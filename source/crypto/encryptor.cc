@@ -21,13 +21,8 @@
 #include "base/message_serialization.h"
 #include "protocol/key_exchange.pb.h"
 
-extern "C" {
 #define SODIUM_STATIC
-
-#pragma warning(push, 3)
 #include <sodium.h>
-#pragma warning(pop)
-} // extern "C"
 
 namespace aspia {
 
