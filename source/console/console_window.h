@@ -19,12 +19,12 @@
 #ifndef ASPIA_CONSOLE__CONSOLE_WINDOW_H_
 #define ASPIA_CONSOLE__CONSOLE_WINDOW_H_
 
-#include <QSystemTrayIcon>
-
 #include "base/locale_loader.h"
 #include "client/client_connections.h"
 #include "protocol/address_book.pb.h"
 #include "ui_console_window.h"
+
+class QSystemTrayIcon;
 
 namespace aspia {
 
@@ -38,7 +38,7 @@ class ConsoleWindow : public QMainWindow
 
 public:
     ConsoleWindow(const QString& file_path, QWidget* parent = nullptr);
-    ~ConsoleWindow() = default;
+    ~ConsoleWindow();
 
 public slots:
     void onNewAddressBook();
@@ -71,7 +71,6 @@ public slots:
     void onComputerContextMenu(ComputerItem* computer_item, const QPoint& point);
     void onComputerDoubleClicked(proto::address_book::Computer* computer);
     void onLanguageChanged(QAction* action);
-    void onTrayIconActivated(QSystemTrayIcon::ActivationReason reason);
     void onShowHideToTray();
 
 protected:
@@ -81,6 +80,7 @@ protected:
 
 private:
     void createLanguageMenu(const QString& current_locale);
+    void showTrayIcon(bool show);
     void addAddressBookTab(AddressBookTab* tab);
     AddressBookTab* currentAddressBookTab();
     void connectToComputer(const proto::address_book::Computer& computer);
@@ -90,8 +90,8 @@ private:
     LocaleLoader locale_loader_;
     ClientConnections connections_;
 
-    QSystemTrayIcon tray_icon_;
-    QMenu tray_menu_;
+    QScopedPointer<QSystemTrayIcon> tray_icon_;
+    QScopedPointer<QMenu> tray_menu_;
 
     DISALLOW_COPY_AND_ASSIGN(ConsoleWindow);
 };

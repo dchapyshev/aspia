@@ -23,6 +23,7 @@
 #include <QDesktopServices>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QSystemTrayIcon>
 #include <QTranslator>
 
 #include "client/ui/client_dialog.h"
@@ -59,9 +60,7 @@ private:
 
 ConsoleWindow::ConsoleWindow(const QString& file_path, QWidget* parent)
     : QMainWindow(parent),
-      connections_(this),
-      tray_icon_(this),
-      tray_menu_(this)
+      connections_(this)
 {
     ConsoleSettings settings;
 
@@ -80,28 +79,16 @@ ConsoleWindow::ConsoleWindow(const QString& file_path, QWidget* parent)
     restoreGeometry(settings.windowGeometry());
     restoreState(settings.windowState());
 
-    tray_menu_.addAction(ui.action_show_hide);
-    tray_menu_.addAction(ui.action_exit);
-    tray_icon_.setIcon(QIcon(QStringLiteral(":/icon/main.png")));
-    tray_icon_.setToolTip(tr("Aspia Console"));
-    tray_icon_.setContextMenu(&tray_menu_);
-
-    ui.action_toolbar->setChecked(settings.isToolBarEnabled());
-
-    bool show_status_bar = settings.isStatusBarEnabled();
-    ui.action_statusbar->setChecked(show_status_bar);
-    ui.status_bar->setVisible(show_status_bar);
-
     ui.action_show_tray_icon->setChecked(settings.alwaysShowTrayIcon());
     ui.action_minimize_to_tray->setChecked(settings.minimizeToTray());
+    ui.action_toolbar->setChecked(settings.isToolBarEnabled());
+    ui.action_statusbar->setChecked(settings.isStatusBarEnabled());
 
-    if (ui.action_show_tray_icon->isChecked())
-        tray_icon_.show();
+    ui.status_bar->setVisible(ui.action_statusbar->isChecked());
+    showTrayIcon(ui.action_show_tray_icon->isChecked());
 
-    connect(&tray_icon_, &QSystemTrayIcon::activated, this, &ConsoleWindow::onTrayIconActivated);
     connect(ui.action_show_hide, &QAction::triggered, this, &ConsoleWindow::onShowHideToTray);
-    connect(ui.action_show_tray_icon, &QAction::toggled, &tray_icon_, &QSystemTrayIcon::setVisible);
-
+    connect(ui.action_show_tray_icon, &QAction::toggled, this, &ConsoleWindow::showTrayIcon);
     connect(ui.action_new, &QAction::triggered, this, &ConsoleWindow::onNewAddressBook);
     connect(ui.action_open, &QAction::triggered, this, &ConsoleWindow::onOpenAddressBook);
     connect(ui.action_save, &QAction::triggered, this, &ConsoleWindow::onSaveAddressBook);
@@ -182,6 +169,8 @@ ConsoleWindow::ConsoleWindow(const QString& file_path, QWidget* parent)
     if (!file_path.isEmpty())
         addAddressBookTab(AddressBookTab::openFromFile(file_path, ui.tab_widget));
 }
+
+ConsoleWindow::~ConsoleWindow() = default;
 
 void ConsoleWindow::onNewAddressBook()
 {
@@ -597,14 +586,6 @@ void ConsoleWindow::onLanguageChanged(QAction* action)
     }
 }
 
-void ConsoleWindow::onTrayIconActivated(QSystemTrayIcon::ActivationReason reason)
-{
-    if (reason == QSystemTrayIcon::Context)
-        return;
-
-    onShowHideToTray();
-}
-
 void ConsoleWindow::onShowHideToTray()
 {
     if (isHidden())
@@ -612,7 +593,7 @@ void ConsoleWindow::onShowHideToTray()
         ui.action_show_hide->setText(tr("Hide"));
 
         if (!ui.action_show_tray_icon->isChecked())
-            tray_icon_.hide();
+            showTrayIcon(false);
 
         if (windowState() & Qt::WindowMaximized)
             showMaximized();
@@ -627,7 +608,7 @@ void ConsoleWindow::onShowHideToTray()
         ui.action_show_hide->setText(tr("Show"));
 
         if (!ui.action_show_tray_icon->isChecked())
-            tray_icon_.show();
+            showTrayIcon(true);
 
         hide();
     }
@@ -709,6 +690,36 @@ void ConsoleWindow::createLanguageMenu(const QString& current_locale)
             action_language->setChecked(true);
 
         ui.menu_language->addAction(action_language);
+    }
+}
+
+void ConsoleWindow::showTrayIcon(bool show)
+{
+    if (show)
+    {
+        tray_menu_.reset(new QMenu(this));
+        tray_menu_->addAction(ui.action_show_hide);
+        tray_menu_->addAction(ui.action_exit);
+
+        tray_icon_.reset(new QSystemTrayIcon(this));
+        tray_icon_->setIcon(QIcon(QStringLiteral(":/icon/main.png")));
+        tray_icon_->setToolTip(tr("Aspia Console"));
+        tray_icon_->setContextMenu(tray_menu_.get());
+        tray_icon_->show();
+
+        connect(tray_icon_.get(), &QSystemTrayIcon::activated,
+                [this](QSystemTrayIcon::ActivationReason reason)
+        {
+            if (reason == QSystemTrayIcon::Context)
+                return;
+
+            onShowHideToTray();
+        });
+    }
+    else
+    {
+        tray_icon_.reset();
+        tray_menu_.reset();
     }
 }
 
