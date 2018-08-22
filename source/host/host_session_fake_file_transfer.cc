@@ -31,7 +31,9 @@ HostSessionFakeFileTransfer::HostSessionFakeFileTransfer(QObject* parent)
 
 void HostSessionFakeFileTransfer::startSession()
 {
-    // Nothing
+    proto::file_transfer::Reply reply;
+    reply.set_status(proto::file_transfer::STATUS_NO_LOGGED_ON_USER);
+    emit sendMessage(serializeMessage(reply));
 }
 
 void HostSessionFakeFileTransfer::onMessageReceived(const QByteArray& /* buffer */)
@@ -39,7 +41,6 @@ void HostSessionFakeFileTransfer::onMessageReceived(const QByteArray& /* buffer 
     proto::file_transfer::Reply reply;
     reply.set_status(proto::file_transfer::STATUS_NO_LOGGED_ON_USER);
     emit sendMessage(serializeMessage(reply));
-    emit errorOccurred();
 }
 
 } // namespace aspia
