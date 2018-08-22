@@ -20,6 +20,7 @@
 
 #include <QAction>
 #include <QDebug>
+#include <QLineEdit>
 #include <QKeyEvent>
 #include <QMenu>
 #include <QMessageBox>
@@ -212,6 +213,14 @@ void FilePanel::keyPressEvent(QKeyEvent* event)
         case Qt::Key_Backspace:
             toParentFolder();
             break;
+
+        case Qt::Key_F4:
+        {
+            QLineEdit* line_edit = ui.address_bar->lineEdit();
+            line_edit->selectAll();
+            line_edit->setFocus();
+        }
+        break;
 
         case Qt::Key_F5:
             refresh();
