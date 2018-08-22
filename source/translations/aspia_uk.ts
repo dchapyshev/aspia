@@ -1269,23 +1269,23 @@
         </translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="277"/>
-        <location filename="../console/address_book_dialog.cc" line="299"/>
+        <location filename="../console/address_book_dialog.cc" line="276"/>
+        <location filename="../console/address_book_dialog.cc" line="298"/>
         <source>Confirmation</source>
         <translation>Підтвердження</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="278"/>
+        <location filename="../console/address_book_dialog.cc" line="277"/>
         <source>At change the number of hashing iterations, you will need to re-enter the password. Continue?</source>
         <translation>Для зміни кількості ітерацій хешування потрібно повторно ввести пароль. Продовжити?</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="300"/>
+        <location filename="../console/address_book_dialog.cc" line="299"/>
         <source>At change the size of hashing salt, you will need to re-enter the password. Continue?</source>
         <translation>Для зміни розміру солі хешування потрібно повторно ввести пароль. Продовжити?</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="338"/>
+        <location filename="../console/address_book_dialog.cc" line="337"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
@@ -1305,69 +1305,69 @@
     <message>
         <location filename="../console/address_book_tab.cc" line="217"/>
         <location filename="../console/address_book_tab.cc" line="232"/>
-        <location filename="../console/address_book_tab.cc" line="262"/>
+        <location filename="../console/address_book_tab.cc" line="259"/>
         <source>The address book file is corrupted or has an unknown format.</source>
         <translation>Файл адресної книги пошкоджено або він має невірний формат.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="256"/>
+        <location filename="../console/address_book_tab.cc" line="253"/>
         <source>Unable to decrypt the address book with the specified password.</source>
         <translation>Неможливо розшифрувати адресну книгу даним паролем.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="272"/>
+        <location filename="../console/address_book_tab.cc" line="269"/>
         <source>The address book file is encrypted with an unsupported encryption type.</source>
         <translation>Тип шифрування адресної книги не підтримується.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="439"/>
+        <location filename="../console/address_book_tab.cc" line="436"/>
         <source>Are you sure you want to delete computer group &quot;%1&quot; and all child items?</source>
         <translation>Ви впевнені, що хочете видалити групу комп&apos;ютерів \&quot;%1\&quot; і всі дочірні об&apos;єкти?</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="443"/>
-        <location filename="../console/address_book_tab.cc" line="465"/>
+        <location filename="../console/address_book_tab.cc" line="440"/>
+        <location filename="../console/address_book_tab.cc" line="462"/>
         <source>Confirmation</source>
         <translation>Підтвердження</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="461"/>
+        <location filename="../console/address_book_tab.cc" line="458"/>
         <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
         <translation>Ви впевнені, що хочете видалити комп&apos;ютер\&quot;%1\&quot;?</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="649"/>
+        <location filename="../console/address_book_tab.cc" line="641"/>
         <source>Save Address Book</source>
         <translation>Зберегти адресну книгу</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="651"/>
+        <location filename="../console/address_book_tab.cc" line="643"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Aspia Address Book (*.aab)</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="661"/>
+        <location filename="../console/address_book_tab.cc" line="653"/>
         <source>Unable to create or open address book file.</source>
         <translation>Неможливо створити або відкрити файл адресної книги.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="673"/>
+        <location filename="../console/address_book_tab.cc" line="665"/>
         <source>Unable to write address book file.</source>
         <translation>Неможливо записати файл адресної книги.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="689"/>
-        <location filename="../console/address_book_tab.cc" line="703"/>
+        <location filename="../console/address_book_tab.cc" line="681"/>
+        <location filename="../console/address_book_tab.cc" line="695"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="691"/>
+        <location filename="../console/address_book_tab.cc" line="683"/>
         <source>Could not open address book</source>
         <translation>Неможливо відкрити адресну книгу</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="705"/>
+        <location filename="../console/address_book_tab.cc" line="697"/>
         <source>Failed to save address book</source>
         <translation>Неможливо зберегти адресну книгу</translation>
     </message>
@@ -1518,17 +1518,17 @@
 <context>
     <name>aspia::ClientUserAuthorizer</name>
     <message>
-        <location filename="../client/client_user_authorizer.cc" line="155"/>
+        <location filename="../client/client_user_authorizer.cc" line="147"/>
         <source>Protocol error: Unknown message from host.</source>
         <translation>Помилка протокола: Невідоме повідомлення від хоста.</translation>
     </message>
     <message>
-        <location filename="../client/client_user_authorizer.cc" line="174"/>
+        <location filename="../client/client_user_authorizer.cc" line="166"/>
         <source>Authorization error: Empty nonce is not allowed.</source>
         <translation>Помилка авторизації: Порожні поля не дозволені.</translation>
     </message>
     <message>
-        <location filename="../client/client_user_authorizer.cc" line="188"/>
+        <location filename="../client/client_user_authorizer.cc" line="180"/>
         <source>Authorization is canceled by the user.</source>
         <translation>Авторизацію скасовано кристувачем.</translation>
     </message>
@@ -1653,54 +1653,54 @@
 <context>
     <name>aspia::ConsoleWindow</name>
     <message>
-        <location filename="../console/console_window.cc" line="86"/>
+        <location filename="../console/console_window.cc" line="706"/>
         <source>Aspia Console</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="197"/>
+        <location filename="../console/console_window.cc" line="186"/>
         <source>Open Address Book</source>
         <translation>Відкрити адресну книгу</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="199"/>
+        <location filename="../console/console_window.cc" line="188"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Aspia Address Book (*.aab)</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="217"/>
+        <location filename="../console/console_window.cc" line="206"/>
         <source>Information</source>
         <translation>Інформація</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="218"/>
+        <location filename="../console/console_window.cc" line="207"/>
         <source>Address Book &quot;%1&quot; is already open.</source>
         <translation>Адресну книгу &quot;%1&quot; вже відкрито.</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="300"/>
+        <location filename="../console/console_window.cc" line="289"/>
         <source>https://aspia.org/en/help.html</source>
         <translation>https://aspia.org/en/help.html</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="417"/>
-        <location filename="../console/console_window.cc" line="655"/>
+        <location filename="../console/console_window.cc" line="406"/>
+        <location filename="../console/console_window.cc" line="636"/>
         <source>Confirmation</source>
         <translation>Підтвердження</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="418"/>
-        <location filename="../console/console_window.cc" line="656"/>
+        <location filename="../console/console_window.cc" line="407"/>
+        <location filename="../console/console_window.cc" line="637"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation>Адресну книгу &quot;%1&quot; змінено. Зберегти зміни?</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="612"/>
+        <location filename="../console/console_window.cc" line="593"/>
         <source>Hide</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="627"/>
+        <location filename="../console/console_window.cc" line="608"/>
         <source>Show</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1845,76 +1845,76 @@
 <context>
     <name>aspia::FilePanel</name>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="145"/>
-        <location filename="../client/ui/file_panel.cc" line="158"/>
-        <location filename="../client/ui/file_panel.cc" line="182"/>
-        <location filename="../client/ui/file_panel.cc" line="193"/>
-        <location filename="../client/ui/file_panel.cc" line="273"/>
-        <location filename="../client/ui/file_panel.cc" line="282"/>
-        <location filename="../client/ui/file_panel.cc" line="300"/>
-        <location filename="../client/ui/file_panel.cc" line="309"/>
+        <location filename="../client/ui/file_panel.cc" line="146"/>
+        <location filename="../client/ui/file_panel.cc" line="159"/>
+        <location filename="../client/ui/file_panel.cc" line="183"/>
+        <location filename="../client/ui/file_panel.cc" line="194"/>
+        <location filename="../client/ui/file_panel.cc" line="284"/>
+        <location filename="../client/ui/file_panel.cc" line="293"/>
+        <location filename="../client/ui/file_panel.cc" line="311"/>
+        <location filename="../client/ui/file_panel.cc" line="320"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="146"/>
+        <location filename="../client/ui/file_panel.cc" line="147"/>
         <source>Failed to get list of drives: %1</source>
         <translation>Не вдалося отримати список дисків: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="159"/>
+        <location filename="../client/ui/file_panel.cc" line="160"/>
         <source>Failed to get list of files: %1</source>
         <translation>Не вдалося отримати список файлів: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="183"/>
+        <location filename="../client/ui/file_panel.cc" line="184"/>
         <source>Failed to create directory: %1</source>
         <translation>Не вдалося створити каталог: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="194"/>
+        <location filename="../client/ui/file_panel.cc" line="195"/>
         <source>Failed to rename item: %1</source>
         <translation>Не давлося переіменувати об&apos;єкт: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="253"/>
+        <location filename="../client/ui/file_panel.cc" line="264"/>
         <source>%1 object(s) selected</source>
         <translation>%1 об&apos;єктів обрано</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="274"/>
-        <location filename="../client/ui/file_panel.cc" line="301"/>
+        <location filename="../client/ui/file_panel.cc" line="285"/>
+        <location filename="../client/ui/file_panel.cc" line="312"/>
         <source>Folder name can not be empty.</source>
         <translation>Ім&apos;я каталогу не може бути порожнім.</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="283"/>
-        <location filename="../client/ui/file_panel.cc" line="310"/>
+        <location filename="../client/ui/file_panel.cc" line="294"/>
+        <location filename="../client/ui/file_panel.cc" line="321"/>
         <source>Name contains invalid characters.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="334"/>
+        <location filename="../client/ui/file_panel.cc" line="345"/>
         <source>&amp;Send	F11</source>
         <translation>&amp;Надіслати F11</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="336"/>
+        <location filename="../client/ui/file_panel.cc" line="347"/>
         <source>&amp;Delete	Delete</source>
         <translation>&amp;Видалити Delete</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="346"/>
+        <location filename="../client/ui/file_panel.cc" line="357"/>
         <source>&amp;Create Folder</source>
         <translation>&amp;Створити каталог</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="401"/>
+        <location filename="../client/ui/file_panel.cc" line="412"/>
         <source>Confirmation</source>
         <translation>Підтвердження</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="402"/>
+        <location filename="../client/ui/file_panel.cc" line="413"/>
         <source>Are you sure you want to delete the selected items?</source>
         <translation>Ви впевнені, що хочете видалити обрані об&apos;єкти?</translation>
     </message>
@@ -2184,14 +2184,6 @@
         <location filename="../host/ui/host_notifier_window.cc" line="237"/>
         <source>Disconnect</source>
         <translation>Відключитися</translation>
-    </message>
-</context>
-<context>
-    <name>aspia::HostServer</name>
-    <message>
-        <location filename="../host/host_server.cc" line="112"/>
-        <source>Allow incoming TCP connections</source>
-        <translation>Дозволити вхідні підключення TCP</translation>
     </message>
 </context>
 <context>

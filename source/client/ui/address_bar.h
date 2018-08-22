@@ -45,12 +45,11 @@ public:
     QString pathAt(const QModelIndex& index) const;
     bool hasCurrentPath() const;
 
-signals:
-    void pathChanged(const QString& path);
-
-protected:
     // QComboBox implementation.
     void showPopup() override;
+
+signals:
+    void pathChanged(const QString& path);
 
 private slots:
     void onPathIndexChanged(const QModelIndex& index);

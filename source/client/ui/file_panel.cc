@@ -219,6 +219,8 @@ void FilePanel::keyPressEvent(QKeyEvent* event)
             QLineEdit* line_edit = ui.address_bar->lineEdit();
             line_edit->selectAll();
             line_edit->setFocus();
+
+            ui.address_bar->showPopup();
         }
         break;
 
