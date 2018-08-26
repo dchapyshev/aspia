@@ -43,7 +43,7 @@ proto::address_book::Computer ConfigFactory::defaultComputer()
 {
     proto::address_book::Computer computer;
 
-    computer.set_session_type(proto::auth::SESSION_TYPE_DESKTOP_MANAGE);
+    computer.set_session_type(proto::SESSION_TYPE_DESKTOP_MANAGE);
     computer.set_port(kDefaultHostTcpPort);
 
     setDefaultDesktopManageConfig(computer.mutable_session_config()->mutable_desktop_manage());

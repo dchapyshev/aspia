@@ -31,7 +31,7 @@ class DesktopConfigDialog : public QDialog
     Q_OBJECT
 
 public:
-    DesktopConfigDialog(proto::auth::SessionType session_type,
+    DesktopConfigDialog(proto::SessionType session_type,
                         const proto::desktop::Config& config,
                         QWidget* parent = nullptr);
     ~DesktopConfigDialog() = default;

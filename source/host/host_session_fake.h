@@ -21,7 +21,7 @@
 
 #include <QObject>
 
-#include "protocol/authorization.pb.h"
+#include "protocol/session_type.pb.h"
 
 namespace aspia {
 
@@ -32,7 +32,7 @@ class HostSessionFake : public QObject
 public:
     virtual ~HostSessionFake() = default;
 
-    static HostSessionFake* create(proto::auth::SessionType session_type, QObject* parent);
+    static HostSessionFake* create(proto::SessionType session_type, QObject* parent);
 
     virtual void startSession() = 0;
 

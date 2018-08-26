@@ -47,8 +47,8 @@ public:
     QString password() const { return password_; }
     void setPassword(const QString& password) { password_ = password; }
 
-    proto::auth::SessionType sessionType() const { return session_type_; }
-    void setSessionType(proto::auth::SessionType session_type) { session_type_ = session_type; }
+    proto::SessionType sessionType() const { return session_type_; }
+    void setSessionType(proto::SessionType session_type) { session_type_ = session_type; }
 
     proto::desktop::Config desktopConfig() const { return desktop_config_; }
     void setDesktopConfig(const proto::desktop::Config& config);
@@ -60,7 +60,7 @@ private:
     QString user_name_;
     QString password_;
 
-    proto::auth::SessionType session_type_ = proto::auth::SESSION_TYPE_UNKNOWN;
+    proto::SessionType session_type_ = proto::SESSION_TYPE_UNKNOWN;
     proto::desktop::Config desktop_config_;
 };
 

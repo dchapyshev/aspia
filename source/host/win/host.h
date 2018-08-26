@@ -22,7 +22,7 @@
 #include <QPointer>
 
 #include "base/macros_magic.h"
-#include "protocol/authorization.pb.h"
+#include "protocol/session_type.pb.h"
 
 namespace aspia {
 
@@ -43,8 +43,8 @@ public:
     NetworkChannel* networkChannel() const { return network_channel_; }
     void setNetworkChannel(NetworkChannel* network_channel);
 
-    proto::auth::SessionType sessionType() const { return session_type_; }
-    void setSessionType(proto::auth::SessionType session_type);
+    proto::SessionType sessionType() const { return session_type_; }
+    void setSessionType(proto::SessionType session_type);
 
     QString userName() const { return user_name_; }
     void setUserName(const QString& user_name);
@@ -79,7 +79,7 @@ private:
     enum class State { STOPPED, STARTING, STOPPING, DETACHED, ATTACHED };
     static const uint32_t kInvalidSessionId = 0xFFFFFFFF;
 
-    proto::auth::SessionType session_type_ = proto::auth::SESSION_TYPE_UNKNOWN;
+    proto::SessionType session_type_ = proto::SESSION_TYPE_UNKNOWN;
     QString user_name_;
     std::string uuid_;
 

@@ -37,19 +37,19 @@ public:
     {
         switch (session_.session_type())
         {
-            case proto::auth::SESSION_TYPE_DESKTOP_MANAGE:
+            case proto::SESSION_TYPE_DESKTOP_MANAGE:
                 setIcon(0, QIcon(QStringLiteral(":/icon/monitor-keyboard.png")));
                 break;
 
-            case proto::auth::SESSION_TYPE_DESKTOP_VIEW:
+            case proto::SESSION_TYPE_DESKTOP_VIEW:
                 setIcon(0, QIcon(QStringLiteral(":/icon/monitor.png")));
                 break;
 
-            case proto::auth::SESSION_TYPE_FILE_TRANSFER:
+            case proto::SESSION_TYPE_FILE_TRANSFER:
                 setIcon(0, QIcon(QStringLiteral(":/icon/folder-stand.png")));
                 break;
 
-            case proto::auth::SESSION_TYPE_SYSTEM_INFO:
+            case proto::SESSION_TYPE_SYSTEM_INFO:
                 setIcon(0, QIcon(QStringLiteral(":/icon/system-monitor.png")));
                 break;
 

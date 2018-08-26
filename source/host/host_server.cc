@@ -38,20 +38,20 @@ const wchar_t kFirewallRuleName[] = L"Aspia Host Service";
 const wchar_t kFirewallRuleDecription[] = L"Allow incoming TCP connections";
 const char kNotifierFileName[] = "aspia_host.exe";
 
-const char* sessionTypeToString(proto::auth::SessionType session_type)
+const char* sessionTypeToString(proto::SessionType session_type)
 {
     switch (session_type)
     {
-        case proto::auth::SESSION_TYPE_DESKTOP_MANAGE:
+        case proto::SESSION_TYPE_DESKTOP_MANAGE:
             return "Desktop Manage";
 
-        case proto::auth::SESSION_TYPE_DESKTOP_VIEW:
+        case proto::SESSION_TYPE_DESKTOP_VIEW:
             return "Desktop View";
 
-        case proto::auth::SESSION_TYPE_FILE_TRANSFER:
+        case proto::SESSION_TYPE_FILE_TRANSFER:
             return "File Transfer";
 
-        case proto::auth::SESSION_TYPE_SYSTEM_INFO:
+        case proto::SESSION_TYPE_SYSTEM_INFO:
             return "System Information";
 
         default:

@@ -137,19 +137,19 @@ void Client::onAuthorizationFinished(proto::auth::Status status)
 
     switch (connect_data_.sessionType())
     {
-        case proto::auth::SESSION_TYPE_DESKTOP_MANAGE:
+        case proto::SESSION_TYPE_DESKTOP_MANAGE:
             session_ = new ClientSessionDesktopManage(&connect_data_, this);
             break;
 
-        case proto::auth::SESSION_TYPE_DESKTOP_VIEW:
+        case proto::SESSION_TYPE_DESKTOP_VIEW:
             session_ = new ClientSessionDesktopView(&connect_data_, this);
             break;
 
-        case proto::auth::SESSION_TYPE_FILE_TRANSFER:
+        case proto::SESSION_TYPE_FILE_TRANSFER:
             session_ = new ClientSessionFileTransfer(&connect_data_, this);
             break;
 
-        case proto::auth::SESSION_TYPE_SYSTEM_INFO:
+        case proto::SESSION_TYPE_SYSTEM_INFO:
             session_ = new ClientSessionSystemInfo(&connect_data_, this);
             break;
 

@@ -42,13 +42,13 @@ DesktopWindow::DesktopWindow(ConnectData* connect_data, QWidget* parent)
       connections_(this)
 {
     QString session_name;
-    if (connect_data_->sessionType() == proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
+    if (connect_data_->sessionType() == proto::SESSION_TYPE_DESKTOP_MANAGE)
     {
         session_name = tr("Aspia Desktop Manage");
     }
     else
     {
-        Q_ASSERT(connect_data_->sessionType() == proto::auth::SESSION_TYPE_DESKTOP_VIEW);
+        Q_ASSERT(connect_data_->sessionType() == proto::SESSION_TYPE_DESKTOP_VIEW);
         session_name = tr("Aspia Desktop View");
     }
 
@@ -116,7 +116,7 @@ DesktopWindow::DesktopWindow(ConnectData* connect_data, QWidget* parent)
     clipboard_ = new Clipboard(this);
     connect(clipboard_, &Clipboard::clipboardEvent, this, &DesktopWindow::sendClipboardEvent);
 
-    connect(panel_, &DesktopPanel::startSession, [this](proto::auth::SessionType session_type)
+    connect(panel_, &DesktopPanel::startSession, [this](proto::SessionType session_type)
     {
         ConnectData connect_data(*connect_data_);
         connect_data.setSessionType(session_type);

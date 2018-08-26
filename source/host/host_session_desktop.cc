@@ -29,15 +29,15 @@
 
 namespace aspia {
 
-HostSessionDesktop::HostSessionDesktop(proto::auth::SessionType session_type,
+HostSessionDesktop::HostSessionDesktop(proto::SessionType session_type,
                                        const QString& channel_id)
     : HostSession(channel_id),
       session_type_(session_type)
 {
     switch (session_type_)
     {
-        case proto::auth::SESSION_TYPE_DESKTOP_MANAGE:
-        case proto::auth::SESSION_TYPE_DESKTOP_VIEW:
+        case proto::SESSION_TYPE_DESKTOP_MANAGE:
+        case proto::SESSION_TYPE_DESKTOP_VIEW:
             break;
 
         default:
@@ -102,7 +102,7 @@ void HostSessionDesktop::messageReceived(const QByteArray& buffer)
 
 void HostSessionDesktop::clipboardEvent(const proto::desktop::ClipboardEvent& event)
 {
-    if (session_type_ != proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
+    if (session_type_ != proto::SESSION_TYPE_DESKTOP_MANAGE)
         return;
 
     proto::desktop::HostToClient message;
@@ -113,7 +113,7 @@ void HostSessionDesktop::clipboardEvent(const proto::desktop::ClipboardEvent& ev
 
 void HostSessionDesktop::readPointerEvent(const proto::desktop::PointerEvent& event)
 {
-    if (session_type_ != proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
+    if (session_type_ != proto::SESSION_TYPE_DESKTOP_MANAGE)
     {
         qWarning("Attempt to inject pointer event to desktop view session");
         emit errorOccurred();
@@ -126,7 +126,7 @@ void HostSessionDesktop::readPointerEvent(const proto::desktop::PointerEvent& ev
 
 void HostSessionDesktop::readKeyEvent(const proto::desktop::KeyEvent& event)
 {
-    if (session_type_ != proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
+    if (session_type_ != proto::SESSION_TYPE_DESKTOP_MANAGE)
     {
         qWarning("Attempt to inject key event to desktop view session");
         emit errorOccurred();
@@ -139,7 +139,7 @@ void HostSessionDesktop::readKeyEvent(const proto::desktop::KeyEvent& event)
 
 void HostSessionDesktop::readClipboardEvent(const proto::desktop::ClipboardEvent& clipboard_event)
 {
-    if (session_type_ != proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
+    if (session_type_ != proto::SESSION_TYPE_DESKTOP_MANAGE)
     {
         qWarning("Attempt to inject clipboard event to desktop view session");
         emit errorOccurred();
@@ -161,7 +161,7 @@ void HostSessionDesktop::readConfig(const proto::desktop::Config& config)
     uint32_t change_flags = config_tracker_.changeFlags(config);
 
     if (change_flags & DesktopConfigTracker::CLIPBOARD_CHANGES &&
-        session_type_ == proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
+        session_type_ == proto::SESSION_TYPE_DESKTOP_MANAGE)
     {
         delete clipboard_;
 
@@ -174,7 +174,7 @@ void HostSessionDesktop::readConfig(const proto::desktop::Config& config)
     }
 
     if (change_flags & DesktopConfigTracker::INPUT_CHANGES &&
-        session_type_ == proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
+        session_type_ == proto::SESSION_TYPE_DESKTOP_MANAGE)
     {
         bool block_input = config.flags() & proto::desktop::BLOCK_REMOTE_INPUT;
         input_injector_.reset(new InputInjector(this, block_input));

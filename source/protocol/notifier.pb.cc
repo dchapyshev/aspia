@@ -281,7 +281,7 @@ bool Session::MergePartialFromCodedStream(
         break;
       }
 
-      // .aspia.proto.auth.SessionType session_type = 4;
+      // .aspia.proto.SessionType session_type = 4;
       case 4: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(32u /* 32 & 0xFF */)) {
@@ -289,7 +289,7 @@ bool Session::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          set_session_type(static_cast< ::aspia::proto::auth::SessionType >(value));
+          set_session_type(static_cast< ::aspia::proto::SessionType >(value));
         } else {
           goto handle_unusual;
         }
@@ -352,7 +352,7 @@ void Session::SerializeWithCachedSizes(
       3, this->username(), output);
   }
 
-  // .aspia.proto.auth.SessionType session_type = 4;
+  // .aspia.proto.SessionType session_type = 4;
   if (this->session_type() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       4, this->session_type(), output);
@@ -390,7 +390,7 @@ size_t Session::ByteSizeLong() const {
         this->username());
   }
 
-  // .aspia.proto.auth.SessionType session_type = 4;
+  // .aspia.proto.SessionType session_type = 4;
   if (this->session_type() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::EnumSize(this->session_type());

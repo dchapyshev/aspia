@@ -36,7 +36,7 @@ enum ColorDepth
 
 } // namespace
 
-DesktopConfigDialog::DesktopConfigDialog(proto::auth::SessionType session_type,
+DesktopConfigDialog::DesktopConfigDialog(proto::SessionType session_type,
                                          const proto::desktop::Config& config,
                                          QWidget* parent)
     : QDialog(parent),
@@ -92,7 +92,7 @@ DesktopConfigDialog::DesktopConfigDialog(proto::auth::SessionType session_type,
     ui.spin_scale_factor->setValue(config_.scale_factor());
     ui.spin_update_interval->setValue(config_.update_interval());
 
-    if (session_type == proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
+    if (session_type == proto::SESSION_TYPE_DESKTOP_MANAGE)
     {
         if (config_.flags() & proto::desktop::BLOCK_REMOTE_INPUT)
             ui.checkbox_block_remote_input->setChecked(true);

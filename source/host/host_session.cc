@@ -44,11 +44,11 @@ HostSession* HostSession::create(const QString& session_type, const QString& cha
 
     if (session_type == QLatin1String("desktop_manage"))
     {
-        return new HostSessionDesktop(proto::auth::SESSION_TYPE_DESKTOP_MANAGE, channel_id);
+        return new HostSessionDesktop(proto::SESSION_TYPE_DESKTOP_MANAGE, channel_id);
     }
     else if (session_type == QLatin1String("desktop_view"))
     {
-        return new HostSessionDesktop(proto::auth::SESSION_TYPE_DESKTOP_VIEW, channel_id);
+        return new HostSessionDesktop(proto::SESSION_TYPE_DESKTOP_VIEW, channel_id);
     }
     else if (session_type == QLatin1String("file_transfer"))
     {

@@ -30,6 +30,7 @@
 #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
 #include <google/protobuf/extension_set.h>  // IWYU pragma: export
 #include <google/protobuf/generated_enum_util.h>
+#include "session_type.pb.h"
 // @@protoc_insertion_point(includes)
 #define PROTOBUF_INTERNAL_EXPORT_protobuf_authorization_2eproto 
 
@@ -92,20 +93,6 @@ bool Method_IsValid(int value);
 const Method Method_MIN = METHOD_UNKNOWN;
 const Method Method_MAX = METHOD_BASIC;
 const int Method_ARRAYSIZE = Method_MAX + 1;
-
-enum SessionType {
-  SESSION_TYPE_UNKNOWN = 0,
-  SESSION_TYPE_DESKTOP_MANAGE = 1,
-  SESSION_TYPE_DESKTOP_VIEW = 2,
-  SESSION_TYPE_FILE_TRANSFER = 4,
-  SESSION_TYPE_SYSTEM_INFO = 8,
-  SessionType_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
-  SessionType_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
-};
-bool SessionType_IsValid(int value);
-const SessionType SessionType_MIN = SESSION_TYPE_UNKNOWN;
-const SessionType SessionType_MAX = SESSION_TYPE_SYSTEM_INFO;
-const int SessionType_ARRAYSIZE = SessionType_MAX + 1;
 
 enum Status {
   STATUS_UNKNOWN = 0,
@@ -445,11 +432,11 @@ class ClientChallenge : public ::google::protobuf::MessageLite /* @@protoc_inser
   ::std::string* release_session_key();
   void set_allocated_session_key(::std::string* session_key);
 
-  // .aspia.proto.auth.SessionType session_type = 1;
+  // .aspia.proto.SessionType session_type = 1;
   void clear_session_type();
   static const int kSessionTypeFieldNumber = 1;
-  ::aspia::proto::auth::SessionType session_type() const;
-  void set_session_type(::aspia::proto::auth::SessionType value);
+  ::aspia::proto::SessionType session_type() const;
+  void set_session_type(::aspia::proto::SessionType value);
 
   // @@protoc_insertion_point(class_scope:aspia.proto.auth.ClientChallenge)
  private:
@@ -888,15 +875,15 @@ inline void ServerChallenge::set_allocated_nonce(::std::string* nonce) {
 
 // ClientChallenge
 
-// .aspia.proto.auth.SessionType session_type = 1;
+// .aspia.proto.SessionType session_type = 1;
 inline void ClientChallenge::clear_session_type() {
   session_type_ = 0;
 }
-inline ::aspia::proto::auth::SessionType ClientChallenge::session_type() const {
+inline ::aspia::proto::SessionType ClientChallenge::session_type() const {
   // @@protoc_insertion_point(field_get:aspia.proto.auth.ClientChallenge.session_type)
-  return static_cast< ::aspia::proto::auth::SessionType >(session_type_);
+  return static_cast< ::aspia::proto::SessionType >(session_type_);
 }
-inline void ClientChallenge::set_session_type(::aspia::proto::auth::SessionType value) {
+inline void ClientChallenge::set_session_type(::aspia::proto::SessionType value) {
   
   session_type_ = value;
   // @@protoc_insertion_point(field_set:aspia.proto.auth.ClientChallenge.session_type)
@@ -1274,7 +1261,6 @@ namespace google {
 namespace protobuf {
 
 template <> struct is_proto_enum< ::aspia::proto::auth::Method> : ::std::true_type {};
-template <> struct is_proto_enum< ::aspia::proto::auth::SessionType> : ::std::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::auth::Status> : ::std::true_type {};
 
 }  // namespace protobuf

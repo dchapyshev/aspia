@@ -68,7 +68,7 @@ ClientUserAuthorizer::~ClientUserAuthorizer()
     cancel();
 }
 
-void ClientUserAuthorizer::setSessionType(proto::auth::SessionType session_type)
+void ClientUserAuthorizer::setSessionType(proto::SessionType session_type)
 {
     if (state_ != State::NOT_STARTED)
     {

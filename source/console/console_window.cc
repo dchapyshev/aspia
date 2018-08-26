@@ -146,19 +146,19 @@ ConsoleWindow::ConsoleWindow(const QString& file_path, QWidget* parent)
 
     switch (settings.sessionType())
     {
-        case proto::auth::SESSION_TYPE_DESKTOP_MANAGE:
+        case proto::SESSION_TYPE_DESKTOP_MANAGE:
             ui.action_desktop_manage->setChecked(true);
             break;
 
-        case proto::auth::SESSION_TYPE_DESKTOP_VIEW:
+        case proto::SESSION_TYPE_DESKTOP_VIEW:
             ui.action_desktop_view->setChecked(true);
             break;
 
-        case proto::auth::SESSION_TYPE_FILE_TRANSFER:
+        case proto::SESSION_TYPE_FILE_TRANSFER:
             ui.action_file_transfer->setChecked(true);
             break;
 
-        case proto::auth::SESSION_TYPE_SYSTEM_INFO:
+        case proto::SESSION_TYPE_SYSTEM_INFO:
             ui.action_system_info->setChecked(true);
             break;
 
@@ -313,7 +313,7 @@ void ConsoleWindow::onDesktopManageConnect()
         if (computer)
         {
             computer->set_connect_time(QDateTime::currentSecsSinceEpoch());
-            computer->set_session_type(proto::auth::SESSION_TYPE_DESKTOP_MANAGE);
+            computer->set_session_type(proto::SESSION_TYPE_DESKTOP_MANAGE);
 
             connectToComputer(*computer);
         }
@@ -329,7 +329,7 @@ void ConsoleWindow::onDesktopViewConnect()
         if (computer)
         {
             computer->set_connect_time(QDateTime::currentSecsSinceEpoch());
-            computer->set_session_type(proto::auth::SESSION_TYPE_DESKTOP_VIEW);
+            computer->set_session_type(proto::SESSION_TYPE_DESKTOP_VIEW);
 
             connectToComputer(*computer);
         }
@@ -345,7 +345,7 @@ void ConsoleWindow::onFileTransferConnect()
         if (computer)
         {
             computer->set_connect_time(QDateTime::currentSecsSinceEpoch());
-            computer->set_session_type(proto::auth::SESSION_TYPE_FILE_TRANSFER);
+            computer->set_session_type(proto::SESSION_TYPE_FILE_TRANSFER);
 
             connectToComputer(*computer);
         }
@@ -361,7 +361,7 @@ void ConsoleWindow::onSystemInfoConnect()
         if (computer)
         {
             computer->set_connect_time(QDateTime::currentSecsSinceEpoch());
-            computer->set_session_type(proto::auth::SESSION_TYPE_SYSTEM_INFO);
+            computer->set_session_type(proto::SESSION_TYPE_SYSTEM_INFO);
 
             connectToComputer(*computer);
         }
@@ -542,19 +542,19 @@ void ConsoleWindow::onComputerDoubleClicked(proto::address_book::Computer* compu
 
     if (ui.action_desktop_manage->isChecked())
     {
-        computer->set_session_type(proto::auth::SESSION_TYPE_DESKTOP_MANAGE);
+        computer->set_session_type(proto::SESSION_TYPE_DESKTOP_MANAGE);
     }
     else if (ui.action_desktop_view->isChecked())
     {
-        computer->set_session_type(proto::auth::SESSION_TYPE_DESKTOP_VIEW);
+        computer->set_session_type(proto::SESSION_TYPE_DESKTOP_VIEW);
     }
     else if (ui.action_file_transfer->isChecked())
     {
-        computer->set_session_type(proto::auth::SESSION_TYPE_FILE_TRANSFER);
+        computer->set_session_type(proto::SESSION_TYPE_FILE_TRANSFER);
     }
     else if (ui.action_system_info->isChecked())
     {
-        computer->set_session_type(proto::auth::SESSION_TYPE_SYSTEM_INFO);
+        computer->set_session_type(proto::SESSION_TYPE_SYSTEM_INFO);
     }
     else
     {
@@ -663,13 +663,13 @@ void ConsoleWindow::closeEvent(QCloseEvent* event)
     settings.setWindowState(saveState());
 
     if (ui.action_desktop_manage->isChecked())
-        settings.setSessionType(proto::auth::SESSION_TYPE_DESKTOP_MANAGE);
+        settings.setSessionType(proto::SESSION_TYPE_DESKTOP_MANAGE);
     else if (ui.action_desktop_view->isChecked())
-        settings.setSessionType(proto::auth::SESSION_TYPE_DESKTOP_VIEW);
+        settings.setSessionType(proto::SESSION_TYPE_DESKTOP_VIEW);
     else if (ui.action_file_transfer->isChecked())
-        settings.setSessionType(proto::auth::SESSION_TYPE_FILE_TRANSFER);
+        settings.setSessionType(proto::SESSION_TYPE_FILE_TRANSFER);
     else if (ui.action_system_info->isChecked())
-        settings.setSessionType(proto::auth::SESSION_TYPE_SYSTEM_INFO);
+        settings.setSessionType(proto::SESSION_TYPE_SYSTEM_INFO);
 
     QApplication::quit();
     QMainWindow::closeEvent(event);
@@ -774,7 +774,7 @@ void ConsoleWindow::connectToComputer(const proto::address_book::Computer& compu
 
     switch (computer.session_type())
     {
-        case proto::auth::SESSION_TYPE_DESKTOP_MANAGE:
+        case proto::SESSION_TYPE_DESKTOP_MANAGE:
         {
             if (computer.session_config().has_desktop_manage())
                 connect_data.setDesktopConfig(computer.session_config().desktop_manage());
@@ -783,7 +783,7 @@ void ConsoleWindow::connectToComputer(const proto::address_book::Computer& compu
         }
         break;
 
-        case proto::auth::SESSION_TYPE_DESKTOP_VIEW:
+        case proto::SESSION_TYPE_DESKTOP_VIEW:
         {
             if (computer.session_config().has_desktop_view())
                 connect_data.setDesktopConfig(computer.session_config().desktop_view());

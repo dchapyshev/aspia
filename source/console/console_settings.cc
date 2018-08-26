@@ -114,14 +114,14 @@ void ConsoleSettings::setAlwaysShowTrayIcon(bool enable)
     settings_.setValue(QStringLiteral("AlwaysShowTrayIcon"), enable);
 }
 
-proto::auth::SessionType ConsoleSettings::sessionType()
+proto::SessionType ConsoleSettings::sessionType()
 {
-    return static_cast<proto::auth::SessionType>(
+    return static_cast<proto::SessionType>(
         settings_.value(QStringLiteral("SessionType"),
-                        proto::auth::SESSION_TYPE_DESKTOP_MANAGE).toInt());
+                        proto::SESSION_TYPE_DESKTOP_MANAGE).toInt());
 }
 
-void ConsoleSettings::setSessionType(proto::auth::SessionType session_type)
+void ConsoleSettings::setSessionType(proto::SessionType session_type)
 {
     settings_.setValue(QStringLiteral("SessionType"), session_type);
 }

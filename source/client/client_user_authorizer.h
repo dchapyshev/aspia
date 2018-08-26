@@ -34,8 +34,8 @@ public:
     explicit ClientUserAuthorizer(QWidget* parent);
     ~ClientUserAuthorizer();
 
-    proto::auth::SessionType sessionType() const { return session_type_; }
-    void setSessionType(proto::auth::SessionType session_type);
+    proto::SessionType sessionType() const { return session_type_; }
+    void setSessionType(proto::SessionType session_type);
 
     QString userName() const { return username_; }
     void setUserName(const QString& username);
@@ -62,7 +62,7 @@ private:
     enum class State { NOT_STARTED, STARTED, FINISHED };
 
     State state_ = State::NOT_STARTED;
-    proto::auth::SessionType session_type_ = proto::auth::SESSION_TYPE_UNKNOWN;
+    proto::SessionType session_type_ = proto::SESSION_TYPE_UNKNOWN;
     QString username_;
     QString password_;
 

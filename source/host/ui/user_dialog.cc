@@ -60,7 +60,7 @@ UserDialog::UserDialog(QList<User>* user_list, User* user, QWidget* parent)
 
     auto add_session_type = [&](const QIcon& icon,
                                 const QString& name,
-                                proto::auth::SessionType session_type)
+                                proto::SessionType session_type)
     {
         QTreeWidgetItem* item = new QTreeWidgetItem();
 
@@ -79,19 +79,19 @@ UserDialog::UserDialog(QList<User>* user_list, User* user, QWidget* parent)
 
     add_session_type(QIcon(QStringLiteral(":/icon/monitor-keyboard.png")),
                      tr("Desktop Manage"),
-                     proto::auth::SESSION_TYPE_DESKTOP_MANAGE);
+                     proto::SESSION_TYPE_DESKTOP_MANAGE);
 
     add_session_type(QIcon(QStringLiteral(":/icon/monitor.png")),
                      tr("Desktop View"),
-                     proto::auth::SESSION_TYPE_DESKTOP_VIEW);
+                     proto::SESSION_TYPE_DESKTOP_VIEW);
 
     add_session_type(QIcon(QStringLiteral(":/icon/folder-stand.png")),
                      tr("File Transfer"),
-                     proto::auth::SESSION_TYPE_FILE_TRANSFER);
+                     proto::SESSION_TYPE_FILE_TRANSFER);
 
     add_session_type(QIcon(QStringLiteral(":/icon/system-monitor.png")),
                      tr("System Information"),
-                     proto::auth::SESSION_TYPE_SYSTEM_INFO);
+                     proto::SESSION_TYPE_SYSTEM_INFO);
 
     connect(ui.button_check_all, &QPushButton::pressed, this, &UserDialog::onCheckAllButtonPressed);
     connect(ui.button_check_none, &QPushButton::pressed, this, &UserDialog::onCheckNoneButtonPressed);

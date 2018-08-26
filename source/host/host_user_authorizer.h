@@ -44,7 +44,7 @@ public:
 
     NetworkChannel* networkChannel() { return network_channel_; }
     proto::auth::Status status() const { return status_; }
-    proto::auth::SessionType sessionType() const { return session_type_; }
+    proto::SessionType sessionType() const { return session_type_; }
     QString userName() const { return user_name_; }
 
 public slots:
@@ -69,7 +69,7 @@ private:
 
     proto::auth::Status doBasicAuthorization(const QString& user_name,
                                              const std::string& session_key,
-                                             proto::auth::SessionType session_type);
+                                             proto::SessionType session_type);
 
     State state_ = State::NOT_STARTED;
 
@@ -82,7 +82,7 @@ private:
     int attempt_count_ = 0;
 
     proto::auth::Method method_ = proto::auth::METHOD_UNKNOWN;
-    proto::auth::SessionType session_type_ = proto::auth::SESSION_TYPE_UNKNOWN;
+    proto::SessionType session_type_ = proto::SESSION_TYPE_UNKNOWN;
     proto::auth::Status status_ = proto::auth::STATUS_ACCESS_DENIED;
 
     DISALLOW_COPY_AND_ASSIGN(HostUserAuthorizer);

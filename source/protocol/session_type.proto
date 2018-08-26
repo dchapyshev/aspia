@@ -16,34 +16,17 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/host_session_fake.h"
+syntax = "proto3";
 
-#include "host/host_session_fake_desktop.h"
-#include "host/host_session_fake_file_transfer.h"
+option optimize_for = LITE_RUNTIME;
 
-namespace aspia {
+package aspia.proto;
 
-HostSessionFake::HostSessionFake(QObject* parent)
-    : QObject(parent)
+enum SessionType
 {
-    // Nothing
+    SESSION_TYPE_UNKNOWN        = 0;
+    SESSION_TYPE_DESKTOP_MANAGE = 1;
+    SESSION_TYPE_DESKTOP_VIEW   = 2;
+    SESSION_TYPE_FILE_TRANSFER  = 4;
+    SESSION_TYPE_SYSTEM_INFO    = 8;
 }
-
-// static
-HostSessionFake* HostSessionFake::create(proto::SessionType session_type, QObject* parent)
-{
-    switch (session_type)
-    {
-        case proto::SESSION_TYPE_DESKTOP_MANAGE:
-        case proto::SESSION_TYPE_DESKTOP_VIEW:
-            return new HostSessionFakeDesktop(parent);
-
-        case proto::SESSION_TYPE_FILE_TRANSFER:
-            return new HostSessionFakeFileTransfer(parent);
-
-        default:
-            return nullptr;
-    }
-}
-
-} // namespace aspia

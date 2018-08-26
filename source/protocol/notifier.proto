@@ -20,16 +20,16 @@ syntax = "proto3";
 
 option optimize_for = LITE_RUNTIME;
 
-import "authorization.proto";
+import "session_type.proto";
 
 package aspia.proto.notifier;
 
 message Session
 {
-    string uuid                   = 1;
-    string remote_address         = 2;
-    string username               = 3;
-    auth.SessionType session_type = 4;
+    string uuid              = 1;
+    string remote_address    = 2;
+    string username          = 3;
+    SessionType session_type = 4;
 }
 
 message SessionClose

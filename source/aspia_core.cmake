@@ -410,6 +410,9 @@ list(APPEND SOURCE_PROTOCOL
     ${PROJECT_SOURCE_DIR}/protocol/notifier.pb.cc
     ${PROJECT_SOURCE_DIR}/protocol/notifier.pb.h
     ${PROJECT_SOURCE_DIR}/protocol/notifier.proto
+    ${PROJECT_SOURCE_DIR}/protocol/session_type.pb.cc
+    ${PROJECT_SOURCE_DIR}/protocol/session_type.pb.h
+    ${PROJECT_SOURCE_DIR}/protocol/session_type.proto
     ${PROJECT_SOURCE_DIR}/protocol/system_info_session.pb.cc
     ${PROJECT_SOURCE_DIR}/protocol/system_info_session.pb.h
     ${PROJECT_SOURCE_DIR}/protocol/system_info_session.proto)

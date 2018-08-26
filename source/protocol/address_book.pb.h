@@ -30,7 +30,7 @@
 #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
 #include <google/protobuf/extension_set.h>  // IWYU pragma: export
 #include <google/protobuf/generated_enum_util.h>
-#include "authorization.pb.h"
+#include "session_type.pb.h"
 #include "desktop_session.pb.h"
 // @@protoc_insertion_point(includes)
 #define PROTOBUF_INTERNAL_EXPORT_protobuf_address_5fbook_2eproto 
@@ -405,11 +405,11 @@ class Computer : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
   ::google::protobuf::uint32 port() const;
   void set_port(::google::protobuf::uint32 value);
 
-  // .aspia.proto.auth.SessionType session_type = 16;
+  // .aspia.proto.SessionType session_type = 16;
   void clear_session_type();
   static const int kSessionTypeFieldNumber = 16;
-  ::aspia::proto::auth::SessionType session_type() const;
-  void set_session_type(::aspia::proto::auth::SessionType value);
+  ::aspia::proto::SessionType session_type() const;
+  void set_session_type(::aspia::proto::SessionType value);
 
   // @@protoc_insertion_point(class_scope:aspia.proto.address_book.Computer)
  private:
@@ -1307,15 +1307,15 @@ inline void Computer::set_allocated_password(::std::string* password) {
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.address_book.Computer.password)
 }
 
-// .aspia.proto.auth.SessionType session_type = 16;
+// .aspia.proto.SessionType session_type = 16;
 inline void Computer::clear_session_type() {
   session_type_ = 0;
 }
-inline ::aspia::proto::auth::SessionType Computer::session_type() const {
+inline ::aspia::proto::SessionType Computer::session_type() const {
   // @@protoc_insertion_point(field_get:aspia.proto.address_book.Computer.session_type)
-  return static_cast< ::aspia::proto::auth::SessionType >(session_type_);
+  return static_cast< ::aspia::proto::SessionType >(session_type_);
 }
-inline void Computer::set_session_type(::aspia::proto::auth::SessionType value) {
+inline void Computer::set_session_type(::aspia::proto::SessionType value) {
   
   session_type_ = value;
   // @@protoc_insertion_point(field_set:aspia.proto.address_book.Computer.session_type)

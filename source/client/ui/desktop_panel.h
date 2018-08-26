@@ -31,7 +31,7 @@ class DesktopPanel : public QFrame
     Q_OBJECT
 
 public:
-    DesktopPanel(proto::auth::SessionType session_type, QWidget* parent);
+    DesktopPanel(proto::SessionType session_type, QWidget* parent);
     ~DesktopPanel() = default;
 
     void setScreenList(const proto::desktop::ScreenList& screen_list);
@@ -45,7 +45,7 @@ signals:
     void scalingChanged(bool enabled);
     void autoScrollChanged(bool enabled);
     void takeScreenshot();
-    void startSession(proto::auth::SessionType session_type);
+    void startSession(proto::SessionType session_type);
 
 protected:
     // QFrame implementation.
@@ -60,7 +60,7 @@ private slots:
     void onKeySequence();
 
 private:
-    void createAdditionalMenu(proto::auth::SessionType session_type);
+    void createAdditionalMenu(proto::SessionType session_type);
     void createScreensMenu();
     void delayedHide();
 

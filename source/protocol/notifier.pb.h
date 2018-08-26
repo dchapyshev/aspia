@@ -29,7 +29,7 @@
 #include <google/protobuf/message_lite.h>
 #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
 #include <google/protobuf/extension_set.h>  // IWYU pragma: export
-#include "authorization.pb.h"
+#include "session_type.pb.h"
 // @@protoc_insertion_point(includes)
 #define PROTOBUF_INTERNAL_EXPORT_protobuf_notifier_2eproto 
 
@@ -207,11 +207,11 @@ class Session : public ::google::protobuf::MessageLite /* @@protoc_insertion_poi
   ::std::string* release_username();
   void set_allocated_username(::std::string* username);
 
-  // .aspia.proto.auth.SessionType session_type = 4;
+  // .aspia.proto.SessionType session_type = 4;
   void clear_session_type();
   static const int kSessionTypeFieldNumber = 4;
-  ::aspia::proto::auth::SessionType session_type() const;
-  void set_session_type(::aspia::proto::auth::SessionType value);
+  ::aspia::proto::SessionType session_type() const;
+  void set_session_type(::aspia::proto::SessionType value);
 
   // @@protoc_insertion_point(class_scope:aspia.proto.notifier.Session)
  private:
@@ -839,15 +839,15 @@ inline void Session::set_allocated_username(::std::string* username) {
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.notifier.Session.username)
 }
 
-// .aspia.proto.auth.SessionType session_type = 4;
+// .aspia.proto.SessionType session_type = 4;
 inline void Session::clear_session_type() {
   session_type_ = 0;
 }
-inline ::aspia::proto::auth::SessionType Session::session_type() const {
+inline ::aspia::proto::SessionType Session::session_type() const {
   // @@protoc_insertion_point(field_get:aspia.proto.notifier.Session.session_type)
-  return static_cast< ::aspia::proto::auth::SessionType >(session_type_);
+  return static_cast< ::aspia::proto::SessionType >(session_type_);
 }
-inline void Session::set_session_type(::aspia::proto::auth::SessionType value) {
+inline void Session::set_session_type(::aspia::proto::SessionType value) {
   
   session_type_ = value;
   // @@protoc_insertion_point(field_set:aspia.proto.notifier.Session.session_type)

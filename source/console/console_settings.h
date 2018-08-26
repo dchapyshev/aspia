@@ -22,7 +22,7 @@
 #include <QSettings>
 
 #include "base/macros_magic.h"
-#include "protocol/authorization.pb.h"
+#include "protocol/session_type.pb.h"
 
 namespace aspia {
 
@@ -57,8 +57,8 @@ public:
     bool alwaysShowTrayIcon() const;
     void setAlwaysShowTrayIcon(bool enable);
 
-    proto::auth::SessionType sessionType();
-    void setSessionType(proto::auth::SessionType session_type);
+    proto::SessionType sessionType();
+    void setSessionType(proto::SessionType session_type);
 
 private:
     QSettings settings_;

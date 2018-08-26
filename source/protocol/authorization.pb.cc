@@ -170,19 +170,6 @@ bool Method_IsValid(int value) {
   }
 }
 
-bool SessionType_IsValid(int value) {
-  switch (value) {
-    case 0:
-    case 1:
-    case 2:
-    case 4:
-    case 8:
-      return true;
-    default:
-      return false;
-  }
-}
-
 bool Status_IsValid(int value) {
   switch (value) {
     case 0:
@@ -650,7 +637,7 @@ bool ClientChallenge::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // .aspia.proto.auth.SessionType session_type = 1;
+      // .aspia.proto.SessionType session_type = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(8u /* 8 & 0xFF */)) {
@@ -658,7 +645,7 @@ bool ClientChallenge::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          set_session_type(static_cast< ::aspia::proto::auth::SessionType >(value));
+          set_session_type(static_cast< ::aspia::proto::SessionType >(value));
         } else {
           goto handle_unusual;
         }
@@ -719,7 +706,7 @@ void ClientChallenge::SerializeWithCachedSizes(
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // .aspia.proto.auth.SessionType session_type = 1;
+  // .aspia.proto.SessionType session_type = 1;
   if (this->session_type() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       1, this->session_type(), output);
@@ -766,7 +753,7 @@ size_t ClientChallenge::ByteSizeLong() const {
         this->session_key());
   }
 
-  // .aspia.proto.auth.SessionType session_type = 1;
+  // .aspia.proto.SessionType session_type = 1;
   if (this->session_type() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::EnumSize(this->session_type());

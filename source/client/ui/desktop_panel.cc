@@ -26,7 +26,7 @@
 
 namespace aspia {
 
-DesktopPanel::DesktopPanel(proto::auth::SessionType session_type, QWidget* parent)
+DesktopPanel::DesktopPanel(proto::SessionType session_type, QWidget* parent)
     : QFrame(parent)
 {
     ui.setupUi(this);
@@ -39,24 +39,24 @@ DesktopPanel::DesktopPanel(proto::auth::SessionType session_type, QWidget* paren
     createScreensMenu();
     createAdditionalMenu(session_type);
 
-    if (session_type == proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
+    if (session_type == proto::SESSION_TYPE_DESKTOP_MANAGE)
     {
         connect(ui.action_cad, &QAction::triggered, this, &DesktopPanel::onCtrlAltDel);
     }
     else
     {
-        Q_ASSERT(session_type == proto::auth::SESSION_TYPE_DESKTOP_VIEW);
+        Q_ASSERT(session_type == proto::SESSION_TYPE_DESKTOP_VIEW);
         ui.action_cad->setVisible(false);
     }
 
     connect(ui.action_file_transfer, &QAction::triggered, [this]()
     {
-        emit startSession(proto::auth::SESSION_TYPE_FILE_TRANSFER);
+        emit startSession(proto::SESSION_TYPE_FILE_TRANSFER);
     });
 
     connect(ui.action_system_info, &QAction::triggered, [this]()
     {
-        emit startSession(proto::auth::SESSION_TYPE_SYSTEM_INFO);
+        emit startSession(proto::SESSION_TYPE_SYSTEM_INFO);
     });
 
     ui.frame->hide();
@@ -187,7 +187,7 @@ void DesktopPanel::onKeySequence()
         emit keySequence(key_sequence[i]);
 }
 
-void DesktopPanel::createAdditionalMenu(proto::auth::SessionType session_type)
+void DesktopPanel::createAdditionalMenu(proto::SessionType session_type)
 {
     // Create a menu and add actions to it.
     additional_menu_ = new QMenu(this);
@@ -195,7 +195,7 @@ void DesktopPanel::createAdditionalMenu(proto::auth::SessionType session_type)
     additional_menu_->addAction(ui.action_autoscroll);
     additional_menu_->addSeparator();
 
-    if (session_type == proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
+    if (session_type == proto::SESSION_TYPE_DESKTOP_MANAGE)
         additional_menu_->addAction(ui.action_key_sequence);
 
     additional_menu_->addAction(ui.action_screenshot);
@@ -207,7 +207,7 @@ void DesktopPanel::createAdditionalMenu(proto::auth::SessionType session_type)
     button->setPopupMode(QToolButton::InstantPopup);
 
     // Now we connect all the necessary signals and slots.
-    if (session_type == proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
+    if (session_type == proto::SESSION_TYPE_DESKTOP_MANAGE)
         connect(ui.action_key_sequence, &QAction::triggered, this, &DesktopPanel::onKeySequence);
 
     connect(ui.action_scaling, &QAction::toggled, [this](bool checked)

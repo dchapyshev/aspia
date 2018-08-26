@@ -21,7 +21,7 @@
 
 #include "host/desktop_config_tracker.h"
 #include "host/host_session.h"
-#include "protocol/authorization.pb.h"
+#include "protocol/session_type.pb.h"
 
 namespace aspia {
 
@@ -35,7 +35,7 @@ class HostSessionDesktop : public HostSession
     Q_OBJECT
 
 public:
-    HostSessionDesktop(proto::auth::SessionType session_type, const QString& channel_id);
+    HostSessionDesktop(proto::SessionType session_type, const QString& channel_id);
     ~HostSessionDesktop();
 
 public slots:
@@ -57,7 +57,7 @@ private:
     void readConfig(const proto::desktop::Config& config);
     void readScreen(const proto::desktop::Screen& screen);
 
-    const proto::auth::SessionType session_type_;
+    const proto::SessionType session_type_;
 
     DesktopConfigTracker config_tracker_;
 

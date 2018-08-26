@@ -20,7 +20,7 @@ syntax = "proto3";
 
 option optimize_for = LITE_RUNTIME;
 
-import "authorization.proto";
+import "session_type.proto";
 import "desktop_session.proto";
 
 package aspia.proto.address_book;
@@ -54,7 +54,7 @@ message Computer
     // Fields 10-15 are reserved.
 
     // Session configurations.
-    auth.SessionType session_type = 16;
+    SessionType session_type = 16;
     SessionConfig session_config  = 17;
 }
 

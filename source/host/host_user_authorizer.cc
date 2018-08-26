@@ -137,7 +137,7 @@ void HostUserAuthorizer::stop()
         network_channel_ = nullptr;
     }
 
-    session_type_ = proto::auth::SESSION_TYPE_UNKNOWN;
+    session_type_ = proto::SESSION_TYPE_UNKNOWN;
     status_ = proto::auth::STATUS_CANCELED;
 
     emit finished(this);
@@ -266,7 +266,7 @@ void HostUserAuthorizer::writeLogonResult(proto::auth::Status status)
 }
 
 proto::auth::Status HostUserAuthorizer::doBasicAuthorization(
-    const QString& user_name, const std::string& session_key, proto::auth::SessionType session_type)
+    const QString& user_name, const std::string& session_key, proto::SessionType session_type)
 {
     if (!User::isValidName(user_name))
     {

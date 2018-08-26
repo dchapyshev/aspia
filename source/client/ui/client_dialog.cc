@@ -37,19 +37,19 @@ ClientDialog::ClientDialog(QWidget* parent)
 
     ui.combo_session_type->addItem(QIcon(QStringLiteral(":/icon/monitor-keyboard.png")),
                                    tr("Desktop Manage"),
-                                   QVariant(proto::auth::SESSION_TYPE_DESKTOP_MANAGE));
+                                   QVariant(proto::SESSION_TYPE_DESKTOP_MANAGE));
 
     ui.combo_session_type->addItem(QIcon(QStringLiteral(":/icon/monitor.png")),
                                    tr("Desktop View"),
-                                   QVariant(proto::auth::SESSION_TYPE_DESKTOP_VIEW));
+                                   QVariant(proto::SESSION_TYPE_DESKTOP_VIEW));
 
     ui.combo_session_type->addItem(QIcon(QStringLiteral(":/icon/folder-stand.png")),
                                    tr("File Transfer"),
-                                   QVariant(proto::auth::SESSION_TYPE_FILE_TRANSFER));
+                                   QVariant(proto::SESSION_TYPE_FILE_TRANSFER));
 
     ui.combo_session_type->addItem(QIcon(QStringLiteral(":/icon/system-monitor.png")),
                                    tr("System Information"),
-                                   QVariant(proto::auth::SESSION_TYPE_SYSTEM_INFO));
+                                   QVariant(proto::SESSION_TYPE_SYSTEM_INFO));
 
     int current_session_type = ui.combo_session_type->findData(QVariant(computer_.session_type()));
     if (current_session_type != -1)
@@ -72,13 +72,13 @@ ClientDialog::ClientDialog(QWidget* parent)
 
 void ClientDialog::sessionTypeChanged(int item_index)
 {
-    proto::auth::SessionType session_type = static_cast<proto::auth::SessionType>(
+    proto::SessionType session_type = static_cast<proto::SessionType>(
         ui.combo_session_type->itemData(item_index).toInt());
 
     switch (session_type)
     {
-        case proto::auth::SESSION_TYPE_DESKTOP_MANAGE:
-        case proto::auth::SESSION_TYPE_DESKTOP_VIEW:
+        case proto::SESSION_TYPE_DESKTOP_MANAGE:
+        case proto::SESSION_TYPE_DESKTOP_VIEW:
             ui.button_session_config->setEnabled(true);
             break;
 
@@ -90,12 +90,12 @@ void ClientDialog::sessionTypeChanged(int item_index)
 
 void ClientDialog::sessionConfigButtonPressed()
 {
-    proto::auth::SessionType session_type = static_cast<proto::auth::SessionType>(
+    proto::SessionType session_type = static_cast<proto::SessionType>(
         ui.combo_session_type->currentData().toInt());
 
     switch (session_type)
     {
-        case proto::auth::SESSION_TYPE_DESKTOP_MANAGE:
+        case proto::SESSION_TYPE_DESKTOP_MANAGE:
         {
             DesktopConfigDialog dialog(session_type,
                                        computer_.session_config().desktop_manage(),
@@ -109,7 +109,7 @@ void ClientDialog::sessionConfigButtonPressed()
         }
         break;
 
-        case proto::auth::SESSION_TYPE_DESKTOP_VIEW:
+        case proto::SESSION_TYPE_DESKTOP_VIEW:
         {
             DesktopConfigDialog dialog(session_type,
                                        computer_.session_config().desktop_view(),
@@ -129,7 +129,7 @@ void ClientDialog::sessionConfigButtonPressed()
 
 void ClientDialog::connectButtonPressed()
 {
-    proto::auth::SessionType session_type = static_cast<proto::auth::SessionType>(
+    proto::SessionType session_type = static_cast<proto::SessionType>(
         ui.combo_session_type->currentData().toInt());
 
     computer_.set_address(ui.edit_address->text().toStdString());
