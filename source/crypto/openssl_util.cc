@@ -16,27 +16,27 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "crypto/scoped_crypto_initializer.h"
+#include "crypto/openssl_util.h"
 
-#include <openssl/crypto.h>
-#include <openssl/ssl.h>
+#include <openssl/bn.h>
+#include <openssl/evp.h>
 
 namespace aspia {
 
-ScopedCryptoInitializer::ScopedCryptoInitializer()
+void BIGNUM_CTX_Deleter::operator()(bignum_ctx* bignum_ctx)
 {
-    if (!OPENSSL_add_all_algorithms_noconf())
-    {
-        qWarning("OPENSSL_init_crypto failed");
-        return;
-    }
-
-    initialized_ = true;
+    BN_CTX_free(bignum_ctx);
 }
 
-ScopedCryptoInitializer::~ScopedCryptoInitializer()
+void BIGNUM_Deleter::operator()(bignum_st* bignum)
 {
-    OPENSSL_cleanup();
+    BN_clear_free(bignum);
+}
+
+void EVP_CIPHER_CTX_Deleter::operator()(evp_cipher_ctx_st* ctx)
+{
+    EVP_CIPHER_CTX_cleanup(ctx);
+    EVP_CIPHER_CTX_free(ctx);
 }
 
 } // namespace aspia

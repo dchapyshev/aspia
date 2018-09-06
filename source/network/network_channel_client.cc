@@ -27,7 +27,7 @@
 
 #include "base/errno_logging.h"
 #include "base/message_serialization.h"
-#include "crypto/encryptor.h"
+#include "crypto/cryptor_chacha20_poly1305.h"
 #include "crypto/secure_memory.h"
 #include "network/srp_client_context.h"
 
@@ -188,22 +188,20 @@ void NetworkChannelClient::readAuthorizationChallenge(const QByteArray& buffer)
 {
     Q_ASSERT(srp_client_);
 
-    encryptor_.reset(Encryptor::create(srp_client_->key(),
-                                       srp_client_->encryptIv(),
-                                       srp_client_->decryptIv()));
-    if (!encryptor_)
+    cryptor_.reset(CryptorChaCha20Poly1305::create(srp_client_->key(),
+                                                   srp_client_->encryptIv(),
+                                                   srp_client_->decryptIv()));
+    if (!cryptor_)
     {
-        qWarning("Unable to create encryptor");
+        qWarning("Unable to create cryptor");
         emit errorOccurred(Error::UNKNOWN);
         return;
     }
 
     QByteArray auth_challenge_buffer;
-    auth_challenge_buffer.resize(encryptor_->decryptedDataSize(buffer.size()));
+    auth_challenge_buffer.resize(cryptor_->decryptedDataSize(buffer.size()));
 
-    if (!encryptor_->decrypt(buffer.data(),
-                             buffer.size(),
-                             auth_challenge_buffer.data()))
+    if (!cryptor_->decrypt(buffer.constData(), buffer.size(), auth_challenge_buffer.data()))
     {
         emit errorOccurred(Error::AUTHENTICATION_FAILURE);
         return;
@@ -234,11 +232,11 @@ void NetworkChannelClient::readAuthorizationChallenge(const QByteArray& buffer)
     }
 
     QByteArray encrypted_buffer;
-    encrypted_buffer.resize(encryptor_->encryptedDataSize(auth_response_buffer.size()));
+    encrypted_buffer.resize(cryptor_->encryptedDataSize(auth_response_buffer.size()));
 
-    if (!encryptor_->encrypt(auth_response_buffer.constData(),
-                             auth_response_buffer.size(),
-                             encrypted_buffer.data()))
+    if (!cryptor_->encrypt(auth_response_buffer.constData(),
+                           auth_response_buffer.size(),
+                           encrypted_buffer.data()))
     {
         emit errorOccurred(Error::ENCRYPTION_FAILURE);
         return;

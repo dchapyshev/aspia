@@ -61,7 +61,7 @@ size_t ivSizeForMethod(proto::Method method)
     switch (method)
     {
         case proto::METHOD_SRP_CHACHA20_POLY1305:
-            return 24;
+            return 12;
 
         default:
             return 0;

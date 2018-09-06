@@ -23,7 +23,7 @@
 
 #include "base/errno_logging.h"
 #include "base/message_serialization.h"
-#include "crypto/encryptor.h"
+#include "crypto/cryptor.h"
 
 namespace aspia {
 
@@ -320,16 +320,16 @@ void NetworkChannel::onMessageReceived()
 {
     if (channel_state_ == ChannelState::ENCRYPTED)
     {
-        int decrypted_data_size = encryptor_->decryptedDataSize(read_.buffer.size());
+        int decrypted_data_size = cryptor_->decryptedDataSize(read_.buffer.size());
 
         if (decrypt_buffer_.capacity() < decrypted_data_size)
             decrypt_buffer_.reserve(decrypted_data_size);
 
         decrypt_buffer_.resize(decrypted_data_size);
 
-        if (!encryptor_->decrypt(read_.buffer.constData(),
-                                 read_.buffer.size(),
-                                 decrypt_buffer_.data()))
+        if (!cryptor_->decrypt(read_.buffer.constData(),
+                               read_.buffer.size(),
+                               decrypt_buffer_.data()))
         {
             emit errorOccurred(Error::DECRYPTION_FAILURE);
             return;
@@ -351,7 +351,7 @@ void NetworkChannel::scheduleWrite()
     const QByteArray& source_buffer = write_.queue.front();
 
     // Calculate the size of the encrypted message.
-    int encrypted_data_size = encryptor_->encryptedDataSize(source_buffer.size());
+    int encrypted_data_size = cryptor_->encryptedDataSize(source_buffer.size());
     if (encrypted_data_size > kMaxMessageSize)
     {
         emit errorOccurred(Error::UNKNOWN);
@@ -395,9 +395,9 @@ void NetworkChannel::scheduleWrite()
     memcpy(write_.buffer.data(), length_data, length_data_size);
 
     // Encrypt the message.
-    if (!encryptor_->encrypt(source_buffer.constData(),
-                             source_buffer.size(),
-                             write_.buffer.data() + length_data_size))
+    if (!cryptor_->encrypt(source_buffer.constData(),
+                           source_buffer.size(),
+                           write_.buffer.data() + length_data_size))
     {
         emit errorOccurred(Error::ENCRYPTION_FAILURE);
         return;

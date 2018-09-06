@@ -28,7 +28,7 @@ BigNum::BigNum(const ConstBuffer& buffer)
     if (!buffer.isValid())
         return;
 
-    num_ = BN_bin2bn(buffer.data(), buffer.size(), nullptr);
+    num_.reset(BN_bin2bn(buffer.data(), buffer.size(), nullptr));
 }
 
 BigNum::BigNum(const std::string& string)
@@ -36,7 +36,7 @@ BigNum::BigNum(const std::string& string)
     if (string.empty())
         return;
 
-    num_ = BN_bin2bn(reinterpret_cast<const uint8_t*>(string.data()), string.size(), nullptr);
+    num_.reset(BN_bin2bn(reinterpret_cast<const uint8_t*>(string.data()), string.size(), nullptr));
 }
 
 BigNum::BigNum(BigNum&& other) noexcept
@@ -50,24 +50,16 @@ BigNum& BigNum::operator=(BigNum&& other) noexcept
     return *this;
 }
 
-BigNum::~BigNum()
-{
-    reset();
-}
+BigNum::~BigNum() = default;
 
 void BigNum::reset(bignum_st* num)
 {
-    if (isValid())
-        BN_clear_free(num_);
-
-    num_ = num;
+    num_.reset(num);
 }
 
 bignum_st* BigNum::release()
 {
-    bignum_st* tmp = num_;
-    num_ = nullptr;
-    return tmp;
+    return num_.release();
 }
 
 std::string BigNum::toStdString() const
@@ -75,14 +67,14 @@ std::string BigNum::toStdString() const
     if (!isValid())
         return std::string();
 
-    int length = BN_num_bytes(num_);
+    int length = BN_num_bytes(num_.get());
     if (length <= 0)
         return std::string();
 
     std::string result;
     result.resize(length);
 
-    BN_bn2bin(num_, reinterpret_cast<uint8_t*>(result.data()));
+    BN_bn2bin(num_.get(), reinterpret_cast<uint8_t*>(result.data()));
     return result;
 }
 
@@ -112,12 +104,10 @@ BigNum::Context::Context(Context&& other) noexcept
 BigNum::Context& BigNum::Context::operator=(Context&& other) noexcept
 {
     reset(other.release());
+    return *this;
 }
 
-BigNum::Context::~Context()
-{
-    reset();
-}
+BigNum::Context::~Context() = default;
 
 // static
 BigNum::Context BigNum::Context::create()
@@ -127,17 +117,12 @@ BigNum::Context BigNum::Context::create()
 
 void BigNum::Context::reset(bignum_ctx* ctx)
 {
-    if (isValid())
-        BN_CTX_free(ctx_);
-
-    ctx_ = ctx;
+    ctx_.reset(ctx);
 }
 
 bignum_ctx* BigNum::Context::release()
 {
-    bignum_ctx* tmp = ctx_;
-    ctx_ = nullptr;
-    return tmp;
+    return ctx_.release();
 }
 
 } // namespace aspia

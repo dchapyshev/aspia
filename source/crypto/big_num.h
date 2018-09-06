@@ -24,9 +24,7 @@
 
 #include "base/const_buffer.h"
 #include "base/macros_magic.h"
-
-struct bignum_st;
-struct bignum_ctx;
+#include "crypto/openssl_util.h"
 
 namespace aspia {
 
@@ -45,8 +43,8 @@ public:
     void reset(bignum_st* num = nullptr);
     bignum_st* release();
 
-    bignum_st* get() { return num_; }
-    const bignum_st* get() const { return num_; }
+    bignum_st* get() { return num_.get(); }
+    const bignum_st* get() const { return num_.get(); }
 
     std::string toStdString() const;
 
@@ -54,7 +52,7 @@ public:
     static BigNum fromBuffer(const ConstBuffer& buffer);
     static BigNum fromStdString(const std::string& string);
 
-    operator bignum_st*() const { return num_; }
+    operator bignum_st*() const { return num_.get(); }
 
     class Context
     {
@@ -71,10 +69,10 @@ public:
         void reset(bignum_ctx* ctx = nullptr);
         bignum_ctx* release();
 
-        bignum_ctx* get() { return ctx_; }
-        const bignum_ctx* get() const { return ctx_; }
+        bignum_ctx* get() { return ctx_.get(); }
+        const bignum_ctx* get() const { return ctx_.get(); }
 
-        operator bignum_ctx*() const { return ctx_; }
+        operator bignum_ctx*() const { return ctx_.get(); }
 
     private:
         Context(bignum_ctx* ctx)
@@ -83,7 +81,7 @@ public:
             // Nothing
         }
 
-        bignum_ctx* ctx_ = nullptr;
+        BIGNUM_CTX_ptr ctx_;
         DISALLOW_COPY_AND_ASSIGN(Context);
     };
 
@@ -97,7 +95,8 @@ private:
     explicit BigNum(const ConstBuffer& buffer);
     explicit BigNum(const std::string& string);
 
-    bignum_st* num_ = nullptr;
+    BIGNUM_ptr num_;
+
     DISALLOW_COPY_AND_ASSIGN(BigNum);
 };
 

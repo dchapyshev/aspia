@@ -254,12 +254,15 @@ list(APPEND SOURCE_CONSOLE
 list(APPEND SOURCE_CRYPTO
     ${PROJECT_SOURCE_DIR}/crypto/big_num.cc
     ${PROJECT_SOURCE_DIR}/crypto/big_num.h
+    ${PROJECT_SOURCE_DIR}/crypto/cryptor.h
+    ${PROJECT_SOURCE_DIR}/crypto/cryptor_chacha20_poly1305.cc
+    ${PROJECT_SOURCE_DIR}/crypto/cryptor_chacha20_poly1305.h
     ${PROJECT_SOURCE_DIR}/crypto/data_encryptor.cc
     ${PROJECT_SOURCE_DIR}/crypto/data_encryptor.h
-    ${PROJECT_SOURCE_DIR}/crypto/encryptor.cc
-    ${PROJECT_SOURCE_DIR}/crypto/encryptor.h
     ${PROJECT_SOURCE_DIR}/crypto/generic_hash.cc
     ${PROJECT_SOURCE_DIR}/crypto/generic_hash.h
+    ${PROJECT_SOURCE_DIR}/crypto/openssl_util.cc
+    ${PROJECT_SOURCE_DIR}/crypto/openssl_util.h
     ${PROJECT_SOURCE_DIR}/crypto/password_hash.cc
     ${PROJECT_SOURCE_DIR}/crypto/password_hash.h
     ${PROJECT_SOURCE_DIR}/crypto/random.cc

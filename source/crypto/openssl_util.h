@@ -16,27 +16,36 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "crypto/scoped_crypto_initializer.h"
+#ifndef ASPIA_CRYPTO__OPENSSL_UTIL_H_
+#define ASPIA_CRYPTO__OPENSSL_UTIL_H_
 
-#include <openssl/crypto.h>
-#include <openssl/ssl.h>
+#include <memory>
+
+struct bignum_ctx;
+struct bignum_st;
+struct evp_cipher_ctx_st;
 
 namespace aspia {
 
-ScopedCryptoInitializer::ScopedCryptoInitializer()
+struct BIGNUM_CTX_Deleter
 {
-    if (!OPENSSL_add_all_algorithms_noconf())
-    {
-        qWarning("OPENSSL_init_crypto failed");
-        return;
-    }
+    void operator()(bignum_ctx* bignum_ctx);
+};
 
-    initialized_ = true;
-}
-
-ScopedCryptoInitializer::~ScopedCryptoInitializer()
+struct BIGNUM_Deleter
 {
-    OPENSSL_cleanup();
-}
+    void operator()(bignum_st* bignum);
+};
+
+struct EVP_CIPHER_CTX_Deleter
+{
+    void operator()(evp_cipher_ctx_st* ctx);
+};
+
+using BIGNUM_CTX_ptr = std::unique_ptr<bignum_ctx, BIGNUM_CTX_Deleter>;
+using BIGNUM_ptr = std::unique_ptr<bignum_st, BIGNUM_Deleter>;
+using EVP_CIPHER_CTX_ptr = std::unique_ptr<evp_cipher_ctx_st, EVP_CIPHER_CTX_Deleter>;
 
 } // namespace aspia
+
+#endif // ASPIA_CRYPTO__OPENSSL_UTIL_H_

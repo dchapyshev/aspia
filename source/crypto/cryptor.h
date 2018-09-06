@@ -16,27 +16,23 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "crypto/scoped_crypto_initializer.h"
-
-#include <openssl/crypto.h>
-#include <openssl/ssl.h>
+#ifndef ASPIA_CRYPTO__CRYPTOR_H_
+#define ASPIA_CRYPTO__CRYPTOR_H_
 
 namespace aspia {
 
-ScopedCryptoInitializer::ScopedCryptoInitializer()
+class Cryptor
 {
-    if (!OPENSSL_add_all_algorithms_noconf())
-    {
-        qWarning("OPENSSL_init_crypto failed");
-        return;
-    }
+public:
+    virtual ~Cryptor() = default;
 
-    initialized_ = true;
-}
+    virtual size_t encryptedDataSize(size_t in_size) = 0;
+    virtual bool encrypt(const char* in, size_t in_size, char* out) = 0;
 
-ScopedCryptoInitializer::~ScopedCryptoInitializer()
-{
-    OPENSSL_cleanup();
-}
+    virtual size_t decryptedDataSize(size_t in_size) = 0;
+    virtual bool decrypt(const char* in, size_t in_size, char* out) = 0;
+};
 
 } // namespace aspia
+
+#endif // ASPIA_CRYPTO__CRYPTOR_H_

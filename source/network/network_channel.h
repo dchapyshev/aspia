@@ -27,7 +27,7 @@
 
 namespace aspia {
 
-class Encryptor;
+class Cryptor;
 
 class NetworkChannel : public QObject
 {
@@ -96,7 +96,7 @@ protected:
     QPointer<QTcpSocket> socket_;
 
     // Encrypts and decrypts data.
-    std::unique_ptr<Encryptor> encryptor_;
+    std::unique_ptr<Cryptor> cryptor_;
 
     ChannelState channel_state_ = ChannelState::NOT_CONNECTED;
     KeyExchangeState key_exchange_state_ = KeyExchangeState::HELLO;

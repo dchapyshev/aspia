@@ -19,7 +19,7 @@
 #include "network/network_channel_host.h"
 
 #include "base/message_serialization.h"
-#include "crypto/encryptor.h"
+#include "crypto/cryptor_chacha20_poly1305.h"
 #include "network/srp_host_context.h"
 
 namespace aspia {
@@ -131,12 +131,12 @@ void NetworkChannelHost::readClientKeyExchange(const QByteArray& buffer)
 
     srp_host_->readClientKeyExchange(client_key_exchange);
 
-    encryptor_.reset(Encryptor::create(srp_host_->key(),
-                                       srp_host_->encryptIv(),
-                                       srp_host_->decryptIv()));
-    if (!encryptor_)
+    cryptor_.reset(CryptorChaCha20Poly1305::create(srp_host_->key(),
+                                                   srp_host_->encryptIv(),
+                                                   srp_host_->decryptIv()));
+    if (!cryptor_)
     {
-        qWarning("Unable to create encryptor");
+        qWarning("Unable to create cryptor");
         emit errorOccurred(Error::UNKNOWN);
         return;
     }
@@ -153,11 +153,11 @@ void NetworkChannelHost::readClientKeyExchange(const QByteArray& buffer)
     }
 
     QByteArray encrypted_buffer;
-    encrypted_buffer.resize(encryptor_->encryptedDataSize(authorization_challenge_buffer.size()));
+    encrypted_buffer.resize(cryptor_->encryptedDataSize(authorization_challenge_buffer.size()));
 
-    if (!encryptor_->encrypt(authorization_challenge_buffer.constData(),
-                             authorization_challenge_buffer.size(),
-                             encrypted_buffer.data()))
+    if (!cryptor_->encrypt(authorization_challenge_buffer.constData(),
+                           authorization_challenge_buffer.size(),
+                           encrypted_buffer.data()))
     {
         emit errorOccurred(Error::ENCRYPTION_FAILURE);
         return;
@@ -170,9 +170,9 @@ void NetworkChannelHost::readClientKeyExchange(const QByteArray& buffer)
 void NetworkChannelHost::readAuthorizationResponse(const QByteArray& buffer)
 {
     QByteArray decrypted_buffer;
-    decrypted_buffer.resize(encryptor_->decryptedDataSize(buffer.size()));
+    decrypted_buffer.resize(cryptor_->decryptedDataSize(buffer.size()));
 
-    if (!encryptor_->decrypt(buffer.constData(), buffer.size(), decrypted_buffer.data()))
+    if (!cryptor_->decrypt(buffer.constData(), buffer.size(), decrypted_buffer.data()))
     {
         emit errorOccurred(Error::DECRYPTION_FAILURE);
         return;
