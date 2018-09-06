@@ -21,12 +21,8 @@
 #include <QHostAddress>
 #include <QNetworkProxy>
 
-#if defined(Q_OS_WIN)
-#include <winsock2.h>
-#include <mstcpip.h>
-#endif
-
 #include "base/errno_logging.h"
+#include "base/message_serialization.h"
 #include "crypto/encryptor.h"
 
 namespace aspia {
@@ -75,18 +71,14 @@ QByteArray createWriteBuffer(const QByteArray& message_buffer)
 
 } // namespace
 
-NetworkChannel::NetworkChannel(Type channel_type, QTcpSocket* socket, QObject* parent)
+NetworkChannel::NetworkChannel(ChannelType channel_type, QTcpSocket* socket, QObject* parent)
     : QObject(parent),
-      type_(channel_type),
+      channel_type_(channel_type),
       socket_(socket)
 {
     Q_ASSERT(!socket_.isNull());
 
     socket_->setParent(this);
-    socket_->setSocketOption(QTcpSocket::KeepAliveOption, 1);
-
-    if (type_ == Type::CLIENT_CHANNEL)
-        connect(socket_, &QTcpSocket::connected, this, &NetworkChannel::onConnected);
 
     connect(socket_, &QTcpSocket::bytesWritten, this, &NetworkChannel::onBytesWritten);
     connect(socket_, &QTcpSocket::readyRead, this, &NetworkChannel::onReadyRead);
@@ -97,24 +89,8 @@ NetworkChannel::NetworkChannel(Type channel_type, QTcpSocket* socket, QObject* p
     connect(socket_, QOverload<QTcpSocket::SocketError>::of(&QTcpSocket::error),
             this, &NetworkChannel::onError,
             Qt::QueuedConnection);
-}
 
-// static
-NetworkChannel* NetworkChannel::createClient(QObject* parent)
-{
-    return new NetworkChannel(Type::CLIENT_CHANNEL, new QTcpSocket(), parent);
-}
-
-void NetworkChannel::connectToHost(const QString& address, int port)
-{
-    if (type_ == Type::SERVER_CHANNEL)
-    {
-        qWarning("The channel is server. The method invocation is invalid.");
-        return;
-    }
-
-    socket_->setProxy(QNetworkProxy::NoProxy);
-    socket_->connectToHost(address, port);
+    connect(this, &NetworkChannel::errorOccurred, this, &NetworkChannel::stop);
 }
 
 QString NetworkChannel::peerAddress() const
@@ -142,7 +118,7 @@ void NetworkChannel::start()
 
 void NetworkChannel::stop()
 {
-    state_ = State::NOT_CONNECTED;
+    channel_state_ = ChannelState::NOT_CONNECTED;
 
     if (socket_->state() != QTcpSocket::UnconnectedState)
     {
@@ -162,77 +138,67 @@ void NetworkChannel::send(const QByteArray& buffer)
 {
     if (buffer.isEmpty())
     {
-        emit errorOccurred("An attempt was made to send an empty message.");
+        emit errorOccurred(Error::UNKNOWN);
+        return;
+    }
+
+    bool schedule_write = write_.queue.isEmpty();
+
+    // Add the buffer to the queue for sending.
+    write_.queue.push_back(buffer);
+
+    if (schedule_write)
+        scheduleWrite();
+}
+
+void NetworkChannel::sendInternal(const QByteArray& buffer)
+{
+    write_.buffer = createWriteBuffer(buffer);
+    if (write_.buffer.isEmpty())
+    {
         stop();
         return;
     }
 
-    // If the write buffer is empty, then no write operation is currently performed.
-    if (write_.buffer.isEmpty() && write_.queue.isEmpty())
-    {
-        // Start the write operation.
-        scheduleWrite(buffer);
-    }
-    else
-    {
-        // Add the buffer to the queue for sending.
-        write_.queue.push_back(buffer);
-    }
+    socket_->write(write_.buffer);
 }
 
-void NetworkChannel::onConnected()
+void NetworkChannel::onError(QAbstractSocket::SocketError error)
 {
-    state_ = State::CONNECTED;
+    Error channel_error;
 
-    // Disable the Nagle algorithm for the socket.
-    socket_->setSocketOption(QTcpSocket::LowDelayOption, 1);
-
-#if defined(Q_OS_WIN)
-    struct tcp_keepalive alive;
-
-    alive.onoff = 1; // On.
-    alive.keepalivetime = 30000; // 30 seconds.
-    alive.keepaliveinterval = 5000; // 5 seconds.
-
-    DWORD bytes_returned;
-
-    if (WSAIoctl(socket_->socketDescriptor(), SIO_KEEPALIVE_VALS,
-                 &alive, sizeof(alive), nullptr, 0, &bytes_returned,
-                 nullptr, nullptr) == SOCKET_ERROR)
+    switch (error)
     {
-        qWarningErrno("WSAIoctl failed");
+        case QAbstractSocket::ConnectionRefusedError:
+            channel_error = Error::CONNECTION_REFUSED;
+            break;
+
+        case QAbstractSocket::RemoteHostClosedError:
+            channel_error = Error::REMOTE_HOST_CLOSED;
+            break;
+
+        case QAbstractSocket::HostNotFoundError:
+            channel_error = Error::SPECIFIED_HOST_NOT_FOUND;
+            break;
+
+        case QAbstractSocket::SocketTimeoutError:
+            channel_error = Error::SOCKET_TIMEOUT;
+            break;
+
+        case QAbstractSocket::AddressInUseError:
+            channel_error = Error::ADDRESS_IN_USE;
+            break;
+
+        case QAbstractSocket::SocketAddressNotAvailableError:
+            channel_error = Error::ADDRESS_NOT_AVAILABLE;
+            break;
+
+        default:
+            channel_error = Error::UNKNOWN;
+            break;
     }
 
-#endif
-
-    if (type_ == Type::SERVER_CHANNEL)
-    {
-        encryptor_.reset(new Encryptor(Encryptor::Mode::SERVER));
-
-        // Start reading hello message.
-        onReadyRead();
-    }
-    else
-    {
-        Q_ASSERT(type_ == Type::CLIENT_CHANNEL);
-        encryptor_.reset(new Encryptor(Encryptor::Mode::CLIENT));
-
-        write_.buffer = createWriteBuffer(encryptor_->helloMessage());
-        if (write_.buffer.isEmpty())
-        {
-            emit errorOccurred(tr("Error in encryption key exchange."));
-            stop();
-            return;
-        }
-
-        // Write hello message to server.
-        socket_->write(write_.buffer);
-    }
-}
-
-void NetworkChannel::onError(QAbstractSocket::SocketError /* error */)
-{
-    emit errorOccurred(socket_->errorString());
+    emit errorOccurred(channel_error);
 }
 
 void NetworkChannel::onBytesWritten(int64_t bytes)
@@ -242,7 +208,7 @@ void NetworkChannel::onBytesWritten(int64_t bytes)
     if (write_.bytes_transferred < write_.buffer.size())
     {
         int64_t bytes_to_write =
-            qMin(write_.buffer.size() - write_.bytes_transferred, kMaxWriteSize);
+            std::min(write_.buffer.size() - write_.bytes_transferred, kMaxWriteSize);
 
         socket_->write(write_.buffer.constData() + write_.bytes_transferred, bytes_to_write);
     }
@@ -296,8 +262,7 @@ void NetworkChannel::onReadyRead()
 
                     if (!read_.buffer_size || read_.buffer_size > kMaxMessageSize)
                     {
-                        emit errorOccurred(tr("The received message has an invalid size."));
-                        stop();
+                        emit errorOccurred(Error::UNKNOWN);
                         return;
                     }
 
@@ -334,129 +299,62 @@ void NetworkChannel::onReadyRead()
 
 void NetworkChannel::onMessageWritten()
 {
-    switch (state_)
+    if (channel_state_ == ChannelState::ENCRYPTED)
     {
-        case State::ENCRYPTED:
-        {
-            if (!write_.queue.isEmpty())
-            {
-                scheduleWrite(write_.queue.front());
-                write_.queue.pop_front();
-            }
-        }
-        break;
+        Q_ASSERT(!write_.queue.empty());
 
-        case State::CONNECTED:
-        {
-            if (type_ == Type::SERVER_CHANNEL)
-            {
-                keyExchangeComplete();
-            }
-            else
-            {
-                Q_ASSERT(type_ == Type::CLIENT_CHANNEL);
+        // Delete the sent message from the queue.
+        write_.queue.pop_front();
 
-                // Read hello message from server.
-                onReadyRead();
-            }
-        }
-        break;
-
-        default:
-            break;
+        // If the queue is not empty, then we send the following message.
+        if (!write_.queue.isEmpty())
+            scheduleWrite();
+    }
+    else
+    {
+        internalMessageWritten();
     }
 }
 
 void NetworkChannel::onMessageReceived()
 {
-    switch (state_)
+    if (channel_state_ == ChannelState::ENCRYPTED)
     {
-        case State::ENCRYPTED:
+        int decrypted_data_size = encryptor_->decryptedDataSize(read_.buffer.size());
+
+        if (decrypt_buffer_.capacity() < decrypted_data_size)
+            decrypt_buffer_.reserve(decrypted_data_size);
+
+        decrypt_buffer_.resize(decrypted_data_size);
+
+        if (!encryptor_->decrypt(read_.buffer.constData(),
+                                 read_.buffer.size(),
+                                 decrypt_buffer_.data()))
         {
-            if (!encryptor_)
-            {
-                emit errorOccurred(tr("Unknown internal error."));
-                stop();
-                return;
-            }
-
-            int decrypted_data_size = encryptor_->decryptedDataSize(read_.buffer.size());
-
-            if (decrypt_buffer_.capacity() < decrypted_data_size)
-                decrypt_buffer_.reserve(decrypted_data_size);
-
-            decrypt_buffer_.resize(decrypted_data_size);
-
-            if (!encryptor_->decrypt(read_.buffer.constData(),
-                                     read_.buffer.size(),
-                                     decrypt_buffer_.data()))
-            {
-                emit errorOccurred(tr("Error while decrypting the message."));
-                stop();
-                return;
-            }
-
-            emit messageReceived(decrypt_buffer_);
-
-            // Read next message.
-            onReadyRead();
+            emit errorOccurred(Error::DECRYPTION_FAILURE);
+            return;
         }
-        break;
 
-        case State::CONNECTED:
-        {
-            if (!encryptor_->readHelloMessage(read_.buffer))
-            {
-                emit errorOccurred(tr("Error in encryption key exchange."));
-                stop();
-                return;
-            }
-
-            if (type_ == Type::SERVER_CHANNEL)
-            {
-                // Write hello message to client.
-                write_.buffer = createWriteBuffer(encryptor_->helloMessage());
-                if (write_.buffer.isEmpty())
-                {
-                    emit errorOccurred(tr("Error in encryption key exchange."));
-                    stop();
-                    return;
-                }
-
-                socket_->write(write_.buffer);
-            }
-            else
-            {
-                Q_ASSERT(type_ == Type::CLIENT_CHANNEL);
-                keyExchangeComplete();
-            }
-        }
-        break;
-
-        default:
-            break;
+        emit messageReceived(decrypt_buffer_);
     }
+    else
+    {
+        internalMessageReceived(read_.buffer);
+    }
+
+    // Read next message.
+    onReadyRead();
 }
 
-void NetworkChannel::keyExchangeComplete()
+void NetworkChannel::scheduleWrite()
 {
-    // After the successful completion of the key exchange, we pause the channel.
-    // To continue receiving messages, slot |start| must be called.
-    read_.paused = true;
+    const QByteArray& source_buffer = write_.queue.front();
 
-    // The data channel is now encrypted.
-    state_ = State::ENCRYPTED;
-    emit connected();
-}
-
-void NetworkChannel::scheduleWrite(const QByteArray& source_buffer)
-{
     // Calculate the size of the encrypted message.
     int encrypted_data_size = encryptor_->encryptedDataSize(source_buffer.size());
     if (encrypted_data_size > kMaxMessageSize)
     {
-        emit errorOccurred(tr("The message to send exceeds the size limit."));
-        stop();
+        emit errorOccurred(Error::UNKNOWN);
         return;
     }
 
@@ -501,8 +399,7 @@ void NetworkChannel::scheduleWrite(const QByteArray& source_buffer)
                              source_buffer.size(),
                              write_.buffer.data() + length_data_size))
     {
-        emit errorOccurred(tr("Error while encrypting the message."));
-        stop();
+        emit errorOccurred(Error::ENCRYPTION_FAILURE);
         return;
     }
 

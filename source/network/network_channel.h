@@ -28,26 +28,36 @@
 namespace aspia {
 
 class Encryptor;
-class NetworkServer;
 
 class NetworkChannel : public QObject
 {
     Q_OBJECT
 
 public:
-    enum class Type { SERVER_CHANNEL, CLIENT_CHANNEL };
-    enum class State { NOT_CONNECTED, CONNECTED, ENCRYPTED };
+    enum class ChannelType { HOST, CLIENT };
+    enum class ChannelState { NOT_CONNECTED, CONNECTED, ENCRYPTED };
+    enum class KeyExchangeState { HELLO, IDENTIFY, KEY_EXCHANGE, AUTHORIZATION, DONE };
 
-    ~NetworkChannel() = default;
+    enum class Error
+    {
+        UNKNOWN,                  // Unknown error.
+        CONNECTION_REFUSED,       // The connection was refused by the peer (or timed out).
+        REMOTE_HOST_CLOSED,       // The remote host closed the connection.
+        SPECIFIED_HOST_NOT_FOUND, // The host address was not found.
+        SOCKET_TIMEOUT,           // The socket operation timed out.
+        ADDRESS_IN_USE,           // The address specified is already in use and was set to be exclusive.
+        ADDRESS_NOT_AVAILABLE,    // The address specified does not belong to the host.
+        PROTOCOL_FAILURE,         // Violation of the data exchange protocol.
+        ENCRYPTION_FAILURE,       // An error occurred while encrypting the message.
+        DECRYPTION_FAILURE,       // An error occurred while decrypting the message.
+        AUTHENTICATION_FAILURE,   // An error occured while authenticating.
+        SESSION_TYPE_NOT_ALLOWED  // The specified session type is not allowed for the user.
+    };
 
-    // Creates a client to connect to the host.
-    static NetworkChannel* createClient(QObject* parent = nullptr);
-
-    // Connection to the host. If the channel is server, it does nothing.
-    void connectToHost(const QString& address, int port);
+    virtual ~NetworkChannel() = default;
 
     // Returns the state of the data channel.
-    State state() const { return state_; }
+    ChannelState channelState() const { return channel_state_; }
 
     // If the channel is started, it returns true, if not, then false.
     bool isStarted() const { return !read_.paused; }
@@ -56,14 +66,11 @@ public:
     QString peerAddress() const;
 
 signals:
-    // Emits when a secure connection is established.
-    void connected();
-
     // Emits when the connection is aborted.
     void disconnected();
 
     // Emitted when an error occurred. Parameter |message| contains a text description of the error.
-    void errorOccurred(const QString& message);
+    void errorOccurred(Error error);
 
     // Emitted when a new message is received.
     void messageReceived(const QByteArray& buffer);
@@ -85,8 +92,23 @@ public slots:
     // Sends a message.
     void send(const QByteArray& buffer);
 
+protected:
+    QPointer<QTcpSocket> socket_;
+
+    // Encrypts and decrypts data.
+    std::unique_ptr<Encryptor> encryptor_;
+
+    ChannelState channel_state_ = ChannelState::NOT_CONNECTED;
+    KeyExchangeState key_exchange_state_ = KeyExchangeState::HELLO;
+
+    NetworkChannel(ChannelType channel_type, QTcpSocket* socket, QObject* parent);
+
+    void sendInternal(const QByteArray& buffer);
+
+    virtual void internalMessageReceived(const QByteArray& buffer) = 0;
+    virtual void internalMessageWritten() = 0;
+
 private slots:
-    void onConnected();
     void onError(QAbstractSocket::SocketError error);
     void onBytesWritten(int64_t bytes);
     void onReadyRead();
@@ -94,17 +116,9 @@ private slots:
     void onMessageReceived();
 
 private:
-    friend class NetworkServer;
-    NetworkChannel(Type channel_type, QTcpSocket* socket, QObject* parent);
-    void keyExchangeComplete();
-    void scheduleWrite(const QByteArray& source_buffer);
+    void scheduleWrite();
 
-    const Type type_;
-    State state_ = State::NOT_CONNECTED;
-    QPointer<QTcpSocket> socket_;
-
-    // Encrypts and decrypts data.
-    QScopedPointer<Encryptor> encryptor_;
+    const ChannelType channel_type_;
 
     // To this buffer decrypts the data received from the network.
     QByteArray decrypt_buffer_;

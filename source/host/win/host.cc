@@ -26,7 +26,7 @@
 #include "host/host_session_fake.h"
 #include "ipc/ipc_channel.h"
 #include "ipc/ipc_server.h"
-#include "network/network_channel.h"
+#include "network/network_channel_host.h"
 
 namespace aspia {
 
@@ -41,7 +41,7 @@ Host::~Host()
     stop();
 }
 
-void Host::setNetworkChannel(NetworkChannel* network_channel)
+void Host::setNetworkChannel(NetworkChannelHost* network_channel)
 {
     if (state_ != State::STOPPED)
     {
@@ -59,28 +59,6 @@ void Host::setNetworkChannel(NetworkChannel* network_channel)
     network_channel_->setParent(this);
 }
 
-void Host::setSessionType(proto::SessionType session_type)
-{
-    if (state_ != State::STOPPED)
-    {
-        qDebug("An attempt to set a session type in an already running host");
-        return;
-    }
-
-    session_type_ = session_type;
-}
-
-void Host::setUserName(const QString& user_name)
-{
-    if (state_ != State::STOPPED)
-    {
-        qDebug("An attempt to set a user name in an already running host");
-        return;
-    }
-
-    user_name_ = user_name;
-}
-
 void Host::setUuid(std::string&& uuid)
 {
     if (state_ != State::STOPPED)
@@ -90,6 +68,16 @@ void Host::setUuid(std::string&& uuid)
     }
 
     uuid_ = std::move(uuid);
+}
+
+const std::string& Host::userName() const
+{
+    return network_channel_->userName();
+}
+
+proto::SessionType Host::sessionType() const
+{
+    return network_channel_->sessionType();
 }
 
 QString Host::remoteAddress() const
@@ -105,7 +93,7 @@ bool Host::start()
         return false;
     }
 
-    switch (session_type_)
+    switch (network_channel_->sessionType())
     {
         case proto::SESSION_TYPE_DESKTOP_MANAGE:
         case proto::SESSION_TYPE_DESKTOP_VIEW:
@@ -115,12 +103,12 @@ bool Host::start()
 
         default:
         {
-            qDebug("Invalid session type: %d", session_type_);
+            qDebug("Invalid session type: %d", network_channel_->sessionType());
             return false;
         }
     }
 
-    if (user_name_.isEmpty())
+    if (network_channel_->userName().empty())
     {
         qDebug("Invalid user name");
         return false;
@@ -162,7 +150,7 @@ void Host::stop()
     qInfo("Stopping host");
     state_ = State::STOPPING;
 
-    if (network_channel_->state() != NetworkChannel::State::NOT_CONNECTED)
+    if (network_channel_->channelState() != NetworkChannel::ChannelState::NOT_CONNECTED)
         network_channel_->stop();
 
     dettachSession();
@@ -228,7 +216,7 @@ void Host::ipcServerStarted(const QString& channel_id)
     arguments << QStringLiteral("--channel_id") << channel_id;
     arguments << QStringLiteral("--session_type");
 
-    switch (session_type_)
+    switch (network_channel_->sessionType())
     {
         case proto::SESSION_TYPE_DESKTOP_MANAGE:
             session_process_->setAccount(HostProcess::Account::System);
@@ -251,7 +239,7 @@ void Host::ipcServerStarted(const QString& channel_id)
             break;
 
         default:
-            qFatal("Unknown session type: %d", session_type_);
+            qFatal("Unknown session type: %d", network_channel_->sessionType());
             break;
     }
 
@@ -259,7 +247,7 @@ void Host::ipcServerStarted(const QString& channel_id)
 
     connect(session_process_, &HostProcess::errorOccurred, [this](HostProcess::ErrorCode error_code)
     {
-        if (session_type_ == proto::SESSION_TYPE_FILE_TRANSFER &&
+        if (network_channel_->sessionType() == proto::SESSION_TYPE_FILE_TRANSFER &&
             error_code == HostProcess::NoLoggedOnUser)
         {
             if (!startFakeSession())
@@ -369,10 +357,11 @@ bool Host::startFakeSession()
 {
     qInfo("Starting a fake session");
 
-    fake_session_ = HostSessionFake::create(session_type_, this);
+    fake_session_ = HostSessionFake::create(network_channel_->sessionType(), this);
     if (fake_session_.isNull())
     {
-        qInfo() << "Session type" << session_type_ << "does not have support for fake sessions";
+        qInfo() << "Session type" << network_channel_->sessionType()
+                << "does not have support for fake sessions";
         return false;
     }
 

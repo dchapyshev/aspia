@@ -20,6 +20,9 @@
 
 #include <QDebug>
 
+#include "base/message_serialization.h"
+#include "crypto/random.h"
+
 namespace aspia {
 
 HostSettings::HostSettings()
@@ -63,62 +66,38 @@ bool HostSettings::setTcpPort(int port)
     return true;
 }
 
-QList<User> HostSettings::userList() const
+std::shared_ptr<proto::SrpUserList> HostSettings::userList() const
 {
-    QList<User> user_list;
+    QByteArray serialized_user_list = settings_.value(QStringLiteral("SrpUserList")).toByteArray();
 
-    int size = settings_.beginReadArray(QStringLiteral("UserList"));
-    for (int i = 0; i < size; ++i)
+    std::shared_ptr<proto::SrpUserList> user_list = std::make_shared<proto::SrpUserList>();
+
+    if (!parseMessage(serialized_user_list, *user_list))
     {
-        settings_.setArrayIndex(i);
-
-        User user;
-
-        QString user_name = settings_.value(QStringLiteral("UserName")).toString();
-        if (!user.setName(user_name))
-        {
-            qDebug() << "Invalid user name. The list of users is corrupted";
-            return QList<User>();
-        }
-
-        std::string password_hash = settings_.value(QStringLiteral("PasswordHash")).toByteArray();
-        if (!user.setPasswordHash(password_hash))
-        {
-            qDebug() << "Invalid password hash. The list of users is corrupted";
-            return QList<User>();
-        }
-
-        user.setFlags(settings_.value(QStringLiteral("Flags")).toUInt());
-        user.setSessions(settings_.value(QStringLiteral("Sessions")).toUInt());
-
-        user_list.push_back(user);
+        qDebug() << "The list of users is corrupted";
+        return nullptr;
     }
-    settings_.endArray();
+
+    if (user_list->seed_key().empty())
+    {
+        static const size_t kSeedKeySize = 512;
+        user_list->set_seed_key(Random::generateBuffer(kSeedKeySize));
+    }
 
     return user_list;
 }
 
-bool HostSettings::setUserList(const QList<User>& user_list)
+bool HostSettings::setUserList(const proto::SrpUserList& user_list)
 {
     if (!settings_.isWritable())
         return false;
 
-    settings_.remove(QStringLiteral("UserList"));
+    if (user_list.seed_key().empty())
+        return false;
 
-    settings_.beginWriteArray(QStringLiteral("UserList"));
-    for (int i = 0; i < user_list.size(); ++i)
-    {
-        settings_.setArrayIndex(i);
+    QByteArray serialized_user_list = serializeMessage(user_list);
 
-        const User& user = user_list.at(i);
-
-        settings_.setValue(QStringLiteral("UserName"), user.name());
-        settings_.setValue(QStringLiteral("PasswordHash"), QByteArray::fromStdString(user.passwordHash()));
-        settings_.setValue(QStringLiteral("Flags"), user.flags());
-        settings_.setValue(QStringLiteral("Sessions"), user.sessions());
-    }
-    settings_.endArray();
-
+    settings_.setValue(QStringLiteral("SrpUserList"), serialized_user_list);
     return true;
 }
 

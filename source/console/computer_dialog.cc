@@ -24,7 +24,7 @@
 #include "client/ui/desktop_config_dialog.h"
 #include "client/client_session_desktop_manage.h"
 #include "console/computer_group_item.h"
-#include "host/user.h"
+#include "host/user_util.h"
 
 namespace aspia {
 
@@ -172,7 +172,7 @@ void ComputerDialog::buttonBoxClicked(QAbstractButton* button)
         }
 
         QString username = ui.edit_username->text();
-        if (!username.isEmpty() && !User::isValidName(username))
+        if (!username.isEmpty() && !UserUtil::isValidUserName(username))
         {
             showError(tr("The user name can not be empty and can contain only"
                          " alphabet characters, numbers and ""_"", ""-"", ""."" characters."));
@@ -180,10 +180,10 @@ void ComputerDialog::buttonBoxClicked(QAbstractButton* button)
         }
 
         QString password = ui.edit_password->text();
-        if (!password.isEmpty() && !User::isValidPassword(password))
+        if (!password.isEmpty() && !UserUtil::isValidPassword(password))
         {
             showError(tr("Password can not be shorter than %n characters.",
-                         "", User::kMinPasswordLength));
+                         "", UserUtil::kMinPasswordLength));
             return;
         }
 

@@ -20,14 +20,13 @@
 #define ASPIA_HOST__HOST_SERVER_H_
 
 #include "host/win/host_process.h"
-#include "host/user.h"
 #include "ipc/ipc_channel.h"
 #include "network/network_server.h"
+#include "protocol/srp_user.pb.h"
 
 namespace aspia {
 
 class Host;
-class HostUserAuthorizer;
 
 class HostServer : public QObject
 {
@@ -37,7 +36,7 @@ public:
     HostServer(QObject* parent = nullptr);
     ~HostServer();
 
-    bool start(int port, const QList<User>& user_list);
+    bool start(int port, std::shared_ptr<proto::SrpUserList>& user_list);
     void stop();
     void setSessionChanged(uint32_t event, uint32_t session_id);
 
@@ -46,7 +45,6 @@ signals:
 
 private slots:
     void onNewConnection();
-    void onAuthorizationFinished(HostUserAuthorizer* authorizer);
     void onHostFinished(Host* host);
     void onIpcServerStarted(const QString& channel_id);
     void onIpcNewConnection(IpcChannel* channel);
@@ -75,9 +73,6 @@ private:
 
     // The channel is used to communicate with the notifier process.
     QPointer<IpcChannel> ipc_channel_;
-
-    // Contains a list of users for authorization.
-    QList<User> user_list_;
 
     // Contains a list of connected sessions.
     QList<QPointer<Host>> session_list_;

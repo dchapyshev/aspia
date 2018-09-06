@@ -18,13 +18,11 @@
 
 #include "client/client.h"
 
-#include "client/ui/authorization_dialog.h"
 #include "client/ui/status_dialog.h"
 #include "client/client_session_desktop_manage.h"
 #include "client/client_session_desktop_view.h"
 #include "client/client_session_file_transfer.h"
 #include "client/client_session_system_info.h"
-#include "client/client_user_authorizer.h"
 
 namespace aspia {
 
@@ -33,15 +31,15 @@ Client::Client(const ConnectData& connect_data, QObject* parent)
       connect_data_(connect_data)
 {
     // Create a network channel.
-    network_channel_ = NetworkChannel::createClient(this);
+    network_channel_ = new NetworkChannelClient(this);
 
     // Create a status dialog. It displays all information about the progress of the connection
     // and errors.
     status_dialog_ = new StatusDialog();
 
-    connect(network_channel_, &NetworkChannel::connected, this, &Client::onChannelConnected);
-    connect(network_channel_, &NetworkChannel::errorOccurred, this, &Client::onChannelError);
-    connect(network_channel_, &NetworkChannel::disconnected, this, &Client::onChannelDisconnected);
+    connect(network_channel_, &NetworkChannelClient::connected, this, &Client::onChannelConnected);
+    connect(network_channel_, &NetworkChannelClient::errorOccurred, this, &Client::onChannelError);
+    connect(network_channel_, &NetworkChannelClient::disconnected, this, &Client::onChannelDisconnected);
 
     connect(status_dialog_, &StatusDialog::finished, [this](int /* result */)
     {
@@ -52,88 +50,27 @@ Client::Client(const ConnectData& connect_data, QObject* parent)
         status_dialog_->deleteLater();
 
         // When the status dialog is finished, we call the client's termination.
-        emit clientTerminated(this);
+        emit finished(this);
     });
+}
 
-    QString address = connect_data_.address();
-    int port = connect_data_.port();
-
+void Client::start()
+{
     status_dialog_->show();
     status_dialog_->activateWindow();
 
-    status_dialog_->addStatus(tr("Attempt to connect to %1:%2.").arg(address).arg(port));
-    network_channel_->connectToHost(address, port);
+    status_dialog_->addStatus(tr("Attempt to connect to %1:%2.")
+                              .arg(connect_data_.address())
+                              .arg(connect_data_.port()));
+
+    network_channel_->connectToHost(connect_data_.address(), connect_data_.port(),
+                                    connect_data_.userName(), connect_data_.password(),
+                                    connect_data_.sessionType());
 }
 
 void Client::onChannelConnected()
 {
     status_dialog_->addStatus(tr("Connection established."));
-
-    authorizer_ = new ClientUserAuthorizer(status_dialog_);
-
-    authorizer_->setSessionType(connect_data_.sessionType());
-    authorizer_->setUserName(connect_data_.userName());
-    authorizer_->setPassword(connect_data_.password());
-
-    // Connect authorizer to network.
-    connect(authorizer_, &ClientUserAuthorizer::sendMessage,
-            network_channel_, &NetworkChannel::send);
-
-    connect(network_channel_, &NetworkChannel::messageReceived,
-            authorizer_, &ClientUserAuthorizer::messageReceived);
-
-    connect(network_channel_, &NetworkChannel::disconnected,
-            authorizer_, &ClientUserAuthorizer::cancel);
-
-    connect(authorizer_, &ClientUserAuthorizer::started,
-            network_channel_, &NetworkChannel::start);
-
-    connect(authorizer_, &ClientUserAuthorizer::errorOccurred,
-            status_dialog_, &StatusDialog::addStatus);
-
-    connect(authorizer_, &ClientUserAuthorizer::finished,
-            network_channel_, &NetworkChannel::pause);
-
-    connect(authorizer_, &ClientUserAuthorizer::finished,
-            this, &Client::onAuthorizationFinished);
-
-    // Now run authorization.
-    status_dialog_->addStatus(tr("Authorization started."));
-    authorizer_->start();
-}
-
-void Client::onChannelDisconnected()
-{
-    status_dialog_->addStatus(tr("Disconnected."));
-}
-
-void Client::onChannelError(const QString& message)
-{
-    status_dialog_->addStatus(tr("Network error: %1.").arg(message));
-}
-
-void Client::onAuthorizationFinished(proto::auth::Status status)
-{
-    delete authorizer_;
-
-    switch (status)
-    {
-        case proto::auth::STATUS_SUCCESS:
-            status_dialog_->addStatus(tr("Successful authorization."));
-            break;
-
-        case proto::auth::STATUS_ACCESS_DENIED:
-            status_dialog_->addStatus(tr("Authorization error: Access denied."));
-            return;
-
-        case proto::auth::STATUS_CANCELED:
-            status_dialog_->addStatus(tr("Authorization has been canceled."));
-            return;
-
-        default:
-            status_dialog_->addStatus(tr("Authorization error: Unknown status code."));
-            return;
-    }
 
     switch (connect_data_.sessionType())
     {
@@ -176,6 +113,69 @@ void Client::onAuthorizationFinished(proto::auth::Status status)
     status_dialog_->hide();
 
     session_->startSession();
+}
+
+void Client::onChannelDisconnected()
+{
+    status_dialog_->addStatus(tr("Disconnected."));
+}
+
+void Client::onChannelError(NetworkChannel::Error error)
+{
+    const char* message;
+
+    switch (error)
+    {
+        case NetworkChannel::Error::CONNECTION_REFUSED:
+            message = QT_TR_NOOP("Connection was refused by the peer (or timed out).");
+            break;
+
+        case NetworkChannel::Error::REMOTE_HOST_CLOSED:
+            message = QT_TR_NOOP("Remote host closed the connection.");
+            break;
+
+        case NetworkChannel::Error::SPECIFIED_HOST_NOT_FOUND:
+            message = QT_TR_NOOP("Host address was not found.");
+            break;
+
+        case NetworkChannel::Error::SOCKET_TIMEOUT:
+            message = QT_TR_NOOP("Socket operation timed out.");
+            break;
+
+        case NetworkChannel::Error::ADDRESS_IN_USE:
+            message = QT_TR_NOOP("Address specified is already in use and was set to be exclusive.");
+            break;
+
+        case NetworkChannel::Error::ADDRESS_NOT_AVAILABLE:
+            message = QT_TR_NOOP("Address specified does not belong to the host.");
+            break;
+
+        case NetworkChannel::Error::PROTOCOL_FAILURE:
+            message = QT_TR_NOOP("Violation of the data exchange protocol.");
+            break;
+
+        case NetworkChannel::Error::ENCRYPTION_FAILURE:
+            message = QT_TR_NOOP("An error occurred while encrypting the message.");
+            break;
+
+        case NetworkChannel::Error::DECRYPTION_FAILURE:
+            message = QT_TR_NOOP("An error occurred while decrypting the message.");
+            break;
+
+        case NetworkChannel::Error::AUTHENTICATION_FAILURE:
+            message = QT_TR_NOOP("An error occured while authenticating: wrong user name or password.");
+            break;
+
+        case NetworkChannel::Error::SESSION_TYPE_NOT_ALLOWED:
+            message = QT_TR_NOOP("Specified session type is not allowed for the user.");
+            break;
+
+        default:
+            message = QT_TR_NOOP("An unknown error occurred.");
+            break;
+    }
+
+    status_dialog_->addStatus(tr(message));
 }
 
 void Client::onSessionClosedByUser()

@@ -20,16 +20,15 @@
 
 namespace aspia {
 
-UserTreeItem::UserTreeItem(int index, User* user)
-    : index_(index),
-      user_(user)
+UserTreeItem::UserTreeItem(proto::SrpUser* user)
+    : user_(user)
 {
-    if (user_->flags() & User::FLAG_ENABLED)
+    if (user_->flags() & proto::SrpUser::ENABLED)
         setIcon(0, QIcon(QStringLiteral(":/icon/user.png")));
     else
         setIcon(0, QIcon(QStringLiteral(":/icon/user-disabled.png")));
 
-    setText(0, user_->name());
+    setText(0, QString::fromStdString(user_->username()));
 }
 
 } // namespace aspia

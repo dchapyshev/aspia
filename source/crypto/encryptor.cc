@@ -19,6 +19,7 @@
 #include "crypto/encryptor.h"
 
 #include "base/message_serialization.h"
+#include "crypto/secure_memory.h"
 #include "protocol/key_exchange.pb.h"
 
 #define SODIUM_STATIC
@@ -26,160 +27,38 @@
 
 namespace aspia {
 
-Encryptor::Encryptor(Mode mode)
-    : mode_(mode)
+Encryptor::Encryptor(const std::string& key,
+                     const std::string& encrypt_iv,
+                     const std::string& decrypt_iv)
+    : key_(key),
+      encrypt_iv_(encrypt_iv),
+      decrypt_iv_(decrypt_iv)
 {
-    if (sodium_init() == -1)
-    {
-        qWarning("sodium_init failed");
-        return;
-    }
-
-    std::vector<uint8_t> public_key;
-    public_key.resize(crypto_kx_PUBLICKEYBYTES);
-
-    std::vector<uint8_t> secret_key;
-    secret_key.resize(crypto_kx_SECRETKEYBYTES);
-
-    if (crypto_kx_keypair(public_key.data(), secret_key.data()) != 0)
-    {
-        qWarning("crypto_kx_keypair failed");
-        return;
-    }
-
-    local_public_key_ = std::move(public_key);
-    local_secret_key_ = std::move(secret_key);
+    // Nothing
 }
 
 Encryptor::~Encryptor()
 {
-    if (!encrypt_key_.empty())
-    {
-        sodium_memzero(encrypt_key_.data(), encrypt_key_.size());
-        encrypt_key_.clear();
-    }
-
-    if (!decrypt_key_.empty())
-    {
-        sodium_memzero(decrypt_key_.data(), decrypt_key_.size());
-        decrypt_key_.clear();
-    }
-
-    if (!encrypt_nonce_.empty())
-    {
-        sodium_memzero(encrypt_nonce_.data(), encrypt_nonce_.size());
-        encrypt_nonce_.clear();
-    }
-
-    if (!decrypt_nonce_.empty())
-    {
-        sodium_memzero(decrypt_nonce_.data(), decrypt_nonce_.size());
-        decrypt_nonce_.clear();
-    }
+    secureMemZero(&key_);
+    secureMemZero(&encrypt_iv_);
+    secureMemZero(&decrypt_iv_);
 }
 
-bool Encryptor::readHelloMessage(const QByteArray& message_buffer)
+// static
+Encryptor* Encryptor::create(const std::string& key,
+                             const std::string& encrypt_iv,
+                             const std::string& decrypt_iv)
 {
-    if (local_public_key_.empty() || local_secret_key_.empty())
-        return false;
+    if (key.size() != crypto_kx_SESSIONKEYBYTES)
+        return nullptr;
 
-    proto::HelloMessage message;
+    if (encrypt_iv.size() != crypto_secretbox_NONCEBYTES)
+        return nullptr;
 
-    if (!parseMessage(message_buffer, message))
-        return false;
+    if (decrypt_iv.size() != crypto_secretbox_NONCEBYTES)
+        return nullptr;
 
-    if (message.public_key().size() != crypto_kx_PUBLICKEYBYTES)
-        return false;
-
-    if (message.nonce().size() != crypto_secretbox_NONCEBYTES)
-        return false;
-
-    decrypt_nonce_.resize(crypto_secretbox_NONCEBYTES);
-    memcpy(decrypt_nonce_.data(), message.nonce().data(), crypto_secretbox_NONCEBYTES);
-
-    std::vector<uint8_t> decrypt_key;
-    decrypt_key.resize(crypto_kx_SESSIONKEYBYTES);
-
-    std::vector<uint8_t> encrypt_key;
-    encrypt_key.resize(crypto_kx_SESSIONKEYBYTES);
-
-    if (mode_ == Mode::SERVER)
-    {
-        if (crypto_kx_server_session_keys(
-                decrypt_key.data(),
-                encrypt_key.data(),
-                local_public_key_.data(),
-                local_secret_key_.data(),
-                reinterpret_cast<const uint8_t*>(message.public_key().data())) != 0)
-        {
-            qWarning("crypto_kx_server_session_keys failed");
-            return false;
-        }
-    }
-    else
-    {
-        Q_ASSERT(mode_ == Mode::CLIENT);
-
-        if (crypto_kx_client_session_keys(
-               decrypt_key.data(),
-               encrypt_key.data(),
-               local_public_key_.data(),
-               local_secret_key_.data(),
-               reinterpret_cast<const uint8_t*>(message.public_key().data())) != 0)
-        {
-            qWarning("crypto_kx_client_session_keys failed");
-            return false;
-        }
-    }
-
-    sodium_memzero(message.mutable_public_key()->data(), message.mutable_public_key()->size());
-    sodium_memzero(message.mutable_nonce()->data(), message.mutable_nonce()->size());
-
-    if (mode_ == Mode::CLIENT)
-    {
-        sodium_memzero(local_public_key_.data(), local_public_key_.size());
-        sodium_memzero(local_secret_key_.data(), local_secret_key_.size());
-
-        local_public_key_.clear();
-        local_secret_key_.clear();
-    }
-
-    decrypt_key_ = std::move(decrypt_key);
-    encrypt_key_ = std::move(encrypt_key);
-
-    return true;
-}
-
-QByteArray Encryptor::helloMessage()
-{
-    if (local_public_key_.empty() || local_secret_key_.empty())
-        return QByteArray();
-
-    encrypt_nonce_.resize(crypto_secretbox_NONCEBYTES);
-
-    // Generate nonce for encryption.
-    randombytes_buf(encrypt_nonce_.data(), encrypt_nonce_.size());
-
-    proto::HelloMessage message;
-
-    message.set_public_key(local_public_key_.data(), local_public_key_.size());
-    message.set_nonce(encrypt_nonce_.data(), encrypt_nonce_.size());
-
-    QByteArray message_buffer = serializeMessage(message);
-
-    sodium_memzero(message.mutable_public_key()->data(), message.mutable_public_key()->size());
-    sodium_memzero(message.mutable_nonce()->data(), message.mutable_nonce()->size());
-
-    if (mode_ == Mode::SERVER)
-    {
-        sodium_memzero(local_public_key_.data(), local_public_key_.size());
-        sodium_memzero(local_secret_key_.data(), local_secret_key_.size());
-
-        local_public_key_.clear();
-        local_secret_key_.clear();
-    }
-
-    return message_buffer;
+    return new Encryptor(key, encrypt_iv, decrypt_iv);
 }
 
 int Encryptor::encryptedDataSize(int source_data_size)
@@ -189,19 +68,18 @@ int Encryptor::encryptedDataSize(int source_data_size)
 
 bool Encryptor::encrypt(const char* source, int source_size, char* target)
 {
-    Q_ASSERT(local_public_key_.empty());
-    Q_ASSERT(local_secret_key_.empty());
-    Q_ASSERT(encrypt_nonce_.size() == crypto_secretbox_NONCEBYTES);
-    Q_ASSERT(!encrypt_key_.empty());
+    Q_ASSERT(encrypt_iv_.size() == crypto_secretbox_NONCEBYTES);
+    Q_ASSERT(!key_.empty());
 
-    sodium_increment(encrypt_nonce_.data(), crypto_secretbox_NONCEBYTES);
+    sodium_increment(reinterpret_cast<uint8_t*>(encrypt_iv_.data()),
+                     crypto_secretbox_NONCEBYTES);
 
     // Encrypt message.
     if (crypto_secretbox_easy(reinterpret_cast<uint8_t*>(target),
                               reinterpret_cast<const uint8_t*>(source),
                               source_size,
-                              encrypt_nonce_.data(),
-                              encrypt_key_.data()) != 0)
+                              reinterpret_cast<const uint8_t*>(encrypt_iv_.data()),
+                              reinterpret_cast<const uint8_t*>(key_.data())) != 0)
     {
         qWarning("crypto_secretbox_easy failed");
         return false;
@@ -217,19 +95,17 @@ int Encryptor::decryptedDataSize(int source_data_size)
 
 bool Encryptor::decrypt(const char* source, int source_size, char* target)
 {
-    Q_ASSERT(local_public_key_.empty());
-    Q_ASSERT(local_secret_key_.empty());
-    Q_ASSERT(decrypt_nonce_.size() == crypto_secretbox_NONCEBYTES);
-    Q_ASSERT(!decrypt_key_.empty());
+    Q_ASSERT(decrypt_iv_.size() == crypto_secretbox_NONCEBYTES);
+    Q_ASSERT(!key_.empty());
 
-    sodium_increment(decrypt_nonce_.data(), crypto_secretbox_NONCEBYTES);
+    sodium_increment(reinterpret_cast<uint8_t*>(decrypt_iv_.data()), crypto_secretbox_NONCEBYTES);
 
     // Decrypt message.
     if (crypto_secretbox_open_easy(reinterpret_cast<uint8_t*>(target),
                                    reinterpret_cast<const uint8_t*>(source),
                                    source_size,
-                                   decrypt_nonce_.data(),
-                                   decrypt_key_.data()) != 0)
+                                   reinterpret_cast<const uint8_t*>(decrypt_iv_.data()),
+                                   reinterpret_cast<const uint8_t*>(key_.data())) != 0)
     {
         qWarning("crypto_secretbox_open_easy failed");
         return false;

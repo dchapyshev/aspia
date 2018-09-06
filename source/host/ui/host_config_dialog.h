@@ -20,7 +20,7 @@
 #define ASPIA_HOST__UI__HOST_CONFIG_DIALOG_H_
 
 #include "base/locale_loader.h"
-#include "host/user.h"
+#include "protocol/srp_user.pb.h"
 #include "ui_host_config_dialog.h"
 
 namespace aspia {
@@ -60,7 +60,7 @@ private:
     Ui::HostConfigDialog ui;
 
     LocaleLoader locale_loader_;
-    QList<User> user_list_;
+    std::shared_ptr<proto::SrpUserList> user_list_;
 
     enum class ServiceState { NOT_INSTALLED, ACCESS_DENIED, NOT_STARTED, STARTED };
 

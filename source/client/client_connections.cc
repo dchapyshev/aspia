@@ -31,11 +31,13 @@ ClientConnections::ClientConnections(QObject* parent)
 void ClientConnections::connectWith(const ConnectData& connect_data)
 {
     Client* client = new Client(connect_data, this);
-    connect(client, &Client::clientTerminated, this, &ClientConnections::onClientTerminated);
+    connect(client, &Client::finished, this, &ClientConnections::onClientFinished);
     client_list_.push_back(client);
+
+    client->start();
 }
 
-void ClientConnections::onClientTerminated(Client* client)
+void ClientConnections::onClientFinished(Client* client)
 {
     for (auto it = client_list_.begin(); it != client_list_.end(); ++it)
     {

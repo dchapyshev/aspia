@@ -1,22 +1,37 @@
 #
-# PROJECT:         Aspia
-# FILE:            aspia_core.cmake
-# LICENSE:         GNU General Public License 3
-# PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+# Aspia Project
+# Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 #
 
 include_directories(
     ${PROJECT_SOURCE_DIR}
+    ${ASPIA_THIRD_PARTY_DIR}/googletest/include
     ${ASPIA_THIRD_PARTY_DIR}/libvpx/include
     ${ASPIA_THIRD_PARTY_DIR}/libyuv/include
     ${ASPIA_THIRD_PARTY_DIR}/zlib-ng/include
+    ${ASPIA_THIRD_PARTY_DIR}/openssl/include
     ${ASPIA_THIRD_PARTY_DIR}/protobuf/include
     ${ASPIA_THIRD_PARTY_DIR}/libsodium/include)
 
 link_directories(
+    ${ASPIA_THIRD_PARTY_DIR}/googletest/lib
     ${ASPIA_THIRD_PARTY_DIR}/libvpx/lib
     ${ASPIA_THIRD_PARTY_DIR}/libyuv/lib
     ${ASPIA_THIRD_PARTY_DIR}/zlib-ng/lib
+    ${ASPIA_THIRD_PARTY_DIR}/openssl/lib
     ${ASPIA_THIRD_PARTY_DIR}/protobuf/lib
     ${ASPIA_THIRD_PARTY_DIR}/qt/lib
     ${ASPIA_THIRD_PARTY_DIR}/qt/plugins/platforms
@@ -29,6 +44,7 @@ list(APPEND SOURCE_BASE
     ${PROJECT_SOURCE_DIR}/base/bitset.h
     ${PROJECT_SOURCE_DIR}/base/clipboard.cc
     ${PROJECT_SOURCE_DIR}/base/clipboard.h
+    ${PROJECT_SOURCE_DIR}/base/const_buffer.h
     ${PROJECT_SOURCE_DIR}/base/errno_logging.cc
     ${PROJECT_SOURCE_DIR}/base/errno_logging.h
     ${PROJECT_SOURCE_DIR}/base/file_logger.cc
@@ -79,8 +95,6 @@ list(APPEND SOURCE_CLIENT
     ${PROJECT_SOURCE_DIR}/client/client_session_file_transfer.h
     ${PROJECT_SOURCE_DIR}/client/client_session_system_info.cc
     ${PROJECT_SOURCE_DIR}/client/client_session_system_info.h
-    ${PROJECT_SOURCE_DIR}/client/client_user_authorizer.cc
-    ${PROJECT_SOURCE_DIR}/client/client_user_authorizer.h
     ${PROJECT_SOURCE_DIR}/client/config_factory.cc
     ${PROJECT_SOURCE_DIR}/client/config_factory.h
     ${PROJECT_SOURCE_DIR}/client/connect_data.cc
@@ -238,16 +252,29 @@ list(APPEND SOURCE_CONSOLE
     ${PROJECT_SOURCE_DIR}/console/open_address_book_dialog.ui)
 
 list(APPEND SOURCE_CRYPTO
+    ${PROJECT_SOURCE_DIR}/crypto/big_num.cc
+    ${PROJECT_SOURCE_DIR}/crypto/big_num.h
     ${PROJECT_SOURCE_DIR}/crypto/data_encryptor.cc
     ${PROJECT_SOURCE_DIR}/crypto/data_encryptor.h
     ${PROJECT_SOURCE_DIR}/crypto/encryptor.cc
     ${PROJECT_SOURCE_DIR}/crypto/encryptor.h
+    ${PROJECT_SOURCE_DIR}/crypto/generic_hash.cc
+    ${PROJECT_SOURCE_DIR}/crypto/generic_hash.h
+    ${PROJECT_SOURCE_DIR}/crypto/password_hash.cc
+    ${PROJECT_SOURCE_DIR}/crypto/password_hash.h
     ${PROJECT_SOURCE_DIR}/crypto/random.cc
     ${PROJECT_SOURCE_DIR}/crypto/random.h
+    ${PROJECT_SOURCE_DIR}/crypto/scoped_crypto_initializer.cc
+    ${PROJECT_SOURCE_DIR}/crypto/scoped_crypto_initializer.h
     ${PROJECT_SOURCE_DIR}/crypto/secure_memory.cc
     ${PROJECT_SOURCE_DIR}/crypto/secure_memory.h
-    ${PROJECT_SOURCE_DIR}/crypto/sha.cc
-    ${PROJECT_SOURCE_DIR}/crypto/sha.h)
+    ${PROJECT_SOURCE_DIR}/crypto/srp_constants.cc
+    ${PROJECT_SOURCE_DIR}/crypto/srp_constants.h
+    ${PROJECT_SOURCE_DIR}/crypto/srp_math.cc
+    ${PROJECT_SOURCE_DIR}/crypto/srp_math.h)
+
+list(APPEND SOURCE_CRYPTO_UNIT_TESTS
+    ${PROJECT_SOURCE_DIR}/crypto/srp_math_unittest.cc)
 
 list(APPEND SOURCE_DESKTOP_CAPTURE
     ${PROJECT_SOURCE_DIR}/desktop_capture/capture_scheduler.cc
@@ -335,16 +362,14 @@ list(APPEND SOURCE_HOST
     ${PROJECT_SOURCE_DIR}/host/host_session_system_info.h
     ${PROJECT_SOURCE_DIR}/host/host_settings.cc
     ${PROJECT_SOURCE_DIR}/host/host_settings.h
-    ${PROJECT_SOURCE_DIR}/host/host_user_authorizer.cc
-    ${PROJECT_SOURCE_DIR}/host/host_user_authorizer.h
     ${PROJECT_SOURCE_DIR}/host/input_injector.cc
     ${PROJECT_SOURCE_DIR}/host/input_injector.h
     ${PROJECT_SOURCE_DIR}/host/screen_updater.cc
     ${PROJECT_SOURCE_DIR}/host/screen_updater.h
     ${PROJECT_SOURCE_DIR}/host/system_info_request.cc
     ${PROJECT_SOURCE_DIR}/host/system_info_request.h
-    ${PROJECT_SOURCE_DIR}/host/user.cc
-    ${PROJECT_SOURCE_DIR}/host/user.h)
+    ${PROJECT_SOURCE_DIR}/host/user_util.cc
+    ${PROJECT_SOURCE_DIR}/host/user_util.h)
 
 list(APPEND SOURCE_HOST_UI
     ${PROJECT_SOURCE_DIR}/host/ui/host_config_dialog.cc
@@ -388,16 +413,21 @@ list(APPEND SOURCE_NETWORK
     ${PROJECT_SOURCE_DIR}/network/firewall_manager.h
     ${PROJECT_SOURCE_DIR}/network/network_channel.cc
     ${PROJECT_SOURCE_DIR}/network/network_channel.h
+    ${PROJECT_SOURCE_DIR}/network/network_channel_client.cc
+    ${PROJECT_SOURCE_DIR}/network/network_channel_client.h
+    ${PROJECT_SOURCE_DIR}/network/network_channel_host.cc
+    ${PROJECT_SOURCE_DIR}/network/network_channel_host.h
     ${PROJECT_SOURCE_DIR}/network/network_server.cc
-    ${PROJECT_SOURCE_DIR}/network/network_server.h)
+    ${PROJECT_SOURCE_DIR}/network/network_server.h
+    ${PROJECT_SOURCE_DIR}/network/srp_client_context.cc
+    ${PROJECT_SOURCE_DIR}/network/srp_client_context.h
+    ${PROJECT_SOURCE_DIR}/network/srp_host_context.cc
+    ${PROJECT_SOURCE_DIR}/network/srp_host_context.h)
 
 list(APPEND SOURCE_PROTOCOL
     ${PROJECT_SOURCE_DIR}/protocol/address_book.pb.cc
     ${PROJECT_SOURCE_DIR}/protocol/address_book.pb.h
     ${PROJECT_SOURCE_DIR}/protocol/address_book.proto
-    ${PROJECT_SOURCE_DIR}/protocol/authorization.pb.cc
-    ${PROJECT_SOURCE_DIR}/protocol/authorization.pb.h
-    ${PROJECT_SOURCE_DIR}/protocol/authorization.proto
     ${PROJECT_SOURCE_DIR}/protocol/desktop_session.pb.cc
     ${PROJECT_SOURCE_DIR}/protocol/desktop_session.pb.h
     ${PROJECT_SOURCE_DIR}/protocol/desktop_session.proto
@@ -413,6 +443,9 @@ list(APPEND SOURCE_PROTOCOL
     ${PROJECT_SOURCE_DIR}/protocol/session_type.pb.cc
     ${PROJECT_SOURCE_DIR}/protocol/session_type.pb.h
     ${PROJECT_SOURCE_DIR}/protocol/session_type.proto
+    ${PROJECT_SOURCE_DIR}/protocol/srp_user.pb.cc
+    ${PROJECT_SOURCE_DIR}/protocol/srp_user.pb.h
+    ${PROJECT_SOURCE_DIR}/protocol/srp_user.proto
     ${PROJECT_SOURCE_DIR}/protocol/system_info_session.pb.cc
     ${PROJECT_SOURCE_DIR}/protocol/system_info_session.pb.h
     ${PROJECT_SOURCE_DIR}/protocol/system_info_session.proto)
@@ -454,3 +487,88 @@ list(APPEND SOURCE
     ${PROJECT_SOURCE_DIR}/core_export.h
     ${PROJECT_SOURCE_DIR}/version.h
     ${PROJECT_SOURCE_DIR}/aspia_core.rc)
+
+list(APPEND ALL_SOURCES
+    ${SOURCE_BASE}
+    ${SOURCE_BASE_WIN}
+    ${SOURCE_CLIENT}
+    ${SOURCE_CLIENT_UI}
+    ${SOURCE_CODEC}
+    ${SOURCE_CONSOLE}
+    ${SOURCE_CRYPTO}
+    ${SOURCE_DESKTOP_CAPTURE}
+    ${SOURCE_DESKTOP_CAPTURE_WIN}
+    ${SOURCE_HOST}
+    ${SOURCE_HOST_UI}
+    ${SOURCE_HOST_WIN}
+    ${SOURCE_IPC}
+    ${SOURCE_NETWORK}
+    ${SOURCE_PROTOCOL}
+    ${SOURCE_RESOURCES}
+    ${SOURCE_SYSTEM_INFO}
+    ${SOURCE_SYSTEM_INFO_PARSER}
+    ${SOURCE_SYSTEM_INFO_PROTOCOL}
+    ${SOURCE_SYSTEM_INFO_SERIALIZER}
+    ${SOURCE_SYSTEM_INFO_UI}
+    ${SOURCE})
+
+list(APPEND ALL_SOURCES_WITH_UNIT_TESTS
+    ${SOURCE_CRYPTO_UNIT_TESTS}
+    ${ALL_SOURCES})
+
+set(THIRD_PARTY_LIBS
+    Qt5::Core
+    Qt5::Gui
+    Qt5::Network
+    Qt5::PrintSupport
+    Qt5::Widgets
+    Qt5::WinMain
+    Qt5::WinExtras
+    Qt5::Xml
+    debug Qt5AccessibilitySupportd
+    debug Qt5EventDispatcherSupportd
+    debug Qt5FontDatabaseSupportd
+    debug Qt5ThemeSupportd
+    debug Qt5WindowsUIAutomationSupportd
+    debug libprotobuf-lited
+    debug libsodiumd
+    debug libvpxd
+    debug libyuvd
+    debug qtfreetyped
+    debug qtharfbuzzd
+    debug qtlibpngd
+    debug qtpcre2d
+    debug qwindowsd
+    debug qwindowsvistastyled
+    debug zlib-ngd
+    optimized Qt5AccessibilitySupport
+    optimized Qt5EventDispatcherSupport
+    optimized Qt5FontDatabaseSupport
+    optimized Qt5ThemeSupport
+    optimized Qt5WindowsUIAutomationSupport
+    optimized libprotobuf-lite
+    optimized libsodium
+    optimized libvpx
+    optimized libyuv
+    optimized qtfreetype
+    optimized qtharfbuzz
+    optimized qtlibpng
+    optimized qtpcre2
+    optimized qwindows
+    optimized qwindowsvistastyle
+    optimized zlib-ng
+    crypt32
+    dwmapi
+    imm32
+    iphlpapi
+    libcrypto
+    mpr
+    netapi32
+    sas
+    shlwapi
+    userenv
+    uxtheme
+    version
+    winmm
+    ws2_32
+    wtsapi32)

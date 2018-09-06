@@ -26,6 +26,7 @@
 #include <QFileInfo>
 
 #include "base/file_logger.h"
+#include "crypto/scoped_crypto_initializer.h"
 #include "desktop_capture/win/scoped_thread_desktop.h"
 #include "host/ui/host_notifier_window.h"
 #include "host/host_session.h"
@@ -95,6 +96,10 @@ int hostMain(int argc, char *argv[])
         qWarning("Exceeded the number of attempts");
         return 1;
     }
+
+    ScopedCryptoInitializer crypto_initializer;
+    if (!crypto_initializer.isSucceeded())
+        return 1;
 
     QApplication application(argc, argv);
     application.setOrganizationName(QStringLiteral("Aspia"));

@@ -16,48 +16,29 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_HOST__USER_H_
-#define ASPIA_HOST__USER_H_
+#ifndef ASPIA_HOST__USER_UTIL_H_
+#define ASPIA_HOST__USER_UTIL_H_
 
 #include <QString>
 
+#include "base/macros_magic.h"
+
 namespace aspia {
 
-class User
+class UserUtil
 {
 public:
-    ~User();
-
-    enum Flags { FLAG_ENABLED = 1 };
-
     static const int kMaxUserNameLength = 64;
     static const int kMinPasswordLength = 8;
     static const int kMaxPasswordLength = 64;
-    static const int kPasswordHashLength = 64;
 
-    static bool isValidName(const QString& value);
-    static bool isValidPassword(const QString& value);
-
-    bool setName(const QString& value);
-    const QString& name() const { return name_; }
-
-    bool setPassword(const QString& value);
-    bool setPasswordHash(const std::string& value);
-    const std::string& passwordHash() const { return password_hash_; }
-
-    void setFlags(uint32_t value);
-    uint32_t flags() const { return flags_; }
-
-    void setSessions(uint32_t value);
-    uint32_t sessions() const { return sessions_; }
+    static bool isValidUserName(const QString& username);
+    static bool isValidPassword(const QString& password);
 
 private:
-    QString name_;
-    std::string password_hash_;
-    uint32_t flags_ = 0;
-    uint32_t sessions_ = 0;
+    DISALLOW_COPY_AND_ASSIGN(UserUtil);
 };
 
 } // namespace aspia
 
-#endif // ASPIA_HOST__USER_H_
+#endif // ASPIA_HOST__USER_UTIL_H_

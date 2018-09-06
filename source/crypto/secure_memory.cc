@@ -18,17 +18,15 @@
 
 #include "crypto/secure_memory.h"
 
-#define SODIUM_STATIC
-#include <sodium.h>
+#include <openssl/opensslv.h>
+#include <openssl/crypto.h>
 
 namespace aspia {
-
-#pragma optimize("", off)
 
 void secureMemZero(void* data, size_t data_size)
 {
     if (data && data_size)
-        sodium_memzero(data, data_size);
+        OPENSSL_cleanse(data, data_size);
 }
 
 void secureMemZero(std::string* str)
@@ -54,7 +52,5 @@ void secureMemZero(QByteArray* bytes)
 
     secureMemZero(bytes->data(), bytes->size());
 }
-
-#pragma optimize("", on)
 
 } // namespace aspia

@@ -20,7 +20,7 @@
 #define ASPIA_HOST__UI__USER_DIALOG_H_
 
 #include "base/macros_magic.h"
-#include "host/user.h"
+#include "protocol/srp_user.pb.h"
 #include "ui_user_dialog.h"
 
 namespace aspia {
@@ -30,7 +30,7 @@ class UserDialog : public QDialog
     Q_OBJECT
 
 public:
-    UserDialog(QList<User>* user_list, User* user, QWidget* parent = nullptr);
+    UserDialog(const proto::SrpUserList& user_list, proto::SrpUser* user, QWidget* parent);
     ~UserDialog() = default;
 
 protected:
@@ -43,12 +43,14 @@ private slots:
     void onButtonBoxClicked(QAbstractButton* button);
 
 private:
+    void setAccountChanged(bool changed);
+
     Ui::UserDialog ui;
 
-    QList<User>* user_list_;
-    User* user_;
+    const proto::SrpUserList& user_list_;
+    proto::SrpUser* user_;
 
-    bool password_changed_ = true;
+    bool account_changed_ = true;
 
     DISALLOW_COPY_AND_ASSIGN(UserDialog);
 };

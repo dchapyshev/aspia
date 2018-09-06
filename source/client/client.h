@@ -21,11 +21,10 @@
 
 #include "client/client_session.h"
 #include "client/connect_data.h"
-#include "network/network_channel.h"
+#include "network/network_channel_client.h"
 
 namespace aspia {
 
-class ClientUserAuthorizer;
 class StatusDialog;
 
 class Client : public QObject
@@ -36,23 +35,23 @@ public:
     Client(const ConnectData& connect_data, QObject* parent = nullptr);
     ~Client() = default;
 
+    void start();
+
 signals:
-    void clientTerminated(Client* client);
+    void finished(Client* client);
 
 private slots:
     void onChannelConnected();
     void onChannelDisconnected();
-    void onChannelError(const QString& message);
-    void onAuthorizationFinished(proto::auth::Status status);
+    void onChannelError(NetworkChannel::Error error);
     void onSessionClosedByUser();
     void onSessionError(const QString& message);
 
 private:
     ConnectData connect_data_;
 
-    QPointer<NetworkChannel> network_channel_;
+    QPointer<NetworkChannelClient> network_channel_;
     QPointer<StatusDialog> status_dialog_;
-    QPointer<ClientUserAuthorizer> authorizer_;
     QPointer<ClientSession> session_;
 
     DISALLOW_COPY_AND_ASSIGN(Client);

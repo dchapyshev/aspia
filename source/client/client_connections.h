@@ -39,7 +39,7 @@ public:
     void connectWith(const ConnectData& connect_data);
 
 private slots:
-    void onClientTerminated(Client* client);
+    void onClientFinished(Client* client);
 
 private:
     std::list<Client*> client_list_;

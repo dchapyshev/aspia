@@ -21,7 +21,7 @@
 #define SODIUM_STATIC
 #include <sodium.h>
 
-#include "crypto/sha.h"
+#include "crypto/generic_hash.h"
 
 namespace aspia {
 
@@ -40,7 +40,7 @@ std::string DataEncryptor::createKey(const std::string& password,
 
     for (int i = 0; i < rounds; ++i)
     {
-        Sha256 hash;
+        GenericHash hash(GenericHash::SHA256);
 
         hash.addData(data);
         hash.addData(salt);
@@ -83,7 +83,7 @@ std::string DataEncryptor::encrypt(const std::string& source_data, const std::st
         }
 
         uint8_t output_buffer[kChunkSize + crypto_secretstream_xchacha20poly1305_ABYTES];
-        quint64 output_length;
+        uint64_t output_length;
 
         crypto_secretstream_xchacha20poly1305_push(&state,
                                                    output_buffer, &output_length,
@@ -153,7 +153,7 @@ bool DataEncryptor::decrypt(const char* source_data, int source_size, const std:
                                    kChunkSize + crypto_secretstream_xchacha20poly1305_ABYTES);
 
         uint8_t output_buffer[kChunkSize];
-        quint64 output_length;
+        uint64_t output_length;
         uint8_t tag;
 
         if (crypto_secretstream_xchacha20poly1305_pull(&state, output_buffer, &output_length, &tag,

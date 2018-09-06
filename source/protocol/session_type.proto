@@ -29,4 +29,7 @@ enum SessionType
     SESSION_TYPE_DESKTOP_VIEW   = 2;
     SESSION_TYPE_FILE_TRANSFER  = 4;
     SESSION_TYPE_SYSTEM_INFO    = 8;
+
+    // When adding or removing session types, you need to recalculate this value.
+    SESSION_TYPE_ALL            = 15;
 }

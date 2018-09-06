@@ -23,12 +23,10 @@
 
 namespace aspia {
 
-#pragma optimize("", off)
 void secureMemZero(void* data, size_t data_size);
 void secureMemZero(std::string* str);
 void secureMemZero(QString* str);
 void secureMemZero(QByteArray* bytes);
-#pragma optimize("", on)
 
 } // namespace aspia
 

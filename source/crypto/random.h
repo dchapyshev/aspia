@@ -28,9 +28,14 @@ namespace aspia {
 class Random
 {
 public:
-    static void fillBuffer(void* buffer, size_t size);
+    // Fills buffer |buffer| of size |size| with random values.
+    // If successful, returns |true| otherwise |false|.
+    static bool fillBuffer(void* buffer, size_t size);
 
+    // Generates a random buffer of size |size|. If the buffer is empty, an error occurred.
     static std::string generateBuffer(size_t size);
+
+    // Generates a random number. If an error occurs, it returns 0.
     static uint32_t generateNumber();
 
 private:

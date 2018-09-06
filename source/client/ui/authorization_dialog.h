@@ -39,6 +39,7 @@ public:
     void setPassword(const QString& password);
 
 protected:
+    // QDialog implementation.
     void showEvent(QShowEvent* event) override;
 
 private slots:

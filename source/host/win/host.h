@@ -30,7 +30,7 @@ class HostProcess;
 class HostSessionFake;
 class IpcChannel;
 class IpcServer;
-class NetworkChannel;
+class NetworkChannelHost;
 
 class Host : public QObject
 {
@@ -40,17 +40,14 @@ public:
     Host(QObject* parent = nullptr);
     ~Host();
 
-    NetworkChannel* networkChannel() const { return network_channel_; }
-    void setNetworkChannel(NetworkChannel* network_channel);
-
-    proto::SessionType sessionType() const { return session_type_; }
-    void setSessionType(proto::SessionType session_type);
-
-    QString userName() const { return user_name_; }
-    void setUserName(const QString& user_name);
+    NetworkChannelHost* networkChannel() const { return network_channel_; }
+    void setNetworkChannel(NetworkChannelHost* network_channel);
 
     const std::string& uuid() const { return uuid_; }
     void setUuid(std::string&& uuid);
+
+    const std::string& userName() const;
+    proto::SessionType sessionType() const;
 
     QString remoteAddress() const;
 
@@ -79,15 +76,13 @@ private:
     enum class State { STOPPED, STARTING, STOPPING, DETACHED, ATTACHED };
     static const uint32_t kInvalidSessionId = 0xFFFFFFFF;
 
-    proto::SessionType session_type_ = proto::SESSION_TYPE_UNKNOWN;
-    QString user_name_;
     std::string uuid_;
 
     uint32_t session_id_ = kInvalidSessionId;
     int attach_timer_id_ = 0;
     State state_ = State::STOPPED;
 
-    QPointer<NetworkChannel> network_channel_;
+    QPointer<NetworkChannelHost> network_channel_;
     QPointer<IpcChannel> ipc_channel_;
     QPointer<HostProcess> session_process_;
     QPointer<HostSessionFake> fake_session_;

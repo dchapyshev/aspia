@@ -20,14 +20,15 @@
 
 #include <QDebug>
 
-#include "network/network_channel.h"
+#include "network/network_channel_host.h"
 
 namespace aspia {
 
-NetworkServer::NetworkServer(QObject* parent)
-    : QObject(parent)
+NetworkServer::NetworkServer(std::shared_ptr<proto::SrpUserList>& user_list, QObject* parent)
+    : QObject(parent),
+      user_list_(user_list)
 {
-    // Nothing
+    Q_ASSERT(user_list_);
 }
 
 bool NetworkServer::start(int port)
@@ -67,7 +68,7 @@ void NetworkServer::stop()
 
     for (auto it = pending_channels_.constBegin(); it != pending_channels_.constEnd(); ++it)
     {
-        NetworkChannel* network_channel = *it;
+        NetworkChannelHost* network_channel = *it;
 
         if (network_channel)
             network_channel->stop();
@@ -75,7 +76,7 @@ void NetworkServer::stop()
 
     for (auto it = ready_channels_.constBegin(); it != ready_channels_.constEnd(); ++it)
     {
-        NetworkChannel* network_channel = *it;
+        NetworkChannelHost* network_channel = *it;
 
         if (network_channel)
             network_channel->stop();
@@ -93,12 +94,12 @@ bool NetworkServer::hasReadyChannels() const
     return !ready_channels_.isEmpty();
 }
 
-NetworkChannel* NetworkServer::nextReadyChannel()
+NetworkChannelHost* NetworkServer::nextReadyChannel()
 {
     if (ready_channels_.isEmpty())
         return nullptr;
 
-    NetworkChannel* network_channel = ready_channels_.front();
+    NetworkChannelHost* network_channel = ready_channels_.front();
     ready_channels_.pop_front();
     return network_channel;
 }
@@ -109,16 +110,15 @@ void NetworkServer::onNewConnection()
     if (!socket)
         return;
 
-    NetworkChannel* network_channel =
-        new NetworkChannel(NetworkChannel::Type::SERVER_CHANNEL, socket, this);
+    NetworkChannelHost* host_channel = new NetworkChannelHost(socket, user_list_, this);
 
-    connect(network_channel, &NetworkChannel::connected,
+    connect(host_channel, &NetworkChannelHost::keyExchangeFinished,
             this, &NetworkServer::onChannelReady);
 
-    pending_channels_.push_back(network_channel);
+    pending_channels_.push_back(host_channel);
 
-    // Start connection (key exchange).
-    network_channel->onConnected();
+    // Start key exchange.
+    host_channel->startKeyExchange();
 }
 
 void NetworkServer::onChannelReady()
@@ -127,13 +127,13 @@ void NetworkServer::onChannelReady()
 
     while (it != pending_channels_.end())
     {
-        NetworkChannel* network_channel = *it;
+        NetworkChannelHost* network_channel = *it;
 
         if (!network_channel)
         {
             it = pending_channels_.erase(it);
         }
-        else if (network_channel->state() == NetworkChannel::State::ENCRYPTED)
+        else if (network_channel->channelState() == NetworkChannel::ChannelState::ENCRYPTED)
         {
             it = pending_channels_.erase(it);
 

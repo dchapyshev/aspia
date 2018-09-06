@@ -18,15 +18,18 @@
 
 #include "crypto/random.h"
 
-#define SODIUM_STATIC
-#include <sodium.h>
+#include <openssl/opensslv.h>
+#include <openssl/rand.h>
 
 namespace aspia {
 
 // static
-void Random::fillBuffer(void* buffer, size_t size)
+bool Random::fillBuffer(void* buffer, size_t size)
 {
-    randombytes_buf(buffer, size);
+    if (!buffer || !size)
+        return false;
+
+    return RAND_bytes(reinterpret_cast<uint8_t*>(buffer), size) > 0;
 }
 
 // static
@@ -35,14 +38,21 @@ std::string Random::generateBuffer(size_t size)
     std::string random_buffer;
     random_buffer.resize(size);
 
-    fillBuffer(random_buffer.data(), random_buffer.size());
+    if (!fillBuffer(random_buffer.data(), random_buffer.size()))
+        return std::string();
+
     return random_buffer;
 }
 
 // static
 uint32_t Random::generateNumber()
 {
-    return randombytes_random();
+    uint32_t result;
+
+    if (!fillBuffer(&result, sizeof(result)))
+        return 0;
+
+    return result;
 }
 
 } // namespace aspia

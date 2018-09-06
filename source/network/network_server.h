@@ -24,24 +24,25 @@
 #include <QTcpServer>
 
 #include "base/macros_magic.h"
+#include "protocol/srp_user.pb.h"
 
 namespace aspia {
 
-class NetworkChannel;
+class NetworkChannelHost;
 
 class NetworkServer : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit NetworkServer(QObject* parent = nullptr);
+    NetworkServer(std::shared_ptr<proto::SrpUserList>& user_list, QObject* parent = nullptr);
     ~NetworkServer() = default;
 
     bool start(int port);
     void stop();
 
     bool hasReadyChannels() const;
-    NetworkChannel* nextReadyChannel();
+    NetworkChannelHost* nextReadyChannel();
 
 signals:
     void newChannelReady();
@@ -53,12 +54,14 @@ private slots:
 private:
     QPointer<QTcpServer> tcp_server_;
 
+    std::shared_ptr<proto::SrpUserList> user_list_;
+
     // Contains a list of channels that are already connected, but the key exchange
     // is not yet complete.
-    QList<QPointer<NetworkChannel>> pending_channels_;
+    QList<QPointer<NetworkChannelHost>> pending_channels_;
 
     // Contains a list of channels that are ready for use.
-    QList<QPointer<NetworkChannel>> ready_channels_;
+    QList<QPointer<NetworkChannelHost>> ready_channels_;
 
     DISALLOW_COPY_AND_ASSIGN(NetworkServer);
 };

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CRYPTO__SHA_H_
-#define ASPIA_CRYPTO__SHA_H_
+#ifndef ASPIA_CRYPTO__PASSWORD_HASH_H_
+#define ASPIA_CRYPTO__PASSWORD_HASH_H_
 
 #include <string>
 
@@ -25,44 +25,21 @@
 
 namespace aspia {
 
-class Sha256
+class PasswordHash
 {
 public:
-    Sha256();
-    ~Sha256();
+    enum Type { SCRYPT };
 
-    static std::string hash(const std::string& data);
-    static std::string hash(const std::string& data, size_t rounds);
+    static const size_t kBitsPerByte = 8;
+    static const size_t kBitsSize = 512;
+    static const size_t kBytesSize = kBitsSize / kBitsPerByte;
 
-    void addData(const void* data, size_t length);
-    void addData(const std::string& data);
-
-    std::string result() const;
+    static std::string hash(Type type, const std::string& password, const std::string& salt);
 
 private:
-    mutable uint8_t state_[104];
-    DISALLOW_COPY_AND_ASSIGN(Sha256);
-};
-
-class Sha512
-{
-public:
-    Sha512();
-    ~Sha512();
-
-    static std::string hash(const std::string& data);
-    static std::string hash(const std::string& data, size_t rounds);
-
-    void addData(const void* data, size_t length);
-    void addData(const std::string& data);
-
-    std::string result() const;
-
-private:
-    mutable uint8_t state_[208];
-    DISALLOW_COPY_AND_ASSIGN(Sha512);
+    DISALLOW_COPY_AND_ASSIGN(PasswordHash);
 };
 
 } // namespace aspia
 
-#endif // ASPIA_CRYPTO__SHA_H_
+#endif // ASPIA_CRYPTO__PASSWORD_HASH_H_

@@ -127,12 +127,12 @@ void HostConfigDialog::onCurrentUserChanged(
 
 void HostConfigDialog::onAddUser()
 {
-    User user;
-    user.setFlags(User::FLAG_ENABLED);
+    proto::SrpUser user;
+    user.set_flags(proto::SrpUser::ENABLED);
 
-    if (UserDialog(&user_list_, &user, this).exec() == QDialog::Accepted)
+    if (UserDialog(*user_list_, &user, this).exec() == QDialog::Accepted)
     {
-        user_list_.push_back(user);
+        user_list_->add_user()->Swap(&user);
         setConfigChanged(true);
         reloadUserList();
     }
@@ -144,7 +144,7 @@ void HostConfigDialog::onModifyUser()
     if (!user_item)
         return;
 
-    if (UserDialog(&user_list_, user_item->user(), this).exec() == QDialog::Accepted)
+    if (UserDialog(*user_list_, user_item->user(), this).exec() == QDialog::Accepted)
     {
         setConfigChanged(true);
         reloadUserList();
@@ -160,11 +160,19 @@ void HostConfigDialog::onDeleteUser()
     if (QMessageBox::question(this,
                               tr("Confirmation"),
                               tr("Are you sure you want to delete user \"%1\"?")
-                                  .arg(user_item->user()->name()),
+                                  .arg(user_item->text(0)),
                               QMessageBox::Yes,
                               QMessageBox::No) == QMessageBox::Yes)
     {
-        user_list_.removeAt(user_item->userIndex());
+        for (int i = 0; i < user_list_->user_size(); ++i)
+        {
+            if (user_list_->mutable_user(i) == user_item->user())
+            {
+                user_list_->mutable_user()->DeleteSubrange(i, 1);
+                break;
+            }
+        }
+
         setConfigChanged(true);
         reloadUserList();
     }
@@ -240,7 +248,7 @@ void HostConfigDialog::onButtonBoxClicked(QAbstractButton* button)
 
         settings.setLocale(new_locale);
         settings.setTcpPort(ui.spinbox_port->value());
-        settings.setUserList(user_list_);
+        settings.setUserList(*user_list_);
 
         if (isServiceStarted())
         {
@@ -326,8 +334,8 @@ void HostConfigDialog::reloadUserList()
     for (int i = ui.tree_users->topLevelItemCount() - 1; i >= 0; --i)
         delete ui.tree_users->takeTopLevelItem(i);
 
-    for (int i = 0; i < user_list_.size(); ++i)
-        ui.tree_users->addTopLevelItem(new UserTreeItem(i, &user_list_[i]));
+    for (int i = 0; i < user_list_->user_size(); ++i)
+        ui.tree_users->addTopLevelItem(new UserTreeItem(user_list_->mutable_user(i)));
 
     ui.button_modify->setEnabled(false);
     ui.button_delete->setEnabled(false);

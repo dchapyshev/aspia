@@ -19,9 +19,7 @@
 #ifndef ASPIA_CRYPTO__ENCRYPTOR_H_
 #define ASPIA_CRYPTO__ENCRYPTOR_H_
 
-#include <QByteArray>
-
-#include <vector>
+#include <string>
 
 #include "base/macros_magic.h"
 
@@ -31,13 +29,11 @@ namespace aspia {
 class Encryptor
 {
 public:
-    enum class Mode { SERVER, CLIENT };
-
-    explicit Encryptor(Mode mode);
     ~Encryptor();
 
-    bool readHelloMessage(const QByteArray& message_buffer);
-    QByteArray helloMessage();
+    static Encryptor* create(const std::string& key,
+                             const std::string& encrypt_iv,
+                             const std::string& decrypt_iv);
 
     int encryptedDataSize(int source_data_size);
     bool encrypt(const char* source, int source_size, char* target);
@@ -45,17 +41,15 @@ public:
     int decryptedDataSize(int source_data_size);
     bool decrypt(const char* source, int source_size, char* target);
 
+protected:
+    Encryptor(const std::string& key,
+              const std::string& encrypt_iv,
+              const std::string& decrypt_iv);
+
 private:
-    const Mode mode_;
-
-    std::vector<uint8_t> local_public_key_;
-    std::vector<uint8_t> local_secret_key_;
-
-    std::vector<uint8_t> encrypt_key_;
-    std::vector<uint8_t> decrypt_key_;
-
-    std::vector<uint8_t> encrypt_nonce_;
-    std::vector<uint8_t> decrypt_nonce_;
+    std::string key_;
+    std::string encrypt_iv_;
+    std::string decrypt_iv_;
 
     DISALLOW_COPY_AND_ASSIGN(Encryptor);
 };

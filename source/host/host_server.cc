@@ -24,10 +24,9 @@
 #include "base/guid.h"
 #include "base/message_serialization.h"
 #include "host/win/host.h"
-#include "host/host_user_authorizer.h"
 #include "ipc/ipc_server.h"
 #include "network/firewall_manager.h"
-#include "network/network_channel.h"
+#include "network/network_channel_host.h"
 #include "protocol/notifier.pb.h"
 
 namespace aspia {
@@ -59,24 +58,6 @@ const char* sessionTypeToString(proto::SessionType session_type)
     }
 }
 
-const char* statusToString(proto::auth::Status status)
-{
-    switch (status)
-    {
-        case proto::auth::STATUS_SUCCESS:
-            return "Success";
-
-        case proto::auth::STATUS_ACCESS_DENIED:
-            return "Access Denied";
-
-        case proto::auth::STATUS_CANCELED:
-            return "Canceled";
-
-        default:
-            return "Unknown";
-    }
-}
-
 } // namespace
 
 HostServer::HostServer(QObject* parent)
@@ -90,7 +71,7 @@ HostServer::~HostServer()
     stop();
 }
 
-bool HostServer::start(int port, const QList<User>& user_list)
+bool HostServer::start(int port, std::shared_ptr<proto::SrpUserList>& user_list)
 {
     qInfo("Starting the server");
 
@@ -98,12 +79,6 @@ bool HostServer::start(int port, const QList<User>& user_list)
     {
         qWarning("An attempt was start an already running server.");
         return false;
-    }
-
-    user_list_ = user_list;
-    if (user_list_.isEmpty())
-    {
-        qWarning("Empty user list");
     }
 
     FirewallManager firewall(qUtf16Printable(QCoreApplication::applicationFilePath()));
@@ -117,7 +92,7 @@ bool HostServer::start(int port, const QList<User>& user_list)
         }
     }
 
-    network_server_ = new NetworkServer(this);
+    network_server_ = new NetworkServer(user_list, this);
 
     connect(network_server_, &NetworkServer::newChannelReady,
             this, &HostServer::onNewConnection);
@@ -143,8 +118,6 @@ void HostServer::stop()
         network_server_->stop();
         delete network_server_;
     }
-
-    user_list_.clear();
 
     FirewallManager firewall(qUtf16Printable(QCoreApplication::applicationFilePath()));
     if (firewall.isValid())
@@ -192,64 +165,36 @@ void HostServer::onNewConnection()
 {
     while (network_server_->hasReadyChannels())
     {
-        NetworkChannel* channel = network_server_->nextReadyChannel();
+        NetworkChannelHost* channel = network_server_->nextReadyChannel();
         if (!channel)
             continue;
 
         qInfo() << "New connected client:" << channel->peerAddress();
 
-        HostUserAuthorizer* authorizer = new HostUserAuthorizer(this);
+        std::unique_ptr<Host> host(new Host(this));
 
-        authorizer->setNetworkChannel(channel);
-        authorizer->setUserList(user_list_);
+        host->setNetworkChannel(channel);
+        host->setUuid(Guid::create());
 
-        connect(authorizer, &HostUserAuthorizer::finished,
-                this, &HostServer::onAuthorizationFinished,
-                Qt::QueuedConnection);
+        connect(this, &HostServer::sessionChanged, host.get(), &Host::sessionChanged);
+        connect(host.get(), &Host::finished, this, &HostServer::onHostFinished, Qt::QueuedConnection);
 
-        qInfo("Start authorization");
-        authorizer->start();
-    }
-}
+        if (host->start())
+        {
+            if (notifier_state_ == NotifierState::STOPPED)
+                startNotifier();
+            else
+                sessionToNotifier(*host);
 
-void HostServer::onAuthorizationFinished(HostUserAuthorizer* authorizer)
-{
-    qInfo() << "Authorization for" << authorizer->userName()
-            << "completed with status:" << statusToString(authorizer->status());
-
-    QScopedPointer<HostUserAuthorizer> authorizer_deleter(authorizer);
-
-    if (authorizer->status() != proto::auth::STATUS_SUCCESS)
-        return;
-
-    QScopedPointer<Host> host(new Host(this));
-
-    host->setNetworkChannel(authorizer->networkChannel());
-    host->setSessionType(authorizer->sessionType());
-    host->setUserName(authorizer->userName());
-    host->setUuid(Guid::create());
-
-    connect(this, &HostServer::sessionChanged, host.data(), &Host::sessionChanged);
-    connect(host.data(), &Host::finished, this, &HostServer::onHostFinished, Qt::QueuedConnection);
-
-    qInfo() << "Starting" << sessionTypeToString(authorizer->sessionType())
-            << "session for" << authorizer->userName();
-
-    if (host->start())
-    {
-        if (notifier_state_ == NotifierState::STOPPED)
-            startNotifier();
-        else
-            sessionToNotifier(*host);
-
-        session_list_.push_back(host.take());
+            session_list_.push_back(host.release());
+        }
     }
 }
 
 void HostServer::onHostFinished(Host* host)
 {
     qInfo() << sessionTypeToString(host->sessionType())
-            << "session is finished for" << host->userName();
+            << "session is finished for" << QString::fromStdString(host->userName());
 
     for (auto it = session_list_.begin(); it != session_list_.end(); ++it)
     {
@@ -427,7 +372,7 @@ void HostServer::sessionToNotifier(const Host& host)
     proto::notifier::Session* session = message.mutable_session();
     session->set_uuid(host.uuid());
     session->set_remote_address(host.remoteAddress().toStdString());
-    session->set_username(host.userName().toStdString());
+    session->set_username(host.userName());
     session->set_session_type(host.sessionType());
 
     ipc_channel_->send(serializeMessage(message));

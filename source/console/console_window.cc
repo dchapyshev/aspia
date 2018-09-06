@@ -26,6 +26,7 @@
 #include <QSystemTrayIcon>
 #include <QTranslator>
 
+#include "client/ui/authorization_dialog.h"
 #include "client/ui/client_dialog.h"
 #include "client/client.h"
 #include "client/config_factory.h"
@@ -771,6 +772,20 @@ void ConsoleWindow::connectToComputer(const proto::address_book::Computer& compu
     connect_data.setUserName(QString::fromStdString(computer.username()));
     connect_data.setPassword(QString::fromStdString(computer.password()));
     connect_data.setSessionType(computer.session_type());
+
+    if (connect_data.userName().isEmpty() || connect_data.password().isEmpty())
+    {
+        AuthorizationDialog auth_dialog(this);
+
+        auth_dialog.setUserName(connect_data.userName());
+        auth_dialog.setPassword(connect_data.password());
+
+        if (auth_dialog.exec() == AuthorizationDialog::Rejected)
+            return;
+
+        connect_data.setUserName(auth_dialog.userName());
+        connect_data.setPassword(auth_dialog.password());
+    }
 
     switch (computer.session_type())
     {

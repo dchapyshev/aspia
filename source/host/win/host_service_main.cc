@@ -21,6 +21,7 @@
 #include <QFileInfo>
 
 #include "base/file_logger.h"
+#include "crypto/scoped_crypto_initializer.h"
 #include "host/win/host_service.h"
 
 namespace aspia {
@@ -29,6 +30,10 @@ int hostServiceMain(int argc, char *argv[])
 {
     FileLogger logger;
     logger.startLogging(QFileInfo(argv[0]).fileName());
+
+    ScopedCryptoInitializer crypto_initializer;
+    if (!crypto_initializer.isSucceeded())
+        return 1;
 
     return HostService().exec(argc, argv);
 }

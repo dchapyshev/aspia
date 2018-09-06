@@ -22,7 +22,7 @@
 #include <QSettings>
 
 #include "base/macros_magic.h"
-#include "host/user.h"
+#include "protocol/srp_user.pb.h"
 
 namespace aspia {
 
@@ -41,8 +41,8 @@ public:
     int tcpPort() const;
     bool setTcpPort(int port);
 
-    QList<User> userList() const;
-    bool setUserList(const QList<User>& user_list);
+    std::shared_ptr<proto::SrpUserList> userList() const;
+    bool setUserList(const proto::SrpUserList& user_list);
 
 private:
     mutable QSettings settings_;
