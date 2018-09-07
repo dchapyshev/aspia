@@ -78,6 +78,23 @@ void DesktopRect::intersectWith(const DesktopRect& rect)
     }
 }
 
+void DesktopRect::unionWith(const DesktopRect& rect)
+{
+    if (isEmpty())
+    {
+        *this = rect;
+        return;
+    }
+
+    if (rect.isEmpty())
+        return;
+
+    left_ = std::min(left(), rect.left());
+    top_ = std::min(top(), rect.top());
+    right_ = std::max(right(), rect.right());
+    bottom_ = std::max(bottom(), rect.bottom());
+}
+
 void DesktopRect::extend(int32_t left_offset,
                          int32_t top_offset,
                          int32_t right_offset,
@@ -87,6 +104,12 @@ void DesktopRect::extend(int32_t left_offset,
     top_    -= top_offset;
     right_  += right_offset;
     bottom_ += bottom_offset;
+}
+
+void DesktopRect::scale(double horizontal, double vertical)
+{
+    right_ += width() * (horizontal - 1);
+    bottom_ += height() * (vertical - 1);
 }
 
 DesktopRect& DesktopRect::operator=(const DesktopRect& other)

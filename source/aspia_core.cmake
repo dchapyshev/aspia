@@ -326,6 +326,10 @@ list(APPEND SOURCE_DESKTOP_CAPTURE
     ${PROJECT_SOURCE_DIR}/desktop_capture/screen_settings_tracker.cc
     ${PROJECT_SOURCE_DIR}/desktop_capture/screen_settings_tracker.h)
 
+list(APPEND SOURCE_DESKTOP_CAPTURE_UNIT_TESTS
+    ${PROJECT_SOURCE_DIR}/desktop_capture/desktop_geometry_unittest.cc
+    ${PROJECT_SOURCE_DIR}/desktop_capture/desktop_region_unittest.cc)
+
 list(APPEND SOURCE_DESKTOP_CAPTURE_WIN
     ${PROJECT_SOURCE_DIR}/desktop_capture/win/cursor.cc
     ${PROJECT_SOURCE_DIR}/desktop_capture/win/cursor.h
@@ -526,6 +530,7 @@ list(APPEND ALL_SOURCES
 list(APPEND ALL_SOURCES_WITH_UNIT_TESTS
     ${SOURCE_BASE_UNIT_TESTS}
     ${SOURCE_CRYPTO_UNIT_TESTS}
+    ${SOURCE_DESKTOP_CAPTURE_UNIT_TESTS}
     ${ALL_SOURCES})
 
 set(THIRD_PARTY_LIBS

@@ -234,6 +234,10 @@ public:
     // Finds intersection with |rect|.
     void intersectWith(const DesktopRect& rect);
 
+    // Extends the rectangle to cover |rect|. If |this| is empty, replaces |this|
+    // with |rect|; if |rect| is empty, this function takes no effect.
+    void unionWith(const DesktopRect& rect);
+
     // Enlarges current DesktopRect by subtracting |left_offset| and |top_offset|
     // from |left_| and |top_|, and adding |right_offset| and |bottom_offset| to
     // |right_| and |bottom_|. This function does not normalize the result, so
@@ -241,6 +245,9 @@ public:
     // |bottom_|.
     void extend(int32_t left_offset, int32_t top_offset,
                 int32_t right_offset, int32_t bottom_offset);
+
+    // Scales current DesktopRect. This function does not impact the |top_| and |left_|.
+    void scale(double horizontal, double vertical);
 
     DesktopRect& operator=(const DesktopRect& other);
 
