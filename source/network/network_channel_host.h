@@ -61,7 +61,7 @@ private:
     std::shared_ptr<proto::SrpUserList> user_list_;
 
     std::string username_;
-    proto::SessionType session_type_;
+    proto::SessionType session_type_ = proto::SESSION_TYPE_UNKNOWN;
 
     std::unique_ptr<SrpHostContext> srp_host_;
 

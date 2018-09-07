@@ -58,7 +58,7 @@ private:
 
     std::string username_;
     std::string password_;
-    proto::SessionType session_type_;
+    proto::SessionType session_type_ = proto::SESSION_TYPE_UNKNOWN;
 
     std::unique_ptr<SrpClientContext> srp_client_;
 

@@ -49,7 +49,7 @@ private:
     std::shared_ptr<proto::SrpUserList> user_list_;
 
     std::string username_;
-    uint32_t session_types_;
+    uint32_t session_types_ = 0;
 
     std::string encrypt_iv_;
     std::string decrypt_iv_;
