@@ -63,7 +63,9 @@ build:
   parallel: true
 
 test_script:
-  - ps: aspia_unit_tests
+  - ps: |
+    $test = "$APPVEYOR_BUILD_FOLDER\build\$env:configuration\aspia_unit_tests"
+    & $test
     If ($LastExitCode -ne 0) {
       exit $LastExitCode
     }
