@@ -237,9 +237,9 @@ void DesktopWindow::onPointerEvent(const QPoint& pos, uint32_t mask)
         double scale_y = (scaled_size.height() * 100) / double(source_size.height());
         double scale = std::min(scale_x, scale_y);
 
-        double x = ((pos.x() * 10000) / (remote_scale_factor * scale))
+        double x = (double(pos.x() * 10000) / (remote_scale_factor * scale))
             + screen_top_left_.x();
-        double y = ((pos.y() * 10000) / (remote_scale_factor * scale))
+        double y = (double(pos.y() * 10000) / (remote_scale_factor * scale))
             + screen_top_left_.y();
 
         emit sendPointerEvent(DesktopPoint(x, y), mask);
