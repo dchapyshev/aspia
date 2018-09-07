@@ -62,4 +62,8 @@ build:
   verbosity: minimal
   parallel: true
 
-test: off
+test_script:
+  - ps: aspia_unit_tests
+    if ($LastExitCode -ne 0) {
+      throw "Exec: $ErrorMessage"
+    }
