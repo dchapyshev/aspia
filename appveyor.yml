@@ -64,8 +64,8 @@ build:
 
 test_script:
   - ps: |
-    $test = "$APPVEYOR_BUILD_FOLDER\build\$env:configuration\aspia_unit_tests"
-    & $test
-    If ($LastExitCode -ne 0) {
-      exit $LastExitCode
-    }
+      $test = "$APPVEYOR_BUILD_FOLDER\build\$env:CONFIGURATION\aspia_unit_tests"
+      & $test
+      If ($LastExitCode -ne 0) {
+        exit $LastExitCode
+      }
