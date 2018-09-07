@@ -100,7 +100,12 @@ add_subdirectory(translations)
 # If the build of unit tests is enabled.
 if (BUILD_UNIT_TESTS)
     add_executable(aspia_unit_tests ${ALL_SOURCES_WITH_UNIT_TESTS})
-    target_link_libraries(aspia_unit_tests ${THIRD_PARTY_LIBS} gtest gtest_main)
+    target_link_libraries(aspia_unit_tests
+        ${THIRD_PARTY_LIBS}
+        optimized gtest
+        optimized gtest_main
+        debug gtestd
+        debug gtest_maind)
 
     enable_testing()
     add_test(NAME aspia_unit_tests COMMAND aspia_unit_tests)
