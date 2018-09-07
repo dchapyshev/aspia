@@ -71,7 +71,8 @@ list(APPEND SOURCE_BASE
     ${PROJECT_SOURCE_DIR}/base/unicode.h)
 
 list(APPEND SOURCE_BASE_UNIT_TESTS
-    ${PROJECT_SOURCE_DIR}/base/aligned_memory_unittest.cc)
+    ${PROJECT_SOURCE_DIR}/base/aligned_memory_unittest.cc
+    ${PROJECT_SOURCE_DIR}/base/string_printf_unittest.cc)
 
 list(APPEND SOURCE_BASE_WIN
     ${PROJECT_SOURCE_DIR}/base/win/registry.cc

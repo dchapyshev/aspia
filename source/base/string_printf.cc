@@ -111,26 +111,26 @@ std::wstring StringPrintf(const wchar_t* format, ...)
     return result;
 }
 
-const std::string& SStringPrintf(std::string& dst, const char* format, ...)
+const std::string& SStringPrintf(std::string* dst, const char* format, ...)
 {
     va_list args;
 
     va_start(args, format);
-    dst = StringPrintfV(format, args);
+    *dst = StringPrintfV(format, args);
     va_end(args);
 
-    return dst;
+    return *dst;
 }
 
-const std::wstring& SStringPrintf(std::wstring& dst, const wchar_t* format, ...)
+const std::wstring& SStringPrintf(std::wstring* dst, const wchar_t* format, ...)
 {
     va_list args;
 
     va_start(args, format);
-    dst = StringPrintfV(format, args);
+    *dst = StringPrintfV(format, args);
     va_end(args);
 
-    return dst;
+    return *dst;
 }
 
 } // namespace aspia

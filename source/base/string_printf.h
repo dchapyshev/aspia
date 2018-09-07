@@ -32,8 +32,8 @@ std::string StringPrintf(const char* format, ...);
 std::wstring StringPrintf(const wchar_t* format, ...);
 
 // Store result into a supplied string and return it.
-const std::string& SStringPrintf(std::string& dst, const char* format, ...);
-const std::wstring& SStringPrintf(std::wstring& dst, const wchar_t* format, ...);
+const std::string& SStringPrintf(std::string* dst, const char* format, ...);
+const std::wstring& SStringPrintf(std::wstring* dst, const wchar_t* format, ...);
 
 } // namespace aspia
 
