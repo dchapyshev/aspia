@@ -18,7 +18,9 @@
 
 #include "network/network_channel_host.h"
 
+#include "base/cpuid.h"
 #include "base/message_serialization.h"
+#include "crypto/cryptor_aes256_gcm.h"
 #include "crypto/cryptor_chacha20_poly1305.h"
 #include "network/srp_host_context.h"
 
@@ -82,15 +84,26 @@ void NetworkChannelHost::readClientHello(const QByteArray& buffer)
         return;
     }
 
-    if (!(client_hello.methods() & proto::METHOD_SRP_CHACHA20_POLY1305))
+    proto::ServerHello server_hello;
+
+    if ((client_hello.methods() & proto::METHOD_SRP_AES256_GCM) && CPUID::hasAesNi())
+    {
+        qInfo("AES256-GCM encryption selected");
+        server_hello.set_method(proto::METHOD_SRP_AES256_GCM);
+    }
+    else if (client_hello.methods() & proto::METHOD_SRP_CHACHA20_POLY1305)
+    {
+        qInfo("CHACHA20-POLY1305 encryption selected");
+        server_hello.set_method(proto::METHOD_SRP_CHACHA20_POLY1305);
+    }
+    else
     {
         qWarning("The client does not have supported key exchange methods");
         emit errorOccurred(Error::UNKNOWN);
         return;
     }
 
-    proto::ServerHello server_hello;
-    server_hello.set_method(proto::METHOD_SRP_CHACHA20_POLY1305);
+    srp_host_ = std::make_unique<SrpHostContext>(server_hello.method(), user_list_);
 
     key_exchange_state_ = KeyExchangeState::IDENTIFY;
     sendInternal(serializeMessage(server_hello));
@@ -104,8 +117,6 @@ void NetworkChannelHost::readIdentify(const QByteArray& buffer)
         emit errorOccurred(Error::PROTOCOL_FAILURE);
         return;
     }
-
-    srp_host_ = std::make_unique<SrpHostContext>(proto::METHOD_SRP_CHACHA20_POLY1305, user_list_);
 
     std::unique_ptr<proto::SrpServerKeyExchange> server_key_exchange(
         srp_host_->readIdentify(identify));
@@ -131,9 +142,28 @@ void NetworkChannelHost::readClientKeyExchange(const QByteArray& buffer)
 
     srp_host_->readClientKeyExchange(client_key_exchange);
 
-    cryptor_.reset(CryptorChaCha20Poly1305::create(srp_host_->key(),
-                                                   srp_host_->encryptIv(),
-                                                   srp_host_->decryptIv()));
+    switch (srp_host_->method())
+    {
+        case proto::METHOD_SRP_AES256_GCM:
+        {
+            cryptor_.reset(CryptorAes256Gcm::create(srp_host_->key(),
+                                                    srp_host_->encryptIv(),
+                                                    srp_host_->decryptIv()));
+        }
+        break;
+
+        case proto::METHOD_SRP_CHACHA20_POLY1305:
+        {
+            cryptor_.reset(CryptorChaCha20Poly1305::create(srp_host_->key(),
+                                                           srp_host_->encryptIv(),
+                                                           srp_host_->decryptIv()));
+        }
+        break;
+
+        default:
+            break;
+    }
+
     if (!cryptor_)
     {
         qWarning("Unable to create cryptor");

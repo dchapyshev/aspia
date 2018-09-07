@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "crypto/cryptor_chacha20_poly1305.h"
+#include "crypto/cryptor_aes256_gcm.h"
 
 #include <openssl/evp.h>
 
@@ -34,7 +34,7 @@ EVP_CIPHER_CTX_ptr createCipher(const std::string& key, int type)
     if (!ctx)
         return nullptr;
 
-    if (EVP_CipherInit_ex(ctx.get(), EVP_chacha20_poly1305(),
+    if (EVP_CipherInit_ex(ctx.get(), EVP_aes_256_gcm(),
                           nullptr, nullptr, nullptr, type) != 1)
     {
         qWarning("EVP_EncryptInit_ex failed");
@@ -103,10 +103,10 @@ void incrementNonce(uint8_t* nonce)
 
 } // namespace
 
-CryptorChaCha20Poly1305::CryptorChaCha20Poly1305(EVP_CIPHER_CTX_ptr encrypt_ctx,
-                                                 EVP_CIPHER_CTX_ptr decrypt_ctx,
-                                                 const std::string& encrypt_nonce,
-                                                 const std::string& decrypt_nonce)
+CryptorAes256Gcm::CryptorAes256Gcm(EVP_CIPHER_CTX_ptr encrypt_ctx,
+                                   EVP_CIPHER_CTX_ptr decrypt_ctx,
+                                   const std::string& encrypt_nonce,
+                                   const std::string& decrypt_nonce)
     : encrypt_ctx_(std::move(encrypt_ctx)),
       decrypt_ctx_(std::move(decrypt_ctx)),
       encrypt_nonce_(encrypt_nonce),
@@ -118,12 +118,12 @@ CryptorChaCha20Poly1305::CryptorChaCha20Poly1305(EVP_CIPHER_CTX_ptr encrypt_ctx,
     Q_ASSERT(EVP_CIPHER_CTX_iv_length(decrypt_ctx_.get()) == kIVSize);
 }
 
-CryptorChaCha20Poly1305::~CryptorChaCha20Poly1305() = default;
+CryptorAes256Gcm::~CryptorAes256Gcm() = default;
 
 // static
-Cryptor* CryptorChaCha20Poly1305::create(const std::string& key,
-                                         const std::string& encrypt_iv,
-                                         const std::string& decrypt_iv)
+Cryptor* CryptorAes256Gcm::create(const std::string& key,
+                                  const std::string& encrypt_iv,
+                                  const std::string& decrypt_iv)
 {
     if (key.size() != kKeySize || encrypt_iv.size() != kIVSize || decrypt_iv.size() != kIVSize)
         return nullptr;
@@ -134,16 +134,16 @@ Cryptor* CryptorChaCha20Poly1305::create(const std::string& key,
     if (!encrypt_ctx || !decrypt_ctx)
         return nullptr;
 
-    return new CryptorChaCha20Poly1305(
+    return new CryptorAes256Gcm(
         std::move(encrypt_ctx), std::move(decrypt_ctx), encrypt_iv, decrypt_iv);
 }
 
-size_t CryptorChaCha20Poly1305::encryptedDataSize(size_t in_size)
+size_t CryptorAes256Gcm::encryptedDataSize(size_t in_size)
 {
     return in_size + kTagSize;
 }
 
-bool CryptorChaCha20Poly1305::encrypt(const char* in, size_t in_size, char* out)
+bool CryptorAes256Gcm::encrypt(const char* in, size_t in_size, char* out)
 {
     if (EVP_EncryptInit_ex(encrypt_ctx_.get(), nullptr, nullptr, nullptr,
                            reinterpret_cast<const uint8_t*>(encrypt_nonce_.c_str())) != 1)
@@ -185,12 +185,12 @@ bool CryptorChaCha20Poly1305::encrypt(const char* in, size_t in_size, char* out)
     return true;
 }
 
-size_t CryptorChaCha20Poly1305::decryptedDataSize(size_t in_size)
+size_t CryptorAes256Gcm::decryptedDataSize(size_t in_size)
 {
     return in_size - kTagSize;
 }
 
-bool CryptorChaCha20Poly1305::decrypt(const char* in, size_t in_size, char* out)
+bool CryptorAes256Gcm::decrypt(const char* in, size_t in_size, char* out)
 {
     if (EVP_DecryptInit_ex(decrypt_ctx_.get(), nullptr, nullptr, nullptr,
                            reinterpret_cast<const uint8_t*>(decrypt_nonce_.c_str())) != 1)

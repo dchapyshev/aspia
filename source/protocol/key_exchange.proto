@@ -59,6 +59,7 @@ enum Method
 {
     METHOD_UNKNOWN = 0;
     METHOD_SRP_CHACHA20_POLY1305 = 1;
+    METHOD_SRP_AES256_GCM = 2;
 }
 
 // Client to server.

@@ -25,8 +25,10 @@
 #include <mstcpip.h>
 #endif
 
+#include "base/cpuid.h"
 #include "base/errno_logging.h"
 #include "base/message_serialization.h"
+#include "crypto/cryptor_aes256_gcm.h"
 #include "crypto/cryptor_chacha20_poly1305.h"
 #include "crypto/secure_memory.h"
 #include "network/srp_client_context.h"
@@ -122,8 +124,13 @@ void NetworkChannelClient::onConnected()
     }
 #endif
 
+    uint32_t methods = proto::METHOD_SRP_CHACHA20_POLY1305;
+
+    if (CPUID::hasAesNi())
+        methods |= proto::METHOD_SRP_AES256_GCM;
+
     proto::ClientHello client_hello;
-    client_hello.set_methods(proto::METHOD_SRP_CHACHA20_POLY1305);
+    client_hello.set_methods(methods);
 
     // Send ClientHello to server.
     sendInternal(serializeMessage(client_hello));
@@ -188,9 +195,28 @@ void NetworkChannelClient::readAuthorizationChallenge(const QByteArray& buffer)
 {
     Q_ASSERT(srp_client_);
 
-    cryptor_.reset(CryptorChaCha20Poly1305::create(srp_client_->key(),
-                                                   srp_client_->encryptIv(),
-                                                   srp_client_->decryptIv()));
+    switch (srp_client_->method())
+    {
+        case proto::METHOD_SRP_AES256_GCM:
+        {
+            cryptor_.reset(CryptorAes256Gcm::create(srp_client_->key(),
+                                                    srp_client_->encryptIv(),
+                                                    srp_client_->decryptIv()));
+        }
+        break;
+
+        case proto::METHOD_SRP_CHACHA20_POLY1305:
+        {
+            cryptor_.reset(CryptorChaCha20Poly1305::create(srp_client_->key(),
+                                                           srp_client_->encryptIv(),
+                                                           srp_client_->decryptIv()));
+        }
+        break;
+
+        default:
+            break;
+    }
+
     if (!cryptor_)
     {
         qWarning("Unable to create cryptor");

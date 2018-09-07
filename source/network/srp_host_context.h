@@ -39,6 +39,7 @@ public:
     const std::string& userName() const { return username_; }
     uint32_t sessionTypes() const { return session_types_; }
 
+    proto::Method method() const { return method_; }
     std::string key() const;
     const std::string& encryptIv() const { return encrypt_iv_; }
     const std::string& decryptIv() const { return decrypt_iv_; }

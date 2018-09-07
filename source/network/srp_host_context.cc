@@ -60,6 +60,7 @@ size_t ivSizeForMethod(proto::Method method)
 {
     switch (method)
     {
+        case proto::METHOD_SRP_AES256_GCM:
         case proto::METHOD_SRP_CHACHA20_POLY1305:
             return 12;
 
@@ -195,7 +196,8 @@ std::string SrpHostContext::key() const
 
     switch (method_)
     {
-        // ChaCha20-Poly1305 requires 256 bit key.
+        // AES256-GCM and ChaCha20-Poly1305 requires 256 bit key.
+        case proto::METHOD_SRP_AES256_GCM:
         case proto::METHOD_SRP_CHACHA20_POLY1305:
         {
             std::string server_key_string = server_key.toStdString();

@@ -87,12 +87,13 @@ namespace proto {
 enum Method {
   METHOD_UNKNOWN = 0,
   METHOD_SRP_CHACHA20_POLY1305 = 1,
+  METHOD_SRP_AES256_GCM = 2,
   Method_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
   Method_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
 };
 bool Method_IsValid(int value);
 const Method Method_MIN = METHOD_UNKNOWN;
-const Method Method_MAX = METHOD_SRP_CHACHA20_POLY1305;
+const Method Method_MAX = METHOD_SRP_AES256_GCM;
 const int Method_ARRAYSIZE = Method_MAX + 1;
 
 // ===================================================================

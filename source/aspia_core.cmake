@@ -45,6 +45,8 @@ list(APPEND SOURCE_BASE
     ${PROJECT_SOURCE_DIR}/base/clipboard.cc
     ${PROJECT_SOURCE_DIR}/base/clipboard.h
     ${PROJECT_SOURCE_DIR}/base/const_buffer.h
+    ${PROJECT_SOURCE_DIR}/base/cpuid.cc
+    ${PROJECT_SOURCE_DIR}/base/cpuid.h
     ${PROJECT_SOURCE_DIR}/base/errno_logging.cc
     ${PROJECT_SOURCE_DIR}/base/errno_logging.h
     ${PROJECT_SOURCE_DIR}/base/file_logger.cc
@@ -255,6 +257,8 @@ list(APPEND SOURCE_CRYPTO
     ${PROJECT_SOURCE_DIR}/crypto/big_num.cc
     ${PROJECT_SOURCE_DIR}/crypto/big_num.h
     ${PROJECT_SOURCE_DIR}/crypto/cryptor.h
+    ${PROJECT_SOURCE_DIR}/crypto/cryptor_aes256_gcm.cc
+    ${PROJECT_SOURCE_DIR}/crypto/cryptor_aes256_gcm.h
     ${PROJECT_SOURCE_DIR}/crypto/cryptor_chacha20_poly1305.cc
     ${PROJECT_SOURCE_DIR}/crypto/cryptor_chacha20_poly1305.h
     ${PROJECT_SOURCE_DIR}/crypto/data_encryptor.cc
