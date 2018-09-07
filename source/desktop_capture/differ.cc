@@ -29,13 +29,12 @@ namespace aspia {
 namespace {
 
 const int kBytesPerPixel = 4;
-const int kBlockWidth = 8;
-const int kBlockHeight = 8;
-const int kBytesPerBlock = kBytesPerPixel * kBlockWidth;
+const int kBlockSize = 8;
+const int kBytesPerBlock = kBytesPerPixel * kBlockSize;
 
 uint8_t diffFullBlock_C(const uint8_t* image1, const uint8_t* image2, int bytes_per_row)
 {
-    for (int y = 0; y < kBlockHeight; ++y)
+    for (int y = 0; y < kBlockSize; ++y)
     {
         if (memcmp(image1, image2, kBytesPerBlock) != 0)
         {
@@ -78,10 +77,10 @@ uint8_t diffPartialBlock(const uint8_t* prev_image,
 Differ::Differ(const DesktopSize& size)
     : screen_rect_(DesktopRect::makeSize(size)),
       bytes_per_row_(size.width() * kBytesPerPixel),
-      diff_width_(((size.width() + kBlockWidth - 1) / kBlockWidth) + 1),
-      diff_height_(((size.height() + kBlockHeight - 1) / kBlockHeight) + 1),
-      full_blocks_x_(size.width() / kBlockWidth),
-      full_blocks_y_(size.height() / kBlockHeight)
+      diff_width_(((size.width() + kBlockSize - 1) / kBlockSize) + 1),
+      diff_height_(((size.height() + kBlockSize - 1) / kBlockSize) + 1),
+      full_blocks_x_(size.width() / kBlockSize),
+      full_blocks_y_(size.height() / kBlockSize)
 {
     const int diff_info_size = diff_width_ * diff_height_;
 
@@ -89,43 +88,43 @@ Differ::Differ(const DesktopSize& size)
     memset(diff_info_.get(), 0, diff_info_size);
 
     // Calc size of partial blocks which may be present on right and bottom edge.
-    partial_column_width_ = size.width() - (full_blocks_x_ * kBlockWidth);
-    partial_row_height_ = size.height() - (full_blocks_y_ * kBlockHeight);
+    partial_column_width_ = size.width() - (full_blocks_x_ * kBlockSize);
+    partial_row_height_ = size.height() - (full_blocks_y_ * kBlockSize);
 
     // Offset from the start of one block-row to the next.
-    block_stride_y_ = bytes_per_row_ * kBlockHeight;
+    block_stride_y_ = bytes_per_row_ * kBlockSize;
 
     if (libyuv::TestCpuFlag(libyuv::kCpuHasAVX2))
     {
         qInfo("AVX2 differ loaded");
 
-        if constexpr (kBlockWidth == 8 && kBlockHeight == 8)
+        if constexpr (kBlockSize == 8)
             diff_full_block_func_ = diffFullBlock_8x8_AVX2;
-        else if constexpr (kBlockWidth == 16 && kBlockHeight == 16)
+        else if constexpr (kBlockSize == 16)
             diff_full_block_func_ = diffFullBlock_16x16_AVX2;
-        else if constexpr (kBlockWidth == 32 && kBlockHeight == 32)
+        else if constexpr (kBlockSize == 32)
             diff_full_block_func_ = diffFullBlock_32x32_AVX2;
     }
     else if (libyuv::TestCpuFlag(libyuv::kCpuHasSSSE3))
     {
         qInfo("SSE3 differ loaded");
 
-        if constexpr (kBlockWidth == 8 && kBlockHeight == 8)
+        if constexpr (kBlockSize == 8)
             diff_full_block_func_ = diffFullBlock_8x8_SSE3;
-        else if constexpr (kBlockWidth == 16 && kBlockHeight == 16)
+        else if constexpr (kBlockSize == 16)
             diff_full_block_func_ = diffFullBlock_16x16_SSE3;
-        else if constexpr (kBlockWidth == 32 && kBlockHeight == 32)
+        else if constexpr (kBlockSize == 32)
             diff_full_block_func_ = diffFullBlock_32x32_SSE3;
     }
     else if (libyuv::TestCpuFlag(libyuv::kCpuHasSSE2))
     {
         qInfo("SSE2 differ loaded");
 
-        if constexpr (kBlockWidth == 8 && kBlockHeight == 8)
+        if constexpr (kBlockSize == 8)
             diff_full_block_func_ = diffFullBlock_8x8_SSE2;
-        else if constexpr (kBlockWidth == 16 && kBlockHeight == 16)
+        else if constexpr (kBlockSize == 16)
             diff_full_block_func_ = diffFullBlock_16x16_SSE2;
-        else if constexpr (kBlockWidth == 32 && kBlockHeight == 32)
+        else if constexpr (kBlockSize == 32)
             diff_full_block_func_ = diffFullBlock_32x32_SSE2;
     }
     else
@@ -175,7 +174,7 @@ void Differ::markDirtyBlocks(const uint8_t* prev_image, const uint8_t* curr_imag
                                              curr_block,
                                              bytes_per_row_,
                                              kBytesPerBlock,
-                                             kBlockHeight);
+                                             kBlockSize);
         }
 
         // Update pointers for next row.
@@ -292,10 +291,8 @@ void Differ::mergeBlocks(DesktopRegion* dirty_region)
                 } while (found_new_row);
 
                 DesktopRect dirty_rect =
-                    DesktopRect::makeXYWH(x * kBlockWidth,
-                                          y * kBlockHeight,
-                                          width * kBlockWidth,
-                                          height * kBlockHeight);
+                    DesktopRect::makeXYWH(x * kBlockSize, y * kBlockSize,
+                                          width * kBlockSize, height * kBlockSize);
 
                 dirty_rect.intersectWith(screen_rect_);
 
