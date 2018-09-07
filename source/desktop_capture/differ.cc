@@ -21,6 +21,7 @@
 #include "desktop_capture/diff_block_avx2.h"
 #include "desktop_capture/diff_block_sse2.h"
 #include "desktop_capture/diff_block_sse3.h"
+#include "desktop_capture/diff_block_c.h"
 
 #include <libyuv/cpu_id.h>
 
@@ -31,22 +32,6 @@ namespace {
 const int kBytesPerPixel = 4;
 const int kBlockSize = 8;
 const int kBytesPerBlock = kBytesPerPixel * kBlockSize;
-
-uint8_t diffFullBlock_C(const uint8_t* image1, const uint8_t* image2, int bytes_per_row)
-{
-    for (int y = 0; y < kBlockSize; ++y)
-    {
-        if (memcmp(image1, image2, kBytesPerBlock) != 0)
-        {
-            return 1U;
-        }
-
-        image1 += bytes_per_row;
-        image2 += bytes_per_row;
-    }
-
-    return 0U;
-}
 
 //
 // Check for diffs in upper-left portion of the block. The size of the portion
@@ -130,7 +115,13 @@ Differ::Differ(const DesktopSize& size)
     else
     {
         qInfo("C differ loaded");
-        diff_full_block_func_ = diffFullBlock_C;
+
+        if constexpr (kBlockSize == 8)
+            diff_full_block_func_ = diffFullBlock_8x8_C;
+        else if constexpr (kBlockSize == 16)
+            diff_full_block_func_ = diffFullBlock_16x16_C;
+        else if constexpr (kBlockSize == 32)
+            diff_full_block_func_ = diffFullBlock_32x32_C;
     }
 }
 

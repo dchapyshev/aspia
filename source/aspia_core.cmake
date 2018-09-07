@@ -307,6 +307,8 @@ list(APPEND SOURCE_DESKTOP_CAPTURE
     ${PROJECT_SOURCE_DIR}/desktop_capture/desktop_region.h
     ${PROJECT_SOURCE_DIR}/desktop_capture/diff_block_avx2.cc
     ${PROJECT_SOURCE_DIR}/desktop_capture/diff_block_avx2.h
+    ${PROJECT_SOURCE_DIR}/desktop_capture/diff_block_c.cc
+    ${PROJECT_SOURCE_DIR}/desktop_capture/diff_block_c.h
     ${PROJECT_SOURCE_DIR}/desktop_capture/diff_block_sse2.cc
     ${PROJECT_SOURCE_DIR}/desktop_capture/diff_block_sse2.h
     ${PROJECT_SOURCE_DIR}/desktop_capture/diff_block_sse3.cc
@@ -328,7 +330,11 @@ list(APPEND SOURCE_DESKTOP_CAPTURE
 
 list(APPEND SOURCE_DESKTOP_CAPTURE_UNIT_TESTS
     ${PROJECT_SOURCE_DIR}/desktop_capture/desktop_geometry_unittest.cc
-    ${PROJECT_SOURCE_DIR}/desktop_capture/desktop_region_unittest.cc)
+    ${PROJECT_SOURCE_DIR}/desktop_capture/desktop_region_unittest.cc
+    ${PROJECT_SOURCE_DIR}/desktop_capture/diff_block_avx2_unittest.cc
+    ${PROJECT_SOURCE_DIR}/desktop_capture/diff_block_c_unittest.cc
+    ${PROJECT_SOURCE_DIR}/desktop_capture/diff_block_sse2_unittest.cc
+    ${PROJECT_SOURCE_DIR}/desktop_capture/diff_block_sse3_unittest.cc)
 
 list(APPEND SOURCE_DESKTOP_CAPTURE_WIN
     ${PROJECT_SOURCE_DIR}/desktop_capture/win/cursor.cc
