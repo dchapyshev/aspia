@@ -1375,57 +1375,87 @@
 <context>
     <name>aspia::Client</name>
     <message>
-        <location filename="../client/client.cc" line="64"/>
+        <location filename="../client/client.cc" line="62"/>
         <source>Attempt to connect to %1:%2.</source>
         <translation>Попытка подключения к %1:%2.</translation>
     </message>
     <message>
-        <location filename="../client/client.cc" line="70"/>
+        <location filename="../client/client.cc" line="73"/>
         <source>Connection established.</source>
         <translation>Соединение установлено.</translation>
     </message>
     <message>
-        <location filename="../client/client.cc" line="101"/>
-        <source>Authorization started.</source>
-        <translation>Начата авторизация.</translation>
+        <location filename="../client/client.cc" line="130"/>
+        <source>Connection was refused by the peer (or timed out).</source>
+        <translation>Подключение было отклонено другой стороной (или превышено время ожидания).</translation>
     </message>
     <message>
-        <location filename="../client/client.cc" line="107"/>
+        <location filename="../client/client.cc" line="134"/>
+        <source>Remote host closed the connection.</source>
+        <translation>Удаленный узел закрыл подключение.</translation>
+    </message>
+    <message>
+        <location filename="../client/client.cc" line="138"/>
+        <source>Host address was not found.</source>
+        <translation>Не найден адрес удаленного узла.</translation>
+    </message>
+    <message>
+        <location filename="../client/client.cc" line="142"/>
+        <source>Socket operation timed out.</source>
+        <translation>Превышено время ожидания.</translation>
+    </message>
+    <message>
+        <location filename="../client/client.cc" line="146"/>
+        <source>Address specified is already in use and was set to be exclusive.</source>
+        <translation>Указанный адрес уже используется и был установлен монопольно.</translation>
+    </message>
+    <message>
+        <location filename="../client/client.cc" line="150"/>
+        <source>Address specified does not belong to the host.</source>
+        <translation>Указанный адрес не принадлежит узлу.</translation>
+    </message>
+    <message>
+        <location filename="../client/client.cc" line="154"/>
+        <source>Violation of the data exchange protocol.</source>
+        <translation>Нарушение протокола обмена данными.</translation>
+    </message>
+    <message>
+        <location filename="../client/client.cc" line="158"/>
+        <source>An error occurred while encrypting the message.</source>
+        <translation>Произошла ошибка при шифровании сообщения.</translation>
+    </message>
+    <message>
+        <location filename="../client/client.cc" line="162"/>
+        <source>An error occurred while decrypting the message.</source>
+        <translation>Произошла ошибка при расшифровке сообщения.</translation>
+    </message>
+    <message>
+        <location filename="../client/client.cc" line="166"/>
+        <source>An error occured while authenticating: wrong user name or password.</source>
+        <translation>Произошла ошибка при аутификации: неправильное имя пользователя или пароль.</translation>
+    </message>
+    <message>
+        <location filename="../client/client.cc" line="170"/>
+        <source>Specified session type is not allowed for the user.</source>
+        <translation>Указанный тип сессии не разрешен для пользователя.</translation>
+    </message>
+    <message>
+        <location filename="../client/client.cc" line="174"/>
+        <source>An unknown error occurred.</source>
+        <translation>Произошла неизвестная ошибка.</translation>
+    </message>
+    <message>
+        <location filename="../client/client.cc" line="120"/>
         <source>Disconnected.</source>
         <translation>Подключение разорвано.</translation>
     </message>
     <message>
-        <location filename="../client/client.cc" line="112"/>
-        <source>Network error: %1.</source>
-        <translation>Сетевая ошибка: %1.</translation>
-    </message>
-    <message>
-        <location filename="../client/client.cc" line="122"/>
-        <source>Successful authorization.</source>
-        <translation>Успешная авторизация.</translation>
-    </message>
-    <message>
-        <location filename="../client/client.cc" line="126"/>
-        <source>Authorization error: Access denied.</source>
-        <translation>Ошибка авторизации: доступ запрещен.</translation>
-    </message>
-    <message>
-        <location filename="../client/client.cc" line="130"/>
-        <source>Authorization has been canceled.</source>
-        <translation>Авторизация отменена.</translation>
-    </message>
-    <message>
-        <location filename="../client/client.cc" line="134"/>
-        <source>Authorization error: Unknown status code.</source>
-        <translation>Ошибка авторизации: Неизвестный код состояния.</translation>
-    </message>
-    <message>
-        <location filename="../client/client.cc" line="157"/>
+        <location filename="../client/client.cc" line="94"/>
         <source>Unsupported session type.</source>
         <translation>Неподдерживаемый тип сессии.</translation>
     </message>
     <message>
-        <location filename="../client/client.cc" line="175"/>
+        <location filename="../client/client.cc" line="112"/>
         <source>Session started.</source>
         <translation>Сессия запущена.</translation>
     </message>
@@ -1513,24 +1543,6 @@
         <location filename="../client/client_session_system_info.cc" line="40"/>
         <source>Session error: Invalid message from host.</source>
         <translation>Ошибка сессии: Неверное сообщение от хоста.</translation>
-    </message>
-</context>
-<context>
-    <name>aspia::ClientUserAuthorizer</name>
-    <message>
-        <location filename="../client/client_user_authorizer.cc" line="147"/>
-        <source>Protocol error: Unknown message from host.</source>
-        <translation>Ошибка протокола: Неизвестное сообщение от хоста.</translation>
-    </message>
-    <message>
-        <location filename="../client/client_user_authorizer.cc" line="166"/>
-        <source>Authorization error: Empty nonce is not allowed.</source>
-        <translation>Ошибка авторизации: Пустое поле nonce не разрешено.</translation>
-    </message>
-    <message>
-        <location filename="../client/client_user_authorizer.cc" line="180"/>
-        <source>Authorization is canceled by the user.</source>
-        <translation>Авторизация отменена пользователем.</translation>
     </message>
 </context>
 <context>
@@ -1653,54 +1665,54 @@
 <context>
     <name>aspia::ConsoleWindow</name>
     <message>
-        <location filename="../console/console_window.cc" line="706"/>
+        <location filename="../console/console_window.cc" line="707"/>
         <source>Aspia Console</source>
         <translation>Консоль Aspia</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="186"/>
+        <location filename="../console/console_window.cc" line="187"/>
         <source>Open Address Book</source>
         <translation>Открытие адресной книги</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="188"/>
+        <location filename="../console/console_window.cc" line="189"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Адресная книга Aspia (*.aab)</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="206"/>
+        <location filename="../console/console_window.cc" line="207"/>
         <source>Information</source>
         <translation>Информация</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="207"/>
+        <location filename="../console/console_window.cc" line="208"/>
         <source>Address Book &quot;%1&quot; is already open.</source>
         <translation>Адресная книга &quot;%1&quot; уже открыта.</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="289"/>
+        <location filename="../console/console_window.cc" line="290"/>
         <source>https://aspia.org/en/help.html</source>
         <translation>https://aspia.org/ru/help.html</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="406"/>
-        <location filename="../console/console_window.cc" line="636"/>
+        <location filename="../console/console_window.cc" line="407"/>
+        <location filename="../console/console_window.cc" line="637"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="407"/>
-        <location filename="../console/console_window.cc" line="637"/>
+        <location filename="../console/console_window.cc" line="408"/>
+        <location filename="../console/console_window.cc" line="638"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation>Адресная книга &quot;%1&quot; изменена. Сохранить изменения?</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="593"/>
+        <location filename="../console/console_window.cc" line="594"/>
         <source>Hide</source>
         <translation>Спрятать</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="608"/>
+        <location filename="../console/console_window.cc" line="609"/>
         <source>Show</source>
         <translation>Показать</translation>
     </message>
@@ -2071,20 +2083,20 @@
 <context>
     <name>aspia::HostConfigDialog</name>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="232"/>
-        <location filename="../host/ui/host_config_dialog.cc" line="409"/>
-        <location filename="../host/ui/host_config_dialog.cc" line="428"/>
-        <location filename="../host/ui/host_config_dialog.cc" line="438"/>
-        <location filename="../host/ui/host_config_dialog.cc" line="454"/>
-        <location filename="../host/ui/host_config_dialog.cc" line="464"/>
-        <location filename="../host/ui/host_config_dialog.cc" line="480"/>
-        <location filename="../host/ui/host_config_dialog.cc" line="490"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="240"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="417"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="436"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="446"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="462"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="472"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="488"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="498"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
         <location filename="../host/ui/host_config_dialog.cc" line="161"/>
-        <location filename="../host/ui/host_config_dialog.cc" line="253"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="261"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
@@ -2094,86 +2106,86 @@
         <translation>Вы действительно хотите удалить пользователя &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="229"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="237"/>
         <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
         <translation>Конфигурация не может быть записана. Проверьте имеются ли у вас достаточные права для записи.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="248"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="256"/>
         <source>Service configuration changed. For the changes to take effect, you must restart the service. Restart the service now?</source>
         <translation>Конфигурация службы изменена. Для принятия изменений требуется перезапуск службы. Перезапустить сейчас?</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="348"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="356"/>
         <source>Remove</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="356"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="364"/>
         <source>Started</source>
         <translation>Запущена</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="357"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="365"/>
         <source>Stop</source>
         <translation>Остановить</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="362"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="370"/>
         <source>Not started</source>
         <translation>Не запущена</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="363"/>
-        <location filename="../host/ui/host_config_dialog.cc" line="370"/>
-        <location filename="../host/ui/host_config_dialog.cc" line="383"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="371"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="378"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="391"/>
         <source>Start</source>
         <translation>Запустить</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="369"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="377"/>
         <source>Installed</source>
         <translation>Установлена</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="380"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="388"/>
         <source>Not installed</source>
         <translation>Не установлена</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="382"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="390"/>
         <source>Install</source>
         <translation>Установить</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="387"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="395"/>
         <source>Current state: %1</source>
         <translation>Текущее состояние: %1</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="410"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="418"/>
         <source>The service could not be installed.</source>
         <translation>Не удалось установить службу.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="429"/>
-        <location filename="../host/ui/host_config_dialog.cc" line="455"/>
-        <location filename="../host/ui/host_config_dialog.cc" line="481"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="437"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="463"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="489"/>
         <source>Could not access the service.</source>
         <translation>Не удалось получить доступ к службе.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="439"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="447"/>
         <source>The service could not be removed.</source>
         <translation>Не удалось удалить службу.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="465"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="473"/>
         <source>The service could not be started.</source>
         <translation>Не удалось запустить службу.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="491"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="499"/>
         <source>The service could not be stopped.</source>
         <translation>Не удалось остановить службу.</translation>
     </message>
@@ -2192,41 +2204,6 @@
         <location filename="../host/host_session_fake_desktop.cc" line="142"/>
         <source>The session is temporarily unavailable.</source>
         <translation>Сессия временно недоступна.</translation>
-    </message>
-</context>
-<context>
-    <name>aspia::NetworkChannel</name>
-    <message>
-        <location filename="../network/network_channel.cc" line="223"/>
-        <location filename="../network/network_channel.cc" line="410"/>
-        <location filename="../network/network_channel.cc" line="421"/>
-        <source>Error in encryption key exchange.</source>
-        <translation>Ошибка при обмене ключами шифрования.</translation>
-    </message>
-    <message>
-        <location filename="../network/network_channel.cc" line="299"/>
-        <source>The received message has an invalid size.</source>
-        <translation>Полученное сообщение имеет некорректные размер.</translation>
-    </message>
-    <message>
-        <location filename="../network/network_channel.cc" line="378"/>
-        <source>Unknown internal error.</source>
-        <translation>Неизвестная внутренняя ошибка.</translation>
-    </message>
-    <message>
-        <location filename="../network/network_channel.cc" line="394"/>
-        <source>Error while decrypting the message.</source>
-        <translation>Ошибка при расшифровке сообщения.</translation>
-    </message>
-    <message>
-        <location filename="../network/network_channel.cc" line="458"/>
-        <source>The message to send exceeds the size limit.</source>
-        <translation>Сообщение для отправки превышает допустимый размер.</translation>
-    </message>
-    <message>
-        <location filename="../network/network_channel.cc" line="504"/>
-        <source>Error while encrypting the message.</source>
-        <translation>Ошибка при расшифровке сообщения.</translation>
     </message>
 </context>
 <context>
@@ -2261,61 +2238,67 @@
 <context>
     <name>aspia::UserDialog</name>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="39"/>
+        <location filename="../host/ui/user_dialog.cc" line="239"/>
         <source>Double-click to change</source>
         <translation>Двойной щелчок для изменения</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="81"/>
+        <location filename="../host/ui/user_dialog.cc" line="72"/>
         <source>Desktop Manage</source>
         <translation>Управление рабочим столом</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="85"/>
+        <location filename="../host/ui/user_dialog.cc" line="76"/>
         <source>Desktop View</source>
         <translation>Просмотр рабочего стола</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="89"/>
+        <location filename="../host/ui/user_dialog.cc" line="80"/>
         <source>File Transfer</source>
         <translation>Передача файлов</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="93"/>
+        <location filename="../host/ui/user_dialog.cc" line="84"/>
         <source>System Information</source>
         <translation>Информация о системе</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="149"/>
-        <location filename="../host/ui/user_dialog.cc" line="163"/>
-        <location filename="../host/ui/user_dialog.cc" line="179"/>
-        <location filename="../host/ui/user_dialog.cc" line="189"/>
+        <location filename="../host/ui/user_dialog.cc" line="132"/>
+        <location filename="../host/ui/user_dialog.cc" line="150"/>
+        <location filename="../host/ui/user_dialog.cc" line="161"/>
+        <location filename="../host/ui/user_dialog.cc" line="170"/>
+        <location filename="../host/ui/user_dialog.cc" line="182"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="150"/>
+        <location filename="../host/ui/user_dialog.cc" line="133"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>Имя пользователя не может быть пустым и может содержать только буквы алфавита, цифры и символы &quot;_&quot;,&quot;-&quot;,&quot;.&quot;.</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="164"/>
+        <location filename="../host/ui/user_dialog.cc" line="151"/>
         <source>The username you entered already exists.</source>
         <translation>Введенное имя пользователя уже существует.</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="180"/>
+        <location filename="../host/ui/user_dialog.cc" line="162"/>
         <source>The passwords you entered do not match.</source>
         <translation>Введенные пароли не совпадают.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../host/ui/user_dialog.cc" line="190"/>
+        <location filename="../host/ui/user_dialog.cc" line="171"/>
         <source>Password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>Пароль не может быть короче, чем %n символ.</numerusform>
             <numerusform>Пароль не может быть короче, чем %n символа.</numerusform>
             <numerusform>Пароль не может быть короче, чем %n символов.</numerusform>
         </translation>
+    </message>
+    <message>
+        <location filename="../host/ui/user_dialog.cc" line="183"/>
+        <source>Unknown internal error when creating or modifying a user.</source>
+        <translation>Неизвестная внутренняя ошибка при создании или изменении пользователя.</translation>
     </message>
 </context>
 </TS>

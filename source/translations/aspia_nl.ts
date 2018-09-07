@@ -1372,57 +1372,87 @@
 <context>
     <name>aspia::Client</name>
     <message>
-        <location filename="../client/client.cc" line="64"/>
+        <location filename="../client/client.cc" line="62"/>
         <source>Attempt to connect to %1:%2.</source>
         <translation>Probeer te verbinden met %1:%2.</translation>
     </message>
     <message>
-        <location filename="../client/client.cc" line="70"/>
+        <location filename="../client/client.cc" line="73"/>
         <source>Connection established.</source>
         <translation>Verbinding opgezet.</translation>
     </message>
     <message>
-        <location filename="../client/client.cc" line="101"/>
-        <source>Authorization started.</source>
-        <translation>Authorizatie begonnen.</translation>
+        <location filename="../client/client.cc" line="130"/>
+        <source>Connection was refused by the peer (or timed out).</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/client.cc" line="107"/>
+        <location filename="../client/client.cc" line="134"/>
+        <source>Remote host closed the connection.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/client.cc" line="138"/>
+        <source>Host address was not found.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/client.cc" line="142"/>
+        <source>Socket operation timed out.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/client.cc" line="146"/>
+        <source>Address specified is already in use and was set to be exclusive.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/client.cc" line="150"/>
+        <source>Address specified does not belong to the host.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/client.cc" line="154"/>
+        <source>Violation of the data exchange protocol.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/client.cc" line="158"/>
+        <source>An error occurred while encrypting the message.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/client.cc" line="162"/>
+        <source>An error occurred while decrypting the message.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/client.cc" line="166"/>
+        <source>An error occured while authenticating: wrong user name or password.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/client.cc" line="170"/>
+        <source>Specified session type is not allowed for the user.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/client.cc" line="174"/>
+        <source>An unknown error occurred.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/client.cc" line="120"/>
         <source>Disconnected.</source>
         <translation>Verbinding verbroken.</translation>
     </message>
     <message>
-        <location filename="../client/client.cc" line="112"/>
-        <source>Network error: %1.</source>
-        <translation>Netwerk fout: %1.</translation>
-    </message>
-    <message>
-        <location filename="../client/client.cc" line="122"/>
-        <source>Successful authorization.</source>
-        <translation>Successvolle authorisatie.</translation>
-    </message>
-    <message>
-        <location filename="../client/client.cc" line="126"/>
-        <source>Authorization error: Access denied.</source>
-        <translation>Authorisatie fout: Toegang geweigerd.</translation>
-    </message>
-    <message>
-        <location filename="../client/client.cc" line="130"/>
-        <source>Authorization has been canceled.</source>
-        <translation>Authorisatie is door de gebruiker afgebroken.</translation>
-    </message>
-    <message>
-        <location filename="../client/client.cc" line="134"/>
-        <source>Authorization error: Unknown status code.</source>
-        <translation>Authorisatie fout: Onbekende code.</translation>
-    </message>
-    <message>
-        <location filename="../client/client.cc" line="157"/>
+        <location filename="../client/client.cc" line="94"/>
         <source>Unsupported session type.</source>
         <translation>Niet ondersteund sessie type.</translation>
     </message>
     <message>
-        <location filename="../client/client.cc" line="175"/>
+        <location filename="../client/client.cc" line="112"/>
         <source>Session started.</source>
         <translation>Sessie begonnen.</translation>
     </message>
@@ -1510,24 +1540,6 @@
         <location filename="../client/client_session_system_info.cc" line="40"/>
         <source>Session error: Invalid message from host.</source>
         <translation type="unfinished">Sessie fout: Ongeldig bericht van de host.</translation>
-    </message>
-</context>
-<context>
-    <name>aspia::ClientUserAuthorizer</name>
-    <message>
-        <location filename="../client/client_user_authorizer.cc" line="147"/>
-        <source>Protocol error: Unknown message from host.</source>
-        <translation>Protocol fout: Onbekend bericht van de host.</translation>
-    </message>
-    <message>
-        <location filename="../client/client_user_authorizer.cc" line="166"/>
-        <source>Authorization error: Empty nonce is not allowed.</source>
-        <translation>Authorisatie fout: Lege nonce is niet toegestaan.</translation>
-    </message>
-    <message>
-        <location filename="../client/client_user_authorizer.cc" line="180"/>
-        <source>Authorization is canceled by the user.</source>
-        <translation>Authorisatie is door de gebruiker afgebroken.</translation>
     </message>
 </context>
 <context>
@@ -1643,54 +1655,54 @@
 <context>
     <name>aspia::ConsoleWindow</name>
     <message>
-        <location filename="../console/console_window.cc" line="706"/>
+        <location filename="../console/console_window.cc" line="707"/>
         <source>Aspia Console</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="186"/>
+        <location filename="../console/console_window.cc" line="187"/>
         <source>Open Address Book</source>
         <translation>Open Adresboek</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="188"/>
+        <location filename="../console/console_window.cc" line="189"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Aspia Adresboek (*.aab)</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="206"/>
+        <location filename="../console/console_window.cc" line="207"/>
         <source>Information</source>
         <translation>Informatie</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="207"/>
+        <location filename="../console/console_window.cc" line="208"/>
         <source>Address Book &quot;%1&quot; is already open.</source>
         <translation>Adresboek &quot;%1&quot; is al geopend.</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="289"/>
+        <location filename="../console/console_window.cc" line="290"/>
         <source>https://aspia.org/en/help.html</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="406"/>
-        <location filename="../console/console_window.cc" line="636"/>
+        <location filename="../console/console_window.cc" line="407"/>
+        <location filename="../console/console_window.cc" line="637"/>
         <source>Confirmation</source>
         <translation>Bevestiging</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="407"/>
-        <location filename="../console/console_window.cc" line="637"/>
+        <location filename="../console/console_window.cc" line="408"/>
+        <location filename="../console/console_window.cc" line="638"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation>Adresboek &quot;%1&quot; is aangepast. Wijzigingen opslaan?</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="593"/>
+        <location filename="../console/console_window.cc" line="594"/>
         <source>Hide</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="608"/>
+        <location filename="../console/console_window.cc" line="609"/>
         <source>Show</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2061,20 +2073,20 @@
 <context>
     <name>aspia::HostConfigDialog</name>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="232"/>
-        <location filename="../host/ui/host_config_dialog.cc" line="409"/>
-        <location filename="../host/ui/host_config_dialog.cc" line="428"/>
-        <location filename="../host/ui/host_config_dialog.cc" line="438"/>
-        <location filename="../host/ui/host_config_dialog.cc" line="454"/>
-        <location filename="../host/ui/host_config_dialog.cc" line="464"/>
-        <location filename="../host/ui/host_config_dialog.cc" line="480"/>
-        <location filename="../host/ui/host_config_dialog.cc" line="490"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="240"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="417"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="436"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="446"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="462"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="472"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="488"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="498"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
     <message>
         <location filename="../host/ui/host_config_dialog.cc" line="161"/>
-        <location filename="../host/ui/host_config_dialog.cc" line="253"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="261"/>
         <source>Confirmation</source>
         <translation>Bevestiging</translation>
     </message>
@@ -2084,86 +2096,86 @@
         <translation>Weet U zeker dat U de gebruiker &quot;%1&quot; wilt verwijderen?</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="229"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="237"/>
         <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
         <translation>De configuratie kon niet worden weggeschreven. Zorg dat U genoeg rechten heeft om te schrijven.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="248"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="256"/>
         <source>Service configuration changed. For the changes to take effect, you must restart the service. Restart the service now?</source>
         <translation>Service configuratie veranderd. Om de wijzigingen toe te passen, moet de service herstart worden. Nu herstarten?</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="348"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="356"/>
         <source>Remove</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="356"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="364"/>
         <source>Started</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="357"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="365"/>
         <source>Stop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="362"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="370"/>
         <source>Not started</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="363"/>
-        <location filename="../host/ui/host_config_dialog.cc" line="370"/>
-        <location filename="../host/ui/host_config_dialog.cc" line="383"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="371"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="378"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="391"/>
         <source>Start</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="369"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="377"/>
         <source>Installed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="380"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="388"/>
         <source>Not installed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="382"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="390"/>
         <source>Install</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="387"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="395"/>
         <source>Current state: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="410"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="418"/>
         <source>The service could not be installed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="429"/>
-        <location filename="../host/ui/host_config_dialog.cc" line="455"/>
-        <location filename="../host/ui/host_config_dialog.cc" line="481"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="437"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="463"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="489"/>
         <source>Could not access the service.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="439"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="447"/>
         <source>The service could not be removed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="465"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="473"/>
         <source>The service could not be started.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="491"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="499"/>
         <source>The service could not be stopped.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2182,41 +2194,6 @@
         <location filename="../host/host_session_fake_desktop.cc" line="142"/>
         <source>The session is temporarily unavailable.</source>
         <translation>De sessie is tijdelijk niet beschikbaar.</translation>
-    </message>
-</context>
-<context>
-    <name>aspia::NetworkChannel</name>
-    <message>
-        <location filename="../network/network_channel.cc" line="223"/>
-        <location filename="../network/network_channel.cc" line="410"/>
-        <location filename="../network/network_channel.cc" line="421"/>
-        <source>Error in encryption key exchange.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../network/network_channel.cc" line="299"/>
-        <source>The received message has an invalid size.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../network/network_channel.cc" line="378"/>
-        <source>Unknown internal error.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../network/network_channel.cc" line="394"/>
-        <source>Error while decrypting the message.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../network/network_channel.cc" line="458"/>
-        <source>The message to send exceeds the size limit.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../network/network_channel.cc" line="504"/>
-        <source>Error while encrypting the message.</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2251,60 +2228,66 @@
 <context>
     <name>aspia::UserDialog</name>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="39"/>
+        <location filename="../host/ui/user_dialog.cc" line="239"/>
         <source>Double-click to change</source>
         <translation>Dubbelklik om te wijzigen</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="81"/>
+        <location filename="../host/ui/user_dialog.cc" line="72"/>
         <source>Desktop Manage</source>
         <translation>Bureaublad Beheren</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="85"/>
+        <location filename="../host/ui/user_dialog.cc" line="76"/>
         <source>Desktop View</source>
         <translation>Bureaublad Weergeven</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="89"/>
+        <location filename="../host/ui/user_dialog.cc" line="80"/>
         <source>File Transfer</source>
         <translation>Bestands Overdracht</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="93"/>
+        <location filename="../host/ui/user_dialog.cc" line="84"/>
         <source>System Information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="149"/>
-        <location filename="../host/ui/user_dialog.cc" line="163"/>
-        <location filename="../host/ui/user_dialog.cc" line="179"/>
-        <location filename="../host/ui/user_dialog.cc" line="189"/>
+        <location filename="../host/ui/user_dialog.cc" line="132"/>
+        <location filename="../host/ui/user_dialog.cc" line="150"/>
+        <location filename="../host/ui/user_dialog.cc" line="161"/>
+        <location filename="../host/ui/user_dialog.cc" line="170"/>
+        <location filename="../host/ui/user_dialog.cc" line="182"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="150"/>
+        <location filename="../host/ui/user_dialog.cc" line="133"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>De gebruikersnaam mag niet leeg zijn, en alleen karakters uit het alfabet, nummers, _, -, . karakters bevatten.</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="164"/>
+        <location filename="../host/ui/user_dialog.cc" line="151"/>
         <source>The username you entered already exists.</source>
         <translation>De ingevoerde gebruikersnaam bestaat al.</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="180"/>
+        <location filename="../host/ui/user_dialog.cc" line="162"/>
         <source>The passwords you entered do not match.</source>
         <translation>De ingevoerde wachtwoorden komen niet overeen.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../host/ui/user_dialog.cc" line="190"/>
+        <location filename="../host/ui/user_dialog.cc" line="171"/>
         <source>Password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>Wachtwoord mag niet korter dan %n karakter zijn.</numerusform>
             <numerusform>Wachtwoord mag niet korter dan %n karakters zijn.</numerusform>
         </translation>
+    </message>
+    <message>
+        <location filename="../host/ui/user_dialog.cc" line="183"/>
+        <source>Unknown internal error when creating or modifying a user.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>
