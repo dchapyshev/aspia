@@ -24,7 +24,7 @@
 
 namespace aspia {
 
-TEST(srp_math, test_vector)
+TEST(srp_math_test, test_vector)
 {
     ScopedCryptoInitializer crypto_initializer;
     ASSERT_TRUE(crypto_initializer.isSucceeded());

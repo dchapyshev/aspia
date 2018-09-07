@@ -39,6 +39,7 @@ find_package(Qt5LinguistTools)
 include(aspia_core.cmake)
 
 source_group(base FILES ${SOURCE_BASE})
+source_group(base FILES ${SOURCE_BASE_UNIT_TESTS})
 source_group(base\\win FILES ${SOURCE_BASE_WIN})
 source_group(client FILES ${SOURCE_CLIENT})
 source_group(client\\ui FILES ${SOURCE_CLIENT_UI})

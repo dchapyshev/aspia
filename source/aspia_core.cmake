@@ -70,6 +70,9 @@ list(APPEND SOURCE_BASE
     ${PROJECT_SOURCE_DIR}/base/unicode.cc
     ${PROJECT_SOURCE_DIR}/base/unicode.h)
 
+list(APPEND SOURCE_BASE_UNIT_TESTS
+    ${PROJECT_SOURCE_DIR}/base/aligned_memory_unittest.cc)
+
 list(APPEND SOURCE_BASE_WIN
     ${PROJECT_SOURCE_DIR}/base/win/registry.cc
     ${PROJECT_SOURCE_DIR}/base/win/registry.h
@@ -520,6 +523,7 @@ list(APPEND ALL_SOURCES
     ${SOURCE})
 
 list(APPEND ALL_SOURCES_WITH_UNIT_TESTS
+    ${SOURCE_BASE_UNIT_TESTS}
     ${SOURCE_CRYPTO_UNIT_TESTS}
     ${ALL_SOURCES})
 
