@@ -376,25 +376,18 @@ void LogMessage::init(const char* file, int line)
     if (last_slash_pos != std::string_view::npos)
         filename.remove_prefix(last_slash_pos + 1);
 
-    stream_ <<  '[';
-    stream_ << GetCurrentThreadId() << ':';
-
     SYSTEMTIME local_time;
     GetLocalTime(&local_time);
 
     stream_ << std::setfill('0')
-            << std::setw(2) << local_time.wMonth
-            << std::setw(2) << local_time.wDay
-            << '/'
-            << std::setw(2) << local_time.wHour
-            << std::setw(2) << local_time.wMinute
-            << std::setw(2) << local_time.wSecond
-            << '.'
-            << std::setw(3) << local_time.wMilliseconds
-            << ':';
+            << std::setw(2) << local_time.wHour   << ':'
+            << std::setw(2) << local_time.wMinute << ':'
+            << std::setw(2) << local_time.wSecond << '.'
+            << std::setw(3) << local_time.wMilliseconds;
 
-    stream_ << severityName(severity_);
-    stream_ << ":" << filename.data() << ":" << line << "] ";
+    stream_ << ' ' << GetCurrentThreadId();
+    stream_ << ' ' << severityName(severity_);
+    stream_ << ' ' << filename.data() << ":" << line << "] ";
 
     message_start_ = stream_.str().length();
 }
