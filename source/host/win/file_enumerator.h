@@ -19,7 +19,10 @@
 #ifndef ASPIA_HOST__WIN__FILE_ENUMERATOR_H_
 #define ASPIA_HOST__WIN__FILE_ENUMERATOR_H_
 
-#include <qt_windows.h>
+#define WIN32_LEAN_AND_MEAN
+#define NOMINMAX
+#include <windows.h>
+
 #include <filesystem>
 
 #include "base/macros_magic.h"

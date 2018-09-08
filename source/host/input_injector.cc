@@ -18,9 +18,12 @@
 
 #include "host/input_injector.h"
 
-#include <set>
-#include <qt_windows.h>
+#define WIN32_LEAN_AND_MEAN
+#define NOMINMAX
+#include <windows.h>
 #include <sas.h>
+
+#include <set>
 
 #include "base/win/registry.h"
 #include "base/logging.h"

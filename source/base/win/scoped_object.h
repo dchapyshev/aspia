@@ -19,7 +19,9 @@
 #ifndef ASPIA_BASE__WIN__SCOPED_HANDLE_H_
 #define ASPIA_BASE__WIN__SCOPED_HANDLE_H_
 
-#include <qt_windows.h>
+#define WIN32_LEAN_AND_MEAN
+#define NOMINMAX
+#include <windows.h>
 
 #include "base/macros_magic.h"
 

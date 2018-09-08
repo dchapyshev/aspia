@@ -19,7 +19,9 @@
 #ifndef ASPIA_DESKTOP_CAPTURE__WIN__CURSOR_H_
 #define ASPIA_DESKTOP_CAPTURE__WIN__CURSOR_H_
 
-#include <qt_windows.h>
+#define WIN32_LEAN_AND_MEAN
+#define NOMINMAX
+#include <windows.h>
 
 namespace aspia {
 

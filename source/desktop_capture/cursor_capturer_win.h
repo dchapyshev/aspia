@@ -19,7 +19,10 @@
 #ifndef ASPIA_DESKTOP_CAPTURE__CURSOR_CAPTURER_WIN_H_
 #define ASPIA_DESKTOP_CAPTURE__CURSOR_CAPTURER_WIN_H_
 
-#include <qt_windows.h>
+#define WIN32_LEAN_AND_MEAN
+#define NOMINMAX
+#include <windows.h>
+
 #include <memory>
 
 #include "base/macros_magic.h"
