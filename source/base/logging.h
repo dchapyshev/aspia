@@ -166,28 +166,13 @@ inline bool initLogging(const LoggingSettings& settings)
     return baseInitLoggingImpl(settings);
 }
 
-// Sets the log level. Anything at or above this level will be written to the log file/displayed to
-// the user (if applicable). Anything below this level will be silently ignored. The log level
-// defaults to 0 (everything is logged up to level INFO) if this function is not called.
-// Note that log messages for VLOG(x) are logged at level -x, so setting the min log level to
-// negative values enables verbose logging.
-void setMinLogLevel(LoggingSeverity level);
-
-// Gets the current log level.
-LoggingSeverity minLogLevel();
+// Closes the log file explicitly if open.
+// NOTE: Since the log file is opened as necessary by the action of logging statements, there's no
+//       guarantee that it will stay closed after this call.
+void shutdownLogging();
 
 // Used by LOG_IS_ON to lazy-evaluate stream arguments.
 bool shouldCreateLogMessage(LoggingSeverity severity);
-
-// Sets the Log Message Handler that gets passed every log message before it's sent to other log
-// destinations (if any).
-// Returns true to signal that it handled the message and the message should not be sent to other
-// log destinations.
-typedef bool (*LogMessageHandlerFunction)
-    (int severity, const char* file, int line, size_t message_start, const std::string& str);
-
-void setLogMessageHandler(LogMessageHandlerFunction handler);
-LogMessageHandlerFunction logMessageHandler();
 
 // A few definitions of macros that don't generate much code. These are used by LOG() and LOG_IF,
 // etc. Since these are used all over our code, it's better to have compact code for these operations.
@@ -214,7 +199,7 @@ LogMessageHandlerFunction logMessageHandler();
 // As special cases, we can assume that LOG_IS_ON(LS_FATAL) always holds. Also, LOG_IS_ON(LS_DFATAL)
 // always holds in debug mode. In particular, CHECK()s will always fire if they fail.
 #define LOG_IS_ON(severity) \
-  (::aspia::shouldCreateLogMessage(aspia::##severity))
+  (::aspia::shouldCreateLogMessage(::aspia::##severity))
 
 // Helper macro which avoids evaluating the arguments to a stream if the condition doesn't hold.
 // Condition is evaluated once and only once.
@@ -237,8 +222,7 @@ LogMessageHandlerFunction logMessageHandler();
   LOG_IF(FATAL, !(condition)) << "Assert failed: " #condition ". "
 
 #define PLOG_STREAM(severity) \
-  COMPACT_LOG_EX_ ## severity(Win32ErrorLogMessage, \
-      ::aspia::lastSystemErrorCode()).stream()
+  COMPACT_LOG_EX_ ## severity(Win32ErrorLogMessage, ::aspia::lastSystemErrorCode()).stream()
 
 #define PLOG(severity) \
   LAZY_STREAM(PLOG_STREAM(severity), LOG_IS_ON(severity))
@@ -301,11 +285,11 @@ private:
 // 'if' clause such as:
 // if (a == 1)
 //   CHECK_EQ(2, a);
-#define CHECK_OP(name, op, val1, val2)                                           \
-  switch (0) case 0: default:                                                    \
-  if (::aspia::CheckOpResult true_if_passed =                                    \
-      ::aspia::check##name##Impl((val1), (val2), #val1 " " #op " " #val2));      \
-  else                                                                           \
+#define CHECK_OP(name, op, val1, val2)                                                           \
+  switch (0) case 0: default:                                                                    \
+  if (::aspia::CheckOpResult true_if_passed =                                                    \
+      ::aspia::check##name##Impl((val1), (val2), #val1 " " #op " " #val2));                      \
+  else                                                                                           \
       ::aspia::LogMessage(__FILE__, __LINE__, true_if_passed.message()).stream()
 
 template <typename T, typename = void>
@@ -379,21 +363,21 @@ std::string* makeCheckOpString(const std::string& v1, const std::string& v2, con
 // Helper functions for CHECK_OP macro.
 // The (int, int) specialization works around the issue that the compiler will not instantiate the
 // template version of the function on values of unnamed enum type - see comment below.
-#define DEFINE_CHECK_OP_IMPL(name, op)                                                   \
-    template <class t1, class t2>                                                        \
-    inline std::string* check##name##Impl(const t1& v1, const t2& v2, const char* names) \
-    {                                                                                    \
-        if ((v1 op v2))                                                                  \
-            return nullptr;                                                              \
-        else                                                                             \
-            return aspia::makeCheckOpString(v1, v2, names);                              \
-    }                                                                                    \
-    inline std::string* check##name##Impl(int v1, int v2, const char* names)             \
-    {                                                                                    \
-        if ((v1 op v2))                                                                  \
-            return nullptr;                                                              \
-        else                                                                             \
-            return aspia::makeCheckOpString(v1, v2, names);                              \
+#define DEFINE_CHECK_OP_IMPL(name, op)                                                           \
+    template <class t1, class t2>                                                                \
+    inline std::string* check##name##Impl(const t1& v1, const t2& v2, const char* names)         \
+    {                                                                                            \
+        if ((v1 op v2))                                                                          \
+            return nullptr;                                                                      \
+        else                                                                                     \
+            return aspia::makeCheckOpString(v1, v2, names);                                      \
+    }                                                                                            \
+    inline std::string* check##name##Impl(int v1, int v2, const char* names)                     \
+    {                                                                                            \
+        if ((v1 op v2))                                                                          \
+            return nullptr;                                                                      \
+        else                                                                                     \
+            return aspia::makeCheckOpString(v1, v2, names);                                      \
     }
 
 DEFINE_CHECK_OP_IMPL(EQ, ==)
@@ -468,16 +452,14 @@ DEFINE_CHECK_OP_IMPL(GT, > )
 //   DCHECK_EQ(2, a);
 #if DCHECK_IS_ON()
 
-#define DCHECK_OP(name, op, val1, val2)                                \
-  switch (0) case 0: default:                                          \
-  if (aspia::checkOpResult true_if_passed =                            \
-      DCHECK_IS_ON() ?                                                 \
-      aspia::check##name##Impl((val1), (val2),                         \
-                                   #val1 " " #op " " #val2) : nullptr) \
-   ;                                                                   \
-  else                                                                 \
-    aspia::LogMessage(__FILE__, __LINE__, aspia::LS_DCHECK,            \
-                          true_if_passed.message()).stream()
+#define DCHECK_OP(name, op, val1, val2)                                                          \
+    switch (0) case 0: default:                                                                  \
+    if (::aspia::checkOpResult true_if_passed =                                                  \
+        DCHECK_IS_ON() ?                                                                         \
+        ::aspia::check##name##Impl((val1), (val2),  #val1 " " #op " " #val2) : nullptr);         \
+    else                                                                                         \
+        ::aspia::LogMessage(__FILE__, __LINE__, ::aspia::LS_DCHECK,                              \
+                            true_if_passed.message()).stream()
 
 #else  // DCHECK_IS_ON()
 
@@ -488,11 +470,9 @@ DEFINE_CHECK_OP_IMPL(GT, > )
 // Note that the contract of DCHECK_EQ, etc is that arguments are only evaluated once. Even though
 // |val1| and |val2| appear twice in this version of the macro expansion, this is OK, since the
 // expression is never actually evaluated.
-#define DCHECK_OP(name, op, val1, val2)                             \
-  EAT_STREAM_PARAMETERS << (aspia::makeCheckOpValueString(          \
-                                aspia::g_swallow_stream, val1),     \
-                            aspia::makeCheckOpValueString(          \
-                                aspia::g_swallow_stream, val2),     \
+#define DCHECK_OP(name, op, val1, val2)                                                          \
+  EAT_STREAM_PARAMETERS << (::aspia::makeCheckOpValueString(::aspia::g_swallow_stream, val1),    \
+                            ::aspia::makeCheckOpValueString(::aspia::g_swallow_stream, val2),    \
                             (val1)op(val2))
 
 #endif  // DCHECK_IS_ON()
@@ -606,10 +586,7 @@ std::string systemErrorCodeToString(SystemErrorCode error_code);
 class Win32ErrorLogMessage
 {
 public:
-    Win32ErrorLogMessage(const char* file,
-                         int line,
-                         LoggingSeverity severity,
-                         SystemErrorCode err);
+    Win32ErrorLogMessage(const char* file, int line, LoggingSeverity severity, SystemErrorCode err);
 
     // Appends the error message before destructing the encapsulated class.
     ~Win32ErrorLogMessage();
@@ -623,29 +600,18 @@ private:
     DISALLOW_COPY_AND_ASSIGN(Win32ErrorLogMessage);
 };
 
-// Closes the log file explicitly if open.
-// NOTE: Since the log file is opened as necessary by the action of logging statements, there's no
-//       guarantee that it will stay closed after this call.
-void shutdownLogging();
-
 // Async signal safe logging mechanism.
 void rawLog(int level, const char* message);
 
 #define RAW_LOG(level, message) \
     ::aspia::rawLog(::aspia::LOG_##level, message)
 
-#define RAW_CHECK(condition)                                                     \
-    do                                                                           \
-    {                                                                            \
-        if (!(condition))                                                        \
-            ::aspia::rawLog(::aspia::LOG_FATAL, "Check failed: " #condition "\n"); \
+#define RAW_CHECK(condition)                                                                     \
+    do                                                                                           \
+    {                                                                                            \
+        if (!(condition))                                                                        \
+            ::aspia::rawLog(::aspia::LOG_FATAL, "Check failed: " #condition "\n");               \
     } while (0)
-
-// Returns true if logging to file is enabled.
-bool isLoggingToFileEnabled();
-
-// Returns the default log file path.
-std::filesystem::path logFileFullPath();
 
 } // namespace aspia
 
@@ -675,13 +641,13 @@ inline std::ostream& operator<<(std::ostream& out, const std::wstring& wstr)
 #define NOTIMPLEMENTED_MSG "NOT IMPLEMENTED"
 
 #define NOTIMPLEMENTED() LOG(LS_ERROR) << NOTIMPLEMENTED_MSG
-#define NOTIMPLEMENTED_LOG_ONCE()                             \
-    do                                                        \
-    {                                                         \
-        static bool logged_once = false;                      \
-        LOG_IF(LS_ERROR, !logged_once) << NOTIMPLEMENTED_MSG; \
-        logged_once = true;                                   \
-    } while (0);                                              \
+#define NOTIMPLEMENTED_LOG_ONCE()                                                                \
+    do                                                                                           \
+    {                                                                                            \
+        static bool logged_once = false;                                                         \
+        LOG_IF(LS_ERROR, !logged_once) << NOTIMPLEMENTED_MSG;                                    \
+        logged_once = true;                                                                      \
+    } while (0);                                                                                 \
     EAT_STREAM_PARAMETERS
 
 #endif // ASPIA_BASE__LOGGING_H_

@@ -54,9 +54,6 @@ std::filesystem::path g_log_file_name;
 // This file is lazily opened and the handle may be nullptr
 FileHandle g_log_file = nullptr;
 
-// A log message handler that gets notified of every log message we process.
-LogMessageHandlerFunction log_message_handler = nullptr;
-
 const char* severityName(LoggingSeverity severity)
 {
     static const char* const kLogSeverityNames[] = {"INFO", "WARNING", "ERROR", "FATAL"};
@@ -194,14 +191,9 @@ bool baseInitLoggingImpl(const LoggingSettings& settings)
     return initializeLogFileHandle();
 }
 
-void setMinLogLevel(LoggingSeverity level)
+void shutdownLogging()
 {
-    g_min_log_level = std::min(LS_FATAL, level);
-}
-
-LoggingSeverity minLogLevel()
-{
-    return g_min_log_level;
+    closeLogFileUnlocked();
 }
 
 bool shouldCreateLogMessage(LoggingSeverity severity)
@@ -212,18 +204,7 @@ bool shouldCreateLogMessage(LoggingSeverity severity)
     // Return true here unless we know ~LogMessage won't do anything. Note that
     // ~LogMessage writes to stderr if severity_ >= kAlwaysPrintErrorLevel, even
     // when g_logging_destination is LOG_NONE.
-    return g_logging_destination != LOG_NONE || log_message_handler ||
-           severity >= kAlwaysPrintErrorLevel;
-}
-
-void setLogMessageHandler(LogMessageHandlerFunction handler)
-{
-    log_message_handler = handler;
-}
-
-LogMessageHandlerFunction logMessageHandler()
-{
-    return log_message_handler;
+    return g_logging_destination != LOG_NONE || severity >= kAlwaysPrintErrorLevel;
 }
 
 void makeCheckOpValueString(std::ostream* os, std::nullptr_t /* p */)
@@ -313,14 +294,6 @@ LogMessage::~LogMessage()
 {
     stream_ << std::endl;
     std::string str_newline(stream_.str());
-
-    // Give any log message handler first dibs on the message.
-    if (log_message_handler &&
-        log_message_handler(severity_, file_, line_, message_start_, str_newline))
-    {
-        // The handler took care of it, no further processing.
-        return;
-    }
 
     if ((g_logging_destination & LOG_TO_SYSTEM_DEBUG_LOG) != 0)
     {
@@ -429,11 +402,6 @@ Win32ErrorLogMessage::~Win32ErrorLogMessage()
     stream() << ": " << systemErrorCodeToString(err_);
 }
 
-void shutdownLogging()
-{
-    closeLogFileUnlocked();
-}
-
 void rawLog(int level, const char* message)
 {
     if (level >= g_min_log_level && message)
@@ -471,16 +439,6 @@ void rawLog(int level, const char* message)
 
     if (level == LS_FATAL)
         __debugbreak();
-}
-
-bool isLoggingToFileEnabled()
-{
-    return g_logging_destination & LOG_TO_FILE;
-}
-
-std::filesystem::path logFileFullPath()
-{
-    return g_log_file_name;
 }
 
 void logErrorNotReached(const char* file, int line)
