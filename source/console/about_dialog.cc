@@ -21,13 +21,9 @@
 #include <QAbstractButton>
 #include <QDesktopServices>
 
-extern "C" {
-#define SODIUM_STATIC
-#include <sodium.h>
-} // extern "C"
-
 #include <libyuv.h>
 #include <google/protobuf/stubs/common.h>
+#include <openssl/crypto.h>
 #include <vpx/vpx_codec.h>
 #include <zlib-ng.h>
 
@@ -58,9 +54,9 @@ const char* kThirdParty[] =
     "libvpx &copy; 2010, The WebM Project authors, BSD 3-Clause License",
     "libyuv &copy; 2011 The LibYuv Project Authors, BSD 3-Clause License",
     "libsodium &copy; 2013-2017 Frank Denis, ISC License",
+    "openssl &copy; 1998-2018 The OpenSSL Project, OpenSSL License",
     "protobuf &copy; 2014 Google Inc., BSD 3-Clause License",
     "zlib-ng &copy; 1995-2013 Jean-loup Gailly and Mark Adler, Zlib License",
-    "FatCow Icons &copy; 2009-2014 FatCow Web Hosting, Creative Commons Attribution 3.0 License",
     "Fugue Icons &copy; 2013 Yusuke Kamiyamane, Creative Commons Attribution 3.0 License"
 };
 
@@ -136,10 +132,10 @@ AboutDialog::AboutDialog(QWidget* parent)
         ui.list_service->addItem(tr("%1 version: %2").arg(name).arg(version));
     };
 
-    add_version("Qt", qVersion());
+    add_version("qt", qVersion());
     add_version("libyuv", QString::number(LIBYUV_VERSION));
-    add_version("libsodium", sodium_version_string());
     add_version("libvpx", vpx_codec_version_str());
+    add_version("openssl", OpenSSL_version(OPENSSL_VERSION));
 
     QString protobuf_version =
         QString::fromStdString(google::protobuf::internal::VersionString(GOOGLE_PROTOBUF_VERSION));
