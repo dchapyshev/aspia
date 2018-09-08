@@ -50,7 +50,7 @@ private:
     static constexpr int kECX = 2;
     static constexpr int kEDX = 3;
 
-    int cpu_info_[4] = { -1 };
+    int cpu_info_[4] = { -1, -1, -1, -1 };
 };
 
 } // namespace aspia
