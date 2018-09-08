@@ -24,7 +24,7 @@ namespace aspia {
 
 namespace {
 
-HRESULT StringCchVPrintfT(char* buffer,
+HRESULT stringCchVPrintfT(char* buffer,
                           size_t buffer_size,
                           const char* format,
                           va_list args)
@@ -32,7 +32,7 @@ HRESULT StringCchVPrintfT(char* buffer,
     return StringCchVPrintfA(buffer, buffer_size, format, args);
 }
 
-HRESULT StringCchVPrintfT(wchar_t* buffer,
+HRESULT stringCchVPrintfT(wchar_t* buffer,
                           size_t buffer_size,
                           const wchar_t* format,
                           va_list args)
@@ -51,7 +51,7 @@ int vscprintfT(const wchar_t* format, va_list args)
 }
 
 template<class StringType>
-StringType StringPrintfVT(const typename StringType::value_type* format, va_list args)
+StringType stringPrintfVT(const typename StringType::value_type* format, va_list args)
 {
     va_list args_copy;
 
@@ -67,7 +67,7 @@ StringType StringPrintfVT(const typename StringType::value_type* format, va_list
     StringType result;
     result.resize(length);
 
-    if (FAILED(StringCchVPrintfT(&result[0], length + 1, format, args_copy)))
+    if (FAILED(stringCchVPrintfT(&result[0], length + 1, format, args_copy)))
     {
         va_end(args_copy);
         return StringType();
@@ -79,55 +79,55 @@ StringType StringPrintfVT(const typename StringType::value_type* format, va_list
 
 } // namespace
 
-std::string StringPrintfV(const char* format, va_list args)
+std::string stringPrintfV(const char* format, va_list args)
 {
-    return StringPrintfVT<std::string>(format, args);
+    return stringPrintfVT<std::string>(format, args);
 }
 
-std::wstring StringPrintfV(const wchar_t* format, va_list args)
+std::wstring stringPrintfV(const wchar_t* format, va_list args)
 {
-    return StringPrintfVT<std::wstring>(format, args);
+    return stringPrintfVT<std::wstring>(format, args);
 }
 
-std::string StringPrintf(const char* format, ...)
+std::string stringPrintf(const char* format, ...)
 {
     va_list args;
 
     va_start(args, format);
-    std::string result = StringPrintfV(format, args);
+    std::string result = stringPrintfV(format, args);
     va_end(args);
 
     return result;
 }
 
-std::wstring StringPrintf(const wchar_t* format, ...)
+std::wstring stringPrintf(const wchar_t* format, ...)
 {
     va_list args;
 
     va_start(args, format);
-    std::wstring result = StringPrintfV(format, args);
+    std::wstring result = stringPrintfV(format, args);
     va_end(args);
 
     return result;
 }
 
-const std::string& SStringPrintf(std::string* dst, const char* format, ...)
+const std::string& sStringPrintf(std::string* dst, const char* format, ...)
 {
     va_list args;
 
     va_start(args, format);
-    *dst = StringPrintfV(format, args);
+    *dst = stringPrintfV(format, args);
     va_end(args);
 
     return *dst;
 }
 
-const std::wstring& SStringPrintf(std::wstring* dst, const wchar_t* format, ...)
+const std::wstring& sStringPrintf(std::wstring* dst, const wchar_t* format, ...)
 {
     va_list args;
 
     va_start(args, format);
-    *dst = StringPrintfV(format, args);
+    *dst = stringPrintfV(format, args);
     va_end(args);
 
     return *dst;

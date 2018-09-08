@@ -57,6 +57,8 @@ list(APPEND SOURCE_BASE
     ${PROJECT_SOURCE_DIR}/base/keycode_converter.h
     ${PROJECT_SOURCE_DIR}/base/locale_loader.cc
     ${PROJECT_SOURCE_DIR}/base/locale_loader.h
+    ${PROJECT_SOURCE_DIR}/base/logging.cc
+    ${PROJECT_SOURCE_DIR}/base/logging.h
     ${PROJECT_SOURCE_DIR}/base/macros_magic.h
     ${PROJECT_SOURCE_DIR}/base/message_serialization.h
     ${PROJECT_SOURCE_DIR}/base/service.h
@@ -66,6 +68,10 @@ list(APPEND SOURCE_BASE
     ${PROJECT_SOURCE_DIR}/base/service_impl_win.cc
     ${PROJECT_SOURCE_DIR}/base/string_printf.cc
     ${PROJECT_SOURCE_DIR}/base/string_printf.h
+    ${PROJECT_SOURCE_DIR}/base/string_util.cc
+    ${PROJECT_SOURCE_DIR}/base/string_util.h
+    ${PROJECT_SOURCE_DIR}/base/string_util_constants.cc
+    ${PROJECT_SOURCE_DIR}/base/string_util_constants.h
     ${PROJECT_SOURCE_DIR}/base/typed_buffer.h
     ${PROJECT_SOURCE_DIR}/base/unicode.cc
     ${PROJECT_SOURCE_DIR}/base/unicode.h)

@@ -16,25 +16,15 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_BASE__STRING_PRINTF_H_
-#define ASPIA_BASE__STRING_PRINTF_H_
-
-#include <string>
+#ifndef ASPIA_BASE__STRING_UTIL_CONSTANTS_H_
+#define ASPIA_BASE__STRING_UTIL_CONSTANTS_H_
 
 namespace aspia {
 
-// Return a C++ string given vprintf-like input.
-std::string stringPrintfV(const char* format, va_list args);
-std::wstring stringPrintfV(const wchar_t* format, va_list args);
-
-// Return a C++ string given printf-like input.
-std::string stringPrintf(const char* format, ...);
-std::wstring stringPrintf(const wchar_t* format, ...);
-
-// Store result into a supplied string and return it.
-const std::string& sStringPrintf(std::string* dst, const char* format, ...);
-const std::wstring& sStringPrintf(std::wstring* dst, const wchar_t* format, ...);
+extern const wchar_t kWhitespaceWide[];
+extern const char kWhitespaceASCII[];
+extern const char kUtf8ByteOrderMark[];
 
 } // namespace aspia
 
-#endif // ASPIA_BASE__STRING_PRINTF_H_
+#endif // ASPIA_BASE__STRING_UTIL_CONSTANTS_H_

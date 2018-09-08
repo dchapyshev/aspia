@@ -63,7 +63,7 @@ bool isValidGUIDInternal(const std::string& guid, bool strict)
 
 std::string randomDataToGUIDString(const uint64_t bytes[2])
 {
-    return StringPrintf("%08x-%04x-%04x-%04x-%012llx",
+    return stringPrintf("%08x-%04x-%04x-%04x-%012llx",
                         static_cast<unsigned int>(bytes[0] >> 32),
                         static_cast<unsigned int>((bytes[0] >> 16) & 0x0000ffff),
                         static_cast<unsigned int>(bytes[0] & 0x0000ffff),
