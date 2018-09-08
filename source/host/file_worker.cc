@@ -18,7 +18,6 @@
 
 #include "host/file_worker.h"
 
-#include <QDebug>
 #include <QDateTime>
 #include <QStandardPaths>
 #include <QStorageInfo>
@@ -27,6 +26,7 @@
 #include "host/win/file_enumerator.h"
 #endif // defined(Q_OS_WIN)
 
+#include "base/logging.h"
 #include "host/file_platform_util.h"
 
 namespace aspia {
@@ -337,7 +337,7 @@ proto::file_transfer::Reply FileWorker::doPacketRequest(
     {
         // Set the unknown status of the request. The connection will be closed.
         reply.set_status(proto::file_transfer::STATUS_UNKNOWN);
-        qWarning("Unexpected file packet request");
+        LOG(LS_WARNING) << "Unexpected file packet request";
     }
     else
     {
@@ -368,7 +368,7 @@ proto::file_transfer::Reply FileWorker::doPacket(const proto::file_transfer::Pac
     {
         // Set the unknown status of the request. The connection will be closed.
         reply.set_status(proto::file_transfer::STATUS_UNKNOWN);
-        qWarning("Unexpected file packet");
+        LOG(LS_WARNING) << "Unexpected file packet";
     }
     else
     {

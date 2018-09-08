@@ -21,6 +21,7 @@
 #include <QMessageBox>
 #include <QMouseEvent>
 
+#include "base/logging.h"
 #include "host/user_util.h"
 #include "network/srp_host_context.h"
 #include "protocol/session_type.pb.h"
@@ -32,7 +33,7 @@ UserDialog::UserDialog(const proto::SrpUserList& user_list, proto::SrpUser* user
       user_list_(user_list),
       user_(user)
 {
-    Q_ASSERT(user_);
+    DCHECK(user_);
 
     ui.setupUi(this);
 
@@ -40,9 +41,9 @@ UserDialog::UserDialog(const proto::SrpUserList& user_list, proto::SrpUser* user
 
     if (!user->verifier().empty())
     {
-        Q_ASSERT(!user_->number().empty());
-        Q_ASSERT(!user_->generator().empty());
-        Q_ASSERT(!user_->salt().empty());
+        DCHECK(!user_->number().empty());
+        DCHECK(!user_->generator().empty());
+        DCHECK(!user_->salt().empty());
 
         setAccountChanged(false);
     }

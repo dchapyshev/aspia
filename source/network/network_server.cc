@@ -18,8 +18,7 @@
 
 #include "network/network_server.h"
 
-#include <QDebug>
-
+#include "base/logging.h"
 #include "network/network_channel_host.h"
 
 namespace aspia {
@@ -28,14 +27,14 @@ NetworkServer::NetworkServer(std::shared_ptr<proto::SrpUserList>& user_list, QOb
     : QObject(parent),
       user_list_(user_list)
 {
-    Q_ASSERT(user_list_);
+    DCHECK(user_list_);
 }
 
 bool NetworkServer::start(int port)
 {
     if (!tcp_server_.isNull())
     {
-        qWarning("Server already started");
+        LOG(LS_WARNING) << "Server already started";
         return false;
     }
 
@@ -45,13 +44,13 @@ bool NetworkServer::start(int port)
     connect(tcp_server_, &QTcpServer::acceptError,
             [this](QAbstractSocket::SocketError /* error */)
     {
-        qWarning() << "accept error: " << tcp_server_->errorString();
+        LOG(LS_WARNING) << "accept error: " << tcp_server_->errorString().toStdString();
         return;
     });
 
     if (!tcp_server_->listen(QHostAddress::Any, port))
     {
-        qWarning() << "listen failed: " << tcp_server_->errorString();
+        LOG(LS_WARNING) << "listen failed: " << tcp_server_->errorString().toStdString();
         return false;
     }
 
@@ -62,7 +61,7 @@ void NetworkServer::stop()
 {
     if (tcp_server_.isNull())
     {
-        qWarning("Server already stopped");
+        LOG(LS_WARNING) << "Server already stopped";
         return;
     }
 

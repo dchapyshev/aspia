@@ -23,6 +23,7 @@
 #include <QScreen>
 #include <QTranslator>
 
+#include "base/logging.h"
 #include "host/host_settings.h"
 
 namespace aspia {
@@ -54,7 +55,7 @@ public:
                 break;
 
             default:
-                qFatal("Unexpected session type: %d", session_.session_type());
+                LOG(LS_FATAL) << "Unexpected session type: " << session_.session_type();
                 return;
         }
 

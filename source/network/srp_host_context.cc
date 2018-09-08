@@ -18,8 +18,7 @@
 
 #include "network/srp_host_context.h"
 
-#include <QDebug>
-
+#include "base/logging.h"
 #include "crypto/generic_hash.h"
 #include "crypto/random.h"
 #include "crypto/secure_memory.h"
@@ -75,7 +74,7 @@ SrpHostContext::SrpHostContext(proto::Method method, std::shared_ptr<proto::SrpU
     : method_(method),
       user_list_(user_list)
 {
-    Q_ASSERT(user_list_);
+    DCHECK(user_list_);
 }
 
 SrpHostContext::~SrpHostContext()
@@ -187,7 +186,7 @@ std::string SrpHostContext::key() const
 {
     if (!SrpMath::verify_A_mod_N(A_, N_))
     {
-        qWarning("A % N != 0");
+        LOG(LS_WARNING) << "SrpMath::verify_A_mod_N failed";
         return std::string();
     }
 
@@ -208,7 +207,7 @@ std::string SrpHostContext::key() const
 
         default:
         {
-            qWarning() << "Unknown method: " << method_;
+            LOG(LS_WARNING) << "Unknown method: " << method_;
             return std::string();
         }
     }

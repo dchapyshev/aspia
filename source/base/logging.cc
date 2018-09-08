@@ -57,7 +57,7 @@ FileHandle g_log_file = nullptr;
 // A log message handler that gets notified of every log message we process.
 LogMessageHandlerFunction log_message_handler = nullptr;
 
-const char* GetSeverityName(LoggingSeverity severity)
+const char* severityName(LoggingSeverity severity)
 {
     static const char* const kLogSeverityNames[] = {"INFO", "WARNING", "ERROR", "FATAL"};
     static_assert(LS_NUMBER == _countof(kLogSeverityNames));
@@ -89,24 +89,26 @@ bool defaultLogFilePath(std::filesystem::path* path)
     SYSTEMTIME local_time;
     GetLocalTime(&local_time);
 
-    std::ostringstream stream;
+    wchar_t file_path[MAX_PATH] = { 0 };
+    GetModuleFileNameW(nullptr, file_path, _countof(file_path));
 
-    stream << std::setfill('0')
+    std::wostringstream stream;
+
+    stream << std::filesystem::path(file_path).filename().native()
+           << L'.'
+           << std::setfill(L'0')
            << std::setw(2) << local_time.wYear
            << std::setw(2) << local_time.wMonth
            << std::setw(2) << local_time.wDay
-           << '-'
+           << L'-'
            << std::setw(2) << local_time.wHour
            << std::setw(2) << local_time.wMinute
            << std::setw(2) << local_time.wSecond
-           << '.'
+           << L'.'
            << std::setw(3) << local_time.wMilliseconds
-           << '.'
-           << GetCurrentProcessId()
-           << ".log";
+           << L".log";
 
     path->append(stream.str());
-
     return true;
 }
 
@@ -391,7 +393,7 @@ void LogMessage::init(const char* file, int line)
             << std::setw(3) << local_time.wMilliseconds
             << ':';
 
-    stream_ << GetSeverityName(severity_);
+    stream_ << severityName(severity_);
     stream_ << ":" << filename.data() << ":" << line << "] ";
 
     message_start_ = stream_.str().length();
@@ -413,12 +415,10 @@ std::string systemErrorCodeToString(SystemErrorCode error_code)
     if (len)
     {
         // Messages returned by system end with line breaks.
-        return aspia::collapseWhitespaceASCII(msgbuf, true) +
-               aspia::stringPrintf(" (0x%lX)", error_code);
+        return collapseWhitespaceASCII(msgbuf, true) + stringPrintf(" (0x%lX)", error_code);
     }
 
-    return aspia::stringPrintf("Error (0x%lX) while retrieving error. (0x%lX)",
-                               GetLastError(), error_code);
+    return stringPrintf("Error (0x%lX) while retrieving error. (0x%lX)", GetLastError(), error_code);
 }
 
 Win32ErrorLogMessage::Win32ErrorLogMessage(const char* file,

@@ -18,6 +18,8 @@
 
 #include "host/file_packetizer.h"
 
+#include "base/logging.h"
+
 namespace aspia {
 
 namespace {
@@ -58,7 +60,7 @@ std::unique_ptr<FilePacketizer> FilePacketizer::create(const std::filesystem::pa
 std::unique_ptr<proto::file_transfer::Packet> FilePacketizer::readNextPacket(
     const proto::file_transfer::PacketRequest& request)
 {
-    Q_ASSERT(file_stream_.is_open());
+    DCHECK(file_stream_.is_open());
 
     // Create a new file packet.
     std::unique_ptr<proto::file_transfer::Packet> packet =
@@ -86,7 +88,7 @@ std::unique_ptr<proto::file_transfer::Packet> FilePacketizer::readNextPacket(
     file_stream_.read(packet_buffer, packet_buffer_size);
     if (file_stream_.fail())
     {
-        qDebug("Unable to read file");
+        LOG(LS_WARNING) << "Unable to read file";
         return nullptr;
     }
 

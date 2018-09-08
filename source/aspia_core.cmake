@@ -47,8 +47,6 @@ list(APPEND SOURCE_BASE
     ${PROJECT_SOURCE_DIR}/base/const_buffer.h
     ${PROJECT_SOURCE_DIR}/base/cpuid.cc
     ${PROJECT_SOURCE_DIR}/base/cpuid.h
-    ${PROJECT_SOURCE_DIR}/base/errno_logging.cc
-    ${PROJECT_SOURCE_DIR}/base/errno_logging.h
     ${PROJECT_SOURCE_DIR}/base/file_logger.cc
     ${PROJECT_SOURCE_DIR}/base/file_logger.h
     ${PROJECT_SOURCE_DIR}/base/guid.cc

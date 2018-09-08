@@ -18,12 +18,10 @@
 
 #include "network/firewall_manager.h"
 
-#include <QDebug>
-
 #include <comutil.h>
 #include <unknwn.h>
 
-#include "base/errno_logging.h"
+#include "base/logging.h"
 #include "base/guid.h"
 #include "base/unicode.h"
 
@@ -40,7 +38,7 @@ FirewallManager::FirewallManager(std::wstring_view application_path)
                                   IID_PPV_ARGS(&firewall_policy_));
     if (FAILED(hr))
     {
-        qWarning() << "CreateInstance failed: " << errnoToString(hr);
+        LOG(LS_WARNING) << "CreateInstance failed: " << systemErrorCodeToString(hr);
         firewall_policy_ = nullptr;
         return;
     }
@@ -48,7 +46,7 @@ FirewallManager::FirewallManager(std::wstring_view application_path)
     hr = firewall_policy_->get_Rules(firewall_rules_.GetAddressOf());
     if (FAILED(hr))
     {
-        qWarning() << "get_Rules failed: " << errnoToString(hr);
+        LOG(LS_WARNING) << "get_Rules failed: " << systemErrorCodeToString(hr);
         firewall_rules_ = nullptr;
     }
 }
@@ -113,7 +111,7 @@ bool FirewallManager::addTcpRule(std::wstring_view rule_name,
     HRESULT hr = CoCreateInstance(CLSID_NetFwRule, nullptr, CLSCTX_ALL, IID_PPV_ARGS(&rule));
     if (FAILED(hr))
     {
-        qWarning() << "CoCreateInstance failed: " << errnoToString(hr);
+        LOG(LS_WARNING) << "CoCreateInstance failed: " << systemErrorCodeToString(hr);
         return false;
     }
 
@@ -130,7 +128,7 @@ bool FirewallManager::addTcpRule(std::wstring_view rule_name,
     firewall_rules_->Add(rule.Get());
     if (FAILED(hr))
     {
-        qWarning() << "Add failed: " << errnoToString(hr);
+        LOG(LS_WARNING) << "Add failed: " << systemErrorCodeToString(hr);
         return false;
     }
 
@@ -149,7 +147,7 @@ void FirewallManager::deleteRuleByName(std::wstring_view rule_name)
         HRESULT hr = rule->get_Name(bstr_rule_name.GetAddress());
         if (FAILED(hr))
         {
-            qWarning() << "get_Name failed: " << errnoToString(hr);
+            LOG(LS_WARNING) << "get_Name failed: " << systemErrorCodeToString(hr);
             continue;
         }
 
@@ -177,7 +175,7 @@ void FirewallManager::allRules(std::vector<Microsoft::WRL::ComPtr<INetFwRule>>* 
     HRESULT hr = firewall_rules_->get__NewEnum(rules_enum_unknown.GetAddressOf());
     if (FAILED(hr))
     {
-        qWarning() << "get__NewEnum failed: " << errnoToString(hr);
+        LOG(LS_WARNING) << "get__NewEnum failed: " << systemErrorCodeToString(hr);
         return;
     }
 
@@ -186,7 +184,7 @@ void FirewallManager::allRules(std::vector<Microsoft::WRL::ComPtr<INetFwRule>>* 
     hr = rules_enum_unknown.CopyTo(rules_enum.GetAddressOf());
     if (FAILED(hr))
     {
-        qWarning() << "QueryInterface failed: " << errnoToString(hr);
+        LOG(LS_WARNING) << "QueryInterface failed: " << systemErrorCodeToString(hr);
         return;
     }
 
@@ -195,12 +193,14 @@ void FirewallManager::allRules(std::vector<Microsoft::WRL::ComPtr<INetFwRule>>* 
         _variant_t rule_var;
         hr = rules_enum->Next(1, rule_var.GetAddress(), nullptr);
         if (FAILED(hr))
-            qWarning() << "Next failed: " << errnoToString(hr);
+        {
+            LOG(LS_WARNING) << "Next failed: " << systemErrorCodeToString(hr);
+        }
 
         if (hr != S_OK)
             break;
 
-        Q_ASSERT(VT_DISPATCH == rule_var.vt);
+        DCHECK_EQ(VT_DISPATCH, rule_var.vt);
 
         if (VT_DISPATCH != rule_var.vt)
             continue;
@@ -210,7 +210,7 @@ void FirewallManager::allRules(std::vector<Microsoft::WRL::ComPtr<INetFwRule>>* 
         hr = V_DISPATCH(&rule_var)->QueryInterface(IID_PPV_ARGS(rule.GetAddressOf()));
         if (FAILED(hr))
         {
-            qWarning() << "QueryInterface failed: " << errnoToString(hr);
+            LOG(LS_WARNING) << "QueryInterface failed: " << systemErrorCodeToString(hr);
             continue;
         }
 
@@ -218,7 +218,7 @@ void FirewallManager::allRules(std::vector<Microsoft::WRL::ComPtr<INetFwRule>>* 
         hr = rule->get_ApplicationName(bstr_path.GetAddress());
         if (FAILED(hr))
         {
-            qWarning() << "get_ApplicationName failed: " << errnoToString(hr);
+            LOG(LS_WARNING) << "get_ApplicationName failed: " << systemErrorCodeToString(hr);
             continue;
         }
 

@@ -18,9 +18,9 @@
 
 #include "desktop_capture/screen_capturer_gdi.h"
 
-#include <QDebug>
 #include <dwmapi.h>
 
+#include "base/logging.h"
 #include "desktop_capture/win/screen_capture_utils.h"
 #include "desktop_capture/desktop_frame_dib.h"
 #include "desktop_capture/differ.h"
@@ -62,20 +62,20 @@ const DesktopFrame* ScreenCapturerGDI::captureFrame()
     DesktopRect screen_rect = ScreenCaptureUtils::screenRect(current_screen_id_, current_device_key_);
     if (screen_rect.isEmpty())
     {
-        qWarning("Failed to get screen rect");
+        LOG(LS_WARNING) << "Failed to get screen rect";
         return nullptr;
     }
 
     if (!queue_.currentFrame() || queue_.currentFrame()->size() != screen_rect.size())
     {
-        Q_ASSERT(desktop_dc_);
-        Q_ASSERT(memory_dc_);
+        DCHECK(desktop_dc_);
+        DCHECK(memory_dc_);
 
         std::unique_ptr<DesktopFrame> frame =
             DesktopFrameDIB::create(screen_rect.size(), PixelFormat::ARGB(), memory_dc_);
         if (!frame)
         {
-            qWarning("Failed to create frame buffer");
+            LOG(LS_WARNING) << "Failed to create frame buffer";
             return nullptr;
         }
 
@@ -147,7 +147,7 @@ bool ScreenCapturerGDI::prepareCaptureResources()
 
     if (!desktop_dc_)
     {
-        Q_ASSERT(!memory_dc_);
+        DCHECK(!memory_dc_);
 
         // Vote to disable Aero composited desktop effects while capturing.
         // Windows will restore Aero automatically if the process exits.
@@ -159,7 +159,7 @@ bool ScreenCapturerGDI::prepareCaptureResources()
         memory_dc_.reset(CreateCompatibleDC(*desktop_dc_));
         if (!memory_dc_)
         {
-            qWarning("CreateCompatibleDC failed");
+            LOG(LS_WARNING) << "CreateCompatibleDC failed";
             return false;
         }
 

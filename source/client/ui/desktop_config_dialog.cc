@@ -18,6 +18,7 @@
 
 #include "client/ui/desktop_config_dialog.h"
 
+#include "base/logging.h"
 #include "client/config_factory.h"
 #include "codec/video_util.h"
 
@@ -188,7 +189,7 @@ void DesktopConfigDialog::onButtonBoxClicked(QAbstractButton* button)
                     break;
 
                 default:
-                    qFatal("Unexpected color depth");
+                    DLOG(LS_FATAL) << "Unexpected color depth";
                     break;
             }
 

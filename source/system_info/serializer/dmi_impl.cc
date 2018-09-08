@@ -20,11 +20,14 @@
 
 #if defined(Q_OS_WIN)
 #define WIN32_LEAN_AND_MEAN
-#include <qt_windows.h>
+#define NOMINMAX
+#include <windows.h>
 #endif
 
+#include <QString>
+
 #include "base/bitset.h"
-#include "base/errno_logging.h"
+#include "base/logging.h"
 
 namespace aspia {
 
@@ -35,7 +38,7 @@ bool readSmBios(void* data, size_t data_size)
 #if defined(Q_OS_WIN)
     if (!GetSystemFirmwareTable('RSMB', 'PCAF', data, data_size))
     {
-        qWarningErrno("GetSystemFirmwareTable failed");
+        PLOG(LS_WARNING) << "GetSystemFirmwareTable failed";
         return false;
     }
 
@@ -76,7 +79,7 @@ void DmiTableEnumerator::advance()
         // user know his / her table is broken.
         if (table_length < 4)
         {
-            qWarning("Invalid SMBIOS table length");
+            LOG(LS_WARNING) << "Invalid SMBIOS table length";
             break;
         }
 

@@ -18,7 +18,7 @@
 
 #include "codec/compressor_zlib.h"
 
-#include <QDebug>
+#include "base/logging.h"
 
 namespace aspia {
 
@@ -32,19 +32,19 @@ CompressorZLIB::CompressorZLIB(int compress_ratio)
                                MAX_WBITS,
                                MAX_MEM_LEVEL,
                                Z_DEFAULT_STRATEGY);
-    Q_ASSERT(ret == Z_OK);
+    DCHECK_EQ(ret, Z_OK);
 }
 
 CompressorZLIB::~CompressorZLIB()
 {
     int ret = zng_deflateEnd(&stream_);
-    Q_ASSERT(ret == Z_OK);
+    DCHECK_EQ(ret, Z_OK);
 }
 
 void CompressorZLIB::reset()
 {
     int ret = zng_deflateReset(&stream_);
-    Q_ASSERT(ret == Z_OK);
+    DCHECK_EQ(ret, Z_OK);
 }
 
 bool CompressorZLIB::process(const uint8_t* input_data,
@@ -55,7 +55,7 @@ bool CompressorZLIB::process(const uint8_t* input_data,
                              size_t* consumed,
                              size_t* written)
 {
-    Q_ASSERT(output_size != 0);
+    DCHECK_NE(output_size, 0U);
 
     // Setup I/O parameters.
     stream_.avail_in  = static_cast<uint32_t>(input_size);
@@ -80,13 +80,13 @@ bool CompressorZLIB::process(const uint8_t* input_data,
             break;
 
         default:
-            qWarning("Unsupported flush mode");
+            LOG(LS_WARNING) << "Unsupported flush mode";
             break;
     }
 
     int ret = zng_deflate(&stream_, z_flush);
     if (ret == Z_STREAM_ERROR)
-        qWarning("zlib compression failed");
+        LOG(LS_WARNING) << "zlib compression failed";
 
     *consumed = input_size - stream_.avail_in;
     *written = output_size - stream_.avail_out;
@@ -108,7 +108,7 @@ bool CompressorZLIB::process(const uint8_t* input_data,
             return stream_.avail_out == 0;
 
         default:
-            qWarning() << "Unexpected zlib error: " << ret;
+            LOG(LS_WARNING) << "Unexpected zlib error: " << ret;
             break;
     }
 

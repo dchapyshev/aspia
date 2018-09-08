@@ -18,8 +18,6 @@
 
 #include "host/host_settings.h"
 
-#include <QDebug>
-
 #include "base/message_serialization.h"
 #include "crypto/random.h"
 
@@ -74,7 +72,7 @@ std::shared_ptr<proto::SrpUserList> HostSettings::userList() const
 
     if (!parseMessage(serialized_user_list, *user_list))
     {
-        qDebug() << "The list of users is corrupted";
+        LOG(LS_WARNING) << "The list of users is corrupted";
         return nullptr;
     }
 

@@ -26,6 +26,7 @@
 
 namespace aspia {
 
+#if 0
 class FileLogger
 {
 public:
@@ -43,6 +44,7 @@ private:
 
     DISALLOW_COPY_AND_ASSIGN(FileLogger);
 };
+#endif
 
 } // namespace aspia
 

@@ -20,16 +20,14 @@
 
 #include <openssl/evp.h>
 
+#include "base/logging.h"
+
 namespace aspia {
 
 GenericHash::GenericHash(Type type)
 {
     ctxt_ = EVP_MD_CTX_new();
-    if (!ctxt_)
-    {
-        qFatal("EVP_MD_CTX_new failed");
-        return;
-    }
+    CHECK(ctxt_) << "EVP_MD_CTX_new failed";
 
     switch (type)
     {
@@ -62,7 +60,7 @@ GenericHash::GenericHash(Type type)
             break;
 
         default:
-            qFatal("Unknown hashing algorithm");
+            LOG(LS_FATAL) << "Unknown hashing algorithm";
             return;
     }
 
@@ -71,7 +69,7 @@ GenericHash::GenericHash(Type type)
 
 GenericHash::~GenericHash()
 {
-    Q_ASSERT(ctxt_);
+    DCHECK(ctxt_);
     EVP_MD_CTX_free(ctxt_);
 }
 
@@ -91,13 +89,9 @@ std::string GenericHash::hash(Type type, const std::string& data)
 
 void GenericHash::addData(const void* data, size_t size)
 {
-    Q_ASSERT(ctxt_);
-
-    if (!EVP_DigestUpdate(ctxt_, data, size))
-    {
-        qFatal("EVP_DigestUpdate failed");
-        return;
-    }
+    DCHECK(ctxt_);
+    int ret = EVP_DigestUpdate(ctxt_, data, size);
+    CHECK_EQ(ret, 1);
 }
 
 void GenericHash::addData(const std::string& data)
@@ -107,32 +101,25 @@ void GenericHash::addData(const std::string& data)
 
 std::string GenericHash::result() const
 {
-    Q_ASSERT(ctxt_);
-    Q_ASSERT(md_);
+    DCHECK(ctxt_);
+    DCHECK(md_);
 
     int len = EVP_MD_size(md_);
-    if (len <= 0)
-        return std::string();
+    CHECK_GT(len, 0);
 
-    std::string ret;
-    ret.resize(len);
+    std::string result;
+    result.resize(len);
 
-    if (!EVP_DigestFinal(ctxt_, reinterpret_cast<uint8_t*>(ret.data()), nullptr))
-    {
-        qFatal("EVP_DigestFinal failed");
-        return std::string();
-    }
+    int ret = EVP_DigestFinal(ctxt_, reinterpret_cast<uint8_t*>(result.data()), nullptr);
+    CHECK_EQ(ret, 1);
 
-    return ret;
+    return result;
 }
 
 void GenericHash::reset()
 {
-    if (!EVP_DigestInit(ctxt_, md_))
-    {
-        qFatal("EVP_DigestInit failed");
-        return;
-    }
+    int ret = EVP_DigestInit(ctxt_, md_);
+    CHECK_EQ(ret, 1);
 }
 
 } // namespace aspia

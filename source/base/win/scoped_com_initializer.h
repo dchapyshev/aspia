@@ -22,7 +22,7 @@
 #include <objbase.h>
 
 #ifndef NDEBUG
-#include <QDebug>
+#include "base/logging.h"
 #endif
 
 #include "base/macros_magic.h"
@@ -58,7 +58,7 @@ public:
     {
 #ifndef NDEBUG
         // Using the windows API directly to avoid dependency on platform_thread.
-        Q_ASSERT(GetCurrentThreadId() == thread_id_);
+        DCHECK_EQ(GetCurrentThreadId(), thread_id_);
 #endif
 
         if (isSucceeded())
@@ -77,12 +77,11 @@ private:
 #ifndef NDEBUG
         if (hr_ == S_FALSE)
         {
-            qWarning() << "Multiple CoInitialize() calls for thread " << thread_id_;
+            LOG(LS_WARNING) << "Multiple CoInitialize() calls for thread " << thread_id_;
         }
         else
         {
-            if (hr_ != RPC_E_CHANGED_MODE)
-                qFatal("Invalid COM thread model change");
+            DCHECK_EQ(hr_, RPC_E_CHANGED_MODE) << "Invalid COM thread model change";
         }
 #endif
     }

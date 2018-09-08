@@ -21,6 +21,7 @@
 #include <libyuv/scale_row.h>
 #include <libyuv/scale_argb.h>
 
+#include "base/logging.h"
 #include "desktop_capture/desktop_frame_aligned.h"
 
 namespace aspia {
@@ -74,9 +75,9 @@ ScaleReducer* ScaleReducer::create(int scale_factor)
 
 const DesktopFrame* ScaleReducer::scaleFrame(const DesktopFrame* source_frame)
 {
-    Q_ASSERT(source_frame);
-    Q_ASSERT(!source_frame->constUpdatedRegion().isEmpty());
-    Q_ASSERT(source_frame->format() == PixelFormat::ARGB());
+    DCHECK(source_frame);
+    DCHECK(!source_frame->constUpdatedRegion().isEmpty());
+    DCHECK(source_frame->format() == PixelFormat::ARGB());
 
     if (scale_factor_ == kDefScaleFactor)
         return source_frame;
@@ -130,7 +131,7 @@ const DesktopFrame* ScaleReducer::scaleFrame(const DesktopFrame* source_frame)
                                   height,
                                   libyuv::kFilterBox) == -1)
         {
-            qWarning("libyuv::ARGBScaleClip failed");
+            LOG(LS_WARNING) << "libyuv::ARGBScaleClip failed";
         }
 
         updated_region->addRect(scaled_rect);

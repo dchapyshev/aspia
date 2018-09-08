@@ -18,8 +18,7 @@
 
 #include "host/win/host_process.h"
 
-#include <QDebug>
-
+#include "base/logging.h"
 #include "host/win/host_process_impl.h"
 
 namespace aspia {
@@ -42,7 +41,7 @@ void HostProcess::start(uint32_t session_id,
 {
     if (impl_->state_ != NotRunning)
     {
-        qWarning("HostProcess::start: Process is already running");
+        DLOG(LS_WARNING) << "HostProcess::start: Process is already running";
         return;
     }
 
@@ -63,7 +62,7 @@ void HostProcess::setSessionId(uint32_t session_id)
 {
     if (impl_->state_ != NotRunning)
     {
-        qWarning("HostProcess::setSessionId: Process is already running");
+        DLOG(LS_WARNING) << "HostProcess::setSessionId: Process is already running";
         return;
     }
 
@@ -79,7 +78,7 @@ void HostProcess::setAccount(Account account)
 {
     if (impl_->state_ != NotRunning)
     {
-        qWarning("HostProcess::setAccount: Process is already running");
+        DLOG(LS_WARNING) << "HostProcess::setAccount: Process is already running";
         return;
     }
 
@@ -95,7 +94,7 @@ void HostProcess::setProgram(const QString& program)
 {
     if (impl_->state_ != NotRunning)
     {
-        qWarning("HostProcess::setProgram: Process is already running");
+        DLOG(LS_WARNING) << "HostProcess::setProgram: Process is already running";
         return;
     }
 
@@ -111,7 +110,7 @@ void HostProcess::setArguments(const QStringList& arguments)
 {
     if (impl_->state_ != NotRunning)
     {
-        qWarning("HostProcess::setArguments: Process is already running");
+        DLOG(LS_WARNING) << "HostProcess::setArguments: Process is already running";
         return;
     }
 

@@ -21,8 +21,7 @@
 #include <libyuv/convert_from.h>
 #include <libyuv/convert_argb.h>
 
-#include <QDebug>
-
+#include "base/logging.h"
 #include "codec/video_util.h"
 
 namespace aspia {
@@ -53,7 +52,7 @@ bool convertImage(const proto::desktop::VideoPacket& packet,
 
                 if (!frame_rect.containsRect(rect))
                 {
-                    qWarning("The rectangle is outside the screen area");
+                    LOG(LS_WARNING) << "The rectangle is outside the screen area";
                     return false;
                 }
 
@@ -82,7 +81,7 @@ bool convertImage(const proto::desktop::VideoPacket& packet,
 
                 if (!frame_rect.containsRect(rect))
                 {
-                    qWarning("The rectangle is outside the screen area");
+                    LOG(LS_WARNING) << "The rectangle is outside the screen area";
                     return false;
                 }
 
@@ -103,7 +102,7 @@ bool convertImage(const proto::desktop::VideoPacket& packet,
 
         default:
         {
-            qWarning() << "Unsupported image format: " << image->fmt;
+            LOG(LS_WARNING) << "Unsupported image format: " << image->fmt;
             return false;
         }
     }
@@ -150,12 +149,12 @@ VideoDecoderVPX::VideoDecoderVPX(proto::desktop::VideoEncoding encoding)
             break;
 
         default:
-            qFatal("Unsupported video encoding: %d", encoding);
+            LOG(LS_FATAL) << "Unsupported video encoding: " << encoding;
             return;
     }
 
-    if (vpx_codec_dec_init(codec_.get(), algo, &config, 0) != VPX_CODEC_OK)
-        qFatal("vpx_codec_dec_init failed");
+    int ret = vpx_codec_dec_init(codec_.get(), algo, &config, 0);
+    CHECK_EQ(ret, VPX_CODEC_OK);
 }
 
 bool VideoDecoderVPX::decode(const proto::desktop::VideoPacket& packet, DesktopFrame* frame)
@@ -172,8 +171,8 @@ bool VideoDecoderVPX::decode(const proto::desktop::VideoPacket& packet, DesktopF
         const char* error = vpx_codec_error(codec_.get());
         const char* error_detail = vpx_codec_error_detail(codec_.get());
 
-        qWarning() << "Decoding failed:" << (error ? error : "(NULL)") << "\n"
-                   << "Details: " << (error_detail ? error_detail : "(NULL)");
+        LOG(LS_WARNING) << "Decoding failed: " << (error ? error : "(NULL)") << "\n"
+                        << "Details: " << (error_detail ? error_detail : "(NULL)");
         return false;
     }
 
@@ -183,13 +182,13 @@ bool VideoDecoderVPX::decode(const proto::desktop::VideoPacket& packet, DesktopF
     vpx_image_t* image = vpx_codec_get_frame(codec_.get(), &iter);
     if (!image)
     {
-        qWarning("No video frame decoded");
+        LOG(LS_WARNING) << "No video frame decoded";
         return false;
     }
 
     if (DesktopSize(image->d_w, image->d_h) != frame->size())
     {
-        qWarning("Size of the encoded frame doesn't match size in the header");
+        LOG(LS_WARNING) << "Size of the encoded frame doesn't match size in the header";
         return false;
     }
 

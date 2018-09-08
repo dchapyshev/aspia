@@ -18,6 +18,8 @@
 
 #include "base/win/registry.h"
 
+#include "base/logging.h"
+
 namespace aspia {
 
 namespace {
@@ -40,7 +42,7 @@ constexpr REGSAM kWow64AccessMask = KEY_WOW64_32KEY | KEY_WOW64_64KEY;
 
 wchar_t* writeInto(std::wstring* str, size_t length_with_null)
 {
-    Q_ASSERT(length_with_null > 1u);
+    DCHECK(length_with_null > 1u);
     str->reserve(length_with_null);
     str->resize(length_with_null - 1);
     return &((*str)[0]);
@@ -48,8 +50,8 @@ wchar_t* writeInto(std::wstring* str, size_t length_with_null)
 
 } // namespace
 
-RegistryKey::RegistryKey(HKEY key) :
-    key_(key)
+RegistryKey::RegistryKey(HKEY key)
+    : key_(key)
 {
     // Nothing
 }
@@ -65,7 +67,7 @@ RegistryKey::RegistryKey(HKEY rootkey, const wchar_t* subkey, REGSAM access)
     }
     else
     {
-        Q_ASSERT(!subkey);
+        DCHECK(!subkey);
         wow64access_ = access & kWow64AccessMask;
     }
 }
@@ -90,7 +92,7 @@ LONG RegistryKey::create(HKEY rootkey, const wchar_t* subkey, REGSAM access)
 LONG RegistryKey::createWithDisposition(HKEY rootkey, const wchar_t* subkey,
                                         DWORD* disposition, REGSAM access)
 {
-    Q_ASSERT(rootkey && subkey && access && disposition);
+    DCHECK(rootkey && subkey && access && disposition);
 
     HKEY subhkey = nullptr;
 
@@ -115,7 +117,7 @@ LONG RegistryKey::createWithDisposition(HKEY rootkey, const wchar_t* subkey,
 
 LONG RegistryKey::open(HKEY rootkey, const wchar_t* subkey, REGSAM access)
 {
-    Q_ASSERT(rootkey && subkey && access);
+    DCHECK(rootkey && subkey && access);
 
     HKEY subhkey = nullptr;
 
@@ -165,7 +167,7 @@ LONG RegistryKey::readValue(const wchar_t* name,
 
 LONG RegistryKey::readValueDW(const wchar_t* name, DWORD* out_value) const
 {
-    Q_ASSERT(out_value);
+    DCHECK(out_value);
 
     DWORD type = REG_DWORD;
     DWORD size = sizeof(DWORD);
@@ -185,7 +187,7 @@ LONG RegistryKey::readValueDW(const wchar_t* name, DWORD* out_value) const
 
 LONG RegistryKey::readValueBIN(const wchar_t* name, std::string* out_value) const
 {
-    Q_ASSERT(out_value);
+    DCHECK(out_value);
 
     DWORD type = REG_BINARY;
     DWORD size = 0;
@@ -206,7 +208,7 @@ LONG RegistryKey::readValueBIN(const wchar_t* name, std::string* out_value) cons
 
 LONG RegistryKey::readValue(const wchar_t* name, std::wstring* out_value) const
 {
-    Q_ASSERT(out_value);
+    DCHECK(out_value);
 
     const size_t kMaxStringLength = 1024;  // This is after expansion.
     // Use the one of the other forms of ReadValue if 1024 is too small for you.
@@ -256,7 +258,7 @@ LONG RegistryKey::writeValue(const wchar_t* name,
                              DWORD dsize,
                              DWORD dtype)
 {
-    Q_ASSERT(data || !dsize);
+    DCHECK(data || !dsize);
 
     return RegSetValueExW(key_,
                           name,
@@ -304,7 +306,7 @@ void RegistryValueIterator::initialize(HKEY root_key,
                                        const wchar_t* folder_key,
                                        REGSAM wow64access)
 {
-    Q_ASSERT((wow64access & ~kWow64AccessMask) == static_cast<REGSAM>(0));
+    DCHECK_EQ((wow64access & ~kWow64AccessMask), static_cast<REGSAM>(0));
 
     LONG result = RegOpenKeyExW(root_key, folder_key, 0,
                                 KEY_READ | wow64access, &key_);
@@ -401,7 +403,7 @@ bool RegistryValueIterator::read()
 
         if (result == ERROR_SUCCESS)
         {
-            Q_ASSERT(to_wchar_size(value_size_) < value_.size());
+            DCHECK_LT(to_wchar_size(value_size_), value_.size());
             value_[to_wchar_size(value_size_)] = L'\0';
             return true;
         }
@@ -478,7 +480,7 @@ void RegistryKeyIterator::initialize(HKEY root_key,
                                      const wchar_t* folder_key,
                                      REGSAM wow64access)
 {
-    Q_ASSERT((wow64access & ~kWow64AccessMask) == static_cast<REGSAM>(0));
+    DCHECK_EQ((wow64access & ~kWow64AccessMask), static_cast<REGSAM>(0));
 
     LONG result = RegOpenKeyExW(root_key, folder_key, 0, KEY_READ | wow64access, &key_);
     if (result != ERROR_SUCCESS)

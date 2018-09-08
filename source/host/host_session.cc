@@ -20,6 +20,7 @@
 
 #include <QCoreApplication>
 
+#include "base/logging.h"
 #include "host/host_session_desktop.h"
 #include "host/host_session_file_transfer.h"
 #include "host/host_session_system_info.h"
@@ -38,7 +39,7 @@ HostSession* HostSession::create(const QString& session_type, const QString& cha
 {
     if (channel_id.isEmpty())
     {
-        qWarning("Invalid IPC channel id");
+        LOG(LS_WARNING) << "Invalid IPC channel id";
         return nullptr;
     }
 
@@ -60,7 +61,7 @@ HostSession* HostSession::create(const QString& session_type, const QString& cha
     }
     else
     {
-        qWarning() << "Unknown session type: " << session_type;
+        LOG(LS_WARNING) << "Unknown session type: " << session_type.toStdString();
         return nullptr;
     }
 }

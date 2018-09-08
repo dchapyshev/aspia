@@ -18,6 +18,8 @@
 
 #include "host/file_depacketizer.h"
 
+#include "base/logging.h"
+
 namespace aspia {
 
 FileDepacketizer::FileDepacketizer(const std::filesystem::path& file_path,
@@ -62,7 +64,7 @@ std::unique_ptr<FileDepacketizer> FileDepacketizer::create(
 
 bool FileDepacketizer::writeNextPacket(const proto::file_transfer::Packet& packet)
 {
-    Q_ASSERT(file_stream_.is_open());
+    DCHECK(file_stream_.is_open());
 
     const size_t packet_size = packet.data().size();
     if (!packet_size)
@@ -72,7 +74,7 @@ bool FileDepacketizer::writeNextPacket(const proto::file_transfer::Packet& packe
         if (packet.flags() & proto::file_transfer::Packet::LAST_PACKET)
             return true;
 
-        qWarning("Wrong packet size");
+        LOG(LS_WARNING) << "Wrong packet size";
         return false;
     }
 
@@ -87,7 +89,7 @@ bool FileDepacketizer::writeNextPacket(const proto::file_transfer::Packet& packe
     file_stream_.write(packet.data().data(), packet_size);
     if (file_stream_.fail())
     {
-        qDebug("Unable to write file");
+        LOG(LS_WARNING) << "Unable to write file";
         return false;
     }
 

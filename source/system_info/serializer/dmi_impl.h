@@ -21,7 +21,7 @@
 
 #include <memory>
 
-#include "base/macros_magic.h"
+#include "base/logging.h"
 
 namespace aspia {
 
@@ -90,7 +90,7 @@ protected:
     template<typename T>
     T number(uint8_t offset) const
     {
-        Q_ASSERT(offset >= length());
+        DCHECK_GE(offset, length());
         return *reinterpret_cast<const T*>(table_[offset]);
     }
 

@@ -18,11 +18,11 @@
 
 #include "codec/video_encoder_vpx.h"
 
-#include <QDebug>
 #include <QThread>
 
 #include <libyuv/convert_from_argb.h>
 
+#include "base/logging.h"
 #include "codec/video_util.h"
 #include "desktop_capture/desktop_frame.h"
 
@@ -85,7 +85,7 @@ void createImage(proto::desktop::VideoEncoding encoding,
     }
     else
     {
-        Q_ASSERT(encoding == proto::desktop::VIDEO_ENCODING_VP9);
+        DCHECK(encoding == proto::desktop::VIDEO_ENCODING_VP9);
 
         image->fmt = VPX_IMG_FMT_I444;
         image->x_chroma_shift = 0;
@@ -169,7 +169,7 @@ void VideoEncoderVPX::createVp8Codec(const DesktopSize& size)
     vpx_codec_iface_t* algo = vpx_codec_vp8_cx();
 
     vpx_codec_err_t ret = vpx_codec_enc_config_default(algo, &config, 0);
-    Q_ASSERT(VPX_CODEC_OK == ret);
+    DCHECK_EQ(VPX_CODEC_OK, ret);
 
     // Adjust default target bit-rate to account for actual desktop size.
     config.rc_target_bitrate = size.width() * size.height() *
@@ -186,19 +186,19 @@ void VideoEncoderVPX::createVp8Codec(const DesktopSize& size)
     config.rc_max_quantizer = 30;
 
     ret = vpx_codec_enc_init(codec_.get(), algo, &config, 0);
-    Q_ASSERT(VPX_CODEC_OK == ret);
+    DCHECK_EQ(VPX_CODEC_OK, ret);
 
     // Value of 16 will have the smallest CPU load. This turns off subpixel motion search.
     ret = vpx_codec_control(codec_.get(), VP8E_SET_CPUUSED, 16);
-    Q_ASSERT(VPX_CODEC_OK == ret);
+    DCHECK_EQ(VPX_CODEC_OK, ret);
 
     ret = vpx_codec_control(codec_.get(), VP8E_SET_SCREEN_CONTENT_MODE, 1);
-    Q_ASSERT(VPX_CODEC_OK == ret);
+    DCHECK_EQ(VPX_CODEC_OK, ret);
 
     // Use the lowest level of noise sensitivity so as to spend less time on motion estimation and
     // inter-prediction mode.
     ret = vpx_codec_control(codec_.get(), VP8E_SET_NOISE_SENSITIVITY, 0);
-    Q_ASSERT(VPX_CODEC_OK == ret);
+    DCHECK_EQ(VPX_CODEC_OK, ret);
 }
 
 void VideoEncoderVPX::createVp9Codec(const DesktopSize& size)
@@ -211,7 +211,7 @@ void VideoEncoderVPX::createVp9Codec(const DesktopSize& size)
     vpx_codec_iface_t* algo = vpx_codec_vp9_cx();
 
     vpx_codec_err_t ret = vpx_codec_enc_config_default(algo, &config, 0);
-    Q_ASSERT(VPX_CODEC_OK == ret);
+    DCHECK_EQ(VPX_CODEC_OK, ret);
 
     setCommonCodecParameters(&config, size);
 
@@ -224,26 +224,26 @@ void VideoEncoderVPX::createVp9Codec(const DesktopSize& size)
     config.rc_end_usage = VPX_VBR;
 
     ret = vpx_codec_enc_init(codec_.get(), algo, &config, 0);
-    Q_ASSERT(VPX_CODEC_OK == ret);
+    DCHECK_EQ(VPX_CODEC_OK, ret);
 
     // Request the lowest-CPU usage that VP9 supports, which depends on whether we are encoding
     // lossy or lossless.
     ret = vpx_codec_control(codec_.get(), VP8E_SET_CPUUSED, 5);
-    Q_ASSERT(VPX_CODEC_OK == ret);
+    DCHECK_EQ(VPX_CODEC_OK, ret);
 
     ret = vpx_codec_control(codec_.get(),
                             VP9E_SET_TUNE_CONTENT,
                             VP9E_CONTENT_SCREEN);
-    Q_ASSERT(VPX_CODEC_OK == ret);
+    DCHECK_EQ(VPX_CODEC_OK, ret);
 
     // Use the lowest level of noise sensitivity so as to spend less time on motion estimation and
     // inter-prediction mode.
     ret = vpx_codec_control(codec_.get(), VP8E_SET_NOISE_SENSITIVITY, 0);
-    Q_ASSERT(VPX_CODEC_OK == ret);
+    DCHECK_EQ(VPX_CODEC_OK, ret);
 
     // Set cyclic refresh (aka "top-off") only for lossy encoding.
     ret = vpx_codec_control(codec_.get(), VP9E_SET_AQ_MODE, kVp9AqModeNone);
-    Q_ASSERT(VPX_CODEC_OK == ret);
+    DCHECK_EQ(VPX_CODEC_OK, ret);
 }
 
 void VideoEncoderVPX::setActiveMap(const DesktopRect& rect)
@@ -327,7 +327,7 @@ void VideoEncoderVPX::prepareImageAndActiveMap(const DesktopFrame* frame,
         break;
 
         default:
-            qFatal("Unsupported image format: %d", image_->fmt);
+            LOG(LS_FATAL) << "Unsupported image format: " << image_->fmt;
             break;
     }
 }
@@ -349,7 +349,7 @@ void VideoEncoderVPX::encode(const DesktopFrame* frame, proto::desktop::VideoPac
         }
         else
         {
-            Q_ASSERT(encoding_ == proto::desktop::VIDEO_ENCODING_VP9);
+            DCHECK_EQ(encoding_, proto::desktop::VIDEO_ENCODING_VP9);
             createVp9Codec(screen_size);
         }
     }
@@ -360,11 +360,11 @@ void VideoEncoderVPX::encode(const DesktopFrame* frame, proto::desktop::VideoPac
 
     // Apply active map to the encoder.
     vpx_codec_err_t ret = vpx_codec_control(codec_.get(), VP8E_SET_ACTIVEMAP, &active_map_);
-    Q_ASSERT(ret == VPX_CODEC_OK);
+    DCHECK_EQ(ret, VPX_CODEC_OK);
 
     // Do the actual encoding.
     ret = vpx_codec_encode(codec_.get(), image_.get(), 0, 1, 0, VPX_DL_REALTIME);
-    Q_ASSERT(ret == VPX_CODEC_OK);
+    DCHECK_EQ(ret, VPX_CODEC_OK);
 
     // Read the encoded data.
     vpx_codec_iter_t iter = nullptr;

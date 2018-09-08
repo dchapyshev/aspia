@@ -18,8 +18,7 @@
 
 #include "codec/video_decoder_zlib.h"
 
-#include <QDebug>
-
+#include "base/logging.h"
 #include "codec/decompressor_zlib.h"
 #include "codec/pixel_translator.h"
 #include "codec/video_util.h"
@@ -53,11 +52,11 @@ bool VideoDecoderZLIB::decode(const proto::desktop::VideoPacket& packet,
         translator_ = PixelTranslator::create(source_frame_->format(), target_frame->format());
     }
 
-    Q_ASSERT(source_frame_->size() == target_frame->size());
+    DCHECK(source_frame_->size() == target_frame->size());
 
     if (!source_frame_ || !translator_)
     {
-        qWarning("A packet with image information was not received");
+        LOG(LS_WARNING) << "A packet with image information was not received";
         return false;
     }
 
@@ -73,7 +72,7 @@ bool VideoDecoderZLIB::decode(const proto::desktop::VideoPacket& packet,
 
         if (!frame_rect.containsRect(rect))
         {
-            qWarning("The rectangle is outside the screen area");
+            LOG(LS_WARNING) << "The rectangle is outside the screen area";
             return false;
         }
 

@@ -18,6 +18,8 @@
 
 #include "desktop_capture/desktop_frame_dib.h"
 
+#include "base/logging.h"
+
 namespace aspia {
 
 DesktopFrameDIB::DesktopFrameDIB(const DesktopSize& size,
@@ -96,7 +98,7 @@ DesktopFrameDIB::create(const DesktopSize& size,
                                       0);
     if (!bitmap)
     {
-        qWarning("CreateDIBSection failed");
+        LOG(LS_WARNING) << "CreateDIBSection failed";
         return nullptr;
     }
 

@@ -370,7 +370,7 @@ void AddressBookTab::modifyAddressBook()
         dynamic_cast<ComputerGroupItem*>(ui.tree_group->topLevelItem(0));
     if (!root_item)
     {
-        qDebug("Invalid root item");
+        LOG(LS_WARNING) << "Invalid root item";
         return;
     }
 
@@ -628,7 +628,7 @@ bool AddressBookTab::saveToFile(const QString& file_path)
             break;
 
         default:
-            qFatal("Unknown encryption type: %d", file_.encryption_type());
+            LOG(LS_FATAL) << "Unknown encryption type: " << file_.encryption_type();
             return false;
     }
 

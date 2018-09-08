@@ -21,6 +21,8 @@
 #include <openssl/opensslv.h>
 #include <openssl/evp.h>
 
+#include "base/logging.h"
+
 namespace aspia {
 
 // static
@@ -42,14 +44,11 @@ std::string PasswordHash::hash(Type type, const std::string& password, const std
     std::string result;
     result.resize(kBytesSize);
 
-    if (!EVP_PBE_scrypt(password.c_str(), password.size(),
-                        reinterpret_cast<const uint8_t*>(salt.c_str()), salt.size(),
-                        N, r, p, max_mem,
-                        reinterpret_cast<uint8_t*>(result.data()), result.size()))
-    {
-        qWarning("EVP_PBE_scrypt failed");
-        return std::string();
-    }
+    int ret = EVP_PBE_scrypt(password.c_str(), password.size(),
+                             reinterpret_cast<const uint8_t*>(salt.c_str()), salt.size(),
+                             N, r, p, max_mem,
+                             reinterpret_cast<uint8_t*>(result.data()), result.size());
+    CHECK_EQ(ret, 1) << "EVP_PBE_scrypt failed";
 
     return result;
 }

@@ -18,7 +18,6 @@
 
 #include "client/ui/address_bar.h"
 
-#include <QDebug>
 #include <QHeaderView>
 #include <QLineEdit>
 #include <QMessageBox>

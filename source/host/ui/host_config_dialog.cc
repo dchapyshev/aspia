@@ -18,12 +18,12 @@
 
 #include "host/ui/host_config_dialog.h"
 
-#include <QDebug>
 #include <QDir>
 #include <QMenu>
 #include <QMessageBox>
 #include <QTranslator>
 
+#include "base/logging.h"
 #include "base/service_controller.h"
 #include "host/ui/user_dialog.h"
 #include "host/ui/user_tree_item.h"
@@ -310,7 +310,7 @@ void HostConfigDialog::setConfigChanged(bool changed)
     QPushButton* apply_button = ui.button_box->button(QDialogButtonBox::Apply);
     if (!apply_button)
     {
-        qFatal("Button not found");
+        DLOG(LS_FATAL) << "Button not found";
         return;
     }
 
@@ -322,7 +322,7 @@ bool HostConfigDialog::isConfigChanged() const
     QPushButton* apply_button = ui.button_box->button(QDialogButtonBox::Apply);
     if (!apply_button)
     {
-        qFatal("Button not found");
+        DLOG(LS_FATAL) << "Button not found";
         return false;
     }
 

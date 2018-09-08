@@ -26,7 +26,7 @@
 #endif
 
 #include "base/cpuid.h"
-#include "base/errno_logging.h"
+#include "base/logging.h"
 #include "base/message_serialization.h"
 #include "crypto/cryptor_aes256_gcm.h"
 #include "crypto/cryptor_chacha20_poly1305.h"
@@ -120,7 +120,7 @@ void NetworkChannelClient::onConnected()
                  &alive, sizeof(alive), nullptr, 0, &bytes_returned,
                  nullptr, nullptr) == SOCKET_ERROR)
     {
-        qWarningErrno("WSAIoctl failed");
+        PLOG(LS_WARNING) << "WSAIoctl failed";
     }
 #endif
 
@@ -150,7 +150,7 @@ void NetworkChannelClient::readServerHello(const QByteArray& buffer)
     srp_client_.reset(SrpClientContext::create(server_hello.method(), username_, password_));
     if (!srp_client_)
     {
-        qWarning("Unable to create SRP client");
+        LOG(LS_WARNING) << "Unable to create SRP client";
         emit errorOccurred(Error::UNKNOWN);
         return;
     }
@@ -158,7 +158,7 @@ void NetworkChannelClient::readServerHello(const QByteArray& buffer)
     std::unique_ptr<proto::SrpIdentify> identify(srp_client_->identify());
     if (!identify)
     {
-        qWarning("Error when creating identify");
+        LOG(LS_WARNING) << "Error when creating identify";
         emit errorOccurred(Error::UNKNOWN);
         return;
     }
@@ -169,7 +169,7 @@ void NetworkChannelClient::readServerHello(const QByteArray& buffer)
 
 void NetworkChannelClient::readServerKeyExchange(const QByteArray& buffer)
 {
-    Q_ASSERT(srp_client_);
+    DCHECK(srp_client_);
 
     proto::SrpServerKeyExchange server_key_exchange;
     if (!parseMessage(buffer, server_key_exchange))
@@ -182,7 +182,7 @@ void NetworkChannelClient::readServerKeyExchange(const QByteArray& buffer)
         srp_client_->readServerKeyExchange(server_key_exchange));
     if (!client_key_exchange)
     {
-        qWarning("Error when reading server key exchange");
+        LOG(LS_WARNING) << "Error when reading server key exchange";
         emit errorOccurred(Error::UNKNOWN);
         return;
     }
@@ -193,7 +193,7 @@ void NetworkChannelClient::readServerKeyExchange(const QByteArray& buffer)
 
 void NetworkChannelClient::readAuthorizationChallenge(const QByteArray& buffer)
 {
-    Q_ASSERT(srp_client_);
+    DCHECK(srp_client_);
 
     switch (srp_client_->method())
     {
@@ -219,7 +219,7 @@ void NetworkChannelClient::readAuthorizationChallenge(const QByteArray& buffer)
 
     if (!cryptor_)
     {
-        qWarning("Unable to create cryptor");
+        LOG(LS_WARNING) << "Unable to create cryptor";
         emit errorOccurred(Error::UNKNOWN);
         return;
     }
@@ -252,7 +252,7 @@ void NetworkChannelClient::readAuthorizationChallenge(const QByteArray& buffer)
     QByteArray auth_response_buffer = serializeMessage(auth_response);
     if (auth_response_buffer.isEmpty())
     {
-        qWarning("Error when creating authorization response");
+        LOG(LS_WARNING) << "Error when creating authorization response";
         emit errorOccurred(Error::UNKNOWN);
         return;
     }

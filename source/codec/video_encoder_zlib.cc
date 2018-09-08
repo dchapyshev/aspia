@@ -18,8 +18,7 @@
 
 #include "codec/video_encoder_zlib.h"
 
-#include <QDebug>
-
+#include "base/logging.h"
 #include "codec/pixel_translator.h"
 #include "codec/video_util.h"
 #include "desktop_capture/desktop_frame.h"
@@ -53,7 +52,7 @@ VideoEncoderZLIB* VideoEncoderZLIB::create(const PixelFormat& target_format, int
 {
     if (compression_ratio < Z_BEST_SPEED || compression_ratio > Z_BEST_COMPRESSION)
     {
-        qWarning() << "Wrong compression ratio: " << compression_ratio;
+        LOG(LS_WARNING) << "Wrong compression ratio: " << compression_ratio;
         return nullptr;
     }
 
@@ -61,7 +60,7 @@ VideoEncoderZLIB* VideoEncoderZLIB::create(const PixelFormat& target_format, int
         PixelTranslator::create(PixelFormat::ARGB(), target_format);
     if (!translator)
     {
-        qWarning("Unsupported pixel format");
+        LOG(LS_WARNING) << "Unsupported pixel format";
         return nullptr;
     }
 

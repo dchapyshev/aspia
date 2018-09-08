@@ -32,7 +32,7 @@ bool HostNotifier::start(const QString& channel_id)
 {
     if (channel_id.isEmpty())
     {
-        qWarning("Invalid IPC channel id");
+        LOG(LS_WARNING) << "Invalid IPC channel id";
         return false;
     }
 
@@ -65,7 +65,7 @@ void HostNotifier::onIpcMessageReceived(const QByteArray& buffer)
     proto::notifier::ServiceToNotifier message;
     if (!parseMessage(buffer, message))
     {
-        qWarning("Invalid message from service");
+        LOG(LS_WARNING) << "Invalid message from service";
         stop();
         return;
     }
@@ -80,7 +80,7 @@ void HostNotifier::onIpcMessageReceived(const QByteArray& buffer)
     }
     else
     {
-        qWarning("Unhandled message from service");
+        LOG(LS_WARNING) << "Unhandled message from service";
     }
 }
 

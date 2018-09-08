@@ -26,6 +26,7 @@
 
 namespace aspia {
 
+#if 0
 QScopedPointer<QFile> FileLogger::file_;
 
 namespace {
@@ -120,5 +121,7 @@ void FileLogger::messageHandler(QtMsgType type,
 
     stream.flush();
 }
+
+#endif
 
 } // namespace aspia

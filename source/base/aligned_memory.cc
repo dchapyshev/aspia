@@ -22,13 +22,15 @@
 #include <malloc.h>
 #endif
 
+#include "base/logging.h"
+
 namespace aspia {
 
 void* alignedAlloc(size_t size, size_t alignment)
 {
-    Q_ASSERT(size > 0U);
-    Q_ASSERT((alignment & (alignment - 1)) == 0U);
-    Q_ASSERT((alignment % sizeof(void*)) == 0U);
+    DCHECK_GT(size, 0U);
+    DCHECK_EQ((alignment & (alignment - 1)), 0U);
+    DCHECK_EQ((alignment % sizeof(void*)), 0U);
 
 #if defined(Q_OS_WIN)
     void* ptr =  _aligned_malloc(size, alignment);
@@ -39,10 +41,10 @@ void* alignedAlloc(size_t size, size_t alignment)
         ptr = nullptr;
 #endif
 
-    Q_CHECK_PTR(ptr);
+    CHECK(ptr);
 
     // Sanity check alignment just to be safe.
-    Q_ASSERT((reinterpret_cast<uintptr_t>(ptr) & (alignment - 1)) == 0U);
+    DCHECK_EQ((reinterpret_cast<uintptr_t>(ptr) & (alignment - 1)), 0U);
     return ptr;
 }
 

@@ -20,6 +20,7 @@
 
 #include <QTimerEvent>
 
+#include "base/logging.h"
 #include "client/file_status.h"
 #include "client/file_transfer_queue_builder.h"
 
@@ -60,7 +61,7 @@ void FileTransfer::start(const QString& source_path,
     }
     else
     {
-        Q_ASSERT(type_ == Uploader);
+        DCHECK(type_ == Uploader);
         connect(builder_, &FileTransferQueueBuilder::newRequest, this, &FileTransfer::localRequest);
     }
 
@@ -234,7 +235,7 @@ void FileTransfer::timerEvent(QTimerEvent* event)
 {
     if (event->timerId() == cancel_timer_id_)
     {
-        Q_ASSERT(is_canceled_);
+        DCHECK(is_canceled_);
 
         killTimer(cancel_timer_id_);
         cancel_timer_id_ = 0;
@@ -252,7 +253,7 @@ void FileTransfer::taskQueueError(const QString& message)
 
 void FileTransfer::taskQueueReady()
 {
-    Q_ASSERT(builder_ != nullptr);
+    DCHECK(builder_ != nullptr);
 
     tasks_ = builder_->taskQueue();
 
@@ -291,7 +292,7 @@ void FileTransfer::applyAction(Error error_type, Action action)
         break;
 
         default:
-            qFatal("Unexpected action");
+            LOG(LS_FATAL) << "Unexpected action";
             break;
     }
 }
@@ -364,7 +365,7 @@ void FileTransfer::sourceRequest(FileRequest* request)
     }
     else
     {
-        Q_ASSERT(type_ == Uploader);
+        DCHECK(type_ == Uploader);
         emit localRequest(request);
     }
 }
@@ -377,7 +378,7 @@ void FileTransfer::targetRequest(FileRequest* request)
     }
     else
     {
-        Q_ASSERT(type_ == Uploader);
+        DCHECK(type_ == Uploader);
         emit remoteRequest(request);
     }
 }

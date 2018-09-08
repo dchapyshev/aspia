@@ -20,6 +20,7 @@
 
 #include <QCoreApplication>
 
+#include "base/logging.h"
 #include "system_info/parser/dmi_parser.h"
 #include "system_info/serializer/dmi_serializer.h"
 #include "system_info/ui/dmi_form.h"
@@ -109,12 +110,12 @@ const CategoryList kCategoryList[] =
 CategoryGroup::CategoryGroup(const CategoryList* current)
     : current_(current)
 {
-    Q_ASSERT(current_);
-    Q_ASSERT(current_->name);
-    Q_ASSERT(current_->icon);
-    Q_ASSERT(!current_->uuid);
-    Q_ASSERT(!current_->create_form);
-    Q_ASSERT(current_->child);
+    DCHECK(current_);
+    DCHECK(current_->name);
+    DCHECK(current_->icon);
+    DCHECK(!current_->uuid);
+    DCHECK(!current_->create_form);
+    DCHECK(current_->child);
 }
 
 CategoryGroup::CategoryGroup(const CategoryGroup& other)
@@ -189,12 +190,12 @@ QList<Category> CategoryGroup::childCategoryList() const
 Category::Category(const CategoryList* current)
     : current_(current)
 {
-    Q_ASSERT(current_);
-    Q_ASSERT(current_->name);
-    Q_ASSERT(current_->icon);
-    Q_ASSERT(current_->uuid);
-    Q_ASSERT(current_->create_form);
-    Q_ASSERT(!current_->child);
+    DCHECK(current_);
+    DCHECK(current_->name);
+    DCHECK(current_->icon);
+    DCHECK(current_->uuid);
+    DCHECK(current_->create_form);
+    DCHECK(!current_->child);
 }
 
 Category::Category(const Category& other)

@@ -18,8 +18,6 @@
 
 #include "base/win/security_helpers.h"
 
-#include <QDebug>
-
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <objidl.h>
@@ -28,7 +26,7 @@
 #include <string>
 
 #include "base/win/scoped_local.h"
-#include "base/errno_logging.h"
+#include "base/logging.h"
 #include "base/typed_buffer.h"
 
 namespace aspia {
@@ -66,7 +64,7 @@ bool makeScopedAbsoluteSd(const ScopedSd& relative_sd,
                        &group_size) ||
         GetLastError() != ERROR_INSUFFICIENT_BUFFER)
     {
-        qWarningErrno("MakeAbsoluteSD failed");
+        PLOG(LS_WARNING) << "MakeAbsoluteSD failed";
         return false;
     }
 
@@ -90,7 +88,7 @@ bool makeScopedAbsoluteSd(const ScopedSd& relative_sd,
                         local_group.get(),
                         &group_size))
     {
-        qWarningErrno("MakeAbsoluteSD failed");
+        PLOG(LS_WARNING) << "MakeAbsoluteSD failed";
         return false;
     }
 
@@ -111,7 +109,7 @@ ScopedSd convertSddlToSd(const std::wstring& sddl)
     if (!ConvertStringSecurityDescriptorToSecurityDescriptorW(sddl.c_str(), SDDL_REVISION_1,
                                                               raw_sd.recieve(), &length))
     {
-        qWarningErrno("ConvertStringSecurityDescriptorToSecurityDescriptorW failed");
+        PLOG(LS_WARNING) << "ConvertStringSecurityDescriptorToSecurityDescriptorW failed";
         return ScopedSd();
     }
 
@@ -136,7 +134,7 @@ bool initializeComSecurity(const wchar_t* security_descriptor,
     ScopedSd relative_sd = convertSddlToSd(sddl);
     if (!relative_sd)
     {
-        qWarning("Failed to create a security descriptor");
+        LOG(LS_WARNING) << "Failed to create a security descriptor";
         return false;
     }
 
@@ -149,7 +147,7 @@ bool initializeComSecurity(const wchar_t* security_descriptor,
     if (!makeScopedAbsoluteSd(relative_sd, &absolute_sd, &dacl,
                               &group, &owner, &sacl))
     {
-        qWarning("MakeScopedAbsoluteSd failed");
+        LOG(LS_WARNING) << "MakeScopedAbsoluteSd failed";
         return false;
     }
 
@@ -171,7 +169,7 @@ bool initializeComSecurity(const wchar_t* security_descriptor,
         nullptr);  // Reserved, must be nullptr
     if (FAILED(result))
     {
-        qWarning() << "CoInitializeSecurity failed: " << result;
+        LOG(LS_WARNING) << "CoInitializeSecurity failed: " << systemErrorCodeToString(result);
         return false;
     }
 

@@ -21,7 +21,7 @@
 #include <QHostAddress>
 #include <QNetworkProxy>
 
-#include "base/errno_logging.h"
+#include "base/logging.h"
 #include "base/message_serialization.h"
 #include "crypto/cryptor.h"
 
@@ -76,7 +76,7 @@ NetworkChannel::NetworkChannel(ChannelType channel_type, QTcpSocket* socket, QOb
       channel_type_(channel_type),
       socket_(socket)
 {
-    Q_ASSERT(!socket_.isNull());
+    DCHECK(!socket_.isNull());
 
     socket_->setParent(this);
 
@@ -301,7 +301,7 @@ void NetworkChannel::onMessageWritten()
 {
     if (channel_state_ == ChannelState::ENCRYPTED)
     {
-        Q_ASSERT(!write_.queue.empty());
+        DCHECK(!write_.queue.empty());
 
         // Delete the sent message from the queue.
         write_.queue.pop_front();

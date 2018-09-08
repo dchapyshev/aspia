@@ -19,6 +19,7 @@
 #include "network/network_channel_host.h"
 
 #include "base/cpuid.h"
+#include "base/logging.h"
 #include "base/message_serialization.h"
 #include "crypto/cryptor_aes256_gcm.h"
 #include "crypto/cryptor_chacha20_poly1305.h"
@@ -32,7 +33,7 @@ NetworkChannelHost::NetworkChannelHost(QTcpSocket* socket,
     : NetworkChannel(ChannelType::HOST, socket, parent),
       user_list_(user_list)
 {
-    Q_ASSERT(user_list_);
+    DCHECK(user_list_);
 
     // Disable the Nagle algorithm for the socket.
     socket_->setSocketOption(QTcpSocket::LowDelayOption, 1);
@@ -88,17 +89,17 @@ void NetworkChannelHost::readClientHello(const QByteArray& buffer)
 
     if ((client_hello.methods() & proto::METHOD_SRP_AES256_GCM) && CPUID::hasAesNi())
     {
-        qInfo("AES256-GCM encryption selected");
+        LOG(LS_INFO) << "AES256-GCM encryption selected";
         server_hello.set_method(proto::METHOD_SRP_AES256_GCM);
     }
     else if (client_hello.methods() & proto::METHOD_SRP_CHACHA20_POLY1305)
     {
-        qInfo("CHACHA20-POLY1305 encryption selected");
+        LOG(LS_INFO) << "CHACHA20-POLY1305 encryption selected";
         server_hello.set_method(proto::METHOD_SRP_CHACHA20_POLY1305);
     }
     else
     {
-        qWarning("The client does not have supported key exchange methods");
+        LOG(LS_WARNING) << "The client does not have supported key exchange methods";
         emit errorOccurred(Error::UNKNOWN);
         return;
     }
@@ -122,7 +123,7 @@ void NetworkChannelHost::readIdentify(const QByteArray& buffer)
         srp_host_->readIdentify(identify));
     if (!server_key_exchange)
     {
-        qWarning("Error when reading identify response");
+        LOG(LS_WARNING) << "Error when reading identify response";
         emit errorOccurred(Error::UNKNOWN);
         return;
     }
@@ -166,7 +167,7 @@ void NetworkChannelHost::readClientKeyExchange(const QByteArray& buffer)
 
     if (!cryptor_)
     {
-        qWarning("Unable to create cryptor");
+        LOG(LS_WARNING) << "Unable to create cryptor";
         emit errorOccurred(Error::UNKNOWN);
         return;
     }
@@ -177,7 +178,7 @@ void NetworkChannelHost::readClientKeyExchange(const QByteArray& buffer)
     QByteArray authorization_challenge_buffer = serializeMessage(authorization_challenge);
     if (authorization_challenge_buffer.isEmpty())
     {
-        qWarning("Error when creating authorization challenge");
+        LOG(LS_WARNING) << "Error when creating authorization challenge";
         emit errorOccurred(Error::UNKNOWN);
         return;
     }

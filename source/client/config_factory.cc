@@ -18,6 +18,7 @@
 
 #include "client/config_factory.h"
 
+#include "base/logging.h"
 #include "codec/video_util.h"
 
 namespace aspia {
@@ -71,7 +72,7 @@ proto::desktop::Config ConfigFactory::defaultDesktopViewConfig()
 // static
 void ConfigFactory::setDefaultDesktopManageConfig(proto::desktop::Config* config)
 {
-    Q_ASSERT(config);
+    DCHECK(config);
 
     static const uint32_t kDefaultFlags =
         proto::desktop::ENABLE_CLIPBOARD | proto::desktop::ENABLE_CURSOR_SHAPE |
@@ -89,7 +90,7 @@ void ConfigFactory::setDefaultDesktopManageConfig(proto::desktop::Config* config
 // static
 void ConfigFactory::setDefaultDesktopViewConfig(proto::desktop::Config* config)
 {
-    Q_ASSERT(config);
+    DCHECK(config);
 
     static const uint32_t kDefaultFlags =
         proto::desktop::DISABLE_DESKTOP_EFFECTS | proto::desktop::DISABLE_DESKTOP_WALLPAPER;

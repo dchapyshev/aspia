@@ -19,7 +19,6 @@
 #include "client/ui/file_panel.h"
 
 #include <QAction>
-#include <QDebug>
 #include <QLineEdit>
 #include <QKeyEvent>
 #include <QMenu>

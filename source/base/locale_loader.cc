@@ -19,9 +19,12 @@
 #include "base/locale_loader.h"
 
 #include <QCoreApplication>
-#include <QDebug>
 #include <QDir>
+#include "QLocale"
 #include <QTranslator>
+#include <QString>
+
+#include "base/logging.h"
 
 namespace aspia {
 
@@ -108,7 +111,7 @@ void LocaleLoader::installTranslators(const QString& locale_name)
 
         if (!translator->load(qm_file, translations_dir))
         {
-            qWarning() << "Translation file not loaded: " << qm_file;
+            LOG(LS_WARNING) << "Translation file not loaded: " << qm_file.toStdString();
             delete translator;
         }
         else

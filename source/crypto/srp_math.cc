@@ -21,6 +21,7 @@
 #include <openssl/opensslv.h>
 #include <openssl/bn.h>
 
+#include "base/logging.h"
 #include "crypto/generic_hash.h"
 
 namespace aspia {
@@ -157,7 +158,7 @@ BigNum SrpMath::calcServerKey(const BigNum& A, const BigNum& v, const BigNum& u,
 {
     if (!A.isValid() || !v.isValid() || !u.isValid() || !b.isValid() || !N.isValid())
     {
-        qWarning("Invalid parameters");
+        DLOG(LS_WARNING) << "Invalid parameters";
         return BigNum();
     }
 

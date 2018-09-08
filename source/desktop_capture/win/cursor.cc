@@ -18,6 +18,7 @@
 
 #include "desktop_capture/win/cursor.h"
 
+#include "base/logging.h"
 #include "base/win/scoped_gdi_object.h"
 #include "desktop_capture/mouse_cursor.h"
 
@@ -115,7 +116,7 @@ MouseCursor* mouseCursorFromHCursor(HDC dc, HCURSOR cursor)
 
     if (!GetIconInfo(cursor, &icon_info))
     {
-        qWarning("GetIconInfo failed");
+        LOG(LS_WARNING) << "GetIconInfo failed";
         return nullptr;
     }
 
@@ -130,7 +131,7 @@ MouseCursor* mouseCursorFromHCursor(HDC dc, HCURSOR cursor)
 
     if (!GetObjectW(scoped_mask, sizeof(bitmap_info), &bitmap_info))
     {
-        qWarning("GetObjectW failed");
+        LOG(LS_WARNING) << "GetObjectW failed";
         return nullptr;
     }
 
@@ -161,7 +162,7 @@ MouseCursor* mouseCursorFromHCursor(HDC dc, HCURSOR cursor)
                    reinterpret_cast<BITMAPINFO*>(&bmi),
                    DIB_RGB_COLORS))
     {
-        qWarning("GetDIBits failed");
+        LOG(LS_WARNING) << "GetDIBits failed";
         return nullptr;
     }
 
@@ -186,7 +187,7 @@ MouseCursor* mouseCursorFromHCursor(HDC dc, HCURSOR cursor)
                        reinterpret_cast<BITMAPINFO*>(&bmi),
                        DIB_RGB_COLORS))
         {
-            qWarning("GetDIBits failed");
+            LOG(LS_WARNING) << "GetDIBits failed";
             return nullptr;
         }
 

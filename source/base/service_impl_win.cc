@@ -22,17 +22,18 @@
 #error This file for MS Windows only
 #endif // defined(Q_OS_WIN)
 
-#include <qt_windows.h>
+#define WIN32_LEAN_AND_MEAN
+#define NOMINMAX
+#include <windows.h>
 
 #include <QCommandLineParser>
 #include <QCoreApplication>
-#include <QDebug>
 #include <QThread>
 
 #include <condition_variable>
 #include <mutex>
 
-#include "base/errno_logging.h"
+#include "base/logging.h"
 #include "base/service_controller.h"
 
 namespace aspia {
@@ -133,7 +134,7 @@ ServiceHandler* ServiceHandler::instance = nullptr;
 
 ServiceHandler::ServiceHandler()
 {
-    Q_ASSERT(!instance);
+    DCHECK(!instance);
     instance = this;
 
     memset(&status_, 0, sizeof(status_));
@@ -141,7 +142,7 @@ ServiceHandler::ServiceHandler()
 
 ServiceHandler::~ServiceHandler()
 {
-    Q_ASSERT(instance);
+    DCHECK(instance);
     instance = nullptr;
 }
 
@@ -167,7 +168,7 @@ void ServiceHandler::setStatus(DWORD status)
 
     if (!SetServiceStatus(status_handle_, &status_))
     {
-        qWarningErrno("SetServiceStatus failed");
+        PLOG(LS_WARNING) << "SetServiceStatus failed";
         return;
     }
 }
@@ -193,8 +194,8 @@ void ServiceHandler::run()
         }
         else
         {
-            qWarning() << "StartServiceCtrlDispatcherW failed: "
-                       << errnoToString(error_code);
+            LOG(LS_WARNING) << "StartServiceCtrlDispatcherW failed: "
+                            << systemErrorCodeToString(error_code);
             instance->startup_state = ErrorOccurred;
         }
 
@@ -232,7 +233,7 @@ void WINAPI ServiceHandler::serviceMain(DWORD /* argc */, LPWSTR* /* argv */)
 
     if (!instance->status_handle_)
     {
-        qWarningErrno("RegisterServiceCtrlHandlerExW failed");
+        PLOG(LS_WARNING) << "RegisterServiceCtrlHandlerExW failed";
         return;
     }
 
@@ -311,13 +312,13 @@ ServiceEventHandler* ServiceEventHandler::instance = nullptr;
 
 ServiceEventHandler::ServiceEventHandler()
 {
-    Q_ASSERT(!instance);
+    DCHECK(!instance);
     instance = this;
 }
 
 ServiceEventHandler::~ServiceEventHandler()
 {
-    Q_ASSERT(instance);
+    DCHECK(instance);
     instance = nullptr;
 }
 
@@ -420,7 +421,7 @@ int ServiceImpl::exec(int argc, char* argv[])
     QScopedPointer<QCoreApplication> application(QCoreApplication::instance());
     if (application.isNull())
     {
-        qWarning("Application instance is null");
+        LOG(LS_WARNING) << "Application instance is null";
         return 1;
     }
 

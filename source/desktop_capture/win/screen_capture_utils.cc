@@ -19,8 +19,10 @@
 #include "desktop_capture/win/screen_capture_utils.h"
 
 #define WIN32_LEAN_AND_MEAN
+#define NOMINMAX
 #include <windows.h>
 
+#include "base/logging.h"
 #include "base/unicode.h"
 
 namespace aspia {
@@ -28,7 +30,7 @@ namespace aspia {
 // static
 bool ScreenCaptureUtils::screenList(ScreenCapturer::ScreenList* screens)
 {
-    Q_ASSERT(screens->size() == 0U);
+    DCHECK_EQ(screens->size(), 0U);
 
     for (int device_index = 0;; ++device_index)
     {

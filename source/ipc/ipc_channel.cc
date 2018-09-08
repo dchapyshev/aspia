@@ -18,7 +18,7 @@
 
 #include "ipc/ipc_channel.h"
 
-#include <QDebug>
+#include "base/logging.h"
 
 namespace aspia {
 
@@ -34,7 +34,7 @@ IpcChannel::IpcChannel(QLocalSocket* socket, QObject* parent)
     : QObject(parent),
       socket_(socket)
 {
-    Q_ASSERT(socket_);
+    DCHECK(socket_);
 
     qRegisterMetaType<QLocalSocket::LocalSocketError>();
 
@@ -92,7 +92,7 @@ void IpcChannel::send(const QByteArray& buffer)
 
 void IpcChannel::onError(QLocalSocket::LocalSocketError /* socket_error */)
 {
-    qWarning() << "IPC channel error: " << socket_->errorString();
+    LOG(LS_WARNING) << "IPC channel error: " << socket_->errorString().toStdString();
     emit errorOccurred();
 }
 
@@ -138,7 +138,7 @@ void IpcChannel::onReadyRead()
 
                 if (!read_size_ || read_size_ > kMaxMessageSize)
                 {
-                    qWarning() << "Wrong message size: " << read_size_;
+                    LOG(LS_WARNING) << "Wrong message size: " << read_size_;
                     socket_->abort();
                     return;
                 }
@@ -178,7 +178,7 @@ void IpcChannel::scheduleWrite()
     write_size_ = write_buffer.size();
     if (!write_size_ || write_size_ > kMaxMessageSize)
     {
-        qWarning() << "Wrong message size: " << write_size_;
+        LOG(LS_WARNING) << "Wrong message size: " << write_size_;
         socket_->abort();
         return;
     }

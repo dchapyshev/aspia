@@ -19,7 +19,6 @@
 #include "client/ui/desktop_widget.h"
 
 #include <QApplication>
-#include <QDebug>
 #include <QPainter>
 #include <QWheelEvent>
 

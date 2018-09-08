@@ -18,9 +18,7 @@
 
 #include "host/win/file_enumerator.h"
 
-#include <QDebug>
-
-#include "base/errno_logging.h"
+#include "base/logging.h"
 
 namespace aspia {
 
@@ -102,7 +100,7 @@ FileEnumerator::FileEnumerator(const std::filesystem::path& root_path)
                 break;
 
             default:
-                qWarning() << "Unhandled error code" << errnoToString(error_code);
+                LOG(LS_WARNING) << "Unhandled error code" << systemErrorCodeToString(error_code);
                 break;
         }
     }

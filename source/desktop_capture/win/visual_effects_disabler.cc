@@ -18,9 +18,10 @@
 
 #include "desktop_capture/win/visual_effects_disabler.h"
 
-#include <qt_windows.h>
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
 
-#include "base/errno_logging.h"
+#include "base/logging.h"
 
 namespace aspia {
 
@@ -66,7 +67,7 @@ std::unique_ptr<VisualEffectsState> currentEffectsState()
     }
     else
     {
-        qWarningErrno("SystemParametersInfoW(SPI_GETDRAGFULLWINDOWS) failed");
+        PLOG(LS_WARNING) << "SystemParametersInfoW(SPI_GETDRAGFULLWINDOWS) failed";
     }
 
     ANIMATIONINFO animation;
@@ -78,7 +79,7 @@ std::unique_ptr<VisualEffectsState> currentEffectsState()
     }
     else
     {
-        qWarningErrno("SystemParametersInfoW(SPI_GETANIMATION) failed");
+        PLOG(LS_WARNING) << "SystemParametersInfoW(SPI_GETANIMATION) failed";
     }
 
     BOOL menu_animation;
@@ -89,7 +90,7 @@ std::unique_ptr<VisualEffectsState> currentEffectsState()
     }
     else
     {
-        qWarningErrno("SystemParametersInfoW(SPI_GETMENUANIMATION) failed");
+        PLOG(LS_WARNING) << "SystemParametersInfoW(SPI_GETMENUANIMATION) failed";
     }
 
     BOOL tooltip_animation;
@@ -100,7 +101,7 @@ std::unique_ptr<VisualEffectsState> currentEffectsState()
     }
     else
     {
-        qWarningErrno("SystemParametersInfoW(SPI_GETTOOLTIPANIMATION) failed");
+        PLOG(LS_WARNING) << "SystemParametersInfoW(SPI_GETTOOLTIPANIMATION) failed";
     }
 
     BOOL combobox_animation;
@@ -111,7 +112,7 @@ std::unique_ptr<VisualEffectsState> currentEffectsState()
     }
     else
     {
-        qWarningErrno("SystemParametersInfoW(SPI_GETCOMBOBOXANIMATION) failed");
+        PLOG(LS_WARNING) << "SystemParametersInfoW(SPI_GETCOMBOBOXANIMATION) failed";
     }
 
     BOOL selection_fade;
@@ -122,7 +123,7 @@ std::unique_ptr<VisualEffectsState> currentEffectsState()
     }
     else
     {
-        qWarningErrno("SystemParametersInfoW(SPI_GETSELECTIONFADE) failed");
+        PLOG(LS_WARNING) << "SystemParametersInfoW(SPI_GETSELECTIONFADE) failed";
     }
 
     BOOL listbox_smooth_scrolling;
@@ -133,7 +134,7 @@ std::unique_ptr<VisualEffectsState> currentEffectsState()
     }
     else
     {
-        qWarningErrno("SystemParametersInfoW(SPI_GETLISTBOXSMOOTHSCROLLING) failed");
+        PLOG(LS_WARNING) << "SystemParametersInfoW(SPI_GETLISTBOXSMOOTHSCROLLING) failed";
     }
 
     BOOL ui_effects;
@@ -144,7 +145,7 @@ std::unique_ptr<VisualEffectsState> currentEffectsState()
     }
     else
     {
-        qWarningErrno("SystemParametersInfoW(SPI_GETUIEFFECTS) failed");
+        PLOG(LS_WARNING) << "SystemParametersInfoW(SPI_GETUIEFFECTS) failed";
     }
 
     BOOL client_area_animation;
@@ -155,7 +156,7 @@ std::unique_ptr<VisualEffectsState> currentEffectsState()
     }
     else
     {
-        qWarningErrno("SystemParametersInfoW(SPI_GETCLIENTAREAANIMATION) failed");
+        PLOG(LS_WARNING) << "SystemParametersInfoW(SPI_GETCLIENTAREAANIMATION) failed";
     }
 
     BOOL gradient_captions;
@@ -166,7 +167,7 @@ std::unique_ptr<VisualEffectsState> currentEffectsState()
     }
     else
     {
-        qWarningErrno("SystemParametersInfoW(SPI_GETGRADIENTCAPTIONS) failed");
+        PLOG(LS_WARNING) << "SystemParametersInfoW(SPI_GETGRADIENTCAPTIONS) failed";
     }
 
     BOOL hot_tracking;
@@ -177,7 +178,7 @@ std::unique_ptr<VisualEffectsState> currentEffectsState()
     }
     else
     {
-        qWarningErrno("SystemParametersInfoW(SPI_GETHOTTRACKING) failed");
+        PLOG(LS_WARNING) << "SystemParametersInfoW(SPI_GETHOTTRACKING) failed";
     }
 
     return state;
@@ -193,7 +194,7 @@ void changeEffectsState(VisualEffectsState* state, BOOL enable)
         }
         else
         {
-            qWarningErrno("SystemParametersInfoW(SPI_SETDRAGFULLWINDOWS) failed");
+            PLOG(LS_WARNING) << "SystemParametersInfoW(SPI_SETDRAGFULLWINDOWS) failed";
         }
     }
 
@@ -209,7 +210,7 @@ void changeEffectsState(VisualEffectsState* state, BOOL enable)
         }
         else
         {
-            qWarningErrno("SystemParametersInfoW(SPI_SETANIMATION) failed");
+            PLOG(LS_WARNING) << "SystemParametersInfoW(SPI_SETANIMATION) failed";
         }
     }
 
@@ -224,7 +225,7 @@ void changeEffectsState(VisualEffectsState* state, BOOL enable)
         }
         else
         {
-            qWarningErrno("SystemParametersInfoW(SPI_SETMENUANIMATION) failed");
+            PLOG(LS_WARNING) << "SystemParametersInfoW(SPI_SETMENUANIMATION) failed";
         }
     }
 
@@ -239,7 +240,7 @@ void changeEffectsState(VisualEffectsState* state, BOOL enable)
         }
         else
         {
-            qWarningErrno("SystemParametersInfoW(SPI_SETTOOLTIPANIMATION) failed");
+            PLOG(LS_WARNING) << "SystemParametersInfoW(SPI_SETTOOLTIPANIMATION) failed";
         }
     }
 
@@ -254,7 +255,7 @@ void changeEffectsState(VisualEffectsState* state, BOOL enable)
         }
         else
         {
-            qWarningErrno("SystemParametersInfoW(SPI_SETCOMBOBOXANIMATION) failed");
+            PLOG(LS_WARNING) << "SystemParametersInfoW(SPI_SETCOMBOBOXANIMATION) failed";
         }
     }
 
@@ -269,7 +270,7 @@ void changeEffectsState(VisualEffectsState* state, BOOL enable)
         }
         else
         {
-            qWarningErrno("SystemParametersInfoW(SPI_SETSELECTIONFADE) failed");
+            PLOG(LS_WARNING) << "SystemParametersInfoW(SPI_SETSELECTIONFADE) failed";
         }
     }
 
@@ -284,7 +285,7 @@ void changeEffectsState(VisualEffectsState* state, BOOL enable)
         }
         else
         {
-            qWarningErrno("SystemParametersInfoW(SPI_SETLISTBOXSMOOTHSCROLLING) failed");
+            PLOG(LS_WARNING) << "SystemParametersInfoW(SPI_SETLISTBOXSMOOTHSCROLLING) failed";
         }
     }
 
@@ -299,7 +300,7 @@ void changeEffectsState(VisualEffectsState* state, BOOL enable)
         }
         else
         {
-            qWarningErrno("SystemParametersInfoW(SPI_SETUIEFFECTS) failed");
+            PLOG(LS_WARNING) << "SystemParametersInfoW(SPI_SETUIEFFECTS) failed";
         }
     }
 
@@ -314,7 +315,7 @@ void changeEffectsState(VisualEffectsState* state, BOOL enable)
         }
         else
         {
-            qWarningErrno("SystemParametersInfoW(SPI_SETCLIENTAREAANIMATION) failed");
+            PLOG(LS_WARNING) << "SystemParametersInfoW(SPI_SETCLIENTAREAANIMATION) failed";
         }
     }
 
@@ -329,7 +330,7 @@ void changeEffectsState(VisualEffectsState* state, BOOL enable)
         }
         else
         {
-            qWarningErrno("SystemParametersInfoW(SPI_SETGRADIENTCAPTIONS) failed");
+            PLOG(LS_WARNING) << "SystemParametersInfoW(SPI_SETGRADIENTCAPTIONS) failed";
         }
     }
 
@@ -344,7 +345,7 @@ void changeEffectsState(VisualEffectsState* state, BOOL enable)
         }
         else
         {
-            qWarningErrno("SystemParametersInfoW(SPI_SETHOTTRACKING) failed");
+            PLOG(LS_WARNING) << "SystemParametersInfoW(SPI_SETHOTTRACKING) failed";
         }
     }
 }
@@ -387,7 +388,7 @@ void VisualEffectsDisabler::disableWallpaper()
                                wallpaper_state_->path,
                                0))
     {
-        qWarningErrno("SystemParametersInfoW(SPI_GETDESKWALLPAPER) failed");
+        PLOG(LS_WARNING) << "SystemParametersInfoW(SPI_GETDESKWALLPAPER) failed";
         wallpaper_state_.reset();
     }
     else

@@ -18,7 +18,6 @@
 
 #include "client/ui/desktop_window.h"
 
-#include <QDebug>
 #include <QBrush>
 #include <QDesktopWidget>
 #include <QFileDialog>
@@ -29,6 +28,7 @@
 #include <QScrollBar>
 
 #include "base/clipboard.h"
+#include "base/logging.h"
 #include "client/ui/desktop_config_dialog.h"
 #include "client/ui/desktop_panel.h"
 #include "client/ui/desktop_widget.h"
@@ -48,7 +48,7 @@ DesktopWindow::DesktopWindow(ConnectData* connect_data, QWidget* parent)
     }
     else
     {
-        Q_ASSERT(connect_data_->sessionType() == proto::SESSION_TYPE_DESKTOP_VIEW);
+        DCHECK(connect_data_->sessionType() == proto::SESSION_TYPE_DESKTOP_VIEW);
         session_name = tr("Aspia Desktop View");
     }
 

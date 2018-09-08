@@ -21,6 +21,7 @@
 #define SODIUM_STATIC
 #include <sodium.h>
 
+#include "base/logging.h"
 #include "crypto/generic_hash.h"
 
 namespace aspia {
@@ -54,7 +55,7 @@ std::string DataEncryptor::createKey(const std::string& password,
 // static
 std::string DataEncryptor::encrypt(const std::string& source_data, const std::string& key)
 {
-    Q_ASSERT(key.size() == crypto_secretstream_xchacha20poly1305_KEYBYTES);
+    DCHECK_EQ(key.size(), crypto_secretstream_xchacha20poly1305_KEYBYTES);
 
     std::string encrypted_data;
     encrypted_data.resize(crypto_secretstream_xchacha20poly1305_HEADERBYTES);
@@ -118,13 +119,13 @@ bool DataEncryptor::decrypt(const char* source_data, int source_size, const std:
     if (!source_data || source_size < crypto_secretstream_xchacha20poly1305_HEADERBYTES ||
         !decrypted_data)
     {
-        qWarning("Invalid parameters");
+        DLOG(LS_WARNING) << "Invalid parameters";
         return false;
     }
 
     if (key.size() != crypto_secretstream_xchacha20poly1305_KEYBYTES)
     {
-        qWarning("Invalid key size");
+        DLOG(LS_WARNING) << "Invalid key size";
         return false;
     }
 
@@ -136,7 +137,7 @@ bool DataEncryptor::decrypt(const char* source_data, int source_size, const std:
             &state, reinterpret_cast<const uint8_t*>(source_data),
             reinterpret_cast<const uint8_t*>(key.c_str())) != 0)
     {
-        qWarning("crypto_secretstream_xchacha20poly1305_init_pull failed");
+        DLOG(LS_WARNING) << "crypto_secretstream_xchacha20poly1305_init_pull failed";
         return false;
     }
 
@@ -160,7 +161,7 @@ bool DataEncryptor::decrypt(const char* source_data, int source_size, const std:
                                                        input_buffer + input_pos, consumed, nullptr,
                                                        0) != 0)
         {
-            qWarning("crypto_secretstream_xchacha20poly1305_pull failed");
+            DLOG(LS_WARNING) << "crypto_secretstream_xchacha20poly1305_pull failed";
             return false;
         }
 
@@ -170,7 +171,7 @@ bool DataEncryptor::decrypt(const char* source_data, int source_size, const std:
         {
             if (input_pos != input_size)
             {
-                qWarning("Unexpected end of buffer");
+                DLOG(LS_WARNING) << "Unexpected end of buffer";
                 return false;
             }
 

@@ -19,23 +19,23 @@
 #include "console/console_main.h"
 
 #include <QCommandLineParser>
-#include <QFileInfo>
 
-#include "base/file_logger.h"
+#include "base/logging.h"
 #include "crypto/scoped_crypto_initializer.h"
 #include "console/console_window.h"
 #include "version.h"
+
+#include <Windows.h>
 
 namespace aspia {
 
 int consoleMain(int argc, char *argv[])
 {
-    FileLogger logger;
-    logger.startLogging(QFileInfo(argv[0]).fileName());
+    LoggingSettings settings;
+    settings.logging_dest = LOG_TO_ALL;
+    initLogging(settings);
 
     ScopedCryptoInitializer crypto_initializer;
-    if (!crypto_initializer.isSucceeded())
-        return 1;
 
     QApplication application(argc, argv);
 

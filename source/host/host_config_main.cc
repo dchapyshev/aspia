@@ -18,9 +18,7 @@
 
 #include "host/host_config_main.h"
 
-#include <QFileInfo>
-
-#include "base/file_logger.h"
+#include "base/logging.h"
 #include "crypto/scoped_crypto_initializer.h"
 #include "host/ui/host_config_dialog.h"
 #include "version.h"
@@ -29,12 +27,11 @@ namespace aspia {
 
 int hostConfigMain(int argc, char *argv[])
 {
-    FileLogger logger;
-    logger.startLogging(QFileInfo(argv[0]).fileName());
+    LoggingSettings settings;
+    settings.logging_dest = LOG_TO_ALL;
+    initLogging(settings);
 
     ScopedCryptoInitializer crypto_initializer;
-    if (!crypto_initializer.isSucceeded())
-        return 1;
 
     QApplication application(argc, argv);
     application.setOrganizationName(QStringLiteral("Aspia"));

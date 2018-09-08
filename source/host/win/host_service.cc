@@ -27,6 +27,7 @@
 #include "base/win/security_helpers.h"
 #include "host/win/host_service_constants.h"
 #include "base/locale_loader.h"
+#include "base/logging.h"
 #include "host/host_server.h"
 #include "host/host_settings.h"
 #include "version.h"
@@ -71,7 +72,7 @@ HostService::~HostService() = default;
 
 void HostService::start()
 {
-    qInfo("Command to start the service has been received");
+    LOG(LS_INFO) << "Command to start the service has been received";
 
     SetPriorityClass(GetCurrentProcess(), HIGH_PRIORITY_CLASS);
 
@@ -84,7 +85,7 @@ void HostService::start()
     com_initializer_.reset(new ScopedCOMInitializer());
     if (!com_initializer_->isSucceeded())
     {
-        qFatal("COM not initialized");
+        LOG(LS_FATAL) << "COM not initialized";
         app->quit();
         return;
     }
@@ -104,17 +105,17 @@ void HostService::start()
         return;
     }
 
-    qInfo("Service is started");
+    LOG(LS_INFO) << "Service is started";
 }
 
 void HostService::stop()
 {
-    qInfo("Command to stop the service has been received");
+    LOG(LS_INFO) << "Command to stop the service has been received";
 
     server_.reset();
     com_initializer_.reset();
 
-    qInfo("Service is stopped");
+    LOG(LS_INFO) << "Service is stopped";
 }
 
 void HostService::sessionChange(uint32_t event, uint32_t session_id)

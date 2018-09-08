@@ -18,8 +18,7 @@
 
 #include "codec/cursor_decoder.h"
 
-#include <QDebug>
-
+#include "base/logging.h"
 #include "codec/decompressor_zlib.h"
 #include "desktop_capture/mouse_cursor_cache.h"
 
@@ -51,7 +50,7 @@ bool CursorDecoder::decompressCursor(const proto::desktop::CursorShape& cursor_s
     {
         if (row_y > cursor_shape.height() - 1)
         {
-            qWarning("Too much data is received for the given rectangle");
+            LOG(LS_WARNING) << "Too much data is received for the given rectangle";
             return false;
         }
 
@@ -95,8 +94,8 @@ std::shared_ptr<MouseCursor> CursorDecoder::decode(const proto::desktop::CursorS
         if (size.width()  <= 0 || size.width()  > (std::numeric_limits<int16_t>::max() / 2) ||
             size.height() <= 0 || size.height() > (std::numeric_limits<int16_t>::max() / 2))
         {
-            qWarning() << "Cursor dimensions are out of bounds for SetCursor: "
-                       << size.width() << "x" << size.height();
+            LOG(LS_WARNING) << "Cursor dimensions are out of bounds for SetCursor: "
+                            << size.width() << "x" << size.height();
             return nullptr;
         }
 
@@ -121,7 +120,7 @@ std::shared_ptr<MouseCursor> CursorDecoder::decode(const proto::desktop::CursorS
 
         if (!cache_)
         {
-            qWarning("Host did not send cache reset command");
+            LOG(LS_WARNING) << "Host did not send cache reset command";
             return nullptr;
         }
 

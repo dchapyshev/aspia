@@ -21,6 +21,7 @@
 #include <QCoreApplication>
 #include <QLocalServer>
 
+#include "base/logging.h"
 #include "crypto/random.h"
 #include "ipc/ipc_channel.h"
 
@@ -56,7 +57,7 @@ void IpcServer::start()
 {
     if (isStarted())
     {
-        qWarning("An attempt was start an already running server.");
+        LOG(LS_WARNING) << "An attempt was start an already running server.";
         return;
     }
 
@@ -71,7 +72,7 @@ void IpcServer::start()
 
     if (!server_->listen(channel_id))
     {
-        qWarning() << "listen failed: " << server_->errorString();
+        LOG(LS_WARNING) << "listen failed: " << server_->errorString().toStdString();
         emit errorOccurred();
         stop();
         return;

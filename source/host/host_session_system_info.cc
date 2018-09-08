@@ -18,7 +18,6 @@
 
 #include "host/host_session_system_info.h"
 
-#include <QDebug>
 #include <QThread>
 
 #include "base/message_serialization.h"
@@ -51,7 +50,7 @@ void HostSessionSystemInfo::messageReceived(const QByteArray& buffer)
     }
     else
     {
-        qWarning("Unhandled request");
+        LOG(LS_WARNING) << "Unhandled request";
         emit errorOccurred();
     }
 }
@@ -116,7 +115,7 @@ void HostSessionSystemInfo::readCategoryRequest(
         }
     }
 
-    qWarning() << "An unknown category was requested: " << category_uuid;
+    LOG(LS_WARNING) << "An unknown category was requested: " << category_uuid.toStdString();
     emit errorOccurred();
 }
 

@@ -18,8 +18,7 @@
 
 #include "network/srp_client_context.h"
 
-#include <QDebug>
-
+#include "base/logging.h"
 #include "crypto/generic_hash.h"
 #include "crypto/random.h"
 #include "crypto/secure_memory.h"
@@ -180,19 +179,19 @@ proto::SrpClientKeyExchange* SrpClientContext::readServerKeyExchange(
 
     if (server_key_exchange.salt().size() < kMin_s)
     {
-        qWarning() << "Wrong salt size:" << server_key_exchange.salt().size();
+        LOG(LS_WARNING) << "Wrong salt size:" << server_key_exchange.salt().size();
         return nullptr;
     }
 
     if (server_key_exchange.b().size() < kMin_B)
     {
-        qWarning() << "Wrong B size:" << server_key_exchange.b().size();
+        LOG(LS_WARNING) << "Wrong B size:" << server_key_exchange.b().size();
         return nullptr;
     }
 
     if (!verifyNg(server_key_exchange.number(), server_key_exchange.generator()))
     {
-        qWarning() << "Wrong number or generator";
+        LOG(LS_WARNING) << "Wrong number or generator";
         return nullptr;
     }
 

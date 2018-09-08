@@ -19,7 +19,6 @@
 #include "host/screen_updater.h"
 
 #include <QApplication>
-#include <QDebug>
 #include <QEvent>
 #include <QThread>
 
@@ -145,7 +144,7 @@ bool ScreenUpdaterImpl::startUpdater(const proto::desktop::Config& config)
         {
             // No supported video encoding. We create the default codec. If the client can not
             // decode it, it will display an error and the connection will be disconnected.
-            qWarning() << "Unsupported video encoding:" << config.video_encoding();
+            LOG(LS_WARNING) << "Unsupported video encoding: " << config.video_encoding();
             video_encoder_.reset(VideoEncoderZLIB::create(PixelFormat::RGB565(), 6));
         }
         break;

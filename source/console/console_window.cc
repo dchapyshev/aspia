@@ -26,6 +26,7 @@
 #include <QSystemTrayIcon>
 #include <QTranslator>
 
+#include "base/logging.h"
 #include "client/ui/authorization_dialog.h"
 #include "client/ui/client_dialog.h"
 #include "client/client.h"
@@ -559,7 +560,7 @@ void ConsoleWindow::onComputerDoubleClicked(proto::address_book::Computer* compu
     }
     else
     {
-        qFatal("Unknown session type");
+        LOG(LS_FATAL) << "Unknown session type";
         return;
     }
 

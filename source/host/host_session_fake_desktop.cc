@@ -47,7 +47,7 @@ void HostSessionFakeDesktop::onMessageReceived(const QByteArray& buffer)
 
     if (!parseMessage(buffer, message))
     {
-        qWarning("Unable to parse message");
+        LOG(LS_WARNING) << "Unable to parse message";
         emit errorOccurred();
         return;
     }
@@ -57,7 +57,7 @@ void HostSessionFakeDesktop::onMessageReceived(const QByteArray& buffer)
         std::unique_ptr<VideoEncoder> video_encoder(createEncoder(message.config()));
         if (!video_encoder)
         {
-            qWarning("Unable to create video encoder");
+            LOG(LS_WARNING) << "Unable to create video encoder";
             emit errorOccurred();
             return;
         }
@@ -65,7 +65,7 @@ void HostSessionFakeDesktop::onMessageReceived(const QByteArray& buffer)
         std::unique_ptr<DesktopFrame> frame = createFrame();
         if (!frame)
         {
-            qWarning("Unable to create video frame");
+            LOG(LS_WARNING) << "Unable to create video frame";
             emit errorOccurred();
             return;
         }
@@ -95,7 +95,7 @@ VideoEncoder* HostSessionFakeDesktop::createEncoder(const proto::desktop::Config
                 VideoUtil::fromVideoPixelFormat(config.pixel_format()), config.compress_ratio());
 
         default:
-            qWarning() << "Unsupported video encoding: " << config.video_encoding();
+            LOG(LS_WARNING) << "Unsupported video encoding: " << config.video_encoding();
             return nullptr;
     }
 }

@@ -71,7 +71,7 @@ void ClientSessionDesktopManage::messageReceived(const QByteArray& buffer)
     else
     {
         // Unknown messages are ignored.
-        qWarning("Unhandled message from host");
+        LOG(LS_WARNING) << "Unhandled message from host";
     }
 }
 

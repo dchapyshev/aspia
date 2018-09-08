@@ -18,6 +18,8 @@
 
 #include "desktop_capture/pixel_format.h"
 
+#include "base/logging.h"
+
 namespace aspia {
 
 PixelFormat::PixelFormat(const PixelFormat& other)
@@ -136,8 +138,8 @@ void PixelFormat::clear()
 
 bool PixelFormat::isEqual(const PixelFormat& other) const
 {
-    Q_ASSERT(bytes_per_pixel_ == (bits_per_pixel_ / 8));
-    Q_ASSERT(other.bytes_per_pixel_ == (other.bits_per_pixel_ / 8));
+    DCHECK_EQ(bytes_per_pixel_, (bits_per_pixel_ / 8));
+    DCHECK_EQ(other.bytes_per_pixel_, (other.bits_per_pixel_ / 8));
 
     if (bits_per_pixel_ == other.bits_per_pixel_ &&
         red_max_        == other.red_max_        &&

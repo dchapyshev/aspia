@@ -18,14 +18,15 @@
 
 #include "host/win/host_main.h"
 
-#include <qt_windows.h>
+#define WIN32_LEAN_AND_MEAN
+#define NOMINMAX
+#include <windows.h>
 
 #include <QApplication>
 #include <QCommandLineParser>
-#include <QDebug>
-#include <QFileInfo>
 
 #include "base/file_logger.h"
+#include "base/logging.h"
 #include "crypto/scoped_crypto_initializer.h"
 #include "desktop_capture/win/scoped_thread_desktop.h"
 #include "host/ui/host_notifier_window.h"
@@ -73,8 +74,9 @@ int runHostNotifier(const QString& channel_id)
 
 int hostMain(int argc, char *argv[])
 {
-    FileLogger logger;
-    logger.startLogging(QFileInfo(argv[0]).fileName());
+    LoggingSettings settings;
+    settings.logging_dest = LOG_TO_ALL;
+    initLogging(settings);
 
     int max_attempt_count = 600;
 
@@ -93,13 +95,11 @@ int hostMain(int argc, char *argv[])
 
     if (max_attempt_count == 0)
     {
-        qWarning("Exceeded the number of attempts");
+        LOG(LS_WARNING) << "Exceeded the number of attempts";
         return 1;
     }
 
     ScopedCryptoInitializer crypto_initializer;
-    if (!crypto_initializer.isSucceeded())
-        return 1;
 
     QApplication application(argc, argv);
     application.setOrganizationName(QStringLiteral("Aspia"));
@@ -120,14 +120,15 @@ int hostMain(int argc, char *argv[])
 
     if (!parser.parse(application.arguments()))
     {
-        qWarning() << "Error parsing command line parameters: " << parser.errorText();
+        LOG(LS_WARNING) << "Error parsing command line parameters: "
+                        << parser.errorText().toStdString();
         return 1;
     }
 
     QString channel_id = parser.value(channel_id_option);
     if (channel_id.isEmpty())
     {
-        qWarning("Empty channel id");
+        LOG(LS_WARNING) << "Empty channel id";
         return 1;
     }
 

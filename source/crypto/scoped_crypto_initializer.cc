@@ -21,17 +21,14 @@
 #include <openssl/crypto.h>
 #include <openssl/ssl.h>
 
+#include "base/logging.h"
+
 namespace aspia {
 
 ScopedCryptoInitializer::ScopedCryptoInitializer()
 {
-    if (!OPENSSL_add_all_algorithms_noconf())
-    {
-        qWarning("OPENSSL_init_crypto failed");
-        return;
-    }
-
-    initialized_ = true;
+    int ret = OPENSSL_add_all_algorithms_noconf();
+    CHECK_EQ(ret, 1) << "OPENSSL_init_crypto failed";
 }
 
 ScopedCryptoInitializer::~ScopedCryptoInitializer()

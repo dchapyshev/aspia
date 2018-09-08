@@ -20,6 +20,8 @@
 
 #include <openssl/evp.h>
 
+#include "base/logging.h"
+
 namespace aspia {
 
 namespace {
@@ -37,26 +39,26 @@ EVP_CIPHER_CTX_ptr createCipher(const std::string& key, int type)
     if (EVP_CipherInit_ex(ctx.get(), EVP_aes_256_gcm(),
                           nullptr, nullptr, nullptr, type) != 1)
     {
-        qWarning("EVP_EncryptInit_ex failed");
+        LOG(LS_WARNING) << "EVP_EncryptInit_ex failed";
         return nullptr;
     }
 
     if (EVP_CIPHER_CTX_set_key_length(ctx.get(), kKeySize) != 1)
     {
-        qWarning("EVP_CIPHER_CTX_set_key_length failed");
+        LOG(LS_WARNING) << "EVP_CIPHER_CTX_set_key_length failed";
         return nullptr;
     }
 
     if (EVP_CIPHER_CTX_ctrl(ctx.get(), EVP_CTRL_AEAD_SET_IVLEN, kIVSize, nullptr) != 1)
     {
-        qWarning("EVP_CIPHER_CTX_ctrl failed");
+        LOG(LS_WARNING) << "EVP_CIPHER_CTX_ctrl failed";
         return nullptr;
     }
 
     if (EVP_CipherInit_ex(ctx.get(), nullptr, nullptr,
                           reinterpret_cast<const uint8_t*>(key.c_str()), nullptr, type) != 1)
     {
-        qWarning("EVP_CIPHER_CTX_ctrl failed");
+        LOG(LS_WARNING) << "EVP_CIPHER_CTX_ctrl failed";
         return nullptr;
     }
 
@@ -112,10 +114,10 @@ CryptorAes256Gcm::CryptorAes256Gcm(EVP_CIPHER_CTX_ptr encrypt_ctx,
       encrypt_nonce_(encrypt_nonce),
       decrypt_nonce_(decrypt_nonce)
 {
-    Q_ASSERT(EVP_CIPHER_CTX_key_length(encrypt_ctx_.get()) == kKeySize);
-    Q_ASSERT(EVP_CIPHER_CTX_iv_length(encrypt_ctx_.get()) == kIVSize);
-    Q_ASSERT(EVP_CIPHER_CTX_key_length(decrypt_ctx_.get()) == kKeySize);
-    Q_ASSERT(EVP_CIPHER_CTX_iv_length(decrypt_ctx_.get()) == kIVSize);
+    DCHECK_EQ(EVP_CIPHER_CTX_key_length(encrypt_ctx_.get()), kKeySize);
+    DCHECK_EQ(EVP_CIPHER_CTX_iv_length(encrypt_ctx_.get()), kIVSize);
+    DCHECK_EQ(EVP_CIPHER_CTX_key_length(decrypt_ctx_.get()), kKeySize);
+    DCHECK_EQ(EVP_CIPHER_CTX_iv_length(decrypt_ctx_.get()), kIVSize);
 }
 
 CryptorAes256Gcm::~CryptorAes256Gcm() = default;
@@ -148,7 +150,7 @@ bool CryptorAes256Gcm::encrypt(const char* in, size_t in_size, char* out)
     if (EVP_EncryptInit_ex(encrypt_ctx_.get(), nullptr, nullptr, nullptr,
                            reinterpret_cast<const uint8_t*>(encrypt_nonce_.c_str())) != 1)
     {
-        qWarning("EVP_EncryptInit_ex failed");
+        LOG(LS_WARNING) << "EVP_EncryptInit_ex failed";
         return false;
     }
 
@@ -160,7 +162,7 @@ bool CryptorAes256Gcm::encrypt(const char* in, size_t in_size, char* out)
                           reinterpret_cast<const uint8_t*>(in),
                           in_size) != 1)
     {
-        qWarning("EVP_EncryptUpdate failed");
+        LOG(LS_WARNING) << "EVP_EncryptUpdate failed";
         return false;
     }
 
@@ -168,7 +170,7 @@ bool CryptorAes256Gcm::encrypt(const char* in, size_t in_size, char* out)
                             reinterpret_cast<uint8_t*>(out) + length,
                             &length) != 1)
     {
-        qWarning("EVP_EncryptFinal_ex failed");
+        LOG(LS_WARNING) << "EVP_EncryptFinal_ex failed";
         return false;
     }
 
@@ -177,7 +179,7 @@ bool CryptorAes256Gcm::encrypt(const char* in, size_t in_size, char* out)
                             kTagSize,
                             reinterpret_cast<uint8_t*>(out) + in_size) != 1)
     {
-        qWarning("EVP_CIPHER_CTX_ctrl failed");
+        LOG(LS_WARNING) << "EVP_CIPHER_CTX_ctrl failed";
         return false;
     }
 
@@ -195,7 +197,7 @@ bool CryptorAes256Gcm::decrypt(const char* in, size_t in_size, char* out)
     if (EVP_DecryptInit_ex(decrypt_ctx_.get(), nullptr, nullptr, nullptr,
                            reinterpret_cast<const uint8_t*>(decrypt_nonce_.c_str())) != 1)
     {
-        qWarning("EVP_DecryptInit_ex failed");
+        LOG(LS_WARNING) << "EVP_DecryptInit_ex failed";
         return false;
     }
 
@@ -207,7 +209,7 @@ bool CryptorAes256Gcm::decrypt(const char* in, size_t in_size, char* out)
                           reinterpret_cast<const uint8_t*>(in),
                           in_size - kTagSize) != 1)
     {
-        qWarning("EVP_DecryptUpdate failed");
+        LOG(LS_WARNING) << "EVP_DecryptUpdate failed";
         return false;
     }
 
@@ -217,7 +219,7 @@ bool CryptorAes256Gcm::decrypt(const char* in, size_t in_size, char* out)
                             reinterpret_cast<uint8_t*>(const_cast<char*>(in)) +
                                 in_size - kTagSize) != 1)
     {
-        qWarning("EVP_CIPHER_CTX_ctrl failed");
+        LOG(LS_WARNING) << "EVP_CIPHER_CTX_ctrl failed";
         return false;
     }
 
@@ -225,7 +227,7 @@ bool CryptorAes256Gcm::decrypt(const char* in, size_t in_size, char* out)
                             reinterpret_cast<uint8_t*>(out) + length,
                             &length) <= 0)
     {
-        qWarning("EVP_DecryptFinal_ex failed");
+        LOG(LS_WARNING) << "EVP_DecryptFinal_ex failed";
         return false;
     }
 

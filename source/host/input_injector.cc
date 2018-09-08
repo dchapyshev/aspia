@@ -18,14 +18,12 @@
 
 #include "host/input_injector.h"
 
-#include <QDebug>
-
 #include <set>
 #include <qt_windows.h>
 #include <sas.h>
 
 #include "base/win/registry.h"
-#include "base/errno_logging.h"
+#include "base/logging.h"
 #include "base/keycode_converter.h"
 #include "desktop_capture/win/scoped_thread_desktop.h"
 #include "desktop_capture/desktop_geometry.h"
@@ -64,7 +62,7 @@ void sendKeyboardScancode(WORD scancode, DWORD flags)
 
     // Do the keyboard event.
     if (!SendInput(1, &input, sizeof(input)))
-        qWarningErrno("SendInput failed");
+        PLOG(LS_WARNING) << "SendInput failed";
 }
 
 void sendKeyboardVirtualKey(WORD key_code, DWORD flags)
@@ -79,7 +77,7 @@ void sendKeyboardVirtualKey(WORD key_code, DWORD flags)
 
     // Do the keyboard event.
     if (!SendInput(1, &input, sizeof(input)))
-        qWarningErrno("SendInput failed");
+        PLOG(LS_WARNING) << "SendInput failed";
 }
 
 class InputInjectorImpl
@@ -209,7 +207,7 @@ void InputInjectorImpl::injectPointerEvent(const proto::desktop::PointerEvent& e
 
     // Do the mouse event.
     if (!SendInput(1, &input, sizeof(input)))
-        qWarningErrno("SendInput failed");
+        PLOG(LS_WARNING) << "SendInput failed";
 
     prev_mouse_button_mask_ = mask;
 }
@@ -289,7 +287,7 @@ void InputInjectorImpl::injectSAS()
     LONG status = key.create(HKEY_LOCAL_MACHINE, kSoftwareSASGenerationPath, KEY_READ | KEY_WRITE);
     if (status != ERROR_SUCCESS)
     {
-        qWarning() << "key.create failed" << errnoToString(status);
+        LOG(LS_WARNING) << "key.create failed" << systemErrorCodeToString(status);
     }
     else
     {
@@ -306,7 +304,7 @@ void InputInjectorImpl::injectSAS()
             status = key.writeValue(kSoftwareSASGeneration, kApplications);
             if (status != ERROR_SUCCESS)
             {
-                qWarning() << "key.writeValue failed" << errnoToString(status);
+                LOG(LS_WARNING) << "key.writeValue failed" << systemErrorCodeToString(status);
                 key.close();
             }
         }
@@ -319,7 +317,7 @@ void InputInjectorImpl::injectSAS()
         LONG status = key.writeValue(kSoftwareSASGeneration, old_state);
         if (status != ERROR_SUCCESS)
         {
-            qWarning() << "key.writeValue failed" << errnoToString(status);
+            LOG(LS_WARNING) << "key.writeValue failed" << systemErrorCodeToString(status);
         }
     }
 }

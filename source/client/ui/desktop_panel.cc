@@ -21,6 +21,7 @@
 #include <QMenu>
 #include <QToolButton>
 
+#include "base/logging.h"
 #include "client/ui/key_sequence_dialog.h"
 #include "client/ui/select_screen_action.h"
 
@@ -45,7 +46,7 @@ DesktopPanel::DesktopPanel(proto::SessionType session_type, QWidget* parent)
     }
     else
     {
-        Q_ASSERT(session_type == proto::SESSION_TYPE_DESKTOP_VIEW);
+        DCHECK(session_type == proto::SESSION_TYPE_DESKTOP_VIEW);
         ui.action_cad->setVisible(false);
     }
 

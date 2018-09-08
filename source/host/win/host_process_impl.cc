@@ -18,12 +18,10 @@
 
 #include "host/win/host_process_impl.h"
 
-#include <QDebug>
-
 #include <userenv.h>
 #include <wtsapi32.h>
 
-#include "base/errno_logging.h"
+#include "base/logging.h"
 
 namespace aspia {
 
@@ -40,7 +38,7 @@ bool copyProcessToken(DWORD desired_access, ScopedHandle* token_out)
                           TOKEN_DUPLICATE | desired_access,
                           process_token.recieve()))
     {
-        qWarningErrno("OpenProcessToken failed");
+        PLOG(LS_WARNING) << "OpenProcessToken failed";
         return false;
     }
 
@@ -51,7 +49,7 @@ bool copyProcessToken(DWORD desired_access, ScopedHandle* token_out)
                           TokenPrimary,
                           token_out->recieve()))
     {
-        qWarningErrno("DuplicateTokenEx failed");
+        PLOG(LS_WARNING) << "DuplicateTokenEx failed";
         return false;
     }
 
@@ -75,7 +73,7 @@ bool createPrivilegedToken(ScopedHandle* token_out)
 
     if (!LookupPrivilegeValueW(nullptr, SE_TCB_NAME, &state.Privileges[0].Luid))
     {
-        qWarningErrno("LookupPrivilegeValueW failed");
+        PLOG(LS_WARNING) << "LookupPrivilegeValueW failed";
         return false;
     }
 
@@ -83,7 +81,7 @@ bool createPrivilegedToken(ScopedHandle* token_out)
     if (!AdjustTokenPrivileges(privileged_token, FALSE, &state, 0,
                                nullptr, nullptr))
     {
-        qWarningErrno("AdjustTokenPrivileges failed");
+        PLOG(LS_WARNING) << "AdjustTokenPrivileges failed";
         return false;
     }
 
@@ -109,7 +107,7 @@ HostProcess::ErrorCode createSessionToken(DWORD session_id, ScopedHandle* token_
 
     if (!ImpersonateLoggedOnUser(privileged_token))
     {
-        qWarningErrno("ImpersonateLoggedOnUser failed");
+        PLOG(LS_WARNING) << "ImpersonateLoggedOnUser failed";
         return HostProcess::OtherError;
     }
 
@@ -118,20 +116,20 @@ HostProcess::ErrorCode createSessionToken(DWORD session_id, ScopedHandle* token_
 
     if (!RevertToSelf())
     {
-        qFatal("RevertToSelf failed");
+        LOG(LS_FATAL) << "RevertToSelf failed";
         return HostProcess::OtherError;
     }
 
     if (!ret)
     {
-        qWarningErrno("SetTokenInformation failed");
+        PLOG(LS_WARNING) << "SetTokenInformation failed";
         return HostProcess::OtherError;
     }
 
     DWORD ui_access = 1;
     if (!SetTokenInformation(session_token, TokenUIAccess, &ui_access, sizeof(ui_access)))
     {
-        qWarningErrno("SetTokenInformation failed");
+        PLOG(LS_WARNING) << "SetTokenInformation failed";
         return HostProcess::OtherError;
     }
 
@@ -148,7 +146,7 @@ HostProcess::ErrorCode createLoggedOnUserToken(DWORD session_id, ScopedHandle* t
 
     if (!ImpersonateLoggedOnUser(privileged_token))
     {
-        qWarningErrno("ImpersonateLoggedOnUser failed");
+        PLOG(LS_WARNING) << "ImpersonateLoggedOnUser failed";
         return HostProcess::OtherError;
     }
 
@@ -162,7 +160,8 @@ HostProcess::ErrorCode createLoggedOnUserToken(DWORD session_id, ScopedHandle* t
         if (system_error_code != ERROR_NO_TOKEN)
         {
             error_code = HostProcess::OtherError;
-            qWarning() << "WTSQueryUserToken failed: " << errnoToString(system_error_code);
+            LOG(LS_WARNING) << "WTSQueryUserToken failed: "
+                            << systemErrorCodeToString(system_error_code);
         }
         else
         {
@@ -172,7 +171,7 @@ HostProcess::ErrorCode createLoggedOnUserToken(DWORD session_id, ScopedHandle* t
 
     if (!RevertToSelf())
     {
-        qFatalErrno("RevertToSelf failed");
+        LOG(LS_FATAL) << "RevertToSelf failed";
         return HostProcess::OtherError;
     }
 
@@ -187,7 +186,7 @@ HostProcess::ErrorCode createLoggedOnUserToken(DWORD session_id, ScopedHandle* t
                                  sizeof(elevation_type),
                                  &returned_length))
         {
-            qWarningErrno("GetTokenInformation failed");
+            PLOG(LS_WARNING) << "GetTokenInformation failed";
             return HostProcess::OtherError;
         }
 
@@ -205,7 +204,7 @@ HostProcess::ErrorCode createLoggedOnUserToken(DWORD session_id, ScopedHandle* t
                                          sizeof(linked_token_info),
                                          &returned_length))
                 {
-                    qWarningErrno("GetTokenInformation failed");
+                    PLOG(LS_WARNING) << "GetTokenInformation failed";
                     return HostProcess::OtherError;
                 }
 
@@ -224,7 +223,7 @@ HostProcess::ErrorCode createLoggedOnUserToken(DWORD session_id, ScopedHandle* t
         DWORD ui_access = 1;
         if (!SetTokenInformation(token_out->get(), TokenUIAccess, &ui_access, sizeof(ui_access)))
         {
-            qWarningErrno("SetTokenInformation failed");
+            PLOG(LS_WARNING) << "SetTokenInformation failed";
             return HostProcess::OtherError;
         }
     }
@@ -321,7 +320,7 @@ void HostProcessImpl::startProcess()
     }
     else
     {
-        Q_ASSERT(account_ == HostProcess::User);
+        DCHECK_EQ(account_, HostProcess::User);
 
         HostProcess::ErrorCode error_code = createLoggedOnUserToken(session_id_, &session_token);
         if (error_code != HostProcess::NoError)
@@ -356,7 +355,7 @@ void HostProcessImpl::killProcess()
 {
     if (!process_handle_.isValid())
     {
-        qWarning("Invalid process handle");
+        LOG(LS_WARNING) << "Invalid process handle";
         return;
     }
 
@@ -367,7 +366,7 @@ void HostProcessImpl::terminateProcess()
 {
     if (!process_handle_.isValid())
     {
-        qWarning("Invalid process handle");
+        LOG(LS_WARNING) << "Invalid process handle";
         return;
     }
 
@@ -387,7 +386,7 @@ bool HostProcessImpl::startProcessWithToken(HANDLE token)
 
     if (!CreateEnvironmentBlock(&environment, token, FALSE))
     {
-        qWarningErrno("CreateEnvironmentBlock failed");
+        PLOG(LS_WARNING) << "CreateEnvironmentBlock failed";
         return false;
     }
 
@@ -408,7 +407,7 @@ bool HostProcessImpl::startProcessWithToken(HANDLE token)
                               &startup_info,
                               &process_info))
     {
-        qWarningErrno("CreateProcessAsUserW failed");
+        PLOG(LS_WARNING) << "CreateProcessAsUserW failed";
         DestroyEnvironmentBlock(environment);
         return false;
     }

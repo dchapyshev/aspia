@@ -19,9 +19,11 @@
 #ifndef ASPIA_BASE__WIN__SCOPED_HDC_H_
 #define ASPIA_BASE__WIN__SCOPED_HDC_H_
 
-#include <qt_windows.h>
+#define WIN32_LEAN_AND_MEAN
+#define NOMINMAX
+#include <windows.h>
 
-#include "base/macros_magic.h"
+#include "base/logging.h"
 
 namespace aspia {
 
@@ -35,18 +37,15 @@ public:
     {
         if (hwnd_)
         {
-            Q_ASSERT(IsWindow(hwnd_));
-            Q_ASSERT(hdc_);
+            DCHECK(IsWindow(hwnd_));
+            DCHECK(hdc_);
         }
         else
         {
             // If GetDC(NULL) returns NULL, something really bad has happened, like
             // GDI handle exhaustion.  In this case Chrome is going to behave badly no
             // matter what, so we may as well just force a crash now.
-            if (!hdc_)
-            {
-                qFatal("!hdc_");
-            }
+            CHECK(hdc_);
         }
     }
 

@@ -18,10 +18,13 @@
 
 #include "host/win/host.h"
 
-#include <qt_windows.h>
+#define WIN32_LEAN_AND_MEAN
+#define NOMINMAX
+#include <windows.h>
 
 #include <QCoreApplication>
 
+#include "base/logging.h"
 #include "host/win/host_process.h"
 #include "host/host_session_fake.h"
 #include "ipc/ipc_channel.h"
@@ -45,13 +48,13 @@ void Host::setNetworkChannel(NetworkChannelHost* network_channel)
 {
     if (state_ != State::STOPPED)
     {
-        qDebug("An attempt to set a network channel in an already running host.");
+        DLOG(LS_WARNING) << "An attempt to set a network channel in an already running host.";
         return;
     }
 
     if (!network_channel)
     {
-        qDebug("Network channel is null");
+        DLOG(LS_WARNING) << "Network channel is null";
         return;
     }
 
@@ -63,7 +66,7 @@ void Host::setUuid(std::string&& uuid)
 {
     if (state_ != State::STOPPED)
     {
-        qDebug("An attempt to set a UUID in an already running host");
+        DLOG(LS_WARNING) << "An attempt to set a UUID in an already running host";
         return;
     }
 
@@ -89,7 +92,7 @@ bool Host::start()
 {
     if (network_channel_.isNull())
     {
-        qDebug("Invalid network channel");
+        DLOG(LS_WARNING) << "Invalid network channel";
         return false;
     }
 
@@ -103,30 +106,30 @@ bool Host::start()
 
         default:
         {
-            qDebug("Invalid session type: %d", network_channel_->sessionType());
+            DLOG(LS_WARNING) << "Invalid session type: " << network_channel_->sessionType();
             return false;
         }
     }
 
     if (network_channel_->userName().empty())
     {
-        qDebug("Invalid user name");
+        DLOG(LS_WARNING) << "Invalid user name";
         return false;
     }
 
     if (uuid_.empty())
     {
-        qDebug("Invalid session UUID");
+        DLOG(LS_WARNING) << "Invalid session UUID";
         return false;
     }
 
     if (state_ != State::STOPPED)
     {
-        qDebug("Attempt to start a host already running");
+        DLOG(LS_WARNING) << "Attempt to start a host already running";
         return false;
     }
 
-    qInfo("Starting the host");
+    LOG(LS_INFO) << "Starting the host";
     state_ = State::STARTING;
 
     connect(network_channel_, &NetworkChannel::disconnected, this, &Host::stop);
@@ -134,7 +137,7 @@ bool Host::start()
     attach_timer_id_ = startTimer(std::chrono::minutes(1));
     if (!attach_timer_id_)
     {
-        qWarning("Could not start the timer");
+        LOG(LS_WARNING) << "Could not start the timer";
         return false;
     }
 
@@ -147,7 +150,7 @@ void Host::stop()
     if (state_ == State::STOPPED || state_ == State::STOPPING)
         return;
 
-    qInfo("Stopping host");
+    LOG(LS_INFO) << "Stopping host";
     state_ = State::STOPPING;
 
     if (network_channel_->channelState() != NetworkChannel::ChannelState::NOT_CONNECTED)
@@ -163,13 +166,13 @@ void Host::stop()
 
     state_ = State::STOPPED;
 
-    qInfo("Host is stopped");
+    LOG(LS_INFO) << "Host is stopped";
     emit finished(this);
 }
 
 void Host::sessionChanged(uint32_t event, uint32_t session_id)
 {
-    qInfo() << "Session change event" << event << "for session" << session_id;
+    LOG(LS_INFO) << "Session change event " << event << " for session " << session_id;
 
     if (state_ != State::ATTACHED && state_ != State::DETACHED)
         return;
@@ -193,17 +196,17 @@ void Host::timerEvent(QTimerEvent* event)
 {
     if (event->timerId() == attach_timer_id_)
     {
-        qWarning("Timeout of session attachment");
+        LOG(LS_WARNING) << "Timeout of session attachment";
         stop();
     }
 }
 
 void Host::ipcServerStarted(const QString& channel_id)
 {
-    Q_ASSERT(state_ == State::STARTING);
-    Q_ASSERT(session_process_.isNull());
+    DCHECK_EQ(state_, State::STARTING);
+    DCHECK(session_process_.isNull());
 
-    qInfo() << "IPC server is running with channel id:" << channel_id;
+    LOG(LS_INFO) << "IPC server is running with channel id: " << channel_id.toStdString();
 
     session_process_ = new HostProcess(this);
 
@@ -239,7 +242,7 @@ void Host::ipcServerStarted(const QString& channel_id)
             break;
 
         default:
-            qFatal("Unknown session type: %d", network_channel_->sessionType());
+            LOG(LS_FATAL) << "Unknown session type: " << network_channel_->sessionType();
             break;
     }
 
@@ -261,16 +264,16 @@ void Host::ipcServerStarted(const QString& channel_id)
 
     connect(session_process_, &HostProcess::finished, this, &Host::dettachSession);
 
-    qInfo("Starting the session process");
+    LOG(LS_INFO) << "Starting the session process";
     session_process_->start();
 }
 
 void Host::ipcNewConnection(IpcChannel* channel)
 {
-    Q_ASSERT(channel);
-    Q_ASSERT(attach_timer_id_);
+    DCHECK(channel);
+    DCHECK(attach_timer_id_);
 
-    qInfo("IPC channel connected");
+    LOG(LS_INFO) << "IPC channel connected";
 
     killTimer(attach_timer_id_);
     attach_timer_id_ = 0;
@@ -285,7 +288,7 @@ void Host::ipcNewConnection(IpcChannel* channel)
     connect(ipc_channel_, &IpcChannel::messageReceived, network_channel_, &NetworkChannel::send);
     connect(network_channel_, &NetworkChannel::messageReceived, ipc_channel_, &IpcChannel::send);
 
-    qInfo() << "Host process is attached for session" << session_id_;
+    LOG(LS_INFO) << "Host process is attached for session " << session_id_;
     state_ = State::ATTACHED;
 
     if (!network_channel_->isStarted())
@@ -296,7 +299,7 @@ void Host::ipcNewConnection(IpcChannel* channel)
 
 void Host::attachSession(uint32_t session_id)
 {
-    qInfo() << "Starting host process attachment to session" << session_id;
+    LOG(LS_INFO) << "Starting host process attachment to session" << session_id;
 
     state_ = State::STARTING;
     session_id_ = session_id;
@@ -308,7 +311,7 @@ void Host::attachSession(uint32_t session_id)
     connect(ipc_server, &IpcServer::newConnection, this, &Host::ipcNewConnection);
     connect(ipc_server, &IpcServer::errorOccurred, this, &Host::stop);
 
-    qInfo("Starting the IPC server");
+    LOG(LS_INFO) << "Starting the IPC server";
     ipc_server->start();
 }
 
@@ -322,18 +325,18 @@ void Host::dettachSession()
 
     if (ipc_channel_)
     {
-        qInfo("There is a valid IPC channel. Stopping");
+        LOG(LS_INFO) << "There is a valid IPC channel. Stopping";
         ipc_channel_->stop();
     }
 
     if (session_process_)
     {
-        qInfo("There is a valid session process. Stoping");
+        LOG(LS_INFO) << "There is a valid session process. Stoping";
         session_process_->terminate();
         delete session_process_;
     }
 
-    qInfo("Host process is detached");
+    LOG(LS_INFO) << "Host process is detached";
 
     if (state_ == State::STOPPING)
         return;
@@ -347,7 +350,7 @@ void Host::dettachSession()
         attach_timer_id_ = startTimer(std::chrono::minutes(1));
         if (!attach_timer_id_)
         {
-            qWarning("Could not start the timer");
+            LOG(LS_WARNING) << "Could not start the timer";
             stop();
         }
     }
@@ -355,13 +358,13 @@ void Host::dettachSession()
 
 bool Host::startFakeSession()
 {
-    qInfo("Starting a fake session");
+    LOG(LS_INFO) << "Starting a fake session";
 
     fake_session_ = HostSessionFake::create(network_channel_->sessionType(), this);
     if (fake_session_.isNull())
     {
-        qInfo() << "Session type" << network_channel_->sessionType()
-                << "does not have support for fake sessions";
+        LOG(LS_INFO) << "Session type " << network_channel_->sessionType()
+                     << " does not have support for fake sessions";
         return false;
     }
 

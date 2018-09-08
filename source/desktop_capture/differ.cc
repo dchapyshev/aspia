@@ -18,6 +18,7 @@
 
 #include "desktop_capture/differ.h"
 
+#include "base/logging.h"
 #include "desktop_capture/diff_block_avx2.h"
 #include "desktop_capture/diff_block_sse2.h"
 #include "desktop_capture/diff_block_sse3.h"
@@ -81,7 +82,7 @@ Differ::Differ(const DesktopSize& size)
 
     if (libyuv::TestCpuFlag(libyuv::kCpuHasAVX2))
     {
-        qInfo("AVX2 differ loaded");
+        LOG(LS_INFO) << "AVX2 differ loaded";
 
         if constexpr (kBlockSize == 8)
             diff_full_block_func_ = diffFullBlock_8x8_AVX2;
@@ -92,7 +93,7 @@ Differ::Differ(const DesktopSize& size)
     }
     else if (libyuv::TestCpuFlag(libyuv::kCpuHasSSSE3))
     {
-        qInfo("SSE3 differ loaded");
+        LOG(LS_INFO) << "SSE3 differ loaded";
 
         if constexpr (kBlockSize == 8)
             diff_full_block_func_ = diffFullBlock_8x8_SSE3;
@@ -103,7 +104,7 @@ Differ::Differ(const DesktopSize& size)
     }
     else if (libyuv::TestCpuFlag(libyuv::kCpuHasSSE2))
     {
-        qInfo("SSE2 differ loaded");
+        LOG(LS_INFO) << "SSE2 differ loaded";
 
         if constexpr (kBlockSize == 8)
             diff_full_block_func_ = diffFullBlock_8x8_SSE2;
@@ -114,7 +115,7 @@ Differ::Differ(const DesktopSize& size)
     }
     else
     {
-        qInfo("C differ loaded");
+        LOG(LS_INFO) << "C differ loaded";
 
         if constexpr (kBlockSize == 8)
             diff_full_block_func_ = diffFullBlock_8x8_C;
