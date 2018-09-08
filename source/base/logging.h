@@ -19,7 +19,6 @@
 #ifndef ASPIA_BASE__LOGGING_H_
 #define ASPIA_BASE__LOGGING_H_
 
-#include <filesystem>
 #include <sstream>
 #include <type_traits>
 #include <utility>
@@ -173,6 +172,16 @@ void shutdownLogging();
 
 // Used by LOG_IS_ON to lazy-evaluate stream arguments.
 bool shouldCreateLogMessage(LoggingSeverity severity);
+
+class ScopedLogging
+{
+public:
+    explicit ScopedLogging(const LoggingSettings& settings) { initLogging(settings); }
+    ~ScopedLogging() { shutdownLogging(); }
+
+private:
+    DISALLOW_COPY_AND_ASSIGN(ScopedLogging);
+};
 
 // A few definitions of macros that don't generate much code. These are used by LOG() and LOG_IF,
 // etc. Since these are used all over our code, it's better to have compact code for these operations.

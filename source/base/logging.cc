@@ -20,6 +20,7 @@
 
 #include <io.h>
 #include <algorithm>
+#include <filesystem>
 #include <iomanip>
 #include <ostream>
 #include <utility>
@@ -48,8 +49,6 @@ LoggingDestination g_logging_destination = LOG_DEFAULT;
 
 // For LS_ERROR and above, always print to stderr.
 const int kAlwaysPrintErrorLevel = LS_ERROR;
-
-std::filesystem::path g_log_file_name;
 
 // This file is lazily opened and the handle may be nullptr
 FileHandle g_log_file = nullptr;
@@ -94,7 +93,7 @@ bool defaultLogFilePath(std::filesystem::path* path)
     stream << std::filesystem::path(file_path).filename().native()
            << L'.'
            << std::setfill(L'0')
-           << std::setw(2) << local_time.wYear
+           << std::setw(4) << local_time.wYear
            << std::setw(2) << local_time.wMonth
            << std::setw(2) << local_time.wDay
            << L'-'
@@ -117,11 +116,9 @@ bool initializeLogFileHandle()
     if (g_log_file)
         return true;
 
-    if (g_log_file_name.empty())
-    {
-        if (!defaultLogFilePath(&g_log_file_name))
-            return false;
-    }
+    std::filesystem::path file_path;
+    if (!defaultLogFilePath(&file_path))
+        return false;
 
     if ((g_logging_destination & LOG_TO_FILE) != 0)
     {
@@ -129,7 +126,7 @@ bool initializeLogFileHandle()
         // appended to across accesses from multiple threads.
         // https://msdn.microsoft.com/en-us/library/windows/desktop/aa364399(v=vs.85).aspx
         // https://msdn.microsoft.com/en-us/library/windows/desktop/aa363858(v=vs.85).aspx
-        g_log_file = CreateFileW(g_log_file_name.c_str(), FILE_APPEND_DATA,
+        g_log_file = CreateFileW(file_path.c_str(), FILE_APPEND_DATA | DELETE,
                                  FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr,
                                  OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
         if (g_log_file == INVALID_HANDLE_VALUE || g_log_file == nullptr)
@@ -148,18 +145,15 @@ void closeLogFileUnlocked()
         return;
 
     LARGE_INTEGER file_size;
-
-    BOOL ret = GetFileSizeEx(g_log_file, &file_size);
+    if (GetFileSizeEx(g_log_file, &file_size) && !file_size.QuadPart)
+    {
+        FILE_DISPOSITION_INFO fdi;
+        fdi.DeleteFile = TRUE;
+        SetFileInformationByHandle(g_log_file, FileDispositionInfo, &fdi, sizeof(fdi));
+    }
 
     CloseHandle(g_log_file);
     g_log_file = nullptr;
-
-    if (ret && !file_size.QuadPart)
-    {
-        // If the file size was successfully received and nothing was written to the file,
-        // then delete it.
-        DeleteFileW(g_log_file_name.c_str());
-    }
 }
 
 } // namespace
@@ -281,8 +275,7 @@ LogMessage::LogMessage(const char* file, int line, std::string* result)
     delete result;
 }
 
-LogMessage::LogMessage(const char* file, int line, LoggingSeverity severity,
-                       std::string* result)
+LogMessage::LogMessage(const char* file, int line, LoggingSeverity severity, std::string* result)
     : severity_(severity), file_(file), line_(line)
 {
     init(file, line);
@@ -411,9 +404,7 @@ void rawLog(int level, const char* message)
         int rv;
         while (bytes_written < message_len)
         {
-            rv = write(STDERR_FILENO,
-                       message + bytes_written,
-                       message_len - bytes_written);
+            rv = write(STDERR_FILENO, message + bytes_written, message_len - bytes_written);
             if (rv < 0)
             {
                 // Give up, nothing we can do now.

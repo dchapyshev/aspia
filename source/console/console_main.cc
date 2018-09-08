@@ -33,8 +33,8 @@ int consoleMain(int argc, char *argv[])
 {
     LoggingSettings settings;
     settings.logging_dest = LOG_TO_ALL;
-    initLogging(settings);
 
+    ScopedLogging logging(settings);
     ScopedCryptoInitializer crypto_initializer;
 
     QApplication application(argc, argv);
