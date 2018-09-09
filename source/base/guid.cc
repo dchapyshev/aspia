@@ -61,16 +61,6 @@ bool isValidGUIDInternal(const std::string& guid, bool strict)
     return true;
 }
 
-std::string randomDataToGUIDString(const uint64_t bytes[2])
-{
-    return stringPrintf("%08x-%04x-%04x-%04x-%012llx",
-                        static_cast<unsigned int>(bytes[0] >> 32),
-                        static_cast<unsigned int>((bytes[0] >> 16) & 0x0000ffff),
-                        static_cast<unsigned int>(bytes[0] & 0x0000ffff),
-                        static_cast<unsigned int>(bytes[1] >> 48),
-                        bytes[1] & 0x0000ffff'ffffffffULL);
-}
-
 } // namespace
 
 // static
@@ -108,6 +98,17 @@ bool Guid::isValid(const std::string& guid)
 bool Guid::isStrictValid(const std::string& guid)
 {
     return isValidGUIDInternal(guid, true /* strict */);
+}
+
+// static
+std::string Guid::randomDataToGUIDString(const uint64_t bytes[2])
+{
+    return stringPrintf("%08x-%04x-%04x-%04x-%012llx",
+                        static_cast<unsigned int>(bytes[0] >> 32),
+                        static_cast<unsigned int>((bytes[0] >> 16) & 0x0000ffff),
+                        static_cast<unsigned int>(bytes[0] & 0x0000ffff),
+                        static_cast<unsigned int>(bytes[1] >> 48),
+                        bytes[1] & 0x0000ffff'ffffffffULL);
 }
 
 } // namespace aspia

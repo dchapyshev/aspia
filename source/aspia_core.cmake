@@ -72,6 +72,7 @@ list(APPEND SOURCE_BASE
 
 list(APPEND SOURCE_BASE_UNIT_TESTS
     ${PROJECT_SOURCE_DIR}/base/aligned_memory_unittest.cc
+    ${PROJECT_SOURCE_DIR}/base/guid_unittest.cc
     ${PROJECT_SOURCE_DIR}/base/string_printf_unittest.cc)
 
 list(APPEND SOURCE_BASE_WIN

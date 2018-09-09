@@ -50,6 +50,9 @@ public:
     // case characters.
     static bool isStrictValid(const std::string& guid);
 
+    // For unit testing purposes only. Do not use outside of tests.
+    static std::string randomDataToGUIDString(const uint64_t bytes[2]);
+
 private:
     DISALLOW_COPY_AND_ASSIGN(Guid);
 };
