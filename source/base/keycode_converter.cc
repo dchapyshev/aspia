@@ -20,6 +20,8 @@
 
 #include <QtCore>
 
+#include "build_config.h"
+
 namespace aspia {
 
 namespace {

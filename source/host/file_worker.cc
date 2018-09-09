@@ -22,12 +22,13 @@
 #include <QStandardPaths>
 #include <QStorageInfo>
 
+#include "base/logging.h"
+#include "host/file_platform_util.h"
+#include "build_config.h"
+
 #if defined(OS_WIN)
 #include "host/win/file_enumerator.h"
 #endif // defined(OS_WIN)
-
-#include "base/logging.h"
-#include "host/file_platform_util.h"
 
 namespace aspia {
 

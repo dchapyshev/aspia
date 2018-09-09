@@ -20,6 +20,7 @@
 
 #include "base/logging.h"
 #include "codec/video_util.h"
+#include "build_config.h"
 
 namespace aspia {
 
@@ -45,7 +46,7 @@ proto::address_book::Computer ConfigFactory::defaultComputer()
     proto::address_book::Computer computer;
 
     computer.set_session_type(proto::SESSION_TYPE_DESKTOP_MANAGE);
-    computer.set_port(kDefaultHostTcpPort);
+    computer.set_port(DEFAULT_HOST_TCP_PORT);
 
     setDefaultDesktopManageConfig(computer.mutable_session_config()->mutable_desktop_manage());
     setDefaultDesktopViewConfig(computer.mutable_session_config()->mutable_desktop_view());

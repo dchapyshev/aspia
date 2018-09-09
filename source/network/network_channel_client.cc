@@ -20,11 +20,6 @@
 
 #include <QNetworkProxy>
 
-#if defined(OS_WIN)
-#include <winsock2.h>
-#include <mstcpip.h>
-#endif
-
 #include "base/cpuid.h"
 #include "base/logging.h"
 #include "base/message_serialization.h"
@@ -32,7 +27,13 @@
 #include "crypto/cryptor_chacha20_poly1305.h"
 #include "crypto/secure_memory.h"
 #include "network/srp_client_context.h"
+#include "build_config.h"
 #include "version.h"
+
+#if defined(OS_WIN)
+#include <winsock2.h>
+#include <mstcpip.h>
+#endif
 
 namespace aspia {
 

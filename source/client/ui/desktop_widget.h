@@ -25,6 +25,8 @@
 #include <memory>
 #include <set>
 
+#include "build_config.h"
+
 #if defined(OS_WIN)
 #include "base/win/scoped_user_object.h"
 #endif

@@ -22,6 +22,8 @@
 #include <QGuiApplication>
 #include <QMimeData>
 
+#include "build_config.h"
+
 namespace aspia {
 
 namespace {

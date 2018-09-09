@@ -19,27 +19,35 @@
 #ifndef ASPIA_BUILD_CONFIG_H_
 #define ASPIA_BUILD_CONFIG_H_
 
-#if defined(_MSC_VER)
+// OS detection.
+#if defined(_WIN32)
 #define OS_WIN
-#define CC_MSVC
 #else
-#error Platform support not implemented
+#error Unknown OS
 #endif
 
-#if defined(OS_WIN)
-// Set target version for MS Windows.
-#define _WIN32_WINNT     0x0601
-#define NTDDI_VERSION    0x06010000 // Windows 7
-#define _WIN32_IE        0x0800 // Internet Explorer 8.0
-#define PSAPI_VERSION    2
-#define WINVER           _WIN32_WINNT
-#define _WIN32_WINDOWS   _WIN32_WINNT
-#endif // defined(OS_WIN)
+// Compiler detection.
+#if defined(_MSC_VER)
+#define CC_MSVC
+#else
+#error Unknown compiller
+#endif
 
-namespace aspia {
+// Architecture detection.
+#if defined(_M_X64) || defined(__x86_64__)
+#define ARCH_CPU_X86_FAMILY    1
+#define ARCH_CPU_X86_64        1
+#define ARCH_CPU_64_BITS       1
+#define ARCH_CPU_LITTLE_ENDIAN 1
+#elif defined(_M_IX86) || defined(__i386__)
+#define ARCH_CPU_X86_FAMILY    1
+#define ARCH_CPU_X86           1
+#define ARCH_CPU_32_BITS       1
+#define ARCH_CPU_LITTLE_ENDIAN 1
+#else
+#error Unknown architecture
+#endif
 
-extern const int kDefaultHostTcpPort;
-
-} // namespace
+#define DEFAULT_HOST_TCP_PORT 8050
 
 #endif // ASPIA_BUILD_CONFIG_H_

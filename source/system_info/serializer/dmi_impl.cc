@@ -18,16 +18,17 @@
 
 #include "system_info/serializer/dmi_impl.h"
 
+#include <QString>
+
+#include "base/bitset.h"
+#include "base/logging.h"
+#include "build_config.h"
+
 #if defined(OS_WIN)
 #define WIN32_LEAN_AND_MEAN
 #define NOMINMAX
 #include <windows.h>
 #endif
-
-#include <QString>
-
-#include "base/bitset.h"
-#include "base/logging.h"
 
 namespace aspia {
 

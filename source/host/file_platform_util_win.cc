@@ -18,10 +18,6 @@
 
 #include "host/file_platform_util.h"
 
-#if !defined(OS_WIN)
-#error This file is only for MS Windows
-#endif
-
 #include <QtWin>
 #include <shellapi.h>
 #include <shlwapi.h>

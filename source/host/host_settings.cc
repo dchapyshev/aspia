@@ -20,6 +20,7 @@
 
 #include "base/message_serialization.h"
 #include "crypto/random.h"
+#include "build_config.h"
 
 namespace aspia {
 
@@ -52,7 +53,7 @@ void HostSettings::setLocale(const QString& locale)
 
 int HostSettings::tcpPort() const
 {
-    return settings_.value(QStringLiteral("TcpPort"), kDefaultHostTcpPort).toInt();
+    return settings_.value(QStringLiteral("TcpPort"), DEFAULT_HOST_TCP_PORT).toInt();
 }
 
 bool HostSettings::setTcpPort(int port)

@@ -34,6 +34,7 @@
 #include "console/about_dialog.h"
 #include "console/address_book_tab.h"
 #include "console/console_settings.h"
+#include "build_config.h"
 
 namespace aspia {
 

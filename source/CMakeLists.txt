@@ -69,9 +69,13 @@ source_group("" FILES ${SOURCE})
 protobuf_generate_cpp(PROTOCOL_CC_FILES PROTOCOL_H_FILES ${SOURCE_PROTOCOL} ${SOURCE_SYSTEM_INFO_PROTOCOL})
 set_source_files_properties(${PROTOCOL_CC_FILES} ${PROTOCOL_H_FILES} PROPERTIES SKIP_AUTOGEN ON)
 
-add_definitions(/FI"build_config.h")
-
 add_definitions(-D_UNICODE
+                -DNTDDI_VERSION=0x06010000
+                -D_WIN32_WINNT=0x0601
+                -D_WIN32_WINDOWS=_WIN32_WINNT
+                -DWINVER=_WIN32_WINNT
+                -D_WIN32_IE=0x0800
+                -DPSAPI_VERSION=2
                 -D_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING
                 -D_CRT_SECURE_NO_WARNINGS
                 -DCORE_IMPLEMENTATION)
