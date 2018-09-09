@@ -18,8 +18,9 @@
 
 #include "base/guid.h"
 
+#include <random>
+
 #include "base/string_printf.h"
-#include "crypto/random.h"
 
 namespace aspia {
 
@@ -66,11 +67,14 @@ bool isValidGUIDInternal(const std::string& guid, bool strict)
 // static
 std::string Guid::create()
 {
-    uint64_t sixteen_bytes[2];
+    std::random_device random_device;
+    std::mt19937 mt(random_device());
+    std::uniform_int_distribution<uint64_t> uniform_distance(
+        std::numeric_limits<uint64_t>::min(), std::numeric_limits<uint64_t>::max());
 
-    // Use base::RandBytes instead of crypto::RandBytes, because crypto calls the
-    // base version directly, and to prevent the dependency from base/ to crypto/.
-    Random::fillBuffer(&sixteen_bytes, sizeof(sixteen_bytes));
+    uint64_t sixteen_bytes[2];
+    sixteen_bytes[0] = uniform_distance(mt);
+    sixteen_bytes[1] = uniform_distance(mt);
 
     // Set the GUID to version 4 as described in RFC 4122, section 4.4.
     // The format of GUID version 4 must be xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx,
