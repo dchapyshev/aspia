@@ -28,7 +28,13 @@ namespace aspia {
 ScopedCryptoInitializer::ScopedCryptoInitializer()
 {
     int ret = OPENSSL_add_all_algorithms_noconf();
-    CHECK_EQ(ret, 1) << "OPENSSL_init_crypto failed";
+    if (ret != 1)
+    {
+        LOG(LS_WARNING) << "OPENSSL_init_crypto failed";
+        return;
+    }
+
+    initialized_ = true;
 }
 
 ScopedCryptoInitializer::~ScopedCryptoInitializer()

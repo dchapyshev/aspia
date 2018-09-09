@@ -100,6 +100,7 @@ int hostMain(int argc, char *argv[])
     }
 
     ScopedCryptoInitializer crypto_initializer;
+    CHECK(crypto_initializer.isSucceeded());
 
     QApplication application(argc, argv);
     application.setOrganizationName(QStringLiteral("Aspia"));

@@ -24,14 +24,14 @@ namespace aspia {
 
 TEST(string_printf_test, string_printf_empty)
 {
-    EXPECT_EQ("", StringPrintf("%s", ""));
+    EXPECT_EQ("", stringPrintf("%s", ""));
 }
 
 TEST(string_printf_test, string_printf_misc)
 {
-    EXPECT_EQ("123hello w", StringPrintf("%3d%2s %1c", 123, "hello", 'w'));
+    EXPECT_EQ("123hello w", stringPrintf("%3d%2s %1c", 123, "hello", 'w'));
 #if defined(Q_OS_WIN)
-    EXPECT_EQ(L"123hello w", StringPrintf(L"%3d%2ls %1lc", 123, L"hello", 'w'));
+    EXPECT_EQ(L"123hello w", stringPrintf(L"%3d%2ls %1lc", 123, L"hello", 'w'));
 #endif
 }
 
@@ -53,13 +53,13 @@ TEST(string_printf_test, string_printf_bounds)
     {
         src[kSrcLen - i] = 0;
         std::string out;
-        SStringPrintf(&out, "%s", src);
+        sStringPrintf(&out, "%s", src);
         EXPECT_STREQ(src, out.c_str());
 
 #if defined(Q_OS_WIN)
         srcw[kSrcLen - i] = 0;
         std::wstring outw;
-        SStringPrintf(&outw, L"%ls", srcw);
+        sStringPrintf(&outw, L"%ls", srcw);
         EXPECT_STREQ(srcw, outw.c_str());
 #endif
     }
@@ -76,7 +76,7 @@ TEST(string_printf_test, grow)
     const char fmt[] = "%sB%sB%sB%sB%sB%sB%s";
 
     std::string out;
-    SStringPrintf(&out, fmt, src, src, src, src, src, src, src);
+    sStringPrintf(&out, fmt, src, src, src, src, src, src, src);
 
     const int kRefSize = 320000;
     char* ref = new char[kRefSize];
@@ -105,7 +105,7 @@ TEST(string_printf_test, grow_boundary)
     src[kBufLen - 1] = 0;
 
     std::string out;
-    SStringPrintf(&out, "%s", src);
+    sStringPrintf(&out, "%s", src);
 
     EXPECT_STREQ(src, out.c_str());
 }
@@ -121,7 +121,7 @@ TEST(string_printf_test, invalid)
     invalid[1] = 0;
 
     std::wstring out;
-    SStringPrintf(&out, L"%ls", invalid);
+    sStringPrintf(&out, L"%ls", invalid);
 #if _MSC_VER >= 1900
     EXPECT_STREQ(invalid, out.c_str());
 #else

@@ -29,7 +29,10 @@ public:
     ScopedCryptoInitializer();
     ~ScopedCryptoInitializer();
 
+    bool isSucceeded() const { return initialized_; }
+
 private:
+    bool initialized_ = false;
     DISALLOW_COPY_AND_ASSIGN(ScopedCryptoInitializer);
 };
 

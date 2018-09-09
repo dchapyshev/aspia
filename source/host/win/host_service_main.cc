@@ -30,7 +30,9 @@ int hostServiceMain(int argc, char *argv[])
     settings.logging_dest = LOG_TO_ALL;
 
     ScopedLogging logging(settings);
+
     ScopedCryptoInitializer crypto_initializer;
+    CHECK(crypto_initializer.isSucceeded());
 
     return HostService().exec(argc, argv);
 }

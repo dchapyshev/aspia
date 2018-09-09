@@ -31,7 +31,9 @@ int hostConfigMain(int argc, char *argv[])
     settings.logging_dest = LOG_TO_ALL;
 
     ScopedLogging logging(settings);
+
     ScopedCryptoInitializer crypto_initializer;
+    CHECK(crypto_initializer.isSucceeded());
 
     QApplication application(argc, argv);
     application.setOrganizationName(QStringLiteral("Aspia"));
