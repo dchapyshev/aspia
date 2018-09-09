@@ -20,7 +20,7 @@
 #define ASPIA_HOST__DESKTOP_CONFIG_TRACKER_H_
 
 #include "base/macros_magic.h"
-#include "protocol/desktop_session.pb.h"
+#include "desktop_session.pb.h"
 
 namespace aspia {
 

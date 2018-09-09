@@ -21,7 +21,7 @@
 
 #include <QString>
 
-#include "protocol/file_transfer_session.pb.h"
+#include "file_transfer_session.pb.h"
 
 namespace aspia {
 

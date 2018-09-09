@@ -21,7 +21,7 @@
 
 #include "base/macros_magic.h"
 #include "system_info/parser/parser.h"
-#include "system_info/protocol/dmi.pb.h"
+#include "dmi.pb.h"
 
 namespace aspia {
 

@@ -20,8 +20,8 @@
 #define ASPIA_HOST__HOST_SESSION_SYSTEM_INFO_H_
 
 #include "host/host_session.h"
-#include "protocol/system_info_session.pb.h"
 #include "system_info/category.h"
+#include "system_info_session.pb.h"
 
 namespace aspia {
 

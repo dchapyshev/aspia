@@ -23,7 +23,7 @@
 #include <QString>
 
 #include "base/macros_magic.h"
-#include "protocol/system_info_session.pb.h"
+#include "system_info_session.pb.h"
 
 namespace aspia {
 

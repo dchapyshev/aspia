@@ -20,8 +20,8 @@
 #define ASPIA_SYSTEM_INFO__UI__DMI_FORM_H_
 
 #include "base/macros_magic.h"
-#include "system_info/protocol/dmi.pb.h"
 #include "system_info/ui/form.h"
+#include "dmi.pb.h"
 #include "ui_dmi_form.h"
 
 namespace aspia {

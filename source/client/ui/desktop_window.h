@@ -24,7 +24,7 @@
 
 #include "client/client_connections.h"
 #include "desktop_capture/desktop_geometry.h"
-#include "protocol/desktop_session.pb.h"
+#include "desktop_session.pb.h"
 
 class QHBoxLayout;
 class QScrollArea;

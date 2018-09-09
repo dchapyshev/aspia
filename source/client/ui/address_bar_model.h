@@ -24,7 +24,7 @@
 
 #include "base/macros_magic.h"
 #include "host/file_platform_util.h"
-#include "protocol/file_transfer_session.pb.h"
+#include "file_transfer_session.pb.h"
 
 namespace aspia {
 

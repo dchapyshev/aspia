@@ -24,7 +24,7 @@
 #include <QString>
 
 #include "base/macros_magic.h"
-#include "protocol/file_transfer_session.pb.h"
+#include "file_transfer_session.pb.h"
 
 namespace aspia {
 

@@ -21,8 +21,8 @@
 
 #include <QString>
 
-#include "protocol/desktop_session.pb.h"
-#include "protocol/session_type.pb.h"
+#include "desktop_session.pb.h"
+#include "session_type.pb.h"
 
 namespace aspia {
 

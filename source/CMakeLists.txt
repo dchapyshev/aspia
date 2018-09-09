@@ -32,9 +32,11 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 
-set(CMAKE_PREFIX_PATH "${ASPIA_THIRD_PARTY_DIR}/qt")
+set(CMAKE_PREFIX_PATH "${ASPIA_THIRD_PARTY_DIR}/qt;${ASPIA_THIRD_PARTY_DIR}/protobuf")
+
 find_package(Qt5 REQUIRED Core Gui Network Widgets WinExtras Xml)
 find_package(Qt5LinguistTools)
+find_package(Protobuf REQUIRED)
 
 include(aspia_core.cmake)
 
@@ -64,6 +66,9 @@ source_group(system_info\\serializer FILES ${SOURCE_SYSTEM_INFO_SERIALIZER})
 source_group(system_info\\ui FILES ${SOURCE_SYSTEM_INFO_UI})
 source_group("" FILES ${SOURCE})
 
+protobuf_generate_cpp(PROTOCOL_CC_FILES PROTOCOL_H_FILES ${SOURCE_PROTOCOL} ${SOURCE_SYSTEM_INFO_PROTOCOL})
+set_source_files_properties(${PROTOCOL_CC_FILES} ${PROTOCOL_H_FILES} PROPERTIES SKIP_AUTOGEN ON)
+
 add_definitions(/FI"build_config.h")
 
 add_definitions(-D_UNICODE
@@ -77,7 +82,7 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MTd /MP /wd4146")
 set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} /LTCG /INCREMENTAL:NO /OPT:REF")
 set(CMAKE_EXE_LINKER_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE} /LTCG /INCREMENTAL:NO /OPT:REF")
 
-add_library(aspia_core SHARED ${ALL_SOURCES})
+add_library(aspia_core SHARED ${ALL_SOURCES} ${PROTOCOL_CC_FILES} ${PROTOCOL_H_FILES})
 target_link_libraries(aspia_core ${THIRD_PARTY_LIBS})
 
 add_executable(aspia_console ${PROJECT_SOURCE_DIR}/console/entry_point.cc ${PROJECT_SOURCE_DIR}/console/console.rc)
@@ -101,7 +106,7 @@ add_subdirectory(translations)
 
 # If the build of unit tests is enabled.
 if (BUILD_UNIT_TESTS)
-    add_executable(aspia_unit_tests ${ALL_SOURCES_WITH_UNIT_TESTS})
+    add_executable(aspia_unit_tests ${ALL_SOURCES_WITH_UNIT_TESTS} ${PROTOCOL_CC_FILES} ${PROTOCOL_H_FILES})
     target_link_libraries(aspia_unit_tests
         ${THIRD_PARTY_LIBS}
         optimized gtest

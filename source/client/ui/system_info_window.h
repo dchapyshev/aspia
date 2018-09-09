@@ -21,7 +21,7 @@
 
 #include "base/macros_magic.h"
 #include "client/connect_data.h"
-#include "protocol/system_info_session.pb.h"
+#include "system_info_session.pb.h"
 #include "ui_system_info_window.h"
 
 namespace aspia {

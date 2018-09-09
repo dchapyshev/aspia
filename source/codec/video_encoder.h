@@ -22,7 +22,7 @@
 #include <memory>
 
 #include "desktop_capture/screen_settings_tracker.h"
-#include "protocol/desktop_session.pb.h"
+#include "desktop_session.pb.h"
 
 namespace aspia {
 

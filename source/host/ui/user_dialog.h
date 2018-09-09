@@ -20,7 +20,7 @@
 #define ASPIA_HOST__UI__USER_DIALOG_H_
 
 #include "base/macros_magic.h"
-#include "protocol/srp_user.pb.h"
+#include "srp_user.pb.h"
 #include "ui_user_dialog.h"
 
 namespace aspia {

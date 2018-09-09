@@ -18,8 +18,8 @@
 
 #include "system_info/serializer/dmi_serializer.h"
 
-#include "system_info/protocol/dmi.pb.h"
 #include "system_info/serializer/dmi_impl.h"
+#include "dmi.pb.h"
 
 namespace aspia {
 

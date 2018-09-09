@@ -448,29 +448,13 @@ list(APPEND SOURCE_NETWORK
     ${PROJECT_SOURCE_DIR}/network/srp_host_context.h)
 
 list(APPEND SOURCE_PROTOCOL
-    ${PROJECT_SOURCE_DIR}/protocol/address_book.pb.cc
-    ${PROJECT_SOURCE_DIR}/protocol/address_book.pb.h
     ${PROJECT_SOURCE_DIR}/protocol/address_book.proto
-    ${PROJECT_SOURCE_DIR}/protocol/desktop_session.pb.cc
-    ${PROJECT_SOURCE_DIR}/protocol/desktop_session.pb.h
     ${PROJECT_SOURCE_DIR}/protocol/desktop_session.proto
-    ${PROJECT_SOURCE_DIR}/protocol/file_transfer_session.pb.cc
-    ${PROJECT_SOURCE_DIR}/protocol/file_transfer_session.pb.h
     ${PROJECT_SOURCE_DIR}/protocol/file_transfer_session.proto
-    ${PROJECT_SOURCE_DIR}/protocol/key_exchange.pb.cc
-    ${PROJECT_SOURCE_DIR}/protocol/key_exchange.pb.h
     ${PROJECT_SOURCE_DIR}/protocol/key_exchange.proto
-    ${PROJECT_SOURCE_DIR}/protocol/notifier.pb.cc
-    ${PROJECT_SOURCE_DIR}/protocol/notifier.pb.h
     ${PROJECT_SOURCE_DIR}/protocol/notifier.proto
-    ${PROJECT_SOURCE_DIR}/protocol/session_type.pb.cc
-    ${PROJECT_SOURCE_DIR}/protocol/session_type.pb.h
     ${PROJECT_SOURCE_DIR}/protocol/session_type.proto
-    ${PROJECT_SOURCE_DIR}/protocol/srp_user.pb.cc
-    ${PROJECT_SOURCE_DIR}/protocol/srp_user.pb.h
     ${PROJECT_SOURCE_DIR}/protocol/srp_user.proto
-    ${PROJECT_SOURCE_DIR}/protocol/system_info_session.pb.cc
-    ${PROJECT_SOURCE_DIR}/protocol/system_info_session.pb.h
     ${PROJECT_SOURCE_DIR}/protocol/system_info_session.proto)
 
 list(APPEND SOURCE_RESOURCES
@@ -486,8 +470,6 @@ list(APPEND SOURCE_SYSTEM_INFO_PARSER
     ${PROJECT_SOURCE_DIR}/system_info/parser/parser.h)
 
 list(APPEND SOURCE_SYSTEM_INFO_PROTOCOL
-    ${PROJECT_SOURCE_DIR}/system_info/protocol/dmi.pb.cc
-    ${PROJECT_SOURCE_DIR}/system_info/protocol/dmi.pb.h
     ${PROJECT_SOURCE_DIR}/system_info/protocol/dmi.proto)
 
 list(APPEND SOURCE_SYSTEM_INFO_SERIALIZER

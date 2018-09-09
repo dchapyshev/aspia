@@ -23,7 +23,7 @@
 
 #include "codec/compressor_zlib.h"
 #include "desktop_capture/mouse_cursor_cache.h"
-#include "protocol/desktop_session.pb.h"
+#include "desktop_session.pb.h"
 
 namespace aspia {
 

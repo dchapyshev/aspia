@@ -24,7 +24,7 @@
 #include "base/logging.h"
 #include "host/user_util.h"
 #include "network/srp_host_context.h"
-#include "protocol/session_type.pb.h"
+#include "session_type.pb.h"
 
 namespace aspia {
 

@@ -27,7 +27,7 @@
 #include <variant>
 
 #include "base/macros_magic.h"
-#include "protocol/desktop_session.pb.h"
+#include "desktop_session.pb.h"
 
 namespace aspia {
 

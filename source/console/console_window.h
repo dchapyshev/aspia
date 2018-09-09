@@ -21,7 +21,7 @@
 
 #include "base/locale_loader.h"
 #include "client/client_connections.h"
-#include "protocol/address_book.pb.h"
+#include "address_book.pb.h"
 #include "ui_console_window.h"
 
 class QSystemTrayIcon;

@@ -27,7 +27,7 @@
 #include "ipc/ipc_server.h"
 #include "network/firewall_manager.h"
 #include "network/network_channel_host.h"
-#include "protocol/notifier.pb.h"
+#include "notifier.pb.h"
 
 namespace aspia {
 

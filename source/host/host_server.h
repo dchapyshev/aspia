@@ -22,7 +22,7 @@
 #include "host/win/host_process.h"
 #include "ipc/ipc_channel.h"
 #include "network/network_server.h"
-#include "protocol/srp_user.pb.h"
+#include "srp_user.pb.h"
 
 namespace aspia {
 

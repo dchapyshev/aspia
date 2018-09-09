@@ -20,8 +20,8 @@
 #define ASPIA_NETWORK__NETWORK_CHANNEL_HOST_H_
 
 #include "network/network_channel.h"
-#include "protocol/session_type.pb.h"
-#include "protocol/srp_user.pb.h"
+#include "session_type.pb.h"
+#include "srp_user.pb.h"
 
 namespace aspia {
 

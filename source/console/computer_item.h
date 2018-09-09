@@ -22,7 +22,7 @@
 #include <QTreeWidget>
 
 #include "base/macros_magic.h"
-#include "protocol/address_book.pb.h"
+#include "address_book.pb.h"
 
 namespace aspia {
 

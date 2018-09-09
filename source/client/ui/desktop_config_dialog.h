@@ -20,8 +20,8 @@
 #define ASPIA_CLIENT__UI__DESKTOP_CONFIG_DIALOG_H_
 
 #include "base/macros_magic.h"
-#include "protocol/desktop_session.pb.h"
-#include "protocol/session_type.pb.h"
+#include "desktop_session.pb.h"
+#include "session_type.pb.h"
 #include "ui_desktop_config_dialog.h"
 
 namespace aspia {

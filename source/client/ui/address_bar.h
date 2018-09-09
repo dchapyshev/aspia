@@ -22,7 +22,7 @@
 #include <QComboBox>
 
 #include "base/macros_magic.h"
-#include "protocol/file_transfer_session.pb.h"
+#include "file_transfer_session.pb.h"
 
 class QLineEdit;
 class QTreeView;

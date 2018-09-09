@@ -20,7 +20,7 @@
 #define ASPIA_HOST__UI__HOST_CONFIG_DIALOG_H_
 
 #include "base/locale_loader.h"
-#include "protocol/srp_user.pb.h"
+#include "srp_user.pb.h"
 #include "ui_host_config_dialog.h"
 
 namespace aspia {

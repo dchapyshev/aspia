@@ -22,7 +22,7 @@
 #include "client/client_session.h"
 #include "client/connect_data.h"
 #include "host/system_info_request.h"
-#include "protocol/system_info_session.pb.h"
+#include "system_info_session.pb.h"
 
 namespace aspia {
 

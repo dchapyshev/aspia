@@ -21,7 +21,7 @@
 
 #include "client/file_remover.h"
 #include "client/file_transfer.h"
-#include "protocol/file_transfer_session.pb.h"
+#include "file_transfer_session.pb.h"
 #include "ui_file_panel.h"
 
 namespace aspia {
