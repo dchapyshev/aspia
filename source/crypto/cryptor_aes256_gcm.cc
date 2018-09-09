@@ -157,7 +157,7 @@ bool CryptorAes256Gcm::encrypt(const char* in, size_t in_size, char* out)
     int length;
 
     if (EVP_EncryptUpdate(encrypt_ctx_.get(),
-                          reinterpret_cast<uint8_t*>(out),
+                          reinterpret_cast<uint8_t*>(out) + kTagSize,
                           &length,
                           reinterpret_cast<const uint8_t*>(in),
                           in_size) != 1)
@@ -167,7 +167,7 @@ bool CryptorAes256Gcm::encrypt(const char* in, size_t in_size, char* out)
     }
 
     if (EVP_EncryptFinal_ex(encrypt_ctx_.get(),
-                            reinterpret_cast<uint8_t*>(out) + length,
+                            reinterpret_cast<uint8_t*>(out) + kTagSize + length,
                             &length) != 1)
     {
         LOG(LS_WARNING) << "EVP_EncryptFinal_ex failed";
@@ -177,7 +177,7 @@ bool CryptorAes256Gcm::encrypt(const char* in, size_t in_size, char* out)
     if (EVP_CIPHER_CTX_ctrl(encrypt_ctx_.get(),
                             EVP_CTRL_AEAD_GET_TAG,
                             kTagSize,
-                            reinterpret_cast<uint8_t*>(out) + in_size) != 1)
+                            reinterpret_cast<uint8_t*>(out)) != 1)
     {
         LOG(LS_WARNING) << "EVP_CIPHER_CTX_ctrl failed";
         return false;
@@ -206,7 +206,7 @@ bool CryptorAes256Gcm::decrypt(const char* in, size_t in_size, char* out)
     if (EVP_DecryptUpdate(decrypt_ctx_.get(),
                           reinterpret_cast<uint8_t*>(out),
                           &length,
-                          reinterpret_cast<const uint8_t*>(in),
+                          reinterpret_cast<const uint8_t*>(in) + kTagSize,
                           in_size - kTagSize) != 1)
     {
         LOG(LS_WARNING) << "EVP_DecryptUpdate failed";
@@ -216,8 +216,7 @@ bool CryptorAes256Gcm::decrypt(const char* in, size_t in_size, char* out)
     if (EVP_CIPHER_CTX_ctrl(decrypt_ctx_.get(),
                             EVP_CTRL_AEAD_SET_TAG,
                             kTagSize,
-                            reinterpret_cast<uint8_t*>(const_cast<char*>(in)) +
-                                in_size - kTagSize) != 1)
+                            reinterpret_cast<uint8_t*>(const_cast<char*>(in))) != 1)
     {
         LOG(LS_WARNING) << "EVP_CIPHER_CTX_ctrl failed";
         return false;
