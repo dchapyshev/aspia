@@ -16,30 +16,22 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CRYPTO__PASSWORD_HASH_H_
-#define ASPIA_CRYPTO__PASSWORD_HASH_H_
+#ifndef ASPIA_CRYPTO__DATA_CRYPTOR_H_
+#define ASPIA_CRYPTO__DATA_CRYPTOR_H_
 
 #include <string>
 
-#include "base/macros_magic.h"
-
 namespace aspia {
 
-class PasswordHash
+class DataCryptor
 {
 public:
-    enum Type { SCRYPT };
+    virtual ~DataCryptor() = default;
 
-    static const size_t kBitsPerByte = 8;
-    static const size_t kBitsSize = 256;
-    static const size_t kBytesSize = kBitsSize / kBitsPerByte;
-
-    static std::string hash(Type type, const std::string& password, const std::string& salt);
-
-private:
-    DISALLOW_COPY_AND_ASSIGN(PasswordHash);
+    virtual bool encrypt(const std::string& in, std::string* out) = 0;
+    virtual bool decrypt(const std::string& in, std::string* out) = 0;
 };
 
 } // namespace aspia
 
-#endif // ASPIA_CRYPTO__PASSWORD_HASH_H_
+#endif // ASPIA_CRYPTO__DATA_CRYPTOR_H_

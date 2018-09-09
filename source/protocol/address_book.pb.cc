@@ -147,6 +147,7 @@ bool EncryptionType_IsValid(int value) {
     case 0:
     case 1:
     case 2:
+    case 3:
       return true;
     default:
       return false;
@@ -1678,7 +1679,6 @@ void File::InitAsDefaultInstance() {
 }
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int File::kEncryptionTypeFieldNumber;
-const int File::kHashingRoundsFieldNumber;
 const int File::kHashingSaltFieldNumber;
 const int File::kDataFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
@@ -1702,18 +1702,14 @@ File::File(const File& from)
   if (from.data().size() > 0) {
     data_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.data_);
   }
-  ::memcpy(&encryption_type_, &from.encryption_type_,
-    static_cast<size_t>(reinterpret_cast<char*>(&hashing_rounds_) -
-    reinterpret_cast<char*>(&encryption_type_)) + sizeof(hashing_rounds_));
+  encryption_type_ = from.encryption_type_;
   // @@protoc_insertion_point(copy_constructor:aspia.proto.address_book.File)
 }
 
 void File::SharedCtor() {
   hashing_salt_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   data_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  ::memset(&encryption_type_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&hashing_rounds_) -
-      reinterpret_cast<char*>(&encryption_type_)) + sizeof(hashing_rounds_));
+  encryption_type_ = 0;
 }
 
 File::~File() {
@@ -1743,9 +1739,7 @@ void File::Clear() {
 
   hashing_salt_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   data_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  ::memset(&encryption_type_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&hashing_rounds_) -
-      reinterpret_cast<char*>(&encryption_type_)) + sizeof(hashing_rounds_));
+  encryption_type_ = 0;
   _internal_metadata_.Clear();
 }
 
@@ -1774,20 +1768,6 @@ bool File::MergePartialFromCodedStream(
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
           set_encryption_type(static_cast< ::aspia::proto::address_book::EncryptionType >(value));
-        } else {
-          goto handle_unusual;
-        }
-        break;
-      }
-
-      // int32 hashing_rounds = 2;
-      case 2: {
-        if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(16u /* 16 & 0xFF */)) {
-
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
-                 input, &hashing_rounds_)));
         } else {
           goto handle_unusual;
         }
@@ -1850,11 +1830,6 @@ void File::SerializeWithCachedSizes(
       1, this->encryption_type(), output);
   }
 
-  // int32 hashing_rounds = 2;
-  if (this->hashing_rounds() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt32(2, this->hashing_rounds(), output);
-  }
-
   // bytes hashing_salt = 3;
   if (this->hashing_salt().size() > 0) {
     ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
@@ -1898,13 +1873,6 @@ size_t File::ByteSizeLong() const {
       ::google::protobuf::internal::WireFormatLite::EnumSize(this->encryption_type());
   }
 
-  // int32 hashing_rounds = 2;
-  if (this->hashing_rounds() != 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::Int32Size(
-        this->hashing_rounds());
-  }
-
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
   SetCachedSize(cached_size);
   return total_size;
@@ -1933,9 +1901,6 @@ void File::MergeFrom(const File& from) {
   if (from.encryption_type() != 0) {
     set_encryption_type(from.encryption_type());
   }
-  if (from.hashing_rounds() != 0) {
-    set_hashing_rounds(from.hashing_rounds());
-  }
 }
 
 void File::CopyFrom(const File& from) {
@@ -1960,7 +1925,6 @@ void File::InternalSwap(File* other) {
   data_.Swap(&other->data_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
     GetArenaNoVirtual());
   swap(encryption_type_, other->encryption_type_);
-  swap(hashing_rounds_, other->hashing_rounds_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
 }
 

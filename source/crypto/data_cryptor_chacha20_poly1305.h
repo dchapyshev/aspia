@@ -16,30 +16,29 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CRYPTO__PASSWORD_HASH_H_
-#define ASPIA_CRYPTO__PASSWORD_HASH_H_
-
-#include <string>
+#ifndef ASPIA_CRYPTO__DATA_CRYPTOR_CHACHA20_POLY1305_H_
+#define ASPIA_CRYPTO__DATA_CRYPTOR_CHACHA20_POLY1305_H_
 
 #include "base/macros_magic.h"
+#include "crypto/data_cryptor.h"
 
 namespace aspia {
 
-class PasswordHash
+class DataCryptorChaCha20Poly1305 : public DataCryptor
 {
 public:
-    enum Type { SCRYPT };
+    DataCryptorChaCha20Poly1305(const std::string& key);
+    ~DataCryptorChaCha20Poly1305();
 
-    static const size_t kBitsPerByte = 8;
-    static const size_t kBitsSize = 256;
-    static const size_t kBytesSize = kBitsSize / kBitsPerByte;
-
-    static std::string hash(Type type, const std::string& password, const std::string& salt);
+    bool encrypt(const std::string& in, std::string* out) override;
+    bool decrypt(const std::string& in, std::string* out) override;
 
 private:
-    DISALLOW_COPY_AND_ASSIGN(PasswordHash);
+    std::string key_;
+
+    DISALLOW_COPY_AND_ASSIGN(DataCryptorChaCha20Poly1305);
 };
 
 } // namespace aspia
 
-#endif // ASPIA_CRYPTO__PASSWORD_HASH_H_
+#endif // ASPIA_CRYPTO__DATA_CRYPTOR_CHACHA20_POLY1305_H_

@@ -33,7 +33,7 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 
 set(CMAKE_PREFIX_PATH "${ASPIA_THIRD_PARTY_DIR}/qt")
-find_package(Qt5 REQUIRED Core Gui Network PrintSupport Widgets WinExtras Xml)
+find_package(Qt5 REQUIRED Core Gui Network Widgets WinExtras Xml)
 find_package(Qt5LinguistTools)
 
 include(aspia_core.cmake)

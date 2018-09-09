@@ -22,7 +22,7 @@
 #include <QMessageBox>
 
 #include "base/logging.h"
-#include "crypto/data_encryptor.h"
+#include "crypto/password_hash.h"
 #include "crypto/random.h"
 
 namespace aspia {
@@ -49,8 +49,8 @@ AddressBookDialog::AddressBookDialog(QWidget* parent, proto::address_book::File*
 
     ui.combo_encryption->addItem(tr("Without Encryption"),
                                  QVariant(proto::address_book::ENCRYPTION_TYPE_NONE));
-    ui.combo_encryption->addItem(tr("XChaCha20 + Poly1305 (256-bit key)"),
-                                 QVariant(proto::address_book::ENCRYPTION_TYPE_XCHACHA20_POLY1305));
+    ui.combo_encryption->addItem(tr("ChaCha20 + Poly1305 (256-bit key)"),
+                                 QVariant(proto::address_book::ENCRYPTION_TYPE_CHACHA20_POLY1305));
 
     ui.edit_name->setText(QString::fromStdString(data_->root_group().name()));
     ui.edit_comment->setPlainText(QString::fromStdString(data_->root_group().comment()));
@@ -59,7 +59,7 @@ AddressBookDialog::AddressBookDialog(QWidget* parent, proto::address_book::File*
     if (current != -1)
         ui.combo_encryption->setCurrentIndex(current);
 
-    if (file->encryption_type() == proto::address_book::ENCRYPTION_TYPE_XCHACHA20_POLY1305)
+    if (file->encryption_type() == proto::address_book::ENCRYPTION_TYPE_CHACHA20_POLY1305)
     {
         if (!key_->empty())
         {
@@ -81,7 +81,6 @@ AddressBookDialog::AddressBookDialog(QWidget* parent, proto::address_book::File*
             ui.edit_password_repeat->installEventFilter(this);
 
             ui.spinbox_password_salt->setValue(file_->hashing_salt().size());
-            ui.spinbox_hashing_rounds->setValue(file_->hashing_rounds());
 
             ui.spinbox_salt_before->setValue(data_->salt1().size());
             ui.spinbox_salt_after->setValue(data_->salt2().size());
@@ -98,9 +97,6 @@ AddressBookDialog::AddressBookDialog(QWidget* parent, proto::address_book::File*
         // Disable Advanced tab.
         ui.tab_widget->setTabEnabled(1, false);
     }
-
-    connect(ui.spinbox_hashing_rounds, QOverload<int>::of(&QSpinBox::valueChanged), this,
-            &AddressBookDialog::hashingRoundsChanged);
 
     connect(ui.spinbox_password_salt, QOverload<int>::of(&QSpinBox::valueChanged), this,
             &AddressBookDialog::hashingSaltChanged);
@@ -165,14 +161,12 @@ void AddressBookDialog::buttonBoxClicked(QAbstractButton* button)
         case proto::address_book::ENCRYPTION_TYPE_NONE:
         {
             file_->mutable_hashing_salt()->clear();
-            file_->set_hashing_rounds(0);
-
             data_->mutable_salt1()->clear();
             data_->mutable_salt2()->clear();
         }
         break;
 
-        case proto::address_book::ENCRYPTION_TYPE_XCHACHA20_POLY1305:
+        case proto::address_book::ENCRYPTION_TYPE_CHACHA20_POLY1305:
         {
             if (password_changed_)
             {
@@ -192,17 +186,13 @@ void AddressBookDialog::buttonBoxClicked(QAbstractButton* button)
                     return;
                 }
 
-                // Save the salt and the number of hashing iterations.
-                file_->set_hashing_rounds(ui.spinbox_hashing_rounds->value());
-
                 // Generate salt, which is added after each iteration of the hashing.
                 // New salt is generated each time the password is changed.
                 file_->set_hashing_salt(Random::generateBuffer(ui.spinbox_password_salt->value()));
 
                 // Now generate a key for encryption/decryption.
-                *key_ = DataEncryptor::createKey(password.toStdString(),
-                                                 file_->hashing_salt(),
-                                                 file_->hashing_rounds());
+                *key_ = PasswordHash::hash(
+                    PasswordHash::SCRYPT, password.toStdString(), file_->hashing_salt());
             }
 
             int salt_before_size = ui.spinbox_salt_before->value();
@@ -251,7 +241,7 @@ void AddressBookDialog::encryptionTypedChanged(int item_index)
         }
         break;
 
-        case proto::address_book::ENCRYPTION_TYPE_XCHACHA20_POLY1305:
+        case proto::address_book::ENCRYPTION_TYPE_CHACHA20_POLY1305:
         {
             ui.edit_password->setEnabled(true);
             ui.edit_password_repeat->setEnabled(true);
@@ -264,28 +254,6 @@ void AddressBookDialog::encryptionTypedChanged(int item_index)
         default:
             LOG(LS_FATAL) << "Unexpected encryption type: " << encryption_type;
             break;
-    }
-}
-
-void AddressBookDialog::hashingRoundsChanged(int /* value */)
-{
-    if (password_changed_ || value_reverting_)
-        return;
-
-    if (QMessageBox::question(
-        this,
-        tr("Confirmation"),
-        tr("At change the number of hashing iterations, you will need to re-enter the password. Continue?"),
-        QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
-    {
-        setPasswordChanged();
-    }
-    else
-    {
-        // Revert value.
-        value_reverting_ = true;
-        ui.spinbox_hashing_rounds->setValue(file_->hashing_rounds());
-        value_reverting_ = false;
     }
 }
 

@@ -41,8 +41,8 @@ OpenAddressBookDialog::OpenAddressBookDialog(
             ui.edit_encryption_type->setText(tr("Without Encryption"));
             break;
 
-        case proto::address_book::ENCRYPTION_TYPE_XCHACHA20_POLY1305:
-            ui.edit_encryption_type->setText(tr("XChaCha20 + Poly1305 (256-bit key)"));
+        case proto::address_book::ENCRYPTION_TYPE_CHACHA20_POLY1305:
+            ui.edit_encryption_type->setText(tr("ChaCha20 + Poly1305 (256-bit key)"));
             break;
 
         default:

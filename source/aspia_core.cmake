@@ -23,8 +23,7 @@ include_directories(
     ${ASPIA_THIRD_PARTY_DIR}/libyuv/include
     ${ASPIA_THIRD_PARTY_DIR}/zlib-ng/include
     ${ASPIA_THIRD_PARTY_DIR}/openssl/include
-    ${ASPIA_THIRD_PARTY_DIR}/protobuf/include
-    ${ASPIA_THIRD_PARTY_DIR}/libsodium/include)
+    ${ASPIA_THIRD_PARTY_DIR}/protobuf/include)
 
 link_directories(
     ${ASPIA_THIRD_PARTY_DIR}/googletest/lib
@@ -35,8 +34,7 @@ link_directories(
     ${ASPIA_THIRD_PARTY_DIR}/protobuf/lib
     ${ASPIA_THIRD_PARTY_DIR}/qt/lib
     ${ASPIA_THIRD_PARTY_DIR}/qt/plugins/platforms
-    ${ASPIA_THIRD_PARTY_DIR}/qt/plugins/styles
-    ${ASPIA_THIRD_PARTY_DIR}/libsodium/lib)
+    ${ASPIA_THIRD_PARTY_DIR}/qt/plugins/styles)
 
 list(APPEND SOURCE_BASE
     ${PROJECT_SOURCE_DIR}/base/aligned_memory.cc
@@ -267,8 +265,9 @@ list(APPEND SOURCE_CRYPTO
     ${PROJECT_SOURCE_DIR}/crypto/cryptor_aes256_gcm.h
     ${PROJECT_SOURCE_DIR}/crypto/cryptor_chacha20_poly1305.cc
     ${PROJECT_SOURCE_DIR}/crypto/cryptor_chacha20_poly1305.h
-    ${PROJECT_SOURCE_DIR}/crypto/data_encryptor.cc
-    ${PROJECT_SOURCE_DIR}/crypto/data_encryptor.h
+    ${PROJECT_SOURCE_DIR}/crypto/data_cryptor.h
+    ${PROJECT_SOURCE_DIR}/crypto/data_cryptor_chacha20_poly1305.cc
+    ${PROJECT_SOURCE_DIR}/crypto/data_cryptor_chacha20_poly1305.h
     ${PROJECT_SOURCE_DIR}/crypto/generic_hash.cc
     ${PROJECT_SOURCE_DIR}/crypto/generic_hash.h
     ${PROJECT_SOURCE_DIR}/crypto/openssl_util.cc
@@ -545,7 +544,6 @@ set(THIRD_PARTY_LIBS
     Qt5::Core
     Qt5::Gui
     Qt5::Network
-    Qt5::PrintSupport
     Qt5::Widgets
     Qt5::WinMain
     Qt5::WinExtras
@@ -556,7 +554,6 @@ set(THIRD_PARTY_LIBS
     debug Qt5ThemeSupportd
     debug Qt5WindowsUIAutomationSupportd
     debug libprotobuf-lited
-    debug libsodiumd
     debug libvpxd
     debug libyuvd
     debug qtfreetyped
@@ -572,7 +569,6 @@ set(THIRD_PARTY_LIBS
     optimized Qt5ThemeSupport
     optimized Qt5WindowsUIAutomationSupport
     optimized libprotobuf-lite
-    optimized libsodium
     optimized libvpx
     optimized libyuv
     optimized qtfreetype

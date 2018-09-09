@@ -31,7 +31,8 @@
 #include "console/computer_item.h"
 #include "console/console_settings.h"
 #include "console/open_address_book_dialog.h"
-#include "crypto/data_encryptor.h"
+#include "crypto/data_cryptor_chacha20_poly1305.h"
+#include "crypto/password_hash.h"
 #include "crypto/secure_memory.h"
 
 namespace aspia {
@@ -235,20 +236,21 @@ AddressBookTab* AddressBookTab::openFromFile(const QString& file_path, QWidget* 
         }
         break;
 
-        case proto::address_book::ENCRYPTION_TYPE_XCHACHA20_POLY1305:
+        case proto::address_book::ENCRYPTION_TYPE_CHACHA20_POLY1305:
         {
             OpenAddressBookDialog dialog(parent, address_book_file.encryption_type());
             if (dialog.exec() != QDialog::Accepted)
                 return nullptr;
 
-            key = DataEncryptor::createKey(
-                dialog.password().toStdString(),
-                address_book_file.hashing_salt(),
-                address_book_file.hashing_rounds());
+            key = PasswordHash::hash(PasswordHash::SCRYPT,
+                                     dialog.password().toStdString(),
+                                     address_book_file.hashing_salt());
+
+            std::unique_ptr<DataCryptor> cryptor =
+                std::make_unique<DataCryptorChaCha20Poly1305>(key);
 
             std::string decrypted_data;
-
-            if (!DataEncryptor::decrypt(address_book_file.data(), key, &decrypted_data))
+            if (!cryptor->decrypt(address_book_file.data(), &decrypted_data))
             {
                 showOpenError(parent, tr("Unable to decrypt the address book with the specified password."));
                 return nullptr;
@@ -622,10 +624,18 @@ bool AddressBookTab::saveToFile(const QString& file_path)
             file_.set_data(std::move(serialized_data));
             break;
 
-        case proto::address_book::ENCRYPTION_TYPE_XCHACHA20_POLY1305:
-            file_.set_data(DataEncryptor::encrypt(serialized_data, key_));
+        case proto::address_book::ENCRYPTION_TYPE_CHACHA20_POLY1305:
+        {
+            std::unique_ptr<DataCryptor> cryptor =
+                std::make_unique<DataCryptorChaCha20Poly1305>(key_);
+
+            std::string encrypted_data;
+            CHECK(cryptor->encrypt(serialized_data, &encrypted_data));
+
+            file_.set_data(std::move(encrypted_data));
             secureMemZero(&serialized_data);
-            break;
+        }
+        break;
 
         default:
             LOG(LS_FATAL) << "Unknown encryption type: " << file_.encryption_type();

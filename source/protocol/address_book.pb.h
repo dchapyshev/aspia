@@ -84,12 +84,13 @@ enum EncryptionType {
   ENCRYPTION_TYPE_UNKNOWN = 0,
   ENCRYPTION_TYPE_NONE = 1,
   ENCRYPTION_TYPE_XCHACHA20_POLY1305 = 2,
+  ENCRYPTION_TYPE_CHACHA20_POLY1305 = 3,
   EncryptionType_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
   EncryptionType_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
 };
 bool EncryptionType_IsValid(int value);
 const EncryptionType EncryptionType_MIN = ENCRYPTION_TYPE_UNKNOWN;
-const EncryptionType EncryptionType_MAX = ENCRYPTION_TYPE_XCHACHA20_POLY1305;
+const EncryptionType EncryptionType_MAX = ENCRYPTION_TYPE_CHACHA20_POLY1305;
 const int EncryptionType_ARRAYSIZE = EncryptionType_MAX + 1;
 
 // ===================================================================
@@ -858,12 +859,6 @@ class File : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(
   ::aspia::proto::address_book::EncryptionType encryption_type() const;
   void set_encryption_type(::aspia::proto::address_book::EncryptionType value);
 
-  // int32 hashing_rounds = 2;
-  void clear_hashing_rounds();
-  static const int kHashingRoundsFieldNumber = 2;
-  ::google::protobuf::int32 hashing_rounds() const;
-  void set_hashing_rounds(::google::protobuf::int32 value);
-
   // @@protoc_insertion_point(class_scope:aspia.proto.address_book.File)
  private:
 
@@ -871,7 +866,6 @@ class File : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(
   ::google::protobuf::internal::ArenaStringPtr hashing_salt_;
   ::google::protobuf::internal::ArenaStringPtr data_;
   int encryption_type_;
-  ::google::protobuf::int32 hashing_rounds_;
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
   friend struct ::protobuf_address_5fbook_2eproto::TableStruct;
 };
@@ -1767,20 +1761,6 @@ inline void File::set_encryption_type(::aspia::proto::address_book::EncryptionTy
   
   encryption_type_ = value;
   // @@protoc_insertion_point(field_set:aspia.proto.address_book.File.encryption_type)
-}
-
-// int32 hashing_rounds = 2;
-inline void File::clear_hashing_rounds() {
-  hashing_rounds_ = 0;
-}
-inline ::google::protobuf::int32 File::hashing_rounds() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.address_book.File.hashing_rounds)
-  return hashing_rounds_;
-}
-inline void File::set_hashing_rounds(::google::protobuf::int32 value) {
-  
-  hashing_rounds_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.address_book.File.hashing_rounds)
 }
 
 // bytes hashing_salt = 3;

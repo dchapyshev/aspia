@@ -30,6 +30,7 @@ enum EncryptionType
     ENCRYPTION_TYPE_UNKNOWN            = 0;
     ENCRYPTION_TYPE_NONE               = 1;
     ENCRYPTION_TYPE_XCHACHA20_POLY1305 = 2;
+    ENCRYPTION_TYPE_CHACHA20_POLY1305  = 3;
 }
 
 message SessionConfig
@@ -90,9 +91,7 @@ message File
     // Encryption type.
     EncryptionType encryption_type = 1;
 
-    // Number of hashing iterations for encryption/decryption key.
-    // When the encryption is disabled, the field is not used.
-    int32 hashing_rounds = 2;
+    // Field 2 not used.
 
     // If encryption is enabled, contains salt (random data), which are added at each iteration
     // of the hashing to create the key.
