@@ -19,26 +19,26 @@
 if(Qt5LinguistTools_FOUND)
     # Don't remove TS files on make clean.
     set_directory_properties(PROPERTIES CLEAN_NO_CUSTOM TRUE)
-
-    # List of translation files.
-    set(TS_FILES aspia_de.ts aspia_ru.ts aspia_nl.ts aspia_uk.ts)
+	
+	# List of translation files.
+    set(TS_CONSOLE_FILES aspia_console_de.ts aspia_console_ru.ts aspia_console_nl.ts aspia_console_uk.ts)
 
     # Get the list of files containing messages.
-    file(GLOB_RECURSE TR_SOURCES
-        ${PROJECT_SOURCE_DIR}/*.cc
-        ${PROJECT_SOURCE_DIR}/*.cpp
-        ${PROJECT_SOURCE_DIR}/*.h
-        ${PROJECT_SOURCE_DIR}/*.ui)
+    file(GLOB_RECURSE TR_CONSOLE_SOURCES
+        ${PROJECT_SOURCE_DIR}/console/*.cc
+        ${PROJECT_SOURCE_DIR}/console/*.cpp
+        ${PROJECT_SOURCE_DIR}/console/*.h
+        ${PROJECT_SOURCE_DIR}/console/*.ui)
 
-    qt5_add_translation(QM_UPDATE ${TS_FILES})
-    add_custom_target(aspia_qm_update ALL DEPENDS ${QM_UPDATE})
+    qt5_add_translation(QM_CONSOLE_UPDATE ${TS_CONSOLE_FILES})
+    add_custom_target(aspia_console_qm_update ALL DEPENDS ${QM_CONSOLE_UPDATE})
 
-    qt5_create_translation(TS_UPDATE ${TR_SOURCES} ${TS_FILES} OPTIONS "-no-obsolete")
-    add_custom_target(aspia_ts_update DEPENDS ${TS_UPDATE})
+    qt5_create_translation(TS_CONSOLE_UPDATE ${TR_CONSOLE_SOURCES} ${TS_CONSOLE_FILES} OPTIONS "-no-obsolete")
+    add_custom_target(aspia_console_ts_update DEPENDS ${TS_CONSOLE_UPDATE})
 
-    foreach(QM_FILE ${QM_UPDATE})
+    foreach(QM_FILE ${QM_CONSOLE_UPDATE})
         get_filename_component(QM_FILE_NAME ${QM_FILE} NAME)
-        add_custom_command(TARGET aspia_qm_update POST_BUILD
+        add_custom_command(TARGET aspia_console_qm_update POST_BUILD
             COMMAND "${CMAKE_COMMAND}" -E copy_if_different "${QM_FILE}" "${PROJECT_BINARY_DIR}/$<CONFIG>/translations/${QM_FILE_NAME}")
     endforeach()
 else()

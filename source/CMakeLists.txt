@@ -106,7 +106,9 @@ set_target_properties(aspia_host PROPERTIES WIN32_EXECUTABLE TRUE)
 set_target_properties(aspia_host PROPERTIES LINK_FLAGS "/MANIFEST:NO")
 target_link_libraries(aspia_host aspia_core)
 
-add_subdirectory(translations)
+add_subdirectory(client)
+add_subdirectory(console)
+add_subdirectory(host)
 
 # If the build of unit tests is enabled.
 if (BUILD_UNIT_TESTS)
