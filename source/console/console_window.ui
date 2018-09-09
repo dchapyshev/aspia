@@ -111,7 +111,7 @@
       <string>&amp;Language</string>
      </property>
      <property name="icon">
-      <iconset resource="console.qrc">
+      <iconset resource="resources/console.qrc">
        <normaloff>:/icon/locale.png</normaloff>:/icon/locale.png</iconset>
      </property>
     </widget>
@@ -169,7 +169,7 @@
   </widget>
   <action name="action_new">
    <property name="icon">
-    <iconset resource="console.qrc">
+    <iconset resource="resources/console.qrc">
      <normaloff>:/icon/document.png</normaloff>:/icon/document.png</iconset>
    </property>
    <property name="text">
@@ -181,7 +181,7 @@
   </action>
   <action name="action_open">
    <property name="icon">
-    <iconset resource="console.qrc">
+    <iconset resource="resources/console.qrc">
      <normaloff>:/icon/open.png</normaloff>:/icon/open.png</iconset>
    </property>
    <property name="text">
@@ -196,7 +196,7 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="console.qrc">
+    <iconset resource="resources/console.qrc">
      <normaloff>:/icon/disk.png</normaloff>:/icon/disk.png</iconset>
    </property>
    <property name="text">
@@ -230,7 +230,7 @@
   </action>
   <action name="action_exit">
    <property name="icon">
-    <iconset resource="console.qrc">
+    <iconset resource="resources/console.qrc">
      <normaloff>:/icon/exit.png</normaloff>:/icon/exit.png</iconset>
    </property>
    <property name="text">
@@ -242,7 +242,7 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="console.qrc">
+    <iconset resource="resources/console.qrc">
      <normaloff>:/icon/folder-plus.png</normaloff>:/icon/folder-plus.png</iconset>
    </property>
    <property name="text">
@@ -254,7 +254,7 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="console.qrc">
+    <iconset resource="resources/console.qrc">
      <normaloff>:/icon/folder-pencil.png</normaloff>:/icon/folder-pencil.png</iconset>
    </property>
    <property name="text">
@@ -266,7 +266,7 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="console.qrc">
+    <iconset resource="resources/console.qrc">
      <normaloff>:/icon/folder-minus.png</normaloff>:/icon/folder-minus.png</iconset>
    </property>
    <property name="text">
@@ -278,7 +278,7 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="console.qrc">
+    <iconset resource="resources/console.qrc">
      <normaloff>:/icon/computer-plus.png</normaloff>:/icon/computer-plus.png</iconset>
    </property>
    <property name="text">
@@ -290,7 +290,7 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="console.qrc">
+    <iconset resource="resources/console.qrc">
      <normaloff>:/icon/computer-pencil.png</normaloff>:/icon/computer-pencil.png</iconset>
    </property>
    <property name="text">
@@ -302,7 +302,7 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="console.qrc">
+    <iconset resource="resources/console.qrc">
      <normaloff>:/icon/computer-minus.png</normaloff>:/icon/computer-minus.png</iconset>
    </property>
    <property name="text">
@@ -317,7 +317,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="console.qrc">
+    <iconset resource="resources/console.qrc">
      <normaloff>:/icon/monitor-keyboard.png</normaloff>:/icon/monitor-keyboard.png</iconset>
    </property>
    <property name="text">
@@ -329,7 +329,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="console.qrc">
+    <iconset resource="resources/console.qrc">
      <normaloff>:/icon/monitor.png</normaloff>:/icon/monitor.png</iconset>
    </property>
    <property name="text">
@@ -341,7 +341,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="console.qrc">
+    <iconset resource="resources/console.qrc">
      <normaloff>:/icon/folder-stand.png</normaloff>:/icon/folder-stand.png</iconset>
    </property>
    <property name="text">
@@ -350,7 +350,7 @@
   </action>
   <action name="action_online_help">
    <property name="icon">
-    <iconset resource="console.qrc">
+    <iconset resource="resources/console.qrc">
      <normaloff>:/icon/lifebuoy.png</normaloff>:/icon/lifebuoy.png</iconset>
    </property>
    <property name="text">
@@ -362,7 +362,7 @@
   </action>
   <action name="action_about">
    <property name="icon">
-    <iconset resource="console.qrc">
+    <iconset resource="resources/console.qrc">
      <normaloff>:/icon/about.png</normaloff>:/icon/about.png</iconset>
    </property>
    <property name="text">
@@ -374,7 +374,7 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="console.qrc">
+    <iconset resource="resources/console.qrc">
      <normaloff>:/icon/book-pencil.png</normaloff>:/icon/book-pencil.png</iconset>
    </property>
    <property name="text">
@@ -383,7 +383,7 @@
   </action>
   <action name="action_desktop_manage_connect">
    <property name="icon">
-    <iconset resource="console.qrc">
+    <iconset resource="resources/console.qrc">
      <normaloff>:/icon/monitor-keyboard.png</normaloff>:/icon/monitor-keyboard.png</iconset>
    </property>
    <property name="text">
@@ -395,7 +395,7 @@
   </action>
   <action name="action_desktop_view_connect">
    <property name="icon">
-    <iconset resource="console.qrc">
+    <iconset resource="resources/console.qrc">
      <normaloff>:/icon/monitor.png</normaloff>:/icon/monitor.png</iconset>
    </property>
    <property name="text">
@@ -407,7 +407,7 @@
   </action>
   <action name="action_file_transfer_connect">
    <property name="icon">
-    <iconset resource="console.qrc">
+    <iconset resource="resources/console.qrc">
      <normaloff>:/icon/folder-stand.png</normaloff>:/icon/folder-stand.png</iconset>
    </property>
    <property name="text">
@@ -441,7 +441,7 @@
   </action>
   <action name="action_fast_connect">
    <property name="icon">
-    <iconset resource="console.qrc">
+    <iconset resource="resources/console.qrc">
      <normaloff>:/icon/plug-disconnect.png</normaloff>:/icon/plug-disconnect.png</iconset>
    </property>
    <property name="text">
@@ -453,7 +453,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="console.qrc">
+    <iconset resource="resources/console.qrc">
      <normaloff>:/icon/system-monitor.png</normaloff>:/icon/system-monitor.png</iconset>
    </property>
    <property name="text">
@@ -462,7 +462,7 @@
   </action>
   <action name="action_system_info_connect">
    <property name="icon">
-    <iconset resource="console.qrc">
+    <iconset resource="resources/console.qrc">
      <normaloff>:/icon/system-monitor.png</normaloff>:/icon/system-monitor.png</iconset>
    </property>
    <property name="text">
@@ -500,7 +500,7 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="console.qrc"/>
+  <include location="resources/console.qrc"/>
  </resources>
  <connections/>
 </ui>

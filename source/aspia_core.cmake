@@ -36,60 +36,9 @@ link_directories(
     ${ASPIA_THIRD_PARTY_DIR}/qt/plugins/platforms
     ${ASPIA_THIRD_PARTY_DIR}/qt/plugins/styles)
 
-list(APPEND SOURCE_BASE
-    ${PROJECT_SOURCE_DIR}/base/aligned_memory.cc
-    ${PROJECT_SOURCE_DIR}/base/aligned_memory.h
-    ${PROJECT_SOURCE_DIR}/base/bitset.h
-    ${PROJECT_SOURCE_DIR}/base/const_buffer.h
-    ${PROJECT_SOURCE_DIR}/base/cpuid.cc
-    ${PROJECT_SOURCE_DIR}/base/cpuid.h
-    ${PROJECT_SOURCE_DIR}/base/guid.cc
-    ${PROJECT_SOURCE_DIR}/base/guid.h
-    ${PROJECT_SOURCE_DIR}/base/keycode_converter.cc
-    ${PROJECT_SOURCE_DIR}/base/keycode_converter.h
-    ${PROJECT_SOURCE_DIR}/base/locale_loader.cc
-    ${PROJECT_SOURCE_DIR}/base/locale_loader.h
-    ${PROJECT_SOURCE_DIR}/base/logging.cc
-    ${PROJECT_SOURCE_DIR}/base/logging.h
-    ${PROJECT_SOURCE_DIR}/base/macros_magic.h
-    ${PROJECT_SOURCE_DIR}/base/message_serialization.h
-    ${PROJECT_SOURCE_DIR}/base/service.h
-    ${PROJECT_SOURCE_DIR}/base/service_controller.cc
-    ${PROJECT_SOURCE_DIR}/base/service_controller.h
-    ${PROJECT_SOURCE_DIR}/base/service_impl.h
-    ${PROJECT_SOURCE_DIR}/base/service_impl_win.cc
-    ${PROJECT_SOURCE_DIR}/base/string_printf.cc
-    ${PROJECT_SOURCE_DIR}/base/string_printf.h
-    ${PROJECT_SOURCE_DIR}/base/string_util.cc
-    ${PROJECT_SOURCE_DIR}/base/string_util.h
-    ${PROJECT_SOURCE_DIR}/base/string_util_constants.cc
-    ${PROJECT_SOURCE_DIR}/base/string_util_constants.h
-    ${PROJECT_SOURCE_DIR}/base/typed_buffer.h
-    ${PROJECT_SOURCE_DIR}/base/unicode.cc
-    ${PROJECT_SOURCE_DIR}/base/unicode.h)
-
-list(APPEND SOURCE_BASE_UNIT_TESTS
-    ${PROJECT_SOURCE_DIR}/base/aligned_memory_unittest.cc
-    ${PROJECT_SOURCE_DIR}/base/guid_unittest.cc
-    ${PROJECT_SOURCE_DIR}/base/string_printf_unittest.cc)
-
-list(APPEND SOURCE_BASE_WIN
-    ${PROJECT_SOURCE_DIR}/base/win/registry.cc
-    ${PROJECT_SOURCE_DIR}/base/win/registry.h
-    ${PROJECT_SOURCE_DIR}/base/win/scoped_com_initializer.h
-    ${PROJECT_SOURCE_DIR}/base/win/scoped_gdi_object.h
-    ${PROJECT_SOURCE_DIR}/base/win/scoped_hdc.h
-    ${PROJECT_SOURCE_DIR}/base/win/scoped_local.h
-    ${PROJECT_SOURCE_DIR}/base/win/scoped_object.h
-    ${PROJECT_SOURCE_DIR}/base/win/scoped_user_object.h
-    ${PROJECT_SOURCE_DIR}/base/win/scoped_wts_memory.h
-    ${PROJECT_SOURCE_DIR}/base/win/security_helpers.cc
-    ${PROJECT_SOURCE_DIR}/base/win/security_helpers.h)
-
 list(APPEND SOURCE_CLIENT
     ${PROJECT_SOURCE_DIR}/client/client.cc
     ${PROJECT_SOURCE_DIR}/client/client.h
-    ${PROJECT_SOURCE_DIR}/client/client.qrc
     ${PROJECT_SOURCE_DIR}/client/client_connections.cc
     ${PROJECT_SOURCE_DIR}/client/client_connections.h
     ${PROJECT_SOURCE_DIR}/client/client_session.h
@@ -119,6 +68,9 @@ list(APPEND SOURCE_CLIENT
     ${PROJECT_SOURCE_DIR}/client/file_transfer_queue_builder.h
     ${PROJECT_SOURCE_DIR}/client/file_transfer_task.cc
     ${PROJECT_SOURCE_DIR}/client/file_transfer_task.h)
+
+list(APPEND SOURCE_CLIENT_RESOURCES
+    ${PROJECT_SOURCE_DIR}/client/resources/client.qrc)
 
 list(APPEND SOURCE_CLIENT_UI
     ${PROJECT_SOURCE_DIR}/client/ui/address_bar.cc
@@ -242,7 +194,6 @@ list(APPEND SOURCE_CONSOLE
     ${PROJECT_SOURCE_DIR}/console/computer_mime_data.h
     ${PROJECT_SOURCE_DIR}/console/computer_tree.cc
     ${PROJECT_SOURCE_DIR}/console/computer_tree.h
-    ${PROJECT_SOURCE_DIR}/console/console.qrc
     ${PROJECT_SOURCE_DIR}/console/console_main.cc
     ${PROJECT_SOURCE_DIR}/console/console_main.h
     ${PROJECT_SOURCE_DIR}/console/console_settings.cc
@@ -257,6 +208,9 @@ list(APPEND SOURCE_CONSOLE
     ${PROJECT_SOURCE_DIR}/console/open_address_book_dialog.cc
     ${PROJECT_SOURCE_DIR}/console/open_address_book_dialog.h
     ${PROJECT_SOURCE_DIR}/console/open_address_book_dialog.ui)
+
+list(APPEND SOURCE_CONSOLE_RESOURCES
+    ${PROJECT_SOURCE_DIR}/console/resources/console.qrc)
 
 list(APPEND SOURCE_CRYPTO
     ${PROJECT_SOURCE_DIR}/crypto/big_num.cc
@@ -363,7 +317,6 @@ list(APPEND SOURCE_HOST
     ${PROJECT_SOURCE_DIR}/host/file_request.h
     ${PROJECT_SOURCE_DIR}/host/file_worker.cc
     ${PROJECT_SOURCE_DIR}/host/file_worker.h
-    ${PROJECT_SOURCE_DIR}/host/host.qrc
     ${PROJECT_SOURCE_DIR}/host/host_config_main.cc
     ${PROJECT_SOURCE_DIR}/host/host_config_main.h
     ${PROJECT_SOURCE_DIR}/host/host_notifier.cc
@@ -394,6 +347,9 @@ list(APPEND SOURCE_HOST
     ${PROJECT_SOURCE_DIR}/host/system_info_request.h
     ${PROJECT_SOURCE_DIR}/host/user_util.cc
     ${PROJECT_SOURCE_DIR}/host/user_util.h)
+
+list(APPEND SOURCE_HOST_RESOURCES
+    ${PROJECT_SOURCE_DIR}/host/resources/host.qrc)
 
 list(APPEND SOURCE_HOST_UI
     ${PROJECT_SOURCE_DIR}/host/ui/host_config_dialog.cc
@@ -496,16 +452,17 @@ list(APPEND SOURCE
     ${PROJECT_SOURCE_DIR}/aspia_core.rc)
 
 list(APPEND ALL_SOURCES
-    ${SOURCE_BASE}
-    ${SOURCE_BASE_WIN}
     ${SOURCE_CLIENT}
+    ${SOURCE_CLIENT_RESOURCES}
     ${SOURCE_CLIENT_UI}
     ${SOURCE_CODEC}
     ${SOURCE_CONSOLE}
+    ${SOURCE_CONSOLE_RESOURCES}
     ${SOURCE_CRYPTO}
     ${SOURCE_DESKTOP_CAPTURE}
     ${SOURCE_DESKTOP_CAPTURE_WIN}
     ${SOURCE_HOST}
+    ${SOURCE_HOST_RESOURCES}
     ${SOURCE_HOST_UI}
     ${SOURCE_HOST_WIN}
     ${SOURCE_IPC}
@@ -520,7 +477,6 @@ list(APPEND ALL_SOURCES
     ${SOURCE})
 
 list(APPEND ALL_SOURCES_WITH_UNIT_TESTS
-    ${SOURCE_BASE_UNIT_TESTS}
     ${SOURCE_CRYPTO_UNIT_TESTS}
     ${SOURCE_DESKTOP_CAPTURE_UNIT_TESTS}
     ${ALL_SOURCES})

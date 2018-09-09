@@ -148,7 +148,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="console.qrc">
+            <iconset resource="resources/console.qrc">
              <normaloff>:/icon/eye.png</normaloff>:/icon/eye.png</iconset>
            </property>
            <property name="checkable">
@@ -175,7 +175,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="console.qrc">
+            <iconset resource="resources/console.qrc">
              <normaloff>:/icon/settings.png</normaloff>:/icon/settings.png</iconset>
            </property>
           </widget>
@@ -211,7 +211,7 @@
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>
-  <include location="console.qrc"/>
+  <include location="resources/console.qrc"/>
  </resources>
  <connections/>
 </ui>

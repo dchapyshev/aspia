@@ -40,19 +40,19 @@ find_package(Protobuf REQUIRED)
 
 include(aspia_core.cmake)
 
-source_group(base FILES ${SOURCE_BASE})
-source_group(base FILES ${SOURCE_BASE_UNIT_TESTS})
-source_group(base\\win FILES ${SOURCE_BASE_WIN})
 source_group(client FILES ${SOURCE_CLIENT})
+source_group(client\\resources FILES ${SOURCE_CLIENT_RESOURCES})
 source_group(client\\ui FILES ${SOURCE_CLIENT_UI})
 source_group(codec FILES ${SOURCE_CODEC})
 source_group(console FILES ${SOURCE_CONSOLE})
+source_group(console\\resources FILES ${SOURCE_CONSOLE_RESOURCES})
 source_group(crypto FILES ${SOURCE_CRYPTO})
 source_group(crypto FILES ${SOURCE_CRYPTO_UNIT_TESTS})
 source_group(desktop_capture FILES ${SOURCE_DESKTOP_CAPTURE})
 source_group(desktop_capture FILES ${SOURCE_DESKTOP_CAPTURE_UNIT_TESTS})
 source_group(desktop_capture\\win FILES ${SOURCE_DESKTOP_CAPTURE_WIN})
 source_group(host FILES ${SOURCE_HOST})
+source_group(host\\resources FILES ${SOURCE_HOST_RESOURCES})
 source_group(host\\ui FILES ${SOURCE_HOST_UI})
 source_group(host\\win FILES ${SOURCE_HOST_WIN})
 source_group(ipc FILES ${SOURCE_IPC})
@@ -86,8 +86,17 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MTd /MP /wd4146")
 set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} /LTCG /INCREMENTAL:NO /OPT:REF")
 set(CMAKE_EXE_LINKER_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE} /LTCG /INCREMENTAL:NO /OPT:REF")
 
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
+
+add_subdirectory(base)
+add_subdirectory(client)
+add_subdirectory(console)
+add_subdirectory(host)
+
 add_library(aspia_core SHARED ${ALL_SOURCES} ${PROTOCOL_CC_FILES} ${PROTOCOL_H_FILES})
-target_link_libraries(aspia_core ${THIRD_PARTY_LIBS})
+target_link_libraries(aspia_core aspia_base ${THIRD_PARTY_LIBS})
 
 add_executable(aspia_console ${PROJECT_SOURCE_DIR}/console/entry_point.cc ${PROJECT_SOURCE_DIR}/console/console.rc)
 set_target_properties(aspia_console PROPERTIES WIN32_EXECUTABLE TRUE)
@@ -105,10 +114,6 @@ add_executable(aspia_host ${PROJECT_SOURCE_DIR}/host/win/host_entry_point.cc ${P
 set_target_properties(aspia_host PROPERTIES WIN32_EXECUTABLE TRUE)
 set_target_properties(aspia_host PROPERTIES LINK_FLAGS "/MANIFEST:NO")
 target_link_libraries(aspia_host aspia_core)
-
-add_subdirectory(client)
-add_subdirectory(console)
-add_subdirectory(host)
 
 # If the build of unit tests is enabled.
 if (BUILD_UNIT_TESTS)
