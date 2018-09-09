@@ -18,7 +18,7 @@
 
 #include "desktop_capture/diff_block_avx2.h"
 
-#if defined(Q_CC_MSVC)
+#if defined(CC_MSVC)
 #include <intrin.h>
 #else
 #include <mmintrin.h>

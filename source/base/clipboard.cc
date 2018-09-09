@@ -53,7 +53,7 @@ void Clipboard::injectClipboardEvent(const proto::desktop::ClipboardEvent& event
 
     QString text = QString::fromStdString(event.data());
 
-#if defined(Q_OS_WIN)
+#if defined(OS_WIN)
     text.replace(QLatin1String("\n"), QLatin1String("\r\n"));
 #endif
 

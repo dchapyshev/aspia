@@ -20,7 +20,7 @@
 
 #include <QNetworkProxy>
 
-#if defined(Q_OS_WIN)
+#if defined(OS_WIN)
 #include <winsock2.h>
 #include <mstcpip.h>
 #endif
@@ -108,7 +108,7 @@ void NetworkChannelClient::onConnected()
     // Disable the Nagle algorithm for the socket.
     socket_->setSocketOption(QTcpSocket::LowDelayOption, 1);
 
-#if defined(Q_OS_WIN)
+#if defined(OS_WIN)
     struct tcp_keepalive alive;
 
     alive.onoff = 1; // On.

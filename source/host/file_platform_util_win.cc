@@ -18,7 +18,7 @@
 
 #include "host/file_platform_util.h"
 
-#if !defined(Q_OS_WIN)
+#if !defined(OS_WIN)
 #error This file is only for MS Windows
 #endif
 

@@ -22,9 +22,9 @@
 #include <QStandardPaths>
 #include <QStorageInfo>
 
-#if defined(Q_OS_WIN)
+#if defined(OS_WIN)
 #include "host/win/file_enumerator.h"
-#endif // defined(Q_OS_WIN)
+#endif // defined(OS_WIN)
 
 #include "base/logging.h"
 #include "host/file_platform_util.h"
@@ -39,7 +39,7 @@ FileWorker::FileWorker(QObject* parent)
 
 proto::file_transfer::Reply FileWorker::doRequest(const proto::file_transfer::Request& request)
 {
-#if defined(Q_OS_WIN)
+#if defined(OS_WIN)
     // We send a notification to the system that it is used to prevent the screen saver, going into
     // hibernation mode, etc.
     SetThreadExecutionState(ES_SYSTEM_REQUIRED);

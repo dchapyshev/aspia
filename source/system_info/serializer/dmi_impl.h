@@ -21,6 +21,8 @@
 
 #include <memory>
 
+#include <QString>
+
 #include "base/logging.h"
 
 namespace aspia {
@@ -106,11 +108,11 @@ public:
     QString manufacturer() const;
     QString version() const;
     QString date() const;
-    quint64 biosSize() const;
+    uint64_t biosSize() const;
     QString biosRevision() const;
     QString firmwareRevision() const;
     QString address() const;
-    quint64 runtimeSize() const;
+    uint64_t runtimeSize() const;
 
     struct Characteristics
     {

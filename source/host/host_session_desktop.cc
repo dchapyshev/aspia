@@ -23,9 +23,9 @@
 #include "host/input_injector.h"
 #include "host/screen_updater.h"
 
-#if defined(Q_OS_WIN)
+#if defined(OS_WIN)
 #include "desktop_capture/win/visual_effects_disabler.h"
-#endif // defined(Q_OS_WIN)
+#endif // defined(OS_WIN)
 
 namespace aspia {
 
@@ -48,7 +48,7 @@ HostSessionDesktop::HostSessionDesktop(proto::SessionType session_type,
 
 HostSessionDesktop::~HostSessionDesktop()
 {
-#if defined(Q_OS_WIN)
+#if defined(OS_WIN)
     if (effects_disabler_)
     {
         if (effects_disabler_->isEffectsDisabled())
@@ -57,7 +57,7 @@ HostSessionDesktop::~HostSessionDesktop()
         if (effects_disabler_->isWallpaperDisabled())
             effects_disabler_->restoreWallpaper();
     }
-#endif // defined(Q_OS_WIN)
+#endif // defined(OS_WIN)
 }
 
 void HostSessionDesktop::startSession()
@@ -182,7 +182,7 @@ void HostSessionDesktop::readConfig(const proto::desktop::Config& config)
 
     if (change_flags & DesktopConfigTracker::EFFECTS_CHANGES)
     {
-#if defined(Q_OS_WIN)
+#if defined(OS_WIN)
         bool disable_effects = config.flags() & proto::desktop::DISABLE_DESKTOP_EFFECTS;
         bool disable_wallpaper = config.flags() & proto::desktop::DISABLE_DESKTOP_WALLPAPER;
 
@@ -205,7 +205,7 @@ void HostSessionDesktop::readConfig(const proto::desktop::Config& config)
             if (disable_wallpaper)
                 effects_disabler_->disableWallpaper();
         }
-#endif // defined(Q_OS_WIN)
+#endif // defined(OS_WIN)
     }
 
     if (change_flags & DesktopConfigTracker::VIDEO_CHANGES)

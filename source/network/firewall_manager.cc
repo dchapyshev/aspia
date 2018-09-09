@@ -21,6 +21,8 @@
 #include <comutil.h>
 #include <unknwn.h>
 
+#include <algorithm>
+
 #include "base/logging.h"
 #include "base/guid.h"
 #include "base/unicode.h"

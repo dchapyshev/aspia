@@ -30,7 +30,7 @@ TEST(string_printf_test, string_printf_empty)
 TEST(string_printf_test, string_printf_misc)
 {
     EXPECT_EQ("123hello w", stringPrintf("%3d%2s %1c", 123, "hello", 'w'));
-#if defined(Q_OS_WIN)
+#if defined(OS_WIN)
     EXPECT_EQ(L"123hello w", stringPrintf(L"%3d%2ls %1lc", 123, L"hello", 'w'));
 #endif
 }
@@ -56,7 +56,7 @@ TEST(string_printf_test, string_printf_bounds)
         sStringPrintf(&out, "%s", src);
         EXPECT_STREQ(src, out.c_str());
 
-#if defined(Q_OS_WIN)
+#if defined(OS_WIN)
         srcw[kSrcLen - i] = 0;
         std::wstring outw;
         sStringPrintf(&outw, L"%ls", srcw);
@@ -80,9 +80,9 @@ TEST(string_printf_test, grow)
 
     const int kRefSize = 320000;
     char* ref = new char[kRefSize];
-#if defined(Q_OS_WIN)
+#if defined(OS_WIN)
     sprintf_s(ref, kRefSize, fmt, src, src, src, src, src, src, src);
-#elif defined(Q_OS_UNIX)
+#elif defined(OS_UNIX)
     snprintf(ref, kRefSize, fmt, src, src, src, src, src, src, src);
 #endif
 
@@ -110,7 +110,7 @@ TEST(string_printf_test, grow_boundary)
     EXPECT_STREQ(src, out.c_str());
 }
 
-#if defined(Q_OS_WIN)
+#if defined(OS_WIN)
 // vswprintf in Visual Studio 2013 fails when given U+FFFF. This tests that the
 // failure case is gracefuly handled. In Visual Studio 2015 the bad character
 // is passed through.

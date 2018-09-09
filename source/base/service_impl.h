@@ -47,9 +47,9 @@ protected:
     virtual void start() = 0;
     virtual void stop() = 0;
 
-#if defined(Q_OS_WIN)
+#if defined(OS_WIN)
     virtual void sessionChange(uint32_t event, uint32_t session_id) = 0;
-#endif // defined(Q_OS_WIN)
+#endif // defined(OS_WIN)
 
     virtual void createApplication(int argc, char* argv[]) = 0;
     virtual int executeApplication() = 0;

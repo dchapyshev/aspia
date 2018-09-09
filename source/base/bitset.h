@@ -19,6 +19,10 @@
 #ifndef ASPIA_BASE__BITSET_H_
 #define ASPIA_BASE__BITSET_H_
 
+#include <limits>
+
+#include "base/logging.h"
+
 namespace aspia {
 
 template<typename NumericType>
@@ -39,7 +43,7 @@ public:
     // Returns the value of the bit range at the range from |from| to |to|.
     NumericType range(size_t from, size_t to) const
     {
-        assert(from <= to && from < size() && to < size());
+        DCHECK(from <= to && from < size() && to < size());
         const NumericType mask = (static_cast<NumericType>(1) << (to + 1)) - 1;
         return ((value_ & mask) >> from);
     }
@@ -63,7 +67,7 @@ public:
     // Sets the bit at position |pos| to the value |value|.
     BitSet& set(size_t pos, bool value = true)
     {
-        assert(pos < size());
+        DCHECK(pos < size());
 
         const NumericType mask = static_cast<NumericType>(1) << pos;
 

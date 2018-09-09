@@ -19,6 +19,7 @@
 #include "base/cpuid.h"
 
 #include <intrin.h>
+#include <cstring>
 
 #include "base/bitset.h"
 

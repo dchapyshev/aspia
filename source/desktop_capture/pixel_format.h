@@ -19,6 +19,8 @@
 #ifndef ASPIA_DESKTOP_CAPTURE__PIXEL_FORMAT_H_
 #define ASPIA_DESKTOP_CAPTURE__PIXEL_FORMAT_H_
 
+#include <cstdint>
+
 namespace aspia {
 
 class PixelFormat

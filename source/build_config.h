@@ -19,13 +19,14 @@
 #ifndef ASPIA_BUILD_CONFIG_H_
 #define ASPIA_BUILD_CONFIG_H_
 
-#define QT_DEPRECATED_WARNINGS
-#define QT_MESSAGELOGCONTEXT
-#define QT_USE_QSTRINGBUILDER
+#if defined(_MSC_VER)
+#define OS_WIN
+#define CC_MSVC
+#else
+#error Platform support not implemented
+#endif
 
-#include <QtGlobal>
-
-#if defined(Q_OS_WIN)
+#if defined(OS_WIN)
 // Set target version for MS Windows.
 #define _WIN32_WINNT     0x0601
 #define NTDDI_VERSION    0x06010000 // Windows 7
@@ -33,11 +34,7 @@
 #define PSAPI_VERSION    2
 #define WINVER           _WIN32_WINNT
 #define _WIN32_WINDOWS   _WIN32_WINNT
-#endif // defined(Q_OS_WIN)
-
-#if defined(NDEBUG)
-#define QT_NO_DEBUG_OUTPUT
-#endif
+#endif // defined(OS_WIN)
 
 namespace aspia {
 

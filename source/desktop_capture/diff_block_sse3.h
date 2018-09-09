@@ -19,6 +19,8 @@
 #ifndef ASPIA_DESKTOP_CAPTURE__DIFF_BLOCK_SSE3_H_
 #define ASPIA_DESKTOP_CAPTURE__DIFF_BLOCK_SSE3_H_
 
+#include <cstdint>
+
 namespace aspia {
 
 uint8_t diffFullBlock_32x32_SSE3(const uint8_t* image1, const uint8_t* image2, int bytes_per_row);

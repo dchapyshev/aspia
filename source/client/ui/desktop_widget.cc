@@ -35,20 +35,20 @@ constexpr uint32_t kWheelMask =
 
 bool isNumLockActivated()
 {
-#if defined(Q_OS_WIN)
+#if defined(OS_WIN)
     return GetKeyState(VK_NUMLOCK) != 0;
 #else
 #error Platform support not implemented
-#endif // defined(Q_OS_WIN)
+#endif // defined(OS_WIN)
 }
 
 bool isCapsLockActivated()
 {
-#if defined(Q_OS_WIN)
+#if defined(OS_WIN)
     return GetKeyState(VK_CAPITAL) != 0;
 #else
 #error Platform support not implemented
-#endif // defined(Q_OS_WIN)
+#endif // defined(OS_WIN)
 }
 
 } // namespace
@@ -259,18 +259,18 @@ void DesktopWidget::leaveEvent(QEvent* event)
 
 void DesktopWidget::focusInEvent(QFocusEvent* event)
 {
-#if defined(Q_OS_WIN)
+#if defined(OS_WIN)
     keyboard_hook_.reset(SetWindowsHookExW(WH_KEYBOARD_LL, keyboardHookProc, nullptr, 0));
-#endif // defined(Q_OS_WIN)
+#endif // defined(OS_WIN)
 
     QWidget::focusInEvent(event);
 }
 
 void DesktopWidget::focusOutEvent(QFocusEvent* event)
 {
-#if defined(Q_OS_WIN)
+#if defined(OS_WIN)
     keyboard_hook_.reset();
-#endif // defined(Q_OS_WIN)
+#endif // defined(OS_WIN)
 
     // Release all pressed keys of the keyboard.
     if (!pressed_keys_.empty())
@@ -297,7 +297,7 @@ void DesktopWidget::executeKeyEvent(uint32_t usb_keycode, uint32_t flags)
     emit sendKeyEvent(usb_keycode, flags);
 }
 
-#if defined(Q_OS_WIN)
+#if defined(OS_WIN)
 // static
 LRESULT CALLBACK DesktopWidget::keyboardHookProc(INT code, WPARAM wparam, LPARAM lparam)
 {
@@ -333,6 +333,6 @@ LRESULT CALLBACK DesktopWidget::keyboardHookProc(INT code, WPARAM wparam, LPARAM
 
     return CallNextHookEx(nullptr, code, wparam, lparam);
 }
-#endif // defined(Q_OS_WIN)
+#endif // defined(OS_WIN)
 
 } // namespace aspia

@@ -18,7 +18,7 @@
 
 #include "system_info/serializer/dmi_impl.h"
 
-#if defined(Q_OS_WIN)
+#if defined(OS_WIN)
 #define WIN32_LEAN_AND_MEAN
 #define NOMINMAX
 #include <windows.h>
@@ -35,7 +35,7 @@ namespace {
 
 bool readSmBios(void* data, size_t data_size)
 {
-#if defined(Q_OS_WIN)
+#if defined(OS_WIN)
     if (!GetSystemFirmwareTable('RSMB', 'PCAF', data, data_size))
     {
         PLOG(LS_WARNING) << "GetSystemFirmwareTable failed";

@@ -18,9 +18,9 @@
 
 #include "base/service_impl.h"
 
-#if !defined(Q_OS_WIN)
+#if !defined(OS_WIN)
 #error This file for MS Windows only
-#endif // defined(Q_OS_WIN)
+#endif // defined(OS_WIN)
 
 #define WIN32_LEAN_AND_MEAN
 #define NOMINMAX

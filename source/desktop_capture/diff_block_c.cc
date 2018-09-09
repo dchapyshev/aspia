@@ -18,6 +18,8 @@
 
 #include "desktop_capture/diff_block_c.h"
 
+#include <cstring>
+
 namespace aspia {
 
 namespace {

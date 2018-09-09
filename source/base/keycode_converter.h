@@ -19,6 +19,8 @@
 #ifndef ASPIA_BASE__KEYCODE_CONVERTER_H_
 #define ASPIA_BASE__KEYCODE_CONVERTER_H_
 
+#include <cstdint>
+
 #include "base/macros_magic.h"
 
 namespace aspia {

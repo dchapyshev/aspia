@@ -198,11 +198,11 @@ void ConsoleWindow::onOpenAddressBook()
         AddressBookTab* tab = dynamic_cast<AddressBookTab*>(ui.tab_widget->widget(i));
         if (tab)
         {
-#if defined(Q_OS_WIN)
+#if defined(OS_WIN)
             if (file_path.compare(tab->addressBookPath(), Qt::CaseInsensitive) == 0)
 #else
             if (file_path.compare(tab->addressBookPath(), Qt::CaseSensitive) == 0)
-#endif // defined(Q_OS_WIN)
+#endif // defined(OS_WIN)
             {
                 QMessageBox::information(this,
                                          tr("Information"),

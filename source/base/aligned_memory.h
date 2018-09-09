@@ -51,7 +51,7 @@
 #include <cstddef>
 #include <cstdint>
 
-#if defined(Q_OS_WIN)
+#if defined(OS_WIN)
 #include <malloc.h>
 #else
 #include <cstdlib>
@@ -63,7 +63,7 @@ void* alignedAlloc(size_t size, size_t alignment);
 
 inline void alignedFree(void* ptr)
 {
-#if defined(Q_OS_WIN)
+#if defined(OS_WIN)
     _aligned_free(ptr);
 #else
     free(ptr);

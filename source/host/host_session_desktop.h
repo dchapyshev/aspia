@@ -65,9 +65,9 @@ private:
     QPointer<Clipboard> clipboard_;
     QScopedPointer<InputInjector> input_injector_;
 
-#if defined(Q_OS_WIN)
+#if defined(OS_WIN)
     std::unique_ptr<VisualEffectsDisabler> effects_disabler_;
-#endif // defined(Q_OS_WIN)
+#endif // defined(OS_WIN)
 
     DISALLOW_COPY_AND_ASSIGN(HostSessionDesktop);
 };

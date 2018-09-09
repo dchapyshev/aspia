@@ -25,7 +25,7 @@
 #include <memory>
 #include <set>
 
-#if defined(Q_OS_WIN)
+#if defined(OS_WIN)
 #include "base/win/scoped_user_object.h"
 #endif
 
@@ -76,11 +76,11 @@ protected:
 private:
     void executeKeyEvent(uint32_t usb_keycode, uint32_t flags);
 
-#if defined(Q_OS_WIN)
+#if defined(OS_WIN)
     static LRESULT CALLBACK keyboardHookProc(INT code, WPARAM wparam, LPARAM lparam);
 
     ScopedHHOOK keyboard_hook_;
-#endif // defined(Q_OS_WIN)
+#endif // defined(OS_WIN)
 
     std::unique_ptr<DesktopFrameQImage> frame_;
 
