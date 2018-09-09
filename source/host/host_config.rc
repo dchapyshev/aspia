@@ -22,7 +22,7 @@
 LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 
 1 RT_MANIFEST "host_config.manifest"
-IDI_ICON1 ICON "resources/host-config.ico"
+IDI_ICON1 ICON "host/resources/host-config.ico"
 
 #define ASPIA_ORIGINAL_FILE_NAME "aspia_host_config.exe"
 #define ASPIA_FILE_DESCRIPTION "Aspia Host Configuration"

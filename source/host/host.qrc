@@ -1,0 +1,20 @@
+<RCC>
+  <qresource prefix="/icon">
+    <file>resources/arrow-left-gray.png</file>
+    <file>resources/arrow-right-gray.png</file>
+    <file>resources/keyboard.png</file>
+    <file>resources/check-all.png</file>
+    <file>resources/check-none.png</file>
+    <file>resources/user.png</file>
+    <file>resources/user-disabled.png</file>
+    <file>resources/user-minus.png</file>
+    <file>resources/user-pencil.png</file>
+    <file>resources/user-plus.png</file>
+    <file>resources/main.png</file>
+    <file>resources/folder-stand.png</file>
+    <file>resources/monitor.png</file>
+    <file>resources/monitor-keyboard.png</file>
+    <file>resources/system-monitor.png</file>
+    <file>resources/document.png</file>
+  </qresource>
+</RCC>

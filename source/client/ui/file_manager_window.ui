@@ -52,7 +52,7 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="../../resources/resources.qrc"/>
+  <include location="../client.qrc"/>
  </resources>
  <connections/>
 </ui>

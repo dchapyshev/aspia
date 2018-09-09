@@ -84,7 +84,7 @@
   </layout>
   <action name="action_save_report">
    <property name="icon">
-    <iconset resource="../../resources/resources.qrc">
+    <iconset resource="../client.qrc">
      <normaloff>:/icon/disk.png</normaloff>:/icon/disk.png</iconset>
    </property>
    <property name="text">
@@ -93,7 +93,7 @@
   </action>
   <action name="action_refresh">
    <property name="icon">
-    <iconset resource="../../resources/resources.qrc">
+    <iconset resource="../client.qrc">
      <normaloff>:/icon/arrow-circle-double.png</normaloff>:/icon/arrow-circle-double.png</iconset>
    </property>
    <property name="text">
@@ -117,7 +117,7 @@
   </action>
  </widget>
  <resources>
-  <include location="../../resources/resources.qrc"/>
+  <include location="../client.qrc"/>
  </resources>
  <connections/>
 </ui>

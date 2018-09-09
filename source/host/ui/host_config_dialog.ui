@@ -159,7 +159,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../../resources/resources.qrc">
+            <iconset resource="../host.qrc">
              <normaloff>:/icon/user-plus.png</normaloff>:/icon/user-plus.png</iconset>
            </property>
           </widget>
@@ -179,7 +179,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../../resources/resources.qrc">
+            <iconset resource="../host.qrc">
              <normaloff>:/icon/user-pencil.png</normaloff>:/icon/user-pencil.png</iconset>
            </property>
           </widget>
@@ -199,7 +199,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../../resources/resources.qrc">
+            <iconset resource="../host.qrc">
              <normaloff>:/icon/user-minus.png</normaloff>:/icon/user-minus.png</iconset>
            </property>
           </widget>
@@ -251,7 +251,7 @@
   </layout>
   <action name="action_add">
    <property name="icon">
-    <iconset resource="../../resources/resources.qrc">
+    <iconset resource="../host.qrc">
      <normaloff>:/icon/user-plus.png</normaloff>:/icon/user-plus.png</iconset>
    </property>
    <property name="text">
@@ -260,7 +260,7 @@
   </action>
   <action name="action_modify">
    <property name="icon">
-    <iconset resource="../../resources/resources.qrc">
+    <iconset resource="../host.qrc">
      <normaloff>:/icon/user-pencil.png</normaloff>:/icon/user-pencil.png</iconset>
    </property>
    <property name="text">
@@ -269,7 +269,7 @@
   </action>
   <action name="action_delete">
    <property name="icon">
-    <iconset resource="../../resources/resources.qrc">
+    <iconset resource="../host.qrc">
      <normaloff>:/icon/user-minus.png</normaloff>:/icon/user-minus.png</iconset>
    </property>
    <property name="text">
@@ -278,7 +278,7 @@
   </action>
  </widget>
  <resources>
-  <include location="../../resources/resources.qrc"/>
+  <include location="../host.qrc"/>
  </resources>
  <connections/>
 </ui>

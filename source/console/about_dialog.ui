@@ -106,7 +106,7 @@ p, li { white-space: pre-wrap; }
         <string>Donate!</string>
        </property>
        <property name="icon">
-        <iconset resource="../resources/resources.qrc">
+        <iconset resource="console.qrc">
          <normaloff>:/icon/heart.png</normaloff>:/icon/heart.png</iconset>
        </property>
       </widget>
@@ -136,7 +136,7 @@ p, li { white-space: pre-wrap; }
   </layout>
  </widget>
  <resources>
-  <include location="../resources/resources.qrc"/>
+  <include location="console.qrc"/>
  </resources>
  <connections/>
 </ui>

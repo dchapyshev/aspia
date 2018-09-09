@@ -242,7 +242,7 @@
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>
-  <include location="../resources/resources.qrc"/>
+  <include location="console.qrc"/>
  </resources>
  <connections/>
 </ui>

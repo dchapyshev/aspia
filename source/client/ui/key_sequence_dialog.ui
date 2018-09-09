@@ -43,7 +43,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="../../resources/resources.qrc"/>
+  <include location="../client.qrc"/>
  </resources>
  <connections/>
 </ui>

@@ -100,7 +100,7 @@ background: #C0C0C0;
          <string/>
         </property>
         <property name="icon">
-         <iconset resource="../../resources/resources.qrc">
+         <iconset resource="../host.qrc">
           <normaloff>:/icon/arrow-left-gray.png</normaloff>:/icon/arrow-left-gray.png</iconset>
         </property>
        </widget>
@@ -326,7 +326,7 @@ color: gray;
   </layout>
  </widget>
  <resources>
-  <include location="../../resources/resources.qrc"/>
+  <include location="../host.qrc"/>
  </resources>
  <connections/>
 </ui>

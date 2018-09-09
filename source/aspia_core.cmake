@@ -91,6 +91,7 @@ list(APPEND SOURCE_BASE_WIN
 list(APPEND SOURCE_CLIENT
     ${PROJECT_SOURCE_DIR}/client/client.cc
     ${PROJECT_SOURCE_DIR}/client/client.h
+    ${PROJECT_SOURCE_DIR}/client/client.qrc
     ${PROJECT_SOURCE_DIR}/client/client_connections.cc
     ${PROJECT_SOURCE_DIR}/client/client_connections.h
     ${PROJECT_SOURCE_DIR}/client/client_session.h
@@ -243,6 +244,7 @@ list(APPEND SOURCE_CONSOLE
     ${PROJECT_SOURCE_DIR}/console/computer_mime_data.h
     ${PROJECT_SOURCE_DIR}/console/computer_tree.cc
     ${PROJECT_SOURCE_DIR}/console/computer_tree.h
+    ${PROJECT_SOURCE_DIR}/console/console.qrc
     ${PROJECT_SOURCE_DIR}/console/console_main.cc
     ${PROJECT_SOURCE_DIR}/console/console_main.h
     ${PROJECT_SOURCE_DIR}/console/console_settings.cc
@@ -363,6 +365,7 @@ list(APPEND SOURCE_HOST
     ${PROJECT_SOURCE_DIR}/host/file_request.h
     ${PROJECT_SOURCE_DIR}/host/file_worker.cc
     ${PROJECT_SOURCE_DIR}/host/file_worker.h
+    ${PROJECT_SOURCE_DIR}/host/host.qrc
     ${PROJECT_SOURCE_DIR}/host/host_config_main.cc
     ${PROJECT_SOURCE_DIR}/host/host_config_main.h
     ${PROJECT_SOURCE_DIR}/host/host_notifier.cc
@@ -457,9 +460,6 @@ list(APPEND SOURCE_PROTOCOL
     ${PROJECT_SOURCE_DIR}/protocol/srp_user.proto
     ${PROJECT_SOURCE_DIR}/protocol/system_info_session.proto)
 
-list(APPEND SOURCE_RESOURCES
-    ${PROJECT_SOURCE_DIR}/resources/resources.qrc)
-
 list(APPEND SOURCE_SYSTEM_INFO
     ${PROJECT_SOURCE_DIR}/system_info/category.cc
     ${PROJECT_SOURCE_DIR}/system_info/category.h)
@@ -509,7 +509,6 @@ list(APPEND ALL_SOURCES
     ${SOURCE_IPC}
     ${SOURCE_NETWORK}
     ${SOURCE_PROTOCOL}
-    ${SOURCE_RESOURCES}
     ${SOURCE_SYSTEM_INFO}
     ${SOURCE_SYSTEM_INFO_PARSER}
     ${SOURCE_SYSTEM_INFO_PROTOCOL}

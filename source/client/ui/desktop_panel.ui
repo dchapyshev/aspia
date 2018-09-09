@@ -110,7 +110,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../../resources/resources.qrc">
+    <iconset resource="../client.qrc">
      <normaloff>:/icon/pin.png</normaloff>:/icon/pin.png</iconset>
    </property>
    <property name="text">
@@ -122,7 +122,7 @@
   </action>
   <action name="action_settings">
    <property name="icon">
-    <iconset resource="../../resources/resources.qrc">
+    <iconset resource="../client.qrc">
      <normaloff>:/icon/settings.png</normaloff>:/icon/settings.png</iconset>
    </property>
    <property name="text">
@@ -134,7 +134,7 @@
   </action>
   <action name="action_monitors">
    <property name="icon">
-    <iconset resource="../../resources/resources.qrc">
+    <iconset resource="../client.qrc">
      <normaloff>:/icon/monitors.png</normaloff>:/icon/monitors.png</iconset>
    </property>
    <property name="text">
@@ -146,7 +146,7 @@
   </action>
   <action name="action_autosize">
    <property name="icon">
-    <iconset resource="../../resources/resources.qrc">
+    <iconset resource="../client.qrc">
      <normaloff>:/icon/arrow-in-out.png</normaloff>:/icon/arrow-in-out.png</iconset>
    </property>
    <property name="text">
@@ -161,7 +161,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../../resources/resources.qrc">
+    <iconset resource="../client.qrc">
      <normaloff>:/icon/application-resize-full.png</normaloff>:/icon/application-resize-full.png</iconset>
    </property>
    <property name="text">
@@ -184,7 +184,7 @@
   </action>
   <action name="action_cad">
    <property name="icon">
-    <iconset resource="../../resources/resources.qrc">
+    <iconset resource="../client.qrc">
      <normaloff>:/icon/ctrl-alt-del.png</normaloff>:/icon/ctrl-alt-del.png</iconset>
    </property>
    <property name="text">
@@ -196,7 +196,7 @@
   </action>
   <action name="action_menu">
    <property name="icon">
-    <iconset resource="../../resources/resources.qrc">
+    <iconset resource="../client.qrc">
      <normaloff>:/icon/menu.png</normaloff>:/icon/menu.png</iconset>
    </property>
    <property name="text">
@@ -224,7 +224,7 @@
   </action>
   <action name="action_file_transfer">
    <property name="icon">
-    <iconset resource="../../resources/resources.qrc">
+    <iconset resource="../client.qrc">
      <normaloff>:/icon/folder-stand.png</normaloff>:/icon/folder-stand.png</iconset>
    </property>
    <property name="text">
@@ -236,7 +236,7 @@
   </action>
   <action name="action_system_info">
    <property name="icon">
-    <iconset resource="../../resources/resources.qrc">
+    <iconset resource="../client.qrc">
      <normaloff>:/icon/system-monitor.png</normaloff>:/icon/system-monitor.png</iconset>
    </property>
    <property name="text">
@@ -256,7 +256,7 @@
   </action>
  </widget>
  <resources>
-  <include location="../../resources/resources.qrc"/>
+  <include location="../client.qrc"/>
  </resources>
  <connections/>
 </ui>
