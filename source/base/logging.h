@@ -463,7 +463,7 @@ DEFINE_CHECK_OP_IMPL(GT, > )
 
 #define DCHECK_OP(name, op, val1, val2)                                                          \
     switch (0) case 0: default:                                                                  \
-    if (::aspia::checkOpResult true_if_passed =                                                  \
+    if (::aspia::CheckOpResult true_if_passed =                                                  \
         DCHECK_IS_ON() ?                                                                         \
         ::aspia::check##name##Impl((val1), (val2),  #val1 " " #op " " #val2) : nullptr);         \
     else                                                                                         \
