@@ -20,6 +20,7 @@
 #define ASPIA_VERSION_H_
 
 // Version information.
+#define ASPIA_VERSION_NUMBER 0x01010000
 #define ASPIA_VERSION_STRING "1.1.0"
 #define ASPIA_VERSION        1,1,0,0
 

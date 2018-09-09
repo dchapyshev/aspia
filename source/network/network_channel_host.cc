@@ -24,6 +24,7 @@
 #include "crypto/cryptor_aes256_gcm.h"
 #include "crypto/cryptor_chacha20_poly1305.h"
 #include "network/srp_host_context.h"
+#include "version.h"
 
 namespace aspia {
 
@@ -86,6 +87,7 @@ void NetworkChannelHost::readClientHello(const QByteArray& buffer)
     }
 
     proto::ServerHello server_hello;
+    server_hello.set_version(ASPIA_VERSION_NUMBER);
 
     if ((client_hello.methods() & proto::METHOD_SRP_AES256_GCM) && CPUID::hasAesNi())
     {

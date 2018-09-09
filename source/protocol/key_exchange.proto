@@ -28,9 +28,8 @@ package aspia.proto;
 //    Field |methods| contains supported methods.
 // 2. The server selects the preferred method and sends the message |ServerHello|.
 //    Field |method| contains the selected method.
-// NOTE: Now we support only algorithm |METHOD_SRP_CHACHA20_POLY1305|.
 //
-// Description of algorithm |ALGORITHM_SRP_CHACHA20_POLY1305| (authentication and key exchange):
+// Description of algorithms |ALGORITHM_SRP_*| (authentication and key exchange):
 // 1. The client sends message |SrpIdentify| with field |username| containing the user name.
 // 2. The server searches for a user who has the same username and sends a message
 //    |SrpServerKeyExchange|.
@@ -65,13 +64,15 @@ enum Method
 // Client to server.
 message ClientHello
 {
-    uint32 methods = 1;
+    uint32 version = 1;
+    uint32 methods = 2;
 }
 
 // Server to client.
 message ServerHello
 {
-    Method method = 1;
+    uint32 version = 1;
+    Method method = 2;
 }
 
 // Client to server.

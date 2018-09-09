@@ -32,6 +32,7 @@
 #include "crypto/cryptor_chacha20_poly1305.h"
 #include "crypto/secure_memory.h"
 #include "network/srp_client_context.h"
+#include "version.h"
 
 namespace aspia {
 
@@ -130,6 +131,7 @@ void NetworkChannelClient::onConnected()
         methods |= proto::METHOD_SRP_AES256_GCM;
 
     proto::ClientHello client_hello;
+    client_hello.set_version(ASPIA_VERSION_NUMBER);
     client_hello.set_methods(methods);
 
     // Send ClientHello to server.
