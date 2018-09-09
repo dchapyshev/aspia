@@ -18,7 +18,7 @@
 
 #include "codec/video_encoder_vpx.h"
 
-#include <QThread>
+#include <thread>
 
 #include <libyuv/convert_from_argb.h>
 
@@ -62,7 +62,7 @@ void setCommonCodecParameters(vpx_codec_enc_cfg_t* config, const DesktopSize& si
     // adequate processing power. NB: Going to multiple threads on low end
     // windows systems can really hurt performance.
     // http://crbug.com/99179
-    config->g_threads = (QThread::idealThreadCount() > 2) ? 2 : 1;
+    config->g_threads = (std::thread::hardware_concurrency() > 2) ? 2 : 1;
 }
 
 void createImage(proto::desktop::VideoEncoding encoding,
