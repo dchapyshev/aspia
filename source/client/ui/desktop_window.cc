@@ -27,12 +27,12 @@
 #include <QScrollArea>
 #include <QScrollBar>
 
-#include "base/clipboard.h"
 #include "base/logging.h"
 #include "client/ui/desktop_config_dialog.h"
 #include "client/ui/desktop_panel.h"
 #include "client/ui/desktop_widget.h"
 #include "desktop_capture/desktop_frame_qimage.h"
+#include "share/clipboard.h"
 
 namespace aspia {
 

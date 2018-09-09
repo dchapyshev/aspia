@@ -40,8 +40,6 @@ list(APPEND SOURCE_BASE
     ${PROJECT_SOURCE_DIR}/base/aligned_memory.cc
     ${PROJECT_SOURCE_DIR}/base/aligned_memory.h
     ${PROJECT_SOURCE_DIR}/base/bitset.h
-    ${PROJECT_SOURCE_DIR}/base/clipboard.cc
-    ${PROJECT_SOURCE_DIR}/base/clipboard.h
     ${PROJECT_SOURCE_DIR}/base/const_buffer.h
     ${PROJECT_SOURCE_DIR}/base/cpuid.cc
     ${PROJECT_SOURCE_DIR}/base/cpuid.h
@@ -460,6 +458,10 @@ list(APPEND SOURCE_PROTOCOL
     ${PROJECT_SOURCE_DIR}/protocol/srp_user.proto
     ${PROJECT_SOURCE_DIR}/protocol/system_info_session.proto)
 
+list(APPEND SOURCE_SHARE
+    ${PROJECT_SOURCE_DIR}/share/clipboard.cc
+    ${PROJECT_SOURCE_DIR}/share/clipboard.h)
+
 list(APPEND SOURCE_SYSTEM_INFO
     ${PROJECT_SOURCE_DIR}/system_info/category.cc
     ${PROJECT_SOURCE_DIR}/system_info/category.h)
@@ -509,6 +511,7 @@ list(APPEND ALL_SOURCES
     ${SOURCE_IPC}
     ${SOURCE_NETWORK}
     ${SOURCE_PROTOCOL}
+    ${SOURCE_SHARE}
     ${SOURCE_SYSTEM_INFO}
     ${SOURCE_SYSTEM_INFO_PARSER}
     ${SOURCE_SYSTEM_INFO_PROTOCOL}
