@@ -14,7 +14,6 @@
     <file>folder-stand.png</file>
     <file>monitor.png</file>
     <file>monitor-keyboard.png</file>
-    <file>system-monitor.png</file>
     <file>document.png</file>
   </qresource>
 </RCC>
