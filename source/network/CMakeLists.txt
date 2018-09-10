@@ -32,9 +32,13 @@ list(APPEND SOURCE_NETWORK
     srp_host_context.cc
     srp_host_context.h)
 
-source_group("" FILES ${SOURCE_NETWORK})
+file(GLOB_RECURSE NETWORK_HEADERS ${PROJECT_SOURCE_DIR}/network/*.h)
+qt5_wrap_cpp(SOURCE_NETWORK_MOC ${NETWORK_HEADERS} OPTIONS "--no-notes")
 
-add_library(aspia_network STATIC ${SOURCE_NETWORK})
+source_group("" FILES ${SOURCE_NETWORK})
+source_group(moc FILES ${SOURCE_NETWORK_MOC})
+
+add_library(aspia_network STATIC ${SOURCE_NETWORK} ${SOURCE_NETWORK_MOC})
 target_link_libraries(aspia_network
     aspia_base
     aspia_crypto

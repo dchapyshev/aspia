@@ -64,12 +64,28 @@ list(APPEND SOURCE_CONSOLE
 list(APPEND SOURCE_CONSOLE_RESOURCES
     resources/console.qrc)
 
+file(GLOB_RECURSE CONSOLE_HEADERS ${PROJECT_SOURCE_DIR}/console/*.h)
+qt5_wrap_cpp(SOURCE_CONSOLE_MOC ${CONSOLE_HEADERS} OPTIONS "--no-notes")
+
+file(GLOB_RECURSE CONSOLE_UI_FILES ${PROJECT_SOURCE_DIR}/console/*.ui)
+qt5_wrap_ui(SOURCE_CONSOLE_UIC ${CONSOLE_UI_FILES})
+
+file(GLOB_RECURSE CONSOLE_QRC_FILES ${PROJECT_SOURCE_DIR}/console/resources/*.qrc)
+qt5_add_resources(SOURCE_CONSOLE_RCC ${CONSOLE_QRC_FILES})
+
 source_group("" FILES ${SOURCE_CONSOLE})
+source_group(moc FILES ${SOURCE_CONSOLE_MOC})
 source_group(resources FILES ${SOURCE_CONSOLE_RESOURCES})
+source_group(resources FILES ${SOURCE_CONSOLE_RCC})
+source_group(uic FILES ${SOURCE_CONSOLE_UIC})
 
-add_executable(aspia_console ${SOURCE_CONSOLE} ${SOURCE_CONSOLE_RESOURCES})
+add_executable(aspia_console
+    ${SOURCE_CONSOLE}
+    ${SOURCE_CONSOLE_MOC}
+    ${SOURCE_CONSOLE_RESOURCES}
+    ${SOURCE_CONSOLE_RCC}
+    ${SOURCE_CONSOLE_UIC})
 set_target_properties(aspia_console PROPERTIES WIN32_EXECUTABLE TRUE)
-
 target_link_libraries(aspia_console
     aspia_base
     aspia_client

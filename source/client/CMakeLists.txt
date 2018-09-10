@@ -107,14 +107,29 @@ list(APPEND SOURCE_CLIENT_UI
     ui/status_dialog.h
     ui/status_dialog.ui)
 
+file(GLOB_RECURSE CLIENT_H_FILES ${PROJECT_SOURCE_DIR}/client/*.h)
+qt5_wrap_cpp(SOURCE_CLIENT_MOC ${CLIENT_H_FILES} OPTIONS "--no-notes")
+
+file(GLOB_RECURSE CLIENT_UI_FILES ${PROJECT_SOURCE_DIR}/client/ui/*.ui)
+qt5_wrap_ui(SOURCE_CLIENT_UIC ${CLIENT_UI_FILES})
+
+file(GLOB_RECURSE CLIENT_QRC_FILES ${PROJECT_SOURCE_DIR}/client/resources/*.qrc)
+qt5_add_resources(SOURCE_CLIENT_RCC ${CLIENT_QRC_FILES})
+
 source_group("" FILES ${SOURCE_CLIENT})
 source_group(resources FILES ${SOURCE_CLIENT_RESOURCES})
+source_group(resources FILES ${SOURCE_CLIENT_RCC})
+source_group(moc FILES ${SOURCE_CLIENT_MOC})
 source_group(ui FILES ${SOURCE_CLIENT_UI})
+source_group(uic FILES ${SOURCE_CLIENT_UIC})
 
 add_library(aspia_client STATIC
     ${SOURCE_CLIENT}
     ${SOURCE_CLIENT_RESOURCES}
-    ${SOURCE_CLIENT_UI})
+    ${SOURCE_CLIENT_RCC}
+    ${SOURCE_CLIENT_MOC}
+    ${SOURCE_CLIENT_UI}
+    ${SOURCE_CLIENT_UIC})
 target_link_libraries(aspia_client
     aspia_base
     aspia_codec

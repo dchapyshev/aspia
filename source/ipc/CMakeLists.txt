@@ -22,9 +22,13 @@ list(APPEND SOURCE_IPC
     ipc_server.cc
     ipc_server.h)
 
-source_group("" FILES ${SOURCE_IPC})
+file(GLOB_RECURSE IPC_HEADERS ${PROJECT_SOURCE_DIR}/ipc/*.h)
+qt5_wrap_cpp(SOURCE_IPC_MOC ${IPC_HEADERS} OPTIONS "--no-notes")
 
-add_library(aspia_ipc STATIC ${SOURCE_IPC})
+source_group("" FILES ${SOURCE_IPC})
+source_group(moc FILES ${SOURCE_IPC_MOC})
+
+add_library(aspia_ipc STATIC ${SOURCE_IPC} ${SOURCE_IPC_MOC})
 target_link_libraries(aspia_ipc
     aspia_base
     ${THIRD_PARTY_LIBS})
