@@ -23,8 +23,8 @@
 #include <QIcon>
 
 #include "base/macros_magic.h"
-#include "host/file_platform_util.h"
-#include "file_transfer_session.pb.h"
+#include "protocol/file_transfer_session.pb.h"
+#include "share/file_platform_util.h"
 
 namespace aspia {
 

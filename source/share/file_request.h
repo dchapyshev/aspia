@@ -16,15 +16,15 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_HOST__FILE_REQUEST_H_
-#define ASPIA_HOST__FILE_REQUEST_H_
+#ifndef ASPIA_SHARE__FILE_REQUEST_H_
+#define ASPIA_SHARE__FILE_REQUEST_H_
 
 #include <QObject>
 #include <QPointer>
 #include <QString>
 
 #include "base/macros_magic.h"
-#include "file_transfer_session.pb.h"
+#include "protocol/file_transfer_session.pb.h"
 
 namespace aspia {
 
@@ -60,4 +60,4 @@ private:
 
 } // namespace aspia
 
-#endif // ASPIA_HOST__FILE_REQUEST_H_
+#endif // ASPIA_SHARE__FILE_REQUEST_H_

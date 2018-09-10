@@ -27,7 +27,7 @@
 #include <vpx/vpx_codec.h>
 #include <zlib-ng.h>
 
-#include "version.h"
+#include "build/version.h"
 
 namespace aspia {
 

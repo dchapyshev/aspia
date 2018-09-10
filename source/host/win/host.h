@@ -22,7 +22,7 @@
 #include <QPointer>
 
 #include "base/macros_magic.h"
-#include "session_type.pb.h"
+#include "protocol/session_type.pb.h"
 
 namespace aspia {
 
@@ -82,7 +82,7 @@ private:
     int attach_timer_id_ = 0;
     State state_ = State::STOPPED;
 
-    QPointer<NetworkChannelHost> network_channel_;
+    NetworkChannelHost* network_channel_ = nullptr;
     QPointer<IpcChannel> ipc_channel_;
     QPointer<HostProcess> session_process_;
     QPointer<HostSessionFake> fake_session_;

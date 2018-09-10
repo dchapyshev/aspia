@@ -27,4 +27,4 @@ IDI_ICON1 ICON "host/resources/host-config.ico"
 #define ASPIA_ORIGINAL_FILE_NAME "aspia_host_config.exe"
 #define ASPIA_FILE_DESCRIPTION "Aspia Host Configuration"
 
-#include "version.rc"
+#include "build/version.rc"

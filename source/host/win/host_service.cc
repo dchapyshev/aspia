@@ -27,12 +27,12 @@
 
 #include "base/win/scoped_com_initializer.h"
 #include "base/win/security_helpers.h"
+#include "build/version.h"
 #include "host/win/host_service_constants.h"
 #include "base/locale_loader.h"
 #include "base/logging.h"
 #include "host/host_server.h"
 #include "host/host_settings.h"
-#include "version.h"
 
 namespace aspia {
 

@@ -19,9 +19,9 @@
 #include "host/host_config_main.h"
 
 #include "base/logging.h"
+#include "build/version.h"
 #include "crypto/scoped_crypto_initializer.h"
 #include "host/ui/host_config_dialog.h"
-#include "version.h"
 
 namespace aspia {
 

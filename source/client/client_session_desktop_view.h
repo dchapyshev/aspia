@@ -26,7 +26,7 @@
 #include "client/client_session.h"
 #include "client/connect_data.h"
 #include "codec/video_decoder.h"
-#include "address_book.pb.h"
+#include "protocol/address_book.pb.h"
 
 namespace aspia {
 

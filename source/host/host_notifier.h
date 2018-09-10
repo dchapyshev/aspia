@@ -20,7 +20,7 @@
 #define ASPIA_HOST__HOST_NOTIFIER_H_
 
 #include "ipc/ipc_channel.h"
-#include "notifier.pb.h"
+#include "protocol/notifier.pb.h"
 
 namespace aspia {
 

@@ -22,7 +22,7 @@
 #include <QSettings>
 
 #include "base/macros_magic.h"
-#include "session_type.pb.h"
+#include "protocol/session_type.pb.h"
 
 namespace aspia {
 

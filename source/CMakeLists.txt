@@ -38,37 +38,6 @@ find_package(Qt5 REQUIRED Core Gui Network Widgets WinExtras Xml)
 find_package(Qt5LinguistTools)
 find_package(Protobuf REQUIRED)
 
-include(aspia_core.cmake)
-
-source_group(client FILES ${SOURCE_CLIENT})
-source_group(client\\resources FILES ${SOURCE_CLIENT_RESOURCES})
-source_group(client\\ui FILES ${SOURCE_CLIENT_UI})
-source_group(codec FILES ${SOURCE_CODEC})
-source_group(console FILES ${SOURCE_CONSOLE})
-source_group(console\\resources FILES ${SOURCE_CONSOLE_RESOURCES})
-source_group(crypto FILES ${SOURCE_CRYPTO})
-source_group(crypto FILES ${SOURCE_CRYPTO_UNIT_TESTS})
-source_group(desktop_capture FILES ${SOURCE_DESKTOP_CAPTURE})
-source_group(desktop_capture FILES ${SOURCE_DESKTOP_CAPTURE_UNIT_TESTS})
-source_group(desktop_capture\\win FILES ${SOURCE_DESKTOP_CAPTURE_WIN})
-source_group(host FILES ${SOURCE_HOST})
-source_group(host\\resources FILES ${SOURCE_HOST_RESOURCES})
-source_group(host\\ui FILES ${SOURCE_HOST_UI})
-source_group(host\\win FILES ${SOURCE_HOST_WIN})
-source_group(ipc FILES ${SOURCE_IPC})
-source_group(network FILES ${SOURCE_NETWORK})
-source_group(protocol FILES ${SOURCE_PROTOCOL})
-source_group(share FILES ${SOURCE_SHARE})
-source_group(system_info FILES ${SOURCE_SYSTEM_INFO})
-source_group(system_info\\parser FILES ${SOURCE_SYSTEM_INFO_PARSER})
-source_group(system_info\\protocol FILES ${SOURCE_SYSTEM_INFO_PROTOCOL})
-source_group(system_info\\serializer FILES ${SOURCE_SYSTEM_INFO_SERIALIZER})
-source_group(system_info\\ui FILES ${SOURCE_SYSTEM_INFO_UI})
-source_group("" FILES ${SOURCE})
-
-protobuf_generate_cpp(PROTOCOL_CC_FILES PROTOCOL_H_FILES ${SOURCE_PROTOCOL} ${SOURCE_SYSTEM_INFO_PROTOCOL})
-set_source_files_properties(${PROTOCOL_CC_FILES} ${PROTOCOL_H_FILES} PROPERTIES SKIP_AUTOGEN ON)
-
 add_definitions(-D_UNICODE
                 -DNTDDI_VERSION=0x06010000
                 -D_WIN32_WINNT=0x0601
@@ -80,6 +49,81 @@ add_definitions(-D_UNICODE
                 -D_CRT_SECURE_NO_WARNINGS
                 -DCORE_IMPLEMENTATION)
 
+include_directories(
+    ${PROJECT_SOURCE_DIR}
+    ${PROJECT_BINARY_DIR}
+    ${ASPIA_THIRD_PARTY_DIR}/googletest/include
+    ${ASPIA_THIRD_PARTY_DIR}/libvpx/include
+    ${ASPIA_THIRD_PARTY_DIR}/libyuv/include
+    ${ASPIA_THIRD_PARTY_DIR}/zlib-ng/include
+    ${ASPIA_THIRD_PARTY_DIR}/openssl/include
+    ${ASPIA_THIRD_PARTY_DIR}/protobuf/include)
+
+link_directories(
+    ${ASPIA_THIRD_PARTY_DIR}/googletest/lib
+    ${ASPIA_THIRD_PARTY_DIR}/libvpx/lib
+    ${ASPIA_THIRD_PARTY_DIR}/libyuv/lib
+    ${ASPIA_THIRD_PARTY_DIR}/zlib-ng/lib
+    ${ASPIA_THIRD_PARTY_DIR}/openssl/lib
+    ${ASPIA_THIRD_PARTY_DIR}/protobuf/lib
+    ${ASPIA_THIRD_PARTY_DIR}/qt/lib
+    ${ASPIA_THIRD_PARTY_DIR}/qt/plugins/platforms
+    ${ASPIA_THIRD_PARTY_DIR}/qt/plugins/styles)
+
+set(THIRD_PARTY_LIBS
+    Qt5::Core
+    Qt5::Gui
+    Qt5::Network
+    Qt5::Widgets
+    Qt5::WinMain
+    Qt5::WinExtras
+    Qt5::Xml
+    debug Qt5AccessibilitySupportd
+    debug Qt5EventDispatcherSupportd
+    debug Qt5FontDatabaseSupportd
+    debug Qt5ThemeSupportd
+    debug Qt5WindowsUIAutomationSupportd
+    debug libprotobuf-lited
+    debug libvpxd
+    debug libyuvd
+    debug qtfreetyped
+    debug qtharfbuzzd
+    debug qtlibpngd
+    debug qtpcre2d
+    debug qwindowsd
+    debug qwindowsvistastyled
+    debug zlib-ngd
+    optimized Qt5AccessibilitySupport
+    optimized Qt5EventDispatcherSupport
+    optimized Qt5FontDatabaseSupport
+    optimized Qt5ThemeSupport
+    optimized Qt5WindowsUIAutomationSupport
+    optimized libprotobuf-lite
+    optimized libvpx
+    optimized libyuv
+    optimized qtfreetype
+    optimized qtharfbuzz
+    optimized qtlibpng
+    optimized qtpcre2
+    optimized qwindows
+    optimized qwindowsvistastyle
+    optimized zlib-ng
+    crypt32
+    dwmapi
+    imm32
+    iphlpapi
+    libcrypto
+    mpr
+    netapi32
+    sas
+    shlwapi
+    userenv
+    uxtheme
+    version
+    winmm
+    ws2_32
+    wtsapi32)
+
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /Ob2 /Oi /Ot /Oy /GL /MT /MP /arch:SSE2 /fp:fast /wd4146")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MTd /MP /wd4146")
@@ -90,41 +134,19 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
-add_subdirectory(base)
-add_subdirectory(client)
-add_subdirectory(console)
-add_subdirectory(host)
-
-add_library(aspia_core SHARED ${ALL_SOURCES} ${PROTOCOL_CC_FILES} ${PROTOCOL_H_FILES})
-target_link_libraries(aspia_core aspia_base ${THIRD_PARTY_LIBS})
-
-add_executable(aspia_console ${PROJECT_SOURCE_DIR}/console/entry_point.cc ${PROJECT_SOURCE_DIR}/console/console.rc)
-set_target_properties(aspia_console PROPERTIES WIN32_EXECUTABLE TRUE)
-target_link_libraries(aspia_console aspia_core)
-
-add_executable(aspia_host_config ${PROJECT_SOURCE_DIR}/host/host_config_entry_point.cc ${PROJECT_SOURCE_DIR}/host/host_config.rc)
-set_target_properties(aspia_host_config PROPERTIES WIN32_EXECUTABLE TRUE)
-set_target_properties(aspia_host_config PROPERTIES LINK_FLAGS "/MANIFEST:NO")
-target_link_libraries(aspia_host_config aspia_core)
-
-add_executable(aspia_host_service ${PROJECT_SOURCE_DIR}/host/win/host_service_entry_point.cc ${PROJECT_SOURCE_DIR}/host/win/host_service.rc)
-target_link_libraries(aspia_host_service aspia_core)
-
-add_executable(aspia_host ${PROJECT_SOURCE_DIR}/host/win/host_entry_point.cc ${PROJECT_SOURCE_DIR}/host/win/host.rc)
-set_target_properties(aspia_host PROPERTIES WIN32_EXECUTABLE TRUE)
-set_target_properties(aspia_host PROPERTIES LINK_FLAGS "/MANIFEST:NO")
-target_link_libraries(aspia_host aspia_core)
-
 # If the build of unit tests is enabled.
 if (BUILD_UNIT_TESTS)
-    add_executable(aspia_unit_tests ${ALL_SOURCES_WITH_UNIT_TESTS} ${PROTOCOL_CC_FILES} ${PROTOCOL_H_FILES})
-    target_link_libraries(aspia_unit_tests
-        ${THIRD_PARTY_LIBS}
-        optimized gtest
-        optimized gtest_main
-        debug gtestd
-        debug gtest_maind)
-
     enable_testing()
-    add_test(NAME aspia_unit_tests COMMAND aspia_unit_tests)
 endif()
+
+add_subdirectory(base)
+add_subdirectory(client)
+add_subdirectory(codec)
+add_subdirectory(console)
+add_subdirectory(crypto)
+add_subdirectory(desktop_capture)
+add_subdirectory(host)
+add_subdirectory(ipc)
+add_subdirectory(network)
+add_subdirectory(protocol)
+add_subdirectory(share)

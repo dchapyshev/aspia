@@ -27,4 +27,4 @@ IDI_ICON2 ICON "console/resources/address-book.ico"
 #define ASPIA_ORIGINAL_FILE_NAME "aspia_console.exe"
 #define ASPIA_FILE_DESCRIPTION "Aspia Console"
 
-#include "version.rc"
+#include "build/version.rc"

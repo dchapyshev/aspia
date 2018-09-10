@@ -67,6 +67,7 @@ list(APPEND SOURCE_BASE_WIN
     ${PROJECT_SOURCE_DIR}/base/win/security_helpers.h)
 
 source_group("" FILES ${SOURCE_BASE})
+source_group("" FILES ${SOURCE_BASE_UNIT_TESTS})
 source_group(win FILES ${SOURCE_BASE_WIN})
 
 add_library(aspia_base STATIC ${SOURCE_BASE} ${SOURCE_BASE_WIN})
@@ -74,15 +75,15 @@ target_link_libraries(aspia_base ${THIRD_PARTY_LIBS})
 
 # If the build of unit tests is enabled.
 if (BUILD_UNIT_TESTS)
-    add_executable(aspia_base_tests ${SOURCE_BASE} ${SOURCE_BASE_WIN})
+    add_executable(aspia_base_tests ${SOURCE_BASE_UNIT_TESTS})
     target_link_libraries(aspia_base_tests
-        ${THIRD_PARTY_LIBS}
+        aspia_base
         optimized gtest
         optimized gtest_main
         debug gtestd
-        debug gtest_maind)
+        debug gtest_maind
+        ${THIRD_PARTY_LIBS})
 
-    enable_testing()
     add_test(NAME aspia_base_tests COMMAND aspia_base_tests)
 endif()
 

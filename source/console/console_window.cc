@@ -27,6 +27,7 @@
 #include <QTranslator>
 
 #include "base/logging.h"
+#include "build/build_config.h"
 #include "client/ui/authorization_dialog.h"
 #include "client/ui/client_dialog.h"
 #include "client/client.h"
@@ -34,7 +35,6 @@
 #include "console/about_dialog.h"
 #include "console/address_book_tab.h"
 #include "console/console_settings.h"
-#include "build_config.h"
 
 namespace aspia {
 
@@ -129,9 +129,6 @@ ConsoleWindow::ConsoleWindow(const QString& file_path, QWidget* parent)
 
     connect(ui.action_file_transfer_connect, &QAction::triggered,
             this, &ConsoleWindow::onFileTransferConnect);
-      
-    connect(ui.action_system_info_connect, &QAction::triggered,
-            this, &ConsoleWindow::onSystemInfoConnect);
 
     connect(ui.tool_bar, &QToolBar::visibilityChanged, ui.action_toolbar, &QAction::setChecked);
     connect(ui.action_toolbar, &QAction::toggled, ui.tool_bar, &QToolBar::setVisible);
@@ -145,7 +142,6 @@ ConsoleWindow::ConsoleWindow(const QString& file_path, QWidget* parent)
     session_type_group->addAction(ui.action_desktop_manage);
     session_type_group->addAction(ui.action_desktop_view);
     session_type_group->addAction(ui.action_file_transfer);
-    session_type_group->addAction(ui.action_system_info);
 
     switch (settings.sessionType())
     {
@@ -159,10 +155,6 @@ ConsoleWindow::ConsoleWindow(const QString& file_path, QWidget* parent)
 
         case proto::SESSION_TYPE_FILE_TRANSFER:
             ui.action_file_transfer->setChecked(true);
-            break;
-
-        case proto::SESSION_TYPE_SYSTEM_INFO:
-            ui.action_system_info->setChecked(true);
             break;
 
         default:
@@ -355,22 +347,6 @@ void ConsoleWindow::onFileTransferConnect()
     }
 }
 
-void ConsoleWindow::onSystemInfoConnect()
-{
-    AddressBookTab* tab = currentAddressBookTab();
-    if (tab)
-    {
-        proto::address_book::Computer* computer = tab->currentComputer();
-        if (computer)
-        {
-            computer->set_connect_time(QDateTime::currentSecsSinceEpoch());
-            computer->set_session_type(proto::SESSION_TYPE_SYSTEM_INFO);
-
-            connectToComputer(*computer);
-        }
-    }
-}
-
 void ConsoleWindow::onCurrentTabChanged(int index)
 {
     if (index == -1)
@@ -555,10 +531,6 @@ void ConsoleWindow::onComputerDoubleClicked(proto::address_book::Computer* compu
     {
         computer->set_session_type(proto::SESSION_TYPE_FILE_TRANSFER);
     }
-    else if (ui.action_system_info->isChecked())
-    {
-        computer->set_session_type(proto::SESSION_TYPE_SYSTEM_INFO);
-    }
     else
     {
         LOG(LS_FATAL) << "Unknown session type";
@@ -671,8 +643,6 @@ void ConsoleWindow::closeEvent(QCloseEvent* event)
         settings.setSessionType(proto::SESSION_TYPE_DESKTOP_VIEW);
     else if (ui.action_file_transfer->isChecked())
         settings.setSessionType(proto::SESSION_TYPE_FILE_TRANSFER);
-    else if (ui.action_system_info->isChecked())
-        settings.setSessionType(proto::SESSION_TYPE_SYSTEM_INFO);
 
     QApplication::quit();
     QMainWindow::closeEvent(event);

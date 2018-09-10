@@ -21,8 +21,8 @@
 
 #include "host/desktop_config_tracker.h"
 #include "host/host_session.h"
-#include "session_type.pb.h"
-#include "build_config.h"
+#include "protocol/session_type.pb.h"
+#include "build/build_config.h"
 
 namespace aspia {
 

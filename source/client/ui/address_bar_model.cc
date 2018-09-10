@@ -18,7 +18,7 @@
 
 #include "client/ui/address_bar_model.h"
 
-#include "host/file_platform_util.h"
+#include "share/file_platform_util.h"
 
 namespace aspia {
 

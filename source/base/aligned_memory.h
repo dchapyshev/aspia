@@ -48,7 +48,7 @@
 #ifndef ASPIA_BASE__ALIGNED_MEMORY_H_
 #define ASPIA_BASE__ALIGNED_MEMORY_H_
 
-#include "build_config.h"
+#include "build/build_config.h"
 
 #include <cstddef>
 #include <cstdint>

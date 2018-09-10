@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/file_packetizer.h"
+#include "share/file_packetizer.h"
 
 #include "base/logging.h"
 

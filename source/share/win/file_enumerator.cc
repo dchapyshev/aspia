@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/win/file_enumerator.h"
+#include "share/win/file_enumerator.h"
 
 #include "base/logging.h"
 

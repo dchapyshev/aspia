@@ -24,4 +24,4 @@ LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 #define ASPIA_ORIGINAL_FILE_NAME "aspia_host_service.exe"
 #define ASPIA_FILE_DESCRIPTION "Aspia Host Service"
 
-#include "version.rc"
+#include "build/version.rc"

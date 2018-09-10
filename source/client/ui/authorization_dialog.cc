@@ -18,47 +18,52 @@
 
 #include "client/ui/authorization_dialog.h"
 
+#include "ui_authorization_dialog.h"
+
 namespace aspia {
 
 AuthorizationDialog::AuthorizationDialog(QWidget* parent)
-    : QDialog(parent)
+    : QDialog(parent),
+      ui(new Ui::AuthorizationDialog())
 {
-    ui.setupUi(this);
+    ui->setupUi(this);
     setFixedHeight(sizeHint().height());
 
-    connect(ui.button_show_password, &QPushButton::toggled,
+    connect(ui->button_show_password, &QPushButton::toggled,
             this, &AuthorizationDialog::onShowPasswordButtonToggled);
 
-    connect(ui.button_box, &QDialogButtonBox::clicked,
+    connect(ui->button_box, &QDialogButtonBox::clicked,
             this, &AuthorizationDialog::onButtonBoxClicked);
 }
 
+AuthorizationDialog::~AuthorizationDialog() = default;
+
 QString AuthorizationDialog::userName() const
 {
-    return ui.edit_username->text();
+    return ui->edit_username->text();
 }
 
 void AuthorizationDialog::setUserName(const QString& username)
 {
-    ui.edit_username->setText(username);
+    ui->edit_username->setText(username);
 }
 
 QString AuthorizationDialog::password() const
 {
-    return ui.edit_password->text();
+    return ui->edit_password->text();
 }
 
 void AuthorizationDialog::setPassword(const QString& password)
 {
-    ui.edit_password->setText(password);
+    ui->edit_password->setText(password);
 }
 
 void AuthorizationDialog::showEvent(QShowEvent* event)
 {
-    if (ui.edit_username->text().isEmpty())
-        ui.edit_username->setFocus();
+    if (ui->edit_username->text().isEmpty())
+        ui->edit_username->setFocus();
     else
-        ui.edit_password->setFocus();
+        ui->edit_password->setFocus();
 
     QDialog::showEvent(event);
 }
@@ -67,20 +72,20 @@ void AuthorizationDialog::onShowPasswordButtonToggled(bool checked)
 {
     if (checked)
     {
-        ui.edit_password->setEchoMode(QLineEdit::Normal);
-        ui.edit_password->setInputMethodHints(Qt::ImhNone);
+        ui->edit_password->setEchoMode(QLineEdit::Normal);
+        ui->edit_password->setInputMethodHints(Qt::ImhNone);
     }
     else
     {
-        ui.edit_password->setEchoMode(QLineEdit::Password);
-        ui.edit_password->setInputMethodHints(Qt::ImhHiddenText | Qt::ImhSensitiveData |
-                                              Qt::ImhNoAutoUppercase | Qt::ImhNoPredictiveText);
+        ui->edit_password->setEchoMode(QLineEdit::Password);
+        ui->edit_password->setInputMethodHints(Qt::ImhHiddenText | Qt::ImhSensitiveData |
+                                               Qt::ImhNoAutoUppercase | Qt::ImhNoPredictiveText);
     }
 }
 
 void AuthorizationDialog::onButtonBoxClicked(QAbstractButton* button)
 {
-    if (ui.button_box->standardButton(button) == QDialogButtonBox::Ok)
+    if (ui->button_box->standardButton(button) == QDialogButtonBox::Ok)
         accept();
     else
         reject();

@@ -20,7 +20,7 @@
 #define ASPIA_CONSOLE__COMPUTER_DIALOG_H_
 
 #include "base/macros_magic.h"
-#include "address_book.pb.h"
+#include "protocol/address_book.pb.h"
 #include "ui_computer_dialog.h"
 
 namespace aspia {

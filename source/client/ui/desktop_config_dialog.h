@@ -19,10 +19,17 @@
 #ifndef ASPIA_CLIENT__UI__DESKTOP_CONFIG_DIALOG_H_
 #define ASPIA_CLIENT__UI__DESKTOP_CONFIG_DIALOG_H_
 
+#include <QDialog>
+
 #include "base/macros_magic.h"
-#include "desktop_session.pb.h"
-#include "session_type.pb.h"
-#include "ui_desktop_config_dialog.h"
+#include "protocol/desktop_session.pb.h"
+#include "protocol/session_type.pb.h"
+
+namespace Ui {
+class DesktopConfigDialog;
+} // namespace Ui
+
+class QAbstractButton;
 
 namespace aspia {
 
@@ -34,7 +41,7 @@ public:
     DesktopConfigDialog(proto::SessionType session_type,
                         const proto::desktop::Config& config,
                         QWidget* parent = nullptr);
-    ~DesktopConfigDialog() = default;
+    ~DesktopConfigDialog();
 
     const proto::desktop::Config& config() { return config_; }
 
@@ -47,7 +54,7 @@ private slots:
     void onButtonBoxClicked(QAbstractButton* button);
 
 private:
-    Ui::DesktopConfigDialog ui;
+    QScopedPointer<Ui::DesktopConfigDialog> ui;
 
     proto::desktop::Config config_;
 

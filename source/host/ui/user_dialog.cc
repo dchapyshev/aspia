@@ -22,9 +22,9 @@
 #include <QMouseEvent>
 
 #include "base/logging.h"
-#include "host/user_util.h"
 #include "network/srp_host_context.h"
-#include "session_type.pb.h"
+#include "protocol/session_type.pb.h"
+#include "share/user_util.h"
 
 namespace aspia {
 
@@ -80,10 +80,6 @@ UserDialog::UserDialog(const proto::SrpUserList& user_list, proto::SrpUser* user
     add_session_type(QIcon(QStringLiteral(":/icon/folder-stand.png")),
                      tr("File Transfer"),
                      proto::SESSION_TYPE_FILE_TRANSFER);
-
-    add_session_type(QIcon(QStringLiteral(":/icon/system-monitor.png")),
-                     tr("System Information"),
-                     proto::SESSION_TYPE_SYSTEM_INFO);
 
     connect(ui.button_check_all, &QPushButton::pressed, this, &UserDialog::onCheckAllButtonPressed);
     connect(ui.button_check_none, &QPushButton::pressed, this, &UserDialog::onCheckNoneButtonPressed);

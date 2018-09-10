@@ -55,11 +55,6 @@ DesktopPanel::DesktopPanel(proto::SessionType session_type, QWidget* parent)
         emit startSession(proto::SESSION_TYPE_FILE_TRANSFER);
     });
 
-    connect(ui.action_system_info, &QAction::triggered, [this]()
-    {
-        emit startSession(proto::SESSION_TYPE_SYSTEM_INFO);
-    });
-
     ui.frame->hide();
     adjustSize();
 

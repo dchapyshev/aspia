@@ -21,7 +21,7 @@
 
 #include "base/locale_loader.h"
 #include "client/client_connections.h"
-#include "address_book.pb.h"
+#include "protocol/address_book.pb.h"
 #include "ui_console_window.h"
 
 class QSystemTrayIcon;
@@ -59,7 +59,6 @@ public slots:
     void onDesktopManageConnect();
     void onDesktopViewConnect();
     void onFileTransferConnect();
-    void onSystemInfoConnect();
 
     void onCurrentTabChanged(int index);
     void onCloseTab(int index);

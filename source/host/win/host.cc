@@ -90,7 +90,7 @@ QString Host::remoteAddress() const
 
 bool Host::start()
 {
-    if (network_channel_.isNull())
+    if (!network_channel_)
     {
         DLOG(LS_WARNING) << "Invalid network channel";
         return false;
@@ -101,7 +101,6 @@ bool Host::start()
         case proto::SESSION_TYPE_DESKTOP_MANAGE:
         case proto::SESSION_TYPE_DESKTOP_VIEW:
         case proto::SESSION_TYPE_FILE_TRANSFER:
-        case proto::SESSION_TYPE_SYSTEM_INFO:
             break;
 
         default:
@@ -212,7 +211,7 @@ void Host::ipcServerStarted(const QString& channel_id)
 
     session_process_->setSessionId(session_id_);
     session_process_->setProgram(
-        QCoreApplication::applicationDirPath() + QLatin1String("/aspia_host.exe"));
+        QCoreApplication::applicationDirPath() + QLatin1String("/aspia_host_session.exe"));
 
     QStringList arguments;
 
@@ -234,11 +233,6 @@ void Host::ipcServerStarted(const QString& channel_id)
         case proto::SESSION_TYPE_FILE_TRANSFER:
             session_process_->setAccount(HostProcess::Account::User);
             arguments << QStringLiteral("file_transfer");
-            break;
-
-        case proto::SESSION_TYPE_SYSTEM_INFO:
-            session_process_->setAccount(HostProcess::Account::System);
-            arguments << QStringLiteral("system_info");
             break;
 
         default:

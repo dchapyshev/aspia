@@ -20,17 +20,23 @@
 
 #include <QCommandLineParser>
 
+#include <QtGlobal>
+#include <QtPlugin>
+
+Q_IMPORT_PLUGIN (QWindowsIntegrationPlugin);
+Q_IMPORT_PLUGIN (QWindowsVistaStylePlugin);
+
 #include "base/logging.h"
+#include "build/version.h"
 #include "crypto/scoped_crypto_initializer.h"
 #include "console/console_window.h"
-#include "version.h"
 
-#include <Windows.h>
+using namespace aspia;
 
-namespace aspia {
-
-int consoleMain(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
+    Q_INIT_RESOURCE(client);
+
     LoggingSettings settings;
     settings.logging_dest = LOG_TO_ALL;
 
@@ -64,5 +70,3 @@ int consoleMain(int argc, char *argv[])
 
     return application.exec();
 }
-
-} // namespace aspia

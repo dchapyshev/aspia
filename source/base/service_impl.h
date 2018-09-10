@@ -22,7 +22,7 @@
 #include <QString>
 
 #include "base/macros_magic.h"
-#include "build_config.h"
+#include "build/build_config.h"
 
 namespace aspia {
 

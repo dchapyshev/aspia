@@ -22,7 +22,7 @@
 #include <QTreeView>
 
 #include "client/file_transfer.h"
-#include "file_transfer_session.pb.h"
+#include "protocol/file_transfer_session.pb.h"
 
 namespace aspia {
 

@@ -24,7 +24,7 @@
 #include <QTcpServer>
 
 #include "base/macros_magic.h"
-#include "srp_user.pb.h"
+#include "protocol/srp_user.pb.h"
 
 namespace aspia {
 

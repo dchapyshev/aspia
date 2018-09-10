@@ -22,8 +22,8 @@
 #include <QQueue>
 
 #include "client/file_remove_task.h"
-#include "host/file_request.h"
-#include "file_transfer_session.pb.h"
+#include "protocol/file_transfer_session.pb.h"
+#include "share/file_request.h"
 
 namespace aspia {
 

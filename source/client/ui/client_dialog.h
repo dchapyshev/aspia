@@ -19,9 +19,14 @@
 #ifndef ASPIA_CLIENT__UI__CLIENT_DIALOG_H_
 #define ASPIA_CLIENT__UI__CLIENT_DIALOG_H_
 
+#include <QDialog>
+
 #include "base/macros_magic.h"
-#include "address_book.pb.h"
-#include "ui_client_dialog.h"
+#include "protocol/address_book.pb.h"
+
+namespace Ui {
+class ClientDialog;
+} // namespace Ui
 
 namespace aspia {
 
@@ -31,7 +36,7 @@ class ClientDialog : public QDialog
 
 public:
     explicit ClientDialog(QWidget* parent = nullptr);
-    ~ClientDialog() = default;
+    ~ClientDialog();
 
     const proto::address_book::Computer& computer() const { return computer_; }
 
@@ -41,7 +46,7 @@ private slots:
     void connectButtonPressed();
 
 private:
-    Ui::ClientDialog ui;
+    QScopedPointer<Ui::ClientDialog> ui;
     proto::address_book::Computer computer_;
 
     DISALLOW_COPY_AND_ASSIGN(ClientDialog);

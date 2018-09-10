@@ -83,7 +83,7 @@
           <string/>
          </property>
          <property name="icon">
-          <iconset resource="../client.qrc">
+          <iconset resource="../resources/client.qrc">
            <normaloff>:/icon/settings.png</normaloff>:/icon/settings.png</iconset>
          </property>
          <property name="autoDefault">
@@ -128,7 +128,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="../client.qrc"/>
+  <include location="../resources/client.qrc"/>
  </resources>
  <connections/>
 </ui>

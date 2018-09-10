@@ -19,8 +19,8 @@
 #include "host/host_settings.h"
 
 #include "base/message_serialization.h"
+#include "build/build_config.h"
 #include "crypto/random.h"
-#include "build_config.h"
 
 namespace aspia {
 

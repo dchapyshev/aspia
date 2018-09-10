@@ -16,18 +16,18 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/file_worker.h"
+#include "share/file_worker.h"
 
 #include <QDateTime>
 #include <QStandardPaths>
 #include <QStorageInfo>
 
 #include "base/logging.h"
-#include "host/file_platform_util.h"
-#include "build_config.h"
+#include "build/build_config.h"
+#include "share/file_platform_util.h"
 
 #if defined(OS_WIN)
-#include "host/win/file_enumerator.h"
+#include "share/win/file_enumerator.h"
 #endif // defined(OS_WIN)
 
 namespace aspia {

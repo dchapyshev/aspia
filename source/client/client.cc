@@ -22,7 +22,6 @@
 #include "client/client_session_desktop_manage.h"
 #include "client/client_session_desktop_view.h"
 #include "client/client_session_file_transfer.h"
-#include "client/client_session_system_info.h"
 
 namespace aspia {
 
@@ -84,10 +83,6 @@ void Client::onChannelConnected()
 
         case proto::SESSION_TYPE_FILE_TRANSFER:
             session_ = new ClientSessionFileTransfer(&connect_data_, this);
-            break;
-
-        case proto::SESSION_TYPE_SYSTEM_INFO:
-            session_ = new ClientSessionSystemInfo(&connect_data_, this);
             break;
 
         default:

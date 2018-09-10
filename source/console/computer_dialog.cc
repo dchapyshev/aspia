@@ -24,7 +24,7 @@
 #include "client/ui/desktop_config_dialog.h"
 #include "client/client_session_desktop_manage.h"
 #include "console/computer_group_item.h"
-#include "host/user_util.h"
+#include "share/user_util.h"
 
 namespace aspia {
 
@@ -57,10 +57,6 @@ ComputerDialog::ComputerDialog(QWidget* parent,
     ui.combo_session_config->addItem(QIcon(QStringLiteral(":/icon/folder-stand.png")),
                                      tr("File Transfer"),
                                      QVariant(proto::SESSION_TYPE_FILE_TRANSFER));
-
-    ui.combo_session_config->addItem(QIcon(QStringLiteral(":/icon/system-monitor.png")),
-                                     tr("System Information"),
-                                     QVariant(proto::SESSION_TYPE_SYSTEM_INFO));
 
     ui.edit_parent_name->setText(QString::fromStdString(parent_computer_group->name()));
     ui.edit_name->setText(QString::fromStdString(computer_->name()));

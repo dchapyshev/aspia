@@ -20,7 +20,7 @@
 #define ASPIA_NETWORK__SRP_CLIENT_CONTEXT_H_
 
 #include "crypto/big_num.h"
-#include "key_exchange.pb.h"
+#include "protocol/key_exchange.pb.h"
 
 namespace aspia {
 

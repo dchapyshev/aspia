@@ -27,7 +27,7 @@
 #include "ipc/ipc_server.h"
 #include "network/firewall_manager.h"
 #include "network/network_channel_host.h"
-#include "notifier.pb.h"
+#include "protocol/notifier.pb.h"
 
 namespace aspia {
 
@@ -35,7 +35,7 @@ namespace {
 
 const wchar_t kFirewallRuleName[] = L"Aspia Host Service";
 const wchar_t kFirewallRuleDecription[] = L"Allow incoming TCP connections";
-const char kNotifierFileName[] = "aspia_host.exe";
+const char kNotifierFileName[] = "aspia_host_session.exe";
 
 const char* sessionTypeToString(proto::SessionType session_type)
 {
@@ -49,9 +49,6 @@ const char* sessionTypeToString(proto::SessionType session_type)
 
         case proto::SESSION_TYPE_FILE_TRANSFER:
             return "File Transfer";
-
-        case proto::SESSION_TYPE_SYSTEM_INFO:
-            return "System Information";
 
         default:
             return "Unknown";

@@ -70,7 +70,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../client.qrc">
+            <iconset resource="../resources/client.qrc">
              <normaloff>:/icon/eye.png</normaloff>:/icon/eye.png</iconset>
            </property>
            <property name="checkable">
@@ -97,7 +97,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="../client.qrc"/>
+  <include location="../resources/client.qrc"/>
  </resources>
  <connections>
   <connection>

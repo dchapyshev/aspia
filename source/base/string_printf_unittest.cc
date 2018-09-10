@@ -19,7 +19,7 @@
 #include <gtest/gtest.h>
 
 #include "base/string_printf.h"
-#include "build_config.h"
+#include "build/build_config.h"
 
 namespace aspia {
 
