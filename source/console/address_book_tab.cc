@@ -169,7 +169,6 @@ AddressBookTab::~AddressBookTab()
     cleanupData(&data_);
     cleanupFile(&file_);
 
-    secureMemZero(&file_path_);
     secureMemZero(&key_);
 }
 
@@ -218,8 +217,6 @@ AddressBookTab* AddressBookTab::openFromFile(const QString& file_path, QWidget* 
         showOpenError(parent, tr("The address book file is corrupted or has an unknown format."));
         return nullptr;
     }
-
-    secureMemZero(&buffer);
 
     proto::address_book::Data address_book_data;
     std::string key;
@@ -666,9 +663,9 @@ bool AddressBookTab::saveToFile(const QString& file_path)
 
     QByteArray buffer = serializeMessage(file_);
 
-    qint64 bytes_written = file.write(buffer);
+    int64_t bytes_written = file.write(buffer);
 
-    secureMemZero(&buffer);
+    secureMemZero(buffer.data(), buffer.size());
 
     if (bytes_written != buffer.size())
     {

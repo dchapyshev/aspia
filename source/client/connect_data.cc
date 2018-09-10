@@ -25,10 +25,7 @@ namespace aspia {
 
 ConnectData::~ConnectData()
 {
-    secureMemZero(&computer_name_);
-    secureMemZero(&address_);
-    secureMemZero(&user_name_);
-    secureMemZero(&password_);
+    secureMemZero(password_.data(), password_.size());
 }
 
 void ConnectData::setDesktopConfig(const proto::desktop::Config& config)
