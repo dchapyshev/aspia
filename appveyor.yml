@@ -64,8 +64,19 @@ build:
 
 test_script:
   - ps: |
-      $test = "$env:APPVEYOR_BUILD_FOLDER\build\$env:CONFIGURATION\aspia_unit_tests"
-      & $test
+      $tests_dir = "$env:APPVEYOR_BUILD_FOLDER\build\$env:CONFIGURATION";
+      $test_base = "$tests_dir\aspia_base_tests"
+      & $test_base
+      If ($LastExitCode -ne 0) {
+        exit $LastExitCode
+      }
+      $test_crypto = "$tests_dir\aspia_crypto_tests"
+      & $test_crypto
+      If ($LastExitCode -ne 0) {
+        exit $LastExitCode
+      }
+      $test_desktop_capture = "$tests_dir\aspia_desktop_capture_tests"
+      & $test_desktop_capture
       If ($LastExitCode -ne 0) {
         exit $LastExitCode
       }
