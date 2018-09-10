@@ -133,12 +133,15 @@
           <item>
            <widget class="QLabel" name="label_password_salt">
             <property name="text">
-             <string>Size of salt for password hashing (bytes):</string>
+             <string>Size of salt for password hashing:</string>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QSpinBox" name="spinbox_password_salt">
+            <property name="suffix">
+             <string> bytes</string>
+            </property>
             <property name="minimum">
              <number>64</number>
             </property>
@@ -166,14 +169,14 @@
               <item>
                <widget class="QLabel" name="label_salt_before">
                 <property name="text">
-                 <string>Size of salt before the data (bytes):</string>
+                 <string>Size of salt before the data:</string>
                 </property>
                </widget>
               </item>
               <item>
                <widget class="QLabel" name="label_salt_after">
                 <property name="text">
-                 <string>Size of salt after the data (bytes):</string>
+                 <string>Size of salt after the data:</string>
                 </property>
                </widget>
               </item>
@@ -183,6 +186,9 @@
              <layout class="QVBoxLayout" name="verticalLayout_9">
               <item>
                <widget class="QSpinBox" name="spinbox_salt_before">
+                <property name="suffix">
+                 <string> bytes</string>
+                </property>
                 <property name="minimum">
                  <number>64</number>
                 </property>
@@ -196,6 +202,9 @@
               </item>
               <item>
                <widget class="QSpinBox" name="spinbox_salt_after">
+                <property name="suffix">
+                 <string> bytes</string>
+                </property>
                 <property name="minimum">
                  <number>64</number>
                 </property>
