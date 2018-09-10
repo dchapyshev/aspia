@@ -19,7 +19,7 @@
 #ifndef ASPIA_HOST__WIN__HOST_SERVICE_MAIN_H_
 #define ASPIA_HOST__WIN__HOST_SERVICE_MAIN_H_
 
-#include "core_export.h"
+#include "host/host_export.h"
 
 namespace aspia {
 

@@ -21,8 +21,10 @@ add_subdirectory(translations)
 list(APPEND SOURCE_HOST
     ${PROJECT_SOURCE_DIR}/host/desktop_config_tracker.cc
     ${PROJECT_SOURCE_DIR}/host/desktop_config_tracker.h
+    ${PROJECT_SOURCE_DIR}/host/host.rc
     ${PROJECT_SOURCE_DIR}/host/host_config_main.cc
     ${PROJECT_SOURCE_DIR}/host/host_config_main.h
+    ${PROJECT_SOURCE_DIR}/host/host_export.h
     ${PROJECT_SOURCE_DIR}/host/host_notifier.cc
     ${PROJECT_SOURCE_DIR}/host/host_notifier.h
     ${PROJECT_SOURCE_DIR}/host/host_server.cc
