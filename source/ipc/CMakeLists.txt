@@ -17,10 +17,10 @@
 #
 
 list(APPEND SOURCE_IPC
-    ${PROJECT_SOURCE_DIR}/ipc/ipc_channel.cc
-    ${PROJECT_SOURCE_DIR}/ipc/ipc_channel.h
-    ${PROJECT_SOURCE_DIR}/ipc/ipc_server.cc
-    ${PROJECT_SOURCE_DIR}/ipc/ipc_server.h)
+    ipc_channel.cc
+    ipc_channel.h
+    ipc_server.cc
+    ipc_server.h)
 
 source_group("" FILES ${SOURCE_IPC})
 

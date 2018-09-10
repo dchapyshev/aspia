@@ -17,35 +17,35 @@
 #
 
 list(APPEND SOURCE_CRYPTO
-    ${PROJECT_SOURCE_DIR}/crypto/big_num.cc
-    ${PROJECT_SOURCE_DIR}/crypto/big_num.h
-    ${PROJECT_SOURCE_DIR}/crypto/cryptor.h
-    ${PROJECT_SOURCE_DIR}/crypto/cryptor_aes256_gcm.cc
-    ${PROJECT_SOURCE_DIR}/crypto/cryptor_aes256_gcm.h
-    ${PROJECT_SOURCE_DIR}/crypto/cryptor_chacha20_poly1305.cc
-    ${PROJECT_SOURCE_DIR}/crypto/cryptor_chacha20_poly1305.h
-    ${PROJECT_SOURCE_DIR}/crypto/data_cryptor.h
-    ${PROJECT_SOURCE_DIR}/crypto/data_cryptor_chacha20_poly1305.cc
-    ${PROJECT_SOURCE_DIR}/crypto/data_cryptor_chacha20_poly1305.h
-    ${PROJECT_SOURCE_DIR}/crypto/generic_hash.cc
-    ${PROJECT_SOURCE_DIR}/crypto/generic_hash.h
-    ${PROJECT_SOURCE_DIR}/crypto/openssl_util.cc
-    ${PROJECT_SOURCE_DIR}/crypto/openssl_util.h
-    ${PROJECT_SOURCE_DIR}/crypto/password_hash.cc
-    ${PROJECT_SOURCE_DIR}/crypto/password_hash.h
-    ${PROJECT_SOURCE_DIR}/crypto/random.cc
-    ${PROJECT_SOURCE_DIR}/crypto/random.h
-    ${PROJECT_SOURCE_DIR}/crypto/scoped_crypto_initializer.cc
-    ${PROJECT_SOURCE_DIR}/crypto/scoped_crypto_initializer.h
-    ${PROJECT_SOURCE_DIR}/crypto/secure_memory.cc
-    ${PROJECT_SOURCE_DIR}/crypto/secure_memory.h
-    ${PROJECT_SOURCE_DIR}/crypto/srp_constants.cc
-    ${PROJECT_SOURCE_DIR}/crypto/srp_constants.h
-    ${PROJECT_SOURCE_DIR}/crypto/srp_math.cc
-    ${PROJECT_SOURCE_DIR}/crypto/srp_math.h)
+    big_num.cc
+    big_num.h
+    cryptor.h
+    cryptor_aes256_gcm.cc
+    cryptor_aes256_gcm.h
+    cryptor_chacha20_poly1305.cc
+    cryptor_chacha20_poly1305.h
+    data_cryptor.h
+    data_cryptor_chacha20_poly1305.cc
+    data_cryptor_chacha20_poly1305.h
+    generic_hash.cc
+    generic_hash.h
+    openssl_util.cc
+    openssl_util.h
+    password_hash.cc
+    password_hash.h
+    random.cc
+    random.h
+    scoped_crypto_initializer.cc
+    scoped_crypto_initializer.h
+    secure_memory.cc
+    secure_memory.h
+    srp_constants.cc
+    srp_constants.h
+    srp_math.cc
+    srp_math.h)
 
 list(APPEND SOURCE_CRYPTO_UNIT_TESTS
-    ${PROJECT_SOURCE_DIR}/crypto/srp_math_unittest.cc)
+    srp_math_unittest.cc)
 
 source_group("" FILES ${SOURCE_CRYPTO} ${SOURCE_CRYPTO_UNIT_TESTS})
 

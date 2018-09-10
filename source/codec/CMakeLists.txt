@@ -17,36 +17,36 @@
 #
 
 list(APPEND SOURCE_CODEC
-    ${PROJECT_SOURCE_DIR}/codec/compressor.h
-    ${PROJECT_SOURCE_DIR}/codec/compressor_zlib.cc
-    ${PROJECT_SOURCE_DIR}/codec/compressor_zlib.h
-    ${PROJECT_SOURCE_DIR}/codec/cursor_decoder.cc
-    ${PROJECT_SOURCE_DIR}/codec/cursor_decoder.h
-    ${PROJECT_SOURCE_DIR}/codec/cursor_encoder.cc
-    ${PROJECT_SOURCE_DIR}/codec/cursor_encoder.h
-    ${PROJECT_SOURCE_DIR}/codec/decompressor.h
-    ${PROJECT_SOURCE_DIR}/codec/decompressor_zlib.cc
-    ${PROJECT_SOURCE_DIR}/codec/decompressor_zlib.h
-    ${PROJECT_SOURCE_DIR}/codec/pixel_translator.cc
-    ${PROJECT_SOURCE_DIR}/codec/pixel_translator.h
-    ${PROJECT_SOURCE_DIR}/codec/scale_reducer.cc
-    ${PROJECT_SOURCE_DIR}/codec/scale_reducer.h
-    ${PROJECT_SOURCE_DIR}/codec/scoped_vpx_codec.cc
-    ${PROJECT_SOURCE_DIR}/codec/scoped_vpx_codec.h
-    ${PROJECT_SOURCE_DIR}/codec/video_decoder.cc
-    ${PROJECT_SOURCE_DIR}/codec/video_decoder.h
-    ${PROJECT_SOURCE_DIR}/codec/video_decoder_vpx.cc
-    ${PROJECT_SOURCE_DIR}/codec/video_decoder_vpx.h
-    ${PROJECT_SOURCE_DIR}/codec/video_decoder_zlib.cc
-    ${PROJECT_SOURCE_DIR}/codec/video_decoder_zlib.h
-    ${PROJECT_SOURCE_DIR}/codec/video_encoder.cc
-    ${PROJECT_SOURCE_DIR}/codec/video_encoder.h
-    ${PROJECT_SOURCE_DIR}/codec/video_encoder_vpx.cc
-    ${PROJECT_SOURCE_DIR}/codec/video_encoder_vpx.h
-    ${PROJECT_SOURCE_DIR}/codec/video_encoder_zlib.cc
-    ${PROJECT_SOURCE_DIR}/codec/video_encoder_zlib.h
-    ${PROJECT_SOURCE_DIR}/codec/video_util.cc
-    ${PROJECT_SOURCE_DIR}/codec/video_util.h)
+    compressor.h
+    compressor_zlib.cc
+    compressor_zlib.h
+    cursor_decoder.cc
+    cursor_decoder.h
+    cursor_encoder.cc
+    cursor_encoder.h
+    decompressor.h
+    decompressor_zlib.cc
+    decompressor_zlib.h
+    pixel_translator.cc
+    pixel_translator.h
+    scale_reducer.cc
+    scale_reducer.h
+    scoped_vpx_codec.cc
+    scoped_vpx_codec.h
+    video_decoder.cc
+    video_decoder.h
+    video_decoder_vpx.cc
+    video_decoder_vpx.h
+    video_decoder_zlib.cc
+    video_decoder_zlib.h
+    video_encoder.cc
+    video_encoder.h
+    video_encoder_vpx.cc
+    video_encoder_vpx.h
+    video_encoder_zlib.cc
+    video_encoder_zlib.h
+    video_util.cc
+    video_util.h)
 
 source_group("" FILES ${SOURCE_CODEC})
 

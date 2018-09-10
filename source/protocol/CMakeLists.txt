@@ -17,13 +17,13 @@
 #
 
 list(APPEND SOURCE_PROTOCOL
-    ${PROJECT_SOURCE_DIR}/protocol/address_book.proto
-    ${PROJECT_SOURCE_DIR}/protocol/desktop_session.proto
-    ${PROJECT_SOURCE_DIR}/protocol/file_transfer_session.proto
-    ${PROJECT_SOURCE_DIR}/protocol/key_exchange.proto
-    ${PROJECT_SOURCE_DIR}/protocol/notifier.proto
-    ${PROJECT_SOURCE_DIR}/protocol/session_type.proto
-    ${PROJECT_SOURCE_DIR}/protocol/srp_user.proto)
+    address_book.proto
+    desktop_session.proto
+    file_transfer_session.proto
+    key_exchange.proto
+    notifier.proto
+    session_type.proto
+    srp_user.proto)
 
 protobuf_generate_cpp(PROTOCOL_CC_FILES PROTOCOL_H_FILES ${SOURCE_PROTOCOL})
 set_source_files_properties(${PROTOCOL_CC_FILES} ${PROTOCOL_H_FILES} PROPERTIES SKIP_AUTOGEN ON)

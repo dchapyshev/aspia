@@ -17,24 +17,24 @@
 #
 
 list(APPEND SOURCE_SHARE
-    ${PROJECT_SOURCE_DIR}/share/clipboard.cc
-    ${PROJECT_SOURCE_DIR}/share/clipboard.h
-    ${PROJECT_SOURCE_DIR}/share/file_depacketizer.cc
-    ${PROJECT_SOURCE_DIR}/share/file_depacketizer.h
-    ${PROJECT_SOURCE_DIR}/share/file_packetizer.cc
-    ${PROJECT_SOURCE_DIR}/share/file_packetizer.h
-    ${PROJECT_SOURCE_DIR}/share/file_platform_util.h
-    ${PROJECT_SOURCE_DIR}/share/file_platform_util_win.cc
-    ${PROJECT_SOURCE_DIR}/share/file_request.cc
-    ${PROJECT_SOURCE_DIR}/share/file_request.h
-    ${PROJECT_SOURCE_DIR}/share/file_worker.cc
-    ${PROJECT_SOURCE_DIR}/share/file_worker.h
-    ${PROJECT_SOURCE_DIR}/share/user_util.cc
-    ${PROJECT_SOURCE_DIR}/share/user_util.h)
+    clipboard.cc
+    clipboard.h
+    file_depacketizer.cc
+    file_depacketizer.h
+    file_packetizer.cc
+    file_packetizer.h
+    file_platform_util.h
+    file_platform_util_win.cc
+    file_request.cc
+    file_request.h
+    file_worker.cc
+    file_worker.h
+    user_util.cc
+    user_util.h)
 
 list(APPEND SOURCE_SHARE_WIN
-    ${PROJECT_SOURCE_DIR}/share/win/file_enumerator.cc
-    ${PROJECT_SOURCE_DIR}/share/win/file_enumerator.h)
+    win/file_enumerator.cc
+    win/file_enumerator.h)
 
 source_group("" FILES ${SOURCE_SHARE})
 source_group(win FILES ${SOURCE_SHARE_WIN})

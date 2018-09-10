@@ -16,8 +16,6 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "console/console_main.h"
-
 #include <QCommandLineParser>
 
 #include <QtGlobal>

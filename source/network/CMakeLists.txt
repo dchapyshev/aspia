@@ -17,20 +17,20 @@
 #
 
 list(APPEND SOURCE_NETWORK
-    ${PROJECT_SOURCE_DIR}/network/firewall_manager.cc
-    ${PROJECT_SOURCE_DIR}/network/firewall_manager.h
-    ${PROJECT_SOURCE_DIR}/network/network_channel.cc
-    ${PROJECT_SOURCE_DIR}/network/network_channel.h
-    ${PROJECT_SOURCE_DIR}/network/network_channel_client.cc
-    ${PROJECT_SOURCE_DIR}/network/network_channel_client.h
-    ${PROJECT_SOURCE_DIR}/network/network_channel_host.cc
-    ${PROJECT_SOURCE_DIR}/network/network_channel_host.h
-    ${PROJECT_SOURCE_DIR}/network/network_server.cc
-    ${PROJECT_SOURCE_DIR}/network/network_server.h
-    ${PROJECT_SOURCE_DIR}/network/srp_client_context.cc
-    ${PROJECT_SOURCE_DIR}/network/srp_client_context.h
-    ${PROJECT_SOURCE_DIR}/network/srp_host_context.cc
-    ${PROJECT_SOURCE_DIR}/network/srp_host_context.h)
+    firewall_manager.cc
+    firewall_manager.h
+    network_channel.cc
+    network_channel.h
+    network_channel_client.cc
+    network_channel_client.h
+    network_channel_host.cc
+    network_channel_host.h
+    network_server.cc
+    network_server.h
+    srp_client_context.cc
+    srp_client_context.h
+    srp_host_context.cc
+    srp_host_context.h)
 
 source_group("" FILES ${SOURCE_NETWORK})
 
