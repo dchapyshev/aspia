@@ -234,7 +234,7 @@
 <context>
     <name>aspia::HostNotifierWindow</name>
     <message>
-        <location filename="../ui/host_notifier_window.cc" line="238"/>
+        <location filename="../ui/host_notifier_window.cc" line="234"/>
         <source>Disconnect</source>
         <translation>Trennen</translation>
     </message>
@@ -250,7 +250,7 @@
 <context>
     <name>aspia::UserDialog</name>
     <message>
-        <location filename="../ui/user_dialog.cc" line="240"/>
+        <location filename="../ui/user_dialog.cc" line="236"/>
         <source>Double-click to change</source>
         <translation>Doppelklicken, um zu ändern</translation>
     </message>
@@ -270,36 +270,31 @@
         <translation>Dateiübertragung</translation>
     </message>
     <message>
-        <location filename="../ui/user_dialog.cc" line="85"/>
-        <source>System Information</source>
-        <translation>Systeminformation</translation>
-    </message>
-    <message>
-        <location filename="../ui/user_dialog.cc" line="133"/>
-        <location filename="../ui/user_dialog.cc" line="151"/>
-        <location filename="../ui/user_dialog.cc" line="162"/>
-        <location filename="../ui/user_dialog.cc" line="171"/>
-        <location filename="../ui/user_dialog.cc" line="183"/>
+        <location filename="../ui/user_dialog.cc" line="129"/>
+        <location filename="../ui/user_dialog.cc" line="147"/>
+        <location filename="../ui/user_dialog.cc" line="158"/>
+        <location filename="../ui/user_dialog.cc" line="167"/>
+        <location filename="../ui/user_dialog.cc" line="179"/>
         <source>Warning</source>
         <translation>Warnung</translation>
     </message>
     <message>
-        <location filename="../ui/user_dialog.cc" line="134"/>
+        <location filename="../ui/user_dialog.cc" line="130"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>Der Benutzername darf nicht leer sein und darf nur Buchstaben, Zahlen und folgende Zeichen: &quot;_&quot;,&quot;-&quot;,&quot;.&quot; beinhalten.</translation>
     </message>
     <message>
-        <location filename="../ui/user_dialog.cc" line="152"/>
+        <location filename="../ui/user_dialog.cc" line="148"/>
         <source>The username you entered already exists.</source>
         <translation>Der eingegebene Benutzername existiert bereits.</translation>
     </message>
     <message>
-        <location filename="../ui/user_dialog.cc" line="163"/>
+        <location filename="../ui/user_dialog.cc" line="159"/>
         <source>The passwords you entered do not match.</source>
         <translation>Die eingegebenen Kennwörter stimmen nicht überein.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/user_dialog.cc" line="172"/>
+        <location filename="../ui/user_dialog.cc" line="168"/>
         <source>Password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>Kennwort darf nicht kürzer als %n Zeichen sein.</numerusform>
@@ -307,7 +302,7 @@
         </translation>
     </message>
     <message>
-        <location filename="../ui/user_dialog.cc" line="184"/>
+        <location filename="../ui/user_dialog.cc" line="180"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation type="unfinished"></translation>
     </message>

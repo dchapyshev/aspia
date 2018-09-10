@@ -133,69 +133,64 @@
 <context>
     <name>DesktopPanel</name>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="120"/>
+        <location filename="../ui/desktop_panel.ui" line="119"/>
         <source>Lock toolbar</source>
         <translation>Закрепить панель инструментов</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="132"/>
+        <location filename="../ui/desktop_panel.ui" line="131"/>
         <source>Session configuration</source>
         <translation>Параметры сессии</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="144"/>
+        <location filename="../ui/desktop_panel.ui" line="143"/>
         <source>Monitor selection</source>
         <translation>Выбор монитора</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="156"/>
+        <location filename="../ui/desktop_panel.ui" line="155"/>
         <source>Automatic window size</source>
         <translation>Автоматический размер окна</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="171"/>
+        <location filename="../ui/desktop_panel.ui" line="170"/>
         <source>Switch to full screen mode or back</source>
         <translation>Переключиться на полный экран (или назад)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="182"/>
+        <location filename="../ui/desktop_panel.ui" line="181"/>
         <source>Automatic scrolling</source>
         <translation>Автоматическая прокрутка</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="206"/>
+        <location filename="../ui/desktop_panel.ui" line="205"/>
         <source>Advanced menu</source>
         <translation>Расширенное меню</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="211"/>
+        <location filename="../ui/desktop_panel.ui" line="210"/>
         <source>Send keys sequence...</source>
         <translation>Отправить сочетание клавиш...</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="216"/>
-        <location filename="../ui/desktop_panel.ui" line="219"/>
-        <location filename="../ui/desktop_panel.ui" line="222"/>
+        <location filename="../ui/desktop_panel.ui" line="215"/>
+        <location filename="../ui/desktop_panel.ui" line="218"/>
+        <location filename="../ui/desktop_panel.ui" line="221"/>
         <source>Save screenshot...</source>
         <translation>Сохранить снимок экрана...</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="234"/>
+        <location filename="../ui/desktop_panel.ui" line="233"/>
         <source>File transfer</source>
         <translation>Передача файлов</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="246"/>
-        <source>System information</source>
-        <translation>Информация о системе</translation>
-    </message>
-    <message>
-        <location filename="../ui/desktop_panel.ui" line="254"/>
+        <location filename="../ui/desktop_panel.ui" line="241"/>
         <source>Scaling an image</source>
         <translation>Масштабирование изображения</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="194"/>
+        <location filename="../ui/desktop_panel.ui" line="193"/>
         <source>Send Ctrl+Alt+Delete</source>
         <translation>Отправить Ctrl+Alt+Delete</translation>
     </message>
@@ -406,34 +401,6 @@
     </message>
 </context>
 <context>
-    <name>SystemInfoWindow</name>
-    <message>
-        <location filename="../ui/system_info_window.ui" line="91"/>
-        <source>Save Report</source>
-        <translation>Сохранить отчет</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.ui" line="100"/>
-        <source>Refresh</source>
-        <translation>Обновить</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.ui" line="105"/>
-        <source>Current</source>
-        <translation>Текущая категория</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.ui" line="110"/>
-        <source>Selected</source>
-        <translation>Выбранные категории</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.ui" line="115"/>
-        <source>All</source>
-        <translation>Все категории</translation>
-    </message>
-</context>
-<context>
     <name>aspia::AddressBar</name>
     <message>
         <location filename="../ui/address_bar.cc" line="57"/>
@@ -553,87 +520,87 @@
 <context>
     <name>aspia::Client</name>
     <message>
-        <location filename="../client.cc" line="62"/>
+        <location filename="../client.cc" line="61"/>
         <source>Attempt to connect to %1:%2.</source>
         <translation>Попытка подключения к %1:%2.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="73"/>
+        <location filename="../client.cc" line="72"/>
         <source>Connection established.</source>
         <translation>Соединение установлено.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="130"/>
+        <location filename="../client.cc" line="125"/>
         <source>Connection was refused by the peer (or timed out).</source>
         <translation>Подключение было отклонено другой стороной (или превышено время ожидания).</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="134"/>
+        <location filename="../client.cc" line="129"/>
         <source>Remote host closed the connection.</source>
         <translation>Удаленный узел закрыл подключение.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="138"/>
+        <location filename="../client.cc" line="133"/>
         <source>Host address was not found.</source>
         <translation>Не найден адрес удаленного узла.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="142"/>
+        <location filename="../client.cc" line="137"/>
         <source>Socket operation timed out.</source>
         <translation>Превышено время ожидания.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="146"/>
+        <location filename="../client.cc" line="141"/>
         <source>Address specified is already in use and was set to be exclusive.</source>
         <translation>Указанный адрес уже используется и был установлен монопольно.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="150"/>
+        <location filename="../client.cc" line="145"/>
         <source>Address specified does not belong to the host.</source>
         <translation>Указанный адрес не принадлежит узлу.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="154"/>
+        <location filename="../client.cc" line="149"/>
         <source>Violation of the data exchange protocol.</source>
         <translation>Нарушение протокола обмена данными.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="158"/>
+        <location filename="../client.cc" line="153"/>
         <source>An error occurred while encrypting the message.</source>
         <translation>Произошла ошибка при шифровании сообщения.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="162"/>
+        <location filename="../client.cc" line="157"/>
         <source>An error occurred while decrypting the message.</source>
         <translation>Произошла ошибка при расшифровке сообщения.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="166"/>
+        <location filename="../client.cc" line="161"/>
         <source>An error occured while authenticating: wrong user name or password.</source>
         <translation>Произошла ошибка при аутификации: неправильное имя пользователя или пароль.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="170"/>
+        <location filename="../client.cc" line="165"/>
         <source>Specified session type is not allowed for the user.</source>
         <translation>Указанный тип сессии не разрешен для пользователя.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="174"/>
+        <location filename="../client.cc" line="169"/>
         <source>An unknown error occurred.</source>
         <translation>Произошла неизвестная ошибка.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="120"/>
+        <location filename="../client.cc" line="115"/>
         <source>Disconnected.</source>
         <translation>Подключение разорвано.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="94"/>
+        <location filename="../client.cc" line="89"/>
         <source>Unsupported session type.</source>
         <translation>Неподдерживаемый тип сессии.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="112"/>
+        <location filename="../client.cc" line="107"/>
         <source>Session started.</source>
         <translation>Сессия запущена.</translation>
     </message>
@@ -641,24 +608,19 @@
 <context>
     <name>aspia::ClientDialog</name>
     <message>
-        <location filename="../ui/client_dialog.cc" line="39"/>
+        <location filename="../ui/client_dialog.cc" line="41"/>
         <source>Desktop Manage</source>
         <translation>Управление рабочим столом</translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.cc" line="43"/>
+        <location filename="../ui/client_dialog.cc" line="45"/>
         <source>Desktop View</source>
         <translation>Просмотр рабочего стола</translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.cc" line="47"/>
+        <location filename="../ui/client_dialog.cc" line="49"/>
         <source>File Transfer</source>
         <translation>Передача файлов</translation>
-    </message>
-    <message>
-        <location filename="../ui/client_dialog.cc" line="51"/>
-        <source>System Information</source>
-        <translation>Информация о системе</translation>
     </message>
 </context>
 <context>
@@ -716,42 +678,34 @@
     </message>
 </context>
 <context>
-    <name>aspia::ClientSessionSystemInfo</name>
-    <message>
-        <location filename="../client_session_system_info.cc" line="40"/>
-        <source>Session error: Invalid message from host.</source>
-        <translation>Ошибка сессии: Неверное сообщение от хоста.</translation>
-    </message>
-</context>
-<context>
     <name>aspia::DesktopConfigDialog</name>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="66"/>
+        <location filename="../ui/desktop_config_dialog.cc" line="68"/>
         <source>True color (32 bit)</source>
         <translation>True color (32 бита)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="67"/>
+        <location filename="../ui/desktop_config_dialog.cc" line="69"/>
         <source>High color (16 bit)</source>
         <translation>High color (16 бит)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="68"/>
+        <location filename="../ui/desktop_config_dialog.cc" line="70"/>
         <source>256 colors (8 bit)</source>
         <translation>256 цветов (8 бит)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="69"/>
+        <location filename="../ui/desktop_config_dialog.cc" line="71"/>
         <source>64 colors (6 bit)</source>
         <translation>64 цвета (6 бит)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="70"/>
+        <location filename="../ui/desktop_config_dialog.cc" line="72"/>
         <source>8 colors (3 bit)</source>
         <translation>8 цветов (3 бита)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="153"/>
+        <location filename="../ui/desktop_config_dialog.cc" line="157"/>
         <source>Compression ratio: %1</source>
         <translation>Уровень сжатия: %1</translation>
     </message>
@@ -1092,14 +1046,6 @@
         <location filename="../ui/select_screen_action.h" line="37"/>
         <source>Full Desktop</source>
         <translation>Весь рабочий стол</translation>
-    </message>
-</context>
-<context>
-    <name>aspia::SystemInfoWindow</name>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="42"/>
-        <source>%1 - Aspia System Information</source>
-        <translation>%1 - Информация о системе</translation>
     </message>
 </context>
 </TS>
