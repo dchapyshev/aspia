@@ -197,6 +197,79 @@ QString ServiceController::description() const
     return QString::fromUtf16(reinterpret_cast<const ushort*>(service_description->lpDescription));
 }
 
+bool ServiceController::setDependencies(const QStringList& dependencies)
+{
+    QByteArray buffer;
+
+    for (auto it = dependencies.constBegin(); it != dependencies.constEnd(); ++it)
+    {
+        const QString& str = *it;
+
+        buffer += QByteArray(reinterpret_cast<const char*>(str.utf16()),
+                             (str.length() + 1) * sizeof(wchar_t));
+    }
+
+    buffer.append(static_cast<char>(0));
+    buffer.append(static_cast<char>(0));
+
+    if (!ChangeServiceConfigW(service_,
+                              SERVICE_NO_CHANGE,
+                              SERVICE_NO_CHANGE,
+                              SERVICE_NO_CHANGE,
+                              nullptr, nullptr, nullptr,
+                              reinterpret_cast<const wchar_t*>(buffer.data()),
+                              nullptr, nullptr, nullptr))
+    {
+        PLOG(LS_WARNING) << "ChangeServiceConfigW failed";
+        return false;
+    }
+
+    return true;
+}
+
+QStringList ServiceController::dependencies() const
+{
+    DWORD bytes_needed = 0;
+
+    if (QueryServiceConfigW(service_, nullptr, 0, &bytes_needed) ||
+        GetLastError() != ERROR_INSUFFICIENT_BUFFER)
+    {
+        LOG(LS_FATAL) << "QueryServiceConfigW: unexpected result";
+        return QStringList();
+    }
+
+    if (!bytes_needed)
+        return QStringList();
+
+    std::unique_ptr<uint8_t[]> buffer = std::make_unique<uint8_t[]>(bytes_needed);
+    QUERY_SERVICE_CONFIGW* service_config = reinterpret_cast<QUERY_SERVICE_CONFIGW*>(buffer.get());
+
+    if (!QueryServiceConfigW(service_, service_config, bytes_needed, &bytes_needed))
+    {
+        PLOG(LS_WARNING) << "QueryServiceConfigW failed";
+        return QStringList();
+    }
+
+    if (!service_config->lpDependencies)
+        return QStringList();
+
+    QStringList list;
+    size_t len = 0;
+    for (;;)
+    {
+        QString str = QString::fromWCharArray(service_config->lpDependencies + len);
+
+        len += str.length() + 1;
+
+        if (str.isEmpty())
+            break;
+
+        list.append(str);
+    }
+
+    return list;
+}
+
 QString ServiceController::filePath() const
 {
     DWORD bytes_needed = 0;

@@ -20,6 +20,7 @@
 #define ASPIA_BASE__SERVICE_CONTROLLER_H_
 
 #include <QString>
+#include <QStringList>
 
 #include "base/win/scoped_object.h"
 
@@ -43,6 +44,9 @@ public:
 
     bool setDescription(const QString& description);
     QString description() const;
+
+    bool setDependencies(const QStringList& dependencies);
+    QStringList dependencies() const;
 
     QString filePath() const;
 

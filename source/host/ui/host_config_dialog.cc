@@ -421,6 +421,7 @@ bool HostConfigDialog::installService()
     }
     else
     {
+        controller.setDependencies(QStringList() << "RpcSs" << "Tcpip" << "NDIS" << "AFD");
         controller.setDescription(kHostServiceDescription);
     }
 
