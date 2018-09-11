@@ -16,13 +16,13 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA__CORE_EXPORT_H_
-#define ASPIA__CORE_EXPORT_H_
+#ifndef ASPIA__HOST_EXPORT_H_
+#define ASPIA__HOST_EXPORT_H_
 
-#if defined(CORE_IMPLEMENTATION)
-#define CORE_EXPORT __declspec(dllexport)
+#if defined(HOST_IMPLEMENTATION)
+#define HOST_EXPORT __declspec(dllexport)
 #else
-#define CORE_EXPORT __declspec(dllimport)
-#endif // defined(CORE_IMPLEMENTATION)
+#define HOST_EXPORT __declspec(dllimport)
+#endif // defined(HOST_IMPLEMENTATION)
 
-#endif // ASPIA__CORE_EXPORT_H_
+#endif // ASPIA__HOST_EXPORT_H_

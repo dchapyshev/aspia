@@ -23,7 +23,7 @@
 
 namespace aspia {
 
-int CORE_EXPORT hostServiceMain(int argc, char *argv[]);
+int HOST_EXPORT hostServiceMain(int argc, char *argv[]);
 
 } // namespace aspia
 

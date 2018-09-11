@@ -47,7 +47,7 @@ add_definitions(-D_UNICODE
                 -DPSAPI_VERSION=2
                 -D_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING
                 -D_CRT_SECURE_NO_WARNINGS
-                -DCORE_IMPLEMENTATION)
+                -DHOST_IMPLEMENTATION)
 
 include_directories(
     ${PROJECT_SOURCE_DIR}
