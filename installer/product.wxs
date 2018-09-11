@@ -2,16 +2,12 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
      xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
   <?include variables.wxi?>
-  <Product Id="*" Name="$(var.ProductName)" Language="1033"
-           Version="$(var.Version)" Manufacturer="$(var.Manufacturer)"
-           UpgradeCode="{A2C5BB66-6951-4342-B3A6-51201CD85758}">
-    <Package InstallerVersion="200" Compressed="yes" Manufacturer="$(var.Manufacturer)"
-             InstallPrivileges="elevated" InstallScope="perMachine" />
+  <Product Id="*" Name="$(var.ProductName)" Language="1033" Version="$(var.Version)" Manufacturer="$(var.Manufacturer)" UpgradeCode="{A2C5BB66-6951-4342-B3A6-51201CD85758}">
+    <Package InstallerVersion="200" Compressed="yes" Manufacturer="$(var.Manufacturer)" InstallPrivileges="elevated" InstallScope="perMachine" />
 
     <Media Id="1" Cabinet="media1.cab" EmbedCab="yes" />
 
-    <MajorUpgrade DowngradeErrorMessage="!(loc.DowngradeErrorMessage)"
-                  Schedule="afterInstallInitialize" />
+    <MajorUpgrade DowngradeErrorMessage="!(loc.DowngradeErrorMessage)" Schedule="afterInstallInitialize" />
 
     <Icon Id="aspia.ico" SourceFile="resources/aspia.ico"/>
     <Property Id="ARPPRODUCTICON" Value="aspia.ico" />
@@ -19,7 +15,12 @@
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="ProgramFilesFolder">
         <Directory Id="INSTALLLOCATION" Name="$(var.ProductName)">
-          <Directory Id="TRANSLATIONS" Name="translations" />
+          <Directory Id="ConsoleFolder" Name="console">
+            <Directory Id="ConsoleTranslationsFolder" Name="translations" />
+          </Directory>
+          <Directory Id="HostFolder" Name="host">
+            <Directory Id="HostTranslationsFolder" Name="translations" />
+          </Directory>
         </Directory>
       </Directory>
       <Directory Id="ProgramMenuFolder">
@@ -28,24 +29,21 @@
       <Directory Id="DesktopFolder" />
     </Directory>
 
-    <Feature Id="FeatureProduct" Title="$(var.ProductName)" Absent="disallow" AllowAdvertise="no"
-             Display="expand" InstallDefault="local" Description="!(loc.CoreDescription)"
-             ConfigurableDirectory="INSTALLLOCATION" Level="1">
-      <ComponentRef Id="CoreApplications" />
-      <ComponentRef Id="ConsoleApplications" />
-      <ComponentRef Id="ConsoleSettings" />
-      <ComponentRef Id="ConsoleProgramMenuShortcuts" />
-      <ComponentRef Id="ConsoleDesktopShortcuts" />
-      <ComponentRef Id="TranslationGerman" />
-      <ComponentRef Id="TranslationDutch" />
-      <ComponentRef Id="TranslationRussian" />
-      <ComponentRef Id="TranslationUkrainian" />
-      <Feature Id="HostFeature" Title="!(loc.HostService_Title)"
-               Description="!(loc.HostService_Description)" Absent="allow" AllowAdvertise="no"
-               TypicalDefault="install" InstallDefault="local" Level="2">
+    <Feature Id="FeatureProduct" Title="$(var.ProductName)" Absent="allow" AllowAdvertise="no" Display="expand" InstallDefault="local" ConfigurableDirectory="INSTALLLOCATION" Level="1">
+      <Feature Id="HostFeature" Title="!(loc.HostService_Title)" Description="!(loc.HostService_Description)" Absent="allow" AllowAdvertise="no" TypicalDefault="install" InstallDefault="local" Level="2">
         <ComponentRef Id="HostApplications" />
         <ComponentRef Id="HostProgramMenuShortcuts" />
         <ComponentRef Id="HostDesktopShortcuts" />
+        <ComponentRef Id="HostTranslations" />
+        <ComponentRef Id="HostLicense" />
+      </Feature>
+      <Feature Id="ConsoleFeature" Title="!(loc.Console_Title)" Description="!(loc.Console_Description)" Absent="allow" AllowAdvertise="no" TypicalDefault="install" InstallDefault="local" Level="2">
+        <ComponentRef Id="ConsoleApplications" />
+        <ComponentRef Id="ConsoleSettings" />
+        <ComponentRef Id="ConsoleProgramMenuShortcuts" />
+        <ComponentRef Id="ConsoleDesktopShortcuts" />
+        <ComponentRef Id="ConsoleTranslations" />
+        <ComponentRef Id="ConsoleLicense"/>
       </Feature>
     </Feature>
     <Property Id="INSTALLLEVEL" Value="2" />
@@ -60,30 +58,22 @@
 
     <UI Id="InstallerUI">
       <Dialog Id="ShortcutsDlg" Width="370" Height="270" Title="!(loc.CustomizeDlg_Title)">
-        <Control Id="BannerBitmap" Type="Bitmap" X="0" Y="0" Width="370" Height="44" TabSkip="no"
-                 Text="!(loc.CustomizeDlgBannerBitmap)" />
+        <Control Id="BannerBitmap" Type="Bitmap" X="0" Y="0" Width="370" Height="44" TabSkip="no" Text="!(loc.CustomizeDlgBannerBitmap)" />
         <Control Id="BannerLine" Type="Line" X="0" Y="44" Width="370" Height="2" />
         <Control Id="BottomLine" Type="Line" X="0" Y="234" Width="370" Height="2" />
-        <Control Id="Title" Type="Text" X="15" Y="6" Width="210" Height="15" Transparent="yes"
-                 NoPrefix="yes" Text="!(loc.CustomizeDlgTitle)" />
-        <Control Id="Description" Type="Text" X="25" Y="23" Width="280" Height="15" Transparent="yes"
-                 NoPrefix="yes" Text="!(loc.CustomizeDlgDescription)" />
+        <Control Id="Title" Type="Text" X="15" Y="6" Width="210" Height="15" Transparent="yes" NoPrefix="yes" Text="!(loc.CustomizeDlgTitle)" />
+        <Control Id="Description" Type="Text" X="25" Y="23" Width="280" Height="15" Transparent="yes" NoPrefix="yes" Text="!(loc.CustomizeDlgDescription)" />
 
-        <Control Id="DesktopShortcutCheckBox" Type="CheckBox" Height="18" Width="295" X="26" Y="58"
-             Text="!(loc.CreateDesktopShortcuts)" Property="DESKTOP_SHORTCUTS" CheckBoxValue="1" />
-        <Control Id="ProgramMenuShortcutCheckBox" Type="CheckBox" Height="18" Width="295" X="26" Y="79"
-             Text="!(loc.CreateProgramMenuShortcuts)" Property="STARTMENU_SHORTCUTS" CheckBoxValue="1" />
+        <Control Id="DesktopShortcutCheckBox" Type="CheckBox" Height="18" Width="295" X="26" Y="58" Text="!(loc.CreateDesktopShortcuts)" Property="DESKTOP_SHORTCUTS" CheckBoxValue="1" />
+        <Control Id="ProgramMenuShortcutCheckBox" Type="CheckBox" Height="18" Width="295" X="26" Y="79" Text="!(loc.CreateProgramMenuShortcuts)" Property="STARTMENU_SHORTCUTS" CheckBoxValue="1" />
 
-        <Control Id="Next" Type="PushButton" X="248" Y="243" Width="56" Height="17" Default="yes"
-                 Text="!(loc.WixUINext)">
+        <Control Id="Next" Type="PushButton" X="248" Y="243" Width="56" Height="17" Default="yes" Text="!(loc.WixUINext)">
           <Publish Event="NewDialog" Value="VerifyReadyDlg" Order="10" />
         </Control>
-        <Control Id="Back" Type="PushButton" X="192" Y="243" Width="56" Height="17"
-                 Text="!(loc.WixUIBack)">
+        <Control Id="Back" Type="PushButton" X="192" Y="243" Width="56" Height="17" Text="!(loc.WixUIBack)">
           <Publish Event="NewDialog" Value="CustomizeDlg" Order="10" />
         </Control>
-        <Control Id="Cancel" Type="PushButton" X="304" Y="243" Width="56" Height="17" Cancel="yes"
-                 Text="!(loc.WixUICancel)">
+        <Control Id="Cancel" Type="PushButton" X="304" Y="243" Width="56" Height="17" Cancel="yes" Text="!(loc.WixUICancel)">
           <Publish Event="SpawnDialog" Value="CancelDlg">1</Publish>
         </Control>
       </Dialog>
@@ -91,8 +81,8 @@
       <Property Id="STARTMENU_SHORTCUTS">1</Property>
       <Property Id="DESKTOP_SHORTCUTS">1</Property>
 
-      <Publish Dialog="CustomizeDlg" Control="Next" Event="NewDialog" Value="ShortcutsDlg" Order="10">1</Publish>
-      <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="ShortcutsDlg" Order="10">1</Publish>
+      <Publish Dialog="CustomizeDlg" Control="Next" Event="NewDialog" Value="ShortcutsDlg" Order="10">NOT Installed</Publish>
+      <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="ShortcutsDlg" Order="10">NOT Installed</Publish>
 
       <UIRef Id="WixUI_FeatureTree" />
       <UIRef Id="WixUI_ErrorProgressText" />

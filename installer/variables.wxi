@@ -5,11 +5,11 @@
   <?define Version="1.1.0"?>
   <?define InstallLocation="Aspia"?>
   <?define SourceFiles="..\build\Release"?>
-  <?define CoreLibrary="aspia_core.dll"?>
   <?define ConsoleExecutable="aspia_console.exe"?>
+  <?define HostLibrary="aspia_host.dll"?>
   <?define HostServiceExecutable="aspia_host_service.exe"?>
   <?define HostConfigExecutable="aspia_host_config.exe"?>
-  <?define HostExecutable="aspia_host.exe"?>
+  <?define HostSessionExecutable="aspia_host_session.exe"?>
   <?define ServiceName="aspia-host-service"?>
   <?define ServiceDisplayName="Aspia Host Service"?>
   <?define ServiceDescription="Accepts incoming remote desktop connections to this computer."?>

@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <WixLocalization Culture="uk-ua" xmlns="http://schemas.microsoft.com/wix/2006/localization">
   <String Id="Locale" Overridable="yes">uk</String>
-  <String Id="HostConfigShortcutName" Overridable="yes">Конфігурація сервера Aspia</String>
-  <String Id="DowngradeErrorMessage" Overridable="yes">Найновішу версію програми вже встановлено.</String>
-  <String Id="CoreDescription" Overridable="yes">Основні файли програми.</String>
-  <String Id="HostService_Title" Overridable="yes">Служба сервера</String>
-  <String Id="HostService_Description" Overridable="yes">Надає віддалений доступ до цього комп'ютера.</String>
-  <String Id="AddressBookFile_Description" Overridable="yes">Адресна книга Aspia (.aab)</String>
-  <String Id="CreateDesktopShortcuts" Overridable="yes">Створити ярлики на робочих столах</String>
-  <String Id="CreateProgramMenuShortcuts" Overridable="yes">Створити ярлики в меню "Пуск"</String>
+  <String Id="HostConfigShortcutName" Overridable="yes">РљРѕРЅС„С–РіСѓСЂР°С†С–СЏ СЃРµСЂРІРµСЂР° Aspia</String>
+  <String Id="ConsoleShortcutName" Overridable="yes">Aspia Console</String>
+  <String Id="DowngradeErrorMessage" Overridable="yes">РќР°Р№РЅРѕРІС–С€Сѓ РІРµСЂСЃС–СЋ РїСЂРѕРіСЂР°РјРё РІР¶Рµ РІСЃС‚Р°РЅРѕРІР»РµРЅРѕ.</String>
+  <String Id="HostService_Title" Overridable="yes">РЎР»СѓР¶Р±Р° СЃРµСЂРІРµСЂР°</String>
+  <String Id="HostService_Description" Overridable="yes">РќР°РґР°С” РІС–РґРґР°Р»РµРЅРёР№ РґРѕСЃС‚СѓРї РґРѕ С†СЊРѕРіРѕ РєРѕРјРї'СЋС‚РµСЂР°.</String>
+  <String Id="Console_Title" Overridable="yes">Console</String>
+  <String Id="Console_Description" Overridable="yes">Allows you to connect to other computers.</String>
+  <String Id="AddressBookFile_Description" Overridable="yes">РђРґСЂРµСЃРЅР° РєРЅРёРіР° Aspia (.aab)</String>
+  <String Id="CreateDesktopShortcuts" Overridable="yes">РЎС‚РІРѕСЂРёС‚Рё СЏСЂР»РёРєРё РЅР° СЂРѕР±РѕС‡РёС… СЃС‚РѕР»Р°С…</String>
+  <String Id="CreateProgramMenuShortcuts" Overridable="yes">РЎС‚РІРѕСЂРёС‚Рё СЏСЂР»РёРєРё РІ РјРµРЅСЋ "РџСѓСЃРє"</String>
 </WixLocalization>
