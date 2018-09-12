@@ -55,9 +55,9 @@ include_directories(
     ${ASPIA_THIRD_PARTY_DIR}/googletest/include
     ${ASPIA_THIRD_PARTY_DIR}/libvpx/include
     ${ASPIA_THIRD_PARTY_DIR}/libyuv/include
-    ${ASPIA_THIRD_PARTY_DIR}/zlib-ng/include
     ${ASPIA_THIRD_PARTY_DIR}/openssl/include
-    ${ASPIA_THIRD_PARTY_DIR}/protobuf/include)
+    ${ASPIA_THIRD_PARTY_DIR}/protobuf/include
+    ${ASPIA_THIRD_PARTY_DIR}/zlib-ng/include)
 
 link_directories(
     ${ASPIA_THIRD_PARTY_DIR}/googletest/lib

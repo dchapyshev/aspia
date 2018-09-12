@@ -19,6 +19,10 @@
 list(APPEND SOURCE_BASE
     aligned_memory.cc
     aligned_memory.h
+    base64.cc
+    base64.h
+    base64_constants.cc
+    base64_constants.h
     bitset.h
     const_buffer.h
     cpuid.cc
@@ -50,6 +54,7 @@ list(APPEND SOURCE_BASE
 
 list(APPEND SOURCE_BASE_UNIT_TESTS
     aligned_memory_unittest.cc
+    base64_unittest.cc
     guid_unittest.cc
     string_printf_unittest.cc)
 
