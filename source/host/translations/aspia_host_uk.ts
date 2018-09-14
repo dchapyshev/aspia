@@ -142,12 +142,12 @@
     <message>
         <location filename="../ui/host_config_dialog.cc" line="240"/>
         <location filename="../ui/host_config_dialog.cc" line="417"/>
-        <location filename="../ui/host_config_dialog.cc" line="436"/>
-        <location filename="../ui/host_config_dialog.cc" line="446"/>
-        <location filename="../ui/host_config_dialog.cc" line="462"/>
-        <location filename="../ui/host_config_dialog.cc" line="472"/>
-        <location filename="../ui/host_config_dialog.cc" line="488"/>
-        <location filename="../ui/host_config_dialog.cc" line="498"/>
+        <location filename="../ui/host_config_dialog.cc" line="437"/>
+        <location filename="../ui/host_config_dialog.cc" line="447"/>
+        <location filename="../ui/host_config_dialog.cc" line="463"/>
+        <location filename="../ui/host_config_dialog.cc" line="473"/>
+        <location filename="../ui/host_config_dialog.cc" line="489"/>
+        <location filename="../ui/host_config_dialog.cc" line="499"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
@@ -209,24 +209,24 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="437"/>
-        <location filename="../ui/host_config_dialog.cc" line="463"/>
-        <location filename="../ui/host_config_dialog.cc" line="489"/>
+        <location filename="../ui/host_config_dialog.cc" line="438"/>
+        <location filename="../ui/host_config_dialog.cc" line="464"/>
+        <location filename="../ui/host_config_dialog.cc" line="490"/>
         <source>Could not access the service.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="447"/>
+        <location filename="../ui/host_config_dialog.cc" line="448"/>
         <source>The service could not be removed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="473"/>
+        <location filename="../ui/host_config_dialog.cc" line="474"/>
         <source>The service could not be started.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="499"/>
+        <location filename="../ui/host_config_dialog.cc" line="500"/>
         <source>The service could not be stopped.</source>
         <translation type="unfinished"></translation>
     </message>

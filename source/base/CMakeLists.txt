@@ -19,6 +19,8 @@
 list(APPEND SOURCE_BASE
     aligned_memory.cc
     aligned_memory.h
+    base_paths.cc
+    base_paths.h
     base64.cc
     base64.h
     base64_constants.cc

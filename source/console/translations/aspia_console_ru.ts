@@ -656,22 +656,22 @@
 <context>
     <name>aspia::ComputerDialog</name>
     <message>
-        <location filename="../computer_dialog.cc" line="50"/>
+        <location filename="../computer_dialog.cc" line="49"/>
         <source>Desktop Manage</source>
         <translation>Управление рабочим столом</translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="54"/>
+        <location filename="../computer_dialog.cc" line="53"/>
         <source>Desktop View</source>
         <translation>Просмотр рабочего стола</translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="58"/>
+        <location filename="../computer_dialog.cc" line="57"/>
         <source>File Transfer</source>
         <translation>Передача файлов</translation>
     </message>
     <message numerus="yes">
-        <location filename="../computer_dialog.cc" line="160"/>
+        <location filename="../computer_dialog.cc" line="159"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Слишком длинное имя. Максимальная длина имени %n символ.</numerusform>
@@ -680,17 +680,17 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="166"/>
+        <location filename="../computer_dialog.cc" line="165"/>
         <source>Name can not be empty.</source>
         <translation>Имя не может быть пустым.</translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="173"/>
+        <location filename="../computer_dialog.cc" line="172"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>Имя пользователя не может быть пустым и может содержать только буквы алфавита, цифры и символы &quot;_&quot;,&quot;-&quot;,&quot;.&quot;.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../computer_dialog.cc" line="181"/>
+        <location filename="../computer_dialog.cc" line="180"/>
         <source>Password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>Пароль не может быть короче, чем %n символ.</numerusform>
@@ -699,7 +699,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../computer_dialog.cc" line="189"/>
+        <location filename="../computer_dialog.cc" line="188"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Слишком длинный комментарий. Максимальная длина комментария %n символ.</numerusform>
@@ -708,7 +708,7 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="219"/>
+        <location filename="../computer_dialog.cc" line="218"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>

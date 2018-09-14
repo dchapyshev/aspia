@@ -653,22 +653,22 @@
 <context>
     <name>aspia::ComputerDialog</name>
     <message>
-        <location filename="../computer_dialog.cc" line="50"/>
+        <location filename="../computer_dialog.cc" line="49"/>
         <source>Desktop Manage</source>
         <translation>Bureaublad Beheren</translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="54"/>
+        <location filename="../computer_dialog.cc" line="53"/>
         <source>Desktop View</source>
         <translation>Bureaublad Weergeven</translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="58"/>
+        <location filename="../computer_dialog.cc" line="57"/>
         <source>File Transfer</source>
         <translation>Bestands Overdracht</translation>
     </message>
     <message numerus="yes">
-        <location filename="../computer_dialog.cc" line="160"/>
+        <location filename="../computer_dialog.cc" line="159"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Te lange naam. De maximum lengte is %n karakter.</numerusform>
@@ -676,17 +676,17 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="166"/>
+        <location filename="../computer_dialog.cc" line="165"/>
         <source>Name can not be empty.</source>
         <translation>Naam mag niet leeg zijn.</translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="173"/>
+        <location filename="../computer_dialog.cc" line="172"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>De gebruikersnaam mag niet leeg zijn, en alleen karakters uit het alfabet, nummers, _, -, . karakters bevatten.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../computer_dialog.cc" line="181"/>
+        <location filename="../computer_dialog.cc" line="180"/>
         <source>Password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>Wachtwoord mag niet korter dan %n karakter zijn.</numerusform>
@@ -694,7 +694,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../computer_dialog.cc" line="189"/>
+        <location filename="../computer_dialog.cc" line="188"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Te lang commentaar. De maximale lengte is %n karakter.</numerusform>
@@ -702,7 +702,7 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="219"/>
+        <location filename="../computer_dialog.cc" line="218"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>

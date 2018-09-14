@@ -126,12 +126,12 @@
     <message>
         <location filename="../ui/host_config_dialog.cc" line="240"/>
         <location filename="../ui/host_config_dialog.cc" line="417"/>
-        <location filename="../ui/host_config_dialog.cc" line="436"/>
-        <location filename="../ui/host_config_dialog.cc" line="446"/>
-        <location filename="../ui/host_config_dialog.cc" line="462"/>
-        <location filename="../ui/host_config_dialog.cc" line="472"/>
-        <location filename="../ui/host_config_dialog.cc" line="488"/>
-        <location filename="../ui/host_config_dialog.cc" line="498"/>
+        <location filename="../ui/host_config_dialog.cc" line="437"/>
+        <location filename="../ui/host_config_dialog.cc" line="447"/>
+        <location filename="../ui/host_config_dialog.cc" line="463"/>
+        <location filename="../ui/host_config_dialog.cc" line="473"/>
+        <location filename="../ui/host_config_dialog.cc" line="489"/>
+        <location filename="../ui/host_config_dialog.cc" line="499"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
@@ -209,24 +209,24 @@
         <translation>Не удалось установить службу.</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="437"/>
-        <location filename="../ui/host_config_dialog.cc" line="463"/>
-        <location filename="../ui/host_config_dialog.cc" line="489"/>
+        <location filename="../ui/host_config_dialog.cc" line="438"/>
+        <location filename="../ui/host_config_dialog.cc" line="464"/>
+        <location filename="../ui/host_config_dialog.cc" line="490"/>
         <source>Could not access the service.</source>
         <translation>Не удалось получить доступ к службе.</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="447"/>
+        <location filename="../ui/host_config_dialog.cc" line="448"/>
         <source>The service could not be removed.</source>
         <translation>Не удалось удалить службу.</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="473"/>
+        <location filename="../ui/host_config_dialog.cc" line="474"/>
         <source>The service could not be started.</source>
         <translation>Не удалось запустить службу.</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="499"/>
+        <location filename="../ui/host_config_dialog.cc" line="500"/>
         <source>The service could not be stopped.</source>
         <translation>Не удалось остановить службу.</translation>
     </message>

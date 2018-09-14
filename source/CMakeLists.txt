@@ -57,6 +57,8 @@ include_directories(
     ${ASPIA_THIRD_PARTY_DIR}/libyuv/include
     ${ASPIA_THIRD_PARTY_DIR}/openssl/include
     ${ASPIA_THIRD_PARTY_DIR}/protobuf/include
+    ${ASPIA_THIRD_PARTY_DIR}/rapidjson/include
+    ${ASPIA_THIRD_PARTY_DIR}/rapidxml/include
     ${ASPIA_THIRD_PARTY_DIR}/zlib-ng/include)
 
 link_directories(

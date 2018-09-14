@@ -656,22 +656,22 @@
 <context>
     <name>aspia::ComputerDialog</name>
     <message>
-        <location filename="../computer_dialog.cc" line="50"/>
+        <location filename="../computer_dialog.cc" line="49"/>
         <source>Desktop Manage</source>
         <translation>Керування робочим столом</translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="54"/>
+        <location filename="../computer_dialog.cc" line="53"/>
         <source>Desktop View</source>
         <translation>Перегляд робочого столу</translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="58"/>
+        <location filename="../computer_dialog.cc" line="57"/>
         <source>File Transfer</source>
         <translation>Передача файлів</translation>
     </message>
     <message numerus="yes">
-        <location filename="../computer_dialog.cc" line="160"/>
+        <location filename="../computer_dialog.cc" line="159"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation type="unfinished">
             <numerusform>Занадто довге ім&apos;я. Максимальна довжина для імені %n символів.</numerusform>
@@ -680,17 +680,17 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="166"/>
+        <location filename="../computer_dialog.cc" line="165"/>
         <source>Name can not be empty.</source>
         <translation>Ім&apos;я не може бути порожнім.</translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="173"/>
+        <location filename="../computer_dialog.cc" line="172"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>Ім&apos;я користувача не може бути порожнім і має мустити тільки букви алфавіту, цифри, та символи &quot;&quot;_&quot;&quot;, &quot;&quot;-&quot;&quot;, &quot;&quot;.&quot;&quot;.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../computer_dialog.cc" line="181"/>
+        <location filename="../computer_dialog.cc" line="180"/>
         <source>Password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>Пароль не може бути коротшим за %n символів.</numerusform>
@@ -699,7 +699,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../computer_dialog.cc" line="189"/>
+        <location filename="../computer_dialog.cc" line="188"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Занадто довгий коментар. Максимальна довжина для коментарів - %n символів.</numerusform>
@@ -708,7 +708,7 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="219"/>
+        <location filename="../computer_dialog.cc" line="218"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
