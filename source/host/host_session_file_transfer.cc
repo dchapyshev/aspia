@@ -18,8 +18,8 @@
 
 #include "host/host_session_file_transfer.h"
 
-#include "base/message_serialization.h"
 #include "share/file_worker.h"
+#include "share/message_serialization.h"
 
 namespace aspia {
 

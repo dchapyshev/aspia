@@ -21,10 +21,10 @@
 #include <QMetaType>
 #include <QThread>
 
-#include "base/message_serialization.h"
 #include "client/ui/file_manager_window.h"
 #include "share/file_request.h"
 #include "share/file_worker.h"
+#include "share/message_serialization.h"
 
 namespace aspia {
 

@@ -20,11 +20,11 @@
 
 #include <QPainter>
 
-#include "base/message_serialization.h"
 #include "codec/video_encoder_vpx.h"
 #include "codec/video_encoder_zlib.h"
 #include "codec/video_util.h"
 #include "desktop_capture/desktop_frame_qimage.h"
+#include "share/message_serialization.h"
 
 namespace aspia {
 

@@ -29,6 +29,7 @@ list(APPEND SOURCE_SHARE
     file_request.h
     file_worker.cc
     file_worker.h
+    message_serialization.h
     user_util.cc
     user_util.h)
 
@@ -36,16 +37,11 @@ list(APPEND SOURCE_SHARE_WIN
     win/file_enumerator.cc
     win/file_enumerator.h)
 
-file(GLOB_RECURSE SHARE_HEADERS ${PROJECT_SOURCE_DIR}/share/*.h)
-qt5_wrap_cpp(SOURCE_SHARE_MOC ${SHARE_HEADERS} OPTIONS "--no-notes")
-
 source_group("" FILES ${SOURCE_SHARE})
-source_group(moc FILES ${SOURCE_SHARE_MOC})
 source_group(win FILES ${SOURCE_SHARE_WIN})
 
 add_library(aspia_share STATIC
     ${SOURCE_SHARE}
-    ${SOURCE_SHARE_MOC}
     ${SOURCE_SHARE_WIN})
 target_link_libraries(aspia_share
     aspia_base

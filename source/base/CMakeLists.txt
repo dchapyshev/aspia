@@ -38,7 +38,6 @@ list(APPEND SOURCE_BASE
     logging.cc
     logging.h
     macros_magic.h
-    message_serialization.h
     service.h
     service_controller.cc
     service_controller.h

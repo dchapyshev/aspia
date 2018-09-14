@@ -22,7 +22,6 @@
 #include <QMenu>
 #include <QMessageBox>
 
-#include "base/message_serialization.h"
 #include "client/config_factory.h"
 #include "codec/video_util.h"
 #include "console/address_book_dialog.h"
@@ -34,6 +33,7 @@
 #include "crypto/data_cryptor_chacha20_poly1305.h"
 #include "crypto/password_hash.h"
 #include "crypto/secure_memory.h"
+#include "share/message_serialization.h"
 
 namespace aspia {
 

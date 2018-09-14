@@ -18,10 +18,10 @@
 
 #include "host/host_session_desktop.h"
 
-#include "base/message_serialization.h"
 #include "host/input_injector.h"
 #include "host/screen_updater.h"
 #include "share/clipboard.h"
+#include "share/message_serialization.h"
 
 #if defined(OS_WIN)
 #include "desktop_capture/win/visual_effects_disabler.h"

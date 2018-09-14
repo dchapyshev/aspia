@@ -80,30 +80,16 @@ list(APPEND SOURCE_HOST_WIN
     win/host_service_main.cc
     win/host_service_main.h)
 
-file(GLOB_RECURSE HOST_HEADERS ${PROJECT_SOURCE_DIR}/host/*.h)
-qt5_wrap_cpp(SOURCE_HOST_MOC ${HOST_HEADERS} OPTIONS "--no-notes")
-
-file(GLOB_RECURSE HOST_UI_FILES ${PROJECT_SOURCE_DIR}/host/ui/*.ui)
-qt5_wrap_ui(SOURCE_HOST_UIC ${HOST_UI_FILES})
-
-file(GLOB_RECURSE HOST_QRC_FILES ${PROJECT_SOURCE_DIR}/host/resources/*.qrc)
-qt5_add_resources(SOURCE_HOST_RCC ${HOST_QRC_FILES})
-
 source_group("" FILES ${SOURCE_HOST})
 source_group(moc FILES ${SOURCE_HOST_MOC})
 source_group(resources FILES ${SOURCE_HOST_RESOURCES})
-source_group(resources FILES ${SOURCE_HOST_RCC})
 source_group(ui FILES ${SOURCE_HOST_UI})
-source_group(uic FILES ${SOURCE_HOST_UIC})
 source_group(win FILES ${SOURCE_HOST_WIN})
 
 add_library(aspia_host SHARED
     ${SOURCE_HOST}
-    ${SOURCE_HOST_MOC}
     ${SOURCE_HOST_RESOURCES}
-    ${SOURCE_HOST_RCC}
     ${SOURCE_HOST_UI}
-    ${SOURCE_HOST_UIC}
     ${SOURCE_HOST_WIN})
 target_link_libraries(aspia_host
     aspia_base

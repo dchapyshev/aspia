@@ -28,9 +28,9 @@ set(ASPIA_THIRD_PARTY_DIR "$ENV{ASPIA_THIRD_PARTY_DIR}")
 project(aspia)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
-set(CMAKE_AUTOMOC OFF)
-set(CMAKE_AUTOUIC OFF)
-set(CMAKE_AUTORCC OFF)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTORCC ON)
 
 set(CMAKE_PREFIX_PATH "${ASPIA_THIRD_PARTY_DIR}/qt;${ASPIA_THIRD_PARTY_DIR}/protobuf")
 
@@ -65,9 +65,9 @@ link_directories(
     ${ASPIA_THIRD_PARTY_DIR}/googletest/lib
     ${ASPIA_THIRD_PARTY_DIR}/libvpx/lib
     ${ASPIA_THIRD_PARTY_DIR}/libyuv/lib
-    ${ASPIA_THIRD_PARTY_DIR}/zlib-ng/lib
     ${ASPIA_THIRD_PARTY_DIR}/openssl/lib
     ${ASPIA_THIRD_PARTY_DIR}/protobuf/lib
+    ${ASPIA_THIRD_PARTY_DIR}/zlib-ng/lib
     ${ASPIA_THIRD_PARTY_DIR}/qt/lib
     ${ASPIA_THIRD_PARTY_DIR}/qt/plugins/platforms
     ${ASPIA_THIRD_PARTY_DIR}/qt/plugins/styles)
