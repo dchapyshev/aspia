@@ -32,6 +32,7 @@ public:
     explicit CompressorZLIB(int compress_ratio);
     ~CompressorZLIB();
 
+    // Compressor implementation.
     bool process(const uint8_t* input_data,
                  size_t input_size,
                  uint8_t* output_data,
@@ -39,7 +40,6 @@ public:
                  CompressorFlush flush,
                  size_t* consumed,
                  size_t* written) override;
-
     void reset() override;
 
 private:

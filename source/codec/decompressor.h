@@ -19,6 +19,8 @@
 #ifndef ASPIA_CODEC__DECOMPRESSOR_H_
 #define ASPIA_CODEC__DECOMPRESSOR_H_
 
+#include <cstdint>
+
 namespace aspia {
 
 //

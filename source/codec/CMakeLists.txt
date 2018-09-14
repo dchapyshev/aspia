@@ -20,6 +20,8 @@ list(APPEND SOURCE_CODEC
     compressor.h
     compressor_zlib.cc
     compressor_zlib.h
+    compressor_zstd.cc
+    compressor_zstd.h
     cursor_decoder.cc
     cursor_decoder.h
     cursor_encoder.cc
@@ -27,6 +29,8 @@ list(APPEND SOURCE_CODEC
     decompressor.h
     decompressor_zlib.cc
     decompressor_zlib.h
+    decompressor_zstd.cc
+    decompressor_zstd.h
     pixel_translator.cc
     pixel_translator.h
     scale_reducer.cc
