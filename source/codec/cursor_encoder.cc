@@ -27,8 +27,8 @@ namespace {
 // Cache size can be in the range from 2 to 31.
 constexpr uint8_t kCacheSize = 16;
 
-// The compression ratio can be in the range of 1 to 9.
-constexpr int kCompressionRatio = 6;
+// The compression ratio can be in the range of 1 to 22.
+constexpr int kCompressionRatio = 8;
 
 uint8_t* getOutputBuffer(proto::desktop::CursorShape* cursor_shape, size_t size)
 {
@@ -43,65 +43,49 @@ CursorEncoder::CursorEncoder()
       cache_(kCacheSize)
 {
     static_assert(kCacheSize >= 2 && kCacheSize <= 31);
-    static_assert(kCompressionRatio >= 1 && kCompressionRatio <= 9);
+    static_assert(kCompressionRatio >= 1 && kCompressionRatio <= 22);
 }
 
-void CursorEncoder::compressCursor(proto::desktop::CursorShape* cursor_shape,
+bool CursorEncoder::compressCursor(proto::desktop::CursorShape* cursor_shape,
                                    const MouseCursor* mouse_cursor)
 {
     compressor_.reset();
 
-    int width = mouse_cursor->size().width();
-    int height = mouse_cursor->size().height();
+    const size_t input_size = mouse_cursor->stride() * mouse_cursor->size().height();
+    const uint8_t* input = mouse_cursor->data();
 
-    const size_t row_size = width * sizeof(uint32_t);
-
-    size_t packet_size = row_size * height;
-    packet_size += packet_size / 100 + 16;
-
-    uint8_t* compressed_pos = getOutputBuffer(cursor_shape, packet_size);
-    const uint8_t* source_pos = mouse_cursor->data();
+    const size_t output_size = compressor_.compressBound(input_size);
+    uint8_t* output = getOutputBuffer(cursor_shape, output_size);
 
     size_t filled = 0;
-    size_t row_pos = 0; // Position in the current row in bytes.
-    int row_y = 0; // Current row.
+    size_t pos = 0;
     bool compress_again = true;
 
     while (compress_again)
     {
-        Compressor::CompressorFlush flush = Compressor::CompressorNoFlush;
-
-        // If we reached the last row in the rectangle.
-        if (row_y == height - 1)
-            flush = Compressor::CompressorFinish;
-
         size_t consumed = 0;
         size_t written = 0;
 
-        compress_again = compressor_.process(
-            source_pos + row_pos, row_size - row_pos,
-            compressed_pos + filled, packet_size - filled,
-            flush, &consumed, &written);
+        compress_again = compressor_.process(input + pos,
+                                             input_size - pos,
+                                             output + filled,
+                                             output_size - filled,
+                                             Compressor::CompressorFinish,
+                                             &consumed,
+                                             &written);
 
-        row_pos += consumed;
+        pos += consumed;
         filled += written;
 
         // If we have filled the message or we have reached the end of stream.
-        if (filled == packet_size || !compress_again)
+        if (filled == output_size || !compress_again)
         {
             cursor_shape->mutable_data()->resize(filled);
-            return;
-        }
-
-        // If we have reached the end of the current row in the rectangle and
-        // this is not the last row.
-        if (row_pos == row_size && row_y < height - 1)
-        {
-            row_pos = 0;
-            source_pos += row_size;
-            ++row_y;
+            return true;
         }
     }
+
+    return false;
 }
 
 bool CursorEncoder::encode(std::unique_ptr<MouseCursor> mouse_cursor,
@@ -130,7 +114,8 @@ bool CursorEncoder::encode(std::unique_ptr<MouseCursor> mouse_cursor,
         cursor_shape->set_hotspot_x(mouse_cursor->hotSpot().x());
         cursor_shape->set_hotspot_y(mouse_cursor->hotSpot().y());
 
-        compressCursor(cursor_shape, mouse_cursor.get());
+        if (!compressCursor(cursor_shape, mouse_cursor.get()))
+            return false;
 
         // If the cache is empty, then set the cache reset flag on the client
         // side and pass the maximum cache size.

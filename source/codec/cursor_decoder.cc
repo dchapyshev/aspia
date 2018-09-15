@@ -19,13 +19,13 @@
 #include "codec/cursor_decoder.h"
 
 #include "base/logging.h"
-#include "codec/decompressor_zlib.h"
+#include "codec/decompressor_zstd.h"
 #include "desktop_capture/mouse_cursor_cache.h"
 
 namespace aspia {
 
 CursorDecoder::CursorDecoder()
-    : decompressor_(std::make_unique<DecompressorZLIB>())
+    : decompressor_(std::make_unique<DecompressorZstd>())
 {
     // Nothing
 }
@@ -33,45 +33,32 @@ CursorDecoder::CursorDecoder()
 CursorDecoder::~CursorDecoder() = default;
 
 bool CursorDecoder::decompressCursor(const proto::desktop::CursorShape& cursor_shape,
-                                     uint8_t* image)
+                                     uint8_t* output,
+                                     size_t output_size)
 {
-    const uint8_t* src = reinterpret_cast<const uint8_t*>(cursor_shape.data().data());
-    const size_t src_size = cursor_shape.data().size();
-    const size_t row_size = cursor_shape.width() * sizeof(uint32_t);
+    if (cursor_shape.data().empty())
+        return false;
 
-    // Consume all the data in the message.
+    const uint8_t* input = reinterpret_cast<const uint8_t*>(cursor_shape.data().data());
+    const size_t input_size = cursor_shape.data().size();
+
     bool decompress_again = true;
     size_t used = 0;
+    size_t filled = 0;
 
-    int row_y = 0;
-    size_t row_pos = 0;
-
-    while (decompress_again && used < src_size)
+    while (decompress_again)
     {
-        if (row_y > cursor_shape.height() - 1)
-        {
-            LOG(LS_WARNING) << "Too much data is received for the given rectangle";
-            return false;
-        }
-
         size_t written = 0;
         size_t consumed = 0;
 
-        decompress_again = decompressor_->process(src + used,
-                                                  src_size - used,
-                                                  image + row_pos,
-                                                  row_size - row_pos,
+        decompress_again = decompressor_->process(input + used,
+                                                  input_size - used,
+                                                  output + filled,
+                                                  output_size - filled,
                                                   &consumed,
                                                   &written);
         used += consumed;
-        row_pos += written;
-
-        if (row_pos == row_size)
-        {
-            ++row_y;
-            row_pos = 0;
-            image += row_size;
-        }
+        filled += written;
     }
 
     decompressor_->reset();
@@ -102,7 +89,7 @@ std::shared_ptr<MouseCursor> CursorDecoder::decode(const proto::desktop::CursorS
         size_t image_size = size.width() * size.height() * sizeof(uint32_t);
         std::unique_ptr<uint8_t[]> image = std::make_unique<uint8_t[]>(image_size);
 
-        if (!decompressCursor(cursor_shape, image.get()))
+        if (!decompressCursor(cursor_shape, image.get(), image_size))
             return nullptr;
 
         std::unique_ptr<MouseCursor> mouse_cursor = std::make_unique<MouseCursor>(

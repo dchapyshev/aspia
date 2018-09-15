@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "codec/video_encoder_zlib.h"
+#include "codec/video_encoder_zstd.h"
 
 #include "base/logging.h"
 #include "codec/pixel_translator.h"
@@ -37,7 +37,7 @@ uint8_t* GetOutputBuffer(proto::desktop::VideoPacket* packet, size_t size)
 
 } // namespace
 
-VideoEncoderZLIB::VideoEncoderZLIB(std::unique_ptr<PixelTranslator> translator,
+VideoEncoderZstd::VideoEncoderZstd(std::unique_ptr<PixelTranslator> translator,
                                    const PixelFormat& target_format,
                                    int compression_ratio)
     : target_format_(target_format),
@@ -48,13 +48,12 @@ VideoEncoderZLIB::VideoEncoderZLIB(std::unique_ptr<PixelTranslator> translator,
 }
 
 // static
-VideoEncoderZLIB* VideoEncoderZLIB::create(const PixelFormat& target_format, int compression_ratio)
+VideoEncoderZstd* VideoEncoderZstd::create(const PixelFormat& target_format, int compression_ratio)
 {
-    if (compression_ratio < Z_BEST_SPEED || compression_ratio > Z_BEST_COMPRESSION)
-    {
-        LOG(LS_WARNING) << "Wrong compression ratio: " << compression_ratio;
-        return nullptr;
-    }
+    if (compression_ratio < CompressorZstd::minCompressRatio())
+        compression_ratio = CompressorZstd::minCompressRatio();
+    else if (compression_ratio > CompressorZstd::maxCompressRatio())
+        compression_ratio = CompressorZstd::maxCompressRatio();
 
     std::unique_ptr<PixelTranslator> translator =
         PixelTranslator::create(PixelFormat::ARGB(), target_format);
@@ -64,14 +63,14 @@ VideoEncoderZLIB* VideoEncoderZLIB::create(const PixelFormat& target_format, int
         return nullptr;
     }
 
-    return new VideoEncoderZLIB(std::move(translator), target_format, compression_ratio);
+    return new VideoEncoderZstd(std::move(translator), target_format, compression_ratio);
 }
 
-void VideoEncoderZLIB::compressPacket(proto::desktop::VideoPacket* packet, size_t source_data_size)
+void VideoEncoderZstd::compressPacket(proto::desktop::VideoPacket* packet, size_t source_data_size)
 {
     compressor_.reset();
 
-    const size_t packet_size = source_data_size + (source_data_size / 100 + 16);
+    const size_t packet_size = compressor_.compressBound(source_data_size);
 
     uint8_t* compress_pos = GetOutputBuffer(packet, packet_size);
 
@@ -87,10 +86,13 @@ void VideoEncoderZLIB::compressPacket(proto::desktop::VideoPacket* packet, size_
         // Number of bytes that were written to the destination buffer.
         size_t written = 0;
 
-        compress_again = compressor_.process(
-            translate_buffer_.get() + pos, source_data_size - pos,
-            compress_pos + filled, packet_size - filled,
-            Compressor::CompressorFinish, &consumed, &written);
+        compress_again = compressor_.process(translate_buffer_.get() + pos,
+                                             source_data_size - pos,
+                                             compress_pos + filled,
+                                             packet_size - filled,
+                                             Compressor::CompressorFinish,
+                                             &consumed,
+                                             &written);
 
         pos += consumed;
         filled += written;
@@ -104,9 +106,9 @@ void VideoEncoderZLIB::compressPacket(proto::desktop::VideoPacket* packet, size_
     }
 }
 
-void VideoEncoderZLIB::encode(const DesktopFrame* frame, proto::desktop::VideoPacket* packet)
+void VideoEncoderZstd::encode(const DesktopFrame* frame, proto::desktop::VideoPacket* packet)
 {
-    fillPacketInfo(proto::desktop::VIDEO_ENCODING_ZLIB, frame, packet);
+    fillPacketInfo(proto::desktop::VIDEO_ENCODING_ZSTD, frame, packet);
 
     if (packet->has_format())
     {
@@ -149,7 +151,7 @@ void VideoEncoderZLIB::encode(const DesktopFrame* frame, proto::desktop::VideoPa
         translate_pos += rect.height() * stride;
     }
 
-    // Compress data with using ZLIB compressor.
+    // Compress data with using Zstd compressor.
     compressPacket(packet, data_size);
 }
 

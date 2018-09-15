@@ -21,7 +21,7 @@
 #include <QPainter>
 
 #include "codec/video_encoder_vpx.h"
-#include "codec/video_encoder_zlib.h"
+#include "codec/video_encoder_zstd.h"
 #include "codec/video_util.h"
 #include "desktop_capture/desktop_frame_qimage.h"
 #include "share/message_serialization.h"
@@ -90,8 +90,8 @@ VideoEncoder* HostSessionFakeDesktop::createEncoder(const proto::desktop::Config
         case proto::desktop::VIDEO_ENCODING_VP9:
             return VideoEncoderVPX::createVP9();
 
-        case proto::desktop::VIDEO_ENCODING_ZLIB:
-            return VideoEncoderZLIB::create(
+        case proto::desktop::VIDEO_ENCODING_ZSTD:
+            return VideoEncoderZstd::create(
                 VideoUtil::fromVideoPixelFormat(config.pixel_format()), config.compress_ratio());
 
         default:

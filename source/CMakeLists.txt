@@ -59,7 +59,6 @@ include_directories(
     ${ASPIA_THIRD_PARTY_DIR}/protobuf/include
     ${ASPIA_THIRD_PARTY_DIR}/rapidjson/include
     ${ASPIA_THIRD_PARTY_DIR}/rapidxml/include
-    ${ASPIA_THIRD_PARTY_DIR}/zlib-ng/include
     ${ASPIA_THIRD_PARTY_DIR}/zstd/include)
 
 link_directories(
@@ -68,7 +67,6 @@ link_directories(
     ${ASPIA_THIRD_PARTY_DIR}/libyuv/lib
     ${ASPIA_THIRD_PARTY_DIR}/openssl/lib
     ${ASPIA_THIRD_PARTY_DIR}/protobuf/lib
-    ${ASPIA_THIRD_PARTY_DIR}/zlib-ng/lib
     ${ASPIA_THIRD_PARTY_DIR}/zstd/lib
     ${ASPIA_THIRD_PARTY_DIR}/qt/lib
     ${ASPIA_THIRD_PARTY_DIR}/qt/plugins/platforms
@@ -96,7 +94,6 @@ set(THIRD_PARTY_LIBS
     debug qtpcre2d
     debug qwindowsd
     debug qwindowsvistastyled
-    debug zlib-ngd
     debug zstdd
     optimized Qt5AccessibilitySupport
     optimized Qt5EventDispatcherSupport
@@ -112,7 +109,6 @@ set(THIRD_PARTY_LIBS
     optimized qtpcre2
     optimized qwindows
     optimized qwindowsvistastyle
-    optimized zlib-ng
     optimized zstd
     crypt32
     dwmapi

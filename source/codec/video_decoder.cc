@@ -19,7 +19,7 @@
 #include "codec/video_decoder.h"
 
 #include "codec/video_decoder_vpx.h"
-#include "codec/video_decoder_zlib.h"
+#include "codec/video_decoder_zstd.h"
 
 namespace aspia {
 
@@ -28,8 +28,8 @@ std::unique_ptr<VideoDecoder> VideoDecoder::create(proto::desktop::VideoEncoding
 {
     switch (encoding)
     {
-        case proto::desktop::VIDEO_ENCODING_ZLIB:
-            return VideoDecoderZLIB::create();
+        case proto::desktop::VIDEO_ENCODING_ZSTD:
+            return VideoDecoderZstd::create();
 
         case proto::desktop::VIDEO_ENCODING_VP8:
             return VideoDecoderVPX::createVP8();

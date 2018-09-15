@@ -25,7 +25,7 @@
 #include <google/protobuf/stubs/common.h>
 #include <openssl/crypto.h>
 #include <vpx/vpx_codec.h>
-#include <zlib-ng.h>
+#include <zstd.h>
 
 #include "build/version.h"
 
@@ -56,7 +56,7 @@ const char* kThirdParty[] =
     "libsodium &copy; 2013-2017 Frank Denis, ISC License",
     "openssl &copy; 1998-2018 The OpenSSL Project, OpenSSL License",
     "protobuf &copy; 2014 Google Inc., BSD 3-Clause License",
-    "zlib-ng &copy; 1995-2013 Jean-loup Gailly and Mark Adler, Zlib License",
+    "zstd &copy; 2016 Yann Collet, Facebook, Inc., BSD License",
     "Fugue Icons &copy; 2013 Yusuke Kamiyamane, Creative Commons Attribution 3.0 License"
 };
 
@@ -141,7 +141,7 @@ AboutDialog::AboutDialog(QWidget* parent)
         QString::fromStdString(google::protobuf::internal::VersionString(GOOGLE_PROTOBUF_VERSION));
     add_version("protobuf", protobuf_version);
 
-    add_version("zlib-ng", zlibng_version());
+    add_version("zstd", ZSTD_versionString());
 
     connect(ui.push_button_donate, &QPushButton::pressed, [this]()
     {

@@ -16,29 +16,29 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "codec/video_decoder_zlib.h"
+#include "codec/video_decoder_zstd.h"
 
 #include "base/logging.h"
-#include "codec/decompressor_zlib.h"
+#include "codec/decompressor_zstd.h"
 #include "codec/pixel_translator.h"
 #include "codec/video_util.h"
 #include "desktop_capture/desktop_frame_aligned.h"
 
 namespace aspia {
 
-VideoDecoderZLIB::VideoDecoderZLIB()
-    : decompressor_(std::make_unique<DecompressorZLIB>())
+VideoDecoderZstd::VideoDecoderZstd()
+    : decompressor_(std::make_unique<DecompressorZstd>())
 {
     // Nothing
 }
 
 // static
-std::unique_ptr<VideoDecoderZLIB> VideoDecoderZLIB::create()
+std::unique_ptr<VideoDecoderZstd> VideoDecoderZstd::create()
 {
-    return std::unique_ptr<VideoDecoderZLIB>(new VideoDecoderZLIB());
+    return std::unique_ptr<VideoDecoderZstd>(new VideoDecoderZstd());
 }
 
-bool VideoDecoderZLIB::decode(const proto::desktop::VideoPacket& packet,
+bool VideoDecoderZstd::decode(const proto::desktop::VideoPacket& packet,
                               DesktopFrame* target_frame)
 {
     if (packet.has_format())

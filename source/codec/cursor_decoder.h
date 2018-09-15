@@ -39,7 +39,9 @@ public:
     std::shared_ptr<MouseCursor> decode(const proto::desktop::CursorShape& cursor_shape);
 
 private:
-    bool decompressCursor(const proto::desktop::CursorShape& cursor_shape, uint8_t* image);
+    bool decompressCursor(const proto::desktop::CursorShape& cursor_shape,
+                          uint8_t* output,
+                          size_t output_size);
 
     std::unique_ptr<MouseCursorCache> cache_;
     std::unique_ptr<Decompressor> decompressor_;

@@ -9,4 +9,4 @@ Third-party components information
 | openssl    | 1.1.0i    | OpenSSL License                       | https://github.com/openssl/openssl/releases     |
 | protobuf   | 3.6.1     | BSD 3-Clause License                  | https://github.com/google/protobuf/releases     |
 | qt         | 5.11.1    | GNU General Public License 3.0        | https://www.qt.io                               |
-| zlib-ng    | trunk     | zlib License                          | https://github.com/Dead2/zlib-ng                |
+| zstd       | 1.3.5     | BSD License                           | https://github.com/facebook/zstd/releases       |

@@ -106,7 +106,7 @@ ImageBuffer decompress(size_t output_size, const ImageBuffer& input)
     bool decompress_again = true;
 
     size_t used = 0;
-    size_t pos = 0;
+    size_t filled = 0;
 
     while (decompress_again)
     {
@@ -115,12 +115,12 @@ ImageBuffer decompress(size_t output_size, const ImageBuffer& input)
 
         decompress_again = decompressor.process(input.data() + used,
                                                 input.size() - used,
-                                                decompressed_buffer.data() + pos,
-                                                decompressed_buffer.size() - pos,
+                                                decompressed_buffer.data() + filled,
+                                                decompressed_buffer.size() - filled,
                                                 &consumed,
                                                 &written);
         used += consumed;
-        pos += written;
+        filled += written;
     }
 
     return decompressed_buffer;

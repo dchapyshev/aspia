@@ -55,8 +55,8 @@ DesktopConfigDialog::DesktopConfigDialog(proto::SessionType session_type,
     ui->combo_codec->addItem(QStringLiteral("VP8"),
                              QVariant(proto::desktop::VIDEO_ENCODING_VP8));
 
-    ui->combo_codec->addItem(QStringLiteral("ZLIB"),
-                             QVariant(proto::desktop::VIDEO_ENCODING_ZLIB));
+    ui->combo_codec->addItem(QStringLiteral("ZSTD"),
+                             QVariant(proto::desktop::VIDEO_ENCODING_ZSTD));
 
     int current_codec = ui->combo_codec->findData(QVariant(config_.video_encoding()));
     if (current_codec == -1)
@@ -142,7 +142,7 @@ DesktopConfigDialog::~DesktopConfigDialog() = default;
 void DesktopConfigDialog::onCodecChanged(int item_index)
 {
     bool has_pixel_format =
-        (ui->combo_codec->itemData(item_index).toInt() == proto::desktop::VIDEO_ENCODING_ZLIB);
+        (ui->combo_codec->itemData(item_index).toInt() == proto::desktop::VIDEO_ENCODING_ZSTD);
 
     ui->label_color_depth->setEnabled(has_pixel_format);
     ui->combo_color_depth->setEnabled(has_pixel_format);
@@ -166,7 +166,7 @@ void DesktopConfigDialog::onButtonBoxClicked(QAbstractButton* button)
 
         config_.set_video_encoding(video_encoding);
 
-        if (video_encoding == proto::desktop::VIDEO_ENCODING_ZLIB)
+        if (video_encoding == proto::desktop::VIDEO_ENCODING_ZSTD)
         {
             PixelFormat pixel_format;
 

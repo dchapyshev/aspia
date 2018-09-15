@@ -21,7 +21,7 @@
 
 #include <memory>
 
-#include "codec/compressor_zlib.h"
+#include "codec/compressor_zstd.h"
 #include "desktop_capture/mouse_cursor_cache.h"
 #include "protocol/desktop_session.pb.h"
 
@@ -37,10 +37,10 @@ public:
                 proto::desktop::CursorShape* cursor_shape);
 
 private:
-    void compressCursor(proto::desktop::CursorShape* cursor_shape,
+    bool compressCursor(proto::desktop::CursorShape* cursor_shape,
                         const MouseCursor* mouse_cursor);
 
-    CompressorZLIB compressor_;
+    CompressorZstd compressor_;
     MouseCursorCache cache_;
 
     DISALLOW_COPY_AND_ASSIGN(CursorEncoder);

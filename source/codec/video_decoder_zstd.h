@@ -16,38 +16,36 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CODEC__DECOMPRESSOR_ZLIB_H_
-#define ASPIA_CODEC__DECOMPRESSOR_ZLIB_H_
+#ifndef ASPIA_CODEC__VIDEO_DECODER_ZSTD_H_
+#define ASPIA_CODEC__VIDEO_DECODER_ZSTD_H_
 
-#include <zlib-ng.h>
-
-#include "base/macros_magic.h"
-#include "codec/decompressor.h"
+#include "codec/video_decoder.h"
 
 namespace aspia {
 
-class DecompressorZLIB : public Decompressor
+class Decompressor;
+class DesktopFrame;
+class PixelTranslator;
+
+class VideoDecoderZstd : public VideoDecoder
 {
 public:
-    DecompressorZLIB();
-    ~DecompressorZLIB();
+    ~VideoDecoderZstd() = default;
 
-    void reset() override;
+    static std::unique_ptr<VideoDecoderZstd> create();
 
-    // Decompressor implementations.
-    bool process(const uint8_t* input_data,
-                 size_t input_size,
-                 uint8_t* output_data,
-                 size_t output_size,
-                 size_t* consumed,
-                 size_t* written) override;
+    bool decode(const proto::desktop::VideoPacket& packet, DesktopFrame* target_frame) override;
 
 private:
-    zng_stream stream_;
+    VideoDecoderZstd();
 
-    DISALLOW_COPY_AND_ASSIGN(DecompressorZLIB);
+    std::unique_ptr<Decompressor> decompressor_;
+    std::unique_ptr<PixelTranslator> translator_;
+    std::unique_ptr<DesktopFrame> source_frame_;
+
+    DISALLOW_COPY_AND_ASSIGN(VideoDecoderZstd);
 };
 
 } // namespace aspia
 
-#endif // ASPIA_CODEC__DECOMPRESSOR_ZLIB_H_
+#endif // ASPIA_CODEC__VIDEO_DECODER_ZSTD_H_

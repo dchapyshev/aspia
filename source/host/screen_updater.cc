@@ -28,7 +28,7 @@
 #include "codec/cursor_encoder.h"
 #include "codec/scale_reducer.h"
 #include "codec/video_encoder_vpx.h"
-#include "codec/video_encoder_zlib.h"
+#include "codec/video_encoder_zstd.h"
 #include "codec/video_util.h"
 #include "desktop_capture/capture_scheduler.h"
 #include "desktop_capture/cursor_capturer_win.h"
@@ -134,8 +134,8 @@ bool ScreenUpdaterImpl::startUpdater(const proto::desktop::Config& config)
             video_encoder_.reset(VideoEncoderVPX::createVP9());
             break;
 
-        case proto::desktop::VIDEO_ENCODING_ZLIB:
-            video_encoder_.reset(VideoEncoderZLIB::create(
+        case proto::desktop::VIDEO_ENCODING_ZSTD:
+            video_encoder_.reset(VideoEncoderZstd::create(
                 VideoUtil::fromVideoPixelFormat(config.pixel_format()),
                 config.compress_ratio()));
             break;
@@ -145,7 +145,7 @@ bool ScreenUpdaterImpl::startUpdater(const proto::desktop::Config& config)
             // No supported video encoding. We create the default codec. If the client can not
             // decode it, it will display an error and the connection will be disconnected.
             LOG(LS_WARNING) << "Unsupported video encoding: " << config.video_encoding();
-            video_encoder_.reset(VideoEncoderZLIB::create(PixelFormat::RGB565(), 6));
+            video_encoder_.reset(VideoEncoderZstd::create(PixelFormat::RGB565(), 6));
         }
         break;
     }

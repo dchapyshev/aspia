@@ -85,7 +85,7 @@ message CursorShape
     int32 hotspot_x = 4;
     int32 hotspot_y = 5;
 
-    // Cursor pixmap data in 32-bit BGRA format compressed with ZLIB.
+    // Cursor pixmap data in 32-bit BGRA format compressed with Zstd.
     bytes data = 6;
 }
 
@@ -114,7 +114,7 @@ message PixelFormat
 enum VideoEncoding
 {
     VIDEO_ENCODING_UNKNOWN = 0;
-    VIDEO_ENCODING_ZLIB    = 1;
+    VIDEO_ENCODING_ZSTD    = 1;
     VIDEO_ENCODING_VP8     = 2;
     VIDEO_ENCODING_VP9     = 4; // LossLess
 }

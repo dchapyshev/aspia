@@ -34,9 +34,9 @@ const int kDefScaleFactor = 100;
 const int kMinScaleFactor = 50;
 const int kMaxScaleFactor = 150;
 
-const int kDefCompressRatio = 6;
+const int kDefCompressRatio = 8;
 const int kMinCompressRatio = 1;
-const int kMaxCompressRatio = 9;
+const int kMaxCompressRatio = 22;
 
 } // namespace
 
@@ -80,7 +80,7 @@ void ConfigFactory::setDefaultDesktopManageConfig(proto::desktop::Config* config
         proto::desktop::DISABLE_DESKTOP_EFFECTS | proto::desktop::DISABLE_DESKTOP_WALLPAPER;
 
     config->set_flags(kDefaultFlags);
-    config->set_video_encoding(proto::desktop::VideoEncoding::VIDEO_ENCODING_ZLIB);
+    config->set_video_encoding(proto::desktop::VideoEncoding::VIDEO_ENCODING_ZSTD);
     config->set_compress_ratio(kDefCompressRatio);
     config->set_scale_factor(kDefScaleFactor);
     config->set_update_interval(kDefUpdateInterval);
@@ -97,7 +97,7 @@ void ConfigFactory::setDefaultDesktopViewConfig(proto::desktop::Config* config)
         proto::desktop::DISABLE_DESKTOP_EFFECTS | proto::desktop::DISABLE_DESKTOP_WALLPAPER;
 
     config->set_flags(kDefaultFlags);
-    config->set_video_encoding(proto::desktop::VideoEncoding::VIDEO_ENCODING_ZLIB);
+    config->set_video_encoding(proto::desktop::VideoEncoding::VIDEO_ENCODING_ZSTD);
     config->set_compress_ratio(kDefCompressRatio);
     config->set_scale_factor(kDefScaleFactor);
     config->set_update_interval(kDefUpdateInterval);

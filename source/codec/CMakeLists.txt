@@ -18,8 +18,6 @@
 
 list(APPEND SOURCE_CODEC
     compressor.h
-    compressor_zlib.cc
-    compressor_zlib.h
     compressor_zstd.cc
     compressor_zstd.h
     cursor_decoder.cc
@@ -27,8 +25,6 @@ list(APPEND SOURCE_CODEC
     cursor_encoder.cc
     cursor_encoder.h
     decompressor.h
-    decompressor_zlib.cc
-    decompressor_zlib.h
     decompressor_zstd.cc
     decompressor_zstd.h
     pixel_translator.cc
@@ -41,19 +37,18 @@ list(APPEND SOURCE_CODEC
     video_decoder.h
     video_decoder_vpx.cc
     video_decoder_vpx.h
-    video_decoder_zlib.cc
-    video_decoder_zlib.h
+    video_decoder_zstd.cc
+    video_decoder_zstd.h
     video_encoder.cc
     video_encoder.h
     video_encoder_vpx.cc
     video_encoder_vpx.h
-    video_encoder_zlib.cc
-    video_encoder_zlib.h
+    video_encoder_zstd.cc
+    video_encoder_zstd.h
     video_util.cc
     video_util.h)
 
 list(APPEND SOURCE_CODEC_UNIT_TESTS
-    compressor_zlib_unittest.cc
     compressor_zstd_unittest.cc)
 
 source_group("" FILES ${SOURCE_CODEC})

@@ -16,13 +16,11 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CODEC__VIDEO_ENCODER_ZLIB_H_
-#define ASPIA_CODEC__VIDEO_ENCODER_ZLIB_H_
-
-#include <QSize>
+#ifndef ASPIA_CODEC__VIDEO_ENCODER_ZSTD_H_
+#define ASPIA_CODEC__VIDEO_ENCODER_ZSTD_H_
 
 #include "base/aligned_memory.h"
-#include "codec/compressor_zlib.h"
+#include "codec/compressor_zstd.h"
 #include "codec/video_encoder.h"
 #include "desktop_capture/pixel_format.h"
 
@@ -30,17 +28,17 @@ namespace aspia {
 
 class PixelTranslator;
 
-class VideoEncoderZLIB : public VideoEncoder
+class VideoEncoderZstd : public VideoEncoder
 {
 public:
-    ~VideoEncoderZLIB() = default;
+    ~VideoEncoderZstd() = default;
 
-    static VideoEncoderZLIB* create(const PixelFormat& target_format, int compression_ratio);
+    static VideoEncoderZstd* create(const PixelFormat& target_format, int compression_ratio);
 
     void encode(const DesktopFrame* frame, proto::desktop::VideoPacket* packet) override;
 
 private:
-    VideoEncoderZLIB(std::unique_ptr<PixelTranslator> translator,
+    VideoEncoderZstd(std::unique_ptr<PixelTranslator> translator,
                      const PixelFormat& target_format,
                      int compression_ratio);
     void compressPacket(proto::desktop::VideoPacket* packet, size_t source_data_size);
@@ -48,15 +46,15 @@ private:
     // Client's pixel format
     PixelFormat target_format_;
 
-    CompressorZLIB compressor_;
+    CompressorZstd compressor_;
     std::unique_ptr<PixelTranslator> translator_;
 
     std::unique_ptr<uint8_t[], AlignedFreeDeleter> translate_buffer_;
     size_t translate_buffer_size_ = 0;
 
-    DISALLOW_COPY_AND_ASSIGN(VideoEncoderZLIB);
+    DISALLOW_COPY_AND_ASSIGN(VideoEncoderZstd);
 };
 
 } // namespace aspia
 
-#endif // ASPIA_CODEC__VIDEO_ENCODER_ZLIB_H_
+#endif // ASPIA_CODEC__VIDEO_ENCODER_ZSTD_H_
