@@ -52,6 +52,10 @@ list(APPEND SOURCE_CODEC
     video_util.cc
     video_util.h)
 
+list(APPEND SOURCE_CODEC_UNIT_TESTS
+    compressor_zlib_unittest.cc
+    compressor_zstd_unittest.cc)
+
 source_group("" FILES ${SOURCE_CODEC})
 
 add_library(aspia_codec STATIC ${SOURCE_CODEC})
@@ -59,4 +63,30 @@ target_link_libraries(aspia_codec
     aspia_base
     aspia_protocol
     ${THIRD_PARTY_LIBS})
+
+# If the build of unit tests is enabled.
+if (BUILD_UNIT_TESTS)
+    add_executable(aspia_codec_tests ${SOURCE_CODEC_UNIT_TESTS})
+    target_link_libraries(aspia_codec_tests
+        aspia_base
+        aspia_codec
+        optimized gtest
+        optimized gtest_main
+        debug gtestd
+        debug gtest_maind
+        ${THIRD_PARTY_LIBS})
+
+    # Get the list of files containing messages.
+    file(GLOB_RECURSE CODEC_TEST_DATA test_data/*.*)
+
+    foreach(TEST_DATA_FILE ${CODEC_TEST_DATA})
+        get_filename_component(TEST_DATA_FILE_NAME ${TEST_DATA_FILE} NAME)
+        add_custom_command(TARGET aspia_codec_tests POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            ${TEST_DATA_FILE}
+            ${CMAKE_BINARY_DIR}/$<CONFIG>/test_data/${TEST_DATA_FILE_NAME})
+    endforeach()
+
+    add_test(NAME aspia_codec_tests COMMAND aspia_codec_tests)
+endif()
 

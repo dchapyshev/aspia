@@ -34,6 +34,18 @@ CompressorZstd::~CompressorZstd()
     ZSTD_freeCStream(stream_);
 }
 
+// static
+int CompressorZstd::minCompressRatio()
+{
+    return 1;
+}
+
+// static
+int CompressorZstd::maxCompressRatio()
+{
+    return ZSTD_maxCLevel();
+}
+
 bool CompressorZstd::process(const uint8_t* input_data,
                              size_t input_size,
                              uint8_t* output_data,
@@ -71,6 +83,11 @@ bool CompressorZstd::process(const uint8_t* input_data,
     *written = output.pos;
 
     return compress_again;
+}
+
+size_t CompressorZstd::compressBound(size_t input_size) const
+{
+    return ZSTD_compressBound(input_size);
 }
 
 void CompressorZstd::reset()

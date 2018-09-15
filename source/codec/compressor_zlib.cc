@@ -41,6 +41,18 @@ CompressorZLIB::~CompressorZLIB()
     DCHECK_EQ(ret, Z_OK);
 }
 
+// static
+int CompressorZLIB::minCompressRatio()
+{
+    return Z_BEST_SPEED;
+}
+
+// static
+int CompressorZLIB::maxCompressRatio()
+{
+    return Z_BEST_COMPRESSION;
+}
+
 void CompressorZLIB::reset()
 {
     int ret = zng_deflateReset(&stream_);
@@ -113,6 +125,11 @@ bool CompressorZLIB::process(const uint8_t* input_data,
     }
 
     return false;
+}
+
+size_t CompressorZLIB::compressBound(size_t input_size) const
+{
+    return input_size + (input_size / 100 + 16);
 }
 
 } // namespace aspia

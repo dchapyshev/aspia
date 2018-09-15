@@ -79,6 +79,8 @@ public:
                          CompressorFlush flush,
                          size_t* consumed,
                          size_t* written) = 0;
+
+    virtual size_t compressBound(size_t input_size) const = 0;
 };
 
 } // namespace aspia

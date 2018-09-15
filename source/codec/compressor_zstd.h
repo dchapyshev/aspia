@@ -32,6 +32,9 @@ public:
     explicit CompressorZstd(int compress_ratio);
     ~CompressorZstd();
 
+    static int minCompressRatio();
+    static int maxCompressRatio();
+
     // Compressor implementation.
     bool process(const uint8_t* input_data,
                  size_t input_size,
@@ -40,6 +43,7 @@ public:
                  CompressorFlush flush,
                  size_t* consumed,
                  size_t* written) override;
+    size_t compressBound(size_t input_size) const override;
     void reset() override;
 
 private:
