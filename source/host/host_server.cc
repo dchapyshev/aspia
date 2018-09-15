@@ -22,12 +22,12 @@
 
 #include "base/guid.h"
 #include "base/logging.h"
-#include "base/message_serialization.h"
 #include "host/win/host.h"
 #include "ipc/ipc_server.h"
 #include "network/firewall_manager.h"
 #include "network/network_channel_host.h"
 #include "protocol/notifier.pb.h"
+#include "share/message_serialization.h"
 
 namespace aspia {
 
@@ -75,6 +75,12 @@ bool HostServer::start(int port, std::shared_ptr<proto::SrpUserList>& user_list)
     if (!network_server_.isNull())
     {
         LOG(LS_WARNING) << "An attempt was start an already running server.";
+        return false;
+    }
+
+    if (!user_list)
+    {
+        LOG(LS_WARNING) << "Corrupted user list";
         return false;
     }
 
