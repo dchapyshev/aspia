@@ -50,7 +50,7 @@ bool DecompressorZstd::process(const uint8_t* input_data,
     ZSTD_inBuffer input = { input_data, input_size, 0 };
     ZSTD_outBuffer output = { output_data, output_size, 0 };
 
-    size_t ret = ZSTD_decompressStream(stream_, &output , &input);
+    size_t ret = ZSTD_decompressStream(stream_, &output, &input);
     if (ZSTD_isError(ret))
     {
         LOG(LS_WARNING) << "ZSTD_decompressStream failed: " << ZSTD_getErrorName(ret);

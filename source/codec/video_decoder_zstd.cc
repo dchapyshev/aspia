@@ -19,7 +19,6 @@
 #include "codec/video_decoder_zstd.h"
 
 #include "base/logging.h"
-#include "codec/decompressor_zstd.h"
 #include "codec/pixel_translator.h"
 #include "codec/video_util.h"
 #include "desktop_capture/desktop_frame_aligned.h"
@@ -27,7 +26,7 @@
 namespace aspia {
 
 VideoDecoderZstd::VideoDecoderZstd()
-    : decompressor_(std::make_unique<DecompressorZstd>())
+    : stream_(ZSTD_createDStream())
 {
     // Nothing
 }
@@ -60,11 +59,11 @@ bool VideoDecoderZstd::decode(const proto::desktop::VideoPacket& packet,
         return false;
     }
 
-    const uint8_t* src = reinterpret_cast<const uint8_t*>(packet.data().data());
-    const size_t src_size = packet.data().size();
-    size_t used = 0;
+    size_t ret = ZSTD_initDStream(stream_.get());
+    DCHECK(!ZSTD_isError(ret)) << ZSTD_getErrorName(ret);
 
     DesktopRect frame_rect = DesktopRect::makeSize(source_frame_->size());
+    ZSTD_inBuffer input = { packet.data().data(), packet.data().size(), 0 };
 
     for (int i = 0; i < packet.dirty_rect_size(); ++i)
     {
@@ -76,40 +75,28 @@ bool VideoDecoderZstd::decode(const proto::desktop::VideoPacket& packet,
             return false;
         }
 
-        uint8_t* dst = source_frame_->frameDataAtPos(rect.x(), rect.y());
-        const size_t row_size = rect.width() * source_frame_->format().bytesPerPixel();
+        uint8_t* output_data = source_frame_->frameDataAtPos(rect.x(), rect.y());
+        const size_t output_size = rect.width() * source_frame_->format().bytesPerPixel();
 
-        // Consume all the data in the message.
-        bool decompress_again = true;
-
+        ZSTD_outBuffer output = { output_data, output_size, 0 };
         int row_y = 0;
-        size_t row_pos = 0;
 
-        while (decompress_again && used < src_size)
+        while (row_y < rect.height())
         {
-            // If we have reached the end of the current rectangle, then
-            // proceed to the next one.
-            if (row_y > rect.height() - 1)
-                break;
+            size_t ret = ZSTD_decompressStream(stream_.get(), &output, &input);
+            if (ZSTD_isError(ret))
+            {
+                LOG(LS_WARNING) << "ZSTD_decompressStream failed: " << ZSTD_getErrorName(ret);
+                return false;
+            }
 
-            size_t written = 0;
-            size_t consumed = 0;
-
-            decompress_again = decompressor_->process(src + used,
-                                                      src_size - used,
-                                                      dst + row_pos,
-                                                      row_size - row_pos,
-                                                      &consumed,
-                                                      &written);
-            used += consumed;
-            row_pos += written;
-
-            // If we completely unpacked the row in the rectangle
-            if (row_pos == row_size)
+            // If we completely unpacked the row in the rectangle.
+            if (output.pos == output.size)
             {
                 ++row_y;
-                row_pos = 0;
-                dst += source_frame_->stride();
+                output_data += source_frame_->stride();
+                output.dst = output_data;
+                output.pos = 0;
             }
         }
 
@@ -121,7 +108,6 @@ bool VideoDecoderZstd::decode(const proto::desktop::VideoPacket& packet,
                                rect.height());
     }
 
-    decompressor_->reset();
     return true;
 }
 

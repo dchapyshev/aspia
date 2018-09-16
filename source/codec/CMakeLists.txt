@@ -33,6 +33,10 @@ list(APPEND SOURCE_CODEC
     scale_reducer.h
     scoped_vpx_codec.cc
     scoped_vpx_codec.h
+    scoped_zstd_dict.cc
+    scoped_zstd_dict.h
+    scoped_zstd_stream.cc
+    scoped_zstd_stream.h
     video_decoder.cc
     video_decoder.h
     video_decoder_vpx.cc

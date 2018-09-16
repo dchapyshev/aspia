@@ -29,7 +29,7 @@ namespace {
 
 // Retrieves a pointer to the output buffer in |update| used for storing the
 // encoded rectangle data. Will resize the buffer to |size|.
-uint8_t* GetOutputBuffer(proto::desktop::VideoPacket* packet, size_t size)
+uint8_t* outputBuffer(proto::desktop::VideoPacket* packet, size_t size)
 {
     packet->mutable_data()->resize(size);
     return reinterpret_cast<uint8_t*>(packet->mutable_data()->data());
@@ -41,7 +41,8 @@ VideoEncoderZstd::VideoEncoderZstd(std::unique_ptr<PixelTranslator> translator,
                                    const PixelFormat& target_format,
                                    int compression_ratio)
     : target_format_(target_format),
-      compressor_(compression_ratio),
+      compress_ratio_(compression_ratio),
+      stream_(ZSTD_createCStream()),
       translator_(std::move(translator))
 {
     // Nothing
@@ -50,10 +51,10 @@ VideoEncoderZstd::VideoEncoderZstd(std::unique_ptr<PixelTranslator> translator,
 // static
 VideoEncoderZstd* VideoEncoderZstd::create(const PixelFormat& target_format, int compression_ratio)
 {
-    if (compression_ratio < CompressorZstd::minCompressRatio())
-        compression_ratio = CompressorZstd::minCompressRatio();
-    else if (compression_ratio > CompressorZstd::maxCompressRatio())
-        compression_ratio = CompressorZstd::maxCompressRatio();
+    if (compression_ratio > ZSTD_maxCLevel())
+        compression_ratio = ZSTD_maxCLevel();
+    else if (compression_ratio < 1)
+        compression_ratio = 1;
 
     std::unique_ptr<PixelTranslator> translator =
         PixelTranslator::create(PixelFormat::ARGB(), target_format);
@@ -66,44 +67,33 @@ VideoEncoderZstd* VideoEncoderZstd::create(const PixelFormat& target_format, int
     return new VideoEncoderZstd(std::move(translator), target_format, compression_ratio);
 }
 
-void VideoEncoderZstd::compressPacket(proto::desktop::VideoPacket* packet, size_t source_data_size)
+void VideoEncoderZstd::compressPacket(proto::desktop::VideoPacket* packet,
+                                      const uint8_t* input_data,
+                                      size_t input_size)
 {
-    compressor_.reset();
+    size_t ret = ZSTD_initCStream(stream_.get(), compress_ratio_);
+    DCHECK(!ZSTD_isError(ret)) << ZSTD_getErrorName(ret);
 
-    const size_t packet_size = compressor_.compressBound(source_data_size);
+    const size_t output_size = ZSTD_compressBound(input_size);
+    uint8_t* output_data = outputBuffer(packet, output_size);
 
-    uint8_t* compress_pos = GetOutputBuffer(packet, packet_size);
+    ZSTD_inBuffer input = { input_data, input_size, 0 };
+    ZSTD_outBuffer output = { output_data, output_size, 0 };
 
-    size_t filled = 0;  // Number of bytes in the destination buffer.
-    size_t pos = 0;  // Position in the current row in bytes.
-    bool compress_again = true;
-
-    while (compress_again)
+    while (input.pos < input.size)
     {
-        // Number of bytes that was taken from the source buffer.
-        size_t consumed = 0;
-
-        // Number of bytes that were written to the destination buffer.
-        size_t written = 0;
-
-        compress_again = compressor_.process(translate_buffer_.get() + pos,
-                                             source_data_size - pos,
-                                             compress_pos + filled,
-                                             packet_size - filled,
-                                             Compressor::CompressorFinish,
-                                             &consumed,
-                                             &written);
-
-        pos += consumed;
-        filled += written;
-
-        // If we have filled the message or we have reached the end of stream.
-        if (filled == packet_size || !compress_again)
+        ret = ZSTD_compressStream(stream_.get(), &output, &input);
+        if (ZSTD_isError(ret))
         {
-            packet->mutable_data()->resize(filled);
+            LOG(LS_WARNING) << "ZSTD_compressStream failed: " << ZSTD_getErrorName(ret);
             return;
         }
     }
+
+    ret = ZSTD_endStream(stream_.get(), &output);
+    DCHECK(!ZSTD_isError(ret)) << ZSTD_getErrorName(ret);
+
+    packet->mutable_data()->resize(output.pos);
 }
 
 void VideoEncoderZstd::encode(const DesktopFrame* frame, proto::desktop::VideoPacket* packet)
@@ -118,8 +108,7 @@ void VideoEncoderZstd::encode(const DesktopFrame* frame, proto::desktop::VideoPa
 
     size_t data_size = 0;
 
-    for (DesktopRegion::Iterator it(frame->constUpdatedRegion());
-         !it.isAtEnd(); it.advance())
+    for (DesktopRegion::Iterator it(frame->constUpdatedRegion()); !it.isAtEnd(); it.advance())
     {
         const DesktopRect& rect = it.rect();
 
@@ -135,8 +124,7 @@ void VideoEncoderZstd::encode(const DesktopFrame* frame, proto::desktop::VideoPa
 
     uint8_t* translate_pos = translate_buffer_.get();
 
-    for (DesktopRegion::Iterator it(frame->constUpdatedRegion());
-         !it.isAtEnd(); it.advance())
+    for (DesktopRegion::Iterator it(frame->constUpdatedRegion()); !it.isAtEnd(); it.advance())
     {
         const DesktopRect& rect = it.rect();
         const int stride = rect.width() * target_format_.bytesPerPixel();
@@ -152,7 +140,7 @@ void VideoEncoderZstd::encode(const DesktopFrame* frame, proto::desktop::VideoPa
     }
 
     // Compress data with using Zstd compressor.
-    compressPacket(packet, data_size);
+    compressPacket(packet, translate_buffer_.get(), data_size);
 }
 
 } // namespace aspia

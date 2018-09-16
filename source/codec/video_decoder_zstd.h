@@ -19,6 +19,8 @@
 #ifndef ASPIA_CODEC__VIDEO_DECODER_ZSTD_H_
 #define ASPIA_CODEC__VIDEO_DECODER_ZSTD_H_
 
+#include "codec/scoped_zstd_dict.h"
+#include "codec/scoped_zstd_stream.h"
 #include "codec/video_decoder.h"
 
 namespace aspia {
@@ -39,7 +41,9 @@ public:
 private:
     VideoDecoderZstd();
 
-    std::unique_ptr<Decompressor> decompressor_;
+    ScopedZstdDDict dict_;
+    ScopedZstdDStream stream_;
+
     std::unique_ptr<PixelTranslator> translator_;
     std::unique_ptr<DesktopFrame> source_frame_;
 

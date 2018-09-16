@@ -20,7 +20,8 @@
 #define ASPIA_CODEC__VIDEO_ENCODER_ZSTD_H_
 
 #include "base/aligned_memory.h"
-#include "codec/compressor_zstd.h"
+#include "codec/scoped_zstd_dict.h"
+#include "codec/scoped_zstd_stream.h"
 #include "codec/video_encoder.h"
 #include "desktop_capture/pixel_format.h"
 
@@ -41,12 +42,17 @@ private:
     VideoEncoderZstd(std::unique_ptr<PixelTranslator> translator,
                      const PixelFormat& target_format,
                      int compression_ratio);
-    void compressPacket(proto::desktop::VideoPacket* packet, size_t source_data_size);
+    void compressPacket(proto::desktop::VideoPacket* packet,
+                        const uint8_t* input_data,
+                        size_t input_size);
 
     // Client's pixel format
     PixelFormat target_format_;
+    int compress_ratio_;
 
-    CompressorZstd compressor_;
+    ScopedZstdCStream stream_;
+    ScopedZstdCDict dict_;
+
     std::unique_ptr<PixelTranslator> translator_;
 
     std::unique_ptr<uint8_t[], AlignedFreeDeleter> translate_buffer_;
