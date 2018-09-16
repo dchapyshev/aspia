@@ -29,7 +29,7 @@ namespace aspia {
 namespace {
 
 const int kMinScaleFactor = 50;
-const int kMaxScaleFactor = 150;
+const int kMaxScaleFactor = 100;
 const int kDefScaleFactor = 100;
 
 int div(int num, int div)

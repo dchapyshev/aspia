@@ -32,7 +32,7 @@ const int kMaxUpdateInterval = 100;
 
 const int kDefScaleFactor = 100;
 const int kMinScaleFactor = 50;
-const int kMaxScaleFactor = 150;
+const int kMaxScaleFactor = 100;
 
 const int kDefCompressRatio = 8;
 const int kMinCompressRatio = 1;
