@@ -19,9 +19,8 @@
 #ifndef ASPIA_CODEC__CURSOR_ENCODER_H_
 #define ASPIA_CODEC__CURSOR_ENCODER_H_
 
-#include <memory>
-
-#include "codec/compressor_zstd.h"
+#include "base/macros_magic.h"
+#include "codec/scoped_zstd_stream.h"
 #include "desktop_capture/mouse_cursor_cache.h"
 #include "protocol/desktop_session.pb.h"
 
@@ -40,7 +39,7 @@ private:
     bool compressCursor(proto::desktop::CursorShape* cursor_shape,
                         const MouseCursor* mouse_cursor);
 
-    CompressorZstd compressor_;
+    ScopedZstdCStream stream_;
     MouseCursorCache cache_;
 
     DISALLOW_COPY_AND_ASSIGN(CursorEncoder);

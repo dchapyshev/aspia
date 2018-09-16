@@ -30,7 +30,7 @@ constexpr uint8_t kCacheSize = 16;
 // The compression ratio can be in the range of 1 to 22.
 constexpr int kCompressionRatio = 8;
 
-uint8_t* getOutputBuffer(proto::desktop::CursorShape* cursor_shape, size_t size)
+uint8_t* outputBuffer(proto::desktop::CursorShape* cursor_shape, size_t size)
 {
     cursor_shape->mutable_data()->resize(size);
     return reinterpret_cast<uint8_t*>(cursor_shape->mutable_data()->data());
@@ -39,7 +39,7 @@ uint8_t* getOutputBuffer(proto::desktop::CursorShape* cursor_shape, size_t size)
 } // namespace
 
 CursorEncoder::CursorEncoder()
-    : compressor_(kCompressionRatio),
+    : stream_(ZSTD_createCStream()),
       cache_(kCacheSize)
 {
     static_assert(kCacheSize >= 2 && kCacheSize <= 31);
@@ -49,43 +49,33 @@ CursorEncoder::CursorEncoder()
 bool CursorEncoder::compressCursor(proto::desktop::CursorShape* cursor_shape,
                                    const MouseCursor* mouse_cursor)
 {
-    compressor_.reset();
+    size_t ret = ZSTD_initCStream(stream_.get(), kCompressionRatio);
+    DCHECK(!ZSTD_isError(ret)) << ZSTD_getErrorName(ret);
 
     const size_t input_size = mouse_cursor->stride() * mouse_cursor->size().height();
-    const uint8_t* input = mouse_cursor->data();
+    const uint8_t* input_data = mouse_cursor->data();
 
-    const size_t output_size = compressor_.compressBound(input_size);
-    uint8_t* output = getOutputBuffer(cursor_shape, output_size);
+    const size_t output_size = ZSTD_compressBound(input_size);
+    uint8_t* output_data = outputBuffer(cursor_shape, output_size);
 
-    size_t filled = 0;
-    size_t pos = 0;
-    bool compress_again = true;
+    ZSTD_inBuffer input = { input_data, input_size, 0 };
+    ZSTD_outBuffer output = { output_data, output_size, 0 };
 
-    while (compress_again)
+    while (input.pos < input.size)
     {
-        size_t consumed = 0;
-        size_t written = 0;
-
-        compress_again = compressor_.process(input + pos,
-                                             input_size - pos,
-                                             output + filled,
-                                             output_size - filled,
-                                             Compressor::CompressorFinish,
-                                             &consumed,
-                                             &written);
-
-        pos += consumed;
-        filled += written;
-
-        // If we have filled the message or we have reached the end of stream.
-        if (filled == output_size || !compress_again)
+        ret = ZSTD_compressStream(stream_.get(), &output, &input);
+        if (ZSTD_isError(ret))
         {
-            cursor_shape->mutable_data()->resize(filled);
-            return true;
+            LOG(LS_WARNING) << "ZSTD_compressStream failed: " << ZSTD_getErrorName(ret);
+            return false;
         }
     }
 
-    return false;
+    ret = ZSTD_endStream(stream_.get(), &output);
+    DCHECK(!ZSTD_isError(ret)) << ZSTD_getErrorName(ret);
+
+    cursor_shape->mutable_data()->resize(output.pos);
+    return true;
 }
 
 bool CursorEncoder::encode(std::unique_ptr<MouseCursor> mouse_cursor,

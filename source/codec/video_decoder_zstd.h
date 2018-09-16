@@ -19,7 +19,6 @@
 #ifndef ASPIA_CODEC__VIDEO_DECODER_ZSTD_H_
 #define ASPIA_CODEC__VIDEO_DECODER_ZSTD_H_
 
-#include "codec/scoped_zstd_dict.h"
 #include "codec/scoped_zstd_stream.h"
 #include "codec/video_decoder.h"
 
@@ -41,7 +40,6 @@ public:
 private:
     VideoDecoderZstd();
 
-    ScopedZstdDDict dict_;
     ScopedZstdDStream stream_;
 
     std::unique_ptr<PixelTranslator> translator_;

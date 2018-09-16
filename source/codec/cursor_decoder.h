@@ -22,11 +22,11 @@
 #include <memory>
 
 #include "base/macros_magic.h"
+#include "codec/scoped_zstd_stream.h"
 #include "protocol/desktop_session.pb.h"
 
 namespace aspia {
 
-class Decompressor;
 class MouseCursor;
 class MouseCursorCache;
 
@@ -40,11 +40,11 @@ public:
 
 private:
     bool decompressCursor(const proto::desktop::CursorShape& cursor_shape,
-                          uint8_t* output,
+                          uint8_t* output_data,
                           size_t output_size);
 
     std::unique_ptr<MouseCursorCache> cache_;
-    std::unique_ptr<Decompressor> decompressor_;
+    ScopedZstdDStream stream_;
 
     DISALLOW_COPY_AND_ASSIGN(CursorDecoder);
 };

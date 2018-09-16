@@ -19,13 +19,12 @@
 #include "codec/cursor_decoder.h"
 
 #include "base/logging.h"
-#include "codec/decompressor_zstd.h"
 #include "desktop_capture/mouse_cursor_cache.h"
 
 namespace aspia {
 
 CursorDecoder::CursorDecoder()
-    : decompressor_(std::make_unique<DecompressorZstd>())
+    : stream_(ZSTD_createDStream())
 {
     // Nothing
 }
@@ -33,35 +32,28 @@ CursorDecoder::CursorDecoder()
 CursorDecoder::~CursorDecoder() = default;
 
 bool CursorDecoder::decompressCursor(const proto::desktop::CursorShape& cursor_shape,
-                                     uint8_t* output,
+                                     uint8_t* output_data,
                                      size_t output_size)
 {
     if (cursor_shape.data().empty())
         return false;
 
-    const uint8_t* input = reinterpret_cast<const uint8_t*>(cursor_shape.data().data());
-    const size_t input_size = cursor_shape.data().size();
+    size_t ret = ZSTD_initDStream(stream_.get());
+    DCHECK(!ZSTD_isError(ret)) << ZSTD_getErrorName(ret);
 
-    bool decompress_again = true;
-    size_t used = 0;
-    size_t filled = 0;
+    ZSTD_inBuffer input = { cursor_shape.data().data(), cursor_shape.data().size(), 0 };
+    ZSTD_outBuffer output = { output_data, output_size, 0 };
 
-    while (decompress_again)
+    while (input.pos < input.size)
     {
-        size_t written = 0;
-        size_t consumed = 0;
-
-        decompress_again = decompressor_->process(input + used,
-                                                  input_size - used,
-                                                  output + filled,
-                                                  output_size - filled,
-                                                  &consumed,
-                                                  &written);
-        used += consumed;
-        filled += written;
+        ret = ZSTD_decompressStream(stream_.get(), &output, &input);
+        if (ZSTD_isError(ret))
+        {
+            LOG(LS_WARNING) << "ZSTD_decompressStream failed: " << ZSTD_getErrorName(ret);
+            return false;
+        }
     }
 
-    decompressor_->reset();
     return true;
 }
 
