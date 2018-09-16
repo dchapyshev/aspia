@@ -20,6 +20,7 @@
 
 #include <QCoreApplication>
 
+#include "base/base_paths.h"
 #include "base/guid.h"
 #include "base/logging.h"
 #include "host/win/host.h"
@@ -84,14 +85,18 @@ bool HostServer::start(int port, std::shared_ptr<proto::SrpUserList>& user_list)
         return false;
     }
 
-    FirewallManager firewall(qUtf16Printable(QCoreApplication::applicationFilePath()));
-    if (firewall.isValid())
+    std::filesystem::path file_path;
+    if (BasePaths::currentExecFile(&file_path))
     {
-        if (firewall.addTcpRule(kFirewallRuleName,
-                                kFirewallRuleDecription,
-                                port))
+        FirewallManager firewall(file_path);
+        if (firewall.isValid())
         {
-            LOG(LS_INFO) << "Rule is added to the firewall";
+            if (firewall.addTcpRule(kFirewallRuleName,
+                                    kFirewallRuleDecription,
+                                    port))
+            {
+                LOG(LS_INFO) << "Rule is added to the firewall";
+            }
         }
     }
 
@@ -122,9 +127,13 @@ void HostServer::stop()
         delete network_server_;
     }
 
-    FirewallManager firewall(qUtf16Printable(QCoreApplication::applicationFilePath()));
-    if (firewall.isValid())
-        firewall.deleteRuleByName(kFirewallRuleName);
+    std::filesystem::path file_path;
+    if (BasePaths::currentExecFile(&file_path))
+    {
+        FirewallManager firewall(file_path);
+        if (firewall.isValid())
+            firewall.deleteRuleByName(kFirewallRuleName);
+    }
 
     LOG(LS_INFO) << "Server is stopped";
 }

@@ -22,6 +22,7 @@
 #include <wrl/client.h>
 #include <netfw.h>
 
+#include <filesystem>
 #include <string>
 #include <vector>
 
@@ -32,7 +33,7 @@ namespace aspia {
 class FirewallManager
 {
 public:
-    explicit FirewallManager(std::wstring_view application_path);
+    explicit FirewallManager(const std::filesystem::path& application_path);
     ~FirewallManager() = default;
 
     // Returns true if firewall manager is valid.
@@ -66,7 +67,7 @@ private:
     Microsoft::WRL::ComPtr<INetFwPolicy2> firewall_policy_;
     Microsoft::WRL::ComPtr<INetFwRules> firewall_rules_;
 
-    std::wstring application_path_;
+    std::filesystem::path application_path_;
 
     DISALLOW_COPY_AND_ASSIGN(FirewallManager);
 };

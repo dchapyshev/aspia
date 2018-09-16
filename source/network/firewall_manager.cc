@@ -21,20 +21,15 @@
 #include <comutil.h>
 #include <unknwn.h>
 
-#include <algorithm>
-
 #include "base/logging.h"
 #include "base/guid.h"
 #include "base/unicode.h"
 
 namespace aspia {
 
-FirewallManager::FirewallManager(std::wstring_view application_path)
+FirewallManager::FirewallManager(const std::filesystem::path& application_path)
     : application_path_(application_path)
 {
-    // Firewall manager does not work with the wrong path separators.
-    std::replace(application_path_.begin(), application_path_.end(), L'/', L'\\');
-
     // Retrieve INetFwPolicy2
     HRESULT hr = CoCreateInstance(CLSID_NetFwPolicy2, nullptr, CLSCTX_ALL,
                                   IID_PPV_ARGS(&firewall_policy_));
@@ -119,7 +114,7 @@ bool FirewallManager::addTcpRule(std::wstring_view rule_name,
 
     rule->put_Name(_bstr_t(rule_name.data()));
     rule->put_Description(_bstr_t(description.data()));
-    rule->put_ApplicationName(_bstr_t(application_path_.data()));
+    rule->put_ApplicationName(_bstr_t(application_path_.c_str()));
     rule->put_Protocol(NET_FW_IP_PROTOCOL_TCP);
     rule->put_Direction(NET_FW_RULE_DIR_IN);
     rule->put_Enabled(VARIANT_TRUE);
@@ -227,7 +222,7 @@ void FirewallManager::allRules(std::vector<Microsoft::WRL::ComPtr<INetFwRule>>* 
         if (!bstr_path)
             continue;
 
-        if (_wcsicmp(application_path_.data(), static_cast<const wchar_t*>(bstr_path)) != 0)
+        if (application_path_.compare(static_cast<const wchar_t*>(bstr_path)) != 0)
             continue;
 
         rules->push_back(rule);
