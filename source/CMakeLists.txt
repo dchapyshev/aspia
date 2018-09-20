@@ -34,7 +34,7 @@ set(CMAKE_AUTORCC ON)
 
 set(CMAKE_PREFIX_PATH "${ASPIA_THIRD_PARTY_DIR}/qt;${ASPIA_THIRD_PARTY_DIR}/protobuf")
 
-find_package(Qt5 REQUIRED Core Gui Network Widgets WinExtras Xml)
+find_package(Qt5 REQUIRED Core Gui Network Widgets WinExtras)
 find_package(Qt5LinguistTools)
 find_package(Protobuf REQUIRED)
 
@@ -79,7 +79,6 @@ set(THIRD_PARTY_LIBS
     Qt5::Widgets
     Qt5::WinMain
     Qt5::WinExtras
-    Qt5::Xml
     debug Qt5AccessibilitySupportd
     debug Qt5EventDispatcherSupportd
     debug Qt5FontDatabaseSupportd
