@@ -172,7 +172,7 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
             }
 
             std::unique_ptr<SrpUser> user(
-                SrpHostContext::createUser(name.toStdString(), password.toStdString()));
+                SrpHostContext::createUser(name.toLower().toStdString(), password.toStdString()));
             if (!user)
             {
                 QMessageBox::warning(this,

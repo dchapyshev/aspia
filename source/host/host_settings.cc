@@ -148,7 +148,7 @@ std::shared_ptr<SrpUserList> HostSettings::userList() const
 
         Base64::decode(users->seed_key, &users->seed_key);
         if (users->seed_key.empty())
-            users->seed_key = Random::generateBuffer(512);
+            users->seed_key = Random::generateBuffer(64);
 
         return users;
     }

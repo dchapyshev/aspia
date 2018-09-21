@@ -42,7 +42,7 @@ public:
     void setPort(int port) { port_ = port; }
 
     QString userName() const { return user_name_; }
-    void setUserName(const QString& user_name) { user_name_ = user_name; }
+    void setUserName(const QString& user_name) { user_name_ = user_name.toLower(); }
 
     QString password() const { return password_; }
     void setPassword(const QString& password) { password_ = password; }

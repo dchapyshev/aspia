@@ -134,7 +134,7 @@ proto::SrpServerKeyExchange* SrpHostContext::readIdentify(const proto::SrpIdenti
         N_ = BigNum::fromBuffer(kSrpNg_8192.N);
         g = BigNum::fromBuffer(kSrpNg_8192.g);
         s = BigNum::fromStdString(hash.result());
-        v_ = SrpMath::calc_v(identify.username(), "password", s, N_, g);
+        v_ = SrpMath::calc_v(identify.username(), user_list_->seed_key, s, N_, g);
     }
     else
     {
