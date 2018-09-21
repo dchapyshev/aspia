@@ -33,24 +33,20 @@ namespace aspia {
 
 namespace {
 
-bool filePath(std::filesystem::path* file_path)
-{
-    if (!BasePaths::commonAppData(file_path))
-        return false;
-
-    file_path->append("aspia");
-    file_path->append("host.xml");
-    return true;
-}
+const char kDirName[] = "aspia";
+const char kFileName[] = "host.xml";
 
 void readSettingsFile(boost::property_tree::ptree* tree)
 {
-    std::filesystem::path file_path;
-    if (!filePath(&file_path))
+    std::filesystem::path path;
+    if (!BasePaths::commonAppData(&path))
         return;
 
+    path.append(kDirName);
+    path.append(kFileName);
+
     std::ifstream file;
-    file.open(file_path, std::ifstream::binary);
+    file.open(path, std::ifstream::binary);
     if (!file.is_open())
         return;
 
@@ -59,12 +55,23 @@ void readSettingsFile(boost::property_tree::ptree* tree)
 
 bool writeSettingsFile(const boost::property_tree::ptree& tree)
 {
-    std::filesystem::path file_path;
-    if (!filePath(&file_path))
+    std::filesystem::path path;
+    if (!BasePaths::commonAppData(&path))
         return false;
 
+    path.append(kDirName);
+
+    std::error_code ignored_code;
+    if (!std::filesystem::exists(path, ignored_code))
+    {
+        if (!std::filesystem::create_directories(path, ignored_code))
+            return false;
+    }
+
+    path.append(kFileName);
+
     std::ofstream file;
-    file.open(file_path, std::ofstream::binary);
+    file.open(path, std::ofstream::binary);
     if (!file.is_open())
         return false;
 
