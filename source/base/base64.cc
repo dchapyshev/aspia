@@ -282,24 +282,6 @@ bool Base64::encode(const std::string& input, std::string* output)
 }
 
 // static
-bool Base64::encode(const char* input, size_t input_size, std::string* output)
-{
-    DCHECK(output);
-
-    if (!input || !input_size)
-        return false;
-
-    std::string temp;
-    temp.resize(encodedLength(input_size));
-
-    size_t output_size = encodeImpl(temp.data(), input, input_size);
-    temp.resize(output_size);
-
-    output->swap(temp);
-    return true;
-}
-
-// static
 bool Base64::decode(const std::string& input, std::string* output)
 {
     DCHECK(output);
@@ -311,26 +293,6 @@ bool Base64::decode(const std::string& input, std::string* output)
     temp.resize(decodedLength(input.size()));
 
     size_t output_size = decodeImpl(temp.data(), input.data(), input.size());
-    if (output_size == kErrorResult)
-        return false;
-
-    temp.resize(output_size);
-    output->swap(temp);
-    return true;
-}
-
-// static
-bool Base64::decode(const char* input, size_t input_size, std::string* output)
-{
-    DCHECK(output);
-
-    if (!input || !input_size)
-        return false;
-
-    std::string temp;
-    temp.resize(decodedLength(input_size));
-
-    size_t output_size = decodeImpl(temp.data(), input, input_size);
     if (output_size == kErrorResult)
         return false;
 

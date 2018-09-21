@@ -97,7 +97,7 @@ void HostService::start()
     HostSettings settings;
 
     locale_loader_.reset(new LocaleLoader());
-    locale_loader_->installTranslators(settings.locale());
+    locale_loader_->installTranslators(QString::fromStdString(settings.locale()));
 
     server_.reset(new HostServer());
     if (!server_->start(settings.tcpPort(), settings.userList()))

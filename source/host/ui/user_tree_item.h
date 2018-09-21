@@ -22,20 +22,21 @@
 #include <QTreeWidget>
 
 #include "base/macros_magic.h"
-#include "protocol/srp_user.pb.h"
 
 namespace aspia {
+
+struct SrpUser;
 
 class UserTreeItem : public QTreeWidgetItem
 {
 public:
-    UserTreeItem(proto::SrpUser* user);
+    UserTreeItem(size_t index, const SrpUser& user);
     ~UserTreeItem() = default;
 
-    proto::SrpUser* user() const { return user_; }
+    size_t userIndex() const { return index_; }
 
 private:
-    proto::SrpUser* user_;
+    size_t index_;
 
     DISALLOW_COPY_AND_ASSIGN(UserTreeItem);
 };

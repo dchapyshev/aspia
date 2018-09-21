@@ -21,17 +21,19 @@
 
 #include "crypto/big_num.h"
 #include "protocol/key_exchange.pb.h"
-#include "protocol/srp_user.pb.h"
 
 namespace aspia {
+
+struct SrpUserList;
+struct SrpUser;
 
 class SrpHostContext
 {
 public:
-    SrpHostContext(proto::Method method, std::shared_ptr<proto::SrpUserList> user_list);
+    SrpHostContext(proto::Method method, std::shared_ptr<SrpUserList> user_list);
     ~SrpHostContext();
 
-    static proto::SrpUser* createUser(const std::string& username, const std::string& password);
+    static SrpUser* createUser(const std::string& username, const std::string& password);
 
     proto::SrpServerKeyExchange* readIdentify(const proto::SrpIdentify& identify);
     void readClientKeyExchange(const proto::SrpClientKeyExchange& client_key_exchange);
@@ -47,7 +49,7 @@ public:
 private:
     const proto::Method method_;
 
-    std::shared_ptr<proto::SrpUserList> user_list_;
+    std::shared_ptr<SrpUserList> user_list_;
 
     std::string username_;
     uint32_t session_types_ = 0;

@@ -23,7 +23,7 @@
 
 namespace aspia {
 
-NetworkServer::NetworkServer(std::shared_ptr<proto::SrpUserList>& user_list, QObject* parent)
+NetworkServer::NetworkServer(std::shared_ptr<SrpUserList>& user_list, QObject* parent)
     : QObject(parent),
       user_list_(user_list)
 {

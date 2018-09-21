@@ -16,31 +16,34 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-syntax = "proto3";
+#ifndef ASPIA_NETWORK__SRP_USER_H_
+#define ASPIA_NETWORK__SRP_USER_H_
 
-option optimize_for = LITE_RUNTIME;
+#include <cstdint>
+#include <string>
+#include <vector>
 
-package aspia.proto;
+namespace aspia {
 
-message SrpUser
+struct SrpUser
 {
-    enum Flags
-    {
-        NO_FLAGS = 0;
-        ENABLED = 1;
-    }
+    enum Flags { ENABLED = 1 };
 
-    string username    = 1;
-    bytes salt         = 2;
-    bytes verifier     = 3;
-    bytes number       = 4;
-    bytes generator    = 5;
-    uint32 sessions    = 6;
-    uint32 flags       = 7;
-}
+    std::string name;
+    std::string salt;
+    std::string verifier;
+    std::string number;
+    std::string generator;
+    uint32_t sessions = 0;
+    uint32_t flags = 0;
+};
 
-message SrpUserList
+struct SrpUserList
 {
-    bytes seed_key     = 1;
-    repeated SrpUser user = 2;
-}
+    std::string seed_key;
+    std::vector<SrpUser> list;
+};
+
+} // namespace aspia
+
+#endif // ASPIA_NETWORK__SRP_USER_H_

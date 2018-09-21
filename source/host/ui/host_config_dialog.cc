@@ -29,6 +29,7 @@
 #include "host/ui/user_tree_item.h"
 #include "host/win/host_service_constants.h"
 #include "host/host_settings.h"
+#include "network/srp_user.h"
 
 namespace aspia {
 
@@ -37,12 +38,12 @@ HostConfigDialog::HostConfigDialog(QWidget* parent)
 {
     HostSettings settings;
 
-    QString current_locale = settings.locale();
+    QString current_locale = QString::fromStdString(settings.locale());
 
     if (!locale_loader_.contains(current_locale))
     {
-        current_locale = HostSettings::defaultLocale();
-        settings.setLocale(current_locale);
+        current_locale = QStringLiteral("en");
+        settings.setLocale(current_locale.toStdString());
     }
 
     locale_loader_.installTranslators(current_locale);
@@ -87,7 +88,7 @@ HostConfigDialog::HostConfigDialog(QWidget* parent)
     connect(ui.button_box, &QDialogButtonBox::clicked,
             this, &HostConfigDialog::onButtonBoxClicked);
 
-    user_list_ = settings.userList();
+    users_ = settings.userList();
 
     reloadServiceStatus();
     reloadUserList();
@@ -127,12 +128,12 @@ void HostConfigDialog::onCurrentUserChanged(
 
 void HostConfigDialog::onAddUser()
 {
-    proto::SrpUser user;
-    user.set_flags(proto::SrpUser::ENABLED);
+    SrpUser user;
+    user.flags = SrpUser::ENABLED;
 
-    if (UserDialog(*user_list_, &user, this).exec() == QDialog::Accepted)
+    if (UserDialog(*users_, &user, this).exec() == QDialog::Accepted)
     {
-        user_list_->add_user()->Swap(&user);
+        users_->list.push_back(std::move(user));
         setConfigChanged(true);
         reloadUserList();
     }
@@ -144,7 +145,8 @@ void HostConfigDialog::onModifyUser()
     if (!user_item)
         return;
 
-    if (UserDialog(*user_list_, user_item->user(), this).exec() == QDialog::Accepted)
+    SrpUser* user = &users_->list[user_item->userIndex()];
+    if (UserDialog(*users_, user, this).exec() == QDialog::Accepted)
     {
         setConfigChanged(true);
         reloadUserList();
@@ -164,14 +166,7 @@ void HostConfigDialog::onDeleteUser()
                               QMessageBox::Yes,
                               QMessageBox::No) == QMessageBox::Yes)
     {
-        for (int i = 0; i < user_list_->user_size(); ++i)
-        {
-            if (user_list_->mutable_user(i) == user_item->user())
-            {
-                user_list_->mutable_user()->DeleteSubrange(i, 1);
-                break;
-            }
-        }
+        users_->list.erase(users_->list.begin() + user_item->userIndex());
 
         setConfigChanged(true);
         reloadUserList();
@@ -231,7 +226,16 @@ void HostConfigDialog::onButtonBoxClicked(QAbstractButton* button)
     {
         HostSettings settings;
 
-        if (!settings.isWritable())
+        QString new_locale = ui.combobox_language->currentData().toString();
+
+        if (standard_button == QDialogButtonBox::Apply)
+            retranslateUi(new_locale);
+
+        settings.setLocale(new_locale.toStdString());
+        settings.setTcpPort(ui.spinbox_port->value());
+        settings.setUserList(*users_);
+
+        if (!settings.commit())
         {
             QString message =
                 tr("The configuration can not be written. "
@@ -240,15 +244,6 @@ void HostConfigDialog::onButtonBoxClicked(QAbstractButton* button)
             QMessageBox::warning(this, tr("Warning"), message, QMessageBox::Ok);
             return;
         }
-
-        QString new_locale = ui.combobox_language->currentData().toString();
-
-        if (standard_button == QDialogButtonBox::Apply)
-            retranslateUi(new_locale);
-
-        settings.setLocale(new_locale);
-        settings.setTcpPort(ui.spinbox_port->value());
-        settings.setUserList(*user_list_);
 
         if (isServiceStarted())
         {
@@ -334,8 +329,8 @@ void HostConfigDialog::reloadUserList()
     for (int i = ui.tree_users->topLevelItemCount() - 1; i >= 0; --i)
         delete ui.tree_users->takeTopLevelItem(i);
 
-    for (int i = 0; i < user_list_->user_size(); ++i)
-        ui.tree_users->addTopLevelItem(new UserTreeItem(user_list_->mutable_user(i)));
+    for (size_t i = 0; i < users_->list.size(); ++i)
+        ui.tree_users->addTopLevelItem(new UserTreeItem(i, users_->list.at(i)));
 
     ui.button_modify->setEnabled(false);
     ui.button_delete->setEnabled(false);

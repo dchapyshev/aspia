@@ -24,6 +24,7 @@
 #include "crypto/secure_memory.h"
 #include "crypto/srp_constants.h"
 #include "crypto/srp_math.h"
+#include "network/srp_user.h"
 
 namespace aspia {
 
@@ -34,16 +35,16 @@ const size_t kUserSaltSize = 64; // In bytes.
 // Looks for the user in the list.
 // If the user is found, it returns an index in the list.
 // If the user is not found or disabled, -1 is returned.
-int findUser(const proto::SrpUserList& user_list, const std::string& username)
+size_t findUser(const SrpUserList& users, const std::string& username)
 {
-    for (int i = 0; i < user_list.user_size(); ++i)
+    for (size_t i = 0; i < users.list.size(); ++i)
     {
-        const proto::SrpUser& user = user_list.user(i);
+        const SrpUser& user = users.list.at(i);
 
-        if (user.username() == username)
+        if (user.name == username)
         {
             // If the user is disabled, we assume that it was not found.
-            if (!(user.flags() & proto::SrpUser::ENABLED))
+            if (!(user.flags & SrpUser::ENABLED))
                 return -1;
 
             return i;
@@ -70,7 +71,7 @@ size_t ivSizeForMethod(proto::Method method)
 
 } // namespace
 
-SrpHostContext::SrpHostContext(proto::Method method, std::shared_ptr<proto::SrpUserList> user_list)
+SrpHostContext::SrpHostContext(proto::Method method, std::shared_ptr<SrpUserList> user_list)
     : method_(method),
       user_list_(user_list)
 {
@@ -84,27 +85,29 @@ SrpHostContext::~SrpHostContext()
 }
 
 // static
-proto::SrpUser* SrpHostContext::createUser(const std::string& username,
-                                           const std::string& password)
+SrpUser* SrpHostContext::createUser(const std::string& username, const std::string& password)
 {
-    std::unique_ptr<proto::SrpUser> user = std::make_unique<proto::SrpUser>();
+    std::unique_ptr<SrpUser> user = std::make_unique<SrpUser>();
 
-    user->set_username(username);
-    user->set_number(kSrpNg_8192.N.data(), kSrpNg_8192.N.size());
-    user->set_generator(kSrpNg_8192.g.data(), kSrpNg_8192.g.size());
-    user->set_salt(Random::generateBuffer(kUserSaltSize));
+    user->name = username;
+    user->salt = Random::generateBuffer(kUserSaltSize);
 
-    if (user->salt().empty())
+    user->number = std::string(
+        reinterpret_cast<const char*>(kSrpNg_8192.N.data()), kSrpNg_8192.N.size());
+    user->generator = std::string(
+        reinterpret_cast<const char*>(kSrpNg_8192.g.data()), kSrpNg_8192.g.size());
+
+    if (user->salt.empty())
         return nullptr;
 
-    BigNum s = BigNum::fromStdString(user->salt());
-    BigNum N = BigNum::fromStdString(user->number());
-    BigNum g = BigNum::fromStdString(user->generator());
+    BigNum s = BigNum::fromStdString(user->salt);
+    BigNum N = BigNum::fromStdString(user->number);
+    BigNum g = BigNum::fromStdString(user->generator);
 
     BigNum v = SrpMath::calc_v(username, password, s, N, g);
 
-    user->set_verifier(v.toStdString());
-    if (user->verifier().empty())
+    user->verifier = v.toStdString();
+    if (user->verifier.empty())
         return nullptr;
 
     return user.release();
@@ -118,14 +121,14 @@ proto::SrpServerKeyExchange* SrpHostContext::readIdentify(const proto::SrpIdenti
     BigNum g;
     BigNum s;
 
-    int user_index = findUser(*user_list_, identify.username());
+    size_t user_index = findUser(*user_list_, identify.username());
     if (user_index == -1)
     {
         username_ = identify.username();
         session_types_ = proto::SESSION_TYPE_ALL;
 
         GenericHash hash(GenericHash::BLAKE2b512);
-        hash.addData(user_list_->seed_key());
+        hash.addData(user_list_->seed_key);
         hash.addData(identify.username());
 
         N_ = BigNum::fromBuffer(kSrpNg_8192.N);
@@ -135,15 +138,15 @@ proto::SrpServerKeyExchange* SrpHostContext::readIdentify(const proto::SrpIdenti
     }
     else
     {
-        const proto::SrpUser& user = user_list_->user(user_index);
+        const SrpUser& user = user_list_->list.at(user_index);
 
-        username_ = user.username();
-        session_types_ = user.sessions();
+        username_ = user.name;
+        session_types_ = user.sessions;
 
-        N_ = BigNum::fromStdString(user.number());
-        g = BigNum::fromStdString(user.generator());
-        s = BigNum::fromStdString(user.salt());
-        v_ = BigNum::fromStdString(user.verifier());
+        N_ = BigNum::fromStdString(user.number);
+        g = BigNum::fromStdString(user.generator);
+        s = BigNum::fromStdString(user.salt);
+        v_ = BigNum::fromStdString(user.verifier);
     }
 
     uint8_t random_buffer[128];

@@ -74,12 +74,12 @@ HostNotifierWindow::HostNotifierWindow(QWidget* parent)
 {
     HostSettings settings;
 
-    QString current_locale = settings.locale();
+    QString current_locale = QString::fromStdString(settings.locale());
 
     if (!locale_loader_.contains(current_locale))
     {
-        current_locale = HostSettings::defaultLocale();
-        settings.setLocale(current_locale);
+        current_locale = QStringLiteral("en");
+        settings.setLocale(current_locale.toStdString());
     }
 
     locale_loader_.installTranslators(current_locale);

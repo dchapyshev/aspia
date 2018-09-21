@@ -22,8 +22,7 @@ list(APPEND SOURCE_PROTOCOL
     file_transfer_session.proto
     key_exchange.proto
     notifier.proto
-    session_type.proto
-    srp_user.proto)
+    session_type.proto)
 
 protobuf_generate_cpp(PROTOCOL_CC_FILES PROTOCOL_H_FILES ${SOURCE_PROTOCOL})
 set_source_files_properties(${PROTOCOL_CC_FILES} ${PROTOCOL_H_FILES} PROPERTIES SKIP_AUTOGEN ON)

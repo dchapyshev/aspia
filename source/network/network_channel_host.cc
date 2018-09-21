@@ -29,7 +29,7 @@
 namespace aspia {
 
 NetworkChannelHost::NetworkChannelHost(QTcpSocket* socket,
-                                       std::shared_ptr<proto::SrpUserList> user_list,
+                                       std::shared_ptr<SrpUserList> user_list,
                                        QObject* parent)
     : NetworkChannel(ChannelType::HOST, socket, parent),
       user_list_(user_list)

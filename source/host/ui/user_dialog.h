@@ -20,7 +20,7 @@
 #define ASPIA_HOST__UI__USER_DIALOG_H_
 
 #include "base/macros_magic.h"
-#include "protocol/srp_user.pb.h"
+#include "network/srp_user.h"
 #include "ui_user_dialog.h"
 
 namespace aspia {
@@ -30,7 +30,7 @@ class UserDialog : public QDialog
     Q_OBJECT
 
 public:
-    UserDialog(const proto::SrpUserList& user_list, proto::SrpUser* user, QWidget* parent);
+    UserDialog(const SrpUserList& user_list, SrpUser* user, QWidget* parent);
     ~UserDialog() = default;
 
 protected:
@@ -47,8 +47,8 @@ private:
 
     Ui::UserDialog ui;
 
-    const proto::SrpUserList& user_list_;
-    proto::SrpUser* user_;
+    const SrpUserList& user_list_;
+    SrpUser* user_;
 
     bool account_changed_ = true;
 

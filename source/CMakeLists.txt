@@ -16,7 +16,7 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 #
 
-cmake_minimum_required(VERSION 2.8.11)
+cmake_minimum_required(VERSION 3.12.2)
 
 option(BUILD_UNIT_TESTS "Build unit tests" ON)
 
@@ -27,16 +27,24 @@ set(ASPIA_THIRD_PARTY_DIR "$ENV{ASPIA_THIRD_PARTY_DIR}")
 
 project(aspia)
 
+# Qt configuration.
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 
+# Boost configuration.
+set(Boost_USE_STATIC_LIBS ON)
+set(Boost_USE_STATIC_RUNTIME ON)
+set(Boost_USE_MULTITHREADED ON)
+
 set(CMAKE_PREFIX_PATH "${ASPIA_THIRD_PARTY_DIR}/qt;${ASPIA_THIRD_PARTY_DIR}/protobuf")
+set(BOOST_ROOT "${ASPIA_THIRD_PARTY_DIR}/boost")
 
 find_package(Qt5 REQUIRED Core Gui Network Widgets WinExtras)
 find_package(Qt5LinguistTools)
 find_package(Protobuf REQUIRED)
+find_package(Boost COMPONENTS program_options REQUIRED)
 
 add_definitions(-D_UNICODE
                 -DNTDDI_VERSION=0x06010000
@@ -57,8 +65,6 @@ include_directories(
     ${ASPIA_THIRD_PARTY_DIR}/libyuv/include
     ${ASPIA_THIRD_PARTY_DIR}/openssl/include
     ${ASPIA_THIRD_PARTY_DIR}/protobuf/include
-    ${ASPIA_THIRD_PARTY_DIR}/rapidjson/include
-    ${ASPIA_THIRD_PARTY_DIR}/rapidxml/include
     ${ASPIA_THIRD_PARTY_DIR}/zstd/include)
 
 link_directories(
@@ -73,6 +79,7 @@ link_directories(
     ${ASPIA_THIRD_PARTY_DIR}/qt/plugins/styles)
 
 set(THIRD_PARTY_LIBS
+    Boost::program_options
     Qt5::Core
     Qt5::Gui
     Qt5::Network

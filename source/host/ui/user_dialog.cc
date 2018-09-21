@@ -28,7 +28,7 @@
 
 namespace aspia {
 
-UserDialog::UserDialog(const proto::SrpUserList& user_list, proto::SrpUser* user, QWidget* parent)
+UserDialog::UserDialog(const SrpUserList& user_list, SrpUser* user, QWidget* parent)
     : QDialog(parent),
       user_list_(user_list),
       user_(user)
@@ -37,18 +37,18 @@ UserDialog::UserDialog(const proto::SrpUserList& user_list, proto::SrpUser* user
 
     ui.setupUi(this);
 
-    ui.edit_username->setText(QString::fromStdString(user_->username()));
+    ui.edit_username->setText(QString::fromStdString(user_->name));
 
-    if (!user->verifier().empty())
+    if (!user->verifier.empty())
     {
-        DCHECK(!user_->number().empty());
-        DCHECK(!user_->generator().empty());
-        DCHECK(!user_->salt().empty());
+        DCHECK(!user_->number.empty());
+        DCHECK(!user_->generator.empty());
+        DCHECK(!user_->salt.empty());
 
         setAccountChanged(false);
     }
 
-    ui.checkbox_disable_user->setChecked(!(user_->flags() & proto::SrpUser::ENABLED));
+    ui.checkbox_disable_user->setChecked(!(user_->flags & SrpUser::ENABLED));
 
     auto add_session_type = [&](const QIcon& icon,
                                 const QString& name,
@@ -61,7 +61,7 @@ UserDialog::UserDialog(const proto::SrpUserList& user_list, proto::SrpUser* user
         item->setFlags(item->flags() | Qt::ItemIsUserCheckable);
         item->setData(0, Qt::UserRole, QVariant(session_type));
 
-        if (user->sessions() & session_type)
+        if (user->sessions & session_type)
             item->setCheckState(0, Qt::Checked);
         else
             item->setCheckState(0, Qt::Unchecked);
@@ -133,13 +133,13 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
                 return;
             }
 
-            QString old_name = QString::fromStdString(user_->username());
+            QString old_name = QString::fromStdString(user_->name);
 
             if (name.compare(old_name, Qt::CaseInsensitive) != 0)
             {
-                for (int i = 0; i < user_list_.user_size(); ++i)
+                for (const auto& user : user_list_.list)
                 {
-                    QString existing_name = QString::fromStdString(user_list_.user(i).username());
+                    QString existing_name = QString::fromStdString(user.name);
 
                     if (name.compare(existing_name, Qt::CaseInsensitive) == 0)
                     {
@@ -171,7 +171,7 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
                 return;
             }
 
-            std::unique_ptr<proto::SrpUser> user(
+            std::unique_ptr<SrpUser> user(
                 SrpHostContext::createUser(name.toStdString(), password.toStdString()));
             if (!user)
             {
@@ -195,10 +195,10 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
 
         uint32_t flags = 0;
         if (!ui.checkbox_disable_user->isChecked())
-            flags |= proto::SrpUser::ENABLED;
+            flags |= SrpUser::ENABLED;
 
-        user_->set_sessions(sessions);
-        user_->set_flags(flags);
+        user_->sessions = sessions;
+        user_->flags = flags;
 
         accept();
     }

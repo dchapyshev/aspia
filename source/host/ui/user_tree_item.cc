@@ -18,17 +18,19 @@
 
 #include "host/ui/user_tree_item.h"
 
+#include "network/srp_user.h"
+
 namespace aspia {
 
-UserTreeItem::UserTreeItem(proto::SrpUser* user)
-    : user_(user)
+UserTreeItem::UserTreeItem(size_t index, const SrpUser& user)
+    : index_(index)
 {
-    if (user_->flags() & proto::SrpUser::ENABLED)
+    if (user.flags & SrpUser::ENABLED)
         setIcon(0, QIcon(QStringLiteral(":/icon/user.png")));
     else
         setIcon(0, QIcon(QStringLiteral(":/icon/user-disabled.png")));
 
-    setText(0, QString::fromStdString(user_->username()));
+    setText(0, QString::fromStdString(user.name));
 }
 
 } // namespace aspia

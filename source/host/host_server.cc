@@ -69,7 +69,7 @@ HostServer::~HostServer()
     stop();
 }
 
-bool HostServer::start(int port, std::shared_ptr<proto::SrpUserList>& user_list)
+bool HostServer::start(int port, std::shared_ptr<SrpUserList>& user_list)
 {
     LOG(LS_INFO) << "Starting the server";
 

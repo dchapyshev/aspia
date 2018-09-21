@@ -19,34 +19,33 @@
 #ifndef ASPIA_HOST__HOST_SETTINGS_H_
 #define ASPIA_HOST__HOST_SETTINGS_H_
 
-#include <QSettings>
+#include <boost/property_tree/ptree.hpp>
 
 #include "base/macros_magic.h"
-#include "protocol/srp_user.pb.h"
 
 namespace aspia {
+
+struct SrpUserList;
 
 class HostSettings
 {
 public:
     HostSettings();
-    ~HostSettings() = default;
+    ~HostSettings();
 
-    bool isWritable() const;
+    bool commit();
 
-    static QString defaultLocale();
-    QString locale() const;
-    void setLocale(const QString& locale);
+    std::string locale() const;
+    void setLocale(const std::string& locale);
 
-    int tcpPort() const;
-    bool setTcpPort(int port);
+    uint16_t tcpPort() const;
+    void setTcpPort(uint16_t port);
 
-    std::shared_ptr<proto::SrpUserList> userList() const;
-    bool setUserList(const proto::SrpUserList& user_list);
+    std::shared_ptr<SrpUserList> userList() const;
+    void setUserList(const SrpUserList& user_list);
 
 private:
-    mutable QSettings settings_;
-
+    boost::property_tree::ptree tree_;
     DISALLOW_COPY_AND_ASSIGN(HostSettings);
 };
 

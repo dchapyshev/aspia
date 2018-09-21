@@ -22,11 +22,11 @@
 #include "host/win/host_process.h"
 #include "ipc/ipc_channel.h"
 #include "network/network_server.h"
-#include "protocol/srp_user.pb.h"
 
 namespace aspia {
 
 class Host;
+struct SrpUserList;
 
 class HostServer : public QObject
 {
@@ -36,7 +36,7 @@ public:
     HostServer(QObject* parent = nullptr);
     ~HostServer();
 
-    bool start(int port, std::shared_ptr<proto::SrpUserList>& user_list);
+    bool start(int port, std::shared_ptr<SrpUserList>& user_list);
     void stop();
     void setSessionChanged(uint32_t event, uint32_t session_id);
 

@@ -30,7 +30,8 @@ list(APPEND SOURCE_NETWORK
     srp_client_context.cc
     srp_client_context.h
     srp_host_context.cc
-    srp_host_context.h)
+    srp_host_context.h
+    srp_user.h)
 
 source_group("" FILES ${SOURCE_NETWORK})
 
