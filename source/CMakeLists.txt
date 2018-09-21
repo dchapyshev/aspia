@@ -33,18 +33,11 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 
-# Boost configuration.
-set(Boost_USE_STATIC_LIBS ON)
-set(Boost_USE_STATIC_RUNTIME ON)
-set(Boost_USE_MULTITHREADED ON)
-
 set(CMAKE_PREFIX_PATH "${ASPIA_THIRD_PARTY_DIR}/qt;${ASPIA_THIRD_PARTY_DIR}/protobuf")
-set(BOOST_ROOT "${ASPIA_THIRD_PARTY_DIR}/boost")
 
 find_package(Qt5 REQUIRED Core Gui Network Widgets WinExtras)
 find_package(Qt5LinguistTools)
 find_package(Protobuf REQUIRED)
-find_package(Boost COMPONENTS program_options REQUIRED)
 
 add_definitions(-D_UNICODE
                 -DNTDDI_VERSION=0x06010000
@@ -60,6 +53,7 @@ add_definitions(-D_UNICODE
 include_directories(
     ${PROJECT_SOURCE_DIR}
     ${PROJECT_BINARY_DIR}
+    ${ASPIA_THIRD_PARTY_DIR}/boost/include
     ${ASPIA_THIRD_PARTY_DIR}/googletest/include
     ${ASPIA_THIRD_PARTY_DIR}/libvpx/include
     ${ASPIA_THIRD_PARTY_DIR}/libyuv/include
@@ -79,7 +73,6 @@ link_directories(
     ${ASPIA_THIRD_PARTY_DIR}/qt/plugins/styles)
 
 set(THIRD_PARTY_LIBS
-    Boost::program_options
     Qt5::Core
     Qt5::Gui
     Qt5::Network
