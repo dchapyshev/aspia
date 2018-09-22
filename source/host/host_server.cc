@@ -24,6 +24,7 @@
 #include "base/guid.h"
 #include "base/logging.h"
 #include "host/win/host.h"
+#include "host/host_settings.h"
 #include "ipc/ipc_server.h"
 #include "network/firewall_manager.h"
 #include "network/network_channel_host.h"
@@ -69,7 +70,7 @@ HostServer::~HostServer()
     stop();
 }
 
-bool HostServer::start(int port, std::shared_ptr<SrpUserList>& user_list)
+bool HostServer::start()
 {
     LOG(LS_INFO) << "Starting the server";
 
@@ -79,36 +80,33 @@ bool HostServer::start(int port, std::shared_ptr<SrpUserList>& user_list)
         return false;
     }
 
-    if (!user_list)
-    {
-        LOG(LS_WARNING) << "Corrupted user list";
-        return false;
-    }
+    HostSettings settings;
 
-    std::filesystem::path file_path;
-    if (BasePaths::currentExecFile(&file_path))
+    if (settings.addFirewallRule())
     {
-        FirewallManager firewall(file_path);
-        if (firewall.isValid())
+        std::filesystem::path file_path;
+        if (BasePaths::currentExecFile(&file_path))
         {
-            if (firewall.addTcpRule(kFirewallRuleName,
-                                    kFirewallRuleDecription,
-                                    port))
+            FirewallManager firewall(file_path);
+            if (firewall.isValid())
             {
-                LOG(LS_INFO) << "Rule is added to the firewall";
+                if (firewall.addTcpRule(kFirewallRuleName, kFirewallRuleDecription, settings.tcpPort()))
+                {
+                    LOG(LS_INFO) << "Rule is added to the firewall";
+                }
             }
         }
     }
 
-    network_server_ = new NetworkServer(user_list, this);
+    network_server_ = new NetworkServer(settings.userList(), this);
 
     connect(network_server_, &NetworkServer::newChannelReady,
             this, &HostServer::onNewConnection);
 
-    if (!network_server_->start(port))
+    if (!network_server_->start(settings.tcpPort()))
         return false;
 
-    LOG(LS_INFO) << "Server is started on port " << port;
+    LOG(LS_INFO) << "Server is started on port " << settings.tcpPort();
     return true;
 }
 

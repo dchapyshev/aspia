@@ -18,8 +18,6 @@
 
 #include "host/win/host_service.h"
 
-#include <QGuiApplication>
-
 #define WIN32_LEAN_AND_MEAN
 #define NOMINMAX
 #include <windows.h>
@@ -27,9 +25,7 @@
 
 #include "base/win/scoped_com_initializer.h"
 #include "base/win/security_helpers.h"
-#include "build/version.h"
 #include "host/win/host_service_constants.h"
-#include "base/locale_loader.h"
 #include "base/logging.h"
 #include "host/host_server.h"
 #include "host/host_settings.h"
@@ -65,7 +61,7 @@ const wchar_t kComProcessMandatoryLabel[] =
 } // namespace
 
 HostService::HostService()
-    : Service<QGuiApplication>(kHostServiceName, kHostServiceDisplayName, kHostServiceDescription)
+    : Service<QCoreApplication>(kHostServiceName, kHostServiceDisplayName, kHostServiceDescription)
 {
     // Nothing
 }
@@ -78,32 +74,21 @@ void HostService::start()
 
     SetPriorityClass(GetCurrentProcess(), HIGH_PRIORITY_CLASS);
 
-    QGuiApplication* app = application();
-
-    app->setOrganizationName(QStringLiteral("Aspia"));
-    app->setApplicationName(QStringLiteral("Host"));
-    app->setApplicationVersion(QStringLiteral(ASPIA_VERSION_STRING));
-
     com_initializer_.reset(new ScopedCOMInitializer());
     if (!com_initializer_->isSucceeded())
     {
         LOG(LS_FATAL) << "COM not initialized";
-        app->quit();
+        QCoreApplication::quit();
         return;
     }
 
     initializeComSecurity(kComProcessSd, kComProcessMandatoryLabel, false);
 
-    HostSettings settings;
-
-    locale_loader_.reset(new LocaleLoader());
-    locale_loader_->installTranslators(QString::fromStdString(settings.locale()));
-
     server_.reset(new HostServer());
-    if (!server_->start(settings.tcpPort(), settings.userList()))
+    if (!server_->start())
     {
         server_.reset();
-        app->quit();
+        QCoreApplication::quit();
         return;
     }
 

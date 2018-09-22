@@ -30,7 +30,7 @@ struct SrpUser;
 class SrpHostContext
 {
 public:
-    SrpHostContext(proto::Method method, std::shared_ptr<SrpUserList> user_list);
+    SrpHostContext(proto::Method method, const SrpUserList& user_list);
     ~SrpHostContext();
 
     static SrpUser* createUser(const std::string& username, const std::string& password);
@@ -49,7 +49,7 @@ public:
 private:
     const proto::Method method_;
 
-    std::shared_ptr<SrpUserList> user_list_;
+    const SrpUserList& user_list_;
 
     std::string username_;
     uint32_t session_types_ = 0;

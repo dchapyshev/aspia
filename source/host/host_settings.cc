@@ -18,6 +18,7 @@
 
 #include "host/host_settings.h"
 
+#include <filesystem>
 #include <fstream>
 
 #include <boost/property_tree/xml_parser.hpp>
@@ -36,47 +37,76 @@ namespace {
 const char kDirName[] = "aspia";
 const char kFileName[] = "host.xml";
 
-void readSettingsFile(boost::property_tree::ptree* tree)
+bool settingsFilePath(std::filesystem::path* path, bool create_dir = false)
 {
-    std::filesystem::path path;
-    if (!BasePaths::commonAppData(&path))
-        return;
+    std::filesystem::path temp;
+    if (!BasePaths::commonAppData(&temp))
+        return false;
 
-    path.append(kDirName);
-    path.append(kFileName);
+    temp.append(kDirName);
 
+    if (create_dir)
+    {
+        std::error_code ignored_code;
+        if (!std::filesystem::exists(temp, ignored_code))
+        {
+            if (!std::filesystem::create_directories(temp, ignored_code))
+            {
+                LOG(LS_WARNING) << "Unable to create directory: " << temp;
+                return false;
+            }
+        }
+    }
+
+    temp.append(kFileName);
+
+    path->swap(temp);
+    return true;
+}
+
+bool readSettingsFile(const std::filesystem::path& path, boost::property_tree::ptree* tree)
+{
     std::ifstream file;
     file.open(path, std::ifstream::binary);
     if (!file.is_open())
-        return;
-
-    boost::property_tree::read_xml(file, *tree);
-}
-
-bool writeSettingsFile(const boost::property_tree::ptree& tree)
-{
-    std::filesystem::path path;
-    if (!BasePaths::commonAppData(&path))
-        return false;
-
-    path.append(kDirName);
-
-    std::error_code ignored_code;
-    if (!std::filesystem::exists(path, ignored_code))
     {
-        if (!std::filesystem::create_directories(path, ignored_code))
-            return false;
+        LOG(LS_WARNING) << "Unable to open file " << path << " for reading";
+        return false;
     }
 
-    path.append(kFileName);
+    try
+    {
+        boost::property_tree::read_xml(file, *tree);
+    }
+    catch (const boost::property_tree::ptree_error &err)
+    {
+        LOG(LS_WARNING) << "Error reading the configuration: " << err.what();
+        return false;
+    }
 
+    return true;
+}
+
+bool writeSettingsFile(const std::filesystem::path& path, const boost::property_tree::ptree& tree)
+{
     std::ofstream file;
     file.open(path, std::ofstream::binary);
     if (!file.is_open())
+    {
+        LOG(LS_WARNING) << "Unable to open file " << path << " for write";
         return false;
+    }
 
-    boost::property_tree::write_xml(
-        file, tree, boost::property_tree::xml_writer_make_settings<std::string>(' ', 2));
+    try
+    {
+        boost::property_tree::write_xml(file, tree);
+    }
+    catch (const boost::property_tree::ptree_error &err)
+    {
+        LOG(LS_WARNING) << "Error writing the configuration: " << err.what();
+        return false;
+    }
+
     return true;
 }
 
@@ -84,14 +114,54 @@ bool writeSettingsFile(const boost::property_tree::ptree& tree)
 
 HostSettings::HostSettings()
 {
-    readSettingsFile(&tree_);
+    std::filesystem::path path;
+    if (settingsFilePath(&path))
+        readSettingsFile(path, &tree_);
 }
 
 HostSettings::~HostSettings() = default;
 
+// static
+HostSettings::ImportResult HostSettings::importSettings(const std::string& from)
+{
+    boost::property_tree::ptree tree;
+    if (!readSettingsFile(std::filesystem::u8path(from), &tree))
+        return ImportResult::READ_ERROR;
+
+    std::filesystem::path to;
+    if (!settingsFilePath(&to, true))
+        return ImportResult::WRITE_ERROR;
+
+    if (!writeSettingsFile(to, tree))
+        return ImportResult::WRITE_ERROR;
+
+    return ImportResult::SUCCESS;
+}
+
+// static
+HostSettings::ExportResult HostSettings::exportSettings(const std::string& to)
+{
+    std::filesystem::path from;
+    if (!settingsFilePath(&from))
+        return ExportResult::READ_ERROR;
+
+    boost::property_tree::ptree tree;
+    if (!readSettingsFile(from, &tree))
+        return ExportResult::READ_ERROR;
+
+    if (!writeSettingsFile(std::filesystem::u8path(to), tree))
+        return ExportResult::WRITE_ERROR;
+
+    return ExportResult::SUCCESS;
+}
+
 bool HostSettings::commit()
 {
-    return writeSettingsFile(tree_);
+    std::filesystem::path path;
+    if (!settingsFilePath(&path, true))
+        return false;
+
+    return writeSettingsFile(path, tree_);
 }
 
 std::string HostSettings::locale() const
@@ -114,12 +184,22 @@ void HostSettings::setTcpPort(uint16_t port)
     tree_.put("tcp_port", port);
 }
 
-std::shared_ptr<SrpUserList> HostSettings::userList() const
+bool HostSettings::addFirewallRule() const
 {
+    return tree_.get<bool>("add_firewall_rule", true);
+}
+
+void HostSettings::setAddFirewallRule(bool value)
+{
+    tree_.put("add_firewall_rule", value);
+}
+
+SrpUserList HostSettings::userList() const
+{
+    SrpUserList users;
+
     try
     {
-        std::shared_ptr<SrpUserList> users = std::make_shared<SrpUserList>();
-
         boost::property_tree::ptree empty_tree;
 
         for (const auto& child_node : tree_.get_child("srp_users", empty_tree))
@@ -141,23 +221,21 @@ std::shared_ptr<SrpUserList> HostSettings::userList() const
             CHECK(Base64::decode(user.number, &user.number));
             CHECK(Base64::decode(user.generator, &user.generator));
 
-            users->list.push_back(std::move(user));
+            users.list.push_back(std::move(user));
         }
 
-        users->seed_key = tree_.get<std::string>("srp_seed_key", "");
-
-        Base64::decode(users->seed_key, &users->seed_key);
-        if (users->seed_key.empty())
-            users->seed_key = Random::generateBuffer(64);
-
-        return users;
+        users.seed_key = tree_.get<std::string>("srp_seed_key", "");
+        Base64::decode(users.seed_key, &users.seed_key);
     }
     catch (const boost::property_tree::ptree_error &err)
     {
         LOG(LS_WARNING) << "Error reading the list of users: " << err.what();
     }
 
-    return nullptr;
+    if (users.seed_key.empty())
+        users.seed_key = Random::generateBuffer(64);
+
+    return users;
 }
 
 void HostSettings::setUserList(const SrpUserList& users)

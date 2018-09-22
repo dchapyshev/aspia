@@ -29,13 +29,11 @@
 namespace aspia {
 
 NetworkChannelHost::NetworkChannelHost(QTcpSocket* socket,
-                                       std::shared_ptr<SrpUserList> user_list,
+                                       const SrpUserList& user_list,
                                        QObject* parent)
     : NetworkChannel(ChannelType::HOST, socket, parent),
       user_list_(user_list)
 {
-    DCHECK(user_list_);
-
     // Disable the Nagle algorithm for the socket.
     socket_->setSocketOption(QTcpSocket::LowDelayOption, 1);
 }

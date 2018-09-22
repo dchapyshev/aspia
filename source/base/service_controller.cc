@@ -126,6 +126,48 @@ ServiceController ServiceController::install(const QString& name,
 }
 
 // static
+bool ServiceController::remove(const QString& name)
+{
+    ScopedScHandle sc_manager(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_ALL_ACCESS));
+    if (!sc_manager.isValid())
+    {
+        PLOG(LS_WARNING) << "OpenSCManagerW failed";
+        return false;
+    }
+
+    ScopedScHandle service(OpenServiceW(sc_manager,
+                                        qUtf16Printable(name),
+                                        SERVICE_ALL_ACCESS));
+    if (!service.isValid())
+    {
+        PLOG(LS_WARNING) << "OpenServiceW failed";
+        return false;
+    }
+
+    if (!DeleteService(service))
+    {
+        PLOG(LS_WARNING) << "DeleteService failed";
+        return false;
+    }
+
+    service.reset();
+    sc_manager.reset();
+
+    static const int kMaxAttempts = 15;
+    static const int kAttemptInterval = 100; // ms
+
+    for (int i = 0; i < kMaxAttempts; ++i)
+    {
+        if (!isInstalled(name))
+            return true;
+
+        Sleep(kAttemptInterval);
+    }
+
+    return false;
+}
+
+// static
 bool ServiceController::isInstalled(const QString& name)
 {
     ScopedScHandle sc_manager(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_CONNECT));
@@ -137,7 +179,7 @@ bool ServiceController::isInstalled(const QString& name)
 
     ScopedScHandle service(OpenServiceW(sc_manager,
                                         qUtf16Printable(name),
-                                        SERVICE_QUERY_STATUS));
+                                        SERVICE_QUERY_CONFIG));
     if (!service.isValid())
     {
         if (GetLastError() != ERROR_SERVICE_DOES_NOT_EXIST)
@@ -149,6 +191,12 @@ bool ServiceController::isInstalled(const QString& name)
     }
 
     return true;
+}
+
+void ServiceController::close()
+{
+    service_.reset();
+    sc_manager_.reset();
 }
 
 bool ServiceController::setDescription(const QString& description)
@@ -353,20 +401,6 @@ bool ServiceController::stop()
     }
 
     return is_stopped;
-}
-
-bool ServiceController::remove()
-{
-    if (!DeleteService(service_))
-    {
-        PLOG(LS_WARNING) << "DeleteService failed";
-        return false;
-    }
-
-    service_.reset();
-    sc_manager_.reset();
-
-    return true;
 }
 
 } // namespace aspia

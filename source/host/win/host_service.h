@@ -19,18 +19,16 @@
 #ifndef ASPIA_HOST__HOST_SERVICE_H_
 #define ASPIA_HOST__HOST_SERVICE_H_
 
-#include <QGuiApplication>
-#include <QScopedPointer>
+#include <QCoreApplication>
 
 #include "base/service.h"
 
 namespace aspia {
 
 class HostServer;
-class LocaleLoader;
 class ScopedCOMInitializer;
 
-class HostService : public Service<QGuiApplication>
+class HostService : public Service<QCoreApplication>
 {
 public:
     HostService();
@@ -43,9 +41,8 @@ protected:
     void sessionChange(uint32_t event, uint32_t session_id) override;
 
 private:
-    QScopedPointer<ScopedCOMInitializer> com_initializer_;
-    QScopedPointer<LocaleLoader> locale_loader_;
-    QScopedPointer<HostServer> server_;
+    std::unique_ptr<ScopedCOMInitializer> com_initializer_;
+    std::unique_ptr<HostServer> server_;
 
     DISALLOW_COPY_AND_ASSIGN(HostService);
 };

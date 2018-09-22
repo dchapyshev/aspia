@@ -19,6 +19,7 @@
 #include "host/ui/host_config_dialog.h"
 
 #include <QDir>
+#include <QFileDialog>
 #include <QMenu>
 #include <QMessageBox>
 #include <QTranslator>
@@ -33,22 +34,11 @@
 
 namespace aspia {
 
-HostConfigDialog::HostConfigDialog(QWidget* parent)
-    : QDialog(parent)
+HostConfigDialog::HostConfigDialog(LocaleLoader& locale_loader, QWidget* parent)
+    : QDialog(parent),
+      locale_loader_(locale_loader)
 {
-    HostSettings settings;
-
-    QString current_locale = QString::fromStdString(settings.locale());
-
-    if (!locale_loader_.contains(current_locale))
-    {
-        current_locale = QStringLiteral("en");
-        settings.setLocale(current_locale.toStdString());
-    }
-
-    locale_loader_.installTranslators(current_locale);
     ui.setupUi(this);
-    createLanguageList(current_locale);
 
     connect(ui.combobox_language, QOverload<int>::of(&QComboBox::currentIndexChanged),
             [this](int /* index */)
@@ -57,6 +47,11 @@ HostConfigDialog::HostConfigDialog(QWidget* parent)
     });
 
     connect(ui.spinbox_port, QOverload<int>::of(&QSpinBox::valueChanged), [this](int /* value */)
+    {
+        setConfigChanged(true);
+    });
+
+    connect(ui.checkbox_add_firewall_rule, &QCheckBox::toggled, [this](bool checked)
     {
         setConfigChanged(true);
     });
@@ -85,17 +80,121 @@ HostConfigDialog::HostConfigDialog(QWidget* parent)
     connect(ui.button_service_start_stop, &QPushButton::pressed,
             this, &HostConfigDialog::onServiceStartStop);
 
+    connect(ui.button_import, &QPushButton::pressed, this, &HostConfigDialog::onImport);
+    connect(ui.button_export, &QPushButton::pressed, this, &HostConfigDialog::onExport);
+
     connect(ui.button_box, &QDialogButtonBox::clicked,
             this, &HostConfigDialog::onButtonBoxClicked);
 
-    users_ = settings.userList();
+    reloadAll();
+}
 
-    reloadServiceStatus();
-    reloadUserList();
+// static
+bool HostConfigDialog::importSettings(const QString& path, bool silent, QWidget* parent)
+{
+    HostSettings::ImportResult result = HostSettings::importSettings(path.toStdString());
+    switch (result)
+    {
+        case HostSettings::ImportResult::READ_ERROR:
+        {
+            if (!silent)
+            {
+                QMessageBox::warning(parent,
+                                     tr("Warning"),
+                                     tr("The source file could not be read. Check for file access"
+                                        " and validity of its contents."),
+                                     QMessageBox::Ok);
+            }
+        }
+        break;
 
-    ui.spinbox_port->setValue(settings.tcpPort());
+        case HostSettings::ImportResult::WRITE_ERROR:
+        {
+            if (!silent)
+            {
+                QMessageBox::warning(parent,
+                                     tr("Warning"),
+                                     tr("Could not write destination file. Verify that you have "
+                                        "the necessary rights to write the file."),
+                                     QMessageBox::Ok);
+            }
+        }
+        break;
 
-    setConfigChanged(false);
+        case HostSettings::ImportResult::SUCCESS:
+        {
+            if (!silent)
+            {
+                QMessageBox::information(parent,
+                                         tr("Information"),
+                                         tr("The configuration was successfully imported."),
+                                         QMessageBox::Ok);
+            }
+
+            return true;
+        }
+        break;
+
+        default:
+            DLOG(LS_FATAL) << "Unexpected result: " << static_cast<int>(result);
+            break;
+    }
+
+    return false;
+}
+
+// static
+bool HostConfigDialog::exportSettings(const QString& path, bool silent, QWidget* parent)
+{
+    HostSettings::ExportResult result = HostSettings::exportSettings(path.toStdString());
+    switch (result)
+    {
+        case HostSettings::ExportResult::READ_ERROR:
+        {
+            if (!silent)
+            {
+                QMessageBox::warning(parent,
+                                     tr("Warning"),
+                                     tr("The source file could not be read. Check for file access"
+                                        " and validity of its contents."),
+                                     QMessageBox::Ok);
+            }
+        }
+        break;
+
+        case HostSettings::ExportResult::WRITE_ERROR:
+        {
+            if (!silent)
+            {
+                QMessageBox::warning(parent,
+                                     tr("Warning"),
+                                     tr("Could not write destination file. Verify that you have "
+                                        "the necessary rights to write the file."),
+                                     QMessageBox::Ok);
+            }
+        }
+        break;
+
+        case HostSettings::ExportResult::SUCCESS:
+        {
+            if (!silent)
+            {
+                QMessageBox::information(parent,
+                                         tr("Information"),
+                                         tr("The configuration was successfully exported."),
+                                         QMessageBox::Ok);
+            }
+
+            return true;
+        }
+        break;
+
+        default:
+            DLOG(LS_FATAL) << "Unexpected result: " << static_cast<int>(result);
+            break;
+    }
+
+    return false;
 }
 
 void HostConfigDialog::onUserContextMenu(const QPoint& point)
@@ -131,9 +230,9 @@ void HostConfigDialog::onAddUser()
     SrpUser user;
     user.flags = SrpUser::ENABLED;
 
-    if (UserDialog(*users_, &user, this).exec() == QDialog::Accepted)
+    if (UserDialog(users_, &user, this).exec() == QDialog::Accepted)
     {
-        users_->list.push_back(std::move(user));
+        users_.list.push_back(std::move(user));
         setConfigChanged(true);
         reloadUserList();
     }
@@ -145,8 +244,8 @@ void HostConfigDialog::onModifyUser()
     if (!user_item)
         return;
 
-    SrpUser* user = &users_->list[user_item->userIndex()];
-    if (UserDialog(*users_, user, this).exec() == QDialog::Accepted)
+    SrpUser* user = &users_.list[user_item->userIndex()];
+    if (UserDialog(users_, user, this).exec() == QDialog::Accepted)
     {
         setConfigChanged(true);
         reloadUserList();
@@ -166,7 +265,7 @@ void HostConfigDialog::onDeleteUser()
                               QMessageBox::Yes,
                               QMessageBox::No) == QMessageBox::Yes)
     {
-        users_->list.erase(users_->list.begin() + user_item->userIndex());
+        users_.list.erase(users_.list.begin() + user_item->userIndex());
 
         setConfigChanged(true);
         reloadUserList();
@@ -184,8 +283,11 @@ void HostConfigDialog::onServiceInstallRemove()
         case ServiceState::NOT_STARTED:
         case ServiceState::STARTED:
         {
-            if (service_state_ == ServiceState::STARTED && !stopService())
-                break;
+            if (service_state_ == ServiceState::STARTED)
+            {
+                if (!stopService())
+                    break;
+            }
 
             removeService();
         }
@@ -217,6 +319,46 @@ void HostConfigDialog::onServiceStartStop()
     reloadServiceStatus();
 }
 
+void HostConfigDialog::onImport()
+{
+    QString file_path =
+        QFileDialog::getOpenFileName(this, tr("Import"), QString(), tr("XML-files (*.xml)"));
+    if (file_path.isEmpty())
+        return;
+
+    if (importSettings(file_path, false, this))
+    {
+        if (isServiceStarted())
+        {
+            QString message =
+                tr("Service configuration changed. "
+                   "For the changes to take effect, you must restart the service. "
+                   "Restart the service now?");
+
+            if (QMessageBox::question(this,
+                                      tr("Confirmation"),
+                                      message,
+                                      QMessageBox::Yes,
+                                      QMessageBox::No) == QMessageBox::Yes)
+            {
+                restartService();
+            }
+        }
+
+        reloadAll();
+    }
+}
+
+void HostConfigDialog::onExport()
+{
+    QString file_path =
+        QFileDialog::getSaveFileName(this, tr("Export"), QString(), tr("XML-files (*.xml)"));
+    if (file_path.isEmpty())
+        return;
+
+    exportSettings(file_path, false, this);
+}
+
 void HostConfigDialog::onButtonBoxClicked(QAbstractButton* button)
 {
     QDialogButtonBox::StandardButton standard_button = ui.button_box->standardButton(button);
@@ -233,7 +375,8 @@ void HostConfigDialog::onButtonBoxClicked(QAbstractButton* button)
 
         settings.setLocale(new_locale.toStdString());
         settings.setTcpPort(ui.spinbox_port->value());
-        settings.setUserList(*users_);
+        settings.setAddFirewallRule(ui.checkbox_add_firewall_rule->isChecked());
+        settings.setUserList(users_);
 
         if (!settings.commit())
         {
@@ -324,13 +467,32 @@ bool HostConfigDialog::isConfigChanged() const
     return apply_button->isEnabled();
 }
 
+void HostConfigDialog::reloadAll()
+{
+    HostSettings settings;
+
+    QString current_locale = QString::fromStdString(settings.locale());
+    locale_loader_.installTranslators(current_locale);
+    createLanguageList(current_locale);
+
+    users_ = settings.userList();
+
+    reloadServiceStatus();
+    reloadUserList();
+
+    ui.spinbox_port->setValue(settings.tcpPort());
+    ui.checkbox_add_firewall_rule->setChecked(settings.addFirewallRule());
+
+    setConfigChanged(false);
+}
+
 void HostConfigDialog::reloadUserList()
 {
     for (int i = ui.tree_users->topLevelItemCount() - 1; i >= 0; --i)
         delete ui.tree_users->takeTopLevelItem(i);
 
-    for (size_t i = 0; i < users_->list.size(); ++i)
-        ui.tree_users->addTopLevelItem(new UserTreeItem(i, users_->list.at(i)));
+    for (size_t i = 0; i < users_.list.size(); ++i)
+        ui.tree_users->addTopLevelItem(new UserTreeItem(i, users_.list.at(i)));
 
     ui.button_modify->setEnabled(false);
     ui.button_delete->setEnabled(false);
@@ -425,25 +587,13 @@ bool HostConfigDialog::installService()
 
 bool HostConfigDialog::removeService()
 {
-    ServiceController controller = ServiceController::open(kHostServiceName);
-    if (!controller.isValid())
+    if (!ServiceController::remove(kHostServiceName))
     {
         QMessageBox::warning(this,
                              tr("Warning"),
-                             tr("Could not access the service."),
+                             tr("The service could not be removed."),
                              QMessageBox::Ok);
         return false;
-    }
-    else
-    {
-        if (!controller.remove())
-        {
-            QMessageBox::warning(this,
-                                 tr("Warning"),
-                                 tr("The service could not be removed."),
-                                 QMessageBox::Ok);
-            return false;
-        }
     }
 
     return true;

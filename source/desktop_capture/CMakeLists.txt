@@ -30,6 +30,8 @@ list(APPEND SOURCE_DESKTOP_CAPTURE
     desktop_frame_dib.h
     desktop_frame_qimage.cc
     desktop_frame_qimage.h
+    desktop_frame_simple.cc
+    desktop_frame_simple.h
     desktop_geometry.cc
     desktop_geometry.h
     desktop_region.cc

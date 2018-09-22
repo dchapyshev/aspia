@@ -463,8 +463,10 @@ int ServiceImpl::exec(int argc, char* argv[])
                         printf("Done.\n");
                 }
 
+                controller.close();
+
                 printf("Remove the service...\n");
-                if (!controller.remove())
+                if (!ServiceController::remove(name_))
                     printf("Error: Service could not be removed.\n");
                 else
                     printf("Done.\n");

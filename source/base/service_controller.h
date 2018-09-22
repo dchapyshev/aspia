@@ -40,7 +40,10 @@ public:
     static ServiceController install(const QString& name,
                                      const QString& display_name,
                                      const QString& file_path);
+    static bool remove(const QString& name);
     static bool isInstalled(const QString& name);
+
+    void close();
 
     bool setDescription(const QString& description);
     QString description() const;
@@ -55,7 +58,6 @@ public:
 
     bool start();
     bool stop();
-    bool remove();
 
 protected:
     ServiceController(SC_HANDLE sc_manager, SC_HANDLE service);

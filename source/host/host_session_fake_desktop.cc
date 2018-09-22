@@ -18,12 +18,10 @@
 
 #include "host/host_session_fake_desktop.h"
 
-#include <QPainter>
-
 #include "codec/video_encoder_vpx.h"
 #include "codec/video_encoder_zstd.h"
 #include "codec/video_util.h"
-#include "desktop_capture/desktop_frame_qimage.h"
+#include "desktop_capture/desktop_frame_simple.h"
 #include "share/message_serialization.h"
 
 namespace aspia {
@@ -102,46 +100,17 @@ VideoEncoder* HostSessionFakeDesktop::createEncoder(const proto::desktop::Config
 
 std::unique_ptr<DesktopFrame> HostSessionFakeDesktop::createFrame()
 {
-    const DesktopRect frame_rect = DesktopRect::makeWH(800, 600);
-    const QRect table_rect(200, 250, 400, 100);
-    const int border_size = 1;
-    const int title_height = 30;
+    static const int kWidth = 800;
+    static const int kHeight = 600;
 
-    std::unique_ptr<DesktopFrameQImage> frame = DesktopFrameQImage::create(frame_rect.size());
+    std::unique_ptr<DesktopFrameSimple> frame =
+        DesktopFrameSimple::create(DesktopSize(kWidth, kHeight), PixelFormat::ARGB());
     if (!frame)
         return nullptr;
 
-    QPainter painter(frame->image());
+    memset(frame->frameData(), 0, frame->stride() * frame->size().height());
 
-    QRect title_rect(table_rect.x() + border_size,
-                     table_rect.y() + border_size,
-                     table_rect.width() - (border_size * 2),
-                     title_height);
-
-    QRect message_rect(table_rect.x() + border_size,
-                       title_rect.bottom() + border_size,
-                       table_rect.width() - (border_size * 2),
-                       table_rect.height() - title_height - (border_size * 2));
-
-    painter.fillRect(table_rect, QColor(167, 167, 167));
-    painter.fillRect(title_rect, QColor(207, 207, 207));
-    painter.fillRect(message_rect, QColor(255, 255, 255));
-
-    QPixmap icon(QStringLiteral(":/icon/main.png"));
-    QPoint icon_pos(title_rect.x() + 8, title_rect.y() + (title_height / 2) - (icon.height() / 2));
-
-    title_rect.setLeft(icon_pos.x() + icon.width() + 8);
-
-    painter.setPen(Qt::black);
-
-    painter.drawPixmap(icon_pos, icon);
-    painter.drawText(title_rect, Qt::AlignVCenter, QStringLiteral("Aspia"));
-
-    painter.drawText(message_rect,
-                     Qt::AlignCenter,
-                     tr("The session is temporarily unavailable."));
-
-    frame->updatedRegion()->addRect(frame_rect);
+    frame->updatedRegion()->addRect(DesktopRect::makeSize(frame->size()));
     return frame;
 }
 

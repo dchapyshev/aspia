@@ -33,6 +33,12 @@ public:
     HostSettings();
     ~HostSettings();
 
+    enum class ImportResult { SUCCESS, READ_ERROR, WRITE_ERROR };
+    enum class ExportResult { SUCCESS, READ_ERROR, WRITE_ERROR };
+
+    static ImportResult importSettings(const std::string& from);
+    static ExportResult exportSettings(const std::string& to);
+
     bool commit();
 
     std::string locale() const;
@@ -41,7 +47,10 @@ public:
     uint16_t tcpPort() const;
     void setTcpPort(uint16_t port);
 
-    std::shared_ptr<SrpUserList> userList() const;
+    bool addFirewallRule() const;
+    void setAddFirewallRule(bool value);
+
+    SrpUserList userList() const;
     void setUserList(const SrpUserList& user_list);
 
 private:

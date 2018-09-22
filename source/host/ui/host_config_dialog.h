@@ -20,19 +20,21 @@
 #define ASPIA_HOST__UI__HOST_CONFIG_DIALOG_H_
 
 #include "base/locale_loader.h"
+#include "network/srp_user.h"
 #include "ui_host_config_dialog.h"
 
 namespace aspia {
-
-struct SrpUserList;
 
 class HostConfigDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit HostConfigDialog(QWidget* parent = nullptr);
+    HostConfigDialog(LocaleLoader& locale_loader, QWidget* parent = nullptr);
     ~HostConfigDialog() = default;
+
+    static bool importSettings(const QString& path, bool silent, QWidget* parent = nullptr);
+    static bool exportSettings(const QString& path, bool silent, QWidget* parent = nullptr);
 
 private slots:
     void onUserContextMenu(const QPoint& point);
@@ -42,6 +44,8 @@ private slots:
     void onDeleteUser();
     void onServiceInstallRemove();
     void onServiceStartStop();
+    void onImport();
+    void onExport();
     void onButtonBoxClicked(QAbstractButton* button);
 
 private:
@@ -49,6 +53,7 @@ private:
     void retranslateUi(const QString& locale);
     void setConfigChanged(bool changed);
     bool isConfigChanged() const;
+    void reloadAll();
     void reloadUserList();
     void reloadServiceStatus();
     bool isServiceStarted();
@@ -60,8 +65,8 @@ private:
 
     Ui::HostConfigDialog ui;
 
-    LocaleLoader locale_loader_;
-    std::shared_ptr<SrpUserList> users_;
+    LocaleLoader& locale_loader_;
+    SrpUserList users_;
 
     enum class ServiceState { NOT_INSTALLED, ACCESS_DENIED, NOT_STARTED, STARTED };
 

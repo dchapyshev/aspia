@@ -18,10 +18,14 @@
 
 #include "host/host_config_main.h"
 
+#include <QCommandLineParser>
+#include <QMessageBox>
+
 #include "base/logging.h"
 #include "build/version.h"
 #include "crypto/scoped_crypto_initializer.h"
 #include "host/ui/host_config_dialog.h"
+#include "host/host_settings.h"
 
 namespace aspia {
 
@@ -36,16 +40,73 @@ int hostConfigMain(int argc, char *argv[])
     CHECK(crypto_initializer.isSucceeded());
 
     QApplication application(argc, argv);
-    application.setOrganizationName(QStringLiteral("Aspia"));
-    application.setApplicationName(QStringLiteral("Host"));
-    application.setApplicationVersion(QStringLiteral(ASPIA_VERSION_STRING));
+    application.setOrganizationName("Aspia");
+    application.setApplicationName("Host");
+    application.setApplicationVersion(ASPIA_VERSION_STRING);
     application.setAttribute(Qt::AA_DisableWindowContextHelpButton, true);
 
-    HostConfigDialog dialog;
-    dialog.show();
-    dialog.activateWindow();
+    HostSettings host_settings;
+    LocaleLoader locale_loader;
 
-    return application.exec();
+    QString current_locale = QString::fromStdString(host_settings.locale());
+    if (!locale_loader.contains(current_locale))
+    {
+        current_locale = "en";
+        host_settings.setLocale(current_locale.toStdString());
+    }
+
+    locale_loader.installTranslators(current_locale);
+
+    QCommandLineOption import_option(
+        "import", QApplication::translate("HostConfig", "The path to the file to import."), "file");
+
+    QCommandLineOption export_option(
+        "export", QApplication::translate("HostConfig", "The path to the file to export."), "file");
+
+    QCommandLineOption silent_option("silent",
+        QApplication::translate("HostConfig", "Enables silent mode when exporting and importing."));
+
+    QCommandLineParser parser;
+    parser.addHelpOption();
+    parser.addVersionOption();
+    parser.addOption(import_option);
+    parser.addOption(export_option);
+    parser.addOption(silent_option);
+    parser.process(application);
+
+    if (parser.isSet(import_option) && parser.isSet(export_option))
+    {
+        if (!parser.isSet(silent_option))
+        {
+            QMessageBox::warning(
+                nullptr,
+                QApplication::translate("HostConfig", "Warning"),
+                QApplication::translate("HostConfig", "Export and import parameters can not be specified together."),
+                QMessageBox::Ok);
+        }
+
+        return 1;
+    }
+    else if (parser.isSet(import_option))
+    {
+        if (!HostConfigDialog::importSettings(parser.value(import_option), parser.isSet(silent_option)))
+            return 1;
+    }
+    else if (parser.isSet(export_option))
+    {
+        if (!HostConfigDialog::exportSettings(parser.value(export_option), parser.isSet(silent_option)))
+            return 1;
+    }
+    else
+    {
+        HostConfigDialog dialog(locale_loader);
+        dialog.show();
+        dialog.activateWindow();
+
+        return application.exec();
+    }
+
+    return 0;
 }
 
 } // namespace aspia

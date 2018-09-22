@@ -23,14 +23,14 @@
 
 namespace aspia {
 
-NetworkServer::NetworkServer(std::shared_ptr<SrpUserList>& user_list, QObject* parent)
+NetworkServer::NetworkServer(const SrpUserList& user_list, QObject* parent)
     : QObject(parent),
       user_list_(user_list)
 {
-    DCHECK(user_list_);
+    // Nothing
 }
 
-bool NetworkServer::start(int port)
+bool NetworkServer::start(uint16_t port)
 {
     if (!tcp_server_.isNull())
     {

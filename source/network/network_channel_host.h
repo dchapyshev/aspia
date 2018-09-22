@@ -20,12 +20,12 @@
 #define ASPIA_NETWORK__NETWORK_CHANNEL_HOST_H_
 
 #include "network/network_channel.h"
+#include "network/srp_user.h"
 #include "protocol/session_type.pb.h"
 
 namespace aspia {
 
 class SrpHostContext;
-struct SrpUserList;
 
 class NetworkChannelHost : public NetworkChannel
 {
@@ -45,7 +45,7 @@ signals:
 protected:
     friend class NetworkServer;
     NetworkChannelHost(QTcpSocket* socket,
-                       std::shared_ptr<SrpUserList> user_list,
+                       const SrpUserList& user_list,
                        QObject* parent = nullptr);
 
     // NetworkChannel implementation.
@@ -58,7 +58,7 @@ private:
     void readClientKeyExchange(const QByteArray& buffer);
     void readAuthorizationResponse(const QByteArray& buffer);
 
-    std::shared_ptr<SrpUserList> user_list_;
+    SrpUserList user_list_;
 
     std::string username_;
     proto::SessionType session_type_ = proto::SESSION_TYPE_UNKNOWN;
