@@ -165,33 +165,22 @@ void HostSettings::setUserList(const SrpUserList& users)
     // Clear the old list of users.
     tree_.erase("srp_users");
 
-    std::string buffer;
-
     for (const auto& user : users.list)
     {
         boost::property_tree::ptree user_tree;
 
         user_tree.put<std::string>("name", user.name);
+        user_tree.put<std::string>("salt", Base64::encode(user.salt));
+        user_tree.put<std::string>("verifier", Base64::encode(user.verifier));
+        user_tree.put<std::string>("number", Base64::encode(user.number));
+        user_tree.put<std::string>("generator", Base64::encode(user.generator));
         user_tree.put<uint32_t>("sessions", user.sessions);
         user_tree.put<uint32_t>("flags", user.flags);
-
-        Base64::encode(user.salt, &buffer);
-        user_tree.put<std::string>("salt", buffer);
-
-        Base64::encode(user.verifier, &buffer);
-        user_tree.put<std::string>("verifier", buffer);
-
-        Base64::encode(user.number, &buffer);
-        user_tree.put<std::string>("number", buffer);
-
-        Base64::encode(user.generator, &buffer);
-        user_tree.put<std::string>("generator", buffer);
 
         tree_.add_child("srp_users.user", user_tree);
     }
 
-    Base64::encode(users.seed_key, &buffer);
-    tree_.put<std::string>("srp_seed_key", buffer);
+    tree_.put<std::string>("srp_seed_key", Base64::encode(users.seed_key));
 }
 
 } // namespace aspia

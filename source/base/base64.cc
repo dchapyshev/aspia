@@ -264,21 +264,25 @@ size_t decodeImpl(char* dest, const char* src, size_t len)
 } // namespace
 
 // static
-bool Base64::encode(const std::string& input, std::string* output)
+void Base64::encode(const std::string& input, std::string* output)
 {
     DCHECK(output);
+    output->swap(encode(input));
+}
 
+// static
+std::string Base64::encode(const std::string& input)
+{
     if (input.empty())
-        return false;
+        return std::string();
 
-    std::string temp;
-    temp.resize(encodedLength(input.size()));
+    std::string result;
+    result.resize(encodedLength(input.size()));
 
-    size_t output_size = encodeImpl(temp.data(), input.data(), input.size());
-    temp.resize(output_size);
+    size_t output_size = encodeImpl(result.data(), input.data(), input.size());
+    result.resize(output_size);
 
-    output->swap(temp);
-    return true;
+    return result;
 }
 
 // static

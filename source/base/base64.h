@@ -29,7 +29,10 @@ class Base64
 {
 public:
     // Encodes the input string in base64. The encoding can be done in-place.
-    static bool encode(const std::string& input, std::string* output);
+    static void encode(const std::string& input, std::string* output);
+
+    // Encodes the input string in base64.
+    static std::string encode(const std::string& input);
 
     // Decodes the base64 input string. Returns true if successful and false otherwise.
     // The output string is only modified if successful. The decoding can be done in-place.
