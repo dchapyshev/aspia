@@ -585,6 +585,69 @@ void AddressBookTab::showEvent(QShowEvent* event)
     QWidget::showEvent(event);
 }
 
+void AddressBookTab::keyPressEvent(QKeyEvent* event)
+{
+    QWidget* focus_widget = QApplication::focusWidget();
+
+    switch (event->key())
+    {
+        case Qt::Key_Insert:
+        {
+            if (focus_widget == ui.tree_group)
+                addComputerGroup();
+            else if (focus_widget == ui.tree_computer)
+                addComputer();
+        }
+        break;
+
+        case Qt::Key_F2:
+        {
+            if (focus_widget == ui.tree_group)
+            {
+                ComputerGroupItem* current_item =
+                    dynamic_cast<ComputerGroupItem*>(ui.tree_group->currentItem());
+                if (!current_item)
+                    break;
+
+                if (current_item->parent())
+                    modifyComputerGroup();
+                else
+                    modifyAddressBook();
+            }
+            else if (focus_widget == ui.tree_computer)
+            {
+                modifyComputer();
+            }
+        }
+        break;
+
+        case Qt::Key_Delete:
+        {
+            if (focus_widget == ui.tree_group)
+                removeComputerGroup();
+            else if (focus_widget == ui.tree_computer)
+                removeComputer();
+        }
+        break;
+
+        case Qt::Key_Return:
+        {
+            if (focus_widget == ui.tree_computer)
+            {
+                ComputerItem* current_item =
+                    dynamic_cast<ComputerItem*>(ui.tree_computer->currentItem());
+                if (!current_item)
+                    break;
+
+                emit computerDoubleClicked(current_item->computer());
+            }
+        }
+        break;
+    }
+
+    QWidget::keyPressEvent(event);
+}
+
 void AddressBookTab::setChanged(bool value)
 {
     is_changed_ = value;

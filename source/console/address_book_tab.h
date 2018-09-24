@@ -69,6 +69,7 @@ signals:
 protected:
     // ConsoleTab implementation.
     void showEvent(QShowEvent* event) override;
+    void keyPressEvent(QKeyEvent* event) override;
 
 private slots:
     void onGroupItemClicked(QTreeWidgetItem* item, int column);

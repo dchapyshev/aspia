@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
     QStringList arguments = parser.positionalArguments();
 
     QString file_path;
-    if (arguments.size())
+    if (!arguments.isEmpty())
         file_path = arguments.front();
 
     ConsoleWindow window(file_path);
