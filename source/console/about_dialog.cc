@@ -20,6 +20,7 @@
 
 #include <QAbstractButton>
 #include <QDesktopServices>
+#include <QFile>
 
 #include <libyuv.h>
 #include <google/protobuf/stubs/common.h>
@@ -122,6 +123,10 @@ AboutDialog::AboutDialog(QWidget* parent)
     html += "</body><html>";
 
     ui.text_edit->setHtml(html);
+
+    QFile file(QApplication::applicationDirPath() + "/license.txt");
+    if (file.open(QFile::ReadOnly))
+        ui.edit_license->setPlainText(file.readAll());
 
     ui.list_service->addItem(tr("Path: %1").arg(QApplication::applicationFilePath()));
     ui.list_service->addItem(tr("Compilation date: %1").arg(__DATE__));
