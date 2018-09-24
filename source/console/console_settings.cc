@@ -74,6 +74,26 @@ void ConsoleSettings::setWindowState(const QByteArray& state)
     settings_.setValue(QStringLiteral("WindowState"), state);
 }
 
+QByteArray ConsoleSettings::splitterState() const
+{
+    return settings_.value(QStringLiteral("SplitterState")).toByteArray();
+}
+
+void ConsoleSettings::setSplitterState(const QByteArray& state)
+{
+    settings_.setValue(QStringLiteral("SplitterState"), state);
+}
+
+QByteArray ConsoleSettings::columnsState() const
+{
+    return settings_.value(QStringLiteral("ColumnsState")).toByteArray();
+}
+
+void ConsoleSettings::setColumnsState(const QByteArray& state)
+{
+    settings_.setValue(QStringLiteral("ColumnsState"), state);
+}
+
 QStringList ConsoleSettings::mru() const
 {
     return settings_.value(QStringLiteral("MRU")).toStringList();

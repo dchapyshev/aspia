@@ -45,6 +45,12 @@ public:
     QByteArray windowState() const;
     void setWindowState(const QByteArray& state);
 
+    QByteArray splitterState() const;
+    void setSplitterState(const QByteArray& state);
+
+    QByteArray columnsState() const;
+    void setColumnsState(const QByteArray& state);
+
     QStringList mru() const;
     void setMru(const QStringList& mru);
 

@@ -106,11 +106,33 @@ AddressBookTab::AddressBookTab(const QString& file_path,
 {
     ui.setupUi(this);
 
-    QList<int> sizes;
-    sizes.push_back(200);
-    sizes.push_back(width() - 200);
+    ConsoleSettings settings;
 
-    ui.splitter->setSizes(sizes);
+    QByteArray splitter_state = settings.splitterState();
+    if (splitter_state.isEmpty())
+    {
+        QList<int> sizes;
+        sizes.push_back(200);
+        sizes.push_back(width() - 200);
+        ui.splitter->setSizes(sizes);
+    }
+    else
+    {
+        ui.splitter->restoreState(splitter_state);
+    }
+
+    QHeaderView* header = ui.tree_computer->header();
+    QByteArray columns_state = settings.columnsState();
+    if (columns_state.isEmpty())
+    {
+        header->hideSection(ComputerItem::COLUMN_INDEX_CREATED);
+        header->hideSection(ComputerItem::COLUMN_INDEX_MODIFIED);
+        header->hideSection(ComputerItem::COLUMN_INDEX_CONNECTED);
+    }
+    else
+    {
+        ui.tree_computer->header()->restoreState(columns_state);
+    }
 
     ComputerGroupItem* group_item = new ComputerGroupItem(data_.mutable_root_group(), nullptr);
 
@@ -170,6 +192,10 @@ AddressBookTab::~AddressBookTab()
     cleanupFile(&file_);
 
     secureMemZero(&key_);
+
+    ConsoleSettings settings;
+    settings.setSplitterState(ui.splitter->saveState());
+    settings.setColumnsState(ui.tree_computer->header()->saveState());
 }
 
 // static

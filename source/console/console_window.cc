@@ -318,6 +318,8 @@ void ConsoleWindow::onDesktopManageConnect()
         proto::address_book::Computer* computer = tab->currentComputer();
         if (computer)
         {
+            tab->setChanged(true);
+
             computer->set_connect_time(QDateTime::currentSecsSinceEpoch());
             computer->set_session_type(proto::SESSION_TYPE_DESKTOP_MANAGE);
 
@@ -334,6 +336,8 @@ void ConsoleWindow::onDesktopViewConnect()
         proto::address_book::Computer* computer = tab->currentComputer();
         if (computer)
         {
+            tab->setChanged(true);
+
             computer->set_connect_time(QDateTime::currentSecsSinceEpoch());
             computer->set_session_type(proto::SESSION_TYPE_DESKTOP_VIEW);
 
@@ -350,6 +354,8 @@ void ConsoleWindow::onFileTransferConnect()
         proto::address_book::Computer* computer = tab->currentComputer();
         if (computer)
         {
+            tab->setChanged(true);
+
             computer->set_connect_time(QDateTime::currentSecsSinceEpoch());
             computer->set_session_type(proto::SESSION_TYPE_FILE_TRANSFER);
 
@@ -529,6 +535,10 @@ void ConsoleWindow::onComputerContextMenu(ComputerItem* computer_item, const QPo
 void ConsoleWindow::onComputerDoubleClicked(proto::address_book::Computer* computer)
 {
     computer->set_connect_time(QDateTime::currentSecsSinceEpoch());
+
+    AddressBookTab* tab = currentAddressBookTab();
+    if (tab)
+        tab->setChanged(true);
 
     if (ui.action_desktop_manage->isChecked())
     {

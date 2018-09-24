@@ -19,6 +19,8 @@
 #include "console/computer_tree.h"
 
 #include <QApplication>
+#include <QHeaderView>
+#include <QMenu>
 #include <QMouseEvent>
 
 #include "console/computer_drag.h"
@@ -26,10 +28,34 @@
 
 namespace aspia {
 
+namespace {
+
+class ColumnAction : public QAction
+{
+public:
+    ColumnAction(const QString& text, int index, QObject* parent)
+        : QAction(text, parent),
+          index_(index)
+    {
+        setCheckable(true);
+    }
+
+    int columnIndex() const { return index_; }
+
+private:
+    const int index_;
+    DISALLOW_COPY_AND_ASSIGN(ColumnAction);
+};
+
+} // namespace
+
 ComputerTree::ComputerTree(QWidget* parent)
     : QTreeWidget(parent)
 {
-    // Nothing
+    header()->setContextMenuPolicy(Qt::CustomContextMenu);
+
+    connect(header(), &QHeaderView::customContextMenuRequested,
+            this, &ComputerTree::onHeaderContextMenu);
 }
 
 void ComputerTree::mousePressEvent(QMouseEvent* event)
@@ -86,6 +112,25 @@ void ComputerTree::startDrag(Qt::DropActions supported_actions)
 
         drag->exec(supported_actions);
     }
+}
+
+void ComputerTree::onHeaderContextMenu(const QPoint& pos)
+{
+    QMenu menu;
+
+    for (int i = 1; i < header()->count(); ++i)
+    {
+        ColumnAction* action = new ColumnAction(headerItem()->text(i), i, &menu);
+        action->setChecked(!header()->isSectionHidden(i));
+        menu.addAction(action);
+    }
+
+    ColumnAction* action = dynamic_cast<ColumnAction*>(
+        menu.exec(header()->viewport()->mapToGlobal(pos)));
+    if (!action)
+        return;
+
+    header()->setSectionHidden(action->columnIndex(), !action->isChecked());
 }
 
 } // namespace aspia

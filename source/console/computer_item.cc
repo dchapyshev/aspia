@@ -18,6 +18,8 @@
 
 #include "console/computer_item.h"
 
+#include <QDateTime>
+
 #include "console/computer_group_item.h"
 
 namespace aspia {
@@ -33,15 +35,67 @@ ComputerItem::ComputerItem(proto::address_book::Computer* computer,
 
 void ComputerItem::updateItem()
 {
-    setText(0, QString::fromStdString(computer_->name()));
-    setText(1, QString::fromStdString(computer_->address()));
-    setText(2, QString::number(computer_->port()));
-    setText(3, QString::fromStdString(computer_->comment()).replace('\n', ' '));
+    setText(COLUMN_INDEX_NAME, QString::fromStdString(computer_->name()));
+    setText(COLUMN_INDEX_ADDRESS, QString::fromStdString(computer_->address()));
+    setText(COLUMN_INDEX_PORT, QString::number(computer_->port()));
+    setText(COLUMN_INDEX_COMMENT, QString::fromStdString(computer_->comment()).replace('\n', ' '));
+
+    setText(COLUMN_INDEX_CREATED, QDateTime::fromSecsSinceEpoch(
+        computer_->create_time()).toString(Qt::DefaultLocaleShortDate));
+
+    setText(COLUMN_INDEX_MODIFIED, QDateTime::fromSecsSinceEpoch(
+        computer_->modify_time()).toString(Qt::DefaultLocaleShortDate));
+
+    setText(COLUMN_INDEX_CONNECTED, QDateTime::fromSecsSinceEpoch(
+        computer_->connect_time()).toString(Qt::DefaultLocaleShortDate));
 }
 
 ComputerGroupItem* ComputerItem::parentComputerGroupItem()
 {
     return parent_group_item_;
+}
+
+bool ComputerItem::operator<(const QTreeWidgetItem &other) const
+{
+    switch (treeWidget()->sortColumn())
+    {
+        case COLUMN_INDEX_PORT:
+        {
+            const ComputerItem* other_item = dynamic_cast<const ComputerItem*>(&other);
+            if (other_item)
+                return computer_->port() < other_item->computer_->port();
+        }
+        break;
+
+        case COLUMN_INDEX_CREATED:
+        {
+            const ComputerItem* other_item = dynamic_cast<const ComputerItem*>(&other);
+            if (other_item)
+                return computer_->create_time() < other_item->computer_->create_time();
+        }
+        break;
+
+        case COLUMN_INDEX_MODIFIED:
+        {
+            const ComputerItem* other_item = dynamic_cast<const ComputerItem*>(&other);
+            if (other_item)
+                return computer_->modify_time() < other_item->computer_->modify_time();
+        }
+        break;
+
+        case COLUMN_INDEX_CONNECTED:
+        {
+            const ComputerItem* other_item = dynamic_cast<const ComputerItem*>(&other);
+            if (other_item)
+                return computer_->connect_time() < other_item->computer_->connect_time();
+        }
+        break;
+
+        default:
+            break;
+    }
+
+    return QTreeWidgetItem::operator<(other);
 }
 
 } // namespace aspia

@@ -36,9 +36,22 @@ public:
 
     void updateItem();
 
-    proto::address_book::Computer* computer() { return computer_; }
+    enum ColumnIndex
+    {
+        COLUMN_INDEX_NAME      = 0,
+        COLUMN_INDEX_ADDRESS   = 1,
+        COLUMN_INDEX_PORT      = 2,
+        COLUMN_INDEX_COMMENT   = 3,
+        COLUMN_INDEX_CREATED   = 4,
+        COLUMN_INDEX_MODIFIED  = 5,
+        COLUMN_INDEX_CONNECTED = 6
+    };
 
+    proto::address_book::Computer* computer() { return computer_; }
     ComputerGroupItem* parentComputerGroupItem();
+
+    // QTreeWidgetItem implementation.
+    bool operator<(const QTreeWidgetItem &other) const override;
 
 private:
     friend class ComputerGroupItem;

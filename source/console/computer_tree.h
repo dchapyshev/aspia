@@ -42,6 +42,9 @@ protected:
     void dropEvent(QDropEvent* event) override;
     void startDrag(Qt::DropActions supported_actions) override;
 
+private slots:
+    void onHeaderContextMenu(const QPoint& pos);
+
 private:
     QPoint start_pos_;
 
