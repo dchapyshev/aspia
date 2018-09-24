@@ -623,54 +623,54 @@
         <translation>Die Adressbuchdatei ist mit einem nicht unterstützten Verschlüsselungstyp verschlüsselt.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="461"/>
+        <location filename="../address_book_tab.cc" line="457"/>
         <source>Are you sure you want to delete computer group &quot;%1&quot; and all child items?</source>
         <translation>Möchten Sie die Computergruppe &quot;%1&quot; und alle Kindelemente wirklich löschen?</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="465"/>
-        <location filename="../address_book_tab.cc" line="487"/>
+        <location filename="../address_book_tab.cc" line="461"/>
+        <location filename="../address_book_tab.cc" line="483"/>
         <source>Confirmation</source>
         <translation>Bestätigung</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="483"/>
+        <location filename="../address_book_tab.cc" line="479"/>
         <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
         <translation>Möchten Sie den Computer &quot;%1&quot; wirklich löschen?</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="737"/>
+        <location filename="../address_book_tab.cc" line="733"/>
         <source>Save Address Book</source>
         <translation>Adressbuch speichern</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="739"/>
+        <location filename="../address_book_tab.cc" line="735"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Aspia Adressbuch (*.aab)</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="749"/>
+        <location filename="../address_book_tab.cc" line="745"/>
         <source>Unable to create or open address book file.</source>
         <translation>Die Adressbuchdatei konnte nicht erstellt oder geöffnet werden.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="761"/>
+        <location filename="../address_book_tab.cc" line="757"/>
         <source>Unable to write address book file.</source>
         <translation>Die Adressbuchdatei konnte nicht geschrieben werden.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="777"/>
-        <location filename="../address_book_tab.cc" line="791"/>
+        <location filename="../address_book_tab.cc" line="773"/>
+        <location filename="../address_book_tab.cc" line="787"/>
         <source>Warning</source>
         <translation>Warnung</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="779"/>
+        <location filename="../address_book_tab.cc" line="775"/>
         <source>Could not open address book</source>
         <translation>Adressbuch konnte nicht geöffnet werden</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="793"/>
+        <location filename="../address_book_tab.cc" line="789"/>
         <source>Failed to save address book</source>
         <translation>Speichern des Adressbuchs fehlgeschlagen</translation>
     </message>
@@ -783,7 +783,7 @@
 <context>
     <name>aspia::ConsoleWindow</name>
     <message>
-        <location filename="../console_window.cc" line="720"/>
+        <location filename="../console_window.cc" line="736"/>
         <source>Aspia Console</source>
         <translation type="unfinished"></translation>
     </message>
@@ -798,17 +798,17 @@
         <translation>Aspia Adressbuch (*.aab)</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="699"/>
+        <location filename="../console_window.cc" line="715"/>
         <source>&lt;empty&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="754"/>
+        <location filename="../console_window.cc" line="770"/>
         <source>Information</source>
         <translation>Information</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="755"/>
+        <location filename="../console_window.cc" line="771"/>
         <source>Address Book &quot;%1&quot; is already open.</source>
         <translation>Adressbuch &quot;%1&quot; ist bereits geöffnet.</translation>
     </message>
@@ -818,24 +818,24 @@
         <translation>https://aspia.org/en/help.html</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="402"/>
-        <location filename="../console_window.cc" line="632"/>
+        <location filename="../console_window.cc" line="411"/>
+        <location filename="../console_window.cc" line="648"/>
         <source>Confirmation</source>
         <translation>Bestätigung</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="403"/>
-        <location filename="../console_window.cc" line="633"/>
+        <location filename="../console_window.cc" line="412"/>
+        <location filename="../console_window.cc" line="649"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation>Adressbuch &quot;%1&quot; wurde geändert. Änderungen speichern?</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="589"/>
+        <location filename="../console_window.cc" line="605"/>
         <source>Hide</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="604"/>
+        <location filename="../console_window.cc" line="620"/>
         <source>Show</source>
         <translation type="unfinished"></translation>
     </message>

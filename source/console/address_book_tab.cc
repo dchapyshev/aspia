@@ -308,13 +308,9 @@ QString AddressBookTab::addressBookName() const
     return QString::fromStdString(data_.root_group().name());
 }
 
-proto::address_book::Computer* AddressBookTab::currentComputer() const
+ComputerItem* AddressBookTab::currentComputer() const
 {
-    ComputerItem* current_item = dynamic_cast<ComputerItem*>(ui.tree_computer->currentItem());
-    if (!current_item)
-        return nullptr;
-
-    return current_item->computer();
+    return dynamic_cast<ComputerItem*>(ui.tree_computer->currentItem());
 }
 
 proto::address_book::ComputerGroup* AddressBookTab::currentComputerGroup() const

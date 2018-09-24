@@ -315,13 +315,16 @@ void ConsoleWindow::onDesktopManageConnect()
     AddressBookTab* tab = currentAddressBookTab();
     if (tab)
     {
-        proto::address_book::Computer* computer = tab->currentComputer();
-        if (computer)
+        ComputerItem* computer_item = tab->currentComputer();
+        if (computer_item)
         {
-            tab->setChanged(true);
+            proto::address_book::Computer* computer = computer_item->computer();
 
             computer->set_connect_time(QDateTime::currentSecsSinceEpoch());
             computer->set_session_type(proto::SESSION_TYPE_DESKTOP_MANAGE);
+
+            computer_item->updateItem();
+            tab->setChanged(true);
 
             connectToComputer(*computer);
         }
@@ -333,13 +336,16 @@ void ConsoleWindow::onDesktopViewConnect()
     AddressBookTab* tab = currentAddressBookTab();
     if (tab)
     {
-        proto::address_book::Computer* computer = tab->currentComputer();
-        if (computer)
+        ComputerItem* computer_item = tab->currentComputer();
+        if (computer_item)
         {
-            tab->setChanged(true);
+            proto::address_book::Computer* computer = computer_item->computer();
 
             computer->set_connect_time(QDateTime::currentSecsSinceEpoch());
             computer->set_session_type(proto::SESSION_TYPE_DESKTOP_VIEW);
+
+            computer_item->updateItem();
+            tab->setChanged(true);
 
             connectToComputer(*computer);
         }
@@ -351,13 +357,16 @@ void ConsoleWindow::onFileTransferConnect()
     AddressBookTab* tab = currentAddressBookTab();
     if (tab)
     {
-        proto::address_book::Computer* computer = tab->currentComputer();
-        if (computer)
+        ComputerItem* computer_item = tab->currentComputer();
+        if (computer_item)
         {
-            tab->setChanged(true);
+            proto::address_book::Computer* computer = computer_item->computer();
 
             computer->set_connect_time(QDateTime::currentSecsSinceEpoch());
             computer->set_session_type(proto::SESSION_TYPE_FILE_TRANSFER);
+
+            computer_item->updateItem();
+            tab->setChanged(true);
 
             connectToComputer(*computer);
         }
@@ -537,8 +546,15 @@ void ConsoleWindow::onComputerDoubleClicked(proto::address_book::Computer* compu
     computer->set_connect_time(QDateTime::currentSecsSinceEpoch());
 
     AddressBookTab* tab = currentAddressBookTab();
-    if (tab)
-        tab->setChanged(true);
+    if (!tab)
+        return;
+
+    ComputerItem* computer_item = tab->currentComputer();
+    if (!computer_item)
+        return;
+
+    computer_item->updateItem();
+    tab->setChanged(true);
 
     if (ui.action_desktop_manage->isChecked())
     {

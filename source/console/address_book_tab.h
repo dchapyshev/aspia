@@ -40,7 +40,7 @@ public:
 
     QString addressBookName() const;
     QString addressBookPath() const { return file_path_; }
-    proto::address_book::Computer* currentComputer() const;
+    ComputerItem* currentComputer() const;
     proto::address_book::ComputerGroup* currentComputerGroup() const;
     void setChanged(bool changed);
     bool isChanged() const { return is_changed_; }
