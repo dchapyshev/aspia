@@ -205,7 +205,7 @@ AddressBookTab* AddressBookTab::createNew(QWidget* parent)
     proto::address_book::Data data;
     std::string key;
 
-    AddressBookDialog dialog(parent, &file, &data, &key);
+    AddressBookDialog dialog(parent, QString(), &file, &data, &key);
     if (dialog.exec() != QDialog::Accepted)
         return nullptr;
 
@@ -395,7 +395,7 @@ void AddressBookTab::modifyAddressBook()
         return;
     }
 
-    AddressBookDialog dialog(this, &file_, &data_, &key_);
+    AddressBookDialog dialog(this, file_path_, &file_, &data_, &key_);
     if (dialog.exec() != QDialog::Accepted)
         return;
 

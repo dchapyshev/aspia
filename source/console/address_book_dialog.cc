@@ -36,9 +36,15 @@ constexpr int kMaxCommentLength = 2048;
 
 } // namespace
 
-AddressBookDialog::AddressBookDialog(QWidget* parent, proto::address_book::File* file,
-                                     proto::address_book::Data* data, std::string* key)
-    : QDialog(parent), file_(file), data_(data), key_(key)
+AddressBookDialog::AddressBookDialog(QWidget* parent,
+                                     const QString& file_path,
+                                     proto::address_book::File* file,
+                                     proto::address_book::Data* data,
+                                     std::string* key)
+    : QDialog(parent),
+      file_(file),
+      data_(data),
+      key_(key)
 {
     ui.setupUi(this);
 
@@ -53,6 +59,7 @@ AddressBookDialog::AddressBookDialog(QWidget* parent, proto::address_book::File*
                                  QVariant(proto::address_book::ENCRYPTION_TYPE_CHACHA20_POLY1305));
 
     ui.edit_name->setText(QString::fromStdString(data_->root_group().name()));
+    ui.edit_file->setText(file_path);
     ui.edit_comment->setPlainText(QString::fromStdString(data_->root_group().comment()));
 
     int current = ui.combo_encryption->findData(QVariant(file->encryption_type()));

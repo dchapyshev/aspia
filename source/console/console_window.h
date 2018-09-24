@@ -87,6 +87,7 @@ private:
     void openAddressBook(const QString& file_path);
     void addAddressBookTab(AddressBookTab* tab);
     AddressBookTab* currentAddressBookTab();
+    bool hasChangedTabs() const;
     void connectToComputer(const proto::address_book::Computer& computer);
 
     Ui::ConsoleWindow ui;

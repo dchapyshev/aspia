@@ -240,14 +240,8 @@ void ConsoleWindow::onSave()
         if (mru_.addRecentFile(tab->addressBookPath()))
             rebuildMruMenu();
 
-        for (int i = 0; i < ui.tab_widget->count(); ++i)
-        {
-            AddressBookTab* tab = dynamic_cast<AddressBookTab*>(ui.tab_widget->widget(i));
-            if (tab && tab->isChanged())
-                return;
-        }
-
-        ui.action_save_all->setEnabled(false);
+        if (!hasChangedTabs())
+            ui.action_save_all->setEnabled(false);
     }
 }
 
@@ -256,17 +250,24 @@ void ConsoleWindow::onSaveAs()
     AddressBookTab* tab = currentAddressBookTab();
     if (tab && tab->saveAs())
     {
-        if (mru_.addRecentFile(tab->addressBookPath()))
+        QString new_path = tab->addressBookPath();
+        if (mru_.addRecentFile(new_path))
             rebuildMruMenu();
 
-        for (int i = 0; i < ui.tab_widget->count(); ++i)
+        int tab_index = ui.tab_widget->currentIndex();
+        if (mru_.isPinnedFile(new_path))
         {
-            AddressBookTab* tab = dynamic_cast<AddressBookTab*>(ui.tab_widget->widget(i));
-            if (tab && tab->isChanged())
-                return;
+            ui.tab_widget->setTabIcon(
+                tab_index, QIcon(QStringLiteral(":/icon/address-book-pinned.png")));
+        }
+        else
+        {
+            ui.tab_widget->setTabIcon(
+                tab_index, QIcon(QStringLiteral(":/icon/address-book.png")));
         }
 
-        ui.action_save_all->setEnabled(false);
+        if (!hasChangedTabs())
+            ui.action_save_all->setEnabled(false);
     }
 }
 
@@ -279,14 +280,8 @@ void ConsoleWindow::onSaveAll()
             tab->save();
     }
 
-    for (int i = 0; i < ui.tab_widget->count(); ++i)
-    {
-        AddressBookTab* tab = dynamic_cast<AddressBookTab*>(ui.tab_widget->widget(i));
-        if (tab && tab->isChanged())
-            return;
-    }
-
-    ui.action_save_all->setEnabled(false);
+    if (!hasChangedTabs())
+        ui.action_save_all->setEnabled(false);
 }
 
 void ConsoleWindow::onClose()
@@ -940,6 +935,18 @@ AddressBookTab* ConsoleWindow::currentAddressBookTab()
         return nullptr;
 
     return dynamic_cast<AddressBookTab*>(ui.tab_widget->widget(current_tab));
+}
+
+bool ConsoleWindow::hasChangedTabs() const
+{
+    for (int i = 0; i < ui.tab_widget->count(); ++i)
+    {
+        AddressBookTab* tab = dynamic_cast<AddressBookTab*>(ui.tab_widget->widget(i));
+        if (tab && tab->isChanged())
+            return true;
+    }
+
+    return false;
 }
 
 void ConsoleWindow::connectToComputer(const proto::address_book::Computer& computer)

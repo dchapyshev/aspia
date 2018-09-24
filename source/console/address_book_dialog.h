@@ -31,6 +31,7 @@ class AddressBookDialog : public QDialog
 
 public:
     AddressBookDialog(QWidget* parent,
+                      const QString& file_path,
                       proto::address_book::File* file,
                       proto::address_book::Data* data,
                       std::string* key);
