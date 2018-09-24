@@ -29,13 +29,21 @@ public:
     Mru() = default;
     ~Mru() = default;
 
-    const QStringList& fileList() const { return list_; }
-    void setFileList(const QStringList& list);
+    const QStringList& recentOpen() const { return recent_list_; }
+    void setRecentOpen(const QStringList& list);
 
-    void addItem(const QString& file_path);
+    const QStringList& pinnedFiles() const { return pinned_list_; }
+    void setPinnedFiles(const QStringList& list);
+
+    bool addRecentFile(const QString& file_path);
+
+    void pinFile(const QString& file_path);
+    void unpinFile(const QString& file_path);
+    bool isPinnedFile(const QString& file_path) const;
 
 private:
-    QStringList list_;
+    QStringList recent_list_;
+    QStringList pinned_list_;
 };
 
 } // namespace aspia

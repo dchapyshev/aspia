@@ -70,6 +70,7 @@ public slots:
     void onComputerGroupContextMenu(const QPoint& point, bool is_root);
     void onComputerContextMenu(ComputerItem* computer_item, const QPoint& point);
     void onComputerDoubleClicked(proto::address_book::Computer* computer);
+    void onTabContextMenu(const QPoint& pos);
     void onLanguageChanged(QAction* action);
     void onShowHideToTray();
 

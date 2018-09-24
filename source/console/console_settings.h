@@ -51,8 +51,11 @@ public:
     QByteArray columnsState() const;
     void setColumnsState(const QByteArray& state);
 
-    QStringList mru() const;
-    void setMru(const QStringList& mru);
+    QStringList recentOpen() const;
+    void setRecentOpen(const QStringList& list);
+
+    QStringList pinnedFiles() const;
+    void setPinnedFiles(const QStringList& list);
 
     bool isToolBarEnabled() const;
     void setToolBarEnabled(bool enable);

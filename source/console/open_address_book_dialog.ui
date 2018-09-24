@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>391</width>
-    <height>161</height>
+    <width>385</width>
+    <height>181</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -67,6 +67,13 @@
         <item>
          <layout class="QVBoxLayout" name="verticalLayout">
           <item>
+           <widget class="QLabel" name="label_file">
+            <property name="text">
+             <string>File:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="QLabel" name="label_encryption_type">
             <property name="text">
              <string>Encryption Type:</string>
@@ -84,6 +91,13 @@
         </item>
         <item>
          <layout class="QVBoxLayout" name="verticalLayout_2">
+          <item>
+           <widget class="QLineEdit" name="edit_file">
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
           <item>
            <widget class="QLineEdit" name="edit_encryption_type">
             <property name="autoFillBackground">

@@ -94,14 +94,24 @@ void ConsoleSettings::setColumnsState(const QByteArray& state)
     settings_.setValue(QStringLiteral("ColumnsState"), state);
 }
 
-QStringList ConsoleSettings::mru() const
+QStringList ConsoleSettings::recentOpen() const
 {
-    return settings_.value(QStringLiteral("MRU")).toStringList();
+    return settings_.value(QStringLiteral("RecentOpen")).toStringList();
 }
 
-void ConsoleSettings::setMru(const QStringList& mru)
+void ConsoleSettings::setRecentOpen(const QStringList& mru)
 {
-    settings_.setValue(QStringLiteral("MRU"), mru);
+    settings_.setValue(QStringLiteral("RecentOpen"), mru);
+}
+
+QStringList ConsoleSettings::pinnedFiles() const
+{
+    return settings_.value(QStringLiteral("PinnedFiles")).toStringList();
+}
+
+void ConsoleSettings::setPinnedFiles(const QStringList& tabs)
+{
+    settings_.setValue(QStringLiteral("PinnedFiles"), tabs);
 }
 
 bool ConsoleSettings::isToolBarEnabled() const

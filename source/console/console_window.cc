@@ -95,7 +95,9 @@ ConsoleWindow::ConsoleWindow(const QString& file_path, QWidget* parent)
 
     createLanguageMenu(current_locale);
 
-    mru_.setFileList(settings.mru());
+    mru_.setRecentOpen(settings.recentOpen());
+    mru_.setPinnedFiles(settings.pinnedFiles());
+
     rebuildMruMenu();
 
     restoreGeometry(settings.windowGeometry());
@@ -117,6 +119,11 @@ ConsoleWindow::ConsoleWindow(const QString& file_path, QWidget* parent)
 
         openAddressBook(mru_action->filePath());
     });
+
+    QTabBar* tab_bar = ui.tab_widget->tabBar();
+    tab_bar->setContextMenuPolicy(Qt::CustomContextMenu);
+
+    connect(tab_bar, &QTabBar::customContextMenuRequested, this, &ConsoleWindow::onTabContextMenu);
 
     connect(ui.action_show_hide, &QAction::triggered, this, &ConsoleWindow::onShowHideToTray);
     connect(ui.action_show_tray_icon, &QAction::toggled, this, &ConsoleWindow::showTrayIcon);
@@ -189,8 +196,16 @@ ConsoleWindow::ConsoleWindow(const QString& file_path, QWidget* parent)
             break;
     }
 
-    if (!file_path.isEmpty())
+    // Open all pinned files of address books.
+    for (const auto& file : mru_.pinnedFiles())
+        addAddressBookTab(AddressBookTab::openFromFile(file, ui.tab_widget));
+
+    // If the address book is pinned, then it is already open.
+    if (!file_path.isEmpty() && !mru_.isPinnedFile(file_path))
         addAddressBookTab(AddressBookTab::openFromFile(file_path, ui.tab_widget));
+
+    if (ui.tab_widget->count() > 0)
+        ui.tab_widget->setCurrentIndex(0);
 }
 
 ConsoleWindow::~ConsoleWindow() = default;
@@ -221,8 +236,8 @@ void ConsoleWindow::onSaveAddressBook()
     AddressBookTab* tab = currentAddressBookTab();
     if (tab && tab->save())
     {
-        mru_.addItem(tab->addressBookPath());
-        rebuildMruMenu();
+        if (mru_.addRecentFile(tab->addressBookPath()))
+            rebuildMruMenu();
     }
 }
 
@@ -231,8 +246,8 @@ void ConsoleWindow::onSaveAsAddressBook()
     AddressBookTab* tab = currentAddressBookTab();
     if (tab && tab->saveAs())
     {
-        mru_.addItem(tab->addressBookPath());
-        rebuildMruMenu();
+        if (mru_.addRecentFile(tab->addressBookPath()))
+            rebuildMruMenu();
     }
 }
 
@@ -577,6 +592,63 @@ void ConsoleWindow::onComputerDoubleClicked(proto::address_book::Computer* compu
     connectToComputer(*computer);
 }
 
+void ConsoleWindow::onTabContextMenu(const QPoint& pos)
+{
+    QTabBar* tab_bar = ui.tab_widget->tabBar();
+    int tab_index = tab_bar->tabAt(pos);
+    if (tab_index == -1)
+        return;
+
+    AddressBookTab* tab = dynamic_cast<AddressBookTab*>(ui.tab_widget->widget(tab_index));
+    if (!tab)
+        return;
+
+    QMenu menu;
+
+    QAction* close_action = new QAction(tr("Close tab"), &menu);
+    QAction* close_other_action = new QAction(tr("Close other tabs"), &menu);
+    QAction* pin_action = new QAction(tr("Pin tab"), &menu);
+
+    QString current_path = tab->addressBookPath();
+
+    pin_action->setCheckable(true);
+    pin_action->setChecked(mru_.isPinnedFile(current_path));
+    pin_action->setEnabled(!current_path.isEmpty());
+
+    menu.addAction(close_action);
+    menu.addAction(close_other_action);
+    menu.addAction(pin_action);
+
+    QAction* action = menu.exec(tab_bar->mapToGlobal(pos));
+    if (action == close_action)
+    {
+        onCloseTab(tab_index);
+    }
+    else if (action == close_other_action)
+    {
+        for (int i = 0; i < ui.tab_widget->count(); ++i)
+        {
+            if (i != tab_index)
+                onCloseTab(i);
+        }
+    }
+    else if (action == pin_action)
+    {
+        if (pin_action->isChecked())
+        {
+            ui.tab_widget->setTabIcon(
+                tab_index, QIcon(QStringLiteral(":/icon/address-book-pinned.png")));
+            mru_.pinFile(current_path);
+        }
+        else
+        {
+            ui.tab_widget->setTabIcon(
+                tab_index, QIcon(QStringLiteral(":/icon/address-book.png")));
+            mru_.unpinFile(current_path);
+        }
+    }
+}
+
 void ConsoleWindow::onLanguageChanged(QAction* action)
 {
     LanguageAction* language_action = dynamic_cast<LanguageAction*>(action);
@@ -673,7 +745,8 @@ void ConsoleWindow::closeEvent(QCloseEvent* event)
     settings.setMinimizeToTray(ui.action_minimize_to_tray->isChecked());
     settings.setWindowGeometry(saveGeometry());
     settings.setWindowState(saveState());
-    settings.setMru(mru_.fileList());
+    settings.setRecentOpen(mru_.recentOpen());
+    settings.setPinnedFiles(mru_.pinnedFiles());
 
     if (ui.action_desktop_manage->isChecked())
         settings.setSessionType(proto::SESSION_TYPE_DESKTOP_MANAGE);
@@ -708,7 +781,7 @@ void ConsoleWindow::rebuildMruMenu()
 {
     ui.menu_recent_open->clear();
 
-    const QStringList file_list = mru_.fileList();
+    const QStringList file_list = mru_.recentOpen();
 
     if (file_list.isEmpty())
     {
@@ -781,9 +854,6 @@ void ConsoleWindow::openAddressBook(const QString& file_path)
     if (!tab)
         return;
 
-    mru_.addItem(file_path);
-    rebuildMruMenu();
-
     addAddressBookTab(tab);
 }
 
@@ -791,6 +861,10 @@ void ConsoleWindow::addAddressBookTab(AddressBookTab* new_tab)
 {
     if (!new_tab)
         return;
+
+    QString file_path = new_tab->addressBookPath();
+    if (mru_.addRecentFile(file_path))
+        rebuildMruMenu();
 
     connect(new_tab, &AddressBookTab::addressBookChanged,
             this, &ConsoleWindow::onAddressBookChanged);
@@ -805,9 +879,11 @@ void ConsoleWindow::addAddressBookTab(AddressBookTab* new_tab)
     connect(new_tab, &AddressBookTab::computerDoubleClicked,
             this, &ConsoleWindow::onComputerDoubleClicked);
 
-    int index = ui.tab_widget->addTab(new_tab,
-                                      QIcon(QStringLiteral(":/icon/address-book.png")),
-                                      new_tab->addressBookName());
+    QIcon icon = mru_.isPinnedFile(file_path) ?
+        QIcon(QStringLiteral(":/icon/address-book-pinned.png")) :
+        QIcon(QStringLiteral(":/icon/address-book.png"));
+
+    int index = ui.tab_widget->addTab(new_tab, icon, new_tab->addressBookName());
 
     ui.action_address_book_properties->setEnabled(true);
     ui.action_save_as->setEnabled(true);

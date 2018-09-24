@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="/icon">
+    <file>address-book-pinned.png</file>
     <file>heart.png</file>
     <file>keyboard.png</file>
     <file>plug-disconnect.png</file>

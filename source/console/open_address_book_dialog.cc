@@ -22,8 +22,9 @@
 
 namespace aspia {
 
-OpenAddressBookDialog::OpenAddressBookDialog(
-    QWidget* parent, proto::address_book::EncryptionType encryption_type)
+OpenAddressBookDialog::OpenAddressBookDialog(QWidget* parent,
+                                             const QString& file_path,
+                                             proto::address_book::EncryptionType encryption_type)
     : QDialog(parent)
 {
     ui.setupUi(this);
@@ -50,6 +51,7 @@ OpenAddressBookDialog::OpenAddressBookDialog(
             break;
     }
 
+    ui.edit_file->setText(file_path);
     ui.edit_password->setFocus();
 }
 

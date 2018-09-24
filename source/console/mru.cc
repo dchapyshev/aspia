@@ -29,19 +29,27 @@ const int kMaxMruSize = 10;
 
 } // namespace
 
-void Mru::setFileList(const QStringList& list)
+void Mru::setRecentOpen(const QStringList& list)
 {
-    list_ = list;
+    recent_list_ = list;
 
     // If the number of entries is more than the maximum, then delete the excess.
-    while (list_.size() > kMaxMruSize)
-        list_.pop_back();
+    while (recent_list_.size() > kMaxMruSize)
+        recent_list_.pop_back();
 }
 
-void Mru::addItem(const QString& file_path)
+void Mru::setPinnedFiles(const QStringList& list)
 {
+    pinned_list_ = list;
+}
+
+bool Mru::addRecentFile(const QString& file_path)
+{
+    if (file_path.isEmpty())
+        return false;
+
     // We are looking for a file in the list. If the file already exists in it, then delete it.
-    for (QStringList::iterator it = list_.begin(); it != list_.end(); ++it)
+    for (QStringList::iterator it = recent_list_.begin(); it != recent_list_.end(); ++it)
     {
 #if defined(OS_WIN)
         if (file_path.compare(*it, Qt::CaseInsensitive) == 0)
@@ -49,18 +57,45 @@ void Mru::addItem(const QString& file_path)
         if (file_path.compare(*it, Qt::CaseSensitive) == 0)
 #endif
         {
-            list_.erase(it);
+            recent_list_.erase(it);
             break;
         }
     }
 
     // Add the file to the top of the list.
-    list_.push_front(file_path);
+    recent_list_.push_front(file_path);
 
     // We keep a limited number of entries on the list. If the number of records exceeds the
     // maximum, then delete the item at the end of the list.
-    if (list_.size() > kMaxMruSize)
-        list_.pop_back();
+    if (recent_list_.size() > kMaxMruSize)
+        recent_list_.pop_back();
+
+    return true;
+}
+
+void Mru::pinFile(const QString& file_path)
+{
+    if (isPinnedFile(file_path))
+        return;
+
+    pinned_list_.push_back(file_path);
+}
+
+void Mru::unpinFile(const QString& file_path)
+{
+    if (!isPinnedFile(file_path))
+        return;
+
+    pinned_list_.removeAll(file_path);
+}
+
+bool Mru::isPinnedFile(const QString& file_path) const
+{
+#if defined(OS_WIN)
+    return pinned_list_.contains(file_path, Qt::CaseInsensitive);
+#else
+    return pinned_list_.contains(file_path, Qt::CaseSensitive);
+#endif
 }
 
 } // namespace aspia

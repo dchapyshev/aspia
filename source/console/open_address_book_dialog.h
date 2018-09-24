@@ -30,7 +30,9 @@ class OpenAddressBookDialog : public QDialog
     Q_OBJECT
 
 public:
-    OpenAddressBookDialog(QWidget* parent, proto::address_book::EncryptionType encryption_type);
+    OpenAddressBookDialog(QWidget* parent,
+                          const QString& file_path,
+                          proto::address_book::EncryptionType encryption_type);
     ~OpenAddressBookDialog() = default;
 
     QString password() const;

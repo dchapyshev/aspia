@@ -261,7 +261,7 @@ AddressBookTab* AddressBookTab::openFromFile(const QString& file_path, QWidget* 
 
         case proto::address_book::ENCRYPTION_TYPE_CHACHA20_POLY1305:
         {
-            OpenAddressBookDialog dialog(parent, address_book_file.encryption_type());
+            OpenAddressBookDialog dialog(parent, file_path, address_book_file.encryption_type());
             if (dialog.exec() != QDialog::Accepted)
                 return nullptr;
 
