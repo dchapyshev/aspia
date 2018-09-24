@@ -59,6 +59,21 @@ private:
     DISALLOW_COPY_AND_ASSIGN(LanguageAction);
 };
 
+class MruAction : public QAction
+{
+public:
+    MruAction(const QString& file, QObject* parent = nullptr)
+        : QAction(file, parent)
+    {
+        // Nothing
+    }
+
+    QString filePath() const { return text(); }
+
+private:
+    DISALLOW_COPY_AND_ASSIGN(MruAction);
+};
+
 } // namespace
 
 ConsoleWindow::ConsoleWindow(const QString& file_path, QWidget* parent)
@@ -77,7 +92,11 @@ ConsoleWindow::ConsoleWindow(const QString& file_path, QWidget* parent)
 
     locale_loader_.installTranslators(current_locale);
     ui.setupUi(this);
+
     createLanguageMenu(current_locale);
+
+    mru_.setFileList(settings.mru());
+    rebuildMruMenu();
 
     restoreGeometry(settings.windowGeometry());
     restoreState(settings.windowState());
@@ -89,6 +108,15 @@ ConsoleWindow::ConsoleWindow(const QString& file_path, QWidget* parent)
 
     ui.status_bar->setVisible(ui.action_statusbar->isChecked());
     showTrayIcon(ui.action_show_tray_icon->isChecked());
+
+    connect(ui.menu_recent_open, &QMenu::triggered, [this](QAction* action)
+    {
+        MruAction* mru_action = dynamic_cast<MruAction*>(action);
+        if (!mru_action)
+            return;
+
+        openAddressBook(mru_action->filePath());
+    });
 
     connect(ui.action_show_hide, &QAction::triggered, this, &ConsoleWindow::onShowHideToTray);
     connect(ui.action_show_tray_icon, &QAction::toggled, this, &ConsoleWindow::showTrayIcon);
@@ -185,44 +213,27 @@ void ConsoleWindow::onOpenAddressBook()
         return;
 
     settings.setLastDirectory(QFileInfo(file_path).absolutePath());
-
-    for (int i = 0; i < ui.tab_widget->count(); ++i)
-    {
-        AddressBookTab* tab = dynamic_cast<AddressBookTab*>(ui.tab_widget->widget(i));
-        if (tab)
-        {
-#if defined(OS_WIN)
-            if (file_path.compare(tab->addressBookPath(), Qt::CaseInsensitive) == 0)
-#else
-            if (file_path.compare(tab->addressBookPath(), Qt::CaseSensitive) == 0)
-#endif // defined(OS_WIN)
-            {
-                QMessageBox::information(this,
-                                         tr("Information"),
-                                         tr("Address Book \"%1\" is already open.").arg(file_path),
-                                         QMessageBox::Ok);
-
-                ui.tab_widget->setCurrentIndex(i);
-                return;
-            }
-        }
-    }
-
-    addAddressBookTab(AddressBookTab::openFromFile(file_path, ui.tab_widget));
+    openAddressBook(file_path);
 }
 
 void ConsoleWindow::onSaveAddressBook()
 {
     AddressBookTab* tab = currentAddressBookTab();
-    if (tab)
-        tab->save();
+    if (tab && tab->save())
+    {
+        mru_.addItem(tab->addressBookPath());
+        rebuildMruMenu();
+    }
 }
 
 void ConsoleWindow::onSaveAsAddressBook()
 {
     AddressBookTab* tab = currentAddressBookTab();
-    if (tab)
-        tab->saveAs();
+    if (tab && tab->saveAs())
+    {
+        mru_.addItem(tab->addressBookPath());
+        rebuildMruMenu();
+    }
 }
 
 void ConsoleWindow::onCloseAddressBook()
@@ -636,6 +647,7 @@ void ConsoleWindow::closeEvent(QCloseEvent* event)
     settings.setMinimizeToTray(ui.action_minimize_to_tray->isChecked());
     settings.setWindowGeometry(saveGeometry());
     settings.setWindowState(saveState());
+    settings.setMru(mru_.fileList());
 
     if (ui.action_desktop_manage->isChecked())
         settings.setSessionType(proto::SESSION_TYPE_DESKTOP_MANAGE);
@@ -663,6 +675,25 @@ void ConsoleWindow::createLanguageMenu(const QString& current_locale)
             action_language->setChecked(true);
 
         ui.menu_language->addAction(action_language);
+    }
+}
+
+void ConsoleWindow::rebuildMruMenu()
+{
+    ui.menu_recent_open->clear();
+
+    const QStringList file_list = mru_.fileList();
+
+    if (file_list.isEmpty())
+    {
+        QAction* action = new QAction(tr("<empty>"), ui.menu_recent_open);
+        action->setEnabled(false);
+        ui.menu_recent_open->addAction(action);
+    }
+    else
+    {
+        for (const auto& file : file_list)
+            ui.menu_recent_open->addAction(new MruAction(file, ui.menu_recent_open));
     }
 }
 
@@ -694,6 +725,40 @@ void ConsoleWindow::showTrayIcon(bool show)
         tray_icon_.reset();
         tray_menu_.reset();
     }
+}
+
+void ConsoleWindow::openAddressBook(const QString& file_path)
+{
+    for (int i = 0; i < ui.tab_widget->count(); ++i)
+    {
+        AddressBookTab* tab = dynamic_cast<AddressBookTab*>(ui.tab_widget->widget(i));
+        if (tab)
+        {
+#if defined(OS_WIN)
+            if (file_path.compare(tab->addressBookPath(), Qt::CaseInsensitive) == 0)
+#else
+            if (file_path.compare(tab->addressBookPath(), Qt::CaseSensitive) == 0)
+#endif // defined(OS_WIN)
+            {
+                QMessageBox::information(this,
+                                         tr("Information"),
+                                         tr("Address Book \"%1\" is already open.").arg(file_path),
+                                         QMessageBox::Ok);
+
+                ui.tab_widget->setCurrentIndex(i);
+                return;
+            }
+        }
+    }
+
+    AddressBookTab* tab = AddressBookTab::openFromFile(file_path, ui.tab_widget);
+    if (!tab)
+        return;
+
+    mru_.addItem(file_path);
+    rebuildMruMenu();
+
+    addAddressBookTab(tab);
 }
 
 void ConsoleWindow::addAddressBookTab(AddressBookTab* new_tab)

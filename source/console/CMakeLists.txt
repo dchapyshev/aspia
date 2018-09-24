@@ -57,6 +57,8 @@ list(APPEND SOURCE_CONSOLE
     console_window.cc
     console_window.h
     console_window.ui
+    mru.cc
+    mru.h
     open_address_book_dialog.cc
     open_address_book_dialog.h
     open_address_book_dialog.ui)

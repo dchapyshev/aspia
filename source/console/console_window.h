@@ -21,6 +21,7 @@
 
 #include "base/locale_loader.h"
 #include "client/client_connections.h"
+#include "console/mru.h"
 #include "protocol/address_book.pb.h"
 #include "ui_console_window.h"
 
@@ -79,7 +80,9 @@ protected:
 
 private:
     void createLanguageMenu(const QString& current_locale);
+    void rebuildMruMenu();
     void showTrayIcon(bool show);
+    void openAddressBook(const QString& file_path);
     void addAddressBookTab(AddressBookTab* tab);
     AddressBookTab* currentAddressBookTab();
     void connectToComputer(const proto::address_book::Computer& computer);
@@ -88,6 +91,7 @@ private:
 
     LocaleLoader locale_loader_;
     ClientConnections connections_;
+    Mru mru_;
 
     QScopedPointer<QSystemTrayIcon> tray_icon_;
     QScopedPointer<QMenu> tray_menu_;

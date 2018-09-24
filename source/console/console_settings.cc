@@ -74,6 +74,16 @@ void ConsoleSettings::setWindowState(const QByteArray& state)
     settings_.setValue(QStringLiteral("WindowState"), state);
 }
 
+QStringList ConsoleSettings::mru() const
+{
+    return settings_.value(QStringLiteral("MRU")).toStringList();
+}
+
+void ConsoleSettings::setMru(const QStringList& mru)
+{
+    settings_.setValue(QStringLiteral("MRU"), mru);
+}
+
 bool ConsoleSettings::isToolBarEnabled() const
 {
     return settings_.value(QStringLiteral("ToolBar"), true).toBool();

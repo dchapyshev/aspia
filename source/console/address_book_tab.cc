@@ -301,14 +301,14 @@ proto::address_book::ComputerGroup* AddressBookTab::currentComputerGroup() const
     return current_item->computerGroup();
 }
 
-void AddressBookTab::save()
+bool AddressBookTab::save()
 {
-    saveToFile(file_path_);
+    return saveToFile(file_path_);
 }
 
-void AddressBookTab::saveAs()
+bool AddressBookTab::saveAs()
 {
-    saveToFile(QString());
+    return saveToFile(QString());
 }
 
 void AddressBookTab::addComputerGroup()

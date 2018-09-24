@@ -45,6 +45,9 @@ public:
     QByteArray windowState() const;
     void setWindowState(const QByteArray& state);
 
+    QStringList mru() const;
+    void setMru(const QStringList& mru);
+
     bool isToolBarEnabled() const;
     void setToolBarEnabled(bool enable);
 

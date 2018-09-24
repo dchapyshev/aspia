@@ -45,11 +45,12 @@ public:
     void setChanged(bool changed);
     bool isChanged() const { return is_changed_; }
 
+    bool save();
+    bool saveAs();
+
     void retranslateUi();
 
 public slots:
-    void save();
-    void saveAs();
     void addComputerGroup();
     void addComputer();
     void modifyAddressBook();
