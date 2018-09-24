@@ -88,7 +88,7 @@
        <bool>true</bool>
       </property>
       <property name="columnCount">
-       <number>3</number>
+       <number>4</number>
       </property>
       <column>
        <property name="text">
@@ -103,6 +103,11 @@
       <column>
        <property name="text">
         <string>Port</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Comment</string>
        </property>
       </column>
      </widget>

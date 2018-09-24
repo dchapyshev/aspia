@@ -36,6 +36,7 @@ void ComputerItem::updateItem()
     setText(0, QString::fromStdString(computer_->name()));
     setText(1, QString::fromStdString(computer_->address()));
     setText(2, QString::number(computer_->port()));
+    setText(3, QString::fromStdString(computer_->comment()).replace('\n', ' '));
 }
 
 ComputerGroupItem* ComputerItem::parentComputerGroupItem()

@@ -121,6 +121,11 @@
         <source>Port</source>
         <translation>Poort</translation>
     </message>
+    <message>
+        <location filename="../address_book_tab.ui" line="110"/>
+        <source>Comment</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ComputerDialog</name>
