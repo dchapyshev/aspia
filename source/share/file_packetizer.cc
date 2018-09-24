@@ -27,12 +27,12 @@ namespace {
 // When transferring a file is divided into parts and each part is
 // transmitted separately.
 // This parameter specifies the size of the part.
-constexpr int64_t kPacketPartSize = 16 * 1024; // 16 kB
+constexpr size_t kPacketPartSize = 32 * 1024; // 32 kB
 
-char* GetOutputBuffer(proto::file_transfer::Packet* packet, size_t size)
+char* outputBuffer(proto::file_transfer::Packet* packet, size_t size)
 {
     packet->mutable_data()->resize(size);
-    return const_cast<char*>(packet->mutable_data()->data());
+    return packet->mutable_data()->data();
 }
 
 } // namespace
@@ -75,12 +75,12 @@ std::unique_ptr<proto::file_transfer::Packet> FilePacketizer::readNextPacket(
     // All file packets must have the flag.
     packet->set_flags(proto::file_transfer::Packet::PACKET);
 
-    int64_t packet_buffer_size = kPacketPartSize;
+    size_t packet_buffer_size = kPacketPartSize;
 
     if (left_size_ < kPacketPartSize)
-        packet_buffer_size = left_size_;
+        packet_buffer_size = static_cast<size_t>(left_size_);
 
-    char* packet_buffer = GetOutputBuffer(packet.get(), packet_buffer_size);
+    char* packet_buffer = outputBuffer(packet.get(), packet_buffer_size);
 
     // Moving to a new position in file.
     file_stream_.seekg(file_size_ - left_size_);
