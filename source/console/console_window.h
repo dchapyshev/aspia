@@ -42,11 +42,12 @@ public:
     ~ConsoleWindow();
 
 public slots:
-    void onNewAddressBook();
-    void onOpenAddressBook();
-    void onSaveAddressBook();
-    void onSaveAsAddressBook();
-    void onCloseAddressBook();
+    void onNew();
+    void onOpen();
+    void onSave();
+    void onSaveAs();
+    void onSaveAll();
+    void onClose();
     void onAddressBookProperties();
     void onAddComputer();
     void onModifyComputer();

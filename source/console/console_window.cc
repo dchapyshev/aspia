@@ -127,11 +127,12 @@ ConsoleWindow::ConsoleWindow(const QString& file_path, QWidget* parent)
 
     connect(ui.action_show_hide, &QAction::triggered, this, &ConsoleWindow::onShowHideToTray);
     connect(ui.action_show_tray_icon, &QAction::toggled, this, &ConsoleWindow::showTrayIcon);
-    connect(ui.action_new, &QAction::triggered, this, &ConsoleWindow::onNewAddressBook);
-    connect(ui.action_open, &QAction::triggered, this, &ConsoleWindow::onOpenAddressBook);
-    connect(ui.action_save, &QAction::triggered, this, &ConsoleWindow::onSaveAddressBook);
-    connect(ui.action_save_as, &QAction::triggered, this, &ConsoleWindow::onSaveAsAddressBook);
-    connect(ui.action_close, &QAction::triggered, this, &ConsoleWindow::onCloseAddressBook);
+    connect(ui.action_new, &QAction::triggered, this, &ConsoleWindow::onNew);
+    connect(ui.action_open, &QAction::triggered, this, &ConsoleWindow::onOpen);
+    connect(ui.action_save, &QAction::triggered, this, &ConsoleWindow::onSave);
+    connect(ui.action_save_as, &QAction::triggered, this, &ConsoleWindow::onSaveAs);
+    connect(ui.action_save_all, &QAction::triggered, this, &ConsoleWindow::onSaveAll);
+    connect(ui.action_close, &QAction::triggered, this, &ConsoleWindow::onClose);
 
     connect(ui.action_address_book_properties, &QAction::triggered,
             this, &ConsoleWindow::onAddressBookProperties);
@@ -210,12 +211,12 @@ ConsoleWindow::ConsoleWindow(const QString& file_path, QWidget* parent)
 
 ConsoleWindow::~ConsoleWindow() = default;
 
-void ConsoleWindow::onNewAddressBook()
+void ConsoleWindow::onNew()
 {
     addAddressBookTab(AddressBookTab::createNew(ui.tab_widget));
 }
 
-void ConsoleWindow::onOpenAddressBook()
+void ConsoleWindow::onOpen()
 {
     ConsoleSettings settings;
 
@@ -231,27 +232,64 @@ void ConsoleWindow::onOpenAddressBook()
     openAddressBook(file_path);
 }
 
-void ConsoleWindow::onSaveAddressBook()
+void ConsoleWindow::onSave()
 {
     AddressBookTab* tab = currentAddressBookTab();
     if (tab && tab->save())
     {
         if (mru_.addRecentFile(tab->addressBookPath()))
             rebuildMruMenu();
+
+        for (int i = 0; i < ui.tab_widget->count(); ++i)
+        {
+            AddressBookTab* tab = dynamic_cast<AddressBookTab*>(ui.tab_widget->widget(i));
+            if (tab && tab->isChanged())
+                return;
+        }
+
+        ui.action_save_all->setEnabled(false);
     }
 }
 
-void ConsoleWindow::onSaveAsAddressBook()
+void ConsoleWindow::onSaveAs()
 {
     AddressBookTab* tab = currentAddressBookTab();
     if (tab && tab->saveAs())
     {
         if (mru_.addRecentFile(tab->addressBookPath()))
             rebuildMruMenu();
+
+        for (int i = 0; i < ui.tab_widget->count(); ++i)
+        {
+            AddressBookTab* tab = dynamic_cast<AddressBookTab*>(ui.tab_widget->widget(i));
+            if (tab && tab->isChanged())
+                return;
+        }
+
+        ui.action_save_all->setEnabled(false);
     }
 }
 
-void ConsoleWindow::onCloseAddressBook()
+void ConsoleWindow::onSaveAll()
+{
+    for (int i = 0; i < ui.tab_widget->count(); ++i)
+    {
+        AddressBookTab* tab = dynamic_cast<AddressBookTab*>(ui.tab_widget->widget(i));
+        if (tab && tab->isChanged())
+            tab->save();
+    }
+
+    for (int i = 0; i < ui.tab_widget->count(); ++i)
+    {
+        AddressBookTab* tab = dynamic_cast<AddressBookTab*>(ui.tab_widget->widget(i));
+        if (tab && tab->isChanged())
+            return;
+    }
+
+    ui.action_save_all->setEnabled(false);
+}
+
+void ConsoleWindow::onClose()
 {
     onCloseTab(ui.tab_widget->currentIndex());
 }
@@ -449,6 +487,7 @@ void ConsoleWindow::onCloseTab(int index)
     {
         ui.status_bar->clear();
         ui.action_save_as->setEnabled(false);
+        ui.action_save_all->setEnabled(false);
         ui.action_address_book_properties->setEnabled(false);
         ui.action_close->setEnabled(false);
     }
@@ -460,6 +499,8 @@ void ConsoleWindow::onAddressBookChanged(bool changed)
 
     if (changed)
     {
+        ui.action_save_all->setEnabled(true);
+
         int current_tab_index = ui.tab_widget->currentIndex();
         if (current_tab_index == -1)
             return;
