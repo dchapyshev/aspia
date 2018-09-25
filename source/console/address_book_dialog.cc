@@ -31,8 +31,33 @@ namespace {
 
 constexpr int kMaxNameLength = 64;
 constexpr int kMinNameLength = 1;
-constexpr int kMinPasswordLength = 8;
+constexpr int kMinPasswordLength = 1;
+constexpr int kMaxPasswordLength = 64;
+constexpr int kSafePasswordLength = 8;
 constexpr int kMaxCommentLength = 2048;
+
+bool isSafePassword(const QString& password)
+{
+    int length = password.length();
+
+    if (length < kSafePasswordLength)
+        return false;
+
+    bool has_upper = false;
+    bool has_lower = false;
+    bool has_digit = false;
+
+    for (int i = 0; i < length; ++i)
+    {
+        const QChar& character = password[i];
+
+        has_upper |= character.isUpper();
+        has_lower |= character.isLower();
+        has_digit |= character.isDigit();
+    }
+
+    return has_upper && has_lower && has_digit;
+}
 
 } // namespace
 
@@ -186,11 +211,32 @@ void AddressBookDialog::buttonBoxClicked(QAbstractButton* button)
                     return;
                 }
 
-                if (password.length() < kMinPasswordLength)
+                if (password.length() < kMinPasswordLength || password.length() > kMaxPasswordLength)
                 {
-                    showError(tr("Password can not be shorter than %n characters.",
-                                 "", kMinPasswordLength));
+                    showError(tr("Password can not be empty and should not exceed %n characters.",
+                                 "", kMaxPasswordLength));
                     return;
+                }
+
+                if (!isSafePassword(password))
+                {
+                    if (QMessageBox::warning(this,
+                                             tr("Warning"),
+                                             tr("<b>Password you entered does not meet the security "
+                                                "requirements!</b><br/>"
+                                                "The password must contain lowercase and uppercase "
+                                                "characters, numbers and should not be shorter "
+                                                "than %n characters.<br/>"
+                                                "Do you want to enter a different password?",
+                                                "", kSafePasswordLength),
+                                             QMessageBox::Yes,
+                                             QMessageBox::No) == QMessageBox::Yes)
+                    {
+                        ui.edit_password->clear();
+                        ui.edit_password_repeat->clear();
+                        ui.edit_password->setFocus();
+                        return;
+                    }
                 }
 
                 // Generate salt, which is added after each iteration of the hashing.

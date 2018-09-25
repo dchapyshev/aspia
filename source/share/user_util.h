@@ -29,11 +29,13 @@ class UserUtil
 {
 public:
     static const int kMaxUserNameLength = 64;
-    static const int kMinPasswordLength = 8;
+    static const int kMinPasswordLength = 1;
     static const int kMaxPasswordLength = 64;
+    static const int kSafePasswordLength = 8;
 
     static bool isValidUserName(const QString& username);
     static bool isValidPassword(const QString& password);
+    static bool isSafePassword(const QString& password);
 
 private:
     DISALLOW_COPY_AND_ASSIGN(UserUtil);

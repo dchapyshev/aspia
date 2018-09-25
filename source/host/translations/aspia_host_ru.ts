@@ -338,7 +338,7 @@
 <context>
     <name>aspia::UserDialog</name>
     <message>
-        <location filename="../ui/user_dialog.cc" line="236"/>
+        <location filename="../ui/user_dialog.cc" line="266"/>
         <source>Double-click to change</source>
         <translation>Двойной щелчок для изменения</translation>
     </message>
@@ -358,40 +358,50 @@
         <translation>Передача файлов</translation>
     </message>
     <message>
-        <location filename="../ui/user_dialog.cc" line="129"/>
-        <location filename="../ui/user_dialog.cc" line="147"/>
-        <location filename="../ui/user_dialog.cc" line="158"/>
-        <location filename="../ui/user_dialog.cc" line="167"/>
-        <location filename="../ui/user_dialog.cc" line="179"/>
+        <location filename="../ui/user_dialog.cc" line="134"/>
+        <location filename="../ui/user_dialog.cc" line="153"/>
+        <location filename="../ui/user_dialog.cc" line="165"/>
+        <location filename="../ui/user_dialog.cc" line="175"/>
+        <location filename="../ui/user_dialog.cc" line="186"/>
+        <location filename="../ui/user_dialog.cc" line="209"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../ui/user_dialog.cc" line="130"/>
+        <location filename="../ui/user_dialog.cc" line="135"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>Имя пользователя не может быть пустым и может содержать только буквы алфавита, цифры и символы &quot;_&quot;,&quot;-&quot;,&quot;.&quot;.</translation>
     </message>
     <message>
-        <location filename="../ui/user_dialog.cc" line="148"/>
+        <location filename="../ui/user_dialog.cc" line="154"/>
         <source>The username you entered already exists.</source>
         <translation>Введенное имя пользователя уже существует.</translation>
     </message>
     <message>
-        <location filename="../ui/user_dialog.cc" line="159"/>
+        <location filename="../ui/user_dialog.cc" line="166"/>
         <source>The passwords you entered do not match.</source>
         <translation>Введенные пароли не совпадают.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/user_dialog.cc" line="168"/>
-        <source>Password can not be shorter than %n characters.</source>
+        <location filename="../ui/user_dialog.cc" line="176"/>
+        <source>Password can not be empty and should not exceed %n characters.</source>
         <translation>
-            <numerusform>Пароль не может быть короче, чем %n символ.</numerusform>
-            <numerusform>Пароль не может быть короче, чем %n символа.</numerusform>
-            <numerusform>Пароль не может быть короче, чем %n символов.</numerusform>
+            <numerusform>Пароль не может быть пустой и не должен превышать %n символ.</numerusform>
+            <numerusform>Пароль не может быть пустой и не должен превышать %n символа.</numerusform>
+            <numerusform>Пароль не может быть пустой и не должен превышать %n символов.</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../ui/user_dialog.cc" line="187"/>
+        <source>&lt;b&gt;Password you entered does not meet the security requirements!&lt;/b&gt;&lt;br/&gt;The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.&lt;br/&gt;Do you want to enter a different password?</source>
+        <translation>
+            <numerusform>&lt;b&gt;Введенный пароль не отвечает требованиям безопасности!&lt;/b&gt;&lt;br/&gt;Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символа.&lt;br/&gt;Вы хотите ввести другой пароль?</numerusform>
+            <numerusform>&lt;b&gt;Введенный пароль не отвечает требованиям безопасности!&lt;/b&gt;&lt;br/&gt;Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символов.&lt;br/&gt;Вы хотите ввести другой пароль?</numerusform>
+            <numerusform>&lt;b&gt;Введенный пароль не отвечает требованиям безопасности!&lt;/b&gt;&lt;br/&gt;Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символов.&lt;br/&gt;Вы хотите ввести другой пароль?</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../ui/user_dialog.cc" line="180"/>
+        <location filename="../ui/user_dialog.cc" line="210"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation>Неизвестная внутренняя ошибка при создании или изменении пользователя.</translation>
     </message>

@@ -494,77 +494,77 @@
 <context>
     <name>aspia::AboutDialog</name>
     <message>
-        <location filename="../about_dialog.cc" line="88"/>
+        <location filename="../about_dialog.cc" line="89"/>
         <source>Version: %1</source>
         <translation>Версія: %1</translation>
     </message>
     <message>
-        <location filename="../about_dialog.cc" line="92"/>
+        <location filename="../about_dialog.cc" line="93"/>
         <source>Aspia is free software released under GNU General Public License 3.</source>
         <translation>Aspia - вільне програмне забезпечення, випущене під ліцензією GNU General Public License 3.</translation>
     </message>
     <message>
-        <location filename="../about_dialog.cc" line="93"/>
+        <location filename="../about_dialog.cc" line="94"/>
         <source>You can get a copy of license here:</source>
         <translation>Переглянути ліцензію:</translation>
     </message>
     <message>
-        <location filename="../about_dialog.cc" line="98"/>
+        <location filename="../about_dialog.cc" line="99"/>
         <source>You can also get a translation of GNU GPL license here:</source>
         <translation>Переглянути переклад ліцензії GNU GPL:</translation>
     </message>
     <message>
-        <location filename="../about_dialog.cc" line="103"/>
+        <location filename="../about_dialog.cc" line="104"/>
         <source>Links:</source>
         <translation>Посилання:</translation>
     </message>
     <message>
-        <location filename="../about_dialog.cc" line="104"/>
+        <location filename="../about_dialog.cc" line="105"/>
         <source>Home page:</source>
         <translation>Домашня сторінка:</translation>
     </message>
     <message>
-        <location filename="../about_dialog.cc" line="105"/>
+        <location filename="../about_dialog.cc" line="106"/>
         <source>GitHub page:</source>
         <translation>Сторінка GitHub:</translation>
     </message>
     <message>
-        <location filename="../about_dialog.cc" line="108"/>
+        <location filename="../about_dialog.cc" line="109"/>
         <source>Developers:</source>
         <translation>Розробники:</translation>
     </message>
     <message>
-        <location filename="../about_dialog.cc" line="110"/>
+        <location filename="../about_dialog.cc" line="111"/>
         <source>Translators:</source>
         <translation>Перекладачі:</translation>
     </message>
     <message>
-        <location filename="../about_dialog.cc" line="112"/>
+        <location filename="../about_dialog.cc" line="113"/>
         <source>Third-party components:</source>
         <translation>Сторонні компоненти:</translation>
     </message>
     <message>
-        <location filename="../about_dialog.cc" line="131"/>
+        <location filename="../about_dialog.cc" line="132"/>
         <source>Path: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../about_dialog.cc" line="132"/>
+        <location filename="../about_dialog.cc" line="133"/>
         <source>Compilation date: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../about_dialog.cc" line="133"/>
+        <location filename="../about_dialog.cc" line="134"/>
         <source>Compilation time: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../about_dialog.cc" line="137"/>
+        <location filename="../about_dialog.cc" line="138"/>
         <source>%1 version: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../about_dialog.cc" line="153"/>
+        <location filename="../about_dialog.cc" line="158"/>
         <source>https://aspia.org/en/donate.html</source>
         <translation>https://aspia.org/en/donate.html</translation>
     </message>
@@ -572,27 +572,45 @@
 <context>
     <name>aspia::AddressBookDialog</name>
     <message>
-        <location filename="../address_book_dialog.cc" line="56"/>
+        <location filename="../address_book_dialog.cc" line="81"/>
         <source>Without Encryption</source>
         <translation>Без шифрування</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="73"/>
+        <location filename="../address_book_dialog.cc" line="98"/>
         <source>Double-click to change</source>
         <translation>Подвійний клік для зміни</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="150"/>
+        <location filename="../address_book_dialog.cc" line="175"/>
         <source>Name can not be empty.</source>
         <translation>Ім&apos;я не може бути порожнім.</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="185"/>
+        <location filename="../address_book_dialog.cc" line="210"/>
         <source>The passwords you entered do not match.</source>
         <translation>Введені паролі не співпадають.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="144"/>
+        <location filename="../address_book_dialog.cc" line="216"/>
+        <source>Password can not be empty and should not exceed %n characters.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../address_book_dialog.cc" line="225"/>
+        <source>&lt;b&gt;Password you entered does not meet the security requirements!&lt;/b&gt;&lt;br/&gt;The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.&lt;br/&gt;Do you want to enter a different password?</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../address_book_dialog.cc" line="169"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation type="unfinished">
             <numerusform>Занадто довге ім&apos;я. Максимальна довжина для імені %n символів.</numerusform>
@@ -601,12 +619,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="58"/>
+        <location filename="../address_book_dialog.cc" line="83"/>
         <source>ChaCha20 + Poly1305 (256-bit key)</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="157"/>
+        <location filename="../address_book_dialog.cc" line="182"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation type="unfinished">
             <numerusform>Занадто довгий коментар. Максимальна довжина для коментарів %n символів.</numerusform>
@@ -614,27 +632,19 @@
             <numerusform></numerusform>
         </translation>
     </message>
-    <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="191"/>
-        <source>Password can not be shorter than %n characters.</source>
-        <translation type="unfinished">
-            <numerusform>Пароль не може бути коротшим за %n символів.</numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
-    </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="274"/>
+        <location filename="../address_book_dialog.cc" line="320"/>
         <source>Confirmation</source>
         <translation>Підтвердження</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="275"/>
+        <location filename="../address_book_dialog.cc" line="321"/>
         <source>At change the size of hashing salt, you will need to re-enter the password. Continue?</source>
         <translation>Для зміни розміру солі хешування потрібно повторно ввести пароль. Продовжити?</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="313"/>
+        <location filename="../address_book_dialog.cc" line="224"/>
+        <location filename="../address_book_dialog.cc" line="359"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
@@ -669,54 +679,54 @@
         <translation>Тип шифрування адресної книги не підтримується.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="464"/>
+        <location filename="../address_book_tab.cc" line="473"/>
         <source>Are you sure you want to delete computer group &quot;%1&quot; and all child items?</source>
         <translation>Ви впевнені, що хочете видалити групу комп&apos;ютерів \&quot;%1\&quot; і всі дочірні об&apos;єкти?</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="468"/>
-        <location filename="../address_book_tab.cc" line="490"/>
+        <location filename="../address_book_tab.cc" line="477"/>
+        <location filename="../address_book_tab.cc" line="499"/>
         <source>Confirmation</source>
         <translation>Підтвердження</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="486"/>
+        <location filename="../address_book_tab.cc" line="495"/>
         <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
         <translation>Ви впевнені, що хочете видалити комп&apos;ютер\&quot;%1\&quot;?</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="745"/>
+        <location filename="../address_book_tab.cc" line="754"/>
         <source>Save Address Book</source>
         <translation>Зберегти адресну книгу</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="747"/>
+        <location filename="../address_book_tab.cc" line="756"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Aspia Address Book (*.aab)</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="757"/>
+        <location filename="../address_book_tab.cc" line="766"/>
         <source>Unable to create or open address book file.</source>
         <translation>Неможливо створити або відкрити файл адресної книги.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="769"/>
+        <location filename="../address_book_tab.cc" line="778"/>
         <source>Unable to write address book file.</source>
         <translation>Неможливо записати файл адресної книги.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="785"/>
-        <location filename="../address_book_tab.cc" line="799"/>
+        <location filename="../address_book_tab.cc" line="794"/>
+        <location filename="../address_book_tab.cc" line="808"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="787"/>
+        <location filename="../address_book_tab.cc" line="796"/>
         <source>Could not open address book</source>
         <translation>Неможливо відкрити адресну книгу</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="801"/>
+        <location filename="../address_book_tab.cc" line="810"/>
         <source>Failed to save address book</source>
         <translation>Неможливо зберегти адресну книгу</translation>
     </message>
@@ -748,26 +758,17 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="165"/>
+        <location filename="../computer_dialog.cc" line="166"/>
         <source>Name can not be empty.</source>
         <translation>Ім&apos;я не може бути порожнім.</translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="172"/>
+        <location filename="../computer_dialog.cc" line="176"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>Ім&apos;я користувача не може бути порожнім і має мустити тільки букви алфавіту, цифри, та символи &quot;&quot;_&quot;&quot;, &quot;&quot;-&quot;&quot;, &quot;&quot;.&quot;&quot;.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../computer_dialog.cc" line="180"/>
-        <source>Password can not be shorter than %n characters.</source>
-        <translation>
-            <numerusform>Пароль не може бути коротшим за %n символів.</numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <location filename="../computer_dialog.cc" line="188"/>
+        <location filename="../computer_dialog.cc" line="185"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Занадто довгий коментар. Максимальна довжина для коментарів - %n символів.</numerusform>
@@ -776,7 +777,7 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="218"/>
+        <location filename="../computer_dialog.cc" line="216"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
@@ -793,12 +794,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.cc" line="66"/>
+        <location filename="../computer_group_dialog.cc" line="67"/>
         <source>Name can not be empty.</source>
         <translation>Ім&apos;я не може бути порожнім.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../computer_group_dialog.cc" line="73"/>
+        <location filename="../computer_group_dialog.cc" line="75"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Занадто довгий коментар. Максимальна довжина для коментарів - %n символів.</numerusform>
@@ -807,7 +808,7 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.cc" line="99"/>
+        <location filename="../computer_group_dialog.cc" line="102"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
@@ -836,7 +837,7 @@
 <context>
     <name>aspia::ConsoleWindow</name>
     <message>
-        <location filename="../console_window.cc" line="853"/>
+        <location filename="../console_window.cc" line="881"/>
         <source>Aspia Console</source>
         <translation type="unfinished"></translation>
     </message>
@@ -851,59 +852,59 @@
         <translation>Aspia Address Book (*.aab)</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="652"/>
+        <location filename="../console_window.cc" line="673"/>
         <source>Close tab</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="653"/>
+        <location filename="../console_window.cc" line="668"/>
         <source>Close other tabs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="654"/>
+        <location filename="../console_window.cc" line="669"/>
         <source>Pin tab</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="832"/>
+        <location filename="../console_window.cc" line="860"/>
         <source>&lt;empty&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="887"/>
+        <location filename="../console_window.cc" line="915"/>
         <source>Information</source>
         <translation>Інформація</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="888"/>
+        <location filename="../console_window.cc" line="916"/>
         <source>Address Book &quot;%1&quot; is already open.</source>
         <translation>Адресну книгу &quot;%1&quot; вже відкрито.</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="350"/>
+        <location filename="../console_window.cc" line="354"/>
         <source>https://aspia.org/en/help.html</source>
         <translation>https://aspia.org/en/help.html</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="466"/>
-        <location filename="../console_window.cc" line="764"/>
+        <location filename="../console_window.cc" line="474"/>
+        <location filename="../console_window.cc" line="792"/>
         <source>Confirmation</source>
         <translation>Підтвердження</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="467"/>
-        <location filename="../console_window.cc" line="765"/>
+        <location filename="../console_window.cc" line="475"/>
+        <location filename="../console_window.cc" line="793"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation>Адресну книгу &quot;%1&quot; змінено. Зберегти зміни?</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="721"/>
+        <location filename="../console_window.cc" line="749"/>
         <source>Hide</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="736"/>
+        <location filename="../console_window.cc" line="764"/>
         <source>Show</source>
         <translation type="unfinished"></translation>
     </message>

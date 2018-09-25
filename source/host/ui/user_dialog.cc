@@ -97,6 +97,11 @@ bool UserDialog::eventFilter(QObject* object, QEvent* event)
         (object == ui.edit_password || object == ui.edit_password_repeat))
     {
         setAccountChanged(true);
+
+        if (object == ui.edit_password)
+            ui.edit_password->setFocus();
+        else if (object == ui.edit_password_repeat)
+            ui.edit_password_repeat->setFocus();
     }
 
     return false;
@@ -130,6 +135,7 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
                                      tr("The user name can not be empty and can contain only alphabet"
                                         " characters, numbers and ""_"", ""-"", ""."" characters."),
                                      QMessageBox::Ok);
+                ui.edit_username->setFocus();
                 return;
             }
 
@@ -147,6 +153,7 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
                                              tr("Warning"),
                                              tr("The username you entered already exists."),
                                              QMessageBox::Ok);
+                        ui.edit_username->setFocus();
                         return;
                     }
                 }
@@ -158,6 +165,7 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
                                      tr("Warning"),
                                      tr("The passwords you entered do not match."),
                                      QMessageBox::Ok);
+                ui.edit_password->setFocus();
                 return;
             }
 
@@ -165,10 +173,32 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
             {
                 QMessageBox::warning(this,
                                      tr("Warning"),
-                                     tr("Password can not be shorter than %n characters.",
-                                        "", UserUtil::kMinPasswordLength),
+                                     tr("Password can not be empty and should not exceed %n characters.",
+                                        "", UserUtil::kMaxPasswordLength),
                                      QMessageBox::Ok);
+                ui.edit_password->setFocus();
                 return;
+            }
+
+            if (!UserUtil::isSafePassword(password))
+            {
+                if (QMessageBox::warning(this,
+                                         tr("Warning"),
+                                         tr("<b>Password you entered does not meet the security "
+                                            "requirements!</b><br/>"
+                                            "The password must contain lowercase and uppercase "
+                                            "characters, numbers and should not be shorter "
+                                            "than %n characters.<br/>"
+                                            "Do you want to enter a different password?",
+                                            "", UserUtil::kSafePasswordLength),
+                                         QMessageBox::Yes,
+                                         QMessageBox::No) == QMessageBox::Yes)
+                {
+                    ui.edit_password->clear();
+                    ui.edit_password_repeat->clear();
+                    ui.edit_password->setFocus();
+                    return;
+                }
             }
 
             std::unique_ptr<SrpUser> user(

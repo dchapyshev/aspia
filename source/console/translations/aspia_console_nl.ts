@@ -494,77 +494,77 @@
 <context>
     <name>aspia::AboutDialog</name>
     <message>
-        <location filename="../about_dialog.cc" line="88"/>
+        <location filename="../about_dialog.cc" line="89"/>
         <source>Version: %1</source>
         <translation>Versie: %1</translation>
     </message>
     <message>
-        <location filename="../about_dialog.cc" line="92"/>
+        <location filename="../about_dialog.cc" line="93"/>
         <source>Aspia is free software released under GNU General Public License 3.</source>
         <translation>Aspia is gratis software verspreid onder de GNU General Public License 3.</translation>
     </message>
     <message>
-        <location filename="../about_dialog.cc" line="93"/>
+        <location filename="../about_dialog.cc" line="94"/>
         <source>You can get a copy of license here:</source>
         <translation>Download een kopie van de licentie:</translation>
     </message>
     <message>
-        <location filename="../about_dialog.cc" line="98"/>
+        <location filename="../about_dialog.cc" line="99"/>
         <source>You can also get a translation of GNU GPL license here:</source>
         <translation>Download hier een vertaling van de GNU GPL:</translation>
     </message>
     <message>
-        <location filename="../about_dialog.cc" line="103"/>
+        <location filename="../about_dialog.cc" line="104"/>
         <source>Links:</source>
         <translation>Links:</translation>
     </message>
     <message>
-        <location filename="../about_dialog.cc" line="104"/>
+        <location filename="../about_dialog.cc" line="105"/>
         <source>Home page:</source>
         <translation>Website:</translation>
     </message>
     <message>
-        <location filename="../about_dialog.cc" line="105"/>
+        <location filename="../about_dialog.cc" line="106"/>
         <source>GitHub page:</source>
         <translation>GitHub pagina:</translation>
     </message>
     <message>
-        <location filename="../about_dialog.cc" line="108"/>
+        <location filename="../about_dialog.cc" line="109"/>
         <source>Developers:</source>
         <translation>Ontwikkelaars:</translation>
     </message>
     <message>
-        <location filename="../about_dialog.cc" line="110"/>
+        <location filename="../about_dialog.cc" line="111"/>
         <source>Translators:</source>
         <translation>Vertalingen:</translation>
     </message>
     <message>
-        <location filename="../about_dialog.cc" line="112"/>
+        <location filename="../about_dialog.cc" line="113"/>
         <source>Third-party components:</source>
         <translation>Third-party componenten:</translation>
     </message>
     <message>
-        <location filename="../about_dialog.cc" line="131"/>
+        <location filename="../about_dialog.cc" line="132"/>
         <source>Path: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../about_dialog.cc" line="132"/>
+        <location filename="../about_dialog.cc" line="133"/>
         <source>Compilation date: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../about_dialog.cc" line="133"/>
+        <location filename="../about_dialog.cc" line="134"/>
         <source>Compilation time: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../about_dialog.cc" line="137"/>
+        <location filename="../about_dialog.cc" line="138"/>
         <source>%1 version: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../about_dialog.cc" line="153"/>
+        <location filename="../about_dialog.cc" line="158"/>
         <source>https://aspia.org/en/donate.html</source>
         <translation></translation>
     </message>
@@ -572,27 +572,43 @@
 <context>
     <name>aspia::AddressBookDialog</name>
     <message>
-        <location filename="../address_book_dialog.cc" line="56"/>
+        <location filename="../address_book_dialog.cc" line="81"/>
         <source>Without Encryption</source>
         <translation>Zonder Encryptie</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="73"/>
+        <location filename="../address_book_dialog.cc" line="98"/>
         <source>Double-click to change</source>
         <translation>Dubbelklik om te wijzigen</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="150"/>
+        <location filename="../address_book_dialog.cc" line="175"/>
         <source>Name can not be empty.</source>
         <translation>Naam mag niet leeg zijn.</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="185"/>
+        <location filename="../address_book_dialog.cc" line="210"/>
         <source>The passwords you entered do not match.</source>
         <translation>De ingevoerde wachtwoorden komen niet overeen.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="144"/>
+        <location filename="../address_book_dialog.cc" line="216"/>
+        <source>Password can not be empty and should not exceed %n characters.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../address_book_dialog.cc" line="225"/>
+        <source>&lt;b&gt;Password you entered does not meet the security requirements!&lt;/b&gt;&lt;br/&gt;The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.&lt;br/&gt;Do you want to enter a different password?</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../address_book_dialog.cc" line="169"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation type="unfinished">
             <numerusform>Te lange naam. De maximum lengte is %n karakter.</numerusform>
@@ -600,38 +616,31 @@
         </translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="58"/>
+        <location filename="../address_book_dialog.cc" line="83"/>
         <source>ChaCha20 + Poly1305 (256-bit key)</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="157"/>
+        <location filename="../address_book_dialog.cc" line="182"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation type="unfinished">
             <numerusform>Te lang commentaar. De maximale lengte is %n karakter.</numerusform>
             <numerusform>Te lang commentaar. De maximale lengte is %n karakters.</numerusform>
         </translation>
     </message>
-    <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="191"/>
-        <source>Password can not be shorter than %n characters.</source>
-        <translation type="unfinished">
-            <numerusform>Wachtwoord mag niet korter dan %n karakter zijn.</numerusform>
-            <numerusform>Wachtwoord mag niet korter dan %n karakters zijn.</numerusform>
-        </translation>
-    </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="274"/>
+        <location filename="../address_book_dialog.cc" line="320"/>
         <source>Confirmation</source>
         <translation>Bevestiging</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="275"/>
+        <location filename="../address_book_dialog.cc" line="321"/>
         <source>At change the size of hashing salt, you will need to re-enter the password. Continue?</source>
         <translation>Bij het veranderen van de hash salt moet het wachtwoord opnieuw ingevoerd worden. Doorgaan?</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="313"/>
+        <location filename="../address_book_dialog.cc" line="224"/>
+        <location filename="../address_book_dialog.cc" line="359"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
@@ -666,54 +675,54 @@
         <translation>Het adresboek is versleuteld met een encryptie type dat niet ondersteund wordt.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="464"/>
+        <location filename="../address_book_tab.cc" line="473"/>
         <source>Are you sure you want to delete computer group &quot;%1&quot; and all child items?</source>
         <translation>Weet U zeker dat U de groep &quot;%1&quot; en alle onderliggende items wilt verwijderen?</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="468"/>
-        <location filename="../address_book_tab.cc" line="490"/>
+        <location filename="../address_book_tab.cc" line="477"/>
+        <location filename="../address_book_tab.cc" line="499"/>
         <source>Confirmation</source>
         <translation>Bevestiging</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="486"/>
+        <location filename="../address_book_tab.cc" line="495"/>
         <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
         <translation>Weet U zeker dat U de computer &quot;%1&quot; wilt verwijderen?</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="745"/>
+        <location filename="../address_book_tab.cc" line="754"/>
         <source>Save Address Book</source>
         <translation>Adresboek Opslaan</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="747"/>
+        <location filename="../address_book_tab.cc" line="756"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Aspia Adresboek (*.aab)</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="757"/>
+        <location filename="../address_book_tab.cc" line="766"/>
         <source>Unable to create or open address book file.</source>
         <translation>Kan adresboek bestand niet maken of openen.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="769"/>
+        <location filename="../address_book_tab.cc" line="778"/>
         <source>Unable to write address book file.</source>
         <translation>Kan adresboek bestand niet schrijven.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="785"/>
-        <location filename="../address_book_tab.cc" line="799"/>
+        <location filename="../address_book_tab.cc" line="794"/>
+        <location filename="../address_book_tab.cc" line="808"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="787"/>
+        <location filename="../address_book_tab.cc" line="796"/>
         <source>Could not open address book</source>
         <translation>Kon adresboek niet openen</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="801"/>
+        <location filename="../address_book_tab.cc" line="810"/>
         <source>Failed to save address book</source>
         <translation>Kon adresboek niet opslaan</translation>
     </message>
@@ -744,25 +753,17 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="165"/>
+        <location filename="../computer_dialog.cc" line="166"/>
         <source>Name can not be empty.</source>
         <translation>Naam mag niet leeg zijn.</translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="172"/>
+        <location filename="../computer_dialog.cc" line="176"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>De gebruikersnaam mag niet leeg zijn, en alleen karakters uit het alfabet, nummers, _, -, . karakters bevatten.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../computer_dialog.cc" line="180"/>
-        <source>Password can not be shorter than %n characters.</source>
-        <translation>
-            <numerusform>Wachtwoord mag niet korter dan %n karakter zijn.</numerusform>
-            <numerusform>Wachtwoord mag niet korter dan %n karakters zijn.</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <location filename="../computer_dialog.cc" line="188"/>
+        <location filename="../computer_dialog.cc" line="185"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Te lang commentaar. De maximale lengte is %n karakter.</numerusform>
@@ -770,7 +771,7 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="218"/>
+        <location filename="../computer_dialog.cc" line="216"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
@@ -786,12 +787,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.cc" line="66"/>
+        <location filename="../computer_group_dialog.cc" line="67"/>
         <source>Name can not be empty.</source>
         <translation>Naam mag niet leeg zijn.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../computer_group_dialog.cc" line="73"/>
+        <location filename="../computer_group_dialog.cc" line="75"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Te lang commentaar. De maximale lengte is %n karakter.</numerusform>
@@ -799,7 +800,7 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.cc" line="99"/>
+        <location filename="../computer_group_dialog.cc" line="102"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
@@ -826,7 +827,7 @@
 <context>
     <name>aspia::ConsoleWindow</name>
     <message>
-        <location filename="../console_window.cc" line="853"/>
+        <location filename="../console_window.cc" line="881"/>
         <source>Aspia Console</source>
         <translation type="unfinished"></translation>
     </message>
@@ -841,59 +842,59 @@
         <translation>Aspia Adresboek (*.aab)</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="652"/>
+        <location filename="../console_window.cc" line="673"/>
         <source>Close tab</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="653"/>
+        <location filename="../console_window.cc" line="668"/>
         <source>Close other tabs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="654"/>
+        <location filename="../console_window.cc" line="669"/>
         <source>Pin tab</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="832"/>
+        <location filename="../console_window.cc" line="860"/>
         <source>&lt;empty&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="887"/>
+        <location filename="../console_window.cc" line="915"/>
         <source>Information</source>
         <translation>Informatie</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="888"/>
+        <location filename="../console_window.cc" line="916"/>
         <source>Address Book &quot;%1&quot; is already open.</source>
         <translation>Adresboek &quot;%1&quot; is al geopend.</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="350"/>
+        <location filename="../console_window.cc" line="354"/>
         <source>https://aspia.org/en/help.html</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="466"/>
-        <location filename="../console_window.cc" line="764"/>
+        <location filename="../console_window.cc" line="474"/>
+        <location filename="../console_window.cc" line="792"/>
         <source>Confirmation</source>
         <translation>Bevestiging</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="467"/>
-        <location filename="../console_window.cc" line="765"/>
+        <location filename="../console_window.cc" line="475"/>
+        <location filename="../console_window.cc" line="793"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation>Adresboek &quot;%1&quot; is aangepast. Wijzigingen opslaan?</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="721"/>
+        <location filename="../console_window.cc" line="749"/>
         <source>Hide</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="736"/>
+        <location filename="../console_window.cc" line="764"/>
         <source>Show</source>
         <translation type="unfinished"></translation>
     </message>

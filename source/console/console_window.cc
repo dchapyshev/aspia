@@ -238,7 +238,7 @@ void ConsoleWindow::onSave()
     AddressBookTab* tab = currentAddressBookTab();
     if (tab && tab->save())
     {
-        if (mru_.addRecentFile(tab->addressBookPath()))
+        if (mru_.addRecentFile(tab->filePath()))
             rebuildMruMenu();
 
         if (!hasChangedTabs())
@@ -249,22 +249,26 @@ void ConsoleWindow::onSave()
 void ConsoleWindow::onSaveAs()
 {
     AddressBookTab* tab = currentAddressBookTab();
-    if (tab && tab->saveAs())
+    if (tab)
     {
-        QString new_path = tab->addressBookPath();
-        if (mru_.addRecentFile(new_path))
-            rebuildMruMenu();
+        QString old_path = tab->filePath();
+        if (mru_.isPinnedFile(old_path))
+        {
+            QScopedPointer<AddressBookTab> duplicate_tab(tab->duplicateTab());
+            if (duplicate_tab->saveAs())
+            {
+                const QString& new_path = duplicate_tab->filePath();
+                if (mru_.addRecentFile(new_path))
+                    rebuildMruMenu();
 
-        int tab_index = ui.tab_widget->currentIndex();
-        if (mru_.isPinnedFile(new_path))
-        {
-            ui.tab_widget->setTabIcon(
-                tab_index, QIcon(QStringLiteral(":/icon/address-book-pinned.png")));
+                addAddressBookTab(duplicate_tab.take());
+            }
         }
-        else
+        else if (tab->saveAs())
         {
-            ui.tab_widget->setTabIcon(
-                tab_index, QIcon(QStringLiteral(":/icon/address-book.png")));
+            const QString& new_path = tab->filePath();
+            if (mru_.addRecentFile(new_path))
+                rebuildMruMenu();
         }
 
         if (!hasChangedTabs())
@@ -443,7 +447,7 @@ void ConsoleWindow::onCurrentTabChanged(int index)
         return;
 
     ui.action_save->setEnabled(tab->isChanged());
-    ui.action_close->setEnabled(!mru_.isPinnedFile(tab->addressBookPath()));
+    ui.action_close->setEnabled(!mru_.isPinnedFile(tab->filePath()));
 
     proto::address_book::ComputerGroup* computer_group = tab->currentComputerGroup();
     if (computer_group)
@@ -461,7 +465,7 @@ void ConsoleWindow::onCloseTab(int index)
     if (!tab)
         return;
 
-    if (mru_.isPinnedFile(tab->addressBookPath()))
+    if (mru_.isPinnedFile(tab->filePath()))
         return;
 
     if (tab->isChanged())
@@ -655,7 +659,7 @@ void ConsoleWindow::onTabContextMenu(const QPoint& pos)
     if (!tab)
         return;
 
-    QString current_path = tab->addressBookPath();
+    const QString& current_path = tab->filePath();
     bool is_pinned = mru_.isPinnedFile(current_path);
 
     QMenu menu;
@@ -902,7 +906,7 @@ void ConsoleWindow::openAddressBook(const QString& file_path)
         if (tab)
         {
 #if defined(OS_WIN)
-            if (file_path.compare(tab->addressBookPath(), Qt::CaseInsensitive) == 0)
+            if (file_path.compare(tab->filePath(), Qt::CaseInsensitive) == 0)
 #else
             if (file_path.compare(tab->addressBookPath(), Qt::CaseSensitive) == 0)
 #endif // defined(OS_WIN)
@@ -930,7 +934,7 @@ void ConsoleWindow::addAddressBookTab(AddressBookTab* new_tab)
     if (!new_tab)
         return;
 
-    QString file_path = new_tab->addressBookPath();
+    const QString& file_path = new_tab->filePath();
     if (mru_.addRecentFile(file_path))
         rebuildMruMenu();
 
@@ -995,7 +999,7 @@ bool ConsoleWindow::hasUnpinnedTabs() const
     for (int i = 0; i < ui.tab_widget->count(); ++i)
     {
         AddressBookTab* tab = dynamic_cast<AddressBookTab*>(ui.tab_widget->widget(i));
-        if (tab && !mru_.isPinnedFile(tab->addressBookPath()))
+        if (tab && !mru_.isPinnedFile(tab->filePath()))
             return true;
     }
 

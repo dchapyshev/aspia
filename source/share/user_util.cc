@@ -70,4 +70,28 @@ bool UserUtil::isValidPassword(const QString& password)
     return true;
 }
 
+// static
+bool UserUtil::isSafePassword(const QString& password)
+{
+    int length = password.length();
+
+    if (length < kSafePasswordLength)
+        return false;
+
+    bool has_upper = false;
+    bool has_lower = false;
+    bool has_digit = false;
+
+    for (int i = 0; i < length; ++i)
+    {
+        const QChar& character = password[i];
+
+        has_upper |= character.isUpper();
+        has_lower |= character.isLower();
+        has_digit |= character.isDigit();
+    }
+
+    return has_upper && has_lower && has_digit;
+}
+
 } // namespace aspia

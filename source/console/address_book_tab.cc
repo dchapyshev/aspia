@@ -330,6 +330,15 @@ proto::address_book::ComputerGroup* AddressBookTab::currentComputerGroup() const
     return current_item->computerGroup();
 }
 
+AddressBookTab* AddressBookTab::duplicateTab() const
+{
+    return new AddressBookTab(filePath(),
+                              proto::address_book::File(file_),
+                              proto::address_book::Data(data_),
+                              std::string(key_),
+                              static_cast<QWidget*>(parent()));
+}
+
 bool AddressBookTab::save()
 {
     return saveToFile(file_path_);

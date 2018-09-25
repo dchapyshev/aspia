@@ -59,11 +59,13 @@ void ComputerGroupDialog::buttonBoxClicked(QAbstractButton* button)
         {
             showError(tr("Too long name. The maximum length of the name is %n characters.",
                          "", kMaxNameLength));
+            ui.edit_name->setFocus();
             return;
         }
         else if (name.length() < kMinNameLength)
         {
             showError(tr("Name can not be empty."));
+            ui.edit_name->setFocus();
             return;
         }
 
@@ -72,10 +74,11 @@ void ComputerGroupDialog::buttonBoxClicked(QAbstractButton* button)
         {
             showError(tr("Too long comment. The maximum length of the comment is %n characters.",
                          "", kMaxCommentLength));
+            ui.edit_comment->setFocus();
             return;
         }
 
-        qint64 current_time = QDateTime::currentSecsSinceEpoch();
+        int64_t current_time = QDateTime::currentSecsSinceEpoch();
 
         if (mode_ == CreateComputerGroup)
             computer_group_->set_create_time(current_time);

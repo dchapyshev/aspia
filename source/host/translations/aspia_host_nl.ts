@@ -338,7 +338,7 @@
 <context>
     <name>aspia::UserDialog</name>
     <message>
-        <location filename="../ui/user_dialog.cc" line="236"/>
+        <location filename="../ui/user_dialog.cc" line="266"/>
         <source>Double-click to change</source>
         <translation>Dubbelklik om te wijzigen</translation>
     </message>
@@ -358,39 +358,48 @@
         <translation>Bestands Overdracht</translation>
     </message>
     <message>
-        <location filename="../ui/user_dialog.cc" line="129"/>
-        <location filename="../ui/user_dialog.cc" line="147"/>
-        <location filename="../ui/user_dialog.cc" line="158"/>
-        <location filename="../ui/user_dialog.cc" line="167"/>
-        <location filename="../ui/user_dialog.cc" line="179"/>
+        <location filename="../ui/user_dialog.cc" line="134"/>
+        <location filename="../ui/user_dialog.cc" line="153"/>
+        <location filename="../ui/user_dialog.cc" line="165"/>
+        <location filename="../ui/user_dialog.cc" line="175"/>
+        <location filename="../ui/user_dialog.cc" line="186"/>
+        <location filename="../ui/user_dialog.cc" line="209"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../ui/user_dialog.cc" line="130"/>
+        <location filename="../ui/user_dialog.cc" line="135"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>De gebruikersnaam mag niet leeg zijn, en alleen karakters uit het alfabet, nummers, _, -, . karakters bevatten.</translation>
     </message>
     <message>
-        <location filename="../ui/user_dialog.cc" line="148"/>
+        <location filename="../ui/user_dialog.cc" line="154"/>
         <source>The username you entered already exists.</source>
         <translation>De ingevoerde gebruikersnaam bestaat al.</translation>
     </message>
     <message>
-        <location filename="../ui/user_dialog.cc" line="159"/>
+        <location filename="../ui/user_dialog.cc" line="166"/>
         <source>The passwords you entered do not match.</source>
         <translation>De ingevoerde wachtwoorden komen niet overeen.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/user_dialog.cc" line="168"/>
-        <source>Password can not be shorter than %n characters.</source>
-        <translation>
-            <numerusform>Wachtwoord mag niet korter dan %n karakter zijn.</numerusform>
-            <numerusform>Wachtwoord mag niet korter dan %n karakters zijn.</numerusform>
+        <location filename="../ui/user_dialog.cc" line="176"/>
+        <source>Password can not be empty and should not exceed %n characters.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../ui/user_dialog.cc" line="187"/>
+        <source>&lt;b&gt;Password you entered does not meet the security requirements!&lt;/b&gt;&lt;br/&gt;The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.&lt;br/&gt;Do you want to enter a different password?</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../ui/user_dialog.cc" line="180"/>
+        <location filename="../ui/user_dialog.cc" line="210"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation type="unfinished"></translation>
     </message>
