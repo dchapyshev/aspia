@@ -687,6 +687,11 @@ void AddressBookTab::retranslateUi()
 {
     ui.retranslateUi(this);
 
+    ComputerGroupItem* root_item =
+        dynamic_cast<ComputerGroupItem*>(ui.tree_group->topLevelItem(0));
+    if (root_item)
+        root_item->updateItem();
+
     QTreeWidgetItem* current = ui.tree_group->currentItem();
     if (current)
         onGroupItemClicked(current, 0);

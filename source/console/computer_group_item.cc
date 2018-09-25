@@ -18,6 +18,8 @@
 
 #include "console/computer_group_item.h"
 
+#include <QApplication>
+
 namespace aspia {
 
 ComputerGroupItem::ComputerGroupItem(proto::address_book::ComputerGroup* computer_group,
@@ -121,7 +123,11 @@ proto::address_book::Computer* ComputerGroupItem::takeChildComputer(
 
 void ComputerGroupItem::updateItem()
 {
-    setText(0, QString::fromStdString(computer_group_->name()));
+    bool has_parent = parent() != nullptr;
+    if (has_parent)
+        setText(0, QString::fromStdString(computer_group_->name()));
+    else
+        setText(0, QApplication::translate("ComputerGroupItem", "Root Group"));
 }
 
 bool ComputerGroupItem::IsExpanded() const
