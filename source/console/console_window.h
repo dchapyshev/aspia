@@ -48,6 +48,7 @@ public slots:
     void onSaveAs();
     void onSaveAll();
     void onClose();
+    void onCloseAll();
     void onAddressBookProperties();
     void onAddComputer();
     void onModifyComputer();

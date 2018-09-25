@@ -133,6 +133,7 @@ ConsoleWindow::ConsoleWindow(const QString& file_path, QWidget* parent)
     connect(ui.action_save_as, &QAction::triggered, this, &ConsoleWindow::onSaveAs);
     connect(ui.action_save_all, &QAction::triggered, this, &ConsoleWindow::onSaveAll);
     connect(ui.action_close, &QAction::triggered, this, &ConsoleWindow::onClose);
+    connect(ui.action_close_all, &QAction::triggered, this, &ConsoleWindow::onCloseAll);
 
     connect(ui.action_address_book_properties, &QAction::triggered,
             this, &ConsoleWindow::onAddressBookProperties);
@@ -287,6 +288,12 @@ void ConsoleWindow::onSaveAll()
 void ConsoleWindow::onClose()
 {
     onCloseTab(ui.tab_widget->currentIndex());
+}
+
+void ConsoleWindow::onCloseAll()
+{
+    for (int i = ui.tab_widget->count(); i >= 0; --i)
+        onCloseTab(i);
 }
 
 void ConsoleWindow::onAddressBookProperties()
@@ -485,6 +492,7 @@ void ConsoleWindow::onCloseTab(int index)
         ui.action_save_all->setEnabled(false);
         ui.action_address_book_properties->setEnabled(false);
         ui.action_close->setEnabled(false);
+        ui.action_close_all->setEnabled(false);
     }
 }
 
@@ -662,7 +670,7 @@ void ConsoleWindow::onTabContextMenu(const QPoint& pos)
     }
     else if (action == close_other_action)
     {
-        for (int i = 0; i < ui.tab_widget->count(); ++i)
+        for (int i = ui.tab_widget->count(); i >= 0; --i)
         {
             if (i != tab_index)
                 onCloseTab(i);
@@ -924,6 +932,7 @@ void ConsoleWindow::addAddressBookTab(AddressBookTab* new_tab)
     ui.action_address_book_properties->setEnabled(true);
     ui.action_save_as->setEnabled(true);
     ui.action_close->setEnabled(true);
+    ui.action_close_all->setEnabled(true);
 
     ui.tab_widget->setCurrentIndex(index);
 }
