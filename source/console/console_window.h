@@ -89,6 +89,7 @@ private:
     void addAddressBookTab(AddressBookTab* tab);
     AddressBookTab* currentAddressBookTab();
     bool hasChangedTabs() const;
+    bool hasUnpinnedTabs() const;
     void connectToComputer(const proto::address_book::Computer& computer);
 
     Ui::ConsoleWindow ui;

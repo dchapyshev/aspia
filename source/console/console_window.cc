@@ -443,6 +443,7 @@ void ConsoleWindow::onCurrentTabChanged(int index)
         return;
 
     ui.action_save->setEnabled(tab->isChanged());
+    ui.action_close->setEnabled(!mru_.isPinnedFile(tab->addressBookPath()));
 
     proto::address_book::ComputerGroup* computer_group = tab->currentComputerGroup();
     if (computer_group)
@@ -458,6 +459,9 @@ void ConsoleWindow::onCloseTab(int index)
 
     AddressBookTab* tab = dynamic_cast<AddressBookTab*>(ui.tab_widget->widget(index));
     if (!tab)
+        return;
+
+    if (mru_.isPinnedFile(tab->addressBookPath()))
         return;
 
     if (tab->isChanged())
@@ -491,6 +495,10 @@ void ConsoleWindow::onCloseTab(int index)
         ui.action_save_as->setEnabled(false);
         ui.action_save_all->setEnabled(false);
         ui.action_address_book_properties->setEnabled(false);
+    }
+
+    if (!hasUnpinnedTabs())
+    {
         ui.action_close->setEnabled(false);
         ui.action_close_all->setEnabled(false);
     }
@@ -647,23 +655,32 @@ void ConsoleWindow::onTabContextMenu(const QPoint& pos)
     if (!tab)
         return;
 
+    QString current_path = tab->addressBookPath();
+    bool is_pinned = mru_.isPinnedFile(current_path);
+
     QMenu menu;
 
-    QAction* close_action = new QAction(tr("Close tab"), &menu);
+    QAction* close_action = nullptr;
     QAction* close_other_action = new QAction(tr("Close other tabs"), &menu);
     QAction* pin_action = new QAction(tr("Pin tab"), &menu);
 
-    QString current_path = tab->addressBookPath();
+    if (!is_pinned)
+    {
+        close_action = new QAction(tr("Close tab"), &menu);
+        menu.addAction(close_action);
+    }
 
     pin_action->setCheckable(true);
-    pin_action->setChecked(mru_.isPinnedFile(current_path));
+    pin_action->setChecked(is_pinned);
     pin_action->setEnabled(!current_path.isEmpty());
 
-    menu.addAction(close_action);
     menu.addAction(close_other_action);
     menu.addAction(pin_action);
 
     QAction* action = menu.exec(tab_bar->mapToGlobal(pos));
+    if (!action)
+        return;
+
     if (action == close_action)
     {
         onCloseTab(tab_index);
@@ -678,6 +695,9 @@ void ConsoleWindow::onTabContextMenu(const QPoint& pos)
     }
     else if (action == pin_action)
     {
+        QWidget* close_button = ui.tab_widget->tabBar()->tabButton(tab_index, QTabBar::RightSide);
+        close_button->setVisible(!pin_action->isChecked());
+
         if (pin_action->isChecked())
         {
             ui.tab_widget->setTabIcon(
@@ -690,6 +710,10 @@ void ConsoleWindow::onTabContextMenu(const QPoint& pos)
                 tab_index, QIcon(QStringLiteral(":/icon/address-book.png")));
             mru_.unpinFile(current_path);
         }
+
+        bool has_unpinned_tabs = hasUnpinnedTabs();
+        ui.action_close->setEnabled(has_unpinned_tabs);
+        ui.action_close_all->setEnabled(has_unpinned_tabs);
     }
 }
 
@@ -929,10 +953,18 @@ void ConsoleWindow::addAddressBookTab(AddressBookTab* new_tab)
 
     int index = ui.tab_widget->addTab(new_tab, icon, new_tab->addressBookName());
 
+    QWidget* close_button = ui.tab_widget->tabBar()->tabButton(index, QTabBar::RightSide);
+    if (mru_.isPinnedFile(file_path))
+        close_button->hide();
+    else
+        close_button->show();
+
+    bool has_unpinned_tabs = hasUnpinnedTabs();
+    ui.action_close->setEnabled(has_unpinned_tabs);
+    ui.action_close_all->setEnabled(has_unpinned_tabs);
+
     ui.action_address_book_properties->setEnabled(true);
     ui.action_save_as->setEnabled(true);
-    ui.action_close->setEnabled(true);
-    ui.action_close_all->setEnabled(true);
 
     ui.tab_widget->setCurrentIndex(index);
 }
@@ -952,6 +984,18 @@ bool ConsoleWindow::hasChangedTabs() const
     {
         AddressBookTab* tab = dynamic_cast<AddressBookTab*>(ui.tab_widget->widget(i));
         if (tab && tab->isChanged())
+            return true;
+    }
+
+    return false;
+}
+
+bool ConsoleWindow::hasUnpinnedTabs() const
+{
+    for (int i = 0; i < ui.tab_widget->count(); ++i)
+    {
+        AddressBookTab* tab = dynamic_cast<AddressBookTab*>(ui.tab_widget->widget(i));
+        if (tab && !mru_.isPinnedFile(tab->addressBookPath()))
             return true;
     }
 

@@ -39,7 +39,7 @@ public:
     static AddressBookTab* openFromFile(const QString& file_path, QWidget* parent);
 
     QString addressBookName() const;
-    QString addressBookPath() const { return file_path_; }
+    const QString& addressBookPath() const { return file_path_; }
     ComputerItem* currentComputer() const;
     proto::address_book::ComputerGroup* currentComputerGroup() const;
     void setChanged(bool changed);
