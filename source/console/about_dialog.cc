@@ -22,8 +22,9 @@
 #include <QDesktopServices>
 #include <QFile>
 
-#include <libyuv.h>
+#include <boost/version.hpp>
 #include <google/protobuf/stubs/common.h>
+#include <libyuv.h>
 #include <openssl/crypto.h>
 #include <vpx/vpx_codec.h>
 #include <zstd.h>
@@ -51,12 +52,12 @@ const char* kTranslators[] =
 
 const char* kThirdParty[] =
 {
-    "Qt Framework &copy; 2015 The Qt Company Ltd., GNU General Public License 3.0",
+    "Boost &copy; 1998-2018 The Boost Project authors, Boost Software License 1.0",
     "libvpx &copy; 2010, The WebM Project authors, BSD 3-Clause License",
     "libyuv &copy; 2011 The LibYuv Project Authors, BSD 3-Clause License",
-    "libsodium &copy; 2013-2017 Frank Denis, ISC License",
     "openssl &copy; 1998-2018 The OpenSSL Project, OpenSSL License",
     "protobuf &copy; 2014 Google Inc., BSD 3-Clause License",
+    "Qt Framework &copy; 2015 The Qt Company Ltd., GNU General Public License 3.0",
     "zstd &copy; 2016 Yann Collet, Facebook, Inc., BSD License",
     "Fugue Icons &copy; 2013 Yusuke Kamiyamane, Creative Commons Attribution 3.0 License"
 };
@@ -137,15 +138,19 @@ AboutDialog::AboutDialog(QWidget* parent)
         ui.list_service->addItem(tr("%1 version: %2").arg(name).arg(version));
     };
 
-    add_version("qt", qVersion());
-    add_version("libyuv", QString::number(LIBYUV_VERSION));
+    add_version("boost", QString("%1.%2.%3")
+                .arg(BOOST_VERSION / 100000)
+                .arg(BOOST_VERSION / 100 % 1000)
+                .arg(BOOST_VERSION % 100));
     add_version("libvpx", vpx_codec_version_str());
+    add_version("libyuv", QString::number(LIBYUV_VERSION));
     add_version("openssl", OpenSSL_version(OPENSSL_VERSION));
 
     QString protobuf_version =
         QString::fromStdString(google::protobuf::internal::VersionString(GOOGLE_PROTOBUF_VERSION));
     add_version("protobuf", protobuf_version);
 
+    add_version("qt", qVersion());
     add_version("zstd", ZSTD_versionString());
 
     connect(ui.push_button_donate, &QPushButton::pressed, [this]()
