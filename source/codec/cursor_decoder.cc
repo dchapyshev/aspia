@@ -35,13 +35,15 @@ bool CursorDecoder::decompressCursor(const proto::desktop::CursorShape& cursor_s
                                      uint8_t* output_data,
                                      size_t output_size)
 {
-    if (cursor_shape.data().empty())
+    const std::string& data = cursor_shape.data();
+
+    if (data.empty())
         return false;
 
     size_t ret = ZSTD_initDStream(stream_.get());
     DCHECK(!ZSTD_isError(ret)) << ZSTD_getErrorName(ret);
 
-    ZSTD_inBuffer input = { cursor_shape.data().data(), cursor_shape.data().size(), 0 };
+    ZSTD_inBuffer input = { data.data(), data.size(), 0 };
     ZSTD_outBuffer output = { output_data, output_size, 0 };
 
     while (input.pos < input.size)

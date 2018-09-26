@@ -608,17 +608,17 @@
 <context>
     <name>aspia::ClientDialog</name>
     <message>
-        <location filename="../ui/client_dialog.cc" line="41"/>
+        <location filename="../ui/client_dialog.cc" line="42"/>
         <source>Desktop Manage</source>
         <translation>Керування робочим столом</translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.cc" line="45"/>
+        <location filename="../ui/client_dialog.cc" line="46"/>
         <source>Desktop View</source>
         <translation>Перегляд робочого столу</translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.cc" line="49"/>
+        <location filename="../ui/client_dialog.cc" line="50"/>
         <source>File Transfer</source>
         <translation>Передача файлів</translation>
     </message>
@@ -680,32 +680,32 @@
 <context>
     <name>aspia::DesktopConfigDialog</name>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="68"/>
+        <location filename="../ui/desktop_config_dialog.cc" line="70"/>
         <source>True color (32 bit)</source>
         <translation>True color (32 bit)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="69"/>
+        <location filename="../ui/desktop_config_dialog.cc" line="71"/>
         <source>High color (16 bit)</source>
         <translation>High color (16 bit)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="70"/>
+        <location filename="../ui/desktop_config_dialog.cc" line="72"/>
         <source>256 colors (8 bit)</source>
         <translation>256 colors (8 bit)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="71"/>
+        <location filename="../ui/desktop_config_dialog.cc" line="73"/>
         <source>64 colors (6 bit)</source>
         <translation>64 colors (6 bit)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="72"/>
+        <location filename="../ui/desktop_config_dialog.cc" line="74"/>
         <source>8 colors (3 bit)</source>
         <translation>8 colors (3 bit)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="157"/>
+        <location filename="../ui/desktop_config_dialog.cc" line="159"/>
         <source>Compression ratio: %1</source>
         <translation>Стиснення: %1</translation>
     </message>

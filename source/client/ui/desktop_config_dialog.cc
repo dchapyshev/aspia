@@ -49,27 +49,29 @@ DesktopConfigDialog::DesktopConfigDialog(proto::SessionType session_type,
 
     ConfigFactory::fixupDesktopConfig(&config_);
 
-    ui->combo_codec->addItem(QStringLiteral("VP9 (LossLess)"),
-                             QVariant(proto::desktop::VIDEO_ENCODING_VP9));
+    QComboBox* combo_codec = ui->combo_codec;
+    combo_codec->addItem(QStringLiteral("VP9 (LossLess)"),
+                         QVariant(proto::desktop::VIDEO_ENCODING_VP9));
 
-    ui->combo_codec->addItem(QStringLiteral("VP8"),
-                             QVariant(proto::desktop::VIDEO_ENCODING_VP8));
+    combo_codec->addItem(QStringLiteral("VP8"),
+                         QVariant(proto::desktop::VIDEO_ENCODING_VP8));
 
-    ui->combo_codec->addItem(QStringLiteral("ZSTD"),
-                             QVariant(proto::desktop::VIDEO_ENCODING_ZSTD));
+    combo_codec->addItem(QStringLiteral("ZSTD"),
+                         QVariant(proto::desktop::VIDEO_ENCODING_ZSTD));
 
-    int current_codec = ui->combo_codec->findData(QVariant(config_.video_encoding()));
+    int current_codec = combo_codec->findData(QVariant(config_.video_encoding()));
     if (current_codec == -1)
         current_codec = 0;
 
-    ui->combo_codec->setCurrentIndex(current_codec);
+    combo_codec->setCurrentIndex(current_codec);
     onCodecChanged(current_codec);
 
-    ui->combo_color_depth->addItem(tr("True color (32 bit)"), QVariant(COLOR_DEPTH_ARGB));
-    ui->combo_color_depth->addItem(tr("High color (16 bit)"), QVariant(COLOR_DEPTH_RGB565));
-    ui->combo_color_depth->addItem(tr("256 colors (8 bit)"), QVariant(COLOR_DEPTH_RGB332));
-    ui->combo_color_depth->addItem(tr("64 colors (6 bit)"), QVariant(COLOR_DEPTH_RGB222));
-    ui->combo_color_depth->addItem(tr("8 colors (3 bit)"), QVariant(COLOR_DEPTH_RGB111));
+    QComboBox* combo_color_depth = ui->combo_color_depth;
+    combo_color_depth->addItem(tr("True color (32 bit)"), QVariant(COLOR_DEPTH_ARGB));
+    combo_color_depth->addItem(tr("High color (16 bit)"), QVariant(COLOR_DEPTH_RGB565));
+    combo_color_depth->addItem(tr("256 colors (8 bit)"), QVariant(COLOR_DEPTH_RGB332));
+    combo_color_depth->addItem(tr("64 colors (6 bit)"), QVariant(COLOR_DEPTH_RGB222));
+    combo_color_depth->addItem(tr("8 colors (3 bit)"), QVariant(COLOR_DEPTH_RGB111));
 
     PixelFormat pixel_format = VideoUtil::fromVideoPixelFormat(config_.pixel_format());
     ColorDepth color_depth = COLOR_DEPTH_ARGB;
@@ -85,9 +87,9 @@ DesktopConfigDialog::DesktopConfigDialog(proto::SessionType session_type,
     else if (pixel_format.isEqual(PixelFormat::RGB111()))
         color_depth = COLOR_DEPTH_RGB111;
 
-    int current_color_depth = ui->combo_color_depth->findData(QVariant(color_depth));
+    int current_color_depth = combo_color_depth->findData(QVariant(color_depth));
     if (current_color_depth != -1)
-        ui->combo_color_depth->setCurrentIndex(current_color_depth);
+        combo_color_depth->setCurrentIndex(current_color_depth);
 
     ui->slider_compression_ratio->setValue(config_.compress_ratio());
     onCompressionRatioChanged(config_.compress_ratio());
@@ -119,7 +121,7 @@ DesktopConfigDialog::DesktopConfigDialog(proto::SessionType session_type,
     if (config_.flags() & proto::desktop::DISABLE_DESKTOP_WALLPAPER)
         ui->checkbox_desktop_wallpaper->setChecked(true);
 
-    connect(ui->combo_codec, QOverload<int>::of(&QComboBox::currentIndexChanged),
+    connect(combo_codec, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &DesktopConfigDialog::onCodecChanged);
 
     connect(ui->slider_compression_ratio, &QSlider::valueChanged,

@@ -196,17 +196,17 @@ void DesktopWindow::onPointerEvent(const QPoint& pos, uint32_t mask)
 
         if (client_area.width() < desktop_->width())
         {
-            if (cursor.x() > client_area.width() - 50)
+            if (cursor.x() > client_area.width() - 150)
                 scroll_delta_.setX(10);
-            else if (cursor.x() < 50)
+            else if (cursor.x() < 150)
                 scroll_delta_.setX(-10);
         }
 
         if (client_area.height() < desktop_->height())
         {
-            if (cursor.y() > client_area.height() - 50)
+            if (cursor.y() > client_area.height() - 150)
                 scroll_delta_.setY(10);
-            else if (cursor.y() < 50)
+            else if (cursor.y() < 150)
                 scroll_delta_.setY(-10);
         }
 

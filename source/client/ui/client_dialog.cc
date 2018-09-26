@@ -37,27 +37,28 @@ ClientDialog::ClientDialog(QWidget* parent)
     ui->edit_address->setText(QString::fromStdString(computer_.address()));
     ui->spin_port->setValue(computer_.port());
 
-    ui->combo_session_type->addItem(QIcon(QStringLiteral(":/icon/monitor-keyboard.png")),
+    QComboBox* combo_session_type = ui->combo_session_type;
+    combo_session_type->addItem(QIcon(QStringLiteral(":/icon/monitor-keyboard.png")),
                                     tr("Desktop Manage"),
                                     QVariant(proto::SESSION_TYPE_DESKTOP_MANAGE));
 
-    ui->combo_session_type->addItem(QIcon(QStringLiteral(":/icon/monitor.png")),
+    combo_session_type->addItem(QIcon(QStringLiteral(":/icon/monitor.png")),
                                     tr("Desktop View"),
                                     QVariant(proto::SESSION_TYPE_DESKTOP_VIEW));
 
-    ui->combo_session_type->addItem(QIcon(QStringLiteral(":/icon/folder-stand.png")),
+    combo_session_type->addItem(QIcon(QStringLiteral(":/icon/folder-stand.png")),
                                     tr("File Transfer"),
                                     QVariant(proto::SESSION_TYPE_FILE_TRANSFER));
 
     int current_session_type =
-        ui->combo_session_type->findData(QVariant(computer_.session_type()));
+        combo_session_type->findData(QVariant(computer_.session_type()));
     if (current_session_type != -1)
     {
-        ui->combo_session_type->setCurrentIndex(current_session_type);
+        combo_session_type->setCurrentIndex(current_session_type);
         sessionTypeChanged(current_session_type);
     }
 
-    connect(ui->combo_session_type, QOverload<int>::of(&QComboBox::currentIndexChanged),
+    connect(combo_session_type, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &ClientDialog::sessionTypeChanged);
 
     connect(ui->button_session_config, &QPushButton::pressed,
