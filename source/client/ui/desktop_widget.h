@@ -57,6 +57,10 @@ public:
 public slots:
     void executeKeySequense(int key_sequence);
 
+    // Enables or disables the sending of key combinations. It only affects the input received
+    // from the user. Slot |executeKeySequense| can send key combinations.
+    void enableKeySequenses(bool enable);
+
 signals:
     void sendKeyEvent(uint32_t usb_keycode, uint32_t flags);
     void sendPointerEvent(const QPoint& pos, uint32_t mask);
@@ -85,6 +89,8 @@ private:
 #endif // defined(OS_WIN)
 
     std::unique_ptr<DesktopFrameQImage> frame_;
+
+    bool enable_key_sequenses_ = true;
 
     QPoint prev_pos_;
     uint32_t prev_mask_ = 0;

@@ -107,6 +107,8 @@ DesktopWindow::DesktopWindow(ConnectData* connect_data, QWidget* parent)
         autoscroll_enabled_ = enabled;
     });
 
+    connect(panel_, &DesktopPanel::keySequensesChanged, desktop_, &DesktopWidget::enableKeySequenses);
+
     connect(desktop_, &DesktopWidget::sendPointerEvent, this, &DesktopWindow::onPointerEvent);
     connect(desktop_, &DesktopWidget::sendKeyEvent, this, &DesktopWindow::sendKeyEvent);
 

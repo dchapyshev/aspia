@@ -44,6 +44,7 @@ signals:
     void screenSelected(const proto::desktop::Screen& screen);
     void scalingChanged(bool enabled);
     void autoScrollChanged(bool enabled);
+    void keySequensesChanged(bool enabled);
     void takeScreenshot();
     void startSession(proto::SessionType session_type);
 
@@ -57,7 +58,6 @@ private slots:
     void onFullscreenButton(bool checked);
     void onAutosizeButton();
     void onCtrlAltDel();
-    void onKeySequence();
 
 private:
     void createAdditionalMenu(proto::SessionType session_type);

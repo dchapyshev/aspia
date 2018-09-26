@@ -51,6 +51,12 @@ bool isCapsLockActivated()
 #endif // defined(OS_WIN)
 }
 
+bool isModifierKey(int key)
+{
+    return key == Qt::Key_Control || key == Qt::Key_Alt ||
+           key == Qt::Key_Shift || key == Qt::Key_Meta;
+}
+
 } // namespace
 
 DesktopWidget::DesktopWidget(QWidget* parent)
@@ -146,6 +152,9 @@ void DesktopWidget::doKeyEvent(QKeyEvent* event)
     if (key == Qt::Key_CapsLock || key == Qt::Key_NumLock)
         return;
 
+    if (!enable_key_sequenses_ && isModifierKey(key))
+        return;
+
     uint32_t flags = ((event->type() == QEvent::KeyPress) ? proto::desktop::KeyEvent::PRESSED : 0);
 
     flags |= (isCapsLockActivated() ? proto::desktop::KeyEvent::CAPSLOCK : 0);
@@ -198,6 +207,18 @@ void DesktopWidget::executeKeySequense(int key_sequence)
 
     for (auto it = keys.crbegin(); it != keys.crend(); ++it)
         executeKeyEvent(*it, flags);
+}
+
+void DesktopWidget::enableKeySequenses(bool enable)
+{
+    enable_key_sequenses_ = enable;
+
+#if defined(OS_WIN)
+    if (enable)
+        keyboard_hook_.reset(SetWindowsHookExW(WH_KEYBOARD_LL, keyboardHookProc, nullptr, 0));
+    else
+        keyboard_hook_.reset();
+#endif // defined(OS_WIN)
 }
 
 void DesktopWidget::paintEvent(QPaintEvent* /* event */)
@@ -260,7 +281,8 @@ void DesktopWidget::leaveEvent(QEvent* event)
 void DesktopWidget::focusInEvent(QFocusEvent* event)
 {
 #if defined(OS_WIN)
-    keyboard_hook_.reset(SetWindowsHookExW(WH_KEYBOARD_LL, keyboardHookProc, nullptr, 0));
+    if (enable_key_sequenses_)
+        keyboard_hook_.reset(SetWindowsHookExW(WH_KEYBOARD_LL, keyboardHookProc, nullptr, 0));
 #endif // defined(OS_WIN)
 
     QWidget::focusInEvent(event);

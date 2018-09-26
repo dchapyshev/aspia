@@ -22,7 +22,6 @@
 #include <QToolButton>
 
 #include "base/logging.h"
-#include "client/ui/key_sequence_dialog.h"
 #include "client/ui/select_screen_action.h"
 
 namespace aspia {
@@ -175,25 +174,17 @@ void DesktopPanel::onCtrlAltDel()
     emit keySequence(Qt::ControlModifier | Qt::AltModifier | Qt::Key_Delete);
 }
 
-void DesktopPanel::onKeySequence()
-{
-    QKeySequence key_sequence = KeySequenceDialog::keySequence(this);
-
-    for (int i = 0; i < key_sequence.count(); ++i)
-        emit keySequence(key_sequence[i]);
-}
-
 void DesktopPanel::createAdditionalMenu(proto::SessionType session_type)
 {
     // Create a menu and add actions to it.
     additional_menu_ = new QMenu(this);
     additional_menu_->addAction(ui.action_scaling);
     additional_menu_->addAction(ui.action_autoscroll);
-    additional_menu_->addSeparator();
 
     if (session_type == proto::SESSION_TYPE_DESKTOP_MANAGE)
-        additional_menu_->addAction(ui.action_key_sequence);
+        additional_menu_->addAction(ui.action_send_key_combinations);
 
+    additional_menu_->addSeparator();
     additional_menu_->addAction(ui.action_screenshot);
 
     // Set the menu for the button on the toolbar.
@@ -204,7 +195,10 @@ void DesktopPanel::createAdditionalMenu(proto::SessionType session_type)
 
     // Now we connect all the necessary signals and slots.
     if (session_type == proto::SESSION_TYPE_DESKTOP_MANAGE)
-        connect(ui.action_key_sequence, &QAction::triggered, this, &DesktopPanel::onKeySequence);
+    {
+        connect(ui.action_send_key_combinations, &QAction::triggered,
+                this, &DesktopPanel::keySequensesChanged);
+    }
 
     connect(ui.action_scaling, &QAction::toggled, [this](bool checked)
     {

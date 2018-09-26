@@ -99,9 +99,6 @@ list(APPEND SOURCE_CLIENT_UI
     ui/file_transfer_dialog.cc
     ui/file_transfer_dialog.h
     ui/file_transfer_dialog.ui
-    ui/key_sequence_dialog.cc
-    ui/key_sequence_dialog.h
-    ui/key_sequence_dialog.ui
     ui/select_screen_action.h
     ui/status_dialog.cc
     ui/status_dialog.h

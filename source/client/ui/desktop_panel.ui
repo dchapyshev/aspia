@@ -205,11 +205,6 @@
     <string>Advanced menu</string>
    </property>
   </action>
-  <action name="action_key_sequence">
-   <property name="text">
-    <string>Send keys sequence...</string>
-   </property>
-  </action>
   <action name="action_screenshot">
    <property name="text">
     <string>Save screenshot...</string>
@@ -239,6 +234,17 @@
    </property>
    <property name="text">
     <string>Scaling an image</string>
+   </property>
+  </action>
+  <action name="action_send_key_combinations">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Send key combinations</string>
    </property>
   </action>
  </widget>
