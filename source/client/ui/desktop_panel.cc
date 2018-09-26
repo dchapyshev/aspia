@@ -22,6 +22,7 @@
 #include <QToolButton>
 
 #include "base/logging.h"
+#include "client/ui/desktop_settings.h"
 #include "client/ui/select_screen_action.h"
 
 namespace aspia {
@@ -30,6 +31,11 @@ DesktopPanel::DesktopPanel(proto::SessionType session_type, QWidget* parent)
     : QFrame(parent)
 {
     ui.setupUi(this);
+
+    DesktopSettings settings;
+    ui.action_scaling->setChecked(settings.scaling());
+    ui.action_autoscroll->setChecked(settings.autoScrolling());
+    ui.action_send_key_combinations->setChecked(settings.sendKeyCombinations());
 
     connect(ui.action_settings, &QAction::triggered, this, &DesktopPanel::settingsButton);
     connect(ui.action_autosize, &QAction::triggered, this, &DesktopPanel::onAutosizeButton);
@@ -58,6 +64,14 @@ DesktopPanel::DesktopPanel(proto::SessionType session_type, QWidget* parent)
     adjustSize();
 
     hide_timer_id_ = startTimer(std::chrono::seconds(1));
+}
+
+DesktopPanel::~DesktopPanel()
+{
+    DesktopSettings settings;
+    settings.setScaling(ui.action_scaling->isChecked());
+    settings.setAutoScrolling(ui.action_autoscroll->isChecked());
+    settings.setSendKeyCombinations(ui.action_send_key_combinations->isChecked());
 }
 
 void DesktopPanel::setScreenList(const proto::desktop::ScreenList& screen_list)
@@ -89,6 +103,21 @@ void DesktopPanel::setScreenList(const proto::desktop::ScreenList& screen_list)
     }
 
     ui.action_monitors->setEnabled(true);
+}
+
+bool DesktopPanel::scaling() const
+{
+    return ui.action_scaling->isChecked();
+}
+
+bool DesktopPanel::autoScrolling() const
+{
+    return ui.action_autoscroll->isChecked();
+}
+
+bool DesktopPanel::sendKeyCombinations() const
+{
+    return ui.action_send_key_combinations->isChecked();
 }
 
 void DesktopPanel::timerEvent(QTimerEvent* event)
@@ -171,7 +200,7 @@ void DesktopPanel::onAutosizeButton()
 
 void DesktopPanel::onCtrlAltDel()
 {
-    emit keySequence(Qt::ControlModifier | Qt::AltModifier | Qt::Key_Delete);
+    emit keyCombination(Qt::ControlModifier | Qt::AltModifier | Qt::Key_Delete);
 }
 
 void DesktopPanel::createAdditionalMenu(proto::SessionType session_type)
@@ -197,7 +226,7 @@ void DesktopPanel::createAdditionalMenu(proto::SessionType session_type)
     if (session_type == proto::SESSION_TYPE_DESKTOP_MANAGE)
     {
         connect(ui.action_send_key_combinations, &QAction::triggered,
-                this, &DesktopPanel::keySequensesChanged);
+                this, &DesktopPanel::keyCombinationsChanged);
     }
 
     connect(ui.action_scaling, &QAction::toggled, [this](bool checked)

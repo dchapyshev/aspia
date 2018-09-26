@@ -79,7 +79,9 @@ DesktopWindow::DesktopWindow(ConnectData* connect_data, QWidget* parent)
 
     panel_ = new DesktopPanel(connect_data_->sessionType(), this);
 
-    connect(panel_, &DesktopPanel::keySequence, desktop_, &DesktopWidget::executeKeySequense);
+    desktop_->enableKeyCombinations(panel_->sendKeyCombinations());
+
+    connect(panel_, &DesktopPanel::keyCombination, desktop_, &DesktopWidget::executeKeyCombination);
     connect(panel_, &DesktopPanel::settingsButton, this, &DesktopWindow::changeSettings);
     connect(panel_, &DesktopPanel::switchToAutosize, this, &DesktopWindow::autosizeWindow);
     connect(panel_, &DesktopPanel::screenSelected, this, &DesktopWindow::sendScreen);
@@ -102,12 +104,8 @@ DesktopWindow::DesktopWindow(ConnectData* connect_data, QWidget* parent)
         }
     });
 
-    connect(panel_, &DesktopPanel::autoScrollChanged, [this](bool enabled)
-    {
-        autoscroll_enabled_ = enabled;
-    });
-
-    connect(panel_, &DesktopPanel::keySequensesChanged, desktop_, &DesktopWidget::enableKeySequenses);
+    connect(panel_, &DesktopPanel::keyCombinationsChanged,
+            desktop_, &DesktopWidget::enableKeyCombinations);
 
     connect(desktop_, &DesktopWidget::sendPointerEvent, this, &DesktopWindow::onPointerEvent);
     connect(desktop_, &DesktopWidget::sendKeyEvent, this, &DesktopWindow::sendKeyEvent);
@@ -136,7 +134,7 @@ void DesktopWindow::resizeDesktopFrame(const DesktopRect& screen_rect)
 
     desktop_->resizeDesktopFrame(screen_rect.size());
 
-    if (!scaling_enabled_)
+    if (!panel_->scaling())
     {
         desktop_->resize(screen_rect.width(), screen_rect.height());
 
@@ -179,7 +177,7 @@ void DesktopWindow::setScreenList(const proto::desktop::ScreenList& screen_list)
 
 void DesktopWindow::onPointerEvent(const QPoint& pos, uint32_t mask)
 {
-    if (autoscroll_enabled_ && !scaling_enabled_)
+    if (panel_->autoScrolling() && !panel_->scaling())
     {
         QPoint cursor = desktop_->mapTo(scroll_area_, pos);
         QRect client_area = scroll_area_->rect();
@@ -317,9 +315,11 @@ void DesktopWindow::takeScreenshot()
 
 void DesktopWindow::onScalingChanged(bool enabled)
 {
-    scaling_enabled_ = enabled;
+    DesktopFrame* frame = desktopFrame();
+    if (!frame)
+        return;
 
-    QSize source_size = desktopFrame()->size().toQSize();
+    QSize source_size = frame->size().toQSize();
     QSize scaled_size = source_size;
 
     if (enabled)
@@ -364,7 +364,7 @@ void DesktopWindow::resizeEvent(QResizeEvent* event)
 {
     panel_->move(QPoint(width() / 2 - panel_->width() / 2, 0));
 
-    if (scaling_enabled_)
+    if (panel_->scaling())
         onScalingChanged();
 
     QWidget::resizeEvent(event);

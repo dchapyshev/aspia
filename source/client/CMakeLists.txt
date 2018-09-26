@@ -73,6 +73,8 @@ list(APPEND SOURCE_CLIENT_UI
     ui/desktop_panel.ui
     ui/desktop_widget.cc
     ui/desktop_widget.h
+    ui/desktop_settings.cc
+    ui/desktop_settings.h
     ui/desktop_window.cc
     ui/desktop_window.h
     ui/file_item_delegate.cc

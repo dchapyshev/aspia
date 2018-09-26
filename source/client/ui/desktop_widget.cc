@@ -167,7 +167,7 @@ void DesktopWidget::doKeyEvent(QKeyEvent* event)
     executeKeyEvent(usb_keycode, flags);
 }
 
-void DesktopWidget::executeKeySequense(int key_sequence)
+void DesktopWidget::executeKeyCombination(int key_sequence)
 {
     const uint32_t kUsbCodeLeftAlt = 0x0700e2;
     const uint32_t kUsbCodeLeftCtrl = 0x0700e0;
@@ -209,7 +209,7 @@ void DesktopWidget::executeKeySequense(int key_sequence)
         executeKeyEvent(*it, flags);
 }
 
-void DesktopWidget::enableKeySequenses(bool enable)
+void DesktopWidget::enableKeyCombinations(bool enable)
 {
     enable_key_sequenses_ = enable;
 

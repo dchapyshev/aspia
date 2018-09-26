@@ -89,8 +89,6 @@ private:
     QPoint scroll_delta_;
 
     bool is_maximized_ = false;
-    bool autoscroll_enabled_ = true;
-    bool scaling_enabled_ = false;
 
     DesktopPoint screen_top_left_;
 

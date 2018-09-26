@@ -32,19 +32,23 @@ class DesktopPanel : public QFrame
 
 public:
     DesktopPanel(proto::SessionType session_type, QWidget* parent);
-    ~DesktopPanel() = default;
+    ~DesktopPanel();
 
     void setScreenList(const proto::desktop::ScreenList& screen_list);
 
+    bool scaling() const;
+    bool autoScrolling() const;
+    bool sendKeyCombinations() const;
+
 signals:
-    void keySequence(int key_secuence);
+    void keyCombination(int key_secuence);
     void switchToFullscreen(bool fullscreen);
     void switchToAutosize();
     void settingsButton();
     void screenSelected(const proto::desktop::Screen& screen);
     void scalingChanged(bool enabled);
     void autoScrollChanged(bool enabled);
-    void keySequensesChanged(bool enabled);
+    void keyCombinationsChanged(bool enabled);
     void takeScreenshot();
     void startSession(proto::SessionType session_type);
 

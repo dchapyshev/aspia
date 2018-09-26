@@ -55,11 +55,11 @@ public:
     void doKeyEvent(QKeyEvent* event);
 
 public slots:
-    void executeKeySequense(int key_sequence);
+    void executeKeyCombination(int key_sequence);
 
     // Enables or disables the sending of key combinations. It only affects the input received
     // from the user. Slot |executeKeySequense| can send key combinations.
-    void enableKeySequenses(bool enable);
+    void enableKeyCombinations(bool enable);
 
 signals:
     void sendKeyEvent(uint32_t usb_keycode, uint32_t flags);
