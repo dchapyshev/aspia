@@ -648,81 +648,85 @@
 <context>
     <name>aspia::AddressBookTab</name>
     <message>
-        <location filename="../address_book_tab.cc" line="235"/>
-        <source>Unable to open address book file.</source>
-        <translation>Die Adressbuchdatei konnte nicht geöffnet werden.</translation>
-    </message>
-    <message>
-        <location filename="../address_book_tab.cc" line="242"/>
-        <source>Unable to read address book file.</source>
-        <translation>Die Adressbuchdatei konnte nicht gelesen werden.</translation>
-    </message>
-    <message>
-        <location filename="../address_book_tab.cc" line="250"/>
-        <location filename="../address_book_tab.cc" line="263"/>
-        <location filename="../address_book_tab.cc" line="291"/>
+        <location filename="../address_book_tab.cc" line="295"/>
         <source>The address book file is corrupted or has an unknown format.</source>
         <translation>Die Adressbuchdatei ist beschädigt oder hat ein unbekanntes Format.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="285"/>
+        <location filename="../address_book_tab.cc" line="289"/>
         <source>Unable to decrypt the address book with the specified password.</source>
         <translation>Das Adressbuch kann nicht mit dem angegebenen Kennwort entschlüsselt werden.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="301"/>
+        <location filename="../address_book_tab.cc" line="235"/>
+        <source>Unable to open address book file &quot;%1&quot;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../address_book_tab.cc" line="242"/>
+        <source>Unable to read address book file &quot;%1&quot;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../address_book_tab.cc" line="251"/>
+        <location filename="../address_book_tab.cc" line="266"/>
+        <source>The address book file &quot;%1&quot; is corrupted or has an unknown format.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../address_book_tab.cc" line="305"/>
         <source>The address book file is encrypted with an unsupported encryption type.</source>
         <translation>Die Adressbuchdatei ist mit einem nicht unterstützten Verschlüsselungstyp verschlüsselt.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="473"/>
+        <location filename="../address_book_tab.cc" line="477"/>
         <source>Are you sure you want to delete computer group &quot;%1&quot; and all child items?</source>
         <translation>Möchten Sie die Computergruppe &quot;%1&quot; und alle Kindelemente wirklich löschen?</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="477"/>
-        <location filename="../address_book_tab.cc" line="499"/>
+        <location filename="../address_book_tab.cc" line="481"/>
+        <location filename="../address_book_tab.cc" line="503"/>
         <source>Confirmation</source>
         <translation>Bestätigung</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="495"/>
+        <location filename="../address_book_tab.cc" line="499"/>
         <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
         <translation>Möchten Sie den Computer &quot;%1&quot; wirklich löschen?</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="754"/>
+        <location filename="../address_book_tab.cc" line="758"/>
         <source>Save Address Book</source>
         <translation>Adressbuch speichern</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="756"/>
+        <location filename="../address_book_tab.cc" line="760"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Aspia Adressbuch (*.aab)</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="766"/>
+        <location filename="../address_book_tab.cc" line="770"/>
         <source>Unable to create or open address book file.</source>
         <translation>Die Adressbuchdatei konnte nicht erstellt oder geöffnet werden.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="778"/>
+        <location filename="../address_book_tab.cc" line="782"/>
         <source>Unable to write address book file.</source>
         <translation>Die Adressbuchdatei konnte nicht geschrieben werden.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="794"/>
-        <location filename="../address_book_tab.cc" line="808"/>
+        <location filename="../address_book_tab.cc" line="798"/>
+        <location filename="../address_book_tab.cc" line="812"/>
         <source>Warning</source>
         <translation>Warnung</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="796"/>
+        <location filename="../address_book_tab.cc" line="800"/>
         <source>Could not open address book</source>
         <translation>Adressbuch konnte nicht geöffnet werden</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="810"/>
+        <location filename="../address_book_tab.cc" line="814"/>
         <source>Failed to save address book</source>
         <translation>Speichern des Adressbuchs fehlgeschlagen</translation>
     </message>
@@ -827,74 +831,84 @@
 <context>
     <name>aspia::ConsoleWindow</name>
     <message>
-        <location filename="../console_window.cc" line="881"/>
+        <location filename="../console_window.cc" line="895"/>
         <source>Aspia Console</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="226"/>
+        <location filename="../console_window.cc" line="240"/>
         <source>Open Address Book</source>
         <translation>Adressbuch öffnen</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="228"/>
+        <location filename="../console_window.cc" line="242"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Aspia Adressbuch (*.aab)</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="673"/>
+        <location filename="../console_window.cc" line="687"/>
         <source>Close tab</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="668"/>
+        <location filename="../console_window.cc" line="682"/>
         <source>Close other tabs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="669"/>
+        <location filename="../console_window.cc" line="211"/>
+        <source>Warning</source>
+        <translation type="unfinished">Warnung</translation>
+    </message>
+    <message>
+        <location filename="../console_window.cc" line="683"/>
         <source>Pin tab</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="860"/>
+        <location filename="../console_window.cc" line="874"/>
         <source>&lt;empty&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="915"/>
+        <location filename="../console_window.cc" line="929"/>
         <source>Information</source>
         <translation>Information</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="916"/>
+        <location filename="../console_window.cc" line="930"/>
         <source>Address Book &quot;%1&quot; is already open.</source>
         <translation>Adressbuch &quot;%1&quot; ist bereits geöffnet.</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="354"/>
+        <location filename="../console_window.cc" line="368"/>
         <source>https://aspia.org/en/help.html</source>
         <translation>https://aspia.org/en/help.html</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="474"/>
-        <location filename="../console_window.cc" line="792"/>
+        <location filename="../console_window.cc" line="212"/>
+        <source>Pinned address book file &quot;%1&quot; was not found.&lt;br/&gt;This file will be unpinned.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../console_window.cc" line="488"/>
+        <location filename="../console_window.cc" line="806"/>
         <source>Confirmation</source>
         <translation>Bestätigung</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="475"/>
-        <location filename="../console_window.cc" line="793"/>
+        <location filename="../console_window.cc" line="489"/>
+        <location filename="../console_window.cc" line="807"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation>Adressbuch &quot;%1&quot; wurde geändert. Änderungen speichern?</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="749"/>
+        <location filename="../console_window.cc" line="763"/>
         <source>Hide</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="764"/>
+        <location filename="../console_window.cc" line="778"/>
         <source>Show</source>
         <translation type="unfinished"></translation>
     </message>

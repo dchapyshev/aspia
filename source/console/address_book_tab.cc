@@ -232,14 +232,14 @@ AddressBookTab* AddressBookTab::openFromFile(const QString& file_path, QWidget* 
     QFile file(file_path);
     if (!file.open(QIODevice::ReadOnly))
     {
-        showOpenError(parent, tr("Unable to open address book file."));
+        showOpenError(parent, tr("Unable to open address book file \"%1\".").arg(file_path));
         return nullptr;
     }
 
     QByteArray buffer = file.readAll();
     if (buffer.isEmpty())
     {
-        showOpenError(parent, tr("Unable to read address book file."));
+        showOpenError(parent, tr("Unable to read address book file \"%1\".").arg(file_path));
         return nullptr;
     }
 
@@ -247,7 +247,9 @@ AddressBookTab* AddressBookTab::openFromFile(const QString& file_path, QWidget* 
 
     if (!address_book_file.ParseFromArray(buffer.constData(), buffer.size()))
     {
-        showOpenError(parent, tr("The address book file is corrupted or has an unknown format."));
+        showOpenError(parent,
+                      tr("The address book file \"%1\" is corrupted or has an unknown format.")
+                      .arg(file_path));
         return nullptr;
     }
 
@@ -260,7 +262,9 @@ AddressBookTab* AddressBookTab::openFromFile(const QString& file_path, QWidget* 
         {
             if (!address_book_data.ParseFromString(address_book_file.data()))
             {
-                showOpenError(parent, tr("The address book file is corrupted or has an unknown format."));
+                showOpenError(parent,
+                              tr("The address book file \"%1\" is corrupted or has an unknown format.")
+                              .arg(file_path));
                 return nullptr;
             }
         }

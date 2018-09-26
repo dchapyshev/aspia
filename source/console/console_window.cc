@@ -200,7 +200,21 @@ ConsoleWindow::ConsoleWindow(const QString& file_path, QWidget* parent)
 
     // Open all pinned files of address books.
     for (const auto& file : mru_.pinnedFiles())
-        addAddressBookTab(AddressBookTab::openFromFile(file, ui.tab_widget));
+    {
+        if (QFile::exists(file))
+        {
+            addAddressBookTab(AddressBookTab::openFromFile(file, ui.tab_widget));
+        }
+        else
+        {
+            QMessageBox::warning(this,
+                                 tr("Warning"),
+                                 tr("Pinned address book file \"%1\" was not found.<br/>"
+                                    "This file will be unpinned.").arg(file),
+                                 QMessageBox::Ok);
+            mru_.unpinFile(file);
+        }
+    }
 
     // If the address book is pinned, then it is already open.
     if (!file_path.isEmpty() && !mru_.isPinnedFile(file_path))

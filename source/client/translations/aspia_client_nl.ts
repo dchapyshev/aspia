@@ -168,24 +168,24 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="210"/>
-        <source>Send keys sequence...</source>
+        <location filename="../ui/desktop_panel.ui" line="247"/>
+        <source>Send key combinations</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="215"/>
-        <location filename="../ui/desktop_panel.ui" line="218"/>
-        <location filename="../ui/desktop_panel.ui" line="221"/>
+        <location filename="../ui/desktop_panel.ui" line="210"/>
+        <location filename="../ui/desktop_panel.ui" line="213"/>
+        <location filename="../ui/desktop_panel.ui" line="216"/>
         <source>Save screenshot...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="233"/>
+        <location filename="../ui/desktop_panel.ui" line="228"/>
         <source>File transfer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="241"/>
+        <location filename="../ui/desktop_panel.ui" line="236"/>
         <source>Scaling an image</source>
         <translation type="unfinished"></translation>
     </message>
@@ -285,19 +285,6 @@
         <location filename="../ui/file_transfer_dialog.ui" line="68"/>
         <source>Item:</source>
         <translation>Item:</translation>
-    </message>
-</context>
-<context>
-    <name>KeySequenceDialog</name>
-    <message>
-        <location filename="../ui/key_sequence_dialog.ui" line="17"/>
-        <source>Key Sequence</source>
-        <translation>Toetsencombinatie</translation>
-    </message>
-    <message>
-        <location filename="../ui/key_sequence_dialog.ui" line="29"/>
-        <source>Key sequence to send:</source>
-        <translation>Te versturen toetsencombinatie:</translation>
     </message>
 </context>
 <context>
@@ -634,32 +621,32 @@
 <context>
     <name>aspia::ClientSessionDesktopView</name>
     <message>
-        <location filename="../client_session_desktop_view.cc" line="55"/>
+        <location filename="../client_session_desktop_view.cc" line="53"/>
         <source>Session error: Invalid message from host.</source>
         <translation>Sessie fout: Ongeldig bericht van de host.</translation>
     </message>
     <message>
-        <location filename="../client_session_desktop_view.cc" line="124"/>
+        <location filename="../client_session_desktop_view.cc" line="122"/>
         <source>Session error: Video decoder not initialized.</source>
         <translation>Sessie fout: Video decoder niet geinitialiseerd.</translation>
     </message>
     <message>
-        <location filename="../client_session_desktop_view.cc" line="135"/>
+        <location filename="../client_session_desktop_view.cc" line="133"/>
         <source>Session error: Wrong video frame size.</source>
         <translation>Sessie fout: Verkeerde video frame grootte.</translation>
     </message>
     <message>
-        <location filename="../client_session_desktop_view.cc" line="142"/>
+        <location filename="../client_session_desktop_view.cc" line="140"/>
         <source>Session error: Wrong video frame position.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_session_desktop_view.cc" line="152"/>
+        <location filename="../client_session_desktop_view.cc" line="150"/>
         <source>Session error: The desktop frame is not initialized.</source>
         <translation>Sessie fout: Het bureaublad frame is niet geinitialiseerd.</translation>
     </message>
     <message>
-        <location filename="../client_session_desktop_view.cc" line="158"/>
+        <location filename="../client_session_desktop_view.cc" line="156"/>
         <source>Session error: The video packet could not be decoded.</source>
         <translation>Sessie fout: Het video pakket kon niet gedecodeerd worden.</translation>
     </message>
@@ -667,12 +654,12 @@
 <context>
     <name>aspia::ClientSessionFileTransfer</name>
     <message>
-        <location filename="../client_session_file_transfer.cc" line="62"/>
+        <location filename="../client_session_file_transfer.cc" line="61"/>
         <source>Session error: Invalid message from host.</source>
         <translation>Sessie fout: Ongeldig bericht van de host.</translation>
     </message>
     <message>
-        <location filename="../client_session_file_transfer.cc" line="69"/>
+        <location filename="../client_session_file_transfer.cc" line="68"/>
         <source>Session error: There are no logged in users. File transfer is not available.</source>
         <translation>Sessie fout: Er zijn geen ingelogde gebruikers. Bestandsoverdracht is niet beschikbaar.</translation>
     </message>
@@ -723,22 +710,22 @@
         <translation>Aspia Bureaublad Weergave</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="291"/>
+        <location filename="../ui/desktop_window.cc" line="293"/>
         <source>Save File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="293"/>
+        <location filename="../ui/desktop_window.cc" line="295"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="313"/>
+        <location filename="../ui/desktop_window.cc" line="315"/>
         <source>Warning</source>
         <translation type="unfinished">Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="313"/>
+        <location filename="../ui/desktop_window.cc" line="315"/>
         <source>Could not save image</source>
         <translation type="unfinished"></translation>
     </message>

@@ -168,24 +168,24 @@
         <translation>Расширенное меню</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="210"/>
-        <source>Send keys sequence...</source>
-        <translation>Отправить сочетание клавиш...</translation>
+        <location filename="../ui/desktop_panel.ui" line="247"/>
+        <source>Send key combinations</source>
+        <translation>Отправлять комбинации клавиш</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="215"/>
-        <location filename="../ui/desktop_panel.ui" line="218"/>
-        <location filename="../ui/desktop_panel.ui" line="221"/>
+        <location filename="../ui/desktop_panel.ui" line="210"/>
+        <location filename="../ui/desktop_panel.ui" line="213"/>
+        <location filename="../ui/desktop_panel.ui" line="216"/>
         <source>Save screenshot...</source>
         <translation>Сохранить снимок экрана...</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="233"/>
+        <location filename="../ui/desktop_panel.ui" line="228"/>
         <source>File transfer</source>
         <translation>Передача файлов</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="241"/>
+        <location filename="../ui/desktop_panel.ui" line="236"/>
         <source>Scaling an image</source>
         <translation>Масштабирование изображения</translation>
     </message>
@@ -285,19 +285,6 @@
         <location filename="../ui/file_transfer_dialog.ui" line="68"/>
         <source>Item:</source>
         <translation>Элемент:</translation>
-    </message>
-</context>
-<context>
-    <name>KeySequenceDialog</name>
-    <message>
-        <location filename="../ui/key_sequence_dialog.ui" line="17"/>
-        <source>Key Sequence</source>
-        <translation>Сочетание клавиш</translation>
-    </message>
-    <message>
-        <location filename="../ui/key_sequence_dialog.ui" line="29"/>
-        <source>Key sequence to send:</source>
-        <translation>Сочетание клавиш для отправки:</translation>
     </message>
 </context>
 <context>
@@ -634,32 +621,32 @@
 <context>
     <name>aspia::ClientSessionDesktopView</name>
     <message>
-        <location filename="../client_session_desktop_view.cc" line="55"/>
+        <location filename="../client_session_desktop_view.cc" line="53"/>
         <source>Session error: Invalid message from host.</source>
         <translation>Ошибка сессии: Неверное сообщение от хоста.</translation>
     </message>
     <message>
-        <location filename="../client_session_desktop_view.cc" line="124"/>
+        <location filename="../client_session_desktop_view.cc" line="122"/>
         <source>Session error: Video decoder not initialized.</source>
         <translation>Ошибка сессии: Видео-декодер не инициализирован.</translation>
     </message>
     <message>
-        <location filename="../client_session_desktop_view.cc" line="135"/>
+        <location filename="../client_session_desktop_view.cc" line="133"/>
         <source>Session error: Wrong video frame size.</source>
         <translation>Ошибка сессии: Неверный размер экрана.</translation>
     </message>
     <message>
-        <location filename="../client_session_desktop_view.cc" line="142"/>
+        <location filename="../client_session_desktop_view.cc" line="140"/>
         <source>Session error: Wrong video frame position.</source>
         <translation>Ошибка сессии: Неверное положение видео-кадра.</translation>
     </message>
     <message>
-        <location filename="../client_session_desktop_view.cc" line="152"/>
+        <location filename="../client_session_desktop_view.cc" line="150"/>
         <source>Session error: The desktop frame is not initialized.</source>
         <translation>Ошибка сессии: Рабочий стол не инициализирован.</translation>
     </message>
     <message>
-        <location filename="../client_session_desktop_view.cc" line="158"/>
+        <location filename="../client_session_desktop_view.cc" line="156"/>
         <source>Session error: The video packet could not be decoded.</source>
         <translation>Ошибка сессии: Не удалось декодировать видео-пакет.</translation>
     </message>
@@ -667,12 +654,12 @@
 <context>
     <name>aspia::ClientSessionFileTransfer</name>
     <message>
-        <location filename="../client_session_file_transfer.cc" line="62"/>
+        <location filename="../client_session_file_transfer.cc" line="61"/>
         <source>Session error: Invalid message from host.</source>
         <translation>Ошибка сессии: Неверное сообщение от хоста.</translation>
     </message>
     <message>
-        <location filename="../client_session_file_transfer.cc" line="69"/>
+        <location filename="../client_session_file_transfer.cc" line="68"/>
         <source>Session error: There are no logged in users. File transfer is not available.</source>
         <translation>Ошибка сессии: Нет вошедших в систему пользователей. Передача файлов недоступна.</translation>
     </message>
@@ -723,22 +710,22 @@
         <translation>Просмотр рабочего стола</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="291"/>
+        <location filename="../ui/desktop_window.cc" line="293"/>
         <source>Save File</source>
         <translation>Сохранение файла</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="293"/>
+        <location filename="../ui/desktop_window.cc" line="295"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG изображение (*.png);;BMP изображение (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="313"/>
+        <location filename="../ui/desktop_window.cc" line="315"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="313"/>
+        <location filename="../ui/desktop_window.cc" line="315"/>
         <source>Could not save image</source>
         <translation>Не удалось сохранить изображение</translation>
     </message>
