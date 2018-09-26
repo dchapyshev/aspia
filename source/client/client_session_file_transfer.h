@@ -54,7 +54,7 @@ private slots:
 
 private:
     ConnectData* connect_data_;
-    QPointer<FileManagerWindow> file_manager_;
+    FileManagerWindow* file_manager_;
 
     QPointer<FileWorker> worker_;
     QPointer<QThread> worker_thread_;

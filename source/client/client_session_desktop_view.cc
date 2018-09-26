@@ -39,11 +39,9 @@ ClientSessionDesktopView::ClientSessionDesktopView(ConnectData* connect_data, QO
     // When the window is closed, we close the session.
     connect(desktop_window_, &DesktopWindow::windowClose,
             this, &ClientSessionDesktopView::closedByUser);
-}
 
-ClientSessionDesktopView::~ClientSessionDesktopView()
-{
-    delete desktop_window_;
+    connect(desktop_window_, &DesktopWindow::windowClose,
+            desktop_window_, &DesktopWindow::deleteLater);
 }
 
 void ClientSessionDesktopView::messageReceived(const QByteArray& buffer)

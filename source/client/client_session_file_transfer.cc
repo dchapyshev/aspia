@@ -49,7 +49,6 @@ ClientSessionFileTransfer::~ClientSessionFileTransfer()
         delete request;
     requests_.clear();
 
-    delete file_manager_;
     delete worker_;
 }
 
@@ -89,6 +88,9 @@ void ClientSessionFileTransfer::startSession()
     // When the window is closed, we close the session.
     connect(file_manager_, &FileManagerWindow::windowClose,
             this, &ClientSessionFileTransfer::closedByUser);
+
+    connect(file_manager_, &FileManagerWindow::windowClose,
+            file_manager_, &FileManagerWindow::deleteLater);
 
     connect(file_manager_, &FileManagerWindow::localRequest,
             worker_, &FileWorker::executeRequest);

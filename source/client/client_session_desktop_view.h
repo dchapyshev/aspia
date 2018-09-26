@@ -38,7 +38,7 @@ class ClientSessionDesktopView : public ClientSession
 
 public:
     ClientSessionDesktopView(ConnectData* connect_data, QObject* parent);
-    virtual ~ClientSessionDesktopView();
+    virtual ~ClientSessionDesktopView() = default;
 
 public slots:
     // ClientSession implementation.
@@ -56,7 +56,7 @@ protected:
 
     ConnectData* connect_data_;
     proto::desktop::HostToClient message_;
-    QPointer<DesktopWindow> desktop_window_;
+    DesktopWindow* desktop_window_;
 
 private:
     proto::desktop::VideoEncoding video_encoding_ = proto::desktop::VIDEO_ENCODING_UNKNOWN;
