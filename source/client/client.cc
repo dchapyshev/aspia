@@ -18,7 +18,6 @@
 
 #include "client/client.h"
 
-#include "client/ui/authorization_dialog.h"
 #include "client/ui/status_dialog.h"
 #include "client/client_session_desktop_manage.h"
 #include "client/client_session_desktop_view.h"
@@ -27,9 +26,9 @@
 
 namespace aspia {
 
-Client::Client(const ConnectData& connect_data, QObject* parent)
+Client::Client(ConnectData&& connect_data, QObject* parent)
     : QObject(parent),
-      connect_data_(connect_data)
+      connect_data_(std::move(connect_data))
 {
     ConfigFactory::fixupDesktopConfig(&connect_data_.desktop_config);
 
@@ -65,23 +64,6 @@ void Client::start()
     QString address(QString::fromStdString(connect_data_.address));
     QString username(QString::fromStdString(connect_data_.username));
     QString password(QString::fromStdString(connect_data_.password));
-
-    if (username.isEmpty() || password.isEmpty())
-    {
-        AuthorizationDialog auth_dialog(status_dialog_);
-
-        auth_dialog.setUserName(username);
-        auth_dialog.setPassword(password);
-
-        if (auth_dialog.exec() == AuthorizationDialog::Rejected)
-        {
-            status_dialog_->close();
-            return;
-        }
-
-        username = auth_dialog.userName();
-        password = auth_dialog.password();
-    }
 
     status_dialog_->addStatus(tr("Attempt to connect to %1:%2.")
                               .arg(address)

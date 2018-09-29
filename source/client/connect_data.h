@@ -19,6 +19,7 @@
 #ifndef ASPIA_CLIENT__CONNECT_DATA_H_
 #define ASPIA_CLIENT__CONNECT_DATA_H_
 
+#include "build/build_config.h"
 #include "protocol/desktop_session.pb.h"
 #include "protocol/session_type.pb.h"
 
@@ -26,15 +27,16 @@ namespace aspia {
 
 struct ConnectData
 {
+    ConnectData();
     ~ConnectData();
 
     std::string computer_name;
     std::string address;
-    uint16_t port = 0;
+    uint16_t port = DEFAULT_HOST_TCP_PORT;
     std::string username;
     std::string password;
 
-    proto::SessionType session_type = proto::SESSION_TYPE_UNKNOWN;
+    proto::SessionType session_type = proto::SESSION_TYPE_DESKTOP_MANAGE;
     proto::desktop::Config desktop_config;
 };
 

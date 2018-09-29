@@ -26,8 +26,10 @@ Q_IMPORT_PLUGIN (QWindowsVistaStylePlugin);
 
 #include "base/logging.h"
 #include "build/version.h"
-#include "crypto/scoped_crypto_initializer.h"
+#include "client/client_pool.h"
 #include "console/console_window.h"
+#include "console/console_settings.h"
+#include "crypto/scoped_crypto_initializer.h"
 
 using namespace aspia;
 
@@ -45,26 +47,100 @@ int main(int argc, char *argv[])
 
     QApplication application(argc, argv);
 
+    ConsoleSettings console_settings;
+    QString current_locale = console_settings.locale();
+
+    LocaleLoader locale_loader;
+    if (!locale_loader.contains(current_locale))
+    {
+        current_locale = ConsoleSettings::defaultLocale();
+        console_settings.setLocale(current_locale);
+    }
+
+    locale_loader.installTranslators(current_locale);
+
     application.setOrganizationName(QStringLiteral("Aspia"));
-    application.setApplicationName(QStringLiteral("Console"));
+    application.setApplicationName(QApplication::translate("Console", "Console"));
     application.setApplicationVersion(QStringLiteral(ASPIA_VERSION_STRING));
     application.setAttribute(Qt::AA_DisableWindowContextHelpButton, true);
 
+    QCommandLineOption address_option(
+        QStringLiteral("address"),
+        QApplication::translate("Console", "Remote computer address."),
+        QApplication::translate("Console", "address"));
+
+    QCommandLineOption port_option(
+        QStringLiteral("port"),
+        QApplication::translate("Console", "Remote computer port."),
+        QApplication::translate("Console", "port"),
+        QString::number(DEFAULT_HOST_TCP_PORT));
+
+    QCommandLineOption username_option(
+        QStringLiteral("username"),
+        QApplication::translate("Console", "Name of user."),
+        QApplication::translate("Console", "username"));
+
+    QCommandLineOption session_type_option(
+        QStringLiteral("session-type"),
+        QApplication::translate("Console", "Session type. Possible values: desktop-manage, "
+                                "desktop-view, file-transfer."),
+        QStringLiteral("desktop-manage"));
+
+    QCommandLineOption simple_ui_option(
+        QStringLiteral("simple-ui"),
+        QApplication::translate("Console", "Run the program with a simplified user interface."));
+
     QCommandLineParser parser;
-    parser.setApplicationDescription(QStringLiteral("Aspia Console"));
+    parser.setApplicationDescription(QApplication::translate("Console", "Aspia Console"));
     parser.addHelpOption();
-    parser.addPositionalArgument(QStringLiteral("file"), QStringLiteral("The file to open."));
+    parser.addVersionOption();
+    parser.addPositionalArgument(QApplication::translate("Console", "file"),
+                                 QApplication::translate("Console", "The file to open."));
+    parser.addOption(address_option);
+    parser.addOption(port_option);
+    parser.addOption(username_option);
+    parser.addOption(session_type_option);
+    parser.addOption(simple_ui_option);
     parser.process(application);
 
-    QStringList arguments = parser.positionalArguments();
+    QScopedPointer<ConsoleWindow> console_window;
 
-    QString file_path;
-    if (!arguments.isEmpty())
-        file_path = arguments.front();
+    if (parser.isSet(simple_ui_option))
+    {
+        if (!ClientPool::connect())
+            return 0;
+    }
+    else if (parser.isSet(address_option))
+    {
+        ConnectData connect_data;
+        connect_data.address  = parser.value(address_option).toStdString();
+        connect_data.port     = parser.value(port_option).toUShort();
+        connect_data.username = parser.value(username_option).toStdString();
 
-    ConsoleWindow window(file_path);
-    window.show();
-    window.activateWindow();
+        QString session_type = parser.value(session_type_option);
+
+        if (session_type == "desktop-manage")
+            connect_data.session_type = proto::SESSION_TYPE_DESKTOP_MANAGE;
+        else if (session_type == "desktop-view")
+            connect_data.session_type = proto::SESSION_TYPE_DESKTOP_VIEW;
+        else if (session_type == "file-transfer")
+            connect_data.session_type = proto::SESSION_TYPE_FILE_TRANSFER;
+
+        if (!ClientPool::connect(connect_data))
+            return 0;
+    }
+    else
+    {
+        QStringList arguments = parser.positionalArguments();
+
+        QString file_path;
+        if (!arguments.isEmpty())
+            file_path = arguments.front();
+
+        console_window.reset(new ConsoleWindow(locale_loader, file_path));
+        console_window->show();
+        console_window->activateWindow();
+    }
 
     return application.exec();
 }

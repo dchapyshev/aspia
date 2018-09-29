@@ -507,87 +507,87 @@
 <context>
     <name>aspia::Client</name>
     <message>
-        <location filename="../client.cc" line="61"/>
+        <location filename="../client.cc" line="68"/>
         <source>Attempt to connect to %1:%2.</source>
         <translation>Спроба підключення до %1:%2.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="72"/>
+        <location filename="../client.cc" line="79"/>
         <source>Connection established.</source>
         <translation>З&apos;єднання встановлено.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="125"/>
+        <location filename="../client.cc" line="132"/>
         <source>Connection was refused by the peer (or timed out).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client.cc" line="129"/>
+        <location filename="../client.cc" line="136"/>
         <source>Remote host closed the connection.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client.cc" line="133"/>
+        <location filename="../client.cc" line="140"/>
         <source>Host address was not found.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client.cc" line="137"/>
+        <location filename="../client.cc" line="144"/>
         <source>Socket operation timed out.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client.cc" line="141"/>
+        <location filename="../client.cc" line="148"/>
         <source>Address specified is already in use and was set to be exclusive.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client.cc" line="145"/>
+        <location filename="../client.cc" line="152"/>
         <source>Address specified does not belong to the host.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client.cc" line="149"/>
+        <location filename="../client.cc" line="156"/>
         <source>Violation of the data exchange protocol.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client.cc" line="153"/>
+        <location filename="../client.cc" line="160"/>
         <source>An error occurred while encrypting the message.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client.cc" line="157"/>
+        <location filename="../client.cc" line="164"/>
         <source>An error occurred while decrypting the message.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client.cc" line="161"/>
+        <location filename="../client.cc" line="168"/>
         <source>An error occured while authenticating: wrong user name or password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client.cc" line="165"/>
+        <location filename="../client.cc" line="172"/>
         <source>Specified session type is not allowed for the user.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client.cc" line="169"/>
+        <location filename="../client.cc" line="176"/>
         <source>An unknown error occurred.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client.cc" line="115"/>
+        <location filename="../client.cc" line="122"/>
         <source>Disconnected.</source>
         <translation>Відключено.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="89"/>
+        <location filename="../client.cc" line="96"/>
         <source>Unsupported session type.</source>
         <translation>Тип сесії не підтримується.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="107"/>
+        <location filename="../client.cc" line="114"/>
         <source>Session started.</source>
         <translation>Сесію розпочато.</translation>
     </message>
@@ -654,12 +654,12 @@
 <context>
     <name>aspia::ClientSessionFileTransfer</name>
     <message>
-        <location filename="../client_session_file_transfer.cc" line="61"/>
+        <location filename="../client_session_file_transfer.cc" line="60"/>
         <source>Session error: Invalid message from host.</source>
         <translation>Збій сесії: Невірне повідомлення від хоста.</translation>
     </message>
     <message>
-        <location filename="../client_session_file_transfer.cc" line="68"/>
+        <location filename="../client_session_file_transfer.cc" line="67"/>
         <source>Session error: There are no logged in users. File transfer is not available.</source>
         <translation>Збій сесії: Немає користувачів в системі. Неможливо передати файли.</translation>
     </message>
@@ -710,22 +710,22 @@
         <translation>Перегляд робочого столу Aspia</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="293"/>
+        <location filename="../ui/desktop_window.cc" line="291"/>
         <source>Save File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="295"/>
+        <location filename="../ui/desktop_window.cc" line="293"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="315"/>
+        <location filename="../ui/desktop_window.cc" line="313"/>
         <source>Warning</source>
         <translation type="unfinished">Попередження</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="315"/>
+        <location filename="../ui/desktop_window.cc" line="313"/>
         <source>Could not save image</source>
         <translation type="unfinished"></translation>
     </message>

@@ -32,7 +32,7 @@ class Client : public QObject
     Q_OBJECT
 
 public:
-    Client(const ConnectData& connect_data, QObject* parent = nullptr);
+    Client(ConnectData&& connect_data, QObject* parent = nullptr);
     ~Client() = default;
 
     void start();

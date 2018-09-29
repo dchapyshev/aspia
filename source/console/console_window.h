@@ -37,7 +37,7 @@ class ConsoleWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    ConsoleWindow(const QString& file_path, QWidget* parent = nullptr);
+    ConsoleWindow(LocaleLoader& locale_loader, const QString& file_path);
     ~ConsoleWindow();
 
 public slots:
@@ -93,7 +93,7 @@ private:
 
     Ui::ConsoleWindow ui;
 
-    LocaleLoader locale_loader_;
+    LocaleLoader& locale_loader_;
     Mru mru_;
 
     QScopedPointer<QSystemTrayIcon> tray_icon_;

@@ -232,6 +232,69 @@
     </message>
 </context>
 <context>
+    <name>Console</name>
+    <message>
+        <location filename="../console_main.cc" line="63"/>
+        <source>Console</source>
+        <translation>Консоль</translation>
+    </message>
+    <message>
+        <location filename="../console_main.cc" line="69"/>
+        <source>Remote computer address.</source>
+        <translation>Адрес удаленного компьютера.</translation>
+    </message>
+    <message>
+        <location filename="../console_main.cc" line="70"/>
+        <source>address</source>
+        <translation>адрес</translation>
+    </message>
+    <message>
+        <location filename="../console_main.cc" line="74"/>
+        <source>Remote computer port.</source>
+        <translation>Порт удаленного компьютера.</translation>
+    </message>
+    <message>
+        <location filename="../console_main.cc" line="75"/>
+        <source>port</source>
+        <translation>порт</translation>
+    </message>
+    <message>
+        <location filename="../console_main.cc" line="80"/>
+        <source>Name of user.</source>
+        <translation>Имя пользователя.</translation>
+    </message>
+    <message>
+        <location filename="../console_main.cc" line="81"/>
+        <source>username</source>
+        <translation>имя_пользователя</translation>
+    </message>
+    <message>
+        <location filename="../console_main.cc" line="85"/>
+        <source>Session type. Possible values: desktop-manage, desktop-view, file-transfer.</source>
+        <translation>Тип сессии. Возможные значения: desktop-manage, desktop-view, file-transfer.</translation>
+    </message>
+    <message>
+        <location filename="../console_main.cc" line="91"/>
+        <source>Run the program with a simplified user interface.</source>
+        <translation>Запуск программы с упрощенным интерфейсом пользователя.</translation>
+    </message>
+    <message>
+        <location filename="../console_main.cc" line="94"/>
+        <source>Aspia Console</source>
+        <translation>Консоль Aspia</translation>
+    </message>
+    <message>
+        <location filename="../console_main.cc" line="97"/>
+        <source>file</source>
+        <translation>файл</translation>
+    </message>
+    <message>
+        <location filename="../console_main.cc" line="98"/>
+        <source>The file to open.</source>
+        <translation>Файл для открытия.</translation>
+    </message>
+</context>
+<context>
     <name>ConsoleWindow</name>
     <message>
         <location filename="../console_window.ui" line="62"/>
@@ -652,85 +715,85 @@
 <context>
     <name>aspia::AddressBookTab</name>
     <message>
-        <location filename="../address_book_tab.cc" line="295"/>
+        <location filename="../address_book_tab.cc" line="294"/>
         <source>The address book file is corrupted or has an unknown format.</source>
         <translation>Файл адресной книги поврежден или имеет неизвестный формат.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="289"/>
+        <location filename="../address_book_tab.cc" line="288"/>
         <source>Unable to decrypt the address book with the specified password.</source>
         <translation>Не удалось расшифровать адресную книгу с указанным паролем.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="235"/>
+        <location filename="../address_book_tab.cc" line="234"/>
         <source>Unable to open address book file &quot;%1&quot;.</source>
         <translation>Не удалось открыть файл адресной книги &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="242"/>
+        <location filename="../address_book_tab.cc" line="241"/>
         <source>Unable to read address book file &quot;%1&quot;.</source>
         <translation>Не удалось прочитать файл адресной книги &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="251"/>
-        <location filename="../address_book_tab.cc" line="266"/>
+        <location filename="../address_book_tab.cc" line="250"/>
+        <location filename="../address_book_tab.cc" line="265"/>
         <source>The address book file &quot;%1&quot; is corrupted or has an unknown format.</source>
         <translation>Файл адресной книги &quot;%1&quot; поврежден или имеет неизвестный формат.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="305"/>
+        <location filename="../address_book_tab.cc" line="304"/>
         <source>The address book file is encrypted with an unsupported encryption type.</source>
         <translation>Файл адресной книги зашифрован неподдерживаемым методом шифрования.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="477"/>
+        <location filename="../address_book_tab.cc" line="476"/>
         <source>Are you sure you want to delete computer group &quot;%1&quot; and all child items?</source>
         <translation>Вы действительно хотите удалить группу компьютеров &quot;%1&quot; и все дочерние элементы?</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="481"/>
-        <location filename="../address_book_tab.cc" line="503"/>
+        <location filename="../address_book_tab.cc" line="480"/>
+        <location filename="../address_book_tab.cc" line="502"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="499"/>
+        <location filename="../address_book_tab.cc" line="498"/>
         <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
         <translation>Вы действительно хотите удалить компьютер &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="758"/>
+        <location filename="../address_book_tab.cc" line="754"/>
         <source>Save Address Book</source>
         <translation>Сохранение адресной книги</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="760"/>
+        <location filename="../address_book_tab.cc" line="756"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Адресная книга Aspia (*.aab)</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="770"/>
+        <location filename="../address_book_tab.cc" line="766"/>
         <source>Unable to create or open address book file.</source>
         <translation>Не удалось создать или открыть файл адресной книги.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="782"/>
+        <location filename="../address_book_tab.cc" line="778"/>
         <source>Unable to write address book file.</source>
         <translation>Не удалось записать файл адресной книги.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="798"/>
-        <location filename="../address_book_tab.cc" line="812"/>
+        <location filename="../address_book_tab.cc" line="794"/>
+        <location filename="../address_book_tab.cc" line="808"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="800"/>
+        <location filename="../address_book_tab.cc" line="796"/>
         <source>Could not open address book</source>
         <translation>Не удалось открыть адресную книгу</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="814"/>
+        <location filename="../address_book_tab.cc" line="810"/>
         <source>Failed to save address book</source>
         <translation>Не удалось сохранить адресную книгу</translation>
     </message>
@@ -841,84 +904,84 @@
 <context>
     <name>aspia::ConsoleWindow</name>
     <message>
-        <location filename="../console_window.cc" line="895"/>
+        <location filename="../console_window.cc" line="876"/>
         <source>Aspia Console</source>
         <translation>Консоль Aspia</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="240"/>
+        <location filename="../console_window.cc" line="226"/>
         <source>Open Address Book</source>
         <translation>Открытие адресной книги</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="242"/>
+        <location filename="../console_window.cc" line="228"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Адресная книга Aspia (*.aab)</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="687"/>
+        <location filename="../console_window.cc" line="668"/>
         <source>Close tab</source>
         <translation>Закрыть вкладку</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="682"/>
+        <location filename="../console_window.cc" line="663"/>
         <source>Close other tabs</source>
         <translation>Закрыть другие вкладки</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="211"/>
+        <location filename="../console_window.cc" line="197"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="683"/>
+        <location filename="../console_window.cc" line="664"/>
         <source>Pin tab</source>
         <translation>Закрепить вкладку</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="874"/>
+        <location filename="../console_window.cc" line="855"/>
         <source>&lt;empty&gt;</source>
         <translation>&lt;пусто&gt;</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="929"/>
+        <location filename="../console_window.cc" line="910"/>
         <source>Information</source>
         <translation>Информация</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="930"/>
+        <location filename="../console_window.cc" line="911"/>
         <source>Address Book &quot;%1&quot; is already open.</source>
         <translation>Адресная книга &quot;%1&quot; уже открыта.</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="368"/>
+        <location filename="../console_window.cc" line="354"/>
         <source>https://aspia.org/en/help.html</source>
         <translation>https://aspia.org/ru/help.html</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="212"/>
+        <location filename="../console_window.cc" line="198"/>
         <source>Pinned address book file &quot;%1&quot; was not found.&lt;br/&gt;This file will be unpinned.</source>
         <translation>Закрепленный файл адресной книги &quot;%1&quot; не найден.&lt;br/&gt;Этот файл будет откреплен.</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="488"/>
-        <location filename="../console_window.cc" line="806"/>
+        <location filename="../console_window.cc" line="469"/>
+        <location filename="../console_window.cc" line="787"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="489"/>
-        <location filename="../console_window.cc" line="807"/>
+        <location filename="../console_window.cc" line="470"/>
+        <location filename="../console_window.cc" line="788"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation>Адресная книга &quot;%1&quot; изменена. Сохранить изменения?</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="763"/>
+        <location filename="../console_window.cc" line="744"/>
         <source>Hide</source>
         <translation>Спрятать</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="778"/>
+        <location filename="../console_window.cc" line="759"/>
         <source>Show</source>
         <translation>Показать</translation>
     </message>

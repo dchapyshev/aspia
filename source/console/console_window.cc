@@ -73,23 +73,13 @@ private:
 
 } // namespace
 
-ConsoleWindow::ConsoleWindow(const QString& file_path, QWidget* parent)
-    : QMainWindow(parent)
+ConsoleWindow::ConsoleWindow(LocaleLoader& locale_loader, const QString& file_path)
+    : locale_loader_(locale_loader)
 {
     ConsoleSettings settings;
-
-    QString current_locale = settings.locale();
-
-    if (!locale_loader_.contains(current_locale))
-    {
-        current_locale = ConsoleSettings::defaultLocale();
-        settings.setLocale(current_locale);
-    }
-
-    locale_loader_.installTranslators(current_locale);
     ui.setupUi(this);
 
-    createLanguageMenu(current_locale);
+    createLanguageMenu(settings.locale());
 
     mru_.setRecentOpen(settings.recentOpen());
     mru_.setPinnedFiles(settings.pinnedFiles());

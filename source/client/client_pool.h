@@ -19,6 +19,8 @@
 #ifndef ASPIA_CLIENT__CLIENT_POOL_H_
 #define ASPIA_CLIENT__CLIENT_POOL_H_
 
+#include <optional>
+
 #include "base/macros_magic.h"
 #include "client/connect_data.h"
 
@@ -29,8 +31,13 @@ class Client;
 class ClientPool
 {
 public:
-    static void connect(const ConnectData& connect_data);
-    static void connect();
+    // Connects to the computer.
+    // If you do not specify the connection parameters, then displays a dialog for setting the
+    // parameters.
+    // If the connection parameters do not specify a user name or a password, it displays a dialog
+    // for authorization.
+    // If the connection is canceled by the user, it returns |false|, otherwise |true|.
+    static bool connect(const std::optional<ConnectData>& connect_data = std::nullopt);
 
 private:
     DISALLOW_COPY_AND_ASSIGN(ClientPool);

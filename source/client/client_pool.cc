@@ -20,6 +20,7 @@
 
 #include <QObject>
 
+#include "client/ui/authorization_dialog.h"
 #include "client/ui/client_dialog.h"
 #include "client/client.h"
 
@@ -38,7 +39,7 @@ public:
     ClientPoolImpl() = default;
     ~ClientPoolImpl() = default;
 
-    void connectWith(const ConnectData& connect_data);
+    void connectWith(ConnectData&& connect_data);
 
 private slots:
     void onClientFinished(Client* client);
@@ -52,12 +53,12 @@ private:
     DISALLOW_COPY_AND_ASSIGN(ClientPoolImpl);
 };
 
-void ClientPoolImpl::connectWith(const ConnectData& connect_data)
+void ClientPoolImpl::connectWith(ConnectData&& connect_data)
 {
-    Client* client = new Client(connect_data, this);
+    Client* client = new Client(std::move(connect_data), this);
     connect(client, &Client::finished, this, &ClientPoolImpl::onClientFinished);
-    client_list_.emplace_back(client);
 
+    client_list_.emplace_back(client);
     client->start();
 }
 
@@ -76,23 +77,43 @@ void ClientPoolImpl::onClientFinished(Client* client)
 } // namespace
 
 // static
-void ClientPool::connect(const ConnectData& connect_data)
+bool ClientPool::connect(const std::optional<ConnectData>& connect_data)
 {
+    ConnectData data;
+
+    if (!connect_data.has_value())
+    {
+        ClientDialog dialog;
+        if (dialog.exec() != ClientDialog::Accepted)
+            return false;
+
+        data = dialog.connectData();
+    }
+    else
+    {
+        data = connect_data.value();
+    }
+
+    if (data.username.empty() || data.password.empty())
+    {
+        AuthorizationDialog auth_dialog;
+
+        auth_dialog.setUserName(QString::fromStdString(data.username));
+        auth_dialog.setPassword(QString::fromStdString(data.password));
+
+        if (auth_dialog.exec() == AuthorizationDialog::Rejected)
+            return false;
+
+        data.username = auth_dialog.userName().toStdString();
+        data.password = auth_dialog.password().toStdString();
+    }
+
     std::scoped_lock lock(g_pool_lock);
     if (!g_pool)
         g_pool = std::make_unique<ClientPoolImpl>();
 
-    g_pool->connectWith(connect_data);
-}
-
-// static
-void ClientPool::connect()
-{
-    ClientDialog dialog;
-    if (dialog.exec() != ClientDialog::Accepted)
-        return;
-
-    connect(dialog.connectData());
+    g_pool->connectWith(std::move(data));
+    return true;
 }
 
 } // namespace aspia

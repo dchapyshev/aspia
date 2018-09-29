@@ -18,9 +18,15 @@
 
 #include "client/connect_data.h"
 
+#include "client/config_factory.h"
 #include "crypto/secure_memory.h"
 
 namespace aspia {
+
+ConnectData::ConnectData()
+{
+    ConfigFactory::setDefaultDesktopManageConfig(&desktop_config);
+}
 
 ConnectData::~ConnectData()
 {
