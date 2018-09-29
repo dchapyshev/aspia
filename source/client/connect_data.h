@@ -19,49 +19,23 @@
 #ifndef ASPIA_CLIENT__CONNECT_DATA_H_
 #define ASPIA_CLIENT__CONNECT_DATA_H_
 
-#include <QString>
-
 #include "protocol/desktop_session.pb.h"
 #include "protocol/session_type.pb.h"
 
 namespace aspia {
 
-class ConnectData
+struct ConnectData
 {
-public:
-    ConnectData() = default;
     ~ConnectData();
 
-    QString computerName() const { return computer_name_; }
-    void setComputerName(const QString& computer_name) { computer_name_ = computer_name; }
+    std::string computer_name;
+    std::string address;
+    uint16_t port = 0;
+    std::string username;
+    std::string password;
 
-    QString address() const { return address_; }
-    void setAddress(const QString& address) { address_ = address; }
-
-    int port() const { return port_; }
-    void setPort(int port) { port_ = port; }
-
-    QString userName() const { return user_name_; }
-    void setUserName(const QString& user_name) { user_name_ = user_name.toLower(); }
-
-    QString password() const { return password_; }
-    void setPassword(const QString& password) { password_ = password; }
-
-    proto::SessionType sessionType() const { return session_type_; }
-    void setSessionType(proto::SessionType session_type) { session_type_ = session_type; }
-
-    proto::desktop::Config desktopConfig() const { return desktop_config_; }
-    void setDesktopConfig(const proto::desktop::Config& config);
-
-private:
-    QString computer_name_;
-    QString address_;
-    int port_ = 0;
-    QString user_name_;
-    QString password_;
-
-    proto::SessionType session_type_ = proto::SESSION_TYPE_UNKNOWN;
-    proto::desktop::Config desktop_config_;
+    proto::SessionType session_type = proto::SESSION_TYPE_UNKNOWN;
+    proto::desktop::Config desktop_config;
 };
 
 } // namespace aspia

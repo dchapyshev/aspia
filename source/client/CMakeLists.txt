@@ -21,8 +21,8 @@ add_subdirectory(translations)
 list(APPEND SOURCE_CLIENT
     client.cc
     client.h
-    client_connections.cc
-    client_connections.h
+    client_pool.cc
+    client_pool.h
     client_session.h
     client_session_desktop_manage.cc
     client_session_desktop_manage.h

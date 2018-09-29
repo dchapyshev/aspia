@@ -28,10 +28,7 @@
 
 #include "base/logging.h"
 #include "build/build_config.h"
-#include "client/ui/authorization_dialog.h"
-#include "client/ui/client_dialog.h"
-#include "client/client.h"
-#include "client/config_factory.h"
+#include "client/client_pool.h"
 #include "console/about_dialog.h"
 #include "console/address_book_tab.h"
 #include "console/console_settings.h"
@@ -77,8 +74,7 @@ private:
 } // namespace
 
 ConsoleWindow::ConsoleWindow(const QString& file_path, QWidget* parent)
-    : QMainWindow(parent),
-      connections_(this)
+    : QMainWindow(parent)
 {
     ConsoleSettings settings;
 
@@ -375,12 +371,7 @@ void ConsoleWindow::onAbout()
 
 void ConsoleWindow::onFastConnect()
 {
-    ClientDialog dialog(this);
-
-    if (dialog.exec() != ClientDialog::Accepted)
-        return;
-
-    connectToComputer(dialog.computer());
+    ClientPool::connect();
 }
 
 void ConsoleWindow::onDesktopManageConnect()
@@ -1024,52 +1015,28 @@ void ConsoleWindow::connectToComputer(const proto::address_book::Computer& compu
 {
     ConnectData connect_data;
 
-    connect_data.setComputerName(QString::fromStdString(computer.name()));
-    connect_data.setAddress(QString::fromStdString(computer.address()));
-    connect_data.setPort(computer.port());
-    connect_data.setUserName(QString::fromStdString(computer.username()));
-    connect_data.setPassword(QString::fromStdString(computer.password()));
-    connect_data.setSessionType(computer.session_type());
-
-    if (connect_data.userName().isEmpty() || connect_data.password().isEmpty())
-    {
-        AuthorizationDialog auth_dialog(this);
-
-        auth_dialog.setUserName(connect_data.userName());
-        auth_dialog.setPassword(connect_data.password());
-
-        if (auth_dialog.exec() == AuthorizationDialog::Rejected)
-            return;
-
-        connect_data.setUserName(auth_dialog.userName());
-        connect_data.setPassword(auth_dialog.password());
-    }
+    connect_data.computer_name = computer.name();
+    connect_data.address       = computer.address();
+    connect_data.port          = computer.port();
+    connect_data.username      = computer.username();
+    connect_data.password      = computer.password();
+    connect_data.session_type  = computer.session_type();
 
     switch (computer.session_type())
     {
         case proto::SESSION_TYPE_DESKTOP_MANAGE:
-        {
-            if (computer.session_config().has_desktop_manage())
-                connect_data.setDesktopConfig(computer.session_config().desktop_manage());
-            else
-                connect_data.setDesktopConfig(ConfigFactory::defaultDesktopManageConfig());
-        }
-        break;
+            connect_data.desktop_config = computer.session_config().desktop_manage();
+            break;
 
         case proto::SESSION_TYPE_DESKTOP_VIEW:
-        {
-            if (computer.session_config().has_desktop_view())
-                connect_data.setDesktopConfig(computer.session_config().desktop_view());
-            else
-                connect_data.setDesktopConfig(ConfigFactory::defaultDesktopViewConfig());
-        }
-        break;
+            connect_data.desktop_config = computer.session_config().desktop_view();
+            break;
 
         default:
             break;
     }
 
-    connections_.connectWith(connect_data);
+    ClientPool::connect(connect_data);
 }
 
 } // namespace aspia

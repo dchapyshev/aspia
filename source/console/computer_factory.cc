@@ -16,10 +16,10 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/config_factory.h"
+#include "console/computer_factory.h"
 
-#include "base/logging.h"
 #include "build/build_config.h"
+#include "base/logging.h"
 #include "codec/video_util.h"
 
 namespace aspia {
@@ -38,26 +38,7 @@ const int kDefCompressRatio = 8;
 const int kMinCompressRatio = 1;
 const int kMaxCompressRatio = 22;
 
-} // namespace
-
-// static
-proto::desktop::Config ConfigFactory::defaultDesktopManageConfig()
-{
-    proto::desktop::Config config;
-    setDefaultDesktopManageConfig(&config);
-    return config;
-}
-
-// static
-proto::desktop::Config ConfigFactory::defaultDesktopViewConfig()
-{
-    proto::desktop::Config config;
-    setDefaultDesktopViewConfig(&config);
-    return config;
-}
-
-// static
-void ConfigFactory::setDefaultDesktopManageConfig(proto::desktop::Config* config)
+void setDefaultDesktopManageConfig(proto::desktop::Config* config)
 {
     DCHECK(config);
 
@@ -74,8 +55,7 @@ void ConfigFactory::setDefaultDesktopManageConfig(proto::desktop::Config* config
     VideoUtil::toVideoPixelFormat(PixelFormat::RGB565(), config->mutable_pixel_format());
 }
 
-// static
-void ConfigFactory::setDefaultDesktopViewConfig(proto::desktop::Config* config)
+void setDefaultDesktopViewConfig(proto::desktop::Config* config)
 {
     DCHECK(config);
 
@@ -91,17 +71,20 @@ void ConfigFactory::setDefaultDesktopViewConfig(proto::desktop::Config* config)
     VideoUtil::toVideoPixelFormat(PixelFormat::RGB565(), config->mutable_pixel_format());
 }
 
+} // namespace
+
 // static
-void ConfigFactory::fixupDesktopConfig(proto::desktop::Config* config)
+proto::address_book::Computer ComputerFactory::defaultComputer()
 {
-    if (config->scale_factor() < kMinScaleFactor || config->scale_factor() > kMaxScaleFactor)
-        config->set_scale_factor(kDefScaleFactor);
+    proto::address_book::Computer computer;
 
-    if (config->update_interval() < kMinUpdateInterval || config->update_interval() > kMaxUpdateInterval)
-        config->set_update_interval(kDefUpdateInterval);
+    computer.set_session_type(proto::SESSION_TYPE_DESKTOP_MANAGE);
+    computer.set_port(DEFAULT_HOST_TCP_PORT);
 
-    if (config->compress_ratio() < kMinCompressRatio || config->compress_ratio() > kMaxCompressRatio)
-        config->set_compress_ratio(kDefCompressRatio);
+    setDefaultDesktopManageConfig(computer.mutable_session_config()->mutable_desktop_manage());
+    setDefaultDesktopViewConfig(computer.mutable_session_config()->mutable_desktop_view());
+
+    return computer;
 }
 
 } // namespace aspia

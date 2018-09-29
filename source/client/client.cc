@@ -18,10 +18,12 @@
 
 #include "client/client.h"
 
+#include "client/ui/authorization_dialog.h"
 #include "client/ui/status_dialog.h"
 #include "client/client_session_desktop_manage.h"
 #include "client/client_session_desktop_view.h"
 #include "client/client_session_file_transfer.h"
+#include "client/config_factory.h"
 
 namespace aspia {
 
@@ -29,6 +31,8 @@ Client::Client(const ConnectData& connect_data, QObject* parent)
     : QObject(parent),
       connect_data_(connect_data)
 {
+    ConfigFactory::fixupDesktopConfig(&connect_data_.desktop_config);
+
     // Create a network channel.
     network_channel_ = new NetworkChannelClient(this);
 
@@ -58,20 +62,41 @@ void Client::start()
     status_dialog_->show();
     status_dialog_->activateWindow();
 
-    status_dialog_->addStatus(tr("Attempt to connect to %1:%2.")
-                              .arg(connect_data_.address())
-                              .arg(connect_data_.port()));
+    QString address(QString::fromStdString(connect_data_.address));
+    QString username(QString::fromStdString(connect_data_.username));
+    QString password(QString::fromStdString(connect_data_.password));
 
-    network_channel_->connectToHost(connect_data_.address(), connect_data_.port(),
-                                    connect_data_.userName(), connect_data_.password(),
-                                    connect_data_.sessionType());
+    if (username.isEmpty() || password.isEmpty())
+    {
+        AuthorizationDialog auth_dialog(status_dialog_);
+
+        auth_dialog.setUserName(username);
+        auth_dialog.setPassword(password);
+
+        if (auth_dialog.exec() == AuthorizationDialog::Rejected)
+        {
+            status_dialog_->close();
+            return;
+        }
+
+        username = auth_dialog.userName();
+        password = auth_dialog.password();
+    }
+
+    status_dialog_->addStatus(tr("Attempt to connect to %1:%2.")
+                              .arg(address)
+                              .arg(connect_data_.port));
+
+    network_channel_->connectToHost(address, connect_data_.port,
+                                    username, password,
+                                    connect_data_.session_type);
 }
 
 void Client::onChannelConnected()
 {
     status_dialog_->addStatus(tr("Connection established."));
 
-    switch (connect_data_.sessionType())
+    switch (connect_data_.session_type)
     {
         case proto::SESSION_TYPE_DESKTOP_MANAGE:
             session_ = new ClientSessionDesktopManage(&connect_data_, this);

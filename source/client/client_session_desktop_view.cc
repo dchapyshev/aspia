@@ -106,7 +106,7 @@ void ClientSessionDesktopView::onSendScreen(const proto::desktop::Screen& screen
 void ClientSessionDesktopView::readConfigRequest(
     const proto::desktop::ConfigRequest& /* config_request */)
 {
-    onSendConfig(connect_data_->desktopConfig());
+    onSendConfig(connect_data_->desktop_config);
 }
 
 void ClientSessionDesktopView::readVideoPacket(const proto::desktop::VideoPacket& packet)

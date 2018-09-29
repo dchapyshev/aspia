@@ -20,7 +20,6 @@
 #define ASPIA_CONSOLE__CONSOLE_WINDOW_H_
 
 #include "base/locale_loader.h"
-#include "client/client_connections.h"
 #include "console/mru.h"
 #include "protocol/address_book.pb.h"
 #include "ui_console_window.h"
@@ -95,7 +94,6 @@ private:
     Ui::ConsoleWindow ui;
 
     LocaleLoader locale_loader_;
-    ClientConnections connections_;
     Mru mru_;
 
     QScopedPointer<QSystemTrayIcon> tray_icon_;

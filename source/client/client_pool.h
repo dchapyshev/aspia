@@ -16,10 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CLIENT__CLIENT_CONNECTIONS_H_
-#define ASPIA_CLIENT__CLIENT_CONNECTIONS_H_
-
-#include <QObject>
+#ifndef ASPIA_CLIENT__CLIENT_POOL_H_
+#define ASPIA_CLIENT__CLIENT_POOL_H_
 
 #include "base/macros_magic.h"
 #include "client/connect_data.h"
@@ -28,25 +26,16 @@ namespace aspia {
 
 class Client;
 
-class ClientConnections : public QObject
+class ClientPool
 {
-    Q_OBJECT
-
 public:
-    explicit ClientConnections(QObject* parent = nullptr);
-    ~ClientConnections() = default;
-
-    void connectWith(const ConnectData& connect_data);
-
-private slots:
-    void onClientFinished(Client* client);
+    static void connect(const ConnectData& connect_data);
+    static void connect();
 
 private:
-    std::list<Client*> client_list_;
-
-    DISALLOW_COPY_AND_ASSIGN(ClientConnections);
+    DISALLOW_COPY_AND_ASSIGN(ClientPool);
 };
 
 } // namespace aspia
 
-#endif // ASPIA_CLIENT__CLIENT_CONNECTIONS_H_
+#endif // ASPIA_CLIENT__CLIENT_POOL_H_

@@ -31,6 +31,7 @@
 #include "client/ui/desktop_config_dialog.h"
 #include "client/ui/desktop_panel.h"
 #include "client/ui/desktop_widget.h"
+#include "client/client_pool.h"
 #include "desktop_capture/desktop_frame_qimage.h"
 #include "share/clipboard.h"
 
@@ -38,25 +39,24 @@ namespace aspia {
 
 DesktopWindow::DesktopWindow(ConnectData* connect_data, QWidget* parent)
     : QWidget(parent),
-      connect_data_(connect_data),
-      connections_(this)
+      connect_data_(connect_data)
 {
     QString session_name;
-    if (connect_data_->sessionType() == proto::SESSION_TYPE_DESKTOP_MANAGE)
+    if (connect_data_->session_type == proto::SESSION_TYPE_DESKTOP_MANAGE)
     {
         session_name = tr("Aspia Desktop Manage");
     }
     else
     {
-        DCHECK(connect_data_->sessionType() == proto::SESSION_TYPE_DESKTOP_VIEW);
+        DCHECK(connect_data_->session_type == proto::SESSION_TYPE_DESKTOP_VIEW);
         session_name = tr("Aspia Desktop View");
     }
 
     QString computer_name;
-    if (!connect_data_->computerName().isEmpty())
-        computer_name = connect_data_->computerName();
+    if (!connect_data_->computer_name.empty())
+        computer_name = QString::fromStdString(connect_data_->computer_name);
     else
-        computer_name = connect_data_->address();
+        computer_name = QString::fromStdString(connect_data_->address);
 
     setWindowTitle(QString("%1 - %2").arg(computer_name).arg(session_name));
     setMinimumSize(400, 300);
@@ -77,7 +77,7 @@ DesktopWindow::DesktopWindow(ConnectData* connect_data, QWidget* parent)
     layout_->setContentsMargins(0, 0, 0, 0);
     layout_->addWidget(scroll_area_);
 
-    panel_ = new DesktopPanel(connect_data_->sessionType(), this);
+    panel_ = new DesktopPanel(connect_data_->session_type, this);
 
     desktop_->enableKeyCombinations(panel_->sendKeyCombinations());
 
@@ -119,8 +119,8 @@ DesktopWindow::DesktopWindow(ConnectData* connect_data, QWidget* parent)
     connect(panel_, &DesktopPanel::startSession, [this](proto::SessionType session_type)
     {
         ConnectData connect_data(*connect_data_);
-        connect_data.setSessionType(session_type);
-        connections_.connectWith(connect_data);
+        connect_data.session_type = session_type;
+        ClientPool::connect(connect_data);
     });
 }
 
@@ -227,7 +227,7 @@ void DesktopWindow::onPointerEvent(const QPoint& pos, uint32_t mask)
         scroll_timer_id_ = 0;
     }
 
-    int remote_scale_factor = connect_data_->desktopConfig().scale_factor();
+    int remote_scale_factor = connect_data_->desktop_config.scale_factor();
     if (remote_scale_factor)
     {
         const DesktopSize& source_size = desktopFrame()->size();
@@ -249,8 +249,8 @@ void DesktopWindow::onPointerEvent(const QPoint& pos, uint32_t mask)
 void DesktopWindow::changeSettings()
 {
     QScopedPointer<DesktopConfigDialog> dialog(
-        new DesktopConfigDialog(connect_data_->sessionType(),
-                                connect_data_->desktopConfig(),
+        new DesktopConfigDialog(connect_data_->session_type,
+                                connect_data_->desktop_config,
                                 this));
 
     connect(dialog.get(), &DesktopConfigDialog::configChanged,
@@ -261,7 +261,7 @@ void DesktopWindow::changeSettings()
 
 void DesktopWindow::onConfigChanged(const proto::desktop::Config& config)
 {
-    connect_data_->setDesktopConfig(config);
+    connect_data_->desktop_config = config;
     emit sendConfig(config);
 }
 

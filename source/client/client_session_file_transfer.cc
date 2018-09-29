@@ -28,8 +28,7 @@
 
 namespace aspia {
 
-ClientSessionFileTransfer::ClientSessionFileTransfer(
-    ConnectData* connect_data, QObject* parent)
+ClientSessionFileTransfer::ClientSessionFileTransfer(ConnectData* connect_data, QObject* parent)
     : ClientSession(parent),
       connect_data_(connect_data)
 {

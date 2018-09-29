@@ -19,13 +19,8 @@
 #ifndef ASPIA_CLIENT__UI__AUTHORIZATION_DIALOG_H_
 #define ASPIA_CLIENT__UI__AUTHORIZATION_DIALOG_H_
 
-#include <QDialog>
-
 #include "base/macros_magic.h"
-
-namespace Ui {
-class AuthorizationDialog;
-} // namespace Ui
+#include "ui_authorization_dialog.h"
 
 class QAbstractButton;
 
@@ -54,7 +49,7 @@ private slots:
     void onButtonBoxClicked(QAbstractButton* button);
 
 private:
-    QScopedPointer<Ui::AuthorizationDialog> ui;
+    Ui::AuthorizationDialog ui;
 
     DISALLOW_COPY_AND_ASSIGN(AuthorizationDialog);
 };

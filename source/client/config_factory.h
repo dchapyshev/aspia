@@ -20,15 +20,13 @@
 #define ASPIA_CLIENT__CONFIG_FACTORY_H_
 
 #include "base/macros_magic.h"
-#include "protocol/address_book.pb.h"
+#include "protocol/desktop_session.pb.h"
 
 namespace aspia {
 
 class ConfigFactory
 {
 public:
-    static proto::address_book::Computer defaultComputer();
-
     static proto::desktop::Config defaultDesktopManageConfig();
     static proto::desktop::Config defaultDesktopViewConfig();
 

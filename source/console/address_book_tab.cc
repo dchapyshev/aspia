@@ -22,10 +22,9 @@
 #include <QMenu>
 #include <QMessageBox>
 
-#include "client/config_factory.h"
-#include "codec/video_util.h"
 #include "console/address_book_dialog.h"
 #include "console/computer_dialog.h"
+#include "console/computer_factory.h"
 #include "console/computer_group_dialog.h"
 #include "console/computer_item.h"
 #include "console/console_settings.h"
@@ -385,7 +384,7 @@ void AddressBookTab::addComputer()
         return;
 
     std::unique_ptr<proto::address_book::Computer> computer =
-        std::make_unique<proto::address_book::Computer>(ConfigFactory::defaultComputer());
+        std::make_unique<proto::address_book::Computer>(ComputerFactory::defaultComputer());
 
     ComputerDialog dialog(this,
                           ComputerDialog::CreateComputer,
@@ -713,10 +712,7 @@ void AddressBookTab::retranslateUi()
 void AddressBookTab::updateComputerList(ComputerGroupItem* computer_group)
 {
     for (int i = ui.tree_computer->topLevelItemCount() - 1; i >= 0; --i)
-    {
-        QTreeWidgetItem* item = ui.tree_computer->takeTopLevelItem(i);
-        delete item;
-    }
+        std::unique_ptr<QTreeWidgetItem> item_deleter(ui.tree_computer->takeTopLevelItem(i));
 
     ui.tree_computer->addTopLevelItems(computer_group->ComputerList());
 }

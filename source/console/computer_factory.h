@@ -16,39 +16,23 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/client_connections.h"
+#ifndef ASPIA_CONSOLE__COMPUTER_FACTORY_H_
+#define ASPIA_CONSOLE__COMPUTER_FACTORY_H_
 
-#include "client/client.h"
+#include "base/macros_magic.h"
+#include "protocol/address_book.pb.h"
 
 namespace aspia {
 
-ClientConnections::ClientConnections(QObject* parent)
-    : QObject(parent)
+class ComputerFactory
 {
-    // Nothing
-}
+public:
+    static proto::address_book::Computer defaultComputer();
 
-void ClientConnections::connectWith(const ConnectData& connect_data)
-{
-    Client* client = new Client(connect_data, this);
-    connect(client, &Client::finished, this, &ClientConnections::onClientFinished);
-    client_list_.push_back(client);
-
-    client->start();
-}
-
-void ClientConnections::onClientFinished(Client* client)
-{
-    for (auto it = client_list_.begin(); it != client_list_.end(); ++it)
-    {
-        if (client == *it)
-        {
-            client_list_.erase(it);
-            break;
-        }
-    }
-
-    delete client;
-}
+private:
+    DISALLOW_COPY_AND_ASSIGN(ComputerFactory);
+};
 
 } // namespace aspia
+
+#endif // ASPIA_CONSOLE__COMPUTER_FACTORY_H_

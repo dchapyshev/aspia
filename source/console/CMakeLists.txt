@@ -32,6 +32,8 @@ list(APPEND SOURCE_CONSOLE
     computer_dialog.h
     computer_dialog.ui
     computer_drag.h
+    computer_factory.cc
+    computer_factory.h
     computer_group_dialog.cc
     computer_group_dialog.h
     computer_group_dialog.ui

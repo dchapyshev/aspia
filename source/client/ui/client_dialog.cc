@@ -18,56 +18,56 @@
 
 #include "client/ui/client_dialog.h"
 
+#include "build/build_config.h"
 #include "client/ui/desktop_config_dialog.h"
 #include "client/client_session_desktop_manage.h"
 #include "client/client_session_desktop_view.h"
 #include "client/config_factory.h"
-#include "ui_client_dialog.h"
 
 namespace aspia {
 
 ClientDialog::ClientDialog(QWidget* parent)
-    : QDialog(parent),
-      ui(new Ui::ClientDialog()),
-      computer_(ConfigFactory::defaultComputer())
+    : QDialog(parent)
 {
-    ui->setupUi(this);
+    connect_data_.port = DEFAULT_HOST_TCP_PORT;
+    connect_data_.session_type = proto::SESSION_TYPE_DESKTOP_MANAGE;
+    connect_data_.desktop_config = ConfigFactory::defaultDesktopManageConfig();
+
+    ui.setupUi(this);
     setFixedHeight(sizeHint().height());
 
-    ui->edit_address->setText(QString::fromStdString(computer_.address()));
-    ui->spin_port->setValue(computer_.port());
+    ui.spin_port->setValue(connect_data_.port);
 
-    QComboBox* combo_session_type = ui->combo_session_type;
-    combo_session_type->addItem(QIcon(QStringLiteral(":/icon/monitor-keyboard.png")),
-                                    tr("Desktop Manage"),
-                                    QVariant(proto::SESSION_TYPE_DESKTOP_MANAGE));
+    ui.combo_session_type->addItem(QIcon(QStringLiteral(":/icon/monitor-keyboard.png")),
+                                   tr("Desktop Manage"),
+                                   QVariant(proto::SESSION_TYPE_DESKTOP_MANAGE));
 
-    combo_session_type->addItem(QIcon(QStringLiteral(":/icon/monitor.png")),
-                                    tr("Desktop View"),
-                                    QVariant(proto::SESSION_TYPE_DESKTOP_VIEW));
+    ui.combo_session_type->addItem(QIcon(QStringLiteral(":/icon/monitor.png")),
+                                   tr("Desktop View"),
+                                   QVariant(proto::SESSION_TYPE_DESKTOP_VIEW));
 
-    combo_session_type->addItem(QIcon(QStringLiteral(":/icon/folder-stand.png")),
-                                    tr("File Transfer"),
-                                    QVariant(proto::SESSION_TYPE_FILE_TRANSFER));
+    ui.combo_session_type->addItem(QIcon(QStringLiteral(":/icon/folder-stand.png")),
+                                   tr("File Transfer"),
+                                   QVariant(proto::SESSION_TYPE_FILE_TRANSFER));
 
     int current_session_type =
-        combo_session_type->findData(QVariant(computer_.session_type()));
+        ui.combo_session_type->findData(QVariant(connect_data_.session_type));
     if (current_session_type != -1)
     {
-        combo_session_type->setCurrentIndex(current_session_type);
+        ui.combo_session_type->setCurrentIndex(current_session_type);
         sessionTypeChanged(current_session_type);
     }
 
-    connect(combo_session_type, QOverload<int>::of(&QComboBox::currentIndexChanged),
+    connect(ui.combo_session_type, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &ClientDialog::sessionTypeChanged);
 
-    connect(ui->button_session_config, &QPushButton::pressed,
+    connect(ui.button_session_config, &QPushButton::pressed,
             this, &ClientDialog::sessionConfigButtonPressed);
 
-    connect(ui->button_connect, &QPushButton::pressed,
+    connect(ui.button_connect, &QPushButton::pressed,
             this, &ClientDialog::connectButtonPressed);
 
-    ui->edit_address->setFocus();
+    ui.edit_address->setFocus();
 }
 
 ClientDialog::~ClientDialog() = default;
@@ -75,17 +75,26 @@ ClientDialog::~ClientDialog() = default;
 void ClientDialog::sessionTypeChanged(int item_index)
 {
     proto::SessionType session_type = static_cast<proto::SessionType>(
-        ui->combo_session_type->itemData(item_index).toInt());
+        ui.combo_session_type->itemData(item_index).toInt());
 
     switch (session_type)
     {
         case proto::SESSION_TYPE_DESKTOP_MANAGE:
+        {
+            ui.button_session_config->setEnabled(true);
+            connect_data_.desktop_config = ConfigFactory::defaultDesktopManageConfig();
+        }
+        break;
+
         case proto::SESSION_TYPE_DESKTOP_VIEW:
-            ui->button_session_config->setEnabled(true);
-            break;
+        {
+            ui.button_session_config->setEnabled(true);
+            connect_data_.desktop_config = ConfigFactory::defaultDesktopViewConfig();
+        }
+        break;
 
         default:
-            ui->button_session_config->setEnabled(false);
+            ui.button_session_config->setEnabled(false);
             break;
     }
 }
@@ -93,34 +102,17 @@ void ClientDialog::sessionTypeChanged(int item_index)
 void ClientDialog::sessionConfigButtonPressed()
 {
     proto::SessionType session_type = static_cast<proto::SessionType>(
-        ui->combo_session_type->currentData().toInt());
+        ui.combo_session_type->currentData().toInt());
 
     switch (session_type)
     {
         case proto::SESSION_TYPE_DESKTOP_MANAGE:
-        {
-            DesktopConfigDialog dialog(session_type,
-                                       computer_.session_config().desktop_manage(),
-                                       this);
-
-            if (dialog.exec() == DesktopConfigDialog::Accepted)
-            {
-                computer_.mutable_session_config()->mutable_desktop_manage()->CopyFrom(
-                    dialog.config());
-            }
-        }
-        break;
-
         case proto::SESSION_TYPE_DESKTOP_VIEW:
         {
-            DesktopConfigDialog dialog(session_type,
-                                       computer_.session_config().desktop_view(),
-                                       this);
+            DesktopConfigDialog dialog(session_type, connect_data_.desktop_config, this);
+
             if (dialog.exec() == DesktopConfigDialog::Accepted)
-            {
-                computer_.mutable_session_config()->mutable_desktop_view()->CopyFrom(
-                    dialog.config());
-            }
+                connect_data_.desktop_config = dialog.config();
         }
         break;
 
@@ -132,11 +124,11 @@ void ClientDialog::sessionConfigButtonPressed()
 void ClientDialog::connectButtonPressed()
 {
     proto::SessionType session_type = static_cast<proto::SessionType>(
-        ui->combo_session_type->currentData().toInt());
+        ui.combo_session_type->currentData().toInt());
 
-    computer_.set_address(ui->edit_address->text().toStdString());
-    computer_.set_port(ui->spin_port->value());
-    computer_.set_session_type(session_type);
+    connect_data_.address = ui.edit_address->text().toStdString();
+    connect_data_.port = ui.spin_port->value();
+    connect_data_.session_type = session_type;
 
     accept();
     close();

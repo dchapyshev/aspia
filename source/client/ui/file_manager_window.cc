@@ -33,10 +33,10 @@ FileManagerWindow::FileManagerWindow(ConnectData* connect_data, QWidget* parent)
     ui.setupUi(this);
 
     QString computer_name;
-    if (!connect_data->computerName().isEmpty())
-        computer_name = connect_data->computerName();
+    if (!connect_data->computer_name.empty())
+        computer_name = QString::fromStdString(connect_data->computer_name);
     else
-        computer_name = connect_data->address();
+        computer_name = QString::fromStdString(connect_data->address);
 
     setWindowTitle(tr("%1 - Aspia File Transfer").arg(computer_name));
 

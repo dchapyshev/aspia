@@ -18,20 +18,13 @@
 
 #include "client/connect_data.h"
 
-#include "client/config_factory.h"
 #include "crypto/secure_memory.h"
 
 namespace aspia {
 
 ConnectData::~ConnectData()
 {
-    secureMemZero(password_.data(), password_.size());
-}
-
-void ConnectData::setDesktopConfig(const proto::desktop::Config& config)
-{
-    desktop_config_ = config;
-    ConfigFactory::fixupDesktopConfig(&desktop_config_);
+    secureMemZero(password.data(), password.size());
 }
 
 } // namespace aspia
