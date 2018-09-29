@@ -18,15 +18,14 @@
 
 #include "common/file_worker.h"
 
-#include <QDateTime>
-#include <QStandardPaths>
-#include <QStorageInfo>
-
-#include "base/logging.h"
 #include "build/build_config.h"
+#include "base/base_paths.h"
+#include "base/logging.h"
+#include "base/unicode.h"
 #include "common/file_platform_util.h"
 
 #if defined(OS_WIN)
+#include "common/win/drive_enumerator.h"
 #include "common/win/file_enumerator.h"
 #endif // defined(OS_WIN)
 
@@ -92,49 +91,69 @@ proto::file_transfer::Reply FileWorker::doRequest(const proto::file_transfer::Re
 
 void FileWorker::executeRequest(FileRequest* request)
 {
+    std::unique_ptr<FileRequest> request_deleter(request);
     request->sendReply(doRequest(request->request()));
-    delete request;
 }
 
 proto::file_transfer::Reply FileWorker::doDriveListRequest()
 {
     proto::file_transfer::Reply reply;
 
-    for (const auto& volume : QStorageInfo::mountedVolumes())
+    for (DriveEnumerator enumerator; !enumerator.isAtEnd(); enumerator.advance())
     {
-        QString root_path = volume.rootPath();
-        QString name = volume.displayName();
-
         proto::file_transfer::DriveList::Item* item = reply.mutable_drive_list()->add_item();
 
-        item->set_type(FilePlatformUtil::driveType(root_path));
-        item->set_path(root_path.toStdString());
+        const DriveEnumerator::DriveInfo& drive_info = enumerator.driveInfo();
+        switch (drive_info.type())
+        {
+            case DriveEnumerator::DriveInfo::Type::FIXED:
+                item->set_type(proto::file_transfer::DriveList::Item::TYPE_FIXED);
+                break;
 
-        if (name != root_path)
-            item->set_name(name.toStdString());
+            case DriveEnumerator::DriveInfo::Type::CDROM:
+                item->set_type(proto::file_transfer::DriveList::Item::TYPE_CDROM);
+                break;
 
-        item->set_total_space(volume.bytesTotal());
-        item->set_free_space(volume.bytesFree());
+            case DriveEnumerator::DriveInfo::Type::REMOVABLE:
+                item->set_type(proto::file_transfer::DriveList::Item::TYPE_REMOVABLE);
+                break;
+
+            case DriveEnumerator::DriveInfo::Type::RAM:
+                item->set_type(proto::file_transfer::DriveList::Item::TYPE_RAM);
+                break;
+
+            case DriveEnumerator::DriveInfo::Type::REMOTE:
+                item->set_type(proto::file_transfer::DriveList::Item::TYPE_REMOTE);
+                break;
+
+            default:
+                break;
+        }
+
+        item->set_path(drive_info.path().u8string());
+        item->set_name(UTF8fromUTF16(drive_info.volumeName()));
+        item->set_total_space(drive_info.totalSpace());
+        item->set_free_space(drive_info.freeSpace());
     }
 
-    QString desktop_path = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
-    if (!desktop_path.isEmpty())
+    std::filesystem::path desktop_path;
+    if (BasePaths::userDesktop(&desktop_path))
     {
         proto::file_transfer::DriveList::Item* item = reply.mutable_drive_list()->add_item();
 
         item->set_type(proto::file_transfer::DriveList::Item::TYPE_DESKTOP_FOLDER);
-        item->set_path(desktop_path.toStdString());
+        item->set_path(desktop_path.u8string());
         item->set_total_space(-1);
         item->set_free_space(-1);
     }
 
-    QString home_path = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
-    if (!home_path.isEmpty())
+    std::filesystem::path home_path;
+    if (BasePaths::userHome(&home_path))
     {
         proto::file_transfer::DriveList::Item* item = reply.mutable_drive_list()->add_item();
 
         item->set_type(proto::file_transfer::DriveList::Item::TYPE_HOME_FOLDER);
-        item->set_path(home_path.toStdString());
+        item->set_path(home_path.u8string());
         item->set_total_space(-1);
         item->set_free_space(-1);
     }

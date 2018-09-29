@@ -36,6 +36,8 @@ list(APPEND SOURCE_COMMON
     user_util.h)
 
 list(APPEND SOURCE_COMMON_WIN
+    win/drive_enumerator.cc
+    win/drive_enumerator.h
     win/file_enumerator.cc
     win/file_enumerator.h)
 

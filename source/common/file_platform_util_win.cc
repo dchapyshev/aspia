@@ -133,31 +133,6 @@ QIcon FilePlatformUtil::driveIcon(proto::file_transfer::DriveList::Item::Type ty
 }
 
 // static
-proto::file_transfer::DriveList::Item::Type FilePlatformUtil::driveType(const QString& drive_path)
-{
-    switch (GetDriveTypeW(qUtf16Printable(drive_path)))
-    {
-        case DRIVE_FIXED:
-            return proto::file_transfer::DriveList::Item::TYPE_FIXED;
-
-        case DRIVE_REMOVABLE:
-            return proto::file_transfer::DriveList::Item::TYPE_REMOVABLE;
-
-        case DRIVE_CDROM:
-            return proto::file_transfer::DriveList::Item::TYPE_CDROM;
-
-        case DRIVE_REMOTE:
-            return proto::file_transfer::DriveList::Item::TYPE_REMOTE;
-
-        case DRIVE_RAMDISK:
-            return proto::file_transfer::DriveList::Item::TYPE_RAM;
-
-        default:
-            return proto::file_transfer::DriveList::Item::TYPE_UNKNOWN;
-    }
-}
-
-// static
 const QList<QChar>& FilePlatformUtil::invalidFileNameCharacters()
 {
     static const QList<QChar> kInvalidCharacters =
