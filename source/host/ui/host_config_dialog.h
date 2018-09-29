@@ -19,7 +19,7 @@
 #ifndef ASPIA_HOST__UI__HOST_CONFIG_DIALOG_H_
 #define ASPIA_HOST__UI__HOST_CONFIG_DIALOG_H_
 
-#include "base/locale_loader.h"
+#include "common/locale_loader.h"
 #include "network/srp_user.h"
 #include "ui_host_config_dialog.h"
 

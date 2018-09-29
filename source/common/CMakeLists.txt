@@ -29,6 +29,8 @@ list(APPEND SOURCE_COMMON
     file_request.h
     file_worker.cc
     file_worker.h
+    locale_loader.cc
+    locale_loader.h
     message_serialization.h
     user_util.cc
     user_util.h)

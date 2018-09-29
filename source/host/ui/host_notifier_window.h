@@ -19,7 +19,7 @@
 #ifndef ASPIA_HOST__UI__HOST_NOTIFIER_WINDOW_H_
 #define ASPIA_HOST__UI__HOST_NOTIFIER_WINDOW_H_
 
-#include "base/locale_loader.h"
+#include "common/locale_loader.h"
 #include "host/host_notifier.h"
 #include "protocol/notifier.pb.h"
 #include "ui_host_notifier_window.h"

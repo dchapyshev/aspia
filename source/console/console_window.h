@@ -19,7 +19,7 @@
 #ifndef ASPIA_CONSOLE__CONSOLE_WINDOW_H_
 #define ASPIA_CONSOLE__CONSOLE_WINDOW_H_
 
-#include "base/locale_loader.h"
+#include "common/locale_loader.h"
 #include "console/mru.h"
 #include "protocol/address_book.pb.h"
 #include "ui_console_window.h"

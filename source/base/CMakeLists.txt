@@ -33,8 +33,6 @@ list(APPEND SOURCE_BASE
     guid.h
     keycode_converter.cc
     keycode_converter.h
-    locale_loader.cc
-    locale_loader.h
     logging.cc
     logging.h
     macros_magic.h

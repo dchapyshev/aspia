@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_BASE__LOCALE_LOADER_H_
-#define ASPIA_BASE__LOCALE_LOADER_H_
+#ifndef ASPIA_COMMON__LOCALE_LOADER_H_
+#define ASPIA_COMMON__LOCALE_LOADER_H_
 
 #include <QHash>
 #include <QStringList>
@@ -53,4 +53,4 @@ private:
 
 } // namespace aspia
 
-#endif // ASPIA_BASE__LOCALE_LOADER_H_
+#endif // ASPIA_COMMON__LOCALE_LOADER_H_

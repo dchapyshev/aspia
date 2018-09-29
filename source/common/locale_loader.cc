@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/locale_loader.h"
+#include "common/locale_loader.h"
 
 #include <QCoreApplication>
 #include <QDir>
