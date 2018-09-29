@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "share/file_platform_util.h"
+#include "common/file_platform_util.h"
 
 #include <QtWin>
 #include <shellapi.h>

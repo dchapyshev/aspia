@@ -16,13 +16,13 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_SHARE__FILE_WORKER_H_
-#define ASPIA_SHARE__FILE_WORKER_H_
+#ifndef ASPIA_COMMON__FILE_WORKER_H_
+#define ASPIA_COMMON__FILE_WORKER_H_
 
+#include "common/file_depacketizer.h"
+#include "common/file_packetizer.h"
+#include "common/file_request.h"
 #include "protocol/file_transfer_session.pb.h"
-#include "share/file_depacketizer.h"
-#include "share/file_packetizer.h"
-#include "share/file_request.h"
 
 namespace aspia {
 
@@ -65,4 +65,4 @@ private:
 
 } // namespace aspia
 
-#endif // ASPIA_SHARE__FILE_WORKER_H_
+#endif // ASPIA_COMMON__FILE_WORKER_H_

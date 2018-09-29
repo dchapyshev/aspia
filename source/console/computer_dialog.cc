@@ -22,8 +22,8 @@
 #include <QMessageBox>
 
 #include "client/ui/desktop_config_dialog.h"
+#include "common/user_util.h"
 #include "console/computer_group_item.h"
-#include "share/user_util.h"
 
 namespace aspia {
 

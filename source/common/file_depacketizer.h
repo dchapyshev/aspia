@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_SHARE__FILE_PACKETIZER_H_
-#define ASPIA_SHARE__FILE_PACKETIZER_H_
+#ifndef ASPIA_COMMON__FILE_DEPACKETIZER_H_
+#define ASPIA_COMMON__FILE_DEPACKETIZER_H_
 
 #include <filesystem>
 #include <fstream>
@@ -28,31 +28,29 @@
 
 namespace aspia {
 
-class FilePacketizer
+class FileDepacketizer
 {
 public:
-    ~FilePacketizer() = default;
+    ~FileDepacketizer();
 
-    // Creates an instance of the class.
-    // Parameter |file_path| contains the full path to the file.
-    // If the specified file can not be opened for reading, then returns nullptr.
-    static std::unique_ptr<FilePacketizer> create(const std::filesystem::path& file_path);
+    static std::unique_ptr<FileDepacketizer> create(const std::filesystem::path& file_path,
+                                                    bool overwrite);
 
-    // Creates a packet for transferring.
-    std::unique_ptr<proto::file_transfer::Packet> readNextPacket(
-        const proto::file_transfer::PacketRequest& request);
+    // Reads the packet and writes its contents to a file.
+    bool writeNextPacket(const proto::file_transfer::Packet& packet);
 
 private:
-    FilePacketizer(std::ifstream&& file_stream);
+    FileDepacketizer(const std::filesystem::path& file_path, std::ofstream&& file_stream);
 
-    std::ifstream file_stream_;
+    std::filesystem::path file_path_;
+    std::ofstream file_stream_;
 
     std::streamoff file_size_ = 0;
     std::streamoff left_size_ = 0;
 
-    DISALLOW_COPY_AND_ASSIGN(FilePacketizer);
+    DISALLOW_COPY_AND_ASSIGN(FileDepacketizer);
 };
 
 } // namespace aspia
 
-#endif // ASPIA_SHARE__FILE_PACKETIZER_H_
+#endif // ASPIA_COMMON__FILE_DEPACKETIZER_H_

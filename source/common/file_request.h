@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_SHARE__FILE_REQUEST_H_
-#define ASPIA_SHARE__FILE_REQUEST_H_
+#ifndef ASPIA_COMMON__FILE_REQUEST_H_
+#define ASPIA_COMMON__FILE_REQUEST_H_
 
 #include <QObject>
 #include <QPointer>
@@ -60,4 +60,4 @@ private:
 
 } // namespace aspia
 
-#endif // ASPIA_SHARE__FILE_REQUEST_H_
+#endif // ASPIA_COMMON__FILE_REQUEST_H_

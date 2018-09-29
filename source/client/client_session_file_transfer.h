@@ -24,8 +24,8 @@
 
 #include "client/client_session.h"
 #include "client/connect_data.h"
+#include "common/file_request.h"
 #include "protocol/file_transfer_session.pb.h"
-#include "share/file_request.h"
 
 namespace aspia {
 

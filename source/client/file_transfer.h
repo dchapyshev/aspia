@@ -25,8 +25,8 @@
 #include <QMap>
 
 #include "client/file_transfer_task.h"
+#include "common/file_request.h"
 #include "protocol/file_transfer_session.pb.h"
-#include "share/file_request.h"
 
 namespace aspia {
 

@@ -26,7 +26,7 @@
 #include <QToolTip>
 
 #include "client/ui/file_name_validator.h"
-#include "share/file_platform_util.h"
+#include "common/file_platform_util.h"
 
 namespace aspia {
 

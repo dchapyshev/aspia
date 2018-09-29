@@ -29,8 +29,8 @@
 #include "client/ui/file_list_model.h"
 #include "client/file_remover.h"
 #include "client/file_status.h"
-#include "share/file_platform_util.h"
-#include "share/file_request.h"
+#include "common/file_platform_util.h"
+#include "common/file_request.h"
 
 namespace aspia {
 

@@ -23,13 +23,13 @@
 #include "base/base_paths.h"
 #include "base/guid.h"
 #include "base/logging.h"
+#include "common/message_serialization.h"
 #include "host/win/host.h"
 #include "host/host_settings.h"
 #include "ipc/ipc_server.h"
 #include "network/firewall_manager.h"
 #include "network/network_channel_host.h"
 #include "protocol/notifier.pb.h"
-#include "share/message_serialization.h"
 
 namespace aspia {
 

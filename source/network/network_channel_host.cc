@@ -21,10 +21,10 @@
 #include "base/cpuid.h"
 #include "base/logging.h"
 #include "build/version.h"
+#include "common/message_serialization.h"
 #include "crypto/cryptor_aes256_gcm.h"
 #include "crypto/cryptor_chacha20_poly1305.h"
 #include "network/srp_host_context.h"
-#include "share/message_serialization.h"
 
 namespace aspia {
 

@@ -30,10 +30,10 @@
 #include "codec/video_encoder_vpx.h"
 #include "codec/video_encoder_zstd.h"
 #include "codec/video_util.h"
+#include "common/message_serialization.h"
 #include "desktop_capture/capture_scheduler.h"
 #include "desktop_capture/cursor_capturer_win.h"
 #include "desktop_capture/screen_capturer_gdi.h"
-#include "share/message_serialization.h"
 
 namespace aspia {
 

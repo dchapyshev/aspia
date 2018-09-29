@@ -16,41 +16,31 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_SHARE__CLIPBOARD_H_
-#define ASPIA_SHARE__CLIPBOARD_H_
+#ifndef ASPIA_COMMON__USER_UTIL_H_
+#define ASPIA_COMMON__USER_UTIL_H_
 
-#include <QObject>
+#include <QString>
 
 #include "base/macros_magic.h"
-#include "protocol/desktop_session.pb.h"
 
 namespace aspia {
 
-class Clipboard : public QObject
+class UserUtil
 {
-    Q_OBJECT
-
 public:
-    Clipboard(QObject* parent = nullptr);
-    ~Clipboard();
+    static const int kMaxUserNameLength = 64;
+    static const int kMinPasswordLength = 1;
+    static const int kMaxPasswordLength = 64;
+    static const int kSafePasswordLength = 8;
 
-public slots:
-    // Receiving the incoming clipboard.
-    void injectClipboardEvent(const proto::desktop::ClipboardEvent& event);
-
-signals:
-    void clipboardEvent(const proto::desktop::ClipboardEvent& event);
-
-private slots:
-    void dataChanged();
+    static bool isValidUserName(const QString& username);
+    static bool isValidPassword(const QString& password);
+    static bool isSafePassword(const QString& password);
 
 private:
-    std::string last_mime_type_;
-    std::string last_data_;
-
-    DISALLOW_COPY_AND_ASSIGN(Clipboard);
+    DISALLOW_COPY_AND_ASSIGN(UserUtil);
 };
 
 } // namespace aspia
 
-#endif // ASPIA_SHARE__CLIPBOARD_H_
+#endif // ASPIA_COMMON__USER_UTIL_H_

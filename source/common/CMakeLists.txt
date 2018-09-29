@@ -16,7 +16,7 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 #
 
-list(APPEND SOURCE_SHARE
+list(APPEND SOURCE_COMMON
     clipboard.cc
     clipboard.h
     file_depacketizer.cc
@@ -33,17 +33,17 @@ list(APPEND SOURCE_SHARE
     user_util.cc
     user_util.h)
 
-list(APPEND SOURCE_SHARE_WIN
+list(APPEND SOURCE_COMMON_WIN
     win/file_enumerator.cc
     win/file_enumerator.h)
 
-source_group("" FILES ${SOURCE_SHARE})
-source_group(win FILES ${SOURCE_SHARE_WIN})
+source_group("" FILES ${SOURCE_COMMON})
+source_group(win FILES ${SOURCE_COMMON_WIN})
 
-add_library(aspia_share STATIC
-    ${SOURCE_SHARE}
-    ${SOURCE_SHARE_WIN})
-target_link_libraries(aspia_share
+add_library(aspia_common STATIC
+    ${SOURCE_COMMON}
+    ${SOURCE_COMMON_WIN})
+target_link_libraries(aspia_common
     aspia_base
     aspia_protocol
     ${THIRD_PARTY_LIBS})

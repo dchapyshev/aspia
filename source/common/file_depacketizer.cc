@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "share/file_depacketizer.h"
+#include "common/file_depacketizer.h"
 
 #include "base/logging.h"
 

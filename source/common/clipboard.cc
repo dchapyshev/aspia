@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "share/clipboard.h"
+#include "common/clipboard.h"
 
 #include <QClipboard>
 #include <QGuiApplication>

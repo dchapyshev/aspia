@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "share/user_util.h"
+#include "common/user_util.h"
 
 namespace aspia {
 

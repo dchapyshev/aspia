@@ -32,8 +32,8 @@
 #include "client/ui/desktop_panel.h"
 #include "client/ui/desktop_widget.h"
 #include "client/client_pool.h"
+#include "common/clipboard.h"
 #include "desktop_capture/desktop_frame_qimage.h"
-#include "share/clipboard.h"
 
 namespace aspia {
 

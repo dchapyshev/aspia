@@ -117,9 +117,9 @@ add_library(aspia_client STATIC
 target_link_libraries(aspia_client
     aspia_base
     aspia_codec
+    aspia_common
     aspia_crypto
     aspia_desktop_capture
     aspia_network
     aspia_protocol
-    aspia_share
     ${THIRD_PARTY_LIBS})

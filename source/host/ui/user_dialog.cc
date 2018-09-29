@@ -22,9 +22,9 @@
 #include <QMouseEvent>
 
 #include "base/logging.h"
+#include "common/user_util.h"
 #include "network/srp_host_context.h"
 #include "protocol/session_type.pb.h"
-#include "share/user_util.h"
 
 namespace aspia {
 

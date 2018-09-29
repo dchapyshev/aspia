@@ -22,8 +22,8 @@
 #include <QNetworkProxy>
 
 #include "base/logging.h"
+#include "common/message_serialization.h"
 #include "crypto/cryptor.h"
-#include "share/message_serialization.h"
 
 namespace aspia {
 

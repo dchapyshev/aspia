@@ -20,7 +20,7 @@
 
 #include "client/ui/desktop_window.h"
 #include "codec/video_util.h"
-#include "share/message_serialization.h"
+#include "common/message_serialization.h"
 
 namespace aspia {
 

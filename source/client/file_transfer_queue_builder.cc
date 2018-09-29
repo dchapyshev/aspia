@@ -22,7 +22,7 @@
 
 #include "base/logging.h"
 #include "client/file_status.h"
-#include "share/file_request.h"
+#include "common/file_request.h"
 
 namespace aspia {
 

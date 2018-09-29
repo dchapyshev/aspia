@@ -94,12 +94,12 @@ add_library(aspia_host SHARED
 target_link_libraries(aspia_host
     aspia_base
     aspia_codec
+    aspia_common
     aspia_crypto
     aspia_desktop_capture
     aspia_ipc
     aspia_network
     aspia_protocol
-    aspia_share
     ${THIRD_PARTY_LIBS})
 
 add_executable(aspia_host_config

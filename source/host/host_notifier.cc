@@ -18,7 +18,7 @@
 
 #include "host/host_notifier.h"
 
-#include "share/message_serialization.h"
+#include "common/message_serialization.h"
 
 namespace aspia {
 

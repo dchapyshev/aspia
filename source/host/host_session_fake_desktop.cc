@@ -21,8 +21,8 @@
 #include "codec/video_encoder_vpx.h"
 #include "codec/video_encoder_zstd.h"
 #include "codec/video_util.h"
+#include "common/message_serialization.h"
 #include "desktop_capture/desktop_frame_simple.h"
-#include "share/message_serialization.h"
 
 namespace aspia {
 

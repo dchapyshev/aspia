@@ -80,9 +80,9 @@ target_link_libraries(aspia_console
     aspia_base
     aspia_client
     aspia_codec
+    aspia_common
     aspia_crypto
     aspia_desktop_capture
     aspia_network
     aspia_protocol
-    aspia_share
     ${THIRD_PARTY_LIBS})
