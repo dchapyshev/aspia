@@ -18,10 +18,6 @@
 
 #include "base/aligned_memory.h"
 
-#if defined(OS_ANDROID)
-#include <malloc.h>
-#endif
-
 #include "base/logging.h"
 
 namespace aspia {
@@ -32,15 +28,7 @@ void* alignedAlloc(size_t size, size_t alignment)
     DCHECK_EQ((alignment & (alignment - 1)), 0U);
     DCHECK_EQ((alignment % sizeof(void*)), 0U);
 
-#if defined(OS_WIN)
-    void* ptr =  _aligned_malloc(size, alignment);
-#elif defined(OS_ANDROID)
-    ptr = memalign(alignment, size);
-#else
-    if (posix_memalign(&ptr, alignment, size))
-        ptr = nullptr;
-#endif
-
+    void* ptr = boost::alignment::aligned_alloc(alignment, size);
     CHECK(ptr);
 
     // Sanity check alignment just to be safe.

@@ -48,16 +48,7 @@
 #ifndef ASPIA_BASE__ALIGNED_MEMORY_H_
 #define ASPIA_BASE__ALIGNED_MEMORY_H_
 
-#include "build/build_config.h"
-
-#include <cstddef>
-#include <cstdint>
-
-#if defined(OS_WIN)
-#include <malloc.h>
-#else
-#include <cstdlib>
-#endif
+#include <boost/align/aligned_alloc.hpp>
 
 namespace aspia {
 
@@ -65,11 +56,7 @@ void* alignedAlloc(size_t size, size_t alignment);
 
 inline void alignedFree(void* ptr)
 {
-#if defined(OS_WIN)
-    _aligned_free(ptr);
-#else
-    free(ptr);
-#endif
+    boost::alignment::aligned_free(ptr);
 }
 
 // Deleter for use with unique_ptr. E.g., use as std::unique_ptr<Foo, AlignedFreeDeleter> foo;
