@@ -20,9 +20,9 @@
 
 #include <openssl/opensslv.h>
 #include <openssl/bn.h>
+#include <openssl/sha.h>
 
 #include "base/logging.h"
-#include "crypto/generic_hash.h"
 
 namespace aspia {
 
@@ -41,20 +41,19 @@ BigNum calc_xy(const BigNum& x, const BigNum& y, const BigNum& N)
     if (N_bytes <= 0)
         return BigNum();
 
-    std::unique_ptr<uint8_t[]> tmp_x = std::make_unique<uint8_t[]>(N_bytes);
-    if (BN_bn2binpad(x, tmp_x.get(), N_bytes) < 0)
+    const size_t xy_size = N_bytes + N_bytes;
+    std::unique_ptr<uint8_t[]> xy = std::make_unique<uint8_t[]>(xy_size);
+
+    if (BN_bn2binpad(x, xy.get(), N_bytes) < 0)
         return BigNum();
 
-    std::unique_ptr<uint8_t[]> tmp_y = std::make_unique<uint8_t[]>(N_bytes);
-    if (BN_bn2binpad(y, tmp_y.get(), N_bytes) < 0)
+    if (BN_bn2binpad(y, xy.get() + N_bytes, N_bytes) < 0)
         return BigNum();
 
-    GenericHash hash(GenericHash::SHA1);
+    uint8_t buffer[SHA_DIGEST_LENGTH];
+    SHA1(xy.get(), xy_size, buffer);
 
-    hash.addData(tmp_x.get(), N_bytes);
-    hash.addData(tmp_y.get(), N_bytes);
-
-    return BigNum::fromStdString(hash.result());
+    return BigNum::fromBuffer(ConstBuffer(buffer, sizeof(buffer)));
 }
 
 // k = SHA1(N | PAD(g))
@@ -118,18 +117,29 @@ BigNum SrpMath::calc_x(const BigNum& s, const std::string& I, const std::string&
     if (!s.isValid() || I.empty() || p.empty())
         return BigNum();
 
-    GenericHash hash(GenericHash::SHA1);
+    uint8_t temp[SHA_DIGEST_LENGTH];
+    SHA_CTX sha_ctx;
 
-    hash.addData(I);
-    hash.addData(":");
-    hash.addData(p);
+    if (!SHA1_Init(&sha_ctx) ||
+        !SHA1_Update(&sha_ctx, I.c_str(), I.size()) ||
+        !SHA1_Update(&sha_ctx, ":", 1) ||
+        !SHA1_Update(&sha_ctx, p.c_str(), p.size()) ||
+        !SHA1_Final(temp, &sha_ctx))
+    {
+        return BigNum();
+    }
 
-    GenericHash result_hash(GenericHash::SHA1);
+    std::string s_buffer = s.toStdString();
 
-    result_hash.addData(s.toStdString());
-    result_hash.addData(hash.result());
+    if (!SHA1_Init(&sha_ctx) ||
+        !SHA1_Update(&sha_ctx, s_buffer.c_str(), s_buffer.size()) ||
+        !SHA1_Update(&sha_ctx, temp, sizeof(temp)) ||
+        !SHA1_Final(temp, &sha_ctx))
+    {
+        return BigNum();
+    }
 
-    return BigNum::fromStdString(result_hash.result());
+    return BigNum::fromBuffer(ConstBuffer(temp, sizeof(temp)));
 }
 
 // static
