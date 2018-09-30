@@ -24,7 +24,7 @@ namespace aspia {
 
 namespace {
 
-template<int kSourceBpp, int kTargetBpp>
+template<typename SourceT, typename TargetT>
 class PixelTranslatorT : public PixelTranslator
 {
 public:
@@ -61,8 +61,8 @@ public:
                    uint8_t* dst, int dst_stride,
                    int width, int height) override
     {
-        src_stride -= width * kSourceBpp;
-        dst_stride -= width * kTargetBpp;
+        src_stride -= width * sizeof(SourceT);
+        dst_stride -= width * sizeof(TargetT);
 
         for (int y = 0; y < height; ++y)
         {
@@ -72,52 +72,14 @@ public:
                 uint32_t green;
                 uint32_t blue;
 
-                if constexpr (kSourceBpp == 4)
-                {
-                    red = red_table_[
-                        *(uint32_t*) src >> source_format_.redShift() & source_format_.redMax()];
-                    green = green_table_[
-                        *(uint32_t*) src >> source_format_.greenShift() & source_format_.greenMax()];
-                    blue = blue_table_[
-                        *(uint32_t*) src >> source_format_.blueShift() & source_format_.blueMax()];
-                }
-                else if constexpr (kSourceBpp == 2)
-                {
-                    red = red_table_[
-                        *(uint16_t*) src >> source_format_.redShift() & source_format_.redMax()];
-                    green = green_table_[
-                        *(uint16_t*) src >> source_format_.greenShift() & source_format_.greenMax()];
-                    blue = blue_table_[
-                        *(uint16_t*) src >> source_format_.blueShift() & source_format_.blueMax()];
-                }
-                else
-                {
-                    static_assert(kSourceBpp == 1);
+                red = red_table_[*(SourceT*)src >> source_format_.redShift() & source_format_.redMax()];
+                green = green_table_[*(SourceT*)src >> source_format_.greenShift() & source_format_.greenMax()];
+                blue = blue_table_[*(SourceT*)src >> source_format_.blueShift() & source_format_.blueMax()];
 
-                    red = red_table_[
-                        *(uint8_t*) src >> source_format_.redShift() & source_format_.redMax()];
-                    green = green_table_[
-                        *(uint8_t*) src >> source_format_.greenShift() & source_format_.greenMax()];
-                    blue = blue_table_[
-                        *(uint8_t*) src >> source_format_.blueShift() & source_format_.blueMax()];
-                }
+                *(TargetT*)dst = (TargetT)(red | green | blue);
 
-                if constexpr (kTargetBpp == 4)
-                {
-                    *(uint32_t*)dst = static_cast<uint32_t>(red | green | blue);
-                }
-                else if constexpr (kTargetBpp == 2)
-                {
-                    *(uint16_t*)dst = static_cast<uint16_t>(red | green | blue);
-                }
-                else
-                {
-                    static_assert(kTargetBpp == 1);
-                    *(uint8_t*)dst = static_cast<uint8_t>(red | green | blue);
-                }
-
-                src += kSourceBpp;
-                dst += kTargetBpp;
+                src += sizeof(SourceT);
+                dst += sizeof(TargetT);
             }
 
             src += src_stride;
@@ -136,7 +98,7 @@ private:
     DISALLOW_COPY_AND_ASSIGN(PixelTranslatorT);
 };
 
-template<int kSourceBpp, int kTargetBpp>
+template<typename SourceT, typename TargetT>
 class PixelTranslatorFrom8_16bppT : public PixelTranslator
 {
 public:
@@ -144,17 +106,9 @@ public:
         : source_format_(source_format),
           target_format_(target_format)
     {
-        size_t table_size;
+        static_assert(sizeof(SourceT) == sizeof(uint8_t) || sizeof(SourceT) == sizeof(uint16_t));
 
-        if constexpr (kSourceBpp == 2)
-        {
-            table_size = 65536;
-        }
-        else
-        {
-            static_assert(kSourceBpp == 1);
-            table_size = 256;
-        }
+        const size_t table_size = std::numeric_limits<SourceT>::max() + 1;
 
         table_ = std::make_unique<uint32_t[]>(table_size);
 
@@ -185,41 +139,17 @@ public:
                    uint8_t* dst, int dst_stride,
                    int width, int height) override
     {
-        src_stride -= width * kSourceBpp;
-        dst_stride -= width * kTargetBpp;
+        src_stride -= width * sizeof(SourceT);
+        dst_stride -= width * sizeof(TargetT);
 
         for (int y = 0; y < height; ++y)
         {
             for (int x = 0; x < width; ++x)
             {
-                uint32_t target_pixel;
+                *(TargetT*)dst = (TargetT)(table_[*(SourceT*)src]);
 
-                if constexpr (kSourceBpp == 2)
-                {
-                    target_pixel = table_[*(uint16_t*)src];
-                }
-                else
-                {
-                    static_assert(kSourceBpp == 1);
-                    target_pixel = table_[*(uint8_t*)src];
-                }
-
-                if constexpr (kTargetBpp == 4)
-                {
-                    *(uint32_t*)dst = static_cast<uint32_t>(target_pixel);
-                }
-                else if constexpr (kTargetBpp == 2)
-                {
-                    *(uint16_t*)dst = static_cast<uint16_t>(target_pixel);
-                }
-                else
-                {
-                    static_assert(kTargetBpp == 1);
-                    *(uint8_t*)dst = static_cast<uint8_t>(target_pixel);
-                }
-
-                src += kSourceBpp;
-                dst += kTargetBpp;
+                src += sizeof(SourceT);
+                dst += sizeof(TargetT);
             }
 
             src += src_stride;
@@ -249,13 +179,16 @@ std::unique_ptr<PixelTranslator> PixelTranslator::create(const PixelFormat& sour
             switch (source_format.bytesPerPixel())
             {
                 case 4:
-                    return std::make_unique<PixelTranslatorT<4, 4>>(source_format, target_format);
+                    return std::make_unique<PixelTranslatorT<uint32_t, uint32_t>>(
+                        source_format, target_format);
 
                 case 2:
-                    return std::make_unique<PixelTranslatorFrom8_16bppT<2, 4>>(source_format, target_format);
+                    return std::make_unique<PixelTranslatorFrom8_16bppT<uint16_t, uint32_t>>(
+                        source_format, target_format);
 
                 case 1:
-                    return std::make_unique<PixelTranslatorFrom8_16bppT<1, 4>>(source_format, target_format);
+                    return std::make_unique<PixelTranslatorFrom8_16bppT<uint8_t, uint32_t>>(
+                        source_format, target_format);
             }
         }
         break;
@@ -265,13 +198,16 @@ std::unique_ptr<PixelTranslator> PixelTranslator::create(const PixelFormat& sour
             switch (source_format.bytesPerPixel())
             {
                 case 4:
-                    return std::make_unique<PixelTranslatorT<4, 2>>(source_format, target_format);
+                    return std::make_unique<PixelTranslatorT<uint32_t, uint16_t>>(
+                        source_format, target_format);
 
                 case 2:
-                    return std::make_unique<PixelTranslatorFrom8_16bppT<2, 2>>(source_format, target_format);
+                    return std::make_unique<PixelTranslatorFrom8_16bppT<uint16_t, uint16_t>>(
+                        source_format, target_format);
 
                 case 1:
-                    return std::make_unique<PixelTranslatorFrom8_16bppT<1, 2>>(source_format, target_format);
+                    return std::make_unique<PixelTranslatorFrom8_16bppT<uint8_t, uint16_t>>(
+                        source_format, target_format);
             }
         }
         break;
@@ -281,13 +217,16 @@ std::unique_ptr<PixelTranslator> PixelTranslator::create(const PixelFormat& sour
             switch (source_format.bytesPerPixel())
             {
                 case 4:
-                    return std::make_unique<PixelTranslatorT<4, 1>>(source_format, target_format);
+                    return std::make_unique<PixelTranslatorT<uint32_t, uint8_t>>(
+                        source_format, target_format);
 
                 case 2:
-                    return std::make_unique<PixelTranslatorFrom8_16bppT<2, 1>>(source_format, target_format);
+                    return std::make_unique<PixelTranslatorFrom8_16bppT<uint16_t, uint8_t>>(
+                        source_format, target_format);
 
                 case 1:
-                    return std::make_unique<PixelTranslatorFrom8_16bppT<1, 1>>(source_format, target_format);
+                    return std::make_unique<PixelTranslatorFrom8_16bppT<uint8_t, uint8_t>>(
+                        source_format, target_format);
             }
         }
         break;
