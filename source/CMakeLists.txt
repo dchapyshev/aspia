@@ -61,6 +61,7 @@ include_directories(
     ${ASPIA_THIRD_PARTY_DIR}/libyuv/include
     ${ASPIA_THIRD_PARTY_DIR}/openssl/include
     ${ASPIA_THIRD_PARTY_DIR}/protobuf/include
+    ${ASPIA_THIRD_PARTY_DIR}/tbb/include
     ${ASPIA_THIRD_PARTY_DIR}/zstd/include)
 
 link_directories(
@@ -69,10 +70,11 @@ link_directories(
     ${ASPIA_THIRD_PARTY_DIR}/libyuv/lib
     ${ASPIA_THIRD_PARTY_DIR}/openssl/lib
     ${ASPIA_THIRD_PARTY_DIR}/protobuf/lib
-    ${ASPIA_THIRD_PARTY_DIR}/zstd/lib
     ${ASPIA_THIRD_PARTY_DIR}/qt/lib
     ${ASPIA_THIRD_PARTY_DIR}/qt/plugins/platforms
-    ${ASPIA_THIRD_PARTY_DIR}/qt/plugins/styles)
+    ${ASPIA_THIRD_PARTY_DIR}/qt/plugins/styles
+    ${ASPIA_THIRD_PARTY_DIR}/tbb/lib
+    ${ASPIA_THIRD_PARTY_DIR}/zstd/lib)
 
 set(THIRD_PARTY_LIBS
     Qt5::Core

@@ -10,4 +10,5 @@ Third-party components information
 | openssl    | 1.1.1     | OpenSSL License                       | https://github.com/openssl/openssl/releases     |
 | protobuf   | 3.6.1     | BSD 3-Clause License                  | https://github.com/google/protobuf/releases     |
 | qt         | 5.11.2    | GNU General Public License 3.0        | https://www.qt.io                               |
+| tbb        | 2019      | Apache License 2.0                    | https://github.com/01org/tbb/releases           |
 | zstd       | 1.3.5     | BSD License                           | https://github.com/facebook/zstd/releases       |

@@ -65,6 +65,7 @@ list(APPEND SOURCE_HOST_UI
     ui/user_tree_item.h)
 
 list(APPEND SOURCE_HOST_WIN
+    win/dll_main.cc
     win/host.cc
     win/host.h
     win/host_main.cc

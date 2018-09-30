@@ -18,11 +18,13 @@
 
 #include <QCommandLineParser>
 
+#include <tbb/tbbmalloc_proxy.h>
+
 #include <QtGlobal>
 #include <QtPlugin>
 
-Q_IMPORT_PLUGIN (QWindowsIntegrationPlugin);
-Q_IMPORT_PLUGIN (QWindowsVistaStylePlugin);
+Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin);
+Q_IMPORT_PLUGIN(QWindowsVistaStylePlugin);
 
 #include "base/logging.h"
 #include "build/version.h"

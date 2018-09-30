@@ -18,16 +18,8 @@
 
 #include "host/win/host_main.h"
 
-#define WIN32_LEAN_AND_MEAN
-#define NOMINMAX
-#include <windows.h>
-
 #include <QApplication>
 #include <QCommandLineParser>
-
-#include <QtPlugin>
-Q_IMPORT_PLUGIN (QWindowsIntegrationPlugin);
-Q_IMPORT_PLUGIN (QWindowsVistaStylePlugin);
 
 #include "base/logging.h"
 #include "build/version.h"
