@@ -48,6 +48,12 @@
 #error Unknown architecture
 #endif
 
+#if defined(CC_MSVC)
+#define INLINE __forceinline
+#else
+#define INLINE inline
+#endif
+
 #define DEFAULT_HOST_TCP_PORT 8050
 
 #endif // ASPIA_BUILD_CONFIG_H_

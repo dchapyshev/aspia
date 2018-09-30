@@ -18,11 +18,14 @@
 
 #include "codec/pixel_translator.h"
 
+#include "build/build_config.h"
 #include "base/macros_magic.h"
 
 namespace aspia {
 
 namespace {
+
+const int kBlockSize = 16;
 
 template<typename SourceT, typename TargetT>
 class PixelTranslatorT : public PixelTranslator
@@ -57,30 +60,52 @@ public:
 
     ~PixelTranslatorT() = default;
 
+    INLINE void translatePixel(const SourceT* src_ptr, TargetT* dst_ptr)
+    {
+        const uint32_t red = red_table_[
+            *src_ptr >> source_format_.redShift() & source_format_.redMax()];
+        const uint32_t green = green_table_[
+            *src_ptr >> source_format_.greenShift() & source_format_.greenMax()];
+        const uint32_t blue = blue_table_[
+            *src_ptr >> source_format_.blueShift() & source_format_.blueMax()];
+
+        *dst_ptr = static_cast<TargetT>(red | green | blue);
+    }
+
     void translate(const uint8_t* src, int src_stride,
                    uint8_t* dst, int dst_stride,
                    int width, int height) override
     {
-        src_stride -= width * sizeof(SourceT);
-        dst_stride -= width * sizeof(TargetT);
+        const int block_count = width / kBlockSize;
+        const int partial_width = width - (block_count * kBlockSize);
 
         for (int y = 0; y < height; ++y)
         {
-            for (int x = 0; x < width; ++x)
+            const SourceT* src_ptr = reinterpret_cast<const SourceT*>(src);
+            TargetT* dst_ptr = reinterpret_cast<TargetT*>(dst);
+
+            for (int x = 0; x < block_count; ++x)
             {
-                uint32_t red;
-                uint32_t green;
-                uint32_t blue;
-
-                red = red_table_[*(SourceT*)src >> source_format_.redShift() & source_format_.redMax()];
-                green = green_table_[*(SourceT*)src >> source_format_.greenShift() & source_format_.greenMax()];
-                blue = blue_table_[*(SourceT*)src >> source_format_.blueShift() & source_format_.blueMax()];
-
-                *(TargetT*)dst = (TargetT)(red | green | blue);
-
-                src += sizeof(SourceT);
-                dst += sizeof(TargetT);
+                translatePixel(src_ptr++, dst_ptr++);
+                translatePixel(src_ptr++, dst_ptr++);
+                translatePixel(src_ptr++, dst_ptr++);
+                translatePixel(src_ptr++, dst_ptr++);
+                translatePixel(src_ptr++, dst_ptr++);
+                translatePixel(src_ptr++, dst_ptr++);
+                translatePixel(src_ptr++, dst_ptr++);
+                translatePixel(src_ptr++, dst_ptr++);
+                translatePixel(src_ptr++, dst_ptr++);
+                translatePixel(src_ptr++, dst_ptr++);
+                translatePixel(src_ptr++, dst_ptr++);
+                translatePixel(src_ptr++, dst_ptr++);
+                translatePixel(src_ptr++, dst_ptr++);
+                translatePixel(src_ptr++, dst_ptr++);
+                translatePixel(src_ptr++, dst_ptr++);
+                translatePixel(src_ptr++, dst_ptr++);
             }
+
+            for (int x = 0; x < partial_width; ++x)
+                translatePixel(src_ptr++, dst_ptr++);
 
             src += src_stride;
             dst += dst_stride;
@@ -109,7 +134,6 @@ public:
         static_assert(sizeof(SourceT) == sizeof(uint8_t) || sizeof(SourceT) == sizeof(uint16_t));
 
         const size_t table_size = std::numeric_limits<SourceT>::max() + 1;
-
         table_ = std::make_unique<uint32_t[]>(table_size);
 
         uint32_t source_red_mask = source_format.redMax() << source_format.redShift();
@@ -139,18 +163,36 @@ public:
                    uint8_t* dst, int dst_stride,
                    int width, int height) override
     {
-        src_stride -= width * sizeof(SourceT);
-        dst_stride -= width * sizeof(TargetT);
+        const int block_count = width / kBlockSize;
+        const int partial_width = width - (block_count * kBlockSize);
 
         for (int y = 0; y < height; ++y)
         {
-            for (int x = 0; x < width; ++x)
-            {
-                *(TargetT*)dst = (TargetT)(table_[*(SourceT*)src]);
+            const SourceT* src_ptr = reinterpret_cast<const SourceT*>(src);
+            TargetT* dst_ptr = reinterpret_cast<TargetT*>(dst);
 
-                src += sizeof(SourceT);
-                dst += sizeof(TargetT);
+            for (int x = 0; x < block_count; ++x)
+            {
+                *dst_ptr++ = static_cast<TargetT>(table_[*src_ptr++]);
+                *dst_ptr++ = static_cast<TargetT>(table_[*src_ptr++]);
+                *dst_ptr++ = static_cast<TargetT>(table_[*src_ptr++]);
+                *dst_ptr++ = static_cast<TargetT>(table_[*src_ptr++]);
+                *dst_ptr++ = static_cast<TargetT>(table_[*src_ptr++]);
+                *dst_ptr++ = static_cast<TargetT>(table_[*src_ptr++]);
+                *dst_ptr++ = static_cast<TargetT>(table_[*src_ptr++]);
+                *dst_ptr++ = static_cast<TargetT>(table_[*src_ptr++]);
+                *dst_ptr++ = static_cast<TargetT>(table_[*src_ptr++]);
+                *dst_ptr++ = static_cast<TargetT>(table_[*src_ptr++]);
+                *dst_ptr++ = static_cast<TargetT>(table_[*src_ptr++]);
+                *dst_ptr++ = static_cast<TargetT>(table_[*src_ptr++]);
+                *dst_ptr++ = static_cast<TargetT>(table_[*src_ptr++]);
+                *dst_ptr++ = static_cast<TargetT>(table_[*src_ptr++]);
+                *dst_ptr++ = static_cast<TargetT>(table_[*src_ptr++]);
+                *dst_ptr++ = static_cast<TargetT>(table_[*src_ptr++]);
             }
+
+            for (int x = 0; x < partial_width; ++x)
+                *dst_ptr++ = static_cast<TargetT>(table_[*src_ptr++]);
 
             src += src_stride;
             dst += dst_stride;
