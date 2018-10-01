@@ -36,6 +36,8 @@ list(APPEND SOURCE_BASE
     logging.cc
     logging.h
     macros_magic.h
+    power_controller.h
+    power_controller_win.cc
     service.h
     service_controller.cc
     service_controller.h

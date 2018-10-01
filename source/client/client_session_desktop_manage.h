@@ -42,6 +42,7 @@ public slots:
     void onSendKeyEvent(uint32_t usb_keycode, uint32_t flags);
     void onSendPointerEvent(const DesktopPoint& pos, uint32_t mask);
     void onSendClipboardEvent(const proto::desktop::ClipboardEvent& event);
+    void onPowerControl(proto::desktop::PowerControl::Action action);
 
 private:
     void readCursorShape(const proto::desktop::CursorShape& cursor_shape);

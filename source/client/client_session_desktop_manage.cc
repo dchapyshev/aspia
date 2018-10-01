@@ -36,6 +36,9 @@ ClientSessionDesktopManage::ClientSessionDesktopManage(ConnectData* connect_data
 
     connect(desktop_window_, &DesktopWindow::sendClipboardEvent,
             this, &ClientSessionDesktopManage::onSendClipboardEvent);
+
+    connect(desktop_window_, &DesktopWindow::sendPowerControl,
+            this, &ClientSessionDesktopManage::onPowerControl);
 }
 
 void ClientSessionDesktopManage::messageReceived(const QByteArray& buffer)
@@ -116,7 +119,13 @@ void ClientSessionDesktopManage::onSendClipboardEvent(const proto::desktop::Clip
 
     proto::desktop::ClientToHost message;
     message.mutable_clipboard_event()->CopyFrom(event);
+    emit sendMessage(serializeMessage(message));
+}
 
+void ClientSessionDesktopManage::onPowerControl(proto::desktop::PowerControl::Action action)
+{
+    proto::desktop::ClientToHost message;
+    message.mutable_power_control()->set_action(action);
     emit sendMessage(serializeMessage(message));
 }
 

@@ -87,6 +87,7 @@ DesktopWindow::DesktopWindow(ConnectData* connect_data, QWidget* parent)
     connect(panel_, &DesktopPanel::screenSelected, this, &DesktopWindow::sendScreen);
     connect(panel_, &DesktopPanel::takeScreenshot, this, &DesktopWindow::takeScreenshot);
     connect(panel_, &DesktopPanel::scalingChanged, this, &DesktopWindow::onScalingChanged);
+    connect(panel_, &DesktopPanel::powerControl, this, &DesktopWindow::sendPowerControl);
 
     connect(panel_, &DesktopPanel::switchToFullscreen, [this](bool fullscreen)
     {

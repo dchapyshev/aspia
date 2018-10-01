@@ -51,6 +51,7 @@ signals:
     void keyCombinationsChanged(bool enabled);
     void takeScreenshot();
     void startSession(proto::SessionType session_type);
+    void powerControl(proto::desktop::PowerControl::Action action);
 
 protected:
     // QFrame implementation.
@@ -62,14 +63,17 @@ private slots:
     void onFullscreenButton(bool checked);
     void onAutosizeButton();
     void onCtrlAltDel();
+    void onPowerControl(QAction* action);
 
 private:
     void createAdditionalMenu(proto::SessionType session_type);
+    void createPowerMenu();
     void createScreensMenu();
     void delayedHide();
 
     Ui::DesktopPanel ui;
 
+    QMenu* power_menu_;
     QMenu* additional_menu_;
     QMenu* screens_menu_;
     QActionGroup* screens_group_;

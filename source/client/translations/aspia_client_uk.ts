@@ -133,64 +133,90 @@
 <context>
     <name>DesktopPanel</name>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="119"/>
+        <location filename="../ui/desktop_panel.ui" line="120"/>
         <source>Lock toolbar</source>
         <translation>Закріпити панель інструментів</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="131"/>
+        <location filename="../ui/desktop_panel.ui" line="132"/>
         <source>Session configuration</source>
         <translation>Налаштування сесії</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="143"/>
+        <location filename="../ui/desktop_panel.ui" line="144"/>
         <source>Monitor selection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="155"/>
+        <location filename="../ui/desktop_panel.ui" line="156"/>
         <source>Automatic window size</source>
         <translation>Автоматичний розмір вікна</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="170"/>
+        <location filename="../ui/desktop_panel.ui" line="171"/>
         <source>Switch to full screen mode or back</source>
         <translation>Повноекранний режим</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="181"/>
+        <location filename="../ui/desktop_panel.ui" line="182"/>
         <source>Automatic scrolling</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="205"/>
+        <location filename="../ui/desktop_panel.ui" line="206"/>
         <source>Advanced menu</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="247"/>
+        <location filename="../ui/desktop_panel.ui" line="248"/>
         <source>Send key combinations</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="210"/>
-        <location filename="../ui/desktop_panel.ui" line="213"/>
-        <location filename="../ui/desktop_panel.ui" line="216"/>
+        <location filename="../ui/desktop_panel.ui" line="257"/>
+        <location filename="../ui/desktop_panel.ui" line="260"/>
+        <source>Power control</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_panel.ui" line="265"/>
+        <source>Shutdown</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_panel.ui" line="270"/>
+        <source>Reboot</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_panel.ui" line="275"/>
+        <source>Logoff</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_panel.ui" line="280"/>
+        <source>Lock</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_panel.ui" line="211"/>
+        <location filename="../ui/desktop_panel.ui" line="214"/>
+        <location filename="../ui/desktop_panel.ui" line="217"/>
         <source>Save screenshot...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="228"/>
+        <location filename="../ui/desktop_panel.ui" line="229"/>
         <source>File transfer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="236"/>
+        <location filename="../ui/desktop_panel.ui" line="237"/>
         <source>Scaling an image</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="193"/>
+        <location filename="../ui/desktop_panel.ui" line="194"/>
         <source>Send Ctrl+Alt+Delete</source>
         <translation>Передати Ctrl+Alt+Del</translation>
     </message>
@@ -613,7 +639,7 @@
 <context>
     <name>aspia::ClientSessionDesktopManage</name>
     <message>
-        <location filename="../client_session_desktop_manage.cc" line="47"/>
+        <location filename="../client_session_desktop_manage.cc" line="50"/>
         <source>Session error: Invalid message from host.</source>
         <translation>Збій сесії: Невірне повідомлення від хоста.</translation>
     </message>
@@ -698,6 +724,37 @@
     </message>
 </context>
 <context>
+    <name>aspia::DesktopPanel</name>
+    <message>
+        <location filename="../ui/desktop_panel.cc" line="215"/>
+        <location filename="../ui/desktop_panel.cc" line="226"/>
+        <location filename="../ui/desktop_panel.cc" line="237"/>
+        <location filename="../ui/desktop_panel.cc" line="248"/>
+        <source>Confirmation</source>
+        <translation type="unfinished">Підтвердження</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_panel.cc" line="216"/>
+        <source>Are you sure you want to shutdown the remote computer?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_panel.cc" line="227"/>
+        <source>Are you sure you want to reboot the remote computer?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_panel.cc" line="238"/>
+        <source>Are you sure you want to end the user session on the remote computer?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_panel.cc" line="249"/>
+        <source>Are you sure you want to lock the user session on the remote computer?</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>aspia::DesktopWindow</name>
     <message>
         <location filename="../ui/desktop_window.cc" line="47"/>
@@ -710,22 +767,22 @@
         <translation>Перегляд робочого столу Aspia</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="291"/>
+        <location filename="../ui/desktop_window.cc" line="292"/>
         <source>Save File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="293"/>
+        <location filename="../ui/desktop_window.cc" line="294"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="313"/>
+        <location filename="../ui/desktop_window.cc" line="314"/>
         <source>Warning</source>
         <translation type="unfinished">Попередження</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="313"/>
+        <location filename="../ui/desktop_window.cc" line="314"/>
         <source>Could not save image</source>
         <translation type="unfinished"></translation>
     </message>

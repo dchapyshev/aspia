@@ -151,6 +151,20 @@ message ScreenList
     repeated Screen screen = 1;
 }
 
+message PowerControl
+{
+    enum Action
+    {
+        ACTION_UNKNOWN  = 0;
+        ACTION_SHUTDOWN = 1;
+        ACTION_REBOOT   = 2;
+        ACTION_LOGOFF   = 3;
+        ACTION_LOCK     = 4;
+    }
+
+    Action action = 1;
+}
+
 message ConfigRequest
 {
     uint32 dummy = 1;
@@ -194,6 +208,8 @@ message ClientToHost
     // Field 3 reserved for TouchEvent.
     // Field 4 reserved for TextEvent.
     ClipboardEvent clipboard_event = 5;
-    Screen screen                  = 6;
-    Config config                  = 7;
+    PowerControl power_control     = 6;
+    Screen screen                  = 7;
+    // Field 8 reserved.
+    Config config                  = 9;
 }

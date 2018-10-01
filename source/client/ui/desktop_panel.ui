@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>230</width>
+    <width>255</width>
     <height>40</height>
    </rect>
   </property>
@@ -62,6 +62,7 @@
      <addaction name="separator"/>
      <addaction name="action_settings"/>
      <addaction name="action_monitors"/>
+     <addaction name="action_power_control"/>
      <addaction name="action_cad"/>
      <addaction name="separator"/>
      <addaction name="action_autosize"/>
@@ -245,6 +246,38 @@
    </property>
    <property name="text">
     <string>Send key combinations</string>
+   </property>
+  </action>
+  <action name="action_power_control">
+   <property name="icon">
+    <iconset resource="../resources/client.qrc">
+     <normaloff>:/icon/lightning.png</normaloff>:/icon/lightning.png</iconset>
+   </property>
+   <property name="text">
+    <string>Power control</string>
+   </property>
+   <property name="toolTip">
+    <string>Power control</string>
+   </property>
+  </action>
+  <action name="action_shutdown">
+   <property name="text">
+    <string>Shutdown</string>
+   </property>
+  </action>
+  <action name="action_reboot">
+   <property name="text">
+    <string>Reboot</string>
+   </property>
+  </action>
+  <action name="action_logoff">
+   <property name="text">
+    <string>Logoff</string>
+   </property>
+  </action>
+  <action name="action_lock">
+   <property name="text">
+    <string>Lock</string>
    </property>
   </action>
  </widget>

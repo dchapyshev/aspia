@@ -19,6 +19,7 @@
 #include "client/ui/desktop_panel.h"
 
 #include <QMenu>
+#include <QMessageBox>
 #include <QToolButton>
 
 #include "base/logging.h"
@@ -47,11 +48,14 @@ DesktopPanel::DesktopPanel(proto::SessionType session_type, QWidget* parent)
 
     if (session_type == proto::SESSION_TYPE_DESKTOP_MANAGE)
     {
+        createPowerMenu();
         connect(ui.action_cad, &QAction::triggered, this, &DesktopPanel::onCtrlAltDel);
     }
     else
     {
         DCHECK(session_type == proto::SESSION_TYPE_DESKTOP_VIEW);
+
+        ui.action_power_control->setVisible(false);
         ui.action_cad->setVisible(false);
     }
 
@@ -203,6 +207,54 @@ void DesktopPanel::onCtrlAltDel()
     emit keyCombination(Qt::ControlModifier | Qt::AltModifier | Qt::Key_Delete);
 }
 
+void DesktopPanel::onPowerControl(QAction* action)
+{
+    if (action == ui.action_shutdown)
+    {
+        if (QMessageBox::question(this,
+                                  tr("Confirmation"),
+                                  tr("Are you sure you want to shutdown the remote computer?"),
+                                  QMessageBox::Yes,
+                                  QMessageBox::No) == QMessageBox::Yes)
+        {
+            emit powerControl(proto::desktop::PowerControl::ACTION_SHUTDOWN);
+        }
+    }
+    else if (action == ui.action_reboot)
+    {
+        if (QMessageBox::question(this,
+                                  tr("Confirmation"),
+                                  tr("Are you sure you want to reboot the remote computer?"),
+                                  QMessageBox::Yes,
+                                  QMessageBox::No) == QMessageBox::Yes)
+        {
+            emit powerControl(proto::desktop::PowerControl::ACTION_REBOOT);
+        }
+    }
+    else if (action == ui.action_logoff)
+    {
+        if (QMessageBox::question(this,
+                                  tr("Confirmation"),
+                                  tr("Are you sure you want to end the user session on the remote computer?"),
+                                  QMessageBox::Yes,
+                                  QMessageBox::No) == QMessageBox::Yes)
+        {
+            emit powerControl(proto::desktop::PowerControl::ACTION_LOGOFF);
+        }
+    }
+    else if (action == ui.action_lock)
+    {
+        if (QMessageBox::question(this,
+                                  tr("Confirmation"),
+                                  tr("Are you sure you want to lock the user session on the remote computer?"),
+                                  QMessageBox::Yes,
+                                  QMessageBox::No) == QMessageBox::Yes)
+        {
+            emit powerControl(proto::desktop::PowerControl::ACTION_LOCK);
+        }
+    }
+}
+
 void DesktopPanel::createAdditionalMenu(proto::SessionType session_type)
 {
     // Create a menu and add actions to it.
@@ -238,6 +290,31 @@ void DesktopPanel::createAdditionalMenu(proto::SessionType session_type)
     connect(ui.action_screenshot, &QAction::triggered, this, &DesktopPanel::takeScreenshot);
     connect(additional_menu_, &QMenu::aboutToShow, [this]() { allow_hide_ = false; });
     connect(additional_menu_, &QMenu::aboutToHide, [this]()
+    {
+        allow_hide_ = true;
+
+        if (leaved_)
+            delayedHide();
+    });
+}
+
+void DesktopPanel::createPowerMenu()
+{
+    power_menu_ = new QMenu(this);
+    power_menu_->addAction(ui.action_shutdown);
+    power_menu_->addAction(ui.action_reboot);
+    power_menu_->addAction(ui.action_logoff);
+    power_menu_->addAction(ui.action_lock);
+
+    ui.action_power_control->setMenu(power_menu_);
+
+    QToolButton* button = qobject_cast<QToolButton*>(
+        ui.toolbar->widgetForAction(ui.action_power_control));
+    button->setPopupMode(QToolButton::InstantPopup);
+
+    connect(power_menu_, &QMenu::triggered, this, &DesktopPanel::onPowerControl);
+    connect(power_menu_, &QMenu::aboutToShow, [this]() { allow_hide_ = false; });
+    connect(power_menu_, &QMenu::aboutToHide, [this]()
     {
         allow_hide_ = true;
 

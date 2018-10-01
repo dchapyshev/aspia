@@ -18,6 +18,7 @@
 
 #include "host/host_session_desktop.h"
 
+#include "base/power_controller.h"
 #include "common/clipboard.h"
 #include "common/message_serialization.h"
 #include "host/input_injector.h"
@@ -90,6 +91,8 @@ void HostSessionDesktop::messageReceived(const QByteArray& buffer)
         readKeyEvent(message.key_event());
     else if (message.has_clipboard_event())
         readClipboardEvent(message.clipboard_event());
+    else if (message.has_power_control())
+        readPowerControl(message.power_control());
     else if (message.has_config())
         readConfig(message.config());
     else if (message.has_screen())
@@ -154,6 +157,32 @@ void HostSessionDesktop::readClipboardEvent(const proto::desktop::ClipboardEvent
     }
 
     clipboard_->injectClipboardEvent(clipboard_event);
+}
+
+void HostSessionDesktop::readPowerControl(const proto::desktop::PowerControl& power_control)
+{
+    switch (power_control.action())
+    {
+        case proto::desktop::PowerControl::ACTION_SHUTDOWN:
+            PowerController::shutdown();
+            break;
+
+        case proto::desktop::PowerControl::ACTION_REBOOT:
+            PowerController::reboot();
+            break;
+
+        case proto::desktop::PowerControl::ACTION_LOGOFF:
+            PowerController::logoff();
+            break;
+
+        case proto::desktop::PowerControl::ACTION_LOCK:
+            PowerController::lock();
+            break;
+
+        default:
+            LOG(LS_WARNING) << "Unhandled power control action: " << power_control.action();
+            break;
+    }
 }
 
 void HostSessionDesktop::readConfig(const proto::desktop::Config& config)

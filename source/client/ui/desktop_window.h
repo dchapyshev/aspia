@@ -58,6 +58,7 @@ signals:
     void sendKeyEvent(uint32_t usb_keycode, uint32_t flags);
     void sendPointerEvent(const DesktopPoint& pos, uint32_t mask);
     void sendClipboardEvent(const proto::desktop::ClipboardEvent& event);
+    void sendPowerControl(proto::desktop::PowerControl::Action action);
     void sendScreen(const proto::desktop::Screen& screen);
 
 protected:
