@@ -116,10 +116,10 @@ message Packet
 {
     enum Flags
     {
-        WRONG_FLAGS  = 0;
-        PACKET       = 1;
-        FIRST_PACKET = 2;
-        LAST_PACKET  = 4;
+        NO_FLAGS     = 0;
+        FIRST_PACKET = 1;
+        LAST_PACKET  = 2;
+        COMPRESSED   = 4;
     }
 
     uint32 flags = 1;

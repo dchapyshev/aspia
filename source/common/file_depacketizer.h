@@ -24,6 +24,7 @@
 #include <memory>
 
 #include "base/macros_magic.h"
+#include "codec/scoped_zstd_stream.h"
 #include "protocol/file_transfer_session.pb.h"
 
 namespace aspia {
@@ -44,9 +45,12 @@ private:
 
     std::filesystem::path file_path_;
     std::ofstream file_stream_;
+    std::string write_buffer_;
 
-    std::streamoff file_size_ = 0;
-    std::streamoff left_size_ = 0;
+    uint64_t file_size_ = 0;
+    uint64_t left_size_ = 0;
+
+    ScopedZstdDStream decompressor_;
 
     DISALLOW_COPY_AND_ASSIGN(FileDepacketizer);
 };
