@@ -63,9 +63,8 @@ HostSessionDesktop::~HostSessionDesktop()
 
 void HostSessionDesktop::startSession()
 {
-    proto::desktop::HostToClient message;
-    message.mutable_config_request()->set_dummy(1);
-    emit sendMessage(serializeMessage(message));
+    outgoing_message_.mutable_config_request()->set_dummy(1);
+    emit sendMessage(serializeMessage(outgoing_message_));
 }
 
 void HostSessionDesktop::stopSession()
@@ -77,26 +76,26 @@ void HostSessionDesktop::stopSession()
 
 void HostSessionDesktop::messageReceived(const QByteArray& buffer)
 {
-    proto::desktop::ClientToHost message;
+    incoming_message_.Clear();
 
-    if (!parseMessage(buffer, message))
+    if (!parseMessage(buffer, incoming_message_))
     {
         emit errorOccurred();
         return;
     }
 
-    if (message.has_pointer_event())
-        readPointerEvent(message.pointer_event());
-    else if (message.has_key_event())
-        readKeyEvent(message.key_event());
-    else if (message.has_clipboard_event())
-        readClipboardEvent(message.clipboard_event());
-    else if (message.has_power_control())
-        readPowerControl(message.power_control());
-    else if (message.has_config())
-        readConfig(message.config());
-    else if (message.has_screen())
-        readScreen(message.screen());
+    if (incoming_message_.has_pointer_event())
+        readPointerEvent(incoming_message_.pointer_event());
+    else if (incoming_message_.has_key_event())
+        readKeyEvent(incoming_message_.key_event());
+    else if (incoming_message_.has_clipboard_event())
+        readClipboardEvent(incoming_message_.clipboard_event());
+    else if (incoming_message_.has_power_control())
+        readPowerControl(incoming_message_.power_control());
+    else if (incoming_message_.has_config())
+        readConfig(incoming_message_.config());
+    else if (incoming_message_.has_screen())
+        readScreen(incoming_message_.screen());
     else
     {
         DLOG(LS_WARNING) << "Unhandled message from client";
@@ -108,10 +107,9 @@ void HostSessionDesktop::clipboardEvent(const proto::desktop::ClipboardEvent& ev
     if (session_type_ != proto::SESSION_TYPE_DESKTOP_MANAGE)
         return;
 
-    proto::desktop::HostToClient message;
-    message.mutable_clipboard_event()->CopyFrom(event);
-
-    emit sendMessage(serializeMessage(message));
+    outgoing_message_.Clear();
+    outgoing_message_.mutable_clipboard_event()->CopyFrom(event);
+    emit sendMessage(serializeMessage(outgoing_message_));
 }
 
 void HostSessionDesktop::readPointerEvent(const proto::desktop::PointerEvent& event)

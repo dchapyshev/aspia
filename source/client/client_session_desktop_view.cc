@@ -46,25 +46,25 @@ ClientSessionDesktopView::ClientSessionDesktopView(ConnectData* connect_data, QO
 
 void ClientSessionDesktopView::messageReceived(const QByteArray& buffer)
 {
-    message_.Clear();
+    incoming_message_.Clear();
 
-    if (!parseMessage(buffer, message_))
+    if (!parseMessage(buffer, incoming_message_))
     {
         emit errorOccurred(tr("Session error: Invalid message from host."));
         return;
     }
 
-    if (message_.has_video_packet())
+    if (incoming_message_.has_video_packet())
     {
-        readVideoPacket(message_.video_packet());
+        readVideoPacket(incoming_message_.video_packet());
     }
-    else if (message_.has_config_request())
+    else if (incoming_message_.has_config_request())
     {
-        readConfigRequest(message_.config_request());
+        readConfigRequest(incoming_message_.config_request());
     }
-    else if (message_.has_screen_list())
+    else if (incoming_message_.has_screen_list())
     {
-        readScreenList(message_.screen_list());
+        readScreenList(incoming_message_.screen_list());
     }
     else
     {
@@ -91,16 +91,16 @@ void ClientSessionDesktopView::closeSession()
 
 void ClientSessionDesktopView::onSendConfig(const proto::desktop::Config& config)
 {
-    proto::desktop::ClientToHost message;
-    message.mutable_config()->CopyFrom(config);
-    emit sendMessage(serializeMessage(message));
+    outgoing_message_.Clear();
+    outgoing_message_.mutable_config()->CopyFrom(config);
+    emit sendMessage(serializeMessage(outgoing_message_));
 }
 
 void ClientSessionDesktopView::onSendScreen(const proto::desktop::Screen& screen)
 {
-    proto::desktop::ClientToHost message;
-    message.mutable_screen()->CopyFrom(screen);
-    emit sendMessage(serializeMessage(message));
+    outgoing_message_.Clear();
+    outgoing_message_.mutable_screen()->CopyFrom(screen);
+    emit sendMessage(serializeMessage(outgoing_message_));
 }
 
 void ClientSessionDesktopView::readConfigRequest(

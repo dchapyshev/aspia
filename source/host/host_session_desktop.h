@@ -61,6 +61,9 @@ private:
 
     const proto::SessionType session_type_;
 
+    proto::desktop::ClientToHost incoming_message_;
+    proto::desktop::HostToClient outgoing_message_;
+
     DesktopConfigTracker config_tracker_;
 
     QPointer<ScreenUpdater> screen_updater_;

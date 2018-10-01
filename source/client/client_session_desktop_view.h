@@ -54,8 +54,10 @@ protected:
     void readScreenList(const proto::desktop::ScreenList& screen_list);
 
     ConnectData* connect_data_;
-    proto::desktop::HostToClient message_;
     DesktopWindow* desktop_window_;
+
+    proto::desktop::HostToClient incoming_message_;
+    proto::desktop::ClientToHost outgoing_message_;
 
 private:
     proto::desktop::VideoEncoding video_encoding_ = proto::desktop::VIDEO_ENCODING_UNKNOWN;

@@ -43,33 +43,33 @@ ClientSessionDesktopManage::ClientSessionDesktopManage(ConnectData* connect_data
 
 void ClientSessionDesktopManage::messageReceived(const QByteArray& buffer)
 {
-    message_.Clear();
+    incoming_message_.Clear();
 
-    if (!parseMessage(buffer, message_))
+    if (!parseMessage(buffer, incoming_message_))
     {
         emit errorOccurred(tr("Session error: Invalid message from host."));
         return;
     }
 
-    if (message_.has_video_packet() || message_.has_cursor_shape())
+    if (incoming_message_.has_video_packet() || incoming_message_.has_cursor_shape())
     {
-        if (message_.has_video_packet())
-            readVideoPacket(message_.video_packet());
+        if (incoming_message_.has_video_packet())
+            readVideoPacket(incoming_message_.video_packet());
 
-        if (message_.has_cursor_shape())
-            readCursorShape(message_.cursor_shape());
+        if (incoming_message_.has_cursor_shape())
+            readCursorShape(incoming_message_.cursor_shape());
     }
-    else if (message_.has_clipboard_event())
+    else if (incoming_message_.has_clipboard_event())
     {
-        readClipboardEvent(message_.clipboard_event());
+        readClipboardEvent(incoming_message_.clipboard_event());
     }
-    else if (message_.has_config_request())
+    else if (incoming_message_.has_config_request())
     {
-        readConfigRequest(message_.config_request());
+        readConfigRequest(incoming_message_.config_request());
     }
-    else if (message_.has_screen_list())
+    else if (incoming_message_.has_screen_list())
     {
-        readScreenList(message_.screen_list());
+        readScreenList(incoming_message_.screen_list());
     }
     else
     {
@@ -83,32 +83,32 @@ void ClientSessionDesktopManage::onSendConfig(const proto::desktop::Config& conf
     if (!(config.flags() & proto::desktop::ENABLE_CURSOR_SHAPE))
         cursor_decoder_.reset();
 
-    proto::desktop::ClientToHost message;
-    message.mutable_config()->CopyFrom(config);
-    emit sendMessage(serializeMessage(message));
+    outgoing_message_.Clear();
+    outgoing_message_.mutable_config()->CopyFrom(config);
+    emit sendMessage(serializeMessage(outgoing_message_));
 }
 
 void ClientSessionDesktopManage::onSendKeyEvent(uint32_t usb_keycode, uint32_t flags)
 {
-    proto::desktop::ClientToHost message;
+    outgoing_message_.Clear();
 
-    proto::desktop::KeyEvent* event = message.mutable_key_event();
+    proto::desktop::KeyEvent* event = outgoing_message_.mutable_key_event();
     event->set_usb_keycode(usb_keycode);
     event->set_flags(flags);
 
-    emit sendMessage(serializeMessage(message));
+    emit sendMessage(serializeMessage(outgoing_message_));
 }
 
 void ClientSessionDesktopManage::onSendPointerEvent(const DesktopPoint& pos, uint32_t mask)
 {
-    proto::desktop::ClientToHost message;
+    outgoing_message_.Clear();
 
-    proto::desktop::PointerEvent* event = message.mutable_pointer_event();
+    proto::desktop::PointerEvent* event = outgoing_message_.mutable_pointer_event();
     event->set_x(pos.x());
     event->set_y(pos.y());
     event->set_mask(mask);
 
-    emit sendMessage(serializeMessage(message));
+    emit sendMessage(serializeMessage(outgoing_message_));
 }
 
 void ClientSessionDesktopManage::onSendClipboardEvent(const proto::desktop::ClipboardEvent& event)
@@ -117,16 +117,16 @@ void ClientSessionDesktopManage::onSendClipboardEvent(const proto::desktop::Clip
     if (!(flags & proto::desktop::ENABLE_CLIPBOARD))
         return;
 
-    proto::desktop::ClientToHost message;
-    message.mutable_clipboard_event()->CopyFrom(event);
-    emit sendMessage(serializeMessage(message));
+    outgoing_message_.Clear();
+    outgoing_message_.mutable_clipboard_event()->CopyFrom(event);
+    emit sendMessage(serializeMessage(outgoing_message_));
 }
 
 void ClientSessionDesktopManage::onPowerControl(proto::desktop::PowerControl::Action action)
 {
-    proto::desktop::ClientToHost message;
-    message.mutable_power_control()->set_action(action);
-    emit sendMessage(serializeMessage(message));
+    outgoing_message_.Clear();
+    outgoing_message_.mutable_power_control()->set_action(action);
+    emit sendMessage(serializeMessage(outgoing_message_));
 }
 
 void ClientSessionDesktopManage::readCursorShape(const proto::desktop::CursorShape& cursor_shape)
