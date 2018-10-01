@@ -19,14 +19,11 @@
 #include "common/file_packetizer.h"
 
 #include "base/logging.h"
+#include "common/file_packet.h"
 
 namespace aspia {
 
 namespace {
-
-// When transferring a file is divided into parts and each part is transmitted separately.
-// This parameter specifies the size of the part.
-constexpr size_t kPacketPartSize = 32 * 1024; // 32 kB
 
 // Files with a size less than or equal to this value will not be compressed.
 constexpr size_t kUncompressedFileSize = 1 * 1024; // 1 kB
@@ -45,7 +42,7 @@ char* outputBuffer(proto::file_transfer::Packet* packet, size_t size)
 FilePacketizer::FilePacketizer(std::ifstream&& file_stream)
     : file_stream_(std::move(file_stream))
 {
-    read_buffer_.resize(kPacketPartSize);
+    read_buffer_.resize(kMaxFilePacketSize);
 
     file_stream_.seekg(0, file_stream_.end);
     file_size_ = file_stream_.tellg();

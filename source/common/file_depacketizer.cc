@@ -19,16 +19,9 @@
 #include "common/file_depacketizer.h"
 
 #include "base/logging.h"
+#include "common/file_packet.h"
 
 namespace aspia {
-
-namespace {
-
-// When transferring a file is divided into parts and each part is transmitted separately.
-// This parameter specifies the size of the part.
-constexpr size_t kPacketPartSize = 32 * 1024; // 32 kB
-
-} // namespace
 
 FileDepacketizer::FileDepacketizer(const std::filesystem::path& file_path,
                                    std::ofstream&& file_stream)
@@ -100,7 +93,7 @@ bool FileDepacketizer::writeNextPacket(const proto::file_transfer::Packet& packe
                 return false;
             }
 
-            write_buffer_.resize(kPacketPartSize);
+            write_buffer_.resize(kMaxFilePacketSize);
         }
     }
 

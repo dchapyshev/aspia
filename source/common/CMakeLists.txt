@@ -21,6 +21,7 @@ list(APPEND SOURCE_COMMON
     clipboard.h
     file_depacketizer.cc
     file_depacketizer.h
+    file_packet.h
     file_packetizer.cc
     file_packetizer.h
     file_platform_util.h

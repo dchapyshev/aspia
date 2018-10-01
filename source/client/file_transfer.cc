@@ -23,6 +23,7 @@
 #include "base/logging.h"
 #include "client/file_status.h"
 #include "client/file_transfer_queue_builder.h"
+#include "common/file_packet.h"
 
 namespace aspia {
 
@@ -149,14 +150,22 @@ void FileTransfer::targetReply(const proto::file_transfer::Request& request,
             return;
         }
 
-        if (currentTask().size() && total_size_)
+        int64_t full_task_size = currentTask().size();
+        if (full_task_size && total_size_)
         {
-            int64_t packet_size = request.packet().data().size();
+            int64_t packet_size = kMaxFilePacketSize;
 
             task_transfered_size_ += packet_size;
+
+            if (task_transfered_size_ > full_task_size)
+            {
+                packet_size = task_transfered_size_ - full_task_size;
+                task_transfered_size_ = full_task_size;
+            }
+
             total_transfered_size_ += packet_size;
 
-            int task_percentage = task_transfered_size_ * 100 / currentTask().size();
+            int task_percentage = task_transfered_size_ * 100 / full_task_size;
             int total_percentage = total_transfered_size_ * 100 / total_size_;
 
             if (task_percentage != task_percentage_ || total_percentage != total_percentage_)
