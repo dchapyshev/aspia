@@ -371,11 +371,13 @@ void VideoEncoderVPX::encode(const DesktopFrame* frame, proto::desktop::VideoPac
 
     while (true)
     {
-        const vpx_codec_cx_pkt_t* vpx_packet = vpx_codec_get_cx_data(codec_.get(), &iter);
+        const vpx_codec_cx_pkt_t* pkt = vpx_codec_get_cx_data(codec_.get(), &iter);
+        if (!pkt)
+            break;
 
-        if (vpx_packet && vpx_packet->kind == VPX_CODEC_CX_FRAME_PKT)
+        if (pkt->kind == VPX_CODEC_CX_FRAME_PKT)
         {
-            packet->set_data(vpx_packet->data.frame.buf, vpx_packet->data.frame.sz);
+            packet->set_data(pkt->data.frame.buf, pkt->data.frame.sz);
             break;
         }
     }

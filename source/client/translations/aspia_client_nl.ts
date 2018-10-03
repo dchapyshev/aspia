@@ -992,33 +992,33 @@
 <context>
     <name>aspia::FileTransfer</name>
     <message>
-        <location filename="../file_transfer.cc" line="116"/>
+        <location filename="../file_transfer.cc" line="117"/>
         <source>Failed to create directory &quot;%1&quot;: %2</source>
         <translation>Kon de map &quot;%1&quot; niet maken: %2</translation>
     </message>
     <message>
-        <location filename="../file_transfer.cc" line="130"/>
+        <location filename="../file_transfer.cc" line="131"/>
         <source>Failed to create file &quot;%1&quot;: %2</source>
         <translation>Kon het bestand &quot;%1&quot; niet maken: %2</translation>
     </message>
     <message>
-        <location filename="../file_transfer.cc" line="146"/>
+        <location filename="../file_transfer.cc" line="147"/>
         <source>Failed to write file &quot;%1&quot;: %2</source>
         <translation>Kon het bestand &quot;%1&quot; niet schrijven: %2</translation>
     </message>
     <message>
-        <location filename="../file_transfer.cc" line="187"/>
-        <location filename="../file_transfer.cc" line="230"/>
+        <location filename="../file_transfer.cc" line="196"/>
+        <location filename="../file_transfer.cc" line="239"/>
         <source>An unexpected response to the request was received</source>
         <translation>Er is een onverwachte reactie op het verzoek ontvangen</translation>
     </message>
     <message>
-        <location filename="../file_transfer.cc" line="202"/>
+        <location filename="../file_transfer.cc" line="211"/>
         <source>Failed to open file &quot;%1&quot;: %2</source>
         <translation>Kon het bestand &quot;%1&quot; niet openen: %2</translation>
     </message>
     <message>
-        <location filename="../file_transfer.cc" line="218"/>
+        <location filename="../file_transfer.cc" line="227"/>
         <source>Failed to read file &quot;%1&quot;: %2</source>
         <translation>Kon het bestand &quot;%1&quot; niet lezen: %2</translation>
     </message>

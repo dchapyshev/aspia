@@ -19,13 +19,9 @@
 #ifndef ASPIA_CODEC__VIDEO_ENCODER_VPX_H_
 #define ASPIA_CODEC__VIDEO_ENCODER_VPX_H_
 
-#include <QRect>
-
-extern "C" {
 #define VPX_CODEC_DISABLE_COMPAT 1
 #include <vpx/vpx_encoder.h>
 #include <vpx/vp8cx.h>
-} // extern "C"
 
 #include "base/macros_magic.h"
 #include "codec/scoped_vpx_codec.h"
