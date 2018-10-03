@@ -76,8 +76,9 @@ private:
 ConsoleWindow::ConsoleWindow(LocaleLoader& locale_loader, const QString& file_path)
     : locale_loader_(locale_loader)
 {
-    ConsoleSettings settings;
     ui.setupUi(this);
+
+    ConsoleSettings settings;
 
     createLanguageMenu(settings.locale());
 
@@ -202,9 +203,12 @@ ConsoleWindow::ConsoleWindow(LocaleLoader& locale_loader, const QString& file_pa
         }
     }
 
+    QString normalized_path(file_path);
+    normalized_path.replace(QLatin1Char('\\'), QLatin1Char('/'));
+
     // If the address book is pinned, then it is already open.
-    if (!file_path.isEmpty() && !mru_.isPinnedFile(file_path))
-        addAddressBookTab(AddressBookTab::openFromFile(file_path, ui.tab_widget));
+    if (!normalized_path.isEmpty() && !mru_.isPinnedFile(normalized_path))
+        addAddressBookTab(AddressBookTab::openFromFile(normalized_path, ui.tab_widget));
 
     if (ui.tab_widget->count() > 0)
         ui.tab_widget->setCurrentIndex(0);

@@ -27,11 +27,28 @@ namespace {
 // Maximum number of entries in the list.
 const int kMaxMruSize = 10;
 
+QString normalizedFilePath(const QString& file)
+{
+    QString normalized(file);
+    normalized.replace(QLatin1Char('\\'), QLatin1Char('/'));
+    return normalized;
+}
+
+QStringList normalizedFileList(const QStringList& source_list)
+{
+    QStringList result;
+
+    for (const auto& file : source_list)
+        result.push_back(normalizedFilePath(file));
+
+    return result;
+}
+
 } // namespace
 
 void Mru::setRecentOpen(const QStringList& list)
 {
-    recent_list_ = list;
+    recent_list_ = normalizedFileList(list);
 
     // If the number of entries is more than the maximum, then delete the excess.
     while (recent_list_.size() > kMaxMruSize)
@@ -40,21 +57,22 @@ void Mru::setRecentOpen(const QStringList& list)
 
 void Mru::setPinnedFiles(const QStringList& list)
 {
-    pinned_list_ = list;
+    pinned_list_ = normalizedFileList(list);
 }
 
 bool Mru::addRecentFile(const QString& file_path)
 {
-    if (file_path.isEmpty())
+    QString normalized_path = normalizedFilePath(file_path);
+    if (normalized_path.isEmpty())
         return false;
 
     // We are looking for a file in the list. If the file already exists in it, then delete it.
     for (QStringList::iterator it = recent_list_.begin(); it != recent_list_.end(); ++it)
     {
 #if defined(OS_WIN)
-        if (file_path.compare(*it, Qt::CaseInsensitive) == 0)
+        if (normalized_path.compare(*it, Qt::CaseInsensitive) == 0)
 #else
-        if (file_path.compare(*it, Qt::CaseSensitive) == 0)
+        if (normalized_path.compare(*it, Qt::CaseSensitive) == 0)
 #endif
         {
             recent_list_.erase(it);
@@ -63,7 +81,7 @@ bool Mru::addRecentFile(const QString& file_path)
     }
 
     // Add the file to the top of the list.
-    recent_list_.push_front(file_path);
+    recent_list_.push_front(normalized_path);
 
     // We keep a limited number of entries on the list. If the number of records exceeds the
     // maximum, then delete the item at the end of the list.
@@ -75,26 +93,32 @@ bool Mru::addRecentFile(const QString& file_path)
 
 void Mru::pinFile(const QString& file_path)
 {
-    if (isPinnedFile(file_path))
+    QString normalized_path = normalizedFilePath(file_path);
+
+    if (isPinnedFile(normalized_path))
         return;
 
-    pinned_list_.push_back(file_path);
+    pinned_list_.push_back(normalized_path);
 }
 
 void Mru::unpinFile(const QString& file_path)
 {
-    if (!isPinnedFile(file_path))
+    QString normalized_path = normalizedFilePath(file_path);
+
+    if (!isPinnedFile(normalized_path))
         return;
 
-    pinned_list_.removeAll(file_path);
+    pinned_list_.removeAll(normalized_path);
 }
 
 bool Mru::isPinnedFile(const QString& file_path) const
 {
+    QString normalized_path = normalizedFilePath(file_path);
+
 #if defined(OS_WIN)
-    return pinned_list_.contains(file_path, Qt::CaseInsensitive);
+    return pinned_list_.contains(normalized_path, Qt::CaseInsensitive);
 #else
-    return pinned_list_.contains(file_path, Qt::CaseSensitive);
+    return pinned_list_.contains(normalized_path, Qt::CaseSensitive);
 #endif
 }
 
