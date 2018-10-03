@@ -21,6 +21,11 @@
 #include <QPushButton>
 #include <QMessageBox>
 
+#if defined(OS_WIN)
+#include <QWinTaskbarButton>
+#include <QWinTaskbarProgress>
+#endif
+
 namespace aspia {
 
 FileRemoveDialog::FileRemoveDialog(QWidget* parent)
@@ -29,10 +34,27 @@ FileRemoveDialog::FileRemoveDialog(QWidget* parent)
     ui.setupUi(this);
     setFixedHeight(sizeHint().height());
 
-    connect(ui.button_box, &QDialogButtonBox::clicked, [this](QAbstractButton* /* button */)
+    connect(ui.button_box, &QDialogButtonBox::clicked, this, &FileRemoveDialog::close);
+
+#if defined(OS_WIN)
+    QWinTaskbarButton* button = new QWinTaskbarButton(this);
+    if (button)
     {
-        close();
-    });
+        button->setWindow(parent->windowHandle());
+
+        taskbar_progress_ = button->progress();
+        if (taskbar_progress_)
+            taskbar_progress_->show();
+    }
+#endif
+}
+
+FileRemoveDialog::~FileRemoveDialog()
+{
+#if defined(OS_WIN)
+    if (taskbar_progress_)
+        taskbar_progress_->hide();
+#endif
 }
 
 void FileRemoveDialog::setProgress(const QString& current_item, int percentage)
@@ -45,12 +67,22 @@ void FileRemoveDialog::setProgress(const QString& current_item, int percentage)
 
     ui.label_current_item->setText(elided_text);
     ui.progress->setValue(percentage);
+
+#if defined(OS_WIN)
+    if (taskbar_progress_)
+        taskbar_progress_->setValue(percentage);
+#endif
 }
 
 void FileRemoveDialog::showError(FileRemover* remover,
                                  FileRemover::Actions actions,
                                  const QString& message)
 {
+#if defined(OS_WIN)
+    if (taskbar_progress_)
+        taskbar_progress_->pause();
+#endif
+
     QPointer<QMessageBox> dialog(new QMessageBox(this));
 
     dialog->setWindowTitle(tr("Warning"));
@@ -90,6 +122,11 @@ void FileRemoveDialog::showError(FileRemover* remover,
     });
 
     dialog->exec();
+
+#if defined(OS_WIN)
+    if (taskbar_progress_)
+        taskbar_progress_->resume();
+#endif
 }
 
 } // namespace aspia

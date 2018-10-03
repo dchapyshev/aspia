@@ -22,6 +22,11 @@
 #include <QPushButton>
 #include <QMessageBox>
 
+#if defined(OS_WIN)
+#include <QWinTaskbarButton>
+#include <QWinTaskbarProgress>
+#endif
+
 namespace aspia {
 
 FileTransferDialog::FileTransferDialog(QWidget* parent)
@@ -30,10 +35,36 @@ FileTransferDialog::FileTransferDialog(QWidget* parent)
     ui.setupUi(this);
     setFixedHeight(sizeHint().height());
 
-    connect(ui.button_box, &QDialogButtonBox::clicked, [this](QAbstractButton* /* button */)
+    ui.progress_total->setMinimum(0);
+    ui.progress_total->setMaximum(0);
+    ui.progress_current->setMinimum(0);
+    ui.progress_current->setMaximum(0);
+
+    connect(ui.button_box, &QDialogButtonBox::clicked, this, &FileTransferDialog::close);
+
+#if defined(OS_WIN)
+    QWinTaskbarButton* button = new QWinTaskbarButton(this);
+    if (button)
     {
-        close();
-    });
+        button->setWindow(parent->windowHandle());
+
+        taskbar_progress_ = button->progress();
+        if (taskbar_progress_)
+        {
+            taskbar_progress_->setMinimum(0);
+            taskbar_progress_->setMaximum(0);
+            taskbar_progress_->show();
+        }
+    }
+#endif
+}
+
+FileTransferDialog::~FileTransferDialog()
+{
+#if defined(OS_WIN)
+    if (taskbar_progress_)
+        taskbar_progress_->hide();
+#endif
 }
 
 void FileTransferDialog::setCurrentItem(const QString& source_path, const QString& target_path)
@@ -42,6 +73,19 @@ void FileTransferDialog::setCurrentItem(const QString& source_path, const QStrin
     {
         task_queue_building_ = false;
         ui.label_task->setText(tr("Current Task: Copying items."));
+
+        ui.progress_total->setMinimum(0);
+        ui.progress_total->setMaximum(100);
+        ui.progress_current->setMinimum(0);
+        ui.progress_current->setMaximum(100);
+
+#if defined(OS_WIN)
+        if (taskbar_progress_)
+        {
+            taskbar_progress_->setMinimum(0);
+            taskbar_progress_->setMaximum(100);
+        }
+#endif
     }
 
     QFontMetrics source_label_metrics(ui.label_source->font());
@@ -65,12 +109,22 @@ void FileTransferDialog::setProgress(int total, int current)
 {
     ui.progress_total->setValue(total);
     ui.progress_current->setValue(current);
+
+#if defined(OS_WIN)
+    if (taskbar_progress_)
+        taskbar_progress_->setValue(total);
+#endif
 }
 
 void FileTransferDialog::showError(FileTransfer* transfer,
                                    FileTransfer::Error error_type,
                                    const QString& message)
 {
+#if defined(OS_WIN)
+    if (taskbar_progress_)
+        taskbar_progress_->pause();
+#endif
+
     QPointer<QMessageBox> dialog(new QMessageBox(this));
 
     dialog->setWindowTitle(tr("Warning"));
@@ -130,6 +184,11 @@ void FileTransferDialog::showError(FileTransfer* transfer,
     });
 
     dialog->exec();
+
+#if defined(OS_WIN)
+    if (taskbar_progress_)
+        taskbar_progress_->resume();
+#endif
 }
 
 void FileTransferDialog::onTransferFinished()

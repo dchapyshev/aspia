@@ -19,8 +19,13 @@
 #ifndef ASPIA_CLIENT__UI__FILE_TRANSFER_DIALOG_H_
 #define ASPIA_CLIENT__UI__FILE_TRANSFER_DIALOG_H_
 
+#include "build/build_config.h"
 #include "client/file_transfer.h"
 #include "ui_file_transfer_dialog.h"
+
+#if defined(OS_WIN)
+class QWinTaskbarProgress;
+#endif
 
 namespace aspia {
 
@@ -30,7 +35,7 @@ class FileTransferDialog : public QDialog
 
 public:
     explicit FileTransferDialog(QWidget* parent = nullptr);
-    ~FileTransferDialog() = default;
+    ~FileTransferDialog();
 
 public slots:
     void setCurrentItem(const QString& source_path, const QString& target_path);
@@ -46,6 +51,10 @@ protected:
 
 private:
     Ui::FileTransferDialog ui;
+
+#if defined(OS_WIN)
+    QWinTaskbarProgress* taskbar_progress_ = nullptr;
+#endif
 
     bool task_queue_building_ = true;
     bool closing_ = false;

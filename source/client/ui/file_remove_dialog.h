@@ -19,8 +19,13 @@
 #ifndef ASPIA_CLIENT__UI__FILE_REMOVE_DIALOG_H_
 #define ASPIA_CLIENT__UI__FILE_REMOVE_DIALOG_H_
 
+#include "build/build_config.h"
 #include "client/file_remover.h"
 #include "ui_file_remove_dialog.h"
+
+#if defined(OS_WIN)
+class QWinTaskbarProgress;
+#endif
 
 namespace aspia {
 
@@ -30,7 +35,7 @@ class FileRemoveDialog : public QDialog
 
 public:
     explicit FileRemoveDialog(QWidget* parent);
-    ~FileRemoveDialog() = default;
+    ~FileRemoveDialog();
 
 public slots:
     void setProgress(const QString& current_item, int percentage);
@@ -38,6 +43,10 @@ public slots:
 
 private:
     Ui::FileRemoveDialog ui;
+
+#if defined(OS_WIN)
+    QWinTaskbarProgress* taskbar_progress_ = nullptr;
+#endif
 
     DISALLOW_COPY_AND_ASSIGN(FileRemoveDialog);
 };
