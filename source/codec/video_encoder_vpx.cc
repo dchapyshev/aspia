@@ -115,6 +115,21 @@ void createImage(const DesktopSize& size,
     *out_image_buffer = std::move(image_buffer);
 }
 
+int roundToTwosMultiple(int x)
+{
+    return x & (~1);
+}
+
+DesktopRect alignRect(const DesktopRect& rect)
+{
+    int x = roundToTwosMultiple(rect.left());
+    int y = roundToTwosMultiple(rect.top());
+    int right = roundToTwosMultiple(rect.right() + 1);
+    int bottom = roundToTwosMultiple(rect.bottom() + 1);
+
+    return DesktopRect::makeLTRB(x, y, right, bottom);
+}
+
 } // namespace
 
 // static
@@ -257,6 +272,29 @@ void VideoEncoderVPX::setActiveMap(const DesktopRect& rect)
 void VideoEncoderVPX::prepareImageAndActiveMap(const DesktopFrame* frame,
                                                proto::desktop::VideoPacket* packet)
 {
+    int padding = encoding_ == proto::desktop::VIDEO_ENCODING_VP9 ? 8 : 3;
+    DesktopRegion updated_region;
+
+    for (DesktopRegion::Iterator it(frame->constUpdatedRegion()); !it.isAtEnd(); it.advance())
+    {
+        const DesktopRect& rect = it.rect();
+
+        // Pad each rectangle to avoid the block-artefact filters in libvpx from introducing
+        // artefacts; VP9 includes up to 8px either side, and VP8 up to 3px, so unchanged pixels
+        // up to that far out may still be affected by the changes in the updated region, and so
+        // must be listed in the active map. After padding we align each rectangle to 16x16
+        // active-map macroblocks. This implicitly ensures all rects have even top-left coords,
+        // which is is required by ARGBToI420().
+        updated_region.addRect(
+            alignRect(DesktopRect::makeLTRB(rect.left() - padding, rect.top() - padding,
+                                            rect.right() + padding, rect.bottom() + padding)));
+    }
+
+    // Clip back to the screen dimensions, in case they're not macroblock aligned. The conversion
+    // routines don't require even width & height, so this is safe even if the source dimensions
+    // are not even.
+    updated_region.intersectWith(DesktopRect::makeWH(image_->w, image_->h));
+
     memset(active_map_.active_map, 0, active_map_size_);
 
     int y_stride = image_->stride[0];
@@ -265,7 +303,7 @@ void VideoEncoderVPX::prepareImageAndActiveMap(const DesktopFrame* frame,
     uint8_t* u_data = image_->planes[1];
     uint8_t* v_data = image_->planes[2];
 
-    for (DesktopRegion::Iterator it(frame->constUpdatedRegion()); !it.isAtEnd(); it.advance())
+    for (DesktopRegion::Iterator it(updated_region); !it.isAtEnd(); it.advance())
     {
         const DesktopRect& rect = it.rect();
 
