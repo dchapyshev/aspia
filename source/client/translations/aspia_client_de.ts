@@ -693,32 +693,32 @@
 <context>
     <name>aspia::DesktopConfigDialog</name>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="70"/>
+        <location filename="../ui/desktop_config_dialog.cc" line="65"/>
         <source>True color (32 bit)</source>
         <translation>True color (32 Bit)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="71"/>
+        <location filename="../ui/desktop_config_dialog.cc" line="66"/>
         <source>High color (16 bit)</source>
         <translation>High color (16 Bit)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="72"/>
+        <location filename="../ui/desktop_config_dialog.cc" line="67"/>
         <source>256 colors (8 bit)</source>
         <translation>256 Farben (8 Bit)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="73"/>
+        <location filename="../ui/desktop_config_dialog.cc" line="68"/>
         <source>64 colors (6 bit)</source>
         <translation>64 Farben (6 Bit)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="74"/>
+        <location filename="../ui/desktop_config_dialog.cc" line="69"/>
         <source>8 colors (3 bit)</source>
         <translation>8 Farben (3 Bit)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="159"/>
+        <location filename="../ui/desktop_config_dialog.cc" line="154"/>
         <source>Compression ratio: %1</source>
         <translation>Kompressionsrate: %1</translation>
     </message>

@@ -32,6 +32,9 @@ bool convertImage(const proto::desktop::VideoPacket& packet,
                   vpx_image_t* image,
                   DesktopFrame* frame)
 {
+    if (image->fmt != VPX_IMG_FMT_I420)
+        return false;
+
     DesktopRect frame_rect = DesktopRect::makeSize(frame->size());
 
     uint8_t* y_data = image->planes[0];
@@ -39,72 +42,28 @@ bool convertImage(const proto::desktop::VideoPacket& packet,
     uint8_t* v_data = image->planes[2];
 
     int y_stride = image->stride[0];
+    int uv_stride = image->stride[1];
 
-    switch (image->fmt)
+    for (int i = 0; i < packet.dirty_rect_size(); ++i)
     {
-        case VPX_IMG_FMT_I420:
+        DesktopRect rect = VideoUtil::fromVideoRect(packet.dirty_rect(i));
+
+        if (!frame_rect.containsRect(rect))
         {
-            int uv_stride = image->stride[1];
-
-            for (int i = 0; i < packet.dirty_rect_size(); ++i)
-            {
-                DesktopRect rect = VideoUtil::fromVideoRect(packet.dirty_rect(i));
-
-                if (!frame_rect.containsRect(rect))
-                {
-                    LOG(LS_WARNING) << "The rectangle is outside the screen area";
-                    return false;
-                }
-
-                int y_offset = y_stride * rect.y() + rect.x();
-                int uv_offset = uv_stride * rect.y() / 2 + rect.x() / 2;
-
-                libyuv::I420ToARGB(y_data + y_offset, y_stride,
-                                   u_data + uv_offset, uv_stride,
-                                   v_data + uv_offset, uv_stride,
-                                   frame->frameDataAtPos(rect.topLeft()),
-                                   frame->stride(),
-                                   rect.width(),
-                                   rect.height());
-            }
-        }
-        break;
-
-        case VPX_IMG_FMT_I444:
-        {
-            int u_stride = image->stride[1];
-            int v_stride = image->stride[2];
-
-            for (int i = 0; i < packet.dirty_rect_size(); ++i)
-            {
-                DesktopRect rect = VideoUtil::fromVideoRect(packet.dirty_rect(i));
-
-                if (!frame_rect.containsRect(rect))
-                {
-                    LOG(LS_WARNING) << "The rectangle is outside the screen area";
-                    return false;
-                }
-
-                int y_offset = y_stride * rect.y() + rect.x();
-                int u_offset = u_stride * rect.y() + rect.x();
-                int v_offset = v_stride * rect.y() + rect.x();
-
-                libyuv::I444ToARGB(y_data + y_offset, y_stride,
-                                   u_data + u_offset, u_stride,
-                                   v_data + v_offset, v_stride,
-                                   frame->frameDataAtPos(rect.topLeft()),
-                                   frame->stride(),
-                                   rect.width(),
-                                   rect.height());
-            }
-        }
-        break;
-
-        default:
-        {
-            LOG(LS_WARNING) << "Unsupported image format: " << image->fmt;
+            LOG(LS_WARNING) << "The rectangle is outside the screen area";
             return false;
         }
+
+        int y_offset = y_stride * rect.y() + rect.x();
+        int uv_offset = uv_stride * rect.y() / 2 + rect.x() / 2;
+
+        libyuv::I420ToARGB(y_data + y_offset, y_stride,
+                           u_data + uv_offset, uv_stride,
+                           v_data + uv_offset, uv_stride,
+                           frame->frameDataAtPos(rect.topLeft()),
+                           frame->stride(),
+                           rect.width(),
+                           rect.height());
     }
 
     return true;

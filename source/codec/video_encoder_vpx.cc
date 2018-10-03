@@ -31,13 +31,13 @@ namespace aspia {
 namespace {
 
 // Defines the dimension of a macro block. This is used to compute the active map for the encoder.
-constexpr int kMacroBlockSize = 16;
+const int kMacroBlockSize = 16;
 
 // Magic encoder profile numbers for I444 input formats.
-constexpr int kVp9I444ProfileNumber = 1;
+const int kVp9I420ProfileNumber = 0;
 
-// Magic encoder constants for adaptive quantization strategy.
-constexpr int kVp9AqModeNone = 0;
+// Magic encoder constant for adaptive quantization strategy.
+const int kVp9AqModeCyclicRefresh = 3;
 
 void setCommonCodecParameters(vpx_codec_enc_cfg_t* config, const DesktopSize& size)
 {
@@ -65,8 +65,7 @@ void setCommonCodecParameters(vpx_codec_enc_cfg_t* config, const DesktopSize& si
     config->g_threads = (std::thread::hardware_concurrency() > 2) ? 2 : 1;
 }
 
-void createImage(proto::desktop::VideoEncoding encoding,
-                 const DesktopSize& size,
+void createImage(const DesktopSize& size,
                  std::unique_ptr<vpx_image_t>* out_image,
                  std::unique_ptr<uint8_t[]>* out_image_buffer)
 {
@@ -77,20 +76,9 @@ void createImage(proto::desktop::VideoEncoding encoding,
     image->d_w = image->w = size.width();
     image->d_h = image->h = size.height();
 
-    if (encoding == proto::desktop::VIDEO_ENCODING_VP8)
-    {
-        image->fmt = VPX_IMG_FMT_YV12;
-        image->x_chroma_shift = 1;
-        image->y_chroma_shift = 1;
-    }
-    else
-    {
-        DCHECK(encoding == proto::desktop::VIDEO_ENCODING_VP9);
-
-        image->fmt = VPX_IMG_FMT_I444;
-        image->x_chroma_shift = 0;
-        image->y_chroma_shift = 0;
-    }
+    image->fmt = VPX_IMG_FMT_YV12;
+    image->x_chroma_shift = 1;
+    image->y_chroma_shift = 1;
 
     // libyuv's fast-path requires 16-byte aligned pointers and strides, so pad the Y, U and V
     // planes' strides to multiples of 16 bytes.
@@ -215,25 +203,25 @@ void VideoEncoderVPX::createVp9Codec(const DesktopSize& size)
 
     setCommonCodecParameters(&config, size);
 
-    // Configure VP9 for I444 source frames.
-    config.g_profile = kVp9I444ProfileNumber;
+    // Configure VP9 for I420 source frames.
+    config.g_profile = kVp9I420ProfileNumber;
+    config.rc_min_quantizer = 20;
+    config.rc_max_quantizer = 30;
+    config.rc_end_usage = VPX_CBR;
 
-    // Disable quantization entirely, putting the encoder in "lossless" mode.
-    config.rc_min_quantizer = 0;
-    config.rc_max_quantizer = 0;
-    config.rc_end_usage = VPX_VBR;
+    // In the absence of a good bandwidth estimator set the target bitrate to a
+    // conservative default.
+    config.rc_target_bitrate = 500;
 
     ret = vpx_codec_enc_init(codec_.get(), algo, &config, 0);
     DCHECK_EQ(VPX_CODEC_OK, ret);
 
     // Request the lowest-CPU usage that VP9 supports, which depends on whether we are encoding
     // lossy or lossless.
-    ret = vpx_codec_control(codec_.get(), VP8E_SET_CPUUSED, 5);
+    ret = vpx_codec_control(codec_.get(), VP8E_SET_CPUUSED, 6);
     DCHECK_EQ(VPX_CODEC_OK, ret);
 
-    ret = vpx_codec_control(codec_.get(),
-                            VP9E_SET_TUNE_CONTENT,
-                            VP9E_CONTENT_SCREEN);
+    ret = vpx_codec_control(codec_.get(), VP9E_SET_TUNE_CONTENT, VP9E_CONTENT_SCREEN);
     DCHECK_EQ(VPX_CODEC_OK, ret);
 
     // Use the lowest level of noise sensitivity so as to spend less time on motion estimation and
@@ -242,7 +230,7 @@ void VideoEncoderVPX::createVp9Codec(const DesktopSize& size)
     DCHECK_EQ(VPX_CODEC_OK, ret);
 
     // Set cyclic refresh (aka "top-off") only for lossy encoding.
-    ret = vpx_codec_control(codec_.get(), VP9E_SET_AQ_MODE, kVp9AqModeNone);
+    ret = vpx_codec_control(codec_.get(), VP9E_SET_AQ_MODE, kVp9AqModeCyclicRefresh);
     DCHECK_EQ(VPX_CODEC_OK, ret);
 }
 
@@ -277,58 +265,23 @@ void VideoEncoderVPX::prepareImageAndActiveMap(const DesktopFrame* frame,
     uint8_t* u_data = image_->planes[1];
     uint8_t* v_data = image_->planes[2];
 
-    switch (image_->fmt)
+    for (DesktopRegion::Iterator it(frame->constUpdatedRegion()); !it.isAtEnd(); it.advance())
     {
-        case VPX_IMG_FMT_YV12:
-        {
-            for (DesktopRegion::Iterator it(frame->constUpdatedRegion());
-                 !it.isAtEnd(); it.advance())
-            {
-                const DesktopRect& rect = it.rect();
+        const DesktopRect& rect = it.rect();
 
-                int y_offset = y_stride * rect.y() + rect.x();
-                int uv_offset = uv_stride * rect.y() / 2 + rect.x() / 2;
+        int y_offset = y_stride * rect.y() + rect.x();
+        int uv_offset = uv_stride * rect.y() / 2 + rect.x() / 2;
 
-                libyuv::ARGBToI420(frame->frameDataAtPos(rect.topLeft()),
-                                   frame->stride(),
-                                   y_data + y_offset, y_stride,
-                                   u_data + uv_offset, uv_stride,
-                                   v_data + uv_offset, uv_stride,
-                                   rect.width(),
-                                   rect.height());
+        libyuv::ARGBToI420(frame->frameDataAtPos(rect.topLeft()),
+                           frame->stride(),
+                           y_data + y_offset, y_stride,
+                           u_data + uv_offset, uv_stride,
+                           v_data + uv_offset, uv_stride,
+                           rect.width(),
+                           rect.height());
 
-                VideoUtil::toVideoRect(rect, packet->add_dirty_rect());
-                setActiveMap(rect);
-            }
-        }
-        break;
-
-        case VPX_IMG_FMT_I444:
-        {
-            for (DesktopRegion::Iterator it(frame->constUpdatedRegion());
-                 !it.isAtEnd(); it.advance())
-            {
-                const DesktopRect& rect = it.rect();
-
-                int yuv_offset = uv_stride * rect.y() + rect.x();
-
-                libyuv::ARGBToI444(frame->frameDataAtPos(rect.topLeft()),
-                                   frame->stride(),
-                                   y_data + yuv_offset, y_stride,
-                                   u_data + yuv_offset, uv_stride,
-                                   v_data + yuv_offset, uv_stride,
-                                   rect.width(),
-                                   rect.height());
-
-                VideoUtil::toVideoRect(rect, packet->add_dirty_rect());
-                setActiveMap(rect);
-            }
-        }
-        break;
-
-        default:
-            LOG(LS_FATAL) << "Unsupported image format: " << image_->fmt;
-            break;
+        VideoUtil::toVideoRect(rect, packet->add_dirty_rect());
+        setActiveMap(rect);
     }
 }
 
@@ -340,7 +293,7 @@ void VideoEncoderVPX::encode(const DesktopFrame* frame, proto::desktop::VideoPac
     {
         const DesktopSize& screen_size = frame->size();
 
-        createImage(encoding_, screen_size, &image_, &image_buffer_);
+        createImage(screen_size, &image_, &image_buffer_);
         createActiveMap(screen_size);
 
         if (encoding_ == proto::desktop::VIDEO_ENCODING_VP8)

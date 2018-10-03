@@ -50,14 +50,9 @@ DesktopConfigDialog::DesktopConfigDialog(proto::SessionType session_type,
     ConfigFactory::fixupDesktopConfig(&config_);
 
     QComboBox* combo_codec = ui->combo_codec;
-    combo_codec->addItem(QStringLiteral("VP9 (LossLess)"),
-                         QVariant(proto::desktop::VIDEO_ENCODING_VP9));
-
-    combo_codec->addItem(QStringLiteral("VP8"),
-                         QVariant(proto::desktop::VIDEO_ENCODING_VP8));
-
-    combo_codec->addItem(QStringLiteral("ZSTD"),
-                         QVariant(proto::desktop::VIDEO_ENCODING_ZSTD));
+    combo_codec->addItem(QStringLiteral("VP9"), QVariant(proto::desktop::VIDEO_ENCODING_VP9));
+    combo_codec->addItem(QStringLiteral("VP8"), QVariant(proto::desktop::VIDEO_ENCODING_VP8));
+    combo_codec->addItem(QStringLiteral("ZSTD"), QVariant(proto::desktop::VIDEO_ENCODING_ZSTD));
 
     int current_codec = combo_codec->findData(QVariant(config_.video_encoding()));
     if (current_codec == -1)
