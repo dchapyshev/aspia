@@ -663,21 +663,35 @@ void ConsoleWindow::onTabContextMenu(const QPoint& pos)
 
     QMenu menu;
 
-    QAction* close_action = nullptr;
-    QAction* close_other_action = new QAction(tr("Close other tabs"), &menu);
-    QAction* pin_action = new QAction(tr("Pin tab"), &menu);
+    QAction* close_other_action = new QAction(
+        QIcon(QStringLiteral(":/icon/ui-tab-multi-close.png")), tr("Close other tabs"), &menu);
+    QAction* close_action;
+    QAction* pin_action;
 
     if (!is_pinned)
     {
-        close_action = new QAction(tr("Close tab"), &menu);
-        menu.addAction(close_action);
+        close_action = new QAction(
+            QIcon(QStringLiteral(":/icon/ui-tab-close.png")), tr("Close tab"), &menu);
+
+        pin_action = new QAction(
+            QIcon(QStringLiteral(":/icon/lock-unlock.png")), tr("Pin tab"), &menu);
+    }
+    else
+    {
+        close_action = nullptr;
+
+        pin_action = new QAction(
+            QIcon(QStringLiteral(":/icon/lock.png")), tr("Pin tab"), &menu);
     }
 
     pin_action->setCheckable(true);
     pin_action->setChecked(is_pinned);
     pin_action->setEnabled(!current_path.isEmpty());
 
+    if (close_action)
+        menu.addAction(close_action);
     menu.addAction(close_other_action);
+    menu.addSeparator();
     menu.addAction(pin_action);
 
     QAction* action = menu.exec(tab_bar->mapToGlobal(pos));

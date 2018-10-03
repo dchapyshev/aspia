@@ -1,5 +1,9 @@
 <RCC>
   <qresource prefix="/icon">
+    <file>ui-tab-close.png</file>
+    <file>ui-tab-multi-close.png</file>
+    <file>lock-unlock.png</file>
+    <file>lock.png</file>
     <file>disks.png</file>
     <file>address-book-pinned.png</file>
     <file>heart.png</file>
