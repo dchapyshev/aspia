@@ -21,7 +21,7 @@
 
 #include "network/network_channel.h"
 #include "network/srp_user.h"
-#include "protocol/session_type.pb.h"
+#include "protocol/common.pb.h"
 
 namespace aspia {
 
@@ -56,7 +56,7 @@ private:
     void readClientHello(const QByteArray& buffer);
     void readIdentify(const QByteArray& buffer);
     void readClientKeyExchange(const QByteArray& buffer);
-    void readAuthorizationResponse(const QByteArray& buffer);
+    void readSessionResponse(const QByteArray& buffer);
 
     SrpUserList user_list_;
 

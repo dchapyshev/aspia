@@ -61,8 +61,8 @@ void NetworkChannelHost::internalMessageReceived(const QByteArray& buffer)
             readClientKeyExchange(buffer);
             break;
 
-        case KeyExchangeState::AUTHORIZATION:
-            readAuthorizationResponse(buffer);
+        case KeyExchangeState::SESSION:
+            readSessionResponse(buffer);
             break;
 
         default:
@@ -85,7 +85,6 @@ void NetworkChannelHost::readClientHello(const QByteArray& buffer)
     }
 
     proto::ServerHello server_hello;
-    server_hello.set_version(ASPIA_VERSION_NUMBER);
 
     if ((client_hello.methods() & proto::METHOD_SRP_AES256_GCM) && CPUID::hasAesNi())
     {
@@ -172,11 +171,15 @@ void NetworkChannelHost::readClientKeyExchange(const QByteArray& buffer)
         return;
     }
 
-    proto::AuthorizationChallenge authorization_challenge;
-    authorization_challenge.set_session_types(srp_host_->sessionTypes());
+    proto::SessionChallenge session_challenge;
+    session_challenge.mutable_version()->set_major(ASPIA_VERSION_MAJOR);
+    session_challenge.mutable_version()->set_minor(ASPIA_VERSION_MINOR);
+    session_challenge.mutable_version()->set_patch(ASPIA_VERSION_PATCH);
+    session_challenge.mutable_version()->set_build(ASPIA_VERSION_BUILD);
+    session_challenge.set_session_types(srp_host_->sessionTypes());
 
-    QByteArray authorization_challenge_buffer = serializeMessage(authorization_challenge);
-    if (authorization_challenge_buffer.isEmpty())
+    QByteArray session_challenge_buffer = serializeMessage(session_challenge);
+    if (session_challenge_buffer.isEmpty())
     {
         LOG(LS_WARNING) << "Error when creating authorization challenge";
         emit errorOccurred(Error::UNKNOWN);
@@ -184,21 +187,21 @@ void NetworkChannelHost::readClientKeyExchange(const QByteArray& buffer)
     }
 
     QByteArray encrypted_buffer;
-    encrypted_buffer.resize(cryptor_->encryptedDataSize(authorization_challenge_buffer.size()));
+    encrypted_buffer.resize(cryptor_->encryptedDataSize(session_challenge_buffer.size()));
 
-    if (!cryptor_->encrypt(authorization_challenge_buffer.constData(),
-                           authorization_challenge_buffer.size(),
+    if (!cryptor_->encrypt(session_challenge_buffer.constData(),
+                           session_challenge_buffer.size(),
                            encrypted_buffer.data()))
     {
         emit errorOccurred(Error::ENCRYPTION_FAILURE);
         return;
     }
 
-    key_exchange_state_ = KeyExchangeState::AUTHORIZATION;
+    key_exchange_state_ = KeyExchangeState::SESSION;
     sendInternal(encrypted_buffer);
 }
 
-void NetworkChannelHost::readAuthorizationResponse(const QByteArray& buffer)
+void NetworkChannelHost::readSessionResponse(const QByteArray& buffer)
 {
     QByteArray decrypted_buffer;
     decrypted_buffer.resize(cryptor_->decryptedDataSize(buffer.size()));
@@ -209,21 +212,21 @@ void NetworkChannelHost::readAuthorizationResponse(const QByteArray& buffer)
         return;
     }
 
-    proto::AuthorizationResponse authorization_response;
-    if (!parseMessage(decrypted_buffer, authorization_response))
+    proto::SessionResponse session_response;
+    if (!parseMessage(decrypted_buffer, session_response))
     {
         emit errorOccurred(Error::PROTOCOL_FAILURE);
         return;
     }
 
-    if (!(srp_host_->sessionTypes() & authorization_response.session_type()))
+    if (!(srp_host_->sessionTypes() & session_response.session_type()))
     {
         emit errorOccurred(Error::SESSION_TYPE_NOT_ALLOWED);
         return;
     }
 
     username_ = srp_host_->userName();
-    session_type_ = authorization_response.session_type();
+    session_type_ = session_response.session_type();
 
     key_exchange_state_ = KeyExchangeState::DONE;
     channel_state_ = ChannelState::ENCRYPTED;

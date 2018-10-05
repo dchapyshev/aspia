@@ -74,7 +74,7 @@ bool HostServer::start()
 {
     LOG(LS_INFO) << "Starting the server";
 
-    if (!network_server_.isNull())
+    if (network_server_)
     {
         LOG(LS_WARNING) << "An attempt was start an already running server.";
         return false;
@@ -119,11 +119,9 @@ void HostServer::stop()
 
     stopNotifier();
 
-    if (!network_server_.isNull())
-    {
+    std::unique_ptr<NetworkServer> network_server_deleter(network_server_);
+    if (network_server_)
         network_server_->stop();
-        delete network_server_;
-    }
 
     std::filesystem::path file_path;
     if (BasePaths::currentExecFile(&file_path))
@@ -213,7 +211,7 @@ void HostServer::onHostFinished(Host* host)
 
         session_list_.erase(it);
 
-        QScopedPointer<Host> host_deleter(host);
+        std::unique_ptr<Host> host_deleter(host);
         sessionCloseToNotifier(*host);
         break;
     }
@@ -253,7 +251,7 @@ void HostServer::onIpcNewConnection(IpcChannel* channel)
     // Clients can disconnect while the notifier is started.
     if (session_list_.isEmpty())
     {
-        QScopedPointer<IpcChannel> channel_deleter(channel);
+        std::unique_ptr<IpcChannel> channel_deleter(channel);
         stopNotifier();
         return;
     }

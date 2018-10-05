@@ -21,7 +21,7 @@
 
 #include <QObject>
 
-#include "protocol/session_type.pb.h"
+#include "protocol/common.pb.h"
 
 namespace aspia {
 

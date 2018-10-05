@@ -36,7 +36,7 @@ class NetworkChannel : public QObject
 public:
     enum class ChannelType { HOST, CLIENT };
     enum class ChannelState { NOT_CONNECTED, CONNECTED, ENCRYPTED };
-    enum class KeyExchangeState { HELLO, IDENTIFY, KEY_EXCHANGE, AUTHORIZATION, DONE };
+    enum class KeyExchangeState { HELLO, IDENTIFY, KEY_EXCHANGE, SESSION, DONE };
 
     enum class Error
     {

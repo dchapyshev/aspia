@@ -20,7 +20,7 @@ syntax = "proto3";
 
 option optimize_for = LITE_RUNTIME;
 
-import "session_type.proto";
+import "common.proto";
 
 package aspia.proto;
 
@@ -64,15 +64,13 @@ enum Method
 // Client to server.
 message ClientHello
 {
-    uint32 version = 1;
-    uint32 methods = 2;
+    uint32 methods = 1;
 }
 
 // Server to client.
 message ServerHello
 {
-    uint32 version = 1;
-    Method method = 2;
+    Method method = 1;
 }
 
 // Client to server.
@@ -99,13 +97,15 @@ message SrpClientKeyExchange
 }
 
 // Server to client.
-message AuthorizationChallenge
+message SessionChallenge
 {
-    uint32 session_types = 1;
+    Version version = 1;
+    uint32 session_types = 2;
 }
 
 // Client to server.
-message AuthorizationResponse
+message SessionResponse
 {
-    SessionType session_type = 1;
+    Version version = 1;
+    SessionType session_type = 2;
 }

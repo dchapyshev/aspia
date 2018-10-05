@@ -20,8 +20,8 @@
 #define ASPIA_CLIENT__UI__DESKTOP_PANEL_H_
 
 #include "base/macros_magic.h"
+#include "protocol/common.pb.h"
 #include "protocol/desktop_session.pb.h"
-#include "protocol/session_type.pb.h"
 #include "ui_desktop_panel.h"
 
 namespace aspia {

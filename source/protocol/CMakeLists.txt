@@ -18,11 +18,11 @@
 
 list(APPEND SOURCE_PROTOCOL
     address_book.proto
+    common.proto
     desktop_session.proto
     file_transfer_session.proto
     key_exchange.proto
-    notifier.proto
-    session_type.proto)
+    notifier.proto)
 
 protobuf_generate_cpp(PROTOCOL_CC_FILES PROTOCOL_H_FILES ${SOURCE_PROTOCOL})
 set_source_files_properties(${PROTOCOL_CC_FILES} ${PROTOCOL_H_FILES} PROPERTIES SKIP_AUTOGEN ON)

@@ -20,7 +20,7 @@
 #define ASPIA_NETWORK__NETWORK_CHANNEL_CLIENT_H_
 
 #include "network/network_channel.h"
-#include "protocol/session_type.pb.h"
+#include "protocol/common.pb.h"
 
 namespace aspia {
 
@@ -54,7 +54,7 @@ private slots:
 private:
     void readServerHello(const QByteArray& buffer);
     void readServerKeyExchange(const QByteArray& buffer);
-    void readAuthorizationChallenge(const QByteArray& buffer);
+    void readSessionChallenge(const QByteArray& buffer);
 
     std::string username_;
     std::string password_;

@@ -22,7 +22,7 @@
 #include <QPointer>
 
 #include "base/macros_magic.h"
-#include "protocol/session_type.pb.h"
+#include "protocol/common.pb.h"
 
 namespace aspia {
 
