@@ -237,7 +237,8 @@ void HostSessionDesktop::readConfig(const proto::desktop::Config& config)
 
     if (change_flags & DesktopConfigTracker::VIDEO_CHANGES)
     {
-        delete screen_updater_;
+        std::unique_ptr<ScreenUpdater> screen_updater_deleter(screen_updater_);
+
         screen_updater_ = new ScreenUpdater(this);
 
         connect(screen_updater_, &ScreenUpdater::sendMessage,

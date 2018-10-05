@@ -137,6 +137,7 @@ const DesktopFrame* ScaleReducer::scaleFrame(const DesktopFrame* source_frame)
         updated_region->addRect(scaled_rect);
     }
 
+    scaled_frame_->setTopLeft(source_frame->topLeft());
     return scaled_frame_.get();
 }
 

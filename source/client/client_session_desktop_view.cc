@@ -127,15 +127,18 @@ void ClientSessionDesktopView::readVideoPacket(const proto::desktop::VideoPacket
     {
         DesktopRect screen_rect = VideoUtil::fromVideoRect(packet.format().screen_rect());
 
-        if (screen_rect.width()  <= 0 || screen_rect.width()  >= 65535 ||
-            screen_rect.height() <= 0 || screen_rect.height() >= 65535)
+        static const int kMaxValue = std::numeric_limits<uint16_t>::max();
+        static const int kMinValue = -std::numeric_limits<uint16_t>::max();
+
+        if (screen_rect.width()  <= 0 || screen_rect.width()  >= kMaxValue ||
+            screen_rect.height() <= 0 || screen_rect.height() >= kMaxValue)
         {
             emit errorOccurred(tr("Session error: Wrong video frame size."));
             return;
         }
 
-        if (screen_rect.x() < 0 || screen_rect.x() >= 65535 ||
-            screen_rect.y() < 0 || screen_rect.y() >= 65535)
+        if (screen_rect.x() < kMinValue || screen_rect.x() >= kMaxValue ||
+            screen_rect.y() < kMinValue || screen_rect.y() >= kMaxValue)
         {
             emit errorOccurred(tr("Session error: Wrong video frame position."));
             return;
