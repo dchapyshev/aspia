@@ -26,6 +26,7 @@
 
 #include "base/logging.h"
 #include "base/service_controller.h"
+#include "build/build_config.h"
 #include "host/ui/user_dialog.h"
 #include "host/ui/user_tree_item.h"
 #include "host/win/host_service_constants.h"
@@ -54,6 +55,16 @@ HostConfigDialog::HostConfigDialog(LocaleLoader& locale_loader, QWidget* parent)
     connect(ui.checkbox_add_firewall_rule, &QCheckBox::toggled, [this](bool checked)
     {
         setConfigChanged(true);
+    });
+
+    connect(ui.checkbox_use_custom_server, &QCheckBox::toggled, [this](bool checked)
+    {
+        setConfigChanged(true);
+
+        ui.edit_update_server->setEnabled(checked);
+
+        if (!checked)
+            ui.edit_update_server->setText(DEFAULT_UPDATE_SERVER);
     });
 
     connect(ui.tree_users, &QTreeWidget::customContextMenuRequested,
@@ -377,6 +388,9 @@ void HostConfigDialog::onButtonBoxClicked(QAbstractButton* button)
         settings.setTcpPort(ui.spinbox_port->value());
         settings.setAddFirewallRule(ui.checkbox_add_firewall_rule->isChecked());
         settings.setUserList(users_);
+        settings.setCustomUpdateServer(ui.checkbox_use_custom_server->isChecked());
+        settings.setRemoteUpdate(ui.checkbox_allow_remote_update->isChecked());
+        settings.setUpdateServer(ui.edit_update_server->text().toStdString());
 
         if (!settings.commit())
         {
@@ -482,6 +496,12 @@ void HostConfigDialog::reloadAll()
 
     ui.spinbox_port->setValue(settings.tcpPort());
     ui.checkbox_add_firewall_rule->setChecked(settings.addFirewallRule());
+
+    ui.checkbox_use_custom_server->setChecked(settings.customUpdateServer());
+    ui.checkbox_allow_remote_update->setChecked(settings.remoteUpdate());
+    ui.edit_update_server->setText(QString::fromStdString(settings.updateServer()));
+
+    ui.edit_update_server->setEnabled(ui.checkbox_use_custom_server->isChecked());
 
     setConfigChanged(false);
 }

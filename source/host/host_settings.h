@@ -53,6 +53,15 @@ public:
     SrpUserList userList() const;
     void setUserList(const SrpUserList& user_list);
 
+    std::string updateServer() const;
+    void setUpdateServer(const std::string& server);
+
+    bool customUpdateServer() const;
+    void setCustomUpdateServer(bool use);
+
+    bool remoteUpdate() const;
+    void setRemoteUpdate(bool allow);
+
 private:
     boost::property_tree::ptree tree_;
     DISALLOW_COPY_AND_ASSIGN(HostSettings);

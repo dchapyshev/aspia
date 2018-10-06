@@ -261,4 +261,34 @@ void HostSettings::setUserList(const SrpUserList& users)
     tree_.put<std::string>("srp_seed_key", Base64::encode(users.seed_key));
 }
 
+std::string HostSettings::updateServer() const
+{
+    return tree_.get<std::string>("update_server", DEFAULT_UPDATE_SERVER);
+}
+
+void HostSettings::setUpdateServer(const std::string& server)
+{
+    tree_.put("update_server", server);
+}
+
+bool HostSettings::customUpdateServer() const
+{
+    return tree_.get<bool>("custom_update_server", false);
+}
+
+void HostSettings::setCustomUpdateServer(bool use)
+{
+    tree_.put("custom_update_server", use);
+}
+
+bool HostSettings::remoteUpdate() const
+{
+    return tree_.get<bool>("remote_update", true);
+}
+
+void HostSettings::setRemoteUpdate(bool allow)
+{
+    tree_.put("remote_update", allow);
+}
+
 } // namespace aspia
