@@ -17,24 +17,24 @@
 //
 #include "build/build_config.h"
 
-#if defined CC_MSVC
+#if defined CC_GCC
 
 #include "base/logging.h"
 
-#include <io.h>
 #include <algorithm>
 #include <filesystem>
 #include <iomanip>
 #include <ostream>
 #include <utility>
-
-#define WIN32_LEAN_AND_MEAN
-#define NOMINMAX
-#include <windows.h>
+#include <cstring>
+#include <chrono>
+#include <ctime>
 
 #include "base/string_util.h"
 #include "base/string_printf.h"
 #include "base/unicode.h"
+#include "base/base_paths.h"
+#include "boost/date_time/local_time/local_time.hpp"
 
 // Windows warns on using write().  It prefers _write().
 #define write(fd, buf, count) _write(fd, buf, static_cast<unsigned int>(count))
@@ -45,7 +45,7 @@ namespace aspia {
 
 namespace {
 
-using FileHandle = HANDLE;
+namespace fs = std::filesystem;
 
 LoggingSeverity g_min_log_level = LS_INFO;
 LoggingDestination g_logging_destination = LOG_DEFAULT;
@@ -54,12 +54,13 @@ LoggingDestination g_logging_destination = LOG_DEFAULT;
 const int kAlwaysPrintErrorLevel = LS_ERROR;
 
 // This file is lazily opened and the handle may be nullptr
-FileHandle g_log_file = nullptr;
+// Filesystem g_log_file = nullptr;
 
 const char* severityName(LoggingSeverity severity)
 {
     static const char* const kLogSeverityNames[] = {"INFO", "WARNING", "ERROR", "FATAL"};
-    static_assert(LS_NUMBER == _countof(kLogSeverityNames));
+    const size_t kLogSeverityNamesCount = std::extent< decltype(kLogSeverityNames) >::value;
+    static_assert(LS_NUMBER == kLogSeverityNamesCount);
 
     if (severity >= 0 && severity < LS_NUMBER)
         return kLogSeverityNames[severity];
@@ -85,27 +86,31 @@ bool defaultLogFilePath(std::filesystem::path* path)
             return false;
     }
 
-    SYSTEMTIME local_time;
-    GetLocalTime(&local_time);
+    // SYSTEMTIME local_time;
+    // GetLocalTime(&local_time);
+    // auto now = std::chrono::system_clock::now();
+    // auto epoch = std::chrono::system_clock::to_time_t(now);
+    // std::tm *local_time = localtime(&epoch);
+    boost::posix_time::ptime localTime = boost::posix_time::second_clock::local_time();
 
-    wchar_t file_path[MAX_PATH] = { 0 };
-    GetModuleFileNameW(nullptr, file_path, _countof(file_path));
+    fs::path exec_path;
+    BasePaths::currentExecFile(&exec_path);
 
-    std::wostringstream stream;
+    std::ostringstream stream;
 
-    stream << std::filesystem::path(file_path).filename().native()
-           << L'.'
-           << std::setfill(L'0')
-           << std::setw(4) << local_time.wYear
-           << std::setw(2) << local_time.wMonth
-           << std::setw(2) << local_time.wDay
-           << L'-'
-           << std::setw(2) << local_time.wHour
-           << std::setw(2) << local_time.wMinute
-           << std::setw(2) << local_time.wSecond
-           << L'.'
-           << std::setw(3) << local_time.wMilliseconds
-           << L".log";
+    stream << exec_path.filename().native()
+           << '.'
+           << std::setfill('0')
+           << std::setw(4) << localTime.date().year()
+           << std::setw(2) << localTime.date().month()
+           << std::setw(2) << localTime.date().day()
+           << '-'
+           << std::setw(2) << localTime.time_of_day().hours()
+           << std::setw(2) << localTime.time_of_day().minutes()
+           << std::setw(2) << localTime.time_of_day().seconds()
+           << '.'
+           << std::setw(3) << localTime.time_of_day().minutes()
+           << ".log";
 
     path->append(stream.str());
     return true;
@@ -447,4 +452,4 @@ std::ostream& std::operator<<(std::ostream& out, const wchar_t* wstr)
     return out << (wstr ? aspia::UTF8fromUTF16(wstr) : std::string());
 }
 
-#endif //CC_MSVC
+#endif //CC_GCC

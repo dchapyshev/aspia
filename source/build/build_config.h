@@ -22,6 +22,8 @@
 // OS detection.
 #if defined(_WIN32)
 #define OS_WIN
+#elif defined(__linux__ )
+#define OS_LINUX
 #else
 #error Unknown OS
 #endif
@@ -29,6 +31,8 @@
 // Compiler detection.
 #if defined(_MSC_VER)
 #define CC_MSVC
+#elif defined(__GNUC__)
+#define CC_GCC
 #else
 #error Unknown compiller
 #endif

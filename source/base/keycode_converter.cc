@@ -21,6 +21,9 @@
 #include <QtCore>
 
 #include "build/build_config.h"
+#if defined CC_GCC
+#include <type_traits>
+#endif
 
 namespace aspia {
 
@@ -42,7 +45,13 @@ namespace {
 #undef USB_KEYMAP
 #undef USB_KEYMAP_DECLARATION
 
+#if defined CC_GCC
+const size_t kKeycodeMapEntries = std::extent< decltype(usb_keycode_map) >::value;
+#elif defined CC_MSVC
 const size_t kKeycodeMapEntries = _countof(usb_keycode_map);
+#else
+#error Unknown compiler
+#endif
 
 } // namespace
 

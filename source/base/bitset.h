@@ -20,6 +20,7 @@
 #define ASPIA_BASE__BITSET_H_
 
 #include <limits>
+#include <cassert>
 
 #include "base/logging.h"
 
@@ -99,7 +100,7 @@ public:
     // Flips the bit at the position |pos|.
     BitSet& flip(size_t pos)
     {
-        assert(pos < Size());
+        assert(pos < size());
 
         value_ ^= static_cast<NumericType>(1) << pos;
         return *this;

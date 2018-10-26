@@ -7,3 +7,6 @@
 *.pdb
 *.res
 *.exe
+
+# Dolphin files
+.directory

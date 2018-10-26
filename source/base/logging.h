@@ -208,7 +208,8 @@ private:
 // As special cases, we can assume that LOG_IS_ON(LS_FATAL) always holds. Also, LOG_IS_ON(LS_DFATAL)
 // always holds in debug mode. In particular, CHECK()s will always fire if they fail.
 #define LOG_IS_ON(severity) \
-  (::aspia::shouldCreateLogMessage(::aspia::##severity))
+  (::aspia::shouldCreateLogMessage(::aspia::LS_ERROR))  
+//   (::aspia::shouldCreateLogMessage(::aspia::##severity))
 
 // Helper macro which avoids evaluating the arguments to a stream if the condition doesn't hold.
 // Condition is evaluated once and only once.

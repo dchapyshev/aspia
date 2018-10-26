@@ -15,6 +15,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
+#include "build/build_config.h"
+
+#ifdef OS_WIN
 
 #include "base/base_paths.h"
 #include "base/logging.h"
@@ -182,3 +185,5 @@ bool BasePaths::currentExecFile(std::filesystem::path* result)
 }
 
 } // namespace aspia
+
+#endif //OS_WIN

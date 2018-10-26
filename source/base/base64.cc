@@ -267,7 +267,7 @@ size_t decodeImpl(char* dest, const char* src, size_t len)
 void Base64::encode(const std::string& input, std::string* output)
 {
     DCHECK(output);
-    output->swap(encode(input));
+    *output = std::move(encode(input));
 }
 
 // static

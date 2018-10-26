@@ -18,7 +18,6 @@
 
 #include "base/cpuid.h"
 
-#include <intrin.h>
 #include <cstring>
 
 #include "base/bitset.h"
@@ -41,23 +40,37 @@ CPUID& CPUID::operator=(const CPUID& other)
 
 void CPUID::get(int leaf)
 {
+    #ifdef CC_MSVC
     __cpuid(cpu_info_, leaf);
+    #endif
 }
 
 void CPUID::get(int leaf, int subleaf)
 {
+    #ifdef CC_MSVC
     __cpuidex(cpu_info_, leaf, subleaf);
+    #endif
 }
 
 // static
 bool CPUID::hasAesNi()
 {
-    // Check if function 1 is supported.
-    if (CPUID(0).eax() < 1)
-        return false;
+    unsigned int b;
 
-    // Bit 25 of register ECX set to 1 indicates the support of AES instructions.
-    return BitSet<uint32_t>(CPUID(1).ecx()).test(25);
+    #ifdef CC_GCC
+    //TODO: perform actual check
+    b = 0;
+    #endif
+    #ifdef CC_MSVC
+    __asm
+    {
+        mov     eax, 1
+        cpuid
+        mov     b, ecx
+    }
+    #endif
+
+    return (b & (1 << 25)) != 0;
 }
 
 } // namespace aspia
