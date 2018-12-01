@@ -35,26 +35,21 @@ FileTransferDialog::FileTransferDialog(QWidget* parent)
     ui.setupUi(this);
     setFixedHeight(sizeHint().height());
 
-    ui.progress_total->setMinimum(0);
-    ui.progress_total->setMaximum(0);
-    ui.progress_current->setMinimum(0);
-    ui.progress_current->setMaximum(0);
+    ui.progress_total->setRange(0, 0);
+    ui.progress_current->setRange(0, 0);
 
     connect(ui.button_box, &QDialogButtonBox::clicked, this, &FileTransferDialog::close);
 
 #if defined(OS_WIN)
     QWinTaskbarButton* button = new QWinTaskbarButton(this);
-    if (button)
-    {
-        button->setWindow(parent->windowHandle());
 
-        taskbar_progress_ = button->progress();
-        if (taskbar_progress_)
-        {
-            taskbar_progress_->setMinimum(0);
-            taskbar_progress_->setMaximum(0);
-            taskbar_progress_->show();
-        }
+    button->setWindow(parent->windowHandle());
+
+    taskbar_progress_ = button->progress();
+    if (taskbar_progress_)
+    {
+        taskbar_progress_->setRange(0, 0);
+        taskbar_progress_->show();
     }
 #endif
 }
@@ -74,17 +69,12 @@ void FileTransferDialog::setCurrentItem(const QString& source_path, const QStrin
         task_queue_building_ = false;
         ui.label_task->setText(tr("Current Task: Copying items."));
 
-        ui.progress_total->setMinimum(0);
-        ui.progress_total->setMaximum(100);
-        ui.progress_current->setMinimum(0);
-        ui.progress_current->setMaximum(100);
+        ui.progress_total->setRange(0, 100);
+        ui.progress_current->setRange(0, 100);
 
 #if defined(OS_WIN)
         if (taskbar_progress_)
-        {
-            taskbar_progress_->setMinimum(0);
-            taskbar_progress_->setMaximum(100);
-        }
+            taskbar_progress_->setRange(0, 100);
 #endif
     }
 

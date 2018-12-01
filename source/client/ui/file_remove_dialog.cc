@@ -38,14 +38,12 @@ FileRemoveDialog::FileRemoveDialog(QWidget* parent)
 
 #if defined(OS_WIN)
     QWinTaskbarButton* button = new QWinTaskbarButton(this);
-    if (button)
-    {
-        button->setWindow(parent->windowHandle());
 
-        taskbar_progress_ = button->progress();
-        if (taskbar_progress_)
-            taskbar_progress_->show();
-    }
+    button->setWindow(parent->windowHandle());
+
+    taskbar_progress_ = button->progress();
+    if (taskbar_progress_)
+        taskbar_progress_->show();
 #endif
 }
 
