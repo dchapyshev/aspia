@@ -33,11 +33,20 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 
+# Boost configuration.
+set(Boost_USE_STATIC_LIBS ON)
+set(Boost_USE_MULTITHREADED ON)
+set(Boost_USE_STATIC_RUNTIME ON)
+
 set(CMAKE_PREFIX_PATH "${ASPIA_THIRD_PARTY_DIR}/qt;${ASPIA_THIRD_PARTY_DIR}/protobuf")
+set(BOOST_ROOT "${ASPIA_THIRD_PARTY_DIR}/boost")
 
 find_package(Qt5 REQUIRED Core Gui Network Widgets WinExtras)
 find_package(Qt5LinguistTools)
 find_package(Protobuf REQUIRED)
+find_package(Boost REQUIRED system)
+
+include(translations.cmake)
 
 add_definitions(-D_UNICODE
                 -DNTDDI_VERSION=0x06010000
@@ -46,9 +55,10 @@ add_definitions(-D_UNICODE
                 -DWINVER=_WIN32_WINNT
                 -D_WIN32_IE=0x0800
                 -DPSAPI_VERSION=2
-                -D_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING
+                -D_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS
                 -D_CRT_SECURE_NO_WARNINGS
                 -DQT_USE_QSTRINGBUILDER
+                -DBOOST_ALL_NO_LIB
                 -DCLIENT_IMPLEMENTATION
                 -DHOST_IMPLEMENTATION)
 
@@ -77,6 +87,7 @@ link_directories(
     ${ASPIA_THIRD_PARTY_DIR}/zstd/lib)
 
 set(THIRD_PARTY_LIBS
+    ${Boost_LIBRARIES}
     Qt5::Core
     Qt5::Gui
     Qt5::Network
@@ -118,6 +129,7 @@ set(THIRD_PARTY_LIBS
     imm32
     iphlpapi
     libcrypto
+    libssl
     mpr
     netapi32
     sas
