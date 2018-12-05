@@ -29,6 +29,8 @@
 // Compiler detection.
 #if defined(_MSC_VER)
 #define CC_MSVC
+#elif defined(__GNUC__)
+#define CC_GCC
 #else
 #error Unknown compiller
 #endif
@@ -49,9 +51,11 @@
 #endif
 
 #if defined(CC_MSVC)
-#define INLINE __forceinline
+#define FORCEINLINE __forceinline
+#elif defined(CC_GCC) && __GNUC__ > 3
+#define FORCEINLINE inline __attribute__ ((__always_inline__))
 #else
-#define INLINE inline
+#define FORCEINLINE inline
 #endif
 
 #define DEFAULT_HOST_TCP_PORT 8050

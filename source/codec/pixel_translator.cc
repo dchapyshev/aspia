@@ -60,7 +60,7 @@ public:
 
     ~PixelTranslatorT() = default;
 
-    INLINE void translatePixel(const SourceT* src_ptr, TargetT* dst_ptr)
+    FORCEINLINE void translatePixel(const SourceT* src_ptr, TargetT* dst_ptr)
     {
         const uint32_t red = red_table_[
             *src_ptr >> source_format_.redShift() & source_format_.redMax()];
