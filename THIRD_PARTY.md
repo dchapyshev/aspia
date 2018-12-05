@@ -7,8 +7,8 @@ Third-party components information
 | googletest | 1.8.1     | BSD 3-Clause License                  | https://github.com/google/googletest/releases   |
 | libvpx     | 1.7.0     | BSD 3-Clause License                  | https://chromium.googlesource.com/webm/libvpx   |
 | libyuv     | trunk     | BSD 3-Clause License                  | https://chromium.googlesource.com/libyuv/libyuv |
-| openssl    | 1.1.1     | OpenSSL License                       | https://github.com/openssl/openssl/releases     |
+| openssl    | 1.1.1a    | OpenSSL License                       | https://github.com/openssl/openssl/releases     |
 | protobuf   | 3.6.1     | BSD 3-Clause License                  | https://github.com/google/protobuf/releases     |
-| qt         | 5.11.2    | GNU General Public License 3.0        | https://www.qt.io                               |
-| tbb        | 2019      | Apache License 2.0                    | https://github.com/01org/tbb/releases           |
-| zstd       | 1.3.5     | BSD License                           | https://github.com/facebook/zstd/releases       |
+| qt         | 5.11.3    | GNU General Public License 3.0        | https://www.qt.io                               |
+| tbb        | 2019 U3   | Apache License 2.0                    | https://github.com/01org/tbb/releases           |
+| zstd       | 1.3.7     | BSD License                           | https://github.com/facebook/zstd/releases       |
