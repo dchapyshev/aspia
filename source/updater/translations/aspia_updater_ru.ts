@@ -24,12 +24,17 @@
         <translation>Доступная версия:</translation>
     </message>
     <message>
-        <location filename="../update_dialog.ui" line="126"/>
+        <location filename="../update_dialog.ui" line="123"/>
+        <source>Update description:</source>
+        <translation>Описание обновления:</translation>
+    </message>
+    <message>
+        <location filename="../update_dialog.ui" line="161"/>
         <source>Update now!</source>
         <translation>Обновить сейчас!</translation>
     </message>
     <message>
-        <location filename="../update_dialog.ui" line="133"/>
+        <location filename="../update_dialog.ui" line="168"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>

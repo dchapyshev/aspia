@@ -154,7 +154,7 @@ void ConsoleSettings::setAlwaysShowTrayIcon(bool enable)
     settings_.setValue(QStringLiteral("always_show_tray_icon"), enable);
 }
 
-proto::SessionType ConsoleSettings::sessionType()
+proto::SessionType ConsoleSettings::sessionType() const
 {
     return static_cast<proto::SessionType>(
         settings_.value(QStringLiteral("session_type"),
@@ -164,6 +164,16 @@ proto::SessionType ConsoleSettings::sessionType()
 void ConsoleSettings::setSessionType(proto::SessionType session_type)
 {
     settings_.setValue(QStringLiteral("session_type"), session_type);
+}
+
+bool ConsoleSettings::checkUpdates() const
+{
+    return settings_.value(QStringLiteral("check_updates"), true).toBool();
+}
+
+void ConsoleSettings::setCheckUpdates(bool check)
+{
+    settings_.setValue(QStringLiteral("check_updates"), check);
 }
 
 } // namespace aspia

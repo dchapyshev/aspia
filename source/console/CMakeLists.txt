@@ -85,4 +85,5 @@ target_link_libraries(aspia_console
     aspia_desktop_capture
     aspia_network
     aspia_protocol
+    aspia_updater
     ${THIRD_PARTY_LIBS})

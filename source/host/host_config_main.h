@@ -21,10 +21,6 @@
 
 #include "host/host_export.h"
 
-namespace aspia {
-
 int HOST_EXPORT hostConfigMain(int argc, char *argv[]);
-
-} // namespace aspia
 
 #endif // ASPIA_HOST__HOST_CONFIG_MAIN_H_

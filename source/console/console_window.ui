@@ -107,6 +107,9 @@
     </property>
     <addaction name="action_online_help"/>
     <addaction name="separator"/>
+    <addaction name="action_check_updates_on_startup"/>
+    <addaction name="action_check_updates"/>
+    <addaction name="separator"/>
     <addaction name="action_about"/>
    </widget>
    <widget class="QMenu" name="menu_view">
@@ -500,6 +503,22 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+W</string>
+   </property>
+  </action>
+  <action name="action_check_updates">
+   <property name="text">
+    <string>Check for updates...</string>
+   </property>
+  </action>
+  <action name="action_check_updates_on_startup">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Check for updates on startup</string>
    </property>
   </action>
  </widget>

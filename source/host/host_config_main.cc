@@ -27,10 +27,12 @@
 #include "host/ui/host_config_dialog.h"
 #include "host/host_settings.h"
 
-namespace aspia {
+using namespace aspia;
 
 int hostConfigMain(int argc, char *argv[])
 {
+    Q_INIT_RESOURCE(updater);
+
     LoggingSettings settings;
     settings.logging_dest = LOG_TO_ALL;
 
@@ -108,5 +110,3 @@ int hostConfigMain(int argc, char *argv[])
 
     return 0;
 }
-
-} // namespace aspia

@@ -56,6 +56,7 @@ public slots:
     void onModifyComputerGroup();
     void onDeleteComputerGroup();
     void onOnlineHelp();
+    void onCheckUpdates();
     void onAbout();
     void onFastConnect();
     void onDesktopManageConnect();

@@ -350,7 +350,7 @@
           <item>
            <widget class="QLabel" name="label_2">
             <property name="text">
-             <string>Users with access to desktop management will be able to update the program.</string>
+             <string>Note: Users with access to desktop management will be able to update the program.</string>
             </property>
             <property name="wordWrap">
              <bool>true</bool>

@@ -32,6 +32,7 @@
 #include "console/about_dialog.h"
 #include "console/address_book_tab.h"
 #include "console/console_settings.h"
+#include "updater/update_dialog.h"
 
 namespace aspia {
 
@@ -94,6 +95,7 @@ ConsoleWindow::ConsoleWindow(LocaleLoader& locale_loader, const QString& file_pa
     ui.action_minimize_to_tray->setChecked(settings.minimizeToTray());
     ui.action_toolbar->setChecked(settings.isToolBarEnabled());
     ui.action_statusbar->setChecked(settings.isStatusBarEnabled());
+    ui.action_check_updates_on_startup->setChecked(settings.checkUpdates());
 
     ui.status_bar->setVisible(ui.action_statusbar->isChecked());
     showTrayIcon(ui.action_show_tray_icon->isChecked());
@@ -141,6 +143,7 @@ ConsoleWindow::ConsoleWindow(LocaleLoader& locale_loader, const QString& file_pa
             this, &ConsoleWindow::onDeleteComputerGroup);
 
     connect(ui.action_online_help, &QAction::triggered, this, &ConsoleWindow::onOnlineHelp);
+    connect(ui.action_check_updates, &QAction::triggered, this, &ConsoleWindow::onCheckUpdates);
     connect(ui.action_about, &QAction::triggered, this, &ConsoleWindow::onAbout);
     connect(ui.action_exit, &QAction::triggered, this, &ConsoleWindow::close);
     connect(ui.action_fast_connect, &QAction::triggered, this, &ConsoleWindow::onFastConnect);
@@ -356,6 +359,11 @@ void ConsoleWindow::onDeleteComputerGroup()
 void ConsoleWindow::onOnlineHelp()
 {
     QDesktopServices::openUrl(QUrl(tr("https://aspia.org/en/help.html")));
+}
+
+void ConsoleWindow::onCheckUpdates()
+{
+    UpdateDialog().exec();
 }
 
 void ConsoleWindow::onAbout()
@@ -828,6 +836,7 @@ void ConsoleWindow::closeEvent(QCloseEvent* event)
     settings.setStatusBarEnabled(ui.action_statusbar->isChecked());
     settings.setAlwaysShowTrayIcon(ui.action_show_tray_icon->isChecked());
     settings.setMinimizeToTray(ui.action_minimize_to_tray->isChecked());
+    settings.setCheckUpdates(ui.action_check_updates_on_startup->isChecked());
     settings.setWindowGeometry(saveGeometry());
     settings.setWindowState(saveState());
     settings.setRecentOpen(mru_.recentOpen());

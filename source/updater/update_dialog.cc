@@ -18,12 +18,24 @@
 
 #include "updater/update_dialog.h"
 
+#include "build/version.h"
+#include "ui_update_dialog.h"
+
 namespace aspia {
 
 UpdateDialog::UpdateDialog(QWidget* parent)
-    : QDialog(parent)
+    : QDialog(parent),
+      ui(std::make_unique<Ui::UpdateDialog>()),
+      checker_(this)
 {
-    ui.setupUi(this);
+    ui->setupUi(this);
+
+    ui->label_current->setText(QString("%1.%2.%3")
+                               .arg(ASPIA_VERSION_MAJOR)
+                               .arg(ASPIA_VERSION_MINOR)
+                               .arg(ASPIA_VERSION_PATCH));
+
+    checker_.checkForUpdates("");
 }
 
 UpdateDialog::~UpdateDialog() = default;

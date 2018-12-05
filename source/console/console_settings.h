@@ -69,8 +69,11 @@ public:
     bool alwaysShowTrayIcon() const;
     void setAlwaysShowTrayIcon(bool enable);
 
-    proto::SessionType sessionType();
+    proto::SessionType sessionType() const;
     void setSessionType(proto::SessionType session_type);
+
+    bool checkUpdates() const;
+    void setCheckUpdates(bool check);
 
 private:
     QSettings settings_;

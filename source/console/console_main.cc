@@ -17,11 +17,9 @@
 //
 
 #include <QCommandLineParser>
+#include <QtPlugin>
 
 #include <tbb/tbbmalloc_proxy.h>
-
-#include <QtGlobal>
-#include <QtPlugin>
 
 Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin);
 Q_IMPORT_PLUGIN(QWindowsVistaStylePlugin);
@@ -38,6 +36,7 @@ using namespace aspia;
 int main(int argc, char *argv[])
 {
     Q_INIT_RESOURCE(client);
+    Q_INIT_RESOURCE(updater);
 
     LoggingSettings settings;
     settings.logging_dest = LOG_TO_ALL;

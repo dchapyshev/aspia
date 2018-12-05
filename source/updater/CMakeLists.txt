@@ -19,9 +19,14 @@
 add_subdirectory(translations)
 
 list(APPEND SOURCE_UPDATER
+    update.h
+    update_checker.cc
+    update_checker.h
     update_dialog.cc
     update_dialog.h
-    update_dialog.ui)
+    update_dialog.ui
+    updater.cc
+    updater.h)
 
 list(APPEND SOURCE_UPDATER_RESOURCES
     resources/updater.qrc)
@@ -36,4 +41,5 @@ add_library(aspia_updater STATIC
     ${SOURCE_UPDATER_UI})
 target_link_libraries(aspia_updater
     aspia_base
+    aspia_network
     ${THIRD_PARTY_LIBS})

@@ -16,34 +16,23 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_UPDATER__UPDATE_DIALOG_H_
-#define ASPIA_UPDATER__UPDATE_DIALOG_H_
+#ifndef ASPIA_UPDATER__UPDATE_H_
+#define ASPIA_UPDATER__UPDATE_H_
 
-#include <QDialog>
-
-#include "base/macros_magic.h"
-#include "updater/update_checker.h"
-
-namespace Ui {
-class UpdateDialog;
-} // namespace Ui
+#include <string>
 
 namespace aspia {
 
-class UpdateDialog : public QDialog
+struct Update
 {
-public:
-    explicit UpdateDialog(QWidget* parent = nullptr);
-    ~UpdateDialog();
-
-private:
-    std::unique_ptr<Ui::UpdateDialog> ui;
-
-    UpdateChecker checker_;
-
-    DISALLOW_COPY_AND_ASSIGN(UpdateDialog);
+    uint32_t major;
+    uint32_t minor;
+    uint32_t patch;
+    uint32_t build;
+    std::string description;
+    std::string url;
 };
 
 } // namespace aspia
 
-#endif // ASPIA_UPDATER__UPDATE_DIALOG_H_
+#endif // ASPIA_UPDATER__UPDATE_H_

@@ -101,6 +101,7 @@ target_link_libraries(aspia_host
     aspia_ipc
     aspia_network
     aspia_protocol
+    aspia_updater
     ${THIRD_PARTY_LIBS})
 
 add_executable(aspia_host_config

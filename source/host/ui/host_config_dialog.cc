@@ -32,6 +32,7 @@
 #include "host/win/host_service_constants.h"
 #include "host/host_settings.h"
 #include "network/srp_user.h"
+#include "updater/update_dialog.h"
 
 namespace aspia {
 
@@ -65,6 +66,11 @@ HostConfigDialog::HostConfigDialog(LocaleLoader& locale_loader, QWidget* parent)
 
         if (!checked)
             ui.edit_update_server->setText(DEFAULT_UPDATE_SERVER);
+    });
+
+    connect(ui.button_check_updates, &QPushButton::pressed, [this]()
+    {
+        UpdateDialog().exec();
     });
 
     connect(ui.tree_users, &QTreeWidget::customContextMenuRequested,
