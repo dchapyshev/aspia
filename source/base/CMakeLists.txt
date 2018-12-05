@@ -49,6 +49,8 @@ list(APPEND SOURCE_BASE
     string_util.h
     string_util_constants.cc
     string_util_constants.h
+    thread_checker.cc
+    thread_checker.h
     typed_buffer.h
     unicode.cc
     unicode.h)
@@ -62,6 +64,7 @@ list(APPEND SOURCE_BASE_UNIT_TESTS
 list(APPEND SOURCE_BASE_WIN
     win/registry.cc
     win/registry.h
+    win/scoped_com_initializer.cc
     win/scoped_com_initializer.h
     win/scoped_gdi_object.h
     win/scoped_hdc.h

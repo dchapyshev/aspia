@@ -21,11 +21,7 @@
 
 #include <objbase.h>
 
-#ifndef NDEBUG
-#include "base/logging.h"
-#endif
-
-#include "base/macros_magic.h"
+#include "base/thread_checker.h"
 
 namespace aspia {
 
@@ -43,57 +39,21 @@ public:
     enum SelectMTA { kMTA };
 
     // Constructor for STA initialization.
-    ScopedCOMInitializer()
-    {
-        initialize(COINIT_APARTMENTTHREADED);
-    }
+    ScopedCOMInitializer();
 
     // Constructor for MTA initialization.
-    explicit ScopedCOMInitializer(SelectMTA /* mta */)
-    {
-        initialize(COINIT_MULTITHREADED);
-    }
+    explicit ScopedCOMInitializer(SelectMTA mta);
 
-    ~ScopedCOMInitializer()
-    {
-#ifndef NDEBUG
-        // Using the windows API directly to avoid dependency on platform_thread.
-        DCHECK_EQ(GetCurrentThreadId(), thread_id_);
-#endif
+    ~ScopedCOMInitializer();
 
-        if (isSucceeded())
-            CoUninitialize();
-    }
-
-    bool isSucceeded() const { return SUCCEEDED(hr_); }
+    bool isSucceeded() const;
 
 private:
-    void initialize(COINIT init)
-    {
-#ifndef NDEBUG
-        thread_id_ = GetCurrentThreadId();
-#endif
-        hr_ = CoInitializeEx(nullptr, init);
-#ifndef NDEBUG
-        if (hr_ == S_FALSE)
-        {
-            LOG(LS_WARNING) << "Multiple CoInitialize() calls for thread " << thread_id_;
-        }
-        else
-        {
-            DCHECK_EQ(hr_, RPC_E_CHANGED_MODE) << "Invalid COM thread model change";
-        }
-#endif
-    }
+    void initialize(COINIT init);
 
     HRESULT hr_;
-#ifndef NDEBUG
-  // In debug builds we use this variable to catch a potential bug where a
-  // ScopedCOMInitializer instance is deleted on a different thread than it
-  // was initially created on.  If that ever happens it can have bad
-  // consequences and the cause can be tricky to track down.
-    DWORD thread_id_;
-#endif
+
+    THREAD_CHECKER(thread_checker_);
 
     DISALLOW_COPY_AND_ASSIGN(ScopedCOMInitializer);
 };
