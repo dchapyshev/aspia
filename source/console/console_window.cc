@@ -385,13 +385,7 @@ void ConsoleWindow::onDesktopManageConnect()
         if (computer_item)
         {
             proto::address_book::Computer* computer = computer_item->computer();
-
-            computer->set_connect_time(QDateTime::currentSecsSinceEpoch());
             computer->set_session_type(proto::SESSION_TYPE_DESKTOP_MANAGE);
-
-            computer_item->updateItem();
-            tab->setChanged(true);
-
             connectToComputer(*computer);
         }
     }
@@ -406,13 +400,7 @@ void ConsoleWindow::onDesktopViewConnect()
         if (computer_item)
         {
             proto::address_book::Computer* computer = computer_item->computer();
-
-            computer->set_connect_time(QDateTime::currentSecsSinceEpoch());
             computer->set_session_type(proto::SESSION_TYPE_DESKTOP_VIEW);
-
-            computer_item->updateItem();
-            tab->setChanged(true);
-
             connectToComputer(*computer);
         }
     }
@@ -427,13 +415,7 @@ void ConsoleWindow::onFileTransferConnect()
         if (computer_item)
         {
             proto::address_book::Computer* computer = computer_item->computer();
-
-            computer->set_connect_time(QDateTime::currentSecsSinceEpoch());
             computer->set_session_type(proto::SESSION_TYPE_FILE_TRANSFER);
-
-            computer_item->updateItem();
-            tab->setChanged(true);
-
             connectToComputer(*computer);
         }
     }
@@ -621,8 +603,6 @@ void ConsoleWindow::onComputerContextMenu(ComputerItem* computer_item, const QPo
 
 void ConsoleWindow::onComputerDoubleClicked(proto::address_book::Computer* computer)
 {
-    computer->set_connect_time(QDateTime::currentSecsSinceEpoch());
-
     AddressBookTab* tab = currentAddressBookTab();
     if (!tab)
         return;
@@ -630,9 +610,6 @@ void ConsoleWindow::onComputerDoubleClicked(proto::address_book::Computer* compu
     ComputerItem* computer_item = tab->currentComputer();
     if (!computer_item)
         return;
-
-    computer_item->updateItem();
-    tab->setChanged(true);
 
     if (ui.action_desktop_manage->isChecked())
     {

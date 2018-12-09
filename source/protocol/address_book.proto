@@ -43,7 +43,7 @@ message Computer
 {
     int64 create_time             = 1;
     int64 modify_time             = 2;
-    int64 connect_time            = 3;
+    // Field 3 not used (deprecated)
 
     string name                   = 4;
     string comment                = 5;

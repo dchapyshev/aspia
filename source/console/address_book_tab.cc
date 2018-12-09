@@ -126,11 +126,10 @@ AddressBookTab::AddressBookTab(const QString& file_path,
     {
         header->hideSection(ComputerItem::COLUMN_INDEX_CREATED);
         header->hideSection(ComputerItem::COLUMN_INDEX_MODIFIED);
-        header->hideSection(ComputerItem::COLUMN_INDEX_CONNECTED);
     }
     else
     {
-        ui.tree_computer->header()->restoreState(columns_state);
+        header->restoreState(columns_state);
     }
 
     ComputerGroupItem* group_item = new ComputerGroupItem(data_.mutable_root_group(), nullptr);

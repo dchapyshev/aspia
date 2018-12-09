@@ -45,9 +45,6 @@ void ComputerItem::updateItem()
 
     setText(COLUMN_INDEX_MODIFIED, QDateTime::fromSecsSinceEpoch(
         computer_->modify_time()).toString(Qt::DefaultLocaleShortDate));
-
-    setText(COLUMN_INDEX_CONNECTED, QDateTime::fromSecsSinceEpoch(
-        computer_->connect_time()).toString(Qt::DefaultLocaleShortDate));
 }
 
 ComputerGroupItem* ComputerItem::parentComputerGroupItem()
@@ -80,14 +77,6 @@ bool ComputerItem::operator<(const QTreeWidgetItem &other) const
             const ComputerItem* other_item = dynamic_cast<const ComputerItem*>(&other);
             if (other_item)
                 return computer_->modify_time() < other_item->computer_->modify_time();
-        }
-        break;
-
-        case COLUMN_INDEX_CONNECTED:
-        {
-            const ComputerItem* other_item = dynamic_cast<const ComputerItem*>(&other);
-            if (other_item)
-                return computer_->connect_time() < other_item->computer_->connect_time();
         }
         break;
 
