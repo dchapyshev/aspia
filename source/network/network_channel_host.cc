@@ -172,11 +172,12 @@ void NetworkChannelHost::readClientKeyExchange(const QByteArray& buffer)
     }
 
     proto::SessionChallenge session_challenge;
-    session_challenge.mutable_version()->set_major(ASPIA_VERSION_MAJOR);
-    session_challenge.mutable_version()->set_minor(ASPIA_VERSION_MINOR);
-    session_challenge.mutable_version()->set_patch(ASPIA_VERSION_PATCH);
-    session_challenge.mutable_version()->set_build(ASPIA_VERSION_BUILD);
     session_challenge.set_session_types(srp_host_->sessionTypes());
+
+    proto::Version* version = session_challenge.mutable_version();
+    version->set_major(ASPIA_VERSION_MAJOR);
+    version->set_minor(ASPIA_VERSION_MINOR);
+    version->set_patch(ASPIA_VERSION_PATCH);
 
     QByteArray session_challenge_buffer = serializeMessage(session_challenge);
     if (session_challenge_buffer.isEmpty())
