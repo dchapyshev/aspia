@@ -23,7 +23,7 @@
 namespace aspia {
 
 #define EXPECT_ALIGNED(ptr, align) \
-    EXPECT_EQ(0u, reinterpret_cast<uintptr_t>(ptr) & (align - 1))
+    EXPECT_EQ(0u, reinterpret_cast<uintptr_t>(ptr) & ((align) - 1))
 
 TEST(aligned_memory_test, dynamic_allocation)
 {
