@@ -38,9 +38,12 @@ void compareRegion(const DesktopRegion& region, const DesktopRect rects[], int r
     {
         SCOPED_TRACE(i);
         ASSERT_FALSE(it.isAtEnd());
-        EXPECT_TRUE(it.rect().isEqual(rects[i]))
-            << it.rect().left() << "-" << it.rect().right() << "."
-            << it.rect().top() << "-" << it.rect().bottom() << " "
+
+        const DesktopRect& current = it.rect();
+
+        EXPECT_TRUE(current.isEqual(rects[i]))
+            << current.left() << "-" << current.right() << "."
+            << current.top() << "-" << current.bottom() << " "
             << rects[i].left() << "-" << rects[i].right() << "." << rects[i].top()
             << "-" << rects[i].bottom();
         it.advance();
@@ -84,27 +87,52 @@ TEST(desktop_region_test, non_overlapping_rects)
         DesktopRect rects[4];
     } cases[] =
     {
-        {1, {DesktopRect::makeXYWH(10, 10, 10, 10)}},
-        {2,
-         {DesktopRect::makeXYWH(10, 10, 10, 10),
-          DesktopRect::makeXYWH(30, 10, 10, 15)}},
-        {2,
-         {DesktopRect::makeXYWH(10, 10, 10, 10),
-          DesktopRect::makeXYWH(10, 30, 10, 5)}},
-        {3,
-         {DesktopRect::makeXYWH(10, 10, 10, 9),
-          DesktopRect::makeXYWH(30, 10, 15, 10),
-          DesktopRect::makeXYWH(10, 30, 8, 10)}},
-        {4,
-         {DesktopRect::makeXYWH(0, 0, 30, 10),
-          DesktopRect::makeXYWH(40, 0, 10, 30),
-          DesktopRect::makeXYWH(0, 20, 10, 30),
-          DesktopRect::makeXYWH(20, 40, 30, 10)}},
-        {4,
-         {DesktopRect::makeXYWH(0, 0, 10, 100),
-          DesktopRect::makeXYWH(20, 10, 30, 10),
-          DesktopRect::makeXYWH(20, 30, 30, 10),
-          DesktopRect::makeXYWH(20, 50, 30, 10)}},
+        {
+            1,
+            {
+                DesktopRect::makeXYWH(10, 10, 10, 10)
+            }
+        },
+        {
+            2,
+            {
+                DesktopRect::makeXYWH(10, 10, 10, 10),
+                DesktopRect::makeXYWH(30, 10, 10, 15)
+            }
+        },
+        {
+            2,
+            {
+                DesktopRect::makeXYWH(10, 10, 10, 10),
+                DesktopRect::makeXYWH(10, 30, 10, 5)
+            }
+        },
+        {
+            3,
+            {
+                DesktopRect::makeXYWH(10, 10, 10, 9),
+                DesktopRect::makeXYWH(30, 10, 15, 10),
+                DesktopRect::makeXYWH(10, 30, 8, 10)
+            }
+        },
+        {
+            4,
+            {
+                DesktopRect::makeXYWH(0, 0, 30, 10),
+                DesktopRect::makeXYWH(40, 0, 10, 30),
+                DesktopRect::makeXYWH(0, 20, 10, 30),
+                DesktopRect::makeXYWH(20, 40, 30, 10)
+            }
+        },
+        {
+            4,
+            {
+                DesktopRect::makeXYWH(0, 0, 10, 100),
+                DesktopRect::makeXYWH(20, 10, 30, 10),
+                DesktopRect::makeXYWH(20, 30, 30, 10),
+                DesktopRect::makeXYWH(20, 50, 30, 10)
+            }
+        },
     };
 
     for (size_t i = 0; i < (sizeof(cases) / sizeof(Case)); ++i)
@@ -139,99 +167,159 @@ TEST(desktop_region_test, two_rects)
         DesktopRect input_rect2;
         int expected_count;
         DesktopRect expected_rects[3];
-    } cases[] = {
+    } cases[] =
+    {
         // Touching rectangles that merge into one.
-        {DesktopRect::makeLTRB(100, 100, 200, 200),
-         DesktopRect::makeLTRB(0, 100, 100, 200),
-         1,
-         {DesktopRect::makeLTRB(0, 100, 200, 200)}},
-
-        {DesktopRect::makeLTRB(100, 100, 200, 200),
-         DesktopRect::makeLTRB(100, 0, 200, 100),
-         1,
-         {DesktopRect::makeLTRB(100, 0, 200, 200)}},
-
-         // Rectangles touching on the vertical edge.
-         {DesktopRect::makeLTRB(100, 100, 200, 200),
-          DesktopRect::makeLTRB(0, 150, 100, 250),
-          3,
-          {DesktopRect::makeLTRB(100, 100, 200, 150),
-           DesktopRect::makeLTRB(0, 150, 200, 200),
-           DesktopRect::makeLTRB(0, 200, 100, 250)}},
-         {DesktopRect::makeLTRB(100, 100, 200, 200),
-          DesktopRect::makeLTRB(0, 50, 100, 150),
-          3,
-          {DesktopRect::makeLTRB(0, 50, 100, 100),
-           DesktopRect::makeLTRB(0, 100, 200, 150),
-           DesktopRect::makeLTRB(100, 150, 200, 200)}},
-         {DesktopRect::makeLTRB(100, 100, 200, 200),
-          DesktopRect::makeLTRB(0, 120, 100, 180),
-          3,
-          {DesktopRect::makeLTRB(100, 100, 200, 120),
-           DesktopRect::makeLTRB(0, 120, 200, 180),
-           DesktopRect::makeLTRB(100, 180, 200, 200)}},
-
-           // Rectangles touching on the horizontal edge.
-           {DesktopRect::makeLTRB(100, 100, 200, 200),
+        {
+            DesktopRect::makeLTRB(100, 100, 200, 200),
+            DesktopRect::makeLTRB(0, 100, 100, 200),
+            1,
+            {
+                DesktopRect::makeLTRB(0, 100, 200, 200)
+            }
+        },
+        {
+            DesktopRect::makeLTRB(100, 100, 200, 200),
+            DesktopRect::makeLTRB(100, 0, 200, 100),
+            1,
+            {
+                DesktopRect::makeLTRB(100, 0, 200, 200)
+            }
+        },
+        // Rectangles touching on the vertical edge.
+        {
+            DesktopRect::makeLTRB(100, 100, 200, 200),
+            DesktopRect::makeLTRB(0, 150, 100, 250),
+            3,
+            {
+                DesktopRect::makeLTRB(100, 100, 200, 150),
+                DesktopRect::makeLTRB(0, 150, 200, 200),
+                DesktopRect::makeLTRB(0, 200, 100, 250)
+            }
+        },
+        {
+            DesktopRect::makeLTRB(100, 100, 200, 200),
+            DesktopRect::makeLTRB(0, 50, 100, 150),
+            3,
+            {
+                DesktopRect::makeLTRB(0, 50, 100, 100),
+                DesktopRect::makeLTRB(0, 100, 200, 150),
+                DesktopRect::makeLTRB(100, 150, 200, 200)
+            }
+        },
+        {
+            DesktopRect::makeLTRB(100, 100, 200, 200),
+            DesktopRect::makeLTRB(0, 120, 100, 180),
+            3,
+            {
+                DesktopRect::makeLTRB(100, 100, 200, 120),
+                DesktopRect::makeLTRB(0, 120, 200, 180),
+                DesktopRect::makeLTRB(100, 180, 200, 200)
+            }
+        },
+        // Rectangles touching on the horizontal edge.
+        {
+            DesktopRect::makeLTRB(100, 100, 200, 200),
             DesktopRect::makeLTRB(150, 0, 250, 100),
             2,
-            {DesktopRect::makeLTRB(150, 0, 250, 100),
-             DesktopRect::makeLTRB(100, 100, 200, 200)}},
-           {DesktopRect::makeLTRB(100, 100, 200, 200),
+            {
+                DesktopRect::makeLTRB(150, 0, 250, 100),
+                DesktopRect::makeLTRB(100, 100, 200, 200)
+            }
+        },
+        {
+            DesktopRect::makeLTRB(100, 100, 200, 200),
             DesktopRect::makeLTRB(50, 0, 150, 100),
             2,
-            {DesktopRect::makeLTRB(50, 0, 150, 100),
-             DesktopRect::makeLTRB(100, 100, 200, 200)}},
-           {DesktopRect::makeLTRB(100, 100, 200, 200),
+            {
+                DesktopRect::makeLTRB(50, 0, 150, 100),
+                DesktopRect::makeLTRB(100, 100, 200, 200)
+            }
+        },
+        {
+            DesktopRect::makeLTRB(100, 100, 200, 200),
             DesktopRect::makeLTRB(120, 0, 180, 100),
             2,
-            {DesktopRect::makeLTRB(120, 0, 180, 100),
-             DesktopRect::makeLTRB(100, 100, 200, 200)}},
-
-             // Overlapping rectangles.
-             {DesktopRect::makeLTRB(100, 100, 200, 200),
-              DesktopRect::makeLTRB(50, 50, 150, 150),
-              3,
-              {DesktopRect::makeLTRB(50, 50, 150, 100),
-               DesktopRect::makeLTRB(50, 100, 200, 150),
-               DesktopRect::makeLTRB(100, 150, 200, 200)}},
-             {DesktopRect::makeLTRB(100, 100, 200, 200),
-              DesktopRect::makeLTRB(150, 50, 250, 150),
-              3,
-              {DesktopRect::makeLTRB(150, 50, 250, 100),
-               DesktopRect::makeLTRB(100, 100, 250, 150),
-               DesktopRect::makeLTRB(100, 150, 200, 200)}},
-             {DesktopRect::makeLTRB(100, 100, 200, 200),
-              DesktopRect::makeLTRB(0, 120, 150, 180),
-              3,
-              {DesktopRect::makeLTRB(100, 100, 200, 120),
-               DesktopRect::makeLTRB(0, 120, 200, 180),
-               DesktopRect::makeLTRB(100, 180, 200, 200)}},
-             {DesktopRect::makeLTRB(100, 100, 200, 200),
-              DesktopRect::makeLTRB(120, 0, 180, 150),
-              2,
-              {DesktopRect::makeLTRB(120, 0, 180, 100),
-               DesktopRect::makeLTRB(100, 100, 200, 200)}},
-             {DesktopRect::makeLTRB(100, 0, 200, 300),
-              DesktopRect::makeLTRB(0, 100, 300, 200),
-              3,
-              {DesktopRect::makeLTRB(100, 0, 200, 100),
-               DesktopRect::makeLTRB(0, 100, 300, 200),
-               DesktopRect::makeLTRB(100, 200, 200, 300)}},
-
-               // One rectangle enclosing another.
-               {DesktopRect::makeLTRB(100, 100, 200, 200),
-                DesktopRect::makeLTRB(150, 150, 180, 180),
-                1,
-                {DesktopRect::makeLTRB(100, 100, 200, 200)}},
-               {DesktopRect::makeLTRB(100, 100, 200, 200),
-                DesktopRect::makeLTRB(100, 100, 180, 180),
-                1,
-                {DesktopRect::makeLTRB(100, 100, 200, 200)}},
-               {DesktopRect::makeLTRB(100, 100, 200, 200),
-                DesktopRect::makeLTRB(150, 150, 200, 200),
-                1,
-                {DesktopRect::makeLTRB(100, 100, 200, 200)}},
+            {
+                DesktopRect::makeLTRB(120, 0, 180, 100),
+                DesktopRect::makeLTRB(100, 100, 200, 200)
+            }
+        },
+        // Overlapping rectangles.
+        {
+            DesktopRect::makeLTRB(100, 100, 200, 200),
+            DesktopRect::makeLTRB(50, 50, 150, 150),
+            3,
+            {
+                DesktopRect::makeLTRB(50, 50, 150, 100),
+                DesktopRect::makeLTRB(50, 100, 200, 150),
+                DesktopRect::makeLTRB(100, 150, 200, 200)
+            }
+        },
+        {
+            DesktopRect::makeLTRB(100, 100, 200, 200),
+            DesktopRect::makeLTRB(150, 50, 250, 150),
+            3,
+            {
+                DesktopRect::makeLTRB(150, 50, 250, 100),
+                 DesktopRect::makeLTRB(100, 100, 250, 150),
+                 DesktopRect::makeLTRB(100, 150, 200, 200)
+            }
+        },
+        {
+            DesktopRect::makeLTRB(100, 100, 200, 200),
+            DesktopRect::makeLTRB(0, 120, 150, 180),
+            3,
+            {
+                DesktopRect::makeLTRB(100, 100, 200, 120),
+                DesktopRect::makeLTRB(0, 120, 200, 180),
+                DesktopRect::makeLTRB(100, 180, 200, 200)
+            }
+        },
+        {
+            DesktopRect::makeLTRB(100, 100, 200, 200),
+            DesktopRect::makeLTRB(120, 0, 180, 150),
+            2,
+            {
+                DesktopRect::makeLTRB(120, 0, 180, 100),
+                DesktopRect::makeLTRB(100, 100, 200, 200)
+            }
+        },
+        {
+            DesktopRect::makeLTRB(100, 0, 200, 300),
+            DesktopRect::makeLTRB(0, 100, 300, 200),
+            3,
+            {
+                DesktopRect::makeLTRB(100, 0, 200, 100),
+                DesktopRect::makeLTRB(0, 100, 300, 200),
+                DesktopRect::makeLTRB(100, 200, 200, 300)
+            }
+        },
+        // One rectangle enclosing another.
+        {
+            DesktopRect::makeLTRB(100, 100, 200, 200),
+            DesktopRect::makeLTRB(150, 150, 180, 180),
+            1,
+            {
+                DesktopRect::makeLTRB(100, 100, 200, 200)
+            }
+        },
+        {
+            DesktopRect::makeLTRB(100, 100, 200, 200),
+            DesktopRect::makeLTRB(100, 100, 180, 180),
+            1,
+            {
+                DesktopRect::makeLTRB(100, 100, 200, 200)
+            }
+        },
+        {
+            DesktopRect::makeLTRB(100, 100, 200, 200),
+            DesktopRect::makeLTRB(150, 150, 200, 200),
+            1,
+            {
+                DesktopRect::makeLTRB(100, 100, 200, 200)
+            }
+        },
     };
 
     for (size_t i = 0; i < (sizeof(cases) / sizeof(Case)); ++i)
@@ -296,9 +384,12 @@ TEST(desktop_region_test, same_row)
             int pos = -1;
             for (DesktopRegion::Iterator it(r); !it.isAtEnd(); it.advance())
             {
-                EXPECT_GT(it.rect().left(), pos);
-                pos = it.rect().right();
-                std::fill_n(map + it.rect().left(), it.rect().width(), true);
+                const DesktopRect& current = it.rect();
+
+                EXPECT_GT(current.left(), pos);
+
+                pos = current.right();
+                std::fill_n(map + current.left(), current.width(), true);
             }
 
             EXPECT_TRUE(std::equal(map, map + kMapWidth, expected_map));
@@ -316,42 +407,64 @@ TEST(desktop_region_test, complex_regions)
         DesktopRect expected_rects[6];
     } cases[] =
     {
-        {3,
-         {
-             DesktopRect::makeLTRB(100, 100, 200, 200),
-             DesktopRect::makeLTRB(0, 100, 100, 200),
-             DesktopRect::makeLTRB(310, 110, 320, 120),
-         },
-         2,
-         {DesktopRect::makeLTRB(0, 100, 200, 200),
-          DesktopRect::makeLTRB(310, 110, 320, 120)}},
-        {3,
-         {DesktopRect::makeLTRB(100, 100, 200, 200),
-          DesktopRect::makeLTRB(50, 50, 150, 150),
-          DesktopRect::makeLTRB(300, 125, 350, 175)},
-         4,
-         {DesktopRect::makeLTRB(50, 50, 150, 100),
-          DesktopRect::makeLTRB(50, 100, 200, 150),
-          DesktopRect::makeLTRB(300, 125, 350, 175),
-          DesktopRect::makeLTRB(100, 150, 200, 200)}},
-        {4,
-         {DesktopRect::makeLTRB(0, 0, 30, 30),
-          DesktopRect::makeLTRB(10, 10, 40, 40),
-          DesktopRect::makeLTRB(20, 20, 50, 50),
-          DesktopRect::makeLTRB(50, 0, 65, 15)},
-         6,
-         {DesktopRect::makeLTRB(0, 0, 30, 10),
-          DesktopRect::makeLTRB(50, 0, 65, 15),
-          DesktopRect::makeLTRB(0, 10, 40, 20),
-          DesktopRect::makeLTRB(0, 20, 50, 30),
-          DesktopRect::makeLTRB(10, 30, 50, 40),
-          DesktopRect::makeLTRB(20, 40, 50, 50)}},
-        {3,
-         {DesktopRect::makeLTRB(10, 10, 40, 20),
-          DesktopRect::makeLTRB(10, 30, 40, 40),
-          DesktopRect::makeLTRB(10, 20, 40, 30)},
-         1,
-         {DesktopRect::makeLTRB(10, 10, 40, 40)}},
+        {
+            3,
+            {
+                DesktopRect::makeLTRB(100, 100, 200, 200),
+                DesktopRect::makeLTRB(0, 100, 100, 200),
+                DesktopRect::makeLTRB(310, 110, 320, 120),
+            },
+            2,
+            {
+                DesktopRect::makeLTRB(0, 100, 200, 200),
+                DesktopRect::makeLTRB(310, 110, 320, 120)
+            }
+        },
+        {
+            3,
+            {
+                DesktopRect::makeLTRB(100, 100, 200, 200),
+                DesktopRect::makeLTRB(50, 50, 150, 150),
+                DesktopRect::makeLTRB(300, 125, 350, 175)
+            },
+            4,
+            {
+                DesktopRect::makeLTRB(50, 50, 150, 100),
+                DesktopRect::makeLTRB(50, 100, 200, 150),
+                DesktopRect::makeLTRB(300, 125, 350, 175),
+                DesktopRect::makeLTRB(100, 150, 200, 200)
+            }
+        },
+        {
+            4,
+            {
+                DesktopRect::makeLTRB(0, 0, 30, 30),
+                DesktopRect::makeLTRB(10, 10, 40, 40),
+                DesktopRect::makeLTRB(20, 20, 50, 50),
+                DesktopRect::makeLTRB(50, 0, 65, 15)
+            },
+            6,
+            {
+                DesktopRect::makeLTRB(0, 0, 30, 10),
+                DesktopRect::makeLTRB(50, 0, 65, 15),
+                DesktopRect::makeLTRB(0, 10, 40, 20),
+                DesktopRect::makeLTRB(0, 20, 50, 30),
+                DesktopRect::makeLTRB(10, 30, 50, 40),
+                DesktopRect::makeLTRB(20, 40, 50, 50)
+            }
+        },
+        {
+            3,
+            {
+                DesktopRect::makeLTRB(10, 10, 40, 20),
+                DesktopRect::makeLTRB(10, 30, 40, 40),
+                DesktopRect::makeLTRB(10, 20, 40, 30)
+            },
+            1,
+            {
+                DesktopRect::makeLTRB(10, 10, 40, 40)
+            }
+        },
     };
 
     for (size_t i = 0; i < (sizeof(cases) / sizeof(Case)); ++i)
@@ -379,63 +492,103 @@ TEST(desktop_region_test, equals)
         int count;
         DesktopRect rects[4];
         int id;
-    } regions[] = {
+    } regions[] =
+    {
         // Same region with one of the rectangles 1 pixel wider/taller.
-        {2,
-         {DesktopRect::makeLTRB(0, 100, 200, 200),
-          DesktopRect::makeLTRB(310, 110, 320, 120)},
-         0},
-        {2,
-         {DesktopRect::makeLTRB(0, 100, 201, 200),
-          DesktopRect::makeLTRB(310, 110, 320, 120)},
-         1},
-        {2,
-         {DesktopRect::makeLTRB(0, 100, 200, 201),
-          DesktopRect::makeLTRB(310, 110, 320, 120)},
-         2},
-
-         // Same region with one of the rectangles shifted horizontally and
-         // vertically.
-         {4,
-          {DesktopRect::makeLTRB(0, 0, 30, 30),
-           DesktopRect::makeLTRB(10, 10, 40, 40),
-           DesktopRect::makeLTRB(20, 20, 50, 50),
-           DesktopRect::makeLTRB(50, 0, 65, 15)},
-          3},
-         {4,
-          {DesktopRect::makeLTRB(0, 0, 30, 30),
-           DesktopRect::makeLTRB(10, 10, 40, 40),
-           DesktopRect::makeLTRB(20, 20, 50, 50),
-           DesktopRect::makeLTRB(50, 1, 65, 16)},
-          4},
-         {4,
-          {DesktopRect::makeLTRB(0, 0, 30, 30),
-           DesktopRect::makeLTRB(10, 10, 40, 40),
-           DesktopRect::makeLTRB(20, 20, 50, 50),
-           DesktopRect::makeLTRB(51, 0, 66, 15)},
-          5},
-
-          // Same region defined by a different set of rectangles - one of the
-          // rectangle is split horizontally into two.
-          {3,
-           {DesktopRect::makeLTRB(100, 100, 200, 200),
-            DesktopRect::makeLTRB(50, 50, 150, 150),
-            DesktopRect::makeLTRB(300, 125, 350, 175)},
-           6},
-          {4,
-           {DesktopRect::makeLTRB(100, 100, 200, 200),
-            DesktopRect::makeLTRB(50, 50, 100, 150),
-            DesktopRect::makeLTRB(100, 50, 150, 150),
-            DesktopRect::makeLTRB(300, 125, 350, 175)},
-           6},
-
-           // Rectangle region defined by a set of rectangles that merge into one.
-           {3,
-            {DesktopRect::makeLTRB(10, 10, 40, 20),
-             DesktopRect::makeLTRB(10, 30, 40, 40),
-             DesktopRect::makeLTRB(10, 20, 40, 30)},
-            7},
-           {1, {DesktopRect::makeLTRB(10, 10, 40, 40)}, 7},
+        {
+            2,
+            {
+                DesktopRect::makeLTRB(0, 100, 200, 200),
+                DesktopRect::makeLTRB(310, 110, 320, 120)
+            },
+            0
+        },
+        {
+            2,
+            {
+                DesktopRect::makeLTRB(0, 100, 201, 200),
+                DesktopRect::makeLTRB(310, 110, 320, 120)
+            },
+            1
+        },
+        {
+            2,
+            {
+                DesktopRect::makeLTRB(0, 100, 200, 201),
+                DesktopRect::makeLTRB(310, 110, 320, 120)
+            },
+            2
+        },
+        // Same region with one of the rectangles shifted horizontally and
+        // vertically.
+        {
+            4,
+            {
+                DesktopRect::makeLTRB(0, 0, 30, 30),
+                DesktopRect::makeLTRB(10, 10, 40, 40),
+                DesktopRect::makeLTRB(20, 20, 50, 50),
+                DesktopRect::makeLTRB(50, 0, 65, 15)
+            },
+            3
+        },
+        {
+            4,
+            {
+                DesktopRect::makeLTRB(0, 0, 30, 30),
+                DesktopRect::makeLTRB(10, 10, 40, 40),
+                DesktopRect::makeLTRB(20, 20, 50, 50),
+                DesktopRect::makeLTRB(50, 1, 65, 16)
+            },
+            4
+        },
+        {
+            4,
+            {
+                DesktopRect::makeLTRB(0, 0, 30, 30),
+                DesktopRect::makeLTRB(10, 10, 40, 40),
+                DesktopRect::makeLTRB(20, 20, 50, 50),
+                DesktopRect::makeLTRB(51, 0, 66, 15)
+            },
+            5
+        },
+        // Same region defined by a different set of rectangles - one of the
+        // rectangle is split horizontally into two.
+        {
+            3,
+            {
+                DesktopRect::makeLTRB(100, 100, 200, 200),
+                DesktopRect::makeLTRB(50, 50, 150, 150),
+                DesktopRect::makeLTRB(300, 125, 350, 175)
+            },
+            6
+        },
+        {
+            4,
+            {
+                DesktopRect::makeLTRB(100, 100, 200, 200),
+                DesktopRect::makeLTRB(50, 50, 100, 150),
+                DesktopRect::makeLTRB(100, 50, 150, 150),
+                DesktopRect::makeLTRB(300, 125, 350, 175)
+            },
+            6
+        },
+        // Rectangle region defined by a set of rectangles that merge into one.
+        {
+            3,
+            {
+                DesktopRect::makeLTRB(10, 10, 40, 20),
+                DesktopRect::makeLTRB(10, 30, 40, 40),
+                DesktopRect::makeLTRB(10, 20, 40, 30)
+            },
+            7
+        },
+        {
+            1,
+            {
+                DesktopRect::makeLTRB(10, 10, 40, 40)
+            },
+            7
+        },
     };
     int kTotalRegions = sizeof(regions) / sizeof(Region);
 
@@ -466,18 +619,24 @@ TEST(desktop_region_test, translate)
         DesktopRect expected_rects[5];
     } cases[] =
     {
-        {3,
-         {DesktopRect::makeLTRB(0, 0, 30, 30),
-          DesktopRect::makeLTRB(10, 10, 40, 40),
-          DesktopRect::makeLTRB(20, 20, 50, 50)},
-         3,
-         5,
-         5,
-         {DesktopRect::makeLTRB(3, 5, 33, 15),
-          DesktopRect::makeLTRB(3, 15, 43, 25),
-          DesktopRect::makeLTRB(3, 25, 53, 35),
-          DesktopRect::makeLTRB(13, 35, 53, 45),
-          DesktopRect::makeLTRB(23, 45, 53, 55)}},
+        {
+            3,
+            {
+                DesktopRect::makeLTRB(0, 0, 30, 30),
+                DesktopRect::makeLTRB(10, 10, 40, 40),
+                DesktopRect::makeLTRB(20, 20, 50, 50)
+            },
+            3,
+            5,
+            5,
+            {
+                DesktopRect::makeLTRB(3, 5, 33, 15),
+                DesktopRect::makeLTRB(3, 15, 43, 25),
+                DesktopRect::makeLTRB(3, 25, 53, 35),
+                DesktopRect::makeLTRB(13, 35, 53, 45),
+                DesktopRect::makeLTRB(23, 45, 53, 55)
+            }
+        },
     };
 
     for (size_t i = 0; i < (sizeof(cases) / sizeof(Case)); ++i)
@@ -502,42 +661,77 @@ TEST(desktop_region_test, intersect)
         DesktopRect expected_rects[5];
     } cases[] =
     {
-        {1,
-         {DesktopRect::makeLTRB(0, 0, 100, 100)},
-         1,
-         {DesktopRect::makeLTRB(50, 50, 150, 150)},
-         1,
-         {DesktopRect::makeLTRB(50, 50, 100, 100)}},
-
-        {1,
-         {DesktopRect::makeLTRB(100, 0, 200, 300)},
-         1,
-         {DesktopRect::makeLTRB(0, 100, 300, 200)},
-         1,
-         {DesktopRect::makeLTRB(100, 100, 200, 200)}},
-
-        {1,
-         {DesktopRect::makeLTRB(0, 0, 100, 100)},
-         2,
-         {DesktopRect::makeLTRB(50, 10, 150, 30),
-          DesktopRect::makeLTRB(50, 30, 160, 50)},
-         1,
-         {DesktopRect::makeLTRB(50, 10, 100, 50)}},
-
-        {1,
-         {DesktopRect::makeLTRB(0, 0, 100, 100)},
-         2,
-         {DesktopRect::makeLTRB(50, 10, 150, 30),
-          DesktopRect::makeLTRB(50, 30, 90, 50)},
-         2,
-         {DesktopRect::makeLTRB(50, 10, 100, 30),
-          DesktopRect::makeLTRB(50, 30, 90, 50)}},
-        {1,
-         {DesktopRect::makeLTRB(0, 0, 100, 100)},
-         1,
-         {DesktopRect::makeLTRB(100, 50, 200, 200)},
-         0,
-         {}},
+        {
+            1,
+            {
+                DesktopRect::makeLTRB(0, 0, 100, 100)
+            },
+            1,
+            {
+                DesktopRect::makeLTRB(50, 50, 150, 150)
+            },
+            1,
+            {
+                DesktopRect::makeLTRB(50, 50, 100, 100)
+            }
+        },
+        {
+            1,
+            {
+                DesktopRect::makeLTRB(100, 0, 200, 300)
+            },
+            1,
+            {
+                DesktopRect::makeLTRB(0, 100, 300, 200)
+            },
+            1,
+            {
+                DesktopRect::makeLTRB(100, 100, 200, 200)
+            }
+        },
+        {
+            1,
+            {
+                DesktopRect::makeLTRB(0, 0, 100, 100)
+            },
+            2,
+            {
+                DesktopRect::makeLTRB(50, 10, 150, 30),
+                DesktopRect::makeLTRB(50, 30, 160, 50)
+            },
+            1,
+            {
+                DesktopRect::makeLTRB(50, 10, 100, 50)
+            }
+        },
+        {
+            1,
+            {
+                DesktopRect::makeLTRB(0, 0, 100, 100)
+            },
+            2,
+            {
+                DesktopRect::makeLTRB(50, 10, 150, 30),
+                DesktopRect::makeLTRB(50, 30, 90, 50)
+            },
+            2,
+            {
+                DesktopRect::makeLTRB(50, 10, 100, 30),
+                DesktopRect::makeLTRB(50, 30, 90, 50)
+            }
+        },
+        {
+            1,
+            {
+                DesktopRect::makeLTRB(0, 0, 100, 100)
+            },
+            1,
+            {
+                DesktopRect::makeLTRB(100, 50, 200, 200)
+            },
+            0,
+            {}
+        },
     };
 
     for (size_t i = 0; i < (sizeof(cases) / sizeof(Case)); ++i)
@@ -567,122 +761,215 @@ TEST(desktop_region_test, subtract)
     } cases[] =
     {
         // Subtract one rect from another.
-        {1,
-         {DesktopRect::makeLTRB(0, 0, 100, 100)},
-         1,
-         {DesktopRect::makeLTRB(50, 50, 150, 150)},
-         2,
-         {DesktopRect::makeLTRB(0, 0, 100, 50),
-          DesktopRect::makeLTRB(0, 50, 50, 100)}},
-
-        {1,
-         {DesktopRect::makeLTRB(0, 0, 100, 100)},
-         1,
-         {DesktopRect::makeLTRB(-50, -50, 50, 50)},
-         2,
-         {DesktopRect::makeLTRB(50, 0, 100, 50),
-          DesktopRect::makeLTRB(0, 50, 100, 100)}},
-
-        {1,
-         {DesktopRect::makeLTRB(0, 0, 100, 100)},
-         1,
-         {DesktopRect::makeLTRB(-50, 50, 50, 150)},
-         2,
-         {DesktopRect::makeLTRB(0, 0, 100, 50),
-          DesktopRect::makeLTRB(50, 50, 100, 100)}},
-
-        {1,
-         {DesktopRect::makeLTRB(0, 0, 100, 100)},
-         1,
-         {DesktopRect::makeLTRB(50, 50, 150, 70)},
-         3,
-         {DesktopRect::makeLTRB(0, 0, 100, 50),
-          DesktopRect::makeLTRB(0, 50, 50, 70),
-          DesktopRect::makeLTRB(0, 70, 100, 100)}},
-
-        {1,
-         {DesktopRect::makeLTRB(0, 0, 100, 100)},
-         1,
-         {DesktopRect::makeLTRB(50, 50, 70, 70)},
-         4,
-         {DesktopRect::makeLTRB(0, 0, 100, 50),
-          DesktopRect::makeLTRB(0, 50, 50, 70),
-          DesktopRect::makeLTRB(70, 50, 100, 70),
-          DesktopRect::makeLTRB(0, 70, 100, 100)}},
-
-          // Empty result.
-          {1,
-           {DesktopRect::makeLTRB(0, 0, 100, 100)},
-           1,
-           {DesktopRect::makeLTRB(0, 0, 100, 100)},
-           0,
-           {}},
-
-          {1,
-           {DesktopRect::makeLTRB(0, 0, 100, 100)},
-           1,
-           {DesktopRect::makeLTRB(-10, -10, 110, 110)},
-           0,
-           {}},
-
-          {2,
-           {DesktopRect::makeLTRB(0, 0, 100, 100),
-            DesktopRect::makeLTRB(50, 50, 150, 150)},
-           2,
-           {DesktopRect::makeLTRB(0, 0, 100, 100),
-            DesktopRect::makeLTRB(50, 50, 150, 150)},
-           0,
-           {}},
-
-           // One rect out of disjoint set.
-           {3,
-            {DesktopRect::makeLTRB(0, 0, 10, 10),
-             DesktopRect::makeLTRB(20, 20, 30, 30),
-             DesktopRect::makeLTRB(40, 0, 50, 10)},
+        {
             1,
-            {DesktopRect::makeLTRB(20, 20, 30, 30)},
+            {
+                DesktopRect::makeLTRB(0, 0, 100, 100)
+            },
+            1,
+            {
+                DesktopRect::makeLTRB(50, 50, 150, 150)
+            },
             2,
-            {DesktopRect::makeLTRB(0, 0, 10, 10),
-             DesktopRect::makeLTRB(40, 0, 50, 10)}},
-
-             // Row merging.
-             {3,
-              {DesktopRect::makeLTRB(0, 0, 100, 50),
-               DesktopRect::makeLTRB(0, 50, 150, 70),
-               DesktopRect::makeLTRB(0, 70, 100, 100)},
-              1,
-              {DesktopRect::makeLTRB(100, 50, 150, 70)},
-              1,
-              {DesktopRect::makeLTRB(0, 0, 100, 100)}},
-
-              // No-op subtraction.
-              {1,
-               {DesktopRect::makeLTRB(0, 0, 100, 100)},
-               1,
-               {DesktopRect::makeLTRB(100, 0, 200, 100)},
-               1,
-               {DesktopRect::makeLTRB(0, 0, 100, 100)}},
-
-              {1,
-               {DesktopRect::makeLTRB(0, 0, 100, 100)},
-               1,
-               {DesktopRect::makeLTRB(-100, 0, 0, 100)},
-               1,
-               {DesktopRect::makeLTRB(0, 0, 100, 100)}},
-
-              {1,
-               {DesktopRect::makeLTRB(0, 0, 100, 100)},
-               1,
-               {DesktopRect::makeLTRB(0, 100, 0, 200)},
-               1,
-               {DesktopRect::makeLTRB(0, 0, 100, 100)}},
-
-              {1,
-               {DesktopRect::makeLTRB(0, 0, 100, 100)},
-               1,
-               {DesktopRect::makeLTRB(0, -100, 100, 0)},
-               1,
-               {DesktopRect::makeLTRB(0, 0, 100, 100)}},
+            {
+                DesktopRect::makeLTRB(0, 0, 100, 50),
+                DesktopRect::makeLTRB(0, 50, 50, 100)
+            }
+        },
+        {
+            1,
+            {
+                DesktopRect::makeLTRB(0, 0, 100, 100)
+            },
+            1,
+            {
+                DesktopRect::makeLTRB(-50, -50, 50, 50)
+            },
+            2,
+            {
+                DesktopRect::makeLTRB(50, 0, 100, 50),
+                DesktopRect::makeLTRB(0, 50, 100, 100)
+            }
+        },
+        {
+            1,
+            {
+                DesktopRect::makeLTRB(0, 0, 100, 100)
+            },
+            1,
+            {
+                DesktopRect::makeLTRB(-50, 50, 50, 150)
+            },
+            2,
+            {
+                DesktopRect::makeLTRB(0, 0, 100, 50),
+                DesktopRect::makeLTRB(50, 50, 100, 100)
+            }
+        },
+        {
+            1,
+            {
+                DesktopRect::makeLTRB(0, 0, 100, 100)
+            },
+            1,
+            {
+                DesktopRect::makeLTRB(50, 50, 150, 70)
+            },
+            3,
+            {
+                DesktopRect::makeLTRB(0, 0, 100, 50),
+                DesktopRect::makeLTRB(0, 50, 50, 70),
+                DesktopRect::makeLTRB(0, 70, 100, 100)
+            }
+        },
+        {
+            1,
+            {
+                DesktopRect::makeLTRB(0, 0, 100, 100)
+            },
+            1,
+            {
+                DesktopRect::makeLTRB(50, 50, 70, 70)
+            },
+            4,
+            {
+                DesktopRect::makeLTRB(0, 0, 100, 50),
+                DesktopRect::makeLTRB(0, 50, 50, 70),
+                DesktopRect::makeLTRB(70, 50, 100, 70),
+                DesktopRect::makeLTRB(0, 70, 100, 100)
+            }
+        },
+        // Empty result.
+        {
+            1,
+            {
+                DesktopRect::makeLTRB(0, 0, 100, 100)
+            },
+            1,
+            {
+                DesktopRect::makeLTRB(0, 0, 100, 100)
+            },
+            0,
+            {}
+        },
+        {
+            1,
+            {
+                DesktopRect::makeLTRB(0, 0, 100, 100)
+            },
+            1,
+            {
+                DesktopRect::makeLTRB(-10, -10, 110, 110)
+            },
+            0,
+            {}
+        },
+        {
+            2,
+            {
+                DesktopRect::makeLTRB(0, 0, 100, 100),
+                DesktopRect::makeLTRB(50, 50, 150, 150)
+            },
+            2,
+            {
+                DesktopRect::makeLTRB(0, 0, 100, 100),
+                DesktopRect::makeLTRB(50, 50, 150, 150)
+            },
+            0,
+            {}
+        },
+        // One rect out of disjoint set.
+        {
+            3,
+            {
+                DesktopRect::makeLTRB(0, 0, 10, 10),
+                DesktopRect::makeLTRB(20, 20, 30, 30),
+                DesktopRect::makeLTRB(40, 0, 50, 10)
+            },
+            1,
+            {
+                DesktopRect::makeLTRB(20, 20, 30, 30)
+            },
+            2,
+            {
+                DesktopRect::makeLTRB(0, 0, 10, 10),
+                DesktopRect::makeLTRB(40, 0, 50, 10)
+            }
+        },
+        // Row merging.
+        {
+            3,
+            {
+                DesktopRect::makeLTRB(0, 0, 100, 50),
+                DesktopRect::makeLTRB(0, 50, 150, 70),
+                DesktopRect::makeLTRB(0, 70, 100, 100)
+            },
+            1,
+            {
+                DesktopRect::makeLTRB(100, 50, 150, 70)
+            },
+            1,
+            {
+                DesktopRect::makeLTRB(0, 0, 100, 100)
+            }
+        },
+        // No-op subtraction.
+        {
+            1,
+            {
+                DesktopRect::makeLTRB(0, 0, 100, 100)
+            },
+            1,
+            {
+                DesktopRect::makeLTRB(100, 0, 200, 100)
+            },
+            1,
+            {
+                DesktopRect::makeLTRB(0, 0, 100, 100)
+            }
+        },
+        {
+            1,
+            {
+                DesktopRect::makeLTRB(0, 0, 100, 100)
+            },
+            1,
+            {
+                DesktopRect::makeLTRB(-100, 0, 0, 100)
+            },
+            1,
+            {
+                DesktopRect::makeLTRB(0, 0, 100, 100)
+            }
+        },
+        {
+            1,
+            {
+                DesktopRect::makeLTRB(0, 0, 100, 100)
+            },
+            1,
+            {
+                DesktopRect::makeLTRB(0, 100, 0, 200)
+            },
+            1,
+            {
+                DesktopRect::makeLTRB(0, 0, 100, 100)
+            }
+        },
+        {
+            1,
+            {
+                DesktopRect::makeLTRB(0, 0, 100, 100)
+            },
+            1,
+            {
+                DesktopRect::makeLTRB(0, -100, 100, 0)
+            },
+            1,
+            {
+                DesktopRect::makeLTRB(0, 0, 100, 100)
+            }
+        },
     };
 
     for (size_t i = 0; i < (sizeof(cases) / sizeof(Case)); ++i)
@@ -767,9 +1054,12 @@ TEST(desktop_region_test, subtract_rect_on_same_row)
             int pos = -1;
             for (DesktopRegion::Iterator it(r); !it.isAtEnd(); it.advance())
             {
-                EXPECT_GT(it.rect().left(), pos);
-                pos = it.rect().right();
-                std::fill_n(map + it.rect().left(), it.rect().width(), true);
+                const DesktopRect& current = it.rect();
+
+                EXPECT_GT(current.left(), pos);
+
+                pos = current.right();
+                std::fill_n(map + current.left(), current.width(), true);
             }
 
             EXPECT_TRUE(std::equal(map, map + kMapWidth, expected_map));
@@ -846,9 +1136,12 @@ TEST(desktop_region_test, subtract_rect_on_same_col)
             int pos = -1;
             for (DesktopRegion::Iterator it(r); !it.isAtEnd(); it.advance())
             {
-                EXPECT_GT(it.rect().top(), pos);
-                pos = it.rect().bottom();
-                std::fill_n(map + it.rect().top(), it.rect().height(), true);
+                const DesktopRect& current = it.rect();
+
+                EXPECT_GT(current.top(), pos);
+
+                pos = current.bottom();
+                std::fill_n(map + current.top(), current.height(), true);
             }
 
             for (int j = 0; j < kMapHeight; j++)
