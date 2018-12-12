@@ -75,6 +75,9 @@ public:
     bool checkUpdates() const;
     void setCheckUpdates(bool check);
 
+    QString updateServer() const;
+    void setUpdateServer(const QString& server);
+
 private:
     QSettings settings_;
 

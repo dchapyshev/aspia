@@ -63,7 +63,10 @@ list(APPEND SOURCE_CONSOLE
     mru.h
     open_address_book_dialog.cc
     open_address_book_dialog.h
-    open_address_book_dialog.ui)
+    open_address_book_dialog.ui
+    update_settings_dialog.cc
+    update_settings_dialog.h
+    update_settings_dialog.ui)
 
 list(APPEND SOURCE_CONSOLE_RESOURCES
     resources/console.qrc)

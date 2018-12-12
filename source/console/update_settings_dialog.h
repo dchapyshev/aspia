@@ -16,10 +16,30 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "updater/updater.h"
+#ifndef ASPIA_CONSOLE__UPDATE_SETTINGS_DIALOG_H_
+#define ASPIA_CONSOLE__UPDATE_SETTINGS_DIALOG_H_
+
+#include <QDialog>
+
+#include "base/macros_magic.h"
+#include "ui_update_settings_dialog.h"
 
 namespace aspia {
 
+class UpdateSettingsDialog : public QDialog
+{
+    Q_OBJECT
 
+public:
+    UpdateSettingsDialog(QWidget* parent = nullptr);
+    ~UpdateSettingsDialog();
+
+private:
+    Ui::UpdateSettingsDialog ui;
+
+    DISALLOW_COPY_AND_ASSIGN(UpdateSettingsDialog);
+};
 
 } // namespace aspia
+
+#endif // ASPIA_CONSOLE__UPDATE_SETTINGS_DIALOG_H_

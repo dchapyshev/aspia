@@ -443,3 +443,8 @@ std::ostream& std::operator<<(std::ostream& out, const wchar_t* wstr)
 {
     return out << (wstr ? aspia::UTF8fromUTF16(wstr) : std::string());
 }
+
+std::ostream& operator<<(std::ostream& out, const QString& qstr)
+{
+    return out << qstr.toStdString();
+}

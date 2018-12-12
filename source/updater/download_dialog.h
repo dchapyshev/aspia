@@ -16,18 +16,35 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_UPDATER__UPDATER_H_
-#define ASPIA_UPDATER__UPDATER_H_
+#ifndef ASPIA_UPDATER__DOWNLOAD_DIALOG_H_
+#define ASPIA_UPDATER__DOWNLOAD_DIALOG_H_
+
+#include <QFile>
+#include <QNetworkAccessManager>
+#include <QUrl>
+
+#include "base/macros_magic.h"
+#include "ui_download_dialog.h"
 
 namespace aspia {
 
-class Updater
+class DownloadDialog : public QDialog
 {
+    Q_OBJECT
+
 public:
+    DownloadDialog(const QUrl& url, QFile& file, QWidget* parent = nullptr);
+    ~DownloadDialog() = default;
 
 private:
+    Ui::DownloadDialog ui;
+
+    QNetworkAccessManager network_manager_;
+    QFile& file_;
+
+    DISALLOW_COPY_AND_ASSIGN(DownloadDialog);
 };
 
 } // namespace aspia
 
-#endif // ASPIA_UPDATER__UPDATER_H_
+#endif // ASPIA_UPDATER__DOWNLOAD_DIALOG_H_

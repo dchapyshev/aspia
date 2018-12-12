@@ -56,9 +56,6 @@ public:
     std::string updateServer() const;
     void setUpdateServer(const std::string& server);
 
-    bool customUpdateServer() const;
-    void setCustomUpdateServer(bool use);
-
     bool remoteUpdate() const;
     void setRemoteUpdate(bool allow);
 

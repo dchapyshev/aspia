@@ -22,7 +22,7 @@
 #include <QDialog>
 
 #include "base/macros_magic.h"
-#include "updater/update_checker.h"
+#include "updater/update_info.h"
 
 namespace Ui {
 class UpdateDialog;
@@ -32,14 +32,23 @@ namespace aspia {
 
 class UpdateDialog : public QDialog
 {
+    Q_OBJECT
+
 public:
-    explicit UpdateDialog(QWidget* parent = nullptr);
+    UpdateDialog(const QString& update_server,
+                 const QString& package_name,
+                 QWidget* parent = nullptr);
+    UpdateDialog(const UpdateInfo& update_info, QWidget* parent = nullptr);
     ~UpdateDialog();
 
-private:
-    std::unique_ptr<Ui::UpdateDialog> ui;
+private slots:
+    void onUpdateNow();
 
-    UpdateChecker checker_;
+private:
+    void initialize();
+
+    std::unique_ptr<Ui::UpdateDialog> ui;
+    UpdateInfo update_info_;
 
     DISALLOW_COPY_AND_ASSIGN(UpdateDialog);
 };

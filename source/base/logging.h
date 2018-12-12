@@ -19,6 +19,8 @@
 #ifndef ASPIA_BASE__LOGGING_H_
 #define ASPIA_BASE__LOGGING_H_
 
+#include <QString>
+
 #include <sstream>
 #include <type_traits>
 #include <utility>
@@ -644,6 +646,8 @@ inline std::ostream& operator<<(std::ostream& out, const std::wstring& wstr)
 }
 
 } // namespace std
+
+std::ostream& operator<<(std::ostream& out, const QString& qstr);
 
 // The NOTIMPLEMENTED() macro annotates codepaths which have not been implemented yet. If output
 // spam is a serious concern, NOTIMPLEMENTED_LOG_ONCE can be used.

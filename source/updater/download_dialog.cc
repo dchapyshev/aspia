@@ -16,56 +16,64 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "updater/update_checker.h"
+#include "updater/download_dialog.h"
 
-#include <QNetworkRequest>
+#include <QAbstractButton>
+#include <QFile>
+#include <QMessageBox>
 #include <QNetworkReply>
-#include <QUrlQuery>
-
-#include "base/logging.h"
-#include "build/version.h"
 
 namespace aspia {
 
-UpdateChecker::UpdateChecker(QObject* parent)
-    : QObject(parent),
-      network_manager_(this)
+DownloadDialog::DownloadDialog(const QUrl& url, QFile& file, QWidget* parent)
+    : QDialog(parent),
+      network_manager_(this),
+      file_(file)
 {
+    ui.setupUi(this);
+
+    connect(ui.button_box, &QDialogButtonBox::clicked, [this](QAbstractButton* /* button */)
+    {
+        reject();
+        close();
+    });
+
     // Only "http"->"http", "http"->"https" or "https"->"https" redirects are allowed.
     network_manager_.setRedirectPolicy(QNetworkRequest::NoLessSafeRedirectPolicy);
 
     connect(&network_manager_, &QNetworkAccessManager::finished, [this](QNetworkReply* reply)
     {
+        reject();
+
         if (reply->error())
         {
-            LOG(LS_WARNING) << "Error checking for updates: " << reply->errorString();
-            emit finished(UpdateInfo());
+            QMessageBox::warning(this,
+                                 tr("Warning"),
+                                 tr("An error occurred while downloading the update: %1.")
+                                    .arg(reply->errorString()),
+                                 QMessageBox::Ok);
         }
         else
         {
-            emit finished(UpdateInfo::fromXml(reply->readAll()));
+            file_.write(reply->readAll());
+            accept();
         }
 
         reply->deleteLater();
+        close();
     });
-}
 
-UpdateChecker::~UpdateChecker() = default;
+    QNetworkReply* reply = network_manager_.get(QNetworkRequest(url));
 
-void UpdateChecker::checkForUpdates(const QString& update_server, const QString& package_name)
-{
-    QVersionNumber current_version(ASPIA_VERSION_MAJOR,
-                                   ASPIA_VERSION_MINOR,
-                                   ASPIA_VERSION_PATCH);
-    QUrl url(update_server);
-
-    url.setPath("/update.php");
-    url.setQuery(QUrlQuery(
-        QString("package=%1&version=%2")
-        .arg(package_name)
-        .arg(current_version.toString())));
-
-    network_manager_.get(QNetworkRequest(url));
+    connect(reply, &QNetworkReply::downloadProgress,
+            [this](qint64 bytes_received, qint64 bytes_total)
+    {
+        if (bytes_total != 0)
+        {
+            int percentage = (bytes_received * 100) / bytes_total;
+            ui.progress_bar->setValue(percentage);
+        }
+    });
 }
 
 } // namespace aspia

@@ -19,14 +19,16 @@
 add_subdirectory(translations)
 
 list(APPEND SOURCE_UPDATER
-    update.h
+    download_dialog.cc
+    download_dialog.h
+    download_dialog.ui
     update_checker.cc
     update_checker.h
     update_dialog.cc
     update_dialog.h
     update_dialog.ui
-    updater.cc
-    updater.h)
+    update_info.cc
+    update_info.h)
 
 list(APPEND SOURCE_UPDATER_RESOURCES
     resources/updater.qrc)

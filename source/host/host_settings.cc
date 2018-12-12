@@ -271,16 +271,6 @@ void HostSettings::setUpdateServer(const std::string& server)
     tree_.put("update_server", server);
 }
 
-bool HostSettings::customUpdateServer() const
-{
-    return tree_.get<bool>("custom_update_server", false);
-}
-
-void HostSettings::setCustomUpdateServer(bool use)
-{
-    tree_.put("custom_update_server", use);
-}
-
 bool HostSettings::remoteUpdate() const
 {
     return tree_.get<bool>("remote_update", true);

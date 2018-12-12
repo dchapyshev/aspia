@@ -19,13 +19,12 @@
 #ifndef ASPIA_UPDATER__UPDATE_CHECKER_H_
 #define ASPIA_UPDATER__UPDATE_CHECKER_H_
 
-#include <QObject>
-
-#include <memory>
-#include <string>
+#include <QNetworkAccessManager>
 
 #include "base/macros_magic.h"
-#include "updater/update.h"
+#include "updater/update_info.h"
+
+class QSslError;
 
 namespace aspia {
 
@@ -37,12 +36,14 @@ public:
     explicit UpdateChecker(QObject* parent = nullptr);
     ~UpdateChecker();
 
-    void checkForUpdates(const std::string& url);
+    void checkForUpdates(const QString& update_server, const QString& package_name);
 
 signals:
-    void updateAvailable(const Update& update);
+    void finished(const UpdateInfo& update_info);
 
 private:
+    QNetworkAccessManager network_manager_;
+
     DISALLOW_COPY_AND_ASSIGN(UpdateChecker);
 };
 

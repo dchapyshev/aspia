@@ -18,26 +18,151 @@
 
 #include "updater/update_dialog.h"
 
+#include <QMessageBox>
+#include <QTemporaryFile>
+
+#include "base/win/process_util.h"
 #include "build/version.h"
+#include "updater/download_dialog.h"
+#include "updater/update_checker.h"
 #include "ui_update_dialog.h"
 
 namespace aspia {
 
-UpdateDialog::UpdateDialog(QWidget* parent)
+namespace {
+
+QString makeUrl(const QUrl& url)
+{
+    return QString("<a href='%1'>%1</a>").arg(url.toString());
+}
+
+} // namespace
+
+UpdateDialog::UpdateDialog(const QString& update_server,
+                           const QString& package_name,
+                           QWidget* parent)
+    : QDialog(parent),
+      ui(std::make_unique<Ui::UpdateDialog>())
+{
+    initialize();
+
+    UpdateChecker* update_checher = new UpdateChecker(this);
+
+    connect(update_checher, &UpdateChecker::finished,
+            [this](const UpdateInfo& update_info)
+    {
+        QVersionNumber version = update_info.version();
+
+        if (version.isNull())
+        {
+            ui->label_available->setText(tr("Unknown"));
+            ui->edit_description->setText(tr("Error retrieving update information."));
+        }
+        else
+        {
+            QVersionNumber current_version(ASPIA_VERSION_MAJOR,
+                                           ASPIA_VERSION_MINOR,
+                                           ASPIA_VERSION_PATCH);
+            if (version > current_version)
+            {
+                ui->label_available->setText(version.toString());
+                ui->edit_description->setText(update_info.description());
+                ui->label_url->setText(makeUrl(update_info.url()));
+                ui->button_update->setEnabled(true);
+            }
+            else
+            {
+                ui->label_available->setText(version.toString());
+                ui->edit_description->setText(tr("No updates available."));
+            }
+        }
+
+        update_info_ = update_info;
+    });
+
+    connect(update_checher, &UpdateChecker::finished,
+            update_checher, &UpdateChecker::deleteLater);
+
+    ui->label_available->setText(tr("Receiving information..."));
+    update_checher->checkForUpdates(update_server, package_name);
+}
+
+UpdateDialog::UpdateDialog(const UpdateInfo& update_info, QWidget* parent)
     : QDialog(parent),
       ui(std::make_unique<Ui::UpdateDialog>()),
-      checker_(this)
+      update_info_(update_info)
 {
-    ui->setupUi(this);
+    initialize();
 
-    ui->label_current->setText(QString("%1.%2.%3")
-                               .arg(ASPIA_VERSION_MAJOR)
-                               .arg(ASPIA_VERSION_MINOR)
-                               .arg(ASPIA_VERSION_PATCH));
-
-    checker_.checkForUpdates("");
+    ui->label_available->setText(update_info_.version().toString());
+    ui->label_url->setText(makeUrl(update_info_.url()));
+    ui->edit_description->setText(update_info_.description());
+    ui->button_update->setEnabled(true);
 }
 
 UpdateDialog::~UpdateDialog() = default;
+
+void UpdateDialog::onUpdateNow()
+{
+    if (QMessageBox::question(
+        this,
+        tr("Confirmation"),
+        tr("An update will be downloaded. "
+           "After the download is complete, the application will automatically close. "
+           "All unsaved data will be lost.<br/>Continue?"),
+        QMessageBox::Yes,
+        QMessageBox::No) == QMessageBox::Yes)
+    {
+        QTemporaryFile file(QLatin1String("aspia"));
+        if (!file.open())
+        {
+            QMessageBox::warning(this,
+                                 tr("Warning"),
+                                 tr("An error occurred while downloading the update: %1.")
+                                 .arg(file.errorString()),
+                                 QMessageBox::Ok);
+        }
+        else
+        {
+            int result = DownloadDialog(update_info_.url(), file, this).exec();
+
+            if (result == DownloadDialog::Accepted)
+                file.setAutoRemove(false);
+
+            file.close();
+
+            // If the download is successfully completed, then run the installer.
+            if (result == DownloadDialog::Accepted)
+            {
+                if (executeProcess(QLatin1String("msiexec.exe"),
+                                   QStringList() << QLatin1String("/update") << file.fileName(),
+                                   ProcessExecuteMode::ELEVATE))
+                {
+                    // If the process is successfully launched, then the application is terminated.
+                    QCoreApplication::quit();
+                }
+                else
+                {
+                    // If the update fails, delete the temporary file.
+                    QFile::remove(file.fileName());
+                }
+            }
+        }
+    }
+}
+
+void UpdateDialog::initialize()
+{
+    ui->setupUi(this);
+
+    connect(ui->button_update, &QPushButton::released, this, &UpdateDialog::onUpdateNow);
+    connect(ui->button_close, &QPushButton::released, this, &UpdateDialog::close);
+
+    QVersionNumber current_version(ASPIA_VERSION_MAJOR,
+                                   ASPIA_VERSION_MINOR,
+                                   ASPIA_VERSION_PATCH);
+
+    ui->label_current->setText(current_version.toString());
+}
 
 } // namespace aspia

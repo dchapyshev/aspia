@@ -21,6 +21,7 @@
 
 #include "common/locale_loader.h"
 #include "console/mru.h"
+#include "updater/update_checker.h"
 #include "protocol/address_book.pb.h"
 #include "ui_console_window.h"
 
@@ -80,6 +81,9 @@ protected:
     // QMainWindow implementation.
     void changeEvent(QEvent* event) override;
     void closeEvent(QCloseEvent* event) override;
+
+private slots:
+    void onUpdateChecked(const UpdateInfo& update_info);
 
 private:
     void createLanguageMenu(const QString& current_locale);

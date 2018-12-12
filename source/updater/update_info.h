@@ -16,21 +16,33 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_UPDATER__UPDATE_H_
-#define ASPIA_UPDATER__UPDATE_H_
+#ifndef ASPIA_UPDATER__UPDATE_INFO_H_
+#define ASPIA_UPDATER__UPDATE_INFO_H_
 
-#include <string>
+#include <QString>
+#include <QUrl>
+#include <QVersionNumber>
 
 namespace aspia {
 
-struct Update
+class UpdateInfo
 {
-    uint32_t major;
-    uint32_t minor;
-    uint32_t patch;
-    uint32_t build;
-    std::string description;
-    std::string url;
+public:
+    UpdateInfo() = default;
+    UpdateInfo(const UpdateInfo& other) = default;
+    UpdateInfo& operator=(const UpdateInfo& other) = default;
+    ~UpdateInfo() = default;
+
+    static UpdateInfo fromXml(const QByteArray& buffer);
+
+    QVersionNumber version() const { return version_; }
+    QString description() const { return description_; }
+    QUrl url() const { return url_; }
+
+private:
+    QVersionNumber version_;
+    QString description_;
+    QUrl url_;
 };
 
 } // namespace aspia

@@ -20,6 +20,8 @@
 
 #include <QDir>
 
+#include "build/build_config.h"
+
 namespace aspia {
 
 ConsoleSettings::ConsoleSettings()
@@ -174,6 +176,17 @@ bool ConsoleSettings::checkUpdates() const
 void ConsoleSettings::setCheckUpdates(bool check)
 {
     settings_.setValue(QStringLiteral("check_updates"), check);
+}
+
+QString ConsoleSettings::updateServer() const
+{
+    return settings_.value(QStringLiteral("update_server"), DEFAULT_UPDATE_SERVER)
+        .toString().toLower();
+}
+
+void ConsoleSettings::setUpdateServer(const QString& server)
+{
+    settings_.setValue(QStringLiteral("update_server"), server.toLower());
 }
 
 } // namespace aspia

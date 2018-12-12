@@ -2,6 +2,19 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="ru_RU">
 <context>
+    <name>DownloadDialog</name>
+    <message>
+        <location filename="../download_dialog.ui" line="14"/>
+        <source>Downloading</source>
+        <translation>Загрузка</translation>
+    </message>
+    <message>
+        <location filename="../download_dialog.ui" line="26"/>
+        <source>Downloading update in progress...</source>
+        <translation>Производится скачивание обновления...</translation>
+    </message>
+</context>
+<context>
     <name>UpdateDialog</name>
     <message>
         <location filename="../update_dialog.ui" line="14"/>
@@ -9,34 +22,95 @@
         <translation>Обновление</translation>
     </message>
     <message>
-        <location filename="../update_dialog.ui" line="44"/>
+        <location filename="../update_dialog.ui" line="47"/>
         <source>Checking for updates</source>
         <translation>Проверка обновлений</translation>
     </message>
     <message>
-        <location filename="../update_dialog.ui" line="57"/>
+        <location filename="../update_dialog.ui" line="62"/>
         <source>Current version:</source>
         <translation>Текущая версия:</translation>
     </message>
     <message>
-        <location filename="../update_dialog.ui" line="64"/>
+        <location filename="../update_dialog.ui" line="69"/>
         <source>Available version:</source>
         <translation>Доступная версия:</translation>
     </message>
     <message>
-        <location filename="../update_dialog.ui" line="123"/>
+        <location filename="../update_dialog.ui" line="78"/>
+        <source>URL:</source>
+        <translation>Ссылка:</translation>
+    </message>
+    <message>
+        <location filename="../update_dialog.ui" line="139"/>
         <source>Update description:</source>
         <translation>Описание обновления:</translation>
     </message>
     <message>
-        <location filename="../update_dialog.ui" line="161"/>
+        <location filename="../update_dialog.ui" line="184"/>
         <source>Update now!</source>
         <translation>Обновить сейчас!</translation>
     </message>
     <message>
-        <location filename="../update_dialog.ui" line="168"/>
+        <location filename="../update_dialog.ui" line="191"/>
         <source>Close</source>
         <translation>Закрыть</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::DownloadDialog</name>
+    <message>
+        <location filename="../download_dialog.cc" line="51"/>
+        <source>Warning</source>
+        <translation>Предупреждение</translation>
+    </message>
+    <message>
+        <location filename="../download_dialog.cc" line="52"/>
+        <source>An error occurred while downloading the update: %1.</source>
+        <translation>Произошла ошибка при загрузке обновления: %1.</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::UpdateDialog</name>
+    <message>
+        <location filename="../update_dialog.cc" line="58"/>
+        <source>Unknown</source>
+        <translation>Неизвестно</translation>
+    </message>
+    <message>
+        <location filename="../update_dialog.cc" line="59"/>
+        <source>Error retrieving update information.</source>
+        <translation>Ошибка при получении информации об обновлении.</translation>
+    </message>
+    <message>
+        <location filename="../update_dialog.cc" line="76"/>
+        <source>No updates available.</source>
+        <translation>Нет доступных обновлений.</translation>
+    </message>
+    <message>
+        <location filename="../update_dialog.cc" line="86"/>
+        <source>Receiving information...</source>
+        <translation>Получение информации...</translation>
+    </message>
+    <message>
+        <location filename="../update_dialog.cc" line="109"/>
+        <source>Confirmation</source>
+        <translation>Подтвеждение</translation>
+    </message>
+    <message>
+        <location filename="../update_dialog.cc" line="110"/>
+        <source>An update will be downloaded. After the download is complete, the application will automatically close. All unsaved data will be lost.&lt;br/&gt;Continue?</source>
+        <translation>Обновление будет загружено. После завершения загрузки приложение будет автоматически закрыто. Все несораненные данные будут потеряны.&lt;br/&gt;Продолжить?</translation>
+    </message>
+    <message>
+        <location filename="../update_dialog.cc" line="120"/>
+        <source>Warning</source>
+        <translation>Предупреждение</translation>
+    </message>
+    <message>
+        <location filename="../update_dialog.cc" line="121"/>
+        <source>An error occurred while downloading the update: %1.</source>
+        <translation>Произошла ошибка при загрузке обновления: %1.</translation>
     </message>
 </context>
 </TS>

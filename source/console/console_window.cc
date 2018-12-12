@@ -28,10 +28,12 @@
 
 #include "base/logging.h"
 #include "build/build_config.h"
+#include "build/version.h"
 #include "client/client_pool.h"
 #include "console/about_dialog.h"
 #include "console/address_book_tab.h"
 #include "console/console_settings.h"
+#include "console/update_settings_dialog.h"
 #include "updater/update_dialog.h"
 
 namespace aspia {
@@ -95,7 +97,6 @@ ConsoleWindow::ConsoleWindow(LocaleLoader& locale_loader, const QString& file_pa
     ui.action_minimize_to_tray->setChecked(settings.minimizeToTray());
     ui.action_toolbar->setChecked(settings.isToolBarEnabled());
     ui.action_statusbar->setChecked(settings.isStatusBarEnabled());
-    ui.action_check_updates_on_startup->setChecked(settings.checkUpdates());
 
     ui.status_bar->setVisible(ui.action_statusbar->isChecked());
     showTrayIcon(ui.action_show_tray_icon->isChecked());
@@ -215,6 +216,24 @@ ConsoleWindow::ConsoleWindow(LocaleLoader& locale_loader, const QString& file_pa
 
     if (ui.tab_widget->count() > 0)
         ui.tab_widget->setCurrentIndex(0);
+
+    connect(ui.action_update_settings, &QAction::triggered, [this]()
+    {
+        UpdateSettingsDialog(this).exec();
+    });
+
+    if (settings.checkUpdates())
+    {
+        UpdateChecker* update_checher = new UpdateChecker(this);
+
+        connect(update_checher, &UpdateChecker::finished,
+                this, &ConsoleWindow::onUpdateChecked);
+
+        connect(update_checher, &UpdateChecker::finished,
+                update_checher, &UpdateChecker::deleteLater);
+
+        update_checher->checkForUpdates(settings.updateServer(), QLatin1String("console"));
+    }
 }
 
 ConsoleWindow::~ConsoleWindow() = default;
@@ -363,7 +382,7 @@ void ConsoleWindow::onOnlineHelp()
 
 void ConsoleWindow::onCheckUpdates()
 {
-    UpdateDialog().exec();
+    UpdateDialog(ConsoleSettings().updateServer(), QLatin1String("console"), this).exec();
 }
 
 void ConsoleWindow::onAbout()
@@ -813,7 +832,6 @@ void ConsoleWindow::closeEvent(QCloseEvent* event)
     settings.setStatusBarEnabled(ui.action_statusbar->isChecked());
     settings.setAlwaysShowTrayIcon(ui.action_show_tray_icon->isChecked());
     settings.setMinimizeToTray(ui.action_minimize_to_tray->isChecked());
-    settings.setCheckUpdates(ui.action_check_updates_on_startup->isChecked());
     settings.setWindowGeometry(saveGeometry());
     settings.setWindowState(saveState());
     settings.setRecentOpen(mru_.recentOpen());
@@ -828,6 +846,15 @@ void ConsoleWindow::closeEvent(QCloseEvent* event)
 
     QApplication::quit();
     QMainWindow::closeEvent(event);
+}
+
+void ConsoleWindow::onUpdateChecked(const UpdateInfo& update_info)
+{
+    QVersionNumber current_version =
+        QVersionNumber(ASPIA_VERSION_MAJOR, ASPIA_VERSION_MINOR, ASPIA_VERSION_PATCH);
+
+    if (update_info.version() > current_version)
+        UpdateDialog(update_info, this).exec();
 }
 
 void ConsoleWindow::createLanguageMenu(const QString& current_locale)

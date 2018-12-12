@@ -70,7 +70,9 @@ HostConfigDialog::HostConfigDialog(LocaleLoader& locale_loader, QWidget* parent)
 
     connect(ui.button_check_updates, &QPushButton::pressed, [this]()
     {
-        UpdateDialog().exec();
+        UpdateDialog(QString::fromStdString(HostSettings().updateServer()),
+                     QLatin1String("host"),
+                     this).exec();
     });
 
     connect(ui.tree_users, &QTreeWidget::customContextMenuRequested,
@@ -394,7 +396,6 @@ void HostConfigDialog::onButtonBoxClicked(QAbstractButton* button)
         settings.setTcpPort(ui.spinbox_port->value());
         settings.setAddFirewallRule(ui.checkbox_add_firewall_rule->isChecked());
         settings.setUserList(users_);
-        settings.setCustomUpdateServer(ui.checkbox_use_custom_server->isChecked());
         settings.setRemoteUpdate(ui.checkbox_allow_remote_update->isChecked());
         settings.setUpdateServer(ui.edit_update_server->text().toStdString());
 
@@ -503,7 +504,7 @@ void HostConfigDialog::reloadAll()
     ui.spinbox_port->setValue(settings.tcpPort());
     ui.checkbox_add_firewall_rule->setChecked(settings.addFirewallRule());
 
-    ui.checkbox_use_custom_server->setChecked(settings.customUpdateServer());
+    ui.checkbox_use_custom_server->setChecked(settings.updateServer() != DEFAULT_UPDATE_SERVER);
     ui.checkbox_allow_remote_update->setChecked(settings.remoteUpdate());
     ui.edit_update_server->setText(QString::fromStdString(settings.updateServer()));
 
