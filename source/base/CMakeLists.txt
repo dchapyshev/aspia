@@ -62,6 +62,8 @@ list(APPEND SOURCE_BASE_UNIT_TESTS
     string_printf_unittest.cc)
 
 list(APPEND SOURCE_BASE_WIN
+    win/process_util.cc
+    win/process_util.h
     win/registry.cc
     win/registry.h
     win/scoped_com_initializer.cc
