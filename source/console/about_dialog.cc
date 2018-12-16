@@ -58,7 +58,6 @@ const char* kThirdParty[] =
     "openssl &copy; 1998-2018 The OpenSSL Project, OpenSSL License",
     "protobuf &copy; 2014 Google Inc., BSD 3-Clause License",
     "qt &copy; 2015 The Qt Company Ltd., GNU General Public License 3.0",
-    "tbb &copy; Copyright 2005-2018 Intel Corporation, Apache License 2.0",
     "zstd &copy; 2016 Yann Collet, Facebook, Inc., BSD License",
     "Fugue Icons &copy; 2013 Yusuke Kamiyamane, Creative Commons Attribution 3.0 License"
 };

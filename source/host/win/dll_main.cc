@@ -20,8 +20,6 @@
 #define NOMINMAX
 #include <windows.h>
 
-#include <tbb/tbbmalloc_proxy.h>
-
 #include <QtPlugin>
 Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin);
 Q_IMPORT_PLUGIN(QWindowsVistaStylePlugin);
