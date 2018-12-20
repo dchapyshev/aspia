@@ -61,11 +61,8 @@ void build(Solution &s)
     updater.Public += network;
     updater.Public += "org.sw.demo.qtproject.qt.base.widgets-*"_dep;
     updater.Public += "org.sw.demo.qtproject.qt.base.xml-*"_dep;
-    automoc("org.sw.demo.qtproject.qt.base.tools.moc-*"_dep, updater);
-    rcc("org.sw.demo.qtproject.qt.base.tools.rcc-*"_dep, updater, updater.SourceDir / "resources/updater.qrc");
-    for (const auto &[p, _] : updater[".*\\.ui"_r])
-        uic("org.sw.demo.qtproject.qt.base.tools.uic-*"_dep, updater, p);
-    qt_create_translation("org.sw.demo.qtproject.qt.tools.linguist.update-*"_dep, "org.sw.demo.qtproject.qt.tools.linguist.release-*"_dep, updater);
+    qt_moc_rcc_uic("org.sw.demo.qtproject.qt-*"_dep, updater);
+    qt_tr("org.sw.demo.qtproject.qt-*"_dep, updater);
 
     auto &common = add_lib("common");
     if (s.Settings.TargetOS.Type == OSType::Windows)
@@ -85,11 +82,8 @@ void build(Solution &s)
     host.Public += "org.sw.demo.boost.property_tree-1"_dep;
     host.Public += "org.sw.demo.qtproject.qt.base.plugins.platforms.windows-*"_dep;
     host.Public += "org.sw.demo.qtproject.qt.base.plugins.styles.windowsvista-*"_dep;
-    automoc("org.sw.demo.qtproject.qt.base.tools.moc-*"_dep, host);
-    rcc("org.sw.demo.qtproject.qt.base.tools.rcc-*"_dep, host, host.SourceDir / "resources/host.qrc");
-    for (const auto &[p, _] : host[".*\\.ui"_r])
-        uic("org.sw.demo.qtproject.qt.base.tools.uic-*"_dep, host, p);
-    qt_create_translation("org.sw.demo.qtproject.qt.tools.linguist.update-*"_dep, "org.sw.demo.qtproject.qt.tools.linguist.release-*"_dep, host);
+    qt_moc_rcc_uic("org.sw.demo.qtproject.qt-*"_dep, host);
+    qt_tr("org.sw.demo.qtproject.qt-*"_dep, host);
 
     auto setup_exe = [](auto &t) -> decltype(auto)
     {
@@ -119,11 +113,8 @@ void build(Solution &s)
     //
     auto &client = add_lib("client");
     client.Public += common, desktop_capture, updater;
-    automoc("org.sw.demo.qtproject.qt.base.tools.moc-*"_dep, client);
-    rcc("org.sw.demo.qtproject.qt.base.tools.rcc-*"_dep, client, client.SourceDir / "resources/client.qrc");
-    for (const auto &[p, _] : client[".*\\.ui"_r])
-        uic("org.sw.demo.qtproject.qt.base.tools.uic-*"_dep, client, p);
-    qt_create_translation("org.sw.demo.qtproject.qt.tools.linguist.update-*"_dep, "org.sw.demo.qtproject.qt.tools.linguist.release-*"_dep, client);
+    qt_moc_rcc_uic("org.sw.demo.qtproject.qt-*"_dep, client);
+    qt_tr("org.sw.demo.qtproject.qt-*"_dep, client);
 
     //
     auto &console = add_exe(aspia, "console");
@@ -131,9 +122,6 @@ void build(Solution &s)
     console.Public += client;
     console.Public += "org.sw.demo.qtproject.qt.base.plugins.platforms.windows-*"_dep;
     console.Public += "org.sw.demo.qtproject.qt.base.plugins.styles.windowsvista-*"_dep;
-    automoc("org.sw.demo.qtproject.qt.base.tools.moc-*"_dep, console);
-    rcc("org.sw.demo.qtproject.qt.base.tools.rcc-*"_dep, console, console.SourceDir / "resources/console.qrc");
-    for (const auto &[p, _] : console[".*\\.ui"_r])
-        uic("org.sw.demo.qtproject.qt.base.tools.uic-*"_dep, console, p);
-    qt_create_translation("org.sw.demo.qtproject.qt.tools.linguist.update-*"_dep, "org.sw.demo.qtproject.qt.tools.linguist.release-*"_dep, console);
+    qt_moc_rcc_uic("org.sw.demo.qtproject.qt-*"_dep, console);
+    qt_tr("org.sw.demo.qtproject.qt-*"_dep, console);
 }
