@@ -19,6 +19,7 @@
 #include "host/ui/host_config_dialog.h"
 
 #include <QDir>
+#include <QFile>
 #include <QFileDialog>
 #include <QMenu>
 #include <QMessageBox>
@@ -35,6 +36,21 @@
 #include "updater/update_dialog.h"
 
 namespace aspia {
+
+namespace {
+
+bool replaceFile(const QString& source_path, const QString& target_path)
+{
+    if (QFile::exists(target_path))
+    {
+        if (!QFile::remove(target_path))
+            return false;
+    }
+
+    return QFile::copy(source_path, target_path);
+}
+
+} // namespace
 
 HostConfigDialog::HostConfigDialog(LocaleLoader& locale_loader, QWidget* parent)
     : QDialog(parent),
@@ -70,7 +86,7 @@ HostConfigDialog::HostConfigDialog(LocaleLoader& locale_loader, QWidget* parent)
 
     connect(ui.button_check_updates, &QPushButton::pressed, [this]()
     {
-        UpdateDialog(QString::fromStdString(HostSettings().updateServer()),
+        UpdateDialog(HostSettings().updateServer(),
                      QLatin1String("host"),
                      this).exec();
     });
@@ -111,109 +127,55 @@ HostConfigDialog::HostConfigDialog(LocaleLoader& locale_loader, QWidget* parent)
 // static
 bool HostConfigDialog::importSettings(const QString& path, bool silent, QWidget* parent)
 {
-    HostSettings::ImportResult result = HostSettings::importSettings(path.toStdString());
-    switch (result)
+    bool result = replaceFile(path, HostSettings().filePath());
+
+    if (!silent)
     {
-        case HostSettings::ImportResult::READ_ERROR:
+        if (result)
         {
-            if (!silent)
-            {
-                QMessageBox::warning(parent,
-                                     tr("Warning"),
-                                     tr("The source file could not be read. Check for file access"
-                                        " and validity of its contents."),
+            QMessageBox::information(parent,
+                                     tr("Information"),
+                                     tr("The configuration was successfully imported."),
                                      QMessageBox::Ok);
-            }
         }
-        break;
-
-        case HostSettings::ImportResult::WRITE_ERROR:
+        else
         {
-            if (!silent)
-            {
-                QMessageBox::warning(parent,
-                                     tr("Warning"),
-                                     tr("Could not write destination file. Verify that you have "
-                                        "the necessary rights to write the file."),
-                                     QMessageBox::Ok);
-            }
+            QMessageBox::warning(parent,
+                                 tr("Warning"),
+                                 tr("Could not write destination file. Verify that you have "
+                                    "the necessary rights to write the file."),
+                                 QMessageBox::Ok);
         }
-        break;
-
-        case HostSettings::ImportResult::SUCCESS:
-        {
-            if (!silent)
-            {
-                QMessageBox::information(parent,
-                                         tr("Information"),
-                                         tr("The configuration was successfully imported."),
-                                         QMessageBox::Ok);
-            }
-
-            return true;
-        }
-        break;
-
-        default:
-            DLOG(LS_FATAL) << "Unexpected result: " << static_cast<int>(result);
-            break;
     }
 
-    return false;
+    return result;
 }
 
 // static
 bool HostConfigDialog::exportSettings(const QString& path, bool silent, QWidget* parent)
 {
-    HostSettings::ExportResult result = HostSettings::exportSettings(path.toStdString());
-    switch (result)
+    bool result = replaceFile(HostSettings().filePath(), path);
+
+    if (!silent)
     {
-        case HostSettings::ExportResult::READ_ERROR:
+        if (result)
         {
-            if (!silent)
-            {
-                QMessageBox::warning(parent,
-                                     tr("Warning"),
-                                     tr("The source file could not be read. Check for file access"
-                                        " and validity of its contents."),
+            QMessageBox::information(parent,
+                                     tr("Information"),
+                                     tr("The configuration was successfully imported."),
                                      QMessageBox::Ok);
-            }
         }
-        break;
-
-        case HostSettings::ExportResult::WRITE_ERROR:
+        else
         {
-            if (!silent)
-            {
-                QMessageBox::warning(parent,
-                                     tr("Warning"),
-                                     tr("Could not write destination file. Verify that you have "
-                                        "the necessary rights to write the file."),
-                                     QMessageBox::Ok);
-            }
+            QMessageBox::warning(parent,
+                                 tr("Warning"),
+                                 tr("Could not write destination file. Verify that you have "
+                                    "the necessary rights to write the file."),
+                                 QMessageBox::Ok);
         }
-        break;
-
-        case HostSettings::ExportResult::SUCCESS:
-        {
-            if (!silent)
-            {
-                QMessageBox::information(parent,
-                                         tr("Information"),
-                                         tr("The configuration was successfully exported."),
-                                         QMessageBox::Ok);
-            }
-
-            return true;
-        }
-        break;
-
-        default:
-            DLOG(LS_FATAL) << "Unexpected result: " << static_cast<int>(result);
-            break;
     }
 
-    return false;
+    return result;
 }
 
 void HostConfigDialog::onUserContextMenu(const QPoint& point)
@@ -387,19 +349,7 @@ void HostConfigDialog::onButtonBoxClicked(QAbstractButton* button)
     {
         HostSettings settings;
 
-        QString new_locale = ui.combobox_language->currentData().toString();
-
-        if (standard_button == QDialogButtonBox::Apply)
-            retranslateUi(new_locale);
-
-        settings.setLocale(new_locale.toStdString());
-        settings.setTcpPort(ui.spinbox_port->value());
-        settings.setAddFirewallRule(ui.checkbox_add_firewall_rule->isChecked());
-        settings.setUserList(users_);
-        settings.setRemoteUpdate(ui.checkbox_allow_remote_update->isChecked());
-        settings.setUpdateServer(ui.edit_update_server->text().toStdString());
-
-        if (!settings.commit())
+        if (!settings.isWritable())
         {
             QString message =
                 tr("The configuration can not be written. "
@@ -408,6 +358,18 @@ void HostConfigDialog::onButtonBoxClicked(QAbstractButton* button)
             QMessageBox::warning(this, tr("Warning"), message, QMessageBox::Ok);
             return;
         }
+
+        QString new_locale = ui.combobox_language->currentData().toString();
+
+        if (standard_button == QDialogButtonBox::Apply)
+            retranslateUi(new_locale);
+
+        settings.setLocale(new_locale);
+        settings.setTcpPort(ui.spinbox_port->value());
+        settings.setAddFirewallRule(ui.checkbox_add_firewall_rule->isChecked());
+        settings.setUserList(users_);
+        settings.setRemoteUpdate(ui.checkbox_allow_remote_update->isChecked());
+        settings.setUpdateServer(ui.edit_update_server->text());
 
         if (isServiceStarted())
         {
@@ -492,7 +454,7 @@ void HostConfigDialog::reloadAll()
 {
     HostSettings settings;
 
-    QString current_locale = QString::fromStdString(settings.locale());
+    QString current_locale = settings.locale();
     locale_loader_.installTranslators(current_locale);
     createLanguageList(current_locale);
 
@@ -506,7 +468,7 @@ void HostConfigDialog::reloadAll()
 
     ui.checkbox_use_custom_server->setChecked(settings.updateServer() != DEFAULT_UPDATE_SERVER);
     ui.checkbox_allow_remote_update->setChecked(settings.remoteUpdate());
-    ui.edit_update_server->setText(QString::fromStdString(settings.updateServer()));
+    ui.edit_update_server->setText(settings.updateServer());
 
     ui.edit_update_server->setEnabled(ui.checkbox_use_custom_server->isChecked());
 
@@ -518,7 +480,7 @@ void HostConfigDialog::reloadUserList()
     for (int i = ui.tree_users->topLevelItemCount() - 1; i >= 0; --i)
         delete ui.tree_users->takeTopLevelItem(i);
 
-    for (size_t i = 0; i < users_.list.size(); ++i)
+    for (int i = 0; i < users_.list.size(); ++i)
         ui.tree_users->addTopLevelItem(new UserTreeItem(i, users_.list.at(i)));
 
     ui.button_modify->setEnabled(false);

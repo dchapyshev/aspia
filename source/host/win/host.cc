@@ -73,7 +73,7 @@ void Host::setUuid(std::string&& uuid)
     uuid_ = std::move(uuid);
 }
 
-const std::string& Host::userName() const
+const QString& Host::userName() const
 {
     return network_channel_->userName();
 }
@@ -110,7 +110,7 @@ bool Host::start()
         }
     }
 
-    if (network_channel_->userName().empty())
+    if (network_channel_->userName().isEmpty())
     {
         DLOG(LS_WARNING) << "Invalid user name";
         return false;

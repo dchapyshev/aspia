@@ -46,7 +46,7 @@ public:
     const std::string& uuid() const { return uuid_; }
     void setUuid(std::string&& uuid);
 
-    const std::string& userName() const;
+    const QString& userName() const;
     proto::SessionType sessionType() const;
 
     QString remoteAddress() const;

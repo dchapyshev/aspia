@@ -30,7 +30,7 @@ UserTreeItem::UserTreeItem(size_t index, const SrpUser& user)
     else
         setIcon(0, QIcon(QStringLiteral(":/icon/user-disabled.png")));
 
-    setText(0, QString::fromStdString(user.name));
+    setText(0, user.name);
 }
 
 } // namespace aspia

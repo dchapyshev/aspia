@@ -23,20 +23,12 @@
 
 namespace aspia {
 
-BigNum::BigNum(const ConstBuffer& buffer)
+BigNum::BigNum(const uint8_t* buffer, size_t buffer_size)
 {
-    if (!buffer.isValid())
+    if (!buffer || !buffer_size)
         return;
 
-    num_.reset(BN_bin2bn(buffer.data(), buffer.size(), nullptr));
-}
-
-BigNum::BigNum(const std::string& string)
-{
-    if (string.empty())
-        return;
-
-    num_.reset(BN_bin2bn(reinterpret_cast<const uint8_t*>(string.data()), string.size(), nullptr));
+    num_.reset(BN_bin2bn(buffer, buffer_size, nullptr));
 }
 
 BigNum::BigNum(BigNum&& other) noexcept
@@ -78,6 +70,22 @@ std::string BigNum::toStdString() const
     return result;
 }
 
+QByteArray BigNum::toByteArray() const
+{
+    if (!isValid())
+        return QByteArray();
+
+    int length = BN_num_bytes(num_.get());
+    if (length <= 0)
+        return QByteArray();
+
+    QByteArray result;
+    result.resize(length);
+
+    BN_bn2bin(num_.get(), reinterpret_cast<uint8_t*>(result.data()));
+    return result;
+}
+
 // static
 BigNum BigNum::create()
 {
@@ -87,13 +95,19 @@ BigNum BigNum::create()
 // static
 BigNum BigNum::fromBuffer(const ConstBuffer& buffer)
 {
-    return BigNum(buffer);
+    return BigNum(reinterpret_cast<const uint8_t*>(buffer.data()), buffer.size());
 }
 
 // static
 BigNum BigNum::fromStdString(const std::string& string)
 {
-    return BigNum(string);
+    return BigNum(reinterpret_cast<const uint8_t*>(string.data()), string.size());
+}
+
+// static
+BigNum BigNum::fromByteArray(const QByteArray& array)
+{
+    return BigNum(reinterpret_cast<const uint8_t*>(array.constData()), array.size());
 }
 
 BigNum::Context::Context(Context&& other) noexcept

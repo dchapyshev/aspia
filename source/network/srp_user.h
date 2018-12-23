@@ -19,9 +19,8 @@
 #ifndef ASPIA_NETWORK__SRP_USER_H_
 #define ASPIA_NETWORK__SRP_USER_H_
 
-#include <cstdint>
-#include <string>
-#include <vector>
+#include <QList>
+#include <QByteArray>
 
 namespace aspia {
 
@@ -29,19 +28,19 @@ struct SrpUser
 {
     enum Flags { ENABLED = 1 };
 
-    std::string name;
-    std::string salt;
-    std::string verifier;
-    std::string number;
-    std::string generator;
+    QString name;
+    QByteArray salt;
+    QByteArray verifier;
+    QByteArray number;
+    QByteArray generator;
     uint32_t sessions = 0;
     uint32_t flags = 0;
 };
 
 struct SrpUserList
 {
-    std::string seed_key;
-    std::vector<SrpUser> list;
+    QByteArray seed_key;
+    QList<SrpUser> list;
 };
 
 } // namespace aspia

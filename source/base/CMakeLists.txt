@@ -21,10 +21,6 @@ list(APPEND SOURCE_BASE
     aligned_memory.h
     base_paths.cc
     base_paths.h
-    base64.cc
-    base64.h
-    base64_constants.cc
-    base64_constants.h
     bitset.h
     const_buffer.h
     cpuid.cc
@@ -53,11 +49,12 @@ list(APPEND SOURCE_BASE
     thread_checker.h
     typed_buffer.h
     unicode.cc
-    unicode.h)
+    unicode.h
+    xml_settings.cc
+    xml_settings.h)
 
 list(APPEND SOURCE_BASE_UNIT_TESTS
     aligned_memory_unittest.cc
-    base64_unittest.cc
     guid_unittest.cc
     string_printf_unittest.cc)
 

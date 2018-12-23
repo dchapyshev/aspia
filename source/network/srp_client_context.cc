@@ -124,8 +124,8 @@ size_t ivSizeForMethod(proto::Method method)
 } // namespace
 
 SrpClientContext::SrpClientContext(proto::Method method,
-                                   const std::string& I,
-                                   const std::string& p)
+                                   const QString& I,
+                                   const QString& p)
     : method_(method),
       I_(I),
       p_(p)
@@ -142,8 +142,8 @@ SrpClientContext::~SrpClientContext()
 
 // static
 SrpClientContext* SrpClientContext::create(proto::Method method,
-                                           const std::string& username,
-                                           const std::string& password)
+                                           const QString& username,
+                                           const QString& password)
 {
     switch (method)
     {
@@ -155,7 +155,7 @@ SrpClientContext* SrpClientContext::create(proto::Method method,
             return nullptr;
     }
 
-    if (username.empty() || password.empty())
+    if (username.isEmpty() || password.isEmpty())
         return nullptr;
 
     return new SrpClientContext(method, username, password);
@@ -166,7 +166,7 @@ proto::SrpIdentify* SrpClientContext::identify()
     std::unique_ptr<proto::SrpIdentify> identify =
         std::make_unique<proto::SrpIdentify>();
 
-    identify->set_username(I_);
+    identify->set_username(I_.toStdString());
 
     return identify.release();
 }
@@ -231,7 +231,7 @@ std::string SrpClientContext::key() const
         return std::string();
 
     BigNum u = SrpMath::calc_u(A_, B_, N_);
-    BigNum x = SrpMath::calc_x(s_, I_, p_);
+    BigNum x = SrpMath::calc_x(s_, I_.toUtf8(), p_.toUtf8());
     BigNum client_key = SrpMath::calcClientKey(N_, B_, g_, x, a_, u);
 
     std::string client_key_string = client_key.toStdString();

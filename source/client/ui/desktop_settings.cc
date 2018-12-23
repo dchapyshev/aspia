@@ -18,42 +18,47 @@
 
 #include "client/ui/desktop_settings.h"
 
+#include "base/xml_settings.h"
+
 namespace aspia {
 
 DesktopSettings::DesktopSettings()
-    : settings_(QSettings::UserScope, QStringLiteral("aspia"), QStringLiteral("client"))
+    : settings_(XmlSettings::registerFormat(),
+                QSettings::UserScope,
+                QLatin1String("aspia"),
+                QLatin1String("client"))
 {
     // Nothing
 }
 
 bool DesktopSettings::scaling() const
 {
-    return settings_.value(QStringLiteral("desktop/scaling"), false).toBool();
+    return settings_.value(QLatin1String("Desktop/Scaling"), false).toBool();
 }
 
 void DesktopSettings::setScaling(bool enable)
 {
-    settings_.setValue(QStringLiteral("desktop/scaling"), enable);
+    settings_.setValue(QLatin1String("Desktop/Scaling"), enable);
 }
 
 bool DesktopSettings::autoScrolling() const
 {
-    return settings_.value(QStringLiteral("desktop/auto_scrolling"), true).toBool();
+    return settings_.value(QLatin1String("Desktop/AutoScrolling"), true).toBool();
 }
 
 void DesktopSettings::setAutoScrolling(bool enable)
 {
-    settings_.setValue(QStringLiteral("desktop/auto_scrolling"), enable);
+    settings_.setValue(QLatin1String("Desktop/AutoScrolling"), enable);
 }
 
 bool DesktopSettings::sendKeyCombinations() const
 {
-    return settings_.value(QStringLiteral("desktop/send_key_combinations"), true).toBool();
+    return settings_.value(QLatin1String("Desktop/SendKeyCombinations"), true).toBool();
 }
 
 void DesktopSettings::setSendKeyCombinations(bool enable)
 {
-    settings_.setValue(QStringLiteral("desktop/send_key_combinations"), enable);
+    settings_.setValue(QLatin1String("Desktop/SendKeyCombinations"), enable);
 }
 
 } // namespace aspia

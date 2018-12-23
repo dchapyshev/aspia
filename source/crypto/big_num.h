@@ -19,8 +19,9 @@
 #ifndef ASPIA_CRYPTO__BIG_NUM_H_
 #define ASPIA_CRYPTO__BIG_NUM_H_
 
+#include <QByteArray>
+
 #include <memory>
-#include <string>
 
 #include "base/const_buffer.h"
 #include "base/macros_magic.h"
@@ -47,10 +48,12 @@ public:
     const bignum_st* get() const { return num_.get(); }
 
     std::string toStdString() const;
+    QByteArray toByteArray() const;
 
     static BigNum create();
     static BigNum fromBuffer(const ConstBuffer& buffer);
     static BigNum fromStdString(const std::string& string);
+    static BigNum fromByteArray(const QByteArray& array);
 
     operator bignum_st*() const { return num_.get(); }
 
@@ -92,8 +95,7 @@ private:
         // Nothing
     }
 
-    explicit BigNum(const ConstBuffer& buffer);
-    explicit BigNum(const std::string& string);
+    BigNum(const uint8_t* buffer, size_t buffer_size);
 
     BIGNUM_ptr num_;
 

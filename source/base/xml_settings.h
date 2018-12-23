@@ -16,32 +16,28 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_BASE__BASE64_H_
-#define ASPIA_BASE__BASE64_H_
+#ifndef ASPIA_BASE__XML_SETTINGS_H_
+#define ASPIA_BASE__XML_SETTINGS_H_
 
-#include <string>
+#include <QSettings>
 
 #include "base/macros_magic.h"
 
 namespace aspia {
 
-class Base64
+class XmlSettings
 {
 public:
-    // Encodes the input string in base64. The encoding can be done in-place.
-    static void encode(const std::string& input, std::string* output);
+    static QSettings::Format registerFormat(
+        Qt::CaseSensitivity case_sensitivity = Qt::CaseSensitive);
 
-    // Encodes the input string in base64.
-    static std::string encode(const std::string& input);
-
-    // Decodes the base64 input string. Returns true if successful and false otherwise.
-    // The output string is only modified if successful. The decoding can be done in-place.
-    static bool decode(const std::string& input, std::string* output);
+    static bool readFunc(QIODevice& device, QSettings::SettingsMap& map);
+    static bool writeFunc(QIODevice& device, const QSettings::SettingsMap& map);
 
 private:
-    DISALLOW_COPY_AND_ASSIGN(Base64);
+    DISALLOW_COPY_AND_ASSIGN(XmlSettings);
 };
 
 } // namespace aspia
 
-#endif // ASPIA_BASE__BASE64_H_
+#endif // ASPIA_BASE__XML_SETTINGS_H_

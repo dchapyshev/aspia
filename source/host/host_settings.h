@@ -19,7 +19,7 @@
 #ifndef ASPIA_HOST__HOST_SETTINGS_H_
 #define ASPIA_HOST__HOST_SETTINGS_H_
 
-#include <boost/property_tree/ptree.hpp>
+#include <QSettings>
 
 #include "base/macros_magic.h"
 
@@ -33,16 +33,11 @@ public:
     HostSettings();
     ~HostSettings();
 
-    enum class ImportResult { SUCCESS, READ_ERROR, WRITE_ERROR };
-    enum class ExportResult { SUCCESS, READ_ERROR, WRITE_ERROR };
+    QString filePath() const;
+    bool isWritable() const;
 
-    static ImportResult importSettings(const std::string& from);
-    static ExportResult exportSettings(const std::string& to);
-
-    bool commit();
-
-    std::string locale() const;
-    void setLocale(const std::string& locale);
+    QString locale() const;
+    void setLocale(const QString& locale);
 
     uint16_t tcpPort() const;
     void setTcpPort(uint16_t port);
@@ -53,14 +48,15 @@ public:
     SrpUserList userList() const;
     void setUserList(const SrpUserList& user_list);
 
-    std::string updateServer() const;
-    void setUpdateServer(const std::string& server);
+    QString updateServer() const;
+    void setUpdateServer(const QString& server);
 
     bool remoteUpdate() const;
     void setRemoteUpdate(bool allow);
 
 private:
-    boost::property_tree::ptree tree_;
+    mutable QSettings settings_;
+
     DISALLOW_COPY_AND_ASSIGN(HostSettings);
 };
 

@@ -51,10 +51,7 @@ int main(int argc, char *argv[])
 
     LocaleLoader locale_loader;
     if (!locale_loader.contains(current_locale))
-    {
-        current_locale = ConsoleSettings::defaultLocale();
-        console_settings.setLocale(current_locale);
-    }
+        console_settings.setLocale(DEFAULT_LOCALE);
 
     locale_loader.installTranslators(current_locale);
 

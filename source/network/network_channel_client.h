@@ -56,8 +56,8 @@ private:
     void readServerKeyExchange(const QByteArray& buffer);
     void readSessionChallenge(const QByteArray& buffer);
 
-    std::string username_;
-    std::string password_;
+    QString username_;
+    QString password_;
     proto::SessionType session_type_ = proto::SESSION_TYPE_UNKNOWN;
 
     std::unique_ptr<SrpClientContext> srp_client_;

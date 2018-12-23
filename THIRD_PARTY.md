@@ -3,7 +3,6 @@ Third-party components information
 
 | Name       | Version   | License                               | URL                                             |
 |------------|-----------|---------------------------------------|-------------------------------------------------|
-| boost      | 1.68.0    | Boost License                         | https://www.boost.org/                          |
 | googletest | 1.8.1     | BSD 3-Clause License                  | https://github.com/google/googletest/releases   |
 | libvpx     | 1.7.0     | BSD 3-Clause License                  | https://chromium.googlesource.com/webm/libvpx   |
 | libyuv     | trunk     | BSD 3-Clause License                  | https://chromium.googlesource.com/libyuv/libyuv |

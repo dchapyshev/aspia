@@ -33,18 +33,11 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 
-# Boost configuration.
-set(Boost_USE_STATIC_LIBS ON)
-set(Boost_USE_MULTITHREADED ON)
-set(Boost_USE_STATIC_RUNTIME ON)
-
 set(CMAKE_PREFIX_PATH "${ASPIA_THIRD_PARTY_DIR}/qt;${ASPIA_THIRD_PARTY_DIR}/protobuf")
-set(BOOST_ROOT "${ASPIA_THIRD_PARTY_DIR}/boost")
 
 find_package(Qt5 REQUIRED Core Gui Network Widgets WinExtras Xml)
 find_package(Qt5LinguistTools)
 find_package(Protobuf REQUIRED)
-find_package(Boost REQUIRED system)
 
 include(translations.cmake)
 
@@ -58,20 +51,17 @@ add_definitions(-D_UNICODE
                 -D_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS
                 -D_CRT_SECURE_NO_WARNINGS
                 -DQT_USE_QSTRINGBUILDER
-                -DBOOST_ALL_NO_LIB
                 -DCLIENT_IMPLEMENTATION
                 -DHOST_IMPLEMENTATION)
 
 include_directories(
     ${PROJECT_SOURCE_DIR}
     ${PROJECT_BINARY_DIR}
-    ${ASPIA_THIRD_PARTY_DIR}/boost/include
     ${ASPIA_THIRD_PARTY_DIR}/googletest/include
     ${ASPIA_THIRD_PARTY_DIR}/libvpx/include
     ${ASPIA_THIRD_PARTY_DIR}/libyuv/include
     ${ASPIA_THIRD_PARTY_DIR}/openssl/include
     ${ASPIA_THIRD_PARTY_DIR}/protobuf/include
-    ${ASPIA_THIRD_PARTY_DIR}/tbb/include
     ${ASPIA_THIRD_PARTY_DIR}/zstd/include)
 
 link_directories(
@@ -83,11 +73,9 @@ link_directories(
     ${ASPIA_THIRD_PARTY_DIR}/qt/lib
     ${ASPIA_THIRD_PARTY_DIR}/qt/plugins/platforms
     ${ASPIA_THIRD_PARTY_DIR}/qt/plugins/styles
-    ${ASPIA_THIRD_PARTY_DIR}/tbb/lib
     ${ASPIA_THIRD_PARTY_DIR}/zstd/lib)
 
 set(THIRD_PARTY_LIBS
-    ${Boost_LIBRARIES}
     Qt5::Core
     Qt5::Gui
     Qt5::Network

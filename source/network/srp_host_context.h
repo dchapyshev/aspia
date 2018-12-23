@@ -19,6 +19,8 @@
 #ifndef ASPIA_NETWORK__SRP_SERVER_CONTEXT_H_
 #define ASPIA_NETWORK__SRP_SERVER_CONTEXT_H_
 
+#include <QString>
+
 #include "crypto/big_num.h"
 #include "protocol/key_exchange.pb.h"
 
@@ -33,12 +35,12 @@ public:
     SrpHostContext(proto::Method method, const SrpUserList& user_list);
     ~SrpHostContext();
 
-    static SrpUser* createUser(const std::string& username, const std::string& password);
+    static SrpUser* createUser(const QString& username, const QString& password);
 
     proto::SrpServerKeyExchange* readIdentify(const proto::SrpIdentify& identify);
     void readClientKeyExchange(const proto::SrpClientKeyExchange& client_key_exchange);
 
-    const std::string& userName() const { return username_; }
+    const QString& userName() const { return username_; }
     uint32_t sessionTypes() const { return session_types_; }
 
     proto::Method method() const { return method_; }
@@ -51,7 +53,7 @@ private:
 
     const SrpUserList& user_list_;
 
-    std::string username_;
+    QString username_;
     uint32_t session_types_ = 0;
 
     std::string encrypt_iv_;

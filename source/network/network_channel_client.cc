@@ -55,8 +55,8 @@ void NetworkChannelClient::connectToHost(const QString& address, int port,
                                          const QString& username, const QString& password,
                                          proto::SessionType session_type)
 {
-    username_ = username.toStdString();
-    password_ = password.toStdString();
+    username_ = username;
+    password_ = password;
     session_type_ = session_type;
 
     socket_->setProxy(QNetworkProxy::NoProxy);

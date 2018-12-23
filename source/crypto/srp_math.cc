@@ -112,27 +112,27 @@ BigNum SrpMath::calc_B(const BigNum& b, const BigNum& N, const BigNum& g, const 
 
 // static
 // x = SHA1(s | SHA1(I | ":" | p))
-BigNum SrpMath::calc_x(const BigNum& s, const std::string& I, const std::string& p)
+BigNum SrpMath::calc_x(const BigNum& s, const QByteArray& I, const QByteArray& p)
 {
-    if (!s.isValid() || I.empty() || p.empty())
+    if (!s.isValid() || I.isEmpty() || p.isEmpty())
         return BigNum();
 
     uint8_t temp[SHA_DIGEST_LENGTH];
     SHA_CTX sha_ctx;
 
     if (!SHA1_Init(&sha_ctx) ||
-        !SHA1_Update(&sha_ctx, I.c_str(), I.size()) ||
+        !SHA1_Update(&sha_ctx, I.constData(), I.size()) ||
         !SHA1_Update(&sha_ctx, ":", 1) ||
-        !SHA1_Update(&sha_ctx, p.c_str(), p.size()) ||
+        !SHA1_Update(&sha_ctx, p.constData(), p.size()) ||
         !SHA1_Final(temp, &sha_ctx))
     {
         return BigNum();
     }
 
-    std::string s_buffer = s.toStdString();
+    QByteArray s_buffer = s.toByteArray();
 
     if (!SHA1_Init(&sha_ctx) ||
-        !SHA1_Update(&sha_ctx, s_buffer.c_str(), s_buffer.size()) ||
+        !SHA1_Update(&sha_ctx, s_buffer.constData(), s_buffer.size()) ||
         !SHA1_Update(&sha_ctx, temp, sizeof(temp)) ||
         !SHA1_Final(temp, &sha_ctx))
     {
@@ -267,10 +267,10 @@ bool SrpMath::verify_A_mod_N(const BigNum& A, const BigNum& N)
 }
 
 // static
-BigNum SrpMath::calc_v(const std::string& I, const std::string& p, const BigNum& s,
+BigNum SrpMath::calc_v(const QByteArray& I, const QByteArray& p, const BigNum& s,
                        const BigNum& N, const BigNum& g)
 {
-    if (I.empty() || p.empty() || !N.isValid() || !g.isValid() || !s.isValid())
+    if (I.isEmpty() || p.isEmpty() || !N.isValid() || !g.isValid() || !s.isValid())
         return BigNum();
 
     BigNum::Context ctx = BigNum::Context::create();

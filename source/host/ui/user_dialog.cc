@@ -37,13 +37,13 @@ UserDialog::UserDialog(const SrpUserList& user_list, SrpUser* user, QWidget* par
 
     ui.setupUi(this);
 
-    ui.edit_username->setText(QString::fromStdString(user_->name));
+    ui.edit_username->setText(user_->name);
 
-    if (!user->verifier.empty())
+    if (!user->verifier.isEmpty())
     {
-        DCHECK(!user_->number.empty());
-        DCHECK(!user_->generator.empty());
-        DCHECK(!user_->salt.empty());
+        DCHECK(!user_->number.isEmpty());
+        DCHECK(!user_->generator.isEmpty());
+        DCHECK(!user_->salt.isEmpty());
 
         setAccountChanged(false);
     }
@@ -139,13 +139,13 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
                 return;
             }
 
-            QString old_name = QString::fromStdString(user_->name);
+            QString old_name = user_->name;
 
             if (name.compare(old_name, Qt::CaseInsensitive) != 0)
             {
                 for (const auto& user : user_list_.list)
                 {
-                    QString existing_name = QString::fromStdString(user.name);
+                    QString existing_name = user.name;
 
                     if (name.compare(existing_name, Qt::CaseInsensitive) == 0)
                     {
@@ -201,8 +201,7 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
                 }
             }
 
-            std::unique_ptr<SrpUser> user(
-                SrpHostContext::createUser(name.toLower().toStdString(), password.toStdString()));
+            std::unique_ptr<SrpUser> user(SrpHostContext::createUser(name.toLower(), password));
             if (!user)
             {
                 QMessageBox::warning(this,

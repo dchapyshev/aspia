@@ -18,222 +18,96 @@
 
 #include "host/host_settings.h"
 
-#include <filesystem>
-#include <fstream>
-
-#include <boost/property_tree/xml_parser.hpp>
-
-#include "base/base_paths.h"
-#include "base/base64.h"
 #include "base/logging.h"
+#include "base/xml_settings.h"
 #include "build/build_config.h"
 #include "crypto/random.h"
 #include "network/srp_user.h"
 
 namespace aspia {
 
-namespace {
-
-const char kDirName[] = "aspia";
-const char kFileName[] = "host.xml";
-
-bool settingsFilePath(std::filesystem::path* path, bool create_dir = false)
-{
-    std::filesystem::path temp;
-    if (!BasePaths::commonAppData(&temp))
-        return false;
-
-    temp.append(kDirName);
-
-    if (create_dir)
-    {
-        std::error_code ignored_code;
-        if (!std::filesystem::exists(temp, ignored_code))
-        {
-            if (!std::filesystem::create_directories(temp, ignored_code))
-            {
-                LOG(LS_WARNING) << "Unable to create directory: " << temp;
-                return false;
-            }
-        }
-    }
-
-    temp.append(kFileName);
-
-    path->swap(temp);
-    return true;
-}
-
-bool readSettingsFile(const std::filesystem::path& path, boost::property_tree::ptree* tree)
-{
-    std::ifstream file;
-    file.open(path, std::ifstream::binary);
-    if (!file.is_open())
-    {
-        LOG(LS_WARNING) << "Unable to open file " << path << " for reading";
-        return false;
-    }
-
-    try
-    {
-        boost::property_tree::read_xml(file, *tree);
-    }
-    catch (const boost::property_tree::ptree_error &err)
-    {
-        LOG(LS_WARNING) << "Error reading the configuration: " << err.what();
-        return false;
-    }
-
-    return true;
-}
-
-bool writeSettingsFile(const std::filesystem::path& path, const boost::property_tree::ptree& tree)
-{
-    std::ofstream file;
-    file.open(path, std::ofstream::binary);
-    if (!file.is_open())
-    {
-        LOG(LS_WARNING) << "Unable to open file " << path << " for write";
-        return false;
-    }
-
-    try
-    {
-        boost::property_tree::write_xml(file, tree);
-    }
-    catch (const boost::property_tree::ptree_error &err)
-    {
-        LOG(LS_WARNING) << "Error writing the configuration: " << err.what();
-        return false;
-    }
-
-    return true;
-}
-
-} // namespace
-
 HostSettings::HostSettings()
+    : settings_(XmlSettings::registerFormat(),
+                QSettings::SystemScope,
+                QLatin1String("aspia"),
+                QLatin1String("host"))
 {
-    std::filesystem::path path;
-    if (settingsFilePath(&path))
-        readSettingsFile(path, &tree_);
+    // Nothing
 }
 
 HostSettings::~HostSettings() = default;
 
-// static
-HostSettings::ImportResult HostSettings::importSettings(const std::string& from)
+QString HostSettings::filePath() const
 {
-    boost::property_tree::ptree tree;
-    if (!readSettingsFile(std::filesystem::u8path(from), &tree))
-        return ImportResult::READ_ERROR;
-
-    std::filesystem::path to;
-    if (!settingsFilePath(&to, true))
-        return ImportResult::WRITE_ERROR;
-
-    if (!writeSettingsFile(to, tree))
-        return ImportResult::WRITE_ERROR;
-
-    return ImportResult::SUCCESS;
+    return settings_.fileName();
 }
 
-// static
-HostSettings::ExportResult HostSettings::exportSettings(const std::string& to)
+bool HostSettings::isWritable() const
 {
-    std::filesystem::path from;
-    if (!settingsFilePath(&from))
-        return ExportResult::READ_ERROR;
-
-    boost::property_tree::ptree tree;
-    if (!readSettingsFile(from, &tree))
-        return ExportResult::READ_ERROR;
-
-    if (!writeSettingsFile(std::filesystem::u8path(to), tree))
-        return ExportResult::WRITE_ERROR;
-
-    return ExportResult::SUCCESS;
+    return settings_.isWritable();
 }
 
-bool HostSettings::commit()
+QString HostSettings::locale() const
 {
-    std::filesystem::path path;
-    if (!settingsFilePath(&path, true))
-        return false;
-
-    return writeSettingsFile(path, tree_);
+    return settings_.value(QLatin1String("Locale"), DEFAULT_LOCALE).toString();
 }
 
-std::string HostSettings::locale() const
+void HostSettings::setLocale(const QString& locale)
 {
-    return tree_.get<std::string>("locale", "en");
-}
-
-void HostSettings::setLocale(const std::string& locale)
-{
-    tree_.put("locale", locale);
+    settings_.setValue(QLatin1String("Locale"), locale);
 }
 
 uint16_t HostSettings::tcpPort() const
 {
-    return tree_.get<uint16_t>("tcp_port", DEFAULT_HOST_TCP_PORT);
+    return settings_.value(QLatin1String("TcpPort"), DEFAULT_HOST_TCP_PORT).toUInt();
 }
 
 void HostSettings::setTcpPort(uint16_t port)
 {
-    tree_.put("tcp_port", port);
+    settings_.setValue(QLatin1String("TcpPort"), port);
 }
 
 bool HostSettings::addFirewallRule() const
 {
-    return tree_.get<bool>("add_firewall_rule", true);
+    return settings_.value(QLatin1String("AddFirewallRule"), true).toBool();
 }
 
 void HostSettings::setAddFirewallRule(bool value)
 {
-    tree_.put("add_firewall_rule", value);
+    settings_.setValue(QLatin1String("AddFirewallRule"), value);
 }
 
 SrpUserList HostSettings::userList() const
 {
     SrpUserList users;
 
-    try
-    {
-        boost::property_tree::ptree empty_tree;
-
-        for (const auto& child_node : tree_.get_child("srp_users", empty_tree))
-        {
-            boost::property_tree::ptree user_tree = child_node.second;
-
-            SrpUser user;
-            user.name      = user_tree.get<std::string>("name");
-            user.salt      = user_tree.get<std::string>("salt");
-            user.verifier  = user_tree.get<std::string>("verifier");
-            user.number    = user_tree.get<std::string>("number");
-            user.generator = user_tree.get<std::string>("generator");
-            user.sessions  = user_tree.get<uint32_t>("sessions");
-            user.flags     = user_tree.get<uint32_t>("flags");
-
-            CHECK(!user.name.empty());
-            CHECK(Base64::decode(user.salt, &user.salt));
-            CHECK(Base64::decode(user.verifier, &user.verifier));
-            CHECK(Base64::decode(user.number, &user.number));
-            CHECK(Base64::decode(user.generator, &user.generator));
-
-            users.list.push_back(std::move(user));
-        }
-
-        users.seed_key = tree_.get<std::string>("srp_seed_key", "");
-        Base64::decode(users.seed_key, &users.seed_key);
-    }
-    catch (const boost::property_tree::ptree_error &err)
-    {
-        LOG(LS_WARNING) << "Error reading the list of users: " << err.what();
-    }
-
-    if (users.seed_key.empty())
+    users.seed_key = settings_.value(QLatin1String("SeedKey")).toByteArray();
+    if (users.seed_key.isEmpty())
         users.seed_key = Random::generateBuffer(64);
+
+    int size = settings_.beginReadArray(QLatin1String("Users"));
+    for (int i = 0; i < size; ++i)
+    {
+        settings_.setArrayIndex(i);
+
+        SrpUser user;
+        user.name      = settings_.value(QLatin1String("Name")).toString();
+        user.salt      = QByteArray::fromBase64(settings_.value(QLatin1String("Salt")).toByteArray());
+        user.verifier  = QByteArray::fromBase64(settings_.value(QLatin1String("Verifier")).toByteArray());
+        user.number    = QByteArray::fromBase64(settings_.value(QLatin1String("Number")).toByteArray());
+        user.generator = QByteArray::fromBase64(settings_.value(QLatin1String("Generator")).toByteArray());
+        user.sessions  = settings_.value(QLatin1String("Sessions")).toUInt();
+        user.flags     = settings_.value(QLatin1String("Flags")).toUInt();
+
+        CHECK(!user.name.isEmpty());
+        CHECK(!user.salt.isEmpty());
+        CHECK(!user.verifier.isEmpty());
+        CHECK(!user.number.isEmpty());
+        CHECK(!user.generator.isEmpty());
+
+        users.list.append(user);
+    }
+    settings_.endArray();
 
     return users;
 }
@@ -241,44 +115,46 @@ SrpUserList HostSettings::userList() const
 void HostSettings::setUserList(const SrpUserList& users)
 {
     // Clear the old list of users.
-    tree_.erase("srp_users");
+    settings_.remove(QLatin1String("Users"));
 
-    for (const auto& user : users.list)
+    settings_.setValue(QLatin1String("SeedKey"), users.seed_key.toBase64());
+
+    settings_.beginWriteArray(QLatin1String("Users"));
+    for (int i = 0; i < users.list.size(); ++i)
     {
-        boost::property_tree::ptree user_tree;
+        settings_.setArrayIndex(i);
 
-        user_tree.put<std::string>("name", user.name);
-        user_tree.put<std::string>("salt", Base64::encode(user.salt));
-        user_tree.put<std::string>("verifier", Base64::encode(user.verifier));
-        user_tree.put<std::string>("number", Base64::encode(user.number));
-        user_tree.put<std::string>("generator", Base64::encode(user.generator));
-        user_tree.put<uint32_t>("sessions", user.sessions);
-        user_tree.put<uint32_t>("flags", user.flags);
+        const SrpUser& user = users.list.at(i);
 
-        tree_.add_child("srp_users.user", user_tree);
+        settings_.setValue(QLatin1String("Name"), user.name);
+        settings_.setValue(QLatin1String("Salt"), user.salt.toBase64());
+        settings_.setValue(QLatin1String("Verifier"), user.verifier.toBase64());
+        settings_.setValue(QLatin1String("Number"), user.number.toBase64());
+        settings_.setValue(QLatin1String("Generator"), user.generator.toBase64());
+        settings_.setValue(QLatin1String("Sessions"), user.sessions);
+        settings_.setValue(QLatin1String("Flags"), user.flags);
     }
-
-    tree_.put<std::string>("srp_seed_key", Base64::encode(users.seed_key));
+    settings_.endArray();
 }
 
-std::string HostSettings::updateServer() const
+QString HostSettings::updateServer() const
 {
-    return tree_.get<std::string>("update_server", DEFAULT_UPDATE_SERVER);
+    return settings_.value(QLatin1String("UpdateServer"), DEFAULT_UPDATE_SERVER).toString();
 }
 
-void HostSettings::setUpdateServer(const std::string& server)
+void HostSettings::setUpdateServer(const QString& server)
 {
-    tree_.put("update_server", server);
+    settings_.setValue(QLatin1String("UpdateServer"), server);
 }
 
 bool HostSettings::remoteUpdate() const
 {
-    return tree_.get<bool>("remote_update", true);
+    return settings_.value(QLatin1String("RemoteUpdate"), true).toBool();
 }
 
 void HostSettings::setRemoteUpdate(bool allow)
 {
-    tree_.put("remote_update", allow);
+    settings_.setValue(QLatin1String("RemoteUpdate"), allow);
 }
 
 } // namespace aspia

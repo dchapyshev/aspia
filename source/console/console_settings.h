@@ -32,7 +32,6 @@ public:
     ConsoleSettings();
     ~ConsoleSettings() = default;
 
-    static QString defaultLocale();
     QString locale() const;
     void setLocale(const QString& locale);
 

@@ -24,6 +24,7 @@
 #include <QTranslator>
 
 #include "base/logging.h"
+#include "build/build_config.h"
 #include "host/host_settings.h"
 
 namespace aspia {
@@ -74,13 +75,10 @@ HostNotifierWindow::HostNotifierWindow(QWidget* parent)
 {
     HostSettings settings;
 
-    QString current_locale = QString::fromStdString(settings.locale());
+    QString current_locale = settings.locale();
 
     if (!locale_loader_.contains(current_locale))
-    {
-        current_locale = QStringLiteral("en");
-        settings.setLocale(current_locale.toStdString());
-    }
+        settings.setLocale(DEFAULT_LOCALE);
 
     locale_loader_.installTranslators(current_locale);
     ui.setupUi(this);

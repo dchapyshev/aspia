@@ -19,6 +19,8 @@
 #ifndef ASPIA_NETWORK__SRP_CLIENT_CONTEXT_H_
 #define ASPIA_NETWORK__SRP_CLIENT_CONTEXT_H_
 
+#include <QString>
+
 #include "crypto/big_num.h"
 #include "protocol/key_exchange.pb.h"
 
@@ -30,8 +32,8 @@ public:
     ~SrpClientContext();
 
     static SrpClientContext* create(proto::Method method,
-                                    const std::string& username,
-                                    const std::string& password);
+                                    const QString& username,
+                                    const QString& password);
 
     proto::SrpIdentify* identify();
 
@@ -44,13 +46,13 @@ public:
     const std::string& decryptIv() const { return decrypt_iv_; }
 
 protected:
-    SrpClientContext(proto::Method method, const std::string& I, const std::string& p);
+    SrpClientContext(proto::Method method, const QString& I, const QString& p);
 
 private:
     const proto::Method method_;
 
-    std::string I_; // User name.
-    std::string p_; // Plain text password.
+    QString I_; // User name.
+    QString p_; // Plain text password.
 
     BigNum N_;
     BigNum g_;

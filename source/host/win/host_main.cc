@@ -117,8 +117,7 @@ int hostMain(int argc, char *argv[])
 
     if (!parser.parse(application.arguments()))
     {
-        LOG(LS_WARNING) << "Error parsing command line parameters: "
-                        << parser.errorText().toStdString();
+        LOG(LS_WARNING) << "Error parsing command line parameters: " << parser.errorText();
         return 1;
     }
 

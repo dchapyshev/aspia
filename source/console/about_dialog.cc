@@ -22,7 +22,6 @@
 #include <QDesktopServices>
 #include <QFile>
 
-#include <boost/version.hpp>
 #include <google/protobuf/stubs/common.h>
 #include <libyuv.h>
 #include <openssl/crypto.h>
@@ -52,7 +51,6 @@ const char* kTranslators[] =
 
 const char* kThirdParty[] =
 {
-    "boost &copy; 1998-2018 The Boost Project authors, Boost Software License 1.0",
     "libvpx &copy; 2010, The WebM Project authors, BSD 3-Clause License",
     "libyuv &copy; 2011 The LibYuv Project Authors, BSD 3-Clause License",
     "openssl &copy; 1998-2018 The OpenSSL Project, OpenSSL License",
@@ -138,10 +136,6 @@ AboutDialog::AboutDialog(QWidget* parent)
         ui.list_service->addItem(tr("%1 version: %2").arg(name).arg(version));
     };
 
-    add_version("boost", QString("%1.%2.%3")
-                .arg(BOOST_VERSION / 100000)
-                .arg(BOOST_VERSION / 100 % 1000)
-                .arg(BOOST_VERSION % 100));
     add_version("libvpx", vpx_codec_version_str());
     add_version("libyuv", QString::number(LIBYUV_VERSION));
     add_version("openssl", OpenSSL_version(OPENSSL_VERSION));

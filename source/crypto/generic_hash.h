@@ -19,7 +19,7 @@
 #ifndef ASPIA_CRYPTO__GENERIC_HASH_H_
 #define ASPIA_CRYPTO__GENERIC_HASH_H_
 
-#include <string>
+#include <QByteArray>
 
 #include "base/macros_magic.h"
 
@@ -50,6 +50,7 @@ public:
 
     void addData(const void* data, size_t size);
     void addData(const std::string& data);
+    void addData(const QByteArray& data);
 
     std::string result() const;
 

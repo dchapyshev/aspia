@@ -19,7 +19,7 @@
 #ifndef ASPIA_CRYPTO__RANDOM_H_
 #define ASPIA_CRYPTO__RANDOM_H_
 
-#include <string>
+#include <QByteArray>
 
 #include "base/macros_magic.h"
 
@@ -33,7 +33,7 @@ public:
     static bool fillBuffer(void* buffer, size_t size);
 
     // Generates a random buffer of size |size|. If the buffer is empty, an error occurred.
-    static std::string generateBuffer(size_t size);
+    static QByteArray generateBuffer(size_t size);
 
     // Generates a random number. If an error occurs, it returns 0.
     static uint32_t generateNumber();

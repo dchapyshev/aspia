@@ -380,7 +380,7 @@ void HostServer::sessionToNotifier(const Host& host)
     proto::notifier::Session* session = message.mutable_session();
     session->set_uuid(host.uuid());
     session->set_remote_address(host.remoteAddress().toStdString());
-    session->set_username(host.userName());
+    session->set_username(host.userName().toStdString());
     session->set_session_type(host.sessionType());
 
     ipc_channel_->send(serializeMessage(message));

@@ -22,6 +22,7 @@
 #include <QMessageBox>
 
 #include "base/logging.h"
+#include "build/build_config.h"
 #include "build/version.h"
 #include "crypto/scoped_crypto_initializer.h"
 #include "host/ui/host_config_dialog.h"
@@ -50,12 +51,9 @@ int hostConfigMain(int argc, char *argv[])
     HostSettings host_settings;
     LocaleLoader locale_loader;
 
-    QString current_locale = QString::fromStdString(host_settings.locale());
+    QString current_locale = host_settings.locale();
     if (!locale_loader.contains(current_locale))
-    {
-        current_locale = "en";
-        host_settings.setLocale(current_locale.toStdString());
-    }
+        host_settings.setLocale(DEFAULT_LOCALE);
 
     locale_loader.installTranslators(current_locale);
 

@@ -33,13 +33,13 @@ bool Random::fillBuffer(void* buffer, size_t size)
 }
 
 // static
-std::string Random::generateBuffer(size_t size)
+QByteArray Random::generateBuffer(size_t size)
 {
-    std::string random_buffer;
+    QByteArray random_buffer;
     random_buffer.resize(size);
 
     if (!fillBuffer(random_buffer.data(), random_buffer.size()))
-        return std::string();
+        return QByteArray();
 
     return random_buffer;
 }

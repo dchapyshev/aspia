@@ -37,4 +37,12 @@ void secureMemZero(std::string* str)
     secureMemZero(str->data(), str->size());
 }
 
+void secureMemZero(QString* str)
+{
+    if (!str)
+        return;
+
+    secureMemZero(str->data(), str->size());
+}
+
 } // namespace aspia

@@ -35,13 +35,13 @@ const size_t kUserSaltSize = 64; // In bytes.
 // Looks for the user in the list.
 // If the user is found, it returns an index in the list.
 // If the user is not found or disabled, -1 is returned.
-size_t findUser(const SrpUserList& users, const std::string& username)
+size_t findUser(const SrpUserList& users, const QString& username)
 {
     for (size_t i = 0; i < users.list.size(); ++i)
     {
         const SrpUser& user = users.list.at(i);
 
-        if (user.name == username)
+        if (username.compare(user.name, Qt::CaseInsensitive) == 0)
         {
             // If the user is disabled, we assume that it was not found.
             if (!(user.flags & SrpUser::ENABLED))
@@ -85,29 +85,29 @@ SrpHostContext::~SrpHostContext()
 }
 
 // static
-SrpUser* SrpHostContext::createUser(const std::string& username, const std::string& password)
+SrpUser* SrpHostContext::createUser(const QString& username, const QString& password)
 {
     std::unique_ptr<SrpUser> user = std::make_unique<SrpUser>();
 
     user->name = username;
     user->salt = Random::generateBuffer(kUserSaltSize);
 
-    user->number = std::string(
+    user->number = QByteArray(
         reinterpret_cast<const char*>(kSrpNg_8192.N.data()), kSrpNg_8192.N.size());
-    user->generator = std::string(
+    user->generator = QByteArray(
         reinterpret_cast<const char*>(kSrpNg_8192.g.data()), kSrpNg_8192.g.size());
 
-    if (user->salt.empty())
+    if (user->salt.isEmpty())
         return nullptr;
 
-    BigNum s = BigNum::fromStdString(user->salt);
-    BigNum N = BigNum::fromStdString(user->number);
-    BigNum g = BigNum::fromStdString(user->generator);
+    BigNum s = BigNum::fromByteArray(user->salt);
+    BigNum N = BigNum::fromByteArray(user->number);
+    BigNum g = BigNum::fromByteArray(user->generator);
 
-    BigNum v = SrpMath::calc_v(username, password, s, N, g);
+    BigNum v = SrpMath::calc_v(username.toUtf8(), password.toUtf8(), s, N, g);
 
-    user->verifier = v.toStdString();
-    if (user->verifier.empty())
+    user->verifier = v.toByteArray();
+    if (user->verifier.isEmpty())
         return nullptr;
 
     return user.release();
@@ -115,16 +115,16 @@ SrpUser* SrpHostContext::createUser(const std::string& username, const std::stri
 
 proto::SrpServerKeyExchange* SrpHostContext::readIdentify(const proto::SrpIdentify& identify)
 {
-    if (identify.username().empty())
+    username_ = QString::fromStdString(identify.username());
+    if (username_.isEmpty())
         return nullptr;
 
     BigNum g;
     BigNum s;
 
-    size_t user_index = findUser(user_list_, identify.username());
+    size_t user_index = findUser(user_list_, username_);
     if (user_index == -1)
     {
-        username_ = identify.username();
         session_types_ = proto::SESSION_TYPE_ALL;
 
         GenericHash hash(GenericHash::BLAKE2b512);
@@ -134,19 +134,18 @@ proto::SrpServerKeyExchange* SrpHostContext::readIdentify(const proto::SrpIdenti
         N_ = BigNum::fromBuffer(kSrpNg_8192.N);
         g = BigNum::fromBuffer(kSrpNg_8192.g);
         s = BigNum::fromStdString(hash.result());
-        v_ = SrpMath::calc_v(identify.username(), user_list_.seed_key, s, N_, g);
+        v_ = SrpMath::calc_v(username_.toUtf8(), user_list_.seed_key, s, N_, g);
     }
     else
     {
         const SrpUser& user = user_list_.list.at(user_index);
 
-        username_ = user.name;
         session_types_ = user.sessions;
 
-        N_ = BigNum::fromStdString(user.number);
-        g = BigNum::fromStdString(user.generator);
-        s = BigNum::fromStdString(user.salt);
-        v_ = BigNum::fromStdString(user.verifier);
+        N_ = BigNum::fromByteArray(user.number);
+        g = BigNum::fromByteArray(user.generator);
+        s = BigNum::fromByteArray(user.salt);
+        v_ = BigNum::fromByteArray(user.verifier);
     }
 
     uint8_t random_buffer[128];

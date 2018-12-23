@@ -99,6 +99,11 @@ void GenericHash::addData(const std::string& data)
     addData(data.c_str(), data.size());
 }
 
+void GenericHash::addData(const QByteArray& data)
+{
+    addData(data.constData(), data.size());
+}
+
 std::string GenericHash::result() const
 {
     DCHECK(ctxt_);
