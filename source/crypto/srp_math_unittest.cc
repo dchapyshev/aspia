@@ -18,6 +18,8 @@
 
 #include <gtest/gtest.h>
 
+#include <QString>
+
 #include "crypto/scoped_crypto_initializer.h"
 #include "crypto/srp_constants.h"
 #include "crypto/srp_math.h"
@@ -29,8 +31,8 @@ TEST(srp_math_test, test_vector)
     ScopedCryptoInitializer crypto_initializer;
     ASSERT_TRUE(crypto_initializer.isSucceeded());
 
-    std::string I = "alice";
-    std::string p = "password123";
+    QString I = "alice";
+    QString p = "password123";
 
     const uint8_t a_buf[] = { 0x60, 0x97, 0x55, 0x27, 0x03, 0x5C, 0xF2, 0xAD, 0x19, 0x89, 0x80,
                               0x6F, 0x04, 0x07, 0x21, 0x0B, 0xC8, 0x1E, 0xDC, 0x04, 0xE2, 0x76,
@@ -153,14 +155,14 @@ TEST(srp_math_test, test_vector)
     ASSERT_EQ(u_string.size(), sizeof(u_ref_buf));
     ASSERT_EQ(memcmp(u_string.c_str(), u_ref_buf, sizeof(u_ref_buf)), 0);
 
-    BigNum x = SrpMath::calc_x(s, I, p);
+    BigNum x = SrpMath::calc_x(s, I.toUtf8(), p.toUtf8());
     ASSERT_TRUE(x.isValid());
 
     std::string x_string = x.toStdString();
     ASSERT_EQ(x_string.size(), sizeof(x_ref_buf));
     ASSERT_EQ(memcmp(x_string.c_str(), x_ref_buf, sizeof(x_ref_buf)), 0);
 
-    BigNum v = SrpMath::calc_v(I, p, s, N, g);
+    BigNum v = SrpMath::calc_v(I.toUtf8(), p.toUtf8(), s, N, g);
     ASSERT_TRUE(v.isValid());
 
     std::string v_string = v.toStdString();
