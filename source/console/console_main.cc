@@ -17,10 +17,12 @@
 //
 
 #include <QCommandLineParser>
-#include <QtPlugin>
 
+#if defined(QT_STATIC)
+#include <QtPlugin>
 Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin);
 Q_IMPORT_PLUGIN(QWindowsVistaStylePlugin);
+#endif
 
 #include "base/logging.h"
 #include "build/version.h"

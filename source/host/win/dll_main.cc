@@ -16,13 +16,17 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
+#include <QtGlobal>
+
 #define WIN32_LEAN_AND_MEAN
 #define NOMINMAX
 #include <windows.h>
 
+#if defined(QT_STATIC)
 #include <QtPlugin>
 Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin);
 Q_IMPORT_PLUGIN(QWindowsVistaStylePlugin);
+#endif
 
 extern "C" {
 
