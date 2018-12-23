@@ -19,9 +19,8 @@
 #include "host/host_server.h"
 
 #include <QCoreApplication>
+#include <QUuid>
 
-#include "base/base_paths.h"
-#include "base/guid.h"
 #include "base/logging.h"
 #include "common/message_serialization.h"
 #include "host/win/host.h"
@@ -35,8 +34,8 @@ namespace aspia {
 
 namespace {
 
-const wchar_t kFirewallRuleName[] = L"Aspia Host Service";
-const wchar_t kFirewallRuleDecription[] = L"Allow incoming TCP connections";
+const char kFirewallRuleName[] = "Aspia Host Service";
+const char kFirewallRuleDecription[] = "Allow incoming TCP connections";
 const char kNotifierFileName[] = "aspia_host_session.exe";
 
 const char* sessionTypeToString(proto::SessionType session_type)
@@ -84,16 +83,12 @@ bool HostServer::start()
 
     if (settings.addFirewallRule())
     {
-        std::filesystem::path file_path;
-        if (BasePaths::currentExecFile(&file_path))
+        FirewallManager firewall(QCoreApplication::applicationFilePath());
+        if (firewall.isValid())
         {
-            FirewallManager firewall(file_path);
-            if (firewall.isValid())
+            if (firewall.addTcpRule(kFirewallRuleName, kFirewallRuleDecription, settings.tcpPort()))
             {
-                if (firewall.addTcpRule(kFirewallRuleName, kFirewallRuleDecription, settings.tcpPort()))
-                {
-                    LOG(LS_INFO) << "Rule is added to the firewall";
-                }
+                LOG(LS_INFO) << "Rule is added to the firewall";
             }
         }
     }
@@ -123,13 +118,9 @@ void HostServer::stop()
     if (network_server_)
         network_server_->stop();
 
-    std::filesystem::path file_path;
-    if (BasePaths::currentExecFile(&file_path))
-    {
-        FirewallManager firewall(file_path);
-        if (firewall.isValid())
-            firewall.deleteRuleByName(kFirewallRuleName);
-    }
+    FirewallManager firewall(QCoreApplication::applicationFilePath());
+    if (firewall.isValid())
+        firewall.deleteRuleByName(kFirewallRuleName);
 
     LOG(LS_INFO) << "Server is stopped";
 }
@@ -182,7 +173,7 @@ void HostServer::onNewConnection()
         std::unique_ptr<Host> host(new Host(this));
 
         host->setNetworkChannel(channel);
-        host->setUuid(Guid::create());
+        host->setUuid(QUuid::createUuid());
 
         connect(this, &HostServer::sessionChanged, host.get(), &Host::sessionChanged);
         connect(host.get(), &Host::finished, this, &HostServer::onHostFinished, Qt::QueuedConnection);
@@ -314,7 +305,7 @@ void HostServer::onIpcMessageReceived(const QByteArray& buffer)
     {
         LOG(LS_INFO) << "Command to terminate the session from the notifier is received.";
 
-        const std::string& uuid = message.kill_session().uuid();
+        QUuid uuid = QUuid::fromString(QString::fromStdString(message.kill_session().uuid()));
 
         for (const auto& session : session_list_)
         {
@@ -378,7 +369,7 @@ void HostServer::sessionToNotifier(const Host& host)
     proto::notifier::ServiceToNotifier message;
 
     proto::notifier::Session* session = message.mutable_session();
-    session->set_uuid(host.uuid());
+    session->set_uuid(host.uuid().toString().toStdString());
     session->set_remote_address(host.remoteAddress().toStdString());
     session->set_username(host.userName().toStdString());
     session->set_session_type(host.sessionType());
@@ -392,7 +383,7 @@ void HostServer::sessionCloseToNotifier(const Host& host)
         return;
 
     proto::notifier::ServiceToNotifier message;
-    message.mutable_session_close()->set_uuid(host.uuid());
+    message.mutable_session_close()->set_uuid(host.uuid().toString().toStdString());
     ipc_channel_->send(serializeMessage(message));
 }
 

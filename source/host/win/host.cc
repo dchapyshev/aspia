@@ -62,7 +62,7 @@ void Host::setNetworkChannel(NetworkChannelHost* network_channel)
     network_channel_->setParent(this);
 }
 
-void Host::setUuid(std::string&& uuid)
+void Host::setUuid(const QUuid& uuid)
 {
     if (state_ != State::STOPPED)
     {
@@ -70,7 +70,7 @@ void Host::setUuid(std::string&& uuid)
         return;
     }
 
-    uuid_ = std::move(uuid);
+    uuid_ = uuid;
 }
 
 const QString& Host::userName() const
@@ -116,7 +116,7 @@ bool Host::start()
         return false;
     }
 
-    if (uuid_.empty())
+    if (uuid_.isNull())
     {
         DLOG(LS_WARNING) << "Invalid session UUID";
         return false;

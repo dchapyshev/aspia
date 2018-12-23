@@ -20,6 +20,7 @@
 #define ASPIA_HOST__WIN__HOST_H_
 
 #include <QPointer>
+#include <QUuid>
 
 #include "base/macros_magic.h"
 #include "protocol/common.pb.h"
@@ -43,8 +44,8 @@ public:
     NetworkChannelHost* networkChannel() const { return network_channel_; }
     void setNetworkChannel(NetworkChannelHost* network_channel);
 
-    const std::string& uuid() const { return uuid_; }
-    void setUuid(std::string&& uuid);
+    const QUuid& uuid() const { return uuid_; }
+    void setUuid(const QUuid& uuid);
 
     const QString& userName() const;
     proto::SessionType sessionType() const;
@@ -76,7 +77,7 @@ private:
     enum class State { STOPPED, STARTING, STOPPING, DETACHED, ATTACHED };
     static const uint32_t kInvalidSessionId = 0xFFFFFFFF;
 
-    std::string uuid_;
+    QUuid uuid_;
 
     uint32_t session_id_ = kInvalidSessionId;
     int attach_timer_id_ = 0;

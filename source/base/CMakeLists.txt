@@ -25,8 +25,6 @@ list(APPEND SOURCE_BASE
     const_buffer.h
     cpuid.cc
     cpuid.h
-    guid.cc
-    guid.h
     keycode_converter.cc
     keycode_converter.h
     logging.cc
@@ -55,7 +53,6 @@ list(APPEND SOURCE_BASE
 
 list(APPEND SOURCE_BASE_UNIT_TESTS
     aligned_memory_unittest.cc
-    guid_unittest.cc
     string_printf_unittest.cc)
 
 list(APPEND SOURCE_BASE_WIN
