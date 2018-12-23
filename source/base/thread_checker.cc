@@ -36,7 +36,7 @@ bool ThreadChecker::calledOnValidThread() const
 
 void ThreadChecker::detachFromThread()
 {
-    std::scoped_lock<std::mutex> lock(thread_id_lock_);
+    std::scoped_lock lock(thread_id_lock_);
     thread_id_ = std::thread::id();
 }
 
