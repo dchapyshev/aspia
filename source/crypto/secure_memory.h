@@ -26,6 +26,7 @@ namespace aspia {
 void secureMemZero(void* data, size_t data_size);
 void secureMemZero(std::string* str);
 void secureMemZero(QString* str);
+void secureMemZero(QByteArray* str);
 
 } // namespace aspia
 

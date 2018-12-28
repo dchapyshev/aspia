@@ -199,7 +199,7 @@ proto::SrpClientKeyExchange* SrpClientContext::readServerKeyExchange(
     g_ = BigNum::fromStdString(server_key_exchange.generator());
     s_ = BigNum::fromStdString(server_key_exchange.salt());
     B_ = BigNum::fromStdString(server_key_exchange.b());
-    decrypt_iv_ = server_key_exchange.iv();
+    decrypt_iv_ = QByteArray::fromStdString(server_key_exchange.iv());
 
     uint8_t random_buffer[128]; // 1024 bits.
     if (!Random::fillBuffer(random_buffer, sizeof(random_buffer)))
@@ -213,7 +213,7 @@ proto::SrpClientKeyExchange* SrpClientContext::readServerKeyExchange(
         return nullptr;
 
     encrypt_iv_ = Random::generateBuffer(iv_size);
-    if (encrypt_iv_.empty())
+    if (encrypt_iv_.isEmpty())
         return nullptr;
 
     std::unique_ptr<proto::SrpClientKeyExchange> client_key_exchange =
@@ -225,18 +225,18 @@ proto::SrpClientKeyExchange* SrpClientContext::readServerKeyExchange(
     return client_key_exchange.release();
 }
 
-std::string SrpClientContext::key() const
+QByteArray SrpClientContext::key() const
 {
     if (!SrpMath::verify_B_mod_N(B_, N_))
-        return std::string();
+        return QByteArray();
 
     BigNum u = SrpMath::calc_u(A_, B_, N_);
     BigNum x = SrpMath::calc_x(s_, I_.toUtf8(), p_.toUtf8());
     BigNum client_key = SrpMath::calcClientKey(N_, B_, g_, x, a_, u);
 
-    std::string client_key_string = client_key.toStdString();
-    if (client_key_string.empty())
-        return std::string();
+    QByteArray client_key_string = client_key.toByteArray();
+    if (client_key_string.isEmpty())
+        return QByteArray();
 
     switch (method_)
     {
@@ -246,7 +246,7 @@ std::string SrpClientContext::key() const
             return GenericHash::hash(GenericHash::BLAKE2s256, client_key_string);
 
         default:
-            return std::string();
+            return QByteArray();
     }
 }
 

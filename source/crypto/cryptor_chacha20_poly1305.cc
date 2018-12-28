@@ -26,11 +26,11 @@ namespace aspia {
 
 namespace {
 
-const size_t kKeySize = 32; // 256 bits, 32 bytes.
-const size_t kIVSize = 12; // 96 bits, 12 bytes.
-const size_t kTagSize = 16; // 128 bits, 16 bytes.
+const int kKeySize = 32; // 256 bits, 32 bytes.
+const int kIVSize = 12; // 96 bits, 12 bytes.
+const int kTagSize = 16; // 128 bits, 16 bytes.
 
-EVP_CIPHER_CTX_ptr createCipher(const std::string& key, int type)
+EVP_CIPHER_CTX_ptr createCipher(const QByteArray& key, int type)
 {
     EVP_CIPHER_CTX_ptr ctx(EVP_CIPHER_CTX_new());
     if (!ctx)
@@ -56,7 +56,7 @@ EVP_CIPHER_CTX_ptr createCipher(const std::string& key, int type)
     }
 
     if (EVP_CipherInit_ex(ctx.get(), nullptr, nullptr,
-                          reinterpret_cast<const uint8_t*>(key.c_str()), nullptr, type) != 1)
+                          reinterpret_cast<const uint8_t*>(key.constData()), nullptr, type) != 1)
     {
         LOG(LS_WARNING) << "EVP_CIPHER_CTX_ctrl failed";
         return nullptr;
@@ -107,8 +107,8 @@ void incrementNonce(uint8_t* nonce)
 
 CryptorChaCha20Poly1305::CryptorChaCha20Poly1305(EVP_CIPHER_CTX_ptr encrypt_ctx,
                                                  EVP_CIPHER_CTX_ptr decrypt_ctx,
-                                                 const std::string& encrypt_nonce,
-                                                 const std::string& decrypt_nonce)
+                                                 const QByteArray& encrypt_nonce,
+                                                 const QByteArray& decrypt_nonce)
     : encrypt_ctx_(std::move(encrypt_ctx)),
       decrypt_ctx_(std::move(decrypt_ctx)),
       encrypt_nonce_(encrypt_nonce),
@@ -123,9 +123,9 @@ CryptorChaCha20Poly1305::CryptorChaCha20Poly1305(EVP_CIPHER_CTX_ptr encrypt_ctx,
 CryptorChaCha20Poly1305::~CryptorChaCha20Poly1305() = default;
 
 // static
-Cryptor* CryptorChaCha20Poly1305::create(const std::string& key,
-                                         const std::string& encrypt_iv,
-                                         const std::string& decrypt_iv)
+Cryptor* CryptorChaCha20Poly1305::create(const QByteArray& key,
+                                         const QByteArray& encrypt_iv,
+                                         const QByteArray& decrypt_iv)
 {
     if (key.size() != kKeySize || encrypt_iv.size() != kIVSize || decrypt_iv.size() != kIVSize)
         return nullptr;
@@ -148,7 +148,7 @@ size_t CryptorChaCha20Poly1305::encryptedDataSize(size_t in_size)
 bool CryptorChaCha20Poly1305::encrypt(const char* in, size_t in_size, char* out)
 {
     if (EVP_EncryptInit_ex(encrypt_ctx_.get(), nullptr, nullptr, nullptr,
-                           reinterpret_cast<const uint8_t*>(encrypt_nonce_.c_str())) != 1)
+                           reinterpret_cast<const uint8_t*>(encrypt_nonce_.constData())) != 1)
     {
         LOG(LS_WARNING) << "EVP_EncryptInit_ex failed";
         return false;
@@ -195,7 +195,7 @@ size_t CryptorChaCha20Poly1305::decryptedDataSize(size_t in_size)
 bool CryptorChaCha20Poly1305::decrypt(const char* in, size_t in_size, char* out)
 {
     if (EVP_DecryptInit_ex(decrypt_ctx_.get(), nullptr, nullptr, nullptr,
-                           reinterpret_cast<const uint8_t*>(decrypt_nonce_.c_str())) != 1)
+                           reinterpret_cast<const uint8_t*>(decrypt_nonce_.constData())) != 1)
     {
         LOG(LS_WARNING) << "EVP_DecryptInit_ex failed";
         return false;

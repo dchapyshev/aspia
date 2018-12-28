@@ -41,9 +41,9 @@ public:
         const proto::SrpServerKeyExchange& server_key_exchange);
 
     proto::Method method() const { return method_; }
-    std::string key() const;
-    const std::string& encryptIv() const { return encrypt_iv_; }
-    const std::string& decryptIv() const { return decrypt_iv_; }
+    QByteArray key() const;
+    const QByteArray& encryptIv() const { return encrypt_iv_; }
+    const QByteArray& decryptIv() const { return decrypt_iv_; }
 
 protected:
     SrpClientContext(proto::Method method, const QString& I, const QString& p);
@@ -62,8 +62,8 @@ private:
     BigNum a_;
     BigNum A_;
 
-    std::string encrypt_iv_;
-    std::string decrypt_iv_;
+    QByteArray encrypt_iv_;
+    QByteArray decrypt_iv_;
 
     DISALLOW_COPY_AND_ASSIGN(SrpClientContext);
 };

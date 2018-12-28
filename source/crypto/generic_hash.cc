@@ -74,7 +74,7 @@ GenericHash::~GenericHash()
 }
 
 // static
-std::string GenericHash::hash(Type type, const void* data, size_t size)
+QByteArray GenericHash::hash(Type type, const void* data, size_t size)
 {
     GenericHash generic_hash(type);
     generic_hash.addData(data, size);
@@ -82,9 +82,15 @@ std::string GenericHash::hash(Type type, const void* data, size_t size)
 }
 
 // static
-std::string GenericHash::hash(Type type, const std::string& data)
+QByteArray GenericHash::hash(Type type, const std::string& data)
 {
     return hash(type, data.c_str(), data.size());
+}
+
+// static
+QByteArray GenericHash::hash(Type type, const QByteArray& data)
+{
+    return hash(type, data.constData(), data.size());
 }
 
 void GenericHash::addData(const void* data, size_t size)
@@ -104,7 +110,7 @@ void GenericHash::addData(const QByteArray& data)
     addData(data.constData(), data.size());
 }
 
-std::string GenericHash::result() const
+QByteArray GenericHash::result() const
 {
     DCHECK(ctxt_);
     DCHECK(md_);
@@ -112,7 +118,7 @@ std::string GenericHash::result() const
     int len = EVP_MD_size(md_);
     CHECK_GT(len, 0);
 
-    std::string result;
+    QByteArray result;
     result.resize(len);
 
     int ret = EVP_DigestFinal(ctxt_, reinterpret_cast<uint8_t*>(result.data()), nullptr);

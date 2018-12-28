@@ -45,4 +45,12 @@ void secureMemZero(QString* str)
     secureMemZero(str->data(), str->size());
 }
 
+void secureMemZero(QByteArray* str)
+{
+    if (!str)
+        return;
+
+    secureMemZero(str->data(), str->size());
+}
+
 } // namespace aspia

@@ -133,7 +133,7 @@ proto::SrpServerKeyExchange* SrpHostContext::readIdentify(const proto::SrpIdenti
 
         N_ = BigNum::fromBuffer(kSrpNg_8192.N);
         g = BigNum::fromBuffer(kSrpNg_8192.g);
-        s = BigNum::fromStdString(hash.result());
+        s = BigNum::fromByteArray(hash.result());
         v_ = SrpMath::calc_v(username_.toUtf8(), user_list_.seed_key, s, N_, g);
     }
     else
@@ -163,7 +163,7 @@ proto::SrpServerKeyExchange* SrpHostContext::readIdentify(const proto::SrpIdenti
         return nullptr;
 
     encrypt_iv_ = Random::generateBuffer(iv_size);
-    if (encrypt_iv_.empty())
+    if (encrypt_iv_.isEmpty())
         return nullptr;
 
     std::unique_ptr<proto::SrpServerKeyExchange> server_key_exchange =
@@ -181,15 +181,15 @@ proto::SrpServerKeyExchange* SrpHostContext::readIdentify(const proto::SrpIdenti
 void SrpHostContext::readClientKeyExchange(const proto::SrpClientKeyExchange& client_key_exchange)
 {
     A_ = BigNum::fromStdString(client_key_exchange.a());
-    decrypt_iv_ = client_key_exchange.iv();
+    decrypt_iv_ = QByteArray::fromStdString(client_key_exchange.iv());
 }
 
-std::string SrpHostContext::key() const
+QByteArray SrpHostContext::key() const
 {
     if (!SrpMath::verify_A_mod_N(A_, N_))
     {
         LOG(LS_WARNING) << "SrpMath::verify_A_mod_N failed";
-        return std::string();
+        return QByteArray();
     }
 
     BigNum u = SrpMath::calc_u(A_, B_, N_);
@@ -201,8 +201,8 @@ std::string SrpHostContext::key() const
         case proto::METHOD_SRP_AES256_GCM:
         case proto::METHOD_SRP_CHACHA20_POLY1305:
         {
-            std::string server_key_string = server_key.toStdString();
-            std::string result = GenericHash::hash(GenericHash::BLAKE2s256, server_key_string);
+            QByteArray server_key_string = server_key.toByteArray();
+            QByteArray result = GenericHash::hash(GenericHash::BLAKE2s256, server_key_string);
             secureMemZero(&server_key_string);
             return result;
         }
@@ -210,7 +210,7 @@ std::string SrpHostContext::key() const
         default:
         {
             LOG(LS_WARNING) << "Unknown method: " << method_;
-            return std::string();
+            return QByteArray();
         }
     }
 }

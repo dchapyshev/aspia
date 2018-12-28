@@ -19,7 +19,7 @@
 #ifndef ASPIA_CRYPTO__CRYPTOR_AES256_GCM_H_
 #define ASPIA_CRYPTO__CRYPTOR_AES256_GCM_H_
 
-#include <string>
+#include <QByteArray>
 
 #include "base/macros_magic.h"
 #include "crypto/cryptor.h"
@@ -32,9 +32,9 @@ class CryptorAes256Gcm : public Cryptor
 public:
     ~CryptorAes256Gcm();
 
-    static Cryptor* create(const std::string& key,
-                           const std::string& encrypt_iv,
-                           const std::string& decrypt_iv);
+    static Cryptor* create(const QByteArray& key,
+                           const QByteArray& encrypt_iv,
+                           const QByteArray& decrypt_iv);
 
     size_t encryptedDataSize(size_t in_size) override;
     bool encrypt(const char* in, size_t in_size, char* out) override;
@@ -45,15 +45,15 @@ public:
 protected:
     CryptorAes256Gcm(EVP_CIPHER_CTX_ptr encrypt_ctx,
                      EVP_CIPHER_CTX_ptr decrypt_ctx,
-                     const std::string& encrypt_nonce,
-                     const std::string& decrypt_nonce);
+                     const QByteArray& encrypt_nonce,
+                     const QByteArray& decrypt_nonce);
 
 private:
     EVP_CIPHER_CTX_ptr encrypt_ctx_;
     EVP_CIPHER_CTX_ptr decrypt_ctx_;
 
-    std::string encrypt_nonce_;
-    std::string decrypt_nonce_;
+    QByteArray encrypt_nonce_;
+    QByteArray decrypt_nonce_;
 
     DISALLOW_COPY_AND_ASSIGN(CryptorAes256Gcm);
 };

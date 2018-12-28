@@ -45,14 +45,15 @@ public:
     GenericHash(Type type);
     ~GenericHash();
 
-    static std::string hash(Type type, const void* data, size_t size);
-    static std::string hash(Type type, const std::string& data);
+    static QByteArray hash(Type type, const void* data, size_t size);
+    static QByteArray hash(Type type, const std::string& data);
+    static QByteArray hash(Type type, const QByteArray& data);
 
     void addData(const void* data, size_t size);
     void addData(const std::string& data);
     void addData(const QByteArray& data);
 
-    std::string result() const;
+    QByteArray result() const;
 
     void reset();
 

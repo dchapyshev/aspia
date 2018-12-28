@@ -44,9 +44,9 @@ public:
     uint32_t sessionTypes() const { return session_types_; }
 
     proto::Method method() const { return method_; }
-    std::string key() const;
-    const std::string& encryptIv() const { return encrypt_iv_; }
-    const std::string& decryptIv() const { return decrypt_iv_; }
+    QByteArray key() const;
+    const QByteArray& encryptIv() const { return encrypt_iv_; }
+    const QByteArray& decryptIv() const { return decrypt_iv_; }
 
 private:
     const proto::Method method_;
@@ -56,8 +56,8 @@ private:
     QString username_;
     uint32_t session_types_ = 0;
 
-    std::string encrypt_iv_;
-    std::string decrypt_iv_;
+    QByteArray encrypt_iv_;
+    QByteArray decrypt_iv_;
 
     BigNum N_;
     BigNum v_;
