@@ -23,10 +23,16 @@
 #include <windows.h>
 
 #if defined(QT_STATIC)
+
 #include <QtPlugin>
+
+#if defined(Q_OS_WIN)
 Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin);
 Q_IMPORT_PLUGIN(QWindowsVistaStylePlugin);
-#endif
+#else
+#error Platform support needed
+#endif // defined(Q_OS_WIN)
+#endif // defined(QT_STATIC)
 
 extern "C" {
 
