@@ -35,9 +35,9 @@ const size_t kUserSaltSize = 64; // In bytes.
 // Looks for the user in the list.
 // If the user is found, it returns an index in the list.
 // If the user is not found or disabled, -1 is returned.
-size_t findUser(const SrpUserList& users, const QString& username)
+int findUser(const SrpUserList& users, const QString& username)
 {
-    for (size_t i = 0; i < users.list.size(); ++i)
+    for (int i = 0; i < users.list.size(); ++i)
     {
         const SrpUser& user = users.list.at(i);
 
@@ -122,7 +122,7 @@ proto::SrpServerKeyExchange* SrpHostContext::readIdentify(const proto::SrpIdenti
     BigNum g;
     BigNum s;
 
-    size_t user_index = findUser(user_list_, username_);
+    int user_index = findUser(user_list_, username_);
     if (user_index == -1)
     {
         session_types_ = proto::SESSION_TYPE_ALL;
