@@ -90,7 +90,7 @@ QString variantToString(const QVariant& value)
             break;
 
         case QMetaType::QByteArray:
-            result += value.toByteArray().toBase64();
+            result = value.toByteArray().toBase64();
             break;
 
         case QMetaType::QRect:
@@ -126,7 +126,7 @@ QString variantToString(const QVariant& value)
                 stream << value;
             }
 
-            result += buffer.toBase64();
+            result = buffer.toBase64();
         }
         break;
     }
@@ -153,7 +153,7 @@ QVariant stringToVariant(const QString& value, const QString& type)
     }
     else if (type == QLatin1String("Rect"))
     {
-        QStringList list = value.mid(6).split(QLatin1Char(' '));
+        QStringList list = value.split(QLatin1Char(' '));
         if (list.size() == 4)
         {
             return QVariant(QRect(list[0].toInt(),
@@ -164,13 +164,13 @@ QVariant stringToVariant(const QString& value, const QString& type)
     }
     else if (type == QLatin1String("Size"))
     {
-        QStringList list = value.mid(6).split(QLatin1Char(' '));
+        QStringList list = value.split(QLatin1Char(' '));
         if (list.size() == 2)
             return QVariant(QSize(list[0].toInt(), list[1].toInt()));
     }
     else if (type == QLatin1String("Point"))
     {
-        QStringList list = value.mid(7).split(QLatin1Char(' '));
+        QStringList list = value.split(QLatin1Char(' '));
         if (list.size() == 2)
             return QVariant(QPoint(list[0].toInt(), list[1].toInt()));
     }
