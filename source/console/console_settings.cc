@@ -19,6 +19,7 @@
 #include "console/console_settings.h"
 
 #include <QDir>
+#include <QLocale>
 
 #include "base/xml_settings.h"
 #include "build/build_config.h"
@@ -36,7 +37,7 @@ ConsoleSettings::ConsoleSettings()
 
 QString ConsoleSettings::locale() const
 {
-    return settings_.value(QLatin1String("Locale"), DEFAULT_LOCALE).toString();
+    return settings_.value(QLatin1String("Locale"), QLocale::system().bcp47Name()).toString();
 }
 
 void ConsoleSettings::setLocale(const QString& locale)

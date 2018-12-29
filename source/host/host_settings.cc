@@ -18,6 +18,8 @@
 
 #include "host/host_settings.h"
 
+#include <QLocale>
+
 #include "base/logging.h"
 #include "base/xml_settings.h"
 #include "build/build_config.h"
@@ -49,7 +51,7 @@ bool HostSettings::isWritable() const
 
 QString HostSettings::locale() const
 {
-    return settings_.value(QLatin1String("Locale"), DEFAULT_LOCALE).toString();
+    return settings_.value(QLatin1String("Locale"), QLocale::system().bcp47Name()).toString();
 }
 
 void HostSettings::setLocale(const QString& locale)
