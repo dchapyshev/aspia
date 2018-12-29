@@ -111,6 +111,11 @@
     <WixVariable Id="WixUIUpIco" Value="resources/up.ico" />
     <WixVariable Id="WixUILicenseRtf" Value="resources/license.rtf" />
 
+    <CustomAction Id="ImportSettings" Execute="deferred" Impersonate="no" Return="asyncWait" FileKey="aspia_host_config.exe" ExeCommand="--import [SourceDir]aspia-host-config.xml --silent" />
+    <InstallExecuteSequence>
+        <Custom Action="ImportSettings" After="InstallFiles">1</Custom>
+    </InstallExecuteSequence>
+
     <!-- UI description -->
     <UI Id="InstallerUI">
         <Dialog Id="ShortcutsDlg" Width="370" Height="270" Title="!(loc.InstallDirDlg_Title)">
