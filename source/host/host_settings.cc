@@ -92,10 +92,10 @@ SrpUserList HostSettings::userList() const
 
         SrpUser user;
         user.name      = settings_.value(QLatin1String("Name")).toString();
-        user.salt      = QByteArray::fromBase64(settings_.value(QLatin1String("Salt")).toByteArray());
-        user.verifier  = QByteArray::fromBase64(settings_.value(QLatin1String("Verifier")).toByteArray());
-        user.number    = QByteArray::fromBase64(settings_.value(QLatin1String("Number")).toByteArray());
-        user.generator = QByteArray::fromBase64(settings_.value(QLatin1String("Generator")).toByteArray());
+        user.salt      = settings_.value(QLatin1String("Salt")).toByteArray();
+        user.verifier  = settings_.value(QLatin1String("Verifier")).toByteArray();
+        user.number    = settings_.value(QLatin1String("Number")).toByteArray();
+        user.generator = settings_.value(QLatin1String("Generator")).toByteArray();
         user.sessions  = settings_.value(QLatin1String("Sessions")).toUInt();
         user.flags     = settings_.value(QLatin1String("Flags")).toUInt();
 
@@ -117,7 +117,7 @@ void HostSettings::setUserList(const SrpUserList& users)
     // Clear the old list of users.
     settings_.remove(QLatin1String("Users"));
 
-    settings_.setValue(QLatin1String("SeedKey"), users.seed_key.toBase64());
+    settings_.setValue(QLatin1String("SeedKey"), users.seed_key);
 
     settings_.beginWriteArray(QLatin1String("Users"));
     for (int i = 0; i < users.list.size(); ++i)
@@ -127,10 +127,10 @@ void HostSettings::setUserList(const SrpUserList& users)
         const SrpUser& user = users.list.at(i);
 
         settings_.setValue(QLatin1String("Name"), user.name);
-        settings_.setValue(QLatin1String("Salt"), user.salt.toBase64());
-        settings_.setValue(QLatin1String("Verifier"), user.verifier.toBase64());
-        settings_.setValue(QLatin1String("Number"), user.number.toBase64());
-        settings_.setValue(QLatin1String("Generator"), user.generator.toBase64());
+        settings_.setValue(QLatin1String("Salt"), user.salt);
+        settings_.setValue(QLatin1String("Verifier"), user.verifier);
+        settings_.setValue(QLatin1String("Number"), user.number);
+        settings_.setValue(QLatin1String("Generator"), user.generator);
         settings_.setValue(QLatin1String("Sessions"), user.sessions);
         settings_.setValue(QLatin1String("Flags"), user.flags);
     }
