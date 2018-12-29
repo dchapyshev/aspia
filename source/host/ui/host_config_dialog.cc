@@ -127,6 +127,18 @@ HostConfigDialog::HostConfigDialog(LocaleLoader& locale_loader, QWidget* parent)
 // static
 bool HostConfigDialog::importSettings(const QString& path, bool silent, QWidget* parent)
 {
+    if (!QFile::exists(path))
+    {
+        if (!silent)
+        {
+            QMessageBox::warning(parent,
+                                 tr("Warning"),
+                                 tr("Source file does not exist: %1").arg(path),
+                                 QMessageBox::Ok);
+        }
+        return false;
+    }
+
     bool result = replaceFile(path, HostSettings().filePath());
 
     if (!silent)
