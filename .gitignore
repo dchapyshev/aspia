@@ -1,6 +1,9 @@
 # VS build folders
 /.vs/
 /build/
+/installer/.vs/
+/installer/bin/
+/installer/obj/
 
 # VS generated files
 *.obj
