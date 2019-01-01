@@ -423,10 +423,10 @@ int ServiceImpl::exec(int argc, char* argv[])
 
     if (handler->startup_state == ServiceHandler::RunningAsConsole)
     {
-        QCommandLineOption install_option(QStringLiteral("install"),
-                                          QStringLiteral("Install service"));
-        QCommandLineOption remove_option(QStringLiteral("remove"),
-                                         QStringLiteral("Remove service"));
+        QCommandLineOption install_option(QLatin1String("install"),
+                                          QLatin1String("Install service"));
+        QCommandLineOption remove_option(QLatin1String("remove"),
+                                         QLatin1String("Remove service"));
         QCommandLineParser parser;
 
         parser.addHelpOption();
