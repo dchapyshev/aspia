@@ -19,7 +19,6 @@
 #include "base/power_controller.h"
 
 #define WIN32_LEAN_AND_MEAN
-#define NOMINMAX
 #include <windows.h>
 #include <wtsapi32.h>
 

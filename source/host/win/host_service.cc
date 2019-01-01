@@ -19,7 +19,6 @@
 #include "host/win/host_service.h"
 
 #define WIN32_LEAN_AND_MEAN
-#define NOMINMAX
 #include <windows.h>
 #include <sddl.h>
 

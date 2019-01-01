@@ -20,7 +20,6 @@
 #define ASPIA_COMMON__WIN__FILE_ENUMERATOR_H_
 
 #define WIN32_LEAN_AND_MEAN
-#define NOMINMAX
 #include <windows.h>
 
 #include <filesystem>

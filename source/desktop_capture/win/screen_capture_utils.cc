@@ -19,7 +19,6 @@
 #include "desktop_capture/win/screen_capture_utils.h"
 
 #define WIN32_LEAN_AND_MEAN
-#define NOMINMAX
 #include <windows.h>
 
 #include "base/logging.h"

@@ -26,7 +26,6 @@
 #include <utility>
 
 #define WIN32_LEAN_AND_MEAN
-#define NOMINMAX
 #include <windows.h>
 
 #include "base/string_util.h"

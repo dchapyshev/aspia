@@ -50,6 +50,7 @@ add_definitions(-D_UNICODE
                 -DPSAPI_VERSION=2
                 -D_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS
                 -D_CRT_SECURE_NO_WARNINGS
+                -DNOMINMAX
                 -DQT_USE_QSTRINGBUILDER
                 -DCLIENT_IMPLEMENTATION
                 -DHOST_IMPLEMENTATION)

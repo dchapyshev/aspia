@@ -19,7 +19,6 @@
 #include "base/win/process_util.h"
 
 #define WIN32_LEAN_AND_MEAN
-#define NOMINMAX
 #include <windows.h>
 #include <shellapi.h>
 

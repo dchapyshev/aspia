@@ -20,7 +20,6 @@
 #define ASPIA_BASE__WIN__SCOPED_USER_OBJECT_H_
 
 #define WIN32_LEAN_AND_MEAN
-#define NOMINMAX
 #include <windows.h>
 
 #include "base/macros_magic.h"
