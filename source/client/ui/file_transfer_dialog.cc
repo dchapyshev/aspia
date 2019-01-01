@@ -52,6 +52,8 @@ FileTransferDialog::FileTransferDialog(QWidget* parent)
         taskbar_progress_->show();
     }
 #endif
+
+    label_metrics_.reset(new QFontMetrics(ui.label_source->font()));
 }
 
 FileTransferDialog::~FileTransferDialog()
@@ -78,15 +80,12 @@ void FileTransferDialog::setCurrentItem(const QString& source_path, const QStrin
 #endif
     }
 
-    QFontMetrics source_label_metrics(ui.label_source->font());
-    QFontMetrics target_label_metrics(ui.label_target->font());
-
-    QString source_text = source_label_metrics.elidedText(
+    QString source_text = label_metrics_->elidedText(
         tr("From: %1").arg(source_path),
         Qt::ElideMiddle,
         ui.label_source->width());
 
-    QString target_text = target_label_metrics.elidedText(
+    QString target_text = label_metrics_->elidedText(
         tr("To: %1").arg(target_path),
         Qt::ElideMiddle,
         ui.label_target->width());

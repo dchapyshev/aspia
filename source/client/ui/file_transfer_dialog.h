@@ -52,6 +52,8 @@ protected:
 private:
     Ui::FileTransferDialog ui;
 
+    QScopedPointer<QFontMetrics> label_metrics_;
+
 #if defined(OS_WIN)
     QWinTaskbarProgress* taskbar_progress_ = nullptr;
 #endif
