@@ -31,17 +31,20 @@ Client::Client(ConnectData&& connect_data, QObject* parent)
       connect_data_(std::move(connect_data))
 {
     ConfigFactory::fixupDesktopConfig(&connect_data_.desktop_config);
+}
 
+void Client::start()
+{
     // Create a network channel.
     network_channel_ = new NetworkChannelClient(this);
-
-    // Create a status dialog. It displays all information about the progress of the connection
-    // and errors.
-    status_dialog_ = new StatusDialog();
 
     connect(network_channel_, &NetworkChannelClient::connected, this, &Client::onChannelConnected);
     connect(network_channel_, &NetworkChannelClient::errorOccurred, this, &Client::onChannelError);
     connect(network_channel_, &NetworkChannelClient::disconnected, this, &Client::onChannelDisconnected);
+
+    // Create a status dialog. It displays all information about the progress of the connection
+    // and errors.
+    status_dialog_ = new StatusDialog(QApplication::activeWindow());
 
     connect(status_dialog_, &StatusDialog::finished, [this](int /* result */)
     {
@@ -54,10 +57,7 @@ Client::Client(ConnectData&& connect_data, QObject* parent)
         // When the status dialog is finished, we call the client's termination.
         emit finished(this);
     });
-}
 
-void Client::start()
-{
     status_dialog_->show();
     status_dialog_->activateWindow();
 
