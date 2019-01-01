@@ -26,9 +26,9 @@ UserTreeItem::UserTreeItem(size_t index, const SrpUser& user)
     : index_(index)
 {
     if (user.flags & SrpUser::ENABLED)
-        setIcon(0, QIcon(QStringLiteral(":/img/user.png")));
+        setIcon(0, QIcon(QLatin1String(":/img/user.png")));
     else
-        setIcon(0, QIcon(QStringLiteral(":/img/user-disabled.png")));
+        setIcon(0, QIcon(QLatin1String(":/img/user-disabled.png")));
 
     setText(0, user.name);
 }
