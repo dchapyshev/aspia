@@ -667,24 +667,24 @@ void ConsoleWindow::onTabContextMenu(const QPoint& pos)
     QMenu menu;
 
     QAction* close_other_action = new QAction(
-        QIcon(QStringLiteral(":/icon/ui-tab-multi-close.png")), tr("Close other tabs"), &menu);
+        QIcon(QStringLiteral(":/img/ui-tab-multi-close.png")), tr("Close other tabs"), &menu);
     QAction* close_action;
     QAction* pin_action;
 
     if (!is_pinned)
     {
         close_action = new QAction(
-            QIcon(QStringLiteral(":/icon/ui-tab-close.png")), tr("Close tab"), &menu);
+            QIcon(QStringLiteral(":/img/ui-tab-close.png")), tr("Close tab"), &menu);
 
         pin_action = new QAction(
-            QIcon(QStringLiteral(":/icon/lock-unlock.png")), tr("Pin tab"), &menu);
+            QIcon(QStringLiteral(":/img/lock-unlock.png")), tr("Pin tab"), &menu);
     }
     else
     {
         close_action = nullptr;
 
         pin_action = new QAction(
-            QIcon(QStringLiteral(":/icon/lock.png")), tr("Pin tab"), &menu);
+            QIcon(QStringLiteral(":/img/lock.png")), tr("Pin tab"), &menu);
     }
 
     pin_action->setCheckable(true);
@@ -721,13 +721,13 @@ void ConsoleWindow::onTabContextMenu(const QPoint& pos)
         if (pin_action->isChecked())
         {
             ui.tab_widget->setTabIcon(
-                tab_index, QIcon(QStringLiteral(":/icon/address-book-pinned.png")));
+                tab_index, QIcon(QStringLiteral(":/img/address-book-pinned.png")));
             mru_.pinFile(current_path);
         }
         else
         {
             ui.tab_widget->setTabIcon(
-                tab_index, QIcon(QStringLiteral(":/icon/address-book.png")));
+                tab_index, QIcon(QStringLiteral(":/img/address-book.png")));
             mru_.unpinFile(current_path);
         }
 
@@ -901,7 +901,7 @@ void ConsoleWindow::showTrayIcon(bool show)
         tray_menu_->addAction(ui.action_exit);
 
         tray_icon_.reset(new QSystemTrayIcon(this));
-        tray_icon_->setIcon(QIcon(QStringLiteral(":/icon/main.png")));
+        tray_icon_->setIcon(QIcon(QStringLiteral(":/img/main.png")));
         tray_icon_->setToolTip(tr("Aspia Console"));
         tray_icon_->setContextMenu(tray_menu_.get());
         tray_icon_->show();
@@ -976,8 +976,8 @@ void ConsoleWindow::addAddressBookTab(AddressBookTab* new_tab)
             this, &ConsoleWindow::onComputerDoubleClicked);
 
     QIcon icon = mru_.isPinnedFile(file_path) ?
-        QIcon(QStringLiteral(":/icon/address-book-pinned.png")) :
-        QIcon(QStringLiteral(":/icon/address-book.png"));
+        QIcon(QStringLiteral(":/img/address-book-pinned.png")) :
+        QIcon(QStringLiteral(":/img/address-book.png"));
 
     int index = ui.tab_widget->addTab(new_tab, icon, new_tab->addressBookName());
 

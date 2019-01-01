@@ -341,9 +341,9 @@ void FilePanel::onListContextMenu(const QPoint& point)
     if (ui.list->selectionModel()->hasSelection())
     {
         copy_action.reset(new QAction(
-            QIcon(QStringLiteral(":/icon/arrow-045.png")), tr("&Send\tF11")));
+            QIcon(QStringLiteral(":/img/arrow-045.png")), tr("&Send\tF11")));
         delete_action.reset(new QAction(
-            QIcon(QStringLiteral(":/icon/cross-script.png")), tr("&Delete\tDelete")));
+            QIcon(QStringLiteral(":/img/cross-script.png")), tr("&Delete\tDelete")));
 
         copy_action->setEnabled(transfer_allowed_ && transfer_enabled_);
 
@@ -353,7 +353,7 @@ void FilePanel::onListContextMenu(const QPoint& point)
     }
 
     QScopedPointer<QAction> add_folder_action(new QAction(
-        QIcon(QStringLiteral(":/icon/folder-plus.png")), tr("&Create Folder")));
+        QIcon(QStringLiteral(":/img/folder-plus.png")), tr("&Create Folder")));
 
     menu.addAction(add_folder_action.data());
 

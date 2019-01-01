@@ -121,7 +121,7 @@ p, li { white-space: pre-wrap; }
        </property>
        <property name="icon">
         <iconset resource="resources/console.qrc">
-         <normaloff>:/icon/heart.png</normaloff>:/icon/heart.png</iconset>
+         <normaloff>:/img/heart.png</normaloff>:/img/heart.png</iconset>
        </property>
       </widget>
      </item>

@@ -40,15 +40,15 @@ public:
         switch (session_.session_type())
         {
             case proto::SESSION_TYPE_DESKTOP_MANAGE:
-                setIcon(0, QIcon(QStringLiteral(":/icon/monitor-keyboard.png")));
+                setIcon(0, QIcon(QStringLiteral(":/img/monitor-keyboard.png")));
                 break;
 
             case proto::SESSION_TYPE_DESKTOP_VIEW:
-                setIcon(0, QIcon(QStringLiteral(":/icon/monitor.png")));
+                setIcon(0, QIcon(QStringLiteral(":/img/monitor.png")));
                 break;
 
             case proto::SESSION_TYPE_FILE_TRANSFER:
-                setIcon(0, QIcon(QStringLiteral(":/icon/folder-stand.png")));
+                setIcon(0, QIcon(QStringLiteral(":/img/folder-stand.png")));
                 break;
 
             default:
@@ -259,7 +259,7 @@ void HostNotifierWindow::showNotifier()
         move(window_rect_.topLeft());
         setFixedSize(window_rect_.size());
 
-        ui.button_show_hide->setIcon(QIcon(QStringLiteral(":/icon/arrow-left-gray.png")));
+        ui.button_show_hide->setIcon(QIcon(QStringLiteral(":/img/arrow-left-gray.png")));
     }
 }
 
@@ -277,7 +277,7 @@ void HostNotifierWindow::hideNotifier()
     setFixedSize(window_rect_.width() - content_size.width(),
                  window_rect_.height());
 
-    ui.button_show_hide->setIcon(QIcon(QStringLiteral(":/icon/arrow-right-gray.png")));
+    ui.button_show_hide->setIcon(QIcon(QStringLiteral(":/img/arrow-right-gray.png")));
 }
 
 } // namespace aspia

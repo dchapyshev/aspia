@@ -151,7 +151,7 @@
    </property>
    <property name="icon">
     <iconset resource="../resources/client.qrc">
-     <normaloff>:/icon/folder-up.png</normaloff>:/icon/folder-up.png</iconset>
+     <normaloff>:/img/folder-up.png</normaloff>:/img/folder-up.png</iconset>
    </property>
    <property name="text">
     <string/>
@@ -163,7 +163,7 @@
   <action name="action_refresh">
    <property name="icon">
     <iconset resource="../resources/client.qrc">
-     <normaloff>:/icon/arrow-circle-double.png</normaloff>:/icon/arrow-circle-double.png</iconset>
+     <normaloff>:/img/arrow-circle-double.png</normaloff>:/img/arrow-circle-double.png</iconset>
    </property>
    <property name="text">
     <string/>
@@ -178,7 +178,7 @@
    </property>
    <property name="icon">
     <iconset resource="../resources/client.qrc">
-     <normaloff>:/icon/folder-plus.png</normaloff>:/icon/folder-plus.png</iconset>
+     <normaloff>:/img/folder-plus.png</normaloff>:/img/folder-plus.png</iconset>
    </property>
    <property name="text">
     <string/>
@@ -193,7 +193,7 @@
    </property>
    <property name="icon">
     <iconset resource="../resources/client.qrc">
-     <normaloff>:/icon/cross-script.png</normaloff>:/icon/cross-script.png</iconset>
+     <normaloff>:/img/cross-script.png</normaloff>:/img/cross-script.png</iconset>
    </property>
    <property name="text">
     <string/>
@@ -208,7 +208,7 @@
    </property>
    <property name="icon">
     <iconset resource="../resources/client.qrc">
-     <normaloff>:/icon/arrow-045.png</normaloff>:/icon/arrow-045.png</iconset>
+     <normaloff>:/img/arrow-045.png</normaloff>:/img/arrow-045.png</iconset>
    </property>
    <property name="text">
     <string>Send</string>

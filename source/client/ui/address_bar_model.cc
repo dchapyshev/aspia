@@ -266,7 +266,7 @@ QVariant AddressBarModel::data(const QModelIndex& index, int role) const
             case Qt::DecorationRole:
             {
                 if (index.column() == COLUMN_NAME)
-                    return QIcon(QStringLiteral(":/icon/computer.png"));
+                    return QIcon(QStringLiteral(":/img/computer.png"));
             }
             break;
 
@@ -289,7 +289,7 @@ QVariant AddressBarModel::data(const QModelIndex& index, int role) const
             case Qt::DecorationRole:
             {
                 if (index.column() == COLUMN_NAME)
-                    return QIcon(QStringLiteral(":/icon/folder.png"));
+                    return QIcon(QStringLiteral(":/img/folder.png"));
             }
             break;
 

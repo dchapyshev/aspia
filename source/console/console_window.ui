@@ -122,7 +122,7 @@
      </property>
      <property name="icon">
       <iconset resource="resources/console.qrc">
-       <normaloff>:/icon/locale.png</normaloff>:/icon/locale.png</iconset>
+       <normaloff>:/img/locale.png</normaloff>:/img/locale.png</iconset>
      </property>
     </widget>
     <addaction name="menu_language"/>
@@ -180,7 +180,7 @@
   <action name="action_new">
    <property name="icon">
     <iconset resource="resources/console.qrc">
-     <normaloff>:/icon/document.png</normaloff>:/icon/document.png</iconset>
+     <normaloff>:/img/document.png</normaloff>:/img/document.png</iconset>
    </property>
    <property name="text">
     <string>&amp;New address book</string>
@@ -192,7 +192,7 @@
   <action name="action_open">
    <property name="icon">
     <iconset resource="resources/console.qrc">
-     <normaloff>:/icon/open.png</normaloff>:/icon/open.png</iconset>
+     <normaloff>:/img/open.png</normaloff>:/img/open.png</iconset>
    </property>
    <property name="text">
     <string>&amp;Open address book...</string>
@@ -207,7 +207,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources/console.qrc">
-     <normaloff>:/icon/disk.png</normaloff>:/icon/disk.png</iconset>
+     <normaloff>:/img/disk.png</normaloff>:/img/disk.png</iconset>
    </property>
    <property name="text">
     <string>&amp;Save</string>
@@ -241,7 +241,7 @@
   <action name="action_exit">
    <property name="icon">
     <iconset resource="resources/console.qrc">
-     <normaloff>:/icon/exit.png</normaloff>:/icon/exit.png</iconset>
+     <normaloff>:/img/exit.png</normaloff>:/img/exit.png</iconset>
    </property>
    <property name="text">
     <string>&amp;Exit</string>
@@ -253,7 +253,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources/console.qrc">
-     <normaloff>:/icon/folder-plus.png</normaloff>:/icon/folder-plus.png</iconset>
+     <normaloff>:/img/folder-plus.png</normaloff>:/img/folder-plus.png</iconset>
    </property>
    <property name="text">
     <string>Add Computer Group</string>
@@ -265,7 +265,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources/console.qrc">
-     <normaloff>:/icon/folder-pencil.png</normaloff>:/icon/folder-pencil.png</iconset>
+     <normaloff>:/img/folder-pencil.png</normaloff>:/img/folder-pencil.png</iconset>
    </property>
    <property name="text">
     <string>Modify Computer Group</string>
@@ -277,7 +277,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources/console.qrc">
-     <normaloff>:/icon/folder-minus.png</normaloff>:/icon/folder-minus.png</iconset>
+     <normaloff>:/img/folder-minus.png</normaloff>:/img/folder-minus.png</iconset>
    </property>
    <property name="text">
     <string>Delete Computer Group</string>
@@ -289,7 +289,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources/console.qrc">
-     <normaloff>:/icon/computer-plus.png</normaloff>:/icon/computer-plus.png</iconset>
+     <normaloff>:/img/computer-plus.png</normaloff>:/img/computer-plus.png</iconset>
    </property>
    <property name="text">
     <string>Add Computer</string>
@@ -301,7 +301,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources/console.qrc">
-     <normaloff>:/icon/computer-pencil.png</normaloff>:/icon/computer-pencil.png</iconset>
+     <normaloff>:/img/computer-pencil.png</normaloff>:/img/computer-pencil.png</iconset>
    </property>
    <property name="text">
     <string>Modify Computer</string>
@@ -313,7 +313,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources/console.qrc">
-     <normaloff>:/icon/computer-minus.png</normaloff>:/icon/computer-minus.png</iconset>
+     <normaloff>:/img/computer-minus.png</normaloff>:/img/computer-minus.png</iconset>
    </property>
    <property name="text">
     <string>Delete Computer</string>
@@ -328,7 +328,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources/console.qrc">
-     <normaloff>:/icon/monitor-keyboard.png</normaloff>:/icon/monitor-keyboard.png</iconset>
+     <normaloff>:/img/monitor-keyboard.png</normaloff>:/img/monitor-keyboard.png</iconset>
    </property>
    <property name="text">
     <string>Desktop &amp;Manage</string>
@@ -340,7 +340,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources/console.qrc">
-     <normaloff>:/icon/monitor.png</normaloff>:/icon/monitor.png</iconset>
+     <normaloff>:/img/monitor.png</normaloff>:/img/monitor.png</iconset>
    </property>
    <property name="text">
     <string>Desktop &amp;View</string>
@@ -352,7 +352,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources/console.qrc">
-     <normaloff>:/icon/folder-stand.png</normaloff>:/icon/folder-stand.png</iconset>
+     <normaloff>:/img/folder-stand.png</normaloff>:/img/folder-stand.png</iconset>
    </property>
    <property name="text">
     <string>&amp;File Transfer</string>
@@ -361,7 +361,7 @@
   <action name="action_online_help">
    <property name="icon">
     <iconset resource="resources/console.qrc">
-     <normaloff>:/icon/lifebuoy.png</normaloff>:/icon/lifebuoy.png</iconset>
+     <normaloff>:/img/lifebuoy.png</normaloff>:/img/lifebuoy.png</iconset>
    </property>
    <property name="text">
     <string>&amp;Online Help...</string>
@@ -373,7 +373,7 @@
   <action name="action_about">
    <property name="icon">
     <iconset resource="resources/console.qrc">
-     <normaloff>:/icon/about.png</normaloff>:/icon/about.png</iconset>
+     <normaloff>:/img/about.png</normaloff>:/img/about.png</iconset>
    </property>
    <property name="text">
     <string>&amp;About</string>
@@ -385,7 +385,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources/console.qrc">
-     <normaloff>:/icon/book-pencil.png</normaloff>:/icon/book-pencil.png</iconset>
+     <normaloff>:/img/book-pencil.png</normaloff>:/img/book-pencil.png</iconset>
    </property>
    <property name="text">
     <string>Address Book Properties</string>
@@ -394,7 +394,7 @@
   <action name="action_desktop_manage_connect">
    <property name="icon">
     <iconset resource="resources/console.qrc">
-     <normaloff>:/icon/monitor-keyboard.png</normaloff>:/icon/monitor-keyboard.png</iconset>
+     <normaloff>:/img/monitor-keyboard.png</normaloff>:/img/monitor-keyboard.png</iconset>
    </property>
    <property name="text">
     <string>Desktop Manage</string>
@@ -406,7 +406,7 @@
   <action name="action_desktop_view_connect">
    <property name="icon">
     <iconset resource="resources/console.qrc">
-     <normaloff>:/icon/monitor.png</normaloff>:/icon/monitor.png</iconset>
+     <normaloff>:/img/monitor.png</normaloff>:/img/monitor.png</iconset>
    </property>
    <property name="text">
     <string>Desktop View</string>
@@ -418,7 +418,7 @@
   <action name="action_file_transfer_connect">
    <property name="icon">
     <iconset resource="resources/console.qrc">
-     <normaloff>:/icon/folder-stand.png</normaloff>:/icon/folder-stand.png</iconset>
+     <normaloff>:/img/folder-stand.png</normaloff>:/img/folder-stand.png</iconset>
    </property>
    <property name="text">
     <string>File Transfer</string>
@@ -452,7 +452,7 @@
   <action name="action_fast_connect">
    <property name="icon">
     <iconset resource="resources/console.qrc">
-     <normaloff>:/icon/plug-disconnect.png</normaloff>:/icon/plug-disconnect.png</iconset>
+     <normaloff>:/img/plug-disconnect.png</normaloff>:/img/plug-disconnect.png</iconset>
    </property>
    <property name="text">
     <string>Fast Connect...</string>
@@ -485,7 +485,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources/console.qrc">
-     <normaloff>:/icon/disks.png</normaloff>:/icon/disks.png</iconset>
+     <normaloff>:/img/disks.png</normaloff>:/img/disks.png</iconset>
    </property>
    <property name="text">
     <string>Save all</string>

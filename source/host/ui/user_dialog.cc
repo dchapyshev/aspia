@@ -69,15 +69,15 @@ UserDialog::UserDialog(const SrpUserList& user_list, SrpUser* user, QWidget* par
         ui.tree_sessions->addTopLevelItem(item);
     };
 
-    add_session_type(QIcon(QStringLiteral(":/icon/monitor-keyboard.png")),
+    add_session_type(QIcon(QStringLiteral(":/img/monitor-keyboard.png")),
                      tr("Desktop Manage"),
                      proto::SESSION_TYPE_DESKTOP_MANAGE);
 
-    add_session_type(QIcon(QStringLiteral(":/icon/monitor.png")),
+    add_session_type(QIcon(QStringLiteral(":/img/monitor.png")),
                      tr("Desktop View"),
                      proto::SESSION_TYPE_DESKTOP_VIEW);
 
-    add_session_type(QIcon(QStringLiteral(":/icon/folder-stand.png")),
+    add_session_type(QIcon(QStringLiteral(":/img/folder-stand.png")),
                      tr("File Transfer"),
                      proto::SESSION_TYPE_FILE_TRANSFER);
 

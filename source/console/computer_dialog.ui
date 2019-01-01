@@ -149,7 +149,7 @@
            </property>
            <property name="icon">
             <iconset resource="resources/console.qrc">
-             <normaloff>:/icon/eye.png</normaloff>:/icon/eye.png</iconset>
+             <normaloff>:/img/eye.png</normaloff>:/img/eye.png</iconset>
            </property>
            <property name="checkable">
             <bool>true</bool>
@@ -176,7 +176,7 @@
            </property>
            <property name="icon">
             <iconset resource="resources/console.qrc">
-             <normaloff>:/icon/settings.png</normaloff>:/icon/settings.png</iconset>
+             <normaloff>:/img/settings.png</normaloff>:/img/settings.png</iconset>
            </property>
           </widget>
          </item>

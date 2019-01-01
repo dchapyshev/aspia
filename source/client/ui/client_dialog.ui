@@ -84,7 +84,7 @@
          </property>
          <property name="icon">
           <iconset resource="../resources/client.qrc">
-           <normaloff>:/icon/settings.png</normaloff>:/icon/settings.png</iconset>
+           <normaloff>:/img/settings.png</normaloff>:/img/settings.png</iconset>
          </property>
          <property name="autoDefault">
           <bool>false</bool>

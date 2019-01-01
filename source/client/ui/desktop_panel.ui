@@ -111,7 +111,7 @@
    </property>
    <property name="icon">
     <iconset resource="../resources/client.qrc">
-     <normaloff>:/icon/pin.png</normaloff>:/icon/pin.png</iconset>
+     <normaloff>:/img/pin.png</normaloff>:/img/pin.png</iconset>
    </property>
    <property name="text">
     <string notr="true"/>
@@ -123,7 +123,7 @@
   <action name="action_settings">
    <property name="icon">
     <iconset resource="../resources/client.qrc">
-     <normaloff>:/icon/settings.png</normaloff>:/icon/settings.png</iconset>
+     <normaloff>:/img/settings.png</normaloff>:/img/settings.png</iconset>
    </property>
    <property name="text">
     <string notr="true"/>
@@ -135,7 +135,7 @@
   <action name="action_monitors">
    <property name="icon">
     <iconset resource="../resources/client.qrc">
-     <normaloff>:/icon/monitors.png</normaloff>:/icon/monitors.png</iconset>
+     <normaloff>:/img/monitors.png</normaloff>:/img/monitors.png</iconset>
    </property>
    <property name="text">
     <string notr="true"/>
@@ -147,7 +147,7 @@
   <action name="action_autosize">
    <property name="icon">
     <iconset resource="../resources/client.qrc">
-     <normaloff>:/icon/arrow-in-out.png</normaloff>:/icon/arrow-in-out.png</iconset>
+     <normaloff>:/img/arrow-in-out.png</normaloff>:/img/arrow-in-out.png</iconset>
    </property>
    <property name="text">
     <string notr="true"/>
@@ -162,7 +162,7 @@
    </property>
    <property name="icon">
     <iconset resource="../resources/client.qrc">
-     <normaloff>:/icon/application-resize-full.png</normaloff>:/icon/application-resize-full.png</iconset>
+     <normaloff>:/img/application-resize-full.png</normaloff>:/img/application-resize-full.png</iconset>
    </property>
    <property name="text">
     <string notr="true"/>
@@ -185,7 +185,7 @@
   <action name="action_cad">
    <property name="icon">
     <iconset resource="../resources/client.qrc">
-     <normaloff>:/icon/ctrl-alt-del.png</normaloff>:/icon/ctrl-alt-del.png</iconset>
+     <normaloff>:/img/ctrl-alt-del.png</normaloff>:/img/ctrl-alt-del.png</iconset>
    </property>
    <property name="text">
     <string notr="true"/>
@@ -197,7 +197,7 @@
   <action name="action_menu">
    <property name="icon">
     <iconset resource="../resources/client.qrc">
-     <normaloff>:/icon/menu.png</normaloff>:/icon/menu.png</iconset>
+     <normaloff>:/img/menu.png</normaloff>:/img/menu.png</iconset>
    </property>
    <property name="text">
     <string notr="true"/>
@@ -220,7 +220,7 @@
   <action name="action_file_transfer">
    <property name="icon">
     <iconset resource="../resources/client.qrc">
-     <normaloff>:/icon/folder-stand.png</normaloff>:/icon/folder-stand.png</iconset>
+     <normaloff>:/img/folder-stand.png</normaloff>:/img/folder-stand.png</iconset>
    </property>
    <property name="text">
     <string/>
@@ -251,7 +251,7 @@
   <action name="action_power_control">
    <property name="icon">
     <iconset resource="../resources/client.qrc">
-     <normaloff>:/icon/lightning.png</normaloff>:/icon/lightning.png</iconset>
+     <normaloff>:/img/lightning.png</normaloff>:/img/lightning.png</iconset>
    </property>
    <property name="text">
     <string>Power control</string>

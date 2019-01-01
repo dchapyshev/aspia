@@ -45,15 +45,15 @@ ComputerDialog::ComputerDialog(QWidget* parent,
 {
     ui.setupUi(this);
 
-    ui.combo_session_config->addItem(QIcon(QStringLiteral(":/icon/monitor-keyboard.png")),
+    ui.combo_session_config->addItem(QIcon(QStringLiteral(":/img/monitor-keyboard.png")),
                                      tr("Desktop Manage"),
                                      QVariant(proto::SESSION_TYPE_DESKTOP_MANAGE));
 
-    ui.combo_session_config->addItem(QIcon(QStringLiteral(":/icon/monitor.png")),
+    ui.combo_session_config->addItem(QIcon(QStringLiteral(":/img/monitor.png")),
                                      tr("Desktop View"),
                                      QVariant(proto::SESSION_TYPE_DESKTOP_VIEW));
 
-    ui.combo_session_config->addItem(QIcon(QStringLiteral(":/icon/folder-stand.png")),
+    ui.combo_session_config->addItem(QIcon(QStringLiteral(":/img/folder-stand.png")),
                                      tr("File Transfer"),
                                      QVariant(proto::SESSION_TYPE_FILE_TRANSFER));
 

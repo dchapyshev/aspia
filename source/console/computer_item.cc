@@ -29,7 +29,7 @@ ComputerItem::ComputerItem(proto::address_book::Computer* computer,
     : computer_(computer),
       parent_group_item_(parent_group_item)
 {
-    setIcon(0, QIcon(QStringLiteral(":/icon/computer.png")));
+    setIcon(0, QIcon(QStringLiteral(":/img/computer.png")));
     updateItem();
 }
 

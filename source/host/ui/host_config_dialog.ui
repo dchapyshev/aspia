@@ -210,7 +210,7 @@
            </property>
            <property name="icon">
             <iconset resource="../resources/host.qrc">
-             <normaloff>:/icon/user-plus.png</normaloff>:/icon/user-plus.png</iconset>
+             <normaloff>:/img/user-plus.png</normaloff>:/img/user-plus.png</iconset>
            </property>
           </widget>
          </item>
@@ -230,7 +230,7 @@
            </property>
            <property name="icon">
             <iconset resource="../resources/host.qrc">
-             <normaloff>:/icon/user-pencil.png</normaloff>:/icon/user-pencil.png</iconset>
+             <normaloff>:/img/user-pencil.png</normaloff>:/img/user-pencil.png</iconset>
            </property>
           </widget>
          </item>
@@ -250,7 +250,7 @@
            </property>
            <property name="icon">
             <iconset resource="../resources/host.qrc">
-             <normaloff>:/icon/user-minus.png</normaloff>:/icon/user-minus.png</iconset>
+             <normaloff>:/img/user-minus.png</normaloff>:/img/user-minus.png</iconset>
            </property>
           </widget>
          </item>
@@ -412,7 +412,7 @@
   <action name="action_add">
    <property name="icon">
     <iconset resource="../resources/host.qrc">
-     <normaloff>:/icon/user-plus.png</normaloff>:/icon/user-plus.png</iconset>
+     <normaloff>:/img/user-plus.png</normaloff>:/img/user-plus.png</iconset>
    </property>
    <property name="text">
     <string>Add</string>
@@ -421,7 +421,7 @@
   <action name="action_modify">
    <property name="icon">
     <iconset resource="../resources/host.qrc">
-     <normaloff>:/icon/user-pencil.png</normaloff>:/icon/user-pencil.png</iconset>
+     <normaloff>:/img/user-pencil.png</normaloff>:/img/user-pencil.png</iconset>
    </property>
    <property name="text">
     <string>Modify</string>
@@ -430,7 +430,7 @@
   <action name="action_delete">
    <property name="icon">
     <iconset resource="../resources/host.qrc">
-     <normaloff>:/icon/user-minus.png</normaloff>:/icon/user-minus.png</iconset>
+     <normaloff>:/img/user-minus.png</normaloff>:/img/user-minus.png</iconset>
    </property>
    <property name="text">
     <string>Delete</string>

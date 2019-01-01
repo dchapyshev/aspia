@@ -1,5 +1,5 @@
 <RCC>
-  <qresource prefix="/icon">
+  <qresource prefix="/img">
     <file>arrow-left-gray.png</file>
     <file>arrow-right-gray.png</file>
     <file>keyboard.png</file>

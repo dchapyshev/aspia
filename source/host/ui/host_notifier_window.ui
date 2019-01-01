@@ -66,7 +66,7 @@ background: #CFCFCF;
 padding: 3px;</string>
         </property>
         <property name="text">
-         <string notr="true">&lt;img src=&quot;:/icon/main.png&quot;/&gt;</string>
+         <string notr="true">&lt;img src=&quot;:/img/main.png&quot;/&gt;</string>
         </property>
        </widget>
       </item>
@@ -101,7 +101,7 @@ background: #C0C0C0;
         </property>
         <property name="icon">
          <iconset resource="../resources/host.qrc">
-          <normaloff>:/icon/arrow-left-gray.png</normaloff>:/icon/arrow-left-gray.png</iconset>
+          <normaloff>:/img/arrow-left-gray.png</normaloff>:/img/arrow-left-gray.png</iconset>
         </property>
        </widget>
       </item>

@@ -1,5 +1,5 @@
 <RCC>
-  <qresource prefix="/icon">
+  <qresource prefix="/img">
     <file>lightning.png</file>
     <file>menu.png</file>
     <file>monitors.png</file>

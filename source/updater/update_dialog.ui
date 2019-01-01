@@ -37,7 +37,7 @@
            <string notr="true"/>
           </property>
           <property name="pixmap">
-           <pixmap resource="resources/updater.qrc">:/icon/globe-green.png</pixmap>
+           <pixmap resource="resources/updater.qrc">:/img/globe-green.png</pixmap>
           </property>
          </widget>
         </item>

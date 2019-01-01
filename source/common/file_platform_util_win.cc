@@ -56,7 +56,7 @@ QIcon stockIcon(SHSTOCKICONID icon_id)
             return QtWin::fromHICON(icon);
     }
 
-    return QIcon(QStringLiteral(":/icon/document.png"));
+    return QIcon(QStringLiteral(":/img/document.png"));
 }
 
 } // namespace
@@ -81,7 +81,7 @@ QPair<QIcon, QString> FilePlatformUtil::fileTypeInfo(const QString& file_name)
                                          reinterpret_cast<const ushort*>(file_info.szTypeName)));
     }
 
-    return QPair<QIcon, QString>(QIcon(QStringLiteral(":/icon/document.png")),
+    return QPair<QIcon, QString>(QIcon(QStringLiteral(":/img/document.png")),
                                  QString::fromUtf16(
                                      reinterpret_cast<const ushort*>(file_info.szTypeName)));
 }

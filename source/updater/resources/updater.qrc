@@ -1,5 +1,5 @@
 <RCC>
-  <qresource prefix="icon">
+  <qresource prefix="img">
     <file>globe-green.png</file>
   </qresource>
 </RCC>
