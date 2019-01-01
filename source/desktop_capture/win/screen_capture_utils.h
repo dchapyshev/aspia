@@ -33,7 +33,7 @@ public:
     // Returns true if |screen| is a valid screen. The screen device key is returned through
     // |device_key| if the screen is valid. The device key can be used in screenRect to verify the
     // screen matches the previously obtained id.
-    static bool isScreenValid(ScreenCapturer::ScreenId screen, std::wstring* device_key);
+    static bool isScreenValid(ScreenCapturer::ScreenId screen, QString* device_key);
 
     // Get the rect of the entire system in system coordinate system. I.e. the primary monitor
     // always starts from (0, 0).
@@ -43,7 +43,7 @@ public:
     // top-left.
     // If the screen device key does not match |device_key|, or the screen does not exist, or any
     // error happens, an empty rect is returned.
-    static DesktopRect screenRect(ScreenCapturer::ScreenId screen, const std::wstring& device_key);
+    static DesktopRect screenRect(ScreenCapturer::ScreenId screen, const QString& device_key);
 
     // The number of visible display monitors on a desktop.
     static int screenCount();

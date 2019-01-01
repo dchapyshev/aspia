@@ -22,7 +22,6 @@
 #include <windows.h>
 
 #include "base/logging.h"
-#include "base/unicode.h"
 
 namespace aspia {
 
@@ -44,14 +43,15 @@ bool ScreenCaptureUtils::screenList(ScreenCapturer::ScreenList* screens)
         if (!(device.StateFlags & DISPLAY_DEVICE_ACTIVE))
             continue;
 
-        screens->push_back({device_index, UTF8fromUTF16(device.DeviceName)});
+        screens->push_back({device_index, QString::fromUtf16(
+            reinterpret_cast<const ushort*>(device.DeviceName))});
     }
 
     return true;
 }
 
 // static
-bool ScreenCaptureUtils::isScreenValid(ScreenCapturer::ScreenId screen, std::wstring* device_key)
+bool ScreenCaptureUtils::isScreenValid(ScreenCapturer::ScreenId screen, QString* device_key)
 {
     if (screen == ScreenCapturer::kFullDesktopScreenId)
     {
@@ -65,7 +65,7 @@ bool ScreenCaptureUtils::isScreenValid(ScreenCapturer::ScreenId screen, std::wst
     if (!EnumDisplayDevicesW(nullptr, screen, &device, 0))
         return false;
 
-    *device_key = device.DeviceKey;
+    *device_key = QString::fromUtf16(reinterpret_cast<const ushort*>(device.DeviceKey));
     return true;
 }
 
@@ -80,7 +80,7 @@ DesktopRect ScreenCaptureUtils::fullScreenRect()
 
 // static
 DesktopRect ScreenCaptureUtils::screenRect(ScreenCapturer::ScreenId screen,
-                                           const std::wstring& device_key)
+                                           const QString& device_key)
 {
     if (screen == ScreenCapturer::kFullDesktopScreenId)
         return fullScreenRect();
@@ -94,7 +94,7 @@ DesktopRect ScreenCaptureUtils::screenRect(ScreenCapturer::ScreenId screen,
     // capturing the same device when devices are added or removed. DeviceKey is documented as
     // reserved, but it actually contains the registry key for the device and is unique for each
     // monitor, while DeviceID is not.
-    if (device_key != device.DeviceKey)
+    if (wcscmp(device.DeviceKey, reinterpret_cast<const wchar_t*>(device_key.utf16())) != 0)
         return DesktopRect();
 
     DEVMODEW device_mode;

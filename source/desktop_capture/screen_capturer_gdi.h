@@ -44,7 +44,7 @@ private:
     bool prepareCaptureResources();
 
     ScreenId current_screen_id_ = kFullDesktopScreenId;
-    std::wstring current_device_key_;
+    QString current_device_key_;
 
     ScopedThreadDesktop desktop_;
     DesktopRect desktop_dc_rect_;
