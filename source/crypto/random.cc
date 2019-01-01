@@ -21,6 +21,8 @@
 #include <openssl/opensslv.h>
 #include <openssl/rand.h>
 
+#include "base/logging.h"
+
 namespace aspia {
 
 // static
@@ -38,8 +40,8 @@ QByteArray Random::generateBuffer(size_t size)
     QByteArray random_buffer;
     random_buffer.resize(size);
 
-    if (!fillBuffer(random_buffer.data(), random_buffer.size()))
-        return QByteArray();
+    bool result = fillBuffer(random_buffer.data(), random_buffer.size());
+    CHECK(result);
 
     return random_buffer;
 }
@@ -47,12 +49,12 @@ QByteArray Random::generateBuffer(size_t size)
 // static
 uint32_t Random::generateNumber()
 {
-    uint32_t result;
+    uint32_t ret;
 
-    if (!fillBuffer(&result, sizeof(result)))
-        return 0;
+    bool result = fillBuffer(&ret, sizeof(ret));
+    CHECK(result);
 
-    return result;
+    return ret;
 }
 
 } // namespace aspia

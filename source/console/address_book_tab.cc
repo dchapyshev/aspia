@@ -95,7 +95,7 @@ void cleanupFile(proto::address_book::File* file)
 AddressBookTab::AddressBookTab(const QString& file_path,
                                proto::address_book::File&& file,
                                proto::address_book::Data&& data,
-                               std::string&& key,
+                               QByteArray&& key,
                                QWidget* parent)
     : ConsoleTab(ConsoleTab::AddressBook, parent),
       file_path_(file_path),
@@ -208,7 +208,7 @@ AddressBookTab* AddressBookTab::createNew(QWidget* parent)
 {
     proto::address_book::File file;
     proto::address_book::Data data;
-    std::string key;
+    QByteArray key;
 
     AddressBookDialog dialog(parent, QString(), &file, &data, &key);
     if (dialog.exec() != QDialog::Accepted)
@@ -252,7 +252,7 @@ AddressBookTab* AddressBookTab::openFromFile(const QString& file_path, QWidget* 
     }
 
     proto::address_book::Data address_book_data;
-    std::string key;
+    QByteArray key;
 
     switch (address_book_file.encryption_type())
     {
@@ -274,21 +274,20 @@ AddressBookTab* AddressBookTab::openFromFile(const QString& file_path, QWidget* 
             if (dialog.exec() != QDialog::Accepted)
                 return nullptr;
 
-            key = PasswordHash::hash(PasswordHash::SCRYPT,
-                                     dialog.password().toStdString(),
-                                     address_book_file.hashing_salt());
+            QByteArray salt = QByteArray::fromStdString(address_book_file.hashing_salt());
+            key = PasswordHash::hash(PasswordHash::SCRYPT, dialog.password().toUtf8(), salt);
 
             std::unique_ptr<DataCryptor> cryptor =
                 std::make_unique<DataCryptorChaCha20Poly1305>(key);
 
-            std::string decrypted_data;
-            if (!cryptor->decrypt(address_book_file.data(), &decrypted_data))
+            QByteArray decrypted_data;
+            if (!cryptor->decrypt(QByteArray::fromStdString(address_book_file.data()), &decrypted_data))
             {
                 showOpenError(parent, tr("Unable to decrypt the address book with the specified password."));
                 return nullptr;
             }
 
-            if (!address_book_data.ParseFromString(decrypted_data))
+            if (!address_book_data.ParseFromArray(decrypted_data.constData(), decrypted_data.size()))
             {
                 showOpenError(parent, tr("The address book file is corrupted or has an unknown format."));
                 return nullptr;
@@ -337,7 +336,7 @@ AddressBookTab* AddressBookTab::duplicateTab() const
     return new AddressBookTab(filePath(),
                               proto::address_book::File(file_),
                               proto::address_book::Data(data_),
-                              std::string(key_),
+                              QByteArray(key_),
                               static_cast<QWidget*>(parent()));
 }
 
@@ -718,12 +717,12 @@ void AddressBookTab::updateComputerList(ComputerGroupItem* computer_group)
 
 bool AddressBookTab::saveToFile(const QString& file_path)
 {
-    std::string serialized_data = data_.SerializeAsString();
+    QByteArray serialized_data = serializeMessage(data_);
 
     switch (file_.encryption_type())
     {
         case proto::address_book::ENCRYPTION_TYPE_NONE:
-            file_.set_data(std::move(serialized_data));
+            file_.set_data(serialized_data.toStdString());
             break;
 
         case proto::address_book::ENCRYPTION_TYPE_CHACHA20_POLY1305:
@@ -731,10 +730,10 @@ bool AddressBookTab::saveToFile(const QString& file_path)
             std::unique_ptr<DataCryptor> cryptor =
                 std::make_unique<DataCryptorChaCha20Poly1305>(key_);
 
-            std::string encrypted_data;
+            QByteArray encrypted_data;
             CHECK(cryptor->encrypt(serialized_data, &encrypted_data));
 
-            file_.set_data(std::move(encrypted_data));
+            file_.set_data(encrypted_data.toStdString());
             secureMemZero(&serialized_data);
         }
         break;

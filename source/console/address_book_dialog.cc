@@ -65,7 +65,7 @@ AddressBookDialog::AddressBookDialog(QWidget* parent,
                                      const QString& file_path,
                                      proto::address_book::File* file,
                                      proto::address_book::Data* data,
-                                     std::string* key)
+                                     QByteArray* key)
     : QDialog(parent),
       file_(file),
       data_(data),
@@ -93,7 +93,7 @@ AddressBookDialog::AddressBookDialog(QWidget* parent,
 
     if (file->encryption_type() == proto::address_book::ENCRYPTION_TYPE_CHACHA20_POLY1305)
     {
-        if (!key_->empty())
+        if (!key_->isEmpty())
         {
             QString text = tr("Double-click to change");
 
@@ -241,21 +241,27 @@ void AddressBookDialog::buttonBoxClicked(QAbstractButton* button)
 
                 // Generate salt, which is added after each iteration of the hashing.
                 // New salt is generated each time the password is changed.
-                file_->set_hashing_salt(Random::generateBuffer(ui.spinbox_password_salt->value()));
+                QByteArray salt = Random::generateBuffer(ui.spinbox_password_salt->value());
+                file_->set_hashing_salt(salt.toStdString());
 
                 // Now generate a key for encryption/decryption.
-                *key_ = PasswordHash::hash(
-                    PasswordHash::SCRYPT, password.toStdString(), file_->hashing_salt());
+                *key_ = PasswordHash::hash(PasswordHash::SCRYPT, password.toUtf8(), salt);
             }
 
             int salt_before_size = ui.spinbox_salt_before->value();
             int salt_after_size = ui.spinbox_salt_after->value();
 
             if (salt_before_size != data_->salt1().size())
-                data_->set_salt1(Random::generateBuffer(salt_before_size));
+            {
+                QByteArray salt = Random::generateBuffer(salt_before_size);
+                data_->set_salt1(salt.toStdString());
+            }
 
             if (salt_after_size != data_->salt2().size())
-                data_->set_salt2(Random::generateBuffer(salt_after_size));
+            {
+                QByteArray salt = Random::generateBuffer(salt_after_size);
+                data_->set_salt2(salt.toStdString());
+            }
         }
         break;
 

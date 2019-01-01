@@ -19,7 +19,7 @@
 #ifndef ASPIA_CRYPTO__PASSWORD_HASH_H_
 #define ASPIA_CRYPTO__PASSWORD_HASH_H_
 
-#include <string>
+#include <QByteArray>
 
 #include "base/macros_magic.h"
 
@@ -34,7 +34,7 @@ public:
     static const size_t kBitsSize = 256;
     static const size_t kBytesSize = kBitsSize / kBitsPerByte;
 
-    static std::string hash(Type type, const std::string& password, const std::string& salt);
+    static QByteArray hash(Type type, const QByteArray& password, const QByteArray& salt);
 
 private:
     DISALLOW_COPY_AND_ASSIGN(PasswordHash);

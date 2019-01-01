@@ -27,14 +27,14 @@ namespace aspia {
 class DataCryptorChaCha20Poly1305 : public DataCryptor
 {
 public:
-    DataCryptorChaCha20Poly1305(const std::string& key);
+    DataCryptorChaCha20Poly1305(const QByteArray& key);
     ~DataCryptorChaCha20Poly1305();
 
-    bool encrypt(const std::string& in, std::string* out) override;
-    bool decrypt(const std::string& in, std::string* out) override;
+    bool encrypt(const QByteArray& in, QByteArray* out) override;
+    bool decrypt(const QByteArray& in, QByteArray* out) override;
 
 private:
-    std::string key_;
+    QByteArray key_;
 
     DISALLOW_COPY_AND_ASSIGN(DataCryptorChaCha20Poly1305);
 };

@@ -19,7 +19,7 @@
 #ifndef ASPIA_CRYPTO__DATA_CRYPTOR_H_
 #define ASPIA_CRYPTO__DATA_CRYPTOR_H_
 
-#include <string>
+#include <QByteArray>
 
 namespace aspia {
 
@@ -28,8 +28,8 @@ class DataCryptor
 public:
     virtual ~DataCryptor() = default;
 
-    virtual bool encrypt(const std::string& in, std::string* out) = 0;
-    virtual bool decrypt(const std::string& in, std::string* out) = 0;
+    virtual bool encrypt(const QByteArray& in, QByteArray* out) = 0;
+    virtual bool decrypt(const QByteArray& in, QByteArray* out) = 0;
 };
 
 } // namespace aspia

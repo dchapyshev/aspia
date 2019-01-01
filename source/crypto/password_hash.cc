@@ -26,7 +26,7 @@
 namespace aspia {
 
 // static
-std::string PasswordHash::hash(Type type, const std::string& password, const std::string& salt)
+QByteArray PasswordHash::hash(Type type, const QByteArray& password, const QByteArray& salt)
 {
     // CPU/Memory cost parameter, must be larger than 1, a power of 2, and less than 2^(128 * r / 8).
     static const uint64_t N = 16384;
@@ -41,11 +41,11 @@ std::string PasswordHash::hash(Type type, const std::string& password, const std
     // 32MB
     static const uint64_t max_mem = 32 * 1024 * 1024;
 
-    std::string result;
+    QByteArray result;
     result.resize(kBytesSize);
 
-    int ret = EVP_PBE_scrypt(password.c_str(), password.size(),
-                             reinterpret_cast<const uint8_t*>(salt.c_str()), salt.size(),
+    int ret = EVP_PBE_scrypt(password.constData(), password.size(),
+                             reinterpret_cast<const uint8_t*>(salt.constData()), salt.size(),
                              N, r, p, max_mem,
                              reinterpret_cast<uint8_t*>(result.data()), result.size());
     CHECK_EQ(ret, 1) << "EVP_PBE_scrypt failed";

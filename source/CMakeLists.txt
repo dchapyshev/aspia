@@ -52,6 +52,7 @@ add_definitions(-D_UNICODE
                 -D_CRT_SECURE_NO_WARNINGS
                 -DNOMINMAX
                 -DQT_NO_CAST_TO_ASCII
+                -DQT_NO_CAST_FROM_BYTEARRAY
                 -DQT_USE_QSTRINGBUILDER
                 -DCLIENT_IMPLEMENTATION
                 -DHOST_IMPLEMENTATION)

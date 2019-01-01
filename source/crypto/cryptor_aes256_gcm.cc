@@ -34,7 +34,10 @@ EVP_CIPHER_CTX_ptr createCipher(const QByteArray& key, int type)
 {
     EVP_CIPHER_CTX_ptr ctx(EVP_CIPHER_CTX_new());
     if (!ctx)
+    {
+        LOG(LS_WARNING) << "EVP_CIPHER_CTX_new failed";
         return nullptr;
+    }
 
     if (EVP_CipherInit_ex(ctx.get(), EVP_aes_256_gcm(),
                           nullptr, nullptr, nullptr, type) != 1)
@@ -128,7 +131,12 @@ Cryptor* CryptorAes256Gcm::create(const QByteArray& key,
                                   const QByteArray& decrypt_iv)
 {
     if (key.size() != kKeySize || encrypt_iv.size() != kIVSize || decrypt_iv.size() != kIVSize)
+    {
+        LOG(LS_WARNING) << "Invalid parameters. Key: " << key.size()
+                        << " Encrypt IV: " << encrypt_iv.size()
+                        << " Decrypt IV: " << decrypt_iv.size();
         return nullptr;
+    }
 
     EVP_CIPHER_CTX_ptr encrypt_ctx = createCipher(key, 1);
     EVP_CIPHER_CTX_ptr decrypt_ctx = createCipher(key, 0);

@@ -97,9 +97,6 @@ SrpUser* SrpHostContext::createUser(const QString& username, const QString& pass
     user->generator = QByteArray(
         reinterpret_cast<const char*>(kSrpNg_8192.g.data()), kSrpNg_8192.g.size());
 
-    if (user->salt.isEmpty())
-        return nullptr;
-
     BigNum s = BigNum::fromByteArray(user->salt);
     BigNum N = BigNum::fromByteArray(user->number);
     BigNum g = BigNum::fromByteArray(user->generator);
@@ -148,11 +145,7 @@ proto::SrpServerKeyExchange* SrpHostContext::readIdentify(const proto::SrpIdenti
         v_ = BigNum::fromByteArray(user.verifier);
     }
 
-    uint8_t random_buffer[128];
-    if (!Random::fillBuffer(random_buffer, sizeof(random_buffer)))
-        return nullptr;
-
-    b_ = BigNum::fromBuffer(ConstBuffer(random_buffer, sizeof(random_buffer)));
+    b_ = BigNum::fromByteArray(Random::generateBuffer(128)); // 1024 bits.
     B_ = SrpMath::calc_B(b_, N_, g, v_);
 
     if (!N_.isValid() || !g.isValid() || !s.isValid() || !B_.isValid())
@@ -163,8 +156,6 @@ proto::SrpServerKeyExchange* SrpHostContext::readIdentify(const proto::SrpIdenti
         return nullptr;
 
     encrypt_iv_ = Random::generateBuffer(iv_size);
-    if (encrypt_iv_.isEmpty())
-        return nullptr;
 
     std::unique_ptr<proto::SrpServerKeyExchange> server_key_exchange =
         std::make_unique<proto::SrpServerKeyExchange>();
@@ -173,7 +164,7 @@ proto::SrpServerKeyExchange* SrpHostContext::readIdentify(const proto::SrpIdenti
     server_key_exchange->set_generator(g.toStdString());
     server_key_exchange->set_salt(s.toStdString());
     server_key_exchange->set_b(B_.toStdString());
-    server_key_exchange->set_iv(encrypt_iv_);
+    server_key_exchange->set_iv(encrypt_iv_.toStdString());
 
     return server_key_exchange.release();
 }

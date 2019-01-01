@@ -88,7 +88,7 @@ private:
     AddressBookTab(const QString& file_path,
                    proto::address_book::File&& file,
                    proto::address_book::Data&& data,
-                   std::string&& key,
+                   QByteArray&& key,
                    QWidget* parent);
 
     void updateComputerList(ComputerGroupItem* computer_group);
@@ -100,7 +100,7 @@ private:
     Ui::AddressBookTab ui;
 
     QString file_path_;
-    std::string key_;
+    QByteArray key_;
 
     proto::address_book::File file_;
     proto::address_book::Data data_;

@@ -32,10 +32,10 @@ public:
     // If successful, returns |true| otherwise |false|.
     static bool fillBuffer(void* buffer, size_t size);
 
-    // Generates a random buffer of size |size|. If the buffer is empty, an error occurred.
+    // Generates a random buffer of size |size|.
     static QByteArray generateBuffer(size_t size);
 
-    // Generates a random number. If an error occurs, it returns 0.
+    // Generates a random number.
     static uint32_t generateNumber();
 
 private:

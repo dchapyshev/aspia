@@ -201,11 +201,7 @@ proto::SrpClientKeyExchange* SrpClientContext::readServerKeyExchange(
     B_ = BigNum::fromStdString(server_key_exchange.b());
     decrypt_iv_ = QByteArray::fromStdString(server_key_exchange.iv());
 
-    uint8_t random_buffer[128]; // 1024 bits.
-    if (!Random::fillBuffer(random_buffer, sizeof(random_buffer)))
-        return nullptr;
-
-    a_ = BigNum::fromBuffer(ConstBuffer(random_buffer, sizeof(random_buffer)));
+    a_ = BigNum::fromByteArray(Random::generateBuffer(128)); // 1024 bits.
     A_ = SrpMath::calc_A(a_, N_, g_);
 
     size_t iv_size = ivSizeForMethod(method_);
@@ -213,14 +209,12 @@ proto::SrpClientKeyExchange* SrpClientContext::readServerKeyExchange(
         return nullptr;
 
     encrypt_iv_ = Random::generateBuffer(iv_size);
-    if (encrypt_iv_.isEmpty())
-        return nullptr;
 
     std::unique_ptr<proto::SrpClientKeyExchange> client_key_exchange =
         std::make_unique<proto::SrpClientKeyExchange>();
 
     client_key_exchange->set_a(A_.toStdString());
-    client_key_exchange->set_iv(encrypt_iv_);
+    client_key_exchange->set_iv(encrypt_iv_.toStdString());
 
     return client_key_exchange.release();
 }
@@ -228,7 +222,10 @@ proto::SrpClientKeyExchange* SrpClientContext::readServerKeyExchange(
 QByteArray SrpClientContext::key() const
 {
     if (!SrpMath::verify_B_mod_N(B_, N_))
+    {
+        LOG(LS_WARNING) << "Invalid B or N";
         return QByteArray();
+    }
 
     BigNum u = SrpMath::calc_u(A_, B_, N_);
     BigNum x = SrpMath::calc_x(s_, I_.toUtf8(), p_.toUtf8());
@@ -236,7 +233,10 @@ QByteArray SrpClientContext::key() const
 
     QByteArray client_key_string = client_key.toByteArray();
     if (client_key_string.isEmpty())
+    {
+        LOG(LS_WARNING) << "Empty encryption key generated";
         return QByteArray();
+    }
 
     switch (method_)
     {
@@ -246,6 +246,7 @@ QByteArray SrpClientContext::key() const
             return GenericHash::hash(GenericHash::BLAKE2s256, client_key_string);
 
         default:
+            LOG(LS_WARNING) << "Unknown encryption method: " << method_;
             return QByteArray();
     }
 }

@@ -216,6 +216,7 @@ void NetworkChannelClient::readSessionChallenge(const QByteArray& buffer)
         break;
 
         default:
+            LOG(LS_WARNING) << "Unknown encryption method: " << srp_client_->method();
             break;
     }
 
