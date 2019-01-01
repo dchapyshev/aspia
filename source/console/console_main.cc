@@ -34,7 +34,6 @@ Q_IMPORT_PLUGIN(QWindowsVistaStylePlugin);
 #include "build/version.h"
 #include "client/client_pool.h"
 #include "console/console_window.h"
-#include "console/console_settings.h"
 #include "crypto/scoped_crypto_initializer.h"
 
 using namespace aspia;
@@ -44,10 +43,10 @@ int main(int argc, char *argv[])
     Q_INIT_RESOURCE(client);
     Q_INIT_RESOURCE(updater);
 
-    LoggingSettings settings;
-    settings.logging_dest = LOG_TO_ALL;
+    LoggingSettings logging_settings;
+    logging_settings.logging_dest = LOG_TO_ALL;
 
-    ScopedLogging logging(settings);
+    ScopedLogging logging(logging_settings);
 
     ScopedCryptoInitializer crypto_initializer;
     CHECK(crypto_initializer.isSucceeded());
@@ -141,7 +140,7 @@ int main(int argc, char *argv[])
         if (!arguments.isEmpty())
             file_path = arguments.front();
 
-        console_window.reset(new ConsoleWindow(locale_loader, file_path));
+        console_window.reset(new ConsoleWindow(console_settings, locale_loader, file_path));
         console_window->show();
         console_window->activateWindow();
     }

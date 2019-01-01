@@ -20,6 +20,7 @@
 #define ASPIA_CONSOLE__CONSOLE_WINDOW_H_
 
 #include "common/locale_loader.h"
+#include "console/console_settings.h"
 #include "console/mru.h"
 #include "updater/update_checker.h"
 #include "protocol/address_book.pb.h"
@@ -38,7 +39,9 @@ class ConsoleWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    ConsoleWindow(LocaleLoader& locale_loader, const QString& file_path);
+    ConsoleWindow(ConsoleSettings& settings,
+                  LocaleLoader& locale_loader,
+                  const QString& file_path);
     ~ConsoleWindow();
 
 public slots:
@@ -98,6 +101,7 @@ private:
 
     Ui::ConsoleWindow ui;
 
+    ConsoleSettings& settings_;
     LocaleLoader& locale_loader_;
     Mru mru_;
 

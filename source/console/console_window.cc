@@ -76,12 +76,13 @@ private:
 
 } // namespace
 
-ConsoleWindow::ConsoleWindow(LocaleLoader& locale_loader, const QString& file_path)
-    : locale_loader_(locale_loader)
+ConsoleWindow::ConsoleWindow(ConsoleSettings& settings,
+                             LocaleLoader& locale_loader,
+                             const QString& file_path)
+    : settings_(settings),
+      locale_loader_(locale_loader)
 {
     ui.setupUi(this);
-
-    ConsoleSettings settings;
 
     createLanguageMenu(settings.locale());
 
@@ -245,17 +246,15 @@ void ConsoleWindow::onNew()
 
 void ConsoleWindow::onOpen()
 {
-    ConsoleSettings settings;
-
     QString file_path =
         QFileDialog::getOpenFileName(this,
                                      tr("Open Address Book"),
-                                     settings.lastDirectory(),
+                                     settings_.lastDirectory(),
                                      tr("Aspia Address Book (*.aab)"));
     if (file_path.isEmpty())
         return;
 
-    settings.setLastDirectory(QFileInfo(file_path).absolutePath());
+    settings_.setLastDirectory(QFileInfo(file_path).absolutePath());
     openAddressBook(file_path);
 }
 
@@ -382,7 +381,7 @@ void ConsoleWindow::onOnlineHelp()
 
 void ConsoleWindow::onCheckUpdates()
 {
-    UpdateDialog(ConsoleSettings().updateServer(), QLatin1String("console"), this).exec();
+    UpdateDialog(settings_.updateServer(), QLatin1String("console"), this).exec();
 }
 
 void ConsoleWindow::onAbout()
@@ -755,7 +754,7 @@ void ConsoleWindow::onLanguageChanged(QAction* action)
                 tab->retranslateUi();
         }
 
-        ConsoleSettings().setLocale(new_locale);
+        settings_.setLocale(new_locale);
     }
 }
 
@@ -827,22 +826,21 @@ void ConsoleWindow::closeEvent(QCloseEvent* event)
         }
     }
 
-    ConsoleSettings settings;
-    settings.setToolBarEnabled(ui.action_toolbar->isChecked());
-    settings.setStatusBarEnabled(ui.action_statusbar->isChecked());
-    settings.setAlwaysShowTrayIcon(ui.action_show_tray_icon->isChecked());
-    settings.setMinimizeToTray(ui.action_minimize_to_tray->isChecked());
-    settings.setWindowGeometry(saveGeometry());
-    settings.setWindowState(saveState());
-    settings.setRecentOpen(mru_.recentOpen());
-    settings.setPinnedFiles(mru_.pinnedFiles());
+    settings_.setToolBarEnabled(ui.action_toolbar->isChecked());
+    settings_.setStatusBarEnabled(ui.action_statusbar->isChecked());
+    settings_.setAlwaysShowTrayIcon(ui.action_show_tray_icon->isChecked());
+    settings_.setMinimizeToTray(ui.action_minimize_to_tray->isChecked());
+    settings_.setWindowGeometry(saveGeometry());
+    settings_.setWindowState(saveState());
+    settings_.setRecentOpen(mru_.recentOpen());
+    settings_.setPinnedFiles(mru_.pinnedFiles());
 
     if (ui.action_desktop_manage->isChecked())
-        settings.setSessionType(proto::SESSION_TYPE_DESKTOP_MANAGE);
+        settings_.setSessionType(proto::SESSION_TYPE_DESKTOP_MANAGE);
     else if (ui.action_desktop_view->isChecked())
-        settings.setSessionType(proto::SESSION_TYPE_DESKTOP_VIEW);
+        settings_.setSessionType(proto::SESSION_TYPE_DESKTOP_VIEW);
     else if (ui.action_file_transfer->isChecked())
-        settings.setSessionType(proto::SESSION_TYPE_FILE_TRANSFER);
+        settings_.setSessionType(proto::SESSION_TYPE_FILE_TRANSFER);
 
     QApplication::quit();
     QMainWindow::closeEvent(event);
