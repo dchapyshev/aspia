@@ -19,8 +19,6 @@
 #ifndef ASPIA_BASE__SERVICE_H_
 #define ASPIA_BASE__SERVICE_H_
 
-#include <QPointer>
-
 #include "base/service_impl.h"
 
 namespace aspia {
@@ -29,7 +27,7 @@ template <class Application>
 class Service : public ServiceImpl
 {
 public:
-    explicit Service(const QString& name, const QString& display_name, const QString& description)
+    Service(const QString& name, const QString& display_name, const QString& description)
         : ServiceImpl(name, display_name, description)
     {
         // Nothing
@@ -49,11 +47,11 @@ protected:
     // ServiceImpl implementation.
     int executeApplication() override
     {
-        return application_->exec();
+        return Application::exec();
     }
 
 private:
-    QPointer<Application> application_;
+    Application* application_;
 };
 
 } // namespace aspia
