@@ -1034,11 +1034,11 @@ void ConsoleWindow::connectToComputer(const proto::address_book::Computer& compu
 {
     ConnectData connect_data;
 
-    connect_data.computer_name = computer.name();
-    connect_data.address       = computer.address();
+    connect_data.computer_name = QString::fromStdString(computer.name());
+    connect_data.address       = QString::fromStdString(computer.address());
     connect_data.port          = computer.port();
-    connect_data.username      = computer.username();
-    connect_data.password      = computer.password();
+    connect_data.username      = QString::fromStdString(computer.username());
+    connect_data.password      = QString::fromStdString(computer.password());
     connect_data.session_type  = computer.session_type();
 
     switch (computer.session_type())

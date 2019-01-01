@@ -94,18 +94,18 @@ bool ClientPool::connect(const std::optional<ConnectData>& connect_data)
         data = connect_data.value();
     }
 
-    if (data.username.empty() || data.password.empty())
+    if (data.username.isEmpty() || data.password.isEmpty())
     {
         AuthorizationDialog auth_dialog;
 
-        auth_dialog.setUserName(QString::fromStdString(data.username));
-        auth_dialog.setPassword(QString::fromStdString(data.password));
+        auth_dialog.setUserName(data.username);
+        auth_dialog.setPassword(data.password);
 
         if (auth_dialog.exec() == AuthorizationDialog::Rejected)
             return false;
 
-        data.username = auth_dialog.userName().toStdString();
-        data.password = auth_dialog.password().toStdString();
+        data.username = auth_dialog.userName();
+        data.password = auth_dialog.password();
     }
 
     std::scoped_lock lock(g_pool_lock);

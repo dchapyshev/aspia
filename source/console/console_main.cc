@@ -116,9 +116,9 @@ int main(int argc, char *argv[])
     else if (parser.isSet(address_option))
     {
         ConnectData connect_data;
-        connect_data.address  = parser.value(address_option).toStdString();
+        connect_data.address  = parser.value(address_option);
         connect_data.port     = parser.value(port_option).toUShort();
-        connect_data.username = parser.value(username_option).toStdString();
+        connect_data.username = parser.value(username_option);
 
         QString session_type = parser.value(session_type_option);
 

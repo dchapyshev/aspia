@@ -61,16 +61,12 @@ void Client::start()
     status_dialog_->show();
     status_dialog_->activateWindow();
 
-    QString address(QString::fromStdString(connect_data_.address));
-    QString username(QString::fromStdString(connect_data_.username));
-    QString password(QString::fromStdString(connect_data_.password));
-
     status_dialog_->addStatus(tr("Attempt to connect to %1:%2.")
-                              .arg(address)
+                              .arg(connect_data_.address)
                               .arg(connect_data_.port));
 
-    network_channel_->connectToHost(address, connect_data_.port,
-                                    username, password,
+    network_channel_->connectToHost(connect_data_.address, connect_data_.port,
+                                    connect_data_.username, connect_data_.password,
                                     connect_data_.session_type);
 }
 

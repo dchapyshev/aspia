@@ -126,7 +126,7 @@ void ClientDialog::connectButtonPressed()
     proto::SessionType session_type = static_cast<proto::SessionType>(
         ui.combo_session_type->currentData().toInt());
 
-    connect_data_.address = ui.edit_address->text().toStdString();
+    connect_data_.address = ui.edit_address->text();
     connect_data_.port = ui.spin_port->value();
     connect_data_.session_type = session_type;
 

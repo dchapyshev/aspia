@@ -19,6 +19,8 @@
 #ifndef ASPIA_CLIENT__CONNECT_DATA_H_
 #define ASPIA_CLIENT__CONNECT_DATA_H_
 
+#include <QString>
+
 #include "build/build_config.h"
 #include "protocol/common.pb.h"
 #include "protocol/desktop_session.pb.h"
@@ -30,11 +32,11 @@ struct ConnectData
     ConnectData();
     ~ConnectData();
 
-    std::string computer_name;
-    std::string address;
+    QString computer_name;
+    QString address;
     uint16_t port = DEFAULT_HOST_TCP_PORT;
-    std::string username;
-    std::string password;
+    QString username;
+    QString password;
 
     proto::SessionType session_type = proto::SESSION_TYPE_DESKTOP_MANAGE;
     proto::desktop::Config desktop_config;

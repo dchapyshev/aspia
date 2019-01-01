@@ -53,10 +53,10 @@ DesktopWindow::DesktopWindow(ConnectData* connect_data, QWidget* parent)
     }
 
     QString computer_name;
-    if (!connect_data_->computer_name.empty())
-        computer_name = QString::fromStdString(connect_data_->computer_name);
+    if (!connect_data_->computer_name.isEmpty())
+        computer_name = connect_data_->computer_name;
     else
-        computer_name = QString::fromStdString(connect_data_->address);
+        computer_name = connect_data_->address;
 
     setWindowTitle(QString("%1 - %2").arg(computer_name).arg(session_name));
     setMinimumSize(400, 300);
