@@ -23,7 +23,7 @@ namespace aspia {
 
 // When transferring a file is divided into parts and each part is transmitted separately.
 // This parameter specifies the size of the part.
-static const size_t kMaxFilePacketSize = 32 * 1024; // 32 kB
+static const size_t kMaxFilePacketSize = 16 * 1024; // 16 kB
 
 } // namespace aspia
 

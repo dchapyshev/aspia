@@ -24,7 +24,6 @@
 #include <memory>
 
 #include "base/macros_magic.h"
-#include "codec/scoped_zstd_stream.h"
 #include "protocol/file_transfer_session.pb.h"
 
 namespace aspia {
@@ -47,12 +46,9 @@ private:
     FilePacketizer(std::ifstream&& file_stream);
 
     std::ifstream file_stream_;
-    std::string read_buffer_;
 
     uint64_t file_size_ = 0;
     uint64_t left_size_ = 0;
-
-    ScopedZstdCStream compressor_;
 
     DISALLOW_COPY_AND_ASSIGN(FilePacketizer);
 };

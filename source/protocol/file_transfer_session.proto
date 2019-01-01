@@ -119,7 +119,6 @@ message Packet
         NO_FLAGS     = 0;
         FIRST_PACKET = 1;
         LAST_PACKET  = 2;
-        COMPRESSED   = 4;
     }
 
     uint32 flags = 1;
