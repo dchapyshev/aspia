@@ -51,7 +51,7 @@ protected:
     }
 
 private:
-    Application* application_;
+    Application* application_ = nullptr;
 };
 
 } // namespace aspia
