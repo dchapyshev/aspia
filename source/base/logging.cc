@@ -128,21 +128,7 @@ std::filesystem::path logFileDir()
     return path;
 }
 
-} // namespace
-
-// This is never instantiated, it's just used for EAT_STREAM_PARAMETERS to have
-// an object of the correct type on the LHS of the unused part of the ternary
-// operator.
-std::ostream* g_swallow_stream;
-
-LoggingSettings::LoggingSettings()
-    : logging_dest(LOG_DEFAULT),
-      max_log_age(7)
-{
-    // Nothing
-}
-
-bool initLogging(const LoggingSettings& settings)
+bool initLoggingImpl(const LoggingSettings& settings)
 {
     std::scoped_lock lock(g_log_file_lock);
     g_log_file.close();
@@ -173,10 +159,37 @@ bool initLogging(const LoggingSettings& settings)
     return true;
 }
 
-void shutdownLogging()
+void shutdownLoggingImpl()
 {
     std::scoped_lock lock(g_log_file_lock);
     g_log_file.close();
+}
+
+} // namespace
+
+// This is never instantiated, it's just used for EAT_STREAM_PARAMETERS to have
+// an object of the correct type on the LHS of the unused part of the ternary
+// operator.
+std::ostream* g_swallow_stream;
+
+LoggingSettings::LoggingSettings()
+    : logging_dest(LOG_DEFAULT),
+      max_log_age(7)
+{
+    // Nothing
+}
+
+bool initLogging(const LoggingSettings& settings)
+{
+    bool result = initLoggingImpl(settings);
+    LOG(LS_INFO) << "Logging started";
+    return result;
+}
+
+void shutdownLogging()
+{
+    LOG(LS_INFO) << "Logging finished";
+    shutdownLoggingImpl();
 }
 
 bool shouldCreateLogMessage(LoggingSeverity severity)
