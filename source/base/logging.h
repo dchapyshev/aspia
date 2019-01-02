@@ -271,12 +271,15 @@ template <typename T>
 struct SupportsOstreamOperator<T, decltype(
     void(std::declval<std::ostream&>() << std::declval<T>()))> : std::true_type {};
 
+template<typename T>
+inline constexpr bool SupportsOstreamOperator_v = SupportsOstreamOperator<T>::value;
+
 // This formats a value for a failing CHECK_XX statement.  Ordinarily, it uses the definition for
 // operator<<, with a few special cases below.
 template <typename T>
-inline typename std::enable_if<
-    SupportsOstreamOperator<const T&>::value &&
-        !std::is_function<typename std::remove_pointer<T>::type>::value, void>::type
+inline std::enable_if_t<
+    SupportsOstreamOperator_v<const T&> &&
+        !std::is_function_v<std::remove_pointer_t<T>>, void>
 makeCheckOpValueString(std::ostream* os, const T& v)
 {
     (*os) << v;
@@ -287,8 +290,8 @@ makeCheckOpValueString(std::ostream* os, const T& v)
 // printed as 1 or 0. (MSVC isn't standards-conforming here and converts function pointers to regular
 // pointers, so this is a no-op for MSVC.)
 template <typename T>
-inline typename std::enable_if<
-    std::is_function<typename std::remove_pointer<T>::type>::value, void>::type
+inline std::enable_if_t<
+    std::is_function_v<std::remove_pointer_t<T>>, void>
 makeCheckOpValueString(std::ostream* os, const T& v)
 {
     (*os) << reinterpret_cast<const void*>(v);
@@ -297,11 +300,11 @@ makeCheckOpValueString(std::ostream* os, const T& v)
 // We need overloads for enums that don't support operator<<. (i.e. scoped enums where no
 // operator<< overload was declared).
 template <typename T>
-inline typename std::enable_if<
-    !SupportsOstreamOperator<const T&>::value && std::is_enum<T>::value, void>::type
+inline std::enable_if_t<
+    !SupportsOstreamOperator_v<const T&> && std::is_enum_v<T>, void>
 makeCheckOpValueString(std::ostream* os, const T& v)
 {
-    (*os) << static_cast<typename std::underlying_type<T>::type>(v);
+    (*os) << static_cast<std::underlying_type_t<T>>(v);
 }
 
 // We need an explicit overload for std::nullptr_t.
