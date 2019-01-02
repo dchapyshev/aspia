@@ -24,7 +24,9 @@ void build(Solution &s)
 
     auto &base = add_lib("base");
     base.Public += "UNICODE"_def;
+    base.Public += "NOMINMAX"_def;
     base.Public += "org.sw.demo.qtproject.qt.base.core-*"_dep;
+    base.Public += "org.sw.demo.qtproject.qt.base.xml-*"_dep;
     base.Public += "org.sw.demo.boost.align-1"_dep;
 
     auto &desktop_capture = add_lib("desktop_capture");
@@ -60,7 +62,6 @@ void build(Solution &s)
     auto &updater = add_lib("updater");
     updater.Public += network;
     updater.Public += "org.sw.demo.qtproject.qt.base.widgets-*"_dep;
-    updater.Public += "org.sw.demo.qtproject.qt.base.xml-*"_dep;
     qt_moc_rcc_uic("org.sw.demo.qtproject.qt-*"_dep, updater);
     qt_tr("org.sw.demo.qtproject.qt-*"_dep, updater);
 
@@ -74,7 +75,8 @@ void build(Solution &s)
 
     auto &host = aspia.addSharedLibrary("host");
     setup_target(host, "host");
-    host -= ".*_entry_point.cc"_rr;
+    host -= ".*_entry_point.cc"_rr, ".*\\.rc"_rr;
+    host += "host.rc";
     host += "HOST_IMPLEMENTATION"_def;
     if (s.Settings.TargetOS.Type == OSType::Windows)
         host.Public += "comsuppw.lib"_lib, "sas.lib"_lib;
@@ -100,14 +102,17 @@ void build(Solution &s)
 
     auto &host_config = add_exe(host, "config");
     host_config += "host_config_entry_point.cc";
+    host_config += "host_config.rc";
     host_config += host;
 
     auto &host_service = add_exe(host, "service");
     host_service += "win/host_service_entry_point.cc";
+    host_service += "win/host_service.rc";
     host_service += host;
 
     auto &host_session = add_exe(host, "session");
     host_session += "win/host_session_entry_point.cc";
+    host_session += "win/host_session.rc";
     host_session += host;
 
     //
