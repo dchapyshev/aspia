@@ -61,7 +61,24 @@ const char* severityName(LoggingSeverity severity)
     return "UNKNOWN";
 }
 
-std::string createFileName()
+void removeOldFiles(const std::filesystem::path& path,
+                    const std::filesystem::file_time_type& current_time,
+                    int max_file_age)
+{
+    std::filesystem::file_time_type time = current_time - std::chrono::hours(24 * max_file_age);
+
+    std::error_code ignored_code;
+    for (const auto& item : std::filesystem::directory_iterator(path, ignored_code))
+    {
+        if (item.is_directory())
+            continue;
+
+        if (item.last_write_time() < time)
+            std::filesystem::remove(item.path(), ignored_code);
+    }
+}
+
+std::string logFileName()
 {
     std::chrono::high_resolution_clock::time_point current_time =
         std::chrono::high_resolution_clock::now();
@@ -89,7 +106,7 @@ std::string createFileName()
     return stream.str();
 }
 
-std::filesystem::path createFilePath()
+std::filesystem::path logFileDir()
 {
     std::error_code error_code;
 
@@ -108,7 +125,6 @@ std::filesystem::path createFilePath()
             return std::filesystem::path();
     }
 
-    path.append(createFileName());
     return path;
 }
 
@@ -120,7 +136,8 @@ std::filesystem::path createFilePath()
 std::ostream* g_swallow_stream;
 
 LoggingSettings::LoggingSettings()
-    : logging_dest(LOG_DEFAULT)
+    : logging_dest(LOG_DEFAULT),
+      max_log_age(7)
 {
     // Nothing
 }
@@ -135,13 +152,25 @@ bool initLogging(const LoggingSettings& settings)
     if (!(g_logging_destination & LOG_TO_FILE))
         return true;
 
-    std::filesystem::path file_path = createFilePath();
-    if (file_path.empty())
+    std::filesystem::path file_dir = logFileDir();
+    if (file_dir.empty())
         return false;
 
-    g_log_file.open(file_path);
+    std::filesystem::path file_path(file_dir);
+    file_path.append(logFileName());
 
-    return g_log_file.is_open();
+    g_log_file.open(file_path);
+    if (!g_log_file.is_open())
+        return false;
+
+    std::error_code error_code;
+
+    std::filesystem::file_time_type current_time =
+        std::filesystem::last_write_time(file_path, error_code);
+    if (!error_code)
+        removeOldFiles(file_dir, current_time, settings.max_log_age);
+
+    return true;
 }
 
 void shutdownLogging()

@@ -116,12 +116,11 @@ struct LoggingSettings
     // The defaults values are:
     //
     //  logging_dest: LOG_DEFAULT
-    //  log_file:     NULL
-    //  lock_log:     LOCK_LOG_FILE
-    //  delete_old:   APPEND_TO_OLD_LOG_FILE
+    //  max_log_age: 7 days
     LoggingSettings();
 
     LoggingDestination logging_dest;
+    int max_log_age;
 };
 
 // Sets the log file name and other global logging state. Calling this function is recommended,
