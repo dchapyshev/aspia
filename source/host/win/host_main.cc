@@ -21,7 +21,7 @@
 #include <QApplication>
 #include <QCommandLineParser>
 
-#include "base/logging.h"
+#include "base/qt_logging.h"
 #include "build/version.h"
 #include "crypto/scoped_crypto_initializer.h"
 #include "desktop_capture/win/scoped_thread_desktop.h"

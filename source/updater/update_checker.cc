@@ -22,7 +22,7 @@
 #include <QNetworkReply>
 #include <QUrlQuery>
 
-#include "base/logging.h"
+#include "base/qt_logging.h"
 #include "build/version.h"
 
 namespace aspia {

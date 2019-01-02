@@ -18,141 +18,98 @@
 
 #include "base/logging.h"
 
-#include <io.h>
 #include <algorithm>
+#include <chrono>
 #include <filesystem>
+#include <fstream>
 #include <iomanip>
+#include <mutex>
 #include <ostream>
+#include <thread>
 #include <utility>
 
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-
-#include "base/string_util.h"
-#include "base/string_printf.h"
+#include "base/debug.h"
 #include "base/unicode.h"
 
-// Windows warns on using write().  It prefers _write().
-#define write(fd, buf, count) _write(fd, buf, static_cast<unsigned int>(count))
-// Windows doesn't define STDERR_FILENO.  Define it here.
-#define STDERR_FILENO 2
+#if defined(OS_WIN)
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#endif // defined(OS_WIN)
 
 namespace aspia {
 
 namespace {
 
-using FileHandle = HANDLE;
-
 LoggingSeverity g_min_log_level = LS_INFO;
 LoggingDestination g_logging_destination = LOG_DEFAULT;
 
-// For LS_ERROR and above, always print to stderr.
-const int kAlwaysPrintErrorLevel = LS_ERROR;
-
-// This file is lazily opened and the handle may be nullptr
-FileHandle g_log_file = nullptr;
+std::ofstream g_log_file;
+std::mutex g_log_file_lock;
 
 const char* severityName(LoggingSeverity severity)
 {
-    static const char* const kLogSeverityNames[] = {"INFO", "WARNING", "ERROR", "FATAL"};
+    static const char* const kLogSeverityNames[] =
+    {
+        "INFO", "WARNING", "ERROR", "FATAL"
+    };
+
     static_assert(LS_NUMBER == _countof(kLogSeverityNames));
 
     if (severity >= 0 && severity < LS_NUMBER)
         return kLogSeverityNames[severity];
+
     return "UNKNOWN";
 }
 
-bool defaultLogFilePath(std::filesystem::path* path)
+std::string createFileName()
 {
-    std::error_code code;
+    std::chrono::high_resolution_clock::time_point current_time =
+        std::chrono::high_resolution_clock::now();
 
-    *path = std::filesystem::temp_directory_path(code);
-    if (code.value() != 0)
-        return false;
+    std::chrono::milliseconds ms = std::chrono::duration_cast<std::chrono::milliseconds>(
+        current_time.time_since_epoch());
 
-    path->append(L"aspia");
+    time_t time_since_epoch = std::chrono::duration_cast<std::chrono::seconds>(ms).count();
+    std::tm* now = std::localtime(&time_since_epoch);
 
-    if (!std::filesystem::exists(*path, code))
-    {
-        if (code.value() != 0)
-            return false;
+    std::ostringstream stream;
 
-        if (!std::filesystem::create_directories(*path, code))
-            return false;
-    }
+    stream << std::setfill('0')
+           << std::setw(4) << (1900 + now->tm_year)
+           << std::setw(2) << (1 + now->tm_mon)
+           << std::setw(2) << now->tm_mday
+           << '-'
+           << std::setw(2) << now->tm_hour
+           << std::setw(2) << now->tm_min
+           << std::setw(2) << now->tm_sec
+           << '.'
+           << std::setw(3) << (ms.count() % 1000)
+           << ".log";
 
-    SYSTEMTIME local_time;
-    GetLocalTime(&local_time);
-
-    wchar_t file_path[MAX_PATH] = { 0 };
-    GetModuleFileNameW(nullptr, file_path, _countof(file_path));
-
-    std::wostringstream stream;
-
-    stream << std::filesystem::path(file_path).filename().native()
-           << L'.'
-           << std::setfill(L'0')
-           << std::setw(4) << local_time.wYear
-           << std::setw(2) << local_time.wMonth
-           << std::setw(2) << local_time.wDay
-           << L'-'
-           << std::setw(2) << local_time.wHour
-           << std::setw(2) << local_time.wMinute
-           << std::setw(2) << local_time.wSecond
-           << L'.'
-           << std::setw(3) << local_time.wMilliseconds
-           << L".log";
-
-    path->append(stream.str());
-    return true;
+    return stream.str();
 }
 
-// Called by logging functions to ensure that |g_log_file| is initialized
-// and can be used for writing. Returns false if the file could not be
-// initialized. |g_log_file| will be nullptr in this case.
-bool initializeLogFileHandle()
+std::filesystem::path createFilePath()
 {
-    if (g_log_file)
-        return true;
+    std::error_code error_code;
 
-    std::filesystem::path file_path;
-    if (!defaultLogFilePath(&file_path))
-        return false;
+    std::filesystem::path path = std::filesystem::temp_directory_path(error_code);
+    if (error_code)
+        return std::filesystem::path();
 
-    if ((g_logging_destination & LOG_TO_FILE) != 0)
+    path.append("aspia");
+
+    if (!std::filesystem::exists(path, error_code))
     {
-        // The FILE_APPEND_DATA access mask ensures that the file is atomically
-        // appended to across accesses from multiple threads.
-        // https://msdn.microsoft.com/en-us/library/windows/desktop/aa364399(v=vs.85).aspx
-        // https://msdn.microsoft.com/en-us/library/windows/desktop/aa363858(v=vs.85).aspx
-        g_log_file = CreateFileW(file_path.c_str(), FILE_APPEND_DATA | DELETE,
-                                 FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr,
-                                 OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
-        if (g_log_file == INVALID_HANDLE_VALUE || g_log_file == nullptr)
-        {
-            g_log_file = nullptr;
-            return false;
-        }
+        if (error_code)
+            return std::filesystem::path();
+
+        if (!std::filesystem::create_directories(path, error_code))
+            return std::filesystem::path();
     }
 
-    return true;
-}
-
-void closeLogFileUnlocked()
-{
-    if (!g_log_file)
-        return;
-
-    LARGE_INTEGER file_size;
-    if (GetFileSizeEx(g_log_file, &file_size) && !file_size.QuadPart)
-    {
-        FILE_DISPOSITION_INFO fdi;
-        fdi.DeleteFile = TRUE;
-        SetFileInformationByHandle(g_log_file, FileDispositionInfo, &fdi, sizeof(fdi));
-    }
-
-    CloseHandle(g_log_file);
-    g_log_file = nullptr;
+    path.append(createFileName());
+    return path;
 }
 
 } // namespace
@@ -163,30 +120,34 @@ void closeLogFileUnlocked()
 std::ostream* g_swallow_stream;
 
 LoggingSettings::LoggingSettings()
-    : logging_dest(LOG_DEFAULT),
-      lock_log(LOCK_LOG_FILE)
+    : logging_dest(LOG_DEFAULT)
 {
     // Nothing
 }
 
-bool baseInitLoggingImpl(const LoggingSettings& settings)
+bool initLogging(const LoggingSettings& settings)
 {
+    std::scoped_lock lock(g_log_file_lock);
+    g_log_file.close();
+
     g_logging_destination = settings.logging_dest;
 
-    // ignore file options unless logging to file is set.
-    if ((g_logging_destination & LOG_TO_FILE) == 0)
+    if (!(g_logging_destination & LOG_TO_FILE))
         return true;
 
-    // Calling InitLogging twice or after some log call has already opened the
-    // default log file will re-initialize to the new options.
-    closeLogFileUnlocked();
+    std::filesystem::path file_path = createFilePath();
+    if (file_path.empty())
+        return false;
 
-    return initializeLogFileHandle();
+    g_log_file.open(file_path);
+
+    return g_log_file.is_open();
 }
 
 void shutdownLogging()
 {
-    closeLogFileUnlocked();
+    std::scoped_lock lock(g_log_file_lock);
+    g_log_file.close();
 }
 
 bool shouldCreateLogMessage(LoggingSeverity severity)
@@ -197,7 +158,7 @@ bool shouldCreateLogMessage(LoggingSeverity severity)
     // Return true here unless we know ~LogMessage won't do anything. Note that
     // ~LogMessage writes to stderr if severity_ >= kAlwaysPrintErrorLevel, even
     // when g_logging_destination is LOG_NONE.
-    return g_logging_destination != LOG_NONE || severity >= kAlwaysPrintErrorLevel;
+    return g_logging_destination != LOG_NONE || severity >= LS_ERROR;
 }
 
 void makeCheckOpValueString(std::ostream* os, std::nullptr_t /* p */)
@@ -242,17 +203,6 @@ std::string* makeCheckOpString(const std::string& v1, const std::string& v2, con
     return makeCheckOpString<std::string, std::string>(v1, v2, names);
 }
 
-LogMessage::SaveLastError::SaveLastError()
-    : last_error_(::GetLastError())
-{
-    // Nothing
-}
-
-LogMessage::SaveLastError::~SaveLastError()
-{
-    ::SetLastError(last_error_);
-}
-
 LogMessage::LogMessage(const char* file, int line, LoggingSeverity severity)
     : severity_(severity), file_(file), line_(line)
 {
@@ -269,70 +219,60 @@ LogMessage::LogMessage(const char* file, int line, const char* condition)
 LogMessage::LogMessage(const char* file, int line, std::string* result)
     : severity_(LS_FATAL), file_(file), line_(line)
 {
+    std::unique_ptr<std::string> result_deleter(result);
     init(file, line);
     stream_ << "Check failed: " << *result;
-    delete result;
 }
 
 LogMessage::LogMessage(const char* file, int line, LoggingSeverity severity, std::string* result)
     : severity_(severity), file_(file), line_(line)
 {
+    std::unique_ptr<std::string> result_deleter(result);
     init(file, line);
     stream_ << "Check failed: " << *result;
-    delete result;
 }
 
 LogMessage::~LogMessage()
 {
     stream_ << std::endl;
-    std::string str_newline(stream_.str());
+
+    std::string message(stream_.str());
 
     if ((g_logging_destination & LOG_TO_SYSTEM_DEBUG_LOG) != 0)
     {
-        OutputDebugStringA(str_newline.c_str());
+#if defined(OS_WIN)
+        OutputDebugStringA(message.c_str());
+#endif // defined(OS_WIN)
 
-        fwrite(str_newline.data(), str_newline.size(), 1, stderr);
+        //std::cerr << str_newline << std::endl;
+        fwrite(message.data(), message.size(), 1, stderr);
         fflush(stderr);
     }
-    else if (severity_ >= kAlwaysPrintErrorLevel)
+    else if (severity_ >= LS_ERROR)
     {
         // When we're only outputting to a log file, above a certain log level, we
         // should still output to stderr so that we can better detect and diagnose
         // problems with unit tests, especially on the buildbots.
-        fwrite(str_newline.data(), str_newline.size(), 1, stderr);
+        fwrite(message.data(), message.size(), 1, stderr);
         fflush(stderr);
     }
 
-    // write to log file
+    // Write to log file.
     if ((g_logging_destination & LOG_TO_FILE) != 0)
     {
-        // We can have multiple threads and/or processes, so try to prevent them
-        // from clobbering each other's writes.
-        // If the client app did not call InitLogging, and the lock has not
-        // been created do it now. We do this on demand, but if two threads try
-        // to do this at the same time, there will be a race condition to create
-        // the lock. This is why InitLogging should be called from the main
-        // thread at the beginning of execution.
-
-        if (initializeLogFileHandle())
-        {
-            DWORD num_written;
-            WriteFile(g_log_file,
-                      static_cast<const void*>(str_newline.c_str()),
-                      static_cast<DWORD>(str_newline.length()),
-                      &num_written,
-                      nullptr);
-        }
+        std::scoped_lock lock(g_log_file_lock);
+        g_log_file.write(message.c_str(), message.size());
+        g_log_file.flush();
     }
 
     if (severity_ == LS_FATAL)
     {
         // Crash the process.
-        __debugbreak();
+        debugBreak();
     }
 }
 
-// writes the common header info to the stream
+// Writes the common header info to the stream.
 void LogMessage::init(const char* file, int line)
 {
     std::string_view filename(file);
@@ -341,16 +281,22 @@ void LogMessage::init(const char* file, int line)
     if (last_slash_pos != std::string_view::npos)
         filename.remove_prefix(last_slash_pos + 1);
 
-    SYSTEMTIME local_time;
-    GetLocalTime(&local_time);
+    std::chrono::high_resolution_clock::time_point current_time =
+        std::chrono::high_resolution_clock::now();
+
+    std::chrono::milliseconds ms = std::chrono::duration_cast<std::chrono::milliseconds>(
+        current_time.time_since_epoch());
+
+    time_t time_since_epoch = std::chrono::duration_cast<std::chrono::seconds>(ms).count();
+    std::tm* now = std::localtime(&time_since_epoch);
 
     stream_ << std::setfill('0')
-            << std::setw(2) << local_time.wHour   << ':'
-            << std::setw(2) << local_time.wMinute << ':'
-            << std::setw(2) << local_time.wSecond << '.'
-            << std::setw(3) << local_time.wMilliseconds;
+            << std::setw(2) << now->tm_hour   << ':'
+            << std::setw(2) << now->tm_min << ':'
+            << std::setw(2) << now->tm_sec << '.'
+            << std::setw(3) << ms.count() % 1000;
 
-    stream_ << ' ' << GetCurrentThreadId();
+    stream_ << ' ' << std::this_thread::get_id();
     stream_ << ' ' << severityName(severity_);
     stream_ << ' ' << filename.data() << ":" << line << "] ";
 
@@ -359,76 +305,59 @@ void LogMessage::init(const char* file, int line)
 
 SystemErrorCode lastSystemErrorCode()
 {
+#if defined(OS_WIN)
     return ::GetLastError();
+#elif defined(OS_POSIX)
+    return errno;
+#else
+#error Platform support not implemented
+#endif
 }
 
 std::string systemErrorCodeToString(SystemErrorCode error_code)
 {
+#if defined(OS_WIN)
+    std::stringstream ss;
+
     constexpr int kErrorMessageBufferSize = 256;
-    char msgbuf[kErrorMessageBufferSize];
+    wchar_t msgbuf[kErrorMessageBufferSize];
 
-    static const DWORD flags = FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS;
-
-    DWORD len = FormatMessageA(flags, nullptr, error_code, 0, msgbuf, _countof(msgbuf), nullptr);
+    DWORD len = FormatMessageW(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+                               nullptr, error_code, 0, msgbuf, _countof(msgbuf), nullptr);
     if (len)
     {
-        // Messages returned by system end with line breaks.
-        return collapseWhitespaceASCII(msgbuf, true) + stringPrintf(" (0x%lX)", error_code);
+        ss << UTF8fromUTF16(msgbuf);
+        ss << std::setfill('0') << " (0x" << std::hex << std::setw(8) << error_code << ")";
+    }
+    else
+    {
+        ss << "Error ";
+        ss << std::setfill('0') << std::hex << std::setw(8) << GetLastError();
+        ss << " while retrieving error (";
+        ss << std::setfill('0') << std::hex << std::setw(8) << error_code << ")";
     }
 
-    return stringPrintf("Error (0x%lX) while retrieving error. (0x%lX)", GetLastError(), error_code);
+    return ss.str();
+#elif (OS_POSIX)
+    return strerror(error_code);
+#else
+#error Platform support not implemented
+#endif
 }
 
-Win32ErrorLogMessage::Win32ErrorLogMessage(const char* file,
-                                           int line,
-                                           LoggingSeverity severity,
-                                           SystemErrorCode err)
-    : err_(err),
+ErrorLogMessage::ErrorLogMessage(const char* file,
+                                 int line,
+                                 LoggingSeverity severity,
+                                 SystemErrorCode error_code)
+    : error_code_(error_code),
       log_message_(file, line, severity)
 {
     // Nothing
 }
 
-Win32ErrorLogMessage::~Win32ErrorLogMessage()
+ErrorLogMessage::~ErrorLogMessage()
 {
-    stream() << ": " << systemErrorCodeToString(err_);
-}
-
-void rawLog(int level, const char* message)
-{
-    if (level >= g_min_log_level && message)
-    {
-        size_t bytes_written = 0;
-        const size_t message_len = strlen(message);
-        int rv;
-        while (bytes_written < message_len)
-        {
-            rv = write(STDERR_FILENO, message + bytes_written, message_len - bytes_written);
-            if (rv < 0)
-            {
-                // Give up, nothing we can do now.
-                break;
-            }
-            bytes_written += rv;
-        }
-
-        if (message_len > 0 && message[message_len - 1] != '\n')
-        {
-            do
-            {
-                rv = write(STDERR_FILENO, "\n", 1);
-                if (rv < 0)
-                {
-                    // Give up, nothing we can do now.
-                    break;
-                }
-            }
-            while (rv != 1);
-        }
-    }
-
-    if (level == LS_FATAL)
-        __debugbreak();
+    stream() << ": " << systemErrorCodeToString(error_code_);
 }
 
 void logErrorNotReached(const char* file, int line)
@@ -438,12 +367,12 @@ void logErrorNotReached(const char* file, int line)
 
 } // namespace aspia
 
-std::ostream& std::operator<<(std::ostream& out, const wchar_t* wstr)
+std::ostream& operator<<(std::ostream& out, const std::wstring& wstr)
 {
-    return out << (wstr ? aspia::UTF8fromUTF16(wstr) : std::string());
+    return out << aspia::UTF8fromUTF16(wstr);
 }
 
-std::ostream& operator<<(std::ostream& out, const QString& qstr)
+std::ostream& std::operator<<(std::ostream& out, const wchar_t* wstr)
 {
-    return out << qstr.toStdString();
+    return out << aspia::UTF8fromUTF16(wstr);
 }

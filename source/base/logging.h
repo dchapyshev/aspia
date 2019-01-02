@@ -19,13 +19,11 @@
 #ifndef ASPIA_BASE__LOGGING_H_
 #define ASPIA_BASE__LOGGING_H_
 
-#include <QString>
-
 #include <sstream>
 #include <type_traits>
 #include <utility>
 
-#include "base/macros_magic.h"
+#include "base/scoped_clear_last_error.h"
 
 
 // Instructions
@@ -102,14 +100,6 @@ enum LoggingDestination
     LOG_DEFAULT = LOG_TO_FILE,
 };
 
-// Indicates that the log file should be locked when being written to. Unless there is only one
-// single-threaded process that is logging to the log file, the file should be locked during writes
-// to make each log output atomic. Other writers will block.
-//
-// All processes writing to the log file must have their locking set for it to work properly.
-// Defaults to LOCK_LOG_FILE.
-enum LogLockingState { LOCK_LOG_FILE, DONT_LOCK_LOG_FILE };
-
 enum LoggingSeverity : int
 {
     LS_INFO    = 0,
@@ -132,40 +122,12 @@ struct LoggingSettings
     LoggingSettings();
 
     LoggingDestination logging_dest;
-
-    // The three settings below have an effect only when LOG_TO_FILE is set in |logging_dest|.
-    LogLockingState lock_log;
 };
-
-// Define different names for the baseInitLoggingImpl() function depending on whether NDEBUG is
-// defined or not so that we'll fail to link if someone tries to compile logging.cc with NDEBUG but
-// includes logging.h without defining it, or vice versa.
-#if defined(NDEBUG)
-#define baseInitLoggingImpl baseInitLoggingImpl_built_with_NDEBUG
-#else
-#define baseInitLoggingImpl baseInitLoggingImpl_built_without_NDEBUG
-#endif
-
-// Implementation of the initLogging() method declared below.  We use a more-specific name so we
-// can #define it above without affecting other code that has named stuff "initLogging".
-bool baseInitLoggingImpl(const LoggingSettings& settings);
 
 // Sets the log file name and other global logging state. Calling this function is recommended,
 // and is normally done at the beginning of application init.
-// If you don't call it, all the flags will be initialized to their default values, and there is a
-// race condition that may leak a critical section object if two threads try to do the first log at
-// the same time.
 // See the definition of the enums above for descriptions and default values.
-//
-// The default log file is initialized to "debug.log" in the application directory. You probably
-// don't want this, especially since the program directory may not be writable on an enduser's system.
-//
-// This function may be called a second time to re-direct logging (e.g after loging in to a user
-// partition), however it should never be called more than twice.
-inline bool initLogging(const LoggingSettings& settings)
-{
-    return baseInitLoggingImpl(settings);
-}
+bool initLogging(const LoggingSettings& settings);
 
 // Closes the log file explicitly if open.
 // NOTE: Since the log file is opened as necessary by the action of logging statements, there's no
@@ -233,7 +195,7 @@ private:
   LOG_IF(FATAL, !(condition)) << "Assert failed: " #condition ". "
 
 #define PLOG_STREAM(severity) \
-  COMPACT_LOG_EX_ ## severity(Win32ErrorLogMessage, ::aspia::lastSystemErrorCode()).stream()
+  COMPACT_LOG_EX_ ## severity(ErrorLogMessage, ::aspia::lastSystemErrorCode()).stream()
 
 #define PLOG(severity) \
   LAZY_STREAM(PLOG_STREAM(severity), LOG_IS_ON(severity))
@@ -261,7 +223,8 @@ class CheckOpResult
 {
 public:
     // |message| must be non-null if and only if the check failed.
-    CheckOpResult(std::string* message) : message_(message)
+    CheckOpResult(std::string* message)
+        : message_(message)
     {
         // Nothing
     }
@@ -274,8 +237,6 @@ public:
 private:
     std::string* message_;
 };
-
-#define IMMEDIATE_CRASH() __debugbreak()
 
 // CHECK dies with a fatal error if condition is not true.  It is *not* controlled by NDEBUG, so
 // the check will be executed regardless of compilation mode.
@@ -381,14 +342,14 @@ std::string* makeCheckOpString(const std::string& v1, const std::string& v2, con
         if ((v1 op v2))                                                                          \
             return nullptr;                                                                      \
         else                                                                                     \
-            return aspia::makeCheckOpString(v1, v2, names);                                      \
+            return ::aspia::makeCheckOpString(v1, v2, names);                                    \
     }                                                                                            \
     inline std::string* check##name##Impl(int v1, int v2, const char* names)                     \
     {                                                                                            \
         if ((v1 op v2))                                                                          \
             return nullptr;                                                                      \
         else                                                                                     \
-            return aspia::makeCheckOpString(v1, v2, names);                                      \
+            return ::aspia::makeCheckOpString(v1, v2, names);                                    \
     }
 
 DEFINE_CHECK_OP_IMPL(EQ, ==)
@@ -527,7 +488,7 @@ public:
     // Used for LOG(severity).
     LogMessage(const char* file, int line, LoggingSeverity severity);
 
-    // Used for CHECK().  Implied severity = LOG_FATAL.
+    // Used for CHECK(). Implied severity = LOG_FATAL.
     LogMessage(const char* file, int line, const char* condition);
 
     // Used for CHECK_EQ(), etc. Takes ownership of the given string.
@@ -549,29 +510,15 @@ private:
 
     LoggingSeverity severity_;
     std::ostringstream stream_;
-    size_t message_start_;  // Offset of the start of the message (past prefix // info).
+
+    // Offset of the start of the message (past prefix // info).
+    size_t message_start_;
+
     // The file and line information passed in to the constructor.
     const char* file_;
     const int line_;
 
-    // Stores the current value of GetLastError in the constructor and restores it in the destructor
-    // by calling SetLastError.
-    // This is useful since the LogMessage class uses a lot of Win32 calls that will lose the value
-    // of GLE and the code that called the log function will have lost the thread error value when
-    // the log call returns.
-    class SaveLastError
-    {
-    public:
-        SaveLastError();
-        ~SaveLastError();
-
-        unsigned long get_error() const { return last_error_; }
-
-    protected:
-        unsigned long last_error_;
-    };
-
-    SaveLastError last_error_;
+    ScopedClearLastError last_error_;
 
     DISALLOW_COPY_AND_ASSIGN(LogMessage);
 };
@@ -586,7 +533,13 @@ public:
     void operator&(std::ostream&) { }
 };
 
+#if defined(OS_WIN)
 using SystemErrorCode = unsigned long;
+#elif defined(OS_POSIX)
+using SystemErrorCode = int;
+#else
+#error Platform support not implemented
+#endif
 
 // Alias for ::GetLastError() on Windows and errno on POSIX. Avoids having to pull in windows.h
 // just for GetLastError() and DWORD.
@@ -594,35 +547,22 @@ SystemErrorCode lastSystemErrorCode();
 std::string systemErrorCodeToString(SystemErrorCode error_code);
 
 // Appends a formatted system message of the GetLastError() type.
-class Win32ErrorLogMessage
+class ErrorLogMessage
 {
 public:
-    Win32ErrorLogMessage(const char* file, int line, LoggingSeverity severity, SystemErrorCode err);
+    ErrorLogMessage(const char* file, int line, LoggingSeverity severity, SystemErrorCode err);
 
     // Appends the error message before destructing the encapsulated class.
-    ~Win32ErrorLogMessage();
+    ~ErrorLogMessage();
 
     std::ostream& stream() { return log_message_.stream(); }
 
 private:
-    SystemErrorCode err_;
+    SystemErrorCode error_code_;
     LogMessage log_message_;
 
-    DISALLOW_COPY_AND_ASSIGN(Win32ErrorLogMessage);
+    DISALLOW_COPY_AND_ASSIGN(ErrorLogMessage);
 };
-
-// Async signal safe logging mechanism.
-void rawLog(int level, const char* message);
-
-#define RAW_LOG(level, message) \
-    ::aspia::rawLog(::aspia::LOG_##level, message)
-
-#define RAW_CHECK(condition)                                                                     \
-    do                                                                                           \
-    {                                                                                            \
-        if (!(condition))                                                                        \
-            ::aspia::rawLog(::aspia::LOG_FATAL, "Check failed: " #condition "\n");               \
-    } while (0)
 
 } // namespace aspia
 
@@ -640,14 +580,9 @@ namespace std {
 // try not to use it for common cases. Non-ASCII characters will be converted to UTF-8 by these
 // operators.
 std::ostream& operator<<(std::ostream& out, const wchar_t* wstr);
-inline std::ostream& operator<<(std::ostream& out, const std::wstring& wstr)
-{
-    return out << wstr.c_str();
-}
+std::ostream& operator<<(std::ostream& out, const std::wstring& wstr);
 
 } // namespace std
-
-std::ostream& operator<<(std::ostream& out, const QString& qstr);
 
 // The NOTIMPLEMENTED() macro annotates codepaths which have not been implemented yet. If output
 // spam is a serious concern, NOTIMPLEMENTED_LOG_ONCE can be used.

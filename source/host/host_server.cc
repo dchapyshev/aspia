@@ -21,7 +21,7 @@
 #include <QCoreApplication>
 #include <QUuid>
 
-#include "base/logging.h"
+#include "base/qt_logging.h"
 #include "common/message_serialization.h"
 #include "host/win/host.h"
 #include "host/host_settings.h"

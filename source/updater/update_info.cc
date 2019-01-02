@@ -20,7 +20,7 @@
 
 #include <QtXml>
 
-#include "base/logging.h"
+#include "base/qt_logging.h"
 
 namespace aspia {
 

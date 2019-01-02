@@ -25,6 +25,8 @@ list(APPEND SOURCE_BASE
     const_buffer.h
     cpuid.cc
     cpuid.h
+    debug.cc
+    debug.h
     keycode_converter.cc
     keycode_converter.h
     logging.cc
@@ -32,6 +34,10 @@ list(APPEND SOURCE_BASE
     macros_magic.h
     power_controller.h
     power_controller_win.cc
+    qt_logging.cc
+    qt_logging.h
+    scoped_clear_last_error.cc
+    scoped_clear_last_error.h
     service.h
     service_controller.cc
     service_controller.h
