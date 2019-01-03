@@ -30,10 +30,12 @@
 #include "codec/video_encoder_vpx.h"
 #include "codec/video_encoder_zstd.h"
 #include "codec/video_util.h"
+#include "common/desktop_session_constants.h"
 #include "common/message_serialization.h"
 #include "desktop_capture/capture_scheduler.h"
 #include "desktop_capture/cursor_capturer_win.h"
 #include "desktop_capture/screen_capturer_gdi.h"
+#include "protocol/desktop_session_extensions.pb.h"
 
 namespace aspia {
 
@@ -197,15 +199,22 @@ void ScreenUpdaterImpl::run()
             ScreenCapturer::ScreenList screens;
             if (screen_capturer_->screenList(&screens))
             {
-                message_.Clear();
+                proto::desktop::ScreenList screen_list;
 
                 for (const auto& screen : screens)
                 {
-                    proto::desktop::Screen* item = message_.mutable_screen_list()->add_screen();
+                    proto::desktop::Screen* item = screen_list.add_screen();
 
                     item->set_id(screen.id);
                     item->set_title(screen.title.toStdString());
                 }
+
+                message_.Clear();
+
+                proto::desktop::Extension* extension = message_.mutable_extension();
+
+                extension->set_name(kSelectScreenExtension);
+                extension->set_data(screen_list.SerializeAsString());
 
                 QApplication::postEvent(parent(), new MessageEvent(serializeMessage(message_)));
             }

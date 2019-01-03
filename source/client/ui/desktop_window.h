@@ -25,6 +25,7 @@
 #include "base/macros_magic.h"
 #include "client/connect_data.h"
 #include "protocol/desktop_session.pb.h"
+#include "protocol/desktop_session_extensions.pb.h"
 
 class QHBoxLayout;
 class QScrollArea;

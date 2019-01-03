@@ -26,6 +26,7 @@
 #include "client/client_session.h"
 #include "client/connect_data.h"
 #include "codec/video_decoder.h"
+#include "protocol/desktop_session_extensions.pb.h"
 
 namespace aspia {
 
@@ -51,7 +52,7 @@ public slots:
 protected:
     void readConfigRequest(const proto::desktop::ConfigRequest& config_request);
     void readVideoPacket(const proto::desktop::VideoPacket& packet);
-    void readScreenList(const proto::desktop::ScreenList& screen_list);
+    void readExtension(const proto::desktop::Extension& extension);
 
     ConnectData* connect_data_;
     DesktopWindow* desktop_window_;

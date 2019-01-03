@@ -19,6 +19,8 @@
 list(APPEND SOURCE_COMMON
     clipboard.cc
     clipboard.h
+    desktop_session_constants.cc
+    desktop_session_constants.h
     file_depacketizer.cc
     file_depacketizer.h
     file_packet.h

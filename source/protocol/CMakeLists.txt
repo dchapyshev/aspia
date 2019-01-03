@@ -20,6 +20,7 @@ list(APPEND SOURCE_PROTOCOL
     address_book.proto
     common.proto
     desktop_session.proto
+    desktop_session_extensions.proto
     file_transfer_session.proto
     key_exchange.proto
     notifier.proto)

@@ -20,6 +20,7 @@
 
 #include "client/ui/desktop_window.h"
 #include "codec/video_util.h"
+#include "common/desktop_session_constants.h"
 #include "common/message_serialization.h"
 
 namespace aspia {
@@ -62,9 +63,9 @@ void ClientSessionDesktopView::messageReceived(const QByteArray& buffer)
     {
         readConfigRequest(incoming_message_.config_request());
     }
-    else if (incoming_message_.has_screen_list())
+    else if (incoming_message_.has_extension())
     {
-        readScreenList(incoming_message_.screen_list());
+        readExtension(incoming_message_.extension());
     }
     else
     {
@@ -99,7 +100,12 @@ void ClientSessionDesktopView::onSendConfig(const proto::desktop::Config& config
 void ClientSessionDesktopView::onSendScreen(const proto::desktop::Screen& screen)
 {
     outgoing_message_.Clear();
-    outgoing_message_.mutable_screen()->CopyFrom(screen);
+
+    proto::desktop::Extension* extension = outgoing_message_.mutable_extension();
+
+    extension->set_name(kSelectScreenExtension);
+    extension->set_data(screen.SerializeAsString());
+
     emit sendMessage(serializeMessage(outgoing_message_));
 }
 
@@ -163,9 +169,24 @@ void ClientSessionDesktopView::readVideoPacket(const proto::desktop::VideoPacket
     desktop_window_->drawDesktopFrame();
 }
 
-void ClientSessionDesktopView::readScreenList(const proto::desktop::ScreenList& screen_list)
+void ClientSessionDesktopView::readExtension(const proto::desktop::Extension& extension)
 {
-    desktop_window_->setScreenList(screen_list);
+    if (extension.name() == kSelectScreenExtension)
+    {
+        proto::desktop::ScreenList screen_list;
+
+        if (!screen_list.ParseFromString(extension.data()))
+        {
+            LOG(LS_ERROR) << "Unable to parse select screen extension data";
+            return;
+        }
+
+        desktop_window_->setScreenList(screen_list);
+    }
+    else
+    {
+        LOG(LS_WARNING) << "Unknown extension: " << extension.name();
+    }
 }
 
 } // namespace aspia

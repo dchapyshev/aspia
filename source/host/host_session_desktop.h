@@ -55,9 +55,8 @@ private:
     void readPointerEvent(const proto::desktop::PointerEvent& event);
     void readKeyEvent(const proto::desktop::KeyEvent& event);
     void readClipboardEvent(const proto::desktop::ClipboardEvent& event);
-    void readPowerControl(const proto::desktop::PowerControl& power_control);
+    void readExtension(const proto::desktop::Extension& extension);
     void readConfig(const proto::desktop::Config& config);
-    void readScreen(const proto::desktop::Screen& screen);
 
     const proto::SessionType session_type_;
 

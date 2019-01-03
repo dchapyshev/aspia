@@ -20,6 +20,7 @@
 
 #include "client/ui/desktop_window.h"
 #include "codec/cursor_decoder.h"
+#include "common/desktop_session_constants.h"
 #include "common/message_serialization.h"
 #include "desktop_capture/mouse_cursor.h"
 
@@ -67,9 +68,9 @@ void ClientSessionDesktopManage::messageReceived(const QByteArray& buffer)
     {
         readConfigRequest(incoming_message_.config_request());
     }
-    else if (incoming_message_.has_screen_list())
+    else if (incoming_message_.has_extension())
     {
-        readScreenList(incoming_message_.screen_list());
+        readExtension(incoming_message_.extension());
     }
     else
     {
@@ -125,7 +126,15 @@ void ClientSessionDesktopManage::onSendClipboardEvent(const proto::desktop::Clip
 void ClientSessionDesktopManage::onPowerControl(proto::desktop::PowerControl::Action action)
 {
     outgoing_message_.Clear();
-    outgoing_message_.mutable_power_control()->set_action(action);
+
+    proto::desktop::Extension* extension = outgoing_message_.mutable_extension();
+
+    proto::desktop::PowerControl power_control;
+    power_control.set_action(action);
+
+    extension->set_name(kPowerControlExtension);
+    extension->set_data(power_control.SerializeAsString());
+
     emit sendMessage(serializeMessage(outgoing_message_));
 }
 

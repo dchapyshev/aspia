@@ -22,6 +22,7 @@
 #include "base/macros_magic.h"
 #include "protocol/common.pb.h"
 #include "protocol/desktop_session.pb.h"
+#include "protocol/desktop_session_extensions.pb.h"
 #include "ui_desktop_panel.h"
 
 namespace aspia {

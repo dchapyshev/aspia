@@ -139,30 +139,10 @@ message VideoPacket
     bytes data = 4;
 }
 
-message Screen
+message Extension
 {
-    int64 id     = 1;
-    string title = 2;
-}
-
-message ScreenList
-{
-    // List of screens (monitors) on the remote computer.
-    repeated Screen screen = 1;
-}
-
-message PowerControl
-{
-    enum Action
-    {
-        ACTION_UNKNOWN  = 0;
-        ACTION_SHUTDOWN = 1;
-        ACTION_REBOOT   = 2;
-        ACTION_LOGOFF   = 3;
-        ACTION_LOCK     = 4;
-    }
-
-    Action action = 1;
+    string name = 1;
+    bytes data  = 2;
 }
 
 message ConfigRequest
@@ -197,7 +177,7 @@ message HostToClient
     // Field 2 reserved for AudioPacket.
     CursorShape cursor_shape       = 3;
     ClipboardEvent clipboard_event = 4;
-    ScreenList screen_list         = 5;
+    Extension extension            = 5;
     ConfigRequest config_request   = 6;
 }
 
@@ -208,8 +188,6 @@ message ClientToHost
     // Field 3 reserved for TouchEvent.
     // Field 4 reserved for TextEvent.
     ClipboardEvent clipboard_event = 5;
-    PowerControl power_control     = 6;
-    Screen screen                  = 7;
-    // Field 8 reserved.
-    Config config                  = 9;
+    Extension extension            = 6;
+    Config config                  = 7;
 }

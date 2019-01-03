@@ -20,9 +20,11 @@
 
 #include "base/power_controller.h"
 #include "common/clipboard.h"
+#include "common/desktop_session_constants.h"
 #include "common/message_serialization.h"
 #include "host/input_injector.h"
 #include "host/screen_updater.h"
+#include "protocol/desktop_session_extensions.pb.h"
 
 #if defined(OS_WIN)
 #include "desktop_capture/win/visual_effects_disabler.h"
@@ -90,12 +92,10 @@ void HostSessionDesktop::messageReceived(const QByteArray& buffer)
         readKeyEvent(incoming_message_.key_event());
     else if (incoming_message_.has_clipboard_event())
         readClipboardEvent(incoming_message_.clipboard_event());
-    else if (incoming_message_.has_power_control())
-        readPowerControl(incoming_message_.power_control());
+    else if (incoming_message_.has_extension())
+        readExtension(incoming_message_.extension());
     else if (incoming_message_.has_config())
         readConfig(incoming_message_.config());
-    else if (incoming_message_.has_screen())
-        readScreen(incoming_message_.screen());
     else
     {
         DLOG(LS_WARNING) << "Unhandled message from client";
@@ -157,29 +157,57 @@ void HostSessionDesktop::readClipboardEvent(const proto::desktop::ClipboardEvent
     clipboard_->injectClipboardEvent(clipboard_event);
 }
 
-void HostSessionDesktop::readPowerControl(const proto::desktop::PowerControl& power_control)
+void HostSessionDesktop::readExtension(const proto::desktop::Extension& extension)
 {
-    switch (power_control.action())
+    if (extension.name() == kSelectScreenExtension)
     {
-        case proto::desktop::PowerControl::ACTION_SHUTDOWN:
-            PowerController::shutdown();
-            break;
+        proto::desktop::Screen screen;
 
-        case proto::desktop::PowerControl::ACTION_REBOOT:
-            PowerController::reboot();
-            break;
+        if (!screen.ParseFromString(extension.data()))
+        {
+            LOG(LS_ERROR) << "Unable to parse select screen extension data";
+            return;
+        }
 
-        case proto::desktop::PowerControl::ACTION_LOGOFF:
-            PowerController::logoff();
-            break;
+        if (screen_updater_)
+            screen_updater_->selectScreen(screen.id());
+    }
+    else if (extension.name() == kPowerControlExtension)
+    {
+        proto::desktop::PowerControl power_control;
 
-        case proto::desktop::PowerControl::ACTION_LOCK:
-            PowerController::lock();
-            break;
+        if (!power_control.ParseFromString(extension.data()))
+        {
+            LOG(LS_ERROR) << "Unable to parse power control extension data";
+            return;
+        }
 
-        default:
-            LOG(LS_WARNING) << "Unhandled power control action: " << power_control.action();
-            break;
+        switch (power_control.action())
+        {
+            case proto::desktop::PowerControl::ACTION_SHUTDOWN:
+                PowerController::shutdown();
+                break;
+
+            case proto::desktop::PowerControl::ACTION_REBOOT:
+                PowerController::reboot();
+                break;
+
+            case proto::desktop::PowerControl::ACTION_LOGOFF:
+                PowerController::logoff();
+                break;
+
+            case proto::desktop::PowerControl::ACTION_LOCK:
+                PowerController::lock();
+                break;
+
+            default:
+                LOG(LS_WARNING) << "Unhandled power control action: " << power_control.action();
+                break;
+        }
+    }
+    else
+    {
+        LOG(LS_WARNING) << "Unknown extension: " << extension.name();
     }
 }
 
@@ -247,12 +275,6 @@ void HostSessionDesktop::readConfig(const proto::desktop::Config& config)
         if (!screen_updater_->start(config))
             emit errorOccurred();
     }
-}
-
-void HostSessionDesktop::readScreen(const proto::desktop::Screen& screen)
-{
-    if (screen_updater_)
-        screen_updater_->selectScreen(screen.id());
 }
 
 } // namespace aspia
