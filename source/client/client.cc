@@ -44,7 +44,8 @@ void Client::start()
 
     // Create a status dialog. It displays all information about the progress of the connection
     // and errors.
-    status_dialog_ = new StatusDialog(QApplication::activeWindow());
+    status_dialog_ = new StatusDialog();
+    status_dialog_->setWindowFlag(Qt::WindowStaysOnTopHint);
 
     connect(status_dialog_, &StatusDialog::finished, [this](int /* result */)
     {
