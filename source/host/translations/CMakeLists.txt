@@ -33,7 +33,7 @@ if(Qt5LinguistTools_FOUND)
     qt5_add_translation(QM_HOST_UPDATE ${TS_HOST_FILES})
     add_custom_target(aspia_host_qm_update ALL DEPENDS ${QM_HOST_UPDATE})
 
-    create_translation(TS_HOST_UPDATE ${TR_HOST_SOURCES} ${TS_HOST_FILES} OPTIONS "-no-obsolete")
+    qt5_create_translation(TS_HOST_UPDATE ${TR_HOST_SOURCES} ${TS_HOST_FILES} OPTIONS "-no-obsolete")
     add_custom_target(aspia_host_ts_update DEPENDS ${TS_HOST_UPDATE})
 
     foreach(QM_FILE ${QM_HOST_UPDATE})

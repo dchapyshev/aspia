@@ -39,8 +39,6 @@ find_package(Qt5 REQUIRED Core Gui Network Widgets WinExtras Xml)
 find_package(Qt5LinguistTools)
 find_package(Protobuf REQUIRED)
 
-include(translations.cmake)
-
 add_definitions(-D_UNICODE
                 -DNTDDI_VERSION=0x06010000
                 -D_WIN32_WINNT=0x0601

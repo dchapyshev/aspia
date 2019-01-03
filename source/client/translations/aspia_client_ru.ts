@@ -533,87 +533,87 @@
 <context>
     <name>aspia::Client</name>
     <message>
-        <location filename="../client.cc" line="64"/>
+        <location filename="../client.cc" line="65"/>
         <source>Attempt to connect to %1:%2.</source>
         <translation>Попытка подключения к %1:%2.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="75"/>
+        <location filename="../client.cc" line="76"/>
         <source>Connection established.</source>
         <translation>Соединение установлено.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="128"/>
+        <location filename="../client.cc" line="129"/>
         <source>Connection was refused by the peer (or timed out).</source>
         <translation>Подключение было отклонено другой стороной (или превышено время ожидания).</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="132"/>
+        <location filename="../client.cc" line="133"/>
         <source>Remote host closed the connection.</source>
         <translation>Удаленный узел закрыл подключение.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="136"/>
+        <location filename="../client.cc" line="137"/>
         <source>Host address was not found.</source>
         <translation>Не найден адрес удаленного узла.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="140"/>
+        <location filename="../client.cc" line="141"/>
         <source>Socket operation timed out.</source>
         <translation>Превышено время ожидания.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="144"/>
+        <location filename="../client.cc" line="145"/>
         <source>Address specified is already in use and was set to be exclusive.</source>
         <translation>Указанный адрес уже используется и был установлен монопольно.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="148"/>
+        <location filename="../client.cc" line="149"/>
         <source>Address specified does not belong to the host.</source>
         <translation>Указанный адрес не принадлежит узлу.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="152"/>
+        <location filename="../client.cc" line="153"/>
         <source>Violation of the data exchange protocol.</source>
         <translation>Нарушение протокола обмена данными.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="156"/>
+        <location filename="../client.cc" line="157"/>
         <source>An error occurred while encrypting the message.</source>
         <translation>Произошла ошибка при шифровании сообщения.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="160"/>
+        <location filename="../client.cc" line="161"/>
         <source>An error occurred while decrypting the message.</source>
         <translation>Произошла ошибка при расшифровке сообщения.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="164"/>
+        <location filename="../client.cc" line="165"/>
         <source>An error occured while authenticating: wrong user name or password.</source>
         <translation>Произошла ошибка при аутификации: неправильное имя пользователя или пароль.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="168"/>
+        <location filename="../client.cc" line="169"/>
         <source>Specified session type is not allowed for the user.</source>
         <translation>Указанный тип сессии не разрешен для пользователя.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="172"/>
+        <location filename="../client.cc" line="173"/>
         <source>An unknown error occurred.</source>
         <translation>Произошла неизвестная ошибка.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="118"/>
+        <location filename="../client.cc" line="119"/>
         <source>Disconnected.</source>
         <translation>Подключение разорвано.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="92"/>
+        <location filename="../client.cc" line="93"/>
         <source>Unsupported session type.</source>
         <translation>Неподдерживаемый тип сессии.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="110"/>
+        <location filename="../client.cc" line="111"/>
         <source>Session started.</source>
         <translation>Сессия запущена.</translation>
     </message>
@@ -639,7 +639,7 @@
 <context>
     <name>aspia::ClientSessionDesktopManage</name>
     <message>
-        <location filename="../client_session_desktop_manage.cc" line="50"/>
+        <location filename="../client_session_desktop_manage.cc" line="51"/>
         <source>Session error: Invalid message from host.</source>
         <translation>Ошибка сессии: Неверное сообщение от хоста.</translation>
     </message>
@@ -647,32 +647,32 @@
 <context>
     <name>aspia::ClientSessionDesktopView</name>
     <message>
-        <location filename="../client_session_desktop_view.cc" line="53"/>
+        <location filename="../client_session_desktop_view.cc" line="54"/>
         <source>Session error: Invalid message from host.</source>
         <translation>Ошибка сессии: Неверное сообщение от хоста.</translation>
     </message>
     <message>
-        <location filename="../client_session_desktop_view.cc" line="122"/>
+        <location filename="../client_session_desktop_view.cc" line="128"/>
         <source>Session error: Video decoder not initialized.</source>
         <translation>Ошибка сессии: Видео-декодер не инициализирован.</translation>
     </message>
     <message>
-        <location filename="../client_session_desktop_view.cc" line="136"/>
+        <location filename="../client_session_desktop_view.cc" line="142"/>
         <source>Session error: Wrong video frame size.</source>
         <translation>Ошибка сессии: Неверный размер экрана.</translation>
     </message>
     <message>
-        <location filename="../client_session_desktop_view.cc" line="143"/>
+        <location filename="../client_session_desktop_view.cc" line="149"/>
         <source>Session error: Wrong video frame position.</source>
         <translation>Ошибка сессии: Неверное положение видео-кадра.</translation>
     </message>
     <message>
-        <location filename="../client_session_desktop_view.cc" line="153"/>
+        <location filename="../client_session_desktop_view.cc" line="159"/>
         <source>Session error: The desktop frame is not initialized.</source>
         <translation>Ошибка сессии: Рабочий стол не инициализирован.</translation>
     </message>
     <message>
-        <location filename="../client_session_desktop_view.cc" line="159"/>
+        <location filename="../client_session_desktop_view.cc" line="165"/>
         <source>Session error: The video packet could not be decoded.</source>
         <translation>Ошибка сессии: Не удалось декодировать видео-пакет.</translation>
     </message>
