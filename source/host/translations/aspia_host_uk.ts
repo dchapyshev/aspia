@@ -4,27 +4,27 @@
 <context>
     <name>HostConfig</name>
     <message>
-        <location filename="../host_config_main.cc" line="61"/>
+        <location filename="../host_config_main.cc" line="62"/>
         <source>The path to the file to import.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host_config_main.cc" line="64"/>
+        <location filename="../host_config_main.cc" line="65"/>
         <source>The path to the file to export.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host_config_main.cc" line="67"/>
+        <location filename="../host_config_main.cc" line="68"/>
         <source>Enables silent mode when exporting and importing.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host_config_main.cc" line="83"/>
+        <location filename="../host_config_main.cc" line="84"/>
         <source>Warning</source>
         <translation type="unfinished">Попередження</translation>
     </message>
     <message>
-        <location filename="../host_config_main.cc" line="84"/>
+        <location filename="../host_config_main.cc" line="85"/>
         <source>Export and import parameters can not be specified together.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -171,7 +171,7 @@
         <translation>Підключення</translation>
     </message>
     <message>
-        <location filename="../ui/host_notifier_window.ui" line="317"/>
+        <location filename="../ui/host_notifier_window.ui" line="330"/>
         <source>Disconnect All</source>
         <translation>Відключити все</translation>
     </message>

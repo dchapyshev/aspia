@@ -16,7 +16,7 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 #
 
-add_subdirectory(translations)
+include(translations)
 
 list(APPEND SOURCE_HOST
     desktop_config_tracker.cc
@@ -103,6 +103,28 @@ target_link_libraries(aspia_host
     aspia_protocol
     aspia_updater
     ${THIRD_PARTY_LIBS})
+
+if(Qt5LinguistTools_FOUND)
+    # Get the list of Qt translation files.
+    file(GLOB QT_QM_FILES ${ASPIA_THIRD_PARTY_DIR}/qt/translations/*.qm)
+    add_qt_translations(aspia_host QRC_FILE "translations/qt_translations.qrc" QM_FILES ${QT_QM_FILES})
+
+    # Get the list of Aspia translation files.
+    file(GLOB HOST_TS_FILES translations/*.ts)
+    add_translations(aspia_host QRC_FILE "translations/host_translations.qrc" TS_FILES ${HOST_TS_FILES})
+
+    # Get the list of files containing messages.
+    file(GLOB_RECURSE HOST_TR_SOURCES
+        ${PROJECT_SOURCE_DIR}/host/*.cc
+        ${PROJECT_SOURCE_DIR}/host/*.cpp
+        ${PROJECT_SOURCE_DIR}/host/*.h
+        ${PROJECT_SOURCE_DIR}/host/*.ui)
+
+    qt5_create_translation(TS_HOST_UPDATE ${HOST_TR_SOURCES} ${HOST_TS_FILES} OPTIONS "-no-obsolete")
+    add_custom_target(aspia_host_ts_update DEPENDS ${TS_HOST_UPDATE})
+else()
+    message(WARNING "Qt5 linguist tools not found. Internationalization support will be disabled.")
+endif()
 
 add_executable(aspia_host_config
     host_config_entry_point.cc

@@ -41,7 +41,9 @@ using namespace aspia;
 int main(int argc, char *argv[])
 {
     Q_INIT_RESOURCE(client);
+    Q_INIT_RESOURCE(client_translations);
     Q_INIT_RESOURCE(updater);
+    Q_INIT_RESOURCE(updater_translations);
 
     LoggingSettings logging_settings;
     logging_settings.logging_dest = LOG_TO_ALL;

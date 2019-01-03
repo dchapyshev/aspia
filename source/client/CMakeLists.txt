@@ -16,7 +16,7 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 #
 
-add_subdirectory(translations)
+include(translations)
 
 list(APPEND SOURCE_CLIENT
     client.cc
@@ -123,3 +123,22 @@ target_link_libraries(aspia_client
     aspia_network
     aspia_protocol
     ${THIRD_PARTY_LIBS})
+
+if(Qt5LinguistTools_FOUND)
+    # Get the list of translation files.
+    file(GLOB CLIENT_TS_FILES translations/*.ts)
+
+    add_translations(aspia_client QRC_FILE "translations/client_translations.qrc" TS_FILES ${CLIENT_TS_FILES})
+
+    # Get the list of files containing messages.
+    file(GLOB_RECURSE CLIENT_TR_SOURCES
+        ${PROJECT_SOURCE_DIR}/client/*.cc
+        ${PROJECT_SOURCE_DIR}/client/*.cpp
+        ${PROJECT_SOURCE_DIR}/client/*.h
+        ${PROJECT_SOURCE_DIR}/client/*.ui)
+
+    qt5_create_translation(TS_CLIENT_UPDATE ${CLIENT_TR_SOURCES} ${CLIENT_TS_FILES} OPTIONS "-no-obsolete")
+    add_custom_target(aspia_client_ts_update DEPENDS ${TS_CLIENT_UPDATE})
+else()
+    message(WARNING "Qt5 linguist tools not found. Internationalization support will be disabled.")
+endif()

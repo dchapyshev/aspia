@@ -31,9 +31,9 @@ namespace aspia {
 LocaleLoader::LocaleLoader()
 {
     QStringList qm_file_list =
-        QDir(translationsDir()).entryList(QStringList() << QStringLiteral("*.qm"));
+        QDir(translationsDir()).entryList(QStringList() << QLatin1String("*.qm"));
 
-    QRegExp regexp(QStringLiteral("([a-zA-Z0-9-_]+)_([^.]*).qm"));
+    QRegExp regexp(QLatin1String("([a-zA-Z0-9-_]+)_([^.]*).qm"));
 
     for (const auto& qm_file : qm_file_list)
     {
@@ -125,7 +125,7 @@ void LocaleLoader::installTranslators(const QString& locale_name)
 // static
 QString LocaleLoader::translationsDir()
 {
-    return QCoreApplication::applicationDirPath() + QStringLiteral("/translations/");
+    return QLatin1String(":/tr/");
 }
 
 void LocaleLoader::removeTranslators()

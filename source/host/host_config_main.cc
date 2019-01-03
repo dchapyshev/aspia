@@ -33,6 +33,7 @@ using namespace aspia;
 int hostConfigMain(int argc, char *argv[])
 {
     Q_INIT_RESOURCE(updater);
+    Q_INIT_RESOURCE(updater_translations);
 
     LoggingSettings settings;
     settings.logging_dest = LOG_TO_ALL;

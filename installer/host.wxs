@@ -29,9 +29,7 @@
 
     <Directory Id="TARGETDIR" Name="SourceDir">
         <Directory Id="ProgramFilesFolder">
-            <Directory Id="INSTALLLOCATION" Name="$(var.ProductName)">
-                <Directory Id="TranslationsFolder" Name="translations" />
-           </Directory>
+            <Directory Id="INSTALLLOCATION" Name="$(var.ProductName)" />
         </Directory>
         <Directory Id="ProgramMenuFolder" />
         <Directory Id="DesktopFolder" />
@@ -79,25 +77,11 @@
         </Component>
     </DirectoryRef>
 
-    <!-- Translations -->
-    <DirectoryRef Id="TranslationsFolder" FileSource="$(var.SourceFiles)\translations">
-        <Component Id="Translations" DiskId="1" Guid="{713A34EF-85B5-49CB-B3D4-6B2B51DC43F3}">
-            <File Id="aspia_host_de.qm" Name="aspia_host_de.qm" KeyPath="yes" />
-            <File Id="aspia_host_nl.qm" Name="aspia_host_nl.qm" />
-            <File Id="aspia_host_ru.qm" Name="aspia_host_ru.qm" />
-            <File Id="aspia_host_uk.qm" Name="aspia_host_uk.qm" />
-            <File Id="qtbase_de.qm" Name="qtbase_de.qm" />
-            <File Id="qtbase_ru.qm" Name="qtbase_ru.qm" />
-            <File Id="qtbase_uk.qm" Name="qtbase_uk.qm" />
-        </Component>
-    </DirectoryRef>
-
     <!-- Product features -->
     <Feature Id="FeatureProduct" Title="$(var.ProductName)" InstallDefault="local" ConfigurableDirectory="INSTALLLOCATION" Level="1">
         <ComponentRef Id="Applications" />
         <ComponentRef Id="ProgramMenuShortcut" />
         <ComponentRef Id="DesktopShortcut" />
-        <ComponentRef Id="Translations" />
         <ComponentRef Id="License" />
     </Feature>
     <Property Id="INSTALLLEVEL" Value="1" />
