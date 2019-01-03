@@ -70,7 +70,7 @@ std::shared_ptr<MouseCursor> CursorDecoder::decode(const proto::desktop::CursorS
     }
     else
     {
-        DesktopSize size(cursor_shape.width(), cursor_shape.height());
+        QSize size(cursor_shape.width(), cursor_shape.height());
 
         if (size.width()  <= 0 || size.width()  > (std::numeric_limits<int16_t>::max() / 2) ||
             size.height() <= 0 || size.height() > (std::numeric_limits<int16_t>::max() / 2))
@@ -87,7 +87,7 @@ std::shared_ptr<MouseCursor> CursorDecoder::decode(const proto::desktop::CursorS
             return nullptr;
 
         std::unique_ptr<MouseCursor> mouse_cursor = std::make_unique<MouseCursor>(
-            std::move(image), size, DesktopPoint(cursor_shape.hotspot_x(), cursor_shape.hotspot_y()));
+            std::move(image), size, QPoint(cursor_shape.hotspot_x(), cursor_shape.hotspot_y()));
 
         if (cursor_shape.flags() & proto::desktop::CursorShape::RESET_CACHE)
         {

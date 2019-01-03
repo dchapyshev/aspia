@@ -20,7 +20,7 @@
 
 namespace aspia {
 
-bool ScreenSettingsTracker::isRectChanged(const DesktopRect& screen_rect)
+bool ScreenSettingsTracker::isRectChanged(const QRect& screen_rect)
 {
     if (screen_rect != screen_rect_)
     {
@@ -31,7 +31,7 @@ bool ScreenSettingsTracker::isRectChanged(const DesktopRect& screen_rect)
     return false;
 }
 
-bool ScreenSettingsTracker::isSizeChanged(const DesktopSize& screen_size)
+bool ScreenSettingsTracker::isSizeChanged(const QSize& screen_size)
 {
     if (screen_size != screen_rect_.size())
     {

@@ -69,7 +69,7 @@ DesktopWidget::DesktopWidget(QWidget* parent)
     setMouseTracking(true);
 }
 
-void DesktopWidget::resizeDesktopFrame(const DesktopSize& screen_size)
+void DesktopWidget::resizeDesktopFrame(const QSize& screen_size)
 {
     frame_ = DesktopFrameQImage::create(screen_size);
 }

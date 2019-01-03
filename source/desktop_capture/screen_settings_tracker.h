@@ -19,8 +19,9 @@
 #ifndef ASPIA_DESKTOP_CAPTURE__SCREEN_SETTINGS_TRACKER_H_
 #define ASPIA_DESKTOP_CAPTURE__SCREEN_SETTINGS_TRACKER_H_
 
+#include <QRect>
+
 #include "base/macros_magic.h"
-#include "desktop_capture/desktop_geometry.h"
 #include "desktop_capture/pixel_format.h"
 
 namespace aspia {
@@ -30,16 +31,16 @@ class ScreenSettingsTracker
 public:
     ScreenSettingsTracker() = default;
 
-    bool isRectChanged(const DesktopRect& screen_rect);
-    bool isSizeChanged(const DesktopSize& screen_size);
+    bool isRectChanged(const QRect& screen_rect);
+    bool isSizeChanged(const QSize& screen_size);
     bool isFormatChanged(const PixelFormat& pixel_format);
 
-    const DesktopRect& screenRect() const { return screen_rect_; }
-    const DesktopSize& screenSize() const { return screen_rect_.size(); }
+    const QRect& screenRect() const { return screen_rect_; }
+    const QSize& screenSize() const { return screen_rect_.size(); }
     const PixelFormat& format() const { return pixel_format_; }
 
 private:
-    DesktopRect screen_rect_;
+    QRect screen_rect_;
     PixelFormat pixel_format_;
 
     DISALLOW_COPY_AND_ASSIGN(ScreenSettingsTracker);

@@ -125,9 +125,9 @@ DesktopWindow::DesktopWindow(ConnectData* connect_data, QWidget* parent)
     });
 }
 
-void DesktopWindow::resizeDesktopFrame(const DesktopRect& screen_rect)
+void DesktopWindow::resizeDesktopFrame(const QRect& screen_rect)
 {
-    DesktopSize prev_size;
+    QSize prev_size;
 
     DesktopFrame* frame = desktop_->desktopFrame();
     if (frame)
@@ -231,7 +231,7 @@ void DesktopWindow::onPointerEvent(const QPoint& pos, uint32_t mask)
     int remote_scale_factor = connect_data_->desktop_config.scale_factor();
     if (remote_scale_factor)
     {
-        const DesktopSize& source_size = desktopFrame()->size();
+        const QSize& source_size = desktopFrame()->size();
         QSize scaled_size = desktop_->size();
 
         double scale_x = (scaled_size.width() * 100) / double(source_size.width());
@@ -243,7 +243,7 @@ void DesktopWindow::onPointerEvent(const QPoint& pos, uint32_t mask)
         double y = (double(pos.y() * 10000) / (remote_scale_factor * scale))
             + screen_top_left_.y();
 
-        emit sendPointerEvent(DesktopPoint(x, y), mask);
+        emit sendPointerEvent(QPoint(x, y), mask);
     }
 }
 
@@ -320,8 +320,7 @@ void DesktopWindow::onScalingChanged(bool enabled)
     if (!frame)
         return;
 
-    QSize source_size = frame->size().toQSize();
-    QSize scaled_size = source_size;
+    QSize scaled_size = frame->size();
 
     if (enabled)
         scaled_size.scale(size(), Qt::KeepAspectRatio);

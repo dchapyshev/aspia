@@ -37,13 +37,13 @@ int div(int num, int div)
     return (num + div - 1) / div;
 }
 
-DesktopSize scaledSize(const DesktopSize& source_size, int scale_factor)
+QSize scaledSize(const QSize& source_size, int scale_factor)
 {
-    return DesktopSize(div(source_size.width() * scale_factor, kDefScaleFactor),
-                       div(source_size.height() * scale_factor, kDefScaleFactor));
+    return QSize(div(source_size.width() * scale_factor, kDefScaleFactor),
+                 div(source_size.height() * scale_factor, kDefScaleFactor));
 }
 
-DesktopRect scaledRect(const DesktopRect& source_rect, int scale_factor)
+QRect scaledRect(const QRect& source_rect, int scale_factor)
 {
     int left = (source_rect.left() * scale_factor) / kDefScaleFactor;
     int top = (source_rect.top() * scale_factor) / kDefScaleFactor;
@@ -52,8 +52,8 @@ DesktopRect scaledRect(const DesktopRect& source_rect, int scale_factor)
 
     static const int kPadding = 1;
 
-    return DesktopRect::makeLTRB(left - kPadding, top - kPadding,
-                                 right + kPadding, bottom + kPadding);
+    return QRect(QPoint(left - kPadding, top - kPadding),
+                 QPoint(right + kPadding, bottom + kPadding));
 }
 
 } // namespace
@@ -87,26 +87,24 @@ const DesktopFrame* ScaleReducer::scaleFrame(const DesktopFrame* source_frame)
 
     if (!scaled_frame_)
     {
-        DesktopSize size = scaledSize(source_frame->size(), scale_factor_);
+        QSize size = scaledSize(source_frame->size(), scale_factor_);
 
         scaled_frame_ = DesktopFrameAligned::create(size, source_frame->format(), 32);
         if (!scaled_frame_)
             return nullptr;
     }
 
-    const DesktopSize& source_size = source_frame->size();
-    const DesktopSize& scaled_size = scaled_frame_->size();
+    const QSize& source_size = source_frame->size();
+    const QSize& scaled_size = scaled_frame_->size();
 
-    DesktopRect scaled_frame_rect = DesktopRect::makeSize(scaled_size);
-    DesktopRegion* updated_region = scaled_frame_->updatedRegion();
+    QRect scaled_frame_rect = QRect(QPoint(), scaled_size);
+    QRegion* updated_region = scaled_frame_->updatedRegion();
 
-    updated_region->clear();
+    *updated_region = QRegion();
 
-    for (DesktopRegion::Iterator it(source_frame->constUpdatedRegion()); !it.isAtEnd(); it.advance())
+    for (const auto& rect : source_frame->constUpdatedRegion())
     {
-        DesktopRect scaled_rect = scaledRect(it.rect(), scale_factor_);
-
-        scaled_rect.intersectWith(scaled_frame_rect);
+        QRect scaled_rect = scaledRect(rect, scale_factor_).intersected(scaled_frame_rect);
 
 #if 1
         int height = scaled_rect.height();
@@ -134,7 +132,7 @@ const DesktopFrame* ScaleReducer::scaleFrame(const DesktopFrame* source_frame)
             LOG(LS_WARNING) << "libyuv::ARGBScaleClip failed";
         }
 
-        updated_region->addRect(scaled_rect);
+        *updated_region += scaled_rect;
     }
 
     scaled_frame_->setTopLeft(source_frame->topLeft());

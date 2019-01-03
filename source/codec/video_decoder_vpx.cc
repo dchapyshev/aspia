@@ -35,7 +35,7 @@ bool convertImage(const proto::desktop::VideoPacket& packet,
     if (image->fmt != VPX_IMG_FMT_I420)
         return false;
 
-    DesktopRect frame_rect = DesktopRect::makeSize(frame->size());
+    QRect frame_rect(QPoint(), frame->size());
 
     uint8_t* y_data = image->planes[0];
     uint8_t* u_data = image->planes[1];
@@ -46,9 +46,9 @@ bool convertImage(const proto::desktop::VideoPacket& packet,
 
     for (int i = 0; i < packet.dirty_rect_size(); ++i)
     {
-        DesktopRect rect = VideoUtil::fromVideoRect(packet.dirty_rect(i));
+        QRect rect = VideoUtil::fromVideoRect(packet.dirty_rect(i));
 
-        if (!frame_rect.containsRect(rect))
+        if (!frame_rect.contains(rect))
         {
             LOG(LS_WARNING) << "The rectangle is outside the screen area";
             return false;
@@ -145,7 +145,7 @@ bool VideoDecoderVPX::decode(const proto::desktop::VideoPacket& packet, DesktopF
         return false;
     }
 
-    if (DesktopSize(image->d_w, image->d_h) != frame->size())
+    if (QSize(image->d_w, image->d_h) != frame->size())
     {
         LOG(LS_WARNING) << "Size of the encoded frame doesn't match size in the header";
         return false;

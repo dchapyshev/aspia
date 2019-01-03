@@ -32,10 +32,6 @@ list(APPEND SOURCE_DESKTOP_CAPTURE
     desktop_frame_qimage.h
     desktop_frame_simple.cc
     desktop_frame_simple.h
-    desktop_geometry.cc
-    desktop_geometry.h
-    desktop_region.cc
-    desktop_region.h
     diff_block_avx2.cc
     diff_block_avx2.h
     diff_block_c.cc
@@ -60,8 +56,6 @@ list(APPEND SOURCE_DESKTOP_CAPTURE
     screen_settings_tracker.h)
 
 list(APPEND SOURCE_DESKTOP_CAPTURE_UNIT_TESTS
-    desktop_geometry_unittest.cc
-    desktop_region_unittest.cc
     diff_block_avx2_unittest.cc
     diff_block_c_unittest.cc
     diff_block_sse2_unittest.cc

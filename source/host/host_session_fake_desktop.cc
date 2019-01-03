@@ -104,13 +104,13 @@ std::unique_ptr<DesktopFrame> HostSessionFakeDesktop::createFrame()
     static const int kHeight = 600;
 
     std::unique_ptr<DesktopFrameSimple> frame =
-        DesktopFrameSimple::create(DesktopSize(kWidth, kHeight), PixelFormat::ARGB());
+        DesktopFrameSimple::create(QSize(kWidth, kHeight), PixelFormat::ARGB());
     if (!frame)
         return nullptr;
 
     memset(frame->frameData(), 0, frame->stride() * frame->size().height());
 
-    frame->updatedRegion()->addRect(DesktopRect::makeSize(frame->size()));
+    *frame->updatedRegion() += QRect(QPoint(), frame->size());
     return frame;
 }
 

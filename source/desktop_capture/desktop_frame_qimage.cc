@@ -29,7 +29,7 @@ constexpr int kBytesPerPixel = 4;
 } // namespace
 
 DesktopFrameQImage::DesktopFrameQImage(QImage&& img)
-    : DesktopFrame(DesktopSize::fromQSize(img.size()),
+    : DesktopFrame(img.size(),
                    PixelFormat::ARGB(),
                    img.width() * kBytesPerPixel,
                    img.bits()),
@@ -39,7 +39,7 @@ DesktopFrameQImage::DesktopFrameQImage(QImage&& img)
 }
 
 // static
-std::unique_ptr<DesktopFrameQImage> DesktopFrameQImage::create(const DesktopSize& size)
+std::unique_ptr<DesktopFrameQImage> DesktopFrameQImage::create(const QSize& size)
 {
     return std::unique_ptr<DesktopFrameQImage>(
         new DesktopFrameQImage(QImage(size.width(), size.height(), QImage::Format_RGB32)));

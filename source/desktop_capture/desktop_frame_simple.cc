@@ -20,7 +20,7 @@
 
 namespace aspia {
 
-DesktopFrameSimple::DesktopFrameSimple(const DesktopSize& size,
+DesktopFrameSimple::DesktopFrameSimple(const QSize& size,
                                        const PixelFormat& format,
                                        int stride,
                                        uint8_t* data)
@@ -36,7 +36,7 @@ DesktopFrameSimple::~DesktopFrameSimple()
 
 // static
 std::unique_ptr<DesktopFrameSimple> DesktopFrameSimple::create(
-    const DesktopSize& size, const PixelFormat& format)
+    const QSize& size, const PixelFormat& format)
 {
     int bytes_per_row = size.width() * format.bytesPerPixel();
 

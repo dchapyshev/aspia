@@ -30,11 +30,11 @@ class DesktopFrameSimple : public DesktopFrame
 public:
     ~DesktopFrameSimple();
 
-    static std::unique_ptr<DesktopFrameSimple> create(const DesktopSize& size,
+    static std::unique_ptr<DesktopFrameSimple> create(const QSize& size,
                                                       const PixelFormat& format);
 
 private:
-    DesktopFrameSimple(const DesktopSize& size,
+    DesktopFrameSimple(const QSize& size,
                        const PixelFormat& format,
                        int stride,
                        uint8_t* data);

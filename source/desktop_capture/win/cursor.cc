@@ -267,8 +267,8 @@ MouseCursor* mouseCursorFromHCursor(HDC dc, HCURSOR cursor)
     alphaMul(reinterpret_cast<uint32_t*>(image.get()), width, height);
 
     return new MouseCursor(std::move(image),
-                           DesktopSize(width, height),
-                           DesktopPoint(icon_info.xHotspot, icon_info.yHotspot));
+                           QSize(width, height),
+                           QPoint(icon_info.xHotspot, icon_info.yHotspot));
 }
 
 } // namespace aspia

@@ -18,6 +18,8 @@
 
 #include "host/input_injector.h"
 
+#include <QRect>
+
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <sas.h>
@@ -28,7 +30,6 @@
 #include "base/logging.h"
 #include "base/keycode_converter.h"
 #include "desktop_capture/win/scoped_thread_desktop.h"
-#include "desktop_capture/desktop_geometry.h"
 
 namespace aspia {
 
@@ -101,7 +102,7 @@ private:
     const bool block_input_;
 
     std::set<uint32_t> pressed_keys_;
-    DesktopPoint prev_mouse_pos_;
+    QPoint prev_mouse_pos_;
 
     uint32_t prev_mouse_button_mask_ = 0;
 
@@ -134,17 +135,16 @@ void InputInjectorImpl::injectPointerEvent(const proto::desktop::PointerEvent& e
 {
     switchToInputDesktop();
 
-    DesktopRect screen_rect =
-        DesktopRect::makeXYWH(GetSystemMetrics(SM_XVIRTUALSCREEN),
-                              GetSystemMetrics(SM_YVIRTUALSCREEN),
-                              GetSystemMetrics(SM_CXVIRTUALSCREEN),
-                              GetSystemMetrics(SM_CYVIRTUALSCREEN));
+    QRect screen_rect(GetSystemMetrics(SM_XVIRTUALSCREEN),
+                      GetSystemMetrics(SM_YVIRTUALSCREEN),
+                      GetSystemMetrics(SM_CXVIRTUALSCREEN),
+                      GetSystemMetrics(SM_CYVIRTUALSCREEN));
     if (screen_rect.isEmpty())
         return;
 
     // Translate the coordinates of the cursor into the coordinates of the virtual screen.
-    DesktopPoint pos(((event.x() - screen_rect.x()) * 65535) / (screen_rect.width() - 1),
-                     ((event.y() - screen_rect.y()) * 65535) / (screen_rect.height() - 1));
+    QPoint pos(((event.x() - screen_rect.x()) * 65535) / (screen_rect.width() - 1),
+               ((event.y() - screen_rect.y()) * 65535) / (screen_rect.height() - 1));
 
     DWORD flags = MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_VIRTUALDESK;
     DWORD wheel_movement = 0;

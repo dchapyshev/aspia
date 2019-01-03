@@ -19,8 +19,9 @@
 #ifndef ASPIA_CODEC__VIDEO_UTIL_H_
 #define ASPIA_CODEC__VIDEO_UTIL_H_
 
+#include <QRect>
+
 #include "base/macros_magic.h"
-#include "desktop_capture/desktop_geometry.h"
 #include "desktop_capture/pixel_format.h"
 #include "protocol/desktop_session.pb.h"
 
@@ -29,8 +30,8 @@ namespace aspia {
 class VideoUtil
 {
 public:
-    static DesktopRect fromVideoRect(const proto::desktop::Rect& rect);
-    static void toVideoRect(const DesktopRect& from, proto::desktop::Rect* to);
+    static QRect fromVideoRect(const proto::desktop::Rect& rect);
+    static void toVideoRect(const QRect& from, proto::desktop::Rect* to);
 
     static PixelFormat fromVideoPixelFormat(const proto::desktop::PixelFormat& format);
     static void toVideoPixelFormat(const PixelFormat& from, proto::desktop::PixelFormat* to);

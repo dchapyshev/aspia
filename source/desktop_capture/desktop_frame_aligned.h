@@ -30,12 +30,12 @@ class DesktopFrameAligned : public DesktopFrame
 public:
     ~DesktopFrameAligned();
 
-    static std::unique_ptr<DesktopFrameAligned> create(const DesktopSize& size,
+    static std::unique_ptr<DesktopFrameAligned> create(const QSize& size,
                                                        const PixelFormat& format,
                                                        size_t alignment);
 
 private:
-    DesktopFrameAligned(const DesktopSize& size,
+    DesktopFrameAligned(const QSize& size,
                         const PixelFormat& format,
                         int stride,
                         uint8_t* data);

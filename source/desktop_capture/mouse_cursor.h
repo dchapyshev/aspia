@@ -19,9 +19,10 @@
 #ifndef ASPIA_DESKTOP_CAPTURE__MOUSE_CURSOR_H_
 #define ASPIA_DESKTOP_CAPTURE__MOUSE_CURSOR_H_
 
-#include <memory>
+#include <QPoint>
+#include <QSize>
 
-#include "desktop_capture/desktop_geometry.h"
+#include <memory>
 
 namespace aspia {
 
@@ -29,12 +30,12 @@ class MouseCursor
 {
 public:
     MouseCursor(std::unique_ptr<uint8_t[]> data,
-                const DesktopSize& size,
-                const DesktopPoint& hotspot);
+                const QSize& size,
+                const QPoint& hotspot);
     ~MouseCursor() = default;
 
-    const DesktopSize& size() const { return size_; }
-    const DesktopPoint& hotSpot() const { return hotspot_; }
+    const QSize& size() const { return size_; }
+    const QPoint& hotSpot() const { return hotspot_; }
     uint8_t* data() const { return data_.get(); }
 
     int stride() const;
@@ -43,8 +44,8 @@ public:
 
 private:
     std::unique_ptr<uint8_t[]> const data_;
-    const DesktopSize size_;
-    const DesktopPoint hotspot_;
+    const QSize size_;
+    const QPoint hotspot_;
 };
 
 } // namespace aspia

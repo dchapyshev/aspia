@@ -22,7 +22,7 @@
 
 namespace aspia {
 
-DesktopFrameDIB::DesktopFrameDIB(const DesktopSize& size,
+DesktopFrameDIB::DesktopFrameDIB(const QSize& size,
                                  const PixelFormat& format,
                                  int stride,
                                  uint8_t* data,
@@ -35,7 +35,7 @@ DesktopFrameDIB::DesktopFrameDIB(const DesktopSize& size,
 
 // static
 std::unique_ptr<DesktopFrameDIB>
-DesktopFrameDIB::create(const DesktopSize& size,
+DesktopFrameDIB::create(const QSize& size,
                         const PixelFormat& format,
                         HDC hdc)
 {
