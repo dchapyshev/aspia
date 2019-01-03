@@ -242,14 +242,27 @@ padding: 30px;
          <enum>Qt::CustomContextMenu</enum>
         </property>
         <property name="styleSheet">
-         <string notr="true">border: none;
-margin: 2px;</string>
+         <string notr="true">QTreeWidget {
+border: none;
+margin: 2px;
+}
+QTreeWidget::item {
+border: 1px solid white;
+color: #000;
+}
+QTreeWidget::item:hover {
+border: 1px solid #AAAAAA;
+background: #EBEBEB;
+}
+QTreeWidget::item:selected {
+background: #EBEBEB;
+}</string>
         </property>
         <property name="frameShape">
          <enum>QFrame::NoFrame</enum>
         </property>
         <property name="selectionBehavior">
-         <enum>QAbstractItemView::SelectItems</enum>
+         <enum>QAbstractItemView::SelectRows</enum>
         </property>
         <property name="indentation">
          <number>0</number>
@@ -259,7 +272,7 @@ margin: 2px;</string>
         </attribute>
         <column>
          <property name="text">
-          <string notr="true"/>
+          <string notr="true">0</string>
          </property>
         </column>
        </widget>
@@ -301,7 +314,7 @@ margin: 2px;</string>
 border: 1px solid #AAAAAA;
 background: white;
 color: black;
-padding: 5px;
+padding: 3px;
 }
 QPushButton:hover {
 background: #EBEBEB;
@@ -315,6 +328,10 @@ color: gray;
           </property>
           <property name="text">
            <string>Disconnect All</string>
+          </property>
+          <property name="icon">
+           <iconset resource="../resources/host.qrc">
+            <normaloff>:/img/cross-script.png</normaloff>:/img/cross-script.png</iconset>
           </property>
          </widget>
         </item>
