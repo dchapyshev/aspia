@@ -578,8 +578,10 @@ namespace std {
 // non-ASCII Unicode strings to the log file, which is normally ASCII. It is relatively slow, so
 // try not to use it for common cases. Non-ASCII characters will be converted to UTF-8 by these
 // operators.
+#if defined(OS_WIN)
 std::ostream& operator<<(std::ostream& out, const wchar_t* wstr);
 std::ostream& operator<<(std::ostream& out, const std::wstring& wstr);
+#endif // defined(OS_WIN)
 
 } // namespace std
 

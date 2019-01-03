@@ -29,9 +29,12 @@
 #include <utility>
 
 #include "base/debug.h"
-#include "base/unicode.h"
 
 #if defined(OS_WIN)
+#include "base/string_printf.h"
+#include "base/string_util.h"
+#include "base/unicode.h"
+
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #endif // defined(OS_WIN)
@@ -359,8 +362,6 @@ SystemErrorCode lastSystemErrorCode()
 std::string systemErrorCodeToString(SystemErrorCode error_code)
 {
 #if defined(OS_WIN)
-    std::stringstream ss;
-
     constexpr int kErrorMessageBufferSize = 256;
     wchar_t msgbuf[kErrorMessageBufferSize];
 
@@ -368,18 +369,14 @@ std::string systemErrorCodeToString(SystemErrorCode error_code)
                                nullptr, error_code, 0, msgbuf, _countof(msgbuf), nullptr);
     if (len)
     {
-        ss << UTF8fromUTF16(msgbuf);
-        ss << std::setfill('0') << " (0x" << std::hex << std::setw(8) << error_code << ")";
-    }
-    else
-    {
-        ss << "Error ";
-        ss << std::setfill('0') << std::hex << std::setw(8) << GetLastError();
-        ss << " while retrieving error (";
-        ss << std::setfill('0') << std::hex << std::setw(8) << error_code << ")";
+        std::wstring msg = collapseWhitespace(msgbuf, true) +
+            stringPrintf(L" (0x%lX)", error_code);
+        return UTF8fromUTF16(msg);
     }
 
-    return ss.str();
+    return stringPrintf("Error (0x%lX) while retrieving error. (0x%lX)",
+                        GetLastError(),
+                        error_code);
 #elif (OS_POSIX)
     return strerror(error_code);
 #else
@@ -409,6 +406,7 @@ void logErrorNotReached(const char* file, int line)
 
 } // namespace aspia
 
+#if defined(OS_WIN)
 std::ostream& operator<<(std::ostream& out, const std::wstring& wstr)
 {
     return out << aspia::UTF8fromUTF16(wstr);
@@ -418,3 +416,4 @@ std::ostream& std::operator<<(std::ostream& out, const wchar_t* wstr)
 {
     return out << aspia::UTF8fromUTF16(wstr);
 }
+#endif // defined(OS_WIN)
