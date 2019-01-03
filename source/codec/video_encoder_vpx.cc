@@ -127,7 +127,7 @@ QRect alignRect(const QRect& rect)
     int right = roundToTwosMultiple(rect.right() + 1);
     int bottom = roundToTwosMultiple(rect.bottom() + 1);
 
-    return QRect(QPoint(x, y), QPoint(right, bottom));
+    return QRect(QPoint(x, y), QPoint(right + 1, bottom + 1));
 }
 
 } // namespace
@@ -272,7 +272,7 @@ void VideoEncoderVPX::setActiveMap(const QRect& rect)
 void VideoEncoderVPX::prepareImageAndActiveMap(const DesktopFrame* frame,
                                                proto::desktop::VideoPacket* packet)
 {
-    int padding = encoding_ == proto::desktop::VIDEO_ENCODING_VP9 ? 8 : 3;
+    int padding = ((encoding_ == proto::desktop::VIDEO_ENCODING_VP9) ? 8 : 3);
     QRegion updated_region;
 
     for (const auto& rect : frame->constUpdatedRegion())
