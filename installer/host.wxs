@@ -43,6 +43,7 @@
             <RegistryValue Root="HKCU" Key="SOFTWARE\$(var.ProductName)" Type="string" Value="" KeyPath="yes" />
         </Component>
     </DirectoryRef>
+
     <!-- Desktop Shortcut -->
     <DirectoryRef Id="DesktopFolder">
         <Component Id="DesktopShortcut" Guid="{6463EBB6-56AC-4FA7-9262-37BBC43435D5}">
@@ -70,19 +71,11 @@
         </Component>
     </DirectoryRef>
 
-    <!-- License file -->
-    <DirectoryRef Id="INSTALLLOCATION" FileSource=".">
-        <Component Id="License" DiskId="1" Guid="{19ABFD64-F8E4-4907-B8F8-FEBEDFA4F21E}">
-            <File Id="LicenseFile" Name="license.txt" Source="resources/license.txt" KeyPath="yes" />
-        </Component>
-    </DirectoryRef>
-
     <!-- Product features -->
     <Feature Id="FeatureProduct" Title="$(var.ProductName)" InstallDefault="local" ConfigurableDirectory="INSTALLLOCATION" Level="1">
         <ComponentRef Id="Applications" />
         <ComponentRef Id="ProgramMenuShortcut" />
         <ComponentRef Id="DesktopShortcut" />
-        <ComponentRef Id="License" />
     </Feature>
     <Property Id="INSTALLLEVEL" Value="1" />
 

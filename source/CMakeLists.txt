@@ -40,7 +40,6 @@ find_package(Qt5LinguistTools)
 find_package(Protobuf REQUIRED)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
-list(APPEND CMAKE_AUTORCC_OPTIONS -compress 9 -threshold 5)
 
 add_definitions(-D_UNICODE
                 -DNTDDI_VERSION=0x06010000
