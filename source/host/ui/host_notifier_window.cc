@@ -86,10 +86,10 @@ HostNotifierWindow::HostNotifierWindow(QWidget* parent)
     ui.label_title->installEventFilter(this);
     ui.label_connections->installEventFilter(this);
 
-    connect(ui.button_show_hide, &QPushButton::pressed,
+    connect(ui.button_show_hide, &QPushButton::released,
             this, &HostNotifierWindow::onShowHidePressed);
 
-    connect(ui.button_disconnect_all, &QPushButton::pressed,
+    connect(ui.button_disconnect_all, &QPushButton::released,
             this, &HostNotifierWindow::onDisconnectAllPressed);
 
     connect(ui.tree, &QTreeWidget::customContextMenuRequested,

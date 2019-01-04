@@ -61,10 +61,10 @@ ClientDialog::ClientDialog(QWidget* parent)
     connect(ui.combo_session_type, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &ClientDialog::sessionTypeChanged);
 
-    connect(ui.button_session_config, &QPushButton::pressed,
+    connect(ui.button_session_config, &QPushButton::released,
             this, &ClientDialog::sessionConfigButtonPressed);
 
-    connect(ui.button_connect, &QPushButton::pressed,
+    connect(ui.button_connect, &QPushButton::released,
             this, &ClientDialog::connectButtonPressed);
 
     ui.edit_address->setFocus();

@@ -85,7 +85,7 @@ HostConfigDialog::HostConfigDialog(LocaleLoader& locale_loader, QWidget* parent)
             ui.edit_update_server->setText(DEFAULT_UPDATE_SERVER);
     });
 
-    connect(ui.button_check_updates, &QPushButton::pressed, [this]()
+    connect(ui.button_check_updates, &QPushButton::released, [this]()
     {
         UpdateDialog(HostSettings().updateServer(),
                      QLatin1String("host"),
@@ -107,19 +107,19 @@ HostConfigDialog::HostConfigDialog(LocaleLoader& locale_loader, QWidget* parent)
     connect(ui.action_add, &QAction::triggered, this, &HostConfigDialog::onAddUser);
     connect(ui.action_modify, &QAction::triggered, this, &HostConfigDialog::onModifyUser);
     connect(ui.action_delete, &QAction::triggered, this, &HostConfigDialog::onDeleteUser);
-    connect(ui.button_add, &QPushButton::pressed, this, &HostConfigDialog::onAddUser);
-    connect(ui.button_modify, &QPushButton::pressed, this, &HostConfigDialog::onModifyUser);
-    connect(ui.button_delete, &QPushButton::pressed, this, &HostConfigDialog::onDeleteUser);
+    connect(ui.button_add, &QPushButton::released, this, &HostConfigDialog::onAddUser);
+    connect(ui.button_modify, &QPushButton::released, this, &HostConfigDialog::onModifyUser);
+    connect(ui.button_delete, &QPushButton::released, this, &HostConfigDialog::onDeleteUser);
 
-    connect(ui.button_service_install_remove, &QPushButton::pressed,
+    connect(ui.button_service_install_remove, &QPushButton::released,
             this, &HostConfigDialog::onServiceInstallRemove);
-    connect(ui.button_service_start_stop, &QPushButton::pressed,
+    connect(ui.button_service_start_stop, &QPushButton::released,
             this, &HostConfigDialog::onServiceStartStop);
 
-    connect(ui.button_import, &QPushButton::pressed, this, &HostConfigDialog::onImport);
-    connect(ui.button_export, &QPushButton::pressed, this, &HostConfigDialog::onExport);
+    connect(ui.button_import, &QPushButton::released, this, &HostConfigDialog::onImport);
+    connect(ui.button_export, &QPushButton::released, this, &HostConfigDialog::onExport);
 
-    connect(ui.button_about, &QPushButton::pressed, [this]()
+    connect(ui.button_about, &QPushButton::released, [this]()
     {
         AboutDialog(this).exec();
     });

@@ -144,12 +144,12 @@ AboutDialog::AboutDialog(QWidget* parent)
     add_version("qt", qVersion());
     add_version("zstd", ZSTD_versionString());
 
-    connect(ui->push_button_donate, &QPushButton::pressed, [this]()
+    connect(ui->push_button_donate, &QPushButton::released, [this]()
     {
         QDesktopServices::openUrl(QUrl(tr("https://aspia.org/en/donate.html")));
     });
 
-    connect(ui->push_button_close, &QPushButton::pressed, this, &AboutDialog::close);
+    connect(ui->push_button_close, &QPushButton::released, this, &AboutDialog::close);
 }
 
 AboutDialog::~AboutDialog() = default;

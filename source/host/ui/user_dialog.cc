@@ -81,8 +81,8 @@ UserDialog::UserDialog(const SrpUserList& user_list, SrpUser* user, QWidget* par
                      tr("File Transfer"),
                      proto::SESSION_TYPE_FILE_TRANSFER);
 
-    connect(ui.button_check_all, &QPushButton::pressed, this, &UserDialog::onCheckAllButtonPressed);
-    connect(ui.button_check_none, &QPushButton::pressed, this, &UserDialog::onCheckNoneButtonPressed);
+    connect(ui.button_check_all, &QPushButton::released, this, &UserDialog::onCheckAllButtonPressed);
+    connect(ui.button_check_none, &QPushButton::released, this, &UserDialog::onCheckNoneButtonPressed);
     connect(ui.button_box, &QDialogButtonBox::clicked, this, &UserDialog::onButtonBoxClicked);
 
     connect(ui.edit_username, &QLineEdit::textEdited, [this]()

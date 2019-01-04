@@ -71,7 +71,7 @@ ComputerDialog::ComputerDialog(QWidget* parent,
     connect(ui.button_show_password, &QPushButton::toggled,
             this, &ComputerDialog::showPasswordButtonToggled);
 
-    connect(ui.button_session_config, &QPushButton::pressed,
+    connect(ui.button_session_config, &QPushButton::released,
             this, &ComputerDialog::sessionConfigButtonPressed);
 
     connect(ui.button_box, &QDialogButtonBox::clicked,
