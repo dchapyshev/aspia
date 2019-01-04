@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="/img">
+    <file>about.png</file>
     <file>cross-script.png</file>
     <file>arrow-left-gray.png</file>
     <file>arrow-right-gray.png</file>

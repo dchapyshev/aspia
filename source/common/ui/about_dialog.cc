@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "console/about_dialog.h"
+#include "common/ui/about_dialog.h"
 
 #include <QAbstractButton>
 #include <QDesktopServices>
@@ -28,6 +28,7 @@
 #include <zstd.h>
 
 #include "build/version.h"
+#include "ui_about_dialog.h"
 
 namespace aspia {
 
@@ -79,11 +80,12 @@ QString createList(const QString& title, const char* array[], size_t array_size)
 } // namespace
 
 AboutDialog::AboutDialog(QWidget* parent)
-    : QDialog(parent)
+    : QDialog(parent),
+      ui(new Ui::AboutDialog())
 {
-    ui.setupUi(this);
+    ui->setupUi(this);
 
-    ui.label_version->setText(tr("Version: %1").arg(ASPIA_VERSION_STRING));
+    ui->label_version->setText(tr("Version: %1").arg(ASPIA_VERSION_STRING));
 
     QString license =
         QString("%1<br>%2<br><a href='%3'>%3</a>")
@@ -120,15 +122,15 @@ AboutDialog::AboutDialog(QWidget* parent)
     html += "<p>" + third_party + "</p>";
     html += "</body><html>";
 
-    ui.text_edit->setHtml(html);
+    ui->text_edit->setHtml(html);
 
-    ui.list_service->addItem(tr("Path: %1").arg(QApplication::applicationFilePath()));
-    ui.list_service->addItem(tr("Compilation date: %1").arg(__DATE__));
-    ui.list_service->addItem(tr("Compilation time: %1").arg(__TIME__));
+    ui->list_service->addItem(tr("Path: %1").arg(QApplication::applicationFilePath()));
+    ui->list_service->addItem(tr("Compilation date: %1").arg(__DATE__));
+    ui->list_service->addItem(tr("Compilation time: %1").arg(__TIME__));
 
     auto add_version = [this](const char* name, const QString& version)
     {
-        ui.list_service->addItem(tr("%1 version: %2").arg(name).arg(version));
+        ui->list_service->addItem(tr("%1 version: %2").arg(name).arg(version));
     };
 
     add_version("libvpx", vpx_codec_version_str());
@@ -142,12 +144,14 @@ AboutDialog::AboutDialog(QWidget* parent)
     add_version("qt", qVersion());
     add_version("zstd", ZSTD_versionString());
 
-    connect(ui.push_button_donate, &QPushButton::pressed, [this]()
+    connect(ui->push_button_donate, &QPushButton::pressed, [this]()
     {
         QDesktopServices::openUrl(QUrl(tr("https://aspia.org/en/donate.html")));
     });
 
-    connect(ui.push_button_close, &QPushButton::pressed, this, &AboutDialog::close);
+    connect(ui->push_button_close, &QPushButton::pressed, this, &AboutDialog::close);
 }
+
+AboutDialog::~AboutDialog() = default;
 
 } // namespace aspia

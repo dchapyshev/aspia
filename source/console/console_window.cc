@@ -30,7 +30,7 @@
 #include "build/build_config.h"
 #include "build/version.h"
 #include "client/client_pool.h"
-#include "console/about_dialog.h"
+#include "common/ui/about_dialog.h"
 #include "console/address_book_tab.h"
 #include "console/console_settings.h"
 #include "console/update_settings_dialog.h"

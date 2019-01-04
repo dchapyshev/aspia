@@ -19,9 +19,6 @@
 include(translations)
 
 list(APPEND SOURCE_CONSOLE
-    about_dialog.cc
-    about_dialog.h
-    about_dialog.ui
     address_book_dialog.cc
     address_book_dialog.h
     address_book_dialog.ui

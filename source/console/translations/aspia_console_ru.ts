@@ -2,39 +2,6 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="ru_RU">
 <context>
-    <name>AboutDialog</name>
-    <message>
-        <location filename="../about_dialog.ui" line="14"/>
-        <source>About</source>
-        <translation>О программе</translation>
-    </message>
-    <message>
-        <location filename="../about_dialog.ui" line="64"/>
-        <source>General</source>
-        <translation>Основное</translation>
-    </message>
-    <message>
-        <location filename="../about_dialog.ui" line="91"/>
-        <source>License</source>
-        <translation>Лицензия</translation>
-    </message>
-    <message>
-        <location filename="../about_dialog.ui" line="782"/>
-        <source>Service Information</source>
-        <translation>Сервисная информация</translation>
-    </message>
-    <message>
-        <location filename="../about_dialog.ui" line="797"/>
-        <source>Donate!</source>
-        <translation>Поддержать!</translation>
-    </message>
-    <message>
-        <location filename="../about_dialog.ui" line="821"/>
-        <source>Close</source>
-        <translation>Закрыть</translation>
-    </message>
-</context>
-<context>
     <name>AddressBookDialog</name>
     <message>
         <location filename="../address_book_dialog.ui" line="17"/>
@@ -229,62 +196,62 @@
 <context>
     <name>Console</name>
     <message>
-        <location filename="../console_main.cc" line="68"/>
+        <location filename="../console_main.cc" line="70"/>
         <source>Console</source>
         <translation>Консоль</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="74"/>
+        <location filename="../console_main.cc" line="76"/>
         <source>Remote computer address.</source>
         <translation>Адрес удаленного компьютера.</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="75"/>
+        <location filename="../console_main.cc" line="77"/>
         <source>address</source>
         <translation>адрес</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="79"/>
+        <location filename="../console_main.cc" line="81"/>
         <source>Remote computer port.</source>
         <translation>Порт удаленного компьютера.</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="80"/>
+        <location filename="../console_main.cc" line="82"/>
         <source>port</source>
         <translation>порт</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="85"/>
+        <location filename="../console_main.cc" line="87"/>
         <source>Name of user.</source>
         <translation>Имя пользователя.</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="86"/>
+        <location filename="../console_main.cc" line="88"/>
         <source>username</source>
         <translation>имя_пользователя</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="90"/>
+        <location filename="../console_main.cc" line="92"/>
         <source>Session type. Possible values: desktop-manage, desktop-view, file-transfer.</source>
         <translation>Тип сессии. Возможные значения: desktop-manage, desktop-view, file-transfer.</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="96"/>
+        <location filename="../console_main.cc" line="98"/>
         <source>Run the program with a simplified user interface.</source>
         <translation>Запуск программы с упрощенным интерфейсом пользователя.</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="99"/>
+        <location filename="../console_main.cc" line="101"/>
         <source>Aspia Console</source>
         <translation>Консоль Aspia</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="102"/>
+        <location filename="../console_main.cc" line="104"/>
         <source>file</source>
         <translation>файл</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="103"/>
+        <location filename="../console_main.cc" line="105"/>
         <source>The file to open.</source>
         <translation>Файл для открытия.</translation>
     </message>
@@ -580,84 +547,6 @@
         <location filename="../update_settings_dialog.ui" line="42"/>
         <source>Server:</source>
         <translation>Сервер:</translation>
-    </message>
-</context>
-<context>
-    <name>aspia::AboutDialog</name>
-    <message>
-        <location filename="../about_dialog.cc" line="86"/>
-        <source>Version: %1</source>
-        <translation>Версия: %1</translation>
-    </message>
-    <message>
-        <location filename="../about_dialog.cc" line="90"/>
-        <source>Aspia is free software released under GNU General Public License 3.</source>
-        <translation>Aspia - свободное программное обеспечение, распространяющееся по лицензии GNU General Public License 3.</translation>
-    </message>
-    <message>
-        <location filename="../about_dialog.cc" line="91"/>
-        <source>You can get a copy of license here:</source>
-        <translation>Вы можете получить копию лицензии по адресу:</translation>
-    </message>
-    <message>
-        <location filename="../about_dialog.cc" line="96"/>
-        <source>You can also get a translation of GNU GPL license here:</source>
-        <translation>Ознакомиться с переводом лицензии на ваш язык можно по адресу:</translation>
-    </message>
-    <message>
-        <location filename="../about_dialog.cc" line="101"/>
-        <source>Links:</source>
-        <translation>Ссылки:</translation>
-    </message>
-    <message>
-        <location filename="../about_dialog.cc" line="102"/>
-        <source>Home page:</source>
-        <translation>Домашняя страница:</translation>
-    </message>
-    <message>
-        <location filename="../about_dialog.cc" line="103"/>
-        <source>GitHub page:</source>
-        <translation>GitHub страница:</translation>
-    </message>
-    <message>
-        <location filename="../about_dialog.cc" line="106"/>
-        <source>Developers:</source>
-        <translation>Разработчики:</translation>
-    </message>
-    <message>
-        <location filename="../about_dialog.cc" line="108"/>
-        <source>Translators:</source>
-        <translation>Переводчики:</translation>
-    </message>
-    <message>
-        <location filename="../about_dialog.cc" line="110"/>
-        <source>Third-party components:</source>
-        <translation>Сторонние компоненты:</translation>
-    </message>
-    <message>
-        <location filename="../about_dialog.cc" line="125"/>
-        <source>Path: %1</source>
-        <translation>Путь: %1</translation>
-    </message>
-    <message>
-        <location filename="../about_dialog.cc" line="126"/>
-        <source>Compilation date: %1</source>
-        <translation>Дата компиляции: %1</translation>
-    </message>
-    <message>
-        <location filename="../about_dialog.cc" line="127"/>
-        <source>Compilation time: %1</source>
-        <translation>Время компиляции: %1</translation>
-    </message>
-    <message>
-        <location filename="../about_dialog.cc" line="131"/>
-        <source>%1 version: %2</source>
-        <translation>Версия %1: %2</translation>
-    </message>
-    <message>
-        <location filename="../about_dialog.cc" line="147"/>
-        <source>https://aspia.org/en/donate.html</source>
-        <translation>https://aspia.org/ru/donate.html</translation>
     </message>
 </context>
 <context>

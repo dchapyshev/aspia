@@ -28,6 +28,7 @@
 #include "base/logging.h"
 #include "base/service_controller.h"
 #include "build/build_config.h"
+#include "common/ui/about_dialog.h"
 #include "host/ui/user_dialog.h"
 #include "host/ui/user_tree_item.h"
 #include "host/win/host_service_constants.h"
@@ -117,6 +118,11 @@ HostConfigDialog::HostConfigDialog(LocaleLoader& locale_loader, QWidget* parent)
 
     connect(ui.button_import, &QPushButton::pressed, this, &HostConfigDialog::onImport);
     connect(ui.button_export, &QPushButton::pressed, this, &HostConfigDialog::onExport);
+
+    connect(ui.button_about, &QPushButton::pressed, [this]()
+    {
+        AboutDialog(this).exec();
+    });
 
     connect(ui.button_box, &QDialogButtonBox::clicked,
             this, &HostConfigDialog::onButtonBoxClicked);

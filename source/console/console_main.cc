@@ -42,6 +42,8 @@ int main(int argc, char *argv[])
 {
     Q_INIT_RESOURCE(client);
     Q_INIT_RESOURCE(client_translations);
+    Q_INIT_RESOURCE(common);
+    Q_INIT_RESOURCE(common_translations);
     Q_INIT_RESOURCE(updater);
     Q_INIT_RESOURCE(updater_translations);
 

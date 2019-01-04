@@ -16,6 +16,8 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 #
 
+include(translations)
+
 list(APPEND SOURCE_COMMON
     clipboard.cc
     clipboard.h
@@ -38,19 +40,49 @@ list(APPEND SOURCE_COMMON
     user_util.cc
     user_util.h)
 
+list(APPEND SOURCE_COMMON_UI
+    ui/about_dialog.cc
+    ui/about_dialog.h
+    ui/about_dialog.ui)
+
 list(APPEND SOURCE_COMMON_WIN
     win/drive_enumerator.cc
     win/drive_enumerator.h
     win/file_enumerator.cc
     win/file_enumerator.h)
 
+list(APPEND SOURCE_COMMON_RESOURCES
+    resources/common.qrc)
+
 source_group("" FILES ${SOURCE_COMMON})
+source_group(ui FILES ${SOURCE_COMMON_UI})
 source_group(win FILES ${SOURCE_COMMON_WIN})
+source_group(resources FILES ${SOURCE_COMMON_RESOURCES})
 
 add_library(aspia_common STATIC
     ${SOURCE_COMMON}
-    ${SOURCE_COMMON_WIN})
+    ${SOURCE_COMMON_UI}
+    ${SOURCE_COMMON_WIN}
+    ${SOURCE_COMMON_RESOURCES})
 target_link_libraries(aspia_common
     aspia_base
     aspia_protocol
     ${THIRD_PARTY_LIBS})
+
+if(Qt5LinguistTools_FOUND)
+    # Get the list of translation files.
+    file(GLOB COMMON_TS_FILES translations/*.ts)
+    add_translations(aspia_common QRC_FILE "translations/common_translations.qrc" TS_FILES ${COMMON_TS_FILES})
+
+    # Get the list of files containing messages.
+    file(GLOB_RECURSE COMMON_TR_SOURCES
+        ${PROJECT_SOURCE_DIR}/common/*.cc
+        ${PROJECT_SOURCE_DIR}/common/*.cpp
+        ${PROJECT_SOURCE_DIR}/common/*.h
+        ${PROJECT_SOURCE_DIR}/common/*.ui)
+
+    qt5_create_translation(TS_COMMON_UPDATE ${COMMON_TR_SOURCES} ${COMMON_TS_FILES} OPTIONS "-no-obsolete")
+    add_custom_target(aspia_common_ts_update DEPENDS ${TS_COMMON_UPDATE})
+else()
+    message(WARNING "Qt5 linguist tools not found. Internationalization support will be disabled.")
+endif()

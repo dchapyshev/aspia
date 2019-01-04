@@ -1,0 +1,5 @@
+<RCC>
+  <qresource prefix="/img">
+    <file>heart.png</file>
+  </qresource>
+</RCC>

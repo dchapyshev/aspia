@@ -16,11 +16,16 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CONSOLE__ABOUT_DIALOG_H_
-#define ASPIA_CONSOLE__ABOUT_DIALOG_H_
+#ifndef ASPIA_COMMON__UI__ABOUT_DIALOG_H_
+#define ASPIA_COMMON__UI__ABOUT_DIALOG_H_
+
+#include <QDialog>
 
 #include "base/macros_magic.h"
-#include "ui_about_dialog.h"
+
+namespace Ui {
+class AboutDialog;
+} // namespace Ui
 
 namespace aspia {
 
@@ -30,14 +35,14 @@ class AboutDialog : public QDialog
 
 public:
     explicit AboutDialog(QWidget* parent = nullptr);
-    ~AboutDialog() = default;
+    ~AboutDialog();
 
 private:
-    Ui::AboutDialog ui;
+    QScopedPointer<Ui::AboutDialog> ui;
 
     DISALLOW_COPY_AND_ASSIGN(AboutDialog);
 };
 
 } // namespace aspia
 
-#endif // ASPIA_CONSOLE__ABOUT_DIALOG_H_
+#endif // ASPIA_COMMON__UI__ABOUT_DIALOG_H_
