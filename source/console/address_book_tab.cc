@@ -682,6 +682,9 @@ void AddressBookTab::keyPressEvent(QKeyEvent* event)
             }
         }
         break;
+
+        default:
+            break;
     }
 
     QWidget::keyPressEvent(event);

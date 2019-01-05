@@ -18,7 +18,6 @@
 
 #include "crypto/password_hash.h"
 
-#include <openssl/opensslv.h>
 #include <openssl/evp.h>
 
 #include "base/logging.h"

@@ -416,17 +416,17 @@
 <context>
     <name>aspia::AddressBar</name>
     <message>
-        <location filename="../ui/address_bar.cc" line="57"/>
+        <location filename="../ui/address_bar.cc" line="56"/>
         <source>Warning</source>
         <translation type="unfinished">Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar.cc" line="58"/>
+        <location filename="../ui/address_bar.cc" line="57"/>
         <source>An incorrect path to the folder was entered.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/address_bar.cc" line="78"/>
+        <location filename="../ui/address_bar.cc" line="77"/>
         <source>The path can not contain characters %1.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -435,7 +435,7 @@
     <name>aspia::AddressBarModel</name>
     <message>
         <location filename="../ui/address_bar_model.cc" line="81"/>
-        <location filename="../ui/address_bar_model.cc" line="439"/>
+        <location filename="../ui/address_bar_model.cc" line="445"/>
         <source>Home Folder</source>
         <translation type="unfinished">Thuismap</translation>
     </message>
@@ -450,82 +450,82 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="384"/>
+        <location filename="../ui/address_bar_model.cc" line="390"/>
         <source>Name</source>
         <translation type="unfinished">Naam</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="387"/>
+        <location filename="../ui/address_bar_model.cc" line="393"/>
         <source>Type</source>
         <translation type="unfinished">Type</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="390"/>
+        <location filename="../ui/address_bar_model.cc" line="396"/>
         <source>Total Space</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="393"/>
+        <location filename="../ui/address_bar_model.cc" line="399"/>
         <source>Free Space</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="424"/>
+        <location filename="../ui/address_bar_model.cc" line="430"/>
         <source>Optical Drive</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="427"/>
+        <location filename="../ui/address_bar_model.cc" line="433"/>
         <source>Removable Drive</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="430"/>
+        <location filename="../ui/address_bar_model.cc" line="436"/>
         <source>Fixed Drive</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="433"/>
+        <location filename="../ui/address_bar_model.cc" line="439"/>
         <source>Network Drive</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="436"/>
+        <location filename="../ui/address_bar_model.cc" line="442"/>
         <source>RAM Drive</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="442"/>
+        <location filename="../ui/address_bar_model.cc" line="448"/>
         <source>Desktop Folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="445"/>
+        <location filename="../ui/address_bar_model.cc" line="451"/>
         <source>Unknown Drive</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="462"/>
+        <location filename="../ui/address_bar_model.cc" line="468"/>
         <source>TB</source>
         <translation type="unfinished">TB</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="467"/>
+        <location filename="../ui/address_bar_model.cc" line="473"/>
         <source>GB</source>
         <translation type="unfinished">GB</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="472"/>
+        <location filename="../ui/address_bar_model.cc" line="478"/>
         <source>MB</source>
         <translation type="unfinished">MB</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="477"/>
+        <location filename="../ui/address_bar_model.cc" line="483"/>
         <source>kB</source>
         <translation type="unfinished">kB</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="482"/>
+        <location filename="../ui/address_bar_model.cc" line="488"/>
         <source>B</source>
         <translation type="unfinished">B</translation>
     </message>
@@ -621,17 +621,17 @@
 <context>
     <name>aspia::ClientDialog</name>
     <message>
-        <location filename="../ui/client_dialog.cc" line="42"/>
+        <location filename="../ui/client_dialog.cc" line="41"/>
         <source>Desktop Manage</source>
         <translation>Bureaublad Beheren</translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.cc" line="46"/>
+        <location filename="../ui/client_dialog.cc" line="45"/>
         <source>Desktop View</source>
         <translation>Bureaublad Weergeven</translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.cc" line="50"/>
+        <location filename="../ui/client_dialog.cc" line="49"/>
         <source>File Transfer</source>
         <translation>Bestands Overdracht</translation>
     </message>

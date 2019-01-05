@@ -19,7 +19,6 @@
 #ifndef _ASPIA_BASE__THREADING__THREAD_CHECKER_H
 #define _ASPIA_BASE__THREADING__THREAD_CHECKER_H
 
-#include "base/logging.h"
 #include "base/macros_magic.h"
 
 #include <thread>

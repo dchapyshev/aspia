@@ -18,8 +18,6 @@
 
 #include "host/ui/host_config_dialog.h"
 
-#include <QDir>
-#include <QFile>
 #include <QFileDialog>
 #include <QMenu>
 #include <QMessageBox>

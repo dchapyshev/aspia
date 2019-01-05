@@ -20,7 +20,6 @@
 #define ASPIA_CLIENT__CLIENT_SESSION_DESKTOP_VIEW_H_
 
 #include <QPointer>
-#include <QThread>
 
 #include "base/macros_magic.h"
 #include "client/client_session.h"

@@ -18,7 +18,6 @@
 
 #include "network/network_channel.h"
 
-#include <QHostAddress>
 #include <QNetworkProxy>
 
 #include "base/logging.h"
@@ -253,6 +252,9 @@ void NetworkChannel::onReadyRead()
 
                     case 3:
                         read_.buffer_size += byte << 21;
+                        break;
+
+                    default:
                         break;
                 }
 

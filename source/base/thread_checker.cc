@@ -28,10 +28,7 @@ ThreadChecker::ThreadChecker()
 bool ThreadChecker::calledOnValidThread() const
 {
     std::scoped_lock lock(thread_id_lock_);
-    if (thread_id_ == std::this_thread::get_id())
-        return true;
-
-    return false;
+    return thread_id_ == std::this_thread::get_id();
 }
 
 void ThreadChecker::detachFromThread()

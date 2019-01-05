@@ -231,6 +231,9 @@ std::unique_ptr<PixelTranslator> PixelTranslator::create(const PixelFormat& sour
                 case 1:
                     return std::make_unique<PixelTranslatorFrom8_16bppT<uint8_t, uint32_t>>(
                         source_format, target_format);
+
+                default:
+                    break;
             }
         }
         break;
@@ -250,6 +253,9 @@ std::unique_ptr<PixelTranslator> PixelTranslator::create(const PixelFormat& sour
                 case 1:
                     return std::make_unique<PixelTranslatorFrom8_16bppT<uint8_t, uint16_t>>(
                         source_format, target_format);
+
+                default:
+                    break;
             }
         }
         break;
@@ -269,9 +275,15 @@ std::unique_ptr<PixelTranslator> PixelTranslator::create(const PixelFormat& sour
                 case 1:
                     return std::make_unique<PixelTranslatorFrom8_16bppT<uint8_t, uint8_t>>(
                         source_format, target_format);
+
+                default:
+                    break;
             }
         }
         break;
+
+        default:
+            break;
     }
 
     return nullptr;

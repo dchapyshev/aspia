@@ -24,7 +24,6 @@
 
 namespace aspia {
 
-class Decompressor;
 class DesktopFrame;
 class PixelTranslator;
 

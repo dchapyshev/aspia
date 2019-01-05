@@ -18,7 +18,6 @@
 
 #include "crypto/secure_memory.h"
 
-#include <openssl/opensslv.h>
 #include <openssl/crypto.h>
 
 namespace aspia {

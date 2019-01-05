@@ -19,7 +19,6 @@
 #ifndef ASPIA_UPDATER__UPDATE_INFO_H_
 #define ASPIA_UPDATER__UPDATE_INFO_H_
 
-#include <QString>
 #include <QUrl>
 #include <QVersionNumber>
 

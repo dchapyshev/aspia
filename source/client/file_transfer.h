@@ -21,7 +21,6 @@
 
 #include <QQueue>
 #include <QPair>
-#include <QPointer>
 #include <QMap>
 
 #include "client/file_transfer_task.h"

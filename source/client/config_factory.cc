@@ -19,7 +19,6 @@
 #include "client/config_factory.h"
 
 #include "base/logging.h"
-#include "build/build_config.h"
 #include "codec/video_util.h"
 
 namespace aspia {

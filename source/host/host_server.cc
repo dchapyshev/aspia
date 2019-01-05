@@ -19,7 +19,6 @@
 #include "host/host_server.h"
 
 #include <QCoreApplication>
-#include <QUuid>
 
 #include "base/qt_logging.h"
 #include "common/message_serialization.h"

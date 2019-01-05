@@ -19,7 +19,6 @@
 #ifndef ASPIA_BASE__SERVICE_CONTROLLER_H_
 #define ASPIA_BASE__SERVICE_CONTROLLER_H_
 
-#include <QString>
 #include <QStringList>
 
 #include "base/win/scoped_object.h"

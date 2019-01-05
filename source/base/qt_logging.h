@@ -21,8 +21,6 @@
 
 #include "base/logging.h"
 
-#include <QByteArray>
-#include <QPoint>
 #include <QRect>
 #include <QSize>
 #include <QString>

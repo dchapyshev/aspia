@@ -19,8 +19,6 @@
 #ifndef ASPIA_CONSOLE__UPDATE_SETTINGS_DIALOG_H_
 #define ASPIA_CONSOLE__UPDATE_SETTINGS_DIALOG_H_
 
-#include <QDialog>
-
 #include "base/macros_magic.h"
 #include "ui_update_settings_dialog.h"
 

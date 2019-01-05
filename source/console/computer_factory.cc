@@ -27,16 +27,8 @@ namespace aspia {
 namespace {
 
 const int kDefUpdateInterval = 30;
-const int kMinUpdateInterval = 15;
-const int kMaxUpdateInterval = 100;
-
 const int kDefScaleFactor = 100;
-const int kMinScaleFactor = 50;
-const int kMaxScaleFactor = 100;
-
 const int kDefCompressRatio = 8;
-const int kMinCompressRatio = 1;
-const int kMaxCompressRatio = 22;
 
 void setDefaultDesktopManageConfig(proto::desktop::Config* config)
 {

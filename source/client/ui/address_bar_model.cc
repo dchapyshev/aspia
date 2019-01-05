@@ -280,6 +280,9 @@ QVariant AddressBarModel::data(const QModelIndex& index, int role) const
 
             case Qt::UserRole:
                 return computerPath();
+
+            default:
+                break;
         }
     }
     else if (index.internalId() == kCurrentFolderItem)
@@ -303,6 +306,9 @@ QVariant AddressBarModel::data(const QModelIndex& index, int role) const
 
             case Qt::UserRole:
                 return current_path_;
+
+            default:
+                break;
         }
     }
     else if (index.internalId() == kDriveItem)
@@ -334,23 +340,23 @@ QVariant AddressBarModel::data(const QModelIndex& index, int role) const
 
                     return QString("%1 (%2)").arg(drive.path).arg(drive.name);
                 }
-                else if (index.column() == COLUMN_TYPE)
-                {
+
+                if (index.column() == COLUMN_TYPE)
                     return typeToString(drive.type);
-                }
-                else if (index.column() == COLUMN_TOTAL_SPACE && drive.total_space >= 0)
-                {
+
+                if (index.column() == COLUMN_TOTAL_SPACE && drive.total_space >= 0)
                     return sizeToString(drive.total_space);
-                }
-                else if (index.column() == COLUMN_FREE_SPACE && drive.free_space >= 0)
-                {
+
+                if (index.column() == COLUMN_FREE_SPACE && drive.free_space >= 0)
                     return sizeToString(drive.free_space);
-                }
             }
             break;
 
             case Qt::UserRole:
                 return drive.path;
+
+            default:
+                break;
         }
     }
 

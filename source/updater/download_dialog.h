@@ -21,7 +21,6 @@
 
 #include <QFile>
 #include <QNetworkAccessManager>
-#include <QUrl>
 
 #include "base/macros_magic.h"
 #include "ui_download_dialog.h"

@@ -51,7 +51,6 @@
 #include "build/build_config.h"
 
 #include <cstddef>
-#include <cstdint>
 
 #if defined(OS_WIN)
 #include <malloc.h>

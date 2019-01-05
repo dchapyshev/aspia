@@ -25,14 +25,13 @@
 
 #include "base/string_util_constants.h"
 #include "base/unicode.h"
-#include "base/logging.h"
 
 namespace aspia {
 
 namespace {
 
-static const std::string kEmptyString;
-static const std::wstring kEmptyStringWide;
+const std::string kEmptyString;
+const std::wstring kEmptyStringWide;
 
 // Assuming that a pointer is the size of a "machine word", then
 // uintptr_t is an integer type that is also a machine word.

@@ -36,7 +36,7 @@ public:
     bool isFormatChanged(const PixelFormat& pixel_format);
 
     const QRect& screenRect() const { return screen_rect_; }
-    const QSize& screenSize() const { return screen_rect_.size(); }
+    QSize screenSize() const { return screen_rect_.size(); }
     const PixelFormat& format() const { return pixel_format_; }
 
 private:

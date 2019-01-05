@@ -19,7 +19,6 @@
 #include "common/file_depacketizer.h"
 
 #include "base/logging.h"
-#include "common/file_packet.h"
 
 namespace aspia {
 

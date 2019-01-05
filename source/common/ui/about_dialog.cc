@@ -18,7 +18,6 @@
 
 #include "common/ui/about_dialog.h"
 
-#include <QAbstractButton>
 #include <QDesktopServices>
 
 #include <google/protobuf/stubs/common.h>

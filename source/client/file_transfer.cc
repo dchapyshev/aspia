@@ -134,10 +134,10 @@ void FileTransfer::targetReply(const proto::file_transfer::Request& request,
             return;
         }
 
-        FileRequest* request =
+        FileRequest* file_request =
             FileRequest::packetRequest(proto::file_transfer::PacketRequest::NO_FLAGS);
-        connect(request, &FileRequest::replyReady, this, &FileTransfer::sourceReply);
-        sourceRequest(request);
+        connect(file_request, &FileRequest::replyReady, this, &FileTransfer::sourceReply);
+        sourceRequest(file_request);
     }
     else if (request.has_packet())
     {
@@ -187,9 +187,9 @@ void FileTransfer::targetReply(const proto::file_transfer::Request& request,
         if (is_canceled_)
             flags = proto::file_transfer::PacketRequest::CANCEL;
 
-        FileRequest* request = FileRequest::packetRequest(flags);
-        connect(request, &FileRequest::replyReady, this, &FileTransfer::sourceReply);
-        sourceRequest(request);
+        FileRequest* file_request = FileRequest::packetRequest(flags);
+        connect(file_request, &FileRequest::replyReady, this, &FileTransfer::sourceReply);
+        sourceRequest(file_request);
     }
     else
     {
@@ -214,10 +214,10 @@ void FileTransfer::sourceReply(const proto::file_transfer::Request& request,
             return;
         }
 
-        FileRequest* request = FileRequest::uploadRequest(currentTask().targetPath(),
-                                                          currentTask().overwrite());
-        connect(request, &FileRequest::replyReady, this, &FileTransfer::targetReply);
-        targetRequest(request);
+        FileRequest* file_request = FileRequest::uploadRequest(currentTask().targetPath(),
+                                                               currentTask().overwrite());
+        connect(file_request, &FileRequest::replyReady, this, &FileTransfer::targetReply);
+        targetRequest(file_request);
     }
     else if (request.has_packet_request())
     {
@@ -230,9 +230,9 @@ void FileTransfer::sourceReply(const proto::file_transfer::Request& request,
             return;
         }
 
-        FileRequest* request = FileRequest::packet(reply.packet());
-        connect(request, &FileRequest::replyReady, this, &FileTransfer::targetReply);
-        targetRequest(request);
+        FileRequest* file_request = FileRequest::packet(reply.packet());
+        connect(file_request, &FileRequest::replyReady, this, &FileTransfer::targetReply);
+        targetRequest(file_request);
     }
     else
     {

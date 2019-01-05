@@ -18,7 +18,6 @@
 
 #include "base/logging.h"
 
-#include <algorithm>
 #include <chrono>
 #include <filesystem>
 #include <fstream>
@@ -26,7 +25,6 @@
 #include <mutex>
 #include <ostream>
 #include <thread>
-#include <utility>
 
 #include "base/debug.h"
 

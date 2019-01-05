@@ -19,12 +19,10 @@
 #include "console/console_window.h"
 
 #include <QCloseEvent>
-#include <QDateTime>
 #include <QDesktopServices>
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QSystemTrayIcon>
-#include <QTranslator>
 
 #include "base/logging.h"
 #include "build/build_config.h"

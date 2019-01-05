@@ -22,7 +22,6 @@
 #include <wrl/client.h>
 #include <netfw.h>
 
-#include <QString>
 #include <QVector>
 
 #include "base/macros_magic.h"

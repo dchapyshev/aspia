@@ -19,7 +19,6 @@
 #ifndef ASPIA_BASE__WIN__PROCESS_UTIL_H_
 #define ASPIA_BASE__WIN__PROCESS_UTIL_H_
 
-#include <QString>
 #include <QStringList>
 
 namespace aspia {

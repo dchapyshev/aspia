@@ -18,6 +18,8 @@
 
 #include "base/win/scoped_com_initializer.h"
 
+#include "base/logging.h"
+
 namespace aspia {
 
 ScopedCOMInitializer::ScopedCOMInitializer()

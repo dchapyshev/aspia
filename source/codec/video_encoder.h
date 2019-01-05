@@ -19,8 +19,6 @@
 #ifndef ASPIA_CODEC__VIDEO_ENCODER_H_
 #define ASPIA_CODEC__VIDEO_ENCODER_H_
 
-#include <memory>
-
 #include "desktop_capture/screen_settings_tracker.h"
 #include "protocol/desktop_session.pb.h"
 

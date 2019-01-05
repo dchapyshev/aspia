@@ -18,7 +18,6 @@
 
 #include "crypto/random.h"
 
-#include <openssl/opensslv.h>
 #include <openssl/rand.h>
 
 #include "base/logging.h"

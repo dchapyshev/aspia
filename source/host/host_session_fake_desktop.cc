@@ -41,18 +41,18 @@ void HostSessionFakeDesktop::startSession()
 
 void HostSessionFakeDesktop::onMessageReceived(const QByteArray& buffer)
 {
-    proto::desktop::ClientToHost message;
+    proto::desktop::ClientToHost incoming_message;
 
-    if (!parseMessage(buffer, message))
+    if (!parseMessage(buffer, incoming_message))
     {
         LOG(LS_WARNING) << "Unable to parse message";
         emit errorOccurred();
         return;
     }
 
-    if (message.has_config())
+    if (incoming_message.has_config())
     {
-        std::unique_ptr<VideoEncoder> video_encoder(createEncoder(message.config()));
+        std::unique_ptr<VideoEncoder> video_encoder(createEncoder(incoming_message.config()));
         if (!video_encoder)
         {
             LOG(LS_WARNING) << "Unable to create video encoder";
@@ -68,9 +68,9 @@ void HostSessionFakeDesktop::onMessageReceived(const QByteArray& buffer)
             return;
         }
 
-        proto::desktop::HostToClient message;
-        video_encoder->encode(frame.get(), message.mutable_video_packet());
-        emit sendMessage(serializeMessage(message));
+        proto::desktop::HostToClient outgoing_message;
+        video_encoder->encode(frame.get(), outgoing_message.mutable_video_packet());
+        emit sendMessage(serializeMessage(outgoing_message));
     }
     else
     {

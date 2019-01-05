@@ -675,38 +675,38 @@
         <translation>Weet U zeker dat U de computer &quot;%1&quot; wilt verwijderen?</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="752"/>
+        <location filename="../address_book_tab.cc" line="755"/>
         <source>Save Address Book</source>
         <translation>Adresboek Opslaan</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="754"/>
+        <location filename="../address_book_tab.cc" line="757"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Aspia Adresboek (*.aab)</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="764"/>
+        <location filename="../address_book_tab.cc" line="767"/>
         <source>Unable to create or open address book file.</source>
         <translation>Kan adresboek bestand niet maken of openen.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="776"/>
+        <location filename="../address_book_tab.cc" line="779"/>
         <source>Unable to write address book file.</source>
         <translation>Kan adresboek bestand niet schrijven.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="792"/>
-        <location filename="../address_book_tab.cc" line="806"/>
+        <location filename="../address_book_tab.cc" line="795"/>
+        <location filename="../address_book_tab.cc" line="809"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="794"/>
+        <location filename="../address_book_tab.cc" line="797"/>
         <source>Could not open address book</source>
         <translation>Kon adresboek niet openen</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="808"/>
+        <location filename="../address_book_tab.cc" line="811"/>
         <source>Failed to save address book</source>
         <translation>Kon adresboek niet opslaan</translation>
     </message>
@@ -811,85 +811,85 @@
 <context>
     <name>aspia::ConsoleWindow</name>
     <message>
-        <location filename="../console_window.cc" line="905"/>
+        <location filename="../console_window.cc" line="903"/>
         <source>Aspia Console</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="251"/>
+        <location filename="../console_window.cc" line="249"/>
         <source>Open Address Book</source>
         <translation>Open Adresboek</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="253"/>
+        <location filename="../console_window.cc" line="251"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Aspia Adresboek (*.aab)</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="677"/>
+        <location filename="../console_window.cc" line="675"/>
         <source>Close tab</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="670"/>
+        <location filename="../console_window.cc" line="668"/>
         <source>Close other tabs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="203"/>
+        <location filename="../console_window.cc" line="201"/>
         <source>Warning</source>
         <translation type="unfinished">Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="680"/>
-        <location filename="../console_window.cc" line="687"/>
+        <location filename="../console_window.cc" line="678"/>
+        <location filename="../console_window.cc" line="685"/>
         <source>Pin tab</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="884"/>
+        <location filename="../console_window.cc" line="882"/>
         <source>&lt;empty&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="939"/>
+        <location filename="../console_window.cc" line="937"/>
         <source>Information</source>
         <translation>Informatie</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="940"/>
+        <location filename="../console_window.cc" line="938"/>
         <source>Address Book &quot;%1&quot; is already open.</source>
         <translation>Adresboek &quot;%1&quot; is al geopend.</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="379"/>
+        <location filename="../console_window.cc" line="377"/>
         <source>https://aspia.org/en/help.html</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="204"/>
+        <location filename="../console_window.cc" line="202"/>
         <source>Pinned address book file &quot;%1&quot; was not found.&lt;br/&gt;This file will be unpinned.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="481"/>
-        <location filename="../console_window.cc" line="808"/>
+        <location filename="../console_window.cc" line="479"/>
+        <location filename="../console_window.cc" line="806"/>
         <source>Confirmation</source>
         <translation>Bevestiging</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="482"/>
-        <location filename="../console_window.cc" line="809"/>
+        <location filename="../console_window.cc" line="480"/>
+        <location filename="../console_window.cc" line="807"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation>Adresboek &quot;%1&quot; is aangepast. Wijzigingen opslaan?</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="765"/>
+        <location filename="../console_window.cc" line="763"/>
         <source>Hide</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="780"/>
+        <location filename="../console_window.cc" line="778"/>
         <source>Show</source>
         <translation type="unfinished"></translation>
     </message>
