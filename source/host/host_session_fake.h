@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_HOST__HOST_SESSION_FAKE_H_
-#define ASPIA_HOST__HOST_SESSION_FAKE_H_
+#ifndef ASPIA_HOST__HOST_SESSION_FAKE_H
+#define ASPIA_HOST__HOST_SESSION_FAKE_H
 
 #include <QObject>
 
@@ -49,4 +49,4 @@ protected:
 
 } // namespace aspia
 
-#endif // ASPIA_HOST__HOST_SESSION_FAKE_H_
+#endif // ASPIA_HOST__HOST_SESSION_FAKE_H

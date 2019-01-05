@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_VERSION_H_
-#define ASPIA_VERSION_H_
+#ifndef ASPIA_VERSION_H
+#define ASPIA_VERSION_H
 
 #define ASPIA_VERSION_MAJOR 1
 #define ASPIA_VERSION_MINOR 1
@@ -45,4 +45,4 @@
     ASPIA_VERSION_MAJOR,ASPIA_VERSION_MINOR, \
     ASPIA_VERSION_PATCH
 
-#endif // ASPIA_VERSION_H_
+#endif // ASPIA_VERSION_H

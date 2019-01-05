@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_BASE__MACROS_MAGIC_H_
-#define ASPIA_BASE__MACROS_MAGIC_H_
+#ifndef ASPIA_BASE__MACROS_MAGIC_H
+#define ASPIA_BASE__MACROS_MAGIC_H
 
 // Put this in the declarations for a class to be uncopyable.
 #define DISALLOW_COPY(TypeName) \
@@ -39,4 +39,4 @@
     TypeName() = delete;                         \
     DISALLOW_COPY_AND_ASSIGN(TypeName)
 
-#endif // ASPIA_BASE__MACROS_MAGIC_H_
+#endif // ASPIA_BASE__MACROS_MAGIC_H

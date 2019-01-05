@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_COMMON__FILE_DEPACKETIZER_H_
-#define ASPIA_COMMON__FILE_DEPACKETIZER_H_
+#ifndef ASPIA_COMMON__FILE_DEPACKETIZER_H
+#define ASPIA_COMMON__FILE_DEPACKETIZER_H
 
 #include <filesystem>
 #include <fstream>
@@ -53,4 +53,4 @@ private:
 
 } // namespace aspia
 
-#endif // ASPIA_COMMON__FILE_DEPACKETIZER_H_
+#endif // ASPIA_COMMON__FILE_DEPACKETIZER_H

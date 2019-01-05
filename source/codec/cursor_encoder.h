@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CODEC__CURSOR_ENCODER_H_
-#define ASPIA_CODEC__CURSOR_ENCODER_H_
+#ifndef ASPIA_CODEC__CURSOR_ENCODER_H
+#define ASPIA_CODEC__CURSOR_ENCODER_H
 
 #include "base/macros_magic.h"
 #include "codec/scoped_zstd_stream.h"
@@ -47,4 +47,4 @@ private:
 
 } // namespace aspia
 
-#endif // ASPIA_CODEC__CURSOR_ENCODER_H_
+#endif // ASPIA_CODEC__CURSOR_ENCODER_H

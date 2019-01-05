@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_BASE__WIN__SCOPED_COM_INITIALIZER_H_
-#define ASPIA_BASE__WIN__SCOPED_COM_INITIALIZER_H_
+#ifndef ASPIA_BASE__WIN__SCOPED_COM_INITIALIZER_H
+#define ASPIA_BASE__WIN__SCOPED_COM_INITIALIZER_H
 
 #include <objbase.h>
 
@@ -60,4 +60,4 @@ private:
 
 }  // namespace aspia
 
-#endif // ASPIA_BASE__WIN__SCOPED_COM_INITIALIZER_H_
+#endif // ASPIA_BASE__WIN__SCOPED_COM_INITIALIZER_H

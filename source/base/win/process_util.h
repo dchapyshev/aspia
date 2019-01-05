@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_BASE__WIN__PROCESS_UTIL_H_
-#define ASPIA_BASE__WIN__PROCESS_UTIL_H_
+#ifndef ASPIA_BASE__WIN__PROCESS_UTIL_H
+#define ASPIA_BASE__WIN__PROCESS_UTIL_H
 
 #include <QStringList>
 
@@ -33,4 +33,4 @@ bool executeProcess(const QString& program, ProcessExecuteMode mode = ProcessExe
 
 } // namespace aspia
 
-#endif // ASPIA_BASE__WIN__PROCESS_UTIL_H_
+#endif // ASPIA_BASE__WIN__PROCESS_UTIL_H

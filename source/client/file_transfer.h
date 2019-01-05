@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CLIENT__FILE_TRANSFER_H_
-#define ASPIA_CLIENT__FILE_TRANSFER_H_
+#ifndef ASPIA_CLIENT__FILE_TRANSFER_H
+#define ASPIA_CLIENT__FILE_TRANSFER_H
 
 #include <QQueue>
 #include <QPair>
@@ -144,4 +144,4 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(FileTransfer::Actions)
 
 } // namespace aspia
 
-#endif // ASPIA_CLIENT__FILE_TRANSFER_H_
+#endif // ASPIA_CLIENT__FILE_TRANSFER_H

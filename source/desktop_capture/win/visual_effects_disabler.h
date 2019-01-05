@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_DESKTOP_CAPTURE__WIN__VISUAL_EFFECTS_DISABLER_H_
-#define ASPIA_DESKTOP_CAPTURE__WIN__VISUAL_EFFECTS_DISABLER_H_
+#ifndef ASPIA_DESKTOP_CAPTURE__WIN__VISUAL_EFFECTS_DISABLER_H
+#define ASPIA_DESKTOP_CAPTURE__WIN__VISUAL_EFFECTS_DISABLER_H
 
 #include <memory>
 
@@ -55,4 +55,4 @@ private:
 
 } // namespace aspia
 
-#endif // ASPIA_DESKTOP_CAPTURE__WIN__VISUAL_EFFECTS_DISABLER_H_
+#endif // ASPIA_DESKTOP_CAPTURE__WIN__VISUAL_EFFECTS_DISABLER_H

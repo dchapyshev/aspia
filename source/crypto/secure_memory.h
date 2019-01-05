@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CRYPTO__SECURE_MEMORY_H_
-#define ASPIA_CRYPTO__SECURE_MEMORY_H_
+#ifndef ASPIA_CRYPTO__SECURE_MEMORY_H
+#define ASPIA_CRYPTO__SECURE_MEMORY_H
 
 #include <QString>
 
@@ -30,4 +30,4 @@ void secureMemZero(QByteArray* str);
 
 } // namespace aspia
 
-#endif // ASPIA_CRYPTO__SECURE_MEMORY_H_
+#endif // ASPIA_CRYPTO__SECURE_MEMORY_H

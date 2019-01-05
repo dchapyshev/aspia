@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_BASE__STRING_UTIL_CONSTANTS_H_
-#define ASPIA_BASE__STRING_UTIL_CONSTANTS_H_
+#ifndef ASPIA_BASE__STRING_UTIL_CONSTANTS_H
+#define ASPIA_BASE__STRING_UTIL_CONSTANTS_H
 
 namespace aspia {
 
@@ -27,4 +27,4 @@ extern const char kUtf8ByteOrderMark[];
 
 } // namespace aspia
 
-#endif // ASPIA_BASE__STRING_UTIL_CONSTANTS_H_
+#endif // ASPIA_BASE__STRING_UTIL_CONSTANTS_H

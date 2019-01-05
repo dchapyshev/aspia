@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_BASE__CPUID_H_
-#define ASPIA_BASE__CPUID_H_
+#ifndef ASPIA_BASE__CPUID_H
+#define ASPIA_BASE__CPUID_H
 
 #include <cstdint>
 
@@ -55,4 +55,4 @@ private:
 
 } // namespace aspia
 
-#endif // ASPIA_BASE__CPUID_H_
+#endif // ASPIA_BASE__CPUID_H

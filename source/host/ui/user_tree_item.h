@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_HOST__UI__USER_TREE_ITEM_H_
-#define ASPIA_HOST__UI__USER_TREE_ITEM_H_
+#ifndef ASPIA_HOST__UI__USER_TREE_ITEM_H
+#define ASPIA_HOST__UI__USER_TREE_ITEM_H
 
 #include <QTreeWidget>
 
@@ -43,4 +43,4 @@ private:
 
 } // namespace aspia
 
-#endif // ASPIA_HOST__UI__USER_TREE_ITEM_H_
+#endif // ASPIA_HOST__UI__USER_TREE_ITEM_H

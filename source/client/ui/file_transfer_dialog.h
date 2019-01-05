@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CLIENT__UI__FILE_TRANSFER_DIALOG_H_
-#define ASPIA_CLIENT__UI__FILE_TRANSFER_DIALOG_H_
+#ifndef ASPIA_CLIENT__UI__FILE_TRANSFER_DIALOG_H
+#define ASPIA_CLIENT__UI__FILE_TRANSFER_DIALOG_H
 
 #include "build/build_config.h"
 #include "client/file_transfer.h"
@@ -67,4 +67,4 @@ private:
 
 } // namespace aspia
 
-#endif // ASPIA_CLIENT__UI__FILE_TRANSFER_DIALOG_H_
+#endif // ASPIA_CLIENT__UI__FILE_TRANSFER_DIALOG_H

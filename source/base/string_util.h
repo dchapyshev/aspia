@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_BASE__STRING_UTIL_H_
-#define ASPIA_BASE__STRING_UTIL_H_
+#ifndef ASPIA_BASE__STRING_UTIL_H
+#define ASPIA_BASE__STRING_UTIL_H
 
 #include <string>
 
@@ -93,4 +93,4 @@ const std::wstring& emptyStringW();
 
 } // namespace aspia
 
-#endif // ASPIA_BASE__STRINGS__STRING_UTIL_H_
+#endif // ASPIA_BASE__STRINGS__STRING_UTIL_H

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CONSOLE__COMPUTER_GROUP_TREE_H_
-#define ASPIA_CONSOLE__COMPUTER_GROUP_TREE_H_
+#ifndef ASPIA_CONSOLE__COMPUTER_GROUP_TREE_H
+#define ASPIA_CONSOLE__COMPUTER_GROUP_TREE_H
 
 #include "base/macros_magic.h"
 #include "console/computer_group_drag.h"
@@ -54,4 +54,4 @@ private:
 
 } // namespace aspia
 
-#endif // ASPIA_CONSOLE__COMPUTER_GROUP_TREE_H_
+#endif // ASPIA_CONSOLE__COMPUTER_GROUP_TREE_H

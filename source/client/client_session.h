@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CLIENT__CLIENT_SESSION_H_
-#define ASPIA_CLIENT__CLIENT_SESSION_H_
+#ifndef ASPIA_CLIENT__CLIENT_SESSION_H
+#define ASPIA_CLIENT__CLIENT_SESSION_H
 
 #include <QObject>
 
@@ -63,4 +63,4 @@ signals:
 
 } // namespace aspia
 
-#endif // ASPIA_CLIENT__CLIENT_SESSION_H_
+#endif // ASPIA_CLIENT__CLIENT_SESSION_H

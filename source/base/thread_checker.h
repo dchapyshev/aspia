@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef _ASPIA_BASE__THREADING__THREAD_CHECKER_H
-#define _ASPIA_BASE__THREADING__THREAD_CHECKER_H
+#ifndef ASPIA_BASE__THREAD_CHECKER_H
+#define ASPIA_BASE__THREAD_CHECKER_H
 
 #include "base/macros_magic.h"
 
@@ -96,4 +96,4 @@ private:
 #define DETACH_FROM_THREAD(name)
 #endif // NDEBUG
 
-#endif // _ASPIA_BASE__THREADING__THREAD_CHECKER_H
+#endif // ASPIA_BASE__THREAD_CHECKER_H

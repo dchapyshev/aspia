@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_HOST__INPUT_INJECTOR_H_
-#define ASPIA_HOST__INPUT_INJECTOR_H_
+#ifndef ASPIA_HOST__INPUT_INJECTOR_H
+#define ASPIA_HOST__INPUT_INJECTOR_H
 
 #include <QThread>
 
@@ -60,4 +60,4 @@ private:
 
 } // namespace aspia
 
-#endif // ASPIA_HOST__INPUT_INJECTOR_H_
+#endif // ASPIA_HOST__INPUT_INJECTOR_H

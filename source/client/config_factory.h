@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CLIENT__CONFIG_FACTORY_H_
-#define ASPIA_CLIENT__CONFIG_FACTORY_H_
+#ifndef ASPIA_CLIENT__CONFIG_FACTORY_H
+#define ASPIA_CLIENT__CONFIG_FACTORY_H
 
 #include "base/macros_magic.h"
 #include "protocol/desktop_session.pb.h"
@@ -42,4 +42,4 @@ private:
 
 } // namespace aspia
 
-#endif // ASPIA_CLIENT__CONFIG_FACTORY_H_
+#endif // ASPIA_CLIENT__CONFIG_FACTORY_H

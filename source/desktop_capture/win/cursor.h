@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_DESKTOP_CAPTURE__WIN__CURSOR_H_
-#define ASPIA_DESKTOP_CAPTURE__WIN__CURSOR_H_
+#ifndef ASPIA_DESKTOP_CAPTURE__WIN__CURSOR_H
+#define ASPIA_DESKTOP_CAPTURE__WIN__CURSOR_H
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -30,4 +30,4 @@ MouseCursor* mouseCursorFromHCursor(HDC dc, HCURSOR cursor);
 
 } // namespace aspia
 
-#endif // ASPIA_DESKTOP_CAPTURE__WIN__CURSOR_H_
+#endif // ASPIA_DESKTOP_CAPTURE__WIN__CURSOR_H

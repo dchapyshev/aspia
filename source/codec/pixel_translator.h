@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CODEC__PIXEL_TRANSLATOR_H_
-#define ASPIA_CODEC__PIXEL_TRANSLATOR_H_
+#ifndef ASPIA_CODEC__PIXEL_TRANSLATOR_H
+#define ASPIA_CODEC__PIXEL_TRANSLATOR_H
 
 #include <memory>
 
@@ -43,4 +43,4 @@ public:
 
 } // namespace aspia
 
-#endif // ASPIA_CODEC__PIXEL_TRANSLATOR_H_
+#endif // ASPIA_CODEC__PIXEL_TRANSLATOR_H

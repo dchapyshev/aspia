@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CONSOLE__CONSOLE_WINDOW_H_
-#define ASPIA_CONSOLE__CONSOLE_WINDOW_H_
+#ifndef ASPIA_CONSOLE__CONSOLE_WINDOW_H
+#define ASPIA_CONSOLE__CONSOLE_WINDOW_H
 
 #include "common/locale_loader.h"
 #include "console/console_settings.h"
@@ -113,4 +113,4 @@ private:
 
 } // namespace aspia
 
-#endif // ASPIA_CONSOLE__CONSOLE_WINDOW_H_
+#endif // ASPIA_CONSOLE__CONSOLE_WINDOW_H

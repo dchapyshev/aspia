@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_BASE__LOGGING_H_
-#define ASPIA_BASE__LOGGING_H_
+#ifndef ASPIA_BASE__LOGGING_H
+#define ASPIA_BASE__LOGGING_H
 
 #include <sstream>
 #include <type_traits>
@@ -599,4 +599,4 @@ std::ostream& operator<<(std::ostream& out, const std::wstring& wstr);
     } while (0);                                                                                 \
     EAT_STREAM_PARAMETERS
 
-#endif // ASPIA_BASE__LOGGING_H_
+#endif // ASPIA_BASE__LOGGING_H

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CLIENT__CLIENT_POOL_H_
-#define ASPIA_CLIENT__CLIENT_POOL_H_
+#ifndef ASPIA_CLIENT__CLIENT_POOL_H
+#define ASPIA_CLIENT__CLIENT_POOL_H
 
 #include <optional>
 
@@ -45,4 +45,4 @@ private:
 
 } // namespace aspia
 
-#endif // ASPIA_CLIENT__CLIENT_POOL_H_
+#endif // ASPIA_CLIENT__CLIENT_POOL_H

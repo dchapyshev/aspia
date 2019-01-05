@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_UPDATER__DOWNLOAD_DIALOG_H_
-#define ASPIA_UPDATER__DOWNLOAD_DIALOG_H_
+#ifndef ASPIA_UPDATER__DOWNLOAD_DIALOG_H
+#define ASPIA_UPDATER__DOWNLOAD_DIALOG_H
 
 #include <QFile>
 #include <QNetworkAccessManager>
@@ -46,4 +46,4 @@ private:
 
 } // namespace aspia
 
-#endif // ASPIA_UPDATER__DOWNLOAD_DIALOG_H_
+#endif // ASPIA_UPDATER__DOWNLOAD_DIALOG_H

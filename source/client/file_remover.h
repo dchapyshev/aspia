@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CLIENT__FILE_REMOVER_H_
-#define ASPIA_CLIENT__FILE_REMOVER_H_
+#ifndef ASPIA_CLIENT__FILE_REMOVER_H
+#define ASPIA_CLIENT__FILE_REMOVER_H
 
 #include <QQueue>
 
@@ -94,4 +94,4 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(FileRemover::Actions)
 
 } // namespace aspia
 
-#endif // ASPIA_CLIENT__FILE_REMOVER_H_
+#endif // ASPIA_CLIENT__FILE_REMOVER_H

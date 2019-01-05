@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_DESKTOP_CAPTURE__DIFF_BLOCK_C_H_
-#define ASPIA_DESKTOP_CAPTURE__DIFF_BLOCK_C_H_
+#ifndef ASPIA_DESKTOP_CAPTURE__DIFF_BLOCK_C_H
+#define ASPIA_DESKTOP_CAPTURE__DIFF_BLOCK_C_H
 
 #include <cstdint>
 
@@ -31,4 +31,4 @@ uint8_t diffFullBlock_8x8_C(const uint8_t* image1, const uint8_t* image2, int by
 
 } // namespace aspia
 
-#endif // ASPIA_DESKTOP_CAPTURE__DIFF_BLOCK_C_H_
+#endif // ASPIA_DESKTOP_CAPTURE__DIFF_BLOCK_C_H

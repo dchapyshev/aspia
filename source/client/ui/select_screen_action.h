@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CLIENT__UI__SELECT_SCREEN_ACTION_H_
-#define ASPIA_CLIENT__UI__SELECT_SCREEN_ACTION_H_
+#ifndef ASPIA_CLIENT__UI__SELECT_SCREEN_ACTION_H
+#define ASPIA_CLIENT__UI__SELECT_SCREEN_ACTION_H
 
 #include <QAction>
 
@@ -60,4 +60,4 @@ private:
 
 } // namespace aspia
 
-#endif // ASPIA_CLIENT__UI__SELECT_SCREEN_ACTION_H_
+#endif // ASPIA_CLIENT__UI__SELECT_SCREEN_ACTION_H

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_BASE__WIN__SCOPED_WTS_MEMORY_H_
-#define ASPIA_BASE__WIN__SCOPED_WTS_MEMORY_H_
+#ifndef ASPIA_BASE__WIN__SCOPED_WTS_MEMORY_H
+#define ASPIA_BASE__WIN__SCOPED_WTS_MEMORY_H
 
 #include <wtsapi32.h>
 
@@ -85,4 +85,4 @@ private:
     DISALLOW_COPY_AND_ASSIGN(ScopedWtsMemory);
 };
 
-#endif // ASPIA_BASE__WIN__SCOPED_WTS_MEMORY_H_
+#endif // ASPIA_BASE__WIN__SCOPED_WTS_MEMORY_H

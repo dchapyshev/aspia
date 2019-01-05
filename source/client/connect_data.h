@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CLIENT__CONNECT_DATA_H_
-#define ASPIA_CLIENT__CONNECT_DATA_H_
+#ifndef ASPIA_CLIENT__CONNECT_DATA_H
+#define ASPIA_CLIENT__CONNECT_DATA_H
 
 #include <QString>
 
@@ -44,4 +44,4 @@ struct ConnectData
 
 } // namespace aspia
 
-#endif // ASPIA_CLIENT__CONNECT_DATA_H_
+#endif // ASPIA_CLIENT__CONNECT_DATA_H

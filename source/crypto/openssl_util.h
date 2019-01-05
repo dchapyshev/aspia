@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CRYPTO__OPENSSL_UTIL_H_
-#define ASPIA_CRYPTO__OPENSSL_UTIL_H_
+#ifndef ASPIA_CRYPTO__OPENSSL_UTIL_H
+#define ASPIA_CRYPTO__OPENSSL_UTIL_H
 
 #include <memory>
 
@@ -48,4 +48,4 @@ using EVP_CIPHER_CTX_ptr = std::unique_ptr<evp_cipher_ctx_st, EVP_CIPHER_CTX_Del
 
 } // namespace aspia
 
-#endif // ASPIA_CRYPTO__OPENSSL_UTIL_H_
+#endif // ASPIA_CRYPTO__OPENSSL_UTIL_H

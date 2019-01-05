@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_HOST__UI__USER_DIALOG_H_
-#define ASPIA_HOST__UI__USER_DIALOG_H_
+#ifndef ASPIA_HOST__UI__USER_DIALOG_H
+#define ASPIA_HOST__UI__USER_DIALOG_H
 
 #include "base/macros_magic.h"
 #include "network/srp_user.h"
@@ -57,4 +57,4 @@ private:
 
 } // namespace aspia
 
-#endif // ASPIA_HOST__UI__USER_DIALOG_H_
+#endif // ASPIA_HOST__UI__USER_DIALOG_H

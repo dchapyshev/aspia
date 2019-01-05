@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_COMMON__DESKTOP_SESSION_CONSTANTS_H_
-#define ASPIA_COMMON__DESKTOP_SESSION_CONSTANTS_H_
+#ifndef ASPIA_COMMON__DESKTOP_SESSION_CONSTANTS_H
+#define ASPIA_COMMON__DESKTOP_SESSION_CONSTANTS_H
 
 namespace aspia {
 
@@ -26,4 +26,4 @@ extern const char kPowerControlExtension[];
 
 } // namespace aspia
 
-#endif // ASPIA_COMMON__DESKTOP_SESSION_CONSTANTS_H_
+#endif // ASPIA_COMMON__DESKTOP_SESSION_CONSTANTS_H

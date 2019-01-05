@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_BASE__WIN__REGISTRY_H_
-#define ASPIA_BASE__WIN__REGISTRY_H_
+#ifndef ASPIA_BASE__WIN__REGISTRY_H
+#define ASPIA_BASE__WIN__REGISTRY_H
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -198,4 +198,4 @@ private:
 
 } // namespace aspia
 
-#endif // ASPIA_BASE__WIN__REGISTRY_H_
+#endif // ASPIA_BASE__WIN__REGISTRY_H

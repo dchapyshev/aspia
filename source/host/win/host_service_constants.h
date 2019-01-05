@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_HOST__WIN__HOST_SERVICE_CONSTANTS_H_
-#define ASPIA_HOST__WIN__HOST_SERVICE_CONSTANTS_H_
+#ifndef ASPIA_HOST__WIN__HOST_SERVICE_CONSTANTS_H
+#define ASPIA_HOST__WIN__HOST_SERVICE_CONSTANTS_H
 
 namespace aspia {
 
@@ -28,4 +28,4 @@ extern const char kHostServiceDescription[];
 
 } // namespace aspia
 
-#endif // ASPIA_HOST__WIN__HOST_SERVICE_CONSTANTS_H_
+#endif // ASPIA_HOST__WIN__HOST_SERVICE_CONSTANTS_H

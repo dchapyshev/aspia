@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_COMMON__USER_UTIL_H_
-#define ASPIA_COMMON__USER_UTIL_H_
+#ifndef ASPIA_COMMON__USER_UTIL_H
+#define ASPIA_COMMON__USER_UTIL_H
 
 #include <QString>
 
@@ -43,4 +43,4 @@ private:
 
 } // namespace aspia
 
-#endif // ASPIA_COMMON__USER_UTIL_H_
+#endif // ASPIA_COMMON__USER_UTIL_H

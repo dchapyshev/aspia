@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_COMMON__WIN__FILE_ENUMERATOR_H_
-#define ASPIA_COMMON__WIN__FILE_ENUMERATOR_H_
+#ifndef ASPIA_COMMON__WIN__FILE_ENUMERATOR_H
+#define ASPIA_COMMON__WIN__FILE_ENUMERATOR_H
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -67,4 +67,4 @@ private:
 
 }  // namespace aspia
 
-#endif // ASPIA_COMMON__WIN__FILE_ENUMERATOR_H_
+#endif // ASPIA_COMMON__WIN__FILE_ENUMERATOR_H

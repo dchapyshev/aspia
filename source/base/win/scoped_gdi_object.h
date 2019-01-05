@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_BASE__WIN__SCOPED_GDI_OBJECT_H_
-#define ASPIA_BASE__WIN__SCOPED_GDI_OBJECT_H_
+#ifndef ASPIA_BASE__WIN__SCOPED_GDI_OBJECT_H
+#define ASPIA_BASE__WIN__SCOPED_GDI_OBJECT_H
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -92,4 +92,4 @@ using ScopedHBRUSH = ScopedGDIObject<HBRUSH, DeleteObjectTraits<HBRUSH>>;
 
 } // namespace aspia
 
-#endif // ASPIA_BASE__WIN__SCOPED_GDI_OBJECT_H_
+#endif // ASPIA_BASE__WIN__SCOPED_GDI_OBJECT_H

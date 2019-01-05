@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CODEC__VIDEO_ENCODER_VPX_H_
-#define ASPIA_CODEC__VIDEO_ENCODER_VPX_H_
+#ifndef ASPIA_CODEC__VIDEO_ENCODER_VPX_H
+#define ASPIA_CODEC__VIDEO_ENCODER_VPX_H
 
 #define VPX_CODEC_DISABLE_COMPAT 1
 #include <vpx/vpx_encoder.h>
@@ -66,4 +66,4 @@ private:
 
 } // namespace aspia
 
-#endif // ASPIA_CODEC___VIDEO_ENCODER_VPX_H_
+#endif // ASPIA_CODEC___VIDEO_ENCODER_VPX_H

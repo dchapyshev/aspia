@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CONSOLE__CONSOLE_STATUSBAR_H_
-#define ASPIA_CONSOLE__CONSOLE_STATUSBAR_H_
+#ifndef ASPIA_CONSOLE__CONSOLE_STATUSBAR_H
+#define ASPIA_CONSOLE__CONSOLE_STATUSBAR_H
 
 #include <QStatusBar>
 
@@ -43,4 +43,4 @@ private:
 
 } // namespace aspia
 
-#endif // ASPIA_CONSOLE__CONSOLE_STATUSBAR_H_
+#endif // ASPIA_CONSOLE__CONSOLE_STATUSBAR_H

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_DESKTOP_CAPTURE__WIN__SCOPED_THREAD_DESKTOP_H_
-#define ASPIA_DESKTOP_CAPTURE__WIN__SCOPED_THREAD_DESKTOP_H_
+#ifndef ASPIA_DESKTOP_CAPTURE__WIN__SCOPED_THREAD_DESKTOP_H
+#define ASPIA_DESKTOP_CAPTURE__WIN__SCOPED_THREAD_DESKTOP_H
 
 #include "desktop_capture/win/desktop.h"
 
@@ -58,4 +58,4 @@ private:
 
 } // namespace aspia
 
-#endif // ASPIA_DESKTOP_CAPTURE__WIN__SCOPED_THREAD_DESKTOP_H_
+#endif // ASPIA_DESKTOP_CAPTURE__WIN__SCOPED_THREAD_DESKTOP_H

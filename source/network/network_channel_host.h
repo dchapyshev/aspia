@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_NETWORK__NETWORK_CHANNEL_HOST_H_
-#define ASPIA_NETWORK__NETWORK_CHANNEL_HOST_H_
+#ifndef ASPIA_NETWORK__NETWORK_CHANNEL_HOST_H
+#define ASPIA_NETWORK__NETWORK_CHANNEL_HOST_H
 
 #include "network/network_channel.h"
 #include "network/srp_user.h"
@@ -70,4 +70,4 @@ private:
 
 } // namespace aspia
 
-#endif // ASPIA_NETWORK__NETWORK_CHANNEL_HOST_H_
+#endif // ASPIA_NETWORK__NETWORK_CHANNEL_HOST_H

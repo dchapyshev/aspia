@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_DESKTOP_CAPTURE__MOUSE_CURSOR_CACHE_H_
-#define ASPIA_DESKTOP_CAPTURE__MOUSE_CURSOR_CACHE_H_
+#ifndef ASPIA_DESKTOP_CAPTURE__MOUSE_CURSOR_CACHE_H
+#define ASPIA_DESKTOP_CAPTURE__MOUSE_CURSOR_CACHE_H
 
 #include <deque>
 
@@ -63,4 +63,4 @@ private:
 
 } // namespace aspia
 
-#endif // ASPIA_DESKTOP_CAPTURE__MOUSE_CURSOR_CACHE_H_
+#endif // ASPIA_DESKTOP_CAPTURE__MOUSE_CURSOR_CACHE_H

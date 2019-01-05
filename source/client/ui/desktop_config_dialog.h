@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CLIENT__UI__DESKTOP_CONFIG_DIALOG_H_
-#define ASPIA_CLIENT__UI__DESKTOP_CONFIG_DIALOG_H_
+#ifndef ASPIA_CLIENT__UI__DESKTOP_CONFIG_DIALOG_H
+#define ASPIA_CLIENT__UI__DESKTOP_CONFIG_DIALOG_H
 
 #include <QDialog>
 
@@ -63,4 +63,4 @@ private:
 
 } // namespace aspia
 
-#endif // ASPIA_CLIENT__UI__DESKTOP_CONFIG_DIALOG_H_
+#endif // ASPIA_CLIENT__UI__DESKTOP_CONFIG_DIALOG_H

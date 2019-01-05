@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CLIENT__UI__DESKTOP_PANEL_H_
-#define ASPIA_CLIENT__UI__DESKTOP_PANEL_H_
+#ifndef ASPIA_CLIENT__UI__DESKTOP_PANEL_H
+#define ASPIA_CLIENT__UI__DESKTOP_PANEL_H
 
 #include "base/macros_magic.h"
 #include "protocol/common.pb.h"
@@ -89,4 +89,4 @@ private:
 
 } // namespace aspia
 
-#endif // ASPIA_CLIENT__UI__DESKTOP_PANEL_H_
+#endif // ASPIA_CLIENT__UI__DESKTOP_PANEL_H

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_DESKTOP_CAPTURE__WIN__DESKTOP_H_
-#define ASPIA_DESKTOP_CAPTURE__WIN__DESKTOP_H_
+#ifndef ASPIA_DESKTOP_CAPTURE__WIN__DESKTOP_H
+#define ASPIA_DESKTOP_CAPTURE__WIN__DESKTOP_H
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -90,4 +90,4 @@ private:
 
 } // namespace aspia
 
-#endif // ASPIA_DESKTOP_CAPTURE__WIN__DESKTOP_H_
+#endif // ASPIA_DESKTOP_CAPTURE__WIN__DESKTOP_H

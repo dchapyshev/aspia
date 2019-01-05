@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CLIENT__FILE_STATUS_H_
-#define ASPIA_CLIENT__FILE_STATUS_H_
+#ifndef ASPIA_CLIENT__FILE_STATUS_H
+#define ASPIA_CLIENT__FILE_STATUS_H
 
 #include <QString>
 
@@ -29,4 +29,4 @@ QString fileStatusToString(proto::file_transfer::Status status);
 
 } // namespace aspia
 
-#endif // ASPIA_CLIENT__FILE_STATUS_H_
+#endif // ASPIA_CLIENT__FILE_STATUS_H

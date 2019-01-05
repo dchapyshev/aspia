@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_UPDATER__UPDATE_INFO_H_
-#define ASPIA_UPDATER__UPDATE_INFO_H_
+#ifndef ASPIA_UPDATER__UPDATE_INFO_H
+#define ASPIA_UPDATER__UPDATE_INFO_H
 
 #include <QUrl>
 #include <QVersionNumber>
@@ -46,4 +46,4 @@ private:
 
 } // namespace aspia
 
-#endif // ASPIA_UPDATER__UPDATE_H_
+#endif // ASPIA_UPDATER__UPDATE_H

@@ -16,11 +16,10 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CLIENT__UI__ADDRESS_BAR_MODEL_H_
-#define ASPIA_CLIENT__UI__ADDRESS_BAR_MODEL_H_
+#ifndef ASPIA_CLIENT__UI__ADDRESS_BAR_MODEL_H
+#define ASPIA_CLIENT__UI__ADDRESS_BAR_MODEL_H
 
 #include <QAbstractItemModel>
-#include <QIcon>
 
 #include "base/macros_magic.h"
 #include "common/file_platform_util.h"
@@ -87,4 +86,4 @@ private:
 
 } // namespace aspia
 
-#endif // ASPIA_CLIENT__UI__ADDRESS_BAR_MODEL_H_
+#endif // ASPIA_CLIENT__UI__ADDRESS_BAR_MODEL_H

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_BUILD_CONFIG_H_
-#define ASPIA_BUILD_CONFIG_H_
+#ifndef ASPIA_BUILD_CONFIG_H
+#define ASPIA_BUILD_CONFIG_H
 
 // OS detection.
 #if defined(_WIN32)
@@ -62,4 +62,4 @@
 #define DEFAULT_HOST_TCP_PORT 8050
 #define DEFAULT_UPDATE_SERVER "https://update.aspia.org"
 
-#endif // ASPIA_BUILD_CONFIG_H_
+#endif // ASPIA_BUILD_CONFIG_H

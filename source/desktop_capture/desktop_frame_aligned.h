@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_DESKTOP_CAPTURE__DESKTOP_FRAME_ALIGNED_H_
-#define ASPIA_DESKTOP_CAPTURE__DESKTOP_FRAME_ALIGNED_H_
+#ifndef ASPIA_DESKTOP_CAPTURE__DESKTOP_FRAME_ALIGNED_H
+#define ASPIA_DESKTOP_CAPTURE__DESKTOP_FRAME_ALIGNED_H
 
 #include <memory>
 
@@ -45,4 +45,4 @@ private:
 
 } // namespace aspia
 
-#endif // ASPIA_DESKTOP_CAPTURE__DESKTOP_FRAME_ALIGNED_H_
+#endif // ASPIA_DESKTOP_CAPTURE__DESKTOP_FRAME_ALIGNED_H

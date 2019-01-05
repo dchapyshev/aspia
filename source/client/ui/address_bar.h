@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CLIENT__UI__ADDRESS_BAR_H_
-#define ASPIA_CLIENT__UI__ADDRESS_BAR_H_
+#ifndef ASPIA_CLIENT__UI__ADDRESS_BAR_H
+#define ASPIA_CLIENT__UI__ADDRESS_BAR_H
 
 #include <QComboBox>
 
@@ -64,4 +64,4 @@ private:
 
 } // namespace aspia
 
-#endif // ASPIA_CLIENT__UI__ADDRESS_BAR_H_
+#endif // ASPIA_CLIENT__UI__ADDRESS_BAR_H

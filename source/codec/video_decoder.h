@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CODEC__VIDEO_DECODER_H_
-#define ASPIA_CODEC__VIDEO_DECODER_H_
+#ifndef ASPIA_CODEC__VIDEO_DECODER_H
+#define ASPIA_CODEC__VIDEO_DECODER_H
 
 #include <memory>
 
@@ -38,4 +38,4 @@ public:
 
 } // namespace aspia
 
-#endif // ASPIA_CODEC__VIDEO_DECODER_H_
+#endif // ASPIA_CODEC__VIDEO_DECODER_H

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_COMMON__FILE_PACKET_H_
-#define ASPIA_COMMON__FILE_PACKET_H_
+#ifndef ASPIA_COMMON__FILE_PACKET_H
+#define ASPIA_COMMON__FILE_PACKET_H
 
 namespace aspia {
 
@@ -27,4 +27,4 @@ static const size_t kMaxFilePacketSize = 16 * 1024; // 16 kB
 
 } // namespace aspia
 
-#endif // ASPIA_COMMON__FILE_PACKET_H_
+#endif // ASPIA_COMMON__FILE_PACKET_H

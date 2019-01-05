@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_BASE__BITSET_H_
-#define ASPIA_BASE__BITSET_H_
+#ifndef ASPIA_BASE__BITSET_H
+#define ASPIA_BASE__BITSET_H
 
 #include <cassert>
 #include <limits>
@@ -148,4 +148,4 @@ private:
 
 } // namespace aspia
 
-#endif // ASPIA_BASE__BITSET_H_
+#endif // ASPIA_BASE__BITSET_H

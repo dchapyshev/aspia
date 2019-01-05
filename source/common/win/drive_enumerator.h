@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_COMMON__WIN__DRIVE_ENUMERATOR_H_
-#define ASPIA_COMMON__WIN__DRIVE_ENUMERATOR_H_
+#ifndef ASPIA_COMMON__WIN__DRIVE_ENUMERATOR_H
+#define ASPIA_COMMON__WIN__DRIVE_ENUMERATOR_H
 
 #include "base/macros_magic.h"
 
@@ -77,4 +77,4 @@ private:
 
 } // namespace aspia
 
-#endif // ASPIA_COMMON__WIN__DRIVE_ENUMERATOR_H_
+#endif // ASPIA_COMMON__WIN__DRIVE_ENUMERATOR_H

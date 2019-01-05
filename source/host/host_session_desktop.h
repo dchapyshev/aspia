@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_HOST__HOST_SESSION_DESKTOP_H_
-#define ASPIA_HOST__HOST_SESSION_DESKTOP_H_
+#ifndef ASPIA_HOST__HOST_SESSION_DESKTOP_H
+#define ASPIA_HOST__HOST_SESSION_DESKTOP_H
 
 #include "host/desktop_config_tracker.h"
 #include "host/host_session.h"
@@ -78,4 +78,4 @@ private:
 
 } // namespace aspia
 
-#endif // ASPIA_HOST__HOST_SESSION_DESKTOP_H_
+#endif // ASPIA_HOST__HOST_SESSION_DESKTOP_H

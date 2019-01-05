@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CLIENT__UI__FILE_PATH_VALIDATOR_H_
-#define ASPIA_CLIENT__UI__FILE_PATH_VALIDATOR_H_
+#ifndef ASPIA_CLIENT__UI__FILE_PATH_VALIDATOR_H
+#define ASPIA_CLIENT__UI__FILE_PATH_VALIDATOR_H
 
 #include <QValidator>
 
@@ -45,4 +45,4 @@ private:
 
 } // namespace aspia
 
-#endif // ASPIA_CLIENT__UI__FILE_PATH_VALIDATOR_H_
+#endif // ASPIA_CLIENT__UI__FILE_PATH_VALIDATOR_H

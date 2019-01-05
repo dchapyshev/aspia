@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CRYPTO__GENERIC_HASH_H_
-#define ASPIA_CRYPTO__GENERIC_HASH_H_
+#ifndef ASPIA_CRYPTO__GENERIC_HASH_H
+#define ASPIA_CRYPTO__GENERIC_HASH_H
 
 #include <QByteArray>
 
@@ -66,4 +66,4 @@ private:
 
 } // namespace aspia
 
-#endif // ASPIA_CRYPTO__GENERIC_HASH_H_
+#endif // ASPIA_CRYPTO__GENERIC_HASH_H

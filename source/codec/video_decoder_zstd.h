@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CODEC__VIDEO_DECODER_ZSTD_H_
-#define ASPIA_CODEC__VIDEO_DECODER_ZSTD_H_
+#ifndef ASPIA_CODEC__VIDEO_DECODER_ZSTD_H
+#define ASPIA_CODEC__VIDEO_DECODER_ZSTD_H
 
 #include "codec/scoped_zstd_stream.h"
 #include "codec/video_decoder.h"
@@ -49,4 +49,4 @@ private:
 
 } // namespace aspia
 
-#endif // ASPIA_CODEC__VIDEO_DECODER_ZSTD_H_
+#endif // ASPIA_CODEC__VIDEO_DECODER_ZSTD_H

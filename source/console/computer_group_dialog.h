@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CONSOLE__COMPUTER_GROUP_DIALOG_H_
-#define ASPIA_CONSOLE__COMPUTER_GROUP_DIALOG_H_
+#ifndef ASPIA_CONSOLE__COMPUTER_GROUP_DIALOG_H
+#define ASPIA_CONSOLE__COMPUTER_GROUP_DIALOG_H
 
 #include "console/computer_group_item.h"
 #include "ui_computer_group_dialog.h"
@@ -53,4 +53,4 @@ private:
 
 } // namespace aspia
 
-#endif // ASPIA_CONSOLE__COMPUTER_GROUP_DIALOG_H_
+#endif // ASPIA_CONSOLE__COMPUTER_GROUP_DIALOG_H
