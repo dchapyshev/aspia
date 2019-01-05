@@ -143,8 +143,7 @@ AddressBookTab::AddressBookTab(const QString& file_path,
 
     std::function<void(ComputerGroupItem*)> restore_child = [&](ComputerGroupItem* item)
     {
-        int count = item->childCount();
-        for (int i = 0; i < count; ++i)
+        for (int i = 0; i < item->childCount(); ++i)
         {
             ComputerGroupItem* child_item = dynamic_cast<ComputerGroupItem*>(item->child(i));
             if (child_item)
