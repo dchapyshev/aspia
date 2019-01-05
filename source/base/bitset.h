@@ -19,6 +19,7 @@
 #ifndef ASPIA_BASE__BITSET_H_
 #define ASPIA_BASE__BITSET_H_
 
+#include <cassert>
 #include <limits>
 
 #include "base/logging.h"
@@ -116,7 +117,7 @@ public:
                 ++counter;
         }
 
-        return count;
+        return counter;
     }
 
     // Returns numberic value of bitset.
