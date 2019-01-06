@@ -49,7 +49,7 @@ DownloadDialog::DownloadDialog(const QUrl& url, QFile& file, QWidget* parent)
         {
             QMessageBox::warning(this,
                                  tr("Warning"),
-                                 tr("An error occurred while downloading the update: %1.")
+                                 tr("An error occurred while downloading the update: %1")
                                     .arg(reply->errorString()),
                                  QMessageBox::Ok);
         }

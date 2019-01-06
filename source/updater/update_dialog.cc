@@ -18,6 +18,7 @@
 
 #include "updater/update_dialog.h"
 
+#include <QDir>
 #include <QMessageBox>
 #include <QTemporaryFile>
 
@@ -113,12 +114,12 @@ void UpdateDialog::onUpdateNow()
         QMessageBox::Yes,
         QMessageBox::No) == QMessageBox::Yes)
     {
-        QTemporaryFile file(QLatin1String("aspia"));
+        QTemporaryFile file(QDir::tempPath() + QLatin1String("/aspia-XXXXXX.msi"));
         if (!file.open())
         {
             QMessageBox::warning(this,
                                  tr("Warning"),
-                                 tr("An error occurred while downloading the update: %1.")
+                                 tr("An error occurred while installing the update: %1")
                                  .arg(file.errorString()),
                                  QMessageBox::Ok);
         }
@@ -134,8 +135,22 @@ void UpdateDialog::onUpdateNow()
             // If the download is successfully completed, then run the installer.
             if (result == DownloadDialog::Accepted)
             {
-                if (executeProcess(QLatin1String("msiexec.exe"),
-                                   QStringList() << QLatin1String("/update") << file.fileName(),
+                QString file_name(file.fileName());
+                file_name.replace(QLatin1Char('/'), QLatin1Char('\\'));
+
+                QStringList arguments;
+
+                // Normal install.
+                arguments << QLatin1String("/i");
+
+                // MSI package file.
+                arguments << file_name;
+
+                // Basic UI with no modal dialog boxes.
+                arguments << QLatin1String("/qb-!");
+
+                if (executeProcess(QLatin1String("msiexec"),
+                                   arguments,
                                    ProcessExecuteMode::ELEVATE))
                 {
                     // If the process is successfully launched, then the application is terminated.

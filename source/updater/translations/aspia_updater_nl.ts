@@ -66,50 +66,50 @@
     </message>
     <message>
         <location filename="../download_dialog.cc" line="52"/>
-        <source>An error occurred while downloading the update: %1.</source>
+        <source>An error occurred while downloading the update: %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>aspia::UpdateDialog</name>
     <message>
-        <location filename="../update_dialog.cc" line="58"/>
+        <location filename="../update_dialog.cc" line="59"/>
         <source>Unknown</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../update_dialog.cc" line="59"/>
+        <location filename="../update_dialog.cc" line="60"/>
         <source>Error retrieving update information.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../update_dialog.cc" line="76"/>
+        <location filename="../update_dialog.cc" line="77"/>
         <source>No updates available.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../update_dialog.cc" line="86"/>
+        <location filename="../update_dialog.cc" line="87"/>
         <source>Receiving information...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../update_dialog.cc" line="109"/>
+        <location filename="../update_dialog.cc" line="110"/>
         <source>Confirmation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../update_dialog.cc" line="110"/>
+        <location filename="../update_dialog.cc" line="111"/>
         <source>An update will be downloaded. After the download is complete, the application will automatically close. All unsaved data will be lost.&lt;br/&gt;Continue?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../update_dialog.cc" line="120"/>
+        <location filename="../update_dialog.cc" line="121"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../update_dialog.cc" line="121"/>
-        <source>An error occurred while downloading the update: %1.</source>
+        <location filename="../update_dialog.cc" line="122"/>
+        <source>An error occurred while installing the update: %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

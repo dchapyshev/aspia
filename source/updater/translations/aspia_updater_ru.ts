@@ -66,51 +66,51 @@
     </message>
     <message>
         <location filename="../download_dialog.cc" line="52"/>
-        <source>An error occurred while downloading the update: %1.</source>
-        <translation>Произошла ошибка при загрузке обновления: %1.</translation>
+        <source>An error occurred while downloading the update: %1</source>
+        <translation>Произошла ошибка при загрузке обновления: %1</translation>
     </message>
 </context>
 <context>
     <name>aspia::UpdateDialog</name>
     <message>
-        <location filename="../update_dialog.cc" line="58"/>
+        <location filename="../update_dialog.cc" line="59"/>
         <source>Unknown</source>
         <translation>Неизвестно</translation>
     </message>
     <message>
-        <location filename="../update_dialog.cc" line="59"/>
+        <location filename="../update_dialog.cc" line="60"/>
         <source>Error retrieving update information.</source>
         <translation>Ошибка при получении информации об обновлении.</translation>
     </message>
     <message>
-        <location filename="../update_dialog.cc" line="76"/>
+        <location filename="../update_dialog.cc" line="77"/>
         <source>No updates available.</source>
         <translation>Нет доступных обновлений.</translation>
     </message>
     <message>
-        <location filename="../update_dialog.cc" line="86"/>
+        <location filename="../update_dialog.cc" line="87"/>
         <source>Receiving information...</source>
         <translation>Получение информации...</translation>
     </message>
     <message>
-        <location filename="../update_dialog.cc" line="109"/>
+        <location filename="../update_dialog.cc" line="110"/>
         <source>Confirmation</source>
         <translation>Подтвеждение</translation>
     </message>
     <message>
-        <location filename="../update_dialog.cc" line="110"/>
+        <location filename="../update_dialog.cc" line="111"/>
         <source>An update will be downloaded. After the download is complete, the application will automatically close. All unsaved data will be lost.&lt;br/&gt;Continue?</source>
         <translation>Обновление будет загружено. После завершения загрузки приложение будет автоматически закрыто. Все несораненные данные будут потеряны.&lt;br/&gt;Продолжить?</translation>
     </message>
     <message>
-        <location filename="../update_dialog.cc" line="120"/>
+        <location filename="../update_dialog.cc" line="121"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../update_dialog.cc" line="121"/>
-        <source>An error occurred while downloading the update: %1.</source>
-        <translation>Произошла ошибка при загрузке обновления: %1.</translation>
+        <location filename="../update_dialog.cc" line="122"/>
+        <source>An error occurred while installing the update: %1</source>
+        <translation>Произошла ошибка при установке обновления: %1</translation>
     </message>
 </context>
 </TS>
