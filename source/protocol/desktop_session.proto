@@ -116,7 +116,7 @@ enum VideoEncoding
     VIDEO_ENCODING_UNKNOWN = 0;
     VIDEO_ENCODING_ZSTD    = 1;
     VIDEO_ENCODING_VP8     = 2;
-    VIDEO_ENCODING_VP9     = 4; // LossLess
+    VIDEO_ENCODING_VP9     = 4;
 }
 
 message VideoPacketFormat

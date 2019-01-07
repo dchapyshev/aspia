@@ -249,6 +249,10 @@ void NetworkChannelClient::readSessionChallenge(const QByteArray& buffer)
         return;
     }
 
+    host_version_ = QVersionNumber(session_challenge.version().major(),
+                                   session_challenge.version().minor(),
+                                   session_challenge.version().patch());
+
     proto::SessionResponse session_response;
     session_response.set_session_type(session_type_);
 

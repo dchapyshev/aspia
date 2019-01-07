@@ -22,5 +22,6 @@ namespace aspia {
 
 const char kSelectScreenExtension[] = "select_screen";
 const char kPowerControlExtension[] = "power_control";
+const char kRemoteUpdateExtension[] = "remote_update";
 
 } // namespace aspia

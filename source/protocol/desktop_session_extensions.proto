@@ -53,3 +53,10 @@ message PowerControl
 
     Action action = 1;
 }
+
+// Extension name: "remote_update"
+// Sent by client to host.
+message RemoteUpdate
+{
+    uint32 dummy = 1;
+}

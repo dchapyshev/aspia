@@ -23,6 +23,7 @@ namespace aspia {
 
 extern const char kSelectScreenExtension[];
 extern const char kPowerControlExtension[];
+extern const char kRemoteUpdateExtension[];
 
 } // namespace aspia
 
