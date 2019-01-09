@@ -200,9 +200,9 @@ void FileList::saveColumnsState()
     QByteArray state = header()->saveState();
 
     if (isDriveListShown())
-        drive_list_state_ = state;
+        drive_list_state_ = std::move(state);
     else
-        file_list_state_ = state;
+        file_list_state_ = std::move(state);
 }
 
 } // namespace aspia

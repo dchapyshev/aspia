@@ -87,27 +87,27 @@
         <translation>Сторонние компоненты:</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="126"/>
+        <location filename="../ui/about_dialog.cc" line="128"/>
         <source>Path: %1</source>
         <translation>Путь: %1</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="127"/>
+        <location filename="../ui/about_dialog.cc" line="129"/>
         <source>Compilation date: %1</source>
         <translation>Дата компиляции: %1</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="128"/>
+        <location filename="../ui/about_dialog.cc" line="130"/>
         <source>Compilation time: %1</source>
         <translation>Время компиляции: %1</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="132"/>
+        <location filename="../ui/about_dialog.cc" line="134"/>
         <source>%1 version: %2</source>
         <translation>Версия %1: %2</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="148"/>
+        <location filename="../ui/about_dialog.cc" line="150"/>
         <source>https://aspia.org/en/donate.html</source>
         <translation>https://aspia.org/ru/donate.html</translation>
     </message>

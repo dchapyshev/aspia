@@ -125,6 +125,9 @@ void ComputerGroupTree::dropEvent(QDropEvent* event)
         {
             ComputerGroupItem* target_group_item =
                 dynamic_cast<ComputerGroupItem*>(itemAt(event->pos()));
+            if (!target_group_item)
+                return;
+
             ComputerGroupItem* source_group_item =
                 computer_group_mime_data->computerGroup();
 

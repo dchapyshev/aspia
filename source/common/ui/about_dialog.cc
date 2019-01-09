@@ -123,13 +123,15 @@ AboutDialog::AboutDialog(QWidget* parent)
 
     ui->text_edit->setHtml(html);
 
-    ui->list_service->addItem(tr("Path: %1").arg(QApplication::applicationFilePath()));
-    ui->list_service->addItem(tr("Compilation date: %1").arg(__DATE__));
-    ui->list_service->addItem(tr("Compilation time: %1").arg(__TIME__));
+    QListWidget* list = ui->list_service;
 
-    auto add_version = [this](const char* name, const QString& version)
+    list->addItem(tr("Path: %1").arg(QApplication::applicationFilePath()));
+    list->addItem(tr("Compilation date: %1").arg(__DATE__));
+    list->addItem(tr("Compilation time: %1").arg(__TIME__));
+
+    auto add_version = [this, list](const char* name, const QString& version)
     {
-        ui->list_service->addItem(tr("%1 version: %2").arg(name).arg(version));
+        list->addItem(tr("%1 version: %2").arg(name).arg(version));
     };
 
     add_version("libvpx", vpx_codec_version_str());

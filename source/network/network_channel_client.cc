@@ -249,17 +249,18 @@ void NetworkChannelClient::readSessionChallenge(const QByteArray& buffer)
         return;
     }
 
-    host_version_ = QVersionNumber(session_challenge.version().major(),
-                                   session_challenge.version().minor(),
-                                   session_challenge.version().patch());
+    const proto::Version& host_version = session_challenge.version();
+
+    host_version_ = QVersionNumber(
+        host_version.major(), host_version.minor(), host_version.patch());
 
     proto::SessionResponse session_response;
     session_response.set_session_type(session_type_);
 
-    proto::Version* version = session_response.mutable_version();
-    version->set_major(ASPIA_VERSION_MAJOR);
-    version->set_minor(ASPIA_VERSION_MINOR);
-    version->set_patch(ASPIA_VERSION_PATCH);
+    proto::Version* client_version = session_response.mutable_version();
+    client_version->set_major(ASPIA_VERSION_MAJOR);
+    client_version->set_minor(ASPIA_VERSION_MINOR);
+    client_version->set_patch(ASPIA_VERSION_PATCH);
 
     QByteArray session_response_buffer = serializeMessage(session_response);
     if (session_response_buffer.isEmpty())
