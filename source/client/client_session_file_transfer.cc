@@ -28,28 +28,29 @@
 
 namespace aspia {
 
-ClientSessionFileTransfer::ClientSessionFileTransfer(ConnectData* connect_data, QObject* parent)
-    : ClientSession(parent),
-      connect_data_(connect_data)
+ClientSessionFileTransfer::ClientSessionFileTransfer(const ConnectData& connect_data,
+                                                     QObject* parent)
+    : ClientSession(connect_data, parent)
 {
     qRegisterMetaType<proto::file_transfer::Request>();
     qRegisterMetaType<proto::file_transfer::Reply>();
+
+    worker_thread_ = new QThread(this);
+    worker_.reset(new FileWorker());
+    worker_->moveToThread(worker_thread_);
+    worker_thread_->start();
 }
 
 ClientSessionFileTransfer::~ClientSessionFileTransfer()
 {
-    if (worker_thread_)
-    {
-        worker_thread_->quit();
-        worker_thread_->wait();
-    }
+    worker_thread_->quit();
+    worker_thread_->wait();
 
     for (auto request : requests_)
         delete request;
-    requests_.clear();
-
-    delete worker_;
 }
+
+FileWorker* ClientSessionFileTransfer::localWorker() { return worker_.get(); }
 
 void ClientSessionFileTransfer::messageReceived(const QByteArray& buffer)
 {
@@ -73,44 +74,6 @@ void ClientSessionFileTransfer::messageReceived(const QByteArray& buffer)
 
     request->sendReply(reply);
     delete request;
-}
-
-void ClientSessionFileTransfer::startSession()
-{
-    worker_thread_ = new QThread(this);
-    worker_ = new FileWorker();
-    worker_->moveToThread(worker_thread_);
-    worker_thread_->start();
-
-    file_manager_ = new FileManagerWindow(connect_data_);
-
-    // When the window is closed, we close the session.
-    connect(file_manager_, &FileManagerWindow::windowClose,
-            this, &ClientSessionFileTransfer::closedByUser);
-
-    connect(file_manager_, &FileManagerWindow::windowClose,
-            file_manager_, &FileManagerWindow::deleteLater);
-
-    connect(file_manager_, &FileManagerWindow::localRequest,
-            worker_, &FileWorker::executeRequest);
-
-    connect(file_manager_, &FileManagerWindow::remoteRequest,
-            this, &ClientSessionFileTransfer::remoteRequest);
-
-    file_manager_->show();
-    file_manager_->activateWindow();
-    file_manager_->refresh();
-
-    emit started();
-}
-
-void ClientSessionFileTransfer::closeSession()
-{
-    // If the end of the session is not initiated by the user, then we do not send the session
-    // end signal.
-    disconnect(file_manager_, &FileManagerWindow::windowClose,
-               this, &ClientSessionFileTransfer::closedByUser);
-    file_manager_->close();
 }
 
 void ClientSessionFileTransfer::remoteRequest(FileRequest* request)

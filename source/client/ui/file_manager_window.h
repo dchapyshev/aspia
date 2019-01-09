@@ -19,18 +19,17 @@
 #ifndef ASPIA_CLIENT__UI__FILE_MANAGER_WINDOW_H
 #define ASPIA_CLIENT__UI__FILE_MANAGER_WINDOW_H
 
-#include "base/macros_magic.h"
-#include "client/connect_data.h"
+#include "client/ui/session_window.h"
 #include "ui_file_manager_window.h"
 
 namespace aspia {
 
-class FileManagerWindow : public QWidget
+class FileManagerWindow : public SessionWindow
 {
     Q_OBJECT
 
 public:
-    FileManagerWindow(ConnectData* connect_data, QWidget* parent = nullptr);
+    FileManagerWindow(const ConnectData& connect_data, QWidget* parent);
     ~FileManagerWindow() = default;
 
 public slots:
@@ -38,12 +37,13 @@ public slots:
 
 signals:
     void windowClose();
-    void localRequest(FileRequest* request);
-    void remoteRequest(FileRequest* request);
 
 protected:
     // QWidget implementation.
     void closeEvent(QCloseEvent* event) override;
+
+    // SessionWindow implementation.
+    void sessionStarted() override;
 
 private slots:
     void removeItems(FilePanel* sender, const QList<FileRemover::Item>& items);

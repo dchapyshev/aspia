@@ -24,19 +24,22 @@
 #include "client/ui/file_transfer_dialog.h"
 #include "client/ui/file_manager_settings.h"
 #include "client/ui/file_mime_data.h"
+#include "client/client_session_file_transfer.h"
+#include "common/file_worker.h"
 
 namespace aspia {
 
-FileManagerWindow::FileManagerWindow(ConnectData* connect_data, QWidget* parent)
-    : QWidget(parent)
+FileManagerWindow::FileManagerWindow(const ConnectData& connect_data, QWidget* parent)
+    : SessionWindow(parent)
 {
+    createSession<ClientSessionFileTransfer>(connect_data);
     ui.setupUi(this);
 
     QString computer_name;
-    if (!connect_data->computer_name.isEmpty())
-        computer_name = connect_data->computer_name;
+    if (!connect_data.computer_name.isEmpty())
+        computer_name = connect_data.computer_name;
     else
-        computer_name = connect_data->address;
+        computer_name = connect_data.address;
 
     setWindowTitle(tr("%1 - Aspia File Transfer").arg(computer_name));
 
@@ -63,10 +66,16 @@ FileManagerWindow::FileManagerWindow(ConnectData* connect_data, QWidget* parent)
     connect(ui.remote_panel, &FilePanel::sendItems, this, &FileManagerWindow::sendItems);
     connect(ui.local_panel, &FilePanel::receiveItems, this, &FileManagerWindow::receiveItems);
     connect(ui.remote_panel, &FilePanel::receiveItems, this, &FileManagerWindow::receiveItems);
-    connect(ui.local_panel, &FilePanel::newRequest, this, &FileManagerWindow::localRequest);
-    connect(ui.remote_panel, &FilePanel::newRequest, this, &FileManagerWindow::remoteRequest);
     connect(ui.local_panel, &FilePanel::pathChanged, this, &FileManagerWindow::onPathChanged);
     connect(ui.remote_panel, &FilePanel::pathChanged, this, &FileManagerWindow::onPathChanged);
+
+    ClientSessionFileTransfer* session =
+        static_cast<ClientSessionFileTransfer*>(currentSession());
+
+    connect(ui.local_panel, &FilePanel::newRequest,
+            session->localWorker(), &FileWorker::executeRequest);
+    connect(ui.remote_panel, &FilePanel::newRequest,
+            session, &ClientSessionFileTransfer::remoteRequest);
 
     ui.local_panel->setFocus();
 }
@@ -91,7 +100,12 @@ void FileManagerWindow::closeEvent(QCloseEvent* event)
     settings.setRemoteFileListState(ui.remote_panel->fileListState());
 
     emit windowClose();
-    QWidget::closeEvent(event);
+    SessionWindow::closeEvent(event);
+}
+
+void FileManagerWindow::sessionStarted()
+{
+    refresh();
 }
 
 void FileManagerWindow::removeItems(FilePanel* sender, const QList<FileRemover::Item>& items)
@@ -99,14 +113,20 @@ void FileManagerWindow::removeItems(FilePanel* sender, const QList<FileRemover::
     FileRemoveDialog* dialog = new FileRemoveDialog(this);
     FileRemover* remover = new FileRemover(dialog);
 
+    ClientSessionFileTransfer* session =
+        static_cast<ClientSessionFileTransfer*>(currentSession());
+
     if (sender == ui.local_panel)
     {
-        connect(remover, &FileRemover::newRequest, this, &FileManagerWindow::localRequest);
+        connect(remover, &FileRemover::newRequest,
+                session->localWorker(), &FileWorker::executeRequest);
     }
     else
     {
         DCHECK(sender == ui.remote_panel);
-        connect(remover, &FileRemover::newRequest, this, &FileManagerWindow::remoteRequest);
+
+        connect(remover, &FileRemover::newRequest,
+                session, &ClientSessionFileTransfer::remoteRequest);
     }
 
     connect(remover, &FileRemover::started, dialog, &FileRemoveDialog::open);
@@ -116,7 +136,6 @@ void FileManagerWindow::removeItems(FilePanel* sender, const QList<FileRemover::
     connect(remover, &FileRemover::error, dialog, &FileRemoveDialog::showError);
 
     connect(dialog, &FileRemoveDialog::finished, dialog, &FileRemoveDialog::deleteLater);
-
     connect(this, &FileManagerWindow::windowClose, dialog, &FileRemoveDialog::close);
 
     remover->start(sender->currentPath(), items);
@@ -189,13 +208,21 @@ void FileManagerWindow::transferItems(FileTransfer::Type type,
     connect(transfer, &FileTransfer::progressChanged, dialog, &FileTransferDialog::setProgress);
 
     connect(transfer, &FileTransfer::error, dialog, &FileTransferDialog::showError);
-    connect(transfer, &FileTransfer::localRequest, this, &FileManagerWindow::localRequest);
-    connect(transfer, &FileTransfer::remoteRequest, this, &FileManagerWindow::remoteRequest);
 
     connect(dialog, &FileTransferDialog::transferCanceled, transfer, &FileTransfer::stop);
     connect(dialog, &FileTransferDialog::finished, dialog, &FileTransferDialog::deleteLater);
 
-    connect(this, &FileManagerWindow::windowClose, dialog, &FileTransferDialog::onTransferFinished);
+    ClientSessionFileTransfer* session =
+        static_cast<ClientSessionFileTransfer*>(currentSession());
+
+    connect(transfer, &FileTransfer::localRequest,
+            session->localWorker(), &FileWorker::executeRequest);
+
+    connect(transfer, &FileTransfer::remoteRequest,
+            session, &ClientSessionFileTransfer::remoteRequest);
+
+    connect(this, &FileManagerWindow::windowClose,
+            dialog, &FileTransferDialog::onTransferFinished);
 
     transfer->start(source_path, target_path, items);
 }

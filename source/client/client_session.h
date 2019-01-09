@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -20,45 +20,53 @@
 #define ASPIA_CLIENT__CLIENT_SESSION_H
 
 #include <QObject>
+#include <QPointer>
+
+#include "base/macros_magic.h"
+#include "client/connect_data.h"
+#include "network/network_channel_client.h"
 
 namespace aspia {
+
+class NetworkChannel;
 
 class ClientSession : public QObject
 {
     Q_OBJECT
 
 public:
-    ClientSession(QObject* parent)
-        : QObject(parent)
-    {
-        // Nothing
-    }
-
-    virtual ~ClientSession() = default;
-
-public slots:
-    // Reads the incoming message for the session.
-    virtual void messageReceived(const QByteArray& buffer) = 0;
+    ClientSession(const ConnectData& connect_data, QObject* parent);
+    virtual ~ClientSession();
 
     // Starts session.
-    virtual void startSession() = 0;
+    void startSession();
 
-    // Closes the session. When a slot is called, signal |sessionClosed| is not generated.
-    virtual void closeSession() = 0;
+    ConnectData& connectData() { return connect_data_; }
 
 signals:
     // Indicates that the session is started.
     void started();
 
-    // Indicates an outgoing message.
-    void sendMessage(const QByteArray& buffer);
+    // Indicates that the session is finished.
+    void finished();
 
     // Indicates an error in the session.
     void errorOccurred(const QString& message);
 
-    // Indicates the end of the session by the user (for example, when the session window
-    // is closed).
-    void closedByUser();
+protected:
+    // Reads the incoming message for the session.
+    virtual void messageReceived(const QByteArray& buffer) = 0;
+
+    // Sends outgoing message.
+    void sendMessage(const QByteArray& buffer);
+
+private:
+    static QString networkErrorToString(NetworkChannel::Error error);
+
+    ConnectData connect_data_;
+    QPointer<NetworkChannelClient> network_channel_;
+
+    DISALLOW_COPY_AND_ASSIGN(ClientSession);
 };
 
 } // namespace aspia

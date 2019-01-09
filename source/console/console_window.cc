@@ -27,7 +27,7 @@
 #include "base/logging.h"
 #include "build/build_config.h"
 #include "build/version.h"
-#include "client/client_pool.h"
+#include "client/ui/session_window.h"
 #include "common/ui/about_dialog.h"
 #include "console/address_book_tab.h"
 #include "console/console_settings.h"
@@ -389,7 +389,7 @@ void ConsoleWindow::onAbout()
 
 void ConsoleWindow::onFastConnect()
 {
-    ClientPool::connect();
+    SessionWindow::connectTo(nullptr);
 }
 
 void ConsoleWindow::onDesktopManageConnect()
@@ -1053,7 +1053,7 @@ void ConsoleWindow::connectToComputer(const proto::address_book::Computer& compu
             break;
     }
 
-    ClientPool::connect(connect_data);
+    SessionWindow::connectTo(&connect_data);
 }
 
 } // namespace aspia

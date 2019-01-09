@@ -31,32 +31,32 @@
 #include "client/ui/desktop_config_dialog.h"
 #include "client/ui/desktop_panel.h"
 #include "client/ui/desktop_widget.h"
-#include "client/client_pool.h"
 #include "common/clipboard.h"
 #include "desktop_capture/desktop_frame_qimage.h"
 
 namespace aspia {
 
-DesktopWindow::DesktopWindow(ConnectData* connect_data, QWidget* parent)
-    : QWidget(parent),
-      connect_data_(connect_data)
+DesktopWindow::DesktopWindow(const ConnectData& connect_data, QWidget* parent)
+    : SessionWindow(parent)
 {
+    createSession<ClientSessionDesktop>(connect_data, this);
+
     QString session_name;
-    if (connect_data_->session_type == proto::SESSION_TYPE_DESKTOP_MANAGE)
+    if (connect_data.session_type == proto::SESSION_TYPE_DESKTOP_MANAGE)
     {
         session_name = tr("Aspia Desktop Manage");
     }
     else
     {
-        DCHECK(connect_data_->session_type == proto::SESSION_TYPE_DESKTOP_VIEW);
+        DCHECK(connect_data.session_type == proto::SESSION_TYPE_DESKTOP_VIEW);
         session_name = tr("Aspia Desktop View");
     }
 
     QString computer_name;
-    if (!connect_data_->computer_name.isEmpty())
-        computer_name = connect_data_->computer_name;
+    if (!connect_data.computer_name.isEmpty())
+        computer_name = connect_data.computer_name;
     else
-        computer_name = connect_data_->address;
+        computer_name = connect_data.address;
 
     setWindowTitle(QString("%1 - %2").arg(computer_name).arg(session_name));
     setMinimumSize(400, 300);
@@ -77,17 +77,28 @@ DesktopWindow::DesktopWindow(ConnectData* connect_data, QWidget* parent)
     layout_->setContentsMargins(0, 0, 0, 0);
     layout_->addWidget(scroll_area_);
 
-    panel_ = new DesktopPanel(connect_data_->session_type, this);
+    panel_ = new DesktopPanel(connect_data.session_type, this);
 
     desktop_->enableKeyCombinations(panel_->sendKeyCombinations());
 
     connect(panel_, &DesktopPanel::keyCombination, desktop_, &DesktopWidget::executeKeyCombination);
     connect(panel_, &DesktopPanel::settingsButton, this, &DesktopWindow::changeSettings);
     connect(panel_, &DesktopPanel::switchToAutosize, this, &DesktopWindow::autosizeWindow);
-    connect(panel_, &DesktopPanel::screenSelected, this, &DesktopWindow::sendScreen);
     connect(panel_, &DesktopPanel::takeScreenshot, this, &DesktopWindow::takeScreenshot);
     connect(panel_, &DesktopPanel::scalingChanged, this, &DesktopWindow::onScalingChanged);
-    connect(panel_, &DesktopPanel::powerControl, this, &DesktopWindow::sendPowerControl);
+
+    connect(panel_, &DesktopPanel::screenSelected, [this](const proto::desktop::Screen& screen)
+    {
+        ClientSessionDesktop* session = static_cast<ClientSessionDesktop*>(currentSession());
+        session->sendScreen(screen);
+    });
+
+    connect(panel_, &DesktopPanel::powerControl,
+            [this](proto::desktop::PowerControl::Action action)
+    {
+        ClientSessionDesktop* session = static_cast<ClientSessionDesktop*>(currentSession());
+        session->sendPowerControl(action);
+    });
 
     connect(panel_, &DesktopPanel::switchToFullscreen, [this](bool fullscreen)
     {
@@ -108,20 +119,34 @@ DesktopWindow::DesktopWindow(ConnectData* connect_data, QWidget* parent)
     connect(panel_, &DesktopPanel::keyCombinationsChanged,
             desktop_, &DesktopWidget::enableKeyCombinations);
 
-    connect(desktop_, &DesktopWidget::sendPointerEvent, this, &DesktopWindow::onPointerEvent);
-    connect(desktop_, &DesktopWidget::sendKeyEvent, this, &DesktopWindow::sendKeyEvent);
+    connect(desktop_, &DesktopWidget::sendPointerEvent, [this](const QPoint& pos, uint32_t mask)
+    {
+        ClientSessionDesktop* session = static_cast<ClientSessionDesktop*>(currentSession());
+        session->sendPointerEvent(pos, mask);
+    });
+
+    connect(desktop_, &DesktopWidget::sendKeyEvent, [this](uint32_t usb_keycode, uint32_t flags)
+    {
+        ClientSessionDesktop* session = static_cast<ClientSessionDesktop*>(currentSession());
+        session->sendKeyEvent(usb_keycode, flags);
+    });
 
     desktop_->installEventFilter(this);
     scroll_area_->viewport()->installEventFilter(this);
 
     clipboard_ = new Clipboard(this);
-    connect(clipboard_, &Clipboard::clipboardEvent, this, &DesktopWindow::sendClipboardEvent);
+    connect(clipboard_, &Clipboard::clipboardEvent,
+            [this](const proto::desktop::ClipboardEvent& event)
+    {
+        ClientSessionDesktop* session = static_cast<ClientSessionDesktop*>(currentSession());
+        session->sendClipboardEvent(event);
+    });
 
     connect(panel_, &DesktopPanel::startSession, [this](proto::SessionType session_type)
     {
-        ConnectData connect_data(*connect_data_);
+        ConnectData connect_data = currentSession()->connectData();
         connect_data.session_type = session_type;
-        ClientPool::connect(connect_data);
+        SessionWindow::connectTo(&connect_data);
     });
 }
 
@@ -228,7 +253,9 @@ void DesktopWindow::onPointerEvent(const QPoint& pos, uint32_t mask)
         scroll_timer_id_ = 0;
     }
 
-    int remote_scale_factor = connect_data_->desktop_config.scale_factor();
+    ClientSessionDesktop* session = static_cast<ClientSessionDesktop*>(currentSession());
+
+    int remote_scale_factor = session->connectData().desktop_config.scale_factor();
     if (remote_scale_factor)
     {
         const QSize& source_size = desktopFrame()->size();
@@ -243,15 +270,17 @@ void DesktopWindow::onPointerEvent(const QPoint& pos, uint32_t mask)
         double y = (double(pos.y() * 10000) / (remote_scale_factor * scale))
             + screen_top_left_.y();
 
-        emit sendPointerEvent(QPoint(x, y), mask);
+        session->sendPointerEvent(QPoint(x, y), mask);
     }
 }
 
 void DesktopWindow::changeSettings()
 {
+    const ConnectData& connect_data = currentSession()->connectData();
+
     QScopedPointer<DesktopConfigDialog> dialog(
-        new DesktopConfigDialog(connect_data_->session_type,
-                                connect_data_->desktop_config,
+        new DesktopConfigDialog(connect_data.session_type,
+                                connect_data.desktop_config,
                                 this));
 
     connect(dialog.get(), &DesktopConfigDialog::configChanged,
@@ -262,8 +291,11 @@ void DesktopWindow::changeSettings()
 
 void DesktopWindow::onConfigChanged(const proto::desktop::Config& config)
 {
-    connect_data_->desktop_config = config;
-    emit sendConfig(config);
+    ClientSessionDesktop* session = static_cast<ClientSessionDesktop*>(currentSession());
+
+    ConnectData& connect_data = session->connectData();
+    connect_data.desktop_config = config;
+    session->sendConfig(config);
 }
 
 void DesktopWindow::autosizeWindow()

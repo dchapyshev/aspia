@@ -32,7 +32,6 @@ namespace aspia {
 Q_DECLARE_METATYPE(proto::file_transfer::Request);
 Q_DECLARE_METATYPE(proto::file_transfer::Reply);
 
-class FileManagerWindow;
 class FileWorker;
 
 class ClientSessionFileTransfer : public ClientSession
@@ -40,23 +39,20 @@ class ClientSessionFileTransfer : public ClientSession
     Q_OBJECT
 
 public:
-    ClientSessionFileTransfer(ConnectData* connect_data, QObject* parent);
+    ClientSessionFileTransfer(const ConnectData& connect_data, QObject* parent);
     ~ClientSessionFileTransfer();
 
-public slots:
-    // ClientSession implementation.
-    void messageReceived(const QByteArray& buffer) override;
-    void startSession() override;
-    void closeSession() override;
+    FileWorker* localWorker();
 
-private slots:
+public slots:
     void remoteRequest(FileRequest* request);
 
-private:
-    ConnectData* connect_data_;
-    FileManagerWindow* file_manager_ = nullptr;
+protected:
+    // ClientSession implementation.
+    void messageReceived(const QByteArray& buffer) override;
 
-    QPointer<FileWorker> worker_;
+private:
+    QScopedPointer<FileWorker> worker_;
     QPointer<QThread> worker_thread_;
 
     QQueue<QPointer<FileRequest>> requests_;

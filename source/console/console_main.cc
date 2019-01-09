@@ -32,7 +32,7 @@ Q_IMPORT_PLUGIN(QWindowsVistaStylePlugin);
 
 #include "base/logging.h"
 #include "build/version.h"
-#include "client/client_pool.h"
+#include "client/ui/session_window.h"
 #include "console/console_window.h"
 #include "crypto/scoped_crypto_initializer.h"
 
@@ -114,7 +114,7 @@ int main(int argc, char *argv[])
 
     if (parser.isSet(simple_ui_option))
     {
-        if (!ClientPool::connect())
+        if (!SessionWindow::connectTo(nullptr))
             return 0;
     }
     else if (parser.isSet(address_option))
@@ -133,7 +133,7 @@ int main(int argc, char *argv[])
         else if (session_type == "file-transfer")
             connect_data.session_type = proto::SESSION_TYPE_FILE_TRANSFER;
 
-        if (!ClientPool::connect(connect_data))
+        if (!SessionWindow::connectTo(&connect_data))
             return 0;
     }
     else

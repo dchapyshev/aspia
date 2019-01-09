@@ -19,11 +19,8 @@
 #ifndef ASPIA_CLIENT__UI__DESKTOP_WINDOW_H
 #define ASPIA_CLIENT__UI__DESKTOP_WINDOW_H
 
-#include <QPointer>
-#include <QWidget>
-
-#include "base/macros_magic.h"
-#include "client/connect_data.h"
+#include "client/ui/session_window.h"
+#include "client/client_session_desktop.h"
 #include "protocol/desktop_session.pb.h"
 #include "protocol/desktop_session_extensions.pb.h"
 
@@ -37,29 +34,26 @@ class DesktopFrame;
 class DesktopPanel;
 class DesktopWidget;
 
-class DesktopWindow : public QWidget
+class DesktopWindow :
+    public SessionWindow,
+    public ClientSessionDesktop::Delegate
 {
     Q_OBJECT
 
 public:
-    DesktopWindow(ConnectData* connect_data, QWidget* parent = nullptr);
+    DesktopWindow(const ConnectData& connect_data, QWidget* parent);
     ~DesktopWindow() = default;
 
-    void resizeDesktopFrame(const QRect& screen_rect);
-    void drawDesktopFrame();
-    DesktopFrame* desktopFrame();
-    void injectCursor(const QCursor& cursor);
-    void injectClipboard(const proto::desktop::ClipboardEvent& event);
-    void setScreenList(const proto::desktop::ScreenList& screen_list);
+    // ClientSessionDesktop::Delegate implementation.
+    void resizeDesktopFrame(const QRect& screen_rect) override;
+    void drawDesktopFrame() override;
+    DesktopFrame* desktopFrame() override;
+    void injectCursor(const QCursor& cursor) override;
+    void injectClipboard(const proto::desktop::ClipboardEvent& event) override;
+    void setScreenList(const proto::desktop::ScreenList& screen_list) override;
 
 signals:
     void windowClose();
-    void sendConfig(const proto::desktop::Config& config);
-    void sendKeyEvent(uint32_t usb_keycode, uint32_t flags);
-    void sendPointerEvent(const QPoint& pos, uint32_t mask);
-    void sendClipboardEvent(const proto::desktop::ClipboardEvent& event);
-    void sendPowerControl(proto::desktop::PowerControl::Action action);
-    void sendScreen(const proto::desktop::Screen& screen);
 
 protected:
     // QWidget implementation.
@@ -78,8 +72,6 @@ private slots:
     void onScalingChanged(bool enabled = true);
 
 private:
-    ConnectData* connect_data_;
-
     QHBoxLayout* layout_;
     QScrollArea* scroll_area_;
     DesktopPanel* panel_;

@@ -1,0 +1,292 @@
+//
+// Aspia Project
+// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program. If not, see <https://www.gnu.org/licenses/>.
+//
+
+#include "client/client_session_desktop.h"
+
+#include <QCursor>
+#include <QImage>
+#include <QPixmap>
+
+#include "codec/cursor_decoder.h"
+#include "codec/video_decoder.h"
+#include "codec/video_util.h"
+#include "common/desktop_session_constants.h"
+#include "common/message_serialization.h"
+#include "desktop_capture/mouse_cursor.h"
+
+namespace aspia {
+
+ClientSessionDesktop::ClientSessionDesktop(const ConnectData& connect_data,
+                                           Delegate* delegate,
+                                           QObject* parent)
+    : ClientSession(connect_data, parent),
+      delegate_(delegate)
+{
+    // Nothing
+}
+
+ClientSessionDesktop::~ClientSessionDesktop() = default;
+
+void ClientSessionDesktop::messageReceived(const QByteArray& buffer)
+{
+    incoming_message_.Clear();
+
+    if (!parseMessage(buffer, incoming_message_))
+    {
+        emit errorOccurred(tr("Session error: Invalid message from host."));
+        return;
+    }
+
+    if (incoming_message_.has_video_packet() || incoming_message_.has_cursor_shape())
+    {
+        if (incoming_message_.has_video_packet())
+            readVideoPacket(incoming_message_.video_packet());
+
+        if (incoming_message_.has_cursor_shape())
+            readCursorShape(incoming_message_.cursor_shape());
+    }
+    else if (incoming_message_.has_clipboard_event())
+    {
+        readClipboardEvent(incoming_message_.clipboard_event());
+    }
+    else if (incoming_message_.has_config_request())
+    {
+        readConfigRequest(incoming_message_.config_request());
+    }
+    else if (incoming_message_.has_extension())
+    {
+        readExtension(incoming_message_.extension());
+    }
+    else
+    {
+        // Unknown messages are ignored.
+        LOG(LS_WARNING) << "Unhandled message from host";
+    }
+}
+
+void ClientSessionDesktop::sendKeyEvent(uint32_t usb_keycode, uint32_t flags)
+{
+    if (connectData().session_type != proto::SESSION_TYPE_DESKTOP_MANAGE)
+        return;
+
+    outgoing_message_.Clear();
+
+    proto::desktop::KeyEvent* event = outgoing_message_.mutable_key_event();
+    event->set_usb_keycode(usb_keycode);
+    event->set_flags(flags);
+
+    emit sendMessage(serializeMessage(outgoing_message_));
+}
+
+void ClientSessionDesktop::sendPointerEvent(const QPoint& pos, uint32_t mask)
+{
+    if (connectData().session_type != proto::SESSION_TYPE_DESKTOP_MANAGE)
+        return;
+
+    outgoing_message_.Clear();
+
+    proto::desktop::PointerEvent* event = outgoing_message_.mutable_pointer_event();
+    event->set_x(pos.x());
+    event->set_y(pos.y());
+    event->set_mask(mask);
+
+    emit sendMessage(serializeMessage(outgoing_message_));
+}
+
+void ClientSessionDesktop::sendClipboardEvent(const proto::desktop::ClipboardEvent& event)
+{
+    const ConnectData& connect_data = connectData();
+
+    if (connect_data.session_type != proto::SESSION_TYPE_DESKTOP_MANAGE)
+        return;
+
+    uint32_t flags = connect_data.desktop_config.flags();
+    if (!(flags & proto::desktop::ENABLE_CLIPBOARD))
+        return;
+
+    outgoing_message_.Clear();
+    outgoing_message_.mutable_clipboard_event()->CopyFrom(event);
+    emit sendMessage(serializeMessage(outgoing_message_));
+}
+
+void ClientSessionDesktop::sendPowerControl(proto::desktop::PowerControl::Action action)
+{
+    if (connectData().session_type != proto::SESSION_TYPE_DESKTOP_MANAGE)
+        return;
+
+    outgoing_message_.Clear();
+
+    proto::desktop::Extension* extension = outgoing_message_.mutable_extension();
+
+    proto::desktop::PowerControl power_control;
+    power_control.set_action(action);
+
+    extension->set_name(kPowerControlExtension);
+    extension->set_data(power_control.SerializeAsString());
+
+    emit sendMessage(serializeMessage(outgoing_message_));
+}
+
+void ClientSessionDesktop::sendConfig(const proto::desktop::Config& config)
+{
+    if (!(config.flags() & proto::desktop::ENABLE_CURSOR_SHAPE))
+        cursor_decoder_.reset();
+
+    outgoing_message_.Clear();
+    outgoing_message_.mutable_config()->CopyFrom(config);
+    emit sendMessage(serializeMessage(outgoing_message_));
+}
+
+void ClientSessionDesktop::sendScreen(const proto::desktop::Screen& screen)
+{
+    outgoing_message_.Clear();
+
+    proto::desktop::Extension* extension = outgoing_message_.mutable_extension();
+
+    extension->set_name(kSelectScreenExtension);
+    extension->set_data(screen.SerializeAsString());
+
+    emit sendMessage(serializeMessage(outgoing_message_));
+}
+
+void ClientSessionDesktop::readConfigRequest(
+    const proto::desktop::ConfigRequest& /* config_request */)
+{
+    sendConfig(connectData().desktop_config);
+}
+
+void ClientSessionDesktop::readVideoPacket(const proto::desktop::VideoPacket& packet)
+{
+    if (video_encoding_ != packet.encoding())
+    {
+        video_decoder_ = VideoDecoder::create(packet.encoding());
+        video_encoding_ = packet.encoding();
+    }
+
+    if (!video_decoder_)
+    {
+        emit errorOccurred(tr("Session error: Video decoder not initialized."));
+        return;
+    }
+
+    if (packet.has_format())
+    {
+        QRect screen_rect = VideoUtil::fromVideoRect(packet.format().screen_rect());
+
+        static const int kMaxValue = std::numeric_limits<uint16_t>::max();
+        static const int kMinValue = -std::numeric_limits<uint16_t>::max();
+
+        if (screen_rect.width()  <= 0 || screen_rect.width()  >= kMaxValue ||
+            screen_rect.height() <= 0 || screen_rect.height() >= kMaxValue)
+        {
+            emit errorOccurred(tr("Session error: Wrong video frame size."));
+            return;
+        }
+
+        if (screen_rect.x() < kMinValue || screen_rect.x() >= kMaxValue ||
+            screen_rect.y() < kMinValue || screen_rect.y() >= kMaxValue)
+        {
+            emit errorOccurred(tr("Session error: Wrong video frame position."));
+            return;
+        }
+
+        delegate_->resizeDesktopFrame(screen_rect);
+    }
+
+    DesktopFrame* frame = delegate_->desktopFrame();
+    if (!frame)
+    {
+        emit errorOccurred(tr("Session error: The desktop frame is not initialized."));
+        return;
+    }
+
+    if (!video_decoder_->decode(packet, frame))
+    {
+        emit errorOccurred(tr("Session error: The video packet could not be decoded."));
+        return;
+    }
+
+    delegate_->drawDesktopFrame();
+}
+
+void ClientSessionDesktop::readCursorShape(const proto::desktop::CursorShape& cursor_shape)
+{
+    const ConnectData& connect_data = connectData();
+
+    if (connect_data.session_type != proto::SESSION_TYPE_DESKTOP_MANAGE)
+        return;
+
+    uint32_t flags = connect_data.desktop_config.flags();
+    if (!(flags & proto::desktop::ENABLE_CURSOR_SHAPE))
+        return;
+
+    if (!cursor_decoder_)
+        cursor_decoder_ = std::make_unique<CursorDecoder>();
+
+    std::shared_ptr<MouseCursor> mouse_cursor = cursor_decoder_->decode(cursor_shape);
+    if (!mouse_cursor)
+        return;
+
+    QImage image(mouse_cursor->data(),
+                 mouse_cursor->size().width(),
+                 mouse_cursor->size().height(),
+                 mouse_cursor->stride(),
+                 QImage::Format::Format_ARGB32);
+
+    delegate_->injectCursor(
+        QCursor(QPixmap::fromImage(image),
+                mouse_cursor->hotSpot().x(),
+                mouse_cursor->hotSpot().y()));
+}
+
+void ClientSessionDesktop::readClipboardEvent(
+    const proto::desktop::ClipboardEvent& clipboard_event)
+{
+    const ConnectData& connect_data = connectData();
+
+    if (connect_data.session_type != proto::SESSION_TYPE_DESKTOP_MANAGE)
+        return;
+
+    uint32_t flags = connect_data.desktop_config.flags();
+    if (!(flags & proto::desktop::ENABLE_CLIPBOARD))
+        return;
+
+    delegate_->injectClipboard(clipboard_event);
+}
+
+void ClientSessionDesktop::readExtension(const proto::desktop::Extension& extension)
+{
+    if (extension.name() == kSelectScreenExtension)
+    {
+        proto::desktop::ScreenList screen_list;
+
+        if (!screen_list.ParseFromString(extension.data()))
+        {
+            LOG(LS_ERROR) << "Unable to parse select screen extension data";
+            return;
+        }
+
+        delegate_->setScreenList(screen_list);
+    }
+    else
+    {
+        LOG(LS_WARNING) << "Unknown extension: " << extension.name();
+    }
+}
+
+} // namespace aspia
