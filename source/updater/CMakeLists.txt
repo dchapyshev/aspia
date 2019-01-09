@@ -51,16 +51,6 @@ if(Qt5LinguistTools_FOUND)
     file(GLOB UPDATER_TS_FILES translations/*.ts)
 
     add_translations(aspia_updater QRC_FILE "translations/updater_translations.qrc" TS_FILES ${UPDATER_TS_FILES})
-
-    # Get the list of files containing messages.
-    file(GLOB_RECURSE UPDATER_TR_SOURCES
-        ${PROJECT_SOURCE_DIR}/updater/*.cc
-        ${PROJECT_SOURCE_DIR}/updater/*.cpp
-        ${PROJECT_SOURCE_DIR}/updater/*.h
-        ${PROJECT_SOURCE_DIR}/updater/*.ui)
-
-    qt5_create_translation(TS_UPDATER_UPDATE ${UPDATER_TR_SOURCES} ${UPDATER_TS_FILES} OPTIONS "-no-obsolete")
-    add_custom_target(aspia_updater_ts_update DEPENDS ${TS_UPDATER_UPDATE})
 else()
     message(WARNING "Qt5 linguist tools not found. Internationalization support will be disabled.")
 endif()
