@@ -35,13 +35,7 @@ FileManagerWindow::FileManagerWindow(const ConnectData& connect_data, QWidget* p
     createClient<ClientFileTransfer>(connect_data);
     ui.setupUi(this);
 
-    QString computer_name;
-    if (!connect_data.computer_name.isEmpty())
-        computer_name = connect_data.computer_name;
-    else
-        computer_name = connect_data.address;
-
-    setWindowTitle(tr("%1 - Aspia File Transfer").arg(computer_name));
+    setWindowTitle(createWindowTitle(connect_data));
 
     FileManagerSettings settings;
     restoreGeometry(settings.windowGeometry());
@@ -233,6 +227,18 @@ void FileManagerWindow::onPathChanged(FilePanel* sender, const QString& path)
         ui.local_panel->setTransferAllowed(allow);
 
     }
+}
+
+// static
+QString FileManagerWindow::createWindowTitle(const ConnectData& connect_data)
+{
+    QString computer_name;
+    if (!connect_data.computer_name.isEmpty())
+        computer_name = connect_data.computer_name;
+    else
+        computer_name = connect_data.address;
+
+    return tr("%1 - Aspia File Transfer").arg(computer_name);
 }
 
 } // namespace aspia

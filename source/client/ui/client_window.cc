@@ -62,7 +62,7 @@ ClientWindow* ClientWindow::create(const ConnectData& connect_data, QWidget* par
     return window;
 }
 
-bool ClientWindow::connectTo(const ConnectData* connect_data, QWidget* parent)
+bool ClientWindow::connectToHost(const ConnectData* connect_data, QWidget* parent)
 {
     ConnectData data;
 

@@ -41,24 +41,7 @@ DesktopWindow::DesktopWindow(const ConnectData& connect_data, QWidget* parent)
 {
     createClient<ClientDesktop>(connect_data, this);
 
-    QString session_name;
-    if (connect_data.session_type == proto::SESSION_TYPE_DESKTOP_MANAGE)
-    {
-        session_name = tr("Aspia Desktop Manage");
-    }
-    else
-    {
-        DCHECK(connect_data.session_type == proto::SESSION_TYPE_DESKTOP_VIEW);
-        session_name = tr("Aspia Desktop View");
-    }
-
-    QString computer_name;
-    if (!connect_data.computer_name.isEmpty())
-        computer_name = connect_data.computer_name;
-    else
-        computer_name = connect_data.address;
-
-    setWindowTitle(QString("%1 - %2").arg(computer_name).arg(session_name));
+    setWindowTitle(createWindowTitle(connect_data));
     setMinimumSize(400, 300);
 
     desktop_ = new DesktopWidget(this);
@@ -86,17 +69,8 @@ DesktopWindow::DesktopWindow(const ConnectData& connect_data, QWidget* parent)
     connect(panel_, &DesktopPanel::switchToAutosize, this, &DesktopWindow::autosizeWindow);
     connect(panel_, &DesktopPanel::takeScreenshot, this, &DesktopWindow::takeScreenshot);
     connect(panel_, &DesktopPanel::scalingChanged, this, &DesktopWindow::onScalingChanged);
-
-    connect(panel_, &DesktopPanel::screenSelected, [this](const proto::desktop::Screen& screen)
-    {
-        static_cast<ClientDesktop*>(currentClient())->sendScreen(screen);
-    });
-
-    connect(panel_, &DesktopPanel::powerControl,
-            [this](proto::desktop::PowerControl::Action action)
-    {
-        static_cast<ClientDesktop*>(currentClient())->sendPowerControl(action);
-    });
+    connect(panel_, &DesktopPanel::screenSelected, desktopClient(), &ClientDesktop::sendScreen);
+    connect(panel_, &DesktopPanel::powerControl, desktopClient(), &ClientDesktop::sendPowerControl);
 
     connect(panel_, &DesktopPanel::switchToFullscreen, [this](bool fullscreen)
     {
@@ -117,31 +91,24 @@ DesktopWindow::DesktopWindow(const ConnectData& connect_data, QWidget* parent)
     connect(panel_, &DesktopPanel::keyCombinationsChanged,
             desktop_, &DesktopWidget::enableKeyCombinations);
 
-    connect(desktop_, &DesktopWidget::sendPointerEvent, [this](const QPoint& pos, uint32_t mask)
-    {
-        static_cast<ClientDesktop*>(currentClient())->sendPointerEvent(pos, mask);
-    });
+    connect(desktop_, &DesktopWidget::sendPointerEvent,
+            desktopClient(), &ClientDesktop::sendPointerEvent);
 
-    connect(desktop_, &DesktopWidget::sendKeyEvent, [this](uint32_t usb_keycode, uint32_t flags)
-    {
-        static_cast<ClientDesktop*>(currentClient())->sendKeyEvent(usb_keycode, flags);
-    });
+    connect(desktop_, &DesktopWidget::sendKeyEvent,
+            desktopClient(), &ClientDesktop::sendKeyEvent);
 
     desktop_->installEventFilter(this);
     scroll_area_->viewport()->installEventFilter(this);
 
     clipboard_ = new Clipboard(this);
     connect(clipboard_, &Clipboard::clipboardEvent,
-            [this](const proto::desktop::ClipboardEvent& event)
-    {
-        static_cast<ClientDesktop*>(currentClient())->sendClipboardEvent(event);
-    });
+            desktopClient(), &ClientDesktop::sendClipboardEvent);
 
     connect(panel_, &DesktopPanel::startSession, [this](proto::SessionType session_type)
     {
         ConnectData connect_data = currentClient()->connectData();
         connect_data.session_type = session_type;
-        ClientWindow::connectTo(&connect_data);
+        ClientWindow::connectToHost(&connect_data);
     });
 }
 
@@ -248,7 +215,7 @@ void DesktopWindow::onPointerEvent(const QPoint& pos, uint32_t mask)
         scroll_timer_id_ = 0;
     }
 
-    ClientDesktop* client = static_cast<ClientDesktop*>(currentClient());
+    ClientDesktop* client = desktopClient();
 
     int remote_scale_factor = client->connectData().desktop_config.scale_factor();
     if (remote_scale_factor)
@@ -456,6 +423,34 @@ bool DesktopWindow::eventFilter(QObject* object, QEvent* event)
     }
 
     return QWidget::eventFilter(object, event);
+}
+
+ClientDesktop* DesktopWindow::desktopClient()
+{
+    return static_cast<ClientDesktop*>(currentClient());
+}
+
+// static
+QString DesktopWindow::createWindowTitle(const ConnectData& connect_data)
+{
+    QString session_name;
+    if (connect_data.session_type == proto::SESSION_TYPE_DESKTOP_MANAGE)
+    {
+        session_name = tr("Aspia Desktop Manage");
+    }
+    else
+    {
+        DCHECK(connect_data.session_type == proto::SESSION_TYPE_DESKTOP_VIEW);
+        session_name = tr("Aspia Desktop View");
+    }
+
+    QString computer_name;
+    if (!connect_data.computer_name.isEmpty())
+        computer_name = connect_data.computer_name;
+    else
+        computer_name = connect_data.address;
+
+    return QString("%1 - %2").arg(computer_name).arg(session_name);
 }
 
 } // namespace aspia

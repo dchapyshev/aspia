@@ -58,6 +58,7 @@ private:
                        const QString& source_path,
                        const QString& target_path,
                        const QList<FileTransfer::Item>& items);
+    static QString createWindowTitle(const ConnectData& connect_data);
 
     Ui::FileManagerWindow ui;
 

@@ -36,28 +36,49 @@ class ClientWindow : public QWidget
 public:
     virtual ~ClientWindow();
 
+    // Creates a client window.
+    // |connect_data| must contain valid data to connect.
+    // Parameter |parent| is used to specify the parent window. If you do not need to specify the
+    // parent window, then the parameter must be equal to nullptr.
     static ClientWindow* create(const ConnectData& connect_data, QWidget* parent = nullptr);
-    static bool connectTo(const ConnectData* connect_data, QWidget* parent = nullptr);
 
+    // Connects to a host.
+    // If |connect_data| is not zero, then the data is used to connect.
+    // If the parameter is equal to zero, then a dialog for entering parameters will be displayed.
+    // If the username and/or password are not specified in the connection parameters, the
+    // authorization dialog will be displayed.
+    // Parameter |parent| is used to specify the parent window. If you do not need to specify the
+    // parent window, then the parameter must be equal to nullptr.
+    static bool connectToHost(const ConnectData* connect_data = nullptr,
+                              QWidget* parent = nullptr);
+
+    // Starts a client session.
     void startSession();
 
 protected:
     explicit ClientWindow(QWidget* parent);
 
+    // Called when the client session is running (network connection is established) and the
+    // client is ready to receive or send data.
     virtual void sessionStarted();
+
+    // Called when the client session is complete.
     virtual void sessionFinished();
 
+    // Creates a client.
+    // Each child must call this method in the constructor to create the client.
     template <class ClassType, class ... Args>
     void createClient(Args ... args)
     {
         client_ = new ClassType(args..., this);
     }
 
+    // Returns the current client.
     Client* currentClient() { return client_; }
 
 private:
-    StatusDialog* status_dialog_;
-    Client* client_;
+    StatusDialog* status_dialog_ = nullptr;
+    Client* client_ = nullptr;
 
     DISALLOW_COPY_AND_ASSIGN(ClientWindow);
 };

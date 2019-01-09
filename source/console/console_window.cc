@@ -389,7 +389,7 @@ void ConsoleWindow::onAbout()
 
 void ConsoleWindow::onFastConnect()
 {
-    ClientWindow::connectTo(nullptr);
+    ClientWindow::connectToHost();
 }
 
 void ConsoleWindow::onDesktopManageConnect()
@@ -1053,7 +1053,7 @@ void ConsoleWindow::connectToComputer(const proto::address_book::Computer& compu
             break;
     }
 
-    ClientWindow::connectTo(&connect_data);
+    ClientWindow::connectToHost(&connect_data);
 }
 
 } // namespace aspia

@@ -72,6 +72,10 @@ private slots:
     void onScalingChanged(bool enabled = true);
 
 private:
+    ClientDesktop* desktopClient();
+
+    static QString createWindowTitle(const ConnectData& connect_data);
+
     QHBoxLayout* layout_;
     QScrollArea* scroll_area_;
     DesktopPanel* panel_;
