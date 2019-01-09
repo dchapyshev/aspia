@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/client_session_desktop.h"
+#include "client/client_desktop.h"
 
 #include <QCursor>
 #include <QImage>
@@ -31,18 +31,16 @@
 
 namespace aspia {
 
-ClientSessionDesktop::ClientSessionDesktop(const ConnectData& connect_data,
-                                           Delegate* delegate,
-                                           QObject* parent)
-    : ClientSession(connect_data, parent),
+ClientDesktop::ClientDesktop(const ConnectData& connect_data, Delegate* delegate, QObject* parent)
+    : Client(connect_data, parent),
       delegate_(delegate)
 {
     // Nothing
 }
 
-ClientSessionDesktop::~ClientSessionDesktop() = default;
+ClientDesktop::~ClientDesktop() = default;
 
-void ClientSessionDesktop::messageReceived(const QByteArray& buffer)
+void ClientDesktop::messageReceived(const QByteArray& buffer)
 {
     incoming_message_.Clear();
 
@@ -79,7 +77,7 @@ void ClientSessionDesktop::messageReceived(const QByteArray& buffer)
     }
 }
 
-void ClientSessionDesktop::sendKeyEvent(uint32_t usb_keycode, uint32_t flags)
+void ClientDesktop::sendKeyEvent(uint32_t usb_keycode, uint32_t flags)
 {
     if (connectData().session_type != proto::SESSION_TYPE_DESKTOP_MANAGE)
         return;
@@ -93,7 +91,7 @@ void ClientSessionDesktop::sendKeyEvent(uint32_t usb_keycode, uint32_t flags)
     emit sendMessage(serializeMessage(outgoing_message_));
 }
 
-void ClientSessionDesktop::sendPointerEvent(const QPoint& pos, uint32_t mask)
+void ClientDesktop::sendPointerEvent(const QPoint& pos, uint32_t mask)
 {
     if (connectData().session_type != proto::SESSION_TYPE_DESKTOP_MANAGE)
         return;
@@ -108,7 +106,7 @@ void ClientSessionDesktop::sendPointerEvent(const QPoint& pos, uint32_t mask)
     emit sendMessage(serializeMessage(outgoing_message_));
 }
 
-void ClientSessionDesktop::sendClipboardEvent(const proto::desktop::ClipboardEvent& event)
+void ClientDesktop::sendClipboardEvent(const proto::desktop::ClipboardEvent& event)
 {
     const ConnectData& connect_data = connectData();
 
@@ -124,7 +122,7 @@ void ClientSessionDesktop::sendClipboardEvent(const proto::desktop::ClipboardEve
     emit sendMessage(serializeMessage(outgoing_message_));
 }
 
-void ClientSessionDesktop::sendPowerControl(proto::desktop::PowerControl::Action action)
+void ClientDesktop::sendPowerControl(proto::desktop::PowerControl::Action action)
 {
     if (connectData().session_type != proto::SESSION_TYPE_DESKTOP_MANAGE)
         return;
@@ -142,7 +140,7 @@ void ClientSessionDesktop::sendPowerControl(proto::desktop::PowerControl::Action
     emit sendMessage(serializeMessage(outgoing_message_));
 }
 
-void ClientSessionDesktop::sendConfig(const proto::desktop::Config& config)
+void ClientDesktop::sendConfig(const proto::desktop::Config& config)
 {
     if (!(config.flags() & proto::desktop::ENABLE_CURSOR_SHAPE))
         cursor_decoder_.reset();
@@ -152,7 +150,7 @@ void ClientSessionDesktop::sendConfig(const proto::desktop::Config& config)
     emit sendMessage(serializeMessage(outgoing_message_));
 }
 
-void ClientSessionDesktop::sendScreen(const proto::desktop::Screen& screen)
+void ClientDesktop::sendScreen(const proto::desktop::Screen& screen)
 {
     outgoing_message_.Clear();
 
@@ -164,13 +162,13 @@ void ClientSessionDesktop::sendScreen(const proto::desktop::Screen& screen)
     emit sendMessage(serializeMessage(outgoing_message_));
 }
 
-void ClientSessionDesktop::readConfigRequest(
+void ClientDesktop::readConfigRequest(
     const proto::desktop::ConfigRequest& /* config_request */)
 {
     sendConfig(connectData().desktop_config);
 }
 
-void ClientSessionDesktop::readVideoPacket(const proto::desktop::VideoPacket& packet)
+void ClientDesktop::readVideoPacket(const proto::desktop::VideoPacket& packet)
 {
     if (video_encoding_ != packet.encoding())
     {
@@ -224,7 +222,7 @@ void ClientSessionDesktop::readVideoPacket(const proto::desktop::VideoPacket& pa
     delegate_->drawDesktopFrame();
 }
 
-void ClientSessionDesktop::readCursorShape(const proto::desktop::CursorShape& cursor_shape)
+void ClientDesktop::readCursorShape(const proto::desktop::CursorShape& cursor_shape)
 {
     const ConnectData& connect_data = connectData();
 
@@ -254,8 +252,7 @@ void ClientSessionDesktop::readCursorShape(const proto::desktop::CursorShape& cu
                 mouse_cursor->hotSpot().y()));
 }
 
-void ClientSessionDesktop::readClipboardEvent(
-    const proto::desktop::ClipboardEvent& clipboard_event)
+void ClientDesktop::readClipboardEvent(const proto::desktop::ClipboardEvent& clipboard_event)
 {
     const ConnectData& connect_data = connectData();
 
@@ -269,7 +266,7 @@ void ClientSessionDesktop::readClipboardEvent(
     delegate_->injectClipboard(clipboard_event);
 }
 
-void ClientSessionDesktop::readExtension(const proto::desktop::Extension& extension)
+void ClientDesktop::readExtension(const proto::desktop::Extension& extension)
 {
     if (extension.name() == kSelectScreenExtension)
     {

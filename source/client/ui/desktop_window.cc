@@ -37,9 +37,9 @@
 namespace aspia {
 
 DesktopWindow::DesktopWindow(const ConnectData& connect_data, QWidget* parent)
-    : SessionWindow(parent)
+    : ClientWindow(parent)
 {
-    createSession<ClientSessionDesktop>(connect_data, this);
+    createClient<ClientDesktop>(connect_data, this);
 
     QString session_name;
     if (connect_data.session_type == proto::SESSION_TYPE_DESKTOP_MANAGE)
@@ -89,15 +89,13 @@ DesktopWindow::DesktopWindow(const ConnectData& connect_data, QWidget* parent)
 
     connect(panel_, &DesktopPanel::screenSelected, [this](const proto::desktop::Screen& screen)
     {
-        ClientSessionDesktop* session = static_cast<ClientSessionDesktop*>(currentSession());
-        session->sendScreen(screen);
+        static_cast<ClientDesktop*>(currentClient())->sendScreen(screen);
     });
 
     connect(panel_, &DesktopPanel::powerControl,
             [this](proto::desktop::PowerControl::Action action)
     {
-        ClientSessionDesktop* session = static_cast<ClientSessionDesktop*>(currentSession());
-        session->sendPowerControl(action);
+        static_cast<ClientDesktop*>(currentClient())->sendPowerControl(action);
     });
 
     connect(panel_, &DesktopPanel::switchToFullscreen, [this](bool fullscreen)
@@ -121,14 +119,12 @@ DesktopWindow::DesktopWindow(const ConnectData& connect_data, QWidget* parent)
 
     connect(desktop_, &DesktopWidget::sendPointerEvent, [this](const QPoint& pos, uint32_t mask)
     {
-        ClientSessionDesktop* session = static_cast<ClientSessionDesktop*>(currentSession());
-        session->sendPointerEvent(pos, mask);
+        static_cast<ClientDesktop*>(currentClient())->sendPointerEvent(pos, mask);
     });
 
     connect(desktop_, &DesktopWidget::sendKeyEvent, [this](uint32_t usb_keycode, uint32_t flags)
     {
-        ClientSessionDesktop* session = static_cast<ClientSessionDesktop*>(currentSession());
-        session->sendKeyEvent(usb_keycode, flags);
+        static_cast<ClientDesktop*>(currentClient())->sendKeyEvent(usb_keycode, flags);
     });
 
     desktop_->installEventFilter(this);
@@ -138,15 +134,14 @@ DesktopWindow::DesktopWindow(const ConnectData& connect_data, QWidget* parent)
     connect(clipboard_, &Clipboard::clipboardEvent,
             [this](const proto::desktop::ClipboardEvent& event)
     {
-        ClientSessionDesktop* session = static_cast<ClientSessionDesktop*>(currentSession());
-        session->sendClipboardEvent(event);
+        static_cast<ClientDesktop*>(currentClient())->sendClipboardEvent(event);
     });
 
     connect(panel_, &DesktopPanel::startSession, [this](proto::SessionType session_type)
     {
-        ConnectData connect_data = currentSession()->connectData();
+        ConnectData connect_data = currentClient()->connectData();
         connect_data.session_type = session_type;
-        SessionWindow::connectTo(&connect_data);
+        ClientWindow::connectTo(&connect_data);
     });
 }
 
@@ -253,9 +248,9 @@ void DesktopWindow::onPointerEvent(const QPoint& pos, uint32_t mask)
         scroll_timer_id_ = 0;
     }
 
-    ClientSessionDesktop* session = static_cast<ClientSessionDesktop*>(currentSession());
+    ClientDesktop* client = static_cast<ClientDesktop*>(currentClient());
 
-    int remote_scale_factor = session->connectData().desktop_config.scale_factor();
+    int remote_scale_factor = client->connectData().desktop_config.scale_factor();
     if (remote_scale_factor)
     {
         const QSize& source_size = desktopFrame()->size();
@@ -270,13 +265,13 @@ void DesktopWindow::onPointerEvent(const QPoint& pos, uint32_t mask)
         double y = (double(pos.y() * 10000) / (remote_scale_factor * scale))
             + screen_top_left_.y();
 
-        session->sendPointerEvent(QPoint(x, y), mask);
+        client->sendPointerEvent(QPoint(x, y), mask);
     }
 }
 
 void DesktopWindow::changeSettings()
 {
-    const ConnectData& connect_data = currentSession()->connectData();
+    const ConnectData& connect_data = currentClient()->connectData();
 
     QScopedPointer<DesktopConfigDialog> dialog(
         new DesktopConfigDialog(connect_data.session_type,
@@ -291,7 +286,7 @@ void DesktopWindow::changeSettings()
 
 void DesktopWindow::onConfigChanged(const proto::desktop::Config& config)
 {
-    ClientSessionDesktop* session = static_cast<ClientSessionDesktop*>(currentSession());
+    ClientDesktop* session = static_cast<ClientDesktop*>(currentClient());
 
     ConnectData& connect_data = session->connectData();
     connect_data.desktop_config = config;

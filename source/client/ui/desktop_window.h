@@ -19,8 +19,8 @@
 #ifndef ASPIA_CLIENT__UI__DESKTOP_WINDOW_H
 #define ASPIA_CLIENT__UI__DESKTOP_WINDOW_H
 
-#include "client/ui/session_window.h"
-#include "client/client_session_desktop.h"
+#include "client/ui/client_window.h"
+#include "client/client_desktop.h"
 #include "protocol/desktop_session.pb.h"
 #include "protocol/desktop_session_extensions.pb.h"
 
@@ -35,8 +35,8 @@ class DesktopPanel;
 class DesktopWidget;
 
 class DesktopWindow :
-    public SessionWindow,
-    public ClientSessionDesktop::Delegate
+    public ClientWindow,
+    public ClientDesktop::Delegate
 {
     Q_OBJECT
 
@@ -44,7 +44,7 @@ public:
     DesktopWindow(const ConnectData& connect_data, QWidget* parent);
     ~DesktopWindow() = default;
 
-    // ClientSessionDesktop::Delegate implementation.
+    // ClientDesktop::Delegate implementation.
     void resizeDesktopFrame(const QRect& screen_rect) override;
     void drawDesktopFrame() override;
     DesktopFrame* desktopFrame() override;

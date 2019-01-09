@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/ui/session_window.h"
+#include "client/ui/client_window.h"
 
 #include "base/logging.h"
 #include "client/ui/authorization_dialog.h"
@@ -24,22 +24,22 @@
 #include "client/ui/desktop_window.h"
 #include "client/ui/file_manager_window.h"
 #include "client/ui/status_dialog.h"
-#include "client/client_session.h"
+#include "client/client.h"
 
 namespace aspia {
 
-SessionWindow::SessionWindow(QWidget* parent)
+ClientWindow::ClientWindow(QWidget* parent)
     : QWidget(parent)
 {
     // Nothing
 }
 
-SessionWindow::~SessionWindow() = default;
+ClientWindow::~ClientWindow() = default;
 
 // static
-SessionWindow* SessionWindow::create(const ConnectData& connect_data, QWidget* parent)
+ClientWindow* ClientWindow::create(const ConnectData& connect_data, QWidget* parent)
 {
-    SessionWindow* window = nullptr;
+    ClientWindow* window = nullptr;
 
     switch (connect_data.session_type)
     {
@@ -62,7 +62,7 @@ SessionWindow* SessionWindow::create(const ConnectData& connect_data, QWidget* p
     return window;
 }
 
-bool SessionWindow::connectTo(const ConnectData* connect_data, QWidget* parent)
+bool ClientWindow::connectTo(const ConnectData* connect_data, QWidget* parent)
 {
     ConnectData data;
 
@@ -93,7 +93,7 @@ bool SessionWindow::connectTo(const ConnectData* connect_data, QWidget* parent)
         data.password = auth_dialog.password();
     }
 
-    SessionWindow* window = create(data, parent);
+    ClientWindow* window = create(data, parent);
     if (!window)
         return false;
 
@@ -101,25 +101,25 @@ bool SessionWindow::connectTo(const ConnectData* connect_data, QWidget* parent)
     return true;
 }
 
-void SessionWindow::startSession()
+void ClientWindow::startSession()
 {
-    DCHECK(session_) << "createSession() must be called first.";
+    DCHECK(client_) << "createClient() must be called first.";
 
     status_dialog_ = new StatusDialog(this);
     status_dialog_->setWindowFlag(Qt::WindowStaysOnTopHint);
 
     // After closing the status dialog, close the session window.
-    connect(status_dialog_, &StatusDialog::finished, this, &SessionWindow::close);
+    connect(status_dialog_, &StatusDialog::finished, this, &ClientWindow::close);
 
     // Show status dialog.
     status_dialog_->show();
     status_dialog_->activateWindow();
 
     status_dialog_->addStatus(tr("Attempt to connect to %1:%2.")
-                              .arg(session_->connectData().address)
-                              .arg(session_->connectData().port));
+                              .arg(client_->connectData().address)
+                              .arg(client_->connectData().port));
 
-    connect(session_, &ClientSession::started, [this]()
+    connect(client_, &Client::started, [this]()
     {
         // Add a message about the successful launch of the session and hide the status dialog.
         status_dialog_->addStatus(tr("Session started."));
@@ -131,12 +131,12 @@ void SessionWindow::startSession()
         show();
     });
 
-    connect(session_, &ClientSession::finished, [this]()
+    connect(client_, &Client::finished, [this]()
     {
         sessionFinished();
     });
 
-    connect(session_, &ClientSession::errorOccurred, [this](const QString& message)
+    connect(client_, &Client::errorOccurred, [this](const QString& message)
     {
         // Hide session window.
         hide();
@@ -146,15 +146,15 @@ void SessionWindow::startSession()
         status_dialog_->show();
     });
 
-    session_->startSession();
+    client_->start();
 }
 
-void SessionWindow::sessionStarted()
+void ClientWindow::sessionStarted()
 {
     // Nothing
 }
 
-void SessionWindow::sessionFinished()
+void ClientWindow::sessionFinished()
 {
     // Nothing
 }

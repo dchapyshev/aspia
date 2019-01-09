@@ -16,29 +16,26 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/client_session.h"
+#include "client/client.h"
 
 namespace aspia {
 
-ClientSession::ClientSession(const ConnectData& connect_data, QObject* parent)
+Client::Client(const ConnectData& connect_data, QObject* parent)
     : QObject(parent),
       connect_data_(connect_data)
 {
     // Nothing
 }
 
-ClientSession::~ClientSession() = default;
+Client::~Client() = default;
 
-void ClientSession::startSession()
+void Client::start()
 {
     network_channel_ = new NetworkChannelClient(this);
 
-    connect(network_channel_, &NetworkChannelClient::connected,
-            this, &ClientSession::started);
-    connect(network_channel_, &NetworkChannelClient::disconnected,
-            this, &ClientSession::finished);
-    connect(network_channel_, &NetworkChannelClient::messageReceived,
-            this, &ClientSession::messageReceived);
+    connect(network_channel_, &NetworkChannelClient::connected, this, &Client::started);
+    connect(network_channel_, &NetworkChannelClient::disconnected, this, &Client::finished);
+    connect(network_channel_, &NetworkChannelClient::messageReceived, this, &Client::messageReceived);
 
     connect(network_channel_, &NetworkChannelClient::errorOccurred,
             [this](NetworkChannel::Error error)
@@ -46,21 +43,21 @@ void ClientSession::startSession()
         emit errorOccurred(networkErrorToString(error));
     });
 
-    connect(this, &ClientSession::errorOccurred, network_channel_, &NetworkChannelClient::stop);
-    connect(this, &ClientSession::started, network_channel_, &NetworkChannel::start);
+    connect(this, &Client::errorOccurred, network_channel_, &NetworkChannelClient::stop);
+    connect(this, &Client::started, network_channel_, &NetworkChannel::start);
 
     network_channel_->connectToHost(connect_data_.address, connect_data_.port,
                                     connect_data_.username, connect_data_.password,
                                     connect_data_.session_type);
 }
 
-void ClientSession::sendMessage(const QByteArray& buffer)
+void Client::sendMessage(const QByteArray& buffer)
 {
     network_channel_->send(buffer);
 }
 
 // static
-QString ClientSession::networkErrorToString(NetworkChannel::Error error)
+QString Client::networkErrorToString(NetworkChannel::Error error)
 {
     const char* message;
 

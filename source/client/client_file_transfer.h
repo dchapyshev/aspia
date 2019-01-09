@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,13 +16,13 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CLIENT__CLIENT_SESSION_FILE_TRANSFER_H
-#define ASPIA_CLIENT__CLIENT_SESSION_FILE_TRANSFER_H
+#ifndef ASPIA_CLIENT__CLIENT_FILE_TRANSFER_H
+#define ASPIA_CLIENT__CLIENT_FILE_TRANSFER_H
 
 #include <QQueue>
 #include <QPointer>
 
-#include "client/client_session.h"
+#include "client/client.h"
 #include "client/connect_data.h"
 #include "common/file_request.h"
 #include "protocol/file_transfer_session.pb.h"
@@ -34,13 +34,13 @@ Q_DECLARE_METATYPE(proto::file_transfer::Reply);
 
 class FileWorker;
 
-class ClientSessionFileTransfer : public ClientSession
+class ClientFileTransfer : public Client
 {
     Q_OBJECT
 
 public:
-    ClientSessionFileTransfer(const ConnectData& connect_data, QObject* parent);
-    ~ClientSessionFileTransfer();
+    ClientFileTransfer(const ConnectData& connect_data, QObject* parent);
+    ~ClientFileTransfer();
 
     FileWorker* localWorker();
 
@@ -57,9 +57,9 @@ private:
 
     QQueue<QPointer<FileRequest>> requests_;
 
-    DISALLOW_COPY_AND_ASSIGN(ClientSessionFileTransfer);
+    DISALLOW_COPY_AND_ASSIGN(ClientFileTransfer);
 };
 
 } // namespace aspia
 
-#endif // ASPIA_CLIENT__CLIENT_SESSION_FILE_TRANSFER_H
+#endif // ASPIA_CLIENT__CLIENT_FILE_TRANSFER_H

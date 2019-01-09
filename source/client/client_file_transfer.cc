@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/client_session_file_transfer.h"
+#include "client/client_file_transfer.h"
 
 #include <QMetaType>
 #include <QThread>
@@ -28,9 +28,8 @@
 
 namespace aspia {
 
-ClientSessionFileTransfer::ClientSessionFileTransfer(const ConnectData& connect_data,
-                                                     QObject* parent)
-    : ClientSession(connect_data, parent)
+ClientFileTransfer::ClientFileTransfer(const ConnectData& connect_data, QObject* parent)
+    : Client(connect_data, parent)
 {
     qRegisterMetaType<proto::file_transfer::Request>();
     qRegisterMetaType<proto::file_transfer::Reply>();
@@ -41,7 +40,7 @@ ClientSessionFileTransfer::ClientSessionFileTransfer(const ConnectData& connect_
     worker_thread_->start();
 }
 
-ClientSessionFileTransfer::~ClientSessionFileTransfer()
+ClientFileTransfer::~ClientFileTransfer()
 {
     worker_thread_->quit();
     worker_thread_->wait();
@@ -50,9 +49,9 @@ ClientSessionFileTransfer::~ClientSessionFileTransfer()
         delete request;
 }
 
-FileWorker* ClientSessionFileTransfer::localWorker() { return worker_.get(); }
+FileWorker* ClientFileTransfer::localWorker() { return worker_.get(); }
 
-void ClientSessionFileTransfer::messageReceived(const QByteArray& buffer)
+void ClientFileTransfer::messageReceived(const QByteArray& buffer)
 {
     proto::file_transfer::Reply reply;
 
@@ -76,10 +75,10 @@ void ClientSessionFileTransfer::messageReceived(const QByteArray& buffer)
     delete request;
 }
 
-void ClientSessionFileTransfer::remoteRequest(FileRequest* request)
+void ClientFileTransfer::remoteRequest(FileRequest* request)
 {
     requests_.push_back(QPointer<FileRequest>(request));
-    emit sendMessage(serializeMessage(request->request()));
+    sendMessage(serializeMessage(request->request()));
 }
 
 } // namespace aspia

@@ -19,12 +19,12 @@
 #ifndef ASPIA_CLIENT__UI__FILE_MANAGER_WINDOW_H
 #define ASPIA_CLIENT__UI__FILE_MANAGER_WINDOW_H
 
-#include "client/ui/session_window.h"
+#include "client/ui/client_window.h"
 #include "ui_file_manager_window.h"
 
 namespace aspia {
 
-class FileManagerWindow : public SessionWindow
+class FileManagerWindow : public ClientWindow
 {
     Q_OBJECT
 

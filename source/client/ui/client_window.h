@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CLIENT__UI__SESSION_WINDOW_H
-#define ASPIA_CLIENT__UI__SESSION_WINDOW_H
+#ifndef ASPIA_CLIENT__UI__CLIENT_WINDOW_H
+#define ASPIA_CLIENT__UI__CLIENT_WINDOW_H
 
 #include <QWidget>
 
@@ -26,42 +26,42 @@
 
 namespace aspia {
 
-class ClientSession;
+class Client;
 class StatusDialog;
 
-class SessionWindow : public QWidget
+class ClientWindow : public QWidget
 {
     Q_OBJECT
 
 public:
-    virtual ~SessionWindow();
+    virtual ~ClientWindow();
 
-    static SessionWindow* create(const ConnectData& connect_data, QWidget* parent = nullptr);
+    static ClientWindow* create(const ConnectData& connect_data, QWidget* parent = nullptr);
     static bool connectTo(const ConnectData* connect_data, QWidget* parent = nullptr);
 
     void startSession();
 
 protected:
-    explicit SessionWindow(QWidget* parent);
+    explicit ClientWindow(QWidget* parent);
 
     virtual void sessionStarted();
     virtual void sessionFinished();
 
     template <class ClassType, class ... Args>
-    void createSession(Args ... args)
+    void createClient(Args ... args)
     {
-        session_ = new ClassType(args..., this);
+        client_ = new ClassType(args..., this);
     }
 
-    ClientSession* currentSession() { return session_; }
+    Client* currentClient() { return client_; }
 
 private:
     StatusDialog* status_dialog_;
-    ClientSession* session_;
+    Client* client_;
 
-    DISALLOW_COPY_AND_ASSIGN(SessionWindow);
+    DISALLOW_COPY_AND_ASSIGN(ClientWindow);
 };
 
 } // namespace aspia
 
-#endif // ASPIA_CLIENT__UI__SESSION_WINDOW_H
+#endif // ASPIA_CLIENT__UI__CLIENT_WINDOW_H

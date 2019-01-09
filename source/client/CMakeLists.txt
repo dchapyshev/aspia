@@ -19,12 +19,12 @@
 include(translations)
 
 list(APPEND SOURCE_CLIENT
-    client_session.cc
-    client_session.h
-    client_session_desktop.cc
-    client_session_desktop.h
-    client_session_file_transfer.cc
-    client_session_file_transfer.h
+    client.cc
+    client.h
+    client_desktop.cc
+    client_desktop.h
+    client_file_transfer.cc
+    client_file_transfer.h
     config_factory.cc
     config_factory.h
     connect_data.cc
@@ -58,6 +58,8 @@ list(APPEND SOURCE_CLIENT_UI
     ui/client_dialog.cc
     ui/client_dialog.h
     ui/client_dialog.ui
+    ui/client_window.cc
+    ui/client_window.h
     ui/desktop_config_dialog.cc
     ui/desktop_config_dialog.h
     ui/desktop_config_dialog.ui
@@ -97,8 +99,6 @@ list(APPEND SOURCE_CLIENT_UI
     ui/file_transfer_dialog.h
     ui/file_transfer_dialog.ui
     ui/select_screen_action.h
-    ui/session_window.cc
-    ui/session_window.h
     ui/status_dialog.cc
     ui/status_dialog.h
     ui/status_dialog.ui)

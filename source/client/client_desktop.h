@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,10 +16,10 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CLIENT__CLIENT_SESSION_DESKTOP_H
-#define ASPIA_CLIENT__CLIENT_SESSION_DESKTOP_H
+#ifndef ASPIA_CLIENT__CLIENT_DESKTOP_H
+#define ASPIA_CLIENT__CLIENT_DESKTOP_H
 
-#include "client/client_session.h"
+#include "client/client.h"
 #include "protocol/desktop_session_extensions.pb.h"
 
 namespace aspia {
@@ -28,7 +28,7 @@ class CursorDecoder;
 class DesktopFrame;
 class VideoDecoder;
 
-class ClientSessionDesktop : public ClientSession
+class ClientDesktop : public Client
 {
     Q_OBJECT
 
@@ -46,8 +46,8 @@ public:
         virtual void setScreenList(const proto::desktop::ScreenList& screen_list) = 0;
     };
 
-    ClientSessionDesktop(const ConnectData& connect_data, Delegate* delegate, QObject* parent);
-    ~ClientSessionDesktop();
+    ClientDesktop(const ConnectData& connect_data, Delegate* delegate, QObject* parent);
+    ~ClientDesktop();
 
     void sendKeyEvent(uint32_t usb_keycode, uint32_t flags);
     void sendPointerEvent(const QPoint& pos, uint32_t mask);
@@ -76,9 +76,9 @@ private:
     std::unique_ptr<VideoDecoder> video_decoder_;
     std::unique_ptr<CursorDecoder> cursor_decoder_;
 
-    DISALLOW_COPY_AND_ASSIGN(ClientSessionDesktop);
+    DISALLOW_COPY_AND_ASSIGN(ClientDesktop);
 };
 
 } // namespace aspia
 
-#endif // ASPIA_CLIENT__CLIENT_SESSION_DESKTOP_H
+#endif // ASPIA_CLIENT__CLIENT_DESKTOP_H

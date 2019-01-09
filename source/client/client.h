@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CLIENT__CLIENT_SESSION_H
-#define ASPIA_CLIENT__CLIENT_SESSION_H
+#ifndef ASPIA_CLIENT__CLIENT_H
+#define ASPIA_CLIENT__CLIENT_H
 
 #include <QObject>
 #include <QPointer>
@@ -30,16 +30,16 @@ namespace aspia {
 
 class NetworkChannel;
 
-class ClientSession : public QObject
+class Client : public QObject
 {
     Q_OBJECT
 
 public:
-    ClientSession(const ConnectData& connect_data, QObject* parent);
-    virtual ~ClientSession();
+    Client(const ConnectData& connect_data, QObject* parent);
+    virtual ~Client();
 
     // Starts session.
-    void startSession();
+    void start();
 
     ConnectData& connectData() { return connect_data_; }
 
@@ -66,9 +66,9 @@ private:
     ConnectData connect_data_;
     QPointer<NetworkChannelClient> network_channel_;
 
-    DISALLOW_COPY_AND_ASSIGN(ClientSession);
+    DISALLOW_COPY_AND_ASSIGN(Client);
 };
 
 } // namespace aspia
 
-#endif // ASPIA_CLIENT__CLIENT_SESSION_H
+#endif // ASPIA_CLIENT__CLIENT_H
