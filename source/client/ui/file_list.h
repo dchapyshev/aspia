@@ -44,11 +44,8 @@ public:
     bool isFileListShown() const;
     void createFolder();
 
-    void setDriveListState(const QByteArray& state);
-    QByteArray driveListState() const;
-
-    void setFileListState(const QByteArray& state);
-    QByteArray fileListState() const;
+    void restoreState(const QByteArray& state);
+    QByteArray saveState() const;
 
 signals:
     void nameChangeRequest(const QString& old_name, const QString& new_name);

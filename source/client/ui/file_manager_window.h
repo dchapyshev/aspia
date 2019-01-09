@@ -32,6 +32,9 @@ public:
     FileManagerWindow(const ConnectData& connect_data, QWidget* parent);
     ~FileManagerWindow() = default;
 
+    QByteArray saveState() const;
+    void restoreState(const QByteArray& state);
+
 public slots:
     void refresh();
 

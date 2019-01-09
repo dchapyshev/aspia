@@ -134,6 +134,16 @@ void FilePanel::setTransferEnabled(bool enabled)
     ui.action_send->setEnabled(transfer_allowed_ && transfer_enabled_);
 }
 
+QByteArray FilePanel::saveState() const
+{
+    return ui.list->saveState();
+}
+
+void FilePanel::restoreState(const QByteArray& state)
+{
+    ui.list->restoreState(state);
+}
+
 void FilePanel::reply(const proto::file_transfer::Request& request,
                       const proto::file_transfer::Reply& reply)
 {

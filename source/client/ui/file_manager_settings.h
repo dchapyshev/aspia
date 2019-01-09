@@ -34,20 +34,8 @@ public:
     QByteArray windowGeometry() const;
     void setWindowGeometry(const QByteArray& geometry);
 
-    QByteArray splitterState() const;
-    void setSplitterState(const QByteArray& state);
-
-    QByteArray localDriveListState() const;
-    void setLocalDriveListState(const QByteArray& state);
-
-    QByteArray localFileListState() const;
-    void setLocalFileListState(const QByteArray& state);
-
-    QByteArray remoteDriveListState() const;
-    void setRemoteDriveListState(const QByteArray& state);
-
-    QByteArray remoteFileListState() const;
-    void setRemoteFileListState(const QByteArray& state);
+    QByteArray windowState() const;
+    void setWindowState(const QByteArray& state);
 
 private:
     QSettings settings_;

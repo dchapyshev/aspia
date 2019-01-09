@@ -39,20 +39,15 @@ FileManagerWindow::FileManagerWindow(const ConnectData& connect_data, QWidget* p
 
     FileManagerSettings settings;
     restoreGeometry(settings.windowGeometry());
-
-    ui.splitter->restoreState(settings.splitterState());
+    restoreState(settings.windowState());
 
     QString mime_type = FileMimeData::createMimeType();
 
     ui.local_panel->setPanelName(tr("Local Computer"));
     ui.local_panel->setMimeType(mime_type);
-    ui.local_panel->setDriveListState(settings.localDriveListState());
-    ui.local_panel->setFileListState(settings.localFileListState());
 
     ui.remote_panel->setPanelName(tr("Remote Computer"));
     ui.remote_panel->setMimeType(mime_type);
-    ui.remote_panel->setDriveListState(settings.remoteDriveListState());
-    ui.remote_panel->setFileListState(settings.remoteFileListState());
 
     connect(ui.local_panel, &FilePanel::removeItems, this, &FileManagerWindow::removeItems);
     connect(ui.remote_panel, &FilePanel::removeItems, this, &FileManagerWindow::removeItems);
@@ -71,6 +66,38 @@ FileManagerWindow::FileManagerWindow(const ConnectData& connect_data, QWidget* p
     ui.local_panel->setFocus();
 }
 
+QByteArray FileManagerWindow::saveState() const
+{
+    QByteArray buffer;
+
+    {
+        QDataStream stream(&buffer, QIODevice::WriteOnly);
+        stream.setVersion(QDataStream::Qt_5_12);
+        stream << ui.splitter->saveState();
+        stream << ui.local_panel->saveState();
+        stream << ui.remote_panel->saveState();
+    }
+
+    return buffer;
+}
+
+void FileManagerWindow::restoreState(const QByteArray& state)
+{
+    QDataStream stream(state);
+    stream.setVersion(QDataStream::Qt_5_12);
+
+    QByteArray value;
+
+    stream >> value;
+    ui.splitter->restoreState(value);
+
+    stream >> value;
+    ui.local_panel->restoreState(value);
+
+    stream >> value;
+    ui.remote_panel->restoreState(value);
+}
+
 void FileManagerWindow::refresh()
 {
     ui.local_panel->refresh();
@@ -82,13 +109,7 @@ void FileManagerWindow::closeEvent(QCloseEvent* event)
     FileManagerSettings settings;
 
     settings.setWindowGeometry(saveGeometry());
-    settings.setSplitterState(ui.splitter->saveState());
-
-    settings.setLocalDriveListState(ui.local_panel->driveListState());
-    settings.setLocalFileListState(ui.local_panel->fileListState());
-
-    settings.setRemoteDriveListState(ui.remote_panel->driveListState());
-    settings.setRemoteFileListState(ui.remote_panel->fileListState());
+    settings.setWindowState(saveState());
 
     emit windowClose();
     ClientWindow::closeEvent(event);

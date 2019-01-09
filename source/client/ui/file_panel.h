@@ -41,11 +41,8 @@ public:
 
     QString currentPath() const { return ui.address_bar->currentPath(); }
 
-    QByteArray driveListState() const { return ui.list->driveListState(); }
-    void setDriveListState(const QByteArray& state) { ui.list->setDriveListState(state); }
-
-    QByteArray fileListState() const { return ui.list->fileListState(); }
-    void setFileListState(const QByteArray& state) { ui.list->setFileListState(state); }
+    QByteArray saveState() const;
+    void restoreState(const QByteArray& state);
 
 signals:
     void newRequest(FileRequest* request);
