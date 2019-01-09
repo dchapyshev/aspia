@@ -22,11 +22,11 @@
 #include <QImage>
 #include <QPixmap>
 
+#include "base/logging.h"
 #include "codec/cursor_decoder.h"
 #include "codec/video_decoder.h"
 #include "codec/video_util.h"
 #include "common/desktop_session_constants.h"
-#include "common/message_serialization.h"
 #include "desktop_capture/mouse_cursor.h"
 
 namespace aspia {
@@ -44,7 +44,7 @@ void ClientDesktop::messageReceived(const QByteArray& buffer)
 {
     incoming_message_.Clear();
 
-    if (!parseMessage(buffer, incoming_message_))
+    if (!incoming_message_.ParseFromArray(buffer.constData(), buffer.size()))
     {
         emit errorOccurred(tr("Session error: Invalid message from host."));
         return;
@@ -88,7 +88,7 @@ void ClientDesktop::sendKeyEvent(uint32_t usb_keycode, uint32_t flags)
     event->set_usb_keycode(usb_keycode);
     event->set_flags(flags);
 
-    emit sendMessage(serializeMessage(outgoing_message_));
+    sendMessage(outgoing_message_);
 }
 
 void ClientDesktop::sendPointerEvent(const QPoint& pos, uint32_t mask)
@@ -103,7 +103,7 @@ void ClientDesktop::sendPointerEvent(const QPoint& pos, uint32_t mask)
     event->set_y(pos.y());
     event->set_mask(mask);
 
-    emit sendMessage(serializeMessage(outgoing_message_));
+    sendMessage(outgoing_message_);
 }
 
 void ClientDesktop::sendClipboardEvent(const proto::desktop::ClipboardEvent& event)
@@ -119,7 +119,7 @@ void ClientDesktop::sendClipboardEvent(const proto::desktop::ClipboardEvent& eve
 
     outgoing_message_.Clear();
     outgoing_message_.mutable_clipboard_event()->CopyFrom(event);
-    emit sendMessage(serializeMessage(outgoing_message_));
+    sendMessage(outgoing_message_);
 }
 
 void ClientDesktop::sendPowerControl(proto::desktop::PowerControl::Action action)
@@ -137,7 +137,7 @@ void ClientDesktop::sendPowerControl(proto::desktop::PowerControl::Action action
     extension->set_name(kPowerControlExtension);
     extension->set_data(power_control.SerializeAsString());
 
-    emit sendMessage(serializeMessage(outgoing_message_));
+    sendMessage(outgoing_message_);
 }
 
 void ClientDesktop::sendConfig(const proto::desktop::Config& config)
@@ -147,7 +147,7 @@ void ClientDesktop::sendConfig(const proto::desktop::Config& config)
 
     outgoing_message_.Clear();
     outgoing_message_.mutable_config()->CopyFrom(config);
-    emit sendMessage(serializeMessage(outgoing_message_));
+    sendMessage(outgoing_message_);
 }
 
 void ClientDesktop::sendScreen(const proto::desktop::Screen& screen)
@@ -159,7 +159,7 @@ void ClientDesktop::sendScreen(const proto::desktop::Screen& screen)
     extension->set_name(kSelectScreenExtension);
     extension->set_data(screen.SerializeAsString());
 
-    emit sendMessage(serializeMessage(outgoing_message_));
+    sendMessage(outgoing_message_);
 }
 
 void ClientDesktop::readConfigRequest(

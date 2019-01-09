@@ -58,7 +58,7 @@ protected:
     virtual void messageReceived(const QByteArray& buffer) = 0;
 
     // Sends outgoing message.
-    void sendMessage(const QByteArray& buffer);
+    void sendMessage(const google::protobuf::MessageLite& message);
 
 private:
     static QString networkErrorToString(NetworkChannel::Error error);

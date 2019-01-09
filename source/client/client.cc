@@ -18,6 +18,8 @@
 
 #include "client/client.h"
 
+#include "base/logging.h"
+
 namespace aspia {
 
 Client::Client(const ConnectData& connect_data, QObject* parent)
@@ -51,8 +53,20 @@ void Client::start()
                                     connect_data_.session_type);
 }
 
-void Client::sendMessage(const QByteArray& buffer)
+void Client::sendMessage(const google::protobuf::MessageLite& message)
 {
+    size_t size = message.ByteSizeLong();
+    if (!size)
+    {
+        LOG(LS_WARNING) << "Empty messages are not allowed";
+        return;
+    }
+
+    QByteArray buffer;
+    buffer.resize(size);
+
+    message.SerializeWithCachedSizesToArray(reinterpret_cast<uint8_t*>(buffer.data()));
+
     network_channel_->send(buffer);
 }
 

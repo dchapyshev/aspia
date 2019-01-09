@@ -24,7 +24,6 @@
 #include "client/ui/file_manager_window.h"
 #include "common/file_request.h"
 #include "common/file_worker.h"
-#include "common/message_serialization.h"
 
 namespace aspia {
 
@@ -55,7 +54,7 @@ void ClientFileTransfer::messageReceived(const QByteArray& buffer)
 {
     proto::file_transfer::Reply reply;
 
-    if (!parseMessage(buffer, reply))
+    if (!reply.ParseFromArray(buffer.constData(), buffer.size()))
     {
         emit errorOccurred(tr("Session error: Invalid message from host."));
         return;
@@ -68,17 +67,16 @@ void ClientFileTransfer::messageReceived(const QByteArray& buffer)
         return;
     }
 
-    FileRequest* request = requests_.front();
+    QScopedPointer<FileRequest> request(requests_.front());
     requests_.pop_front();
 
     request->sendReply(reply);
-    delete request;
 }
 
 void ClientFileTransfer::remoteRequest(FileRequest* request)
 {
     requests_.push_back(QPointer<FileRequest>(request));
-    sendMessage(serializeMessage(request->request()));
+    sendMessage(request->request());
 }
 
 } // namespace aspia
