@@ -48,7 +48,7 @@ public slots:
     void remoteRequest(FileRequest* request);
 
 protected:
-    // ClientSession implementation.
+    // Client implementation.
     void messageReceived(const QByteArray& buffer) override;
 
 private:

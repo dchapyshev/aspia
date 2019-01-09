@@ -57,7 +57,7 @@ public:
     void sendScreen(const proto::desktop::Screen& screen);
 
 protected:
-    // ClientSession implementation.
+    // Client implementation.
     void messageReceived(const QByteArray& buffer) override;
 
 private:
