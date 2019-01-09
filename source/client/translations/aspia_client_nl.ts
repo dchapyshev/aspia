@@ -533,161 +533,141 @@
 <context>
     <name>aspia::Client</name>
     <message>
-        <location filename="../client.cc" line="65"/>
-        <source>Attempt to connect to %1:%2.</source>
-        <translation>Probeer te verbinden met %1:%2.</translation>
-    </message>
-    <message>
-        <location filename="../client.cc" line="76"/>
-        <source>Connection established.</source>
-        <translation>Verbinding opgezet.</translation>
-    </message>
-    <message>
-        <location filename="../client.cc" line="129"/>
+        <location filename="../client.cc" line="81"/>
         <source>Connection was refused by the peer (or timed out).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client.cc" line="133"/>
+        <location filename="../client.cc" line="85"/>
         <source>Remote host closed the connection.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client.cc" line="137"/>
+        <location filename="../client.cc" line="89"/>
         <source>Host address was not found.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client.cc" line="141"/>
+        <location filename="../client.cc" line="93"/>
         <source>Socket operation timed out.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client.cc" line="145"/>
+        <location filename="../client.cc" line="97"/>
         <source>Address specified is already in use and was set to be exclusive.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client.cc" line="149"/>
+        <location filename="../client.cc" line="101"/>
         <source>Address specified does not belong to the host.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client.cc" line="153"/>
+        <location filename="../client.cc" line="105"/>
         <source>Violation of the data exchange protocol.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client.cc" line="157"/>
+        <location filename="../client.cc" line="109"/>
         <source>An error occurred while encrypting the message.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client.cc" line="161"/>
+        <location filename="../client.cc" line="113"/>
         <source>An error occurred while decrypting the message.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client.cc" line="165"/>
+        <location filename="../client.cc" line="117"/>
         <source>An error occured while authenticating: wrong user name or password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client.cc" line="169"/>
+        <location filename="../client.cc" line="121"/>
         <source>Specified session type is not allowed for the user.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client.cc" line="173"/>
+        <location filename="../client.cc" line="125"/>
         <source>An unknown error occurred.</source>
         <translation type="unfinished"></translation>
     </message>
+</context>
+<context>
+    <name>aspia::ClientDesktop</name>
     <message>
-        <location filename="../client.cc" line="119"/>
-        <source>Disconnected.</source>
-        <translation>Verbinding verbroken.</translation>
+        <location filename="../client_desktop.cc" line="49"/>
+        <source>Session error: Invalid message from host.</source>
+        <translation type="unfinished">Sessie fout: Ongeldig bericht van de host.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="93"/>
-        <source>Unsupported session type.</source>
-        <translation>Niet ondersteund sessie type.</translation>
+        <location filename="../client_desktop.cc" line="181"/>
+        <source>Session error: Video decoder not initialized.</source>
+        <translation type="unfinished">Sessie fout: Video decoder niet geinitialiseerd.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="111"/>
-        <source>Session started.</source>
-        <translation>Sessie begonnen.</translation>
+        <location filename="../client_desktop.cc" line="195"/>
+        <source>Session error: Wrong video frame size.</source>
+        <translation type="unfinished">Sessie fout: Verkeerde video frame grootte.</translation>
+    </message>
+    <message>
+        <location filename="../client_desktop.cc" line="202"/>
+        <source>Session error: Wrong video frame position.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client_desktop.cc" line="212"/>
+        <source>Session error: The desktop frame is not initialized.</source>
+        <translation type="unfinished">Sessie fout: Het bureaublad frame is niet geinitialiseerd.</translation>
+    </message>
+    <message>
+        <location filename="../client_desktop.cc" line="218"/>
+        <source>Session error: The video packet could not be decoded.</source>
+        <translation type="unfinished">Sessie fout: Het video pakket kon niet gedecodeerd worden.</translation>
     </message>
 </context>
 <context>
     <name>aspia::ClientDialog</name>
     <message>
-        <location filename="../ui/client_dialog.cc" line="41"/>
+        <location filename="../ui/client_dialog.cc" line="40"/>
         <source>Desktop Manage</source>
         <translation>Bureaublad Beheren</translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.cc" line="45"/>
+        <location filename="../ui/client_dialog.cc" line="44"/>
         <source>Desktop View</source>
         <translation>Bureaublad Weergeven</translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.cc" line="49"/>
+        <location filename="../ui/client_dialog.cc" line="48"/>
         <source>File Transfer</source>
         <translation>Bestands Overdracht</translation>
     </message>
 </context>
 <context>
-    <name>aspia::ClientSessionDesktopManage</name>
+    <name>aspia::ClientFileTransfer</name>
     <message>
-        <location filename="../client_session_desktop_manage.cc" line="51"/>
+        <location filename="../client_file_transfer.cc" line="59"/>
         <source>Session error: Invalid message from host.</source>
-        <translation>Sessie fout: Ongeldig bericht van de host.</translation>
-    </message>
-</context>
-<context>
-    <name>aspia::ClientSessionDesktopView</name>
-    <message>
-        <location filename="../client_session_desktop_view.cc" line="54"/>
-        <source>Session error: Invalid message from host.</source>
-        <translation>Sessie fout: Ongeldig bericht van de host.</translation>
+        <translation type="unfinished">Sessie fout: Ongeldig bericht van de host.</translation>
     </message>
     <message>
-        <location filename="../client_session_desktop_view.cc" line="128"/>
-        <source>Session error: Video decoder not initialized.</source>
-        <translation>Sessie fout: Video decoder niet geinitialiseerd.</translation>
-    </message>
-    <message>
-        <location filename="../client_session_desktop_view.cc" line="142"/>
-        <source>Session error: Wrong video frame size.</source>
-        <translation>Sessie fout: Verkeerde video frame grootte.</translation>
-    </message>
-    <message>
-        <location filename="../client_session_desktop_view.cc" line="149"/>
-        <source>Session error: Wrong video frame position.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client_session_desktop_view.cc" line="159"/>
-        <source>Session error: The desktop frame is not initialized.</source>
-        <translation>Sessie fout: Het bureaublad frame is niet geinitialiseerd.</translation>
-    </message>
-    <message>
-        <location filename="../client_session_desktop_view.cc" line="165"/>
-        <source>Session error: The video packet could not be decoded.</source>
-        <translation>Sessie fout: Het video pakket kon niet gedecodeerd worden.</translation>
-    </message>
-</context>
-<context>
-    <name>aspia::ClientSessionFileTransfer</name>
-    <message>
-        <location filename="../client_session_file_transfer.cc" line="60"/>
-        <source>Session error: Invalid message from host.</source>
-        <translation>Sessie fout: Ongeldig bericht van de host.</translation>
-    </message>
-    <message>
-        <location filename="../client_session_file_transfer.cc" line="67"/>
+        <location filename="../client_file_transfer.cc" line="66"/>
         <source>Session error: There are no logged in users. File transfer is not available.</source>
-        <translation>Sessie fout: Er zijn geen ingelogde gebruikers. Bestandsoverdracht is niet beschikbaar.</translation>
+        <translation type="unfinished">Sessie fout: Er zijn geen ingelogde gebruikers. Bestandsoverdracht is niet beschikbaar.</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::ClientWindow</name>
+    <message>
+        <location filename="../ui/client_window.cc" line="118"/>
+        <source>Attempt to connect to %1:%2.</source>
+        <translation type="unfinished">Probeer te verbinden met %1:%2.</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="125"/>
+        <source>Session started.</source>
+        <translation type="unfinished">Sessie begonnen.</translation>
     </message>
 </context>
 <context>
@@ -757,32 +737,32 @@
 <context>
     <name>aspia::DesktopWindow</name>
     <message>
-        <location filename="../ui/desktop_window.cc" line="47"/>
+        <location filename="../ui/desktop_window.cc" line="439"/>
         <source>Aspia Desktop Manage</source>
         <translation>Aspia Bureaublad Beheer</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="52"/>
+        <location filename="../ui/desktop_window.cc" line="444"/>
         <source>Aspia Desktop View</source>
         <translation>Aspia Bureaublad Weergave</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="292"/>
+        <location filename="../ui/desktop_window.cc" line="286"/>
         <source>Save File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="294"/>
+        <location filename="../ui/desktop_window.cc" line="288"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="314"/>
+        <location filename="../ui/desktop_window.cc" line="308"/>
         <source>Warning</source>
         <translation type="unfinished">Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="314"/>
+        <location filename="../ui/desktop_window.cc" line="308"/>
         <source>Could not save image</source>
         <translation type="unfinished"></translation>
     </message>
@@ -843,17 +823,17 @@
 <context>
     <name>aspia::FileManagerWindow</name>
     <message>
-        <location filename="../ui/file_manager_window.cc" line="41"/>
+        <location filename="../ui/file_manager_window.cc" line="262"/>
         <source>%1 - Aspia File Transfer</source>
         <translation>%1 - Aspia Bestands Overdracht</translation>
     </message>
     <message>
-        <location filename="../ui/file_manager_window.cc" line="50"/>
+        <location filename="../ui/file_manager_window.cc" line="46"/>
         <source>Local Computer</source>
         <translation>Lokale Computer</translation>
     </message>
     <message>
-        <location filename="../ui/file_manager_window.cc" line="55"/>
+        <location filename="../ui/file_manager_window.cc" line="49"/>
         <source>Remote Computer</source>
         <translation>Computer op afstand</translation>
     </message>
@@ -861,76 +841,76 @@
 <context>
     <name>aspia::FilePanel</name>
     <message>
-        <location filename="../ui/file_panel.cc" line="145"/>
-        <location filename="../ui/file_panel.cc" line="158"/>
-        <location filename="../ui/file_panel.cc" line="182"/>
-        <location filename="../ui/file_panel.cc" line="193"/>
-        <location filename="../ui/file_panel.cc" line="283"/>
-        <location filename="../ui/file_panel.cc" line="292"/>
-        <location filename="../ui/file_panel.cc" line="310"/>
-        <location filename="../ui/file_panel.cc" line="319"/>
+        <location filename="../ui/file_panel.cc" line="155"/>
+        <location filename="../ui/file_panel.cc" line="168"/>
+        <location filename="../ui/file_panel.cc" line="192"/>
+        <location filename="../ui/file_panel.cc" line="203"/>
+        <location filename="../ui/file_panel.cc" line="293"/>
+        <location filename="../ui/file_panel.cc" line="302"/>
+        <location filename="../ui/file_panel.cc" line="320"/>
+        <location filename="../ui/file_panel.cc" line="329"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="146"/>
+        <location filename="../ui/file_panel.cc" line="156"/>
         <source>Failed to get list of drives: %1</source>
         <translation>Kon lijst van schijven niet maken: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="159"/>
+        <location filename="../ui/file_panel.cc" line="169"/>
         <source>Failed to get list of files: %1</source>
         <translation>Kon lijst van bestanden niet maken: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="183"/>
+        <location filename="../ui/file_panel.cc" line="193"/>
         <source>Failed to create directory: %1</source>
         <translation>Kon lijst van mappen niet maken: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="194"/>
+        <location filename="../ui/file_panel.cc" line="204"/>
         <source>Failed to rename item: %1</source>
         <translation>Kon object niet hernoemen: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="263"/>
+        <location filename="../ui/file_panel.cc" line="273"/>
         <source>%1 object(s) selected</source>
         <translation>%1 object(en) geselecteerd</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="284"/>
-        <location filename="../ui/file_panel.cc" line="311"/>
+        <location filename="../ui/file_panel.cc" line="294"/>
+        <location filename="../ui/file_panel.cc" line="321"/>
         <source>Folder name can not be empty.</source>
         <translation>Map naam mag niet leeg zijn.</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="293"/>
-        <location filename="../ui/file_panel.cc" line="320"/>
+        <location filename="../ui/file_panel.cc" line="303"/>
+        <location filename="../ui/file_panel.cc" line="330"/>
         <source>Name contains invalid characters.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="344"/>
+        <location filename="../ui/file_panel.cc" line="354"/>
         <source>&amp;Send	F11</source>
         <translation>&amp;Stuur	F11</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="346"/>
+        <location filename="../ui/file_panel.cc" line="356"/>
         <source>&amp;Delete	Delete</source>
         <translation>&amp;Delete	Delete</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="356"/>
+        <location filename="../ui/file_panel.cc" line="366"/>
         <source>&amp;Create Folder</source>
         <translation>&amp;Map maken</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="411"/>
+        <location filename="../ui/file_panel.cc" line="421"/>
         <source>Confirmation</source>
         <translation>Bevestiging</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="412"/>
+        <location filename="../ui/file_panel.cc" line="422"/>
         <source>Are you sure you want to delete the selected items?</source>
         <translation>Weet U zeker dat U de geselecteerde objecten wilt verwijderen?</translation>
     </message>
