@@ -737,32 +737,32 @@
 <context>
     <name>aspia::DesktopWindow</name>
     <message>
-        <location filename="../ui/desktop_window.cc" line="439"/>
+        <location filename="../ui/desktop_window.cc" line="436"/>
         <source>Aspia Desktop Manage</source>
         <translation>Aspia Bureaublad Beheer</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="444"/>
+        <location filename="../ui/desktop_window.cc" line="441"/>
         <source>Aspia Desktop View</source>
         <translation>Aspia Bureaublad Weergave</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="286"/>
+        <location filename="../ui/desktop_window.cc" line="284"/>
         <source>Save File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="288"/>
+        <location filename="../ui/desktop_window.cc" line="286"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="308"/>
+        <location filename="../ui/desktop_window.cc" line="306"/>
         <source>Warning</source>
         <translation type="unfinished">Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="308"/>
+        <location filename="../ui/desktop_window.cc" line="306"/>
         <source>Could not save image</source>
         <translation type="unfinished"></translation>
     </message>

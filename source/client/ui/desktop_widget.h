@@ -42,7 +42,16 @@ class DesktopWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit DesktopWidget(QWidget* parent);
+    class Delegate
+    {
+    public:
+        virtual ~Delegate() = default;
+
+        virtual void sendPointerEvent(const QPoint& pos, uint32_t mask) = 0;
+        virtual void sendKeyEvent(uint32_t usb_keycode, uint32_t flags) = 0;
+    };
+
+    DesktopWidget(Delegate* delegate, QWidget* parent);
     ~DesktopWidget() = default;
 
     void resizeDesktopFrame(const QSize& screen_size);
@@ -60,10 +69,6 @@ public slots:
     // Enables or disables the sending of key combinations. It only affects the input received
     // from the user. Slot |executeKeySequense| can send key combinations.
     void enableKeyCombinations(bool enable);
-
-signals:
-    void sendKeyEvent(uint32_t usb_keycode, uint32_t flags);
-    void sendPointerEvent(const QPoint& pos, uint32_t mask);
 
 protected:
     // QWidget implementation.
@@ -88,8 +93,9 @@ private:
     ScopedHHOOK keyboard_hook_;
 #endif // defined(OS_WIN)
 
-    std::unique_ptr<DesktopFrameQImage> frame_;
+    Delegate* delegate_;
 
+    std::unique_ptr<DesktopFrameQImage> frame_;
     bool enable_key_sequenses_ = true;
 
     QPoint prev_pos_;

@@ -59,8 +59,9 @@ bool isModifierKey(int key)
 
 } // namespace
 
-DesktopWidget::DesktopWidget(QWidget* parent)
-    : QWidget(parent)
+DesktopWidget::DesktopWidget(Delegate* delegate, QWidget* parent)
+    : QWidget(parent),
+      delegate_(delegate)
 {
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     setFocusPolicy(Qt::StrongFocus);
@@ -135,13 +136,13 @@ void DesktopWidget::doMouseEvent(QEvent::Type event_type,
         {
             for (int i = 0; i < wheel_steps; ++i)
             {
-                emit sendPointerEvent(pos, mask);
-                emit sendPointerEvent(pos, mask & ~kWheelMask);
+                delegate_->sendPointerEvent(pos, mask);
+                delegate_->sendPointerEvent(pos, mask & ~kWheelMask);
             }
         }
         else
         {
-            emit sendPointerEvent(pos, mask);
+            delegate_->sendPointerEvent(pos, mask);
         }
     }
 }
@@ -271,7 +272,7 @@ void DesktopWidget::leaveEvent(QEvent* event)
     // When the mouse cursor leaves the widget area, release all the mouse buttons.
     if (prev_mask_ != 0)
     {
-        emit sendPointerEvent(prev_pos_, 0);
+        delegate_->sendPointerEvent(prev_pos_, 0);
         prev_mask_ = 0;
     }
 
@@ -316,7 +317,7 @@ void DesktopWidget::executeKeyEvent(uint32_t usb_keycode, uint32_t flags)
     else
         pressed_keys_.erase(usb_keycode);
 
-    emit sendKeyEvent(usb_keycode, flags);
+    delegate_->sendKeyEvent(usb_keycode, flags);
 }
 
 #if defined(OS_WIN)

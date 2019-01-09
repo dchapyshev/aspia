@@ -20,6 +20,7 @@
 #define ASPIA_CLIENT__UI__DESKTOP_WINDOW_H
 
 #include "client/ui/client_window.h"
+#include "client/ui/desktop_widget.h"
 #include "client/client_desktop.h"
 #include "protocol/desktop_session.pb.h"
 #include "protocol/desktop_session_extensions.pb.h"
@@ -32,11 +33,11 @@ namespace aspia {
 class Clipboard;
 class DesktopFrame;
 class DesktopPanel;
-class DesktopWidget;
 
 class DesktopWindow :
     public ClientWindow,
-    public ClientDesktop::Delegate
+    public ClientDesktop::Delegate,
+    public DesktopWidget::Delegate
 {
     Q_OBJECT
 
@@ -52,8 +53,9 @@ public:
     void injectClipboard(const proto::desktop::ClipboardEvent& event) override;
     void setScreenList(const proto::desktop::ScreenList& screen_list) override;
 
-signals:
-    void windowClose();
+    // DesktopWidget::Delegate implementation.
+    void sendPointerEvent(const QPoint& pos, uint32_t mask) override;
+    void sendKeyEvent(uint32_t usb_keycode, uint32_t flags) override;
 
 protected:
     // QWidget implementation.
@@ -64,7 +66,6 @@ protected:
     bool eventFilter(QObject* object, QEvent* event) override;
 
 private slots:
-    void onPointerEvent(const QPoint& pos, uint32_t mask);
     void changeSettings();
     void onConfigChanged(const proto::desktop::Config& config);
     void autosizeWindow();

@@ -30,7 +30,6 @@
 #include "base/logging.h"
 #include "client/ui/desktop_config_dialog.h"
 #include "client/ui/desktop_panel.h"
-#include "client/ui/desktop_widget.h"
 #include "common/clipboard.h"
 #include "desktop_capture/desktop_frame_qimage.h"
 
@@ -44,7 +43,7 @@ DesktopWindow::DesktopWindow(const ConnectData& connect_data, QWidget* parent)
     setWindowTitle(createWindowTitle(connect_data));
     setMinimumSize(400, 300);
 
-    desktop_ = new DesktopWidget(this);
+    desktop_ = new DesktopWidget(this, this);
 
     scroll_area_ = new QScrollArea(this);
     scroll_area_->setAlignment(Qt::AlignCenter);
@@ -90,12 +89,6 @@ DesktopWindow::DesktopWindow(const ConnectData& connect_data, QWidget* parent)
 
     connect(panel_, &DesktopPanel::keyCombinationsChanged,
             desktop_, &DesktopWidget::enableKeyCombinations);
-
-    connect(desktop_, &DesktopWidget::sendPointerEvent,
-            desktopClient(), &ClientDesktop::sendPointerEvent);
-
-    connect(desktop_, &DesktopWidget::sendKeyEvent,
-            desktopClient(), &ClientDesktop::sendKeyEvent);
 
     desktop_->installEventFilter(this);
     scroll_area_->viewport()->installEventFilter(this);
@@ -163,7 +156,7 @@ void DesktopWindow::setScreenList(const proto::desktop::ScreenList& screen_list)
     panel_->setScreenList(screen_list);
 }
 
-void DesktopWindow::onPointerEvent(const QPoint& pos, uint32_t mask)
+void DesktopWindow::sendPointerEvent(const QPoint& pos, uint32_t mask)
 {
     if (panel_->autoScrolling() && !panel_->scaling())
     {
@@ -234,6 +227,11 @@ void DesktopWindow::onPointerEvent(const QPoint& pos, uint32_t mask)
 
         client->sendPointerEvent(QPoint(x, y), mask);
     }
+}
+
+void DesktopWindow::sendKeyEvent(uint32_t usb_keycode, uint32_t flags)
+{
+    desktopClient()->sendKeyEvent(usb_keycode, flags);
 }
 
 void DesktopWindow::changeSettings()
@@ -373,7 +371,6 @@ void DesktopWindow::closeEvent(QCloseEvent* event)
             widget->close();
     }
 
-    emit windowClose();
     QWidget::closeEvent(event);
 }
 
