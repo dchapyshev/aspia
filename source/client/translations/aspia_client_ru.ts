@@ -133,90 +133,95 @@
 <context>
     <name>DesktopPanel</name>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="120"/>
+        <location filename="../ui/desktop_panel.ui" line="121"/>
         <source>Lock toolbar</source>
         <translation>Закрепить панель инструментов</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="132"/>
+        <location filename="../ui/desktop_panel.ui" line="133"/>
         <source>Session configuration</source>
         <translation>Параметры сессии</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="144"/>
+        <location filename="../ui/desktop_panel.ui" line="145"/>
         <source>Monitor selection</source>
         <translation>Выбор монитора</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="156"/>
+        <location filename="../ui/desktop_panel.ui" line="157"/>
         <source>Automatic window size</source>
         <translation>Автоматический размер окна</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="171"/>
+        <location filename="../ui/desktop_panel.ui" line="172"/>
         <source>Switch to full screen mode or back</source>
         <translation>Переключиться на полный экран (или назад)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="182"/>
+        <location filename="../ui/desktop_panel.ui" line="183"/>
         <source>Automatic scrolling</source>
         <translation>Автоматическая прокрутка</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="206"/>
+        <location filename="../ui/desktop_panel.ui" line="207"/>
         <source>Advanced menu</source>
         <translation>Расширенное меню</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="248"/>
+        <location filename="../ui/desktop_panel.ui" line="249"/>
         <source>Send key combinations</source>
         <translation>Отправлять комбинации клавиш</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="257"/>
-        <location filename="../ui/desktop_panel.ui" line="260"/>
+        <location filename="../ui/desktop_panel.ui" line="258"/>
+        <location filename="../ui/desktop_panel.ui" line="261"/>
         <source>Power control</source>
         <translation>Управление питанием</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="265"/>
+        <location filename="../ui/desktop_panel.ui" line="266"/>
         <source>Shutdown</source>
         <translation>Выключение</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="270"/>
+        <location filename="../ui/desktop_panel.ui" line="271"/>
         <source>Reboot</source>
         <translation>Перезагрузка</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="275"/>
+        <location filename="../ui/desktop_panel.ui" line="276"/>
         <source>Logoff</source>
         <translation>Завершение сеанса</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="280"/>
+        <location filename="../ui/desktop_panel.ui" line="281"/>
         <source>Lock</source>
         <translation>Блокировка</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="211"/>
-        <location filename="../ui/desktop_panel.ui" line="214"/>
-        <location filename="../ui/desktop_panel.ui" line="217"/>
+        <location filename="../ui/desktop_panel.ui" line="290"/>
+        <source>Remote Update</source>
+        <translation>Удаленное обновление</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_panel.ui" line="212"/>
+        <location filename="../ui/desktop_panel.ui" line="215"/>
+        <location filename="../ui/desktop_panel.ui" line="218"/>
         <source>Save screenshot...</source>
         <translation>Сохранить снимок экрана...</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="229"/>
+        <location filename="../ui/desktop_panel.ui" line="230"/>
         <source>File transfer</source>
         <translation>Передача файлов</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="237"/>
+        <location filename="../ui/desktop_panel.ui" line="238"/>
         <source>Scaling an image</source>
         <translation>Масштабирование изображения</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="194"/>
+        <location filename="../ui/desktop_panel.ui" line="195"/>
         <source>Send Ctrl+Alt+Delete</source>
         <translation>Отправить Ctrl+Alt+Delete</translation>
     </message>
@@ -533,62 +538,62 @@
 <context>
     <name>aspia::Client</name>
     <message>
-        <location filename="../client.cc" line="81"/>
+        <location filename="../client.cc" line="89"/>
         <source>Connection was refused by the peer (or timed out).</source>
         <translation>Подключение было отклонено другой стороной (или превышено время ожидания).</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="85"/>
+        <location filename="../client.cc" line="93"/>
         <source>Remote host closed the connection.</source>
         <translation>Удаленный узел закрыл подключение.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="89"/>
+        <location filename="../client.cc" line="97"/>
         <source>Host address was not found.</source>
         <translation>Не найден адрес удаленного узла.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="93"/>
+        <location filename="../client.cc" line="101"/>
         <source>Socket operation timed out.</source>
         <translation>Превышено время ожидания.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="97"/>
+        <location filename="../client.cc" line="105"/>
         <source>Address specified is already in use and was set to be exclusive.</source>
         <translation>Указанный адрес уже используется и был установлен монопольно.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="101"/>
+        <location filename="../client.cc" line="109"/>
         <source>Address specified does not belong to the host.</source>
         <translation>Указанный адрес не принадлежит узлу.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="105"/>
+        <location filename="../client.cc" line="113"/>
         <source>Violation of the data exchange protocol.</source>
         <translation>Нарушение протокола обмена данными.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="109"/>
+        <location filename="../client.cc" line="117"/>
         <source>An error occurred while encrypting the message.</source>
         <translation>Произошла ошибка при шифровании сообщения.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="113"/>
+        <location filename="../client.cc" line="121"/>
         <source>An error occurred while decrypting the message.</source>
         <translation>Произошла ошибка при расшифровке сообщения.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="117"/>
+        <location filename="../client.cc" line="125"/>
         <source>An error occured while authenticating: wrong user name or password.</source>
         <translation>Произошла ошибка при аутификации: неправильное имя пользователя или пароль.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="121"/>
+        <location filename="../client.cc" line="129"/>
         <source>Specified session type is not allowed for the user.</source>
         <translation>Указанный тип сессии не разрешен для пользователя.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="125"/>
+        <location filename="../client.cc" line="133"/>
         <source>An unknown error occurred.</source>
         <translation>Произошла неизвестная ошибка.</translation>
     </message>
@@ -601,27 +606,27 @@
         <translation>Ошибка сессии: Неверное сообщение от хоста.</translation>
     </message>
     <message>
-        <location filename="../client_desktop.cc" line="181"/>
+        <location filename="../client_desktop.cc" line="188"/>
         <source>Session error: Video decoder not initialized.</source>
         <translation>Ошибка сессии: Видео-декодер не инициализирован.</translation>
     </message>
     <message>
-        <location filename="../client_desktop.cc" line="195"/>
+        <location filename="../client_desktop.cc" line="202"/>
         <source>Session error: Wrong video frame size.</source>
         <translation>Ошибка сессии: Неверный размер экрана.</translation>
     </message>
     <message>
-        <location filename="../client_desktop.cc" line="202"/>
+        <location filename="../client_desktop.cc" line="209"/>
         <source>Session error: Wrong video frame position.</source>
         <translation>Ошибка сессии: Неверное положение видео-кадра.</translation>
     </message>
     <message>
-        <location filename="../client_desktop.cc" line="212"/>
+        <location filename="../client_desktop.cc" line="219"/>
         <source>Session error: The desktop frame is not initialized.</source>
         <translation>Ошибка сессии: Рабочий стол не инициализирован.</translation>
     </message>
     <message>
-        <location filename="../client_desktop.cc" line="218"/>
+        <location filename="../client_desktop.cc" line="225"/>
         <source>Session error: The video packet could not be decoded.</source>
         <translation>Ошибка сессии: Не удалось декодировать видео-пакет.</translation>
     </message>
@@ -706,30 +711,30 @@
 <context>
     <name>aspia::DesktopPanel</name>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="215"/>
-        <location filename="../ui/desktop_panel.cc" line="226"/>
-        <location filename="../ui/desktop_panel.cc" line="237"/>
-        <location filename="../ui/desktop_panel.cc" line="248"/>
+        <location filename="../ui/desktop_panel.cc" line="223"/>
+        <location filename="../ui/desktop_panel.cc" line="234"/>
+        <location filename="../ui/desktop_panel.cc" line="245"/>
+        <location filename="../ui/desktop_panel.cc" line="256"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="216"/>
+        <location filename="../ui/desktop_panel.cc" line="224"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>Вы действительно хотите выключить удаленный компьютер?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="227"/>
+        <location filename="../ui/desktop_panel.cc" line="235"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>Вы действительно хотите перезагрузить удаленный компьютер?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="238"/>
+        <location filename="../ui/desktop_panel.cc" line="246"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>Вы действительно хотите завершить сеанс пользователя на удаленном компьютере?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="249"/>
+        <location filename="../ui/desktop_panel.cc" line="257"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>Вы действительно хотите заблокировать сеанс пользователя на удаленном компьютере?</translation>
     </message>
@@ -737,32 +742,32 @@
 <context>
     <name>aspia::DesktopWindow</name>
     <message>
-        <location filename="../ui/desktop_window.cc" line="436"/>
+        <location filename="../ui/desktop_window.cc" line="450"/>
         <source>Aspia Desktop Manage</source>
         <translation>Управление рабочим столом</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="441"/>
+        <location filename="../ui/desktop_window.cc" line="455"/>
         <source>Aspia Desktop View</source>
         <translation>Просмотр рабочего стола</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="284"/>
+        <location filename="../ui/desktop_window.cc" line="286"/>
         <source>Save File</source>
         <translation>Сохранение файла</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="286"/>
+        <location filename="../ui/desktop_window.cc" line="288"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG изображение (*.png);;BMP изображение (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="306"/>
+        <location filename="../ui/desktop_window.cc" line="308"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="306"/>
+        <location filename="../ui/desktop_window.cc" line="308"/>
         <source>Could not save image</source>
         <translation>Не удалось сохранить изображение</translation>
     </message>

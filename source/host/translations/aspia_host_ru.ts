@@ -4,27 +4,32 @@
 <context>
     <name>HostConfig</name>
     <message>
-        <location filename="../host_config_main.cc" line="64"/>
+        <location filename="../host_config_main.cc" line="65"/>
         <source>The path to the file to import.</source>
         <translation>Путь к файлу для импорта.</translation>
     </message>
     <message>
-        <location filename="../host_config_main.cc" line="67"/>
+        <location filename="../host_config_main.cc" line="68"/>
         <source>The path to the file to export.</source>
         <translation>Путь к файлу для экспорта.</translation>
     </message>
     <message>
-        <location filename="../host_config_main.cc" line="70"/>
+        <location filename="../host_config_main.cc" line="71"/>
         <source>Enables silent mode when exporting and importing.</source>
         <translation>Включает тихий режим при экспортировании и импортировании.</translation>
     </message>
     <message>
-        <location filename="../host_config_main.cc" line="86"/>
+        <location filename="../host_config_main.cc" line="74"/>
+        <source>Run application update.</source>
+        <translation>Запускает обновление приложения.</translation>
+    </message>
+    <message>
+        <location filename="../host_config_main.cc" line="91"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../host_config_main.cc" line="87"/>
+        <location filename="../host_config_main.cc" line="92"/>
         <source>Export and import parameters can not be specified together.</source>
         <translation>Параметры экспорта и импорта не могут быть указаны одновременно.</translation>
     </message>
