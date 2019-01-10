@@ -251,7 +251,7 @@ void NetworkChannelClient::readSessionChallenge(const QByteArray& buffer)
 
     const proto::Version& host_version = session_challenge.version();
 
-    host_version_ = QVersionNumber(
+    peer_version_ = QVersionNumber(
         host_version.major(), host_version.minor(), host_version.patch());
 
     proto::SessionResponse session_response;

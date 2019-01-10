@@ -65,6 +65,9 @@ protected:
     void leaveEvent(QEvent* event) override;
     bool eventFilter(QObject* object, QEvent* event) override;
 
+    // ClientWindow implementation.
+    void sessionStarted() override;
+
 private slots:
     void changeSettings();
     void onConfigChanged(const proto::desktop::Config& config);

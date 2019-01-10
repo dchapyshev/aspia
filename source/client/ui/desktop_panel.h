@@ -36,6 +36,7 @@ public:
     ~DesktopPanel();
 
     void setScreenList(const proto::desktop::ScreenList& screen_list);
+    void setUpdateAvaliable(bool available);
 
     bool scaling() const;
     bool autoScrolling() const;
@@ -53,6 +54,7 @@ signals:
     void takeScreenshot();
     void startSession(proto::SessionType session_type);
     void powerControl(proto::desktop::PowerControl::Action action);
+    void startRemoteUpdate();
 
 protected:
     // QFrame implementation.

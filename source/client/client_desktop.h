@@ -55,6 +55,7 @@ public:
     void sendPowerControl(proto::desktop::PowerControl::Action action);
     void sendConfig(const proto::desktop::Config& config);
     void sendScreen(const proto::desktop::Screen& screen);
+    void sendRemoteUpdate();
 
 protected:
     // Client implementation.

@@ -162,6 +162,13 @@ void ClientDesktop::sendScreen(const proto::desktop::Screen& screen)
     sendMessage(outgoing_message_);
 }
 
+void ClientDesktop::sendRemoteUpdate()
+{
+    outgoing_message_.Clear();
+    outgoing_message_.mutable_extension()->set_name(kRemoteUpdateExtension);
+    sendMessage(outgoing_message_);
+}
+
 void ClientDesktop::readConfigRequest(
     const proto::desktop::ConfigRequest& /* config_request */)
 {

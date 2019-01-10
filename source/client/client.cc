@@ -53,6 +53,14 @@ void Client::start()
                                     connect_data_.session_type);
 }
 
+QVersionNumber Client::hostVersion() const
+{
+    if (!network_channel_)
+        return QVersionNumber();
+
+    return network_channel_->peerVersion();
+}
+
 void Client::sendMessage(const google::protobuf::MessageLite& message)
 {
     size_t size = message.ByteSizeLong();

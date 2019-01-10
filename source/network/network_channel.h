@@ -22,6 +22,7 @@
 #include <QPointer>
 #include <QQueue>
 #include <QTcpSocket>
+#include <QVersionNumber>
 
 #include "base/macros_magic.h"
 
@@ -65,6 +66,9 @@ public:
     // Returns the address of the connected peer.
     QString peerAddress() const;
 
+    // Returns the version of the connected peer.
+    QVersionNumber peerVersion() const;
+
 signals:
     // Emits when the connection is aborted.
     void disconnected();
@@ -94,6 +98,7 @@ public slots:
 
 protected:
     QPointer<QTcpSocket> socket_;
+    QVersionNumber peer_version_;
 
     // Encrypts and decrypts data.
     std::unique_ptr<Cryptor> cryptor_;

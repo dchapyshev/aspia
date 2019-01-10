@@ -1,6 +1,7 @@
 <RCC>
   <qresource prefix="/img">
     <file>lightning.png</file>
+    <file>update.png</file>
     <file>menu.png</file>
     <file>monitors.png</file>
     <file>hardware.png</file>

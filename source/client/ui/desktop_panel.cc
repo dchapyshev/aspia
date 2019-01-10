@@ -42,6 +42,7 @@ DesktopPanel::DesktopPanel(proto::SessionType session_type, QWidget* parent)
     connect(ui.action_autosize, &QAction::triggered, this, &DesktopPanel::onAutosizeButton);
     connect(ui.action_fullscreen, &QAction::triggered, this, &DesktopPanel::onFullscreenButton);
     connect(ui.action_autoscroll, &QAction::triggered, this, &DesktopPanel::autoScrollChanged);
+    connect(ui.action_update, &QAction::triggered, this, &DesktopPanel::startRemoteUpdate);
 
     createScreensMenu();
     createAdditionalMenu(session_type);
@@ -107,6 +108,13 @@ void DesktopPanel::setScreenList(const proto::desktop::ScreenList& screen_list)
     }
 
     ui.action_monitors->setEnabled(true);
+}
+
+void DesktopPanel::setUpdateAvaliable(bool available)
+{
+    ui.action_update->setVisible(available);
+    ui.toolbar->adjustSize();
+    adjustSize();
 }
 
 bool DesktopPanel::scaling() const

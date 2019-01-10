@@ -28,6 +28,7 @@
 #include <QScrollBar>
 
 #include "base/logging.h"
+#include "build/version.h"
 #include "client/ui/desktop_config_dialog.h"
 #include "client/ui/desktop_panel.h"
 #include "common/clipboard.h"
@@ -70,6 +71,7 @@ DesktopWindow::DesktopWindow(const ConnectData& connect_data, QWidget* parent)
     connect(panel_, &DesktopPanel::scalingChanged, this, &DesktopWindow::onScalingChanged);
     connect(panel_, &DesktopPanel::screenSelected, desktopClient(), &ClientDesktop::sendScreen);
     connect(panel_, &DesktopPanel::powerControl, desktopClient(), &ClientDesktop::sendPowerControl);
+    connect(panel_, &DesktopPanel::startRemoteUpdate, desktopClient(), &ClientDesktop::sendRemoteUpdate);
 
     connect(panel_, &DesktopPanel::switchToFullscreen, [this](bool fullscreen)
     {
@@ -420,6 +422,18 @@ bool DesktopWindow::eventFilter(QObject* object, QEvent* event)
     }
 
     return QWidget::eventFilter(object, event);
+}
+
+void DesktopWindow::sessionStarted()
+{
+    if (currentClient()->connectData().session_type != proto::SESSION_TYPE_DESKTOP_MANAGE)
+        return;
+
+    QVersionNumber client_version(
+        ASPIA_VERSION_MAJOR, ASPIA_VERSION_MINOR, ASPIA_VERSION_PATCH);
+
+    if (client_version > desktopClient()->hostVersion())
+        panel_->setUpdateAvaliable(true);
 }
 
 ClientDesktop* DesktopWindow::desktopClient()

@@ -43,6 +43,9 @@ public:
 
     ConnectData& connectData() { return connect_data_; }
 
+    // Returns the version of the connected host.
+    QVersionNumber hostVersion() const;
+
 signals:
     // Indicates that the session is started.
     void started();

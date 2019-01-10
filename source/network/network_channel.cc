@@ -104,6 +104,11 @@ QString NetworkChannel::peerAddress() const
     return address.toString();
 }
 
+QVersionNumber NetworkChannel::peerVersion() const
+{
+    return peer_version_;
+}
+
 void NetworkChannel::start()
 {
     if (isStarted())

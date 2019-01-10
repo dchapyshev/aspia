@@ -41,8 +41,6 @@ public:
                        const QString& username, const QString& password,
                        proto::SessionType session_type);
 
-    QVersionNumber hostVersion() const { return host_version_; }
-
 signals:
     // Emits when a secure connection is established.
     void connected();
@@ -63,7 +61,6 @@ private:
     QString username_;
     QString password_;
     proto::SessionType session_type_ = proto::SESSION_TYPE_UNKNOWN;
-    QVersionNumber host_version_;
 
     std::unique_ptr<SrpClientContext> srp_client_;
 

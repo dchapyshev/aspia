@@ -21,6 +21,8 @@
 
 #include <QStringList>
 
+#include "base/win/scoped_object.h"
+
 namespace aspia {
 
 enum class ProcessExecuteMode { NORMAL, ELEVATE };
@@ -30,6 +32,13 @@ bool executeProcess(const QString& program,
                     ProcessExecuteMode mode = ProcessExecuteMode::NORMAL);
 
 bool executeProcess(const QString& program, ProcessExecuteMode mode = ProcessExecuteMode::NORMAL);
+
+bool copyProcessToken(DWORD desired_access, ScopedHandle* token_out);
+
+// Creates a copy of the current process with SE_TCB_NAME privilege enabled.
+bool createPrivilegedToken(ScopedHandle* token_out);
+
+QString createCommandLine(const QString& program, const QStringList& arguments);
 
 } // namespace aspia
 

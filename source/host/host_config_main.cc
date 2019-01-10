@@ -27,6 +27,7 @@
 #include "crypto/scoped_crypto_initializer.h"
 #include "host/ui/host_config_dialog.h"
 #include "host/host_settings.h"
+#include "updater/update_dialog.h"
 
 using namespace aspia;
 
@@ -69,12 +70,16 @@ int hostConfigMain(int argc, char *argv[])
     QCommandLineOption silent_option("silent",
         QApplication::translate("HostConfig", "Enables silent mode when exporting and importing."));
 
+    QCommandLineOption update_option("update",
+        QApplication::translate("HostConfig", "Run application update."));
+
     QCommandLineParser parser;
     parser.addHelpOption();
     parser.addVersionOption();
     parser.addOption(import_option);
     parser.addOption(export_option);
     parser.addOption(silent_option);
+    parser.addOption(update_option);
     parser.process(application);
 
     if (parser.isSet(import_option) && parser.isSet(export_option))
@@ -99,6 +104,14 @@ int hostConfigMain(int argc, char *argv[])
     {
         if (!HostConfigDialog::exportSettings(parser.value(export_option), parser.isSet(silent_option)))
             return 1;
+    }
+    else if (parser.isSet(update_option))
+    {
+        UpdateDialog dialog(host_settings.updateServer(), QLatin1String("host"));
+        dialog.show();
+        dialog.activateWindow();
+
+        return application.exec();
     }
     else
     {

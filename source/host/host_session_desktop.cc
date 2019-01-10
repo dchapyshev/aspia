@@ -24,10 +24,12 @@
 #include "common/message_serialization.h"
 #include "host/input_injector.h"
 #include "host/screen_updater.h"
+#include "host/host_settings.h"
 #include "protocol/desktop_session_extensions.pb.h"
 
 #if defined(OS_WIN)
 #include "desktop_capture/win/visual_effects_disabler.h"
+#include "host/win/updater_launcher.h"
 #endif // defined(OS_WIN)
 
 namespace aspia {
@@ -203,6 +205,14 @@ void HostSessionDesktop::readExtension(const proto::desktop::Extension& extensio
             default:
                 LOG(LS_WARNING) << "Unhandled power control action: " << power_control.action();
                 break;
+        }
+    }
+    else if (extension.name() == kRemoteUpdateExtension)
+    {
+        if (session_type_ == proto::SESSION_TYPE_DESKTOP_MANAGE &&
+            HostSettings().remoteUpdate())
+        {
+            launchUpdater();
         }
     }
     else
