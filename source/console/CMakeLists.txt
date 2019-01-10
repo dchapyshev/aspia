@@ -96,6 +96,16 @@ if(Qt5LinguistTools_FOUND)
     # Get the list of Aspia translation files.
     file(GLOB CONSOLE_TS_FILES translations/*.ts)
     add_translations(aspia_console QRC_FILE "translations/console_translations.qrc" TS_FILES ${CONSOLE_TS_FILES})
+
+    # Get the list of files containing messages.
+    file(GLOB_RECURSE CONSOLE_TR_SOURCES
+        ${PROJECT_SOURCE_DIR}/console/*.cc
+        ${PROJECT_SOURCE_DIR}/console/*.cpp
+        ${PROJECT_SOURCE_DIR}/console/*.h
+        ${PROJECT_SOURCE_DIR}/console/*.ui)
+
+    qt5_create_translation(TS_CONSOLE_UPDATE ${CONSOLE_TR_SOURCES} ${CONSOLE_TS_FILES})
+    add_custom_target(aspia_console_ts_update DEPENDS ${TS_CONSOLE_UPDATE})
 else()
     message(WARNING "Qt5 linguist tools not found. Internationalization support will be disabled.")
 endif()
