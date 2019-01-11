@@ -83,7 +83,7 @@ bool VideoDecoderZstd::decode(const proto::desktop::VideoPacket& packet,
 
         while (row_y < rect.height())
         {
-            size_t ret = ZSTD_decompressStream(stream_.get(), &output, &input);
+            ret = ZSTD_decompressStream(stream_.get(), &output, &input);
             if (ZSTD_isError(ret))
             {
                 LOG(LS_WARNING) << "ZSTD_decompressStream failed: " << ZSTD_getErrorName(ret);

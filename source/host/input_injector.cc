@@ -316,7 +316,7 @@ void InputInjectorImpl::injectSAS()
 
     if (key.isValid())
     {
-        LONG status = key.writeValue(kSoftwareSASGeneration, old_state);
+        status = key.writeValue(kSoftwareSASGeneration, old_state);
         if (status != ERROR_SUCCESS)
         {
             LOG(LS_WARNING) << "key.writeValue failed" << systemErrorCodeToString(status);
