@@ -19,6 +19,8 @@
 #ifndef ASPIA_BASE__WIN__SCOPED_WTS_MEMORY_H
 #define ASPIA_BASE__WIN__SCOPED_WTS_MEMORY_H
 
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
 #include <wtsapi32.h>
 
 #include "base/macros_magic.h"
