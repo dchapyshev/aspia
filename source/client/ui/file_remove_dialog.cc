@@ -89,7 +89,6 @@ void FileRemoveDialog::showError(FileRemover* remover,
 
     QAbstractButton* skip_button = nullptr;
     QAbstractButton* skip_all_button = nullptr;
-    QAbstractButton* abort_button = nullptr;
 
     if (actions & FileRemover::Skip)
         skip_button = dialog->addButton(tr("Skip"), QMessageBox::ButtonRole::ActionRole);
@@ -98,7 +97,7 @@ void FileRemoveDialog::showError(FileRemover* remover,
         skip_all_button = dialog->addButton(tr("Skip All"), QMessageBox::ButtonRole::ActionRole);
 
     if (actions & FileRemover::Abort)
-        abort_button = dialog->addButton(tr("Abort"), QMessageBox::ButtonRole::ActionRole);
+        dialog->addButton(tr("Abort"), QMessageBox::ButtonRole::ActionRole);
 
     connect(dialog, &QMessageBox::buttonClicked, [&](QAbstractButton* button)
     {
@@ -109,7 +108,8 @@ void FileRemoveDialog::showError(FileRemover* remover,
                 remover->applyAction(FileRemover::Skip);
                 return;
             }
-            else if (button == skip_all_button)
+
+            if (button == skip_all_button)
             {
                 remover->applyAction(FileRemover::SkipAll);
                 return;

@@ -124,7 +124,6 @@ void FileTransferDialog::showError(FileTransfer* transfer,
     QAbstractButton* skip_all_button = nullptr;
     QAbstractButton* replace_button = nullptr;
     QAbstractButton* replace_all_button = nullptr;
-    QAbstractButton* abort_button = nullptr;
 
     FileTransfer::Actions actions = transfer->availableActions(error_type);
 
@@ -141,7 +140,7 @@ void FileTransferDialog::showError(FileTransfer* transfer,
         replace_all_button = dialog->addButton(tr("Replace All"), QMessageBox::ButtonRole::ActionRole);
 
     if (actions & FileTransfer::Abort)
-        abort_button = dialog->addButton(tr("Abort"), QMessageBox::ButtonRole::ActionRole);
+        dialog->addButton(tr("Abort"), QMessageBox::ButtonRole::ActionRole);
 
     connect(dialog, &QMessageBox::buttonClicked, [&](QAbstractButton* button)
     {
@@ -152,17 +151,20 @@ void FileTransferDialog::showError(FileTransfer* transfer,
                 transfer->applyAction(error_type, FileTransfer::Skip);
                 return;
             }
-            else if (button == skip_all_button)
+
+            if (button == skip_all_button)
             {
                 transfer->applyAction(error_type, FileTransfer::SkipAll);
                 return;
             }
-            else if (button == replace_button)
+
+            if (button == replace_button)
             {
                 transfer->applyAction(error_type, FileTransfer::Replace);
                 return;
             }
-            else if (button == replace_all_button)
+
+            if (button == replace_all_button)
             {
                 transfer->applyAction(error_type, FileTransfer::ReplaceAll);
                 return;

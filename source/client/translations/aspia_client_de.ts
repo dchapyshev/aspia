@@ -933,17 +933,17 @@
         <translation>Warnung</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="95"/>
+        <location filename="../ui/file_remove_dialog.cc" line="94"/>
         <source>Skip</source>
         <translation>Überspringen</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="98"/>
+        <location filename="../ui/file_remove_dialog.cc" line="97"/>
         <source>Skip All</source>
         <translation>All überspringen</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="101"/>
+        <location filename="../ui/file_remove_dialog.cc" line="100"/>
         <source>Abort</source>
         <translation>Abbrechen</translation>
     </message>
@@ -1031,27 +1031,27 @@
         <translation>Warnung</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="132"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="131"/>
         <source>Skip</source>
         <translation>Überspringen</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="135"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="134"/>
         <source>Skip All</source>
         <translation>Alle überspringen</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="138"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="137"/>
         <source>Replace</source>
         <translation>Ersetzen</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="141"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="140"/>
         <source>Replace All</source>
         <translation>Alle ersetzen</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="144"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="143"/>
         <source>Abort</source>
         <translation>Abbrechen</translation>
     </message>
