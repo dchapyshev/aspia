@@ -235,6 +235,9 @@ bool XmlSettings::readFunc(QIODevice& device, QSettings::SettingsMap& map)
                 map[key] = stringToVariant(xml.text().toString(), type);
             }
             break;
+
+            default:
+                break;
         }
     }
 
