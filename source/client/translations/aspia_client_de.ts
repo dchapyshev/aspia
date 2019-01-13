@@ -133,95 +133,100 @@
 <context>
     <name>DesktopPanel</name>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="121"/>
+        <location filename="../ui/desktop_panel.ui" line="122"/>
         <source>Lock toolbar</source>
         <translation>Symbolleiste sperren</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="133"/>
+        <location filename="../ui/desktop_panel.ui" line="134"/>
         <source>Session configuration</source>
         <translation>Sitzungskonfiguration</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="145"/>
+        <location filename="../ui/desktop_panel.ui" line="146"/>
         <source>Monitor selection</source>
         <translation>Bildschirmauswahl</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="157"/>
+        <location filename="../ui/desktop_panel.ui" line="158"/>
         <source>Automatic window size</source>
         <translation>Automatische Fenstergröße</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="172"/>
+        <location filename="../ui/desktop_panel.ui" line="173"/>
         <source>Switch to full screen mode or back</source>
         <translation>In den Vollbildmodus wechseln (oder zurück)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="183"/>
+        <location filename="../ui/desktop_panel.ui" line="184"/>
         <source>Automatic scrolling</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="207"/>
+        <location filename="../ui/desktop_panel.ui" line="208"/>
         <source>Advanced menu</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="249"/>
+        <location filename="../ui/desktop_panel.ui" line="250"/>
         <source>Send key combinations</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="258"/>
-        <location filename="../ui/desktop_panel.ui" line="261"/>
+        <location filename="../ui/desktop_panel.ui" line="259"/>
+        <location filename="../ui/desktop_panel.ui" line="262"/>
         <source>Power control</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="266"/>
+        <location filename="../ui/desktop_panel.ui" line="267"/>
         <source>Shutdown</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="271"/>
+        <location filename="../ui/desktop_panel.ui" line="272"/>
         <source>Reboot</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="276"/>
+        <location filename="../ui/desktop_panel.ui" line="277"/>
         <source>Logoff</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="281"/>
+        <location filename="../ui/desktop_panel.ui" line="282"/>
         <source>Lock</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="290"/>
+        <location filename="../ui/desktop_panel.ui" line="291"/>
         <source>Remote Update</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="212"/>
-        <location filename="../ui/desktop_panel.ui" line="215"/>
-        <location filename="../ui/desktop_panel.ui" line="218"/>
+        <location filename="../ui/desktop_panel.ui" line="303"/>
+        <source>System Information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_panel.ui" line="213"/>
+        <location filename="../ui/desktop_panel.ui" line="216"/>
+        <location filename="../ui/desktop_panel.ui" line="219"/>
         <source>Save screenshot...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="230"/>
+        <location filename="../ui/desktop_panel.ui" line="231"/>
         <source>File transfer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="238"/>
+        <location filename="../ui/desktop_panel.ui" line="239"/>
         <source>Scaling an image</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="195"/>
+        <location filename="../ui/desktop_panel.ui" line="196"/>
         <source>Send Ctrl+Alt+Delete</source>
         <translation>Strg+Alt+Entf senden</translation>
     </message>
@@ -419,6 +424,44 @@
     </message>
 </context>
 <context>
+    <name>SystemInfoWindow</name>
+    <message>
+        <location filename="../ui/system_info_window.ui" line="14"/>
+        <source>System Information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.ui" line="46"/>
+        <source>Parameter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.ui" line="51"/>
+        <source>Value</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.ui" line="97"/>
+        <source>Save</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.ui" line="100"/>
+        <source>Ctrl+S</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.ui" line="109"/>
+        <source>Print</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.ui" line="112"/>
+        <source>Ctrl+P</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>aspia::AddressBar</name>
     <message>
         <location filename="../ui/address_bar.cc" line="56"/>
@@ -606,27 +649,27 @@
         <translation type="unfinished">Sitzungsfehler: Ungültige Nachricht vom Host.</translation>
     </message>
     <message>
-        <location filename="../client_desktop.cc" line="188"/>
+        <location filename="../client_desktop.cc" line="195"/>
         <source>Session error: Video decoder not initialized.</source>
         <translation type="unfinished">Sitzungsfehler: Videodecoder nicht initialisiert.</translation>
     </message>
     <message>
-        <location filename="../client_desktop.cc" line="202"/>
+        <location filename="../client_desktop.cc" line="209"/>
         <source>Session error: Wrong video frame size.</source>
         <translation type="unfinished">Sitzungsfehler: Falsche Videoframegröße.</translation>
     </message>
     <message>
-        <location filename="../client_desktop.cc" line="209"/>
+        <location filename="../client_desktop.cc" line="216"/>
         <source>Session error: Wrong video frame position.</source>
         <translation type="unfinished">Sitzungsfehler: Falsche Position des Videoframes.</translation>
     </message>
     <message>
-        <location filename="../client_desktop.cc" line="219"/>
+        <location filename="../client_desktop.cc" line="226"/>
         <source>Session error: The desktop frame is not initialized.</source>
         <translation type="unfinished">Sitzungsfehler: Desktop ist nicht initialisiert.</translation>
     </message>
     <message>
-        <location filename="../client_desktop.cc" line="225"/>
+        <location filename="../client_desktop.cc" line="232"/>
         <source>Session error: The video packet could not be decoded.</source>
         <translation type="unfinished">Sitzungsfehler: Das Videopaket konnte nicht decodiert werden.</translation>
     </message>
@@ -711,30 +754,30 @@
 <context>
     <name>aspia::DesktopPanel</name>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="223"/>
-        <location filename="../ui/desktop_panel.cc" line="234"/>
-        <location filename="../ui/desktop_panel.cc" line="245"/>
-        <location filename="../ui/desktop_panel.cc" line="256"/>
+        <location filename="../ui/desktop_panel.cc" line="224"/>
+        <location filename="../ui/desktop_panel.cc" line="235"/>
+        <location filename="../ui/desktop_panel.cc" line="246"/>
+        <location filename="../ui/desktop_panel.cc" line="257"/>
         <source>Confirmation</source>
         <translation type="unfinished">Bestätigung</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="224"/>
+        <location filename="../ui/desktop_panel.cc" line="225"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="235"/>
+        <location filename="../ui/desktop_panel.cc" line="236"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="246"/>
+        <location filename="../ui/desktop_panel.cc" line="247"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="257"/>
+        <location filename="../ui/desktop_panel.cc" line="258"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -742,32 +785,32 @@
 <context>
     <name>aspia::DesktopWindow</name>
     <message>
-        <location filename="../ui/desktop_window.cc" line="450"/>
+        <location filename="../ui/desktop_window.cc" line="462"/>
         <source>Aspia Desktop Manage</source>
         <translation>Aspia Desktopverwaltung</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="455"/>
+        <location filename="../ui/desktop_window.cc" line="467"/>
         <source>Aspia Desktop View</source>
         <translation>Aspia Desktopansicht</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="286"/>
+        <location filename="../ui/desktop_window.cc" line="298"/>
         <source>Save File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="288"/>
+        <location filename="../ui/desktop_window.cc" line="300"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="308"/>
+        <location filename="../ui/desktop_window.cc" line="320"/>
         <source>Warning</source>
         <translation type="unfinished">Warnung</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="308"/>
+        <location filename="../ui/desktop_window.cc" line="320"/>
         <source>Could not save image</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1075,6 +1118,343 @@
         <location filename="../ui/select_screen_action.h" line="37"/>
         <source>Full Desktop</source>
         <translation>Vollen Desktop</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::SystemInfoWindow</name>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="90"/>
+        <source>HTML File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="92"/>
+        <source>HTML File (*.html)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="101"/>
+        <source>Warning</source>
+        <translation type="unfinished">Warnung</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="102"/>
+        <source>Failed to save file: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="134"/>
+        <location filename="../ui/system_info_window.cc" line="158"/>
+        <source>Name</source>
+        <translation type="unfinished">Name</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="137"/>
+        <source>Domain</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="140"/>
+        <source>Workgroup</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="143"/>
+        <source>Uptime</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="148"/>
+        <source>Computer</source>
+        <translation type="unfinished">Computer</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="161"/>
+        <location filename="../ui/system_info_window.cc" line="227"/>
+        <source>Version</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="164"/>
+        <source>Architecture</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="169"/>
+        <source>Operating System</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="179"/>
+        <location filename="../ui/system_info_window.cc" line="252"/>
+        <source>Manufacturer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="182"/>
+        <location filename="../ui/system_info_window.cc" line="197"/>
+        <source>Model</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="187"/>
+        <source>Motherboard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="200"/>
+        <location filename="../ui/system_info_window.cc" line="224"/>
+        <source>Vendor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="203"/>
+        <source>Packages</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="206"/>
+        <source>Cores</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="209"/>
+        <source>Threads</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="214"/>
+        <source>Processor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="230"/>
+        <source>Date</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="255"/>
+        <source>Size</source>
+        <translation type="unfinished">Größe</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="258"/>
+        <source>Speed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="258"/>
+        <source>%1 MHz</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="261"/>
+        <source>Type</source>
+        <translation type="unfinished">Typ</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="264"/>
+        <source>Form Factor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="267"/>
+        <source>Part Number</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="271"/>
+        <source>Installed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="271"/>
+        <location filename="../ui/system_info_window.cc" line="347"/>
+        <location filename="../ui/system_info_window.cc" line="414"/>
+        <source>No</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="281"/>
+        <source>Memory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="310"/>
+        <source>%1 (%2 free)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="321"/>
+        <source>Logical Drives</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="336"/>
+        <source>Adapter Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="339"/>
+        <source>Interface Type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="342"/>
+        <source>Connection Speed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="345"/>
+        <source>MAC Address</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="347"/>
+        <source>DHCP Enabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="347"/>
+        <location filename="../ui/system_info_window.cc" line="406"/>
+        <location filename="../ui/system_info_window.cc" line="414"/>
+        <source>Yes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="352"/>
+        <source>DHCP Server #%1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="352"/>
+        <source>DHCP Server</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="364"/>
+        <source>Address #%1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="364"/>
+        <source>Address</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="372"/>
+        <source>Gateway #%1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="372"/>
+        <source>Gateway</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="392"/>
+        <source>Network Connections</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="406"/>
+        <source>Default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="409"/>
+        <source>Port</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="412"/>
+        <source>Driver</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="414"/>
+        <source>Shared</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="417"/>
+        <source>Share Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="419"/>
+        <source>Jobs Count</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="428"/>
+        <source>Printers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="451"/>
+        <source>TB</source>
+        <translation type="unfinished">TB</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="456"/>
+        <source>GB</source>
+        <translation type="unfinished">GB</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="461"/>
+        <source>MB</source>
+        <translation type="unfinished">MB</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="466"/>
+        <source>kB</source>
+        <translation type="unfinished">kB</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="471"/>
+        <source>B</source>
+        <translation type="unfinished">B</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="489"/>
+        <source>%1 days %2 hours %3 minutes %4 seconds</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="495"/>
+        <source>%1 hours %2 minutes %3 seconds</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="501"/>
+        <source>%1 minutes %2 seconds</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="505"/>
+        <source>%1 seconds</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="520"/>
+        <source>Gbps</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="525"/>
+        <source>Mbps</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="530"/>
+        <source>Kbps</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="535"/>
+        <source>bps</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

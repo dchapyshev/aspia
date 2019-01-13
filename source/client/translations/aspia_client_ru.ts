@@ -133,95 +133,100 @@
 <context>
     <name>DesktopPanel</name>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="121"/>
+        <location filename="../ui/desktop_panel.ui" line="122"/>
         <source>Lock toolbar</source>
         <translation>Закрепить панель инструментов</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="133"/>
+        <location filename="../ui/desktop_panel.ui" line="134"/>
         <source>Session configuration</source>
         <translation>Параметры сессии</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="145"/>
+        <location filename="../ui/desktop_panel.ui" line="146"/>
         <source>Monitor selection</source>
         <translation>Выбор монитора</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="157"/>
+        <location filename="../ui/desktop_panel.ui" line="158"/>
         <source>Automatic window size</source>
         <translation>Автоматический размер окна</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="172"/>
+        <location filename="../ui/desktop_panel.ui" line="173"/>
         <source>Switch to full screen mode or back</source>
         <translation>Переключиться на полный экран (или назад)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="183"/>
+        <location filename="../ui/desktop_panel.ui" line="184"/>
         <source>Automatic scrolling</source>
         <translation>Автоматическая прокрутка</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="207"/>
+        <location filename="../ui/desktop_panel.ui" line="208"/>
         <source>Advanced menu</source>
         <translation>Расширенное меню</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="249"/>
+        <location filename="../ui/desktop_panel.ui" line="250"/>
         <source>Send key combinations</source>
         <translation>Отправлять комбинации клавиш</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="258"/>
-        <location filename="../ui/desktop_panel.ui" line="261"/>
+        <location filename="../ui/desktop_panel.ui" line="259"/>
+        <location filename="../ui/desktop_panel.ui" line="262"/>
         <source>Power control</source>
         <translation>Управление питанием</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="266"/>
+        <location filename="../ui/desktop_panel.ui" line="267"/>
         <source>Shutdown</source>
         <translation>Выключение</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="271"/>
+        <location filename="../ui/desktop_panel.ui" line="272"/>
         <source>Reboot</source>
         <translation>Перезагрузка</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="276"/>
+        <location filename="../ui/desktop_panel.ui" line="277"/>
         <source>Logoff</source>
         <translation>Завершение сеанса</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="281"/>
+        <location filename="../ui/desktop_panel.ui" line="282"/>
         <source>Lock</source>
         <translation>Блокировка</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="290"/>
+        <location filename="../ui/desktop_panel.ui" line="291"/>
         <source>Remote Update</source>
         <translation>Удаленное обновление</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="212"/>
-        <location filename="../ui/desktop_panel.ui" line="215"/>
-        <location filename="../ui/desktop_panel.ui" line="218"/>
+        <location filename="../ui/desktop_panel.ui" line="303"/>
+        <source>System Information</source>
+        <translation>Информация о системе</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_panel.ui" line="213"/>
+        <location filename="../ui/desktop_panel.ui" line="216"/>
+        <location filename="../ui/desktop_panel.ui" line="219"/>
         <source>Save screenshot...</source>
         <translation>Сохранить снимок экрана...</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="230"/>
+        <location filename="../ui/desktop_panel.ui" line="231"/>
         <source>File transfer</source>
         <translation>Передача файлов</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="238"/>
+        <location filename="../ui/desktop_panel.ui" line="239"/>
         <source>Scaling an image</source>
         <translation>Масштабирование изображения</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="195"/>
+        <location filename="../ui/desktop_panel.ui" line="196"/>
         <source>Send Ctrl+Alt+Delete</source>
         <translation>Отправить Ctrl+Alt+Delete</translation>
     </message>
@@ -419,6 +424,44 @@
     </message>
 </context>
 <context>
+    <name>SystemInfoWindow</name>
+    <message>
+        <location filename="../ui/system_info_window.ui" line="14"/>
+        <source>System Information</source>
+        <translation>Информация о системе</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.ui" line="46"/>
+        <source>Parameter</source>
+        <translation>Параметр</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.ui" line="51"/>
+        <source>Value</source>
+        <translation>Значение</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.ui" line="97"/>
+        <source>Save</source>
+        <translation>Сохранить</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.ui" line="100"/>
+        <source>Ctrl+S</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.ui" line="109"/>
+        <source>Print</source>
+        <translation>Печать</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.ui" line="112"/>
+        <source>Ctrl+P</source>
+        <translation></translation>
+    </message>
+</context>
+<context>
     <name>aspia::AddressBar</name>
     <message>
         <location filename="../ui/address_bar.cc" line="56"/>
@@ -606,27 +649,27 @@
         <translation>Ошибка сессии: Неверное сообщение от хоста.</translation>
     </message>
     <message>
-        <location filename="../client_desktop.cc" line="188"/>
+        <location filename="../client_desktop.cc" line="195"/>
         <source>Session error: Video decoder not initialized.</source>
         <translation>Ошибка сессии: Видео-декодер не инициализирован.</translation>
     </message>
     <message>
-        <location filename="../client_desktop.cc" line="202"/>
+        <location filename="../client_desktop.cc" line="209"/>
         <source>Session error: Wrong video frame size.</source>
         <translation>Ошибка сессии: Неверный размер экрана.</translation>
     </message>
     <message>
-        <location filename="../client_desktop.cc" line="209"/>
+        <location filename="../client_desktop.cc" line="216"/>
         <source>Session error: Wrong video frame position.</source>
         <translation>Ошибка сессии: Неверное положение видео-кадра.</translation>
     </message>
     <message>
-        <location filename="../client_desktop.cc" line="219"/>
+        <location filename="../client_desktop.cc" line="226"/>
         <source>Session error: The desktop frame is not initialized.</source>
         <translation>Ошибка сессии: Рабочий стол не инициализирован.</translation>
     </message>
     <message>
-        <location filename="../client_desktop.cc" line="225"/>
+        <location filename="../client_desktop.cc" line="232"/>
         <source>Session error: The video packet could not be decoded.</source>
         <translation>Ошибка сессии: Не удалось декодировать видео-пакет.</translation>
     </message>
@@ -711,30 +754,30 @@
 <context>
     <name>aspia::DesktopPanel</name>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="223"/>
-        <location filename="../ui/desktop_panel.cc" line="234"/>
-        <location filename="../ui/desktop_panel.cc" line="245"/>
-        <location filename="../ui/desktop_panel.cc" line="256"/>
+        <location filename="../ui/desktop_panel.cc" line="224"/>
+        <location filename="../ui/desktop_panel.cc" line="235"/>
+        <location filename="../ui/desktop_panel.cc" line="246"/>
+        <location filename="../ui/desktop_panel.cc" line="257"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="224"/>
+        <location filename="../ui/desktop_panel.cc" line="225"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>Вы действительно хотите выключить удаленный компьютер?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="235"/>
+        <location filename="../ui/desktop_panel.cc" line="236"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>Вы действительно хотите перезагрузить удаленный компьютер?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="246"/>
+        <location filename="../ui/desktop_panel.cc" line="247"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>Вы действительно хотите завершить сеанс пользователя на удаленном компьютере?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="257"/>
+        <location filename="../ui/desktop_panel.cc" line="258"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>Вы действительно хотите заблокировать сеанс пользователя на удаленном компьютере?</translation>
     </message>
@@ -742,32 +785,32 @@
 <context>
     <name>aspia::DesktopWindow</name>
     <message>
-        <location filename="../ui/desktop_window.cc" line="450"/>
+        <location filename="../ui/desktop_window.cc" line="462"/>
         <source>Aspia Desktop Manage</source>
         <translation>Управление рабочим столом</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="455"/>
+        <location filename="../ui/desktop_window.cc" line="467"/>
         <source>Aspia Desktop View</source>
         <translation>Просмотр рабочего стола</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="286"/>
+        <location filename="../ui/desktop_window.cc" line="298"/>
         <source>Save File</source>
         <translation>Сохранение файла</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="288"/>
+        <location filename="../ui/desktop_window.cc" line="300"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG изображение (*.png);;BMP изображение (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="308"/>
+        <location filename="../ui/desktop_window.cc" line="320"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="308"/>
+        <location filename="../ui/desktop_window.cc" line="320"/>
         <source>Could not save image</source>
         <translation>Не удалось сохранить изображение</translation>
     </message>
@@ -1075,6 +1118,343 @@
         <location filename="../ui/select_screen_action.h" line="37"/>
         <source>Full Desktop</source>
         <translation>Весь рабочий стол</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::SystemInfoWindow</name>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="90"/>
+        <source>HTML File</source>
+        <translation>HTML-файл</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="92"/>
+        <source>HTML File (*.html)</source>
+        <translation>HTML-файл (*.html)</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="101"/>
+        <source>Warning</source>
+        <translation>Предупреждение</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="102"/>
+        <source>Failed to save file: %1</source>
+        <translation>Не удалось сохранить файл: %1</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="134"/>
+        <location filename="../ui/system_info_window.cc" line="158"/>
+        <source>Name</source>
+        <translation>Имя</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="137"/>
+        <source>Domain</source>
+        <translation>Домен</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="140"/>
+        <source>Workgroup</source>
+        <translation>Рабочая группа</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="143"/>
+        <source>Uptime</source>
+        <translation>Время работы</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="148"/>
+        <source>Computer</source>
+        <translation>Компьютер</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="161"/>
+        <location filename="../ui/system_info_window.cc" line="227"/>
+        <source>Version</source>
+        <translation>Версия</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="164"/>
+        <source>Architecture</source>
+        <translation>Архитектура</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="169"/>
+        <source>Operating System</source>
+        <translation>Операционная система</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="179"/>
+        <location filename="../ui/system_info_window.cc" line="252"/>
+        <source>Manufacturer</source>
+        <translation>Производитель</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="182"/>
+        <location filename="../ui/system_info_window.cc" line="197"/>
+        <source>Model</source>
+        <translation>Модель</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="187"/>
+        <source>Motherboard</source>
+        <translation>Материнская плата</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="200"/>
+        <location filename="../ui/system_info_window.cc" line="224"/>
+        <source>Vendor</source>
+        <translation>Поставщик</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="203"/>
+        <source>Packages</source>
+        <translation>Сокетов</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="206"/>
+        <source>Cores</source>
+        <translation>Ядер</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="209"/>
+        <source>Threads</source>
+        <translation>Потоков</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="214"/>
+        <source>Processor</source>
+        <translation>Процессор</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="230"/>
+        <source>Date</source>
+        <translation>Дата</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="255"/>
+        <source>Size</source>
+        <translation>Размер</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="258"/>
+        <source>Speed</source>
+        <translation>Частота</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="258"/>
+        <source>%1 MHz</source>
+        <translation>%1 МГц</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="261"/>
+        <source>Type</source>
+        <translation>Тип</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="264"/>
+        <source>Form Factor</source>
+        <translation>Форм-фактор</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="267"/>
+        <source>Part Number</source>
+        <translation>Номер партии</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="271"/>
+        <source>Installed</source>
+        <translation>Установлено</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="271"/>
+        <location filename="../ui/system_info_window.cc" line="347"/>
+        <location filename="../ui/system_info_window.cc" line="414"/>
+        <source>No</source>
+        <translation>Нет</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="281"/>
+        <source>Memory</source>
+        <translation>Память</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="310"/>
+        <source>%1 (%2 free)</source>
+        <translation>%1 (%2 свободно)</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="321"/>
+        <source>Logical Drives</source>
+        <translation>Логические диски</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="336"/>
+        <source>Adapter Name</source>
+        <translation>Имя адаптера</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="339"/>
+        <source>Interface Type</source>
+        <translation>Тип интерфейса</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="342"/>
+        <source>Connection Speed</source>
+        <translation>Скорость соединения</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="345"/>
+        <source>MAC Address</source>
+        <translation>MAC адрес</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="347"/>
+        <source>DHCP Enabled</source>
+        <translation>DHCP включен</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="347"/>
+        <location filename="../ui/system_info_window.cc" line="406"/>
+        <location filename="../ui/system_info_window.cc" line="414"/>
+        <source>Yes</source>
+        <translation>Да</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="352"/>
+        <source>DHCP Server #%1</source>
+        <translation>DHCP сервер #%1</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="352"/>
+        <source>DHCP Server</source>
+        <translation>DHCP сервер</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="364"/>
+        <source>Address #%1</source>
+        <translation>Адрес #%1</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="364"/>
+        <source>Address</source>
+        <translation>Адрес</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="372"/>
+        <source>Gateway #%1</source>
+        <translation>Шлюз #%1</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="372"/>
+        <source>Gateway</source>
+        <translation>Шлюз</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="392"/>
+        <source>Network Connections</source>
+        <translation>Сетевые подключения</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="406"/>
+        <source>Default</source>
+        <translation>По умолчанию</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="409"/>
+        <source>Port</source>
+        <translation>Порт</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="412"/>
+        <source>Driver</source>
+        <translation>Драйвер</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="414"/>
+        <source>Shared</source>
+        <translation>Общий доступ</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="417"/>
+        <source>Share Name</source>
+        <translation>Имя общего ресурса</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="419"/>
+        <source>Jobs Count</source>
+        <translation>Количество заданий</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="428"/>
+        <source>Printers</source>
+        <translation>Принтеры</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="451"/>
+        <source>TB</source>
+        <translation>ТБ</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="456"/>
+        <source>GB</source>
+        <translation>ГБ</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="461"/>
+        <source>MB</source>
+        <translation>МБ</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="466"/>
+        <source>kB</source>
+        <translation>кБ</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="471"/>
+        <source>B</source>
+        <translation>Б</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="489"/>
+        <source>%1 days %2 hours %3 minutes %4 seconds</source>
+        <translation>%1 дней %2 часов %3 минут %4 секунд</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="495"/>
+        <source>%1 hours %2 minutes %3 seconds</source>
+        <translation>%1 часов %2 минут %3 секунд</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="501"/>
+        <source>%1 minutes %2 seconds</source>
+        <translation>%1 минут %2 секунд</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="505"/>
+        <source>%1 seconds</source>
+        <translation>%1 секунд</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="520"/>
+        <source>Gbps</source>
+        <translation>Гбит/c</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="525"/>
+        <source>Mbps</source>
+        <translation>Мбит/c</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="530"/>
+        <source>Kbps</source>
+        <translation>Кбит/с</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="535"/>
+        <source>bps</source>
+        <translation>бит/c</translation>
     </message>
 </context>
 </TS>
