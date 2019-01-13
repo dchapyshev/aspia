@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_COMMON__WIN__DRIVE_ENUMERATOR_H
-#define ASPIA_COMMON__WIN__DRIVE_ENUMERATOR_H
+#ifndef ASPIA_BASE__WIN__DRIVE_ENUMERATOR_H
+#define ASPIA_BASE__WIN__DRIVE_ENUMERATOR_H
 
 #include "base/macros_magic.h"
 
@@ -51,9 +51,9 @@ public:
         Type type() const;
         uint64_t totalSpace() const;
         uint64_t freeSpace() const;
-        std::wstring fileSystem() const;
-        std::wstring volumeName() const;
-        std::wstring volumeSerial() const;
+        std::string fileSystem() const;
+        std::string volumeName() const;
+        std::string volumeSerial() const;
 
     private:
         friend class DriveEnumerator;
@@ -77,4 +77,4 @@ private:
 
 } // namespace aspia
 
-#endif // ASPIA_COMMON__WIN__DRIVE_ENUMERATOR_H
+#endif // ASPIA_BASE__WIN__DRIVE_ENUMERATOR_H

@@ -16,16 +16,21 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_COMMON__DESKTOP_SESSION_CONSTANTS_H
-#define ASPIA_COMMON__DESKTOP_SESSION_CONSTANTS_H
+#ifndef ASPIA_CLIENT__UI__TREE_TO_HTML_H
+#define ASPIA_CLIENT__UI__TREE_TO_HTML_H
+
+#include <QString>
+
+class QTreeWidget;
 
 namespace aspia {
 
-extern const char kSelectScreenExtension[];
-extern const char kPowerControlExtension[];
-extern const char kRemoteUpdateExtension[];
-extern const char kSystemInfoExtension[];
+QString treeToHtmlString(const QTreeWidget* tree);
+
+bool treeToHtmlFile(const QTreeWidget* tree,
+                    const QString& file_path,
+                    QString* error_string = nullptr);
 
 } // namespace aspia
 
-#endif // ASPIA_COMMON__DESKTOP_SESSION_CONSTANTS_H
+#endif // ASPIA_CLIENT__UI__TREE_TO_HTML_H

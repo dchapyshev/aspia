@@ -1,13 +1,18 @@
 <RCC>
   <qresource prefix="/img">
+    <file>drive.png</file>
+    <file>graphic-card.png</file>
+    <file>processor.png</file>
+    <file>printer.png</file>
+    <file>memory.png</file>
+    <file>bios.png</file>
+    <file>motherboard.png</file>
+    <file>computer_info.png</file>
     <file>lightning.png</file>
     <file>update.png</file>
     <file>menu.png</file>
     <file>monitors.png</file>
-    <file>hardware.png</file>
-    <file>network.png</file>
     <file>operating-system.png</file>
-    <file>software.png</file>
     <file>pin.png</file>
     <file>folder-up.png</file>
     <file>arrow-circle-double.png</file>

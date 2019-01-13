@@ -43,6 +43,8 @@ list(APPEND SOURCE_HOST
     host_session_file_transfer.h
     host_settings.cc
     host_settings.h
+    host_system_info.cc
+    host_system_info.h
     input_injector.cc
     input_injector.h
     screen_updater.cc

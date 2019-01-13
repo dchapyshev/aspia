@@ -21,11 +21,10 @@
 #include "build/build_config.h"
 #include "base/base_paths.h"
 #include "base/logging.h"
-#include "base/unicode.h"
 #include "common/file_platform_util.h"
 
 #if defined(OS_WIN)
-#include "common/win/drive_enumerator.h"
+#include "base/win/drive_enumerator.h"
 #include "common/win/file_enumerator.h"
 #endif // defined(OS_WIN)
 
@@ -131,7 +130,7 @@ proto::file_transfer::Reply FileWorker::doDriveListRequest()
         }
 
         item->set_path(drive_info.path().u8string());
-        item->set_name(UTF8fromUTF16(drive_info.volumeName()));
+        item->set_name(drive_info.volumeName());
         item->set_total_space(drive_info.totalSpace());
         item->set_free_space(drive_info.freeSpace());
     }

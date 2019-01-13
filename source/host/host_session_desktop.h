@@ -58,6 +58,8 @@ private:
     void readExtension(const proto::desktop::Extension& extension);
     void readConfig(const proto::desktop::Config& config);
 
+    void sendSystemInfo();
+
     const proto::SessionType session_type_;
 
     proto::desktop::ClientToHost incoming_message_;

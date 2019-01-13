@@ -20,6 +20,7 @@
 #define ASPIA_BASE__CPUID_H
 
 #include <cstdint>
+#include <string>
 
 namespace aspia {
 

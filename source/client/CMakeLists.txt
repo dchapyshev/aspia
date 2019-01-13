@@ -101,7 +101,12 @@ list(APPEND SOURCE_CLIENT_UI
     ui/select_screen_action.h
     ui/status_dialog.cc
     ui/status_dialog.h
-    ui/status_dialog.ui)
+    ui/status_dialog.ui
+    ui/system_info_window.cc
+    ui/system_info_window.h
+    ui/system_info_window.ui
+    ui/tree_to_html.cc
+    ui/tree_to_html.h)
 
 source_group("" FILES ${SOURCE_CLIENT})
 source_group(resources FILES ${SOURCE_CLIENT_RESOURCES})

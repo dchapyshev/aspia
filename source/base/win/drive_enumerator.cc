@@ -16,13 +16,14 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "common/win/drive_enumerator.h"
+#include "base/win/drive_enumerator.h"
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
 #include "base/string_printf.h"
 #include "base/logging.h"
+#include "base/unicode.h"
 
 namespace aspia {
 
@@ -112,7 +113,7 @@ uint64_t DriveEnumerator::DriveInfo::freeSpace() const
     return free_space.QuadPart;
 }
 
-std::wstring DriveEnumerator::DriveInfo::fileSystem() const
+std::string DriveEnumerator::DriveInfo::fileSystem() const
 {
     wchar_t fs[MAX_PATH];
 
@@ -122,13 +123,13 @@ std::wstring DriveEnumerator::DriveInfo::fileSystem() const
                                fs, _countof(fs)))
     {
         DPLOG(LS_ERROR) << "GetVolumeInformationW failed";
-        return std::wstring();
+        return std::string();
     }
 
-    return fs;
+    return UTF8fromUTF16(fs);
 }
 
-std::wstring DriveEnumerator::DriveInfo::volumeName() const
+std::string DriveEnumerator::DriveInfo::volumeName() const
 {
     wchar_t name[MAX_PATH];
 
@@ -138,23 +139,23 @@ std::wstring DriveEnumerator::DriveInfo::volumeName() const
                                nullptr, 0))
     {
         DPLOG(LS_ERROR) << "GetVolumeInformationW failed";
-        return std::wstring();
+        return std::string();
     }
 
-    return name;
+    return UTF8fromUTF16(name);
 }
 
-std::wstring DriveEnumerator::DriveInfo::volumeSerial() const
+std::string DriveEnumerator::DriveInfo::volumeSerial() const
 {
     DWORD serial;
 
     if (!GetVolumeInformationW(path_.c_str(), nullptr, 0, &serial, nullptr, nullptr, nullptr, 0))
     {
         DPLOG(LS_ERROR) << "GetVolumeInformationW failed";
-        return std::wstring();
+        return std::string();
     }
 
-    return stringPrintf(L"%04X-%04X", HIWORD(serial), LOWORD(serial));
+    return stringPrintf("%04X-%04X", HIWORD(serial), LOWORD(serial));
 }
 
 } // namespace aspia

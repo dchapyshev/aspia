@@ -167,6 +167,15 @@ STR collapseWhitespaceT(const STR& text, bool trim_sequences_with_line_breaks)
     return result;
 }
 
+template<typename StringType>
+void removeCharsT(StringType* str, std::basic_string_view<typename StringType::value_type> substr)
+{
+    size_t pos;
+
+    while ((pos = str->find(substr)) != StringType::npos)
+        str->erase(pos, substr.length());
+}
+
 } // namespace
 
 std::string replaceLfByCrLf(const std::string& in)
@@ -382,6 +391,16 @@ TrimPositions trimWhitespaceASCII(const std::string& input,
                                   std::string& output)
 {
     return trimStringT(input, kWhitespaceASCII, positions, output);
+}
+
+void removeChars(std::string* str, std::string_view substr)
+{
+    removeCharsT(str, substr);
+}
+
+void removeChars(std::wstring* str, std::wstring_view substr)
+{
+    removeCharsT(str, substr);
 }
 
 std::wstring toUpper(std::wstring_view in)

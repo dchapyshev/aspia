@@ -16,16 +16,35 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_COMMON__DESKTOP_SESSION_CONSTANTS_H
-#define ASPIA_COMMON__DESKTOP_SESSION_CONSTANTS_H
+#ifndef ASPIA_CLIENT__UI__SYSTEM_INFO_WINDOW_H
+#define ASPIA_CLIENT__UI__SYSTEM_INFO_WINDOW_H
+
+#include "base/macros_magic.h"
+#include "protocol/system_info.pb.h"
+#include "ui_system_info_window.h"
 
 namespace aspia {
 
-extern const char kSelectScreenExtension[];
-extern const char kPowerControlExtension[];
-extern const char kRemoteUpdateExtension[];
-extern const char kSystemInfoExtension[];
+class SystemInfoWindow : public QMainWindow
+{
+    Q_OBJECT
+
+public:
+    explicit SystemInfoWindow(QWidget* parent = nullptr);
+    ~SystemInfoWindow();
+
+    void setSystemInfo(const proto::system_info::SystemInfo& system_info);
+
+private:
+    static QString sizeToString(int64_t size);
+    static QString delayToString(uint64_t delay);
+    static QString speedToString(uint64_t speed);
+
+    Ui::SystemInfoWindow ui;
+
+    DISALLOW_COPY_AND_ASSIGN(SystemInfoWindow);
+};
 
 } // namespace aspia
 
-#endif // ASPIA_COMMON__DESKTOP_SESSION_CONSTANTS_H
+#endif // ASPIA_CLIENT__UI__SYSTEM_INFO_WINDOW_H

@@ -82,6 +82,9 @@ TrimPositions trimWhitespaceASCII(const std::string& input,
                                   TrimPositions positions,
                                   std::string& output);
 
+void removeChars(std::string* str, std::string_view substr);
+void removeChars(std::wstring* str, std::wstring_view substr);
+
 std::wstring toUpper(std::wstring_view in);
 std::wstring toLower(std::wstring_view in);
 

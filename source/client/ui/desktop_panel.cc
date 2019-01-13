@@ -43,6 +43,7 @@ DesktopPanel::DesktopPanel(proto::SessionType session_type, QWidget* parent)
     connect(ui.action_fullscreen, &QAction::triggered, this, &DesktopPanel::onFullscreenButton);
     connect(ui.action_autoscroll, &QAction::triggered, this, &DesktopPanel::autoScrollChanged);
     connect(ui.action_update, &QAction::triggered, this, &DesktopPanel::startRemoteUpdate);
+    connect(ui.action_system_info, &QAction::triggered, this, &DesktopPanel::startSystemInfo);
 
     createScreensMenu();
     createAdditionalMenu(session_type);

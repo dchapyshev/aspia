@@ -46,8 +46,6 @@ list(APPEND SOURCE_COMMON_UI
     ui/about_dialog.ui)
 
 list(APPEND SOURCE_COMMON_WIN
-    win/drive_enumerator.cc
-    win/drive_enumerator.h
     win/file_enumerator.cc
     win/file_enumerator.h)
 

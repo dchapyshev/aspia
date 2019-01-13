@@ -1,0 +1,144 @@
+//
+// Aspia Project
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program. If not, see <https://www.gnu.org/licenses/>.
+//
+
+syntax = "proto3";
+
+option optimize_for = LITE_RUNTIME;
+
+package aspia.proto.system_info;
+
+message Computer
+{
+    string name      = 1;
+    string domain    = 2;
+    string workgroup = 3;
+    uint64 uptime    = 4;
+}
+
+message OperatingSystem
+{
+    string name    = 1;
+    string version = 2;
+    string arch    = 3;
+}
+
+message Motherboard
+{
+    string manufacturer = 1;
+    string model        = 2;
+}
+
+message Bios
+{
+    string vendor  = 1;
+    string version = 2;
+    string date    = 3;
+}
+
+message Processor
+{
+    string vendor   = 1;
+    string model    = 2;
+    uint32 packages = 3;
+    uint32 cores    = 4;
+    uint32 threads  = 5;
+}
+
+message Memory
+{
+    message Module
+    {
+        bool present         = 1;
+        string location      = 2;
+        string manufacturer  = 3;
+        uint64 size          = 4;
+        string type          = 5;
+        string form_factor   = 6;
+        string part_number   = 7;
+        uint32 speed         = 8;
+    }
+
+    repeated Module module = 1;
+}
+
+message LogicalDrives
+{
+    message Drive
+    {
+        string path        = 1;
+        string file_system = 2;
+        uint64 total_size  = 3;
+        uint64 free_size   = 4;
+    }
+
+    repeated Drive drive = 1;
+}
+
+message Printers
+{
+    message Printer
+    {
+        string name       = 1;
+        bool default      = 2;
+        bool shared       = 3;
+        string port       = 4;
+        string driver     = 5;
+        uint32 jobs_count = 6;
+        string share_name = 7;
+    }
+
+    repeated Printer printer = 1;
+}
+
+message NetworkAdapters
+{
+    message Adapter
+    {
+        message Address
+        {
+            string ip   = 1;
+            string mask = 2;
+        }
+
+        string adapter_name      = 1;
+        string connection_name   = 2;
+        string interface         = 3;
+        uint64 speed             = 4;
+        string mac               = 5;
+        bool dhcp_enabled        = 6;
+        repeated string gateway  = 7;
+        repeated Address address = 8;
+        repeated string dns      = 9;
+        repeated string dhcp     = 10;
+    }
+
+    repeated Adapter adapter = 1;
+}
+
+message SystemInfo
+{
+    Computer computer                = 1;
+    OperatingSystem operating_system = 2;
+    Motherboard motherboard          = 3;
+    Bios bios                        = 4;
+    Processor processor              = 5;
+    Memory memory                    = 6;
+    LogicalDrives logical_drives     = 7;
+    Printers printers                = 8;
+    NetworkAdapters network_adapters = 9;
+}

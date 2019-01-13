@@ -169,6 +169,13 @@ void ClientDesktop::sendRemoteUpdate()
     sendMessage(outgoing_message_);
 }
 
+void ClientDesktop::sendSysInfoRequest()
+{
+    outgoing_message_.Clear();
+    outgoing_message_.mutable_extension()->set_name(kSystemInfoExtension);
+    sendMessage(outgoing_message_);
+}
+
 void ClientDesktop::readConfigRequest(
     const proto::desktop::ConfigRequest& /* config_request */)
 {
@@ -286,6 +293,18 @@ void ClientDesktop::readExtension(const proto::desktop::Extension& extension)
         }
 
         delegate_->setScreenList(screen_list);
+    }
+    else if (extension.name() == kSystemInfoExtension)
+    {
+        proto::system_info::SystemInfo system_info;
+
+        if (!system_info.ParseFromString(extension.data()))
+        {
+            LOG(LS_ERROR) << "Unable to parse system info extension data";
+            return;
+        }
+
+        delegate_->setSystemInfo(system_info);
     }
     else
     {

@@ -25,6 +25,7 @@
 #if defined(Q_OS_WIN)
 Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin);
 Q_IMPORT_PLUGIN(QWindowsVistaStylePlugin);
+Q_IMPORT_PLUGIN(QWindowsPrinterSupportPlugin);
 #else
 #error Platform support needed
 #endif // defined(Q_OS_WIN)

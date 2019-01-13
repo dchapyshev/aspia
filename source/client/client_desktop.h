@@ -21,6 +21,7 @@
 
 #include "client/client.h"
 #include "protocol/desktop_session_extensions.pb.h"
+#include "protocol/system_info.pb.h"
 
 namespace aspia {
 
@@ -44,6 +45,7 @@ public:
         virtual void injectCursor(const QCursor& cursor) = 0;
         virtual void injectClipboard(const proto::desktop::ClipboardEvent& event) = 0;
         virtual void setScreenList(const proto::desktop::ScreenList& screen_list) = 0;
+        virtual void setSystemInfo(const proto::system_info::SystemInfo& system_info) = 0;
     };
 
     ClientDesktop(const ConnectData& connect_data, Delegate* delegate, QObject* parent);
@@ -56,6 +58,7 @@ public:
     void sendConfig(const proto::desktop::Config& config);
     void sendScreen(const proto::desktop::Screen& screen);
     void sendRemoteUpdate();
+    void sendSysInfoRequest();
 
 protected:
     // Client implementation.

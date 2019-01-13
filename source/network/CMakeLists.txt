@@ -19,6 +19,8 @@
 list(APPEND SOURCE_NETWORK
     firewall_manager.cc
     firewall_manager.h
+    network_adapter_enumerator.cc
+    network_adapter_enumerator.h
     network_channel.cc
     network_channel.h
     network_channel_client.cc

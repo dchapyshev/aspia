@@ -16,16 +16,34 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_COMMON__DESKTOP_SESSION_CONSTANTS_H
-#define ASPIA_COMMON__DESKTOP_SESSION_CONSTANTS_H
+#include "base/smbios_reader.h"
+
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+
+#include "base/logging.h"
 
 namespace aspia {
 
-extern const char kSelectScreenExtension[];
-extern const char kPowerControlExtension[];
-extern const char kRemoteUpdateExtension[];
-extern const char kSystemInfoExtension[];
+std::string readSmbiosDump()
+{
+    UINT buffer_size = GetSystemFirmwareTable('RSMB', 'PCAF', nullptr, 0);
+    if (!buffer_size)
+    {
+        DPLOG(LS_WARNING) << "GetSystemFirmwareTable failed";
+        return std::string();
+    }
+
+    std::string buffer;
+    buffer.resize(buffer_size);
+
+    if (!GetSystemFirmwareTable('RSMB', 'PCAF', buffer.data(), buffer_size))
+    {
+        DPLOG(LS_WARNING) << "GetSystemFirmwareTable failed";
+        return std::string();
+    }
+
+    return buffer;
+}
 
 } // namespace aspia
-
-#endif // ASPIA_COMMON__DESKTOP_SESSION_CONSTANTS_H

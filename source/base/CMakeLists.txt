@@ -43,12 +43,20 @@ list(APPEND SOURCE_BASE
     service_controller.h
     service_impl.h
     service_impl_win.cc
+    smbios.h
+    smbios_parser.cc
+    smbios_parser.h
+    smbios_reader.h
+    smbios_reader_win.cc
     string_printf.cc
     string_printf.h
     string_util.cc
     string_util.h
     string_util_constants.cc
     string_util_constants.h
+    sys_info.cc
+    sys_info.h
+    sys_info_win.cc
     thread_checker.cc
     thread_checker.h
     typed_buffer.h
@@ -63,6 +71,10 @@ list(APPEND SOURCE_BASE_UNIT_TESTS
     string_printf_unittest.cc)
 
 list(APPEND SOURCE_BASE_WIN
+    win/drive_enumerator.cc
+    win/drive_enumerator.h
+    win/printer_enumerator.cc
+    win/printer_enumerator.h
     win/process_util.cc
     win/process_util.h
     win/registry.cc

@@ -35,7 +35,7 @@ set(CMAKE_AUTORCC ON)
 
 set(CMAKE_PREFIX_PATH "${ASPIA_THIRD_PARTY_DIR}/qt;${ASPIA_THIRD_PARTY_DIR}/protobuf")
 
-find_package(Qt5 REQUIRED Core Gui Network Widgets WinExtras Xml)
+find_package(Qt5 REQUIRED Core Gui Network PrintSupport Widgets WinExtras Xml)
 find_package(Qt5LinguistTools)
 find_package(Protobuf REQUIRED)
 
@@ -75,6 +75,7 @@ link_directories(
     ${ASPIA_THIRD_PARTY_DIR}/protobuf/lib
     ${ASPIA_THIRD_PARTY_DIR}/qt/lib
     ${ASPIA_THIRD_PARTY_DIR}/qt/plugins/platforms
+    ${ASPIA_THIRD_PARTY_DIR}/qt/plugins/printsupport
     ${ASPIA_THIRD_PARTY_DIR}/qt/plugins/styles
     ${ASPIA_THIRD_PARTY_DIR}/zstd/lib)
 
@@ -82,6 +83,7 @@ set(THIRD_PARTY_LIBS
     Qt5::Core
     Qt5::Gui
     Qt5::Network
+    Qt5::PrintSupport
     Qt5::Widgets
     Qt5::WinMain
     Qt5::WinExtras
@@ -100,6 +102,7 @@ set(THIRD_PARTY_LIBS
     debug qtpcre2d
     debug qwindowsd
     debug qwindowsvistastyled
+    debug windowsprintersupportd
     debug zstdd
     optimized Qt5AccessibilitySupport
     optimized Qt5EventDispatcherSupport
@@ -115,6 +118,7 @@ set(THIRD_PARTY_LIBS
     optimized qtpcre2
     optimized qwindows
     optimized qwindowsvistastyle
+    optimized windowsprintersupport
     optimized zstd
     crypt32
     dwmapi
@@ -125,6 +129,7 @@ set(THIRD_PARTY_LIBS
     mpr
     netapi32
     sas
+    setupapi
     shlwapi
     userenv
     uxtheme

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>255</width>
+    <width>280</width>
     <height>40</height>
    </rect>
   </property>
@@ -69,6 +69,7 @@
      <addaction name="action_fullscreen"/>
      <addaction name="separator"/>
      <addaction name="action_file_transfer"/>
+     <addaction name="action_system_info"/>
      <addaction name="separator"/>
      <addaction name="action_update"/>
      <addaction name="action_menu"/>
@@ -291,6 +292,15 @@
    </property>
    <property name="visible">
     <bool>false</bool>
+   </property>
+  </action>
+  <action name="action_system_info">
+   <property name="icon">
+    <iconset resource="../resources/client.qrc">
+     <normaloff>:/img/computer_info.png</normaloff>:/img/computer_info.png</iconset>
+   </property>
+   <property name="text">
+    <string>System Information</string>
    </property>
   </action>
  </widget>

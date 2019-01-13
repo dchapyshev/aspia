@@ -16,16 +16,15 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_COMMON__DESKTOP_SESSION_CONSTANTS_H
-#define ASPIA_COMMON__DESKTOP_SESSION_CONSTANTS_H
+#ifndef ASPIA_BASE__SMBIOS_READER_H
+#define ASPIA_BASE__SMBIOS_READER_H
+
+#include <string>
 
 namespace aspia {
 
-extern const char kSelectScreenExtension[];
-extern const char kPowerControlExtension[];
-extern const char kRemoteUpdateExtension[];
-extern const char kSystemInfoExtension[];
+std::string readSmbiosDump();
 
 } // namespace aspia
 
-#endif // ASPIA_COMMON__DESKTOP_SESSION_CONSTANTS_H
+#endif // ASPIA_BASE__SMBIOS_READER_H

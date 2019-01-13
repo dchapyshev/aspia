@@ -52,6 +52,7 @@ public:
     void injectCursor(const QCursor& cursor) override;
     void injectClipboard(const proto::desktop::ClipboardEvent& event) override;
     void setScreenList(const proto::desktop::ScreenList& screen_list) override;
+    void setSystemInfo(const proto::system_info::SystemInfo& system_info) override;
 
     // DesktopWidget::Delegate implementation.
     void sendPointerEvent(const QPoint& pos, uint32_t mask) override;

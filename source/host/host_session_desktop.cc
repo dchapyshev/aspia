@@ -25,6 +25,7 @@
 #include "host/input_injector.h"
 #include "host/screen_updater.h"
 #include "host/host_settings.h"
+#include "host/host_system_info.h"
 #include "protocol/desktop_session_extensions.pb.h"
 
 #if defined(OS_WIN)
@@ -215,6 +216,10 @@ void HostSessionDesktop::readExtension(const proto::desktop::Extension& extensio
             launchUpdater();
         }
     }
+    else if (extension.name() == kSystemInfoExtension)
+    {
+        sendSystemInfo();
+    }
     else
     {
         LOG(LS_WARNING) << "Unknown extension: " << extension.name();
@@ -285,6 +290,20 @@ void HostSessionDesktop::readConfig(const proto::desktop::Config& config)
         if (!screen_updater_->start(config))
             emit errorOccurred();
     }
+}
+
+void HostSessionDesktop::sendSystemInfo()
+{
+    proto::system_info::SystemInfo system_info;
+    createHostSystemInfo(&system_info);
+
+    outgoing_message_.Clear();
+
+    proto::desktop::Extension* extension = outgoing_message_.mutable_extension();
+    extension->set_name(kSystemInfoExtension);
+    extension->set_data(system_info.SerializeAsString());
+
+    emit sendMessage(serializeMessage(outgoing_message_));
 }
 
 } // namespace aspia

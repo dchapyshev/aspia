@@ -16,16 +16,39 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_COMMON__DESKTOP_SESSION_CONSTANTS_H
-#define ASPIA_COMMON__DESKTOP_SESSION_CONSTANTS_H
+#ifndef ASPIA_BASE__SYS_INFO_H
+#define ASPIA_BASE__SYS_INFO_H
+
+#include <string>
+
+#include "base/macros_magic.h"
 
 namespace aspia {
 
-extern const char kSelectScreenExtension[];
-extern const char kPowerControlExtension[];
-extern const char kRemoteUpdateExtension[];
-extern const char kSystemInfoExtension[];
+class SysInfo
+{
+public:
+    static std::string operatingSystemName();
+    static std::string operatingSystemVersion();
+    static std::string operatingSystemArchitecture();
+    static std::string operatingSystemDir();
+
+    static uint64_t uptime();
+
+    static std::string computerName();
+    static std::string computerDomain();
+    static std::string computerWorkgroup();
+
+    static std::string processorName();
+    static std::string processorVendor();
+    static int processorPackages();
+    static int processorCores();
+    static int processorThreads();
+
+private:
+    DISALLOW_COPY_AND_ASSIGN(SysInfo);
+};
 
 } // namespace aspia
 
-#endif // ASPIA_COMMON__DESKTOP_SESSION_CONSTANTS_H
+#endif // ASPIA_BASE__SYS_INFO_H

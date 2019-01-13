@@ -31,6 +31,7 @@
 #include "build/version.h"
 #include "client/ui/desktop_config_dialog.h"
 #include "client/ui/desktop_panel.h"
+#include "client/ui/system_info_window.h"
 #include "common/clipboard.h"
 #include "desktop_capture/desktop_frame_qimage.h"
 
@@ -72,6 +73,7 @@ DesktopWindow::DesktopWindow(const ConnectData& connect_data, QWidget* parent)
     connect(panel_, &DesktopPanel::screenSelected, desktopClient(), &ClientDesktop::sendScreen);
     connect(panel_, &DesktopPanel::powerControl, desktopClient(), &ClientDesktop::sendPowerControl);
     connect(panel_, &DesktopPanel::startRemoteUpdate, desktopClient(), &ClientDesktop::sendRemoteUpdate);
+    connect(panel_, &DesktopPanel::startSystemInfo, desktopClient(), &ClientDesktop::sendSysInfoRequest);
 
     connect(panel_, &DesktopPanel::switchToFullscreen, [this](bool fullscreen)
     {
@@ -156,6 +158,16 @@ void DesktopWindow::injectClipboard(const proto::desktop::ClipboardEvent& event)
 void DesktopWindow::setScreenList(const proto::desktop::ScreenList& screen_list)
 {
     panel_->setScreenList(screen_list);
+}
+
+void DesktopWindow::setSystemInfo(const proto::system_info::SystemInfo& system_info)
+{
+    SystemInfoWindow* window = new SystemInfoWindow(this);
+
+    window->setSystemInfo(system_info);
+    window->setAttribute(Qt::WA_DeleteOnClose);
+    window->show();
+    window->activateWindow();
 }
 
 void DesktopWindow::sendPointerEvent(const QPoint& pos, uint32_t mask)

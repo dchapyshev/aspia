@@ -16,16 +16,15 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_COMMON__DESKTOP_SESSION_CONSTANTS_H
-#define ASPIA_COMMON__DESKTOP_SESSION_CONSTANTS_H
+#ifndef ASPIA_HOST__HOST_SYSTEM_INFO_H
+#define ASPIA_HOST__HOST_SYSTEM_INFO_H
+
+#include "protocol/system_info.pb.h"
 
 namespace aspia {
 
-extern const char kSelectScreenExtension[];
-extern const char kPowerControlExtension[];
-extern const char kRemoteUpdateExtension[];
-extern const char kSystemInfoExtension[];
+void createHostSystemInfo(proto::system_info::SystemInfo* system_info);
 
 } // namespace aspia
 
-#endif // ASPIA_COMMON__DESKTOP_SESSION_CONSTANTS_H
+#endif // ASPIA_HOST__HOST_SYSTEM_INFO_H
