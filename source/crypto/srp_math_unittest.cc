@@ -24,7 +24,7 @@
 #include "crypto/srp_constants.h"
 #include "crypto/srp_math.h"
 
-namespace aspia {
+namespace crypto {
 
 TEST(srp_math_test, test_vector)
 {
@@ -184,4 +184,4 @@ TEST(srp_math_test, test_vector)
     ASSERT_EQ(memcmp(client_key_string.c_str(), key_ref_buf, sizeof(key_ref_buf)), 0);
 }
 
-} // namespace aspia
+} // namespace crypto
