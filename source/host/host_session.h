@@ -24,9 +24,11 @@
 
 #include "base/macros_magic.h"
 
-namespace aspia {
+namespace ipc {
+class Channel;
+} // namespace ipc
 
-class IpcChannel;
+namespace aspia {
 
 class HostSession : public QObject
 {
@@ -56,7 +58,7 @@ private slots:
 
 private:
     QString channel_id_;
-    QPointer<IpcChannel> ipc_channel_;
+    QPointer<ipc::Channel> ipc_channel_;
 
     DISALLOW_COPY_AND_ASSIGN(HostSession);
 };

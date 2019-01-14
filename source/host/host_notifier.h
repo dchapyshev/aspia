@@ -47,7 +47,7 @@ private slots:
     void onIpcMessageReceived(const QByteArray& buffer);
 
 private:
-    QPointer<IpcChannel> ipc_channel_;
+    QPointer<ipc::Channel> ipc_channel_;
 
     DISALLOW_COPY_AND_ASSIGN(HostNotifier);
 };

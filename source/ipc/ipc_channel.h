@@ -26,18 +26,18 @@
 
 #include "base/macros_magic.h"
 
-namespace aspia {
+namespace ipc {
 
-class IpcServer;
+class Server;
 
-class IpcChannel : public QObject
+class Channel : public QObject
 {
     Q_OBJECT
 
 public:
-    ~IpcChannel() = default;
+    ~Channel() = default;
 
-    static IpcChannel* createClient(QObject* parent = nullptr);
+    static Channel* createClient(QObject* parent = nullptr);
 
     void connectToServer(const QString& channel_name);
 
@@ -62,8 +62,8 @@ private slots:
     void onReadyRead();
 
 private:
-    friend class IpcServer;
-    IpcChannel(QLocalSocket* socket, QObject* parent);
+    friend class Server;
+    Channel(QLocalSocket* socket, QObject* parent);
 
     void scheduleWrite();
 
@@ -80,9 +80,9 @@ private:
     MessageSizeType read_size_ = 0;
     int64_t read_ = 0;
 
-    DISALLOW_COPY_AND_ASSIGN(IpcChannel);
+    DISALLOW_COPY_AND_ASSIGN(Channel);
 };
 
-} // namespace aspia
+} // namespace ipc
 
 #endif // ASPIA_IPC__IPC_CHANNEL_H

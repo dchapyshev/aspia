@@ -36,12 +36,12 @@ bool HostNotifier::start(const QString& channel_id)
         return false;
     }
 
-    ipc_channel_ = IpcChannel::createClient(this);
+    ipc_channel_ = ipc::Channel::createClient(this);
 
-    connect(ipc_channel_, &IpcChannel::connected, ipc_channel_, &IpcChannel::start);
-    connect(ipc_channel_, &IpcChannel::disconnected, this, &HostNotifier::stop);
-    connect(ipc_channel_, &IpcChannel::errorOccurred, this, &HostNotifier::stop);
-    connect(ipc_channel_, &IpcChannel::messageReceived, this, &HostNotifier::onIpcMessageReceived);
+    connect(ipc_channel_, &ipc::Channel::connected, ipc_channel_, &ipc::Channel::start);
+    connect(ipc_channel_, &ipc::Channel::disconnected, this, &HostNotifier::stop);
+    connect(ipc_channel_, &ipc::Channel::errorOccurred, this, &HostNotifier::stop);
+    connect(ipc_channel_, &ipc::Channel::messageReceived, this, &HostNotifier::onIpcMessageReceived);
 
     ipc_channel_->connectToServer(channel_id);
     return true;

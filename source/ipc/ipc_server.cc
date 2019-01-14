@@ -25,7 +25,7 @@
 #include "crypto/random.h"
 #include "ipc/ipc_channel.h"
 
-namespace aspia {
+namespace ipc {
 
 namespace {
 
@@ -37,23 +37,23 @@ QString generateUniqueChannelId()
     return QString("%1.%2.%3")
         .arg(QCoreApplication::applicationPid())
         .arg(channel_id)
-        .arg(Random::generateNumber());
+        .arg(aspia::Random::generateNumber());
 }
 
 } // namespace
 
-IpcServer::IpcServer(QObject* parent)
+Server::Server(QObject* parent)
     : QObject(parent)
 {
     // Nothing
 }
 
-bool IpcServer::isStarted() const
+bool Server::isStarted() const
 {
     return !server_.isNull();
 }
 
-void IpcServer::start()
+void Server::start()
 {
     if (isStarted())
     {
@@ -66,7 +66,7 @@ void IpcServer::start()
     server_->setSocketOptions(QLocalServer::OtherAccessOption);
     server_->setMaxPendingConnections(1);
 
-    connect(server_, &QLocalServer::newConnection, this, &IpcServer::onNewConnection);
+    connect(server_, &QLocalServer::newConnection, this, &Server::onNewConnection);
 
     QString channel_id = generateUniqueChannelId();
 
@@ -81,7 +81,7 @@ void IpcServer::start()
     emit started(channel_id);
 }
 
-void IpcServer::stop()
+void Server::stop()
 {
     if (!server_.isNull())
     {
@@ -91,14 +91,14 @@ void IpcServer::stop()
     }
 }
 
-void IpcServer::onNewConnection()
+void Server::onNewConnection()
 {
     if (server_->hasPendingConnections())
     {
         QLocalSocket* socket = server_->nextPendingConnection();
-        emit newConnection(new IpcChannel(socket, nullptr));
+        emit newConnection(new Channel(socket, nullptr));
         emit finished();
     }
 }
 
-} // namespace aspia
+} // namespace ipc

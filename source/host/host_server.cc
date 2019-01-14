@@ -231,7 +231,7 @@ void HostServer::onIpcServerStarted(const QString& channel_id)
     notifier_process_->start();
 }
 
-void HostServer::onIpcNewConnection(IpcChannel* channel)
+void HostServer::onIpcNewConnection(ipc::Channel* channel)
 {
     DCHECK_EQ(notifier_state_, NotifierState::STARTING);
 
@@ -241,7 +241,7 @@ void HostServer::onIpcNewConnection(IpcChannel* channel)
     // Clients can disconnect while the notifier is started.
     if (session_list_.isEmpty())
     {
-        std::unique_ptr<IpcChannel> channel_deleter(channel);
+        std::unique_ptr<ipc::Channel> channel_deleter(channel);
         stopNotifier();
         return;
     }
@@ -249,9 +249,9 @@ void HostServer::onIpcNewConnection(IpcChannel* channel)
     ipc_channel_ = channel;
     ipc_channel_->setParent(this);
 
-    connect(ipc_channel_, &IpcChannel::disconnected, ipc_channel_, &IpcChannel::deleteLater);
-    connect(ipc_channel_, &IpcChannel::disconnected, this, &HostServer::restartNotifier);
-    connect(ipc_channel_, &IpcChannel::messageReceived, this, &HostServer::onIpcMessageReceived);
+    connect(ipc_channel_, &ipc::Channel::disconnected, ipc_channel_, &ipc::Channel::deleteLater);
+    connect(ipc_channel_, &ipc::Channel::disconnected, this, &HostServer::restartNotifier);
+    connect(ipc_channel_, &ipc::Channel::messageReceived, this, &HostServer::onIpcMessageReceived);
 
     // Send information about all connected sessions to the notifier.
     for (const auto& session : session_list_)
@@ -329,12 +329,12 @@ void HostServer::startNotifier()
     LOG(LS_INFO) << "Starting the notifier";
     notifier_state_ = NotifierState::STARTING;
 
-    IpcServer* ipc_server = new IpcServer(this);
+    ipc::Server* ipc_server = new ipc::Server(this);
 
-    connect(ipc_server, &IpcServer::started, this, &HostServer::onIpcServerStarted);
-    connect(ipc_server, &IpcServer::finished, ipc_server, &IpcServer::deleteLater);
-    connect(ipc_server, &IpcServer::newConnection, this, &HostServer::onIpcNewConnection);
-    connect(ipc_server, &IpcServer::errorOccurred, this, &HostServer::stop, Qt::QueuedConnection);
+    connect(ipc_server, &ipc::Server::started, this, &HostServer::onIpcServerStarted);
+    connect(ipc_server, &ipc::Server::finished, ipc_server, &ipc::Server::deleteLater);
+    connect(ipc_server, &ipc::Server::newConnection, this, &HostServer::onIpcNewConnection);
+    connect(ipc_server, &ipc::Server::errorOccurred, this, &HostServer::stop, Qt::QueuedConnection);
 
     // Start IPC server. After its successful start, slot |onIpcServerStarted| will be called,
     // which will start the process.

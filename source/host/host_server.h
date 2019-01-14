@@ -47,7 +47,7 @@ private slots:
     void onNewConnection();
     void onHostFinished(Host* host);
     void onIpcServerStarted(const QString& channel_id);
-    void onIpcNewConnection(IpcChannel* channel);
+    void onIpcNewConnection(ipc::Channel* channel);
     void onIpcMessageReceived(const QByteArray& buffer);
     void onNotifierProcessError(HostProcess::ErrorCode error_code);
     void restartNotifier();
@@ -72,7 +72,7 @@ private:
     bool has_user_session_ = true;
 
     // The channel is used to communicate with the notifier process.
-    QPointer<IpcChannel> ipc_channel_;
+    QPointer<ipc::Channel> ipc_channel_;
 
     // Contains a list of connected sessions.
     QList<QPointer<Host>> session_list_;

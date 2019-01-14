@@ -261,7 +261,7 @@ void Host::ipcServerStarted(const QString& channel_id)
     session_process_->start();
 }
 
-void Host::ipcNewConnection(IpcChannel* channel)
+void Host::ipcNewConnection(ipc::Channel* channel)
 {
     DCHECK(channel);
     DCHECK(attach_timer_id_);
@@ -276,10 +276,10 @@ void Host::ipcNewConnection(IpcChannel* channel)
     ipc_channel_ = channel;
     ipc_channel_->setParent(this);
 
-    connect(ipc_channel_, &IpcChannel::disconnected, ipc_channel_, &IpcChannel::deleteLater);
-    connect(ipc_channel_, &IpcChannel::disconnected, this, &Host::dettachSession);
-    connect(ipc_channel_, &IpcChannel::messageReceived, network_channel_, &NetworkChannel::send);
-    connect(network_channel_, &NetworkChannel::messageReceived, ipc_channel_, &IpcChannel::send);
+    connect(ipc_channel_, &ipc::Channel::disconnected, ipc_channel_, &ipc::Channel::deleteLater);
+    connect(ipc_channel_, &ipc::Channel::disconnected, this, &Host::dettachSession);
+    connect(ipc_channel_, &ipc::Channel::messageReceived, network_channel_, &NetworkChannel::send);
+    connect(network_channel_, &NetworkChannel::messageReceived, ipc_channel_, &ipc::Channel::send);
 
     LOG(LS_INFO) << "Host process is attached for session " << session_id_;
     state_ = State::ATTACHED;
@@ -297,12 +297,12 @@ void Host::attachSession(uint32_t session_id)
     state_ = State::STARTING;
     session_id_ = session_id;
 
-    IpcServer* ipc_server = new IpcServer(this);
+    ipc::Server* ipc_server = new ipc::Server(this);
 
-    connect(ipc_server, &IpcServer::started, this, &Host::ipcServerStarted);
-    connect(ipc_server, &IpcServer::finished, ipc_server, &IpcServer::deleteLater);
-    connect(ipc_server, &IpcServer::newConnection, this, &Host::ipcNewConnection);
-    connect(ipc_server, &IpcServer::errorOccurred, this, &Host::stop);
+    connect(ipc_server, &ipc::Server::started, this, &Host::ipcServerStarted);
+    connect(ipc_server, &ipc::Server::finished, ipc_server, &ipc::Server::deleteLater);
+    connect(ipc_server, &ipc::Server::newConnection, this, &Host::ipcNewConnection);
+    connect(ipc_server, &ipc::Server::errorOccurred, this, &Host::stop);
 
     LOG(LS_INFO) << "Starting the IPC server";
     ipc_server->start();

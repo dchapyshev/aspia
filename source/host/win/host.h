@@ -25,12 +25,15 @@
 #include "base/macros_magic.h"
 #include "protocol/common.pb.h"
 
+namespace ipc {
+class Channel;
+class Server;
+} // namespace ipc
+
 namespace aspia {
 
 class HostProcess;
 class HostSessionFake;
-class IpcChannel;
-class IpcServer;
 class NetworkChannelHost;
 
 class Host : public QObject
@@ -67,7 +70,7 @@ protected:
 
 private slots:
     void ipcServerStarted(const QString& channel_id);
-    void ipcNewConnection(IpcChannel* channel);
+    void ipcNewConnection(ipc::Channel* channel);
     void attachSession(uint32_t session_id);
     void dettachSession();
 
@@ -84,7 +87,7 @@ private:
     State state_ = State::STOPPED;
 
     NetworkChannelHost* network_channel_ = nullptr;
-    QPointer<IpcChannel> ipc_channel_;
+    QPointer<ipc::Channel> ipc_channel_;
     QPointer<HostProcess> session_process_;
     QPointer<HostSessionFake> fake_session_;
 

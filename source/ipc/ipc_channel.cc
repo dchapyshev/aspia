@@ -20,7 +20,7 @@
 
 #include "base/logging.h"
 
-namespace aspia {
+namespace ipc {
 
 Q_DECLARE_METATYPE(QLocalSocket::LocalSocketError);
 
@@ -30,7 +30,7 @@ constexpr uint32_t kMaxMessageSize = 16 * 1024 * 1024; // 16MB
 
 } // namespace
 
-IpcChannel::IpcChannel(QLocalSocket* socket, QObject* parent)
+Channel::Channel(QLocalSocket* socket, QObject* parent)
     : QObject(parent),
       socket_(socket)
 {
@@ -40,31 +40,31 @@ IpcChannel::IpcChannel(QLocalSocket* socket, QObject* parent)
 
     socket_->setParent(this);
 
-    connect(socket_, &QLocalSocket::connected, this, &IpcChannel::connected);
-    connect(socket_, &QLocalSocket::bytesWritten, this, &IpcChannel::onBytesWritten);
-    connect(socket_, &QLocalSocket::readyRead, this, &IpcChannel::onReadyRead);
+    connect(socket_, &QLocalSocket::connected, this, &Channel::connected);
+    connect(socket_, &QLocalSocket::bytesWritten, this, &Channel::onBytesWritten);
+    connect(socket_, &QLocalSocket::readyRead, this, &Channel::onReadyRead);
 
     connect(socket_, &QLocalSocket::disconnected,
-            this, &IpcChannel::disconnected,
+            this, &Channel::disconnected,
             Qt::QueuedConnection);
 
     connect(socket_, QOverload<QLocalSocket::LocalSocketError>::of(&QLocalSocket::error),
-            this, &IpcChannel::onError,
+            this, &Channel::onError,
             Qt::QueuedConnection);
 }
 
 // static
-IpcChannel* IpcChannel::createClient(QObject* parent)
+Channel* Channel::createClient(QObject* parent)
 {
-    return new IpcChannel(new QLocalSocket(), parent);
+    return new Channel(new QLocalSocket(), parent);
 }
 
-void IpcChannel::connectToServer(const QString& channel_name)
+void Channel::connectToServer(const QString& channel_name)
 {
     socket_->connectToServer(channel_name);
 }
 
-void IpcChannel::stop()
+void Channel::stop()
 {
     if (socket_->state() != QLocalSocket::UnconnectedState)
     {
@@ -75,12 +75,12 @@ void IpcChannel::stop()
     }
 }
 
-void IpcChannel::start()
+void Channel::start()
 {
     onReadyRead();
 }
 
-void IpcChannel::send(const QByteArray& buffer)
+void Channel::send(const QByteArray& buffer)
 {
     bool schedule_write = write_queue_.isEmpty();
 
@@ -90,13 +90,13 @@ void IpcChannel::send(const QByteArray& buffer)
         scheduleWrite();
 }
 
-void IpcChannel::onError(QLocalSocket::LocalSocketError /* socket_error */)
+void Channel::onError(QLocalSocket::LocalSocketError /* socket_error */)
 {
     LOG(LS_WARNING) << "IPC channel error: " << socket_->errorString().toStdString();
     emit errorOccurred();
 }
 
-void IpcChannel::onBytesWritten(int64_t bytes)
+void Channel::onBytesWritten(int64_t bytes)
 {
     const QByteArray& write_buffer = write_queue_.front();
 
@@ -122,7 +122,7 @@ void IpcChannel::onBytesWritten(int64_t bytes)
     }
 }
 
-void IpcChannel::onReadyRead()
+void Channel::onReadyRead()
 {
     int64_t current;
 
@@ -171,7 +171,7 @@ void IpcChannel::onReadyRead()
     }
 }
 
-void IpcChannel::scheduleWrite()
+void Channel::scheduleWrite()
 {
     const QByteArray& write_buffer = write_queue_.front();
 
@@ -186,4 +186,4 @@ void IpcChannel::scheduleWrite()
     socket_->write(reinterpret_cast<const char*>(&write_size_), sizeof(MessageSizeType));
 }
 
-} // namespace aspia
+} // namespace ipc

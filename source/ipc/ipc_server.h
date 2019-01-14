@@ -25,17 +25,17 @@
 
 class QLocalServer;
 
-namespace aspia {
+namespace ipc {
 
-class IpcChannel;
+class Channel;
 
-class IpcServer : public QObject
+class Server : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit IpcServer(QObject* parent = nullptr);
-    ~IpcServer() = default;
+    explicit Server(QObject* parent = nullptr);
+    ~Server() = default;
 
     bool isStarted() const;
 
@@ -46,7 +46,7 @@ public slots:
 signals:
     void started(const QString& channel_id);
     void finished();
-    void newConnection(IpcChannel* channel);
+    void newConnection(Channel* channel);
     void errorOccurred();
 
 private slots:
@@ -55,9 +55,9 @@ private slots:
 private:
     QPointer<QLocalServer> server_;
 
-    DISALLOW_COPY_AND_ASSIGN(IpcServer);
+    DISALLOW_COPY_AND_ASSIGN(Server);
 };
 
-} // namespace aspia
+} // namespace ipc
 
 #endif // ASPIA_IPC__IPC_SERVER_H
