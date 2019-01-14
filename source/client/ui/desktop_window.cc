@@ -33,7 +33,7 @@
 #include "client/ui/desktop_panel.h"
 #include "client/ui/system_info_window.h"
 #include "common/clipboard.h"
-#include "desktop_capture/desktop_frame_qimage.h"
+#include "desktop/desktop_frame_qimage.h"
 
 namespace client {
 

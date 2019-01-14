@@ -31,7 +31,7 @@
 #include "base/win/scoped_user_object.h"
 #endif
 
-#include "desktop_capture/desktop_frame.h"
+#include "desktop/desktop_frame.h"
 
 namespace desktop {
 class DesktopFrameQImage;

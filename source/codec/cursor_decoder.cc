@@ -19,7 +19,7 @@
 #include "codec/cursor_decoder.h"
 
 #include "base/logging.h"
-#include "desktop_capture/mouse_cursor_cache.h"
+#include "desktop/mouse_cursor_cache.h"
 
 namespace codec {
 

@@ -32,9 +32,9 @@
 #include "codec/video_util.h"
 #include "common/desktop_session_constants.h"
 #include "common/message_serialization.h"
-#include "desktop_capture/capture_scheduler.h"
-#include "desktop_capture/cursor_capturer_win.h"
-#include "desktop_capture/screen_capturer_gdi.h"
+#include "desktop/capture_scheduler.h"
+#include "desktop/cursor_capturer_win.h"
+#include "desktop/screen_capturer_gdi.h"
 #include "protocol/desktop_session_extensions.pb.h"
 
 namespace host {

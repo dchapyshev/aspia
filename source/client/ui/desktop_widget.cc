@@ -23,7 +23,7 @@
 #include <QWheelEvent>
 
 #include "base/keycode_converter.h"
-#include "desktop_capture/desktop_frame_qimage.h"
+#include "desktop/desktop_frame_qimage.h"
 #include "protocol/desktop_session.pb.h"
 
 namespace client {

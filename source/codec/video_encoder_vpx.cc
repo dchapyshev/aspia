@@ -24,7 +24,7 @@
 
 #include "base/logging.h"
 #include "codec/video_util.h"
-#include "desktop_capture/desktop_frame.h"
+#include "desktop/desktop_frame.h"
 
 namespace codec {
 

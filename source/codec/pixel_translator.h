@@ -21,7 +21,7 @@
 
 #include <memory>
 
-#include "desktop_capture/pixel_format.h"
+#include "desktop/pixel_format.h"
 
 namespace codec {
 

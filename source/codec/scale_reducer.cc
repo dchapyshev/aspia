@@ -21,7 +21,7 @@
 #include <libyuv/scale_argb.h>
 
 #include "base/logging.h"
-#include "desktop_capture/desktop_frame_aligned.h"
+#include "desktop/desktop_frame_aligned.h"
 
 namespace codec {
 

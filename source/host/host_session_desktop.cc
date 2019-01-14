@@ -29,7 +29,7 @@
 #include "protocol/desktop_session_extensions.pb.h"
 
 #if defined(OS_WIN)
-#include "desktop_capture/win/visual_effects_disabler.h"
+#include "desktop/win/visual_effects_disabler.h"
 #include "host/win/updater_launcher.h"
 #endif // defined(OS_WIN)
 

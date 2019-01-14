@@ -24,7 +24,7 @@
 #include "base/qt_logging.h"
 #include "build/version.h"
 #include "crypto/scoped_crypto_initializer.h"
-#include "desktop_capture/win/scoped_thread_desktop.h"
+#include "desktop/win/scoped_thread_desktop.h"
 #include "host/ui/host_notifier_window.h"
 #include "host/host_session.h"
 

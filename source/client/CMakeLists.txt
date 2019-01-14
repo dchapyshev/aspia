@@ -121,7 +121,7 @@ target_link_libraries(aspia_client
     aspia_codec
     aspia_common
     aspia_crypto
-    aspia_desktop_capture
+    aspia_desktop
     aspia_network
     aspia_protocol
     ${THIRD_PARTY_LIBS})

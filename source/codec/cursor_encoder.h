@@ -21,7 +21,7 @@
 
 #include "base/macros_magic.h"
 #include "codec/scoped_zstd_stream.h"
-#include "desktop_capture/mouse_cursor_cache.h"
+#include "desktop/mouse_cursor_cache.h"
 #include "protocol/desktop_session.pb.h"
 
 namespace codec {

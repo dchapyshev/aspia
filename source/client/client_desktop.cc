@@ -27,7 +27,7 @@
 #include "codec/video_decoder.h"
 #include "codec/video_util.h"
 #include "common/desktop_session_constants.h"
-#include "desktop_capture/mouse_cursor.h"
+#include "desktop/mouse_cursor.h"
 
 namespace client {
 

@@ -22,7 +22,7 @@
 #include <memory>
 
 #include "base/macros_magic.h"
-#include "desktop_capture/screen_settings_tracker.h"
+#include "desktop/screen_settings_tracker.h"
 
 namespace desktop {
 class DesktopFrame;

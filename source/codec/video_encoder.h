@@ -19,7 +19,7 @@
 #ifndef ASPIA_CODEC__VIDEO_ENCODER_H
 #define ASPIA_CODEC__VIDEO_ENCODER_H
 
-#include "desktop_capture/screen_settings_tracker.h"
+#include "desktop/screen_settings_tracker.h"
 #include "protocol/desktop_session.pb.h"
 
 namespace desktop {

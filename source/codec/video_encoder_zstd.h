@@ -22,7 +22,7 @@
 #include "base/aligned_memory.h"
 #include "codec/scoped_zstd_stream.h"
 #include "codec/video_encoder.h"
-#include "desktop_capture/pixel_format.h"
+#include "desktop/pixel_format.h"
 
 namespace codec {
 

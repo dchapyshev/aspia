@@ -29,7 +29,7 @@
 #include "base/win/registry.h"
 #include "base/logging.h"
 #include "base/keycode_converter.h"
-#include "desktop_capture/win/scoped_thread_desktop.h"
+#include "desktop/win/scoped_thread_desktop.h"
 
 namespace host {
 
