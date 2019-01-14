@@ -19,7 +19,7 @@
 #ifndef ASPIA_HOST__HOST_SYSTEM_INFO_H
 #define ASPIA_HOST__HOST_SYSTEM_INFO_H
 
-#include "protocol/system_info.pb.h"
+#include "proto/system_info.pb.h"
 
 namespace host {
 

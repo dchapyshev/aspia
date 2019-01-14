@@ -16,7 +16,7 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 #
 
-list(APPEND SOURCE_PROTOCOL
+list(APPEND SOURCE_PROTO
     address_book.proto
     common.proto
     desktop_session.proto
@@ -26,10 +26,10 @@ list(APPEND SOURCE_PROTOCOL
     notifier.proto
     system_info.proto)
 
-protobuf_generate_cpp(PROTOCOL_CC_FILES PROTOCOL_H_FILES ${SOURCE_PROTOCOL})
-set_source_files_properties(${PROTOCOL_CC_FILES} ${PROTOCOL_H_FILES} PROPERTIES SKIP_AUTOGEN ON)
+protobuf_generate_cpp(PROTO_CC_FILES PROTO_H_FILES ${SOURCE_PROTO})
+set_source_files_properties(${PROTO_CC_FILES} ${PROTO_H_FILES} PROPERTIES SKIP_AUTOGEN ON)
 
-source_group("" FILES ${SOURCE_PROTOCOL} ${PROTOCOL_CC_FILES} ${PROTOCOL_H_FILES})
+source_group("" FILES ${SOURCE_PROTO} ${PROTO_CC_FILES} ${PROTO_H_FILES})
 
-add_library(aspia_protocol STATIC ${SOURCE_PROTOCOL} ${PROTOCOL_CC_FILES} ${PROTOCOL_H_FILES})
-target_link_libraries(aspia_protocol ${THIRD_PARTY_LIBS})
+add_library(aspia_proto STATIC ${SOURCE_PROTO} ${PROTO_CC_FILES} ${PROTO_H_FILES})
+target_link_libraries(aspia_proto ${THIRD_PARTY_LIBS})

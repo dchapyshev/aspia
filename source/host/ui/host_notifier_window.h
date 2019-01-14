@@ -21,7 +21,7 @@
 
 #include "common/locale_loader.h"
 #include "host/host_notifier.h"
-#include "protocol/notifier.pb.h"
+#include "proto/notifier.pb.h"
 #include "ui_host_notifier_window.h"
 
 namespace host {

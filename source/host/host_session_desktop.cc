@@ -26,7 +26,7 @@
 #include "host/screen_updater.h"
 #include "host/host_settings.h"
 #include "host/host_system_info.h"
-#include "protocol/desktop_session_extensions.pb.h"
+#include "proto/desktop_session_extensions.pb.h"
 
 #if defined(OS_WIN)
 #include "desktop/win/visual_effects_disabler.h"

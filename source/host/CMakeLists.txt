@@ -104,7 +104,7 @@ target_link_libraries(aspia_host
     aspia_desktop
     aspia_ipc
     aspia_net
-    aspia_protocol
+    aspia_proto
     aspia_updater
     ${THIRD_PARTY_LIBS})
 

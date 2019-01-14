@@ -22,7 +22,7 @@
 #include <QAction>
 
 #include "base/macros_magic.h"
-#include "protocol/desktop_session_extensions.pb.h"
+#include "proto/desktop_session_extensions.pb.h"
 
 namespace client {
 

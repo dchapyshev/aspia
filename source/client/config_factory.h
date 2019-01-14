@@ -20,7 +20,7 @@
 #define ASPIA_CLIENT__CONFIG_FACTORY_H
 
 #include "base/macros_magic.h"
-#include "protocol/desktop_session.pb.h"
+#include "proto/desktop_session.pb.h"
 
 namespace client {
 

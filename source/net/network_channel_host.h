@@ -21,7 +21,7 @@
 
 #include "net/network_channel.h"
 #include "net/srp_user.h"
-#include "protocol/common.pb.h"
+#include "proto/common.pb.h"
 
 namespace net {
 

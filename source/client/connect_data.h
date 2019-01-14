@@ -22,8 +22,8 @@
 #include <QString>
 
 #include "build/build_config.h"
-#include "protocol/common.pb.h"
-#include "protocol/desktop_session.pb.h"
+#include "proto/common.pb.h"
+#include "proto/desktop_session.pb.h"
 
 namespace client {
 

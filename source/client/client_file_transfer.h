@@ -25,7 +25,7 @@
 #include "client/client.h"
 #include "client/connect_data.h"
 #include "common/file_request.h"
-#include "protocol/file_transfer_session.pb.h"
+#include "proto/file_transfer_session.pb.h"
 
 namespace common {
 class FileWorker;

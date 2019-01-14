@@ -21,7 +21,7 @@
 
 #include "host/desktop_config_tracker.h"
 #include "host/host_session.h"
-#include "protocol/common.pb.h"
+#include "proto/common.pb.h"
 #include "build/build_config.h"
 
 namespace common {

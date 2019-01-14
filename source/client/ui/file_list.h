@@ -22,7 +22,7 @@
 #include <QTreeView>
 
 #include "client/file_transfer.h"
-#include "protocol/file_transfer_session.pb.h"
+#include "proto/file_transfer_session.pb.h"
 
 namespace client {
 

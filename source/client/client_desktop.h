@@ -20,8 +20,8 @@
 #define ASPIA_CLIENT__CLIENT_DESKTOP_H
 
 #include "client/client.h"
-#include "protocol/desktop_session_extensions.pb.h"
-#include "protocol/system_info.pb.h"
+#include "proto/desktop_session_extensions.pb.h"
+#include "proto/system_info.pb.h"
 
 namespace codec {
 class CursorDecoder;

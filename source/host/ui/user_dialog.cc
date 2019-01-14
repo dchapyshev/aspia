@@ -24,7 +24,7 @@
 #include "base/logging.h"
 #include "common/user_util.h"
 #include "net/srp_host_context.h"
-#include "protocol/common.pb.h"
+#include "proto/common.pb.h"
 
 namespace host {
 

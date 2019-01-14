@@ -35,7 +35,7 @@
 #include "desktop/capture_scheduler.h"
 #include "desktop/cursor_capturer_win.h"
 #include "desktop/screen_capturer_gdi.h"
-#include "protocol/desktop_session_extensions.pb.h"
+#include "proto/desktop_session_extensions.pb.h"
 
 namespace host {
 

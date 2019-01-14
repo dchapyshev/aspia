@@ -84,7 +84,7 @@ target_link_libraries(aspia_console
     aspia_crypto
     aspia_desktop
     aspia_net
-    aspia_protocol
+    aspia_proto
     aspia_updater
     ${THIRD_PARTY_LIBS})
 

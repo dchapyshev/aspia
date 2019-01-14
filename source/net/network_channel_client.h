@@ -22,7 +22,7 @@
 #include <QVersionNumber>
 
 #include "net/network_channel.h"
-#include "protocol/common.pb.h"
+#include "proto/common.pb.h"
 
 namespace net {
 

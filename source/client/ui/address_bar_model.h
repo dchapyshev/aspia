@@ -23,7 +23,7 @@
 
 #include "base/macros_magic.h"
 #include "common/file_platform_util.h"
-#include "protocol/file_transfer_session.pb.h"
+#include "proto/file_transfer_session.pb.h"
 
 namespace client {
 

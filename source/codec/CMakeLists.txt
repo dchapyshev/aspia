@@ -50,7 +50,4 @@ list(APPEND SOURCE_CODEC_UNIT_TESTS
 source_group("" FILES ${SOURCE_CODEC})
 
 add_library(aspia_codec STATIC ${SOURCE_CODEC})
-target_link_libraries(aspia_codec
-    aspia_base
-    aspia_protocol
-    ${THIRD_PARTY_LIBS})
+target_link_libraries(aspia_codec aspia_base aspia_proto ${THIRD_PARTY_LIBS})

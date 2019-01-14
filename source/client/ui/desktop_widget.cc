@@ -24,7 +24,7 @@
 
 #include "base/keycode_converter.h"
 #include "desktop/desktop_frame_qimage.h"
-#include "protocol/desktop_session.pb.h"
+#include "proto/desktop_session.pb.h"
 
 namespace client {
 

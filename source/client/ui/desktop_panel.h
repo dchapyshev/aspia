@@ -20,9 +20,9 @@
 #define ASPIA_CLIENT__UI__DESKTOP_PANEL_H
 
 #include "base/macros_magic.h"
-#include "protocol/common.pb.h"
-#include "protocol/desktop_session.pb.h"
-#include "protocol/desktop_session_extensions.pb.h"
+#include "proto/common.pb.h"
+#include "proto/desktop_session.pb.h"
+#include "proto/desktop_session_extensions.pb.h"
 #include "ui_desktop_panel.h"
 
 namespace client {

@@ -21,7 +21,7 @@
 
 #include <memory>
 
-#include "protocol/desktop_session.pb.h"
+#include "proto/desktop_session.pb.h"
 
 namespace desktop {
 class DesktopFrame;

@@ -22,7 +22,7 @@
 #include <QString>
 
 #include "crypto/big_num.h"
-#include "protocol/key_exchange.pb.h"
+#include "proto/key_exchange.pb.h"
 
 namespace net {
 

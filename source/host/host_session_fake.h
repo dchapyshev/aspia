@@ -21,7 +21,7 @@
 
 #include <QObject>
 
-#include "protocol/common.pb.h"
+#include "proto/common.pb.h"
 
 namespace host {
 

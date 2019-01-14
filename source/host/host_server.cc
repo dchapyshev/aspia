@@ -27,7 +27,7 @@
 #include "ipc/ipc_server.h"
 #include "net/firewall_manager.h"
 #include "net/network_channel_host.h"
-#include "protocol/notifier.pb.h"
+#include "proto/notifier.pb.h"
 
 namespace host {
 

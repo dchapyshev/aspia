@@ -20,7 +20,7 @@
 #define ASPIA_CLIENT__UI__SYSTEM_INFO_WINDOW_H
 
 #include "base/macros_magic.h"
-#include "protocol/system_info.pb.h"
+#include "proto/system_info.pb.h"
 #include "ui_system_info_window.h"
 
 namespace client {

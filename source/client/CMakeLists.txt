@@ -123,7 +123,7 @@ target_link_libraries(aspia_client
     aspia_crypto
     aspia_desktop
     aspia_net
-    aspia_protocol
+    aspia_proto
     ${THIRD_PARTY_LIBS})
 
 if(Qt5LinguistTools_FOUND)

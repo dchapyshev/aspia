@@ -20,7 +20,7 @@
 #define ASPIA_CODEC__VIDEO_ENCODER_H
 
 #include "desktop/screen_settings_tracker.h"
-#include "protocol/desktop_session.pb.h"
+#include "proto/desktop_session.pb.h"
 
 namespace desktop {
 class DesktopFrame;

@@ -27,7 +27,7 @@
 #include <variant>
 
 #include "base/macros_magic.h"
-#include "protocol/desktop_session.pb.h"
+#include "proto/desktop_session.pb.h"
 
 namespace host {
 
