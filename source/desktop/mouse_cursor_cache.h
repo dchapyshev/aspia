@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_DESKTOP__MOUSE_CURSOR_CACHE_H
-#define ASPIA_DESKTOP__MOUSE_CURSOR_CACHE_H
+#ifndef DESKTOP__MOUSE_CURSOR_CACHE_H
+#define DESKTOP__MOUSE_CURSOR_CACHE_H
 
 #include <deque>
 
@@ -63,4 +63,4 @@ private:
 
 } // namespace desktop
 
-#endif // ASPIA_DESKTOP__MOUSE_CURSOR_CACHE_H
+#endif // DESKTOP__MOUSE_CURSOR_CACHE_H

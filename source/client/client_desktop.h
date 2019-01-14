@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CLIENT__CLIENT_DESKTOP_H
-#define ASPIA_CLIENT__CLIENT_DESKTOP_H
+#ifndef CLIENT__CLIENT_DESKTOP_H
+#define CLIENT__CLIENT_DESKTOP_H
 
 #include "client/client.h"
 #include "proto/desktop_session_extensions.pb.h"
@@ -90,4 +90,4 @@ private:
 
 } // namespace client
 
-#endif // ASPIA_CLIENT__CLIENT_DESKTOP_H
+#endif // CLIENT__CLIENT_DESKTOP_H

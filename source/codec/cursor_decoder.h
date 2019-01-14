@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CODEC__CURSOR_DECODER_H
-#define ASPIA_CODEC__CURSOR_DECODER_H
+#ifndef CODEC__CURSOR_DECODER_H
+#define CODEC__CURSOR_DECODER_H
 
 #include <memory>
 
@@ -53,4 +53,4 @@ private:
 
 } // namespace codec
 
-#endif // ASPIA_CODEC__CURSOR_DECODER_H
+#endif // CODEC__CURSOR_DECODER_H

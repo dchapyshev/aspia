@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CRYPTO__SCOPED_CRYPTO_INITIALIZER_H
-#define ASPIA_CRYPTO__SCOPED_CRYPTO_INITIALIZER_H
+#ifndef CRYPTO__SCOPED_CRYPTO_INITIALIZER_H
+#define CRYPTO__SCOPED_CRYPTO_INITIALIZER_H
 
 #include "base/macros_magic.h"
 
@@ -38,4 +38,4 @@ private:
 
 } // namespace crypto
 
-#endif // ASPIA_CRYPTO__SCOPED_CRYPTO_INITIALIZER_H
+#endif // CRYPTO__SCOPED_CRYPTO_INITIALIZER_H

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CODEC__SCOPED_ZSTD_STREAM_H
-#define ASPIA_CODEC__SCOPED_ZSTD_STREAM_H
+#ifndef CODEC__SCOPED_ZSTD_STREAM_H
+#define CODEC__SCOPED_ZSTD_STREAM_H
 
 #include <memory>
 
@@ -40,4 +40,4 @@ using ScopedZstdDStream = std::unique_ptr<ZSTD_DStream, ZstdDStreamDeleter>;
 
 } // namespace codec
 
-#endif // ASPIA_CODEC__SCOPED_ZSTD_STREAM_H
+#endif // CODEC__SCOPED_ZSTD_STREAM_H

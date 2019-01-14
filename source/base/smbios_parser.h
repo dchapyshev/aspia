@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_BASE__SMBIOS_PARSER_H
-#define ASPIA_BASE__SMBIOS_PARSER_H
+#ifndef BASE__SMBIOS_PARSER_H
+#define BASE__SMBIOS_PARSER_H
 
 #include <vector>
 
@@ -103,4 +103,4 @@ private:
 
 } // namespace base
 
-#endif // ASPIA_BASE__SMBIOS_PARSER_H
+#endif // BASE__SMBIOS_PARSER_H

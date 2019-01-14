@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CODEC__SCALE_REDUCER_H
-#define ASPIA_CODEC__SCALE_REDUCER_H
+#ifndef CODEC__SCALE_REDUCER_H
+#define CODEC__SCALE_REDUCER_H
 
 #include <memory>
 
@@ -52,4 +52,4 @@ private:
 
 } // namespace codec
 
-#endif // ASPIA_CODEC__SCALE_REDUCER_H
+#endif // CODEC__SCALE_REDUCER_H

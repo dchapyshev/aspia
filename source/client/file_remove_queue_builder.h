@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CLIENT__FILE_REMOVE_QUEUE_BUILDER_H
-#define ASPIA_CLIENT__FILE_REMOVE_QUEUE_BUILDER_H
+#ifndef CLIENT__FILE_REMOVE_QUEUE_BUILDER_H
+#define CLIENT__FILE_REMOVE_QUEUE_BUILDER_H
 
 #include "client/file_remover.h"
 
@@ -68,4 +68,4 @@ private:
 
 } // namespace client
 
-#endif // ASPIA_CLIENT__FILE_REMOVE_QUEUE_BUILDER_H
+#endif // CLIENT__FILE_REMOVE_QUEUE_BUILDER_H

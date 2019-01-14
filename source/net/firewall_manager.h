@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_NET__FIREWALL_MANAGER_H
-#define ASPIA_NET__FIREWALL_MANAGER_H
+#ifndef NET__FIREWALL_MANAGER_H
+#define NET__FIREWALL_MANAGER_H
 
 #include <wrl/client.h>
 #include <netfw.h>
@@ -72,4 +72,4 @@ private:
 
 } // namespace net
 
-#endif // ASPIA_NET__FIREWALL_MANAGER_H
+#endif // NET__FIREWALL_MANAGER_H

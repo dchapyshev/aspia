@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_HOST__WIN__HOST_SERVICE_MAIN_H
-#define ASPIA_HOST__WIN__HOST_SERVICE_MAIN_H
+#ifndef HOST__WIN__HOST_SERVICE_MAIN_H
+#define HOST__WIN__HOST_SERVICE_MAIN_H
 
 #include "host/host_export.h"
 
@@ -27,4 +27,4 @@ int HOST_EXPORT hostServiceMain(int argc, char *argv[]);
 
 } // namespace host
 
-#endif // ASPIA_HOST__WIN__HOST_SERVICE_MAIN_H
+#endif // HOST__WIN__HOST_SERVICE_MAIN_H

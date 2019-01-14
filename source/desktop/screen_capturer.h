@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_DESKTOP__SCREEN_CAPTURER_H
-#define ASPIA_DESKTOP__SCREEN_CAPTURER_H
+#ifndef DESKTOP__SCREEN_CAPTURER_H
+#define DESKTOP__SCREEN_CAPTURER_H
 
 #include "desktop/desktop_frame.h"
 
@@ -49,4 +49,4 @@ public:
 
 } // namespace desktop
 
-#endif // ASPIA_DESKTOP__CAPTURER_H
+#endif // DESKTOP__CAPTURER_H

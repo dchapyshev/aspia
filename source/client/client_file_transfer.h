@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CLIENT__CLIENT_FILE_TRANSFER_H
-#define ASPIA_CLIENT__CLIENT_FILE_TRANSFER_H
+#ifndef CLIENT__CLIENT_FILE_TRANSFER_H
+#define CLIENT__CLIENT_FILE_TRANSFER_H
 
 #include <QQueue>
 #include <QPointer>
@@ -64,4 +64,4 @@ private:
 
 } // namespace client
 
-#endif // ASPIA_CLIENT__CLIENT_FILE_TRANSFER_H
+#endif // CLIENT__CLIENT_FILE_TRANSFER_H

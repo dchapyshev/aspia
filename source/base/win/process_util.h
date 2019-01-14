@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_BASE__WIN__PROCESS_UTIL_H
-#define ASPIA_BASE__WIN__PROCESS_UTIL_H
+#ifndef BASE__WIN__PROCESS_UTIL_H
+#define BASE__WIN__PROCESS_UTIL_H
 
 #include <QStringList>
 
@@ -42,4 +42,4 @@ QString createCommandLine(const QString& program, const QStringList& arguments);
 
 } // namespace base::win
 
-#endif // ASPIA_BASE__WIN__PROCESS_UTIL_H
+#endif // BASE__WIN__PROCESS_UTIL_H

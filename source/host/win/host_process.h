@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_HOST__WIN__HOST_PROCESS_H
-#define ASPIA_HOST__WIN__HOST_PROCESS_H
+#ifndef HOST__WIN__HOST_PROCESS_H
+#define HOST__WIN__HOST_PROCESS_H
 
 #include <QObject>
 #include <QScopedPointer>
@@ -98,4 +98,4 @@ private:
 
 } // namespace host
 
-#endif // ASPIA_HOST__WIN__HOST_PROCESS_H
+#endif // HOST__WIN__HOST_PROCESS_H

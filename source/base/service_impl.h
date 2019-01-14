@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_BASE__SERVICE_IMPL_H
-#define ASPIA_BASE__SERVICE_IMPL_H
+#ifndef BASE__SERVICE_IMPL_H
+#define BASE__SERVICE_IMPL_H
 
 #include <QString>
 
@@ -67,4 +67,4 @@ private:
 
 } // namespace base
 
-#endif // ASPIA_BASE__SERVICE_IMPL_H
+#endif // BASE__SERVICE_IMPL_H

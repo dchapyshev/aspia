@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_BASE__SMBIOS_H
-#define ASPIA_BASE__SMBIOS_H
+#ifndef BASE__SMBIOS_H
+#define BASE__SMBIOS_H
 
 #include <cstdint>
 
@@ -129,4 +129,4 @@ struct SmbiosMemoryDeviceTable : public SmbiosTable
 
 } // namespace base
 
-#endif // ASPIA_BASE__SMBIOS_H
+#endif // BASE__SMBIOS_H

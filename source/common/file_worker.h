@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_COMMON__FILE_WORKER_H
-#define ASPIA_COMMON__FILE_WORKER_H
+#ifndef COMMON__FILE_WORKER_H
+#define COMMON__FILE_WORKER_H
 
 #include "common/file_depacketizer.h"
 #include "common/file_packetizer.h"
@@ -65,4 +65,4 @@ private:
 
 } // namespace common
 
-#endif // ASPIA_COMMON__FILE_WORKER_H
+#endif // COMMON__FILE_WORKER_H

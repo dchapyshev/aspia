@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CLIENT__CLIENT_H
-#define ASPIA_CLIENT__CLIENT_H
+#ifndef CLIENT__CLIENT_H
+#define CLIENT__CLIENT_H
 
 #include <QObject>
 #include <QPointer>
@@ -74,4 +74,4 @@ private:
 
 } // namespace client
 
-#endif // ASPIA_CLIENT__CLIENT_H
+#endif // CLIENT__CLIENT_H

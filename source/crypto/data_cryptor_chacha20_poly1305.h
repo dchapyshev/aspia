@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CRYPTO__DATA_CRYPTOR_CHACHA20_POLY1305_H
-#define ASPIA_CRYPTO__DATA_CRYPTOR_CHACHA20_POLY1305_H
+#ifndef CRYPTO__DATA_CRYPTOR_CHACHA20_POLY1305_H
+#define CRYPTO__DATA_CRYPTOR_CHACHA20_POLY1305_H
 
 #include "base/macros_magic.h"
 #include "crypto/data_cryptor.h"
@@ -41,4 +41,4 @@ private:
 
 } // namespace crypto
 
-#endif // ASPIA_CRYPTO__DATA_CRYPTOR_CHACHA20_POLY1305_H
+#endif // CRYPTO__DATA_CRYPTOR_CHACHA20_POLY1305_H

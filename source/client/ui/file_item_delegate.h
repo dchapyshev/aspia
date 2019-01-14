@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CLIENT__UI__FILE_ITEM_DELEGATE_H
-#define ASPIA_CLIENT__UI__FILE_ITEM_DELEGATE_H
+#ifndef CLIENT__UI__FILE_ITEM_DELEGATE_H
+#define CLIENT__UI__FILE_ITEM_DELEGATE_H
 
 #include <QStyledItemDelegate>
 
@@ -53,4 +53,4 @@ private:
 
 } // namespace client
 
-#endif // ASPIA_CLIENT__UI__FILE_ITEM_DELEGATE_H
+#endif // CLIENT__UI__FILE_ITEM_DELEGATE_H

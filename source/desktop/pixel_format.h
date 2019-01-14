@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_DESKTOP__PIXEL_FORMAT_H
-#define ASPIA_DESKTOP__PIXEL_FORMAT_H
+#ifndef DESKTOP__PIXEL_FORMAT_H
+#define DESKTOP__PIXEL_FORMAT_H
 
 #include <cstdint>
 
@@ -105,4 +105,4 @@ private:
 
 } // namespace desktop
 
-#endif // ASPIA_DESKTOP__PIXEL_FORMAT_H
+#endif // DESKTOP__PIXEL_FORMAT_H

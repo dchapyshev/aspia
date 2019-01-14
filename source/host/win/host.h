@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_HOST__WIN__HOST_H
-#define ASPIA_HOST__WIN__HOST_H
+#ifndef HOST__WIN__HOST_H
+#define HOST__WIN__HOST_H
 
 #include <QPointer>
 #include <QUuid>
@@ -99,4 +99,4 @@ private:
 
 } // namespace host
 
-#endif // ASPIA_HOST__WIN__HOST_H
+#endif // HOST__WIN__HOST_H

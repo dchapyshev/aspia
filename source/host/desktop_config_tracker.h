@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_HOST__DESKTOP_CONFIG_TRACKER_H
-#define ASPIA_HOST__DESKTOP_CONFIG_TRACKER_H
+#ifndef HOST__DESKTOP_CONFIG_TRACKER_H
+#define HOST__DESKTOP_CONFIG_TRACKER_H
 
 #include "base/macros_magic.h"
 #include "proto/desktop_session.pb.h"
@@ -49,4 +49,4 @@ private:
 
 } // namespace host
 
-#endif // ASPIA_HOST__DESKTOP_CONFIG_TRACKER_H
+#endif // HOST__DESKTOP_CONFIG_TRACKER_H

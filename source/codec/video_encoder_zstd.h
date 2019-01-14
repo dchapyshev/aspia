@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CODEC__VIDEO_ENCODER_ZSTD_H
-#define ASPIA_CODEC__VIDEO_ENCODER_ZSTD_H
+#ifndef CODEC__VIDEO_ENCODER_ZSTD_H
+#define CODEC__VIDEO_ENCODER_ZSTD_H
 
 #include "base/aligned_memory.h"
 #include "codec/scoped_zstd_stream.h"
@@ -59,4 +59,4 @@ private:
 
 } // namespace codec
 
-#endif // ASPIA_CODEC__VIDEO_ENCODER_ZSTD_H
+#endif // CODEC__VIDEO_ENCODER_ZSTD_H

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_NET__NETWORK_CHANNEL_H
-#define ASPIA_NET__NETWORK_CHANNEL_H
+#ifndef NET__NETWORK_CHANNEL_H
+#define NET__NETWORK_CHANNEL_H
 
 #include <QPointer>
 #include <QQueue>
@@ -168,4 +168,4 @@ private:
 
 } // namespace net
 
-#endif // ASPIA_NET__NETWORK_CHANNEL_H
+#endif // NET__NETWORK_CHANNEL_H

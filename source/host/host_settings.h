@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_HOST__HOST_SETTINGS_H
-#define ASPIA_HOST__HOST_SETTINGS_H
+#ifndef HOST__HOST_SETTINGS_H
+#define HOST__HOST_SETTINGS_H
 
 #include <QSettings>
 
@@ -64,4 +64,4 @@ private:
 
 } // namespace host
 
-#endif // ASPIA_HOST__HOST_SETTINGS_H
+#endif // HOST__HOST_SETTINGS_H

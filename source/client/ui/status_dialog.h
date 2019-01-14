@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CLIENT__UI__STATUS_DIALOG_H
-#define ASPIA_CLIENT__UI__STATUS_DIALOG_H
+#ifndef CLIENT__UI__STATUS_DIALOG_H
+#define CLIENT__UI__STATUS_DIALOG_H
 
 #include "base/macros_magic.h"
 #include "ui_status_dialog.h"
@@ -44,4 +44,4 @@ private:
 
 } // namespace client
 
-#endif // ASPIA_CLIENT__UI__STATUS_DIALOG_H
+#endif // CLIENT__UI__STATUS_DIALOG_H

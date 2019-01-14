@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_BASE__STRING_PRINTF_H
-#define ASPIA_BASE__STRING_PRINTF_H
+#ifndef BASE__STRING_PRINTF_H
+#define BASE__STRING_PRINTF_H
 
 #include <string>
 
@@ -37,4 +37,4 @@ const std::wstring& sStringPrintf(std::wstring* dst, const wchar_t* format, ...)
 
 } // namespace base
 
-#endif // ASPIA_BASE__STRING_PRINTF_H
+#endif // BASE__STRING_PRINTF_H

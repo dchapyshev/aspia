@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_UPDATER__UPDATE_DIALOG_H
-#define ASPIA_UPDATER__UPDATE_DIALOG_H
+#ifndef UPDATER__UPDATE_DIALOG_H
+#define UPDATER__UPDATE_DIALOG_H
 
 #include <QDialog>
 
@@ -55,4 +55,4 @@ private:
 
 } // namespace updater
 
-#endif // ASPIA_UPDATER__UPDATE_DIALOG_H
+#endif // UPDATER__UPDATE_DIALOG_H

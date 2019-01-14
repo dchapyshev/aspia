@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_COMMON__CLIPBOARD_H
-#define ASPIA_COMMON__CLIPBOARD_H
+#ifndef COMMON__CLIPBOARD_H
+#define COMMON__CLIPBOARD_H
 
 #include <QObject>
 
@@ -53,4 +53,4 @@ private:
 
 } // namespace common
 
-#endif // ASPIA_COMMON__CLIPBOARD_H
+#endif // COMMON__CLIPBOARD_H

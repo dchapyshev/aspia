@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CONSOLE__COMPUTER_DIALOG_H
-#define ASPIA_CONSOLE__COMPUTER_DIALOG_H
+#ifndef CONSOLE__COMPUTER_DIALOG_H
+#define CONSOLE__COMPUTER_DIALOG_H
 
 #include "base/macros_magic.h"
 #include "proto/address_book.pb.h"
@@ -59,4 +59,4 @@ private:
 
 } // namespace console
 
-#endif // ASPIA_CONSOLE__COMPUTER_DIALOG_H
+#endif // CONSOLE__COMPUTER_DIALOG_H

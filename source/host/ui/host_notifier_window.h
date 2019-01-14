@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_HOST__UI__HOST_NOTIFIER_WINDOW_H
-#define ASPIA_HOST__UI__HOST_NOTIFIER_WINDOW_H
+#ifndef HOST__UI__HOST_NOTIFIER_WINDOW_H
+#define HOST__UI__HOST_NOTIFIER_WINDOW_H
 
 #include "common/locale_loader.h"
 #include "host/host_notifier.h"
@@ -74,4 +74,4 @@ private:
 
 } // namespace host
 
-#endif // ASPIA_HOST__UI__HOST_NOTIFIER_WINDOW_H
+#endif // HOST__UI__HOST_NOTIFIER_WINDOW_H

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CONSOLE__MRU_H
-#define ASPIA_CONSOLE__MRU_H
+#ifndef CONSOLE__MRU_H
+#define CONSOLE__MRU_H
 
 #include <QStringList>
 
@@ -48,4 +48,4 @@ private:
 
 } // namespace console
 
-#endif // ASPIA_CONSOLE__MRU_H
+#endif // CONSOLE__MRU_H

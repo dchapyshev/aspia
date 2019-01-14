@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_BASE__POWER_CONTROLLER_H
-#define ASPIA_BASE__POWER_CONTROLLER_H
+#ifndef BASE__POWER_CONTROLLER_H
+#define BASE__POWER_CONTROLLER_H
 
 #include "base/macros_magic.h"
 
@@ -37,4 +37,4 @@ private:
 
 } // namespace base
 
-#endif // ASPIA_BASE__POWER_CONTROLLER_H
+#endif // BASE__POWER_CONTROLLER_H

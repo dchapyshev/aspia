@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_DESKTOP__CURSOR_CAPTURER_WIN_H
-#define ASPIA_DESKTOP__CURSOR_CAPTURER_WIN_H
+#ifndef DESKTOP__CURSOR_CAPTURER_WIN_H
+#define DESKTOP__CURSOR_CAPTURER_WIN_H
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -50,4 +50,4 @@ private:
 
 } // namespace desktop
 
-#endif // ASPIA_DESKTOP__CURSOR_CAPTURER_WIN_H
+#endif // DESKTOP__CURSOR_CAPTURER_WIN_H

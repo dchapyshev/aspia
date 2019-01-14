@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CODEC__SCOPED_VPX_CODEC_H
-#define ASPIA_CODEC__SCOPED_VPX_CODEC_H
+#ifndef CODEC__SCOPED_VPX_CODEC_H
+#define CODEC__SCOPED_VPX_CODEC_H
 
 #include <memory>
 
@@ -37,4 +37,4 @@ using ScopedVpxCodec = std::unique_ptr<vpx_codec_ctx_t, VpxCodecDeleter>;
 
 } // namespace codec
 
-#endif // ASPIA_CODEC__SCOPED_VPX_CODEC_H
+#endif // CODEC__SCOPED_VPX_CODEC_H

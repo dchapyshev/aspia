@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CRYPTO__PASSWORD_HASH_H
-#define ASPIA_CRYPTO__PASSWORD_HASH_H
+#ifndef CRYPTO__PASSWORD_HASH_H
+#define CRYPTO__PASSWORD_HASH_H
 
 #include <QByteArray>
 
@@ -42,4 +42,4 @@ private:
 
 } // namespace crypto
 
-#endif // ASPIA_CRYPTO__PASSWORD_HASH_H
+#endif // CRYPTO__PASSWORD_HASH_H

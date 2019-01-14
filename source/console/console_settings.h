@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CONSOLE__CONSOLE_SETTINGS_H
-#define ASPIA_CONSOLE__CONSOLE_SETTINGS_H
+#ifndef CONSOLE__CONSOLE_SETTINGS_H
+#define CONSOLE__CONSOLE_SETTINGS_H
 
 #include <QSettings>
 
@@ -85,4 +85,4 @@ private:
 
 } // namespace console
 
-#endif // ASPIA_CONSOLE__CONSOLE_SETTINGS_H
+#endif // CONSOLE__CONSOLE_SETTINGS_H

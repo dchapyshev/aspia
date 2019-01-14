@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CODEC__VIDEO_ENCODER_H
-#define ASPIA_CODEC__VIDEO_ENCODER_H
+#ifndef CODEC__VIDEO_ENCODER_H
+#define CODEC__VIDEO_ENCODER_H
 
 #include "desktop/screen_settings_tracker.h"
 #include "proto/desktop_session.pb.h"
@@ -46,4 +46,4 @@ private:
 
 } // namespace codec
 
-#endif // ASPIA_CODEC__VIDEO_ENCODER_H
+#endif // CODEC__VIDEO_ENCODER_H

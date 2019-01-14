@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_BASE__KEYCODE_CONVERTER_H
-#define ASPIA_BASE__KEYCODE_CONVERTER_H
+#ifndef BASE__KEYCODE_CONVERTER_H
+#define BASE__KEYCODE_CONVERTER_H
 
 #include <cstdint>
 
@@ -70,4 +70,4 @@ private:
 
 } // namespace base
 
-#endif // ASPIA_BASE__KEYCODE_CONVERTER_H
+#endif // BASE__KEYCODE_CONVERTER_H

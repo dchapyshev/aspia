@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_BASE__SCOPED_CLEAR_LAST_ERROR_H
-#define ASPIA_BASE__SCOPED_CLEAR_LAST_ERROR_H
+#ifndef BASE__SCOPED_CLEAR_LAST_ERROR_H
+#define BASE__SCOPED_CLEAR_LAST_ERROR_H
 
 #include "base/macros_magic.h"
 #include "build/build_config.h"
@@ -64,4 +64,4 @@ using ScopedClearLastError = ScopedClearLastErrorBase;
 
 } // namespace base
 
-#endif // ASPIA_BASE__SCOPED_CLEAR_LAST_ERROR_H
+#endif // BASE__SCOPED_CLEAR_LAST_ERROR_H

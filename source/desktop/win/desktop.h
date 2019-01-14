@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_DESKTOP__WIN__DESKTOP_H
-#define ASPIA_DESKTOP__WIN__DESKTOP_H
+#ifndef DESKTOP__WIN__DESKTOP_H
+#define DESKTOP__WIN__DESKTOP_H
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -90,4 +90,4 @@ private:
 
 } // namespace desktop
 
-#endif // ASPIA_DESKTOP__WIN__DESKTOP_H
+#endif // DESKTOP__WIN__DESKTOP_H

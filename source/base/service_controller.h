@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_BASE__SERVICE_CONTROLLER_H
-#define ASPIA_BASE__SERVICE_CONTROLLER_H
+#ifndef BASE__SERVICE_CONTROLLER_H
+#define BASE__SERVICE_CONTROLLER_H
 
 #include <QStringList>
 
@@ -70,4 +70,4 @@ private:
 
 } // namespace base
 
-#endif // ASPIA_BASE__SERVICE_CONTROLLER_H
+#endif // BASE__SERVICE_CONTROLLER_H

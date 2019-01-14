@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CLIENT__UI__SYSTEM_INFO_WINDOW_H
-#define ASPIA_CLIENT__UI__SYSTEM_INFO_WINDOW_H
+#ifndef CLIENT__UI__SYSTEM_INFO_WINDOW_H
+#define CLIENT__UI__SYSTEM_INFO_WINDOW_H
 
 #include "base/macros_magic.h"
 #include "proto/system_info.pb.h"
@@ -47,4 +47,4 @@ private:
 
 } // namespace client
 
-#endif // ASPIA_CLIENT__UI__SYSTEM_INFO_WINDOW_H
+#endif // CLIENT__UI__SYSTEM_INFO_WINDOW_H

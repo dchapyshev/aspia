@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_NET__NETWORK_SERVER_H
-#define ASPIA_NET__NETWORK_SERVER_H
+#ifndef NET__NETWORK_SERVER_H
+#define NET__NETWORK_SERVER_H
 
 #include <QPointer>
 #include <QList>
@@ -67,4 +67,4 @@ private:
 
 } // namespace net
 
-#endif // ASPIA_NET__NETWORK_SERVER_H
+#endif // NET__NETWORK_SERVER_H

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CONSOLE__COMPUTER_GROUP_MIME_DATA_H
-#define ASPIA_CONSOLE__COMPUTER_GROUP_MIME_DATA_H
+#ifndef CONSOLE__COMPUTER_GROUP_MIME_DATA_H
+#define CONSOLE__COMPUTER_GROUP_MIME_DATA_H
 
 #include <QMimeData>
 
@@ -53,4 +53,4 @@ private:
 
 } // namespace console
 
-#endif // ASPIA_CONSOLE__COMPUTER_GROUP_MIME_DATA_H
+#endif // CONSOLE__COMPUTER_GROUP_MIME_DATA_H

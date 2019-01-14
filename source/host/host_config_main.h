@@ -16,11 +16,11 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_HOST__HOST_CONFIG_MAIN_H
-#define ASPIA_HOST__HOST_CONFIG_MAIN_H
+#ifndef HOST__HOST_CONFIG_MAIN_H
+#define HOST__HOST_CONFIG_MAIN_H
 
 #include "host/host_export.h"
 
 int HOST_EXPORT hostConfigMain(int argc, char *argv[]);
 
-#endif // ASPIA_HOST__HOST_CONFIG_MAIN_H
+#endif // HOST__HOST_CONFIG_MAIN_H

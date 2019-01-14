@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_DESKTOP__DESKTOP_FRAME_ALIGNED_H
-#define ASPIA_DESKTOP__DESKTOP_FRAME_ALIGNED_H
+#ifndef DESKTOP__DESKTOP_FRAME_ALIGNED_H
+#define DESKTOP__DESKTOP_FRAME_ALIGNED_H
 
 #include <memory>
 
@@ -41,4 +41,4 @@ private:
 
 } // namespace desktop
 
-#endif // ASPIA_DESKTOP__DESKTOP_FRAME_ALIGNED_H
+#endif // DESKTOP__DESKTOP_FRAME_ALIGNED_H

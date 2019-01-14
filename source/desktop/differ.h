@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_DESKTOP__DIFFER_H
-#define ASPIA_DESKTOP__DIFFER_H
+#ifndef DESKTOP__DIFFER_H
+#define DESKTOP__DIFFER_H
 
 #include <QRegion>
 #include <memory>
@@ -66,4 +66,4 @@ private:
 
 } // namespace desktop
 
-#endif // ASPIA_DESKTOP___DIFFER_H
+#endif // DESKTOP___DIFFER_H

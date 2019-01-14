@@ -20,5 +20,5 @@
 
 int main(int argc, char *argv[])
 {
-    return aspia::hostServiceMain(argc, argv);
+    return host::hostServiceMain(argc, argv);
 }

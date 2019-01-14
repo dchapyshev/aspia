@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_HOST__HOST_SESSION_FAKE_FILE_TRANSFER_H
-#define ASPIA_HOST__HOST_SESSION_FAKE_FILE_TRANSFER_H
+#ifndef HOST__HOST_SESSION_FAKE_FILE_TRANSFER_H
+#define HOST__HOST_SESSION_FAKE_FILE_TRANSFER_H
 
 #include "base/macros_magic.h"
 #include "host/host_session_fake.h"
@@ -44,4 +44,4 @@ private:
 
 } // namespace host
 
-#endif // ASPIA_HOST__HOST_SESSION_FAKE_FILE_TRANSFER_H
+#endif // HOST__HOST_SESSION_FAKE_FILE_TRANSFER_H

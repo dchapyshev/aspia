@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_BASE__TYPED_BUFFER_H
-#define ASPIA_BASE__TYPED_BUFFER_H
+#ifndef BASE__TYPED_BUFFER_H
+#define BASE__TYPED_BUFFER_H
 
 #include "base/macros_magic.h"
 
@@ -114,4 +114,4 @@ private:
 
 } // namespace base
 
-#endif // ASPIA_BASE__TYPED_BUFFER_H
+#endif // BASE__TYPED_BUFFER_H

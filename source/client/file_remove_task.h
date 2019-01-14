@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CLIENT__FILE_REMOVE_TASK_H
-#define ASPIA_CLIENT__FILE_REMOVE_TASK_H
+#ifndef CLIENT__FILE_REMOVE_TASK_H
+#define CLIENT__FILE_REMOVE_TASK_H
 
 #include <QString>
 
@@ -46,4 +46,4 @@ private:
 
 } // namespace client
 
-#endif // ASPIA_CLIENT__FILE_REMOVE_TASK_H
+#endif // CLIENT__FILE_REMOVE_TASK_H

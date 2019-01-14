@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_COMMON__UI__ABOUT_DIALOG_H
-#define ASPIA_COMMON__UI__ABOUT_DIALOG_H
+#ifndef COMMON__UI__ABOUT_DIALOG_H
+#define COMMON__UI__ABOUT_DIALOG_H
 
 #include <QDialog>
 
@@ -45,4 +45,4 @@ private:
 
 } // namespace common
 
-#endif // ASPIA_COMMON__UI__ABOUT_DIALOG_H
+#endif // COMMON__UI__ABOUT_DIALOG_H

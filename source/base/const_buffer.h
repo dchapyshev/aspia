@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_BASE__CONST_BUFFER_H
-#define ASPIA_BASE__CONST_BUFFER_H
+#ifndef BASE__CONST_BUFFER_H
+#define BASE__CONST_BUFFER_H
 
 #include <cstdint>
 
@@ -45,4 +45,4 @@ private:
 
 } // namespace base
 
-#endif // ASPIA_BASE__CONST_BUFFER_H
+#endif // BASE__CONST_BUFFER_H

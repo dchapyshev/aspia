@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CRYPTO__CRYPTOR_AES256_GCM_H
-#define ASPIA_CRYPTO__CRYPTOR_AES256_GCM_H
+#ifndef CRYPTO__CRYPTOR_AES256_GCM_H
+#define CRYPTO__CRYPTOR_AES256_GCM_H
 
 #include <QByteArray>
 
@@ -60,4 +60,4 @@ private:
 
 } // namespace crypto
 
-#endif // ASPIA_CRYPTO__CRYPTOR_AES256_GCM_H
+#endif // CRYPTO__CRYPTOR_AES256_GCM_H

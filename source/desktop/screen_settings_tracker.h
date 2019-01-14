@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_DESKTOP__SCREEN_SETTINGS_TRACKER_H
-#define ASPIA_DESKTOP__SCREEN_SETTINGS_TRACKER_H
+#ifndef DESKTOP__SCREEN_SETTINGS_TRACKER_H
+#define DESKTOP__SCREEN_SETTINGS_TRACKER_H
 
 #include <QRect>
 
@@ -48,4 +48,4 @@ private:
 
 } // namespace desktop
 
-#endif // ASPIA_DESKTOP__SCREEN_SETTINGS_TRACKER_H
+#endif // DESKTOP__SCREEN_SETTINGS_TRACKER_H

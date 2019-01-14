@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CONSOLE__COMPUTER_GROUP_DRAG_H
-#define ASPIA_CONSOLE__COMPUTER_GROUP_DRAG_H
+#ifndef CONSOLE__COMPUTER_GROUP_DRAG_H
+#define CONSOLE__COMPUTER_GROUP_DRAG_H
 
 #include <QDrag>
 
@@ -44,4 +44,4 @@ public:
 
 } // namespace console
 
-#endif // ASPIA_CONSOLE__COMPUTER_GROUP_DRAG_H
+#endif // CONSOLE__COMPUTER_GROUP_DRAG_H

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CRYPTO__DATA_CRYPTOR_H
-#define ASPIA_CRYPTO__DATA_CRYPTOR_H
+#ifndef CRYPTO__DATA_CRYPTOR_H
+#define CRYPTO__DATA_CRYPTOR_H
 
 #include <QByteArray>
 
@@ -34,4 +34,4 @@ public:
 
 } // namespace crypto
 
-#endif // ASPIA_CRYPTO__DATA_CRYPTOR_H
+#endif // CRYPTO__DATA_CRYPTOR_H

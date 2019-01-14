@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_UPDATER__UPDATE_CHECKER_H
-#define ASPIA_UPDATER__UPDATE_CHECKER_H
+#ifndef UPDATER__UPDATE_CHECKER_H
+#define UPDATER__UPDATE_CHECKER_H
 
 #include <QNetworkAccessManager>
 
@@ -49,4 +49,4 @@ private:
 
 } // namespace updater
 
-#endif // ASPIA_UPDATER__UPDATE_CHECKER_H
+#endif // UPDATER__UPDATE_CHECKER_H

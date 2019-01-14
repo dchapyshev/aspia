@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_BASE__WIN__SCOPED_WTS_MEMORY_H
-#define ASPIA_BASE__WIN__SCOPED_WTS_MEMORY_H
+#ifndef BASE__WIN__SCOPED_WTS_MEMORY_H
+#define BASE__WIN__SCOPED_WTS_MEMORY_H
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -91,4 +91,4 @@ private:
 
 } // namespace base::win
 
-#endif // ASPIA_BASE__WIN__SCOPED_WTS_MEMORY_H
+#endif // BASE__WIN__SCOPED_WTS_MEMORY_H

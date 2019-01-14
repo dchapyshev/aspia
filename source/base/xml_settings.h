@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_BASE__XML_SETTINGS_H
-#define ASPIA_BASE__XML_SETTINGS_H
+#ifndef BASE__XML_SETTINGS_H
+#define BASE__XML_SETTINGS_H
 
 #include <QSettings>
 
@@ -40,4 +40,4 @@ private:
 
 } // namespace base
 
-#endif // ASPIA_BASE__XML_SETTINGS_H
+#endif // BASE__XML_SETTINGS_H

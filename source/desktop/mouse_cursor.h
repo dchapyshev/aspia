@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_DESKTOP__MOUSE_CURSOR_H
-#define ASPIA_DESKTOP__MOUSE_CURSOR_H
+#ifndef DESKTOP__MOUSE_CURSOR_H
+#define DESKTOP__MOUSE_CURSOR_H
 
 #include <QPoint>
 #include <QSize>
@@ -50,4 +50,4 @@ private:
 
 } // namespace desktop
 
-#endif // ASPIA_DESKTOP__MOUSE_CURSOR_H
+#endif // DESKTOP__MOUSE_CURSOR_H

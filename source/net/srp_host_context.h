@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_NET__SRP_SERVER_CONTEXT_H
-#define ASPIA_NET__SRP_SERVER_CONTEXT_H
+#ifndef NET__SRP_SERVER_CONTEXT_H
+#define NET__SRP_SERVER_CONTEXT_H
 
 #include <QString>
 
@@ -71,4 +71,4 @@ private:
 
 } // namespace net
 
-#endif // ASPIA_NET__SRP_SERVER_CONTEXT_H
+#endif // NET__SRP_SERVER_CONTEXT_H

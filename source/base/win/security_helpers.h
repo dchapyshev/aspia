@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_BASE__WIN__SECURITY_HELPERS_H
-#define ASPIA_BASE__WIN__SECURITY_HELPERS_H
+#ifndef BASE__WIN__SECURITY_HELPERS_H
+#define BASE__WIN__SECURITY_HELPERS_H
 
 namespace base::win {
 
@@ -35,4 +35,4 @@ bool initializeComSecurity(const wchar_t* security_descriptor,
 
 } // namespace base::win
 
-#endif // ASPIA_BASE__WIN__SECURITY_HELPERS_H
+#endif // BASE__WIN__SECURITY_HELPERS_H

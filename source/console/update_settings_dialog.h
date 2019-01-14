@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CONSOLE__UPDATE_SETTINGS_DIALOG_H
-#define ASPIA_CONSOLE__UPDATE_SETTINGS_DIALOG_H
+#ifndef CONSOLE__UPDATE_SETTINGS_DIALOG_H
+#define CONSOLE__UPDATE_SETTINGS_DIALOG_H
 
 #include "base/macros_magic.h"
 #include "ui_update_settings_dialog.h"
@@ -40,4 +40,4 @@ private:
 
 } // namespace console
 
-#endif // ASPIA_CONSOLE__UPDATE_SETTINGS_DIALOG_H
+#endif // CONSOLE__UPDATE_SETTINGS_DIALOG_H

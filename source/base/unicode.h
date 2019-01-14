@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_BASE__UNICODE_H
-#define ASPIA_BASE__UNICODE_H
+#ifndef BASE__UNICODE_H
+#define BASE__UNICODE_H
 
 #include <string>
 
@@ -37,4 +37,4 @@ std::string UTF8fromUTF16(const wchar_t* in);
 
 } // namespace base
 
-#endif // ASPIA_BASE__UNICODE_H
+#endif // BASE__UNICODE_H

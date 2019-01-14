@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CRYPTO__SRP_CONSTANTS_H
-#define ASPIA_CRYPTO__SRP_CONSTANTS_H
+#ifndef CRYPTO__SRP_CONSTANTS_H
+#define CRYPTO__SRP_CONSTANTS_H
 
 #include "base/const_buffer.h"
 
@@ -39,4 +39,4 @@ extern const SrpNg kSrpNg_8192;
 
 } // namespace crypto
 
-#endif // ASPIA_CRYPTO__SRP_CONSTANTS_H
+#endif // CRYPTO__SRP_CONSTANTS_H

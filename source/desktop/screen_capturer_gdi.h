@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_DESKTOP__SCREEN_CAPTURER_GDI_H
-#define ASPIA_DESKTOP__SCREEN_CAPTURER_GDI_H
+#ifndef DESKTOP__SCREEN_CAPTURER_GDI_H
+#define DESKTOP__SCREEN_CAPTURER_GDI_H
 
 #include "base/win/scoped_hdc.h"
 #include "desktop/win/scoped_thread_desktop.h"
@@ -60,4 +60,4 @@ private:
 
 } // namespace desktop
 
-#endif // ASPIA_DESKTOP__SCREEN_CAPTURER_GDI_H
+#endif // DESKTOP__SCREEN_CAPTURER_GDI_H

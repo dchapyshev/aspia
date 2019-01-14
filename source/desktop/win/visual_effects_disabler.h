@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_DESKTOP__WIN__VISUAL_EFFECTS_DISABLER_H
-#define ASPIA_DESKTOP__WIN__VISUAL_EFFECTS_DISABLER_H
+#ifndef DESKTOP__WIN__VISUAL_EFFECTS_DISABLER_H
+#define DESKTOP__WIN__VISUAL_EFFECTS_DISABLER_H
 
 #include <memory>
 
@@ -55,4 +55,4 @@ private:
 
 } // namespace desktop
 
-#endif // ASPIA_DESKTOP__WIN__VISUAL_EFFECTS_DISABLER_H
+#endif // DESKTOP__WIN__VISUAL_EFFECTS_DISABLER_H

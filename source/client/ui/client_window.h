@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CLIENT__UI__CLIENT_WINDOW_H
-#define ASPIA_CLIENT__UI__CLIENT_WINDOW_H
+#ifndef CLIENT__UI__CLIENT_WINDOW_H
+#define CLIENT__UI__CLIENT_WINDOW_H
 
 #include <QWidget>
 
@@ -85,4 +85,4 @@ private:
 
 } // namespace client
 
-#endif // ASPIA_CLIENT__UI__CLIENT_WINDOW_H
+#endif // CLIENT__UI__CLIENT_WINDOW_H

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_BASE__SMBIOS_READER_H
-#define ASPIA_BASE__SMBIOS_READER_H
+#ifndef BASE__SMBIOS_READER_H
+#define BASE__SMBIOS_READER_H
 
 #include <string>
 
@@ -27,4 +27,4 @@ std::string readSmbiosDump();
 
 } // namespace base
 
-#endif // ASPIA_BASE__SMBIOS_READER_H
+#endif // BASE__SMBIOS_READER_H

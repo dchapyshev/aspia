@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA__HOST_EXPORT_H
-#define ASPIA__HOST_EXPORT_H
+#ifndef HOST_EXPORT_H
+#define HOST_EXPORT_H
 
 #if defined(HOST_IMPLEMENTATION)
 #define HOST_EXPORT __declspec(dllexport)
@@ -25,4 +25,4 @@
 #define HOST_EXPORT __declspec(dllimport)
 #endif // defined(HOST_IMPLEMENTATION)
 
-#endif // ASPIA__HOST_EXPORT_H
+#endif // HOST_EXPORT_H

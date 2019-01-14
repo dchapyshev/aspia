@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_NET__NETWORK_CHANNEL_CLIENT_H
-#define ASPIA_NET__NETWORK_CHANNEL_CLIENT_H
+#ifndef NET__NETWORK_CHANNEL_CLIENT_H
+#define NET__NETWORK_CHANNEL_CLIENT_H
 
 #include <QVersionNumber>
 
@@ -69,4 +69,4 @@ private:
 
 } // namespace net
 
-#endif // ASPIA_NET__NETWORK_CHANNEL_CLIENT_H
+#endif // NET__NETWORK_CHANNEL_CLIENT_H

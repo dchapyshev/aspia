@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_BASE__SYS_INFO_H
-#define ASPIA_BASE__SYS_INFO_H
+#ifndef BASE__SYS_INFO_H
+#define BASE__SYS_INFO_H
 
 #include <string>
 
@@ -51,4 +51,4 @@ private:
 
 } // namespace base
 
-#endif // ASPIA_BASE__SYS_INFO_H
+#endif // BASE__SYS_INFO_H

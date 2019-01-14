@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_BASE__SERVICE_H
-#define ASPIA_BASE__SERVICE_H
+#ifndef BASE__SERVICE_H
+#define BASE__SERVICE_H
 
 #include "base/service_impl.h"
 
@@ -56,4 +56,4 @@ private:
 
 } // namespace base
 
-#endif // ASPIA_BASE__SERVICE_H
+#endif // BASE__SERVICE_H

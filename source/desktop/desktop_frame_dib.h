@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_DESKTOP__DESKTOP_FRAME_DIB_H
-#define ASPIA_DESKTOP__DESKTOP_FRAME_DIB_H
+#ifndef DESKTOP__DESKTOP_FRAME_DIB_H
+#define DESKTOP__DESKTOP_FRAME_DIB_H
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -46,4 +46,4 @@ private:
 
 } // namespace desktop
 
-#endif // ASPIA_DESKTOP__DESKTOP_FRAME_DIB_H
+#endif // DESKTOP__DESKTOP_FRAME_DIB_H

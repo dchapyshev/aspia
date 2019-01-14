@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_HOST__SCREEN_UPDATER_H
-#define ASPIA_HOST__SCREEN_UPDATER_H
+#ifndef HOST__SCREEN_UPDATER_H
+#define HOST__SCREEN_UPDATER_H
 
 #include <QObject>
 
@@ -55,4 +55,4 @@ private:
 
 } // namespace host
 
-#endif // ASPIA_HOST__SCREEN_UPDATER_H
+#endif // HOST__SCREEN_UPDATER_H

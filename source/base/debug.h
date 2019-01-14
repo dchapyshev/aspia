@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_BASE__DEBUG_H
-#define ASPIA_BASE__DEBUG_H
+#ifndef BASE__DEBUG_H
+#define BASE__DEBUG_H
 
 namespace base {
 
@@ -25,4 +25,4 @@ void debugBreak();
 
 } // namespace base
 
-#endif // ASPIA_BASE__DEBUG_H
+#endif // BASE__DEBUG_H

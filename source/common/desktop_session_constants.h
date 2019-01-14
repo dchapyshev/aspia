@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_COMMON__DESKTOP_SESSION_CONSTANTS_H
-#define ASPIA_COMMON__DESKTOP_SESSION_CONSTANTS_H
+#ifndef COMMON__DESKTOP_SESSION_CONSTANTS_H
+#define COMMON__DESKTOP_SESSION_CONSTANTS_H
 
 namespace common {
 
@@ -28,4 +28,4 @@ extern const char kSystemInfoExtension[];
 
 } // namespace common
 
-#endif // ASPIA_COMMON__DESKTOP_SESSION_CONSTANTS_H
+#endif // COMMON__DESKTOP_SESSION_CONSTANTS_H

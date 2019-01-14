@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_HOST__HOST_SYSTEM_INFO_H
-#define ASPIA_HOST__HOST_SYSTEM_INFO_H
+#ifndef HOST__HOST_SYSTEM_INFO_H
+#define HOST__HOST_SYSTEM_INFO_H
 
 #include "proto/system_info.pb.h"
 
@@ -27,4 +27,4 @@ void createHostSystemInfo(proto::system_info::SystemInfo* system_info);
 
 } // namespace host
 
-#endif // ASPIA_HOST__HOST_SYSTEM_INFO_H
+#endif // HOST__HOST_SYSTEM_INFO_H

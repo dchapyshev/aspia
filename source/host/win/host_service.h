@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_HOST__HOST_SERVICE_H
-#define ASPIA_HOST__HOST_SERVICE_H
+#ifndef HOST__HOST_SERVICE_H
+#define HOST__HOST_SERVICE_H
 
 #include <QCoreApplication>
 
@@ -52,4 +52,4 @@ private:
 
 } // namespace host
 
-#endif // ASPIA_HOST__HOST_SERVICE_H
+#endif // HOST__HOST_SERVICE_H

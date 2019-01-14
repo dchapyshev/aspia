@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_DESKTOP__DIFF_BLOCK_SSE2_H
-#define ASPIA_DESKTOP__DIFF_BLOCK_SSE2_H
+#ifndef DESKTOP__DIFF_BLOCK_SSE2_H
+#define DESKTOP__DIFF_BLOCK_SSE2_H
 
 #include <cstdint>
 
@@ -31,4 +31,4 @@ uint8_t diffFullBlock_8x8_SSE2(const uint8_t* image1, const uint8_t* image2, int
 
 } // namespace desktop
 
-#endif // ASPIA_DESKTOP__DIFF_BLOCK_SSE2_H
+#endif // DESKTOP__DIFF_BLOCK_SSE2_H

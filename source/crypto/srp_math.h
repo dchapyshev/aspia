@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CRYPTO__SRP_MATH_H
-#define ASPIA_CRYPTO__SRP_MATH_H
+#ifndef CRYPTO__SRP_MATH_H
+#define CRYPTO__SRP_MATH_H
 
 #include "crypto/big_num.h"
 
@@ -65,4 +65,4 @@ private:
 
 } // namespace crypto
 
-#endif // ASPIA_CRYPTO__SRP_H
+#endif // CRYPTO__SRP_H

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_DESKTOP__CURSOR_CAPTURER_H
-#define ASPIA_DESKTOP__CURSOR_CAPTURER_H
+#ifndef DESKTOP__CURSOR_CAPTURER_H
+#define DESKTOP__CURSOR_CAPTURER_H
 
 namespace desktop {
 
@@ -33,4 +33,4 @@ public:
 
 } // namespace desktop
 
-#endif // ASPIA_DESKTOP__CURSOR_CAPTURER_H
+#endif // DESKTOP__CURSOR_CAPTURER_H

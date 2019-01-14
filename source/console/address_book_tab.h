@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CONSOLE__ADDRESS_BOOK_TAB_H
-#define ASPIA_CONSOLE__ADDRESS_BOOK_TAB_H
+#ifndef CONSOLE__ADDRESS_BOOK_TAB_H
+#define CONSOLE__ADDRESS_BOOK_TAB_H
 
 #include "base/macros_magic.h"
 #include "console/console_tab.h"
@@ -112,4 +112,4 @@ private:
 
 } // namespace console
 
-#endif // ASPIA_CONSOLE__ADDRESS_BOOK_TAB_H
+#endif // CONSOLE__ADDRESS_BOOK_TAB_H

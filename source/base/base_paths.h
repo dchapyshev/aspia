@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_BASE__BASE_PATHS_H
-#define ASPIA_BASE__BASE_PATHS_H
+#ifndef BASE__BASE_PATHS_H
+#define BASE__BASE_PATHS_H
 
 #include <filesystem>
 
@@ -61,4 +61,4 @@ private:
 
 } // namespace base
 
-#endif // ASPIA_BASE__BASE_PATHS_H
+#endif // BASE__BASE_PATHS_H

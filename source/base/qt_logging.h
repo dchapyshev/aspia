@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_BASE__QT_LOGGING_H
-#define ASPIA_BASE__QT_LOGGING_H
+#ifndef BASE__QT_LOGGING_H
+#define BASE__QT_LOGGING_H
 
 #include "base/logging.h"
 
@@ -31,4 +31,4 @@ std::ostream& operator<<(std::ostream& out, const QRect& qstr);
 std::ostream& operator<<(std::ostream& out, const QSize& qstr);
 std::ostream& operator<<(std::ostream& out, const QString& qstr);
 
-#endif // ASPIA_BASE__QT_LOGGING_H
+#endif // BASE__QT_LOGGING_H

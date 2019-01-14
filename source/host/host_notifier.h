@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_HOST__HOST_NOTIFIER_H
-#define ASPIA_HOST__HOST_NOTIFIER_H
+#ifndef HOST__HOST_NOTIFIER_H
+#define HOST__HOST_NOTIFIER_H
 
 #include "ipc/ipc_channel.h"
 #include "proto/notifier.pb.h"
@@ -54,4 +54,4 @@ private:
 
 } // namespace host
 
-#endif // ASPIA_HOST__HOST_NOTIFIER_H
+#endif // HOST__HOST_NOTIFIER_H

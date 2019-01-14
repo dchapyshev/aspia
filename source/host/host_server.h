@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_HOST__HOST_SERVER_H
-#define ASPIA_HOST__HOST_SERVER_H
+#ifndef HOST__HOST_SERVER_H
+#define HOST__HOST_SERVER_H
 
 #include "host/win/host_process.h"
 #include "ipc/ipc_channel.h"
@@ -82,4 +82,4 @@ private:
 
 } // namespace host
 
-#endif // ASPIA_HOST__HOST_SERVER_H
+#endif // HOST__HOST_SERVER_H

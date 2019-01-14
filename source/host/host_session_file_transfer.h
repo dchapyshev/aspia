@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_HOST__HOST_SESSION_FILE_TRANSFER_H
-#define ASPIA_HOST__HOST_SESSION_FILE_TRANSFER_H
+#ifndef HOST__HOST_SESSION_FILE_TRANSFER_H
+#define HOST__HOST_SESSION_FILE_TRANSFER_H
 
 #include "host/host_session.h"
 
@@ -51,4 +51,4 @@ private:
 
 } // namespace host
 
-#endif // ASPIA_HOST__HOST_SESSION_FILE_TRANSFER_H
+#endif // HOST__HOST_SESSION_FILE_TRANSFER_H

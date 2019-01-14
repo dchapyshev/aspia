@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_DESKTOP__SCREEN_CAPTURE_FRAME_QUEUE_H
-#define ASPIA_DESKTOP__SCREEN_CAPTURE_FRAME_QUEUE_H
+#ifndef DESKTOP__SCREEN_CAPTURE_FRAME_QUEUE_H
+#define DESKTOP__SCREEN_CAPTURE_FRAME_QUEUE_H
 
 #include <memory>
 
@@ -73,4 +73,4 @@ private:
 
 } // namespace desktop
 
-#endif // ASPIA_DESKTOP__SCREEN_CAPTURE_FRAME_QUEUE_H
+#endif // DESKTOP__SCREEN_CAPTURE_FRAME_QUEUE_H

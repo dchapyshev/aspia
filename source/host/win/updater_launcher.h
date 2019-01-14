@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_HOST__WIN__UPDATER_LAUNCHER_H
-#define ASPIA_HOST__WIN__UPDATER_LAUNCHER_H
+#ifndef HOST__WIN__UPDATER_LAUNCHER_H
+#define HOST__WIN__UPDATER_LAUNCHER_H
 
 namespace host {
 
@@ -25,4 +25,4 @@ bool launchUpdater();
 
 } // namespace host
 
-#endif // ASPIA_HOST__WIN__UPDATER_LAUNCHER_H
+#endif // HOST__WIN__UPDATER_LAUNCHER_H
