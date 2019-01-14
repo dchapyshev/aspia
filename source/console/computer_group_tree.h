@@ -22,7 +22,7 @@
 #include "base/macros_magic.h"
 #include "console/computer_group_drag.h"
 
-namespace aspia {
+namespace console {
 
 class ComputerGroupTree : public QTreeWidget
 {
@@ -52,6 +52,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(ComputerGroupTree);
 };
 
-} // namespace aspia
+} // namespace console
 
 #endif // ASPIA_CONSOLE__COMPUTER_GROUP_TREE_H

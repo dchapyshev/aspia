@@ -196,62 +196,62 @@
 <context>
     <name>Console</name>
     <message>
-        <location filename="../console_main.cc" line="71"/>
+        <location filename="../console_main.cc" line="69"/>
         <source>Console</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="77"/>
+        <location filename="../console_main.cc" line="75"/>
         <source>Remote computer address.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="78"/>
+        <location filename="../console_main.cc" line="76"/>
         <source>address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="82"/>
+        <location filename="../console_main.cc" line="80"/>
         <source>Remote computer port.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="83"/>
+        <location filename="../console_main.cc" line="81"/>
         <source>port</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="88"/>
+        <location filename="../console_main.cc" line="86"/>
         <source>Name of user.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="89"/>
+        <location filename="../console_main.cc" line="87"/>
         <source>username</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="93"/>
+        <location filename="../console_main.cc" line="91"/>
         <source>Session type. Possible values: desktop-manage, desktop-view, file-transfer.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="99"/>
+        <location filename="../console_main.cc" line="97"/>
         <source>Run the program with a simplified user interface.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="102"/>
+        <location filename="../console_main.cc" line="100"/>
         <source>Aspia Console</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="105"/>
+        <location filename="../console_main.cc" line="103"/>
         <source>file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="106"/>
+        <location filename="../console_main.cc" line="104"/>
         <source>The file to open.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -552,24 +552,280 @@
 <context>
     <name>aspia::AddressBookDialog</name>
     <message>
+        <source>Without Encryption</source>
+        <translation type="vanished">Без шифрування</translation>
+    </message>
+    <message>
+        <source>Double-click to change</source>
+        <translation type="vanished">Подвійний клік для зміни</translation>
+    </message>
+    <message>
+        <source>Name can not be empty.</source>
+        <translation type="vanished">Ім&apos;я не може бути порожнім.</translation>
+    </message>
+    <message>
+        <source>The passwords you entered do not match.</source>
+        <translation type="vanished">Введені паролі не співпадають.</translation>
+    </message>
+    <message numerus="yes">
+        <source>Too long name. The maximum length of the name is %n characters.</source>
+        <translation type="obsolete">
+            <numerusform>Занадто довге ім&apos;я. Максимальна довжина для імені %n символів.</numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>Too long comment. The maximum length of the comment is %n characters.</source>
+        <translation type="obsolete">
+            <numerusform>Занадто довгий коментар. Максимальна довжина для коментарів %n символів.</numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>Confirmation</source>
+        <translation type="vanished">Підтвердження</translation>
+    </message>
+    <message>
+        <source>At change the size of hashing salt, you will need to re-enter the password. Continue?</source>
+        <translation type="vanished">Для зміни розміру солі хешування потрібно повторно ввести пароль. Продовжити?</translation>
+    </message>
+    <message>
+        <source>Warning</source>
+        <translation type="vanished">Попередження</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::AddressBookTab</name>
+    <message>
+        <source>The address book file is corrupted or has an unknown format.</source>
+        <translation type="vanished">Файл адресної книги пошкоджено або він має невірний формат.</translation>
+    </message>
+    <message>
+        <source>Unable to decrypt the address book with the specified password.</source>
+        <translation type="vanished">Неможливо розшифрувати адресну книгу даним паролем.</translation>
+    </message>
+    <message>
+        <source>The address book file is encrypted with an unsupported encryption type.</source>
+        <translation type="vanished">Тип шифрування адресної книги не підтримується.</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to delete computer group &quot;%1&quot; and all child items?</source>
+        <translation type="vanished">Ви впевнені, що хочете видалити групу комп&apos;ютерів \&quot;%1\&quot; і всі дочірні об&apos;єкти?</translation>
+    </message>
+    <message>
+        <source>Confirmation</source>
+        <translation type="vanished">Підтвердження</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
+        <translation type="vanished">Ви впевнені, що хочете видалити комп&apos;ютер\&quot;%1\&quot;?</translation>
+    </message>
+    <message>
+        <source>Save Address Book</source>
+        <translation type="vanished">Зберегти адресну книгу</translation>
+    </message>
+    <message>
+        <source>Aspia Address Book (*.aab)</source>
+        <translation type="vanished">Aspia Address Book (*.aab)</translation>
+    </message>
+    <message>
+        <source>Unable to create or open address book file.</source>
+        <translation type="vanished">Неможливо створити або відкрити файл адресної книги.</translation>
+    </message>
+    <message>
+        <source>Unable to write address book file.</source>
+        <translation type="vanished">Неможливо записати файл адресної книги.</translation>
+    </message>
+    <message>
+        <source>Warning</source>
+        <translation type="vanished">Попередження</translation>
+    </message>
+    <message>
+        <source>Could not open address book</source>
+        <translation type="vanished">Неможливо відкрити адресну книгу</translation>
+    </message>
+    <message>
+        <source>Failed to save address book</source>
+        <translation type="vanished">Неможливо зберегти адресну книгу</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::ComputerDialog</name>
+    <message>
+        <source>Desktop Manage</source>
+        <translation type="vanished">Керування робочим столом</translation>
+    </message>
+    <message>
+        <source>Desktop View</source>
+        <translation type="vanished">Перегляд робочого столу</translation>
+    </message>
+    <message>
+        <source>File Transfer</source>
+        <translation type="vanished">Передача файлів</translation>
+    </message>
+    <message numerus="yes">
+        <source>Too long name. The maximum length of the name is %n characters.</source>
+        <translation type="obsolete">
+            <numerusform>Занадто довге ім&apos;я. Максимальна довжина для імені %n символів.</numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>Name can not be empty.</source>
+        <translation type="vanished">Ім&apos;я не може бути порожнім.</translation>
+    </message>
+    <message>
+        <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
+        <translation type="vanished">Ім&apos;я користувача не може бути порожнім і має мустити тільки букви алфавіту, цифри, та символи &quot;&quot;_&quot;&quot;, &quot;&quot;-&quot;&quot;, &quot;&quot;.&quot;&quot;.</translation>
+    </message>
+    <message numerus="yes">
+        <source>Too long comment. The maximum length of the comment is %n characters.</source>
+        <translation type="vanished">
+            <numerusform>Занадто довгий коментар. Максимальна довжина для коментарів - %n символів.</numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>Warning</source>
+        <translation type="vanished">Попередження</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::ComputerGroupDialog</name>
+    <message numerus="yes">
+        <source>Too long name. The maximum length of the name is %n characters.</source>
+        <translation type="vanished">
+            <numerusform>Занадто довге ім&apos;я. Максимальна довжина для імені - %n символів.</numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>Name can not be empty.</source>
+        <translation type="vanished">Ім&apos;я не може бути порожнім.</translation>
+    </message>
+    <message numerus="yes">
+        <source>Too long comment. The maximum length of the comment is %n characters.</source>
+        <translation type="vanished">
+            <numerusform>Занадто довгий коментар. Максимальна довжина для коментарів - %n символів.</numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>Warning</source>
+        <translation type="vanished">Попередження</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::ConsoleStatusBar</name>
+    <message numerus="yes">
+        <source>%n child group(s)</source>
+        <translation type="vanished">
+            <numerusform>%n дочірніх груп</numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>%n child computer(s)</source>
+        <translation type="vanished">
+            <numerusform>%n дочірніх комп&apos;ютерів</numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+</context>
+<context>
+    <name>aspia::ConsoleWindow</name>
+    <message>
+        <source>Open Address Book</source>
+        <translation type="vanished">Відкрити адресну книгу</translation>
+    </message>
+    <message>
+        <source>Aspia Address Book (*.aab)</source>
+        <translation type="vanished">Aspia Address Book (*.aab)</translation>
+    </message>
+    <message>
+        <source>Warning</source>
+        <translation type="obsolete">Попередження</translation>
+    </message>
+    <message>
+        <source>Information</source>
+        <translation type="vanished">Інформація</translation>
+    </message>
+    <message>
+        <source>Address Book &quot;%1&quot; is already open.</source>
+        <translation type="vanished">Адресну книгу &quot;%1&quot; вже відкрито.</translation>
+    </message>
+    <message>
+        <source>https://aspia.org/en/help.html</source>
+        <translation type="vanished">https://aspia.org/en/help.html</translation>
+    </message>
+    <message>
+        <source>Confirmation</source>
+        <translation type="vanished">Підтвердження</translation>
+    </message>
+    <message>
+        <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
+        <translation type="vanished">Адресну книгу &quot;%1&quot; змінено. Зберегти зміни?</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::OpenAddressBookDialog</name>
+    <message>
+        <source>Without Encryption</source>
+        <translation type="vanished">Без шифрування</translation>
+    </message>
+</context>
+<context>
+    <name>console::AddressBookDialog</name>
+    <message>
         <location filename="../address_book_dialog.cc" line="81"/>
         <source>Without Encryption</source>
-        <translation>Без шифрування</translation>
+        <translation type="unfinished">Без шифрування</translation>
+    </message>
+    <message>
+        <location filename="../address_book_dialog.cc" line="83"/>
+        <source>ChaCha20 + Poly1305 (256-bit key)</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../address_book_dialog.cc" line="98"/>
         <source>Double-click to change</source>
-        <translation>Подвійний клік для зміни</translation>
+        <translation type="unfinished">Подвійний клік для зміни</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../address_book_dialog.cc" line="169"/>
+        <source>Too long name. The maximum length of the name is %n characters.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../address_book_dialog.cc" line="175"/>
         <source>Name can not be empty.</source>
-        <translation>Ім&apos;я не може бути порожнім.</translation>
+        <translation type="unfinished">Ім&apos;я не може бути порожнім.</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../address_book_dialog.cc" line="182"/>
+        <source>Too long comment. The maximum length of the comment is %n characters.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../address_book_dialog.cc" line="210"/>
         <source>The passwords you entered do not match.</source>
-        <translation>Введені паролі не співпадають.</translation>
+        <translation type="unfinished">Введені паролі не співпадають.</translation>
     </message>
     <message numerus="yes">
         <location filename="../address_book_dialog.cc" line="216"/>
@@ -580,6 +836,12 @@
             <numerusform></numerusform>
         </translation>
     </message>
+    <message>
+        <location filename="../address_book_dialog.cc" line="224"/>
+        <location filename="../address_book_dialog.cc" line="366"/>
+        <source>Warning</source>
+        <translation type="unfinished">Попередження</translation>
+    </message>
     <message numerus="yes">
         <location filename="../address_book_dialog.cc" line="225"/>
         <source>&lt;b&gt;Password you entered does not meet the security requirements!&lt;/b&gt;&lt;br/&gt;The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.&lt;br/&gt;Do you want to enter a different password?</source>
@@ -589,58 +851,19 @@
             <numerusform></numerusform>
         </translation>
     </message>
-    <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="169"/>
-        <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="unfinished">
-            <numerusform>Занадто довге ім&apos;я. Максимальна довжина для імені %n символів.</numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
-    </message>
-    <message>
-        <location filename="../address_book_dialog.cc" line="83"/>
-        <source>ChaCha20 + Poly1305 (256-bit key)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="182"/>
-        <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation type="unfinished">
-            <numerusform>Занадто довгий коментар. Максимальна довжина для коментарів %n символів.</numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
-    </message>
     <message>
         <location filename="../address_book_dialog.cc" line="327"/>
         <source>Confirmation</source>
-        <translation>Підтвердження</translation>
+        <translation type="unfinished">Підтвердження</translation>
     </message>
     <message>
         <location filename="../address_book_dialog.cc" line="328"/>
         <source>At change the size of hashing salt, you will need to re-enter the password. Continue?</source>
-        <translation>Для зміни розміру солі хешування потрібно повторно ввести пароль. Продовжити?</translation>
-    </message>
-    <message>
-        <location filename="../address_book_dialog.cc" line="224"/>
-        <location filename="../address_book_dialog.cc" line="366"/>
-        <source>Warning</source>
-        <translation>Попередження</translation>
+        <translation type="unfinished">Для зміни розміру солі хешування потрібно повторно ввести пароль. Продовжити?</translation>
     </message>
 </context>
 <context>
-    <name>aspia::AddressBookTab</name>
-    <message>
-        <location filename="../address_book_tab.cc" line="292"/>
-        <source>The address book file is corrupted or has an unknown format.</source>
-        <translation>Файл адресної книги пошкоджено або він має невірний формат.</translation>
-    </message>
-    <message>
-        <location filename="../address_book_tab.cc" line="286"/>
-        <source>Unable to decrypt the address book with the specified password.</source>
-        <translation>Неможливо розшифрувати адресну книгу даним паролем.</translation>
-    </message>
+    <name>console::AddressBookTab</name>
     <message>
         <location filename="../address_book_tab.cc" line="232"/>
         <source>Unable to open address book file &quot;%1&quot;.</source>
@@ -658,85 +881,95 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../address_book_tab.cc" line="286"/>
+        <source>Unable to decrypt the address book with the specified password.</source>
+        <translation type="unfinished">Неможливо розшифрувати адресну книгу даним паролем.</translation>
+    </message>
+    <message>
+        <location filename="../address_book_tab.cc" line="292"/>
+        <source>The address book file is corrupted or has an unknown format.</source>
+        <translation type="unfinished">Файл адресної книги пошкоджено або він має невірний формат.</translation>
+    </message>
+    <message>
         <location filename="../address_book_tab.cc" line="302"/>
         <source>The address book file is encrypted with an unsupported encryption type.</source>
-        <translation>Тип шифрування адресної книги не підтримується.</translation>
+        <translation type="unfinished">Тип шифрування адресної книги не підтримується.</translation>
     </message>
     <message>
         <location filename="../address_book_tab.cc" line="474"/>
         <source>Are you sure you want to delete computer group &quot;%1&quot; and all child items?</source>
-        <translation>Ви впевнені, що хочете видалити групу комп&apos;ютерів \&quot;%1\&quot; і всі дочірні об&apos;єкти?</translation>
+        <translation type="unfinished">Ви впевнені, що хочете видалити групу комп&apos;ютерів \&quot;%1\&quot; і всі дочірні об&apos;єкти?</translation>
     </message>
     <message>
         <location filename="../address_book_tab.cc" line="478"/>
         <location filename="../address_book_tab.cc" line="500"/>
         <source>Confirmation</source>
-        <translation>Підтвердження</translation>
+        <translation type="unfinished">Підтвердження</translation>
     </message>
     <message>
         <location filename="../address_book_tab.cc" line="496"/>
         <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
-        <translation>Ви впевнені, що хочете видалити комп&apos;ютер\&quot;%1\&quot;?</translation>
+        <translation type="unfinished">Ви впевнені, що хочете видалити комп&apos;ютер\&quot;%1\&quot;?</translation>
     </message>
     <message>
         <location filename="../address_book_tab.cc" line="755"/>
         <source>Save Address Book</source>
-        <translation>Зберегти адресну книгу</translation>
+        <translation type="unfinished">Зберегти адресну книгу</translation>
     </message>
     <message>
         <location filename="../address_book_tab.cc" line="757"/>
         <source>Aspia Address Book (*.aab)</source>
-        <translation>Aspia Address Book (*.aab)</translation>
+        <translation type="unfinished">Aspia Address Book (*.aab)</translation>
     </message>
     <message>
         <location filename="../address_book_tab.cc" line="767"/>
         <source>Unable to create or open address book file.</source>
-        <translation>Неможливо створити або відкрити файл адресної книги.</translation>
+        <translation type="unfinished">Неможливо створити або відкрити файл адресної книги.</translation>
     </message>
     <message>
         <location filename="../address_book_tab.cc" line="779"/>
         <source>Unable to write address book file.</source>
-        <translation>Неможливо записати файл адресної книги.</translation>
+        <translation type="unfinished">Неможливо записати файл адресної книги.</translation>
     </message>
     <message>
         <location filename="../address_book_tab.cc" line="795"/>
         <location filename="../address_book_tab.cc" line="809"/>
         <source>Warning</source>
-        <translation>Попередження</translation>
+        <translation type="unfinished">Попередження</translation>
     </message>
     <message>
         <location filename="../address_book_tab.cc" line="797"/>
         <source>Could not open address book</source>
-        <translation>Неможливо відкрити адресну книгу</translation>
+        <translation type="unfinished">Неможливо відкрити адресну книгу</translation>
     </message>
     <message>
         <location filename="../address_book_tab.cc" line="811"/>
         <source>Failed to save address book</source>
-        <translation>Неможливо зберегти адресну книгу</translation>
+        <translation type="unfinished">Неможливо зберегти адресну книгу</translation>
     </message>
 </context>
 <context>
-    <name>aspia::ComputerDialog</name>
+    <name>console::ComputerDialog</name>
     <message>
         <location filename="../computer_dialog.cc" line="49"/>
         <source>Desktop Manage</source>
-        <translation>Керування робочим столом</translation>
+        <translation type="unfinished">Керування робочим столом</translation>
     </message>
     <message>
         <location filename="../computer_dialog.cc" line="53"/>
         <source>Desktop View</source>
-        <translation>Перегляд робочого столу</translation>
+        <translation type="unfinished">Перегляд робочого столу</translation>
     </message>
     <message>
         <location filename="../computer_dialog.cc" line="57"/>
         <source>File Transfer</source>
-        <translation>Передача файлів</translation>
+        <translation type="unfinished">Передача файлів</translation>
     </message>
     <message numerus="yes">
         <location filename="../computer_dialog.cc" line="157"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation type="unfinished">
-            <numerusform>Занадто довге ім&apos;я. Максимальна довжина для імені %n символів.</numerusform>
+            <numerusform></numerusform>
             <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
@@ -744,18 +977,18 @@
     <message>
         <location filename="../computer_dialog.cc" line="164"/>
         <source>Name can not be empty.</source>
-        <translation>Ім&apos;я не може бути порожнім.</translation>
+        <translation type="unfinished">Ім&apos;я не може бути порожнім.</translation>
     </message>
     <message>
         <location filename="../computer_dialog.cc" line="174"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
-        <translation>Ім&apos;я користувача не може бути порожнім і має мустити тільки букви алфавіту, цифри, та символи &quot;&quot;_&quot;&quot;, &quot;&quot;-&quot;&quot;, &quot;&quot;.&quot;&quot;.</translation>
+        <translation type="unfinished">Ім&apos;я користувача не може бути порожнім і має мустити тільки букви алфавіту, цифри, та символи &quot;&quot;_&quot;&quot;, &quot;&quot;-&quot;&quot;, &quot;&quot;.&quot;&quot;.</translation>
     </message>
     <message numerus="yes">
         <location filename="../computer_dialog.cc" line="183"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation>
-            <numerusform>Занадто довгий коментар. Максимальна довжина для коментарів - %n символів.</numerusform>
+        <translation type="unfinished">
+            <numerusform></numerusform>
             <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
@@ -763,16 +996,16 @@
     <message>
         <location filename="../computer_dialog.cc" line="214"/>
         <source>Warning</source>
-        <translation>Попередження</translation>
+        <translation type="unfinished">Попередження</translation>
     </message>
 </context>
 <context>
-    <name>aspia::ComputerGroupDialog</name>
+    <name>console::ComputerGroupDialog</name>
     <message numerus="yes">
         <location filename="../computer_group_dialog.cc" line="60"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation>
-            <numerusform>Занадто довге ім&apos;я. Максимальна довжина для імені - %n символів.</numerusform>
+        <translation type="unfinished">
+            <numerusform></numerusform>
             <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
@@ -780,13 +1013,13 @@
     <message>
         <location filename="../computer_group_dialog.cc" line="67"/>
         <source>Name can not be empty.</source>
-        <translation>Ім&apos;я не може бути порожнім.</translation>
+        <translation type="unfinished">Ім&apos;я не може бути порожнім.</translation>
     </message>
     <message numerus="yes">
         <location filename="../computer_group_dialog.cc" line="75"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation>
-            <numerusform>Занадто довгий коментар. Максимальна довжина для коментарів - %n символів.</numerusform>
+        <translation type="unfinished">
+            <numerusform></numerusform>
             <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
@@ -794,15 +1027,15 @@
     <message>
         <location filename="../computer_group_dialog.cc" line="102"/>
         <source>Warning</source>
-        <translation>Попередження</translation>
+        <translation type="unfinished">Попередження</translation>
     </message>
 </context>
 <context>
-    <name>aspia::ConsoleStatusBar</name>
+    <name>console::ConsoleStatusBar</name>
     <message numerus="yes">
         <location filename="../console_statusbar.cc" line="37"/>
         <source>%n child group(s)</source>
-        <translation>
+        <translation type="unfinished">
             <numerusform>%n дочірніх груп</numerusform>
             <numerusform></numerusform>
             <numerusform></numerusform>
@@ -811,7 +1044,7 @@
     <message numerus="yes">
         <location filename="../console_statusbar.cc" line="38"/>
         <source>%n child computer(s)</source>
-        <translation>
+        <translation type="unfinished">
             <numerusform>%n дочірніх комп&apos;ютерів</numerusform>
             <numerusform></numerusform>
             <numerusform></numerusform>
@@ -819,62 +1052,11 @@
     </message>
 </context>
 <context>
-    <name>aspia::ConsoleWindow</name>
-    <message>
-        <location filename="../console_window.cc" line="903"/>
-        <source>Aspia Console</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console_window.cc" line="249"/>
-        <source>Open Address Book</source>
-        <translation>Відкрити адресну книгу</translation>
-    </message>
-    <message>
-        <location filename="../console_window.cc" line="251"/>
-        <source>Aspia Address Book (*.aab)</source>
-        <translation>Aspia Address Book (*.aab)</translation>
-    </message>
-    <message>
-        <location filename="../console_window.cc" line="675"/>
-        <source>Close tab</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console_window.cc" line="668"/>
-        <source>Close other tabs</source>
-        <translation type="unfinished"></translation>
-    </message>
+    <name>console::ConsoleWindow</name>
     <message>
         <location filename="../console_window.cc" line="201"/>
         <source>Warning</source>
         <translation type="unfinished">Попередження</translation>
-    </message>
-    <message>
-        <location filename="../console_window.cc" line="678"/>
-        <location filename="../console_window.cc" line="685"/>
-        <source>Pin tab</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console_window.cc" line="882"/>
-        <source>&lt;empty&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console_window.cc" line="937"/>
-        <source>Information</source>
-        <translation>Інформація</translation>
-    </message>
-    <message>
-        <location filename="../console_window.cc" line="938"/>
-        <source>Address Book &quot;%1&quot; is already open.</source>
-        <translation>Адресну книгу &quot;%1&quot; вже відкрито.</translation>
-    </message>
-    <message>
-        <location filename="../console_window.cc" line="377"/>
-        <source>https://aspia.org/en/help.html</source>
-        <translation>https://aspia.org/en/help.html</translation>
     </message>
     <message>
         <location filename="../console_window.cc" line="202"/>
@@ -882,16 +1064,47 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../console_window.cc" line="249"/>
+        <source>Open Address Book</source>
+        <translation type="unfinished">Відкрити адресну книгу</translation>
+    </message>
+    <message>
+        <location filename="../console_window.cc" line="251"/>
+        <source>Aspia Address Book (*.aab)</source>
+        <translation type="unfinished">Aspia Address Book (*.aab)</translation>
+    </message>
+    <message>
+        <location filename="../console_window.cc" line="377"/>
+        <source>https://aspia.org/en/help.html</source>
+        <translation type="unfinished">https://aspia.org/en/help.html</translation>
+    </message>
+    <message>
         <location filename="../console_window.cc" line="479"/>
         <location filename="../console_window.cc" line="806"/>
         <source>Confirmation</source>
-        <translation>Підтвердження</translation>
+        <translation type="unfinished">Підтвердження</translation>
     </message>
     <message>
         <location filename="../console_window.cc" line="480"/>
         <location filename="../console_window.cc" line="807"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
-        <translation>Адресну книгу &quot;%1&quot; змінено. Зберегти зміни?</translation>
+        <translation type="unfinished">Адресну книгу &quot;%1&quot; змінено. Зберегти зміни?</translation>
+    </message>
+    <message>
+        <location filename="../console_window.cc" line="668"/>
+        <source>Close other tabs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../console_window.cc" line="675"/>
+        <source>Close tab</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../console_window.cc" line="678"/>
+        <location filename="../console_window.cc" line="685"/>
+        <source>Pin tab</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../console_window.cc" line="763"/>
@@ -903,13 +1116,33 @@
         <source>Show</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../console_window.cc" line="882"/>
+        <source>&lt;empty&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../console_window.cc" line="903"/>
+        <source>Aspia Console</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../console_window.cc" line="937"/>
+        <source>Information</source>
+        <translation type="unfinished">Інформація</translation>
+    </message>
+    <message>
+        <location filename="../console_window.cc" line="938"/>
+        <source>Address Book &quot;%1&quot; is already open.</source>
+        <translation type="unfinished">Адресну книгу &quot;%1&quot; вже відкрито.</translation>
+    </message>
 </context>
 <context>
-    <name>aspia::OpenAddressBookDialog</name>
+    <name>console::OpenAddressBookDialog</name>
     <message>
         <location filename="../open_address_book_dialog.cc" line="42"/>
         <source>Without Encryption</source>
-        <translation>Без шифрування</translation>
+        <translation type="unfinished">Без шифрування</translation>
     </message>
     <message>
         <location filename="../open_address_book_dialog.cc" line="46"/>

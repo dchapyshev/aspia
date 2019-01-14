@@ -20,7 +20,7 @@
 
 #include "base/logging.h"
 
-namespace aspia {
+namespace console {
 
 OpenAddressBookDialog::OpenAddressBookDialog(QWidget* parent,
                                              const QString& file_path,
@@ -85,4 +85,4 @@ void OpenAddressBookDialog::buttonBoxClicked(QAbstractButton* button)
     close();
 }
 
-} // namespace aspia
+} // namespace console

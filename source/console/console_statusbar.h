@@ -24,7 +24,7 @@
 #include "base/macros_magic.h"
 #include "proto/address_book.pb.h"
 
-namespace aspia {
+namespace console {
 
 class ConsoleStatusBar : public QStatusBar
 {
@@ -41,6 +41,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(ConsoleStatusBar);
 };
 
-} // namespace aspia
+} // namespace console
 
 #endif // ASPIA_CONSOLE__CONSOLE_STATUSBAR_H

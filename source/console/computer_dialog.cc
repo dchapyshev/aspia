@@ -25,7 +25,7 @@
 #include "common/user_util.h"
 #include "console/computer_group_item.h"
 
-namespace aspia {
+namespace console {
 
 namespace {
 
@@ -214,4 +214,4 @@ void ComputerDialog::showError(const QString& message)
     QMessageBox(QMessageBox::Warning, tr("Warning"), message, QMessageBox::Ok, this).exec();
 }
 
-} // namespace aspia
+} // namespace console

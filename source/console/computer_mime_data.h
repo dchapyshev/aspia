@@ -23,7 +23,7 @@
 
 #include "console/computer_item.h"
 
-namespace aspia {
+namespace console {
 
 class ComputerMimeData : public QMimeData
 {
@@ -51,6 +51,6 @@ private:
     ComputerItem* computer_item_ = nullptr;
 };
 
-} // namespace aspia
+} // namespace console
 
 #endif // ASPIA_CONSOLE__COMPUTER_MIME_DATA_H

@@ -34,7 +34,7 @@
 #include "crypto/password_hash.h"
 #include "crypto/secure_memory.h"
 
-namespace aspia {
+namespace console {
 
 namespace {
 
@@ -814,4 +814,4 @@ void AddressBookTab::showSaveError(QWidget* parent, const QString& message)
     dialog.exec();
 }
 
-} // namespace aspia
+} // namespace console

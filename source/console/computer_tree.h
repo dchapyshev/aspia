@@ -23,7 +23,7 @@
 
 #include "base/macros_magic.h"
 
-namespace aspia {
+namespace console {
 
 class ComputerTree : public QTreeWidget
 {
@@ -51,6 +51,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(ComputerTree);
 };
 
-} // namespace aspia
+} // namespace console
 
 #endif // ASPIA_CONSOLE__COMPUTER_TREE_H

@@ -21,7 +21,7 @@
 #include <QIcon>
 #include <QLabel>
 
-namespace aspia {
+namespace console {
 
 ConsoleStatusBar::ConsoleStatusBar(QWidget* parent)
     : QStatusBar(parent)
@@ -69,4 +69,4 @@ void ConsoleStatusBar::clear()
     }
 }
 
-} // namespace aspia
+} // namespace console

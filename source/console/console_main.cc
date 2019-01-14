@@ -37,8 +37,6 @@ Q_IMPORT_PLUGIN(QWindowsPrinterSupportPlugin);
 #include "console/console_window.h"
 #include "crypto/scoped_crypto_initializer.h"
 
-using namespace aspia;
-
 int main(int argc, char *argv[])
 {
     Q_INIT_RESOURCE(client);
@@ -58,7 +56,7 @@ int main(int argc, char *argv[])
 
     QApplication application(argc, argv);
 
-    ConsoleSettings console_settings;
+    console::ConsoleSettings console_settings;
     QString current_locale = console_settings.locale();
 
     common::LocaleLoader locale_loader;
@@ -111,7 +109,7 @@ int main(int argc, char *argv[])
     parser.addOption(simple_ui_option);
     parser.process(application);
 
-    QScopedPointer<ConsoleWindow> console_window;
+    QScopedPointer<console::ConsoleWindow> console_window;
 
     if (parser.isSet(simple_ui_option))
     {
@@ -145,7 +143,8 @@ int main(int argc, char *argv[])
         if (!arguments.isEmpty())
             file_path = arguments.front();
 
-        console_window.reset(new ConsoleWindow(console_settings, locale_loader, file_path));
+        console_window.reset(
+            new console::ConsoleWindow(console_settings, locale_loader, file_path));
         console_window->show();
         console_window->activateWindow();
     }

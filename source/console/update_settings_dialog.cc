@@ -21,7 +21,7 @@
 #include "build/build_config.h"
 #include "console/console_settings.h"
 
-namespace aspia {
+namespace console {
 
 UpdateSettingsDialog::UpdateSettingsDialog(QWidget* parent)
     : QDialog(parent)
@@ -67,4 +67,4 @@ UpdateSettingsDialog::UpdateSettingsDialog(QWidget* parent)
 
 UpdateSettingsDialog::~UpdateSettingsDialog() = default;
 
-} // namespace aspia
+} // namespace console

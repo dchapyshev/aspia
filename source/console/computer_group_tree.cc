@@ -23,7 +23,7 @@
 
 #include "console/computer_mime_data.h"
 
-namespace aspia {
+namespace console {
 
 ComputerGroupTree::ComputerGroupTree(QWidget* parent)
     : QTreeWidget(parent)
@@ -228,4 +228,4 @@ void ComputerGroupTree::startDrag(Qt::DropActions supported_actions)
     }
 }
 
-} // namespace aspia
+} // namespace console

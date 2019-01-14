@@ -23,7 +23,7 @@
 
 #include "base/macros_magic.h"
 
-namespace aspia {
+namespace console {
 
 class ConsoleTab : public QWidget
 {
@@ -43,6 +43,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(ConsoleTab);
 };
 
-} // namespace aspia
+} // namespace console
 
 #endif // ASPIA_CONSOLE__CONSOLE_TAB_H

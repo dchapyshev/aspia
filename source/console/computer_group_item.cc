@@ -20,7 +20,7 @@
 
 #include <QApplication>
 
-namespace aspia {
+namespace console {
 
 ComputerGroupItem::ComputerGroupItem(proto::address_book::ComputerGroup* computer_group,
                                      ComputerGroupItem* parent_item)
@@ -150,4 +150,4 @@ QList<QTreeWidgetItem*> ComputerGroupItem::ComputerList()
     return list;
 }
 
-} // namespace aspia
+} // namespace console

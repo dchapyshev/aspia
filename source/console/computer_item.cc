@@ -22,7 +22,7 @@
 
 #include "console/computer_group_item.h"
 
-namespace aspia {
+namespace console {
 
 ComputerItem::ComputerItem(proto::address_book::Computer* computer,
                            ComputerGroupItem* parent_group_item)
@@ -87,4 +87,4 @@ bool ComputerItem::operator<(const QTreeWidgetItem &other) const
     return QTreeWidgetItem::operator<(other);
 }
 
-} // namespace aspia
+} // namespace console

@@ -22,7 +22,7 @@
 #include "console/computer_group_item.h"
 #include "ui_computer_group_dialog.h"
 
-namespace aspia {
+namespace console {
 
 class ComputerGroupDialog : public QDialog
 {
@@ -51,6 +51,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(ComputerGroupDialog);
 };
 
-} // namespace aspia
+} // namespace console
 
 #endif // ASPIA_CONSOLE__COMPUTER_GROUP_DIALOG_H

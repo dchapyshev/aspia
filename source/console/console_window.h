@@ -28,7 +28,7 @@
 
 class QSystemTrayIcon;
 
-namespace aspia {
+namespace console {
 
 class AddressBookTab;
 class ComputerItem;
@@ -111,6 +111,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(ConsoleWindow);
 };
 
-} // namespace aspia
+} // namespace console
 
 #endif // ASPIA_CONSOLE__CONSOLE_WINDOW_H

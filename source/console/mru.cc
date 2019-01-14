@@ -20,7 +20,7 @@
 
 #include "build/build_config.h"
 
-namespace aspia {
+namespace console {
 
 namespace {
 
@@ -122,4 +122,4 @@ bool Mru::isPinnedFile(const QString& file_path) const
 #endif
 }
 
-} // namespace aspia
+} // namespace console

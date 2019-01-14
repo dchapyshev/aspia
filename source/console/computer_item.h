@@ -24,7 +24,7 @@
 #include "base/macros_magic.h"
 #include "proto/address_book.pb.h"
 
-namespace aspia {
+namespace console {
 
 class ComputerGroupItem;
 
@@ -61,6 +61,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(ComputerItem);
 };
 
-} // namespace aspia
+} // namespace console
 
 #endif // ASPIA_CONSOLE__COMPUTER_ITEM_H

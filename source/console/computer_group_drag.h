@@ -23,7 +23,7 @@
 
 #include "console/computer_group_mime_data.h"
 
-namespace aspia {
+namespace console {
 
 class ComputerGroupDrag : public QDrag
 {
@@ -42,6 +42,6 @@ public:
     }
 };
 
-} // namespace aspia
+} // namespace console
 
 #endif // ASPIA_CONSOLE__COMPUTER_GROUP_DRAG_H

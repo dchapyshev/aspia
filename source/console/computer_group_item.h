@@ -22,7 +22,7 @@
 #include "console/computer_item.h"
 #include "proto/address_book.pb.h"
 
-namespace aspia {
+namespace console {
 
 class ComputerGroupItem : public QTreeWidgetItem
 {
@@ -54,6 +54,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(ComputerGroupItem);
 };
 
-} // namespace aspia
+} // namespace console
 
 #endif // ASPIA_CONSOLE__COMPUTER_GROUP_ITEM_H

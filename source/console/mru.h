@@ -21,7 +21,7 @@
 
 #include <QStringList>
 
-namespace aspia {
+namespace console {
 
 class Mru
 {
@@ -46,6 +46,6 @@ private:
     QStringList pinned_list_;
 };
 
-} // namespace aspia
+} // namespace console
 
 #endif // ASPIA_CONSOLE__MRU_H

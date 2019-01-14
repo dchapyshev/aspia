@@ -22,7 +22,7 @@
 #include "base/logging.h"
 #include "codec/video_util.h"
 
-namespace aspia {
+namespace console {
 
 namespace {
 
@@ -81,4 +81,4 @@ proto::address_book::Computer ComputerFactory::defaultComputer()
     return computer;
 }
 
-} // namespace aspia
+} // namespace console

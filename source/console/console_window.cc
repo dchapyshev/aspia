@@ -34,7 +34,7 @@
 #include "console/update_settings_dialog.h"
 #include "updater/update_dialog.h"
 
-namespace aspia {
+namespace console {
 
 namespace {
 
@@ -1056,4 +1056,4 @@ void ConsoleWindow::connectToComputer(const proto::address_book::Computer& compu
     client::ClientWindow::connectToHost(&connect_data);
 }
 
-} // namespace aspia
+} // namespace console

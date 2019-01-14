@@ -18,7 +18,7 @@
 
 #include "console/console_tab.h"
 
-namespace aspia {
+namespace console {
 
 ConsoleTab::ConsoleTab(Type type, QWidget* parent)
     : QWidget(parent), type_(type)
@@ -26,4 +26,4 @@ ConsoleTab::ConsoleTab(Type type, QWidget* parent)
     // Nothing
 }
 
-} // namespace aspia
+} // namespace console

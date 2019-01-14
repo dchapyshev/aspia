@@ -24,7 +24,7 @@
 #include "base/xml_settings.h"
 #include "build/build_config.h"
 
-namespace aspia {
+namespace console {
 
 ConsoleSettings::ConsoleSettings()
     : settings_(base::XmlSettings::registerFormat(),
@@ -188,4 +188,4 @@ void ConsoleSettings::setUpdateServer(const QString& server)
     settings_.setValue(QLatin1String("UpdateServer"), server.toLower());
 }
 
-} // namespace aspia
+} // namespace console

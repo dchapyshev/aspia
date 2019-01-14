@@ -26,7 +26,7 @@
 #include "console/computer_drag.h"
 #include "console/computer_item.h"
 
-namespace aspia {
+namespace console {
 
 namespace {
 
@@ -133,4 +133,4 @@ void ComputerTree::onHeaderContextMenu(const QPoint& pos)
     header()->setSectionHidden(action->columnIndex(), !action->isChecked());
 }
 
-} // namespace aspia
+} // namespace console

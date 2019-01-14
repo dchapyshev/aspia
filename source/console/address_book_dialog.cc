@@ -25,7 +25,7 @@
 #include "crypto/password_hash.h"
 #include "crypto/random.h"
 
-namespace aspia {
+namespace console {
 
 namespace {
 
@@ -366,4 +366,4 @@ void AddressBookDialog::showError(const QString& message)
     QMessageBox(QMessageBox::Warning, tr("Warning"), message, QMessageBox::Ok, this).exec();
 }
 
-} // namespace aspia
+} // namespace console

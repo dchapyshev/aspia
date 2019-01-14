@@ -138,7 +138,7 @@
    <addaction name="menu_session_type"/>
    <addaction name="menu_help"/>
   </widget>
-  <widget class="aspia::ConsoleStatusBar" name="status_bar"/>
+  <widget class="console::ConsoleStatusBar" name="status_bar"/>
   <widget class="QToolBar" name="tool_bar">
    <property name="windowTitle">
     <string>Tool Bar</string>
@@ -519,7 +519,7 @@
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>aspia::ConsoleStatusBar</class>
+   <class>console::ConsoleStatusBar</class>
    <extends>QStatusBar</extends>
    <header>console/console_statusbar.h</header>
   </customwidget>

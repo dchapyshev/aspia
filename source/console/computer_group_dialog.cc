@@ -22,7 +22,7 @@
 #include <QDateTime>
 #include <QMessageBox>
 
-namespace aspia {
+namespace console {
 
 namespace {
 
@@ -102,4 +102,4 @@ void ComputerGroupDialog::showError(const QString& message)
     QMessageBox(QMessageBox::Warning, tr("Warning"), message, QMessageBox::Ok, this).exec();
 }
 
-} // namespace aspia
+} // namespace console

@@ -23,7 +23,7 @@
 #include "proto/address_book.pb.h"
 #include "ui_computer_dialog.h"
 
-namespace aspia {
+namespace console {
 
 class ComputerGroupItem;
 
@@ -57,6 +57,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(ComputerDialog);
 };
 
-} // namespace aspia
+} // namespace console
 
 #endif // ASPIA_CONSOLE__COMPUTER_DIALOG_H

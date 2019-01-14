@@ -22,7 +22,7 @@
 #include "base/macros_magic.h"
 #include "proto/address_book.pb.h"
 
-namespace aspia {
+namespace console {
 
 class ComputerFactory
 {
@@ -33,6 +33,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(ComputerFactory);
 };
 
-} // namespace aspia
+} // namespace console
 
 #endif // ASPIA_CONSOLE__COMPUTER_FACTORY_H

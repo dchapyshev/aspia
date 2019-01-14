@@ -196,62 +196,62 @@
 <context>
     <name>Console</name>
     <message>
-        <location filename="../console_main.cc" line="71"/>
+        <location filename="../console_main.cc" line="69"/>
         <source>Console</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="77"/>
+        <location filename="../console_main.cc" line="75"/>
         <source>Remote computer address.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="78"/>
+        <location filename="../console_main.cc" line="76"/>
         <source>address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="82"/>
+        <location filename="../console_main.cc" line="80"/>
         <source>Remote computer port.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="83"/>
+        <location filename="../console_main.cc" line="81"/>
         <source>port</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="88"/>
+        <location filename="../console_main.cc" line="86"/>
         <source>Name of user.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="89"/>
+        <location filename="../console_main.cc" line="87"/>
         <source>username</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="93"/>
+        <location filename="../console_main.cc" line="91"/>
         <source>Session type. Possible values: desktop-manage, desktop-view, file-transfer.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="99"/>
+        <location filename="../console_main.cc" line="97"/>
         <source>Run the program with a simplified user interface.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="102"/>
+        <location filename="../console_main.cc" line="100"/>
         <source>Aspia Console</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="105"/>
+        <location filename="../console_main.cc" line="103"/>
         <source>file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="106"/>
+        <location filename="../console_main.cc" line="104"/>
         <source>The file to open.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -552,40 +552,240 @@
 <context>
     <name>aspia::AddressBookDialog</name>
     <message>
+        <source>Without Encryption</source>
+        <translation type="vanished">Zonder Encryptie</translation>
+    </message>
+    <message>
+        <source>Double-click to change</source>
+        <translation type="vanished">Dubbelklik om te wijzigen</translation>
+    </message>
+    <message>
+        <source>Name can not be empty.</source>
+        <translation type="vanished">Naam mag niet leeg zijn.</translation>
+    </message>
+    <message>
+        <source>The passwords you entered do not match.</source>
+        <translation type="vanished">De ingevoerde wachtwoorden komen niet overeen.</translation>
+    </message>
+    <message numerus="yes">
+        <source>Too long name. The maximum length of the name is %n characters.</source>
+        <translation type="obsolete">
+            <numerusform>Te lange naam. De maximum lengte is %n karakter.</numerusform>
+            <numerusform>Te lange naam. De maximum lengte is %n karakters.</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>Too long comment. The maximum length of the comment is %n characters.</source>
+        <translation type="obsolete">
+            <numerusform>Te lang commentaar. De maximale lengte is %n karakter.</numerusform>
+            <numerusform>Te lang commentaar. De maximale lengte is %n karakters.</numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>Confirmation</source>
+        <translation type="vanished">Bevestiging</translation>
+    </message>
+    <message>
+        <source>At change the size of hashing salt, you will need to re-enter the password. Continue?</source>
+        <translation type="vanished">Bij het veranderen van de hash salt moet het wachtwoord opnieuw ingevoerd worden. Doorgaan?</translation>
+    </message>
+    <message>
+        <source>Warning</source>
+        <translation type="vanished">Waarschuwing</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::AddressBookTab</name>
+    <message>
+        <source>The address book file is corrupted or has an unknown format.</source>
+        <translation type="vanished">Het adresboek is beschadigd of heeft een onbekende indeling.</translation>
+    </message>
+    <message>
+        <source>Unable to decrypt the address book with the specified password.</source>
+        <translation type="vanished">Kan het adresboek niet ontsleutelen met het opgegeven wachtwoord.</translation>
+    </message>
+    <message>
+        <source>The address book file is encrypted with an unsupported encryption type.</source>
+        <translation type="vanished">Het adresboek is versleuteld met een encryptie type dat niet ondersteund wordt.</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to delete computer group &quot;%1&quot; and all child items?</source>
+        <translation type="vanished">Weet U zeker dat U de groep &quot;%1&quot; en alle onderliggende items wilt verwijderen?</translation>
+    </message>
+    <message>
+        <source>Confirmation</source>
+        <translation type="vanished">Bevestiging</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
+        <translation type="vanished">Weet U zeker dat U de computer &quot;%1&quot; wilt verwijderen?</translation>
+    </message>
+    <message>
+        <source>Save Address Book</source>
+        <translation type="vanished">Adresboek Opslaan</translation>
+    </message>
+    <message>
+        <source>Aspia Address Book (*.aab)</source>
+        <translation type="vanished">Aspia Adresboek (*.aab)</translation>
+    </message>
+    <message>
+        <source>Unable to create or open address book file.</source>
+        <translation type="vanished">Kan adresboek bestand niet maken of openen.</translation>
+    </message>
+    <message>
+        <source>Unable to write address book file.</source>
+        <translation type="vanished">Kan adresboek bestand niet schrijven.</translation>
+    </message>
+    <message>
+        <source>Warning</source>
+        <translation type="vanished">Waarschuwing</translation>
+    </message>
+    <message>
+        <source>Could not open address book</source>
+        <translation type="vanished">Kon adresboek niet openen</translation>
+    </message>
+    <message>
+        <source>Failed to save address book</source>
+        <translation type="vanished">Kon adresboek niet opslaan</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::ComputerDialog</name>
+    <message>
+        <source>Desktop Manage</source>
+        <translation type="vanished">Bureaublad Beheren</translation>
+    </message>
+    <message>
+        <source>Desktop View</source>
+        <translation type="vanished">Bureaublad Weergeven</translation>
+    </message>
+    <message>
+        <source>File Transfer</source>
+        <translation type="vanished">Bestands Overdracht</translation>
+    </message>
+    <message numerus="yes">
+        <source>Too long name. The maximum length of the name is %n characters.</source>
+        <translation type="vanished">
+            <numerusform>Te lange naam. De maximum lengte is %n karakter.</numerusform>
+            <numerusform>Te lange naam. De maximum lengte is %n karakters.</numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>Name can not be empty.</source>
+        <translation type="vanished">Naam mag niet leeg zijn.</translation>
+    </message>
+    <message>
+        <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
+        <translation type="vanished">De gebruikersnaam mag niet leeg zijn, en alleen karakters uit het alfabet, nummers, _, -, . karakters bevatten.</translation>
+    </message>
+    <message numerus="yes">
+        <source>Too long comment. The maximum length of the comment is %n characters.</source>
+        <translation type="vanished">
+            <numerusform>Te lang commentaar. De maximale lengte is %n karakter.</numerusform>
+            <numerusform>Te lang commentaar. De maximale lengte is %n karakters.</numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>Warning</source>
+        <translation type="vanished">Waarschuwing</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::ComputerGroupDialog</name>
+    <message numerus="yes">
+        <source>Too long name. The maximum length of the name is %n characters.</source>
+        <translation type="vanished">
+            <numerusform>Te lange naam. De maximum lengte is %n karakter.</numerusform>
+            <numerusform>Te lange naam. De maximum lengte is %n karakters.</numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>Name can not be empty.</source>
+        <translation type="vanished">Naam mag niet leeg zijn.</translation>
+    </message>
+    <message numerus="yes">
+        <source>Too long comment. The maximum length of the comment is %n characters.</source>
+        <translation type="vanished">
+            <numerusform>Te lang commentaar. De maximale lengte is %n karakter.</numerusform>
+            <numerusform>Te lang commentaar. De maximale lengte is %n karakters.</numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>Warning</source>
+        <translation type="vanished">Waarschuwing</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::ConsoleStatusBar</name>
+    <message numerus="yes">
+        <source>%n child group(s)</source>
+        <translation type="vanished">
+            <numerusform>%n onderliggende groep</numerusform>
+            <numerusform>%n onderliggende groepen</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>%n child computer(s)</source>
+        <translation type="vanished">
+            <numerusform>%n onderliggende computer</numerusform>
+            <numerusform>%n onderliggende computers</numerusform>
+        </translation>
+    </message>
+</context>
+<context>
+    <name>aspia::ConsoleWindow</name>
+    <message>
+        <source>Open Address Book</source>
+        <translation type="vanished">Open Adresboek</translation>
+    </message>
+    <message>
+        <source>Aspia Address Book (*.aab)</source>
+        <translation type="vanished">Aspia Adresboek (*.aab)</translation>
+    </message>
+    <message>
+        <source>Warning</source>
+        <translation type="obsolete">Waarschuwing</translation>
+    </message>
+    <message>
+        <source>Information</source>
+        <translation type="vanished">Informatie</translation>
+    </message>
+    <message>
+        <source>Address Book &quot;%1&quot; is already open.</source>
+        <translation type="vanished">Adresboek &quot;%1&quot; is al geopend.</translation>
+    </message>
+    <message>
+        <source>Confirmation</source>
+        <translation type="vanished">Bevestiging</translation>
+    </message>
+    <message>
+        <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
+        <translation type="vanished">Adresboek &quot;%1&quot; is aangepast. Wijzigingen opslaan?</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::OpenAddressBookDialog</name>
+    <message>
+        <source>Without Encryption</source>
+        <translation type="vanished">Zonder Encryptie</translation>
+    </message>
+</context>
+<context>
+    <name>console::AddressBookDialog</name>
+    <message>
         <location filename="../address_book_dialog.cc" line="81"/>
         <source>Without Encryption</source>
-        <translation>Zonder Encryptie</translation>
+        <translation type="unfinished">Zonder Encryptie</translation>
+    </message>
+    <message>
+        <location filename="../address_book_dialog.cc" line="83"/>
+        <source>ChaCha20 + Poly1305 (256-bit key)</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../address_book_dialog.cc" line="98"/>
         <source>Double-click to change</source>
-        <translation>Dubbelklik om te wijzigen</translation>
-    </message>
-    <message>
-        <location filename="../address_book_dialog.cc" line="175"/>
-        <source>Name can not be empty.</source>
-        <translation>Naam mag niet leeg zijn.</translation>
-    </message>
-    <message>
-        <location filename="../address_book_dialog.cc" line="210"/>
-        <source>The passwords you entered do not match.</source>
-        <translation>De ingevoerde wachtwoorden komen niet overeen.</translation>
-    </message>
-    <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="216"/>
-        <source>Password can not be empty and should not exceed %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="225"/>
-        <source>&lt;b&gt;Password you entered does not meet the security requirements!&lt;/b&gt;&lt;br/&gt;The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.&lt;br/&gt;Do you want to enter a different password?</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
+        <translation type="unfinished">Dubbelklik om te wijzigen</translation>
     </message>
     <message numerus="yes">
         <location filename="../address_book_dialog.cc" line="169"/>
@@ -596,9 +796,9 @@
         </translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="83"/>
-        <source>ChaCha20 + Poly1305 (256-bit key)</source>
-        <translation type="unfinished"></translation>
+        <location filename="../address_book_dialog.cc" line="175"/>
+        <source>Name can not be empty.</source>
+        <translation type="unfinished">Naam mag niet leeg zijn.</translation>
     </message>
     <message numerus="yes">
         <location filename="../address_book_dialog.cc" line="182"/>
@@ -609,34 +809,45 @@
         </translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="327"/>
-        <source>Confirmation</source>
-        <translation>Bevestiging</translation>
+        <location filename="../address_book_dialog.cc" line="210"/>
+        <source>The passwords you entered do not match.</source>
+        <translation type="unfinished">De ingevoerde wachtwoorden komen niet overeen.</translation>
     </message>
-    <message>
-        <location filename="../address_book_dialog.cc" line="328"/>
-        <source>At change the size of hashing salt, you will need to re-enter the password. Continue?</source>
-        <translation>Bij het veranderen van de hash salt moet het wachtwoord opnieuw ingevoerd worden. Doorgaan?</translation>
+    <message numerus="yes">
+        <location filename="../address_book_dialog.cc" line="216"/>
+        <source>Password can not be empty and should not exceed %n characters.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../address_book_dialog.cc" line="224"/>
         <location filename="../address_book_dialog.cc" line="366"/>
         <source>Warning</source>
-        <translation>Waarschuwing</translation>
+        <translation type="unfinished">Waarschuwing</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../address_book_dialog.cc" line="225"/>
+        <source>&lt;b&gt;Password you entered does not meet the security requirements!&lt;/b&gt;&lt;br/&gt;The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.&lt;br/&gt;Do you want to enter a different password?</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="../address_book_dialog.cc" line="327"/>
+        <source>Confirmation</source>
+        <translation type="unfinished">Bevestiging</translation>
+    </message>
+    <message>
+        <location filename="../address_book_dialog.cc" line="328"/>
+        <source>At change the size of hashing salt, you will need to re-enter the password. Continue?</source>
+        <translation type="unfinished">Bij het veranderen van de hash salt moet het wachtwoord opnieuw ingevoerd worden. Doorgaan?</translation>
     </message>
 </context>
 <context>
-    <name>aspia::AddressBookTab</name>
-    <message>
-        <location filename="../address_book_tab.cc" line="292"/>
-        <source>The address book file is corrupted or has an unknown format.</source>
-        <translation>Het adresboek is beschadigd of heeft een onbekende indeling.</translation>
-    </message>
-    <message>
-        <location filename="../address_book_tab.cc" line="286"/>
-        <source>Unable to decrypt the address book with the specified password.</source>
-        <translation>Kan het adresboek niet ontsleutelen met het opgegeven wachtwoord.</translation>
-    </message>
+    <name>console::AddressBookTab</name>
     <message>
         <location filename="../address_book_tab.cc" line="232"/>
         <source>Unable to open address book file &quot;%1&quot;.</source>
@@ -654,84 +865,94 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../address_book_tab.cc" line="286"/>
+        <source>Unable to decrypt the address book with the specified password.</source>
+        <translation type="unfinished">Kan het adresboek niet ontsleutelen met het opgegeven wachtwoord.</translation>
+    </message>
+    <message>
+        <location filename="../address_book_tab.cc" line="292"/>
+        <source>The address book file is corrupted or has an unknown format.</source>
+        <translation type="unfinished">Het adresboek is beschadigd of heeft een onbekende indeling.</translation>
+    </message>
+    <message>
         <location filename="../address_book_tab.cc" line="302"/>
         <source>The address book file is encrypted with an unsupported encryption type.</source>
-        <translation>Het adresboek is versleuteld met een encryptie type dat niet ondersteund wordt.</translation>
+        <translation type="unfinished">Het adresboek is versleuteld met een encryptie type dat niet ondersteund wordt.</translation>
     </message>
     <message>
         <location filename="../address_book_tab.cc" line="474"/>
         <source>Are you sure you want to delete computer group &quot;%1&quot; and all child items?</source>
-        <translation>Weet U zeker dat U de groep &quot;%1&quot; en alle onderliggende items wilt verwijderen?</translation>
+        <translation type="unfinished">Weet U zeker dat U de groep &quot;%1&quot; en alle onderliggende items wilt verwijderen?</translation>
     </message>
     <message>
         <location filename="../address_book_tab.cc" line="478"/>
         <location filename="../address_book_tab.cc" line="500"/>
         <source>Confirmation</source>
-        <translation>Bevestiging</translation>
+        <translation type="unfinished">Bevestiging</translation>
     </message>
     <message>
         <location filename="../address_book_tab.cc" line="496"/>
         <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
-        <translation>Weet U zeker dat U de computer &quot;%1&quot; wilt verwijderen?</translation>
+        <translation type="unfinished">Weet U zeker dat U de computer &quot;%1&quot; wilt verwijderen?</translation>
     </message>
     <message>
         <location filename="../address_book_tab.cc" line="755"/>
         <source>Save Address Book</source>
-        <translation>Adresboek Opslaan</translation>
+        <translation type="unfinished">Adresboek Opslaan</translation>
     </message>
     <message>
         <location filename="../address_book_tab.cc" line="757"/>
         <source>Aspia Address Book (*.aab)</source>
-        <translation>Aspia Adresboek (*.aab)</translation>
+        <translation type="unfinished">Aspia Adresboek (*.aab)</translation>
     </message>
     <message>
         <location filename="../address_book_tab.cc" line="767"/>
         <source>Unable to create or open address book file.</source>
-        <translation>Kan adresboek bestand niet maken of openen.</translation>
+        <translation type="unfinished">Kan adresboek bestand niet maken of openen.</translation>
     </message>
     <message>
         <location filename="../address_book_tab.cc" line="779"/>
         <source>Unable to write address book file.</source>
-        <translation>Kan adresboek bestand niet schrijven.</translation>
+        <translation type="unfinished">Kan adresboek bestand niet schrijven.</translation>
     </message>
     <message>
         <location filename="../address_book_tab.cc" line="795"/>
         <location filename="../address_book_tab.cc" line="809"/>
         <source>Warning</source>
-        <translation>Waarschuwing</translation>
+        <translation type="unfinished">Waarschuwing</translation>
     </message>
     <message>
         <location filename="../address_book_tab.cc" line="797"/>
         <source>Could not open address book</source>
-        <translation>Kon adresboek niet openen</translation>
+        <translation type="unfinished">Kon adresboek niet openen</translation>
     </message>
     <message>
         <location filename="../address_book_tab.cc" line="811"/>
         <source>Failed to save address book</source>
-        <translation>Kon adresboek niet opslaan</translation>
+        <translation type="unfinished">Kon adresboek niet opslaan</translation>
     </message>
 </context>
 <context>
-    <name>aspia::ComputerDialog</name>
+    <name>console::ComputerDialog</name>
     <message>
         <location filename="../computer_dialog.cc" line="49"/>
         <source>Desktop Manage</source>
-        <translation>Bureaublad Beheren</translation>
+        <translation type="unfinished">Bureaublad Beheren</translation>
     </message>
     <message>
         <location filename="../computer_dialog.cc" line="53"/>
         <source>Desktop View</source>
-        <translation>Bureaublad Weergeven</translation>
+        <translation type="unfinished">Bureaublad Weergeven</translation>
     </message>
     <message>
         <location filename="../computer_dialog.cc" line="57"/>
         <source>File Transfer</source>
-        <translation>Bestands Overdracht</translation>
+        <translation type="unfinished">Bestands Overdracht</translation>
     </message>
     <message numerus="yes">
         <location filename="../computer_dialog.cc" line="157"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation>
+        <translation type="unfinished">
             <numerusform>Te lange naam. De maximum lengte is %n karakter.</numerusform>
             <numerusform>Te lange naam. De maximum lengte is %n karakters.</numerusform>
         </translation>
@@ -739,17 +960,17 @@
     <message>
         <location filename="../computer_dialog.cc" line="164"/>
         <source>Name can not be empty.</source>
-        <translation>Naam mag niet leeg zijn.</translation>
+        <translation type="unfinished">Naam mag niet leeg zijn.</translation>
     </message>
     <message>
         <location filename="../computer_dialog.cc" line="174"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
-        <translation>De gebruikersnaam mag niet leeg zijn, en alleen karakters uit het alfabet, nummers, _, -, . karakters bevatten.</translation>
+        <translation type="unfinished">De gebruikersnaam mag niet leeg zijn, en alleen karakters uit het alfabet, nummers, _, -, . karakters bevatten.</translation>
     </message>
     <message numerus="yes">
         <location filename="../computer_dialog.cc" line="183"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation>
+        <translation type="unfinished">
             <numerusform>Te lang commentaar. De maximale lengte is %n karakter.</numerusform>
             <numerusform>Te lang commentaar. De maximale lengte is %n karakters.</numerusform>
         </translation>
@@ -757,15 +978,15 @@
     <message>
         <location filename="../computer_dialog.cc" line="214"/>
         <source>Warning</source>
-        <translation>Waarschuwing</translation>
+        <translation type="unfinished">Waarschuwing</translation>
     </message>
 </context>
 <context>
-    <name>aspia::ComputerGroupDialog</name>
+    <name>console::ComputerGroupDialog</name>
     <message numerus="yes">
         <location filename="../computer_group_dialog.cc" line="60"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation>
+        <translation type="unfinished">
             <numerusform>Te lange naam. De maximum lengte is %n karakter.</numerusform>
             <numerusform>Te lange naam. De maximum lengte is %n karakters.</numerusform>
         </translation>
@@ -773,12 +994,12 @@
     <message>
         <location filename="../computer_group_dialog.cc" line="67"/>
         <source>Name can not be empty.</source>
-        <translation>Naam mag niet leeg zijn.</translation>
+        <translation type="unfinished">Naam mag niet leeg zijn.</translation>
     </message>
     <message numerus="yes">
         <location filename="../computer_group_dialog.cc" line="75"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation>
+        <translation type="unfinished">
             <numerusform>Te lang commentaar. De maximale lengte is %n karakter.</numerusform>
             <numerusform>Te lang commentaar. De maximale lengte is %n karakters.</numerusform>
         </translation>
@@ -786,15 +1007,15 @@
     <message>
         <location filename="../computer_group_dialog.cc" line="102"/>
         <source>Warning</source>
-        <translation>Waarschuwing</translation>
+        <translation type="unfinished">Waarschuwing</translation>
     </message>
 </context>
 <context>
-    <name>aspia::ConsoleStatusBar</name>
+    <name>console::ConsoleStatusBar</name>
     <message numerus="yes">
         <location filename="../console_statusbar.cc" line="37"/>
         <source>%n child group(s)</source>
-        <translation>
+        <translation type="unfinished">
             <numerusform>%n onderliggende groep</numerusform>
             <numerusform>%n onderliggende groepen</numerusform>
         </translation>
@@ -802,69 +1023,18 @@
     <message numerus="yes">
         <location filename="../console_statusbar.cc" line="38"/>
         <source>%n child computer(s)</source>
-        <translation>
+        <translation type="unfinished">
             <numerusform>%n onderliggende computer</numerusform>
             <numerusform>%n onderliggende computers</numerusform>
         </translation>
     </message>
 </context>
 <context>
-    <name>aspia::ConsoleWindow</name>
-    <message>
-        <location filename="../console_window.cc" line="903"/>
-        <source>Aspia Console</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console_window.cc" line="249"/>
-        <source>Open Address Book</source>
-        <translation>Open Adresboek</translation>
-    </message>
-    <message>
-        <location filename="../console_window.cc" line="251"/>
-        <source>Aspia Address Book (*.aab)</source>
-        <translation>Aspia Adresboek (*.aab)</translation>
-    </message>
-    <message>
-        <location filename="../console_window.cc" line="675"/>
-        <source>Close tab</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console_window.cc" line="668"/>
-        <source>Close other tabs</source>
-        <translation type="unfinished"></translation>
-    </message>
+    <name>console::ConsoleWindow</name>
     <message>
         <location filename="../console_window.cc" line="201"/>
         <source>Warning</source>
         <translation type="unfinished">Waarschuwing</translation>
-    </message>
-    <message>
-        <location filename="../console_window.cc" line="678"/>
-        <location filename="../console_window.cc" line="685"/>
-        <source>Pin tab</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console_window.cc" line="882"/>
-        <source>&lt;empty&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console_window.cc" line="937"/>
-        <source>Information</source>
-        <translation>Informatie</translation>
-    </message>
-    <message>
-        <location filename="../console_window.cc" line="938"/>
-        <source>Address Book &quot;%1&quot; is already open.</source>
-        <translation>Adresboek &quot;%1&quot; is al geopend.</translation>
-    </message>
-    <message>
-        <location filename="../console_window.cc" line="377"/>
-        <source>https://aspia.org/en/help.html</source>
-        <translation></translation>
     </message>
     <message>
         <location filename="../console_window.cc" line="202"/>
@@ -872,16 +1042,47 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../console_window.cc" line="249"/>
+        <source>Open Address Book</source>
+        <translation type="unfinished">Open Adresboek</translation>
+    </message>
+    <message>
+        <location filename="../console_window.cc" line="251"/>
+        <source>Aspia Address Book (*.aab)</source>
+        <translation type="unfinished">Aspia Adresboek (*.aab)</translation>
+    </message>
+    <message>
+        <location filename="../console_window.cc" line="377"/>
+        <source>https://aspia.org/en/help.html</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../console_window.cc" line="479"/>
         <location filename="../console_window.cc" line="806"/>
         <source>Confirmation</source>
-        <translation>Bevestiging</translation>
+        <translation type="unfinished">Bevestiging</translation>
     </message>
     <message>
         <location filename="../console_window.cc" line="480"/>
         <location filename="../console_window.cc" line="807"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
-        <translation>Adresboek &quot;%1&quot; is aangepast. Wijzigingen opslaan?</translation>
+        <translation type="unfinished">Adresboek &quot;%1&quot; is aangepast. Wijzigingen opslaan?</translation>
+    </message>
+    <message>
+        <location filename="../console_window.cc" line="668"/>
+        <source>Close other tabs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../console_window.cc" line="675"/>
+        <source>Close tab</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../console_window.cc" line="678"/>
+        <location filename="../console_window.cc" line="685"/>
+        <source>Pin tab</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../console_window.cc" line="763"/>
@@ -893,13 +1094,33 @@
         <source>Show</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../console_window.cc" line="882"/>
+        <source>&lt;empty&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../console_window.cc" line="903"/>
+        <source>Aspia Console</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../console_window.cc" line="937"/>
+        <source>Information</source>
+        <translation type="unfinished">Informatie</translation>
+    </message>
+    <message>
+        <location filename="../console_window.cc" line="938"/>
+        <source>Address Book &quot;%1&quot; is already open.</source>
+        <translation type="unfinished">Adresboek &quot;%1&quot; is al geopend.</translation>
+    </message>
 </context>
 <context>
-    <name>aspia::OpenAddressBookDialog</name>
+    <name>console::OpenAddressBookDialog</name>
     <message>
         <location filename="../open_address_book_dialog.cc" line="42"/>
         <source>Without Encryption</source>
-        <translation>Zonder Encryptie</translation>
+        <translation type="unfinished">Zonder Encryptie</translation>
     </message>
     <message>
         <location filename="../open_address_book_dialog.cc" line="46"/>

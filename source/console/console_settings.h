@@ -24,7 +24,7 @@
 #include "base/macros_magic.h"
 #include "proto/common.pb.h"
 
-namespace aspia {
+namespace console {
 
 class ConsoleSettings
 {
@@ -83,6 +83,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(ConsoleSettings);
 };
 
-} // namespace aspia
+} // namespace console
 
 #endif // ASPIA_CONSOLE__CONSOLE_SETTINGS_H

@@ -22,7 +22,7 @@
 #include "base/macros_magic.h"
 #include "ui_update_settings_dialog.h"
 
-namespace aspia {
+namespace console {
 
 class UpdateSettingsDialog : public QDialog
 {
@@ -38,6 +38,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(UpdateSettingsDialog);
 };
 
-} // namespace aspia
+} // namespace console
 
 #endif // ASPIA_CONSOLE__UPDATE_SETTINGS_DIALOG_H

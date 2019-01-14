@@ -24,7 +24,7 @@
 #include "proto/address_book.pb.h"
 #include "ui_address_book_tab.h"
 
-namespace aspia {
+namespace console {
 
 class ComputerItem;
 
@@ -110,6 +110,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(AddressBookTab);
 };
 
-} // namespace aspia
+} // namespace console
 
 #endif // ASPIA_CONSOLE__ADDRESS_BOOK_TAB_H
