@@ -24,7 +24,7 @@
 
 #include "base/macros_magic.h"
 
-namespace aspia {
+namespace host {
 
 class HostProcessImpl;
 
@@ -96,6 +96,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(HostProcess);
 };
 
-} // namespace aspia
+} // namespace host
 
 #endif // ASPIA_HOST__WIN__HOST_PROCESS_H

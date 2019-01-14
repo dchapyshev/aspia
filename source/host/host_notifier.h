@@ -22,7 +22,7 @@
 #include "ipc/ipc_channel.h"
 #include "protocol/notifier.pb.h"
 
-namespace aspia {
+namespace host {
 
 class HostNotifier : public QObject
 {
@@ -52,6 +52,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(HostNotifier);
 };
 
-} // namespace aspia
+} // namespace host
 
 #endif // ASPIA_HOST__HOST_NOTIFIER_H

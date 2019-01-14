@@ -20,7 +20,7 @@
 
 #include "network/srp_user.h"
 
-namespace aspia {
+namespace host {
 
 UserTreeItem::UserTreeItem(size_t index, const net::SrpUser& user)
     : index_(index)
@@ -33,4 +33,4 @@ UserTreeItem::UserTreeItem(size_t index, const net::SrpUser& user)
     setText(0, user.name);
 }
 
-} // namespace aspia
+} // namespace host

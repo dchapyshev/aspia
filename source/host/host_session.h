@@ -28,7 +28,7 @@ namespace ipc {
 class Channel;
 } // namespace ipc
 
-namespace aspia {
+namespace host {
 
 class HostSession : public QObject
 {
@@ -63,6 +63,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(HostSession);
 };
 
-} // namespace aspia
+} // namespace host
 
 #endif // ASPIA_HOST__HOST_SESSION_H

@@ -26,7 +26,7 @@
 #include "network/srp_host_context.h"
 #include "protocol/common.pb.h"
 
-namespace aspia {
+namespace host {
 
 UserDialog::UserDialog(const net::SrpUserList& user_list, net::SrpUser* user, QWidget* parent)
     : QDialog(parent),
@@ -279,4 +279,4 @@ void UserDialog::setAccountChanged(bool changed)
     }
 }
 
-} // namespace aspia
+} // namespace host

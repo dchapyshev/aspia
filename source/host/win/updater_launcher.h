@@ -19,10 +19,10 @@
 #ifndef ASPIA_HOST__WIN__UPDATER_LAUNCHER_H
 #define ASPIA_HOST__WIN__UPDATER_LAUNCHER_H
 
-namespace aspia {
+namespace host {
 
 bool launchUpdater();
 
-} // namespace aspia
+} // namespace host
 
 #endif // ASPIA_HOST__WIN__UPDATER_LAUNCHER_H

@@ -21,10 +21,10 @@
 
 #include "host/host_export.h"
 
-namespace aspia {
+namespace host {
 
 int HOST_EXPORT hostMain(int argc, char *argv[]);
 
-} // namespace aspia
+} // namespace host
 
 #endif // ASPIA_HOST__WIN__HOST_MAIN_H

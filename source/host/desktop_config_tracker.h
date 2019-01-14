@@ -22,7 +22,7 @@
 #include "base/macros_magic.h"
 #include "protocol/desktop_session.pb.h"
 
-namespace aspia {
+namespace host {
 
 class DesktopConfigTracker
 {
@@ -47,6 +47,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(DesktopConfigTracker);
 };
 
-} // namespace aspia
+} // namespace host
 
 #endif // ASPIA_HOST__DESKTOP_CONFIG_TRACKER_H

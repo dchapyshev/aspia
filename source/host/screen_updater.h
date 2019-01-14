@@ -24,7 +24,7 @@
 #include "base/macros_magic.h"
 #include "protocol/desktop_session.pb.h"
 
-namespace aspia {
+namespace host {
 
 class ScreenUpdaterImpl;
 
@@ -53,6 +53,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(ScreenUpdater);
 };
 
-} // namespace aspia
+} // namespace host
 
 #endif // ASPIA_HOST__SCREEN_UPDATER_H

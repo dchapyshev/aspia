@@ -27,7 +27,7 @@
 #include "build/build_config.h"
 #include "host/host_settings.h"
 
-namespace aspia {
+namespace host {
 
 namespace {
 
@@ -280,4 +280,4 @@ void HostNotifierWindow::hideNotifier()
     ui.button_show_hide->setIcon(QIcon(QStringLiteral(":/img/arrow-right-gray.png")));
 }
 
-} // namespace aspia
+} // namespace host

@@ -24,7 +24,7 @@
 #include "protocol/notifier.pb.h"
 #include "ui_host_notifier_window.h"
 
-namespace aspia {
+namespace host {
 
 class HostNotifierWindow : public QWidget
 {
@@ -72,6 +72,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(HostNotifierWindow);
 };
 
-} // namespace aspia
+} // namespace host
 
 #endif // ASPIA_HOST__UI__HOST_NOTIFIER_WINDOW_H

@@ -33,7 +33,7 @@
 #include "host/win/updater_launcher.h"
 #endif // defined(OS_WIN)
 
-namespace aspia {
+namespace host {
 
 HostSessionDesktop::HostSessionDesktop(proto::SessionType session_type,
                                        const QString& channel_id)
@@ -306,4 +306,4 @@ void HostSessionDesktop::sendSystemInfo()
     emit sendMessage(common::serializeMessage(outgoing_message_));
 }
 
-} // namespace aspia
+} // namespace host

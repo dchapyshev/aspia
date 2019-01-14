@@ -37,7 +37,7 @@
 #include "desktop_capture/screen_capturer_gdi.h"
 #include "protocol/desktop_session_extensions.pb.h"
 
-namespace aspia {
+namespace host {
 
 class MessageEvent : public QEvent
 {
@@ -310,4 +310,4 @@ void ScreenUpdater::customEvent(QEvent* event)
     emit sendMessage(message_event->buffer());
 }
 
-} // namespace aspia
+} // namespace host

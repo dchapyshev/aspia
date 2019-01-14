@@ -21,7 +21,7 @@
 #include "host/host_session_fake_desktop.h"
 #include "host/host_session_fake_file_transfer.h"
 
-namespace aspia {
+namespace host {
 
 HostSessionFake::HostSessionFake(QObject* parent)
     : QObject(parent)
@@ -46,4 +46,4 @@ HostSessionFake* HostSessionFake::create(proto::SessionType session_type, QObjec
     }
 }
 
-} // namespace aspia
+} // namespace host

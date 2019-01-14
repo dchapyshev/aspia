@@ -18,7 +18,7 @@
 
 #include "host/desktop_config_tracker.h"
 
-namespace aspia {
+namespace host {
 
 namespace {
 
@@ -102,4 +102,4 @@ uint32_t DesktopConfigTracker::changeFlags(const proto::desktop::Config& new_con
     return result;
 }
 
-} // namespace aspia
+} // namespace host

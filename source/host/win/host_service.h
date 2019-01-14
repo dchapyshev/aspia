@@ -27,7 +27,7 @@ namespace base::win {
 class ScopedCOMInitializer;
 } // namespace base::win
 
-namespace aspia {
+namespace host {
 
 class HostServer;
 
@@ -50,6 +50,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(HostService);
 };
 
-} // namespace aspia
+} // namespace host
 
 #endif // ASPIA_HOST__HOST_SERVICE_H

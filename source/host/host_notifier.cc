@@ -20,7 +20,7 @@
 
 #include "common/message_serialization.h"
 
-namespace aspia {
+namespace host {
 
 HostNotifier::HostNotifier(QObject* parent)
     : QObject(parent)
@@ -84,4 +84,4 @@ void HostNotifier::onIpcMessageReceived(const QByteArray& buffer)
     }
 }
 
-} // namespace aspia
+} // namespace host

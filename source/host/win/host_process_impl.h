@@ -26,7 +26,7 @@
 #include "base/win/scoped_object.h"
 #include "host/win/host_process.h"
 
-namespace aspia {
+namespace host {
 
 class HostProcessImpl
 {
@@ -57,6 +57,6 @@ public:
     DISALLOW_COPY_AND_ASSIGN(HostProcessImpl);
 };
 
-} // namespace aspia
+} // namespace host
 
 #endif // ASPIA_HOST__WIN__HOST_PROCESS_IMPL_H

@@ -21,7 +21,7 @@
 #include "common/file_worker.h"
 #include "common/message_serialization.h"
 
-namespace aspia {
+namespace host {
 
 HostSessionFileTransfer::HostSessionFileTransfer(const QString& channel_id)
     : HostSession(channel_id)
@@ -55,4 +55,4 @@ void HostSessionFileTransfer::messageReceived(const QByteArray& buffer)
     emit sendMessage(common::serializeMessage(worker_->doRequest(request)));
 }
 
-} // namespace aspia
+} // namespace host

@@ -21,7 +21,7 @@
 #include "base/logging.h"
 #include "host/win/host_process_impl.h"
 
-namespace aspia {
+namespace host {
 
 HostProcess::HostProcess(QObject* parent)
     : QObject(parent)
@@ -137,4 +137,4 @@ void HostProcess::terminate()
     impl_->terminateProcess();
 }
 
-} // namespace aspia
+} // namespace host

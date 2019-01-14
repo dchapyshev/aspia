@@ -29,7 +29,7 @@
 #include "network/network_channel_host.h"
 #include "protocol/notifier.pb.h"
 
-namespace aspia {
+namespace host {
 
 namespace {
 
@@ -386,4 +386,4 @@ void HostServer::sessionCloseToNotifier(const Host& host)
     ipc_channel_->send(common::serializeMessage(message));
 }
 
-} // namespace aspia
+} // namespace host

@@ -24,7 +24,7 @@
 #include "common/message_serialization.h"
 #include "desktop_capture/desktop_frame_simple.h"
 
-namespace aspia {
+namespace host {
 
 HostSessionFakeDesktop::HostSessionFakeDesktop(QObject* parent)
     : HostSessionFake(parent)
@@ -115,4 +115,4 @@ std::unique_ptr<desktop::DesktopFrame> HostSessionFakeDesktop::createFrame()
     return frame;
 }
 
-} // namespace aspia
+} // namespace host

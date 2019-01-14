@@ -23,7 +23,7 @@
 
 #include "protocol/common.pb.h"
 
-namespace aspia {
+namespace host {
 
 class HostSessionFake : public QObject
 {
@@ -47,6 +47,6 @@ protected:
     explicit HostSessionFake(QObject* parent);
 };
 
-} // namespace aspia
+} // namespace host
 
 #endif // ASPIA_HOST__HOST_SESSION_FAKE_H

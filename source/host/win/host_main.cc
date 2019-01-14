@@ -28,7 +28,7 @@
 #include "host/ui/host_notifier_window.h"
 #include "host/host_session.h"
 
-namespace aspia {
+namespace host {
 
 namespace {
 
@@ -134,4 +134,4 @@ int hostMain(int argc, char *argv[])
     return runHostNotifier(channel_id);
 }
 
-} // namespace aspia
+} // namespace host

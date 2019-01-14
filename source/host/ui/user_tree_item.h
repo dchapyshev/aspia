@@ -27,7 +27,7 @@ namespace net {
 struct SrpUser;
 } // namespace net
 
-namespace aspia {
+namespace host {
 
 class UserTreeItem : public QTreeWidgetItem
 {
@@ -43,6 +43,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(UserTreeItem);
 };
 
-} // namespace aspia
+} // namespace host
 
 #endif // ASPIA_HOST__UI__USER_TREE_ITEM_H

@@ -22,7 +22,7 @@
 #include "crypto/scoped_crypto_initializer.h"
 #include "host/win/host_service.h"
 
-namespace aspia {
+namespace host {
 
 int hostServiceMain(int argc, char *argv[])
 {
@@ -37,4 +37,4 @@ int hostServiceMain(int argc, char *argv[])
     return HostService().exec(argc, argv);
 }
 
-} // namespace aspia
+} // namespace host

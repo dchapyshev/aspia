@@ -19,13 +19,13 @@
 #ifndef ASPIA_HOST__WIN__HOST_SERVICE_CONSTANTS_H
 #define ASPIA_HOST__WIN__HOST_SERVICE_CONSTANTS_H
 
-namespace aspia {
+namespace host {
 
 extern const char kHostServiceFileName[];
 extern const char kHostServiceName[];
 extern const char kHostServiceDisplayName[];
 extern const char kHostServiceDescription[];
 
-} // namespace aspia
+} // namespace host
 
 #endif // ASPIA_HOST__WIN__HOST_SERVICE_CONSTANTS_H

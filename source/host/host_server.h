@@ -23,7 +23,7 @@
 #include "ipc/ipc_channel.h"
 #include "network/network_server.h"
 
-namespace aspia {
+namespace host {
 
 class Host;
 struct SrpUserList;
@@ -80,6 +80,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(HostServer);
 };
 
-} // namespace aspia
+} // namespace host
 
 #endif // ASPIA_HOST__HOST_SERVER_H

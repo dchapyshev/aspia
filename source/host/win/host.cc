@@ -30,7 +30,7 @@
 #include "ipc/ipc_server.h"
 #include "network/network_channel_host.h"
 
-namespace aspia {
+namespace host {
 
 Host::Host(QObject* parent)
     : QObject(parent)
@@ -372,4 +372,4 @@ bool Host::startFakeSession()
     return true;
 }
 
-} // namespace aspia
+} // namespace host

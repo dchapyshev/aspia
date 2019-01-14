@@ -4,32 +4,32 @@
 <context>
     <name>HostConfig</name>
     <message>
-        <location filename="../host_config_main.cc" line="65"/>
+        <location filename="../host_config_main.cc" line="63"/>
         <source>The path to the file to import.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host_config_main.cc" line="68"/>
+        <location filename="../host_config_main.cc" line="66"/>
         <source>The path to the file to export.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host_config_main.cc" line="71"/>
+        <location filename="../host_config_main.cc" line="69"/>
         <source>Enables silent mode when exporting and importing.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host_config_main.cc" line="74"/>
+        <location filename="../host_config_main.cc" line="72"/>
         <source>Run application update.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host_config_main.cc" line="91"/>
+        <location filename="../host_config_main.cc" line="89"/>
         <source>Warning</source>
         <translation type="unfinished">Попередження</translation>
     </message>
     <message>
-        <location filename="../host_config_main.cc" line="92"/>
+        <location filename="../host_config_main.cc" line="90"/>
         <source>Export and import parameters can not be specified together.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -217,22 +217,70 @@
 <context>
     <name>aspia::HostConfigDialog</name>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="258"/>
-        <location filename="../ui/host_config_dialog.cc" line="335"/>
-        <location filename="../ui/host_config_dialog.cc" line="397"/>
         <source>Confirmation</source>
-        <translation>Підтвердження</translation>
+        <translation type="vanished">Підтвердження</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="259"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
-        <translation>Ви впевнені, що хочете видалити користувача &quot;%1&quot;?</translation>
+        <translation type="vanished">Ви впевнені, що хочете видалити користувача &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="370"/>
         <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
-        <translation>Неможливо записати налаштування.Переконайтеся, що у вас є відповідні права для запису.</translation>
+        <translation type="vanished">Неможливо записати налаштування.Переконайтеся, що у вас є відповідні права для запису.</translation>
     </message>
+    <message>
+        <source>Warning</source>
+        <translation type="vanished">Попередження</translation>
+    </message>
+    <message>
+        <source>Service configuration changed. For the changes to take effect, you must restart the service. Restart the service now?</source>
+        <translation type="vanished">Налаштування сервісу замінено. Для примінення нових налаштувань потрібно перезапустити сервіс. Перезапустити сервіс зараз?</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::HostNotifierWindow</name>
+    <message>
+        <source>Disconnect</source>
+        <translation type="vanished">Відключитися</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::UserDialog</name>
+    <message>
+        <source>Double-click to change</source>
+        <translation type="vanished">Подвійний клік для зміни</translation>
+    </message>
+    <message>
+        <source>Desktop Manage</source>
+        <translation type="vanished">Керування робоим столом</translation>
+    </message>
+    <message>
+        <source>Desktop View</source>
+        <translation type="vanished">Перегляд робочого столу</translation>
+    </message>
+    <message>
+        <source>File Transfer</source>
+        <translation type="vanished">Передача файлів</translation>
+    </message>
+    <message>
+        <source>Warning</source>
+        <translation type="vanished">Попередження</translation>
+    </message>
+    <message>
+        <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
+        <translation type="vanished">Ім&apos;я користувача не може бути порожнім і має мустити тільки букви алфавіту, цифри, та символи &quot;&quot;_&quot;&quot;, &quot;&quot;-&quot;&quot;, &quot;&quot;.&quot;&quot;.</translation>
+    </message>
+    <message>
+        <source>The username you entered already exists.</source>
+        <translation type="vanished">Введене ім&apos;я користувача вже існує.</translation>
+    </message>
+    <message>
+        <source>The passwords you entered do not match.</source>
+        <translation type="vanished">Введені паролі не співпадають.</translation>
+    </message>
+</context>
+<context>
+    <name>host::HostConfigDialog</name>
     <message>
         <location filename="../ui/host_config_dialog.cc" line="138"/>
         <location filename="../ui/host_config_dialog.cc" line="159"/>
@@ -245,12 +293,11 @@
         <location filename="../ui/host_config_dialog.cc" line="638"/>
         <location filename="../ui/host_config_dialog.cc" line="648"/>
         <source>Warning</source>
-        <translation>Попередження</translation>
+        <translation type="unfinished">Попередження</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="160"/>
-        <location filename="../ui/host_config_dialog.cc" line="187"/>
-        <source>Could not write destination file. Verify that you have the necessary rights to write the file.</source>
+        <location filename="../ui/host_config_dialog.cc" line="139"/>
+        <source>Source file does not exist: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -264,6 +311,24 @@
         <location filename="../ui/host_config_dialog.cc" line="180"/>
         <source>The configuration was successfully imported.</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/host_config_dialog.cc" line="160"/>
+        <location filename="../ui/host_config_dialog.cc" line="187"/>
+        <source>Could not write destination file. Verify that you have the necessary rights to write the file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/host_config_dialog.cc" line="258"/>
+        <location filename="../ui/host_config_dialog.cc" line="335"/>
+        <location filename="../ui/host_config_dialog.cc" line="397"/>
+        <source>Confirmation</source>
+        <translation type="unfinished">Підтвердження</translation>
+    </message>
+    <message>
+        <location filename="../ui/host_config_dialog.cc" line="259"/>
+        <source>Are you sure you want to delete user &quot;%1&quot;?</source>
+        <translation type="unfinished">Ви впевнені, що хочете видалити користувача &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../ui/host_config_dialog.cc" line="321"/>
@@ -280,12 +345,17 @@
         <location filename="../ui/host_config_dialog.cc" line="330"/>
         <location filename="../ui/host_config_dialog.cc" line="392"/>
         <source>Service configuration changed. For the changes to take effect, you must restart the service. Restart the service now?</source>
-        <translation>Налаштування сервісу замінено. Для примінення нових налаштувань потрібно перезапустити сервіс. Перезапустити сервіс зараз?</translation>
+        <translation type="unfinished">Налаштування сервісу замінено. Для примінення нових налаштувань потрібно перезапустити сервіс. Перезапустити сервіс зараз?</translation>
     </message>
     <message>
         <location filename="../ui/host_config_dialog.cc" line="351"/>
         <source>Export</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/host_config_dialog.cc" line="370"/>
+        <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
+        <translation type="unfinished">Неможливо записати налаштування.Переконайтеся, що у вас є відповідні права для запису.</translation>
     </message>
     <message>
         <location filename="../ui/host_config_dialog.cc" line="517"/>
@@ -340,19 +410,14 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="613"/>
-        <location filename="../ui/host_config_dialog.cc" line="639"/>
-        <source>Could not access the service.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../ui/host_config_dialog.cc" line="598"/>
         <source>The service could not be removed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="139"/>
-        <source>Source file does not exist: %1</source>
+        <location filename="../ui/host_config_dialog.cc" line="613"/>
+        <location filename="../ui/host_config_dialog.cc" line="639"/>
+        <source>Could not access the service.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -367,34 +432,29 @@
     </message>
 </context>
 <context>
-    <name>aspia::HostNotifierWindow</name>
+    <name>host::HostNotifierWindow</name>
     <message>
         <location filename="../ui/host_notifier_window.cc" line="232"/>
         <source>Disconnect</source>
-        <translation>Відключитися</translation>
+        <translation type="unfinished">Відключитися</translation>
     </message>
 </context>
 <context>
-    <name>aspia::UserDialog</name>
-    <message>
-        <location filename="../ui/user_dialog.cc" line="266"/>
-        <source>Double-click to change</source>
-        <translation>Подвійний клік для зміни</translation>
-    </message>
+    <name>host::UserDialog</name>
     <message>
         <location filename="../ui/user_dialog.cc" line="73"/>
         <source>Desktop Manage</source>
-        <translation>Керування робоим столом</translation>
+        <translation type="unfinished">Керування робоим столом</translation>
     </message>
     <message>
         <location filename="../ui/user_dialog.cc" line="77"/>
         <source>Desktop View</source>
-        <translation>Перегляд робочого столу</translation>
+        <translation type="unfinished">Перегляд робочого столу</translation>
     </message>
     <message>
         <location filename="../ui/user_dialog.cc" line="81"/>
         <source>File Transfer</source>
-        <translation>Передача файлів</translation>
+        <translation type="unfinished">Передача файлів</translation>
     </message>
     <message>
         <location filename="../ui/user_dialog.cc" line="134"/>
@@ -404,22 +464,22 @@
         <location filename="../ui/user_dialog.cc" line="186"/>
         <location filename="../ui/user_dialog.cc" line="209"/>
         <source>Warning</source>
-        <translation>Попередження</translation>
+        <translation type="unfinished">Попередження</translation>
     </message>
     <message>
         <location filename="../ui/user_dialog.cc" line="135"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
-        <translation>Ім&apos;я користувача не може бути порожнім і має мустити тільки букви алфавіту, цифри, та символи &quot;&quot;_&quot;&quot;, &quot;&quot;-&quot;&quot;, &quot;&quot;.&quot;&quot;.</translation>
+        <translation type="unfinished">Ім&apos;я користувача не може бути порожнім і має мустити тільки букви алфавіту, цифри, та символи &quot;&quot;_&quot;&quot;, &quot;&quot;-&quot;&quot;, &quot;&quot;.&quot;&quot;.</translation>
     </message>
     <message>
         <location filename="../ui/user_dialog.cc" line="154"/>
         <source>The username you entered already exists.</source>
-        <translation>Введене ім&apos;я користувача вже існує.</translation>
+        <translation type="unfinished">Введене ім&apos;я користувача вже існує.</translation>
     </message>
     <message>
         <location filename="../ui/user_dialog.cc" line="166"/>
         <source>The passwords you entered do not match.</source>
-        <translation>Введені паролі не співпадають.</translation>
+        <translation type="unfinished">Введені паролі не співпадають.</translation>
     </message>
     <message numerus="yes">
         <location filename="../ui/user_dialog.cc" line="176"/>
@@ -443,6 +503,11 @@
         <location filename="../ui/user_dialog.cc" line="210"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/user_dialog.cc" line="266"/>
+        <source>Double-click to change</source>
+        <translation type="unfinished">Подвійний клік для зміни</translation>
     </message>
 </context>
 </TS>

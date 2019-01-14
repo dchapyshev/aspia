@@ -24,7 +24,7 @@
 #include "base/win/process_util.h"
 #include "base/logging.h"
 
-namespace aspia {
+namespace host {
 
 namespace {
 
@@ -319,4 +319,4 @@ bool HostProcessImpl::startProcessWithToken(HANDLE token)
     return true;
 }
 
-} // namespace aspia
+} // namespace host

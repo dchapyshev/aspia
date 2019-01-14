@@ -25,7 +25,7 @@
 #include "base/sys_info.h"
 #include "network/network_adapter_enumerator.h"
 
-namespace aspia {
+namespace host {
 
 void createHostSystemInfo(proto::system_info::SystemInfo* system_info)
 {
@@ -174,4 +174,4 @@ void createHostSystemInfo(proto::system_info::SystemInfo* system_info)
     }
 }
 
-} // namespace aspia
+} // namespace host

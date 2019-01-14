@@ -31,7 +31,7 @@
 #include "base/keycode_converter.h"
 #include "desktop_capture/win/scoped_thread_desktop.h"
 
-namespace aspia {
+namespace host {
 
 namespace {
 
@@ -414,4 +414,4 @@ void InputInjector::run()
     }
 }
 
-} // namespace aspia
+} // namespace host

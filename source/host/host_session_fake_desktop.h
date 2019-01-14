@@ -31,7 +31,7 @@ namespace desktop {
 class DesktopFrame;
 } // namespace desktop
 
-namespace aspia {
+namespace host {
 
 class HostSessionFakeDesktop : public HostSessionFake
 {
@@ -54,6 +54,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(HostSessionFakeDesktop);
 };
 
-} // namespace aspia
+} // namespace host
 
 #endif // ASPIA_HOST__HOST_SESSION_FAKE_DESKTOP_H

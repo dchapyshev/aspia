@@ -21,7 +21,7 @@
 #include "common/message_serialization.h"
 #include "protocol/file_transfer_session.pb.h"
 
-namespace aspia {
+namespace host {
 
 HostSessionFakeFileTransfer::HostSessionFakeFileTransfer(QObject* parent)
     : HostSessionFake(parent)
@@ -43,4 +43,4 @@ void HostSessionFakeFileTransfer::onMessageReceived(const QByteArray& /* buffer 
     emit sendMessage(common::serializeMessage(reply));
 }
 
-} // namespace aspia
+} // namespace host

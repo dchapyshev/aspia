@@ -29,8 +29,6 @@
 #include "host/host_settings.h"
 #include "updater/update_dialog.h"
 
-using namespace aspia;
-
 int hostConfigMain(int argc, char *argv[])
 {
     Q_INIT_RESOURCE(common);
@@ -52,7 +50,7 @@ int hostConfigMain(int argc, char *argv[])
     application.setApplicationVersion(ASPIA_VERSION_STRING);
     application.setAttribute(Qt::AA_DisableWindowContextHelpButton, true);
 
-    HostSettings host_settings;
+    host::HostSettings host_settings;
     common::LocaleLoader locale_loader;
 
     QString current_locale = host_settings.locale();
@@ -97,13 +95,19 @@ int hostConfigMain(int argc, char *argv[])
     }
     else if (parser.isSet(import_option))
     {
-        if (!HostConfigDialog::importSettings(parser.value(import_option), parser.isSet(silent_option)))
+        if (!host::HostConfigDialog::importSettings(
+            parser.value(import_option), parser.isSet(silent_option)))
+        {
             return 1;
+        }
     }
     else if (parser.isSet(export_option))
     {
-        if (!HostConfigDialog::exportSettings(parser.value(export_option), parser.isSet(silent_option)))
+        if (!host::HostConfigDialog::exportSettings(
+            parser.value(export_option), parser.isSet(silent_option)))
+        {
             return 1;
+        }
     }
     else if (parser.isSet(update_option))
     {
@@ -115,7 +119,7 @@ int hostConfigMain(int argc, char *argv[])
     }
     else
     {
-        HostConfigDialog dialog(locale_loader);
+        host::HostConfigDialog dialog(locale_loader);
         dialog.show();
         dialog.activateWindow();
 

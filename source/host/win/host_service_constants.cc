@@ -18,7 +18,7 @@
 
 #include "host/win/host_service_constants.h"
 
-namespace aspia {
+namespace host {
 
 const char kHostServiceFileName[] = "aspia_host_service.exe";
 
@@ -29,4 +29,4 @@ const char kHostServiceDisplayName[] = "Aspia Host Service";
 const char kHostServiceDescription[] =
     "Accepts incoming remote desktop connections to this computer.";
 
-} // namespace aspia
+} // namespace host

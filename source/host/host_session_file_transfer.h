@@ -25,7 +25,7 @@ namespace common {
 class FileWorker;
 } // namespace common
 
-namespace aspia {
+namespace host {
 
 class HostSessionFileTransfer : public HostSession
 {
@@ -49,6 +49,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(HostSessionFileTransfer);
 };
 
-} // namespace aspia
+} // namespace host
 
 #endif // ASPIA_HOST__HOST_SESSION_FILE_TRANSFER_H

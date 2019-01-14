@@ -34,7 +34,7 @@
 #include "network/srp_user.h"
 #include "updater/update_dialog.h"
 
-namespace aspia {
+namespace host {
 
 namespace {
 
@@ -663,4 +663,4 @@ bool HostConfigDialog::restartService()
     return startService();
 }
 
-} // namespace aspia
+} // namespace host

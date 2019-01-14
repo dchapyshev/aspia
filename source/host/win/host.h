@@ -34,7 +34,7 @@ namespace net {
 class ChannelHost;
 } // namespace net
 
-namespace aspia {
+namespace host {
 
 class HostProcess;
 class HostSessionFake;
@@ -97,6 +97,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(Host);
 };
 
-} // namespace aspia
+} // namespace host
 
 #endif // ASPIA_HOST__WIN__HOST_H

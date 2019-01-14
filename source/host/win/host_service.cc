@@ -29,7 +29,7 @@
 #include "host/host_server.h"
 #include "host/host_settings.h"
 
-namespace aspia {
+namespace host {
 
 namespace {
 
@@ -110,4 +110,4 @@ void HostService::sessionChange(uint32_t event, uint32_t session_id)
         server_->setSessionChanged(event, session_id);
 }
 
-} // namespace aspia
+} // namespace host

@@ -26,7 +26,7 @@
 #include "base/win/process_util.h"
 #include "base/logging.h"
 
-namespace aspia {
+namespace host {
 
 namespace {
 
@@ -173,4 +173,4 @@ bool launchUpdater()
     return createProcessWithToken(user_token, program, arguments);
 }
 
-} // namespace aspia
+} // namespace host

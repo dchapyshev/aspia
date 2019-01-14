@@ -29,7 +29,7 @@
 #include "base/macros_magic.h"
 #include "protocol/desktop_session.pb.h"
 
-namespace aspia {
+namespace host {
 
 class InputInjector : public QThread
 {
@@ -58,6 +58,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(InputInjector);
 };
 
-} // namespace aspia
+} // namespace host
 
 #endif // ASPIA_HOST__INPUT_INJECTOR_H

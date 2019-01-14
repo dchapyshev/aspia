@@ -25,7 +25,7 @@
 #include "host/host_session_file_transfer.h"
 #include "ipc/ipc_channel.h"
 
-namespace aspia {
+namespace host {
 
 HostSession::HostSession(const QString& channel_id)
     : channel_id_(channel_id)
@@ -83,4 +83,4 @@ void HostSession::stop()
     QCoreApplication::quit();
 }
 
-} // namespace aspia
+} // namespace host

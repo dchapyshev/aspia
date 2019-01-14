@@ -21,10 +21,10 @@
 
 #include "protocol/system_info.pb.h"
 
-namespace aspia {
+namespace host {
 
 void createHostSystemInfo(proto::system_info::SystemInfo* system_info);
 
-} // namespace aspia
+} // namespace host
 
 #endif // ASPIA_HOST__HOST_SYSTEM_INFO_H

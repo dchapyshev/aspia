@@ -23,7 +23,7 @@
 #include "network/srp_user.h"
 #include "ui_user_dialog.h"
 
-namespace aspia {
+namespace host {
 
 class UserDialog : public QDialog
 {
@@ -55,6 +55,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(UserDialog);
 };
 
-} // namespace aspia
+} // namespace host
 
 #endif // ASPIA_HOST__UI__USER_DIALOG_H

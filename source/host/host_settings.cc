@@ -26,7 +26,7 @@
 #include "crypto/random.h"
 #include "network/srp_user.h"
 
-namespace aspia {
+namespace host {
 
 HostSettings::HostSettings()
     : settings_(base::XmlSettings::registerFormat(),
@@ -159,4 +159,4 @@ void HostSettings::setRemoteUpdate(bool allow)
     settings_.setValue(QLatin1String("RemoteUpdate"), allow);
 }
 
-} // namespace aspia
+} // namespace host

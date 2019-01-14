@@ -4,32 +4,32 @@
 <context>
     <name>HostConfig</name>
     <message>
-        <location filename="../host_config_main.cc" line="65"/>
+        <location filename="../host_config_main.cc" line="63"/>
         <source>The path to the file to import.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host_config_main.cc" line="68"/>
+        <location filename="../host_config_main.cc" line="66"/>
         <source>The path to the file to export.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host_config_main.cc" line="71"/>
+        <location filename="../host_config_main.cc" line="69"/>
         <source>Enables silent mode when exporting and importing.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host_config_main.cc" line="74"/>
+        <location filename="../host_config_main.cc" line="72"/>
         <source>Run application update.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host_config_main.cc" line="91"/>
+        <location filename="../host_config_main.cc" line="89"/>
         <source>Warning</source>
         <translation type="unfinished">Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../host_config_main.cc" line="92"/>
+        <location filename="../host_config_main.cc" line="90"/>
         <source>Export and import parameters can not be specified together.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -217,6 +217,71 @@
 <context>
     <name>aspia::HostConfigDialog</name>
     <message>
+        <source>Warning</source>
+        <translation type="vanished">Waarschuwing</translation>
+    </message>
+    <message>
+        <source>Confirmation</source>
+        <translation type="vanished">Bevestiging</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to delete user &quot;%1&quot;?</source>
+        <translation type="vanished">Weet U zeker dat U de gebruiker &quot;%1&quot; wilt verwijderen?</translation>
+    </message>
+    <message>
+        <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
+        <translation type="vanished">De configuratie kon niet worden weggeschreven. Zorg dat U genoeg rechten heeft om te schrijven.</translation>
+    </message>
+    <message>
+        <source>Service configuration changed. For the changes to take effect, you must restart the service. Restart the service now?</source>
+        <translation type="vanished">Service configuratie veranderd. Om de wijzigingen toe te passen, moet de service herstart worden. Nu herstarten?</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::HostNotifierWindow</name>
+    <message>
+        <source>Disconnect</source>
+        <translation type="vanished">Verbinding verbreken</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::UserDialog</name>
+    <message>
+        <source>Double-click to change</source>
+        <translation type="vanished">Dubbelklik om te wijzigen</translation>
+    </message>
+    <message>
+        <source>Desktop Manage</source>
+        <translation type="vanished">Bureaublad Beheren</translation>
+    </message>
+    <message>
+        <source>Desktop View</source>
+        <translation type="vanished">Bureaublad Weergeven</translation>
+    </message>
+    <message>
+        <source>File Transfer</source>
+        <translation type="vanished">Bestands Overdracht</translation>
+    </message>
+    <message>
+        <source>Warning</source>
+        <translation type="vanished">Waarschuwing</translation>
+    </message>
+    <message>
+        <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
+        <translation type="vanished">De gebruikersnaam mag niet leeg zijn, en alleen karakters uit het alfabet, nummers, _, -, . karakters bevatten.</translation>
+    </message>
+    <message>
+        <source>The username you entered already exists.</source>
+        <translation type="vanished">De ingevoerde gebruikersnaam bestaat al.</translation>
+    </message>
+    <message>
+        <source>The passwords you entered do not match.</source>
+        <translation type="vanished">De ingevoerde wachtwoorden komen niet overeen.</translation>
+    </message>
+</context>
+<context>
+    <name>host::HostConfigDialog</name>
+    <message>
         <location filename="../ui/host_config_dialog.cc" line="138"/>
         <location filename="../ui/host_config_dialog.cc" line="159"/>
         <location filename="../ui/host_config_dialog.cc" line="186"/>
@@ -228,40 +293,11 @@
         <location filename="../ui/host_config_dialog.cc" line="638"/>
         <location filename="../ui/host_config_dialog.cc" line="648"/>
         <source>Warning</source>
-        <translation>Waarschuwing</translation>
+        <translation type="unfinished">Waarschuwing</translation>
     </message>
     <message>
         <location filename="../ui/host_config_dialog.cc" line="139"/>
         <source>Source file does not exist: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/host_config_dialog.cc" line="258"/>
-        <location filename="../ui/host_config_dialog.cc" line="335"/>
-        <location filename="../ui/host_config_dialog.cc" line="397"/>
-        <source>Confirmation</source>
-        <translation>Bevestiging</translation>
-    </message>
-    <message>
-        <location filename="../ui/host_config_dialog.cc" line="259"/>
-        <source>Are you sure you want to delete user &quot;%1&quot;?</source>
-        <translation>Weet U zeker dat U de gebruiker &quot;%1&quot; wilt verwijderen?</translation>
-    </message>
-    <message>
-        <location filename="../ui/host_config_dialog.cc" line="370"/>
-        <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
-        <translation>De configuratie kon niet worden weggeschreven. Zorg dat U genoeg rechten heeft om te schrijven.</translation>
-    </message>
-    <message>
-        <location filename="../ui/host_config_dialog.cc" line="330"/>
-        <location filename="../ui/host_config_dialog.cc" line="392"/>
-        <source>Service configuration changed. For the changes to take effect, you must restart the service. Restart the service now?</source>
-        <translation>Service configuratie veranderd. Om de wijzigingen toe te passen, moet de service herstart worden. Nu herstarten?</translation>
-    </message>
-    <message>
-        <location filename="../ui/host_config_dialog.cc" line="160"/>
-        <location filename="../ui/host_config_dialog.cc" line="187"/>
-        <source>Could not write destination file. Verify that you have the necessary rights to write the file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -277,6 +313,24 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../ui/host_config_dialog.cc" line="160"/>
+        <location filename="../ui/host_config_dialog.cc" line="187"/>
+        <source>Could not write destination file. Verify that you have the necessary rights to write the file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/host_config_dialog.cc" line="258"/>
+        <location filename="../ui/host_config_dialog.cc" line="335"/>
+        <location filename="../ui/host_config_dialog.cc" line="397"/>
+        <source>Confirmation</source>
+        <translation type="unfinished">Bevestiging</translation>
+    </message>
+    <message>
+        <location filename="../ui/host_config_dialog.cc" line="259"/>
+        <source>Are you sure you want to delete user &quot;%1&quot;?</source>
+        <translation type="unfinished">Weet U zeker dat U de gebruiker &quot;%1&quot; wilt verwijderen?</translation>
+    </message>
+    <message>
         <location filename="../ui/host_config_dialog.cc" line="321"/>
         <source>Import</source>
         <translation type="unfinished"></translation>
@@ -288,9 +342,20 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../ui/host_config_dialog.cc" line="330"/>
+        <location filename="../ui/host_config_dialog.cc" line="392"/>
+        <source>Service configuration changed. For the changes to take effect, you must restart the service. Restart the service now?</source>
+        <translation type="unfinished">Service configuratie veranderd. Om de wijzigingen toe te passen, moet de service herstart worden. Nu herstarten?</translation>
+    </message>
+    <message>
         <location filename="../ui/host_config_dialog.cc" line="351"/>
         <source>Export</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/host_config_dialog.cc" line="370"/>
+        <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
+        <translation type="unfinished">De configuratie kon niet worden weggeschreven. Zorg dat U genoeg rechten heeft om te schrijven.</translation>
     </message>
     <message>
         <location filename="../ui/host_config_dialog.cc" line="517"/>
@@ -345,14 +410,14 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="613"/>
-        <location filename="../ui/host_config_dialog.cc" line="639"/>
-        <source>Could not access the service.</source>
+        <location filename="../ui/host_config_dialog.cc" line="598"/>
+        <source>The service could not be removed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="598"/>
-        <source>The service could not be removed.</source>
+        <location filename="../ui/host_config_dialog.cc" line="613"/>
+        <location filename="../ui/host_config_dialog.cc" line="639"/>
+        <source>Could not access the service.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -367,34 +432,29 @@
     </message>
 </context>
 <context>
-    <name>aspia::HostNotifierWindow</name>
+    <name>host::HostNotifierWindow</name>
     <message>
         <location filename="../ui/host_notifier_window.cc" line="232"/>
         <source>Disconnect</source>
-        <translation>Verbinding verbreken</translation>
+        <translation type="unfinished">Verbinding verbreken</translation>
     </message>
 </context>
 <context>
-    <name>aspia::UserDialog</name>
-    <message>
-        <location filename="../ui/user_dialog.cc" line="266"/>
-        <source>Double-click to change</source>
-        <translation>Dubbelklik om te wijzigen</translation>
-    </message>
+    <name>host::UserDialog</name>
     <message>
         <location filename="../ui/user_dialog.cc" line="73"/>
         <source>Desktop Manage</source>
-        <translation>Bureaublad Beheren</translation>
+        <translation type="unfinished">Bureaublad Beheren</translation>
     </message>
     <message>
         <location filename="../ui/user_dialog.cc" line="77"/>
         <source>Desktop View</source>
-        <translation>Bureaublad Weergeven</translation>
+        <translation type="unfinished">Bureaublad Weergeven</translation>
     </message>
     <message>
         <location filename="../ui/user_dialog.cc" line="81"/>
         <source>File Transfer</source>
-        <translation>Bestands Overdracht</translation>
+        <translation type="unfinished">Bestands Overdracht</translation>
     </message>
     <message>
         <location filename="../ui/user_dialog.cc" line="134"/>
@@ -404,22 +464,22 @@
         <location filename="../ui/user_dialog.cc" line="186"/>
         <location filename="../ui/user_dialog.cc" line="209"/>
         <source>Warning</source>
-        <translation>Waarschuwing</translation>
+        <translation type="unfinished">Waarschuwing</translation>
     </message>
     <message>
         <location filename="../ui/user_dialog.cc" line="135"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
-        <translation>De gebruikersnaam mag niet leeg zijn, en alleen karakters uit het alfabet, nummers, _, -, . karakters bevatten.</translation>
+        <translation type="unfinished">De gebruikersnaam mag niet leeg zijn, en alleen karakters uit het alfabet, nummers, _, -, . karakters bevatten.</translation>
     </message>
     <message>
         <location filename="../ui/user_dialog.cc" line="154"/>
         <source>The username you entered already exists.</source>
-        <translation>De ingevoerde gebruikersnaam bestaat al.</translation>
+        <translation type="unfinished">De ingevoerde gebruikersnaam bestaat al.</translation>
     </message>
     <message>
         <location filename="../ui/user_dialog.cc" line="166"/>
         <source>The passwords you entered do not match.</source>
-        <translation>De ingevoerde wachtwoorden komen niet overeen.</translation>
+        <translation type="unfinished">De ingevoerde wachtwoorden komen niet overeen.</translation>
     </message>
     <message numerus="yes">
         <location filename="../ui/user_dialog.cc" line="176"/>
@@ -441,6 +501,11 @@
         <location filename="../ui/user_dialog.cc" line="210"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/user_dialog.cc" line="266"/>
+        <source>Double-click to change</source>
+        <translation type="unfinished">Dubbelklik om te wijzigen</translation>
     </message>
 </context>
 </TS>

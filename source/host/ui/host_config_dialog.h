@@ -23,7 +23,7 @@
 #include "network/srp_user.h"
 #include "ui_host_config_dialog.h"
 
-namespace aspia {
+namespace host {
 
 class HostConfigDialog : public QDialog
 {
@@ -75,6 +75,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(HostConfigDialog);
 };
 
-} // namespace aspia
+} // namespace host
 
 #endif // ASPIA_HOST__UI__HOST_CONFIG_DIALOG_H
