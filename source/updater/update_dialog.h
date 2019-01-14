@@ -28,7 +28,7 @@ namespace Ui {
 class UpdateDialog;
 } // namespace Ui
 
-namespace aspia {
+namespace updater {
 
 class UpdateDialog : public QDialog
 {
@@ -53,6 +53,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(UpdateDialog);
 };
 
-} // namespace aspia
+} // namespace updater
 
 #endif // ASPIA_UPDATER__UPDATE_DIALOG_H

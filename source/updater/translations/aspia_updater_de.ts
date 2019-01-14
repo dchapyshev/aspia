@@ -58,7 +58,7 @@
     </message>
 </context>
 <context>
-    <name>aspia::DownloadDialog</name>
+    <name>updater::DownloadDialog</name>
     <message>
         <location filename="../download_dialog.cc" line="51"/>
         <source>Warning</source>
@@ -71,7 +71,7 @@
     </message>
 </context>
 <context>
-    <name>aspia::UpdateDialog</name>
+    <name>updater::UpdateDialog</name>
     <message>
         <location filename="../update_dialog.cc" line="59"/>
         <source>Unknown</source>

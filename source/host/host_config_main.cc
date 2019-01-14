@@ -107,7 +107,7 @@ int hostConfigMain(int argc, char *argv[])
     }
     else if (parser.isSet(update_option))
     {
-        UpdateDialog dialog(host_settings.updateServer(), QLatin1String("host"));
+        updater::UpdateDialog dialog(host_settings.updateServer(), QLatin1String("host"));
         dialog.show();
         dialog.activateWindow();
 

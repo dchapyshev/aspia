@@ -223,13 +223,13 @@ ConsoleWindow::ConsoleWindow(ConsoleSettings& settings,
 
     if (settings.checkUpdates())
     {
-        UpdateChecker* update_checher = new UpdateChecker(this);
+        updater::UpdateChecker* update_checher = new updater::UpdateChecker(this);
 
-        connect(update_checher, &UpdateChecker::finished,
+        connect(update_checher, &updater::UpdateChecker::finished,
                 this, &ConsoleWindow::onUpdateChecked);
 
-        connect(update_checher, &UpdateChecker::finished,
-                update_checher, &UpdateChecker::deleteLater);
+        connect(update_checher, &updater::UpdateChecker::finished,
+                update_checher, &updater::UpdateChecker::deleteLater);
 
         update_checher->checkForUpdates(settings.updateServer(), QLatin1String("console"));
     }
@@ -379,7 +379,7 @@ void ConsoleWindow::onOnlineHelp()
 
 void ConsoleWindow::onCheckUpdates()
 {
-    UpdateDialog(settings_.updateServer(), QLatin1String("console"), this).exec();
+    updater::UpdateDialog(settings_.updateServer(), QLatin1String("console"), this).exec();
 }
 
 void ConsoleWindow::onAbout()
@@ -844,13 +844,13 @@ void ConsoleWindow::closeEvent(QCloseEvent* event)
     QMainWindow::closeEvent(event);
 }
 
-void ConsoleWindow::onUpdateChecked(const UpdateInfo& update_info)
+void ConsoleWindow::onUpdateChecked(const updater::UpdateInfo& update_info)
 {
     QVersionNumber current_version =
         QVersionNumber(ASPIA_VERSION_MAJOR, ASPIA_VERSION_MINOR, ASPIA_VERSION_PATCH);
 
     if (update_info.version() > current_version)
-        UpdateDialog(update_info, this).exec();
+        updater::UpdateDialog(update_info, this).exec();
 }
 
 void ConsoleWindow::createLanguageMenu(const QString& current_locale)

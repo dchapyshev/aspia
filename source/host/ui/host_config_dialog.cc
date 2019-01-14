@@ -85,9 +85,8 @@ HostConfigDialog::HostConfigDialog(common::LocaleLoader& locale_loader, QWidget*
 
     connect(ui.button_check_updates, &QPushButton::released, [this]()
     {
-        UpdateDialog(HostSettings().updateServer(),
-                     QLatin1String("host"),
-                     this).exec();
+        updater::UpdateDialog(
+            HostSettings().updateServer(), QLatin1String("host"), this).exec();
     });
 
     connect(ui.tree_users, &QTreeWidget::customContextMenuRequested,

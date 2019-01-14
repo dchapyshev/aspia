@@ -22,7 +22,7 @@
 #include <QUrl>
 #include <QVersionNumber>
 
-namespace aspia {
+namespace updater {
 
 class UpdateInfo
 {
@@ -44,6 +44,6 @@ private:
     QUrl url_;
 };
 
-} // namespace aspia
+} // namespace updater
 
 #endif // ASPIA_UPDATER__UPDATE_H

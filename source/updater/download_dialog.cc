@@ -23,7 +23,7 @@
 #include <QMessageBox>
 #include <QNetworkReply>
 
-namespace aspia {
+namespace updater {
 
 DownloadDialog::DownloadDialog(const QUrl& url, QFile& file, QWidget* parent)
     : QDialog(parent),
@@ -76,4 +76,4 @@ DownloadDialog::DownloadDialog(const QUrl& url, QFile& file, QWidget* parent)
     });
 }
 
-} // namespace aspia
+} // namespace updater

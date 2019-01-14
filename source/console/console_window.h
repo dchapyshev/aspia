@@ -86,7 +86,7 @@ protected:
     void closeEvent(QCloseEvent* event) override;
 
 private slots:
-    void onUpdateChecked(const UpdateInfo& update_info);
+    void onUpdateChecked(const updater::UpdateInfo& update_info);
 
 private:
     void createLanguageMenu(const QString& current_locale);

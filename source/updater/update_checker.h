@@ -26,7 +26,7 @@
 
 class QSslError;
 
-namespace aspia {
+namespace updater {
 
 class UpdateChecker : public QObject
 {
@@ -47,6 +47,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(UpdateChecker);
 };
 
-} // namespace aspia
+} // namespace updater
 
 #endif // ASPIA_UPDATER__UPDATE_CHECKER_H

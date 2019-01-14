@@ -22,7 +22,7 @@
 
 #include "base/qt_logging.h"
 
-namespace aspia {
+namespace updater {
 
 namespace {
 
@@ -92,4 +92,4 @@ UpdateInfo UpdateInfo::fromXml(const QByteArray& buffer)
     return update_info;
 }
 
-} // namespace aspia
+} // namespace updater

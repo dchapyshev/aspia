@@ -25,7 +25,7 @@
 #include "base/macros_magic.h"
 #include "ui_download_dialog.h"
 
-namespace aspia {
+namespace updater {
 
 class DownloadDialog : public QDialog
 {
@@ -44,6 +44,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(DownloadDialog);
 };
 
-} // namespace aspia
+} // namespace updater
 
 #endif // ASPIA_UPDATER__DOWNLOAD_DIALOG_H

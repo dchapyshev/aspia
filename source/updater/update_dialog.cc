@@ -28,7 +28,7 @@
 #include "updater/update_checker.h"
 #include "ui_update_dialog.h"
 
-namespace aspia {
+namespace updater {
 
 namespace {
 
@@ -180,4 +180,4 @@ void UpdateDialog::initialize()
     ui->label_current->setText(current_version.toString());
 }
 
-} // namespace aspia
+} // namespace updater

@@ -25,7 +25,7 @@
 #include "base/qt_logging.h"
 #include "build/version.h"
 
-namespace aspia {
+namespace updater {
 
 UpdateChecker::UpdateChecker(QObject* parent)
     : QObject(parent),
@@ -68,4 +68,4 @@ void UpdateChecker::checkForUpdates(const QString& update_server, const QString&
     network_manager_.get(QNetworkRequest(url));
 }
 
-} // namespace aspia
+} // namespace updater
