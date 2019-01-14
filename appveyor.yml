@@ -75,7 +75,7 @@ test_script:
       If ($LastExitCode -ne 0) {
         exit $LastExitCode
       }
-      $test_desktop_capture = "$tests_dir\aspia_desktop_capture_tests"
+      $test_desktop = "$tests_dir\aspia_desktop_tests"
       & $test_desktop_capture
       If ($LastExitCode -ne 0) {
         exit $LastExitCode
