@@ -52,7 +52,7 @@ bool ScreenCapturerGDI::selectScreen(ScreenId screen_id)
     return true;
 }
 
-const DesktopFrame* ScreenCapturerGDI::captureFrame()
+const Frame* ScreenCapturerGDI::captureFrame()
 {
     queue_.moveToNextFrame();
 
@@ -71,8 +71,8 @@ const DesktopFrame* ScreenCapturerGDI::captureFrame()
         DCHECK(desktop_dc_);
         DCHECK(memory_dc_);
 
-        std::unique_ptr<DesktopFrame> frame =
-            DesktopFrameDIB::create(screen_rect.size(), PixelFormat::ARGB(), memory_dc_);
+        std::unique_ptr<Frame> frame = FrameDib::create(
+            screen_rect.size(), PixelFormat::ARGB(), memory_dc_);
         if (!frame)
         {
             LOG(LS_WARNING) << "Failed to create frame buffer";
@@ -82,8 +82,8 @@ const DesktopFrame* ScreenCapturerGDI::captureFrame()
         queue_.replaceCurrentFrame(std::move(frame));
     }
 
-    DesktopFrameDIB* current = static_cast<DesktopFrameDIB*>(queue_.currentFrame());
-    DesktopFrameDIB* previous = static_cast<DesktopFrameDIB*>(queue_.previousFrame());
+    FrameDib* current = static_cast<FrameDib*>(queue_.currentFrame());
+    FrameDib* previous = static_cast<FrameDib*>(queue_.previousFrame());
 
     HGDIOBJ old_bitmap = SelectObject(memory_dc_, current->bitmap());
     if (old_bitmap)

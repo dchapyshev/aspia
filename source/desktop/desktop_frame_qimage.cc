@@ -28,33 +28,33 @@ constexpr int kBytesPerPixel = 4;
 
 } // namespace
 
-DesktopFrameQImage::DesktopFrameQImage(QImage&& img)
-    : DesktopFrame(img.size(),
-                   PixelFormat::ARGB(),
-                   img.width() * kBytesPerPixel,
-                   img.bits()),
+FrameQImage::FrameQImage(QImage&& img)
+    : Frame(img.size(),
+            PixelFormat::ARGB(),
+            img.width() * kBytesPerPixel,
+            img.bits()),
       image_(std::move(img))
 {
     // Nothing
 }
 
 // static
-std::unique_ptr<DesktopFrameQImage> DesktopFrameQImage::create(const QSize& size)
+std::unique_ptr<FrameQImage> FrameQImage::create(const QSize& size)
 {
-    return std::unique_ptr<DesktopFrameQImage>(
-        new DesktopFrameQImage(QImage(size.width(), size.height(), QImage::Format_RGB32)));
+    return std::unique_ptr<FrameQImage>(
+        new FrameQImage(QImage(size.width(), size.height(), QImage::Format_RGB32)));
 }
 
 // static
-std::unique_ptr<DesktopFrameQImage> DesktopFrameQImage::create(const QPixmap& pixmap)
+std::unique_ptr<FrameQImage> FrameQImage::create(const QPixmap& pixmap)
 {
-    return std::unique_ptr<DesktopFrameQImage>(new DesktopFrameQImage(pixmap.toImage()));
+    return std::unique_ptr<FrameQImage>(new FrameQImage(pixmap.toImage()));
 }
 
 // static
-std::unique_ptr<DesktopFrameQImage> DesktopFrameQImage::create(QImage&& image)
+std::unique_ptr<FrameQImage> FrameQImage::create(QImage&& image)
 {
-    return std::unique_ptr<DesktopFrameQImage>(new DesktopFrameQImage(std::move(image)));
+    return std::unique_ptr<FrameQImage>(new FrameQImage(std::move(image)));
 }
 
 } // namespace desktop

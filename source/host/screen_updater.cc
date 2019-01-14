@@ -226,7 +226,7 @@ void ScreenUpdaterImpl::run()
 
         capture_scheduler_->beginCapture();
 
-        const desktop::DesktopFrame* screen_frame = screen_capturer_->captureFrame();
+        const desktop::Frame* screen_frame = screen_capturer_->captureFrame();
         if (screen_frame)
         {
             message_.Clear();

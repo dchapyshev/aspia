@@ -22,22 +22,19 @@
 
 namespace desktop {
 
-DesktopFrameAligned::DesktopFrameAligned(const QSize& size,
-                                         const PixelFormat& format,
-                                         int stride,
-                                         uint8_t* data)
-    : DesktopFrame(size, format, stride, data)
+FrameAligned::FrameAligned(const QSize& size, const PixelFormat& format, int stride, uint8_t* data)
+    : Frame(size, format, stride, data)
 {
     // Nothing
 }
 
-DesktopFrameAligned::~DesktopFrameAligned()
+FrameAligned::~FrameAligned()
 {
     base::alignedFree(data_);
 }
 
 // static
-std::unique_ptr<DesktopFrameAligned> DesktopFrameAligned::create(
+std::unique_ptr<FrameAligned> FrameAligned::create(
     const QSize& size, const PixelFormat& format, size_t alignment)
 {
     int bytes_per_row = size.width() * format.bytesPerPixel();
@@ -47,8 +44,7 @@ std::unique_ptr<DesktopFrameAligned> DesktopFrameAligned::create(
     if (!data)
         return nullptr;
 
-    return std::unique_ptr<DesktopFrameAligned>(
-        new DesktopFrameAligned(size, format, bytes_per_row, data));
+    return std::unique_ptr<FrameAligned>(new FrameAligned(size, format, bytes_per_row, data));
 }
 
 } // namespace desktop

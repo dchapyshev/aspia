@@ -26,24 +26,24 @@
 
 namespace desktop {
 
-class DesktopFrameQImage : public DesktopFrame
+class FrameQImage : public Frame
 {
 public:
-    ~DesktopFrameQImage() = default;
+    ~FrameQImage() = default;
 
-    static std::unique_ptr<DesktopFrameQImage> create(const QSize& size);
-    static std::unique_ptr<DesktopFrameQImage> create(const QPixmap& pixmap);
-    static std::unique_ptr<DesktopFrameQImage> create(QImage&& image);
+    static std::unique_ptr<FrameQImage> create(const QSize& size);
+    static std::unique_ptr<FrameQImage> create(const QPixmap& pixmap);
+    static std::unique_ptr<FrameQImage> create(QImage&& image);
 
     const QImage& constImage() const { return image_; }
     QImage* image() { return &image_; }
 
 private:
-    DesktopFrameQImage(QImage&& img);
+    FrameQImage(QImage&& img);
 
     QImage image_;
 
-    DISALLOW_COPY_AND_ASSIGN(DesktopFrameQImage);
+    DISALLOW_COPY_AND_ASSIGN(FrameQImage);
 };
 
 } // namespace desktop

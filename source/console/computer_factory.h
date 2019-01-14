@@ -20,7 +20,7 @@
 #define ASPIA_CONSOLE__COMPUTER_FACTORY_H
 
 #include "base/macros_magic.h"
-#include "protocol/address_book.pb.h"
+#include "proto/address_book.pb.h"
 
 namespace aspia {
 

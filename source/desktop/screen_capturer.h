@@ -44,7 +44,7 @@ public:
     virtual int screenCount() = 0;
     virtual bool screenList(ScreenList* screens) = 0;
     virtual bool selectScreen(ScreenId screen_id) = 0;
-    virtual const DesktopFrame* captureFrame() = 0;
+    virtual const Frame* captureFrame() = 0;
 };
 
 } // namespace desktop

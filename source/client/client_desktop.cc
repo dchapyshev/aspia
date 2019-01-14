@@ -220,7 +220,7 @@ void ClientDesktop::readVideoPacket(const proto::desktop::VideoPacket& packet)
         delegate_->resizeDesktopFrame(screen_rect);
     }
 
-    desktop::DesktopFrame* frame = delegate_->desktopFrame();
+    desktop::Frame* frame = delegate_->desktopFrame();
     if (!frame)
     {
         emit errorOccurred(tr("Session error: The desktop frame is not initialized."));

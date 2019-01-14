@@ -20,10 +20,7 @@
 
 namespace desktop {
 
-DesktopFrame::DesktopFrame(const QSize& size,
-                           const PixelFormat& format,
-                           int stride,
-                           uint8_t* data)
+Frame::Frame(const QSize& size, const PixelFormat& format, int stride, uint8_t* data)
     : size_(size),
       format_(format),
       stride_(stride),
@@ -32,17 +29,17 @@ DesktopFrame::DesktopFrame(const QSize& size,
     // Nothing
 }
 
-bool DesktopFrame::contains(int x, int y) const
+bool Frame::contains(int x, int y) const
 {
     return (x >= 0 && x <= size_.width() && y >= 0 && y <= size_.height());
 }
 
-uint8_t* DesktopFrame::frameDataAtPos(const QPoint& pos) const
+uint8_t* Frame::frameDataAtPos(const QPoint& pos) const
 {
     return frameDataAtPos(pos.x(), pos.y());
 }
 
-uint8_t* DesktopFrame::frameDataAtPos(int x, int y) const
+uint8_t* Frame::frameDataAtPos(int x, int y) const
 {
     return frameData() + stride() * y + format_.bytesPerPixel() * x;
 }

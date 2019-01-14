@@ -25,7 +25,7 @@
 #include "desktop/screen_settings_tracker.h"
 
 namespace desktop {
-class DesktopFrame;
+class Frame;
 } // namespace aspia
 
 namespace codec {
@@ -37,14 +37,14 @@ public:
 
     static ScaleReducer* create(int scale_factor);
 
-    const desktop::DesktopFrame* scaleFrame(const desktop::DesktopFrame* source_frame);
+    const desktop::Frame* scaleFrame(const desktop::Frame* source_frame);
 
 protected:
     explicit ScaleReducer(int scale_factor);
 
 private:
     const int scale_factor_;
-    std::unique_ptr<desktop::DesktopFrame> scaled_frame_;
+    std::unique_ptr<desktop::Frame> scaled_frame_;
     desktop::ScreenSettingsTracker screen_settings_tracker_;
 
     DISALLOW_COPY_AND_ASSIGN(ScaleReducer);

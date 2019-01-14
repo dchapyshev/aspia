@@ -28,7 +28,7 @@ class VideoEncoder;
 } // namespace codec
 
 namespace desktop {
-class DesktopFrame;
+class Frame;
 } // namespace desktop
 
 namespace host {
@@ -49,7 +49,7 @@ public slots:
 
 private:
     codec::VideoEncoder* createEncoder(const proto::desktop::Config& config);
-    std::unique_ptr<desktop::DesktopFrame> createFrame();
+    std::unique_ptr<desktop::Frame> createFrame();
 
     DISALLOW_COPY_AND_ASSIGN(HostSessionFakeDesktop);
 };

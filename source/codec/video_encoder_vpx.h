@@ -37,7 +37,7 @@ public:
     static VideoEncoderVPX* createVP8();
     static VideoEncoderVPX* createVP9();
 
-    void encode(const desktop::DesktopFrame* frame, proto::desktop::VideoPacket* packet) override;
+    void encode(const desktop::Frame* frame, proto::desktop::VideoPacket* packet) override;
 
 private:
     VideoEncoderVPX(proto::desktop::VideoEncoding encoding);
@@ -45,8 +45,7 @@ private:
     void createActiveMap(const QSize& size);
     void createVp8Codec(const QSize& size);
     void createVp9Codec(const QSize& size);
-    void prepareImageAndActiveMap(const desktop::DesktopFrame* frame,
-                                  proto::desktop::VideoPacket* packet);
+    void prepareImageAndActiveMap(const desktop::Frame* frame, proto::desktop::VideoPacket* packet);
     void setActiveMap(const QRect& rect);
 
     const proto::desktop::VideoEncoding encoding_;

@@ -22,7 +22,7 @@
 #include <QSettings>
 
 #include "base/macros_magic.h"
-#include "protocol/common.pb.h"
+#include "proto/common.pb.h"
 
 namespace aspia {
 

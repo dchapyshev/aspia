@@ -25,22 +25,18 @@
 
 namespace desktop {
 
-class DesktopFrameAligned : public DesktopFrame
+class FrameAligned : public Frame
 {
 public:
-    ~DesktopFrameAligned();
+    ~FrameAligned();
 
-    static std::unique_ptr<DesktopFrameAligned> create(const QSize& size,
-                                                       const PixelFormat& format,
-                                                       size_t alignment);
+    static std::unique_ptr<FrameAligned> create(
+        const QSize& size, const PixelFormat& format, size_t alignment);
 
 private:
-    DesktopFrameAligned(const QSize& size,
-                        const PixelFormat& format,
-                        int stride,
-                        uint8_t* data);
+    FrameAligned(const QSize& size, const PixelFormat& format, int stride, uint8_t* data);
 
-    DISALLOW_COPY_AND_ASSIGN(DesktopFrameAligned);
+    DISALLOW_COPY_AND_ASSIGN(FrameAligned);
 };
 
 } // namespace desktop

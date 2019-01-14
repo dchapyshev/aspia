@@ -25,21 +25,17 @@
 
 namespace desktop {
 
-class DesktopFrameSimple : public DesktopFrame
+class FrameSimple : public Frame
 {
 public:
-    ~DesktopFrameSimple();
+    ~FrameSimple();
 
-    static std::unique_ptr<DesktopFrameSimple> create(const QSize& size,
-                                                      const PixelFormat& format);
+    static std::unique_ptr<FrameSimple> create(const QSize& size, const PixelFormat& format);
 
 private:
-    DesktopFrameSimple(const QSize& size,
-                       const PixelFormat& format,
-                       int stride,
-                       uint8_t* data);
+    FrameSimple(const QSize& size, const PixelFormat& format, int stride, uint8_t* data);
 
-    DISALLOW_COPY_AND_ASSIGN(DesktopFrameSimple);
+    DISALLOW_COPY_AND_ASSIGN(FrameSimple);
 };
 
 } // namespace desktop

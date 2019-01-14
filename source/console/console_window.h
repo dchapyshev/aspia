@@ -23,7 +23,7 @@
 #include "console/console_settings.h"
 #include "console/mru.h"
 #include "updater/update_checker.h"
-#include "protocol/address_book.pb.h"
+#include "proto/address_book.pb.h"
 #include "ui_console_window.h"
 
 class QSystemTrayIcon;

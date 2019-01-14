@@ -1586,22 +1586,22 @@
         <translation type="unfinished">PNG изображение (*.png);;BMP изображение (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="321"/>
+        <location filename="../ui/desktop_window.cc" line="320"/>
         <source>Warning</source>
         <translation type="unfinished">Предупреждение</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="321"/>
+        <location filename="../ui/desktop_window.cc" line="320"/>
         <source>Could not save image</source>
         <translation type="unfinished">Не удалось сохранить изображение</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="463"/>
+        <location filename="../ui/desktop_window.cc" line="462"/>
         <source>Aspia Desktop Manage</source>
         <translation type="unfinished">Управление рабочим столом</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="468"/>
+        <location filename="../ui/desktop_window.cc" line="467"/>
         <source>Aspia Desktop View</source>
         <translation type="unfinished">Просмотр рабочего стола</translation>
     </message>

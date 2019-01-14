@@ -23,7 +23,7 @@
 #include "proto/desktop_session.pb.h"
 
 namespace desktop {
-class DesktopFrame;
+class Frame;
 } // namespace desktop
 
 namespace codec {
@@ -33,12 +33,11 @@ class VideoEncoder
 public:
     virtual ~VideoEncoder() = default;
 
-    virtual void encode(
-        const desktop::DesktopFrame* frame, proto::desktop::VideoPacket* packet) = 0;
+    virtual void encode(const desktop::Frame* frame, proto::desktop::VideoPacket* packet) = 0;
 
 protected:
     void fillPacketInfo(proto::desktop::VideoEncoding encoding,
-                        const desktop::DesktopFrame* frame,
+                        const desktop::Frame* frame,
                         proto::desktop::VideoPacket* packet);
 
 private:

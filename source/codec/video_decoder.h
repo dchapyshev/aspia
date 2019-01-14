@@ -24,7 +24,7 @@
 #include "proto/desktop_session.pb.h"
 
 namespace desktop {
-class DesktopFrame;
+class Frame;
 } // namespace desktop
 
 namespace codec {
@@ -36,8 +36,7 @@ public:
 
     static std::unique_ptr<VideoDecoder> create(proto::desktop::VideoEncoding encoding);
 
-    virtual bool decode(
-        const proto::desktop::VideoPacket& packet, desktop::DesktopFrame* frame) = 0;
+    virtual bool decode(const proto::desktop::VideoPacket& packet, desktop::Frame* frame) = 0;
 };
 
 } // namespace codec

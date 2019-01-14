@@ -72,7 +72,7 @@ ScaleReducer* ScaleReducer::create(int scale_factor)
     return new ScaleReducer(scale_factor);
 }
 
-const desktop::DesktopFrame* ScaleReducer::scaleFrame(const desktop::DesktopFrame* source_frame)
+const desktop::Frame* ScaleReducer::scaleFrame(const desktop::Frame* source_frame)
 {
     DCHECK(source_frame);
     DCHECK(!source_frame->constUpdatedRegion().isEmpty());
@@ -88,7 +88,7 @@ const desktop::DesktopFrame* ScaleReducer::scaleFrame(const desktop::DesktopFram
     {
         QSize size = scaledSize(source_frame->size(), scale_factor_);
 
-        scaled_frame_ = desktop::DesktopFrameAligned::create(size, source_frame->format(), 32);
+        scaled_frame_ = desktop::FrameAligned::create(size, source_frame->format(), 32);
         if (!scaled_frame_)
             return nullptr;
     }

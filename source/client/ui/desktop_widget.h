@@ -34,7 +34,7 @@
 #include "desktop/desktop_frame.h"
 
 namespace desktop {
-class DesktopFrameQImage;
+class FrameQImage;
 } // namespace desktop
 
 namespace client {
@@ -57,7 +57,7 @@ public:
     ~DesktopWidget() = default;
 
     void resizeDesktopFrame(const QSize& screen_size);
-    desktop::DesktopFrame* desktopFrame();
+    desktop::Frame* desktopFrame();
 
     void doMouseEvent(QEvent::Type event_type,
                       const Qt::MouseButtons& buttons,
@@ -97,7 +97,7 @@ private:
 
     Delegate* delegate_;
 
-    std::unique_ptr<desktop::DesktopFrameQImage> frame_;
+    std::unique_ptr<desktop::FrameQImage> frame_;
     bool enable_key_sequenses_ = true;
 
     QPoint prev_pos_;

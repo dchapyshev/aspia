@@ -23,7 +23,7 @@
 namespace codec {
 
 void VideoEncoder::fillPacketInfo(proto::desktop::VideoEncoding encoding,
-                                  const desktop::DesktopFrame* frame,
+                                  const desktop::Frame* frame,
                                   proto::desktop::VideoPacket* packet)
 {
     packet->set_encoding(encoding);

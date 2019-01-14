@@ -38,7 +38,7 @@ public:
     bool screenList(ScreenList* screens) override;
     bool selectScreen(ScreenId screen_id) override;
 
-    const DesktopFrame* captureFrame() override;
+    const Frame* captureFrame() override;
 
 private:
     bool prepareCaptureResources();

@@ -72,10 +72,10 @@ DesktopWidget::DesktopWidget(Delegate* delegate, QWidget* parent)
 
 void DesktopWidget::resizeDesktopFrame(const QSize& screen_size)
 {
-    frame_ = desktop::DesktopFrameQImage::create(screen_size);
+    frame_ = desktop::FrameQImage::create(screen_size);
 }
 
-desktop::DesktopFrame* DesktopWidget::desktopFrame()
+desktop::Frame* DesktopWidget::desktopFrame()
 {
     return frame_.get();
 }

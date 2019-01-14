@@ -1287,22 +1287,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="321"/>
+        <location filename="../ui/desktop_window.cc" line="320"/>
         <source>Warning</source>
         <translation type="unfinished">Warnung</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="321"/>
+        <location filename="../ui/desktop_window.cc" line="320"/>
         <source>Could not save image</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="463"/>
+        <location filename="../ui/desktop_window.cc" line="462"/>
         <source>Aspia Desktop Manage</source>
         <translation type="unfinished">Aspia Desktopverwaltung</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="468"/>
+        <location filename="../ui/desktop_window.cc" line="467"/>
         <source>Aspia Desktop View</source>
         <translation type="unfinished">Aspia Desktopansicht</translation>
     </message>

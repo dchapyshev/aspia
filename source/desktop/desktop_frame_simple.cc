@@ -20,23 +20,19 @@
 
 namespace desktop {
 
-DesktopFrameSimple::DesktopFrameSimple(const QSize& size,
-                                       const PixelFormat& format,
-                                       int stride,
-                                       uint8_t* data)
-    : DesktopFrame(size, format, stride, data)
+FrameSimple::FrameSimple(const QSize& size, const PixelFormat& format, int stride, uint8_t* data)
+    : Frame(size, format, stride, data)
 {
     // Nothing
 }
 
-DesktopFrameSimple::~DesktopFrameSimple()
+FrameSimple::~FrameSimple()
 {
     free(data_);
 }
 
 // static
-std::unique_ptr<DesktopFrameSimple> DesktopFrameSimple::create(
-    const QSize& size, const PixelFormat& format)
+std::unique_ptr<FrameSimple> FrameSimple::create(const QSize& size, const PixelFormat& format)
 {
     int bytes_per_row = size.width() * format.bytesPerPixel();
 
@@ -45,8 +41,7 @@ std::unique_ptr<DesktopFrameSimple> DesktopFrameSimple::create(
     if (!data)
         return nullptr;
 
-    return std::unique_ptr<DesktopFrameSimple>(
-        new DesktopFrameSimple(size, format, bytes_per_row, data));
+    return std::unique_ptr<FrameSimple>(new FrameSimple(size, format, bytes_per_row, data));
 }
 
 } // namespace desktop

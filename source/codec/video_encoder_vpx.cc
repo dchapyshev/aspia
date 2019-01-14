@@ -269,8 +269,8 @@ void VideoEncoderVPX::setActiveMap(const QRect& rect)
     }
 }
 
-void VideoEncoderVPX::prepareImageAndActiveMap(const desktop::DesktopFrame* frame,
-                                               proto::desktop::VideoPacket* packet)
+void VideoEncoderVPX::prepareImageAndActiveMap(
+    const desktop::Frame* frame, proto::desktop::VideoPacket* packet)
 {
     int padding = ((encoding_ == proto::desktop::VIDEO_ENCODING_VP9) ? 8 : 3);
     QRegion updated_region;
@@ -321,8 +321,7 @@ void VideoEncoderVPX::prepareImageAndActiveMap(const desktop::DesktopFrame* fram
     }
 }
 
-void VideoEncoderVPX::encode(
-    const desktop::DesktopFrame* frame, proto::desktop::VideoPacket* packet)
+void VideoEncoderVPX::encode(const desktop::Frame* frame, proto::desktop::VideoPacket* packet)
 {
     fillPacketInfo(encoding_, frame, packet);
 

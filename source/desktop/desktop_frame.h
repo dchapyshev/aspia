@@ -26,10 +26,10 @@
 
 namespace desktop {
 
-class DesktopFrame
+class Frame
 {
 public:
-    virtual ~DesktopFrame() = default;
+    virtual ~Frame() = default;
 
     uint8_t* frameDataAtPos(const QPoint& pos) const;
     uint8_t* frameDataAtPos(int x, int y) const;
@@ -46,7 +46,7 @@ public:
     void setTopLeft(const QPoint& top_left) { top_left_ = top_left; }
 
 protected:
-    DesktopFrame(const QSize& size, const PixelFormat& format, int stride, uint8_t* data);
+    Frame(const QSize& size, const PixelFormat& format, int stride, uint8_t* data);
 
     // Ownership of the buffers is defined by the classes that inherit from
     // this class. They must guarantee that the buffer is not deleted before
@@ -61,7 +61,7 @@ private:
     QRegion updated_region_;
     QPoint top_left_;
 
-    DISALLOW_COPY_AND_ASSIGN(DesktopFrame);
+    DISALLOW_COPY_AND_ASSIGN(Frame);
 };
 
 } // namespace desktop

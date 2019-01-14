@@ -34,7 +34,7 @@ public:
 
     static std::unique_ptr<VideoDecoderZstd> create();
 
-    bool decode(const proto::desktop::VideoPacket& packet, desktop::DesktopFrame* target_frame) override;
+    bool decode(const proto::desktop::VideoPacket& packet, desktop::Frame* target_frame) override;
 
 private:
     VideoDecoderZstd();
@@ -42,7 +42,7 @@ private:
     ScopedZstdDStream stream_;
 
     std::unique_ptr<PixelTranslator> translator_;
-    std::unique_ptr<desktop::DesktopFrame> source_frame_;
+    std::unique_ptr<desktop::Frame> source_frame_;
 
     DISALLOW_COPY_AND_ASSIGN(VideoDecoderZstd);
 };

@@ -97,8 +97,7 @@ void VideoEncoderZstd::compressPacket(proto::desktop::VideoPacket* packet,
     packet->mutable_data()->resize(output.pos);
 }
 
-void VideoEncoderZstd::encode(
-    const desktop::DesktopFrame* frame, proto::desktop::VideoPacket* packet)
+void VideoEncoderZstd::encode(const desktop::Frame* frame, proto::desktop::VideoPacket* packet)
 {
     fillPacketInfo(proto::desktop::VIDEO_ENCODING_ZSTD, frame, packet);
 

@@ -25,7 +25,7 @@
 
 namespace desktop {
 
-class DesktopFrame;
+class Frame;
 
 class ScreenCaptureFrameQueue
 {
@@ -39,7 +39,7 @@ public:
         current_ = (current_ + 1) % kQueueLength;
     }
 
-    void replaceCurrentFrame(std::unique_ptr<DesktopFrame> frame)
+    void replaceCurrentFrame(std::unique_ptr<Frame> frame)
     {
         frames_[current_] = std::move(frame);
     }
@@ -51,12 +51,12 @@ public:
         current_ = 0;
     }
 
-    DesktopFrame* currentFrame() const
+    Frame* currentFrame() const
     {
         return frames_[current_].get();
     }
 
-    DesktopFrame* previousFrame() const
+    Frame* previousFrame() const
     {
         return frames_[(current_ + kQueueLength - 1) % kQueueLength].get();
     }
@@ -66,7 +66,7 @@ private:
     int current_ = 0;
 
     static const int kQueueLength = 2;
-    std::unique_ptr<DesktopFrame> frames_[kQueueLength];
+    std::unique_ptr<Frame> frames_[kQueueLength];
 
     DISALLOW_COPY_AND_ASSIGN(ScreenCaptureFrameQueue);
 };

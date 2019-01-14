@@ -33,7 +33,7 @@ class Clipboard;
 } // namespace common
 
 namespace desktop {
-class DesktopFrame;
+class Frame;
 } // namespace desktop
 
 namespace client {
@@ -54,7 +54,7 @@ public:
     // ClientDesktop::Delegate implementation.
     void resizeDesktopFrame(const QRect& screen_rect) override;
     void drawDesktopFrame() override;
-    desktop::DesktopFrame* desktopFrame() override;
+    desktop::Frame* desktopFrame() override;
     void injectCursor(const QCursor& cursor) override;
     void injectClipboard(const proto::desktop::ClipboardEvent& event) override;
     void setScreenList(const proto::desktop::ScreenList& screen_list) override;

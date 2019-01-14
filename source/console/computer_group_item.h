@@ -20,7 +20,7 @@
 #define ASPIA_CONSOLE__COMPUTER_GROUP_ITEM_H
 
 #include "console/computer_item.h"
-#include "protocol/address_book.pb.h"
+#include "proto/address_book.pb.h"
 
 namespace aspia {
 

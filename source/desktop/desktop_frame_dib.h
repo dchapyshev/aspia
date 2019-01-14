@@ -28,27 +28,20 @@
 
 namespace desktop {
 
-class DesktopFrameDIB : public DesktopFrame
+class FrameDib : public Frame
 {
 public:
-    ~DesktopFrameDIB() = default;
+    ~FrameDib() = default;
 
-    static std::unique_ptr<DesktopFrameDIB> create(const QSize& size,
-                                                   const PixelFormat& format,
-                                                   HDC hdc);
-
+    static std::unique_ptr<FrameDib> create(const QSize& size, const PixelFormat& format, HDC hdc);
     HBITMAP bitmap() { return bitmap_; }
 
 private:
-    DesktopFrameDIB(const QSize& size,
-                    const PixelFormat& format,
-                    int stride,
-                    uint8_t* data,
-                    HBITMAP bitmap);
+    FrameDib(const QSize& size, const PixelFormat& format, int stride, uint8_t* data, HBITMAP bitmap);
 
     base::win::ScopedHBITMAP bitmap_;
 
-    DISALLOW_COPY_AND_ASSIGN(DesktopFrameDIB);
+    DISALLOW_COPY_AND_ASSIGN(FrameDib);
 };
 
 } // namespace desktop

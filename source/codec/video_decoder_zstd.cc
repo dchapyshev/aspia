@@ -38,13 +38,13 @@ std::unique_ptr<VideoDecoderZstd> VideoDecoderZstd::create()
 }
 
 bool VideoDecoderZstd::decode(const proto::desktop::VideoPacket& packet,
-                              desktop::DesktopFrame* target_frame)
+                              desktop::Frame* target_frame)
 {
     if (packet.has_format())
     {
         const proto::desktop::VideoPacketFormat& format = packet.format();
 
-        source_frame_ = desktop::DesktopFrameAligned::create(
+        source_frame_ = desktop::FrameAligned::create(
             QSize(format.screen_rect().width(), format.screen_rect().height()),
             VideoUtil::fromVideoPixelFormat(format.pixel_format()), 32);
 

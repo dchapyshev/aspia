@@ -60,7 +60,7 @@ void HostSessionFakeDesktop::onMessageReceived(const QByteArray& buffer)
             return;
         }
 
-        std::unique_ptr<desktop::DesktopFrame> frame = createFrame();
+        std::unique_ptr<desktop::Frame> frame = createFrame();
         if (!frame)
         {
             LOG(LS_WARNING) << "Unable to create video frame";
@@ -99,13 +99,13 @@ codec::VideoEncoder* HostSessionFakeDesktop::createEncoder(const proto::desktop:
     }
 }
 
-std::unique_ptr<desktop::DesktopFrame> HostSessionFakeDesktop::createFrame()
+std::unique_ptr<desktop::Frame> HostSessionFakeDesktop::createFrame()
 {
     static const int kWidth = 800;
     static const int kHeight = 600;
 
-    std::unique_ptr<desktop::DesktopFrameSimple> frame =
-        desktop::DesktopFrameSimple::create(QSize(kWidth, kHeight), desktop::PixelFormat::ARGB());
+    std::unique_ptr<desktop::FrameSimple> frame =
+        desktop::FrameSimple::create(QSize(kWidth, kHeight), desktop::PixelFormat::ARGB());
     if (!frame)
         return nullptr;
 

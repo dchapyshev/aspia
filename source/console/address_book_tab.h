@@ -21,7 +21,7 @@
 
 #include "base/macros_magic.h"
 #include "console/console_tab.h"
-#include "protocol/address_book.pb.h"
+#include "proto/address_book.pb.h"
 #include "ui_address_book_tab.h"
 
 namespace aspia {
