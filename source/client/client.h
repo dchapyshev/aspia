@@ -26,7 +26,7 @@
 #include "client/connect_data.h"
 #include "network/network_channel_client.h"
 
-namespace aspia {
+namespace client {
 
 class NetworkChannel;
 
@@ -72,6 +72,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(Client);
 };
 
-} // namespace aspia
+} // namespace client
 
 #endif // ASPIA_CLIENT__CLIENT_H

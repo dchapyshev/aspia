@@ -20,7 +20,7 @@
 
 #include "base/xml_settings.h"
 
-namespace aspia {
+namespace client {
 
 DesktopSettings::DesktopSettings()
     : settings_(base::XmlSettings::registerFormat(),
@@ -61,4 +61,4 @@ void DesktopSettings::setSendKeyCombinations(bool enable)
     settings_.setValue(QLatin1String("Desktop/SendKeyCombinations"), enable);
 }
 
-} // namespace aspia
+} // namespace client

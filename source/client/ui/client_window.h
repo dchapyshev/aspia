@@ -24,7 +24,7 @@
 #include "base/macros_magic.h"
 #include "client/connect_data.h"
 
-namespace aspia {
+namespace client {
 
 class Client;
 class StatusDialog;
@@ -83,6 +83,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(ClientWindow);
 };
 
-} // namespace aspia
+} // namespace client
 
 #endif // ASPIA_CLIENT__UI__CLIENT_WINDOW_H

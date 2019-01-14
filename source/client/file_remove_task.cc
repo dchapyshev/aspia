@@ -18,7 +18,7 @@
 
 #include "client/file_remove_task.h"
 
-namespace aspia {
+namespace client {
 
 FileRemoveTask::FileRemoveTask(const QString& path, bool is_directory)
     : path_(path),
@@ -44,4 +44,4 @@ FileRemoveTask& FileRemoveTask::operator=(FileRemoveTask&& other) noexcept
     return *this;
 }
 
-} // namespace aspia
+} // namespace client

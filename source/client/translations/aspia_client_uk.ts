@@ -464,6 +464,435 @@
 <context>
     <name>aspia::AddressBar</name>
     <message>
+        <source>Warning</source>
+        <translation type="obsolete">Попередження</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::AddressBarModel</name>
+    <message>
+        <source>Home Folder</source>
+        <translation type="obsolete">Домашній каталог</translation>
+    </message>
+    <message>
+        <source>Desktop</source>
+        <translation type="obsolete">Робочий стіл</translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="obsolete">Ім&apos;я</translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="obsolete">Тип</translation>
+    </message>
+    <message>
+        <source>TB</source>
+        <translation type="obsolete">ТБ</translation>
+    </message>
+    <message>
+        <source>GB</source>
+        <translation type="obsolete">ГБ</translation>
+    </message>
+    <message>
+        <source>MB</source>
+        <translation type="obsolete">МБ</translation>
+    </message>
+    <message>
+        <source>kB</source>
+        <translation type="obsolete">кБ</translation>
+    </message>
+    <message>
+        <source>B</source>
+        <translation type="obsolete">Б</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::ClientDesktop</name>
+    <message>
+        <source>Session error: Invalid message from host.</source>
+        <translation type="obsolete">Збій сесії: Невірне повідомлення від хоста.</translation>
+    </message>
+    <message>
+        <source>Session error: Video decoder not initialized.</source>
+        <translation type="obsolete">Збій сесії: Відео декодер не ініціалізовано.</translation>
+    </message>
+    <message>
+        <source>Session error: Wrong video frame size.</source>
+        <translation type="obsolete">Збій сесії: Невірний розмір відеофрейму.</translation>
+    </message>
+    <message>
+        <source>Session error: Wrong video frame position.</source>
+        <translation type="obsolete">Збій сесії: Невірна позиція відеофрейму.</translation>
+    </message>
+    <message>
+        <source>Session error: The desktop frame is not initialized.</source>
+        <translation type="obsolete">Збій сесії: Фрейм робочого столу не ініціалізовано.</translation>
+    </message>
+    <message>
+        <source>Session error: The video packet could not be decoded.</source>
+        <translation type="obsolete">Збій сесії: Неможливо декодувати відеопакет.</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::ClientDialog</name>
+    <message>
+        <source>Desktop Manage</source>
+        <translation type="vanished">Керування робочим столом</translation>
+    </message>
+    <message>
+        <source>Desktop View</source>
+        <translation type="vanished">Перегляд робочого столу</translation>
+    </message>
+    <message>
+        <source>File Transfer</source>
+        <translation type="vanished">Передача файлів</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::ClientFileTransfer</name>
+    <message>
+        <source>Session error: Invalid message from host.</source>
+        <translation type="obsolete">Збій сесії: Невірне повідомлення від хоста.</translation>
+    </message>
+    <message>
+        <source>Session error: There are no logged in users. File transfer is not available.</source>
+        <translation type="obsolete">Збій сесії: Немає користувачів в системі. Неможливо передати файли.</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::ClientWindow</name>
+    <message>
+        <source>Attempt to connect to %1:%2.</source>
+        <translation type="obsolete">Спроба підключення до %1:%2.</translation>
+    </message>
+    <message>
+        <source>Session started.</source>
+        <translation type="obsolete">Сесію розпочато.</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::DesktopConfigDialog</name>
+    <message>
+        <source>True color (32 bit)</source>
+        <translation type="vanished">True color (32 bit)</translation>
+    </message>
+    <message>
+        <source>High color (16 bit)</source>
+        <translation type="vanished">High color (16 bit)</translation>
+    </message>
+    <message>
+        <source>256 colors (8 bit)</source>
+        <translation type="vanished">256 colors (8 bit)</translation>
+    </message>
+    <message>
+        <source>64 colors (6 bit)</source>
+        <translation type="vanished">64 colors (6 bit)</translation>
+    </message>
+    <message>
+        <source>8 colors (3 bit)</source>
+        <translation type="vanished">8 colors (3 bit)</translation>
+    </message>
+    <message>
+        <source>Compression ratio: %1</source>
+        <translation type="vanished">Стиснення: %1</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::DesktopPanel</name>
+    <message>
+        <source>Confirmation</source>
+        <translation type="obsolete">Підтвердження</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::DesktopWindow</name>
+    <message>
+        <source>Aspia Desktop Manage</source>
+        <translation type="vanished">Керування робочим столом Aspia</translation>
+    </message>
+    <message>
+        <source>Aspia Desktop View</source>
+        <translation type="vanished">Перегляд робочого столу Aspia</translation>
+    </message>
+    <message>
+        <source>Warning</source>
+        <translation type="obsolete">Попередження</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::FileListModel</name>
+    <message>
+        <source>Folder</source>
+        <translation type="vanished">Каталог</translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="vanished">Ім&apos;я</translation>
+    </message>
+    <message>
+        <source>Size</source>
+        <translation type="vanished">Розмір</translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="vanished">Тип</translation>
+    </message>
+    <message>
+        <source>Modified</source>
+        <translation type="vanished">Змінено</translation>
+    </message>
+    <message>
+        <source>TB</source>
+        <translation type="vanished">ТБ</translation>
+    </message>
+    <message>
+        <source>GB</source>
+        <translation type="vanished">ГБ</translation>
+    </message>
+    <message>
+        <source>MB</source>
+        <translation type="vanished">МБ</translation>
+    </message>
+    <message>
+        <source>kB</source>
+        <translation type="vanished">кБ</translation>
+    </message>
+    <message>
+        <source>B</source>
+        <translation type="vanished">Б</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::FileManagerWindow</name>
+    <message>
+        <source>%1 - Aspia File Transfer</source>
+        <translation type="vanished">%1 - Передача файлів Aspia</translation>
+    </message>
+    <message>
+        <source>Local Computer</source>
+        <translation type="vanished">Локальний комп&apos;ютер</translation>
+    </message>
+    <message>
+        <source>Remote Computer</source>
+        <translation type="vanished">Віддалений комп&apos;ютер</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::FilePanel</name>
+    <message>
+        <source>Warning</source>
+        <translation type="vanished">Попередження</translation>
+    </message>
+    <message>
+        <source>Failed to get list of drives: %1</source>
+        <translation type="vanished">Не вдалося отримати список дисків: %1</translation>
+    </message>
+    <message>
+        <source>Failed to get list of files: %1</source>
+        <translation type="vanished">Не вдалося отримати список файлів: %1</translation>
+    </message>
+    <message>
+        <source>Failed to create directory: %1</source>
+        <translation type="vanished">Не вдалося створити каталог: %1</translation>
+    </message>
+    <message>
+        <source>Failed to rename item: %1</source>
+        <translation type="vanished">Не давлося переіменувати об&apos;єкт: %1</translation>
+    </message>
+    <message>
+        <source>%1 object(s) selected</source>
+        <translation type="vanished">%1 об&apos;єктів обрано</translation>
+    </message>
+    <message>
+        <source>Folder name can not be empty.</source>
+        <translation type="vanished">Ім&apos;я каталогу не може бути порожнім.</translation>
+    </message>
+    <message>
+        <source>&amp;Send	F11</source>
+        <translation type="vanished">&amp;Надіслати F11</translation>
+    </message>
+    <message>
+        <source>&amp;Delete	Delete</source>
+        <translation type="vanished">&amp;Видалити Delete</translation>
+    </message>
+    <message>
+        <source>&amp;Create Folder</source>
+        <translation type="vanished">&amp;Створити каталог</translation>
+    </message>
+    <message>
+        <source>Confirmation</source>
+        <translation type="vanished">Підтвердження</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to delete the selected items?</source>
+        <translation type="vanished">Ви впевнені, що хочете видалити обрані об&apos;єкти?</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::FileRemoveDialog</name>
+    <message>
+        <source>Deleting: %1</source>
+        <translation type="vanished">Видалення: %1</translation>
+    </message>
+    <message>
+        <source>Warning</source>
+        <translation type="vanished">Попередження</translation>
+    </message>
+    <message>
+        <source>Skip</source>
+        <translation type="vanished">Пропустити</translation>
+    </message>
+    <message>
+        <source>Skip All</source>
+        <translation type="vanished">Пропустити всі</translation>
+    </message>
+    <message>
+        <source>Abort</source>
+        <translation type="vanished">Відмінити</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::FileRemoveQueueBuilder</name>
+    <message>
+        <source>An unexpected answer was received.</source>
+        <translation type="vanished">Отримано неочікувану відповідь.</translation>
+    </message>
+    <message>
+        <source>An error occurred while retrieving the list of files: %1</source>
+        <translation type="vanished">Трапилася помилка під час отримання списку файлів: %1</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::FileRemover</name>
+    <message>
+        <source>An unexpected answer was received.</source>
+        <translation type="vanished">Отримано неочікувану відповідь.</translation>
+    </message>
+    <message>
+        <source>Failed to delete &quot;%1&quot;: %2.</source>
+        <translation type="vanished">Не вдалося видалити &quot;%1&quot;:%2.</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::FileTransfer</name>
+    <message>
+        <source>Failed to create directory &quot;%1&quot;: %2</source>
+        <translation type="vanished">Не вдалося створити каталог &quot;%1&quot;:%2</translation>
+    </message>
+    <message>
+        <source>Failed to create file &quot;%1&quot;: %2</source>
+        <translation type="vanished">Не вдалося створити файл &quot;%1&quot;:%2</translation>
+    </message>
+    <message>
+        <source>Failed to write file &quot;%1&quot;: %2</source>
+        <translation type="vanished">Не вдалося записати файл &quot;%1&quot;:%2</translation>
+    </message>
+    <message>
+        <source>An unexpected response to the request was received</source>
+        <translation type="vanished">Отримано неочікувану відповідь на запит</translation>
+    </message>
+    <message>
+        <source>Failed to open file &quot;%1&quot;: %2</source>
+        <translation type="vanished">Не вдалося відкрити файл &quot;%1&quot;:%2</translation>
+    </message>
+    <message>
+        <source>Failed to read file &quot;%1&quot;: %2</source>
+        <translation type="vanished">Не вдалося прочитати файл &quot;%1&quot;:%2</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::FileTransferDialog</name>
+    <message>
+        <source>Current Task: Copying items.</source>
+        <translation type="vanished">Поточне завдання: Копіювання файлів.</translation>
+    </message>
+    <message>
+        <source>From: %1</source>
+        <translation type="vanished">З: %1</translation>
+    </message>
+    <message>
+        <source>To: %1</source>
+        <translation type="vanished">До: %1</translation>
+    </message>
+    <message>
+        <source>Warning</source>
+        <translation type="vanished">Попередження</translation>
+    </message>
+    <message>
+        <source>Skip</source>
+        <translation type="vanished">Пропустити</translation>
+    </message>
+    <message>
+        <source>Skip All</source>
+        <translation type="vanished">Пропустити всі</translation>
+    </message>
+    <message>
+        <source>Replace</source>
+        <translation type="vanished">Замінити</translation>
+    </message>
+    <message>
+        <source>Replace All</source>
+        <translation type="vanished">Замінити всі</translation>
+    </message>
+    <message>
+        <source>Abort</source>
+        <translation type="vanished">Відмінити</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::FileTransferQueueBuilder</name>
+    <message>
+        <source>An unexpected answer was received.</source>
+        <translation type="vanished">Отримано неочікувану відповідь.</translation>
+    </message>
+    <message>
+        <source>An error occurred while retrieving the list of files: %1</source>
+        <translation type="vanished">Трапилася помилка під час отримання списку файлів: %1</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::SystemInfoWindow</name>
+    <message>
+        <source>Warning</source>
+        <translation type="obsolete">Попередження</translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="obsolete">Ім&apos;я</translation>
+    </message>
+    <message>
+        <source>Size</source>
+        <translation type="obsolete">Розмір</translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="obsolete">Тип</translation>
+    </message>
+    <message>
+        <source>TB</source>
+        <translation type="obsolete">ТБ</translation>
+    </message>
+    <message>
+        <source>GB</source>
+        <translation type="obsolete">ГБ</translation>
+    </message>
+    <message>
+        <source>MB</source>
+        <translation type="obsolete">МБ</translation>
+    </message>
+    <message>
+        <source>kB</source>
+        <translation type="obsolete">кБ</translation>
+    </message>
+    <message>
+        <source>B</source>
+        <translation type="obsolete">Б</translation>
+    </message>
+</context>
+<context>
+    <name>client::AddressBar</name>
+    <message>
         <location filename="../ui/address_bar.cc" line="56"/>
         <source>Warning</source>
         <translation type="unfinished">Попередження</translation>
@@ -480,7 +909,7 @@
     </message>
 </context>
 <context>
-    <name>aspia::AddressBarModel</name>
+    <name>client::AddressBarModel</name>
     <message>
         <location filename="../ui/address_bar_model.cc" line="81"/>
         <location filename="../ui/address_bar_model.cc" line="445"/>
@@ -579,7 +1008,7 @@
     </message>
 </context>
 <context>
-    <name>aspia::Client</name>
+    <name>client::Client</name>
     <message>
         <location filename="../client.cc" line="88"/>
         <source>Connection was refused by the peer (or timed out).</source>
@@ -642,7 +1071,7 @@
     </message>
 </context>
 <context>
-    <name>aspia::ClientDesktop</name>
+    <name>client::ClientDesktop</name>
     <message>
         <location filename="../client_desktop.cc" line="49"/>
         <source>Session error: Invalid message from host.</source>
@@ -675,25 +1104,25 @@
     </message>
 </context>
 <context>
-    <name>aspia::ClientDialog</name>
+    <name>client::ClientDialog</name>
     <message>
         <location filename="../ui/client_dialog.cc" line="40"/>
         <source>Desktop Manage</source>
-        <translation>Керування робочим столом</translation>
+        <translation type="unfinished">Керування робочим столом</translation>
     </message>
     <message>
         <location filename="../ui/client_dialog.cc" line="44"/>
         <source>Desktop View</source>
-        <translation>Перегляд робочого столу</translation>
+        <translation type="unfinished">Перегляд робочого столу</translation>
     </message>
     <message>
         <location filename="../ui/client_dialog.cc" line="48"/>
         <source>File Transfer</source>
-        <translation>Передача файлів</translation>
+        <translation type="unfinished">Передача файлів</translation>
     </message>
 </context>
 <context>
-    <name>aspia::ClientFileTransfer</name>
+    <name>client::ClientFileTransfer</name>
     <message>
         <location filename="../client_file_transfer.cc" line="59"/>
         <source>Session error: Invalid message from host.</source>
@@ -706,7 +1135,7 @@
     </message>
 </context>
 <context>
-    <name>aspia::ClientWindow</name>
+    <name>client::ClientWindow</name>
     <message>
         <location filename="../ui/client_window.cc" line="118"/>
         <source>Attempt to connect to %1:%2.</source>
@@ -719,40 +1148,40 @@
     </message>
 </context>
 <context>
-    <name>aspia::DesktopConfigDialog</name>
+    <name>client::DesktopConfigDialog</name>
     <message>
         <location filename="../ui/desktop_config_dialog.cc" line="65"/>
         <source>True color (32 bit)</source>
-        <translation>True color (32 bit)</translation>
+        <translation type="unfinished">True color (32 bit)</translation>
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.cc" line="66"/>
         <source>High color (16 bit)</source>
-        <translation>High color (16 bit)</translation>
+        <translation type="unfinished">High color (16 bit)</translation>
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.cc" line="67"/>
         <source>256 colors (8 bit)</source>
-        <translation>256 colors (8 bit)</translation>
+        <translation type="unfinished">256 colors (8 bit)</translation>
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.cc" line="68"/>
         <source>64 colors (6 bit)</source>
-        <translation>64 colors (6 bit)</translation>
+        <translation type="unfinished">64 colors (6 bit)</translation>
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.cc" line="69"/>
         <source>8 colors (3 bit)</source>
-        <translation>8 colors (3 bit)</translation>
+        <translation type="unfinished">8 colors (3 bit)</translation>
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.cc" line="155"/>
         <source>Compression ratio: %1</source>
-        <translation>Стиснення: %1</translation>
+        <translation type="unfinished">Стиснення: %1</translation>
     </message>
 </context>
 <context>
-    <name>aspia::DesktopPanel</name>
+    <name>client::DesktopPanel</name>
     <message>
         <location filename="../ui/desktop_panel.cc" line="224"/>
         <location filename="../ui/desktop_panel.cc" line="235"/>
@@ -783,17 +1212,7 @@
     </message>
 </context>
 <context>
-    <name>aspia::DesktopWindow</name>
-    <message>
-        <location filename="../ui/desktop_window.cc" line="463"/>
-        <source>Aspia Desktop Manage</source>
-        <translation>Керування робочим столом Aspia</translation>
-    </message>
-    <message>
-        <location filename="../ui/desktop_window.cc" line="468"/>
-        <source>Aspia Desktop View</source>
-        <translation>Перегляд робочого столу Aspia</translation>
-    </message>
+    <name>client::DesktopWindow</name>
     <message>
         <location filename="../ui/desktop_window.cc" line="298"/>
         <source>Save File</source>
@@ -814,80 +1233,90 @@
         <source>Could not save image</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../ui/desktop_window.cc" line="463"/>
+        <source>Aspia Desktop Manage</source>
+        <translation type="unfinished">Керування робочим столом Aspia</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_window.cc" line="468"/>
+        <source>Aspia Desktop View</source>
+        <translation type="unfinished">Перегляд робочого столу Aspia</translation>
+    </message>
 </context>
 <context>
-    <name>aspia::FileListModel</name>
+    <name>client::FileListModel</name>
     <message>
         <location filename="../ui/file_list_model.cc" line="95"/>
         <source>Folder</source>
-        <translation>Каталог</translation>
+        <translation type="unfinished">Каталог</translation>
     </message>
     <message>
         <location filename="../ui/file_list_model.cc" line="357"/>
         <source>Name</source>
-        <translation>Ім&apos;я</translation>
+        <translation type="unfinished">Ім&apos;я</translation>
     </message>
     <message>
         <location filename="../ui/file_list_model.cc" line="360"/>
         <source>Size</source>
-        <translation>Розмір</translation>
+        <translation type="unfinished">Розмір</translation>
     </message>
     <message>
         <location filename="../ui/file_list_model.cc" line="363"/>
         <source>Type</source>
-        <translation>Тип</translation>
+        <translation type="unfinished">Тип</translation>
     </message>
     <message>
         <location filename="../ui/file_list_model.cc" line="366"/>
         <source>Modified</source>
-        <translation>Змінено</translation>
+        <translation type="unfinished">Змінено</translation>
     </message>
     <message>
         <location filename="../ui/file_list_model.cc" line="522"/>
         <source>TB</source>
-        <translation>ТБ</translation>
+        <translation type="unfinished">ТБ</translation>
     </message>
     <message>
         <location filename="../ui/file_list_model.cc" line="527"/>
         <source>GB</source>
-        <translation>ГБ</translation>
+        <translation type="unfinished">ГБ</translation>
     </message>
     <message>
         <location filename="../ui/file_list_model.cc" line="532"/>
         <source>MB</source>
-        <translation>МБ</translation>
+        <translation type="unfinished">МБ</translation>
     </message>
     <message>
         <location filename="../ui/file_list_model.cc" line="537"/>
         <source>kB</source>
-        <translation>кБ</translation>
+        <translation type="unfinished">кБ</translation>
     </message>
     <message>
         <location filename="../ui/file_list_model.cc" line="542"/>
         <source>B</source>
-        <translation>Б</translation>
+        <translation type="unfinished">Б</translation>
     </message>
 </context>
 <context>
-    <name>aspia::FileManagerWindow</name>
-    <message>
-        <location filename="../ui/file_manager_window.cc" line="264"/>
-        <source>%1 - Aspia File Transfer</source>
-        <translation>%1 - Передача файлів Aspia</translation>
-    </message>
+    <name>client::FileManagerWindow</name>
     <message>
         <location filename="../ui/file_manager_window.cc" line="46"/>
         <source>Local Computer</source>
-        <translation>Локальний комп&apos;ютер</translation>
+        <translation type="unfinished">Локальний комп&apos;ютер</translation>
     </message>
     <message>
         <location filename="../ui/file_manager_window.cc" line="49"/>
         <source>Remote Computer</source>
-        <translation>Віддалений комп&apos;ютер</translation>
+        <translation type="unfinished">Віддалений комп&apos;ютер</translation>
+    </message>
+    <message>
+        <location filename="../ui/file_manager_window.cc" line="264"/>
+        <source>%1 - Aspia File Transfer</source>
+        <translation type="unfinished">%1 - Передача файлів Aspia</translation>
     </message>
 </context>
 <context>
-    <name>aspia::FilePanel</name>
+    <name>client::FilePanel</name>
     <message>
         <location filename="../ui/file_panel.cc" line="155"/>
         <location filename="../ui/file_panel.cc" line="168"/>
@@ -898,38 +1327,38 @@
         <location filename="../ui/file_panel.cc" line="320"/>
         <location filename="../ui/file_panel.cc" line="329"/>
         <source>Warning</source>
-        <translation>Попередження</translation>
+        <translation type="unfinished">Попередження</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="156"/>
         <source>Failed to get list of drives: %1</source>
-        <translation>Не вдалося отримати список дисків: %1</translation>
+        <translation type="unfinished">Не вдалося отримати список дисків: %1</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="169"/>
         <source>Failed to get list of files: %1</source>
-        <translation>Не вдалося отримати список файлів: %1</translation>
+        <translation type="unfinished">Не вдалося отримати список файлів: %1</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="193"/>
         <source>Failed to create directory: %1</source>
-        <translation>Не вдалося створити каталог: %1</translation>
+        <translation type="unfinished">Не вдалося створити каталог: %1</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="204"/>
         <source>Failed to rename item: %1</source>
-        <translation>Не давлося переіменувати об&apos;єкт: %1</translation>
+        <translation type="unfinished">Не давлося переіменувати об&apos;єкт: %1</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="273"/>
         <source>%1 object(s) selected</source>
-        <translation>%1 об&apos;єктів обрано</translation>
+        <translation type="unfinished">%1 об&apos;єктів обрано</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="294"/>
         <location filename="../ui/file_panel.cc" line="321"/>
         <source>Folder name can not be empty.</source>
-        <translation>Ім&apos;я каталогу не може бути порожнім.</translation>
+        <translation type="unfinished">Ім&apos;я каталогу не може бути порожнім.</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="303"/>
@@ -940,180 +1369,180 @@
     <message>
         <location filename="../ui/file_panel.cc" line="355"/>
         <source>&amp;Send	F11</source>
-        <translation>&amp;Надіслати F11</translation>
+        <translation type="unfinished">&amp;Надіслати F11</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="357"/>
         <source>&amp;Delete	Delete</source>
-        <translation>&amp;Видалити Delete</translation>
+        <translation type="unfinished">&amp;Видалити Delete</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="367"/>
         <source>&amp;Create Folder</source>
-        <translation>&amp;Створити каталог</translation>
+        <translation type="unfinished">&amp;Створити каталог</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="422"/>
         <source>Confirmation</source>
-        <translation>Підтвердження</translation>
+        <translation type="unfinished">Підтвердження</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="423"/>
         <source>Are you sure you want to delete the selected items?</source>
-        <translation>Ви впевнені, що хочете видалити обрані об&apos;єкти?</translation>
+        <translation type="unfinished">Ви впевнені, що хочете видалити обрані об&apos;єкти?</translation>
     </message>
 </context>
 <context>
-    <name>aspia::FileRemoveDialog</name>
+    <name>client::FileRemoveDialog</name>
     <message>
         <location filename="../ui/file_remove_dialog.cc" line="62"/>
         <source>Deleting: %1</source>
-        <translation>Видалення: %1</translation>
+        <translation type="unfinished">Видалення: %1</translation>
     </message>
     <message>
         <location filename="../ui/file_remove_dialog.cc" line="86"/>
         <source>Warning</source>
-        <translation>Попередження</translation>
+        <translation type="unfinished">Попередження</translation>
     </message>
     <message>
         <location filename="../ui/file_remove_dialog.cc" line="94"/>
         <source>Skip</source>
-        <translation>Пропустити</translation>
+        <translation type="unfinished">Пропустити</translation>
     </message>
     <message>
         <location filename="../ui/file_remove_dialog.cc" line="97"/>
         <source>Skip All</source>
-        <translation>Пропустити всі</translation>
+        <translation type="unfinished">Пропустити всі</translation>
     </message>
     <message>
         <location filename="../ui/file_remove_dialog.cc" line="100"/>
         <source>Abort</source>
-        <translation>Відмінити</translation>
+        <translation type="unfinished">Відмінити</translation>
     </message>
 </context>
 <context>
-    <name>aspia::FileRemoveQueueBuilder</name>
+    <name>client::FileRemoveQueueBuilder</name>
     <message>
         <location filename="../file_remove_queue_builder.cc" line="54"/>
         <source>An unexpected answer was received.</source>
-        <translation>Отримано неочікувану відповідь.</translation>
+        <translation type="unfinished">Отримано неочікувану відповідь.</translation>
     </message>
     <message>
         <location filename="../file_remove_queue_builder.cc" line="60"/>
         <source>An error occurred while retrieving the list of files: %1</source>
-        <translation>Трапилася помилка під час отримання списку файлів: %1</translation>
+        <translation type="unfinished">Трапилася помилка під час отримання списку файлів: %1</translation>
     </message>
 </context>
 <context>
-    <name>aspia::FileRemover</name>
+    <name>client::FileRemover</name>
     <message>
         <location filename="../file_remover.cc" line="83"/>
         <source>An unexpected answer was received.</source>
-        <translation>Отримано неочікувану відповідь.</translation>
+        <translation type="unfinished">Отримано неочікувану відповідь.</translation>
     </message>
     <message>
         <location filename="../file_remover.cc" line="111"/>
         <source>Failed to delete &quot;%1&quot;: %2.</source>
-        <translation>Не вдалося видалити &quot;%1&quot;:%2.</translation>
+        <translation type="unfinished">Не вдалося видалити &quot;%1&quot;:%2.</translation>
     </message>
 </context>
 <context>
-    <name>aspia::FileTransfer</name>
+    <name>client::FileTransfer</name>
     <message>
         <location filename="../file_transfer.cc" line="117"/>
         <source>Failed to create directory &quot;%1&quot;: %2</source>
-        <translation>Не вдалося створити каталог &quot;%1&quot;:%2</translation>
+        <translation type="unfinished">Не вдалося створити каталог &quot;%1&quot;:%2</translation>
     </message>
     <message>
         <location filename="../file_transfer.cc" line="131"/>
         <source>Failed to create file &quot;%1&quot;: %2</source>
-        <translation>Не вдалося створити файл &quot;%1&quot;:%2</translation>
+        <translation type="unfinished">Не вдалося створити файл &quot;%1&quot;:%2</translation>
     </message>
     <message>
         <location filename="../file_transfer.cc" line="147"/>
         <source>Failed to write file &quot;%1&quot;: %2</source>
-        <translation>Не вдалося записати файл &quot;%1&quot;:%2</translation>
+        <translation type="unfinished">Не вдалося записати файл &quot;%1&quot;:%2</translation>
     </message>
     <message>
         <location filename="../file_transfer.cc" line="196"/>
         <location filename="../file_transfer.cc" line="240"/>
         <source>An unexpected response to the request was received</source>
-        <translation>Отримано неочікувану відповідь на запит</translation>
+        <translation type="unfinished">Отримано неочікувану відповідь на запит</translation>
     </message>
     <message>
         <location filename="../file_transfer.cc" line="211"/>
         <source>Failed to open file &quot;%1&quot;: %2</source>
-        <translation>Не вдалося відкрити файл &quot;%1&quot;:%2</translation>
+        <translation type="unfinished">Не вдалося відкрити файл &quot;%1&quot;:%2</translation>
     </message>
     <message>
         <location filename="../file_transfer.cc" line="228"/>
         <source>Failed to read file &quot;%1&quot;: %2</source>
-        <translation>Не вдалося прочитати файл &quot;%1&quot;:%2</translation>
+        <translation type="unfinished">Не вдалося прочитати файл &quot;%1&quot;:%2</translation>
     </message>
 </context>
 <context>
-    <name>aspia::FileTransferDialog</name>
+    <name>client::FileTransferDialog</name>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="72"/>
         <source>Current Task: Copying items.</source>
-        <translation>Поточне завдання: Копіювання файлів.</translation>
+        <translation type="unfinished">Поточне завдання: Копіювання файлів.</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="84"/>
         <source>From: %1</source>
-        <translation>З: %1</translation>
+        <translation type="unfinished">З: %1</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="89"/>
         <source>To: %1</source>
-        <translation>До: %1</translation>
+        <translation type="unfinished">До: %1</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="119"/>
         <source>Warning</source>
-        <translation>Попередження</translation>
+        <translation type="unfinished">Попередження</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="131"/>
         <source>Skip</source>
-        <translation>Пропустити</translation>
+        <translation type="unfinished">Пропустити</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="134"/>
         <source>Skip All</source>
-        <translation>Пропустити всі</translation>
+        <translation type="unfinished">Пропустити всі</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="137"/>
         <source>Replace</source>
-        <translation>Замінити</translation>
+        <translation type="unfinished">Замінити</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="140"/>
         <source>Replace All</source>
-        <translation>Замінити всі</translation>
+        <translation type="unfinished">Замінити всі</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="143"/>
         <source>Abort</source>
-        <translation>Відмінити</translation>
+        <translation type="unfinished">Відмінити</translation>
     </message>
 </context>
 <context>
-    <name>aspia::FileTransferQueueBuilder</name>
+    <name>client::FileTransferQueueBuilder</name>
     <message>
         <location filename="../file_transfer_queue_builder.cc" line="74"/>
         <source>An unexpected answer was received.</source>
-        <translation>Отримано неочікувану відповідь.</translation>
+        <translation type="unfinished">Отримано неочікувану відповідь.</translation>
     </message>
     <message>
         <location filename="../file_transfer_queue_builder.cc" line="80"/>
         <source>An error occurred while retrieving the list of files: %1</source>
-        <translation>Трапилася помилка під час отримання списку файлів: %1</translation>
+        <translation type="unfinished">Трапилася помилка під час отримання списку файлів: %1</translation>
     </message>
 </context>
 <context>
-    <name>aspia::SelectScreenAction</name>
+    <name>client::SelectScreenAction</name>
     <message>
         <location filename="../ui/select_screen_action.h" line="37"/>
         <source>Full Desktop</source>
@@ -1121,7 +1550,7 @@
     </message>
 </context>
 <context>
-    <name>aspia::SystemInfoWindow</name>
+    <name>client::SystemInfoWindow</name>
     <message>
         <location filename="../ui/system_info_window.cc" line="90"/>
         <source>HTML File</source>

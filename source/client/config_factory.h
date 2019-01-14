@@ -22,7 +22,7 @@
 #include "base/macros_magic.h"
 #include "protocol/desktop_session.pb.h"
 
-namespace aspia {
+namespace client {
 
 class ConfigFactory
 {
@@ -40,6 +40,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(ConfigFactory);
 };
 
-} // namespace aspia
+} // namespace client
 
 #endif // ASPIA_CLIENT__CONFIG_FACTORY_H

@@ -32,7 +32,7 @@
 #include "common/file_platform_util.h"
 #include "common/file_request.h"
 
-namespace aspia {
+namespace client {
 
 namespace {
 
@@ -453,4 +453,4 @@ void FilePanel::sendSelected()
     emit sendItems(this, items);
 }
 
-} // namespace aspia
+} // namespace client

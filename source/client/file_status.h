@@ -23,10 +23,10 @@
 
 #include "protocol/file_transfer_session.pb.h"
 
-namespace aspia {
+namespace client {
 
 QString fileStatusToString(proto::file_transfer::Status status);
 
-} // namespace aspia
+} // namespace client
 
 #endif // ASPIA_CLIENT__FILE_STATUS_H

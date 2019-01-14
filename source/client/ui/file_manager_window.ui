@@ -37,15 +37,15 @@
      <property name="handleWidth">
       <number>3</number>
      </property>
-     <widget class="aspia::FilePanel" name="local_panel" native="true"/>
-     <widget class="aspia::FilePanel" name="remote_panel" native="true"/>
+     <widget class="client::FilePanel" name="local_panel" native="true"/>
+     <widget class="client::FilePanel" name="remote_panel" native="true"/>
     </widget>
    </item>
   </layout>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>aspia::FilePanel</class>
+   <class>client::FilePanel</class>
    <extends>QWidget</extends>
    <header>client/ui/file_panel.h</header>
    <container>1</container>

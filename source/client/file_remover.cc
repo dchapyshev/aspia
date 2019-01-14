@@ -22,7 +22,7 @@
 #include "client/file_remove_queue_builder.h"
 #include "client/file_status.h"
 
-namespace aspia {
+namespace client {
 
 FileRemover::FileRemover(QObject* parent)
     : QObject(parent)
@@ -160,4 +160,4 @@ void FileRemover::processNextTask()
     processTask();
 }
 
-} // namespace aspia
+} // namespace client

@@ -21,7 +21,7 @@
 
 #include <QString>
 
-namespace aspia {
+namespace client {
 
 class FileRemoveTask
 {
@@ -44,6 +44,6 @@ private:
     bool is_directory_;
 };
 
-} // namespace aspia
+} // namespace client
 
 #endif // ASPIA_CLIENT__FILE_REMOVE_TASK_H

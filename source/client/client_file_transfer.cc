@@ -25,7 +25,7 @@
 #include "common/file_request.h"
 #include "common/file_worker.h"
 
-namespace aspia {
+namespace client {
 
 ClientFileTransfer::ClientFileTransfer(const ConnectData& connect_data, QObject* parent)
     : Client(connect_data, parent)
@@ -79,4 +79,4 @@ void ClientFileTransfer::remoteRequest(common::FileRequest* request)
     sendMessage(request->request());
 }
 
-} // namespace aspia
+} // namespace client

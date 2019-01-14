@@ -23,7 +23,7 @@
 
 #include "base/macros_magic.h"
 
-namespace aspia {
+namespace client {
 
 class FileItemDelegate : public QStyledItemDelegate
 {
@@ -51,6 +51,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(FileItemDelegate);
 };
 
-} // namespace aspia
+} // namespace client
 
 #endif // ASPIA_CLIENT__UI__FILE_ITEM_DELEGATE_H

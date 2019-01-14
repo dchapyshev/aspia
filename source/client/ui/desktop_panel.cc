@@ -26,7 +26,7 @@
 #include "client/ui/desktop_settings.h"
 #include "client/ui/select_screen_action.h"
 
-namespace aspia {
+namespace client {
 
 DesktopPanel::DesktopPanel(proto::SessionType session_type, QWidget* parent)
     : QFrame(parent)
@@ -362,4 +362,4 @@ void DesktopPanel::delayedHide()
         hide_timer_id_ = startTimer(std::chrono::seconds(1));
 }
 
-} // namespace aspia
+} // namespace client

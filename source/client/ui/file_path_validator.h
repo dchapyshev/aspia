@@ -23,7 +23,7 @@
 
 #include "base/macros_magic.h"
 
-namespace aspia {
+namespace client {
 
 class FilePathValidator : public QValidator
 {
@@ -43,6 +43,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(FilePathValidator);
 };
 
-} // namespace aspia
+} // namespace client
 
 #endif // ASPIA_CLIENT__UI__FILE_PATH_VALIDATOR_H

@@ -18,7 +18,7 @@
 
 #include "client/file_transfer_task.h"
 
-namespace aspia {
+namespace client {
 
 FileTransferTask::FileTransferTask(const QString& source_path,
                                    const QString& target_path,
@@ -50,4 +50,4 @@ FileTransferTask& FileTransferTask::operator=(FileTransferTask&& other) noexcept
     return *this;
 }
 
-} // namespace aspia
+} // namespace client

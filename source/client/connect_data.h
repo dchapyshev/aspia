@@ -25,7 +25,7 @@
 #include "protocol/common.pb.h"
 #include "protocol/desktop_session.pb.h"
 
-namespace aspia {
+namespace client {
 
 struct ConnectData
 {
@@ -42,6 +42,6 @@ struct ConnectData
     proto::desktop::Config desktop_config;
 };
 
-} // namespace aspia
+} // namespace client
 
 #endif // ASPIA_CLIENT__CONNECT_DATA_H

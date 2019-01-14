@@ -35,7 +35,7 @@
 #include "common/clipboard.h"
 #include "desktop_capture/desktop_frame_qimage.h"
 
-namespace aspia {
+namespace client {
 
 DesktopWindow::DesktopWindow(const ConnectData& connect_data, QWidget* parent)
     : ClientWindow(parent)
@@ -477,4 +477,4 @@ QString DesktopWindow::createWindowTitle(const ConnectData& connect_data)
     return QString("%1 - %2").arg(computer_name).arg(session_name);
 }
 
-} // namespace aspia
+} // namespace client

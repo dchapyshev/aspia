@@ -24,7 +24,7 @@
 #include "base/macros_magic.h"
 #include "protocol/desktop_session_extensions.pb.h"
 
-namespace aspia {
+namespace client {
 
 class SelectScreenAction : public QAction
 {
@@ -58,6 +58,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(SelectScreenAction);
 };
 
-} // namespace aspia
+} // namespace client
 
 #endif // ASPIA_CLIENT__UI__SELECT_SCREEN_ACTION_H

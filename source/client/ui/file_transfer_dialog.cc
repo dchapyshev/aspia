@@ -27,7 +27,7 @@
 #include <QWinTaskbarProgress>
 #endif
 
-namespace aspia {
+namespace client {
 
 FileTransferDialog::FileTransferDialog(QWidget* parent)
     : QDialog(parent)
@@ -209,4 +209,4 @@ void FileTransferDialog::closeEvent(QCloseEvent* event)
     emit transferCanceled();
 }
 
-} // namespace aspia
+} // namespace client

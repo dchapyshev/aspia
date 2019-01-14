@@ -23,7 +23,7 @@
 #include "codec/video_util.h"
 #include "ui_desktop_config_dialog.h"
 
-namespace aspia {
+namespace client {
 
 namespace {
 
@@ -233,4 +233,4 @@ void DesktopConfigDialog::onButtonBoxClicked(QAbstractButton* button)
     close();
 }
 
-} // namespace aspia
+} // namespace client

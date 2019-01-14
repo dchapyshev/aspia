@@ -23,7 +23,7 @@
 
 #include "base/macros_magic.h"
 
-namespace aspia {
+namespace client {
 
 class FileManagerSettings
 {
@@ -43,6 +43,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(FileManagerSettings);
 };
 
-} // namespace aspia
+} // namespace client
 
 #endif // ASPIA_CLIENT__UI__FILE_MANAGER_SETTINGS_H

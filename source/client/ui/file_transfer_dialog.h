@@ -27,7 +27,7 @@
 class QWinTaskbarProgress;
 #endif
 
-namespace aspia {
+namespace client {
 
 class FileTransferDialog : public QDialog
 {
@@ -65,6 +65,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(FileTransferDialog);
 };
 
-} // namespace aspia
+} // namespace client
 
 #endif // ASPIA_CLIENT__UI__FILE_TRANSFER_DIALOG_H

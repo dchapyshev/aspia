@@ -24,7 +24,7 @@
 #include "client/file_status.h"
 #include "common/file_request.h"
 
-namespace aspia {
+namespace client {
 
 namespace {
 
@@ -149,4 +149,4 @@ void FileTransferQueueBuilder::addPendingTask(const QString& source_dir,
     pending_tasks_.push_back(FileTransferTask(source_path, target_path, is_directory, size));
 }
 
-} // namespace aspia
+} // namespace client

@@ -22,7 +22,7 @@
 #include <QTreeWidget>
 #include <QXmlStreamWriter>
 
-namespace aspia {
+namespace client {
 
 namespace {
 
@@ -160,4 +160,4 @@ bool treeToHtmlFile(const QTreeWidget* tree, const QString& file_path, QString* 
     return true;
 }
 
-} // namespace aspia
+} // namespace client

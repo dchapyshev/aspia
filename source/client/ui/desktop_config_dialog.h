@@ -31,7 +31,7 @@ class DesktopConfigDialog;
 
 class QAbstractButton;
 
-namespace aspia {
+namespace client {
 
 class DesktopConfigDialog : public QDialog
 {
@@ -61,6 +61,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(DesktopConfigDialog);
 };
 
-} // namespace aspia
+} // namespace client
 
 #endif // ASPIA_CLIENT__UI__DESKTOP_CONFIG_DIALOG_H

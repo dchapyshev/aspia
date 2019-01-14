@@ -23,7 +23,7 @@
 
 class QTreeWidget;
 
-namespace aspia {
+namespace client {
 
 QString treeToHtmlString(const QTreeWidget* tree);
 
@@ -31,6 +31,6 @@ bool treeToHtmlFile(const QTreeWidget* tree,
                     const QString& file_path,
                     QString* error_string = nullptr);
 
-} // namespace aspia
+} // namespace client
 
 #endif // ASPIA_CLIENT__UI__TREE_TO_HTML_H

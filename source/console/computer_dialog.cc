@@ -120,9 +120,8 @@ void ComputerDialog::sessionConfigButtonPressed()
     {
         case proto::SESSION_TYPE_DESKTOP_MANAGE:
         {
-            DesktopConfigDialog dialog(session_type,
-                                       computer_->session_config().desktop_manage(),
-                                       this);
+            client::DesktopConfigDialog dialog(
+                session_type, computer_->session_config().desktop_manage(), this);
             if (dialog.exec() == QDialog::Accepted)
             {
                 computer_->mutable_session_config()->mutable_desktop_manage()->CopyFrom(
@@ -133,9 +132,8 @@ void ComputerDialog::sessionConfigButtonPressed()
 
         case proto::SESSION_TYPE_DESKTOP_VIEW:
         {
-            DesktopConfigDialog dialog(session_type,
-                                       computer_->session_config().desktop_view(),
-                                       this);
+            client::DesktopConfigDialog dialog(
+                session_type, computer_->session_config().desktop_view(), this);
             if (dialog.exec() == QDialog::Accepted)
             {
                 computer_->mutable_session_config()->mutable_desktop_view()->CopyFrom(

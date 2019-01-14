@@ -733,7 +733,7 @@
         <translation>Передача файлов</translation>
     </message>
     <message numerus="yes">
-        <location filename="../computer_dialog.cc" line="159"/>
+        <location filename="../computer_dialog.cc" line="157"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Слишком длинное имя. Максимальная длина имени %n символ.</numerusform>
@@ -742,17 +742,17 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="166"/>
+        <location filename="../computer_dialog.cc" line="164"/>
         <source>Name can not be empty.</source>
         <translation>Имя не может быть пустым.</translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="176"/>
+        <location filename="../computer_dialog.cc" line="174"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>Имя пользователя не может быть пустым и может содержать только буквы алфавита, цифры и символы &quot;_&quot;,&quot;-&quot;,&quot;.&quot;.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../computer_dialog.cc" line="185"/>
+        <location filename="../computer_dialog.cc" line="183"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Слишком длинный комментарий. Максимальная длина комментария %n символ.</numerusform>
@@ -761,7 +761,7 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="216"/>
+        <location filename="../computer_dialog.cc" line="214"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>

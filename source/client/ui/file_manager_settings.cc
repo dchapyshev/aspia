@@ -18,7 +18,7 @@
 
 #include "client/ui/file_manager_settings.h"
 
-namespace aspia {
+namespace client {
 
 FileManagerSettings::FileManagerSettings()
     : settings_(QSettings::UserScope, QStringLiteral("aspia"), QStringLiteral("client"))
@@ -46,4 +46,4 @@ void FileManagerSettings::setWindowState(const QByteArray& state)
     settings_.setValue(QStringLiteral("FileManager/WindowState"), state);
 }
 
-} // namespace aspia
+} // namespace client

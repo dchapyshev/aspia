@@ -25,7 +25,7 @@
 #include "common/file_request.h"
 #include "protocol/file_transfer_session.pb.h"
 
-namespace aspia {
+namespace client {
 
 class FileRemoveQueueBuilder;
 
@@ -92,6 +92,6 @@ private:
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(FileRemover::Actions)
 
-} // namespace aspia
+} // namespace client
 
 #endif // ASPIA_CLIENT__FILE_REMOVER_H

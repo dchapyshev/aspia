@@ -464,430 +464,1221 @@
 <context>
     <name>aspia::AddressBar</name>
     <message>
-        <location filename="../ui/address_bar.cc" line="56"/>
         <source>Warning</source>
-        <translation>Предупреждение</translation>
+        <translation type="vanished">Предупреждение</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar.cc" line="57"/>
         <source>An incorrect path to the folder was entered.</source>
-        <translation>Введен некорректный путь к папке.</translation>
+        <translation type="vanished">Введен некорректный путь к папке.</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar.cc" line="77"/>
         <source>The path can not contain characters %1.</source>
-        <translation>Путь не может содержать символы %1.</translation>
+        <translation type="vanished">Путь не может содержать символы %1.</translation>
     </message>
 </context>
 <context>
     <name>aspia::AddressBarModel</name>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="81"/>
-        <location filename="../ui/address_bar_model.cc" line="445"/>
         <source>Home Folder</source>
-        <translation>Домашняя папка</translation>
+        <translation type="vanished">Домашняя папка</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="85"/>
         <source>Desktop</source>
-        <translation>Рабочий стол</translation>
+        <translation type="vanished">Рабочий стол</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="277"/>
         <source>Computer</source>
-        <translation>Компьютер</translation>
+        <translation type="vanished">Компьютер</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="390"/>
         <source>Name</source>
-        <translation>Имя</translation>
+        <translation type="vanished">Имя</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="393"/>
         <source>Type</source>
-        <translation>Тип</translation>
+        <translation type="vanished">Тип</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="396"/>
         <source>Total Space</source>
-        <translation>Размер</translation>
+        <translation type="vanished">Размер</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="399"/>
         <source>Free Space</source>
-        <translation>Свободно</translation>
+        <translation type="vanished">Свободно</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="430"/>
         <source>Optical Drive</source>
-        <translation>Оптический дисковод</translation>
+        <translation type="vanished">Оптический дисковод</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="433"/>
         <source>Removable Drive</source>
-        <translation>Съемный диск</translation>
+        <translation type="vanished">Съемный диск</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="436"/>
         <source>Fixed Drive</source>
-        <translation>Локальный диск</translation>
+        <translation type="vanished">Локальный диск</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="439"/>
         <source>Network Drive</source>
-        <translation>Сетевой диск</translation>
+        <translation type="vanished">Сетевой диск</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="442"/>
         <source>RAM Drive</source>
-        <translation>Привод RAM</translation>
+        <translation type="vanished">Привод RAM</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="448"/>
         <source>Desktop Folder</source>
-        <translation>Папка рабочего стола</translation>
+        <translation type="vanished">Папка рабочего стола</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="451"/>
         <source>Unknown Drive</source>
-        <translation>Неизвестный диск</translation>
+        <translation type="vanished">Неизвестный диск</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="468"/>
         <source>TB</source>
-        <translation>ТБ</translation>
+        <translation type="vanished">ТБ</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="473"/>
         <source>GB</source>
-        <translation>ГБ</translation>
+        <translation type="vanished">ГБ</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="478"/>
         <source>MB</source>
-        <translation>МБ</translation>
+        <translation type="vanished">МБ</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="483"/>
         <source>kB</source>
-        <translation>кБ</translation>
+        <translation type="vanished">кБ</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="488"/>
         <source>B</source>
-        <translation>Б</translation>
+        <translation type="vanished">Б</translation>
     </message>
 </context>
 <context>
     <name>aspia::Client</name>
     <message>
-        <location filename="../client.cc" line="88"/>
         <source>Connection was refused by the peer (or timed out).</source>
-        <translation>Подключение было отклонено другой стороной (или превышено время ожидания).</translation>
+        <translation type="vanished">Подключение было отклонено другой стороной (или превышено время ожидания).</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="92"/>
         <source>Remote host closed the connection.</source>
-        <translation>Удаленный узел закрыл подключение.</translation>
+        <translation type="vanished">Удаленный узел закрыл подключение.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="96"/>
         <source>Host address was not found.</source>
-        <translation>Не найден адрес удаленного узла.</translation>
+        <translation type="vanished">Не найден адрес удаленного узла.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="100"/>
         <source>Socket operation timed out.</source>
-        <translation>Превышено время ожидания.</translation>
+        <translation type="vanished">Превышено время ожидания.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="104"/>
         <source>Address specified is already in use and was set to be exclusive.</source>
-        <translation>Указанный адрес уже используется и был установлен монопольно.</translation>
+        <translation type="vanished">Указанный адрес уже используется и был установлен монопольно.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="108"/>
         <source>Address specified does not belong to the host.</source>
-        <translation>Указанный адрес не принадлежит узлу.</translation>
+        <translation type="vanished">Указанный адрес не принадлежит узлу.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="112"/>
         <source>Violation of the data exchange protocol.</source>
-        <translation>Нарушение протокола обмена данными.</translation>
+        <translation type="vanished">Нарушение протокола обмена данными.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="116"/>
         <source>An error occurred while encrypting the message.</source>
-        <translation>Произошла ошибка при шифровании сообщения.</translation>
+        <translation type="vanished">Произошла ошибка при шифровании сообщения.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="120"/>
         <source>An error occurred while decrypting the message.</source>
-        <translation>Произошла ошибка при расшифровке сообщения.</translation>
+        <translation type="vanished">Произошла ошибка при расшифровке сообщения.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="124"/>
         <source>An error occured while authenticating: wrong user name or password.</source>
-        <translation>Произошла ошибка при аутификации: неправильное имя пользователя или пароль.</translation>
+        <translation type="vanished">Произошла ошибка при аутификации: неправильное имя пользователя или пароль.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="128"/>
         <source>Specified session type is not allowed for the user.</source>
-        <translation>Указанный тип сессии не разрешен для пользователя.</translation>
+        <translation type="vanished">Указанный тип сессии не разрешен для пользователя.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="132"/>
         <source>An unknown error occurred.</source>
-        <translation>Произошла неизвестная ошибка.</translation>
+        <translation type="vanished">Произошла неизвестная ошибка.</translation>
     </message>
 </context>
 <context>
     <name>aspia::ClientDesktop</name>
     <message>
-        <location filename="../client_desktop.cc" line="49"/>
         <source>Session error: Invalid message from host.</source>
-        <translation>Ошибка сессии: Неверное сообщение от хоста.</translation>
+        <translation type="vanished">Ошибка сессии: Неверное сообщение от хоста.</translation>
     </message>
     <message>
-        <location filename="../client_desktop.cc" line="195"/>
         <source>Session error: Video decoder not initialized.</source>
-        <translation>Ошибка сессии: Видео-декодер не инициализирован.</translation>
+        <translation type="vanished">Ошибка сессии: Видео-декодер не инициализирован.</translation>
     </message>
     <message>
-        <location filename="../client_desktop.cc" line="209"/>
         <source>Session error: Wrong video frame size.</source>
-        <translation>Ошибка сессии: Неверный размер экрана.</translation>
+        <translation type="vanished">Ошибка сессии: Неверный размер экрана.</translation>
     </message>
     <message>
-        <location filename="../client_desktop.cc" line="216"/>
         <source>Session error: Wrong video frame position.</source>
-        <translation>Ошибка сессии: Неверное положение видео-кадра.</translation>
+        <translation type="vanished">Ошибка сессии: Неверное положение видео-кадра.</translation>
     </message>
     <message>
-        <location filename="../client_desktop.cc" line="226"/>
         <source>Session error: The desktop frame is not initialized.</source>
-        <translation>Ошибка сессии: Рабочий стол не инициализирован.</translation>
+        <translation type="vanished">Ошибка сессии: Рабочий стол не инициализирован.</translation>
     </message>
     <message>
-        <location filename="../client_desktop.cc" line="232"/>
         <source>Session error: The video packet could not be decoded.</source>
-        <translation>Ошибка сессии: Не удалось декодировать видео-пакет.</translation>
+        <translation type="vanished">Ошибка сессии: Не удалось декодировать видео-пакет.</translation>
     </message>
 </context>
 <context>
     <name>aspia::ClientDialog</name>
     <message>
-        <location filename="../ui/client_dialog.cc" line="40"/>
         <source>Desktop Manage</source>
-        <translation>Управление рабочим столом</translation>
+        <translation type="vanished">Управление рабочим столом</translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.cc" line="44"/>
         <source>Desktop View</source>
-        <translation>Просмотр рабочего стола</translation>
+        <translation type="vanished">Просмотр рабочего стола</translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.cc" line="48"/>
         <source>File Transfer</source>
-        <translation>Передача файлов</translation>
+        <translation type="vanished">Передача файлов</translation>
     </message>
 </context>
 <context>
     <name>aspia::ClientFileTransfer</name>
     <message>
-        <location filename="../client_file_transfer.cc" line="59"/>
         <source>Session error: Invalid message from host.</source>
-        <translation>Ошибка сессии: Неверное сообщение от хоста.</translation>
+        <translation type="vanished">Ошибка сессии: Неверное сообщение от хоста.</translation>
     </message>
     <message>
-        <location filename="../client_file_transfer.cc" line="66"/>
         <source>Session error: There are no logged in users. File transfer is not available.</source>
-        <translation>Ошибка сессии: Нет вошедших в систему пользователей. Передача файлов недоступна.</translation>
+        <translation type="vanished">Ошибка сессии: Нет вошедших в систему пользователей. Передача файлов недоступна.</translation>
     </message>
 </context>
 <context>
     <name>aspia::ClientWindow</name>
     <message>
-        <location filename="../ui/client_window.cc" line="118"/>
         <source>Attempt to connect to %1:%2.</source>
-        <translation>Попытка подключения к %1:%2.</translation>
+        <translation type="vanished">Попытка подключения к %1:%2.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="125"/>
         <source>Session started.</source>
-        <translation>Сессия запущена.</translation>
+        <translation type="vanished">Сессия запущена.</translation>
     </message>
 </context>
 <context>
     <name>aspia::DesktopConfigDialog</name>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="65"/>
         <source>True color (32 bit)</source>
-        <translation>True color (32 бита)</translation>
+        <translation type="vanished">True color (32 бита)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="66"/>
         <source>High color (16 bit)</source>
-        <translation>High color (16 бит)</translation>
+        <translation type="vanished">High color (16 бит)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="67"/>
         <source>256 colors (8 bit)</source>
-        <translation>256 цветов (8 бит)</translation>
+        <translation type="vanished">256 цветов (8 бит)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="68"/>
         <source>64 colors (6 bit)</source>
-        <translation>64 цвета (6 бит)</translation>
+        <translation type="vanished">64 цвета (6 бит)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="69"/>
         <source>8 colors (3 bit)</source>
-        <translation>8 цветов (3 бита)</translation>
+        <translation type="vanished">8 цветов (3 бита)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="155"/>
         <source>Compression ratio: %1</source>
-        <translation>Уровень сжатия: %1</translation>
+        <translation type="vanished">Уровень сжатия: %1</translation>
     </message>
 </context>
 <context>
     <name>aspia::DesktopPanel</name>
+    <message>
+        <source>Confirmation</source>
+        <translation type="vanished">Подтверждение</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to shutdown the remote computer?</source>
+        <translation type="vanished">Вы действительно хотите выключить удаленный компьютер?</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to reboot the remote computer?</source>
+        <translation type="vanished">Вы действительно хотите перезагрузить удаленный компьютер?</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to end the user session on the remote computer?</source>
+        <translation type="vanished">Вы действительно хотите завершить сеанс пользователя на удаленном компьютере?</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to lock the user session on the remote computer?</source>
+        <translation type="vanished">Вы действительно хотите заблокировать сеанс пользователя на удаленном компьютере?</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::DesktopWindow</name>
+    <message>
+        <source>Aspia Desktop Manage</source>
+        <translation type="vanished">Управление рабочим столом</translation>
+    </message>
+    <message>
+        <source>Aspia Desktop View</source>
+        <translation type="vanished">Просмотр рабочего стола</translation>
+    </message>
+    <message>
+        <source>Save File</source>
+        <translation type="vanished">Сохранение файла</translation>
+    </message>
+    <message>
+        <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
+        <translation type="vanished">PNG изображение (*.png);;BMP изображение (*.bmp)</translation>
+    </message>
+    <message>
+        <source>Warning</source>
+        <translation type="vanished">Предупреждение</translation>
+    </message>
+    <message>
+        <source>Could not save image</source>
+        <translation type="vanished">Не удалось сохранить изображение</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::FileListModel</name>
+    <message>
+        <source>Folder</source>
+        <translation type="vanished">Папка</translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="vanished">Имя</translation>
+    </message>
+    <message>
+        <source>Size</source>
+        <translation type="vanished">Размер</translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="vanished">Тип</translation>
+    </message>
+    <message>
+        <source>Modified</source>
+        <translation type="vanished">Изменен</translation>
+    </message>
+    <message>
+        <source>TB</source>
+        <translation type="vanished">ТБ</translation>
+    </message>
+    <message>
+        <source>GB</source>
+        <translation type="vanished">ГБ</translation>
+    </message>
+    <message>
+        <source>MB</source>
+        <translation type="vanished">МБ</translation>
+    </message>
+    <message>
+        <source>kB</source>
+        <translation type="vanished">кБ</translation>
+    </message>
+    <message>
+        <source>B</source>
+        <translation type="vanished">Б</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::FileManagerWindow</name>
+    <message>
+        <source>%1 - Aspia File Transfer</source>
+        <translation type="vanished">%1 - Передача файлов</translation>
+    </message>
+    <message>
+        <source>Local Computer</source>
+        <translation type="vanished">Локальный компьютер</translation>
+    </message>
+    <message>
+        <source>Remote Computer</source>
+        <translation type="vanished">Удаленный компьютер</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::FilePanel</name>
+    <message>
+        <source>Warning</source>
+        <translation type="vanished">Предупреждение</translation>
+    </message>
+    <message>
+        <source>Failed to get list of drives: %1</source>
+        <translation type="vanished">Не удалось получить список дисков: %1</translation>
+    </message>
+    <message>
+        <source>Failed to get list of files: %1</source>
+        <translation type="vanished">Не удалось получить список файлов: %1</translation>
+    </message>
+    <message>
+        <source>Failed to create directory: %1</source>
+        <translation type="vanished">Не удалось создать директорию: %1</translation>
+    </message>
+    <message>
+        <source>Failed to rename item: %1</source>
+        <translation type="vanished">Не удалось переименовать элемент: %1</translation>
+    </message>
+    <message>
+        <source>%1 object(s) selected</source>
+        <translation type="vanished">Выбрано объектов: %1</translation>
+    </message>
+    <message>
+        <source>Folder name can not be empty.</source>
+        <translation type="vanished">Имя папки не может быть пустым.</translation>
+    </message>
+    <message>
+        <source>Name contains invalid characters.</source>
+        <translation type="vanished">Имя содержит некорректные символы.</translation>
+    </message>
+    <message>
+        <source>&amp;Send	F11</source>
+        <translation type="vanished">&amp;Отправить	F11</translation>
+    </message>
+    <message>
+        <source>&amp;Delete	Delete</source>
+        <translation type="vanished">&amp;Удалить	Delete</translation>
+    </message>
+    <message>
+        <source>&amp;Create Folder</source>
+        <translation type="vanished">&amp;Создать папку</translation>
+    </message>
+    <message>
+        <source>Confirmation</source>
+        <translation type="vanished">Подтверждение</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to delete the selected items?</source>
+        <translation type="vanished">Вы действительно хотите удалить выбранные элементы?</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::FileRemoveDialog</name>
+    <message>
+        <source>Deleting: %1</source>
+        <translation type="vanished">Удаление: %1</translation>
+    </message>
+    <message>
+        <source>Warning</source>
+        <translation type="vanished">Предупреждение</translation>
+    </message>
+    <message>
+        <source>Skip</source>
+        <translation type="vanished">Пропустить</translation>
+    </message>
+    <message>
+        <source>Skip All</source>
+        <translation type="vanished">Пропустить все</translation>
+    </message>
+    <message>
+        <source>Abort</source>
+        <translation type="vanished">Прервать</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::FileRemoveQueueBuilder</name>
+    <message>
+        <source>An unexpected answer was received.</source>
+        <translation type="vanished">Получен неожиданный ответ на запрос.</translation>
+    </message>
+    <message>
+        <source>An error occurred while retrieving the list of files: %1</source>
+        <translation type="vanished">Произошла ошибка при получении списка файлов: %1</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::FileRemover</name>
+    <message>
+        <source>An unexpected answer was received.</source>
+        <translation type="vanished">Получен неожиданный ответ на запрос.</translation>
+    </message>
+    <message>
+        <source>Failed to delete &quot;%1&quot;: %2.</source>
+        <translation type="vanished">Не удалось удалить &quot;%1&quot;: %2.</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::FileTransfer</name>
+    <message>
+        <source>Failed to create directory &quot;%1&quot;: %2</source>
+        <translation type="vanished">Не удалось создать директорию &quot;%1&quot;: %2</translation>
+    </message>
+    <message>
+        <source>Failed to create file &quot;%1&quot;: %2</source>
+        <translation type="vanished">Не удалось создать файл &quot;%1&quot;: %2</translation>
+    </message>
+    <message>
+        <source>Failed to write file &quot;%1&quot;: %2</source>
+        <translation type="vanished">Не удалось выполнить запись файла &quot;%1&quot;: %2</translation>
+    </message>
+    <message>
+        <source>Failed to open file &quot;%1&quot;: %2</source>
+        <translation type="vanished">Не удалось открыть файл &quot;%1&quot;: %2</translation>
+    </message>
+    <message>
+        <source>An unexpected response to the request was received</source>
+        <translation type="vanished">Получен неожиданный ответ на запрос</translation>
+    </message>
+    <message>
+        <source>Failed to read file &quot;%1&quot;: %2</source>
+        <translation type="vanished">Не удалось прочитать файл &quot;%1&quot;: %2</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::FileTransferDialog</name>
+    <message>
+        <source>Current Task: Copying items.</source>
+        <translation type="vanished">Текущая задача: копирование элементов.</translation>
+    </message>
+    <message>
+        <source>From: %1</source>
+        <translation type="vanished">Из: %1</translation>
+    </message>
+    <message>
+        <source>To: %1</source>
+        <translation type="vanished">В: %1</translation>
+    </message>
+    <message>
+        <source>Warning</source>
+        <translation type="vanished">Предупреждение</translation>
+    </message>
+    <message>
+        <source>Skip</source>
+        <translation type="vanished">Пропустить</translation>
+    </message>
+    <message>
+        <source>Skip All</source>
+        <translation type="vanished">Пропустить все</translation>
+    </message>
+    <message>
+        <source>Replace</source>
+        <translation type="vanished">Заменить</translation>
+    </message>
+    <message>
+        <source>Replace All</source>
+        <translation type="vanished">Заменить все</translation>
+    </message>
+    <message>
+        <source>Abort</source>
+        <translation type="vanished">Прервать</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::FileTransferQueueBuilder</name>
+    <message>
+        <source>An unexpected answer was received.</source>
+        <translation type="vanished">Получен неожиданный ответ на запрос.</translation>
+    </message>
+    <message>
+        <source>An error occurred while retrieving the list of files: %1</source>
+        <translation type="vanished">Произошла ошибка при получении списка файлов: %1</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::SelectScreenAction</name>
+    <message>
+        <source>Full Desktop</source>
+        <translation type="vanished">Весь рабочий стол</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::SystemInfoWindow</name>
+    <message>
+        <source>HTML File</source>
+        <translation type="vanished">HTML-файл</translation>
+    </message>
+    <message>
+        <source>HTML File (*.html)</source>
+        <translation type="vanished">HTML-файл (*.html)</translation>
+    </message>
+    <message>
+        <source>Warning</source>
+        <translation type="vanished">Предупреждение</translation>
+    </message>
+    <message>
+        <source>Failed to save file: %1</source>
+        <translation type="vanished">Не удалось сохранить файл: %1</translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="vanished">Имя</translation>
+    </message>
+    <message>
+        <source>Domain</source>
+        <translation type="vanished">Домен</translation>
+    </message>
+    <message>
+        <source>Workgroup</source>
+        <translation type="vanished">Рабочая группа</translation>
+    </message>
+    <message>
+        <source>Uptime</source>
+        <translation type="vanished">Время работы</translation>
+    </message>
+    <message>
+        <source>Computer</source>
+        <translation type="vanished">Компьютер</translation>
+    </message>
+    <message>
+        <source>Version</source>
+        <translation type="vanished">Версия</translation>
+    </message>
+    <message>
+        <source>Architecture</source>
+        <translation type="vanished">Архитектура</translation>
+    </message>
+    <message>
+        <source>Operating System</source>
+        <translation type="vanished">Операционная система</translation>
+    </message>
+    <message>
+        <source>Manufacturer</source>
+        <translation type="vanished">Производитель</translation>
+    </message>
+    <message>
+        <source>Model</source>
+        <translation type="vanished">Модель</translation>
+    </message>
+    <message>
+        <source>Motherboard</source>
+        <translation type="vanished">Материнская плата</translation>
+    </message>
+    <message>
+        <source>Vendor</source>
+        <translation type="vanished">Поставщик</translation>
+    </message>
+    <message>
+        <source>Packages</source>
+        <translation type="vanished">Сокетов</translation>
+    </message>
+    <message>
+        <source>Cores</source>
+        <translation type="vanished">Ядер</translation>
+    </message>
+    <message>
+        <source>Threads</source>
+        <translation type="vanished">Потоков</translation>
+    </message>
+    <message>
+        <source>Processor</source>
+        <translation type="vanished">Процессор</translation>
+    </message>
+    <message>
+        <source>Date</source>
+        <translation type="vanished">Дата</translation>
+    </message>
+    <message>
+        <source>Size</source>
+        <translation type="vanished">Размер</translation>
+    </message>
+    <message>
+        <source>Speed</source>
+        <translation type="vanished">Частота</translation>
+    </message>
+    <message>
+        <source>%1 MHz</source>
+        <translation type="vanished">%1 МГц</translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="vanished">Тип</translation>
+    </message>
+    <message>
+        <source>Form Factor</source>
+        <translation type="vanished">Форм-фактор</translation>
+    </message>
+    <message>
+        <source>Part Number</source>
+        <translation type="vanished">Номер партии</translation>
+    </message>
+    <message>
+        <source>Installed</source>
+        <translation type="vanished">Установлено</translation>
+    </message>
+    <message>
+        <source>No</source>
+        <translation type="vanished">Нет</translation>
+    </message>
+    <message>
+        <source>Memory</source>
+        <translation type="vanished">Память</translation>
+    </message>
+    <message>
+        <source>%1 (%2 free)</source>
+        <translation type="vanished">%1 (%2 свободно)</translation>
+    </message>
+    <message>
+        <source>Logical Drives</source>
+        <translation type="vanished">Логические диски</translation>
+    </message>
+    <message>
+        <source>Adapter Name</source>
+        <translation type="vanished">Имя адаптера</translation>
+    </message>
+    <message>
+        <source>Interface Type</source>
+        <translation type="vanished">Тип интерфейса</translation>
+    </message>
+    <message>
+        <source>Connection Speed</source>
+        <translation type="vanished">Скорость соединения</translation>
+    </message>
+    <message>
+        <source>MAC Address</source>
+        <translation type="vanished">MAC адрес</translation>
+    </message>
+    <message>
+        <source>DHCP Enabled</source>
+        <translation type="vanished">DHCP включен</translation>
+    </message>
+    <message>
+        <source>Yes</source>
+        <translation type="vanished">Да</translation>
+    </message>
+    <message>
+        <source>DHCP Server #%1</source>
+        <translation type="vanished">DHCP сервер #%1</translation>
+    </message>
+    <message>
+        <source>DHCP Server</source>
+        <translation type="vanished">DHCP сервер</translation>
+    </message>
+    <message>
+        <source>Address #%1</source>
+        <translation type="vanished">Адрес #%1</translation>
+    </message>
+    <message>
+        <source>Address</source>
+        <translation type="vanished">Адрес</translation>
+    </message>
+    <message>
+        <source>Gateway #%1</source>
+        <translation type="vanished">Шлюз #%1</translation>
+    </message>
+    <message>
+        <source>Gateway</source>
+        <translation type="vanished">Шлюз</translation>
+    </message>
+    <message>
+        <source>Network Connections</source>
+        <translation type="vanished">Сетевые подключения</translation>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation type="vanished">По умолчанию</translation>
+    </message>
+    <message>
+        <source>Port</source>
+        <translation type="vanished">Порт</translation>
+    </message>
+    <message>
+        <source>Driver</source>
+        <translation type="vanished">Драйвер</translation>
+    </message>
+    <message>
+        <source>Shared</source>
+        <translation type="vanished">Общий доступ</translation>
+    </message>
+    <message>
+        <source>Share Name</source>
+        <translation type="vanished">Имя общего ресурса</translation>
+    </message>
+    <message>
+        <source>Jobs Count</source>
+        <translation type="vanished">Количество заданий</translation>
+    </message>
+    <message>
+        <source>Printers</source>
+        <translation type="vanished">Принтеры</translation>
+    </message>
+    <message>
+        <source>TB</source>
+        <translation type="vanished">ТБ</translation>
+    </message>
+    <message>
+        <source>GB</source>
+        <translation type="vanished">ГБ</translation>
+    </message>
+    <message>
+        <source>MB</source>
+        <translation type="vanished">МБ</translation>
+    </message>
+    <message>
+        <source>kB</source>
+        <translation type="vanished">кБ</translation>
+    </message>
+    <message>
+        <source>B</source>
+        <translation type="vanished">Б</translation>
+    </message>
+    <message>
+        <source>%1 days %2 hours %3 minutes %4 seconds</source>
+        <translation type="vanished">%1 дней %2 часов %3 минут %4 секунд</translation>
+    </message>
+    <message>
+        <source>%1 hours %2 minutes %3 seconds</source>
+        <translation type="vanished">%1 часов %2 минут %3 секунд</translation>
+    </message>
+    <message>
+        <source>%1 minutes %2 seconds</source>
+        <translation type="vanished">%1 минут %2 секунд</translation>
+    </message>
+    <message>
+        <source>%1 seconds</source>
+        <translation type="vanished">%1 секунд</translation>
+    </message>
+    <message>
+        <source>Gbps</source>
+        <translation type="vanished">Гбит/c</translation>
+    </message>
+    <message>
+        <source>Mbps</source>
+        <translation type="vanished">Мбит/c</translation>
+    </message>
+    <message>
+        <source>Kbps</source>
+        <translation type="vanished">Кбит/с</translation>
+    </message>
+    <message>
+        <source>bps</source>
+        <translation type="vanished">бит/c</translation>
+    </message>
+</context>
+<context>
+    <name>client::AddressBar</name>
+    <message>
+        <location filename="../ui/address_bar.cc" line="56"/>
+        <source>Warning</source>
+        <translation type="unfinished">Предупреждение</translation>
+    </message>
+    <message>
+        <location filename="../ui/address_bar.cc" line="57"/>
+        <source>An incorrect path to the folder was entered.</source>
+        <translation type="unfinished">Введен некорректный путь к папке.</translation>
+    </message>
+    <message>
+        <location filename="../ui/address_bar.cc" line="77"/>
+        <source>The path can not contain characters %1.</source>
+        <translation type="unfinished">Путь не может содержать символы %1.</translation>
+    </message>
+</context>
+<context>
+    <name>client::AddressBarModel</name>
+    <message>
+        <location filename="../ui/address_bar_model.cc" line="81"/>
+        <location filename="../ui/address_bar_model.cc" line="445"/>
+        <source>Home Folder</source>
+        <translation type="unfinished">Домашняя папка</translation>
+    </message>
+    <message>
+        <location filename="../ui/address_bar_model.cc" line="85"/>
+        <source>Desktop</source>
+        <translation type="unfinished">Рабочий стол</translation>
+    </message>
+    <message>
+        <location filename="../ui/address_bar_model.cc" line="277"/>
+        <source>Computer</source>
+        <translation type="unfinished">Компьютер</translation>
+    </message>
+    <message>
+        <location filename="../ui/address_bar_model.cc" line="390"/>
+        <source>Name</source>
+        <translation type="unfinished">Имя</translation>
+    </message>
+    <message>
+        <location filename="../ui/address_bar_model.cc" line="393"/>
+        <source>Type</source>
+        <translation type="unfinished">Тип</translation>
+    </message>
+    <message>
+        <location filename="../ui/address_bar_model.cc" line="396"/>
+        <source>Total Space</source>
+        <translation type="unfinished">Размер</translation>
+    </message>
+    <message>
+        <location filename="../ui/address_bar_model.cc" line="399"/>
+        <source>Free Space</source>
+        <translation type="unfinished">Свободно</translation>
+    </message>
+    <message>
+        <location filename="../ui/address_bar_model.cc" line="430"/>
+        <source>Optical Drive</source>
+        <translation type="unfinished">Оптический дисковод</translation>
+    </message>
+    <message>
+        <location filename="../ui/address_bar_model.cc" line="433"/>
+        <source>Removable Drive</source>
+        <translation type="unfinished">Съемный диск</translation>
+    </message>
+    <message>
+        <location filename="../ui/address_bar_model.cc" line="436"/>
+        <source>Fixed Drive</source>
+        <translation type="unfinished">Локальный диск</translation>
+    </message>
+    <message>
+        <location filename="../ui/address_bar_model.cc" line="439"/>
+        <source>Network Drive</source>
+        <translation type="unfinished">Сетевой диск</translation>
+    </message>
+    <message>
+        <location filename="../ui/address_bar_model.cc" line="442"/>
+        <source>RAM Drive</source>
+        <translation type="unfinished">Привод RAM</translation>
+    </message>
+    <message>
+        <location filename="../ui/address_bar_model.cc" line="448"/>
+        <source>Desktop Folder</source>
+        <translation type="unfinished">Папка рабочего стола</translation>
+    </message>
+    <message>
+        <location filename="../ui/address_bar_model.cc" line="451"/>
+        <source>Unknown Drive</source>
+        <translation type="unfinished">Неизвестный диск</translation>
+    </message>
+    <message>
+        <location filename="../ui/address_bar_model.cc" line="468"/>
+        <source>TB</source>
+        <translation type="unfinished">ТБ</translation>
+    </message>
+    <message>
+        <location filename="../ui/address_bar_model.cc" line="473"/>
+        <source>GB</source>
+        <translation type="unfinished">ГБ</translation>
+    </message>
+    <message>
+        <location filename="../ui/address_bar_model.cc" line="478"/>
+        <source>MB</source>
+        <translation type="unfinished">МБ</translation>
+    </message>
+    <message>
+        <location filename="../ui/address_bar_model.cc" line="483"/>
+        <source>kB</source>
+        <translation type="unfinished">кБ</translation>
+    </message>
+    <message>
+        <location filename="../ui/address_bar_model.cc" line="488"/>
+        <source>B</source>
+        <translation type="unfinished">Б</translation>
+    </message>
+</context>
+<context>
+    <name>client::Client</name>
+    <message>
+        <location filename="../client.cc" line="88"/>
+        <source>Connection was refused by the peer (or timed out).</source>
+        <translation type="unfinished">Подключение было отклонено другой стороной (или превышено время ожидания).</translation>
+    </message>
+    <message>
+        <location filename="../client.cc" line="92"/>
+        <source>Remote host closed the connection.</source>
+        <translation type="unfinished">Удаленный узел закрыл подключение.</translation>
+    </message>
+    <message>
+        <location filename="../client.cc" line="96"/>
+        <source>Host address was not found.</source>
+        <translation type="unfinished">Не найден адрес удаленного узла.</translation>
+    </message>
+    <message>
+        <location filename="../client.cc" line="100"/>
+        <source>Socket operation timed out.</source>
+        <translation type="unfinished">Превышено время ожидания.</translation>
+    </message>
+    <message>
+        <location filename="../client.cc" line="104"/>
+        <source>Address specified is already in use and was set to be exclusive.</source>
+        <translation type="unfinished">Указанный адрес уже используется и был установлен монопольно.</translation>
+    </message>
+    <message>
+        <location filename="../client.cc" line="108"/>
+        <source>Address specified does not belong to the host.</source>
+        <translation type="unfinished">Указанный адрес не принадлежит узлу.</translation>
+    </message>
+    <message>
+        <location filename="../client.cc" line="112"/>
+        <source>Violation of the data exchange protocol.</source>
+        <translation type="unfinished">Нарушение протокола обмена данными.</translation>
+    </message>
+    <message>
+        <location filename="../client.cc" line="116"/>
+        <source>An error occurred while encrypting the message.</source>
+        <translation type="unfinished">Произошла ошибка при шифровании сообщения.</translation>
+    </message>
+    <message>
+        <location filename="../client.cc" line="120"/>
+        <source>An error occurred while decrypting the message.</source>
+        <translation type="unfinished">Произошла ошибка при расшифровке сообщения.</translation>
+    </message>
+    <message>
+        <location filename="../client.cc" line="124"/>
+        <source>An error occured while authenticating: wrong user name or password.</source>
+        <translation type="unfinished">Произошла ошибка при аутификации: неправильное имя пользователя или пароль.</translation>
+    </message>
+    <message>
+        <location filename="../client.cc" line="128"/>
+        <source>Specified session type is not allowed for the user.</source>
+        <translation type="unfinished">Указанный тип сессии не разрешен для пользователя.</translation>
+    </message>
+    <message>
+        <location filename="../client.cc" line="132"/>
+        <source>An unknown error occurred.</source>
+        <translation type="unfinished">Произошла неизвестная ошибка.</translation>
+    </message>
+</context>
+<context>
+    <name>client::ClientDesktop</name>
+    <message>
+        <location filename="../client_desktop.cc" line="49"/>
+        <source>Session error: Invalid message from host.</source>
+        <translation type="unfinished">Ошибка сессии: Неверное сообщение от хоста.</translation>
+    </message>
+    <message>
+        <location filename="../client_desktop.cc" line="195"/>
+        <source>Session error: Video decoder not initialized.</source>
+        <translation type="unfinished">Ошибка сессии: Видео-декодер не инициализирован.</translation>
+    </message>
+    <message>
+        <location filename="../client_desktop.cc" line="209"/>
+        <source>Session error: Wrong video frame size.</source>
+        <translation type="unfinished">Ошибка сессии: Неверный размер экрана.</translation>
+    </message>
+    <message>
+        <location filename="../client_desktop.cc" line="216"/>
+        <source>Session error: Wrong video frame position.</source>
+        <translation type="unfinished">Ошибка сессии: Неверное положение видео-кадра.</translation>
+    </message>
+    <message>
+        <location filename="../client_desktop.cc" line="226"/>
+        <source>Session error: The desktop frame is not initialized.</source>
+        <translation type="unfinished">Ошибка сессии: Рабочий стол не инициализирован.</translation>
+    </message>
+    <message>
+        <location filename="../client_desktop.cc" line="232"/>
+        <source>Session error: The video packet could not be decoded.</source>
+        <translation type="unfinished">Ошибка сессии: Не удалось декодировать видео-пакет.</translation>
+    </message>
+</context>
+<context>
+    <name>client::ClientDialog</name>
+    <message>
+        <location filename="../ui/client_dialog.cc" line="40"/>
+        <source>Desktop Manage</source>
+        <translation type="unfinished">Управление рабочим столом</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_dialog.cc" line="44"/>
+        <source>Desktop View</source>
+        <translation type="unfinished">Просмотр рабочего стола</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_dialog.cc" line="48"/>
+        <source>File Transfer</source>
+        <translation type="unfinished">Передача файлов</translation>
+    </message>
+</context>
+<context>
+    <name>client::ClientFileTransfer</name>
+    <message>
+        <location filename="../client_file_transfer.cc" line="59"/>
+        <source>Session error: Invalid message from host.</source>
+        <translation type="unfinished">Ошибка сессии: Неверное сообщение от хоста.</translation>
+    </message>
+    <message>
+        <location filename="../client_file_transfer.cc" line="66"/>
+        <source>Session error: There are no logged in users. File transfer is not available.</source>
+        <translation type="unfinished">Ошибка сессии: Нет вошедших в систему пользователей. Передача файлов недоступна.</translation>
+    </message>
+</context>
+<context>
+    <name>client::ClientWindow</name>
+    <message>
+        <location filename="../ui/client_window.cc" line="118"/>
+        <source>Attempt to connect to %1:%2.</source>
+        <translation type="unfinished">Попытка подключения к %1:%2.</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="125"/>
+        <source>Session started.</source>
+        <translation type="unfinished">Сессия запущена.</translation>
+    </message>
+</context>
+<context>
+    <name>client::DesktopConfigDialog</name>
+    <message>
+        <location filename="../ui/desktop_config_dialog.cc" line="65"/>
+        <source>True color (32 bit)</source>
+        <translation type="unfinished">True color (32 бита)</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_config_dialog.cc" line="66"/>
+        <source>High color (16 bit)</source>
+        <translation type="unfinished">High color (16 бит)</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_config_dialog.cc" line="67"/>
+        <source>256 colors (8 bit)</source>
+        <translation type="unfinished">256 цветов (8 бит)</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_config_dialog.cc" line="68"/>
+        <source>64 colors (6 bit)</source>
+        <translation type="unfinished">64 цвета (6 бит)</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_config_dialog.cc" line="69"/>
+        <source>8 colors (3 bit)</source>
+        <translation type="unfinished">8 цветов (3 бита)</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_config_dialog.cc" line="155"/>
+        <source>Compression ratio: %1</source>
+        <translation type="unfinished">Уровень сжатия: %1</translation>
+    </message>
+</context>
+<context>
+    <name>client::DesktopPanel</name>
     <message>
         <location filename="../ui/desktop_panel.cc" line="224"/>
         <location filename="../ui/desktop_panel.cc" line="235"/>
         <location filename="../ui/desktop_panel.cc" line="246"/>
         <location filename="../ui/desktop_panel.cc" line="257"/>
         <source>Confirmation</source>
-        <translation>Подтверждение</translation>
+        <translation type="unfinished">Подтверждение</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.cc" line="225"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
-        <translation>Вы действительно хотите выключить удаленный компьютер?</translation>
+        <translation type="unfinished">Вы действительно хотите выключить удаленный компьютер?</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.cc" line="236"/>
         <source>Are you sure you want to reboot the remote computer?</source>
-        <translation>Вы действительно хотите перезагрузить удаленный компьютер?</translation>
+        <translation type="unfinished">Вы действительно хотите перезагрузить удаленный компьютер?</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.cc" line="247"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
-        <translation>Вы действительно хотите завершить сеанс пользователя на удаленном компьютере?</translation>
+        <translation type="unfinished">Вы действительно хотите завершить сеанс пользователя на удаленном компьютере?</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.cc" line="258"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
-        <translation>Вы действительно хотите заблокировать сеанс пользователя на удаленном компьютере?</translation>
+        <translation type="unfinished">Вы действительно хотите заблокировать сеанс пользователя на удаленном компьютере?</translation>
     </message>
 </context>
 <context>
-    <name>aspia::DesktopWindow</name>
-    <message>
-        <location filename="../ui/desktop_window.cc" line="463"/>
-        <source>Aspia Desktop Manage</source>
-        <translation>Управление рабочим столом</translation>
-    </message>
-    <message>
-        <location filename="../ui/desktop_window.cc" line="468"/>
-        <source>Aspia Desktop View</source>
-        <translation>Просмотр рабочего стола</translation>
-    </message>
+    <name>client::DesktopWindow</name>
     <message>
         <location filename="../ui/desktop_window.cc" line="298"/>
         <source>Save File</source>
-        <translation>Сохранение файла</translation>
+        <translation type="unfinished">Сохранение файла</translation>
     </message>
     <message>
         <location filename="../ui/desktop_window.cc" line="300"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
-        <translation>PNG изображение (*.png);;BMP изображение (*.bmp)</translation>
+        <translation type="unfinished">PNG изображение (*.png);;BMP изображение (*.bmp)</translation>
     </message>
     <message>
         <location filename="../ui/desktop_window.cc" line="321"/>
         <source>Warning</source>
-        <translation>Предупреждение</translation>
+        <translation type="unfinished">Предупреждение</translation>
     </message>
     <message>
         <location filename="../ui/desktop_window.cc" line="321"/>
         <source>Could not save image</source>
-        <translation>Не удалось сохранить изображение</translation>
+        <translation type="unfinished">Не удалось сохранить изображение</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_window.cc" line="463"/>
+        <source>Aspia Desktop Manage</source>
+        <translation type="unfinished">Управление рабочим столом</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_window.cc" line="468"/>
+        <source>Aspia Desktop View</source>
+        <translation type="unfinished">Просмотр рабочего стола</translation>
     </message>
 </context>
 <context>
-    <name>aspia::FileListModel</name>
+    <name>client::FileListModel</name>
     <message>
         <location filename="../ui/file_list_model.cc" line="95"/>
         <source>Folder</source>
-        <translation>Папка</translation>
+        <translation type="unfinished">Папка</translation>
     </message>
     <message>
         <location filename="../ui/file_list_model.cc" line="357"/>
         <source>Name</source>
-        <translation>Имя</translation>
+        <translation type="unfinished">Имя</translation>
     </message>
     <message>
         <location filename="../ui/file_list_model.cc" line="360"/>
         <source>Size</source>
-        <translation>Размер</translation>
+        <translation type="unfinished">Размер</translation>
     </message>
     <message>
         <location filename="../ui/file_list_model.cc" line="363"/>
         <source>Type</source>
-        <translation>Тип</translation>
+        <translation type="unfinished">Тип</translation>
     </message>
     <message>
         <location filename="../ui/file_list_model.cc" line="366"/>
         <source>Modified</source>
-        <translation>Изменен</translation>
+        <translation type="unfinished">Изменен</translation>
     </message>
     <message>
         <location filename="../ui/file_list_model.cc" line="522"/>
         <source>TB</source>
-        <translation>ТБ</translation>
+        <translation type="unfinished">ТБ</translation>
     </message>
     <message>
         <location filename="../ui/file_list_model.cc" line="527"/>
         <source>GB</source>
-        <translation>ГБ</translation>
+        <translation type="unfinished">ГБ</translation>
     </message>
     <message>
         <location filename="../ui/file_list_model.cc" line="532"/>
         <source>MB</source>
-        <translation>МБ</translation>
+        <translation type="unfinished">МБ</translation>
     </message>
     <message>
         <location filename="../ui/file_list_model.cc" line="537"/>
         <source>kB</source>
-        <translation>кБ</translation>
+        <translation type="unfinished">кБ</translation>
     </message>
     <message>
         <location filename="../ui/file_list_model.cc" line="542"/>
         <source>B</source>
-        <translation>Б</translation>
+        <translation type="unfinished">Б</translation>
     </message>
 </context>
 <context>
-    <name>aspia::FileManagerWindow</name>
-    <message>
-        <location filename="../ui/file_manager_window.cc" line="264"/>
-        <source>%1 - Aspia File Transfer</source>
-        <translation>%1 - Передача файлов</translation>
-    </message>
+    <name>client::FileManagerWindow</name>
     <message>
         <location filename="../ui/file_manager_window.cc" line="46"/>
         <source>Local Computer</source>
-        <translation>Локальный компьютер</translation>
+        <translation type="unfinished">Локальный компьютер</translation>
     </message>
     <message>
         <location filename="../ui/file_manager_window.cc" line="49"/>
         <source>Remote Computer</source>
-        <translation>Удаленный компьютер</translation>
+        <translation type="unfinished">Удаленный компьютер</translation>
+    </message>
+    <message>
+        <location filename="../ui/file_manager_window.cc" line="264"/>
+        <source>%1 - Aspia File Transfer</source>
+        <translation type="unfinished">%1 - Передача файлов</translation>
     </message>
 </context>
 <context>
-    <name>aspia::FilePanel</name>
+    <name>client::FilePanel</name>
     <message>
         <location filename="../ui/file_panel.cc" line="155"/>
         <location filename="../ui/file_panel.cc" line="168"/>
@@ -898,563 +1689,563 @@
         <location filename="../ui/file_panel.cc" line="320"/>
         <location filename="../ui/file_panel.cc" line="329"/>
         <source>Warning</source>
-        <translation>Предупреждение</translation>
+        <translation type="unfinished">Предупреждение</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="156"/>
         <source>Failed to get list of drives: %1</source>
-        <translation>Не удалось получить список дисков: %1</translation>
+        <translation type="unfinished">Не удалось получить список дисков: %1</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="169"/>
         <source>Failed to get list of files: %1</source>
-        <translation>Не удалось получить список файлов: %1</translation>
+        <translation type="unfinished">Не удалось получить список файлов: %1</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="193"/>
         <source>Failed to create directory: %1</source>
-        <translation>Не удалось создать директорию: %1</translation>
+        <translation type="unfinished">Не удалось создать директорию: %1</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="204"/>
         <source>Failed to rename item: %1</source>
-        <translation>Не удалось переименовать элемент: %1</translation>
+        <translation type="unfinished">Не удалось переименовать элемент: %1</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="273"/>
         <source>%1 object(s) selected</source>
-        <translation>Выбрано объектов: %1</translation>
+        <translation type="unfinished">Выбрано объектов: %1</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="294"/>
         <location filename="../ui/file_panel.cc" line="321"/>
         <source>Folder name can not be empty.</source>
-        <translation>Имя папки не может быть пустым.</translation>
+        <translation type="unfinished">Имя папки не может быть пустым.</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="303"/>
         <location filename="../ui/file_panel.cc" line="330"/>
         <source>Name contains invalid characters.</source>
-        <translation>Имя содержит некорректные символы.</translation>
+        <translation type="unfinished">Имя содержит некорректные символы.</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="355"/>
         <source>&amp;Send	F11</source>
-        <translation>&amp;Отправить	F11</translation>
+        <translation type="unfinished">&amp;Отправить	F11</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="357"/>
         <source>&amp;Delete	Delete</source>
-        <translation>&amp;Удалить	Delete</translation>
+        <translation type="unfinished">&amp;Удалить	Delete</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="367"/>
         <source>&amp;Create Folder</source>
-        <translation>&amp;Создать папку</translation>
+        <translation type="unfinished">&amp;Создать папку</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="422"/>
         <source>Confirmation</source>
-        <translation>Подтверждение</translation>
+        <translation type="unfinished">Подтверждение</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="423"/>
         <source>Are you sure you want to delete the selected items?</source>
-        <translation>Вы действительно хотите удалить выбранные элементы?</translation>
+        <translation type="unfinished">Вы действительно хотите удалить выбранные элементы?</translation>
     </message>
 </context>
 <context>
-    <name>aspia::FileRemoveDialog</name>
+    <name>client::FileRemoveDialog</name>
     <message>
         <location filename="../ui/file_remove_dialog.cc" line="62"/>
         <source>Deleting: %1</source>
-        <translation>Удаление: %1</translation>
+        <translation type="unfinished">Удаление: %1</translation>
     </message>
     <message>
         <location filename="../ui/file_remove_dialog.cc" line="86"/>
         <source>Warning</source>
-        <translation>Предупреждение</translation>
+        <translation type="unfinished">Предупреждение</translation>
     </message>
     <message>
         <location filename="../ui/file_remove_dialog.cc" line="94"/>
         <source>Skip</source>
-        <translation>Пропустить</translation>
+        <translation type="unfinished">Пропустить</translation>
     </message>
     <message>
         <location filename="../ui/file_remove_dialog.cc" line="97"/>
         <source>Skip All</source>
-        <translation>Пропустить все</translation>
+        <translation type="unfinished">Пропустить все</translation>
     </message>
     <message>
         <location filename="../ui/file_remove_dialog.cc" line="100"/>
         <source>Abort</source>
-        <translation>Прервать</translation>
+        <translation type="unfinished">Прервать</translation>
     </message>
 </context>
 <context>
-    <name>aspia::FileRemoveQueueBuilder</name>
+    <name>client::FileRemoveQueueBuilder</name>
     <message>
         <location filename="../file_remove_queue_builder.cc" line="54"/>
         <source>An unexpected answer was received.</source>
-        <translation>Получен неожиданный ответ на запрос.</translation>
+        <translation type="unfinished">Получен неожиданный ответ на запрос.</translation>
     </message>
     <message>
         <location filename="../file_remove_queue_builder.cc" line="60"/>
         <source>An error occurred while retrieving the list of files: %1</source>
-        <translation>Произошла ошибка при получении списка файлов: %1</translation>
+        <translation type="unfinished">Произошла ошибка при получении списка файлов: %1</translation>
     </message>
 </context>
 <context>
-    <name>aspia::FileRemover</name>
+    <name>client::FileRemover</name>
     <message>
         <location filename="../file_remover.cc" line="83"/>
         <source>An unexpected answer was received.</source>
-        <translation>Получен неожиданный ответ на запрос.</translation>
+        <translation type="unfinished">Получен неожиданный ответ на запрос.</translation>
     </message>
     <message>
         <location filename="../file_remover.cc" line="111"/>
         <source>Failed to delete &quot;%1&quot;: %2.</source>
-        <translation>Не удалось удалить &quot;%1&quot;: %2.</translation>
+        <translation type="unfinished">Не удалось удалить &quot;%1&quot;: %2.</translation>
     </message>
 </context>
 <context>
-    <name>aspia::FileTransfer</name>
+    <name>client::FileTransfer</name>
     <message>
         <location filename="../file_transfer.cc" line="117"/>
         <source>Failed to create directory &quot;%1&quot;: %2</source>
-        <translation>Не удалось создать директорию &quot;%1&quot;: %2</translation>
+        <translation type="unfinished">Не удалось создать директорию &quot;%1&quot;: %2</translation>
     </message>
     <message>
         <location filename="../file_transfer.cc" line="131"/>
         <source>Failed to create file &quot;%1&quot;: %2</source>
-        <translation>Не удалось создать файл &quot;%1&quot;: %2</translation>
+        <translation type="unfinished">Не удалось создать файл &quot;%1&quot;: %2</translation>
     </message>
     <message>
         <location filename="../file_transfer.cc" line="147"/>
         <source>Failed to write file &quot;%1&quot;: %2</source>
-        <translation>Не удалось выполнить запись файла &quot;%1&quot;: %2</translation>
-    </message>
-    <message>
-        <location filename="../file_transfer.cc" line="211"/>
-        <source>Failed to open file &quot;%1&quot;: %2</source>
-        <translation>Не удалось открыть файл &quot;%1&quot;: %2</translation>
+        <translation type="unfinished">Не удалось выполнить запись файла &quot;%1&quot;: %2</translation>
     </message>
     <message>
         <location filename="../file_transfer.cc" line="196"/>
         <location filename="../file_transfer.cc" line="240"/>
         <source>An unexpected response to the request was received</source>
-        <translation>Получен неожиданный ответ на запрос</translation>
+        <translation type="unfinished">Получен неожиданный ответ на запрос</translation>
+    </message>
+    <message>
+        <location filename="../file_transfer.cc" line="211"/>
+        <source>Failed to open file &quot;%1&quot;: %2</source>
+        <translation type="unfinished">Не удалось открыть файл &quot;%1&quot;: %2</translation>
     </message>
     <message>
         <location filename="../file_transfer.cc" line="228"/>
         <source>Failed to read file &quot;%1&quot;: %2</source>
-        <translation>Не удалось прочитать файл &quot;%1&quot;: %2</translation>
+        <translation type="unfinished">Не удалось прочитать файл &quot;%1&quot;: %2</translation>
     </message>
 </context>
 <context>
-    <name>aspia::FileTransferDialog</name>
+    <name>client::FileTransferDialog</name>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="72"/>
         <source>Current Task: Copying items.</source>
-        <translation>Текущая задача: копирование элементов.</translation>
+        <translation type="unfinished">Текущая задача: копирование элементов.</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="84"/>
         <source>From: %1</source>
-        <translation>Из: %1</translation>
+        <translation type="unfinished">Из: %1</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="89"/>
         <source>To: %1</source>
-        <translation>В: %1</translation>
+        <translation type="unfinished">В: %1</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="119"/>
         <source>Warning</source>
-        <translation>Предупреждение</translation>
+        <translation type="unfinished">Предупреждение</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="131"/>
         <source>Skip</source>
-        <translation>Пропустить</translation>
+        <translation type="unfinished">Пропустить</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="134"/>
         <source>Skip All</source>
-        <translation>Пропустить все</translation>
+        <translation type="unfinished">Пропустить все</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="137"/>
         <source>Replace</source>
-        <translation>Заменить</translation>
+        <translation type="unfinished">Заменить</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="140"/>
         <source>Replace All</source>
-        <translation>Заменить все</translation>
+        <translation type="unfinished">Заменить все</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="143"/>
         <source>Abort</source>
-        <translation>Прервать</translation>
+        <translation type="unfinished">Прервать</translation>
     </message>
 </context>
 <context>
-    <name>aspia::FileTransferQueueBuilder</name>
+    <name>client::FileTransferQueueBuilder</name>
     <message>
         <location filename="../file_transfer_queue_builder.cc" line="74"/>
         <source>An unexpected answer was received.</source>
-        <translation>Получен неожиданный ответ на запрос.</translation>
+        <translation type="unfinished">Получен неожиданный ответ на запрос.</translation>
     </message>
     <message>
         <location filename="../file_transfer_queue_builder.cc" line="80"/>
         <source>An error occurred while retrieving the list of files: %1</source>
-        <translation>Произошла ошибка при получении списка файлов: %1</translation>
+        <translation type="unfinished">Произошла ошибка при получении списка файлов: %1</translation>
     </message>
 </context>
 <context>
-    <name>aspia::SelectScreenAction</name>
+    <name>client::SelectScreenAction</name>
     <message>
         <location filename="../ui/select_screen_action.h" line="37"/>
         <source>Full Desktop</source>
-        <translation>Весь рабочий стол</translation>
+        <translation type="unfinished">Весь рабочий стол</translation>
     </message>
 </context>
 <context>
-    <name>aspia::SystemInfoWindow</name>
+    <name>client::SystemInfoWindow</name>
     <message>
         <location filename="../ui/system_info_window.cc" line="90"/>
         <source>HTML File</source>
-        <translation>HTML-файл</translation>
+        <translation type="unfinished">HTML-файл</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="92"/>
         <source>HTML File (*.html)</source>
-        <translation>HTML-файл (*.html)</translation>
+        <translation type="unfinished">HTML-файл (*.html)</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="101"/>
         <source>Warning</source>
-        <translation>Предупреждение</translation>
+        <translation type="unfinished">Предупреждение</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="102"/>
         <source>Failed to save file: %1</source>
-        <translation>Не удалось сохранить файл: %1</translation>
+        <translation type="unfinished">Не удалось сохранить файл: %1</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="134"/>
         <location filename="../ui/system_info_window.cc" line="158"/>
         <source>Name</source>
-        <translation>Имя</translation>
+        <translation type="unfinished">Имя</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="137"/>
         <source>Domain</source>
-        <translation>Домен</translation>
+        <translation type="unfinished">Домен</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="140"/>
         <source>Workgroup</source>
-        <translation>Рабочая группа</translation>
+        <translation type="unfinished">Рабочая группа</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="143"/>
         <source>Uptime</source>
-        <translation>Время работы</translation>
+        <translation type="unfinished">Время работы</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="148"/>
         <source>Computer</source>
-        <translation>Компьютер</translation>
+        <translation type="unfinished">Компьютер</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="161"/>
         <location filename="../ui/system_info_window.cc" line="227"/>
         <source>Version</source>
-        <translation>Версия</translation>
+        <translation type="unfinished">Версия</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="164"/>
         <source>Architecture</source>
-        <translation>Архитектура</translation>
+        <translation type="unfinished">Архитектура</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="169"/>
         <source>Operating System</source>
-        <translation>Операционная система</translation>
+        <translation type="unfinished">Операционная система</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="179"/>
         <location filename="../ui/system_info_window.cc" line="252"/>
         <source>Manufacturer</source>
-        <translation>Производитель</translation>
+        <translation type="unfinished">Производитель</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="182"/>
         <location filename="../ui/system_info_window.cc" line="197"/>
         <source>Model</source>
-        <translation>Модель</translation>
+        <translation type="unfinished">Модель</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="187"/>
         <source>Motherboard</source>
-        <translation>Материнская плата</translation>
+        <translation type="unfinished">Материнская плата</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="200"/>
         <location filename="../ui/system_info_window.cc" line="224"/>
         <source>Vendor</source>
-        <translation>Поставщик</translation>
+        <translation type="unfinished">Поставщик</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="203"/>
         <source>Packages</source>
-        <translation>Сокетов</translation>
+        <translation type="unfinished">Сокетов</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="206"/>
         <source>Cores</source>
-        <translation>Ядер</translation>
+        <translation type="unfinished">Ядер</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="209"/>
         <source>Threads</source>
-        <translation>Потоков</translation>
+        <translation type="unfinished">Потоков</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="214"/>
         <source>Processor</source>
-        <translation>Процессор</translation>
+        <translation type="unfinished">Процессор</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="230"/>
         <source>Date</source>
-        <translation>Дата</translation>
+        <translation type="unfinished">Дата</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="255"/>
         <source>Size</source>
-        <translation>Размер</translation>
+        <translation type="unfinished">Размер</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="258"/>
         <source>Speed</source>
-        <translation>Частота</translation>
+        <translation type="unfinished">Частота</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="258"/>
         <source>%1 MHz</source>
-        <translation>%1 МГц</translation>
+        <translation type="unfinished">%1 МГц</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="261"/>
         <source>Type</source>
-        <translation>Тип</translation>
+        <translation type="unfinished">Тип</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="264"/>
         <source>Form Factor</source>
-        <translation>Форм-фактор</translation>
+        <translation type="unfinished">Форм-фактор</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="267"/>
         <source>Part Number</source>
-        <translation>Номер партии</translation>
+        <translation type="unfinished">Номер партии</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="271"/>
         <source>Installed</source>
-        <translation>Установлено</translation>
+        <translation type="unfinished">Установлено</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="271"/>
         <location filename="../ui/system_info_window.cc" line="347"/>
         <location filename="../ui/system_info_window.cc" line="414"/>
         <source>No</source>
-        <translation>Нет</translation>
+        <translation type="unfinished">Нет</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="281"/>
         <source>Memory</source>
-        <translation>Память</translation>
+        <translation type="unfinished">Память</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="310"/>
         <source>%1 (%2 free)</source>
-        <translation>%1 (%2 свободно)</translation>
+        <translation type="unfinished">%1 (%2 свободно)</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="321"/>
         <source>Logical Drives</source>
-        <translation>Логические диски</translation>
+        <translation type="unfinished">Логические диски</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="336"/>
         <source>Adapter Name</source>
-        <translation>Имя адаптера</translation>
+        <translation type="unfinished">Имя адаптера</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="339"/>
         <source>Interface Type</source>
-        <translation>Тип интерфейса</translation>
+        <translation type="unfinished">Тип интерфейса</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="342"/>
         <source>Connection Speed</source>
-        <translation>Скорость соединения</translation>
+        <translation type="unfinished">Скорость соединения</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="345"/>
         <source>MAC Address</source>
-        <translation>MAC адрес</translation>
+        <translation type="unfinished">MAC адрес</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="347"/>
         <source>DHCP Enabled</source>
-        <translation>DHCP включен</translation>
+        <translation type="unfinished">DHCP включен</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="347"/>
         <location filename="../ui/system_info_window.cc" line="406"/>
         <location filename="../ui/system_info_window.cc" line="414"/>
         <source>Yes</source>
-        <translation>Да</translation>
+        <translation type="unfinished">Да</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="352"/>
         <source>DHCP Server #%1</source>
-        <translation>DHCP сервер #%1</translation>
+        <translation type="unfinished">DHCP сервер #%1</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="352"/>
         <source>DHCP Server</source>
-        <translation>DHCP сервер</translation>
+        <translation type="unfinished">DHCP сервер</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="364"/>
         <source>Address #%1</source>
-        <translation>Адрес #%1</translation>
+        <translation type="unfinished">Адрес #%1</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="364"/>
         <source>Address</source>
-        <translation>Адрес</translation>
+        <translation type="unfinished">Адрес</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="372"/>
         <source>Gateway #%1</source>
-        <translation>Шлюз #%1</translation>
+        <translation type="unfinished">Шлюз #%1</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="372"/>
         <source>Gateway</source>
-        <translation>Шлюз</translation>
+        <translation type="unfinished">Шлюз</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="392"/>
         <source>Network Connections</source>
-        <translation>Сетевые подключения</translation>
+        <translation type="unfinished">Сетевые подключения</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="406"/>
         <source>Default</source>
-        <translation>По умолчанию</translation>
+        <translation type="unfinished">По умолчанию</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="409"/>
         <source>Port</source>
-        <translation>Порт</translation>
+        <translation type="unfinished">Порт</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="412"/>
         <source>Driver</source>
-        <translation>Драйвер</translation>
+        <translation type="unfinished">Драйвер</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="414"/>
         <source>Shared</source>
-        <translation>Общий доступ</translation>
+        <translation type="unfinished">Общий доступ</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="417"/>
         <source>Share Name</source>
-        <translation>Имя общего ресурса</translation>
+        <translation type="unfinished">Имя общего ресурса</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="419"/>
         <source>Jobs Count</source>
-        <translation>Количество заданий</translation>
+        <translation type="unfinished">Количество заданий</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="428"/>
         <source>Printers</source>
-        <translation>Принтеры</translation>
+        <translation type="unfinished">Принтеры</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="451"/>
         <source>TB</source>
-        <translation>ТБ</translation>
+        <translation type="unfinished">ТБ</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="456"/>
         <source>GB</source>
-        <translation>ГБ</translation>
+        <translation type="unfinished">ГБ</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="461"/>
         <source>MB</source>
-        <translation>МБ</translation>
+        <translation type="unfinished">МБ</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="466"/>
         <source>kB</source>
-        <translation>кБ</translation>
+        <translation type="unfinished">кБ</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="471"/>
         <source>B</source>
-        <translation>Б</translation>
+        <translation type="unfinished">Б</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="489"/>
         <source>%1 days %2 hours %3 minutes %4 seconds</source>
-        <translation>%1 дней %2 часов %3 минут %4 секунд</translation>
+        <translation type="unfinished">%1 дней %2 часов %3 минут %4 секунд</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="495"/>
         <source>%1 hours %2 minutes %3 seconds</source>
-        <translation>%1 часов %2 минут %3 секунд</translation>
+        <translation type="unfinished">%1 часов %2 минут %3 секунд</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="501"/>
         <source>%1 minutes %2 seconds</source>
-        <translation>%1 минут %2 секунд</translation>
+        <translation type="unfinished">%1 минут %2 секунд</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="505"/>
         <source>%1 seconds</source>
-        <translation>%1 секунд</translation>
+        <translation type="unfinished">%1 секунд</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="520"/>
         <source>Gbps</source>
-        <translation>Гбит/c</translation>
+        <translation type="unfinished">Гбит/c</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="525"/>
         <source>Mbps</source>
-        <translation>Мбит/c</translation>
+        <translation type="unfinished">Мбит/c</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="530"/>
         <source>Kbps</source>
-        <translation>Кбит/с</translation>
+        <translation type="unfinished">Кбит/с</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="535"/>
         <source>bps</source>
-        <translation>бит/c</translation>
+        <translation type="unfinished">бит/c</translation>
     </message>
 </context>
 </TS>

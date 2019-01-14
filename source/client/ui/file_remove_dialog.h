@@ -27,7 +27,7 @@
 class QWinTaskbarProgress;
 #endif
 
-namespace aspia {
+namespace client {
 
 class FileRemoveDialog : public QDialog
 {
@@ -51,6 +51,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(FileRemoveDialog);
 };
 
-} // namespace aspia
+} // namespace client
 
 #endif // ASPIA_CLIENT__UI__FILE_REMOVE_DIALOG_H

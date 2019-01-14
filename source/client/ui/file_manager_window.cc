@@ -27,7 +27,7 @@
 #include "client/client_file_transfer.h"
 #include "common/file_worker.h"
 
-namespace aspia {
+namespace client {
 
 FileManagerWindow::FileManagerWindow(const ConnectData& connect_data, QWidget* parent)
     : ClientWindow(parent)
@@ -264,4 +264,4 @@ QString FileManagerWindow::createWindowTitle(const ConnectData& connect_data)
     return tr("%1 - Aspia File Transfer").arg(computer_name);
 }
 
-} // namespace aspia
+} // namespace client

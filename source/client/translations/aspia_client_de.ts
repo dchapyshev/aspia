@@ -464,122 +464,614 @@
 <context>
     <name>aspia::AddressBar</name>
     <message>
-        <location filename="../ui/address_bar.cc" line="56"/>
         <source>Warning</source>
-        <translation>Warnung</translation>
+        <translation type="vanished">Warnung</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar.cc" line="57"/>
         <source>An incorrect path to the folder was entered.</source>
-        <translation>Ein falscher Pfad zu dem Ordner wurde eingegeben.</translation>
+        <translation type="vanished">Ein falscher Pfad zu dem Ordner wurde eingegeben.</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar.cc" line="77"/>
         <source>The path can not contain characters %1.</source>
-        <translation>Der Pfad darf die Zeichen &quot;%1&quot; nicht beinhalten.</translation>
+        <translation type="vanished">Der Pfad darf die Zeichen &quot;%1&quot; nicht beinhalten.</translation>
     </message>
 </context>
 <context>
     <name>aspia::AddressBarModel</name>
     <message>
+        <source>Home Folder</source>
+        <translation type="vanished">Home-Ordner</translation>
+    </message>
+    <message>
+        <source>Desktop</source>
+        <translation type="vanished">Desktop</translation>
+    </message>
+    <message>
+        <source>Computer</source>
+        <translation type="vanished">Computer</translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="vanished">Name</translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="vanished">Typ</translation>
+    </message>
+    <message>
+        <source>Total Space</source>
+        <translation type="vanished">Gesamter Speicherplatz</translation>
+    </message>
+    <message>
+        <source>Free Space</source>
+        <translation type="vanished">Freier Speicherplatz</translation>
+    </message>
+    <message>
+        <source>Optical Drive</source>
+        <translation type="vanished">Optisches Laufwerk</translation>
+    </message>
+    <message>
+        <source>Removable Drive</source>
+        <translation type="vanished">Wechsellaufwerk</translation>
+    </message>
+    <message>
+        <source>Fixed Drive</source>
+        <translation type="vanished">Festes Laufwerk</translation>
+    </message>
+    <message>
+        <source>Network Drive</source>
+        <translation type="vanished">Netzlaufwerk</translation>
+    </message>
+    <message>
+        <source>RAM Drive</source>
+        <translation type="vanished">RAM-Laufwerk</translation>
+    </message>
+    <message>
+        <source>Desktop Folder</source>
+        <translation type="vanished">Desktopordner</translation>
+    </message>
+    <message>
+        <source>Unknown Drive</source>
+        <translation type="vanished">Unbekanntes Laufwerk</translation>
+    </message>
+    <message>
+        <source>TB</source>
+        <translation type="vanished">TB</translation>
+    </message>
+    <message>
+        <source>GB</source>
+        <translation type="vanished">GB</translation>
+    </message>
+    <message>
+        <source>MB</source>
+        <translation type="vanished">MB</translation>
+    </message>
+    <message>
+        <source>kB</source>
+        <translation type="vanished">kB</translation>
+    </message>
+    <message>
+        <source>B</source>
+        <translation type="vanished">B</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::ClientDesktop</name>
+    <message>
+        <source>Session error: Invalid message from host.</source>
+        <translation type="obsolete">Sitzungsfehler: Ungültige Nachricht vom Host.</translation>
+    </message>
+    <message>
+        <source>Session error: Video decoder not initialized.</source>
+        <translation type="obsolete">Sitzungsfehler: Videodecoder nicht initialisiert.</translation>
+    </message>
+    <message>
+        <source>Session error: Wrong video frame size.</source>
+        <translation type="obsolete">Sitzungsfehler: Falsche Videoframegröße.</translation>
+    </message>
+    <message>
+        <source>Session error: Wrong video frame position.</source>
+        <translation type="obsolete">Sitzungsfehler: Falsche Position des Videoframes.</translation>
+    </message>
+    <message>
+        <source>Session error: The desktop frame is not initialized.</source>
+        <translation type="obsolete">Sitzungsfehler: Desktop ist nicht initialisiert.</translation>
+    </message>
+    <message>
+        <source>Session error: The video packet could not be decoded.</source>
+        <translation type="obsolete">Sitzungsfehler: Das Videopaket konnte nicht decodiert werden.</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::ClientDialog</name>
+    <message>
+        <source>Desktop Manage</source>
+        <translation type="vanished">Desktopverwaltung</translation>
+    </message>
+    <message>
+        <source>Desktop View</source>
+        <translation type="vanished">Desktopansicht</translation>
+    </message>
+    <message>
+        <source>File Transfer</source>
+        <translation type="vanished">Dateiübertragung</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::ClientFileTransfer</name>
+    <message>
+        <source>Session error: Invalid message from host.</source>
+        <translation type="obsolete">Sitzungsfehler: Ungültige Nachricht vom Host.</translation>
+    </message>
+    <message>
+        <source>Session error: There are no logged in users. File transfer is not available.</source>
+        <translation type="obsolete">Sitzungsfehler: Es sind keine Benutzer angemeldet. Die Dateiübertragung ist nicht verfügbar.</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::ClientWindow</name>
+    <message>
+        <source>Attempt to connect to %1:%2.</source>
+        <translation type="obsolete">Versuch, eine Verbindung mit %1:%2 herzustellen.</translation>
+    </message>
+    <message>
+        <source>Session started.</source>
+        <translation type="obsolete">Die Sitzung wurde gestartet.</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::DesktopConfigDialog</name>
+    <message>
+        <source>True color (32 bit)</source>
+        <translation type="vanished">True color (32 Bit)</translation>
+    </message>
+    <message>
+        <source>High color (16 bit)</source>
+        <translation type="vanished">High color (16 Bit)</translation>
+    </message>
+    <message>
+        <source>256 colors (8 bit)</source>
+        <translation type="vanished">256 Farben (8 Bit)</translation>
+    </message>
+    <message>
+        <source>64 colors (6 bit)</source>
+        <translation type="vanished">64 Farben (6 Bit)</translation>
+    </message>
+    <message>
+        <source>8 colors (3 bit)</source>
+        <translation type="vanished">8 Farben (3 Bit)</translation>
+    </message>
+    <message>
+        <source>Compression ratio: %1</source>
+        <translation type="vanished">Kompressionsrate: %1</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::DesktopPanel</name>
+    <message>
+        <source>Confirmation</source>
+        <translation type="obsolete">Bestätigung</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::DesktopWindow</name>
+    <message>
+        <source>Aspia Desktop Manage</source>
+        <translation type="vanished">Aspia Desktopverwaltung</translation>
+    </message>
+    <message>
+        <source>Aspia Desktop View</source>
+        <translation type="vanished">Aspia Desktopansicht</translation>
+    </message>
+    <message>
+        <source>Warning</source>
+        <translation type="obsolete">Warnung</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::FileListModel</name>
+    <message>
+        <source>Folder</source>
+        <translation type="vanished">Ordner</translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="vanished">Name</translation>
+    </message>
+    <message>
+        <source>Size</source>
+        <translation type="vanished">Größe</translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="vanished">Typ</translation>
+    </message>
+    <message>
+        <source>Modified</source>
+        <translation type="vanished">Geändert</translation>
+    </message>
+    <message>
+        <source>TB</source>
+        <translation type="vanished">TB</translation>
+    </message>
+    <message>
+        <source>GB</source>
+        <translation type="vanished">GB</translation>
+    </message>
+    <message>
+        <source>MB</source>
+        <translation type="vanished">MB</translation>
+    </message>
+    <message>
+        <source>kB</source>
+        <translation type="vanished">kB</translation>
+    </message>
+    <message>
+        <source>B</source>
+        <translation type="vanished">B</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::FileManagerWindow</name>
+    <message>
+        <source>%1 - Aspia File Transfer</source>
+        <translation type="vanished">%1 - Aspia Dateiübertragung</translation>
+    </message>
+    <message>
+        <source>Local Computer</source>
+        <translation type="vanished">Lokaler Computer</translation>
+    </message>
+    <message>
+        <source>Remote Computer</source>
+        <translation type="vanished">Remote Computer</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::FilePanel</name>
+    <message>
+        <source>Warning</source>
+        <translation type="vanished">Warnung</translation>
+    </message>
+    <message>
+        <source>Failed to get list of drives: %1</source>
+        <translation type="vanished">Fehler beim Abrufen der Laufwerksliste: %1</translation>
+    </message>
+    <message>
+        <source>Failed to get list of files: %1</source>
+        <translation type="vanished">Fehler beim Abrufen der Dateiliste: %1</translation>
+    </message>
+    <message>
+        <source>Failed to create directory: %1</source>
+        <translation type="vanished">Fehler beim Erstellen des Verzeichnisses: %1</translation>
+    </message>
+    <message>
+        <source>Failed to rename item: %1</source>
+        <translation type="vanished">Fehler beim Umbenennen des Elements: %1</translation>
+    </message>
+    <message>
+        <source>%1 object(s) selected</source>
+        <translation type="vanished">%1 Objekt(e) ausgewählt</translation>
+    </message>
+    <message>
+        <source>Folder name can not be empty.</source>
+        <translation type="vanished">Ordnername darf nicht leer sein.</translation>
+    </message>
+    <message>
+        <source>Name contains invalid characters.</source>
+        <translation type="vanished">Name beinhaltet ungültige Zeichen.</translation>
+    </message>
+    <message>
+        <source>&amp;Send	F11</source>
+        <translation type="vanished">&amp;Senden F11</translation>
+    </message>
+    <message>
+        <source>&amp;Delete	Delete</source>
+        <translation type="vanished">&amp;Löschen Entf</translation>
+    </message>
+    <message>
+        <source>&amp;Create Folder</source>
+        <translation type="vanished">&amp;Ordner erstellen</translation>
+    </message>
+    <message>
+        <source>Confirmation</source>
+        <translation type="vanished">Bestätigung</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to delete the selected items?</source>
+        <translation type="vanished">Möchten Sie die ausgewählten Elemente wirklich löschen?</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::FileRemoveDialog</name>
+    <message>
+        <source>Deleting: %1</source>
+        <translation type="vanished">Löschen: %1</translation>
+    </message>
+    <message>
+        <source>Warning</source>
+        <translation type="vanished">Warnung</translation>
+    </message>
+    <message>
+        <source>Skip</source>
+        <translation type="vanished">Überspringen</translation>
+    </message>
+    <message>
+        <source>Skip All</source>
+        <translation type="vanished">All überspringen</translation>
+    </message>
+    <message>
+        <source>Abort</source>
+        <translation type="vanished">Abbrechen</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::FileRemoveQueueBuilder</name>
+    <message>
+        <source>An unexpected answer was received.</source>
+        <translation type="vanished">Eine unerwartete Antwort wurde erhalten.</translation>
+    </message>
+    <message>
+        <source>An error occurred while retrieving the list of files: %1</source>
+        <translation type="vanished">Beim Abrufen der Dateiliste ist ein Fehler aufgetreten: %1</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::FileRemover</name>
+    <message>
+        <source>An unexpected answer was received.</source>
+        <translation type="vanished">Eine unerwartete Antwort wurde erhalten.</translation>
+    </message>
+    <message>
+        <source>Failed to delete &quot;%1&quot;: %2.</source>
+        <translation type="vanished">Fehler beim Löschen &quot;%1&quot;: %2.</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::FileTransfer</name>
+    <message>
+        <source>Failed to create directory &quot;%1&quot;: %2</source>
+        <translation type="vanished">Fehler beim Erstellen des Verzeichnisses &quot;%1&quot;: %2</translation>
+    </message>
+    <message>
+        <source>Failed to create file &quot;%1&quot;: %2</source>
+        <translation type="vanished">Fehler beim Erstellen der Datei &quot;%1&quot;: %2</translation>
+    </message>
+    <message>
+        <source>Failed to write file &quot;%1&quot;: %2</source>
+        <translation type="vanished">Fehler beim Schreiben der Datei &quot;%1&quot;: %2</translation>
+    </message>
+    <message>
+        <source>An unexpected response to the request was received</source>
+        <translation type="vanished">Eine unerwartete Antwort auf die Anfrage wurde empfangen</translation>
+    </message>
+    <message>
+        <source>Failed to open file &quot;%1&quot;: %2</source>
+        <translation type="vanished">Fehler beim Öffnen der Datei &quot;%1&quot;: %2</translation>
+    </message>
+    <message>
+        <source>Failed to read file &quot;%1&quot;: %2</source>
+        <translation type="vanished">Fehler beim Lesen der Datei &quot;%1&quot;: %2</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::FileTransferDialog</name>
+    <message>
+        <source>Current Task: Copying items.</source>
+        <translation type="vanished">Aktuelle Aufgabe: Elemente kopieren.</translation>
+    </message>
+    <message>
+        <source>From: %1</source>
+        <translation type="vanished">Von: %1</translation>
+    </message>
+    <message>
+        <source>To: %1</source>
+        <translation type="vanished">Zu: %1</translation>
+    </message>
+    <message>
+        <source>Warning</source>
+        <translation type="vanished">Warnung</translation>
+    </message>
+    <message>
+        <source>Skip</source>
+        <translation type="vanished">Überspringen</translation>
+    </message>
+    <message>
+        <source>Skip All</source>
+        <translation type="vanished">Alle überspringen</translation>
+    </message>
+    <message>
+        <source>Replace</source>
+        <translation type="vanished">Ersetzen</translation>
+    </message>
+    <message>
+        <source>Replace All</source>
+        <translation type="vanished">Alle ersetzen</translation>
+    </message>
+    <message>
+        <source>Abort</source>
+        <translation type="vanished">Abbrechen</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::FileTransferQueueBuilder</name>
+    <message>
+        <source>An unexpected answer was received.</source>
+        <translation type="vanished">Eine unerwartete Antwort wurde erhalten.</translation>
+    </message>
+    <message>
+        <source>An error occurred while retrieving the list of files: %1</source>
+        <translation type="vanished">Beim Abrufen der Dateiliste ist ein Fehler aufgetreten: %1</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::SelectScreenAction</name>
+    <message>
+        <source>Full Desktop</source>
+        <translation type="vanished">Vollen Desktop</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::SystemInfoWindow</name>
+    <message>
+        <source>Warning</source>
+        <translation type="obsolete">Warnung</translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="obsolete">Name</translation>
+    </message>
+    <message>
+        <source>Computer</source>
+        <translation type="obsolete">Computer</translation>
+    </message>
+    <message>
+        <source>Size</source>
+        <translation type="obsolete">Größe</translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="obsolete">Typ</translation>
+    </message>
+    <message>
+        <source>TB</source>
+        <translation type="obsolete">TB</translation>
+    </message>
+    <message>
+        <source>GB</source>
+        <translation type="obsolete">GB</translation>
+    </message>
+    <message>
+        <source>MB</source>
+        <translation type="obsolete">MB</translation>
+    </message>
+    <message>
+        <source>kB</source>
+        <translation type="obsolete">kB</translation>
+    </message>
+    <message>
+        <source>B</source>
+        <translation type="obsolete">B</translation>
+    </message>
+</context>
+<context>
+    <name>client::AddressBar</name>
+    <message>
+        <location filename="../ui/address_bar.cc" line="56"/>
+        <source>Warning</source>
+        <translation type="unfinished">Warnung</translation>
+    </message>
+    <message>
+        <location filename="../ui/address_bar.cc" line="57"/>
+        <source>An incorrect path to the folder was entered.</source>
+        <translation type="unfinished">Ein falscher Pfad zu dem Ordner wurde eingegeben.</translation>
+    </message>
+    <message>
+        <location filename="../ui/address_bar.cc" line="77"/>
+        <source>The path can not contain characters %1.</source>
+        <translation type="unfinished">Der Pfad darf die Zeichen &quot;%1&quot; nicht beinhalten.</translation>
+    </message>
+</context>
+<context>
+    <name>client::AddressBarModel</name>
+    <message>
         <location filename="../ui/address_bar_model.cc" line="81"/>
         <location filename="../ui/address_bar_model.cc" line="445"/>
         <source>Home Folder</source>
-        <translation>Home-Ordner</translation>
+        <translation type="unfinished">Home-Ordner</translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="85"/>
         <source>Desktop</source>
-        <translation>Desktop</translation>
+        <translation type="unfinished">Desktop</translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="277"/>
         <source>Computer</source>
-        <translation>Computer</translation>
+        <translation type="unfinished">Computer</translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="390"/>
         <source>Name</source>
-        <translation>Name</translation>
+        <translation type="unfinished">Name</translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="393"/>
         <source>Type</source>
-        <translation>Typ</translation>
+        <translation type="unfinished">Typ</translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="396"/>
         <source>Total Space</source>
-        <translation>Gesamter Speicherplatz</translation>
+        <translation type="unfinished">Gesamter Speicherplatz</translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="399"/>
         <source>Free Space</source>
-        <translation>Freier Speicherplatz</translation>
+        <translation type="unfinished">Freier Speicherplatz</translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="430"/>
         <source>Optical Drive</source>
-        <translation>Optisches Laufwerk</translation>
+        <translation type="unfinished">Optisches Laufwerk</translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="433"/>
         <source>Removable Drive</source>
-        <translation>Wechsellaufwerk</translation>
+        <translation type="unfinished">Wechsellaufwerk</translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="436"/>
         <source>Fixed Drive</source>
-        <translation>Festes Laufwerk</translation>
+        <translation type="unfinished">Festes Laufwerk</translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="439"/>
         <source>Network Drive</source>
-        <translation>Netzlaufwerk</translation>
+        <translation type="unfinished">Netzlaufwerk</translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="442"/>
         <source>RAM Drive</source>
-        <translation>RAM-Laufwerk</translation>
+        <translation type="unfinished">RAM-Laufwerk</translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="448"/>
         <source>Desktop Folder</source>
-        <translation>Desktopordner</translation>
+        <translation type="unfinished">Desktopordner</translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="451"/>
         <source>Unknown Drive</source>
-        <translation>Unbekanntes Laufwerk</translation>
+        <translation type="unfinished">Unbekanntes Laufwerk</translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="468"/>
         <source>TB</source>
-        <translation>TB</translation>
+        <translation type="unfinished">TB</translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="473"/>
         <source>GB</source>
-        <translation>GB</translation>
+        <translation type="unfinished">GB</translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="478"/>
         <source>MB</source>
-        <translation>MB</translation>
+        <translation type="unfinished">MB</translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="483"/>
         <source>kB</source>
-        <translation>kB</translation>
+        <translation type="unfinished">kB</translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="488"/>
         <source>B</source>
-        <translation>B</translation>
+        <translation type="unfinished">B</translation>
     </message>
 </context>
 <context>
-    <name>aspia::Client</name>
+    <name>client::Client</name>
     <message>
         <location filename="../client.cc" line="88"/>
         <source>Connection was refused by the peer (or timed out).</source>
@@ -642,7 +1134,7 @@
     </message>
 </context>
 <context>
-    <name>aspia::ClientDesktop</name>
+    <name>client::ClientDesktop</name>
     <message>
         <location filename="../client_desktop.cc" line="49"/>
         <source>Session error: Invalid message from host.</source>
@@ -675,25 +1167,25 @@
     </message>
 </context>
 <context>
-    <name>aspia::ClientDialog</name>
+    <name>client::ClientDialog</name>
     <message>
         <location filename="../ui/client_dialog.cc" line="40"/>
         <source>Desktop Manage</source>
-        <translation>Desktopverwaltung</translation>
+        <translation type="unfinished">Desktopverwaltung</translation>
     </message>
     <message>
         <location filename="../ui/client_dialog.cc" line="44"/>
         <source>Desktop View</source>
-        <translation>Desktopansicht</translation>
+        <translation type="unfinished">Desktopansicht</translation>
     </message>
     <message>
         <location filename="../ui/client_dialog.cc" line="48"/>
         <source>File Transfer</source>
-        <translation>Dateiübertragung</translation>
+        <translation type="unfinished">Dateiübertragung</translation>
     </message>
 </context>
 <context>
-    <name>aspia::ClientFileTransfer</name>
+    <name>client::ClientFileTransfer</name>
     <message>
         <location filename="../client_file_transfer.cc" line="59"/>
         <source>Session error: Invalid message from host.</source>
@@ -706,7 +1198,7 @@
     </message>
 </context>
 <context>
-    <name>aspia::ClientWindow</name>
+    <name>client::ClientWindow</name>
     <message>
         <location filename="../ui/client_window.cc" line="118"/>
         <source>Attempt to connect to %1:%2.</source>
@@ -719,40 +1211,40 @@
     </message>
 </context>
 <context>
-    <name>aspia::DesktopConfigDialog</name>
+    <name>client::DesktopConfigDialog</name>
     <message>
         <location filename="../ui/desktop_config_dialog.cc" line="65"/>
         <source>True color (32 bit)</source>
-        <translation>True color (32 Bit)</translation>
+        <translation type="unfinished">True color (32 Bit)</translation>
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.cc" line="66"/>
         <source>High color (16 bit)</source>
-        <translation>High color (16 Bit)</translation>
+        <translation type="unfinished">High color (16 Bit)</translation>
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.cc" line="67"/>
         <source>256 colors (8 bit)</source>
-        <translation>256 Farben (8 Bit)</translation>
+        <translation type="unfinished">256 Farben (8 Bit)</translation>
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.cc" line="68"/>
         <source>64 colors (6 bit)</source>
-        <translation>64 Farben (6 Bit)</translation>
+        <translation type="unfinished">64 Farben (6 Bit)</translation>
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.cc" line="69"/>
         <source>8 colors (3 bit)</source>
-        <translation>8 Farben (3 Bit)</translation>
+        <translation type="unfinished">8 Farben (3 Bit)</translation>
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.cc" line="155"/>
         <source>Compression ratio: %1</source>
-        <translation>Kompressionsrate: %1</translation>
+        <translation type="unfinished">Kompressionsrate: %1</translation>
     </message>
 </context>
 <context>
-    <name>aspia::DesktopPanel</name>
+    <name>client::DesktopPanel</name>
     <message>
         <location filename="../ui/desktop_panel.cc" line="224"/>
         <location filename="../ui/desktop_panel.cc" line="235"/>
@@ -783,17 +1275,7 @@
     </message>
 </context>
 <context>
-    <name>aspia::DesktopWindow</name>
-    <message>
-        <location filename="../ui/desktop_window.cc" line="463"/>
-        <source>Aspia Desktop Manage</source>
-        <translation>Aspia Desktopverwaltung</translation>
-    </message>
-    <message>
-        <location filename="../ui/desktop_window.cc" line="468"/>
-        <source>Aspia Desktop View</source>
-        <translation>Aspia Desktopansicht</translation>
-    </message>
+    <name>client::DesktopWindow</name>
     <message>
         <location filename="../ui/desktop_window.cc" line="298"/>
         <source>Save File</source>
@@ -814,80 +1296,90 @@
         <source>Could not save image</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../ui/desktop_window.cc" line="463"/>
+        <source>Aspia Desktop Manage</source>
+        <translation type="unfinished">Aspia Desktopverwaltung</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_window.cc" line="468"/>
+        <source>Aspia Desktop View</source>
+        <translation type="unfinished">Aspia Desktopansicht</translation>
+    </message>
 </context>
 <context>
-    <name>aspia::FileListModel</name>
+    <name>client::FileListModel</name>
     <message>
         <location filename="../ui/file_list_model.cc" line="95"/>
         <source>Folder</source>
-        <translation>Ordner</translation>
+        <translation type="unfinished">Ordner</translation>
     </message>
     <message>
         <location filename="../ui/file_list_model.cc" line="357"/>
         <source>Name</source>
-        <translation>Name</translation>
+        <translation type="unfinished">Name</translation>
     </message>
     <message>
         <location filename="../ui/file_list_model.cc" line="360"/>
         <source>Size</source>
-        <translation>Größe</translation>
+        <translation type="unfinished">Größe</translation>
     </message>
     <message>
         <location filename="../ui/file_list_model.cc" line="363"/>
         <source>Type</source>
-        <translation>Typ</translation>
+        <translation type="unfinished">Typ</translation>
     </message>
     <message>
         <location filename="../ui/file_list_model.cc" line="366"/>
         <source>Modified</source>
-        <translation>Geändert</translation>
+        <translation type="unfinished">Geändert</translation>
     </message>
     <message>
         <location filename="../ui/file_list_model.cc" line="522"/>
         <source>TB</source>
-        <translation>TB</translation>
+        <translation type="unfinished">TB</translation>
     </message>
     <message>
         <location filename="../ui/file_list_model.cc" line="527"/>
         <source>GB</source>
-        <translation>GB</translation>
+        <translation type="unfinished">GB</translation>
     </message>
     <message>
         <location filename="../ui/file_list_model.cc" line="532"/>
         <source>MB</source>
-        <translation>MB</translation>
+        <translation type="unfinished">MB</translation>
     </message>
     <message>
         <location filename="../ui/file_list_model.cc" line="537"/>
         <source>kB</source>
-        <translation>kB</translation>
+        <translation type="unfinished">kB</translation>
     </message>
     <message>
         <location filename="../ui/file_list_model.cc" line="542"/>
         <source>B</source>
-        <translation>B</translation>
+        <translation type="unfinished">B</translation>
     </message>
 </context>
 <context>
-    <name>aspia::FileManagerWindow</name>
-    <message>
-        <location filename="../ui/file_manager_window.cc" line="264"/>
-        <source>%1 - Aspia File Transfer</source>
-        <translation>%1 - Aspia Dateiübertragung</translation>
-    </message>
+    <name>client::FileManagerWindow</name>
     <message>
         <location filename="../ui/file_manager_window.cc" line="46"/>
         <source>Local Computer</source>
-        <translation>Lokaler Computer</translation>
+        <translation type="unfinished">Lokaler Computer</translation>
     </message>
     <message>
         <location filename="../ui/file_manager_window.cc" line="49"/>
         <source>Remote Computer</source>
-        <translation>Remote Computer</translation>
+        <translation type="unfinished">Remote Computer</translation>
+    </message>
+    <message>
+        <location filename="../ui/file_manager_window.cc" line="264"/>
+        <source>%1 - Aspia File Transfer</source>
+        <translation type="unfinished">%1 - Aspia Dateiübertragung</translation>
     </message>
 </context>
 <context>
-    <name>aspia::FilePanel</name>
+    <name>client::FilePanel</name>
     <message>
         <location filename="../ui/file_panel.cc" line="155"/>
         <location filename="../ui/file_panel.cc" line="168"/>
@@ -898,230 +1390,230 @@
         <location filename="../ui/file_panel.cc" line="320"/>
         <location filename="../ui/file_panel.cc" line="329"/>
         <source>Warning</source>
-        <translation>Warnung</translation>
+        <translation type="unfinished">Warnung</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="156"/>
         <source>Failed to get list of drives: %1</source>
-        <translation>Fehler beim Abrufen der Laufwerksliste: %1</translation>
+        <translation type="unfinished">Fehler beim Abrufen der Laufwerksliste: %1</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="169"/>
         <source>Failed to get list of files: %1</source>
-        <translation>Fehler beim Abrufen der Dateiliste: %1</translation>
+        <translation type="unfinished">Fehler beim Abrufen der Dateiliste: %1</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="193"/>
         <source>Failed to create directory: %1</source>
-        <translation>Fehler beim Erstellen des Verzeichnisses: %1</translation>
+        <translation type="unfinished">Fehler beim Erstellen des Verzeichnisses: %1</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="204"/>
         <source>Failed to rename item: %1</source>
-        <translation>Fehler beim Umbenennen des Elements: %1</translation>
+        <translation type="unfinished">Fehler beim Umbenennen des Elements: %1</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="273"/>
         <source>%1 object(s) selected</source>
-        <translation>%1 Objekt(e) ausgewählt</translation>
+        <translation type="unfinished">%1 Objekt(e) ausgewählt</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="294"/>
         <location filename="../ui/file_panel.cc" line="321"/>
         <source>Folder name can not be empty.</source>
-        <translation>Ordnername darf nicht leer sein.</translation>
+        <translation type="unfinished">Ordnername darf nicht leer sein.</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="303"/>
         <location filename="../ui/file_panel.cc" line="330"/>
         <source>Name contains invalid characters.</source>
-        <translation>Name beinhaltet ungültige Zeichen.</translation>
+        <translation type="unfinished">Name beinhaltet ungültige Zeichen.</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="355"/>
         <source>&amp;Send	F11</source>
-        <translation>&amp;Senden F11</translation>
+        <translation type="unfinished">&amp;Senden F11</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="357"/>
         <source>&amp;Delete	Delete</source>
-        <translation>&amp;Löschen Entf</translation>
+        <translation type="unfinished">&amp;Löschen Entf</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="367"/>
         <source>&amp;Create Folder</source>
-        <translation>&amp;Ordner erstellen</translation>
+        <translation type="unfinished">&amp;Ordner erstellen</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="422"/>
         <source>Confirmation</source>
-        <translation>Bestätigung</translation>
+        <translation type="unfinished">Bestätigung</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="423"/>
         <source>Are you sure you want to delete the selected items?</source>
-        <translation>Möchten Sie die ausgewählten Elemente wirklich löschen?</translation>
+        <translation type="unfinished">Möchten Sie die ausgewählten Elemente wirklich löschen?</translation>
     </message>
 </context>
 <context>
-    <name>aspia::FileRemoveDialog</name>
+    <name>client::FileRemoveDialog</name>
     <message>
         <location filename="../ui/file_remove_dialog.cc" line="62"/>
         <source>Deleting: %1</source>
-        <translation>Löschen: %1</translation>
+        <translation type="unfinished">Löschen: %1</translation>
     </message>
     <message>
         <location filename="../ui/file_remove_dialog.cc" line="86"/>
         <source>Warning</source>
-        <translation>Warnung</translation>
+        <translation type="unfinished">Warnung</translation>
     </message>
     <message>
         <location filename="../ui/file_remove_dialog.cc" line="94"/>
         <source>Skip</source>
-        <translation>Überspringen</translation>
+        <translation type="unfinished">Überspringen</translation>
     </message>
     <message>
         <location filename="../ui/file_remove_dialog.cc" line="97"/>
         <source>Skip All</source>
-        <translation>All überspringen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/file_remove_dialog.cc" line="100"/>
         <source>Abort</source>
-        <translation>Abbrechen</translation>
+        <translation type="unfinished">Abbrechen</translation>
     </message>
 </context>
 <context>
-    <name>aspia::FileRemoveQueueBuilder</name>
+    <name>client::FileRemoveQueueBuilder</name>
     <message>
         <location filename="../file_remove_queue_builder.cc" line="54"/>
         <source>An unexpected answer was received.</source>
-        <translation>Eine unerwartete Antwort wurde erhalten.</translation>
+        <translation type="unfinished">Eine unerwartete Antwort wurde erhalten.</translation>
     </message>
     <message>
         <location filename="../file_remove_queue_builder.cc" line="60"/>
         <source>An error occurred while retrieving the list of files: %1</source>
-        <translation>Beim Abrufen der Dateiliste ist ein Fehler aufgetreten: %1</translation>
+        <translation type="unfinished">Beim Abrufen der Dateiliste ist ein Fehler aufgetreten: %1</translation>
     </message>
 </context>
 <context>
-    <name>aspia::FileRemover</name>
+    <name>client::FileRemover</name>
     <message>
         <location filename="../file_remover.cc" line="83"/>
         <source>An unexpected answer was received.</source>
-        <translation>Eine unerwartete Antwort wurde erhalten.</translation>
+        <translation type="unfinished">Eine unerwartete Antwort wurde erhalten.</translation>
     </message>
     <message>
         <location filename="../file_remover.cc" line="111"/>
         <source>Failed to delete &quot;%1&quot;: %2.</source>
-        <translation>Fehler beim Löschen &quot;%1&quot;: %2.</translation>
+        <translation type="unfinished">Fehler beim Löschen &quot;%1&quot;: %2.</translation>
     </message>
 </context>
 <context>
-    <name>aspia::FileTransfer</name>
+    <name>client::FileTransfer</name>
     <message>
         <location filename="../file_transfer.cc" line="117"/>
         <source>Failed to create directory &quot;%1&quot;: %2</source>
-        <translation>Fehler beim Erstellen des Verzeichnisses &quot;%1&quot;: %2</translation>
+        <translation type="unfinished">Fehler beim Erstellen des Verzeichnisses &quot;%1&quot;: %2</translation>
     </message>
     <message>
         <location filename="../file_transfer.cc" line="131"/>
         <source>Failed to create file &quot;%1&quot;: %2</source>
-        <translation>Fehler beim Erstellen der Datei &quot;%1&quot;: %2</translation>
+        <translation type="unfinished">Fehler beim Erstellen der Datei &quot;%1&quot;: %2</translation>
     </message>
     <message>
         <location filename="../file_transfer.cc" line="147"/>
         <source>Failed to write file &quot;%1&quot;: %2</source>
-        <translation>Fehler beim Schreiben der Datei &quot;%1&quot;: %2</translation>
+        <translation type="unfinished">Fehler beim Schreiben der Datei &quot;%1&quot;: %2</translation>
     </message>
     <message>
         <location filename="../file_transfer.cc" line="196"/>
         <location filename="../file_transfer.cc" line="240"/>
         <source>An unexpected response to the request was received</source>
-        <translation>Eine unerwartete Antwort auf die Anfrage wurde empfangen</translation>
+        <translation type="unfinished">Eine unerwartete Antwort auf die Anfrage wurde empfangen</translation>
     </message>
     <message>
         <location filename="../file_transfer.cc" line="211"/>
         <source>Failed to open file &quot;%1&quot;: %2</source>
-        <translation>Fehler beim Öffnen der Datei &quot;%1&quot;: %2</translation>
+        <translation type="unfinished">Fehler beim Öffnen der Datei &quot;%1&quot;: %2</translation>
     </message>
     <message>
         <location filename="../file_transfer.cc" line="228"/>
         <source>Failed to read file &quot;%1&quot;: %2</source>
-        <translation>Fehler beim Lesen der Datei &quot;%1&quot;: %2</translation>
+        <translation type="unfinished">Fehler beim Lesen der Datei &quot;%1&quot;: %2</translation>
     </message>
 </context>
 <context>
-    <name>aspia::FileTransferDialog</name>
+    <name>client::FileTransferDialog</name>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="72"/>
         <source>Current Task: Copying items.</source>
-        <translation>Aktuelle Aufgabe: Elemente kopieren.</translation>
+        <translation type="unfinished">Aktuelle Aufgabe: Elemente kopieren.</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="84"/>
         <source>From: %1</source>
-        <translation>Von: %1</translation>
+        <translation type="unfinished">Von: %1</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="89"/>
         <source>To: %1</source>
-        <translation>Zu: %1</translation>
+        <translation type="unfinished">Zu: %1</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="119"/>
         <source>Warning</source>
-        <translation>Warnung</translation>
+        <translation type="unfinished">Warnung</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="131"/>
         <source>Skip</source>
-        <translation>Überspringen</translation>
+        <translation type="unfinished">Überspringen</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="134"/>
         <source>Skip All</source>
-        <translation>Alle überspringen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="137"/>
         <source>Replace</source>
-        <translation>Ersetzen</translation>
+        <translation type="unfinished">Ersetzen</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="140"/>
         <source>Replace All</source>
-        <translation>Alle ersetzen</translation>
+        <translation type="unfinished">Alle ersetzen</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="143"/>
         <source>Abort</source>
-        <translation>Abbrechen</translation>
+        <translation type="unfinished">Abbrechen</translation>
     </message>
 </context>
 <context>
-    <name>aspia::FileTransferQueueBuilder</name>
+    <name>client::FileTransferQueueBuilder</name>
     <message>
         <location filename="../file_transfer_queue_builder.cc" line="74"/>
         <source>An unexpected answer was received.</source>
-        <translation>Eine unerwartete Antwort wurde erhalten.</translation>
+        <translation type="unfinished">Eine unerwartete Antwort wurde erhalten.</translation>
     </message>
     <message>
         <location filename="../file_transfer_queue_builder.cc" line="80"/>
         <source>An error occurred while retrieving the list of files: %1</source>
-        <translation>Beim Abrufen der Dateiliste ist ein Fehler aufgetreten: %1</translation>
+        <translation type="unfinished">Beim Abrufen der Dateiliste ist ein Fehler aufgetreten: %1</translation>
     </message>
 </context>
 <context>
-    <name>aspia::SelectScreenAction</name>
+    <name>client::SelectScreenAction</name>
     <message>
         <location filename="../ui/select_screen_action.h" line="37"/>
         <source>Full Desktop</source>
-        <translation>Vollen Desktop</translation>
+        <translation type="unfinished">Vollen Desktop</translation>
     </message>
 </context>
 <context>
-    <name>aspia::SystemInfoWindow</name>
+    <name>client::SystemInfoWindow</name>
     <message>
         <location filename="../ui/system_info_window.cc" line="90"/>
         <source>HTML File</source>

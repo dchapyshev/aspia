@@ -27,7 +27,7 @@
 class QLineEdit;
 class QTreeView;
 
-namespace aspia {
+namespace client {
 
 class AddressBarModel;
 
@@ -62,6 +62,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(AddressBar);
 };
 
-} // namespace aspia
+} // namespace client
 
 #endif // ASPIA_CLIENT__UI__ADDRESS_BAR_H

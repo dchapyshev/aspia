@@ -37,7 +37,7 @@ namespace desktop {
 class DesktopFrameQImage;
 } // namespace desktop
 
-namespace aspia {
+namespace client {
 
 class DesktopWidget : public QWidget
 {
@@ -108,6 +108,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(DesktopWidget);
 };
 
-} // namespace aspia
+} // namespace client
 
 #endif // ASPIA_CLIENT__UI__DESKTOP_WIDGET_H

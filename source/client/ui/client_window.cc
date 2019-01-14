@@ -26,7 +26,7 @@
 #include "client/ui/status_dialog.h"
 #include "client/client.h"
 
-namespace aspia {
+namespace client {
 
 ClientWindow::ClientWindow(QWidget* parent)
     : QWidget(parent)
@@ -159,4 +159,4 @@ void ClientWindow::sessionFinished()
     // Nothing
 }
 
-} // namespace aspia
+} // namespace client

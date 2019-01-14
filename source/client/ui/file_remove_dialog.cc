@@ -26,7 +26,7 @@
 #include <QWinTaskbarProgress>
 #endif
 
-namespace aspia {
+namespace client {
 
 FileRemoveDialog::FileRemoveDialog(QWidget* parent)
     : QDialog(parent)
@@ -127,4 +127,4 @@ void FileRemoveDialog::showError(FileRemover* remover,
 #endif
 }
 
-} // namespace aspia
+} // namespace client

@@ -22,7 +22,7 @@
 #include "client/ui/desktop_config_dialog.h"
 #include "client/config_factory.h"
 
-namespace aspia {
+namespace client {
 
 ClientDialog::ClientDialog(QWidget* parent)
     : QDialog(parent)
@@ -132,4 +132,4 @@ void ClientDialog::connectButtonPressed()
     close();
 }
 
-} // namespace aspia
+} // namespace client

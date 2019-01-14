@@ -21,7 +21,7 @@
 #include "base/logging.h"
 #include "codec/video_util.h"
 
-namespace aspia {
+namespace client {
 
 namespace {
 
@@ -105,4 +105,4 @@ void ConfigFactory::fixupDesktopConfig(proto::desktop::Config* config)
         config->set_compress_ratio(kDefCompressRatio);
 }
 
-} // namespace aspia
+} // namespace client

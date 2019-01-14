@@ -20,7 +20,7 @@
 
 #include <QTime>
 
-namespace aspia {
+namespace client {
 
 StatusDialog::StatusDialog(QWidget* parent)
     : QDialog(parent)
@@ -42,4 +42,4 @@ void StatusDialog::addStatus(const QString& status)
         QString("%1 %2").arg(QTime::currentTime().toString()).arg(status));
 }
 
-} // namespace aspia
+} // namespace client

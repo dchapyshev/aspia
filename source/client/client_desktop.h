@@ -32,7 +32,7 @@ namespace desktop {
 class DesktopFrame;
 } // namespace desktop
 
-namespace aspia {
+namespace client {
 
 class ClientDesktop : public Client
 {
@@ -88,6 +88,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(ClientDesktop);
 };
 
-} // namespace aspia
+} // namespace client
 
 #endif // ASPIA_CLIENT__CLIENT_DESKTOP_H

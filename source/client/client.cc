@@ -20,7 +20,7 @@
 
 #include "base/logging.h"
 
-namespace aspia {
+namespace client {
 
 Client::Client(const ConnectData& connect_data, QObject* parent)
     : QObject(parent),
@@ -136,4 +136,4 @@ QString Client::networkErrorToString(net::Channel::Error error)
     return tr(message);
 }
 
-} // namespace aspia
+} // namespace client

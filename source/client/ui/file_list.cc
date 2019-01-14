@@ -26,7 +26,7 @@
 #include "client/ui/file_item_delegate.h"
 #include "client/ui/file_list_model.h"
 
-namespace aspia {
+namespace client {
 
 namespace {
 
@@ -205,4 +205,4 @@ void FileList::saveColumnsState()
         file_list_state_ = std::move(state);
 }
 
-} // namespace aspia
+} // namespace client

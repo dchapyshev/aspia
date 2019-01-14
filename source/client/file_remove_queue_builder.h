@@ -21,7 +21,7 @@
 
 #include "client/file_remover.h"
 
-namespace aspia {
+namespace client {
 
 // The class prepares the task queue to perform the deletion.
 class FileRemoveQueueBuilder : public QObject
@@ -66,6 +66,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(FileRemoveQueueBuilder);
 };
 
-} // namespace aspia
+} // namespace client
 
 #endif // ASPIA_CLIENT__FILE_REMOVE_QUEUE_BUILDER_H

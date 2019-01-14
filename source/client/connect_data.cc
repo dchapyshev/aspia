@@ -21,7 +21,7 @@
 #include "client/config_factory.h"
 #include "crypto/secure_memory.h"
 
-namespace aspia {
+namespace client {
 
 ConnectData::ConnectData()
 {
@@ -33,4 +33,4 @@ ConnectData::~ConnectData()
     crypto::memZero(&password);
 }
 
-} // namespace aspia
+} // namespace client

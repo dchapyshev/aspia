@@ -24,7 +24,7 @@
 
 class QAbstractButton;
 
-namespace aspia {
+namespace client {
 
 class AuthorizationDialog : public QDialog
 {
@@ -54,6 +54,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(AuthorizationDialog);
 };
 
-} // namespace aspia
+} // namespace client
 
 #endif // ASPIA_CLIENT__UI__AUTHORIZATION_DIALOG_H

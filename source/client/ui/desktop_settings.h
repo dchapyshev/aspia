@@ -23,7 +23,7 @@
 
 #include "base/macros_magic.h"
 
-namespace aspia {
+namespace client {
 
 class DesktopSettings
 {
@@ -45,6 +45,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(DesktopSettings);
 };
 
-} // namespace aspia
+} // namespace client
 
 #endif // ASPIA_CLIENT__UI__DESKTOP_SETTINGS_H

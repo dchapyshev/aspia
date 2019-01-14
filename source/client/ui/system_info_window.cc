@@ -26,7 +26,7 @@
 
 #include "client/ui/tree_to_html.h"
 
-namespace aspia {
+namespace client {
 
 namespace {
 
@@ -541,4 +541,4 @@ QString SystemInfoWindow::speedToString(uint64_t speed)
         .arg(units);
 }
 
-} // namespace aspia
+} // namespace client

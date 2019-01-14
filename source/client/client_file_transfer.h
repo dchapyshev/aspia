@@ -31,7 +31,7 @@ namespace common {
 class FileWorker;
 } // namespace common
 
-namespace aspia {
+namespace client {
 
 Q_DECLARE_METATYPE(proto::file_transfer::Request);
 Q_DECLARE_METATYPE(proto::file_transfer::Reply);
@@ -62,6 +62,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(ClientFileTransfer);
 };
 
-} // namespace aspia
+} // namespace client
 
 #endif // ASPIA_CLIENT__CLIENT_FILE_TRANSFER_H

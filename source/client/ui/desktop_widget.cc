@@ -26,7 +26,7 @@
 #include "desktop_capture/desktop_frame_qimage.h"
 #include "protocol/desktop_session.pb.h"
 
-namespace aspia {
+namespace client {
 
 namespace {
 
@@ -360,4 +360,4 @@ LRESULT CALLBACK DesktopWidget::keyboardHookProc(INT code, WPARAM wparam, LPARAM
 }
 #endif // defined(OS_WIN)
 
-} // namespace aspia
+} // namespace client

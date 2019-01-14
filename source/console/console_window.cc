@@ -389,7 +389,7 @@ void ConsoleWindow::onAbout()
 
 void ConsoleWindow::onFastConnect()
 {
-    ClientWindow::connectToHost();
+    client::ClientWindow::connectToHost();
 }
 
 void ConsoleWindow::onDesktopManageConnect()
@@ -1030,7 +1030,7 @@ bool ConsoleWindow::hasUnpinnedTabs() const
 
 void ConsoleWindow::connectToComputer(const proto::address_book::Computer& computer)
 {
-    ConnectData connect_data;
+    client::ConnectData connect_data;
 
     connect_data.computer_name = QString::fromStdString(computer.name());
     connect_data.address       = QString::fromStdString(computer.address());
@@ -1053,7 +1053,7 @@ void ConsoleWindow::connectToComputer(const proto::address_book::Computer& compu
             break;
     }
 
-    ClientWindow::connectToHost(&connect_data);
+    client::ClientWindow::connectToHost(&connect_data);
 }
 
 } // namespace aspia

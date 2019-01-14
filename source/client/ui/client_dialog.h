@@ -23,7 +23,7 @@
 #include "client/connect_data.h"
 #include "ui_client_dialog.h"
 
-namespace aspia {
+namespace client {
 
 class ClientDialog : public QDialog
 {
@@ -47,6 +47,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(ClientDialog);
 };
 
-} // namespace aspia
+} // namespace client
 
 #endif // ASPIA_CLIENT__UI__CLIENT_DIALOG_H

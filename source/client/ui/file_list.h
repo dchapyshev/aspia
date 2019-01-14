@@ -24,7 +24,7 @@
 #include "client/file_transfer.h"
 #include "protocol/file_transfer_session.pb.h"
 
-namespace aspia {
+namespace client {
 
 class AddressBarModel;
 class FileListModel;
@@ -68,6 +68,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(FileList);
 };
 
-} // namespace aspia
+} // namespace client
 
 #endif // ASPIA_CLIENT__UI__FILE_LIST_H

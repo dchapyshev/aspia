@@ -464,6 +464,431 @@
 <context>
     <name>aspia::AddressBar</name>
     <message>
+        <source>Warning</source>
+        <translation type="obsolete">Waarschuwing</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::AddressBarModel</name>
+    <message>
+        <source>Home Folder</source>
+        <translation type="obsolete">Thuismap</translation>
+    </message>
+    <message>
+        <source>Desktop</source>
+        <translation type="obsolete">Bureablad</translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="obsolete">Naam</translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="obsolete">Type</translation>
+    </message>
+    <message>
+        <source>TB</source>
+        <translation type="obsolete">TB</translation>
+    </message>
+    <message>
+        <source>GB</source>
+        <translation type="obsolete">GB</translation>
+    </message>
+    <message>
+        <source>MB</source>
+        <translation type="obsolete">MB</translation>
+    </message>
+    <message>
+        <source>kB</source>
+        <translation type="obsolete">kB</translation>
+    </message>
+    <message>
+        <source>B</source>
+        <translation type="obsolete">B</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::ClientDesktop</name>
+    <message>
+        <source>Session error: Invalid message from host.</source>
+        <translation type="obsolete">Sessie fout: Ongeldig bericht van de host.</translation>
+    </message>
+    <message>
+        <source>Session error: Video decoder not initialized.</source>
+        <translation type="obsolete">Sessie fout: Video decoder niet geinitialiseerd.</translation>
+    </message>
+    <message>
+        <source>Session error: Wrong video frame size.</source>
+        <translation type="obsolete">Sessie fout: Verkeerde video frame grootte.</translation>
+    </message>
+    <message>
+        <source>Session error: The desktop frame is not initialized.</source>
+        <translation type="obsolete">Sessie fout: Het bureaublad frame is niet geinitialiseerd.</translation>
+    </message>
+    <message>
+        <source>Session error: The video packet could not be decoded.</source>
+        <translation type="obsolete">Sessie fout: Het video pakket kon niet gedecodeerd worden.</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::ClientDialog</name>
+    <message>
+        <source>Desktop Manage</source>
+        <translation type="vanished">Bureaublad Beheren</translation>
+    </message>
+    <message>
+        <source>Desktop View</source>
+        <translation type="vanished">Bureaublad Weergeven</translation>
+    </message>
+    <message>
+        <source>File Transfer</source>
+        <translation type="vanished">Bestands Overdracht</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::ClientFileTransfer</name>
+    <message>
+        <source>Session error: Invalid message from host.</source>
+        <translation type="obsolete">Sessie fout: Ongeldig bericht van de host.</translation>
+    </message>
+    <message>
+        <source>Session error: There are no logged in users. File transfer is not available.</source>
+        <translation type="obsolete">Sessie fout: Er zijn geen ingelogde gebruikers. Bestandsoverdracht is niet beschikbaar.</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::ClientWindow</name>
+    <message>
+        <source>Attempt to connect to %1:%2.</source>
+        <translation type="obsolete">Probeer te verbinden met %1:%2.</translation>
+    </message>
+    <message>
+        <source>Session started.</source>
+        <translation type="obsolete">Sessie begonnen.</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::DesktopConfigDialog</name>
+    <message>
+        <source>True color (32 bit)</source>
+        <translation type="vanished">Ware kleuren (32 bit)</translation>
+    </message>
+    <message>
+        <source>High color (16 bit)</source>
+        <translation type="vanished">Hoge kleuren (16 bit)</translation>
+    </message>
+    <message>
+        <source>256 colors (8 bit)</source>
+        <translation type="vanished">256 kleuren (8 bit)</translation>
+    </message>
+    <message>
+        <source>64 colors (6 bit)</source>
+        <translation type="vanished">64 kleuren (6 bit)</translation>
+    </message>
+    <message>
+        <source>8 colors (3 bit)</source>
+        <translation type="vanished">8 kleuren (3 bit)</translation>
+    </message>
+    <message>
+        <source>Compression ratio: %1</source>
+        <translation type="vanished">Compressie ratio: %1</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::DesktopPanel</name>
+    <message>
+        <source>Confirmation</source>
+        <translation type="obsolete">Bevestiging</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::DesktopWindow</name>
+    <message>
+        <source>Aspia Desktop Manage</source>
+        <translation type="vanished">Aspia Bureaublad Beheer</translation>
+    </message>
+    <message>
+        <source>Aspia Desktop View</source>
+        <translation type="vanished">Aspia Bureaublad Weergave</translation>
+    </message>
+    <message>
+        <source>Warning</source>
+        <translation type="obsolete">Waarschuwing</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::FileListModel</name>
+    <message>
+        <source>Folder</source>
+        <translation type="vanished">Map</translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="vanished">Naam</translation>
+    </message>
+    <message>
+        <source>Size</source>
+        <translation type="vanished">Grootte</translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="vanished">Type</translation>
+    </message>
+    <message>
+        <source>Modified</source>
+        <translation type="vanished">Aangepast</translation>
+    </message>
+    <message>
+        <source>TB</source>
+        <translation type="vanished">TB</translation>
+    </message>
+    <message>
+        <source>GB</source>
+        <translation type="vanished">GB</translation>
+    </message>
+    <message>
+        <source>MB</source>
+        <translation type="vanished">MB</translation>
+    </message>
+    <message>
+        <source>kB</source>
+        <translation type="vanished">kB</translation>
+    </message>
+    <message>
+        <source>B</source>
+        <translation type="vanished">B</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::FileManagerWindow</name>
+    <message>
+        <source>%1 - Aspia File Transfer</source>
+        <translation type="vanished">%1 - Aspia Bestands Overdracht</translation>
+    </message>
+    <message>
+        <source>Local Computer</source>
+        <translation type="vanished">Lokale Computer</translation>
+    </message>
+    <message>
+        <source>Remote Computer</source>
+        <translation type="vanished">Computer op afstand</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::FilePanel</name>
+    <message>
+        <source>Warning</source>
+        <translation type="vanished">Waarschuwing</translation>
+    </message>
+    <message>
+        <source>Failed to get list of drives: %1</source>
+        <translation type="vanished">Kon lijst van schijven niet maken: %1</translation>
+    </message>
+    <message>
+        <source>Failed to get list of files: %1</source>
+        <translation type="vanished">Kon lijst van bestanden niet maken: %1</translation>
+    </message>
+    <message>
+        <source>Failed to create directory: %1</source>
+        <translation type="vanished">Kon lijst van mappen niet maken: %1</translation>
+    </message>
+    <message>
+        <source>Failed to rename item: %1</source>
+        <translation type="vanished">Kon object niet hernoemen: %1</translation>
+    </message>
+    <message>
+        <source>%1 object(s) selected</source>
+        <translation type="vanished">%1 object(en) geselecteerd</translation>
+    </message>
+    <message>
+        <source>Folder name can not be empty.</source>
+        <translation type="vanished">Map naam mag niet leeg zijn.</translation>
+    </message>
+    <message>
+        <source>&amp;Send	F11</source>
+        <translation type="vanished">&amp;Stuur	F11</translation>
+    </message>
+    <message>
+        <source>&amp;Delete	Delete</source>
+        <translation type="vanished">&amp;Delete	Delete</translation>
+    </message>
+    <message>
+        <source>&amp;Create Folder</source>
+        <translation type="vanished">&amp;Map maken</translation>
+    </message>
+    <message>
+        <source>Confirmation</source>
+        <translation type="vanished">Bevestiging</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to delete the selected items?</source>
+        <translation type="vanished">Weet U zeker dat U de geselecteerde objecten wilt verwijderen?</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::FileRemoveDialog</name>
+    <message>
+        <source>Deleting: %1</source>
+        <translation type="vanished">Verwijderen: %1</translation>
+    </message>
+    <message>
+        <source>Warning</source>
+        <translation type="vanished">Waarschuwing</translation>
+    </message>
+    <message>
+        <source>Skip</source>
+        <translation type="vanished">Overslaan</translation>
+    </message>
+    <message>
+        <source>Skip All</source>
+        <translation type="vanished">Alles overslaan</translation>
+    </message>
+    <message>
+        <source>Abort</source>
+        <translation type="vanished">Afbreken</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::FileRemoveQueueBuilder</name>
+    <message>
+        <source>An unexpected answer was received.</source>
+        <translation type="vanished">Een onverwacht antwoord was ontvangen.</translation>
+    </message>
+    <message>
+        <source>An error occurred while retrieving the list of files: %1</source>
+        <translation type="vanished">Er is een fout opgetreden bij het ontvangen van de bestandslijst: %1</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::FileRemover</name>
+    <message>
+        <source>An unexpected answer was received.</source>
+        <translation type="vanished">Een onverwacht antwoord was ontvangen.</translation>
+    </message>
+    <message>
+        <source>Failed to delete &quot;%1&quot;: %2.</source>
+        <translation type="vanished">Kon &quot;%1&quot; niet verwijderen: %2.</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::FileTransfer</name>
+    <message>
+        <source>Failed to create directory &quot;%1&quot;: %2</source>
+        <translation type="vanished">Kon de map &quot;%1&quot; niet maken: %2</translation>
+    </message>
+    <message>
+        <source>Failed to create file &quot;%1&quot;: %2</source>
+        <translation type="vanished">Kon het bestand &quot;%1&quot; niet maken: %2</translation>
+    </message>
+    <message>
+        <source>Failed to write file &quot;%1&quot;: %2</source>
+        <translation type="vanished">Kon het bestand &quot;%1&quot; niet schrijven: %2</translation>
+    </message>
+    <message>
+        <source>An unexpected response to the request was received</source>
+        <translation type="vanished">Er is een onverwachte reactie op het verzoek ontvangen</translation>
+    </message>
+    <message>
+        <source>Failed to open file &quot;%1&quot;: %2</source>
+        <translation type="vanished">Kon het bestand &quot;%1&quot; niet openen: %2</translation>
+    </message>
+    <message>
+        <source>Failed to read file &quot;%1&quot;: %2</source>
+        <translation type="vanished">Kon het bestand &quot;%1&quot; niet lezen: %2</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::FileTransferDialog</name>
+    <message>
+        <source>Current Task: Copying items.</source>
+        <translation type="vanished">Huidige taak: Items kopieren.</translation>
+    </message>
+    <message>
+        <source>From: %1</source>
+        <translation type="vanished">Van: %1</translation>
+    </message>
+    <message>
+        <source>To: %1</source>
+        <translation type="vanished">Naar: %1</translation>
+    </message>
+    <message>
+        <source>Warning</source>
+        <translation type="vanished">Waarschuwing</translation>
+    </message>
+    <message>
+        <source>Skip</source>
+        <translation type="vanished">Overslaan</translation>
+    </message>
+    <message>
+        <source>Skip All</source>
+        <translation type="vanished">Alles overslaan</translation>
+    </message>
+    <message>
+        <source>Replace</source>
+        <translation type="vanished">Vervangen</translation>
+    </message>
+    <message>
+        <source>Replace All</source>
+        <translation type="vanished">Alles vervangen</translation>
+    </message>
+    <message>
+        <source>Abort</source>
+        <translation type="vanished">Afbreken</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::FileTransferQueueBuilder</name>
+    <message>
+        <source>An unexpected answer was received.</source>
+        <translation type="vanished">Een onverwacht antwoord was ontvangen.</translation>
+    </message>
+    <message>
+        <source>An error occurred while retrieving the list of files: %1</source>
+        <translation type="vanished">Er is een fout opgetreden bij het ontvangen van de bestandslijst: %1</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::SystemInfoWindow</name>
+    <message>
+        <source>Warning</source>
+        <translation type="obsolete">Waarschuwing</translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="obsolete">Naam</translation>
+    </message>
+    <message>
+        <source>Size</source>
+        <translation type="obsolete">Grootte</translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="obsolete">Type</translation>
+    </message>
+    <message>
+        <source>TB</source>
+        <translation type="obsolete">TB</translation>
+    </message>
+    <message>
+        <source>GB</source>
+        <translation type="obsolete">GB</translation>
+    </message>
+    <message>
+        <source>MB</source>
+        <translation type="obsolete">MB</translation>
+    </message>
+    <message>
+        <source>kB</source>
+        <translation type="obsolete">kB</translation>
+    </message>
+    <message>
+        <source>B</source>
+        <translation type="obsolete">B</translation>
+    </message>
+</context>
+<context>
+    <name>client::AddressBar</name>
+    <message>
         <location filename="../ui/address_bar.cc" line="56"/>
         <source>Warning</source>
         <translation type="unfinished">Waarschuwing</translation>
@@ -480,7 +905,7 @@
     </message>
 </context>
 <context>
-    <name>aspia::AddressBarModel</name>
+    <name>client::AddressBarModel</name>
     <message>
         <location filename="../ui/address_bar_model.cc" line="81"/>
         <location filename="../ui/address_bar_model.cc" line="445"/>
@@ -579,7 +1004,7 @@
     </message>
 </context>
 <context>
-    <name>aspia::Client</name>
+    <name>client::Client</name>
     <message>
         <location filename="../client.cc" line="88"/>
         <source>Connection was refused by the peer (or timed out).</source>
@@ -642,7 +1067,7 @@
     </message>
 </context>
 <context>
-    <name>aspia::ClientDesktop</name>
+    <name>client::ClientDesktop</name>
     <message>
         <location filename="../client_desktop.cc" line="49"/>
         <source>Session error: Invalid message from host.</source>
@@ -675,25 +1100,25 @@
     </message>
 </context>
 <context>
-    <name>aspia::ClientDialog</name>
+    <name>client::ClientDialog</name>
     <message>
         <location filename="../ui/client_dialog.cc" line="40"/>
         <source>Desktop Manage</source>
-        <translation>Bureaublad Beheren</translation>
+        <translation type="unfinished">Bureaublad Beheren</translation>
     </message>
     <message>
         <location filename="../ui/client_dialog.cc" line="44"/>
         <source>Desktop View</source>
-        <translation>Bureaublad Weergeven</translation>
+        <translation type="unfinished">Bureaublad Weergeven</translation>
     </message>
     <message>
         <location filename="../ui/client_dialog.cc" line="48"/>
         <source>File Transfer</source>
-        <translation>Bestands Overdracht</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
-    <name>aspia::ClientFileTransfer</name>
+    <name>client::ClientFileTransfer</name>
     <message>
         <location filename="../client_file_transfer.cc" line="59"/>
         <source>Session error: Invalid message from host.</source>
@@ -706,7 +1131,7 @@
     </message>
 </context>
 <context>
-    <name>aspia::ClientWindow</name>
+    <name>client::ClientWindow</name>
     <message>
         <location filename="../ui/client_window.cc" line="118"/>
         <source>Attempt to connect to %1:%2.</source>
@@ -719,40 +1144,40 @@
     </message>
 </context>
 <context>
-    <name>aspia::DesktopConfigDialog</name>
+    <name>client::DesktopConfigDialog</name>
     <message>
         <location filename="../ui/desktop_config_dialog.cc" line="65"/>
         <source>True color (32 bit)</source>
-        <translation>Ware kleuren (32 bit)</translation>
+        <translation type="unfinished">Ware kleuren (32 bit)</translation>
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.cc" line="66"/>
         <source>High color (16 bit)</source>
-        <translation>Hoge kleuren (16 bit)</translation>
+        <translation type="unfinished">Hoge kleuren (16 bit)</translation>
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.cc" line="67"/>
         <source>256 colors (8 bit)</source>
-        <translation>256 kleuren (8 bit)</translation>
+        <translation type="unfinished">256 kleuren (8 bit)</translation>
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.cc" line="68"/>
         <source>64 colors (6 bit)</source>
-        <translation>64 kleuren (6 bit)</translation>
+        <translation type="unfinished">64 kleuren (6 bit)</translation>
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.cc" line="69"/>
         <source>8 colors (3 bit)</source>
-        <translation>8 kleuren (3 bit)</translation>
+        <translation type="unfinished">8 kleuren (3 bit)</translation>
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.cc" line="155"/>
         <source>Compression ratio: %1</source>
-        <translation>Compressie ratio: %1</translation>
+        <translation type="unfinished">Compressie ratio: %1</translation>
     </message>
 </context>
 <context>
-    <name>aspia::DesktopPanel</name>
+    <name>client::DesktopPanel</name>
     <message>
         <location filename="../ui/desktop_panel.cc" line="224"/>
         <location filename="../ui/desktop_panel.cc" line="235"/>
@@ -783,17 +1208,7 @@
     </message>
 </context>
 <context>
-    <name>aspia::DesktopWindow</name>
-    <message>
-        <location filename="../ui/desktop_window.cc" line="463"/>
-        <source>Aspia Desktop Manage</source>
-        <translation>Aspia Bureaublad Beheer</translation>
-    </message>
-    <message>
-        <location filename="../ui/desktop_window.cc" line="468"/>
-        <source>Aspia Desktop View</source>
-        <translation>Aspia Bureaublad Weergave</translation>
-    </message>
+    <name>client::DesktopWindow</name>
     <message>
         <location filename="../ui/desktop_window.cc" line="298"/>
         <source>Save File</source>
@@ -814,80 +1229,90 @@
         <source>Could not save image</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../ui/desktop_window.cc" line="463"/>
+        <source>Aspia Desktop Manage</source>
+        <translation type="unfinished">Aspia Bureaublad Beheer</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_window.cc" line="468"/>
+        <source>Aspia Desktop View</source>
+        <translation type="unfinished">Aspia Bureaublad Weergave</translation>
+    </message>
 </context>
 <context>
-    <name>aspia::FileListModel</name>
+    <name>client::FileListModel</name>
     <message>
         <location filename="../ui/file_list_model.cc" line="95"/>
         <source>Folder</source>
-        <translation>Map</translation>
+        <translation type="unfinished">Map</translation>
     </message>
     <message>
         <location filename="../ui/file_list_model.cc" line="357"/>
         <source>Name</source>
-        <translation>Naam</translation>
+        <translation type="unfinished">Naam</translation>
     </message>
     <message>
         <location filename="../ui/file_list_model.cc" line="360"/>
         <source>Size</source>
-        <translation>Grootte</translation>
+        <translation type="unfinished">Grootte</translation>
     </message>
     <message>
         <location filename="../ui/file_list_model.cc" line="363"/>
         <source>Type</source>
-        <translation>Type</translation>
+        <translation type="unfinished">Type</translation>
     </message>
     <message>
         <location filename="../ui/file_list_model.cc" line="366"/>
         <source>Modified</source>
-        <translation>Aangepast</translation>
+        <translation type="unfinished">Aangepast</translation>
     </message>
     <message>
         <location filename="../ui/file_list_model.cc" line="522"/>
         <source>TB</source>
-        <translation>TB</translation>
+        <translation type="unfinished">TB</translation>
     </message>
     <message>
         <location filename="../ui/file_list_model.cc" line="527"/>
         <source>GB</source>
-        <translation>GB</translation>
+        <translation type="unfinished">GB</translation>
     </message>
     <message>
         <location filename="../ui/file_list_model.cc" line="532"/>
         <source>MB</source>
-        <translation>MB</translation>
+        <translation type="unfinished">MB</translation>
     </message>
     <message>
         <location filename="../ui/file_list_model.cc" line="537"/>
         <source>kB</source>
-        <translation>kB</translation>
+        <translation type="unfinished">kB</translation>
     </message>
     <message>
         <location filename="../ui/file_list_model.cc" line="542"/>
         <source>B</source>
-        <translation>B</translation>
+        <translation type="unfinished">B</translation>
     </message>
 </context>
 <context>
-    <name>aspia::FileManagerWindow</name>
-    <message>
-        <location filename="../ui/file_manager_window.cc" line="264"/>
-        <source>%1 - Aspia File Transfer</source>
-        <translation>%1 - Aspia Bestands Overdracht</translation>
-    </message>
+    <name>client::FileManagerWindow</name>
     <message>
         <location filename="../ui/file_manager_window.cc" line="46"/>
         <source>Local Computer</source>
-        <translation>Lokale Computer</translation>
+        <translation type="unfinished">Lokale Computer</translation>
     </message>
     <message>
         <location filename="../ui/file_manager_window.cc" line="49"/>
         <source>Remote Computer</source>
-        <translation>Computer op afstand</translation>
+        <translation type="unfinished">Computer op afstand</translation>
+    </message>
+    <message>
+        <location filename="../ui/file_manager_window.cc" line="264"/>
+        <source>%1 - Aspia File Transfer</source>
+        <translation type="unfinished">%1 - Aspia Bestands Overdracht</translation>
     </message>
 </context>
 <context>
-    <name>aspia::FilePanel</name>
+    <name>client::FilePanel</name>
     <message>
         <location filename="../ui/file_panel.cc" line="155"/>
         <location filename="../ui/file_panel.cc" line="168"/>
@@ -898,38 +1323,38 @@
         <location filename="../ui/file_panel.cc" line="320"/>
         <location filename="../ui/file_panel.cc" line="329"/>
         <source>Warning</source>
-        <translation>Waarschuwing</translation>
+        <translation type="unfinished">Waarschuwing</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="156"/>
         <source>Failed to get list of drives: %1</source>
-        <translation>Kon lijst van schijven niet maken: %1</translation>
+        <translation type="unfinished">Kon lijst van schijven niet maken: %1</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="169"/>
         <source>Failed to get list of files: %1</source>
-        <translation>Kon lijst van bestanden niet maken: %1</translation>
+        <translation type="unfinished">Kon lijst van bestanden niet maken: %1</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="193"/>
         <source>Failed to create directory: %1</source>
-        <translation>Kon lijst van mappen niet maken: %1</translation>
+        <translation type="unfinished">Kon lijst van mappen niet maken: %1</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="204"/>
         <source>Failed to rename item: %1</source>
-        <translation>Kon object niet hernoemen: %1</translation>
+        <translation type="unfinished">Kon object niet hernoemen: %1</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="273"/>
         <source>%1 object(s) selected</source>
-        <translation>%1 object(en) geselecteerd</translation>
+        <translation type="unfinished">%1 object(en) geselecteerd</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="294"/>
         <location filename="../ui/file_panel.cc" line="321"/>
         <source>Folder name can not be empty.</source>
-        <translation>Map naam mag niet leeg zijn.</translation>
+        <translation type="unfinished">Map naam mag niet leeg zijn.</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="303"/>
@@ -940,180 +1365,180 @@
     <message>
         <location filename="../ui/file_panel.cc" line="355"/>
         <source>&amp;Send	F11</source>
-        <translation>&amp;Stuur	F11</translation>
+        <translation type="unfinished">&amp;Stuur	F11</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="357"/>
         <source>&amp;Delete	Delete</source>
-        <translation>&amp;Delete	Delete</translation>
+        <translation type="unfinished">&amp;Delete	Delete</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="367"/>
         <source>&amp;Create Folder</source>
-        <translation>&amp;Map maken</translation>
+        <translation type="unfinished">&amp;Map maken</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="422"/>
         <source>Confirmation</source>
-        <translation>Bevestiging</translation>
+        <translation type="unfinished">Bevestiging</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="423"/>
         <source>Are you sure you want to delete the selected items?</source>
-        <translation>Weet U zeker dat U de geselecteerde objecten wilt verwijderen?</translation>
+        <translation type="unfinished">Weet U zeker dat U de geselecteerde objecten wilt verwijderen?</translation>
     </message>
 </context>
 <context>
-    <name>aspia::FileRemoveDialog</name>
+    <name>client::FileRemoveDialog</name>
     <message>
         <location filename="../ui/file_remove_dialog.cc" line="62"/>
         <source>Deleting: %1</source>
-        <translation>Verwijderen: %1</translation>
+        <translation type="unfinished">Verwijderen: %1</translation>
     </message>
     <message>
         <location filename="../ui/file_remove_dialog.cc" line="86"/>
         <source>Warning</source>
-        <translation>Waarschuwing</translation>
+        <translation type="unfinished">Waarschuwing</translation>
     </message>
     <message>
         <location filename="../ui/file_remove_dialog.cc" line="94"/>
         <source>Skip</source>
-        <translation>Overslaan</translation>
+        <translation type="unfinished">Overslaan</translation>
     </message>
     <message>
         <location filename="../ui/file_remove_dialog.cc" line="97"/>
         <source>Skip All</source>
-        <translation>Alles overslaan</translation>
+        <translation type="unfinished">Alles overslaan</translation>
     </message>
     <message>
         <location filename="../ui/file_remove_dialog.cc" line="100"/>
         <source>Abort</source>
-        <translation>Afbreken</translation>
+        <translation type="unfinished">Afbreken</translation>
     </message>
 </context>
 <context>
-    <name>aspia::FileRemoveQueueBuilder</name>
+    <name>client::FileRemoveQueueBuilder</name>
     <message>
         <location filename="../file_remove_queue_builder.cc" line="54"/>
         <source>An unexpected answer was received.</source>
-        <translation>Een onverwacht antwoord was ontvangen.</translation>
+        <translation type="unfinished">Een onverwacht antwoord was ontvangen.</translation>
     </message>
     <message>
         <location filename="../file_remove_queue_builder.cc" line="60"/>
         <source>An error occurred while retrieving the list of files: %1</source>
-        <translation>Er is een fout opgetreden bij het ontvangen van de bestandslijst: %1</translation>
+        <translation type="unfinished">Er is een fout opgetreden bij het ontvangen van de bestandslijst: %1</translation>
     </message>
 </context>
 <context>
-    <name>aspia::FileRemover</name>
+    <name>client::FileRemover</name>
     <message>
         <location filename="../file_remover.cc" line="83"/>
         <source>An unexpected answer was received.</source>
-        <translation>Een onverwacht antwoord was ontvangen.</translation>
+        <translation type="unfinished">Een onverwacht antwoord was ontvangen.</translation>
     </message>
     <message>
         <location filename="../file_remover.cc" line="111"/>
         <source>Failed to delete &quot;%1&quot;: %2.</source>
-        <translation>Kon &quot;%1&quot; niet verwijderen: %2.</translation>
+        <translation type="unfinished">Kon &quot;%1&quot; niet verwijderen: %2.</translation>
     </message>
 </context>
 <context>
-    <name>aspia::FileTransfer</name>
+    <name>client::FileTransfer</name>
     <message>
         <location filename="../file_transfer.cc" line="117"/>
         <source>Failed to create directory &quot;%1&quot;: %2</source>
-        <translation>Kon de map &quot;%1&quot; niet maken: %2</translation>
+        <translation type="unfinished">Kon de map &quot;%1&quot; niet maken: %2</translation>
     </message>
     <message>
         <location filename="../file_transfer.cc" line="131"/>
         <source>Failed to create file &quot;%1&quot;: %2</source>
-        <translation>Kon het bestand &quot;%1&quot; niet maken: %2</translation>
+        <translation type="unfinished">Kon het bestand &quot;%1&quot; niet maken: %2</translation>
     </message>
     <message>
         <location filename="../file_transfer.cc" line="147"/>
         <source>Failed to write file &quot;%1&quot;: %2</source>
-        <translation>Kon het bestand &quot;%1&quot; niet schrijven: %2</translation>
+        <translation type="unfinished">Kon het bestand &quot;%1&quot; niet schrijven: %2</translation>
     </message>
     <message>
         <location filename="../file_transfer.cc" line="196"/>
         <location filename="../file_transfer.cc" line="240"/>
         <source>An unexpected response to the request was received</source>
-        <translation>Er is een onverwachte reactie op het verzoek ontvangen</translation>
+        <translation type="unfinished">Er is een onverwachte reactie op het verzoek ontvangen</translation>
     </message>
     <message>
         <location filename="../file_transfer.cc" line="211"/>
         <source>Failed to open file &quot;%1&quot;: %2</source>
-        <translation>Kon het bestand &quot;%1&quot; niet openen: %2</translation>
+        <translation type="unfinished">Kon het bestand &quot;%1&quot; niet openen: %2</translation>
     </message>
     <message>
         <location filename="../file_transfer.cc" line="228"/>
         <source>Failed to read file &quot;%1&quot;: %2</source>
-        <translation>Kon het bestand &quot;%1&quot; niet lezen: %2</translation>
+        <translation type="unfinished">Kon het bestand &quot;%1&quot; niet lezen: %2</translation>
     </message>
 </context>
 <context>
-    <name>aspia::FileTransferDialog</name>
+    <name>client::FileTransferDialog</name>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="72"/>
         <source>Current Task: Copying items.</source>
-        <translation>Huidige taak: Items kopieren.</translation>
+        <translation type="unfinished">Huidige taak: Items kopieren.</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="84"/>
         <source>From: %1</source>
-        <translation>Van: %1</translation>
+        <translation type="unfinished">Van: %1</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="89"/>
         <source>To: %1</source>
-        <translation>Naar: %1</translation>
+        <translation type="unfinished">Naar: %1</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="119"/>
         <source>Warning</source>
-        <translation>Waarschuwing</translation>
+        <translation type="unfinished">Waarschuwing</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="131"/>
         <source>Skip</source>
-        <translation>Overslaan</translation>
+        <translation type="unfinished">Overslaan</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="134"/>
         <source>Skip All</source>
-        <translation>Alles overslaan</translation>
+        <translation type="unfinished">Alles overslaan</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="137"/>
         <source>Replace</source>
-        <translation>Vervangen</translation>
+        <translation type="unfinished">Vervangen</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="140"/>
         <source>Replace All</source>
-        <translation>Alles vervangen</translation>
+        <translation type="unfinished">Alles vervangen</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="143"/>
         <source>Abort</source>
-        <translation>Afbreken</translation>
+        <translation type="unfinished">Afbreken</translation>
     </message>
 </context>
 <context>
-    <name>aspia::FileTransferQueueBuilder</name>
+    <name>client::FileTransferQueueBuilder</name>
     <message>
         <location filename="../file_transfer_queue_builder.cc" line="74"/>
         <source>An unexpected answer was received.</source>
-        <translation>Een onverwacht antwoord was ontvangen.</translation>
+        <translation type="unfinished">Een onverwacht antwoord was ontvangen.</translation>
     </message>
     <message>
         <location filename="../file_transfer_queue_builder.cc" line="80"/>
         <source>An error occurred while retrieving the list of files: %1</source>
-        <translation>Er is een fout opgetreden bij het ontvangen van de bestandslijst: %1</translation>
+        <translation type="unfinished">Er is een fout opgetreden bij het ontvangen van de bestandslijst: %1</translation>
     </message>
 </context>
 <context>
-    <name>aspia::SelectScreenAction</name>
+    <name>client::SelectScreenAction</name>
     <message>
         <location filename="../ui/select_screen_action.h" line="37"/>
         <source>Full Desktop</source>
@@ -1121,7 +1546,7 @@
     </message>
 </context>
 <context>
-    <name>aspia::SystemInfoWindow</name>
+    <name>client::SystemInfoWindow</name>
     <message>
         <location filename="../ui/system_info_window.cc" line="90"/>
         <source>HTML File</source>

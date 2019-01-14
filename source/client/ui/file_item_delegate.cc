@@ -28,7 +28,7 @@
 #include "client/ui/file_name_validator.h"
 #include "common/file_platform_util.h"
 
-namespace aspia {
+namespace client {
 
 namespace {
 
@@ -137,4 +137,4 @@ void FileItemDelegate::updateEditorGeometry(QWidget* editor,
     edit->setGeometry(option.rect);
 }
 
-} // namespace aspia
+} // namespace client

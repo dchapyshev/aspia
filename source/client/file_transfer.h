@@ -27,7 +27,7 @@
 #include "common/file_request.h"
 #include "protocol/file_transfer_session.pb.h"
 
-namespace aspia {
+namespace client {
 
 class FileTransferQueueBuilder;
 
@@ -142,6 +142,6 @@ private:
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(FileTransfer::Actions)
 
-} // namespace aspia
+} // namespace client
 
 #endif // ASPIA_CLIENT__FILE_TRANSFER_H

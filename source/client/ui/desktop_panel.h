@@ -25,7 +25,7 @@
 #include "protocol/desktop_session_extensions.pb.h"
 #include "ui_desktop_panel.h"
 
-namespace aspia {
+namespace client {
 
 class DesktopPanel : public QFrame
 {
@@ -90,6 +90,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(DesktopPanel);
 };
 
-} // namespace aspia
+} // namespace client
 
 #endif // ASPIA_CLIENT__UI__DESKTOP_PANEL_H

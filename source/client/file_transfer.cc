@@ -25,7 +25,7 @@
 #include "client/file_transfer_queue_builder.h"
 #include "common/file_packet.h"
 
-namespace aspia {
+namespace client {
 
 FileTransfer::FileTransfer(Type type, QObject* parent)
     : QObject(parent),
@@ -395,4 +395,4 @@ void FileTransfer::targetRequest(common::FileRequest* request)
     }
 }
 
-} // namespace aspia
+} // namespace client

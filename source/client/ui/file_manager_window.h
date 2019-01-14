@@ -22,7 +22,7 @@
 #include "client/ui/client_window.h"
 #include "ui_file_manager_window.h"
 
-namespace aspia {
+namespace client {
 
 class FileManagerWindow : public ClientWindow
 {
@@ -68,6 +68,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(FileManagerWindow);
 };
 
-} // namespace aspia
+} // namespace client
 
 #endif // ASPIA_CLIENT__UI__FILE_MANAGER_WINDOW_H

@@ -20,7 +20,7 @@
 
 #include "common/file_platform_util.h"
 
-namespace aspia {
+namespace client {
 
 FileNameValidator::FileNameValidator(QObject* parent)
     : QValidator(parent)
@@ -60,4 +60,4 @@ void FileNameValidator::fixup(QString& input) const
     }
 }
 
-} // namespace aspia
+} // namespace client

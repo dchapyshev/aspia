@@ -115,12 +115,12 @@ int main(int argc, char *argv[])
 
     if (parser.isSet(simple_ui_option))
     {
-        if (!ClientWindow::connectToHost())
+        if (!client::ClientWindow::connectToHost())
             return 0;
     }
     else if (parser.isSet(address_option))
     {
-        ConnectData connect_data;
+        client::ConnectData connect_data;
         connect_data.address  = parser.value(address_option);
         connect_data.port     = parser.value(port_option).toUShort();
         connect_data.username = parser.value(username_option);
@@ -134,7 +134,7 @@ int main(int argc, char *argv[])
         else if (session_type == "file-transfer")
             connect_data.session_type = proto::SESSION_TYPE_FILE_TRANSFER;
 
-        if (!ClientWindow::connectToHost(&connect_data))
+        if (!client::ClientWindow::connectToHost(&connect_data))
             return 0;
     }
     else

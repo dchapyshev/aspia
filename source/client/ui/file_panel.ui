@@ -40,7 +40,7 @@
     </widget>
    </item>
    <item>
-    <widget class="aspia::AddressBar" name="address_bar">
+    <widget class="client::AddressBar" name="address_bar">
      <property name="editable">
       <bool>true</bool>
      </property>
@@ -92,7 +92,7 @@
     </layout>
    </item>
    <item>
-    <widget class="aspia::FileList" name="list">
+    <widget class="client::FileList" name="list">
      <property name="focusPolicy">
       <enum>Qt::StrongFocus</enum>
      </property>
@@ -220,12 +220,12 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>aspia::AddressBar</class>
+   <class>client::AddressBar</class>
    <extends>QComboBox</extends>
    <header>client/ui/address_bar.h</header>
   </customwidget>
   <customwidget>
-   <class>aspia::FileList</class>
+   <class>client::FileList</class>
    <extends>QTreeView</extends>
    <header>client/ui/file_list.h</header>
   </customwidget>

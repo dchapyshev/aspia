@@ -20,7 +20,7 @@
 
 #include <QUuid>
 
-namespace aspia {
+namespace client {
 
 FileMimeData::~FileMimeData() = default;
 
@@ -46,4 +46,4 @@ void FileMimeData::setSource(const FileListModel* source)
     source_ = source;
 }
 
-} // namespace aspia
+} // namespace client

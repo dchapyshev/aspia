@@ -20,7 +20,7 @@
 
 #include "common/file_platform_util.h"
 
-namespace aspia {
+namespace client {
 
 namespace {
 
@@ -494,4 +494,4 @@ QString AddressBarModel::sizeToString(int64_t size)
         .arg(units);
 }
 
-} // namespace aspia
+} // namespace client

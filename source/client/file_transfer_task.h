@@ -21,7 +21,7 @@
 
 #include <QString>
 
-namespace aspia {
+namespace client {
 
 class FileTransferTask
 {
@@ -56,6 +56,6 @@ private:
     int64_t size_;
 };
 
-} // namespace aspia
+} // namespace client
 
 #endif // ASPIA_CLIENT__FILE_TRANSFER_TASK_H

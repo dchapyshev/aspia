@@ -25,7 +25,7 @@
 #include "base/macros_magic.h"
 #include "client/file_transfer.h"
 
-namespace aspia {
+namespace client {
 
 class FileListModel : public QAbstractItemModel
 {
@@ -103,6 +103,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(FileListModel);
 };
 
-} // namespace aspia
+} // namespace client
 
 #endif // ASPIA_CLIENT__UI__FILE_LIST_MODEL_H

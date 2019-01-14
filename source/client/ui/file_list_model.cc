@@ -23,7 +23,7 @@
 #include "client/ui/file_mime_data.h"
 #include "common/file_platform_util.h"
 
-namespace aspia {
+namespace client {
 
 namespace {
 
@@ -554,4 +554,4 @@ QString FileListModel::timeToString(time_t time)
     return QDateTime::fromSecsSinceEpoch(time).toString(Qt::DefaultLocaleShortDate);
 }
 
-} // namespace aspia
+} // namespace client

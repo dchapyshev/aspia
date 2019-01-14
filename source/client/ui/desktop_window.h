@@ -36,7 +36,7 @@ namespace desktop {
 class DesktopFrame;
 } // namespace desktop
 
-namespace aspia {
+namespace client {
 
 class DesktopPanel;
 
@@ -103,6 +103,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(DesktopWindow);
 };
 
-} // namespace aspia
+} // namespace client
 
 #endif // ASPIA_CLIENT__UI__DESKTOP_WINDOW_H

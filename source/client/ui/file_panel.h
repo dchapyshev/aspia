@@ -24,7 +24,7 @@
 #include "protocol/file_transfer_session.pb.h"
 #include "ui_file_panel.h"
 
-namespace aspia {
+namespace client {
 
 class FilePanel : public QWidget
 {
@@ -85,6 +85,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(FilePanel);
 };
 
-} // namespace aspia
+} // namespace client
 
 #endif // ASPIA_CLIENT__UI__FILE_PANEL_H

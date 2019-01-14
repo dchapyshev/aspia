@@ -20,7 +20,7 @@
 
 #include <QCoreApplication>
 
-namespace aspia {
+namespace client {
 
 QString fileStatusToString(proto::file_transfer::Status status)
 {
@@ -70,4 +70,4 @@ QString fileStatusToString(proto::file_transfer::Status status)
     }
 }
 
-} // namespace aspia
+} // namespace client

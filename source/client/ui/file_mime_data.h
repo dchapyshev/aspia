@@ -23,7 +23,7 @@
 
 #include "client/file_transfer.h"
 
-namespace aspia {
+namespace client {
 
 class FileListModel;
 
@@ -52,6 +52,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(FileMimeData);
 };
 
-} // namespace aspia
+} // namespace client
 
 #endif // ASPIA_CLIENT__UI__FILE_MIME_DATA_H

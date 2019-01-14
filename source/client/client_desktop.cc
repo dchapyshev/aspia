@@ -29,7 +29,7 @@
 #include "common/desktop_session_constants.h"
 #include "desktop_capture/mouse_cursor.h"
 
-namespace aspia {
+namespace client {
 
 ClientDesktop::ClientDesktop(const ConnectData& connect_data, Delegate* delegate, QObject* parent)
     : Client(connect_data, parent),
@@ -312,4 +312,4 @@ void ClientDesktop::readExtension(const proto::desktop::Extension& extension)
     }
 }
 
-} // namespace aspia
+} // namespace client

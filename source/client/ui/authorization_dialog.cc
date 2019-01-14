@@ -18,7 +18,7 @@
 
 #include "client/ui/authorization_dialog.h"
 
-namespace aspia {
+namespace client {
 
 AuthorizationDialog::AuthorizationDialog(QWidget* parent)
     : QDialog(parent)
@@ -90,4 +90,4 @@ void AuthorizationDialog::onButtonBoxClicked(QAbstractButton* button)
     close();
 }
 
-} // namespace aspia
+} // namespace client

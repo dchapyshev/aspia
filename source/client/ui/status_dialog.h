@@ -22,7 +22,7 @@
 #include "base/macros_magic.h"
 #include "ui_status_dialog.h"
 
-namespace aspia {
+namespace client {
 
 class StatusDialog : public QDialog
 {
@@ -42,6 +42,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(StatusDialog);
 };
 
-} // namespace aspia
+} // namespace client
 
 #endif // ASPIA_CLIENT__UI__STATUS_DIALOG_H

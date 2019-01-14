@@ -26,7 +26,7 @@
 #include "client/ui/address_bar_model.h"
 #include "client/ui/file_path_validator.h"
 
-namespace aspia {
+namespace client {
 
 AddressBar::AddressBar(QWidget* parent)
     : QComboBox(parent)
@@ -136,4 +136,4 @@ void AddressBar::onPathIndexChanged(const QModelIndex& index)
     emit pathChanged(currentPath());
 }
 
-} // namespace aspia
+} // namespace client

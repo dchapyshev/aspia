@@ -23,7 +23,7 @@
 #include "protocol/system_info.pb.h"
 #include "ui_system_info_window.h"
 
-namespace aspia {
+namespace client {
 
 class SystemInfoWindow : public QMainWindow
 {
@@ -45,6 +45,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(SystemInfoWindow);
 };
 
-} // namespace aspia
+} // namespace client
 
 #endif // ASPIA_CLIENT__UI__SYSTEM_INFO_WINDOW_H
