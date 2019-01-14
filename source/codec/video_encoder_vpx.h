@@ -27,7 +27,7 @@
 #include "codec/scoped_vpx_codec.h"
 #include "codec/video_encoder.h"
 
-namespace aspia {
+namespace codec {
 
 class VideoEncoderVPX : public VideoEncoder
 {
@@ -37,7 +37,7 @@ public:
     static VideoEncoderVPX* createVP8();
     static VideoEncoderVPX* createVP9();
 
-    void encode(const DesktopFrame* frame, proto::desktop::VideoPacket* packet) override;
+    void encode(const aspia::DesktopFrame* frame, proto::desktop::VideoPacket* packet) override;
 
 private:
     VideoEncoderVPX(proto::desktop::VideoEncoding encoding);
@@ -45,7 +45,8 @@ private:
     void createActiveMap(const QSize& size);
     void createVp8Codec(const QSize& size);
     void createVp9Codec(const QSize& size);
-    void prepareImageAndActiveMap(const DesktopFrame* frame, proto::desktop::VideoPacket* packet);
+    void prepareImageAndActiveMap(const aspia::DesktopFrame* frame,
+                                  proto::desktop::VideoPacket* packet);
     void setActiveMap(const QRect& rect);
 
     const proto::desktop::VideoEncoding encoding_;
@@ -64,6 +65,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(VideoEncoderVPX);
 };
 
-} // namespace aspia
+} // namespace codec
 
 #endif // ASPIA_CODEC___VIDEO_ENCODER_VPX_H

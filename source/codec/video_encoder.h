@@ -23,25 +23,27 @@
 #include "protocol/desktop_session.pb.h"
 
 namespace aspia {
-
 class DesktopFrame;
+} // namespace aspia
+
+namespace codec {
 
 class VideoEncoder
 {
 public:
     virtual ~VideoEncoder() = default;
 
-    virtual void encode(const DesktopFrame* frame, proto::desktop::VideoPacket* packet) = 0;
+    virtual void encode(const aspia::DesktopFrame* frame, proto::desktop::VideoPacket* packet) = 0;
 
 protected:
     void fillPacketInfo(proto::desktop::VideoEncoding encoding,
-                        const DesktopFrame* frame,
+                        const aspia::DesktopFrame* frame,
                         proto::desktop::VideoPacket* packet);
 
 private:
-    ScreenSettingsTracker screen_settings_tracker_;
+    aspia::ScreenSettingsTracker screen_settings_tracker_;
 };
 
-} // namespace aspia
+} // namespace codec
 
 #endif // ASPIA_CODEC__VIDEO_ENCODER_H

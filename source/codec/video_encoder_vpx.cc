@@ -26,7 +26,7 @@
 #include "codec/video_util.h"
 #include "desktop_capture/desktop_frame.h"
 
-namespace aspia {
+namespace codec {
 
 namespace {
 
@@ -269,7 +269,7 @@ void VideoEncoderVPX::setActiveMap(const QRect& rect)
     }
 }
 
-void VideoEncoderVPX::prepareImageAndActiveMap(const DesktopFrame* frame,
+void VideoEncoderVPX::prepareImageAndActiveMap(const aspia::DesktopFrame* frame,
                                                proto::desktop::VideoPacket* packet)
 {
     int padding = ((encoding_ == proto::desktop::VIDEO_ENCODING_VP9) ? 8 : 3);
@@ -321,7 +321,7 @@ void VideoEncoderVPX::prepareImageAndActiveMap(const DesktopFrame* frame,
     }
 }
 
-void VideoEncoderVPX::encode(const DesktopFrame* frame, proto::desktop::VideoPacket* packet)
+void VideoEncoderVPX::encode(const aspia::DesktopFrame* frame, proto::desktop::VideoPacket* packet)
 {
     fillPacketInfo(encoding_, frame, packet);
 
@@ -372,4 +372,4 @@ void VideoEncoderVPX::encode(const DesktopFrame* frame, proto::desktop::VideoPac
     }
 }
 
-} // namespace aspia
+} // namespace codec

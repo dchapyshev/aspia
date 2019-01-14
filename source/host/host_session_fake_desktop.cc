@@ -52,7 +52,7 @@ void HostSessionFakeDesktop::onMessageReceived(const QByteArray& buffer)
 
     if (incoming_message.has_config())
     {
-        std::unique_ptr<VideoEncoder> video_encoder(createEncoder(incoming_message.config()));
+        std::unique_ptr<codec::VideoEncoder> video_encoder(createEncoder(incoming_message.config()));
         if (!video_encoder)
         {
             LOG(LS_WARNING) << "Unable to create video encoder";
@@ -78,19 +78,20 @@ void HostSessionFakeDesktop::onMessageReceived(const QByteArray& buffer)
     }
 }
 
-VideoEncoder* HostSessionFakeDesktop::createEncoder(const proto::desktop::Config& config)
+codec::VideoEncoder* HostSessionFakeDesktop::createEncoder(const proto::desktop::Config& config)
 {
     switch (config.video_encoding())
     {
         case proto::desktop::VIDEO_ENCODING_VP8:
-            return VideoEncoderVPX::createVP8();
+            return codec::VideoEncoderVPX::createVP8();
 
         case proto::desktop::VIDEO_ENCODING_VP9:
-            return VideoEncoderVPX::createVP9();
+            return codec::VideoEncoderVPX::createVP9();
 
         case proto::desktop::VIDEO_ENCODING_ZSTD:
-            return VideoEncoderZstd::create(
-                VideoUtil::fromVideoPixelFormat(config.pixel_format()), config.compress_ratio());
+            return codec::VideoEncoderZstd::create(
+                codec::VideoUtil::fromVideoPixelFormat(
+                    config.pixel_format()), config.compress_ratio());
 
         default:
             LOG(LS_WARNING) << "Unsupported video encoding: " << config.video_encoding();

@@ -21,7 +21,7 @@
 #include "codec/video_decoder_vpx.h"
 #include "codec/video_decoder_zstd.h"
 
-namespace aspia {
+namespace codec {
 
 // static
 std::unique_ptr<VideoDecoder> VideoDecoder::create(proto::desktop::VideoEncoding encoding)
@@ -42,4 +42,4 @@ std::unique_ptr<VideoDecoder> VideoDecoder::create(proto::desktop::VideoEncoding
     }
 }
 
-} // namespace aspia
+} // namespace codec

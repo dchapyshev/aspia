@@ -23,11 +23,14 @@
 #include "protocol/desktop_session_extensions.pb.h"
 #include "protocol/system_info.pb.h"
 
+namespace codec {
+class CursorDecoder;
+class VideoDecoder;
+} // namespace codec
+
 namespace aspia {
 
-class CursorDecoder;
 class DesktopFrame;
-class VideoDecoder;
 
 class ClientDesktop : public Client
 {
@@ -77,8 +80,8 @@ private:
     proto::desktop::ClientToHost outgoing_message_;
 
     proto::desktop::VideoEncoding video_encoding_ = proto::desktop::VIDEO_ENCODING_UNKNOWN;
-    std::unique_ptr<VideoDecoder> video_decoder_;
-    std::unique_ptr<CursorDecoder> cursor_decoder_;
+    std::unique_ptr<codec::VideoDecoder> video_decoder_;
+    std::unique_ptr<codec::CursorDecoder> cursor_decoder_;
 
     DISALLOW_COPY_AND_ASSIGN(ClientDesktop);
 };

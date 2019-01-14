@@ -26,7 +26,7 @@ extern "C"
 typedef struct vpx_codec_ctx vpx_codec_ctx_t;
 }
 
-namespace aspia {
+namespace codec {
 
 struct VpxCodecDeleter
 {
@@ -35,6 +35,6 @@ struct VpxCodecDeleter
 
 using ScopedVpxCodec = std::unique_ptr<vpx_codec_ctx_t, VpxCodecDeleter>;
 
-} // namespace aspia
+} // namespace codec
 
 #endif // ASPIA_CODEC__SCOPED_VPX_CODEC_H

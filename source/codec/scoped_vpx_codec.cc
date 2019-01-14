@@ -23,7 +23,7 @@
 
 #include "base/logging.h"
 
-namespace aspia {
+namespace codec {
 
 void VpxCodecDeleter::operator()(vpx_codec_ctx_t* codec)
 {
@@ -35,4 +35,4 @@ void VpxCodecDeleter::operator()(vpx_codec_ctx_t* codec)
     }
 }
 
-} // namespace aspia
+} // namespace codec

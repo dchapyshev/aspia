@@ -27,7 +27,7 @@
 #include "codec/scoped_vpx_codec.h"
 #include "codec/video_decoder.h"
 
-namespace aspia {
+namespace codec {
 
 class VideoDecoderVPX : public VideoDecoder
 {
@@ -37,7 +37,7 @@ public:
     static std::unique_ptr<VideoDecoderVPX> createVP8();
     static std::unique_ptr<VideoDecoderVPX> createVP9();
 
-    bool decode(const proto::desktop::VideoPacket& packet, DesktopFrame* frame) override;
+    bool decode(const proto::desktop::VideoPacket& packet, aspia::DesktopFrame* frame) override;
 
 private:
     explicit VideoDecoderVPX(proto::desktop::VideoEncoding encoding);
@@ -47,6 +47,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(VideoDecoderVPX);
 };
 
-} // namespace aspia
+} // namespace codec
 
 #endif // ASPIA_CODEC__VIDEO_DECODER_VPX_H

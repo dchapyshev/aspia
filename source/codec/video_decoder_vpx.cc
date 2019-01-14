@@ -23,14 +23,15 @@
 
 #include "base/logging.h"
 #include "codec/video_util.h"
+#include "desktop_capture/desktop_frame.h"
 
-namespace aspia {
+namespace codec {
 
 namespace {
 
 bool convertImage(const proto::desktop::VideoPacket& packet,
                   vpx_image_t* image,
-                  DesktopFrame* frame)
+                  aspia::DesktopFrame* frame)
 {
     if (image->fmt != VPX_IMG_FMT_I420)
         return false;
@@ -116,7 +117,7 @@ VideoDecoderVPX::VideoDecoderVPX(proto::desktop::VideoEncoding encoding)
     CHECK_EQ(ret, VPX_CODEC_OK);
 }
 
-bool VideoDecoderVPX::decode(const proto::desktop::VideoPacket& packet, DesktopFrame* frame)
+bool VideoDecoderVPX::decode(const proto::desktop::VideoPacket& packet, aspia::DesktopFrame* frame)
 {
     // Do the actual decoding.
     vpx_codec_err_t ret =
@@ -154,4 +155,4 @@ bool VideoDecoderVPX::decode(const proto::desktop::VideoPacket& packet, DesktopF
     return convertImage(packet, image, frame);
 }
 
-} // namespace aspia
+} // namespace codec

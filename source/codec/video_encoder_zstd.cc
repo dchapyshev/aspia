@@ -23,7 +23,7 @@
 #include "codec/video_util.h"
 #include "desktop_capture/desktop_frame.h"
 
-namespace aspia {
+namespace codec {
 
 namespace {
 
@@ -38,7 +38,7 @@ uint8_t* outputBuffer(proto::desktop::VideoPacket* packet, size_t size)
 } // namespace
 
 VideoEncoderZstd::VideoEncoderZstd(std::unique_ptr<PixelTranslator> translator,
-                                   const PixelFormat& target_format,
+                                   const aspia::PixelFormat& target_format,
                                    int compression_ratio)
     : target_format_(target_format),
       compress_ratio_(compression_ratio),
@@ -49,7 +49,8 @@ VideoEncoderZstd::VideoEncoderZstd(std::unique_ptr<PixelTranslator> translator,
 }
 
 // static
-VideoEncoderZstd* VideoEncoderZstd::create(const PixelFormat& target_format, int compression_ratio)
+VideoEncoderZstd* VideoEncoderZstd::create(
+    const aspia::PixelFormat& target_format, int compression_ratio)
 {
     if (compression_ratio > ZSTD_maxCLevel())
         compression_ratio = ZSTD_maxCLevel();
@@ -57,7 +58,7 @@ VideoEncoderZstd* VideoEncoderZstd::create(const PixelFormat& target_format, int
         compression_ratio = 1;
 
     std::unique_ptr<PixelTranslator> translator =
-        PixelTranslator::create(PixelFormat::ARGB(), target_format);
+        PixelTranslator::create(aspia::PixelFormat::ARGB(), target_format);
     if (!translator)
     {
         LOG(LS_WARNING) << "Unsupported pixel format";
@@ -96,7 +97,8 @@ void VideoEncoderZstd::compressPacket(proto::desktop::VideoPacket* packet,
     packet->mutable_data()->resize(output.pos);
 }
 
-void VideoEncoderZstd::encode(const DesktopFrame* frame, proto::desktop::VideoPacket* packet)
+void VideoEncoderZstd::encode(
+    const aspia::DesktopFrame* frame, proto::desktop::VideoPacket* packet)
 {
     fillPacketInfo(proto::desktop::VIDEO_ENCODING_ZSTD, frame, packet);
 
@@ -140,4 +142,4 @@ void VideoEncoderZstd::encode(const DesktopFrame* frame, proto::desktop::VideoPa
     compressPacket(packet, translate_buffer_.get(), data_size);
 }
 
-} // namespace aspia
+} // namespace codec

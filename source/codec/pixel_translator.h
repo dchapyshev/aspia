@@ -23,15 +23,15 @@
 
 #include "desktop_capture/pixel_format.h"
 
-namespace aspia {
+namespace codec {
 
 class PixelTranslator
 {
 public:
     virtual ~PixelTranslator() = default;
 
-    static std::unique_ptr<PixelTranslator> create(const PixelFormat& source_format,
-                                                   const PixelFormat& target_format);
+    static std::unique_ptr<PixelTranslator> create(const aspia::PixelFormat& source_format,
+                                                   const aspia::PixelFormat& target_format);
 
     virtual void translate(const uint8_t* src,
                            int src_stride,
@@ -41,6 +41,6 @@ public:
                            int height) = 0;
 };
 
-} // namespace aspia
+} // namespace codec
 
 #endif // ASPIA_CODEC__PIXEL_TRANSLATOR_H

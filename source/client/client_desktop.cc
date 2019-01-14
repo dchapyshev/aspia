@@ -186,7 +186,7 @@ void ClientDesktop::readVideoPacket(const proto::desktop::VideoPacket& packet)
 {
     if (video_encoding_ != packet.encoding())
     {
-        video_decoder_ = VideoDecoder::create(packet.encoding());
+        video_decoder_ = codec::VideoDecoder::create(packet.encoding());
         video_encoding_ = packet.encoding();
     }
 
@@ -198,7 +198,7 @@ void ClientDesktop::readVideoPacket(const proto::desktop::VideoPacket& packet)
 
     if (packet.has_format())
     {
-        QRect screen_rect = VideoUtil::fromVideoRect(packet.format().screen_rect());
+        QRect screen_rect = codec::VideoUtil::fromVideoRect(packet.format().screen_rect());
 
         static const int kMaxValue = std::numeric_limits<uint16_t>::max();
         static const int kMinValue = -std::numeric_limits<uint16_t>::max();
@@ -248,7 +248,7 @@ void ClientDesktop::readCursorShape(const proto::desktop::CursorShape& cursor_sh
         return;
 
     if (!cursor_decoder_)
-        cursor_decoder_ = std::make_unique<CursorDecoder>();
+        cursor_decoder_ = std::make_unique<codec::CursorDecoder>();
 
     std::shared_ptr<MouseCursor> mouse_cursor = cursor_decoder_->decode(cursor_shape);
     if (!mouse_cursor)

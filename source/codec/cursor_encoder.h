@@ -24,7 +24,7 @@
 #include "desktop_capture/mouse_cursor_cache.h"
 #include "protocol/desktop_session.pb.h"
 
-namespace aspia {
+namespace codec {
 
 class CursorEncoder
 {
@@ -32,19 +32,19 @@ public:
     CursorEncoder();
     ~CursorEncoder() = default;
 
-    bool encode(std::unique_ptr<MouseCursor> mouse_cursor,
+    bool encode(std::unique_ptr<aspia::MouseCursor> mouse_cursor,
                 proto::desktop::CursorShape* cursor_shape);
 
 private:
     bool compressCursor(proto::desktop::CursorShape* cursor_shape,
-                        const MouseCursor* mouse_cursor);
+                        const aspia::MouseCursor* mouse_cursor);
 
     ScopedZstdCStream stream_;
-    MouseCursorCache cache_;
+    aspia::MouseCursorCache cache_;
 
     DISALLOW_COPY_AND_ASSIGN(CursorEncoder);
 };
 
-} // namespace aspia
+} // namespace codec
 
 #endif // ASPIA_CODEC__CURSOR_ENCODER_H

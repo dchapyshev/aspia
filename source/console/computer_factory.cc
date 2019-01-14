@@ -44,7 +44,7 @@ void setDefaultDesktopManageConfig(proto::desktop::Config* config)
     config->set_scale_factor(kDefScaleFactor);
     config->set_update_interval(kDefUpdateInterval);
 
-    VideoUtil::toVideoPixelFormat(PixelFormat::RGB565(), config->mutable_pixel_format());
+    codec::VideoUtil::toVideoPixelFormat(PixelFormat::RGB565(), config->mutable_pixel_format());
 }
 
 void setDefaultDesktopViewConfig(proto::desktop::Config* config)
@@ -60,7 +60,7 @@ void setDefaultDesktopViewConfig(proto::desktop::Config* config)
     config->set_scale_factor(kDefScaleFactor);
     config->set_update_interval(kDefUpdateInterval);
 
-    VideoUtil::toVideoPixelFormat(PixelFormat::RGB565(), config->mutable_pixel_format());
+    codec::VideoUtil::toVideoPixelFormat(PixelFormat::RGB565(), config->mutable_pixel_format());
 }
 
 } // namespace

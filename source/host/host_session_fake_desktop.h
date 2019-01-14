@@ -23,10 +23,13 @@
 #include "host/host_session_fake.h"
 #include "protocol/desktop_session.pb.h"
 
+namespace codec {
+class VideoEncoder;
+} // namespace codec
+
 namespace aspia {
 
 class DesktopFrame;
-class VideoEncoder;
 
 class HostSessionFakeDesktop : public HostSessionFake
 {
@@ -43,7 +46,7 @@ public slots:
     void onMessageReceived(const QByteArray& buffer) override;
 
 private:
-    VideoEncoder* createEncoder(const proto::desktop::Config& config);
+    codec::VideoEncoder* createEncoder(const proto::desktop::Config& config);
     std::unique_ptr<DesktopFrame> createFrame();
 
     DISALLOW_COPY_AND_ASSIGN(HostSessionFakeDesktop);

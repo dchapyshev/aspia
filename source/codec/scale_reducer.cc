@@ -23,7 +23,7 @@
 #include "base/logging.h"
 #include "desktop_capture/desktop_frame_aligned.h"
 
-namespace aspia {
+namespace codec {
 
 namespace {
 
@@ -72,11 +72,11 @@ ScaleReducer* ScaleReducer::create(int scale_factor)
     return new ScaleReducer(scale_factor);
 }
 
-const DesktopFrame* ScaleReducer::scaleFrame(const DesktopFrame* source_frame)
+const aspia::DesktopFrame* ScaleReducer::scaleFrame(const aspia::DesktopFrame* source_frame)
 {
     DCHECK(source_frame);
     DCHECK(!source_frame->constUpdatedRegion().isEmpty());
-    DCHECK(source_frame->format() == PixelFormat::ARGB());
+    DCHECK(source_frame->format() == aspia::PixelFormat::ARGB());
 
     if (scale_factor_ == kDefScaleFactor)
         return source_frame;
@@ -88,7 +88,7 @@ const DesktopFrame* ScaleReducer::scaleFrame(const DesktopFrame* source_frame)
     {
         QSize size = scaledSize(source_frame->size(), scale_factor_);
 
-        scaled_frame_ = DesktopFrameAligned::create(size, source_frame->format(), 32);
+        scaled_frame_ = aspia::DesktopFrameAligned::create(size, source_frame->format(), 32);
         if (!scaled_frame_)
             return nullptr;
     }
@@ -138,4 +138,4 @@ const DesktopFrame* ScaleReducer::scaleFrame(const DesktopFrame* source_frame)
     return scaled_frame_.get();
 }
 
-} // namespace aspia
+} // namespace codec

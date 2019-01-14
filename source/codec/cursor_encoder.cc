@@ -20,7 +20,7 @@
 
 #include "base/logging.h"
 
-namespace aspia {
+namespace codec {
 
 namespace {
 
@@ -47,7 +47,7 @@ CursorEncoder::CursorEncoder()
 }
 
 bool CursorEncoder::compressCursor(proto::desktop::CursorShape* cursor_shape,
-                                   const MouseCursor* mouse_cursor)
+                                   const aspia::MouseCursor* mouse_cursor)
 {
     size_t ret = ZSTD_initCStream(stream_.get(), kCompressionRatio);
     DCHECK(!ZSTD_isError(ret)) << ZSTD_getErrorName(ret);
@@ -78,7 +78,7 @@ bool CursorEncoder::compressCursor(proto::desktop::CursorShape* cursor_shape,
     return true;
 }
 
-bool CursorEncoder::encode(std::unique_ptr<MouseCursor> mouse_cursor,
+bool CursorEncoder::encode(std::unique_ptr<aspia::MouseCursor> mouse_cursor,
                            proto::desktop::CursorShape* cursor_shape)
 {
     if (!mouse_cursor)
@@ -97,7 +97,7 @@ bool CursorEncoder::encode(std::unique_ptr<MouseCursor> mouse_cursor,
     size_t index = cache_.find(mouse_cursor.get());
 
     // The cursor is not found in the cache.
-    if (index == MouseCursorCache::kInvalidIndex)
+    if (index == aspia::MouseCursorCache::kInvalidIndex)
     {
         cursor_shape->set_width(size.width());
         cursor_shape->set_height(size.height());
@@ -123,4 +123,4 @@ bool CursorEncoder::encode(std::unique_ptr<MouseCursor> mouse_cursor,
     return true;
 }
 
-} // namespace aspia
+} // namespace codec

@@ -21,7 +21,7 @@
 #include "base/logging.h"
 #include "desktop_capture/mouse_cursor_cache.h"
 
-namespace aspia {
+namespace codec {
 
 CursorDecoder::CursorDecoder()
     : stream_(ZSTD_createDStream())
@@ -59,7 +59,8 @@ bool CursorDecoder::decompressCursor(const proto::desktop::CursorShape& cursor_s
     return true;
 }
 
-std::shared_ptr<MouseCursor> CursorDecoder::decode(const proto::desktop::CursorShape& cursor_shape)
+std::shared_ptr<aspia::MouseCursor> CursorDecoder::decode(
+    const proto::desktop::CursorShape& cursor_shape)
 {
     size_t cache_index;
 
@@ -86,17 +87,17 @@ std::shared_ptr<MouseCursor> CursorDecoder::decode(const proto::desktop::CursorS
         if (!decompressCursor(cursor_shape, image.get(), image_size))
             return nullptr;
 
-        std::unique_ptr<MouseCursor> mouse_cursor = std::make_unique<MouseCursor>(
+        std::unique_ptr<aspia::MouseCursor> mouse_cursor = std::make_unique<aspia::MouseCursor>(
             std::move(image), size, QPoint(cursor_shape.hotspot_x(), cursor_shape.hotspot_y()));
 
         if (cursor_shape.flags() & proto::desktop::CursorShape::RESET_CACHE)
         {
             size_t cache_size = cursor_shape.flags() & 0x1F;
 
-            if (!MouseCursorCache::isValidCacheSize(cache_size))
+            if (!aspia::MouseCursorCache::isValidCacheSize(cache_size))
                 return nullptr;
 
-            cache_ = std::make_unique<MouseCursorCache>(cache_size);
+            cache_ = std::make_unique<aspia::MouseCursorCache>(cache_size);
         }
 
         if (!cache_)
@@ -111,4 +112,4 @@ std::shared_ptr<MouseCursor> CursorDecoder::decode(const proto::desktop::CursorS
     return cache_->get(cache_index);
 }
 
-} // namespace aspia
+} // namespace codec

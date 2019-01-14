@@ -24,7 +24,7 @@
 #include "codec/video_encoder.h"
 #include "desktop_capture/pixel_format.h"
 
-namespace aspia {
+namespace codec {
 
 class PixelTranslator;
 
@@ -33,20 +33,20 @@ class VideoEncoderZstd : public VideoEncoder
 public:
     ~VideoEncoderZstd() = default;
 
-    static VideoEncoderZstd* create(const PixelFormat& target_format, int compression_ratio);
+    static VideoEncoderZstd* create(const aspia::PixelFormat& target_format, int compression_ratio);
 
-    void encode(const DesktopFrame* frame, proto::desktop::VideoPacket* packet) override;
+    void encode(const aspia::DesktopFrame* frame, proto::desktop::VideoPacket* packet) override;
 
 private:
     VideoEncoderZstd(std::unique_ptr<PixelTranslator> translator,
-                     const PixelFormat& target_format,
+                     const aspia::PixelFormat& target_format,
                      int compression_ratio);
     void compressPacket(proto::desktop::VideoPacket* packet,
                         const uint8_t* input_data,
                         size_t input_size);
 
     // Client's pixel format
-    PixelFormat target_format_;
+    aspia::PixelFormat target_format_;
     int compress_ratio_;
     ScopedZstdCStream stream_;
     std::unique_ptr<PixelTranslator> translator_;
@@ -56,6 +56,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(VideoEncoderZstd);
 };
 
-} // namespace aspia
+} // namespace codec
 
 #endif // ASPIA_CODEC__VIDEO_ENCODER_ZSTD_H

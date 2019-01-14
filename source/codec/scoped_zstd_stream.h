@@ -23,7 +23,7 @@
 
 #include <zstd.h>
 
-namespace aspia {
+namespace codec {
 
 struct ZstdCStreamDeleter
 {
@@ -38,6 +38,6 @@ struct ZstdDStreamDeleter
 using ScopedZstdCStream = std::unique_ptr<ZSTD_CStream, ZstdCStreamDeleter>;
 using ScopedZstdDStream = std::unique_ptr<ZSTD_DStream, ZstdDStreamDeleter>;
 
-} // namespace aspia
+} // namespace codec
 
 #endif // ASPIA_CODEC__SCOPED_ZSTD_STREAM_H

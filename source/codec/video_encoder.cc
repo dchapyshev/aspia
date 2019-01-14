@@ -20,10 +20,10 @@
 
 #include "desktop_capture/desktop_frame.h"
 
-namespace aspia {
+namespace codec {
 
 void VideoEncoder::fillPacketInfo(proto::desktop::VideoEncoding encoding,
-                                  const DesktopFrame* frame,
+                                  const aspia::DesktopFrame* frame,
                                   proto::desktop::VideoPacket* packet)
 {
     packet->set_encoding(encoding);
@@ -39,4 +39,4 @@ void VideoEncoder::fillPacketInfo(proto::desktop::VideoEncoding encoding,
     }
 }
 
-} // namespace aspia
+} // namespace codec

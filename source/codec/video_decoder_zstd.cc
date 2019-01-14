@@ -23,7 +23,7 @@
 #include "codec/video_util.h"
 #include "desktop_capture/desktop_frame_aligned.h"
 
-namespace aspia {
+namespace codec {
 
 VideoDecoderZstd::VideoDecoderZstd()
     : stream_(ZSTD_createDStream())
@@ -38,13 +38,13 @@ std::unique_ptr<VideoDecoderZstd> VideoDecoderZstd::create()
 }
 
 bool VideoDecoderZstd::decode(const proto::desktop::VideoPacket& packet,
-                              DesktopFrame* target_frame)
+                              aspia::DesktopFrame* target_frame)
 {
     if (packet.has_format())
     {
         const proto::desktop::VideoPacketFormat& format = packet.format();
 
-        source_frame_ = DesktopFrameAligned::create(
+        source_frame_ = aspia::DesktopFrameAligned::create(
             QSize(format.screen_rect().width(), format.screen_rect().height()),
             VideoUtil::fromVideoPixelFormat(format.pixel_format()), 32);
 
@@ -111,4 +111,4 @@ bool VideoDecoderZstd::decode(const proto::desktop::VideoPacket& packet,
     return true;
 }
 
-} // namespace aspia
+} // namespace codec

@@ -18,7 +18,7 @@
 
 #include "codec/video_util.h"
 
-namespace aspia {
+namespace codec {
 
 QRect VideoUtil::fromVideoRect(const proto::desktop::Rect& rect)
 {
@@ -33,18 +33,19 @@ void VideoUtil::toVideoRect(const QRect& from, proto::desktop::Rect* to)
     to->set_height(from.height());
 }
 
-PixelFormat VideoUtil::fromVideoPixelFormat(const proto::desktop::PixelFormat& format)
+aspia::PixelFormat VideoUtil::fromVideoPixelFormat(const proto::desktop::PixelFormat& format)
 {
-    return PixelFormat(static_cast<uint8_t>(format.bits_per_pixel()),
-                       static_cast<uint16_t>(format.red_max()),
-                       static_cast<uint16_t>(format.green_max()),
-                       static_cast<uint16_t>(format.blue_max()),
-                       static_cast<uint8_t>(format.red_shift()),
-                       static_cast<uint8_t>(format.green_shift()),
-                       static_cast<uint8_t>(format.blue_shift()));
+    return aspia::PixelFormat(
+        static_cast<uint8_t>(format.bits_per_pixel()),
+        static_cast<uint16_t>(format.red_max()),
+        static_cast<uint16_t>(format.green_max()),
+        static_cast<uint16_t>(format.blue_max()),
+        static_cast<uint8_t>(format.red_shift()),
+        static_cast<uint8_t>(format.green_shift()),
+        static_cast<uint8_t>(format.blue_shift()));
 }
 
-void VideoUtil::toVideoPixelFormat(const PixelFormat& from, proto::desktop::PixelFormat* to)
+void VideoUtil::toVideoPixelFormat(const aspia::PixelFormat& from, proto::desktop::PixelFormat* to)
 {
     to->set_bits_per_pixel(from.bitsPerPixel());
 
@@ -57,4 +58,4 @@ void VideoUtil::toVideoPixelFormat(const PixelFormat& from, proto::desktop::Pixe
     to->set_blue_shift(from.blueShift());
 }
 
-} // namespace aspia
+} // namespace codec

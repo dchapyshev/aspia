@@ -68,7 +68,7 @@ DesktopConfigDialog::DesktopConfigDialog(proto::SessionType session_type,
     combo_color_depth->addItem(tr("64 colors (6 bit)"), QVariant(COLOR_DEPTH_RGB222));
     combo_color_depth->addItem(tr("8 colors (3 bit)"), QVariant(COLOR_DEPTH_RGB111));
 
-    PixelFormat pixel_format = VideoUtil::fromVideoPixelFormat(config_.pixel_format());
+    PixelFormat pixel_format = codec::VideoUtil::fromVideoPixelFormat(config_.pixel_format());
     ColorDepth color_depth = COLOR_DEPTH_ARGB;
 
     if (pixel_format.isEqual(PixelFormat::ARGB()))
@@ -194,7 +194,7 @@ void DesktopConfigDialog::onButtonBoxClicked(QAbstractButton* button)
                     break;
             }
 
-            VideoUtil::toVideoPixelFormat(pixel_format, config_.mutable_pixel_format());
+            codec::VideoUtil::toVideoPixelFormat(pixel_format, config_.mutable_pixel_format());
 
             config_.set_compress_ratio(ui->slider_compression_ratio->value());
         }

@@ -21,10 +21,13 @@
 
 #include <memory>
 
-#include "desktop_capture/desktop_frame.h"
 #include "protocol/desktop_session.pb.h"
 
 namespace aspia {
+class DesktopFrame;
+} // namespace aspia
+
+namespace codec {
 
 class VideoDecoder
 {
@@ -33,9 +36,9 @@ public:
 
     static std::unique_ptr<VideoDecoder> create(proto::desktop::VideoEncoding encoding);
 
-    virtual bool decode(const proto::desktop::VideoPacket& packet, DesktopFrame* frame) = 0;
+    virtual bool decode(const proto::desktop::VideoPacket& packet, aspia::DesktopFrame* frame) = 0;
 };
 
-} // namespace aspia
+} // namespace codec
 
 #endif // ASPIA_CODEC__VIDEO_DECODER_H

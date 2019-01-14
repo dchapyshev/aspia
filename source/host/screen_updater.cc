@@ -77,11 +77,11 @@ private:
     std::unique_ptr<CaptureScheduler> capture_scheduler_;
 
     std::unique_ptr<ScreenCapturer> screen_capturer_;
-    std::unique_ptr<ScaleReducer> scale_reducer_;
-    std::unique_ptr<VideoEncoder> video_encoder_;
+    std::unique_ptr<codec::ScaleReducer> scale_reducer_;
+    std::unique_ptr<codec::VideoEncoder> video_encoder_;
 
     std::unique_ptr<CursorCapturer> cursor_capturer_;
-    std::unique_ptr<CursorEncoder> cursor_encoder_;
+    std::unique_ptr<codec::CursorEncoder> cursor_encoder_;
 
     // By default, we capture the full screen.
     ScreenCapturer::ScreenId screen_id_ = ScreenCapturer::kFullDesktopScreenId;
@@ -122,24 +122,24 @@ ScreenUpdaterImpl::~ScreenUpdaterImpl()
 
 bool ScreenUpdaterImpl::startUpdater(const proto::desktop::Config& config)
 {
-    scale_reducer_.reset(ScaleReducer::create(config.scale_factor()));
+    scale_reducer_.reset(codec::ScaleReducer::create(config.scale_factor()));
     if (!scale_reducer_)
         return false;
 
     switch (config.video_encoding())
     {
         case proto::desktop::VIDEO_ENCODING_VP8:
-            video_encoder_.reset(VideoEncoderVPX::createVP8());
+            video_encoder_.reset(codec::VideoEncoderVPX::createVP8());
             break;
 
         case proto::desktop::VIDEO_ENCODING_VP9:
-            video_encoder_.reset(VideoEncoderVPX::createVP9());
+            video_encoder_.reset(codec::VideoEncoderVPX::createVP9());
             break;
 
         case proto::desktop::VIDEO_ENCODING_ZSTD:
-            video_encoder_.reset(VideoEncoderZstd::create(
-                VideoUtil::fromVideoPixelFormat(config.pixel_format()),
-                config.compress_ratio()));
+            video_encoder_.reset(codec::VideoEncoderZstd::create(
+                codec::VideoUtil::fromVideoPixelFormat(
+                    config.pixel_format()), config.compress_ratio()));
             break;
 
         default:
@@ -147,7 +147,7 @@ bool ScreenUpdaterImpl::startUpdater(const proto::desktop::Config& config)
             // No supported video encoding. We create the default codec. If the client can not
             // decode it, it will display an error and the connection will be disconnected.
             LOG(LS_WARNING) << "Unsupported video encoding: " << config.video_encoding();
-            video_encoder_.reset(VideoEncoderZstd::create(PixelFormat::RGB565(), 6));
+            video_encoder_.reset(codec::VideoEncoderZstd::create(PixelFormat::RGB565(), 6));
         }
         break;
     }
@@ -158,7 +158,7 @@ bool ScreenUpdaterImpl::startUpdater(const proto::desktop::Config& config)
     if (config.flags() & proto::desktop::ENABLE_CURSOR_SHAPE)
     {
         cursor_capturer_.reset(new CursorCapturerWin());
-        cursor_encoder_.reset(new CursorEncoder());
+        cursor_encoder_.reset(new codec::CursorEncoder());
     }
 
     capture_scheduler_.reset(
