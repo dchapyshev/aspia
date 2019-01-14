@@ -25,7 +25,7 @@ struct bignum_ctx;
 struct bignum_st;
 struct evp_cipher_ctx_st;
 
-namespace aspia {
+namespace crypto {
 
 struct BIGNUM_CTX_Deleter
 {
@@ -46,6 +46,6 @@ using BIGNUM_CTX_ptr = std::unique_ptr<bignum_ctx, BIGNUM_CTX_Deleter>;
 using BIGNUM_ptr = std::unique_ptr<bignum_st, BIGNUM_Deleter>;
 using EVP_CIPHER_CTX_ptr = std::unique_ptr<evp_cipher_ctx_st, EVP_CIPHER_CTX_Deleter>;
 
-} // namespace aspia
+} // namespace crypto
 
 #endif // ASPIA_CRYPTO__OPENSSL_UTIL_H

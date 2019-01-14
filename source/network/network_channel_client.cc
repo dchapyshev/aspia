@@ -48,7 +48,7 @@ ChannelClient::ChannelClient(QObject* parent)
 
 ChannelClient::~ChannelClient()
 {
-    aspia::secureMemZero(&password_);
+    crypto::memZero(&password_);
 }
 
 void ChannelClient::connectToHost(const QString& address, int port,
@@ -201,19 +201,15 @@ void ChannelClient::readSessionChallenge(const QByteArray& buffer)
     {
         case proto::METHOD_SRP_AES256_GCM:
         {
-            cryptor_.reset(
-                aspia::CryptorAes256Gcm::create(srp_client_->key(),
-                                                srp_client_->encryptIv(),
-                                                srp_client_->decryptIv()));
+            cryptor_.reset(crypto::CryptorAes256Gcm::create(
+                srp_client_->key(), srp_client_->encryptIv(), srp_client_->decryptIv()));
         }
         break;
 
         case proto::METHOD_SRP_CHACHA20_POLY1305:
         {
-            cryptor_.reset(
-                aspia::CryptorChaCha20Poly1305::create(srp_client_->key(),
-                                                       srp_client_->encryptIv(),
-                                                       srp_client_->decryptIv()));
+            cryptor_.reset(crypto::CryptorChaCha20Poly1305::create(
+                srp_client_->key(), srp_client_->encryptIv(), srp_client_->decryptIv()));
         }
         break;
 

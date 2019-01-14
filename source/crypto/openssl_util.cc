@@ -21,7 +21,7 @@
 #include <openssl/bn.h>
 #include <openssl/evp.h>
 
-namespace aspia {
+namespace crypto {
 
 void BIGNUM_CTX_Deleter::operator()(bignum_ctx* bignum_ctx)
 {
@@ -39,4 +39,4 @@ void EVP_CIPHER_CTX_Deleter::operator()(evp_cipher_ctx_st* ctx)
     EVP_CIPHER_CTX_free(ctx);
 }
 
-} // namespace aspia
+} // namespace crypto

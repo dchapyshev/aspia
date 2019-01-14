@@ -609,18 +609,18 @@
         </translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="326"/>
+        <location filename="../address_book_dialog.cc" line="327"/>
         <source>Confirmation</source>
         <translation>Bestätigung</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="327"/>
+        <location filename="../address_book_dialog.cc" line="328"/>
         <source>At change the size of hashing salt, you will need to re-enter the password. Continue?</source>
         <translation>Um die Größe des Hashing-Salzes zu ändern, müssen Sie das Kennwort erneut eingeben. Fortsetzen?</translation>
     </message>
     <message>
         <location filename="../address_book_dialog.cc" line="224"/>
-        <location filename="../address_book_dialog.cc" line="365"/>
+        <location filename="../address_book_dialog.cc" line="366"/>
         <source>Warning</source>
         <translation>Warnung</translation>
     </message>
@@ -628,12 +628,12 @@
 <context>
     <name>aspia::AddressBookTab</name>
     <message>
-        <location filename="../address_book_tab.cc" line="291"/>
+        <location filename="../address_book_tab.cc" line="292"/>
         <source>The address book file is corrupted or has an unknown format.</source>
         <translation>Die Adressbuchdatei ist beschädigt oder hat ein unbekanntes Format.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="285"/>
+        <location filename="../address_book_tab.cc" line="286"/>
         <source>Unable to decrypt the address book with the specified password.</source>
         <translation>Das Adressbuch kann nicht mit dem angegebenen Kennwort entschlüsselt werden.</translation>
     </message>
@@ -654,59 +654,59 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="301"/>
+        <location filename="../address_book_tab.cc" line="302"/>
         <source>The address book file is encrypted with an unsupported encryption type.</source>
         <translation>Die Adressbuchdatei ist mit einem nicht unterstützten Verschlüsselungstyp verschlüsselt.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="473"/>
+        <location filename="../address_book_tab.cc" line="474"/>
         <source>Are you sure you want to delete computer group &quot;%1&quot; and all child items?</source>
         <translation>Möchten Sie die Computergruppe &quot;%1&quot; und alle Kindelemente wirklich löschen?</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="477"/>
-        <location filename="../address_book_tab.cc" line="499"/>
+        <location filename="../address_book_tab.cc" line="478"/>
+        <location filename="../address_book_tab.cc" line="500"/>
         <source>Confirmation</source>
         <translation>Bestätigung</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="495"/>
+        <location filename="../address_book_tab.cc" line="496"/>
         <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
         <translation>Möchten Sie den Computer &quot;%1&quot; wirklich löschen?</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="754"/>
+        <location filename="../address_book_tab.cc" line="755"/>
         <source>Save Address Book</source>
         <translation>Adressbuch speichern</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="756"/>
+        <location filename="../address_book_tab.cc" line="757"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Aspia Adressbuch (*.aab)</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="766"/>
+        <location filename="../address_book_tab.cc" line="767"/>
         <source>Unable to create or open address book file.</source>
         <translation>Die Adressbuchdatei konnte nicht erstellt oder geöffnet werden.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="778"/>
+        <location filename="../address_book_tab.cc" line="779"/>
         <source>Unable to write address book file.</source>
         <translation>Die Adressbuchdatei konnte nicht geschrieben werden.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="794"/>
-        <location filename="../address_book_tab.cc" line="808"/>
+        <location filename="../address_book_tab.cc" line="795"/>
+        <location filename="../address_book_tab.cc" line="809"/>
         <source>Warning</source>
         <translation>Warnung</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="796"/>
+        <location filename="../address_book_tab.cc" line="797"/>
         <source>Could not open address book</source>
         <translation>Adressbuch konnte nicht geöffnet werden</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="810"/>
+        <location filename="../address_book_tab.cc" line="811"/>
         <source>Failed to save address book</source>
         <translation>Speichern des Adressbuchs fehlgeschlagen</translation>
     </message>

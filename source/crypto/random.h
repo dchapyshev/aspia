@@ -23,7 +23,7 @@
 
 #include "base/macros_magic.h"
 
-namespace aspia {
+namespace crypto {
 
 class Random
 {
@@ -42,6 +42,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(Random);
 };
 
-} // namespace aspia
+} // namespace crypto
 
 #endif // ASPIA_CRYPTO__RANDOM_H

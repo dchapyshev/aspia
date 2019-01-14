@@ -85,7 +85,7 @@ net::SrpUserList HostSettings::userList() const
 
     users.seed_key = settings_.value(QLatin1String("SeedKey")).toByteArray();
     if (users.seed_key.isEmpty())
-        users.seed_key = Random::generateBuffer(64);
+        users.seed_key = crypto::Random::generateBuffer(64);
 
     int size = settings_.beginReadArray(QLatin1String("Users"));
     for (int i = 0; i < size; ++i)

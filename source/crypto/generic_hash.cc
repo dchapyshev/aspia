@@ -22,7 +22,7 @@
 
 #include "base/logging.h"
 
-namespace aspia {
+namespace crypto {
 
 GenericHash::GenericHash(Type type)
 {
@@ -133,4 +133,4 @@ void GenericHash::reset()
     CHECK_EQ(ret, 1);
 }
 
-} // namespace aspia
+} // namespace crypto

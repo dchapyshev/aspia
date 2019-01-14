@@ -27,7 +27,7 @@
 #include "base/macros_magic.h"
 #include "crypto/openssl_util.h"
 
-namespace aspia {
+namespace crypto {
 
 class BigNum
 {
@@ -102,6 +102,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(BigNum);
 };
 
-} // namespace aspia
+} // namespace crypto
 
 #endif // ASPIA_CRYPTO__BIG_NUM_H

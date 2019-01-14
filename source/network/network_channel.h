@@ -26,9 +26,9 @@
 
 #include "base/macros_magic.h"
 
-namespace aspia {
+namespace crypto {
 class Cryptor;
-} // namespace aspia
+} // namespace crypto
 
 namespace net {
 
@@ -103,7 +103,7 @@ protected:
     QVersionNumber peer_version_;
 
     // Encrypts and decrypts data.
-    std::unique_ptr<aspia::Cryptor> cryptor_;
+    std::unique_ptr<crypto::Cryptor> cryptor_;
 
     ChannelState channel_state_ = ChannelState::NOT_CONNECTED;
     KeyExchangeState key_exchange_state_ = KeyExchangeState::HELLO;

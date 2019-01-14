@@ -21,7 +21,7 @@
 
 #include "base/macros_magic.h"
 
-namespace aspia {
+namespace crypto {
 
 class ScopedCryptoInitializer
 {
@@ -36,6 +36,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(ScopedCryptoInitializer);
 };
 
-} // namespace aspia
+} // namespace crypto
 
 #endif // ASPIA_CRYPTO__SCOPED_CRYPTO_INITIALIZER_H

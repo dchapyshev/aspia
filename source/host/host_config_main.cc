@@ -43,7 +43,7 @@ int hostConfigMain(int argc, char *argv[])
 
     base::ScopedLogging logging(settings);
 
-    ScopedCryptoInitializer crypto_initializer;
+    crypto::ScopedCryptoInitializer crypto_initializer;
     CHECK(crypto_initializer.isSucceeded());
 
     QApplication application(argc, argv);

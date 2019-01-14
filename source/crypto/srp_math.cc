@@ -24,7 +24,7 @@
 
 #include "base/logging.h"
 
-namespace aspia {
+namespace crypto {
 
 namespace {
 
@@ -287,4 +287,4 @@ BigNum SrpMath::calc_v(const QByteArray& I, const QByteArray& p, const BigNum& s
     return v;
 }
 
-} // namespace aspia
+} // namespace crypto

@@ -22,7 +22,7 @@
 
 #include "base/logging.h"
 
-namespace aspia {
+namespace crypto {
 
 // static
 bool Random::fillBuffer(void* buffer, size_t size)
@@ -56,4 +56,4 @@ uint32_t Random::generateNumber()
     return ret;
 }
 
-} // namespace aspia
+} // namespace crypto

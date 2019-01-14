@@ -95,7 +95,7 @@ int hostMain(int argc, char *argv[])
         return 1;
     }
 
-    ScopedCryptoInitializer crypto_initializer;
+    crypto::ScopedCryptoInitializer crypto_initializer;
     CHECK(crypto_initializer.isSucceeded());
 
     QApplication application(argc, argv);

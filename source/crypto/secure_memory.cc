@@ -20,36 +20,36 @@
 
 #include <openssl/crypto.h>
 
-namespace aspia {
+namespace crypto {
 
-void secureMemZero(void* data, size_t data_size)
+void memZero(void* data, size_t data_size)
 {
     if (data && data_size)
         OPENSSL_cleanse(data, data_size);
 }
 
-void secureMemZero(std::string* str)
+void memZero(std::string* str)
 {
     if (!str)
         return;
 
-    secureMemZero(str->data(), str->size());
+    memZero(str->data(), str->size());
 }
 
-void secureMemZero(QString* str)
+void memZero(QString* str)
 {
     if (!str)
         return;
 
-    secureMemZero(str->data(), str->size());
+    memZero(str->data(), str->size());
 }
 
-void secureMemZero(QByteArray* str)
+void memZero(QByteArray* str)
 {
     if (!str)
         return;
 
-    secureMemZero(str->data(), str->size());
+    memZero(str->data(), str->size());
 }
 
-} // namespace aspia
+} // namespace crypto

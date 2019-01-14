@@ -26,7 +26,7 @@
 struct evp_md_ctx_st;
 struct evp_md_st;
 
-namespace aspia {
+namespace crypto {
 
 class GenericHash
 {
@@ -64,6 +64,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(GenericHash);
 };
 
-} // namespace aspia
+} // namespace crypto
 
 #endif // ASPIA_CRYPTO__GENERIC_HASH_H

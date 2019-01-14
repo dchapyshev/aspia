@@ -53,7 +53,7 @@ int main(int argc, char *argv[])
 
     base::ScopedLogging logging(logging_settings);
 
-    ScopedCryptoInitializer crypto_initializer;
+    crypto::ScopedCryptoInitializer crypto_initializer;
     CHECK(crypto_initializer.isSucceeded());
 
     QApplication application(argc, argv);

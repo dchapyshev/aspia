@@ -21,7 +21,7 @@
 
 #include "crypto/big_num.h"
 
-namespace aspia {
+namespace crypto {
 
 // This class implements primitives to perform authorization using SRP algorithm.
 class SrpMath
@@ -63,6 +63,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(SrpMath);
 };
 
-} // namespace aspia
+} // namespace crypto
 
 #endif // ASPIA_CRYPTO__SRP_H

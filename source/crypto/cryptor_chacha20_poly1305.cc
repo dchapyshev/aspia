@@ -22,7 +22,7 @@
 
 #include "base/logging.h"
 
-namespace aspia {
+namespace crypto {
 
 namespace {
 
@@ -242,4 +242,4 @@ bool CryptorChaCha20Poly1305::decrypt(const char* in, size_t in_size, char* out)
     return true;
 }
 
-} // namespace aspia
+} // namespace crypto

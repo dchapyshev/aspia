@@ -25,7 +25,7 @@
 #include "crypto/cryptor.h"
 #include "crypto/openssl_util.h"
 
-namespace aspia {
+namespace crypto {
 
 class CryptorChaCha20Poly1305 : public Cryptor
 {
@@ -58,6 +58,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(CryptorChaCha20Poly1305);
 };
 
-} // namespace aspia
+} // namespace crypto
 
 #endif // ASPIA_CRYPTO__CRYPTOR_CHACHA20_POLY1305_H

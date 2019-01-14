@@ -241,11 +241,12 @@ void AddressBookDialog::buttonBoxClicked(QAbstractButton* button)
 
                 // Generate salt, which is added after each iteration of the hashing.
                 // New salt is generated each time the password is changed.
-                QByteArray salt = Random::generateBuffer(ui.spinbox_password_salt->value());
+                QByteArray salt = crypto::Random::generateBuffer(ui.spinbox_password_salt->value());
                 file_->set_hashing_salt(salt.toStdString());
 
                 // Now generate a key for encryption/decryption.
-                *key_ = PasswordHash::hash(PasswordHash::SCRYPT, password.toUtf8(), salt);
+                *key_ = crypto::PasswordHash::hash(
+                    crypto::PasswordHash::SCRYPT, password.toUtf8(), salt);
             }
 
             int salt_before_size = ui.spinbox_salt_before->value();
@@ -253,13 +254,13 @@ void AddressBookDialog::buttonBoxClicked(QAbstractButton* button)
 
             if (salt_before_size != data_->salt1().size())
             {
-                QByteArray salt = Random::generateBuffer(salt_before_size);
+                QByteArray salt = crypto::Random::generateBuffer(salt_before_size);
                 data_->set_salt1(salt.toStdString());
             }
 
             if (salt_after_size != data_->salt2().size())
             {
-                QByteArray salt = Random::generateBuffer(salt_after_size);
+                QByteArray salt = crypto::Random::generateBuffer(salt_after_size);
                 data_->set_salt2(salt.toStdString());
             }
         }

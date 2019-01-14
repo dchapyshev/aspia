@@ -80,8 +80,8 @@ SrpHostContext::SrpHostContext(proto::Method method, const SrpUserList& user_lis
 
 SrpHostContext::~SrpHostContext()
 {
-    aspia::secureMemZero(&encrypt_iv_);
-    aspia::secureMemZero(&decrypt_iv_);
+    crypto::memZero(&encrypt_iv_);
+    crypto::memZero(&decrypt_iv_);
 }
 
 // static
@@ -90,18 +90,18 @@ SrpUser* SrpHostContext::createUser(const QString& username, const QString& pass
     std::unique_ptr<SrpUser> user = std::make_unique<SrpUser>();
 
     user->name = username;
-    user->salt = aspia::Random::generateBuffer(kUserSaltSize);
+    user->salt = crypto::Random::generateBuffer(kUserSaltSize);
 
     user->number = QByteArray(
-        reinterpret_cast<const char*>(aspia::kSrpNg_8192.N.data()), aspia::kSrpNg_8192.N.size());
+        reinterpret_cast<const char*>(crypto::kSrpNg_8192.N.data()), crypto::kSrpNg_8192.N.size());
     user->generator = QByteArray(
-        reinterpret_cast<const char*>(aspia::kSrpNg_8192.g.data()), aspia::kSrpNg_8192.g.size());
+        reinterpret_cast<const char*>(crypto::kSrpNg_8192.g.data()), crypto::kSrpNg_8192.g.size());
 
-    aspia::BigNum s = aspia::BigNum::fromByteArray(user->salt);
-    aspia::BigNum N = aspia::BigNum::fromByteArray(user->number);
-    aspia::BigNum g = aspia::BigNum::fromByteArray(user->generator);
+    crypto::BigNum s = crypto::BigNum::fromByteArray(user->salt);
+    crypto::BigNum N = crypto::BigNum::fromByteArray(user->number);
+    crypto::BigNum g = crypto::BigNum::fromByteArray(user->generator);
 
-    aspia::BigNum v = aspia::SrpMath::calc_v(username.toUtf8(), password.toUtf8(), s, N, g);
+    crypto::BigNum v = crypto::SrpMath::calc_v(username.toUtf8(), password.toUtf8(), s, N, g);
 
     user->verifier = v.toByteArray();
     if (user->verifier.isEmpty())
@@ -116,22 +116,22 @@ proto::SrpServerKeyExchange* SrpHostContext::readIdentify(const proto::SrpIdenti
     if (username_.isEmpty())
         return nullptr;
 
-    aspia::BigNum g;
-    aspia::BigNum s;
+    crypto::BigNum g;
+    crypto::BigNum s;
 
     int user_index = findUser(user_list_, username_);
     if (user_index == -1)
     {
         session_types_ = proto::SESSION_TYPE_ALL;
 
-        aspia::GenericHash hash(aspia::GenericHash::BLAKE2b512);
+        crypto::GenericHash hash(crypto::GenericHash::BLAKE2b512);
         hash.addData(user_list_.seed_key);
         hash.addData(identify.username());
 
-        N_ = aspia::BigNum::fromBuffer(aspia::kSrpNg_8192.N);
-        g = aspia::BigNum::fromBuffer(aspia::kSrpNg_8192.g);
-        s = aspia::BigNum::fromByteArray(hash.result());
-        v_ = aspia::SrpMath::calc_v(username_.toUtf8(), user_list_.seed_key, s, N_, g);
+        N_ = crypto::BigNum::fromBuffer(crypto::kSrpNg_8192.N);
+        g = crypto::BigNum::fromBuffer(crypto::kSrpNg_8192.g);
+        s = crypto::BigNum::fromByteArray(hash.result());
+        v_ = crypto::SrpMath::calc_v(username_.toUtf8(), user_list_.seed_key, s, N_, g);
     }
     else
     {
@@ -139,14 +139,14 @@ proto::SrpServerKeyExchange* SrpHostContext::readIdentify(const proto::SrpIdenti
 
         session_types_ = user.sessions;
 
-        N_ = aspia::BigNum::fromByteArray(user.number);
-        g = aspia::BigNum::fromByteArray(user.generator);
-        s = aspia::BigNum::fromByteArray(user.salt);
-        v_ = aspia::BigNum::fromByteArray(user.verifier);
+        N_ = crypto::BigNum::fromByteArray(user.number);
+        g = crypto::BigNum::fromByteArray(user.generator);
+        s = crypto::BigNum::fromByteArray(user.salt);
+        v_ = crypto::BigNum::fromByteArray(user.verifier);
     }
 
-    b_ = aspia::BigNum::fromByteArray(aspia::Random::generateBuffer(128)); // 1024 bits.
-    B_ = aspia::SrpMath::calc_B(b_, N_, g, v_);
+    b_ = crypto::BigNum::fromByteArray(crypto::Random::generateBuffer(128)); // 1024 bits.
+    B_ = crypto::SrpMath::calc_B(b_, N_, g, v_);
 
     if (!N_.isValid() || !g.isValid() || !s.isValid() || !B_.isValid())
         return nullptr;
@@ -155,7 +155,7 @@ proto::SrpServerKeyExchange* SrpHostContext::readIdentify(const proto::SrpIdenti
     if (!iv_size)
         return nullptr;
 
-    encrypt_iv_ = aspia::Random::generateBuffer(iv_size);
+    encrypt_iv_ = crypto::Random::generateBuffer(iv_size);
 
     std::unique_ptr<proto::SrpServerKeyExchange> server_key_exchange =
         std::make_unique<proto::SrpServerKeyExchange>();
@@ -171,20 +171,20 @@ proto::SrpServerKeyExchange* SrpHostContext::readIdentify(const proto::SrpIdenti
 
 void SrpHostContext::readClientKeyExchange(const proto::SrpClientKeyExchange& client_key_exchange)
 {
-    A_ = aspia::BigNum::fromStdString(client_key_exchange.a());
+    A_ = crypto::BigNum::fromStdString(client_key_exchange.a());
     decrypt_iv_ = QByteArray::fromStdString(client_key_exchange.iv());
 }
 
 QByteArray SrpHostContext::key() const
 {
-    if (!aspia::SrpMath::verify_A_mod_N(A_, N_))
+    if (!crypto::SrpMath::verify_A_mod_N(A_, N_))
     {
         LOG(LS_WARNING) << "SrpMath::verify_A_mod_N failed";
         return QByteArray();
     }
 
-    aspia::BigNum u = aspia::SrpMath::calc_u(A_, B_, N_);
-    aspia::BigNum server_key = aspia::SrpMath::calcServerKey(A_, v_, u, b_, N_);
+    crypto::BigNum u = crypto::SrpMath::calc_u(A_, B_, N_);
+    crypto::BigNum server_key = crypto::SrpMath::calcServerKey(A_, v_, u, b_, N_);
 
     switch (method_)
     {
@@ -193,8 +193,9 @@ QByteArray SrpHostContext::key() const
         case proto::METHOD_SRP_CHACHA20_POLY1305:
         {
             QByteArray server_key_string = server_key.toByteArray();
-            QByteArray result = aspia::GenericHash::hash(aspia::GenericHash::BLAKE2s256, server_key_string);
-            aspia::secureMemZero(&server_key_string);
+            QByteArray result = crypto::GenericHash::hash(
+                crypto::GenericHash::BLAKE2s256, server_key_string);
+            crypto::memZero(&server_key_string);
             return result;
         }
 

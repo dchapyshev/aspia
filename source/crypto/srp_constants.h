@@ -21,7 +21,7 @@
 
 #include "base/const_buffer.h"
 
-namespace aspia {
+namespace crypto {
 
 struct SrpNg
 {
@@ -37,6 +37,6 @@ extern const SrpNg kSrpNg_4096;
 extern const SrpNg kSrpNg_6144;
 extern const SrpNg kSrpNg_8192;
 
-} // namespace aspia
+} // namespace crypto
 
 #endif // ASPIA_CRYPTO__SRP_CONSTANTS_H

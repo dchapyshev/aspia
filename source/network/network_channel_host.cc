@@ -146,19 +146,15 @@ void ChannelHost::readClientKeyExchange(const QByteArray& buffer)
     {
         case proto::METHOD_SRP_AES256_GCM:
         {
-            cryptor_.reset(
-                aspia::CryptorAes256Gcm::create(srp_host_->key(),
-                                                srp_host_->encryptIv(),
-                                                srp_host_->decryptIv()));
+            cryptor_.reset(crypto::CryptorAes256Gcm::create(
+                srp_host_->key(), srp_host_->encryptIv(), srp_host_->decryptIv()));
         }
         break;
 
         case proto::METHOD_SRP_CHACHA20_POLY1305:
         {
-            cryptor_.reset(
-                aspia::CryptorChaCha20Poly1305::create(srp_host_->key(),
-                                                       srp_host_->encryptIv(),
-                                                       srp_host_->decryptIv()));
+            cryptor_.reset(crypto::CryptorChaCha20Poly1305::create(
+                srp_host_->key(), srp_host_->encryptIv(), srp_host_->decryptIv()));
         }
         break;
 

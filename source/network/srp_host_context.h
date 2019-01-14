@@ -59,12 +59,12 @@ private:
     QByteArray encrypt_iv_;
     QByteArray decrypt_iv_;
 
-    aspia::BigNum N_;
-    aspia::BigNum v_;
+    crypto::BigNum N_;
+    crypto::BigNum v_;
 
-    aspia::BigNum b_;
-    aspia::BigNum B_;
-    aspia::BigNum A_;
+    crypto::BigNum b_;
+    crypto::BigNum B_;
+    crypto::BigNum A_;
 
     DISALLOW_COPY_AND_ASSIGN(SrpHostContext);
 };

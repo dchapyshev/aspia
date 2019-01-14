@@ -43,11 +43,11 @@ void cleanupComputer(proto::address_book::Computer* computer)
     if (!computer)
         return;
 
-    secureMemZero(computer->mutable_name());
-    secureMemZero(computer->mutable_address());
-    secureMemZero(computer->mutable_username());
-    secureMemZero(computer->mutable_password());
-    secureMemZero(computer->mutable_comment());
+    crypto::memZero(computer->mutable_name());
+    crypto::memZero(computer->mutable_address());
+    crypto::memZero(computer->mutable_username());
+    crypto::memZero(computer->mutable_password());
+    crypto::memZero(computer->mutable_comment());
 }
 
 void cleanupComputerGroup(proto::address_book::ComputerGroup* computer_group)
@@ -63,8 +63,8 @@ void cleanupComputerGroup(proto::address_book::ComputerGroup* computer_group)
         proto::address_book::ComputerGroup* child_group =
             computer_group->mutable_computer_group(i);
 
-        secureMemZero(child_group->mutable_name());
-        secureMemZero(child_group->mutable_comment());
+        crypto::memZero(child_group->mutable_name());
+        crypto::memZero(child_group->mutable_comment());
 
         cleanupComputerGroup(child_group);
     }
@@ -77,8 +77,8 @@ void cleanupData(proto::address_book::Data* data)
 
     cleanupComputerGroup(data->mutable_root_group());
 
-    secureMemZero(data->mutable_salt1());
-    secureMemZero(data->mutable_salt2());
+    crypto::memZero(data->mutable_salt1());
+    crypto::memZero(data->mutable_salt2());
 }
 
 void cleanupFile(proto::address_book::File* file)
@@ -86,8 +86,8 @@ void cleanupFile(proto::address_book::File* file)
     if (!file)
         return;
 
-    secureMemZero(file->mutable_hashing_salt());
-    secureMemZero(file->mutable_data());
+    crypto::memZero(file->mutable_hashing_salt());
+    crypto::memZero(file->mutable_data());
 }
 
 } // namespace
@@ -195,7 +195,7 @@ AddressBookTab::~AddressBookTab()
     cleanupData(&data_);
     cleanupFile(&file_);
 
-    secureMemZero(&key_);
+    crypto::memZero(&key_);
 
     ConsoleSettings settings;
     settings.setSplitterState(ui.splitter->saveState());
@@ -274,10 +274,11 @@ AddressBookTab* AddressBookTab::openFromFile(const QString& file_path, QWidget* 
                 return nullptr;
 
             QByteArray salt = QByteArray::fromStdString(address_book_file.hashing_salt());
-            key = PasswordHash::hash(PasswordHash::SCRYPT, dialog.password().toUtf8(), salt);
+            key = crypto::PasswordHash::hash(
+                crypto::PasswordHash::SCRYPT, dialog.password().toUtf8(), salt);
 
-            std::unique_ptr<DataCryptor> cryptor =
-                std::make_unique<DataCryptorChaCha20Poly1305>(key);
+            std::unique_ptr<crypto::DataCryptor> cryptor =
+                std::make_unique<crypto::DataCryptorChaCha20Poly1305>(key);
 
             QByteArray decrypted_data;
             if (!cryptor->decrypt(QByteArray::fromStdString(address_book_file.data()), &decrypted_data))
@@ -292,7 +293,7 @@ AddressBookTab* AddressBookTab::openFromFile(const QString& file_path, QWidget* 
                 return nullptr;
             }
 
-            secureMemZero(&decrypted_data);
+            crypto::memZero(&decrypted_data);
         }
         break;
 
@@ -729,14 +730,14 @@ bool AddressBookTab::saveToFile(const QString& file_path)
 
         case proto::address_book::ENCRYPTION_TYPE_CHACHA20_POLY1305:
         {
-            std::unique_ptr<DataCryptor> cryptor =
-                std::make_unique<DataCryptorChaCha20Poly1305>(key_);
+            std::unique_ptr<crypto::DataCryptor> cryptor =
+                std::make_unique<crypto::DataCryptorChaCha20Poly1305>(key_);
 
             QByteArray encrypted_data;
             CHECK(cryptor->encrypt(serialized_data, &encrypted_data));
 
             file_.set_data(encrypted_data.toStdString());
-            secureMemZero(&serialized_data);
+            crypto::memZero(&serialized_data);
         }
         break;
 
@@ -771,7 +772,7 @@ bool AddressBookTab::saveToFile(const QString& file_path)
 
     int64_t bytes_written = file.write(buffer);
 
-    secureMemZero(buffer.data(), buffer.size());
+    crypto::memZero(buffer.data(), buffer.size());
 
     if (bytes_written != buffer.size())
     {

@@ -25,7 +25,7 @@
 #include "crypto/cryptor.h"
 #include "crypto/openssl_util.h"
 
-namespace aspia {
+namespace crypto {
 
 class CryptorAes256Gcm : public Cryptor
 {
@@ -58,6 +58,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(CryptorAes256Gcm);
 };
 
-} // namespace aspia
+} // namespace crypto
 
 #endif // ASPIA_CRYPTO__CRYPTOR_AES256_GCM_H

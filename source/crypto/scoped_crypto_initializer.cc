@@ -23,7 +23,7 @@
 
 #include "base/logging.h"
 
-namespace aspia {
+namespace crypto {
 
 ScopedCryptoInitializer::ScopedCryptoInitializer()
 {
@@ -42,4 +42,4 @@ ScopedCryptoInitializer::~ScopedCryptoInitializer()
     OPENSSL_cleanup();
 }
 
-} // namespace aspia
+} // namespace crypto

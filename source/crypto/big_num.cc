@@ -21,7 +21,7 @@
 #include <openssl/opensslv.h>
 #include <openssl/bn.h>
 
-namespace aspia {
+namespace crypto {
 
 BigNum::BigNum(const uint8_t* buffer, size_t buffer_size)
 {
@@ -139,4 +139,4 @@ bignum_ctx* BigNum::Context::release()
     return ctx_.release();
 }
 
-} // namespace aspia
+} // namespace crypto

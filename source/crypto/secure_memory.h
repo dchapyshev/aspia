@@ -21,13 +21,13 @@
 
 #include <QString>
 
-namespace aspia {
+namespace crypto {
 
-void secureMemZero(void* data, size_t data_size);
-void secureMemZero(std::string* str);
-void secureMemZero(QString* str);
-void secureMemZero(QByteArray* str);
+void memZero(void* data, size_t data_size);
+void memZero(std::string* str);
+void memZero(QString* str);
+void memZero(QByteArray* str);
 
-} // namespace aspia
+} // namespace crypto
 
 #endif // ASPIA_CRYPTO__SECURE_MEMORY_H

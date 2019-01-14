@@ -22,7 +22,7 @@
 #include "base/macros_magic.h"
 #include "crypto/data_cryptor.h"
 
-namespace aspia {
+namespace crypto {
 
 class DataCryptorChaCha20Poly1305 : public DataCryptor
 {
@@ -39,6 +39,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(DataCryptorChaCha20Poly1305);
 };
 
-} // namespace aspia
+} // namespace crypto
 
 #endif // ASPIA_CRYPTO__DATA_CRYPTOR_CHACHA20_POLY1305_H

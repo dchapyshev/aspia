@@ -54,13 +54,13 @@ private:
     QString I_; // User name.
     QString p_; // Plain text password.
 
-    aspia::BigNum N_;
-    aspia::BigNum g_;
-    aspia::BigNum s_;
-    aspia::BigNum B_;
+    crypto::BigNum N_;
+    crypto::BigNum g_;
+    crypto::BigNum s_;
+    crypto::BigNum B_;
 
-    aspia::BigNum a_;
-    aspia::BigNum A_;
+    crypto::BigNum a_;
+    crypto::BigNum A_;
 
     QByteArray encrypt_iv_;
     QByteArray decrypt_iv_;

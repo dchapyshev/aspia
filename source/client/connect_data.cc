@@ -30,7 +30,7 @@ ConnectData::ConnectData()
 
 ConnectData::~ConnectData()
 {
-    secureMemZero(password.data(), password.size());
+    crypto::memZero(&password);
 }
 
 } // namespace aspia

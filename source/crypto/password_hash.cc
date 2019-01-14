@@ -22,7 +22,7 @@
 
 #include "base/logging.h"
 
-namespace aspia {
+namespace crypto {
 
 // static
 QByteArray PasswordHash::hash(Type type, const QByteArray& password, const QByteArray& salt)
@@ -52,4 +52,4 @@ QByteArray PasswordHash::hash(Type type, const QByteArray& password, const QByte
     return result;
 }
 
-} // namespace aspia
+} // namespace crypto

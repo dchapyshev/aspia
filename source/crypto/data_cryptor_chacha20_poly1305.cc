@@ -25,7 +25,7 @@
 #include "crypto/random.h"
 #include "crypto/secure_memory.h"
 
-namespace aspia {
+namespace crypto {
 
 namespace {
 
@@ -90,7 +90,7 @@ DataCryptorChaCha20Poly1305::DataCryptorChaCha20Poly1305(const QByteArray& key)
 
 DataCryptorChaCha20Poly1305::~DataCryptorChaCha20Poly1305()
 {
-    secureMemZero(&key_);
+    memZero(&key_);
 }
 
 bool DataCryptorChaCha20Poly1305::encrypt(const QByteArray& in, QByteArray* out)
@@ -198,4 +198,4 @@ bool DataCryptorChaCha20Poly1305::decrypt(const QByteArray& in, QByteArray* out)
     return true;
 }
 
-} // namespace aspia
+} // namespace crypto

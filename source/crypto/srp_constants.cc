@@ -18,7 +18,7 @@
 
 #include "crypto/srp_constants.h"
 
-namespace aspia {
+namespace crypto {
 
 //
 // RFC 5054
@@ -310,4 +310,4 @@ const SrpNg kSrpNg_8192 =
     { kSrpGroup_8192, sizeof(kSrpGroup_8192) }, { kSrpGenerator_19, sizeof(kSrpGenerator_19) }
 };
 
-} // namespace aspia
+} // namespace crypto

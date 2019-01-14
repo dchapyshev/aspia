@@ -19,7 +19,7 @@
 #ifndef ASPIA_CRYPTO__CRYPTOR_H
 #define ASPIA_CRYPTO__CRYPTOR_H
 
-namespace aspia {
+namespace crypto {
 
 class Cryptor
 {
@@ -33,6 +33,6 @@ public:
     virtual bool decrypt(const char* in, size_t in_size, char* out) = 0;
 };
 
-} // namespace aspia
+} // namespace crypto
 
 #endif // ASPIA_CRYPTO__CRYPTOR_H

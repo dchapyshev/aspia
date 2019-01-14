@@ -21,7 +21,7 @@
 
 #include <QByteArray>
 
-namespace aspia {
+namespace crypto {
 
 class DataCryptor
 {
@@ -32,6 +32,6 @@ public:
     virtual bool decrypt(const QByteArray& in, QByteArray* out) = 0;
 };
 
-} // namespace aspia
+} // namespace crypto
 
 #endif // ASPIA_CRYPTO__DATA_CRYPTOR_H

@@ -23,7 +23,7 @@
 
 #include "base/macros_magic.h"
 
-namespace aspia {
+namespace crypto {
 
 class PasswordHash
 {
@@ -40,6 +40,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(PasswordHash);
 };
 
-} // namespace aspia
+} // namespace crypto
 
 #endif // ASPIA_CRYPTO__PASSWORD_HASH_H
