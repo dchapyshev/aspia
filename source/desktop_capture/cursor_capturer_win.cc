@@ -21,7 +21,7 @@
 #include "base/win/scoped_hdc.h"
 #include "desktop_capture/win/cursor.h"
 
-namespace aspia {
+namespace desktop {
 
 namespace {
 
@@ -73,4 +73,4 @@ MouseCursor* CursorCapturerWin::captureCursor()
     return nullptr;
 }
 
-} // namespace aspia
+} // namespace desktop

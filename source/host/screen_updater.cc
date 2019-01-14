@@ -65,7 +65,7 @@ public:
     ~ScreenUpdaterImpl();
 
     bool startUpdater(const proto::desktop::Config& config);
-    void selectScreen(ScreenCapturer::ScreenId screen_id);
+    void selectScreen(desktop::ScreenCapturer::ScreenId screen_id);
 
 protected:
     // QThread implementation.
@@ -74,17 +74,17 @@ protected:
 private:
     enum class Event { NO_EVENT, SELECT_SCREEN, TERMINATE };
 
-    std::unique_ptr<CaptureScheduler> capture_scheduler_;
+    std::unique_ptr<desktop::CaptureScheduler> capture_scheduler_;
 
-    std::unique_ptr<ScreenCapturer> screen_capturer_;
+    std::unique_ptr<desktop::ScreenCapturer> screen_capturer_;
     std::unique_ptr<codec::ScaleReducer> scale_reducer_;
     std::unique_ptr<codec::VideoEncoder> video_encoder_;
 
-    std::unique_ptr<CursorCapturer> cursor_capturer_;
+    std::unique_ptr<desktop::CursorCapturer> cursor_capturer_;
     std::unique_ptr<codec::CursorEncoder> cursor_encoder_;
 
     // By default, we capture the full screen.
-    ScreenCapturer::ScreenId screen_id_ = ScreenCapturer::kFullDesktopScreenId;
+    desktop::ScreenCapturer::ScreenId screen_id_ = desktop::ScreenCapturer::kFullDesktopScreenId;
     int screen_count_ = 0;
 
     Event event_ = Event::NO_EVENT;
@@ -147,7 +147,8 @@ bool ScreenUpdaterImpl::startUpdater(const proto::desktop::Config& config)
             // No supported video encoding. We create the default codec. If the client can not
             // decode it, it will display an error and the connection will be disconnected.
             LOG(LS_WARNING) << "Unsupported video encoding: " << config.video_encoding();
-            video_encoder_.reset(codec::VideoEncoderZstd::create(PixelFormat::RGB565(), 6));
+            video_encoder_.reset(
+                codec::VideoEncoderZstd::create(desktop::PixelFormat::RGB565(), 6));
         }
         break;
     }
@@ -157,18 +158,18 @@ bool ScreenUpdaterImpl::startUpdater(const proto::desktop::Config& config)
 
     if (config.flags() & proto::desktop::ENABLE_CURSOR_SHAPE)
     {
-        cursor_capturer_.reset(new CursorCapturerWin());
+        cursor_capturer_.reset(new desktop::CursorCapturerWin());
         cursor_encoder_.reset(new codec::CursorEncoder());
     }
 
     capture_scheduler_.reset(
-        new CaptureScheduler(std::chrono::milliseconds(config.update_interval())));
+        new desktop::CaptureScheduler(std::chrono::milliseconds(config.update_interval())));
 
     start(QThread::HighPriority);
     return true;
 }
 
-void ScreenUpdaterImpl::selectScreen(ScreenCapturer::ScreenId screen_id)
+void ScreenUpdaterImpl::selectScreen(desktop::ScreenCapturer::ScreenId screen_id)
 {
     // Set the event.
     std::scoped_lock lock(event_lock_);
@@ -181,7 +182,7 @@ void ScreenUpdaterImpl::selectScreen(ScreenCapturer::ScreenId screen_id)
 
 void ScreenUpdaterImpl::run()
 {
-    screen_capturer_.reset(new ScreenCapturerGDI());
+    screen_capturer_.reset(new desktop::ScreenCapturerGDI());
 
     while (true)
     {
@@ -194,9 +195,9 @@ void ScreenUpdaterImpl::run()
 
             // The list of screens has changed. We do not know which screen is removed or added.
             // We display the full desktop and send a new list of screens.
-            screen_id_ = ScreenCapturer::kFullDesktopScreenId;
+            screen_id_ = desktop::ScreenCapturer::kFullDesktopScreenId;
 
-            ScreenCapturer::ScreenList screens;
+            desktop::ScreenCapturer::ScreenList screens;
             if (screen_capturer_->screenList(&screens))
             {
                 proto::desktop::ScreenList screen_list;
@@ -224,7 +225,7 @@ void ScreenUpdaterImpl::run()
 
         capture_scheduler_->beginCapture();
 
-        const DesktopFrame* screen_frame = screen_capturer_->captureFrame();
+        const desktop::DesktopFrame* screen_frame = screen_capturer_->captureFrame();
         if (screen_frame)
         {
             message_.Clear();
@@ -237,7 +238,8 @@ void ScreenUpdaterImpl::run()
 
             if (cursor_capturer_ && cursor_encoder_)
             {
-                std::unique_ptr<MouseCursor> mouse_cursor(cursor_capturer_->captureCursor());
+                std::unique_ptr<desktop::MouseCursor> mouse_cursor(
+                    cursor_capturer_->captureCursor());
                 if (mouse_cursor)
                 {
                     cursor_encoder_->encode(std::move(mouse_cursor),

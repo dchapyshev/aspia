@@ -31,7 +31,7 @@ namespace {
 
 bool convertImage(const proto::desktop::VideoPacket& packet,
                   vpx_image_t* image,
-                  aspia::DesktopFrame* frame)
+                  desktop::DesktopFrame* frame)
 {
     if (image->fmt != VPX_IMG_FMT_I420)
         return false;
@@ -117,7 +117,8 @@ VideoDecoderVPX::VideoDecoderVPX(proto::desktop::VideoEncoding encoding)
     CHECK_EQ(ret, VPX_CODEC_OK);
 }
 
-bool VideoDecoderVPX::decode(const proto::desktop::VideoPacket& packet, aspia::DesktopFrame* frame)
+bool VideoDecoderVPX::decode(
+    const proto::desktop::VideoPacket& packet, desktop::DesktopFrame* frame)
 {
     // Do the actual decoding.
     vpx_codec_err_t ret =

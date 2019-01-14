@@ -24,7 +24,7 @@
 #include "base/macros_magic.h"
 #include "desktop_capture/pixel_format.h"
 
-namespace aspia {
+namespace desktop {
 
 class ScreenSettingsTracker
 {
@@ -46,6 +46,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(ScreenSettingsTracker);
 };
 
-} // namespace aspia
+} // namespace desktop
 
 #endif // ASPIA_DESKTOP_CAPTURE__SCREEN_SETTINGS_TRACKER_H

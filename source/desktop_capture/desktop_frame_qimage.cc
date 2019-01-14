@@ -20,7 +20,7 @@
 
 #include <QPixmap>
 
-namespace aspia {
+namespace desktop {
 
 namespace {
 
@@ -57,4 +57,4 @@ std::unique_ptr<DesktopFrameQImage> DesktopFrameQImage::create(QImage&& image)
     return std::unique_ptr<DesktopFrameQImage>(new DesktopFrameQImage(std::move(image)));
 }
 
-} // namespace aspia
+} // namespace desktop

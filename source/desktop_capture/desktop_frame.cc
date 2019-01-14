@@ -18,7 +18,7 @@
 
 #include "desktop_capture/desktop_frame.h"
 
-namespace aspia {
+namespace desktop {
 
 DesktopFrame::DesktopFrame(const QSize& size,
                            const PixelFormat& format,
@@ -47,4 +47,4 @@ uint8_t* DesktopFrame::frameDataAtPos(int x, int y) const
     return frameData() + stride() * y + format_.bytesPerPixel() * x;
 }
 
-} // namespace aspia
+} // namespace desktop

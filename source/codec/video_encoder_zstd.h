@@ -33,20 +33,21 @@ class VideoEncoderZstd : public VideoEncoder
 public:
     ~VideoEncoderZstd() = default;
 
-    static VideoEncoderZstd* create(const aspia::PixelFormat& target_format, int compression_ratio);
+    static VideoEncoderZstd* create(
+        const desktop::PixelFormat& target_format, int compression_ratio);
 
-    void encode(const aspia::DesktopFrame* frame, proto::desktop::VideoPacket* packet) override;
+    void encode(const desktop::DesktopFrame* frame, proto::desktop::VideoPacket* packet) override;
 
 private:
     VideoEncoderZstd(std::unique_ptr<PixelTranslator> translator,
-                     const aspia::PixelFormat& target_format,
+                     const desktop::PixelFormat& target_format,
                      int compression_ratio);
     void compressPacket(proto::desktop::VideoPacket* packet,
                         const uint8_t* input_data,
                         size_t input_size);
 
     // Client's pixel format
-    aspia::PixelFormat target_format_;
+    desktop::PixelFormat target_format_;
     int compress_ratio_;
     ScopedZstdCStream stream_;
     std::unique_ptr<PixelTranslator> translator_;

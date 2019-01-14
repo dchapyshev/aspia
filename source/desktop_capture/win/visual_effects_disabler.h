@@ -23,7 +23,7 @@
 
 #include "base/macros_magic.h"
 
-namespace aspia {
+namespace desktop {
 
 struct VisualEffectsState;
 struct WallpaperState;
@@ -53,6 +53,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(VisualEffectsDisabler);
 };
 
-} // namespace aspia
+} // namespace desktop
 
 #endif // ASPIA_DESKTOP_CAPTURE__WIN__VISUAL_EFFECTS_DISABLER_H

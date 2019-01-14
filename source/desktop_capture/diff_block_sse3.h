@@ -21,7 +21,7 @@
 
 #include <cstdint>
 
-namespace aspia {
+namespace desktop {
 
 uint8_t diffFullBlock_32x32_SSE3(const uint8_t* image1, const uint8_t* image2, int bytes_per_row);
 
@@ -29,6 +29,6 @@ uint8_t diffFullBlock_16x16_SSE3(const uint8_t* image1, const uint8_t* image2, i
 
 uint8_t diffFullBlock_8x8_SSE3(const uint8_t* image1, const uint8_t* image2, int bytes_per_row);
 
-} // namespace aspia
+} // namespace desktop
 
 #endif // ASPIA_DESKTOP_CAPTURE__DIFF_BLOCK_SSE3_H

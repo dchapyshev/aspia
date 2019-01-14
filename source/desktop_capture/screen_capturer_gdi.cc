@@ -25,7 +25,7 @@
 #include "desktop_capture/desktop_frame_dib.h"
 #include "desktop_capture/differ.h"
 
-namespace aspia {
+namespace desktop {
 
 ScreenCapturerGDI::ScreenCapturerGDI() = default;
 ScreenCapturerGDI::~ScreenCapturerGDI() = default;
@@ -172,4 +172,4 @@ bool ScreenCapturerGDI::prepareCaptureResources()
     return true;
 }
 
-} // namespace aspia
+} // namespace desktop

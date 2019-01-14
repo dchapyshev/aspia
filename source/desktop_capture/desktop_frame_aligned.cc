@@ -20,7 +20,7 @@
 
 #include "base/aligned_memory.h"
 
-namespace aspia {
+namespace desktop {
 
 DesktopFrameAligned::DesktopFrameAligned(const QSize& size,
                                          const PixelFormat& format,
@@ -51,4 +51,4 @@ std::unique_ptr<DesktopFrameAligned> DesktopFrameAligned::create(
         new DesktopFrameAligned(size, format, bytes_per_row, data));
 }
 
-} // namespace aspia
+} // namespace desktop

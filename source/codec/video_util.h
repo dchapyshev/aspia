@@ -33,8 +33,11 @@ public:
     static QRect fromVideoRect(const proto::desktop::Rect& rect);
     static void toVideoRect(const QRect& from, proto::desktop::Rect* to);
 
-    static aspia::PixelFormat fromVideoPixelFormat(const proto::desktop::PixelFormat& format);
-    static void toVideoPixelFormat(const aspia::PixelFormat& from, proto::desktop::PixelFormat* to);
+    static desktop::PixelFormat fromVideoPixelFormat(
+        const proto::desktop::PixelFormat& format);
+
+    static void toVideoPixelFormat(
+        const desktop::PixelFormat& from, proto::desktop::PixelFormat* to);
 
 private:
     DISALLOW_COPY_AND_ASSIGN(VideoUtil);

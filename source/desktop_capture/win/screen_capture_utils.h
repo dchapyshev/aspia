@@ -21,7 +21,7 @@
 
 #include "desktop_capture/screen_capturer.h"
 
-namespace aspia {
+namespace desktop {
 
 class ScreenCaptureUtils
 {
@@ -52,6 +52,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(ScreenCaptureUtils);
 };
 
-} // namespace aspia
+} // namespace desktop
 
 #endif // ASPIA_DESKTOP_CAPTURE__WIN__SCREEN_CAPTURE_UTILS_H

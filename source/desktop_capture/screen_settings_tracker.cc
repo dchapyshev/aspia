@@ -18,7 +18,7 @@
 
 #include "desktop_capture/screen_settings_tracker.h"
 
-namespace aspia {
+namespace desktop {
 
 bool ScreenSettingsTracker::isRectChanged(const QRect& screen_rect)
 {
@@ -53,4 +53,4 @@ bool ScreenSettingsTracker::isFormatChanged(const PixelFormat& pixel_format)
     return false;
 }
 
-} // namespace aspia
+} // namespace desktop

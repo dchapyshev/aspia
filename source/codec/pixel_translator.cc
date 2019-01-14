@@ -31,8 +31,8 @@ template<typename SourceT, typename TargetT>
 class PixelTranslatorT : public PixelTranslator
 {
 public:
-    PixelTranslatorT(const aspia::PixelFormat& source_format,
-                     const aspia::PixelFormat& target_format)
+    PixelTranslatorT(const desktop::PixelFormat& source_format,
+                     const desktop::PixelFormat& target_format)
         : source_format_(source_format),
           target_format_(target_format)
     {
@@ -118,8 +118,8 @@ private:
     std::unique_ptr<uint32_t[]> green_table_;
     std::unique_ptr<uint32_t[]> blue_table_;
 
-    aspia::PixelFormat source_format_;
-    aspia::PixelFormat target_format_;
+    desktop::PixelFormat source_format_;
+    desktop::PixelFormat target_format_;
 
     DISALLOW_COPY_AND_ASSIGN(PixelTranslatorT);
 };
@@ -128,8 +128,8 @@ template<typename SourceT, typename TargetT>
 class PixelTranslatorFrom8_16bppT : public PixelTranslator
 {
 public:
-    PixelTranslatorFrom8_16bppT(const aspia::PixelFormat& source_format,
-                                const aspia::PixelFormat& target_format)
+    PixelTranslatorFrom8_16bppT(const desktop::PixelFormat& source_format,
+                                const desktop::PixelFormat& target_format)
         : source_format_(source_format),
           target_format_(target_format)
     {
@@ -204,8 +204,8 @@ public:
 private:
     std::unique_ptr<uint32_t[]> table_;
 
-    aspia::PixelFormat source_format_;
-    aspia::PixelFormat target_format_;
+    desktop::PixelFormat source_format_;
+    desktop::PixelFormat target_format_;
 
     DISALLOW_COPY_AND_ASSIGN(PixelTranslatorFrom8_16bppT);
 };
@@ -213,8 +213,8 @@ private:
 } // namespace
 
 // static
-std::unique_ptr<PixelTranslator> PixelTranslator::create(const aspia::PixelFormat& source_format,
-                                                         const aspia::PixelFormat& target_format)
+std::unique_ptr<PixelTranslator> PixelTranslator::create(
+    const desktop::PixelFormat& source_format, const desktop::PixelFormat& target_format)
 {
     switch (target_format.bytesPerPixel())
     {

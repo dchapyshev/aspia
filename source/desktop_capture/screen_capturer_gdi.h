@@ -24,7 +24,7 @@
 #include "desktop_capture/screen_capturer.h"
 #include "desktop_capture/screen_capture_frame_queue.h"
 
-namespace aspia {
+namespace desktop {
 
 class Differ;
 
@@ -58,6 +58,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(ScreenCapturerGDI);
 };
 
-} // namespace aspia
+} // namespace desktop
 
 #endif // ASPIA_DESKTOP_CAPTURE__SCREEN_CAPTURER_GDI_H

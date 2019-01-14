@@ -23,7 +23,7 @@
 
 #include "base/logging.h"
 
-namespace aspia {
+namespace desktop {
 
 struct VisualEffectsState
 {
@@ -415,4 +415,4 @@ void VisualEffectsDisabler::restoreWallpaper()
     SystemParametersInfoW(SPI_SETDESKWALLPAPER, 0, wallpaper_state_->path, SPIF_SENDCHANGE);
 }
 
-} // namespace aspia
+} // namespace desktop

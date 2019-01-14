@@ -746,7 +746,7 @@
         <translation>8 colors (3 bit)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="154"/>
+        <location filename="../ui/desktop_config_dialog.cc" line="155"/>
         <source>Compression ratio: %1</source>
         <translation>Стиснення: %1</translation>
     </message>
@@ -785,12 +785,12 @@
 <context>
     <name>aspia::DesktopWindow</name>
     <message>
-        <location filename="../ui/desktop_window.cc" line="462"/>
+        <location filename="../ui/desktop_window.cc" line="463"/>
         <source>Aspia Desktop Manage</source>
         <translation>Керування робочим столом Aspia</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="467"/>
+        <location filename="../ui/desktop_window.cc" line="468"/>
         <source>Aspia Desktop View</source>
         <translation>Перегляд робочого столу Aspia</translation>
     </message>
@@ -805,12 +805,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="320"/>
+        <location filename="../ui/desktop_window.cc" line="321"/>
         <source>Warning</source>
         <translation type="unfinished">Попередження</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="320"/>
+        <location filename="../ui/desktop_window.cc" line="321"/>
         <source>Could not save image</source>
         <translation type="unfinished"></translation>
     </message>

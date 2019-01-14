@@ -24,12 +24,15 @@
 #include "protocol/common.pb.h"
 #include "build/build_config.h"
 
+namespace desktop {
+class VisualEffectsDisabler;
+} // namespace desktop
+
 namespace aspia {
 
 class Clipboard;
 class InputInjector;
 class ScreenUpdater;
-class VisualEffectsDisabler;
 
 class HostSessionDesktop : public HostSession
 {
@@ -72,7 +75,7 @@ private:
     QScopedPointer<InputInjector> input_injector_;
 
 #if defined(OS_WIN)
-    std::unique_ptr<VisualEffectsDisabler> effects_disabler_;
+    std::unique_ptr<desktop::VisualEffectsDisabler> effects_disabler_;
 #endif // defined(OS_WIN)
 
     DISALLOW_COPY_AND_ASSIGN(HostSessionDesktop);

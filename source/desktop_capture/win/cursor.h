@@ -22,12 +22,12 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
-namespace aspia {
+namespace desktop {
 
 class MouseCursor;
 
 MouseCursor* mouseCursorFromHCursor(HDC dc, HCURSOR cursor);
 
-} // namespace aspia
+} // namespace desktop
 
 #endif // ASPIA_DESKTOP_CAPTURE__WIN__CURSOR_H

@@ -113,7 +113,7 @@ void DesktopWindow::resizeDesktopFrame(const QRect& screen_rect)
 {
     QSize prev_size;
 
-    DesktopFrame* frame = desktop_->desktopFrame();
+    desktop::DesktopFrame* frame = desktop_->desktopFrame();
     if (frame)
         prev_size = desktop_->desktopFrame()->size();
 
@@ -140,7 +140,7 @@ void DesktopWindow::drawDesktopFrame()
     panel_->update();
 }
 
-DesktopFrame* DesktopWindow::desktopFrame()
+desktop::DesktopFrame* DesktopWindow::desktopFrame()
 {
     return desktop_->desktopFrame();
 }
@@ -302,7 +302,8 @@ void DesktopWindow::takeScreenshot()
     if (file_path.isEmpty() || selected_filter.isEmpty())
         return;
 
-    DesktopFrameQImage* frame = dynamic_cast<DesktopFrameQImage*>(desktop_->desktopFrame());
+    desktop::DesktopFrameQImage* frame =
+        dynamic_cast<desktop::DesktopFrameQImage*>(desktop_->desktopFrame());
     if (!frame)
         return;
 
@@ -322,7 +323,7 @@ void DesktopWindow::takeScreenshot()
 
 void DesktopWindow::onScalingChanged(bool enabled)
 {
-    DesktopFrame* frame = desktopFrame();
+    desktop::DesktopFrame* frame = desktopFrame();
     if (!frame)
         return;
 

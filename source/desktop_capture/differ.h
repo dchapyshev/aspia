@@ -24,7 +24,7 @@
 
 #include "base/macros_magic.h"
 
-namespace aspia {
+namespace desktop {
 
 // Class to search for changed regions of the screen.
 class Differ
@@ -64,6 +64,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(Differ);
 };
 
-} // namespace aspia
+} // namespace desktop
 
 #endif // ASPIA_DESKTOP_CAPTURE___DIFFER_H

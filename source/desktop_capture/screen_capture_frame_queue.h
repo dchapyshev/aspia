@@ -23,7 +23,7 @@
 
 #include "base/macros_magic.h"
 
-namespace aspia {
+namespace desktop {
 
 class DesktopFrame;
 
@@ -71,6 +71,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(ScreenCaptureFrameQueue);
 };
 
-} // namespace aspia
+} // namespace desktop
 
 #endif // ASPIA_DESKTOP_CAPTURE__SCREEN_CAPTURE_FRAME_QUEUE_H

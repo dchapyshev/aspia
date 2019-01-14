@@ -20,7 +20,7 @@
 
 #include "base/logging.h"
 
-namespace aspia {
+namespace desktop {
 
 DesktopFrameDIB::DesktopFrameDIB(const QSize& size,
                                  const PixelFormat& format,
@@ -110,4 +110,4 @@ DesktopFrameDIB::create(const QSize& size,
                             bitmap));
 }
 
-} // namespace aspia
+} // namespace desktop

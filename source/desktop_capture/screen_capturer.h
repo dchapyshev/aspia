@@ -21,7 +21,7 @@
 
 #include "desktop_capture/desktop_frame.h"
 
-namespace aspia {
+namespace desktop {
 
 class ScreenCapturer
 {
@@ -47,6 +47,6 @@ public:
     virtual const DesktopFrame* captureFrame() = 0;
 };
 
-} // namespace aspia
+} // namespace desktop
 
 #endif // ASPIA_DESKTOP_CAPTURE__CAPTURER_H

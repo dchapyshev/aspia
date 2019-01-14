@@ -24,7 +24,7 @@
 #include "base/macros_magic.h"
 #include "desktop_capture/screen_settings_tracker.h"
 
-namespace aspia {
+namespace desktop {
 class DesktopFrame;
 } // namespace aspia
 
@@ -37,15 +37,15 @@ public:
 
     static ScaleReducer* create(int scale_factor);
 
-    const aspia::DesktopFrame* scaleFrame(const aspia::DesktopFrame* source_frame);
+    const desktop::DesktopFrame* scaleFrame(const desktop::DesktopFrame* source_frame);
 
 protected:
     explicit ScaleReducer(int scale_factor);
 
 private:
     const int scale_factor_;
-    std::unique_ptr<aspia::DesktopFrame> scaled_frame_;
-    aspia::ScreenSettingsTracker screen_settings_tracker_;
+    std::unique_ptr<desktop::DesktopFrame> scaled_frame_;
+    desktop::ScreenSettingsTracker screen_settings_tracker_;
 
     DISALLOW_COPY_AND_ASSIGN(ScaleReducer);
 };

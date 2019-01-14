@@ -20,7 +20,7 @@
 
 #include <utility>
 
-namespace aspia {
+namespace desktop {
 
 ScopedThreadDesktop::ScopedThreadDesktop()
     : initial_(Desktop::threadDesktop())
@@ -65,4 +65,4 @@ bool ScopedThreadDesktop::setThreadDesktop(Desktop&& desktop)
     return true;
 }
 
-} // namespace aspia
+} // namespace desktop

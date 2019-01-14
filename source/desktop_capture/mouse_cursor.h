@@ -24,7 +24,7 @@
 
 #include <memory>
 
-namespace aspia {
+namespace desktop {
 
 class MouseCursor
 {
@@ -48,6 +48,6 @@ private:
     const QPoint hotspot_;
 };
 
-} // namespace aspia
+} // namespace desktop
 
 #endif // ASPIA_DESKTOP_CAPTURE__MOUSE_CURSOR_H

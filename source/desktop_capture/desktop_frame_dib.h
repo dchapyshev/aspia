@@ -26,7 +26,7 @@
 #include "base/win/scoped_gdi_object.h"
 #include "desktop_capture/desktop_frame.h"
 
-namespace aspia {
+namespace desktop {
 
 class DesktopFrameDIB : public DesktopFrame
 {
@@ -51,6 +51,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(DesktopFrameDIB);
 };
 
-} // namespace aspia
+} // namespace desktop
 
 #endif // ASPIA_DESKTOP_CAPTURE__DESKTOP_FRAME_DIB_H

@@ -20,7 +20,7 @@
 
 #include <cstring>
 
-namespace aspia {
+namespace desktop {
 
 namespace {
 
@@ -82,4 +82,4 @@ uint8_t diffFullBlock_8x8_C(const uint8_t* image1, const uint8_t* image2, int by
     return 0U;
 }
 
-} // namespace aspia
+} // namespace desktop

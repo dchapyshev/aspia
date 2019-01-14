@@ -18,7 +18,7 @@
 
 #include "desktop_capture/mouse_cursor.h"
 
-namespace aspia {
+namespace desktop {
 
 MouseCursor::MouseCursor(std::unique_ptr<uint8_t[]> data,
                          const QSize& size,
@@ -47,4 +47,4 @@ bool MouseCursor::isEqual(const MouseCursor& other)
     return false;
 }
 
-} // namespace aspia
+} // namespace desktop

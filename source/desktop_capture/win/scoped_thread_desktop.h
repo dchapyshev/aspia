@@ -21,7 +21,7 @@
 
 #include "desktop_capture/win/desktop.h"
 
-namespace aspia {
+namespace desktop {
 
 class ScopedThreadDesktop
 {
@@ -56,6 +56,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(ScopedThreadDesktop);
 };
 
-} // namespace aspia
+} // namespace desktop
 
 #endif // ASPIA_DESKTOP_CAPTURE__WIN__SCOPED_THREAD_DESKTOP_H

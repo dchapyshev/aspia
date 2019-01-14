@@ -220,7 +220,7 @@ void ClientDesktop::readVideoPacket(const proto::desktop::VideoPacket& packet)
         delegate_->resizeDesktopFrame(screen_rect);
     }
 
-    DesktopFrame* frame = delegate_->desktopFrame();
+    desktop::DesktopFrame* frame = delegate_->desktopFrame();
     if (!frame)
     {
         emit errorOccurred(tr("Session error: The desktop frame is not initialized."));
@@ -250,7 +250,7 @@ void ClientDesktop::readCursorShape(const proto::desktop::CursorShape& cursor_sh
     if (!cursor_decoder_)
         cursor_decoder_ = std::make_unique<codec::CursorDecoder>();
 
-    std::shared_ptr<MouseCursor> mouse_cursor = cursor_decoder_->decode(cursor_shape);
+    std::shared_ptr<desktop::MouseCursor> mouse_cursor = cursor_decoder_->decode(cursor_shape);
     if (!mouse_cursor)
         return;
 

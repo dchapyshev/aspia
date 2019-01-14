@@ -21,7 +21,7 @@
 
 #include <cstdint>
 
-namespace aspia {
+namespace desktop {
 
 class PixelFormat
 {
@@ -103,6 +103,6 @@ private:
     uint8_t bytes_per_pixel_ = 0;
 };
 
-} // namespace aspia
+} // namespace desktop
 
 #endif // ASPIA_DESKTOP_CAPTURE__PIXEL_FORMAT_H

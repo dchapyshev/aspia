@@ -19,7 +19,7 @@
 #ifndef ASPIA_DESKTOP_CAPTURE__CURSOR_CAPTURER_H
 #define ASPIA_DESKTOP_CAPTURE__CURSOR_CAPTURER_H
 
-namespace aspia {
+namespace desktop {
 
 class MouseCursor;
 
@@ -31,6 +31,6 @@ public:
     virtual MouseCursor* captureCursor() = 0;
 };
 
-} // namespace aspia
+} // namespace desktop
 
 #endif // ASPIA_DESKTOP_CAPTURE__CURSOR_CAPTURER_H

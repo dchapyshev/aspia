@@ -33,9 +33,9 @@ void VideoUtil::toVideoRect(const QRect& from, proto::desktop::Rect* to)
     to->set_height(from.height());
 }
 
-aspia::PixelFormat VideoUtil::fromVideoPixelFormat(const proto::desktop::PixelFormat& format)
+desktop::PixelFormat VideoUtil::fromVideoPixelFormat(const proto::desktop::PixelFormat& format)
 {
-    return aspia::PixelFormat(
+    return desktop::PixelFormat(
         static_cast<uint8_t>(format.bits_per_pixel()),
         static_cast<uint16_t>(format.red_max()),
         static_cast<uint16_t>(format.green_max()),
@@ -45,7 +45,8 @@ aspia::PixelFormat VideoUtil::fromVideoPixelFormat(const proto::desktop::PixelFo
         static_cast<uint8_t>(format.blue_shift()));
 }
 
-void VideoUtil::toVideoPixelFormat(const aspia::PixelFormat& from, proto::desktop::PixelFormat* to)
+void VideoUtil::toVideoPixelFormat(
+    const desktop::PixelFormat& from, proto::desktop::PixelFormat* to)
 {
     to->set_bits_per_pixel(from.bitsPerPixel());
 

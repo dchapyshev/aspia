@@ -18,7 +18,7 @@
 
 #include "desktop_capture/capture_scheduler.h"
 
-namespace aspia {
+namespace desktop {
 
 CaptureScheduler::CaptureScheduler(const std::chrono::milliseconds& update_interval)
     : update_interval_(update_interval)
@@ -47,4 +47,4 @@ std::chrono::milliseconds CaptureScheduler::nextCaptureDelay() const
     return update_interval_ - diff_time;
 }
 
-} // namespace aspia
+} // namespace desktop

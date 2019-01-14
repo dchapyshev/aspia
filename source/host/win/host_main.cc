@@ -78,7 +78,7 @@ int hostMain(int argc, char *argv[])
 
     do
     {
-        Desktop input_desktop(Desktop::inputDesktop());
+        desktop::Desktop input_desktop(desktop::Desktop::inputDesktop());
         if (input_desktop.isValid())
         {
             if (input_desktop.setThreadDesktop())

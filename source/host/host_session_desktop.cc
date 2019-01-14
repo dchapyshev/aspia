@@ -267,7 +267,7 @@ void HostSessionDesktop::readConfig(const proto::desktop::Config& config)
 
         if (disable_wallpaper || disable_effects)
         {
-            effects_disabler_ = std::make_unique<VisualEffectsDisabler>();
+            effects_disabler_ = std::make_unique<desktop::VisualEffectsDisabler>();
 
             if (disable_effects)
                 effects_disabler_->disableEffects();

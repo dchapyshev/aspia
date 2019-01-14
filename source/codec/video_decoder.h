@@ -23,9 +23,9 @@
 
 #include "protocol/desktop_session.pb.h"
 
-namespace aspia {
+namespace desktop {
 class DesktopFrame;
-} // namespace aspia
+} // namespace desktop
 
 namespace codec {
 
@@ -36,7 +36,8 @@ public:
 
     static std::unique_ptr<VideoDecoder> create(proto::desktop::VideoEncoding encoding);
 
-    virtual bool decode(const proto::desktop::VideoPacket& packet, aspia::DesktopFrame* frame) = 0;
+    virtual bool decode(
+        const proto::desktop::VideoPacket& packet, desktop::DesktopFrame* frame) = 0;
 };
 
 } // namespace codec

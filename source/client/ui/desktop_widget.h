@@ -33,9 +33,11 @@
 
 #include "desktop_capture/desktop_frame.h"
 
-namespace aspia {
-
+namespace desktop {
 class DesktopFrameQImage;
+} // namespace desktop
+
+namespace aspia {
 
 class DesktopWidget : public QWidget
 {
@@ -55,7 +57,7 @@ public:
     ~DesktopWidget() = default;
 
     void resizeDesktopFrame(const QSize& screen_size);
-    DesktopFrame* desktopFrame();
+    desktop::DesktopFrame* desktopFrame();
 
     void doMouseEvent(QEvent::Type event_type,
                       const Qt::MouseButtons& buttons,
@@ -95,7 +97,7 @@ private:
 
     Delegate* delegate_;
 
-    std::unique_ptr<DesktopFrameQImage> frame_;
+    std::unique_ptr<desktop::DesktopFrameQImage> frame_;
     bool enable_key_sequenses_ = true;
 
     QPoint prev_pos_;

@@ -22,9 +22,9 @@
 #include "desktop_capture/screen_settings_tracker.h"
 #include "protocol/desktop_session.pb.h"
 
-namespace aspia {
+namespace desktop {
 class DesktopFrame;
-} // namespace aspia
+} // namespace desktop
 
 namespace codec {
 
@@ -33,15 +33,16 @@ class VideoEncoder
 public:
     virtual ~VideoEncoder() = default;
 
-    virtual void encode(const aspia::DesktopFrame* frame, proto::desktop::VideoPacket* packet) = 0;
+    virtual void encode(
+        const desktop::DesktopFrame* frame, proto::desktop::VideoPacket* packet) = 0;
 
 protected:
     void fillPacketInfo(proto::desktop::VideoEncoding encoding,
-                        const aspia::DesktopFrame* frame,
+                        const desktop::DesktopFrame* frame,
                         proto::desktop::VideoPacket* packet);
 
 private:
-    aspia::ScreenSettingsTracker screen_settings_tracker_;
+    desktop::ScreenSettingsTracker screen_settings_tracker_;
 };
 
 } // namespace codec

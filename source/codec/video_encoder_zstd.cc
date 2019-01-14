@@ -38,7 +38,7 @@ uint8_t* outputBuffer(proto::desktop::VideoPacket* packet, size_t size)
 } // namespace
 
 VideoEncoderZstd::VideoEncoderZstd(std::unique_ptr<PixelTranslator> translator,
-                                   const aspia::PixelFormat& target_format,
+                                   const desktop::PixelFormat& target_format,
                                    int compression_ratio)
     : target_format_(target_format),
       compress_ratio_(compression_ratio),
@@ -50,7 +50,7 @@ VideoEncoderZstd::VideoEncoderZstd(std::unique_ptr<PixelTranslator> translator,
 
 // static
 VideoEncoderZstd* VideoEncoderZstd::create(
-    const aspia::PixelFormat& target_format, int compression_ratio)
+    const desktop::PixelFormat& target_format, int compression_ratio)
 {
     if (compression_ratio > ZSTD_maxCLevel())
         compression_ratio = ZSTD_maxCLevel();
@@ -58,7 +58,7 @@ VideoEncoderZstd* VideoEncoderZstd::create(
         compression_ratio = 1;
 
     std::unique_ptr<PixelTranslator> translator =
-        PixelTranslator::create(aspia::PixelFormat::ARGB(), target_format);
+        PixelTranslator::create(desktop::PixelFormat::ARGB(), target_format);
     if (!translator)
     {
         LOG(LS_WARNING) << "Unsupported pixel format";
@@ -98,7 +98,7 @@ void VideoEncoderZstd::compressPacket(proto::desktop::VideoPacket* packet,
 }
 
 void VideoEncoderZstd::encode(
-    const aspia::DesktopFrame* frame, proto::desktop::VideoPacket* packet)
+    const desktop::DesktopFrame* frame, proto::desktop::VideoPacket* packet)
 {
     fillPacketInfo(proto::desktop::VIDEO_ENCODING_ZSTD, frame, packet);
 

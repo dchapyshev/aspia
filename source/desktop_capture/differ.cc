@@ -26,7 +26,7 @@
 
 #include <libyuv/cpu_id.h>
 
-namespace aspia {
+namespace desktop {
 
 namespace {
 
@@ -314,4 +314,4 @@ void Differ::calcDirtyRegion(const uint8_t* prev_image,
     mergeBlocks(dirty_region);
 }
 
-} // namespace aspia
+} // namespace desktop

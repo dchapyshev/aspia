@@ -23,7 +23,7 @@
 
 #include "base/logging.h"
 
-namespace aspia {
+namespace desktop {
 
 // static
 bool ScreenCaptureUtils::screenList(ScreenCapturer::ScreenList* screens)
@@ -116,4 +116,4 @@ int ScreenCaptureUtils::screenCount()
     return GetSystemMetrics(SM_CMONITORS);
 }
 
-} // namespace aspia
+} // namespace desktop

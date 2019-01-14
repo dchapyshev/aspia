@@ -24,7 +24,7 @@
 #include "base/macros_magic.h"
 #include "desktop_capture/pixel_format.h"
 
-namespace aspia {
+namespace desktop {
 
 class DesktopFrame
 {
@@ -64,6 +64,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(DesktopFrame);
 };
 
-} // namespace aspia
+} // namespace desktop
 
 #endif // ASPIA_DESKTOP_CAPTURE__DESKTOP_FRAME_H

@@ -28,9 +28,11 @@ class CursorDecoder;
 class VideoDecoder;
 } // namespace codec
 
-namespace aspia {
-
+namespace desktop {
 class DesktopFrame;
+} // namespace desktop
+
+namespace aspia {
 
 class ClientDesktop : public Client
 {
@@ -44,7 +46,7 @@ public:
 
         virtual void resizeDesktopFrame(const QRect& screen_rect) = 0;
         virtual void drawDesktopFrame() = 0;
-        virtual DesktopFrame* desktopFrame() = 0;
+        virtual desktop::DesktopFrame* desktopFrame() = 0;
         virtual void injectCursor(const QCursor& cursor) = 0;
         virtual void injectClipboard(const proto::desktop::ClipboardEvent& event) = 0;
         virtual void setScreenList(const proto::desktop::ScreenList& screen_list) = 0;

@@ -28,10 +28,13 @@
 class QHBoxLayout;
 class QScrollArea;
 
+namespace desktop {
+class DesktopFrame;
+} // namespace desktop
+
 namespace aspia {
 
 class Clipboard;
-class DesktopFrame;
 class DesktopPanel;
 
 class DesktopWindow :
@@ -48,7 +51,7 @@ public:
     // ClientDesktop::Delegate implementation.
     void resizeDesktopFrame(const QRect& screen_rect) override;
     void drawDesktopFrame() override;
-    DesktopFrame* desktopFrame() override;
+    desktop::DesktopFrame* desktopFrame() override;
     void injectCursor(const QCursor& cursor) override;
     void injectClipboard(const proto::desktop::ClipboardEvent& event) override;
     void setScreenList(const proto::desktop::ScreenList& screen_list) override;

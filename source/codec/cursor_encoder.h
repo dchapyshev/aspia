@@ -32,15 +32,15 @@ public:
     CursorEncoder();
     ~CursorEncoder() = default;
 
-    bool encode(std::unique_ptr<aspia::MouseCursor> mouse_cursor,
+    bool encode(std::unique_ptr<desktop::MouseCursor> mouse_cursor,
                 proto::desktop::CursorShape* cursor_shape);
 
 private:
     bool compressCursor(proto::desktop::CursorShape* cursor_shape,
-                        const aspia::MouseCursor* mouse_cursor);
+                        const desktop::MouseCursor* mouse_cursor);
 
     ScopedZstdCStream stream_;
-    aspia::MouseCursorCache cache_;
+    desktop::MouseCursorCache cache_;
 
     DISALLOW_COPY_AND_ASSIGN(CursorEncoder);
 };

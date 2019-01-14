@@ -26,7 +26,7 @@
 #include <emmintrin.h>
 #endif
 
-namespace aspia {
+namespace desktop {
 
 uint8_t diffFullBlock_32x32_SSE3(const uint8_t* image1, const uint8_t* image2, int bytes_per_row)
 {
@@ -145,4 +145,4 @@ uint8_t diffFullBlock_8x8_SSE3(const uint8_t* image1, const uint8_t* image2, int
     return 0U;
 }
 
-} // namespace aspia
+} // namespace desktop

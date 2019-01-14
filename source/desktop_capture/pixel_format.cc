@@ -20,7 +20,7 @@
 
 #include "base/logging.h"
 
-namespace aspia {
+namespace desktop {
 
 PixelFormat::PixelFormat(const PixelFormat& other)
 {
@@ -185,4 +185,4 @@ bool PixelFormat::operator!=(const PixelFormat& other) const
     return !isEqual(other);
 }
 
-} // namespace aspia
+} // namespace desktop

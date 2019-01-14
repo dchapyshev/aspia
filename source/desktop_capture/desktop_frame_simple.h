@@ -23,7 +23,7 @@
 
 #include "desktop_capture/desktop_frame.h"
 
-namespace aspia {
+namespace desktop {
 
 class DesktopFrameSimple : public DesktopFrame
 {
@@ -42,6 +42,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(DesktopFrameSimple);
 };
 
-} // namespace aspia
+} // namespace desktop
 
 #endif // ASPIA_DESKTOP_CAPTURE__DESKTOP_FRAME_SIMPLE_H

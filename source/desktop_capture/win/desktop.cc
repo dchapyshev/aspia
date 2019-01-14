@@ -20,7 +20,7 @@
 
 #include "base/logging.h"
 
-namespace aspia {
+namespace desktop {
 
 Desktop::Desktop(Desktop&& other) noexcept
 {
@@ -159,4 +159,4 @@ Desktop& Desktop::operator=(Desktop&& other) noexcept
     return *this;
 }
 
-} // namespace aspia
+} // namespace desktop

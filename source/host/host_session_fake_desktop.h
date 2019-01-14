@@ -27,9 +27,11 @@ namespace codec {
 class VideoEncoder;
 } // namespace codec
 
-namespace aspia {
-
+namespace desktop {
 class DesktopFrame;
+} // namespace desktop
+
+namespace aspia {
 
 class HostSessionFakeDesktop : public HostSessionFake
 {
@@ -47,7 +49,7 @@ public slots:
 
 private:
     codec::VideoEncoder* createEncoder(const proto::desktop::Config& config);
-    std::unique_ptr<DesktopFrame> createFrame();
+    std::unique_ptr<desktop::DesktopFrame> createFrame();
 
     DISALLOW_COPY_AND_ASSIGN(HostSessionFakeDesktop);
 };

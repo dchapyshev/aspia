@@ -20,7 +20,7 @@
 
 #include "base/logging.h"
 
-namespace aspia {
+namespace desktop {
 
 namespace {
 
@@ -101,4 +101,4 @@ bool MouseCursorCache::isValidCacheSize(size_t size)
     return true;
 }
 
-} // namespace aspia
+} // namespace desktop

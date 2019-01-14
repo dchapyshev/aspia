@@ -25,7 +25,7 @@
 #include "codec/scoped_zstd_stream.h"
 #include "protocol/desktop_session.pb.h"
 
-namespace aspia {
+namespace desktop {
 class MouseCursor;
 class MouseCursorCache;
 } // namespace aspia
@@ -38,14 +38,14 @@ public:
     CursorDecoder();
     ~CursorDecoder();
 
-    std::shared_ptr<aspia::MouseCursor> decode(const proto::desktop::CursorShape& cursor_shape);
+    std::shared_ptr<desktop::MouseCursor> decode(const proto::desktop::CursorShape& cursor_shape);
 
 private:
     bool decompressCursor(const proto::desktop::CursorShape& cursor_shape,
                           uint8_t* output_data,
                           size_t output_size);
 
-    std::unique_ptr<aspia::MouseCursorCache> cache_;
+    std::unique_ptr<desktop::MouseCursorCache> cache_;
     ScopedZstdDStream stream_;
 
     DISALLOW_COPY_AND_ASSIGN(CursorDecoder);

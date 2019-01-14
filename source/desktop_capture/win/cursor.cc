@@ -22,7 +22,7 @@
 #include "base/win/scoped_gdi_object.h"
 #include "desktop_capture/mouse_cursor.h"
 
-namespace aspia {
+namespace desktop {
 
 namespace {
 
@@ -271,4 +271,4 @@ MouseCursor* mouseCursorFromHCursor(HDC dc, HCURSOR cursor)
                            QPoint(icon_info.xHotspot, icon_info.yHotspot));
 }
 
-} // namespace aspia
+} // namespace desktop

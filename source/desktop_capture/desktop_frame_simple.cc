@@ -18,7 +18,7 @@
 
 #include "desktop_capture/desktop_frame_simple.h"
 
-namespace aspia {
+namespace desktop {
 
 DesktopFrameSimple::DesktopFrameSimple(const QSize& size,
                                        const PixelFormat& format,
@@ -49,4 +49,4 @@ std::unique_ptr<DesktopFrameSimple> DesktopFrameSimple::create(
         new DesktopFrameSimple(size, format, bytes_per_row, data));
 }
 
-} // namespace aspia
+} // namespace desktop

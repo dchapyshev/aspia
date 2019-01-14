@@ -31,7 +31,7 @@ namespace base::win {
 class ScopedGetDC;
 } // namespace base::win
 
-namespace aspia {
+namespace desktop {
 
 class CursorCapturerWin : public CursorCapturer
 {
@@ -48,6 +48,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(CursorCapturerWin);
 };
 
-} // namespace aspia
+} // namespace desktop
 
 #endif // ASPIA_DESKTOP_CAPTURE__CURSOR_CAPTURER_WIN_H

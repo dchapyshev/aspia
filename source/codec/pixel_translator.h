@@ -30,8 +30,8 @@ class PixelTranslator
 public:
     virtual ~PixelTranslator() = default;
 
-    static std::unique_ptr<PixelTranslator> create(const aspia::PixelFormat& source_format,
-                                                   const aspia::PixelFormat& target_format);
+    static std::unique_ptr<PixelTranslator> create(const desktop::PixelFormat& source_format,
+                                                   const desktop::PixelFormat& target_format);
 
     virtual void translate(const uint8_t* src,
                            int src_stride,

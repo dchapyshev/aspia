@@ -24,7 +24,7 @@
 
 #include "base/macros_magic.h"
 
-namespace aspia {
+namespace desktop {
 
 class Desktop
 {
@@ -88,6 +88,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(Desktop);
 };
 
-} // namespace aspia
+} // namespace desktop
 
 #endif // ASPIA_DESKTOP_CAPTURE__WIN__DESKTOP_H

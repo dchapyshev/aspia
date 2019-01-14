@@ -23,7 +23,7 @@
 
 #include "desktop_capture/mouse_cursor.h"
 
-namespace aspia {
+namespace desktop {
 
 class MouseCursorCache
 {
@@ -61,6 +61,6 @@ private:
     const size_t cache_size_;
 };
 
-} // namespace aspia
+} // namespace desktop
 
 #endif // ASPIA_DESKTOP_CAPTURE__MOUSE_CURSOR_CACHE_H

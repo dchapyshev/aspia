@@ -97,7 +97,7 @@ private:
     void injectSAS();
     bool isCtrlAndAltPressed();
 
-    ScopedThreadDesktop desktop_;
+    desktop::ScopedThreadDesktop desktop_;
 
     const bool block_input_;
 
@@ -265,7 +265,7 @@ void InputInjectorImpl::injectKeyEvent(const proto::desktop::KeyEvent& event)
 
 void InputInjectorImpl::switchToInputDesktop()
 {
-    Desktop input_desktop(Desktop::inputDesktop());
+    desktop::Desktop input_desktop(desktop::Desktop::inputDesktop());
 
     if (input_desktop.isValid() && !desktop_.isSame(input_desktop))
         desktop_.setThreadDesktop(std::move(input_desktop));

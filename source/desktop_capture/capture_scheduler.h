@@ -23,7 +23,7 @@
 
 #include "base/macros_magic.h"
 
-namespace aspia {
+namespace desktop {
 
 class CaptureScheduler
 {
@@ -43,6 +43,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(CaptureScheduler);
 };
 
-} // namespace aspia
+} // namespace desktop
 
 #endif // ASPIA_DESKTOP_CAPTURE__CAPTURE_SCHEDULER_H
