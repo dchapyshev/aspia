@@ -27,7 +27,7 @@ namespace Ui {
 class AboutDialog;
 } // namespace Ui
 
-namespace aspia {
+namespace common {
 
 class AboutDialog : public QDialog
 {
@@ -43,6 +43,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(AboutDialog);
 };
 
-} // namespace aspia
+} // namespace common
 
 #endif // ASPIA_COMMON__UI__ABOUT_DIALOG_H

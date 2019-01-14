@@ -118,8 +118,8 @@ void FileTransferQueueBuilder::processNextPendingTask()
         return;
     }
 
-    FileRequest* request = FileRequest::fileListRequest(current.sourcePath());
-    connect(request, &FileRequest::replyReady, this, &FileTransferQueueBuilder::reply);
+    common::FileRequest* request = common::FileRequest::fileListRequest(current.sourcePath());
+    connect(request, &common::FileRequest::replyReady, this, &FileTransferQueueBuilder::reply);
     emit newRequest(request);
 }
 

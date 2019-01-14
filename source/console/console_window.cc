@@ -75,7 +75,7 @@ private:
 } // namespace
 
 ConsoleWindow::ConsoleWindow(ConsoleSettings& settings,
-                             LocaleLoader& locale_loader,
+                             common::LocaleLoader& locale_loader,
                              const QString& file_path)
     : settings_(settings),
       locale_loader_(locale_loader)
@@ -384,7 +384,7 @@ void ConsoleWindow::onCheckUpdates()
 
 void ConsoleWindow::onAbout()
 {
-    AboutDialog(this).exec();
+    common::AboutDialog(this).exec();
 }
 
 void ConsoleWindow::onFastConnect()

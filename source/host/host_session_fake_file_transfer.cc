@@ -33,14 +33,14 @@ void HostSessionFakeFileTransfer::startSession()
 {
     proto::file_transfer::Reply reply;
     reply.set_status(proto::file_transfer::STATUS_NO_LOGGED_ON_USER);
-    emit sendMessage(serializeMessage(reply));
+    emit sendMessage(common::serializeMessage(reply));
 }
 
 void HostSessionFakeFileTransfer::onMessageReceived(const QByteArray& /* buffer */)
 {
     proto::file_transfer::Reply reply;
     reply.set_status(proto::file_transfer::STATUS_NO_LOGGED_ON_USER);
-    emit sendMessage(serializeMessage(reply));
+    emit sendMessage(common::serializeMessage(reply));
 }
 
 } // namespace aspia

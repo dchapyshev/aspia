@@ -28,7 +28,7 @@
 #include "common/win/file_enumerator.h"
 #endif // defined(OS_WIN)
 
-namespace aspia {
+namespace common {
 
 FileWorker::FileWorker(QObject* parent)
     : QObject(parent)
@@ -403,4 +403,4 @@ proto::file_transfer::Reply FileWorker::doPacket(const proto::file_transfer::Pac
     return reply;
 }
 
-} // namespace aspia
+} // namespace common

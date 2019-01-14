@@ -135,7 +135,7 @@ void ChannelClient::onConnected()
     client_hello.set_methods(methods);
 
     // Send ClientHello to server.
-    sendInternal(aspia::serializeMessage(client_hello));
+    sendInternal(common::serializeMessage(client_hello));
 }
 
 void ChannelClient::readServerHello(const QByteArray& buffer)
@@ -143,7 +143,7 @@ void ChannelClient::readServerHello(const QByteArray& buffer)
     key_exchange_state_ = KeyExchangeState::IDENTIFY;
 
     proto::ServerHello server_hello;
-    if (!aspia::parseMessage(buffer, server_hello))
+    if (!common::parseMessage(buffer, server_hello))
     {
         emit errorOccurred(Error::PROTOCOL_FAILURE);
         return;
@@ -166,7 +166,7 @@ void ChannelClient::readServerHello(const QByteArray& buffer)
     }
 
     key_exchange_state_ = KeyExchangeState::KEY_EXCHANGE;
-    sendInternal(aspia::serializeMessage(*identify));
+    sendInternal(common::serializeMessage(*identify));
 }
 
 void ChannelClient::readServerKeyExchange(const QByteArray& buffer)
@@ -174,7 +174,7 @@ void ChannelClient::readServerKeyExchange(const QByteArray& buffer)
     DCHECK(srp_client_);
 
     proto::SrpServerKeyExchange server_key_exchange;
-    if (!aspia::parseMessage(buffer, server_key_exchange))
+    if (!common::parseMessage(buffer, server_key_exchange))
     {
         emit errorOccurred(Error::PROTOCOL_FAILURE);
         return;
@@ -190,7 +190,7 @@ void ChannelClient::readServerKeyExchange(const QByteArray& buffer)
     }
 
     key_exchange_state_ = KeyExchangeState::SESSION;
-    sendInternal(aspia::serializeMessage(*client_key_exchange));
+    sendInternal(common::serializeMessage(*client_key_exchange));
 }
 
 void ChannelClient::readSessionChallenge(const QByteArray& buffer)
@@ -235,7 +235,7 @@ void ChannelClient::readSessionChallenge(const QByteArray& buffer)
     }
 
     proto::SessionChallenge session_challenge;
-    if (!aspia::parseMessage(session_challenge_buffer, session_challenge))
+    if (!common::parseMessage(session_challenge_buffer, session_challenge))
     {
         emit errorOccurred(Error::AUTHENTICATION_FAILURE);
         return;
@@ -260,7 +260,7 @@ void ChannelClient::readSessionChallenge(const QByteArray& buffer)
     client_version->set_minor(ASPIA_VERSION_MINOR);
     client_version->set_patch(ASPIA_VERSION_PATCH);
 
-    QByteArray session_response_buffer = aspia::serializeMessage(session_response);
+    QByteArray session_response_buffer = common::serializeMessage(session_response);
     if (session_response_buffer.isEmpty())
     {
         LOG(LS_WARNING) << "Error when creating session response";

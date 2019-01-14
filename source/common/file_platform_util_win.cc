@@ -24,7 +24,7 @@
 
 #include "base/win/scoped_user_object.h"
 
-namespace aspia {
+namespace common {
 
 namespace {
 
@@ -194,4 +194,4 @@ bool FilePlatformUtil::isRelativePath(const QString& path)
     return !!PathIsRelativeW(qUtf16Printable(path));
 }
 
-} // namespace aspia
+} // namespace common

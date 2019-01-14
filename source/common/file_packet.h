@@ -19,12 +19,12 @@
 #ifndef ASPIA_COMMON__FILE_PACKET_H
 #define ASPIA_COMMON__FILE_PACKET_H
 
-namespace aspia {
+namespace common {
 
 // When transferring a file is divided into parts and each part is transmitted separately.
 // This parameter specifies the size of the part.
 static const size_t kMaxFilePacketSize = 16 * 1024; // 16 kB
 
-} // namespace aspia
+} // namespace common
 
 #endif // ASPIA_COMMON__FILE_PACKET_H

@@ -146,8 +146,8 @@ void FileRemover::processTask()
 
     emit progressChanged(tasks_.front().path(), percentage);
 
-    FileRequest* request = FileRequest::removeRequest(tasks_.front().path());
-    connect(request, &FileRequest::replyReady, this, &FileRemover::reply);
+    common::FileRequest* request = common::FileRequest::removeRequest(tasks_.front().path());
+    connect(request, &common::FileRequest::replyReady, this, &FileRemover::reply);
 
     emit newRequest(request);
 }

@@ -25,7 +25,7 @@
 
 #include "base/logging.h"
 
-namespace aspia {
+namespace common {
 
 static QByteArray serializeMessage(const google::protobuf::MessageLite& message)
 {
@@ -55,6 +55,6 @@ bool parseMessage(const QByteArray& buffer, T& message)
     return true;
 }
 
-} // namespace aspia
+} // namespace common
 
 #endif // ASPIA_COMMON__MESSAGE_SERIALIZATION_H

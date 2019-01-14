@@ -24,7 +24,7 @@
 #include "base/macros_magic.h"
 #include "protocol/desktop_session.pb.h"
 
-namespace aspia {
+namespace common {
 
 class Clipboard : public QObject
 {
@@ -51,6 +51,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(Clipboard);
 };
 
-} // namespace aspia
+} // namespace common
 
 #endif // ASPIA_COMMON__CLIPBOARD_H

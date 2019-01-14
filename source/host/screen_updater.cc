@@ -214,10 +214,11 @@ void ScreenUpdaterImpl::run()
 
                 proto::desktop::Extension* extension = message_.mutable_extension();
 
-                extension->set_name(kSelectScreenExtension);
+                extension->set_name(common::kSelectScreenExtension);
                 extension->set_data(screen_list.SerializeAsString());
 
-                QApplication::postEvent(parent(), new MessageEvent(serializeMessage(message_)));
+                QApplication::postEvent(
+                    parent(), new MessageEvent(common::serializeMessage(message_)));
             }
 
             screen_capturer_->selectScreen(screen_id_);
@@ -248,7 +249,10 @@ void ScreenUpdaterImpl::run()
             }
 
             if (message_.has_video_packet() || message_.has_cursor_shape())
-                QApplication::postEvent(parent(), new MessageEvent(serializeMessage(message_)));
+            {
+                QApplication::postEvent(
+                    parent(), new MessageEvent(common::serializeMessage(message_)));
+            }
         }
 
         capture_scheduler_->endCapture();

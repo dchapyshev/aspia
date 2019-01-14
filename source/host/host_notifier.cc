@@ -57,13 +57,13 @@ void HostNotifier::killSession(const std::string& uuid)
 {
     proto::notifier::NotifierToService message;
     message.mutable_kill_session()->set_uuid(uuid);
-    ipc_channel_->send(serializeMessage(message));
+    ipc_channel_->send(common::serializeMessage(message));
 }
 
 void HostNotifier::onIpcMessageReceived(const QByteArray& buffer)
 {
     proto::notifier::ServiceToNotifier message;
-    if (!parseMessage(buffer, message))
+    if (!common::parseMessage(buffer, message))
     {
         LOG(LS_WARNING) << "Invalid message from service";
         stop();

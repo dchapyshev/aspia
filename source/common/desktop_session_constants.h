@@ -19,13 +19,13 @@
 #ifndef ASPIA_COMMON__DESKTOP_SESSION_CONSTANTS_H
 #define ASPIA_COMMON__DESKTOP_SESSION_CONSTANTS_H
 
-namespace aspia {
+namespace common {
 
 extern const char kSelectScreenExtension[];
 extern const char kPowerControlExtension[];
 extern const char kRemoteUpdateExtension[];
 extern const char kSystemInfoExtension[];
 
-} // namespace aspia
+} // namespace common
 
 #endif // ASPIA_COMMON__DESKTOP_SESSION_CONSTANTS_H

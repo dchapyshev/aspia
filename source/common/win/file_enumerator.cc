@@ -20,7 +20,7 @@
 
 #include "base/logging.h"
 
-namespace aspia {
+namespace common {
 
 namespace {
 
@@ -148,4 +148,4 @@ void FileEnumerator::advance()
     }
 }
 
-} // namespace aspia
+} // namespace common

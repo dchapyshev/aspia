@@ -134,7 +134,7 @@ void ClientDesktop::sendPowerControl(proto::desktop::PowerControl::Action action
     proto::desktop::PowerControl power_control;
     power_control.set_action(action);
 
-    extension->set_name(kPowerControlExtension);
+    extension->set_name(common::kPowerControlExtension);
     extension->set_data(power_control.SerializeAsString());
 
     sendMessage(outgoing_message_);
@@ -156,7 +156,7 @@ void ClientDesktop::sendScreen(const proto::desktop::Screen& screen)
 
     proto::desktop::Extension* extension = outgoing_message_.mutable_extension();
 
-    extension->set_name(kSelectScreenExtension);
+    extension->set_name(common::kSelectScreenExtension);
     extension->set_data(screen.SerializeAsString());
 
     sendMessage(outgoing_message_);
@@ -165,14 +165,14 @@ void ClientDesktop::sendScreen(const proto::desktop::Screen& screen)
 void ClientDesktop::sendRemoteUpdate()
 {
     outgoing_message_.Clear();
-    outgoing_message_.mutable_extension()->set_name(kRemoteUpdateExtension);
+    outgoing_message_.mutable_extension()->set_name(common::kRemoteUpdateExtension);
     sendMessage(outgoing_message_);
 }
 
 void ClientDesktop::sendSysInfoRequest()
 {
     outgoing_message_.Clear();
-    outgoing_message_.mutable_extension()->set_name(kSystemInfoExtension);
+    outgoing_message_.mutable_extension()->set_name(common::kSystemInfoExtension);
     sendMessage(outgoing_message_);
 }
 
@@ -282,7 +282,7 @@ void ClientDesktop::readClipboardEvent(const proto::desktop::ClipboardEvent& cli
 
 void ClientDesktop::readExtension(const proto::desktop::Extension& extension)
 {
-    if (extension.name() == kSelectScreenExtension)
+    if (extension.name() == common::kSelectScreenExtension)
     {
         proto::desktop::ScreenList screen_list;
 
@@ -294,7 +294,7 @@ void ClientDesktop::readExtension(const proto::desktop::Extension& extension)
 
         delegate_->setScreenList(screen_list);
     }
-    else if (extension.name() == kSystemInfoExtension)
+    else if (extension.name() == common::kSystemInfoExtension)
     {
         proto::system_info::SystemInfo system_info;
 

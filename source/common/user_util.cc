@@ -18,7 +18,7 @@
 
 #include "common/user_util.h"
 
-namespace aspia {
+namespace common {
 
 namespace {
 
@@ -94,4 +94,4 @@ bool UserUtil::isSafePassword(const QString& password)
     return has_upper && has_lower && has_digit;
 }
 
-} // namespace aspia
+} // namespace common

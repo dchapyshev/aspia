@@ -26,7 +26,7 @@
 #include "base/macros_magic.h"
 #include "protocol/file_transfer_session.pb.h"
 
-namespace aspia {
+namespace common {
 
 class FilePlatformUtil
 {
@@ -52,6 +52,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(FilePlatformUtil);
 };
 
-} // namespace aspia
+} // namespace common
 
 #endif // ASPIA_COMMON__FILE_PLATFORM_UTIL_H

@@ -30,7 +30,7 @@ class HostConfigDialog : public QDialog
     Q_OBJECT
 
 public:
-    HostConfigDialog(LocaleLoader& locale_loader, QWidget* parent = nullptr);
+    HostConfigDialog(common::LocaleLoader& locale_loader, QWidget* parent = nullptr);
     ~HostConfigDialog() = default;
 
     static bool importSettings(const QString& path, bool silent, QWidget* parent = nullptr);
@@ -65,7 +65,7 @@ private:
 
     Ui::HostConfigDialog ui;
 
-    LocaleLoader& locale_loader_;
+    common::LocaleLoader& locale_loader_;
     net::SrpUserList users_;
 
     enum class ServiceState { NOT_INSTALLED, ACCESS_DENIED, NOT_STARTED, STARTED };

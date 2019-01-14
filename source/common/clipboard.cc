@@ -24,7 +24,7 @@
 
 #include "build/build_config.h"
 
-namespace aspia {
+namespace common {
 
 namespace {
 
@@ -79,4 +79,4 @@ void Clipboard::dataChanged()
     emit clipboardEvent(event);
 }
 
-} // namespace aspia
+} // namespace common

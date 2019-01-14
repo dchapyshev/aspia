@@ -24,7 +24,7 @@
 #include "common/file_request.h"
 #include "protocol/file_transfer_session.pb.h"
 
-namespace aspia {
+namespace common {
 
 class FileWorker : public QObject
 {
@@ -63,6 +63,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(FileWorker);
 };
 
-} // namespace aspia
+} // namespace common
 
 #endif // ASPIA_COMMON__FILE_WORKER_H

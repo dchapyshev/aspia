@@ -69,7 +69,7 @@ void AddressBarModel::setDriveList(const proto::file_transfer::DriveList& list)
         const proto::file_transfer::DriveList::Item& item = list.item(i);
 
         Drive drive;
-        drive.icon        = FilePlatformUtil::driveIcon(item.type());
+        drive.icon        = common::FilePlatformUtil::driveIcon(item.type());
         drive.path        = normalizePath(QString::fromStdString(item.path()));
         drive.type        = item.type();
         drive.total_space = item.total_space();
@@ -111,8 +111,8 @@ QModelIndex AddressBarModel::setCurrentPath(const QString& path)
     {
         QString normalized_path = normalizePath(path);
 
-        if (!FilePlatformUtil::isValidPath(normalized_path) ||
-            FilePlatformUtil::isRelativePath(normalized_path) ||
+        if (!common::FilePlatformUtil::isValidPath(normalized_path) ||
+            common::FilePlatformUtil::isRelativePath(normalized_path) ||
             normalized_path.contains(QLatin1String("//")) ||
             normalized_path.contains(QLatin1String("/../")) ||
             normalized_path.contains(QLatin1String("/./")))

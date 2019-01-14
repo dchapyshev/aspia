@@ -29,7 +29,7 @@
 #include "build/version.h"
 #include "ui_about_dialog.h"
 
-namespace aspia {
+namespace common {
 
 namespace {
 
@@ -155,4 +155,4 @@ AboutDialog::AboutDialog(QWidget* parent)
 
 AboutDialog::~AboutDialog() = default;
 
-} // namespace aspia
+} // namespace common

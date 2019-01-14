@@ -293,7 +293,7 @@ void HostServer::onIpcMessageReceived(const QByteArray& buffer)
 {
     proto::notifier::NotifierToService message;
 
-    if (!parseMessage(buffer, message))
+    if (!common::parseMessage(buffer, message))
     {
         LOG(LS_WARNING) << "Invaliid message from notifier.";
         stop();
@@ -373,7 +373,7 @@ void HostServer::sessionToNotifier(const Host& host)
     session->set_username(host.userName().toStdString());
     session->set_session_type(host.sessionType());
 
-    ipc_channel_->send(serializeMessage(message));
+    ipc_channel_->send(common::serializeMessage(message));
 }
 
 void HostServer::sessionCloseToNotifier(const Host& host)
@@ -383,7 +383,7 @@ void HostServer::sessionCloseToNotifier(const Host& host)
 
     proto::notifier::ServiceToNotifier message;
     message.mutable_session_close()->set_uuid(host.uuid().toString().toStdString());
-    ipc_channel_->send(serializeMessage(message));
+    ipc_channel_->send(common::serializeMessage(message));
 }
 
 } // namespace aspia

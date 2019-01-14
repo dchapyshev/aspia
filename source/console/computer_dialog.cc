@@ -171,7 +171,7 @@ void ComputerDialog::buttonBoxClicked(QAbstractButton* button)
         QString username = ui.edit_username->text();
         QString password = ui.edit_password->text();
 
-        if (!username.isEmpty() && !UserUtil::isValidUserName(username))
+        if (!username.isEmpty() && !common::UserUtil::isValidUserName(username))
         {
             showError(tr("The user name can not be empty and can contain only"
                          " alphabet characters, numbers and ""_"", ""-"", ""."" characters."));

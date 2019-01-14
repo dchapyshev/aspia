@@ -32,7 +32,8 @@ FilePathValidator::State FilePathValidator::validate(QString& input, int& pos) c
 {
     if (!input.isEmpty())
     {
-        const QList<QChar>& invalid_characters = FilePlatformUtil::invalidPathCharacters();
+        const QList<QChar>& invalid_characters =
+            common::FilePlatformUtil::invalidPathCharacters();
 
         for (const auto& character : input)
         {
@@ -50,7 +51,7 @@ FilePathValidator::State FilePathValidator::validate(QString& input, int& pos) c
 void FilePathValidator::fixup(QString& input) const
 {
     const QList<QChar>& invalid_characters =
-        FilePlatformUtil::invalidPathCharacters();
+        common::FilePlatformUtil::invalidPathCharacters();
 
     for (auto it = input.begin(); it != input.end(); ++it)
     {

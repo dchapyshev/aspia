@@ -18,11 +18,11 @@
 
 #include "common/desktop_session_constants.h"
 
-namespace aspia {
+namespace common {
 
 const char kSelectScreenExtension[] = "select_screen";
 const char kPowerControlExtension[] = "power_control";
 const char kRemoteUpdateExtension[] = "remote_update";
 const char kSystemInfoExtension[] = "system_info";
 
-} // namespace aspia
+} // namespace common

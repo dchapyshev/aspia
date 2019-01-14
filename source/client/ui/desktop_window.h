@@ -28,13 +28,16 @@
 class QHBoxLayout;
 class QScrollArea;
 
+namespace common {
+class Clipboard;
+} // namespace common
+
 namespace desktop {
 class DesktopFrame;
 } // namespace desktop
 
 namespace aspia {
 
-class Clipboard;
 class DesktopPanel;
 
 class DesktopWindow :
@@ -88,7 +91,7 @@ private:
     QScrollArea* scroll_area_;
     DesktopPanel* panel_;
     DesktopWidget* desktop_;
-    Clipboard* clipboard_;
+    common::Clipboard* clipboard_;
 
     int scroll_timer_id_ = 0;
     QPoint scroll_delta_;

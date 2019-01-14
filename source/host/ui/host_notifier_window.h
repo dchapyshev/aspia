@@ -62,7 +62,7 @@ private:
 
     Ui::HostNotifierWindow ui;
 
-    LocaleLoader locale_loader_;
+    common::LocaleLoader locale_loader_;
     QPoint start_pos_;
     QRect window_rect_;
 

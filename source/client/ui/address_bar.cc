@@ -65,7 +65,7 @@ AddressBar::AddressBar(QWidget* parent)
     {
         QString characters;
 
-        for (const auto& character : FilePlatformUtil::invalidPathCharacters())
+        for (const auto& character : common::FilePlatformUtil::invalidPathCharacters())
         {
             if (!characters.isEmpty())
                 characters += QLatin1String(", ");

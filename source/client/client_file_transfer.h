@@ -27,12 +27,14 @@
 #include "common/file_request.h"
 #include "protocol/file_transfer_session.pb.h"
 
+namespace common {
+class FileWorker;
+} // namespace common
+
 namespace aspia {
 
 Q_DECLARE_METATYPE(proto::file_transfer::Request);
 Q_DECLARE_METATYPE(proto::file_transfer::Reply);
-
-class FileWorker;
 
 class ClientFileTransfer : public Client
 {
@@ -42,20 +44,20 @@ public:
     ClientFileTransfer(const ConnectData& connect_data, QObject* parent);
     ~ClientFileTransfer();
 
-    FileWorker* localWorker();
+    common::FileWorker* localWorker();
 
 public slots:
-    void remoteRequest(FileRequest* request);
+    void remoteRequest(common::FileRequest* request);
 
 protected:
     // Client implementation.
     void messageReceived(const QByteArray& buffer) override;
 
 private:
-    QScopedPointer<FileWorker> worker_;
+    QScopedPointer<common::FileWorker> worker_;
     QPointer<QThread> worker_thread_;
 
-    QQueue<QPointer<FileRequest>> requests_;
+    QQueue<QPointer<common::FileRequest>> requests_;
 
     DISALLOW_COPY_AND_ASSIGN(ClientFileTransfer);
 };

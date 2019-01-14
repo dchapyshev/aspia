@@ -53,7 +53,7 @@ int hostConfigMain(int argc, char *argv[])
     application.setAttribute(Qt::AA_DisableWindowContextHelpButton, true);
 
     HostSettings host_settings;
-    LocaleLoader locale_loader;
+    common::LocaleLoader locale_loader;
 
     QString current_locale = host_settings.locale();
     if (!locale_loader.contains(current_locale))

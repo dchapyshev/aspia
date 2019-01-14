@@ -97,8 +97,8 @@ void FileRemoveQueueBuilder::processNextPendingTask()
         return;
     }
 
-    FileRequest* request = FileRequest::fileListRequest(current.path());
-    connect(request, &FileRequest::replyReady, this, &FileRemoveQueueBuilder::reply);
+    common::FileRequest* request = common::FileRequest::fileListRequest(current.path());
+    connect(request, &common::FileRequest::replyReady, this, &FileRemoveQueueBuilder::reply);
     emit newRequest(request);
 }
 

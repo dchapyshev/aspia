@@ -60,7 +60,8 @@ FileManagerWindow::FileManagerWindow(const ConnectData& connect_data, QWidget* p
 
     ClientFileTransfer* client = static_cast<ClientFileTransfer*>(currentClient());
 
-    connect(ui.local_panel, &FilePanel::newRequest, client->localWorker(), &FileWorker::executeRequest);
+    connect(ui.local_panel, &FilePanel::newRequest,
+            client->localWorker(), &common::FileWorker::executeRequest);
     connect(ui.remote_panel, &FilePanel::newRequest, client, &ClientFileTransfer::remoteRequest);
 
     ui.local_panel->setFocus();
@@ -130,7 +131,7 @@ void FileManagerWindow::removeItems(FilePanel* sender, const QList<FileRemover::
     if (sender == ui.local_panel)
     {
         connect(remover, &FileRemover::newRequest,
-                client->localWorker(), &FileWorker::executeRequest);
+                client->localWorker(), &common::FileWorker::executeRequest);
     }
     else
     {
@@ -225,7 +226,8 @@ void FileManagerWindow::transferItems(FileTransfer::Type type,
 
     ClientFileTransfer* client = static_cast<ClientFileTransfer*>(currentClient());
 
-    connect(transfer, &FileTransfer::localRequest, client->localWorker(), &FileWorker::executeRequest);
+    connect(transfer, &FileTransfer::localRequest,
+            client->localWorker(), &common::FileWorker::executeRequest);
     connect(transfer, &FileTransfer::remoteRequest, client, &ClientFileTransfer::remoteRequest);
 
     connect(this, &FileManagerWindow::windowClose,

@@ -128,7 +128,7 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
             QString name = ui.edit_username->text();
             QString password = ui.edit_password->text();
 
-            if (!UserUtil::isValidUserName(name))
+            if (!common::UserUtil::isValidUserName(name))
             {
                 QMessageBox::warning(this,
                                      tr("Warning"),
@@ -169,18 +169,18 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
                 return;
             }
 
-            if (!UserUtil::isValidPassword(password))
+            if (!common::UserUtil::isValidPassword(password))
             {
                 QMessageBox::warning(this,
                                      tr("Warning"),
                                      tr("Password can not be empty and should not exceed %n characters.",
-                                        "", UserUtil::kMaxPasswordLength),
+                                        "", common::UserUtil::kMaxPasswordLength),
                                      QMessageBox::Ok);
                 ui.edit_password->setFocus();
                 return;
             }
 
-            if (!UserUtil::isSafePassword(password))
+            if (!common::UserUtil::isSafePassword(password))
             {
                 if (QMessageBox::warning(this,
                                          tr("Warning"),
@@ -190,7 +190,7 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
                                             "characters, numbers and should not be shorter "
                                             "than %n characters.<br/>"
                                             "Do you want to enter a different password?",
-                                            "", UserUtil::kSafePasswordLength),
+                                            "", common::UserUtil::kSafePasswordLength),
                                          QMessageBox::Yes,
                                          QMessageBox::No) == QMessageBox::Yes)
                 {

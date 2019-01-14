@@ -61,7 +61,7 @@ int main(int argc, char *argv[])
     ConsoleSettings console_settings;
     QString current_locale = console_settings.locale();
 
-    LocaleLoader locale_loader;
+    common::LocaleLoader locale_loader;
     if (!locale_loader.contains(current_locale))
         console_settings.setLocale(DEFAULT_LOCALE);
 

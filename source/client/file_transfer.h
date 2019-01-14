@@ -100,8 +100,8 @@ signals:
     void currentItemChanged(const QString& source_path, const QString& target_path);
     void progressChanged(int total, int current);
     void error(FileTransfer* transfer, FileTransfer::Error error_type, const QString& message);
-    void localRequest(FileRequest* request);
-    void remoteRequest(FileRequest* request);
+    void localRequest(common::FileRequest* request);
+    void remoteRequest(common::FileRequest* request);
 
 protected:
     void timerEvent(QTimerEvent* event) override;
@@ -118,8 +118,8 @@ private:
     void processTask(bool overwrite);
     void processNextTask();
     void processError(Error error_type, const QString& message);
-    void sourceRequest(FileRequest* request);
-    void targetRequest(FileRequest* request);
+    void sourceRequest(common::FileRequest* request);
+    void targetRequest(common::FileRequest* request);
 
     // The map contains available actions for the error and the current action.
     QMap<Error, QPair<Actions, Action>> actions_;

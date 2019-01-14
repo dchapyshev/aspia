@@ -45,7 +45,7 @@ public:
     void restoreState(const QByteArray& state);
 
 signals:
-    void newRequest(FileRequest* request);
+    void newRequest(common::FileRequest* request);
     void removeItems(FilePanel* sender, const QList<FileRemover::Item>& items);
     void sendItems(FilePanel* sender, const QList<FileTransfer::Item>& items);
     void receiveItems(FilePanel* sender,

@@ -40,7 +40,7 @@ class ConsoleWindow : public QMainWindow
 
 public:
     ConsoleWindow(ConsoleSettings& settings,
-                  LocaleLoader& locale_loader,
+                  common::LocaleLoader& locale_loader,
                   const QString& file_path);
     ~ConsoleWindow();
 
@@ -102,7 +102,7 @@ private:
     Ui::ConsoleWindow ui;
 
     ConsoleSettings& settings_;
-    LocaleLoader& locale_loader_;
+    common::LocaleLoader& locale_loader_;
     Mru mru_;
 
     QScopedPointer<QSystemTrayIcon> tray_icon_;

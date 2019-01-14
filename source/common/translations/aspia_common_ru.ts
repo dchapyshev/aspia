@@ -37,79 +37,142 @@
 <context>
     <name>aspia::AboutDialog</name>
     <message>
+        <source>Version: %1</source>
+        <translation type="vanished">Версия: %1</translation>
+    </message>
+    <message>
+        <source>Aspia is free software released under GNU General Public License 3.</source>
+        <translation type="vanished">Aspia - свободное программное обеспечение, распространяющееся по лицензии GNU General Public License 3.</translation>
+    </message>
+    <message>
+        <source>You can get a copy of license here:</source>
+        <translation type="vanished">Вы можете получить копию лицензии по адресу:</translation>
+    </message>
+    <message>
+        <source>You can also get a translation of GNU GPL license here:</source>
+        <translation type="vanished">Ознакомиться с переводом лицензии на ваш язык можно по адресу:</translation>
+    </message>
+    <message>
+        <source>Links:</source>
+        <translation type="vanished">Ссылки:</translation>
+    </message>
+    <message>
+        <source>Home page:</source>
+        <translation type="vanished">Домашняя страница:</translation>
+    </message>
+    <message>
+        <source>GitHub page:</source>
+        <translation type="vanished">GitHub страница:</translation>
+    </message>
+    <message>
+        <source>Developers:</source>
+        <translation type="vanished">Разработчики:</translation>
+    </message>
+    <message>
+        <source>Translators:</source>
+        <translation type="vanished">Переводчики:</translation>
+    </message>
+    <message>
+        <source>Third-party components:</source>
+        <translation type="vanished">Сторонние компоненты:</translation>
+    </message>
+    <message>
+        <source>Path: %1</source>
+        <translation type="vanished">Путь: %1</translation>
+    </message>
+    <message>
+        <source>Compilation date: %1</source>
+        <translation type="vanished">Дата компиляции: %1</translation>
+    </message>
+    <message>
+        <source>Compilation time: %1</source>
+        <translation type="vanished">Время компиляции: %1</translation>
+    </message>
+    <message>
+        <source>%1 version: %2</source>
+        <translation type="vanished">Версия %1: %2</translation>
+    </message>
+    <message>
+        <source>https://aspia.org/en/donate.html</source>
+        <translation type="vanished">https://aspia.org/ru/donate.html</translation>
+    </message>
+</context>
+<context>
+    <name>common::AboutDialog</name>
+    <message>
         <location filename="../ui/about_dialog.cc" line="87"/>
         <source>Version: %1</source>
-        <translation>Версия: %1</translation>
+        <translation type="unfinished">Версия: %1</translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.cc" line="91"/>
         <source>Aspia is free software released under GNU General Public License 3.</source>
-        <translation>Aspia - свободное программное обеспечение, распространяющееся по лицензии GNU General Public License 3.</translation>
+        <translation type="unfinished">Aspia - свободное программное обеспечение, распространяющееся по лицензии GNU General Public License 3.</translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.cc" line="92"/>
         <source>You can get a copy of license here:</source>
-        <translation>Вы можете получить копию лицензии по адресу:</translation>
+        <translation type="unfinished">Вы можете получить копию лицензии по адресу:</translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.cc" line="97"/>
         <source>You can also get a translation of GNU GPL license here:</source>
-        <translation>Ознакомиться с переводом лицензии на ваш язык можно по адресу:</translation>
+        <translation type="unfinished">Ознакомиться с переводом лицензии на ваш язык можно по адресу:</translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.cc" line="102"/>
         <source>Links:</source>
-        <translation>Ссылки:</translation>
+        <translation type="unfinished">Ссылки:</translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.cc" line="103"/>
         <source>Home page:</source>
-        <translation>Домашняя страница:</translation>
+        <translation type="unfinished">Домашняя страница:</translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.cc" line="104"/>
         <source>GitHub page:</source>
-        <translation>GitHub страница:</translation>
+        <translation type="unfinished">GitHub страница:</translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.cc" line="107"/>
         <source>Developers:</source>
-        <translation>Разработчики:</translation>
+        <translation type="unfinished">Разработчики:</translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.cc" line="109"/>
         <source>Translators:</source>
-        <translation>Переводчики:</translation>
+        <translation type="unfinished">Переводчики:</translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.cc" line="111"/>
         <source>Third-party components:</source>
-        <translation>Сторонние компоненты:</translation>
+        <translation type="unfinished">Сторонние компоненты:</translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.cc" line="128"/>
         <source>Path: %1</source>
-        <translation>Путь: %1</translation>
+        <translation type="unfinished">Путь: %1</translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.cc" line="129"/>
         <source>Compilation date: %1</source>
-        <translation>Дата компиляции: %1</translation>
+        <translation type="unfinished">Дата компиляции: %1</translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.cc" line="130"/>
         <source>Compilation time: %1</source>
-        <translation>Время компиляции: %1</translation>
+        <translation type="unfinished">Время компиляции: %1</translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.cc" line="134"/>
         <source>%1 version: %2</source>
-        <translation>Версия %1: %2</translation>
+        <translation type="unfinished">Версия %1: %2</translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.cc" line="150"/>
         <source>https://aspia.org/en/donate.html</source>
-        <translation>https://aspia.org/ru/donate.html</translation>
+        <translation type="unfinished">https://aspia.org/ru/donate.html</translation>
     </message>
 </context>
 </TS>

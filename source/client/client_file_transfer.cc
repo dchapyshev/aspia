@@ -34,7 +34,7 @@ ClientFileTransfer::ClientFileTransfer(const ConnectData& connect_data, QObject*
     qRegisterMetaType<proto::file_transfer::Reply>();
 
     worker_thread_ = new QThread(this);
-    worker_.reset(new FileWorker());
+    worker_.reset(new common::FileWorker());
     worker_->moveToThread(worker_thread_);
     worker_thread_->start();
 }
@@ -48,7 +48,7 @@ ClientFileTransfer::~ClientFileTransfer()
         delete request;
 }
 
-FileWorker* ClientFileTransfer::localWorker() { return worker_.get(); }
+common::FileWorker* ClientFileTransfer::localWorker() { return worker_.get(); }
 
 void ClientFileTransfer::messageReceived(const QByteArray& buffer)
 {
@@ -67,15 +67,15 @@ void ClientFileTransfer::messageReceived(const QByteArray& buffer)
         return;
     }
 
-    QScopedPointer<FileRequest> request(requests_.front());
+    QScopedPointer<common::FileRequest> request(requests_.front());
     requests_.pop_front();
 
     request->sendReply(reply);
 }
 
-void ClientFileTransfer::remoteRequest(FileRequest* request)
+void ClientFileTransfer::remoteRequest(common::FileRequest* request)
 {
-    requests_.push_back(QPointer<FileRequest>(request));
+    requests_.push_back(QPointer<common::FileRequest>(request));
     sendMessage(request->request());
 }
 

@@ -36,14 +36,14 @@ void HostSessionFakeDesktop::startSession()
 {
     proto::desktop::HostToClient message;
     message.mutable_config_request()->set_dummy(1);
-    emit sendMessage(serializeMessage(message));
+    emit sendMessage(common::serializeMessage(message));
 }
 
 void HostSessionFakeDesktop::onMessageReceived(const QByteArray& buffer)
 {
     proto::desktop::ClientToHost incoming_message;
 
-    if (!parseMessage(buffer, incoming_message))
+    if (!common::parseMessage(buffer, incoming_message))
     {
         LOG(LS_WARNING) << "Unable to parse message";
         emit errorOccurred();
@@ -70,7 +70,7 @@ void HostSessionFakeDesktop::onMessageReceived(const QByteArray& buffer)
 
         proto::desktop::HostToClient outgoing_message;
         video_encoder->encode(frame.get(), outgoing_message.mutable_video_packet());
-        emit sendMessage(serializeMessage(outgoing_message));
+        emit sendMessage(common::serializeMessage(outgoing_message));
     }
     else
     {

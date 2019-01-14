@@ -26,7 +26,7 @@
 #include "base/macros_magic.h"
 #include "protocol/file_transfer_session.pb.h"
 
-namespace aspia {
+namespace common {
 
 class FilePacketizer
 {
@@ -53,6 +53,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(FilePacketizer);
 };
 
-} // namespace aspia
+} // namespace common
 
 #endif // ASPIA_COMMON__FILE_PACKETIZER_H

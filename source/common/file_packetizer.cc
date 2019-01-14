@@ -21,7 +21,7 @@
 #include "base/logging.h"
 #include "common/file_packet.h"
 
-namespace aspia {
+namespace common {
 
 namespace {
 
@@ -106,4 +106,4 @@ std::unique_ptr<proto::file_transfer::Packet> FilePacketizer::readNextPacket(
     return packet;
 }
 
-} // namespace aspia
+} // namespace common

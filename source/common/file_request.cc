@@ -18,7 +18,7 @@
 
 #include "common/file_request.h"
 
-namespace aspia {
+namespace common {
 
 FileRequest::FileRequest(proto::file_transfer::Request&& request)
     : request_(std::move(request))
@@ -105,4 +105,4 @@ FileRequest* FileRequest::packet(const proto::file_transfer::Packet& packet)
     return new FileRequest(std::move(request));
 }
 
-} // namespace aspia
+} // namespace common

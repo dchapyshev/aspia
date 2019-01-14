@@ -24,13 +24,16 @@
 #include "protocol/common.pb.h"
 #include "build/build_config.h"
 
+namespace common {
+class Clipboard;
+} // namespace common
+
 namespace desktop {
 class VisualEffectsDisabler;
 } // namespace desktop
 
 namespace aspia {
 
-class Clipboard;
 class InputInjector;
 class ScreenUpdater;
 
@@ -71,7 +74,7 @@ private:
     DesktopConfigTracker config_tracker_;
 
     QPointer<ScreenUpdater> screen_updater_;
-    QPointer<Clipboard> clipboard_;
+    QPointer<common::Clipboard> clipboard_;
     QScopedPointer<InputInjector> input_injector_;
 
 #if defined(OS_WIN)

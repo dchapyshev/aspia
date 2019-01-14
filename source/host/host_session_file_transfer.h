@@ -21,9 +21,11 @@
 
 #include "host/host_session.h"
 
-namespace aspia {
-
+namespace common {
 class FileWorker;
+} // namespace common
+
+namespace aspia {
 
 class HostSessionFileTransfer : public HostSession
 {
@@ -42,7 +44,7 @@ protected:
     void stopSession() override;
 
 private:
-    QPointer<FileWorker> worker_;
+    QPointer<common::FileWorker> worker_;
 
     DISALLOW_COPY_AND_ASSIGN(HostSessionFileTransfer);
 };

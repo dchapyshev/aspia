@@ -32,7 +32,8 @@ FileNameValidator::State FileNameValidator::validate(QString& input, int& pos) c
 {
     if (!input.isEmpty())
     {
-        const QList<QChar>& invalid_characters = FilePlatformUtil::invalidFileNameCharacters();
+        const QList<QChar>& invalid_characters =
+            common::FilePlatformUtil::invalidFileNameCharacters();
 
         for (const auto& character : input)
         {
@@ -50,7 +51,7 @@ FileNameValidator::State FileNameValidator::validate(QString& input, int& pos) c
 void FileNameValidator::fixup(QString& input) const
 {
     const QList<QChar>& invalid_characters =
-        FilePlatformUtil::invalidFileNameCharacters();
+        common::FilePlatformUtil::invalidFileNameCharacters();
 
     for (auto it = input.begin(); it != input.end(); ++it)
     {

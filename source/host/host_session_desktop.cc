@@ -69,7 +69,7 @@ HostSessionDesktop::~HostSessionDesktop()
 void HostSessionDesktop::startSession()
 {
     outgoing_message_.mutable_config_request()->set_dummy(1);
-    emit sendMessage(serializeMessage(outgoing_message_));
+    emit sendMessage(common::serializeMessage(outgoing_message_));
 }
 
 void HostSessionDesktop::stopSession()
@@ -83,7 +83,7 @@ void HostSessionDesktop::messageReceived(const QByteArray& buffer)
 {
     incoming_message_.Clear();
 
-    if (!parseMessage(buffer, incoming_message_))
+    if (!common::parseMessage(buffer, incoming_message_))
     {
         emit errorOccurred();
         return;
@@ -112,7 +112,7 @@ void HostSessionDesktop::clipboardEvent(const proto::desktop::ClipboardEvent& ev
 
     outgoing_message_.Clear();
     outgoing_message_.mutable_clipboard_event()->CopyFrom(event);
-    emit sendMessage(serializeMessage(outgoing_message_));
+    emit sendMessage(common::serializeMessage(outgoing_message_));
 }
 
 void HostSessionDesktop::readPointerEvent(const proto::desktop::PointerEvent& event)
@@ -162,7 +162,7 @@ void HostSessionDesktop::readClipboardEvent(const proto::desktop::ClipboardEvent
 
 void HostSessionDesktop::readExtension(const proto::desktop::Extension& extension)
 {
-    if (extension.name() == kSelectScreenExtension)
+    if (extension.name() == common::kSelectScreenExtension)
     {
         proto::desktop::Screen screen;
 
@@ -175,7 +175,7 @@ void HostSessionDesktop::readExtension(const proto::desktop::Extension& extensio
         if (screen_updater_)
             screen_updater_->selectScreen(screen.id());
     }
-    else if (extension.name() == kPowerControlExtension)
+    else if (extension.name() == common::kPowerControlExtension)
     {
         proto::desktop::PowerControl power_control;
 
@@ -208,7 +208,7 @@ void HostSessionDesktop::readExtension(const proto::desktop::Extension& extensio
                 break;
         }
     }
-    else if (extension.name() == kRemoteUpdateExtension)
+    else if (extension.name() == common::kRemoteUpdateExtension)
     {
         if (session_type_ == proto::SESSION_TYPE_DESKTOP_MANAGE &&
             HostSettings().remoteUpdate())
@@ -216,7 +216,7 @@ void HostSessionDesktop::readExtension(const proto::desktop::Extension& extensio
             launchUpdater();
         }
     }
-    else if (extension.name() == kSystemInfoExtension)
+    else if (extension.name() == common::kSystemInfoExtension)
     {
         sendSystemInfo();
     }
@@ -237,8 +237,8 @@ void HostSessionDesktop::readConfig(const proto::desktop::Config& config)
 
         if (config.flags() & proto::desktop::ENABLE_CLIPBOARD)
         {
-            clipboard_ = new Clipboard(this);
-            connect(clipboard_, &Clipboard::clipboardEvent,
+            clipboard_ = new common::Clipboard(this);
+            connect(clipboard_, &common::Clipboard::clipboardEvent,
                     this, &HostSessionDesktop::clipboardEvent);
         }
     }
@@ -300,10 +300,10 @@ void HostSessionDesktop::sendSystemInfo()
     outgoing_message_.Clear();
 
     proto::desktop::Extension* extension = outgoing_message_.mutable_extension();
-    extension->set_name(kSystemInfoExtension);
+    extension->set_name(common::kSystemInfoExtension);
     extension->set_data(system_info.SerializeAsString());
 
-    emit sendMessage(serializeMessage(outgoing_message_));
+    emit sendMessage(common::serializeMessage(outgoing_message_));
 }
 
 } // namespace aspia

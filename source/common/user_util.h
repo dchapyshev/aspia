@@ -23,7 +23,7 @@
 
 #include "base/macros_magic.h"
 
-namespace aspia {
+namespace common {
 
 class UserUtil
 {
@@ -41,6 +41,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(UserUtil);
 };
 
-} // namespace aspia
+} // namespace common
 
 #endif // ASPIA_COMMON__USER_UTIL_H

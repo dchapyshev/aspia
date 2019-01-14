@@ -26,7 +26,7 @@
 #include "base/macros_magic.h"
 #include "protocol/file_transfer_session.pb.h"
 
-namespace aspia {
+namespace common {
 
 class FileRequest : public QObject
 {
@@ -58,6 +58,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(FileRequest);
 };
 
-} // namespace aspia
+} // namespace common
 
 #endif // ASPIA_COMMON__FILE_REQUEST_H

@@ -31,7 +31,7 @@ HostSessionFileTransfer::HostSessionFileTransfer(const QString& channel_id)
 
 void HostSessionFileTransfer::startSession()
 {
-    worker_ = new FileWorker(this);
+    worker_ = new common::FileWorker(this);
 }
 
 void HostSessionFileTransfer::stopSession()
@@ -46,13 +46,13 @@ void HostSessionFileTransfer::messageReceived(const QByteArray& buffer)
 
     proto::file_transfer::Request request;
 
-    if (!parseMessage(buffer, request))
+    if (!common::parseMessage(buffer, request))
     {
         emit errorOccurred();
         return;
     }
 
-    emit sendMessage(serializeMessage(worker_->doRequest(request)));
+    emit sendMessage(common::serializeMessage(worker_->doRequest(request)));
 }
 
 } // namespace aspia

@@ -37,54 +37,97 @@
 <context>
     <name>aspia::AboutDialog</name>
     <message>
+        <source>Version: %1</source>
+        <translation type="vanished">Versie: %1</translation>
+    </message>
+    <message>
+        <source>Aspia is free software released under GNU General Public License 3.</source>
+        <translation type="vanished">Aspia is gratis software verspreid onder de GNU General Public License 3.</translation>
+    </message>
+    <message>
+        <source>You can get a copy of license here:</source>
+        <translation type="vanished">Download een kopie van de licentie:</translation>
+    </message>
+    <message>
+        <source>You can also get a translation of GNU GPL license here:</source>
+        <translation type="vanished">Download hier een vertaling van de GNU GPL:</translation>
+    </message>
+    <message>
+        <source>Links:</source>
+        <translation type="vanished">Links:</translation>
+    </message>
+    <message>
+        <source>Home page:</source>
+        <translation type="vanished">Website:</translation>
+    </message>
+    <message>
+        <source>GitHub page:</source>
+        <translation type="vanished">GitHub pagina:</translation>
+    </message>
+    <message>
+        <source>Developers:</source>
+        <translation type="vanished">Ontwikkelaars:</translation>
+    </message>
+    <message>
+        <source>Translators:</source>
+        <translation type="vanished">Vertalingen:</translation>
+    </message>
+    <message>
+        <source>Third-party components:</source>
+        <translation type="vanished">Third-party componenten:</translation>
+    </message>
+</context>
+<context>
+    <name>common::AboutDialog</name>
+    <message>
         <location filename="../ui/about_dialog.cc" line="87"/>
         <source>Version: %1</source>
-        <translation>Versie: %1</translation>
+        <translation type="unfinished">Versie: %1</translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.cc" line="91"/>
         <source>Aspia is free software released under GNU General Public License 3.</source>
-        <translation>Aspia is gratis software verspreid onder de GNU General Public License 3.</translation>
+        <translation type="unfinished">Aspia is gratis software verspreid onder de GNU General Public License 3.</translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.cc" line="92"/>
         <source>You can get a copy of license here:</source>
-        <translation>Download een kopie van de licentie:</translation>
+        <translation type="unfinished">Download een kopie van de licentie:</translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.cc" line="97"/>
         <source>You can also get a translation of GNU GPL license here:</source>
-        <translation>Download hier een vertaling van de GNU GPL:</translation>
+        <translation type="unfinished">Download hier een vertaling van de GNU GPL:</translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.cc" line="102"/>
         <source>Links:</source>
-        <translation>Links:</translation>
+        <translation type="unfinished">Links:</translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.cc" line="103"/>
         <source>Home page:</source>
-        <translation>Website:</translation>
+        <translation type="unfinished">Website:</translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.cc" line="104"/>
         <source>GitHub page:</source>
-        <translation>GitHub pagina:</translation>
+        <translation type="unfinished">GitHub pagina:</translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.cc" line="107"/>
         <source>Developers:</source>
-        <translation>Ontwikkelaars:</translation>
+        <translation type="unfinished">Ontwikkelaars:</translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.cc" line="109"/>
         <source>Translators:</source>
-        <translation>Vertalingen:</translation>
+        <translation type="unfinished">Vertalingen:</translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.cc" line="111"/>
         <source>Third-party components:</source>
-        <translation>Third-party componenten:</translation>
+        <translation type="unfinished">Third-party componenten:</translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.cc" line="128"/>
@@ -109,7 +152,7 @@
     <message>
         <location filename="../ui/about_dialog.cc" line="150"/>
         <source>https://aspia.org/en/donate.html</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

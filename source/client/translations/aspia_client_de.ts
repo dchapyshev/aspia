@@ -871,7 +871,7 @@
 <context>
     <name>aspia::FileManagerWindow</name>
     <message>
-        <location filename="../ui/file_manager_window.cc" line="262"/>
+        <location filename="../ui/file_manager_window.cc" line="264"/>
         <source>%1 - Aspia File Transfer</source>
         <translation>%1 - Aspia Dateiübertragung</translation>
     </message>
@@ -938,27 +938,27 @@
         <translation>Name beinhaltet ungültige Zeichen.</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="354"/>
+        <location filename="../ui/file_panel.cc" line="355"/>
         <source>&amp;Send	F11</source>
         <translation>&amp;Senden F11</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="356"/>
+        <location filename="../ui/file_panel.cc" line="357"/>
         <source>&amp;Delete	Delete</source>
         <translation>&amp;Löschen Entf</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="366"/>
+        <location filename="../ui/file_panel.cc" line="367"/>
         <source>&amp;Create Folder</source>
         <translation>&amp;Ordner erstellen</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="421"/>
+        <location filename="../ui/file_panel.cc" line="422"/>
         <source>Confirmation</source>
         <translation>Bestätigung</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="422"/>
+        <location filename="../ui/file_panel.cc" line="423"/>
         <source>Are you sure you want to delete the selected items?</source>
         <translation>Möchten Sie die ausgewählten Elemente wirklich löschen?</translation>
     </message>
@@ -1036,7 +1036,7 @@
     </message>
     <message>
         <location filename="../file_transfer.cc" line="196"/>
-        <location filename="../file_transfer.cc" line="239"/>
+        <location filename="../file_transfer.cc" line="240"/>
         <source>An unexpected response to the request was received</source>
         <translation>Eine unerwartete Antwort auf die Anfrage wurde empfangen</translation>
     </message>
@@ -1046,7 +1046,7 @@
         <translation>Fehler beim Öffnen der Datei &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../file_transfer.cc" line="227"/>
+        <location filename="../file_transfer.cc" line="228"/>
         <source>Failed to read file &quot;%1&quot;: %2</source>
         <translation>Fehler beim Lesen der Datei &quot;%1&quot;: %2</translation>
     </message>

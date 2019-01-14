@@ -78,7 +78,7 @@ void ChannelHost::internalMessageWritten()
 void ChannelHost::readClientHello(const QByteArray& buffer)
 {
     proto::ClientHello client_hello;
-    if (!aspia::parseMessage(buffer, client_hello))
+    if (!common::parseMessage(buffer, client_hello))
     {
         emit errorOccurred(Error::PROTOCOL_FAILURE);
         return;
@@ -106,13 +106,13 @@ void ChannelHost::readClientHello(const QByteArray& buffer)
     srp_host_ = std::make_unique<SrpHostContext>(server_hello.method(), user_list_);
 
     key_exchange_state_ = KeyExchangeState::IDENTIFY;
-    sendInternal(aspia::serializeMessage(server_hello));
+    sendInternal(common::serializeMessage(server_hello));
 }
 
 void ChannelHost::readIdentify(const QByteArray& buffer)
 {
     proto::SrpIdentify identify;
-    if (!aspia::parseMessage(buffer, identify))
+    if (!common::parseMessage(buffer, identify))
     {
         emit errorOccurred(Error::PROTOCOL_FAILURE);
         return;
@@ -128,13 +128,13 @@ void ChannelHost::readIdentify(const QByteArray& buffer)
     }
 
     key_exchange_state_ = KeyExchangeState::KEY_EXCHANGE;
-    sendInternal(aspia::serializeMessage(*server_key_exchange));
+    sendInternal(common::serializeMessage(*server_key_exchange));
 }
 
 void ChannelHost::readClientKeyExchange(const QByteArray& buffer)
 {
     proto::SrpClientKeyExchange client_key_exchange;
-    if (!aspia::parseMessage(buffer, client_key_exchange))
+    if (!common::parseMessage(buffer, client_key_exchange))
     {
         emit errorOccurred(Error::PROTOCOL_FAILURE);
         return;
@@ -177,7 +177,7 @@ void ChannelHost::readClientKeyExchange(const QByteArray& buffer)
     host_version->set_minor(ASPIA_VERSION_MINOR);
     host_version->set_patch(ASPIA_VERSION_PATCH);
 
-    QByteArray session_challenge_buffer = aspia::serializeMessage(session_challenge);
+    QByteArray session_challenge_buffer = common::serializeMessage(session_challenge);
     if (session_challenge_buffer.isEmpty())
     {
         LOG(LS_WARNING) << "Error when creating authorization challenge";
@@ -212,7 +212,7 @@ void ChannelHost::readSessionResponse(const QByteArray& buffer)
     }
 
     proto::SessionResponse session_response;
-    if (!aspia::parseMessage(decrypted_buffer, session_response))
+    if (!common::parseMessage(decrypted_buffer, session_response))
     {
         emit errorOccurred(Error::PROTOCOL_FAILURE);
         return;

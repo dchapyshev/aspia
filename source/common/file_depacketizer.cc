@@ -20,7 +20,7 @@
 
 #include "base/logging.h"
 
-namespace aspia {
+namespace common {
 
 FileDepacketizer::FileDepacketizer(const std::filesystem::path& file_path,
                                    std::ofstream&& file_stream)
@@ -104,4 +104,4 @@ bool FileDepacketizer::writeNextPacket(const proto::file_transfer::Packet& packe
     return true;
 }
 
-} // namespace aspia
+} // namespace common

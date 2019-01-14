@@ -871,7 +871,7 @@
 <context>
     <name>aspia::FileManagerWindow</name>
     <message>
-        <location filename="../ui/file_manager_window.cc" line="262"/>
+        <location filename="../ui/file_manager_window.cc" line="264"/>
         <source>%1 - Aspia File Transfer</source>
         <translation>%1 - Передача файлов</translation>
     </message>
@@ -938,27 +938,27 @@
         <translation>Имя содержит некорректные символы.</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="354"/>
+        <location filename="../ui/file_panel.cc" line="355"/>
         <source>&amp;Send	F11</source>
         <translation>&amp;Отправить	F11</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="356"/>
+        <location filename="../ui/file_panel.cc" line="357"/>
         <source>&amp;Delete	Delete</source>
         <translation>&amp;Удалить	Delete</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="366"/>
+        <location filename="../ui/file_panel.cc" line="367"/>
         <source>&amp;Create Folder</source>
         <translation>&amp;Создать папку</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="421"/>
+        <location filename="../ui/file_panel.cc" line="422"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="422"/>
+        <location filename="../ui/file_panel.cc" line="423"/>
         <source>Are you sure you want to delete the selected items?</source>
         <translation>Вы действительно хотите удалить выбранные элементы?</translation>
     </message>
@@ -1041,12 +1041,12 @@
     </message>
     <message>
         <location filename="../file_transfer.cc" line="196"/>
-        <location filename="../file_transfer.cc" line="239"/>
+        <location filename="../file_transfer.cc" line="240"/>
         <source>An unexpected response to the request was received</source>
         <translation>Получен неожиданный ответ на запрос</translation>
     </message>
     <message>
-        <location filename="../file_transfer.cc" line="227"/>
+        <location filename="../file_transfer.cc" line="228"/>
         <source>Failed to read file &quot;%1&quot;: %2</source>
         <translation>Не удалось прочитать файл &quot;%1&quot;: %2</translation>
     </message>

@@ -26,7 +26,7 @@
 
 class QTranslator;
 
-namespace aspia {
+namespace common {
 
 class LocaleLoader
 {
@@ -51,6 +51,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(LocaleLoader);
 };
 
-} // namespace aspia
+} // namespace common
 
 #endif // ASPIA_COMMON__LOCALE_LOADER_H

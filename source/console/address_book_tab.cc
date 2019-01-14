@@ -720,7 +720,7 @@ void AddressBookTab::updateComputerList(ComputerGroupItem* computer_group)
 
 bool AddressBookTab::saveToFile(const QString& file_path)
 {
-    QByteArray serialized_data = serializeMessage(data_);
+    QByteArray serialized_data = common::serializeMessage(data_);
 
     switch (file_.encryption_type())
     {
@@ -768,7 +768,7 @@ bool AddressBookTab::saveToFile(const QString& file_path)
         return false;
     }
 
-    QByteArray buffer = serializeMessage(file_);
+    QByteArray buffer = common::serializeMessage(file_);
 
     int64_t bytes_written = file.write(buffer);
 

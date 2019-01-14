@@ -106,8 +106,8 @@ void FilePanel::onPathChanged(const QString& path)
     }
     else
     {
-        FileRequest* request = FileRequest::fileListRequest(path);
-        connect(request, &FileRequest::replyReady, this, &FilePanel::reply);
+        common::FileRequest* request = common::FileRequest::fileListRequest(path);
+        connect(request, &common::FileRequest::replyReady, this, &FilePanel::reply);
         emit newRequest(request);
     }
 }
@@ -210,8 +210,8 @@ void FilePanel::reply(const proto::file_transfer::Request& request,
 
 void FilePanel::refresh()
 {
-    FileRequest* request = FileRequest::driveListRequest();
-    connect(request, &FileRequest::replyReady, this, &FilePanel::reply);
+    common::FileRequest* request = common::FileRequest::driveListRequest();
+    connect(request, &common::FileRequest::replyReady, this, &FilePanel::reply);
     emit newRequest(request);
 }
 
@@ -296,7 +296,7 @@ void FilePanel::onNameChangeRequest(const QString& old_name, const QString& new_
     }
     else if (old_name.compare(new_name, Qt::CaseInsensitive) != 0)
     {
-        if (!FilePlatformUtil::isValidFileName(new_name))
+        if (!common::FilePlatformUtil::isValidFileName(new_name))
         {
             QMessageBox::warning(this,
                                  tr("Warning"),
@@ -305,9 +305,9 @@ void FilePanel::onNameChangeRequest(const QString& old_name, const QString& new_
             return;
         }
 
-        FileRequest* request = FileRequest::renameRequest(currentPath() + old_name,
-                                                          currentPath() + new_name);
-        connect(request, &FileRequest::replyReady, this, &FilePanel::reply);
+        common::FileRequest* request =
+            common::FileRequest::renameRequest(currentPath() + old_name, currentPath() + new_name);
+        connect(request, &common::FileRequest::replyReady, this, &FilePanel::reply);
         emit newRequest(request);
     }
 }
@@ -323,7 +323,7 @@ void FilePanel::onCreateFolderRequest(const QString& name)
     }
     else
     {
-        if (!FilePlatformUtil::isValidFileName(name))
+        if (!common::FilePlatformUtil::isValidFileName(name))
         {
             QMessageBox::warning(this,
                                  tr("Warning"),
@@ -332,8 +332,9 @@ void FilePanel::onCreateFolderRequest(const QString& name)
             return;
         }
 
-        FileRequest* request = FileRequest::createDirectoryRequest(currentPath() + name);
-        connect(request, &FileRequest::replyReady, this, &FilePanel::reply);
+        common::FileRequest* request =
+            common::FileRequest::createDirectoryRequest(currentPath() + name);
+        connect(request, &common::FileRequest::replyReady, this, &FilePanel::reply);
         emit newRequest(request);
     }
 }

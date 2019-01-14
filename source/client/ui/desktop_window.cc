@@ -97,8 +97,8 @@ DesktopWindow::DesktopWindow(const ConnectData& connect_data, QWidget* parent)
     desktop_->installEventFilter(this);
     scroll_area_->viewport()->installEventFilter(this);
 
-    clipboard_ = new Clipboard(this);
-    connect(clipboard_, &Clipboard::clipboardEvent,
+    clipboard_ = new common::Clipboard(this);
+    connect(clipboard_, &common::Clipboard::clipboardEvent,
             desktopClient(), &ClientDesktop::sendClipboardEvent);
 
     connect(panel_, &DesktopPanel::startSession, [this](proto::SessionType session_type)

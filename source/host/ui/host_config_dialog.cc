@@ -51,7 +51,7 @@ bool replaceFile(const QString& source_path, const QString& target_path)
 
 } // namespace
 
-HostConfigDialog::HostConfigDialog(LocaleLoader& locale_loader, QWidget* parent)
+HostConfigDialog::HostConfigDialog(common::LocaleLoader& locale_loader, QWidget* parent)
     : QDialog(parent),
       locale_loader_(locale_loader)
 {
@@ -119,7 +119,7 @@ HostConfigDialog::HostConfigDialog(LocaleLoader& locale_loader, QWidget* parent)
 
     connect(ui.button_about, &QPushButton::released, [this]()
     {
-        AboutDialog(this).exec();
+        common::AboutDialog(this).exec();
     });
 
     connect(ui.button_box, &QDialogButtonBox::clicked,

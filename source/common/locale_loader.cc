@@ -26,7 +26,7 @@
 
 #include "base/logging.h"
 
-namespace aspia {
+namespace common {
 
 LocaleLoader::LocaleLoader()
 {
@@ -139,4 +139,4 @@ void LocaleLoader::removeTranslators()
     translator_list_.clear();
 }
 
-} // namespace aspia
+} // namespace common
