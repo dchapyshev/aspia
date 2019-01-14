@@ -26,11 +26,11 @@
 
 namespace console {
 
-class ConsoleSettings
+class Settings
 {
 public:
-    ConsoleSettings();
-    ~ConsoleSettings() = default;
+    Settings();
+    ~Settings() = default;
 
     QString locale() const;
     void setLocale(const QString& locale);
@@ -80,7 +80,7 @@ public:
 private:
     QSettings settings_;
 
-    DISALLOW_COPY_AND_ASSIGN(ConsoleSettings);
+    DISALLOW_COPY_AND_ASSIGN(Settings);
 };
 
 } // namespace console

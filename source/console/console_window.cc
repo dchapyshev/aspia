@@ -74,7 +74,7 @@ private:
 
 } // namespace
 
-ConsoleWindow::ConsoleWindow(ConsoleSettings& settings,
+ConsoleWindow::ConsoleWindow(Settings& settings,
                              common::LocaleLoader& locale_loader,
                              const QString& file_path)
     : settings_(settings),

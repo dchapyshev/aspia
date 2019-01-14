@@ -39,7 +39,7 @@ class ConsoleWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    ConsoleWindow(ConsoleSettings& settings,
+    ConsoleWindow(Settings& settings,
                   common::LocaleLoader& locale_loader,
                   const QString& file_path);
     ~ConsoleWindow();
@@ -101,7 +101,7 @@ private:
 
     Ui::ConsoleWindow ui;
 
-    ConsoleSettings& settings_;
+    Settings& settings_;
     common::LocaleLoader& locale_loader_;
     Mru mru_;
 

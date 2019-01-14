@@ -56,7 +56,7 @@ int main(int argc, char *argv[])
 
     QApplication application(argc, argv);
 
-    console::ConsoleSettings console_settings;
+    console::Settings console_settings;
     QString current_locale = console_settings.locale();
 
     common::LocaleLoader locale_loader;

@@ -105,7 +105,7 @@ AddressBookTab::AddressBookTab(const QString& file_path,
 {
     ui.setupUi(this);
 
-    ConsoleSettings settings;
+    Settings settings;
 
     QByteArray splitter_state = settings.splitterState();
     if (splitter_state.isEmpty())
@@ -197,7 +197,7 @@ AddressBookTab::~AddressBookTab()
 
     crypto::memZero(&key_);
 
-    ConsoleSettings settings;
+    Settings settings;
     settings.setSplitterState(ui.splitter->saveState());
     settings.setColumnsState(ui.tree_computer->header()->saveState());
 }
@@ -749,7 +749,7 @@ bool AddressBookTab::saveToFile(const QString& file_path)
     QString path = file_path;
     if (path.isEmpty())
     {
-        ConsoleSettings settings;
+        Settings settings;
 
         path = QFileDialog::getSaveFileName(this,
                                             tr("Save Address Book"),

@@ -28,7 +28,7 @@ UpdateSettingsDialog::UpdateSettingsDialog(QWidget* parent)
 {
     ui.setupUi(this);
 
-    ConsoleSettings settings;
+    Settings settings;
 
     ui.checkbox_check_updates->setChecked(settings.checkUpdates());
     ui.edit_server->setText(settings.updateServer());
@@ -56,7 +56,7 @@ UpdateSettingsDialog::UpdateSettingsDialog(QWidget* parent)
     {
         if (ui.button_box->standardButton(button) == QDialogButtonBox::Ok)
         {
-            ConsoleSettings settings;
+            Settings settings;
             settings.setCheckUpdates(ui.checkbox_check_updates->isChecked());
             settings.setUpdateServer(ui.edit_server->text());
         }
