@@ -50,7 +50,7 @@ int hostConfigMain(int argc, char *argv[])
     application.setApplicationVersion(ASPIA_VERSION_STRING);
     application.setAttribute(Qt::AA_DisableWindowContextHelpButton, true);
 
-    host::HostSettings host_settings;
+    host::Settings host_settings;
     common::LocaleLoader locale_loader;
 
     QString current_locale = host_settings.locale();

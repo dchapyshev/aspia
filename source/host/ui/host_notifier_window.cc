@@ -73,7 +73,7 @@ private:
 HostNotifierWindow::HostNotifierWindow(QWidget* parent)
     : QWidget(parent, Qt::FramelessWindowHint | Qt::Tool | Qt::WindowStaysOnTopHint)
 {
-    HostSettings settings;
+    Settings settings;
 
     QString current_locale = settings.locale();
 

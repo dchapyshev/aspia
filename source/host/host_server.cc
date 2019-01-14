@@ -78,7 +78,7 @@ bool HostServer::start()
         return false;
     }
 
-    HostSettings settings;
+    Settings settings;
 
     if (settings.addFirewallRule())
     {

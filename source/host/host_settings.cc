@@ -28,7 +28,7 @@
 
 namespace host {
 
-HostSettings::HostSettings()
+Settings::Settings()
     : settings_(base::XmlSettings::registerFormat(),
                 QSettings::SystemScope,
                 QLatin1String("aspia"),
@@ -37,49 +37,49 @@ HostSettings::HostSettings()
     // Nothing
 }
 
-HostSettings::~HostSettings() = default;
+Settings::~Settings() = default;
 
-QString HostSettings::filePath() const
+QString Settings::filePath() const
 {
     return settings_.fileName();
 }
 
-bool HostSettings::isWritable() const
+bool Settings::isWritable() const
 {
     return settings_.isWritable();
 }
 
-QString HostSettings::locale() const
+QString Settings::locale() const
 {
     return settings_.value(QLatin1String("Locale"), QLocale::system().bcp47Name()).toString();
 }
 
-void HostSettings::setLocale(const QString& locale)
+void Settings::setLocale(const QString& locale)
 {
     settings_.setValue(QLatin1String("Locale"), locale);
 }
 
-uint16_t HostSettings::tcpPort() const
+uint16_t Settings::tcpPort() const
 {
     return settings_.value(QLatin1String("TcpPort"), DEFAULT_HOST_TCP_PORT).toUInt();
 }
 
-void HostSettings::setTcpPort(uint16_t port)
+void Settings::setTcpPort(uint16_t port)
 {
     settings_.setValue(QLatin1String("TcpPort"), port);
 }
 
-bool HostSettings::addFirewallRule() const
+bool Settings::addFirewallRule() const
 {
     return settings_.value(QLatin1String("AddFirewallRule"), true).toBool();
 }
 
-void HostSettings::setAddFirewallRule(bool value)
+void Settings::setAddFirewallRule(bool value)
 {
     settings_.setValue(QLatin1String("AddFirewallRule"), value);
 }
 
-net::SrpUserList HostSettings::userList() const
+net::SrpUserList Settings::userList() const
 {
     net::SrpUserList users;
 
@@ -114,7 +114,7 @@ net::SrpUserList HostSettings::userList() const
     return users;
 }
 
-void HostSettings::setUserList(const net::SrpUserList& users)
+void Settings::setUserList(const net::SrpUserList& users)
 {
     // Clear the old list of users.
     settings_.remove(QLatin1String("Users"));
@@ -139,22 +139,22 @@ void HostSettings::setUserList(const net::SrpUserList& users)
     settings_.endArray();
 }
 
-QString HostSettings::updateServer() const
+QString Settings::updateServer() const
 {
     return settings_.value(QLatin1String("UpdateServer"), DEFAULT_UPDATE_SERVER).toString();
 }
 
-void HostSettings::setUpdateServer(const QString& server)
+void Settings::setUpdateServer(const QString& server)
 {
     settings_.setValue(QLatin1String("UpdateServer"), server);
 }
 
-bool HostSettings::remoteUpdate() const
+bool Settings::remoteUpdate() const
 {
     return settings_.value(QLatin1String("RemoteUpdate"), true).toBool();
 }
 
-void HostSettings::setRemoteUpdate(bool allow)
+void Settings::setRemoteUpdate(bool allow)
 {
     settings_.setValue(QLatin1String("RemoteUpdate"), allow);
 }

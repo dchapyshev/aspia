@@ -29,11 +29,11 @@ struct SrpUserList;
 
 namespace host {
 
-class HostSettings
+class Settings
 {
 public:
-    HostSettings();
-    ~HostSettings();
+    Settings();
+    ~Settings();
 
     QString filePath() const;
     bool isWritable() const;
@@ -59,7 +59,7 @@ public:
 private:
     mutable QSettings settings_;
 
-    DISALLOW_COPY_AND_ASSIGN(HostSettings);
+    DISALLOW_COPY_AND_ASSIGN(Settings);
 };
 
 } // namespace host

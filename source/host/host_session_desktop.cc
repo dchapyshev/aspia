@@ -210,8 +210,7 @@ void HostSessionDesktop::readExtension(const proto::desktop::Extension& extensio
     }
     else if (extension.name() == common::kRemoteUpdateExtension)
     {
-        if (session_type_ == proto::SESSION_TYPE_DESKTOP_MANAGE &&
-            HostSettings().remoteUpdate())
+        if (session_type_ == proto::SESSION_TYPE_DESKTOP_MANAGE && Settings().remoteUpdate())
         {
             launchUpdater();
         }

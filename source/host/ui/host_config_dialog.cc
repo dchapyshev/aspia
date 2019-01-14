@@ -85,8 +85,7 @@ HostConfigDialog::HostConfigDialog(common::LocaleLoader& locale_loader, QWidget*
 
     connect(ui.button_check_updates, &QPushButton::released, [this]()
     {
-        updater::UpdateDialog(
-            HostSettings().updateServer(), QLatin1String("host"), this).exec();
+        updater::UpdateDialog(Settings().updateServer(), QLatin1String("host"), this).exec();
     });
 
     connect(ui.tree_users, &QTreeWidget::customContextMenuRequested,
@@ -142,7 +141,7 @@ bool HostConfigDialog::importSettings(const QString& path, bool silent, QWidget*
         return false;
     }
 
-    bool result = replaceFile(path, HostSettings().filePath());
+    bool result = replaceFile(path, Settings().filePath());
 
     if (!silent)
     {
@@ -169,7 +168,7 @@ bool HostConfigDialog::importSettings(const QString& path, bool silent, QWidget*
 // static
 bool HostConfigDialog::exportSettings(const QString& path, bool silent, QWidget* parent)
 {
-    bool result = replaceFile(HostSettings().filePath(), path);
+    bool result = replaceFile(Settings().filePath(), path);
 
     if (!silent)
     {
@@ -362,7 +361,7 @@ void HostConfigDialog::onButtonBoxClicked(QAbstractButton* button)
     if (isConfigChanged() && (standard_button == QDialogButtonBox::Ok ||
                               standard_button == QDialogButtonBox::Apply))
     {
-        HostSettings settings;
+        Settings settings;
 
         if (!settings.isWritable())
         {
@@ -467,7 +466,7 @@ bool HostConfigDialog::isConfigChanged() const
 
 void HostConfigDialog::reloadAll()
 {
-    HostSettings settings;
+    Settings settings;
 
     QString current_locale = settings.locale();
     locale_loader_.installTranslators(current_locale);
