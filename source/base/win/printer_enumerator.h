@@ -26,7 +26,7 @@
 
 struct _PRINTER_INFO_2W;
 
-namespace aspia {
+namespace base::win {
 
 class PrinterEnumerator
 {
@@ -65,6 +65,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(PrinterEnumerator);
 };
 
-} // namespace aspia
+} // namespace base::win
 
 #endif // ASPIA_BASE__WIN__PRINTER_ENUMERATOR_H

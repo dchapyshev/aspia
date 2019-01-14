@@ -37,7 +37,7 @@ FirewallManager::FirewallManager(const QString& application_path)
                                   IID_PPV_ARGS(&firewall_policy_));
     if (FAILED(hr))
     {
-        LOG(LS_WARNING) << "CreateInstance failed: " << systemErrorCodeToString(hr);
+        LOG(LS_WARNING) << "CreateInstance failed: " << base::systemErrorCodeToString(hr);
         firewall_policy_ = nullptr;
         return;
     }
@@ -45,7 +45,7 @@ FirewallManager::FirewallManager(const QString& application_path)
     hr = firewall_policy_->get_Rules(firewall_rules_.GetAddressOf());
     if (FAILED(hr))
     {
-        LOG(LS_WARNING) << "get_Rules failed: " << systemErrorCodeToString(hr);
+        LOG(LS_WARNING) << "get_Rules failed: " << base::systemErrorCodeToString(hr);
         firewall_rules_ = nullptr;
     }
 }
@@ -110,7 +110,7 @@ bool FirewallManager::addTcpRule(const QString& rule_name,
     HRESULT hr = CoCreateInstance(CLSID_NetFwRule, nullptr, CLSCTX_ALL, IID_PPV_ARGS(&rule));
     if (FAILED(hr))
     {
-        LOG(LS_WARNING) << "CoCreateInstance failed: " << systemErrorCodeToString(hr);
+        LOG(LS_WARNING) << "CoCreateInstance failed: " << base::systemErrorCodeToString(hr);
         return false;
     }
 
@@ -127,7 +127,7 @@ bool FirewallManager::addTcpRule(const QString& rule_name,
     firewall_rules_->Add(rule.Get());
     if (FAILED(hr))
     {
-        LOG(LS_WARNING) << "Add failed: " << systemErrorCodeToString(hr);
+        LOG(LS_WARNING) << "Add failed: " << base::systemErrorCodeToString(hr);
         return false;
     }
 
@@ -146,7 +146,7 @@ void FirewallManager::deleteRuleByName(const QString& rule_name)
         HRESULT hr = rule->get_Name(bstr_rule_name.GetAddress());
         if (FAILED(hr))
         {
-            LOG(LS_WARNING) << "get_Name failed: " << systemErrorCodeToString(hr);
+            LOG(LS_WARNING) << "get_Name failed: " << base::systemErrorCodeToString(hr);
             continue;
         }
 
@@ -177,7 +177,7 @@ void FirewallManager::allRules(QVector<Microsoft::WRL::ComPtr<INetFwRule>>* rule
     HRESULT hr = firewall_rules_->get__NewEnum(rules_enum_unknown.GetAddressOf());
     if (FAILED(hr))
     {
-        LOG(LS_WARNING) << "get__NewEnum failed: " << systemErrorCodeToString(hr);
+        LOG(LS_WARNING) << "get__NewEnum failed: " << base::systemErrorCodeToString(hr);
         return;
     }
 
@@ -186,7 +186,7 @@ void FirewallManager::allRules(QVector<Microsoft::WRL::ComPtr<INetFwRule>>* rule
     hr = rules_enum_unknown.CopyTo(rules_enum.GetAddressOf());
     if (FAILED(hr))
     {
-        LOG(LS_WARNING) << "QueryInterface failed: " << systemErrorCodeToString(hr);
+        LOG(LS_WARNING) << "QueryInterface failed: " << base::systemErrorCodeToString(hr);
         return;
     }
 
@@ -196,7 +196,7 @@ void FirewallManager::allRules(QVector<Microsoft::WRL::ComPtr<INetFwRule>>* rule
         hr = rules_enum->Next(1, rule_var.GetAddress(), nullptr);
         if (FAILED(hr))
         {
-            LOG(LS_WARNING) << "Next failed: " << systemErrorCodeToString(hr);
+            LOG(LS_WARNING) << "Next failed: " << base::systemErrorCodeToString(hr);
         }
 
         if (hr != S_OK)
@@ -212,7 +212,7 @@ void FirewallManager::allRules(QVector<Microsoft::WRL::ComPtr<INetFwRule>>* rule
         hr = V_DISPATCH(&rule_var)->QueryInterface(IID_PPV_ARGS(rule.GetAddressOf()));
         if (FAILED(hr))
         {
-            LOG(LS_WARNING) << "QueryInterface failed: " << systemErrorCodeToString(hr);
+            LOG(LS_WARNING) << "QueryInterface failed: " << base::systemErrorCodeToString(hr);
             continue;
         }
 
@@ -220,7 +220,7 @@ void FirewallManager::allRules(QVector<Microsoft::WRL::ComPtr<INetFwRule>>* rule
         hr = rule->get_ApplicationName(bstr_path.GetAddress());
         if (FAILED(hr))
         {
-            LOG(LS_WARNING) << "get_ApplicationName failed: " << systemErrorCodeToString(hr);
+            LOG(LS_WARNING) << "get_ApplicationName failed: " << base::systemErrorCodeToString(hr);
             continue;
         }
 

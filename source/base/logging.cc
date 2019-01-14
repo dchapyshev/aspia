@@ -37,7 +37,7 @@
 #include <windows.h>
 #endif // defined(OS_WIN)
 
-namespace aspia {
+namespace base {
 
 namespace {
 
@@ -402,16 +402,16 @@ void logErrorNotReached(const char* file, int line)
     LogMessage(file, line, LS_ERROR).stream() << "NOTREACHED() hit.";
 }
 
-} // namespace aspia
+} // namespace base
 
 #if defined(OS_WIN)
 std::ostream& operator<<(std::ostream& out, const std::wstring& wstr)
 {
-    return out << aspia::UTF8fromUTF16(wstr);
+    return out << base::UTF8fromUTF16(wstr);
 }
 
 std::ostream& std::operator<<(std::ostream& out, const wchar_t* wstr)
 {
-    return out << aspia::UTF8fromUTF16(wstr);
+    return out << base::UTF8fromUTF16(wstr);
 }
 #endif // defined(OS_WIN)

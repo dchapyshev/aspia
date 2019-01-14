@@ -33,9 +33,9 @@ namespace {
 // Name of the default session desktop.
 const wchar_t kDefaultDesktopName[] = L"winsta0\\default";
 
-bool createLoggedOnUserToken(DWORD session_id, ScopedHandle* token_out)
+bool createLoggedOnUserToken(DWORD session_id, base::win::ScopedHandle* token_out)
 {
-    ScopedHandle privileged_token;
+    base::win::ScopedHandle privileged_token;
 
     if (!createPrivilegedToken(&privileged_token))
         return false;
@@ -46,7 +46,7 @@ bool createLoggedOnUserToken(DWORD session_id, ScopedHandle* token_out)
         return false;
     }
 
-    ScopedHandle user_token;
+    base::win::ScopedHandle user_token;
     if (!WTSQueryUserToken(session_id, user_token.recieve()))
     {
         PLOG(LS_WARNING) << "WTSQueryUserToken failed";
@@ -121,7 +121,7 @@ bool createProcessWithToken(HANDLE token, const QString& program, const QStringL
     PROCESS_INFORMATION process_info;
     memset(&process_info, 0, sizeof(process_info));
 
-    QString command_line = createCommandLine(program, arguments);
+    QString command_line = base::win::createCommandLine(program, arguments);
 
     if (!CreateProcessAsUserW(token,
                               nullptr,
@@ -140,8 +140,8 @@ bool createProcessWithToken(HANDLE token, const QString& program, const QStringL
         return false;
     }
 
-    ScopedHandle thread_deleter(process_info.hThread);
-    ScopedHandle process_deleter(process_info.hProcess);
+    base::win::ScopedHandle thread_deleter(process_info.hThread);
+    base::win::ScopedHandle process_deleter(process_info.hProcess);
 
     DestroyEnvironmentBlock(environment);
     return true;
@@ -160,7 +160,7 @@ bool launchUpdater()
         return false;
     }
 
-    ScopedHandle user_token;
+    base::win::ScopedHandle user_token;
     if (!createLoggedOnUserToken(session_id, &user_token))
         return false;
 

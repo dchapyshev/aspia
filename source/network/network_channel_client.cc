@@ -128,7 +128,7 @@ void NetworkChannelClient::onConnected()
 
     uint32_t methods = proto::METHOD_SRP_CHACHA20_POLY1305;
 
-    if (CPUID::hasAesNi())
+    if (base::CPUID::hasAesNi())
         methods |= proto::METHOD_SRP_AES256_GCM;
 
     proto::ClientHello client_hello;

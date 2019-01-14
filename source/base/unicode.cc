@@ -21,7 +21,7 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
-namespace aspia {
+namespace base {
 
 namespace {
 
@@ -122,4 +122,4 @@ std::string UTF8fromUTF16(const wchar_t* in)
     return out;
 }
 
-} // namespace aspia
+} // namespace base

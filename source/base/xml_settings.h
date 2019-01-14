@@ -23,7 +23,7 @@
 
 #include "base/macros_magic.h"
 
-namespace aspia {
+namespace base {
 
 class XmlSettings
 {
@@ -38,6 +38,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(XmlSettings);
 };
 
-} // namespace aspia
+} // namespace base
 
 #endif // ASPIA_BASE__XML_SETTINGS_H

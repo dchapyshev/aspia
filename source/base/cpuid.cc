@@ -23,7 +23,7 @@
 
 #include "base/bitset.h"
 
-namespace aspia {
+namespace base {
 
 CPUID::CPUID(const CPUID& other)
 {
@@ -60,4 +60,4 @@ bool CPUID::hasAesNi()
     return BitSet<uint32_t>(CPUID(1).ecx()).test(25);
 }
 
-} // namespace aspia
+} // namespace base

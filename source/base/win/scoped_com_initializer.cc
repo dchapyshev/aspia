@@ -20,7 +20,7 @@
 
 #include "base/logging.h"
 
-namespace aspia {
+namespace base::win {
 
 ScopedCOMInitializer::ScopedCOMInitializer()
 {
@@ -51,4 +51,4 @@ void ScopedCOMInitializer::initialize(COINIT init)
     DCHECK_NE(hr_, RPC_E_CHANGED_MODE) << "Invalid COM thread model change";
 }
 
-} // namespace aspia
+} // namespace base::win

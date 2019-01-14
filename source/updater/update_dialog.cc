@@ -149,9 +149,9 @@ void UpdateDialog::onUpdateNow()
                 // Basic UI with no modal dialog boxes.
                 arguments << QLatin1String("/qb-!");
 
-                if (executeProcess(QLatin1String("msiexec"),
-                                   arguments,
-                                   ProcessExecuteMode::ELEVATE))
+                if (base::win::executeProcess(QLatin1String("msiexec"),
+                                              arguments,
+                                              base::win::ProcessExecuteMode::ELEVATE))
                 {
                     // If the process is successfully launched, then the application is terminated.
                     QCoreApplication::quit();

@@ -30,33 +30,33 @@ namespace aspia {
 void createHostSystemInfo(proto::system_info::SystemInfo* system_info)
 {
     proto::system_info::Computer* computer = system_info->mutable_computer();
-    computer->set_name(SysInfo::computerName());
-    computer->set_domain(SysInfo::computerDomain());
-    computer->set_workgroup(SysInfo::computerWorkgroup());
-    computer->set_uptime(SysInfo::uptime());
+    computer->set_name(base::SysInfo::computerName());
+    computer->set_domain(base::SysInfo::computerDomain());
+    computer->set_workgroup(base::SysInfo::computerWorkgroup());
+    computer->set_uptime(base::SysInfo::uptime());
 
     proto::system_info::OperatingSystem* operating_system = system_info->mutable_operating_system();
-    operating_system->set_name(SysInfo::operatingSystemName());
-    operating_system->set_version(SysInfo::operatingSystemVersion());
-    operating_system->set_arch(SysInfo::operatingSystemArchitecture());
+    operating_system->set_name(base::SysInfo::operatingSystemName());
+    operating_system->set_version(base::SysInfo::operatingSystemVersion());
+    operating_system->set_arch(base::SysInfo::operatingSystemArchitecture());
 
     proto::system_info::Processor* processor = system_info->mutable_processor();
-    processor->set_vendor(SysInfo::processorVendor());
-    processor->set_model(SysInfo::processorName());
-    processor->set_packages(SysInfo::processorPackages());
-    processor->set_cores(SysInfo::processorCores());
-    processor->set_threads(SysInfo::processorThreads());
+    processor->set_vendor(base::SysInfo::processorVendor());
+    processor->set_model(base::SysInfo::processorName());
+    processor->set_packages(base::SysInfo::processorPackages());
+    processor->set_cores(base::SysInfo::processorCores());
+    processor->set_threads(base::SysInfo::processorThreads());
 
-    for (SmbiosTableEnumerator enumerator(readSmbiosDump());
+    for (base::SmbiosTableEnumerator enumerator(base::readSmbiosDump());
          !enumerator.isAtEnd(); enumerator.advance())
     {
-        const SmbiosTable* table = enumerator.table();
+        const base::SmbiosTable* table = enumerator.table();
 
         switch (table->type)
         {
-            case SMBIOS_TABLE_TYPE_BIOS:
+            case base::SMBIOS_TABLE_TYPE_BIOS:
             {
-                SmbiosBios bios_table(table);
+                base::SmbiosBios bios_table(table);
 
                 proto::system_info::Bios* bios = system_info->mutable_bios();
                 bios->set_vendor(bios_table.vendor());
@@ -65,9 +65,9 @@ void createHostSystemInfo(proto::system_info::SystemInfo* system_info)
             }
             break;
 
-            case SMBIOS_TABLE_TYPE_BASEBOARD:
+            case base::SMBIOS_TABLE_TYPE_BASEBOARD:
             {
-                SmbiosBaseboard baseboard_table(table);
+                base::SmbiosBaseboard baseboard_table(table);
                 if (!baseboard_table.isValid())
                     continue;
 
@@ -77,9 +77,9 @@ void createHostSystemInfo(proto::system_info::SystemInfo* system_info)
             }
             break;
 
-            case SMBIOS_TABLE_TYPE_MEMORY_DEVICE:
+            case base::SMBIOS_TABLE_TYPE_MEMORY_DEVICE:
             {
-                SmbiosMemoryDevice memory_device_table(table);
+                base::SmbiosMemoryDevice memory_device_table(table);
                 if (!memory_device_table.isValid())
                     continue;
 
@@ -106,9 +106,9 @@ void createHostSystemInfo(proto::system_info::SystemInfo* system_info)
         }
     }
 
-    for (DriveEnumerator enumerator; !enumerator.isAtEnd(); enumerator.advance())
+    for (base::win::DriveEnumerator enumerator; !enumerator.isAtEnd(); enumerator.advance())
     {
-        const DriveEnumerator::DriveInfo& drive_info = enumerator.driveInfo();
+        const base::win::DriveEnumerator::DriveInfo& drive_info = enumerator.driveInfo();
 
         proto::system_info::LogicalDrives::Drive* drive =
             system_info->mutable_logical_drives()->add_drive();
@@ -119,7 +119,7 @@ void createHostSystemInfo(proto::system_info::SystemInfo* system_info)
         drive->set_free_size(drive_info.freeSpace());
     }
 
-    for (PrinterEnumerator enumerator; !enumerator.isAtEnd(); enumerator.advance())
+    for (base::win::PrinterEnumerator enumerator; !enumerator.isAtEnd(); enumerator.advance())
     {
         proto::system_info::Printers::Printer* printer =
             system_info->mutable_printers()->add_printer();

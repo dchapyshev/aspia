@@ -25,16 +25,16 @@
 #include "base/win/scoped_object.h"
 #include "base/logging.h"
 
-namespace aspia {
+namespace base {
 
 namespace {
 
 // Delay for shutdown and reboot.
 const DWORD kActionDelayInSeconds = 30;
 
-bool copyProcessToken(DWORD desired_access, ScopedHandle* token_out)
+bool copyProcessToken(DWORD desired_access, win::ScopedHandle* token_out)
 {
-    ScopedHandle process_token;
+    win::ScopedHandle process_token;
     if (!OpenProcessToken(GetCurrentProcess(),
                           TOKEN_DUPLICATE | desired_access,
                           process_token.recieve()))
@@ -58,12 +58,12 @@ bool copyProcessToken(DWORD desired_access, ScopedHandle* token_out)
 }
 
 // Creates a copy of the current process with SE_SHUTDOWN_NAME privilege enabled.
-bool createPrivilegedToken(ScopedHandle* token_out)
+bool createPrivilegedToken(win::ScopedHandle* token_out)
 {
     const DWORD desired_access = TOKEN_ADJUST_PRIVILEGES | TOKEN_IMPERSONATE |
         TOKEN_DUPLICATE | TOKEN_QUERY;
 
-    ScopedHandle privileged_token;
+    win::ScopedHandle privileged_token;
     if (!copyProcessToken(desired_access, &privileged_token))
         return false;
 
@@ -97,11 +97,11 @@ bool PowerController::shutdown()
     const DWORD desired_access =
         TOKEN_ADJUST_DEFAULT | TOKEN_ASSIGN_PRIMARY | TOKEN_DUPLICATE | TOKEN_QUERY;
 
-    ScopedHandle process_token;
+    win::ScopedHandle process_token;
     if (!copyProcessToken(desired_access, &process_token))
         return false;
 
-    ScopedHandle privileged_token;
+    win::ScopedHandle privileged_token;
     if (!createPrivilegedToken(&privileged_token))
         return false;
 
@@ -134,11 +134,11 @@ bool PowerController::reboot()
     const DWORD desired_access =
         TOKEN_ADJUST_DEFAULT | TOKEN_ASSIGN_PRIMARY | TOKEN_DUPLICATE | TOKEN_QUERY;
 
-    ScopedHandle process_token;
+    win::ScopedHandle process_token;
     if (!copyProcessToken(desired_access, &process_token))
         return false;
 
-    ScopedHandle privileged_token;
+    win::ScopedHandle privileged_token;
     if (!createPrivilegedToken(&privileged_token))
         return false;
 
@@ -189,4 +189,4 @@ bool PowerController::lock()
     return true;
 }
 
-} // namespace aspia
+} // namespace base

@@ -21,7 +21,7 @@
 
 #include <cstdint>
 
-namespace aspia {
+namespace base {
 
 class ConstBuffer
 {
@@ -43,6 +43,6 @@ private:
     const size_t size_;
 };
 
-} // namespace aspia
+} // namespace base
 
 #endif // ASPIA_BASE__CONST_BUFFER_H

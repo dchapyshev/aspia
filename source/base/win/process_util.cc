@@ -24,7 +24,7 @@
 
 #include "base/logging.h"
 
-namespace aspia {
+namespace base::win {
 
 namespace {
 
@@ -206,4 +206,4 @@ QString createCommandLine(const QString& program, const QStringList& arguments)
     return args;
 }
 
-} // namespace aspia
+} // namespace base::win

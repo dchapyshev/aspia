@@ -22,7 +22,7 @@
 #include "base/macros_magic.h"
 #include "build/build_config.h"
 
-namespace aspia {
+namespace base {
 
 // ScopedClearLastError stores and resets the value of thread local error codes
 // (errno, GetLastError()), and restores them in the destructor. This is useful
@@ -62,6 +62,6 @@ using ScopedClearLastError = ScopedClearLastErrorBase;
 #error Platform support not implemented
 #endif // defined(OS_WIN)
 
-} // namespace aspia
+} // namespace base
 
 #endif // ASPIA_BASE__SCOPED_CLEAR_LAST_ERROR_H

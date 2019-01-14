@@ -25,7 +25,7 @@
 #include "base/logging.h"
 #include "base/unicode.h"
 
-namespace aspia {
+namespace base::win {
 
 DriveEnumerator::DriveEnumerator()
 {
@@ -158,4 +158,4 @@ std::string DriveEnumerator::DriveInfo::volumeSerial() const
     return stringPrintf("%04X-%04X", HIWORD(serial), LOWORD(serial));
 }
 
-} // namespace aspia
+} // namespace base::win

@@ -27,7 +27,7 @@
 namespace aspia {
 
 ConsoleSettings::ConsoleSettings()
-    : settings_(XmlSettings::registerFormat(),
+    : settings_(base::XmlSettings::registerFormat(),
                 QSettings::UserScope,
                 QLatin1String("aspia"),
                 QLatin1String("console"))

@@ -24,7 +24,7 @@
 
 #include "base/logging.h"
 
-namespace aspia {
+namespace base {
 
 template<typename NumericType>
 class BitSet
@@ -146,6 +146,6 @@ private:
     NumericType value_ = 0;
 };
 
-} // namespace aspia
+} // namespace base
 
 #endif // ASPIA_BASE__BITSET_H

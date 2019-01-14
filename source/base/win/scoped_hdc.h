@@ -24,7 +24,7 @@
 
 #include "base/logging.h"
 
-namespace aspia {
+namespace base::win {
 
 // Like ScopedHandle but for HDC.  Only use this on HDCs returned from GetDC.
 class ScopedGetDC
@@ -100,6 +100,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(ScopedCreateDC);
 };
 
-} // namespace aspia
+} // namespace base::win
 
 #endif // ASPIA_BASE__WIN__SCOPED_HDC_H

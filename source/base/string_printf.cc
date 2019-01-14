@@ -20,7 +20,7 @@
 
 #include <strsafe.h>
 
-namespace aspia {
+namespace base {
 
 namespace {
 
@@ -133,4 +133,4 @@ const std::wstring& sStringPrintf(std::wstring* dst, const wchar_t* format, ...)
     return *dst;
 }
 
-} // namespace aspia
+} // namespace base

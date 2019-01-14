@@ -21,7 +21,7 @@
 
 #include "base/macros_magic.h"
 
-namespace aspia {
+namespace base {
 
 class PowerController
 {
@@ -35,6 +35,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(PowerController);
 };
 
-} // namespace aspia
+} // namespace base
 
 #endif // ASPIA_BASE__POWER_CONTROLLER_H

@@ -20,7 +20,7 @@
 
 #include "build/build_config.h"
 
-namespace aspia {
+namespace base {
 
 void debugBreak()
 {
@@ -47,4 +47,4 @@ void debugBreak()
 #endif // ARCH_CPU_*
 }
 
-} // namespace aspia
+} // namespace base

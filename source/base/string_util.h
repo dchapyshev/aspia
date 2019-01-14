@@ -21,7 +21,7 @@
 
 #include <string>
 
-namespace aspia {
+namespace base {
 
 std::string replaceLfByCrLf(const std::string& in);
 std::string replaceCrLfByLf(const std::string& in);
@@ -94,6 +94,6 @@ std::string toLowerASCII(std::string_view in);
 const std::string& emptyString();
 const std::wstring& emptyStringW();
 
-} // namespace aspia
+} // namespace base
 
 #endif // ASPIA_BASE__STRINGS__STRING_UTIL_H

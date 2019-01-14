@@ -53,7 +53,7 @@ BigNum calc_xy(const BigNum& x, const BigNum& y, const BigNum& N)
     uint8_t buffer[SHA_DIGEST_LENGTH];
     SHA1(xy.get(), xy_size, buffer);
 
-    return BigNum::fromBuffer(ConstBuffer(buffer, sizeof(buffer)));
+    return BigNum::fromBuffer(base::ConstBuffer(buffer, sizeof(buffer)));
 }
 
 // k = SHA1(N | PAD(g))
@@ -139,7 +139,7 @@ BigNum SrpMath::calc_x(const BigNum& s, const QByteArray& I, const QByteArray& p
         return BigNum();
     }
 
-    return BigNum::fromBuffer(ConstBuffer(temp, sizeof(temp)));
+    return BigNum::fromBuffer(base::ConstBuffer(temp, sizeof(temp)));
 }
 
 // static

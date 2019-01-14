@@ -20,7 +20,7 @@
 
 #include <QtXml>
 
-namespace aspia {
+namespace base {
 
 namespace {
 
@@ -295,4 +295,4 @@ bool XmlSettings::writeFunc(QIODevice& device, const QSettings::SettingsMap& map
     return !xml.hasError();
 }
 
-} // namespace aspia
+} // namespace base

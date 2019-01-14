@@ -23,7 +23,7 @@
 
 #include "base/macros_magic.h"
 
-namespace aspia {
+namespace base {
 
 // This structure is used to define the keycode mapping table.
 // It is defined here because the unittests need access to it.
@@ -68,6 +68,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(KeycodeConverter);
 };
 
-} // namespace aspia
+} // namespace base
 
 #endif // ASPIA_BASE__KEYCODE_CONVERTER_H

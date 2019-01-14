@@ -33,7 +33,7 @@ DesktopFrameAligned::DesktopFrameAligned(const QSize& size,
 
 DesktopFrameAligned::~DesktopFrameAligned()
 {
-    alignedFree(data_);
+    base::alignedFree(data_);
 }
 
 // static
@@ -43,7 +43,7 @@ std::unique_ptr<DesktopFrameAligned> DesktopFrameAligned::create(
     int bytes_per_row = size.width() * format.bytesPerPixel();
 
     uint8_t* data =
-        reinterpret_cast<uint8_t*>(alignedAlloc(bytes_per_row * size.height(), alignment));
+        reinterpret_cast<uint8_t*>(base::alignedAlloc(bytes_per_row * size.height(), alignment));
     if (!data)
         return nullptr;
 

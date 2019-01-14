@@ -25,8 +25,8 @@ namespace aspia {
 
 struct SrpNg
 {
-    const ConstBuffer N;
-    const ConstBuffer g;
+    const base::ConstBuffer N;
+    const base::ConstBuffer g;
 };
 
 extern const SrpNg kSrpNg_1024;

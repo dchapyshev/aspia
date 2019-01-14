@@ -21,7 +21,7 @@
 
 #include "base/macros_magic.h"
 
-namespace aspia {
+namespace base {
 
 //
 // A scoper for a variable-length structure such as SID, SECURITY_DESCRIPTOR and
@@ -112,6 +112,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(TypedBuffer);
 };
 
-} // namespace aspia
+} // namespace base
 
 #endif // ASPIA_BASE__TYPED_BUFFER_H

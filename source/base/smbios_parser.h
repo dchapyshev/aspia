@@ -24,7 +24,7 @@
 #include "base/macros_magic.h"
 #include "base/smbios.h"
 
-namespace aspia {
+namespace base {
 
 class SmbiosTableEnumerator
 {
@@ -101,6 +101,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(SmbiosMemoryDevice);
 };
 
-} // namespace aspia
+} // namespace base
 
 #endif // ASPIA_BASE__SMBIOS_PARSER_H

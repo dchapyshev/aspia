@@ -79,7 +79,7 @@
 //
 // There is the special severity of DFATAL, which logs LS_FATAL in debug mode, LS_ERROR in normal mode.
 
-namespace aspia {
+namespace base {
 
 #if defined(NDEBUG) && !defined(DCHECK_ALWAYS_ON)
 #define DCHECK_IS_ON() 0
@@ -149,17 +149,17 @@ private:
 // A few definitions of macros that don't generate much code. These are used by LOG() and LOG_IF,
 // etc. Since these are used all over our code, it's better to have compact code for these operations.
 #define COMPACT_LOG_EX_LS_INFO(ClassName, ...) \
-    ::aspia::ClassName(__FILE__, __LINE__, ::aspia::LS_INFO, ##__VA_ARGS__)
+    ::base::ClassName(__FILE__, __LINE__, ::base::LS_INFO, ##__VA_ARGS__)
 #define COMPACT_LOG_EX_LS_WARNING(ClassName, ...) \
-    ::aspia::ClassName(__FILE__, __LINE__, ::aspia::LS_WARNING, ##__VA_ARGS__)
+    ::base::ClassName(__FILE__, __LINE__, ::base::LS_WARNING, ##__VA_ARGS__)
 #define COMPACT_LOG_EX_LS_ERROR(ClassName, ...) \
-    ::aspia::ClassName(__FILE__, __LINE__, ::aspia::LS_ERROR, ##__VA_ARGS__)
+    ::base::ClassName(__FILE__, __LINE__, ::base::LS_ERROR, ##__VA_ARGS__)
 #define COMPACT_LOG_EX_LS_FATAL(ClassName, ...) \
-    ::aspia::ClassName(__FILE__, __LINE__, ::aspia::LS_FATAL, ##__VA_ARGS__)
+    ::base::ClassName(__FILE__, __LINE__, ::base::LS_FATAL, ##__VA_ARGS__)
 #define COMPACT_LOG_EX_LS_DFATAL(ClassName, ...) \
-    ::aspia::ClassName(__FILE__, __LINE__, ::aspia::LS_DFATAL, ##__VA_ARGS__)
+    ::base::ClassName(__FILE__, __LINE__, ::base::LS_DFATAL, ##__VA_ARGS__)
 #define COMPACT_LOG_EX_LS_DCHECK(ClassName, ...) \
-    ::aspia::ClassName(__FILE__, __LINE__, ::aspia::LS_DCHECK, ##__VA_ARGS__)
+    ::base::ClassName(__FILE__, __LINE__, ::base::LS_DCHECK, ##__VA_ARGS__)
 
 #define COMPACT_LOG_LS_INFO    COMPACT_LOG_EX_LS_INFO(LogMessage)
 #define COMPACT_LOG_LS_WARNING COMPACT_LOG_EX_LS_WARNING(LogMessage)
@@ -171,12 +171,12 @@ private:
 // As special cases, we can assume that LOG_IS_ON(LS_FATAL) always holds. Also, LOG_IS_ON(LS_DFATAL)
 // always holds in debug mode. In particular, CHECK()s will always fire if they fail.
 #define LOG_IS_ON(severity) \
-  (::aspia::shouldCreateLogMessage(::aspia::##severity))
+  (::base::shouldCreateLogMessage(::base::##severity))
 
 // Helper macro which avoids evaluating the arguments to a stream if the condition doesn't hold.
 // Condition is evaluated once and only once.
 #define LAZY_STREAM(stream, condition) \
-  !(condition) ? (void) 0 : ::aspia::LogMessageVoidify() & (stream)
+  !(condition) ? (void) 0 : ::base::LogMessageVoidify() & (stream)
 
 // We use the preprocessor's merging operator, "##", so that, e.g., LOG(LS_INFO) becomes the token
 // COMPACT_LOG_LS_INFO. There's some funny subtle difference between ostream member streaming
@@ -194,7 +194,7 @@ private:
   LOG_IF(FATAL, !(condition)) << "Assert failed: " #condition ". "
 
 #define PLOG_STREAM(severity) \
-  COMPACT_LOG_EX_ ## severity(ErrorLogMessage, ::aspia::lastSystemErrorCode()).stream()
+  COMPACT_LOG_EX_ ## severity(ErrorLogMessage, ::base::lastSystemErrorCode()).stream()
 
 #define PLOG(severity) \
   LAZY_STREAM(PLOG_STREAM(severity), LOG_IS_ON(severity))
@@ -215,7 +215,7 @@ extern std::ostream* g_swallow_stream;
 // in some .cc files, because they become defined-but-unreferenced functions. A reinterpret_cast of
 // 0 to an ostream* also is not suitable, because some compilers warn of undefined behavior.
 #define EAT_STREAM_PARAMETERS \
-  true ? (void)0 : ::aspia::LogMessageVoidify() & (*::aspia::g_swallow_stream)
+  true ? (void)0 : ::base::LogMessageVoidify() & (*::base::g_swallow_stream)
 
 // Captures the result of a CHECK_EQ (for example) and facilitates testing as a boolean.
 class CheckOpResult
@@ -245,7 +245,7 @@ private:
 
 // Do as much work as possible out of line to reduce inline code size.
 #define CHECK(condition)                                                                         \
-    LAZY_STREAM(::aspia::LogMessage(__FILE__, __LINE__, #condition).stream(), !(condition))
+    LAZY_STREAM(::base::LogMessage(__FILE__, __LINE__, #condition).stream(), !(condition))
 
 #define PCHECK(condition)                                                                        \
     LAZY_STREAM(PLOG_STREAM(FATAL), !(condition)) << "Check failed: " #condition ". "
@@ -258,10 +258,10 @@ private:
 //   CHECK_EQ(2, a);
 #define CHECK_OP(name, op, val1, val2)                                                           \
   switch (0) case 0: default:                                                                    \
-  if (::aspia::CheckOpResult true_if_passed =                                                    \
-      ::aspia::check##name##Impl((val1), (val2), #val1 " " #op " " #val2));                      \
+  if (::base::CheckOpResult true_if_passed =                                                    \
+      ::base::check##name##Impl((val1), (val2), #val1 " " #op " " #val2));                      \
   else                                                                                           \
-      ::aspia::LogMessage(__FILE__, __LINE__, true_if_passed.message()).stream()
+      ::base::LogMessage(__FILE__, __LINE__, true_if_passed.message()).stream()
 
 template <typename T, typename = void>
 struct SupportsOstreamOperator : std::false_type {};
@@ -341,14 +341,14 @@ std::string* makeCheckOpString(const std::string& v1, const std::string& v2, con
         if ((v1 op v2))                                                                          \
             return nullptr;                                                                      \
         else                                                                                     \
-            return ::aspia::makeCheckOpString(v1, v2, names);                                    \
+            return ::base::makeCheckOpString(v1, v2, names);                                    \
     }                                                                                            \
     inline std::string* check##name##Impl(int v1, int v2, const char* names)                     \
     {                                                                                            \
         if ((v1 op v2))                                                                          \
             return nullptr;                                                                      \
         else                                                                                     \
-            return ::aspia::makeCheckOpString(v1, v2, names);                                    \
+            return ::base::makeCheckOpString(v1, v2, names);                                    \
     }
 
 DEFINE_CHECK_OP_IMPL(EQ, ==)
@@ -425,11 +425,11 @@ DEFINE_CHECK_OP_IMPL(GT, > )
 
 #define DCHECK_OP(name, op, val1, val2)                                                          \
     switch (0) case 0: default:                                                                  \
-    if (::aspia::CheckOpResult true_if_passed =                                                  \
+    if (::base::CheckOpResult true_if_passed =                                                  \
         DCHECK_IS_ON() ?                                                                         \
-        ::aspia::check##name##Impl((val1), (val2),  #val1 " " #op " " #val2) : nullptr);         \
+        ::base::check##name##Impl((val1), (val2),  #val1 " " #op " " #val2) : nullptr);         \
     else                                                                                         \
-        ::aspia::LogMessage(__FILE__, __LINE__, ::aspia::LS_DCHECK,                              \
+        ::base::LogMessage(__FILE__, __LINE__, ::base::LS_DCHECK,                              \
                             true_if_passed.message()).stream()
 
 #else  // DCHECK_IS_ON()
@@ -442,8 +442,8 @@ DEFINE_CHECK_OP_IMPL(GT, > )
 // |val1| and |val2| appear twice in this version of the macro expansion, this is OK, since the
 // expression is never actually evaluated.
 #define DCHECK_OP(name, op, val1, val2)                                                          \
-  EAT_STREAM_PARAMETERS << (::aspia::makeCheckOpValueString(::aspia::g_swallow_stream, val1),    \
-                            ::aspia::makeCheckOpValueString(::aspia::g_swallow_stream, val2),    \
+  EAT_STREAM_PARAMETERS << (::base::makeCheckOpValueString(::base::g_swallow_stream, val1),    \
+                            ::base::makeCheckOpValueString(::base::g_swallow_stream, val2),    \
                             (val1)op(val2))
 
 #endif  // DCHECK_IS_ON()
@@ -563,7 +563,7 @@ private:
     DISALLOW_COPY_AND_ASSIGN(ErrorLogMessage);
 };
 
-} // namespace aspia
+} // namespace base
 
 // Note that "The behavior of a C++ program is undefined if it adds declarations or definitions to
 // namespace std or to a namespace within namespace std unless otherwise specified.

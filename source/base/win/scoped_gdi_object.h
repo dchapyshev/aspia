@@ -24,7 +24,7 @@
 
 #include "base/macros_magic.h"
 
-namespace aspia {
+namespace base::win {
 
 // Like ScopedHandle but for GDI objects.
 template<class T, class Traits>
@@ -90,6 +90,6 @@ using ScopedHRGN = ScopedGDIObject<HRGN, DeleteObjectTraits<HRGN>>;
 using ScopedHFONT = ScopedGDIObject<HFONT, DeleteObjectTraits<HFONT>>;
 using ScopedHBRUSH = ScopedGDIObject<HBRUSH, DeleteObjectTraits<HBRUSH>>;
 
-} // namespace aspia
+} // namespace base::win
 
 #endif // ASPIA_BASE__WIN__SCOPED_GDI_OBJECT_H

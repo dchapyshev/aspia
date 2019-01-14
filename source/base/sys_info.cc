@@ -23,7 +23,7 @@
 #include "base/cpuid.h"
 #include "base/string_util.h"
 
-namespace aspia {
+namespace base {
 
 // static
 std::string SysInfo::processorName()
@@ -128,4 +128,4 @@ std::string SysInfo::processorVendor()
         return vendor;
 }
 
-} // namespace aspia
+} // namespace base

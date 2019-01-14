@@ -51,7 +51,7 @@ public:
     QByteArray toByteArray() const;
 
     static BigNum create();
-    static BigNum fromBuffer(const ConstBuffer& buffer);
+    static BigNum fromBuffer(const base::ConstBuffer& buffer);
     static BigNum fromStdString(const std::string& string);
     static BigNum fromByteArray(const QByteArray& array);
 

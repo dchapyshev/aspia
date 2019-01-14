@@ -21,7 +21,7 @@
 #include "base/string_printf.h"
 #include "build/build_config.h"
 
-namespace aspia {
+namespace base {
 
 TEST(string_printf_test, string_printf_empty)
 {
@@ -131,4 +131,4 @@ TEST(string_printf_test, invalid)
 }
 #endif
 
-} // namespace aspia
+} // namespace base

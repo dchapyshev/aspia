@@ -24,7 +24,7 @@
 
 #include "base/macros_magic.h"
 
-namespace aspia {
+namespace base::win {
 
 template<class T, class Traits>
 class ScopedObject
@@ -149,6 +149,6 @@ using ScopedHandle = ScopedObject<HANDLE, HandleObjectTraits>;
 using ScopedScHandle = ScopedObject<SC_HANDLE, ScHandleObjectTraits>;
 using ScopedEventLog = ScopedObject<HANDLE, EventLogObjectTraits>;
 
-} // namespace aspia
+} // namespace base::win
 
 #endif // ASPIA_BASE__WIN__SCOPED_HANDLE_H

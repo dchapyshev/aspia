@@ -155,7 +155,7 @@ bool ScreenCapturerGDI::prepareCaptureResources()
         DwmEnableComposition(DWM_EC_DISABLECOMPOSITION);
 
         // Create GDI device contexts to capture from the desktop into memory.
-        desktop_dc_ = std::make_unique<ScopedGetDC>(nullptr);
+        desktop_dc_ = std::make_unique<base::win::ScopedGetDC>(nullptr);
         memory_dc_.reset(CreateCompatibleDC(*desktop_dc_));
         if (!memory_dc_)
         {

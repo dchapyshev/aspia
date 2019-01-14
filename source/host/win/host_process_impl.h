@@ -47,8 +47,8 @@ public:
     QString program_;
     QStringList arguments_;
 
-    ScopedHandle thread_handle_;
-    ScopedHandle process_handle_;
+    base::win::ScopedHandle thread_handle_;
+    base::win::ScopedHandle process_handle_;
     uint32_t process_id_ = -1;
     uint32_t thread_id_ = -1;
 

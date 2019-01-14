@@ -19,12 +19,12 @@
 #ifndef ASPIA_BASE__STRING_UTIL_CONSTANTS_H
 #define ASPIA_BASE__STRING_UTIL_CONSTANTS_H
 
-namespace aspia {
+namespace base {
 
 extern const wchar_t kWhitespaceWide[];
 extern const char kWhitespaceASCII[];
 extern const char kUtf8ByteOrderMark[];
 
-} // namespace aspia
+} // namespace base
 
 #endif // ASPIA_BASE__STRING_UTIL_CONSTANTS_H

@@ -26,10 +26,10 @@ namespace aspia {
 
 int hostServiceMain(int argc, char *argv[])
 {
-    LoggingSettings settings;
-    settings.logging_dest = LOG_TO_ALL;
+    base::LoggingSettings settings;
+    settings.logging_dest = base::LOG_TO_ALL;
 
-    ScopedLogging logging(settings);
+    base::ScopedLogging logging(settings);
 
     ScopedCryptoInitializer crypto_initializer;
     CHECK(crypto_initializer.isSucceeded());

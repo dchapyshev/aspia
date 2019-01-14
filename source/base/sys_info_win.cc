@@ -29,7 +29,7 @@
 #include "base/unicode.h"
 #include "build/build_config.h"
 
-namespace aspia {
+namespace base {
 
 namespace {
 
@@ -79,7 +79,7 @@ int processorCount(LOGICAL_PROCESSOR_RELATIONSHIP relationship)
 //static
 std::string SysInfo::operatingSystemName()
 {
-    RegistryKey key;
+    win::RegistryKey key;
 
     REGSAM access = KEY_READ;
 
@@ -304,4 +304,4 @@ int SysInfo::processorThreads()
     return system_info.dwNumberOfProcessors;
 }
 
-} // namespace aspia
+} // namespace base

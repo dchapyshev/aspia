@@ -18,7 +18,7 @@
 
 #include "base/thread_checker.h"
 
-namespace aspia {
+namespace base {
 
 ThreadChecker::ThreadChecker()
 {
@@ -43,4 +43,4 @@ void ThreadChecker::ensureAssigned()
     thread_id_ = std::this_thread::get_id();
 }
 
-} // namespace aspia
+} // namespace base

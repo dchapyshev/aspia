@@ -64,7 +64,7 @@
 //       THREAD_CHECKER(my_thread_checker_);
 //   }
 
-namespace aspia {
+namespace base {
 
 class ThreadChecker
 {
@@ -84,10 +84,10 @@ private:
     DISALLOW_COPY_AND_ASSIGN(ThreadChecker);
 };
 
-} // namespace aspia
+} // namespace base
 
 #ifndef NDEBUG
-#define THREAD_CHECKER(name) ::aspia::ThreadChecker name
+#define THREAD_CHECKER(name) ::base::ThreadChecker name
 #define DCHECK_CALLED_ON_VALID_THREAD(name) DCHECK((name).calledOnValidThread())
 #define DETACH_FROM_THREAD(name) (name).detachFromThread()
 #else // NDEBUG

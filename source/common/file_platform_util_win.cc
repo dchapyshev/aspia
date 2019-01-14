@@ -51,7 +51,7 @@ QIcon stockIcon(SHSTOCKICONID icon_id)
 
     if (SUCCEEDED(SHGetStockIconInfo(icon_id, SHGSI_ICON | SHGSI_SMALLICON, &icon_info)))
     {
-        ScopedHICON icon(icon_info.hIcon);
+        base::win::ScopedHICON icon(icon_info.hIcon);
         if (icon.isValid())
             return QtWin::fromHICON(icon);
     }
@@ -73,7 +73,7 @@ QPair<QIcon, QString> FilePlatformUtil::fileTypeInfo(const QString& file_name)
                    sizeof(file_info),
                    SHGFI_USEFILEATTRIBUTES | SHGFI_ICON | SHGFI_SMALLICON | SHGFI_TYPENAME);
 
-    ScopedHICON icon(file_info.hIcon);
+    base::win::ScopedHICON icon(file_info.hIcon);
     if (icon.isValid())
     {
         return QPair<QIcon, QString>(QtWin::fromHICON(icon),

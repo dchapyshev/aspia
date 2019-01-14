@@ -25,7 +25,7 @@
 #include <windows.h>
 #endif // defined(OS_WIN)
 
-namespace aspia {
+namespace base {
 
 TEST(ScopedClearLastError, test_no_error)
 {
@@ -71,4 +71,4 @@ TEST(ScopedClearLastError, test_error_win)
 
 #endif  // defined(OS_WIN)
 
-} // namespace aspia
+} // namespace base

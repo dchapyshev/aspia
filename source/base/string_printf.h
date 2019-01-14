@@ -21,7 +21,7 @@
 
 #include <string>
 
-namespace aspia {
+namespace base {
 
 // Return a C++ string given vprintf-like input.
 std::string stringPrintfV(const char* format, va_list args);
@@ -35,6 +35,6 @@ std::wstring stringPrintf(const wchar_t* format, ...);
 const std::string& sStringPrintf(std::string* dst, const char* format, ...);
 const std::wstring& sStringPrintf(std::wstring* dst, const wchar_t* format, ...);
 
-} // namespace aspia
+} // namespace base
 
 #endif // ASPIA_BASE__STRING_PRINTF_H

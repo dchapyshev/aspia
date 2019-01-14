@@ -24,7 +24,7 @@
 #include "base/macros_magic.h"
 #include "build/build_config.h"
 
-namespace aspia {
+namespace base {
 
 class ServiceEventHandler;
 
@@ -65,6 +65,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(ServiceImpl);
 };
 
-} // namespace aspia
+} // namespace base
 
 #endif // ASPIA_BASE__SERVICE_IMPL_H

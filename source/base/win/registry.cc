@@ -20,7 +20,7 @@
 
 #include "base/logging.h"
 
-namespace aspia {
+namespace base::win {
 
 namespace {
 
@@ -508,5 +508,5 @@ void RegistryKeyIterator::initialize(HKEY root_key,
     read();
 }
 
-} // namespace aspia
+} // namespace base::win
 

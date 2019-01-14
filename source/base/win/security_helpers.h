@@ -19,7 +19,7 @@
 #ifndef ASPIA_BASE__WIN__SECURITY_HELPERS_H
 #define ASPIA_BASE__WIN__SECURITY_HELPERS_H
 
-namespace aspia {
+namespace base::win {
 
 // Initializes COM security of the process applying the passed security
 // descriptor.  The function configures the following settings:
@@ -33,6 +33,6 @@ bool initializeComSecurity(const wchar_t* security_descriptor,
                            const wchar_t* mandatory_label,
                            bool activate_as_activator);
 
-} // namespace aspia
+} // namespace base::win
 
 #endif // ASPIA_BASE__WIN__SECURITY_HELPERS_H

@@ -23,7 +23,7 @@
 
 #include "base/win/scoped_object.h"
 
-namespace aspia {
+namespace base::win {
 
 enum class ProcessExecuteMode { NORMAL, ELEVATE };
 
@@ -40,6 +40,6 @@ bool createPrivilegedToken(ScopedHandle* token_out);
 
 QString createCommandLine(const QString& program, const QStringList& arguments);
 
-} // namespace aspia
+} // namespace base::win
 
 #endif // ASPIA_BASE__WIN__PROCESS_UTIL_H

@@ -29,7 +29,7 @@
 #include "base/logging.h"
 #include "base/typed_buffer.h"
 
-namespace aspia {
+namespace base::win {
 
 namespace {
 
@@ -176,4 +176,4 @@ bool initializeComSecurity(const wchar_t* security_descriptor,
     return true;
 }
 
-} // namespace aspia
+} // namespace base::win

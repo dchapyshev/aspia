@@ -22,7 +22,7 @@
 
 #include "base/logging.h"
 
-namespace aspia {
+namespace base {
 
 ServiceController::ServiceController() = default;
 
@@ -52,16 +52,16 @@ ServiceController::~ServiceController() = default;
 // static
 ServiceController ServiceController::open(const QString& name)
 {
-    ScopedScHandle sc_manager(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_ALL_ACCESS));
+    win::ScopedScHandle sc_manager(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_ALL_ACCESS));
     if (!sc_manager.isValid())
     {
         PLOG(LS_WARNING) << "OpenSCManagerW failed";
         return ServiceController();
     }
 
-    ScopedScHandle service(OpenServiceW(sc_manager,
-                                        qUtf16Printable(name),
-                                        SERVICE_ALL_ACCESS));
+    win::ScopedScHandle service(OpenServiceW(sc_manager,
+                                             qUtf16Printable(name),
+                                             SERVICE_ALL_ACCESS));
     if (!service.isValid())
     {
         PLOG(LS_WARNING) << "OpenServiceW failed";
@@ -76,7 +76,7 @@ ServiceController ServiceController::install(const QString& name,
                                              const QString& display_name,
                                              const QString& file_path)
 {
-    ScopedScHandle sc_manager(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_ALL_ACCESS));
+    win::ScopedScHandle sc_manager(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_ALL_ACCESS));
     if (!sc_manager.isValid())
     {
         PLOG(LS_WARNING) << "OpenSCManagerW failed";
@@ -86,19 +86,19 @@ ServiceController ServiceController::install(const QString& name,
     QString normalized_file_path = file_path;
     normalized_file_path.replace(QLatin1Char('/'), QLatin1Char('\\'));
 
-    ScopedScHandle service(CreateServiceW(sc_manager,
-                                          qUtf16Printable(name),
-                                          qUtf16Printable(display_name),
-                                          SERVICE_ALL_ACCESS,
-                                          SERVICE_WIN32_OWN_PROCESS,
-                                          SERVICE_AUTO_START,
-                                          SERVICE_ERROR_NORMAL,
-                                          qUtf16Printable(normalized_file_path),
-                                          nullptr,
-                                          nullptr,
-                                          nullptr,
-                                          nullptr,
-                                          nullptr));
+    win::ScopedScHandle service(CreateServiceW(sc_manager,
+                                               qUtf16Printable(name),
+                                               qUtf16Printable(display_name),
+                                               SERVICE_ALL_ACCESS,
+                                               SERVICE_WIN32_OWN_PROCESS,
+                                               SERVICE_AUTO_START,
+                                               SERVICE_ERROR_NORMAL,
+                                               qUtf16Printable(normalized_file_path),
+                                               nullptr,
+                                               nullptr,
+                                               nullptr,
+                                               nullptr,
+                                               nullptr));
     if (!service.isValid())
     {
         PLOG(LS_WARNING) << "CreateServiceW failed";
@@ -128,16 +128,16 @@ ServiceController ServiceController::install(const QString& name,
 // static
 bool ServiceController::remove(const QString& name)
 {
-    ScopedScHandle sc_manager(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_ALL_ACCESS));
+    win::ScopedScHandle sc_manager(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_ALL_ACCESS));
     if (!sc_manager.isValid())
     {
         PLOG(LS_WARNING) << "OpenSCManagerW failed";
         return false;
     }
 
-    ScopedScHandle service(OpenServiceW(sc_manager,
-                                        qUtf16Printable(name),
-                                        SERVICE_ALL_ACCESS));
+    win::ScopedScHandle service(OpenServiceW(sc_manager,
+                                             qUtf16Printable(name),
+                                             SERVICE_ALL_ACCESS));
     if (!service.isValid())
     {
         PLOG(LS_WARNING) << "OpenServiceW failed";
@@ -170,16 +170,16 @@ bool ServiceController::remove(const QString& name)
 // static
 bool ServiceController::isInstalled(const QString& name)
 {
-    ScopedScHandle sc_manager(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_CONNECT));
+    win::ScopedScHandle sc_manager(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_CONNECT));
     if (!sc_manager.isValid())
     {
         PLOG(LS_WARNING) << "OpenSCManagerW failed";
         return false;
     }
 
-    ScopedScHandle service(OpenServiceW(sc_manager,
-                                        qUtf16Printable(name),
-                                        SERVICE_QUERY_CONFIG));
+    win::ScopedScHandle service(OpenServiceW(sc_manager,
+                                             qUtf16Printable(name),
+                                             SERVICE_QUERY_CONFIG));
     if (!service.isValid())
     {
         if (GetLastError() != ERROR_SERVICE_DOES_NOT_EXIST)
@@ -403,4 +403,4 @@ bool ServiceController::stop()
     return is_stopped;
 }
 
-} // namespace aspia
+} // namespace base

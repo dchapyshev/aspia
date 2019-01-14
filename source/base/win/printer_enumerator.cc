@@ -25,7 +25,7 @@
 #include "base/logging.h"
 #include "base/unicode.h"
 
-namespace aspia {
+namespace base::win {
 
 PrinterEnumerator::PrinterEnumerator()
 {
@@ -170,4 +170,4 @@ int PrinterEnumerator::jobsCount() const
     return info_[current_].cJobs;
 }
 
-} // namespace aspia
+} // namespace base::win

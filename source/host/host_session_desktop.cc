@@ -188,19 +188,19 @@ void HostSessionDesktop::readExtension(const proto::desktop::Extension& extensio
         switch (power_control.action())
         {
             case proto::desktop::PowerControl::ACTION_SHUTDOWN:
-                PowerController::shutdown();
+                base::PowerController::shutdown();
                 break;
 
             case proto::desktop::PowerControl::ACTION_REBOOT:
-                PowerController::reboot();
+                base::PowerController::reboot();
                 break;
 
             case proto::desktop::PowerControl::ACTION_LOGOFF:
-                PowerController::logoff();
+                base::PowerController::logoff();
                 break;
 
             case proto::desktop::PowerControl::ACTION_LOCK:
-                PowerController::lock();
+                base::PowerController::lock();
                 break;
 
             default:

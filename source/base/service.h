@@ -21,7 +21,7 @@
 
 #include "base/service_impl.h"
 
-namespace aspia {
+namespace base {
 
 template <class Application>
 class Service : public ServiceImpl
@@ -54,6 +54,6 @@ private:
     Application* application_ = nullptr;
 };
 
-} // namespace aspia
+} // namespace base
 
 #endif // ASPIA_BASE__SERVICE_H

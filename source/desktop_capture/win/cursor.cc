@@ -121,8 +121,8 @@ MouseCursor* mouseCursorFromHCursor(HDC dc, HCURSOR cursor)
     }
 
     // Make sure the bitmaps will be freed.
-    ScopedHBITMAP scoped_mask(icon_info.hbmMask);
-    ScopedHBITMAP scoped_color(icon_info.hbmColor);
+    base::win::ScopedHBITMAP scoped_mask(icon_info.hbmMask);
+    base::win::ScopedHBITMAP scoped_color(icon_info.hbmColor);
 
     bool is_color = (icon_info.hbmColor != nullptr);
 

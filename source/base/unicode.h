@@ -21,7 +21,7 @@
 
 #include <string>
 
-namespace aspia {
+namespace base {
 
 bool UTF16toUTF8(const std::wstring& in, std::string* out);
 bool UTF8toUTF16(const std::string& in, std::wstring* out);
@@ -35,6 +35,6 @@ std::string UTF8fromUTF16(const std::wstring& in);
 std::wstring UTF16fromUTF8(const char* in);
 std::string UTF8fromUTF16(const wchar_t* in);
 
-} // namespace aspia
+} // namespace base
 
 #endif // ASPIA_BASE__UNICODE_H

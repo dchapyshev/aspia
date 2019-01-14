@@ -27,9 +27,11 @@
 #include "base/macros_magic.h"
 #include "desktop_capture/cursor_capturer.h"
 
-namespace aspia {
-
+namespace base::win {
 class ScopedGetDC;
+} // namespace base::win
+
+namespace aspia {
 
 class CursorCapturerWin : public CursorCapturer
 {
@@ -40,7 +42,7 @@ public:
     MouseCursor* captureCursor() override;
 
 private:
-    std::unique_ptr<ScopedGetDC> desktop_dc_;
+    std::unique_ptr<base::win::ScopedGetDC> desktop_dc_;
     CURSORINFO prev_cursor_info_;
 
     DISALLOW_COPY_AND_ASSIGN(CursorCapturerWin);

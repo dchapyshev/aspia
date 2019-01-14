@@ -21,7 +21,7 @@
 
 #include <shlobj.h>
 
-namespace aspia {
+namespace base {
 
 // static
 bool BasePaths::windowsDir(std::filesystem::path* result)
@@ -181,4 +181,4 @@ bool BasePaths::currentExecFile(std::filesystem::path* result)
     return true;
 }
 
-} // namespace aspia
+} // namespace base

@@ -42,7 +42,7 @@ CursorCapturerWin::CursorCapturerWin()
 MouseCursor* CursorCapturerWin::captureCursor()
 {
     if (!desktop_dc_)
-        desktop_dc_.reset(new ScopedGetDC(nullptr));
+        desktop_dc_.reset(new base::win::ScopedGetDC(nullptr));
 
     CURSORINFO cursor_info = { 0 };
 

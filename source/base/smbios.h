@@ -21,7 +21,7 @@
 
 #include <cstdint>
 
-namespace aspia {
+namespace base {
 
 const size_t kSmbiosMaxDataSize = 0xFA00; // 64kB
 
@@ -127,6 +127,6 @@ struct SmbiosMemoryDeviceTable : public SmbiosTable
 
 #pragma pack(pop)
 
-} // namespace aspia
+} // namespace base
 
 #endif // ASPIA_BASE__SMBIOS_H

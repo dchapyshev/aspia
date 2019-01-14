@@ -23,7 +23,7 @@
 
 #include "base/macros_magic.h"
 
-namespace aspia {
+namespace base {
 
 class BasePaths
 {
@@ -59,6 +59,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(BasePaths);
 };
 
-} // namespace aspia
+} // namespace base
 
 #endif // ASPIA_BASE__BASE_PATHS_H

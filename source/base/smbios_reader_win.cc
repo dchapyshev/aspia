@@ -23,7 +23,7 @@
 
 #include "base/logging.h"
 
-namespace aspia {
+namespace base {
 
 std::string readSmbiosDump()
 {
@@ -46,4 +46,4 @@ std::string readSmbiosDump()
     return buffer;
 }
 
-} // namespace aspia
+} // namespace base

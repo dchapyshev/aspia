@@ -33,16 +33,16 @@ const wchar_t kDefaultDesktopName[] = L"winsta0\\default";
 
 // Creates a copy of the current process token for the given |session_id| so
 // it can be used to launch a process in that session.
-HostProcess::ErrorCode createSessionToken(DWORD session_id, ScopedHandle* token_out)
+HostProcess::ErrorCode createSessionToken(DWORD session_id, base::win::ScopedHandle* token_out)
 {
-    ScopedHandle session_token;
+    base::win::ScopedHandle session_token;
     const DWORD desired_access = TOKEN_ADJUST_DEFAULT | TOKEN_ADJUST_SESSIONID |
         TOKEN_ASSIGN_PRIMARY | TOKEN_DUPLICATE | TOKEN_QUERY;
 
     if (!copyProcessToken(desired_access, &session_token))
         return HostProcess::OtherError;
 
-    ScopedHandle privileged_token;
+    base::win::ScopedHandle privileged_token;
 
     if (!createPrivilegedToken(&privileged_token))
         return HostProcess::OtherError;
@@ -79,9 +79,10 @@ HostProcess::ErrorCode createSessionToken(DWORD session_id, ScopedHandle* token_
     return HostProcess::NoError;
 }
 
-HostProcess::ErrorCode createLoggedOnUserToken(DWORD session_id, ScopedHandle* token_out)
+HostProcess::ErrorCode createLoggedOnUserToken(
+    DWORD session_id, base::win::ScopedHandle* token_out)
 {
-    ScopedHandle privileged_token;
+    base::win::ScopedHandle privileged_token;
 
     if (!createPrivilegedToken(&privileged_token))
         return HostProcess::OtherError;
@@ -94,7 +95,7 @@ HostProcess::ErrorCode createLoggedOnUserToken(DWORD session_id, ScopedHandle* t
 
     HostProcess::ErrorCode error_code = HostProcess::NoError;
 
-    ScopedHandle user_token;
+    base::win::ScopedHandle user_token;
     if (!WTSQueryUserToken(session_id, user_token.recieve()))
     {
         DWORD system_error_code = GetLastError();
@@ -103,7 +104,7 @@ HostProcess::ErrorCode createLoggedOnUserToken(DWORD session_id, ScopedHandle* t
         {
             error_code = HostProcess::OtherError;
             LOG(LS_WARNING) << "WTSQueryUserToken failed: "
-                            << systemErrorCodeToString(system_error_code);
+                            << base::systemErrorCodeToString(system_error_code);
         }
         else
         {
@@ -203,7 +204,7 @@ void HostProcessImpl::startProcess()
 {
     state_ = HostProcess::Starting;
 
-    ScopedHandle session_token;
+    base::win::ScopedHandle session_token;
 
     if (account_ == HostProcess::System)
     {
@@ -290,7 +291,7 @@ bool HostProcessImpl::startProcessWithToken(HANDLE token)
     PROCESS_INFORMATION process_info;
     memset(&process_info, 0, sizeof(process_info));
 
-    QString command_line = createCommandLine(program_, arguments_);
+    QString command_line = base::win::createCommandLine(program_, arguments_);
 
     if (!CreateProcessAsUserW(token,
                               nullptr,

@@ -24,7 +24,7 @@
 
 #include "base/macros_magic.h"
 
-namespace aspia {
+namespace base::win {
 
 template <typename T>
 class ScopedLocal
@@ -101,6 +101,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(ScopedLocal);
 };
 
-} // namespace aspia
+} // namespace base::win
 
 #endif // ASPIA_BASE__WIN__SCOPED_LOCAL_H

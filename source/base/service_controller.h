@@ -23,7 +23,7 @@
 
 #include "base/win/scoped_object.h"
 
-namespace aspia {
+namespace base {
 
 class ServiceController
 {
@@ -62,12 +62,12 @@ protected:
     ServiceController(SC_HANDLE sc_manager, SC_HANDLE service);
 
 private:
-    ScopedScHandle sc_manager_;
-    mutable ScopedScHandle service_;
+    win::ScopedScHandle sc_manager_;
+    mutable win::ScopedScHandle service_;
 
     DISALLOW_COPY_AND_ASSIGN(ServiceController);
 };
 
-} // namespace aspia
+} // namespace base
 
 #endif // ASPIA_BASE__SERVICE_CONTROLLER_H

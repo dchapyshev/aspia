@@ -116,7 +116,7 @@ void VideoEncoderZstd::encode(const DesktopFrame* frame, proto::desktop::VideoPa
 
     if (translate_buffer_size_ < data_size)
     {
-        translate_buffer_.reset(static_cast<uint8_t*>(alignedAlloc(data_size, 32)));
+        translate_buffer_.reset(static_cast<uint8_t*>(base::alignedAlloc(data_size, 32)));
         translate_buffer_size_ = data_size;
     }
 

@@ -73,7 +73,7 @@ void HostService::start()
 
     SetPriorityClass(GetCurrentProcess(), HIGH_PRIORITY_CLASS);
 
-    com_initializer_.reset(new ScopedCOMInitializer());
+    com_initializer_.reset(new base::win::ScopedCOMInitializer());
     if (!com_initializer_->isSucceeded())
     {
         LOG(LS_FATAL) << "COM not initialized";
@@ -81,7 +81,7 @@ void HostService::start()
         return;
     }
 
-    initializeComSecurity(kComProcessSd, kComProcessMandatoryLabel, false);
+    base::win::initializeComSecurity(kComProcessSd, kComProcessMandatoryLabel, false);
 
     server_.reset(new HostServer());
     if (!server_->start())

@@ -22,7 +22,7 @@
 #include <cstdint>
 #include <string>
 
-namespace aspia {
+namespace base {
 
 class CPUID
 {
@@ -54,6 +54,6 @@ private:
     int cpu_info_[4] = { -1, -1, -1, -1 };
 };
 
-} // namespace aspia
+} // namespace base
 
 #endif // ASPIA_BASE__CPUID_H

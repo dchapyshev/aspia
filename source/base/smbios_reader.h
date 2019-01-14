@@ -21,10 +21,10 @@
 
 #include <string>
 
-namespace aspia {
+namespace base {
 
 std::string readSmbiosDump();
 
-} // namespace aspia
+} // namespace base
 
 #endif // ASPIA_BASE__SMBIOS_READER_H

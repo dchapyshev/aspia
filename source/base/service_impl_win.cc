@@ -31,7 +31,7 @@
 #include "base/logging.h"
 #include "base/service_controller.h"
 
-namespace aspia {
+namespace base {
 
 class ServiceHandler : public QThread
 {
@@ -505,4 +505,4 @@ int ServiceImpl::exec(int argc, char* argv[])
     return ret;
 }
 
-} // namespace aspia
+} // namespace base

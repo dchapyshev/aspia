@@ -513,11 +513,11 @@ void HostConfigDialog::reloadServiceStatus()
 
     QString state;
 
-    if (ServiceController::isInstalled(kHostServiceName))
+    if (base::ServiceController::isInstalled(kHostServiceName))
     {
         ui.button_service_install_remove->setText(tr("Remove"));
 
-        ServiceController controller = ServiceController::open(kHostServiceName);
+        base::ServiceController controller = base::ServiceController::open(kHostServiceName);
         if (controller.isValid())
         {
             if (controller.isRunning())
@@ -559,7 +559,7 @@ void HostConfigDialog::reloadServiceStatus()
 
 bool HostConfigDialog::isServiceStarted()
 {
-    ServiceController controller = ServiceController::open(kHostServiceName);
+    base::ServiceController controller = base::ServiceController::open(kHostServiceName);
     if (controller.isValid())
         return controller.isRunning();
 
@@ -571,8 +571,8 @@ bool HostConfigDialog::installService()
     QString service_file_path =
         QApplication::applicationDirPath() + QLatin1Char('/') + QLatin1String(kHostServiceFileName);
 
-    ServiceController controller =
-        ServiceController::install(kHostServiceName, kHostServiceDisplayName, service_file_path);
+    base::ServiceController controller = base::ServiceController::install(
+        kHostServiceName, kHostServiceDisplayName, service_file_path);
     if (!controller.isValid())
     {
         QMessageBox::warning(this,
@@ -592,7 +592,7 @@ bool HostConfigDialog::installService()
 
 bool HostConfigDialog::removeService()
 {
-    if (!ServiceController::remove(kHostServiceName))
+    if (!base::ServiceController::remove(kHostServiceName))
     {
         QMessageBox::warning(this,
                              tr("Warning"),
@@ -606,7 +606,7 @@ bool HostConfigDialog::removeService()
 
 bool HostConfigDialog::startService()
 {
-    ServiceController controller = ServiceController::open(kHostServiceName);
+    base::ServiceController controller = base::ServiceController::open(kHostServiceName);
     if (!controller.isValid())
     {
         QMessageBox::warning(this,
@@ -632,7 +632,7 @@ bool HostConfigDialog::startService()
 
 bool HostConfigDialog::stopService()
 {
-    ServiceController controller = ServiceController::open(kHostServiceName);
+    base::ServiceController controller = base::ServiceController::open(kHostServiceName);
     if (!controller.isValid())
     {
         QMessageBox::warning(this,

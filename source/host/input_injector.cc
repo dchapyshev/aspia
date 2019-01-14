@@ -122,8 +122,8 @@ InputInjectorImpl::~InputInjectorImpl()
 {
     for (auto usb_keycode : pressed_keys_)
     {
-        int scancode = KeycodeConverter::usbKeycodeToNativeKeycode(usb_keycode);
-        if (scancode != KeycodeConverter::invalidNativeKeycode())
+        int scancode = base::KeycodeConverter::usbKeycodeToNativeKeycode(usb_keycode);
+        if (scancode != base::KeycodeConverter::invalidNativeKeycode())
         {
             sendKeyboardScancode(static_cast<WORD>(scancode),
                                  KEYEVENTF_SCANCODE | KEYEVENTF_KEYUP);
@@ -231,8 +231,8 @@ void InputInjectorImpl::injectKeyEvent(const proto::desktop::KeyEvent& event)
         pressed_keys_.erase(event.usb_keycode());
     }
 
-    int scancode = KeycodeConverter::usbKeycodeToNativeKeycode(event.usb_keycode());
-    if (scancode == KeycodeConverter::invalidNativeKeycode())
+    int scancode = base::KeycodeConverter::usbKeycodeToNativeKeycode(event.usb_keycode());
+    if (scancode == base::KeycodeConverter::invalidNativeKeycode())
         return;
 
     switchToInputDesktop();
@@ -283,13 +283,13 @@ void InputInjectorImpl::injectSAS()
     static const DWORD kNone = 0;
     static const DWORD kApplications = 2;
 
-    RegistryKey key;
+    base::win::RegistryKey key;
     DWORD old_state = kNone;
 
     LONG status = key.create(HKEY_LOCAL_MACHINE, kSoftwareSASGenerationPath, KEY_READ | KEY_WRITE);
     if (status != ERROR_SUCCESS)
     {
-        LOG(LS_WARNING) << "key.create failed" << systemErrorCodeToString(status);
+        LOG(LS_WARNING) << "key.create failed" << base::systemErrorCodeToString(status);
     }
     else
     {
@@ -306,7 +306,8 @@ void InputInjectorImpl::injectSAS()
             status = key.writeValue(kSoftwareSASGeneration, kApplications);
             if (status != ERROR_SUCCESS)
             {
-                LOG(LS_WARNING) << "key.writeValue failed" << systemErrorCodeToString(status);
+                LOG(LS_WARNING) << "key.writeValue failed"
+                                << base::systemErrorCodeToString(status);
                 key.close();
             }
         }
@@ -319,7 +320,7 @@ void InputInjectorImpl::injectSAS()
         status = key.writeValue(kSoftwareSASGeneration, old_state);
         if (status != ERROR_SUCCESS)
         {
-            LOG(LS_WARNING) << "key.writeValue failed" << systemErrorCodeToString(status);
+            LOG(LS_WARNING) << "key.writeValue failed" << base::systemErrorCodeToString(status);
         }
     }
 }

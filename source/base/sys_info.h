@@ -23,7 +23,7 @@
 
 #include "base/macros_magic.h"
 
-namespace aspia {
+namespace base {
 
 class SysInfo
 {
@@ -49,6 +49,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(SysInfo);
 };
 
-} // namespace aspia
+} // namespace base
 
 #endif // ASPIA_BASE__SYS_INFO_H

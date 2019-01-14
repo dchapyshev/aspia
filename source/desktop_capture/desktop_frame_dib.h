@@ -46,7 +46,7 @@ private:
                     uint8_t* data,
                     HBITMAP bitmap);
 
-    ScopedHBITMAP bitmap_;
+    base::win::ScopedHBITMAP bitmap_;
 
     DISALLOW_COPY_AND_ASSIGN(DesktopFrameDIB);
 };

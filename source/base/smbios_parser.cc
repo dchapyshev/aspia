@@ -20,7 +20,7 @@
 
 #include "base/string_util.h"
 
-namespace aspia {
+namespace base {
 
 SmbiosTableEnumerator::SmbiosTableEnumerator(const std::string& smbios_dump)
 {
@@ -307,4 +307,4 @@ uint32_t SmbiosMemoryDevice::speed() const
     return table_->speed;
 }
 
-} // namespace aspia
+} // namespace base

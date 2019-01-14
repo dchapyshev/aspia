@@ -26,7 +26,7 @@
 #include "base/string_util_constants.h"
 #include "base/unicode.h"
 
-namespace aspia {
+namespace base {
 
 namespace {
 
@@ -443,4 +443,4 @@ const std::wstring& emptyStringW()
     return kEmptyStringWide;
 }
 
-} // namespace aspia
+} // namespace base

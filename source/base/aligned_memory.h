@@ -58,7 +58,7 @@
 #include <cstdlib>
 #endif
 
-namespace aspia {
+namespace base {
 
 void* alignedAlloc(size_t size, size_t alignment);
 
@@ -80,6 +80,6 @@ struct AlignedFreeDeleter
     }
 };
 
-}  // namespace aspia
+}  // namespace base
 
 #endif // ASPIA_BASE__ALIGNED_MEMORY_H

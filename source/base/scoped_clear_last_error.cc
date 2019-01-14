@@ -25,7 +25,7 @@
 #include <windows.h>
 #endif // defined(OS_WIN)
 
-namespace aspia {
+namespace base {
 
 ScopedClearLastErrorBase::ScopedClearLastErrorBase()
     : last_errno_(errno)
@@ -51,4 +51,4 @@ ScopedClearLastError::~ScopedClearLastError()
 }
 #endif // defined(OS_WIN)
 
-} // namespace aspia
+} // namespace base

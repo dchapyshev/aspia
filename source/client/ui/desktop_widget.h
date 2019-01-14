@@ -90,7 +90,7 @@ private:
 #if defined(OS_WIN)
     static LRESULT CALLBACK keyboardHookProc(INT code, WPARAM wparam, LPARAM lparam);
 
-    ScopedHHOOK keyboard_hook_;
+    base::win::ScopedHHOOK keyboard_hook_;
 #endif // defined(OS_WIN)
 
     Delegate* delegate_;

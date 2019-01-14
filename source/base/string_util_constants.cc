@@ -18,7 +18,7 @@
 
 #include "base/string_util_constants.h"
 
-namespace aspia {
+namespace base {
 
 #define WHITESPACE_UNICODE \
   0x0009, /* CHARACTER TABULATION */      \
@@ -64,4 +64,4 @@ const char kWhitespaceASCII[] = {
 
 const char kUtf8ByteOrderMark[] = "\xEF\xBB\xBF";
 
-} // namespace aspia
+} // namespace base

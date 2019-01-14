@@ -48,10 +48,10 @@ int main(int argc, char *argv[])
     Q_INIT_RESOURCE(updater);
     Q_INIT_RESOURCE(updater_translations);
 
-    LoggingSettings logging_settings;
-    logging_settings.logging_dest = LOG_TO_ALL;
+    base::LoggingSettings logging_settings;
+    logging_settings.logging_dest = base::LOG_TO_ALL;
 
-    ScopedLogging logging(logging_settings);
+    base::ScopedLogging logging(logging_settings);
 
     ScopedCryptoInitializer crypto_initializer;
     CHECK(crypto_initializer.isSucceeded());

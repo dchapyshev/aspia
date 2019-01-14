@@ -24,7 +24,7 @@
 #include <filesystem>
 #include <vector>
 
-namespace aspia {
+namespace base::win {
 
 class DriveEnumerator
 {
@@ -75,6 +75,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(DriveEnumerator);
 };
 
-} // namespace aspia
+} // namespace base::win
 
 #endif // ASPIA_BASE__WIN__DRIVE_ENUMERATOR_H

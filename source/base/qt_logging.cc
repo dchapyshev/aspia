@@ -18,8 +18,6 @@
 
 #include "base/qt_logging.h"
 
-namespace aspia {
-
 std::ostream& operator<<(std::ostream& out, const QByteArray& qbytearray)
 {
     return out << qbytearray.toHex().toStdString();
@@ -47,5 +45,3 @@ std::ostream& operator<<(std::ostream& out, const QString& qstr)
 {
     return out << qstr.toStdString();
 }
-
-} // namespace aspia

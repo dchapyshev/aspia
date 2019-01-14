@@ -81,7 +81,7 @@ static std::wstring GetAdapterRegistryPath(const char* adapter_name)
     static constexpr wchar_t kFormat[] =
         L"SYSTEM\\CurrentControlSet\\Control\\Network\\{4D36E972-E325-11CE-BFC1-08002BE10318}\\%S\\Connection";
 
-    return stringPrintf(kFormat, adapter_name);
+    return base::stringPrintf(kFormat, adapter_name);
 }
 
 std::string NetworkAdapterEnumerator::adapterName() const
@@ -94,7 +94,7 @@ std::string NetworkAdapterEnumerator::adapterName() const
 
     std::wstring key_path = GetAdapterRegistryPath(adapter_->AdapterName);
 
-    RegistryKey key(HKEY_LOCAL_MACHINE, key_path.c_str(), KEY_READ);
+    base::win::RegistryKey key(HKEY_LOCAL_MACHINE, key_path.c_str(), KEY_READ);
     if (!key.isValid())
     {
         SetupDiDestroyDeviceInfoList(device_info);
@@ -142,7 +142,7 @@ std::string NetworkAdapterEnumerator::adapterName() const
                                                   nullptr))
             {
                 SetupDiDestroyDeviceInfoList(device_info);
-                return UTF8fromUTF16(device_name);
+                return base::UTF8fromUTF16(device_name);
             }
 
             if (SetupDiGetDeviceRegistryPropertyW(device_info,
@@ -154,7 +154,7 @@ std::string NetworkAdapterEnumerator::adapterName() const
                                                   nullptr))
             {
                 SetupDiDestroyDeviceInfoList(device_info);
-                return UTF8fromUTF16(device_name);
+                return base::UTF8fromUTF16(device_name);
             }
 
             break;
@@ -169,7 +169,7 @@ std::string NetworkAdapterEnumerator::connectionName() const
 {
     std::wstring key_path = GetAdapterRegistryPath(adapter_->AdapterName);
 
-    RegistryKey key(HKEY_LOCAL_MACHINE, key_path.c_str(), KEY_READ);
+    base::win::RegistryKey key(HKEY_LOCAL_MACHINE, key_path.c_str(), KEY_READ);
     if (!key.isValid())
         return std::string();
 
@@ -178,7 +178,7 @@ std::string NetworkAdapterEnumerator::connectionName() const
     if (key.readValue(L"Name", &name) != ERROR_SUCCESS)
         return std::string();
 
-    return UTF8fromUTF16(name);
+    return base::UTF8fromUTF16(name);
 }
 
 std::string NetworkAdapterEnumerator::interfaceType() const
@@ -261,14 +261,14 @@ std::string NetworkAdapterEnumerator::macAddress() const
     if (GetIfEntry(&adapter_if_entry) != NO_ERROR)
         return std::string();
 
-    return stringPrintf("%.2X-%.2X-%.2X-%.2X-%.2X-%.2X",
-                        adapter_if_entry.bPhysAddr[0],
-                        adapter_if_entry.bPhysAddr[1],
-                        adapter_if_entry.bPhysAddr[2],
-                        adapter_if_entry.bPhysAddr[3],
-                        adapter_if_entry.bPhysAddr[4],
-                        adapter_if_entry.bPhysAddr[5],
-                        adapter_if_entry.bPhysAddr[6]);
+    return base::stringPrintf("%.2X-%.2X-%.2X-%.2X-%.2X-%.2X",
+                              adapter_if_entry.bPhysAddr[0],
+                              adapter_if_entry.bPhysAddr[1],
+                              adapter_if_entry.bPhysAddr[2],
+                              adapter_if_entry.bPhysAddr[3],
+                              adapter_if_entry.bPhysAddr[4],
+                              adapter_if_entry.bPhysAddr[5],
+                              adapter_if_entry.bPhysAddr[6]);
 }
 
 bool NetworkAdapterEnumerator::isWinsEnabled() const

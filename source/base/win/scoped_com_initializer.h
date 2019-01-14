@@ -23,7 +23,7 @@
 
 #include "base/thread_checker.h"
 
-namespace aspia {
+namespace base::win {
 
 // Initializes COM in the constructor (STA or MTA), and uninitializes COM in the
 // destructor.
@@ -58,6 +58,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(ScopedCOMInitializer);
 };
 
-}  // namespace aspia
+} // namespace base::win
 
 #endif // ASPIA_BASE__WIN__SCOPED_COM_INITIALIZER_H

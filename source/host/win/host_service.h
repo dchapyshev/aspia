@@ -23,12 +23,15 @@
 
 #include "base/service.h"
 
+namespace base::win {
+class ScopedCOMInitializer;
+} // namespace base::win
+
 namespace aspia {
 
 class HostServer;
-class ScopedCOMInitializer;
 
-class HostService : public Service<QCoreApplication>
+class HostService : public base::Service<QCoreApplication>
 {
 public:
     HostService();
@@ -41,7 +44,7 @@ protected:
     void sessionChange(uint32_t event, uint32_t session_id) override;
 
 private:
-    std::unique_ptr<ScopedCOMInitializer> com_initializer_;
+    std::unique_ptr<base::win::ScopedCOMInitializer> com_initializer_;
     std::unique_ptr<HostServer> server_;
 
     DISALLOW_COPY_AND_ASSIGN(HostService);

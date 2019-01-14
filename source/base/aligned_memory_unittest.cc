@@ -20,7 +20,7 @@
 
 #include "base/aligned_memory.h"
 
-namespace aspia {
+namespace base {
 
 #define EXPECT_ALIGNED(ptr, align) \
     EXPECT_EQ(0u, reinterpret_cast<uintptr_t>(ptr) & ((align) - 1))
@@ -55,4 +55,4 @@ TEST(aligned_memory_test, scoped_dynamic_allocation)
     EXPECT_ALIGNED(p.get(), 8);
 }
 
-} // namespace aspia
+} // namespace base

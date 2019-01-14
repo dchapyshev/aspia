@@ -115,17 +115,17 @@ TEST(srp_math_test, test_vector)
 
     BigNum N = BigNum::fromBuffer(kSrpNg_1024.N);
     BigNum g = BigNum::fromBuffer(kSrpNg_1024.g);
-    BigNum s = BigNum::fromBuffer(ConstBuffer(s_buf, sizeof(s_buf)));
+    BigNum s = BigNum::fromBuffer(base::ConstBuffer(s_buf, sizeof(s_buf)));
     ASSERT_TRUE(N.isValid());
     ASSERT_TRUE(g.isValid());
     ASSERT_TRUE(s.isValid());
 
     BigNum v_ref = BigNum::fromBuffer(
-        ConstBuffer(reinterpret_cast<const uint8_t*>(v_ref_buf), sizeof(v_ref_buf)));
+        base::ConstBuffer(reinterpret_cast<const uint8_t*>(v_ref_buf), sizeof(v_ref_buf)));
     ASSERT_TRUE(v_ref.isValid());
 
-    BigNum a = BigNum::fromBuffer(ConstBuffer(a_buf, sizeof(a_buf)));
-    BigNum b = BigNum::fromBuffer(ConstBuffer(b_buf, sizeof(b_buf)));
+    BigNum a = BigNum::fromBuffer(base::ConstBuffer(a_buf, sizeof(a_buf)));
+    BigNum b = BigNum::fromBuffer(base::ConstBuffer(b_buf, sizeof(b_buf)));
 
     ASSERT_TRUE(a.isValid());
     ASSERT_TRUE(b.isValid());

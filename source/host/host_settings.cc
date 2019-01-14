@@ -29,7 +29,7 @@
 namespace aspia {
 
 HostSettings::HostSettings()
-    : settings_(XmlSettings::registerFormat(),
+    : settings_(base::XmlSettings::registerFormat(),
                 QSettings::SystemScope,
                 QLatin1String("aspia"),
                 QLatin1String("host"))

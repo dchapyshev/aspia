@@ -26,7 +26,7 @@
 
 #include "base/macros_magic.h"
 
-namespace aspia {
+namespace base::win {
 
 class RegistryKey
 {
@@ -196,6 +196,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(RegistryKeyIterator);
 };
 
-} // namespace aspia
+} // namespace base::win
 
 #endif // ASPIA_BASE__WIN__REGISTRY_H

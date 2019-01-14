@@ -19,10 +19,10 @@
 #ifndef ASPIA_BASE__DEBUG_H
 #define ASPIA_BASE__DEBUG_H
 
-namespace aspia {
+namespace base {
 
 void debugBreak();
 
-} // namespace aspia
+} // namespace base
 
 #endif // ASPIA_BASE__DEBUG_H

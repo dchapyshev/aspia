@@ -98,30 +98,30 @@ proto::file_transfer::Reply FileWorker::doDriveListRequest()
 {
     proto::file_transfer::Reply reply;
 
-    for (DriveEnumerator enumerator; !enumerator.isAtEnd(); enumerator.advance())
+    for (base::win::DriveEnumerator enumerator; !enumerator.isAtEnd(); enumerator.advance())
     {
         proto::file_transfer::DriveList::Item* item = reply.mutable_drive_list()->add_item();
 
-        const DriveEnumerator::DriveInfo& drive_info = enumerator.driveInfo();
+        const base::win::DriveEnumerator::DriveInfo& drive_info = enumerator.driveInfo();
         switch (drive_info.type())
         {
-            case DriveEnumerator::DriveInfo::Type::FIXED:
+            case base::win::DriveEnumerator::DriveInfo::Type::FIXED:
                 item->set_type(proto::file_transfer::DriveList::Item::TYPE_FIXED);
                 break;
 
-            case DriveEnumerator::DriveInfo::Type::CDROM:
+            case base::win::DriveEnumerator::DriveInfo::Type::CDROM:
                 item->set_type(proto::file_transfer::DriveList::Item::TYPE_CDROM);
                 break;
 
-            case DriveEnumerator::DriveInfo::Type::REMOVABLE:
+            case base::win::DriveEnumerator::DriveInfo::Type::REMOVABLE:
                 item->set_type(proto::file_transfer::DriveList::Item::TYPE_REMOVABLE);
                 break;
 
-            case DriveEnumerator::DriveInfo::Type::RAM:
+            case base::win::DriveEnumerator::DriveInfo::Type::RAM:
                 item->set_type(proto::file_transfer::DriveList::Item::TYPE_RAM);
                 break;
 
-            case DriveEnumerator::DriveInfo::Type::REMOTE:
+            case base::win::DriveEnumerator::DriveInfo::Type::REMOTE:
                 item->set_type(proto::file_transfer::DriveList::Item::TYPE_REMOTE);
                 break;
 
@@ -136,7 +136,7 @@ proto::file_transfer::Reply FileWorker::doDriveListRequest()
     }
 
     std::filesystem::path desktop_path;
-    if (BasePaths::userDesktop(&desktop_path))
+    if (base::BasePaths::userDesktop(&desktop_path))
     {
         proto::file_transfer::DriveList::Item* item = reply.mutable_drive_list()->add_item();
 
@@ -147,7 +147,7 @@ proto::file_transfer::Reply FileWorker::doDriveListRequest()
     }
 
     std::filesystem::path home_path;
-    if (BasePaths::userHome(&home_path))
+    if (base::BasePaths::userHome(&home_path))
     {
         proto::file_transfer::DriveList::Item* item = reply.mutable_drive_list()->add_item();
 

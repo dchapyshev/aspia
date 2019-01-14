@@ -24,7 +24,7 @@
 
 #include "base/logging.h"
 
-namespace aspia {
+namespace base {
 
 void* alignedAlloc(size_t size, size_t alignment)
 {
@@ -48,4 +48,4 @@ void* alignedAlloc(size_t size, size_t alignment)
     return ptr;
 }
 
-}  // namespace aspia
+} // namespace base

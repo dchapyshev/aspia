@@ -86,7 +86,7 @@ void NetworkChannelHost::readClientHello(const QByteArray& buffer)
 
     proto::ServerHello server_hello;
 
-    if ((client_hello.methods() & proto::METHOD_SRP_AES256_GCM) && CPUID::hasAesNi())
+    if ((client_hello.methods() & proto::METHOD_SRP_AES256_GCM) && base::CPUID::hasAesNi())
     {
         LOG(LS_INFO) << "AES256-GCM encryption selected";
         server_hello.set_method(proto::METHOD_SRP_AES256_GCM);

@@ -22,7 +22,7 @@
 
 #include "build/build_config.h"
 
-namespace aspia {
+namespace base {
 
 namespace {
 
@@ -108,4 +108,4 @@ uint32_t KeycodeConverter::qtKeycodeToUsbKeycode(int qt_keycode)
     return invalidUsbKeycode();
 }
 
-} // namespace aspia
+} // namespace base

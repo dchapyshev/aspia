@@ -25,6 +25,8 @@
 
 #include "base/macros_magic.h"
 
+namespace base::win {
+
 template <typename T>
 class ScopedWtsMemory
 {
@@ -86,5 +88,7 @@ private:
 
     DISALLOW_COPY_AND_ASSIGN(ScopedWtsMemory);
 };
+
+} // namespace base::win
 
 #endif // ASPIA_BASE__WIN__SCOPED_WTS_MEMORY_H

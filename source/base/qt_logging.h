@@ -25,14 +25,10 @@
 #include <QSize>
 #include <QString>
 
-namespace aspia {
-
 std::ostream& operator<<(std::ostream& out, const QByteArray& qstr);
 std::ostream& operator<<(std::ostream& out, const QPoint& qstr);
 std::ostream& operator<<(std::ostream& out, const QRect& qstr);
 std::ostream& operator<<(std::ostream& out, const QSize& qstr);
 std::ostream& operator<<(std::ostream& out, const QString& qstr);
-
-} // namespace aspia
 
 #endif // ASPIA_BASE__QT_LOGGING_H

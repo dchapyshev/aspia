@@ -24,7 +24,7 @@
 
 #include "base/macros_magic.h"
 
-namespace aspia {
+namespace base::win {
 
 // Like ScopedGDIObject but for User objects.
 template<class T, class Traits>
@@ -161,6 +161,6 @@ using ScopedHCURSOR = ScopedUserObject<HCURSOR, DestroyCursorTraits>;
 using ScopedHACCEL = ScopedUserObject<HACCEL, DestroyAccelTraits>;
 using ScopedHHOOK = ScopedUserObject<HHOOK, DestroyHookTraits>;
 
-} // namespace aspia
+} // namespace base::win
 
 #endif // ASPIA_BASE__WIN__SCOPED_USER_OBJECT_H
