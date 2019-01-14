@@ -23,16 +23,16 @@
 #include "network/srp_user.h"
 #include "protocol/common.pb.h"
 
-namespace aspia {
+namespace net {
 
 class SrpHostContext;
 
-class NetworkChannelHost : public NetworkChannel
+class ChannelHost : public Channel
 {
     Q_OBJECT
 
 public:
-    ~NetworkChannelHost();
+    ~ChannelHost();
 
     void startKeyExchange();
 
@@ -43,10 +43,8 @@ signals:
     void keyExchangeFinished();
 
 protected:
-    friend class NetworkServer;
-    NetworkChannelHost(QTcpSocket* socket,
-                       const SrpUserList& user_list,
-                       QObject* parent = nullptr);
+    friend class Server;
+    ChannelHost(QTcpSocket* socket, const SrpUserList& user_list, QObject* parent = nullptr);
 
     // NetworkChannel implementation.
     void internalMessageReceived(const QByteArray& buffer) override;
@@ -65,9 +63,9 @@ private:
 
     std::unique_ptr<SrpHostContext> srp_host_;
 
-    DISALLOW_COPY_AND_ASSIGN(NetworkChannelHost);
+    DISALLOW_COPY_AND_ASSIGN(ChannelHost);
 };
 
-} // namespace aspia
+} // namespace net
 
 #endif // ASPIA_NETWORK__NETWORK_CHANNEL_HOST_H

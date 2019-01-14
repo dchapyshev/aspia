@@ -33,20 +33,19 @@ Client::~Client() = default;
 
 void Client::start()
 {
-    network_channel_ = new NetworkChannelClient(this);
+    network_channel_ = new net::ChannelClient(this);
 
-    connect(network_channel_, &NetworkChannelClient::connected, this, &Client::started);
-    connect(network_channel_, &NetworkChannelClient::disconnected, this, &Client::finished);
-    connect(network_channel_, &NetworkChannelClient::messageReceived, this, &Client::messageReceived);
+    connect(network_channel_, &net::ChannelClient::connected, this, &Client::started);
+    connect(network_channel_, &net::ChannelClient::disconnected, this, &Client::finished);
+    connect(network_channel_, &net::ChannelClient::messageReceived, this, &Client::messageReceived);
 
-    connect(network_channel_, &NetworkChannelClient::errorOccurred,
-            [this](NetworkChannel::Error error)
+    connect(network_channel_, &net::ChannelClient::errorOccurred, [this](net::Channel::Error error)
     {
         emit errorOccurred(networkErrorToString(error));
     });
 
-    connect(this, &Client::errorOccurred, network_channel_, &NetworkChannelClient::stop);
-    connect(this, &Client::started, network_channel_, &NetworkChannel::start);
+    connect(this, &Client::errorOccurred, network_channel_, &net::ChannelClient::stop);
+    connect(this, &Client::started, network_channel_, &net::Channel::start);
 
     network_channel_->connectToHost(connect_data_.address, connect_data_.port,
                                     connect_data_.username, connect_data_.password,
@@ -79,53 +78,53 @@ void Client::sendMessage(const google::protobuf::MessageLite& message)
 }
 
 // static
-QString Client::networkErrorToString(NetworkChannel::Error error)
+QString Client::networkErrorToString(net::Channel::Error error)
 {
     const char* message;
 
     switch (error)
     {
-        case NetworkChannel::Error::CONNECTION_REFUSED:
+        case net::Channel::Error::CONNECTION_REFUSED:
             message = QT_TR_NOOP("Connection was refused by the peer (or timed out).");
             break;
 
-        case NetworkChannel::Error::REMOTE_HOST_CLOSED:
+        case net::Channel::Error::REMOTE_HOST_CLOSED:
             message = QT_TR_NOOP("Remote host closed the connection.");
             break;
 
-        case NetworkChannel::Error::SPECIFIED_HOST_NOT_FOUND:
+        case net::Channel::Error::SPECIFIED_HOST_NOT_FOUND:
             message = QT_TR_NOOP("Host address was not found.");
             break;
 
-        case NetworkChannel::Error::SOCKET_TIMEOUT:
+        case net::Channel::Error::SOCKET_TIMEOUT:
             message = QT_TR_NOOP("Socket operation timed out.");
             break;
 
-        case NetworkChannel::Error::ADDRESS_IN_USE:
+        case net::Channel::Error::ADDRESS_IN_USE:
             message = QT_TR_NOOP("Address specified is already in use and was set to be exclusive.");
             break;
 
-        case NetworkChannel::Error::ADDRESS_NOT_AVAILABLE:
+        case net::Channel::Error::ADDRESS_NOT_AVAILABLE:
             message = QT_TR_NOOP("Address specified does not belong to the host.");
             break;
 
-        case NetworkChannel::Error::PROTOCOL_FAILURE:
+        case net::Channel::Error::PROTOCOL_FAILURE:
             message = QT_TR_NOOP("Violation of the data exchange protocol.");
             break;
 
-        case NetworkChannel::Error::ENCRYPTION_FAILURE:
+        case net::Channel::Error::ENCRYPTION_FAILURE:
             message = QT_TR_NOOP("An error occurred while encrypting the message.");
             break;
 
-        case NetworkChannel::Error::DECRYPTION_FAILURE:
+        case net::Channel::Error::DECRYPTION_FAILURE:
             message = QT_TR_NOOP("An error occurred while decrypting the message.");
             break;
 
-        case NetworkChannel::Error::AUTHENTICATION_FAILURE:
+        case net::Channel::Error::AUTHENTICATION_FAILURE:
             message = QT_TR_NOOP("An error occured while authenticating: wrong user name or password.");
             break;
 
-        case NetworkChannel::Error::SESSION_TYPE_NOT_ALLOWED:
+        case net::Channel::Error::SESSION_TYPE_NOT_ALLOWED:
             message = QT_TR_NOOP("Specified session type is not allowed for the user.");
             break;
 

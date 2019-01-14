@@ -26,23 +26,23 @@
 #include "base/macros_magic.h"
 #include "network/srp_user.h"
 
-namespace aspia {
+namespace net {
 
-class NetworkChannelHost;
+class ChannelHost;
 
-class NetworkServer : public QObject
+class Server : public QObject
 {
     Q_OBJECT
 
 public:
-    NetworkServer(const SrpUserList& user_list, QObject* parent = nullptr);
-    ~NetworkServer() = default;
+    Server(const SrpUserList& user_list, QObject* parent = nullptr);
+    ~Server() = default;
 
     bool start(uint16_t port);
     void stop();
 
     bool hasReadyChannels() const;
-    NetworkChannelHost* nextReadyChannel();
+    ChannelHost* nextReadyChannel();
 
 signals:
     void newChannelReady();
@@ -57,14 +57,14 @@ private:
 
     // Contains a list of channels that are already connected, but the key exchange
     // is not yet complete.
-    QList<QPointer<NetworkChannelHost>> pending_channels_;
+    QList<QPointer<ChannelHost>> pending_channels_;
 
     // Contains a list of channels that are ready for use.
-    QList<QPointer<NetworkChannelHost>> ready_channels_;
+    QList<QPointer<ChannelHost>> ready_channels_;
 
-    DISALLOW_COPY_AND_ASSIGN(NetworkServer);
+    DISALLOW_COPY_AND_ASSIGN(Server);
 };
 
-} // namespace aspia
+} // namespace net
 
 #endif // ASPIA_NETWORK__NETWORK_SERVER_H

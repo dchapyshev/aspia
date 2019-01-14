@@ -43,7 +43,7 @@ Host::~Host()
     stop();
 }
 
-void Host::setNetworkChannel(NetworkChannelHost* network_channel)
+void Host::setNetworkChannel(net::ChannelHost* network_channel)
 {
     if (state_ != State::STOPPED)
     {
@@ -130,7 +130,7 @@ bool Host::start()
     LOG(LS_INFO) << "Starting the host";
     state_ = State::STARTING;
 
-    connect(network_channel_, &NetworkChannel::disconnected, this, &Host::stop);
+    connect(network_channel_, &net::Channel::disconnected, this, &Host::stop);
 
     attach_timer_id_ = startTimer(std::chrono::minutes(1));
     if (!attach_timer_id_)
@@ -151,7 +151,7 @@ void Host::stop()
     LOG(LS_INFO) << "Stopping host";
     state_ = State::STOPPING;
 
-    if (network_channel_->channelState() != NetworkChannel::ChannelState::NOT_CONNECTED)
+    if (network_channel_->channelState() != net::Channel::ChannelState::NOT_CONNECTED)
         network_channel_->stop();
 
     dettachSession();
@@ -278,8 +278,8 @@ void Host::ipcNewConnection(ipc::Channel* channel)
 
     connect(ipc_channel_, &ipc::Channel::disconnected, ipc_channel_, &ipc::Channel::deleteLater);
     connect(ipc_channel_, &ipc::Channel::disconnected, this, &Host::dettachSession);
-    connect(ipc_channel_, &ipc::Channel::messageReceived, network_channel_, &NetworkChannel::send);
-    connect(network_channel_, &NetworkChannel::messageReceived, ipc_channel_, &ipc::Channel::send);
+    connect(ipc_channel_, &ipc::Channel::messageReceived, network_channel_, &net::Channel::send);
+    connect(network_channel_, &net::Channel::messageReceived, ipc_channel_, &ipc::Channel::send);
 
     LOG(LS_INFO) << "Host process is attached for session " << session_id_;
     state_ = State::ATTACHED;
@@ -361,9 +361,9 @@ bool Host::startFakeSession()
         return false;
     }
 
-    connect(fake_session_, &HostSessionFake::sendMessage, network_channel_, &NetworkChannel::send);
+    connect(fake_session_, &HostSessionFake::sendMessage, network_channel_, &net::Channel::send);
 
-    connect(network_channel_, &NetworkChannel::messageReceived,
+    connect(network_channel_, &net::Channel::messageReceived,
             fake_session_, &HostSessionFake::onMessageReceived);
 
     connect(fake_session_, &HostSessionFake::errorOccurred, this, &Host::stop);

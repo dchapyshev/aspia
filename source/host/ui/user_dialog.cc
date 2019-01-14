@@ -28,7 +28,7 @@
 
 namespace aspia {
 
-UserDialog::UserDialog(const SrpUserList& user_list, SrpUser* user, QWidget* parent)
+UserDialog::UserDialog(const net::SrpUserList& user_list, net::SrpUser* user, QWidget* parent)
     : QDialog(parent),
       user_list_(user_list),
       user_(user)
@@ -48,7 +48,7 @@ UserDialog::UserDialog(const SrpUserList& user_list, SrpUser* user, QWidget* par
         setAccountChanged(false);
     }
 
-    ui.checkbox_disable_user->setChecked(!(user_->flags & SrpUser::ENABLED));
+    ui.checkbox_disable_user->setChecked(!(user_->flags & net::SrpUser::ENABLED));
 
     auto add_session_type = [&](const QIcon& icon,
                                 const QString& name,
@@ -201,7 +201,8 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
                 }
             }
 
-            std::unique_ptr<SrpUser> user(SrpHostContext::createUser(name.toLower(), password));
+            std::unique_ptr<net::SrpUser> user(
+                net::SrpHostContext::createUser(name.toLower(), password));
             if (!user)
             {
                 QMessageBox::warning(this,
@@ -224,7 +225,7 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
 
         uint32_t flags = 0;
         if (!ui.checkbox_disable_user->isChecked())
-            flags |= SrpUser::ENABLED;
+            flags |= net::SrpUser::ENABLED;
 
         user_->sessions = sessions;
         user_->flags = flags;

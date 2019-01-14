@@ -66,7 +66,7 @@ private:
     Ui::HostConfigDialog ui;
 
     LocaleLoader& locale_loader_;
-    SrpUserList users_;
+    net::SrpUserList users_;
 
     enum class ServiceState { NOT_INSTALLED, ACCESS_DENIED, NOT_STARTED, STARTED };
 

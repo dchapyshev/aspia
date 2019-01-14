@@ -26,13 +26,13 @@
 struct _IP_ADAPTER_INFO;
 struct _IP_ADDR_STRING;
 
-namespace aspia {
+namespace net {
 
-class NetworkAdapterEnumerator
+class AdapterEnumerator
 {
 public:
-    NetworkAdapterEnumerator();
-    ~NetworkAdapterEnumerator();
+    AdapterEnumerator();
+    ~AdapterEnumerator();
 
     bool isAtEnd() const;
     void advance();
@@ -51,7 +51,7 @@ public:
     class IpAddressEnumerator
     {
     public:
-        explicit IpAddressEnumerator(const NetworkAdapterEnumerator& adapter);
+        explicit IpAddressEnumerator(const AdapterEnumerator& adapter);
 
         bool isAtEnd() const;
         void advance();
@@ -68,7 +68,7 @@ public:
     class GatewayEnumerator
     {
     public:
-        explicit GatewayEnumerator(const NetworkAdapterEnumerator& adapter);
+        explicit GatewayEnumerator(const AdapterEnumerator& adapter);
 
         bool isAtEnd() const;
         void advance();
@@ -83,7 +83,7 @@ public:
     class DhcpEnumerator
     {
     public:
-        explicit DhcpEnumerator(const NetworkAdapterEnumerator& adapter);
+        explicit DhcpEnumerator(const AdapterEnumerator& adapter);
 
         bool isAtEnd() const;
         void advance();
@@ -98,7 +98,7 @@ public:
     class DnsEnumerator
     {
     public:
-        explicit DnsEnumerator(const NetworkAdapterEnumerator& adapter);
+        explicit DnsEnumerator(const AdapterEnumerator& adapter);
 
         bool isAtEnd() const;
         void advance();
@@ -115,9 +115,9 @@ private:
     std::unique_ptr<uint8_t[]> adapters_buffer_;
     _IP_ADAPTER_INFO* adapter_;
 
-    DISALLOW_COPY_AND_ASSIGN(NetworkAdapterEnumerator);
+    DISALLOW_COPY_AND_ASSIGN(AdapterEnumerator);
 };
 
-} // namespace aspia
+} // namespace net
 
 #endif // ASPIA_NETWORK__NETWORK_ADAPTER_ENUMERATOR_H

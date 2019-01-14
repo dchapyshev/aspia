@@ -224,8 +224,8 @@ void HostConfigDialog::onCurrentUserChanged(
 
 void HostConfigDialog::onAddUser()
 {
-    SrpUser user;
-    user.flags = SrpUser::ENABLED;
+    net::SrpUser user;
+    user.flags = net::SrpUser::ENABLED;
 
     if (UserDialog(users_, &user, this).exec() == QDialog::Accepted)
     {
@@ -241,7 +241,7 @@ void HostConfigDialog::onModifyUser()
     if (!user_item)
         return;
 
-    SrpUser* user = &users_.list[user_item->userIndex()];
+    net::SrpUser* user = &users_.list[user_item->userIndex()];
     if (UserDialog(users_, user, this).exec() == QDialog::Accepted)
     {
         setConfigChanged(true);

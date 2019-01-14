@@ -581,62 +581,62 @@
 <context>
     <name>aspia::Client</name>
     <message>
-        <location filename="../client.cc" line="89"/>
+        <location filename="../client.cc" line="88"/>
         <source>Connection was refused by the peer (or timed out).</source>
         <translation>Подключение было отклонено другой стороной (или превышено время ожидания).</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="93"/>
+        <location filename="../client.cc" line="92"/>
         <source>Remote host closed the connection.</source>
         <translation>Удаленный узел закрыл подключение.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="97"/>
+        <location filename="../client.cc" line="96"/>
         <source>Host address was not found.</source>
         <translation>Не найден адрес удаленного узла.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="101"/>
+        <location filename="../client.cc" line="100"/>
         <source>Socket operation timed out.</source>
         <translation>Превышено время ожидания.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="105"/>
+        <location filename="../client.cc" line="104"/>
         <source>Address specified is already in use and was set to be exclusive.</source>
         <translation>Указанный адрес уже используется и был установлен монопольно.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="109"/>
+        <location filename="../client.cc" line="108"/>
         <source>Address specified does not belong to the host.</source>
         <translation>Указанный адрес не принадлежит узлу.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="113"/>
+        <location filename="../client.cc" line="112"/>
         <source>Violation of the data exchange protocol.</source>
         <translation>Нарушение протокола обмена данными.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="117"/>
+        <location filename="../client.cc" line="116"/>
         <source>An error occurred while encrypting the message.</source>
         <translation>Произошла ошибка при шифровании сообщения.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="121"/>
+        <location filename="../client.cc" line="120"/>
         <source>An error occurred while decrypting the message.</source>
         <translation>Произошла ошибка при расшифровке сообщения.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="125"/>
+        <location filename="../client.cc" line="124"/>
         <source>An error occured while authenticating: wrong user name or password.</source>
         <translation>Произошла ошибка при аутификации: неправильное имя пользователя или пароль.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="129"/>
+        <location filename="../client.cc" line="128"/>
         <source>Specified session type is not allowed for the user.</source>
         <translation>Указанный тип сессии не разрешен для пользователя.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="133"/>
+        <location filename="../client.cc" line="132"/>
         <source>An unknown error occurred.</source>
         <translation>Произошла неизвестная ошибка.</translation>
     </message>

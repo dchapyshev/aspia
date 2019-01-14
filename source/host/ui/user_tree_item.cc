@@ -22,10 +22,10 @@
 
 namespace aspia {
 
-UserTreeItem::UserTreeItem(size_t index, const SrpUser& user)
+UserTreeItem::UserTreeItem(size_t index, const net::SrpUser& user)
     : index_(index)
 {
-    if (user.flags & SrpUser::ENABLED)
+    if (user.flags & net::SrpUser::ENABLED)
         setIcon(0, QIcon(QLatin1String(":/img/user.png")));
     else
         setIcon(0, QIcon(QLatin1String(":/img/user-disabled.png")));

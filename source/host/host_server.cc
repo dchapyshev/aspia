@@ -82,7 +82,7 @@ bool HostServer::start()
 
     if (settings.addFirewallRule())
     {
-        FirewallManager firewall(QCoreApplication::applicationFilePath());
+        net::FirewallManager firewall(QCoreApplication::applicationFilePath());
         if (firewall.isValid())
         {
             if (firewall.addTcpRule(kFirewallRuleName, kFirewallRuleDecription, settings.tcpPort()))
@@ -92,9 +92,9 @@ bool HostServer::start()
         }
     }
 
-    network_server_ = new NetworkServer(settings.userList(), this);
+    network_server_ = new net::Server(settings.userList(), this);
 
-    connect(network_server_, &NetworkServer::newChannelReady,
+    connect(network_server_, &net::Server::newChannelReady,
             this, &HostServer::onNewConnection);
 
     if (!network_server_->start(settings.tcpPort()))
@@ -113,11 +113,11 @@ void HostServer::stop()
 
     stopNotifier();
 
-    std::unique_ptr<NetworkServer> network_server_deleter(network_server_);
+    std::unique_ptr<net::Server> network_server_deleter(network_server_);
     if (network_server_)
         network_server_->stop();
 
-    FirewallManager firewall(QCoreApplication::applicationFilePath());
+    net::FirewallManager firewall(QCoreApplication::applicationFilePath());
     if (firewall.isValid())
         firewall.deleteRuleByName(kFirewallRuleName);
 
@@ -163,7 +163,7 @@ void HostServer::onNewConnection()
 {
     while (network_server_->hasReadyChannels())
     {
-        NetworkChannelHost* channel = network_server_->nextReadyChannel();
+        net::ChannelHost* channel = network_server_->nextReadyChannel();
         if (!channel)
             continue;
 

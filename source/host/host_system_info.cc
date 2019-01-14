@@ -133,7 +133,7 @@ void createHostSystemInfo(proto::system_info::SystemInfo* system_info)
         printer->set_share_name(enumerator.shareName());
     }
 
-    for (NetworkAdapterEnumerator enumerator; !enumerator.isAtEnd(); enumerator.advance())
+    for (net::AdapterEnumerator enumerator; !enumerator.isAtEnd(); enumerator.advance())
     {
         proto::system_info::NetworkAdapters::Adapter* adapter =
             system_info->mutable_network_adapters()->add_adapter();
@@ -145,13 +145,13 @@ void createHostSystemInfo(proto::system_info::SystemInfo* system_info)
         adapter->set_mac(enumerator.macAddress());
         adapter->set_dhcp_enabled(enumerator.isDhcpEnabled());
 
-        for (NetworkAdapterEnumerator::GatewayEnumerator gateway(enumerator);
+        for (net::AdapterEnumerator::GatewayEnumerator gateway(enumerator);
              !gateway.isAtEnd(); gateway.advance())
         {
             adapter->add_gateway()->assign(gateway.address());
         }
 
-        for (NetworkAdapterEnumerator::IpAddressEnumerator ip(enumerator);
+        for (net::AdapterEnumerator::IpAddressEnumerator ip(enumerator);
              !ip.isAtEnd(); ip.advance())
         {
             proto::system_info::NetworkAdapters::Adapter::Address* address = adapter->add_address();
@@ -160,13 +160,13 @@ void createHostSystemInfo(proto::system_info::SystemInfo* system_info)
             address->set_mask(ip.mask());
         }
 
-        for (NetworkAdapterEnumerator::DnsEnumerator dns(enumerator);
+        for (net::AdapterEnumerator::DnsEnumerator dns(enumerator);
              !dns.isAtEnd(); dns.advance())
         {
             adapter->add_dns()->assign(dns.address());
         }
 
-        for (NetworkAdapterEnumerator::DhcpEnumerator dhcp(enumerator);
+        for (net::AdapterEnumerator::DhcpEnumerator dhcp(enumerator);
              !dhcp.isAtEnd(); dhcp.advance())
         {
             adapter->add_dhcp()->append(dhcp.address());

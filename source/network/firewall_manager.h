@@ -26,7 +26,7 @@
 
 #include "base/macros_magic.h"
 
-namespace aspia {
+namespace net {
 
 class FirewallManager
 {
@@ -70,6 +70,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(FirewallManager);
 };
 
-} // namespace aspia
+} // namespace net
 
 #endif // ASPIA_NETWORK__FIREWALL_MANAGER_H

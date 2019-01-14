@@ -23,14 +23,16 @@
 
 #include "base/macros_magic.h"
 
-namespace aspia {
-
+namespace net {
 struct SrpUser;
+} // namespace net
+
+namespace aspia {
 
 class UserTreeItem : public QTreeWidgetItem
 {
 public:
-    UserTreeItem(size_t index, const SrpUser& user);
+    UserTreeItem(size_t index, const net::SrpUser& user);
     ~UserTreeItem() = default;
 
     size_t userIndex() const { return index_; }

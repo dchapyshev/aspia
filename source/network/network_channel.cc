@@ -24,7 +24,7 @@
 #include "common/message_serialization.h"
 #include "crypto/cryptor.h"
 
-namespace aspia {
+namespace net {
 
 namespace {
 
@@ -70,7 +70,7 @@ QByteArray createWriteBuffer(const QByteArray& message_buffer)
 
 } // namespace
 
-NetworkChannel::NetworkChannel(ChannelType channel_type, QTcpSocket* socket, QObject* parent)
+Channel::Channel(ChannelType channel_type, QTcpSocket* socket, QObject* parent)
     : QObject(parent),
       channel_type_(channel_type),
       socket_(socket)
@@ -79,20 +79,20 @@ NetworkChannel::NetworkChannel(ChannelType channel_type, QTcpSocket* socket, QOb
 
     socket_->setParent(this);
 
-    connect(socket_, &QTcpSocket::bytesWritten, this, &NetworkChannel::onBytesWritten);
-    connect(socket_, &QTcpSocket::readyRead, this, &NetworkChannel::onReadyRead);
+    connect(socket_, &QTcpSocket::bytesWritten, this, &Channel::onBytesWritten);
+    connect(socket_, &QTcpSocket::readyRead, this, &Channel::onReadyRead);
 
-    connect(socket_, &QTcpSocket::disconnected, this, &NetworkChannel::disconnected,
+    connect(socket_, &QTcpSocket::disconnected, this, &Channel::disconnected,
             Qt::QueuedConnection);
 
     connect(socket_, QOverload<QTcpSocket::SocketError>::of(&QTcpSocket::error),
-            this, &NetworkChannel::onError,
+            this, &Channel::onError,
             Qt::QueuedConnection);
 
-    connect(this, &NetworkChannel::errorOccurred, this, &NetworkChannel::stop);
+    connect(this, &Channel::errorOccurred, this, &Channel::stop);
 }
 
-QString NetworkChannel::peerAddress() const
+QString Channel::peerAddress() const
 {
     QHostAddress address = socket_->peerAddress();
 
@@ -104,12 +104,12 @@ QString NetworkChannel::peerAddress() const
     return address.toString();
 }
 
-QVersionNumber NetworkChannel::peerVersion() const
+QVersionNumber Channel::peerVersion() const
 {
     return peer_version_;
 }
 
-void NetworkChannel::start()
+void Channel::start()
 {
     if (isStarted())
         return;
@@ -120,7 +120,7 @@ void NetworkChannel::start()
     onReadyRead();
 }
 
-void NetworkChannel::stop()
+void Channel::stop()
 {
     channel_state_ = ChannelState::NOT_CONNECTED;
 
@@ -133,12 +133,12 @@ void NetworkChannel::stop()
     }
 }
 
-void NetworkChannel::pause()
+void Channel::pause()
 {
     read_.paused = true;
 }
 
-void NetworkChannel::send(const QByteArray& buffer)
+void Channel::send(const QByteArray& buffer)
 {
     if (buffer.isEmpty())
     {
@@ -155,7 +155,7 @@ void NetworkChannel::send(const QByteArray& buffer)
         scheduleWrite();
 }
 
-void NetworkChannel::sendInternal(const QByteArray& buffer)
+void Channel::sendInternal(const QByteArray& buffer)
 {
     write_.buffer = createWriteBuffer(buffer);
     if (write_.buffer.isEmpty())
@@ -167,7 +167,7 @@ void NetworkChannel::sendInternal(const QByteArray& buffer)
     socket_->write(write_.buffer);
 }
 
-void NetworkChannel::onError(QAbstractSocket::SocketError error)
+void Channel::onError(QAbstractSocket::SocketError error)
 {
     Error channel_error;
 
@@ -205,7 +205,7 @@ void NetworkChannel::onError(QAbstractSocket::SocketError error)
     emit errorOccurred(channel_error);
 }
 
-void NetworkChannel::onBytesWritten(int64_t bytes)
+void Channel::onBytesWritten(int64_t bytes)
 {
     write_.bytes_transferred += bytes;
 
@@ -225,7 +225,7 @@ void NetworkChannel::onBytesWritten(int64_t bytes)
     }
 }
 
-void NetworkChannel::onReadyRead()
+void Channel::onReadyRead()
 {
     if (read_.paused)
         return;
@@ -304,7 +304,7 @@ void NetworkChannel::onReadyRead()
     }
 }
 
-void NetworkChannel::onMessageWritten()
+void Channel::onMessageWritten()
 {
     if (channel_state_ == ChannelState::ENCRYPTED)
     {
@@ -323,7 +323,7 @@ void NetworkChannel::onMessageWritten()
     }
 }
 
-void NetworkChannel::onMessageReceived()
+void Channel::onMessageReceived()
 {
     if (channel_state_ == ChannelState::ENCRYPTED)
     {
@@ -353,7 +353,7 @@ void NetworkChannel::onMessageReceived()
     onReadyRead();
 }
 
-void NetworkChannel::scheduleWrite()
+void Channel::scheduleWrite()
 {
     const QByteArray& source_buffer = write_.queue.front();
 
@@ -414,4 +414,4 @@ void NetworkChannel::scheduleWrite()
     socket_->write(write_.buffer);
 }
 
-} // namespace aspia
+} // namespace net

@@ -24,7 +24,7 @@
 #include "crypto/big_num.h"
 #include "protocol/key_exchange.pb.h"
 
-namespace aspia {
+namespace net {
 
 class SrpClientContext
 {
@@ -54,13 +54,13 @@ private:
     QString I_; // User name.
     QString p_; // Plain text password.
 
-    BigNum N_;
-    BigNum g_;
-    BigNum s_;
-    BigNum B_;
+    aspia::BigNum N_;
+    aspia::BigNum g_;
+    aspia::BigNum s_;
+    aspia::BigNum B_;
 
-    BigNum a_;
-    BigNum A_;
+    aspia::BigNum a_;
+    aspia::BigNum A_;
 
     QByteArray encrypt_iv_;
     QByteArray decrypt_iv_;
@@ -68,6 +68,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(SrpClientContext);
 };
 
-} // namespace aspia
+} // namespace net
 
 #endif // ASPIA_NETWORK__SRP_CLIENT_CONTEXT_H

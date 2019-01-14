@@ -25,7 +25,7 @@
 #include "crypto/srp_constants.h"
 #include "crypto/srp_math.h"
 
-namespace aspia {
+namespace net {
 
 namespace {
 
@@ -35,65 +35,65 @@ bool verifyNg(const std::string& N, const std::string& g)
     {
         case 256: // 2048 bit
         {
-            if (memcmp(N.data(), kSrpNg_2048.N.data(), kSrpNg_2048.N.size()) != 0)
+            if (memcmp(N.data(), aspia::kSrpNg_2048.N.data(), aspia::kSrpNg_2048.N.size()) != 0)
                 return false;
 
-            if (g.size() != kSrpNg_2048.g.size())
+            if (g.size() != aspia::kSrpNg_2048.g.size())
                 return false;
 
-            if (memcmp(g.data(), kSrpNg_2048.g.data(), kSrpNg_2048.g.size()) != 0)
+            if (memcmp(g.data(), aspia::kSrpNg_2048.g.data(), aspia::kSrpNg_2048.g.size()) != 0)
                 return false;
         }
         break;
 
         case 384: // 3072 bit
         {
-            if (memcmp(N.data(), kSrpNg_3072.N.data(), kSrpNg_3072.N.size()) != 0)
+            if (memcmp(N.data(), aspia::kSrpNg_3072.N.data(), aspia::kSrpNg_3072.N.size()) != 0)
                 return false;
 
-            if (g.size() != kSrpNg_3072.g.size())
+            if (g.size() != aspia::kSrpNg_3072.g.size())
                 return false;
 
-            if (memcmp(g.data(), kSrpNg_3072.g.data(), kSrpNg_3072.g.size()) != 0)
+            if (memcmp(g.data(), aspia::kSrpNg_3072.g.data(), aspia::kSrpNg_3072.g.size()) != 0)
                 return false;
         }
         break;
 
         case 512: // 4096 bit
         {
-            if (memcmp(N.data(), kSrpNg_4096.N.data(), kSrpNg_4096.N.size()) != 0)
+            if (memcmp(N.data(), aspia::kSrpNg_4096.N.data(), aspia::kSrpNg_4096.N.size()) != 0)
                 return false;
 
-            if (g.size() != kSrpNg_4096.g.size())
+            if (g.size() != aspia::kSrpNg_4096.g.size())
                 return false;
 
-            if (memcmp(g.data(), kSrpNg_4096.g.data(), kSrpNg_4096.g.size()) != 0)
+            if (memcmp(g.data(), aspia::kSrpNg_4096.g.data(), aspia::kSrpNg_4096.g.size()) != 0)
                 return false;
         }
         break;
 
         case 768: // 6144 bit
         {
-            if (memcmp(N.data(), kSrpNg_6144.N.data(), kSrpNg_6144.N.size()) != 0)
+            if (memcmp(N.data(), aspia::kSrpNg_6144.N.data(), aspia::kSrpNg_6144.N.size()) != 0)
                 return false;
 
-            if (g.size() != kSrpNg_6144.g.size())
+            if (g.size() != aspia::kSrpNg_6144.g.size())
                 return false;
 
-            if (memcmp(g.data(), kSrpNg_6144.g.data(), kSrpNg_6144.g.size()) != 0)
+            if (memcmp(g.data(), aspia::kSrpNg_6144.g.data(), aspia::kSrpNg_6144.g.size()) != 0)
                 return false;
         }
         break;
 
         case 1024: // 8192 bit
         {
-            if (memcmp(N.data(), kSrpNg_8192.N.data(), kSrpNg_8192.N.size()) != 0)
+            if (memcmp(N.data(), aspia::kSrpNg_8192.N.data(), aspia::kSrpNg_8192.N.size()) != 0)
                 return false;
 
-            if (g.size() != kSrpNg_8192.g.size())
+            if (g.size() != aspia::kSrpNg_8192.g.size())
                 return false;
 
-            if (memcmp(g.data(), kSrpNg_8192.g.data(), kSrpNg_8192.g.size()) != 0)
+            if (memcmp(g.data(), aspia::kSrpNg_8192.g.data(), aspia::kSrpNg_8192.g.size()) != 0)
                 return false;
         }
         break;
@@ -135,9 +135,9 @@ SrpClientContext::SrpClientContext(proto::Method method,
 
 SrpClientContext::~SrpClientContext()
 {
-    secureMemZero(&p_);
-    secureMemZero(&encrypt_iv_);
-    secureMemZero(&decrypt_iv_);
+    aspia::secureMemZero(&p_);
+    aspia::secureMemZero(&encrypt_iv_);
+    aspia::secureMemZero(&decrypt_iv_);
 }
 
 // static
@@ -195,20 +195,20 @@ proto::SrpClientKeyExchange* SrpClientContext::readServerKeyExchange(
         return nullptr;
     }
 
-    N_ = BigNum::fromStdString(server_key_exchange.number());
-    g_ = BigNum::fromStdString(server_key_exchange.generator());
-    s_ = BigNum::fromStdString(server_key_exchange.salt());
-    B_ = BigNum::fromStdString(server_key_exchange.b());
+    N_ = aspia::BigNum::fromStdString(server_key_exchange.number());
+    g_ = aspia::BigNum::fromStdString(server_key_exchange.generator());
+    s_ = aspia::BigNum::fromStdString(server_key_exchange.salt());
+    B_ = aspia::BigNum::fromStdString(server_key_exchange.b());
     decrypt_iv_ = QByteArray::fromStdString(server_key_exchange.iv());
 
-    a_ = BigNum::fromByteArray(Random::generateBuffer(128)); // 1024 bits.
-    A_ = SrpMath::calc_A(a_, N_, g_);
+    a_ = aspia::BigNum::fromByteArray(aspia::Random::generateBuffer(128)); // 1024 bits.
+    A_ = aspia::SrpMath::calc_A(a_, N_, g_);
 
     size_t iv_size = ivSizeForMethod(method_);
     if (!iv_size)
         return nullptr;
 
-    encrypt_iv_ = Random::generateBuffer(iv_size);
+    encrypt_iv_ = aspia::Random::generateBuffer(iv_size);
 
     std::unique_ptr<proto::SrpClientKeyExchange> client_key_exchange =
         std::make_unique<proto::SrpClientKeyExchange>();
@@ -221,15 +221,15 @@ proto::SrpClientKeyExchange* SrpClientContext::readServerKeyExchange(
 
 QByteArray SrpClientContext::key() const
 {
-    if (!SrpMath::verify_B_mod_N(B_, N_))
+    if (!aspia::SrpMath::verify_B_mod_N(B_, N_))
     {
         LOG(LS_WARNING) << "Invalid B or N";
         return QByteArray();
     }
 
-    BigNum u = SrpMath::calc_u(A_, B_, N_);
-    BigNum x = SrpMath::calc_x(s_, I_.toUtf8(), p_.toUtf8());
-    BigNum client_key = SrpMath::calcClientKey(N_, B_, g_, x, a_, u);
+    aspia::BigNum u = aspia::SrpMath::calc_u(A_, B_, N_);
+    aspia::BigNum x = aspia::SrpMath::calc_x(s_, I_.toUtf8(), p_.toUtf8());
+    aspia::BigNum client_key = aspia::SrpMath::calcClientKey(N_, B_, g_, x, a_, u);
 
     QByteArray client_key_string = client_key.toByteArray();
     if (client_key_string.isEmpty())
@@ -243,7 +243,7 @@ QByteArray SrpClientContext::key() const
         // AES256-GCM and ChaCha20-Poly1305 requires 256 bit key.
         case proto::METHOD_SRP_AES256_GCM:
         case proto::METHOD_SRP_CHACHA20_POLY1305:
-            return GenericHash::hash(GenericHash::BLAKE2s256, client_key_string);
+            return aspia::GenericHash::hash(aspia::GenericHash::BLAKE2s256, client_key_string);
 
         default:
             LOG(LS_WARNING) << "Unknown encryption method: " << method_;
@@ -251,4 +251,4 @@ QByteArray SrpClientContext::key() const
     }
 }
 
-} // namespace aspia
+} // namespace net

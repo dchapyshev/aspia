@@ -22,7 +22,7 @@
 #include <QList>
 #include <QByteArray>
 
-namespace aspia {
+namespace net {
 
 struct SrpUser
 {
@@ -43,6 +43,6 @@ struct SrpUserList
     QList<SrpUser> list;
 };
 
-} // namespace aspia
+} // namespace net
 
 #endif // ASPIA_NETWORK__SRP_USER_H

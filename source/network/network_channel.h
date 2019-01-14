@@ -27,10 +27,12 @@
 #include "base/macros_magic.h"
 
 namespace aspia {
-
 class Cryptor;
+} // namespace aspia
 
-class NetworkChannel : public QObject
+namespace net {
+
+class Channel : public QObject
 {
     Q_OBJECT
 
@@ -55,7 +57,7 @@ public:
         SESSION_TYPE_NOT_ALLOWED  // The specified session type is not allowed for the user.
     };
 
-    virtual ~NetworkChannel() = default;
+    virtual ~Channel() = default;
 
     // Returns the state of the data channel.
     ChannelState channelState() const { return channel_state_; }
@@ -101,12 +103,12 @@ protected:
     QVersionNumber peer_version_;
 
     // Encrypts and decrypts data.
-    std::unique_ptr<Cryptor> cryptor_;
+    std::unique_ptr<aspia::Cryptor> cryptor_;
 
     ChannelState channel_state_ = ChannelState::NOT_CONNECTED;
     KeyExchangeState key_exchange_state_ = KeyExchangeState::HELLO;
 
-    NetworkChannel(ChannelType channel_type, QTcpSocket* socket, QObject* parent);
+    Channel(ChannelType channel_type, QTcpSocket* socket, QObject* parent);
 
     void sendInternal(const QByteArray& buffer);
 
@@ -161,9 +163,9 @@ private:
     ReadContext read_;
     WriteContext write_;
 
-    DISALLOW_COPY_AND_ASSIGN(NetworkChannel);
+    DISALLOW_COPY_AND_ASSIGN(Channel);
 };
 
-} // namespace aspia
+} // namespace net
 
 #endif // ASPIA_NETWORK__NETWORK_CHANNEL_H

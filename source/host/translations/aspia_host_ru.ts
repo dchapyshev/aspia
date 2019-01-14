@@ -377,7 +377,7 @@
 <context>
     <name>aspia::UserDialog</name>
     <message>
-        <location filename="../ui/user_dialog.cc" line="265"/>
+        <location filename="../ui/user_dialog.cc" line="266"/>
         <source>Double-click to change</source>
         <translation>Двойной щелчок для изменения</translation>
     </message>
@@ -402,7 +402,7 @@
         <location filename="../ui/user_dialog.cc" line="165"/>
         <location filename="../ui/user_dialog.cc" line="175"/>
         <location filename="../ui/user_dialog.cc" line="186"/>
-        <location filename="../ui/user_dialog.cc" line="208"/>
+        <location filename="../ui/user_dialog.cc" line="209"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
@@ -440,7 +440,7 @@
         </translation>
     </message>
     <message>
-        <location filename="../ui/user_dialog.cc" line="209"/>
+        <location filename="../ui/user_dialog.cc" line="210"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation>Неизвестная внутренняя ошибка при создании или изменении пользователя.</translation>
     </message>

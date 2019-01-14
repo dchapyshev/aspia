@@ -24,17 +24,17 @@
 #include "network/network_channel.h"
 #include "protocol/common.pb.h"
 
-namespace aspia {
+namespace net {
 
 class SrpClientContext;
 
-class NetworkChannelClient : public NetworkChannel
+class ChannelClient : public Channel
 {
     Q_OBJECT
 
 public:
-    NetworkChannelClient(QObject* parent = nullptr);
-    ~NetworkChannelClient();
+    ChannelClient(QObject* parent = nullptr);
+    ~ChannelClient();
 
     // Connection to the host.
     void connectToHost(const QString& address, int port,
@@ -46,7 +46,7 @@ signals:
     void connected();
 
 protected:
-    // NetworkChannel implementation.
+    // Channel implementation.
     void internalMessageReceived(const QByteArray& buffer) override;
     void internalMessageWritten() override;
 
@@ -64,9 +64,9 @@ private:
 
     std::unique_ptr<SrpClientContext> srp_client_;
 
-    DISALLOW_COPY_AND_ASSIGN(NetworkChannelClient);
+    DISALLOW_COPY_AND_ASSIGN(ChannelClient);
 };
 
-} // namespace aspia
+} // namespace net
 
 #endif // ASPIA_NETWORK__NETWORK_CHANNEL_CLIENT_H

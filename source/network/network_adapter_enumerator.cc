@@ -28,13 +28,13 @@
 #include "base/string_printf.h"
 #include "base/unicode.h"
 
-namespace aspia {
+namespace net {
 
 //
-// NetworkAdapterEnumerator
+// AdapterEnumerator
 //
 
-NetworkAdapterEnumerator::NetworkAdapterEnumerator()
+AdapterEnumerator::AdapterEnumerator()
 {
     ULONG buffer_size = sizeof(IP_ADAPTER_INFO);
 
@@ -64,14 +64,14 @@ NetworkAdapterEnumerator::NetworkAdapterEnumerator()
     }
 }
 
-NetworkAdapterEnumerator::~NetworkAdapterEnumerator() = default;
+AdapterEnumerator::~AdapterEnumerator() = default;
 
-bool NetworkAdapterEnumerator::isAtEnd() const
+bool AdapterEnumerator::isAtEnd() const
 {
     return adapter_ == nullptr;
 }
 
-void NetworkAdapterEnumerator::advance()
+void AdapterEnumerator::advance()
 {
     adapter_ = adapter_->Next;
 }
@@ -84,7 +84,7 @@ static std::wstring GetAdapterRegistryPath(const char* adapter_name)
     return base::stringPrintf(kFormat, adapter_name);
 }
 
-std::string NetworkAdapterEnumerator::adapterName() const
+std::string AdapterEnumerator::adapterName() const
 {
     HDEVINFO device_info =
         SetupDiGetClassDevsW(&GUID_DEVCLASS_NET, nullptr, nullptr, DIGCF_PRESENT);
@@ -165,7 +165,7 @@ std::string NetworkAdapterEnumerator::adapterName() const
     return std::string();
 }
 
-std::string NetworkAdapterEnumerator::connectionName() const
+std::string AdapterEnumerator::connectionName() const
 {
     std::wstring key_path = GetAdapterRegistryPath(adapter_->AdapterName);
 
@@ -181,7 +181,7 @@ std::string NetworkAdapterEnumerator::connectionName() const
     return base::UTF8fromUTF16(name);
 }
 
-std::string NetworkAdapterEnumerator::interfaceType() const
+std::string AdapterEnumerator::interfaceType() const
 {
     MIB_IFROW adapter_if_entry;
 
@@ -225,7 +225,7 @@ std::string NetworkAdapterEnumerator::interfaceType() const
     }
 }
 
-uint32_t NetworkAdapterEnumerator::mtu() const
+uint32_t AdapterEnumerator::mtu() const
 {
     MIB_IFROW adapter_if_entry;
 
@@ -238,7 +238,7 @@ uint32_t NetworkAdapterEnumerator::mtu() const
     return adapter_if_entry.dwMtu;
 }
 
-uint32_t NetworkAdapterEnumerator::speed() const
+uint32_t AdapterEnumerator::speed() const
 {
     MIB_IFROW adapter_if_entry;
 
@@ -251,7 +251,7 @@ uint32_t NetworkAdapterEnumerator::speed() const
     return adapter_if_entry.dwSpeed;
 }
 
-std::string NetworkAdapterEnumerator::macAddress() const
+std::string AdapterEnumerator::macAddress() const
 {
     MIB_IFROW adapter_if_entry;
 
@@ -271,12 +271,12 @@ std::string NetworkAdapterEnumerator::macAddress() const
                               adapter_if_entry.bPhysAddr[6]);
 }
 
-bool NetworkAdapterEnumerator::isWinsEnabled() const
+bool AdapterEnumerator::isWinsEnabled() const
 {
     return !!adapter_->HaveWins;
 }
 
-std::string NetworkAdapterEnumerator::primaryWinsServer() const
+std::string AdapterEnumerator::primaryWinsServer() const
 {
     if (!isWinsEnabled())
         return std::string();
@@ -284,7 +284,7 @@ std::string NetworkAdapterEnumerator::primaryWinsServer() const
     return adapter_->PrimaryWinsServer.IpAddress.String;
 }
 
-std::string NetworkAdapterEnumerator::secondaryWinsServer() const
+std::string AdapterEnumerator::secondaryWinsServer() const
 {
     if (!isWinsEnabled())
         return std::string();
@@ -292,7 +292,7 @@ std::string NetworkAdapterEnumerator::secondaryWinsServer() const
     return adapter_->SecondaryWinsServer.IpAddress.String;
 }
 
-bool NetworkAdapterEnumerator::isDhcpEnabled() const
+bool AdapterEnumerator::isDhcpEnabled() const
 {
     return !!adapter_->DhcpEnabled;
 }
@@ -301,8 +301,7 @@ bool NetworkAdapterEnumerator::isDhcpEnabled() const
 // IpAddressEnumerator
 //
 
-NetworkAdapterEnumerator::IpAddressEnumerator::IpAddressEnumerator(
-    const NetworkAdapterEnumerator& adapter)
+AdapterEnumerator::IpAddressEnumerator::IpAddressEnumerator(const AdapterEnumerator& adapter)
     : address_(&adapter.adapter_->IpAddressList)
 {
     while (true)
@@ -320,12 +319,12 @@ NetworkAdapterEnumerator::IpAddressEnumerator::IpAddressEnumerator(
     }
 }
 
-bool NetworkAdapterEnumerator::IpAddressEnumerator::isAtEnd() const
+bool AdapterEnumerator::IpAddressEnumerator::isAtEnd() const
 {
     return address_ == nullptr;
 }
 
-void NetworkAdapterEnumerator::IpAddressEnumerator::advance()
+void AdapterEnumerator::IpAddressEnumerator::advance()
 {
     while (true)
     {
@@ -342,12 +341,12 @@ void NetworkAdapterEnumerator::IpAddressEnumerator::advance()
     }
 }
 
-std::string NetworkAdapterEnumerator::IpAddressEnumerator::address() const
+std::string AdapterEnumerator::IpAddressEnumerator::address() const
 {
     return address_->IpAddress.String;
 }
 
-std::string NetworkAdapterEnumerator::IpAddressEnumerator::mask() const
+std::string AdapterEnumerator::IpAddressEnumerator::mask() const
 {
     return address_->IpMask.String;
 }
@@ -356,8 +355,7 @@ std::string NetworkAdapterEnumerator::IpAddressEnumerator::mask() const
 // GatewayEnumerator
 //
 
-NetworkAdapterEnumerator::GatewayEnumerator::GatewayEnumerator(
-    const NetworkAdapterEnumerator& adapter)
+AdapterEnumerator::GatewayEnumerator::GatewayEnumerator(const AdapterEnumerator& adapter)
     : address_(&adapter.adapter_->GatewayList)
 {
     while (true)
@@ -375,12 +373,12 @@ NetworkAdapterEnumerator::GatewayEnumerator::GatewayEnumerator(
     }
 }
 
-bool NetworkAdapterEnumerator::GatewayEnumerator::isAtEnd() const
+bool AdapterEnumerator::GatewayEnumerator::isAtEnd() const
 {
     return address_ == nullptr;
 }
 
-void NetworkAdapterEnumerator::GatewayEnumerator::advance()
+void AdapterEnumerator::GatewayEnumerator::advance()
 {
     while (true)
     {
@@ -394,7 +392,7 @@ void NetworkAdapterEnumerator::GatewayEnumerator::advance()
     }
 }
 
-std::string NetworkAdapterEnumerator::GatewayEnumerator::address() const
+std::string AdapterEnumerator::GatewayEnumerator::address() const
 {
     return address_->IpAddress.String;
 }
@@ -403,8 +401,7 @@ std::string NetworkAdapterEnumerator::GatewayEnumerator::address() const
 // DhcpEnumerator
 //
 
-NetworkAdapterEnumerator::DhcpEnumerator::DhcpEnumerator(
-    const NetworkAdapterEnumerator& adapter)
+AdapterEnumerator::DhcpEnumerator::DhcpEnumerator(const AdapterEnumerator& adapter)
     : address_(&adapter.adapter_->DhcpServer)
 {
     while (true)
@@ -422,12 +419,12 @@ NetworkAdapterEnumerator::DhcpEnumerator::DhcpEnumerator(
     }
 }
 
-bool NetworkAdapterEnumerator::DhcpEnumerator::isAtEnd() const
+bool AdapterEnumerator::DhcpEnumerator::isAtEnd() const
 {
     return address_ == nullptr;
 }
 
-void NetworkAdapterEnumerator::DhcpEnumerator::advance()
+void AdapterEnumerator::DhcpEnumerator::advance()
 {
     while (true)
     {
@@ -444,7 +441,7 @@ void NetworkAdapterEnumerator::DhcpEnumerator::advance()
     }
 }
 
-std::string NetworkAdapterEnumerator::DhcpEnumerator::address() const
+std::string AdapterEnumerator::DhcpEnumerator::address() const
 {
     return address_->IpAddress.String;
 }
@@ -453,7 +450,7 @@ std::string NetworkAdapterEnumerator::DhcpEnumerator::address() const
 // DnsEnumerator
 //
 
-NetworkAdapterEnumerator::DnsEnumerator::DnsEnumerator(const NetworkAdapterEnumerator& adapter)
+AdapterEnumerator::DnsEnumerator::DnsEnumerator(const AdapterEnumerator& adapter)
 {
     ULONG buffer_size = sizeof(IP_PER_ADAPTER_INFO);
 
@@ -500,12 +497,12 @@ NetworkAdapterEnumerator::DnsEnumerator::DnsEnumerator(const NetworkAdapterEnume
     }
 }
 
-bool NetworkAdapterEnumerator::DnsEnumerator::isAtEnd() const
+bool AdapterEnumerator::DnsEnumerator::isAtEnd() const
 {
     return address_ == nullptr;
 }
 
-void NetworkAdapterEnumerator::DnsEnumerator::advance()
+void AdapterEnumerator::DnsEnumerator::advance()
 {
     while (true)
     {
@@ -522,9 +519,9 @@ void NetworkAdapterEnumerator::DnsEnumerator::advance()
     }
 }
 
-std::string NetworkAdapterEnumerator::DnsEnumerator::address() const
+std::string AdapterEnumerator::DnsEnumerator::address() const
 {
     return address_->IpAddress.String;
 }
 
-} // namespace aspia
+} // namespace net

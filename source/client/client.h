@@ -64,10 +64,10 @@ protected:
     void sendMessage(const google::protobuf::MessageLite& message);
 
 private:
-    static QString networkErrorToString(NetworkChannel::Error error);
+    static QString networkErrorToString(net::Channel::Error error);
 
     ConnectData connect_data_;
-    QPointer<NetworkChannelClient> network_channel_;
+    QPointer<net::ChannelClient> network_channel_;
 
     DISALLOW_COPY_AND_ASSIGN(Client);
 };

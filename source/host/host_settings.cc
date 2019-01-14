@@ -79,9 +79,9 @@ void HostSettings::setAddFirewallRule(bool value)
     settings_.setValue(QLatin1String("AddFirewallRule"), value);
 }
 
-SrpUserList HostSettings::userList() const
+net::SrpUserList HostSettings::userList() const
 {
-    SrpUserList users;
+    net::SrpUserList users;
 
     users.seed_key = settings_.value(QLatin1String("SeedKey")).toByteArray();
     if (users.seed_key.isEmpty())
@@ -92,7 +92,7 @@ SrpUserList HostSettings::userList() const
     {
         settings_.setArrayIndex(i);
 
-        SrpUser user;
+        net::SrpUser user;
         user.name      = settings_.value(QLatin1String("Name")).toString();
         user.salt      = settings_.value(QLatin1String("Salt")).toByteArray();
         user.verifier  = settings_.value(QLatin1String("Verifier")).toByteArray();
@@ -114,7 +114,7 @@ SrpUserList HostSettings::userList() const
     return users;
 }
 
-void HostSettings::setUserList(const SrpUserList& users)
+void HostSettings::setUserList(const net::SrpUserList& users)
 {
     // Clear the old list of users.
     settings_.remove(QLatin1String("Users"));
@@ -126,7 +126,7 @@ void HostSettings::setUserList(const SrpUserList& users)
     {
         settings_.setArrayIndex(i);
 
-        const SrpUser& user = users.list.at(i);
+        const net::SrpUser& user = users.list.at(i);
 
         settings_.setValue(QLatin1String("Name"), user.name);
         settings_.setValue(QLatin1String("Salt"), user.salt);

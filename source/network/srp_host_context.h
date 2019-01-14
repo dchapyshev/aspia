@@ -24,7 +24,7 @@
 #include "crypto/big_num.h"
 #include "protocol/key_exchange.pb.h"
 
-namespace aspia {
+namespace net {
 
 struct SrpUserList;
 struct SrpUser;
@@ -59,16 +59,16 @@ private:
     QByteArray encrypt_iv_;
     QByteArray decrypt_iv_;
 
-    BigNum N_;
-    BigNum v_;
+    aspia::BigNum N_;
+    aspia::BigNum v_;
 
-    BigNum b_;
-    BigNum B_;
-    BigNum A_;
+    aspia::BigNum b_;
+    aspia::BigNum B_;
+    aspia::BigNum A_;
 
     DISALLOW_COPY_AND_ASSIGN(SrpHostContext);
 };
 
-} // namespace aspia
+} // namespace net
 
 #endif // ASPIA_NETWORK__SRP_SERVER_CONTEXT_H

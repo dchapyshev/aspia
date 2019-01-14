@@ -21,16 +21,16 @@
 #include "base/logging.h"
 #include "network/network_channel_host.h"
 
-namespace aspia {
+namespace net {
 
-NetworkServer::NetworkServer(const SrpUserList& user_list, QObject* parent)
+Server::Server(const SrpUserList& user_list, QObject* parent)
     : QObject(parent),
       user_list_(user_list)
 {
     // Nothing
 }
 
-bool NetworkServer::start(uint16_t port)
+bool Server::start(uint16_t port)
 {
     if (!tcp_server_.isNull())
     {
@@ -40,7 +40,7 @@ bool NetworkServer::start(uint16_t port)
 
     tcp_server_ = new QTcpServer(this);
 
-    connect(tcp_server_, &QTcpServer::newConnection, this, &NetworkServer::onNewConnection);
+    connect(tcp_server_, &QTcpServer::newConnection, this, &Server::onNewConnection);
     connect(tcp_server_, &QTcpServer::acceptError,
             [this](QAbstractSocket::SocketError /* error */)
     {
@@ -57,7 +57,7 @@ bool NetworkServer::start(uint16_t port)
     return true;
 }
 
-void NetworkServer::stop()
+void Server::stop()
 {
     if (tcp_server_.isNull())
     {
@@ -67,7 +67,7 @@ void NetworkServer::stop()
 
     for (auto it = pending_channels_.constBegin(); it != pending_channels_.constEnd(); ++it)
     {
-        NetworkChannelHost* network_channel = *it;
+        ChannelHost* network_channel = *it;
 
         if (network_channel)
             network_channel->stop();
@@ -75,7 +75,7 @@ void NetworkServer::stop()
 
     for (auto it = ready_channels_.constBegin(); it != ready_channels_.constEnd(); ++it)
     {
-        NetworkChannelHost* network_channel = *it;
+        ChannelHost* network_channel = *it;
 
         if (network_channel)
             network_channel->stop();
@@ -88,51 +88,48 @@ void NetworkServer::stop()
     delete tcp_server_;
 }
 
-bool NetworkServer::hasReadyChannels() const
+bool Server::hasReadyChannels() const
 {
     return !ready_channels_.isEmpty();
 }
 
-NetworkChannelHost* NetworkServer::nextReadyChannel()
+ChannelHost* Server::nextReadyChannel()
 {
     if (ready_channels_.isEmpty())
         return nullptr;
 
-    NetworkChannelHost* network_channel = ready_channels_.front();
+    ChannelHost* network_channel = ready_channels_.front();
     ready_channels_.pop_front();
     return network_channel;
 }
 
-void NetworkServer::onNewConnection()
+void Server::onNewConnection()
 {
     QTcpSocket* socket = tcp_server_->nextPendingConnection();
     if (!socket)
         return;
 
-    NetworkChannelHost* host_channel = new NetworkChannelHost(socket, user_list_, this);
-
-    connect(host_channel, &NetworkChannelHost::keyExchangeFinished,
-            this, &NetworkServer::onChannelReady);
-
+    ChannelHost* host_channel = new ChannelHost(socket, user_list_, this);
+    connect(host_channel, &ChannelHost::keyExchangeFinished, this, &Server::onChannelReady);
     pending_channels_.push_back(host_channel);
 
     // Start key exchange.
     host_channel->startKeyExchange();
 }
 
-void NetworkServer::onChannelReady()
+void Server::onChannelReady()
 {
     auto it = pending_channels_.begin();
 
     while (it != pending_channels_.end())
     {
-        NetworkChannelHost* network_channel = *it;
+        ChannelHost* network_channel = *it;
 
         if (!network_channel)
         {
             it = pending_channels_.erase(it);
         }
-        else if (network_channel->channelState() == NetworkChannel::ChannelState::ENCRYPTED)
+        else if (network_channel->channelState() == Channel::ChannelState::ENCRYPTED)
         {
             it = pending_channels_.erase(it);
 
@@ -146,4 +143,4 @@ void NetworkServer::onChannelReady()
     }
 }
 
-} // namespace aspia
+} // namespace net

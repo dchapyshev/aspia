@@ -23,9 +23,11 @@
 
 #include "base/macros_magic.h"
 
-namespace aspia {
-
+namespace net {
 struct SrpUserList;
+} // namespace net
+
+namespace aspia {
 
 class HostSettings
 {
@@ -45,8 +47,8 @@ public:
     bool addFirewallRule() const;
     void setAddFirewallRule(bool value);
 
-    SrpUserList userList() const;
-    void setUserList(const SrpUserList& user_list);
+    net::SrpUserList userList() const;
+    void setUserList(const net::SrpUserList& user_list);
 
     QString updateServer() const;
     void setUpdateServer(const QString& server);

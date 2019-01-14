@@ -30,11 +30,14 @@ class Channel;
 class Server;
 } // namespace ipc
 
+namespace net {
+class ChannelHost;
+} // namespace net
+
 namespace aspia {
 
 class HostProcess;
 class HostSessionFake;
-class NetworkChannelHost;
 
 class Host : public QObject
 {
@@ -44,8 +47,8 @@ public:
     Host(QObject* parent = nullptr);
     ~Host();
 
-    NetworkChannelHost* networkChannel() const { return network_channel_; }
-    void setNetworkChannel(NetworkChannelHost* network_channel);
+    net::ChannelHost* networkChannel() const { return network_channel_; }
+    void setNetworkChannel(net::ChannelHost* network_channel);
 
     const QUuid& uuid() const { return uuid_; }
     void setUuid(const QUuid& uuid);
@@ -86,7 +89,7 @@ private:
     int attach_timer_id_ = 0;
     State state_ = State::STOPPED;
 
-    NetworkChannelHost* network_channel_ = nullptr;
+    net::ChannelHost* network_channel_ = nullptr;
     QPointer<ipc::Channel> ipc_channel_;
     QPointer<HostProcess> session_process_;
     QPointer<HostSessionFake> fake_session_;

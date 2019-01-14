@@ -61,7 +61,7 @@ private:
     void sessionCloseToNotifier(const Host& host);
 
     // Accepts incoming network connections.
-    QPointer<NetworkServer> network_server_;
+    QPointer<net::Server> network_server_;
 
     // Contains the status of the notifier process.
     NotifierState notifier_state_ = NotifierState::STOPPED;

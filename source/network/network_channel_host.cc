@@ -26,26 +26,26 @@
 #include "crypto/cryptor_chacha20_poly1305.h"
 #include "network/srp_host_context.h"
 
-namespace aspia {
+namespace net {
 
-NetworkChannelHost::NetworkChannelHost(QTcpSocket* socket,
-                                       const SrpUserList& user_list,
-                                       QObject* parent)
-    : NetworkChannel(ChannelType::HOST, socket, parent),
+ChannelHost::ChannelHost(QTcpSocket* socket,
+                         const SrpUserList& user_list,
+                         QObject* parent)
+    : Channel(ChannelType::HOST, socket, parent),
       user_list_(user_list)
 {
     // Disable the Nagle algorithm for the socket.
     socket_->setSocketOption(QTcpSocket::LowDelayOption, 1);
 }
 
-NetworkChannelHost::~NetworkChannelHost() = default;
+ChannelHost::~ChannelHost() = default;
 
-void NetworkChannelHost::startKeyExchange()
+void ChannelHost::startKeyExchange()
 {
     channel_state_ = ChannelState::CONNECTED;
 }
 
-void NetworkChannelHost::internalMessageReceived(const QByteArray& buffer)
+void ChannelHost::internalMessageReceived(const QByteArray& buffer)
 {
     switch (key_exchange_state_)
     {
@@ -70,15 +70,15 @@ void NetworkChannelHost::internalMessageReceived(const QByteArray& buffer)
     }
 }
 
-void NetworkChannelHost::internalMessageWritten()
+void ChannelHost::internalMessageWritten()
 {
     // Nothing
 }
 
-void NetworkChannelHost::readClientHello(const QByteArray& buffer)
+void ChannelHost::readClientHello(const QByteArray& buffer)
 {
     proto::ClientHello client_hello;
-    if (!parseMessage(buffer, client_hello))
+    if (!aspia::parseMessage(buffer, client_hello))
     {
         emit errorOccurred(Error::PROTOCOL_FAILURE);
         return;
@@ -106,13 +106,13 @@ void NetworkChannelHost::readClientHello(const QByteArray& buffer)
     srp_host_ = std::make_unique<SrpHostContext>(server_hello.method(), user_list_);
 
     key_exchange_state_ = KeyExchangeState::IDENTIFY;
-    sendInternal(serializeMessage(server_hello));
+    sendInternal(aspia::serializeMessage(server_hello));
 }
 
-void NetworkChannelHost::readIdentify(const QByteArray& buffer)
+void ChannelHost::readIdentify(const QByteArray& buffer)
 {
     proto::SrpIdentify identify;
-    if (!parseMessage(buffer, identify))
+    if (!aspia::parseMessage(buffer, identify))
     {
         emit errorOccurred(Error::PROTOCOL_FAILURE);
         return;
@@ -128,13 +128,13 @@ void NetworkChannelHost::readIdentify(const QByteArray& buffer)
     }
 
     key_exchange_state_ = KeyExchangeState::KEY_EXCHANGE;
-    sendInternal(serializeMessage(*server_key_exchange));
+    sendInternal(aspia::serializeMessage(*server_key_exchange));
 }
 
-void NetworkChannelHost::readClientKeyExchange(const QByteArray& buffer)
+void ChannelHost::readClientKeyExchange(const QByteArray& buffer)
 {
     proto::SrpClientKeyExchange client_key_exchange;
-    if (!parseMessage(buffer, client_key_exchange))
+    if (!aspia::parseMessage(buffer, client_key_exchange))
     {
         emit errorOccurred(Error::PROTOCOL_FAILURE);
         return;
@@ -146,17 +146,19 @@ void NetworkChannelHost::readClientKeyExchange(const QByteArray& buffer)
     {
         case proto::METHOD_SRP_AES256_GCM:
         {
-            cryptor_.reset(CryptorAes256Gcm::create(srp_host_->key(),
-                                                    srp_host_->encryptIv(),
-                                                    srp_host_->decryptIv()));
+            cryptor_.reset(
+                aspia::CryptorAes256Gcm::create(srp_host_->key(),
+                                                srp_host_->encryptIv(),
+                                                srp_host_->decryptIv()));
         }
         break;
 
         case proto::METHOD_SRP_CHACHA20_POLY1305:
         {
-            cryptor_.reset(CryptorChaCha20Poly1305::create(srp_host_->key(),
-                                                           srp_host_->encryptIv(),
-                                                           srp_host_->decryptIv()));
+            cryptor_.reset(
+                aspia::CryptorChaCha20Poly1305::create(srp_host_->key(),
+                                                       srp_host_->encryptIv(),
+                                                       srp_host_->decryptIv()));
         }
         break;
 
@@ -179,7 +181,7 @@ void NetworkChannelHost::readClientKeyExchange(const QByteArray& buffer)
     host_version->set_minor(ASPIA_VERSION_MINOR);
     host_version->set_patch(ASPIA_VERSION_PATCH);
 
-    QByteArray session_challenge_buffer = serializeMessage(session_challenge);
+    QByteArray session_challenge_buffer = aspia::serializeMessage(session_challenge);
     if (session_challenge_buffer.isEmpty())
     {
         LOG(LS_WARNING) << "Error when creating authorization challenge";
@@ -202,7 +204,7 @@ void NetworkChannelHost::readClientKeyExchange(const QByteArray& buffer)
     sendInternal(encrypted_buffer);
 }
 
-void NetworkChannelHost::readSessionResponse(const QByteArray& buffer)
+void ChannelHost::readSessionResponse(const QByteArray& buffer)
 {
     QByteArray decrypted_buffer;
     decrypted_buffer.resize(cryptor_->decryptedDataSize(buffer.size()));
@@ -214,7 +216,7 @@ void NetworkChannelHost::readSessionResponse(const QByteArray& buffer)
     }
 
     proto::SessionResponse session_response;
-    if (!parseMessage(decrypted_buffer, session_response))
+    if (!aspia::parseMessage(decrypted_buffer, session_response))
     {
         emit errorOccurred(Error::PROTOCOL_FAILURE);
         return;
@@ -246,4 +248,4 @@ void NetworkChannelHost::readSessionResponse(const QByteArray& buffer)
     emit keyExchangeFinished();
 }
 
-} // namespace aspia
+} // namespace net

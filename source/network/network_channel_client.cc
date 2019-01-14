@@ -35,25 +35,25 @@
 #include <mstcpip.h>
 #endif
 
-namespace aspia {
+namespace net {
 
-NetworkChannelClient::NetworkChannelClient(QObject* parent)
-    : NetworkChannel(ChannelType::CLIENT, new QTcpSocket(), parent)
+ChannelClient::ChannelClient(QObject* parent)
+    : Channel(ChannelType::CLIENT, new QTcpSocket(), parent)
 {
     // We must enable this option before the connection is established.
     socket_->setSocketOption(QTcpSocket::KeepAliveOption, 1);
 
-    connect(socket_, &QTcpSocket::connected, this, &NetworkChannelClient::onConnected);
+    connect(socket_, &QTcpSocket::connected, this, &ChannelClient::onConnected);
 }
 
-NetworkChannelClient::~NetworkChannelClient()
+ChannelClient::~ChannelClient()
 {
-    secureMemZero(&password_);
+    aspia::secureMemZero(&password_);
 }
 
-void NetworkChannelClient::connectToHost(const QString& address, int port,
-                                         const QString& username, const QString& password,
-                                         proto::SessionType session_type)
+void ChannelClient::connectToHost(const QString& address, int port,
+                                  const QString& username, const QString& password,
+                                  proto::SessionType session_type)
 {
     username_ = username;
     password_ = password;
@@ -63,7 +63,7 @@ void NetworkChannelClient::connectToHost(const QString& address, int port,
     socket_->connectToHost(address, port);
 }
 
-void NetworkChannelClient::internalMessageReceived(const QByteArray& buffer)
+void ChannelClient::internalMessageReceived(const QByteArray& buffer)
 {
     switch (key_exchange_state_)
     {
@@ -84,7 +84,7 @@ void NetworkChannelClient::internalMessageReceived(const QByteArray& buffer)
     }
 }
 
-void NetworkChannelClient::internalMessageWritten()
+void ChannelClient::internalMessageWritten()
 {
     switch (key_exchange_state_)
     {
@@ -102,7 +102,7 @@ void NetworkChannelClient::internalMessageWritten()
     }
 }
 
-void NetworkChannelClient::onConnected()
+void ChannelClient::onConnected()
 {
     channel_state_ = ChannelState::CONNECTED;
 
@@ -135,15 +135,15 @@ void NetworkChannelClient::onConnected()
     client_hello.set_methods(methods);
 
     // Send ClientHello to server.
-    sendInternal(serializeMessage(client_hello));
+    sendInternal(aspia::serializeMessage(client_hello));
 }
 
-void NetworkChannelClient::readServerHello(const QByteArray& buffer)
+void ChannelClient::readServerHello(const QByteArray& buffer)
 {
     key_exchange_state_ = KeyExchangeState::IDENTIFY;
 
     proto::ServerHello server_hello;
-    if (!parseMessage(buffer, server_hello))
+    if (!aspia::parseMessage(buffer, server_hello))
     {
         emit errorOccurred(Error::PROTOCOL_FAILURE);
         return;
@@ -166,15 +166,15 @@ void NetworkChannelClient::readServerHello(const QByteArray& buffer)
     }
 
     key_exchange_state_ = KeyExchangeState::KEY_EXCHANGE;
-    sendInternal(serializeMessage(*identify));
+    sendInternal(aspia::serializeMessage(*identify));
 }
 
-void NetworkChannelClient::readServerKeyExchange(const QByteArray& buffer)
+void ChannelClient::readServerKeyExchange(const QByteArray& buffer)
 {
     DCHECK(srp_client_);
 
     proto::SrpServerKeyExchange server_key_exchange;
-    if (!parseMessage(buffer, server_key_exchange))
+    if (!aspia::parseMessage(buffer, server_key_exchange))
     {
         emit errorOccurred(Error::PROTOCOL_FAILURE);
         return;
@@ -190,10 +190,10 @@ void NetworkChannelClient::readServerKeyExchange(const QByteArray& buffer)
     }
 
     key_exchange_state_ = KeyExchangeState::SESSION;
-    sendInternal(serializeMessage(*client_key_exchange));
+    sendInternal(aspia::serializeMessage(*client_key_exchange));
 }
 
-void NetworkChannelClient::readSessionChallenge(const QByteArray& buffer)
+void ChannelClient::readSessionChallenge(const QByteArray& buffer)
 {
     DCHECK(srp_client_);
 
@@ -201,17 +201,19 @@ void NetworkChannelClient::readSessionChallenge(const QByteArray& buffer)
     {
         case proto::METHOD_SRP_AES256_GCM:
         {
-            cryptor_.reset(CryptorAes256Gcm::create(srp_client_->key(),
-                                                    srp_client_->encryptIv(),
-                                                    srp_client_->decryptIv()));
+            cryptor_.reset(
+                aspia::CryptorAes256Gcm::create(srp_client_->key(),
+                                                srp_client_->encryptIv(),
+                                                srp_client_->decryptIv()));
         }
         break;
 
         case proto::METHOD_SRP_CHACHA20_POLY1305:
         {
-            cryptor_.reset(CryptorChaCha20Poly1305::create(srp_client_->key(),
-                                                           srp_client_->encryptIv(),
-                                                           srp_client_->decryptIv()));
+            cryptor_.reset(
+                aspia::CryptorChaCha20Poly1305::create(srp_client_->key(),
+                                                       srp_client_->encryptIv(),
+                                                       srp_client_->decryptIv()));
         }
         break;
 
@@ -237,7 +239,7 @@ void NetworkChannelClient::readSessionChallenge(const QByteArray& buffer)
     }
 
     proto::SessionChallenge session_challenge;
-    if (!parseMessage(session_challenge_buffer, session_challenge))
+    if (!aspia::parseMessage(session_challenge_buffer, session_challenge))
     {
         emit errorOccurred(Error::AUTHENTICATION_FAILURE);
         return;
@@ -262,7 +264,7 @@ void NetworkChannelClient::readSessionChallenge(const QByteArray& buffer)
     client_version->set_minor(ASPIA_VERSION_MINOR);
     client_version->set_patch(ASPIA_VERSION_PATCH);
 
-    QByteArray session_response_buffer = serializeMessage(session_response);
+    QByteArray session_response_buffer = aspia::serializeMessage(session_response);
     if (session_response_buffer.isEmpty())
     {
         LOG(LS_WARNING) << "Error when creating session response";
@@ -289,4 +291,4 @@ void NetworkChannelClient::readSessionChallenge(const QByteArray& buffer)
     sendInternal(encrypted_buffer);
 }
 
-} // namespace aspia
+} // namespace net

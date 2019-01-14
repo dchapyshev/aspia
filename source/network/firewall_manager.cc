@@ -25,7 +25,7 @@
 
 #include "base/logging.h"
 
-namespace aspia {
+namespace net {
 
 FirewallManager::FirewallManager(const QString& application_path)
     : application_path_(application_path)
@@ -244,4 +244,4 @@ void FirewallManager::deleteRule(Microsoft::WRL::ComPtr<INetFwRule> rule)
     firewall_rules_->Remove(unique_name);
 }
 
-} // namespace aspia
+} // namespace net
