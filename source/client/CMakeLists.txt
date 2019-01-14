@@ -122,7 +122,7 @@ target_link_libraries(aspia_client
     aspia_common
     aspia_crypto
     aspia_desktop
-    aspia_network
+    aspia_net
     aspia_protocol
     ${THIRD_PARTY_LIBS})
 

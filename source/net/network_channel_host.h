@@ -16,57 +16,56 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_NETWORK__NETWORK_CHANNEL_CLIENT_H
-#define ASPIA_NETWORK__NETWORK_CHANNEL_CLIENT_H
+#ifndef ASPIA_NET__NETWORK_CHANNEL_HOST_H
+#define ASPIA_NET__NETWORK_CHANNEL_HOST_H
 
-#include <QVersionNumber>
-
-#include "network/network_channel.h"
+#include "net/network_channel.h"
+#include "net/srp_user.h"
 #include "protocol/common.pb.h"
 
 namespace net {
 
-class SrpClientContext;
+class SrpHostContext;
 
-class ChannelClient : public Channel
+class ChannelHost : public Channel
 {
     Q_OBJECT
 
 public:
-    ChannelClient(QObject* parent = nullptr);
-    ~ChannelClient();
+    ~ChannelHost();
 
-    // Connection to the host.
-    void connectToHost(const QString& address, int port,
-                       const QString& username, const QString& password,
-                       proto::SessionType session_type);
+    void startKeyExchange();
+
+    const QString& userName() const { return username_; }
+    proto::SessionType sessionType() const { return session_type_; }
 
 signals:
-    // Emits when a secure connection is established.
-    void connected();
+    void keyExchangeFinished();
 
 protected:
-    // Channel implementation.
+    friend class Server;
+    ChannelHost(QTcpSocket* socket, const SrpUserList& user_list, QObject* parent = nullptr);
+
+    // NetworkChannel implementation.
     void internalMessageReceived(const QByteArray& buffer) override;
     void internalMessageWritten() override;
 
-private slots:
-    void onConnected();
-
 private:
-    void readServerHello(const QByteArray& buffer);
-    void readServerKeyExchange(const QByteArray& buffer);
-    void readSessionChallenge(const QByteArray& buffer);
+    void readClientHello(const QByteArray& buffer);
+    void readIdentify(const QByteArray& buffer);
+    void readClientKeyExchange(const QByteArray& buffer);
+    void readSessionResponse(const QByteArray& buffer);
+
+    SrpUserList user_list_;
 
     QString username_;
-    QString password_;
     proto::SessionType session_type_ = proto::SESSION_TYPE_UNKNOWN;
 
-    std::unique_ptr<SrpClientContext> srp_client_;
+    std::unique_ptr<SrpHostContext> srp_host_;
 
-    DISALLOW_COPY_AND_ASSIGN(ChannelClient);
+    DISALLOW_COPY_AND_ASSIGN(ChannelHost);
 };
 
 } // namespace net
 
-#endif // ASPIA_NETWORK__NETWORK_CHANNEL_CLIENT_H
+#endif // ASPIA_NET__NETWORK_CHANNEL_HOST_H

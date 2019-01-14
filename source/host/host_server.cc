@@ -25,8 +25,8 @@
 #include "host/win/host.h"
 #include "host/host_settings.h"
 #include "ipc/ipc_server.h"
-#include "network/firewall_manager.h"
-#include "network/network_channel_host.h"
+#include "net/firewall_manager.h"
+#include "net/network_channel_host.h"
 #include "protocol/notifier.pb.h"
 
 namespace host {

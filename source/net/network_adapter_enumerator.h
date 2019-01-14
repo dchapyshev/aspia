@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_NETWORK__NETWORK_ADAPTER_ENUMERATOR_H
-#define ASPIA_NETWORK__NETWORK_ADAPTER_ENUMERATOR_H
+#ifndef ASPIA_NET__NETWORK_ADAPTER_ENUMERATOR_H
+#define ASPIA_NET__NETWORK_ADAPTER_ENUMERATOR_H
 
 #include <string>
 
@@ -120,4 +120,4 @@ private:
 
 } // namespace net
 
-#endif // ASPIA_NETWORK__NETWORK_ADAPTER_ENUMERATOR_H
+#endif // ASPIA_NET__NETWORK_ADAPTER_ENUMERATOR_H

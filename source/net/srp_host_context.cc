@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "network/srp_host_context.h"
+#include "net/srp_host_context.h"
 
 #include "base/logging.h"
 #include "crypto/generic_hash.h"
@@ -24,7 +24,7 @@
 #include "crypto/secure_memory.h"
 #include "crypto/srp_constants.h"
 #include "crypto/srp_math.h"
-#include "network/srp_user.h"
+#include "net/srp_user.h"
 
 namespace net {
 

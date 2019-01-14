@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "network/firewall_manager.h"
+#include "net/firewall_manager.h"
 
 #include <QUuid>
 

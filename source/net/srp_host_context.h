@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_NETWORK__SRP_CLIENT_CONTEXT_H
-#define ASPIA_NETWORK__SRP_CLIENT_CONTEXT_H
+#ifndef ASPIA_NET__SRP_SERVER_CONTEXT_H
+#define ASPIA_NET__SRP_SERVER_CONTEXT_H
 
 #include <QString>
 
@@ -26,48 +26,49 @@
 
 namespace net {
 
-class SrpClientContext
+struct SrpUserList;
+struct SrpUser;
+
+class SrpHostContext
 {
 public:
-    ~SrpClientContext();
+    SrpHostContext(proto::Method method, const SrpUserList& user_list);
+    ~SrpHostContext();
 
-    static SrpClientContext* create(proto::Method method,
-                                    const QString& username,
-                                    const QString& password);
+    static SrpUser* createUser(const QString& username, const QString& password);
 
-    proto::SrpIdentify* identify();
+    proto::SrpServerKeyExchange* readIdentify(const proto::SrpIdentify& identify);
+    void readClientKeyExchange(const proto::SrpClientKeyExchange& client_key_exchange);
 
-    proto::SrpClientKeyExchange* readServerKeyExchange(
-        const proto::SrpServerKeyExchange& server_key_exchange);
+    const QString& userName() const { return username_; }
+    uint32_t sessionTypes() const { return session_types_; }
 
     proto::Method method() const { return method_; }
     QByteArray key() const;
     const QByteArray& encryptIv() const { return encrypt_iv_; }
     const QByteArray& decryptIv() const { return decrypt_iv_; }
 
-protected:
-    SrpClientContext(proto::Method method, const QString& I, const QString& p);
-
 private:
     const proto::Method method_;
 
-    QString I_; // User name.
-    QString p_; // Plain text password.
+    const SrpUserList& user_list_;
 
-    crypto::BigNum N_;
-    crypto::BigNum g_;
-    crypto::BigNum s_;
-    crypto::BigNum B_;
-
-    crypto::BigNum a_;
-    crypto::BigNum A_;
+    QString username_;
+    uint32_t session_types_ = 0;
 
     QByteArray encrypt_iv_;
     QByteArray decrypt_iv_;
 
-    DISALLOW_COPY_AND_ASSIGN(SrpClientContext);
+    crypto::BigNum N_;
+    crypto::BigNum v_;
+
+    crypto::BigNum b_;
+    crypto::BigNum B_;
+    crypto::BigNum A_;
+
+    DISALLOW_COPY_AND_ASSIGN(SrpHostContext);
 };
 
 } // namespace net
 
-#endif // ASPIA_NETWORK__SRP_CLIENT_CONTEXT_H
+#endif // ASPIA_NET__SRP_SERVER_CONTEXT_H

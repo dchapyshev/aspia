@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "network/network_channel_client.h"
+#include "net/network_channel_client.h"
 
 #include <QNetworkProxy>
 
@@ -28,7 +28,7 @@
 #include "crypto/cryptor_aes256_gcm.h"
 #include "crypto/cryptor_chacha20_poly1305.h"
 #include "crypto/secure_memory.h"
-#include "network/srp_client_context.h"
+#include "net/srp_client_context.h"
 
 #if defined(OS_WIN)
 #include <winsock2.h>

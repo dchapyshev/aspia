@@ -31,7 +31,7 @@
 #include "host/ui/user_tree_item.h"
 #include "host/win/host_service_constants.h"
 #include "host/host_settings.h"
-#include "network/srp_user.h"
+#include "net/srp_user.h"
 #include "updater/update_dialog.h"
 
 namespace host {

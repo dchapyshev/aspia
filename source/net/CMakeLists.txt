@@ -16,7 +16,7 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 #
 
-list(APPEND SOURCE_NETWORK
+list(APPEND SOURCE_NET
     firewall_manager.cc
     firewall_manager.h
     network_adapter_enumerator.cc
@@ -35,10 +35,7 @@ list(APPEND SOURCE_NETWORK
     srp_host_context.h
     srp_user.h)
 
-source_group("" FILES ${SOURCE_NETWORK})
+source_group("" FILES ${SOURCE_NET})
 
-add_library(aspia_network STATIC ${SOURCE_NETWORK})
-target_link_libraries(aspia_network
-    aspia_base
-    aspia_crypto
-    ${THIRD_PARTY_LIBS})
+add_library(aspia_net STATIC ${SOURCE_NET})
+target_link_libraries(aspia_net aspia_base aspia_crypto ${THIRD_PARTY_LIBS})

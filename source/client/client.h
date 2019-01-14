@@ -24,7 +24,7 @@
 
 #include "base/macros_magic.h"
 #include "client/connect_data.h"
-#include "network/network_channel_client.h"
+#include "net/network_channel_client.h"
 
 namespace client {
 

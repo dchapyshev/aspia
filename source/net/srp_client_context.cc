@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "network/srp_client_context.h"
+#include "net/srp_client_context.h"
 
 #include "base/logging.h"
 #include "crypto/generic_hash.h"

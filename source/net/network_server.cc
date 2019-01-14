@@ -16,10 +16,10 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "network/network_server.h"
+#include "net/network_server.h"
 
 #include "base/logging.h"
-#include "network/network_channel_host.h"
+#include "net/network_channel_host.h"
 
 namespace net {
 

@@ -28,7 +28,7 @@
 #include "host/host_session_fake.h"
 #include "ipc/ipc_channel.h"
 #include "ipc/ipc_server.h"
-#include "network/network_channel_host.h"
+#include "net/network_channel_host.h"
 
 namespace host {
 

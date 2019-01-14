@@ -21,7 +21,7 @@
 
 #include "host/win/host_process.h"
 #include "ipc/ipc_channel.h"
-#include "network/network_server.h"
+#include "net/network_server.h"
 
 namespace host {
 

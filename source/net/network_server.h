@@ -16,15 +16,15 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_NETWORK__NETWORK_SERVER_H
-#define ASPIA_NETWORK__NETWORK_SERVER_H
+#ifndef ASPIA_NET__NETWORK_SERVER_H
+#define ASPIA_NET__NETWORK_SERVER_H
 
 #include <QPointer>
 #include <QList>
 #include <QTcpServer>
 
 #include "base/macros_magic.h"
-#include "network/srp_user.h"
+#include "net/srp_user.h"
 
 namespace net {
 
@@ -67,4 +67,4 @@ private:
 
 } // namespace net
 
-#endif // ASPIA_NETWORK__NETWORK_SERVER_H
+#endif // ASPIA_NET__NETWORK_SERVER_H

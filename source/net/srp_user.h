@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_NETWORK__SRP_USER_H
-#define ASPIA_NETWORK__SRP_USER_H
+#ifndef ASPIA_NET__SRP_USER_H
+#define ASPIA_NET__SRP_USER_H
 
 #include <QList>
 #include <QByteArray>
@@ -45,4 +45,4 @@ struct SrpUserList
 
 } // namespace net
 
-#endif // ASPIA_NETWORK__SRP_USER_H
+#endif // ASPIA_NET__SRP_USER_H

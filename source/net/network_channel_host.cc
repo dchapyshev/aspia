@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "network/network_channel_host.h"
+#include "net/network_channel_host.h"
 
 #include "base/cpuid.h"
 #include "base/logging.h"
@@ -24,7 +24,7 @@
 #include "common/message_serialization.h"
 #include "crypto/cryptor_aes256_gcm.h"
 #include "crypto/cryptor_chacha20_poly1305.h"
-#include "network/srp_host_context.h"
+#include "net/srp_host_context.h"
 
 namespace net {
 

@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "network/network_channel.h"
+#include "net/network_channel.h"
 
 #include <QNetworkProxy>
 

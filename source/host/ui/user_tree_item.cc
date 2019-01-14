@@ -18,7 +18,7 @@
 
 #include "host/ui/user_tree_item.h"
 
-#include "network/srp_user.h"
+#include "net/srp_user.h"
 
 namespace host {
 
