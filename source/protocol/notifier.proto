@@ -22,7 +22,7 @@ option optimize_for = LITE_RUNTIME;
 
 import "common.proto";
 
-package aspia.proto.notifier;
+package proto.notifier;
 
 message Session
 {

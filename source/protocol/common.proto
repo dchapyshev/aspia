@@ -20,7 +20,7 @@ syntax = "proto3";
 
 option optimize_for = LITE_RUNTIME;
 
-package aspia.proto;
+package proto;
 
 enum SessionType
 {

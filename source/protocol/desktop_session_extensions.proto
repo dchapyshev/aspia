@@ -20,7 +20,7 @@ syntax = "proto3";
 
 option optimize_for = LITE_RUNTIME;
 
-package aspia.proto.desktop;
+package proto.desktop;
 
 // Extension name: "select_screen"
 // Sent by client to host for screen selection.

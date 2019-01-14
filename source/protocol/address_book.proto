@@ -23,7 +23,7 @@ option optimize_for = LITE_RUNTIME;
 import "common.proto";
 import "desktop_session.proto";
 
-package aspia.proto.address_book;
+package proto.address_book;
 
 enum EncryptionType
 {
