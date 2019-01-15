@@ -19,6 +19,7 @@
 #include "client/client.h"
 
 #include "base/logging.h"
+#include "client/config_factory.h"
 
 namespace client {
 
@@ -27,6 +28,8 @@ Client::Client(const ConnectData& connect_data, QObject* parent)
       connect_data_(connect_data),
       channel_(new net::ChannelClient(this))
 {
+    ConfigFactory::fixupDesktopConfig(&connect_data_.desktop_config);
+
     connect(channel_, &net::ChannelClient::connected, this, &Client::started);
     connect(channel_, &net::ChannelClient::disconnected, this, &Client::finished);
     connect(channel_, &net::ChannelClient::messageReceived, this, &Client::messageReceived);
