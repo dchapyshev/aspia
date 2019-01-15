@@ -441,22 +441,22 @@
         <translation>Значение</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="97"/>
+        <location filename="../ui/system_info_window.ui" line="96"/>
         <source>Save</source>
         <translation>Сохранить</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="100"/>
+        <location filename="../ui/system_info_window.ui" line="99"/>
         <source>Ctrl+S</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="109"/>
+        <location filename="../ui/system_info_window.ui" line="108"/>
         <source>Print</source>
         <translation>Печать</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="112"/>
+        <location filename="../ui/system_info_window.ui" line="111"/>
         <source>Ctrl+P</source>
         <translation></translation>
     </message>

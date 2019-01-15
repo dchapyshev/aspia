@@ -29,11 +29,11 @@
     </property>
     <item>
      <widget class="QTreeWidget" name="tree">
+      <property name="frameShape">
+       <enum>QFrame::NoFrame</enum>
+      </property>
       <property name="showDropIndicator" stdset="0">
        <bool>false</bool>
-      </property>
-      <property name="selectionMode">
-       <enum>QAbstractItemView::ExtendedSelection</enum>
       </property>
       <property name="iconSize">
        <size>
@@ -65,7 +65,6 @@
     </rect>
    </property>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
   <widget class="QToolBar" name="toolbar">
    <property name="windowTitle">
     <string notr="true">toolBar</string>
