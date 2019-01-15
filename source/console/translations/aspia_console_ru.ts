@@ -41,7 +41,7 @@
     <message>
         <location filename="../address_book_dialog.ui" line="125"/>
         <source>Comment:</source>
-        <translation>Коментарий:</translation>
+        <translation>Комментарий:</translation>
     </message>
     <message>
         <location filename="../address_book_dialog.ui" line="138"/>
@@ -159,7 +159,7 @@
     <message>
         <location filename="../computer_dialog.ui" line="194"/>
         <source>Comment:</source>
-        <translation>Коментарий:</translation>
+        <translation>Комментарий:</translation>
     </message>
 </context>
 <context>
@@ -182,7 +182,7 @@
     <message>
         <location filename="../computer_group_dialog.ui" line="74"/>
         <source>Comment:</source>
-        <translation>Коментарий:</translation>
+        <translation>Комментарий:</translation>
     </message>
 </context>
 <context>
