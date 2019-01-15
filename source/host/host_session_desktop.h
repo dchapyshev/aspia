@@ -37,26 +37,23 @@ namespace host {
 
 class InputInjector;
 
-class HostSessionDesktop :
-    public HostSession,
+class SessionDesktop :
+    public Session,
     public ScreenUpdater::Delegate
 {
     Q_OBJECT
 
 public:
-    HostSessionDesktop(proto::SessionType session_type, const QString& channel_id);
-    ~HostSessionDesktop();
+    SessionDesktop(proto::SessionType session_type, const QString& channel_id);
+    ~SessionDesktop();
 
     // ScreenUpdater::Delegate implementation.
     void onScreenUpdate(const QByteArray& message);
 
-public slots:
-    // HostSession implementation.
-    void messageReceived(const QByteArray& buffer) override;
-
 protected:
-    // HostSession implementation.
+    // Session implementation.
     void sessionStarted() override;
+    void messageReceived(const QByteArray& buffer) override;
 
 private slots:
     void clipboardEvent(const proto::desktop::ClipboardEvent& event);
@@ -85,7 +82,7 @@ private:
     std::unique_ptr<desktop::VisualEffectsDisabler> effects_disabler_;
 #endif // defined(OS_WIN)
 
-    DISALLOW_COPY_AND_ASSIGN(HostSessionDesktop);
+    DISALLOW_COPY_AND_ASSIGN(SessionDesktop);
 };
 
 } // namespace host

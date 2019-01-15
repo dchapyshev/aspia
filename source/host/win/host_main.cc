@@ -37,7 +37,7 @@ int runHostSession(const QString& channel_id, const QString& session_type)
     // At the end of the user's session, the program ends later than the others.
     SetProcessShutdownParameters(0, SHUTDOWN_NORETRY);
 
-    QScopedPointer<HostSession> session(HostSession::create(session_type, channel_id));
+    QScopedPointer<Session> session(Session::create(session_type, channel_id));
     if (session.isNull())
         return 1;
 

@@ -34,9 +34,8 @@
 
 namespace host {
 
-HostSessionDesktop::HostSessionDesktop(proto::SessionType session_type,
-                                       const QString& channel_id)
-    : HostSession(channel_id),
+SessionDesktop::SessionDesktop(proto::SessionType session_type, const QString& channel_id)
+    : Session(channel_id),
       session_type_(session_type)
 {
     switch (session_type_)
@@ -51,7 +50,7 @@ HostSessionDesktop::HostSessionDesktop(proto::SessionType session_type,
     }
 }
 
-HostSessionDesktop::~HostSessionDesktop()
+SessionDesktop::~SessionDesktop()
 {
 #if defined(OS_WIN)
     if (effects_disabler_)
@@ -65,18 +64,18 @@ HostSessionDesktop::~HostSessionDesktop()
 #endif // defined(OS_WIN)
 }
 
-void HostSessionDesktop::onScreenUpdate(const QByteArray& message)
+void SessionDesktop::onScreenUpdate(const QByteArray& message)
 {
     sendMessage(message);
 }
 
-void HostSessionDesktop::sessionStarted()
+void SessionDesktop::sessionStarted()
 {
     outgoing_message_.mutable_config_request()->set_dummy(1);
     sendMessage(common::serializeMessage(outgoing_message_));
 }
 
-void HostSessionDesktop::messageReceived(const QByteArray& buffer)
+void SessionDesktop::messageReceived(const QByteArray& buffer)
 {
     incoming_message_.Clear();
 
@@ -102,7 +101,7 @@ void HostSessionDesktop::messageReceived(const QByteArray& buffer)
     }
 }
 
-void HostSessionDesktop::clipboardEvent(const proto::desktop::ClipboardEvent& event)
+void SessionDesktop::clipboardEvent(const proto::desktop::ClipboardEvent& event)
 {
     if (session_type_ != proto::SESSION_TYPE_DESKTOP_MANAGE)
         return;
@@ -112,7 +111,7 @@ void HostSessionDesktop::clipboardEvent(const proto::desktop::ClipboardEvent& ev
     sendMessage(common::serializeMessage(outgoing_message_));
 }
 
-void HostSessionDesktop::readPointerEvent(const proto::desktop::PointerEvent& event)
+void SessionDesktop::readPointerEvent(const proto::desktop::PointerEvent& event)
 {
     if (session_type_ != proto::SESSION_TYPE_DESKTOP_MANAGE)
     {
@@ -125,7 +124,7 @@ void HostSessionDesktop::readPointerEvent(const proto::desktop::PointerEvent& ev
         input_injector_->injectPointerEvent(event);
 }
 
-void HostSessionDesktop::readKeyEvent(const proto::desktop::KeyEvent& event)
+void SessionDesktop::readKeyEvent(const proto::desktop::KeyEvent& event)
 {
     if (session_type_ != proto::SESSION_TYPE_DESKTOP_MANAGE)
     {
@@ -138,7 +137,7 @@ void HostSessionDesktop::readKeyEvent(const proto::desktop::KeyEvent& event)
         input_injector_->injectKeyEvent(event);
 }
 
-void HostSessionDesktop::readClipboardEvent(const proto::desktop::ClipboardEvent& clipboard_event)
+void SessionDesktop::readClipboardEvent(const proto::desktop::ClipboardEvent& clipboard_event)
 {
     if (session_type_ != proto::SESSION_TYPE_DESKTOP_MANAGE)
     {
@@ -157,7 +156,7 @@ void HostSessionDesktop::readClipboardEvent(const proto::desktop::ClipboardEvent
     clipboard_->injectClipboardEvent(clipboard_event);
 }
 
-void HostSessionDesktop::readExtension(const proto::desktop::Extension& extension)
+void SessionDesktop::readExtension(const proto::desktop::Extension& extension)
 {
     if (extension.name() == common::kSelectScreenExtension)
     {
@@ -222,7 +221,7 @@ void HostSessionDesktop::readExtension(const proto::desktop::Extension& extensio
     }
 }
 
-void HostSessionDesktop::readConfig(const proto::desktop::Config& config)
+void SessionDesktop::readConfig(const proto::desktop::Config& config)
 {
     uint32_t change_flags = config_tracker_.changeFlags(config);
 
@@ -233,7 +232,7 @@ void HostSessionDesktop::readConfig(const proto::desktop::Config& config)
         {
             clipboard_.reset(new common::Clipboard());
             connect(clipboard_.get(), &common::Clipboard::clipboardEvent,
-                    this, &HostSessionDesktop::clipboardEvent);
+                    this, &SessionDesktop::clipboardEvent);
         }
     }
 
@@ -281,7 +280,7 @@ void HostSessionDesktop::readConfig(const proto::desktop::Config& config)
     }
 }
 
-void HostSessionDesktop::sendSystemInfo()
+void SessionDesktop::sendSystemInfo()
 {
     proto::system_info::SystemInfo system_info;
     createHostSystemInfo(&system_info);

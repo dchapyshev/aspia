@@ -27,25 +27,23 @@ class FileWorker;
 
 namespace host {
 
-class HostSessionFileTransfer : public HostSession
+class SessionFileTransfer : public Session
 {
     Q_OBJECT
 
 public:
-    explicit HostSessionFileTransfer(const QString& channel_id);
-    ~HostSessionFileTransfer() = default;
-
-public slots:
-    // HostSession implementation.
-    void messageReceived(const QByteArray& buffer) override;
+    explicit SessionFileTransfer(const QString& channel_id);
+    ~SessionFileTransfer() = default;
 
 protected:
+    // Session implementation.
     void sessionStarted() override;
+    void messageReceived(const QByteArray& buffer) override;
 
 private:
     common::FileWorker* worker_;
 
-    DISALLOW_COPY_AND_ASSIGN(HostSessionFileTransfer);
+    DISALLOW_COPY_AND_ASSIGN(SessionFileTransfer);
 };
 
 } // namespace host

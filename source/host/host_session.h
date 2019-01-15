@@ -30,18 +30,18 @@ class Channel;
 
 namespace host {
 
-class HostSession : public QObject
+class Session : public QObject
 {
 public:
-    virtual ~HostSession() = default;
+    virtual ~Session() = default;
 
-    static HostSession* create(const QString& session_type, const QString& channel_id);
+    static Session* create(const QString& session_type, const QString& channel_id);
 
     void start();
     void stop();
 
 protected:
-    explicit HostSession(const QString& channel_id);
+    explicit Session(const QString& channel_id);
 
     // Sends outgoing message.
     void sendMessage(const QByteArray& message);
@@ -53,7 +53,7 @@ private:
     QString channel_id_;
     ipc::Channel* channel_ = nullptr;
 
-    DISALLOW_COPY_AND_ASSIGN(HostSession);
+    DISALLOW_COPY_AND_ASSIGN(Session);
 };
 
 } // namespace host

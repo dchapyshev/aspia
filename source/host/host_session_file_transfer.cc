@@ -23,19 +23,19 @@
 
 namespace host {
 
-HostSessionFileTransfer::HostSessionFileTransfer(const QString& channel_id)
-    : HostSession(channel_id),
+SessionFileTransfer::SessionFileTransfer(const QString& channel_id)
+    : Session(channel_id),
       worker_(new common::FileWorker(this))
 {
     // Nothing
 }
 
-void HostSessionFileTransfer::sessionStarted()
+void SessionFileTransfer::sessionStarted()
 {
     // Nothing
 }
 
-void HostSessionFileTransfer::messageReceived(const QByteArray& buffer)
+void SessionFileTransfer::messageReceived(const QByteArray& buffer)
 {
     proto::file_transfer::Request request;
 
