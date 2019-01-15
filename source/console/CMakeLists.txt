@@ -76,6 +76,7 @@ add_executable(aspia_console
     ${SOURCE_CONSOLE}
     ${SOURCE_CONSOLE_RESOURCES})
 set_target_properties(aspia_console PROPERTIES WIN32_EXECUTABLE TRUE)
+set_target_properties(aspia_console PROPERTIES LINK_FLAGS "/MANIFEST:NO")
 target_link_libraries(aspia_console
     aspia_base
     aspia_client
