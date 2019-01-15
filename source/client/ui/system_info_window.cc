@@ -18,6 +18,7 @@
 
 #include "client/ui/system_info_window.h"
 
+#include <QClipboard>
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QPrinter>
@@ -76,6 +77,18 @@ QTreeWidgetItem* mk(const QString& param, const std::string& value)
     return mk(param, QString::fromStdString(value));
 }
 
+void copyTextToClipboard(const QString& text)
+{
+    if (text.isEmpty())
+        return;
+
+    QClipboard* clipboard = QApplication::clipboard();
+    if (!clipboard)
+        return;
+
+    clipboard->setText(text);
+}
+
 } // namespace
 
 SystemInfoWindow::SystemInfoWindow(QWidget* parent)
@@ -118,6 +131,30 @@ SystemInfoWindow::SystemInfoWindow(QWidget* parent)
             return;
 
         document.print(&printer);
+    });
+
+    connect(ui.action_copy_row, &QAction::triggered, [this]()
+    {
+        copyRow(ui.tree->currentItem());
+    });
+
+    connect(ui.action_copy_name, &QAction::triggered, [this]()
+    {
+        copyColumn(ui.tree->currentItem(), 0);
+    });
+
+    connect(ui.action_copy_value, &QAction::triggered, [this]()
+    {
+        copyColumn(ui.tree->currentItem(), 1);
+    });
+
+    connect(ui.tree, &QTreeWidget::customContextMenuRequested,
+            this, &SystemInfoWindow::onContextMenu);
+
+    connect(ui.tree, &QTreeWidget::itemDoubleClicked,
+            [this](QTreeWidgetItem* item, int /* column */)
+    {
+        copyRow(item);
     });
 }
 
@@ -433,6 +470,44 @@ void SystemInfoWindow::setSystemInfo(const proto::system_info::SystemInfo& syste
         ui.tree->topLevelItem(i)->setExpanded(true);
 
     ui.tree->resizeColumnToContents(0);
+}
+
+void SystemInfoWindow::onContextMenu(const QPoint& point)
+{
+    QTreeWidgetItem* current_item = ui.tree->itemAt(point);
+    if (!current_item)
+        return;
+
+    ui.tree->setCurrentItem(current_item);
+
+    QMenu menu;
+    menu.addAction(ui.action_copy_row);
+    menu.addAction(ui.action_copy_name);
+    menu.addAction(ui.action_copy_value);
+
+    menu.exec(ui.tree->viewport()->mapToGlobal(point));
+}
+
+void SystemInfoWindow::copyRow(QTreeWidgetItem* item)
+{
+    if (!item)
+        return;
+
+    QString name = item->text(0);
+    QString value = item->text(1);
+
+    if (value.isEmpty())
+        copyTextToClipboard(name);
+    else
+        copyTextToClipboard(name + QLatin1String(": ") + value);
+}
+
+void SystemInfoWindow::copyColumn(QTreeWidgetItem* item, int column)
+{
+    if (!item)
+        return;
+
+    copyTextToClipboard(item->text(column));
 }
 
 // static

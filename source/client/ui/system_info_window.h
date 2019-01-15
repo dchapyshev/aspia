@@ -35,7 +35,13 @@ public:
 
     void setSystemInfo(const proto::system_info::SystemInfo& system_info);
 
+private slots:
+    void onContextMenu(const QPoint& point);
+
 private:
+    void copyRow(QTreeWidgetItem* item);
+    void copyColumn(QTreeWidgetItem* item, int column);
+
     static QString sizeToString(int64_t size);
     static QString delayToString(uint64_t delay);
     static QString speedToString(uint64_t speed);

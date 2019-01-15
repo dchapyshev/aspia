@@ -29,6 +29,9 @@
     </property>
     <item>
      <widget class="QTreeWidget" name="tree">
+      <property name="contextMenuPolicy">
+       <enum>Qt::CustomContextMenu</enum>
+      </property>
       <property name="frameShape">
        <enum>QFrame::NoFrame</enum>
       </property>
@@ -95,8 +98,11 @@
    <property name="text">
     <string>Save</string>
    </property>
+   <property name="toolTip">
+    <string>Save (Ctrl+S)</string>
+   </property>
    <property name="shortcut">
-    <string>Ctrl+S</string>
+    <string notr="true">Ctrl+S</string>
    </property>
   </action>
   <action name="action_print">
@@ -107,8 +113,26 @@
    <property name="text">
     <string>Print</string>
    </property>
+   <property name="toolTip">
+    <string>Print (Ctrl+P)</string>
+   </property>
    <property name="shortcut">
-    <string>Ctrl+P</string>
+    <string notr="true">Ctrl+P</string>
+   </property>
+  </action>
+  <action name="action_copy_row">
+   <property name="text">
+    <string>Copy Row</string>
+   </property>
+  </action>
+  <action name="action_copy_name">
+   <property name="text">
+    <string>Copy Name</string>
+   </property>
+  </action>
+  <action name="action_copy_value">
+   <property name="text">
+    <string>Copy Value</string>
    </property>
   </action>
  </widget>
