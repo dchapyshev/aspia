@@ -110,9 +110,9 @@ std::string SysInfo::processorVendor()
         return "Rise";
     else if (vendor == "SiS SiS SiS")
         return "SiS";
-    else if (vendor == "UMC UMC UMC ")
+    else if (vendor == "UMC UMC UMC")
         return "UMC";
-    else if (vendor == "VIA VIA VIA ")
+    else if (vendor == "VIA VIA VIA")
         return "VIA";
     else if (vendor == "Vortex86 SoC")
         return "Vortex";
