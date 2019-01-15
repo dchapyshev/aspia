@@ -855,22 +855,22 @@
     <message>
         <location filename="../address_book_dialog.cc" line="81"/>
         <source>Without Encryption</source>
-        <translation type="unfinished">Без шифрования</translation>
+        <translation>Без шифрования</translation>
     </message>
     <message>
         <location filename="../address_book_dialog.cc" line="83"/>
         <source>ChaCha20 + Poly1305 (256-bit key)</source>
-        <translation type="unfinished">ChaCha20 + Poly1305 (256-битный ключ)</translation>
+        <translation>ChaCha20 + Poly1305 (256-битный ключ)</translation>
     </message>
     <message>
         <location filename="../address_book_dialog.cc" line="98"/>
         <source>Double-click to change</source>
-        <translation type="unfinished">Двойной щелчок для изменения</translation>
+        <translation>Двойной щелчок для изменения</translation>
     </message>
     <message numerus="yes">
         <location filename="../address_book_dialog.cc" line="169"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>Слишком длинное имя. Максимальная длина имени %n символ.</numerusform>
             <numerusform>Слишком длинное имя. Максимальная длина имени %n символа.</numerusform>
             <numerusform>Слишком длинное имя. Максимальная длина имени %n символов.</numerusform>
@@ -879,12 +879,12 @@
     <message>
         <location filename="../address_book_dialog.cc" line="175"/>
         <source>Name can not be empty.</source>
-        <translation type="unfinished">Имя не может быть пустым.</translation>
+        <translation>Имя не может быть пустым.</translation>
     </message>
     <message numerus="yes">
         <location filename="../address_book_dialog.cc" line="182"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>Слишком длинный комментарий. Максимальная длина комментария %n символ.</numerusform>
             <numerusform>Слишком длинный комментарий. Максимальная длина комментария %n символа.</numerusform>
             <numerusform>Слишком длинный комментарий. Максимальная длина комментария %n символов.</numerusform>
@@ -893,12 +893,12 @@
     <message>
         <location filename="../address_book_dialog.cc" line="210"/>
         <source>The passwords you entered do not match.</source>
-        <translation type="unfinished">Введенные пароли не совпадают.</translation>
+        <translation>Введенные пароли не совпадают.</translation>
     </message>
     <message numerus="yes">
         <location filename="../address_book_dialog.cc" line="216"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>Пароль не может быть пустой и не должен превышать %n символ.</numerusform>
             <numerusform>Пароль не может быть пустой и не должен превышать %n символа.</numerusform>
             <numerusform>Пароль не может быть пустой и не должен превышать %n символов.</numerusform>
@@ -908,12 +908,12 @@
         <location filename="../address_book_dialog.cc" line="224"/>
         <location filename="../address_book_dialog.cc" line="366"/>
         <source>Warning</source>
-        <translation type="unfinished">Предупреждение</translation>
+        <translation>Предупреждение</translation>
     </message>
     <message numerus="yes">
         <location filename="../address_book_dialog.cc" line="225"/>
         <source>&lt;b&gt;Password you entered does not meet the security requirements!&lt;/b&gt;&lt;br/&gt;The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.&lt;br/&gt;Do you want to enter a different password?</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>&lt;b&gt;Введенный пароль не отвечает требованиям безопасности!&lt;/b&gt;&lt;br/&gt;Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символа.&lt;br/&gt;Вы хотите ввести другой пароль?</numerusform>
             <numerusform>&lt;b&gt;Введенный пароль не отвечает требованиям безопасности!&lt;/b&gt;&lt;br/&gt;Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символов.&lt;br/&gt;Вы хотите ввести другой пароль?</numerusform>
             <numerusform>&lt;b&gt;Введенный пароль не отвечает требованиям безопасности!&lt;/b&gt;&lt;br/&gt;Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символов.&lt;br/&gt;Вы хотите ввести другой пароль?</numerusform>
@@ -922,12 +922,12 @@
     <message>
         <location filename="../address_book_dialog.cc" line="327"/>
         <source>Confirmation</source>
-        <translation type="unfinished">Подтверждение</translation>
+        <translation>Подтверждение</translation>
     </message>
     <message>
         <location filename="../address_book_dialog.cc" line="328"/>
         <source>At change the size of hashing salt, you will need to re-enter the password. Continue?</source>
-        <translation type="unfinished">При изменении размера соли для хеширования вам придется ввести пароль заново. Продолжить?</translation>
+        <translation>При изменении размера соли для хеширования вам придется ввести пароль заново. Продолжить?</translation>
     </message>
 </context>
 <context>
@@ -935,85 +935,85 @@
     <message>
         <location filename="../address_book_tab.cc" line="232"/>
         <source>Unable to open address book file &quot;%1&quot;.</source>
-        <translation type="unfinished">Не удалось открыть файл адресной книги &quot;%1&quot;.</translation>
+        <translation>Не удалось открыть файл адресной книги &quot;%1&quot;.</translation>
     </message>
     <message>
         <location filename="../address_book_tab.cc" line="239"/>
         <source>Unable to read address book file &quot;%1&quot;.</source>
-        <translation type="unfinished">Не удалось прочитать файл адресной книги &quot;%1&quot;.</translation>
+        <translation>Не удалось прочитать файл адресной книги &quot;%1&quot;.</translation>
     </message>
     <message>
         <location filename="../address_book_tab.cc" line="248"/>
         <location filename="../address_book_tab.cc" line="263"/>
         <source>The address book file &quot;%1&quot; is corrupted or has an unknown format.</source>
-        <translation type="unfinished">Файл адресной книги &quot;%1&quot; поврежден или имеет неизвестный формат.</translation>
+        <translation>Файл адресной книги &quot;%1&quot; поврежден или имеет неизвестный формат.</translation>
     </message>
     <message>
         <location filename="../address_book_tab.cc" line="286"/>
         <source>Unable to decrypt the address book with the specified password.</source>
-        <translation type="unfinished">Не удалось расшифровать адресную книгу с указанным паролем.</translation>
+        <translation>Не удалось расшифровать адресную книгу с указанным паролем.</translation>
     </message>
     <message>
         <location filename="../address_book_tab.cc" line="292"/>
         <source>The address book file is corrupted or has an unknown format.</source>
-        <translation type="unfinished">Файл адресной книги поврежден или имеет неизвестный формат.</translation>
+        <translation>Файл адресной книги поврежден или имеет неизвестный формат.</translation>
     </message>
     <message>
         <location filename="../address_book_tab.cc" line="302"/>
         <source>The address book file is encrypted with an unsupported encryption type.</source>
-        <translation type="unfinished">Файл адресной книги зашифрован неподдерживаемым методом шифрования.</translation>
+        <translation>Файл адресной книги зашифрован неподдерживаемым методом шифрования.</translation>
     </message>
     <message>
         <location filename="../address_book_tab.cc" line="474"/>
         <source>Are you sure you want to delete computer group &quot;%1&quot; and all child items?</source>
-        <translation type="unfinished">Вы действительно хотите удалить группу компьютеров &quot;%1&quot; и все дочерние элементы?</translation>
+        <translation>Вы действительно хотите удалить группу компьютеров &quot;%1&quot; и все дочерние элементы?</translation>
     </message>
     <message>
         <location filename="../address_book_tab.cc" line="478"/>
         <location filename="../address_book_tab.cc" line="500"/>
         <source>Confirmation</source>
-        <translation type="unfinished">Подтверждение</translation>
+        <translation>Подтверждение</translation>
     </message>
     <message>
         <location filename="../address_book_tab.cc" line="496"/>
         <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
-        <translation type="unfinished">Вы действительно хотите удалить компьютер &quot;%1&quot;?</translation>
+        <translation>Вы действительно хотите удалить компьютер &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../address_book_tab.cc" line="755"/>
         <source>Save Address Book</source>
-        <translation type="unfinished">Сохранение адресной книги</translation>
+        <translation>Сохранение адресной книги</translation>
     </message>
     <message>
         <location filename="../address_book_tab.cc" line="757"/>
         <source>Aspia Address Book (*.aab)</source>
-        <translation type="unfinished">Адресная книга Aspia (*.aab)</translation>
+        <translation>Адресная книга Aspia (*.aab)</translation>
     </message>
     <message>
         <location filename="../address_book_tab.cc" line="767"/>
         <source>Unable to create or open address book file.</source>
-        <translation type="unfinished">Не удалось создать или открыть файл адресной книги.</translation>
+        <translation>Не удалось создать или открыть файл адресной книги.</translation>
     </message>
     <message>
         <location filename="../address_book_tab.cc" line="779"/>
         <source>Unable to write address book file.</source>
-        <translation type="unfinished">Не удалось записать файл адресной книги.</translation>
+        <translation>Не удалось записать файл адресной книги.</translation>
     </message>
     <message>
         <location filename="../address_book_tab.cc" line="795"/>
         <location filename="../address_book_tab.cc" line="809"/>
         <source>Warning</source>
-        <translation type="unfinished">Предупреждение</translation>
+        <translation>Предупреждение</translation>
     </message>
     <message>
         <location filename="../address_book_tab.cc" line="797"/>
         <source>Could not open address book</source>
-        <translation type="unfinished">Не удалось открыть адресную книгу</translation>
+        <translation>Не удалось открыть адресную книгу</translation>
     </message>
     <message>
         <location filename="../address_book_tab.cc" line="811"/>
         <source>Failed to save address book</source>
-        <translation type="unfinished">Не удалось сохранить адресную книгу</translation>
+        <translation>Не удалось сохранить адресную книгу</translation>
     </message>
 </context>
 <context>
@@ -1021,22 +1021,22 @@
     <message>
         <location filename="../computer_dialog.cc" line="49"/>
         <source>Desktop Manage</source>
-        <translation type="unfinished">Управление рабочим столом</translation>
+        <translation>Управление рабочим столом</translation>
     </message>
     <message>
         <location filename="../computer_dialog.cc" line="53"/>
         <source>Desktop View</source>
-        <translation type="unfinished">Просмотр рабочего стола</translation>
+        <translation>Просмотр рабочего стола</translation>
     </message>
     <message>
         <location filename="../computer_dialog.cc" line="57"/>
         <source>File Transfer</source>
-        <translation type="unfinished">Передача файлов</translation>
+        <translation>Передача файлов</translation>
     </message>
     <message numerus="yes">
         <location filename="../computer_dialog.cc" line="157"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>Слишком длинное имя. Максимальная длина имени %n символ.</numerusform>
             <numerusform>Слишком длинное имя. Максимальная длина имени %n символа.</numerusform>
             <numerusform>Слишком длинное имя. Максимальная длина имени %n символов.</numerusform>
@@ -1045,17 +1045,17 @@
     <message>
         <location filename="../computer_dialog.cc" line="164"/>
         <source>Name can not be empty.</source>
-        <translation type="unfinished">Имя не может быть пустым.</translation>
+        <translation>Имя не может быть пустым.</translation>
     </message>
     <message>
         <location filename="../computer_dialog.cc" line="174"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
-        <translation type="unfinished">Имя пользователя не может быть пустым и может содержать только буквы алфавита, цифры и символы &quot;_&quot;,&quot;-&quot;,&quot;.&quot;.</translation>
+        <translation>Имя пользователя не может быть пустым и может содержать только буквы алфавита, цифры и символы &quot;_&quot;,&quot;-&quot;,&quot;.&quot;.</translation>
     </message>
     <message numerus="yes">
         <location filename="../computer_dialog.cc" line="183"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>Слишком длинный комментарий. Максимальная длина комментария %n символ.</numerusform>
             <numerusform>Слишком длинный комментарий. Максимальная длина комментария %n символа.</numerusform>
             <numerusform>Слишком длинный комментарий. Максимальная длина комментария %n символов.</numerusform>
@@ -1064,7 +1064,7 @@
     <message>
         <location filename="../computer_dialog.cc" line="214"/>
         <source>Warning</source>
-        <translation type="unfinished">Предупреждение</translation>
+        <translation>Предупреждение</translation>
     </message>
 </context>
 <context>
@@ -1072,7 +1072,7 @@
     <message numerus="yes">
         <location filename="../computer_group_dialog.cc" line="60"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>Слишком длинное имя. Максимальная длина имени %n символ.</numerusform>
             <numerusform>Слишком длинное имя. Максимальная длина имени %n символа.</numerusform>
             <numerusform>Слишком длинное имя. Максимальная длина имени %n символов.</numerusform>
@@ -1081,12 +1081,12 @@
     <message>
         <location filename="../computer_group_dialog.cc" line="67"/>
         <source>Name can not be empty.</source>
-        <translation type="unfinished">Имя не может быть пустым.</translation>
+        <translation>Имя не может быть пустым.</translation>
     </message>
     <message numerus="yes">
         <location filename="../computer_group_dialog.cc" line="75"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>Слишком длинный комментарий. Максимальная длина комментария %n символ.</numerusform>
             <numerusform>Слишком длинный комментарий. Максимальная длина комментария %n символа.</numerusform>
             <numerusform>Слишком длинный комментарий. Максимальная длина комментария %n символов.</numerusform>
@@ -1095,7 +1095,7 @@
     <message>
         <location filename="../computer_group_dialog.cc" line="102"/>
         <source>Warning</source>
-        <translation type="unfinished">Предупреждение</translation>
+        <translation>Предупреждение</translation>
     </message>
 </context>
 <context>
@@ -1103,7 +1103,7 @@
     <message numerus="yes">
         <location filename="../console_statusbar.cc" line="37"/>
         <source>%n child group(s)</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>%n дочерняя группа</numerusform>
             <numerusform>%n дочерние группы</numerusform>
             <numerusform>%n дочерних групп</numerusform>
@@ -1112,7 +1112,7 @@
     <message numerus="yes">
         <location filename="../console_statusbar.cc" line="38"/>
         <source>%n child computer(s)</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>%n дочерний компьютер</numerusform>
             <numerusform>%n дочерних компьютера</numerusform>
             <numerusform>%n дочерних компьютеров</numerusform>
@@ -1124,85 +1124,85 @@
     <message>
         <location filename="../console_window.cc" line="201"/>
         <source>Warning</source>
-        <translation type="unfinished">Предупреждение</translation>
+        <translation>Предупреждение</translation>
     </message>
     <message>
         <location filename="../console_window.cc" line="202"/>
         <source>Pinned address book file &quot;%1&quot; was not found.&lt;br/&gt;This file will be unpinned.</source>
-        <translation type="unfinished">Закрепленный файл адресной книги &quot;%1&quot; не найден.&lt;br/&gt;Этот файл будет откреплен.</translation>
+        <translation>Закрепленный файл адресной книги &quot;%1&quot; не найден.&lt;br/&gt;Этот файл будет откреплен.</translation>
     </message>
     <message>
         <location filename="../console_window.cc" line="249"/>
         <source>Open Address Book</source>
-        <translation type="unfinished">Открытие адресной книги</translation>
+        <translation>Открытие адресной книги</translation>
     </message>
     <message>
         <location filename="../console_window.cc" line="251"/>
         <source>Aspia Address Book (*.aab)</source>
-        <translation type="unfinished">Адресная книга Aspia (*.aab)</translation>
+        <translation>Адресная книга Aspia (*.aab)</translation>
     </message>
     <message>
         <location filename="../console_window.cc" line="377"/>
         <source>https://aspia.org/en/help.html</source>
-        <translation type="unfinished">https://aspia.org/ru/help.html</translation>
+        <translation>https://aspia.org/ru/help.html</translation>
     </message>
     <message>
         <location filename="../console_window.cc" line="479"/>
         <location filename="../console_window.cc" line="806"/>
         <source>Confirmation</source>
-        <translation type="unfinished">Подтверждение</translation>
+        <translation>Подтверждение</translation>
     </message>
     <message>
         <location filename="../console_window.cc" line="480"/>
         <location filename="../console_window.cc" line="807"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
-        <translation type="unfinished">Адресная книга &quot;%1&quot; изменена. Сохранить изменения?</translation>
+        <translation>Адресная книга &quot;%1&quot; изменена. Сохранить изменения?</translation>
     </message>
     <message>
         <location filename="../console_window.cc" line="668"/>
         <source>Close other tabs</source>
-        <translation type="unfinished">Закрыть другие вкладки</translation>
+        <translation>Закрыть другие вкладки</translation>
     </message>
     <message>
         <location filename="../console_window.cc" line="675"/>
         <source>Close tab</source>
-        <translation type="unfinished">Закрыть вкладку</translation>
+        <translation>Закрыть вкладку</translation>
     </message>
     <message>
         <location filename="../console_window.cc" line="678"/>
         <location filename="../console_window.cc" line="685"/>
         <source>Pin tab</source>
-        <translation type="unfinished">Закрепить вкладку</translation>
+        <translation>Закрепить вкладку</translation>
     </message>
     <message>
         <location filename="../console_window.cc" line="763"/>
         <source>Hide</source>
-        <translation type="unfinished">Спрятать</translation>
+        <translation>Спрятать</translation>
     </message>
     <message>
         <location filename="../console_window.cc" line="778"/>
         <source>Show</source>
-        <translation type="unfinished">Показать</translation>
+        <translation>Показать</translation>
     </message>
     <message>
         <location filename="../console_window.cc" line="882"/>
         <source>&lt;empty&gt;</source>
-        <translation type="unfinished">&lt;пусто&gt;</translation>
+        <translation>&lt;пусто&gt;</translation>
     </message>
     <message>
         <location filename="../console_window.cc" line="903"/>
         <source>Aspia Console</source>
-        <translation type="unfinished">Консоль Aspia</translation>
+        <translation>Консоль Aspia</translation>
     </message>
     <message>
         <location filename="../console_window.cc" line="937"/>
         <source>Information</source>
-        <translation type="unfinished">Информация</translation>
+        <translation>Информация</translation>
     </message>
     <message>
         <location filename="../console_window.cc" line="938"/>
         <source>Address Book &quot;%1&quot; is already open.</source>
-        <translation type="unfinished">Адресная книга &quot;%1&quot; уже открыта.</translation>
+        <translation>Адресная книга &quot;%1&quot; уже открыта.</translation>
     </message>
 </context>
 <context>
@@ -1210,12 +1210,12 @@
     <message>
         <location filename="../open_address_book_dialog.cc" line="42"/>
         <source>Without Encryption</source>
-        <translation type="unfinished">Без шифрования</translation>
+        <translation>Без шифрования</translation>
     </message>
     <message>
         <location filename="../open_address_book_dialog.cc" line="46"/>
         <source>ChaCha20 + Poly1305 (256-bit key)</source>
-        <translation type="unfinished">ChaCha20 + Poly1305 (256-битный ключ)</translation>
+        <translation>ChaCha20 + Poly1305 (256-битный ключ)</translation>
     </message>
 </context>
 </TS>

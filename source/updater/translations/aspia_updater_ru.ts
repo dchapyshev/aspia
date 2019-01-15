@@ -108,12 +108,12 @@
     <message>
         <location filename="../download_dialog.cc" line="51"/>
         <source>Warning</source>
-        <translation type="unfinished">Предупреждение</translation>
+        <translation>Предупреждение</translation>
     </message>
     <message>
         <location filename="../download_dialog.cc" line="52"/>
         <source>An error occurred while downloading the update: %1</source>
-        <translation type="unfinished">Произошла ошибка при загрузке обновления: %1</translation>
+        <translation>Произошла ошибка при загрузке обновления: %1</translation>
     </message>
 </context>
 <context>
@@ -121,42 +121,42 @@
     <message>
         <location filename="../update_dialog.cc" line="59"/>
         <source>Unknown</source>
-        <translation type="unfinished">Неизвестно</translation>
+        <translation>Неизвестно</translation>
     </message>
     <message>
         <location filename="../update_dialog.cc" line="60"/>
         <source>Error retrieving update information.</source>
-        <translation type="unfinished">Ошибка при получении информации об обновлении.</translation>
+        <translation>Ошибка при получении информации об обновлении.</translation>
     </message>
     <message>
         <location filename="../update_dialog.cc" line="77"/>
         <source>No updates available.</source>
-        <translation type="unfinished">Нет доступных обновлений.</translation>
+        <translation>Нет доступных обновлений.</translation>
     </message>
     <message>
         <location filename="../update_dialog.cc" line="87"/>
         <source>Receiving information...</source>
-        <translation type="unfinished">Получение информации...</translation>
+        <translation>Получение информации...</translation>
     </message>
     <message>
         <location filename="../update_dialog.cc" line="110"/>
         <source>Confirmation</source>
-        <translation type="unfinished">Подтвеждение</translation>
+        <translation>Подтвеждение</translation>
     </message>
     <message>
         <location filename="../update_dialog.cc" line="111"/>
         <source>An update will be downloaded. After the download is complete, the application will automatically close. All unsaved data will be lost.&lt;br/&gt;Continue?</source>
-        <translation type="unfinished">Обновление будет загружено. После завершения загрузки приложение будет автоматически закрыто. Все несораненные данные будут потеряны.&lt;br/&gt;Продолжить?</translation>
+        <translation>Обновление будет загружено. После завершения загрузки приложение будет автоматически закрыто. Все несораненные данные будут потеряны.&lt;br/&gt;Продолжить?</translation>
     </message>
     <message>
         <location filename="../update_dialog.cc" line="121"/>
         <source>Warning</source>
-        <translation type="unfinished">Предупреждение</translation>
+        <translation>Предупреждение</translation>
     </message>
     <message>
         <location filename="../update_dialog.cc" line="122"/>
         <source>An error occurred while installing the update: %1</source>
-        <translation type="unfinished">Произошла ошибка при установке обновления: %1</translation>
+        <translation>Произошла ошибка при установке обновления: %1</translation>
     </message>
 </context>
 </TS>
