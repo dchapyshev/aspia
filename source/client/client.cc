@@ -24,40 +24,37 @@ namespace client {
 
 Client::Client(const ConnectData& connect_data, QObject* parent)
     : QObject(parent),
-      connect_data_(connect_data)
+      connect_data_(connect_data),
+      channel_(new net::ChannelClient(this))
 {
-    // Nothing
+    connect(channel_, &net::ChannelClient::connected, this, &Client::started);
+    connect(channel_, &net::ChannelClient::disconnected, this, &Client::finished);
+    connect(channel_, &net::ChannelClient::messageReceived, this, &Client::messageReceived);
+
+    connect(channel_, &net::ChannelClient::errorOccurred, [this](net::Channel::Error error)
+    {
+        emit errorOccurred(networkErrorToString(error));
+    });
+
+    connect(this, &Client::errorOccurred, channel_, &net::ChannelClient::stop);
+    connect(this, &Client::started, channel_, &net::Channel::start);
 }
 
 Client::~Client() = default;
 
 void Client::start()
 {
-    network_channel_ = new net::ChannelClient(this);
-
-    connect(network_channel_, &net::ChannelClient::connected, this, &Client::started);
-    connect(network_channel_, &net::ChannelClient::disconnected, this, &Client::finished);
-    connect(network_channel_, &net::ChannelClient::messageReceived, this, &Client::messageReceived);
-
-    connect(network_channel_, &net::ChannelClient::errorOccurred, [this](net::Channel::Error error)
-    {
-        emit errorOccurred(networkErrorToString(error));
-    });
-
-    connect(this, &Client::errorOccurred, network_channel_, &net::ChannelClient::stop);
-    connect(this, &Client::started, network_channel_, &net::Channel::start);
-
-    network_channel_->connectToHost(connect_data_.address, connect_data_.port,
-                                    connect_data_.username, connect_data_.password,
-                                    connect_data_.session_type);
+    channel_->connectToHost(connect_data_.address, connect_data_.port,
+                            connect_data_.username, connect_data_.password,
+                            connect_data_.session_type);
 }
 
 QVersionNumber Client::hostVersion() const
 {
-    if (!network_channel_)
+    if (!channel_)
         return QVersionNumber();
 
-    return network_channel_->peerVersion();
+    return channel_->peerVersion();
 }
 
 void Client::sendMessage(const google::protobuf::MessageLite& message)
@@ -74,7 +71,7 @@ void Client::sendMessage(const google::protobuf::MessageLite& message)
 
     message.SerializeWithCachedSizesToArray(reinterpret_cast<uint8_t*>(buffer.data()));
 
-    network_channel_->send(buffer);
+    channel_->send(buffer);
 }
 
 // static

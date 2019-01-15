@@ -20,15 +20,12 @@
 #define CLIENT__CLIENT_H
 
 #include <QObject>
-#include <QPointer>
 
 #include "base/macros_magic.h"
 #include "client/connect_data.h"
 #include "net/network_channel_client.h"
 
 namespace client {
-
-class NetworkChannel;
 
 class Client : public QObject
 {
@@ -67,7 +64,7 @@ private:
     static QString networkErrorToString(net::Channel::Error error);
 
     ConnectData connect_data_;
-    QPointer<net::ChannelClient> network_channel_;
+    net::ChannelClient* channel_;
 
     DISALLOW_COPY_AND_ASSIGN(Client);
 };
