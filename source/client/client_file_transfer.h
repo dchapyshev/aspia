@@ -20,7 +20,6 @@
 #define CLIENT__CLIENT_FILE_TRANSFER_H
 
 #include <QQueue>
-#include <QPointer>
 
 #include "client/client.h"
 #include "client/connect_data.h"
@@ -55,7 +54,7 @@ protected:
 
 private:
     QScopedPointer<common::FileWorker> worker_;
-    QPointer<QThread> worker_thread_;
+    QThread* worker_thread_;
 
     QQueue<QPointer<common::FileRequest>> requests_;
 
