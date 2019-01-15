@@ -1762,6 +1762,7 @@
     <message>
         <location filename="../ui/system_info_window.cc" line="271"/>
         <location filename="../ui/system_info_window.cc" line="347"/>
+        <location filename="../ui/system_info_window.cc" line="406"/>
         <location filename="../ui/system_info_window.cc" line="414"/>
         <source>No</source>
         <translation type="unfinished"></translation>

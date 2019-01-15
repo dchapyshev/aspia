@@ -403,7 +403,7 @@ void SystemInfoWindow::setSystemInfo(const proto::system_info::SystemInfo& syste
             const proto::system_info::Printers::Printer& printer = printers.printer(i);
             QList<QTreeWidgetItem*> group;
 
-            group << mk(tr("Default"), printer.default_() ? tr("Yes") : ("No"));
+            group << mk(tr("Default"), printer.default_() ? tr("Yes") : tr("No"));
 
             if (!printer.port().empty())
                 group << mk(tr("Port"), printer.port());
