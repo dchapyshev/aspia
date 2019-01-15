@@ -45,9 +45,9 @@ int hostConfigMain(int argc, char *argv[])
     CHECK(crypto_initializer.isSucceeded());
 
     QApplication application(argc, argv);
-    application.setOrganizationName("Aspia");
-    application.setApplicationName("Host");
-    application.setApplicationVersion(ASPIA_VERSION_STRING);
+    application.setOrganizationName(QStringLiteral("Aspia"));
+    application.setApplicationName(QStringLiteral("Host"));
+    application.setApplicationVersion(QStringLiteral(ASPIA_VERSION_STRING));
     application.setAttribute(Qt::AA_DisableWindowContextHelpButton, true);
 
     host::Settings host_settings;
@@ -55,20 +55,22 @@ int hostConfigMain(int argc, char *argv[])
 
     QString current_locale = host_settings.locale();
     if (!locale_loader.contains(current_locale))
-        host_settings.setLocale(DEFAULT_LOCALE);
+        host_settings.setLocale(QStringLiteral(DEFAULT_LOCALE));
 
     locale_loader.installTranslators(current_locale);
 
-    QCommandLineOption import_option(
-        "import", QApplication::translate("HostConfig", "The path to the file to import."), "file");
+    QCommandLineOption import_option(QStringLiteral("import"),
+        QApplication::translate("HostConfig", "The path to the file to import."),
+        QStringLiteral("file"));
 
-    QCommandLineOption export_option(
-        "export", QApplication::translate("HostConfig", "The path to the file to export."), "file");
+    QCommandLineOption export_option(QStringLiteral("export"),
+        QApplication::translate("HostConfig", "The path to the file to export."),
+        QStringLiteral("file"));
 
-    QCommandLineOption silent_option("silent",
+    QCommandLineOption silent_option(QStringLiteral("silent"),
         QApplication::translate("HostConfig", "Enables silent mode when exporting and importing."));
 
-    QCommandLineOption update_option("update",
+    QCommandLineOption update_option(QStringLiteral("update"),
         QApplication::translate("HostConfig", "Run application update."));
 
     QCommandLineParser parser;

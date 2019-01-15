@@ -31,7 +31,7 @@ QString variantToType(const QVariant& value)
     switch (value.type())
     {
         case QMetaType::UnknownType:
-            result = QLatin1String("Unknown");
+            result = QStringLiteral("Unknown");
             break;
 
         case QMetaType::Bool:
@@ -46,23 +46,23 @@ QString variantToType(const QVariant& value)
             break;
 
         case QMetaType::QByteArray:
-            result = QLatin1String("ByteArray");
+            result = QStringLiteral("ByteArray");
             break;
 
         case QMetaType::QRect:
-            result = QLatin1String("Rect");
+            result = QStringLiteral("Rect");
             break;
 
         case QMetaType::QSize:
-            result = QLatin1String("Size");
+            result = QStringLiteral("Size");
             break;
 
         case QMetaType::QPoint:
-            result = QLatin1String("Point");
+            result = QStringLiteral("Point");
             break;
 
         default:
-            result = QLatin1String("Variant");
+            result = QStringLiteral("Variant");
             break;
     }
 
@@ -187,7 +187,7 @@ QVariant stringToVariant(const QString& value, const QString& type)
 // static
 QSettings::Format XmlSettings::registerFormat(Qt::CaseSensitivity case_sensitivity)
 {
-    return QSettings::registerFormat(QLatin1String("xml"), readFunc, writeFunc, case_sensitivity);
+    return QSettings::registerFormat(QStringLiteral("xml"), readFunc, writeFunc, case_sensitivity);
 }
 
 // static
@@ -251,7 +251,7 @@ bool XmlSettings::writeFunc(QIODevice& device, const QSettings::SettingsMap& map
 
     xml.setAutoFormatting(true);
     xml.writeStartDocument();
-    xml.writeStartElement(QLatin1String("Settings"));
+    xml.writeStartElement(QStringLiteral("Settings"));
 
     QStringList prev;
 
@@ -270,16 +270,16 @@ bool XmlSettings::writeFunc(QIODevice& device, const QSettings::SettingsMap& map
         for (int i = x; i < segments.size(); ++i)
         {
             if (i == segments.size() - 1)
-                xml.writeStartElement(QLatin1String("Value"));
+                xml.writeStartElement(QStringLiteral("Value"));
             else
-                xml.writeStartElement(QLatin1String("Group"));
+                xml.writeStartElement(QStringLiteral("Group"));
 
-            xml.writeAttribute(QLatin1String("Name"), segments.at(i));
+            xml.writeAttribute(QStringLiteral("Name"), segments.at(i));
         }
 
         QString type = variantToType(it.value());
         if (!type.isEmpty())
-            xml.writeAttribute(QLatin1String("Type"), type);
+            xml.writeAttribute(QStringLiteral("Type"), type);
 
         xml.writeCharacters(variantToString(it.value()));
 

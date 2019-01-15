@@ -29,163 +29,163 @@ namespace console {
 Settings::Settings()
     : settings_(base::XmlSettings::registerFormat(),
                 QSettings::UserScope,
-                QLatin1String("aspia"),
-                QLatin1String("console"))
+                QStringLiteral("aspia"),
+                QStringLiteral("console"))
 {
     // Nothing
 }
 
 QString Settings::locale() const
 {
-    return settings_.value(QLatin1String("Locale"), QLocale::system().bcp47Name()).toString();
+    return settings_.value(QStringLiteral("Locale"), QLocale::system().bcp47Name()).toString();
 }
 
 void Settings::setLocale(const QString& locale)
 {
-    settings_.setValue(QLatin1String("Locale"), locale);
+    settings_.setValue(QStringLiteral("Locale"), locale);
 }
 
 QString Settings::lastDirectory() const
 {
-    return settings_.value(QLatin1String("LastDirectory"), QDir::homePath()).toString();
+    return settings_.value(QStringLiteral("LastDirectory"), QDir::homePath()).toString();
 }
 
 void Settings::setLastDirectory(const QString& directory_path)
 {
-    settings_.setValue(QLatin1String("LastDirectory"), directory_path);
+    settings_.setValue(QStringLiteral("LastDirectory"), directory_path);
 }
 
 QByteArray Settings::windowGeometry() const
 {
-    return settings_.value(QLatin1String("WindowGeometry")).toByteArray();
+    return settings_.value(QStringLiteral("WindowGeometry")).toByteArray();
 }
 
 void Settings::setWindowGeometry(const QByteArray& geometry)
 {
-    settings_.setValue(QLatin1String("WindowGeometry"), geometry);
+    settings_.setValue(QStringLiteral("WindowGeometry"), geometry);
 }
 
 QByteArray Settings::windowState() const
 {
-    return settings_.value(QLatin1String("WindowState")).toByteArray();
+    return settings_.value(QStringLiteral("WindowState")).toByteArray();
 }
 
 void Settings::setWindowState(const QByteArray& state)
 {
-    settings_.setValue(QLatin1String("WindowState"), state);
+    settings_.setValue(QStringLiteral("WindowState"), state);
 }
 
 QByteArray Settings::splitterState() const
 {
-    return settings_.value(QLatin1String("SplitterState")).toByteArray();
+    return settings_.value(QStringLiteral("SplitterState")).toByteArray();
 }
 
 void Settings::setSplitterState(const QByteArray& state)
 {
-    settings_.setValue(QLatin1String("SplitterState"), state);
+    settings_.setValue(QStringLiteral("SplitterState"), state);
 }
 
 QByteArray Settings::columnsState() const
 {
-    return settings_.value(QLatin1String("ColumnsState")).toByteArray();
+    return settings_.value(QStringLiteral("ColumnsState")).toByteArray();
 }
 
 void Settings::setColumnsState(const QByteArray& state)
 {
-    settings_.setValue(QLatin1String("ColumnsState"), state);
+    settings_.setValue(QStringLiteral("ColumnsState"), state);
 }
 
 QStringList Settings::recentOpen() const
 {
-    return settings_.value(QLatin1String("RecentOpen")).toStringList();
+    return settings_.value(QStringLiteral("RecentOpen")).toStringList();
 }
 
 void Settings::setRecentOpen(const QStringList& mru)
 {
-    settings_.setValue(QLatin1String("RecentOpen"), mru);
+    settings_.setValue(QStringLiteral("RecentOpen"), mru);
 }
 
 QStringList Settings::pinnedFiles() const
 {
-    return settings_.value(QLatin1String("PinnedFiles")).toStringList();
+    return settings_.value(QStringLiteral("PinnedFiles")).toStringList();
 }
 
 void Settings::setPinnedFiles(const QStringList& tabs)
 {
-    settings_.setValue(QLatin1String("PinnedFiles"), tabs);
+    settings_.setValue(QStringLiteral("PinnedFiles"), tabs);
 }
 
 bool Settings::isToolBarEnabled() const
 {
-    return settings_.value(QLatin1String("Toolbar"), true).toBool();
+    return settings_.value(QStringLiteral("Toolbar"), true).toBool();
 }
 
 void Settings::setToolBarEnabled(bool enable)
 {
-    settings_.setValue(QLatin1String("Toolbar"), enable);
+    settings_.setValue(QStringLiteral("Toolbar"), enable);
 }
 
 bool Settings::isStatusBarEnabled() const
 {
-    return settings_.value(QLatin1String("Statusbar"), true).toBool();
+    return settings_.value(QStringLiteral("Statusbar"), true).toBool();
 }
 
 void Settings::setStatusBarEnabled(bool enable)
 {
-    settings_.setValue(QLatin1String("Statusbar"), enable);
+    settings_.setValue(QStringLiteral("Statusbar"), enable);
 }
 
 bool Settings::minimizeToTray() const
 {
-    return settings_.value(QLatin1String("MinimizeToTray"), false).toBool();
+    return settings_.value(QStringLiteral("MinimizeToTray"), false).toBool();
 }
 
 void Settings::setMinimizeToTray(bool enable)
 {
-    settings_.setValue(QLatin1String("MinimizeToTray"), enable);
+    settings_.setValue(QStringLiteral("MinimizeToTray"), enable);
 }
 
 bool Settings::alwaysShowTrayIcon() const
 {
-    return settings_.value(QLatin1String("AlwaysShowTrayIcon"), false).toBool();
+    return settings_.value(QStringLiteral("AlwaysShowTrayIcon"), false).toBool();
 }
 
 void Settings::setAlwaysShowTrayIcon(bool enable)
 {
-    settings_.setValue(QLatin1String("AlwaysShowTrayIcon"), enable);
+    settings_.setValue(QStringLiteral("AlwaysShowTrayIcon"), enable);
 }
 
 proto::SessionType Settings::sessionType() const
 {
     return static_cast<proto::SessionType>(
-        settings_.value(QLatin1String("SessionType"),
+        settings_.value(QStringLiteral("SessionType"),
                         proto::SESSION_TYPE_DESKTOP_MANAGE).toInt());
 }
 
 void Settings::setSessionType(proto::SessionType session_type)
 {
-    settings_.setValue(QLatin1String("SessionType"), session_type);
+    settings_.setValue(QStringLiteral("SessionType"), session_type);
 }
 
 bool Settings::checkUpdates() const
 {
-    return settings_.value(QLatin1String("CheckUpdates"), true).toBool();
+    return settings_.value(QStringLiteral("CheckUpdates"), true).toBool();
 }
 
 void Settings::setCheckUpdates(bool check)
 {
-    settings_.setValue(QLatin1String("CheckUpdates"), check);
+    settings_.setValue(QStringLiteral("CheckUpdates"), check);
 }
 
 QString Settings::updateServer() const
 {
-    return settings_.value(QLatin1String("UpdateServer"), DEFAULT_UPDATE_SERVER)
+    return settings_.value(QStringLiteral("UpdateServer"), DEFAULT_UPDATE_SERVER)
         .toString().toLower();
 }
 
 void Settings::setUpdateServer(const QString& server)
 {
-    settings_.setValue(QLatin1String("UpdateServer"), server.toLower());
+    settings_.setValue(QStringLiteral("UpdateServer"), server.toLower());
 }
 
 } // namespace console

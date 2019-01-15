@@ -51,55 +51,55 @@ bool Settings::isWritable() const
 
 QString Settings::locale() const
 {
-    return settings_.value(QLatin1String("Locale"), QLocale::system().bcp47Name()).toString();
+    return settings_.value(QStringLiteral("Locale"), QLocale::system().bcp47Name()).toString();
 }
 
 void Settings::setLocale(const QString& locale)
 {
-    settings_.setValue(QLatin1String("Locale"), locale);
+    settings_.setValue(QStringLiteral("Locale"), locale);
 }
 
 uint16_t Settings::tcpPort() const
 {
-    return settings_.value(QLatin1String("TcpPort"), DEFAULT_HOST_TCP_PORT).toUInt();
+    return settings_.value(QStringLiteral("TcpPort"), DEFAULT_HOST_TCP_PORT).toUInt();
 }
 
 void Settings::setTcpPort(uint16_t port)
 {
-    settings_.setValue(QLatin1String("TcpPort"), port);
+    settings_.setValue(QStringLiteral("TcpPort"), port);
 }
 
 bool Settings::addFirewallRule() const
 {
-    return settings_.value(QLatin1String("AddFirewallRule"), true).toBool();
+    return settings_.value(QStringLiteral("AddFirewallRule"), true).toBool();
 }
 
 void Settings::setAddFirewallRule(bool value)
 {
-    settings_.setValue(QLatin1String("AddFirewallRule"), value);
+    settings_.setValue(QStringLiteral("AddFirewallRule"), value);
 }
 
 net::SrpUserList Settings::userList() const
 {
     net::SrpUserList users;
 
-    users.seed_key = settings_.value(QLatin1String("SeedKey")).toByteArray();
+    users.seed_key = settings_.value(QStringLiteral("SeedKey")).toByteArray();
     if (users.seed_key.isEmpty())
         users.seed_key = crypto::Random::generateBuffer(64);
 
-    int size = settings_.beginReadArray(QLatin1String("Users"));
+    int size = settings_.beginReadArray(QStringLiteral("Users"));
     for (int i = 0; i < size; ++i)
     {
         settings_.setArrayIndex(i);
 
         net::SrpUser user;
-        user.name      = settings_.value(QLatin1String("Name")).toString();
-        user.salt      = settings_.value(QLatin1String("Salt")).toByteArray();
-        user.verifier  = settings_.value(QLatin1String("Verifier")).toByteArray();
-        user.number    = settings_.value(QLatin1String("Number")).toByteArray();
-        user.generator = settings_.value(QLatin1String("Generator")).toByteArray();
-        user.sessions  = settings_.value(QLatin1String("Sessions")).toUInt();
-        user.flags     = settings_.value(QLatin1String("Flags")).toUInt();
+        user.name      = settings_.value(QStringLiteral("Name")).toString();
+        user.salt      = settings_.value(QStringLiteral("Salt")).toByteArray();
+        user.verifier  = settings_.value(QStringLiteral("Verifier")).toByteArray();
+        user.number    = settings_.value(QStringLiteral("Number")).toByteArray();
+        user.generator = settings_.value(QStringLiteral("Generator")).toByteArray();
+        user.sessions  = settings_.value(QStringLiteral("Sessions")).toUInt();
+        user.flags     = settings_.value(QStringLiteral("Flags")).toUInt();
 
         CHECK(!user.name.isEmpty());
         CHECK(!user.salt.isEmpty());
@@ -117,46 +117,46 @@ net::SrpUserList Settings::userList() const
 void Settings::setUserList(const net::SrpUserList& users)
 {
     // Clear the old list of users.
-    settings_.remove(QLatin1String("Users"));
+    settings_.remove(QStringLiteral("Users"));
 
-    settings_.setValue(QLatin1String("SeedKey"), users.seed_key);
+    settings_.setValue(QStringLiteral("SeedKey"), users.seed_key);
 
-    settings_.beginWriteArray(QLatin1String("Users"));
+    settings_.beginWriteArray(QStringLiteral("Users"));
     for (int i = 0; i < users.list.size(); ++i)
     {
         settings_.setArrayIndex(i);
 
         const net::SrpUser& user = users.list.at(i);
 
-        settings_.setValue(QLatin1String("Name"), user.name);
-        settings_.setValue(QLatin1String("Salt"), user.salt);
-        settings_.setValue(QLatin1String("Verifier"), user.verifier);
-        settings_.setValue(QLatin1String("Number"), user.number);
-        settings_.setValue(QLatin1String("Generator"), user.generator);
-        settings_.setValue(QLatin1String("Sessions"), user.sessions);
-        settings_.setValue(QLatin1String("Flags"), user.flags);
+        settings_.setValue(QStringLiteral("Name"), user.name);
+        settings_.setValue(QStringLiteral("Salt"), user.salt);
+        settings_.setValue(QStringLiteral("Verifier"), user.verifier);
+        settings_.setValue(QStringLiteral("Number"), user.number);
+        settings_.setValue(QStringLiteral("Generator"), user.generator);
+        settings_.setValue(QStringLiteral("Sessions"), user.sessions);
+        settings_.setValue(QStringLiteral("Flags"), user.flags);
     }
     settings_.endArray();
 }
 
 QString Settings::updateServer() const
 {
-    return settings_.value(QLatin1String("UpdateServer"), DEFAULT_UPDATE_SERVER).toString();
+    return settings_.value(QStringLiteral("UpdateServer"), DEFAULT_UPDATE_SERVER).toString();
 }
 
 void Settings::setUpdateServer(const QString& server)
 {
-    settings_.setValue(QLatin1String("UpdateServer"), server);
+    settings_.setValue(QStringLiteral("UpdateServer"), server);
 }
 
 bool Settings::remoteUpdate() const
 {
-    return settings_.value(QLatin1String("RemoteUpdate"), true).toBool();
+    return settings_.value(QStringLiteral("RemoteUpdate"), true).toBool();
 }
 
 void Settings::setRemoteUpdate(bool allow)
 {
-    settings_.setValue(QLatin1String("RemoteUpdate"), allow);
+    settings_.setValue(QStringLiteral("RemoteUpdate"), allow);
 }
 
 } // namespace host
