@@ -33,25 +33,25 @@ class Frame;
 
 namespace host {
 
-class HostSessionFakeDesktop : public HostSessionFake
+class SessionFakeDesktop : public SessionFake
 {
     Q_OBJECT
 
 public:
-    explicit HostSessionFakeDesktop(QObject* parent);
+    explicit SessionFakeDesktop(QObject* parent);
 
-    // HostSessionFake implementation.
+    // SessionFake implementation.
     void startSession() override;
 
 public slots:
-    // HostSessionFake implementation.
+    // SessionFake implementation.
     void onMessageReceived(const QByteArray& buffer) override;
 
 private:
     codec::VideoEncoder* createEncoder(const proto::desktop::Config& config);
     std::unique_ptr<desktop::Frame> createFrame();
 
-    DISALLOW_COPY_AND_ASSIGN(HostSessionFakeDesktop);
+    DISALLOW_COPY_AND_ASSIGN(SessionFakeDesktop);
 };
 
 } // namespace host

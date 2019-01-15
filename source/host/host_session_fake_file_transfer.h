@@ -24,22 +24,22 @@
 
 namespace host {
 
-class HostSessionFakeFileTransfer : public HostSessionFake
+class SessionFakeFileTransfer : public SessionFake
 {
     Q_OBJECT
 
 public:
-    explicit HostSessionFakeFileTransfer(QObject* parent);
+    explicit SessionFakeFileTransfer(QObject* parent);
 
-    // HostSessionFake implementation.
+    // SessionFake implementation.
     void startSession() override;
 
 public slots:
-    // HostSessionFake implementation.
+    // SessionFake implementation.
     void onMessageReceived(const QByteArray& buffer) override;
 
 private:
-    DISALLOW_COPY_AND_ASSIGN(HostSessionFakeFileTransfer);
+    DISALLOW_COPY_AND_ASSIGN(SessionFakeFileTransfer);
 };
 
 } // namespace host

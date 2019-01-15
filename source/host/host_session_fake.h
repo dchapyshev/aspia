@@ -25,14 +25,14 @@
 
 namespace host {
 
-class HostSessionFake : public QObject
+class SessionFake : public QObject
 {
     Q_OBJECT
 
 public:
-    virtual ~HostSessionFake() = default;
+    virtual ~SessionFake() = default;
 
-    static HostSessionFake* create(proto::SessionType session_type, QObject* parent);
+    static SessionFake* create(proto::SessionType session_type, QObject* parent);
 
     virtual void startSession() = 0;
 
@@ -44,7 +44,7 @@ public slots:
     virtual void onMessageReceived(const QByteArray& buffer) = 0;
 
 protected:
-    explicit HostSessionFake(QObject* parent);
+    explicit SessionFake(QObject* parent);
 };
 
 } // namespace host

@@ -353,7 +353,7 @@ bool Host::startFakeSession()
 {
     LOG(LS_INFO) << "Starting a fake session";
 
-    fake_session_ = HostSessionFake::create(network_channel_->sessionType(), this);
+    fake_session_ = SessionFake::create(network_channel_->sessionType(), this);
     if (fake_session_.isNull())
     {
         LOG(LS_INFO) << "Session type " << network_channel_->sessionType()
@@ -361,12 +361,12 @@ bool Host::startFakeSession()
         return false;
     }
 
-    connect(fake_session_, &HostSessionFake::sendMessage, network_channel_, &net::Channel::send);
+    connect(fake_session_, &SessionFake::sendMessage, network_channel_, &net::Channel::send);
 
     connect(network_channel_, &net::Channel::messageReceived,
-            fake_session_, &HostSessionFake::onMessageReceived);
+            fake_session_, &SessionFake::onMessageReceived);
 
-    connect(fake_session_, &HostSessionFake::errorOccurred, this, &Host::stop);
+    connect(fake_session_, &SessionFake::errorOccurred, this, &Host::stop);
 
     fake_session_->startSession();
     return true;

@@ -23,20 +23,20 @@
 
 namespace host {
 
-HostSessionFakeFileTransfer::HostSessionFakeFileTransfer(QObject* parent)
-    : HostSessionFake(parent)
+SessionFakeFileTransfer::SessionFakeFileTransfer(QObject* parent)
+    : SessionFake(parent)
 {
     // Nothing
 }
 
-void HostSessionFakeFileTransfer::startSession()
+void SessionFakeFileTransfer::startSession()
 {
     proto::file_transfer::Reply reply;
     reply.set_status(proto::file_transfer::STATUS_NO_LOGGED_ON_USER);
     emit sendMessage(common::serializeMessage(reply));
 }
 
-void HostSessionFakeFileTransfer::onMessageReceived(const QByteArray& /* buffer */)
+void SessionFakeFileTransfer::onMessageReceived(const QByteArray& /* buffer */)
 {
     proto::file_transfer::Reply reply;
     reply.set_status(proto::file_transfer::STATUS_NO_LOGGED_ON_USER);

@@ -26,20 +26,20 @@
 
 namespace host {
 
-HostSessionFakeDesktop::HostSessionFakeDesktop(QObject* parent)
-    : HostSessionFake(parent)
+SessionFakeDesktop::SessionFakeDesktop(QObject* parent)
+    : SessionFake(parent)
 {
     // Nothing
 }
 
-void HostSessionFakeDesktop::startSession()
+void SessionFakeDesktop::startSession()
 {
     proto::desktop::HostToClient message;
     message.mutable_config_request()->set_dummy(1);
     emit sendMessage(common::serializeMessage(message));
 }
 
-void HostSessionFakeDesktop::onMessageReceived(const QByteArray& buffer)
+void SessionFakeDesktop::onMessageReceived(const QByteArray& buffer)
 {
     proto::desktop::ClientToHost incoming_message;
 
@@ -78,7 +78,7 @@ void HostSessionFakeDesktop::onMessageReceived(const QByteArray& buffer)
     }
 }
 
-codec::VideoEncoder* HostSessionFakeDesktop::createEncoder(const proto::desktop::Config& config)
+codec::VideoEncoder* SessionFakeDesktop::createEncoder(const proto::desktop::Config& config)
 {
     switch (config.video_encoding())
     {
@@ -99,7 +99,7 @@ codec::VideoEncoder* HostSessionFakeDesktop::createEncoder(const proto::desktop:
     }
 }
 
-std::unique_ptr<desktop::Frame> HostSessionFakeDesktop::createFrame()
+std::unique_ptr<desktop::Frame> SessionFakeDesktop::createFrame()
 {
     static const int kWidth = 800;
     static const int kHeight = 600;

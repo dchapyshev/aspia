@@ -23,23 +23,23 @@
 
 namespace host {
 
-HostSessionFake::HostSessionFake(QObject* parent)
+SessionFake::SessionFake(QObject* parent)
     : QObject(parent)
 {
     // Nothing
 }
 
 // static
-HostSessionFake* HostSessionFake::create(proto::SessionType session_type, QObject* parent)
+SessionFake* SessionFake::create(proto::SessionType session_type, QObject* parent)
 {
     switch (session_type)
     {
         case proto::SESSION_TYPE_DESKTOP_MANAGE:
         case proto::SESSION_TYPE_DESKTOP_VIEW:
-            return new HostSessionFakeDesktop(parent);
+            return new SessionFakeDesktop(parent);
 
         case proto::SESSION_TYPE_FILE_TRANSFER:
-            return new HostSessionFakeFileTransfer(parent);
+            return new SessionFakeFileTransfer(parent);
 
         default:
             return nullptr;

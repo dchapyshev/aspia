@@ -37,7 +37,7 @@ class ChannelHost;
 namespace host {
 
 class HostProcess;
-class HostSessionFake;
+class SessionFake;
 
 class Host : public QObject
 {
@@ -92,7 +92,7 @@ private:
     net::ChannelHost* network_channel_ = nullptr;
     QPointer<ipc::Channel> ipc_channel_;
     QPointer<HostProcess> session_process_;
-    QPointer<HostSessionFake> fake_session_;
+    QPointer<SessionFake> fake_session_;
 
     DISALLOW_COPY_AND_ASSIGN(Host);
 };
