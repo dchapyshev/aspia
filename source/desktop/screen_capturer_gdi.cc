@@ -121,7 +121,7 @@ bool ScreenCapturerGDI::prepareCaptureResources()
 {
     // Switch to the desktop receiving user input if different from the
     // current one.
-    Desktop input_desktop(Desktop::inputDesktop());
+    base::Desktop input_desktop(base::Desktop::inputDesktop());
 
     if (input_desktop.isValid() && !desktop_.isSame(input_desktop))
     {

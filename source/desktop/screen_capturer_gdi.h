@@ -20,7 +20,7 @@
 #define DESKTOP__SCREEN_CAPTURER_GDI_H
 
 #include "base/win/scoped_hdc.h"
-#include "desktop/win/scoped_thread_desktop.h"
+#include "base/win/scoped_thread_desktop.h"
 #include "desktop/screen_capturer.h"
 #include "desktop/screen_capture_frame_queue.h"
 
@@ -46,7 +46,7 @@ private:
     ScreenId current_screen_id_ = kFullDesktopScreenId;
     QString current_device_key_;
 
-    ScopedThreadDesktop desktop_;
+    base::ScopedThreadDesktop desktop_;
     QRect desktop_dc_rect_;
 
     std::unique_ptr<Differ> differ_;

@@ -64,10 +64,6 @@ list(APPEND SOURCE_DESKTOP_UNIT_TESTS
 list(APPEND SOURCE_DESKTOP_WIN
     win/cursor.cc
     win/cursor.h
-    win/desktop.cc
-    win/desktop.h
-    win/scoped_thread_desktop.cc
-    win/scoped_thread_desktop.h
     win/screen_capture_utils.cc
     win/screen_capture_utils.h
     win/visual_effects_disabler.cc

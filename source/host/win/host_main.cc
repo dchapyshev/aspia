@@ -21,10 +21,10 @@
 #include <QApplication>
 #include <QCommandLineParser>
 
+#include "base/win/scoped_thread_desktop.h"
 #include "base/qt_logging.h"
 #include "build/version.h"
 #include "crypto/scoped_crypto_initializer.h"
-#include "desktop/win/scoped_thread_desktop.h"
 #include "host/ui/host_notifier_window.h"
 #include "host/host_session.h"
 
@@ -78,7 +78,7 @@ int hostMain(int argc, char *argv[])
 
     do
     {
-        desktop::Desktop input_desktop(desktop::Desktop::inputDesktop());
+        base::Desktop input_desktop(base::Desktop::inputDesktop());
         if (input_desktop.isValid())
         {
             if (input_desktop.setThreadDesktop())

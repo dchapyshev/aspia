@@ -16,12 +16,12 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef DESKTOP__WIN__SCOPED_THREAD_DESKTOP_H
-#define DESKTOP__WIN__SCOPED_THREAD_DESKTOP_H
+#ifndef BASE__WIN__SCOPED_THREAD_DESKTOP_H
+#define BASE__WIN__SCOPED_THREAD_DESKTOP_H
 
-#include "desktop/win/desktop.h"
+#include "base/win/desktop.h"
 
-namespace desktop {
+namespace base {
 
 class ScopedThreadDesktop
 {
@@ -56,6 +56,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(ScopedThreadDesktop);
 };
 
-} // namespace desktop
+} // namespace base
 
-#endif // DESKTOP__WIN__SCOPED_THREAD_DESKTOP_H
+#endif // BASE__WIN__SCOPED_THREAD_DESKTOP_H

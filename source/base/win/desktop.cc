@@ -16,11 +16,11 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "desktop/win/desktop.h"
+#include "base/win/desktop.h"
 
 #include "base/logging.h"
 
-namespace desktop {
+namespace base {
 
 Desktop::Desktop(Desktop&& other) noexcept
 {
@@ -159,4 +159,4 @@ Desktop& Desktop::operator=(Desktop&& other) noexcept
     return *this;
 }
 
-} // namespace desktop
+} // namespace base

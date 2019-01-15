@@ -16,15 +16,15 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef DESKTOP__WIN__DESKTOP_H
-#define DESKTOP__WIN__DESKTOP_H
+#ifndef BASE__WIN__DESKTOP_H
+#define BASE__WIN__DESKTOP_H
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
 #include "base/macros_magic.h"
 
-namespace desktop {
+namespace base {
 
 class Desktop
 {
@@ -33,40 +33,25 @@ public:
     Desktop(Desktop&& other) noexcept;
     ~Desktop();
 
-    //
-    // Returns the desktop currently receiving user input or NULL if an error
-    // occurs.
-    //
+    // Returns the desktop currently receiving user input or NULL if an error occurs.
     static Desktop inputDesktop();
 
-    //
     // Returns the desktop by its name or NULL if an error occurs.
-    //
     static Desktop desktop(const wchar_t* desktop_name);
 
-    //
-    // Returns the desktop currently assigned to the calling thread or NULL if
-    // an error occurs.
-    //
+    // Returns the desktop currently assigned to the calling thread or NULL if an error occurs.
     static Desktop threadDesktop();
 
-    //
-    // Returns the name of the desktop represented by the object. Return false if
-    // quering the name failed for any reason.
-    //
+    // Returns the name of the desktop represented by the object. Return false if quering the name
+    // failed for any reason.
     bool name(wchar_t* name, DWORD length) const;
 
-    //
-    // Returns true if |other| has the same name as this desktop. Returns false
-    // in any other case including failing Win32 APIs and uninitialized desktop
-    // handles.
-    //
+    // Returns true if |other| has the same name as this desktop. Returns false in any other case
+    // including failing Win32 APIs and uninitialized desktop handles.
     bool isSame(const Desktop& other) const;
 
-    //
-    // Assigns the desktop to the current thread. Returns false is the operation
-    // failed for any reason.
-    //
+    // Assigns the desktop to the current thread. Returns false is the operation failed for any
+    // reason.
     bool setThreadDesktop() const;
 
     bool isValid() const;
@@ -88,6 +73,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(Desktop);
 };
 
-} // namespace desktop
+} // namespace base
 
-#endif // DESKTOP__WIN__DESKTOP_H
+#endif // BASE__WIN__DESKTOP_H

@@ -27,9 +27,9 @@
 #include <set>
 
 #include "base/win/registry.h"
+#include "base/win/scoped_thread_desktop.h"
 #include "base/logging.h"
 #include "base/keycode_converter.h"
-#include "desktop/win/scoped_thread_desktop.h"
 
 namespace host {
 
@@ -97,7 +97,7 @@ private:
     void injectSAS();
     bool isCtrlAndAltPressed();
 
-    desktop::ScopedThreadDesktop desktop_;
+    base::ScopedThreadDesktop desktop_;
 
     const bool block_input_;
 
@@ -265,7 +265,7 @@ void InputInjectorImpl::injectKeyEvent(const proto::desktop::KeyEvent& event)
 
 void InputInjectorImpl::switchToInputDesktop()
 {
-    desktop::Desktop input_desktop(desktop::Desktop::inputDesktop());
+    base::Desktop input_desktop(base::Desktop::inputDesktop());
 
     if (input_desktop.isValid() && !desktop_.isSame(input_desktop))
         desktop_.setThreadDesktop(std::move(input_desktop));

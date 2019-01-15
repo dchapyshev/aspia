@@ -16,11 +16,11 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "desktop/win/scoped_thread_desktop.h"
+#include "base/win/scoped_thread_desktop.h"
 
 #include <utility>
 
-namespace desktop {
+namespace base {
 
 ScopedThreadDesktop::ScopedThreadDesktop()
     : initial_(Desktop::threadDesktop())
@@ -65,4 +65,4 @@ bool ScopedThreadDesktop::setThreadDesktop(Desktop&& desktop)
     return true;
 }
 
-} // namespace desktop
+} // namespace base

@@ -71,6 +71,8 @@ list(APPEND SOURCE_BASE_UNIT_TESTS
     string_printf_unittest.cc)
 
 list(APPEND SOURCE_BASE_WIN
+    win/desktop.cc
+    win/desktop.h
     win/drive_enumerator.cc
     win/drive_enumerator.h
     win/printer_enumerator.cc
@@ -85,6 +87,8 @@ list(APPEND SOURCE_BASE_WIN
     win/scoped_hdc.h
     win/scoped_local.h
     win/scoped_object.h
+    win/scoped_thread_desktop.cc
+    win/scoped_thread_desktop.h
     win/scoped_user_object.h
     win/scoped_wts_memory.h
     win/security_helpers.cc
