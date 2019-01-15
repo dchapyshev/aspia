@@ -23,7 +23,6 @@
 #include "common/desktop_session_constants.h"
 #include "common/message_serialization.h"
 #include "host/input_injector.h"
-#include "host/screen_updater.h"
 #include "host/host_settings.h"
 #include "host/host_system_info.h"
 #include "proto/desktop_session_extensions.pb.h"
@@ -66,17 +65,15 @@ HostSessionDesktop::~HostSessionDesktop()
 #endif // defined(OS_WIN)
 }
 
-void HostSessionDesktop::startSession()
+void HostSessionDesktop::onScreenUpdate(const QByteArray& message)
 {
-    outgoing_message_.mutable_config_request()->set_dummy(1);
-    emit sendMessage(common::serializeMessage(outgoing_message_));
+    sendMessage(message);
 }
 
-void HostSessionDesktop::stopSession()
+void HostSessionDesktop::sessionStarted()
 {
-    delete screen_updater_;
-    delete clipboard_;
-    input_injector_.reset();
+    outgoing_message_.mutable_config_request()->set_dummy(1);
+    sendMessage(common::serializeMessage(outgoing_message_));
 }
 
 void HostSessionDesktop::messageReceived(const QByteArray& buffer)
@@ -85,7 +82,7 @@ void HostSessionDesktop::messageReceived(const QByteArray& buffer)
 
     if (!common::parseMessage(buffer, incoming_message_))
     {
-        emit errorOccurred();
+        stop();
         return;
     }
 
@@ -112,7 +109,7 @@ void HostSessionDesktop::clipboardEvent(const proto::desktop::ClipboardEvent& ev
 
     outgoing_message_.Clear();
     outgoing_message_.mutable_clipboard_event()->CopyFrom(event);
-    emit sendMessage(common::serializeMessage(outgoing_message_));
+    sendMessage(common::serializeMessage(outgoing_message_));
 }
 
 void HostSessionDesktop::readPointerEvent(const proto::desktop::PointerEvent& event)
@@ -120,7 +117,7 @@ void HostSessionDesktop::readPointerEvent(const proto::desktop::PointerEvent& ev
     if (session_type_ != proto::SESSION_TYPE_DESKTOP_MANAGE)
     {
         LOG(LS_WARNING) << "Attempt to inject pointer event to desktop view session";
-        emit errorOccurred();
+        stop();
         return;
     }
 
@@ -133,7 +130,7 @@ void HostSessionDesktop::readKeyEvent(const proto::desktop::KeyEvent& event)
     if (session_type_ != proto::SESSION_TYPE_DESKTOP_MANAGE)
     {
         LOG(LS_WARNING) << "Attempt to inject key event to desktop view session";
-        emit errorOccurred();
+        stop();
         return;
     }
 
@@ -146,14 +143,14 @@ void HostSessionDesktop::readClipboardEvent(const proto::desktop::ClipboardEvent
     if (session_type_ != proto::SESSION_TYPE_DESKTOP_MANAGE)
     {
         LOG(LS_WARNING) << "Attempt to inject clipboard event to desktop view session";
-        emit errorOccurred();
+        stop();
         return;
     }
 
-    if (clipboard_.isNull())
+    if (!clipboard_)
     {
         LOG(LS_WARNING) << "Attempt to inject clipboard event to session with the clipboard disabled";
-        emit errorOccurred();
+        stop();
         return;
     }
 
@@ -232,12 +229,10 @@ void HostSessionDesktop::readConfig(const proto::desktop::Config& config)
     if (change_flags & DesktopConfigTracker::CLIPBOARD_CHANGES &&
         session_type_ == proto::SESSION_TYPE_DESKTOP_MANAGE)
     {
-        delete clipboard_;
-
         if (config.flags() & proto::desktop::ENABLE_CLIPBOARD)
         {
-            clipboard_ = new common::Clipboard(this);
-            connect(clipboard_, &common::Clipboard::clipboardEvent,
+            clipboard_.reset(new common::Clipboard());
+            connect(clipboard_.get(), &common::Clipboard::clipboardEvent,
                     this, &HostSessionDesktop::clipboardEvent);
         }
     }
@@ -279,15 +274,10 @@ void HostSessionDesktop::readConfig(const proto::desktop::Config& config)
 
     if (change_flags & DesktopConfigTracker::VIDEO_CHANGES)
     {
-        std::unique_ptr<ScreenUpdater> screen_updater_deleter(screen_updater_);
-
-        screen_updater_ = new ScreenUpdater(this);
-
-        connect(screen_updater_, &ScreenUpdater::sendMessage,
-                this, &HostSessionDesktop::sendMessage);
+        screen_updater_.reset(new ScreenUpdater(this));
 
         if (!screen_updater_->start(config))
-            emit errorOccurred();
+            stop();
     }
 }
 
@@ -302,7 +292,7 @@ void HostSessionDesktop::sendSystemInfo()
     extension->set_name(common::kSystemInfoExtension);
     extension->set_data(system_info.SerializeAsString());
 
-    emit sendMessage(common::serializeMessage(outgoing_message_));
+    sendMessage(common::serializeMessage(outgoing_message_));
 }
 
 } // namespace host

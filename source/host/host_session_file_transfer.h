@@ -40,11 +40,10 @@ public slots:
     void messageReceived(const QByteArray& buffer) override;
 
 protected:
-    void startSession() override;
-    void stopSession() override;
+    void sessionStarted() override;
 
 private:
-    QPointer<common::FileWorker> worker_;
+    common::FileWorker* worker_;
 
     DISALLOW_COPY_AND_ASSIGN(HostSessionFileTransfer);
 };

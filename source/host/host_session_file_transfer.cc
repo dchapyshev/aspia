@@ -24,35 +24,28 @@
 namespace host {
 
 HostSessionFileTransfer::HostSessionFileTransfer(const QString& channel_id)
-    : HostSession(channel_id)
+    : HostSession(channel_id),
+      worker_(new common::FileWorker(this))
 {
     // Nothing
 }
 
-void HostSessionFileTransfer::startSession()
+void HostSessionFileTransfer::sessionStarted()
 {
-    worker_ = new common::FileWorker(this);
-}
-
-void HostSessionFileTransfer::stopSession()
-{
-    delete worker_;
+    // Nothing
 }
 
 void HostSessionFileTransfer::messageReceived(const QByteArray& buffer)
 {
-    if (worker_.isNull())
-        return;
-
     proto::file_transfer::Request request;
 
     if (!common::parseMessage(buffer, request))
     {
-        emit errorOccurred();
+        stop();
         return;
     }
 
-    emit sendMessage(common::serializeMessage(worker_->doRequest(request)));
+    sendMessage(common::serializeMessage(worker_->doRequest(request)));
 }
 
 } // namespace host

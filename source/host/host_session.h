@@ -20,7 +20,7 @@
 #define HOST__HOST_SESSION_H
 
 #include <QByteArray>
-#include <QPointer>
+#include <QObject>
 
 #include "base/macros_magic.h"
 
@@ -32,33 +32,26 @@ namespace host {
 
 class HostSession : public QObject
 {
-    Q_OBJECT
-
 public:
     virtual ~HostSession() = default;
 
     static HostSession* create(const QString& session_type, const QString& channel_id);
 
     void start();
-
-public slots:
-    virtual void messageReceived(const QByteArray& buffer) = 0;
-
-signals:
-    void sendMessage(const QByteArray& buffer);
-    void errorOccurred();
+    void stop();
 
 protected:
     explicit HostSession(const QString& channel_id);
 
-private slots:
-    virtual void startSession() = 0;
-    virtual void stopSession() = 0;
-    void stop();
+    // Sends outgoing message.
+    void sendMessage(const QByteArray& message);
+
+    virtual void sessionStarted() = 0;
+    virtual void messageReceived(const QByteArray& buffer) = 0;
 
 private:
     QString channel_id_;
-    QPointer<ipc::Channel> ipc_channel_;
+    ipc::Channel* channel_ = nullptr;
 
     DISALLOW_COPY_AND_ASSIGN(HostSession);
 };

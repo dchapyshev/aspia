@@ -250,8 +250,9 @@ void ScreenUpdaterImpl::run()
 
             if (message_.has_video_packet() || message_.has_cursor_shape())
             {
-                QApplication::postEvent(
-                    parent(), new MessageEvent(common::serializeMessage(message_)));
+                QApplication::postEvent(parent(),
+                    new MessageEvent(common::serializeMessage(message_)),
+                    Qt::HighEventPriority);
             }
         }
 
@@ -281,8 +282,9 @@ void ScreenUpdaterImpl::run()
 // ScreenUpdater implementation.
 //================================================================================================
 
-ScreenUpdater::ScreenUpdater(QObject* parent)
-    : QObject(parent)
+ScreenUpdater::ScreenUpdater(Delegate* delegate, QObject* parent)
+    : QObject(parent),
+      delegate_(delegate)
 {
     // Nothing
 }
@@ -303,11 +305,7 @@ void ScreenUpdater::customEvent(QEvent* event)
     if (event->type() != MessageEvent::kType)
         return;
 
-    MessageEvent* message_event = dynamic_cast<MessageEvent*>(event);
-    if (!message_event)
-        return;
-
-    emit sendMessage(message_event->buffer());
+    delegate_->onScreenUpdate(static_cast<MessageEvent*>(event)->buffer());
 }
 
 } // namespace host

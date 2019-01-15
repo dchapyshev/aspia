@@ -33,15 +33,20 @@ class ScreenUpdater : public QObject
     Q_OBJECT
 
 public:
-    explicit ScreenUpdater(QObject* parent = nullptr);
+    class Delegate
+    {
+    public:
+        virtual ~Delegate() = default;
+
+        virtual void onScreenUpdate(const QByteArray& message) = 0;
+    };
+
+    ScreenUpdater(Delegate* delegate, QObject* parent = nullptr);
     ~ScreenUpdater() = default;
 
 public slots:
     bool start(const proto::desktop::Config& config);
     void selectScreen(int64_t screen_id);
-
-signals:
-    void sendMessage(const QByteArray& buffer);
 
 protected:
     // QObject implementation.
@@ -49,6 +54,7 @@ protected:
 
 private:
     ScreenUpdaterImpl* impl_ = nullptr;
+    Delegate* delegate_;
 
     DISALLOW_COPY_AND_ASSIGN(ScreenUpdater);
 };

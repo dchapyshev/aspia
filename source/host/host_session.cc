@@ -63,23 +63,24 @@ HostSession* HostSession::create(const QString& session_type, const QString& cha
 
 void HostSession::start()
 {
-    ipc_channel_ = ipc::Channel::createClient(this);
+    channel_ = ipc::Channel::createClient(this);
 
-    connect(ipc_channel_, &ipc::Channel::connected, ipc_channel_, &ipc::Channel::start);
-    connect(ipc_channel_, &ipc::Channel::connected, this, &HostSession::startSession);
-    connect(ipc_channel_, &ipc::Channel::disconnected, this, &HostSession::stop);
-    connect(ipc_channel_, &ipc::Channel::errorOccurred, this, &HostSession::stop);
-    connect(ipc_channel_, &ipc::Channel::messageReceived, this, &HostSession::messageReceived);
+    connect(channel_, &ipc::Channel::connected, channel_, &ipc::Channel::start);
+    connect(channel_, &ipc::Channel::connected, this, &HostSession::sessionStarted);
+    connect(channel_, &ipc::Channel::disconnected, this, &HostSession::stop);
+    connect(channel_, &ipc::Channel::errorOccurred, this, &HostSession::stop);
+    connect(channel_, &ipc::Channel::messageReceived, this, &HostSession::messageReceived);
 
-    connect(this, &HostSession::sendMessage, ipc_channel_, &ipc::Channel::send);
-    connect(this, &HostSession::errorOccurred, this, &HostSession::stop);
+    channel_->connectToServer(channel_id_);
+}
 
-    ipc_channel_->connectToServer(channel_id_);
+void HostSession::sendMessage(const QByteArray& message)
+{
+    channel_->send(message);
 }
 
 void HostSession::stop()
 {
-    stopSession();
     QCoreApplication::quit();
 }
 

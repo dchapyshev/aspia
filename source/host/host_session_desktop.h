@@ -21,6 +21,7 @@
 
 #include "host/desktop_config_tracker.h"
 #include "host/host_session.h"
+#include "host/screen_updater.h"
 #include "proto/common.pb.h"
 #include "build/build_config.h"
 
@@ -35,9 +36,10 @@ class VisualEffectsDisabler;
 namespace host {
 
 class InputInjector;
-class ScreenUpdater;
 
-class HostSessionDesktop : public HostSession
+class HostSessionDesktop :
+    public HostSession,
+    public ScreenUpdater::Delegate
 {
     Q_OBJECT
 
@@ -45,14 +47,16 @@ public:
     HostSessionDesktop(proto::SessionType session_type, const QString& channel_id);
     ~HostSessionDesktop();
 
+    // ScreenUpdater::Delegate implementation.
+    void onScreenUpdate(const QByteArray& message);
+
 public slots:
     // HostSession implementation.
     void messageReceived(const QByteArray& buffer) override;
 
 protected:
     // HostSession implementation.
-    void startSession() override;
-    void stopSession() override;
+    void sessionStarted() override;
 
 private slots:
     void clipboardEvent(const proto::desktop::ClipboardEvent& event);
@@ -73,9 +77,9 @@ private:
 
     DesktopConfigTracker config_tracker_;
 
-    QPointer<ScreenUpdater> screen_updater_;
-    QPointer<common::Clipboard> clipboard_;
-    QScopedPointer<InputInjector> input_injector_;
+    std::unique_ptr<ScreenUpdater> screen_updater_;
+    std::unique_ptr<common::Clipboard> clipboard_;
+    std::unique_ptr<InputInjector> input_injector_;
 
 #if defined(OS_WIN)
     std::unique_ptr<desktop::VisualEffectsDisabler> effects_disabler_;
