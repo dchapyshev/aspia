@@ -66,7 +66,7 @@ private:
     QPoint start_pos_;
     QRect window_rect_;
 
-    QPointer<HostNotifier> notifier_;
+    HostNotifier* notifier_ = nullptr;
     QString channel_id_;
 
     DISALLOW_COPY_AND_ASSIGN(HostNotifierWindow);

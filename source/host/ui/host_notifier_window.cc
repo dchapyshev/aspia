@@ -78,7 +78,7 @@ HostNotifierWindow::HostNotifierWindow(QWidget* parent)
     QString current_locale = settings.locale();
 
     if (!locale_loader_.contains(current_locale))
-        settings.setLocale(DEFAULT_LOCALE);
+        settings.setLocale(QStringLiteral(DEFAULT_LOCALE));
 
     locale_loader_.installTranslators(current_locale);
     ui.setupUi(this);
@@ -175,7 +175,7 @@ bool HostNotifierWindow::eventFilter(QObject* object, QEvent* event)
 
 void HostNotifierWindow::showEvent(QShowEvent* event)
 {
-    if (notifier_.isNull())
+    if (!notifier_)
     {
         notifier_ = new HostNotifier(this);
 
