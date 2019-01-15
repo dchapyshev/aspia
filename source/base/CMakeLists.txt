@@ -27,8 +27,6 @@ list(APPEND SOURCE_BASE
     cpuid.h
     debug.cc
     debug.h
-    keycode_converter.cc
-    keycode_converter.h
     logging.cc
     logging.h
     macros_magic.h

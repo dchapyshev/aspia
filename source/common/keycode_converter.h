@@ -16,14 +16,14 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__KEYCODE_CONVERTER_H
-#define BASE__KEYCODE_CONVERTER_H
+#ifndef COMMON__KEYCODE_CONVERTER_H
+#define COMMON__KEYCODE_CONVERTER_H
 
 #include <cstdint>
 
 #include "base/macros_magic.h"
 
-namespace base {
+namespace common {
 
 // This structure is used to define the keycode mapping table.
 // It is defined here because the unittests need access to it.
@@ -68,6 +68,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(KeycodeConverter);
 };
 
-} // namespace base
+} // namespace common
 
-#endif // BASE__KEYCODE_CONVERTER_H
+#endif // COMMON__KEYCODE_CONVERTER_H

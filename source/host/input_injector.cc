@@ -29,7 +29,7 @@
 #include "base/win/registry.h"
 #include "base/win/scoped_thread_desktop.h"
 #include "base/logging.h"
-#include "base/keycode_converter.h"
+#include "common/keycode_converter.h"
 
 namespace host {
 
@@ -122,8 +122,8 @@ InputInjectorImpl::~InputInjectorImpl()
 {
     for (auto usb_keycode : pressed_keys_)
     {
-        int scancode = base::KeycodeConverter::usbKeycodeToNativeKeycode(usb_keycode);
-        if (scancode != base::KeycodeConverter::invalidNativeKeycode())
+        int scancode = common::KeycodeConverter::usbKeycodeToNativeKeycode(usb_keycode);
+        if (scancode != common::KeycodeConverter::invalidNativeKeycode())
         {
             sendKeyboardScancode(static_cast<WORD>(scancode),
                                  KEYEVENTF_SCANCODE | KEYEVENTF_KEYUP);
@@ -231,8 +231,8 @@ void InputInjectorImpl::injectKeyEvent(const proto::desktop::KeyEvent& event)
         pressed_keys_.erase(event.usb_keycode());
     }
 
-    int scancode = base::KeycodeConverter::usbKeycodeToNativeKeycode(event.usb_keycode());
-    if (scancode == base::KeycodeConverter::invalidNativeKeycode())
+    int scancode = common::KeycodeConverter::usbKeycodeToNativeKeycode(event.usb_keycode());
+    if (scancode == common::KeycodeConverter::invalidNativeKeycode())
         return;
 
     switchToInputDesktop();

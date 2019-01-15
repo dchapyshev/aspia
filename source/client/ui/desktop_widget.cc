@@ -22,7 +22,7 @@
 #include <QPainter>
 #include <QWheelEvent>
 
-#include "base/keycode_converter.h"
+#include "common/keycode_converter.h"
 #include "desktop/desktop_frame_qimage.h"
 #include "proto/desktop_session.pb.h"
 
@@ -162,8 +162,8 @@ void DesktopWidget::doKeyEvent(QKeyEvent* event)
     flags |= (isNumLockActivated() ? proto::desktop::KeyEvent::NUMLOCK : 0);
 
     uint32_t usb_keycode =
-        base::KeycodeConverter::nativeKeycodeToUsbKeycode(event->nativeScanCode());
-    if (usb_keycode == base::KeycodeConverter::invalidUsbKeycode())
+        common::KeycodeConverter::nativeKeycodeToUsbKeycode(event->nativeScanCode());
+    if (usb_keycode == common::KeycodeConverter::invalidUsbKeycode())
         return;
 
     executeKeyEvent(usb_keycode, flags);
@@ -190,9 +190,9 @@ void DesktopWidget::executeKeyCombination(int key_sequence)
     if (key_sequence & Qt::MetaModifier)
         keys.push_back(kUsbCodeLeftMeta);
 
-    uint32_t key = base::KeycodeConverter::qtKeycodeToUsbKeycode(
+    uint32_t key = common::KeycodeConverter::qtKeycodeToUsbKeycode(
         key_sequence & ~Qt::KeyboardModifierMask);
-    if (key == base::KeycodeConverter::invalidUsbKeycode())
+    if (key == common::KeycodeConverter::invalidUsbKeycode())
         return;
 
     keys.push_back(key);
@@ -346,8 +346,8 @@ LRESULT CALLBACK DesktopWidget::keyboardHookProc(INT code, WPARAM wparam, LPARAM
                     scan_code |= 0x100;
 
                 uint32_t usb_keycode =
-                    base::KeycodeConverter::nativeKeycodeToUsbKeycode(scan_code);
-                if (usb_keycode != base::KeycodeConverter::invalidUsbKeycode())
+                    common::KeycodeConverter::nativeKeycodeToUsbKeycode(scan_code);
+                if (usb_keycode != common::KeycodeConverter::invalidUsbKeycode())
                 {
                     self->executeKeyEvent(usb_keycode, flags);
                     return TRUE;

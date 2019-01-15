@@ -16,13 +16,13 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/keycode_converter.h"
+#include "common/keycode_converter.h"
 
 #include <QtCore>
 
 #include "build/build_config.h"
 
-namespace base {
+namespace common {
 
 namespace {
 
@@ -38,7 +38,7 @@ namespace {
 #define USB_KEYMAP(usb, evdev, xkb, win, mac, qt) {usb, 0, qt}
 #endif
 #define USB_KEYMAP_DECLARATION const KeycodeMapEntry usb_keycode_map[] =
-#include "base/keycode_converter_data.inc"
+#include "common/keycode_converter_data.inc"
 #undef USB_KEYMAP
 #undef USB_KEYMAP_DECLARATION
 
@@ -108,4 +108,4 @@ uint32_t KeycodeConverter::qtKeycodeToUsbKeycode(int qt_keycode)
     return invalidUsbKeycode();
 }
 
-} // namespace base
+} // namespace common
