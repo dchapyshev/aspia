@@ -196,62 +196,62 @@
 <context>
     <name>Console</name>
     <message>
-        <location filename="../console_main.cc" line="69"/>
+        <location filename="../console_main.cc" line="70"/>
         <source>Console</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="75"/>
+        <location filename="../console_main.cc" line="76"/>
         <source>Remote computer address.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="76"/>
+        <location filename="../console_main.cc" line="77"/>
         <source>address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="80"/>
+        <location filename="../console_main.cc" line="81"/>
         <source>Remote computer port.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="81"/>
+        <location filename="../console_main.cc" line="82"/>
         <source>port</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="86"/>
+        <location filename="../console_main.cc" line="87"/>
         <source>Name of user.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="87"/>
+        <location filename="../console_main.cc" line="88"/>
         <source>username</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="91"/>
+        <location filename="../console_main.cc" line="92"/>
         <source>Session type. Possible values: desktop-manage, desktop-view, file-transfer.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="97"/>
+        <location filename="../console_main.cc" line="98"/>
         <source>Run the program with a simplified user interface.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="100"/>
+        <location filename="../console_main.cc" line="101"/>
         <source>Aspia Console</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="103"/>
+        <location filename="../console_main.cc" line="104"/>
         <source>file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="104"/>
+        <location filename="../console_main.cc" line="105"/>
         <source>The file to open.</source>
         <translation type="unfinished"></translation>
     </message>

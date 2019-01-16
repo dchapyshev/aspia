@@ -4,32 +4,32 @@
 <context>
     <name>HostConfig</name>
     <message>
-        <location filename="../host_config_main.cc" line="63"/>
+        <location filename="../host_config_main.cc" line="64"/>
         <source>The path to the file to import.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host_config_main.cc" line="67"/>
+        <location filename="../host_config_main.cc" line="68"/>
         <source>The path to the file to export.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host_config_main.cc" line="71"/>
+        <location filename="../host_config_main.cc" line="72"/>
         <source>Enables silent mode when exporting and importing.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host_config_main.cc" line="74"/>
+        <location filename="../host_config_main.cc" line="75"/>
         <source>Run application update.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host_config_main.cc" line="91"/>
+        <location filename="../host_config_main.cc" line="92"/>
         <source>Warning</source>
         <translation type="unfinished">Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../host_config_main.cc" line="92"/>
+        <location filename="../host_config_main.cc" line="93"/>
         <source>Export and import parameters can not be specified together.</source>
         <translation type="unfinished"></translation>
     </message>

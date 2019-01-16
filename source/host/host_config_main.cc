@@ -31,6 +31,7 @@
 
 int hostConfigMain(int argc, char *argv[])
 {
+    Q_INIT_RESOURCE(qt_translations);
     Q_INIT_RESOURCE(common);
     Q_INIT_RESOURCE(common_translations);
     Q_INIT_RESOURCE(updater);

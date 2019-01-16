@@ -67,6 +67,10 @@ add_library(aspia_common STATIC
 target_link_libraries(aspia_common aspia_base aspia_proto ${THIRD_PARTY_LIBS})
 
 if(Qt5LinguistTools_FOUND)
+    # Get the list of Qt translation files.
+    file(GLOB QT_QM_FILES ${ASPIA_THIRD_PARTY_DIR}/qt/translations/*.qm)
+    add_qt_translations(aspia_common QRC_FILE "translations/qt_translations.qrc" QM_FILES ${QT_QM_FILES})
+
     # Get the list of translation files.
     file(GLOB COMMON_TS_FILES translations/*.ts)
     add_translations(aspia_common QRC_FILE "translations/common_translations.qrc" TS_FILES ${COMMON_TS_FILES})

@@ -39,6 +39,7 @@ Q_IMPORT_PLUGIN(QWindowsPrinterSupportPlugin);
 
 int main(int argc, char *argv[])
 {
+    Q_INIT_RESOURCE(qt_translations);
     Q_INIT_RESOURCE(client);
     Q_INIT_RESOURCE(client_translations);
     Q_INIT_RESOURCE(common);

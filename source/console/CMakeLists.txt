@@ -90,11 +90,7 @@ target_link_libraries(aspia_console
     ${THIRD_PARTY_LIBS})
 
 if(Qt5LinguistTools_FOUND)
-    # Get the list of Qt translation files.
-    file(GLOB QT_QM_FILES ${ASPIA_THIRD_PARTY_DIR}/qt/translations/*.qm)
-    add_qt_translations(aspia_console QRC_FILE "translations/qt_translations.qrc" QM_FILES ${QT_QM_FILES})
-
-    # Get the list of Aspia translation files.
+    # Get the list of translation files.
     file(GLOB CONSOLE_TS_FILES translations/*.ts)
     add_translations(aspia_console QRC_FILE "translations/console_translations.qrc" TS_FILES ${CONSOLE_TS_FILES})
 
