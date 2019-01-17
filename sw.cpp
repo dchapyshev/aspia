@@ -11,7 +11,7 @@ void build(Solution &s)
     auto setup_target = [&aspia](auto &t, const String &name) -> decltype(auto)
     {
         t.CPPVersion = CPPLanguageStandard::CPP17;
-        t += "source"_idir;
+        t.Public += "source"_idir;
         t.setRootDirectory("source/" + name);
         t += ".*"_rr;
         t -= ".*_unittest.*"_rr;
@@ -23,7 +23,9 @@ void build(Solution &s)
         return setup_target(aspia.addStaticLibrary(name), name);
     };
 
-    auto &base = add_lib("base");
+    auto &base = aspia.addStaticLibrary("base");
+    base -= "source/build/.*"_rr;
+    setup_target(base, "base");
     base.Public += "UNICODE"_def;
     base.Public += "NOMINMAX"_def;
     base.Public += "org.sw.demo.qtproject.qt.base.core-*"_dep;
@@ -41,10 +43,8 @@ void build(Solution &s)
         gen_protobuf(protocol, p, true, "proto");
 
     auto &codec = add_lib("codec");
-    codec.Public += base, protocol;
-    codec.Public += "org.sw.demo.qtproject.qt.base.gui-*"_dep;
+    codec.Public += protocol, desktop_capture;
     codec.Public += "org.sw.demo.facebook.zstd.zstd-*"_dep;
-    codec.Public += "org.sw.demo.chromium.libyuv-master"_dep;
     codec.Public += "org.sw.demo.webmproject.vpx-1"_dep;
 
     auto &crypto = add_lib("crypto");
@@ -56,16 +56,7 @@ void build(Solution &s)
     ipc.Public += "org.sw.demo.qtproject.qt.base.network-*"_dep;
     automoc("org.sw.demo.qtproject.qt.base.tools.moc-*"_dep, ipc);
 
-    auto &network = add_lib("net");
-    network.Public += crypto, protocol;
-    network.Public += "org.sw.demo.qtproject.qt.base.network-*"_dep;
-    if (s.Settings.TargetOS.Type == OSType::Windows)
-        network.Public += "Setupapi.lib"_lib, "Winspool.lib"_lib;
-    automoc("org.sw.demo.qtproject.qt.base.tools.moc-*"_dep, network);
-
-    auto qms = qt_translations_create_qm_files("org.sw.demo.qtproject.qt-*"_dep, s);
-
-    auto qt_progs_and_tr = [&qms](auto &t, bool qt = false)
+    auto qt_progs_and_tr = [](auto &t)
     {
         automoc("org.sw.demo.qtproject.qt.base.tools.moc-*"_dep, t);
         rcc("org.sw.demo.qtproject.qt.base.tools.rcc-*"_dep, t, t.SourceDir / ("resources/" + t.pkg.ppath.back() + ".qrc"));
@@ -74,22 +65,11 @@ void build(Solution &s)
         // trs
         qt_tr("org.sw.demo.qtproject.qt-*"_dep, t);
         t.configureFile(t.SourceDir / ("translations/" + t.pkg.ppath.back() + "_translations.qrc"),
-                        t.BinaryDir / (t.pkg.ppath.back() + "_translations.qrc"),
-                        ConfigureFlags::CopyOnly);
+            t.BinaryDir / (t.pkg.ppath.back() + "_translations.qrc"), ConfigureFlags::CopyOnly);
         rcc("org.sw.demo.qtproject.qt.base.tools.rcc-*"_dep, t,
             t.BinaryDir / (t.pkg.ppath.back() + "_translations.qrc"))
             .c->working_directory = t.BinaryDir;
-
-        if (qt)
-        {
-            qt_translations_rcc("org.sw.demo.qtproject.qt-*"_dep, t, "translations/qt_translations.qrc", qms);
-        }
     };
-
-    auto &updater = add_lib("updater");
-    updater.Public += network;
-    updater.Public += "org.sw.demo.qtproject.qt.base.widgets-*"_dep;
-    qt_progs_and_tr(updater);
 
     auto &common = add_lib("common");
     if (s.Settings.TargetOS.Type == OSType::Windows)
@@ -98,7 +78,20 @@ void build(Solution &s)
     common.Public += "org.sw.demo.openssl.crypto-*.*.*.*"_dep;
     common.Public += "org.sw.demo.qtproject.qt.base.widgets-*"_dep;
     common.Public += "org.sw.demo.qtproject.qt.winextras-*"_dep;
-    qt_progs_and_tr(common, true);
+    qt_progs_and_tr(common);
+    qt_translations_rcc("org.sw.demo.qtproject.qt-*"_dep, aspia, common, "translations/qt_translations.qrc");
+
+    auto &network = add_lib("net");
+    network.Public += crypto, common;
+    network.Public += "org.sw.demo.qtproject.qt.base.network-*"_dep;
+    if (s.Settings.TargetOS.Type == OSType::Windows)
+        network.Public += "Setupapi.lib"_lib, "Winspool.lib"_lib;
+    automoc("org.sw.demo.qtproject.qt.base.tools.moc-*"_dep, network);
+
+    auto &updater = add_lib("updater");
+    updater.Public += network;
+    updater.Public += "org.sw.demo.qtproject.qt.base.widgets-*"_dep;
+    qt_progs_and_tr(updater);
 
     auto &host = aspia.addSharedLibrary("host");
     setup_target(host, "host");
@@ -107,7 +100,7 @@ void build(Solution &s)
     host += "HOST_IMPLEMENTATION"_def;
     if (s.Settings.TargetOS.Type == OSType::Windows)
         host.Public += "comsuppw.lib"_lib, "sas.lib"_lib;
-    host.Public += common, desktop_capture, ipc, updater;
+    host.Public += common, ipc, updater;
     host.Public += "org.sw.demo.boost.property_tree-1"_dep;
     host.Public += "org.sw.demo.qtproject.qt.base.plugins.platforms.windows-*"_dep;
     host.Public += "org.sw.demo.qtproject.qt.base.plugins.styles.windowsvista-*"_dep;
@@ -143,7 +136,7 @@ void build(Solution &s)
 
     //
     auto &client = add_lib("client");
-    client.Public += common, desktop_capture, updater;
+    client.Public += common, updater;
     client.Public += "org.sw.demo.qtproject.qt.base.printsupport-*"_dep;
     qt_progs_and_tr(client);
 
