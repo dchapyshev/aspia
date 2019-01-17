@@ -21,6 +21,8 @@
 
 LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 
+1 RT_MANIFEST "host_service.manifest"
+
 #define ASPIA_ORIGINAL_FILE_NAME "aspia_host_service.exe"
 #define ASPIA_FILE_DESCRIPTION "Aspia Host Service"
 

@@ -136,6 +136,7 @@ target_link_libraries(aspia_host_config aspia_host)
 add_executable(aspia_host_service
     win/host_service_entry_point.cc
     win/host_service.rc)
+set_target_properties(aspia_host_service PROPERTIES LINK_FLAGS "/MANIFEST:NO")
 target_link_libraries(aspia_host_service aspia_host)
 
 add_executable(aspia_host_session
