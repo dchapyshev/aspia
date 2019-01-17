@@ -18,7 +18,7 @@ Instructions for building the project
 8. Open **aspia.sln** in Visual Studio and build the project.
 
 Alternative instructions (SW build system)
-=====================================
+==========================================
 1. Download, unpack and add to PATH `sw` tool from https://github.com/SoftwareNetwork/binaries
 2. Run `sw build` in the project root.
    Binaries will be available under `.sw` directory.
