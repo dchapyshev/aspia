@@ -21,7 +21,6 @@
 #include <QNetworkProxy>
 
 #include "base/logging.h"
-#include "common/message_serialization.h"
 #include "crypto/cryptor.h"
 
 namespace net {

@@ -21,12 +21,31 @@
 #include "base/cpuid.h"
 #include "base/logging.h"
 #include "build/version.h"
-#include "common/message_serialization.h"
 #include "crypto/cryptor_aes256_gcm.h"
 #include "crypto/cryptor_chacha20_poly1305.h"
 #include "net/srp_host_context.h"
 
 namespace net {
+
+namespace {
+
+QByteArray serializeMessage(const google::protobuf::MessageLite& message)
+{
+    size_t size = message.ByteSizeLong();
+    if (!size)
+    {
+        LOG(LS_WARNING) << "Empty messages are not allowed";
+        return QByteArray();
+    }
+
+    QByteArray buffer;
+    buffer.resize(size);
+
+    message.SerializeWithCachedSizesToArray(reinterpret_cast<uint8_t*>(buffer.data()));
+    return buffer;
+}
+
+} // namespace
 
 ChannelHost::ChannelHost(QTcpSocket* socket,
                          const SrpUserList& user_list,
@@ -78,7 +97,7 @@ void ChannelHost::internalMessageWritten()
 void ChannelHost::readClientHello(const QByteArray& buffer)
 {
     proto::ClientHello client_hello;
-    if (!common::parseMessage(buffer, client_hello))
+    if (!client_hello.ParseFromArray(buffer.constData(), buffer.size()))
     {
         emit errorOccurred(Error::PROTOCOL_FAILURE);
         return;
@@ -106,13 +125,13 @@ void ChannelHost::readClientHello(const QByteArray& buffer)
     srp_host_ = std::make_unique<SrpHostContext>(server_hello.method(), user_list_);
 
     key_exchange_state_ = KeyExchangeState::IDENTIFY;
-    sendInternal(common::serializeMessage(server_hello));
+    sendInternal(serializeMessage(server_hello));
 }
 
 void ChannelHost::readIdentify(const QByteArray& buffer)
 {
     proto::SrpIdentify identify;
-    if (!common::parseMessage(buffer, identify))
+    if (!identify.ParseFromArray(buffer.constData(), buffer.size()))
     {
         emit errorOccurred(Error::PROTOCOL_FAILURE);
         return;
@@ -128,13 +147,13 @@ void ChannelHost::readIdentify(const QByteArray& buffer)
     }
 
     key_exchange_state_ = KeyExchangeState::KEY_EXCHANGE;
-    sendInternal(common::serializeMessage(*server_key_exchange));
+    sendInternal(serializeMessage(*server_key_exchange));
 }
 
 void ChannelHost::readClientKeyExchange(const QByteArray& buffer)
 {
     proto::SrpClientKeyExchange client_key_exchange;
-    if (!common::parseMessage(buffer, client_key_exchange))
+    if (!client_key_exchange.ParseFromArray(buffer.constData(), buffer.size()))
     {
         emit errorOccurred(Error::PROTOCOL_FAILURE);
         return;
@@ -177,7 +196,7 @@ void ChannelHost::readClientKeyExchange(const QByteArray& buffer)
     host_version->set_minor(ASPIA_VERSION_MINOR);
     host_version->set_patch(ASPIA_VERSION_PATCH);
 
-    QByteArray session_challenge_buffer = common::serializeMessage(session_challenge);
+    QByteArray session_challenge_buffer = serializeMessage(session_challenge);
     if (session_challenge_buffer.isEmpty())
     {
         LOG(LS_WARNING) << "Error when creating authorization challenge";
@@ -212,7 +231,7 @@ void ChannelHost::readSessionResponse(const QByteArray& buffer)
     }
 
     proto::SessionResponse session_response;
-    if (!common::parseMessage(decrypted_buffer, session_response))
+    if (!session_response.ParseFromArray(decrypted_buffer.constData(), decrypted_buffer.size()))
     {
         emit errorOccurred(Error::PROTOCOL_FAILURE);
         return;

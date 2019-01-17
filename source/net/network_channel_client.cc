@@ -24,7 +24,6 @@
 #include "base/logging.h"
 #include "build/build_config.h"
 #include "build/version.h"
-#include "common/message_serialization.h"
 #include "crypto/cryptor_aes256_gcm.h"
 #include "crypto/cryptor_chacha20_poly1305.h"
 #include "crypto/secure_memory.h"
@@ -36,6 +35,26 @@
 #endif
 
 namespace net {
+
+namespace {
+
+QByteArray serializeMessage(const google::protobuf::MessageLite& message)
+{
+    size_t size = message.ByteSizeLong();
+    if (!size)
+    {
+        LOG(LS_WARNING) << "Empty messages are not allowed";
+        return QByteArray();
+    }
+
+    QByteArray buffer;
+    buffer.resize(size);
+
+    message.SerializeWithCachedSizesToArray(reinterpret_cast<uint8_t*>(buffer.data()));
+    return buffer;
+}
+
+} // namespace
 
 ChannelClient::ChannelClient(QObject* parent)
     : Channel(ChannelType::CLIENT, new QTcpSocket(), parent)
@@ -135,7 +154,7 @@ void ChannelClient::onConnected()
     client_hello.set_methods(methods);
 
     // Send ClientHello to server.
-    sendInternal(common::serializeMessage(client_hello));
+    sendInternal(serializeMessage(client_hello));
 }
 
 void ChannelClient::readServerHello(const QByteArray& buffer)
@@ -143,7 +162,7 @@ void ChannelClient::readServerHello(const QByteArray& buffer)
     key_exchange_state_ = KeyExchangeState::IDENTIFY;
 
     proto::ServerHello server_hello;
-    if (!common::parseMessage(buffer, server_hello))
+    if (!server_hello.ParseFromArray(buffer.constData(), buffer.size()))
     {
         emit errorOccurred(Error::PROTOCOL_FAILURE);
         return;
@@ -166,7 +185,7 @@ void ChannelClient::readServerHello(const QByteArray& buffer)
     }
 
     key_exchange_state_ = KeyExchangeState::KEY_EXCHANGE;
-    sendInternal(common::serializeMessage(*identify));
+    sendInternal(serializeMessage(*identify));
 }
 
 void ChannelClient::readServerKeyExchange(const QByteArray& buffer)
@@ -174,7 +193,7 @@ void ChannelClient::readServerKeyExchange(const QByteArray& buffer)
     DCHECK(srp_client_);
 
     proto::SrpServerKeyExchange server_key_exchange;
-    if (!common::parseMessage(buffer, server_key_exchange))
+    if (!server_key_exchange.ParseFromArray(buffer.constData(), buffer.size()))
     {
         emit errorOccurred(Error::PROTOCOL_FAILURE);
         return;
@@ -190,7 +209,7 @@ void ChannelClient::readServerKeyExchange(const QByteArray& buffer)
     }
 
     key_exchange_state_ = KeyExchangeState::SESSION;
-    sendInternal(common::serializeMessage(*client_key_exchange));
+    sendInternal(serializeMessage(*client_key_exchange));
 }
 
 void ChannelClient::readSessionChallenge(const QByteArray& buffer)
@@ -235,7 +254,8 @@ void ChannelClient::readSessionChallenge(const QByteArray& buffer)
     }
 
     proto::SessionChallenge session_challenge;
-    if (!common::parseMessage(session_challenge_buffer, session_challenge))
+    if (!session_challenge.ParseFromArray(session_challenge_buffer.constData(),
+                                          session_challenge_buffer.size()))
     {
         emit errorOccurred(Error::AUTHENTICATION_FAILURE);
         return;
@@ -260,7 +280,7 @@ void ChannelClient::readSessionChallenge(const QByteArray& buffer)
     client_version->set_minor(ASPIA_VERSION_MINOR);
     client_version->set_patch(ASPIA_VERSION_PATCH);
 
-    QByteArray session_response_buffer = common::serializeMessage(session_response);
+    QByteArray session_response_buffer = serializeMessage(session_response);
     if (session_response_buffer.isEmpty())
     {
         LOG(LS_WARNING) << "Error when creating session response";
