@@ -18,7 +18,6 @@
 
 #include "base/logging.h"
 
-#include <chrono>
 #include <fstream>
 #include <iomanip>
 #include <mutex>
@@ -80,29 +79,45 @@ void removeOldFiles(const std::filesystem::path& path,
 
 std::string logFileName()
 {
-    std::chrono::high_resolution_clock::time_point current_time =
-        std::chrono::high_resolution_clock::now();
-
-    std::chrono::milliseconds ms = std::chrono::duration_cast<std::chrono::milliseconds>(
-        current_time.time_since_epoch());
-
-    time_t time_since_epoch = std::chrono::duration_cast<std::chrono::seconds>(ms).count();
-    std::tm* now = std::localtime(&time_since_epoch);
-
     std::ostringstream stream;
 
-    stream << std::setfill('0')
-           << std::setw(4) << (1900 + now->tm_year)
-           << std::setw(2) << (1 + now->tm_mon)
-           << std::setw(2) << now->tm_mday
-           << '-'
-           << std::setw(2) << now->tm_hour
-           << std::setw(2) << now->tm_min
-           << std::setw(2) << now->tm_sec
-           << '.'
-           << std::setw(3) << (ms.count() % 1000)
-           << ".log";
+#if defined(OS_WIN)
+    SYSTEMTIME local_time;
+    GetLocalTime(&local_time);
 
+    stream << std::setfill('0')
+           << std::setw(4) << local_time.wYear
+           << std::setw(2) << local_time.wMonth
+           << std::setw(2) << local_time.wDay
+           << '-'
+           << std::setw(2) << local_time.wHour
+           << std::setw(2) << local_time.wMinute
+           << std::setw(2) << local_time.wSecond
+           << '.'
+           << std::setw(3) << local_time.wMilliseconds;
+#elif defined(OS_POSIX)
+    timeval tv;
+    gettimeofday(&tv, nullptr);
+    time_t t = tv.tv_sec;
+    struct tm local_time;
+    localtime_r(&t, &local_time);
+    struct tm* tm_time = &local_time;
+
+    stream_ << std::setfill('0')
+            << std::setw(4) << 1900 + tm_time->tm_year
+            << std::setw(2) << 1 + tm_time->tm_mon
+            << std::setw(2) << tm_time->tm_mday
+            << '-'
+            << std::setw(2) << tm_time->tm_hour
+            << std::setw(2) << tm_time->tm_min
+            << std::setw(2) << tm_time->tm_sec
+            << '.'
+            << std::setw(6) << tv.tv_usec;
+#else
+#error Platform support not implemented
+#endif
+
+    stream << ".log";
     return stream.str();
 }
 
@@ -288,7 +303,6 @@ LogMessage::~LogMessage()
         OutputDebugStringA(message.c_str());
 #endif // defined(OS_WIN)
 
-        //std::cerr << str_newline << std::endl;
         fwrite(message.data(), message.size(), 1, stderr);
         fflush(stderr);
     }
@@ -325,20 +339,31 @@ void LogMessage::init(const char* file, int line)
     if (last_slash_pos != std::string_view::npos)
         filename.remove_prefix(last_slash_pos + 1);
 
-    std::chrono::high_resolution_clock::time_point current_time =
-        std::chrono::high_resolution_clock::now();
-
-    std::chrono::milliseconds ms = std::chrono::duration_cast<std::chrono::milliseconds>(
-        current_time.time_since_epoch());
-
-    time_t time_since_epoch = std::chrono::duration_cast<std::chrono::seconds>(ms).count();
-    std::tm* now = std::localtime(&time_since_epoch);
+#if defined(OS_WIN)
+    SYSTEMTIME local_time;
+    GetLocalTime(&local_time);
 
     stream_ << std::setfill('0')
-            << std::setw(2) << now->tm_hour   << ':'
-            << std::setw(2) << now->tm_min << ':'
-            << std::setw(2) << now->tm_sec << '.'
-            << std::setw(3) << ms.count() % 1000;
+            << std::setw(2) << local_time.wHour   << ':'
+            << std::setw(2) << local_time.wMinute << ':'
+            << std::setw(2) << local_time.wSecond << '.'
+            << std::setw(3) << local_time.wMilliseconds;
+#elif defined(OS_POSIX)
+    timeval tv;
+    gettimeofday(&tv, nullptr);
+    time_t t = tv.tv_sec;
+    struct tm local_time;
+    localtime_r(&t, &local_time);
+    struct tm* tm_time = &local_time;
+
+    stream_ << std::setfill('0')
+            << std::setw(2) << tm_time->tm_hour << ':'
+            << std::setw(2) << tm_time->tm_min  << ':'
+            << std::setw(2) << tm_time->tm_sec  << '.'
+            << std::setw(6) << tv.tv_usec;
+#else
+#error Platform support not implemented
+#endif
 
     stream_ << ' ' << std::this_thread::get_id();
     stream_ << ' ' << severityName(severity_);
