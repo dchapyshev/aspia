@@ -36,8 +36,8 @@ public:
 
     ComputerDialog(QWidget* parent,
                    Mode mode,
-                   proto::address_book::Computer* computer,
-                   proto::address_book::ComputerGroup* parent_computer_group);
+                   const QString& parent_name,
+                   proto::address_book::Computer* computer);
     ~ComputerDialog() = default;
 
 private slots:

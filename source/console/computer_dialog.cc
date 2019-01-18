@@ -37,8 +37,8 @@ constexpr int kMaxCommentLength = 2048;
 
 ComputerDialog::ComputerDialog(QWidget* parent,
                                Mode mode,
-                               proto::address_book::Computer* computer,
-                               proto::address_book::ComputerGroup* parent_computer_group)
+                               const QString& parent_name,
+                               proto::address_book::Computer* computer)
     : QDialog(parent),
       mode_(mode),
       computer_(computer)
@@ -57,7 +57,7 @@ ComputerDialog::ComputerDialog(QWidget* parent,
                                      tr("File Transfer"),
                                      QVariant(proto::SESSION_TYPE_FILE_TRANSFER));
 
-    ui.edit_parent_name->setText(QString::fromStdString(parent_computer_group->name()));
+    ui.edit_parent_name->setText(parent_name);
     ui.edit_name->setText(QString::fromStdString(computer_->name()));
     ui.edit_address->setText(QString::fromStdString(computer_->address()));
     ui.spinbox_port->setValue(computer_->port());

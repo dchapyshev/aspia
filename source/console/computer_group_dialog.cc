@@ -34,8 +34,8 @@ constexpr int kMaxCommentLength = 2048;
 
 ComputerGroupDialog::ComputerGroupDialog(QWidget* parent,
                                          Mode mode,
-                                         proto::address_book::ComputerGroup* computer_group,
-                                         proto::address_book::ComputerGroup* parent_computer_group)
+                                         const QString& parent_name,
+                                         proto::address_book::ComputerGroup* computer_group)
     : QDialog(parent),
       mode_(mode),
       computer_group_(computer_group)
@@ -45,7 +45,7 @@ ComputerGroupDialog::ComputerGroupDialog(QWidget* parent,
     connect(ui.button_box, &QDialogButtonBox::clicked,
             this, &ComputerGroupDialog::buttonBoxClicked);
 
-    ui.edit_parent_name->setText(QString::fromStdString(parent_computer_group->name()));
+    ui.edit_parent_name->setText(parent_name);
     ui.edit_name->setText(QString::fromStdString(computer_group_->name()));
     ui.edit_comment->setPlainText(QString::fromStdString(computer_group->comment()));
 }

@@ -362,8 +362,8 @@ void AddressBookTab::addComputerGroup()
 
     ComputerGroupDialog dialog(this,
                                ComputerGroupDialog::CreateComputerGroup,
-                               computer_group.get(),
-                               parent_item->computerGroup());
+                               parentName(parent_item),
+                               computer_group.get());
     if (dialog.exec() != QDialog::Accepted)
         return;
 
@@ -386,8 +386,8 @@ void AddressBookTab::addComputer()
 
     ComputerDialog dialog(this,
                           ComputerDialog::CreateComputer,
-                          computer.get(),
-                          parent_item->computerGroup());
+                          parentName(parent_item),
+                          computer.get());
     if (dialog.exec() != QDialog::Accepted)
         return;
 
@@ -433,8 +433,8 @@ void AddressBookTab::modifyComputerGroup()
 
     ComputerGroupDialog dialog(this,
                                ComputerGroupDialog::ModifyComputerGroup,
-                               current_item->computerGroup(),
-                               parent_item->computerGroup());
+                               parentName(parent_item),
+                               current_item->computerGroup());
     if (dialog.exec() != QDialog::Accepted)
         return;
 
@@ -450,8 +450,8 @@ void AddressBookTab::modifyComputer()
 
     ComputerDialog dialog(this,
                           ComputerDialog::ModifyComputer,
-                          current_item->computer(),
-                          current_item->parentComputerGroupItem()->computerGroup());
+                          parentName(current_item->parentComputerGroupItem()),
+                          current_item->computer());
     if (dialog.exec() != QDialog::Accepted)
         return;
 
@@ -784,6 +784,15 @@ bool AddressBookTab::saveToFile(const QString& file_path)
 
     setChanged(false);
     return true;
+}
+
+// static
+QString AddressBookTab::parentName(ComputerGroupItem* item)
+{
+    if (!item->parent())
+        return tr("Root Group");
+
+    return QString::fromStdString(item->computerGroup()->name());
 }
 
 // static

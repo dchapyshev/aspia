@@ -920,18 +920,23 @@
         <translation type="unfinished">Die Adressbuchdatei konnte nicht geschrieben werden.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="795"/>
-        <location filename="../address_book_tab.cc" line="809"/>
+        <location filename="../address_book_tab.cc" line="793"/>
+        <source>Root Group</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../address_book_tab.cc" line="804"/>
+        <location filename="../address_book_tab.cc" line="818"/>
         <source>Warning</source>
         <translation type="unfinished">Warnung</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="797"/>
+        <location filename="../address_book_tab.cc" line="806"/>
         <source>Could not open address book</source>
         <translation type="unfinished">Adressbuch konnte nicht geöffnet werden</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="811"/>
+        <location filename="../address_book_tab.cc" line="820"/>
         <source>Failed to save address book</source>
         <translation type="unfinished">Speichern des Adressbuchs fehlgeschlagen</translation>
     </message>
