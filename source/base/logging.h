@@ -19,6 +19,7 @@
 #ifndef BASE__LOGGING_H
 #define BASE__LOGGING_H
 
+#include <filesystem>
 #include <sstream>
 #include <type_traits>
 #include <utility>
@@ -123,6 +124,8 @@ struct LoggingSettings
     LoggingDestination destination;
     LoggingSeverity min_log_level;
     int max_log_age;
+
+    std::filesystem::path log_dir;
 };
 
 // Sets the log file name and other global logging state. Calling this function is recommended,

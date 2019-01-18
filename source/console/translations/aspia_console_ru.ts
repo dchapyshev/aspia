@@ -200,57 +200,57 @@
         <translation type="vanished">Консоль</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="62"/>
+        <location filename="../console_main.cc" line="74"/>
         <source>Remote computer address.</source>
         <translation>Адрес удаленного компьютера.</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="63"/>
+        <location filename="../console_main.cc" line="75"/>
         <source>address</source>
         <translation>адрес</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="67"/>
+        <location filename="../console_main.cc" line="79"/>
         <source>Remote computer port.</source>
         <translation>Порт удаленного компьютера.</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="68"/>
+        <location filename="../console_main.cc" line="80"/>
         <source>port</source>
         <translation>порт</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="73"/>
+        <location filename="../console_main.cc" line="85"/>
         <source>Name of user.</source>
         <translation>Имя пользователя.</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="74"/>
+        <location filename="../console_main.cc" line="86"/>
         <source>username</source>
         <translation>имя_пользователя</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="78"/>
+        <location filename="../console_main.cc" line="90"/>
         <source>Session type. Possible values: desktop-manage, desktop-view, file-transfer.</source>
         <translation>Тип сессии. Возможные значения: desktop-manage, desktop-view, file-transfer.</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="84"/>
+        <location filename="../console_main.cc" line="96"/>
         <source>Run the program with a simplified user interface.</source>
         <translation>Запуск программы с упрощенным интерфейсом пользователя.</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="87"/>
+        <location filename="../console_main.cc" line="99"/>
         <source>Aspia Console</source>
         <translation>Консоль Aspia</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="90"/>
+        <location filename="../console_main.cc" line="102"/>
         <source>file</source>
         <translation>файл</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="91"/>
+        <location filename="../console_main.cc" line="103"/>
         <source>The file to open.</source>
         <translation>Файл для открытия.</translation>
     </message>

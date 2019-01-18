@@ -22,6 +22,7 @@
 #include <QCommandLineParser>
 
 #include "base/win/scoped_thread_desktop.h"
+#include "base/base_paths.h"
 #include "base/qt_logging.h"
 #include "build/version.h"
 #include "crypto/scoped_crypto_initializer.h"
@@ -31,6 +32,17 @@
 namespace host {
 
 namespace {
+
+std::filesystem::path loggingDir()
+{
+    std::filesystem::path path;
+
+    if (!base::BasePaths::commonAppData(&path))
+        return std::filesystem::path();
+
+    path.append("aspia/logs");
+    return path;
+}
 
 int runHostSession(const QString& channel_id, const QString& session_type)
 {
@@ -126,7 +138,11 @@ int runApplication(int argc, char *argv[])
 
 int hostMain(int argc, char *argv[])
 {
-    base::initLogging();
+    base::LoggingSettings settings;
+    settings.destination = base::LOG_TO_FILE;
+    settings.log_dir = loggingDir();
+
+    base::initLogging(settings);
     base::initQtLogging();
 
     crypto::ScopedCryptoInitializer crypto_initializer;

@@ -19,7 +19,6 @@
 #include "base/logging.h"
 
 #include <chrono>
-#include <filesystem>
 #include <fstream>
 #include <iomanip>
 #include <mutex>
@@ -107,24 +106,13 @@ std::string logFileName()
     return stream.str();
 }
 
-std::filesystem::path logFileDir()
+std::filesystem::path defaultLogFileDir()
 {
     std::error_code error_code;
 
     std::filesystem::path path = std::filesystem::temp_directory_path(error_code);
     if (error_code)
         return std::filesystem::path();
-
-    path.append("aspia");
-
-    if (!std::filesystem::exists(path, error_code))
-    {
-        if (error_code)
-            return std::filesystem::path();
-
-        if (!std::filesystem::create_directories(path, error_code))
-            return std::filesystem::path();
-    }
 
     return path;
 }
@@ -139,9 +127,23 @@ bool initLoggingImpl(const LoggingSettings& settings)
     if (!(g_logging_destination & LOG_TO_FILE))
         return true;
 
-    std::filesystem::path file_dir = logFileDir();
+    std::filesystem::path file_dir = settings.log_dir;
+
+    if (file_dir.empty())
+        file_dir = defaultLogFileDir();
+
     if (file_dir.empty())
         return false;
+
+    std::error_code error_code;
+    if (!std::filesystem::exists(file_dir, error_code))
+    {
+        if (error_code)
+            return false;
+
+        if (!std::filesystem::create_directories(file_dir, error_code))
+            return false;
+    }
 
     std::filesystem::path file_path(file_dir);
     file_path.append(logFileName());
@@ -149,8 +151,6 @@ bool initLoggingImpl(const LoggingSettings& settings)
     g_log_file.open(file_path);
     if (!g_log_file.is_open())
         return false;
-
-    std::error_code error_code;
 
     std::filesystem::file_time_type current_time =
         std::filesystem::last_write_time(file_path, error_code);

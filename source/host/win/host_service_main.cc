@@ -18,15 +18,35 @@
 
 #include "host/win/host_service_main.h"
 
+#include "base/base_paths.h"
 #include "base/qt_logging.h"
 #include "crypto/scoped_crypto_initializer.h"
 #include "host/win/host_service.h"
 
 namespace host {
 
+namespace {
+
+std::filesystem::path loggingDir()
+{
+    std::filesystem::path path;
+
+    if (!base::BasePaths::commonAppData(&path))
+        return std::filesystem::path();
+
+    path.append("aspia/logs");
+    return path;
+}
+
+} // namespace
+
 int hostServiceMain(int argc, char *argv[])
 {
-    base::initLogging();
+    base::LoggingSettings settings;
+    settings.destination = base::LOG_TO_FILE;
+    settings.log_dir = loggingDir();
+
+    base::initLogging(settings);
     base::initQtLogging();
 
     crypto::ScopedCryptoInitializer crypto_initializer;

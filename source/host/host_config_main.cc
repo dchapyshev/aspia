@@ -21,6 +21,7 @@
 #include <QCommandLineParser>
 #include <QMessageBox>
 
+#include "base/base_paths.h"
 #include "base/qt_logging.h"
 #include "build/build_config.h"
 #include "build/version.h"
@@ -30,6 +31,17 @@
 #include "updater/update_dialog.h"
 
 namespace {
+
+std::filesystem::path loggingDir()
+{
+    std::filesystem::path path;
+
+    if (!base::BasePaths::commonAppData(&path))
+        return std::filesystem::path();
+
+    path.append("aspia/logs");
+    return path;
+}
 
 int runApplication(int argc, char *argv[])
 {
@@ -130,7 +142,11 @@ int hostConfigMain(int argc, char *argv[])
     Q_INIT_RESOURCE(updater);
     Q_INIT_RESOURCE(updater_translations);
 
-    base::initLogging();
+    base::LoggingSettings settings;
+    settings.destination = base::LOG_TO_FILE;
+    settings.log_dir = loggingDir();
+
+    base::initLogging(settings);
     base::initQtLogging();
 
     crypto::ScopedCryptoInitializer crypto_initializer;
