@@ -20,15 +20,15 @@
 
 #include <openssl/opensslv.h>
 #include <openssl/bn.h>
-#include <openssl/sha.h>
 
 #include "base/logging.h"
+#include "crypto/generic_hash.h"
 
 namespace crypto {
 
 namespace {
 
-// xy = SHA1(PAD(x) || PAD(y))
+// xy = BLAKE2b512(PAD(x) || PAD(y))
 BigNum calc_xy(const BigNum& x, const BigNum& y, const BigNum& N)
 {
     if (x.get() != N.get() && BN_ucmp(x, N) >= 0)
@@ -50,13 +50,11 @@ BigNum calc_xy(const BigNum& x, const BigNum& y, const BigNum& N)
     if (BN_bn2binpad(y, xy.get() + N_bytes, N_bytes) < 0)
         return BigNum();
 
-    uint8_t buffer[SHA_DIGEST_LENGTH];
-    SHA1(xy.get(), xy_size, buffer);
-
-    return BigNum::fromBuffer(base::ConstBuffer(buffer, sizeof(buffer)));
+    return BigNum::fromByteArray(
+        GenericHash::hash(GenericHash::BLAKE2b512, xy.get(), xy_size));
 }
 
-// k = SHA1(N | PAD(g))
+// k = BLAKE2b512(N | PAD(g))
 BigNum calc_k(const BigNum& N, const BigNum& g)
 {
     return calc_xy(N, g, N);
@@ -65,7 +63,7 @@ BigNum calc_k(const BigNum& N, const BigNum& g)
 } // namespace
 
 // static
-// u = SHA1(PAD(A) | PAD(B))
+// u = BLAKE2b512(PAD(A) | PAD(B))
 BigNum SrpMath::calc_u(const BigNum& A, const BigNum& B, const BigNum& N)
 {
     return calc_xy(A, B, N);
@@ -111,35 +109,27 @@ BigNum SrpMath::calc_B(const BigNum& b, const BigNum& N, const BigNum& g, const 
 }
 
 // static
-// x = SHA1(s | SHA1(I | ":" | p))
+// x = BLAKE2b512(s | BLAKE2b512(I | ":" | p))
 BigNum SrpMath::calc_x(const BigNum& s, const QByteArray& I, const QByteArray& p)
 {
     if (!s.isValid() || I.isEmpty() || p.isEmpty())
         return BigNum();
 
-    uint8_t temp[SHA_DIGEST_LENGTH];
-    SHA_CTX sha_ctx;
+    GenericHash hash(GenericHash::BLAKE2b512);
 
-    if (!SHA1_Init(&sha_ctx) ||
-        !SHA1_Update(&sha_ctx, I.constData(), I.size()) ||
-        !SHA1_Update(&sha_ctx, ":", 1) ||
-        !SHA1_Update(&sha_ctx, p.constData(), p.size()) ||
-        !SHA1_Final(temp, &sha_ctx))
-    {
-        return BigNum();
-    }
+    hash.addData(I);
+    hash.addData(QByteArrayLiteral(":"));
+    hash.addData(p);
 
-    QByteArray s_buffer = s.toByteArray();
+    QByteArray temp = hash.result();
+    QByteArray salt = s.toByteArray();
 
-    if (!SHA1_Init(&sha_ctx) ||
-        !SHA1_Update(&sha_ctx, s_buffer.constData(), s_buffer.size()) ||
-        !SHA1_Update(&sha_ctx, temp, sizeof(temp)) ||
-        !SHA1_Final(temp, &sha_ctx))
-    {
-        return BigNum();
-    }
+    hash.reset();
 
-    return BigNum::fromBuffer(base::ConstBuffer(temp, sizeof(temp)));
+    hash.addData(salt);
+    hash.addData(temp);
+
+    return BigNum::fromByteArray(hash.result());
 }
 
 // static
