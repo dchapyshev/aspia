@@ -33,32 +33,6 @@ bool verifyNg(const std::string& N, const std::string& g)
 {
     switch (N.size())
     {
-        case 256: // 2048 bit
-        {
-            if (memcmp(N.data(), crypto::kSrpNg_2048.N.data(), crypto::kSrpNg_2048.N.size()) != 0)
-                return false;
-
-            if (g.size() != crypto::kSrpNg_2048.g.size())
-                return false;
-
-            if (memcmp(g.data(), crypto::kSrpNg_2048.g.data(), crypto::kSrpNg_2048.g.size()) != 0)
-                return false;
-        }
-        break;
-
-        case 384: // 3072 bit
-        {
-            if (memcmp(N.data(), crypto::kSrpNg_3072.N.data(), crypto::kSrpNg_3072.N.size()) != 0)
-                return false;
-
-            if (g.size() != crypto::kSrpNg_3072.g.size())
-                return false;
-
-            if (memcmp(g.data(), crypto::kSrpNg_3072.g.data(), crypto::kSrpNg_3072.g.size()) != 0)
-                return false;
-        }
-        break;
-
         case 512: // 4096 bit
         {
             if (memcmp(N.data(), crypto::kSrpNg_4096.N.data(), crypto::kSrpNg_4096.N.size()) != 0)
@@ -98,9 +72,11 @@ bool verifyNg(const std::string& N, const std::string& g)
         }
         break;
 
-        // We do not allow groups with a length of 1024 and 1536 bits.
+        // We do not allow groups less than 512 bytes (4096 bits).
         case 128:
         case 192:
+        case 256:
+        case 384:
         default:
             return false;
     }
