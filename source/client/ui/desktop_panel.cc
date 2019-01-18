@@ -29,14 +29,20 @@
 namespace client {
 
 DesktopPanel::DesktopPanel(proto::SessionType session_type, QWidget* parent)
-    : QFrame(parent)
+    : QFrame(parent),
+      session_type_(session_type)
 {
     ui.setupUi(this);
 
     DesktopSettings settings;
     ui.action_scaling->setChecked(settings.scaling());
     ui.action_autoscroll->setChecked(settings.autoScrolling());
-    ui.action_send_key_combinations->setChecked(settings.sendKeyCombinations());
+
+    // Sending key combinations is available only in desktop management.
+    if (session_type == proto::SESSION_TYPE_DESKTOP_MANAGE)
+        ui.action_send_key_combinations->setChecked(settings.sendKeyCombinations());
+    else
+        ui.action_send_key_combinations->setChecked(false);
 
     connect(ui.action_settings, &QAction::triggered, this, &DesktopPanel::settingsButton);
     connect(ui.action_autosize, &QAction::triggered, this, &DesktopPanel::onAutosizeButton);
@@ -77,7 +83,10 @@ DesktopPanel::~DesktopPanel()
     DesktopSettings settings;
     settings.setScaling(ui.action_scaling->isChecked());
     settings.setAutoScrolling(ui.action_autoscroll->isChecked());
-    settings.setSendKeyCombinations(ui.action_send_key_combinations->isChecked());
+
+    // Save the parameter only for desktop management.
+    if (session_type_ == proto::SESSION_TYPE_DESKTOP_MANAGE)
+        settings.setSendKeyCombinations(ui.action_send_key_combinations->isChecked());
 }
 
 void DesktopPanel::setScreenList(const proto::desktop::ScreenList& screen_list)

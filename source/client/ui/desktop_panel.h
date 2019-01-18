@@ -77,6 +77,8 @@ private:
 
     Ui::DesktopPanel ui;
 
+    const proto::SessionType session_type_;
+
     QMenu* power_menu_;
     QMenu* additional_menu_;
     QMenu* screens_menu_;

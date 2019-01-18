@@ -1194,30 +1194,30 @@
 <context>
     <name>client::DesktopPanel</name>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="224"/>
-        <location filename="../ui/desktop_panel.cc" line="235"/>
-        <location filename="../ui/desktop_panel.cc" line="246"/>
-        <location filename="../ui/desktop_panel.cc" line="257"/>
+        <location filename="../ui/desktop_panel.cc" line="233"/>
+        <location filename="../ui/desktop_panel.cc" line="244"/>
+        <location filename="../ui/desktop_panel.cc" line="255"/>
+        <location filename="../ui/desktop_panel.cc" line="266"/>
         <source>Confirmation</source>
         <translation type="unfinished">Bevestiging</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="225"/>
+        <location filename="../ui/desktop_panel.cc" line="234"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="236"/>
+        <location filename="../ui/desktop_panel.cc" line="245"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="247"/>
+        <location filename="../ui/desktop_panel.cc" line="256"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="258"/>
+        <location filename="../ui/desktop_panel.cc" line="267"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation type="unfinished"></translation>
     </message>
