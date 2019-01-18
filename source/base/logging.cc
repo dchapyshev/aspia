@@ -134,7 +134,7 @@ bool initLoggingImpl(const LoggingSettings& settings)
     std::scoped_lock lock(g_log_file_lock);
     g_log_file.close();
 
-    g_logging_destination = settings.logging_dest;
+    g_logging_destination = settings.destination;
 
     if (!(g_logging_destination & LOG_TO_FILE))
         return true;
@@ -174,7 +174,8 @@ void shutdownLoggingImpl()
 std::ostream* g_swallow_stream;
 
 LoggingSettings::LoggingSettings()
-    : logging_dest(LOG_DEFAULT),
+    : destination(LOG_DEFAULT),
+      min_log_level(LS_INFO),
       max_log_age(7)
 {
     // Nothing

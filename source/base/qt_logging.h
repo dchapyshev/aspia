@@ -25,6 +25,13 @@
 #include <QSize>
 #include <QString>
 
+namespace base {
+
+// Initializes message logging for Qt.
+void initQtLogging();
+
+} // namespace base
+
 std::ostream& operator<<(std::ostream& out, const QByteArray& qstr);
 std::ostream& operator<<(std::ostream& out, const QPoint& qstr);
 std::ostream& operator<<(std::ostream& out, const QRect& qstr);

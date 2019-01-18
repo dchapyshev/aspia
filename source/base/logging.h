@@ -115,18 +115,20 @@ struct LoggingSettings
 {
     // The defaults values are:
     //
-    //  logging_dest: LOG_DEFAULT
+    //  destination: LOG_DEFAULT
     //  max_log_age: 7 days
+    //  min_log_level: LS_INFO
     LoggingSettings();
 
-    LoggingDestination logging_dest;
+    LoggingDestination destination;
+    LoggingSeverity min_log_level;
     int max_log_age;
 };
 
 // Sets the log file name and other global logging state. Calling this function is recommended,
 // and is normally done at the beginning of application init.
 // See the definition of the enums above for descriptions and default values.
-bool initLogging(const LoggingSettings& settings);
+bool initLogging(const LoggingSettings& settings = LoggingSettings());
 
 // Closes the log file explicitly if open.
 // NOTE: Since the log file is opened as necessary by the action of logging statements, there's no
@@ -135,16 +137,6 @@ void shutdownLogging();
 
 // Used by LOG_IS_ON to lazy-evaluate stream arguments.
 bool shouldCreateLogMessage(LoggingSeverity severity);
-
-class ScopedLogging
-{
-public:
-    explicit ScopedLogging(const LoggingSettings& settings) { initLogging(settings); }
-    ~ScopedLogging() { shutdownLogging(); }
-
-private:
-    DISALLOW_COPY_AND_ASSIGN(ScopedLogging);
-};
 
 // A few definitions of macros that don't generate much code. These are used by LOG() and LOG_IF,
 // etc. Since these are used all over our code, it's better to have compact code for these operations.

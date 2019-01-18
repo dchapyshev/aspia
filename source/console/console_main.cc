@@ -31,30 +31,16 @@ Q_IMPORT_PLUGIN(QWindowsPrinterSupportPlugin);
 #endif // defined(Q_OS_WIN)
 #endif // defined(QT_STATIC)
 
-#include "base/logging.h"
+#include "base/qt_logging.h"
 #include "build/version.h"
 #include "client/ui/client_window.h"
 #include "console/console_window.h"
 #include "crypto/scoped_crypto_initializer.h"
 
-int main(int argc, char *argv[])
+namespace {
+
+int runApplication(int argc, char *argv[])
 {
-    Q_INIT_RESOURCE(qt_translations);
-    Q_INIT_RESOURCE(client);
-    Q_INIT_RESOURCE(client_translations);
-    Q_INIT_RESOURCE(common);
-    Q_INIT_RESOURCE(common_translations);
-    Q_INIT_RESOURCE(updater);
-    Q_INIT_RESOURCE(updater_translations);
-
-    base::LoggingSettings logging_settings;
-    logging_settings.logging_dest = base::LOG_TO_ALL;
-
-    base::ScopedLogging logging(logging_settings);
-
-    crypto::ScopedCryptoInitializer crypto_initializer;
-    CHECK(crypto_initializer.isSucceeded());
-
     QApplication application(argc, argv);
 
     console::Settings console_settings;
@@ -62,12 +48,12 @@ int main(int argc, char *argv[])
 
     common::LocaleLoader locale_loader;
     if (!locale_loader.contains(current_locale))
-        console_settings.setLocale(DEFAULT_LOCALE);
+        console_settings.setLocale(QStringLiteral(DEFAULT_LOCALE));
 
     locale_loader.installTranslators(current_locale);
 
     application.setOrganizationName(QStringLiteral("Aspia"));
-    application.setApplicationName(QApplication::translate("Console", "Console"));
+    application.setApplicationName(QStringLiteral("Console"));
     application.setApplicationVersion(QStringLiteral(ASPIA_VERSION_STRING));
     application.setAttribute(Qt::AA_DisableWindowContextHelpButton, true);
 
@@ -120,17 +106,17 @@ int main(int argc, char *argv[])
     else if (parser.isSet(address_option))
     {
         client::ConnectData connect_data;
-        connect_data.address  = parser.value(address_option);
-        connect_data.port     = parser.value(port_option).toUShort();
+        connect_data.address = parser.value(address_option);
+        connect_data.port = parser.value(port_option).toUShort();
         connect_data.username = parser.value(username_option);
 
         QString session_type = parser.value(session_type_option);
 
-        if (session_type == "desktop-manage")
+        if (session_type == QLatin1String("desktop-manage"))
             connect_data.session_type = proto::SESSION_TYPE_DESKTOP_MANAGE;
-        else if (session_type == "desktop-view")
+        else if (session_type == QLatin1String("desktop-view"))
             connect_data.session_type = proto::SESSION_TYPE_DESKTOP_VIEW;
-        else if (session_type == "file-transfer")
+        else if (session_type == QLatin1String("file-transfer"))
             connect_data.session_type = proto::SESSION_TYPE_FILE_TRANSFER;
 
         if (!client::ClientWindow::connectToHost(&connect_data))
@@ -151,4 +137,28 @@ int main(int argc, char *argv[])
     }
 
     return application.exec();
+}
+
+} // namespace
+
+int main(int argc, char *argv[])
+{
+    Q_INIT_RESOURCE(qt_translations);
+    Q_INIT_RESOURCE(client);
+    Q_INIT_RESOURCE(client_translations);
+    Q_INIT_RESOURCE(common);
+    Q_INIT_RESOURCE(common_translations);
+    Q_INIT_RESOURCE(updater);
+    Q_INIT_RESOURCE(updater_translations);
+
+    base::initLogging();
+    base::initQtLogging();
+
+    crypto::ScopedCryptoInitializer crypto_initializer;
+    CHECK(crypto_initializer.isSucceeded());
+
+    int result = runApplication(argc, argv);
+
+    base::shutdownLogging();
+    return result;
 }

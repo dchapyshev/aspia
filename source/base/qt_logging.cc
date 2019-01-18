@@ -18,9 +18,56 @@
 
 #include "base/qt_logging.h"
 
+#include <QDebug>
+
+namespace base {
+
+namespace {
+
+LoggingSeverity messageTypeToSeverity(QtMsgType type)
+{
+    switch (type)
+    {
+        case QtCriticalMsg:
+            return LS_ERROR;
+
+        case QtFatalMsg:
+            return LS_FATAL;
+
+        case QtInfoMsg:
+            return LS_INFO;
+
+        case QtDebugMsg:
+        case QtWarningMsg:
+        default:
+            return LS_WARNING;
+    }
+}
+
+void messageHandler(QtMsgType type,
+                    const QMessageLogContext& context,
+                    const QString& msg)
+{
+    const char* filename = context.file;
+    if (!filename)
+        filename = "<empty>";
+
+    LogMessage log_message(filename, context.line, messageTypeToSeverity(type));
+    log_message.stream() << msg;
+}
+
+} // namespace
+
+void initQtLogging()
+{
+    qInstallMessageHandler(messageHandler);
+}
+
+} // namespace base
+
 std::ostream& operator<<(std::ostream& out, const QByteArray& qbytearray)
 {
-    return out << qbytearray.toHex().toStdString();
+    return out << "QByteArray(" << qbytearray.toHex().toStdString() << ')';
 }
 
 std::ostream& operator<<(std::ostream& out, const QPoint& qpoint)

@@ -65,15 +65,8 @@ int runHostNotifier(const QString& channel_id)
     return QApplication::exec();
 }
 
-} // namespace
-
-int hostMain(int argc, char *argv[])
+int runApplication(int argc, char *argv[])
 {
-    base::LoggingSettings settings;
-    settings.logging_dest = base::LOG_TO_ALL;
-
-    base::ScopedLogging logging(settings);
-
     int max_attempt_count = 600;
 
     do
@@ -95,21 +88,16 @@ int hostMain(int argc, char *argv[])
         return 1;
     }
 
-    crypto::ScopedCryptoInitializer crypto_initializer;
-    CHECK(crypto_initializer.isSucceeded());
-
     QApplication application(argc, argv);
     application.setOrganizationName(QStringLiteral("Aspia"));
     application.setApplicationName(QStringLiteral("Host"));
     application.setApplicationVersion(QStringLiteral(ASPIA_VERSION_STRING));
 
-    QCommandLineOption channel_id_option(QStringLiteral("channel_id"),
-                                         QString(),
-                                         QStringLiteral("channel_id"));
+    QCommandLineOption channel_id_option(
+        QStringLiteral("channel_id"), QString(), QStringLiteral("channel_id"));
 
-    QCommandLineOption session_type_option(QStringLiteral("session_type"),
-                                           QString(),
-                                           QStringLiteral("session_type"));
+    QCommandLineOption session_type_option(
+        QStringLiteral("session_type"), QString(), QStringLiteral("session_type"));
 
     QCommandLineParser parser;
     parser.addOption(channel_id_option);
@@ -132,6 +120,22 @@ int hostMain(int argc, char *argv[])
         return runHostSession(channel_id, parser.value(session_type_option));
 
     return runHostNotifier(channel_id);
+}
+
+} // namespace
+
+int hostMain(int argc, char *argv[])
+{
+    base::initLogging();
+    base::initQtLogging();
+
+    crypto::ScopedCryptoInitializer crypto_initializer;
+    CHECK(crypto_initializer.isSucceeded());
+
+    int result = runApplication(argc, argv);
+
+    base::shutdownLogging();
+    return result;
 }
 
 } // namespace host

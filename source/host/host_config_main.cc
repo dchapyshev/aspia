@@ -21,7 +21,7 @@
 #include <QCommandLineParser>
 #include <QMessageBox>
 
-#include "base/logging.h"
+#include "base/qt_logging.h"
 #include "build/build_config.h"
 #include "build/version.h"
 #include "crypto/scoped_crypto_initializer.h"
@@ -29,22 +29,10 @@
 #include "host/host_settings.h"
 #include "updater/update_dialog.h"
 
-int hostConfigMain(int argc, char *argv[])
+namespace {
+
+int runApplication(int argc, char *argv[])
 {
-    Q_INIT_RESOURCE(qt_translations);
-    Q_INIT_RESOURCE(common);
-    Q_INIT_RESOURCE(common_translations);
-    Q_INIT_RESOURCE(updater);
-    Q_INIT_RESOURCE(updater_translations);
-
-    base::LoggingSettings settings;
-    settings.logging_dest = base::LOG_TO_ALL;
-
-    base::ScopedLogging logging(settings);
-
-    crypto::ScopedCryptoInitializer crypto_initializer;
-    CHECK(crypto_initializer.isSucceeded());
-
     QApplication application(argc, argv);
     application.setOrganizationName(QStringLiteral("Aspia"));
     application.setApplicationName(QStringLiteral("Host"));
@@ -98,16 +86,16 @@ int hostConfigMain(int argc, char *argv[])
     }
     else if (parser.isSet(import_option))
     {
-        if (!host::HostConfigDialog::importSettings(
-            parser.value(import_option), parser.isSet(silent_option)))
+        if (!host::HostConfigDialog::importSettings(parser.value(import_option),
+                                                    parser.isSet(silent_option)))
         {
             return 1;
         }
     }
     else if (parser.isSet(export_option))
     {
-        if (!host::HostConfigDialog::exportSettings(
-            parser.value(export_option), parser.isSet(silent_option)))
+        if (!host::HostConfigDialog::exportSettings(parser.value(export_option),
+                                                    parser.isSet(silent_option)))
         {
             return 1;
         }
@@ -130,4 +118,26 @@ int hostConfigMain(int argc, char *argv[])
     }
 
     return 0;
+}
+
+} // namespace
+
+int hostConfigMain(int argc, char *argv[])
+{
+    Q_INIT_RESOURCE(qt_translations);
+    Q_INIT_RESOURCE(common);
+    Q_INIT_RESOURCE(common_translations);
+    Q_INIT_RESOURCE(updater);
+    Q_INIT_RESOURCE(updater_translations);
+
+    base::initLogging();
+    base::initQtLogging();
+
+    crypto::ScopedCryptoInitializer crypto_initializer;
+    CHECK(crypto_initializer.isSucceeded());
+
+    int result = runApplication(argc, argv);
+
+    base::shutdownLogging();
+    return result;
 }

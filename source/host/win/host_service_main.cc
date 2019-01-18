@@ -18,7 +18,7 @@
 
 #include "host/win/host_service_main.h"
 
-#include "base/logging.h"
+#include "base/qt_logging.h"
 #include "crypto/scoped_crypto_initializer.h"
 #include "host/win/host_service.h"
 
@@ -26,15 +26,16 @@ namespace host {
 
 int hostServiceMain(int argc, char *argv[])
 {
-    base::LoggingSettings settings;
-    settings.logging_dest = base::LOG_TO_ALL;
-
-    base::ScopedLogging logging(settings);
+    base::initLogging();
+    base::initQtLogging();
 
     crypto::ScopedCryptoInitializer crypto_initializer;
     CHECK(crypto_initializer.isSucceeded());
 
-    return HostService().exec(argc, argv);
+    int result = HostService().exec(argc, argv);
+
+    base::shutdownLogging();
+    return result;
 }
 
 } // namespace host
