@@ -77,6 +77,8 @@ private slots:
     void sendSelected();
 
 private:
+    void sendRequest(common::FileRequest* request);
+
     Ui::FilePanel ui;
 
     bool transfer_allowed_ = false;

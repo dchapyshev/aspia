@@ -242,32 +242,32 @@
 <context>
     <name>FilePanel</name>
     <message>
-        <location filename="../ui/file_panel.ui" line="160"/>
+        <location filename="../ui/file_panel.ui" line="163"/>
         <source>Browse to parent folder (Backspace)</source>
         <translation>Zum übergeordneten Ordner navigieren (Backspace)</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.ui" line="172"/>
+        <location filename="../ui/file_panel.ui" line="175"/>
         <source>Refresh (F5)</source>
         <translation>Aktualisieren (F5)</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.ui" line="187"/>
+        <location filename="../ui/file_panel.ui" line="190"/>
         <source>Create a new folder</source>
         <translation>Neuen Ordner erstellen</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.ui" line="202"/>
+        <location filename="../ui/file_panel.ui" line="205"/>
         <source>Delete selected object(s) (Delete)</source>
         <translation>Ausgewählte(n) Objekt(e) löschen (Entf)</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.ui" line="217"/>
+        <location filename="../ui/file_panel.ui" line="220"/>
         <source>Send selected object(s) (F11)</source>
         <translation>Ausgewählte(n) Objekt(e) senden (F11)</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.ui" line="214"/>
+        <location filename="../ui/file_panel.ui" line="217"/>
         <source>Send</source>
         <translation>Senden</translation>
     </message>
@@ -1396,19 +1396,19 @@
 <context>
     <name>client::FilePanel</name>
     <message>
-        <location filename="../ui/file_panel.cc" line="155"/>
+        <location filename="../ui/file_panel.cc" line="153"/>
         <location filename="../ui/file_panel.cc" line="168"/>
         <location filename="../ui/file_panel.cc" line="192"/>
         <location filename="../ui/file_panel.cc" line="203"/>
-        <location filename="../ui/file_panel.cc" line="293"/>
-        <location filename="../ui/file_panel.cc" line="302"/>
-        <location filename="../ui/file_panel.cc" line="320"/>
-        <location filename="../ui/file_panel.cc" line="329"/>
+        <location filename="../ui/file_panel.cc" line="294"/>
+        <location filename="../ui/file_panel.cc" line="303"/>
+        <location filename="../ui/file_panel.cc" line="319"/>
+        <location filename="../ui/file_panel.cc" line="328"/>
         <source>Warning</source>
         <translation type="unfinished">Warnung</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="156"/>
+        <location filename="../ui/file_panel.cc" line="154"/>
         <source>Failed to get list of drives: %1</source>
         <translation type="unfinished">Fehler beim Abrufen der Laufwerksliste: %1</translation>
     </message>
@@ -1428,44 +1428,44 @@
         <translation type="unfinished">Fehler beim Umbenennen des Elements: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="273"/>
+        <location filename="../ui/file_panel.cc" line="274"/>
         <source>%1 object(s) selected</source>
         <translation type="unfinished">%1 Objekt(e) ausgewählt</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="294"/>
-        <location filename="../ui/file_panel.cc" line="321"/>
+        <location filename="../ui/file_panel.cc" line="295"/>
+        <location filename="../ui/file_panel.cc" line="320"/>
         <source>Folder name can not be empty.</source>
         <translation type="unfinished">Ordnername darf nicht leer sein.</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="303"/>
-        <location filename="../ui/file_panel.cc" line="330"/>
+        <location filename="../ui/file_panel.cc" line="304"/>
+        <location filename="../ui/file_panel.cc" line="329"/>
         <source>Name contains invalid characters.</source>
         <translation type="unfinished">Name beinhaltet ungültige Zeichen.</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="355"/>
+        <location filename="../ui/file_panel.cc" line="351"/>
         <source>&amp;Send	F11</source>
         <translation type="unfinished">&amp;Senden F11</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="357"/>
+        <location filename="../ui/file_panel.cc" line="353"/>
         <source>&amp;Delete	Delete</source>
         <translation type="unfinished">&amp;Löschen Entf</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="367"/>
+        <location filename="../ui/file_panel.cc" line="363"/>
         <source>&amp;Create Folder</source>
         <translation type="unfinished">&amp;Ordner erstellen</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="422"/>
+        <location filename="../ui/file_panel.cc" line="418"/>
         <source>Confirmation</source>
         <translation type="unfinished">Bestätigung</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="423"/>
+        <location filename="../ui/file_panel.cc" line="419"/>
         <source>Are you sure you want to delete the selected items?</source>
         <translation type="unfinished">Möchten Sie die ausgewählten Elemente wirklich löschen?</translation>
     </message>

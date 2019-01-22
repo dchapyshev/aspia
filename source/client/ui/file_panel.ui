@@ -2,6 +2,9 @@
 <ui version="4.0">
  <class>FilePanel</class>
  <widget class="QWidget" name="FilePanel">
+  <property name="enabled">
+   <bool>false</bool>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>

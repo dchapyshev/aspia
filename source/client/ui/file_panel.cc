@@ -106,9 +106,7 @@ void FilePanel::onPathChanged(const QString& path)
     }
     else
     {
-        common::FileRequest* request = common::FileRequest::fileListRequest(path);
-        connect(request, &common::FileRequest::replyReady, this, &FilePanel::reply);
-        emit newRequest(request);
+        sendRequest(common::FileRequest::fileListRequest(path));
     }
 }
 
@@ -157,8 +155,10 @@ void FilePanel::reply(const proto::file_transfer::Request& request,
                                      .arg(fileStatusToString(reply.status())),
                                  QMessageBox::Ok);
         }
-
-        ui.address_bar->setDriveList(reply.drive_list());
+        else
+        {
+            ui.address_bar->setDriveList(reply.drive_list());
+        }
     }
     else if (request.has_file_list_request())
     {
@@ -206,13 +206,14 @@ void FilePanel::reply(const proto::file_transfer::Request& request,
                                  QMessageBox::Ok);
         }
     }
+
+    // Request completed. Turn on the panel.
+    setEnabled(true);
 }
 
 void FilePanel::refresh()
 {
-    common::FileRequest* request = common::FileRequest::driveListRequest();
-    connect(request, &common::FileRequest::replyReady, this, &FilePanel::reply);
-    emit newRequest(request);
+    sendRequest(common::FileRequest::driveListRequest());
 }
 
 void FilePanel::keyPressEvent(QKeyEvent* event)
@@ -305,10 +306,8 @@ void FilePanel::onNameChangeRequest(const QString& old_name, const QString& new_
             return;
         }
 
-        common::FileRequest* request =
-            common::FileRequest::renameRequest(currentPath() + old_name, currentPath() + new_name);
-        connect(request, &common::FileRequest::replyReady, this, &FilePanel::reply);
-        emit newRequest(request);
+        sendRequest(common::FileRequest::renameRequest(
+            currentPath() + old_name, currentPath() + new_name));
     }
 }
 
@@ -332,10 +331,7 @@ void FilePanel::onCreateFolderRequest(const QString& name)
             return;
         }
 
-        common::FileRequest* request =
-            common::FileRequest::createDirectoryRequest(currentPath() + name);
-        connect(request, &common::FileRequest::replyReady, this, &FilePanel::reply);
-        emit newRequest(request);
+        sendRequest(common::FileRequest::createDirectoryRequest(currentPath() + name));
     }
 }
 
@@ -451,6 +447,16 @@ void FilePanel::sendSelected()
         return;
 
     emit sendItems(this, items);
+}
+
+void FilePanel::sendRequest(common::FileRequest* request)
+{
+    // Disable the panel before executing the request. When a response is received, the panel
+    // will be turned on.
+    setEnabled(false);
+
+    connect(request, &common::FileRequest::replyReady, this, &FilePanel::reply);
+    emit newRequest(request);
 }
 
 } // namespace client
