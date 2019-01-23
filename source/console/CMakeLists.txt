@@ -25,6 +25,8 @@ list(APPEND SOURCE_CONSOLE
     address_book_tab.cc
     address_book_tab.h
     address_book_tab.ui
+    computer_address.cc
+    computer_address.h
     computer_dialog.cc
     computer_dialog.h
     computer_dialog.ui

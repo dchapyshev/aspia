@@ -137,27 +137,26 @@
         <translation>Адреса:</translation>
     </message>
     <message>
-        <location filename="../computer_dialog.ui" line="54"/>
         <source>Port:</source>
-        <translation>Порт:</translation>
+        <translation type="vanished">Порт:</translation>
     </message>
     <message>
-        <location filename="../computer_dialog.ui" line="61"/>
+        <location filename="../computer_dialog.ui" line="54"/>
         <source>User Name:</source>
         <translation>Ім&apos;я користувача:</translation>
     </message>
     <message>
-        <location filename="../computer_dialog.ui" line="68"/>
+        <location filename="../computer_dialog.ui" line="61"/>
         <source>Password:</source>
         <translation>Пароль:</translation>
     </message>
     <message>
-        <location filename="../computer_dialog.ui" line="75"/>
+        <location filename="../computer_dialog.ui" line="68"/>
         <source>Session Configuration:</source>
         <translation>Налаштування сесії:</translation>
     </message>
     <message>
-        <location filename="../computer_dialog.ui" line="194"/>
+        <location filename="../computer_dialog.ui" line="174"/>
         <source>Comment:</source>
         <translation>Коментар:</translation>
     </message>
@@ -951,22 +950,22 @@
 <context>
     <name>console::ComputerDialog</name>
     <message>
-        <location filename="../computer_dialog.cc" line="49"/>
+        <location filename="../computer_dialog.cc" line="51"/>
         <source>Desktop Manage</source>
         <translation type="unfinished">Керування робочим столом</translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="53"/>
+        <location filename="../computer_dialog.cc" line="55"/>
         <source>Desktop View</source>
         <translation type="unfinished">Перегляд робочого столу</translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="57"/>
+        <location filename="../computer_dialog.cc" line="59"/>
         <source>File Transfer</source>
         <translation type="unfinished">Передача файлів</translation>
     </message>
     <message numerus="yes">
-        <location filename="../computer_dialog.cc" line="157"/>
+        <location filename="../computer_dialog.cc" line="162"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -975,17 +974,17 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="164"/>
+        <location filename="../computer_dialog.cc" line="169"/>
         <source>Name can not be empty.</source>
         <translation type="unfinished">Ім&apos;я не може бути порожнім.</translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="174"/>
+        <location filename="../computer_dialog.cc" line="179"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation type="unfinished">Ім&apos;я користувача не може бути порожнім і має мустити тільки букви алфавіту, цифри, та символи &quot;&quot;_&quot;&quot;, &quot;&quot;-&quot;&quot;, &quot;&quot;.&quot;&quot;.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../computer_dialog.cc" line="183"/>
+        <location filename="../computer_dialog.cc" line="188"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -994,7 +993,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="214"/>
+        <location filename="../computer_dialog.cc" line="202"/>
+        <source>An invalid computer address was entered.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog.cc" line="227"/>
         <source>Warning</source>
         <translation type="unfinished">Попередження</translation>
     </message>

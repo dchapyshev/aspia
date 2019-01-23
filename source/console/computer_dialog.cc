@@ -21,8 +21,10 @@
 #include <QDateTime>
 #include <QMessageBox>
 
+#include "build/build_config.h"
 #include "client/ui/desktop_config_dialog.h"
 #include "common/user_util.h"
+#include "console/computer_address.h"
 #include "console/computer_group_item.h"
 
 namespace console {
@@ -57,10 +59,13 @@ ComputerDialog::ComputerDialog(QWidget* parent,
                                      tr("File Transfer"),
                                      QVariant(proto::SESSION_TYPE_FILE_TRANSFER));
 
+    ComputerAddress address;
+    address.setHost(QString::fromStdString(computer_->address()));
+    address.setPort(computer_->port());
+
     ui.edit_parent_name->setText(parent_name);
     ui.edit_name->setText(QString::fromStdString(computer_->name()));
-    ui.edit_address->setText(QString::fromStdString(computer_->address()));
-    ui.spinbox_port->setValue(computer_->port());
+    ui.edit_address->setText(address.toString(DEFAULT_HOST_TCP_PORT));
     ui.edit_username->setText(QString::fromStdString(computer_->username()));
     ui.edit_password->setText(QString::fromStdString(computer->password()));
     ui.edit_comment->setPlainText(QString::fromStdString(computer->comment()));
@@ -191,10 +196,18 @@ void ComputerDialog::buttonBoxClicked(QAbstractButton* button)
         if (mode_ == CreateComputer)
             computer_->set_create_time(current_time);
 
+        ComputerAddress address = ComputerAddress::fromString(ui.edit_address->text());
+        if (!address.isValid())
+        {
+            showError(tr("An invalid computer address was entered."));
+            ui.edit_address->setFocus();
+            return;
+        }
+
         computer_->set_modify_time(current_time);
         computer_->set_name(name.toStdString());
-        computer_->set_address(ui.edit_address->text().toStdString());
-        computer_->set_port(ui.spinbox_port->value());
+        computer_->set_address(address.host().toStdString());
+        computer_->set_port(address.port(DEFAULT_HOST_TCP_PORT));
         computer_->set_username(username.toStdString());
         computer_->set_password(password.toStdString());
         computer_->set_comment(comment.toStdString());

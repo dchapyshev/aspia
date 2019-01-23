@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>393</width>
-    <height>414</height>
+    <height>316</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -45,13 +45,6 @@
         <widget class="QLabel" name="label_address">
          <property name="text">
           <string>Address:</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="label_port">
-         <property name="text">
-          <string>Port:</string>
          </property>
         </widget>
        </item>
@@ -101,19 +94,6 @@
         <widget class="QLineEdit" name="edit_address">
          <property name="maxLength">
           <number>64</number>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QSpinBox" name="spinbox_port">
-         <property name="minimum">
-          <number>1</number>
-         </property>
-         <property name="maximum">
-          <number>65534</number>
-         </property>
-         <property name="value">
-          <number>8050</number>
          </property>
         </widget>
        </item>

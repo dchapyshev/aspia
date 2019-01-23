@@ -137,27 +137,26 @@
         <translation>Адрес:</translation>
     </message>
     <message>
-        <location filename="../computer_dialog.ui" line="54"/>
         <source>Port:</source>
-        <translation>Порт:</translation>
+        <translation type="vanished">Порт:</translation>
     </message>
     <message>
-        <location filename="../computer_dialog.ui" line="61"/>
+        <location filename="../computer_dialog.ui" line="54"/>
         <source>User Name:</source>
         <translation>Имя пользователя:</translation>
     </message>
     <message>
-        <location filename="../computer_dialog.ui" line="68"/>
+        <location filename="../computer_dialog.ui" line="61"/>
         <source>Password:</source>
         <translation>Пароль:</translation>
     </message>
     <message>
-        <location filename="../computer_dialog.ui" line="75"/>
+        <location filename="../computer_dialog.ui" line="68"/>
         <source>Session Configuration:</source>
         <translation>Параметры сессии:</translation>
     </message>
     <message>
-        <location filename="../computer_dialog.ui" line="194"/>
+        <location filename="../computer_dialog.ui" line="174"/>
         <source>Comment:</source>
         <translation>Комментарий:</translation>
     </message>
@@ -1001,7 +1000,7 @@
     <message>
         <location filename="../address_book_tab.cc" line="793"/>
         <source>Root Group</source>
-        <translation type="unfinished">Корневая группа</translation>
+        <translation>Корневая группа</translation>
     </message>
     <message>
         <location filename="../address_book_tab.cc" line="804"/>
@@ -1023,22 +1022,22 @@
 <context>
     <name>console::ComputerDialog</name>
     <message>
-        <location filename="../computer_dialog.cc" line="49"/>
+        <location filename="../computer_dialog.cc" line="51"/>
         <source>Desktop Manage</source>
         <translation>Управление рабочим столом</translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="53"/>
+        <location filename="../computer_dialog.cc" line="55"/>
         <source>Desktop View</source>
         <translation>Просмотр рабочего стола</translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="57"/>
+        <location filename="../computer_dialog.cc" line="59"/>
         <source>File Transfer</source>
         <translation>Передача файлов</translation>
     </message>
     <message numerus="yes">
-        <location filename="../computer_dialog.cc" line="157"/>
+        <location filename="../computer_dialog.cc" line="162"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Слишком длинное имя. Максимальная длина имени %n символ.</numerusform>
@@ -1047,17 +1046,17 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="164"/>
+        <location filename="../computer_dialog.cc" line="169"/>
         <source>Name can not be empty.</source>
         <translation>Имя не может быть пустым.</translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="174"/>
+        <location filename="../computer_dialog.cc" line="179"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>Имя пользователя не может быть пустым и может содержать только буквы алфавита, цифры и символы &quot;_&quot;,&quot;-&quot;,&quot;.&quot;.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../computer_dialog.cc" line="183"/>
+        <location filename="../computer_dialog.cc" line="188"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Слишком длинный комментарий. Максимальная длина комментария %n символ.</numerusform>
@@ -1066,7 +1065,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="214"/>
+        <location filename="../computer_dialog.cc" line="202"/>
+        <source>An invalid computer address was entered.</source>
+        <translation>Введен некорректный адрес компьютера.</translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog.cc" line="227"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>

@@ -137,27 +137,26 @@
         <translation>Adresse:</translation>
     </message>
     <message>
-        <location filename="../computer_dialog.ui" line="54"/>
         <source>Port:</source>
-        <translation>Port:</translation>
+        <translation type="vanished">Port:</translation>
     </message>
     <message>
-        <location filename="../computer_dialog.ui" line="61"/>
+        <location filename="../computer_dialog.ui" line="54"/>
         <source>User Name:</source>
         <translation>Benutzername:</translation>
     </message>
     <message>
-        <location filename="../computer_dialog.ui" line="68"/>
+        <location filename="../computer_dialog.ui" line="61"/>
         <source>Password:</source>
         <translation>Kennwort:</translation>
     </message>
     <message>
-        <location filename="../computer_dialog.ui" line="75"/>
+        <location filename="../computer_dialog.ui" line="68"/>
         <source>Session Configuration:</source>
         <translation>Sitzungskonfiguration:</translation>
     </message>
     <message>
-        <location filename="../computer_dialog.ui" line="194"/>
+        <location filename="../computer_dialog.ui" line="174"/>
         <source>Comment:</source>
         <translation>Kommentar:</translation>
     </message>
@@ -939,22 +938,22 @@
 <context>
     <name>console::ComputerDialog</name>
     <message>
-        <location filename="../computer_dialog.cc" line="49"/>
+        <location filename="../computer_dialog.cc" line="51"/>
         <source>Desktop Manage</source>
         <translation type="unfinished">Desktopverwaltung</translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="53"/>
+        <location filename="../computer_dialog.cc" line="55"/>
         <source>Desktop View</source>
         <translation type="unfinished">Desktopansicht</translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="57"/>
+        <location filename="../computer_dialog.cc" line="59"/>
         <source>File Transfer</source>
         <translation type="unfinished">Dateiübertragung</translation>
     </message>
     <message numerus="yes">
-        <location filename="../computer_dialog.cc" line="157"/>
+        <location filename="../computer_dialog.cc" line="162"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation type="unfinished">
             <numerusform>Zu langer Name. Die maximale Länge des Namens beträgt %n Zeichen.</numerusform>
@@ -962,17 +961,17 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="164"/>
+        <location filename="../computer_dialog.cc" line="169"/>
         <source>Name can not be empty.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="174"/>
+        <location filename="../computer_dialog.cc" line="179"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation type="unfinished">Der Benutzername darf nicht leer sein und darf nur Buchstaben, Zahlen und folgende Zeichen: &quot;_&quot;,&quot;-&quot;,&quot;.&quot; beinhalten.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../computer_dialog.cc" line="183"/>
+        <location filename="../computer_dialog.cc" line="188"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation type="unfinished">
             <numerusform>Zu langer Kommentar. Die maximale Länge des Kommentars beträgt %n Zeichen.</numerusform>
@@ -980,7 +979,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="214"/>
+        <location filename="../computer_dialog.cc" line="202"/>
+        <source>An invalid computer address was entered.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog.cc" line="227"/>
         <source>Warning</source>
         <translation type="unfinished">Warnung</translation>
     </message>
