@@ -65,7 +65,7 @@ ComputerDialog::ComputerDialog(QWidget* parent,
 
     ui.edit_parent_name->setText(parent_name);
     ui.edit_name->setText(QString::fromStdString(computer_->name()));
-    ui.edit_address->setText(address.toString(DEFAULT_HOST_TCP_PORT));
+    ui.edit_address->setText(address.toString());
     ui.edit_username->setText(QString::fromStdString(computer_->username()));
     ui.edit_password->setText(QString::fromStdString(computer->password()));
     ui.edit_comment->setPlainText(QString::fromStdString(computer->comment()));
@@ -207,7 +207,7 @@ void ComputerDialog::buttonBoxClicked(QAbstractButton* button)
         computer_->set_modify_time(current_time);
         computer_->set_name(name.toStdString());
         computer_->set_address(address.host().toStdString());
-        computer_->set_port(address.port(DEFAULT_HOST_TCP_PORT));
+        computer_->set_port(address.port());
         computer_->set_username(username.toStdString());
         computer_->set_password(password.toStdString());
         computer_->set_comment(comment.toStdString());

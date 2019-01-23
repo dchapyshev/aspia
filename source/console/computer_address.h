@@ -21,13 +21,13 @@
 
 #include <QString>
 
+#include "build/build_config.h"
+
 namespace console {
 
 class ComputerAddress
 {
 public:
-    static const uint16_t kInvalidPort = 0;
-
     ComputerAddress() = default;
 
     ComputerAddress(const ComputerAddress& other);
@@ -41,14 +41,14 @@ public:
     static ComputerAddress fromString(const QString& str);
     static ComputerAddress fromStdString(const std::string& str);
 
-    QString toString(uint16_t def_port = kInvalidPort) const;
+    QString toString() const;
     std::string toStdString() const;
 
     void setHost(const QString& host);
     QString host() const;
 
     void setPort(uint16_t port);
-    uint16_t port(uint16_t def_port) const;
+    uint16_t port() const;
 
     bool isValid() const;
 
@@ -61,7 +61,7 @@ private:
     ComputerAddress(QString&& host, uint16_t port);
 
     QString host_;
-    uint16_t port_ = kInvalidPort;
+    uint16_t port_ = DEFAULT_HOST_TCP_PORT;
 };
 
 } // namespace console

@@ -42,7 +42,7 @@ void ComputerItem::updateItem()
     address.setPort(computer_->port());
 
     setText(COLUMN_INDEX_NAME, QString::fromStdString(computer_->name()));
-    setText(COLUMN_INDEX_ADDRESS, address.toString(DEFAULT_HOST_TCP_PORT));
+    setText(COLUMN_INDEX_ADDRESS, address.toString());
     setText(COLUMN_INDEX_COMMENT, QString::fromStdString(computer_->comment()).replace('\n', ' '));
 
     setText(COLUMN_INDEX_CREATED, QDateTime::fromSecsSinceEpoch(

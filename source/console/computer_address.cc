@@ -253,11 +253,14 @@ ComputerAddress ComputerAddress::fromString(const QString& str)
 
     if (parse(begin, end, &parts))
     {
-        if (net::isValidIpV4Address(parts.host) ||
-            net::isValidIpV6Address(parts.host) ||
+        if (net::isValidIpV4Address(parts.host) || net::isValidIpV6Address(parts.host) ||
             isValidHostName(parts.host))
         {
-            return ComputerAddress(std::move(parts.host), parts.port.toUShort());
+            uint16_t port = parts.port.toUShort();
+            if (!isValidPort(port))
+                port = DEFAULT_HOST_TCP_PORT;
+
+            return ComputerAddress(std::move(parts.host), port);
         }
     }
 
@@ -270,9 +273,9 @@ ComputerAddress ComputerAddress::fromStdString(const std::string& str)
     return fromString(QString::fromStdString(str));
 }
 
-QString ComputerAddress::toString(uint16_t def_port) const
+QString ComputerAddress::toString() const
 {
-    if (def_port != kInvalidPort && port_ == def_port)
+    if (port_ == DEFAULT_HOST_TCP_PORT)
         return host();
 
     if (!isValidPort(port_) || !isValidHostName(host_))
@@ -304,23 +307,14 @@ void ComputerAddress::setPort(uint16_t port)
     port_ = port;
 }
 
-uint16_t ComputerAddress::port(uint16_t def_port) const
+uint16_t ComputerAddress::port() const
 {
-    if (port_ == kInvalidPort)
-        return def_port;
-
     return port_;
 }
 
 bool ComputerAddress::isValid() const
 {
-    if (!isValidHostName(host_))
-        return false;
-
-    if (port_ == kInvalidPort)
-        return true;
-
-    return isValidPort(port_);
+    return isValidHostName(host_) && isValidPort(port_);
 }
 
 bool ComputerAddress::isEqual(const ComputerAddress& other)
