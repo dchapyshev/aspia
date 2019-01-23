@@ -20,6 +20,8 @@
 
 #include <QDateTime>
 
+#include "build/build_config.h"
+#include "console/computer_address.h"
 #include "console/computer_group_item.h"
 
 namespace console {
@@ -35,9 +37,12 @@ ComputerItem::ComputerItem(proto::address_book::Computer* computer,
 
 void ComputerItem::updateItem()
 {
+    ComputerAddress address;
+    address.setHost(QString::fromStdString(computer_->address()));
+    address.setPort(computer_->port());
+
     setText(COLUMN_INDEX_NAME, QString::fromStdString(computer_->name()));
-    setText(COLUMN_INDEX_ADDRESS, QString::fromStdString(computer_->address()));
-    setText(COLUMN_INDEX_PORT, QString::number(computer_->port()));
+    setText(COLUMN_INDEX_ADDRESS, address.toString(DEFAULT_HOST_TCP_PORT));
     setText(COLUMN_INDEX_COMMENT, QString::fromStdString(computer_->comment()).replace('\n', ' '));
 
     setText(COLUMN_INDEX_CREATED, QDateTime::fromSecsSinceEpoch(
@@ -56,14 +61,6 @@ bool ComputerItem::operator<(const QTreeWidgetItem &other) const
 {
     switch (treeWidget()->sortColumn())
     {
-        case COLUMN_INDEX_PORT:
-        {
-            const ComputerItem* other_item = dynamic_cast<const ComputerItem*>(&other);
-            if (other_item)
-                return computer_->port() < other_item->computer_->port();
-        }
-        break;
-
         case COLUMN_INDEX_CREATED:
         {
             const ComputerItem* other_item = dynamic_cast<const ComputerItem*>(&other);

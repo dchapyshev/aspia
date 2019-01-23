@@ -88,7 +88,7 @@
        <bool>true</bool>
       </property>
       <property name="columnCount">
-       <number>6</number>
+       <number>5</number>
       </property>
       <column>
        <property name="text">
@@ -98,11 +98,6 @@
       <column>
        <property name="text">
         <string>Address</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>Port</string>
        </property>
       </column>
       <column>

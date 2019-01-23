@@ -122,15 +122,8 @@ AddressBookTab::AddressBookTab(const QString& file_path,
 
     QHeaderView* header = ui.tree_computer->header();
     QByteArray columns_state = settings.columnsState();
-    if (columns_state.isEmpty())
-    {
-        header->hideSection(ComputerItem::COLUMN_INDEX_CREATED);
-        header->hideSection(ComputerItem::COLUMN_INDEX_MODIFIED);
-    }
-    else
-    {
+    if (!columns_state.isEmpty())
         header->restoreState(columns_state);
-    }
 
     ComputerGroupItem* group_item = new ComputerGroupItem(data_.mutable_root_group(), nullptr);
 

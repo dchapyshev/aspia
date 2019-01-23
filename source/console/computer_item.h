@@ -40,10 +40,9 @@ public:
     {
         COLUMN_INDEX_NAME      = 0,
         COLUMN_INDEX_ADDRESS   = 1,
-        COLUMN_INDEX_PORT      = 2,
-        COLUMN_INDEX_COMMENT   = 3,
-        COLUMN_INDEX_CREATED   = 4,
-        COLUMN_INDEX_MODIFIED  = 5
+        COLUMN_INDEX_COMMENT   = 2,
+        COLUMN_INDEX_CREATED   = 3,
+        COLUMN_INDEX_MODIFIED  = 4
     };
 
     proto::address_book::Computer* computer() { return computer_; }
