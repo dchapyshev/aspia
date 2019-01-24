@@ -50,82 +50,87 @@
 <context>
     <name>DesktopConfigDialog</name>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="26"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="20"/>
         <source>Session Configuration</source>
         <translation>Sessie Eigenschappen</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="32"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="36"/>
         <source>Codec</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="41"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="42"/>
+        <source>Name:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_config_dialog.ui" line="52"/>
         <source>Color depth:</source>
         <translation>Kleur diepte:</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="51"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="62"/>
         <source>Compression ratio:</source>
         <translation>Compressie ratio:</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="60"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="71"/>
         <source>Fast</source>
         <translation>Snel</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="89"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="100"/>
         <source>Best</source>
         <translation>Beste</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="101"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="123"/>
         <source>Remote Screen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="109"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="133"/>
         <source>Scale factor:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="116"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="140"/>
         <source>Update interval:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="146"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="170"/>
         <source>ms</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="167"/>
-        <source>Additional</source>
+        <location filename="../ui/desktop_config_dialog.ui" line="204"/>
+        <source>Advanced</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="173"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="210"/>
         <source>Block remote input</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="180"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="217"/>
         <source>Enable cursor shape</source>
         <translation>Muis vorm inschakelen</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="187"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="224"/>
         <source>Enable clipboard</source>
         <translation>Klembord inschakelen</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="194"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="231"/>
         <source>Disable desktop effects</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="201"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="238"/>
         <source>Disable desktop wallpaper</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1161,32 +1166,32 @@
 <context>
     <name>client::DesktopConfigDialog</name>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="65"/>
+        <location filename="../ui/desktop_config_dialog.cc" line="63"/>
         <source>True color (32 bit)</source>
         <translation type="unfinished">Ware kleuren (32 bit)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="66"/>
+        <location filename="../ui/desktop_config_dialog.cc" line="64"/>
         <source>High color (16 bit)</source>
         <translation type="unfinished">Hoge kleuren (16 bit)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="67"/>
+        <location filename="../ui/desktop_config_dialog.cc" line="65"/>
         <source>256 colors (8 bit)</source>
         <translation type="unfinished">256 kleuren (8 bit)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="68"/>
+        <location filename="../ui/desktop_config_dialog.cc" line="66"/>
         <source>64 colors (6 bit)</source>
         <translation type="unfinished">64 kleuren (6 bit)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="69"/>
+        <location filename="../ui/desktop_config_dialog.cc" line="67"/>
         <source>8 colors (3 bit)</source>
         <translation type="unfinished">8 kleuren (3 bit)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="155"/>
+        <location filename="../ui/desktop_config_dialog.cc" line="145"/>
         <source>Compression ratio: %1</source>
         <translation type="unfinished">Compressie ratio: %1</translation>
     </message>

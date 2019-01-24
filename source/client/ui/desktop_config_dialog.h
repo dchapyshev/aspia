@@ -24,10 +24,7 @@
 #include "base/macros_magic.h"
 #include "proto/common.pb.h"
 #include "proto/desktop_session.pb.h"
-
-namespace Ui {
-class DesktopConfigDialog;
-} // namespace Ui
+#include "ui_desktop_config_dialog.h"
 
 class QAbstractButton;
 
@@ -54,7 +51,7 @@ private slots:
     void onButtonBoxClicked(QAbstractButton* button);
 
 private:
-    QScopedPointer<Ui::DesktopConfigDialog> ui;
+    Ui::DesktopConfigDialog ui;
 
     proto::desktop::Config config_;
 
