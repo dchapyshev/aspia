@@ -111,7 +111,8 @@ void DesktopPanel::setScreenList(const proto::desktop::ScreenList& screen_list)
 
     for (int i = 0; i < screen_list.screen_size(); ++i)
     {
-        SelectScreenAction* action = new SelectScreenAction(screen_list.screen(i), screens_group_);
+        SelectScreenAction* action = new SelectScreenAction(
+            screen_list.screen(i), tr("Monitor %1").arg(i + 1), screens_group_);
 
         screens_group_->addAction(action);
         screens_menu_->addAction(action);

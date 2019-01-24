@@ -42,11 +42,11 @@ public:
         screen_.set_id(-1);
     }
 
-    SelectScreenAction(const proto::desktop::Screen& screen, QObject* parent)
+    SelectScreenAction(const proto::desktop::Screen& screen, const QString& title, QObject* parent)
         : QAction(parent),
           screen_(screen)
     {
-        setText(QString::fromStdString(screen_.title()));
+        setText(title);
         setCheckable(true);
     }
 

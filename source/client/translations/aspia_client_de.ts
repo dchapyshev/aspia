@@ -1266,30 +1266,35 @@
 <context>
     <name>client::DesktopPanel</name>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="233"/>
-        <location filename="../ui/desktop_panel.cc" line="244"/>
-        <location filename="../ui/desktop_panel.cc" line="255"/>
-        <location filename="../ui/desktop_panel.cc" line="266"/>
+        <location filename="../ui/desktop_panel.cc" line="115"/>
+        <source>Monitor %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_panel.cc" line="234"/>
+        <location filename="../ui/desktop_panel.cc" line="245"/>
+        <location filename="../ui/desktop_panel.cc" line="256"/>
+        <location filename="../ui/desktop_panel.cc" line="267"/>
         <source>Confirmation</source>
         <translation type="unfinished">Bestätigung</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="234"/>
+        <location filename="../ui/desktop_panel.cc" line="235"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="245"/>
+        <location filename="../ui/desktop_panel.cc" line="246"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="256"/>
+        <location filename="../ui/desktop_panel.cc" line="257"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="267"/>
+        <location filename="../ui/desktop_panel.cc" line="268"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation type="unfinished"></translation>
     </message>
