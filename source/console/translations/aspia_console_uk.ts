@@ -121,43 +121,160 @@
         <translation>Властивості комп&apos;ютера</translation>
     </message>
     <message>
-        <location filename="../computer_dialog.ui" line="33"/>
         <source>Name:</source>
-        <translation>Ім&apos;я:</translation>
+        <translation type="vanished">Ім&apos;я:</translation>
     </message>
     <message>
-        <location filename="../computer_dialog.ui" line="40"/>
         <source>Parent Group:</source>
-        <translation>Група:</translation>
+        <translation type="vanished">Група:</translation>
     </message>
     <message>
-        <location filename="../computer_dialog.ui" line="47"/>
         <source>Address:</source>
-        <translation>Адреса:</translation>
+        <translation type="vanished">Адреса:</translation>
     </message>
     <message>
         <source>Port:</source>
         <translation type="vanished">Порт:</translation>
     </message>
     <message>
-        <location filename="../computer_dialog.ui" line="54"/>
         <source>User Name:</source>
-        <translation>Ім&apos;я користувача:</translation>
+        <translation type="vanished">Ім&apos;я користувача:</translation>
     </message>
     <message>
-        <location filename="../computer_dialog.ui" line="61"/>
         <source>Password:</source>
-        <translation>Пароль:</translation>
+        <translation type="vanished">Пароль:</translation>
     </message>
     <message>
-        <location filename="../computer_dialog.ui" line="68"/>
         <source>Session Configuration:</source>
-        <translation>Налаштування сесії:</translation>
+        <translation type="vanished">Налаштування сесії:</translation>
     </message>
     <message>
-        <location filename="../computer_dialog.ui" line="174"/>
         <source>Comment:</source>
-        <translation>Коментар:</translation>
+        <translation type="vanished">Коментар:</translation>
+    </message>
+</context>
+<context>
+    <name>ComputerDialogDesktop</name>
+    <message>
+        <location filename="../computer_dialog_desktop.ui" line="36"/>
+        <source>Codec</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog_desktop.ui" line="42"/>
+        <source>Name:</source>
+        <translation type="unfinished">Ім&apos;я:</translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog_desktop.ui" line="52"/>
+        <source>Color depth:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog_desktop.ui" line="62"/>
+        <source>Compression ratio:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog_desktop.ui" line="71"/>
+        <source>Fast</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog_desktop.ui" line="100"/>
+        <source>Best</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog_desktop.ui" line="123"/>
+        <source>Remote Screen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog_desktop.ui" line="133"/>
+        <source>Scale factor:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog_desktop.ui" line="140"/>
+        <source>Update interval:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog_desktop.ui" line="170"/>
+        <source>ms</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog_desktop.ui" line="204"/>
+        <source>Advanced</source>
+        <translation type="unfinished">Додаткові</translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog_desktop.ui" line="210"/>
+        <source>Block remote input</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog_desktop.ui" line="217"/>
+        <source>Enable cursor shape</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog_desktop.ui" line="224"/>
+        <source>Enable clipboard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog_desktop.ui" line="231"/>
+        <source>Disable desktop effects</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog_desktop.ui" line="238"/>
+        <source>Disable desktop wallpaper</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ComputerDialogGeneral</name>
+    <message>
+        <location filename="../computer_dialog_general.ui" line="36"/>
+        <source>Name:</source>
+        <translation type="unfinished">Ім&apos;я:</translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog_general.ui" line="43"/>
+        <source>Parent Group:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog_general.ui" line="50"/>
+        <source>Address:</source>
+        <translation type="unfinished">Адреса:</translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog_general.ui" line="57"/>
+        <source>User Name:</source>
+        <translation type="unfinished">Ім&apos;я користувача:</translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog_general.ui" line="64"/>
+        <source>Password:</source>
+        <translation type="unfinished">Пароль:</translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog_general.ui" line="146"/>
+        <source>Comment:</source>
+        <translation type="unfinished">Коментар:</translation>
+    </message>
+</context>
+<context>
+    <name>ComputerDialogParent</name>
+    <message>
+        <location filename="../computer_dialog_parent.ui" line="20"/>
+        <source>Select child item</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -858,90 +975,90 @@
 <context>
     <name>console::AddressBookTab</name>
     <message>
-        <location filename="../address_book_tab.cc" line="225"/>
+        <location filename="../address_book_tab.cc" line="224"/>
         <source>Unable to open address book file &quot;%1&quot;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="232"/>
+        <location filename="../address_book_tab.cc" line="231"/>
         <source>Unable to read address book file &quot;%1&quot;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="241"/>
-        <location filename="../address_book_tab.cc" line="256"/>
+        <location filename="../address_book_tab.cc" line="240"/>
+        <location filename="../address_book_tab.cc" line="255"/>
         <source>The address book file &quot;%1&quot; is corrupted or has an unknown format.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="279"/>
+        <location filename="../address_book_tab.cc" line="278"/>
         <source>Unable to decrypt the address book with the specified password.</source>
         <translation type="unfinished">Неможливо розшифрувати адресну книгу даним паролем.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="285"/>
+        <location filename="../address_book_tab.cc" line="284"/>
         <source>The address book file is corrupted or has an unknown format.</source>
         <translation type="unfinished">Файл адресної книги пошкоджено або він має невірний формат.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="295"/>
+        <location filename="../address_book_tab.cc" line="294"/>
         <source>The address book file is encrypted with an unsupported encryption type.</source>
         <translation type="unfinished">Тип шифрування адресної книги не підтримується.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="467"/>
+        <location filename="../address_book_tab.cc" line="461"/>
         <source>Are you sure you want to delete computer group &quot;%1&quot; and all child items?</source>
         <translation type="unfinished">Ви впевнені, що хочете видалити групу комп&apos;ютерів \&quot;%1\&quot; і всі дочірні об&apos;єкти?</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="471"/>
-        <location filename="../address_book_tab.cc" line="493"/>
+        <location filename="../address_book_tab.cc" line="465"/>
+        <location filename="../address_book_tab.cc" line="487"/>
         <source>Confirmation</source>
         <translation type="unfinished">Підтвердження</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="489"/>
+        <location filename="../address_book_tab.cc" line="483"/>
         <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
         <translation type="unfinished">Ви впевнені, що хочете видалити комп&apos;ютер\&quot;%1\&quot;?</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="748"/>
+        <location filename="../address_book_tab.cc" line="742"/>
         <source>Save Address Book</source>
         <translation type="unfinished">Зберегти адресну книгу</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="750"/>
+        <location filename="../address_book_tab.cc" line="744"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation type="unfinished">Aspia Address Book (*.aab)</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="760"/>
+        <location filename="../address_book_tab.cc" line="754"/>
         <source>Unable to create or open address book file.</source>
         <translation type="unfinished">Неможливо створити або відкрити файл адресної книги.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="772"/>
+        <location filename="../address_book_tab.cc" line="766"/>
         <source>Unable to write address book file.</source>
         <translation type="unfinished">Неможливо записати файл адресної книги.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="786"/>
+        <location filename="../address_book_tab.cc" line="780"/>
         <source>Root Group</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="797"/>
-        <location filename="../address_book_tab.cc" line="811"/>
+        <location filename="../address_book_tab.cc" line="791"/>
+        <location filename="../address_book_tab.cc" line="805"/>
         <source>Warning</source>
         <translation type="unfinished">Попередження</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="799"/>
+        <location filename="../address_book_tab.cc" line="793"/>
         <source>Could not open address book</source>
         <translation type="unfinished">Неможливо відкрити адресну книгу</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="813"/>
+        <location filename="../address_book_tab.cc" line="807"/>
         <source>Failed to save address book</source>
         <translation type="unfinished">Неможливо зберегти адресну книгу</translation>
     </message>
@@ -949,22 +1066,87 @@
 <context>
     <name>console::ComputerDialog</name>
     <message>
-        <location filename="../computer_dialog.cc" line="51"/>
         <source>Desktop Manage</source>
-        <translation type="unfinished">Керування робочим столом</translation>
+        <translation type="obsolete">Керування робочим столом</translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="55"/>
         <source>Desktop View</source>
-        <translation type="unfinished">Перегляд робочого столу</translation>
+        <translation type="obsolete">Перегляд робочого столу</translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="59"/>
         <source>File Transfer</source>
-        <translation type="unfinished">Передача файлів</translation>
+        <translation type="obsolete">Передача файлів</translation>
     </message>
+    <message>
+        <source>Name can not be empty.</source>
+        <translation type="obsolete">Ім&apos;я не може бути порожнім.</translation>
+    </message>
+    <message>
+        <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
+        <translation type="obsolete">Ім&apos;я користувача не може бути порожнім і має мустити тільки букви алфавіту, цифри, та символи &quot;&quot;_&quot;&quot;, &quot;&quot;-&quot;&quot;, &quot;&quot;.&quot;&quot;.</translation>
+    </message>
+    <message>
+        <source>Warning</source>
+        <translation type="obsolete">Попередження</translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog.cc" line="154"/>
+        <source>General</source>
+        <translation type="unfinished">Основні</translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog.cc" line="158"/>
+        <source>Sessions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog.cc" line="165"/>
+        <source>Manage</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog.cc" line="169"/>
+        <source>View</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>console::ComputerDialogDesktop</name>
+    <message>
+        <location filename="../computer_dialog_desktop.cc" line="60"/>
+        <source>True color (32 bit)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog_desktop.cc" line="61"/>
+        <source>High color (16 bit)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog_desktop.cc" line="62"/>
+        <source>256 colors (8 bit)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog_desktop.cc" line="63"/>
+        <source>64 colors (6 bit)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog_desktop.cc" line="64"/>
+        <source>8 colors (3 bit)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog_desktop.cc" line="207"/>
+        <source>Compression ratio: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>console::ComputerDialogGeneral</name>
     <message numerus="yes">
-        <location filename="../computer_dialog.cc" line="162"/>
+        <location filename="../computer_dialog_general.cc" line="65"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -973,17 +1155,17 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="169"/>
+        <location filename="../computer_dialog_general.cc" line="72"/>
         <source>Name can not be empty.</source>
         <translation type="unfinished">Ім&apos;я не може бути порожнім.</translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="179"/>
+        <location filename="../computer_dialog_general.cc" line="82"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation type="unfinished">Ім&apos;я користувача не може бути порожнім і має мустити тільки букви алфавіту, цифри, та символи &quot;&quot;_&quot;&quot;, &quot;&quot;-&quot;&quot;, &quot;&quot;.&quot;&quot;.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../computer_dialog.cc" line="188"/>
+        <location filename="../computer_dialog_general.cc" line="91"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -992,12 +1174,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="202"/>
+        <location filename="../computer_dialog_general.cc" line="100"/>
         <source>An invalid computer address was entered.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="227"/>
+        <location filename="../computer_dialog_general.cc" line="131"/>
         <source>Warning</source>
         <translation type="unfinished">Попередження</translation>
     </message>

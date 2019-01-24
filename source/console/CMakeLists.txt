@@ -30,6 +30,16 @@ list(APPEND SOURCE_CONSOLE
     computer_dialog.cc
     computer_dialog.h
     computer_dialog.ui
+    computer_dialog_desktop.cc
+    computer_dialog_desktop.h
+    computer_dialog_desktop.ui
+    computer_dialog_general.cc
+    computer_dialog_general.h
+    computer_dialog_general.ui
+    computer_dialog_parent.cc
+    computer_dialog_parent.h
+    computer_dialog_parent.ui
+    computer_dialog_tab.h
     computer_drag.h
     computer_factory.cc
     computer_factory.h

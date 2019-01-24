@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -19,40 +19,48 @@
 #ifndef CONSOLE__COMPUTER_DIALOG_H
 #define CONSOLE__COMPUTER_DIALOG_H
 
+#include <QDialog>
+
 #include "base/macros_magic.h"
 #include "proto/address_book.pb.h"
 #include "ui_computer_dialog.h"
 
-namespace console {
+class QAbstractButton;
 
-class ComputerGroupItem;
+namespace console {
 
 class ComputerDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    enum Mode { CreateComputer, ModifyComputer };
-
     ComputerDialog(QWidget* parent,
-                   Mode mode,
                    const QString& parent_name,
-                   proto::address_book::Computer* computer);
-    ~ComputerDialog() = default;
+                   const proto::address_book::Computer& computer);
+    ComputerDialog(QWidget* parent, const QString& parent_name);
+    ~ComputerDialog();
+
+    const proto::address_book::Computer& computer() const { return computer_; }
+
+protected:
+    // QDialog implementation.
+    bool eventFilter(QObject* watched, QEvent* event) override;
 
 private slots:
-    void sessionTypeChanged(int item_index);
-    void showPasswordButtonToggled(bool checked);
-    void sessionConfigButtonPressed();
+    void onTabChanged(QTreeWidgetItem* current);
     void buttonBoxClicked(QAbstractButton* button);
 
 private:
-    void showError(const QString& message);
+    void init(const QString& parent_name);
+    void showTab(int type);
+
+    enum class Mode { CREATE_COMPUTER, MODIFY_COMPUTER };
 
     Ui::ComputerDialog ui;
-
+    QWidgetList tabs_;
     const Mode mode_;
-    proto::address_book::Computer* computer_;
+
+    proto::address_book::Computer computer_;
 
     DISALLOW_COPY_AND_ASSIGN(ComputerDialog);
 };

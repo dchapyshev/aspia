@@ -25,7 +25,6 @@
 #include "common/message_serialization.h"
 #include "console/address_book_dialog.h"
 #include "console/computer_dialog.h"
-#include "console/computer_factory.h"
 #include "console/computer_group_dialog.h"
 #include "console/computer_item.h"
 #include "console/console_settings.h"
@@ -374,22 +373,17 @@ void AddressBookTab::addComputer()
     if (!parent_item)
         return;
 
-    std::unique_ptr<proto::address_book::Computer> computer =
-        std::make_unique<proto::address_book::Computer>(ComputerFactory::defaultComputer());
-
-    ComputerDialog dialog(this,
-                          ComputerDialog::CreateComputer,
-                          parentName(parent_item),
-                          computer.get());
+    ComputerDialog dialog(this, parentName(parent_item));
     if (dialog.exec() != QDialog::Accepted)
         return;
 
-    proto::address_book::Computer* computer_released = computer.release();
+    proto::address_book::Computer* computer =
+        new proto::address_book::Computer(dialog.computer());
 
-    parent_item->addChildComputer(computer_released);
+    parent_item->addChildComputer(computer);
     if (ui.tree_group->currentItem() == parent_item)
     {
-        ui.tree_computer->addTopLevelItem(new ComputerItem(computer_released, parent_item));
+        ui.tree_computer->addTopLevelItem(new ComputerItem(computer, parent_item));
     }
 
     setChanged(true);
@@ -442,12 +436,12 @@ void AddressBookTab::modifyComputer()
         return;
 
     ComputerDialog dialog(this,
-                          ComputerDialog::ModifyComputer,
                           parentName(current_item->parentComputerGroupItem()),
-                          current_item->computer());
+                          *current_item->computer());
     if (dialog.exec() != QDialog::Accepted)
         return;
 
+    current_item->computer()->CopyFrom(dialog.computer());
     current_item->updateItem();
     setChanged(true);
 }
