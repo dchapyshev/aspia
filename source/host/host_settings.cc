@@ -149,14 +149,4 @@ void Settings::setUpdateServer(const QString& server)
     settings_.setValue(QStringLiteral("UpdateServer"), server);
 }
 
-bool Settings::remoteUpdate() const
-{
-    return settings_.value(QStringLiteral("RemoteUpdate"), true).toBool();
-}
-
-void Settings::setRemoteUpdate(bool allow)
-{
-    settings_.setValue(QStringLiteral("RemoteUpdate"), allow);
-}
-
 } // namespace host

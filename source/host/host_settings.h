@@ -53,9 +53,6 @@ public:
     QString updateServer() const;
     void setUpdateServer(const QString& server);
 
-    bool remoteUpdate() const;
-    void setRemoteUpdate(bool allow);
-
 private:
     mutable QSettings settings_;
 
