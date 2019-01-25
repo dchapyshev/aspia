@@ -147,7 +147,8 @@ message Extension
 
 message ConfigRequest
 {
-    uint32 dummy = 1;
+    string extensions      = 1;
+    uint32 video_encodings = 2;
 }
 
 enum ConfigFlags

@@ -56,7 +56,7 @@ public:
     DesktopWidget(Delegate* delegate, QWidget* parent);
     ~DesktopWidget() = default;
 
-    void resizeDesktopFrame(const QSize& screen_size);
+    void setDesktopSize(const QSize& screen_size);
     desktop::Frame* desktopFrame();
 
     void doMouseEvent(QEvent::Type event_type,

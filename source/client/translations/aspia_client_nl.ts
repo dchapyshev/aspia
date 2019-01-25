@@ -153,85 +153,85 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="158"/>
+        <location filename="../ui/desktop_panel.ui" line="161"/>
         <source>Automatic window size</source>
         <translation>Automatische scherm grootte</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="173"/>
+        <location filename="../ui/desktop_panel.ui" line="176"/>
         <source>Switch to full screen mode or back</source>
         <translation>Tussen volledig scherm schakelen</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="184"/>
+        <location filename="../ui/desktop_panel.ui" line="187"/>
         <source>Automatic scrolling</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="208"/>
+        <location filename="../ui/desktop_panel.ui" line="211"/>
         <source>Advanced menu</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="250"/>
+        <location filename="../ui/desktop_panel.ui" line="253"/>
         <source>Send key combinations</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="259"/>
         <location filename="../ui/desktop_panel.ui" line="262"/>
+        <location filename="../ui/desktop_panel.ui" line="265"/>
         <source>Power control</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="267"/>
+        <location filename="../ui/desktop_panel.ui" line="273"/>
         <source>Shutdown</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="272"/>
+        <location filename="../ui/desktop_panel.ui" line="278"/>
         <source>Reboot</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="277"/>
+        <location filename="../ui/desktop_panel.ui" line="283"/>
         <source>Logoff</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="282"/>
+        <location filename="../ui/desktop_panel.ui" line="288"/>
         <source>Lock</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="291"/>
+        <location filename="../ui/desktop_panel.ui" line="297"/>
         <source>Remote Update</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="303"/>
+        <location filename="../ui/desktop_panel.ui" line="309"/>
         <source>System Information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="213"/>
         <location filename="../ui/desktop_panel.ui" line="216"/>
         <location filename="../ui/desktop_panel.ui" line="219"/>
+        <location filename="../ui/desktop_panel.ui" line="222"/>
         <source>Save screenshot...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="231"/>
+        <location filename="../ui/desktop_panel.ui" line="234"/>
         <source>File transfer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="239"/>
+        <location filename="../ui/desktop_panel.ui" line="242"/>
         <source>Scaling an image</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="196"/>
+        <location filename="../ui/desktop_panel.ui" line="199"/>
         <source>Send Ctrl+Alt+Delete</source>
         <translation>Stuur Ctrl+Alt+Delete</translation>
     </message>
@@ -1026,62 +1026,62 @@
 <context>
     <name>client::Client</name>
     <message>
-        <location filename="../client.cc" line="88"/>
+        <location filename="../client.cc" line="94"/>
         <source>Connection was refused by the peer (or timed out).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client.cc" line="92"/>
+        <location filename="../client.cc" line="98"/>
         <source>Remote host closed the connection.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client.cc" line="96"/>
+        <location filename="../client.cc" line="102"/>
         <source>Host address was not found.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client.cc" line="100"/>
+        <location filename="../client.cc" line="106"/>
         <source>Socket operation timed out.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client.cc" line="104"/>
+        <location filename="../client.cc" line="110"/>
         <source>Address specified is already in use and was set to be exclusive.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client.cc" line="108"/>
+        <location filename="../client.cc" line="114"/>
         <source>Address specified does not belong to the host.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client.cc" line="112"/>
+        <location filename="../client.cc" line="118"/>
         <source>Violation of the data exchange protocol.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client.cc" line="116"/>
+        <location filename="../client.cc" line="122"/>
         <source>An error occurred while encrypting the message.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client.cc" line="120"/>
+        <location filename="../client.cc" line="126"/>
         <source>An error occurred while decrypting the message.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client.cc" line="124"/>
+        <location filename="../client.cc" line="130"/>
         <source>An error occured while authenticating: wrong user name or password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client.cc" line="128"/>
+        <location filename="../client.cc" line="134"/>
         <source>Specified session type is not allowed for the user.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client.cc" line="132"/>
+        <location filename="../client.cc" line="138"/>
         <source>An unknown error occurred.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1089,50 +1089,80 @@
 <context>
     <name>client::ClientDesktop</name>
     <message>
-        <location filename="../client_desktop.cc" line="49"/>
         <source>Session error: Invalid message from host.</source>
-        <translation type="unfinished">Sessie fout: Ongeldig bericht van de host.</translation>
+        <translation type="obsolete">Sessie fout: Ongeldig bericht van de host.</translation>
     </message>
     <message>
-        <location filename="../client_desktop.cc" line="195"/>
         <source>Session error: Video decoder not initialized.</source>
-        <translation type="unfinished">Sessie fout: Video decoder niet geinitialiseerd.</translation>
+        <translation type="obsolete">Sessie fout: Video decoder niet geinitialiseerd.</translation>
     </message>
     <message>
-        <location filename="../client_desktop.cc" line="209"/>
         <source>Session error: Wrong video frame size.</source>
-        <translation type="unfinished">Sessie fout: Verkeerde video frame grootte.</translation>
+        <translation type="obsolete">Sessie fout: Verkeerde video frame grootte.</translation>
     </message>
     <message>
-        <location filename="../client_desktop.cc" line="216"/>
-        <source>Session error: Wrong video frame position.</source>
+        <source>Session error: The desktop frame is not initialized.</source>
+        <translation type="obsolete">Sessie fout: Het bureaublad frame is niet geinitialiseerd.</translation>
+    </message>
+    <message>
+        <source>Session error: The video packet could not be decoded.</source>
+        <translation type="obsolete">Sessie fout: Het video pakket kon niet gedecodeerd worden.</translation>
+    </message>
+    <message>
+        <location filename="../client_desktop.cc" line="49"/>
+        <source>Invalid message from host</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_desktop.cc" line="226"/>
-        <source>Session error: The desktop frame is not initialized.</source>
-        <translation type="unfinished">Sessie fout: Het bureaublad frame is niet geinitialiseerd.</translation>
+        <location filename="../client_desktop.cc" line="198"/>
+        <source>There are no supported video encodings</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_desktop.cc" line="232"/>
-        <source>Session error: The video packet could not be decoded.</source>
-        <translation type="unfinished">Sessie fout: Het video pakket kon niet gedecodeerd worden.</translation>
+        <location filename="../client_desktop.cc" line="224"/>
+        <source>Video decoder not initialized</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client_desktop.cc" line="238"/>
+        <source>Wrong video frame size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client_desktop.cc" line="245"/>
+        <source>Wrong video frame position</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client_desktop.cc" line="255"/>
+        <source>The desktop frame is not initialized</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client_desktop.cc" line="261"/>
+        <source>The video packet could not be decoded</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client_desktop.cc" line="346"/>
+        <source>Session error</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>client::ClientDialog</name>
     <message>
-        <location filename="../ui/client_dialog.cc" line="40"/>
+        <location filename="../ui/client_dialog.cc" line="41"/>
         <source>Desktop Manage</source>
         <translation type="unfinished">Bureaublad Beheren</translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.cc" line="44"/>
+        <location filename="../ui/client_dialog.cc" line="45"/>
         <source>Desktop View</source>
         <translation type="unfinished">Bureaublad Weergeven</translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.cc" line="48"/>
+        <location filename="../ui/client_dialog.cc" line="49"/>
         <source>File Transfer</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1166,32 +1196,32 @@
 <context>
     <name>client::DesktopConfigDialog</name>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="63"/>
+        <location filename="../ui/desktop_config_dialog.cc" line="71"/>
         <source>True color (32 bit)</source>
         <translation type="unfinished">Ware kleuren (32 bit)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="64"/>
+        <location filename="../ui/desktop_config_dialog.cc" line="72"/>
         <source>High color (16 bit)</source>
         <translation type="unfinished">Hoge kleuren (16 bit)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="65"/>
+        <location filename="../ui/desktop_config_dialog.cc" line="73"/>
         <source>256 colors (8 bit)</source>
         <translation type="unfinished">256 kleuren (8 bit)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="66"/>
+        <location filename="../ui/desktop_config_dialog.cc" line="74"/>
         <source>64 colors (6 bit)</source>
         <translation type="unfinished">64 kleuren (6 bit)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="67"/>
+        <location filename="../ui/desktop_config_dialog.cc" line="75"/>
         <source>8 colors (3 bit)</source>
         <translation type="unfinished">8 kleuren (3 bit)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="145"/>
+        <location filename="../ui/desktop_config_dialog.cc" line="153"/>
         <source>Compression ratio: %1</source>
         <translation type="unfinished">Compressie ratio: %1</translation>
     </message>
@@ -1199,35 +1229,35 @@
 <context>
     <name>client::DesktopPanel</name>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="115"/>
+        <location filename="../ui/desktop_panel.cc" line="179"/>
         <source>Monitor %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="234"/>
-        <location filename="../ui/desktop_panel.cc" line="245"/>
-        <location filename="../ui/desktop_panel.cc" line="256"/>
-        <location filename="../ui/desktop_panel.cc" line="267"/>
+        <location filename="../ui/desktop_panel.cc" line="308"/>
+        <location filename="../ui/desktop_panel.cc" line="319"/>
+        <location filename="../ui/desktop_panel.cc" line="330"/>
+        <location filename="../ui/desktop_panel.cc" line="341"/>
         <source>Confirmation</source>
         <translation type="unfinished">Bevestiging</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="235"/>
+        <location filename="../ui/desktop_panel.cc" line="309"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="246"/>
+        <location filename="../ui/desktop_panel.cc" line="320"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="257"/>
+        <location filename="../ui/desktop_panel.cc" line="331"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="268"/>
+        <location filename="../ui/desktop_panel.cc" line="342"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1235,32 +1265,43 @@
 <context>
     <name>client::DesktopWindow</name>
     <message>
-        <location filename="../ui/desktop_window.cc" line="298"/>
+        <location filename="../ui/desktop_window.cc" line="350"/>
         <source>Save File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="300"/>
+        <location filename="../ui/desktop_window.cc" line="352"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="320"/>
+        <location filename="../ui/desktop_window.cc" line="135"/>
+        <location filename="../ui/desktop_window.cc" line="372"/>
         <source>Warning</source>
         <translation type="unfinished">Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="320"/>
+        <location filename="../ui/desktop_window.cc" line="136"/>
+        <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_window.cc" line="154"/>
+        <source>Selecting a supported video encoding is canceled by the user.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_window.cc" line="372"/>
         <source>Could not save image</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="462"/>
+        <location filename="../ui/desktop_window.cc" line="502"/>
         <source>Aspia Desktop Manage</source>
         <translation type="unfinished">Aspia Bureaublad Beheer</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="467"/>
+        <location filename="../ui/desktop_window.cc" line="507"/>
         <source>Aspia Desktop View</source>
         <translation type="unfinished">Aspia Bureaublad Weergave</translation>
     </message>

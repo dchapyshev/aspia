@@ -33,6 +33,7 @@
 #include "client/ui/desktop_panel.h"
 #include "client/ui/system_info_window.h"
 #include "common/clipboard.h"
+#include "common/desktop_session_constants.h"
 #include "desktop/desktop_frame_qimage.h"
 
 namespace client {
@@ -73,7 +74,7 @@ DesktopWindow::DesktopWindow(const ConnectData& connect_data, QWidget* parent)
     connect(panel_, &DesktopPanel::screenSelected, desktopClient(), &ClientDesktop::sendScreen);
     connect(panel_, &DesktopPanel::powerControl, desktopClient(), &ClientDesktop::sendPowerControl);
     connect(panel_, &DesktopPanel::startRemoteUpdate, desktopClient(), &ClientDesktop::sendRemoteUpdate);
-    connect(panel_, &DesktopPanel::startSystemInfo, desktopClient(), &ClientDesktop::sendSysInfoRequest);
+    connect(panel_, &DesktopPanel::startSystemInfo, desktopClient(), &ClientDesktop::sendSystemInfoRequest);
 
     connect(panel_, &DesktopPanel::switchToFullscreen, [this](bool fullscreen)
     {
@@ -109,7 +110,55 @@ DesktopWindow::DesktopWindow(const ConnectData& connect_data, QWidget* parent)
     });
 }
 
-void DesktopWindow::resizeDesktopFrame(const QRect& screen_rect)
+void DesktopWindow::extensionListChanged()
+{
+    ClientDesktop* client = desktopClient();
+    const QStringList& extensions = client->supportedExtensions();
+
+    // By default, remote update is disabled.
+    panel_->enableRemoteUpdate(false);
+
+    if (extensions.contains(common::kRemoteUpdateExtension))
+    {
+        if (client->clientVersion() > client->hostVersion())
+            panel_->enableRemoteUpdate(true);
+    }
+
+    panel_->enablePowerControl(extensions.contains(common::kPowerControlExtension));
+    panel_->enableScreenSelect(extensions.contains(common::kSelectScreenExtension));
+    panel_->enableSystemInfo(extensions.contains(common::kSystemInfoExtension));
+}
+
+void DesktopWindow::configRequered()
+{
+    QMessageBox::warning(this,
+                         tr("Warning"),
+                         tr("The current video encoding is not supported by the host. "
+                           "Please specify a different video encoding."),
+                         QMessageBox::Ok);
+
+    ClientDesktop* client = desktopClient();
+    const ConnectData& connect_data = client->connectData();
+
+    DesktopConfigDialog* dialog =
+        new DesktopConfigDialog(connect_data.session_type,
+                                connect_data.desktop_config,
+                                client->supportedVideoEncodings(),
+                                this);
+
+    connect(dialog, &DesktopConfigDialog::configChanged, this, &DesktopWindow::onConfigChanged);
+    connect(dialog, &DesktopConfigDialog::finished, dialog, &DesktopConfigDialog::deleteLater);
+    connect(dialog, &DesktopConfigDialog::rejected, [this]()
+    {
+        emit currentClient()->errorOccurred(
+            tr("Selecting a supported video encoding is canceled by the user."));
+    });
+
+    dialog->show();
+    dialog->activateWindow();
+}
+
+void DesktopWindow::setDesktopRect(const QRect& screen_rect)
 {
     QSize prev_size;
 
@@ -117,7 +166,7 @@ void DesktopWindow::resizeDesktopFrame(const QRect& screen_rect)
     if (frame)
         prev_size = desktop_->desktopFrame()->size();
 
-    desktop_->resizeDesktopFrame(screen_rect.size());
+    desktop_->setDesktopSize(screen_rect.size());
 
     if (!panel_->scaling())
     {
@@ -134,7 +183,7 @@ void DesktopWindow::resizeDesktopFrame(const QRect& screen_rect)
     screen_top_left_ = screen_rect.topLeft();
 }
 
-void DesktopWindow::drawDesktopFrame()
+void DesktopWindow::drawDesktop()
 {
     desktop_->update();
     panel_->update();
@@ -145,12 +194,12 @@ desktop::Frame* DesktopWindow::desktopFrame()
     return desktop_->desktopFrame();
 }
 
-void DesktopWindow::injectCursor(const QCursor& cursor)
+void DesktopWindow::setRemoteCursor(const QCursor& cursor)
 {
     desktop_->setCursor(cursor);
 }
 
-void DesktopWindow::injectClipboard(const proto::desktop::ClipboardEvent& event)
+void DesktopWindow::setRemoteClipboard(const proto::desktop::ClipboardEvent& event)
 {
     clipboard_->injectClipboardEvent(event);
 }
@@ -250,17 +299,20 @@ void DesktopWindow::sendKeyEvent(uint32_t usb_keycode, uint32_t flags)
 
 void DesktopWindow::changeSettings()
 {
-    const ConnectData& connect_data = currentClient()->connectData();
+    ClientDesktop* client = desktopClient();
+    const ConnectData& connect_data = client->connectData();
 
-    QScopedPointer<DesktopConfigDialog> dialog(
+    DesktopConfigDialog* dialog =
         new DesktopConfigDialog(connect_data.session_type,
                                 connect_data.desktop_config,
-                                this));
+                                client->supportedVideoEncodings(),
+                                this);
 
-    connect(dialog.get(), &DesktopConfigDialog::configChanged,
-            this, &DesktopWindow::onConfigChanged);
+    connect(dialog, &DesktopConfigDialog::configChanged, this, &DesktopWindow::onConfigChanged);
+    connect(dialog, &DesktopConfigDialog::finished, dialog, &DesktopConfigDialog::deleteLater);
 
-    dialog->exec();
+    dialog->show();
+    dialog->activateWindow();
 }
 
 void DesktopWindow::onConfigChanged(const proto::desktop::Config& config)
@@ -434,18 +486,6 @@ bool DesktopWindow::eventFilter(QObject* object, QEvent* event)
     }
 
     return QWidget::eventFilter(object, event);
-}
-
-void DesktopWindow::sessionStarted()
-{
-    if (currentClient()->connectData().session_type != proto::SESSION_TYPE_DESKTOP_MANAGE)
-        return;
-
-    QVersionNumber client_version(
-        ASPIA_VERSION_MAJOR, ASPIA_VERSION_MINOR, ASPIA_VERSION_PATCH);
-
-    if (client_version > desktopClient()->hostVersion())
-        panel_->setUpdateAvaliable(true);
 }
 
 ClientDesktop* DesktopWindow::desktopClient()

@@ -23,7 +23,6 @@
 #include "common/desktop_session_constants.h"
 #include "common/message_serialization.h"
 #include "host/input_injector.h"
-#include "host/host_settings.h"
 #include "host/host_system_info.h"
 #include "proto/desktop_session_extensions.pb.h"
 
@@ -71,7 +70,25 @@ void SessionDesktop::onScreenUpdate(const QByteArray& message)
 
 void SessionDesktop::sessionStarted()
 {
-    outgoing_message_.mutable_config_request()->set_dummy(1);
+    const char* extensions;
+
+    // Supported extensions are different for managing and viewing the desktop.
+    if (session_type_ == proto::SESSION_TYPE_DESKTOP_MANAGE)
+        extensions = common::kSupportedExtensionsForManage;
+    else
+        extensions = common::kSupportedExtensionsForView;
+
+    // Add supported extensions to the list.
+    extensions_ = QString::fromLatin1(extensions).split(QLatin1Char(';'));
+
+    // Create a configuration request.
+    proto::desktop::ConfigRequest* request = outgoing_message_.mutable_config_request();
+
+    // Add supported extensions and video encodings.
+    request->set_extensions(extensions);
+    request->set_video_encodings(common::kSupportedVideoEncodings);
+
+    // Send the request.
     sendMessage(common::serializeMessage(outgoing_message_));
 }
 
@@ -158,6 +175,12 @@ void SessionDesktop::readClipboardEvent(const proto::desktop::ClipboardEvent& cl
 
 void SessionDesktop::readExtension(const proto::desktop::Extension& extension)
 {
+    if (!extensions_.contains(QString::fromStdString(extension.name())))
+    {
+        DLOG(LS_WARNING) << "Unsupported or disabled extensions: " << extension.name();
+        return;
+    }
+
     if (extension.name() == common::kSelectScreenExtension)
     {
         proto::desktop::Screen screen;
@@ -206,10 +229,7 @@ void SessionDesktop::readExtension(const proto::desktop::Extension& extension)
     }
     else if (extension.name() == common::kRemoteUpdateExtension)
     {
-        if (session_type_ == proto::SESSION_TYPE_DESKTOP_MANAGE && Settings().remoteUpdate())
-        {
-            launchUpdater();
-        }
+        launchUpdater();
     }
     else if (extension.name() == common::kSystemInfoExtension)
     {

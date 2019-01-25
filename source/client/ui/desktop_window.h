@@ -52,11 +52,13 @@ public:
     ~DesktopWindow() = default;
 
     // ClientDesktop::Delegate implementation.
-    void resizeDesktopFrame(const QRect& screen_rect) override;
-    void drawDesktopFrame() override;
+    void extensionListChanged() override;
+    void configRequered() override;
+    void setDesktopRect(const QRect& screen_rect) override;
+    void drawDesktop() override;
     desktop::Frame* desktopFrame() override;
-    void injectCursor(const QCursor& cursor) override;
-    void injectClipboard(const proto::desktop::ClipboardEvent& event) override;
+    void setRemoteCursor(const QCursor& cursor) override;
+    void setRemoteClipboard(const proto::desktop::ClipboardEvent& event) override;
     void setScreenList(const proto::desktop::ScreenList& screen_list) override;
     void setSystemInfo(const proto::system_info::SystemInfo& system_info) override;
 
@@ -71,9 +73,6 @@ protected:
     void closeEvent(QCloseEvent* event) override;
     void leaveEvent(QEvent* event) override;
     bool eventFilter(QObject* object, QEvent* event) override;
-
-    // ClientWindow implementation.
-    void sessionStarted() override;
 
 private slots:
     void changeSettings();

@@ -35,8 +35,12 @@ public:
     DesktopPanel(proto::SessionType session_type, QWidget* parent);
     ~DesktopPanel();
 
+    void enableScreenSelect(bool enable);
+    void enablePowerControl(bool enable);
+    void enableSystemInfo(bool enable);
+    void enableRemoteUpdate(bool enable);
+
     void setScreenList(const proto::desktop::ScreenList& screen_list);
-    void setUpdateAvaliable(bool available);
 
     bool scaling() const;
     bool autoScrolling() const;
@@ -71,18 +75,18 @@ private slots:
 
 private:
     void createAdditionalMenu(proto::SessionType session_type);
-    void createPowerMenu();
-    void createScreensMenu();
+    void updateSize();
     void delayedHide();
 
     Ui::DesktopPanel ui;
 
     const proto::SessionType session_type_;
 
-    QMenu* power_menu_;
-    QMenu* additional_menu_;
-    QMenu* screens_menu_;
-    QActionGroup* screens_group_;
+    QScopedPointer<QMenu> power_menu_;
+    QMenu* additional_menu_ = nullptr;
+
+    QScopedPointer<QMenu> screens_menu_;
+    QActionGroup* screens_group_ = nullptr;
 
     int hide_timer_id_ = 0;
 

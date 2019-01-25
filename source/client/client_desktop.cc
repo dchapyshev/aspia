@@ -46,7 +46,7 @@ void ClientDesktop::messageReceived(const QByteArray& buffer)
 
     if (!incoming_message_.ParseFromArray(buffer.constData(), buffer.size()))
     {
-        emit errorOccurred(tr("Session error: Invalid message from host."));
+        onSessionError(tr("Invalid message from host"));
         return;
     }
 
@@ -169,17 +169,46 @@ void ClientDesktop::sendRemoteUpdate()
     sendMessage(outgoing_message_);
 }
 
-void ClientDesktop::sendSysInfoRequest()
+void ClientDesktop::sendSystemInfoRequest()
 {
     outgoing_message_.Clear();
     outgoing_message_.mutable_extension()->set_name(common::kSystemInfoExtension);
     sendMessage(outgoing_message_);
 }
 
-void ClientDesktop::readConfigRequest(
-    const proto::desktop::ConfigRequest& /* config_request */)
+void ClientDesktop::readConfigRequest(const proto::desktop::ConfigRequest& config_request)
 {
-    sendConfig(connectData().desktop_config);
+    // The list of extensions is passed as a string. Extensions are separated by a semicolon.
+    supported_extensions_ =
+        QString::fromStdString(config_request.extensions()).split(QLatin1Char(';'));
+
+    // The list of supported video encodings is passed as a bit field.
+    supported_video_encodings_ = config_request.video_encodings();
+
+    // We notify the window about changes in the list of extensions.
+    // A window can disable/enable some of its capabilities in accordance with this information.
+    delegate_->extensionListChanged();
+
+    // If current video encoding not supported.
+    if (!(config_request.video_encodings() & connectData().desktop_config.video_encoding()))
+    {
+        // Check whether we have supported encodings.
+        if (!(config_request.video_encodings() & common::kSupportedVideoEncodings))
+        {
+            onSessionError(tr("There are no supported video encodings"));
+            return;
+        }
+        else
+        {
+            // We tell the window about the need to change the encoding.
+            delegate_->configRequered();
+        }
+    }
+    else
+    {
+        // Everything is fine, we send the current configuration.
+        sendConfig(connectData().desktop_config);
+    }
 }
 
 void ClientDesktop::readVideoPacket(const proto::desktop::VideoPacket& packet)
@@ -192,7 +221,7 @@ void ClientDesktop::readVideoPacket(const proto::desktop::VideoPacket& packet)
 
     if (!video_decoder_)
     {
-        emit errorOccurred(tr("Session error: Video decoder not initialized."));
+        onSessionError(tr("Video decoder not initialized"));
         return;
     }
 
@@ -206,34 +235,34 @@ void ClientDesktop::readVideoPacket(const proto::desktop::VideoPacket& packet)
         if (screen_rect.width()  <= 0 || screen_rect.width()  >= kMaxValue ||
             screen_rect.height() <= 0 || screen_rect.height() >= kMaxValue)
         {
-            emit errorOccurred(tr("Session error: Wrong video frame size."));
+            onSessionError(tr("Wrong video frame size"));
             return;
         }
 
         if (screen_rect.x() < kMinValue || screen_rect.x() >= kMaxValue ||
             screen_rect.y() < kMinValue || screen_rect.y() >= kMaxValue)
         {
-            emit errorOccurred(tr("Session error: Wrong video frame position."));
+            onSessionError(tr("Wrong video frame position"));
             return;
         }
 
-        delegate_->resizeDesktopFrame(screen_rect);
+        delegate_->setDesktopRect(screen_rect);
     }
 
     desktop::Frame* frame = delegate_->desktopFrame();
     if (!frame)
     {
-        emit errorOccurred(tr("Session error: The desktop frame is not initialized."));
+        onSessionError(tr("The desktop frame is not initialized"));
         return;
     }
 
     if (!video_decoder_->decode(packet, frame))
     {
-        emit errorOccurred(tr("Session error: The video packet could not be decoded."));
+        onSessionError(tr("The video packet could not be decoded"));
         return;
     }
 
-    delegate_->drawDesktopFrame();
+    delegate_->drawDesktop();
 }
 
 void ClientDesktop::readCursorShape(const proto::desktop::CursorShape& cursor_shape)
@@ -260,7 +289,7 @@ void ClientDesktop::readCursorShape(const proto::desktop::CursorShape& cursor_sh
                  mouse_cursor->stride(),
                  QImage::Format::Format_ARGB32);
 
-    delegate_->injectCursor(
+    delegate_->setRemoteCursor(
         QCursor(QPixmap::fromImage(image),
                 mouse_cursor->hotSpot().x(),
                 mouse_cursor->hotSpot().y()));
@@ -277,7 +306,7 @@ void ClientDesktop::readClipboardEvent(const proto::desktop::ClipboardEvent& cli
     if (!(flags & proto::desktop::ENABLE_CLIPBOARD))
         return;
 
-    delegate_->injectClipboard(clipboard_event);
+    delegate_->setRemoteClipboard(clipboard_event);
 }
 
 void ClientDesktop::readExtension(const proto::desktop::Extension& extension)
@@ -310,6 +339,11 @@ void ClientDesktop::readExtension(const proto::desktop::Extension& extension)
     {
         LOG(LS_WARNING) << "Unknown extension: " << extension.name();
     }
+}
+
+void ClientDesktop::onSessionError(const QString& message)
+{
+    emit errorOccurred(QString("%1: %2.").arg(tr("Session error").arg(message)));
 }
 
 } // namespace client

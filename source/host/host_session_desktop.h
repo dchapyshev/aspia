@@ -69,6 +69,8 @@ private:
 
     const proto::SessionType session_type_;
 
+    QStringList extensions_;
+
     proto::desktop::ClientToHost incoming_message_;
     proto::desktop::HostToClient outgoing_message_;
 

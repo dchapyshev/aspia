@@ -21,6 +21,7 @@
 #include "codec/video_encoder_vpx.h"
 #include "codec/video_encoder_zstd.h"
 #include "codec/video_util.h"
+#include "common/desktop_session_constants.h"
 #include "common/message_serialization.h"
 #include "desktop/desktop_frame_simple.h"
 
@@ -35,7 +36,7 @@ SessionFakeDesktop::SessionFakeDesktop(QObject* parent)
 void SessionFakeDesktop::startSession()
 {
     proto::desktop::HostToClient message;
-    message.mutable_config_request()->set_dummy(1);
+    message.mutable_config_request()->set_video_encodings(common::kSupportedVideoEncodings);
     emit sendMessage(common::serializeMessage(message));
 }
 

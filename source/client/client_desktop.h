@@ -44,17 +44,24 @@ public:
     public:
         virtual ~Delegate() = default;
 
-        virtual void resizeDesktopFrame(const QRect& screen_rect) = 0;
-        virtual void drawDesktopFrame() = 0;
+        virtual void extensionListChanged() = 0;
+        virtual void configRequered() = 0;
+
+        virtual void setDesktopRect(const QRect& screen_rect) = 0;
+        virtual void drawDesktop() = 0;
         virtual desktop::Frame* desktopFrame() = 0;
-        virtual void injectCursor(const QCursor& cursor) = 0;
-        virtual void injectClipboard(const proto::desktop::ClipboardEvent& event) = 0;
+
+        virtual void setRemoteCursor(const QCursor& cursor) = 0;
+        virtual void setRemoteClipboard(const proto::desktop::ClipboardEvent& event) = 0;
         virtual void setScreenList(const proto::desktop::ScreenList& screen_list) = 0;
         virtual void setSystemInfo(const proto::system_info::SystemInfo& system_info) = 0;
     };
 
     ClientDesktop(const ConnectData& connect_data, Delegate* delegate, QObject* parent);
     ~ClientDesktop();
+
+    const QStringList& supportedExtensions() const { return supported_extensions_; }
+    uint32_t supportedVideoEncodings() const { return supported_video_encodings_; }
 
     void sendKeyEvent(uint32_t usb_keycode, uint32_t flags);
     void sendPointerEvent(const QPoint& pos, uint32_t mask);
@@ -63,7 +70,7 @@ public:
     void sendConfig(const proto::desktop::Config& config);
     void sendScreen(const proto::desktop::Screen& screen);
     void sendRemoteUpdate();
-    void sendSysInfoRequest();
+    void sendSystemInfoRequest();
 
 protected:
     // Client implementation.
@@ -76,10 +83,15 @@ private:
     void readClipboardEvent(const proto::desktop::ClipboardEvent& clipboard_event);
     void readExtension(const proto::desktop::Extension& extension);
 
+    void onSessionError(const QString& message);
+
     Delegate* delegate_;
 
     proto::desktop::HostToClient incoming_message_;
     proto::desktop::ClientToHost outgoing_message_;
+
+    QStringList supported_extensions_;
+    uint32_t supported_video_encodings_ = 0;
 
     proto::desktop::VideoEncoding video_encoding_ = proto::desktop::VIDEO_ENCODING_UNKNOWN;
     std::unique_ptr<codec::VideoDecoder> video_decoder_;

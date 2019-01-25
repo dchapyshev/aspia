@@ -51,12 +51,10 @@ DesktopPanel::DesktopPanel(proto::SessionType session_type, QWidget* parent)
     connect(ui.action_update, &QAction::triggered, this, &DesktopPanel::startRemoteUpdate);
     connect(ui.action_system_info, &QAction::triggered, this, &DesktopPanel::startSystemInfo);
 
-    createScreensMenu();
     createAdditionalMenu(session_type);
 
     if (session_type == proto::SESSION_TYPE_DESKTOP_MANAGE)
     {
-        createPowerMenu();
         connect(ui.action_cad, &QAction::triggered, this, &DesktopPanel::onCtrlAltDel);
     }
     else
@@ -73,7 +71,7 @@ DesktopPanel::DesktopPanel(proto::SessionType session_type, QWidget* parent)
     });
 
     ui.frame->hide();
-    adjustSize();
+    updateSize();
 
     hide_timer_id_ = startTimer(std::chrono::seconds(1));
 }
@@ -89,25 +87,91 @@ DesktopPanel::~DesktopPanel()
         settings.setSendKeyCombinations(ui.action_send_key_combinations->isChecked());
 }
 
+void DesktopPanel::enableScreenSelect(bool /* enable */)
+{
+    // By default, we disable the monitor selection menu. Selection will be enabled when receiving
+    // a list of monitors.
+    ui.action_monitors->setVisible(false);
+    ui.action_monitors->setEnabled(false);
+    screens_menu_.reset();
+    updateSize();
+}
+
+void DesktopPanel::enablePowerControl(bool enable)
+{
+    ui.action_power_control->setVisible(enable);
+    ui.action_power_control->setEnabled(enable);
+
+    if (!enable)
+    {
+        power_menu_.reset();
+    }
+    else
+    {
+        power_menu_.reset(new QMenu());
+        power_menu_->addAction(ui.action_shutdown);
+        power_menu_->addAction(ui.action_reboot);
+        power_menu_->addAction(ui.action_logoff);
+        power_menu_->addAction(ui.action_lock);
+
+        ui.action_power_control->setMenu(power_menu_.get());
+
+        QToolButton* button = qobject_cast<QToolButton*>(
+            ui.toolbar->widgetForAction(ui.action_power_control));
+        button->setPopupMode(QToolButton::InstantPopup);
+
+        connect(power_menu_.get(), &QMenu::triggered, this, &DesktopPanel::onPowerControl);
+        connect(power_menu_.get(), &QMenu::aboutToShow, [this]() { allow_hide_ = false; });
+        connect(power_menu_.get(), &QMenu::aboutToHide, [this]()
+        {
+            allow_hide_ = true;
+
+            if (leaved_)
+                delayedHide();
+        });
+    }
+
+    updateSize();
+}
+
+void DesktopPanel::enableSystemInfo(bool enable)
+{
+    ui.action_system_info->setVisible(enable);
+    ui.action_system_info->setEnabled(enable);
+    updateSize();
+}
+
+void DesktopPanel::enableRemoteUpdate(bool enable)
+{
+    ui.action_update->setVisible(enable);
+    ui.action_update->setEnabled(enable);
+    updateSize();
+}
+
 void DesktopPanel::setScreenList(const proto::desktop::ScreenList& screen_list)
 {
-    delete screens_group_;
+    screens_menu_.reset();
 
-    screens_group_ = new QActionGroup(this);
-
-    connect(screens_group_, &QActionGroup::triggered, [this](QAction* action)
+    // If it has only one screen or an empty list is received.
+    if (screen_list.screen_size() <= 1)
     {
-        SelectScreenAction* screen_action = dynamic_cast<SelectScreenAction*>(action);
-        if (!screen_action)
-            return;
+        // Monitor selection not available.
+        ui.action_monitors->setVisible(false);
+        return;
+    }
 
-        emit screenSelected(screen_action->screen());
-    });
+    screens_menu_.reset(new QMenu());
+    screens_group_ = new QActionGroup(screens_menu_.get());
 
-    SelectScreenAction* full_desktop_action = new SelectScreenAction(screens_group_);
+    SelectScreenAction* full_screen_action = new SelectScreenAction(screens_group_);
+    screens_group_->addAction(full_screen_action);
+    screens_menu_->addAction(full_screen_action);
 
-    screens_group_->addAction(full_desktop_action);
-    screens_menu_->addAction(full_desktop_action);
+    ui.action_monitors->setMenu(screens_menu_.get());
+
+    QToolButton* button = qobject_cast<QToolButton*>(
+        ui.toolbar->widgetForAction(ui.action_monitors));
+    button->setPopupMode(QToolButton::InstantPopup);
 
     for (int i = 0; i < screen_list.screen_size(); ++i)
     {
@@ -118,14 +182,24 @@ void DesktopPanel::setScreenList(const proto::desktop::ScreenList& screen_list)
         screens_menu_->addAction(action);
     }
 
-    ui.action_monitors->setEnabled(true);
-}
+    connect(screens_menu_.get(), &QMenu::aboutToShow, [this]() { allow_hide_ = false; });
+    connect(screens_menu_.get(), &QMenu::aboutToHide, [this]()
+    {
+        allow_hide_ = true;
 
-void DesktopPanel::setUpdateAvaliable(bool available)
-{
-    ui.action_update->setVisible(available);
-    ui.toolbar->adjustSize();
-    adjustSize();
+        if (leaved_)
+            delayedHide();
+    });
+
+    connect(screens_group_, &QActionGroup::triggered, [this](QAction* action)
+    {
+        emit screenSelected(static_cast<SelectScreenAction*>(action)->screen());
+    });
+
+    ui.action_monitors->setVisible(true);
+    ui.action_monitors->setEnabled(true);
+
+    updateSize();
 }
 
 bool DesktopPanel::scaling() const
@@ -317,53 +391,10 @@ void DesktopPanel::createAdditionalMenu(proto::SessionType session_type)
     });
 }
 
-void DesktopPanel::createPowerMenu()
+void DesktopPanel::updateSize()
 {
-    power_menu_ = new QMenu(this);
-    power_menu_->addAction(ui.action_shutdown);
-    power_menu_->addAction(ui.action_reboot);
-    power_menu_->addAction(ui.action_logoff);
-    power_menu_->addAction(ui.action_lock);
-
-    ui.action_power_control->setMenu(power_menu_);
-
-    QToolButton* button = qobject_cast<QToolButton*>(
-        ui.toolbar->widgetForAction(ui.action_power_control));
-    button->setPopupMode(QToolButton::InstantPopup);
-
-    connect(power_menu_, &QMenu::triggered, this, &DesktopPanel::onPowerControl);
-    connect(power_menu_, &QMenu::aboutToShow, [this]() { allow_hide_ = false; });
-    connect(power_menu_, &QMenu::aboutToHide, [this]()
-    {
-        allow_hide_ = true;
-
-        if (leaved_)
-            delayedHide();
-    });
-}
-
-void DesktopPanel::createScreensMenu()
-{
-    screens_menu_ = new QMenu(this);
-    screens_group_ = new QActionGroup(this);
-
-    SelectScreenAction* full_screen_action = new SelectScreenAction(screens_group_);
-    screens_group_->addAction(full_screen_action);
-    screens_menu_->addAction(full_screen_action);
-
-    ui.action_monitors->setMenu(screens_menu_);
-
-    QToolButton* button = qobject_cast<QToolButton*>(ui.toolbar->widgetForAction(ui.action_monitors));
-    button->setPopupMode(QToolButton::InstantPopup);
-
-    connect(screens_menu_, &QMenu::aboutToShow, [this]() { allow_hide_ = false; });
-    connect(screens_menu_, &QMenu::aboutToHide, [this]()
-    {
-        allow_hide_ = true;
-
-        if (leaved_)
-            delayedHide();
-    });
+    ui.toolbar->adjustSize();
+    adjustSize();
 }
 
 void DesktopPanel::delayedHide()

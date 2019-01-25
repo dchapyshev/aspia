@@ -43,6 +43,9 @@ public:
     // Returns the version of the connected host.
     QVersionNumber hostVersion() const;
 
+    // Returns the version of the current client.
+    QVersionNumber clientVersion() const;
+
 signals:
     // Indicates that the session is started.
     void started();

@@ -21,6 +21,7 @@
 #include "build/build_config.h"
 #include "client/ui/desktop_config_dialog.h"
 #include "client/config_factory.h"
+#include "common/desktop_session_constants.h"
 
 namespace client {
 
@@ -107,7 +108,10 @@ void ClientDialog::sessionConfigButtonPressed()
         case proto::SESSION_TYPE_DESKTOP_MANAGE:
         case proto::SESSION_TYPE_DESKTOP_VIEW:
         {
-            DesktopConfigDialog dialog(session_type, connect_data_.desktop_config, this);
+            DesktopConfigDialog dialog(session_type,
+                                       connect_data_.desktop_config,
+                                       common::kSupportedVideoEncodings,
+                                       this);
 
             if (dialog.exec() == DesktopConfigDialog::Accepted)
                 connect_data_.desktop_config = dialog.config();

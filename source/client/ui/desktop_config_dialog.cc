@@ -21,6 +21,7 @@
 #include "base/logging.h"
 #include "client/config_factory.h"
 #include "codec/video_util.h"
+#include "common/desktop_session_constants.h"
 
 namespace client {
 
@@ -39,6 +40,7 @@ enum ColorDepth
 
 DesktopConfigDialog::DesktopConfigDialog(proto::SessionType session_type,
                                          const proto::desktop::Config& config,
+                                         uint32_t video_encodings,
                                          QWidget* parent)
     : QDialog(parent),
       config_(config)
@@ -48,9 +50,15 @@ DesktopConfigDialog::DesktopConfigDialog(proto::SessionType session_type,
     ConfigFactory::fixupDesktopConfig(&config_);
 
     QComboBox* combo_codec = ui.combo_codec;
-    combo_codec->addItem(QLatin1String("VP9"), proto::desktop::VIDEO_ENCODING_VP9);
-    combo_codec->addItem(QLatin1String("VP8"), proto::desktop::VIDEO_ENCODING_VP8);
-    combo_codec->addItem(QLatin1String("ZSTD"), proto::desktop::VIDEO_ENCODING_ZSTD);
+
+    if (video_encodings & proto::desktop::VIDEO_ENCODING_VP9)
+        combo_codec->addItem(QLatin1String("VP9"), proto::desktop::VIDEO_ENCODING_VP9);
+
+    if (video_encodings & proto::desktop::VIDEO_ENCODING_VP8)
+        combo_codec->addItem(QLatin1String("VP8"), proto::desktop::VIDEO_ENCODING_VP8);
+
+    if (video_encodings & proto::desktop::VIDEO_ENCODING_ZSTD)
+        combo_codec->addItem(QLatin1String("ZSTD"), proto::desktop::VIDEO_ENCODING_ZSTD);
 
     int current_codec = combo_codec->findData(config_.video_encoding());
     if (current_codec == -1)
@@ -215,12 +223,6 @@ void DesktopConfigDialog::onButtonBoxClicked(QAbstractButton* button)
         emit configChanged(config_);
         accept();
     }
-    else
-    {
-        reject();
-    }
-
-    close();
 }
 
 } // namespace client

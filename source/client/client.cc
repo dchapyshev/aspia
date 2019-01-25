@@ -19,6 +19,7 @@
 #include "client/client.h"
 
 #include "base/logging.h"
+#include "build/version.h"
 #include "client/config_factory.h"
 
 namespace client {
@@ -58,6 +59,11 @@ QVersionNumber Client::hostVersion() const
         return QVersionNumber();
 
     return channel_->peerVersion();
+}
+
+QVersionNumber Client::clientVersion() const
+{
+    return QVersionNumber(ASPIA_VERSION_MAJOR, ASPIA_VERSION_MINOR, ASPIA_VERSION_PATCH);
 }
 
 void Client::sendMessage(const google::protobuf::MessageLite& message)
