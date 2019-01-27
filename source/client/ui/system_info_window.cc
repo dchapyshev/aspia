@@ -559,25 +559,38 @@ QString SystemInfoWindow::delayToString(uint64_t delay)
     uint64_t minutes = ((delay % 86400) % 3600) / 60;
     uint64_t seconds = ((delay % 86400) % 3600) % 60;
 
-    if (days)
-    {
-        return tr("%1 days %2 hours %3 minutes %4 seconds")
-            .arg(days).arg(hours).arg(minutes).arg(seconds);
-    }
+    QString seconds_string = tr("%n seconds", "", seconds);
+    QString minutes_string = tr("%n minutes", "", minutes);
+    QString hours_string = tr("%n hours", "", hours);
+    QString days_string = tr("%n days", "", days);
 
-    if (hours)
+    if (!days)
     {
-        return tr("%1 hours %2 minutes %3 seconds")
-            .arg(hours).arg(minutes).arg(seconds);
+        if (!hours)
+        {
+            if (!minutes)
+            {
+                return seconds_string;
+            }
+            else
+            {
+                return minutes_string + QLatin1Char(' ') + seconds_string;
+            }
+        }
+        else
+        {
+            return hours_string + QLatin1Char(' ') +
+                   minutes_string + QLatin1Char(' ') +
+                   seconds_string;
+        }
     }
-
-    if (minutes)
+    else
     {
-        return tr("%1 minutes %2 seconds")
-            .arg(minutes).arg(seconds);
+        return days_string + QLatin1Char(' ') +
+               hours_string + QLatin1Char(' ') +
+               minutes_string + QLatin1Char(' ') +
+               seconds_string;
     }
-
-    return tr("%1 seconds").arg(seconds);
 }
 
 // static

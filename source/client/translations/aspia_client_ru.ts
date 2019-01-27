@@ -2307,43 +2307,75 @@
         <source>B</source>
         <translation>Б</translation>
     </message>
-    <message>
+    <message numerus="yes">
+        <location filename="../ui/system_info_window.cc" line="562"/>
+        <source>%n seconds</source>
+        <translation>
+            <numerusform>%n секунда</numerusform>
+            <numerusform>%n секунды</numerusform>
+            <numerusform>%n секунд</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../ui/system_info_window.cc" line="563"/>
+        <source>%n minutes</source>
+        <translation>
+            <numerusform>%n минута</numerusform>
+            <numerusform>%n минуты</numerusform>
+            <numerusform>%n минут</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
         <location filename="../ui/system_info_window.cc" line="564"/>
+        <source>%n hours</source>
+        <translation>
+            <numerusform>%n час</numerusform>
+            <numerusform>%n часа</numerusform>
+            <numerusform>%n часов</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../ui/system_info_window.cc" line="565"/>
+        <source>%n days</source>
+        <translation>
+            <numerusform>%n день</numerusform>
+            <numerusform>%n дня</numerusform>
+            <numerusform>%n дней</numerusform>
+        </translation>
+    </message>
+    <message>
         <source>%1 days %2 hours %3 minutes %4 seconds</source>
-        <translation>%1 дней %2 часов %3 минут %4 секунд</translation>
+        <translation type="vanished">%1 дней %2 часов %3 минут %4 секунд</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="570"/>
         <source>%1 hours %2 minutes %3 seconds</source>
-        <translation>%1 часов %2 минут %3 секунд</translation>
+        <translation type="vanished">%1 часов %2 минут %3 секунд</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="576"/>
         <source>%1 minutes %2 seconds</source>
-        <translation>%1 минут %2 секунд</translation>
+        <translation type="vanished">%1 минут %2 секунд</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="580"/>
         <source>%1 seconds</source>
-        <translation>%1 секунд</translation>
+        <translation type="vanished">%1 секунд</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="595"/>
+        <location filename="../ui/system_info_window.cc" line="608"/>
         <source>Gbps</source>
         <translation>Гбит/c</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="600"/>
+        <location filename="../ui/system_info_window.cc" line="613"/>
         <source>Mbps</source>
         <translation>Мбит/c</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="605"/>
+        <location filename="../ui/system_info_window.cc" line="618"/>
         <source>Kbps</source>
         <translation>Кбит/с</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="610"/>
+        <location filename="../ui/system_info_window.cc" line="623"/>
         <source>bps</source>
         <translation>бит/c</translation>
     </message>

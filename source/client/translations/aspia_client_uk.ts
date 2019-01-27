@@ -1941,43 +1941,59 @@
         <source>B</source>
         <translation type="unfinished">Б</translation>
     </message>
-    <message>
+    <message numerus="yes">
+        <location filename="../ui/system_info_window.cc" line="562"/>
+        <source>%n seconds</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../ui/system_info_window.cc" line="563"/>
+        <source>%n minutes</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
         <location filename="../ui/system_info_window.cc" line="564"/>
-        <source>%1 days %2 hours %3 minutes %4 seconds</source>
-        <translation type="unfinished"></translation>
+        <source>%n hours</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../ui/system_info_window.cc" line="565"/>
+        <source>%n days</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="570"/>
-        <source>%1 hours %2 minutes %3 seconds</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="576"/>
-        <source>%1 minutes %2 seconds</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="580"/>
-        <source>%1 seconds</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="595"/>
+        <location filename="../ui/system_info_window.cc" line="608"/>
         <source>Gbps</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="600"/>
+        <location filename="../ui/system_info_window.cc" line="613"/>
         <source>Mbps</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="605"/>
+        <location filename="../ui/system_info_window.cc" line="618"/>
         <source>Kbps</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="610"/>
+        <location filename="../ui/system_info_window.cc" line="623"/>
         <source>bps</source>
         <translation type="unfinished"></translation>
     </message>
