@@ -959,90 +959,90 @@
 <context>
     <name>console::AddressBookTab</name>
     <message>
-        <location filename="../address_book_tab.cc" line="227"/>
+        <location filename="../address_book_tab.cc" line="229"/>
         <source>Unable to open address book file &quot;%1&quot;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="234"/>
+        <location filename="../address_book_tab.cc" line="236"/>
         <source>Unable to read address book file &quot;%1&quot;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="243"/>
-        <location filename="../address_book_tab.cc" line="258"/>
+        <location filename="../address_book_tab.cc" line="245"/>
+        <location filename="../address_book_tab.cc" line="260"/>
         <source>The address book file &quot;%1&quot; is corrupted or has an unknown format.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="281"/>
+        <location filename="../address_book_tab.cc" line="283"/>
         <source>Unable to decrypt the address book with the specified password.</source>
         <translation type="unfinished">Kan het adresboek niet ontsleutelen met het opgegeven wachtwoord.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="287"/>
+        <location filename="../address_book_tab.cc" line="289"/>
         <source>The address book file is corrupted or has an unknown format.</source>
         <translation type="unfinished">Het adresboek is beschadigd of heeft een onbekende indeling.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="297"/>
+        <location filename="../address_book_tab.cc" line="299"/>
         <source>The address book file is encrypted with an unsupported encryption type.</source>
         <translation type="unfinished">Het adresboek is versleuteld met een encryptie type dat niet ondersteund wordt.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="464"/>
+        <location filename="../address_book_tab.cc" line="466"/>
         <source>Are you sure you want to delete computer group &quot;%1&quot; and all child items?</source>
         <translation type="unfinished">Weet U zeker dat U de groep &quot;%1&quot; en alle onderliggende items wilt verwijderen?</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="468"/>
-        <location filename="../address_book_tab.cc" line="490"/>
+        <location filename="../address_book_tab.cc" line="470"/>
+        <location filename="../address_book_tab.cc" line="492"/>
         <source>Confirmation</source>
         <translation type="unfinished">Bevestiging</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="486"/>
+        <location filename="../address_book_tab.cc" line="488"/>
         <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
         <translation type="unfinished">Weet U zeker dat U de computer &quot;%1&quot; wilt verwijderen?</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="745"/>
+        <location filename="../address_book_tab.cc" line="747"/>
         <source>Save Address Book</source>
         <translation type="unfinished">Adresboek Opslaan</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="747"/>
+        <location filename="../address_book_tab.cc" line="749"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation type="unfinished">Aspia Adresboek (*.aab)</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="757"/>
+        <location filename="../address_book_tab.cc" line="759"/>
         <source>Unable to create or open address book file.</source>
         <translation type="unfinished">Kan adresboek bestand niet maken of openen.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="769"/>
+        <location filename="../address_book_tab.cc" line="771"/>
         <source>Unable to write address book file.</source>
         <translation type="unfinished">Kan adresboek bestand niet schrijven.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="783"/>
+        <location filename="../address_book_tab.cc" line="785"/>
         <source>Root Group</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="794"/>
-        <location filename="../address_book_tab.cc" line="808"/>
+        <location filename="../address_book_tab.cc" line="796"/>
+        <location filename="../address_book_tab.cc" line="810"/>
         <source>Warning</source>
         <translation type="unfinished">Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="796"/>
+        <location filename="../address_book_tab.cc" line="798"/>
         <source>Could not open address book</source>
         <translation type="unfinished">Kon adresboek niet openen</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="810"/>
+        <location filename="../address_book_tab.cc" line="812"/>
         <source>Failed to save address book</source>
         <translation type="unfinished">Kon adresboek niet opslaan</translation>
     </message>

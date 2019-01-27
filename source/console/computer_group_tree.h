@@ -32,6 +32,7 @@ public:
     ComputerGroupTree(QWidget* parent);
     ~ComputerGroupTree() = default;
 
+    void setComputerMimeType(const QString& mime_type);
     bool dragging() const;
 
 signals:
@@ -49,6 +50,9 @@ protected:
 
 private:
     bool isAllowedDropTarget(ComputerGroupItem* target, ComputerGroupItem* item);
+
+    QString computer_mime_type_;
+    QString computer_group_mime_type_;
 
     QPoint start_pos_;
     bool dragging_ = false;

@@ -31,15 +31,10 @@ public:
     ComputerMimeData() = default;
     virtual ~ComputerMimeData() = default;
 
-    static QString mimeType()
-    {
-        return QStringLiteral("application/computer");
-    }
-
-    void setComputerItem(ComputerItem* computer_item)
+    void setComputerItem(ComputerItem* computer_item, const QString& mime_type)
     {
         computer_item_ = computer_item;
-        setData(mimeType(), QByteArray());
+        setData(mime_type, QByteArray());
     }
 
     ComputerItem* computerItem() const

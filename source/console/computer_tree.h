@@ -33,6 +33,8 @@ public:
     explicit ComputerTree(QWidget* parent = nullptr);
     ~ComputerTree() = default;
 
+    QString mimeType() const { return mime_type_; }
+
 protected:
     // QTreeWidget implementation.
     void mousePressEvent(QMouseEvent* event) override;
@@ -47,6 +49,7 @@ private slots:
 
 private:
     QPoint start_pos_;
+    QString mime_type_;
 
     DISALLOW_COPY_AND_ASSIGN(ComputerTree);
 };

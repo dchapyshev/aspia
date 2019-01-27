@@ -22,6 +22,7 @@
 #include <QHeaderView>
 #include <QMenu>
 #include <QMouseEvent>
+#include <QUuid>
 
 #include "console/computer_drag.h"
 #include "console/computer_item.h"
@@ -50,7 +51,8 @@ private:
 } // namespace
 
 ComputerTree::ComputerTree(QWidget* parent)
-    : QTreeWidget(parent)
+    : QTreeWidget(parent),
+      mime_type_(QString("application/%1").arg(QUuid::createUuid().toString()))
 {
     header()->setContextMenuPolicy(Qt::CustomContextMenu);
 
@@ -105,7 +107,7 @@ void ComputerTree::startDrag(Qt::DropActions supported_actions)
     {
         ComputerDrag* drag = new ComputerDrag(this);
 
-        drag->setComputerItem(computer_item);
+        drag->setComputerItem(computer_item, mime_type_);
 
         QIcon icon = computer_item->icon(0);
         drag->setPixmap(icon.pixmap(icon.actualSize(QSize(16, 16))));

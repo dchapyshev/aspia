@@ -28,16 +28,16 @@ namespace console {
 class ComputerGroupDrag : public QDrag
 {
 public:
-    ComputerGroupDrag(QObject* dragSource = nullptr)
-        : QDrag(dragSource)
+    ComputerGroupDrag(QObject* drag_source = nullptr)
+        : QDrag(drag_source)
     {
         // Nothing
     }
 
-    void setComputerGroupItem(ComputerGroupItem* computer_group_item)
+    void setComputerGroupItem(ComputerGroupItem* computer_group_item, const QString& mime_type)
     {
         ComputerGroupMimeData* mime_data = new ComputerGroupMimeData();
-        mime_data->setComputerGroupItem(computer_group_item);
+        mime_data->setComputerGroupItem(computer_group_item, mime_type);
         setMimeData(mime_data);
     }
 };

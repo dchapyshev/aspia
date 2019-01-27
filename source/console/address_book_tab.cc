@@ -104,6 +104,8 @@ AddressBookTab::AddressBookTab(const QString& file_path,
 {
     ui.setupUi(this);
 
+    ui.tree_group->setComputerMimeType(ui.tree_computer->mimeType());
+
     Settings settings;
 
     QByteArray splitter_state = settings.splitterState();

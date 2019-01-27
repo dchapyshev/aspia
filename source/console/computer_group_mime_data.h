@@ -31,15 +31,10 @@ public:
     ComputerGroupMimeData() = default;
     virtual ~ComputerGroupMimeData() = default;
 
-    static QString mimeType()
-    {
-        return QStringLiteral("application/computer_group");
-    }
-
-    void setComputerGroupItem(ComputerGroupItem* computer_group_item)
+    void setComputerGroupItem(ComputerGroupItem* computer_group_item, const QString& mime_type)
     {
         computer_group_item_ = computer_group_item;
-        setData(mimeType(), QByteArray());
+        setData(mime_type, QByteArray());
     }
 
     ComputerGroupItem* computerGroup() const

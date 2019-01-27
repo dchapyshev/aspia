@@ -20,17 +20,24 @@
 
 #include <QApplication>
 #include <QDropEvent>
+#include <QUuid>
 
 #include "console/computer_mime_data.h"
 
 namespace console {
 
 ComputerGroupTree::ComputerGroupTree(QWidget* parent)
-    : QTreeWidget(parent)
+    : QTreeWidget(parent),
+      computer_group_mime_type_(QString("application/%1").arg(QUuid::createUuid().toString()))
 {
     QTreeWidgetItem* invisible_root = invisibleRootItem();
     invisible_root->setFlags(invisible_root->flags() ^ Qt::ItemIsDropEnabled);
     setAcceptDrops(true);
+}
+
+void ComputerGroupTree::setComputerMimeType(const QString& mime_type)
+{
+    computer_mime_type_ = mime_type;
 }
 
 bool ComputerGroupTree::dragging() const
@@ -66,8 +73,8 @@ void ComputerGroupTree::dragEnterEvent(QDragEnterEvent* event)
 {
     const QMimeData* mime_data = event->mimeData();
 
-    if (mime_data->hasFormat(ComputerGroupMimeData::mimeType()) ||
-        mime_data->hasFormat(ComputerMimeData::mimeType()))
+    if (mime_data->hasFormat(computer_group_mime_type_) ||
+        mime_data->hasFormat(computer_mime_type_))
     {
         event->acceptProposedAction();
     }
@@ -87,7 +94,7 @@ void ComputerGroupTree::dragMoveEvent(QDragMoveEvent* event)
 
     const QMimeData* mime_data = event->mimeData();
 
-    if (mime_data->hasFormat(ComputerGroupMimeData::mimeType()))
+    if (mime_data->hasFormat(computer_group_mime_type_))
     {
         ComputerGroupItem* source_item = dynamic_cast<ComputerGroupItem*>(itemAt(start_pos_));
         ComputerGroupItem* target_item = dynamic_cast<ComputerGroupItem*>(itemAt(event->pos()));
@@ -100,7 +107,7 @@ void ComputerGroupTree::dragMoveEvent(QDragMoveEvent* event)
             event->acceptProposedAction();
         }
     }
-    else if (mime_data->hasFormat(ComputerMimeData::mimeType()))
+    else if (mime_data->hasFormat(computer_mime_type_))
     {
         ComputerGroupItem* target_item = dynamic_cast<ComputerGroupItem*>(itemAt(event->pos()));
         if (target_item)
@@ -134,7 +141,7 @@ void ComputerGroupTree::dropEvent(QDropEvent* event)
     if (!mime_data)
         return;
 
-    if (mime_data->hasFormat(ComputerGroupMimeData::mimeType()))
+    if (mime_data->hasFormat(computer_group_mime_type_))
     {
         const ComputerGroupMimeData* computer_group_mime_data =
             dynamic_cast<const ComputerGroupMimeData*>(event->mimeData());
@@ -164,12 +171,12 @@ void ComputerGroupTree::dropEvent(QDropEvent* event)
             target_group_item->addChildComputerGroup(computer_group);
             target_group_item->setExpanded(true);
 
-            setCurrentItem(target_group_item);
+            setCurrentItem(source_group_item);
 
             emit itemDropped();
         }
     }
-    else if (mime_data->hasFormat(ComputerMimeData::mimeType()))
+    else if (mime_data->hasFormat(computer_mime_type_))
     {
         const ComputerMimeData* computer_mime_data =
             dynamic_cast<const ComputerMimeData*>(event->mimeData());
@@ -239,7 +246,7 @@ void ComputerGroupTree::startDrag(Qt::DropActions supported_actions)
     {
         ComputerGroupDrag* drag = new ComputerGroupDrag(this);
 
-        drag->setComputerGroupItem(computer_group);
+        drag->setComputerGroupItem(computer_group, computer_group_mime_type_);
 
         QIcon icon = computer_group->icon(0);
         drag->setPixmap(icon.pixmap(icon.actualSize(QSize(16, 16))));
