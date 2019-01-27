@@ -19,6 +19,7 @@
 #include "common/ui/about_dialog.h"
 
 #include <QDesktopServices>
+#include <QFile>
 
 #include <google/protobuf/stubs/common.h>
 #include <libyuv.h>
@@ -144,6 +145,10 @@ AboutDialog::AboutDialog(QWidget* parent)
 
     add_version("qt", qVersion());
     add_version("zstd", ZSTD_versionString());
+
+    QFile file(QLatin1String(":/txt/license.txt"));
+    if (file.open(QFile::ReadOnly))
+        ui->edit_license->setPlainText(file.readAll());
 
     connect(ui->push_button_donate, &QPushButton::released, [this]()
     {
