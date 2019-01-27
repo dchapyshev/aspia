@@ -562,8 +562,8 @@
         <location filename="../ui/user_dialog.cc" line="153"/>
         <location filename="../ui/user_dialog.cc" line="165"/>
         <location filename="../ui/user_dialog.cc" line="175"/>
-        <location filename="../ui/user_dialog.cc" line="186"/>
-        <location filename="../ui/user_dialog.cc" line="209"/>
+        <location filename="../ui/user_dialog.cc" line="196"/>
+        <location filename="../ui/user_dialog.cc" line="214"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
@@ -591,22 +591,40 @@
             <numerusform>Пароль не может быть пустой и не должен превышать %n символов.</numerusform>
         </translation>
     </message>
+    <message>
+        <location filename="../ui/user_dialog.cc" line="186"/>
+        <source>Password you entered does not meet the security requirements!</source>
+        <translation>Введенный пароль не отвечает требованиям безопасности!</translation>
+    </message>
     <message numerus="yes">
-        <location filename="../ui/user_dialog.cc" line="187"/>
-        <source>&lt;b&gt;Password you entered does not meet the security requirements!&lt;/b&gt;&lt;br/&gt;The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.&lt;br/&gt;Do you want to enter a different password?</source>
+        <location filename="../ui/user_dialog.cc" line="189"/>
+        <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
+            <numerusform>Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символа.</numerusform>
+            <numerusform>Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символов.</numerusform>
+            <numerusform>Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символов.</numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="../ui/user_dialog.cc" line="193"/>
+        <source>Do you want to enter a different password?</source>
+        <translation>Вы хотите ввести другой пароль?</translation>
+    </message>
+    <message numerus="yes">
+        <source>&lt;b&gt;Password you entered does not meet the security requirements!&lt;/b&gt;&lt;br/&gt;The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.&lt;br/&gt;Do you want to enter a different password?</source>
+        <translation type="vanished">
             <numerusform>&lt;b&gt;Введенный пароль не отвечает требованиям безопасности!&lt;/b&gt;&lt;br/&gt;Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символа.&lt;br/&gt;Вы хотите ввести другой пароль?</numerusform>
             <numerusform>&lt;b&gt;Введенный пароль не отвечает требованиям безопасности!&lt;/b&gt;&lt;br/&gt;Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символов.&lt;br/&gt;Вы хотите ввести другой пароль?</numerusform>
             <numerusform>&lt;b&gt;Введенный пароль не отвечает требованиям безопасности!&lt;/b&gt;&lt;br/&gt;Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символов.&lt;br/&gt;Вы хотите ввести другой пароль?</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../ui/user_dialog.cc" line="210"/>
+        <location filename="../ui/user_dialog.cc" line="215"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation>Неизвестная внутренняя ошибка при создании или изменении пользователя.</translation>
     </message>
     <message>
-        <location filename="../ui/user_dialog.cc" line="266"/>
+        <location filename="../ui/user_dialog.cc" line="271"/>
         <source>Double-click to change</source>
         <translation>Двойной щелчок для изменения</translation>
     </message>

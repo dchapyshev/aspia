@@ -182,15 +182,20 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
 
             if (!common::UserUtil::isSafePassword(password))
             {
+                QString unsafe =
+                    tr("Password you entered does not meet the security requirements!");
+
+                QString safe =
+                    tr("The password must contain lowercase and uppercase characters, "
+                       "numbers and should not be shorter than %n characters.",
+                       "", common::UserUtil::kSafePasswordLength);
+
+                QString question = tr("Do you want to enter a different password?");
+
                 if (QMessageBox::warning(this,
                                          tr("Warning"),
-                                         tr("<b>Password you entered does not meet the security "
-                                            "requirements!</b><br/>"
-                                            "The password must contain lowercase and uppercase "
-                                            "characters, numbers and should not be shorter "
-                                            "than %n characters.<br/>"
-                                            "Do you want to enter a different password?",
-                                            "", common::UserUtil::kSafePasswordLength),
+                                         QString("<b>%1</b><br/>%2<br/>%3")
+                                             .arg(unsafe).arg(safe).arg(question),
                                          QMessageBox::Yes,
                                          QMessageBox::No) == QMessageBox::Yes)
                 {

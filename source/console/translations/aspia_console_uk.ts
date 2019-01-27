@@ -948,13 +948,12 @@
     </message>
     <message>
         <location filename="../address_book_dialog.cc" line="224"/>
-        <location filename="../address_book_dialog.cc" line="366"/>
-        <source>Warning</source>
-        <translation type="unfinished">Попередження</translation>
+        <source>Password you entered does not meet the security requirements!</source>
+        <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="225"/>
-        <source>&lt;b&gt;Password you entered does not meet the security requirements!&lt;/b&gt;&lt;br/&gt;The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.&lt;br/&gt;Do you want to enter a different password?</source>
+        <location filename="../address_book_dialog.cc" line="227"/>
+        <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
             <numerusform></numerusform>
@@ -962,12 +961,23 @@
         </translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="327"/>
+        <location filename="../address_book_dialog.cc" line="231"/>
+        <source>Do you want to enter a different password?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../address_book_dialog.cc" line="234"/>
+        <location filename="../address_book_dialog.cc" line="371"/>
+        <source>Warning</source>
+        <translation type="unfinished">Попередження</translation>
+    </message>
+    <message>
+        <location filename="../address_book_dialog.cc" line="332"/>
         <source>Confirmation</source>
         <translation type="unfinished">Підтвердження</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="328"/>
+        <location filename="../address_book_dialog.cc" line="333"/>
         <source>At change the size of hashing salt, you will need to re-enter the password. Continue?</source>
         <translation type="unfinished">Для зміни розміру солі хешування потрібно повторно ввести пароль. Продовжити?</translation>
     </message>

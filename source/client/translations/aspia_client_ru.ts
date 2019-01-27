@@ -1544,14 +1544,27 @@
 <context>
     <name>client::ClientFileTransfer</name>
     <message>
-        <location filename="../client_file_transfer.cc" line="59"/>
         <source>Session error: Invalid message from host.</source>
-        <translation>Ошибка сессии: Неверное сообщение от хоста.</translation>
+        <translation type="vanished">Ошибка сессии: Неверное сообщение от хоста.</translation>
     </message>
     <message>
-        <location filename="../client_file_transfer.cc" line="66"/>
         <source>Session error: There are no logged in users. File transfer is not available.</source>
-        <translation>Ошибка сессии: Нет вошедших в систему пользователей. Передача файлов недоступна.</translation>
+        <translation type="vanished">Ошибка сессии: Нет вошедших в систему пользователей. Передача файлов недоступна.</translation>
+    </message>
+    <message>
+        <location filename="../client_file_transfer.cc" line="59"/>
+        <source>Invalid message from host</source>
+        <translation>Неверное сообщение от хоста</translation>
+    </message>
+    <message>
+        <location filename="../client_file_transfer.cc" line="65"/>
+        <source>There are no logged in users. File transfer is not available</source>
+        <translation>Нет вошедших в систему пользователей. Передача файлов недоступна</translation>
+    </message>
+    <message>
+        <location filename="../client_file_transfer.cc" line="83"/>
+        <source>Session error</source>
+        <translation>Ошибка сессии</translation>
     </message>
 </context>
 <context>
@@ -1671,13 +1684,21 @@
     </message>
     <message>
         <location filename="../ui/desktop_window.cc" line="502"/>
-        <source>Aspia Desktop Manage</source>
+        <source>Desktop Manage</source>
         <translation>Управление рабочим столом</translation>
     </message>
     <message>
         <location filename="../ui/desktop_window.cc" line="507"/>
-        <source>Aspia Desktop View</source>
+        <source>Desktop View</source>
         <translation>Просмотр рабочего стола</translation>
+    </message>
+    <message>
+        <source>Aspia Desktop Manage</source>
+        <translation type="vanished">Управление рабочим столом</translation>
+    </message>
+    <message>
+        <source>Aspia Desktop View</source>
+        <translation type="vanished">Просмотр рабочего стола</translation>
     </message>
 </context>
 <context>
@@ -1747,8 +1768,12 @@
     </message>
     <message>
         <location filename="../ui/file_manager_window.cc" line="264"/>
+        <source>File Transfer</source>
+        <translation>Передача файлов</translation>
+    </message>
+    <message>
         <source>%1 - Aspia File Transfer</source>
-        <translation>%1 - Передача файлов</translation>
+        <translation type="vanished">%1 - Передача файлов</translation>
     </message>
 </context>
 <context>

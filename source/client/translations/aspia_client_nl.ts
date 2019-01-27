@@ -1170,14 +1170,27 @@
 <context>
     <name>client::ClientFileTransfer</name>
     <message>
-        <location filename="../client_file_transfer.cc" line="59"/>
         <source>Session error: Invalid message from host.</source>
-        <translation type="unfinished">Sessie fout: Ongeldig bericht van de host.</translation>
+        <translation type="obsolete">Sessie fout: Ongeldig bericht van de host.</translation>
     </message>
     <message>
-        <location filename="../client_file_transfer.cc" line="66"/>
         <source>Session error: There are no logged in users. File transfer is not available.</source>
-        <translation type="unfinished">Sessie fout: Er zijn geen ingelogde gebruikers. Bestandsoverdracht is niet beschikbaar.</translation>
+        <translation type="obsolete">Sessie fout: Er zijn geen ingelogde gebruikers. Bestandsoverdracht is niet beschikbaar.</translation>
+    </message>
+    <message>
+        <location filename="../client_file_transfer.cc" line="59"/>
+        <source>Invalid message from host</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client_file_transfer.cc" line="65"/>
+        <source>There are no logged in users. File transfer is not available</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client_file_transfer.cc" line="83"/>
+        <source>Session error</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1297,13 +1310,21 @@
     </message>
     <message>
         <location filename="../ui/desktop_window.cc" line="502"/>
-        <source>Aspia Desktop Manage</source>
-        <translation type="unfinished">Aspia Bureaublad Beheer</translation>
+        <source>Desktop Manage</source>
+        <translation type="unfinished">Bureaublad Beheren</translation>
     </message>
     <message>
         <location filename="../ui/desktop_window.cc" line="507"/>
+        <source>Desktop View</source>
+        <translation type="unfinished">Bureaublad Weergeven</translation>
+    </message>
+    <message>
+        <source>Aspia Desktop Manage</source>
+        <translation type="obsolete">Aspia Bureaublad Beheer</translation>
+    </message>
+    <message>
         <source>Aspia Desktop View</source>
-        <translation type="unfinished">Aspia Bureaublad Weergave</translation>
+        <translation type="obsolete">Aspia Bureaublad Weergave</translation>
     </message>
 </context>
 <context>
@@ -1373,8 +1394,12 @@
     </message>
     <message>
         <location filename="../ui/file_manager_window.cc" line="264"/>
+        <source>File Transfer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>%1 - Aspia File Transfer</source>
-        <translation type="unfinished">%1 - Aspia Bestands Overdracht</translation>
+        <translation type="obsolete">%1 - Aspia Bestands Overdracht</translation>
     </message>
 </context>
 <context>

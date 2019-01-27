@@ -53,6 +53,8 @@ protected:
     void messageReceived(const QByteArray& buffer) override;
 
 private:
+    void onSessionError(const QString& message);
+
     QScopedPointer<common::FileWorker> worker_;
     QThread* worker_thread_;
 

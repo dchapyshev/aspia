@@ -56,14 +56,13 @@ void ClientFileTransfer::messageReceived(const QByteArray& buffer)
 
     if (!reply.ParseFromArray(buffer.constData(), buffer.size()))
     {
-        emit errorOccurred(tr("Session error: Invalid message from host."));
+        onSessionError(tr("Invalid message from host"));
         return;
     }
 
     if (reply.status() == proto::file_transfer::STATUS_NO_LOGGED_ON_USER)
     {
-        emit errorOccurred(
-            tr("Session error: There are no logged in users. File transfer is not available."));
+        onSessionError(tr("There are no logged in users. File transfer is not available"));
         return;
     }
 
@@ -77,6 +76,11 @@ void ClientFileTransfer::remoteRequest(common::FileRequest* request)
 {
     requests_.push_back(QPointer<common::FileRequest>(request));
     sendMessage(request->request());
+}
+
+void ClientFileTransfer::onSessionError(const QString& message)
+{
+    emit errorOccurred(QString("%1: %2.").arg(tr("Session error")).arg(message));
 }
 
 } // namespace client

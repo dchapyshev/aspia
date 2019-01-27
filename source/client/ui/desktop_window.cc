@@ -499,12 +499,12 @@ QString DesktopWindow::createWindowTitle(const ConnectData& connect_data)
     QString session_name;
     if (connect_data.session_type == proto::SESSION_TYPE_DESKTOP_MANAGE)
     {
-        session_name = tr("Aspia Desktop Manage");
+        session_name = tr("Desktop Manage");
     }
     else
     {
         DCHECK(connect_data.session_type == proto::SESSION_TYPE_DESKTOP_VIEW);
-        session_name = tr("Aspia Desktop View");
+        session_name = tr("Desktop View");
     }
 
     QString computer_name;

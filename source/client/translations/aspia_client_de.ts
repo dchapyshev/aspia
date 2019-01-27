@@ -1241,14 +1241,27 @@
 <context>
     <name>client::ClientFileTransfer</name>
     <message>
-        <location filename="../client_file_transfer.cc" line="59"/>
         <source>Session error: Invalid message from host.</source>
-        <translation type="unfinished">Sitzungsfehler: Ungültige Nachricht vom Host.</translation>
+        <translation type="obsolete">Sitzungsfehler: Ungültige Nachricht vom Host.</translation>
     </message>
     <message>
-        <location filename="../client_file_transfer.cc" line="66"/>
         <source>Session error: There are no logged in users. File transfer is not available.</source>
-        <translation type="unfinished">Sitzungsfehler: Es sind keine Benutzer angemeldet. Die Dateiübertragung ist nicht verfügbar.</translation>
+        <translation type="obsolete">Sitzungsfehler: Es sind keine Benutzer angemeldet. Die Dateiübertragung ist nicht verfügbar.</translation>
+    </message>
+    <message>
+        <location filename="../client_file_transfer.cc" line="59"/>
+        <source>Invalid message from host</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client_file_transfer.cc" line="65"/>
+        <source>There are no logged in users. File transfer is not available</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client_file_transfer.cc" line="83"/>
+        <source>Session error</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1368,13 +1381,21 @@
     </message>
     <message>
         <location filename="../ui/desktop_window.cc" line="502"/>
-        <source>Aspia Desktop Manage</source>
-        <translation type="unfinished">Aspia Desktopverwaltung</translation>
+        <source>Desktop Manage</source>
+        <translation type="unfinished">Desktopverwaltung</translation>
     </message>
     <message>
         <location filename="../ui/desktop_window.cc" line="507"/>
+        <source>Desktop View</source>
+        <translation type="unfinished">Desktopansicht</translation>
+    </message>
+    <message>
+        <source>Aspia Desktop Manage</source>
+        <translation type="obsolete">Aspia Desktopverwaltung</translation>
+    </message>
+    <message>
         <source>Aspia Desktop View</source>
-        <translation type="unfinished">Aspia Desktopansicht</translation>
+        <translation type="obsolete">Aspia Desktopansicht</translation>
     </message>
 </context>
 <context>
@@ -1444,8 +1465,12 @@
     </message>
     <message>
         <location filename="../ui/file_manager_window.cc" line="264"/>
+        <source>File Transfer</source>
+        <translation type="unfinished">Dateiübertragung</translation>
+    </message>
+    <message>
         <source>%1 - Aspia File Transfer</source>
-        <translation type="unfinished">%1 - Aspia Dateiübertragung</translation>
+        <translation type="obsolete">%1 - Aspia Dateiübertragung</translation>
     </message>
 </context>
 <context>

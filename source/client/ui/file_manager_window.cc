@@ -261,7 +261,7 @@ QString FileManagerWindow::createWindowTitle(const ConnectData& connect_data)
     else
         computer_name = connect_data.address;
 
-    return tr("%1 - Aspia File Transfer").arg(computer_name);
+    return QString("%1 - %2").arg(computer_name).arg(tr("File Transfer"));
 }
 
 } // namespace client

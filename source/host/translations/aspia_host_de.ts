@@ -502,8 +502,8 @@
         <location filename="../ui/user_dialog.cc" line="153"/>
         <location filename="../ui/user_dialog.cc" line="165"/>
         <location filename="../ui/user_dialog.cc" line="175"/>
-        <location filename="../ui/user_dialog.cc" line="186"/>
-        <location filename="../ui/user_dialog.cc" line="209"/>
+        <location filename="../ui/user_dialog.cc" line="196"/>
+        <location filename="../ui/user_dialog.cc" line="214"/>
         <source>Warning</source>
         <translation type="unfinished">Warnung</translation>
     </message>
@@ -530,21 +530,31 @@
             <numerusform></numerusform>
         </translation>
     </message>
+    <message>
+        <location filename="../ui/user_dialog.cc" line="186"/>
+        <source>Password you entered does not meet the security requirements!</source>
+        <translation type="unfinished"></translation>
+    </message>
     <message numerus="yes">
-        <location filename="../ui/user_dialog.cc" line="187"/>
-        <source>&lt;b&gt;Password you entered does not meet the security requirements!&lt;/b&gt;&lt;br/&gt;The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.&lt;br/&gt;Do you want to enter a different password?</source>
+        <location filename="../ui/user_dialog.cc" line="189"/>
+        <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../ui/user_dialog.cc" line="210"/>
+        <location filename="../ui/user_dialog.cc" line="193"/>
+        <source>Do you want to enter a different password?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/user_dialog.cc" line="215"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/user_dialog.cc" line="266"/>
+        <location filename="../ui/user_dialog.cc" line="271"/>
         <source>Double-click to change</source>
         <translation type="unfinished">Doppelklicken, um zu ändern</translation>
     </message>
