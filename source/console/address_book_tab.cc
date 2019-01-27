@@ -152,6 +152,9 @@ AddressBookTab::AddressBookTab(const QString& file_path,
 
     connect(ui.tree_group, &ComputerGroupTree::itemSelectionChanged, [this]()
     {
+        if (ui.tree_group->dragging())
+            return;
+
         QList<QTreeWidgetItem*> items = ui.tree_group->selectedItems();
         if (!items.isEmpty())
             onGroupItemClicked(items.front(), 0);

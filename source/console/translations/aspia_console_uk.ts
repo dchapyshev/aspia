@@ -975,90 +975,90 @@
 <context>
     <name>console::AddressBookTab</name>
     <message>
-        <location filename="../address_book_tab.cc" line="224"/>
+        <location filename="../address_book_tab.cc" line="227"/>
         <source>Unable to open address book file &quot;%1&quot;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="231"/>
+        <location filename="../address_book_tab.cc" line="234"/>
         <source>Unable to read address book file &quot;%1&quot;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="240"/>
-        <location filename="../address_book_tab.cc" line="255"/>
+        <location filename="../address_book_tab.cc" line="243"/>
+        <location filename="../address_book_tab.cc" line="258"/>
         <source>The address book file &quot;%1&quot; is corrupted or has an unknown format.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="278"/>
+        <location filename="../address_book_tab.cc" line="281"/>
         <source>Unable to decrypt the address book with the specified password.</source>
         <translation type="unfinished">Неможливо розшифрувати адресну книгу даним паролем.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="284"/>
+        <location filename="../address_book_tab.cc" line="287"/>
         <source>The address book file is corrupted or has an unknown format.</source>
         <translation type="unfinished">Файл адресної книги пошкоджено або він має невірний формат.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="294"/>
+        <location filename="../address_book_tab.cc" line="297"/>
         <source>The address book file is encrypted with an unsupported encryption type.</source>
         <translation type="unfinished">Тип шифрування адресної книги не підтримується.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="461"/>
+        <location filename="../address_book_tab.cc" line="464"/>
         <source>Are you sure you want to delete computer group &quot;%1&quot; and all child items?</source>
         <translation type="unfinished">Ви впевнені, що хочете видалити групу комп&apos;ютерів \&quot;%1\&quot; і всі дочірні об&apos;єкти?</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="465"/>
-        <location filename="../address_book_tab.cc" line="487"/>
+        <location filename="../address_book_tab.cc" line="468"/>
+        <location filename="../address_book_tab.cc" line="490"/>
         <source>Confirmation</source>
         <translation type="unfinished">Підтвердження</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="483"/>
+        <location filename="../address_book_tab.cc" line="486"/>
         <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
         <translation type="unfinished">Ви впевнені, що хочете видалити комп&apos;ютер\&quot;%1\&quot;?</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="742"/>
+        <location filename="../address_book_tab.cc" line="745"/>
         <source>Save Address Book</source>
         <translation type="unfinished">Зберегти адресну книгу</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="744"/>
+        <location filename="../address_book_tab.cc" line="747"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation type="unfinished">Aspia Address Book (*.aab)</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="754"/>
+        <location filename="../address_book_tab.cc" line="757"/>
         <source>Unable to create or open address book file.</source>
         <translation type="unfinished">Неможливо створити або відкрити файл адресної книги.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="766"/>
+        <location filename="../address_book_tab.cc" line="769"/>
         <source>Unable to write address book file.</source>
         <translation type="unfinished">Неможливо записати файл адресної книги.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="780"/>
+        <location filename="../address_book_tab.cc" line="783"/>
         <source>Root Group</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="791"/>
-        <location filename="../address_book_tab.cc" line="805"/>
+        <location filename="../address_book_tab.cc" line="794"/>
+        <location filename="../address_book_tab.cc" line="808"/>
         <source>Warning</source>
         <translation type="unfinished">Попередження</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="793"/>
+        <location filename="../address_book_tab.cc" line="796"/>
         <source>Could not open address book</source>
         <translation type="unfinished">Неможливо відкрити адресну книгу</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="807"/>
+        <location filename="../address_book_tab.cc" line="810"/>
         <source>Failed to save address book</source>
         <translation type="unfinished">Неможливо зберегти адресну книгу</translation>
     </message>

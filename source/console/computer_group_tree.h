@@ -32,6 +32,8 @@ public:
     ComputerGroupTree(QWidget* parent);
     ~ComputerGroupTree() = default;
 
+    bool dragging() const;
+
 signals:
     void itemDropped();
 
@@ -40,6 +42,7 @@ protected:
     void mousePressEvent(QMouseEvent* event) override;
     void mouseMoveEvent(QMouseEvent* event) override;
     void dragEnterEvent(QDragEnterEvent* event) override;
+    void dragLeaveEvent(QDragLeaveEvent* event) override;
     void dragMoveEvent(QDragMoveEvent* event) override;
     void dropEvent(QDropEvent* event) override;
     void startDrag(Qt::DropActions supported_actions) override;
@@ -48,6 +51,7 @@ private:
     bool isAllowedDropTarget(ComputerGroupItem* target, ComputerGroupItem* item);
 
     QPoint start_pos_;
+    bool dragging_ = false;
 
     DISALLOW_COPY_AND_ASSIGN(ComputerGroupTree);
 };

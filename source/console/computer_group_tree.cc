@@ -18,8 +18,8 @@
 
 #include "console/computer_group_tree.h"
 
-#include <QDropEvent>
 #include <QApplication>
+#include <QDropEvent>
 
 #include "console/computer_mime_data.h"
 
@@ -31,6 +31,11 @@ ComputerGroupTree::ComputerGroupTree(QWidget* parent)
     QTreeWidgetItem* invisible_root = invisibleRootItem();
     invisible_root->setFlags(invisible_root->flags() ^ Qt::ItemIsDropEnabled);
     setAcceptDrops(true);
+}
+
+bool ComputerGroupTree::dragging() const
+{
+    return dragging_;
 }
 
 void ComputerGroupTree::mousePressEvent(QMouseEvent* event)
@@ -66,6 +71,14 @@ void ComputerGroupTree::dragEnterEvent(QDragEnterEvent* event)
     {
         event->acceptProposedAction();
     }
+
+    dragging_ = true;
+}
+
+void ComputerGroupTree::dragLeaveEvent(QDragLeaveEvent* event)
+{
+    dragging_ = false;
+    QTreeWidget::dragLeaveEvent(event);
 }
 
 void ComputerGroupTree::dragMoveEvent(QDragMoveEvent* event)
@@ -81,7 +94,9 @@ void ComputerGroupTree::dragMoveEvent(QDragMoveEvent* event)
 
         if (isAllowedDropTarget(target_item, source_item))
         {
-            setCurrentItem(target_item);
+            clearSelection();
+
+            target_item->setSelected(true);
             event->acceptProposedAction();
         }
     }
@@ -97,7 +112,9 @@ void ComputerGroupTree::dragMoveEvent(QDragMoveEvent* event)
                 ComputerItem* computer_item = computer_mime_data->computerItem();
                 if (computer_item && computer_item->parentComputerGroupItem() != target_item)
                 {
-                    setCurrentItem(target_item);
+                    clearSelection();
+
+                    target_item->setSelected(true);
                     event->acceptProposedAction();
                 }
             }
@@ -146,6 +163,7 @@ void ComputerGroupTree::dropEvent(QDropEvent* event)
 
             target_group_item->addChildComputerGroup(computer_group);
             target_group_item->setExpanded(true);
+
             setCurrentItem(target_group_item);
 
             emit itemDropped();
@@ -179,6 +197,8 @@ void ComputerGroupTree::dropEvent(QDropEvent* event)
             }
         }
     }
+
+    dragging_ = false;
 }
 
 bool ComputerGroupTree::isAllowedDropTarget(ComputerGroupItem* target, ComputerGroupItem* item)
