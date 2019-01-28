@@ -414,11 +414,7 @@ int ServiceImpl::exec(int argc, char* argv[])
     createApplication(argc, argv);
 
     QScopedPointer<QCoreApplication> application(QCoreApplication::instance());
-    if (application.isNull())
-    {
-        LOG(LS_WARNING) << "Application instance is null";
-        return 1;
-    }
+    DCHECK(application);
 
     if (handler->startup_state == ServiceHandler::RunningAsConsole)
     {
