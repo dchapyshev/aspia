@@ -76,6 +76,7 @@ private slots:
 
 private:
     void createAdditionalMenu(proto::SessionType session_type);
+    void showCloseButton(bool show);
     void updateSize();
     void delayedHide();
 

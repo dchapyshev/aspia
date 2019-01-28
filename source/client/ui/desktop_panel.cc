@@ -70,7 +70,7 @@ DesktopPanel::DesktopPanel(proto::SessionType session_type, QWidget* parent)
     });
 
     ui.frame->hide();
-    updateSize();
+    showCloseButton(false);
 
     hide_timer_id_ = startTimer(std::chrono::seconds(1));
 }
@@ -268,22 +268,6 @@ void DesktopPanel::leaveEvent(QEvent* event)
 
 void DesktopPanel::onFullscreenButton(bool checked)
 {
-    ui.action_close->setVisible(checked);
-    ui.action_close->setEnabled(checked);
-
-    QList<QAction*> actions = ui.toolbar->actions();
-
-    for (auto it = actions.crbegin(); it != actions.crend(); ++it)
-    {
-        QAction* action = *it;
-
-        if (action->isSeparator())
-        {
-            action->setVisible(checked);
-            break;
-        }
-    }
-
     if (checked)
     {
         ui.action_fullscreen->setIcon(
@@ -295,7 +279,7 @@ void DesktopPanel::onFullscreenButton(bool checked)
             QIcon(QStringLiteral(":/img/application-resize-full.png")));
     }
 
-    updateSize();
+    showCloseButton(checked);
 
     emit switchToFullscreen(checked);
 }
@@ -406,6 +390,27 @@ void DesktopPanel::createAdditionalMenu(proto::SessionType session_type)
         if (leaved_)
             delayedHide();
     });
+}
+
+void DesktopPanel::showCloseButton(bool show)
+{
+    ui.action_close->setVisible(show);
+    ui.action_close->setEnabled(show);
+
+    QList<QAction*> actions = ui.toolbar->actions();
+
+    for (auto it = actions.crbegin(); it != actions.crend(); ++it)
+    {
+        QAction* action = *it;
+
+        if (action->isSeparator())
+        {
+            action->setVisible(show);
+            break;
+        }
+    }
+
+    updateSize();
 }
 
 void DesktopPanel::updateSize()

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>211</width>
+    <width>236</width>
     <height>40</height>
    </rect>
   </property>
@@ -324,9 +324,6 @@
    </property>
    <property name="toolTip">
     <string>Close session</string>
-   </property>
-   <property name="visible">
-    <bool>false</bool>
    </property>
   </action>
  </widget>
