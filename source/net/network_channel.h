@@ -44,6 +44,8 @@ public:
     enum class Error
     {
         UNKNOWN,                  // Unknown error.
+        NETWORK_ERROR,            // An error occurred with the network (e.g., the network cable
+                                  // was accidentally plugged out).
         CONNECTION_REFUSED,       // The connection was refused by the peer (or timed out).
         REMOTE_HOST_CLOSED,       // The remote host closed the connection.
         SPECIFIED_HOST_NOT_FOUND, // The host address was not found.

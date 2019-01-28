@@ -1047,61 +1047,66 @@
     <name>client::Client</name>
     <message>
         <location filename="../client.cc" line="94"/>
-        <source>Connection was refused by the peer (or timed out).</source>
+        <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../client.cc" line="98"/>
-        <source>Remote host closed the connection.</source>
+        <source>Connection was refused by the peer (or timed out).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../client.cc" line="102"/>
-        <source>Host address was not found.</source>
+        <source>Remote host closed the connection.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../client.cc" line="106"/>
-        <source>Socket operation timed out.</source>
+        <source>Host address was not found.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../client.cc" line="110"/>
-        <source>Address specified is already in use and was set to be exclusive.</source>
+        <source>Socket operation timed out.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../client.cc" line="114"/>
-        <source>Address specified does not belong to the host.</source>
+        <source>Address specified is already in use and was set to be exclusive.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../client.cc" line="118"/>
-        <source>Violation of the data exchange protocol.</source>
+        <source>Address specified does not belong to the host.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../client.cc" line="122"/>
-        <source>An error occurred while encrypting the message.</source>
+        <source>Violation of the data exchange protocol.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../client.cc" line="126"/>
-        <source>An error occurred while decrypting the message.</source>
+        <source>An error occurred while encrypting the message.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../client.cc" line="130"/>
-        <source>An error occured while authenticating: wrong user name or password.</source>
+        <source>An error occurred while decrypting the message.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../client.cc" line="134"/>
-        <source>Specified session type is not allowed for the user.</source>
+        <source>An error occured while authenticating: wrong user name or password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../client.cc" line="138"/>
+        <source>Specified session type is not allowed for the user.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client.cc" line="142"/>
         <source>An unknown error occurred.</source>
         <translation type="unfinished"></translation>
     </message>

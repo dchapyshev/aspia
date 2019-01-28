@@ -196,7 +196,12 @@ void Channel::onError(QAbstractSocket::SocketError error)
             channel_error = Error::ADDRESS_NOT_AVAILABLE;
             break;
 
+        case QAbstractSocket::NetworkError:
+            channel_error = Error::NETWORK_ERROR;
+            break;
+
         default:
+            LOG(LS_WARNING) << "Unhandled value of Qt error: " << error;
             channel_error = Error::UNKNOWN;
             break;
     }

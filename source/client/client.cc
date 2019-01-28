@@ -90,6 +90,10 @@ QString Client::networkErrorToString(net::Channel::Error error)
 
     switch (error)
     {
+        case net::Channel::Error::NETWORK_ERROR:
+            message = QT_TR_NOOP("An error occurred with the network (e.g., the network cable was accidentally plugged out).");
+            break;
+
         case net::Channel::Error::CONNECTION_REFUSED:
             message = QT_TR_NOOP("Connection was refused by the peer (or timed out).");
             break;
