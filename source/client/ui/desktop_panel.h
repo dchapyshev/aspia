@@ -60,6 +60,7 @@ signals:
     void powerControl(proto::desktop::PowerControl::Action action);
     void startRemoteUpdate();
     void startSystemInfo();
+    void closeSession();
 
 protected:
     // QFrame implementation.

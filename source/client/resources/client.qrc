@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="/img">
+    <file>cross-button.png</file>
     <file>drive.png</file>
     <file>graphic-card.png</file>
     <file>processor.png</file>

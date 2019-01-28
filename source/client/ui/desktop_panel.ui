@@ -73,6 +73,7 @@
      <addaction name="separator"/>
      <addaction name="action_update"/>
      <addaction name="action_menu"/>
+     <addaction name="action_close"/>
     </widget>
    </item>
    <item>
@@ -307,6 +308,21 @@
    </property>
    <property name="text">
     <string>System Information</string>
+   </property>
+   <property name="visible">
+    <bool>false</bool>
+   </property>
+  </action>
+  <action name="action_close">
+   <property name="icon">
+    <iconset resource="../resources/client.qrc">
+     <normaloff>:/img/cross-button.png</normaloff>:/img/cross-button.png</iconset>
+   </property>
+   <property name="text">
+    <string>Close</string>
+   </property>
+   <property name="toolTip">
+    <string>Close session</string>
    </property>
    <property name="visible">
     <bool>false</bool>

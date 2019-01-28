@@ -142,100 +142,110 @@
 <context>
     <name>DesktopPanel</name>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="122"/>
+        <location filename="../ui/desktop_panel.ui" line="123"/>
         <source>Lock toolbar</source>
         <translation>Закрепить панель инструментов</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="134"/>
+        <location filename="../ui/desktop_panel.ui" line="135"/>
         <source>Session configuration</source>
         <translation>Параметры сессии</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="146"/>
+        <location filename="../ui/desktop_panel.ui" line="147"/>
         <source>Monitor selection</source>
         <translation>Выбор монитора</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="161"/>
+        <location filename="../ui/desktop_panel.ui" line="162"/>
         <source>Automatic window size</source>
         <translation>Автоматический размер окна</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="176"/>
+        <location filename="../ui/desktop_panel.ui" line="177"/>
         <source>Switch to full screen mode or back</source>
         <translation>Переключиться на полный экран (или назад)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="187"/>
+        <location filename="../ui/desktop_panel.ui" line="188"/>
         <source>Automatic scrolling</source>
         <translation>Автоматическая прокрутка</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="211"/>
+        <location filename="../ui/desktop_panel.ui" line="212"/>
         <source>Advanced menu</source>
         <translation>Расширенное меню</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="253"/>
+        <location filename="../ui/desktop_panel.ui" line="254"/>
         <source>Send key combinations</source>
         <translation>Отправлять комбинации клавиш</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="262"/>
-        <location filename="../ui/desktop_panel.ui" line="265"/>
+        <location filename="../ui/desktop_panel.ui" line="263"/>
+        <location filename="../ui/desktop_panel.ui" line="266"/>
         <source>Power control</source>
         <translation>Управление питанием</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="273"/>
+        <location filename="../ui/desktop_panel.ui" line="274"/>
         <source>Shutdown</source>
         <translation>Выключение</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="278"/>
+        <location filename="../ui/desktop_panel.ui" line="279"/>
         <source>Reboot</source>
         <translation>Перезагрузка</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="283"/>
+        <location filename="../ui/desktop_panel.ui" line="284"/>
         <source>Logoff</source>
         <translation>Завершение сеанса</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="288"/>
+        <location filename="../ui/desktop_panel.ui" line="289"/>
         <source>Lock</source>
         <translation>Блокировка</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="297"/>
+        <location filename="../ui/desktop_panel.ui" line="298"/>
         <source>Remote Update</source>
         <translation>Удаленное обновление</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="309"/>
+        <location filename="../ui/desktop_panel.ui" line="310"/>
         <source>System Information</source>
         <translation>Информация о системе</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="216"/>
-        <location filename="../ui/desktop_panel.ui" line="219"/>
-        <location filename="../ui/desktop_panel.ui" line="222"/>
+        <location filename="../ui/desktop_panel.ui" line="322"/>
+        <source>Close</source>
+        <translation>Закрыть</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_panel.ui" line="325"/>
+        <source>Close session</source>
+        <translation>Закрыть сессию</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_panel.ui" line="217"/>
+        <location filename="../ui/desktop_panel.ui" line="220"/>
+        <location filename="../ui/desktop_panel.ui" line="223"/>
         <source>Save screenshot...</source>
         <translation>Сохранить снимок экрана...</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="234"/>
+        <location filename="../ui/desktop_panel.ui" line="235"/>
         <source>File transfer</source>
         <translation>Передача файлов</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="242"/>
+        <location filename="../ui/desktop_panel.ui" line="243"/>
         <source>Scaling an image</source>
         <translation>Масштабирование изображения</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="199"/>
+        <location filename="../ui/desktop_panel.ui" line="200"/>
         <source>Send Ctrl+Alt+Delete</source>
         <translation>Отправить Ctrl+Alt+Delete</translation>
     </message>
@@ -1616,35 +1626,35 @@
 <context>
     <name>client::DesktopPanel</name>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="179"/>
+        <location filename="../ui/desktop_panel.cc" line="178"/>
         <source>Monitor %1</source>
         <translation>Монитор %1</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="308"/>
-        <location filename="../ui/desktop_panel.cc" line="319"/>
-        <location filename="../ui/desktop_panel.cc" line="330"/>
-        <location filename="../ui/desktop_panel.cc" line="341"/>
+        <location filename="../ui/desktop_panel.cc" line="312"/>
+        <location filename="../ui/desktop_panel.cc" line="323"/>
+        <location filename="../ui/desktop_panel.cc" line="334"/>
+        <location filename="../ui/desktop_panel.cc" line="345"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="309"/>
+        <location filename="../ui/desktop_panel.cc" line="313"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>Вы действительно хотите выключить удаленный компьютер?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="320"/>
+        <location filename="../ui/desktop_panel.cc" line="324"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>Вы действительно хотите перезагрузить удаленный компьютер?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="331"/>
+        <location filename="../ui/desktop_panel.cc" line="335"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>Вы действительно хотите завершить сеанс пользователя на удаленном компьютере?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="342"/>
+        <location filename="../ui/desktop_panel.cc" line="346"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>Вы действительно хотите заблокировать сеанс пользователя на удаленном компьютере?</translation>
     </message>
@@ -1652,43 +1662,43 @@
 <context>
     <name>client::DesktopWindow</name>
     <message>
-        <location filename="../ui/desktop_window.cc" line="350"/>
+        <location filename="../ui/desktop_window.cc" line="351"/>
         <source>Save File</source>
         <translation>Сохранение файла</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="352"/>
+        <location filename="../ui/desktop_window.cc" line="353"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG изображение (*.png);;BMP изображение (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="135"/>
-        <location filename="../ui/desktop_window.cc" line="372"/>
+        <location filename="../ui/desktop_window.cc" line="136"/>
+        <location filename="../ui/desktop_window.cc" line="373"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="136"/>
+        <location filename="../ui/desktop_window.cc" line="137"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
         <translation>Текущая видео-кодировка не поддерживается хостом. Пожалуйста, выберите другую видео-кодировку.</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="154"/>
+        <location filename="../ui/desktop_window.cc" line="155"/>
         <source>Selecting a supported video encoding is canceled by the user.</source>
         <translation>Выбор поддерживаемой видео-кодировки отменен пользователем.</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="372"/>
+        <location filename="../ui/desktop_window.cc" line="373"/>
         <source>Could not save image</source>
         <translation>Не удалось сохранить изображение</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="502"/>
+        <location filename="../ui/desktop_window.cc" line="503"/>
         <source>Desktop Manage</source>
         <translation>Управление рабочим столом</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="507"/>
+        <location filename="../ui/desktop_window.cc" line="508"/>
         <source>Desktop View</source>
         <translation>Просмотр рабочего стола</translation>
     </message>

@@ -75,6 +75,7 @@ DesktopWindow::DesktopWindow(const ConnectData& connect_data, QWidget* parent)
     connect(panel_, &DesktopPanel::powerControl, desktopClient(), &ClientDesktop::sendPowerControl);
     connect(panel_, &DesktopPanel::startRemoteUpdate, desktopClient(), &ClientDesktop::sendRemoteUpdate);
     connect(panel_, &DesktopPanel::startSystemInfo, desktopClient(), &ClientDesktop::sendSystemInfoRequest);
+    connect(panel_, &DesktopPanel::closeSession, this, &DesktopWindow::close);
 
     connect(panel_, &DesktopPanel::switchToFullscreen, [this](bool fullscreen)
     {

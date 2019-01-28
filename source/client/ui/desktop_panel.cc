@@ -50,6 +50,7 @@ DesktopPanel::DesktopPanel(proto::SessionType session_type, QWidget* parent)
     connect(ui.action_autoscroll, &QAction::triggered, this, &DesktopPanel::autoScrollChanged);
     connect(ui.action_update, &QAction::triggered, this, &DesktopPanel::startRemoteUpdate);
     connect(ui.action_system_info, &QAction::triggered, this, &DesktopPanel::startSystemInfo);
+    connect(ui.action_close, &QAction::triggered, this, &DesktopPanel::closeSession);
 
     createAdditionalMenu(session_type);
 
@@ -60,8 +61,6 @@ DesktopPanel::DesktopPanel(proto::SessionType session_type, QWidget* parent)
     else
     {
         DCHECK(session_type == proto::SESSION_TYPE_DESKTOP_VIEW);
-
-        ui.action_power_control->setVisible(false);
         ui.action_cad->setVisible(false);
     }
 
@@ -269,6 +268,9 @@ void DesktopPanel::leaveEvent(QEvent* event)
 
 void DesktopPanel::onFullscreenButton(bool checked)
 {
+    ui.action_close->setVisible(checked);
+    ui.action_close->setEnabled(checked);
+
     if (checked)
     {
         ui.action_fullscreen->setIcon(
@@ -279,6 +281,8 @@ void DesktopPanel::onFullscreenButton(bool checked)
         ui.action_fullscreen->setIcon(
             QIcon(QStringLiteral(":/img/application-resize-full.png")));
     }
+
+    updateSize();
 
     emit switchToFullscreen(checked);
 }
