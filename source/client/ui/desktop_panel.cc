@@ -271,6 +271,19 @@ void DesktopPanel::onFullscreenButton(bool checked)
     ui.action_close->setVisible(checked);
     ui.action_close->setEnabled(checked);
 
+    QList<QAction*> actions = ui.toolbar->actions();
+
+    for (auto it = actions.crbegin(); it != actions.crend(); ++it)
+    {
+        QAction* action = *it;
+
+        if (action->isSeparator())
+        {
+            action->setVisible(checked);
+            break;
+        }
+    }
+
     if (checked)
     {
         ui.action_fullscreen->setIcon(
