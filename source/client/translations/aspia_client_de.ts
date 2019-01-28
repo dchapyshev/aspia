@@ -456,47 +456,47 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="100"/>
+        <location filename="../ui/system_info_window.ui" line="106"/>
         <source>Save</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="103"/>
+        <location filename="../ui/system_info_window.ui" line="109"/>
         <source>Save (Ctrl+S)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="115"/>
+        <location filename="../ui/system_info_window.ui" line="121"/>
         <source>Print</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="118"/>
+        <location filename="../ui/system_info_window.ui" line="124"/>
         <source>Print (Ctrl+P)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="126"/>
+        <location filename="../ui/system_info_window.ui" line="132"/>
         <source>Copy Row</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="131"/>
+        <location filename="../ui/system_info_window.ui" line="137"/>
         <source>Copy Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="136"/>
+        <location filename="../ui/system_info_window.ui" line="142"/>
         <source>Copy Value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="145"/>
+        <location filename="../ui/system_info_window.ui" line="151"/>
         <source>Refresh</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="148"/>
+        <location filename="../ui/system_info_window.ui" line="154"/>
         <source>Refresh (F5)</source>
         <translation type="unfinished">Aktualisieren (F5)</translation>
     </message>
