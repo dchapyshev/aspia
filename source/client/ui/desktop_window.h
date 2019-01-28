@@ -39,6 +39,7 @@ class Frame;
 namespace client {
 
 class DesktopPanel;
+class SystemInfoWindow;
 
 class DesktopWindow :
     public ClientWindow,
@@ -49,7 +50,7 @@ class DesktopWindow :
 
 public:
     DesktopWindow(const ConnectData& connect_data, QWidget* parent);
-    ~DesktopWindow() = default;
+    ~DesktopWindow();
 
     // ClientDesktop::Delegate implementation.
     void extensionListChanged() override;
@@ -87,11 +88,13 @@ private:
 
     static QString createWindowTitle(const ConnectData& connect_data);
 
-    QHBoxLayout* layout_;
-    QScrollArea* scroll_area_;
-    DesktopPanel* panel_;
-    DesktopWidget* desktop_;
-    common::Clipboard* clipboard_;
+    QHBoxLayout* layout_ = nullptr;
+    QScrollArea* scroll_area_ = nullptr;
+    DesktopPanel* panel_ = nullptr;
+    DesktopWidget* desktop_ = nullptr;
+    common::Clipboard* clipboard_ = nullptr;
+
+    QPointer<SystemInfoWindow> system_info_;
 
     int scroll_timer_id_ = 0;
     QPoint scroll_delta_;

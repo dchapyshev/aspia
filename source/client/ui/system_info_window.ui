@@ -89,6 +89,7 @@
    </attribute>
    <addaction name="action_save"/>
    <addaction name="action_print"/>
+   <addaction name="action_refresh"/>
   </widget>
   <action name="action_save">
    <property name="icon">
@@ -133,6 +134,21 @@
   <action name="action_copy_value">
    <property name="text">
     <string>Copy Value</string>
+   </property>
+  </action>
+  <action name="action_refresh">
+   <property name="icon">
+    <iconset resource="../resources/client.qrc">
+     <normaloff>:/img/arrow-circle-double.png</normaloff>:/img/arrow-circle-double.png</iconset>
+   </property>
+   <property name="text">
+    <string>Refresh</string>
+   </property>
+   <property name="toolTip">
+    <string>Refresh (F5)</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true">F5</string>
    </property>
   </action>
  </widget>

@@ -111,6 +111,8 @@ DesktopWindow::DesktopWindow(const ConnectData& connect_data, QWidget* parent)
     });
 }
 
+DesktopWindow::~DesktopWindow() = default;
+
 void DesktopWindow::extensionListChanged()
 {
     ClientDesktop* client = desktopClient();
@@ -211,12 +213,18 @@ void DesktopWindow::setScreenList(const proto::desktop::ScreenList& screen_list)
 
 void DesktopWindow::setSystemInfo(const proto::system_info::SystemInfo& system_info)
 {
-    SystemInfoWindow* window = new SystemInfoWindow(this);
+    if (!system_info_)
+    {
+        system_info_ = new SystemInfoWindow(this);
+        system_info_->setAttribute(Qt::WA_DeleteOnClose);
 
-    window->setSystemInfo(system_info);
-    window->setAttribute(Qt::WA_DeleteOnClose);
-    window->show();
-    window->activateWindow();
+        connect(system_info_, &SystemInfoWindow::systemInfoRequired,
+                desktopClient(), &ClientDesktop::sendSystemInfoRequest);
+    }
+
+    system_info_->setSystemInfo(system_info);
+    system_info_->show();
+    system_info_->activateWindow();
 }
 
 void DesktopWindow::onPointerEvent(const QPoint& pos, uint32_t mask)

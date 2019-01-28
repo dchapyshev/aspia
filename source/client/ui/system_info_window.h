@@ -35,6 +35,9 @@ public:
 
     void setSystemInfo(const proto::system_info::SystemInfo& system_info);
 
+signals:
+    void systemInfoRequired();
+
 private slots:
     void onContextMenu(const QPoint& point);
 

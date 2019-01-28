@@ -133,6 +133,8 @@ SystemInfoWindow::SystemInfoWindow(QWidget* parent)
         document.print(&printer);
     });
 
+    connect(ui.action_refresh, &QAction::triggered, this, &SystemInfoWindow::systemInfoRequired);
+
     connect(ui.action_copy_row, &QAction::triggered, [this]()
     {
         copyRow(ui.tree->currentItem());
@@ -162,6 +164,8 @@ SystemInfoWindow::~SystemInfoWindow() = default;
 
 void SystemInfoWindow::setSystemInfo(const proto::system_info::SystemInfo& system_info)
 {
+    ui.tree->clear();
+
     if (system_info.has_computer())
     {
         const proto::system_info::Computer& computer = system_info.computer();
