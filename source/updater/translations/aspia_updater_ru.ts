@@ -139,22 +139,41 @@
         <translation>Получение информации...</translation>
     </message>
     <message>
+        <location filename="../update_dialog.cc" line="108"/>
+        <source>An update will be downloaded. After the download is complete, the application will automatically close.</source>
+        <translation>Обновление будет загружено. После завершения загрузки приложение будет автоматически закрыто.</translation>
+    </message>
+    <message>
         <location filename="../update_dialog.cc" line="110"/>
+        <source>All connected sessions will be terminated. You cannot establish a connection until the update is complete.</source>
+        <translation>Все подключенные сессии будут завершены. Вы не сможете установить подключение пока обновление не будет завершено.</translation>
+    </message>
+    <message>
+        <location filename="../update_dialog.cc" line="112"/>
+        <source>All unsaved data will be lost.</source>
+        <translation>Все несохраненные данные будут потеряны.</translation>
+    </message>
+    <message>
+        <location filename="../update_dialog.cc" line="113"/>
+        <source>Continue?</source>
+        <translation>Продолжить?</translation>
+    </message>
+    <message>
+        <location filename="../update_dialog.cc" line="116"/>
         <source>Confirmation</source>
         <translation>Подтвеждение</translation>
     </message>
     <message>
-        <location filename="../update_dialog.cc" line="111"/>
         <source>An update will be downloaded. After the download is complete, the application will automatically close. All unsaved data will be lost.&lt;br/&gt;Continue?</source>
-        <translation>Обновление будет загружено. После завершения загрузки приложение будет автоматически закрыто. Все несораненные данные будут потеряны.&lt;br/&gt;Продолжить?</translation>
+        <translation type="vanished">Обновление будет загружено. После завершения загрузки приложение будет автоматически закрыто. Все несораненные данные будут потеряны.&lt;br/&gt;Продолжить?</translation>
     </message>
     <message>
-        <location filename="../update_dialog.cc" line="121"/>
+        <location filename="../update_dialog.cc" line="126"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../update_dialog.cc" line="122"/>
+        <location filename="../update_dialog.cc" line="127"/>
         <source>An error occurred while installing the update: %1</source>
         <translation>Произошла ошибка при установке обновления: %1</translation>
     </message>

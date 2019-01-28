@@ -93,22 +93,37 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../update_dialog.cc" line="108"/>
+        <source>An update will be downloaded. After the download is complete, the application will automatically close.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../update_dialog.cc" line="110"/>
+        <source>All connected sessions will be terminated. You cannot establish a connection until the update is complete.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../update_dialog.cc" line="112"/>
+        <source>All unsaved data will be lost.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../update_dialog.cc" line="113"/>
+        <source>Continue?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../update_dialog.cc" line="116"/>
         <source>Confirmation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../update_dialog.cc" line="111"/>
-        <source>An update will be downloaded. After the download is complete, the application will automatically close. All unsaved data will be lost.&lt;br/&gt;Continue?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../update_dialog.cc" line="121"/>
+        <location filename="../update_dialog.cc" line="126"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../update_dialog.cc" line="122"/>
+        <location filename="../update_dialog.cc" line="127"/>
         <source>An error occurred while installing the update: %1</source>
         <translation type="unfinished"></translation>
     </message>

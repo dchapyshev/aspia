@@ -105,14 +105,19 @@ UpdateDialog::~UpdateDialog() = default;
 
 void UpdateDialog::onUpdateNow()
 {
-    if (QMessageBox::question(
-        this,
-        tr("Confirmation"),
-        tr("An update will be downloaded. "
-           "After the download is complete, the application will automatically close. "
-           "All unsaved data will be lost.<br/>Continue?"),
-        QMessageBox::Yes,
-        QMessageBox::No) == QMessageBox::Yes)
+    QString message1 = tr("An update will be downloaded. After the download is complete, the "
+                          "application will automatically close.");
+    QString message2 = tr("All connected sessions will be terminated. You cannot establish a "
+                          "connection until the update is complete.");
+    QString message3 = tr("All unsaved data will be lost.");
+    QString question = tr("Continue?");
+
+    if (QMessageBox::question(this,
+                              tr("Confirmation"),
+                              QString("%1<br/><b>%2</b><br/><b>%3</b><br/>%4")
+                                  .arg(message1).arg(message2).arg(message3).arg(question),
+                              QMessageBox::Yes,
+                              QMessageBox::No) == QMessageBox::Yes)
     {
         QTemporaryFile file(QDir::tempPath() + QLatin1String("/aspia-XXXXXX.msi"));
         if (!file.open())
