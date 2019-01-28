@@ -32,7 +32,7 @@ class Clipboard : public QObject
 
 public:
     Clipboard(QObject* parent = nullptr);
-    ~Clipboard();
+    ~Clipboard() = default;
 
 public slots:
     // Receiving the incoming clipboard.

@@ -35,14 +35,7 @@ const char kMimeTypeTextUtf8[] = "text/plain; charset=UTF-8";
 Clipboard::Clipboard(QObject* parent)
     : QObject(parent)
 {
-    connect(QGuiApplication::clipboard(), &QClipboard::dataChanged,
-            this, &Clipboard::dataChanged);
-}
-
-Clipboard::~Clipboard()
-{
-    disconnect(QGuiApplication::clipboard(), &QClipboard::dataChanged,
-               this, &Clipboard::dataChanged);
+    connect(QGuiApplication::clipboard(), &QClipboard::dataChanged, this, &Clipboard::dataChanged);
 }
 
 void Clipboard::injectClipboardEvent(const proto::desktop::ClipboardEvent& event)
@@ -65,13 +58,26 @@ void Clipboard::injectClipboardEvent(const proto::desktop::ClipboardEvent& event
 void Clipboard::dataChanged()
 {
     const QMimeData* mime_data = QGuiApplication::clipboard()->mimeData();
+
+#if 1
+    // HACK! We must call hasText twice to get the correct result.
+    // Qt bug: https://bugreports.qt.io/browse/QTBUG-53979
+    mime_data->hasText();
+#endif
+
     if (!mime_data->hasText())
         return;
 
+    QString text = mime_data->text();
+
+#if defined(OS_WIN)
+    text.replace(QLatin1String("\r\n"), QLatin1String("\n"));
+#endif
+
     proto::desktop::ClipboardEvent event;
+
     event.set_mime_type(kMimeTypeTextUtf8);
-    event.set_data(QString(mime_data->text()).replace(
-        QLatin1String("\r\n"), QLatin1String("\n")).toStdString());
+    event.set_data(text.toStdString());
 
     if (event.mime_type() == last_mime_type_ && event.data() == last_data_)
         return;
