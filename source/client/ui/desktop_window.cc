@@ -187,7 +187,6 @@ void DesktopWindow::setDesktopRect(const QRect& screen_rect)
 void DesktopWindow::drawDesktop()
 {
     desktop_->update();
-    panel_->update();
 }
 
 desktop::Frame* DesktopWindow::desktopFrame()
@@ -220,7 +219,7 @@ void DesktopWindow::setSystemInfo(const proto::system_info::SystemInfo& system_i
     window->activateWindow();
 }
 
-void DesktopWindow::sendPointerEvent(const QPoint& pos, uint32_t mask)
+void DesktopWindow::onPointerEvent(const QPoint& pos, uint32_t mask)
 {
     if (panel_->autoScrolling() && !panel_->scaling())
     {
@@ -293,9 +292,14 @@ void DesktopWindow::sendPointerEvent(const QPoint& pos, uint32_t mask)
     }
 }
 
-void DesktopWindow::sendKeyEvent(uint32_t usb_keycode, uint32_t flags)
+void DesktopWindow::onKeyEvent(uint32_t usb_keycode, uint32_t flags)
 {
     desktopClient()->sendKeyEvent(usb_keycode, flags);
+}
+
+void DesktopWindow::onDrawDesktop()
+{
+    panel_->update();
 }
 
 void DesktopWindow::changeSettings()

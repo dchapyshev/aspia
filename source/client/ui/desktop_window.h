@@ -63,8 +63,9 @@ public:
     void setSystemInfo(const proto::system_info::SystemInfo& system_info) override;
 
     // DesktopWidget::Delegate implementation.
-    void sendPointerEvent(const QPoint& pos, uint32_t mask) override;
-    void sendKeyEvent(uint32_t usb_keycode, uint32_t flags) override;
+    void onPointerEvent(const QPoint& pos, uint32_t mask) override;
+    void onKeyEvent(uint32_t usb_keycode, uint32_t flags) override;
+    void onDrawDesktop() override;
 
 protected:
     // QWidget implementation.

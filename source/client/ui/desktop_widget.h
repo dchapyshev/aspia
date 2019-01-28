@@ -49,8 +49,9 @@ public:
     public:
         virtual ~Delegate() = default;
 
-        virtual void sendPointerEvent(const QPoint& pos, uint32_t mask) = 0;
-        virtual void sendKeyEvent(uint32_t usb_keycode, uint32_t flags) = 0;
+        virtual void onPointerEvent(const QPoint& pos, uint32_t mask) = 0;
+        virtual void onKeyEvent(uint32_t usb_keycode, uint32_t flags) = 0;
+        virtual void onDrawDesktop() = 0;
     };
 
     DesktopWidget(Delegate* delegate, QWidget* parent);

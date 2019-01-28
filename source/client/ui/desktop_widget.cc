@@ -136,13 +136,13 @@ void DesktopWidget::doMouseEvent(QEvent::Type event_type,
         {
             for (int i = 0; i < wheel_steps; ++i)
             {
-                delegate_->sendPointerEvent(pos, mask);
-                delegate_->sendPointerEvent(pos, mask & ~kWheelMask);
+                delegate_->onPointerEvent(pos, mask);
+                delegate_->onPointerEvent(pos, mask & ~kWheelMask);
             }
         }
         else
         {
-            delegate_->sendPointerEvent(pos, mask);
+            delegate_->onPointerEvent(pos, mask);
         }
     }
 }
@@ -231,6 +231,8 @@ void DesktopWidget::paintEvent(QPaintEvent* /* event */)
         painter.setRenderHint(QPainter::SmoothPixmapTransform);
         painter.drawImage(rect(), frame_->constImage());
     }
+
+    delegate_->onDrawDesktop();
 }
 
 void DesktopWidget::mouseMoveEvent(QMouseEvent* event)
@@ -273,7 +275,7 @@ void DesktopWidget::leaveEvent(QEvent* event)
     // When the mouse cursor leaves the widget area, release all the mouse buttons.
     if (prev_mask_ != 0)
     {
-        delegate_->sendPointerEvent(prev_pos_, 0);
+        delegate_->onPointerEvent(prev_pos_, 0);
         prev_mask_ = 0;
     }
 
@@ -318,7 +320,7 @@ void DesktopWidget::executeKeyEvent(uint32_t usb_keycode, uint32_t flags)
     else
         pressed_keys_.erase(usb_keycode);
 
-    delegate_->sendKeyEvent(usb_keycode, flags);
+    delegate_->onKeyEvent(usb_keycode, flags);
 }
 
 #if defined(OS_WIN)

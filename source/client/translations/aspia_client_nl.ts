@@ -1288,18 +1288,18 @@
 <context>
     <name>client::DesktopWindow</name>
     <message>
-        <location filename="../ui/desktop_window.cc" line="351"/>
+        <location filename="../ui/desktop_window.cc" line="355"/>
         <source>Save File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="353"/>
+        <location filename="../ui/desktop_window.cc" line="357"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/desktop_window.cc" line="136"/>
-        <location filename="../ui/desktop_window.cc" line="373"/>
+        <location filename="../ui/desktop_window.cc" line="377"/>
         <source>Warning</source>
         <translation type="unfinished">Waarschuwing</translation>
     </message>
@@ -1314,17 +1314,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="373"/>
+        <location filename="../ui/desktop_window.cc" line="377"/>
         <source>Could not save image</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="503"/>
+        <location filename="../ui/desktop_window.cc" line="507"/>
         <source>Desktop Manage</source>
         <translation type="unfinished">Bureaublad Beheren</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="508"/>
+        <location filename="../ui/desktop_window.cc" line="512"/>
         <source>Desktop View</source>
         <translation type="unfinished">Bureaublad Weergeven</translation>
     </message>
