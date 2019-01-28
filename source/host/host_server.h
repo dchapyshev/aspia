@@ -36,12 +36,16 @@ public:
     HostServer(QObject* parent = nullptr);
     ~HostServer();
 
-    bool start();
+    void start();
     void stop();
     void setSessionChanged(uint32_t event, uint32_t session_id);
 
 signals:
     void sessionChanged(uint32_t event, uint32_t session_id);
+
+protected:
+    // QObject implementation.
+    void customEvent(QEvent* event) override;
 
 private slots:
     void onNewConnection();

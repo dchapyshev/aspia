@@ -69,7 +69,7 @@ HostService::~HostService() = default;
 
 void HostService::start()
 {
-    LOG(LS_INFO) << "Command to start the service has been received";
+    LOG(LS_INFO) << "Service is started";
 
     SetPriorityClass(GetCurrentProcess(), HIGH_PRIORITY_CLASS);
 
@@ -77,27 +77,17 @@ void HostService::start()
     if (!com_initializer_->isSucceeded())
     {
         LOG(LS_FATAL) << "COM not initialized";
-        QCoreApplication::quit();
         return;
     }
 
     base::win::initializeComSecurity(kComProcessSd, kComProcessMandatoryLabel, false);
 
     server_.reset(new HostServer());
-    if (!server_->start())
-    {
-        server_.reset();
-        QCoreApplication::quit();
-        return;
-    }
-
-    LOG(LS_INFO) << "Service is started";
+    server_->start();
 }
 
 void HostService::stop()
 {
-    LOG(LS_INFO) << "Command to stop the service has been received";
-
     server_.reset();
     com_initializer_.reset();
 

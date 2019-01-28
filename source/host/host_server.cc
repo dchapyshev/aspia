@@ -37,6 +37,8 @@ const char kFirewallRuleName[] = "Aspia Host Service";
 const char kFirewallRuleDecription[] = "Allow incoming TCP connections";
 const char kNotifierFileName[] = "aspia_host_session.exe";
 
+const int kStartEvent = QEvent::User + 1;
+
 const char* sessionTypeToString(proto::SessionType session_type)
 {
     switch (session_type)
@@ -68,40 +70,9 @@ HostServer::~HostServer()
     stop();
 }
 
-bool HostServer::start()
+void HostServer::start()
 {
-    LOG(LS_INFO) << "Starting the server";
-
-    if (network_server_)
-    {
-        LOG(LS_WARNING) << "An attempt was start an already running server.";
-        return false;
-    }
-
-    Settings settings;
-
-    if (settings.addFirewallRule())
-    {
-        net::FirewallManager firewall(QCoreApplication::applicationFilePath());
-        if (firewall.isValid())
-        {
-            if (firewall.addTcpRule(kFirewallRuleName, kFirewallRuleDecription, settings.tcpPort()))
-            {
-                LOG(LS_INFO) << "Rule is added to the firewall";
-            }
-        }
-    }
-
-    network_server_ = new net::Server(settings.userList(), this);
-
-    connect(network_server_, &net::Server::newChannelReady,
-            this, &HostServer::onNewConnection);
-
-    if (!network_server_->start(settings.tcpPort()))
-        return false;
-
-    LOG(LS_INFO) << "Server is started on port " << settings.tcpPort();
-    return true;
+    QCoreApplication::postEvent(this, new QEvent(QEvent::Type(kStartEvent)));
 }
 
 void HostServer::stop()
@@ -157,6 +128,47 @@ void HostServer::setSessionChanged(uint32_t event, uint32_t session_id)
         default:
             break;
     }
+}
+
+void HostServer::customEvent(QEvent* event)
+{
+    if (event->type() == kStartEvent)
+    {
+        LOG(LS_INFO) << "Starting the server";
+
+        if (network_server_)
+        {
+            DLOG(LS_WARNING) << "An attempt was start an already running server.";
+            return;
+        }
+
+        Settings settings;
+
+        if (settings.addFirewallRule())
+        {
+            net::FirewallManager firewall(QCoreApplication::applicationFilePath());
+            if (firewall.isValid())
+            {
+                if (firewall.addTcpRule(kFirewallRuleName, kFirewallRuleDecription, settings.tcpPort()))
+                {
+                    LOG(LS_INFO) << "Rule is added to the firewall";
+                }
+            }
+        }
+
+        network_server_ = new net::Server(settings.userList(), this);
+
+        connect(network_server_, &net::Server::newChannelReady,
+                this, &HostServer::onNewConnection);
+
+        if (!network_server_->start(settings.tcpPort()))
+        {
+            QCoreApplication::quit();
+            return;
+        }
+    }
+
+    QObject::customEvent(event);
 }
 
 void HostServer::onNewConnection()
