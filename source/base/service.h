@@ -39,7 +39,7 @@ protected:
     Application* application() const { return application_; }
 
     // ServiceImpl implementation.
-    void createApplication(int argc, char* argv[]) override
+    void createApplication(int& argc, char* argv[]) override
     {
         application_ = new Application(argc, argv);
     }

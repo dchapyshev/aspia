@@ -52,7 +52,7 @@ protected:
     virtual void sessionChange(uint32_t event, uint32_t session_id) = 0;
 #endif // defined(OS_WIN)
 
-    virtual void createApplication(int argc, char* argv[]) = 0;
+    virtual void createApplication(int& argc, char* argv[]) = 0;
     virtual int executeApplication() = 0;
 
 private:
