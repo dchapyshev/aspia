@@ -146,10 +146,7 @@ void FileRemover::processTask()
 
     emit progressChanged(tasks_.front().path(), percentage);
 
-    common::FileRequest* request = common::FileRequest::removeRequest(tasks_.front().path());
-    connect(request, &common::FileRequest::replyReady, this, &FileRemover::reply);
-
-    emit newRequest(request);
+    sendRequest(common::FileRequest::removeRequest(tasks_.front().path()));
 }
 
 void FileRemover::processNextTask()
@@ -158,6 +155,12 @@ void FileRemover::processNextTask()
         tasks_.pop_front();
 
     processTask();
+}
+
+void FileRemover::sendRequest(common::FileRequest* request)
+{
+    connect(request, &common::FileRequest::replyReady, this, &FileRemover::reply);
+    emit newRequest(request);
 }
 
 } // namespace client

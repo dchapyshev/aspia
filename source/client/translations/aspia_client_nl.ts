@@ -1571,23 +1571,23 @@
         <translation type="unfinished">Kon het bestand &quot;%1&quot; niet maken: %2</translation>
     </message>
     <message>
-        <location filename="../file_transfer.cc" line="147"/>
+        <location filename="../file_transfer.cc" line="145"/>
         <source>Failed to write file &quot;%1&quot;: %2</source>
         <translation type="unfinished">Kon het bestand &quot;%1&quot; niet schrijven: %2</translation>
     </message>
     <message>
-        <location filename="../file_transfer.cc" line="196"/>
-        <location filename="../file_transfer.cc" line="240"/>
+        <location filename="../file_transfer.cc" line="192"/>
+        <location filename="../file_transfer.cc" line="231"/>
         <source>An unexpected response to the request was received</source>
         <translation type="unfinished">Er is een onverwachte reactie op het verzoek ontvangen</translation>
     </message>
     <message>
-        <location filename="../file_transfer.cc" line="211"/>
+        <location filename="../file_transfer.cc" line="207"/>
         <source>Failed to open file &quot;%1&quot;: %2</source>
         <translation type="unfinished">Kon het bestand &quot;%1&quot; niet openen: %2</translation>
     </message>
     <message>
-        <location filename="../file_transfer.cc" line="228"/>
+        <location filename="../file_transfer.cc" line="221"/>
         <source>Failed to read file &quot;%1&quot;: %2</source>
         <translation type="unfinished">Kon het bestand &quot;%1&quot; niet lezen: %2</translation>
     </message>

@@ -97,9 +97,7 @@ void FileRemoveQueueBuilder::processNextPendingTask()
         return;
     }
 
-    common::FileRequest* request = common::FileRequest::fileListRequest(current.path());
-    connect(request, &common::FileRequest::replyReady, this, &FileRemoveQueueBuilder::reply);
-    emit newRequest(request);
+    sendRequest(common::FileRequest::fileListRequest(current.path()));
 }
 
 void FileRemoveQueueBuilder::processError(const QString& message)
@@ -108,6 +106,12 @@ void FileRemoveQueueBuilder::processError(const QString& message)
 
     emit error(message);
     emit finished();
+}
+
+void FileRemoveQueueBuilder::sendRequest(common::FileRequest* request)
+{
+    connect(request, &common::FileRequest::replyReady, this, &FileRemoveQueueBuilder::reply);
+    emit newRequest(request);
 }
 
 } // namespace client

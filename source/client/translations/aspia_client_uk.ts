@@ -1579,23 +1579,23 @@
         <translation type="unfinished">Не вдалося створити файл &quot;%1&quot;:%2</translation>
     </message>
     <message>
-        <location filename="../file_transfer.cc" line="147"/>
+        <location filename="../file_transfer.cc" line="145"/>
         <source>Failed to write file &quot;%1&quot;: %2</source>
         <translation type="unfinished">Не вдалося записати файл &quot;%1&quot;:%2</translation>
     </message>
     <message>
-        <location filename="../file_transfer.cc" line="196"/>
-        <location filename="../file_transfer.cc" line="240"/>
+        <location filename="../file_transfer.cc" line="192"/>
+        <location filename="../file_transfer.cc" line="231"/>
         <source>An unexpected response to the request was received</source>
         <translation type="unfinished">Отримано неочікувану відповідь на запит</translation>
     </message>
     <message>
-        <location filename="../file_transfer.cc" line="211"/>
+        <location filename="../file_transfer.cc" line="207"/>
         <source>Failed to open file &quot;%1&quot;: %2</source>
         <translation type="unfinished">Не вдалося відкрити файл &quot;%1&quot;:%2</translation>
     </message>
     <message>
-        <location filename="../file_transfer.cc" line="228"/>
+        <location filename="../file_transfer.cc" line="221"/>
         <source>Failed to read file &quot;%1&quot;: %2</source>
         <translation type="unfinished">Не вдалося прочитати файл &quot;%1&quot;:%2</translation>
     </message>

@@ -118,9 +118,7 @@ void FileTransferQueueBuilder::processNextPendingTask()
         return;
     }
 
-    common::FileRequest* request = common::FileRequest::fileListRequest(current.sourcePath());
-    connect(request, &common::FileRequest::replyReady, this, &FileTransferQueueBuilder::reply);
-    emit newRequest(request);
+    sendRequest(common::FileRequest::fileListRequest(current.sourcePath()));
 }
 
 void FileTransferQueueBuilder::processError(const QString& message)
@@ -147,6 +145,12 @@ void FileTransferQueueBuilder::addPendingTask(const QString& source_dir,
     }
 
     pending_tasks_.push_back(FileTransferTask(source_path, target_path, is_directory, size));
+}
+
+void FileTransferQueueBuilder::sendRequest(common::FileRequest* request)
+{
+    connect(request, &common::FileRequest::replyReady, this, &FileTransferQueueBuilder::reply);
+    emit newRequest(request);
 }
 
 } // namespace client

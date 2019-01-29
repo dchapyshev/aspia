@@ -59,6 +59,7 @@ public slots:
 private:
     void processNextPendingTask();
     void processError(const QString& message);
+    void sendRequest(common::FileRequest* request);
 
     QQueue<FileRemoveTask> pending_tasks_;
     QQueue<FileRemoveTask> tasks_;

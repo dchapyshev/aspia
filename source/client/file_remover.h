@@ -80,6 +80,7 @@ private slots:
 private:
     void processTask();
     void processNextTask();
+    void sendRequest(common::FileRequest* request);
 
     FileRemoveQueueBuilder* builder_ = nullptr;
     QQueue<FileRemoveTask> tasks_;

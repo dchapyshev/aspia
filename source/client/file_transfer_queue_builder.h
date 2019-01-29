@@ -66,6 +66,7 @@ private:
                         qint64 size);
     void processNextPendingTask();
     void processError(const QString& message);
+    void sendRequest(common::FileRequest* request);
 
     QQueue<FileTransferTask> pending_tasks_;
     QQueue<FileTransferTask> tasks_;

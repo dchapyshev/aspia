@@ -134,10 +134,8 @@ void FileTransfer::targetReply(const proto::file_transfer::Request& request,
             return;
         }
 
-        common::FileRequest* file_request =
-            common::FileRequest::packetRequest(proto::file_transfer::PacketRequest::NO_FLAGS);
-        connect(file_request, &common::FileRequest::replyReady, this, &FileTransfer::sourceReply);
-        sourceRequest(file_request);
+        sourceRequest(common::FileRequest::packetRequest(
+            proto::file_transfer::PacketRequest::NO_FLAGS));
     }
     else if (request.has_packet())
     {
@@ -187,9 +185,7 @@ void FileTransfer::targetReply(const proto::file_transfer::Request& request,
         if (is_canceled_)
             flags = proto::file_transfer::PacketRequest::CANCEL;
 
-        common::FileRequest* file_request = common::FileRequest::packetRequest(flags);
-        connect(file_request, &common::FileRequest::replyReady, this, &FileTransfer::sourceReply);
-        sourceRequest(file_request);
+        sourceRequest(common::FileRequest::packetRequest(flags));
     }
     else
     {
@@ -214,11 +210,8 @@ void FileTransfer::sourceReply(const proto::file_transfer::Request& request,
             return;
         }
 
-        common::FileRequest* file_request =
-            common::FileRequest::uploadRequest(currentTask().targetPath(),
-                                               currentTask().overwrite());
-        connect(file_request, &common::FileRequest::replyReady, this, &FileTransfer::targetReply);
-        targetRequest(file_request);
+        targetRequest(common::FileRequest::uploadRequest(currentTask().targetPath(),
+                                                         currentTask().overwrite()));
     }
     else if (request.has_packet_request())
     {
@@ -231,9 +224,7 @@ void FileTransfer::sourceReply(const proto::file_transfer::Request& request,
             return;
         }
 
-        common::FileRequest* file_request = common::FileRequest::packet(reply.packet());
-        connect(file_request, &common::FileRequest::replyReady, this, &FileTransfer::targetReply);
-        targetRequest(file_request);
+        targetRequest(common::FileRequest::packet(reply.packet()));
     }
     else
     {
@@ -325,17 +316,11 @@ void FileTransfer::processTask(bool overwrite)
 
     if (task.isDirectory())
     {
-        common::FileRequest* request =
-            common::FileRequest::createDirectoryRequest(task.targetPath());
-        connect(request, &common::FileRequest::replyReady, this, &FileTransfer::targetReply);
-        targetRequest(request);
+        targetRequest(common::FileRequest::createDirectoryRequest(task.targetPath()));
     }
     else
     {
-        common::FileRequest* request =
-            common::FileRequest::FileRequest::downloadRequest(task.sourcePath());
-        connect(request, &common::FileRequest::replyReady, this, &FileTransfer::sourceReply);
-        sourceRequest(request);
+        sourceRequest(common::FileRequest::FileRequest::downloadRequest(task.sourcePath()));
     }
 }
 
@@ -376,6 +361,8 @@ void FileTransfer::processError(Error error_type, const QString& message)
 
 void FileTransfer::sourceRequest(common::FileRequest* request)
 {
+    connect(request, &common::FileRequest::replyReady, this, &FileTransfer::sourceReply);
+
     if (type_ == Downloader)
     {
         emit remoteRequest(request);
@@ -389,6 +376,8 @@ void FileTransfer::sourceRequest(common::FileRequest* request)
 
 void FileTransfer::targetRequest(common::FileRequest* request)
 {
+    connect(request, &common::FileRequest::replyReady, this, &FileTransfer::targetReply);
+
     if (type_ == Downloader)
     {
         emit localRequest(request);

@@ -1642,23 +1642,23 @@
         <translation type="unfinished">Fehler beim Erstellen der Datei &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../file_transfer.cc" line="147"/>
+        <location filename="../file_transfer.cc" line="145"/>
         <source>Failed to write file &quot;%1&quot;: %2</source>
         <translation type="unfinished">Fehler beim Schreiben der Datei &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../file_transfer.cc" line="196"/>
-        <location filename="../file_transfer.cc" line="240"/>
+        <location filename="../file_transfer.cc" line="192"/>
+        <location filename="../file_transfer.cc" line="231"/>
         <source>An unexpected response to the request was received</source>
         <translation type="unfinished">Eine unerwartete Antwort auf die Anfrage wurde empfangen</translation>
     </message>
     <message>
-        <location filename="../file_transfer.cc" line="211"/>
+        <location filename="../file_transfer.cc" line="207"/>
         <source>Failed to open file &quot;%1&quot;: %2</source>
         <translation type="unfinished">Fehler beim Öffnen der Datei &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../file_transfer.cc" line="228"/>
+        <location filename="../file_transfer.cc" line="221"/>
         <source>Failed to read file &quot;%1&quot;: %2</source>
         <translation type="unfinished">Fehler beim Lesen der Datei &quot;%1&quot;: %2</translation>
     </message>
