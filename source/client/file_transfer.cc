@@ -266,6 +266,11 @@ void FileTransfer::taskQueueReady()
     DCHECK(builder_ != nullptr);
 
     tasks_ = builder_->taskQueue();
+    if (tasks_.isEmpty())
+    {
+        emit finished();
+        return;
+    }
 
     for (const auto& task : tasks_)
         total_size_ += task.size();
