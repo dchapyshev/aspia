@@ -169,19 +169,16 @@ void DesktopWindow::setDesktopRect(const QRect& screen_rect)
     if (frame)
         prev_size = desktop_->desktopFrame()->size();
 
-    desktop_->setDesktopSize(screen_rect.size());
+    QSize screen_size = screen_rect.size();
 
-    if (!panel_->scaling())
-    {
-        desktop_->resize(screen_rect.width(), screen_rect.height());
+    desktop_->setDesktopSize(screen_size);
+    desktop_->resize(screen_size);
 
-        if (screen_rect.size() != prev_size && !isMaximized() && !isFullScreen())
-            autosizeWindow();
-    }
-    else
-    {
+    if (prev_size.isEmpty())
+        autosizeWindow();
+
+    if (panel_->scaling())
         onScalingChanged();
-    }
 
     screen_top_left_ = screen_rect.topLeft();
 }
@@ -339,16 +336,23 @@ void DesktopWindow::onConfigChanged(const proto::desktop::Config& config)
 
 void DesktopWindow::autosizeWindow()
 {
-    QRect screen_rect = QApplication::desktop()->availableGeometry(this);
-    QSize window_size = desktop_->size() + frameSize() - size();
+    desktop::Frame* frame = desktop_->desktopFrame();
+    if (!frame)
+        return;
 
-    if (window_size.width() < screen_rect.width() && window_size.height() < screen_rect.height())
+    const QSize& remote_screen_size = desktop_->desktopFrame()->size();
+
+    QRect local_screen_rect = QApplication::desktop()->availableGeometry(this);
+    QSize window_size = desktop_->desktopFrame()->size() + frameSize() - size();
+
+    if (window_size.width() < local_screen_rect.width() &&
+        window_size.height() < local_screen_rect.height())
     {
         showNormal();
 
-        resize(desktop_->size());
-        move(screen_rect.x() + (screen_rect.width() / 2 - window_size.width() / 2),
-             screen_rect.y() + (screen_rect.height() / 2 - window_size.height() / 2));
+        resize(remote_screen_size);
+        move(local_screen_rect.x() + (local_screen_rect.width() / 2 - window_size.width() / 2),
+             local_screen_rect.y() + (local_screen_rect.height() / 2 - window_size.height() / 2));
     }
     else
     {

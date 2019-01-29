@@ -1374,18 +1374,18 @@
 <context>
     <name>client::DesktopWindow</name>
     <message>
-        <location filename="../ui/desktop_window.cc" line="363"/>
+        <location filename="../ui/desktop_window.cc" line="367"/>
         <source>Save File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="365"/>
+        <location filename="../ui/desktop_window.cc" line="369"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/desktop_window.cc" line="138"/>
-        <location filename="../ui/desktop_window.cc" line="385"/>
+        <location filename="../ui/desktop_window.cc" line="389"/>
         <source>Warning</source>
         <translation type="unfinished">Warnung</translation>
     </message>
@@ -1400,17 +1400,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="385"/>
+        <location filename="../ui/desktop_window.cc" line="389"/>
         <source>Could not save image</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="515"/>
+        <location filename="../ui/desktop_window.cc" line="519"/>
         <source>Desktop Manage</source>
         <translation type="unfinished">Desktopverwaltung</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="520"/>
+        <location filename="../ui/desktop_window.cc" line="524"/>
         <source>Desktop View</source>
         <translation type="unfinished">Desktopansicht</translation>
     </message>
