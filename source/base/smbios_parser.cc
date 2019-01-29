@@ -163,7 +163,7 @@ bool SmbiosMemoryDevice::isValid() const
 
 bool SmbiosMemoryDevice::isPresent() const
 {
-    return table_->size != 0xFFFF;
+    return size() != 0;
 }
 
 std::string SmbiosMemoryDevice::location() const
@@ -181,7 +181,7 @@ std::string SmbiosMemoryDevice::manufacturer() const
 
 uint64_t SmbiosMemoryDevice::size() const
 {
-    if (table_->length >= 0x20 && table_->size == 0x7FFF)
+    if (table_->length >= 0x20 && table_->module_size == 0x7FFF)
     {
         uint32_t ext_size = table_->ext_size & 0x7FFFFFFFUL;
 
@@ -203,21 +203,21 @@ uint64_t SmbiosMemoryDevice::size() const
     }
     else
     {
-        if (table_->size == 0xFFFF)
+        if (table_->module_size == 0xFFFF)
         {
             // No installed memory device in the socket.
             return 0;
         }
 
-        if (table_->size & 0x8000)
+        if (table_->module_size & 0x8000)
         {
             // Size in kB. Convert to bytes and return.
-            return static_cast<uint64_t>(table_->size & 0x7FFF) * 1024ULL;
+            return static_cast<uint64_t>(table_->module_size & 0x7FFF) * 1024ULL;
         }
         else
         {
             // Size in MB. Convert to bytes and return.
-            return static_cast<uint64_t>(table_->size) * 1024ULL * 1024ULL;
+            return static_cast<uint64_t>(table_->module_size) * 1024ULL * 1024ULL;
         }
     }
 }

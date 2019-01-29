@@ -96,7 +96,7 @@ struct SmbiosMemoryDeviceTable : public SmbiosTable
     uint16_t error_info_handle;      // 06h-07h
     uint16_t total_width;            // 08h-09h
     uint16_t data_width;             // 0Ah-0Bh
-    uint16_t size;                   // 0Ch-0Dh
+    uint16_t module_size;            // 0Ch-0Dh
     uint8_t form_factor;             // 0Eh
     uint8_t device_set;              // 0Fh
     uint8_t device_location;         // 10h
