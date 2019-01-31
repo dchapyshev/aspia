@@ -54,15 +54,12 @@ HostProcess::ErrorCode createSessionToken(DWORD session_id, base::win::ScopedHan
     }
 
     // Change the session ID of the token.
-    BOOL ret = SetTokenInformation(session_token, TokenSessionId, &session_id, sizeof(session_id));
+    BOOL result = SetTokenInformation(session_token, TokenSessionId, &session_id, sizeof(session_id));
 
-    if (!RevertToSelf())
-    {
-        LOG(LS_FATAL) << "RevertToSelf failed";
-        return HostProcess::OtherError;
-    }
+    BOOL ret = RevertToSelf();
+    CHECK(ret);
 
-    if (!ret)
+    if (!result)
     {
         PLOG(LS_WARNING) << "SetTokenInformation failed";
         return HostProcess::OtherError;
@@ -112,11 +109,8 @@ HostProcess::ErrorCode createLoggedOnUserToken(
         }
     }
 
-    if (!RevertToSelf())
-    {
-        LOG(LS_FATAL) << "RevertToSelf failed";
-        return HostProcess::OtherError;
-    }
+    BOOL ret = RevertToSelf();
+    CHECK(ret);
 
     if (error_code == HostProcess::NoError)
     {
