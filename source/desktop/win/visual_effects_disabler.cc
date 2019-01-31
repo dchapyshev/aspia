@@ -50,10 +50,13 @@ namespace {
 enum StateFlags
 {
     STATE_ENABLED = 1,
-    STATE_SAVED   = 2,
-    STATE_CHANGED = 4,
-    STATE_CHANGE_ALLOWED = (STATE_ENABLED | STATE_SAVED),
+    STATE_SAVED   = 2
 };
+
+bool isChangeRequired(uint8_t flags)
+{
+    return (flags & STATE_ENABLED) && (flags & STATE_SAVED);
+}
 
 std::unique_ptr<VisualEffectsState> currentEffectsState()
 {
@@ -186,164 +189,120 @@ std::unique_ptr<VisualEffectsState> currentEffectsState()
 
 void changeEffectsState(VisualEffectsState* state, BOOL enable)
 {
-    if (state->drag_full_windows & STATE_CHANGE_ALLOWED)
+    if (isChangeRequired(state->drag_full_windows))
     {
-        if (SystemParametersInfoW(SPI_SETDRAGFULLWINDOWS, enable, 0, SPIF_SENDCHANGE))
-        {
-            state->drag_full_windows |= STATE_CHANGED;
-        }
-        else
+        if (!SystemParametersInfoW(SPI_SETDRAGFULLWINDOWS, enable, 0, SPIF_SENDCHANGE))
         {
             PLOG(LS_WARNING) << "SystemParametersInfoW(SPI_SETDRAGFULLWINDOWS) failed";
         }
     }
 
-    if (state->animation & STATE_CHANGE_ALLOWED)
+    if (isChangeRequired(state->animation))
     {
         ANIMATIONINFO animation;
         animation.cbSize = sizeof(animation);
         animation.iMinAnimate = enable;
 
-        if (SystemParametersInfoW(SPI_SETANIMATION, sizeof(animation), &animation, SPIF_SENDCHANGE))
-        {
-            state->animation |= STATE_CHANGED;
-        }
-        else
+        if (!SystemParametersInfoW(SPI_SETANIMATION, sizeof(animation), &animation, SPIF_SENDCHANGE))
         {
             PLOG(LS_WARNING) << "SystemParametersInfoW(SPI_SETANIMATION) failed";
         }
     }
 
-    if (state->menu_animation & STATE_CHANGE_ALLOWED)
+    if (isChangeRequired(state->menu_animation))
     {
-        if (SystemParametersInfoW(SPI_SETMENUANIMATION,
-                                  0,
-                                  reinterpret_cast<void*>(enable),
-                                  SPIF_SENDCHANGE))
-        {
-            state->menu_animation |= STATE_CHANGED;
-        }
-        else
+        if (!SystemParametersInfoW(SPI_SETMENUANIMATION,
+                                   0,
+                                   reinterpret_cast<void*>(enable),
+                                   SPIF_SENDCHANGE))
         {
             PLOG(LS_WARNING) << "SystemParametersInfoW(SPI_SETMENUANIMATION) failed";
         }
     }
 
-    if (state->tooltip_animation & STATE_CHANGE_ALLOWED)
+    if (isChangeRequired(state->tooltip_animation))
     {
-        if (SystemParametersInfoW(SPI_SETTOOLTIPANIMATION,
-                                  0,
-                                  reinterpret_cast<void*>(enable),
-                                  SPIF_SENDCHANGE))
-        {
-            state->tooltip_animation |= STATE_CHANGED;
-        }
-        else
+        if (!SystemParametersInfoW(SPI_SETTOOLTIPANIMATION,
+                                   0,
+                                   reinterpret_cast<void*>(enable),
+                                   SPIF_SENDCHANGE))
         {
             PLOG(LS_WARNING) << "SystemParametersInfoW(SPI_SETTOOLTIPANIMATION) failed";
         }
     }
 
-    if (state->combobox_animation & STATE_CHANGE_ALLOWED)
+    if (isChangeRequired(state->combobox_animation))
     {
-        if (SystemParametersInfoW(SPI_SETCOMBOBOXANIMATION,
-                                  0,
-                                  reinterpret_cast<void*>(enable),
-                                  SPIF_SENDCHANGE))
-        {
-            state->combobox_animation |= STATE_CHANGED;
-        }
-        else
+        if (!SystemParametersInfoW(SPI_SETCOMBOBOXANIMATION,
+                                   0,
+                                   reinterpret_cast<void*>(enable),
+                                   SPIF_SENDCHANGE))
         {
             PLOG(LS_WARNING) << "SystemParametersInfoW(SPI_SETCOMBOBOXANIMATION) failed";
         }
     }
 
-    if (state->selection_fade & STATE_CHANGE_ALLOWED)
+    if (isChangeRequired(state->selection_fade))
     {
-        if (SystemParametersInfoW(SPI_SETSELECTIONFADE,
-                                  0,
-                                  reinterpret_cast<void*>(enable),
-                                  SPIF_SENDCHANGE))
-        {
-            state->selection_fade |= STATE_CHANGED;
-        }
-        else
+        if (!SystemParametersInfoW(SPI_SETSELECTIONFADE,
+                                   0,
+                                   reinterpret_cast<void*>(enable),
+                                   SPIF_SENDCHANGE))
         {
             PLOG(LS_WARNING) << "SystemParametersInfoW(SPI_SETSELECTIONFADE) failed";
         }
     }
 
-    if (state->listbox_smooth_scrolling & STATE_CHANGE_ALLOWED)
+    if (isChangeRequired(state->listbox_smooth_scrolling))
     {
-        if (SystemParametersInfoW(SPI_SETLISTBOXSMOOTHSCROLLING,
-                                  0,
-                                  reinterpret_cast<void*>(enable),
-                                  SPIF_SENDCHANGE))
-        {
-            state->listbox_smooth_scrolling |= STATE_CHANGED;
-        }
-        else
+        if (!SystemParametersInfoW(SPI_SETLISTBOXSMOOTHSCROLLING,
+                                   0,
+                                   reinterpret_cast<void*>(enable),
+                                   SPIF_SENDCHANGE))
         {
             PLOG(LS_WARNING) << "SystemParametersInfoW(SPI_SETLISTBOXSMOOTHSCROLLING) failed";
         }
     }
 
-    if (state->ui_effects & STATE_CHANGE_ALLOWED)
+    if (isChangeRequired(state->ui_effects))
     {
-        if (SystemParametersInfoW(SPI_SETUIEFFECTS,
-                                  0,
-                                  reinterpret_cast<void*>(enable),
-                                  SPIF_SENDCHANGE))
-        {
-            state->ui_effects |= STATE_CHANGED;
-        }
-        else
+        if (!SystemParametersInfoW(SPI_SETUIEFFECTS,
+                                   0,
+                                   reinterpret_cast<void*>(enable),
+                                   SPIF_SENDCHANGE))
         {
             PLOG(LS_WARNING) << "SystemParametersInfoW(SPI_SETUIEFFECTS) failed";
         }
     }
 
-    if (state->client_area_animation & STATE_CHANGE_ALLOWED)
+    if (isChangeRequired(state->client_area_animation))
     {
-        if (SystemParametersInfoW(SPI_SETCLIENTAREAANIMATION,
-                                  0,
-                                  reinterpret_cast<void*>(enable),
-                                  SPIF_SENDCHANGE))
-        {
-            state->client_area_animation |= STATE_CHANGED;
-        }
-        else
+        if (!SystemParametersInfoW(SPI_SETCLIENTAREAANIMATION,
+                                   0,
+                                   reinterpret_cast<void*>(enable),
+                                   SPIF_SENDCHANGE))
         {
             PLOG(LS_WARNING) << "SystemParametersInfoW(SPI_SETCLIENTAREAANIMATION) failed";
         }
     }
 
-    if (state->gradient_captions & STATE_CHANGE_ALLOWED)
+    if (isChangeRequired(state->gradient_captions))
     {
-        if (SystemParametersInfoW(SPI_SETGRADIENTCAPTIONS,
-                                  0,
-                                  reinterpret_cast<void*>(enable),
-                                  SPIF_SENDCHANGE))
-        {
-            state->gradient_captions |= STATE_CHANGED;
-        }
-        else
+        if (!SystemParametersInfoW(SPI_SETGRADIENTCAPTIONS,
+                                   0,
+                                   reinterpret_cast<void*>(enable),
+                                   SPIF_SENDCHANGE))
         {
             PLOG(LS_WARNING) << "SystemParametersInfoW(SPI_SETGRADIENTCAPTIONS) failed";
         }
     }
 
-    if (state->hot_tracking & STATE_CHANGE_ALLOWED)
+    if (isChangeRequired(state->hot_tracking))
     {
-        if (SystemParametersInfoW(SPI_SETHOTTRACKING,
-                                  0,
-                                  reinterpret_cast<void*>(enable),
-                                  SPIF_SENDCHANGE))
-        {
-            state->hot_tracking |= STATE_CHANGED;
-        }
-        else
+        if (!SystemParametersInfoW(SPI_SETHOTTRACKING,
+                                   0,
+                                   reinterpret_cast<void*>(enable),
+                                   SPIF_SENDCHANGE))
         {
             PLOG(LS_WARNING) << "SystemParametersInfoW(SPI_SETHOTTRACKING) failed";
         }
