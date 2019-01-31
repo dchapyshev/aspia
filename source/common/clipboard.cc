@@ -59,7 +59,7 @@ void Clipboard::dataChanged()
 {
     const QMimeData* mime_data = QGuiApplication::clipboard()->mimeData();
 
-#if 1
+#if defined(OS_WIN)
     // HACK! We must call hasText twice to get the correct result.
     // Qt bug: https://bugreports.qt.io/browse/QTBUG-53979
     mime_data->hasText();
