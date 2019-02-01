@@ -24,13 +24,16 @@
 
 namespace client {
 
+class FileRemoveDialog;
+class FileTransferDialog;
+
 class FileManagerWindow : public ClientWindow
 {
     Q_OBJECT
 
 public:
     FileManagerWindow(const ConnectData& connect_data, QWidget* parent);
-    ~FileManagerWindow() = default;
+    ~FileManagerWindow();
 
     QByteArray saveState() const;
     void restoreState(const QByteArray& state);
@@ -38,15 +41,13 @@ public:
 public slots:
     void refresh();
 
-signals:
-    void windowClose();
-
 protected:
     // QWidget implementation.
     void closeEvent(QCloseEvent* event) override;
 
     // SessionWindow implementation.
     void sessionStarted() override;
+    void sessionError() override;
 
 private slots:
     void removeItems(FilePanel* sender, const QList<FileRemover::Item>& items);
@@ -64,6 +65,9 @@ private:
     static QString createWindowTitle(const ConnectData& connect_data);
 
     Ui::FileManagerWindow ui;
+
+    QPointer<FileRemoveDialog> remove_dialog_;
+    QPointer<FileTransferDialog> transfer_dialog_;
 
     DISALLOW_COPY_AND_ASSIGN(FileManagerWindow);
 };

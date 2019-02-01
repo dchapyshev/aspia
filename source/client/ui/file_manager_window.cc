@@ -67,6 +67,8 @@ FileManagerWindow::FileManagerWindow(const ConnectData& connect_data, QWidget* p
     ui.local_panel->setFocus();
 }
 
+FileManagerWindow::~FileManagerWindow() = default;
+
 QByteArray FileManagerWindow::saveState() const
 {
     QByteArray buffer;
@@ -112,7 +114,6 @@ void FileManagerWindow::closeEvent(QCloseEvent* event)
     settings.setWindowGeometry(saveGeometry());
     settings.setWindowState(saveState());
 
-    emit windowClose();
     ClientWindow::closeEvent(event);
 }
 
@@ -121,10 +122,21 @@ void FileManagerWindow::sessionStarted()
     refresh();
 }
 
+void FileManagerWindow::sessionError()
+{
+    if (transfer_dialog_)
+        transfer_dialog_->onTransferFinished();
+
+    if (remove_dialog_)
+        remove_dialog_->close();
+}
+
 void FileManagerWindow::removeItems(FilePanel* sender, const QList<FileRemover::Item>& items)
 {
-    FileRemoveDialog* dialog = new FileRemoveDialog(this);
-    FileRemover* remover = new FileRemover(dialog);
+    remove_dialog_ = new FileRemoveDialog(this);
+    remove_dialog_->setAttribute(Qt::WA_DeleteOnClose);
+
+    FileRemover* remover = new FileRemover(remove_dialog_);
 
     ClientFileTransfer* client = static_cast<ClientFileTransfer*>(currentClient());
 
@@ -141,14 +153,11 @@ void FileManagerWindow::removeItems(FilePanel* sender, const QList<FileRemover::
                 client, &ClientFileTransfer::remoteRequest);
     }
 
-    connect(remover, &FileRemover::started, dialog, &FileRemoveDialog::open);
-    connect(remover, &FileRemover::finished, dialog, &FileRemoveDialog::close);
+    connect(remover, &FileRemover::started, remove_dialog_, &FileRemoveDialog::open);
+    connect(remover, &FileRemover::finished, remove_dialog_, &FileRemoveDialog::close);
     connect(remover, &FileRemover::finished, sender, &FilePanel::refresh);
-    connect(remover, &FileRemover::progressChanged, dialog, &FileRemoveDialog::setProgress);
-    connect(remover, &FileRemover::error, dialog, &FileRemoveDialog::showError);
-
-    connect(dialog, &FileRemoveDialog::finished, dialog, &FileRemoveDialog::deleteLater);
-    connect(this, &FileManagerWindow::windowClose, dialog, &FileRemoveDialog::close);
+    connect(remover, &FileRemover::progressChanged, remove_dialog_, &FileRemoveDialog::setProgress);
+    connect(remover, &FileRemover::error, remove_dialog_, &FileRemoveDialog::showError);
 
     remover->start(sender->currentPath(), items);
 }
@@ -200,8 +209,10 @@ void FileManagerWindow::transferItems(FileTransfer::Type type,
                                       const QString& target_path,
                                       const QList<FileTransfer::Item>& items)
 {
-    FileTransferDialog* dialog = new FileTransferDialog(this);
-    FileTransfer* transfer = new FileTransfer(type, dialog);
+    transfer_dialog_ = new FileTransferDialog(this);
+    transfer_dialog_->setAttribute(Qt::WA_DeleteOnClose);
+
+    FileTransfer* transfer = new FileTransfer(type, transfer_dialog_);
 
     if (type == FileTransfer::Uploader)
     {
@@ -213,25 +224,31 @@ void FileManagerWindow::transferItems(FileTransfer::Type type,
         connect(transfer, &FileTransfer::finished, ui.local_panel, &FilePanel::refresh);
     }
 
-    connect(transfer, &FileTransfer::started, dialog, &FileTransferDialog::open);
-    connect(transfer, &FileTransfer::finished, dialog, &FileTransferDialog::onTransferFinished);
+    connect(transfer, &FileTransfer::started,
+            transfer_dialog_, &FileTransferDialog::open);
 
-    connect(transfer, &FileTransfer::currentItemChanged, dialog, &FileTransferDialog::setCurrentItem);
-    connect(transfer, &FileTransfer::progressChanged, dialog, &FileTransferDialog::setProgress);
+    connect(transfer, &FileTransfer::finished,
+            transfer_dialog_, &FileTransferDialog::onTransferFinished);
 
-    connect(transfer, &FileTransfer::error, dialog, &FileTransferDialog::showError);
+    connect(transfer, &FileTransfer::currentItemChanged,
+            transfer_dialog_, &FileTransferDialog::setCurrentItem);
 
-    connect(dialog, &FileTransferDialog::transferCanceled, transfer, &FileTransfer::stop);
-    connect(dialog, &FileTransferDialog::finished, dialog, &FileTransferDialog::deleteLater);
+    connect(transfer, &FileTransfer::progressChanged,
+            transfer_dialog_, &FileTransferDialog::setProgress);
+
+    connect(transfer, &FileTransfer::error,
+            transfer_dialog_, &FileTransferDialog::showError);
+
+    connect(transfer_dialog_, &FileTransferDialog::transferCanceled,
+            transfer, &FileTransfer::stop);
 
     ClientFileTransfer* client = static_cast<ClientFileTransfer*>(currentClient());
 
     connect(transfer, &FileTransfer::localRequest,
             client->localWorker(), &common::FileWorker::executeRequest);
-    connect(transfer, &FileTransfer::remoteRequest, client, &ClientFileTransfer::remoteRequest);
 
-    connect(this, &FileManagerWindow::windowClose,
-            dialog, &FileTransferDialog::onTransferFinished);
+    connect(transfer, &FileTransfer::remoteRequest,
+            client, &ClientFileTransfer::remoteRequest);
 
     transfer->start(source_path, target_path, items);
 }

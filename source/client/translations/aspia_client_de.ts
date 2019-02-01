@@ -1489,7 +1489,7 @@
         <translation type="unfinished">Remote Computer</translation>
     </message>
     <message>
-        <location filename="../ui/file_manager_window.cc" line="264"/>
+        <location filename="../ui/file_manager_window.cc" line="281"/>
         <source>File Transfer</source>
         <translation type="unfinished">Dateiübertragung</translation>
     </message>
