@@ -1677,18 +1677,18 @@
 <context>
     <name>client::DesktopWindow</name>
     <message>
-        <location filename="../ui/desktop_window.cc" line="367"/>
+        <location filename="../ui/desktop_window.cc" line="366"/>
         <source>Save File</source>
         <translation>Сохранение файла</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="369"/>
+        <location filename="../ui/desktop_window.cc" line="368"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG изображение (*.png);;BMP изображение (*.bmp)</translation>
     </message>
     <message>
         <location filename="../ui/desktop_window.cc" line="138"/>
-        <location filename="../ui/desktop_window.cc" line="389"/>
+        <location filename="../ui/desktop_window.cc" line="388"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
@@ -1698,22 +1698,22 @@
         <translation>Текущая видео-кодировка не поддерживается хостом. Пожалуйста, выберите другую видео-кодировку.</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="157"/>
+        <location filename="../ui/desktop_window.cc" line="156"/>
         <source>Selecting a supported video encoding is canceled by the user.</source>
         <translation>Выбор поддерживаемой видео-кодировки отменен пользователем.</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="389"/>
+        <location filename="../ui/desktop_window.cc" line="388"/>
         <source>Could not save image</source>
         <translation>Не удалось сохранить изображение</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="519"/>
+        <location filename="../ui/desktop_window.cc" line="527"/>
         <source>Desktop Manage</source>
         <translation>Управление рабочим столом</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="524"/>
+        <location filename="../ui/desktop_window.cc" line="532"/>
         <source>Desktop View</source>
         <translation>Просмотр рабочего стола</translation>
     </message>

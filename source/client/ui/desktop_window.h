@@ -38,6 +38,7 @@ class Frame;
 
 namespace client {
 
+class DesktopConfigDialog;
 class DesktopPanel;
 class SystemInfoWindow;
 
@@ -76,6 +77,9 @@ protected:
     void leaveEvent(QEvent* event) override;
     bool eventFilter(QObject* object, QEvent* event) override;
 
+    // ClientWindow implementation.
+    void sessionError() override;
+
 private slots:
     void changeSettings();
     void onConfigChanged(const proto::desktop::Config& config);
@@ -94,6 +98,7 @@ private:
     DesktopWidget* desktop_ = nullptr;
     common::Clipboard* clipboard_ = nullptr;
 
+    QPointer<DesktopConfigDialog> config_dialog_;
     QPointer<SystemInfoWindow> system_info_;
 
     int scroll_timer_id_ = 0;

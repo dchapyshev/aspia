@@ -143,22 +143,21 @@ void DesktopWindow::configRequered()
     ClientDesktop* client = desktopClient();
     const ConnectData& connect_data = client->connectData();
 
-    DesktopConfigDialog* dialog =
-        new DesktopConfigDialog(connect_data.session_type,
-                                connect_data.desktop_config,
-                                client->supportedVideoEncodings(),
-                                this);
+    config_dialog_ = new DesktopConfigDialog(connect_data.session_type,
+                                             connect_data.desktop_config,
+                                             client->supportedVideoEncodings(),
+                                             this);
+    config_dialog_->setAttribute(Qt::WA_DeleteOnClose);
 
-    connect(dialog, &DesktopConfigDialog::configChanged, this, &DesktopWindow::onConfigChanged);
-    connect(dialog, &DesktopConfigDialog::finished, dialog, &DesktopConfigDialog::deleteLater);
-    connect(dialog, &DesktopConfigDialog::rejected, [this]()
+    connect(config_dialog_, &DesktopConfigDialog::configChanged, this, &DesktopWindow::onConfigChanged);
+    connect(config_dialog_, &DesktopConfigDialog::rejected, [this]()
     {
         emit currentClient()->errorOccurred(
             tr("Selecting a supported video encoding is canceled by the user."));
     });
 
-    dialog->show();
-    dialog->activateWindow();
+    config_dialog_->show();
+    config_dialog_->activateWindow();
 }
 
 void DesktopWindow::setDesktopRect(const QRect& screen_rect)
@@ -312,17 +311,17 @@ void DesktopWindow::changeSettings()
     ClientDesktop* client = desktopClient();
     const ConnectData& connect_data = client->connectData();
 
-    DesktopConfigDialog* dialog =
-        new DesktopConfigDialog(connect_data.session_type,
-                                connect_data.desktop_config,
-                                client->supportedVideoEncodings(),
-                                this);
+    config_dialog_ = new DesktopConfigDialog(connect_data.session_type,
+                                             connect_data.desktop_config,
+                                             client->supportedVideoEncodings(),
+                                             this);
+    config_dialog_->setAttribute(Qt::WA_DeleteOnClose);
 
-    connect(dialog, &DesktopConfigDialog::configChanged, this, &DesktopWindow::onConfigChanged);
-    connect(dialog, &DesktopConfigDialog::finished, dialog, &DesktopConfigDialog::deleteLater);
+    connect(config_dialog_, &DesktopConfigDialog::configChanged,
+            this, &DesktopWindow::onConfigChanged);
 
-    dialog->show();
-    dialog->activateWindow();
+    config_dialog_->show();
+    config_dialog_->activateWindow();
 }
 
 void DesktopWindow::onConfigChanged(const proto::desktop::Config& config)
@@ -466,6 +465,15 @@ void DesktopWindow::leaveEvent(QEvent* event)
     }
 
     QWidget::leaveEvent(event);
+}
+
+void DesktopWindow::sessionError()
+{
+    if (config_dialog_)
+        config_dialog_->close();
+
+    if (system_info_)
+        system_info_->close();
 }
 
 bool DesktopWindow::eventFilter(QObject* object, QEvent* event)

@@ -129,6 +129,7 @@ void ClientWindow::startSession()
 
         // Show session window.
         show();
+        activateWindow();
     });
 
     connect(client_, &Client::finished, [this]()
@@ -141,9 +142,12 @@ void ClientWindow::startSession()
         // Hide session window.
         hide();
 
+        sessionError();
+
         // Display an error in the dialog.
         status_dialog_->addStatus(message);
         status_dialog_->show();
+        status_dialog_->activateWindow();
     });
 
     client_->start();
@@ -155,6 +159,11 @@ void ClientWindow::sessionStarted()
 }
 
 void ClientWindow::sessionFinished()
+{
+    // Nothing
+}
+
+void ClientWindow::sessionError()
 {
     // Nothing
 }

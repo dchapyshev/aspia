@@ -1303,18 +1303,18 @@
 <context>
     <name>client::DesktopWindow</name>
     <message>
-        <location filename="../ui/desktop_window.cc" line="367"/>
+        <location filename="../ui/desktop_window.cc" line="366"/>
         <source>Save File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="369"/>
+        <location filename="../ui/desktop_window.cc" line="368"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/desktop_window.cc" line="138"/>
-        <location filename="../ui/desktop_window.cc" line="389"/>
+        <location filename="../ui/desktop_window.cc" line="388"/>
         <source>Warning</source>
         <translation type="unfinished">Waarschuwing</translation>
     </message>
@@ -1324,22 +1324,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="157"/>
+        <location filename="../ui/desktop_window.cc" line="156"/>
         <source>Selecting a supported video encoding is canceled by the user.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="389"/>
+        <location filename="../ui/desktop_window.cc" line="388"/>
         <source>Could not save image</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="519"/>
+        <location filename="../ui/desktop_window.cc" line="527"/>
         <source>Desktop Manage</source>
         <translation type="unfinished">Bureaublad Beheren</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="524"/>
+        <location filename="../ui/desktop_window.cc" line="532"/>
         <source>Desktop View</source>
         <translation type="unfinished">Bureaublad Weergeven</translation>
     </message>

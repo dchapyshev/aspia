@@ -65,6 +65,9 @@ protected:
     // Called when the client session is complete.
     virtual void sessionFinished();
 
+    // Called when an error occurred in the session.
+    virtual void sessionError();
+
     // Creates a client.
     // Each child must call this method in the constructor to create the client.
     template <class ClassType, class ... Args>
