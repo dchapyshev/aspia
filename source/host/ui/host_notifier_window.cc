@@ -245,8 +245,8 @@ void HostNotifierWindow::updateWindowPosition()
     QRect screen_rect = QApplication::primaryScreen()->availableGeometry();
     QSize window_size = frameSize();
 
-    move(screen_rect.x() + screen_rect.width() - window_size.width(),
-         screen_rect.y() + screen_rect.height() - window_size.height());
+    move(screen_rect.x() + (screen_rect.width() - window_size.width()) - 1,
+         screen_rect.y() + (screen_rect.height() - window_size.height()) - 1);
 }
 
 void HostNotifierWindow::showNotifier()
