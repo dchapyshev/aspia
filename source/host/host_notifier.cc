@@ -38,9 +38,15 @@ bool HostNotifier::start(const QString& channel_id)
 
     ipc_channel_ = ipc::Channel::createClient(this);
 
+    connect(ipc_channel_, &ipc::Channel::disconnected,
+            this, &HostNotifier::stop,
+            Qt::QueuedConnection);
+
+    connect(ipc_channel_, &ipc::Channel::errorOccurred,
+            this, &HostNotifier::stop,
+            Qt::QueuedConnection);
+
     connect(ipc_channel_, &ipc::Channel::connected, ipc_channel_, &ipc::Channel::start);
-    connect(ipc_channel_, &ipc::Channel::disconnected, this, &HostNotifier::stop);
-    connect(ipc_channel_, &ipc::Channel::errorOccurred, this, &HostNotifier::stop);
     connect(ipc_channel_, &ipc::Channel::messageReceived, this, &HostNotifier::onIpcMessageReceived);
 
     ipc_channel_->connectToServer(channel_id);

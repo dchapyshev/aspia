@@ -23,6 +23,7 @@
 #include <QUuid>
 
 #include "base/macros_magic.h"
+#include "host/win/host_process.h"
 #include "proto/common.pb.h"
 
 namespace ipc {
@@ -36,7 +37,6 @@ class ChannelHost;
 
 namespace host {
 
-class HostProcess;
 class SessionFake;
 
 class Host : public QObject
@@ -74,6 +74,7 @@ protected:
 private slots:
     void ipcServerStarted(const QString& channel_id);
     void ipcNewConnection(ipc::Channel* channel);
+    void sessionProcessError(HostProcess::ErrorCode error_code);
     void attachSession(uint32_t session_id);
     void dettachSession();
 

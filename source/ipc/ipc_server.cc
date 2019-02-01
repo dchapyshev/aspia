@@ -21,7 +21,7 @@
 #include <QCoreApplication>
 #include <QLocalServer>
 
-#include "base/logging.h"
+#include "base/qt_logging.h"
 #include "crypto/random.h"
 #include "ipc/ipc_channel.h"
 
@@ -72,7 +72,7 @@ void Server::start()
 
     if (!server_->listen(channel_id))
     {
-        LOG(LS_WARNING) << "listen failed: " << server_->errorString().toStdString();
+        LOG(LS_WARNING) << "listen failed: " << server_->errorString();
         emit errorOccurred();
         stop();
         return;

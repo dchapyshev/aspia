@@ -187,7 +187,10 @@ void HostServer::onNewConnection()
         host->setUuid(QUuid::createUuid());
 
         connect(this, &HostServer::sessionChanged, host.get(), &Host::sessionChanged);
-        connect(host.get(), &Host::finished, this, &HostServer::onHostFinished, Qt::QueuedConnection);
+
+        connect(host.get(), &Host::finished,
+                this, &HostServer::onHostFinished,
+                Qt::QueuedConnection);
 
         if (host->start())
         {
@@ -233,10 +236,12 @@ void HostServer::onIpcServerStarted(const QString& channel_id)
         QStringList() << QStringLiteral("--channel_id") << channel_id);
 
     connect(notifier_process_, &HostProcess::errorOccurred,
-            this, &HostServer::onNotifierProcessError);
+            this, &HostServer::onNotifierProcessError,
+            Qt::QueuedConnection);
 
     connect(notifier_process_, &HostProcess::finished,
-            this, &HostServer::restartNotifier);
+            this, &HostServer::restartNotifier,
+            Qt::QueuedConnection);
 
     // Start the process. After the start, the process must connect to the IPC server and
     // slot |onIpcNewConnection| will be called.
@@ -261,9 +266,15 @@ void HostServer::onIpcNewConnection(ipc::Channel* channel)
     ipc_channel_ = channel;
     ipc_channel_->setParent(this);
 
-    connect(ipc_channel_, &ipc::Channel::disconnected, ipc_channel_, &ipc::Channel::deleteLater);
-    connect(ipc_channel_, &ipc::Channel::disconnected, this, &HostServer::restartNotifier);
-    connect(ipc_channel_, &ipc::Channel::messageReceived, this, &HostServer::onIpcMessageReceived);
+    connect(ipc_channel_, &ipc::Channel::disconnected,
+            ipc_channel_, &ipc::Channel::deleteLater);
+
+    connect(ipc_channel_, &ipc::Channel::disconnected,
+            this, &HostServer::restartNotifier,
+            Qt::QueuedConnection);
+
+    connect(ipc_channel_, &ipc::Channel::messageReceived,
+            this, &HostServer::onIpcMessageReceived);
 
     // Send information about all connected sessions to the notifier.
     for (const auto& session : session_list_)

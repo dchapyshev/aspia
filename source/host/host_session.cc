@@ -67,8 +67,8 @@ void Session::start()
 
     connect(channel_, &ipc::Channel::connected, channel_, &ipc::Channel::start);
     connect(channel_, &ipc::Channel::connected, this, &Session::sessionStarted);
-    connect(channel_, &ipc::Channel::disconnected, this, &Session::stop);
-    connect(channel_, &ipc::Channel::errorOccurred, this, &Session::stop);
+    connect(channel_, &ipc::Channel::disconnected, this, &Session::stop, Qt::QueuedConnection);
+    connect(channel_, &ipc::Channel::errorOccurred, this, &Session::stop, Qt::QueuedConnection);
     connect(channel_, &ipc::Channel::messageReceived, this, &Session::messageReceived);
 
     channel_->connectToServer(channel_id_);

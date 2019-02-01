@@ -23,8 +23,7 @@
 
 #include <QCoreApplication>
 
-#include "base/logging.h"
-#include "host/win/host_process.h"
+#include "base/qt_logging.h"
 #include "host/host_session_fake.h"
 #include "ipc/ipc_channel.h"
 #include "ipc/ipc_server.h"
@@ -204,7 +203,7 @@ void Host::ipcServerStarted(const QString& channel_id)
     DCHECK_EQ(state_, State::STARTING);
     DCHECK(session_process_.isNull());
 
-    LOG(LS_INFO) << "IPC server is running with channel id: " << channel_id.toStdString();
+    LOG(LS_INFO) << "IPC server is running with channel id: " << channel_id;
 
     session_process_ = new HostProcess(this);
 
@@ -241,19 +240,9 @@ void Host::ipcServerStarted(const QString& channel_id)
 
     session_process_->setArguments(arguments);
 
-    connect(session_process_, &HostProcess::errorOccurred, [this](HostProcess::ErrorCode error_code)
-    {
-        if (network_channel_->sessionType() == proto::SESSION_TYPE_FILE_TRANSFER &&
-            error_code == HostProcess::NoLoggedOnUser)
-        {
-            if (!startFakeSession())
-                stop();
-        }
-        else
-        {
-            stop();
-        }
-    });
+    connect(session_process_, &HostProcess::errorOccurred,
+            this, &Host::sessionProcessError,
+            Qt::QueuedConnection);
 
     connect(session_process_, &HostProcess::finished, this, &Host::dettachSession);
 
@@ -276,8 +265,11 @@ void Host::ipcNewConnection(ipc::Channel* channel)
     ipc_channel_ = channel;
     ipc_channel_->setParent(this);
 
+    connect(ipc_channel_, &ipc::Channel::disconnected,
+            this, &Host::dettachSession,
+            Qt::QueuedConnection);
+
     connect(ipc_channel_, &ipc::Channel::disconnected, ipc_channel_, &ipc::Channel::deleteLater);
-    connect(ipc_channel_, &ipc::Channel::disconnected, this, &Host::dettachSession);
     connect(ipc_channel_, &ipc::Channel::messageReceived, network_channel_, &net::Channel::send);
     connect(network_channel_, &net::Channel::messageReceived, ipc_channel_, &ipc::Channel::send);
 
@@ -288,6 +280,20 @@ void Host::ipcNewConnection(ipc::Channel* channel)
         network_channel_->start();
 
     ipc_channel_->start();
+}
+
+void Host::sessionProcessError(HostProcess::ErrorCode error_code)
+{
+    if (network_channel_->sessionType() == proto::SESSION_TYPE_FILE_TRANSFER &&
+        error_code == HostProcess::NoLoggedOnUser)
+    {
+        if (!startFakeSession())
+            stop();
+    }
+    else
+    {
+        stop();
+    }
 }
 
 void Host::attachSession(uint32_t session_id)
@@ -302,7 +308,7 @@ void Host::attachSession(uint32_t session_id)
     connect(ipc_server, &ipc::Server::started, this, &Host::ipcServerStarted);
     connect(ipc_server, &ipc::Server::finished, ipc_server, &ipc::Server::deleteLater);
     connect(ipc_server, &ipc::Server::newConnection, this, &Host::ipcNewConnection);
-    connect(ipc_server, &ipc::Server::errorOccurred, this, &Host::stop);
+    connect(ipc_server, &ipc::Server::errorOccurred, this, &Host::stop, Qt::QueuedConnection);
 
     LOG(LS_INFO) << "Starting the IPC server";
     ipc_server->start();
@@ -366,7 +372,7 @@ bool Host::startFakeSession()
     connect(network_channel_, &net::Channel::messageReceived,
             fake_session_, &SessionFake::onMessageReceived);
 
-    connect(fake_session_, &SessionFake::errorOccurred, this, &Host::stop);
+    connect(fake_session_, &SessionFake::errorOccurred, this, &Host::stop, Qt::QueuedConnection);
 
     fake_session_->startSession();
     return true;
