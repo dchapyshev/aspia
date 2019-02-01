@@ -18,7 +18,7 @@
 
 #include "ipc/ipc_channel.h"
 
-#include "base/logging.h"
+#include "base/qt_logging.h"
 
 namespace ipc {
 
@@ -43,14 +43,9 @@ Channel::Channel(QLocalSocket* socket, QObject* parent)
     connect(socket_, &QLocalSocket::connected, this, &Channel::connected);
     connect(socket_, &QLocalSocket::bytesWritten, this, &Channel::onBytesWritten);
     connect(socket_, &QLocalSocket::readyRead, this, &Channel::onReadyRead);
-
-    connect(socket_, &QLocalSocket::disconnected,
-            this, &Channel::disconnected,
-            Qt::QueuedConnection);
-
+    connect(socket_, &QLocalSocket::disconnected, this, &Channel::disconnected);
     connect(socket_, QOverload<QLocalSocket::LocalSocketError>::of(&QLocalSocket::error),
-            this, &Channel::onError,
-            Qt::QueuedConnection);
+            this, &Channel::onError);
 }
 
 // static
@@ -92,7 +87,7 @@ void Channel::send(const QByteArray& buffer)
 
 void Channel::onError(QLocalSocket::LocalSocketError /* socket_error */)
 {
-    LOG(LS_WARNING) << "IPC channel error: " << socket_->errorString().toStdString();
+    LOG(LS_WARNING) << "IPC channel error: " << socket_->errorString();
     emit errorOccurred();
 }
 
@@ -164,7 +159,7 @@ void Channel::onReadyRead()
             continue;
         }
 
-        if (current == 0)
+        if (current <= 0)
             break;
 
         read_ += current;
