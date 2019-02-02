@@ -18,54 +18,55 @@
 
 #include "updater/update_checker.h"
 
-#include <QNetworkRequest>
-#include <QNetworkReply>
-#include <QUrlQuery>
+#include <QThread>
 
-#include "base/qt_logging.h"
-#include "build/version.h"
+#include "updater/update_checker_impl.h"
 
 namespace updater {
 
-UpdateChecker::UpdateChecker(QObject* parent)
-    : QObject(parent),
-      network_manager_(this)
+Checker::Checker(QObject* parent)
+    : QObject(parent)
 {
-    // Only "http"->"http", "http"->"https" or "https"->"https" redirects are allowed.
-    network_manager_.setRedirectPolicy(QNetworkRequest::NoLessSafeRedirectPolicy);
+    qRegisterMetaType<UpdateInfo>();
 
-    connect(&network_manager_, &QNetworkAccessManager::finished, [this](QNetworkReply* reply)
-    {
-        if (reply->error())
-        {
-            LOG(LS_WARNING) << "Error checking for updates: " << reply->errorString();
-            emit finished(UpdateInfo());
-        }
-        else
-        {
-            emit finished(UpdateInfo::fromXml(reply->readAll()));
-        }
+    thread_ = new QThread(this);
+    impl_ = new CheckerImpl();
 
-        reply->deleteLater();
-    });
+    impl_->moveToThread(thread_);
+
+    connect(impl_, &CheckerImpl::finished, this, &Checker::finished);
+    connect(impl_, &CheckerImpl::finished, impl_, &CheckerImpl::deleteLater);
+    connect(impl_, &CheckerImpl::finished, thread_, &QThread::quit);
+
+    connect(thread_, &QThread::started, impl_, &CheckerImpl::start);
+    connect(thread_, &QThread::finished, thread_, &QThread::deleteLater);
 }
 
-UpdateChecker::~UpdateChecker() = default;
-
-void UpdateChecker::checkForUpdates(const QString& update_server, const QString& package_name)
+Checker::~Checker()
 {
-    QVersionNumber current_version(ASPIA_VERSION_MAJOR,
-                                   ASPIA_VERSION_MINOR,
-                                   ASPIA_VERSION_PATCH);
-    QUrl url(update_server);
+    if (thread_ && thread_->isRunning())
+    {
+        thread_->quit();
+        thread_->wait();
+    }
+}
 
-    url.setPath("/update.php");
-    url.setQuery(QUrlQuery(
-        QString("package=%1&version=%2")
-        .arg(package_name)
-        .arg(current_version.toString())));
+void Checker::setUpdateServer(const QString& update_server)
+{
+    if (impl_)
+        impl_->setUpdateServer(update_server);
+}
 
-    network_manager_.get(QNetworkRequest(url));
+void Checker::setPackageName(const QString& package_name)
+{
+    if (impl_)
+        impl_->setPackageName(package_name);
+}
+
+void Checker::start()
+{
+    if (thread_)
+        thread_->start(QThread::LowPriority);
 }
 
 } // namespace updater

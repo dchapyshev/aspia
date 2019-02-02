@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,44 +16,44 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef UPDATER__UPDATE_DIALOG_H
-#define UPDATER__UPDATE_DIALOG_H
+#ifndef UPDATER__UPDATE_CHECKER_IMPL_H
+#define UPDATER__UPDATE_CHECKER_IMPL_H
 
-#include <QDialog>
+#include <QObject>
 
 #include "base/macros_magic.h"
 #include "updater/update_info.h"
 
-namespace Ui {
-class UpdateDialog;
-} // namespace Ui
+class QNetworkAccessManager;
 
 namespace updater {
 
-class UpdateDialog : public QDialog
+class CheckerImpl : public QObject
 {
     Q_OBJECT
 
 public:
-    UpdateDialog(const QString& update_server,
-                 const QString& package_name,
-                 QWidget* parent = nullptr);
-    UpdateDialog(const UpdateInfo& update_info, QWidget* parent = nullptr);
-    ~UpdateDialog();
+    explicit CheckerImpl(QObject* parent = nullptr);
+    ~CheckerImpl();
 
-private slots:
-    void onUpdateChecked(const UpdateInfo& update_info);
-    void onUpdateNow();
+    void setUpdateServer(const QString& update_server);
+    void setPackageName(const QString& package_name);
+
+signals:
+    void finished(const UpdateInfo& update_info);
+
+public slots:
+    void start();
 
 private:
-    void initialize();
+    QNetworkAccessManager* network_manager_;
 
-    std::unique_ptr<Ui::UpdateDialog> ui;
-    UpdateInfo update_info_;
+    QString update_server_;
+    QString package_name_;
 
-    DISALLOW_COPY_AND_ASSIGN(UpdateDialog);
+    DISALLOW_COPY_AND_ASSIGN(CheckerImpl);
 };
 
 } // namespace updater
 
-#endif // UPDATER__UPDATE_DIALOG_H
+#endif // UPDATER__UPDATE_CHECKER_IMPL_H

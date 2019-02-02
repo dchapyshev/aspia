@@ -47,45 +47,17 @@ UpdateDialog::UpdateDialog(const QString& update_server,
 {
     initialize();
 
-    UpdateChecker* update_checher = new UpdateChecker(this);
-
-    connect(update_checher, &UpdateChecker::finished,
-            [this](const UpdateInfo& update_info)
-    {
-        QVersionNumber version = update_info.version();
-
-        if (version.isNull())
-        {
-            ui->label_available->setText(tr("Unknown"));
-            ui->edit_description->setText(tr("Error retrieving update information."));
-        }
-        else
-        {
-            QVersionNumber current_version(ASPIA_VERSION_MAJOR,
-                                           ASPIA_VERSION_MINOR,
-                                           ASPIA_VERSION_PATCH);
-            if (version > current_version)
-            {
-                ui->label_available->setText(version.toString());
-                ui->edit_description->setText(update_info.description());
-                ui->label_url->setText(makeUrl(update_info.url()));
-                ui->button_update->setEnabled(true);
-            }
-            else
-            {
-                ui->label_available->setText(version.toString());
-                ui->edit_description->setText(tr("No updates available."));
-            }
-        }
-
-        update_info_ = update_info;
-    });
-
-    connect(update_checher, &UpdateChecker::finished,
-            update_checher, &UpdateChecker::deleteLater);
-
     ui->label_available->setText(tr("Receiving information..."));
-    update_checher->checkForUpdates(update_server, package_name);
+
+    Checker* checker = new Checker(this);
+
+    checker->setUpdateServer(update_server);
+    checker->setPackageName(package_name);
+
+    connect(checker, &Checker::finished, this, &UpdateDialog::onUpdateChecked);
+    connect(checker, &Checker::finished, checker, &Checker::deleteLater);
+
+    checker->start();
 }
 
 UpdateDialog::UpdateDialog(const UpdateInfo& update_info, QWidget* parent)
@@ -102,6 +74,36 @@ UpdateDialog::UpdateDialog(const UpdateInfo& update_info, QWidget* parent)
 }
 
 UpdateDialog::~UpdateDialog() = default;
+
+void UpdateDialog::onUpdateChecked(const UpdateInfo& update_info)
+{
+    if (!update_info.isValid())
+    {
+        ui->label_available->setText(tr("Unknown"));
+        ui->edit_description->setText(tr("Error retrieving update information."));
+    }
+    else
+    {
+        QVersionNumber current_version(
+            ASPIA_VERSION_MAJOR, ASPIA_VERSION_MINOR, ASPIA_VERSION_PATCH);
+        QVersionNumber new_version = update_info.version();
+
+        if (new_version > current_version)
+        {
+            ui->label_available->setText(new_version.toString());
+            ui->edit_description->setText(update_info.description());
+            ui->label_url->setText(makeUrl(update_info.url()));
+            ui->button_update->setEnabled(true);
+        }
+        else
+        {
+            ui->label_available->setText(current_version.toString());
+            ui->edit_description->setText(tr("No updates available."));
+        }
+    }
+
+    update_info_ = update_info;
+}
 
 void UpdateDialog::onUpdateNow()
 {
@@ -178,9 +180,8 @@ void UpdateDialog::initialize()
     connect(ui->button_update, &QPushButton::released, this, &UpdateDialog::onUpdateNow);
     connect(ui->button_close, &QPushButton::released, this, &UpdateDialog::close);
 
-    QVersionNumber current_version(ASPIA_VERSION_MAJOR,
-                                   ASPIA_VERSION_MINOR,
-                                   ASPIA_VERSION_PATCH);
+    QVersionNumber current_version(
+        ASPIA_VERSION_MAJOR, ASPIA_VERSION_MINOR, ASPIA_VERSION_PATCH);
 
     ui->label_current->setText(current_version.toString());
 }

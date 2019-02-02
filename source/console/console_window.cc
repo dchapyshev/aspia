@@ -221,17 +221,17 @@ ConsoleWindow::ConsoleWindow(Settings& settings,
         UpdateSettingsDialog(this).exec();
     });
 
-    if (settings.checkUpdates())
+    if (settings_.checkUpdates())
     {
-        updater::UpdateChecker* update_checher = new updater::UpdateChecker(this);
+        updater::Checker* checker = new updater::Checker(this);
 
-        connect(update_checher, &updater::UpdateChecker::finished,
-                this, &ConsoleWindow::onUpdateChecked);
+        checker->setUpdateServer(settings_.updateServer());
+        checker->setPackageName(QStringLiteral("console"));
 
-        connect(update_checher, &updater::UpdateChecker::finished,
-                update_checher, &updater::UpdateChecker::deleteLater);
+        connect(checker, &updater::Checker::finished, this, &ConsoleWindow::onUpdateChecked);
+        connect(checker, &updater::Checker::finished, checker, &updater::Checker::deleteLater);
 
-        update_checher->checkForUpdates(settings.updateServer(), QLatin1String("console"));
+        checker->start();
     }
 }
 
@@ -846,6 +846,9 @@ void ConsoleWindow::closeEvent(QCloseEvent* event)
 
 void ConsoleWindow::onUpdateChecked(const updater::UpdateInfo& update_info)
 {
+    if (!update_info.isValid() || !update_info.hasUpdate())
+        return;
+
     QVersionNumber current_version =
         QVersionNumber(ASPIA_VERSION_MAJOR, ASPIA_VERSION_MINOR, ASPIA_VERSION_PATCH);
 

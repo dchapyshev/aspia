@@ -54,22 +54,22 @@ UpdateInfo UpdateInfo::fromXml(const QByteArray& buffer)
 
         if (token == QXmlStreamReader::StartElement)
         {
-            if (xml.name() == "update")
+            if (xml.name() == QLatin1String("update"))
                 continue;
 
             while (xml.tokenType() != QXmlStreamReader::EndElement)
             {
                 if (xml.tokenType() == QXmlStreamReader::StartElement)
                 {
-                    if (xml.name() == "version")
+                    if (xml.name() == QLatin1String("version"))
                     {
                         update_info.version_ = QVersionNumber::fromString(parseElement(xml));
                     }
-                    else if (xml.name() == "description")
+                    else if (xml.name() == QLatin1String("description"))
                     {
                         update_info.description_ = parseElement(xml);
                     }
-                    else if (xml.name() == "url")
+                    else if (xml.name() == QLatin1String("url"))
                     {
                         update_info.url_ = parseElement(xml);
                     }
@@ -88,8 +88,17 @@ UpdateInfo UpdateInfo::fromXml(const QByteArray& buffer)
     {
         LOG(LS_WARNING) << "Error parsing XML: " << xml.errorString();
     }
+    else
+    {
+        update_info.valid_ = true;
+    }
 
     return update_info;
+}
+
+bool UpdateInfo::hasUpdate() const
+{
+    return !version_.isNull() && !url_.isEmpty();
 }
 
 } // namespace updater

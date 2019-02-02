@@ -24,6 +24,8 @@ list(APPEND SOURCE_UPDATER
     download_dialog.ui
     update_checker.cc
     update_checker.h
+    update_checker_impl.cc
+    update_checker_impl.h
     update_dialog.cc
     update_dialog.h
     update_dialog.ui

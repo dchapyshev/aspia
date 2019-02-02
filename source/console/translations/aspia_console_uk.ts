@@ -1311,22 +1311,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="882"/>
+        <location filename="../console_window.cc" line="885"/>
         <source>&lt;empty&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="903"/>
+        <location filename="../console_window.cc" line="906"/>
         <source>Aspia Console</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="937"/>
+        <location filename="../console_window.cc" line="940"/>
         <source>Information</source>
         <translation type="unfinished">Інформація</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="938"/>
+        <location filename="../console_window.cc" line="941"/>
         <source>Address Book &quot;%1&quot; is already open.</source>
         <translation type="unfinished">Адресну книгу &quot;%1&quot; вже відкрито.</translation>
     </message>

@@ -34,11 +34,15 @@ public:
 
     static UpdateInfo fromXml(const QByteArray& buffer);
 
+    bool hasUpdate() const;
+
+    bool isValid() const { return valid_; }
     QVersionNumber version() const { return version_; }
     QString description() const { return description_; }
     QUrl url() const { return url_; }
 
 private:
+    bool valid_ = false;
     QVersionNumber version_;
     QString description_;
     QUrl url_;

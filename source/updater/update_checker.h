@@ -19,32 +19,40 @@
 #ifndef UPDATER__UPDATE_CHECKER_H
 #define UPDATER__UPDATE_CHECKER_H
 
-#include <QNetworkAccessManager>
+#include <QPointer>
 
 #include "base/macros_magic.h"
 #include "updater/update_info.h"
 
-class QSslError;
+class QThread;
 
 namespace updater {
 
-class UpdateChecker : public QObject
+class CheckerImpl;
+
+Q_DECLARE_METATYPE(UpdateInfo);
+
+class Checker : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit UpdateChecker(QObject* parent = nullptr);
-    ~UpdateChecker();
+    explicit Checker(QObject* parent = nullptr);
+    ~Checker();
 
-    void checkForUpdates(const QString& update_server, const QString& package_name);
+    void setUpdateServer(const QString& update_server);
+    void setPackageName(const QString& package_name);
+
+    void start();
 
 signals:
     void finished(const UpdateInfo& update_info);
 
 private:
-    QNetworkAccessManager network_manager_;
+    QPointer<QThread> thread_;
+    QPointer<CheckerImpl> impl_;
 
-    DISALLOW_COPY_AND_ASSIGN(UpdateChecker);
+    DISALLOW_COPY_AND_ASSIGN(Checker);
 };
 
 } // namespace updater
