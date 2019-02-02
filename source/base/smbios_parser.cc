@@ -68,7 +68,7 @@ void SmbiosTableEnumerator::advance()
 
     pos_ += header->length;
 
-    while (uint32_t(pos_ - start_ + 1) < smbios_.length && (pos_[0] || pos_[1]))
+    while (static_cast<uint32_t>(pos_ - start_ + 1) < smbios_.length && (pos_[0] || pos_[1]))
         ++pos_;
 
     // Points to the next table thas after two null bytes at the end of the strings.

@@ -283,13 +283,13 @@ void DesktopWindow::onPointerEvent(const QPoint& pos, uint32_t mask)
         const QSize& source_size = desktopFrame()->size();
         QSize scaled_size = desktop_->size();
 
-        double scale_x = (scaled_size.width() * 100) / double(source_size.width());
-        double scale_y = (scaled_size.height() * 100) / double(source_size.height());
+        double scale_x = (scaled_size.width() * 100) / static_cast<double>(source_size.width());
+        double scale_y = (scaled_size.height() * 100) / static_cast<double>(source_size.height());
         double scale = std::min(scale_x, scale_y);
 
-        double x = (double(pos.x() * 10000) / (remote_scale_factor * scale))
+        double x = (static_cast<double>(pos.x() * 10000) / (remote_scale_factor * scale))
             + screen_top_left_.x();
-        double y = (double(pos.y() * 10000) / (remote_scale_factor * scale))
+        double y = (static_cast<double>(pos.y() * 10000) / (remote_scale_factor * scale))
             + screen_top_left_.y();
 
         client->sendPointerEvent(QPoint(x, y), mask);
