@@ -1261,9 +1261,8 @@
         <translation type="unfinished">Aspia Adressbuch (*.aab)</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="377"/>
         <source>https://aspia.org/en/help.html</source>
-        <translation type="unfinished">https://aspia.org/en/help.html</translation>
+        <translation type="obsolete">https://aspia.org/en/help.html</translation>
     </message>
     <message>
         <location filename="../console_window.cc" line="479"/>

@@ -1261,11 +1261,6 @@
         <translation type="unfinished">Aspia Adresboek (*.aab)</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="377"/>
-        <source>https://aspia.org/en/help.html</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../console_window.cc" line="479"/>
         <location filename="../console_window.cc" line="806"/>
         <source>Confirmation</source>

@@ -1369,9 +1369,8 @@
         <translation>Адресная книга Aspia (*.aab)</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="377"/>
         <source>https://aspia.org/en/help.html</source>
-        <translation>https://aspia.org/ru/help.html</translation>
+        <translation type="vanished">https://aspia.org/ru/help.html</translation>
     </message>
     <message>
         <location filename="../console_window.cc" line="479"/>

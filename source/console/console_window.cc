@@ -374,7 +374,7 @@ void ConsoleWindow::onDeleteComputerGroup()
 
 void ConsoleWindow::onOnlineHelp()
 {
-    QDesktopServices::openUrl(QUrl(tr("https://aspia.org/en/help.html")));
+    QDesktopServices::openUrl(QUrl("https://doc.aspia.org"));
 }
 
 void ConsoleWindow::onCheckUpdates()
