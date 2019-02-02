@@ -2054,7 +2054,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/system_info_window.cc" line="569"/>
+        <location filename="../ui/system_info_window.cc" line="592"/>
         <source>%n days</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -2062,22 +2062,22 @@
         </translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="612"/>
+        <location filename="../ui/system_info_window.cc" line="613"/>
         <source>Gbps</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="617"/>
+        <location filename="../ui/system_info_window.cc" line="618"/>
         <source>Mbps</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="622"/>
+        <location filename="../ui/system_info_window.cc" line="623"/>
         <source>Kbps</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="627"/>
+        <location filename="../ui/system_info_window.cc" line="628"/>
         <source>bps</source>
         <translation type="unfinished"></translation>
     </message>

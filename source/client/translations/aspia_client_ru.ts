@@ -2360,7 +2360,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/system_info_window.cc" line="569"/>
+        <location filename="../ui/system_info_window.cc" line="592"/>
         <source>%n days</source>
         <translation>
             <numerusform>%n день</numerusform>
@@ -2385,22 +2385,22 @@
         <translation type="vanished">%1 секунд</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="612"/>
+        <location filename="../ui/system_info_window.cc" line="613"/>
         <source>Gbps</source>
         <translation>Гбит/c</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="617"/>
+        <location filename="../ui/system_info_window.cc" line="618"/>
         <source>Mbps</source>
         <translation>Мбит/c</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="622"/>
+        <location filename="../ui/system_info_window.cc" line="623"/>
         <source>Kbps</source>
         <translation>Кбит/с</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="627"/>
+        <location filename="../ui/system_info_window.cc" line="628"/>
         <source>bps</source>
         <translation>бит/c</translation>
     </message>

@@ -566,7 +566,6 @@ QString SystemInfoWindow::delayToString(uint64_t delay)
     QString seconds_string = tr("%n seconds", "", seconds);
     QString minutes_string = tr("%n minutes", "", minutes);
     QString hours_string = tr("%n hours", "", hours);
-    QString days_string = tr("%n days", "", days);
 
     if (!days)
     {
@@ -590,6 +589,8 @@ QString SystemInfoWindow::delayToString(uint64_t delay)
     }
     else
     {
+        QString days_string = tr("%n days", "", days);
+
         return days_string + QLatin1Char(' ') +
                hours_string + QLatin1Char(' ') +
                minutes_string + QLatin1Char(' ') +
