@@ -14,7 +14,7 @@ if "%2" == "" ( goto :USAGE )
 goto :START
 
 :USAGE
-echo Usage: openddl_build_x86.cmd [openssl_src_dir] [openssl_out_dir]
+echo Usage: openssl_build_x86.cmd [openssl_src_dir] [openssl_out_dir]
 goto :END
 
 :START
