@@ -154,9 +154,8 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="155"/>
         <source>https://aspia.org/en/donate.html</source>
-        <translation type="unfinished">https://aspia.org/en/donate.html</translation>
+        <translation type="obsolete">https://aspia.org/en/donate.html</translation>
     </message>
 </context>
 </TS>

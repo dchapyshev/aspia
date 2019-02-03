@@ -170,9 +170,8 @@
         <translation>Версия %1: %2</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="155"/>
         <source>https://aspia.org/en/donate.html</source>
-        <translation>https://aspia.org/ru/donate.html</translation>
+        <translation type="vanished">https://aspia.org/ru/donate.html</translation>
     </message>
 </context>
 </TS>

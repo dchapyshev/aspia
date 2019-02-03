@@ -149,10 +149,5 @@
         <source>%1 version: %2</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <location filename="../ui/about_dialog.cc" line="155"/>
-        <source>https://aspia.org/en/donate.html</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 </TS>
