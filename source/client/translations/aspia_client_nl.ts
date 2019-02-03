@@ -57,12 +57,12 @@
     <message>
         <location filename="../ui/desktop_config_dialog.ui" line="36"/>
         <source>Codec</source>
-        <translation type="unfinished"></translation>
+        <translation>Codec</translation>
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.ui" line="42"/>
         <source>Name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Naam:</translation>
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.ui" line="52"/>
@@ -87,32 +87,32 @@
     <message>
         <location filename="../ui/desktop_config_dialog.ui" line="123"/>
         <source>Remote Screen</source>
-        <translation type="unfinished"></translation>
+        <translation>Scherm op afstand</translation>
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.ui" line="133"/>
         <source>Scale factor:</source>
-        <translation type="unfinished"></translation>
+        <translation>Schaal factor:</translation>
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.ui" line="140"/>
         <source>Update interval:</source>
-        <translation type="unfinished"></translation>
+        <translation>Vernieuwings tijd:</translation>
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.ui" line="170"/>
         <source>ms</source>
-        <translation type="unfinished"></translation>
+        <translation>ms</translation>
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.ui" line="204"/>
         <source>Advanced</source>
-        <translation type="unfinished"></translation>
+        <translation>Geavanceerd</translation>
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.ui" line="210"/>
         <source>Block remote input</source>
-        <translation type="unfinished"></translation>
+        <translation>Blokkeer invoer op afstand</translation>
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.ui" line="217"/>
@@ -127,12 +127,12 @@
     <message>
         <location filename="../ui/desktop_config_dialog.ui" line="231"/>
         <source>Disable desktop effects</source>
-        <translation type="unfinished"></translation>
+        <translation>Schakel bureaublad effecten uit</translation>
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.ui" line="238"/>
         <source>Disable desktop wallpaper</source>
-        <translation type="unfinished"></translation>
+        <translation>Geen bureaublad achtergrond</translation>
     </message>
 </context>
 <context>
@@ -150,7 +150,7 @@
     <message>
         <location filename="../ui/desktop_panel.ui" line="148"/>
         <source>Monitor selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Beeldscherm selectie</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.ui" line="163"/>
@@ -165,80 +165,80 @@
     <message>
         <location filename="../ui/desktop_panel.ui" line="189"/>
         <source>Automatic scrolling</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatisch scrollen</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.ui" line="213"/>
         <source>Advanced menu</source>
-        <translation type="unfinished"></translation>
+        <translation>Geavanceerd menu</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.ui" line="255"/>
         <source>Send key combinations</source>
-        <translation type="unfinished"></translation>
+        <translation>Stuur toets combinaties</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.ui" line="264"/>
         <location filename="../ui/desktop_panel.ui" line="267"/>
         <source>Power control</source>
-        <translation type="unfinished"></translation>
+        <translation>Power beheer</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.ui" line="275"/>
         <source>Shutdown</source>
-        <translation type="unfinished"></translation>
+        <translation>Afsluiten</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.ui" line="280"/>
         <source>Reboot</source>
-        <translation type="unfinished"></translation>
+        <translation>Herstarten</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.ui" line="285"/>
         <source>Logoff</source>
-        <translation type="unfinished"></translation>
+        <translation>Afmelden</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.ui" line="290"/>
         <source>Lock</source>
-        <translation type="unfinished"></translation>
+        <translation>Vergrendelen</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.ui" line="299"/>
         <source>Remote Update</source>
-        <translation type="unfinished"></translation>
+        <translation>Update op afstand</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.ui" line="311"/>
         <source>System Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Systeem Informatie</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.ui" line="323"/>
         <source>Close</source>
-        <translation type="unfinished">Sluiten</translation>
+        <translation>Sluiten</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.ui" line="326"/>
         <source>Close session</source>
-        <translation type="unfinished"></translation>
+        <translation>Sluit sessie</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.ui" line="218"/>
         <location filename="../ui/desktop_panel.ui" line="221"/>
         <location filename="../ui/desktop_panel.ui" line="224"/>
         <source>Save screenshot...</source>
-        <translation type="unfinished"></translation>
+        <translation>Screenshot opslaan...</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.ui" line="236"/>
         <source>File transfer</source>
-        <translation type="unfinished"></translation>
+        <translation>Bestands overdracht</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.ui" line="244"/>
         <source>Scaling an image</source>
-        <translation type="unfinished"></translation>
+        <translation>Afbeelding schalen</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.ui" line="201"/>
@@ -251,7 +251,7 @@
     <message>
         <location filename="../ui/file_item_delegate.cc" line="56"/>
         <source>The name can not contain characters %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>De naam mag de karakters %1 niet bevatten.</translation>
     </message>
 </context>
 <context>
@@ -264,7 +264,7 @@
     <message>
         <location filename="../ui/file_panel.ui" line="175"/>
         <source>Refresh (F5)</source>
-        <translation type="unfinished"></translation>
+        <translation>Vernieuwen (F5)</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.ui" line="190"/>
@@ -416,7 +416,7 @@
         <location filename="../file_status.cc" line="66"/>
         <source>Drive not ready</source>
         <comment>FileStatus</comment>
-        <translation type="unfinished"></translation>
+        <translation>Schijf niet klaar</translation>
     </message>
     <message>
         <location filename="../file_status.cc" line="69"/>
@@ -443,62 +443,62 @@
     <message>
         <location filename="../ui/system_info_window.ui" line="14"/>
         <source>System Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Systeem Informatie</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.ui" line="49"/>
         <source>Parameter</source>
-        <translation type="unfinished"></translation>
+        <translation>Argument</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.ui" line="54"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Waarde</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.ui" line="106"/>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation>Opslaan</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.ui" line="109"/>
         <source>Save (Ctrl+S)</source>
-        <translation type="unfinished"></translation>
+        <translation>Opslaan (Ctrl+S)</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.ui" line="121"/>
         <source>Print</source>
-        <translation type="unfinished"></translation>
+        <translation>Printen</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.ui" line="124"/>
         <source>Print (Ctrl+P)</source>
-        <translation type="unfinished"></translation>
+        <translation>Printen(Ctrl+P)</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.ui" line="132"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopieer Rij</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.ui" line="137"/>
         <source>Copy Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopieer Naam</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.ui" line="142"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopieer Waarde</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.ui" line="151"/>
         <source>Refresh</source>
-        <translation type="unfinished"></translation>
+        <translation>Vernieuwen</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.ui" line="154"/>
         <source>Refresh (F5)</source>
-        <translation type="unfinished"></translation>
+        <translation>Vernieuwen (F5)</translation>
     </message>
 </context>
 <context>
@@ -931,17 +931,17 @@
     <message>
         <location filename="../ui/address_bar.cc" line="56"/>
         <source>Warning</source>
-        <translation type="unfinished">Waarschuwing</translation>
+        <translation>Waarschuwing</translation>
     </message>
     <message>
         <location filename="../ui/address_bar.cc" line="57"/>
         <source>An incorrect path to the folder was entered.</source>
-        <translation type="unfinished"></translation>
+        <translation>Er is een ongeldig pad voor de map opgegeven.</translation>
     </message>
     <message>
         <location filename="../ui/address_bar.cc" line="77"/>
         <source>The path can not contain characters %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Het pad mag de karakters %1 niet bevatten.</translation>
     </message>
 </context>
 <context>
@@ -950,97 +950,97 @@
         <location filename="../ui/address_bar_model.cc" line="81"/>
         <location filename="../ui/address_bar_model.cc" line="445"/>
         <source>Home Folder</source>
-        <translation type="unfinished">Thuismap</translation>
+        <translation>Thuismap</translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="85"/>
         <source>Desktop</source>
-        <translation type="unfinished">Bureablad</translation>
+        <translation>Bureablad</translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="277"/>
         <source>Computer</source>
-        <translation type="unfinished"></translation>
+        <translation>Computer</translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="390"/>
         <source>Name</source>
-        <translation type="unfinished">Naam</translation>
+        <translation>Naam</translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="393"/>
         <source>Type</source>
-        <translation type="unfinished">Type</translation>
+        <translation>Type</translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="396"/>
         <source>Total Space</source>
-        <translation type="unfinished"></translation>
+        <translation>Totale Ruimte</translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="399"/>
         <source>Free Space</source>
-        <translation type="unfinished"></translation>
+        <translation>Vrije Ruimte</translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="430"/>
         <source>Optical Drive</source>
-        <translation type="unfinished"></translation>
+        <translation>Optische Schijf</translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="433"/>
         <source>Removable Drive</source>
-        <translation type="unfinished"></translation>
+        <translation>Verwijderbare Schijf</translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="436"/>
         <source>Fixed Drive</source>
-        <translation type="unfinished"></translation>
+        <translation>Vaste Schijf</translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="439"/>
         <source>Network Drive</source>
-        <translation type="unfinished"></translation>
+        <translation>Netwerk Schijf</translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="442"/>
         <source>RAM Drive</source>
-        <translation type="unfinished"></translation>
+        <translation>RAM Schijf</translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="448"/>
         <source>Desktop Folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Bureablad Map</translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="451"/>
         <source>Unknown Drive</source>
-        <translation type="unfinished"></translation>
+        <translation>Onbekende Schijf</translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="468"/>
         <source>TB</source>
-        <translation type="unfinished">TB</translation>
+        <translation>TB</translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="473"/>
         <source>GB</source>
-        <translation type="unfinished">GB</translation>
+        <translation>GB</translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="478"/>
         <source>MB</source>
-        <translation type="unfinished">MB</translation>
+        <translation>MB</translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="483"/>
         <source>kB</source>
-        <translation type="unfinished">kB</translation>
+        <translation>kB</translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="488"/>
         <source>B</source>
-        <translation type="unfinished">B</translation>
+        <translation>B</translation>
     </message>
 </context>
 <context>
@@ -1048,67 +1048,67 @@
     <message>
         <location filename="../client.cc" line="94"/>
         <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
-        <translation type="unfinished"></translation>
+        <translation>Er is een probleem opgetreden in het netwerk (bijv, de netwerk kabel is per ongelijk verwijderd).</translation>
     </message>
     <message>
         <location filename="../client.cc" line="98"/>
         <source>Connection was refused by the peer (or timed out).</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbinding is geweigerd door de peer (of er was een timeout).</translation>
     </message>
     <message>
         <location filename="../client.cc" line="102"/>
         <source>Remote host closed the connection.</source>
-        <translation type="unfinished"></translation>
+        <translation>De remote host heeft de verbinding gesloten.</translation>
     </message>
     <message>
         <location filename="../client.cc" line="106"/>
         <source>Host address was not found.</source>
-        <translation type="unfinished"></translation>
+        <translation>Host adres is niet gevonden.</translation>
     </message>
     <message>
         <location filename="../client.cc" line="110"/>
         <source>Socket operation timed out.</source>
-        <translation type="unfinished"></translation>
+        <translation>Socket operatie gaf een timeout.</translation>
     </message>
     <message>
         <location filename="../client.cc" line="114"/>
         <source>Address specified is already in use and was set to be exclusive.</source>
-        <translation type="unfinished"></translation>
+        <translation>Het opgegeven adres is al in gebruik, en is ingesteld als exclusief.</translation>
     </message>
     <message>
         <location filename="../client.cc" line="118"/>
         <source>Address specified does not belong to the host.</source>
-        <translation type="unfinished"></translation>
+        <translation>Het opgegeven adres behoort niet toe aan de host.</translation>
     </message>
     <message>
         <location filename="../client.cc" line="122"/>
         <source>Violation of the data exchange protocol.</source>
-        <translation type="unfinished"></translation>
+        <translation>Schending van het data uitwisselings protocol.</translation>
     </message>
     <message>
         <location filename="../client.cc" line="126"/>
         <source>An error occurred while encrypting the message.</source>
-        <translation type="unfinished"></translation>
+        <translation>Er is een error opgetreden bij het encrypten van het bericht.</translation>
     </message>
     <message>
         <location filename="../client.cc" line="130"/>
         <source>An error occurred while decrypting the message.</source>
-        <translation type="unfinished"></translation>
+        <translation>Er is een error opgetreden bij het decrypten van het bericht.</translation>
     </message>
     <message>
         <location filename="../client.cc" line="134"/>
         <source>An error occured while authenticating: wrong user name or password.</source>
-        <translation type="unfinished"></translation>
+        <translation>Er is een error opgetreden bij het authenticeren: verkeerde gebruikers naam of wachtwoord.</translation>
     </message>
     <message>
         <location filename="../client.cc" line="138"/>
         <source>Specified session type is not allowed for the user.</source>
-        <translation type="unfinished"></translation>
+        <translation>Het gespecificeerde sessie type is niet toegestaan voor de gebruiker.</translation>
     </message>
     <message>
         <location filename="../client.cc" line="142"/>
         <source>An unknown error occurred.</source>
-        <translation type="unfinished"></translation>
+        <translation>Een onbekende error is opgetreden.</translation>
     </message>
 </context>
 <context>
@@ -1136,42 +1136,42 @@
     <message>
         <location filename="../client_desktop.cc" line="49"/>
         <source>Invalid message from host</source>
-        <translation type="unfinished"></translation>
+        <translation>Ongeldig bericht van de host</translation>
     </message>
     <message>
         <location filename="../client_desktop.cc" line="198"/>
         <source>There are no supported video encodings</source>
-        <translation type="unfinished"></translation>
+        <translation>Er zijn geen ondersteunde video encodings</translation>
     </message>
     <message>
         <location filename="../client_desktop.cc" line="224"/>
         <source>Video decoder not initialized</source>
-        <translation type="unfinished"></translation>
+        <translation>Video decoder is niet geinitialiseerd</translation>
     </message>
     <message>
         <location filename="../client_desktop.cc" line="238"/>
         <source>Wrong video frame size</source>
-        <translation type="unfinished"></translation>
+        <translation>Verkeerd video frame grootte</translation>
     </message>
     <message>
         <location filename="../client_desktop.cc" line="245"/>
         <source>Wrong video frame position</source>
-        <translation type="unfinished"></translation>
+        <translation>Verkeerd video frame positie</translation>
     </message>
     <message>
         <location filename="../client_desktop.cc" line="255"/>
         <source>The desktop frame is not initialized</source>
-        <translation type="unfinished"></translation>
+        <translation>Het bureaublad frame is niet geinitialiseerd</translation>
     </message>
     <message>
         <location filename="../client_desktop.cc" line="261"/>
         <source>The video packet could not be decoded</source>
-        <translation type="unfinished"></translation>
+        <translation>Het video pakket kon niet gedecodeerd worden</translation>
     </message>
     <message>
         <location filename="../client_desktop.cc" line="346"/>
         <source>Session error</source>
-        <translation type="unfinished"></translation>
+        <translation>Sessie fout</translation>
     </message>
 </context>
 <context>
@@ -1179,17 +1179,17 @@
     <message>
         <location filename="../ui/client_dialog.cc" line="41"/>
         <source>Desktop Manage</source>
-        <translation type="unfinished">Bureaublad Beheren</translation>
+        <translation>Bureaublad Beheren</translation>
     </message>
     <message>
         <location filename="../ui/client_dialog.cc" line="45"/>
         <source>Desktop View</source>
-        <translation type="unfinished">Bureaublad Weergeven</translation>
+        <translation>Bureaublad Weergeven</translation>
     </message>
     <message>
         <location filename="../ui/client_dialog.cc" line="49"/>
         <source>File Transfer</source>
-        <translation type="unfinished"></translation>
+        <translation>Bestands Overdracht</translation>
     </message>
 </context>
 <context>
@@ -1205,17 +1205,17 @@
     <message>
         <location filename="../client_file_transfer.cc" line="59"/>
         <source>Invalid message from host</source>
-        <translation type="unfinished"></translation>
+        <translation>Ongeldig bericht van de host</translation>
     </message>
     <message>
         <location filename="../client_file_transfer.cc" line="65"/>
         <source>There are no logged in users. File transfer is not available</source>
-        <translation type="unfinished"></translation>
+        <translation>Er zijn geen ingelogde gebruikers. Bestandsoverdracht is niet beschikbaar</translation>
     </message>
     <message>
         <location filename="../client_file_transfer.cc" line="83"/>
         <source>Session error</source>
-        <translation type="unfinished"></translation>
+        <translation>Sessie fout</translation>
     </message>
 </context>
 <context>
@@ -1223,12 +1223,12 @@
     <message>
         <location filename="../ui/client_window.cc" line="118"/>
         <source>Attempt to connect to %1:%2.</source>
-        <translation type="unfinished">Probeer te verbinden met %1:%2.</translation>
+        <translation>Probeer te verbinden met %1:%2.</translation>
     </message>
     <message>
         <location filename="../ui/client_window.cc" line="125"/>
         <source>Session started.</source>
-        <translation type="unfinished">Sessie begonnen.</translation>
+        <translation>Sessie begonnen.</translation>
     </message>
 </context>
 <context>
@@ -1236,32 +1236,32 @@
     <message>
         <location filename="../ui/desktop_config_dialog.cc" line="71"/>
         <source>True color (32 bit)</source>
-        <translation type="unfinished">Ware kleuren (32 bit)</translation>
+        <translation>Ware kleuren (32 bit)</translation>
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.cc" line="72"/>
         <source>High color (16 bit)</source>
-        <translation type="unfinished">Hoge kleuren (16 bit)</translation>
+        <translation>Hoge kleuren (16 bit)</translation>
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.cc" line="73"/>
         <source>256 colors (8 bit)</source>
-        <translation type="unfinished">256 kleuren (8 bit)</translation>
+        <translation>256 kleuren (8 bit)</translation>
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.cc" line="74"/>
         <source>64 colors (6 bit)</source>
-        <translation type="unfinished">64 kleuren (6 bit)</translation>
+        <translation>64 kleuren (6 bit)</translation>
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.cc" line="75"/>
         <source>8 colors (3 bit)</source>
-        <translation type="unfinished">8 kleuren (3 bit)</translation>
+        <translation>8 kleuren (3 bit)</translation>
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.cc" line="153"/>
         <source>Compression ratio: %1</source>
-        <translation type="unfinished">Compressie ratio: %1</translation>
+        <translation>Compressie ratio: %1</translation>
     </message>
 </context>
 <context>
@@ -1269,7 +1269,7 @@
     <message>
         <location filename="../ui/desktop_panel.cc" line="178"/>
         <source>Monitor %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Beeldscherm %1</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.cc" line="309"/>
@@ -1277,27 +1277,27 @@
         <location filename="../ui/desktop_panel.cc" line="331"/>
         <location filename="../ui/desktop_panel.cc" line="342"/>
         <source>Confirmation</source>
-        <translation type="unfinished">Bevestiging</translation>
+        <translation>Bevestiging</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.cc" line="310"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
-        <translation type="unfinished"></translation>
+        <translation>Weet U zeker dat U de computer op afstand wilt afsluiten?</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.cc" line="321"/>
         <source>Are you sure you want to reboot the remote computer?</source>
-        <translation type="unfinished"></translation>
+        <translation>Weet U zeker dat U de computer op afstand wilt herstarten?</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.cc" line="332"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
-        <translation type="unfinished"></translation>
+        <translation>Weet U zeker dat U de gebruikers sessie van de computer op afstand wilt beeindigen?</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.cc" line="343"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
-        <translation type="unfinished"></translation>
+        <translation>Weet U zeker dat U de gebruikers sessie van de computer op afstand wilt vergrendelen?</translation>
     </message>
 </context>
 <context>
@@ -1305,43 +1305,43 @@
     <message>
         <location filename="../ui/desktop_window.cc" line="366"/>
         <source>Save File</source>
-        <translation type="unfinished"></translation>
+        <translation>Bestand Opslaan</translation>
     </message>
     <message>
         <location filename="../ui/desktop_window.cc" line="368"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
-        <translation type="unfinished"></translation>
+        <translation>PNG Afbeelding (*.png);;BMP Afbeelding (*.bmp)</translation>
     </message>
     <message>
         <location filename="../ui/desktop_window.cc" line="138"/>
         <location filename="../ui/desktop_window.cc" line="388"/>
         <source>Warning</source>
-        <translation type="unfinished">Waarschuwing</translation>
+        <translation>Waarschuwing</translation>
     </message>
     <message>
         <location filename="../ui/desktop_window.cc" line="139"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
-        <translation type="unfinished"></translation>
+        <translation>De huidige video encoding wordt niet ondersteund door de host. Specificeer AUB een andere encoding.</translation>
     </message>
     <message>
         <location filename="../ui/desktop_window.cc" line="156"/>
         <source>Selecting a supported video encoding is canceled by the user.</source>
-        <translation type="unfinished"></translation>
+        <translation>Selecteer een video encoding is geannuleerd door de gebruiker.</translation>
     </message>
     <message>
         <location filename="../ui/desktop_window.cc" line="388"/>
         <source>Could not save image</source>
-        <translation type="unfinished"></translation>
+        <translation>Kon het bestand niet opslaan</translation>
     </message>
     <message>
         <location filename="../ui/desktop_window.cc" line="527"/>
         <source>Desktop Manage</source>
-        <translation type="unfinished">Bureaublad Beheren</translation>
+        <translation>Bureaublad Beheren</translation>
     </message>
     <message>
         <location filename="../ui/desktop_window.cc" line="532"/>
         <source>Desktop View</source>
-        <translation type="unfinished">Bureaublad Weergeven</translation>
+        <translation>Bureaublad Weergeven</translation>
     </message>
     <message>
         <source>Aspia Desktop Manage</source>
@@ -1357,52 +1357,52 @@
     <message>
         <location filename="../ui/file_list_model.cc" line="95"/>
         <source>Folder</source>
-        <translation type="unfinished">Map</translation>
+        <translation>Map</translation>
     </message>
     <message>
         <location filename="../ui/file_list_model.cc" line="357"/>
         <source>Name</source>
-        <translation type="unfinished">Naam</translation>
+        <translation>Naam</translation>
     </message>
     <message>
         <location filename="../ui/file_list_model.cc" line="360"/>
         <source>Size</source>
-        <translation type="unfinished">Grootte</translation>
+        <translation>Grootte</translation>
     </message>
     <message>
         <location filename="../ui/file_list_model.cc" line="363"/>
         <source>Type</source>
-        <translation type="unfinished">Type</translation>
+        <translation>Type</translation>
     </message>
     <message>
         <location filename="../ui/file_list_model.cc" line="366"/>
         <source>Modified</source>
-        <translation type="unfinished">Aangepast</translation>
+        <translation>Aangepast</translation>
     </message>
     <message>
         <location filename="../ui/file_list_model.cc" line="522"/>
         <source>TB</source>
-        <translation type="unfinished">TB</translation>
+        <translation>TB</translation>
     </message>
     <message>
         <location filename="../ui/file_list_model.cc" line="527"/>
         <source>GB</source>
-        <translation type="unfinished">GB</translation>
+        <translation>GB</translation>
     </message>
     <message>
         <location filename="../ui/file_list_model.cc" line="532"/>
         <source>MB</source>
-        <translation type="unfinished">MB</translation>
+        <translation>MB</translation>
     </message>
     <message>
         <location filename="../ui/file_list_model.cc" line="537"/>
         <source>kB</source>
-        <translation type="unfinished">kB</translation>
+        <translation>kB</translation>
     </message>
     <message>
         <location filename="../ui/file_list_model.cc" line="542"/>
         <source>B</source>
-        <translation type="unfinished">B</translation>
+        <translation>B</translation>
     </message>
 </context>
 <context>
@@ -1410,17 +1410,17 @@
     <message>
         <location filename="../ui/file_manager_window.cc" line="46"/>
         <source>Local Computer</source>
-        <translation type="unfinished">Lokale Computer</translation>
+        <translation>Lokale Computer</translation>
     </message>
     <message>
         <location filename="../ui/file_manager_window.cc" line="49"/>
         <source>Remote Computer</source>
-        <translation type="unfinished">Computer op afstand</translation>
+        <translation>Computer op afstand</translation>
     </message>
     <message>
         <location filename="../ui/file_manager_window.cc" line="281"/>
         <source>File Transfer</source>
-        <translation type="unfinished"></translation>
+        <translation>Bestands Overdracht</translation>
     </message>
     <message>
         <source>%1 - Aspia File Transfer</source>
@@ -1439,69 +1439,69 @@
         <location filename="../ui/file_panel.cc" line="319"/>
         <location filename="../ui/file_panel.cc" line="328"/>
         <source>Warning</source>
-        <translation type="unfinished">Waarschuwing</translation>
+        <translation>Waarschuwing</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="154"/>
         <source>Failed to get list of drives: %1</source>
-        <translation type="unfinished">Kon lijst van schijven niet maken: %1</translation>
+        <translation>Kon lijst van schijven niet maken: %1</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="169"/>
         <source>Failed to get list of files: %1</source>
-        <translation type="unfinished">Kon lijst van bestanden niet maken: %1</translation>
+        <translation>Kon lijst van bestanden niet maken: %1</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="193"/>
         <source>Failed to create directory: %1</source>
-        <translation type="unfinished">Kon lijst van mappen niet maken: %1</translation>
+        <translation>Kon lijst van mappen niet maken: %1</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="204"/>
         <source>Failed to rename item: %1</source>
-        <translation type="unfinished">Kon object niet hernoemen: %1</translation>
+        <translation>Kon object niet hernoemen: %1</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="274"/>
         <source>%1 object(s) selected</source>
-        <translation type="unfinished">%1 object(en) geselecteerd</translation>
+        <translation>%1 object(en) geselecteerd</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="295"/>
         <location filename="../ui/file_panel.cc" line="320"/>
         <source>Folder name can not be empty.</source>
-        <translation type="unfinished">Map naam mag niet leeg zijn.</translation>
+        <translation>Map naam mag niet leeg zijn.</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="304"/>
         <location filename="../ui/file_panel.cc" line="329"/>
         <source>Name contains invalid characters.</source>
-        <translation type="unfinished"></translation>
+        <translation>De naam bevat ongeldige karakters.</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="351"/>
         <source>&amp;Send	F11</source>
-        <translation type="unfinished">&amp;Stuur	F11</translation>
+        <translation>&amp;Stuur	F11</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="353"/>
         <source>&amp;Delete	Delete</source>
-        <translation type="unfinished">&amp;Delete	Delete</translation>
+        <translation>&amp;Delete	Delete</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="363"/>
         <source>&amp;Create Folder</source>
-        <translation type="unfinished">&amp;Map maken</translation>
+        <translation>&amp;Map maken</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="418"/>
         <source>Confirmation</source>
-        <translation type="unfinished">Bevestiging</translation>
+        <translation>Bevestiging</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="419"/>
         <source>Are you sure you want to delete the selected items?</source>
-        <translation type="unfinished">Weet U zeker dat U de geselecteerde objecten wilt verwijderen?</translation>
+        <translation>Weet U zeker dat U de geselecteerde objecten wilt verwijderen?</translation>
     </message>
 </context>
 <context>
@@ -1509,27 +1509,27 @@
     <message>
         <location filename="../ui/file_remove_dialog.cc" line="62"/>
         <source>Deleting: %1</source>
-        <translation type="unfinished">Verwijderen: %1</translation>
+        <translation>Verwijderen: %1</translation>
     </message>
     <message>
         <location filename="../ui/file_remove_dialog.cc" line="86"/>
         <source>Warning</source>
-        <translation type="unfinished">Waarschuwing</translation>
+        <translation>Waarschuwing</translation>
     </message>
     <message>
         <location filename="../ui/file_remove_dialog.cc" line="94"/>
         <source>Skip</source>
-        <translation type="unfinished">Overslaan</translation>
+        <translation>Overslaan</translation>
     </message>
     <message>
         <location filename="../ui/file_remove_dialog.cc" line="97"/>
         <source>Skip All</source>
-        <translation type="unfinished">Alles overslaan</translation>
+        <translation>Alles overslaan</translation>
     </message>
     <message>
         <location filename="../ui/file_remove_dialog.cc" line="100"/>
         <source>Abort</source>
-        <translation type="unfinished">Afbreken</translation>
+        <translation>Afbreken</translation>
     </message>
 </context>
 <context>
@@ -1537,12 +1537,12 @@
     <message>
         <location filename="../file_remove_queue_builder.cc" line="54"/>
         <source>An unexpected answer was received.</source>
-        <translation type="unfinished">Een onverwacht antwoord was ontvangen.</translation>
+        <translation>Een onverwacht antwoord was ontvangen.</translation>
     </message>
     <message>
         <location filename="../file_remove_queue_builder.cc" line="60"/>
         <source>An error occurred while retrieving the list of files: %1</source>
-        <translation type="unfinished">Er is een fout opgetreden bij het ontvangen van de bestandslijst: %1</translation>
+        <translation>Er is een fout opgetreden bij het ontvangen van de bestandslijst: %1</translation>
     </message>
 </context>
 <context>
@@ -1550,12 +1550,12 @@
     <message>
         <location filename="../file_remover.cc" line="83"/>
         <source>An unexpected answer was received.</source>
-        <translation type="unfinished">Een onverwacht antwoord was ontvangen.</translation>
+        <translation>Een onverwacht antwoord was ontvangen.</translation>
     </message>
     <message>
         <location filename="../file_remover.cc" line="111"/>
         <source>Failed to delete &quot;%1&quot;: %2.</source>
-        <translation type="unfinished">Kon &quot;%1&quot; niet verwijderen: %2.</translation>
+        <translation>Kon &quot;%1&quot; niet verwijderen: %2.</translation>
     </message>
 </context>
 <context>
@@ -1563,33 +1563,33 @@
     <message>
         <location filename="../file_transfer.cc" line="117"/>
         <source>Failed to create directory &quot;%1&quot;: %2</source>
-        <translation type="unfinished">Kon de map &quot;%1&quot; niet maken: %2</translation>
+        <translation>Kon de map &quot;%1&quot; niet maken: %2</translation>
     </message>
     <message>
         <location filename="../file_transfer.cc" line="131"/>
         <source>Failed to create file &quot;%1&quot;: %2</source>
-        <translation type="unfinished">Kon het bestand &quot;%1&quot; niet maken: %2</translation>
+        <translation>Kon het bestand &quot;%1&quot; niet maken: %2</translation>
     </message>
     <message>
         <location filename="../file_transfer.cc" line="145"/>
         <source>Failed to write file &quot;%1&quot;: %2</source>
-        <translation type="unfinished">Kon het bestand &quot;%1&quot; niet schrijven: %2</translation>
+        <translation>Kon het bestand &quot;%1&quot; niet schrijven: %2</translation>
     </message>
     <message>
         <location filename="../file_transfer.cc" line="192"/>
         <location filename="../file_transfer.cc" line="231"/>
         <source>An unexpected response to the request was received</source>
-        <translation type="unfinished">Er is een onverwachte reactie op het verzoek ontvangen</translation>
+        <translation>Er is een onverwachte reactie op het verzoek ontvangen</translation>
     </message>
     <message>
         <location filename="../file_transfer.cc" line="207"/>
         <source>Failed to open file &quot;%1&quot;: %2</source>
-        <translation type="unfinished">Kon het bestand &quot;%1&quot; niet openen: %2</translation>
+        <translation>Kon het bestand &quot;%1&quot; niet openen: %2</translation>
     </message>
     <message>
         <location filename="../file_transfer.cc" line="221"/>
         <source>Failed to read file &quot;%1&quot;: %2</source>
-        <translation type="unfinished">Kon het bestand &quot;%1&quot; niet lezen: %2</translation>
+        <translation>Kon het bestand &quot;%1&quot; niet lezen: %2</translation>
     </message>
 </context>
 <context>
@@ -1597,47 +1597,47 @@
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="72"/>
         <source>Current Task: Copying items.</source>
-        <translation type="unfinished">Huidige taak: Items kopieren.</translation>
+        <translation>Huidige taak: Items kopieren.</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="84"/>
         <source>From: %1</source>
-        <translation type="unfinished">Van: %1</translation>
+        <translation>Van: %1</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="89"/>
         <source>To: %1</source>
-        <translation type="unfinished">Naar: %1</translation>
+        <translation>Naar: %1</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="119"/>
         <source>Warning</source>
-        <translation type="unfinished">Waarschuwing</translation>
+        <translation>Waarschuwing</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="131"/>
         <source>Skip</source>
-        <translation type="unfinished">Overslaan</translation>
+        <translation>Overslaan</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="134"/>
         <source>Skip All</source>
-        <translation type="unfinished">Alles overslaan</translation>
+        <translation>Alles overslaan</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="137"/>
         <source>Replace</source>
-        <translation type="unfinished">Vervangen</translation>
+        <translation>Vervangen</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="140"/>
         <source>Replace All</source>
-        <translation type="unfinished">Alles vervangen</translation>
+        <translation>Alles vervangen</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="143"/>
         <source>Abort</source>
-        <translation type="unfinished">Afbreken</translation>
+        <translation>Afbreken</translation>
     </message>
 </context>
 <context>
@@ -1645,12 +1645,12 @@
     <message>
         <location filename="../file_transfer_queue_builder.cc" line="74"/>
         <source>An unexpected answer was received.</source>
-        <translation type="unfinished">Een onverwacht antwoord was ontvangen.</translation>
+        <translation>Een onverwacht antwoord was ontvangen.</translation>
     </message>
     <message>
         <location filename="../file_transfer_queue_builder.cc" line="80"/>
         <source>An error occurred while retrieving the list of files: %1</source>
-        <translation type="unfinished">Er is een fout opgetreden bij het ontvangen van de bestandslijst: %1</translation>
+        <translation>Er is een fout opgetreden bij het ontvangen van de bestandslijst: %1</translation>
     </message>
 </context>
 <context>
@@ -1658,7 +1658,7 @@
     <message>
         <location filename="../ui/select_screen_action.h" line="37"/>
         <source>Full Desktop</source>
-        <translation type="unfinished"></translation>
+        <translation>Volledig Bureaublad</translation>
     </message>
 </context>
 <context>
@@ -1666,147 +1666,147 @@
     <message>
         <location filename="../ui/system_info_window.cc" line="103"/>
         <source>HTML File</source>
-        <translation type="unfinished"></translation>
+        <translation>HTML Bestand</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="105"/>
         <source>HTML File (*.html)</source>
-        <translation type="unfinished"></translation>
+        <translation>HTML Bestand (*.html)</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="114"/>
         <source>Warning</source>
-        <translation type="unfinished">Waarschuwing</translation>
+        <translation>Waarschuwing</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="115"/>
         <source>Failed to save file: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Kon het bestand %1 niet opslaan</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="175"/>
         <location filename="../ui/system_info_window.cc" line="199"/>
         <source>Name</source>
-        <translation type="unfinished">Naam</translation>
+        <translation>Naam</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="178"/>
         <source>Domain</source>
-        <translation type="unfinished"></translation>
+        <translation>Domein</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="181"/>
         <source>Workgroup</source>
-        <translation type="unfinished"></translation>
+        <translation>Werkgroep</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="184"/>
         <source>Uptime</source>
-        <translation type="unfinished"></translation>
+        <translation>Uptime</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="189"/>
         <source>Computer</source>
-        <translation type="unfinished"></translation>
+        <translation>Computer</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="202"/>
         <location filename="../ui/system_info_window.cc" line="268"/>
         <source>Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Versie</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="205"/>
         <source>Architecture</source>
-        <translation type="unfinished"></translation>
+        <translation>Architectuur</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="210"/>
         <source>Operating System</source>
-        <translation type="unfinished"></translation>
+        <translation>Besturingssysteem</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="220"/>
         <location filename="../ui/system_info_window.cc" line="293"/>
         <source>Manufacturer</source>
-        <translation type="unfinished"></translation>
+        <translation>Producent</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="223"/>
         <location filename="../ui/system_info_window.cc" line="238"/>
         <source>Model</source>
-        <translation type="unfinished"></translation>
+        <translation>Model</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="228"/>
         <source>Motherboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Moederbord</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="241"/>
         <location filename="../ui/system_info_window.cc" line="265"/>
         <source>Vendor</source>
-        <translation type="unfinished"></translation>
+        <translation>Verkoper</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="244"/>
         <source>Packages</source>
-        <translation type="unfinished"></translation>
+        <translation>Pakketten</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="247"/>
         <source>Cores</source>
-        <translation type="unfinished"></translation>
+        <translation>Kernen</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="250"/>
         <source>Threads</source>
-        <translation type="unfinished"></translation>
+        <translation>Threads</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="255"/>
         <source>Processor</source>
-        <translation type="unfinished"></translation>
+        <translation>Processor</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="271"/>
         <source>Date</source>
-        <translation type="unfinished"></translation>
+        <translation>Datum</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="296"/>
         <source>Size</source>
-        <translation type="unfinished">Grootte</translation>
+        <translation>Grootte</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="299"/>
         <source>Speed</source>
-        <translation type="unfinished"></translation>
+        <translation>Snelheid</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="299"/>
         <source>%1 MHz</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 MHz</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="302"/>
         <source>Type</source>
-        <translation type="unfinished">Type</translation>
+        <translation>Type</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="305"/>
         <source>Form Factor</source>
-        <translation type="unfinished"></translation>
+        <translation>Form Factor</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="308"/>
         <source>Part Number</source>
-        <translation type="unfinished"></translation>
+        <translation>Onderdeel Nummer</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="312"/>
         <source>Installed</source>
-        <translation type="unfinished"></translation>
+        <translation>Geinstalleerd</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="312"/>
@@ -1814,201 +1814,201 @@
         <location filename="../ui/system_info_window.cc" line="447"/>
         <location filename="../ui/system_info_window.cc" line="455"/>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation>Nee</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="322"/>
         <source>Memory</source>
-        <translation type="unfinished"></translation>
+        <translation>Geheugen</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="351"/>
         <source>%1 (%2 free)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 (%2 vrij)</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="362"/>
         <source>Logical Drives</source>
-        <translation type="unfinished"></translation>
+        <translation>Logische Drives</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="377"/>
         <source>Adapter Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Adapter Naam</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="380"/>
         <source>Interface Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Interface Type</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="383"/>
         <source>Connection Speed</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbindings Snelheid</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="386"/>
         <source>MAC Address</source>
-        <translation type="unfinished"></translation>
+        <translation>MAC Adres</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="388"/>
         <source>DHCP Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>DHCP Ingeschakeld</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="388"/>
         <location filename="../ui/system_info_window.cc" line="447"/>
         <location filename="../ui/system_info_window.cc" line="455"/>
         <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation>Ya</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="393"/>
         <source>DHCP Server #%1</source>
-        <translation type="unfinished"></translation>
+        <translation>DHCP Server #%1</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="393"/>
         <source>DHCP Server</source>
-        <translation type="unfinished"></translation>
+        <translation>DHCP Server</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="405"/>
         <source>Address #%1</source>
-        <translation type="unfinished"></translation>
+        <translation>Adres #%1</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="405"/>
         <source>Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Adres</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="413"/>
         <source>Gateway #%1</source>
-        <translation type="unfinished"></translation>
+        <translation>Gateway #%1</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="413"/>
         <source>Gateway</source>
-        <translation type="unfinished"></translation>
+        <translation>Gateway</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="433"/>
         <source>Network Connections</source>
-        <translation type="unfinished"></translation>
+        <translation>Netwerk Verbindingen</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="447"/>
         <source>Default</source>
-        <translation type="unfinished"></translation>
+        <translation>Standaard</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="450"/>
         <source>Port</source>
-        <translation type="unfinished"></translation>
+        <translation>Poort</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="453"/>
         <source>Driver</source>
-        <translation type="unfinished"></translation>
+        <translation>Driver</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="455"/>
         <source>Shared</source>
-        <translation type="unfinished"></translation>
+        <translation>Gedeeld</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="458"/>
         <source>Share Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Share Naam</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="460"/>
         <source>Jobs Count</source>
-        <translation type="unfinished"></translation>
+        <translation>Aantal Jobs</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="469"/>
         <source>Printers</source>
-        <translation type="unfinished"></translation>
+        <translation>Printers</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="530"/>
         <source>TB</source>
-        <translation type="unfinished">TB</translation>
+        <translation>TB</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="535"/>
         <source>GB</source>
-        <translation type="unfinished">GB</translation>
+        <translation>GB</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="540"/>
         <source>MB</source>
-        <translation type="unfinished">MB</translation>
+        <translation>MB</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="545"/>
         <source>kB</source>
-        <translation type="unfinished">kB</translation>
+        <translation>kB</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="550"/>
         <source>B</source>
-        <translation type="unfinished">B</translation>
+        <translation>B</translation>
     </message>
     <message numerus="yes">
         <location filename="../ui/system_info_window.cc" line="566"/>
         <source>%n seconds</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n seconde</numerusform>
+            <numerusform>%n seconden</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../ui/system_info_window.cc" line="567"/>
         <source>%n minutes</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n minuut</numerusform>
+            <numerusform>%n minuten</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../ui/system_info_window.cc" line="568"/>
         <source>%n hours</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n uur</numerusform>
+            <numerusform>%n uren</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../ui/system_info_window.cc" line="592"/>
         <source>%n days</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n dag</numerusform>
+            <numerusform>%n dagen</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="613"/>
         <source>Gbps</source>
-        <translation type="unfinished"></translation>
+        <translation>Gbps</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="618"/>
         <source>Mbps</source>
-        <translation type="unfinished"></translation>
+        <translation>Mbps</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="623"/>
         <source>Kbps</source>
-        <translation type="unfinished"></translation>
+        <translation>Kbps</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="628"/>
         <source>bps</source>
-        <translation type="unfinished"></translation>
+        <translation>bps</translation>
     </message>
 </context>
 </TS>
