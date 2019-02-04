@@ -3,6 +3,15 @@
 #pragma sw require header org.sw.demo.qtproject.qt.tools.linguist.release-*
 #pragma sw require header org.sw.demo.qtproject.qt.translations-*
 
+void configure(Build &s)
+{
+    if (s.isConfigSelected("mt"))
+    {
+        s.Settings.Native.LibrariesType = LibraryType::Static;
+        s.Settings.Native.MT = true;
+    }
+}
+
 void build(Solution &s)
 {
     auto &aspia = s.addProject("aspia", "master");
@@ -40,7 +49,7 @@ void build(Solution &s)
     auto &protocol = aspia.addStaticLibrary("proto");
     protocol += "source/proto/.*\\.proto"_rr;
     for (const auto &[p, _] : protocol[FileRegex(protocol.SourceDir / "source/proto", std::regex(".*\\.proto"))])
-        gen_protobuf(protocol, p, true, "proto");
+        gen_protobuf("org.sw.demo.google.protobuf-3"_dep, protocol, p, true, "proto");
 
     auto &codec = add_lib("codec");
     codec.Public += protocol, desktop_capture;
@@ -137,14 +146,18 @@ void build(Solution &s)
     //
     auto &client = add_lib("client");
     client.Public += common, updater;
-    client.Public += "org.sw.demo.qtproject.qt.base.printsupport-*"_dep;
+    if (s.Settings.TargetOS.Type == OSType::Windows)
+        client.Public += "org.sw.demo.qtproject.qt.base.plugins.printsupport.windows-*"_dep;
     qt_progs_and_tr(client);
 
     //
     auto &console = add_exe(aspia, "console");
     setup_target(console, "console");
     console.Public += client;
-    console.Public += "org.sw.demo.qtproject.qt.base.plugins.platforms.windows-*"_dep;
-    console.Public += "org.sw.demo.qtproject.qt.base.plugins.styles.windowsvista-*"_dep;
+    if (s.Settings.TargetOS.Type == OSType::Windows)
+    {
+        console.Public += "org.sw.demo.qtproject.qt.base.plugins.platforms.windows-*"_dep;
+        console.Public += "org.sw.demo.qtproject.qt.base.plugins.styles.windowsvista-*"_dep;
+    }
     qt_progs_and_tr(console);
 }
