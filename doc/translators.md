@@ -2,7 +2,7 @@ Instructions for translators
 ============================
 You need to translate the application and installer.
 
-To translate the application interface you need to download [Qt Linguist](https://aspia.org/files/linguist.7z).
+To translate the application interface you need to download [Qt Linguist](https://files.aspia.org/dev/linguist.7z).
 
 To translate the installer interface you need to download a text editor. For example, [Notepad++](https://notepad-plus-plus.org/download).
 
