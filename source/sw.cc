@@ -20,8 +20,8 @@ void build(Solution &s)
     auto setup_target = [&aspia](auto &t, const String &name) -> decltype(auto)
     {
         t.CPPVersion = CPPLanguageStandard::CPP17;
-        t.Public += "source"_idir;
-        t.setRootDirectory("source/" + name);
+        t.Public += "."_idir;
+        t.setRootDirectory(name);
         t += ".*"_rr;
         t -= ".*_unittest.*"_rr;
         return t;
@@ -33,7 +33,7 @@ void build(Solution &s)
     };
 
     auto &base = aspia.addStaticLibrary("base");
-    base -= "source/build/.*"_rr;
+    base -= "build/.*"_rr;
     setup_target(base, "base");
     base.Public += "UNICODE"_def;
     base.Public += "NOMINMAX"_def;
@@ -47,8 +47,8 @@ void build(Solution &s)
     desktop_capture.Public += "org.sw.demo.chromium.libyuv-master"_dep;
 
     auto &protocol = aspia.addStaticLibrary("proto");
-    protocol += "source/proto/.*\\.proto"_rr;
-    for (const auto &[p, _] : protocol[FileRegex(protocol.SourceDir / "source/proto", std::regex(".*\\.proto"))])
+    protocol += "proto/.*\\.proto"_rr;
+    for (const auto &[p, _] : protocol[FileRegex(protocol.SourceDir / "proto", std::regex(".*\\.proto"))])
         gen_protobuf("org.sw.demo.google.protobuf-3"_dep, protocol, p, true, "proto");
 
     auto &codec = add_lib("codec");

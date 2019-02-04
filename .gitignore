@@ -10,3 +10,6 @@
 *.pdb
 *.res
 *.exe
+
+# SW build dir
+.sw
