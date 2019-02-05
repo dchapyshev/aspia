@@ -20,7 +20,10 @@
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
+#include <wtsapi32.h>
 
+#include "base/win/process_util.h"
+#include "base/win/scoped_impersonator.h"
 #include "base/logging.h"
 
 namespace desktop {
@@ -42,7 +45,7 @@ struct VisualEffectsState
 
 struct WallpaperState
 {
-    wchar_t path[MAX_PATH] = { 0 };
+    std::wstring path;
 };
 
 namespace {
@@ -56,6 +59,60 @@ enum StateFlags
 bool isChangeRequired(uint8_t flags)
 {
     return (flags & STATE_ENABLED) && (flags & STATE_SAVED);
+}
+
+bool createLoggedOnUserToken(base::win::ScopedHandle* token_out)
+{
+    base::win::ScopedHandle privileged_token;
+
+    if (!createPrivilegedToken(&privileged_token))
+        return false;
+
+    base::win::ScopedImpersonator impersonator;
+
+    if (!impersonator.loggedOnUser(privileged_token))
+        return false;
+
+    if (!WTSQueryUserToken(WTSGetActiveConsoleSessionId(), token_out->recieve()))
+    {
+        PLOG(LS_WARNING) << "WTSQueryUserToken failed";
+        return false;
+    }
+
+    return true;
+}
+
+void updateUserSettings()
+{
+    base::win::ScopedHandle user_token;
+
+    if (!createLoggedOnUserToken(&user_token))
+        return;
+
+    base::win::ScopedImpersonator impersonator;
+
+    // The process of the desktop session is running with "SYSTEM" account.
+    // We need the current real user, not "SYSTEM".
+    if (!impersonator.loggedOnUser(user_token))
+        return;
+
+    HMODULE module = GetModuleHandleW(L"user32.dll");
+    if (module)
+    {
+        // The function prototype is relevant for versions starting from Windows Vista.
+        // Older versions have a different prototype.
+        typedef BOOL(WINAPI* UpdatePerUserSystemParametersFunc)(DWORD flags);
+
+        UpdatePerUserSystemParametersFunc update_per_user_system_parameters =
+            reinterpret_cast<UpdatePerUserSystemParametersFunc>(
+                GetProcAddress(module, "UpdatePerUserSystemParameters"));
+        if (update_per_user_system_parameters)
+        {
+            // WARNING! Undocumented function!
+            // Any ideas how to update user settings without using it?
+            update_per_user_system_parameters(0x06);
+        }
+    }
 }
 
 std::unique_ptr<VisualEffectsState> currentEffectsState()
@@ -340,29 +397,23 @@ void VisualEffectsDisabler::restoreEffects()
 
 void VisualEffectsDisabler::disableWallpaper()
 {
-    wallpaper_state_ = std::make_unique<WallpaperState>();
+    wchar_t buffer[MAX_PATH] = { 0 };
 
-    if (!SystemParametersInfoW(SPI_GETDESKWALLPAPER,
-                               _countof(wallpaper_state_->path),
-                               wallpaper_state_->path,
-                               0))
+    if (!SystemParametersInfoW(SPI_GETDESKWALLPAPER, _countof(buffer), buffer, 0))
     {
         PLOG(LS_WARNING) << "SystemParametersInfoW(SPI_GETDESKWALLPAPER) failed";
-        wallpaper_state_.reset();
+        return;
     }
-    else
-    {
-        // If the string is empty, then the desktop wallpaper is not installed.
-        if (!wallpaper_state_->path[0])
-        {
-            wallpaper_state_.reset();
-        }
-        else
-        {
-            // We do not check the return value. For SPI_SETDESKWALLPAPER, always returns TRUE.
-            SystemParametersInfoW(SPI_SETDESKWALLPAPER, 0, L"", SPIF_SENDCHANGE);
-        }
-    }
+
+    // If the string is empty, then the desktop wallpaper is not installed.
+    if (!buffer[0])
+        return;
+
+    wallpaper_state_ = std::make_unique<WallpaperState>();
+    wallpaper_state_->path = buffer;
+
+    // We do not check the return value. For SPI_SETDESKWALLPAPER, always returns TRUE.
+    SystemParametersInfoW(SPI_SETDESKWALLPAPER, 0, L"", SPIF_SENDCHANGE);
 }
 
 void VisualEffectsDisabler::restoreWallpaper()
@@ -371,7 +422,8 @@ void VisualEffectsDisabler::restoreWallpaper()
         return;
 
     // We do not check the return value. For SPI_SETDESKWALLPAPER, always returns TRUE.
-    SystemParametersInfoW(SPI_SETDESKWALLPAPER, 0, wallpaper_state_->path, SPIF_SENDCHANGE);
+    SystemParametersInfoW(SPI_SETDESKWALLPAPER, 0, 0, 0);
+    updateUserSettings();
 }
 
 } // namespace desktop
