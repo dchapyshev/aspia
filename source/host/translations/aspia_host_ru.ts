@@ -39,7 +39,7 @@
     <message>
         <location filename="../ui/host_config_dialog.ui" line="14"/>
         <source>Host Configuration</source>
-        <translation>Конфигурация сервера</translation>
+        <translation>Конфигурация хоста</translation>
     </message>
     <message>
         <location filename="../ui/host_config_dialog.ui" line="27"/>
