@@ -3,9 +3,6 @@
 rem We assume that Visual Studio 2017 is installed to the default path.
 set VS_PATH="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build"
 
-rem x86 with Windows SDK 8.1
-call %VS_PATH%\vcvars32.bat 8.1
-
 rem Qt source directory
 if "%1" == "" ( goto :USAGE )
 
@@ -21,6 +18,9 @@ echo Usage: qt_build_x86_dev.cmd [qt_src_dir] [qt_out_dir] [openssl_dir]
 goto :END
 
 :START
+rem x86 with Windows SDK 8.1
+call %VS_PATH%\vcvars32.bat 8.1
+
 cd /d %1
 
 call configure ^
