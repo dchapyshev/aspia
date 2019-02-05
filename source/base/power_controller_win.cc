@@ -22,6 +22,7 @@
 #include <windows.h>
 #include <wtsapi32.h>
 
+#include "base/win/scoped_impersonator.h"
 #include "base/win/scoped_object.h"
 #include "base/logging.h"
 
@@ -105,11 +106,9 @@ bool PowerController::shutdown()
     if (!createPrivilegedToken(&privileged_token))
         return false;
 
-    if (!ImpersonateLoggedOnUser(privileged_token))
-    {
-        PLOG(LS_WARNING) << "ImpersonateLoggedOnUser failed";
+    win::ScopedImpersonator impersonator;
+    if (!impersonator.loggedOnUser(privileged_token))
         return false;
-    }
 
     const DWORD reason = SHTDN_REASON_MAJOR_APPLICATION | SHTDN_REASON_MINOR_MAINTENANCE;
 
@@ -120,10 +119,9 @@ bool PowerController::shutdown()
                                               FALSE, // Shutdown.
                                               reason);
     if (!result)
+    {
         PLOG(LS_WARNING) << "InitiateSystemShutdownExW failed";
-
-    BOOL ret = RevertToSelf();
-    CHECK(ret);
+    }
 
     return result;
 }
@@ -142,11 +140,9 @@ bool PowerController::reboot()
     if (!createPrivilegedToken(&privileged_token))
         return false;
 
-    if (!ImpersonateLoggedOnUser(privileged_token))
-    {
-        PLOG(LS_WARNING) << "ImpersonateLoggedOnUser failed";
+    win::ScopedImpersonator impersonator;
+    if (!impersonator.loggedOnUser(privileged_token))
         return false;
-    }
 
     const DWORD reason = SHTDN_REASON_MAJOR_APPLICATION | SHTDN_REASON_MINOR_MAINTENANCE;
 
@@ -157,10 +153,9 @@ bool PowerController::reboot()
                                               TRUE, // Reboot.
                                               reason);
     if (!result)
+    {
         PLOG(LS_WARNING) << "InitiateSystemShutdownExW failed";
-
-    BOOL ret = RevertToSelf();
-    CHECK(ret);
+    }
 
     return result;
 }

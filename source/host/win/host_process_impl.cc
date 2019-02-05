@@ -22,6 +22,7 @@
 #include <wtsapi32.h>
 
 #include "base/win/process_util.h"
+#include "base/win/scoped_impersonator.h"
 #include "base/logging.h"
 
 namespace host {
@@ -47,19 +48,13 @@ HostProcess::ErrorCode createSessionToken(DWORD session_id, base::win::ScopedHan
     if (!createPrivilegedToken(&privileged_token))
         return HostProcess::OtherError;
 
-    if (!ImpersonateLoggedOnUser(privileged_token))
-    {
-        PLOG(LS_WARNING) << "ImpersonateLoggedOnUser failed";
+    base::win::ScopedImpersonator impersonator;
+
+    if (!impersonator.loggedOnUser(privileged_token))
         return HostProcess::OtherError;
-    }
 
     // Change the session ID of the token.
-    BOOL result = SetTokenInformation(session_token, TokenSessionId, &session_id, sizeof(session_id));
-
-    BOOL ret = RevertToSelf();
-    CHECK(ret);
-
-    if (!result)
+    if (!SetTokenInformation(session_token, TokenSessionId, &session_id, sizeof(session_id)))
     {
         PLOG(LS_WARNING) << "SetTokenInformation failed";
         return HostProcess::OtherError;
@@ -84,11 +79,10 @@ HostProcess::ErrorCode createLoggedOnUserToken(
     if (!createPrivilegedToken(&privileged_token))
         return HostProcess::OtherError;
 
-    if (!ImpersonateLoggedOnUser(privileged_token))
-    {
-        PLOG(LS_WARNING) << "ImpersonateLoggedOnUser failed";
+    base::win::ScopedImpersonator impersonator;
+
+    if (!impersonator.loggedOnUser(privileged_token))
         return HostProcess::OtherError;
-    }
 
     HostProcess::ErrorCode error_code = HostProcess::NoError;
 
@@ -109,8 +103,7 @@ HostProcess::ErrorCode createLoggedOnUserToken(
         }
     }
 
-    BOOL ret = RevertToSelf();
-    CHECK(ret);
+    impersonator.revertToSelf();
 
     if (error_code == HostProcess::NoError)
     {

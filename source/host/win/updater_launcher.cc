@@ -24,6 +24,7 @@
 #include <wtsapi32.h>
 
 #include "base/win/process_util.h"
+#include "base/win/scoped_impersonator.h"
 #include "base/logging.h"
 
 namespace host {
@@ -40,11 +41,9 @@ bool createLoggedOnUserToken(DWORD session_id, base::win::ScopedHandle* token_ou
     if (!createPrivilegedToken(&privileged_token))
         return false;
 
-    if (!ImpersonateLoggedOnUser(privileged_token))
-    {
-        PLOG(LS_WARNING) << "ImpersonateLoggedOnUser failed";
+    base::win::ScopedImpersonator impersonator;
+    if (!impersonator.loggedOnUser(privileged_token))
         return false;
-    }
 
     base::win::ScopedHandle user_token;
     if (!WTSQueryUserToken(session_id, user_token.recieve()))
@@ -53,8 +52,7 @@ bool createLoggedOnUserToken(DWORD session_id, base::win::ScopedHandle* token_ou
         return false;
     }
 
-    BOOL ret = RevertToSelf();
-    CHECK(ret);
+    impersonator.revertToSelf();
 
     TOKEN_ELEVATION_TYPE elevation_type;
     DWORD returned_length;
