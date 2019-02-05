@@ -83,6 +83,8 @@ list(APPEND SOURCE_BASE_WIN
     win/scoped_com_initializer.h
     win/scoped_gdi_object.h
     win/scoped_hdc.h
+    win/scoped_impersonator.cc
+    win/scoped_impersonator.h
     win/scoped_local.h
     win/scoped_object.h
     win/scoped_thread_desktop.cc
