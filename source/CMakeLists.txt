@@ -95,7 +95,7 @@ set(THIRD_PARTY_LIBS
     debug Qt5ThemeSupportd
     debug Qt5WindowsUIAutomationSupportd
     debug libprotobuf-lited
-    debug libvpxd
+    debug vpxmtd
     debug libyuvd
     debug qtfreetyped
     debug qtharfbuzzd
@@ -111,7 +111,7 @@ set(THIRD_PARTY_LIBS
     optimized Qt5ThemeSupport
     optimized Qt5WindowsUIAutomationSupport
     optimized libprotobuf-lite
-    optimized libvpx
+    optimized vpxmt
     optimized libyuv
     optimized qtfreetype
     optimized qtharfbuzz
