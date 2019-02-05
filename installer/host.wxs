@@ -12,7 +12,7 @@
 <?define ServiceDescription="Accepts incoming remote desktop connections to this computer."?>
 
 <!-- Product description -->
-<Product Id="*" Name="$(var.ProductName)" Language="1033" Version="$(var.Version)" Manufacturer="$(var.Manufacturer)" UpgradeCode="{B460F717-1546-4FFC-9EDE-B21FD07E07CB}">
+<Product Id="*" Name="!(loc.ProductName)" Language="1033" Version="$(var.Version)" Manufacturer="$(var.Manufacturer)" UpgradeCode="{B460F717-1546-4FFC-9EDE-B21FD07E07CB}">
     <Package Id="*" InstallerVersion="405" Compressed="yes" Manufacturer="$(var.Manufacturer)" InstallPrivileges="elevated" InstallScope="perMachine" />
 
     <Media Id="1" Cabinet="media1.cab" EmbedCab="yes" />
@@ -29,17 +29,22 @@
 
     <Directory Id="TARGETDIR" Name="SourceDir">
         <Directory Id="ProgramFilesFolder">
-            <Directory Id="INSTALLLOCATION" Name="$(var.ProductName)" />
+            <Directory Id="VendorProgramFilesFolder" Name="Aspia">
+                <Directory Id="INSTALLLOCATION" Name="Host" />
+            </Directory>
         </Directory>
-        <Directory Id="ProgramMenuFolder" />
+        <Directory Id="ProgramMenuFolder">
+            <Directory Id="ApplicationMenuFolder" Name="Aspia" />
+        </Directory>
         <Directory Id="DesktopFolder" />
     </Directory>
 
     <!-- Program Menu Shortcut -->
-    <DirectoryRef Id="ProgramMenuFolder">
+    <DirectoryRef Id="ApplicationMenuFolder">
         <Component Id="ProgramMenuShortcut" Guid="{C0DBE098-F1FD-49F6-8BD9-D18BDF9C80DA}">
             <Condition>STARTMENU_SHORTCUT</Condition>
             <Shortcut Id="ConfigProgramMenuShortcut" Name="!(loc.ConfigShortcutName)" WorkingDirectory="INSTALLLOCATION" Target="[INSTALLLOCATION]aspia_host_config.exe"/>
+            <RemoveFolder Id="ApplicationMenuFolder" On="uninstall" />
             <RegistryValue Root="HKCU" Key="SOFTWARE\$(var.ProductName)" Type="string" Value="" KeyPath="yes" />
         </Component>
     </DirectoryRef>

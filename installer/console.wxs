@@ -10,7 +10,7 @@
 <?define Executable="aspia_console.exe"?>
 
 <!-- Product description -->
-<Product Id="*" Name="$(var.ProductName)" Language="1033" Version="$(var.Version)" Manufacturer="$(var.Manufacturer)" UpgradeCode="{459185F3-2795-4E8D-89CA-82E3E2D10FBA}">
+<Product Id="*" Name="!(loc.ProductName)" Language="1033" Version="$(var.Version)" Manufacturer="$(var.Manufacturer)" UpgradeCode="{459185F3-2795-4E8D-89CA-82E3E2D10FBA}">
     <Package Id="*" InstallerVersion="405" Compressed="yes" Manufacturer="$(var.Manufacturer)" InstallPrivileges="elevated" InstallScope="perMachine" />
 
     <Media Id="1" Cabinet="media1.cab" EmbedCab="yes" />
@@ -27,17 +27,22 @@
 
     <Directory Id="TARGETDIR" Name="SourceDir">
         <Directory Id="ProgramFilesFolder">
-            <Directory Id="INSTALLLOCATION" Name="$(var.ProductName)" />
+            <Directory Id="VendorProgramFilesFolder" Name="Aspia">
+                <Directory Id="INSTALLLOCATION" Name="Console" />
+            </Directory>
         </Directory>
-        <Directory Id="ProgramMenuFolder" />
+        <Directory Id="ProgramMenuFolder">
+            <Directory Id="ApplicationMenuFolder" Name="Aspia" />
+        </Directory>
         <Directory Id="DesktopFolder" />
     </Directory>
 
     <!-- Program Menu Shortcut -->
-    <DirectoryRef Id="ProgramMenuFolder">
+    <DirectoryRef Id="ApplicationMenuFolder">
         <Component Id="ProgramMenuShortcut" Guid="{50D24B57-80D4-4642-9B01-B19A7C16DF13}">
             <Condition>STARTMENU_SHORTCUT</Condition>
             <Shortcut Id="ProgramMenuShortcut" Name="!(loc.ShortcutName)" WorkingDirectory="INSTALLLOCATION" Target="[INSTALLLOCATION]$(var.Executable)" />
+            <RemoveFolder Id="ApplicationMenuFolder" On="uninstall" />
             <RegistryValue Root="HKCU" Key="SOFTWARE\$(var.ProductName)" Type="string" Value="" KeyPath="yes" />
         </Component>
     </DirectoryRef>
