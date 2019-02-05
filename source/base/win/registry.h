@@ -35,6 +35,9 @@ public:
     explicit RegistryKey(HKEY key);
     RegistryKey(HKEY rootkey, const wchar_t* subkey, REGSAM access);
 
+    RegistryKey(RegistryKey&& other) noexcept;
+    RegistryKey& operator=(RegistryKey&& other) noexcept;
+
     ~RegistryKey();
 
     // True while the key is valid.

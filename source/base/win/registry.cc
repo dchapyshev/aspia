@@ -72,6 +72,28 @@ RegistryKey::RegistryKey(HKEY rootkey, const wchar_t* subkey, REGSAM access)
     }
 }
 
+RegistryKey::RegistryKey(RegistryKey&& other) noexcept
+{
+    key_ = other.key_;
+    wow64access_ = other.wow64access_;
+
+    other.key_ = nullptr;
+    other.wow64access_ = 0;
+}
+
+RegistryKey& RegistryKey::operator=(RegistryKey&& other) noexcept
+{
+    close();
+
+    key_ = other.key_;
+    wow64access_ = other.wow64access_;
+
+    other.key_ = nullptr;
+    other.wow64access_ = 0;
+
+    return *this;
+}
+
 RegistryKey::~RegistryKey()
 {
     close();
