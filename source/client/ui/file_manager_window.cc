@@ -159,6 +159,12 @@ void FileManagerWindow::removeItems(FilePanel* sender, const QList<FileRemover::
     connect(remover, &FileRemover::progressChanged, remove_dialog_, &FileRemoveDialog::setProgress);
     connect(remover, &FileRemover::error, remove_dialog_, &FileRemoveDialog::showError);
 
+    connect(remove_dialog_, &FileRemoveDialog::finished, [this]()
+    {
+        activateWindow();
+        setFocus();
+    });
+
     remover->start(sender->currentPath(), items);
 }
 
@@ -229,6 +235,12 @@ void FileManagerWindow::transferItems(FileTransfer::Type type,
 
     connect(transfer, &FileTransfer::finished,
             transfer_dialog_, &FileTransferDialog::onTransferFinished);
+
+    connect(transfer_dialog_, &FileTransferDialog::finished, [this]()
+    {
+        activateWindow();
+        setFocus();
+    });
 
     connect(transfer, &FileTransfer::currentItemChanged,
             transfer_dialog_, &FileTransferDialog::setCurrentItem);

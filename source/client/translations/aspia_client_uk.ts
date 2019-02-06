@@ -1426,7 +1426,7 @@
         <translation type="unfinished">Віддалений комп&apos;ютер</translation>
     </message>
     <message>
-        <location filename="../ui/file_manager_window.cc" line="281"/>
+        <location filename="../ui/file_manager_window.cc" line="293"/>
         <source>File Transfer</source>
         <translation type="unfinished">Передача файлів</translation>
     </message>
