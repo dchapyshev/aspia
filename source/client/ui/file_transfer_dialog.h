@@ -47,7 +47,9 @@ signals:
     void transferCanceled();
 
 protected:
-    void closeEvent(QCloseEvent* event);
+    // QDialog implementation.
+    void keyPressEvent(QKeyEvent* event) override;
+    void closeEvent(QCloseEvent* event) override;
 
 private:
     Ui::FileTransferDialog ui;

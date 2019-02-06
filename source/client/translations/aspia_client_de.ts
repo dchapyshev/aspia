@@ -1711,7 +1711,7 @@
         <translation type="unfinished">Abbrechen</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="208"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="223"/>
         <source>Current Task: Cancel transfer of files.</source>
         <translation type="unfinished"></translation>
     </message>

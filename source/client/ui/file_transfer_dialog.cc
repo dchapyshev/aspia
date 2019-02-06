@@ -190,6 +190,21 @@ void FileTransferDialog::onTransferFinished()
     close();
 }
 
+void FileTransferDialog::keyPressEvent(QKeyEvent* event)
+{
+    // If the user presses the Esc key in a dialog, QDialog::reject() will be called. This will
+    // cause the window to close: The close event cannot be ignored.
+    // We do not allow pressing Esc to cause regular behavior. We intercept pressing and we cause
+    // closing of dialog.
+    if (event->key() == Qt::Key_Escape)
+    {
+        close();
+        return;
+    }
+
+    QDialog::keyPressEvent(event);
+}
+
 void FileTransferDialog::closeEvent(QCloseEvent* event)
 {
     if (finished_)
