@@ -101,11 +101,12 @@ net::SrpUserList Settings::userList() const
         user.sessions  = settings_.value(QStringLiteral("Sessions")).toUInt();
         user.flags     = settings_.value(QStringLiteral("Flags")).toUInt();
 
-        CHECK(!user.name.isEmpty());
-        CHECK(!user.salt.isEmpty());
-        CHECK(!user.verifier.isEmpty());
-        CHECK(!user.number.isEmpty());
-        CHECK(!user.generator.isEmpty());
+        if (user.name.isEmpty() || user.salt.isEmpty() || user.verifier.isEmpty() ||
+            user.number.isEmpty() || user.generator.isEmpty())
+        {
+            LOG(LS_ERROR) << "The list of users is corrupted.";
+            return net::SrpUserList();
+        }
 
         users.list.append(user);
     }
