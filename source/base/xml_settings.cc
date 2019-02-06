@@ -197,6 +197,8 @@ bool XmlSettings::readFunc(QIODevice& device, QSettings::SettingsMap& map)
     QStringList segments;
     QString type;
 
+    bool settings_found = false;
+
     while (!xml.atEnd() && !xml.hasError())
     {
         switch (xml.readNext())
@@ -204,9 +206,19 @@ bool XmlSettings::readFunc(QIODevice& device, QSettings::SettingsMap& map)
             case QXmlStreamReader::StartElement:
             {
                 if (xml.name() == QLatin1String("Settings"))
+                {
+                    settings_found = true;
                     continue;
+                }
 
-                segments.append(xml.attributes().value(QLatin1String("Name")).toString());
+                if (!settings_found)
+                    return false;
+
+                QString name = xml.attributes().value(QLatin1String("Name")).toString();
+                if (name.isEmpty())
+                    return false;
+
+                segments.append(name);
                 type = xml.attributes().value(QLatin1String("Type")).toString();
             }
             break;
@@ -231,6 +243,9 @@ bool XmlSettings::readFunc(QIODevice& device, QSettings::SettingsMap& map)
                         key += QLatin1Char('/');
                     key += segments.at(i);
                 }
+
+                if (key.isEmpty())
+                    return false;
 
                 map[key] = stringToVariant(xml.text().toString(), type);
             }
