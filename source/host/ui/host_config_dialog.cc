@@ -25,6 +25,7 @@
 
 #include "base/logging.h"
 #include "base/service_controller.h"
+#include "base/xml_settings.h"
 #include "build/build_config.h"
 #include "common/ui/about_dialog.h"
 #include "host/ui/user_dialog.h"
@@ -38,15 +39,27 @@ namespace host {
 
 namespace {
 
-bool replaceFile(const QString& source_path, const QString& target_path)
+bool copySettings(const QString& source_path, const QString& target_path)
 {
-    if (QFile::exists(target_path))
-    {
-        if (!QFile::remove(target_path))
-            return false;
-    }
+    QFile source_file(source_path);
 
-    return QFile::copy(source_path, target_path);
+    if (!source_file.open(QIODevice::ReadOnly))
+        return false;
+
+    QFile target_file(target_path);
+
+    if (!target_file.open(QIODevice::WriteOnly))
+        return false;
+
+    QSettings::SettingsMap settings_map;
+
+    if (!base::XmlSettings::readFunc(source_file, settings_map))
+        return false;
+
+    if (!base::XmlSettings::writeFunc(target_file, settings_map))
+        return false;
+
+    return true;
 }
 
 } // namespace
@@ -141,7 +154,7 @@ bool HostConfigDialog::importSettings(const QString& path, bool silent, QWidget*
         return false;
     }
 
-    bool result = replaceFile(path, Settings().filePath());
+    bool result = copySettings(path, Settings().filePath());
 
     if (!silent)
     {
@@ -168,7 +181,7 @@ bool HostConfigDialog::importSettings(const QString& path, bool silent, QWidget*
 // static
 bool HostConfigDialog::exportSettings(const QString& path, bool silent, QWidget* parent)
 {
-    bool result = replaceFile(Settings().filePath(), path);
+    bool result = copySettings(Settings().filePath(), path);
 
     if (!silent)
     {
