@@ -37,10 +37,19 @@ void beginDocument(QXmlStreamWriter* writer)
     writer->writeStartElement(QLatin1String("html"));
     writer->writeStartElement(QLatin1String("head"));
 
+    writer->writeStartElement(QLatin1String("meta"));
+    writer->writeAttribute(QLatin1String("http-equiv"), QLatin1String("Content-Type"));
+    writer->writeAttribute(QLatin1String("content"), QLatin1String("text/html; charset=utf-8"));
+    writer->writeEndElement(); // meta
+
     writer->writeStartElement(QLatin1String("style"));
     writer->writeAttribute(QLatin1String("type"), QLatin1String("text/css"));
     writer->writeCharacters(style);
     writer->writeEndElement(); // style
+
+    writer->writeStartElement(QLatin1String("title"));
+    writer->writeCharacters(QLatin1String("Document"));
+    writer->writeEndElement(); // title
 
     writer->writeEndElement(); // head
 
