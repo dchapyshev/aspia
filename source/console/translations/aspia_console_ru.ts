@@ -274,7 +274,7 @@
     <message>
         <location filename="../computer_dialog_parent.ui" line="20"/>
         <source>Select child item</source>
-        <translation>Выберите дочерий элемент</translation>
+        <translation>Выберите дочерний элемент</translation>
     </message>
 </context>
 <context>

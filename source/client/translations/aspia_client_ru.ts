@@ -1468,7 +1468,7 @@
     <message>
         <location filename="../client.cc" line="134"/>
         <source>An error occured while authenticating: wrong user name or password.</source>
-        <translation>Произошла ошибка при аутификации: неправильное имя пользователя или пароль.</translation>
+        <translation>Произошла ошибка при аутентификации: неправильное имя пользователя или пароль.</translation>
     </message>
     <message>
         <location filename="../client.cc" line="138"/>
