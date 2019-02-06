@@ -374,6 +374,8 @@ void HostConfigDialog::onButtonBoxClicked(QAbstractButton* button)
 
 void HostConfigDialog::createLanguageList(const QString& current_locale)
 {
+    ui.combobox_language->clear();
+
     for (const auto& locale : locale_loader_.sortedLocaleList())
     {
         const QString language = QLocale::languageToString(QLocale(locale).language());
@@ -441,8 +443,7 @@ void HostConfigDialog::reloadAll()
 
 void HostConfigDialog::reloadUserList()
 {
-    for (int i = ui.tree_users->topLevelItemCount() - 1; i >= 0; --i)
-        delete ui.tree_users->takeTopLevelItem(i);
+    ui.tree_users->clear();
 
     for (int i = 0; i < users_.list.size(); ++i)
         ui.tree_users->addTopLevelItem(new UserTreeItem(i, users_.list.at(i)));
