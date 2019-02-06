@@ -20,6 +20,7 @@
 #define CONSOLE__COMPUTER_GROUP_DIALOG_H
 
 #include "console/computer_group_item.h"
+#include "console/console_settings.h"
 #include "ui_computer_group_dialog.h"
 
 namespace console {
@@ -37,6 +38,10 @@ public:
                         proto::address_book::ComputerGroup* computer_group);
     ~ComputerGroupDialog() = default;
 
+protected:
+    // QDialog implementation.
+    void closeEvent(QCloseEvent* event) override;
+
 private slots:
     void buttonBoxClicked(QAbstractButton* button);
 
@@ -44,6 +49,8 @@ private:
     void showError(const QString& message);
 
     Ui::ComputerGroupDialog ui;
+
+    Settings settings_;
 
     const Mode mode_;
     proto::address_book::ComputerGroup* computer_group_;

@@ -1098,22 +1098,22 @@
         <translation type="obsolete">Warnung</translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="154"/>
+        <location filename="../computer_dialog.cc" line="164"/>
         <source>General</source>
         <translation type="unfinished">Allgemeines</translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="158"/>
+        <location filename="../computer_dialog.cc" line="168"/>
         <source>Sessions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="165"/>
+        <location filename="../computer_dialog.cc" line="175"/>
         <source>Manage</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="169"/>
+        <location filename="../computer_dialog.cc" line="179"/>
         <source>View</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1193,7 +1193,7 @@
 <context>
     <name>console::ComputerGroupDialog</name>
     <message numerus="yes">
-        <location filename="../computer_group_dialog.cc" line="60"/>
+        <location filename="../computer_group_dialog.cc" line="68"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation type="unfinished">
             <numerusform>Zu langer Name. Die maximale Länge des Namens beträgt %n Zeichen.</numerusform>
@@ -1201,12 +1201,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.cc" line="67"/>
+        <location filename="../computer_group_dialog.cc" line="75"/>
         <source>Name can not be empty.</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../computer_group_dialog.cc" line="75"/>
+        <location filename="../computer_group_dialog.cc" line="83"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation type="unfinished">
             <numerusform>Zu langer Kommentar. Die maximale Länge des Kommentars beträgt %n Zeichen.</numerusform>
@@ -1214,7 +1214,7 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.cc" line="102"/>
+        <location filename="../computer_group_dialog.cc" line="110"/>
         <source>Warning</source>
         <translation type="unfinished">Warnung</translation>
     </message>

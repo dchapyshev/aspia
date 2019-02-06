@@ -1100,22 +1100,22 @@
         <translation type="obsolete">Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="154"/>
+        <location filename="../computer_dialog.cc" line="164"/>
         <source>General</source>
         <translation>Basis</translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="158"/>
+        <location filename="../computer_dialog.cc" line="168"/>
         <source>Sessions</source>
         <translation>Sessies</translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="165"/>
+        <location filename="../computer_dialog.cc" line="175"/>
         <source>Manage</source>
         <translation>Beheren</translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="169"/>
+        <location filename="../computer_dialog.cc" line="179"/>
         <source>View</source>
         <translation>Weergave</translation>
     </message>
@@ -1195,7 +1195,7 @@
 <context>
     <name>console::ComputerGroupDialog</name>
     <message numerus="yes">
-        <location filename="../computer_group_dialog.cc" line="60"/>
+        <location filename="../computer_group_dialog.cc" line="68"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Te lange naam. De maximum lengte is %n karakter.</numerusform>
@@ -1203,12 +1203,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.cc" line="67"/>
+        <location filename="../computer_group_dialog.cc" line="75"/>
         <source>Name can not be empty.</source>
         <translation>Naam mag niet leeg zijn.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../computer_group_dialog.cc" line="75"/>
+        <location filename="../computer_group_dialog.cc" line="83"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Te lang commentaar. De maximale lengte is %n karakter.</numerusform>
@@ -1216,7 +1216,7 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.cc" line="102"/>
+        <location filename="../computer_group_dialog.cc" line="110"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>

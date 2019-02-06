@@ -22,6 +22,7 @@
 #include <QDialog>
 
 #include "base/macros_magic.h"
+#include "console/console_settings.h"
 #include "proto/address_book.pb.h"
 #include "ui_computer_dialog.h"
 
@@ -44,6 +45,7 @@ public:
 
 protected:
     // QDialog implementation.
+    void closeEvent(QCloseEvent* event) override;
     bool eventFilter(QObject* watched, QEvent* event) override;
 
 private slots:
@@ -59,6 +61,8 @@ private:
     Ui::ComputerDialog ui;
     QWidgetList tabs_;
     const Mode mode_;
+
+    Settings settings_;
 
     proto::address_book::Computer computer_;
 

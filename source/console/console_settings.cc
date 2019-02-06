@@ -188,4 +188,34 @@ void Settings::setUpdateServer(const QString& server)
     settings_.setValue(QStringLiteral("UpdateServer"), server.toLower());
 }
 
+QByteArray Settings::computerDialogGeometry() const
+{
+    return settings_.value(QStringLiteral("ComputerDialogGeometry")).toByteArray();
+}
+
+void Settings::setComputerDialogGeometry(const QByteArray& geometry)
+{
+    settings_.setValue(QStringLiteral("ComputerDialogGeometry"), geometry);
+}
+
+QByteArray Settings::computerDialogState() const
+{
+    return settings_.value(QStringLiteral("ComputerDialogState")).toByteArray();
+}
+
+void Settings::setComputerDialogState(const QByteArray& state)
+{
+    settings_.setValue(QStringLiteral("ComputerDialogState"), state);
+}
+
+QByteArray Settings::computerGroupDialogGeometry() const
+{
+    return settings_.value(QStringLiteral("ComputerGroupDialogGeometry")).toByteArray();
+}
+
+void Settings::setComputerGroupDialogGeometry(const QByteArray& geometry)
+{
+    settings_.setValue(QStringLiteral("ComputerGroupDialogGeometry"), geometry);
+}
+
 } // namespace console

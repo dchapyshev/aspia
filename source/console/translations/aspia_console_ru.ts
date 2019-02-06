@@ -1200,22 +1200,22 @@
         <translation type="vanished">Предупреждение</translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="154"/>
+        <location filename="../computer_dialog.cc" line="164"/>
         <source>General</source>
         <translation>Основные</translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="158"/>
+        <location filename="../computer_dialog.cc" line="168"/>
         <source>Sessions</source>
         <translation>Сессии</translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="165"/>
+        <location filename="../computer_dialog.cc" line="175"/>
         <source>Manage</source>
         <translation>Управление</translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="169"/>
+        <location filename="../computer_dialog.cc" line="179"/>
         <source>View</source>
         <translation>Просмотр</translation>
     </message>
@@ -1297,7 +1297,7 @@
 <context>
     <name>console::ComputerGroupDialog</name>
     <message numerus="yes">
-        <location filename="../computer_group_dialog.cc" line="60"/>
+        <location filename="../computer_group_dialog.cc" line="68"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Слишком длинное имя. Максимальная длина имени %n символ.</numerusform>
@@ -1306,12 +1306,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.cc" line="67"/>
+        <location filename="../computer_group_dialog.cc" line="75"/>
         <source>Name can not be empty.</source>
         <translation>Имя не может быть пустым.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../computer_group_dialog.cc" line="75"/>
+        <location filename="../computer_group_dialog.cc" line="83"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Слишком длинный комментарий. Максимальная длина комментария %n символ.</numerusform>
@@ -1320,7 +1320,7 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.cc" line="102"/>
+        <location filename="../computer_group_dialog.cc" line="110"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>

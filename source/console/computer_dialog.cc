@@ -74,6 +74,13 @@ ComputerDialog::~ComputerDialog()
     crypto::memZero(computer_.mutable_comment());
 }
 
+void ComputerDialog::closeEvent(QCloseEvent* event)
+{
+    settings_.setComputerDialogGeometry(saveGeometry());
+    settings_.setComputerDialogState(ui.splitter->saveState());
+    QDialog::closeEvent(event);
+}
+
 bool ComputerDialog::eventFilter(QObject* watched, QEvent* event)
 {
     if (watched == ui.widget && event->type() == QEvent::Resize)
@@ -145,6 +152,9 @@ void ComputerDialog::buttonBoxClicked(QAbstractButton* button)
 void ComputerDialog::init(const QString& parent_name)
 {
     ui.setupUi(this);
+
+    restoreGeometry(settings_.computerDialogGeometry());
+    ui.splitter->restoreState(settings_.computerDialogState());
 
     connect(ui.tree, &QTreeWidget::currentItemChanged, this, &ComputerDialog::onTabChanged);
     connect(ui.button_box, &QDialogButtonBox::clicked, this, &ComputerDialog::buttonBoxClicked);

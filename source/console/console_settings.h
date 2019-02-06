@@ -77,6 +77,15 @@ public:
     QString updateServer() const;
     void setUpdateServer(const QString& server);
 
+    QByteArray computerDialogGeometry() const;
+    void setComputerDialogGeometry(const QByteArray& geometry);
+
+    QByteArray computerDialogState() const;
+    void setComputerDialogState(const QByteArray& state);
+
+    QByteArray computerGroupDialogGeometry() const;
+    void setComputerGroupDialogGeometry(const QByteArray& geometry);
+
 private:
     QSettings settings_;
 

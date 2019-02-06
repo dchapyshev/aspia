@@ -42,12 +42,20 @@ ComputerGroupDialog::ComputerGroupDialog(QWidget* parent,
 {
     ui.setupUi(this);
 
+    restoreGeometry(settings_.computerGroupDialogGeometry());
+
     connect(ui.button_box, &QDialogButtonBox::clicked,
             this, &ComputerGroupDialog::buttonBoxClicked);
 
     ui.edit_parent_name->setText(parent_name);
     ui.edit_name->setText(QString::fromStdString(computer_group_->name()));
     ui.edit_comment->setPlainText(QString::fromStdString(computer_group->comment()));
+}
+
+void ComputerGroupDialog::closeEvent(QCloseEvent* event)
+{
+    settings_.setComputerGroupDialogGeometry(saveGeometry());
+    QDialog::closeEvent(event);
 }
 
 void ComputerGroupDialog::buttonBoxClicked(QAbstractButton* button)
