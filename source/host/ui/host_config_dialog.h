@@ -63,6 +63,9 @@ private:
     bool stopService();
     bool restartService();
 
+    static bool copySettings(
+        const QString& source_path, const QString& target_path, bool silent, QWidget* parent);
+
     Ui::HostConfigDialog ui;
 
     common::LocaleLoader& locale_loader_;

@@ -37,33 +37,6 @@
 
 namespace host {
 
-namespace {
-
-bool copySettings(const QString& source_path, const QString& target_path)
-{
-    QFile source_file(source_path);
-
-    if (!source_file.open(QIODevice::ReadOnly))
-        return false;
-
-    QFile target_file(target_path);
-
-    if (!target_file.open(QIODevice::WriteOnly))
-        return false;
-
-    QSettings::SettingsMap settings_map;
-
-    if (!base::XmlSettings::readFunc(source_file, settings_map))
-        return false;
-
-    if (!base::XmlSettings::writeFunc(target_file, settings_map))
-        return false;
-
-    return true;
-}
-
-} // namespace
-
 HostConfigDialog::HostConfigDialog(common::LocaleLoader& locale_loader, QWidget* parent)
     : QDialog(parent),
       locale_loader_(locale_loader)
@@ -142,37 +115,14 @@ HostConfigDialog::HostConfigDialog(common::LocaleLoader& locale_loader, QWidget*
 // static
 bool HostConfigDialog::importSettings(const QString& path, bool silent, QWidget* parent)
 {
-    if (!QFile::exists(path))
-    {
-        if (!silent)
-        {
-            QMessageBox::warning(parent,
-                                 tr("Warning"),
-                                 tr("Source file does not exist: %1").arg(path),
-                                 QMessageBox::Ok);
-        }
-        return false;
-    }
+    bool result = copySettings(path, Settings().filePath(), silent, parent);
 
-    bool result = copySettings(path, Settings().filePath());
-
-    if (!silent)
+    if (!silent && result)
     {
-        if (result)
-        {
-            QMessageBox::information(parent,
-                                     tr("Information"),
-                                     tr("The configuration was successfully imported."),
-                                     QMessageBox::Ok);
-        }
-        else
-        {
-            QMessageBox::warning(parent,
-                                 tr("Warning"),
-                                 tr("Could not write destination file. Verify that you have "
-                                    "the necessary rights to write the file."),
+        QMessageBox::information(parent,
+                                 tr("Information"),
+                                 tr("The configuration was successfully imported."),
                                  QMessageBox::Ok);
-        }
     }
 
     return result;
@@ -181,25 +131,14 @@ bool HostConfigDialog::importSettings(const QString& path, bool silent, QWidget*
 // static
 bool HostConfigDialog::exportSettings(const QString& path, bool silent, QWidget* parent)
 {
-    bool result = copySettings(Settings().filePath(), path);
+    bool result = copySettings(Settings().filePath(), path, silent, parent);
 
-    if (!silent)
+    if (!silent && result)
     {
-        if (result)
-        {
-            QMessageBox::information(parent,
-                                     tr("Information"),
-                                     tr("The configuration was successfully imported."),
-                                     QMessageBox::Ok);
-        }
-        else
-        {
-            QMessageBox::warning(parent,
-                                 tr("Warning"),
-                                 tr("Could not write destination file. Verify that you have "
-                                    "the necessary rights to write the file."),
+        QMessageBox::information(parent,
+                                 tr("Information"),
+                                 tr("The configuration was successfully exported."),
                                  QMessageBox::Ok);
-        }
     }
 
     return result;
@@ -671,6 +610,74 @@ bool HostConfigDialog::restartService()
         return false;
 
     return startService();
+}
+
+// static
+bool HostConfigDialog::copySettings(
+    const QString& source_path, const QString& target_path, bool silent, QWidget* parent)
+{
+    QFile source_file(source_path);
+
+    if (!source_file.open(QIODevice::ReadOnly))
+    {
+        if (!silent)
+        {
+            QMessageBox::warning(parent,
+                                 tr("Warning"),
+                                 tr("Could not open source file: %1")
+                                     .arg(source_file.errorString()),
+                                 QMessageBox::Ok);
+        }
+
+        return false;
+    }
+
+    QFile target_file(target_path);
+
+    if (!target_file.open(QIODevice::WriteOnly))
+    {
+        if (!silent)
+        {
+            QMessageBox::warning(parent,
+                                 tr("Warning"),
+                                 tr("Could not open target file: %1")
+                                 .arg(target_file.errorString()),
+                                 QMessageBox::Ok);
+        }
+
+        return false;
+    }
+
+    QSettings::SettingsMap settings_map;
+
+    if (!base::XmlSettings::readFunc(source_file, settings_map))
+    {
+        if (!silent)
+        {
+            QMessageBox::warning(
+                parent,
+                tr("Warning"),
+                tr("Unable to read the source file: the file is damaged or has an unknown format."),
+                QMessageBox::Ok);
+        }
+
+        return false;
+    }
+
+    if (!base::XmlSettings::writeFunc(target_file, settings_map))
+    {
+        if (!silent)
+        {
+            QMessageBox::warning(parent,
+                                 tr("Warning"),
+                                 tr("Unable to write the target file."),
+                                 QMessageBox::Ok);
+        }
+
+        return false;
+    }
+
+    return true;
 }
 
 } // namespace host

@@ -267,152 +267,166 @@
 <context>
     <name>host::HostConfigDialog</name>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="150"/>
-        <location filename="../ui/host_config_dialog.cc" line="171"/>
-        <location filename="../ui/host_config_dialog.cc" line="198"/>
-        <location filename="../ui/host_config_dialog.cc" line="385"/>
-        <location filename="../ui/host_config_dialog.cc" line="588"/>
-        <location filename="../ui/host_config_dialog.cc" line="607"/>
-        <location filename="../ui/host_config_dialog.cc" line="622"/>
-        <location filename="../ui/host_config_dialog.cc" line="632"/>
-        <location filename="../ui/host_config_dialog.cc" line="648"/>
-        <location filename="../ui/host_config_dialog.cc" line="658"/>
+        <location filename="../ui/host_config_dialog.cc" line="324"/>
+        <location filename="../ui/host_config_dialog.cc" line="527"/>
+        <location filename="../ui/host_config_dialog.cc" line="546"/>
+        <location filename="../ui/host_config_dialog.cc" line="561"/>
+        <location filename="../ui/host_config_dialog.cc" line="571"/>
+        <location filename="../ui/host_config_dialog.cc" line="587"/>
+        <location filename="../ui/host_config_dialog.cc" line="597"/>
+        <location filename="../ui/host_config_dialog.cc" line="626"/>
+        <location filename="../ui/host_config_dialog.cc" line="642"/>
+        <location filename="../ui/host_config_dialog.cc" line="659"/>
+        <location filename="../ui/host_config_dialog.cc" line="672"/>
         <source>Warning</source>
         <translation type="unfinished">Попередження</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="151"/>
-        <source>Source file does not exist: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/host_config_dialog.cc" line="164"/>
-        <location filename="../ui/host_config_dialog.cc" line="191"/>
+        <location filename="../ui/host_config_dialog.cc" line="123"/>
+        <location filename="../ui/host_config_dialog.cc" line="139"/>
         <source>Information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="165"/>
-        <location filename="../ui/host_config_dialog.cc" line="192"/>
+        <location filename="../ui/host_config_dialog.cc" line="124"/>
         <source>The configuration was successfully imported.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="172"/>
-        <location filename="../ui/host_config_dialog.cc" line="199"/>
-        <source>Could not write destination file. Verify that you have the necessary rights to write the file.</source>
+        <location filename="../ui/host_config_dialog.cc" line="140"/>
+        <source>The configuration was successfully exported.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="270"/>
+        <location filename="../ui/host_config_dialog.cc" line="209"/>
+        <location filename="../ui/host_config_dialog.cc" line="286"/>
         <location filename="../ui/host_config_dialog.cc" line="347"/>
-        <location filename="../ui/host_config_dialog.cc" line="408"/>
         <source>Confirmation</source>
         <translation type="unfinished">Підтвердження</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="271"/>
+        <location filename="../ui/host_config_dialog.cc" line="210"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation type="unfinished">Ви впевнені, що хочете видалити користувача &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="333"/>
+        <location filename="../ui/host_config_dialog.cc" line="272"/>
         <source>Import</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="333"/>
-        <location filename="../ui/host_config_dialog.cc" line="363"/>
+        <location filename="../ui/host_config_dialog.cc" line="272"/>
+        <location filename="../ui/host_config_dialog.cc" line="302"/>
         <source>XML-files (*.xml)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../ui/host_config_dialog.cc" line="281"/>
         <location filename="../ui/host_config_dialog.cc" line="342"/>
-        <location filename="../ui/host_config_dialog.cc" line="403"/>
         <source>Service configuration changed. For the changes to take effect, you must restart the service. Restart the service now?</source>
         <translation type="unfinished">Налаштування сервісу замінено. Для примінення нових налаштувань потрібно перезапустити сервіс. Перезапустити сервіс зараз?</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="363"/>
+        <location filename="../ui/host_config_dialog.cc" line="302"/>
         <source>Export</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="382"/>
+        <location filename="../ui/host_config_dialog.cc" line="321"/>
         <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
         <translation type="unfinished">Неможливо записати налаштування.Переконайтеся, що у вас є відповідні права для запису.</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="527"/>
+        <location filename="../ui/host_config_dialog.cc" line="466"/>
         <source>Remove</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="535"/>
+        <location filename="../ui/host_config_dialog.cc" line="474"/>
         <source>Started</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="536"/>
+        <location filename="../ui/host_config_dialog.cc" line="475"/>
         <source>Stop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="541"/>
+        <location filename="../ui/host_config_dialog.cc" line="480"/>
         <source>Not started</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="542"/>
-        <location filename="../ui/host_config_dialog.cc" line="549"/>
-        <location filename="../ui/host_config_dialog.cc" line="562"/>
+        <location filename="../ui/host_config_dialog.cc" line="481"/>
+        <location filename="../ui/host_config_dialog.cc" line="488"/>
+        <location filename="../ui/host_config_dialog.cc" line="501"/>
         <source>Start</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="548"/>
+        <location filename="../ui/host_config_dialog.cc" line="487"/>
         <source>Installed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="559"/>
+        <location filename="../ui/host_config_dialog.cc" line="498"/>
         <source>Not installed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="561"/>
+        <location filename="../ui/host_config_dialog.cc" line="500"/>
         <source>Install</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="566"/>
+        <location filename="../ui/host_config_dialog.cc" line="505"/>
         <source>Current state: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="589"/>
+        <location filename="../ui/host_config_dialog.cc" line="528"/>
         <source>The service could not be installed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="608"/>
+        <location filename="../ui/host_config_dialog.cc" line="547"/>
         <source>The service could not be removed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="623"/>
-        <location filename="../ui/host_config_dialog.cc" line="649"/>
+        <location filename="../ui/host_config_dialog.cc" line="562"/>
+        <location filename="../ui/host_config_dialog.cc" line="588"/>
         <source>Could not access the service.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="633"/>
+        <location filename="../ui/host_config_dialog.cc" line="572"/>
         <source>The service could not be started.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="659"/>
+        <location filename="../ui/host_config_dialog.cc" line="598"/>
         <source>The service could not be stopped.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/host_config_dialog.cc" line="627"/>
+        <source>Could not open source file: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/host_config_dialog.cc" line="643"/>
+        <source>Could not open target file: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/host_config_dialog.cc" line="660"/>
+        <source>Unable to read the source file: the file is damaged or has an unknown format.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/host_config_dialog.cc" line="673"/>
+        <source>Unable to write the target file.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
