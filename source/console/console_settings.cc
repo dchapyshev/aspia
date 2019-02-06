@@ -27,7 +27,7 @@
 namespace console {
 
 Settings::Settings()
-    : settings_(base::XmlSettings::registerFormat(),
+    : settings_(base::XmlSettings::format(),
                 QSettings::UserScope,
                 QStringLiteral("aspia"),
                 QStringLiteral("console"))

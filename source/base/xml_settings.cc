@@ -24,6 +24,12 @@ namespace base {
 
 namespace {
 
+QSettings::Format g_xml_format =
+    QSettings::registerFormat(QStringLiteral("xml"),
+                              XmlSettings::readFunc,
+                              XmlSettings::writeFunc,
+                              Qt::CaseSensitive);
+
 QString variantToType(const QVariant& value)
 {
     QString result;
@@ -185,9 +191,9 @@ QVariant stringToVariant(const QString& value, const QString& type)
 } // namespace
 
 // static
-QSettings::Format XmlSettings::registerFormat(Qt::CaseSensitivity case_sensitivity)
+QSettings::Format XmlSettings::format()
 {
-    return QSettings::registerFormat(QStringLiteral("xml"), readFunc, writeFunc, case_sensitivity);
+    return g_xml_format;
 }
 
 // static

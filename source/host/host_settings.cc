@@ -29,7 +29,7 @@
 namespace host {
 
 Settings::Settings()
-    : settings_(base::XmlSettings::registerFormat(),
+    : settings_(base::XmlSettings::format(),
                 QSettings::SystemScope,
                 QLatin1String("aspia"),
                 QLatin1String("host"))
@@ -87,8 +87,8 @@ net::SrpUserList Settings::userList() const
     if (users.seed_key.isEmpty())
         users.seed_key = crypto::Random::generateBuffer(64);
 
-    int size = settings_.beginReadArray(QStringLiteral("Users"));
-    for (int i = 0; i < size; ++i)
+    int count = settings_.beginReadArray(QStringLiteral("Users"));
+    for (int i = 0; i < count; ++i)
     {
         settings_.setArrayIndex(i);
 

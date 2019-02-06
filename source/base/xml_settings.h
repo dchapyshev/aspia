@@ -28,8 +28,7 @@ namespace base {
 class XmlSettings
 {
 public:
-    static QSettings::Format registerFormat(
-        Qt::CaseSensitivity case_sensitivity = Qt::CaseSensitive);
+    static QSettings::Format format();
 
     static bool readFunc(QIODevice& device, QSettings::SettingsMap& map);
     static bool writeFunc(QIODevice& device, const QSettings::SettingsMap& map);

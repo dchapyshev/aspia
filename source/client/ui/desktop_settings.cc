@@ -23,7 +23,7 @@
 namespace client {
 
 DesktopSettings::DesktopSettings()
-    : settings_(base::XmlSettings::registerFormat(),
+    : settings_(base::XmlSettings::format(),
                 QSettings::UserScope,
                 QLatin1String("aspia"),
                 QLatin1String("client"))
