@@ -2013,6 +2013,11 @@
         <source>Abort</source>
         <translation>Прервать</translation>
     </message>
+    <message>
+        <location filename="../ui/file_transfer_dialog.cc" line="206"/>
+        <source>Current Task: Cancel transfer of files.</source>
+        <translation>Текущая задача: Отмена передачи файлов.</translation>
+    </message>
 </context>
 <context>
     <name>client::FileTransferQueueBuilder</name>

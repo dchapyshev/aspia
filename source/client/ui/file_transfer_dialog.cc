@@ -203,7 +203,7 @@ void FileTransferDialog::closeEvent(QCloseEvent* event)
 
     closing_ = true;
 
-    ui.label_task->setText("Current Task: Cancel transfer of files.");
+    ui.label_task->setText(tr("Current Task: Cancel transfer of files."));
     ui.button_box->setDisabled(true);
 
     emit transferCanceled();
