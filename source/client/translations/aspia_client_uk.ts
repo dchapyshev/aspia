@@ -1648,7 +1648,7 @@
         <translation type="unfinished">Відмінити</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="206"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="208"/>
         <source>Current Task: Cancel transfer of files.</source>
         <translation type="unfinished"></translation>
     </message>

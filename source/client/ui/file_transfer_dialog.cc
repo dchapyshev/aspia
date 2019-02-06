@@ -114,7 +114,7 @@ void FileTransferDialog::showError(FileTransfer* transfer,
         taskbar_progress_->pause();
 #endif
 
-    QPointer<QMessageBox> dialog(new QMessageBox(this));
+    QMessageBox* dialog = new QMessageBox(this);
 
     dialog->setWindowTitle(tr("Warning"));
     dialog->setIcon(QMessageBox::Warning);
@@ -173,6 +173,8 @@ void FileTransferDialog::showError(FileTransfer* transfer,
 
         transfer->applyAction(error_type, FileTransfer::Abort);
     });
+
+    connect(dialog, &QMessageBox::finished, dialog, &QMessageBox::deleteLater);
 
     dialog->exec();
 
