@@ -44,6 +44,11 @@ TEST(ComputerAddressTest, Port)
     EXPECT_FALSE(addr4.isValid());
     EXPECT_TRUE(addr4.host().isEmpty());
     EXPECT_EQ(addr4.port(), 0);
+
+    ComputerAddress addr5 = ComputerAddress::fromStdString("192.168.0.1:83572576");
+    EXPECT_FALSE(addr5.isValid());
+    EXPECT_TRUE(addr5.host().isEmpty());
+    EXPECT_EQ(addr5.port(), 0);
 }
 
 TEST(ComputerAddressTest, InvalidAddress)
