@@ -20,6 +20,7 @@
 #define UPDATER__UPDATE_DIALOG_H
 
 #include <QDialog>
+#include <QPointer>
 
 #include "base/macros_magic.h"
 #include "updater/update_info.h"
@@ -29,6 +30,8 @@ class UpdateDialog;
 } // namespace Ui
 
 namespace updater {
+
+class Checker;
 
 class UpdateDialog : public QDialog
 {
@@ -41,6 +44,11 @@ public:
     UpdateDialog(const UpdateInfo& update_info, QWidget* parent = nullptr);
     ~UpdateDialog();
 
+protected:
+    // QDialog implementation.
+    void keyPressEvent(QKeyEvent* event) override;
+    void closeEvent(QCloseEvent* event) override;
+
 private slots:
     void onUpdateChecked(const UpdateInfo& update_info);
     void onUpdateNow();
@@ -50,6 +58,9 @@ private:
 
     std::unique_ptr<Ui::UpdateDialog> ui;
     UpdateInfo update_info_;
+
+    QPointer<Checker> checker_;
+    bool checker_finished_ = true;
 
     DISALLOW_COPY_AND_ASSIGN(UpdateDialog);
 };

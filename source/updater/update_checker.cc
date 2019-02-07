@@ -46,9 +46,6 @@ Checker::~Checker()
 {
     if (thread_ && thread_->isRunning())
     {
-        if (impl_)
-            impl_->stop();
-
         thread_->quit();
         thread_->wait();
     }

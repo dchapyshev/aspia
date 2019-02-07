@@ -30,12 +30,6 @@
 
 namespace updater {
 
-namespace {
-
-const int kStopEvent = QEvent::User + 1;
-
-} // namespace
-
 CheckerImpl::CheckerImpl(QObject* parent)
     : QObject(parent)
 {
@@ -87,24 +81,6 @@ void CheckerImpl::start()
         .arg(current_version.toString())));
 
     network_manager_->get(QNetworkRequest(url));
-}
-
-void CheckerImpl::stop()
-{
-    QCoreApplication::postEvent(this, new QEvent(QEvent::Type(kStopEvent)));
-}
-
-void CheckerImpl::customEvent(QEvent* event)
-{
-    if (event->type() == kStopEvent)
-    {
-        delete network_manager_;
-        network_manager_ = nullptr;
-
-        return;
-    }
-
-    QObject::customEvent(event);
 }
 
 } // namespace updater

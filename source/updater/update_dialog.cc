@@ -18,6 +18,7 @@
 
 #include "updater/update_dialog.h"
 
+#include <QCloseEvent>
 #include <QDir>
 #include <QMessageBox>
 #include <QTemporaryFile>
@@ -49,15 +50,15 @@ UpdateDialog::UpdateDialog(const QString& update_server,
 
     ui->label_available->setText(tr("Receiving information..."));
 
-    Checker* checker = new Checker(this);
+    checker_ = new Checker(this);
 
-    checker->setUpdateServer(update_server);
-    checker->setPackageName(package_name);
+    checker_->setUpdateServer(update_server);
+    checker_->setPackageName(package_name);
 
-    connect(checker, &Checker::finished, this, &UpdateDialog::onUpdateChecked);
-    connect(checker, &Checker::finished, checker, &Checker::deleteLater);
+    connect(checker_, &Checker::finished, this, &UpdateDialog::onUpdateChecked);
+    connect(checker_, &Checker::finished, checker_, &Checker::deleteLater);
 
-    checker->start();
+    checker_->start();
 }
 
 UpdateDialog::UpdateDialog(const UpdateInfo& update_info, QWidget* parent)
@@ -74,6 +75,43 @@ UpdateDialog::UpdateDialog(const UpdateInfo& update_info, QWidget* parent)
 }
 
 UpdateDialog::~UpdateDialog() = default;
+
+void UpdateDialog::keyPressEvent(QKeyEvent* event)
+{
+    if (event->key() == Qt::Key_Escape)
+    {
+        close();
+        return;
+    }
+
+    QDialog::keyPressEvent(event);
+}
+
+void UpdateDialog::closeEvent(QCloseEvent* event)
+{
+    if (checker_)
+    {
+        checker_finished_ = false;
+
+        connect(checker_, &Checker::finished, [this]()
+        {
+            checker_finished_ = true;
+            close();
+        });
+
+        ui->label_available->setText(tr("Cancel checking for updates. Please wait."));
+        ui->button_close->setEnabled(false);
+        checker_ = nullptr;
+    }
+
+    if (!checker_finished_)
+    {
+        event->ignore();
+        return;
+    }
+
+    QDialog::closeEvent(event);
+}
 
 void UpdateDialog::onUpdateChecked(const UpdateInfo& update_info)
 {

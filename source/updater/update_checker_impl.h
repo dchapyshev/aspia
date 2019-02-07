@@ -25,6 +25,7 @@
 #include "updater/update_info.h"
 
 class QNetworkAccessManager;
+class QNetworkReply;
 
 namespace updater {
 
@@ -44,11 +45,6 @@ signals:
 
 public slots:
     void start();
-    void stop();
-
-protected:
-    // QObject implementation.
-    void customEvent(QEvent* event) override;
 
 private:
     QNetworkAccessManager* network_manager_ = nullptr;
