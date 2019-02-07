@@ -48,11 +48,23 @@ bool isValidHostName(const QString& host)
     if (length > kMaxHostNameLength)
         return false;
 
+    int letter_count = 0;
+    int digit_count = 0;
+
     for (int i = 0; i < length; ++i)
     {
+        if (host[i].isDigit())
+            ++digit_count;
+
+        if (host[i].isLetter())
+            ++letter_count;
+
         if (!isValidHostNameChar(host[i]))
             return false;
     }
+
+    if (!letter_count && !digit_count)
+        return false;
 
     return true;
 }
@@ -183,7 +195,7 @@ bool parse(QStringView::const_iterator& it, QStringView::const_iterator last, Ad
     }
     else if (state == ParseState::HOST_IPV6)
     {
-        if (!setHostAndPort(first, last, last_colon, parts))
+        if (!setHostAndPort(first + 1, last - 1, last_colon, parts))
             return false;
     }
     else if (state == ParseState::PORT)
@@ -273,16 +285,26 @@ ComputerAddress ComputerAddress::fromStdString(const std::string& str)
 
 QString ComputerAddress::toString() const
 {
-    if (port_ == DEFAULT_HOST_TCP_PORT)
-        return host();
-
-    if (!isValidPort(port_) || !isValidHostName(host_))
+    if (!isValidPort(port_))
         return QString();
 
     if (net::isValidIpV6Address(host_))
-        return QString("[%1]:%2").arg(host_).arg(port_);
+    {
+        if (port_ == DEFAULT_HOST_TCP_PORT)
+            return QString("[%1]").arg(host_);
+        else
+            return QString("[%1]:%2").arg(host_).arg(port_);
+    }
+    else
+    {
+        if (!net::isValidIpV4Address(host_) && !isValidHostName(host_))
+            return QString();
 
-    return QString("%1:%2").arg(host_).arg(port_);
+        if (port_ == DEFAULT_HOST_TCP_PORT)
+            return host();
+
+        return QString("%1:%2").arg(host_).arg(port_);
+    }
 }
 
 std::string ComputerAddress::toStdString() const
@@ -312,7 +334,17 @@ uint16_t ComputerAddress::port() const
 
 bool ComputerAddress::isValid() const
 {
-    return isValidHostName(host_) && isValidPort(port_);
+    if (!isValidPort(port_))
+        return false;
+
+    if (!net::isValidIpV4Address(host_) &&
+        !net::isValidIpV6Address(host_) &&
+        !isValidHostName(host_))
+    {
+        return false;
+    }
+
+    return true;
 }
 
 bool ComputerAddress::isEqual(const ComputerAddress& other)

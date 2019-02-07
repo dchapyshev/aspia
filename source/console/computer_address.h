@@ -61,7 +61,7 @@ private:
     ComputerAddress(QString&& host, uint16_t port);
 
     QString host_;
-    uint16_t port_ = DEFAULT_HOST_TCP_PORT;
+    uint16_t port_ = 0;
 };
 
 } // namespace console

@@ -80,7 +80,13 @@ list(APPEND SOURCE_CONSOLE
 list(APPEND SOURCE_CONSOLE_RESOURCES
     resources/console.qrc)
 
+list(APPEND SOURCE_CONSOLE_UNIT_TESTS
+    computer_address.cc
+    computer_address.h
+    computer_address_unittest.cc)
+
 source_group("" FILES ${SOURCE_CONSOLE})
+source_group("" FILES ${SOURCE_CONSOLE_UNIT_TESTS})
 source_group(moc FILES ${SOURCE_CONSOLE_MOC})
 source_group(resources FILES ${SOURCE_CONSOLE_RESOURCES})
 
@@ -100,6 +106,21 @@ target_link_libraries(aspia_console
     aspia_proto
     aspia_updater
     ${THIRD_PARTY_LIBS})
+
+# If the build of unit tests is enabled.
+if (BUILD_UNIT_TESTS)
+    add_executable(aspia_console_tests ${SOURCE_CONSOLE_UNIT_TESTS})
+    target_link_libraries(aspia_console_tests
+        aspia_base
+        aspia_net
+        optimized gtest
+        optimized gtest_main
+        debug gtestd
+        debug gtest_maind
+        ${THIRD_PARTY_LIBS})
+
+    add_test(NAME aspia_console_tests COMMAND aspia_console_tests)
+endif()
 
 if(Qt5LinguistTools_FOUND)
     # Get the list of translation files.
