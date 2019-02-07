@@ -44,20 +44,13 @@ HostConfigDialog::HostConfigDialog(common::LocaleLoader& locale_loader, QWidget*
     ui.setupUi(this);
 
     connect(ui.combobox_language, QOverload<int>::of(&QComboBox::currentIndexChanged),
-            [this](int /* index */)
-    {
-        setConfigChanged(true);
-    });
+            this, &HostConfigDialog::onConfigChanged);
 
-    connect(ui.spinbox_port, QOverload<int>::of(&QSpinBox::valueChanged), [this](int /* value */)
-    {
-        setConfigChanged(true);
-    });
+    connect(ui.spinbox_port, QOverload<int>::of(&QSpinBox::valueChanged),
+            this, &HostConfigDialog::onConfigChanged);
 
-    connect(ui.checkbox_add_firewall_rule, &QCheckBox::toggled, [this](bool checked)
-    {
-        setConfigChanged(true);
-    });
+    connect(ui.checkbox_add_firewall_rule, &QCheckBox::toggled,
+            this, &HostConfigDialog::onConfigChanged);
 
     connect(ui.checkbox_use_custom_server, &QCheckBox::toggled, [this](bool checked)
     {
@@ -68,6 +61,9 @@ HostConfigDialog::HostConfigDialog(common::LocaleLoader& locale_loader, QWidget*
         if (!checked)
             ui.edit_update_server->setText(DEFAULT_UPDATE_SERVER);
     });
+
+    connect(ui.edit_update_server, &QLineEdit::textEdited,
+            this, &HostConfigDialog::onConfigChanged);
 
     connect(ui.button_check_updates, &QPushButton::released, [this]()
     {
@@ -81,10 +77,7 @@ HostConfigDialog::HostConfigDialog(common::LocaleLoader& locale_loader, QWidget*
             this, &HostConfigDialog::onCurrentUserChanged);
 
     connect(ui.tree_users, &QTreeWidget::itemDoubleClicked,
-            [this](QTreeWidgetItem* /* item */, int /* column */)
-    {
-        onModifyUser();
-    });
+            this, &HostConfigDialog::onModifyUser);
 
     connect(ui.action_add, &QAction::triggered, this, &HostConfigDialog::onAddUser);
     connect(ui.action_modify, &QAction::triggered, this, &HostConfigDialog::onModifyUser);

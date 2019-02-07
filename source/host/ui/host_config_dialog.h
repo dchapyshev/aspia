@@ -46,6 +46,7 @@ private slots:
     void onServiceStartStop();
     void onImport();
     void onExport();
+    void onConfigChanged() { setConfigChanged(true); }
     void onButtonBoxClicked(QAbstractButton* button);
 
 private:

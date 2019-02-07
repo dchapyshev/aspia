@@ -44,9 +44,14 @@ signals:
 
 public slots:
     void start();
+    void stop();
+
+protected:
+    // QObject implementation.
+    void customEvent(QEvent* event) override;
 
 private:
-    QNetworkAccessManager* network_manager_;
+    QNetworkAccessManager* network_manager_ = nullptr;
 
     QString update_server_;
     QString package_name_;

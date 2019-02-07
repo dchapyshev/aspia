@@ -18,6 +18,8 @@
 
 #include "updater/update_checker_impl.h"
 
+#include <QCoreApplication>
+#include <QEvent>
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
 #include <QNetworkReply>
@@ -28,10 +30,34 @@
 
 namespace updater {
 
+namespace {
+
+const int kStopEvent = QEvent::User + 1;
+
+} // namespace
+
 CheckerImpl::CheckerImpl(QObject* parent)
-    : QObject(parent),
-      network_manager_(new QNetworkAccessManager(this))
+    : QObject(parent)
 {
+    // Nothing
+}
+
+CheckerImpl::~CheckerImpl() = default;
+
+void CheckerImpl::setUpdateServer(const QString& update_server)
+{
+    update_server_ = update_server;
+}
+
+void CheckerImpl::setPackageName(const QString& package_name)
+{
+    package_name_ = package_name;
+}
+
+void CheckerImpl::start()
+{
+    network_manager_ = new QNetworkAccessManager(this);
+
     // Only "http"->"http", "http"->"https" or "https"->"https" redirects are allowed.
     network_manager_->setRedirectPolicy(QNetworkRequest::NoLessSafeRedirectPolicy);
 
@@ -49,22 +75,7 @@ CheckerImpl::CheckerImpl(QObject* parent)
 
         reply->deleteLater();
     });
-}
 
-CheckerImpl::~CheckerImpl() = default;
-
-void CheckerImpl::setUpdateServer(const QString& update_server)
-{
-    update_server_ = update_server;
-}
-
-void CheckerImpl::setPackageName(const QString& package_name)
-{
-    package_name_ = package_name;
-}
-
-void CheckerImpl::start()
-{
     QVersionNumber current_version(
         ASPIA_VERSION_MAJOR, ASPIA_VERSION_MINOR, ASPIA_VERSION_PATCH);
     QUrl url(update_server_);
@@ -76,6 +87,24 @@ void CheckerImpl::start()
         .arg(current_version.toString())));
 
     network_manager_->get(QNetworkRequest(url));
+}
+
+void CheckerImpl::stop()
+{
+    QCoreApplication::postEvent(this, new QEvent(QEvent::Type(kStopEvent)));
+}
+
+void CheckerImpl::customEvent(QEvent* event)
+{
+    if (event->type() == kStopEvent)
+    {
+        delete network_manager_;
+        network_manager_ = nullptr;
+
+        return;
+    }
+
+    QObject::customEvent(event);
 }
 
 } // namespace updater
