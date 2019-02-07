@@ -166,10 +166,8 @@ bool parse(QStringView::const_iterator& it, QStringView::const_iterator last, Ad
             if (it == last)
                 return false;
 
-            if (it->isDigit())
-                ++it;
-
-            continue;
+            if (!it->isDigit())
+                return false;
         }
 
         ++it;
