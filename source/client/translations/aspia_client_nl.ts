@@ -456,47 +456,47 @@
         <translation>Waarde</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="106"/>
+        <location filename="../ui/system_info_window.ui" line="109"/>
         <source>Save</source>
         <translation>Opslaan</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="109"/>
+        <location filename="../ui/system_info_window.ui" line="112"/>
         <source>Save (Ctrl+S)</source>
         <translation>Opslaan (Ctrl+S)</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="121"/>
+        <location filename="../ui/system_info_window.ui" line="124"/>
         <source>Print</source>
         <translation>Printen</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="124"/>
+        <location filename="../ui/system_info_window.ui" line="127"/>
         <source>Print (Ctrl+P)</source>
         <translation>Printen(Ctrl+P)</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="132"/>
+        <location filename="../ui/system_info_window.ui" line="135"/>
         <source>Copy Row</source>
         <translation>Kopieer Rij</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="137"/>
+        <location filename="../ui/system_info_window.ui" line="140"/>
         <source>Copy Name</source>
         <translation>Kopieer Naam</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="142"/>
+        <location filename="../ui/system_info_window.ui" line="145"/>
         <source>Copy Value</source>
         <translation>Kopieer Waarde</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="151"/>
+        <location filename="../ui/system_info_window.ui" line="154"/>
         <source>Refresh</source>
         <translation>Vernieuwen</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="154"/>
+        <location filename="../ui/system_info_window.ui" line="157"/>
         <source>Refresh (F5)</source>
         <translation>Vernieuwen (F5)</translation>
     </message>

@@ -460,47 +460,47 @@
         <translation>Значение</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="106"/>
+        <location filename="../ui/system_info_window.ui" line="109"/>
         <source>Save</source>
         <translation>Сохранить</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="109"/>
+        <location filename="../ui/system_info_window.ui" line="112"/>
         <source>Save (Ctrl+S)</source>
         <translation>Сохранить (Ctrl+S)</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="121"/>
+        <location filename="../ui/system_info_window.ui" line="124"/>
         <source>Print</source>
         <translation>Печать</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="124"/>
+        <location filename="../ui/system_info_window.ui" line="127"/>
         <source>Print (Ctrl+P)</source>
         <translation>Печать (Ctrl+P)</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="132"/>
+        <location filename="../ui/system_info_window.ui" line="135"/>
         <source>Copy Row</source>
         <translation>Копировать строку</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="137"/>
+        <location filename="../ui/system_info_window.ui" line="140"/>
         <source>Copy Name</source>
         <translation>Копировать имя</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="142"/>
+        <location filename="../ui/system_info_window.ui" line="145"/>
         <source>Copy Value</source>
         <translation>Копировать значение</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="151"/>
+        <location filename="../ui/system_info_window.ui" line="154"/>
         <source>Refresh</source>
         <translation>Обновить</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="154"/>
+        <location filename="../ui/system_info_window.ui" line="157"/>
         <source>Refresh (F5)</source>
         <translation>Обновить (F5)</translation>
     </message>
