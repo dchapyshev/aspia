@@ -1343,30 +1343,30 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="309"/>
-        <location filename="../ui/desktop_panel.cc" line="320"/>
-        <location filename="../ui/desktop_panel.cc" line="331"/>
-        <location filename="../ui/desktop_panel.cc" line="342"/>
+        <location filename="../ui/desktop_panel.cc" line="311"/>
+        <location filename="../ui/desktop_panel.cc" line="322"/>
+        <location filename="../ui/desktop_panel.cc" line="333"/>
+        <location filename="../ui/desktop_panel.cc" line="344"/>
         <source>Confirmation</source>
         <translation type="unfinished">Bestätigung</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="310"/>
+        <location filename="../ui/desktop_panel.cc" line="312"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="321"/>
+        <location filename="../ui/desktop_panel.cc" line="323"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="332"/>
+        <location filename="../ui/desktop_panel.cc" line="334"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="343"/>
+        <location filename="../ui/desktop_panel.cc" line="345"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation type="unfinished"></translation>
     </message>

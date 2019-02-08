@@ -291,6 +291,8 @@ void DesktopPanel::onAutosizeButton()
         ui.action_fullscreen->setIcon(
             QIcon(QStringLiteral(":/img/application-resize-full.png")));
         ui.action_fullscreen->setChecked(false);
+
+        showCloseButton(false);
     }
 
     emit switchToAutosize();
