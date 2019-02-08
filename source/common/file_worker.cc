@@ -365,6 +365,7 @@ proto::file_transfer::Reply FileWorker::doPacketRequest(
         if (!packet)
         {
             reply.set_status(proto::file_transfer::STATUS_FILE_READ_ERROR);
+            packetizer_.reset();
         }
         else
         {
@@ -392,9 +393,14 @@ proto::file_transfer::Reply FileWorker::doPacket(const proto::file_transfer::Pac
     else
     {
         if (!depacketizer_->writeNextPacket(packet))
+        {
             reply.set_status(proto::file_transfer::STATUS_FILE_WRITE_ERROR);
+            depacketizer_.reset();
+        }
         else
+        {
             reply.set_status(proto::file_transfer::STATUS_SUCCESS);
+        }
 
         if (packet.flags() & proto::file_transfer::Packet::LAST_PACKET)
             depacketizer_.reset();
