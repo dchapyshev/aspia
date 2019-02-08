@@ -1515,7 +1515,7 @@
     <message>
         <location filename="../client_desktop.cc" line="198"/>
         <source>There are no supported video encodings</source>
-        <translation>Нет поддерживаемых видео-кодировок</translation>
+        <translation>Нет поддерживаемых видео-кодеков</translation>
     </message>
     <message>
         <location filename="../client_desktop.cc" line="224"/>
@@ -1695,7 +1695,7 @@
     <message>
         <location filename="../ui/desktop_window.cc" line="139"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
-        <translation>Текущая видео-кодировка не поддерживается хостом. Пожалуйста, выберите другую видео-кодировку.</translation>
+        <translation>Текущий видео-кодек не поддерживается хостом. Пожалуйста, выберите другой кодек.</translation>
     </message>
     <message>
         <location filename="../ui/desktop_window.cc" line="156"/>
