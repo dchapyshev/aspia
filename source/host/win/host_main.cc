@@ -44,6 +44,32 @@ std::filesystem::path loggingDir()
     return path;
 }
 
+bool waitForValidInputDesktop()
+{
+    int max_attempt_count = 600;
+
+    do
+    {
+        base::Desktop input_desktop(base::Desktop::inputDesktop());
+        if (input_desktop.isValid())
+        {
+            if (input_desktop.setThreadDesktop())
+                break;
+        }
+
+        Sleep(100);
+    }
+    while (--max_attempt_count > 0);
+
+    if (max_attempt_count == 0)
+    {
+        LOG(LS_WARNING) << "Exceeded the number of attempts";
+        return false;
+    }
+
+    return true;
+}
+
 int runHostSession(const QString& channel_id, const QString& session_type)
 {
     // At the end of the user's session, the program ends later than the others.
@@ -121,26 +147,8 @@ int runApplication(int argc, char *argv[])
     }
     else
     {
-        int max_attempt_count = 600;
-
-        do
-        {
-            base::Desktop input_desktop(base::Desktop::inputDesktop());
-            if (input_desktop.isValid())
-            {
-                if (input_desktop.setThreadDesktop())
-                    break;
-            }
-
-            Sleep(100);
-        }
-        while (--max_attempt_count > 0);
-
-        if (max_attempt_count == 0)
-        {
-            LOG(LS_WARNING) << "Exceeded the number of attempts";
+        if (!waitForValidInputDesktop())
             return 1;
-        }
 
         QApplication application(argc, argv);
 
