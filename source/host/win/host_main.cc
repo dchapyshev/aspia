@@ -79,31 +79,12 @@ int runHostNotifier(const QString& channel_id)
 
 int runApplication(int argc, char *argv[])
 {
-    int max_attempt_count = 600;
+    QStringList arguments;
 
-    do
-    {
-        base::Desktop input_desktop(base::Desktop::inputDesktop());
-        if (input_desktop.isValid())
-        {
-            if (input_desktop.setThreadDesktop())
-                break;
-        }
-
-        Sleep(100);
-    }
-    while (--max_attempt_count > 0);
-
-    if (max_attempt_count == 0)
-    {
-        LOG(LS_WARNING) << "Exceeded the number of attempts";
-        return 1;
-    }
-
-    QApplication application(argc, argv);
-    application.setOrganizationName(QStringLiteral("Aspia"));
-    application.setApplicationName(QStringLiteral("Host"));
-    application.setApplicationVersion(QStringLiteral(ASPIA_VERSION_STRING));
+    // We need to get command line arguments before creating QApplication.
+    // Prepare a list of arguments for the parser.
+    for (int i = 0; i < argc; ++i)
+        arguments.append(QString::fromLocal8Bit(argv[i]));
 
     QCommandLineOption channel_id_option(
         QStringLiteral("channel_id"), QString(), QStringLiteral("channel_id"));
@@ -115,7 +96,7 @@ int runApplication(int argc, char *argv[])
     parser.addOption(channel_id_option);
     parser.addOption(session_type_option);
 
-    if (!parser.parse(application.arguments()))
+    if (!parser.parse(arguments))
     {
         LOG(LS_WARNING) << "Error parsing command line parameters: " << parser.errorText();
         return 1;
@@ -129,9 +110,46 @@ int runApplication(int argc, char *argv[])
     }
 
     if (parser.isSet(session_type_option))
-        return runHostSession(channel_id, parser.value(session_type_option));
+    {
+        QGuiApplication application(argc, argv);
 
-    return runHostNotifier(channel_id);
+        application.setOrganizationName(QStringLiteral("Aspia"));
+        application.setApplicationName(QStringLiteral("Host Session"));
+        application.setApplicationVersion(QStringLiteral(ASPIA_VERSION_STRING));
+
+        return runHostSession(channel_id, parser.value(session_type_option));
+    }
+    else
+    {
+        int max_attempt_count = 600;
+
+        do
+        {
+            base::Desktop input_desktop(base::Desktop::inputDesktop());
+            if (input_desktop.isValid())
+            {
+                if (input_desktop.setThreadDesktop())
+                    break;
+            }
+
+            Sleep(100);
+        }
+        while (--max_attempt_count > 0);
+
+        if (max_attempt_count == 0)
+        {
+            LOG(LS_WARNING) << "Exceeded the number of attempts";
+            return 1;
+        }
+
+        QApplication application(argc, argv);
+
+        application.setOrganizationName(QStringLiteral("Aspia"));
+        application.setApplicationName(QStringLiteral("Host Notifier"));
+        application.setApplicationVersion(QStringLiteral(ASPIA_VERSION_STRING));
+
+        return runHostNotifier(channel_id);
+    }
 }
 
 } // namespace
