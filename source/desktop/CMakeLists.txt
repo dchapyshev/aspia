@@ -64,10 +64,12 @@ list(APPEND SOURCE_DESKTOP_UNIT_TESTS
 list(APPEND SOURCE_DESKTOP_WIN
     win/cursor.cc
     win/cursor.h
+    win/effects_disabler.cc
+    win/effects_disabler.h
     win/screen_capture_utils.cc
     win/screen_capture_utils.h
-    win/visual_effects_disabler.cc
-    win/visual_effects_disabler.h)
+    win/wallpaper_disabler.cc
+    win/wallpaper_disabler.h)
 
 source_group("" FILES ${SOURCE_DESKTOP})
 source_group("" FILES ${SOURCE_DESKTOP_UNIT_TESTS})
