@@ -27,7 +27,8 @@
 #include "proto/desktop_session_extensions.pb.h"
 
 #if defined(OS_WIN)
-#include "desktop/win/visual_effects_disabler.h"
+#include "desktop/win/effects_disabler.h"
+#include "desktop/win/wallpaper_disabler.h"
 #include "host/win/updater_launcher.h"
 #endif // defined(OS_WIN)
 
@@ -49,19 +50,7 @@ SessionDesktop::SessionDesktop(proto::SessionType session_type, const QString& c
     }
 }
 
-SessionDesktop::~SessionDesktop()
-{
-#if defined(OS_WIN)
-    if (effects_disabler_)
-    {
-        if (effects_disabler_->isEffectsDisabled())
-            effects_disabler_->restoreEffects();
-
-        if (effects_disabler_->isWallpaperDisabled())
-            effects_disabler_->restoreWallpaper();
-    }
-#endif // defined(OS_WIN)
-}
+SessionDesktop::~SessionDesktop() = default;
 
 void SessionDesktop::onScreenUpdate(const QByteArray& message)
 {
@@ -266,28 +255,14 @@ void SessionDesktop::readConfig(const proto::desktop::Config& config)
     if (change_flags & DesktopConfigTracker::EFFECTS_CHANGES)
     {
 #if defined(OS_WIN)
-        bool disable_effects = config.flags() & proto::desktop::DISABLE_DESKTOP_EFFECTS;
-        bool disable_wallpaper = config.flags() & proto::desktop::DISABLE_DESKTOP_WALLPAPER;
+        effects_disabler_.reset();
+        wallpaper_disabler_.reset();
 
-        if (effects_disabler_)
-        {
-            if (effects_disabler_->isEffectsDisabled())
-                effects_disabler_->restoreEffects();
+        if (config.flags() & proto::desktop::DISABLE_DESKTOP_EFFECTS)
+            effects_disabler_.reset(new desktop::EffectsDisabler());
 
-            if (effects_disabler_->isWallpaperDisabled())
-                effects_disabler_->restoreWallpaper();
-        }
-
-        if (disable_wallpaper || disable_effects)
-        {
-            effects_disabler_ = std::make_unique<desktop::VisualEffectsDisabler>();
-
-            if (disable_effects)
-                effects_disabler_->disableEffects();
-
-            if (disable_wallpaper)
-                effects_disabler_->disableWallpaper();
-        }
+        if (config.flags() & proto::desktop::DISABLE_DESKTOP_WALLPAPER)
+            wallpaper_disabler_.reset(new desktop::WallpaperDisabler());
 #endif // defined(OS_WIN)
     }
 

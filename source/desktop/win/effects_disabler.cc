@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,108 +16,31 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "desktop/win/visual_effects_disabler.h"
+#include "desktop/win/effects_disabler.h"
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-#include <wtsapi32.h>
 
-#include "base/win/process_util.h"
-#include "base/win/scoped_impersonator.h"
 #include "base/logging.h"
 
 namespace desktop {
 
-struct VisualEffectsState
+EffectsDisabler::EffectsDisabler()
 {
-    uint8_t drag_full_windows = 0;
-    uint8_t animation = 0;
-    uint8_t menu_animation = 0;
-    uint8_t tooltip_animation = 0;
-    uint8_t combobox_animation = 0;
-    uint8_t selection_fade = 0;
-    uint8_t listbox_smooth_scrolling = 0;
-    uint8_t ui_effects = 0;
-    uint8_t client_area_animation = 0;
-    uint8_t gradient_captions = 0;
-    uint8_t hot_tracking = 0;
-};
-
-struct WallpaperState
-{
-    std::wstring path;
-};
-
-namespace {
-
-enum StateFlags
-{
-    STATE_ENABLED = 1,
-    STATE_SAVED   = 2
-};
-
-bool isChangeRequired(uint8_t flags)
-{
-    return (flags & STATE_ENABLED) && (flags & STATE_SAVED);
+    state_ = saveState();
+    changeState(state_.get(), false);
 }
 
-bool createLoggedOnUserToken(base::win::ScopedHandle* token_out)
+EffectsDisabler::~EffectsDisabler()
 {
-    base::win::ScopedHandle privileged_token;
-
-    if (!createPrivilegedToken(&privileged_token))
-        return false;
-
-    base::win::ScopedImpersonator impersonator;
-
-    if (!impersonator.loggedOnUser(privileged_token))
-        return false;
-
-    if (!WTSQueryUserToken(WTSGetActiveConsoleSessionId(), token_out->recieve()))
-    {
-        PLOG(LS_WARNING) << "WTSQueryUserToken failed";
-        return false;
-    }
-
-    return true;
+    changeState(state_.get(), true);
+    state_.reset();
 }
 
-void updateUserSettings()
+// static
+std::unique_ptr<EffectsDisabler::State> EffectsDisabler::saveState()
 {
-    base::win::ScopedHandle user_token;
-
-    if (!createLoggedOnUserToken(&user_token))
-        return;
-
-    base::win::ScopedImpersonator impersonator;
-
-    // The process of the desktop session is running with "SYSTEM" account.
-    // We need the current real user, not "SYSTEM".
-    if (!impersonator.loggedOnUser(user_token))
-        return;
-
-    HMODULE module = GetModuleHandleW(L"user32.dll");
-    if (module)
-    {
-        // The function prototype is relevant for versions starting from Windows Vista.
-        // Older versions have a different prototype.
-        typedef BOOL(WINAPI* UpdatePerUserSystemParametersFunc)(DWORD flags);
-
-        UpdatePerUserSystemParametersFunc update_per_user_system_parameters =
-            reinterpret_cast<UpdatePerUserSystemParametersFunc>(
-                GetProcAddress(module, "UpdatePerUserSystemParameters"));
-        if (update_per_user_system_parameters)
-        {
-            // WARNING! Undocumented function!
-            // Any ideas how to update user settings without using it?
-            update_per_user_system_parameters(0x06);
-        }
-    }
-}
-
-std::unique_ptr<VisualEffectsState> currentEffectsState()
-{
-    std::unique_ptr<VisualEffectsState> state = std::make_unique<VisualEffectsState>();
+    std::unique_ptr<State> state = std::make_unique<State>();
 
     BOOL drag_full_windows;
     if (SystemParametersInfoW(SPI_GETDRAGFULLWINDOWS, 0, &drag_full_windows, 0))
@@ -244,8 +167,11 @@ std::unique_ptr<VisualEffectsState> currentEffectsState()
     return state;
 }
 
-void changeEffectsState(VisualEffectsState* state, BOOL enable)
+// static
+void EffectsDisabler::changeState(State* state, bool value)
 {
+    BOOL enable = !!value;
+
     if (isChangeRequired(state->drag_full_windows))
     {
         if (!SystemParametersInfoW(SPI_SETDRAGFULLWINDOWS, enable, 0, SPIF_SENDCHANGE))
@@ -366,64 +292,10 @@ void changeEffectsState(VisualEffectsState* state, BOOL enable)
     }
 }
 
-} // namespace
-
-VisualEffectsDisabler::VisualEffectsDisabler() = default;
-VisualEffectsDisabler::~VisualEffectsDisabler() = default;
-
-void VisualEffectsDisabler::disableAll()
+// static
+bool EffectsDisabler::isChangeRequired(uint8_t flags)
 {
-    disableEffects();
-    disableWallpaper();
-}
-
-void VisualEffectsDisabler::restoreAll()
-{
-    restoreEffects();
-    restoreWallpaper();
-}
-
-void VisualEffectsDisabler::disableEffects()
-{
-    effects_state_ = currentEffectsState();
-    changeEffectsState(effects_state_.get(), false);
-}
-
-void VisualEffectsDisabler::restoreEffects()
-{
-    changeEffectsState(effects_state_.get(), true);
-    effects_state_.reset();
-}
-
-void VisualEffectsDisabler::disableWallpaper()
-{
-    wchar_t buffer[MAX_PATH] = { 0 };
-
-    if (!SystemParametersInfoW(SPI_GETDESKWALLPAPER, _countof(buffer), buffer, 0))
-    {
-        PLOG(LS_WARNING) << "SystemParametersInfoW(SPI_GETDESKWALLPAPER) failed";
-        return;
-    }
-
-    // If the string is empty, then the desktop wallpaper is not installed.
-    if (!buffer[0])
-        return;
-
-    wallpaper_state_ = std::make_unique<WallpaperState>();
-    wallpaper_state_->path = buffer;
-
-    // We do not check the return value. For SPI_SETDESKWALLPAPER, always returns TRUE.
-    SystemParametersInfoW(SPI_SETDESKWALLPAPER, 0, L"", SPIF_SENDCHANGE);
-}
-
-void VisualEffectsDisabler::restoreWallpaper()
-{
-    if (!wallpaper_state_)
-        return;
-
-    // We do not check the return value. For SPI_SETDESKWALLPAPER, always returns TRUE.
-    SystemParametersInfoW(SPI_SETDESKWALLPAPER, 0, 0, 0);
-    updateUserSettings();
+    return (flags & STATE_ENABLED) && (flags & STATE_SAVED);
 }
 
 } // namespace desktop
