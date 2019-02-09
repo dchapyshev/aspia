@@ -77,19 +77,19 @@ uint32_t DesktopConfigTracker::changeFlags(const proto::desktop::Config& new_con
     if ((old_config_.flags() & proto::desktop::DISABLE_DESKTOP_EFFECTS) !=
         (new_config.flags() & proto::desktop::DISABLE_DESKTOP_EFFECTS))
     {
-        result |= EFFECTS_CHANGES;
+        result |= VIDEO_CHANGES;
     }
 
     if ((old_config_.flags() & proto::desktop::DISABLE_DESKTOP_WALLPAPER) !=
         (new_config.flags() & proto::desktop::DISABLE_DESKTOP_WALLPAPER))
     {
-        result |= EFFECTS_CHANGES;
+        result |= VIDEO_CHANGES;
     }
 
     if ((old_config_.flags() & proto::desktop::DISABLE_FONT_SMOOTHING) !=
         (new_config.flags() & proto::desktop::DISABLE_FONT_SMOOTHING))
     {
-        result |= EFFECTS_CHANGES;
+        result |= VIDEO_CHANGES;
     }
 
     if ((old_config_.flags() & proto::desktop::BLOCK_REMOTE_INPUT) !=

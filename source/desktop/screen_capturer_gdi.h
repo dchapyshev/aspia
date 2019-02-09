@@ -27,11 +27,19 @@
 namespace desktop {
 
 class Differ;
+class EffectsDisabler;
+class WallpaperDisabler;
 
 class ScreenCapturerGDI : public ScreenCapturer
 {
 public:
-    ScreenCapturerGDI();
+    enum Flags
+    {
+        DISABLE_EFFECTS = 1,
+        DISABLE_WALLPAPER = 2
+    };
+
+    ScreenCapturerGDI(uint32_t flags);
     ~ScreenCapturerGDI();
 
     int screenCount() override;
@@ -42,6 +50,8 @@ public:
 
 private:
     bool prepareCaptureResources();
+
+    const uint32_t flags_;
 
     ScreenId current_screen_id_ = kFullDesktopScreenId;
     QString current_device_key_;
@@ -54,6 +64,9 @@ private:
     base::win::ScopedCreateDC memory_dc_;
 
     ScreenCaptureFrameQueue queue_;
+
+    std::unique_ptr<EffectsDisabler> effects_disabler_;
+    std::unique_ptr<WallpaperDisabler> wallpaper_disabler_;
 
     DISALLOW_COPY_AND_ASSIGN(ScreenCapturerGDI);
 };

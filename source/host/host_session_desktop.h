@@ -29,11 +29,6 @@ namespace common {
 class Clipboard;
 } // namespace common
 
-namespace desktop {
-class EffectsDisabler;
-class WallpaperDisabler;
-} // namespace desktop
-
 namespace host {
 
 class InputInjector;
@@ -80,11 +75,6 @@ private:
     std::unique_ptr<ScreenUpdater> screen_updater_;
     std::unique_ptr<common::Clipboard> clipboard_;
     std::unique_ptr<InputInjector> input_injector_;
-
-#if defined(OS_WIN)
-    std::unique_ptr<desktop::EffectsDisabler> effects_disabler_;
-    std::unique_ptr<desktop::WallpaperDisabler> wallpaper_disabler_;
-#endif // defined(OS_WIN)
 
     DISALLOW_COPY_AND_ASSIGN(SessionDesktop);
 };

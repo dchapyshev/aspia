@@ -21,13 +21,20 @@
 #include <dwmapi.h>
 
 #include "base/logging.h"
+#include "desktop/win/effects_disabler.h"
 #include "desktop/win/screen_capture_utils.h"
+#include "desktop/win/wallpaper_disabler.h"
 #include "desktop/desktop_frame_dib.h"
 #include "desktop/differ.h"
 
 namespace desktop {
 
-ScreenCapturerGDI::ScreenCapturerGDI() = default;
+ScreenCapturerGDI::ScreenCapturerGDI(uint32_t flags)
+    : flags_(flags)
+{
+    // Nothing
+}
+
 ScreenCapturerGDI::~ScreenCapturerGDI() = default;
 
 int ScreenCapturerGDI::screenCount()
@@ -129,6 +136,9 @@ bool ScreenCapturerGDI::prepareCaptureResources()
         desktop_dc_.reset();
         memory_dc_.reset();
 
+        effects_disabler_.reset();
+        wallpaper_disabler_.reset();
+
         // If SetThreadDesktop() fails, the thread is still assigned a desktop.
         // So we can continue capture screen bits, just from the wrong desktop.
         desktop_.setThreadDesktop(std::move(input_desktop));
@@ -153,6 +163,12 @@ bool ScreenCapturerGDI::prepareCaptureResources()
         // Windows will restore Aero automatically if the process exits.
         // This has no effect under Windows 8 or higher. See crbug.com/124018.
         DwmEnableComposition(DWM_EC_DISABLECOMPOSITION);
+
+        if (flags_ & DISABLE_EFFECTS)
+            effects_disabler_ = std::make_unique<EffectsDisabler>();
+
+        if (flags_ & DISABLE_WALLPAPER)
+            wallpaper_disabler_ = std::make_unique<WallpaperDisabler>();
 
         // Create GDI device contexts to capture from the desktop into memory.
         desktop_dc_ = std::make_unique<base::win::ScopedGetDC>(nullptr);

@@ -33,8 +33,7 @@ public:
     {
         VIDEO_CHANGES     = 1,
         CLIPBOARD_CHANGES = 2,
-        EFFECTS_CHANGES   = 4,
-        INPUT_CHANGES     = 8,
+        INPUT_CHANGES     = 4,
         ALL_CHANGES       = std::numeric_limits<uint32_t>::max()
     };
 

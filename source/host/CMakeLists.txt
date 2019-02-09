@@ -48,7 +48,9 @@ list(APPEND SOURCE_HOST
     input_injector.cc
     input_injector.h
     screen_updater.cc
-    screen_updater.h)
+    screen_updater.h
+    screen_updater_impl.cc
+    screen_updater_impl.h)
 
 list(APPEND SOURCE_HOST_RESOURCES
     resources/host.qrc)

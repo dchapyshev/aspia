@@ -27,8 +27,6 @@
 #include "proto/desktop_session_extensions.pb.h"
 
 #if defined(OS_WIN)
-#include "desktop/win/effects_disabler.h"
-#include "desktop/win/wallpaper_disabler.h"
 #include "host/win/updater_launcher.h"
 #endif // defined(OS_WIN)
 
@@ -250,20 +248,6 @@ void SessionDesktop::readConfig(const proto::desktop::Config& config)
     {
         bool block_input = config.flags() & proto::desktop::BLOCK_REMOTE_INPUT;
         input_injector_.reset(new InputInjector(this, block_input));
-    }
-
-    if (change_flags & DesktopConfigTracker::EFFECTS_CHANGES)
-    {
-#if defined(OS_WIN)
-        effects_disabler_.reset();
-        wallpaper_disabler_.reset();
-
-        if (config.flags() & proto::desktop::DISABLE_DESKTOP_EFFECTS)
-            effects_disabler_.reset(new desktop::EffectsDisabler());
-
-        if (config.flags() & proto::desktop::DISABLE_DESKTOP_WALLPAPER)
-            wallpaper_disabler_.reset(new desktop::WallpaperDisabler());
-#endif // defined(OS_WIN)
     }
 
     if (change_flags & DesktopConfigTracker::VIDEO_CHANGES)
