@@ -36,66 +36,65 @@ bool isEqualPixelFormat(const proto::desktop::PixelFormat& first,
 
 } // namespace
 
-uint32_t DesktopConfigTracker::changeFlags(const proto::desktop::Config& new_config)
+uint32_t DesktopConfigTracker::changesMask(const proto::desktop::Config& new_config)
 {
-    if (!has_config_)
+    if (!old_config_.has_value())
     {
-        has_config_ = true;
         old_config_ = new_config;
-        return ALL_CHANGES;
+        return std::numeric_limits<uint32_t>::max();
     }
 
     uint32_t result = 0;
 
-    if (old_config_.video_encoding() != new_config.video_encoding())
-        result |= VIDEO_CHANGES;
+    if (old_config_->video_encoding() != new_config.video_encoding())
+        result |= HAS_VIDEO;
 
-    if (!isEqualPixelFormat(old_config_.pixel_format(), new_config.pixel_format()))
-        result |= VIDEO_CHANGES;
+    if (!isEqualPixelFormat(old_config_->pixel_format(), new_config.pixel_format()))
+        result |= HAS_VIDEO;
 
-    if (old_config_.update_interval() != new_config.update_interval())
-        result |= VIDEO_CHANGES;
+    if (old_config_->update_interval() != new_config.update_interval())
+        result |= HAS_VIDEO;
 
-    if (old_config_.scale_factor() != new_config.scale_factor())
-        result |= VIDEO_CHANGES;
+    if (old_config_->scale_factor() != new_config.scale_factor())
+        result |= HAS_VIDEO;
 
-    if (old_config_.compress_ratio() != new_config.compress_ratio())
-        result |= VIDEO_CHANGES;
+    if (old_config_->compress_ratio() != new_config.compress_ratio())
+        result |= HAS_VIDEO;
 
-    if ((old_config_.flags() & proto::desktop::ENABLE_CURSOR_SHAPE) !=
+    if ((old_config_->flags() & proto::desktop::ENABLE_CURSOR_SHAPE) !=
         (new_config.flags() & proto::desktop::ENABLE_CURSOR_SHAPE))
     {
-        result |= VIDEO_CHANGES;
+        result |= HAS_VIDEO;
     }
 
-    if ((old_config_.flags() & proto::desktop::ENABLE_CLIPBOARD) !=
+    if ((old_config_->flags() & proto::desktop::ENABLE_CLIPBOARD) !=
         (new_config.flags() & proto::desktop::ENABLE_CLIPBOARD))
     {
-        result |= CLIPBOARD_CHANGES;
+        result |= HAS_CLIPBOARD;
     }
 
-    if ((old_config_.flags() & proto::desktop::DISABLE_DESKTOP_EFFECTS) !=
+    if ((old_config_->flags() & proto::desktop::DISABLE_DESKTOP_EFFECTS) !=
         (new_config.flags() & proto::desktop::DISABLE_DESKTOP_EFFECTS))
     {
-        result |= VIDEO_CHANGES;
+        result |= HAS_VIDEO;
     }
 
-    if ((old_config_.flags() & proto::desktop::DISABLE_DESKTOP_WALLPAPER) !=
+    if ((old_config_->flags() & proto::desktop::DISABLE_DESKTOP_WALLPAPER) !=
         (new_config.flags() & proto::desktop::DISABLE_DESKTOP_WALLPAPER))
     {
-        result |= VIDEO_CHANGES;
+        result |= HAS_VIDEO;
     }
 
-    if ((old_config_.flags() & proto::desktop::DISABLE_FONT_SMOOTHING) !=
+    if ((old_config_->flags() & proto::desktop::DISABLE_FONT_SMOOTHING) !=
         (new_config.flags() & proto::desktop::DISABLE_FONT_SMOOTHING))
     {
-        result |= VIDEO_CHANGES;
+        result |= HAS_VIDEO;
     }
 
-    if ((old_config_.flags() & proto::desktop::BLOCK_REMOTE_INPUT) !=
+    if ((old_config_->flags() & proto::desktop::BLOCK_REMOTE_INPUT) !=
         (new_config.flags() & proto::desktop::BLOCK_REMOTE_INPUT))
     {
-        result |= INPUT_CHANGES;
+        result |= HAS_INPUT;
     }
 
     old_config_ = new_config;

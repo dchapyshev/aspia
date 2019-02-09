@@ -230,27 +230,32 @@ void SessionDesktop::readExtension(const proto::desktop::Extension& extension)
 
 void SessionDesktop::readConfig(const proto::desktop::Config& config)
 {
-    uint32_t change_flags = config_tracker_.changeFlags(config);
+    uint32_t mask = config_tracker_.changesMask(config);
 
-    if (change_flags & DesktopConfigTracker::CLIPBOARD_CHANGES &&
-        session_type_ == proto::SESSION_TYPE_DESKTOP_MANAGE)
+    if (session_type_ == proto::SESSION_TYPE_DESKTOP_MANAGE)
     {
-        if (config.flags() & proto::desktop::ENABLE_CLIPBOARD)
+        if (mask & DesktopConfigTracker::HAS_CLIPBOARD)
         {
-            clipboard_.reset(new common::Clipboard());
-            connect(clipboard_.get(), &common::Clipboard::clipboardEvent,
-                    this, &SessionDesktop::clipboardEvent);
+            if (config.flags() & proto::desktop::ENABLE_CLIPBOARD)
+            {
+                clipboard_.reset(new common::Clipboard());
+                connect(clipboard_.get(), &common::Clipboard::clipboardEvent,
+                        this, &SessionDesktop::clipboardEvent);
+            }
+            else
+            {
+                clipboard_.reset();
+            }
+        }
+
+        if (mask & DesktopConfigTracker::HAS_INPUT)
+        {
+            bool block_input = config.flags() & proto::desktop::BLOCK_REMOTE_INPUT;
+            input_injector_.reset(new InputInjector(this, block_input));
         }
     }
 
-    if (change_flags & DesktopConfigTracker::INPUT_CHANGES &&
-        session_type_ == proto::SESSION_TYPE_DESKTOP_MANAGE)
-    {
-        bool block_input = config.flags() & proto::desktop::BLOCK_REMOTE_INPUT;
-        input_injector_.reset(new InputInjector(this, block_input));
-    }
-
-    if (change_flags & DesktopConfigTracker::VIDEO_CHANGES)
+    if (mask & DesktopConfigTracker::HAS_VIDEO)
     {
         screen_updater_.reset(new ScreenUpdater(this));
 

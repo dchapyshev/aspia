@@ -19,6 +19,8 @@
 #ifndef HOST__DESKTOP_CONFIG_TRACKER_H
 #define HOST__DESKTOP_CONFIG_TRACKER_H
 
+#include <optional>
+
 #include "base/macros_magic.h"
 #include "proto/desktop_session.pb.h"
 
@@ -29,19 +31,17 @@ class DesktopConfigTracker
 public:
     DesktopConfigTracker() = default;
 
-    enum Flags
+    enum Mask
     {
-        VIDEO_CHANGES     = 1,
-        CLIPBOARD_CHANGES = 2,
-        INPUT_CHANGES     = 4,
-        ALL_CHANGES       = std::numeric_limits<uint32_t>::max()
+        HAS_VIDEO     = 1,
+        HAS_CLIPBOARD = 2,
+        HAS_INPUT     = 4
     };
 
-    uint32_t changeFlags(const proto::desktop::Config& config);
+    uint32_t changesMask(const proto::desktop::Config& config);
 
 private:
-    proto::desktop::Config old_config_;
-    bool has_config_ = false;
+    std::optional<proto::desktop::Config> old_config_;
 
     DISALLOW_COPY_AND_ASSIGN(DesktopConfigTracker);
 };
