@@ -6,32 +6,32 @@
     <message>
         <location filename="../host_config_main.cc" line="64"/>
         <source>The path to the file to import.</source>
-        <translation type="unfinished"></translation>
+        <translation>Шлях до файла для імпорту.</translation>
     </message>
     <message>
         <location filename="../host_config_main.cc" line="68"/>
         <source>The path to the file to export.</source>
-        <translation type="unfinished"></translation>
+        <translation>Глях до файла для експорту.</translation>
     </message>
     <message>
         <location filename="../host_config_main.cc" line="72"/>
         <source>Enables silent mode when exporting and importing.</source>
-        <translation type="unfinished"></translation>
+        <translation>Включає &quot;тихий режим&quot; під час експорту та імпорту.</translation>
     </message>
     <message>
         <location filename="../host_config_main.cc" line="75"/>
         <source>Run application update.</source>
-        <translation type="unfinished"></translation>
+        <translation>Запустити оновлення програми.</translation>
     </message>
     <message>
         <location filename="../host_config_main.cc" line="92"/>
         <source>Warning</source>
-        <translation type="unfinished">Попередження</translation>
+        <translation>Попередження</translation>
     </message>
     <message>
         <location filename="../host_config_main.cc" line="93"/>
         <source>Export and import parameters can not be specified together.</source>
-        <translation type="unfinished"></translation>
+        <translation>Параметри імпорту і експорту не можуть бути задані одночасно.</translation>
     </message>
 </context>
 <context>
@@ -59,7 +59,7 @@
     <message>
         <location filename="../ui/host_config_dialog.ui" line="52"/>
         <source>Service</source>
-        <translation type="unfinished"></translation>
+        <translation>Служба</translation>
     </message>
     <message>
         <location filename="../ui/host_config_dialog.ui" line="99"/>
@@ -74,22 +74,22 @@
     <message>
         <location filename="../ui/host_config_dialog.ui" line="129"/>
         <source>Add a rule to the firewall when the service starts</source>
-        <translation type="unfinished"></translation>
+        <translation>Додати правило файрвола при запуску служби</translation>
     </message>
     <message>
         <location filename="../ui/host_config_dialog.ui" line="142"/>
         <source>Import / Export Configuration</source>
-        <translation type="unfinished"></translation>
+        <translation>Налаштування імпорта/експорта</translation>
     </message>
     <message>
         <location filename="../ui/host_config_dialog.ui" line="161"/>
         <source>Import...</source>
-        <translation type="unfinished"></translation>
+        <translation>Імпорт...</translation>
     </message>
     <message>
         <location filename="../ui/host_config_dialog.ui" line="168"/>
         <source>Export...</source>
-        <translation type="unfinished"></translation>
+        <translation>Експорт...</translation>
     </message>
     <message>
         <location filename="../ui/host_config_dialog.ui" line="192"/>
@@ -100,42 +100,42 @@
     <message>
         <location filename="../ui/host_config_dialog.ui" line="206"/>
         <source>Add new user</source>
-        <translation type="unfinished"></translation>
+        <translation>Додати нового окристувача</translation>
     </message>
     <message>
         <location filename="../ui/host_config_dialog.ui" line="226"/>
         <source>Edit user</source>
-        <translation type="unfinished"></translation>
+        <translation>Редагувати окристувача</translation>
     </message>
     <message>
         <location filename="../ui/host_config_dialog.ui" line="246"/>
         <source>Delete user</source>
-        <translation type="unfinished"></translation>
+        <translation>Видалити користувача</translation>
     </message>
     <message>
         <location filename="../ui/host_config_dialog.ui" line="294"/>
         <source>Update</source>
-        <translation type="unfinished"></translation>
+        <translation>Оновити</translation>
     </message>
     <message>
         <location filename="../ui/host_config_dialog.ui" line="300"/>
         <source>Update Server</source>
-        <translation type="unfinished"></translation>
+        <translation>Сервер оновлень</translation>
     </message>
     <message>
         <location filename="../ui/host_config_dialog.ui" line="306"/>
         <source>Use custom update server</source>
-        <translation type="unfinished"></translation>
+        <translation>Використовувати інший сервер оновлень</translation>
     </message>
     <message>
         <location filename="../ui/host_config_dialog.ui" line="315"/>
         <source>Server:</source>
-        <translation type="unfinished"></translation>
+        <translation>Сервер:</translation>
     </message>
     <message>
         <location filename="../ui/host_config_dialog.ui" line="365"/>
         <source>Check for updates</source>
-        <translation type="unfinished"></translation>
+        <translation>Перевірити наявність оновлень</translation>
     </message>
     <message>
         <location filename="../ui/host_config_dialog.ui" line="417"/>
@@ -279,155 +279,155 @@
         <location filename="../ui/host_config_dialog.cc" line="653"/>
         <location filename="../ui/host_config_dialog.cc" line="666"/>
         <source>Warning</source>
-        <translation type="unfinished">Попередження</translation>
+        <translation>Попередження</translation>
     </message>
     <message>
         <location filename="../ui/host_config_dialog.cc" line="116"/>
         <location filename="../ui/host_config_dialog.cc" line="132"/>
         <source>Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Інформація</translation>
     </message>
     <message>
         <location filename="../ui/host_config_dialog.cc" line="117"/>
         <source>The configuration was successfully imported.</source>
-        <translation type="unfinished"></translation>
+        <translation>Конфігурацію імпортовано успішно.</translation>
     </message>
     <message>
         <location filename="../ui/host_config_dialog.cc" line="133"/>
         <source>The configuration was successfully exported.</source>
-        <translation type="unfinished"></translation>
+        <translation>Кофігурацію експортовано успішно.</translation>
     </message>
     <message>
         <location filename="../ui/host_config_dialog.cc" line="202"/>
         <location filename="../ui/host_config_dialog.cc" line="279"/>
         <location filename="../ui/host_config_dialog.cc" line="340"/>
         <source>Confirmation</source>
-        <translation type="unfinished">Підтвердження</translation>
+        <translation>Підтвердження</translation>
     </message>
     <message>
         <location filename="../ui/host_config_dialog.cc" line="203"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
-        <translation type="unfinished">Ви впевнені, що хочете видалити користувача &quot;%1&quot;?</translation>
+        <translation>Ви впевнені, що хочете видалити користувача &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../ui/host_config_dialog.cc" line="265"/>
         <source>Import</source>
-        <translation type="unfinished"></translation>
+        <translation>Імпорт</translation>
     </message>
     <message>
         <location filename="../ui/host_config_dialog.cc" line="265"/>
         <location filename="../ui/host_config_dialog.cc" line="295"/>
         <source>XML-files (*.xml)</source>
-        <translation type="unfinished"></translation>
+        <translation>XML-файли (*.xml)</translation>
     </message>
     <message>
         <location filename="../ui/host_config_dialog.cc" line="274"/>
         <location filename="../ui/host_config_dialog.cc" line="335"/>
         <source>Service configuration changed. For the changes to take effect, you must restart the service. Restart the service now?</source>
-        <translation type="unfinished">Налаштування сервісу замінено. Для примінення нових налаштувань потрібно перезапустити сервіс. Перезапустити сервіс зараз?</translation>
+        <translation>Налаштування сервісу замінено. Для примінення нових налаштувань потрібно перезапустити сервіс. Перезапустити сервіс зараз?</translation>
     </message>
     <message>
         <location filename="../ui/host_config_dialog.cc" line="295"/>
         <source>Export</source>
-        <translation type="unfinished"></translation>
+        <translation>Експорт</translation>
     </message>
     <message>
         <location filename="../ui/host_config_dialog.cc" line="314"/>
         <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
-        <translation type="unfinished">Неможливо записати налаштування.Переконайтеся, що у вас є відповідні права для запису.</translation>
+        <translation>Неможливо записати налаштування.Переконайтеся, що у вас є відповідні права для запису.</translation>
     </message>
     <message>
         <location filename="../ui/host_config_dialog.cc" line="460"/>
         <source>Remove</source>
-        <translation type="unfinished"></translation>
+        <translation>Видалити</translation>
     </message>
     <message>
         <location filename="../ui/host_config_dialog.cc" line="468"/>
         <source>Started</source>
-        <translation type="unfinished"></translation>
+        <translation>Розпочато</translation>
     </message>
     <message>
         <location filename="../ui/host_config_dialog.cc" line="469"/>
         <source>Stop</source>
-        <translation type="unfinished"></translation>
+        <translation>Зупинити</translation>
     </message>
     <message>
         <location filename="../ui/host_config_dialog.cc" line="474"/>
         <source>Not started</source>
-        <translation type="unfinished"></translation>
+        <translation>Не розпочато</translation>
     </message>
     <message>
         <location filename="../ui/host_config_dialog.cc" line="475"/>
         <location filename="../ui/host_config_dialog.cc" line="482"/>
         <location filename="../ui/host_config_dialog.cc" line="495"/>
         <source>Start</source>
-        <translation type="unfinished"></translation>
+        <translation>Почати</translation>
     </message>
     <message>
         <location filename="../ui/host_config_dialog.cc" line="481"/>
         <source>Installed</source>
-        <translation type="unfinished"></translation>
+        <translation>Встановлено</translation>
     </message>
     <message>
         <location filename="../ui/host_config_dialog.cc" line="492"/>
         <source>Not installed</source>
-        <translation type="unfinished"></translation>
+        <translation>Не встановлено</translation>
     </message>
     <message>
         <location filename="../ui/host_config_dialog.cc" line="494"/>
         <source>Install</source>
-        <translation type="unfinished"></translation>
+        <translation>Встановити</translation>
     </message>
     <message>
         <location filename="../ui/host_config_dialog.cc" line="499"/>
         <source>Current state: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Поточний стан: %1</translation>
     </message>
     <message>
         <location filename="../ui/host_config_dialog.cc" line="522"/>
         <source>The service could not be installed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Неможливо встановити службу.</translation>
     </message>
     <message>
         <location filename="../ui/host_config_dialog.cc" line="541"/>
         <source>The service could not be removed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Неможливо видалити службу.</translation>
     </message>
     <message>
         <location filename="../ui/host_config_dialog.cc" line="556"/>
         <location filename="../ui/host_config_dialog.cc" line="582"/>
         <source>Could not access the service.</source>
-        <translation type="unfinished"></translation>
+        <translation>Немає доступу до служби.</translation>
     </message>
     <message>
         <location filename="../ui/host_config_dialog.cc" line="566"/>
         <source>The service could not be started.</source>
-        <translation type="unfinished"></translation>
+        <translation>Неможливо запустити службу.</translation>
     </message>
     <message>
         <location filename="../ui/host_config_dialog.cc" line="592"/>
         <source>The service could not be stopped.</source>
-        <translation type="unfinished"></translation>
+        <translation>Неможливо зупинити службу.</translation>
     </message>
     <message>
         <location filename="../ui/host_config_dialog.cc" line="621"/>
         <source>Could not open source file: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Неможливо відкрити вихідний файл: %1</translation>
     </message>
     <message>
         <location filename="../ui/host_config_dialog.cc" line="637"/>
         <source>Could not open target file: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Неможливо відкрити цільовий файл: %1</translation>
     </message>
     <message>
         <location filename="../ui/host_config_dialog.cc" line="654"/>
         <source>Unable to read the source file: the file is damaged or has an unknown format.</source>
-        <translation type="unfinished"></translation>
+        <translation>Неможливо прочитати вихідний файл: файл пошкоджено або формат файлу невідомний.</translation>
     </message>
     <message>
         <location filename="../ui/host_config_dialog.cc" line="667"/>
         <source>Unable to write the target file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Неможливо записати цільовий файл.</translation>
     </message>
 </context>
 <context>
@@ -435,7 +435,7 @@
     <message>
         <location filename="../ui/host_notifier_window.cc" line="232"/>
         <source>Disconnect</source>
-        <translation type="unfinished">Відключитися</translation>
+        <translation>Відключитися</translation>
     </message>
 </context>
 <context>
@@ -443,17 +443,17 @@
     <message>
         <location filename="../ui/user_dialog.cc" line="73"/>
         <source>Desktop Manage</source>
-        <translation type="unfinished">Керування робоим столом</translation>
+        <translation>Керування робоим столом</translation>
     </message>
     <message>
         <location filename="../ui/user_dialog.cc" line="77"/>
         <source>Desktop View</source>
-        <translation type="unfinished">Перегляд робочого столу</translation>
+        <translation>Перегляд робочого столу</translation>
     </message>
     <message>
         <location filename="../ui/user_dialog.cc" line="81"/>
         <source>File Transfer</source>
-        <translation type="unfinished">Передача файлів</translation>
+        <translation>Передача файлів</translation>
     </message>
     <message>
         <location filename="../ui/user_dialog.cc" line="134"/>
@@ -463,60 +463,60 @@
         <location filename="../ui/user_dialog.cc" line="196"/>
         <location filename="../ui/user_dialog.cc" line="214"/>
         <source>Warning</source>
-        <translation type="unfinished">Попередження</translation>
+        <translation>Попередження</translation>
     </message>
     <message>
         <location filename="../ui/user_dialog.cc" line="135"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
-        <translation type="unfinished">Ім&apos;я користувача не може бути порожнім і має мустити тільки букви алфавіту, цифри, та символи &quot;&quot;_&quot;&quot;, &quot;&quot;-&quot;&quot;, &quot;&quot;.&quot;&quot;.</translation>
+        <translation>Ім&apos;я користувача не може бути порожнім і має мустити тільки букви алфавіту, цифри, та символи &quot;&quot;_&quot;&quot;, &quot;&quot;-&quot;&quot;, &quot;&quot;.&quot;&quot;.</translation>
     </message>
     <message>
         <location filename="../ui/user_dialog.cc" line="154"/>
         <source>The username you entered already exists.</source>
-        <translation type="unfinished">Введене ім&apos;я користувача вже існує.</translation>
+        <translation>Введене ім&apos;я користувача вже існує.</translation>
     </message>
     <message>
         <location filename="../ui/user_dialog.cc" line="166"/>
         <source>The passwords you entered do not match.</source>
-        <translation type="unfinished">Введені паролі не співпадають.</translation>
+        <translation>Введені паролі не співпадають.</translation>
     </message>
     <message numerus="yes">
         <location filename="../ui/user_dialog.cc" line="176"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Пароль не може бути порожнім або довшим за %n символ.</numerusform>
+            <numerusform>Пароль не може бути порожнім або довшим за %n символи.</numerusform>
+            <numerusform>Пароль не може бути порожнім або довшим за %n символів.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../ui/user_dialog.cc" line="186"/>
         <source>Password you entered does not meet the security requirements!</source>
-        <translation type="unfinished"></translation>
+        <translation>Введений пароль не задовільняє вимогам безпеки!</translation>
     </message>
     <message numerus="yes">
         <location filename="../ui/user_dialog.cc" line="189"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Пароль має містити символи нижнього і верхнього регістрів і має бути довшим за %n смивол.</numerusform>
+            <numerusform>Пароль має містити символи нижнього і верхнього регістрів і має бути довшим за %n смиволи.</numerusform>
+            <numerusform>Пароль має містити символи нижнього і верхнього регістрів і має бути довшим за %n смиволів.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../ui/user_dialog.cc" line="193"/>
         <source>Do you want to enter a different password?</source>
-        <translation type="unfinished"></translation>
+        <translation>Бажаєте ввести інший пароль?</translation>
     </message>
     <message>
         <location filename="../ui/user_dialog.cc" line="215"/>
         <source>Unknown internal error when creating or modifying a user.</source>
-        <translation type="unfinished"></translation>
+        <translation>Невідома внутрішня помилка під час створення або редагування користувача.</translation>
     </message>
     <message>
         <location filename="../ui/user_dialog.cc" line="271"/>
         <source>Double-click to change</source>
-        <translation type="unfinished">Подвійний клік для зміни</translation>
+        <translation>Подвійний клік для зміни</translation>
     </message>
 </context>
 </TS>

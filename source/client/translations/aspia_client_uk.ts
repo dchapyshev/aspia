@@ -57,12 +57,12 @@
     <message>
         <location filename="../ui/desktop_config_dialog.ui" line="36"/>
         <source>Codec</source>
-        <translation type="unfinished"></translation>
+        <translation>Кодек</translation>
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.ui" line="42"/>
         <source>Name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Ім&apos;я:</translation>
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.ui" line="52"/>
@@ -87,32 +87,32 @@
     <message>
         <location filename="../ui/desktop_config_dialog.ui" line="123"/>
         <source>Remote Screen</source>
-        <translation type="unfinished"></translation>
+        <translation>Віддалений екран</translation>
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.ui" line="133"/>
         <source>Scale factor:</source>
-        <translation type="unfinished"></translation>
+        <translation>Масштаб:</translation>
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.ui" line="140"/>
         <source>Update interval:</source>
-        <translation type="unfinished"></translation>
+        <translation>Частота оновлення:</translation>
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.ui" line="170"/>
         <source>ms</source>
-        <translation type="unfinished"></translation>
+        <translation>мс</translation>
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.ui" line="204"/>
         <source>Advanced</source>
-        <translation type="unfinished"></translation>
+        <translation>Додатково</translation>
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.ui" line="210"/>
         <source>Block remote input</source>
-        <translation type="unfinished"></translation>
+        <translation>Блокувати віддалений ввід</translation>
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.ui" line="217"/>
@@ -127,12 +127,12 @@
     <message>
         <location filename="../ui/desktop_config_dialog.ui" line="231"/>
         <source>Disable desktop effects</source>
-        <translation type="unfinished"></translation>
+        <translation>Відключити ефекти робочого стола</translation>
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.ui" line="238"/>
         <source>Disable desktop wallpaper</source>
-        <translation type="unfinished"></translation>
+        <translation>Відключити шпалери робочого стола</translation>
     </message>
 </context>
 <context>
@@ -150,7 +150,7 @@
     <message>
         <location filename="../ui/desktop_panel.ui" line="148"/>
         <source>Monitor selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Вибір монітора</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.ui" line="163"/>
@@ -165,80 +165,80 @@
     <message>
         <location filename="../ui/desktop_panel.ui" line="189"/>
         <source>Automatic scrolling</source>
-        <translation type="unfinished"></translation>
+        <translation>Автоматична прокрутка</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.ui" line="213"/>
         <source>Advanced menu</source>
-        <translation type="unfinished"></translation>
+        <translation>Розширене меню</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.ui" line="255"/>
         <source>Send key combinations</source>
-        <translation type="unfinished"></translation>
+        <translation>Комбінації клавіш відправки</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.ui" line="264"/>
         <location filename="../ui/desktop_panel.ui" line="267"/>
         <source>Power control</source>
-        <translation type="unfinished"></translation>
+        <translation>Котроль живлення</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.ui" line="275"/>
         <source>Shutdown</source>
-        <translation type="unfinished"></translation>
+        <translation>Відключити</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.ui" line="280"/>
         <source>Reboot</source>
-        <translation type="unfinished"></translation>
+        <translation>Перезавантажити</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.ui" line="285"/>
         <source>Logoff</source>
-        <translation type="unfinished"></translation>
+        <translation>Вийти</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.ui" line="290"/>
         <source>Lock</source>
-        <translation type="unfinished"></translation>
+        <translation>Заблокувати</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.ui" line="299"/>
         <source>Remote Update</source>
-        <translation type="unfinished"></translation>
+        <translation>Віддалене оновлення</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.ui" line="311"/>
         <source>System Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Системна інформація</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.ui" line="323"/>
         <source>Close</source>
-        <translation type="unfinished">Закрити</translation>
+        <translation>Закрити</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.ui" line="326"/>
         <source>Close session</source>
-        <translation type="unfinished"></translation>
+        <translation>Закрити сесію</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.ui" line="218"/>
         <location filename="../ui/desktop_panel.ui" line="221"/>
         <location filename="../ui/desktop_panel.ui" line="224"/>
         <source>Save screenshot...</source>
-        <translation type="unfinished"></translation>
+        <translation>Зберегти знімок екрану...</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.ui" line="236"/>
         <source>File transfer</source>
-        <translation type="unfinished"></translation>
+        <translation>Передача файлів</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.ui" line="244"/>
         <source>Scaling an image</source>
-        <translation type="unfinished"></translation>
+        <translation>Масштабувати зображення</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.ui" line="201"/>
@@ -251,7 +251,7 @@
     <message>
         <location filename="../ui/file_item_delegate.cc" line="56"/>
         <source>The name can not contain characters %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ім&apos;я не може містити символи %1.</translation>
     </message>
 </context>
 <context>
@@ -264,7 +264,7 @@
     <message>
         <location filename="../ui/file_panel.ui" line="175"/>
         <source>Refresh (F5)</source>
-        <translation type="unfinished"></translation>
+        <translation>Оновити (F5)</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.ui" line="190"/>
@@ -416,7 +416,7 @@
         <location filename="../file_status.cc" line="66"/>
         <source>Drive not ready</source>
         <comment>FileStatus</comment>
-        <translation type="unfinished"></translation>
+        <translation>Диск не готовий</translation>
     </message>
     <message>
         <location filename="../file_status.cc" line="69"/>
@@ -443,62 +443,62 @@
     <message>
         <location filename="../ui/system_info_window.ui" line="14"/>
         <source>System Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Системна інформація</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.ui" line="49"/>
         <source>Parameter</source>
-        <translation type="unfinished"></translation>
+        <translation>Параметр</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.ui" line="54"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Значення</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.ui" line="106"/>
+        <source>Save</source>
+        <translation>Зберегти</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.ui" line="109"/>
-        <source>Save</source>
-        <translation type="unfinished"></translation>
+        <source>Save (Ctrl+S)</source>
+        <translation>Зберегти (Ctrl+S)</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="112"/>
-        <source>Save (Ctrl+S)</source>
-        <translation type="unfinished"></translation>
+        <location filename="../ui/system_info_window.ui" line="121"/>
+        <source>Print</source>
+        <translation>Друкувати</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.ui" line="124"/>
-        <source>Print</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.ui" line="127"/>
         <source>Print (Ctrl+P)</source>
-        <translation type="unfinished"></translation>
+        <translation>Друкувати (Ctrl+P)</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="135"/>
+        <location filename="../ui/system_info_window.ui" line="132"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>Копіювати рядок</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="140"/>
+        <location filename="../ui/system_info_window.ui" line="137"/>
         <source>Copy Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Копіювати ім&apos;я</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="145"/>
+        <location filename="../ui/system_info_window.ui" line="142"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Копіювати значення</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.ui" line="151"/>
+        <source>Refresh</source>
+        <translation>Оновити</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.ui" line="154"/>
-        <source>Refresh</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.ui" line="157"/>
         <source>Refresh (F5)</source>
-        <translation type="unfinished"></translation>
+        <translation>Оновити (F5)</translation>
     </message>
 </context>
 <context>
@@ -615,23 +615,23 @@
     <name>aspia::DesktopConfigDialog</name>
     <message>
         <source>True color (32 bit)</source>
-        <translation type="vanished">True color (32 bit)</translation>
+        <translation type="vanished">True color (32 біти)</translation>
     </message>
     <message>
         <source>High color (16 bit)</source>
-        <translation type="vanished">High color (16 bit)</translation>
+        <translation type="vanished">High color (16 біт)</translation>
     </message>
     <message>
         <source>256 colors (8 bit)</source>
-        <translation type="vanished">256 colors (8 bit)</translation>
+        <translation type="vanished">256 кольорів (8 біт)</translation>
     </message>
     <message>
         <source>64 colors (6 bit)</source>
-        <translation type="vanished">64 colors (6 bit)</translation>
+        <translation type="vanished">64 кольори (6 біт)</translation>
     </message>
     <message>
         <source>8 colors (3 bit)</source>
-        <translation type="vanished">8 colors (3 bit)</translation>
+        <translation type="vanished">8 кольорів (3 біт)</translation>
     </message>
     <message>
         <source>Compression ratio: %1</source>
@@ -935,17 +935,17 @@
     <message>
         <location filename="../ui/address_bar.cc" line="56"/>
         <source>Warning</source>
-        <translation type="unfinished">Попередження</translation>
+        <translation>Попередження</translation>
     </message>
     <message>
         <location filename="../ui/address_bar.cc" line="57"/>
         <source>An incorrect path to the folder was entered.</source>
-        <translation type="unfinished"></translation>
+        <translation>Введено невірний шлях до папки.</translation>
     </message>
     <message>
         <location filename="../ui/address_bar.cc" line="77"/>
         <source>The path can not contain characters %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Шлях не може містити символи %1.</translation>
     </message>
 </context>
 <context>
@@ -954,97 +954,97 @@
         <location filename="../ui/address_bar_model.cc" line="81"/>
         <location filename="../ui/address_bar_model.cc" line="445"/>
         <source>Home Folder</source>
-        <translation type="unfinished">Домашній каталог</translation>
+        <translation>Домашній каталог</translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="85"/>
         <source>Desktop</source>
-        <translation type="unfinished">Робочий стіл</translation>
+        <translation>Робочий стіл</translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="277"/>
         <source>Computer</source>
-        <translation type="unfinished"></translation>
+        <translation>Комп&apos;ютер</translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="390"/>
         <source>Name</source>
-        <translation type="unfinished">Ім&apos;я</translation>
+        <translation>Ім&apos;я</translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="393"/>
         <source>Type</source>
-        <translation type="unfinished">Тип</translation>
+        <translation>Тип</translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="396"/>
         <source>Total Space</source>
-        <translation type="unfinished"></translation>
+        <translation>Загальний простір</translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="399"/>
         <source>Free Space</source>
-        <translation type="unfinished"></translation>
+        <translation>Вільний простір</translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="430"/>
         <source>Optical Drive</source>
-        <translation type="unfinished"></translation>
+        <translation>Оптичний диск</translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="433"/>
         <source>Removable Drive</source>
-        <translation type="unfinished"></translation>
+        <translation>Знімний диск</translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="436"/>
         <source>Fixed Drive</source>
-        <translation type="unfinished"></translation>
+        <translation>Фіксований диск</translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="439"/>
         <source>Network Drive</source>
-        <translation type="unfinished"></translation>
+        <translation>Мережевий диск</translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="442"/>
         <source>RAM Drive</source>
-        <translation type="unfinished"></translation>
+        <translation>RAM диск</translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="448"/>
         <source>Desktop Folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Каталог робочого стола</translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="451"/>
         <source>Unknown Drive</source>
-        <translation type="unfinished"></translation>
+        <translation>Невідомий диск</translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="468"/>
         <source>TB</source>
-        <translation type="unfinished">ТБ</translation>
+        <translation>ТБ</translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="473"/>
         <source>GB</source>
-        <translation type="unfinished">ГБ</translation>
+        <translation>ГБ</translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="478"/>
         <source>MB</source>
-        <translation type="unfinished">МБ</translation>
+        <translation>МБ</translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="483"/>
         <source>kB</source>
-        <translation type="unfinished">кБ</translation>
+        <translation>кБ</translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="488"/>
         <source>B</source>
-        <translation type="unfinished">Б</translation>
+        <translation>Б</translation>
     </message>
 </context>
 <context>
@@ -1052,67 +1052,67 @@
     <message>
         <location filename="../client.cc" line="94"/>
         <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
-        <translation type="unfinished"></translation>
+        <translation>Виникла помилка з мережею (напр., мережевий кабель випадково від&apos;єднано).</translation>
     </message>
     <message>
         <location filename="../client.cc" line="98"/>
         <source>Connection was refused by the peer (or timed out).</source>
-        <translation type="unfinished"></translation>
+        <translation>З&apos;єднання відхилено піром (або час вийшов).</translation>
     </message>
     <message>
         <location filename="../client.cc" line="102"/>
         <source>Remote host closed the connection.</source>
-        <translation type="unfinished"></translation>
+        <translation>Віддалений хост закрив з&apos;єднання.</translation>
     </message>
     <message>
         <location filename="../client.cc" line="106"/>
         <source>Host address was not found.</source>
-        <translation type="unfinished"></translation>
+        <translation>Адресу хоста не знайдено.</translation>
     </message>
     <message>
         <location filename="../client.cc" line="110"/>
         <source>Socket operation timed out.</source>
-        <translation type="unfinished"></translation>
+        <translation>Вийшов час операції сокета.</translation>
     </message>
     <message>
         <location filename="../client.cc" line="114"/>
         <source>Address specified is already in use and was set to be exclusive.</source>
-        <translation type="unfinished"></translation>
+        <translation>Введена адреса вже використовується і встановлена як унікальна.</translation>
     </message>
     <message>
         <location filename="../client.cc" line="118"/>
         <source>Address specified does not belong to the host.</source>
-        <translation type="unfinished"></translation>
+        <translation>Введена адреса не належить хосту.</translation>
     </message>
     <message>
         <location filename="../client.cc" line="122"/>
         <source>Violation of the data exchange protocol.</source>
-        <translation type="unfinished"></translation>
+        <translation>Порушення в протоколі передачі даних.</translation>
     </message>
     <message>
         <location filename="../client.cc" line="126"/>
         <source>An error occurred while encrypting the message.</source>
-        <translation type="unfinished"></translation>
+        <translation>Виникла помилка під час шифрування повідомлення.</translation>
     </message>
     <message>
         <location filename="../client.cc" line="130"/>
         <source>An error occurred while decrypting the message.</source>
-        <translation type="unfinished"></translation>
+        <translation>Виникла помилка під час розшифрування повідомлення.</translation>
     </message>
     <message>
         <location filename="../client.cc" line="134"/>
         <source>An error occured while authenticating: wrong user name or password.</source>
-        <translation type="unfinished"></translation>
+        <translation>Виникла помилка під час аутентифікації: невірне ім&apos;я користувача або пароль.</translation>
     </message>
     <message>
         <location filename="../client.cc" line="138"/>
         <source>Specified session type is not allowed for the user.</source>
-        <translation type="unfinished"></translation>
+        <translation>Обраний тип сесії не дозволений для користувача.</translation>
     </message>
     <message>
         <location filename="../client.cc" line="142"/>
         <source>An unknown error occurred.</source>
-        <translation type="unfinished"></translation>
+        <translation>Виникла невідома помилка.</translation>
     </message>
 </context>
 <context>
@@ -1144,42 +1144,42 @@
     <message>
         <location filename="../client_desktop.cc" line="49"/>
         <source>Invalid message from host</source>
-        <translation type="unfinished"></translation>
+        <translation>Невірне повідомлення від хоста</translation>
     </message>
     <message>
         <location filename="../client_desktop.cc" line="198"/>
         <source>There are no supported video encodings</source>
-        <translation type="unfinished"></translation>
+        <translation>Немає підтримуваного кодування відео</translation>
     </message>
     <message>
         <location filename="../client_desktop.cc" line="224"/>
         <source>Video decoder not initialized</source>
-        <translation type="unfinished"></translation>
+        <translation>Відео декодер не ініціалізовано</translation>
     </message>
     <message>
         <location filename="../client_desktop.cc" line="238"/>
         <source>Wrong video frame size</source>
-        <translation type="unfinished"></translation>
+        <translation>Невірний розмір відеокадра</translation>
     </message>
     <message>
         <location filename="../client_desktop.cc" line="245"/>
         <source>Wrong video frame position</source>
-        <translation type="unfinished"></translation>
+        <translation>Невірна позиція відеокадра</translation>
     </message>
     <message>
         <location filename="../client_desktop.cc" line="255"/>
         <source>The desktop frame is not initialized</source>
-        <translation type="unfinished"></translation>
+        <translation>Відеокадр робочого стола не ініціалізований</translation>
     </message>
     <message>
         <location filename="../client_desktop.cc" line="261"/>
         <source>The video packet could not be decoded</source>
-        <translation type="unfinished"></translation>
+        <translation>Відеопакет не може бути декодовано</translation>
     </message>
     <message>
         <location filename="../client_desktop.cc" line="346"/>
         <source>Session error</source>
-        <translation type="unfinished"></translation>
+        <translation>Помилка сесії</translation>
     </message>
 </context>
 <context>
@@ -1187,17 +1187,17 @@
     <message>
         <location filename="../ui/client_dialog.cc" line="41"/>
         <source>Desktop Manage</source>
-        <translation type="unfinished">Керування робочим столом</translation>
+        <translation>Керування робочим столом</translation>
     </message>
     <message>
         <location filename="../ui/client_dialog.cc" line="45"/>
         <source>Desktop View</source>
-        <translation type="unfinished">Перегляд робочого столу</translation>
+        <translation>Перегляд робочого столу</translation>
     </message>
     <message>
         <location filename="../ui/client_dialog.cc" line="49"/>
         <source>File Transfer</source>
-        <translation type="unfinished">Передача файлів</translation>
+        <translation>Передача файлів</translation>
     </message>
 </context>
 <context>
@@ -1213,17 +1213,17 @@
     <message>
         <location filename="../client_file_transfer.cc" line="59"/>
         <source>Invalid message from host</source>
-        <translation type="unfinished"></translation>
+        <translation>Невірне повідомлення від хоста</translation>
     </message>
     <message>
         <location filename="../client_file_transfer.cc" line="65"/>
         <source>There are no logged in users. File transfer is not available</source>
-        <translation type="unfinished"></translation>
+        <translation>Немає підключених користувачів. Передача файлів недоступна</translation>
     </message>
     <message>
         <location filename="../client_file_transfer.cc" line="83"/>
         <source>Session error</source>
-        <translation type="unfinished"></translation>
+        <translation>Помилка сесії</translation>
     </message>
 </context>
 <context>
@@ -1231,12 +1231,12 @@
     <message>
         <location filename="../ui/client_window.cc" line="118"/>
         <source>Attempt to connect to %1:%2.</source>
-        <translation type="unfinished">Спроба підключення до %1:%2.</translation>
+        <translation>Спроба підключення до %1:%2.</translation>
     </message>
     <message>
         <location filename="../ui/client_window.cc" line="125"/>
         <source>Session started.</source>
-        <translation type="unfinished">Сесію розпочато.</translation>
+        <translation>Сесію розпочато.</translation>
     </message>
 </context>
 <context>
@@ -1244,32 +1244,32 @@
     <message>
         <location filename="../ui/desktop_config_dialog.cc" line="71"/>
         <source>True color (32 bit)</source>
-        <translation type="unfinished">True color (32 bit)</translation>
+        <translation>True color (32 біти)</translation>
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.cc" line="72"/>
         <source>High color (16 bit)</source>
-        <translation type="unfinished">High color (16 bit)</translation>
+        <translation>High color (16 біт)</translation>
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.cc" line="73"/>
         <source>256 colors (8 bit)</source>
-        <translation type="unfinished">256 colors (8 bit)</translation>
+        <translation>256 кольорів (8 біт)</translation>
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.cc" line="74"/>
         <source>64 colors (6 bit)</source>
-        <translation type="unfinished">64 colors (6 bit)</translation>
+        <translation>64 кольори (6 біт)</translation>
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.cc" line="75"/>
         <source>8 colors (3 bit)</source>
-        <translation type="unfinished">8 colors (3 bit)</translation>
+        <translation>8 кольорів (3 біти)</translation>
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.cc" line="153"/>
         <source>Compression ratio: %1</source>
-        <translation type="unfinished">Стиснення: %1</translation>
+        <translation>Стиснення: %1</translation>
     </message>
 </context>
 <context>
@@ -1277,35 +1277,35 @@
     <message>
         <location filename="../ui/desktop_panel.cc" line="178"/>
         <source>Monitor %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Монітор %1</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="311"/>
-        <location filename="../ui/desktop_panel.cc" line="322"/>
-        <location filename="../ui/desktop_panel.cc" line="333"/>
-        <location filename="../ui/desktop_panel.cc" line="344"/>
+        <location filename="../ui/desktop_panel.cc" line="309"/>
+        <location filename="../ui/desktop_panel.cc" line="320"/>
+        <location filename="../ui/desktop_panel.cc" line="331"/>
+        <location filename="../ui/desktop_panel.cc" line="342"/>
         <source>Confirmation</source>
-        <translation type="unfinished">Підтвердження</translation>
+        <translation>Підтвердження</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="312"/>
+        <location filename="../ui/desktop_panel.cc" line="310"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
-        <translation type="unfinished"></translation>
+        <translation>Ви впевнені, що хочете відключити віддалений комп&apos;ютер?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="323"/>
+        <location filename="../ui/desktop_panel.cc" line="321"/>
         <source>Are you sure you want to reboot the remote computer?</source>
-        <translation type="unfinished"></translation>
+        <translation>Ви впевнені, що хочете перезавантажити віддалений комп&apos;ютер?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="334"/>
+        <location filename="../ui/desktop_panel.cc" line="332"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
-        <translation type="unfinished"></translation>
+        <translation>Ви впевнені, що хочете завершити сесію користувача на віддаленому комп&apos;ютері?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="345"/>
+        <location filename="../ui/desktop_panel.cc" line="343"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
-        <translation type="unfinished"></translation>
+        <translation>Ви впевнені, що хочете заблокувати сесію користувача на віддаленому комп&apos;ютері?</translation>
     </message>
 </context>
 <context>
@@ -1313,43 +1313,43 @@
     <message>
         <location filename="../ui/desktop_window.cc" line="366"/>
         <source>Save File</source>
-        <translation type="unfinished"></translation>
+        <translation>Зберегти файл</translation>
     </message>
     <message>
         <location filename="../ui/desktop_window.cc" line="368"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
-        <translation type="unfinished"></translation>
+        <translation>Зображення PNG (*.png);;Зображення BMP (*.bmp)</translation>
     </message>
     <message>
         <location filename="../ui/desktop_window.cc" line="138"/>
         <location filename="../ui/desktop_window.cc" line="388"/>
         <source>Warning</source>
-        <translation type="unfinished">Попередження</translation>
+        <translation>Попередження</translation>
     </message>
     <message>
         <location filename="../ui/desktop_window.cc" line="139"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
-        <translation type="unfinished"></translation>
+        <translation>Обране кодування відео не підтримується хостом. Будь ласка, оберіть інше кодування відео.</translation>
     </message>
     <message>
         <location filename="../ui/desktop_window.cc" line="156"/>
         <source>Selecting a supported video encoding is canceled by the user.</source>
-        <translation type="unfinished"></translation>
+        <translation>Вибір підтримуваного кодування відео відмінено користувачем.</translation>
     </message>
     <message>
         <location filename="../ui/desktop_window.cc" line="388"/>
         <source>Could not save image</source>
-        <translation type="unfinished"></translation>
+        <translation>Неможливо зберегти зображення</translation>
     </message>
     <message>
         <location filename="../ui/desktop_window.cc" line="527"/>
         <source>Desktop Manage</source>
-        <translation type="unfinished">Керування робочим столом</translation>
+        <translation>Керування робочим столом</translation>
     </message>
     <message>
         <location filename="../ui/desktop_window.cc" line="532"/>
         <source>Desktop View</source>
-        <translation type="unfinished">Перегляд робочого столу</translation>
+        <translation>Перегляд робочого столу</translation>
     </message>
     <message>
         <source>Aspia Desktop Manage</source>
@@ -1365,52 +1365,52 @@
     <message>
         <location filename="../ui/file_list_model.cc" line="95"/>
         <source>Folder</source>
-        <translation type="unfinished">Каталог</translation>
+        <translation>Каталог</translation>
     </message>
     <message>
         <location filename="../ui/file_list_model.cc" line="357"/>
         <source>Name</source>
-        <translation type="unfinished">Ім&apos;я</translation>
+        <translation>Ім&apos;я</translation>
     </message>
     <message>
         <location filename="../ui/file_list_model.cc" line="360"/>
         <source>Size</source>
-        <translation type="unfinished">Розмір</translation>
+        <translation>Розмір</translation>
     </message>
     <message>
         <location filename="../ui/file_list_model.cc" line="363"/>
         <source>Type</source>
-        <translation type="unfinished">Тип</translation>
+        <translation>Тип</translation>
     </message>
     <message>
         <location filename="../ui/file_list_model.cc" line="366"/>
         <source>Modified</source>
-        <translation type="unfinished">Змінено</translation>
+        <translation>Змінено</translation>
     </message>
     <message>
         <location filename="../ui/file_list_model.cc" line="522"/>
         <source>TB</source>
-        <translation type="unfinished">ТБ</translation>
+        <translation>ТБ</translation>
     </message>
     <message>
         <location filename="../ui/file_list_model.cc" line="527"/>
         <source>GB</source>
-        <translation type="unfinished">ГБ</translation>
+        <translation>ГБ</translation>
     </message>
     <message>
         <location filename="../ui/file_list_model.cc" line="532"/>
         <source>MB</source>
-        <translation type="unfinished">МБ</translation>
+        <translation>МБ</translation>
     </message>
     <message>
         <location filename="../ui/file_list_model.cc" line="537"/>
         <source>kB</source>
-        <translation type="unfinished">кБ</translation>
+        <translation>кБ</translation>
     </message>
     <message>
         <location filename="../ui/file_list_model.cc" line="542"/>
         <source>B</source>
-        <translation type="unfinished">Б</translation>
+        <translation>Б</translation>
     </message>
 </context>
 <context>
@@ -1418,17 +1418,17 @@
     <message>
         <location filename="../ui/file_manager_window.cc" line="46"/>
         <source>Local Computer</source>
-        <translation type="unfinished">Локальний комп&apos;ютер</translation>
+        <translation>Локальний комп&apos;ютер</translation>
     </message>
     <message>
         <location filename="../ui/file_manager_window.cc" line="49"/>
         <source>Remote Computer</source>
-        <translation type="unfinished">Віддалений комп&apos;ютер</translation>
+        <translation>Віддалений комп&apos;ютер</translation>
     </message>
     <message>
         <location filename="../ui/file_manager_window.cc" line="293"/>
         <source>File Transfer</source>
-        <translation type="unfinished">Передача файлів</translation>
+        <translation>Передача файлів</translation>
     </message>
     <message>
         <source>%1 - Aspia File Transfer</source>
@@ -1447,69 +1447,69 @@
         <location filename="../ui/file_panel.cc" line="319"/>
         <location filename="../ui/file_panel.cc" line="328"/>
         <source>Warning</source>
-        <translation type="unfinished">Попередження</translation>
+        <translation>Попередження</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="154"/>
         <source>Failed to get list of drives: %1</source>
-        <translation type="unfinished">Не вдалося отримати список дисків: %1</translation>
+        <translation>Не вдалося отримати список дисків: %1</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="169"/>
         <source>Failed to get list of files: %1</source>
-        <translation type="unfinished">Не вдалося отримати список файлів: %1</translation>
+        <translation>Не вдалося отримати список файлів: %1</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="193"/>
         <source>Failed to create directory: %1</source>
-        <translation type="unfinished">Не вдалося створити каталог: %1</translation>
+        <translation>Не вдалося створити каталог: %1</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="204"/>
         <source>Failed to rename item: %1</source>
-        <translation type="unfinished">Не давлося переіменувати об&apos;єкт: %1</translation>
+        <translation>Не давлося переіменувати об&apos;єкт: %1</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="274"/>
         <source>%1 object(s) selected</source>
-        <translation type="unfinished">%1 об&apos;єктів обрано</translation>
+        <translation>%1 об&apos;єктів обрано</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="295"/>
         <location filename="../ui/file_panel.cc" line="320"/>
         <source>Folder name can not be empty.</source>
-        <translation type="unfinished">Ім&apos;я каталогу не може бути порожнім.</translation>
+        <translation>Ім&apos;я каталогу не може бути порожнім.</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="304"/>
         <location filename="../ui/file_panel.cc" line="329"/>
         <source>Name contains invalid characters.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ім&apos;я містить недійсні символи.</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="351"/>
         <source>&amp;Send	F11</source>
-        <translation type="unfinished">&amp;Надіслати F11</translation>
+        <translation>&amp;Надіслати F11</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="353"/>
         <source>&amp;Delete	Delete</source>
-        <translation type="unfinished">&amp;Видалити Delete</translation>
+        <translation>&amp;Видалити Delete</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="363"/>
         <source>&amp;Create Folder</source>
-        <translation type="unfinished">&amp;Створити каталог</translation>
+        <translation>&amp;Створити каталог</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="418"/>
         <source>Confirmation</source>
-        <translation type="unfinished">Підтвердження</translation>
+        <translation>Підтвердження</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="419"/>
         <source>Are you sure you want to delete the selected items?</source>
-        <translation type="unfinished">Ви впевнені, що хочете видалити обрані об&apos;єкти?</translation>
+        <translation>Ви впевнені, що хочете видалити обрані об&apos;єкти?</translation>
     </message>
 </context>
 <context>
@@ -1517,27 +1517,27 @@
     <message>
         <location filename="../ui/file_remove_dialog.cc" line="62"/>
         <source>Deleting: %1</source>
-        <translation type="unfinished">Видалення: %1</translation>
+        <translation>Видалення: %1</translation>
     </message>
     <message>
         <location filename="../ui/file_remove_dialog.cc" line="86"/>
         <source>Warning</source>
-        <translation type="unfinished">Попередження</translation>
+        <translation>Попередження</translation>
     </message>
     <message>
         <location filename="../ui/file_remove_dialog.cc" line="94"/>
         <source>Skip</source>
-        <translation type="unfinished">Пропустити</translation>
+        <translation>Пропустити</translation>
     </message>
     <message>
         <location filename="../ui/file_remove_dialog.cc" line="97"/>
         <source>Skip All</source>
-        <translation type="unfinished">Пропустити всі</translation>
+        <translation>Пропустити всі</translation>
     </message>
     <message>
         <location filename="../ui/file_remove_dialog.cc" line="100"/>
         <source>Abort</source>
-        <translation type="unfinished">Відмінити</translation>
+        <translation>Відмінити</translation>
     </message>
 </context>
 <context>
@@ -1545,12 +1545,12 @@
     <message>
         <location filename="../file_remove_queue_builder.cc" line="54"/>
         <source>An unexpected answer was received.</source>
-        <translation type="unfinished">Отримано неочікувану відповідь.</translation>
+        <translation>Отримано неочікувану відповідь.</translation>
     </message>
     <message>
         <location filename="../file_remove_queue_builder.cc" line="60"/>
         <source>An error occurred while retrieving the list of files: %1</source>
-        <translation type="unfinished">Трапилася помилка під час отримання списку файлів: %1</translation>
+        <translation>Трапилася помилка під час отримання списку файлів: %1</translation>
     </message>
 </context>
 <context>
@@ -1558,12 +1558,12 @@
     <message>
         <location filename="../file_remover.cc" line="83"/>
         <source>An unexpected answer was received.</source>
-        <translation type="unfinished">Отримано неочікувану відповідь.</translation>
+        <translation>Отримано неочікувану відповідь.</translation>
     </message>
     <message>
         <location filename="../file_remover.cc" line="111"/>
         <source>Failed to delete &quot;%1&quot;: %2.</source>
-        <translation type="unfinished">Не вдалося видалити &quot;%1&quot;:%2.</translation>
+        <translation>Не вдалося видалити &quot;%1&quot;:%2.</translation>
     </message>
 </context>
 <context>
@@ -1571,33 +1571,33 @@
     <message>
         <location filename="../file_transfer.cc" line="117"/>
         <source>Failed to create directory &quot;%1&quot;: %2</source>
-        <translation type="unfinished">Не вдалося створити каталог &quot;%1&quot;:%2</translation>
+        <translation>Не вдалося створити каталог &quot;%1&quot;:%2</translation>
     </message>
     <message>
         <location filename="../file_transfer.cc" line="131"/>
         <source>Failed to create file &quot;%1&quot;: %2</source>
-        <translation type="unfinished">Не вдалося створити файл &quot;%1&quot;:%2</translation>
+        <translation>Не вдалося створити файл &quot;%1&quot;:%2</translation>
     </message>
     <message>
         <location filename="../file_transfer.cc" line="145"/>
         <source>Failed to write file &quot;%1&quot;: %2</source>
-        <translation type="unfinished">Не вдалося записати файл &quot;%1&quot;:%2</translation>
+        <translation>Не вдалося записати файл &quot;%1&quot;:%2</translation>
     </message>
     <message>
         <location filename="../file_transfer.cc" line="192"/>
         <location filename="../file_transfer.cc" line="231"/>
         <source>An unexpected response to the request was received</source>
-        <translation type="unfinished">Отримано неочікувану відповідь на запит</translation>
+        <translation>Отримано неочікувану відповідь на запит</translation>
     </message>
     <message>
         <location filename="../file_transfer.cc" line="207"/>
         <source>Failed to open file &quot;%1&quot;: %2</source>
-        <translation type="unfinished">Не вдалося відкрити файл &quot;%1&quot;:%2</translation>
+        <translation>Не вдалося відкрити файл &quot;%1&quot;:%2</translation>
     </message>
     <message>
         <location filename="../file_transfer.cc" line="221"/>
         <source>Failed to read file &quot;%1&quot;: %2</source>
-        <translation type="unfinished">Не вдалося прочитати файл &quot;%1&quot;:%2</translation>
+        <translation>Не вдалося прочитати файл &quot;%1&quot;:%2</translation>
     </message>
 </context>
 <context>
@@ -1605,52 +1605,52 @@
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="72"/>
         <source>Current Task: Copying items.</source>
-        <translation type="unfinished">Поточне завдання: Копіювання файлів.</translation>
+        <translation>Поточне завдання: Копіювання файлів.</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="84"/>
         <source>From: %1</source>
-        <translation type="unfinished">З: %1</translation>
+        <translation>З: %1</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="89"/>
         <source>To: %1</source>
-        <translation type="unfinished">До: %1</translation>
+        <translation>До: %1</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="119"/>
         <source>Warning</source>
-        <translation type="unfinished">Попередження</translation>
+        <translation>Попередження</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="131"/>
         <source>Skip</source>
-        <translation type="unfinished">Пропустити</translation>
+        <translation>Пропустити</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="134"/>
         <source>Skip All</source>
-        <translation type="unfinished">Пропустити всі</translation>
+        <translation>Пропустити всі</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="137"/>
         <source>Replace</source>
-        <translation type="unfinished">Замінити</translation>
+        <translation>Замінити</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="140"/>
         <source>Replace All</source>
-        <translation type="unfinished">Замінити всі</translation>
+        <translation>Замінити всі</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="143"/>
         <source>Abort</source>
-        <translation type="unfinished">Відмінити</translation>
+        <translation>Відмінити</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="223"/>
         <source>Current Task: Cancel transfer of files.</source>
-        <translation type="unfinished"></translation>
+        <translation>Поточне завдання: Відміна передачі файлів.</translation>
     </message>
 </context>
 <context>
@@ -1658,12 +1658,12 @@
     <message>
         <location filename="../file_transfer_queue_builder.cc" line="74"/>
         <source>An unexpected answer was received.</source>
-        <translation type="unfinished">Отримано неочікувану відповідь.</translation>
+        <translation>Отримано неочікувану відповідь.</translation>
     </message>
     <message>
         <location filename="../file_transfer_queue_builder.cc" line="80"/>
         <source>An error occurred while retrieving the list of files: %1</source>
-        <translation type="unfinished">Трапилася помилка під час отримання списку файлів: %1</translation>
+        <translation>Трапилася помилка під час отримання списку файлів: %1</translation>
     </message>
 </context>
 <context>
@@ -1671,7 +1671,7 @@
     <message>
         <location filename="../ui/select_screen_action.h" line="37"/>
         <source>Full Desktop</source>
-        <translation type="unfinished"></translation>
+        <translation>Повний робочий стіл</translation>
     </message>
 </context>
 <context>
@@ -1679,147 +1679,147 @@
     <message>
         <location filename="../ui/system_info_window.cc" line="103"/>
         <source>HTML File</source>
-        <translation type="unfinished"></translation>
+        <translation>Файл HTML</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="105"/>
         <source>HTML File (*.html)</source>
-        <translation type="unfinished"></translation>
+        <translation>Файл HTML (*.html)</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="114"/>
         <source>Warning</source>
-        <translation type="unfinished">Попередження</translation>
+        <translation>Попередження</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="115"/>
         <source>Failed to save file: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Не вдалося зберегти файл: %1</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="175"/>
         <location filename="../ui/system_info_window.cc" line="199"/>
         <source>Name</source>
-        <translation type="unfinished">Ім&apos;я</translation>
+        <translation>Ім&apos;я</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="178"/>
         <source>Domain</source>
-        <translation type="unfinished"></translation>
+        <translation>Домен</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="181"/>
         <source>Workgroup</source>
-        <translation type="unfinished"></translation>
+        <translation>Робоча група</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="184"/>
         <source>Uptime</source>
-        <translation type="unfinished"></translation>
+        <translation>Час роботи</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="189"/>
         <source>Computer</source>
-        <translation type="unfinished"></translation>
+        <translation>Комп&apos;ютер</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="202"/>
         <location filename="../ui/system_info_window.cc" line="268"/>
         <source>Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Версія</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="205"/>
         <source>Architecture</source>
-        <translation type="unfinished"></translation>
+        <translation>Архітектура</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="210"/>
         <source>Operating System</source>
-        <translation type="unfinished"></translation>
+        <translation>Операційна система</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="220"/>
         <location filename="../ui/system_info_window.cc" line="293"/>
         <source>Manufacturer</source>
-        <translation type="unfinished"></translation>
+        <translation>Виробник</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="223"/>
         <location filename="../ui/system_info_window.cc" line="238"/>
         <source>Model</source>
-        <translation type="unfinished"></translation>
+        <translation>Модель</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="228"/>
         <source>Motherboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Материнська плата</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="241"/>
         <location filename="../ui/system_info_window.cc" line="265"/>
         <source>Vendor</source>
-        <translation type="unfinished"></translation>
+        <translation>Вендор</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="244"/>
         <source>Packages</source>
-        <translation type="unfinished"></translation>
+        <translation>Пакети</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="247"/>
         <source>Cores</source>
-        <translation type="unfinished"></translation>
+        <translation>Ядра</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="250"/>
         <source>Threads</source>
-        <translation type="unfinished"></translation>
+        <translation>Потоки</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="255"/>
         <source>Processor</source>
-        <translation type="unfinished"></translation>
+        <translation>Процесор</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="271"/>
         <source>Date</source>
-        <translation type="unfinished"></translation>
+        <translation>Дата</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="296"/>
         <source>Size</source>
-        <translation type="unfinished">Розмір</translation>
+        <translation>Розмір</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="299"/>
         <source>Speed</source>
-        <translation type="unfinished"></translation>
+        <translation>Швидкість</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="299"/>
         <source>%1 MHz</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 МГц</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="302"/>
         <source>Type</source>
-        <translation type="unfinished">Тип</translation>
+        <translation>Тип</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="305"/>
         <source>Form Factor</source>
-        <translation type="unfinished"></translation>
+        <translation>Форм фактор</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="308"/>
         <source>Part Number</source>
-        <translation type="unfinished"></translation>
+        <translation>Партномер</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="312"/>
         <source>Installed</source>
-        <translation type="unfinished"></translation>
+        <translation>Встановлено</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="312"/>
@@ -1827,205 +1827,205 @@
         <location filename="../ui/system_info_window.cc" line="447"/>
         <location filename="../ui/system_info_window.cc" line="455"/>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation>Ні</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="322"/>
         <source>Memory</source>
-        <translation type="unfinished"></translation>
+        <translation>Пам&apos;ять</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="351"/>
         <source>%1 (%2 free)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 (%2 вільно)</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="362"/>
         <source>Logical Drives</source>
-        <translation type="unfinished"></translation>
+        <translation>Логічні диски</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="377"/>
         <source>Adapter Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Ім&apos;я адаптера</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="380"/>
         <source>Interface Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Тип інтерфейса</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="383"/>
         <source>Connection Speed</source>
-        <translation type="unfinished"></translation>
+        <translation>Швидкість з&apos;єднання</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="386"/>
         <source>MAC Address</source>
-        <translation type="unfinished"></translation>
+        <translation>MAC адреса</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="388"/>
         <source>DHCP Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>DHCP включено</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="388"/>
         <location filename="../ui/system_info_window.cc" line="447"/>
         <location filename="../ui/system_info_window.cc" line="455"/>
         <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation>Так</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="393"/>
         <source>DHCP Server #%1</source>
-        <translation type="unfinished"></translation>
+        <translation>DHCP сервер #%1</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="393"/>
         <source>DHCP Server</source>
-        <translation type="unfinished"></translation>
+        <translation>DHCP сервер</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="405"/>
         <source>Address #%1</source>
-        <translation type="unfinished"></translation>
+        <translation>Адреса #%1</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="405"/>
         <source>Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Адреса</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="413"/>
         <source>Gateway #%1</source>
-        <translation type="unfinished"></translation>
+        <translation>Шлюз #%1</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="413"/>
         <source>Gateway</source>
-        <translation type="unfinished"></translation>
+        <translation>Шлюз</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="433"/>
         <source>Network Connections</source>
-        <translation type="unfinished"></translation>
+        <translation>Мережеві з&apos;єднання</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="447"/>
         <source>Default</source>
-        <translation type="unfinished"></translation>
+        <translation>За замовчанням</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="450"/>
         <source>Port</source>
-        <translation type="unfinished"></translation>
+        <translation>Порт</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="453"/>
         <source>Driver</source>
-        <translation type="unfinished"></translation>
+        <translation>Драйвер</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="455"/>
         <source>Shared</source>
-        <translation type="unfinished"></translation>
+        <translation>Спільне користування</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="458"/>
         <source>Share Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Спільне ім&apos;я</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="460"/>
         <source>Jobs Count</source>
-        <translation type="unfinished"></translation>
+        <translation>Лічильник завдань</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="469"/>
         <source>Printers</source>
-        <translation type="unfinished"></translation>
+        <translation>Принтери</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="530"/>
         <source>TB</source>
-        <translation type="unfinished">ТБ</translation>
+        <translation>ТБ</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="535"/>
         <source>GB</source>
-        <translation type="unfinished">ГБ</translation>
+        <translation>ГБ</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="540"/>
         <source>MB</source>
-        <translation type="unfinished">МБ</translation>
+        <translation>МБ</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="545"/>
         <source>kB</source>
-        <translation type="unfinished">кБ</translation>
+        <translation>кБ</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="550"/>
         <source>B</source>
-        <translation type="unfinished">Б</translation>
+        <translation>Б</translation>
     </message>
     <message numerus="yes">
         <location filename="../ui/system_info_window.cc" line="566"/>
         <source>%n seconds</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n секунда</numerusform>
+            <numerusform>%n секунди</numerusform>
+            <numerusform>%n секунд</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../ui/system_info_window.cc" line="567"/>
         <source>%n minutes</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n хвилина</numerusform>
+            <numerusform>%n хвилини</numerusform>
+            <numerusform>%n хвилин</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../ui/system_info_window.cc" line="568"/>
         <source>%n hours</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n година</numerusform>
+            <numerusform>%n години</numerusform>
+            <numerusform>%n годин</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../ui/system_info_window.cc" line="592"/>
         <source>%n days</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n день</numerusform>
+            <numerusform>%n дні</numerusform>
+            <numerusform>%n днів</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="613"/>
         <source>Gbps</source>
-        <translation type="unfinished"></translation>
+        <translation>Гб/с</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="618"/>
         <source>Mbps</source>
-        <translation type="unfinished"></translation>
+        <translation>Мб/с</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="623"/>
         <source>Kbps</source>
-        <translation type="unfinished"></translation>
+        <translation>Кб/с</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="628"/>
         <source>bps</source>
-        <translation type="unfinished"></translation>
+        <translation>б/с</translation>
     </message>
 </context>
 </TS>
