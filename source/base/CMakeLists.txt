@@ -92,7 +92,9 @@ list(APPEND SOURCE_BASE_WIN
     win/scoped_user_object.h
     win/scoped_wts_memory.h
     win/security_helpers.cc
-    win/security_helpers.h)
+    win/security_helpers.h
+    win/session_watcher.cc
+    win/session_watcher.h)
 
 source_group("" FILES ${SOURCE_BASE})
 source_group("" FILES ${SOURCE_BASE_UNIT_TESTS})
