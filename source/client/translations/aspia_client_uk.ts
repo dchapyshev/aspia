@@ -456,47 +456,47 @@
         <translation>Значення</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="106"/>
+        <location filename="../ui/system_info_window.ui" line="109"/>
         <source>Save</source>
         <translation>Зберегти</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="109"/>
+        <location filename="../ui/system_info_window.ui" line="112"/>
         <source>Save (Ctrl+S)</source>
         <translation>Зберегти (Ctrl+S)</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="121"/>
+        <location filename="../ui/system_info_window.ui" line="124"/>
         <source>Print</source>
         <translation>Друкувати</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="124"/>
+        <location filename="../ui/system_info_window.ui" line="127"/>
         <source>Print (Ctrl+P)</source>
         <translation>Друкувати (Ctrl+P)</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="132"/>
+        <location filename="../ui/system_info_window.ui" line="135"/>
         <source>Copy Row</source>
         <translation>Копіювати рядок</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="137"/>
+        <location filename="../ui/system_info_window.ui" line="140"/>
         <source>Copy Name</source>
         <translation>Копіювати ім&apos;я</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="142"/>
+        <location filename="../ui/system_info_window.ui" line="145"/>
         <source>Copy Value</source>
         <translation>Копіювати значення</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="151"/>
+        <location filename="../ui/system_info_window.ui" line="154"/>
         <source>Refresh</source>
         <translation>Оновити</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="154"/>
+        <location filename="../ui/system_info_window.ui" line="157"/>
         <source>Refresh (F5)</source>
         <translation>Оновити (F5)</translation>
     </message>
@@ -1280,30 +1280,30 @@
         <translation>Монітор %1</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="309"/>
-        <location filename="../ui/desktop_panel.cc" line="320"/>
-        <location filename="../ui/desktop_panel.cc" line="331"/>
-        <location filename="../ui/desktop_panel.cc" line="342"/>
+        <location filename="../ui/desktop_panel.cc" line="311"/>
+        <location filename="../ui/desktop_panel.cc" line="322"/>
+        <location filename="../ui/desktop_panel.cc" line="333"/>
+        <location filename="../ui/desktop_panel.cc" line="344"/>
         <source>Confirmation</source>
         <translation>Підтвердження</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="310"/>
+        <location filename="../ui/desktop_panel.cc" line="312"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>Ви впевнені, що хочете відключити віддалений комп&apos;ютер?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="321"/>
+        <location filename="../ui/desktop_panel.cc" line="323"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>Ви впевнені, що хочете перезавантажити віддалений комп&apos;ютер?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="332"/>
+        <location filename="../ui/desktop_panel.cc" line="334"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>Ви впевнені, що хочете завершити сесію користувача на віддаленому комп&apos;ютері?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="343"/>
+        <location filename="../ui/desktop_panel.cc" line="345"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>Ви впевнені, що хочете заблокувати сесію користувача на віддаленому комп&apos;ютері?</translation>
     </message>

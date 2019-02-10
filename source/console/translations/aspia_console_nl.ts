@@ -1264,13 +1264,13 @@
     </message>
     <message>
         <location filename="../console_window.cc" line="479"/>
-        <location filename="../console_window.cc" line="806"/>
+        <location filename="../console_window.cc" line="808"/>
         <source>Confirmation</source>
         <translation>Bevestiging</translation>
     </message>
     <message>
         <location filename="../console_window.cc" line="480"/>
-        <location filename="../console_window.cc" line="807"/>
+        <location filename="../console_window.cc" line="809"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation>Adresboek &quot;%1&quot; is aangepast. Wijzigingen opslaan?</translation>
     </message>
@@ -1291,33 +1291,33 @@
         <translation>Pin tab</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="763"/>
+        <location filename="../console_window.cc" line="765"/>
         <source>Hide</source>
         <translation>Verbergen</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="778"/>
+        <location filename="../console_window.cc" line="780"/>
         <source>Show</source>
         <translation>Weergeven</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="885"/>
+        <location filename="../console_window.cc" line="887"/>
         <source>&lt;empty&gt;</source>
         <translatorcomment>Are you sure we should translate this?</translatorcomment>
         <translation>&lt;leeg&gt;</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="906"/>
+        <location filename="../console_window.cc" line="908"/>
         <source>Aspia Console</source>
         <translation>Aspia Console</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="940"/>
+        <location filename="../console_window.cc" line="942"/>
         <source>Information</source>
         <translation>Informatie</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="941"/>
+        <location filename="../console_window.cc" line="943"/>
         <source>Address Book &quot;%1&quot; is already open.</source>
         <translation>Adresboek &quot;%1&quot; is al geopend.</translation>
     </message>

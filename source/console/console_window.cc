@@ -687,7 +687,6 @@ void ConsoleWindow::onTabContextMenu(const QPoint& pos)
 
     pin_action->setCheckable(true);
     pin_action->setChecked(is_pinned);
-    pin_action->setEnabled(!current_path.isEmpty());
 
     if (close_action)
         menu.addAction(close_action);
@@ -713,11 +712,11 @@ void ConsoleWindow::onTabContextMenu(const QPoint& pos)
     }
     else if (action == pin_action)
     {
-        QWidget* close_button = ui.tab_widget->tabBar()->tabButton(tab_index, QTabBar::RightSide);
-        close_button->setVisible(!pin_action->isChecked());
-
         if (pin_action->isChecked())
         {
+            if (!tab->save())
+                return;
+
             ui.tab_widget->setTabIcon(
                 tab_index, QIcon(QStringLiteral(":/img/address-book-pinned.png")));
             mru_.pinFile(current_path);
@@ -728,6 +727,9 @@ void ConsoleWindow::onTabContextMenu(const QPoint& pos)
                 tab_index, QIcon(QStringLiteral(":/img/address-book.png")));
             mru_.unpinFile(current_path);
         }
+
+        QWidget* close_button = ui.tab_widget->tabBar()->tabButton(tab_index, QTabBar::RightSide);
+        close_button->setVisible(!pin_action->isChecked());
 
         bool has_unpinned_tabs = hasUnpinnedTabs();
         ui.action_close->setEnabled(has_unpinned_tabs);

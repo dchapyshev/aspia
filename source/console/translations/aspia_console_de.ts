@@ -1266,13 +1266,13 @@
     </message>
     <message>
         <location filename="../console_window.cc" line="479"/>
-        <location filename="../console_window.cc" line="806"/>
+        <location filename="../console_window.cc" line="808"/>
         <source>Confirmation</source>
         <translation type="unfinished">Bestätigung</translation>
     </message>
     <message>
         <location filename="../console_window.cc" line="480"/>
-        <location filename="../console_window.cc" line="807"/>
+        <location filename="../console_window.cc" line="809"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation type="unfinished">Adressbuch &quot;%1&quot; wurde geändert. Änderungen speichern?</translation>
     </message>
@@ -1293,32 +1293,32 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="763"/>
+        <location filename="../console_window.cc" line="765"/>
         <source>Hide</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="778"/>
+        <location filename="../console_window.cc" line="780"/>
         <source>Show</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="885"/>
+        <location filename="../console_window.cc" line="887"/>
         <source>&lt;empty&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="906"/>
+        <location filename="../console_window.cc" line="908"/>
         <source>Aspia Console</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="940"/>
+        <location filename="../console_window.cc" line="942"/>
         <source>Information</source>
         <translation type="unfinished">Information</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="941"/>
+        <location filename="../console_window.cc" line="943"/>
         <source>Address Book &quot;%1&quot; is already open.</source>
         <translation type="unfinished">Adressbuch &quot;%1&quot; ist bereits geöffnet.</translation>
     </message>
