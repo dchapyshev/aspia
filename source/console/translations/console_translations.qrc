@@ -1,6 +1,5 @@
 <RCC>
   <qresource prefix="/tr">
-    <file>aspia_console_de.qm</file>
     <file>aspia_console_nl.qm</file>
     <file>aspia_console_ru.qm</file>
     <file>aspia_console_uk.qm</file>

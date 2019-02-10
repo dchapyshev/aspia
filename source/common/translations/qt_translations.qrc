@@ -1,6 +1,5 @@
 <RCC>
   <qresource prefix="/tr">
-    <file>qtbase_de.qm</file>
     <file>qtbase_ru.qm</file>
     <file>qtbase_uk.qm</file>
   </qresource>
