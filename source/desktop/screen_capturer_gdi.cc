@@ -152,6 +152,9 @@ bool ScreenCapturerGDI::prepareCaptureResources()
         desktop_dc_.reset();
         memory_dc_.reset();
 
+        effects_disabler_.reset();
+        wallpaper_disabler_.reset();
+
         desktop_dc_rect_ = QRect();
     }
 
