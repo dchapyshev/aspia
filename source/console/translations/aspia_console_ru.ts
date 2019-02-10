@@ -94,10 +94,6 @@
         <translation>Адрес</translation>
     </message>
     <message>
-        <source>Port</source>
-        <translation type="vanished">Порт</translation>
-    </message>
-    <message>
         <location filename="../address_book_tab.ui" line="105"/>
         <source>Comment</source>
         <translation>Комментарий</translation>
@@ -119,38 +115,6 @@
         <location filename="../computer_dialog.ui" line="17"/>
         <source>Computer Properties</source>
         <translation>Свойства компьютера</translation>
-    </message>
-    <message>
-        <source>Name:</source>
-        <translation type="vanished">Имя:</translation>
-    </message>
-    <message>
-        <source>Parent Group:</source>
-        <translation type="vanished">Родительская группа:</translation>
-    </message>
-    <message>
-        <source>Address:</source>
-        <translation type="vanished">Адрес:</translation>
-    </message>
-    <message>
-        <source>Port:</source>
-        <translation type="vanished">Порт:</translation>
-    </message>
-    <message>
-        <source>User Name:</source>
-        <translation type="vanished">Имя пользователя:</translation>
-    </message>
-    <message>
-        <source>Password:</source>
-        <translation type="vanished">Пароль:</translation>
-    </message>
-    <message>
-        <source>Session Configuration:</source>
-        <translation type="vanished">Параметры сессии:</translation>
-    </message>
-    <message>
-        <source>Comment:</source>
-        <translation type="vanished">Комментарий:</translation>
     </message>
 </context>
 <context>
@@ -310,10 +274,6 @@
 </context>
 <context>
     <name>Console</name>
-    <message>
-        <source>Console</source>
-        <translation type="vanished">Консоль</translation>
-    </message>
     <message>
         <location filename="../console_main.cc" line="74"/>
         <source>Remote computer address.</source>
@@ -664,307 +624,6 @@
     </message>
 </context>
 <context>
-    <name>aspia::AddressBookDialog</name>
-    <message>
-        <source>Without Encryption</source>
-        <translation type="vanished">Без шифрования</translation>
-    </message>
-    <message>
-        <source>Double-click to change</source>
-        <translation type="vanished">Двойной щелчок для изменения</translation>
-    </message>
-    <message>
-        <source>Name can not be empty.</source>
-        <translation type="vanished">Имя не может быть пустым.</translation>
-    </message>
-    <message>
-        <source>The passwords you entered do not match.</source>
-        <translation type="vanished">Введенные пароли не совпадают.</translation>
-    </message>
-    <message numerus="yes">
-        <source>Password can not be empty and should not exceed %n characters.</source>
-        <translation type="vanished">
-            <numerusform>Пароль не может быть пустой и не должен превышать %n символ.</numerusform>
-            <numerusform>Пароль не может быть пустой и не должен превышать %n символа.</numerusform>
-            <numerusform>Пароль не может быть пустой и не должен превышать %n символов.</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>&lt;b&gt;Password you entered does not meet the security requirements!&lt;/b&gt;&lt;br/&gt;The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.&lt;br/&gt;Do you want to enter a different password?</source>
-        <translation type="vanished">
-            <numerusform>&lt;b&gt;Введенный пароль не отвечает требованиям безопасности!&lt;/b&gt;&lt;br/&gt;Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символа.&lt;br/&gt;Вы хотите ввести другой пароль?</numerusform>
-            <numerusform>&lt;b&gt;Введенный пароль не отвечает требованиям безопасности!&lt;/b&gt;&lt;br/&gt;Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символов.&lt;br/&gt;Вы хотите ввести другой пароль?</numerusform>
-            <numerusform>&lt;b&gt;Введенный пароль не отвечает требованиям безопасности!&lt;/b&gt;&lt;br/&gt;Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символов.&lt;br/&gt;Вы хотите ввести другой пароль?</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="vanished">
-            <numerusform>Слишком длинное имя. Максимальная длина имени %n символ.</numerusform>
-            <numerusform>Слишком длинное имя. Максимальная длина имени %n символа.</numerusform>
-            <numerusform>Слишком длинное имя. Максимальная длина имени %n символов.</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>ChaCha20 + Poly1305 (256-bit key)</source>
-        <translation type="vanished">ChaCha20 + Poly1305 (256-битный ключ)</translation>
-    </message>
-    <message numerus="yes">
-        <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation type="vanished">
-            <numerusform>Слишком длинный комментарий. Максимальная длина комментария %n символ.</numerusform>
-            <numerusform>Слишком длинный комментарий. Максимальная длина комментария %n символа.</numerusform>
-            <numerusform>Слишком длинный комментарий. Максимальная длина комментария %n символов.</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>Confirmation</source>
-        <translation type="vanished">Подтверждение</translation>
-    </message>
-    <message>
-        <source>At change the size of hashing salt, you will need to re-enter the password. Continue?</source>
-        <translation type="vanished">При изменении размера соли для хеширования вам придется ввести пароль заново. Продолжить?</translation>
-    </message>
-    <message>
-        <source>Warning</source>
-        <translation type="vanished">Предупреждение</translation>
-    </message>
-</context>
-<context>
-    <name>aspia::AddressBookTab</name>
-    <message>
-        <source>The address book file is corrupted or has an unknown format.</source>
-        <translation type="vanished">Файл адресной книги поврежден или имеет неизвестный формат.</translation>
-    </message>
-    <message>
-        <source>Unable to decrypt the address book with the specified password.</source>
-        <translation type="vanished">Не удалось расшифровать адресную книгу с указанным паролем.</translation>
-    </message>
-    <message>
-        <source>Unable to open address book file &quot;%1&quot;.</source>
-        <translation type="vanished">Не удалось открыть файл адресной книги &quot;%1&quot;.</translation>
-    </message>
-    <message>
-        <source>Unable to read address book file &quot;%1&quot;.</source>
-        <translation type="vanished">Не удалось прочитать файл адресной книги &quot;%1&quot;.</translation>
-    </message>
-    <message>
-        <source>The address book file &quot;%1&quot; is corrupted or has an unknown format.</source>
-        <translation type="vanished">Файл адресной книги &quot;%1&quot; поврежден или имеет неизвестный формат.</translation>
-    </message>
-    <message>
-        <source>The address book file is encrypted with an unsupported encryption type.</source>
-        <translation type="vanished">Файл адресной книги зашифрован неподдерживаемым методом шифрования.</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to delete computer group &quot;%1&quot; and all child items?</source>
-        <translation type="vanished">Вы действительно хотите удалить группу компьютеров &quot;%1&quot; и все дочерние элементы?</translation>
-    </message>
-    <message>
-        <source>Confirmation</source>
-        <translation type="vanished">Подтверждение</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
-        <translation type="vanished">Вы действительно хотите удалить компьютер &quot;%1&quot;?</translation>
-    </message>
-    <message>
-        <source>Save Address Book</source>
-        <translation type="vanished">Сохранение адресной книги</translation>
-    </message>
-    <message>
-        <source>Aspia Address Book (*.aab)</source>
-        <translation type="vanished">Адресная книга Aspia (*.aab)</translation>
-    </message>
-    <message>
-        <source>Unable to create or open address book file.</source>
-        <translation type="vanished">Не удалось создать или открыть файл адресной книги.</translation>
-    </message>
-    <message>
-        <source>Unable to write address book file.</source>
-        <translation type="vanished">Не удалось записать файл адресной книги.</translation>
-    </message>
-    <message>
-        <source>Warning</source>
-        <translation type="vanished">Предупреждение</translation>
-    </message>
-    <message>
-        <source>Could not open address book</source>
-        <translation type="vanished">Не удалось открыть адресную книгу</translation>
-    </message>
-    <message>
-        <source>Failed to save address book</source>
-        <translation type="vanished">Не удалось сохранить адресную книгу</translation>
-    </message>
-</context>
-<context>
-    <name>aspia::ComputerDialog</name>
-    <message>
-        <source>Desktop Manage</source>
-        <translation type="vanished">Управление рабочим столом</translation>
-    </message>
-    <message>
-        <source>Desktop View</source>
-        <translation type="vanished">Просмотр рабочего стола</translation>
-    </message>
-    <message>
-        <source>File Transfer</source>
-        <translation type="vanished">Передача файлов</translation>
-    </message>
-    <message numerus="yes">
-        <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="vanished">
-            <numerusform>Слишком длинное имя. Максимальная длина имени %n символ.</numerusform>
-            <numerusform>Слишком длинное имя. Максимальная длина имени %n символа.</numerusform>
-            <numerusform>Слишком длинное имя. Максимальная длина имени %n символов.</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>Name can not be empty.</source>
-        <translation type="vanished">Имя не может быть пустым.</translation>
-    </message>
-    <message>
-        <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
-        <translation type="vanished">Имя пользователя не может быть пустым и может содержать только буквы алфавита, цифры и символы &quot;_&quot;,&quot;-&quot;,&quot;.&quot;.</translation>
-    </message>
-    <message numerus="yes">
-        <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation type="vanished">
-            <numerusform>Слишком длинный комментарий. Максимальная длина комментария %n символ.</numerusform>
-            <numerusform>Слишком длинный комментарий. Максимальная длина комментария %n символа.</numerusform>
-            <numerusform>Слишком длинный комментарий. Максимальная длина комментария %n символов.</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>Warning</source>
-        <translation type="vanished">Предупреждение</translation>
-    </message>
-</context>
-<context>
-    <name>aspia::ComputerGroupDialog</name>
-    <message numerus="yes">
-        <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="vanished">
-            <numerusform>Слишком длинное имя. Максимальная длина имени %n символ.</numerusform>
-            <numerusform>Слишком длинное имя. Максимальная длина имени %n символа.</numerusform>
-            <numerusform>Слишком длинное имя. Максимальная длина имени %n символов.</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>Name can not be empty.</source>
-        <translation type="vanished">Имя не может быть пустым.</translation>
-    </message>
-    <message numerus="yes">
-        <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation type="vanished">
-            <numerusform>Слишком длинный комментарий. Максимальная длина комментария %n символ.</numerusform>
-            <numerusform>Слишком длинный комментарий. Максимальная длина комментария %n символа.</numerusform>
-            <numerusform>Слишком длинный комментарий. Максимальная длина комментария %n символов.</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>Warning</source>
-        <translation type="vanished">Предупреждение</translation>
-    </message>
-</context>
-<context>
-    <name>aspia::ConsoleStatusBar</name>
-    <message numerus="yes">
-        <source>%n child group(s)</source>
-        <translation type="vanished">
-            <numerusform>%n дочерняя группа</numerusform>
-            <numerusform>%n дочерние группы</numerusform>
-            <numerusform>%n дочерних групп</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>%n child computer(s)</source>
-        <translation type="vanished">
-            <numerusform>%n дочерний компьютер</numerusform>
-            <numerusform>%n дочерних компьютера</numerusform>
-            <numerusform>%n дочерних компьютеров</numerusform>
-        </translation>
-    </message>
-</context>
-<context>
-    <name>aspia::ConsoleWindow</name>
-    <message>
-        <source>Aspia Console</source>
-        <translation type="vanished">Консоль Aspia</translation>
-    </message>
-    <message>
-        <source>Open Address Book</source>
-        <translation type="vanished">Открытие адресной книги</translation>
-    </message>
-    <message>
-        <source>Aspia Address Book (*.aab)</source>
-        <translation type="vanished">Адресная книга Aspia (*.aab)</translation>
-    </message>
-    <message>
-        <source>Close tab</source>
-        <translation type="vanished">Закрыть вкладку</translation>
-    </message>
-    <message>
-        <source>Close other tabs</source>
-        <translation type="vanished">Закрыть другие вкладки</translation>
-    </message>
-    <message>
-        <source>Warning</source>
-        <translation type="vanished">Предупреждение</translation>
-    </message>
-    <message>
-        <source>Pin tab</source>
-        <translation type="vanished">Закрепить вкладку</translation>
-    </message>
-    <message>
-        <source>&lt;empty&gt;</source>
-        <translation type="vanished">&lt;пусто&gt;</translation>
-    </message>
-    <message>
-        <source>Information</source>
-        <translation type="vanished">Информация</translation>
-    </message>
-    <message>
-        <source>Address Book &quot;%1&quot; is already open.</source>
-        <translation type="vanished">Адресная книга &quot;%1&quot; уже открыта.</translation>
-    </message>
-    <message>
-        <source>https://aspia.org/en/help.html</source>
-        <translation type="vanished">https://aspia.org/ru/help.html</translation>
-    </message>
-    <message>
-        <source>Pinned address book file &quot;%1&quot; was not found.&lt;br/&gt;This file will be unpinned.</source>
-        <translation type="vanished">Закрепленный файл адресной книги &quot;%1&quot; не найден.&lt;br/&gt;Этот файл будет откреплен.</translation>
-    </message>
-    <message>
-        <source>Confirmation</source>
-        <translation type="vanished">Подтверждение</translation>
-    </message>
-    <message>
-        <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
-        <translation type="vanished">Адресная книга &quot;%1&quot; изменена. Сохранить изменения?</translation>
-    </message>
-    <message>
-        <source>Hide</source>
-        <translation type="vanished">Спрятать</translation>
-    </message>
-    <message>
-        <source>Show</source>
-        <translation type="vanished">Показать</translation>
-    </message>
-</context>
-<context>
-    <name>aspia::OpenAddressBookDialog</name>
-    <message>
-        <source>Without Encryption</source>
-        <translation type="vanished">Без шифрования</translation>
-    </message>
-    <message>
-        <source>ChaCha20 + Poly1305 (256-bit key)</source>
-        <translation type="vanished">ChaCha20 + Poly1305 (256-битный ключ)</translation>
-    </message>
-</context>
-<context>
     <name>console::AddressBookDialog</name>
     <message>
         <location filename="../address_book_dialog.cc" line="81"/>
@@ -1042,14 +701,6 @@
         <location filename="../address_book_dialog.cc" line="371"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
-    </message>
-    <message numerus="yes">
-        <source>&lt;b&gt;Password you entered does not meet the security requirements!&lt;/b&gt;&lt;br/&gt;The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.&lt;br/&gt;Do you want to enter a different password?</source>
-        <translation type="vanished">
-            <numerusform>&lt;b&gt;Введенный пароль не отвечает требованиям безопасности!&lt;/b&gt;&lt;br/&gt;Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символа.&lt;br/&gt;Вы хотите ввести другой пароль?</numerusform>
-            <numerusform>&lt;b&gt;Введенный пароль не отвечает требованиям безопасности!&lt;/b&gt;&lt;br/&gt;Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символов.&lt;br/&gt;Вы хотите ввести другой пароль?</numerusform>
-            <numerusform>&lt;b&gt;Введенный пароль не отвечает требованиям безопасности!&lt;/b&gt;&lt;br/&gt;Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символов.&lt;br/&gt;Вы хотите ввести другой пароль?</numerusform>
-        </translation>
     </message>
     <message>
         <location filename="../address_book_dialog.cc" line="332"/>
@@ -1155,50 +806,6 @@
 </context>
 <context>
     <name>console::ComputerDialog</name>
-    <message>
-        <source>Desktop Manage</source>
-        <translation type="vanished">Управление рабочим столом</translation>
-    </message>
-    <message>
-        <source>Desktop View</source>
-        <translation type="vanished">Просмотр рабочего стола</translation>
-    </message>
-    <message>
-        <source>File Transfer</source>
-        <translation type="vanished">Передача файлов</translation>
-    </message>
-    <message numerus="yes">
-        <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="vanished">
-            <numerusform>Слишком длинное имя. Максимальная длина имени %n символ.</numerusform>
-            <numerusform>Слишком длинное имя. Максимальная длина имени %n символа.</numerusform>
-            <numerusform>Слишком длинное имя. Максимальная длина имени %n символов.</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>Name can not be empty.</source>
-        <translation type="vanished">Имя не может быть пустым.</translation>
-    </message>
-    <message>
-        <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
-        <translation type="vanished">Имя пользователя не может быть пустым и может содержать только буквы алфавита, цифры и символы &quot;_&quot;,&quot;-&quot;,&quot;.&quot;.</translation>
-    </message>
-    <message numerus="yes">
-        <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation type="vanished">
-            <numerusform>Слишком длинный комментарий. Максимальная длина комментария %n символ.</numerusform>
-            <numerusform>Слишком длинный комментарий. Максимальная длина комментария %n символа.</numerusform>
-            <numerusform>Слишком длинный комментарий. Максимальная длина комментария %n символов.</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>An invalid computer address was entered.</source>
-        <translation type="vanished">Введен некорректный адрес компьютера.</translation>
-    </message>
-    <message>
-        <source>Warning</source>
-        <translation type="vanished">Предупреждение</translation>
-    </message>
     <message>
         <location filename="../computer_dialog.cc" line="164"/>
         <source>General</source>
@@ -1367,10 +974,6 @@
         <location filename="../console_window.cc" line="251"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Адресная книга Aspia (*.aab)</translation>
-    </message>
-    <message>
-        <source>https://aspia.org/en/help.html</source>
-        <translation type="vanished">https://aspia.org/ru/help.html</translation>
     </message>
     <message>
         <location filename="../console_window.cc" line="479"/>

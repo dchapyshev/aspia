@@ -94,10 +94,6 @@
         <translation>Adresse</translation>
     </message>
     <message>
-        <source>Port</source>
-        <translation type="vanished">Port</translation>
-    </message>
-    <message>
         <location filename="../address_book_tab.ui" line="105"/>
         <source>Comment</source>
         <translation type="unfinished"></translation>
@@ -119,38 +115,6 @@
         <location filename="../computer_dialog.ui" line="17"/>
         <source>Computer Properties</source>
         <translation>Computereigenschaften</translation>
-    </message>
-    <message>
-        <source>Name:</source>
-        <translation type="vanished">Name:</translation>
-    </message>
-    <message>
-        <source>Parent Group:</source>
-        <translation type="vanished">Elterngruppe:</translation>
-    </message>
-    <message>
-        <source>Address:</source>
-        <translation type="vanished">Adresse:</translation>
-    </message>
-    <message>
-        <source>Port:</source>
-        <translation type="vanished">Port:</translation>
-    </message>
-    <message>
-        <source>User Name:</source>
-        <translation type="vanished">Benutzername:</translation>
-    </message>
-    <message>
-        <source>Password:</source>
-        <translation type="vanished">Kennwort:</translation>
-    </message>
-    <message>
-        <source>Session Configuration:</source>
-        <translation type="vanished">Sitzungskonfiguration:</translation>
-    </message>
-    <message>
-        <source>Comment:</source>
-        <translation type="vanished">Kommentar:</translation>
     </message>
 </context>
 <context>
@@ -660,231 +624,6 @@
     </message>
 </context>
 <context>
-    <name>aspia::AddressBookDialog</name>
-    <message>
-        <source>Without Encryption</source>
-        <translation type="vanished">Ohne Verschlüsselung</translation>
-    </message>
-    <message>
-        <source>Double-click to change</source>
-        <translation type="vanished">Doppelklicken, um zu ändern</translation>
-    </message>
-    <message>
-        <source>Name can not be empty.</source>
-        <translation type="vanished">Name kann nicht leer sein.</translation>
-    </message>
-    <message>
-        <source>The passwords you entered do not match.</source>
-        <translation type="vanished">Die eingegebenen Kennwörter stimmen nicht überein.</translation>
-    </message>
-    <message numerus="yes">
-        <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="vanished">
-            <numerusform>Zu langer Name. Die maximale Länge des Namens beträgt %n Zeichen.</numerusform>
-            <numerusform></numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation type="vanished">
-            <numerusform>Zu langer Kommentar. Die maximale Länge des Kommentars beträgt %n Zeichen.</numerusform>
-            <numerusform></numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>Confirmation</source>
-        <translation type="vanished">Bestätigung</translation>
-    </message>
-    <message>
-        <source>At change the size of hashing salt, you will need to re-enter the password. Continue?</source>
-        <translation type="vanished">Um die Größe des Hashing-Salzes zu ändern, müssen Sie das Kennwort erneut eingeben. Fortsetzen?</translation>
-    </message>
-    <message>
-        <source>Warning</source>
-        <translation type="vanished">Warnung</translation>
-    </message>
-</context>
-<context>
-    <name>aspia::AddressBookTab</name>
-    <message>
-        <source>The address book file is corrupted or has an unknown format.</source>
-        <translation type="vanished">Die Adressbuchdatei ist beschädigt oder hat ein unbekanntes Format.</translation>
-    </message>
-    <message>
-        <source>Unable to decrypt the address book with the specified password.</source>
-        <translation type="vanished">Das Adressbuch kann nicht mit dem angegebenen Kennwort entschlüsselt werden.</translation>
-    </message>
-    <message>
-        <source>The address book file is encrypted with an unsupported encryption type.</source>
-        <translation type="vanished">Die Adressbuchdatei ist mit einem nicht unterstützten Verschlüsselungstyp verschlüsselt.</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to delete computer group &quot;%1&quot; and all child items?</source>
-        <translation type="vanished">Möchten Sie die Computergruppe &quot;%1&quot; und alle Kindelemente wirklich löschen?</translation>
-    </message>
-    <message>
-        <source>Confirmation</source>
-        <translation type="vanished">Bestätigung</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
-        <translation type="vanished">Möchten Sie den Computer &quot;%1&quot; wirklich löschen?</translation>
-    </message>
-    <message>
-        <source>Save Address Book</source>
-        <translation type="vanished">Adressbuch speichern</translation>
-    </message>
-    <message>
-        <source>Aspia Address Book (*.aab)</source>
-        <translation type="vanished">Aspia Adressbuch (*.aab)</translation>
-    </message>
-    <message>
-        <source>Unable to create or open address book file.</source>
-        <translation type="vanished">Die Adressbuchdatei konnte nicht erstellt oder geöffnet werden.</translation>
-    </message>
-    <message>
-        <source>Unable to write address book file.</source>
-        <translation type="vanished">Die Adressbuchdatei konnte nicht geschrieben werden.</translation>
-    </message>
-    <message>
-        <source>Warning</source>
-        <translation type="vanished">Warnung</translation>
-    </message>
-    <message>
-        <source>Could not open address book</source>
-        <translation type="vanished">Adressbuch konnte nicht geöffnet werden</translation>
-    </message>
-    <message>
-        <source>Failed to save address book</source>
-        <translation type="vanished">Speichern des Adressbuchs fehlgeschlagen</translation>
-    </message>
-</context>
-<context>
-    <name>aspia::ComputerDialog</name>
-    <message>
-        <source>Desktop Manage</source>
-        <translation type="vanished">Desktopverwaltung</translation>
-    </message>
-    <message>
-        <source>Desktop View</source>
-        <translation type="vanished">Desktopansicht</translation>
-    </message>
-    <message>
-        <source>File Transfer</source>
-        <translation type="vanished">Dateiübertragung</translation>
-    </message>
-    <message numerus="yes">
-        <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="vanished">
-            <numerusform>Zu langer Name. Die maximale Länge des Namens beträgt %n Zeichen.</numerusform>
-            <numerusform></numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>Name can not be empty.</source>
-        <translation type="vanished">Name darf nicht leer sein.</translation>
-    </message>
-    <message>
-        <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
-        <translation type="vanished">Der Benutzername darf nicht leer sein und darf nur Buchstaben, Zahlen und folgende Zeichen: &quot;_&quot;,&quot;-&quot;,&quot;.&quot; beinhalten.</translation>
-    </message>
-    <message numerus="yes">
-        <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation type="vanished">
-            <numerusform>Zu langer Kommentar. Die maximale Länge des Kommentars beträgt %n Zeichen.</numerusform>
-            <numerusform></numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>Warning</source>
-        <translation type="vanished">Warnung</translation>
-    </message>
-</context>
-<context>
-    <name>aspia::ComputerGroupDialog</name>
-    <message numerus="yes">
-        <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="vanished">
-            <numerusform>Zu langer Name. Die maximale Länge des Namens beträgt %n Zeichen.</numerusform>
-            <numerusform></numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>Name can not be empty.</source>
-        <translation type="vanished">Name darf nicht leer sein.</translation>
-    </message>
-    <message numerus="yes">
-        <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation type="vanished">
-            <numerusform>Zu langer Kommentar. Die maximale Länge des Kommentars beträgt %n Zeichen.</numerusform>
-            <numerusform></numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>Warning</source>
-        <translation type="vanished">Warnung</translation>
-    </message>
-</context>
-<context>
-    <name>aspia::ConsoleStatusBar</name>
-    <message numerus="yes">
-        <source>%n child group(s)</source>
-        <translation type="vanished">
-            <numerusform>%n Kindgruppe(n)</numerusform>
-            <numerusform></numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>%n child computer(s)</source>
-        <translation type="vanished">
-            <numerusform>%n Kindcomputer</numerusform>
-            <numerusform></numerusform>
-        </translation>
-    </message>
-</context>
-<context>
-    <name>aspia::ConsoleWindow</name>
-    <message>
-        <source>Open Address Book</source>
-        <translation type="vanished">Adressbuch öffnen</translation>
-    </message>
-    <message>
-        <source>Aspia Address Book (*.aab)</source>
-        <translation type="vanished">Aspia Adressbuch (*.aab)</translation>
-    </message>
-    <message>
-        <source>Warning</source>
-        <translation type="obsolete">Warnung</translation>
-    </message>
-    <message>
-        <source>Information</source>
-        <translation type="vanished">Information</translation>
-    </message>
-    <message>
-        <source>Address Book &quot;%1&quot; is already open.</source>
-        <translation type="vanished">Adressbuch &quot;%1&quot; ist bereits geöffnet.</translation>
-    </message>
-    <message>
-        <source>https://aspia.org/en/help.html</source>
-        <translation type="vanished">https://aspia.org/en/help.html</translation>
-    </message>
-    <message>
-        <source>Confirmation</source>
-        <translation type="vanished">Bestätigung</translation>
-    </message>
-    <message>
-        <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
-        <translation type="vanished">Adressbuch &quot;%1&quot; wurde geändert. Änderungen speichern?</translation>
-    </message>
-</context>
-<context>
-    <name>aspia::OpenAddressBookDialog</name>
-    <message>
-        <source>Without Encryption</source>
-        <translation type="vanished">Ohne Verschlüsselung</translation>
-    </message>
-</context>
-<context>
     <name>console::AddressBookDialog</name>
     <message>
         <location filename="../address_book_dialog.cc" line="81"/>
@@ -1064,40 +803,6 @@
 <context>
     <name>console::ComputerDialog</name>
     <message>
-        <source>Desktop Manage</source>
-        <translation type="obsolete">Desktopverwaltung</translation>
-    </message>
-    <message>
-        <source>Desktop View</source>
-        <translation type="obsolete">Desktopansicht</translation>
-    </message>
-    <message>
-        <source>File Transfer</source>
-        <translation type="obsolete">Dateiübertragung</translation>
-    </message>
-    <message numerus="yes">
-        <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="obsolete">
-            <numerusform>Zu langer Name. Die maximale Länge des Namens beträgt %n Zeichen.</numerusform>
-            <numerusform></numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
-        <translation type="obsolete">Der Benutzername darf nicht leer sein und darf nur Buchstaben, Zahlen und folgende Zeichen: &quot;_&quot;,&quot;-&quot;,&quot;.&quot; beinhalten.</translation>
-    </message>
-    <message numerus="yes">
-        <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation type="obsolete">
-            <numerusform>Zu langer Kommentar. Die maximale Länge des Kommentars beträgt %n Zeichen.</numerusform>
-            <numerusform></numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>Warning</source>
-        <translation type="obsolete">Warnung</translation>
-    </message>
-    <message>
         <location filename="../computer_dialog.cc" line="164"/>
         <source>General</source>
         <translation type="unfinished">Allgemeines</translation>
@@ -1259,10 +964,6 @@
         <location filename="../console_window.cc" line="251"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation type="unfinished">Aspia Adressbuch (*.aab)</translation>
-    </message>
-    <message>
-        <source>https://aspia.org/en/help.html</source>
-        <translation type="obsolete">https://aspia.org/en/help.html</translation>
     </message>
     <message>
         <location filename="../console_window.cc" line="479"/>
