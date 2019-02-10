@@ -35,53 +35,6 @@
     </message>
 </context>
 <context>
-    <name>aspia::AboutDialog</name>
-    <message>
-        <source>Version: %1</source>
-        <translation type="vanished">Версія: %1</translation>
-    </message>
-    <message>
-        <source>Aspia is free software released under GNU General Public License 3.</source>
-        <translation type="vanished">Aspia - вільне програмне забезпечення, випущене під ліцензією GNU General Public License 3.</translation>
-    </message>
-    <message>
-        <source>You can get a copy of license here:</source>
-        <translation type="vanished">Переглянути ліцензію:</translation>
-    </message>
-    <message>
-        <source>You can also get a translation of GNU GPL license here:</source>
-        <translation type="vanished">Переглянути переклад ліцензії GNU GPL:</translation>
-    </message>
-    <message>
-        <source>Links:</source>
-        <translation type="vanished">Посилання:</translation>
-    </message>
-    <message>
-        <source>Home page:</source>
-        <translation type="vanished">Домашня сторінка:</translation>
-    </message>
-    <message>
-        <source>GitHub page:</source>
-        <translation type="vanished">Сторінка GitHub:</translation>
-    </message>
-    <message>
-        <source>Developers:</source>
-        <translation type="vanished">Розробники:</translation>
-    </message>
-    <message>
-        <source>Translators:</source>
-        <translation type="vanished">Перекладачі:</translation>
-    </message>
-    <message>
-        <source>Third-party components:</source>
-        <translation type="vanished">Сторонні компоненти:</translation>
-    </message>
-    <message>
-        <source>https://aspia.org/en/donate.html</source>
-        <translation type="vanished">https://aspia.org/en/donate.html</translation>
-    </message>
-</context>
-<context>
     <name>common::AboutDialog</name>
     <message>
         <location filename="../ui/about_dialog.cc" line="88"/>
@@ -152,10 +105,6 @@
         <location filename="../ui/about_dialog.cc" line="135"/>
         <source>%1 version: %2</source>
         <translation>%1 версія: %2</translation>
-    </message>
-    <message>
-        <source>https://aspia.org/en/donate.html</source>
-        <translation type="obsolete">https://aspia.org/en/donate.html</translation>
     </message>
 </context>
 </TS>
