@@ -23,7 +23,9 @@
 #define ASPIA_VERSION_MINOR 1
 #define ASPIA_VERSION_PATCH 0
 
-#define ASPIA_VERSION_POSTFIX "dev"
+#if 0
+#define ASPIA_VERSION_POSTFIX ""
+#endif
 
 #define STR_HELPER_INTERNAL(x) #x
 #define STR_INTERNAL(x) STR_HELPER_INTERNAL(x)
