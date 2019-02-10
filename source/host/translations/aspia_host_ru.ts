@@ -133,18 +133,6 @@
         <translation>Сервер:</translation>
     </message>
     <message>
-        <source>Remote Update</source>
-        <translation type="vanished">Удаленное обновление</translation>
-    </message>
-    <message>
-        <source>Allow remote update</source>
-        <translation type="vanished">Разрешить удаленное обновление</translation>
-    </message>
-    <message>
-        <source>Note: Users with access to desktop management will be able to update the program.</source>
-        <translation type="vanished">Примечание: пользователи с доступом к управлению рабочим столом смогут обновить программу.</translation>
-    </message>
-    <message>
         <location filename="../ui/host_config_dialog.ui" line="365"/>
         <source>Check for updates</source>
         <translation>Проверить обновления</translation>
@@ -212,175 +200,6 @@
     </message>
 </context>
 <context>
-    <name>aspia::HostConfigDialog</name>
-    <message>
-        <source>Warning</source>
-        <translation type="vanished">Предупреждение</translation>
-    </message>
-    <message>
-        <source>Source file does not exist: %1</source>
-        <translation type="vanished">Исходный файл не существует: %1</translation>
-    </message>
-    <message>
-        <source>Confirmation</source>
-        <translation type="vanished">Подтверждение</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to delete user &quot;%1&quot;?</source>
-        <translation type="vanished">Вы действительно хотите удалить пользователя &quot;%1&quot;?</translation>
-    </message>
-    <message>
-        <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
-        <translation type="vanished">Конфигурация не может быть записана. Проверьте имеются ли у вас достаточные права для записи.</translation>
-    </message>
-    <message>
-        <source>Service configuration changed. For the changes to take effect, you must restart the service. Restart the service now?</source>
-        <translation type="vanished">Конфигурация службы изменена. Для принятия изменений требуется перезапуск службы. Перезапустить сейчас?</translation>
-    </message>
-    <message>
-        <source>Could not write destination file. Verify that you have the necessary rights to write the file.</source>
-        <translation type="vanished">Не удалось записать файл назначения. Проверьте наличие необходимых прав для записи файла.</translation>
-    </message>
-    <message>
-        <source>Information</source>
-        <translation type="vanished">Информация</translation>
-    </message>
-    <message>
-        <source>The configuration was successfully imported.</source>
-        <translation type="vanished">Конфигурация успешно импортирована.</translation>
-    </message>
-    <message>
-        <source>Import</source>
-        <translation type="vanished">Импорт</translation>
-    </message>
-    <message>
-        <source>XML-files (*.xml)</source>
-        <translation type="vanished">XML-файлы (*.xml)</translation>
-    </message>
-    <message>
-        <source>Export</source>
-        <translation type="vanished">Экспорт</translation>
-    </message>
-    <message>
-        <source>Remove</source>
-        <translation type="vanished">Удалить</translation>
-    </message>
-    <message>
-        <source>Started</source>
-        <translation type="vanished">Запущена</translation>
-    </message>
-    <message>
-        <source>Stop</source>
-        <translation type="vanished">Остановить</translation>
-    </message>
-    <message>
-        <source>Not started</source>
-        <translation type="vanished">Не запущена</translation>
-    </message>
-    <message>
-        <source>Start</source>
-        <translation type="vanished">Запустить</translation>
-    </message>
-    <message>
-        <source>Installed</source>
-        <translation type="vanished">Установлена</translation>
-    </message>
-    <message>
-        <source>Not installed</source>
-        <translation type="vanished">Не установлена</translation>
-    </message>
-    <message>
-        <source>Install</source>
-        <translation type="vanished">Установить</translation>
-    </message>
-    <message>
-        <source>Current state: %1</source>
-        <translation type="vanished">Текущее состояние: %1</translation>
-    </message>
-    <message>
-        <source>The service could not be installed.</source>
-        <translation type="vanished">Не удалось установить службу.</translation>
-    </message>
-    <message>
-        <source>Could not access the service.</source>
-        <translation type="vanished">Не удалось получить доступ к службе.</translation>
-    </message>
-    <message>
-        <source>The service could not be removed.</source>
-        <translation type="vanished">Не удалось удалить службу.</translation>
-    </message>
-    <message>
-        <source>The service could not be started.</source>
-        <translation type="vanished">Не удалось запустить службу.</translation>
-    </message>
-    <message>
-        <source>The service could not be stopped.</source>
-        <translation type="vanished">Не удалось остановить службу.</translation>
-    </message>
-</context>
-<context>
-    <name>aspia::HostNotifierWindow</name>
-    <message>
-        <source>Disconnect</source>
-        <translation type="vanished">Отключить</translation>
-    </message>
-</context>
-<context>
-    <name>aspia::UserDialog</name>
-    <message>
-        <source>Double-click to change</source>
-        <translation type="vanished">Двойной щелчок для изменения</translation>
-    </message>
-    <message>
-        <source>Desktop Manage</source>
-        <translation type="vanished">Управление рабочим столом</translation>
-    </message>
-    <message>
-        <source>Desktop View</source>
-        <translation type="vanished">Просмотр рабочего стола</translation>
-    </message>
-    <message>
-        <source>File Transfer</source>
-        <translation type="vanished">Передача файлов</translation>
-    </message>
-    <message>
-        <source>Warning</source>
-        <translation type="vanished">Предупреждение</translation>
-    </message>
-    <message>
-        <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
-        <translation type="vanished">Имя пользователя не может быть пустым и может содержать только буквы алфавита, цифры и символы &quot;_&quot;,&quot;-&quot;,&quot;.&quot;.</translation>
-    </message>
-    <message>
-        <source>The username you entered already exists.</source>
-        <translation type="vanished">Введенное имя пользователя уже существует.</translation>
-    </message>
-    <message>
-        <source>The passwords you entered do not match.</source>
-        <translation type="vanished">Введенные пароли не совпадают.</translation>
-    </message>
-    <message numerus="yes">
-        <source>Password can not be empty and should not exceed %n characters.</source>
-        <translation type="vanished">
-            <numerusform>Пароль не может быть пустой и не должен превышать %n символ.</numerusform>
-            <numerusform>Пароль не может быть пустой и не должен превышать %n символа.</numerusform>
-            <numerusform>Пароль не может быть пустой и не должен превышать %n символов.</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>&lt;b&gt;Password you entered does not meet the security requirements!&lt;/b&gt;&lt;br/&gt;The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.&lt;br/&gt;Do you want to enter a different password?</source>
-        <translation type="vanished">
-            <numerusform>&lt;b&gt;Введенный пароль не отвечает требованиям безопасности!&lt;/b&gt;&lt;br/&gt;Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символа.&lt;br/&gt;Вы хотите ввести другой пароль?</numerusform>
-            <numerusform>&lt;b&gt;Введенный пароль не отвечает требованиям безопасности!&lt;/b&gt;&lt;br/&gt;Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символов.&lt;br/&gt;Вы хотите ввести другой пароль?</numerusform>
-            <numerusform>&lt;b&gt;Введенный пароль не отвечает требованиям безопасности!&lt;/b&gt;&lt;br/&gt;Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символов.&lt;br/&gt;Вы хотите ввести другой пароль?</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>Unknown internal error when creating or modifying a user.</source>
-        <translation type="vanished">Неизвестная внутренняя ошибка при создании или изменении пользователя.</translation>
-    </message>
-</context>
-<context>
     <name>host::HostConfigDialog</name>
     <message>
         <location filename="../ui/host_config_dialog.cc" line="317"/>
@@ -398,10 +217,6 @@
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <source>Source file does not exist: %1</source>
-        <translation type="vanished">Исходный файл не существует: %1</translation>
-    </message>
-    <message>
         <location filename="../ui/host_config_dialog.cc" line="116"/>
         <location filename="../ui/host_config_dialog.cc" line="132"/>
         <source>Information</source>
@@ -411,10 +226,6 @@
         <location filename="../ui/host_config_dialog.cc" line="117"/>
         <source>The configuration was successfully imported.</source>
         <translation>Конфигурация успешно импортирована.</translation>
-    </message>
-    <message>
-        <source>Could not write destination file. Verify that you have the necessary rights to write the file.</source>
-        <translation type="vanished">Не удалось записать файл назначения. Проверьте наличие необходимых прав для записи файла.</translation>
     </message>
     <message>
         <location filename="../ui/host_config_dialog.cc" line="133"/>
@@ -631,14 +442,6 @@
         <location filename="../ui/user_dialog.cc" line="193"/>
         <source>Do you want to enter a different password?</source>
         <translation>Вы хотите ввести другой пароль?</translation>
-    </message>
-    <message numerus="yes">
-        <source>&lt;b&gt;Password you entered does not meet the security requirements!&lt;/b&gt;&lt;br/&gt;The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.&lt;br/&gt;Do you want to enter a different password?</source>
-        <translation type="vanished">
-            <numerusform>&lt;b&gt;Введенный пароль не отвечает требованиям безопасности!&lt;/b&gt;&lt;br/&gt;Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символа.&lt;br/&gt;Вы хотите ввести другой пароль?</numerusform>
-            <numerusform>&lt;b&gt;Введенный пароль не отвечает требованиям безопасности!&lt;/b&gt;&lt;br/&gt;Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символов.&lt;br/&gt;Вы хотите ввести другой пароль?</numerusform>
-            <numerusform>&lt;b&gt;Введенный пароль не отвечает требованиям безопасности!&lt;/b&gt;&lt;br/&gt;Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символов.&lt;br/&gt;Вы хотите ввести другой пароль?</numerusform>
-        </translation>
     </message>
     <message>
         <location filename="../ui/user_dialog.cc" line="215"/>

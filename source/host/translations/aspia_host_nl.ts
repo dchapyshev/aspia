@@ -200,71 +200,6 @@
     </message>
 </context>
 <context>
-    <name>aspia::HostConfigDialog</name>
-    <message>
-        <source>Warning</source>
-        <translation type="vanished">Waarschuwing</translation>
-    </message>
-    <message>
-        <source>Confirmation</source>
-        <translation type="vanished">Bevestiging</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to delete user &quot;%1&quot;?</source>
-        <translation type="vanished">Weet U zeker dat U de gebruiker &quot;%1&quot; wilt verwijderen?</translation>
-    </message>
-    <message>
-        <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
-        <translation type="vanished">De configuratie kon niet worden weggeschreven. Zorg dat U genoeg rechten heeft om te schrijven.</translation>
-    </message>
-    <message>
-        <source>Service configuration changed. For the changes to take effect, you must restart the service. Restart the service now?</source>
-        <translation type="vanished">Service configuratie veranderd. Om de wijzigingen toe te passen, moet de service herstart worden. Nu herstarten?</translation>
-    </message>
-</context>
-<context>
-    <name>aspia::HostNotifierWindow</name>
-    <message>
-        <source>Disconnect</source>
-        <translation type="vanished">Verbinding verbreken</translation>
-    </message>
-</context>
-<context>
-    <name>aspia::UserDialog</name>
-    <message>
-        <source>Double-click to change</source>
-        <translation type="vanished">Dubbelklik om te wijzigen</translation>
-    </message>
-    <message>
-        <source>Desktop Manage</source>
-        <translation type="vanished">Bureaublad Beheren</translation>
-    </message>
-    <message>
-        <source>Desktop View</source>
-        <translation type="vanished">Bureaublad Weergeven</translation>
-    </message>
-    <message>
-        <source>File Transfer</source>
-        <translation type="vanished">Bestands Overdracht</translation>
-    </message>
-    <message>
-        <source>Warning</source>
-        <translation type="vanished">Waarschuwing</translation>
-    </message>
-    <message>
-        <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
-        <translation type="vanished">De gebruikersnaam mag niet leeg zijn, en alleen karakters uit het alfabet, nummers, _, -, . karakters bevatten.</translation>
-    </message>
-    <message>
-        <source>The username you entered already exists.</source>
-        <translation type="vanished">De ingevoerde gebruikersnaam bestaat al.</translation>
-    </message>
-    <message>
-        <source>The passwords you entered do not match.</source>
-        <translation type="vanished">De ingevoerde wachtwoorden komen niet overeen.</translation>
-    </message>
-</context>
-<context>
     <name>host::HostConfigDialog</name>
     <message>
         <location filename="../ui/host_config_dialog.cc" line="317"/>
@@ -282,10 +217,6 @@
         <translation>Waarschuwing</translation>
     </message>
     <message>
-        <source>Source file does not exist: %1</source>
-        <translation type="vanished">Bron bestand bestaat niet: %1</translation>
-    </message>
-    <message>
         <location filename="../ui/host_config_dialog.cc" line="116"/>
         <location filename="../ui/host_config_dialog.cc" line="132"/>
         <source>Information</source>
@@ -295,10 +226,6 @@
         <location filename="../ui/host_config_dialog.cc" line="117"/>
         <source>The configuration was successfully imported.</source>
         <translation>De configuratie is successvol geimporteerd.</translation>
-    </message>
-    <message>
-        <source>Could not write destination file. Verify that you have the necessary rights to write the file.</source>
-        <translation type="vanished">Kon het doelbestand niet schrijven. Controleer dat U de benodigde rechten hebt.</translation>
     </message>
     <message>
         <location filename="../ui/host_config_dialog.cc" line="133"/>
