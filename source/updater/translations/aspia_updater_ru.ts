@@ -58,52 +58,6 @@
     </message>
 </context>
 <context>
-    <name>aspia::DownloadDialog</name>
-    <message>
-        <source>Warning</source>
-        <translation type="vanished">Предупреждение</translation>
-    </message>
-    <message>
-        <source>An error occurred while downloading the update: %1</source>
-        <translation type="vanished">Произошла ошибка при загрузке обновления: %1</translation>
-    </message>
-</context>
-<context>
-    <name>aspia::UpdateDialog</name>
-    <message>
-        <source>Unknown</source>
-        <translation type="vanished">Неизвестно</translation>
-    </message>
-    <message>
-        <source>Error retrieving update information.</source>
-        <translation type="vanished">Ошибка при получении информации об обновлении.</translation>
-    </message>
-    <message>
-        <source>No updates available.</source>
-        <translation type="vanished">Нет доступных обновлений.</translation>
-    </message>
-    <message>
-        <source>Receiving information...</source>
-        <translation type="vanished">Получение информации...</translation>
-    </message>
-    <message>
-        <source>Confirmation</source>
-        <translation type="vanished">Подтвеждение</translation>
-    </message>
-    <message>
-        <source>An update will be downloaded. After the download is complete, the application will automatically close. All unsaved data will be lost.&lt;br/&gt;Continue?</source>
-        <translation type="vanished">Обновление будет загружено. После завершения загрузки приложение будет автоматически закрыто. Все несораненные данные будут потеряны.&lt;br/&gt;Продолжить?</translation>
-    </message>
-    <message>
-        <source>Warning</source>
-        <translation type="vanished">Предупреждение</translation>
-    </message>
-    <message>
-        <source>An error occurred while installing the update: %1</source>
-        <translation type="vanished">Произошла ошибка при установке обновления: %1</translation>
-    </message>
-</context>
-<context>
     <name>updater::DownloadDialog</name>
     <message>
         <location filename="../download_dialog.cc" line="51"/>
@@ -167,10 +121,6 @@
         <location filename="../update_dialog.cc" line="156"/>
         <source>Confirmation</source>
         <translation>Подтвеждение</translation>
-    </message>
-    <message>
-        <source>An update will be downloaded. After the download is complete, the application will automatically close. All unsaved data will be lost.&lt;br/&gt;Continue?</source>
-        <translation type="vanished">Обновление будет загружено. После завершения загрузки приложение будет автоматически закрыто. Все несораненные данные будут потеряны.&lt;br/&gt;Продолжить?</translation>
     </message>
     <message>
         <location filename="../update_dialog.cc" line="166"/>
