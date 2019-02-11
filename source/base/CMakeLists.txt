@@ -96,16 +96,22 @@ list(APPEND SOURCE_BASE_WIN
     win/session_watcher.cc
     win/session_watcher.h)
 
+list(APPEND SOURCE_BASE_WIN_UNIT_TESTS
+    win/registry_unittest.cc)
+
 source_group("" FILES ${SOURCE_BASE})
 source_group("" FILES ${SOURCE_BASE_UNIT_TESTS})
 source_group(win FILES ${SOURCE_BASE_WIN})
+source_group(win FILES ${SOURCE_BASE_WIN_UNIT_TESTS})
 
 add_library(aspia_base STATIC ${SOURCE_BASE} ${SOURCE_BASE_WIN})
 target_link_libraries(aspia_base ${THIRD_PARTY_LIBS})
 
 # If the build of unit tests is enabled.
 if (BUILD_UNIT_TESTS)
-    add_executable(aspia_base_tests ${SOURCE_BASE_UNIT_TESTS})
+    add_executable(aspia_base_tests
+        ${SOURCE_BASE_UNIT_TESTS}
+        ${SOURCE_BASE_WIN_UNIT_TESTS})
     target_link_libraries(aspia_base_tests
         aspia_base
         optimized gtest
