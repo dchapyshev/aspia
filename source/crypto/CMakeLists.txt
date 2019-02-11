@@ -45,6 +45,8 @@ list(APPEND SOURCE_CRYPTO
     srp_math.h)
 
 list(APPEND SOURCE_CRYPTO_UNIT_TESTS
+    crypto_tests_main.cc
+    generic_hash_unittest.cc
     srp_math_unittest.cc)
 
 source_group("" FILES ${SOURCE_CRYPTO} ${SOURCE_CRYPTO_UNIT_TESTS})

@@ -20,7 +20,6 @@
 
 #include <QString>
 
-#include "crypto/scoped_crypto_initializer.h"
 #include "crypto/srp_constants.h"
 #include "crypto/srp_math.h"
 
@@ -28,9 +27,6 @@ namespace crypto {
 
 TEST(srp_math_test, test_vector)
 {
-    ScopedCryptoInitializer crypto_initializer;
-    ASSERT_TRUE(crypto_initializer.isSucceeded());
-
     QString I = "alice";
     QString p = "password123";
 
