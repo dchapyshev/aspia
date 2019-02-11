@@ -71,7 +71,7 @@ bool isValidHostName(const QString& host)
 
 bool isValidPort(uint16_t port)
 {
-    return (port != 0 && port < std::numeric_limits<uint16_t>::max());
+    return (port != 0 && port <= std::numeric_limits<uint16_t>::max());
 }
 
 bool isValidPort(const QString& str)
