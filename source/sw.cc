@@ -24,6 +24,7 @@ void build(Solution &s)
         t.setRootDirectory(name);
         t += ".*"_rr;
         t -= ".*_unittest.*"_rr;
+        t -= ".*_tests.*"_rr;
         return t;
     };
 
@@ -37,7 +38,7 @@ void build(Solution &s)
     setup_target(base, "base");
     base.Public += "UNICODE"_def;
     base.Public += "NOMINMAX"_def;
-    base.Public += "org.sw.demo.qtproject.qt.base.core-*"_dep;
+    base.Public += "org.sw.demo.qtproject.qt.base.widgets-*"_dep;
     base.Public += "org.sw.demo.qtproject.qt.base.xml-*"_dep;
     base.Public += "org.sw.demo.boost.align-1"_dep;
 
@@ -48,7 +49,7 @@ void build(Solution &s)
 
     auto &protocol = aspia.addStaticLibrary("proto");
     protocol += "proto/.*\\.proto"_rr;
-    for (const auto &[p, _] : protocol[FileRegex(protocol.SourceDir / "proto", std::regex(".*\\.proto"))])
+    for (const auto &[p, _] : protocol[FileRegex(protocol.SourceDir / "proto", ".*\\.proto", false)])
         gen_protobuf("org.sw.demo.google.protobuf-3"_dep, protocol, p, true, "proto");
 
     auto &codec = add_lib("codec");
