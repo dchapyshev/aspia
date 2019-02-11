@@ -46,6 +46,8 @@ list(APPEND SOURCE_CRYPTO
 
 list(APPEND SOURCE_CRYPTO_UNIT_TESTS
     crypto_tests_main.cc
+    cryptor_unittest.cc
+    data_cryptor_unittest.cc
     generic_hash_unittest.cc
     password_hash_unittest.cc
     srp_math_unittest.cc)
