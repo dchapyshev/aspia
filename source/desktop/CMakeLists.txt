@@ -71,16 +71,24 @@ list(APPEND SOURCE_DESKTOP_WIN
     win/wallpaper_disabler.cc
     win/wallpaper_disabler.h)
 
+list(APPEND SOURCE_DESKTOP_WIN_UNIT_TESTS
+    win/cursor_unittest.cc
+    win/cursor_unittest_resources.h
+    win/cursor_unittest_resources.rc)
+
 source_group("" FILES ${SOURCE_DESKTOP})
 source_group("" FILES ${SOURCE_DESKTOP_UNIT_TESTS})
 source_group(win FILES ${SOURCE_DESKTOP_WIN})
+source_group(win FILES ${SOURCE_DESKTOP_WIN_UNIT_TESTS})
 
 add_library(aspia_desktop STATIC ${SOURCE_DESKTOP} ${SOURCE_DESKTOP_WIN})
 target_link_libraries(aspia_desktop aspia_base ${THIRD_PARTY_LIBS})
 
 # If the build of unit tests is enabled.
 if (BUILD_UNIT_TESTS)
-    add_executable(aspia_desktop_tests ${SOURCE_DESKTOP_UNIT_TESTS})
+    add_executable(aspia_desktop_tests
+        ${SOURCE_DESKTOP_UNIT_TESTS}
+        ${SOURCE_DESKTOP_WIN_UNIT_TESTS})
     target_link_libraries(aspia_desktop_tests
         aspia_base
         aspia_desktop
