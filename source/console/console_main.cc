@@ -17,6 +17,7 @@
 //
 
 #include <QCommandLineParser>
+#include <QMessageBox>
 
 #if defined(QT_STATIC)
 
@@ -125,11 +126,26 @@ int runApplication(int argc, char *argv[])
         QString session_type = parser.value(session_type_option);
 
         if (session_type == QLatin1String("desktop-manage"))
+        {
             connect_data.session_type = proto::SESSION_TYPE_DESKTOP_MANAGE;
+        }
         else if (session_type == QLatin1String("desktop-view"))
+        {
             connect_data.session_type = proto::SESSION_TYPE_DESKTOP_VIEW;
+        }
         else if (session_type == QLatin1String("file-transfer"))
+        {
             connect_data.session_type = proto::SESSION_TYPE_FILE_TRANSFER;
+        }
+        else
+        {
+            QMessageBox::warning(
+                nullptr,
+                QApplication::translate("Console", "Warning"),
+                QApplication::translate("Console", "Incorrect session type entered."),
+                QMessageBox::Ok);
+            return 1;
+        }
 
         if (!client::ClientWindow::connectToHost(&connect_data))
             return 0;
