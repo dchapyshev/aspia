@@ -97,7 +97,8 @@ list(APPEND SOURCE_BASE_WIN
     win/session_watcher.h)
 
 list(APPEND SOURCE_BASE_WIN_UNIT_TESTS
-    win/registry_unittest.cc)
+    win/registry_unittest.cc
+    win/scoped_object_unittest.cc)
 
 source_group("" FILES ${SOURCE_BASE})
 source_group("" FILES ${SOURCE_BASE_UNIT_TESTS})
