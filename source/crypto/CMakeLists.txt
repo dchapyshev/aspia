@@ -29,6 +29,8 @@ list(APPEND SOURCE_CRYPTO
     data_cryptor_chacha20_poly1305.h
     generic_hash.cc
     generic_hash.h
+    large_number_increment.cc
+    large_number_increment.h
     openssl_util.cc
     openssl_util.h
     password_hash.cc

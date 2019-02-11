@@ -21,6 +21,7 @@
 #include <openssl/evp.h>
 
 #include "base/logging.h"
+#include "crypto/large_number_increment.h"
 
 namespace crypto {
 
@@ -66,44 +67,6 @@ EVP_CIPHER_CTX_ptr createCipher(const QByteArray& key, int type)
     }
 
     return ctx;
-}
-
-void incrementNonce(uint8_t* nonce)
-{
-    const union
-    {
-        long one;
-        char little;
-    } is_endian = { 1 };
-
-    if (is_endian.little || (reinterpret_cast<size_t>(nonce) % sizeof(size_t)) != 0)
-    {
-        uint32_t n = kIVSize;
-        uint32_t c = 1;
-
-        do
-        {
-            --n;
-            c += nonce[n];
-            nonce[n] = static_cast<uint8_t>(c);
-            c >>= 8;
-        }
-        while (n);
-    }
-    else
-    {
-        size_t* data = reinterpret_cast<size_t*>(nonce);
-        size_t n = kIVSize / sizeof(size_t);
-        size_t c = 1;
-
-        do
-        {
-            --n;
-            size_t d = data[n] += c;
-            c = ((d - c) & ~d) >> (sizeof(size_t) * 8 - 1);
-        }
-        while (n);
-    }
 }
 
 } // namespace
@@ -191,7 +154,7 @@ bool CryptorAes256Gcm::encrypt(const char* in, size_t in_size, char* out)
         return false;
     }
 
-    incrementNonce(reinterpret_cast<uint8_t*>(encrypt_nonce_.data()));
+    largeNumberIncrement(&encrypt_nonce_);
     return true;
 }
 
@@ -238,7 +201,7 @@ bool CryptorAes256Gcm::decrypt(const char* in, size_t in_size, char* out)
         return false;
     }
 
-    incrementNonce(reinterpret_cast<uint8_t*>(decrypt_nonce_.data()));
+    largeNumberIncrement(&decrypt_nonce_);
     return true;
 }
 
