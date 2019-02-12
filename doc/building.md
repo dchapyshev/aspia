@@ -22,4 +22,4 @@ Alternative instructions (SW build system)
 1. Download, unpack and add to PATH `sw` tool from https://github.com/SoftwareNetwork/binaries
 2. Run `sw build source` in the project root.
    Binaries will be available under `.sw` directory.
-3. To generate VS solution, run `sw generate`.
+3. To generate VS solution, run `sw generate source`.
