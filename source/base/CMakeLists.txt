@@ -65,6 +65,7 @@ list(APPEND SOURCE_BASE
 
 list(APPEND SOURCE_BASE_UNIT_TESTS
     aligned_memory_unittest.cc
+    bitset_unittest.cc
     scoped_clear_last_error_unittest.cc
     string_printf_unittest.cc)
 
