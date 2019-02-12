@@ -18,10 +18,15 @@
 
 #include "crypto/large_number_increment.h"
 
+#include "base/logging.h"
+
 namespace crypto {
 
 void largeNumberIncrement(uint8_t* buffer, size_t buffer_size)
 {
+    DCHECK(buffer);
+    DCHECK(buffer_size);
+
     const union
     {
         long one;
@@ -60,6 +65,8 @@ void largeNumberIncrement(uint8_t* buffer, size_t buffer_size)
 
 void largeNumberIncrement(QByteArray* buffer)
 {
+    DCHECK(buffer);
+
     largeNumberIncrement(reinterpret_cast<uint8_t*>(buffer->data()), buffer->size());
 }
 

@@ -51,6 +51,7 @@ list(APPEND SOURCE_CRYPTO_UNIT_TESTS
     cryptor_unittest.cc
     data_cryptor_unittest.cc
     generic_hash_unittest.cc
+    large_number_increment_unittest.cc
     password_hash_unittest.cc
     srp_math_unittest.cc)
 
