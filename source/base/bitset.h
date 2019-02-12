@@ -22,8 +22,6 @@
 #include <cassert>
 #include <limits>
 
-#include "base/logging.h"
-
 namespace base {
 
 template<typename NumericType>
@@ -44,9 +42,17 @@ public:
     // Returns the value of the bit range at the range from |from| to |to|.
     NumericType range(size_t from, size_t to) const
     {
-        DCHECK(from <= to && from < size() && to < size());
+        if (from > size() - 1)
+            return 0;
+
+        NumericType v = value_ >> from;
+
+        to -= from;
+        if (to >= size() - 1)
+            return v;
+
         const NumericType mask = (static_cast<NumericType>(1) << (to + 1)) - 1;
-        return ((value_ & mask) >> from);
+        return v & mask;
     }
 
     // Checks if all bits are set to true.
@@ -68,7 +74,8 @@ public:
     // Sets the bit at position |pos| to the value |value|.
     BitSet& set(size_t pos, bool value = true)
     {
-        DCHECK(pos < size());
+        if (pos > size() - 1)
+            return *this;
 
         const NumericType mask = static_cast<NumericType>(1) << pos;
 
@@ -100,7 +107,8 @@ public:
     // Flips the bit at the position |pos|.
     BitSet& flip(size_t pos)
     {
-        assert(pos < Size());
+        if (pos > size() - 1)
+            return *this;
 
         value_ ^= static_cast<NumericType>(1) << pos;
         return *this;
