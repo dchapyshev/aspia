@@ -20,8 +20,11 @@
 #define HOST__UI__HOST_WINDOW_H
 
 #include <QMainWindow>
+#include <QSystemTrayIcon>
 
 #include "base/macros_magic.h"
+#include "common/locale_loader.h"
+#include "host/host_settings.h"
 #include "ui_host_window.h"
 
 namespace host {
@@ -31,15 +34,29 @@ class HostWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit HostWindow(QWidget* parent = nullptr);
+    HostWindow(Settings& settings, common::LocaleLoader& locale_loader, QWidget* parent = nullptr);
     ~HostWindow();
 
 private slots:
+    void refreshIpList();
+    void newPassword();
+
+    void onLanguageChanged(QAction* action);
+    void onSettings();
+    void onShowHide();
     void onHelp();
     void onAbout();
 
 private:
+    void createLanguageMenu(const QString& current_locale);
+
     Ui::HostWindow ui;
+
+    Settings& settings_;
+    common::LocaleLoader& locale_loader_;
+
+    QSystemTrayIcon tray_icon_;
+    QMenu tray_menu_;
 
     DISALLOW_COPY_AND_ASSIGN(HostWindow);
 };

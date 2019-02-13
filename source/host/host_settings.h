@@ -19,6 +19,7 @@
 #ifndef HOST__HOST_SETTINGS_H
 #define HOST__HOST_SETTINGS_H
 
+#include <QCoreApplication>
 #include <QSettings>
 
 #include "base/macros_magic.h"
@@ -31,9 +32,14 @@ namespace host {
 
 class Settings
 {
+    Q_DECLARE_TR_FUNCTIONS(Settings)
+
 public:
     Settings();
     ~Settings();
+
+    static bool importFromFile(const QString& path, bool silent, QWidget* parent = nullptr);
+    static bool exportToFile(const QString& path, bool silent, QWidget* parent = nullptr);
 
     QString filePath() const;
     bool isWritable() const;
@@ -54,6 +60,9 @@ public:
     void setUpdateServer(const QString& server);
 
 private:
+    static bool copySettings(
+        const QString& source_path, const QString& target_path, bool silent, QWidget* parent);
+
     mutable QSettings settings_;
 
     DISALLOW_COPY_AND_ASSIGN(Settings);

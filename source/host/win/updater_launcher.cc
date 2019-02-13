@@ -162,8 +162,7 @@ bool launchUpdater()
     if (!createLoggedOnUserToken(session_id, &user_token))
         return false;
 
-    QString program =
-        QCoreApplication::applicationDirPath() + QLatin1String("/aspia_host_config.exe");
+    QString program = QCoreApplication::applicationDirPath() + QLatin1String("/aspia_host.exe");
 
     QStringList arguments;
     arguments << QLatin1String("--update");

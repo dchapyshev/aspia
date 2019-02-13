@@ -19,6 +19,8 @@
 #include "host/host_main.h"
 
 #include <QApplication>
+#include <QCommandLineParser>
+#include <QMessageBox>
 
 #include "base/win/process_util.h"
 #include "base/base_paths.h"
@@ -26,6 +28,8 @@
 #include "build/version.h"
 #include "crypto/scoped_crypto_initializer.h"
 #include "host/ui/host_window.h"
+#include "host/host_settings.h"
+#include "updater/update_dialog.h"
 
 namespace {
 
@@ -56,11 +60,79 @@ int runApplication(int argc, char* argv[])
     application.setApplicationVersion(QStringLiteral(ASPIA_VERSION_STRING));
     application.setAttribute(Qt::AA_DisableWindowContextHelpButton, true);
 
-    host::HostWindow window;
-    window.show();
-    window.activateWindow();
+    host::Settings host_settings;
+    common::LocaleLoader locale_loader;
 
-    return application.exec();
+    QString current_locale = host_settings.locale();
+    if (!locale_loader.contains(current_locale))
+        host_settings.setLocale(QStringLiteral(DEFAULT_LOCALE));
+
+    locale_loader.installTranslators(current_locale);
+
+    QCommandLineOption import_option(QStringLiteral("import"),
+        QApplication::translate("Host", "The path to the file to import."),
+        QStringLiteral("file"));
+
+    QCommandLineOption export_option(QStringLiteral("export"),
+        QApplication::translate("Host", "The path to the file to export."),
+        QStringLiteral("file"));
+
+    QCommandLineOption silent_option(QStringLiteral("silent"),
+        QApplication::translate("Host", "Enables silent mode when exporting and importing."));
+
+    QCommandLineOption update_option(QStringLiteral("update"),
+        QApplication::translate("Host", "Run application update."));
+
+    QCommandLineParser parser;
+    parser.addHelpOption();
+    parser.addVersionOption();
+    parser.addOption(import_option);
+    parser.addOption(export_option);
+    parser.addOption(silent_option);
+    parser.addOption(update_option);
+    parser.process(application);
+
+    if (parser.isSet(import_option) && parser.isSet(export_option))
+    {
+        if (!parser.isSet(silent_option))
+        {
+            QMessageBox::warning(
+                nullptr,
+                QApplication::translate("Host", "Warning"),
+                QApplication::translate("Host", "Export and import parameters can not be specified together."),
+                QMessageBox::Ok);
+        }
+
+        return 1;
+    }
+    else if (parser.isSet(import_option))
+    {
+        if (!host::Settings::importFromFile(parser.value(import_option), parser.isSet(silent_option)))
+            return 1;
+    }
+    else if (parser.isSet(export_option))
+    {
+        if (!host::Settings::exportToFile(parser.value(export_option), parser.isSet(silent_option)))
+            return 1;
+    }
+    else if (parser.isSet(update_option))
+    {
+        updater::UpdateDialog dialog(host_settings.updateServer(), QLatin1String("host"));
+        dialog.show();
+        dialog.activateWindow();
+
+        return application.exec();
+    }
+    else
+    {
+        host::HostWindow window(host_settings, locale_loader);
+        window.show();
+        window.activateWindow();
+
+        return application.exec();
+    }
+
+    return 0;
 }
 
 } // namespace

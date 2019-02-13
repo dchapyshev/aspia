@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,15 +16,29 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
+#ifndef COMMON__UI__LANGUAGE_ACTION_H
+#define COMMON__UI__LANGUAGE_ACTION_H
 
-LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
+#include <QAction>
 
-1 RT_MANIFEST "host_config.manifest"
-IDI_ICON1 ICON "host/resources/host-config.ico"
+#include "base/macros_magic.h"
 
-#define ASPIA_ORIGINAL_FILE_NAME "aspia_host_config.exe"
-#define ASPIA_FILE_DESCRIPTION "Aspia Host Configuration"
+namespace common {
 
-#include "build/version.rc"
+class LanguageAction : public QAction
+{
+public:
+    explicit LanguageAction(const QString& locale, QObject* parent = nullptr);
+    ~LanguageAction() = default;
+
+    QString locale() const { return locale_; }
+
+private:
+    QString locale_;
+
+    DISALLOW_COPY_AND_ASSIGN(LanguageAction);
+};
+
+} // namespace common
+
+#endif // COMMON__UI__LANGUAGE_ACTION_H

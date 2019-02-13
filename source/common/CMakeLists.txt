@@ -45,7 +45,9 @@ list(APPEND SOURCE_COMMON
 list(APPEND SOURCE_COMMON_UI
     ui/about_dialog.cc
     ui/about_dialog.h
-    ui/about_dialog.ui)
+    ui/about_dialog.ui
+    ui/language_action.cc
+    ui/language_action.h)
 
 list(APPEND SOURCE_COMMON_WIN
     win/file_enumerator.cc

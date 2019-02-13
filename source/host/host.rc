@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,11 +16,15 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST__HOST_CONFIG_MAIN_H
-#define HOST__HOST_CONFIG_MAIN_H
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
 
-#include "host/host_export.h"
+LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 
-int HOST_EXPORT hostConfigMain(int argc, char* argv[]);
+1 RT_MANIFEST "host.manifest"
+IDI_ICON1 ICON "host/resources/host-config.ico"
 
-#endif // HOST__HOST_CONFIG_MAIN_H
+#define ASPIA_ORIGINAL_FILE_NAME "aspia_host.exe"
+#define ASPIA_FILE_DESCRIPTION "Aspia Host"
+
+#include "build/version.rc"

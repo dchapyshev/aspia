@@ -22,8 +22,6 @@ list(APPEND SOURCE_HOST_CORE
     desktop_config_tracker.cc
     desktop_config_tracker.h
     host_core.rc
-    host_config_main.cc
-    host_config_main.h
     host_export.h
     host_main.cc
     host_main.h
@@ -133,28 +131,16 @@ else()
     message(WARNING "Qt5 linguist tools not found. Internationalization support will be disabled.")
 endif()
 
-add_executable(aspia_host
-    host_entry_point.cc)
+add_executable(aspia_host host_entry_point.cc host.rc)
 set_target_properties(aspia_host PROPERTIES WIN32_EXECUTABLE TRUE)
 set_target_properties(aspia_host PROPERTIES LINK_FLAGS "/MANIFEST:NO")
 target_link_libraries(aspia_host aspia_host_core)
 
-add_executable(aspia_host_config
-    host_config_entry_point.cc
-    host_config.rc)
-set_target_properties(aspia_host_config PROPERTIES WIN32_EXECUTABLE TRUE)
-set_target_properties(aspia_host_config PROPERTIES LINK_FLAGS "/MANIFEST:NO")
-target_link_libraries(aspia_host_config aspia_host_core)
-
-add_executable(aspia_host_service
-    win/host_service_entry_point.cc
-    win/host_service.rc)
+add_executable(aspia_host_service win/host_service_entry_point.cc win/host_service.rc)
 set_target_properties(aspia_host_service PROPERTIES LINK_FLAGS "/MANIFEST:NO")
 target_link_libraries(aspia_host_service aspia_host_core)
 
-add_executable(aspia_host_session
-    win/host_session_entry_point.cc
-    win/host_session.rc)
+add_executable(aspia_host_session win/host_session_entry_point.cc win/host_session.rc)
 set_target_properties(aspia_host_session PROPERTIES WIN32_EXECUTABLE TRUE)
 set_target_properties(aspia_host_session PROPERTIES LINK_FLAGS "/MANIFEST:NO")
 target_link_libraries(aspia_host_session aspia_host_core)

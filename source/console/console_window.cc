@@ -29,6 +29,7 @@
 #include "build/version.h"
 #include "client/ui/client_window.h"
 #include "common/ui/about_dialog.h"
+#include "common/ui/language_action.h"
 #include "console/address_book_tab.h"
 #include "console/console_settings.h"
 #include "console/update_settings_dialog.h"
@@ -37,25 +38,6 @@
 namespace console {
 
 namespace {
-
-class LanguageAction : public QAction
-{
-public:
-    LanguageAction(const QString& locale, QObject* parent = nullptr)
-        : QAction(parent),
-          locale_(locale)
-    {
-        setText(QLocale::languageToString(QLocale(locale).language()));
-    }
-
-    ~LanguageAction() = default;
-
-    QString locale() const { return locale_; }
-
-private:
-    QString locale_;
-    DISALLOW_COPY_AND_ASSIGN(LanguageAction);
-};
 
 class MruAction : public QAction
 {
@@ -739,7 +721,7 @@ void ConsoleWindow::onTabContextMenu(const QPoint& pos)
 
 void ConsoleWindow::onLanguageChanged(QAction* action)
 {
-    LanguageAction* language_action = dynamic_cast<LanguageAction*>(action);
+    common::LanguageAction* language_action = dynamic_cast<common::LanguageAction*>(action);
     if (language_action)
     {
         QString new_locale = language_action->locale();
@@ -864,7 +846,7 @@ void ConsoleWindow::createLanguageMenu(const QString& current_locale)
 
     for (const auto& locale : locale_loader_.sortedLocaleList())
     {
-        LanguageAction* action_language = new LanguageAction(locale, this);
+        common::LanguageAction* action_language = new common::LanguageAction(locale, this);
 
         action_language->setActionGroup(language_group);
         action_language->setCheckable(true);

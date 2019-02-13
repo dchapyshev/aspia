@@ -18,7 +18,9 @@
 
 #include "host/host_settings.h"
 
+#include <QFile>
 #include <QLocale>
+#include <QMessageBox>
 
 #include "base/logging.h"
 #include "base/xml_settings.h"
@@ -38,6 +40,38 @@ Settings::Settings()
 }
 
 Settings::~Settings() = default;
+
+// static
+bool Settings::importFromFile(const QString& path, bool silent, QWidget* parent)
+{
+    bool result = copySettings(path, Settings().filePath(), silent, parent);
+
+    if (!silent && result)
+    {
+        QMessageBox::information(parent,
+                                 tr("Information"),
+                                 tr("The configuration was successfully imported."),
+                                 QMessageBox::Ok);
+    }
+
+    return result;
+}
+
+// static
+bool Settings::exportToFile(const QString& path, bool silent, QWidget* parent)
+{
+    bool result = copySettings(Settings().filePath(), path, silent, parent);
+
+    if (!silent && result)
+    {
+        QMessageBox::information(parent,
+                                 tr("Information"),
+                                 tr("The configuration was successfully exported."),
+                                 QMessageBox::Ok);
+    }
+
+    return result;
+}
 
 QString Settings::filePath() const
 {
@@ -148,6 +182,74 @@ QString Settings::updateServer() const
 void Settings::setUpdateServer(const QString& server)
 {
     settings_.setValue(QStringLiteral("UpdateServer"), server);
+}
+
+// static
+bool Settings::copySettings(
+    const QString& source_path, const QString& target_path, bool silent, QWidget* parent)
+{
+    QFile source_file(source_path);
+
+    if (!source_file.open(QIODevice::ReadOnly))
+    {
+        if (!silent)
+        {
+            QMessageBox::warning(parent,
+                                 tr("Warning"),
+                                 tr("Could not open source file: %1")
+                                 .arg(source_file.errorString()),
+                                 QMessageBox::Ok);
+        }
+
+        return false;
+    }
+
+    QFile target_file(target_path);
+
+    if (!target_file.open(QIODevice::WriteOnly))
+    {
+        if (!silent)
+        {
+            QMessageBox::warning(parent,
+                                 tr("Warning"),
+                                 tr("Could not open target file: %1")
+                                 .arg(target_file.errorString()),
+                                 QMessageBox::Ok);
+        }
+
+        return false;
+    }
+
+    QSettings::SettingsMap settings_map;
+
+    if (!base::XmlSettings::readFunc(source_file, settings_map))
+    {
+        if (!silent)
+        {
+            QMessageBox::warning(
+                parent,
+                tr("Warning"),
+                tr("Unable to read the source file: the file is damaged or has an unknown format."),
+                QMessageBox::Ok);
+        }
+
+        return false;
+    }
+
+    if (!base::XmlSettings::writeFunc(target_file, settings_map))
+    {
+        if (!silent)
+        {
+            QMessageBox::warning(parent,
+                                 tr("Warning"),
+                                 tr("Unable to write the target file."),
+                                 QMessageBox::Ok);
+        }
+
+        return false;
+    }
+
+    return true;
 }
 
 } // namespace host

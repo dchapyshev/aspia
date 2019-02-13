@@ -37,14 +37,10 @@
 
 namespace host {
 
-HostConfigDialog::HostConfigDialog(common::LocaleLoader& locale_loader, QWidget* parent)
-    : QDialog(parent),
-      locale_loader_(locale_loader)
+HostConfigDialog::HostConfigDialog(QWidget* parent)
+    : QDialog(parent)
 {
     ui.setupUi(this);
-
-    connect(ui.combobox_language, QOverload<int>::of(&QComboBox::currentIndexChanged),
-            this, &HostConfigDialog::onConfigChanged);
 
     connect(ui.spinbox_port, QOverload<int>::of(&QSpinBox::valueChanged),
             this, &HostConfigDialog::onConfigChanged);
@@ -94,47 +90,10 @@ HostConfigDialog::HostConfigDialog(common::LocaleLoader& locale_loader, QWidget*
     connect(ui.button_import, &QPushButton::released, this, &HostConfigDialog::onImport);
     connect(ui.button_export, &QPushButton::released, this, &HostConfigDialog::onExport);
 
-    connect(ui.button_about, &QPushButton::released, [this]()
-    {
-        common::AboutDialog(this).exec();
-    });
-
     connect(ui.button_box, &QDialogButtonBox::clicked,
             this, &HostConfigDialog::onButtonBoxClicked);
 
     reloadAll();
-}
-
-// static
-bool HostConfigDialog::importSettings(const QString& path, bool silent, QWidget* parent)
-{
-    bool result = copySettings(path, Settings().filePath(), silent, parent);
-
-    if (!silent && result)
-    {
-        QMessageBox::information(parent,
-                                 tr("Information"),
-                                 tr("The configuration was successfully imported."),
-                                 QMessageBox::Ok);
-    }
-
-    return result;
-}
-
-// static
-bool HostConfigDialog::exportSettings(const QString& path, bool silent, QWidget* parent)
-{
-    bool result = copySettings(Settings().filePath(), path, silent, parent);
-
-    if (!silent && result)
-    {
-        QMessageBox::information(parent,
-                                 tr("Information"),
-                                 tr("The configuration was successfully exported."),
-                                 QMessageBox::Ok);
-    }
-
-    return result;
 }
 
 void HostConfigDialog::onUserContextMenu(const QPoint& point)
@@ -266,7 +225,7 @@ void HostConfigDialog::onImport()
     if (file_path.isEmpty())
         return;
 
-    if (importSettings(file_path, false, this))
+    if (Settings::importFromFile(file_path, false, this))
     {
         if (isServiceStarted())
         {
@@ -296,7 +255,7 @@ void HostConfigDialog::onExport()
     if (file_path.isEmpty())
         return;
 
-    exportSettings(file_path, false, this);
+    Settings::exportToFile(file_path, false, this);
 }
 
 void HostConfigDialog::onButtonBoxClicked(QAbstractButton* button)
@@ -318,12 +277,6 @@ void HostConfigDialog::onButtonBoxClicked(QAbstractButton* button)
             return;
         }
 
-        QString new_locale = ui.combobox_language->currentData().toString();
-
-        if (standard_button == QDialogButtonBox::Apply)
-            retranslateUi(new_locale);
-
-        settings.setLocale(new_locale);
         settings.setTcpPort(ui.spinbox_port->value());
         settings.setAddFirewallRule(ui.checkbox_add_firewall_rule->isChecked());
         settings.setUserList(users_);
@@ -365,27 +318,6 @@ void HostConfigDialog::onButtonBoxClicked(QAbstractButton* button)
     close();
 }
 
-void HostConfigDialog::createLanguageList(const QString& current_locale)
-{
-    ui.combobox_language->clear();
-
-    for (const auto& locale : locale_loader_.sortedLocaleList())
-    {
-        const QString language = QLocale::languageToString(QLocale(locale).language());
-
-        ui.combobox_language->addItem(language, locale);
-        if (current_locale == locale)
-            ui.combobox_language->setCurrentText(language);
-    }
-}
-
-void HostConfigDialog::retranslateUi(const QString& locale)
-{
-    locale_loader_.installTranslators(locale);
-    ui.retranslateUi(this);
-    reloadServiceStatus();
-}
-
 void HostConfigDialog::setConfigChanged(bool changed)
 {
     QPushButton* apply_button = ui.button_box->button(QDialogButtonBox::Apply);
@@ -413,10 +345,6 @@ bool HostConfigDialog::isConfigChanged() const
 void HostConfigDialog::reloadAll()
 {
     Settings settings;
-
-    QString current_locale = settings.locale();
-    locale_loader_.installTranslators(current_locale);
-    createLanguageList(current_locale);
 
     users_ = settings.userList();
 
@@ -604,74 +532,6 @@ bool HostConfigDialog::restartService()
         return false;
 
     return startService();
-}
-
-// static
-bool HostConfigDialog::copySettings(
-    const QString& source_path, const QString& target_path, bool silent, QWidget* parent)
-{
-    QFile source_file(source_path);
-
-    if (!source_file.open(QIODevice::ReadOnly))
-    {
-        if (!silent)
-        {
-            QMessageBox::warning(parent,
-                                 tr("Warning"),
-                                 tr("Could not open source file: %1")
-                                     .arg(source_file.errorString()),
-                                 QMessageBox::Ok);
-        }
-
-        return false;
-    }
-
-    QFile target_file(target_path);
-
-    if (!target_file.open(QIODevice::WriteOnly))
-    {
-        if (!silent)
-        {
-            QMessageBox::warning(parent,
-                                 tr("Warning"),
-                                 tr("Could not open target file: %1")
-                                 .arg(target_file.errorString()),
-                                 QMessageBox::Ok);
-        }
-
-        return false;
-    }
-
-    QSettings::SettingsMap settings_map;
-
-    if (!base::XmlSettings::readFunc(source_file, settings_map))
-    {
-        if (!silent)
-        {
-            QMessageBox::warning(
-                parent,
-                tr("Warning"),
-                tr("Unable to read the source file: the file is damaged or has an unknown format."),
-                QMessageBox::Ok);
-        }
-
-        return false;
-    }
-
-    if (!base::XmlSettings::writeFunc(target_file, settings_map))
-    {
-        if (!silent)
-        {
-            QMessageBox::warning(parent,
-                                 tr("Warning"),
-                                 tr("Unable to write the target file."),
-                                 QMessageBox::Ok);
-        }
-
-        return false;
-    }
-
-    return true;
 }
 
 } // namespace host

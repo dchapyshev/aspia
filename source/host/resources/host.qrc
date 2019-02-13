@@ -1,5 +1,7 @@
 <RCC>
   <qresource prefix="/img">
+    <file>arrow-circle-double.png</file>
+    <file>key.png</file>
     <file>computer.png</file>
     <file>computer-cloud.png</file>
     <file>exit.png</file>

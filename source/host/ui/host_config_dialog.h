@@ -30,11 +30,8 @@ class HostConfigDialog : public QDialog
     Q_OBJECT
 
 public:
-    HostConfigDialog(common::LocaleLoader& locale_loader, QWidget* parent = nullptr);
+    HostConfigDialog(QWidget* parent = nullptr);
     ~HostConfigDialog() = default;
-
-    static bool importSettings(const QString& path, bool silent, QWidget* parent = nullptr);
-    static bool exportSettings(const QString& path, bool silent, QWidget* parent = nullptr);
 
 private slots:
     void onUserContextMenu(const QPoint& point);
@@ -50,8 +47,6 @@ private slots:
     void onButtonBoxClicked(QAbstractButton* button);
 
 private:
-    void createLanguageList(const QString& current_locale);
-    void retranslateUi(const QString& locale);
     void setConfigChanged(bool changed);
     bool isConfigChanged() const;
     void reloadAll();
@@ -64,16 +59,10 @@ private:
     bool stopService();
     bool restartService();
 
-    static bool copySettings(
-        const QString& source_path, const QString& target_path, bool silent, QWidget* parent);
-
     Ui::HostConfigDialog ui;
-
-    common::LocaleLoader& locale_loader_;
     net::SrpUserList users_;
 
     enum class ServiceState { NOT_INSTALLED, ACCESS_DENIED, NOT_STARTED, STARTED };
-
     ServiceState service_state_;
 
     DISALLOW_COPY_AND_ASSIGN(HostConfigDialog);
