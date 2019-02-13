@@ -503,17 +503,17 @@
 <context>
     <name>host::HostWindow</name>
     <message>
-        <location filename="../ui/host_window.cc" line="48"/>
+        <location filename="../ui/host_window.cc" line="49"/>
         <source>Aspia Host</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/host_window.cc" line="116"/>
+        <location filename="../ui/host_window.cc" line="125"/>
         <source>Show</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/host_window.cc" line="121"/>
+        <location filename="../ui/host_window.cc" line="130"/>
         <source>Hide</source>
         <translation type="unfinished"></translation>
     </message>

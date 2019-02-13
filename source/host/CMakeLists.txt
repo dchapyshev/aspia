@@ -47,6 +47,8 @@ list(APPEND SOURCE_HOST_CORE
     host_system_info.h
     input_injector.cc
     input_injector.h
+    password_generator.cc
+    password_generator.h
     screen_updater.cc
     screen_updater.h
     screen_updater_impl.cc

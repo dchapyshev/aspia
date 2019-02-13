@@ -28,6 +28,7 @@
 #include "common/ui/language_action.h"
 #include "host/ui/host_config_dialog.h"
 #include "host/host_settings.h"
+#include "host/password_generator.h"
 #include "net/network_adapter_enumerator.h"
 
 namespace host {
@@ -51,6 +52,7 @@ HostWindow::HostWindow(Settings& settings, common::LocaleLoader& locale_loader, 
 
     createLanguageMenu(settings.locale());
     refreshIpList();
+    newPassword();
 
     connect(ui.menu_language, &QMenu::triggered, this, &HostWindow::onLanguageChanged);
     connect(ui.action_settings, &QAction::triggered, this, &HostWindow::onSettings);
@@ -88,7 +90,14 @@ void HostWindow::refreshIpList()
 
 void HostWindow::newPassword()
 {
-    // TODO
+    PasswordGenerator generator;
+
+    generator.setLength(8);
+    generator.setCharacters(PasswordGenerator::LOWER_CASE |
+                            PasswordGenerator::UPPER_CASE |
+                            PasswordGenerator::DIGITS);
+
+    ui.edit_password->setText(generator.result());
 }
 
 void HostWindow::onLanguageChanged(QAction* action)
