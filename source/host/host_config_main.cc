@@ -43,7 +43,7 @@ std::filesystem::path loggingDir()
     return path;
 }
 
-int runApplication(int argc, char *argv[])
+int runApplication(int argc, char* argv[])
 {
     QApplication application(argc, argv);
     application.setOrganizationName(QStringLiteral("Aspia"));
@@ -134,7 +134,7 @@ int runApplication(int argc, char *argv[])
 
 } // namespace
 
-int hostConfigMain(int argc, char *argv[])
+int hostConfigMain(int argc, char* argv[])
 {
     Q_INIT_RESOURCE(qt_translations);
     Q_INIT_RESOURCE(common);

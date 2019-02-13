@@ -18,13 +18,15 @@
 
 include(translations)
 
-list(APPEND SOURCE_HOST
+list(APPEND SOURCE_HOST_CORE
     desktop_config_tracker.cc
     desktop_config_tracker.h
-    host.rc
+    host_core.rc
     host_config_main.cc
     host_config_main.h
     host_export.h
+    host_main.cc
+    host_main.h
     host_notifier.cc
     host_notifier.h
     host_server.cc
@@ -52,23 +54,26 @@ list(APPEND SOURCE_HOST
     screen_updater_impl.cc
     screen_updater_impl.h)
 
-list(APPEND SOURCE_HOST_RESOURCES
+list(APPEND SOURCE_HOST_CORE_RESOURCES
     resources/host.qrc)
 
-list(APPEND SOURCE_HOST_UI
+list(APPEND SOURCE_HOST_CORE_UI
     ui/host_config_dialog.cc
     ui/host_config_dialog.h
     ui/host_config_dialog.ui
     ui/host_notifier_window.cc
     ui/host_notifier_window.h
     ui/host_notifier_window.ui
+    ui/host_window.cc
+    ui/host_window.h
+    ui/host_window.ui
     ui/user_dialog.cc
     ui/user_dialog.h
     ui/user_dialog.ui
     ui/user_tree_item.cc
     ui/user_tree_item.h)
 
-list(APPEND SOURCE_HOST_WIN
+list(APPEND SOURCE_HOST_CORE_WIN
     win/dll_main.cc
     win/host.cc
     win/host.h
@@ -87,18 +92,18 @@ list(APPEND SOURCE_HOST_WIN
     win/updater_launcher.cc
     win/updater_launcher.h)
 
-source_group("" FILES ${SOURCE_HOST})
-source_group(moc FILES ${SOURCE_HOST_MOC})
-source_group(resources FILES ${SOURCE_HOST_RESOURCES})
-source_group(ui FILES ${SOURCE_HOST_UI})
-source_group(win FILES ${SOURCE_HOST_WIN})
+source_group("" FILES ${SOURCE_HOST_CORE})
+source_group(moc FILES ${SOURCE_HOST_CORE_MOC})
+source_group(resources FILES ${SOURCE_HOST_CORE_RESOURCES})
+source_group(ui FILES ${SOURCE_HOST_CORE_UI})
+source_group(win FILES ${SOURCE_HOST_CORE_WIN})
 
-add_library(aspia_host SHARED
-    ${SOURCE_HOST}
-    ${SOURCE_HOST_RESOURCES}
-    ${SOURCE_HOST_UI}
-    ${SOURCE_HOST_WIN})
-target_link_libraries(aspia_host
+add_library(aspia_host_core SHARED
+    ${SOURCE_HOST_CORE}
+    ${SOURCE_HOST_CORE_RESOURCES}
+    ${SOURCE_HOST_CORE_UI}
+    ${SOURCE_HOST_CORE_WIN})
+target_link_libraries(aspia_host_core
     aspia_base
     aspia_codec
     aspia_common
@@ -113,7 +118,7 @@ target_link_libraries(aspia_host
 if(Qt5LinguistTools_FOUND)
     # Get the list of translation files.
     file(GLOB HOST_TS_FILES translations/*.ts)
-    add_translations(aspia_host QRC_FILE "translations/host_translations.qrc" TS_FILES ${HOST_TS_FILES})
+    add_translations(aspia_host_core QRC_FILE "translations/host_translations.qrc" TS_FILES ${HOST_TS_FILES})
 
     # Get the list of files containing messages.
     file(GLOB_RECURSE HOST_TR_SOURCES
@@ -128,22 +133,28 @@ else()
     message(WARNING "Qt5 linguist tools not found. Internationalization support will be disabled.")
 endif()
 
+add_executable(aspia_host
+    host_entry_point.cc)
+set_target_properties(aspia_host PROPERTIES WIN32_EXECUTABLE TRUE)
+set_target_properties(aspia_host PROPERTIES LINK_FLAGS "/MANIFEST:NO")
+target_link_libraries(aspia_host aspia_host_core)
+
 add_executable(aspia_host_config
     host_config_entry_point.cc
     host_config.rc)
 set_target_properties(aspia_host_config PROPERTIES WIN32_EXECUTABLE TRUE)
 set_target_properties(aspia_host_config PROPERTIES LINK_FLAGS "/MANIFEST:NO")
-target_link_libraries(aspia_host_config aspia_host)
+target_link_libraries(aspia_host_config aspia_host_core)
 
 add_executable(aspia_host_service
     win/host_service_entry_point.cc
     win/host_service.rc)
 set_target_properties(aspia_host_service PROPERTIES LINK_FLAGS "/MANIFEST:NO")
-target_link_libraries(aspia_host_service aspia_host)
+target_link_libraries(aspia_host_service aspia_host_core)
 
 add_executable(aspia_host_session
     win/host_session_entry_point.cc
     win/host_session.rc)
 set_target_properties(aspia_host_session PROPERTIES WIN32_EXECUTABLE TRUE)
 set_target_properties(aspia_host_session PROPERTIES LINK_FLAGS "/MANIFEST:NO")
-target_link_libraries(aspia_host_session aspia_host)
+target_link_libraries(aspia_host_session aspia_host_core)

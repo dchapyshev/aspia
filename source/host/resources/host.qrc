@@ -1,5 +1,10 @@
 <RCC>
   <qresource prefix="/img">
+    <file>computer.png</file>
+    <file>computer-cloud.png</file>
+    <file>exit.png</file>
+    <file>lifebuoy.png</file>
+    <file>settings.png</file>
     <file>about.png</file>
     <file>cross-script.png</file>
     <file>arrow-left-gray.png</file>

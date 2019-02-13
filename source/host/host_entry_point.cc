@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,11 +16,9 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST__HOST_CONFIG_MAIN_H
-#define HOST__HOST_CONFIG_MAIN_H
+#include "host/host_main.h"
 
-#include "host/host_export.h"
-
-int HOST_EXPORT hostConfigMain(int argc, char* argv[]);
-
-#endif // HOST__HOST_CONFIG_MAIN_H
+int main(int argc, char *argv[])
+{
+    return hostMain(argc, argv);
+}

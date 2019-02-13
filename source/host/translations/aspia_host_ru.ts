@@ -167,6 +167,69 @@
     </message>
 </context>
 <context>
+    <name>HostWindow</name>
+    <message>
+        <location filename="../ui/host_window.ui" line="14"/>
+        <source>Aspia Host</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/host_window.ui" line="42"/>
+        <source>Your ID:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/host_window.ui" line="79"/>
+        <source>Your IP:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/host_window.ui" line="123"/>
+        <source>Start</source>
+        <translation type="unfinished">Запустить</translation>
+    </message>
+    <message>
+        <location filename="../ui/host_window.ui" line="146"/>
+        <source>Aspia</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/host_window.ui" line="155"/>
+        <source>Help</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/host_window.ui" line="163"/>
+        <source>Language</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/host_window.ui" line="177"/>
+        <source>Exit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/host_window.ui" line="186"/>
+        <source>Online Help...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/host_window.ui" line="195"/>
+        <source>About</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/host_window.ui" line="204"/>
+        <source>Settings...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/host_window.ui" line="209"/>
+        <source>Hide</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>UserDialog</name>
     <message>
         <location filename="../ui/user_dialog.ui" line="14"/>
