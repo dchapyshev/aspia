@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/win/host_main.h"
+#include "host/win/host_session_main.h"
 
 #include <QApplication>
 #include <QCommandLineParser>
@@ -162,7 +162,7 @@ int runApplication(int argc, char *argv[])
 
 } // namespace
 
-int hostMain(int argc, char *argv[])
+int hostSessionMain(int argc, char *argv[])
 {
     base::LoggingSettings settings;
     settings.destination = base::LOG_TO_FILE;

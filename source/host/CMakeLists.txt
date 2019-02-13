@@ -72,8 +72,6 @@ list(APPEND SOURCE_HOST_WIN
     win/dll_main.cc
     win/host.cc
     win/host.h
-    win/host_main.cc
-    win/host_main.h
     win/host_process.cc
     win/host_process.h
     win/host_process_impl.cc
@@ -84,6 +82,8 @@ list(APPEND SOURCE_HOST_WIN
     win/host_service_constants.h
     win/host_service_main.cc
     win/host_service_main.h
+    win/host_session_main.cc
+    win/host_session_main.h
     win/updater_launcher.cc
     win/updater_launcher.h)
 

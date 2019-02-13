@@ -16,9 +16,9 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/win/host_main.h"
+#include "host/win/host_session_main.h"
 
 int main(int argc, char *argv[])
 {
-    return host::hostMain(argc, argv);
+    return host::hostSessionMain(argc, argv);
 }
