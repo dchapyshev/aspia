@@ -74,6 +74,28 @@ QString createParamaters(const QStringList& arguments)
 
 } // namespace
 
+bool isProcessElevated()
+{
+    ScopedHandle token;
+
+    if (!OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, token.recieve()))
+    {
+        PLOG(LS_ERROR) << "OpenProcessToken failed";
+        return false;
+    }
+
+    TOKEN_ELEVATION elevation;
+    DWORD size;
+
+    if (!GetTokenInformation(token, TokenElevation, &elevation, sizeof(elevation), &size))
+    {
+        PLOG(LS_ERROR) << "GetTokenInformation failed";
+        return false;
+    }
+
+    return elevation.TokenIsElevated != 0;
+}
+
 bool executeProcess(const QString& program, const QStringList& arguments, ProcessExecuteMode mode)
 {
     QString normalized_program = normalizedProgram(program);

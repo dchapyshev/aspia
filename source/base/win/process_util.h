@@ -25,6 +25,8 @@
 
 namespace base::win {
 
+bool isProcessElevated();
+
 enum class ProcessExecuteMode { NORMAL, ELEVATE };
 
 bool executeProcess(const QString& program,
