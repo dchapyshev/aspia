@@ -81,7 +81,7 @@ QString PasswordGenerator::result() const
 
     for (int i = 0; i < length_; ++i)
     {
-        std::uniform_int_distribution<> dist(0, length_);
+        std::uniform_int_distribution<> dist(0, table.size() - 1);
         result += table[dist(generator)];
     }
 
