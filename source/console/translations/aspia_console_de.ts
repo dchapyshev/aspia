@@ -956,80 +956,80 @@
 <context>
     <name>console::ConsoleWindow</name>
     <message>
-        <location filename="../console_window.cc" line="201"/>
+        <location filename="../console_window.cc" line="183"/>
         <source>Warning</source>
         <translation type="unfinished">Warnung</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="202"/>
+        <location filename="../console_window.cc" line="184"/>
         <source>Pinned address book file &quot;%1&quot; was not found.&lt;br/&gt;This file will be unpinned.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="249"/>
+        <location filename="../console_window.cc" line="231"/>
         <source>Open Address Book</source>
         <translation type="unfinished">Adressbuch öffnen</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="251"/>
+        <location filename="../console_window.cc" line="233"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation type="unfinished">Aspia Adressbuch (*.aab)</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="479"/>
-        <location filename="../console_window.cc" line="808"/>
+        <location filename="../console_window.cc" line="461"/>
+        <location filename="../console_window.cc" line="790"/>
         <source>Confirmation</source>
         <translation type="unfinished">Bestätigung</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="480"/>
-        <location filename="../console_window.cc" line="809"/>
+        <location filename="../console_window.cc" line="462"/>
+        <location filename="../console_window.cc" line="791"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation type="unfinished">Adressbuch &quot;%1&quot; wurde geändert. Änderungen speichern?</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="668"/>
+        <location filename="../console_window.cc" line="650"/>
         <source>Close other tabs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="675"/>
+        <location filename="../console_window.cc" line="657"/>
         <source>Close tab</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="678"/>
-        <location filename="../console_window.cc" line="685"/>
+        <location filename="../console_window.cc" line="660"/>
+        <location filename="../console_window.cc" line="667"/>
         <source>Pin tab</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="765"/>
+        <location filename="../console_window.cc" line="747"/>
         <source>Hide</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="780"/>
+        <location filename="../console_window.cc" line="762"/>
         <source>Show</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="887"/>
+        <location filename="../console_window.cc" line="869"/>
         <source>&lt;empty&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="908"/>
+        <location filename="../console_window.cc" line="890"/>
         <source>Aspia Console</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="942"/>
+        <location filename="../console_window.cc" line="924"/>
         <source>Information</source>
         <translation type="unfinished">Information</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="943"/>
+        <location filename="../console_window.cc" line="925"/>
         <source>Address Book &quot;%1&quot; is already open.</source>
         <translation type="unfinished">Adressbuch &quot;%1&quot; ist bereits geöffnet.</translation>
     </message>

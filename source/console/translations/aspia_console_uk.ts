@@ -966,80 +966,80 @@
 <context>
     <name>console::ConsoleWindow</name>
     <message>
-        <location filename="../console_window.cc" line="201"/>
+        <location filename="../console_window.cc" line="183"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="202"/>
+        <location filename="../console_window.cc" line="184"/>
         <source>Pinned address book file &quot;%1&quot; was not found.&lt;br/&gt;This file will be unpinned.</source>
         <translation>Закріплений файл адресної книги &quot;%1&quot; не знайдено. &lt;br/&gt; Цей файл буде відкріплено.</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="249"/>
+        <location filename="../console_window.cc" line="231"/>
         <source>Open Address Book</source>
         <translation>Відкрити адресну книгу</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="251"/>
+        <location filename="../console_window.cc" line="233"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Адресна книга Aspia (*.aab)</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="479"/>
-        <location filename="../console_window.cc" line="808"/>
+        <location filename="../console_window.cc" line="461"/>
+        <location filename="../console_window.cc" line="790"/>
         <source>Confirmation</source>
         <translation>Підтвердження</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="480"/>
-        <location filename="../console_window.cc" line="809"/>
+        <location filename="../console_window.cc" line="462"/>
+        <location filename="../console_window.cc" line="791"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation>Адресну книгу &quot;%1&quot; змінено. Зберегти зміни?</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="668"/>
+        <location filename="../console_window.cc" line="650"/>
         <source>Close other tabs</source>
         <translation>Закрити інші вкладки</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="675"/>
+        <location filename="../console_window.cc" line="657"/>
         <source>Close tab</source>
         <translation>Закрити вкладку</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="678"/>
-        <location filename="../console_window.cc" line="685"/>
+        <location filename="../console_window.cc" line="660"/>
+        <location filename="../console_window.cc" line="667"/>
         <source>Pin tab</source>
         <translation>Закріпити вкладку</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="765"/>
+        <location filename="../console_window.cc" line="747"/>
         <source>Hide</source>
         <translation>Заховати</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="780"/>
+        <location filename="../console_window.cc" line="762"/>
         <source>Show</source>
         <translation>Показати</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="887"/>
+        <location filename="../console_window.cc" line="869"/>
         <source>&lt;empty&gt;</source>
         <translation>&lt;порожньо&gt;</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="908"/>
+        <location filename="../console_window.cc" line="890"/>
         <source>Aspia Console</source>
         <translation>Консоль Aspia</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="942"/>
+        <location filename="../console_window.cc" line="924"/>
         <source>Information</source>
         <translation>Інформація</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="943"/>
+        <location filename="../console_window.cc" line="925"/>
         <source>Address Book &quot;%1&quot; is already open.</source>
         <translation>Адресну книгу &quot;%1&quot; вже відкрито.</translation>
     </message>

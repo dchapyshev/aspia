@@ -198,62 +198,62 @@
 <context>
     <name>HostWindow</name>
     <message>
-        <location filename="../ui/host_window.ui" line="20"/>
+        <location filename="../ui/host_window.ui" line="26"/>
         <source>Aspia Host</source>
         <translation>Хост Aspia</translation>
     </message>
     <message>
-        <location filename="../ui/host_window.ui" line="54"/>
+        <location filename="../ui/host_window.ui" line="60"/>
         <source>Your ID:</source>
         <translation>Ваш ID:</translation>
     </message>
     <message>
-        <location filename="../ui/host_window.ui" line="94"/>
+        <location filename="../ui/host_window.ui" line="100"/>
         <source>Your IP:</source>
         <translation>Ваш IP:</translation>
     </message>
     <message>
-        <location filename="../ui/host_window.ui" line="152"/>
+        <location filename="../ui/host_window.ui" line="158"/>
         <source>Password:</source>
         <translation>Пароль:</translation>
     </message>
     <message>
-        <location filename="../ui/host_window.ui" line="217"/>
+        <location filename="../ui/host_window.ui" line="223"/>
         <source>Start</source>
         <translation>Запустить</translation>
     </message>
     <message>
-        <location filename="../ui/host_window.ui" line="245"/>
+        <location filename="../ui/host_window.ui" line="251"/>
         <source>Help</source>
         <translation>Помощь</translation>
     </message>
     <message>
-        <location filename="../ui/host_window.ui" line="253"/>
+        <location filename="../ui/host_window.ui" line="259"/>
         <source>Language</source>
         <translation>Язык</translation>
     </message>
     <message>
-        <location filename="../ui/host_window.ui" line="266"/>
+        <location filename="../ui/host_window.ui" line="272"/>
         <source>Exit</source>
         <translation>Выход</translation>
     </message>
     <message>
-        <location filename="../ui/host_window.ui" line="275"/>
+        <location filename="../ui/host_window.ui" line="281"/>
         <source>Online Help...</source>
         <translation>Онлайн справка...</translation>
     </message>
     <message>
-        <location filename="../ui/host_window.ui" line="287"/>
+        <location filename="../ui/host_window.ui" line="293"/>
         <source>About</source>
         <translation>О программе</translation>
     </message>
     <message>
-        <location filename="../ui/host_window.ui" line="296"/>
+        <location filename="../ui/host_window.ui" line="302"/>
         <source>Settings...</source>
         <translation>Параметры...</translation>
     </message>
     <message>
-        <location filename="../ui/host_window.ui" line="301"/>
+        <location filename="../ui/host_window.ui" line="307"/>
         <source>Hide</source>
         <translation>Спрятать</translation>
     </message>
