@@ -17,12 +17,12 @@
 #
 
 list(APPEND SOURCE_NET
+    adapter_enumerator.cc
+    adapter_enumerator.h
     firewall_manager.cc
     firewall_manager.h
     ip_util.cc
     ip_util.h
-    network_adapter_enumerator.cc
-    network_adapter_enumerator.h
     network_channel.cc
     network_channel.h
     network_channel_client.cc

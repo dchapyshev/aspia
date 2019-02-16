@@ -29,7 +29,7 @@
 #include "host/ui/host_config_dialog.h"
 #include "host/host_settings.h"
 #include "host/password_generator.h"
-#include "net/network_adapter_enumerator.h"
+#include "net/adapter_enumerator.h"
 
 namespace host {
 

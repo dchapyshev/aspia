@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "net/network_adapter_enumerator.h"
+#include "net/adapter_enumerator.h"
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>

@@ -23,7 +23,7 @@
 #include "base/smbios_parser.h"
 #include "base/smbios_reader.h"
 #include "base/sys_info.h"
-#include "net/network_adapter_enumerator.h"
+#include "net/adapter_enumerator.h"
 
 namespace host {
 
