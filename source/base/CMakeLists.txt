@@ -94,6 +94,8 @@ list(APPEND SOURCE_BASE_WIN
     win/scoped_wts_memory.h
     win/security_helpers.cc
     win/security_helpers.h
+    win/session_enumerator.cc
+    win/session_enumerator.h
     win/session_watcher.cc
     win/session_watcher.h)
 
