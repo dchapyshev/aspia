@@ -93,7 +93,7 @@ const Frame* ScreenCapturerGDI::captureFrame()
     FrameDib* current = static_cast<FrameDib*>(queue_.currentFrame());
     FrameDib* previous = static_cast<FrameDib*>(queue_.previousFrame());
 
-    base::win::ScopedSelectObject(memory_dc_, current->bitmap());
+    base::win::ScopedSelectObject select_object(memory_dc_, current->bitmap());
 
     BitBlt(memory_dc_,
            0, 0,
