@@ -76,6 +76,8 @@ list(APPEND SOURCE_BASE_WIN
     win/drive_enumerator.h
     win/printer_enumerator.cc
     win/printer_enumerator.h
+    win/process.cc
+    win/process.h
     win/process_util.cc
     win/process_util.h
     win/registry.cc
@@ -88,6 +90,7 @@ list(APPEND SOURCE_BASE_WIN
     win/scoped_impersonator.h
     win/scoped_local.h
     win/scoped_object.h
+    win/scoped_select_object.h
     win/scoped_thread_desktop.cc
     win/scoped_thread_desktop.h
     win/scoped_user_object.h

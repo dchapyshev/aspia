@@ -23,56 +23,9 @@
 #include <shellapi.h>
 
 #include "base/logging.h"
+#include "base/win/process.h"
 
 namespace base::win {
-
-namespace {
-
-QString normalizedProgram(const QString& program)
-{
-    QString normalized = program;
-
-    if (!normalized.startsWith(QLatin1Char('\"')) &&
-        !normalized.endsWith(QLatin1Char('\"')) &&
-        normalized.contains(QLatin1Char(' ')))
-    {
-        normalized = QLatin1Char('\"') + normalized + QLatin1Char('\"');
-    }
-
-    normalized.replace(QLatin1Char('/'), QLatin1Char('\\'));
-    return normalized;
-}
-
-QString createParamaters(const QStringList& arguments)
-{
-    QString parameters;
-
-    for (int i = 0; i < arguments.size(); ++i)
-    {
-        QString tmp = arguments.at(i);
-
-        // Quotes are escaped and their preceding backslashes are doubled.
-        tmp.replace(QRegExp(QLatin1String("(\\\\*)\"")), QLatin1String("\\1\\1\\\""));
-
-        if (tmp.isEmpty() || tmp.contains(QLatin1Char(' ')) || tmp.contains(QLatin1Char('\t')))
-        {
-            // The argument must not end with a \ since this would be interpreted as escaping the
-            // quote -- rather put the \ behind the quote: e.g. rather use "foo"\ than "foo\"
-            int len = tmp.length();
-            while (len > 0 && tmp.at(len - 1) == QLatin1Char('\\'))
-                --len;
-
-            tmp.insert(len, QLatin1Char('\"'));
-            tmp.prepend(QLatin1Char('\"'));
-        }
-
-        parameters += QLatin1Char(' ') + tmp;
-    }
-
-    return parameters;
-}
-
-} // namespace
 
 bool isProcessElevated()
 {
@@ -98,8 +51,8 @@ bool isProcessElevated()
 
 bool executeProcess(const QString& program, const QStringList& arguments, ProcessExecuteMode mode)
 {
-    QString normalized_program = normalizedProgram(program);
-    QString parameters = createParamaters(arguments);
+    QString normalized_program = Process::normalizedProgram(program);
+    QString parameters = Process::createParamaters(arguments);
 
     SHELLEXECUTEINFOW sei;
     memset(&sei, 0, sizeof(sei));
@@ -181,51 +134,6 @@ bool createPrivilegedToken(ScopedHandle* token_out)
 
     token_out->reset(privileged_token.release());
     return true;
-}
-
-QString createCommandLine(const QString& program, const QStringList& arguments)
-{
-    QString args;
-
-    if (!program.isEmpty())
-    {
-        QString program_name = program;
-
-        if (!program_name.startsWith(QLatin1Char('\"')) &&
-            !program_name.endsWith(QLatin1Char('\"')) &&
-            program_name.contains(QLatin1Char(' ')))
-        {
-            program_name = QLatin1Char('\"') + program_name + QLatin1Char('\"');
-        }
-
-        program_name.replace(QLatin1Char('/'), QLatin1Char('\\'));
-
-        args = program_name + QLatin1Char(' ');
-    }
-
-    for (int i = 0; i < arguments.size(); ++i)
-    {
-        QString tmp = arguments.at(i);
-
-        // Quotes are escaped and their preceding backslashes are doubled.
-        tmp.replace(QRegExp(QLatin1String("(\\\\*)\"")), QLatin1String("\\1\\1\\\""));
-
-        if (tmp.isEmpty() || tmp.contains(QLatin1Char(' ')) || tmp.contains(QLatin1Char('\t')))
-        {
-            // The argument must not end with a \ since this would be interpreted as escaping the
-            // quote -- rather put the \ behind the quote: e.g. rather use "foo"\ than "foo\"
-            int len = tmp.length();
-            while (len > 0 && tmp.at(len - 1) == QLatin1Char('\\'))
-                --len;
-
-            tmp.insert(len, QLatin1Char('\"'));
-            tmp.prepend(QLatin1Char('\"'));
-        }
-
-        args += QLatin1Char(' ') + tmp;
-    }
-
-    return args;
 }
 
 } // namespace base::win

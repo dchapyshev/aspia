@@ -40,8 +40,6 @@ bool copyProcessToken(DWORD desired_access, ScopedHandle* token_out);
 // Creates a copy of the current process with SE_TCB_NAME privilege enabled.
 bool createPrivilegedToken(ScopedHandle* token_out);
 
-QString createCommandLine(const QString& program, const QStringList& arguments);
-
 } // namespace base::win
 
 #endif // BASE__WIN__PROCESS_UTIL_H

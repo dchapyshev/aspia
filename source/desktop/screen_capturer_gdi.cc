@@ -21,6 +21,7 @@
 #include <dwmapi.h>
 
 #include "base/logging.h"
+#include "base/win/scoped_select_object.h"
 #include "desktop/win/effects_disabler.h"
 #include "desktop/win/screen_capture_utils.h"
 #include "desktop/win/wallpaper_disabler.h"
@@ -92,20 +93,14 @@ const Frame* ScreenCapturerGDI::captureFrame()
     FrameDib* current = static_cast<FrameDib*>(queue_.currentFrame());
     FrameDib* previous = static_cast<FrameDib*>(queue_.previousFrame());
 
-    HGDIOBJ old_bitmap = SelectObject(memory_dc_, current->bitmap());
-    if (old_bitmap)
-    {
-        BitBlt(memory_dc_,
-               0, 0,
-               screen_rect.width(),
-               screen_rect.height(),
-               *desktop_dc_,
-               screen_rect.left(),
-               screen_rect.top(),
-               CAPTUREBLT | SRCCOPY);
+    base::win::ScopedSelectObject(memory_dc_, current->bitmap());
 
-        SelectObject(memory_dc_, old_bitmap);
-    }
+    BitBlt(memory_dc_,
+           0, 0,
+           screen_rect.width(), screen_rect.height(),
+           *desktop_dc_,
+           screen_rect.left(), screen_rect.top(),
+           CAPTUREBLT | SRCCOPY);
 
     current->setTopLeft(screen_rect.topLeft());
 

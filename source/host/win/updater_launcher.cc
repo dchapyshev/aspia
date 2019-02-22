@@ -23,6 +23,7 @@
 #include <userenv.h>
 #include <wtsapi32.h>
 
+#include "base/win/process.h"
 #include "base/win/process_util.h"
 #include "base/win/scoped_impersonator.h"
 #include "base/logging.h"
@@ -119,7 +120,7 @@ bool createProcessWithToken(HANDLE token, const QString& program, const QStringL
     PROCESS_INFORMATION process_info;
     memset(&process_info, 0, sizeof(process_info));
 
-    QString command_line = base::win::createCommandLine(program, arguments);
+    QString command_line = base::win::Process::createCommandLine(program, arguments);
 
     if (!CreateProcessAsUserW(token,
                               nullptr,
