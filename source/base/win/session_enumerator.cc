@@ -85,7 +85,7 @@ SessionEnumerator::State SessionEnumerator::state() const
     }
 }
 
-uint32_t SessionEnumerator::sessionId() const
+SessionId SessionEnumerator::sessionId() const
 {
     return info_[current_]->SessionId;
 }

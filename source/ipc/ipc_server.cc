@@ -48,47 +48,60 @@ Server::Server(QObject* parent)
     // Nothing
 }
 
-bool Server::isStarted() const
-{
-    return !server_.isNull();
-}
-
-void Server::start()
+bool Server::start()
 {
     if (isStarted())
     {
         LOG(LS_WARNING) << "An attempt was start an already running server.";
-        return;
+        return false;
     }
 
-    server_ = new QLocalServer(this);
+    std::unique_ptr<QLocalServer> server(new QLocalServer(this));
 
-    server_->setSocketOptions(QLocalServer::OtherAccessOption);
-    server_->setMaxPendingConnections(1);
+    server->setSocketOptions(QLocalServer::OtherAccessOption);
+    server->setMaxPendingConnections(25);
 
-    connect(server_, &QLocalServer::newConnection, this, &Server::onNewConnection);
+    connect(server.get(), &QLocalServer::newConnection, this, &Server::onNewConnection);
 
-    QString channel_id = generateUniqueChannelId();
+    QString channel_id = channel_id_;
 
-    if (!server_->listen(channel_id))
+    if (channel_id.isEmpty())
+        channel_id = generateUniqueChannelId();
+
+    if (!server->listen(channel_id))
     {
-        LOG(LS_WARNING) << "listen failed: " << server_->errorString();
-        emit errorOccurred();
-        stop();
-        return;
+        LOG(LS_WARNING) << "listen failed: " << server->errorString();
+        return false;
     }
 
-    emit started(channel_id);
+    channel_id_ = channel_id;
+    server_ = server.release();
+    return true;
 }
 
 void Server::stop()
 {
-    if (!server_.isNull())
+    if (server_)
     {
         server_->close();
         delete server_;
         emit finished();
     }
+}
+
+bool Server::isStarted() const
+{
+    return server_ != nullptr;
+}
+
+void Server::setChannelId(const QString& channel_id)
+{
+    channel_id_ = channel_id;
+}
+
+QString Server::channelId() const
+{
+    return channel_id_;
 }
 
 void Server::onNewConnection()
@@ -97,7 +110,6 @@ void Server::onNewConnection()
     {
         QLocalSocket* socket = server_->nextPendingConnection();
         emit newConnection(new Channel(socket, nullptr));
-        emit finished();
     }
 }
 

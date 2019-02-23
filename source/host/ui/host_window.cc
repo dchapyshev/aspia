@@ -23,11 +23,14 @@
 #include <QMessageBox>
 #include <QUrl>
 
+#include "base/qt_logging.h"
 #include "base/xml_settings.h"
 #include "common/ui/about_dialog.h"
 #include "common/ui/language_action.h"
 #include "host/ui/host_config_dialog.h"
+#include "host/ui/host_notifier_window.h"
 #include "host/host_settings.h"
+#include "host/host_ui_client.h"
 #include "host/password_generator.h"
 #include "net/adapter_enumerator.h"
 
@@ -65,9 +68,41 @@ HostWindow::HostWindow(Settings& settings, common::LocaleLoader& locale_loader, 
     connect(ui.button_new_password, &QPushButton::released, this, &HostWindow::newPassword);
 
     setFixedHeight(sizeHint().height());
+
+    client_ = new UiClient(this);
+
+    connect(client_, &UiClient::finished, this, &HostWindow::close);
+
+    connect(client_, &UiClient::connectEvent, [this](const proto::notifier::ConnectEvent& event)
+    {
+        if (!notifier_)
+        {
+            notifier_ = new HostNotifierWindow(this);
+
+            connect(client_, &UiClient::disconnectEvent,
+                    notifier_, &HostNotifierWindow::onDisconnectEvent);
+
+            connect(notifier_, &HostNotifierWindow::killSession,
+                    client_, &UiClient::killSession);
+
+            notifier_->setAttribute(Qt::WA_DeleteOnClose);
+            notifier_->show();
+            notifier_->activateWindow();
+        }
+
+        notifier_->onConnectEvent(event);
+    });
+
+    client_->start();
 }
 
 HostWindow::~HostWindow() = default;
+
+void HostWindow::hideToTray()
+{
+    ui.action_show_hide->setText(tr("Show"));
+    setVisible(false);
+}
 
 void HostWindow::refreshIpList()
 {

@@ -4,32 +4,37 @@
 <context>
     <name>Host</name>
     <message>
-        <location filename="../host_main.cc" line="73"/>
+        <location filename="../host_main.cc" line="103"/>
+        <source>Launches the application as hidden.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../host_main.cc" line="106"/>
         <source>The path to the file to import.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="77"/>
+        <location filename="../host_main.cc" line="110"/>
         <source>The path to the file to export.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="81"/>
+        <location filename="../host_main.cc" line="114"/>
         <source>Enables silent mode when exporting and importing.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="84"/>
+        <location filename="../host_main.cc" line="117"/>
         <source>Run application update.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="101"/>
+        <location filename="../host_main.cc" line="135"/>
         <source>Warning</source>
         <translation type="unfinished">Warnung</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="102"/>
+        <location filename="../host_main.cc" line="136"/>
         <source>Export and import parameters can not be specified together.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -447,7 +452,7 @@
 <context>
     <name>host::HostNotifierWindow</name>
     <message>
-        <location filename="../ui/host_notifier_window.cc" line="232"/>
+        <location filename="../ui/host_notifier_window.cc" line="191"/>
         <source>Disconnect</source>
         <translation type="unfinished">Trennen</translation>
     </message>
@@ -455,17 +460,18 @@
 <context>
     <name>host::HostWindow</name>
     <message>
-        <location filename="../ui/host_window.cc" line="49"/>
+        <location filename="../ui/host_window.cc" line="52"/>
         <source>Aspia Host</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/host_window.cc" line="125"/>
+        <location filename="../ui/host_window.cc" line="103"/>
+        <location filename="../ui/host_window.cc" line="160"/>
         <source>Show</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/host_window.cc" line="130"/>
+        <location filename="../ui/host_window.cc" line="165"/>
         <source>Hide</source>
         <translation type="unfinished"></translation>
     </message>

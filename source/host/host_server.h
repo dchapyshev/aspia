@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -19,6 +19,7 @@
 #ifndef HOST__HOST_SERVER_H
 #define HOST__HOST_SERVER_H
 
+#include "base/win/session_status.h"
 #include "host/win/host_process.h"
 #include "ipc/ipc_channel.h"
 #include "net/network_server.h"
@@ -26,6 +27,7 @@
 namespace host {
 
 class Host;
+class UiServer;
 struct SrpUserList;
 
 class HostServer : public QObject
@@ -38,10 +40,10 @@ public:
 
     void start();
     void stop();
-    void setSessionChanged(uint32_t event, uint32_t session_id);
+    void setSessionEvent(base::win::SessionStatus status, base::win::SessionId session_id);
 
 signals:
-    void sessionChanged(uint32_t event, uint32_t session_id);
+    void sessionEvent(base::win::SessionStatus status, base::win::SessionId session_id);
 
 protected:
     // QObject implementation.
@@ -50,36 +52,15 @@ protected:
 private slots:
     void onNewConnection();
     void onHostFinished(Host* host);
-    void onIpcServerStarted(const QString& channel_id);
-    void onIpcNewConnection(ipc::Channel* channel);
-    void onIpcMessageReceived(const QByteArray& buffer);
-    void onNotifierProcessError(HostProcess::ErrorCode error_code);
-    void restartNotifier();
 
 private:
-    enum class NotifierState { STOPPED, STARTING, STARTED };
-
-    void startNotifier();
-    void stopNotifier();
-    void sessionToNotifier(const Host& host);
-    void sessionCloseToNotifier(const Host& host);
+    QPointer<UiServer> ui_server_;
 
     // Accepts incoming network connections.
     QPointer<net::Server> network_server_;
 
-    // Contains the status of the notifier process.
-    NotifierState notifier_state_ = NotifierState::STOPPED;
-
-    // Starts and monitors the status of the notifier process.
-    QPointer<HostProcess> notifier_process_;
-
-    bool has_user_session_ = true;
-
-    // The channel is used to communicate with the notifier process.
-    QPointer<ipc::Channel> ipc_channel_;
-
     // Contains a list of connected sessions.
-    QList<QPointer<Host>> session_list_;
+    std::list<QPointer<Host>> session_list_;
 
     DISALLOW_COPY_AND_ASSIGN(HostServer);
 };

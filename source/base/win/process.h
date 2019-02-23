@@ -21,7 +21,9 @@
 
 #include <QWinEventNotifier>
 
+#include "base/process_handle.h"
 #include "base/win/scoped_object.h"
+#include "base/win/session_id.h"
 
 namespace base::win {
 
@@ -30,7 +32,8 @@ class Process : public QObject
     Q_OBJECT
 
 public:
-    Process(uint32_t process_id, QObject* parent = nullptr);
+    Process(ProcessId process_id, QObject* parent = nullptr);
+    Process(HANDLE process, HANDLE thread, QObject* parent = nullptr);
     ~Process();
 
     static QString createCommandLine(const QString& program, const QStringList& arguments);
@@ -41,17 +44,14 @@ public:
 
     QString filePath() const;
     QString fileName() const;
-    uint32_t processId() const;
-    uint32_t sessionId() const;
+    ProcessId processId() const;
+    SessionId sessionId() const;
 
     void kill();
     void terminate();
 
 signals:
     void finished();
-
-protected:
-    Process(HANDLE process, HANDLE thread, QObject* parent = nullptr);
 
 private:
     QWinEventNotifier* notifier_ = nullptr;

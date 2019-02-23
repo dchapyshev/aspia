@@ -19,12 +19,47 @@
 #include "base/win/process.h"
 
 #include <psapi.h>
+#include <tlhelp32.h>
 
 #include "base/logging.h"
+#include "base/win/process_util.h"
+#include "base/win/scoped_impersonator.h"
 
 namespace base::win {
 
 namespace {
+
+// Creates a copy of the current process with |privilege_name| privilege enabled.
+bool createToken(const wchar_t* privilege_name, win::ScopedHandle* token_out)
+{
+    const DWORD desired_access = TOKEN_ADJUST_PRIVILEGES | TOKEN_IMPERSONATE |
+        TOKEN_DUPLICATE | TOKEN_QUERY;
+
+    win::ScopedHandle privileged_token;
+    if (!copyProcessToken(desired_access, &privileged_token))
+        return false;
+
+    // Get the LUID for the privilege.
+    TOKEN_PRIVILEGES state;
+    state.PrivilegeCount = 1;
+    state.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
+
+    if (!LookupPrivilegeValueW(nullptr, SE_DEBUG_NAME, &state.Privileges[0].Luid))
+    {
+        PLOG(LS_WARNING) << "LookupPrivilegeValueW failed";
+        return false;
+    }
+
+    // Enable the privilege.
+    if (!AdjustTokenPrivileges(privileged_token, FALSE, &state, 0, nullptr, nullptr))
+    {
+        PLOG(LS_WARNING) << "AdjustTokenPrivileges failed";
+        return false;
+    }
+
+    token_out->reset(privileged_token.release());
+    return true;
+}
 
 BOOL CALLBACK terminateEnumProc(HWND hwnd, LPARAM lparam)
 {
@@ -41,14 +76,24 @@ BOOL CALLBACK terminateEnumProc(HWND hwnd, LPARAM lparam)
 
 } // namespace
 
-Process::Process(uint32_t process_id, QObject* parent)
+Process::Process(ProcessId process_id, QObject* parent)
     : QObject(parent)
 {
-    ScopedHandle process(OpenProcess(PROCESS_ALL_ACCESS, FALSE, process_id));
-    if (process.isValid())
+    // We need SE_DEBUG_NAME privilege to open the process.
+    ScopedHandle privileged_token;
+    if (!createToken(SE_DEBUG_NAME, &privileged_token))
         return;
 
+    ScopedImpersonator impersonator;
+    if (!impersonator.loggedOnUser(privileged_token))
+        return;
 
+    ScopedHandle process(OpenProcess(PROCESS_ALL_ACCESS, TRUE, process_id));
+    if (!process.isValid())
+    {
+        PLOG(LS_WARNING) << "OpenProcess failed";
+        return;
+    }
 
     process_.reset(process.release());
 }
@@ -125,7 +170,7 @@ QString Process::createParamaters(const QStringList& arguments)
 
 bool Process::isValid() const
 {
-    return process_.isValid() && thread_.isValid();
+    return process_.isValid();
 }
 
 QString Process::filePath() const
@@ -154,17 +199,17 @@ QString Process::fileName() const
     return QString::fromUtf16(reinterpret_cast<const ushort*>(buffer));
 }
 
-uint32_t Process::processId() const
+ProcessId Process::processId() const
 {
     return GetProcessId(process_.get());
 }
 
-uint32_t Process::sessionId() const
+SessionId Process::sessionId() const
 {
     DWORD session_id;
 
     if (!ProcessIdToSessionId(processId(), &session_id))
-        return -1;
+        return kInvalidSessionId;
 
     return session_id;
 }
@@ -188,8 +233,42 @@ void Process::terminate()
         return;
     }
 
-    EnumWindows(terminateEnumProc, processId());
-    PostThreadMessageW(GetThreadId(thread_), WM_CLOSE, 0, 0);
+    ProcessId process_id = processId();
+
+    if (!EnumWindows(terminateEnumProc, process_id))
+    {
+        PLOG(LS_WARNING) << "EnumWindows failed";
+    }
+
+    if (!thread_.isValid())
+    {
+        ScopedHandle snapshot(CreateToolhelp32Snapshot(TH32CS_SNAPTHREAD, process_id));
+        if (!snapshot.isValid())
+        {
+            PLOG(LS_WARNING) << "CreateToolhelp32Snapshot failed";
+            return;
+        }
+
+        THREADENTRY32 entry;
+        entry.dwSize = sizeof(entry);
+
+        for (BOOL ret = Thread32First(snapshot, &entry);
+             ret && GetLastError() != ERROR_NO_MORE_FILES;
+             ret = Thread32Next(snapshot, &entry))
+        {
+            if (entry.th32OwnerProcessID == process_id)
+            {
+                if (!PostThreadMessageW(entry.th32ThreadID, WM_CLOSE, 0, 0))
+                {
+                    PLOG(LS_WARNING) << "PostThreadMessageW failed";
+                }
+            }
+        }
+    }
+    else
+    {
+        PostThreadMessageW(GetThreadId(thread_), WM_CLOSE, 0, 0);
+    }
 }
 
 } // namespace base::win

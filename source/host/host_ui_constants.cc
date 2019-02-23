@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,39 +16,10 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-syntax = "proto3";
+#include "host/host_ui_constants.h"
 
-option optimize_for = LITE_RUNTIME;
+namespace host {
 
-import "common.proto";
+const char kIpcChannelIdForUI[] = "aspia_ui_server_ipc_channel";
 
-package proto.notifier;
-
-message ConnectEvent
-{
-    string uuid              = 1;
-    string remote_address    = 2;
-    string username          = 3;
-    SessionType session_type = 4;
-}
-
-message DisconnectEvent
-{
-    string uuid = 1;
-}
-
-message KillSession
-{
-    string uuid = 1;
-}
-
-message NotifierToService
-{
-    KillSession kill_session = 1;
-}
-
-message ServiceToNotifier
-{
-    ConnectEvent connect_event       = 1;
-    DisconnectEvent disconnect_event = 2;
-}
+} // namespace host

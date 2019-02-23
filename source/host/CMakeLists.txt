@@ -25,8 +25,6 @@ list(APPEND SOURCE_HOST_CORE
     host_export.h
     host_main.cc
     host_main.h
-    host_notifier.cc
-    host_notifier.h
     host_server.cc
     host_server.h
     host_session.cc
@@ -45,6 +43,14 @@ list(APPEND SOURCE_HOST_CORE
     host_settings.h
     host_system_info.cc
     host_system_info.h
+    host_ui_client.cc
+    host_ui_client.h
+    host_ui_constants.cc
+    host_ui_constants.h
+    host_ui_process.cc
+    host_ui_process.h
+    host_ui_server.cc
+    host_ui_server.h
     input_injector.cc
     input_injector.h
     password_generator.cc
@@ -79,8 +85,6 @@ list(APPEND SOURCE_HOST_CORE_WIN
     win/host.h
     win/host_process.cc
     win/host_process.h
-    win/host_process_impl.cc
-    win/host_process_impl.h
     win/host_service.cc
     win/host_service.h
     win/host_service_constants.cc

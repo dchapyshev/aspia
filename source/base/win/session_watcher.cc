@@ -73,8 +73,8 @@ bool SessionWatcher::nativeEvent(const QByteArray& /* event_type */, void* messa
     if (native_message->message != WM_WTSSESSION_CHANGE)
         return false;
 
-    emit sessionEvent(static_cast<uint32_t>(native_message->wParam),
-                      static_cast<uint32_t>(native_message->lParam));
+    emit sessionEvent(static_cast<SessionStatus>(native_message->wParam),
+                      static_cast<SessionId>(native_message->lParam));
 
     *result = 0;
     return true;

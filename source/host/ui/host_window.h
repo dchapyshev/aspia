@@ -20,6 +20,7 @@
 #define HOST__UI__HOST_WINDOW_H
 
 #include <QMainWindow>
+#include <QPointer>
 #include <QSystemTrayIcon>
 
 #include "base/macros_magic.h"
@@ -29,6 +30,9 @@
 
 namespace host {
 
+class HostNotifierWindow;
+class UiClient;
+
 class HostWindow : public QMainWindow
 {
     Q_OBJECT
@@ -36,6 +40,8 @@ class HostWindow : public QMainWindow
 public:
     HostWindow(Settings& settings, common::LocaleLoader& locale_loader, QWidget* parent = nullptr);
     ~HostWindow();
+
+    void hideToTray();
 
 private slots:
     void refreshIpList();
@@ -57,6 +63,9 @@ private:
 
     QSystemTrayIcon tray_icon_;
     QMenu tray_menu_;
+
+    QPointer<HostNotifierWindow> notifier_;
+    QPointer<UiClient> client_;
 
     DISALLOW_COPY_AND_ASSIGN(HostWindow);
 };

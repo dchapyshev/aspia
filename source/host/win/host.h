@@ -23,6 +23,8 @@
 #include <QUuid>
 
 #include "base/macros_magic.h"
+#include "base/win/session_id.h"
+#include "base/win/session_status.h"
 #include "host/win/host_process.h"
 #include "proto/common.pb.h"
 
@@ -62,7 +64,7 @@ public:
 
 public slots:
     void stop();
-    void sessionChanged(uint32_t event, uint32_t session_id);
+    void setSessionEvent(base::win::SessionStatus status, base::win::SessionId session_id);
 
 signals:
     void finished(Host* host);
@@ -72,25 +74,23 @@ protected:
     void timerEvent(QTimerEvent* event) override;
 
 private slots:
-    void ipcServerStarted(const QString& channel_id);
     void ipcNewConnection(ipc::Channel* channel);
-    void sessionProcessError(HostProcess::ErrorCode error_code);
-    void attachSession(uint32_t session_id);
+    void attachSession(base::win::SessionId session_id);
     void dettachSession();
 
 private:
     bool startFakeSession();
 
     enum class State { STOPPED, STARTING, STOPPING, DETACHED, ATTACHED };
-    static const uint32_t kInvalidSessionId = 0xFFFFFFFF;
 
     QUuid uuid_;
 
-    uint32_t session_id_ = kInvalidSessionId;
+    base::win::SessionId session_id_ = base::win::kInvalidSessionId;
     int attach_timer_id_ = 0;
     State state_ = State::STOPPED;
 
     net::ChannelHost* network_channel_ = nullptr;
+    QPointer<ipc::Server> ipc_server_;
     QPointer<ipc::Channel> ipc_channel_;
     QPointer<HostProcess> session_process_;
     QPointer<SessionFake> fake_session_;

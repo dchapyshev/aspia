@@ -25,6 +25,11 @@
 #include <QPointer>
 
 #include "base/macros_magic.h"
+#include "base/process_handle.h"
+
+#if defined(OS_WIN)
+#include "base/win/session_id.h"
+#endif // defined(OS_WIN)
 
 namespace ipc {
 
@@ -40,6 +45,14 @@ public:
     static Channel* createClient(QObject* parent = nullptr);
 
     void connectToServer(const QString& channel_name);
+
+    base::ProcessId clientProcessId() const;
+    base::ProcessId serverProcessId() const;
+
+#if defined(OS_WIN)
+    base::win::SessionId clientSessionId() const;
+    base::win::SessionId serverSessionId() const;
+#endif
 
 public slots:
     void stop();

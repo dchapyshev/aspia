@@ -32,6 +32,8 @@ list(APPEND SOURCE_BASE
     macros_magic.h
     power_controller.h
     power_controller_win.cc
+    process_handle.cc
+    process_handle.h
     qt_logging.cc
     qt_logging.h
     scoped_clear_last_error.cc
@@ -99,6 +101,10 @@ list(APPEND SOURCE_BASE_WIN
     win/security_helpers.h
     win/session_enumerator.cc
     win/session_enumerator.h
+    win/session_id.cc
+    win/session_id.h
+    win/session_status.cc
+    win/session_status.h
     win/session_watcher.cc
     win/session_watcher.h)
 

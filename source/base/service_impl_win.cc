@@ -86,29 +86,29 @@ public:
 
     static const int kStartEvent = QEvent::User + 1;
     static const int kStopEvent = QEvent::User + 2;
-    static const int kSessionChangeEvent = QEvent::User + 3;
+    static const int kSessionEvent = QEvent::User + 3;
 
     static void postStartEvent();
     static void postStopEvent();
-    static void postSessionChangeEvent(uint32_t event, uint32_t session_id);
+    static void postSessionEvent(win::SessionStatus status, win::SessionId session_id);
 
     class SessionChangeEvent : public QEvent
     {
     public:
-        SessionChangeEvent(uint32_t event, uint32_t session_id)
-            : QEvent(QEvent::Type(kSessionChangeEvent)),
-              event_(event),
+        SessionChangeEvent(win::SessionStatus status, uint32_t session_id)
+            : QEvent(QEvent::Type(kSessionEvent)),
+              status_(status),
               session_id_(session_id)
         {
             // Nothing
         }
 
-        uint32_t event() const { return event_; }
-        uint32_t sessionId() const { return session_id_; }
+        win::SessionStatus status() const { return status_; }
+        win::SessionId sessionId() const { return session_id_; }
 
     private:
-        uint32_t event_;
-        uint32_t session_id_;
+        win::SessionStatus status_;
+        win::SessionId session_id_;
 
         DISALLOW_COPY_AND_ASSIGN(SessionChangeEvent);
     };
@@ -264,8 +264,9 @@ DWORD WINAPI ServiceHandler::serviceControlHandler(
             instance->event_processed = false;
 
             // Post event to application.
-            ServiceEventHandler::postSessionChangeEvent(
-                event_type, reinterpret_cast<WTSSESSION_NOTIFICATION*>(event_data)->dwSessionId);
+            ServiceEventHandler::postSessionEvent(
+                static_cast<win::SessionStatus>(event_type),
+                reinterpret_cast<WTSSESSION_NOTIFICATION*>(event_data)->dwSessionId);
 
             // Wait for the event to be processed by the application.
             while (!instance->event_processed)
@@ -332,10 +333,10 @@ void ServiceEventHandler::postStopEvent()
 }
 
 // static
-void ServiceEventHandler::postSessionChangeEvent(uint32_t event, uint32_t session_id)
+void ServiceEventHandler::postSessionEvent(win::SessionStatus status, win::SessionId session_id)
 {
     if (instance)
-        QCoreApplication::postEvent(instance, new SessionChangeEvent(event, session_id));
+        QCoreApplication::postEvent(instance, new SessionChangeEvent(status, session_id));
 }
 
 void ServiceEventHandler::customEvent(QEvent* event)
@@ -351,14 +352,14 @@ void ServiceEventHandler::customEvent(QEvent* event)
             QCoreApplication::instance()->quit();
             break;
 
-        case kSessionChangeEvent:
+        case kSessionEvent:
         {
             SessionChangeEvent* session_change_event = dynamic_cast<SessionChangeEvent*>(event);
             if (!session_change_event)
                 return;
 
-            ServiceImpl::instance()->sessionChange(session_change_event->event(),
-                                                   session_change_event->sessionId());
+            ServiceImpl::instance()->sessionEvent(
+                session_change_event->status(), session_change_event->sessionId());
         }
         break;
 

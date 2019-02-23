@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,42 +16,49 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST__HOST_NOTIFIER_H
-#define HOST__HOST_NOTIFIER_H
+#ifndef HOST__HOST_UI_CLIENT_H
+#define HOST__HOST_UI_CLIENT_H
 
-#include "ipc/ipc_channel.h"
+#include <QObject>
+#include <QPointer>
+
+#include "base/macros_magic.h"
 #include "proto/notifier.pb.h"
+
+namespace ipc {
+class Channel;
+} // namespace ipc
 
 namespace host {
 
-class HostNotifier : public QObject
+class UiClient : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit HostNotifier(QObject* parent = nullptr);
-    ~HostNotifier() = default;
+    explicit UiClient(QObject* parent = nullptr);
+    ~UiClient();
 
-    bool start(const QString& channel_id);
-
-public slots:
+    void start();
     void stop();
+
     void killSession(const std::string& uuid);
 
 signals:
+    void started();
     void finished();
-    void sessionOpen(const proto::notifier::Session& session);
-    void sessionClose(const proto::notifier::SessionClose& session_close);
+    void connectEvent(const proto::notifier::ConnectEvent& event);
+    void disconnectEvent(const proto::notifier::DisconnectEvent& event);
 
 private slots:
-    void onIpcMessageReceived(const QByteArray& buffer);
+    void onChannelMessage(const QByteArray& buffer);
 
 private:
-    QPointer<ipc::Channel> ipc_channel_;
+    QPointer<ipc::Channel> channel_;
 
-    DISALLOW_COPY_AND_ASSIGN(HostNotifier);
+    DISALLOW_COPY_AND_ASSIGN(UiClient);
 };
 
 } // namespace host
 
-#endif // HOST__HOST_NOTIFIER_H
+#endif // HOST__HOST_UI_CLIENT_H

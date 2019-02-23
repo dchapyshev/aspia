@@ -24,6 +24,11 @@
 #include "base/macros_magic.h"
 #include "build/build_config.h"
 
+#if defined(OS_WIN)
+#include "base/win/session_id.h"
+#include "base/win/session_status.h"
+#endif // defined(OS_WIN)
+
 namespace base {
 
 class ServiceEventHandler;
@@ -49,7 +54,7 @@ protected:
     virtual void stop() = 0;
 
 #if defined(OS_WIN)
-    virtual void sessionChange(uint32_t event, uint32_t session_id) = 0;
+    virtual void sessionEvent(win::SessionStatus event, win::SessionId session_id) = 0;
 #endif // defined(OS_WIN)
 
     virtual void createApplication(int& argc, char* argv[]) = 0;

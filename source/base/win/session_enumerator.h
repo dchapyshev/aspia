@@ -24,6 +24,7 @@
 
 #include "base/macros_magic.h"
 #include "base/win/scoped_wts_memory.h"
+#include "base/win/session_id.h"
 
 namespace base::win {
 
@@ -55,7 +56,7 @@ public:
     };
 
     State state() const;
-    uint32_t sessionId() const;
+    SessionId sessionId() const;
 
     // A string that contains the name of this session. For example, "services", "console",
     // or "RDP-Tcp#0".

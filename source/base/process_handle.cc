@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,39 +16,26 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-syntax = "proto3";
+#include "base/process_handle.h"
 
-option optimize_for = LITE_RUNTIME;
+namespace base {
 
-import "common.proto";
-
-package proto.notifier;
-
-message ConnectEvent
+ProcessHandle currentProcessHandle()
 {
-    string uuid              = 1;
-    string remote_address    = 2;
-    string username          = 3;
-    SessionType session_type = 4;
+#if defined(OS_WIN)
+    return GetCurrentProcess();
+#else
+#error Platfrom support not implemented
+#endif
 }
 
-message DisconnectEvent
+ProcessId currentProcessId()
 {
-    string uuid = 1;
+#if defined(OS_WIN)
+    return GetCurrentProcessId();
+#else
+#error Platfrom support not implemented
+#endif
 }
 
-message KillSession
-{
-    string uuid = 1;
-}
-
-message NotifierToService
-{
-    KillSession kill_session = 1;
-}
-
-message ServiceToNotifier
-{
-    ConnectEvent connect_event       = 1;
-    DisconnectEvent disconnect_event = 2;
-}
+} // namespace base

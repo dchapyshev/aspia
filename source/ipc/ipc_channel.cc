@@ -18,6 +18,13 @@
 
 #include "ipc/ipc_channel.h"
 
+#include "build/build_config.h"
+
+#if defined(OS_WIN)
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#endif // defined(OS_WIN)
+
 #include "base/qt_logging.h"
 
 namespace ipc {
@@ -58,6 +65,72 @@ void Channel::connectToServer(const QString& channel_name)
 {
     socket_->connectToServer(channel_name);
 }
+
+base::ProcessId Channel::clientProcessId() const
+{
+#if defined(OS_WIN)
+    ULONG process_id = base::kNullProcessId;
+
+    if (!GetNamedPipeClientProcessId(reinterpret_cast<HANDLE>(socket_->socketDescriptor()),
+                                     &process_id))
+    {
+        PLOG(LS_WARNING) << "GetNamedPipeClientProcessId failed";
+        return base::kNullProcessId;
+    }
+
+    return process_id;
+#else
+#error Platform support not implemented
+#endif
+}
+
+base::ProcessId Channel::serverProcessId() const
+{
+#if defined(OS_WIN)
+    ULONG process_id = base::kNullProcessId;
+
+    if (!GetNamedPipeServerProcessId(reinterpret_cast<HANDLE>(socket_->socketDescriptor()),
+                                     &process_id))
+    {
+        PLOG(LS_WARNING) << "GetNamedPipeServerProcessId failed";
+        return base::kNullProcessId;
+    }
+
+    return process_id;
+#else
+#error Platform support not implemented
+#endif
+}
+
+#if defined(OS_WIN)
+base::win::SessionId Channel::clientSessionId() const
+{
+    ULONG session_id = base::win::kInvalidSessionId;
+
+    if (!GetNamedPipeClientSessionId(reinterpret_cast<HANDLE>(socket_->socketDescriptor()),
+                                     &session_id))
+    {
+        PLOG(LS_WARNING) << "GetNamedPipeClientSessionId failed";
+        return base::win::kInvalidSessionId;
+    }
+
+    return session_id;
+}
+
+base::win::SessionId Channel::serverSessionId() const
+{
+    ULONG session_id = base::win::kInvalidSessionId;
+
+    if (!GetNamedPipeServerSessionId(reinterpret_cast<HANDLE>(socket_->socketDescriptor()),
+                                     &session_id))
+    {
+        PLOG(LS_WARNING) << "GetNamedPipeServerSessionId failed";
+        return base::win::kInvalidSessionId;
+    }
+
+    return session_id;
+}
+#endif // defined(OS_WIN)
 
 void Channel::stop()
 {

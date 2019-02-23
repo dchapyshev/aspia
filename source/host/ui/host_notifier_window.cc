@@ -25,7 +25,6 @@
 
 #include "base/logging.h"
 #include "build/build_config.h"
-#include "host/host_settings.h"
 
 namespace host {
 
@@ -34,10 +33,10 @@ namespace {
 class SessionTreeItem : public QTreeWidgetItem
 {
 public:
-    SessionTreeItem(const proto::notifier::Session& session)
-        : session_(session)
+    SessionTreeItem(const proto::notifier::ConnectEvent& event)
+        : event_(event)
     {
-        switch (session_.session_type())
+        switch (event_.session_type())
         {
             case proto::SESSION_TYPE_DESKTOP_MANAGE:
                 setIcon(0, QIcon(QStringLiteral(":/img/monitor-keyboard.png")));
@@ -52,19 +51,19 @@ public:
                 break;
 
             default:
-                LOG(LS_FATAL) << "Unexpected session type: " << session_.session_type();
+                LOG(LS_FATAL) << "Unexpected session type: " << event_.session_type();
                 return;
         }
 
         setText(0, QString("%1 (%2)")
-                .arg(QString::fromStdString(session_.username()))
-                .arg(QString::fromStdString(session_.remote_address())));
+                .arg(QString::fromStdString(event_.username()))
+                .arg(QString::fromStdString(event_.remote_address())));
     }
 
-    const proto::notifier::Session& session() const { return session_; }
+    const proto::notifier::ConnectEvent& event() const { return event_; }
 
 private:
-    proto::notifier::Session session_;
+    proto::notifier::ConnectEvent event_;
     DISALLOW_COPY_AND_ASSIGN(SessionTreeItem);
 };
 
@@ -73,14 +72,6 @@ private:
 HostNotifierWindow::HostNotifierWindow(QWidget* parent)
     : QWidget(parent, Qt::FramelessWindowHint | Qt::Tool | Qt::WindowStaysOnTopHint)
 {
-    Settings settings;
-
-    QString current_locale = settings.locale();
-
-    if (!locale_loader_.contains(current_locale))
-        settings.setLocale(QStringLiteral(DEFAULT_LOCALE));
-
-    locale_loader_.installTranslators(current_locale);
     ui.setupUi(this);
 
     ui.label_title->installEventFilter(this);
@@ -103,23 +94,18 @@ HostNotifierWindow::HostNotifierWindow(QWidget* parent)
     updateWindowPosition();
 }
 
-void HostNotifierWindow::setChannelId(const QString& channel_id)
+void HostNotifierWindow::onConnectEvent(const proto::notifier::ConnectEvent& event)
 {
-    channel_id_ = channel_id;
-}
-
-void HostNotifierWindow::sessionOpen(const proto::notifier::Session& session)
-{
-    ui.tree->addTopLevelItem(new SessionTreeItem(session));
+    ui.tree->addTopLevelItem(new SessionTreeItem(event));
     ui.button_disconnect_all->setEnabled(true);
 }
 
-void HostNotifierWindow::sessionClose(const proto::notifier::SessionClose& session_close)
+void HostNotifierWindow::onDisconnectEvent(const proto::notifier::DisconnectEvent& event)
 {
     for (int i = 0; i < ui.tree->topLevelItemCount(); ++i)
     {
         SessionTreeItem* item = dynamic_cast<SessionTreeItem*>(ui.tree->topLevelItem(i));
-        if (item && item->session().uuid() == session_close.uuid())
+        if (item && item->event().uuid() == event.uuid())
         {
             delete item;
             break;
@@ -127,7 +113,7 @@ void HostNotifierWindow::sessionClose(const proto::notifier::SessionClose& sessi
     }
 
     if (!ui.tree->topLevelItemCount())
-        quit();
+        close();
 }
 
 bool HostNotifierWindow::eventFilter(QObject* object, QEvent* event)
@@ -173,36 +159,9 @@ bool HostNotifierWindow::eventFilter(QObject* object, QEvent* event)
     return QWidget::eventFilter(object, event);
 }
 
-void HostNotifierWindow::showEvent(QShowEvent* event)
-{
-    if (!notifier_)
-    {
-        notifier_ = new HostNotifier(this);
-
-        connect(notifier_, &HostNotifier::finished, this, &HostNotifierWindow::quit);
-        connect(notifier_, &HostNotifier::sessionOpen, this, &HostNotifierWindow::sessionOpen);
-        connect(notifier_, &HostNotifier::sessionClose, this, &HostNotifierWindow::sessionClose);
-        connect(this, &HostNotifierWindow::killSession, notifier_, &HostNotifier::killSession);
-
-        if (!notifier_->start(channel_id_))
-        {
-            quit();
-            return;
-        }
-    }
-
-    QWidget::showEvent(event);
-}
-
 void HostNotifierWindow::hideEvent(QHideEvent* event)
 {
     show();
-}
-
-void HostNotifierWindow::quit()
-{
-    close();
-    QApplication::quit();
 }
 
 void HostNotifierWindow::onShowHidePressed()
@@ -219,7 +178,7 @@ void HostNotifierWindow::onDisconnectAllPressed()
     {
         SessionTreeItem* item = dynamic_cast<SessionTreeItem*>(ui.tree->topLevelItem(i));
         if (item)
-            emit killSession(item->session().uuid());
+            emit killSession(item->event().uuid());
     }
 }
 
@@ -235,7 +194,7 @@ void HostNotifierWindow::onContextMenu(const QPoint& point)
     menu.addAction(&disconnect_action);
 
     if (menu.exec(ui.tree->viewport()->mapToGlobal(point)) == &disconnect_action)
-        emit killSession(item->session().uuid());
+        emit killSession(item->event().uuid());
 }
 
 void HostNotifierWindow::updateWindowPosition()

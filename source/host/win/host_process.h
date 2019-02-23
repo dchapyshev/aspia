@@ -20,9 +20,11 @@
 #define HOST__WIN__HOST_PROCESS_H
 
 #include <QObject>
-#include <QScopedPointer>
+#include <QPointer>
 
 #include "base/macros_magic.h"
+#include "base/win/process.h"
+#include "base/win/session_id.h"
 
 namespace host {
 
@@ -33,39 +35,22 @@ class HostProcess : public QObject
     Q_OBJECT
 
 public:
-    enum ProcessState
-    {
-        NotRunning,
-        Starting,
-        Running
-    };
-    Q_ENUM(ProcessState)
-
-    enum Account
-    {
-        System,
-        User
-    };
-    Q_ENUM(Account)
-
-    enum ErrorCode
-    {
-        NoError,
-        NoLoggedOnUser,
-        OtherError
-    };
-    Q_ENUM(ErrorCode)
+    enum ProcessState { NotRunning, Starting, Running };
+    enum Account { System, User };
+    enum ErrorCode { NoError, NoLoggedOnUser, OtherError };
 
     HostProcess(QObject* parent = nullptr);
     virtual ~HostProcess();
 
-    void start(uint32_t session_id,
-               Account account,
-               const QString& program,
-               const QStringList& arguments);
+    ErrorCode start();
 
-    uint32_t sessionId() const;
-    void setSessionId(uint32_t session_id);
+    ErrorCode start(base::win::SessionId session_id,
+                    Account account,
+                    const QString& program,
+                    const QStringList& arguments);
+
+    base::win::SessionId sessionId() const;
+    void setSessionId(base::win::SessionId session_id);
 
     Account account() const;
     void setAccount(Account account);
@@ -79,19 +64,21 @@ public:
     ProcessState state() const;
 
 public slots:
-    void start();
     void kill();
     void terminate();
 
 signals:
     void started();
     void finished();
-    void errorOccurred(HostProcess::ErrorCode error_code);
 
 private:
-    friend class HostProcessImpl;
+    QPointer<base::win::Process> process_;
 
-    QScopedPointer<HostProcessImpl> impl_;
+    HostProcess::ProcessState state_ = HostProcess::NotRunning;
+    HostProcess::Account account_ = HostProcess::User;
+    base::win::SessionId session_id_ = base::win::kInvalidSessionId;
+    QString program_;
+    QStringList arguments_;
 
     DISALLOW_COPY_AND_ASSIGN(HostProcess);
 };

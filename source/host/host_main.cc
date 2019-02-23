@@ -22,6 +22,7 @@
 #include <QCommandLineParser>
 #include <QMessageBox>
 
+#include "base/win/scoped_thread_desktop.h"
 #include "base/win/process_util.h"
 #include "base/base_paths.h"
 #include "base/qt_logging.h"
@@ -52,8 +53,37 @@ std::filesystem::path loggingDir()
     return path;
 }
 
+bool waitForValidInputDesktop()
+{
+    int max_attempt_count = 600;
+
+    do
+    {
+        base::Desktop input_desktop(base::Desktop::inputDesktop());
+        if (input_desktop.isValid())
+        {
+            if (input_desktop.setThreadDesktop())
+                break;
+        }
+
+        Sleep(100);
+    }
+    while (--max_attempt_count > 0);
+
+    if (max_attempt_count == 0)
+    {
+        LOG(LS_WARNING) << "Exceeded the number of attempts";
+        return false;
+    }
+
+    return true;
+}
+
 int runApplication(int argc, char* argv[])
 {
+    if (!waitForValidInputDesktop())
+        return 1;
+
     QApplication application(argc, argv);
     application.setOrganizationName(QStringLiteral("Aspia"));
     application.setApplicationName(QStringLiteral("Host"));
@@ -68,6 +98,9 @@ int runApplication(int argc, char* argv[])
         host_settings.setLocale(QStringLiteral(DEFAULT_LOCALE));
 
     locale_loader.installTranslators(current_locale);
+
+    QCommandLineOption hidden_option(QStringLiteral("hidden"),
+        QApplication::translate("Host", "Launches the application as hidden."));
 
     QCommandLineOption import_option(QStringLiteral("import"),
         QApplication::translate("Host", "The path to the file to import."),
@@ -86,6 +119,7 @@ int runApplication(int argc, char* argv[])
     QCommandLineParser parser;
     parser.addHelpOption();
     parser.addVersionOption();
+    parser.addOption(hidden_option);
     parser.addOption(import_option);
     parser.addOption(export_option);
     parser.addOption(silent_option);
@@ -126,7 +160,12 @@ int runApplication(int argc, char* argv[])
     else
     {
         host::HostWindow window(host_settings, locale_loader);
-        window.show();
+
+        if (parser.isSet(hidden_option))
+            window.hideToTray();
+        else
+            window.show();
+
         window.activateWindow();
 
         return application.exec();

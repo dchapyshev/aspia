@@ -69,14 +69,14 @@ HostService::~HostService() = default;
 
 void HostService::start()
 {
-    LOG(LS_INFO) << "Service is started";
+    LOG(LS_INFO) << "Service is started.";
 
     SetPriorityClass(GetCurrentProcess(), HIGH_PRIORITY_CLASS);
 
     com_initializer_.reset(new base::win::ScopedCOMInitializer());
     if (!com_initializer_->isSucceeded())
     {
-        LOG(LS_FATAL) << "COM not initialized";
+        LOG(LS_FATAL) << "COM not initialized.";
         return;
     }
 
@@ -91,13 +91,13 @@ void HostService::stop()
     server_.reset();
     com_initializer_.reset();
 
-    LOG(LS_INFO) << "Service is stopped";
+    LOG(LS_INFO) << "Service is stopped.";
 }
 
-void HostService::sessionChange(uint32_t event, uint32_t session_id)
+void HostService::sessionEvent(base::win::SessionStatus status, base::win::SessionId session_id)
 {
     if (server_)
-        server_->setSessionChanged(event, session_id);
+        server_->setSessionEvent(status, session_id);
 }
 
 } // namespace host

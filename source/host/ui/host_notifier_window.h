@@ -19,8 +19,7 @@
 #ifndef HOST__UI__HOST_NOTIFIER_WINDOW_H
 #define HOST__UI__HOST_NOTIFIER_WINDOW_H
 
-#include "common/locale_loader.h"
-#include "host/host_notifier.h"
+#include "base/macros_magic.h"
 #include "proto/notifier.pb.h"
 #include "ui_host_notifier_window.h"
 
@@ -34,11 +33,9 @@ public:
     explicit HostNotifierWindow(QWidget* parent = nullptr);
     ~HostNotifierWindow() = default;
 
-    void setChannelId(const QString& channel_id);
-
 public slots:
-    void sessionOpen(const proto::notifier::Session& session);
-    void sessionClose(const proto::notifier::SessionClose& session_close);
+    void onConnectEvent(const proto::notifier::ConnectEvent& event);
+    void onDisconnectEvent(const proto::notifier::DisconnectEvent& event);
 
 signals:
     void killSession(const std::string& uuid);
@@ -46,11 +43,9 @@ signals:
 protected:
     // QWidget implementation.
     bool eventFilter(QObject* object, QEvent* event) override;
-    void showEvent(QShowEvent* event) override;
     void hideEvent(QHideEvent* event) override;
 
 private slots:
-    void quit();
     void onShowHidePressed();
     void onDisconnectAllPressed();
     void onContextMenu(const QPoint& point);
@@ -62,12 +57,8 @@ private:
 
     Ui::HostNotifierWindow ui;
 
-    common::LocaleLoader locale_loader_;
     QPoint start_pos_;
     QRect window_rect_;
-
-    HostNotifier* notifier_ = nullptr;
-    QString channel_id_;
 
     DISALLOW_COPY_AND_ASSIGN(HostNotifierWindow);
 };

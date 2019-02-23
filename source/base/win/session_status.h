@@ -16,39 +16,29 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__WIN__SESSION_WATCHER_H
-#define BASE__WIN__SESSION_WATCHER_H
-
-#include <QWidget>
-
-#include "base/macros_magic.h"
-#include "base/win/session_id.h"
-#include "base/win/session_status.h"
+#ifndef BASE__WIN__SESSION_STATUS_H
+#define BASE__WIN__SESSION_STATUS_H
 
 namespace base::win {
 
-class SessionWatcher : public QWidget
+enum class SessionStatus
 {
-    Q_OBJECT
-
-public:
-    explicit SessionWatcher(QWidget* parent = nullptr);
-    ~SessionWatcher() = default;
-
-    void start();
-    void stop();
-
-signals:
-    void sessionEvent(SessionStatus status, SessionId session_id);
-
-protected:
-    // QWidget implementation.
-    bool nativeEvent(const QByteArray& event_type, void* message, long* result) override;
-
-private:
-    DISALLOW_COPY_AND_ASSIGN(SessionWatcher);
+    UNKNOWN                = 0x0,
+    CONSOLE_CONNECT        = 0x1,
+    CONSOLE_DISCONNECT     = 0x2,
+    REMOTE_CONNECT         = 0x3,
+    REMOTE_DISCONNECT      = 0x4,
+    SESSION_LOGON          = 0x5,
+    SESSION_LOGOFF         = 0x6,
+    SESSION_LOCK           = 0x7,
+    SESSION_UNLOCK         = 0x8,
+    SESSION_REMOTE_CONTROL = 0x9,
+    SESSION_CREATE         = 0xA,
+    SESSION_TERMINATE      = 0xB
 };
+
+const char* sessionStatusToString(SessionStatus status);
 
 } // namespace base::win
 
-#endif // BASE__WIN__SESSION_WATCHER_H
+#endif // BASE__WIN__SESSION_STATUS_H

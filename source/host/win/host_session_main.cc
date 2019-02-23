@@ -18,15 +18,16 @@
 
 #include "host/win/host_session_main.h"
 
-#include <QApplication>
+#include <QGuiApplication>
 #include <QCommandLineParser>
 
-#include "base/win/scoped_thread_desktop.h"
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+
 #include "base/base_paths.h"
 #include "base/qt_logging.h"
 #include "build/version.h"
 #include "crypto/scoped_crypto_initializer.h"
-#include "host/ui/host_notifier_window.h"
 #include "host/host_session.h"
 
 namespace host {
@@ -42,65 +43,6 @@ std::filesystem::path loggingDir()
 
     path.append("aspia/logs");
     return path;
-}
-
-bool waitForValidInputDesktop()
-{
-    int max_attempt_count = 600;
-
-    do
-    {
-        base::Desktop input_desktop(base::Desktop::inputDesktop());
-        if (input_desktop.isValid())
-        {
-            if (input_desktop.setThreadDesktop())
-                break;
-        }
-
-        Sleep(100);
-    }
-    while (--max_attempt_count > 0);
-
-    if (max_attempt_count == 0)
-    {
-        LOG(LS_WARNING) << "Exceeded the number of attempts";
-        return false;
-    }
-
-    return true;
-}
-
-int runHostSession(const QString& channel_id, const QString& session_type)
-{
-    // At the end of the user's session, the program ends later than the others.
-    SetProcessShutdownParameters(0, SHUTDOWN_NORETRY);
-
-    QScopedPointer<Session> session(Session::create(session_type, channel_id));
-    if (session.isNull())
-        return 1;
-
-    session->start();
-
-    return QApplication::exec();
-}
-
-int runHostNotifier(const QString& channel_id)
-{
-    HostNotifierWindow window;
-    window.setChannelId(channel_id);
-    window.show();
-
-    DWORD active_thread_id = GetWindowThreadProcessId(GetForegroundWindow(), nullptr);
-    DWORD current_thread_id = GetCurrentThreadId();
-
-    if (active_thread_id != current_thread_id)
-    {
-        AttachThreadInput(current_thread_id, active_thread_id, TRUE);
-        SetForegroundWindow(reinterpret_cast<HWND>(window.winId()));
-        AttachThreadInput(current_thread_id, active_thread_id, FALSE);
-    }
-
-    return QApplication::exec();
 }
 
 int runApplication(int argc, char *argv[])
@@ -128,36 +70,27 @@ int runApplication(int argc, char *argv[])
         return 1;
     }
 
-    QString channel_id = parser.value(channel_id_option);
-    if (channel_id.isEmpty())
+    if (parser.isSet(session_type_option) && parser.isSet(channel_id_option))
     {
-        LOG(LS_WARNING) << "Empty channel id";
-        return 1;
-    }
+        // At the end of the user's session, the program ends later than the others.
+        SetProcessShutdownParameters(0, SHUTDOWN_NORETRY);
 
-    if (parser.isSet(session_type_option))
-    {
         QGuiApplication application(argc, argv);
 
         application.setOrganizationName(QStringLiteral("Aspia"));
         application.setApplicationName(QStringLiteral("Host Session"));
         application.setApplicationVersion(QStringLiteral(ASPIA_VERSION_STRING));
 
-        return runHostSession(channel_id, parser.value(session_type_option));
+        QScopedPointer<Session> session(
+            Session::create(parser.value(session_type_option), parser.value(channel_id_option)));
+        if (session)
+        {
+            session->start();
+            return QGuiApplication::exec();
+        }
     }
-    else
-    {
-        if (!waitForValidInputDesktop())
-            return 1;
 
-        QApplication application(argc, argv);
-
-        application.setOrganizationName(QStringLiteral("Aspia"));
-        application.setApplicationName(QStringLiteral("Host Notifier"));
-        application.setApplicationVersion(QStringLiteral(ASPIA_VERSION_STRING));
-
-        return runHostNotifier(channel_id);
-    }
+    return 1;
 }
 
 } // namespace

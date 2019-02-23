@@ -18,9 +18,6 @@
 
 #include "host/win/host.h"
 
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-
 #include <QCoreApplication>
 
 #include "base/qt_logging.h"
@@ -30,6 +27,12 @@
 #include "net/network_channel_host.h"
 
 namespace host {
+
+namespace {
+
+const char kFileName[] = "aspia_host_session.exe";
+
+} // namespace
 
 Host::Host(QObject* parent)
     : QObject(parent)
@@ -138,7 +141,7 @@ bool Host::start()
         return false;
     }
 
-    attachSession(WTSGetActiveConsoleSessionId());
+    attachSession(base::win::activeConsoleSessionId());
     return true;
 }
 
@@ -167,20 +170,21 @@ void Host::stop()
     emit finished(this);
 }
 
-void Host::sessionChanged(uint32_t event, uint32_t session_id)
+void Host::setSessionEvent(base::win::SessionStatus status, base::win::SessionId session_id)
 {
-    LOG(LS_INFO) << "Session change event " << event << " for session " << session_id;
+    LOG(LS_INFO) << "Session change event " << base::win::sessionStatusToString(status)
+                 << " for session " << session_id;
 
     if (state_ != State::ATTACHED && state_ != State::DETACHED)
         return;
 
-    switch (event)
+    switch (status)
     {
-        case WTS_CONSOLE_CONNECT:
+        case base::win::SessionStatus::CONSOLE_CONNECT:
             attachSession(session_id);
             break;
 
-        case WTS_CONSOLE_DISCONNECT:
+        case base::win::SessionStatus::CONSOLE_DISCONNECT:
             dettachSession();
             break;
 
@@ -198,22 +202,70 @@ void Host::timerEvent(QTimerEvent* event)
     }
 }
 
-void Host::ipcServerStarted(const QString& channel_id)
+void Host::ipcNewConnection(ipc::Channel* channel)
 {
-    DCHECK_EQ(state_, State::STARTING);
-    DCHECK(session_process_.isNull());
+    DCHECK(channel);
+    DCHECK(attach_timer_id_);
 
-    LOG(LS_INFO) << "IPC server is running with channel id: " << channel_id;
+    LOG(LS_INFO) << "IPC channel connected";
 
+    killTimer(attach_timer_id_);
+    attach_timer_id_ = 0;
+
+    delete fake_session_;
+
+    ipc_channel_ = channel;
+    ipc_channel_->setParent(this);
+
+    delete ipc_server_;
+
+    connect(ipc_channel_, &ipc::Channel::disconnected,
+            this, &Host::dettachSession,
+            Qt::QueuedConnection);
+
+    connect(ipc_channel_, &ipc::Channel::disconnected, ipc_channel_, &ipc::Channel::deleteLater);
+    connect(ipc_channel_, &ipc::Channel::messageReceived, network_channel_, &net::Channel::send);
+    connect(network_channel_, &net::Channel::messageReceived, ipc_channel_, &ipc::Channel::send);
+
+    LOG(LS_INFO) << "Host process is attached for session " << session_id_;
+    state_ = State::ATTACHED;
+
+    if (!network_channel_->isStarted())
+        network_channel_->start();
+
+    ipc_channel_->start();
+}
+
+void Host::attachSession(base::win::SessionId session_id)
+{
+    LOG(LS_INFO) << "Starting host process attachment to session " << session_id;
+
+    state_ = State::STARTING;
+    session_id_ = session_id;
+
+    ipc_server_ = new ipc::Server(this);
+
+    connect(ipc_server_, &ipc::Server::newConnection, this, &Host::ipcNewConnection);
+
+    LOG(LS_INFO) << "Starting the IPC server";
+    if (!ipc_server_->start())
+    {
+        stop();
+        return;
+    }
+
+    LOG(LS_INFO) << "IPC server is running with channel id: " << ipc_server_->channelId();
+
+    DCHECK(!session_process_);
     session_process_ = new HostProcess(this);
 
     session_process_->setSessionId(session_id_);
     session_process_->setProgram(
-        QCoreApplication::applicationDirPath() + QLatin1String("/aspia_host_session.exe"));
+        QCoreApplication::applicationDirPath() + QLatin1Char('/') + kFileName);
 
     QStringList arguments;
 
-    arguments << QStringLiteral("--channel_id") << channel_id;
+    arguments << QStringLiteral("--channel_id") << ipc_server_->channelId();
     arguments << QStringLiteral("--session_type");
 
     switch (network_channel_->sessionType())
@@ -240,78 +292,24 @@ void Host::ipcServerStarted(const QString& channel_id)
 
     session_process_->setArguments(arguments);
 
-    connect(session_process_, &HostProcess::errorOccurred,
-            this, &Host::sessionProcessError,
-            Qt::QueuedConnection);
-
     connect(session_process_, &HostProcess::finished, this, &Host::dettachSession);
 
     LOG(LS_INFO) << "Starting the session process";
-    session_process_->start();
-}
 
-void Host::ipcNewConnection(ipc::Channel* channel)
-{
-    DCHECK(channel);
-    DCHECK(attach_timer_id_);
-
-    LOG(LS_INFO) << "IPC channel connected";
-
-    killTimer(attach_timer_id_);
-    attach_timer_id_ = 0;
-
-    delete fake_session_;
-
-    ipc_channel_ = channel;
-    ipc_channel_->setParent(this);
-
-    connect(ipc_channel_, &ipc::Channel::disconnected,
-            this, &Host::dettachSession,
-            Qt::QueuedConnection);
-
-    connect(ipc_channel_, &ipc::Channel::disconnected, ipc_channel_, &ipc::Channel::deleteLater);
-    connect(ipc_channel_, &ipc::Channel::messageReceived, network_channel_, &net::Channel::send);
-    connect(network_channel_, &net::Channel::messageReceived, ipc_channel_, &ipc::Channel::send);
-
-    LOG(LS_INFO) << "Host process is attached for session " << session_id_;
-    state_ = State::ATTACHED;
-
-    if (!network_channel_->isStarted())
-        network_channel_->start();
-
-    ipc_channel_->start();
-}
-
-void Host::sessionProcessError(HostProcess::ErrorCode error_code)
-{
-    if (network_channel_->sessionType() == proto::SESSION_TYPE_FILE_TRANSFER &&
-        error_code == HostProcess::NoLoggedOnUser)
+    HostProcess::ErrorCode error_code = session_process_->start();
+    if (error_code != HostProcess::NoError)
     {
-        if (!startFakeSession())
+        if (network_channel_->sessionType() == proto::SESSION_TYPE_FILE_TRANSFER &&
+            error_code == HostProcess::NoLoggedOnUser)
+        {
+            if (!startFakeSession())
+                stop();
+        }
+        else
+        {
             stop();
+        }
     }
-    else
-    {
-        stop();
-    }
-}
-
-void Host::attachSession(uint32_t session_id)
-{
-    LOG(LS_INFO) << "Starting host process attachment to session" << session_id;
-
-    state_ = State::STARTING;
-    session_id_ = session_id;
-
-    ipc::Server* ipc_server = new ipc::Server(this);
-
-    connect(ipc_server, &ipc::Server::started, this, &Host::ipcServerStarted);
-    connect(ipc_server, &ipc::Server::finished, ipc_server, &ipc::Server::deleteLater);
-    connect(ipc_server, &ipc::Server::newConnection, this, &Host::ipcNewConnection);
-    connect(ipc_server, &ipc::Server::errorOccurred, this, &Host::stop, Qt::QueuedConnection);
-
-    LOG(LS_INFO) << "Starting the IPC server";
-    ipc_server->start();
 }
 
 void Host::dettachSession()

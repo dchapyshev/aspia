@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,39 +16,22 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-syntax = "proto3";
+#include "base/win/session_id.h"
 
-option optimize_for = LITE_RUNTIME;
+#include <limits>
+#include <type_traits>
 
-import "common.proto";
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
 
-package proto.notifier;
+namespace base::win {
 
-message ConnectEvent
+static_assert(std::is_same<SessionId, DWORD>());
+static_assert(kInvalidSessionId == std::numeric_limits<DWORD>::max());
+
+SessionId activeConsoleSessionId()
 {
-    string uuid              = 1;
-    string remote_address    = 2;
-    string username          = 3;
-    SessionType session_type = 4;
+    return WTSGetActiveConsoleSessionId();
 }
 
-message DisconnectEvent
-{
-    string uuid = 1;
-}
-
-message KillSession
-{
-    string uuid = 1;
-}
-
-message NotifierToService
-{
-    KillSession kill_session = 1;
-}
-
-message ServiceToNotifier
-{
-    ConnectEvent connect_event       = 1;
-    DisconnectEvent disconnect_event = 2;
-}
+} // namespace base::win

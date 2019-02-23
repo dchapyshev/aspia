@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,39 +16,31 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-syntax = "proto3";
+#ifndef BASE__PROCESS_HANDLE_H
+#define BASE__PROCESS_HANDLE_H
 
-option optimize_for = LITE_RUNTIME;
+#include "build/build_config.h"
 
-import "common.proto";
+#if defined(OS_WIN)
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#endif // defined(OS_WIN)
 
-package proto.notifier;
+namespace base {
 
-message ConnectEvent
-{
-    string uuid              = 1;
-    string remote_address    = 2;
-    string username          = 3;
-    SessionType session_type = 4;
-}
+#if defined(OS_WIN)
+using ProcessHandle = HANDLE;
+using ProcessId = DWORD;
 
-message DisconnectEvent
-{
-    string uuid = 1;
-}
+const ProcessHandle kNullProcessHandle = nullptr;
+const ProcessId kNullProcessId = 0;
+#else
+#error Platform support not implemented
+#endif
 
-message KillSession
-{
-    string uuid = 1;
-}
+ProcessHandle currentProcessHandle();
+ProcessId currentProcessId();
 
-message NotifierToService
-{
-    KillSession kill_session = 1;
-}
+} // namespace base
 
-message ServiceToNotifier
-{
-    ConnectEvent connect_event       = 1;
-    DisconnectEvent disconnect_event = 2;
-}
+#endif // BASE__PROCESS_HANDLE_H

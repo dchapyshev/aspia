@@ -37,22 +37,23 @@ public:
     explicit Server(QObject* parent = nullptr);
     ~Server() = default;
 
-    bool isStarted() const;
-
-public slots:
-    void start();
+    bool start();
     void stop();
 
+    bool isStarted() const;
+
+    void setChannelId(const QString& channel_id);
+    QString channelId() const;
+
 signals:
-    void started(const QString& channel_id);
     void finished();
     void newConnection(Channel* channel);
-    void errorOccurred();
 
 private slots:
     void onNewConnection();
 
 private:
+    QString channel_id_;
     QPointer<QLocalServer> server_;
 
     DISALLOW_COPY_AND_ASSIGN(Server);
