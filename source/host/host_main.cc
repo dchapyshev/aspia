@@ -22,10 +22,10 @@
 #include <QCommandLineParser>
 #include <QMessageBox>
 
-#include "base/win/scoped_thread_desktop.h"
-#include "base/win/process_util.h"
 #include "base/base_paths.h"
 #include "base/qt_logging.h"
+#include "base/win/scoped_thread_desktop.h"
+#include "base/win/process_util.h"
 #include "build/version.h"
 #include "crypto/scoped_crypto_initializer.h"
 #include "host/ui/host_window.h"
@@ -81,8 +81,37 @@ bool waitForValidInputDesktop()
 
 int runApplication(int argc, char* argv[])
 {
-    if (!waitForValidInputDesktop())
-        return 1;
+    bool is_started_from_service = base::win::isProcessStartedFromService();
+
+    if (!is_started_from_service)
+    {
+        if (!base::win::isProcessElevated())
+        {
+            QStringList arguments;
+            QString program;
+
+            for (int i = 0; i < argc; ++i)
+            {
+                QString argument = QString::fromLocal8Bit(argv[i]);
+
+                if (i == 0)
+                    program = argument;
+                else
+                    arguments.append(argument);
+            }
+
+            if (base::win::executeProcess(program, arguments,
+                                          base::win::ProcessExecuteMode::ELEVATE))
+            {
+                return 0;
+            }
+        }
+    }
+    else
+    {
+        if (!waitForValidInputDesktop())
+            return 1;
+    }
 
     QApplication application(argc, argv);
     application.setOrganizationName(QStringLiteral("Aspia"));
@@ -98,9 +127,6 @@ int runApplication(int argc, char* argv[])
         host_settings.setLocale(QStringLiteral(DEFAULT_LOCALE));
 
     locale_loader.installTranslators(current_locale);
-
-    QCommandLineOption hidden_option(QStringLiteral("hidden"),
-        QApplication::translate("Host", "Launches the application as hidden."));
 
     QCommandLineOption import_option(QStringLiteral("import"),
         QApplication::translate("Host", "The path to the file to import."),
@@ -119,7 +145,6 @@ int runApplication(int argc, char* argv[])
     QCommandLineParser parser;
     parser.addHelpOption();
     parser.addVersionOption();
-    parser.addOption(hidden_option);
     parser.addOption(import_option);
     parser.addOption(export_option);
     parser.addOption(silent_option);
@@ -161,7 +186,7 @@ int runApplication(int argc, char* argv[])
     {
         host::HostWindow window(host_settings, locale_loader);
 
-        if (parser.isSet(hidden_option))
+        if (is_started_from_service)
             window.hideToTray();
         else
             window.show();

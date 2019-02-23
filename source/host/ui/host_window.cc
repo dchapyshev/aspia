@@ -80,7 +80,11 @@ HostWindow::HostWindow(Settings& settings, common::LocaleLoader& locale_loader, 
 
     client_ = new UiClient(this);
 
-    connect(client_, &UiClient::finished, this, &HostWindow::close);
+    connect(client_, &UiClient::finished, [this]()
+    {
+        should_be_quit_ = true;
+        close();
+    });
 
     connect(client_, &UiClient::connectEvent, [this](const proto::notifier::ConnectEvent& event)
     {

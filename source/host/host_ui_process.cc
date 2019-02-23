@@ -54,7 +54,6 @@ void UiProcess::create(base::win::SessionId session_id)
     process->setAccount(HostProcess::User);
     process->setSessionId(session_id);
     process->setProgram(QCoreApplication::applicationDirPath() + QLatin1Char('/') + kFileName);
-    process->setArguments(QStringList() << QStringLiteral("--hidden"));
 
     process->start();
 }

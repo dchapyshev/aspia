@@ -20,6 +20,7 @@
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
+#include <tlhelp32.h>
 #include <shellapi.h>
 
 #include "base/logging.h"
@@ -134,6 +135,56 @@ bool createPrivilegedToken(ScopedHandle* token_out)
 
     token_out->reset(privileged_token.release());
     return true;
+}
+
+bool isProcessStartedFromService()
+{
+    base::win::ScopedHandle snapshot(CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0));
+    if (!snapshot.isValid())
+    {
+        PLOG(LS_WARNING) << "CreateToolhelp32Snapshot failed";
+        return false;
+    }
+
+    DWORD process_id = GetCurrentProcessId();
+
+    PROCESSENTRY32W entry;
+    entry.dwSize = sizeof(entry);
+
+    BOOL ret = Process32FirstW(snapshot, &entry);
+    if (!ret)
+    {
+        PLOG(LS_WARNING) << "Process32FirstW failed";
+        return false;
+    }
+
+    for (;;)
+    {
+        if (entry.th32ProcessID == process_id)
+        {
+            DWORD session_id;
+
+            if (ProcessIdToSessionId(entry.th32ParentProcessID, &session_id))
+            {
+                // Services are started in session with id 0.
+                return session_id == 0;
+            }
+            else
+            {
+                PLOG(LS_WARNING) << "ProcessIdToSessionId failed";
+                break;
+            }
+        }
+
+        ret = Process32NextW(snapshot, &entry);
+        if (!ret)
+        {
+            PLOG(LS_WARNING) << "Process32NextW failed";
+            break;
+        }
+    }
+
+    return false;
 }
 
 } // namespace base::win

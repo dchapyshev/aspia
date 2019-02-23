@@ -4,37 +4,32 @@
 <context>
     <name>Host</name>
     <message>
-        <location filename="../host_main.cc" line="103"/>
-        <source>Launches the application as hidden.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../host_main.cc" line="106"/>
+        <location filename="../host_main.cc" line="132"/>
         <source>The path to the file to import.</source>
         <translation type="unfinished">Шлях до файла для імпорту.</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="110"/>
+        <location filename="../host_main.cc" line="136"/>
         <source>The path to the file to export.</source>
         <translation type="unfinished">Глях до файла для експорту.</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="114"/>
+        <location filename="../host_main.cc" line="140"/>
         <source>Enables silent mode when exporting and importing.</source>
         <translation type="unfinished">Включає &quot;тихий режим&quot; під час експорту та імпорту.</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="117"/>
+        <location filename="../host_main.cc" line="143"/>
         <source>Run application update.</source>
         <translation type="unfinished">Запустити оновлення програми.</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="135"/>
+        <location filename="../host_main.cc" line="160"/>
         <source>Warning</source>
         <translation type="unfinished">Попередження</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="136"/>
+        <location filename="../host_main.cc" line="161"/>
         <source>Export and import parameters can not be specified together.</source>
         <translation type="unfinished">Параметри імпорту і експорту не можуть бути задані одночасно.</translation>
     </message>
@@ -513,23 +508,23 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/host_window.cc" line="112"/>
-        <location filename="../ui/host_window.cc" line="182"/>
+        <location filename="../ui/host_window.cc" line="116"/>
+        <location filename="../ui/host_window.cc" line="186"/>
         <source>Show</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/host_window.cc" line="187"/>
+        <location filename="../ui/host_window.cc" line="191"/>
         <source>Hide</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/host_window.cc" line="206"/>
+        <location filename="../ui/host_window.cc" line="210"/>
         <source>Confirmation</source>
         <translation type="unfinished">Підтвердження</translation>
     </message>
     <message>
-        <location filename="../ui/host_window.cc" line="207"/>
+        <location filename="../ui/host_window.cc" line="211"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation type="unfinished"></translation>
     </message>
