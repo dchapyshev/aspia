@@ -43,6 +43,10 @@ public:
 
     void hideToTray();
 
+protected:
+    // QMainWindow implementation.
+    void closeEvent(QCloseEvent* event) override;
+
 private slots:
     void refreshIpList();
     void newPassword();
@@ -52,11 +56,14 @@ private slots:
     void onShowHide();
     void onHelp();
     void onAbout();
+    void onExit();
 
 private:
     void createLanguageMenu(const QString& current_locale);
 
     Ui::HostWindow ui;
+
+    bool should_be_quit_ = false;
 
     Settings& settings_;
     common::LocaleLoader& locale_loader_;

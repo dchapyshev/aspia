@@ -18,6 +18,7 @@
 
 #include "host/ui/host_window.h"
 
+#include <QCloseEvent>
 #include <QDesktopServices>
 #include <QFile>
 #include <QMessageBox>
@@ -68,7 +69,7 @@ HostWindow::HostWindow(Settings& settings, common::LocaleLoader& locale_loader, 
     connect(ui.menu_language, &QMenu::triggered, this, &HostWindow::onLanguageChanged);
     connect(ui.action_settings, &QAction::triggered, this, &HostWindow::onSettings);
     connect(ui.action_show_hide, &QAction::triggered, this, &HostWindow::onShowHide);
-    connect(ui.action_exit, &QAction::triggered, this, &HostWindow::close);
+    connect(ui.action_exit, &QAction::triggered, this, &HostWindow::onExit);
     connect(ui.action_help, &QAction::triggered, this, &HostWindow::onHelp);
     connect(ui.action_about, &QAction::triggered, this, &HostWindow::onAbout);
 
@@ -110,6 +111,19 @@ void HostWindow::hideToTray()
 {
     ui.action_show_hide->setText(tr("Show"));
     setVisible(false);
+}
+
+void HostWindow::closeEvent(QCloseEvent* event)
+{
+    if (!should_be_quit_)
+    {
+        hideToTray();
+        event->ignore();
+    }
+    else
+    {
+        QMainWindow::closeEvent(event);
+    }
 }
 
 void HostWindow::refreshIpList()
@@ -183,6 +197,24 @@ void HostWindow::onHelp()
 void HostWindow::onAbout()
 {
     common::AboutDialog(this).exec();
+}
+
+void HostWindow::onExit()
+{
+    int ret = QMessageBox::question(
+        this,
+        tr("Confirmation"),
+        tr("If you exit from Aspia, it will not be possible to connect to this computer until "
+           "you turn on the computer or Aspia again manually. Do you really want to exit the "
+           "application?"),
+        QMessageBox::Yes,
+        QMessageBox::No);
+
+    if (ret == QMessageBox::Yes)
+    {
+        should_be_quit_ = true;
+        close();
+    }
 }
 
 void HostWindow::createLanguageMenu(const QString& current_locale)

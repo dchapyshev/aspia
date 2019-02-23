@@ -488,19 +488,29 @@
 <context>
     <name>host::HostWindow</name>
     <message>
-        <location filename="../ui/host_window.cc" line="52"/>
+        <location filename="../ui/host_window.cc" line="53"/>
         <source>Aspia Host</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/host_window.cc" line="111"/>
-        <location filename="../ui/host_window.cc" line="168"/>
+        <location filename="../ui/host_window.cc" line="112"/>
+        <location filename="../ui/host_window.cc" line="182"/>
         <source>Show</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/host_window.cc" line="173"/>
+        <location filename="../ui/host_window.cc" line="187"/>
         <source>Hide</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/host_window.cc" line="206"/>
+        <source>Confirmation</source>
+        <translation type="unfinished">Bevestiging</translation>
+    </message>
+    <message>
+        <location filename="../ui/host_window.cc" line="207"/>
+        <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
