@@ -513,13 +513,13 @@
         <translation>Хост Aspia</translation>
     </message>
     <message>
-        <location filename="../ui/host_window.cc" line="103"/>
-        <location filename="../ui/host_window.cc" line="160"/>
+        <location filename="../ui/host_window.cc" line="111"/>
+        <location filename="../ui/host_window.cc" line="168"/>
         <source>Show</source>
         <translation>Показать</translation>
     </message>
     <message>
-        <location filename="../ui/host_window.cc" line="165"/>
+        <location filename="../ui/host_window.cc" line="173"/>
         <source>Hide</source>
         <translation>Спрятать</translation>
     </message>

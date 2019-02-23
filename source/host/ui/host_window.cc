@@ -57,6 +57,14 @@ HostWindow::HostWindow(Settings& settings, common::LocaleLoader& locale_loader, 
     refreshIpList();
     newPassword();
 
+    connect(&tray_icon_, &QSystemTrayIcon::activated, [this](QSystemTrayIcon::ActivationReason reason)
+    {
+        if (reason == QSystemTrayIcon::Context)
+            return;
+
+        onShowHide();
+    });
+
     connect(ui.menu_language, &QMenu::triggered, this, &HostWindow::onLanguageChanged);
     connect(ui.action_settings, &QAction::triggered, this, &HostWindow::onSettings);
     connect(ui.action_show_hide, &QAction::triggered, this, &HostWindow::onShowHide);
