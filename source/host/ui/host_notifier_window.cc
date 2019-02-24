@@ -69,7 +69,7 @@ private:
 
 } // namespace
 
-HostNotifierWindow::HostNotifierWindow(QWidget* parent)
+NotifierWindow::NotifierWindow(QWidget* parent)
     : QWidget(parent, Qt::FramelessWindowHint | Qt::Tool | Qt::WindowStaysOnTopHint)
 {
     ui.setupUi(this);
@@ -78,29 +78,29 @@ HostNotifierWindow::HostNotifierWindow(QWidget* parent)
     ui.label_connections->installEventFilter(this);
 
     connect(ui.button_show_hide, &QPushButton::released,
-            this, &HostNotifierWindow::onShowHidePressed);
+            this, &NotifierWindow::onShowHidePressed);
 
     connect(ui.button_disconnect_all, &QPushButton::released,
-            this, &HostNotifierWindow::onDisconnectAllPressed);
+            this, &NotifierWindow::onDisconnectAllPressed);
 
     connect(ui.tree, &QTreeWidget::customContextMenuRequested,
-            this, &HostNotifierWindow::onContextMenu);
+            this, &NotifierWindow::onContextMenu);
 
     setAttribute(Qt::WA_TranslucentBackground);
 
     connect(QApplication::primaryScreen(), &QScreen::availableGeometryChanged,
-            this, &HostNotifierWindow::updateWindowPosition);
+            this, &NotifierWindow::updateWindowPosition);
 
     updateWindowPosition();
 }
 
-void HostNotifierWindow::onConnectEvent(const proto::notifier::ConnectEvent& event)
+void NotifierWindow::onConnectEvent(const proto::notifier::ConnectEvent& event)
 {
     ui.tree->addTopLevelItem(new SessionTreeItem(event));
     ui.button_disconnect_all->setEnabled(true);
 }
 
-void HostNotifierWindow::onDisconnectEvent(const proto::notifier::DisconnectEvent& event)
+void NotifierWindow::onDisconnectEvent(const proto::notifier::DisconnectEvent& event)
 {
     for (int i = 0; i < ui.tree->topLevelItemCount(); ++i)
     {
@@ -116,7 +116,7 @@ void HostNotifierWindow::onDisconnectEvent(const proto::notifier::DisconnectEven
         close();
 }
 
-bool HostNotifierWindow::eventFilter(QObject* object, QEvent* event)
+bool NotifierWindow::eventFilter(QObject* object, QEvent* event)
 {
     if (object == ui.label_title || object == ui.label_connections)
     {
@@ -159,12 +159,12 @@ bool HostNotifierWindow::eventFilter(QObject* object, QEvent* event)
     return QWidget::eventFilter(object, event);
 }
 
-void HostNotifierWindow::hideEvent(QHideEvent* event)
+void NotifierWindow::hideEvent(QHideEvent* event)
 {
     show();
 }
 
-void HostNotifierWindow::onShowHidePressed()
+void NotifierWindow::onShowHidePressed()
 {
     if (ui.content->isVisible())
         hideNotifier();
@@ -172,7 +172,7 @@ void HostNotifierWindow::onShowHidePressed()
         showNotifier();
 }
 
-void HostNotifierWindow::onDisconnectAllPressed()
+void NotifierWindow::onDisconnectAllPressed()
 {
     for (int i = 0; i < ui.tree->topLevelItemCount(); ++i)
     {
@@ -182,7 +182,7 @@ void HostNotifierWindow::onDisconnectAllPressed()
     }
 }
 
-void HostNotifierWindow::onContextMenu(const QPoint& point)
+void NotifierWindow::onContextMenu(const QPoint& point)
 {
     SessionTreeItem* item = dynamic_cast<SessionTreeItem*>(ui.tree->itemAt(point));
     if (!item)
@@ -197,7 +197,7 @@ void HostNotifierWindow::onContextMenu(const QPoint& point)
         emit killSession(item->event().uuid());
 }
 
-void HostNotifierWindow::updateWindowPosition()
+void NotifierWindow::updateWindowPosition()
 {
     showNotifier();
 
@@ -208,7 +208,7 @@ void HostNotifierWindow::updateWindowPosition()
          screen_rect.y() + (screen_rect.height() - window_size.height()) - 1);
 }
 
-void HostNotifierWindow::showNotifier()
+void NotifierWindow::showNotifier()
 {
     if (ui.content->isHidden() && ui.title->isHidden())
     {
@@ -222,7 +222,7 @@ void HostNotifierWindow::showNotifier()
     }
 }
 
-void HostNotifierWindow::hideNotifier()
+void NotifierWindow::hideNotifier()
 {
     QRect screen_rect = QApplication::primaryScreen()->availableGeometry();
     QSize content_size = ui.content->frameSize();

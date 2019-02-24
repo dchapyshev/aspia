@@ -6,32 +6,32 @@
     <message>
         <location filename="../host_main.cc" line="132"/>
         <source>The path to the file to import.</source>
-        <translation type="unfinished">Pad naar het bestand om te importeren.</translation>
+        <translation>Pad naar het bestand om te importeren.</translation>
     </message>
     <message>
         <location filename="../host_main.cc" line="136"/>
         <source>The path to the file to export.</source>
-        <translation type="unfinished">Pad naar het bestand om te exporteren.</translation>
+        <translation>Pad naar het bestand om te exporteren.</translation>
     </message>
     <message>
         <location filename="../host_main.cc" line="140"/>
         <source>Enables silent mode when exporting and importing.</source>
-        <translation type="unfinished">Schakelt stille modus in bij het exporteren en importeren.</translation>
+        <translation>Schakelt stille modus in bij het exporteren en importeren.</translation>
     </message>
     <message>
         <location filename="../host_main.cc" line="143"/>
         <source>Run application update.</source>
-        <translation type="unfinished">Applicatie update uitvoeren.</translation>
+        <translation>Applicatie update uitvoeren.</translation>
     </message>
     <message>
         <location filename="../host_main.cc" line="160"/>
         <source>Warning</source>
-        <translation type="unfinished">Waarschuwing</translation>
+        <translation>Waarschuwing</translation>
     </message>
     <message>
         <location filename="../host_main.cc" line="161"/>
         <source>Export and import parameters can not be specified together.</source>
-        <translation type="unfinished">Export en import argumenten kunnen niet samen gespecificeerd worden.</translation>
+        <translation>Export en import argumenten kunnen niet samen gespecificeerd worden.</translation>
     </message>
 </context>
 <context>
@@ -215,12 +215,12 @@
     <message>
         <location filename="../ui/host_window.ui" line="158"/>
         <source>Password:</source>
-        <translation type="unfinished">Wachtwoord:</translation>
+        <translation>Wachtwoord:</translation>
     </message>
     <message>
         <location filename="../ui/host_window.ui" line="223"/>
         <source>Start</source>
-        <translation type="unfinished">Starten</translation>
+        <translation>Starten</translation>
     </message>
     <message>
         <location filename="../ui/host_window.ui" line="251"/>
@@ -259,17 +259,28 @@
     </message>
 </context>
 <context>
+    <name>NotifierWindow</name>
+    <message>
+        <source>Connections</source>
+        <translation type="obsolete">Verbindingen</translation>
+    </message>
+    <message>
+        <source>Disconnect All</source>
+        <translation type="obsolete">Alle Verbreken</translation>
+    </message>
+</context>
+<context>
     <name>Settings</name>
     <message>
         <location filename="../host_settings.cc" line="52"/>
         <location filename="../host_settings.cc" line="68"/>
         <source>Information</source>
-        <translation type="unfinished">Informatie</translation>
+        <translation>Informatie</translation>
     </message>
     <message>
         <location filename="../host_settings.cc" line="53"/>
         <source>The configuration was successfully imported.</source>
-        <translation type="unfinished">De configuratie is successvol geimporteerd.</translation>
+        <translation>De configuratie is successvol geimporteerd.</translation>
     </message>
     <message>
         <location filename="../host_settings.cc" line="69"/>
@@ -282,7 +293,7 @@
         <location filename="../host_settings.cc" line="231"/>
         <location filename="../host_settings.cc" line="244"/>
         <source>Warning</source>
-        <translation type="unfinished">Waarschuwing</translation>
+        <translation>Waarschuwing</translation>
     </message>
     <message>
         <location filename="../host_settings.cc" line="199"/>
@@ -339,26 +350,7 @@
     </message>
 </context>
 <context>
-    <name>host::HostConfigDialog</name>
-    <message>
-        <location filename="../ui/host_config_dialog.cc" line="276"/>
-        <location filename="../ui/host_config_dialog.cc" line="449"/>
-        <location filename="../ui/host_config_dialog.cc" line="468"/>
-        <location filename="../ui/host_config_dialog.cc" line="483"/>
-        <location filename="../ui/host_config_dialog.cc" line="493"/>
-        <location filename="../ui/host_config_dialog.cc" line="509"/>
-        <location filename="../ui/host_config_dialog.cc" line="519"/>
-        <source>Warning</source>
-        <translation>Waarschuwing</translation>
-    </message>
-    <message>
-        <source>Information</source>
-        <translation type="vanished">Informatie</translation>
-    </message>
-    <message>
-        <source>The configuration was successfully imported.</source>
-        <translation type="vanished">De configuratie is successvol geimporteerd.</translation>
-    </message>
+    <name>host::ConfigDialog</name>
     <message>
         <location filename="../ui/host_config_dialog.cc" line="161"/>
         <location filename="../ui/host_config_dialog.cc" line="238"/>
@@ -397,6 +389,17 @@
         <location filename="../ui/host_config_dialog.cc" line="273"/>
         <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
         <translation>De configuratie kon niet worden weggeschreven. Zorg dat U genoeg rechten heeft om te schrijven.</translation>
+    </message>
+    <message>
+        <location filename="../ui/host_config_dialog.cc" line="276"/>
+        <location filename="../ui/host_config_dialog.cc" line="449"/>
+        <location filename="../ui/host_config_dialog.cc" line="468"/>
+        <location filename="../ui/host_config_dialog.cc" line="483"/>
+        <location filename="../ui/host_config_dialog.cc" line="493"/>
+        <location filename="../ui/host_config_dialog.cc" line="509"/>
+        <location filename="../ui/host_config_dialog.cc" line="519"/>
+        <source>Warning</source>
+        <translation>Waarschuwing</translation>
     </message>
     <message>
         <location filename="../ui/host_config_dialog.cc" line="388"/>
@@ -473,11 +476,109 @@
     </message>
 </context>
 <context>
+    <name>host::HostConfigDialog</name>
+    <message>
+        <source>Warning</source>
+        <translation type="vanished">Waarschuwing</translation>
+    </message>
+    <message>
+        <source>Information</source>
+        <translation type="vanished">Informatie</translation>
+    </message>
+    <message>
+        <source>The configuration was successfully imported.</source>
+        <translation type="vanished">De configuratie is successvol geimporteerd.</translation>
+    </message>
+    <message>
+        <source>Confirmation</source>
+        <translation type="vanished">Bevestiging</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to delete user &quot;%1&quot;?</source>
+        <translation type="vanished">Weet U zeker dat U de gebruiker &quot;%1&quot; wilt verwijderen?</translation>
+    </message>
+    <message>
+        <source>Import</source>
+        <translation type="vanished">Importeren</translation>
+    </message>
+    <message>
+        <source>XML-files (*.xml)</source>
+        <translation type="vanished">XML-bestanden (*.xml)</translation>
+    </message>
+    <message>
+        <source>Service configuration changed. For the changes to take effect, you must restart the service. Restart the service now?</source>
+        <translation type="vanished">Service configuratie veranderd. Om de wijzigingen toe te passen, moet de service herstart worden. Nu herstarten?</translation>
+    </message>
+    <message>
+        <source>Export</source>
+        <translation type="vanished">Exporteren</translation>
+    </message>
+    <message>
+        <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
+        <translation type="vanished">De configuratie kon niet worden weggeschreven. Zorg dat U genoeg rechten heeft om te schrijven.</translation>
+    </message>
+    <message>
+        <source>Remove</source>
+        <translation type="vanished">Verwijderen</translation>
+    </message>
+    <message>
+        <source>Started</source>
+        <translation type="vanished">Gestart</translation>
+    </message>
+    <message>
+        <source>Stop</source>
+        <translation type="vanished">Stoppen</translation>
+    </message>
+    <message>
+        <source>Not started</source>
+        <translation type="vanished">Niet gestart</translation>
+    </message>
+    <message>
+        <source>Start</source>
+        <translation type="vanished">Starten</translation>
+    </message>
+    <message>
+        <source>Installed</source>
+        <translation type="vanished">Geinstalleerd</translation>
+    </message>
+    <message>
+        <source>Not installed</source>
+        <translation type="vanished">Niet geinstalleerd</translation>
+    </message>
+    <message>
+        <source>Install</source>
+        <translation type="vanished">Installeren</translation>
+    </message>
+    <message>
+        <source>Current state: %1</source>
+        <translation type="vanished">Huidige status: %1</translation>
+    </message>
+    <message>
+        <source>The service could not be installed.</source>
+        <translation type="vanished">De service kon niet worden geinstalleerd.</translation>
+    </message>
+    <message>
+        <source>The service could not be removed.</source>
+        <translation type="vanished">De service kon niet worden verwijderd.</translation>
+    </message>
+    <message>
+        <source>Could not access the service.</source>
+        <translation type="vanished">Kon de service niet bereiken.</translation>
+    </message>
+    <message>
+        <source>The service could not be started.</source>
+        <translation type="vanished">De service kon niet worden gestart.</translation>
+    </message>
+    <message>
+        <source>The service could not be stopped.</source>
+        <translation type="vanished">De service kon niet worden gestopt.</translation>
+    </message>
+</context>
+<context>
     <name>host::HostNotifierWindow</name>
     <message>
-        <location filename="../ui/host_notifier_window.cc" line="191"/>
         <source>Disconnect</source>
-        <translation>Verbinding verbreken</translation>
+        <translation type="vanished">Verbinding verbreken</translation>
     </message>
 </context>
 <context>
@@ -501,12 +602,20 @@
     <message>
         <location filename="../ui/host_window.cc" line="213"/>
         <source>Confirmation</source>
-        <translation type="unfinished">Bevestiging</translation>
+        <translation>Bevestiging</translation>
     </message>
     <message>
         <location filename="../ui/host_window.cc" line="214"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>host::NotifierWindow</name>
+    <message>
+        <location filename="../ui/host_notifier_window.cc" line="191"/>
+        <source>Disconnect</source>
+        <translation>Verbinding verbreken</translation>
     </message>
 </context>
 <context>

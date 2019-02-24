@@ -21,14 +21,11 @@
 #include <QCoreApplication>
 
 #include "base/qt_logging.h"
-#include "common/message_serialization.h"
 #include "host/win/host_session_process.h"
 #include "host/host_ui_server.h"
 #include "host/host_settings.h"
-#include "ipc/ipc_server.h"
 #include "net/firewall_manager.h"
 #include "net/network_channel_host.h"
-#include "proto/notifier.pb.h"
 
 namespace host {
 

@@ -26,7 +26,7 @@
     <message>
         <location filename="../host_main.cc" line="160"/>
         <source>Warning</source>
-        <translation type="unfinished">Warnung</translation>
+        <translation>Warnung</translation>
     </message>
     <message>
         <location filename="../host_main.cc" line="161"/>
@@ -195,12 +195,12 @@
     <message>
         <location filename="../ui/host_window.ui" line="158"/>
         <source>Password:</source>
-        <translation type="unfinished">Kennwort:</translation>
+        <translation>Kennwort:</translation>
     </message>
     <message>
         <location filename="../ui/host_window.ui" line="223"/>
         <source>Start</source>
-        <translation type="unfinished">Starten</translation>
+        <translation>Starten</translation>
     </message>
     <message>
         <location filename="../ui/host_window.ui" line="251"/>
@@ -239,6 +239,13 @@
     </message>
 </context>
 <context>
+    <name>NotifierWindow</name>
+    <message>
+        <source>Connections</source>
+        <translation type="obsolete">Verbindungen</translation>
+    </message>
+</context>
+<context>
     <name>Settings</name>
     <message>
         <location filename="../host_settings.cc" line="52"/>
@@ -262,7 +269,7 @@
         <location filename="../host_settings.cc" line="231"/>
         <location filename="../host_settings.cc" line="244"/>
         <source>Warning</source>
-        <translation type="unfinished">Warnung</translation>
+        <translation>Warnung</translation>
     </message>
     <message>
         <location filename="../host_settings.cc" line="199"/>
@@ -319,29 +326,18 @@
     </message>
 </context>
 <context>
-    <name>host::HostConfigDialog</name>
-    <message>
-        <location filename="../ui/host_config_dialog.cc" line="276"/>
-        <location filename="../ui/host_config_dialog.cc" line="449"/>
-        <location filename="../ui/host_config_dialog.cc" line="468"/>
-        <location filename="../ui/host_config_dialog.cc" line="483"/>
-        <location filename="../ui/host_config_dialog.cc" line="493"/>
-        <location filename="../ui/host_config_dialog.cc" line="509"/>
-        <location filename="../ui/host_config_dialog.cc" line="519"/>
-        <source>Warning</source>
-        <translation type="unfinished">Warnung</translation>
-    </message>
+    <name>host::ConfigDialog</name>
     <message>
         <location filename="../ui/host_config_dialog.cc" line="161"/>
         <location filename="../ui/host_config_dialog.cc" line="238"/>
         <location filename="../ui/host_config_dialog.cc" line="293"/>
         <source>Confirmation</source>
-        <translation type="unfinished">Bestätigung</translation>
+        <translation>Bestätigung</translation>
     </message>
     <message>
         <location filename="../ui/host_config_dialog.cc" line="162"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
-        <translation type="unfinished">Möchten Sie den Benutzer &quot;%1&quot; wirklich löschen?</translation>
+        <translation>Möchten Sie den Benutzer &quot;%1&quot; wirklich löschen?</translation>
     </message>
     <message>
         <location filename="../ui/host_config_dialog.cc" line="224"/>
@@ -358,7 +354,7 @@
         <location filename="../ui/host_config_dialog.cc" line="233"/>
         <location filename="../ui/host_config_dialog.cc" line="288"/>
         <source>Service configuration changed. For the changes to take effect, you must restart the service. Restart the service now?</source>
-        <translation type="unfinished">Servicekonfiguration geändert. Damit die Änderungen wirksam werden, müssen Sie den Dienst neu starten. Den Dienst jetzt neu?</translation>
+        <translation>Servicekonfiguration geändert. Damit die Änderungen wirksam werden, müssen Sie den Dienst neu starten. Den Dienst jetzt neu?</translation>
     </message>
     <message>
         <location filename="../ui/host_config_dialog.cc" line="254"/>
@@ -368,88 +364,177 @@
     <message>
         <location filename="../ui/host_config_dialog.cc" line="273"/>
         <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
-        <translation type="unfinished">Die Konfiguration kann nicht geschrieben werden. Stellen Sie sicher, dass Sie über ausreichende Schreibrechte verfügen.</translation>
+        <translation>Die Konfiguration kann nicht geschrieben werden. Stellen Sie sicher, dass Sie über ausreichende Schreibrechte verfügen.</translation>
+    </message>
+    <message>
+        <location filename="../ui/host_config_dialog.cc" line="276"/>
+        <location filename="../ui/host_config_dialog.cc" line="449"/>
+        <location filename="../ui/host_config_dialog.cc" line="468"/>
+        <location filename="../ui/host_config_dialog.cc" line="483"/>
+        <location filename="../ui/host_config_dialog.cc" line="493"/>
+        <location filename="../ui/host_config_dialog.cc" line="509"/>
+        <location filename="../ui/host_config_dialog.cc" line="519"/>
+        <source>Warning</source>
+        <translation>Warnung</translation>
     </message>
     <message>
         <location filename="../ui/host_config_dialog.cc" line="388"/>
         <source>Remove</source>
-        <translation type="unfinished">Löschen</translation>
+        <translation>Löschen</translation>
     </message>
     <message>
         <location filename="../ui/host_config_dialog.cc" line="396"/>
         <source>Started</source>
-        <translation type="unfinished">Gestartet</translation>
+        <translation>Gestartet</translation>
     </message>
     <message>
         <location filename="../ui/host_config_dialog.cc" line="397"/>
         <source>Stop</source>
-        <translation type="unfinished">Stopp</translation>
+        <translation>Stopp</translation>
     </message>
     <message>
         <location filename="../ui/host_config_dialog.cc" line="402"/>
         <source>Not started</source>
-        <translation type="unfinished">Nicht gestartet</translation>
+        <translation>Nicht gestartet</translation>
     </message>
     <message>
         <location filename="../ui/host_config_dialog.cc" line="403"/>
         <location filename="../ui/host_config_dialog.cc" line="410"/>
         <location filename="../ui/host_config_dialog.cc" line="423"/>
         <source>Start</source>
-        <translation type="unfinished">Starten</translation>
+        <translation>Starten</translation>
     </message>
     <message>
         <location filename="../ui/host_config_dialog.cc" line="409"/>
         <source>Installed</source>
-        <translation type="unfinished">Installiert</translation>
+        <translation>Installiert</translation>
     </message>
     <message>
         <location filename="../ui/host_config_dialog.cc" line="420"/>
         <source>Not installed</source>
-        <translation type="unfinished">Nicht installiert</translation>
+        <translation>Nicht installiert</translation>
     </message>
     <message>
         <location filename="../ui/host_config_dialog.cc" line="422"/>
         <source>Install</source>
-        <translation type="unfinished">Installieren</translation>
+        <translation>Installieren</translation>
     </message>
     <message>
         <location filename="../ui/host_config_dialog.cc" line="427"/>
         <source>Current state: %1</source>
-        <translation type="unfinished">Aktueller Zustand: %1</translation>
+        <translation>Aktueller Zustand: %1</translation>
     </message>
     <message>
         <location filename="../ui/host_config_dialog.cc" line="450"/>
         <source>The service could not be installed.</source>
-        <translation type="unfinished">Dienst konnte nicht installiert werden.</translation>
+        <translation>Dienst konnte nicht installiert werden.</translation>
     </message>
     <message>
         <location filename="../ui/host_config_dialog.cc" line="469"/>
         <source>The service could not be removed.</source>
-        <translation type="unfinished">Dienst konnte nicht gelöscht werden.</translation>
+        <translation>Dienst konnte nicht gelöscht werden.</translation>
     </message>
     <message>
         <location filename="../ui/host_config_dialog.cc" line="484"/>
         <location filename="../ui/host_config_dialog.cc" line="510"/>
         <source>Could not access the service.</source>
-        <translation type="unfinished">Kann nicht auf den Dienst zugreifen.</translation>
+        <translation>Kann nicht auf den Dienst zugreifen.</translation>
     </message>
     <message>
         <location filename="../ui/host_config_dialog.cc" line="494"/>
         <source>The service could not be started.</source>
-        <translation type="unfinished">Dienst konnte nicht gestartet werden.</translation>
+        <translation>Dienst konnte nicht gestartet werden.</translation>
     </message>
     <message>
         <location filename="../ui/host_config_dialog.cc" line="520"/>
         <source>The service could not be stopped.</source>
-        <translation type="unfinished">Dienst konnte nicht angehalten werden.</translation>
+        <translation>Dienst konnte nicht angehalten werden.</translation>
+    </message>
+</context>
+<context>
+    <name>host::HostConfigDialog</name>
+    <message>
+        <source>Warning</source>
+        <translation type="obsolete">Warnung</translation>
+    </message>
+    <message>
+        <source>Confirmation</source>
+        <translation type="obsolete">Bestätigung</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to delete user &quot;%1&quot;?</source>
+        <translation type="obsolete">Möchten Sie den Benutzer &quot;%1&quot; wirklich löschen?</translation>
+    </message>
+    <message>
+        <source>Service configuration changed. For the changes to take effect, you must restart the service. Restart the service now?</source>
+        <translation type="obsolete">Servicekonfiguration geändert. Damit die Änderungen wirksam werden, müssen Sie den Dienst neu starten. Den Dienst jetzt neu?</translation>
+    </message>
+    <message>
+        <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
+        <translation type="obsolete">Die Konfiguration kann nicht geschrieben werden. Stellen Sie sicher, dass Sie über ausreichende Schreibrechte verfügen.</translation>
+    </message>
+    <message>
+        <source>Remove</source>
+        <translation type="obsolete">Löschen</translation>
+    </message>
+    <message>
+        <source>Started</source>
+        <translation type="obsolete">Gestartet</translation>
+    </message>
+    <message>
+        <source>Stop</source>
+        <translation type="obsolete">Stopp</translation>
+    </message>
+    <message>
+        <source>Not started</source>
+        <translation type="obsolete">Nicht gestartet</translation>
+    </message>
+    <message>
+        <source>Start</source>
+        <translation type="obsolete">Starten</translation>
+    </message>
+    <message>
+        <source>Installed</source>
+        <translation type="obsolete">Installiert</translation>
+    </message>
+    <message>
+        <source>Not installed</source>
+        <translation type="obsolete">Nicht installiert</translation>
+    </message>
+    <message>
+        <source>Install</source>
+        <translation type="obsolete">Installieren</translation>
+    </message>
+    <message>
+        <source>Current state: %1</source>
+        <translation type="obsolete">Aktueller Zustand: %1</translation>
+    </message>
+    <message>
+        <source>The service could not be installed.</source>
+        <translation type="obsolete">Dienst konnte nicht installiert werden.</translation>
+    </message>
+    <message>
+        <source>The service could not be removed.</source>
+        <translation type="obsolete">Dienst konnte nicht gelöscht werden.</translation>
+    </message>
+    <message>
+        <source>Could not access the service.</source>
+        <translation type="obsolete">Kann nicht auf den Dienst zugreifen.</translation>
+    </message>
+    <message>
+        <source>The service could not be started.</source>
+        <translation type="obsolete">Dienst konnte nicht gestartet werden.</translation>
+    </message>
+    <message>
+        <source>The service could not be stopped.</source>
+        <translation type="obsolete">Dienst konnte nicht angehalten werden.</translation>
     </message>
 </context>
 <context>
     <name>host::HostNotifierWindow</name>
     <message>
-        <location filename="../ui/host_notifier_window.cc" line="191"/>
         <source>Disconnect</source>
-        <translation type="unfinished">Trennen</translation>
+        <translation type="obsolete">Trennen</translation>
     </message>
 </context>
 <context>
@@ -473,7 +558,7 @@
     <message>
         <location filename="../ui/host_window.cc" line="213"/>
         <source>Confirmation</source>
-        <translation type="unfinished">Bestätigung</translation>
+        <translation>Bestätigung</translation>
     </message>
     <message>
         <location filename="../ui/host_window.cc" line="214"/>
@@ -482,21 +567,29 @@
     </message>
 </context>
 <context>
+    <name>host::NotifierWindow</name>
+    <message>
+        <location filename="../ui/host_notifier_window.cc" line="191"/>
+        <source>Disconnect</source>
+        <translation>Trennen</translation>
+    </message>
+</context>
+<context>
     <name>host::UserDialog</name>
     <message>
         <location filename="../ui/user_dialog.cc" line="73"/>
         <source>Desktop Manage</source>
-        <translation type="unfinished">Desktopverwaltung</translation>
+        <translation>Desktopverwaltung</translation>
     </message>
     <message>
         <location filename="../ui/user_dialog.cc" line="77"/>
         <source>Desktop View</source>
-        <translation type="unfinished">Desktopansicht</translation>
+        <translation>Desktopansicht</translation>
     </message>
     <message>
         <location filename="../ui/user_dialog.cc" line="81"/>
         <source>File Transfer</source>
-        <translation type="unfinished">Dateiübertragung</translation>
+        <translation>Dateiübertragung</translation>
     </message>
     <message>
         <location filename="../ui/user_dialog.cc" line="134"/>
@@ -506,22 +599,22 @@
         <location filename="../ui/user_dialog.cc" line="196"/>
         <location filename="../ui/user_dialog.cc" line="214"/>
         <source>Warning</source>
-        <translation type="unfinished">Warnung</translation>
+        <translation>Warnung</translation>
     </message>
     <message>
         <location filename="../ui/user_dialog.cc" line="135"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
-        <translation type="unfinished">Der Benutzername darf nicht leer sein und darf nur Buchstaben, Zahlen und folgende Zeichen: &quot;_&quot;,&quot;-&quot;,&quot;.&quot; beinhalten.</translation>
+        <translation>Der Benutzername darf nicht leer sein und darf nur Buchstaben, Zahlen und folgende Zeichen: &quot;_&quot;,&quot;-&quot;,&quot;.&quot; beinhalten.</translation>
     </message>
     <message>
         <location filename="../ui/user_dialog.cc" line="154"/>
         <source>The username you entered already exists.</source>
-        <translation type="unfinished">Der eingegebene Benutzername existiert bereits.</translation>
+        <translation>Der eingegebene Benutzername existiert bereits.</translation>
     </message>
     <message>
         <location filename="../ui/user_dialog.cc" line="166"/>
         <source>The passwords you entered do not match.</source>
-        <translation type="unfinished">Die eingegebenen Kennwörter stimmen nicht überein.</translation>
+        <translation>Die eingegebenen Kennwörter stimmen nicht überein.</translation>
     </message>
     <message numerus="yes">
         <location filename="../ui/user_dialog.cc" line="176"/>
@@ -557,7 +650,7 @@
     <message>
         <location filename="../ui/user_dialog.cc" line="271"/>
         <source>Double-click to change</source>
-        <translation type="unfinished">Doppelklicken, um zu ändern</translation>
+        <translation>Doppelklicken, um zu ändern</translation>
     </message>
 </context>
 </TS>

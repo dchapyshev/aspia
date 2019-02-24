@@ -6,32 +6,32 @@
     <message>
         <location filename="../host_main.cc" line="132"/>
         <source>The path to the file to import.</source>
-        <translation type="unfinished">Шлях до файла для імпорту.</translation>
+        <translation>Шлях до файла для імпорту.</translation>
     </message>
     <message>
         <location filename="../host_main.cc" line="136"/>
         <source>The path to the file to export.</source>
-        <translation type="unfinished">Глях до файла для експорту.</translation>
+        <translation>Глях до файла для експорту.</translation>
     </message>
     <message>
         <location filename="../host_main.cc" line="140"/>
         <source>Enables silent mode when exporting and importing.</source>
-        <translation type="unfinished">Включає &quot;тихий режим&quot; під час експорту та імпорту.</translation>
+        <translation>Включає &quot;тихий режим&quot; під час експорту та імпорту.</translation>
     </message>
     <message>
         <location filename="../host_main.cc" line="143"/>
         <source>Run application update.</source>
-        <translation type="unfinished">Запустити оновлення програми.</translation>
+        <translation>Запустити оновлення програми.</translation>
     </message>
     <message>
         <location filename="../host_main.cc" line="160"/>
         <source>Warning</source>
-        <translation type="unfinished">Попередження</translation>
+        <translation>Попередження</translation>
     </message>
     <message>
         <location filename="../host_main.cc" line="161"/>
         <source>Export and import parameters can not be specified together.</source>
-        <translation type="unfinished">Параметри імпорту і експорту не можуть бути задані одночасно.</translation>
+        <translation>Параметри імпорту і експорту не можуть бути задані одночасно.</translation>
     </message>
 </context>
 <context>
@@ -215,12 +215,12 @@
     <message>
         <location filename="../ui/host_window.ui" line="158"/>
         <source>Password:</source>
-        <translation type="unfinished">Пароль:</translation>
+        <translation>Пароль:</translation>
     </message>
     <message>
         <location filename="../ui/host_window.ui" line="223"/>
         <source>Start</source>
-        <translation type="unfinished">Почати</translation>
+        <translation>Почати</translation>
     </message>
     <message>
         <location filename="../ui/host_window.ui" line="251"/>
@@ -259,22 +259,33 @@
     </message>
 </context>
 <context>
+    <name>NotifierWindow</name>
+    <message>
+        <source>Connections</source>
+        <translation type="obsolete">Підключення</translation>
+    </message>
+    <message>
+        <source>Disconnect All</source>
+        <translation type="obsolete">Відключити все</translation>
+    </message>
+</context>
+<context>
     <name>Settings</name>
     <message>
         <location filename="../host_settings.cc" line="52"/>
         <location filename="../host_settings.cc" line="68"/>
         <source>Information</source>
-        <translation type="unfinished">Інформація</translation>
+        <translation>Інформація</translation>
     </message>
     <message>
         <location filename="../host_settings.cc" line="53"/>
         <source>The configuration was successfully imported.</source>
-        <translation type="unfinished">Конфігурацію імпортовано успішно.</translation>
+        <translation>Конфігурацію імпортовано успішно.</translation>
     </message>
     <message>
         <location filename="../host_settings.cc" line="69"/>
         <source>The configuration was successfully exported.</source>
-        <translation type="unfinished">Кофігурацію експортовано успішно.</translation>
+        <translation>Кофігурацію експортовано успішно.</translation>
     </message>
     <message>
         <location filename="../host_settings.cc" line="198"/>
@@ -282,27 +293,27 @@
         <location filename="../host_settings.cc" line="231"/>
         <location filename="../host_settings.cc" line="244"/>
         <source>Warning</source>
-        <translation type="unfinished">Попередження</translation>
+        <translation>Попередження</translation>
     </message>
     <message>
         <location filename="../host_settings.cc" line="199"/>
         <source>Could not open source file: %1</source>
-        <translation type="unfinished">Неможливо відкрити вихідний файл: %1</translation>
+        <translation>Неможливо відкрити вихідний файл: %1</translation>
     </message>
     <message>
         <location filename="../host_settings.cc" line="215"/>
         <source>Could not open target file: %1</source>
-        <translation type="unfinished">Неможливо відкрити цільовий файл: %1</translation>
+        <translation>Неможливо відкрити цільовий файл: %1</translation>
     </message>
     <message>
         <location filename="../host_settings.cc" line="232"/>
         <source>Unable to read the source file: the file is damaged or has an unknown format.</source>
-        <translation type="unfinished">Неможливо прочитати вихідний файл: файл пошкоджено або формат файлу невідомний.</translation>
+        <translation>Неможливо прочитати вихідний файл: файл пошкоджено або формат файлу невідомний.</translation>
     </message>
     <message>
         <location filename="../host_settings.cc" line="245"/>
         <source>Unable to write the target file.</source>
-        <translation type="unfinished">Неможливо записати цільовий файл.</translation>
+        <translation>Неможливо записати цільовий файл.</translation>
     </message>
 </context>
 <context>
@@ -339,30 +350,7 @@
     </message>
 </context>
 <context>
-    <name>host::HostConfigDialog</name>
-    <message>
-        <location filename="../ui/host_config_dialog.cc" line="276"/>
-        <location filename="../ui/host_config_dialog.cc" line="449"/>
-        <location filename="../ui/host_config_dialog.cc" line="468"/>
-        <location filename="../ui/host_config_dialog.cc" line="483"/>
-        <location filename="../ui/host_config_dialog.cc" line="493"/>
-        <location filename="../ui/host_config_dialog.cc" line="509"/>
-        <location filename="../ui/host_config_dialog.cc" line="519"/>
-        <source>Warning</source>
-        <translation>Попередження</translation>
-    </message>
-    <message>
-        <source>Information</source>
-        <translation type="vanished">Інформація</translation>
-    </message>
-    <message>
-        <source>The configuration was successfully imported.</source>
-        <translation type="vanished">Конфігурацію імпортовано успішно.</translation>
-    </message>
-    <message>
-        <source>The configuration was successfully exported.</source>
-        <translation type="vanished">Кофігурацію експортовано успішно.</translation>
-    </message>
+    <name>host::ConfigDialog</name>
     <message>
         <location filename="../ui/host_config_dialog.cc" line="161"/>
         <location filename="../ui/host_config_dialog.cc" line="238"/>
@@ -401,6 +389,17 @@
         <location filename="../ui/host_config_dialog.cc" line="273"/>
         <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
         <translation>Неможливо записати налаштування.Переконайтеся, що у вас є відповідні права для запису.</translation>
+    </message>
+    <message>
+        <location filename="../ui/host_config_dialog.cc" line="276"/>
+        <location filename="../ui/host_config_dialog.cc" line="449"/>
+        <location filename="../ui/host_config_dialog.cc" line="468"/>
+        <location filename="../ui/host_config_dialog.cc" line="483"/>
+        <location filename="../ui/host_config_dialog.cc" line="493"/>
+        <location filename="../ui/host_config_dialog.cc" line="509"/>
+        <location filename="../ui/host_config_dialog.cc" line="519"/>
+        <source>Warning</source>
+        <translation>Попередження</translation>
     </message>
     <message>
         <location filename="../ui/host_config_dialog.cc" line="388"/>
@@ -475,6 +474,109 @@
         <source>The service could not be stopped.</source>
         <translation>Неможливо зупинити службу.</translation>
     </message>
+</context>
+<context>
+    <name>host::HostConfigDialog</name>
+    <message>
+        <source>Warning</source>
+        <translation type="vanished">Попередження</translation>
+    </message>
+    <message>
+        <source>Information</source>
+        <translation type="vanished">Інформація</translation>
+    </message>
+    <message>
+        <source>The configuration was successfully imported.</source>
+        <translation type="vanished">Конфігурацію імпортовано успішно.</translation>
+    </message>
+    <message>
+        <source>The configuration was successfully exported.</source>
+        <translation type="vanished">Кофігурацію експортовано успішно.</translation>
+    </message>
+    <message>
+        <source>Confirmation</source>
+        <translation type="vanished">Підтвердження</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to delete user &quot;%1&quot;?</source>
+        <translation type="vanished">Ви впевнені, що хочете видалити користувача &quot;%1&quot;?</translation>
+    </message>
+    <message>
+        <source>Import</source>
+        <translation type="vanished">Імпорт</translation>
+    </message>
+    <message>
+        <source>XML-files (*.xml)</source>
+        <translation type="vanished">XML-файли (*.xml)</translation>
+    </message>
+    <message>
+        <source>Service configuration changed. For the changes to take effect, you must restart the service. Restart the service now?</source>
+        <translation type="vanished">Налаштування сервісу замінено. Для примінення нових налаштувань потрібно перезапустити сервіс. Перезапустити сервіс зараз?</translation>
+    </message>
+    <message>
+        <source>Export</source>
+        <translation type="vanished">Експорт</translation>
+    </message>
+    <message>
+        <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
+        <translation type="vanished">Неможливо записати налаштування.Переконайтеся, що у вас є відповідні права для запису.</translation>
+    </message>
+    <message>
+        <source>Remove</source>
+        <translation type="vanished">Видалити</translation>
+    </message>
+    <message>
+        <source>Started</source>
+        <translation type="vanished">Розпочато</translation>
+    </message>
+    <message>
+        <source>Stop</source>
+        <translation type="vanished">Зупинити</translation>
+    </message>
+    <message>
+        <source>Not started</source>
+        <translation type="vanished">Не розпочато</translation>
+    </message>
+    <message>
+        <source>Start</source>
+        <translation type="vanished">Почати</translation>
+    </message>
+    <message>
+        <source>Installed</source>
+        <translation type="vanished">Встановлено</translation>
+    </message>
+    <message>
+        <source>Not installed</source>
+        <translation type="vanished">Не встановлено</translation>
+    </message>
+    <message>
+        <source>Install</source>
+        <translation type="vanished">Встановити</translation>
+    </message>
+    <message>
+        <source>Current state: %1</source>
+        <translation type="vanished">Поточний стан: %1</translation>
+    </message>
+    <message>
+        <source>The service could not be installed.</source>
+        <translation type="vanished">Неможливо встановити службу.</translation>
+    </message>
+    <message>
+        <source>The service could not be removed.</source>
+        <translation type="vanished">Неможливо видалити службу.</translation>
+    </message>
+    <message>
+        <source>Could not access the service.</source>
+        <translation type="vanished">Немає доступу до служби.</translation>
+    </message>
+    <message>
+        <source>The service could not be started.</source>
+        <translation type="vanished">Неможливо запустити службу.</translation>
+    </message>
+    <message>
+        <source>The service could not be stopped.</source>
+        <translation type="vanished">Неможливо зупинити службу.</translation>
+    </message>
     <message>
         <source>Could not open source file: %1</source>
         <translation type="vanished">Неможливо відкрити вихідний файл: %1</translation>
@@ -495,9 +597,8 @@
 <context>
     <name>host::HostNotifierWindow</name>
     <message>
-        <location filename="../ui/host_notifier_window.cc" line="191"/>
         <source>Disconnect</source>
-        <translation>Відключитися</translation>
+        <translation type="vanished">Відключитися</translation>
     </message>
 </context>
 <context>
@@ -521,12 +622,20 @@
     <message>
         <location filename="../ui/host_window.cc" line="213"/>
         <source>Confirmation</source>
-        <translation type="unfinished">Підтвердження</translation>
+        <translation>Підтвердження</translation>
     </message>
     <message>
         <location filename="../ui/host_window.cc" line="214"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>host::NotifierWindow</name>
+    <message>
+        <location filename="../ui/host_notifier_window.cc" line="191"/>
+        <source>Disconnect</source>
+        <translation>Відключитися</translation>
     </message>
 </context>
 <context>

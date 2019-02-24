@@ -25,13 +25,13 @@
 
 namespace host {
 
-class HostNotifierWindow : public QWidget
+class NotifierWindow : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit HostNotifierWindow(QWidget* parent = nullptr);
-    ~HostNotifierWindow() = default;
+    explicit NotifierWindow(QWidget* parent = nullptr);
+    ~NotifierWindow() = default;
 
 public slots:
     void onConnectEvent(const proto::notifier::ConnectEvent& event);
@@ -60,7 +60,7 @@ private:
     QPoint start_pos_;
     QRect window_rect_;
 
-    DISALLOW_COPY_AND_ASSIGN(HostNotifierWindow);
+    DISALLOW_COPY_AND_ASSIGN(NotifierWindow);
 };
 
 } // namespace host

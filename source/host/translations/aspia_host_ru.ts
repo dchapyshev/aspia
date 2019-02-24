@@ -263,6 +263,17 @@
     </message>
 </context>
 <context>
+    <name>NotifierWindow</name>
+    <message>
+        <source>Connections</source>
+        <translation type="obsolete">Подключения</translation>
+    </message>
+    <message>
+        <source>Disconnect All</source>
+        <translation type="obsolete">Отключить всех</translation>
+    </message>
+</context>
+<context>
     <name>Settings</name>
     <message>
         <location filename="../host_settings.cc" line="52"/>
@@ -343,30 +354,7 @@
     </message>
 </context>
 <context>
-    <name>host::HostConfigDialog</name>
-    <message>
-        <location filename="../ui/host_config_dialog.cc" line="276"/>
-        <location filename="../ui/host_config_dialog.cc" line="449"/>
-        <location filename="../ui/host_config_dialog.cc" line="468"/>
-        <location filename="../ui/host_config_dialog.cc" line="483"/>
-        <location filename="../ui/host_config_dialog.cc" line="493"/>
-        <location filename="../ui/host_config_dialog.cc" line="509"/>
-        <location filename="../ui/host_config_dialog.cc" line="519"/>
-        <source>Warning</source>
-        <translation>Предупреждение</translation>
-    </message>
-    <message>
-        <source>Information</source>
-        <translation type="vanished">Информация</translation>
-    </message>
-    <message>
-        <source>The configuration was successfully imported.</source>
-        <translation type="vanished">Конфигурация успешно импортирована.</translation>
-    </message>
-    <message>
-        <source>The configuration was successfully exported.</source>
-        <translation type="vanished">Конфигурация успешно экспортирована.</translation>
-    </message>
+    <name>host::ConfigDialog</name>
     <message>
         <location filename="../ui/host_config_dialog.cc" line="161"/>
         <location filename="../ui/host_config_dialog.cc" line="238"/>
@@ -405,6 +393,17 @@
         <location filename="../ui/host_config_dialog.cc" line="273"/>
         <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
         <translation>Конфигурация не может быть записана. Проверьте имеются ли у вас достаточные права для записи.</translation>
+    </message>
+    <message>
+        <location filename="../ui/host_config_dialog.cc" line="276"/>
+        <location filename="../ui/host_config_dialog.cc" line="449"/>
+        <location filename="../ui/host_config_dialog.cc" line="468"/>
+        <location filename="../ui/host_config_dialog.cc" line="483"/>
+        <location filename="../ui/host_config_dialog.cc" line="493"/>
+        <location filename="../ui/host_config_dialog.cc" line="509"/>
+        <location filename="../ui/host_config_dialog.cc" line="519"/>
+        <source>Warning</source>
+        <translation>Предупреждение</translation>
     </message>
     <message>
         <location filename="../ui/host_config_dialog.cc" line="388"/>
@@ -479,6 +478,109 @@
         <source>The service could not be stopped.</source>
         <translation>Не удалось остановить службу.</translation>
     </message>
+</context>
+<context>
+    <name>host::HostConfigDialog</name>
+    <message>
+        <source>Warning</source>
+        <translation type="vanished">Предупреждение</translation>
+    </message>
+    <message>
+        <source>Information</source>
+        <translation type="vanished">Информация</translation>
+    </message>
+    <message>
+        <source>The configuration was successfully imported.</source>
+        <translation type="vanished">Конфигурация успешно импортирована.</translation>
+    </message>
+    <message>
+        <source>The configuration was successfully exported.</source>
+        <translation type="vanished">Конфигурация успешно экспортирована.</translation>
+    </message>
+    <message>
+        <source>Confirmation</source>
+        <translation type="vanished">Подтверждение</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to delete user &quot;%1&quot;?</source>
+        <translation type="vanished">Вы действительно хотите удалить пользователя &quot;%1&quot;?</translation>
+    </message>
+    <message>
+        <source>Import</source>
+        <translation type="vanished">Импорт</translation>
+    </message>
+    <message>
+        <source>XML-files (*.xml)</source>
+        <translation type="vanished">XML-файлы (*.xml)</translation>
+    </message>
+    <message>
+        <source>Service configuration changed. For the changes to take effect, you must restart the service. Restart the service now?</source>
+        <translation type="vanished">Конфигурация службы изменена. Для принятия изменений требуется перезапуск службы. Перезапустить сейчас?</translation>
+    </message>
+    <message>
+        <source>Export</source>
+        <translation type="vanished">Экспорт</translation>
+    </message>
+    <message>
+        <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
+        <translation type="vanished">Конфигурация не может быть записана. Проверьте имеются ли у вас достаточные права для записи.</translation>
+    </message>
+    <message>
+        <source>Remove</source>
+        <translation type="vanished">Удалить</translation>
+    </message>
+    <message>
+        <source>Started</source>
+        <translation type="vanished">Запущена</translation>
+    </message>
+    <message>
+        <source>Stop</source>
+        <translation type="vanished">Остановить</translation>
+    </message>
+    <message>
+        <source>Not started</source>
+        <translation type="vanished">Не запущена</translation>
+    </message>
+    <message>
+        <source>Start</source>
+        <translation type="vanished">Запустить</translation>
+    </message>
+    <message>
+        <source>Installed</source>
+        <translation type="vanished">Установлена</translation>
+    </message>
+    <message>
+        <source>Not installed</source>
+        <translation type="vanished">Не установлена</translation>
+    </message>
+    <message>
+        <source>Install</source>
+        <translation type="vanished">Установить</translation>
+    </message>
+    <message>
+        <source>Current state: %1</source>
+        <translation type="vanished">Текущее состояние: %1</translation>
+    </message>
+    <message>
+        <source>The service could not be installed.</source>
+        <translation type="vanished">Не удалось установить службу.</translation>
+    </message>
+    <message>
+        <source>The service could not be removed.</source>
+        <translation type="vanished">Не удалось удалить службу.</translation>
+    </message>
+    <message>
+        <source>Could not access the service.</source>
+        <translation type="vanished">Не удалось получить доступ к службе.</translation>
+    </message>
+    <message>
+        <source>The service could not be started.</source>
+        <translation type="vanished">Не удалось запустить службу.</translation>
+    </message>
+    <message>
+        <source>The service could not be stopped.</source>
+        <translation type="vanished">Не удалось остановить службу.</translation>
+    </message>
     <message>
         <source>Could not open source file: %1</source>
         <translation type="vanished">Не удалось открыть исходный файл: %1</translation>
@@ -499,9 +601,8 @@
 <context>
     <name>host::HostNotifierWindow</name>
     <message>
-        <location filename="../ui/host_notifier_window.cc" line="191"/>
         <source>Disconnect</source>
-        <translation>Отключить</translation>
+        <translation type="vanished">Отключить</translation>
     </message>
 </context>
 <context>
@@ -531,6 +632,14 @@
         <location filename="../ui/host_window.cc" line="214"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation>Если вы выйдите из Aspia, то вы не сможете подключиться к этому компьютеру пока вы снова не включите компьютер или Aspia вручную. Вы действительно хотите выйти из приложения?</translation>
+    </message>
+</context>
+<context>
+    <name>host::NotifierWindow</name>
+    <message>
+        <location filename="../ui/host_notifier_window.cc" line="191"/>
+        <source>Disconnect</source>
+        <translation>Отключить</translation>
     </message>
 </context>
 <context>

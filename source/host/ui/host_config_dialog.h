@@ -25,13 +25,13 @@
 
 namespace host {
 
-class HostConfigDialog : public QDialog
+class ConfigDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    HostConfigDialog(QWidget* parent = nullptr);
-    ~HostConfigDialog() = default;
+    ConfigDialog(QWidget* parent = nullptr);
+    ~ConfigDialog() = default;
 
 private slots:
     void onUserContextMenu(const QPoint& point);
@@ -65,7 +65,7 @@ private:
     enum class ServiceState { NOT_INSTALLED, ACCESS_DENIED, NOT_STARTED, STARTED };
     ServiceState service_state_;
 
-    DISALLOW_COPY_AND_ASSIGN(HostConfigDialog);
+    DISALLOW_COPY_AND_ASSIGN(ConfigDialog);
 };
 
 } // namespace host

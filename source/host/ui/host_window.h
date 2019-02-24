@@ -30,7 +30,7 @@
 
 namespace host {
 
-class HostNotifierWindow;
+class NotifierWindow;
 class UiClient;
 
 class HostWindow : public QMainWindow
@@ -71,7 +71,7 @@ private:
     QSystemTrayIcon tray_icon_;
     QMenu tray_menu_;
 
-    QPointer<HostNotifierWindow> notifier_;
+    QPointer<NotifierWindow> notifier_;
     QPointer<UiClient> client_;
 
     DISALLOW_COPY_AND_ASSIGN(HostWindow);

@@ -37,16 +37,16 @@
 
 namespace host {
 
-HostConfigDialog::HostConfigDialog(QWidget* parent)
+ConfigDialog::ConfigDialog(QWidget* parent)
     : QDialog(parent)
 {
     ui.setupUi(this);
 
     connect(ui.spinbox_port, QOverload<int>::of(&QSpinBox::valueChanged),
-            this, &HostConfigDialog::onConfigChanged);
+            this, &ConfigDialog::onConfigChanged);
 
     connect(ui.checkbox_add_firewall_rule, &QCheckBox::toggled,
-            this, &HostConfigDialog::onConfigChanged);
+            this, &ConfigDialog::onConfigChanged);
 
     connect(ui.checkbox_use_custom_server, &QCheckBox::toggled, [this](bool checked)
     {
@@ -59,7 +59,7 @@ HostConfigDialog::HostConfigDialog(QWidget* parent)
     });
 
     connect(ui.edit_update_server, &QLineEdit::textEdited,
-            this, &HostConfigDialog::onConfigChanged);
+            this, &ConfigDialog::onConfigChanged);
 
     connect(ui.button_check_updates, &QPushButton::released, [this]()
     {
@@ -67,36 +67,36 @@ HostConfigDialog::HostConfigDialog(QWidget* parent)
     });
 
     connect(ui.tree_users, &QTreeWidget::customContextMenuRequested,
-            this, &HostConfigDialog::onUserContextMenu);
+            this, &ConfigDialog::onUserContextMenu);
 
     connect(ui.tree_users, &QTreeWidget::currentItemChanged,
-            this, &HostConfigDialog::onCurrentUserChanged);
+            this, &ConfigDialog::onCurrentUserChanged);
 
     connect(ui.tree_users, &QTreeWidget::itemDoubleClicked,
-            this, &HostConfigDialog::onModifyUser);
+            this, &ConfigDialog::onModifyUser);
 
-    connect(ui.action_add, &QAction::triggered, this, &HostConfigDialog::onAddUser);
-    connect(ui.action_modify, &QAction::triggered, this, &HostConfigDialog::onModifyUser);
-    connect(ui.action_delete, &QAction::triggered, this, &HostConfigDialog::onDeleteUser);
-    connect(ui.button_add, &QPushButton::released, this, &HostConfigDialog::onAddUser);
-    connect(ui.button_modify, &QPushButton::released, this, &HostConfigDialog::onModifyUser);
-    connect(ui.button_delete, &QPushButton::released, this, &HostConfigDialog::onDeleteUser);
+    connect(ui.action_add, &QAction::triggered, this, &ConfigDialog::onAddUser);
+    connect(ui.action_modify, &QAction::triggered, this, &ConfigDialog::onModifyUser);
+    connect(ui.action_delete, &QAction::triggered, this, &ConfigDialog::onDeleteUser);
+    connect(ui.button_add, &QPushButton::released, this, &ConfigDialog::onAddUser);
+    connect(ui.button_modify, &QPushButton::released, this, &ConfigDialog::onModifyUser);
+    connect(ui.button_delete, &QPushButton::released, this, &ConfigDialog::onDeleteUser);
 
     connect(ui.button_service_install_remove, &QPushButton::released,
-            this, &HostConfigDialog::onServiceInstallRemove);
+            this, &ConfigDialog::onServiceInstallRemove);
     connect(ui.button_service_start_stop, &QPushButton::released,
-            this, &HostConfigDialog::onServiceStartStop);
+            this, &ConfigDialog::onServiceStartStop);
 
-    connect(ui.button_import, &QPushButton::released, this, &HostConfigDialog::onImport);
-    connect(ui.button_export, &QPushButton::released, this, &HostConfigDialog::onExport);
+    connect(ui.button_import, &QPushButton::released, this, &ConfigDialog::onImport);
+    connect(ui.button_export, &QPushButton::released, this, &ConfigDialog::onExport);
 
     connect(ui.button_box, &QDialogButtonBox::clicked,
-            this, &HostConfigDialog::onButtonBoxClicked);
+            this, &ConfigDialog::onButtonBoxClicked);
 
     reloadAll();
 }
 
-void HostConfigDialog::onUserContextMenu(const QPoint& point)
+void ConfigDialog::onUserContextMenu(const QPoint& point)
 {
     QMenu menu;
 
@@ -114,7 +114,7 @@ void HostConfigDialog::onUserContextMenu(const QPoint& point)
     menu.exec(ui.tree_users->viewport()->mapToGlobal(point));
 }
 
-void HostConfigDialog::onCurrentUserChanged(
+void ConfigDialog::onCurrentUserChanged(
     QTreeWidgetItem* /* current */, QTreeWidgetItem* /* previous */)
 {
     ui.button_modify->setEnabled(true);
@@ -124,7 +124,7 @@ void HostConfigDialog::onCurrentUserChanged(
     ui.action_delete->setEnabled(true);
 }
 
-void HostConfigDialog::onAddUser()
+void ConfigDialog::onAddUser()
 {
     net::SrpUser user;
     user.flags = net::SrpUser::ENABLED;
@@ -137,7 +137,7 @@ void HostConfigDialog::onAddUser()
     }
 }
 
-void HostConfigDialog::onModifyUser()
+void ConfigDialog::onModifyUser()
 {
     UserTreeItem* user_item = dynamic_cast<UserTreeItem*>(ui.tree_users->currentItem());
     if (!user_item)
@@ -151,7 +151,7 @@ void HostConfigDialog::onModifyUser()
     }
 }
 
-void HostConfigDialog::onDeleteUser()
+void ConfigDialog::onDeleteUser()
 {
     UserTreeItem* user_item = dynamic_cast<UserTreeItem*>(ui.tree_users->currentItem());
     if (!user_item)
@@ -171,7 +171,7 @@ void HostConfigDialog::onDeleteUser()
     }
 }
 
-void HostConfigDialog::onServiceInstallRemove()
+void ConfigDialog::onServiceInstallRemove()
 {
     switch (service_state_)
     {
@@ -199,7 +199,7 @@ void HostConfigDialog::onServiceInstallRemove()
     reloadServiceStatus();
 }
 
-void HostConfigDialog::onServiceStartStop()
+void ConfigDialog::onServiceStartStop()
 {
     switch (service_state_)
     {
@@ -218,7 +218,7 @@ void HostConfigDialog::onServiceStartStop()
     reloadServiceStatus();
 }
 
-void HostConfigDialog::onImport()
+void ConfigDialog::onImport()
 {
     QString file_path =
         QFileDialog::getOpenFileName(this, tr("Import"), QString(), tr("XML-files (*.xml)"));
@@ -248,7 +248,7 @@ void HostConfigDialog::onImport()
     }
 }
 
-void HostConfigDialog::onExport()
+void ConfigDialog::onExport()
 {
     QString file_path =
         QFileDialog::getSaveFileName(this, tr("Export"), QString(), tr("XML-files (*.xml)"));
@@ -258,7 +258,7 @@ void HostConfigDialog::onExport()
     Settings::exportToFile(file_path, false, this);
 }
 
-void HostConfigDialog::onButtonBoxClicked(QAbstractButton* button)
+void ConfigDialog::onButtonBoxClicked(QAbstractButton* button)
 {
     QDialogButtonBox::StandardButton standard_button = ui.button_box->standardButton(button);
 
@@ -318,7 +318,7 @@ void HostConfigDialog::onButtonBoxClicked(QAbstractButton* button)
     close();
 }
 
-void HostConfigDialog::setConfigChanged(bool changed)
+void ConfigDialog::setConfigChanged(bool changed)
 {
     QPushButton* apply_button = ui.button_box->button(QDialogButtonBox::Apply);
     if (!apply_button)
@@ -330,7 +330,7 @@ void HostConfigDialog::setConfigChanged(bool changed)
     apply_button->setEnabled(changed);
 }
 
-bool HostConfigDialog::isConfigChanged() const
+bool ConfigDialog::isConfigChanged() const
 {
     QPushButton* apply_button = ui.button_box->button(QDialogButtonBox::Apply);
     if (!apply_button)
@@ -342,7 +342,7 @@ bool HostConfigDialog::isConfigChanged() const
     return apply_button->isEnabled();
 }
 
-void HostConfigDialog::reloadAll()
+void ConfigDialog::reloadAll()
 {
     Settings settings;
 
@@ -362,7 +362,7 @@ void HostConfigDialog::reloadAll()
     setConfigChanged(false);
 }
 
-void HostConfigDialog::reloadUserList()
+void ConfigDialog::reloadUserList()
 {
     ui.tree_users->clear();
 
@@ -376,7 +376,7 @@ void HostConfigDialog::reloadUserList()
     ui.action_delete->setEnabled(false);
 }
 
-void HostConfigDialog::reloadServiceStatus()
+void ConfigDialog::reloadServiceStatus()
 {
     ui.button_service_install_remove->setEnabled(true);
     ui.button_service_start_stop->setEnabled(true);
@@ -427,7 +427,7 @@ void HostConfigDialog::reloadServiceStatus()
     ui.label_service_status->setText(tr("Current state: %1").arg(state));
 }
 
-bool HostConfigDialog::isServiceStarted()
+bool ConfigDialog::isServiceStarted()
 {
     base::ServiceController controller = base::ServiceController::open(kHostServiceName);
     if (controller.isValid())
@@ -436,7 +436,7 @@ bool HostConfigDialog::isServiceStarted()
     return false;
 }
 
-bool HostConfigDialog::installService()
+bool ConfigDialog::installService()
 {
     QString service_file_path =
         QApplication::applicationDirPath() + QLatin1Char('/') + QLatin1String(kHostServiceFileName);
@@ -460,7 +460,7 @@ bool HostConfigDialog::installService()
     return true;
 }
 
-bool HostConfigDialog::removeService()
+bool ConfigDialog::removeService()
 {
     if (!base::ServiceController::remove(kHostServiceName))
     {
@@ -474,7 +474,7 @@ bool HostConfigDialog::removeService()
     return true;
 }
 
-bool HostConfigDialog::startService()
+bool ConfigDialog::startService()
 {
     base::ServiceController controller = base::ServiceController::open(kHostServiceName);
     if (!controller.isValid())
@@ -500,7 +500,7 @@ bool HostConfigDialog::startService()
     return true;
 }
 
-bool HostConfigDialog::stopService()
+bool ConfigDialog::stopService()
 {
     base::ServiceController controller = base::ServiceController::open(kHostServiceName);
     if (!controller.isValid())
@@ -526,7 +526,7 @@ bool HostConfigDialog::stopService()
     return true;
 }
 
-bool HostConfigDialog::restartService()
+bool ConfigDialog::restartService()
 {
     if (!stopService())
         return false;

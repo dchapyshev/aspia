@@ -90,12 +90,12 @@ HostWindow::HostWindow(Settings& settings, common::LocaleLoader& locale_loader, 
     {
         if (!notifier_)
         {
-            notifier_ = new HostNotifierWindow();
+            notifier_ = new NotifierWindow();
 
             connect(client_, &UiClient::disconnectEvent,
-                    notifier_, &HostNotifierWindow::onDisconnectEvent);
+                    notifier_, &NotifierWindow::onDisconnectEvent);
 
-            connect(notifier_, &HostNotifierWindow::killSession,
+            connect(notifier_, &NotifierWindow::killSession,
                     client_, &UiClient::killSession);
 
             notifier_->setAttribute(Qt::WA_DeleteOnClose);
@@ -179,7 +179,7 @@ void HostWindow::onLanguageChanged(QAction* action)
 
 void HostWindow::onSettings()
 {
-    HostConfigDialog(this).exec();
+    ConfigDialog(this).exec();
 }
 
 void HostWindow::onShowHide()
