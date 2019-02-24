@@ -63,7 +63,7 @@ void SessionProcess::setNetworkChannel(net::ChannelHost* network_channel)
     network_channel_->setParent(this);
 }
 
-void SessionProcess::setUuid(const QUuid& uuid)
+void SessionProcess::setUuid(const QByteArray& uuid)
 {
     if (state_ != State::STOPPED)
     {
@@ -117,7 +117,7 @@ bool SessionProcess::start()
         return false;
     }
 
-    if (uuid_.isNull())
+    if (uuid_.isEmpty())
     {
         DLOG(LS_ERROR) << "Invalid session UUID.";
         return false;
@@ -167,7 +167,7 @@ void SessionProcess::stop()
     state_ = State::STOPPED;
 
     LOG(LS_INFO) << "Session process is stopped.";
-    emit finished(this);
+    emit finished();
 }
 
 void SessionProcess::setSessionEvent(

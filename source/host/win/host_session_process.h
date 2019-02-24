@@ -49,11 +49,16 @@ public:
     SessionProcess(QObject* parent = nullptr);
     ~SessionProcess();
 
+    enum class State { STOPPED, STARTING, STOPPING, DETACHED, ATTACHED };
+
+    State state() const { return state_; }
+    base::win::SessionId sessionId() const { return session_id_; }
+
     net::ChannelHost* networkChannel() const { return network_channel_; }
     void setNetworkChannel(net::ChannelHost* network_channel);
 
-    const QUuid& uuid() const { return uuid_; }
-    void setUuid(const QUuid& uuid);
+    const QByteArray& uuid() const { return uuid_; }
+    void setUuid(const QByteArray& uuid);
 
     const QString& userName() const;
     proto::SessionType sessionType() const;
@@ -67,7 +72,7 @@ public slots:
     void setSessionEvent(base::win::SessionStatus status, base::win::SessionId session_id);
 
 signals:
-    void finished(SessionProcess* host);
+    void finished();
 
 protected:
     // QObject implementation.
@@ -81,9 +86,7 @@ private slots:
 private:
     bool startFakeSession();
 
-    enum class State { STOPPED, STARTING, STOPPING, DETACHED, ATTACHED };
-
-    QUuid uuid_;
+    QByteArray uuid_;
 
     base::win::SessionId session_id_ = base::win::kInvalidSessionId;
     int attach_timer_id_ = 0;

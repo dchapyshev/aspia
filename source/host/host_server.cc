@@ -78,9 +78,15 @@ void HostServer::start()
 void HostServer::stop()
 {
     LOG(LS_INFO) << "Stopping the server.";
+    state_ = State::STOPPING;
 
     for (auto session : session_list_)
+    {
         session->stop();
+        delete session;
+    }
+
+    session_list_.clear();
 
     if (ui_server_)
     {
@@ -88,20 +94,24 @@ void HostServer::stop()
         delete ui_server_;
     }
 
-    std::unique_ptr<net::Server> network_server_deleter(network_server_);
     if (network_server_)
+    {
         network_server_->stop();
+        delete network_server_;
+    }
 
     net::FirewallManager firewall(QCoreApplication::applicationFilePath());
     if (firewall.isValid())
         firewall.deleteRuleByName(kFirewallRuleName);
 
     LOG(LS_INFO) << "Server is stopped.";
+    state_ = State::STOPPED;
 }
 
 void HostServer::setSessionEvent(base::win::SessionStatus status, base::win::SessionId session_id)
 {
-    emit sessionEvent(status, session_id);
+    for (const auto session : session_list_)
+        session->setSessionEvent(status, session_id);
 
     if (ui_server_)
         ui_server_->setSessionEvent(status, session_id);
@@ -134,6 +144,16 @@ void HostServer::customEvent(QEvent* event)
         }
 
         ui_server_ = new UiServer(this);
+
+        connect(ui_server_, &UiServer::processConnected, [this](base::win::SessionId session_id)
+        {
+            for (const auto& session : session_list_)
+            {
+                if (session->sessionId() == session_id)
+                    sessionToUi(session);
+            }
+        });
+
         if (!ui_server_->start())
         {
             QCoreApplication::quit();
@@ -150,6 +170,8 @@ void HostServer::customEvent(QEvent* event)
             QCoreApplication::quit();
             return;
         }
+
+        state_ = State::STARTED;
     }
 
     QObject::customEvent(event);
@@ -163,54 +185,69 @@ void HostServer::onNewConnection()
         if (!channel)
             continue;
 
-        LOG(LS_INFO) << "New connected client: " << channel->peerAddress();
+        LOG(LS_INFO) << "New connected client: " << channel->peerAddress() << ".";
 
         std::unique_ptr<SessionProcess> session_process(new SessionProcess(this));
 
         session_process->setNetworkChannel(channel);
-        session_process->setUuid(QUuid::createUuid());
-
-        connect(this, &HostServer::sessionEvent,
-                session_process.get(), &SessionProcess::setSessionEvent);
+        session_process->setUuid(QUuid::createUuid().toByteArray());
 
         connect(session_process.get(), &SessionProcess::finished,
-                this, &HostServer::onHostFinished,
+                this, &HostServer::onSessionFinished,
                 Qt::QueuedConnection);
 
         if (session_process->start())
         {
-            proto::notifier::ConnectEvent event;
-
-            event.set_session_type(session_process->sessionType());
-            event.set_remote_address(session_process->remoteAddress().toStdString());
-            event.set_username(session_process->userName().toStdString());
-            event.set_uuid(session_process->uuid().toString().toStdString());
-
-            ui_server_->setConnectEvent(base::win::activeConsoleSessionId(), event);
-
-            session_list_.push_back(session_process.release());
+            SessionProcess* released_session_process = session_process.release();
+            session_list_.push_back(released_session_process);
+            sessionToUi(released_session_process);
         }
     }
 }
 
-void HostServer::onHostFinished(SessionProcess* host)
+void HostServer::onSessionFinished()
 {
-    LOG(LS_INFO) << sessionTypeToString(host->sessionType())
-                 << " session is finished for " << host->userName();
+    if (state_ == State::STOPPING)
+        return;
 
-    for (auto it = session_list_.begin(); it != session_list_.end(); ++it)
+    for (auto it = session_list_.begin(); it != session_list_.end();)
     {
-        if (*it != host)
-            continue;
+        SessionProcess* session_process = *it;
 
-        session_list_.erase(it);
+        if (session_process->state() == SessionProcess::State::STOPPED)
+        {
+            LOG(LS_INFO) << sessionTypeToString(session_process->sessionType())
+                         << " session is finished for " << session_process->userName() << ".";
 
-        std::unique_ptr<SessionProcess> host_deleter(host);
+            if (ui_server_)
+            {
+                ui_server_->setDisconnectEvent(session_process->sessionId(),
+                                               session_process->uuid().toStdString());
+            }
 
-        ui_server_->setDisconnectEvent(
-            base::win::activeConsoleSessionId(), host->uuid().toString().toStdString());
-        break;
+            it = session_list_.erase(it);
+            delete session_process;
+        }
+        else
+        {
+            ++it;
+        }
     }
+}
+
+void HostServer::sessionToUi(const SessionProcess* session_process)
+{
+    if (!ui_server_)
+        return;
+
+    proto::notifier::ConnectEvent event;
+
+    event.set_session_type(session_process->sessionType());
+    event.set_remote_address(session_process->remoteAddress().toStdString());
+    event.set_username(session_process->userName().toStdString());
+    event.set_uuid(session_process->uuid().toStdString());
+
+    ui_server_->setConnectEvent(session_process->sessionId(), event);
 }
 
 } // namespace host

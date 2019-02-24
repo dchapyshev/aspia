@@ -131,9 +131,12 @@ void UiServer::setDisconnectEvent(base::win::SessionId session_id, const std::st
 
 void UiServer::onChannelConnected(ipc::Channel* channel)
 {
+    base::ProcessId process_id = channel->clientProcessId();
+    base::win::SessionId session_id = channel->clientSessionId();
+
     LOG(LS_INFO) << "Process has been successfully connected (PID: "
-                 << channel->clientProcessId() << ", SID: "
-                 << channel->clientSessionId() << ").";
+                 << process_id << ", SID: "
+                 << session_id << ").";
 
     UiProcess* process = new UiProcess(channel, this);
 
@@ -149,18 +152,16 @@ void UiServer::onChannelConnected(ipc::Channel* channel)
             UiProcess* process = *it;
 
             if (process->state() == UiProcess::State::STOPPED)
-            {
                 it = process_list_.erase(it);
-            }
             else
-            {
                 ++it;
-            }
         }
     });
 
     process_list_.emplace_back(process);
     process->start();
+
+    emit processConnected(session_id);
 }
 
 } // namespace host

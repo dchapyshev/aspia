@@ -42,18 +42,21 @@ public:
     void stop();
     void setSessionEvent(base::win::SessionStatus status, base::win::SessionId session_id);
 
-signals:
-    void sessionEvent(base::win::SessionStatus status, base::win::SessionId session_id);
-
 protected:
     // QObject implementation.
     void customEvent(QEvent* event) override;
 
 private slots:
     void onNewConnection();
-    void onHostFinished(SessionProcess* host);
+    void onSessionFinished();
 
 private:
+    void sessionToUi(const SessionProcess* session_process);
+
+    enum class State { STOPPED, STOPPING, STARTED };
+
+    State state_ = State::STOPPED;
+
     QPointer<UiServer> ui_server_;
 
     // Accepts incoming network connections.

@@ -53,6 +53,7 @@ public slots:
     void setDisconnectEvent(base::win::SessionId session_id, const std::string& uuid);
 
 signals:
+    void processConnected(base::win::SessionId session_id);
     void finished();
 
 private slots:
