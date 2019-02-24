@@ -209,42 +209,41 @@
         <translation>Пароль:</translation>
     </message>
     <message>
-        <location filename="../ui/host_main_window.ui" line="223"/>
         <source>Start</source>
-        <translation>Запустить</translation>
+        <translation type="vanished">Запустить</translation>
     </message>
     <message>
-        <location filename="../ui/host_main_window.ui" line="251"/>
+        <location filename="../ui/host_main_window.ui" line="227"/>
         <source>Help</source>
         <translation>Помощь</translation>
     </message>
     <message>
-        <location filename="../ui/host_main_window.ui" line="259"/>
+        <location filename="../ui/host_main_window.ui" line="235"/>
         <source>Language</source>
         <translation>Язык</translation>
     </message>
     <message>
-        <location filename="../ui/host_main_window.ui" line="272"/>
+        <location filename="../ui/host_main_window.ui" line="248"/>
         <source>Exit</source>
         <translation>Выход</translation>
     </message>
     <message>
-        <location filename="../ui/host_main_window.ui" line="281"/>
+        <location filename="../ui/host_main_window.ui" line="257"/>
         <source>Online Help...</source>
         <translation>Онлайн справка...</translation>
     </message>
     <message>
-        <location filename="../ui/host_main_window.ui" line="293"/>
+        <location filename="../ui/host_main_window.ui" line="269"/>
         <source>About</source>
         <translation>О программе</translation>
     </message>
     <message>
-        <location filename="../ui/host_main_window.ui" line="302"/>
+        <location filename="../ui/host_main_window.ui" line="278"/>
         <source>Settings...</source>
         <translation>Параметры...</translation>
     </message>
     <message>
-        <location filename="../ui/host_main_window.ui" line="307"/>
+        <location filename="../ui/host_main_window.ui" line="283"/>
         <source>Hide</source>
         <translation>Спрятать</translation>
     </message>

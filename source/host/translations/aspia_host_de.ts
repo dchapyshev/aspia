@@ -185,42 +185,41 @@
         <translation>Kennwort:</translation>
     </message>
     <message>
-        <location filename="../ui/host_main_window.ui" line="223"/>
         <source>Start</source>
-        <translation>Starten</translation>
+        <translation type="vanished">Starten</translation>
     </message>
     <message>
-        <location filename="../ui/host_main_window.ui" line="251"/>
+        <location filename="../ui/host_main_window.ui" line="227"/>
         <source>Help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/host_main_window.ui" line="259"/>
+        <location filename="../ui/host_main_window.ui" line="235"/>
         <source>Language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/host_main_window.ui" line="272"/>
+        <location filename="../ui/host_main_window.ui" line="248"/>
         <source>Exit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/host_main_window.ui" line="281"/>
+        <location filename="../ui/host_main_window.ui" line="257"/>
         <source>Online Help...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/host_main_window.ui" line="293"/>
+        <location filename="../ui/host_main_window.ui" line="269"/>
         <source>About</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/host_main_window.ui" line="302"/>
+        <location filename="../ui/host_main_window.ui" line="278"/>
         <source>Settings...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/host_main_window.ui" line="307"/>
+        <location filename="../ui/host_main_window.ui" line="283"/>
         <source>Hide</source>
         <translation type="unfinished"></translation>
     </message>
