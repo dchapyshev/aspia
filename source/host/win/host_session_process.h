@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST__WIN__HOST_H
-#define HOST__WIN__HOST_H
+#ifndef HOST__WIN__HOST_SESSION_PROCESS_H
+#define HOST__WIN__HOST_SESSION_PROCESS_H
 
 #include <QPointer>
 #include <QUuid>
@@ -41,13 +41,13 @@ namespace host {
 
 class SessionFake;
 
-class Host : public QObject
+class SessionProcess : public QObject
 {
     Q_OBJECT
 
 public:
-    Host(QObject* parent = nullptr);
-    ~Host();
+    SessionProcess(QObject* parent = nullptr);
+    ~SessionProcess();
 
     net::ChannelHost* networkChannel() const { return network_channel_; }
     void setNetworkChannel(net::ChannelHost* network_channel);
@@ -67,7 +67,7 @@ public slots:
     void setSessionEvent(base::win::SessionStatus status, base::win::SessionId session_id);
 
 signals:
-    void finished(Host* host);
+    void finished(SessionProcess* host);
 
 protected:
     // QObject implementation.
@@ -95,9 +95,9 @@ private:
     QPointer<HostProcess> session_process_;
     QPointer<SessionFake> fake_session_;
 
-    DISALLOW_COPY_AND_ASSIGN(Host);
+    DISALLOW_COPY_AND_ASSIGN(SessionProcess);
 };
 
 } // namespace host
 
-#endif // HOST__WIN__HOST_H
+#endif // HOST__WIN__HOST_SESSION_PROCESS_H

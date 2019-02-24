@@ -23,7 +23,7 @@
 
 #include "base/qt_logging.h"
 #include "common/message_serialization.h"
-#include "host/win/host.h"
+#include "host/win/host_process.h"
 #include "ipc/ipc_channel.h"
 #include "proto/notifier.pb.h"
 

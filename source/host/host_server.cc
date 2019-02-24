@@ -22,7 +22,7 @@
 
 #include "base/qt_logging.h"
 #include "common/message_serialization.h"
-#include "host/win/host.h"
+#include "host/win/host_session_process.h"
 #include "host/host_ui_server.h"
 #include "host/host_settings.h"
 #include "ipc/ipc_server.h"
@@ -165,34 +165,35 @@ void HostServer::onNewConnection()
 
         LOG(LS_INFO) << "New connected client: " << channel->peerAddress();
 
-        std::unique_ptr<Host> host(new Host(this));
+        std::unique_ptr<SessionProcess> session_process(new SessionProcess(this));
 
-        host->setNetworkChannel(channel);
-        host->setUuid(QUuid::createUuid());
+        session_process->setNetworkChannel(channel);
+        session_process->setUuid(QUuid::createUuid());
 
-        connect(this, &HostServer::sessionEvent, host.get(), &Host::setSessionEvent);
+        connect(this, &HostServer::sessionEvent,
+                session_process.get(), &SessionProcess::setSessionEvent);
 
-        connect(host.get(), &Host::finished,
+        connect(session_process.get(), &SessionProcess::finished,
                 this, &HostServer::onHostFinished,
                 Qt::QueuedConnection);
 
-        if (host->start())
+        if (session_process->start())
         {
             proto::notifier::ConnectEvent event;
 
-            event.set_session_type(host->sessionType());
-            event.set_remote_address(host->remoteAddress().toStdString());
-            event.set_username(host->userName().toStdString());
-            event.set_uuid(host->uuid().toString().toStdString());
+            event.set_session_type(session_process->sessionType());
+            event.set_remote_address(session_process->remoteAddress().toStdString());
+            event.set_username(session_process->userName().toStdString());
+            event.set_uuid(session_process->uuid().toString().toStdString());
 
             ui_server_->setConnectEvent(base::win::activeConsoleSessionId(), event);
 
-            session_list_.push_back(host.release());
+            session_list_.push_back(session_process.release());
         }
     }
 }
 
-void HostServer::onHostFinished(Host* host)
+void HostServer::onHostFinished(SessionProcess* host)
 {
     LOG(LS_INFO) << sessionTypeToString(host->sessionType())
                  << " session is finished for " << host->userName();
@@ -204,7 +205,7 @@ void HostServer::onHostFinished(Host* host)
 
         session_list_.erase(it);
 
-        std::unique_ptr<Host> host_deleter(host);
+        std::unique_ptr<SessionProcess> host_deleter(host);
 
         ui_server_->setDisconnectEvent(
             base::win::activeConsoleSessionId(), host->uuid().toString().toStdString());

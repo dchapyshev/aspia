@@ -26,7 +26,7 @@
 
 namespace host {
 
-class Host;
+class SessionProcess;
 class UiServer;
 struct SrpUserList;
 
@@ -51,7 +51,7 @@ protected:
 
 private slots:
     void onNewConnection();
-    void onHostFinished(Host* host);
+    void onHostFinished(SessionProcess* host);
 
 private:
     QPointer<UiServer> ui_server_;
@@ -60,7 +60,7 @@ private:
     QPointer<net::Server> network_server_;
 
     // Contains a list of connected sessions.
-    std::list<QPointer<Host>> session_list_;
+    std::list<SessionProcess*> session_list_;
 
     DISALLOW_COPY_AND_ASSIGN(HostServer);
 };

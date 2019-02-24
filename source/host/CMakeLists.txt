@@ -81,8 +81,6 @@ list(APPEND SOURCE_HOST_CORE_UI
 
 list(APPEND SOURCE_HOST_CORE_WIN
     win/dll_main.cc
-    win/host.cc
-    win/host.h
     win/host_process.cc
     win/host_process.h
     win/host_service.cc
@@ -93,6 +91,8 @@ list(APPEND SOURCE_HOST_CORE_WIN
     win/host_service_main.h
     win/host_session_main.cc
     win/host_session_main.h
+    win/host_session_process.cc
+    win/host_session_process.h
     win/updater_launcher.cc
     win/updater_launcher.h)
 
