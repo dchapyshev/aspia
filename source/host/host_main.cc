@@ -28,7 +28,7 @@
 #include "base/win/process_util.h"
 #include "build/version.h"
 #include "crypto/scoped_crypto_initializer.h"
-#include "host/ui/host_window.h"
+#include "host/ui/host_main_window.h"
 #include "host/host_settings.h"
 #include "updater/update_dialog.h"
 
@@ -184,7 +184,7 @@ int runApplication(int argc, char* argv[])
     }
     else
     {
-        host::HostWindow window(host_settings, locale_loader);
+        host::MainWindow window(host_settings, locale_loader);
 
         if (is_started_from_service)
             window.hideToTray();

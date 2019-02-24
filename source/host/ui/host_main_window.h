@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST__UI__HOST_WINDOW_H
-#define HOST__UI__HOST_WINDOW_H
+#ifndef HOST__UI__HOST_MAIN_WINDOW_H
+#define HOST__UI__HOST_MAIN_WINDOW_H
 
 #include <QMainWindow>
 #include <QPointer>
@@ -26,20 +26,20 @@
 #include "base/macros_magic.h"
 #include "common/locale_loader.h"
 #include "host/host_settings.h"
-#include "ui_host_window.h"
+#include "ui_host_main_window.h"
 
 namespace host {
 
 class NotifierWindow;
 class UiClient;
 
-class HostWindow : public QMainWindow
+class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    HostWindow(Settings& settings, common::LocaleLoader& locale_loader, QWidget* parent = nullptr);
-    ~HostWindow();
+    MainWindow(Settings& settings, common::LocaleLoader& locale_loader, QWidget* parent = nullptr);
+    ~MainWindow();
 
     void hideToTray();
 
@@ -61,7 +61,7 @@ private slots:
 private:
     void createLanguageMenu(const QString& current_locale);
 
-    Ui::HostWindow ui;
+    Ui::HostMainWindow ui;
 
     bool should_be_quit_ = false;
 
@@ -74,9 +74,9 @@ private:
     QPointer<NotifierWindow> notifier_;
     QPointer<UiClient> client_;
 
-    DISALLOW_COPY_AND_ASSIGN(HostWindow);
+    DISALLOW_COPY_AND_ASSIGN(MainWindow);
 };
 
 } // namespace host
 
-#endif // HOST__UI__HOST_WINDOW_H
+#endif // HOST__UI__HOST_MAIN_WINDOW_H

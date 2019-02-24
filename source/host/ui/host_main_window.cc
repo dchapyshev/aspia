@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/ui/host_window.h"
+#include "host/ui/host_main_window.h"
 
 #include <QCloseEvent>
 #include <QDesktopServices>
@@ -37,7 +37,7 @@
 
 namespace host {
 
-HostWindow::HostWindow(Settings& settings, common::LocaleLoader& locale_loader, QWidget* parent)
+MainWindow::MainWindow(Settings& settings, common::LocaleLoader& locale_loader, QWidget* parent)
     : QMainWindow(parent),
       settings_(settings),
       locale_loader_(locale_loader)
@@ -66,15 +66,15 @@ HostWindow::HostWindow(Settings& settings, common::LocaleLoader& locale_loader, 
         onShowHide();
     });
 
-    connect(ui.menu_language, &QMenu::triggered, this, &HostWindow::onLanguageChanged);
-    connect(ui.action_settings, &QAction::triggered, this, &HostWindow::onSettings);
-    connect(ui.action_show_hide, &QAction::triggered, this, &HostWindow::onShowHide);
-    connect(ui.action_exit, &QAction::triggered, this, &HostWindow::onExit);
-    connect(ui.action_help, &QAction::triggered, this, &HostWindow::onHelp);
-    connect(ui.action_about, &QAction::triggered, this, &HostWindow::onAbout);
+    connect(ui.menu_language, &QMenu::triggered, this, &MainWindow::onLanguageChanged);
+    connect(ui.action_settings, &QAction::triggered, this, &MainWindow::onSettings);
+    connect(ui.action_show_hide, &QAction::triggered, this, &MainWindow::onShowHide);
+    connect(ui.action_exit, &QAction::triggered, this, &MainWindow::onExit);
+    connect(ui.action_help, &QAction::triggered, this, &MainWindow::onHelp);
+    connect(ui.action_about, &QAction::triggered, this, &MainWindow::onAbout);
 
-    connect(ui.button_refresh_ip_list, &QPushButton::released, this, &HostWindow::refreshIpList);
-    connect(ui.button_new_password, &QPushButton::released, this, &HostWindow::newPassword);
+    connect(ui.button_refresh_ip_list, &QPushButton::released, this, &MainWindow::refreshIpList);
+    connect(ui.button_new_password, &QPushButton::released, this, &MainWindow::newPassword);
 
     setFixedHeight(sizeHint().height());
 
@@ -109,15 +109,15 @@ HostWindow::HostWindow(Settings& settings, common::LocaleLoader& locale_loader, 
     client_->start();
 }
 
-HostWindow::~HostWindow() = default;
+MainWindow::~MainWindow() = default;
 
-void HostWindow::hideToTray()
+void MainWindow::hideToTray()
 {
     ui.action_show_hide->setText(tr("Show"));
     setVisible(false);
 }
 
-void HostWindow::closeEvent(QCloseEvent* event)
+void MainWindow::closeEvent(QCloseEvent* event)
 {
     if (!should_be_quit_)
     {
@@ -133,7 +133,7 @@ void HostWindow::closeEvent(QCloseEvent* event)
     }
 }
 
-void HostWindow::refreshIpList()
+void MainWindow::refreshIpList()
 {
     QString ip_list;
 
@@ -152,7 +152,7 @@ void HostWindow::refreshIpList()
     ui.edit_ip->setText(ip_list);
 }
 
-void HostWindow::newPassword()
+void MainWindow::newPassword()
 {
     PasswordGenerator generator;
 
@@ -164,7 +164,7 @@ void HostWindow::newPassword()
     ui.edit_password->setText(generator.result());
 }
 
-void HostWindow::onLanguageChanged(QAction* action)
+void MainWindow::onLanguageChanged(QAction* action)
 {
     common::LanguageAction* language_action = dynamic_cast<common::LanguageAction*>(action);
     if (!language_action)
@@ -177,12 +177,12 @@ void HostWindow::onLanguageChanged(QAction* action)
     settings_.setLocale(new_locale);
 }
 
-void HostWindow::onSettings()
+void MainWindow::onSettings()
 {
     ConfigDialog(this).exec();
 }
 
-void HostWindow::onShowHide()
+void MainWindow::onShowHide()
 {
     if (isVisible())
     {
@@ -196,17 +196,17 @@ void HostWindow::onShowHide()
     }
 }
 
-void HostWindow::onHelp()
+void MainWindow::onHelp()
 {
     QDesktopServices::openUrl(QUrl("https://aspia.org/help"));
 }
 
-void HostWindow::onAbout()
+void MainWindow::onAbout()
 {
     common::AboutDialog(this).exec();
 }
 
-void HostWindow::onExit()
+void MainWindow::onExit()
 {
     int ret = QMessageBox::question(
         this,
@@ -224,7 +224,7 @@ void HostWindow::onExit()
     }
 }
 
-void HostWindow::createLanguageMenu(const QString& current_locale)
+void MainWindow::createLanguageMenu(const QString& current_locale)
 {
     QActionGroup* language_group = new QActionGroup(this);
 
