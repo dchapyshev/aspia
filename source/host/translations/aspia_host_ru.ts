@@ -513,22 +513,22 @@
     </message>
     <message>
         <location filename="../ui/host_window.cc" line="116"/>
-        <location filename="../ui/host_window.cc" line="186"/>
+        <location filename="../ui/host_window.cc" line="189"/>
         <source>Show</source>
         <translation>Показать</translation>
     </message>
     <message>
-        <location filename="../ui/host_window.cc" line="191"/>
+        <location filename="../ui/host_window.cc" line="194"/>
         <source>Hide</source>
         <translation>Спрятать</translation>
     </message>
     <message>
-        <location filename="../ui/host_window.cc" line="210"/>
+        <location filename="../ui/host_window.cc" line="213"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../ui/host_window.cc" line="211"/>
+        <location filename="../ui/host_window.cc" line="214"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation>Если вы выйдите из Aspia, то вы не сможете подключиться к этому компьютеру пока вы снова не включите компьютер или Aspia вручную. Вы действительно хотите выйти из приложения?</translation>
     </message>

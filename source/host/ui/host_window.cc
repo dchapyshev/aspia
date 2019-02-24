@@ -90,7 +90,7 @@ HostWindow::HostWindow(Settings& settings, common::LocaleLoader& locale_loader, 
     {
         if (!notifier_)
         {
-            notifier_ = new HostNotifierWindow(this);
+            notifier_ = new HostNotifierWindow();
 
             connect(client_, &UiClient::disconnectEvent,
                     notifier_, &HostNotifierWindow::onDisconnectEvent);
@@ -126,6 +126,9 @@ void HostWindow::closeEvent(QCloseEvent* event)
     }
     else
     {
+        if (notifier_)
+            notifier_->close();
+
         QMainWindow::closeEvent(event);
     }
 }
