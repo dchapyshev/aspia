@@ -282,46 +282,46 @@
 <context>
     <name>Settings</name>
     <message>
-        <location filename="../host_settings.cc" line="52"/>
-        <location filename="../host_settings.cc" line="68"/>
+        <location filename="../host_settings.cc" line="56"/>
+        <location filename="../host_settings.cc" line="72"/>
         <source>Information</source>
         <translation>Інформація</translation>
     </message>
     <message>
-        <location filename="../host_settings.cc" line="53"/>
+        <location filename="../host_settings.cc" line="57"/>
         <source>The configuration was successfully imported.</source>
         <translation>Конфігурацію імпортовано успішно.</translation>
     </message>
     <message>
-        <location filename="../host_settings.cc" line="69"/>
+        <location filename="../host_settings.cc" line="73"/>
         <source>The configuration was successfully exported.</source>
         <translation>Кофігурацію експортовано успішно.</translation>
     </message>
     <message>
-        <location filename="../host_settings.cc" line="198"/>
-        <location filename="../host_settings.cc" line="214"/>
-        <location filename="../host_settings.cc" line="231"/>
-        <location filename="../host_settings.cc" line="244"/>
+        <location filename="../host_settings.cc" line="204"/>
+        <location filename="../host_settings.cc" line="220"/>
+        <location filename="../host_settings.cc" line="237"/>
+        <location filename="../host_settings.cc" line="250"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
     <message>
-        <location filename="../host_settings.cc" line="199"/>
+        <location filename="../host_settings.cc" line="205"/>
         <source>Could not open source file: %1</source>
         <translation>Неможливо відкрити вихідний файл: %1</translation>
     </message>
     <message>
-        <location filename="../host_settings.cc" line="215"/>
+        <location filename="../host_settings.cc" line="221"/>
         <source>Could not open target file: %1</source>
         <translation>Неможливо відкрити цільовий файл: %1</translation>
     </message>
     <message>
-        <location filename="../host_settings.cc" line="232"/>
+        <location filename="../host_settings.cc" line="238"/>
         <source>Unable to read the source file: the file is damaged or has an unknown format.</source>
         <translation>Неможливо прочитати вихідний файл: файл пошкоджено або формат файлу невідомний.</translation>
     </message>
     <message>
-        <location filename="../host_settings.cc" line="245"/>
+        <location filename="../host_settings.cc" line="251"/>
         <source>Unable to write the target file.</source>
         <translation>Неможливо записати цільовий файл.</translation>
     </message>

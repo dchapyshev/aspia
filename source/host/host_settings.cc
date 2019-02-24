@@ -31,10 +31,14 @@
 namespace host {
 
 Settings::Settings()
-    : settings_(base::XmlSettings::format(),
-                QSettings::SystemScope,
-                QLatin1String("aspia"),
-                QLatin1String("host"))
+    : system_settings_(base::XmlSettings::format(),
+                       QSettings::SystemScope,
+                       QLatin1String("aspia"),
+                       QLatin1String("host")),
+      user_settings_(base::XmlSettings::format(),
+                     QSettings::UserScope,
+                     QLatin1String("aspia"),
+                     QLatin1String("host"))
 {
     // Nothing
 }
@@ -75,65 +79,66 @@ bool Settings::exportToFile(const QString& path, bool silent, QWidget* parent)
 
 QString Settings::filePath() const
 {
-    return settings_.fileName();
+    return system_settings_.fileName();
 }
 
 bool Settings::isWritable() const
 {
-    return settings_.isWritable();
+    return system_settings_.isWritable();
 }
 
 QString Settings::locale() const
 {
-    return settings_.value(QStringLiteral("Locale"), QLocale::system().bcp47Name()).toString();
+    return user_settings_.value(
+        QStringLiteral("Locale"), QLocale::system().bcp47Name()).toString();
 }
 
 void Settings::setLocale(const QString& locale)
 {
-    settings_.setValue(QStringLiteral("Locale"), locale);
+    user_settings_.setValue(QStringLiteral("Locale"), locale);
 }
 
 uint16_t Settings::tcpPort() const
 {
-    return settings_.value(QStringLiteral("TcpPort"), DEFAULT_HOST_TCP_PORT).toUInt();
+    return system_settings_.value(QStringLiteral("TcpPort"), DEFAULT_HOST_TCP_PORT).toUInt();
 }
 
 void Settings::setTcpPort(uint16_t port)
 {
-    settings_.setValue(QStringLiteral("TcpPort"), port);
+    system_settings_.setValue(QStringLiteral("TcpPort"), port);
 }
 
 bool Settings::addFirewallRule() const
 {
-    return settings_.value(QStringLiteral("AddFirewallRule"), true).toBool();
+    return system_settings_.value(QStringLiteral("AddFirewallRule"), true).toBool();
 }
 
 void Settings::setAddFirewallRule(bool value)
 {
-    settings_.setValue(QStringLiteral("AddFirewallRule"), value);
+    system_settings_.setValue(QStringLiteral("AddFirewallRule"), value);
 }
 
 net::SrpUserList Settings::userList() const
 {
     net::SrpUserList users;
 
-    users.seed_key = settings_.value(QStringLiteral("SeedKey")).toByteArray();
+    users.seed_key = system_settings_.value(QStringLiteral("SeedKey")).toByteArray();
     if (users.seed_key.isEmpty())
         users.seed_key = crypto::Random::generateBuffer(64);
 
-    int count = settings_.beginReadArray(QStringLiteral("Users"));
+    int count = system_settings_.beginReadArray(QStringLiteral("Users"));
     for (int i = 0; i < count; ++i)
     {
-        settings_.setArrayIndex(i);
+        system_settings_.setArrayIndex(i);
 
         net::SrpUser user;
-        user.name      = settings_.value(QStringLiteral("Name")).toString();
-        user.salt      = settings_.value(QStringLiteral("Salt")).toByteArray();
-        user.verifier  = settings_.value(QStringLiteral("Verifier")).toByteArray();
-        user.number    = settings_.value(QStringLiteral("Number")).toByteArray();
-        user.generator = settings_.value(QStringLiteral("Generator")).toByteArray();
-        user.sessions  = settings_.value(QStringLiteral("Sessions")).toUInt();
-        user.flags     = settings_.value(QStringLiteral("Flags")).toUInt();
+        user.name      = system_settings_.value(QStringLiteral("Name")).toString();
+        user.salt      = system_settings_.value(QStringLiteral("Salt")).toByteArray();
+        user.verifier  = system_settings_.value(QStringLiteral("Verifier")).toByteArray();
+        user.number    = system_settings_.value(QStringLiteral("Number")).toByteArray();
+        user.generator = system_settings_.value(QStringLiteral("Generator")).toByteArray();
+        user.sessions  = system_settings_.value(QStringLiteral("Sessions")).toUInt();
+        user.flags     = system_settings_.value(QStringLiteral("Flags")).toUInt();
 
         if (user.name.isEmpty() || user.salt.isEmpty() || user.verifier.isEmpty() ||
             user.number.isEmpty() || user.generator.isEmpty())
@@ -144,7 +149,7 @@ net::SrpUserList Settings::userList() const
 
         users.list.append(user);
     }
-    settings_.endArray();
+    system_settings_.endArray();
 
     return users;
 }
@@ -152,36 +157,37 @@ net::SrpUserList Settings::userList() const
 void Settings::setUserList(const net::SrpUserList& users)
 {
     // Clear the old list of users.
-    settings_.remove(QStringLiteral("Users"));
+    system_settings_.remove(QStringLiteral("Users"));
 
-    settings_.setValue(QStringLiteral("SeedKey"), users.seed_key);
+    system_settings_.setValue(QStringLiteral("SeedKey"), users.seed_key);
 
-    settings_.beginWriteArray(QStringLiteral("Users"));
+    system_settings_.beginWriteArray(QStringLiteral("Users"));
     for (int i = 0; i < users.list.size(); ++i)
     {
-        settings_.setArrayIndex(i);
+        system_settings_.setArrayIndex(i);
 
         const net::SrpUser& user = users.list.at(i);
 
-        settings_.setValue(QStringLiteral("Name"), user.name);
-        settings_.setValue(QStringLiteral("Salt"), user.salt);
-        settings_.setValue(QStringLiteral("Verifier"), user.verifier);
-        settings_.setValue(QStringLiteral("Number"), user.number);
-        settings_.setValue(QStringLiteral("Generator"), user.generator);
-        settings_.setValue(QStringLiteral("Sessions"), user.sessions);
-        settings_.setValue(QStringLiteral("Flags"), user.flags);
+        system_settings_.setValue(QStringLiteral("Name"), user.name);
+        system_settings_.setValue(QStringLiteral("Salt"), user.salt);
+        system_settings_.setValue(QStringLiteral("Verifier"), user.verifier);
+        system_settings_.setValue(QStringLiteral("Number"), user.number);
+        system_settings_.setValue(QStringLiteral("Generator"), user.generator);
+        system_settings_.setValue(QStringLiteral("Sessions"), user.sessions);
+        system_settings_.setValue(QStringLiteral("Flags"), user.flags);
     }
-    settings_.endArray();
+    system_settings_.endArray();
 }
 
 QString Settings::updateServer() const
 {
-    return settings_.value(QStringLiteral("UpdateServer"), DEFAULT_UPDATE_SERVER).toString();
+    return system_settings_.value(
+        QStringLiteral("UpdateServer"), DEFAULT_UPDATE_SERVER).toString();
 }
 
 void Settings::setUpdateServer(const QString& server)
 {
-    settings_.setValue(QStringLiteral("UpdateServer"), server);
+    system_settings_.setValue(QStringLiteral("UpdateServer"), server);
 }
 
 // static

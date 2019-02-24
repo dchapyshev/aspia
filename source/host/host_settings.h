@@ -63,7 +63,8 @@ private:
     static bool copySettings(
         const QString& source_path, const QString& target_path, bool silent, QWidget* parent);
 
-    mutable QSettings settings_;
+    mutable QSettings system_settings_;
+    QSettings user_settings_;
 
     DISALLOW_COPY_AND_ASSIGN(Settings);
 };
