@@ -35,10 +35,65 @@ namespace {
 
 constexpr uint32_t kMaxMessageSize = 16 * 1024 * 1024; // 16MB
 
+#if defined(OS_WIN)
+base::ProcessId clientProcessIdImpl(HANDLE pipe_handle)
+{
+    ULONG process_id = base::kNullProcessId;
+
+    if (!GetNamedPipeClientProcessId(pipe_handle, &process_id))
+    {
+        PLOG(LS_WARNING) << "GetNamedPipeClientProcessId failed";
+        return base::kNullProcessId;
+    }
+
+    return process_id;
+}
+
+base::ProcessId serverProcessIdImpl(HANDLE pipe_handle)
+{
+    ULONG process_id = base::kNullProcessId;
+
+    if (!GetNamedPipeServerProcessId(pipe_handle, &process_id))
+    {
+        PLOG(LS_WARNING) << "GetNamedPipeServerProcessId failed";
+        return base::kNullProcessId;
+    }
+
+    return process_id;
+}
+
+base::win::SessionId clientSessionIdImpl(HANDLE pipe_handle)
+{
+    ULONG session_id = base::win::kInvalidSessionId;
+
+    if (!GetNamedPipeClientSessionId(pipe_handle, &session_id))
+    {
+        PLOG(LS_WARNING) << "GetNamedPipeClientSessionId failed";
+        return base::win::kInvalidSessionId;
+    }
+
+    return session_id;
+}
+
+base::win::SessionId serverSessionIdImpl(HANDLE pipe_handle)
+{
+    ULONG session_id = base::win::kInvalidSessionId;
+
+    if (!GetNamedPipeServerSessionId(pipe_handle, &session_id))
+    {
+        PLOG(LS_WARNING) << "GetNamedPipeServerSessionId failed";
+        return base::win::kInvalidSessionId;
+    }
+
+    return session_id;
+}
+#endif // defined(OS_WIN)
+
 } // namespace
 
-Channel::Channel(QLocalSocket* socket, QObject* parent)
+Channel::Channel(Type type, QLocalSocket* socket, QObject* parent)
     : QObject(parent),
+      type_(type),
       socket_(socket)
 {
     DCHECK(socket_);
@@ -47,7 +102,15 @@ Channel::Channel(QLocalSocket* socket, QObject* parent)
 
     socket_->setParent(this);
 
-    connect(socket_, &QLocalSocket::connected, this, &Channel::connected);
+    if (type_ == Type::SERVER)
+        initConnected();
+
+    connect(socket_, &QLocalSocket::connected, [this]()
+    {
+        initConnected();
+        emit connected();
+    });
+
     connect(socket_, &QLocalSocket::bytesWritten, this, &Channel::onBytesWritten);
     connect(socket_, &QLocalSocket::readyRead, this, &Channel::onReadyRead);
     connect(socket_, &QLocalSocket::disconnected, this, &Channel::disconnected);
@@ -58,79 +121,19 @@ Channel::Channel(QLocalSocket* socket, QObject* parent)
 // static
 Channel* Channel::createClient(QObject* parent)
 {
-    return new Channel(new QLocalSocket(), parent);
+    return new Channel(Type::CLIENT, new QLocalSocket(), parent);
 }
 
 void Channel::connectToServer(const QString& channel_name)
 {
+    if (type_ != Type::CLIENT)
+    {
+        DLOG(LS_ERROR) << "Attempt to use server channel as client.";
+        return;
+    }
+
     socket_->connectToServer(channel_name);
 }
-
-base::ProcessId Channel::clientProcessId() const
-{
-#if defined(OS_WIN)
-    ULONG process_id = base::kNullProcessId;
-
-    if (!GetNamedPipeClientProcessId(reinterpret_cast<HANDLE>(socket_->socketDescriptor()),
-                                     &process_id))
-    {
-        PLOG(LS_WARNING) << "GetNamedPipeClientProcessId failed";
-        return base::kNullProcessId;
-    }
-
-    return process_id;
-#else
-#error Platform support not implemented
-#endif
-}
-
-base::ProcessId Channel::serverProcessId() const
-{
-#if defined(OS_WIN)
-    ULONG process_id = base::kNullProcessId;
-
-    if (!GetNamedPipeServerProcessId(reinterpret_cast<HANDLE>(socket_->socketDescriptor()),
-                                     &process_id))
-    {
-        PLOG(LS_WARNING) << "GetNamedPipeServerProcessId failed";
-        return base::kNullProcessId;
-    }
-
-    return process_id;
-#else
-#error Platform support not implemented
-#endif
-}
-
-#if defined(OS_WIN)
-base::win::SessionId Channel::clientSessionId() const
-{
-    ULONG session_id = base::win::kInvalidSessionId;
-
-    if (!GetNamedPipeClientSessionId(reinterpret_cast<HANDLE>(socket_->socketDescriptor()),
-                                     &session_id))
-    {
-        PLOG(LS_WARNING) << "GetNamedPipeClientSessionId failed";
-        return base::win::kInvalidSessionId;
-    }
-
-    return session_id;
-}
-
-base::win::SessionId Channel::serverSessionId() const
-{
-    ULONG session_id = base::win::kInvalidSessionId;
-
-    if (!GetNamedPipeServerSessionId(reinterpret_cast<HANDLE>(socket_->socketDescriptor()),
-                                     &session_id))
-    {
-        PLOG(LS_WARNING) << "GetNamedPipeServerSessionId failed";
-        return base::win::kInvalidSessionId;
-    }
-
-    return session_id;
-}
-#endif // defined(OS_WIN)
 
 void Channel::stop()
 {
@@ -237,6 +240,18 @@ void Channel::onReadyRead()
 
         read_ += current;
     }
+}
+
+void Channel::initConnected()
+{
+#if defined(OS_WIN)
+    HANDLE pipe_handle = reinterpret_cast<HANDLE>(socket_->socketDescriptor());
+
+    client_process_id_ = clientProcessIdImpl(pipe_handle);
+    server_process_id_ = serverProcessIdImpl(pipe_handle);
+    client_session_id_ = clientSessionIdImpl(pipe_handle);
+    server_session_id_ = serverSessionIdImpl(pipe_handle);
+#endif // defined(OS_WIN)
 }
 
 void Channel::scheduleWrite()

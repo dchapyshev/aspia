@@ -25,9 +25,10 @@
 #include <QPointer>
 
 #include "base/macros_magic.h"
-#include "base/process_handle.h"
+#include "build/build_config.h"
 
 #if defined(OS_WIN)
+#include "base/process_handle.h"
 #include "base/win/session_id.h"
 #endif // defined(OS_WIN)
 
@@ -44,15 +45,17 @@ public:
 
     static Channel* createClient(QObject* parent = nullptr);
 
+    enum class Type { SERVER, CLIENT };
+    Type type() const { return type_; }
+
     void connectToServer(const QString& channel_name);
 
-    base::ProcessId clientProcessId() const;
-    base::ProcessId serverProcessId() const;
-
 #if defined(OS_WIN)
-    base::win::SessionId clientSessionId() const;
-    base::win::SessionId serverSessionId() const;
-#endif
+    base::ProcessId clientProcessId() const { return client_process_id_; }
+    base::ProcessId serverProcessId() const { return server_process_id_; }
+    base::win::SessionId clientSessionId() const { return client_session_id_; }
+    base::win::SessionId serverSessionId() const { return server_session_id_; }
+#endif // defined(OS_WIN)
 
 public slots:
     void stop();
@@ -76,12 +79,14 @@ private slots:
 
 private:
     friend class Server;
-    Channel(QLocalSocket* socket, QObject* parent);
+    Channel(Type type, QLocalSocket* socket, QObject* parent);
 
+    void initConnected();
     void scheduleWrite();
 
     using MessageSizeType = uint32_t;
 
+    const Type type_;
     QPointer<QLocalSocket> socket_;
 
     QQueue<QByteArray> write_queue_;
@@ -92,6 +97,13 @@ private:
     QByteArray read_buffer_;
     MessageSizeType read_size_ = 0;
     int64_t read_ = 0;
+
+#if defined(OS_WIN)
+    base::ProcessId client_process_id_ = base::kNullProcessId;
+    base::ProcessId server_process_id_ = base::kNullProcessId;
+    base::win::SessionId client_session_id_ = base::win::kInvalidSessionId;
+    base::win::SessionId server_session_id_ = base::win::kInvalidSessionId;
+#endif // defined(OS_WIN)
 
     DISALLOW_COPY_AND_ASSIGN(Channel);
 };

@@ -109,7 +109,7 @@ void Server::onNewConnection()
     if (server_->hasPendingConnections())
     {
         QLocalSocket* socket = server_->nextPendingConnection();
-        emit newConnection(new Channel(socket, nullptr));
+        emit newConnection(new Channel(Channel::Type::SERVER, socket, nullptr));
     }
 }
 
