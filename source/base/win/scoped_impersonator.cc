@@ -24,7 +24,7 @@ namespace base::win {
 
 ScopedImpersonator::ScopedImpersonator()
 {
-    DETACH_FROM_THREAD(thread_checker_);
+    // Nothing
 }
 
 ScopedImpersonator::~ScopedImpersonator()
