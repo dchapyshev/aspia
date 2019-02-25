@@ -23,6 +23,7 @@ namespace base::win {
 
 using SessionId = unsigned long;
 const SessionId kInvalidSessionId = 0xFFFFFFFF;
+const SessionId kServiceSessionId = 0;
 
 SessionId activeConsoleSessionId();
 
