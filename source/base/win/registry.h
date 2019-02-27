@@ -19,10 +19,11 @@
 #ifndef BASE__WIN__REGISTRY_H
 #define BASE__WIN__REGISTRY_H
 
+#include <string>
+#include <vector>
+
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-
-#include <vector>
 
 #include "base/macros_magic.h"
 

@@ -19,6 +19,7 @@
 #ifndef NET__ADAPTER_ENUMERATOR_H
 #define NET__ADAPTER_ENUMERATOR_H
 
+#include <memory>
 #include <string>
 
 #include "base/macros_magic.h"

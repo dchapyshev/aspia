@@ -19,6 +19,7 @@
 #ifndef BASE__SMBIOS_PARSER_H
 #define BASE__SMBIOS_PARSER_H
 
+#include <string>
 #include <vector>
 
 #include "base/macros_magic.h"
