@@ -43,6 +43,7 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 list(APPEND CMAKE_AUTORCC_OPTIONS -compress 9 -threshold 5)
 
 add_definitions(-D_UNICODE
+                -DUNICODE
                 -DNTDDI_VERSION=0x06010000
                 -D_WIN32_WINNT=0x0601
                 -D_WIN32_WINDOWS=_WIN32_WINNT
