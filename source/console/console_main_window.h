@@ -16,15 +16,15 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CONSOLE__CONSOLE_WINDOW_H
-#define CONSOLE__CONSOLE_WINDOW_H
+#ifndef CONSOLE__CONSOLE_MAIN_WINDOW_H
+#define CONSOLE__CONSOLE_MAIN_WINDOW_H
 
 #include "common/locale_loader.h"
 #include "console/console_settings.h"
 #include "console/mru.h"
 #include "updater/update_checker.h"
 #include "proto/address_book.pb.h"
-#include "ui_console_window.h"
+#include "ui_console_main_window.h"
 
 class QSystemTrayIcon;
 
@@ -34,15 +34,13 @@ class AddressBookTab;
 class ComputerItem;
 class Client;
 
-class ConsoleWindow : public QMainWindow
+class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    ConsoleWindow(Settings& settings,
-                  common::LocaleLoader& locale_loader,
-                  const QString& file_path);
-    ~ConsoleWindow();
+    MainWindow(Settings& settings, common::LocaleLoader& locale_loader, const QString& file_path);
+    ~MainWindow();
 
 public slots:
     void onNew();
@@ -99,7 +97,7 @@ private:
     bool hasUnpinnedTabs() const;
     void connectToComputer(const proto::address_book::Computer& computer);
 
-    Ui::ConsoleWindow ui;
+    Ui::ConsoleMainWindow ui;
 
     Settings& settings_;
     common::LocaleLoader& locale_loader_;
@@ -108,9 +106,9 @@ private:
     QScopedPointer<QSystemTrayIcon> tray_icon_;
     QScopedPointer<QMenu> tray_menu_;
 
-    DISALLOW_COPY_AND_ASSIGN(ConsoleWindow);
+    DISALLOW_COPY_AND_ASSIGN(MainWindow);
 };
 
 } // namespace console
 
-#endif // CONSOLE__CONSOLE_WINDOW_H
+#endif // CONSOLE__CONSOLE_MAIN_WINDOW_H

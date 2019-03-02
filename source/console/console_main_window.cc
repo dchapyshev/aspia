@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "console/console_window.h"
+#include "console/console_main_window.h"
 
 #include <QCloseEvent>
 #include <QDesktopServices>
@@ -56,9 +56,9 @@ private:
 
 } // namespace
 
-ConsoleWindow::ConsoleWindow(Settings& settings,
-                             common::LocaleLoader& locale_loader,
-                             const QString& file_path)
+MainWindow::MainWindow(Settings& settings,
+                       common::LocaleLoader& locale_loader,
+                       const QString& file_path)
     : settings_(settings),
       locale_loader_(locale_loader)
 {
@@ -94,57 +94,57 @@ ConsoleWindow::ConsoleWindow(Settings& settings,
     QTabBar* tab_bar = ui.tab_widget->tabBar();
     tab_bar->setContextMenuPolicy(Qt::CustomContextMenu);
 
-    connect(tab_bar, &QTabBar::customContextMenuRequested, this, &ConsoleWindow::onTabContextMenu);
+    connect(tab_bar, &QTabBar::customContextMenuRequested, this, &MainWindow::onTabContextMenu);
 
-    connect(ui.action_show_hide, &QAction::triggered, this, &ConsoleWindow::onShowHideToTray);
-    connect(ui.action_show_tray_icon, &QAction::toggled, this, &ConsoleWindow::showTrayIcon);
-    connect(ui.action_new, &QAction::triggered, this, &ConsoleWindow::onNew);
-    connect(ui.action_open, &QAction::triggered, this, &ConsoleWindow::onOpen);
-    connect(ui.action_save, &QAction::triggered, this, &ConsoleWindow::onSave);
-    connect(ui.action_save_as, &QAction::triggered, this, &ConsoleWindow::onSaveAs);
-    connect(ui.action_save_all, &QAction::triggered, this, &ConsoleWindow::onSaveAll);
-    connect(ui.action_close, &QAction::triggered, this, &ConsoleWindow::onClose);
-    connect(ui.action_close_all, &QAction::triggered, this, &ConsoleWindow::onCloseAll);
+    connect(ui.action_show_hide, &QAction::triggered, this, &MainWindow::onShowHideToTray);
+    connect(ui.action_show_tray_icon, &QAction::toggled, this, &MainWindow::showTrayIcon);
+    connect(ui.action_new, &QAction::triggered, this, &MainWindow::onNew);
+    connect(ui.action_open, &QAction::triggered, this, &MainWindow::onOpen);
+    connect(ui.action_save, &QAction::triggered, this, &MainWindow::onSave);
+    connect(ui.action_save_as, &QAction::triggered, this, &MainWindow::onSaveAs);
+    connect(ui.action_save_all, &QAction::triggered, this, &MainWindow::onSaveAll);
+    connect(ui.action_close, &QAction::triggered, this, &MainWindow::onClose);
+    connect(ui.action_close_all, &QAction::triggered, this, &MainWindow::onCloseAll);
 
     connect(ui.action_address_book_properties, &QAction::triggered,
-            this, &ConsoleWindow::onAddressBookProperties);
+            this, &MainWindow::onAddressBookProperties);
 
-    connect(ui.action_add_computer, &QAction::triggered, this, &ConsoleWindow::onAddComputer);
-    connect(ui.action_modify_computer, &QAction::triggered, this, &ConsoleWindow::onModifyComputer);
+    connect(ui.action_add_computer, &QAction::triggered, this, &MainWindow::onAddComputer);
+    connect(ui.action_modify_computer, &QAction::triggered, this, &MainWindow::onModifyComputer);
 
     connect(ui.action_delete_computer, &QAction::triggered,
-            this, &ConsoleWindow::onDeleteComputer);
+            this, &MainWindow::onDeleteComputer);
 
     connect(ui.action_add_computer_group, &QAction::triggered,
-            this, &ConsoleWindow::onAddComputerGroup);
+            this, &MainWindow::onAddComputerGroup);
 
     connect(ui.action_modify_computer_group, &QAction::triggered,
-            this, &ConsoleWindow::onModifyComputerGroup);
+            this, &MainWindow::onModifyComputerGroup);
 
     connect(ui.action_delete_computer_group, &QAction::triggered,
-            this, &ConsoleWindow::onDeleteComputerGroup);
+            this, &MainWindow::onDeleteComputerGroup);
 
-    connect(ui.action_online_help, &QAction::triggered, this, &ConsoleWindow::onOnlineHelp);
-    connect(ui.action_check_updates, &QAction::triggered, this, &ConsoleWindow::onCheckUpdates);
-    connect(ui.action_about, &QAction::triggered, this, &ConsoleWindow::onAbout);
-    connect(ui.action_exit, &QAction::triggered, this, &ConsoleWindow::close);
-    connect(ui.action_fast_connect, &QAction::triggered, this, &ConsoleWindow::onFastConnect);
+    connect(ui.action_online_help, &QAction::triggered, this, &MainWindow::onOnlineHelp);
+    connect(ui.action_check_updates, &QAction::triggered, this, &MainWindow::onCheckUpdates);
+    connect(ui.action_about, &QAction::triggered, this, &MainWindow::onAbout);
+    connect(ui.action_exit, &QAction::triggered, this, &MainWindow::close);
+    connect(ui.action_fast_connect, &QAction::triggered, this, &MainWindow::onFastConnect);
 
     connect(ui.action_desktop_manage_connect, &QAction::triggered,
-            this, &ConsoleWindow::onDesktopManageConnect);
+            this, &MainWindow::onDesktopManageConnect);
 
     connect(ui.action_desktop_view_connect, &QAction::triggered,
-            this, &ConsoleWindow::onDesktopViewConnect);
+            this, &MainWindow::onDesktopViewConnect);
 
     connect(ui.action_file_transfer_connect, &QAction::triggered,
-            this, &ConsoleWindow::onFileTransferConnect);
+            this, &MainWindow::onFileTransferConnect);
 
     connect(ui.tool_bar, &QToolBar::visibilityChanged, ui.action_toolbar, &QAction::setChecked);
     connect(ui.action_toolbar, &QAction::toggled, ui.tool_bar, &QToolBar::setVisible);
     connect(ui.action_statusbar, &QAction::toggled, ui.status_bar, &QStatusBar::setVisible);
-    connect(ui.tab_widget, &QTabWidget::currentChanged, this, &ConsoleWindow::onCurrentTabChanged);
-    connect(ui.tab_widget, &QTabWidget::tabCloseRequested, this, &ConsoleWindow::onCloseTab);
-    connect(ui.menu_language, &QMenu::triggered, this, &ConsoleWindow::onLanguageChanged);
+    connect(ui.tab_widget, &QTabWidget::currentChanged, this, &MainWindow::onCurrentTabChanged);
+    connect(ui.tab_widget, &QTabWidget::tabCloseRequested, this, &MainWindow::onCloseTab);
+    connect(ui.menu_language, &QMenu::triggered, this, &MainWindow::onLanguageChanged);
 
     QActionGroup* session_type_group = new QActionGroup(this);
 
@@ -210,21 +210,21 @@ ConsoleWindow::ConsoleWindow(Settings& settings,
         checker->setUpdateServer(settings_.updateServer());
         checker->setPackageName(QStringLiteral("console"));
 
-        connect(checker, &updater::Checker::finished, this, &ConsoleWindow::onUpdateChecked);
+        connect(checker, &updater::Checker::finished, this, &MainWindow::onUpdateChecked);
         connect(checker, &updater::Checker::finished, checker, &updater::Checker::deleteLater);
 
         checker->start();
     }
 }
 
-ConsoleWindow::~ConsoleWindow() = default;
+MainWindow::~MainWindow() = default;
 
-void ConsoleWindow::onNew()
+void MainWindow::onNew()
 {
     addAddressBookTab(AddressBookTab::createNew(ui.tab_widget));
 }
 
-void ConsoleWindow::onOpen()
+void MainWindow::onOpen()
 {
     QString file_path =
         QFileDialog::getOpenFileName(this,
@@ -238,7 +238,7 @@ void ConsoleWindow::onOpen()
     openAddressBook(file_path);
 }
 
-void ConsoleWindow::onSave()
+void MainWindow::onSave()
 {
     AddressBookTab* tab = currentAddressBookTab();
     if (tab && tab->save())
@@ -251,7 +251,7 @@ void ConsoleWindow::onSave()
     }
 }
 
-void ConsoleWindow::onSaveAs()
+void MainWindow::onSaveAs()
 {
     AddressBookTab* tab = currentAddressBookTab();
     if (tab)
@@ -281,7 +281,7 @@ void ConsoleWindow::onSaveAs()
     }
 }
 
-void ConsoleWindow::onSaveAll()
+void MainWindow::onSaveAll()
 {
     for (int i = 0; i < ui.tab_widget->count(); ++i)
     {
@@ -294,87 +294,87 @@ void ConsoleWindow::onSaveAll()
         ui.action_save_all->setEnabled(false);
 }
 
-void ConsoleWindow::onClose()
+void MainWindow::onClose()
 {
     onCloseTab(ui.tab_widget->currentIndex());
 }
 
-void ConsoleWindow::onCloseAll()
+void MainWindow::onCloseAll()
 {
     for (int i = ui.tab_widget->count(); i >= 0; --i)
         onCloseTab(i);
 }
 
-void ConsoleWindow::onAddressBookProperties()
+void MainWindow::onAddressBookProperties()
 {
     AddressBookTab* tab = currentAddressBookTab();
     if (tab)
         tab->modifyAddressBook();
 }
 
-void ConsoleWindow::onAddComputer()
+void MainWindow::onAddComputer()
 {
     AddressBookTab* tab = currentAddressBookTab();
     if (tab)
         tab->addComputer();
 }
 
-void ConsoleWindow::onModifyComputer()
+void MainWindow::onModifyComputer()
 {
     AddressBookTab* tab = currentAddressBookTab();
     if (tab)
         tab->modifyComputer();
 }
 
-void ConsoleWindow::onDeleteComputer()
+void MainWindow::onDeleteComputer()
 {
     AddressBookTab* tab = currentAddressBookTab();
     if (tab)
         tab->removeComputer();
 }
 
-void ConsoleWindow::onAddComputerGroup()
+void MainWindow::onAddComputerGroup()
 {
     AddressBookTab* tab = currentAddressBookTab();
     if (tab)
         tab->addComputerGroup();
 }
 
-void ConsoleWindow::onModifyComputerGroup()
+void MainWindow::onModifyComputerGroup()
 {
     AddressBookTab* tab = currentAddressBookTab();
     if (tab)
         tab->modifyComputerGroup();
 }
 
-void ConsoleWindow::onDeleteComputerGroup()
+void MainWindow::onDeleteComputerGroup()
 {
     AddressBookTab* tab = currentAddressBookTab();
     if (tab)
         tab->removeComputerGroup();
 }
 
-void ConsoleWindow::onOnlineHelp()
+void MainWindow::onOnlineHelp()
 {
     QDesktopServices::openUrl(QUrl("https://aspia.org/help"));
 }
 
-void ConsoleWindow::onCheckUpdates()
+void MainWindow::onCheckUpdates()
 {
     updater::UpdateDialog(settings_.updateServer(), QLatin1String("console"), this).exec();
 }
 
-void ConsoleWindow::onAbout()
+void MainWindow::onAbout()
 {
     common::AboutDialog(this).exec();
 }
 
-void ConsoleWindow::onFastConnect()
+void MainWindow::onFastConnect()
 {
     client::ClientWindow::connectToHost();
 }
 
-void ConsoleWindow::onDesktopManageConnect()
+void MainWindow::onDesktopManageConnect()
 {
     AddressBookTab* tab = currentAddressBookTab();
     if (tab)
@@ -389,7 +389,7 @@ void ConsoleWindow::onDesktopManageConnect()
     }
 }
 
-void ConsoleWindow::onDesktopViewConnect()
+void MainWindow::onDesktopViewConnect()
 {
     AddressBookTab* tab = currentAddressBookTab();
     if (tab)
@@ -404,7 +404,7 @@ void ConsoleWindow::onDesktopViewConnect()
     }
 }
 
-void ConsoleWindow::onFileTransferConnect()
+void MainWindow::onFileTransferConnect()
 {
     AddressBookTab* tab = currentAddressBookTab();
     if (tab)
@@ -419,7 +419,7 @@ void ConsoleWindow::onFileTransferConnect()
     }
 }
 
-void ConsoleWindow::onCurrentTabChanged(int index)
+void MainWindow::onCurrentTabChanged(int index)
 {
     if (index == -1)
     {
@@ -443,7 +443,7 @@ void ConsoleWindow::onCurrentTabChanged(int index)
         ui.status_bar->clear();
 }
 
-void ConsoleWindow::onCloseTab(int index)
+void MainWindow::onCloseTab(int index)
 {
     if (index == -1)
         return;
@@ -495,7 +495,7 @@ void ConsoleWindow::onCloseTab(int index)
     }
 }
 
-void ConsoleWindow::onAddressBookChanged(bool changed)
+void MainWindow::onAddressBookChanged(bool changed)
 {
     ui.action_save->setEnabled(changed);
 
@@ -517,7 +517,7 @@ void ConsoleWindow::onAddressBookChanged(bool changed)
     }
 }
 
-void ConsoleWindow::onComputerGroupActivated(bool activated, bool is_root)
+void MainWindow::onComputerGroupActivated(bool activated, bool is_root)
 {
     ui.action_add_computer_group->setEnabled(activated);
 
@@ -551,13 +551,13 @@ void ConsoleWindow::onComputerGroupActivated(bool activated, bool is_root)
     }
 }
 
-void ConsoleWindow::onComputerActivated(bool activated)
+void MainWindow::onComputerActivated(bool activated)
 {
     ui.action_modify_computer->setEnabled(activated);
     ui.action_delete_computer->setEnabled(activated);
 }
 
-void ConsoleWindow::onComputerGroupContextMenu(const QPoint& point, bool is_root)
+void MainWindow::onComputerGroupContextMenu(const QPoint& point, bool is_root)
 {
     QMenu menu;
 
@@ -578,7 +578,7 @@ void ConsoleWindow::onComputerGroupContextMenu(const QPoint& point, bool is_root
     menu.exec(point);
 }
 
-void ConsoleWindow::onComputerContextMenu(ComputerItem* computer_item, const QPoint& point)
+void MainWindow::onComputerContextMenu(ComputerItem* computer_item, const QPoint& point)
 {
     QMenu menu;
 
@@ -599,7 +599,7 @@ void ConsoleWindow::onComputerContextMenu(ComputerItem* computer_item, const QPo
     menu.exec(point);
 }
 
-void ConsoleWindow::onComputerDoubleClicked(proto::address_book::Computer* computer)
+void MainWindow::onComputerDoubleClicked(proto::address_book::Computer* computer)
 {
     AddressBookTab* tab = currentAddressBookTab();
     if (!tab)
@@ -630,7 +630,7 @@ void ConsoleWindow::onComputerDoubleClicked(proto::address_book::Computer* compu
     connectToComputer(*computer);
 }
 
-void ConsoleWindow::onTabContextMenu(const QPoint& pos)
+void MainWindow::onTabContextMenu(const QPoint& pos)
 {
     QTabBar* tab_bar = ui.tab_widget->tabBar();
     int tab_index = tab_bar->tabAt(pos);
@@ -719,7 +719,7 @@ void ConsoleWindow::onTabContextMenu(const QPoint& pos)
     }
 }
 
-void ConsoleWindow::onLanguageChanged(QAction* action)
+void MainWindow::onLanguageChanged(QAction* action)
 {
     common::LanguageAction* language_action = dynamic_cast<common::LanguageAction*>(action);
     if (language_action)
@@ -740,7 +740,7 @@ void ConsoleWindow::onLanguageChanged(QAction* action)
     }
 }
 
-void ConsoleWindow::onShowHideToTray()
+void MainWindow::onShowHideToTray()
 {
     if (isHidden())
     {
@@ -768,7 +768,7 @@ void ConsoleWindow::onShowHideToTray()
     }
 }
 
-void ConsoleWindow::changeEvent(QEvent* event)
+void MainWindow::changeEvent(QEvent* event)
 {
     if (event->type() == QEvent::WindowStateChange && ui.action_minimize_to_tray->isChecked())
     {
@@ -779,7 +779,7 @@ void ConsoleWindow::changeEvent(QEvent* event)
     QMainWindow::changeEvent(event);
 }
 
-void ConsoleWindow::closeEvent(QCloseEvent* event)
+void MainWindow::closeEvent(QCloseEvent* event)
 {
     for (int i = 0; i < ui.tab_widget->count(); ++i)
     {
@@ -828,7 +828,7 @@ void ConsoleWindow::closeEvent(QCloseEvent* event)
     QMainWindow::closeEvent(event);
 }
 
-void ConsoleWindow::onUpdateChecked(const updater::UpdateInfo& update_info)
+void MainWindow::onUpdateChecked(const updater::UpdateInfo& update_info)
 {
     if (!update_info.isValid() || !update_info.hasUpdate())
         return;
@@ -840,7 +840,7 @@ void ConsoleWindow::onUpdateChecked(const updater::UpdateInfo& update_info)
         updater::UpdateDialog(update_info, this).exec();
 }
 
-void ConsoleWindow::createLanguageMenu(const QString& current_locale)
+void MainWindow::createLanguageMenu(const QString& current_locale)
 {
     QActionGroup* language_group = new QActionGroup(this);
 
@@ -858,7 +858,7 @@ void ConsoleWindow::createLanguageMenu(const QString& current_locale)
     }
 }
 
-void ConsoleWindow::rebuildMruMenu()
+void MainWindow::rebuildMruMenu()
 {
     ui.menu_recent_open->clear();
 
@@ -877,7 +877,7 @@ void ConsoleWindow::rebuildMruMenu()
     }
 }
 
-void ConsoleWindow::showTrayIcon(bool show)
+void MainWindow::showTrayIcon(bool show)
 {
     if (show)
     {
@@ -907,7 +907,7 @@ void ConsoleWindow::showTrayIcon(bool show)
     }
 }
 
-void ConsoleWindow::openAddressBook(const QString& file_path)
+void MainWindow::openAddressBook(const QString& file_path)
 {
     for (int i = 0; i < ui.tab_widget->count(); ++i)
     {
@@ -938,7 +938,7 @@ void ConsoleWindow::openAddressBook(const QString& file_path)
     addAddressBookTab(tab);
 }
 
-void ConsoleWindow::addAddressBookTab(AddressBookTab* new_tab)
+void MainWindow::addAddressBookTab(AddressBookTab* new_tab)
 {
     if (!new_tab)
         return;
@@ -948,17 +948,17 @@ void ConsoleWindow::addAddressBookTab(AddressBookTab* new_tab)
         rebuildMruMenu();
 
     connect(new_tab, &AddressBookTab::addressBookChanged,
-            this, &ConsoleWindow::onAddressBookChanged);
+            this, &MainWindow::onAddressBookChanged);
     connect(new_tab, &AddressBookTab::computerGroupActivated,
-            this, &ConsoleWindow::onComputerGroupActivated);
+            this, &MainWindow::onComputerGroupActivated);
     connect(new_tab, &AddressBookTab::computerActivated,
-            this, &ConsoleWindow::onComputerActivated);
+            this, &MainWindow::onComputerActivated);
     connect(new_tab, &AddressBookTab::computerGroupContextMenu,
-            this, &ConsoleWindow::onComputerGroupContextMenu);
+            this, &MainWindow::onComputerGroupContextMenu);
     connect(new_tab, &AddressBookTab::computerContextMenu,
-            this, &ConsoleWindow::onComputerContextMenu);
+            this, &MainWindow::onComputerContextMenu);
     connect(new_tab, &AddressBookTab::computerDoubleClicked,
-            this, &ConsoleWindow::onComputerDoubleClicked);
+            this, &MainWindow::onComputerDoubleClicked);
 
     QIcon icon = mru_.isPinnedFile(file_path) ?
         QIcon(QStringLiteral(":/img/address-book-pinned.png")) :
@@ -982,7 +982,7 @@ void ConsoleWindow::addAddressBookTab(AddressBookTab* new_tab)
     ui.tab_widget->setCurrentIndex(index);
 }
 
-AddressBookTab* ConsoleWindow::currentAddressBookTab()
+AddressBookTab* MainWindow::currentAddressBookTab()
 {
     int current_tab = ui.tab_widget->currentIndex();
     if (current_tab == -1)
@@ -991,7 +991,7 @@ AddressBookTab* ConsoleWindow::currentAddressBookTab()
     return dynamic_cast<AddressBookTab*>(ui.tab_widget->widget(current_tab));
 }
 
-bool ConsoleWindow::hasChangedTabs() const
+bool MainWindow::hasChangedTabs() const
 {
     for (int i = 0; i < ui.tab_widget->count(); ++i)
     {
@@ -1003,7 +1003,7 @@ bool ConsoleWindow::hasChangedTabs() const
     return false;
 }
 
-bool ConsoleWindow::hasUnpinnedTabs() const
+bool MainWindow::hasUnpinnedTabs() const
 {
     for (int i = 0; i < ui.tab_widget->count(); ++i)
     {
@@ -1015,7 +1015,7 @@ bool ConsoleWindow::hasUnpinnedTabs() const
     return false;
 }
 
-void ConsoleWindow::connectToComputer(const proto::address_book::Computer& computer)
+void MainWindow::connectToComputer(const proto::address_book::Computer& computer)
 {
     client::ConnectData connect_data;
 

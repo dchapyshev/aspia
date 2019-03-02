@@ -59,15 +59,15 @@ list(APPEND SOURCE_CONSOLE
     computer_tree.h
     console.rc
     console_main.cc
+    console_main_window.cc
+    console_main_window.h
+    console_main_window.ui
     console_settings.cc
     console_settings.h
     console_statusbar.cc
     console_statusbar.h
     console_tab.cc
     console_tab.h
-    console_window.cc
-    console_window.h
-    console_window.ui
     mru.cc
     mru.h
     open_address_book_dialog.cc

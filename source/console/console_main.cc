@@ -36,7 +36,7 @@ Q_IMPORT_PLUGIN(QWindowsPrinterSupportPlugin);
 #include "base/qt_logging.h"
 #include "build/version.h"
 #include "client/ui/client_window.h"
-#include "console/console_window.h"
+#include "console/console_main_window.h"
 #include "crypto/scoped_crypto_initializer.h"
 
 namespace {
@@ -109,7 +109,7 @@ int runApplication(int argc, char *argv[])
     parser.addOption(simple_ui_option);
     parser.process(application);
 
-    QScopedPointer<console::ConsoleWindow> console_window;
+    QScopedPointer<console::MainWindow> console_window;
 
     if (parser.isSet(simple_ui_option))
     {
@@ -159,7 +159,7 @@ int runApplication(int argc, char *argv[])
             file_path = arguments.front();
 
         console_window.reset(
-            new console::ConsoleWindow(console_settings, locale_loader, file_path));
+            new console::MainWindow(console_settings, locale_loader, file_path));
         console_window->show();
         console_window->activateWindow();
     }
