@@ -22,27 +22,34 @@
 <context>
     <name>ClientDialog</name>
     <message>
-        <location filename="../ui/client_dialog.ui" line="20"/>
         <source>Connection</source>
-        <translation>Verbindung</translation>
+        <translation type="vanished">Verbindung</translation>
+    </message>
+    <message>
+        <source>Server Address:</source>
+        <translation type="vanished">Serveradresse:</translation>
+    </message>
+    <message>
+        <source>Server Port:</source>
+        <translation type="vanished">Server Port:</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_dialog.ui" line="20"/>
+        <source>Aspia Client</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/client_dialog.ui" line="31"/>
-        <source>Server Address:</source>
-        <translation>Serveradresse:</translation>
+        <source>Address:</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/client_dialog.ui" line="45"/>
-        <source>Server Port:</source>
-        <translation>Server Port:</translation>
-    </message>
-    <message>
-        <location filename="../ui/client_dialog.ui" line="65"/>
         <source>Session Type:</source>
         <translation>Sitzungstyp:</translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.ui" line="122"/>
+        <location filename="../ui/client_dialog.ui" line="102"/>
         <source>Connect</source>
         <translation>Verbinden</translation>
     </message>
@@ -732,19 +739,29 @@
 <context>
     <name>client::ClientDialog</name>
     <message>
-        <location filename="../ui/client_dialog.cc" line="41"/>
+        <location filename="../ui/client_dialog.cc" line="42"/>
         <source>Desktop Manage</source>
         <translation type="unfinished">Desktopverwaltung</translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.cc" line="45"/>
+        <location filename="../ui/client_dialog.cc" line="46"/>
         <source>Desktop View</source>
         <translation type="unfinished">Desktopansicht</translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.cc" line="49"/>
+        <location filename="../ui/client_dialog.cc" line="50"/>
         <source>File Transfer</source>
         <translation type="unfinished">Dateiübertragung</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_dialog.cc" line="133"/>
+        <source>Warning</source>
+        <translation type="unfinished">Warnung</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_dialog.cc" line="134"/>
+        <source>An invalid computer address was entered.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

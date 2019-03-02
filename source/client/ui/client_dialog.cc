@@ -18,10 +18,13 @@
 
 #include "client/ui/client_dialog.h"
 
+#include <QMessageBox>
+
 #include "build/build_config.h"
 #include "client/ui/desktop_config_dialog.h"
 #include "client/config_factory.h"
 #include "common/desktop_session_constants.h"
+#include "net/address.h"
 
 namespace client {
 
@@ -34,8 +37,6 @@ ClientDialog::ClientDialog(QWidget* parent)
 
     ui.setupUi(this);
     setFixedHeight(sizeHint().height());
-
-    ui.spin_port->setValue(connect_data_.port);
 
     ui.combo_session_type->addItem(QIcon(QStringLiteral(":/img/monitor-keyboard.png")),
                                    tr("Desktop Manage"),
@@ -125,15 +126,27 @@ void ClientDialog::sessionConfigButtonPressed()
 
 void ClientDialog::connectButtonPressed()
 {
-    proto::SessionType session_type = static_cast<proto::SessionType>(
-        ui.combo_session_type->currentData().toInt());
+    net::Address address = net::Address::fromString(ui.edit_address->text());
+    if (!address.isValid())
+    {
+        QMessageBox::warning(this,
+                             tr("Warning"),
+                             tr("An invalid computer address was entered."),
+                             QMessageBox::Ok);
+        ui.edit_address->setFocus();
+    }
+    else
+    {
+        proto::SessionType session_type = static_cast<proto::SessionType>(
+            ui.combo_session_type->currentData().toInt());
 
-    connect_data_.address = ui.edit_address->text();
-    connect_data_.port = ui.spin_port->value();
-    connect_data_.session_type = session_type;
+        connect_data_.address = address.host();
+        connect_data_.port = address.port();
+        connect_data_.session_type = session_type;
 
-    accept();
-    close();
+        accept();
+        close();
+    }
 }
 
 } // namespace client
