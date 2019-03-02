@@ -55,8 +55,9 @@ public:
     net::ChannelHost* networkChannel() const { return network_channel_; }
     void setNetworkChannel(net::ChannelHost* network_channel);
 
-    const QByteArray& uuid() const { return uuid_; }
-    void setUuid(const QByteArray& uuid);
+    const std::string& uuid() const { return uuid_; }
+    void setUuid(const std::string& uuid);
+    void setUuid(std::string&& uuid);
 
     const QString& userName() const;
     proto::SessionType sessionType() const;
@@ -84,7 +85,7 @@ private slots:
 private:
     bool startFakeSession();
 
-    QByteArray uuid_;
+    std::string uuid_;
 
     base::win::SessionId session_id_ = base::win::kInvalidSessionId;
     int attach_timer_id_ = 0;

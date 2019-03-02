@@ -63,7 +63,7 @@ void SessionProcess::setNetworkChannel(net::ChannelHost* network_channel)
     network_channel_->setParent(this);
 }
 
-void SessionProcess::setUuid(const QByteArray& uuid)
+void SessionProcess::setUuid(const std::string& uuid)
 {
     if (state_ != State::STOPPED)
     {
@@ -72,6 +72,17 @@ void SessionProcess::setUuid(const QByteArray& uuid)
     }
 
     uuid_ = uuid;
+}
+
+void SessionProcess::setUuid(std::string&& uuid)
+{
+    if (state_ != State::STOPPED)
+    {
+        DLOG(LS_ERROR) << "An attempt to set a UUID in an already running session process";
+        return;
+    }
+
+    uuid_ = std::move(uuid);
 }
 
 const QString& SessionProcess::userName() const
@@ -117,7 +128,7 @@ bool SessionProcess::start(base::win::SessionId session_id)
         return false;
     }
 
-    if (uuid_.isEmpty())
+    if (uuid_.empty())
     {
         DLOG(LS_ERROR) << "Invalid session UUID";
         return false;

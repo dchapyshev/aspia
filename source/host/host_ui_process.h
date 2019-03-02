@@ -57,7 +57,7 @@ public:
 signals:
     void started();
     void finished();
-    void killSession(const QByteArray& session_uuid);
+    void killSession(const std::string& session_uuid);
 
 private slots:
     void onProcessFinished(int exit_code);

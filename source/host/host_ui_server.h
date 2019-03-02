@@ -60,7 +60,7 @@ public:
 
 signals:
     void processEvent(ProcessEvent event, base::win::SessionId session_id);
-    void killSession(const QByteArray& uuid);
+    void killSession(const std::string& uuid);
     void finished();
 
 private slots:

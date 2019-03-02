@@ -19,8 +19,8 @@
 #include "host/host_server.h"
 
 #include <QCoreApplication>
-#include <QUuid>
 
+#include "base/guid.h"
 #include "base/qt_logging.h"
 #include "base/win/session_info.h"
 #include "host/win/host_session_process.h"
@@ -134,7 +134,7 @@ void HostServer::setSessionEvent(base::win::SessionStatus status, base::win::Ses
     }
 }
 
-void HostServer::stopSession(const QByteArray& uuid)
+void HostServer::stopSession(const std::string& uuid)
 {
     for (auto session : sessions_)
     {
@@ -284,7 +284,7 @@ void HostServer::onNewConnection()
         std::unique_ptr<SessionProcess> session_process(new SessionProcess(this));
 
         session_process->setNetworkChannel(channel);
-        session_process->setUuid(QUuid::createUuid().toByteArray());
+        session_process->setUuid(base::Guid::create());
 
         connect(session_process.get(), &SessionProcess::finished,
                 this, &HostServer::onSessionFinished,
@@ -360,7 +360,7 @@ void HostServer::onSessionFinished()
             if (ui_server_)
             {
                 ui_server_->setDisconnectEvent(session_process->sessionId(),
-                                               session_process->uuid().toStdString());
+                                               session_process->uuid());
             }
 
             it = sessions_.erase(it);
@@ -383,7 +383,7 @@ void HostServer::sendConnectEvent(const SessionProcess* session_process)
     event.set_session_type(session_process->sessionType());
     event.set_remote_address(session_process->remoteAddress().toStdString());
     event.set_username(session_process->userName().toStdString());
-    event.set_uuid(session_process->uuid().toStdString());
+    event.set_uuid(session_process->uuid());
 
     ui_server_->setConnectEvent(session_process->sessionId(), event);
 }

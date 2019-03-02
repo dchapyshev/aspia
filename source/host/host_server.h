@@ -41,7 +41,7 @@ public:
     void start();
     void stop();
     void setSessionEvent(base::win::SessionStatus status, base::win::SessionId session_id);
-    void stopSession(const QByteArray& uuid);
+    void stopSession(const std::string& uuid);
 
 protected:
     // QObject implementation.

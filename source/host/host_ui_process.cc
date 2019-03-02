@@ -148,7 +148,7 @@ void UiProcess::onMessageReceived(const QByteArray& buffer)
 
     if (message.has_kill_session())
     {
-        emit killSession(QByteArray::fromStdString(message.kill_session().uuid()));
+        emit killSession(message.kill_session().uuid());
     }
     else
     {
