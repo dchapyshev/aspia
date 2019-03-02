@@ -311,8 +311,12 @@
     </message>
     <message>
         <location filename="../console_main.cc" line="97"/>
+        <source>Open the client to connect to the computer.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Run the program with a simplified user interface.</source>
-        <translation>Запустити програму із спрощеним інтерфейсом користувача.</translation>
+        <translation type="vanished">Запустити програму із спрощеним інтерфейсом користувача.</translation>
     </message>
     <message>
         <location filename="../console_main.cc" line="100"/>

@@ -311,7 +311,7 @@
     </message>
     <message>
         <location filename="../console_main.cc" line="97"/>
-        <source>Run the program with a simplified user interface.</source>
+        <source>Open the client to connect to the computer.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

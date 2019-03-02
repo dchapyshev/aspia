@@ -92,9 +92,9 @@ int runApplication(int argc, char *argv[])
                                 "desktop-view, file-transfer."),
         QStringLiteral("desktop-manage"));
 
-    QCommandLineOption simple_ui_option(
-        QStringLiteral("simple-ui"),
-        QApplication::translate("Console", "Run the program with a simplified user interface."));
+    QCommandLineOption client_option(
+        QStringLiteral("client"),
+        QApplication::translate("Console", "Open the client to connect to the computer."));
 
     QCommandLineParser parser;
     parser.setApplicationDescription(QApplication::translate("Console", "Aspia Console"));
@@ -106,12 +106,12 @@ int runApplication(int argc, char *argv[])
     parser.addOption(port_option);
     parser.addOption(username_option);
     parser.addOption(session_type_option);
-    parser.addOption(simple_ui_option);
+    parser.addOption(client_option);
     parser.process(application);
 
     QScopedPointer<console::MainWindow> console_window;
 
-    if (parser.isSet(simple_ui_option))
+    if (parser.isSet(client_option))
     {
         if (!client::ClientWindow::connectToHost())
             return 0;

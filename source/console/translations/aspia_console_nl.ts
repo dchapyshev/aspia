@@ -311,8 +311,12 @@
     </message>
     <message>
         <location filename="../console_main.cc" line="97"/>
+        <source>Open the client to connect to the computer.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Run the program with a simplified user interface.</source>
-        <translation>Voer het programma uit met een versimpelde user interface.</translation>
+        <translation type="vanished">Voer het programma uit met een versimpelde user interface.</translation>
     </message>
     <message>
         <location filename="../console_main.cc" line="100"/>
