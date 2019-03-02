@@ -37,25 +37,7 @@ public:
     void advance();
     bool isAtEnd() const;
 
-    enum class State
-    {
-        UNKNOWN       = 0, // Unknown state.
-        ACTIVE        = 1, // A user is logged on to the WinStation.
-        CONNECTED     = 2, // The WinStation is connected to the client.
-        CONNECT_QUERY = 3, // The WinStation is in the process of connecting to the client.
-        SHADOW        = 4, // The WinStation is shadowing another WinStation.
-        DISCONNECTED  = 5, // The WinStation is active but the client is disconnected.
-        IDLE          = 6, // The WinStation is waiting for a client to connect.
-        LISTEN        = 7, // The WinStation is listening for a connection. A listener session
-                           // waits for requests for new client connections. No user is logged on
-                           // a listener session. A listener session cannot be reset, shadowed, or
-                           // changed to a regular client session.
-        RESET         = 8, // The WinStation is being reset.
-        DOWN          = 9, // The WinStation is down due to an error.
-        INIT          = 10 // The WinStation is initializing.
-    };
-
-    State state() const;
+    WTS_CONNECTSTATE_CLASS state() const;
     SessionId sessionId() const;
 
     // A string that contains the name of this session. For example, "services", "console",
@@ -79,7 +61,7 @@ public:
     std::string farmName() const;
 
 private:
-    base::win::ScopedWtsMemory<PWTS_SESSION_INFO_1W> info_;
+    base::win::ScopedWtsMemory<WTS_SESSION_INFO_1W> info_;
     DWORD count_ = 0;
     DWORD current_ = 0;
 

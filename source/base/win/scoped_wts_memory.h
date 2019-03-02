@@ -33,7 +33,7 @@ class ScopedWtsMemory
 public:
     ScopedWtsMemory() = default;
 
-    explicit ScopedWtsMemory(T memory)
+    explicit ScopedWtsMemory(T* memory)
         : memory_(memory)
     {
         // Nothing
@@ -41,22 +41,22 @@ public:
 
     ~ScopedWtsMemory() { close(); }
 
-    T get() { return memory_; }
+    T* get() { return memory_; }
 
-    void reset(T memory)
+    void reset(T* memory)
     {
         close();
         memory_ = memory;
     }
 
-    T release()
+    T* release()
     {
-        T memory = memory_;
+        T* memory = memory_;
         memory_ = nullptr;
         return memory;
     }
 
-    T* recieve()
+    T** recieve()
     {
         close();
         return &memory_;
@@ -67,12 +67,12 @@ public:
         return (memory_ != nullptr);
     }
 
-    operator T() { return memory_; }
-
-    T operator [](DWORD index) const
+    T* operator [](DWORD index) const
     {
         return &memory_[index];
     }
+
+    T* operator->() const { return memory_; }
 
 private:
     void close()
@@ -84,7 +84,7 @@ private:
         }
     }
 
-    T memory_ = nullptr;
+    T* memory_ = nullptr;
 
     DISALLOW_COPY_AND_ASSIGN(ScopedWtsMemory);
 };

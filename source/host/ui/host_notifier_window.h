@@ -36,9 +36,11 @@ public:
 public slots:
     void onConnectEvent(const proto::notifier::ConnectEvent& event);
     void onDisconnectEvent(const proto::notifier::DisconnectEvent& event);
+    void disconnectAll();
 
 signals:
     void killSession(const std::string& uuid);
+    void finished();
 
 protected:
     // QWidget implementation.
@@ -47,7 +49,6 @@ protected:
 
 private slots:
     void onShowHidePressed();
-    void onDisconnectAllPressed();
     void onContextMenu(const QPoint& point);
     void updateWindowPosition();
 

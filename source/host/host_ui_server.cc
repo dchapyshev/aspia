@@ -42,7 +42,7 @@ bool UiServer::start()
 {
     if (state_ != State::STOPPED)
     {
-        DLOG(LS_WARNING) << "Attempting to start an already running server.";
+        DLOG(LS_WARNING) << "Attempting to start an already running server";
         return false;
     }
 
@@ -55,7 +55,12 @@ bool UiServer::start()
         return false;
 
     for (base::win::SessionEnumerator session; !session.isAtEnd(); session.advance())
-        UiProcess::create(session.sessionId());
+    {
+        base::win::SessionId session_id = session.sessionId();
+
+        if (session_id != base::win::kServiceSessionId)
+            UiProcess::create(session_id);
+    }
 
     state_ = State::STARTED;
     server_ = server.release();
@@ -64,7 +69,7 @@ bool UiServer::start()
 
 void UiServer::stop()
 {
-    if (state_ == State::STOPPED)
+    if (state_ == State::STOPPED || state_ == State::STOPPING)
         return;
 
     state_ = State::STOPPING;
@@ -87,13 +92,27 @@ void UiServer::stop()
     emit finished();
 }
 
+bool UiServer::hasUiForSession(base::win::SessionId session_id) const
+{
+    for (const auto process : process_list_)
+    {
+        if (process->sessionId() == session_id)
+            return true;
+    }
+
+    return false;
+}
+
 void UiServer::setSessionEvent(base::win::SessionStatus status, base::win::SessionId session_id)
 {
     switch (status)
     {
         case base::win::SessionStatus::SESSION_LOGON:
-            UiProcess::create(session_id);
-            break;
+        {
+            if (session_id != base::win::kServiceSessionId)
+                UiProcess::create(session_id);
+        }
+        break;
 
         default:
             break;
@@ -103,7 +122,7 @@ void UiServer::setSessionEvent(base::win::SessionStatus status, base::win::Sessi
 void UiServer::setConnectEvent(
     base::win::SessionId session_id, const proto::notifier::ConnectEvent& event)
 {
-    LOG(LS_INFO) << "Connect event (SID: " << session_id << ").";
+    LOG(LS_INFO) << "Connect event (SID: " << session_id << ", UUID: " << event.uuid() << ")";
 
     for (auto process : process_list_)
     {
@@ -117,7 +136,7 @@ void UiServer::setConnectEvent(
 
 void UiServer::setDisconnectEvent(base::win::SessionId session_id, const std::string& uuid)
 {
-    LOG(LS_INFO) << "Disconnect event (SID: " << session_id << ").";
+    LOG(LS_INFO) << "Disconnect event (SID: " << session_id << ", UUID: " << uuid << ")";
 
     for (auto process : process_list_)
     {
@@ -131,37 +150,52 @@ void UiServer::setDisconnectEvent(base::win::SessionId session_id, const std::st
 
 void UiServer::onChannelConnected(ipc::Channel* channel)
 {
-    base::ProcessId process_id = channel->clientProcessId();
     base::win::SessionId session_id = channel->clientSessionId();
 
-    LOG(LS_INFO) << "Process has been successfully connected (PID: "
-                 << process_id << ", SID: "
-                 << session_id << ").";
+    if (hasUiForSession(session_id))
+    {
+        LOG(LS_ERROR) << "There is already a running UI process for the session " << session_id;
+        channel->stop();
+        channel->deleteLater();
+        return;
+    }
+
+    LOG(LS_INFO) << "Process has been successfully connected ("
+                 << "PID: " << channel->clientProcessId() << ", "
+                 << "SID: " << session_id << ")";
 
     UiProcess* process = new UiProcess(channel, this);
 
-    connect(process, &UiProcess::finished, [this]()
-    {
-        if (state_ == State::STOPPING)
-            return;
-
-        auto it = process_list_.begin();
-
-        while (it != process_list_.end())
-        {
-            UiProcess* process = *it;
-
-            if (process->state() == UiProcess::State::STOPPED)
-                it = process_list_.erase(it);
-            else
-                ++it;
-        }
-    });
+    connect(process, &UiProcess::killSession, this, &UiServer::killSession);
+    connect(process, &UiProcess::finished, this, &UiServer::onProcessFinished);
 
     process_list_.emplace_back(process);
     process->start();
 
-    emit processConnected(session_id);
+    emit processEvent(ProcessEvent::CONNECTED, session_id);
+}
+
+void UiServer::onProcessFinished()
+{
+    if (state_ == State::STOPPING)
+        return;
+
+    for (auto it = process_list_.begin(); it != process_list_.end();)
+    {
+        UiProcess* process = *it;
+
+        if (process->state() == UiProcess::State::STOPPED)
+        {
+            emit processEvent(ProcessEvent::DISCONNECTED, process->sessionId());
+
+            it = process_list_.erase(it);
+            delete process;
+        }
+        else
+        {
+            ++it;
+        }
+    }
 }
 
 } // namespace host

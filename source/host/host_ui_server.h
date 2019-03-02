@@ -44,24 +44,30 @@ public:
     explicit UiServer(QObject* parent = nullptr);
     ~UiServer();
 
+    enum class State { STOPPED, STOPPING, STARTED };
+    enum class ProcessEvent { CONNECTED, DISCONNECTED };
+
     bool start();
     void stop();
 
-public slots:
+    State state() const { return state_; }
+
+    bool hasUiForSession(base::win::SessionId session_id) const;
+
     void setSessionEvent(base::win::SessionStatus status, base::win::SessionId session_id);
     void setConnectEvent(base::win::SessionId session_id, const proto::notifier::ConnectEvent& event);
     void setDisconnectEvent(base::win::SessionId session_id, const std::string& uuid);
 
 signals:
-    void processConnected(base::win::SessionId session_id);
+    void processEvent(ProcessEvent event, base::win::SessionId session_id);
+    void killSession(const QByteArray& uuid);
     void finished();
 
 private slots:
     void onChannelConnected(ipc::Channel* channel);
+    void onProcessFinished();
 
 private:
-    enum class State { STOPPED, STOPPING, STARTED };
-
     State state_ = State::STOPPED;
 
     // IPC server accepts incoming connections from UI processes.

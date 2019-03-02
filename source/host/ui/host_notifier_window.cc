@@ -34,9 +34,9 @@ class SessionTreeItem : public QTreeWidgetItem
 {
 public:
     SessionTreeItem(const proto::notifier::ConnectEvent& event)
-        : event_(event)
+        : uuid_(event.uuid())
     {
-        switch (event_.session_type())
+        switch (event.session_type())
         {
             case proto::SESSION_TYPE_DESKTOP_MANAGE:
                 setIcon(0, QIcon(QStringLiteral(":/img/monitor-keyboard.png")));
@@ -51,19 +51,19 @@ public:
                 break;
 
             default:
-                LOG(LS_FATAL) << "Unexpected session type: " << event_.session_type();
+                LOG(LS_FATAL) << "Unexpected session type: " << event.session_type();
                 return;
         }
 
         setText(0, QString("%1 (%2)")
-                .arg(QString::fromStdString(event_.username()))
-                .arg(QString::fromStdString(event_.remote_address())));
+                .arg(QString::fromStdString(event.username()))
+                .arg(QString::fromStdString(event.remote_address())));
     }
 
-    const proto::notifier::ConnectEvent& event() const { return event_; }
+    const std::string& uuid() const { return uuid_; }
 
 private:
-    proto::notifier::ConnectEvent event_;
+    const std::string uuid_;
     DISALLOW_COPY_AND_ASSIGN(SessionTreeItem);
 };
 
@@ -81,7 +81,7 @@ NotifierWindow::NotifierWindow(QWidget* parent)
             this, &NotifierWindow::onShowHidePressed);
 
     connect(ui.button_disconnect_all, &QPushButton::released,
-            this, &NotifierWindow::onDisconnectAllPressed);
+            this, &NotifierWindow::disconnectAll);
 
     connect(ui.tree, &QTreeWidget::customContextMenuRequested,
             this, &NotifierWindow::onContextMenu);
@@ -105,7 +105,7 @@ void NotifierWindow::onDisconnectEvent(const proto::notifier::DisconnectEvent& e
     for (int i = 0; i < ui.tree->topLevelItemCount(); ++i)
     {
         SessionTreeItem* item = dynamic_cast<SessionTreeItem*>(ui.tree->topLevelItem(i));
-        if (item && item->event().uuid() == event.uuid())
+        if (item && item->uuid() == event.uuid())
         {
             delete item;
             break;
@@ -113,7 +113,20 @@ void NotifierWindow::onDisconnectEvent(const proto::notifier::DisconnectEvent& e
     }
 
     if (!ui.tree->topLevelItemCount())
+    {
+        emit finished();
         close();
+    }
+}
+
+void NotifierWindow::disconnectAll()
+{
+    for (int i = 0; i < ui.tree->topLevelItemCount(); ++i)
+    {
+        SessionTreeItem* item = dynamic_cast<SessionTreeItem*>(ui.tree->topLevelItem(i));
+        if (item)
+            emit killSession(item->uuid());
+    }
 }
 
 bool NotifierWindow::eventFilter(QObject* object, QEvent* event)
@@ -172,16 +185,6 @@ void NotifierWindow::onShowHidePressed()
         showNotifier();
 }
 
-void NotifierWindow::onDisconnectAllPressed()
-{
-    for (int i = 0; i < ui.tree->topLevelItemCount(); ++i)
-    {
-        SessionTreeItem* item = dynamic_cast<SessionTreeItem*>(ui.tree->topLevelItem(i));
-        if (item)
-            emit killSession(item->event().uuid());
-    }
-}
-
 void NotifierWindow::onContextMenu(const QPoint& point)
 {
     SessionTreeItem* item = dynamic_cast<SessionTreeItem*>(ui.tree->itemAt(point));
@@ -194,7 +197,7 @@ void NotifierWindow::onContextMenu(const QPoint& point)
     menu.addAction(&disconnect_action);
 
     if (menu.exec(ui.tree->viewport()->mapToGlobal(point)) == &disconnect_action)
-        emit killSession(item->event().uuid());
+        emit killSession(item->uuid());
 }
 
 void NotifierWindow::updateWindowPosition()

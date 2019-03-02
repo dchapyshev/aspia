@@ -103,6 +103,8 @@ list(APPEND SOURCE_BASE_WIN
     win/session_enumerator.h
     win/session_id.cc
     win/session_id.h
+    win/session_info.cc
+    win/session_info.h
     win/session_status.cc
     win/session_status.h
     win/session_watcher.cc

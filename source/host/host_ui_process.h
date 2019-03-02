@@ -20,7 +20,6 @@
 #define HOST__HOST_UI_PROCESS_H
 
 #include <QPointer>
-#include <QUuid>
 
 #include "base/macros_magic.h"
 #include "base/win/session_id.h"
@@ -52,16 +51,16 @@ public:
 
     State state() const { return state_; }
 
-public slots:
-    void start();
+    bool start();
     void stop();
 
 signals:
     void started();
     void finished();
-    void killSession(const QUuid& session_uuid);
+    void killSession(const QByteArray& session_uuid);
 
 private slots:
+    void onProcessFinished(int exit_code);
     void onMessageReceived(const QByteArray& buffer);
 
 private:
@@ -70,6 +69,8 @@ private:
 
     // The channel is used to communicate with the UI process.
     ipc::Channel* channel_;
+
+    base::win::Process* process_ = nullptr;
 
     DISALLOW_COPY_AND_ASSIGN(UiProcess);
 };

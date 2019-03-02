@@ -20,6 +20,7 @@
 #define HOST__HOST_SERVER_H
 
 #include "base/win/session_status.h"
+#include "host/host_ui_server.h"
 #include "host/win/host_process.h"
 #include "ipc/ipc_channel.h"
 #include "net/network_server.h"
@@ -27,7 +28,6 @@
 namespace host {
 
 class SessionProcess;
-class UiServer;
 struct SrpUserList;
 
 class HostServer : public QObject
@@ -41,17 +41,20 @@ public:
     void start();
     void stop();
     void setSessionEvent(base::win::SessionStatus status, base::win::SessionId session_id);
+    void stopSession(const QByteArray& uuid);
 
 protected:
     // QObject implementation.
     void customEvent(QEvent* event) override;
+    void timerEvent(QTimerEvent* event) override;
 
 private slots:
     void onNewConnection();
+    void onUiProcessEvent(UiServer::ProcessEvent event, base::win::SessionId session_id);
     void onSessionFinished();
 
 private:
-    void sessionToUi(const SessionProcess* session_process);
+    void sendConnectEvent(const SessionProcess* session_process);
 
     enum class State { STOPPED, STOPPING, STARTED };
 
@@ -63,7 +66,9 @@ private:
     QPointer<net::Server> network_server_;
 
     // Contains a list of connected sessions.
-    std::list<SessionProcess*> session_list_;
+    std::list<SessionProcess*> sessions_;
+
+    std::map<base::win::SessionId, int> dettach_timers_;
 
     DISALLOW_COPY_AND_ASSIGN(HostServer);
 };

@@ -36,8 +36,12 @@ void UiClient::start()
 {
     channel_ = ipc::Channel::createClient(this);
 
-    connect(channel_, &ipc::Channel::connected, channel_, &ipc::Channel::start);
-    connect(channel_, &ipc::Channel::connected, this, &UiClient::started);
+    connect(channel_, &ipc::Channel::connected, [this]()
+    {
+        channel_->start();
+        emit started();
+    });
+
     connect(channel_, &ipc::Channel::disconnected, this, &UiClient::stop);
     connect(channel_, &ipc::Channel::errorOccurred, this, &UiClient::stop);
     connect(channel_, &ipc::Channel::messageReceived, this, &UiClient::onChannelMessage);
@@ -47,12 +51,17 @@ void UiClient::start()
 
 void UiClient::stop()
 {
-    channel_->stop();
+    if (channel_)
+        channel_->stop();
+
     emit finished();
 }
 
 void UiClient::killSession(const std::string& uuid)
 {
+    if (!channel_)
+        return;
+
     proto::notifier::NotifierToService message;
     message.mutable_kill_session()->set_uuid(uuid);
     channel_->send(common::serializeMessage(message));

@@ -46,43 +46,9 @@ bool SessionEnumerator::isAtEnd() const
     return current_ >= count_;
 }
 
-SessionEnumerator::State SessionEnumerator::state() const
+WTS_CONNECTSTATE_CLASS SessionEnumerator::state() const
 {
-    switch (info_[current_]->State)
-    {
-        case WTSActive:
-            return State::ACTIVE;
-
-        case WTSConnected:
-            return State::CONNECTED;
-
-        case WTSConnectQuery:
-            return State::CONNECT_QUERY;
-
-        case WTSShadow:
-            return State::SHADOW;
-
-        case WTSDisconnected:
-            return State::DISCONNECTED;
-
-        case WTSIdle:
-            return State::IDLE;
-
-        case WTSListen:
-            return State::LISTEN;
-
-        case WTSReset:
-            return State::RESET;
-
-        case WTSDown:
-            return State::DOWN;
-
-        case WTSInit:
-            return State::INIT;
-
-        default:
-            return State::UNKNOWN;
-    }
+    return info_[current_]->State;
 }
 
 SessionId SessionEnumerator::sessionId() const

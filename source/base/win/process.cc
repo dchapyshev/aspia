@@ -96,6 +96,9 @@ Process::Process(ProcessId process_id, QObject* parent)
     }
 
     process_.reset(process.release());
+    initNotifier();
+
+    state_ = State::STARTED;
 }
 
 Process::Process(HANDLE process, HANDLE thread, QObject* parent)
@@ -103,9 +106,12 @@ Process::Process(HANDLE process, HANDLE thread, QObject* parent)
       process_(process),
       thread_(thread)
 {
-    notifier_ = new QWinEventNotifier(process_.get(), this);
-    connect(notifier_, &QWinEventNotifier::activated, this, &Process::finished);
-    notifier_->setEnabled(true);
+    if (!process_.isValid())
+        return;
+
+    initNotifier();
+
+    state_ = State::STARTED;
 }
 
 Process::~Process() = default;
@@ -214,6 +220,19 @@ SessionId Process::sessionId() const
     return session_id;
 }
 
+int Process::exitCode() const
+{
+    DWORD exit_code;
+
+    if (!GetExitCodeProcess(process_.get(), &exit_code))
+    {
+        PLOG(LS_WARNING) << "GetExitCodeProcess failed";
+        return 0;
+    }
+
+    return exit_code;
+}
+
 void Process::kill()
 {
     if (!process_.isValid())
@@ -235,10 +254,7 @@ void Process::terminate()
 
     ProcessId process_id = processId();
 
-    if (!EnumWindows(terminateEnumProc, process_id))
-    {
-        PLOG(LS_WARNING) << "EnumWindows failed";
-    }
+    EnumWindows(terminateEnumProc, process_id);
 
     if (!thread_.isValid())
     {
@@ -269,6 +285,24 @@ void Process::terminate()
     {
         PostThreadMessageW(GetThreadId(thread_), WM_CLOSE, 0, 0);
     }
+}
+
+void Process::initNotifier()
+{
+    notifier_ = new QWinEventNotifier(process_, this);
+
+    connect(notifier_, &QWinEventNotifier::activated, [this](HANDLE process_handle)
+    {
+        DCHECK_EQ(process_handle, process_.get());
+
+        if (state_ != State::STARTED)
+            return;
+
+        state_ = State::FINISHED;
+        emit finished(exitCode());
+    });
+
+    notifier_->setEnabled(true);
 }
 
 } // namespace base::win

@@ -20,9 +20,7 @@
 #define HOST__WIN__HOST_SESSION_PROCESS_H
 
 #include <QPointer>
-#include <QUuid>
 
-#include "base/macros_magic.h"
 #include "base/win/session_id.h"
 #include "base/win/session_status.h"
 #include "host/win/host_process.h"
@@ -65,11 +63,13 @@ public:
 
     QString remoteAddress() const;
 
-    bool start();
+    bool start(base::win::SessionId session_id);
 
 public slots:
     void stop();
     void setSessionEvent(base::win::SessionStatus status, base::win::SessionId session_id);
+    void attachSession(base::win::SessionId session_id);
+    void dettachSession();
 
 signals:
     void finished();
@@ -80,8 +80,6 @@ protected:
 
 private slots:
     void ipcNewConnection(ipc::Channel* channel);
-    void attachSession(base::win::SessionId session_id);
-    void dettachSession();
 
 private:
     bool startFakeSession();

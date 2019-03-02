@@ -54,7 +54,7 @@ private slots:
     void onChannelMessage(const QByteArray& buffer);
 
 private:
-    QPointer<ipc::Channel> channel_;
+    ipc::Channel* channel_ = nullptr;
 
     DISALLOW_COPY_AND_ASSIGN(UiClient);
 };

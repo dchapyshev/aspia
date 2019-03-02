@@ -47,17 +47,27 @@ public:
     ProcessId processId() const;
     SessionId sessionId() const;
 
+    int exitCode() const;
+
     void kill();
     void terminate();
 
+    HANDLE native() const { return process_.get(); }
+
 signals:
-    void finished();
+    void finished(int exit_code);
 
 private:
+    void initNotifier();
+
+    enum class State { INVALID, STARTED, FINISHED };
+
     QWinEventNotifier* notifier_ = nullptr;
 
     ScopedHandle process_;
     ScopedHandle thread_;
+
+    State state_ = State::INVALID;
 
     DISALLOW_COPY_AND_ASSIGN(Process);
 };

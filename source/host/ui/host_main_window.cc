@@ -80,11 +80,7 @@ MainWindow::MainWindow(Settings& settings, common::LocaleLoader& locale_loader, 
 
     client_ = new UiClient(this);
 
-    connect(client_, &UiClient::finished, [this]()
-    {
-        should_be_quit_ = true;
-        close();
-    });
+    connect(client_, &UiClient::finished, this, &MainWindow::realClose);
 
     connect(client_, &UiClient::connectEvent, [this](const proto::notifier::ConnectEvent& event)
     {
@@ -129,8 +125,14 @@ void MainWindow::closeEvent(QCloseEvent* event)
         if (notifier_)
             notifier_->close();
 
-        QMainWindow::closeEvent(event);
+        QApplication::quit();
     }
+}
+
+void MainWindow::realClose()
+{
+    should_be_quit_ = true;
+    close();
 }
 
 void MainWindow::refreshIpList()
@@ -208,7 +210,9 @@ void MainWindow::onAbout()
 
 void MainWindow::onExit()
 {
-    int ret = QMessageBox::question(
+    QApplication::setQuitOnLastWindowClosed(false);
+
+    int button = QMessageBox::question(
         this,
         tr("Confirmation"),
         tr("If you exit from Aspia, it will not be possible to connect to this computer until "
@@ -217,10 +221,19 @@ void MainWindow::onExit()
         QMessageBox::Yes,
         QMessageBox::No);
 
-    if (ret == QMessageBox::Yes)
+    QApplication::setQuitOnLastWindowClosed(true);
+
+    if (button == QMessageBox::Yes)
     {
-        should_be_quit_ = true;
-        close();
+        if (!notifier_)
+        {
+            realClose();
+        }
+        else
+        {
+            connect(notifier_, &NotifierWindow::finished, this, &MainWindow::realClose);
+            notifier_->disconnectAll();
+        }
     }
 }
 

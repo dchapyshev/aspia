@@ -18,6 +18,8 @@
 
 #include "host/host_main.h"
 
+#include <QAbstractEventDispatcher>
+#include <QAbstractNativeEventFilter>
 #include <QApplication>
 #include <QCommandLineParser>
 #include <QMessageBox>
@@ -33,6 +35,42 @@
 #include "updater/update_dialog.h"
 
 namespace {
+
+class EventFilter : public QAbstractNativeEventFilter
+{
+public:
+    ~EventFilter() = default;
+
+    static EventFilter* instance();
+
+    // QAbstractNativeEventFilter implementation.
+    bool nativeEventFilter(const QByteArray& event_type, void* message, long* result) override;
+
+private:
+    EventFilter() = default;
+
+    DISALLOW_COPY_AND_ASSIGN(EventFilter);
+};
+
+// static
+EventFilter* EventFilter::instance()
+{
+    static EventFilter event_filter;
+    return &event_filter;
+}
+
+bool EventFilter::nativeEventFilter(const QByteArray& event_type, void* message, long* result)
+{
+    MSG* native_message = reinterpret_cast<MSG*>(message);
+
+    if (native_message->message == WM_QUERYENDSESSION || native_message->message == WM_ENDSESSION)
+    {
+        *result = TRUE;
+        return true;
+    }
+
+    return false;
+}
 
 std::filesystem::path loggingDir()
 {
@@ -184,6 +222,9 @@ int runApplication(int argc, char* argv[])
     }
     else
     {
+        QAbstractEventDispatcher::instance()->installNativeEventFilter(
+            EventFilter::instance());
+
         host::MainWindow window(host_settings, locale_loader);
 
         if (is_started_from_service)

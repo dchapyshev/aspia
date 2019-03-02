@@ -47,19 +47,30 @@ UiProcess::~UiProcess() = default;
 // static
 void UiProcess::create(base::win::SessionId session_id)
 {
-    LOG(LS_INFO) << "Starting the UI (SID: " << session_id << ").";
+    LOG(LS_INFO) << "Starting the UI (SID: " << session_id << ")";
 
-    std::unique_ptr<HostProcess> process(new HostProcess());
+    HostProcess process;
 
-    process->setAccount(HostProcess::User);
-    process->setSessionId(session_id);
-    process->setProgram(QCoreApplication::applicationDirPath() + QLatin1Char('/') + kFileName);
+    process.setAccount(HostProcess::User);
+    process.setSessionId(session_id);
+    process.setProgram(QCoreApplication::applicationDirPath() + QLatin1Char('/') + kFileName);
 
-    process->start();
+    HostProcess::ErrorCode error_code = process.start();
+    if (error_code != HostProcess::ErrorCode::NoError)
+    {
+        LOG(LS_ERROR) << "UI process is not started";
+    }
+    else
+    {
+        LOG(LS_INFO) << "UI process is started successfully";
+    }
 }
 
 base::win::SessionId UiProcess::sessionId() const
 {
+    if (!channel_)
+        return base::win::kInvalidSessionId;
+
     return channel_->clientSessionId();
 }
 
@@ -77,19 +88,31 @@ void UiProcess::setDisconnectEvent(const std::string& uuid)
     channel_->send(common::serializeMessage(message));
 }
 
-void UiProcess::start()
+bool UiProcess::start()
 {
     if (state_ != State::STOPPED)
     {
-        DLOG(LS_ERROR) << "Attempting to start a process that is already running.";
-        return;
+        DLOG(LS_ERROR) << "Attempting to start a process that is already running";
+        return false;
     }
 
+    process_ = new base::win::Process(channel_->clientProcessId(), this);
+    if (!process_->isValid())
+    {
+        LOG(LS_ERROR) << "Unable to open UI process";
+        return false;
+    }
+
+    connect(process_, &base::win::Process::finished,
+            this, &UiProcess::onProcessFinished,
+            Qt::QueuedConnection);
+
     connect(channel_, &ipc::Channel::messageReceived, this, &UiProcess::onMessageReceived);
-    connect(channel_, &ipc::Channel::disconnected, this, &UiProcess::stop);
+    connect(channel_, &ipc::Channel::disconnected, this, &UiProcess::stop, Qt::QueuedConnection);
 
     state_ = State::STARTED;
     channel_->start();
+    return true;
 }
 
 void UiProcess::stop()
@@ -102,8 +125,14 @@ void UiProcess::stop()
     if (channel_)
         channel_->stop();
 
-    LOG(LS_INFO) << "UI is stopped.";
+    LOG(LS_INFO) << "UI is stopped";
     emit finished();
+}
+
+void UiProcess::onProcessFinished(int exit_code)
+{
+    LOG(LS_INFO) << "UI process finished with code: " << exit_code;
+    stop();
 }
 
 void UiProcess::onMessageReceived(const QByteArray& buffer)
@@ -112,19 +141,18 @@ void UiProcess::onMessageReceived(const QByteArray& buffer)
 
     if (!common::parseMessage(buffer, message))
     {
-        LOG(LS_ERROR) << "Invalid message from UI.";
+        LOG(LS_ERROR) << "Invalid message from UI";
         stop();
         return;
     }
 
     if (message.has_kill_session())
     {
-        QString uuid = QString::fromStdString(message.kill_session().uuid());
-        emit killSession(QUuid::fromString(uuid));
+        emit killSession(QByteArray::fromStdString(message.kill_session().uuid()));
     }
     else
     {
-        LOG(LS_WARNING) << "Unhandled message from UI.";
+        LOG(LS_WARNING) << "Unhandled message from UI";
     }
 }
 
