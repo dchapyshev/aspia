@@ -103,8 +103,8 @@ SrpClientContext::SrpClientContext(proto::Method method,
                                    const QString& I,
                                    const QString& p)
     : method_(method),
-      I_(I),
-      p_(p)
+      I_(I.toStdString()),
+      p_(p.toStdString())
 {
     // Nothing
 }
@@ -142,7 +142,7 @@ proto::SrpIdentify* SrpClientContext::identify()
     std::unique_ptr<proto::SrpIdentify> identify =
         std::make_unique<proto::SrpIdentify>();
 
-    identify->set_username(I_.toStdString());
+    identify->set_username(I_);
 
     return identify.release();
 }
@@ -204,7 +204,7 @@ QByteArray SrpClientContext::key() const
     }
 
     crypto::BigNum u = crypto::SrpMath::calc_u(A_, B_, N_);
-    crypto::BigNum x = crypto::SrpMath::calc_x(s_, I_.toUtf8(), p_.toUtf8());
+    crypto::BigNum x = crypto::SrpMath::calc_x(s_, I_, p_);
     crypto::BigNum client_key = crypto::SrpMath::calcClientKey(N_, B_, g_, x, a_, u);
 
     QByteArray client_key_string = client_key.toByteArray();

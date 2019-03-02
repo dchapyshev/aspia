@@ -40,7 +40,7 @@ public:
     proto::SrpServerKeyExchange* readIdentify(const proto::SrpIdentify& identify);
     void readClientKeyExchange(const proto::SrpClientKeyExchange& client_key_exchange);
 
-    const QString& userName() const { return username_; }
+    const std::string& userName() const { return username_; }
     uint32_t sessionTypes() const { return session_types_; }
 
     proto::Method method() const { return method_; }
@@ -53,7 +53,7 @@ private:
 
     const SrpUserList& user_list_;
 
-    QString username_;
+    std::string username_;
     uint32_t session_types_ = 0;
 
     QByteArray encrypt_iv_;

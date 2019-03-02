@@ -35,8 +35,10 @@ const size_t kUserSaltSize = 64; // In bytes.
 // Looks for the user in the list.
 // If the user is found, it returns an index in the list.
 // If the user is not found or disabled, -1 is returned.
-int findUser(const SrpUserList& users, const QString& username)
+int findUser(const SrpUserList& users, const std::string& username_utf8)
 {
+    QString username = QString::fromStdString(username_utf8);
+
     for (int i = 0; i < users.list.size(); ++i)
     {
         const SrpUser& user = users.list.at(i);
@@ -101,7 +103,8 @@ SrpUser* SrpHostContext::createUser(const QString& username, const QString& pass
     crypto::BigNum N = crypto::BigNum::fromByteArray(user->number);
     crypto::BigNum g = crypto::BigNum::fromByteArray(user->generator);
 
-    crypto::BigNum v = crypto::SrpMath::calc_v(username.toUtf8(), password.toUtf8(), s, N, g);
+    crypto::BigNum v = crypto::SrpMath::calc_v(
+        username.toStdString(), password.toStdString(), s, N, g);
 
     user->verifier = v.toByteArray();
     if (user->verifier.isEmpty())
@@ -112,8 +115,8 @@ SrpUser* SrpHostContext::createUser(const QString& username, const QString& pass
 
 proto::SrpServerKeyExchange* SrpHostContext::readIdentify(const proto::SrpIdentify& identify)
 {
-    username_ = QString::fromStdString(identify.username());
-    if (username_.isEmpty())
+    username_ = identify.username();
+    if (username_.empty())
         return nullptr;
 
     crypto::BigNum g;
@@ -131,7 +134,7 @@ proto::SrpServerKeyExchange* SrpHostContext::readIdentify(const proto::SrpIdenti
         N_ = crypto::BigNum::fromBuffer(crypto::kSrpNg_8192.N);
         g = crypto::BigNum::fromBuffer(crypto::kSrpNg_8192.g);
         s = crypto::BigNum::fromByteArray(hash.result());
-        v_ = crypto::SrpMath::calc_v(username_.toUtf8(), user_list_.seed_key, s, N_, g);
+        v_ = crypto::SrpMath::calc_v(username_, user_list_.seed_key.toStdString(), s, N_, g);
     }
     else
     {

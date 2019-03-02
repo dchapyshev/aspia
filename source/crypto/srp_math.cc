@@ -110,9 +110,9 @@ BigNum SrpMath::calc_B(const BigNum& b, const BigNum& N, const BigNum& g, const 
 
 // static
 // x = BLAKE2b512(s | BLAKE2b512(I | ":" | p))
-BigNum SrpMath::calc_x(const BigNum& s, const QByteArray& I, const QByteArray& p)
+BigNum SrpMath::calc_x(const BigNum& s, const std::string& I, const std::string& p)
 {
-    if (!s.isValid() || I.isEmpty() || p.isEmpty())
+    if (!s.isValid() || I.empty() || p.empty())
         return BigNum();
 
     GenericHash hash(GenericHash::BLAKE2b512);
@@ -257,10 +257,10 @@ bool SrpMath::verify_A_mod_N(const BigNum& A, const BigNum& N)
 }
 
 // static
-BigNum SrpMath::calc_v(const QByteArray& I, const QByteArray& p, const BigNum& s,
+BigNum SrpMath::calc_v(const std::string& I, const std::string& p, const BigNum& s,
                        const BigNum& N, const BigNum& g)
 {
-    if (I.isEmpty() || p.isEmpty() || !N.isValid() || !g.isValid() || !s.isValid())
+    if (I.empty() || p.empty() || !N.isValid() || !g.isValid() || !s.isValid())
         return BigNum();
 
     BigNum::Context ctx = BigNum::Context::create();

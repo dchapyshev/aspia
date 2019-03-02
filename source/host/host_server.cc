@@ -382,7 +382,7 @@ void HostServer::sendConnectEvent(const SessionProcess* session_process)
 
     event.set_session_type(session_process->sessionType());
     event.set_remote_address(session_process->remoteAddress().toStdString());
-    event.set_username(session_process->userName().toStdString());
+    event.set_username(session_process->userName());
     event.set_uuid(session_process->uuid());
 
     ui_server_->setConnectEvent(session_process->sessionId(), event);

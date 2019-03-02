@@ -51,8 +51,8 @@ protected:
 private:
     const proto::Method method_;
 
-    QString I_; // User name.
-    QString p_; // Plain text password.
+    std::string I_; // User name.
+    std::string p_; // Plain text password.
 
     crypto::BigNum N_;
     crypto::BigNum g_;
