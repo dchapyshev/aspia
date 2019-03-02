@@ -41,6 +41,7 @@ void build(Solution &s)
     base.Public += "org.sw.demo.qtproject.qt.base.widgets-*"_dep;
     base.Public += "org.sw.demo.qtproject.qt.base.xml-*"_dep;
     base.Public += "org.sw.demo.boost.align-1"_dep;
+    automoc("org.sw.demo.qtproject.qt.base.tools.moc-*"_dep, base);
 
     auto &desktop_capture = add_lib("desktop");
     desktop_capture.Public += base;
@@ -130,8 +131,8 @@ void build(Solution &s)
     };
 
     auto &host_config = add_exe(host, "config");
-    host_config += "host_config_entry_point.cc";
-    host_config += "host_config.rc";
+    host_config += "host_entry_point.cc";
+    host_config += "host_core.rc";
     host_config += host;
 
     auto &host_service = add_exe(host, "service");
