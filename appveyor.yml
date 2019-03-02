@@ -70,11 +70,6 @@ test_script:
       If ($LastExitCode -ne 0) {
         exit $LastExitCode
       }
-      $test_console = "$tests_dir\aspia_console_tests"
-      & $test_console
-      If ($LastExitCode -ne 0) {
-        exit $LastExitCode
-      }
       $test_crypto = "$tests_dir\aspia_crypto_tests"
       & $test_crypto
       If ($LastExitCode -ne 0) {
@@ -82,6 +77,11 @@ test_script:
       }
       $test_desktop = "$tests_dir\aspia_desktop_tests"
       & $test_desktop
+      If ($LastExitCode -ne 0) {
+        exit $LastExitCode
+      }
+      $test_net = "$tests_dir\aspia_net_tests"
+      & $test_net
       If ($LastExitCode -ne 0) {
         exit $LastExitCode
       }

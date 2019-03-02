@@ -19,6 +19,8 @@
 list(APPEND SOURCE_NET
     adapter_enumerator.cc
     adapter_enumerator.h
+    address.cc
+    address.h
     firewall_manager.cc
     firewall_manager.h
     ip_util.cc
@@ -37,7 +39,25 @@ list(APPEND SOURCE_NET
     srp_host_context.h
     srp_user.h)
 
+list(APPEND SOURCE_NET_UNIT_TESTS
+    address_unittest.cc)
+
 source_group("" FILES ${SOURCE_NET})
+source_group("" FILES ${SOURCE_NET_UNIT_TESTS})
 
 add_library(aspia_net STATIC ${SOURCE_NET})
 target_link_libraries(aspia_net aspia_base aspia_crypto ${THIRD_PARTY_LIBS})
+
+# If the build of unit tests is enabled.
+if (BUILD_UNIT_TESTS)
+    add_executable(aspia_net_tests ${SOURCE_NET_UNIT_TESTS})
+    target_link_libraries(aspia_net_tests
+        aspia_net
+        optimized gtest
+        optimized gtest_main
+        debug gtestd
+        debug gtest_maind
+        ${THIRD_PARTY_LIBS})
+
+    add_test(NAME aspia_net_tests COMMAND aspia_net_tests)
+endif()

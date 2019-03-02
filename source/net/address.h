@@ -16,30 +16,30 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CONSOLE__COMPUTER_ADDRESS_H
-#define CONSOLE__COMPUTER_ADDRESS_H
+#ifndef CONSOLE__ADDRESS_H
+#define CONSOLE__ADDRESS_H
 
 #include <QString>
 
 #include "build/build_config.h"
 
-namespace console {
+namespace net {
 
-class ComputerAddress
+class Address
 {
 public:
-    ComputerAddress() = default;
+    Address() = default;
 
-    ComputerAddress(const ComputerAddress& other);
-    ComputerAddress& operator=(const ComputerAddress& other);
+    Address(const Address& other);
+    Address& operator=(const Address& other);
 
-    ComputerAddress(ComputerAddress&& other);
-    ComputerAddress& operator=(ComputerAddress&& other);
+    Address(Address&& other);
+    Address& operator=(Address&& other);
 
-    ~ComputerAddress() = default;
+    ~Address() = default;
 
-    static ComputerAddress fromString(const QString& str);
-    static ComputerAddress fromStdString(const std::string& str);
+    static Address fromString(const QString& str);
+    static Address fromStdString(const std::string& str);
 
     QString toString() const;
     std::string toStdString() const;
@@ -52,18 +52,18 @@ public:
 
     bool isValid() const;
 
-    bool isEqual(const ComputerAddress& other);
+    bool isEqual(const Address& other);
 
-    bool operator==(const ComputerAddress& other);
-    bool operator!=(const ComputerAddress& other);
+    bool operator==(const Address& other);
+    bool operator!=(const Address& other);
 
 private:
-    ComputerAddress(QString&& host, uint16_t port);
+    Address(QString&& host, uint16_t port);
 
     QString host_;
     uint16_t port_ = 0;
 };
 
-} // namespace console
+} // namespace net
 
-#endif // CONSOLE__COMPUTER_ADDRESS_H
+#endif // CONSOLE__ADDRESS_H

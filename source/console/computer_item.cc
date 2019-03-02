@@ -21,8 +21,8 @@
 #include <QDateTime>
 
 #include "build/build_config.h"
-#include "console/computer_address.h"
 #include "console/computer_group_item.h"
+#include "net/address.h"
 
 namespace console {
 
@@ -37,7 +37,7 @@ ComputerItem::ComputerItem(proto::address_book::Computer* computer,
 
 void ComputerItem::updateItem()
 {
-    ComputerAddress address;
+    net::Address address;
     address.setHost(QString::fromStdString(computer_->address()));
     address.setPort(computer_->port());
 

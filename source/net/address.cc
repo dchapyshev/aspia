@@ -16,13 +16,13 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "console/computer_address.h"
+#include "net/address.h"
 
 #include <QStringView>
 
 #include "net/ip_util.h"
 
-namespace console {
+namespace net {
 
 namespace {
 
@@ -210,21 +210,21 @@ bool parse(QStringView::const_iterator& it, QStringView::const_iterator last, Ad
 
 } // namespace
 
-ComputerAddress::ComputerAddress(QString&& host, uint16_t port)
+Address::Address(QString&& host, uint16_t port)
     : host_(std::move(host)),
       port_(port)
 {
     // Nothing
 }
 
-ComputerAddress::ComputerAddress(const ComputerAddress& other)
+Address::Address(const Address& other)
     : host_(other.host_),
       port_(other.port_)
 {
     // Nothing
 }
 
-ComputerAddress& ComputerAddress::operator=(const ComputerAddress& other)
+Address& Address::operator=(const Address& other)
 {
     if (this != &other)
     {
@@ -235,14 +235,14 @@ ComputerAddress& ComputerAddress::operator=(const ComputerAddress& other)
     return *this;
 }
 
-ComputerAddress::ComputerAddress(ComputerAddress&& other)
+Address::Address(Address&& other)
     : host_(std::move(other.host_)),
       port_(other.port_)
 {
     // Nothing
 }
 
-ComputerAddress& ComputerAddress::operator=(ComputerAddress&& other)
+Address& Address::operator=(Address&& other)
 {
     if (this != &other)
     {
@@ -254,7 +254,7 @@ ComputerAddress& ComputerAddress::operator=(ComputerAddress&& other)
 }
 
 // static
-ComputerAddress ComputerAddress::fromString(const QString& str)
+Address Address::fromString(const QString& str)
 {
     auto begin = str.cbegin();
     auto end = str.cend();
@@ -270,20 +270,20 @@ ComputerAddress ComputerAddress::fromString(const QString& str)
             if (!isValidPort(port))
                 port = DEFAULT_HOST_TCP_PORT;
 
-            return ComputerAddress(std::move(parts.host), port);
+            return Address(std::move(parts.host), port);
         }
     }
 
-    return ComputerAddress();
+    return Address();
 }
 
 // static
-ComputerAddress ComputerAddress::fromStdString(const std::string& str)
+Address Address::fromStdString(const std::string& str)
 {
     return fromString(QString::fromStdString(str));
 }
 
-QString ComputerAddress::toString() const
+QString Address::toString() const
 {
     if (!isValidPort(port_))
         return QString();
@@ -307,32 +307,32 @@ QString ComputerAddress::toString() const
     }
 }
 
-std::string ComputerAddress::toStdString() const
+std::string Address::toStdString() const
 {
     return toString().toStdString();
 }
 
-void ComputerAddress::setHost(const QString& host)
+void Address::setHost(const QString& host)
 {
     host_ = host;
 }
 
-QString ComputerAddress::host() const
+QString Address::host() const
 {
     return host_;
 }
 
-void ComputerAddress::setPort(uint16_t port)
+void Address::setPort(uint16_t port)
 {
     port_ = port;
 }
 
-uint16_t ComputerAddress::port() const
+uint16_t Address::port() const
 {
     return port_;
 }
 
-bool ComputerAddress::isValid() const
+bool Address::isValid() const
 {
     if (!isValidPort(port_))
         return false;
@@ -347,19 +347,19 @@ bool ComputerAddress::isValid() const
     return true;
 }
 
-bool ComputerAddress::isEqual(const ComputerAddress& other)
+bool Address::isEqual(const Address& other)
 {
     return host_ == other.host_ && port_ == other.port_;
 }
 
-bool ComputerAddress::operator==(const ComputerAddress& other)
+bool Address::operator==(const Address& other)
 {
     return isEqual(other);
 }
 
-bool ComputerAddress::operator!=(const ComputerAddress& other)
+bool Address::operator!=(const Address& other)
 {
     return !isEqual(other);
 }
 
-} // namespace console
+} // namespace net

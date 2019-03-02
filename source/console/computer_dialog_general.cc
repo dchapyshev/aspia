@@ -21,7 +21,7 @@
 #include <QMessageBox>
 
 #include "common/user_util.h"
-#include "console/computer_address.h"
+#include "net/address.h"
 
 namespace console {
 
@@ -45,7 +45,7 @@ ComputerDialogGeneral::ComputerDialogGeneral(int type, QWidget* parent)
 void ComputerDialogGeneral::restoreSettings(
     const QString& parent_name, const proto::address_book::Computer& computer)
 {
-    ComputerAddress address;
+    net::Address address;
     address.setHost(QString::fromStdString(computer.address()));
     address.setPort(computer.port());
 
@@ -94,7 +94,7 @@ bool ComputerDialogGeneral::saveSettings(proto::address_book::Computer* computer
         return false;
     }
 
-    ComputerAddress address = ComputerAddress::fromString(ui.edit_address->text());
+    net::Address address = net::Address::fromString(ui.edit_address->text());
     if (!address.isValid())
     {
         showError(tr("An invalid computer address was entered."));

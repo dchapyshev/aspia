@@ -19,132 +19,132 @@
 #include <gtest/gtest.h>
 
 #include "build/build_config.h"
-#include "console/computer_address.h"
+#include "net/address.h"
 
-namespace console {
+namespace net {
 
-TEST(ComputerAddressTest, Port)
+TEST(AddressTest, Port)
 {
-    ComputerAddress addr1 = ComputerAddress::fromStdString("192.168.0.1:0");
+    Address addr1 = Address::fromStdString("192.168.0.1:0");
     EXPECT_FALSE(addr1.isValid());
     EXPECT_TRUE(addr1.host().isEmpty());
     EXPECT_EQ(addr1.port(), 0);
 
-    ComputerAddress addr2 = ComputerAddress::fromStdString("192.168.0.1:08051");
+    Address addr2 = Address::fromStdString("192.168.0.1:08051");
     EXPECT_TRUE(addr2.isValid());
     EXPECT_EQ(addr2.host(), "192.168.0.1");
     EXPECT_EQ(addr2.port(), 8051);
 
-    ComputerAddress addr3 = ComputerAddress::fromStdString("192.168.0.1:FFFF");
+    Address addr3 = Address::fromStdString("192.168.0.1:FFFF");
     EXPECT_FALSE(addr3.isValid());
     EXPECT_TRUE(addr3.host().isEmpty());
     EXPECT_EQ(addr3.port(), 0);
 
-    ComputerAddress addr4 = ComputerAddress::fromStdString("192.168.0.1:");
+    Address addr4 = Address::fromStdString("192.168.0.1:");
     EXPECT_FALSE(addr4.isValid());
     EXPECT_TRUE(addr4.host().isEmpty());
     EXPECT_EQ(addr4.port(), 0);
 
-    ComputerAddress addr5 = ComputerAddress::fromStdString("192.168.0.1:83572576");
+    Address addr5 = Address::fromStdString("192.168.0.1:83572576");
     EXPECT_FALSE(addr5.isValid());
     EXPECT_TRUE(addr5.host().isEmpty());
     EXPECT_EQ(addr5.port(), 0);
 
-    ComputerAddress addr6 = ComputerAddress::fromStdString("192.168.0.1:65535");
+    Address addr6 = Address::fromStdString("192.168.0.1:65535");
     EXPECT_TRUE(addr6.isValid());
     EXPECT_EQ(addr6.host(), "192.168.0.1");
     EXPECT_EQ(addr6.port(), 65535);
 }
 
-TEST(ComputerAddressTest, InvalidAddress)
+TEST(AddressTest, InvalidAddress)
 {
-    ComputerAddress addr1 = ComputerAddress::fromStdString("http://test.com");
+    Address addr1 = Address::fromStdString("http://test.com");
     EXPECT_FALSE(addr1.isValid());
     EXPECT_TRUE(addr1.host().isEmpty());
     EXPECT_EQ(addr1.port(), 0);
 
-    EXPECT_FALSE(ComputerAddress::fromStdString("https://test1.org").isValid());
-    EXPECT_FALSE(ComputerAddress::fromStdString("ftp://test2.net").isValid());
-    EXPECT_FALSE(ComputerAddress::fromStdString("te%st2").isValid());
-    EXPECT_FALSE(ComputerAddress::fromStdString("//").isValid());
-    EXPECT_FALSE(ComputerAddress::fromStdString("..").isValid());
-    EXPECT_FALSE(ComputerAddress::fromStdString(".").isValid());
-    EXPECT_FALSE(ComputerAddress::fromStdString("\\").isValid());
-    EXPECT_FALSE(ComputerAddress::fromStdString("/").isValid());
-    EXPECT_FALSE(ComputerAddress::fromStdString(":").isValid());
-    EXPECT_FALSE(ComputerAddress::fromStdString("^").isValid());
-    EXPECT_FALSE(ComputerAddress::fromStdString("#").isValid());
-    EXPECT_FALSE(ComputerAddress::fromStdString("2001:db8:1f70::999:de8:7648:6e8").isValid());
+    EXPECT_FALSE(Address::fromStdString("https://test1.org").isValid());
+    EXPECT_FALSE(Address::fromStdString("ftp://test2.net").isValid());
+    EXPECT_FALSE(Address::fromStdString("te%st2").isValid());
+    EXPECT_FALSE(Address::fromStdString("//").isValid());
+    EXPECT_FALSE(Address::fromStdString("..").isValid());
+    EXPECT_FALSE(Address::fromStdString(".").isValid());
+    EXPECT_FALSE(Address::fromStdString("\\").isValid());
+    EXPECT_FALSE(Address::fromStdString("/").isValid());
+    EXPECT_FALSE(Address::fromStdString(":").isValid());
+    EXPECT_FALSE(Address::fromStdString("^").isValid());
+    EXPECT_FALSE(Address::fromStdString("#").isValid());
+    EXPECT_FALSE(Address::fromStdString("2001:db8:1f70::999:de8:7648:6e8").isValid());
 }
 
-TEST(ComputerAddressTest, ValidAddress)
+TEST(AddressTest, ValidAddress)
 {
-    ComputerAddress addr1 = ComputerAddress::fromStdString("192.168.1.1");
+    Address addr1 = Address::fromStdString("192.168.1.1");
     EXPECT_TRUE(addr1.isValid());
     EXPECT_EQ(addr1.host(), "192.168.1.1");
     EXPECT_EQ(addr1.port(), DEFAULT_HOST_TCP_PORT);
     EXPECT_EQ(addr1.toStdString(), "192.168.1.1");
 
-    ComputerAddress addr2 = ComputerAddress::fromStdString("192.168.1.1:8080");
+    Address addr2 = Address::fromStdString("192.168.1.1:8080");
     EXPECT_TRUE(addr2.isValid());
     EXPECT_EQ(addr2.host(), "192.168.1.1");
     EXPECT_EQ(addr2.port(), 8080);
     EXPECT_EQ(addr2.toStdString(), "192.168.1.1:8080");
 
-    ComputerAddress addr3 = ComputerAddress::fromStdString("test.com");
+    Address addr3 = Address::fromStdString("test.com");
     EXPECT_TRUE(addr3.isValid());
     EXPECT_EQ(addr3.host(), "test.com");
     EXPECT_EQ(addr3.port(), DEFAULT_HOST_TCP_PORT);
     EXPECT_EQ(addr3.toStdString(), "test.com");
 
-    ComputerAddress addr4 = ComputerAddress::fromStdString("test.com:8080");
+    Address addr4 = Address::fromStdString("test.com:8080");
     EXPECT_TRUE(addr4.isValid());
     EXPECT_EQ(addr4.host(), "test.com");
     EXPECT_EQ(addr4.port(), 8080);
     EXPECT_EQ(addr4.toStdString(), "test.com:8080");
 
-    ComputerAddress addr5 = ComputerAddress::fromStdString("test");
+    Address addr5 = Address::fromStdString("test");
     EXPECT_TRUE(addr5.isValid());
     EXPECT_EQ(addr5.host(), "test");
     EXPECT_EQ(addr5.port(), DEFAULT_HOST_TCP_PORT);
     EXPECT_EQ(addr5.toStdString(), "test");
 
-    ComputerAddress addr6 = ComputerAddress::fromStdString("test:8080");
+    Address addr6 = Address::fromStdString("test:8080");
     EXPECT_TRUE(addr6.isValid());
     EXPECT_EQ(addr6.host(), "test");
     EXPECT_EQ(addr6.port(), 8080);
     EXPECT_EQ(addr6.toStdString(), "test:8080");
 
-    ComputerAddress addr7 = ComputerAddress::fromStdString("[2001:db8:1f70::999:de8:7648:6e8]");
+    Address addr7 = Address::fromStdString("[2001:db8:1f70::999:de8:7648:6e8]");
     EXPECT_TRUE(addr7.isValid());
     EXPECT_EQ(addr7.host(), "2001:db8:1f70::999:de8:7648:6e8");
     EXPECT_EQ(addr7.port(), DEFAULT_HOST_TCP_PORT);
     EXPECT_EQ(addr7.toStdString(), "[2001:db8:1f70::999:de8:7648:6e8]");
 
-    ComputerAddress addr8 = ComputerAddress::fromStdString("[2001:db8:1f70::999:de8:7648:6e8]:8080");
+    Address addr8 = Address::fromStdString("[2001:db8:1f70::999:de8:7648:6e8]:8080");
     EXPECT_TRUE(addr8.isValid());
     EXPECT_EQ(addr8.host(), "2001:db8:1f70::999:de8:7648:6e8");
     EXPECT_EQ(addr8.port(), 8080);
     EXPECT_EQ(addr8.toStdString(), "[2001:db8:1f70::999:de8:7648:6e8]:8080");
 
-    ComputerAddress addr9 = ComputerAddress::fromStdString("[::ffff:192.0.2.1]");
+    Address addr9 = Address::fromStdString("[::ffff:192.0.2.1]");
     EXPECT_TRUE(addr9.isValid());
     EXPECT_EQ(addr9.host(), "::ffff:192.0.2.1");
     EXPECT_EQ(addr9.port(), DEFAULT_HOST_TCP_PORT);
     EXPECT_EQ(addr9.toStdString(), "[::ffff:192.0.2.1]");
 
-    ComputerAddress addr10 = ComputerAddress::fromStdString("[::ffff:192.0.2.1]:8080");
+    Address addr10 = Address::fromStdString("[::ffff:192.0.2.1]:8080");
     EXPECT_TRUE(addr10.isValid());
     EXPECT_EQ(addr10.host(), "::ffff:192.0.2.1");
     EXPECT_EQ(addr10.port(), 8080);
     EXPECT_EQ(addr10.toStdString(), "[::ffff:192.0.2.1]:8080");
 }
 
-TEST(ComputerAddressTest, TestVector)
+TEST(AddressTest, TestVector)
 {
     static_assert(DEFAULT_HOST_TCP_PORT == 8050);
 
-    ComputerAddress addr = ComputerAddress::fromStdString("192.168.1.1:8050");
+    Address addr = Address::fromStdString("192.168.1.1:8050");
 
     EXPECT_TRUE(addr.isValid());
     EXPECT_EQ(addr.host(), "192.168.1.1");
@@ -182,4 +182,4 @@ TEST(ComputerAddressTest, TestVector)
     EXPECT_EQ(addr.toStdString(), "192.168.1.1");
 }
 
-} // namespace console
+} // namespace net
