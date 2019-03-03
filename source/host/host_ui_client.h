@@ -39,14 +39,18 @@ public:
     explicit UiClient(QObject* parent = nullptr);
     ~UiClient();
 
+    enum class State { NOT_CONNECTED, CONNECTING, CONNECTED };
+
+    State state() const { return state_; }
+
     void start();
     void stop();
 
     void killSession(const std::string& uuid);
 
 signals:
-    void started();
-    void finished();
+    void disconnected();
+    void errorOccurred();
     void connectEvent(const proto::notifier::ConnectEvent& event);
     void disconnectEvent(const proto::notifier::DisconnectEvent& event);
 
@@ -54,6 +58,7 @@ private slots:
     void onChannelMessage(const QByteArray& buffer);
 
 private:
+    State state_ = State::NOT_CONNECTED;
     ipc::Channel* channel_ = nullptr;
 
     DISALLOW_COPY_AND_ASSIGN(UiClient);

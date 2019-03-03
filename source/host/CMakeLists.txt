@@ -41,6 +41,8 @@ list(APPEND SOURCE_HOST_CORE
     host_session_file_transfer.h
     host_settings.cc
     host_settings.h
+    host_single_application.cc
+    host_single_application.h
     host_system_info.cc
     host_system_info.h
     host_ui_client.cc

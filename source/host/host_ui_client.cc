@@ -34,16 +34,17 @@ UiClient::~UiClient() = default;
 
 void UiClient::start()
 {
+    state_ = State::CONNECTING;
     channel_ = ipc::Channel::createClient(this);
 
     connect(channel_, &ipc::Channel::connected, [this]()
     {
+        state_ = State::CONNECTED;
         channel_->start();
-        emit started();
     });
 
     connect(channel_, &ipc::Channel::disconnected, this, &UiClient::stop);
-    connect(channel_, &ipc::Channel::errorOccurred, this, &UiClient::stop);
+    connect(channel_, &ipc::Channel::errorOccurred, this, &UiClient::errorOccurred);
     connect(channel_, &ipc::Channel::messageReceived, this, &UiClient::onChannelMessage);
 
     channel_->connectToServer(kIpcChannelIdForUI);
@@ -51,10 +52,14 @@ void UiClient::start()
 
 void UiClient::stop()
 {
+    if (state_ == State::NOT_CONNECTED)
+        return;
+
     if (channel_)
         channel_->stop();
 
-    emit finished();
+    state_ = State::NOT_CONNECTED;
+    emit disconnected();
 }
 
 void UiClient::killSession(const std::string& uuid)

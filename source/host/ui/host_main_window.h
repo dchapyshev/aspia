@@ -41,6 +41,9 @@ public:
     MainWindow(Settings& settings, common::LocaleLoader& locale_loader, QWidget* parent = nullptr);
     ~MainWindow();
 
+public slots:
+    void connectToService();
+    void activateHost();
     void hideToTray();
 
 protected:

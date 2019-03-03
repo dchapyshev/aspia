@@ -78,34 +78,49 @@ MainWindow::MainWindow(Settings& settings, common::LocaleLoader& locale_loader, 
 
     setFixedHeight(sizeHint().height());
 
-    client_ = new UiClient(this);
 
-    connect(client_, &UiClient::finished, this, &MainWindow::realClose);
-
-    connect(client_, &UiClient::connectEvent, [this](const proto::notifier::ConnectEvent& event)
-    {
-        if (!notifier_)
-        {
-            notifier_ = new NotifierWindow();
-
-            connect(client_, &UiClient::disconnectEvent,
-                    notifier_, &NotifierWindow::onDisconnectEvent);
-
-            connect(notifier_, &NotifierWindow::killSession,
-                    client_, &UiClient::killSession);
-
-            notifier_->setAttribute(Qt::WA_DeleteOnClose);
-            notifier_->show();
-            notifier_->activateWindow();
-        }
-
-        notifier_->onConnectEvent(event);
-    });
-
-    client_->start();
 }
 
 MainWindow::~MainWindow() = default;
+
+void MainWindow::connectToService()
+{
+    if (!client_)
+    {
+        client_ = new UiClient(this);
+
+        connect(client_, &UiClient::disconnected, this, &MainWindow::realClose);
+        connect(client_, &UiClient::errorOccurred, client_, &UiClient::deleteLater);
+        connect(client_, &UiClient::connectEvent, [this](const proto::notifier::ConnectEvent& event)
+        {
+            if (!notifier_)
+            {
+                notifier_ = new NotifierWindow();
+
+                connect(client_, &UiClient::disconnectEvent,
+                        notifier_, &NotifierWindow::onDisconnectEvent);
+
+                connect(notifier_, &NotifierWindow::killSession,
+                        client_, &UiClient::killSession);
+
+                notifier_->setAttribute(Qt::WA_DeleteOnClose);
+                notifier_->show();
+                notifier_->activateWindow();
+            }
+
+            notifier_->onConnectEvent(event);
+        });
+
+        client_->start();
+    }
+}
+
+void MainWindow::activateHost()
+{
+    show();
+    activateWindow();
+    connectToService();
+}
 
 void MainWindow::hideToTray()
 {

@@ -32,6 +32,7 @@
 #include "crypto/scoped_crypto_initializer.h"
 #include "host/ui/host_main_window.h"
 #include "host/host_settings.h"
+#include "host/host_single_application.h"
 #include "updater/update_dialog.h"
 
 namespace {
@@ -151,7 +152,7 @@ int runApplication(int argc, char* argv[])
             return 1;
     }
 
-    QApplication application(argc, argv);
+    host::SingleApplication application(argc, argv);
     application.setOrganizationName(QStringLiteral("Aspia"));
     application.setApplicationName(QStringLiteral("Host"));
     application.setApplicationVersion(QStringLiteral(ASPIA_VERSION_STRING));
@@ -222,19 +223,34 @@ int runApplication(int argc, char* argv[])
     }
     else
     {
-        QAbstractEventDispatcher::instance()->installNativeEventFilter(
-            EventFilter::instance());
-
-        host::MainWindow window(host_settings, locale_loader);
-
-        if (is_started_from_service)
-            window.hideToTray();
+        if (application.isRunning())
+        {
+            application.activate();
+        }
         else
-            window.show();
+        {
+            QAbstractEventDispatcher::instance()->installNativeEventFilter(
+                EventFilter::instance());
 
-        window.activateWindow();
+            host::MainWindow window(host_settings, locale_loader);
 
-        return application.exec();
+            QObject::connect(&application, &host::SingleApplication::activated,
+                             &window, &host::MainWindow::activateHost);
+
+            if (is_started_from_service)
+            {
+                window.hideToTray();
+            }
+            else
+            {
+                window.show();
+                window.activateWindow();
+            }
+
+            window.connectToService();
+
+            return application.exec();
+        }
     }
 
     return 0;
