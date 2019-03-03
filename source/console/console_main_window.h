@@ -43,6 +43,15 @@ public:
     ~MainWindow();
 
 public slots:
+    void showConsole();
+    void openAddressBook(const QString& file_path);
+
+protected:
+    // QMainWindow implementation.
+    void changeEvent(QEvent* event) override;
+    void closeEvent(QCloseEvent* event) override;
+
+private slots:
     void onNew();
     void onOpen();
     void onSave();
@@ -77,20 +86,12 @@ public slots:
     void onTabContextMenu(const QPoint& pos);
     void onLanguageChanged(QAction* action);
     void onShowHideToTray();
-
-protected:
-    // QMainWindow implementation.
-    void changeEvent(QEvent* event) override;
-    void closeEvent(QCloseEvent* event) override;
-
-private slots:
     void onUpdateChecked(const updater::UpdateInfo& update_info);
 
 private:
     void createLanguageMenu(const QString& current_locale);
     void rebuildMruMenu();
     void showTrayIcon(bool show);
-    void openAddressBook(const QString& file_path);
     void addAddressBookTab(AddressBookTab* tab);
     AddressBookTab* currentAddressBookTab();
     bool hasChangedTabs() const;

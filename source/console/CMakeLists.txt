@@ -62,6 +62,8 @@ list(APPEND SOURCE_CONSOLE
     console_main_window.ui
     console_settings.cc
     console_settings.h
+    console_single_application.cc
+    console_single_application.h
     console_statusbar.cc
     console_statusbar.h
     console_tab.cc

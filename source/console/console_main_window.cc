@@ -219,6 +219,53 @@ MainWindow::MainWindow(Settings& settings,
 
 MainWindow::~MainWindow() = default;
 
+void MainWindow::showConsole()
+{
+    if (tray_icon_ && isHidden())
+    {
+        onShowHideToTray();
+    }
+    else
+    {
+        show();
+        activateWindow();
+        setFocus();
+    }
+}
+
+void MainWindow::openAddressBook(const QString& file_path)
+{
+    showConsole();
+
+    for (int i = 0; i < ui.tab_widget->count(); ++i)
+    {
+        AddressBookTab* tab = dynamic_cast<AddressBookTab*>(ui.tab_widget->widget(i));
+        if (tab)
+        {
+#if defined(OS_WIN)
+            if (file_path.compare(tab->filePath(), Qt::CaseInsensitive) == 0)
+#else
+            if (file_path.compare(tab->addressBookPath(), Qt::CaseSensitive) == 0)
+#endif // defined(OS_WIN)
+            {
+                QMessageBox::information(this,
+                                         tr("Information"),
+                                         tr("Address Book \"%1\" is already open.").arg(file_path),
+                                         QMessageBox::Ok);
+
+                ui.tab_widget->setCurrentIndex(i);
+                return;
+            }
+        }
+    }
+
+    AddressBookTab* tab = AddressBookTab::openFromFile(file_path, ui.tab_widget);
+    if (!tab)
+        return;
+
+    addAddressBookTab(tab);
+}
+
 void MainWindow::onNew()
 {
     addAddressBookTab(AddressBookTab::createNew(ui.tab_widget));
@@ -905,37 +952,6 @@ void MainWindow::showTrayIcon(bool show)
         tray_icon_.reset();
         tray_menu_.reset();
     }
-}
-
-void MainWindow::openAddressBook(const QString& file_path)
-{
-    for (int i = 0; i < ui.tab_widget->count(); ++i)
-    {
-        AddressBookTab* tab = dynamic_cast<AddressBookTab*>(ui.tab_widget->widget(i));
-        if (tab)
-        {
-#if defined(OS_WIN)
-            if (file_path.compare(tab->filePath(), Qt::CaseInsensitive) == 0)
-#else
-            if (file_path.compare(tab->addressBookPath(), Qt::CaseSensitive) == 0)
-#endif // defined(OS_WIN)
-            {
-                QMessageBox::information(this,
-                                         tr("Information"),
-                                         tr("Address Book \"%1\" is already open.").arg(file_path),
-                                         QMessageBox::Ok);
-
-                ui.tab_widget->setCurrentIndex(i);
-                return;
-            }
-        }
-    }
-
-    AddressBookTab* tab = AddressBookTab::openFromFile(file_path, ui.tab_widget);
-    if (!tab)
-        return;
-
-    addAddressBookTab(tab);
 }
 
 void MainWindow::addAddressBookTab(AddressBookTab* new_tab)

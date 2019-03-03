@@ -45,6 +45,8 @@ list(APPEND SOURCE_BASE
     service_controller.h
     service_impl.h
     service_impl_win.cc
+    single_application.cc
+    single_application.h
     smbios.h
     smbios_parser.cc
     smbios_parser.h

@@ -37,6 +37,7 @@ Q_IMPORT_PLUGIN(QWindowsPrinterSupportPlugin);
 #include "build/version.h"
 #include "client/ui/client_window.h"
 #include "console/console_main_window.h"
+#include "console/console_single_application.h"
 #include "crypto/scoped_crypto_initializer.h"
 
 namespace {
@@ -54,7 +55,7 @@ std::filesystem::path loggingDir()
 
 int runApplication(int argc, char *argv[])
 {
-    QApplication application(argc, argv);
+    console::SingleApplication application(argc, argv);
 
     console::Settings console_settings;
     QString current_locale = console_settings.locale();
@@ -158,10 +159,29 @@ int runApplication(int argc, char *argv[])
         if (!arguments.isEmpty())
             file_path = arguments.front();
 
-        console_window.reset(
-            new console::MainWindow(console_settings, locale_loader, file_path));
-        console_window->show();
-        console_window->activateWindow();
+        if (application.isRunning())
+        {
+            if (file_path.isEmpty())
+                application.activateWindow();
+            else
+                application.openFile(file_path);
+
+            return 0;
+        }
+        else
+        {
+            console_window.reset(
+                new console::MainWindow(console_settings, locale_loader, file_path));
+
+            QObject::connect(&application, &console::SingleApplication::windowActivated,
+                             console_window.get(), &console::MainWindow::showConsole);
+
+            QObject::connect(&application, &console::SingleApplication::fileOpened,
+                             console_window.get(), &console::MainWindow::openAddressBook);
+
+            console_window->show();
+            console_window->activateWindow();
+        }
     }
 
     return application.exec();
