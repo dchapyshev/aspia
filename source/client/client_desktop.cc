@@ -25,7 +25,6 @@
 #include "desktop/mouse_cursor.h"
 
 #include <QCursor>
-#include <QImage>
 #include <QPixmap>
 
 namespace client {

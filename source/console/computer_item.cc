@@ -17,7 +17,6 @@
 //
 
 #include "console/computer_item.h"
-#include "build/build_config.h"
 #include "console/computer_group_item.h"
 #include "net/address.h"
 

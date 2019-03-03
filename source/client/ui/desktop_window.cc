@@ -18,7 +18,6 @@
 
 #include "client/ui/desktop_window.h"
 #include "base/logging.h"
-#include "build/version.h"
 #include "client/ui/desktop_config_dialog.h"
 #include "client/ui/desktop_panel.h"
 #include "client/ui/system_info_window.h"

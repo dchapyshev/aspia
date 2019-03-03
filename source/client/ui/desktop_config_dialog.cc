@@ -20,7 +20,6 @@
 #include "base/logging.h"
 #include "client/config_factory.h"
 #include "codec/video_util.h"
-#include "common/desktop_session_constants.h"
 
 namespace client {
 

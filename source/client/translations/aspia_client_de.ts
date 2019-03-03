@@ -696,42 +696,42 @@
 <context>
     <name>client::ClientDesktop</name>
     <message>
-        <location filename="../client_desktop.cc" line="48"/>
+        <location filename="../client_desktop.cc" line="47"/>
         <source>Invalid message from host</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_desktop.cc" line="197"/>
+        <location filename="../client_desktop.cc" line="196"/>
         <source>There are no supported video encodings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_desktop.cc" line="223"/>
+        <location filename="../client_desktop.cc" line="222"/>
         <source>Video decoder not initialized</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_desktop.cc" line="237"/>
+        <location filename="../client_desktop.cc" line="236"/>
         <source>Wrong video frame size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_desktop.cc" line="244"/>
+        <location filename="../client_desktop.cc" line="243"/>
         <source>Wrong video frame position</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_desktop.cc" line="254"/>
+        <location filename="../client_desktop.cc" line="253"/>
         <source>The desktop frame is not initialized</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_desktop.cc" line="260"/>
+        <location filename="../client_desktop.cc" line="259"/>
         <source>The video packet could not be decoded</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_desktop.cc" line="345"/>
+        <location filename="../client_desktop.cc" line="344"/>
         <source>Session error</source>
         <translation type="unfinished"></translation>
     </message>
@@ -798,32 +798,32 @@
 <context>
     <name>client::DesktopConfigDialog</name>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="70"/>
+        <location filename="../ui/desktop_config_dialog.cc" line="69"/>
         <source>True color (32 bit)</source>
         <translation type="unfinished">True color (32 Bit)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="71"/>
+        <location filename="../ui/desktop_config_dialog.cc" line="70"/>
         <source>High color (16 bit)</source>
         <translation type="unfinished">High color (16 Bit)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="72"/>
+        <location filename="../ui/desktop_config_dialog.cc" line="71"/>
         <source>256 colors (8 bit)</source>
         <translation type="unfinished">256 Farben (8 Bit)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="73"/>
+        <location filename="../ui/desktop_config_dialog.cc" line="72"/>
         <source>64 colors (6 bit)</source>
         <translation type="unfinished">64 Farben (6 Bit)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="74"/>
+        <location filename="../ui/desktop_config_dialog.cc" line="73"/>
         <source>8 colors (3 bit)</source>
         <translation type="unfinished">8 Farben (3 Bit)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="152"/>
+        <location filename="../ui/desktop_config_dialog.cc" line="151"/>
         <source>Compression ratio: %1</source>
         <translation type="unfinished">Kompressionsrate: %1</translation>
     </message>
@@ -867,43 +867,43 @@
 <context>
     <name>client::DesktopWindow</name>
     <message>
-        <location filename="../ui/desktop_window.cc" line="365"/>
+        <location filename="../ui/desktop_window.cc" line="364"/>
         <source>Save File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="367"/>
+        <location filename="../ui/desktop_window.cc" line="366"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="137"/>
-        <location filename="../ui/desktop_window.cc" line="387"/>
+        <location filename="../ui/desktop_window.cc" line="136"/>
+        <location filename="../ui/desktop_window.cc" line="386"/>
         <source>Warning</source>
         <translation type="unfinished">Warnung</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="138"/>
+        <location filename="../ui/desktop_window.cc" line="137"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="155"/>
+        <location filename="../ui/desktop_window.cc" line="154"/>
         <source>Selecting a supported video encoding is canceled by the user.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="387"/>
+        <location filename="../ui/desktop_window.cc" line="386"/>
         <source>Could not save image</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="526"/>
+        <location filename="../ui/desktop_window.cc" line="525"/>
         <source>Desktop Manage</source>
         <translation type="unfinished">Desktopverwaltung</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="531"/>
+        <location filename="../ui/desktop_window.cc" line="530"/>
         <source>Desktop View</source>
         <translation type="unfinished">Desktopansicht</translation>
     </message>

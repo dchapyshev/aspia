@@ -17,7 +17,6 @@
 //
 
 #include "console/address_book_tab.h"
-
 #include "common/message_serialization.h"
 #include "console/address_book_dialog.h"
 #include "console/computer_dialog.h"

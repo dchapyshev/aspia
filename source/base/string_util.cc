@@ -23,7 +23,6 @@
 #include <algorithm>
 #include <cwctype>
 #include <cctype>
-#include <strsafe.h>
 
 namespace base {
 

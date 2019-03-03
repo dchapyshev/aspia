@@ -23,7 +23,6 @@
 #include "base/win/scoped_wts_memory.h"
 #include "base/win/session_id.h"
 
-#include <cstdint>
 #include <string>
 
 namespace base::win {

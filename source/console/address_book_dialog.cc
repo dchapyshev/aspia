@@ -17,7 +17,6 @@
 //
 
 #include "console/address_book_dialog.h"
-
 #include "base/logging.h"
 #include "crypto/password_hash.h"
 #include "crypto/random.h"
