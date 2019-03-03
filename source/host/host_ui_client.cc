@@ -17,7 +17,6 @@
 //
 
 #include "host/host_ui_client.h"
-
 #include "common/message_serialization.h"
 #include "host/host_ui_constants.h"
 #include "ipc/ipc_channel.h"

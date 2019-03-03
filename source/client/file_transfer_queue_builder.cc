@@ -17,12 +17,11 @@
 //
 
 #include "client/file_transfer_queue_builder.h"
-
-#include <QCoreApplication>
-
 #include "base/logging.h"
 #include "client/file_status.h"
 #include "common/file_request.h"
+
+#include <QCoreApplication>
 
 namespace client {
 

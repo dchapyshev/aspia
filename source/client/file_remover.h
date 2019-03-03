@@ -19,11 +19,11 @@
 #ifndef CLIENT__FILE_REMOVER_H
 #define CLIENT__FILE_REMOVER_H
 
-#include <QQueue>
-
 #include "client/file_remove_task.h"
 #include "common/file_request.h"
 #include "proto/file_transfer_session.pb.h"
+
+#include <QQueue>
 
 namespace client {
 

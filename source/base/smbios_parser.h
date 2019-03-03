@@ -19,11 +19,11 @@
 #ifndef BASE__SMBIOS_PARSER_H
 #define BASE__SMBIOS_PARSER_H
 
-#include <string>
-#include <vector>
-
 #include "base/macros_magic.h"
 #include "base/smbios.h"
+
+#include <string>
+#include <vector>
 
 namespace base {
 

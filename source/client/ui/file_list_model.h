@@ -19,11 +19,10 @@
 #ifndef CLIENT__UI__FILE_LIST_MODEL_H
 #define CLIENT__UI__FILE_LIST_MODEL_H
 
+#include "client/file_transfer.h"
+
 #include <QAbstractItemModel>
 #include <QIcon>
-
-#include "base/macros_magic.h"
-#include "client/file_transfer.h"
 
 namespace client {
 

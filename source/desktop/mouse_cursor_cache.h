@@ -19,9 +19,9 @@
 #ifndef DESKTOP__MOUSE_CURSOR_CACHE_H
 #define DESKTOP__MOUSE_CURSOR_CACHE_H
 
-#include <deque>
-
 #include "desktop/mouse_cursor.h"
+
+#include <deque>
 
 namespace desktop {
 

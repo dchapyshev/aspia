@@ -19,10 +19,11 @@
 #ifndef DESKTOP__DIFFER_H
 #define DESKTOP__DIFFER_H
 
-#include <QRegion>
-#include <memory>
-
 #include "base/macros_magic.h"
+
+#include <QRegion>
+
+#include <memory>
 
 namespace desktop {
 

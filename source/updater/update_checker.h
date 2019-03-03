@@ -19,10 +19,10 @@
 #ifndef UPDATER__UPDATE_CHECKER_H
 #define UPDATER__UPDATE_CHECKER_H
 
-#include <QPointer>
-
 #include "base/macros_magic.h"
 #include "updater/update_info.h"
+
+#include <QPointer>
 
 class QThread;
 

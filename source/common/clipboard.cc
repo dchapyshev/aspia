@@ -17,12 +17,11 @@
 //
 
 #include "common/clipboard.h"
+#include "build/build_config.h"
 
 #include <QClipboard>
 #include <QGuiApplication>
 #include <QMimeData>
-
-#include "build/build_config.h"
 
 namespace common {
 

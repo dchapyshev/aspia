@@ -18,12 +18,12 @@
 
 #include "console/address_book_dialog.h"
 
-#include <QAbstractButton>
-#include <QMessageBox>
-
 #include "base/logging.h"
 #include "crypto/password_hash.h"
 #include "crypto/random.h"
+
+#include <QAbstractButton>
+#include <QMessageBox>
 
 namespace console {
 

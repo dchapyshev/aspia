@@ -73,62 +73,62 @@
 <context>
     <name>updater::UpdateDialog</name>
     <message>
-        <location filename="../update_dialog.cc" line="120"/>
+        <location filename="../update_dialog.cc" line="119"/>
         <source>Unknown</source>
         <translation>Неизвестно</translation>
     </message>
     <message>
-        <location filename="../update_dialog.cc" line="121"/>
+        <location filename="../update_dialog.cc" line="120"/>
         <source>Error retrieving update information.</source>
         <translation>Ошибка при получении информации об обновлении.</translation>
     </message>
     <message>
-        <location filename="../update_dialog.cc" line="139"/>
+        <location filename="../update_dialog.cc" line="138"/>
         <source>No updates available.</source>
         <translation>Нет доступных обновлений.</translation>
     </message>
     <message>
-        <location filename="../update_dialog.cc" line="51"/>
+        <location filename="../update_dialog.cc" line="50"/>
         <source>Receiving information...</source>
         <translation>Получение информации...</translation>
     </message>
     <message>
-        <location filename="../update_dialog.cc" line="102"/>
+        <location filename="../update_dialog.cc" line="101"/>
         <source>Cancel checking for updates. Please wait.</source>
         <translation>Отмена проверки обновлений. Пожалуйста, подождите.</translation>
     </message>
     <message>
-        <location filename="../update_dialog.cc" line="148"/>
+        <location filename="../update_dialog.cc" line="147"/>
         <source>An update will be downloaded. After the download is complete, the application will automatically close.</source>
         <translation>Обновление будет загружено. После завершения загрузки приложение будет автоматически закрыто.</translation>
     </message>
     <message>
-        <location filename="../update_dialog.cc" line="150"/>
+        <location filename="../update_dialog.cc" line="149"/>
         <source>All connected sessions will be terminated. You cannot establish a connection until the update is complete.</source>
         <translation>Все подключенные сессии будут завершены. Вы не сможете установить подключение пока обновление не будет завершено.</translation>
     </message>
     <message>
-        <location filename="../update_dialog.cc" line="152"/>
+        <location filename="../update_dialog.cc" line="151"/>
         <source>All unsaved data will be lost.</source>
         <translation>Все несохраненные данные будут потеряны.</translation>
     </message>
     <message>
-        <location filename="../update_dialog.cc" line="153"/>
+        <location filename="../update_dialog.cc" line="152"/>
         <source>Continue?</source>
         <translation>Продолжить?</translation>
     </message>
     <message>
-        <location filename="../update_dialog.cc" line="156"/>
+        <location filename="../update_dialog.cc" line="155"/>
         <source>Confirmation</source>
         <translation>Подтвеждение</translation>
     </message>
     <message>
-        <location filename="../update_dialog.cc" line="166"/>
+        <location filename="../update_dialog.cc" line="165"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../update_dialog.cc" line="167"/>
+        <location filename="../update_dialog.cc" line="166"/>
         <source>An error occurred while installing the update: %1</source>
         <translation>Произошла ошибка при установке обновления: %1</translation>
     </message>

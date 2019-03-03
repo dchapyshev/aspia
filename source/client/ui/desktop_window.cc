@@ -17,6 +17,14 @@
 //
 
 #include "client/ui/desktop_window.h"
+#include "base/logging.h"
+#include "build/version.h"
+#include "client/ui/desktop_config_dialog.h"
+#include "client/ui/desktop_panel.h"
+#include "client/ui/system_info_window.h"
+#include "common/clipboard.h"
+#include "common/desktop_session_constants.h"
+#include "desktop/desktop_frame_qimage.h"
 
 #include <QBrush>
 #include <QDesktopWidget>
@@ -26,15 +34,6 @@
 #include <QResizeEvent>
 #include <QScrollArea>
 #include <QScrollBar>
-
-#include "base/logging.h"
-#include "build/version.h"
-#include "client/ui/desktop_config_dialog.h"
-#include "client/ui/desktop_panel.h"
-#include "client/ui/system_info_window.h"
-#include "common/clipboard.h"
-#include "common/desktop_session_constants.h"
-#include "desktop/desktop_frame_qimage.h"
 
 namespace client {
 

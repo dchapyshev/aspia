@@ -17,7 +17,6 @@
 //
 
 #include "crypto/large_number_increment.h"
-
 #include "base/logging.h"
 
 namespace crypto {

@@ -17,10 +17,9 @@
 //
 
 #include "updater/update_checker.h"
+#include "updater/update_checker_impl.h"
 
 #include <QThread>
-
-#include "updater/update_checker_impl.h"
 
 namespace updater {
 

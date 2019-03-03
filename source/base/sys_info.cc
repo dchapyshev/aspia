@@ -17,11 +17,10 @@
 //
 
 #include "base/sys_info.h"
-
-#include <algorithm>
-
 #include "base/cpuid.h"
 #include "base/string_util.h"
+
+#include <algorithm>
 
 namespace base {
 

@@ -19,11 +19,11 @@
 #ifndef CODEC__CURSOR_DECODER_H
 #define CODEC__CURSOR_DECODER_H
 
-#include <memory>
-
 #include "base/macros_magic.h"
 #include "codec/scoped_zstd_stream.h"
 #include "proto/desktop_session.pb.h"
+
+#include <memory>
 
 namespace desktop {
 class MouseCursor;

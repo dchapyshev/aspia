@@ -19,9 +19,9 @@
 #ifndef CRYPTO__RANDOM_H
 #define CRYPTO__RANDOM_H
 
-#include <QByteArray>
-
 #include "base/macros_magic.h"
+
+#include <QByteArray>
 
 namespace crypto {
 

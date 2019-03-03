@@ -17,6 +17,8 @@
 //
 
 #include "client/ui/file_item_delegate.h"
+#include "client/ui/file_name_validator.h"
+#include "common/file_platform_util.h"
 
 #include <QApplication>
 #include <QPainter>
@@ -24,9 +26,6 @@
 #include <QPixmap>
 #include <QLineEdit>
 #include <QToolTip>
-
-#include "client/ui/file_name_validator.h"
-#include "common/file_platform_util.h"
 
 namespace client {
 

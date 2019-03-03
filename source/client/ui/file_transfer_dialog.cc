@@ -25,7 +25,7 @@
 #if defined(OS_WIN)
 #include <QWinTaskbarButton>
 #include <QWinTaskbarProgress>
-#endif
+#endif // defined(OS_WIN)
 
 namespace client {
 

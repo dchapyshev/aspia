@@ -19,10 +19,10 @@
 #ifndef NET__ADAPTER_ENUMERATOR_H
 #define NET__ADAPTER_ENUMERATOR_H
 
+#include "base/macros_magic.h"
+
 #include <memory>
 #include <string>
-
-#include "base/macros_magic.h"
 
 struct _IP_ADAPTER_INFO;
 struct _IP_ADDR_STRING;

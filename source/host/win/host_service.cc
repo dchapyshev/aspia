@@ -17,17 +17,16 @@
 //
 
 #include "host/win/host_service.h"
+#include "base/logging.h"
+#include "base/win/scoped_com_initializer.h"
+#include "base/win/security_helpers.h"
+#include "host/win/host_service_constants.h"
+#include "host/host_server.h"
+#include "host/host_settings.h"
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <sddl.h>
-
-#include "base/win/scoped_com_initializer.h"
-#include "base/win/security_helpers.h"
-#include "host/win/host_service_constants.h"
-#include "base/logging.h"
-#include "host/host_server.h"
-#include "host/host_settings.h"
 
 namespace host {
 

@@ -19,9 +19,9 @@
 #ifndef DESKTOP__WIN__EFFECTS_DISABLER_H
 #define DESKTOP__WIN__EFFECTS_DISABLER_H
 
-#include <memory>
-
 #include "base/macros_magic.h"
+
+#include <memory>
 
 namespace desktop {
 

@@ -17,7 +17,6 @@
 //
 
 #include "client/ui/file_manager_window.h"
-
 #include "base/logging.h"
 #include "client/ui/address_bar_model.h"
 #include "client/ui/file_remove_dialog.h"

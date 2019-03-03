@@ -17,16 +17,15 @@
 //
 
 #include "host/win/updater_launcher.h"
+#include "base/win/process.h"
+#include "base/win/process_util.h"
+#include "base/win/scoped_impersonator.h"
+#include "base/logging.h"
 
 #include <QCoreApplication>
 
 #include <userenv.h>
 #include <wtsapi32.h>
-
-#include "base/win/process.h"
-#include "base/win/process_util.h"
-#include "base/win/scoped_impersonator.h"
-#include "base/logging.h"
 
 namespace host {
 

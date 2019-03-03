@@ -19,11 +19,11 @@
 #ifndef HOST__HOST_UI_CLIENT_H
 #define HOST__HOST_UI_CLIENT_H
 
-#include <QObject>
-#include <QPointer>
-
 #include "base/macros_magic.h"
 #include "proto/notifier.pb.h"
+
+#include <QObject>
+#include <QPointer>
 
 namespace ipc {
 class Channel;

@@ -17,7 +17,6 @@
 //
 
 #include "client/config_factory.h"
-
 #include "base/logging.h"
 #include "codec/video_util.h"
 

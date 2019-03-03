@@ -17,11 +17,10 @@
 //
 
 #include "codec/scoped_vpx_codec.h"
+#include "base/logging.h"
 
 #define VPX_CODEC_DISABLE_COMPAT 1
 #include "vpx/vpx_codec.h"
-
-#include "base/logging.h"
 
 namespace codec {
 

@@ -17,7 +17,6 @@
 //
 
 #include "host/host_system_info.h"
-
 #include "base/win/drive_enumerator.h"
 #include "base/win/printer_enumerator.h"
 #include "base/smbios_parser.h"

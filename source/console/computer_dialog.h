@@ -19,12 +19,12 @@
 #ifndef CONSOLE__COMPUTER_DIALOG_H
 #define CONSOLE__COMPUTER_DIALOG_H
 
-#include <QDialog>
-
 #include "base/macros_magic.h"
 #include "console/console_settings.h"
 #include "proto/address_book.pb.h"
 #include "ui_computer_dialog.h"
+
+#include <QDialog>
 
 class QAbstractButton;
 

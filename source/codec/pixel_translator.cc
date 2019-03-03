@@ -17,9 +17,8 @@
 //
 
 #include "codec/pixel_translator.h"
-
-#include "build/build_config.h"
 #include "base/macros_magic.h"
+#include "build/build_config.h"
 
 namespace codec {
 

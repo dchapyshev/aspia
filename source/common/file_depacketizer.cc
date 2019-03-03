@@ -17,7 +17,6 @@
 //
 
 #include "common/file_depacketizer.h"
-
 #include "base/logging.h"
 
 namespace common {

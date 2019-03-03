@@ -17,9 +17,6 @@
 //
 
 #include "desktop/screen_capturer_gdi.h"
-
-#include <dwmapi.h>
-
 #include "base/logging.h"
 #include "base/win/scoped_select_object.h"
 #include "desktop/win/effects_disabler.h"
@@ -27,6 +24,8 @@
 #include "desktop/win/wallpaper_disabler.h"
 #include "desktop/desktop_frame_dib.h"
 #include "desktop/differ.h"
+
+#include <dwmapi.h>
 
 namespace desktop {
 

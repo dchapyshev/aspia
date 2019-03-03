@@ -19,9 +19,9 @@
 #ifndef DESKTOP__CAPTURE_SCHEDULER_H
 #define DESKTOP__CAPTURE_SCHEDULER_H
 
-#include <chrono>
-
 #include "base/macros_magic.h"
+
+#include <chrono>
 
 namespace desktop {
 

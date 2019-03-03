@@ -17,11 +17,10 @@
 //
 
 #include "crypto/cryptor_chacha20_poly1305.h"
-
-#include <openssl/evp.h>
-
 #include "base/logging.h"
 #include "crypto/large_number_increment.h"
+
+#include <openssl/evp.h>
 
 namespace crypto {
 

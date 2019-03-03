@@ -19,9 +19,9 @@
 #ifndef HOST__HOST_SERVICE_H
 #define HOST__HOST_SERVICE_H
 
-#include <QCoreApplication>
-
 #include "base/service.h"
+
+#include <QCoreApplication>
 
 namespace base::win {
 class ScopedCOMInitializer;

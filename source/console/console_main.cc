@@ -16,6 +16,14 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
+#include "base/base_paths.h"
+#include "base/qt_logging.h"
+#include "build/version.h"
+#include "client/ui/client_window.h"
+#include "console/console_main_window.h"
+#include "console/console_single_application.h"
+#include "crypto/scoped_crypto_initializer.h"
+
 #include <QCommandLineParser>
 #include <QMessageBox>
 
@@ -31,14 +39,6 @@ Q_IMPORT_PLUGIN(QWindowsPrinterSupportPlugin);
 #error Platform support needed
 #endif // defined(Q_OS_WIN)
 #endif // defined(QT_STATIC)
-
-#include "base/base_paths.h"
-#include "base/qt_logging.h"
-#include "build/version.h"
-#include "client/ui/client_window.h"
-#include "console/console_main_window.h"
-#include "console/console_single_application.h"
-#include "crypto/scoped_crypto_initializer.h"
 
 namespace {
 

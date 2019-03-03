@@ -17,16 +17,15 @@
 //
 
 #include "host/host_settings.h"
-
-#include <QFile>
-#include <QLocale>
-#include <QMessageBox>
-
 #include "base/logging.h"
 #include "base/xml_settings.h"
 #include "build/build_config.h"
 #include "crypto/random.h"
 #include "net/srp_user.h"
+
+#include <QFile>
+#include <QLocale>
+#include <QMessageBox>
 
 namespace host {
 

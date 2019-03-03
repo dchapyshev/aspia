@@ -19,9 +19,9 @@
 #ifndef DESKTOP__SCREEN_CAPTURE_FRAME_QUEUE_H
 #define DESKTOP__SCREEN_CAPTURE_FRAME_QUEUE_H
 
-#include <memory>
-
 #include "base/macros_magic.h"
+
+#include <memory>
 
 namespace desktop {
 

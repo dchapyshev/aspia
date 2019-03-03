@@ -19,9 +19,9 @@
 #ifndef COMMON__USER_UTIL_H
 #define COMMON__USER_UTIL_H
 
-#include <QString>
-
 #include "base/macros_magic.h"
+
+#include <QString>
 
 namespace common {
 

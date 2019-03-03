@@ -19,10 +19,10 @@
 #ifndef HOST__HOST_SETTINGS_H
 #define HOST__HOST_SETTINGS_H
 
+#include "base/macros_magic.h"
+
 #include <QCoreApplication>
 #include <QSettings>
-
-#include "base/macros_magic.h"
 
 namespace net {
 struct SrpUserList;

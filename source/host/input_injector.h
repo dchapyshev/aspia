@@ -19,15 +19,15 @@
 #ifndef HOST__INPUT_INJECTOR_H
 #define HOST__INPUT_INJECTOR_H
 
+#include "base/macros_magic.h"
+#include "proto/desktop_session.pb.h"
+
 #include <QThread>
 
 #include <condition_variable>
 #include <queue>
 #include <mutex>
 #include <variant>
-
-#include "base/macros_magic.h"
-#include "proto/desktop_session.pb.h"
 
 namespace host {
 

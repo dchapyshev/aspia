@@ -19,12 +19,12 @@
 #ifndef NET__FIREWALL_MANAGER_H
 #define NET__FIREWALL_MANAGER_H
 
-#include <wrl/client.h>
-#include <netfw.h>
+#include "base/macros_magic.h"
 
 #include <QVector>
 
-#include "base/macros_magic.h"
+#include <wrl/client.h>
+#include <netfw.h>
 
 namespace net {
 

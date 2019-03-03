@@ -16,14 +16,12 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include <gtest/gtest.h>
-
 #include "base/win/registry.h"
+
+#include <gtest/gtest.h>
 
 #include <cstring>
 #include <vector>
-
-#include "base/macros_magic.h"
 
 namespace base::win {
 

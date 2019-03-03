@@ -17,13 +17,6 @@
 //
 
 #include "console/console_main_window.h"
-
-#include <QCloseEvent>
-#include <QDesktopServices>
-#include <QFileDialog>
-#include <QMessageBox>
-#include <QSystemTrayIcon>
-
 #include "base/logging.h"
 #include "build/build_config.h"
 #include "build/version.h"
@@ -34,6 +27,12 @@
 #include "console/console_settings.h"
 #include "console/update_settings_dialog.h"
 #include "updater/update_dialog.h"
+
+#include <QCloseEvent>
+#include <QDesktopServices>
+#include <QFileDialog>
+#include <QMessageBox>
+#include <QSystemTrayIcon>
 
 namespace console {
 

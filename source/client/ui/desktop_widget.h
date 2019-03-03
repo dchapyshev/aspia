@@ -19,19 +19,17 @@
 #ifndef CLIENT__UI__DESKTOP_WIDGET_H
 #define CLIENT__UI__DESKTOP_WIDGET_H
 
+#include "build/build_config.h"
+#if defined(OS_WIN)
+#include "base/win/scoped_user_object.h"
+#endif // defined(OS_WIN)
+#include "desktop/desktop_frame.h"
+
 #include <QEvent>
 #include <QWidget>
 
 #include <memory>
 #include <set>
-
-#include "build/build_config.h"
-
-#if defined(OS_WIN)
-#include "base/win/scoped_user_object.h"
-#endif
-
-#include "desktop/desktop_frame.h"
 
 namespace desktop {
 class FrameQImage;

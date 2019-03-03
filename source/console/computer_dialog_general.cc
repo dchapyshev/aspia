@@ -17,11 +17,10 @@
 //
 
 #include "console/computer_dialog_general.h"
-
-#include <QMessageBox>
-
 #include "common/user_util.h"
 #include "net/address.h"
+
+#include <QMessageBox>
 
 namespace console {
 

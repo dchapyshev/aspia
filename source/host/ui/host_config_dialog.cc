@@ -17,12 +17,6 @@
 //
 
 #include "host/ui/host_config_dialog.h"
-
-#include <QFileDialog>
-#include <QMenu>
-#include <QMessageBox>
-#include <QTranslator>
-
 #include "base/logging.h"
 #include "base/service_controller.h"
 #include "base/xml_settings.h"
@@ -34,6 +28,11 @@
 #include "host/host_settings.h"
 #include "net/srp_user.h"
 #include "updater/update_dialog.h"
+
+#include <QFileDialog>
+#include <QMenu>
+#include <QMessageBox>
+#include <QTranslator>
 
 namespace host {
 

@@ -19,10 +19,10 @@
 #ifndef BASE__WIN__SCOPED_SELECT_OBJECT_H
 #define BASE__WIN__SCOPED_SELECT_OBJECT_H
 
+#include "base/logging.h"
+
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-
-#include "base/logging.h"
 
 namespace base::win {
 

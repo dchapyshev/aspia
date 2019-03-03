@@ -17,7 +17,6 @@
 //
 
 #include "base/win/scoped_impersonator.h"
-
 #include "base/logging.h"
 
 namespace base::win {

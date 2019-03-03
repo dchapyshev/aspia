@@ -19,10 +19,10 @@
 #ifndef UPDATER__UPDATE_CHECKER_IMPL_H
 #define UPDATER__UPDATE_CHECKER_IMPL_H
 
-#include <QObject>
-
 #include "base/macros_magic.h"
 #include "updater/update_info.h"
+
+#include <QObject>
 
 class QNetworkAccessManager;
 class QNetworkReply;

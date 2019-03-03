@@ -19,9 +19,9 @@
 #ifndef CODEC__VIDEO_DECODER_H
 #define CODEC__VIDEO_DECODER_H
 
-#include <memory>
-
 #include "proto/desktop_session.pb.h"
+
+#include <memory>
 
 namespace desktop {
 class Frame;

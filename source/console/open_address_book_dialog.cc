@@ -17,7 +17,6 @@
 //
 
 #include "console/open_address_book_dialog.h"
-
 #include "base/logging.h"
 
 namespace console {

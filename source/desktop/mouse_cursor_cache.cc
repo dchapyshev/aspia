@@ -17,7 +17,6 @@
 //
 
 #include "desktop/mouse_cursor_cache.h"
-
 #include "base/logging.h"
 
 namespace desktop {

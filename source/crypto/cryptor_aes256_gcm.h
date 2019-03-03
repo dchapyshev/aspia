@@ -19,11 +19,11 @@
 #ifndef CRYPTO__CRYPTOR_AES256_GCM_H
 #define CRYPTO__CRYPTOR_AES256_GCM_H
 
-#include <QByteArray>
-
 #include "base/macros_magic.h"
 #include "crypto/cryptor.h"
 #include "crypto/openssl_util.h"
+
+#include <QByteArray>
 
 namespace crypto {
 

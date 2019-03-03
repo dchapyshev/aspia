@@ -19,11 +19,11 @@
 #ifndef CLIENT__UI__ADDRESS_BAR_MODEL_H
 #define CLIENT__UI__ADDRESS_BAR_MODEL_H
 
-#include <QAbstractItemModel>
-
 #include "base/macros_magic.h"
 #include "common/file_platform_util.h"
 #include "proto/file_transfer_session.pb.h"
+
+#include <QAbstractItemModel>
 
 namespace client {
 

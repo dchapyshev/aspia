@@ -19,12 +19,12 @@
 #ifndef BASE__WIN__SESSION_ENUMERATOR_H
 #define BASE__WIN__SESSION_ENUMERATOR_H
 
-#include <cstdint>
-#include <string>
-
 #include "base/macros_magic.h"
 #include "base/win/scoped_wts_memory.h"
 #include "base/win/session_id.h"
+
+#include <cstdint>
+#include <string>
 
 namespace base::win {
 

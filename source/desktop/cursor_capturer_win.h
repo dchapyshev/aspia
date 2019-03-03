@@ -19,13 +19,13 @@
 #ifndef DESKTOP__CURSOR_CAPTURER_WIN_H
 #define DESKTOP__CURSOR_CAPTURER_WIN_H
 
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
+#include "base/macros_magic.h"
+#include "desktop/cursor_capturer.h"
 
 #include <memory>
 
-#include "base/macros_magic.h"
-#include "desktop/cursor_capturer.h"
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
 
 namespace base::win {
 class ScopedGetDC;

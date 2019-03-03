@@ -19,11 +19,11 @@
 #ifndef CLIENT__CONNECT_DATA_H
 #define CLIENT__CONNECT_DATA_H
 
-#include <QString>
-
 #include "build/build_config.h"
 #include "proto/common.pb.h"
 #include "proto/desktop_session.pb.h"
+
+#include <QString>
 
 namespace client {
 

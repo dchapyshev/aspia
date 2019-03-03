@@ -17,14 +17,13 @@
 //
 
 #include "desktop/win/wallpaper_disabler.h"
+#include "base/win/process_util.h"
+#include "base/win/scoped_impersonator.h"
+#include "base/logging.h"
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <wtsapi32.h>
-
-#include "base/win/process_util.h"
-#include "base/win/scoped_impersonator.h"
-#include "base/logging.h"
 
 namespace desktop {
 

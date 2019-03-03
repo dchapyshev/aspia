@@ -17,7 +17,6 @@
 //
 
 #include "desktop/desktop_frame_aligned.h"
-
 #include "base/aligned_memory.h"
 
 namespace desktop {

@@ -17,12 +17,11 @@
 //
 
 #include "crypto/srp_math.h"
+#include "base/logging.h"
+#include "crypto/generic_hash.h"
 
 #include <openssl/opensslv.h>
 #include <openssl/bn.h>
-
-#include "base/logging.h"
-#include "crypto/generic_hash.h"
 
 namespace crypto {
 

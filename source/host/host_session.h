@@ -19,10 +19,10 @@
 #ifndef HOST__HOST_SESSION_H
 #define HOST__HOST_SESSION_H
 
+#include "base/macros_magic.h"
+
 #include <QByteArray>
 #include <QObject>
-
-#include "base/macros_magic.h"
 
 namespace ipc {
 class Channel;

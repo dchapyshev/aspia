@@ -17,7 +17,6 @@
 //
 
 #include "base/win/session_info.h"
-
 #include "base/logging.h"
 #include "base/unicode.h"
 

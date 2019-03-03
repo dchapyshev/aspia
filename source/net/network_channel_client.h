@@ -19,10 +19,10 @@
 #ifndef NET__NETWORK_CHANNEL_CLIENT_H
 #define NET__NETWORK_CHANNEL_CLIENT_H
 
-#include <QVersionNumber>
-
 #include "net/network_channel.h"
 #include "proto/common.pb.h"
+
+#include <QVersionNumber>
 
 namespace net {
 

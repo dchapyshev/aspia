@@ -17,9 +17,8 @@
 //
 
 #include "base/service_impl.h"
-
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
+#include "base/logging.h"
+#include "base/service_controller.h"
 
 #include <QCommandLineParser>
 #include <QCoreApplication>
@@ -28,8 +27,8 @@
 #include <condition_variable>
 #include <mutex>
 
-#include "base/logging.h"
-#include "base/service_controller.h"
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
 
 namespace base {
 

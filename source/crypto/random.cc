@@ -17,10 +17,9 @@
 //
 
 #include "crypto/random.h"
+#include "base/logging.h"
 
 #include <openssl/rand.h>
-
-#include "base/logging.h"
 
 namespace crypto {
 

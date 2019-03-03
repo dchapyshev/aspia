@@ -19,9 +19,9 @@
 #ifndef HOST__HOST_SESSION_FAKE_H
 #define HOST__HOST_SESSION_FAKE_H
 
-#include <QObject>
-
 #include "proto/common.pb.h"
+
+#include <QObject>
 
 namespace host {
 

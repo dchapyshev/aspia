@@ -19,10 +19,10 @@
 #ifndef CODEC__SCALE_REDUCER_H
 #define CODEC__SCALE_REDUCER_H
 
-#include <memory>
-
 #include "base/macros_magic.h"
 #include "desktop/screen_settings_tracker.h"
+
+#include <memory>
 
 namespace desktop {
 class Frame;

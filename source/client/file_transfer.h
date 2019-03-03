@@ -19,13 +19,13 @@
 #ifndef CLIENT__FILE_TRANSFER_H
 #define CLIENT__FILE_TRANSFER_H
 
-#include <QQueue>
-#include <QPair>
-#include <QMap>
-
 #include "client/file_transfer_task.h"
 #include "common/file_request.h"
 #include "proto/file_transfer_session.pb.h"
+
+#include <QQueue>
+#include <QPair>
+#include <QMap>
 
 namespace client {
 

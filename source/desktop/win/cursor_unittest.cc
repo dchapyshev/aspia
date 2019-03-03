@@ -16,14 +16,14 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include <gtest/gtest.h>
-
 #include "base/win/scoped_gdi_object.h"
 #include "base/win/scoped_user_object.h"
 #include "desktop/desktop_frame.h"
 #include "desktop/mouse_cursor.h"
 #include "desktop/win/cursor.h"
 #include "desktop/win/cursor_unittest_resources.h"
+
+#include <gtest/gtest.h>
 
 namespace desktop {
 

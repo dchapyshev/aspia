@@ -19,13 +19,13 @@
 #ifndef COMMON__WIN__FILE_ENUMERATOR_H
 #define COMMON__WIN__FILE_ENUMERATOR_H
 
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
+#include "base/macros_magic.h"
+#include "proto/file_transfer_session.pb.h"
 
 #include <filesystem>
 
-#include "base/macros_magic.h"
-#include "proto/file_transfer_session.pb.h"
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
 
 namespace common {
 

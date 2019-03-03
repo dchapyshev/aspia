@@ -17,16 +17,15 @@
 //
 
 #include "console/computer_dialog.h"
-
-#include <QAbstractButton>
-#include <QDateTime>
-
 #include "client/config_factory.h"
 #include "console/computer_dialog_desktop.h"
 #include "console/computer_dialog_general.h"
 #include "console/computer_dialog_parent.h"
 #include "console/computer_factory.h"
 #include "crypto/secure_memory.h"
+
+#include <QAbstractButton>
+#include <QDateTime>
 
 namespace console {
 

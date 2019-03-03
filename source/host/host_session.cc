@@ -17,13 +17,12 @@
 //
 
 #include "host/host_session.h"
-
-#include <QCoreApplication>
-
 #include "base/logging.h"
 #include "host/host_session_desktop.h"
 #include "host/host_session_file_transfer.h"
 #include "ipc/ipc_channel.h"
+
+#include <QCoreApplication>
 
 namespace host {
 

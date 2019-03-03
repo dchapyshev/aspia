@@ -19,9 +19,9 @@
 #ifndef COMMON__UI__ABOUT_DIALOG_H
 #define COMMON__UI__ABOUT_DIALOG_H
 
-#include <QDialog>
-
 #include "base/macros_magic.h"
+
+#include <QDialog>
 
 namespace Ui {
 class AboutDialog;

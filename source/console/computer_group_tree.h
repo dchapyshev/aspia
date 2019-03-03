@@ -19,7 +19,6 @@
 #ifndef CONSOLE__COMPUTER_GROUP_TREE_H
 #define CONSOLE__COMPUTER_GROUP_TREE_H
 
-#include "base/macros_magic.h"
 #include "console/computer_group_drag.h"
 
 namespace console {

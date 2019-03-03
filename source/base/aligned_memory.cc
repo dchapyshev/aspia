@@ -17,12 +17,11 @@
 //
 
 #include "base/aligned_memory.h"
+#include "base/logging.h"
 
 #if defined(OS_ANDROID)
 #include <malloc.h>
 #endif
-
-#include "base/logging.h"
 
 namespace base {
 

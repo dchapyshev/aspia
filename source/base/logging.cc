@@ -17,6 +17,13 @@
 //
 
 #include "base/logging.h"
+#include "base/debug.h"
+
+#if defined(OS_WIN)
+#include "base/string_printf.h"
+#include "base/string_util.h"
+#include "base/unicode.h"
+#endif // defined(OS_WIN)
 
 #include <fstream>
 #include <iomanip>
@@ -24,13 +31,7 @@
 #include <ostream>
 #include <thread>
 
-#include "base/debug.h"
-
 #if defined(OS_WIN)
-#include "base/string_printf.h"
-#include "base/string_util.h"
-#include "base/unicode.h"
-
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #endif // defined(OS_WIN)

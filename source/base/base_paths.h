@@ -19,9 +19,9 @@
 #ifndef BASE__BASE_PATHS_H
 #define BASE__BASE_PATHS_H
 
-#include <filesystem>
-
 #include "base/macros_magic.h"
+
+#include <filesystem>
 
 namespace base {
 

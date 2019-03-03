@@ -17,10 +17,9 @@
 //
 
 #include "crypto/password_hash.h"
+#include "base/logging.h"
 
 #include <openssl/evp.h>
-
-#include "base/logging.h"
 
 namespace crypto {
 

@@ -17,7 +17,6 @@
 //
 
 #include "codec/video_encoder_zstd.h"
-
 #include "base/logging.h"
 #include "codec/pixel_translator.h"
 #include "codec/video_util.h"

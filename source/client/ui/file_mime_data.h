@@ -19,9 +19,9 @@
 #ifndef CLIENT__UI__FILE_MIME_DATA_H
 #define CLIENT__UI__FILE_MIME_DATA_H
 
-#include <QMimeData>
-
 #include "client/file_transfer.h"
+
+#include <QMimeData>
 
 namespace client {
 

@@ -17,6 +17,8 @@
 //
 
 #include "common/ui/about_dialog.h"
+#include "build/version.h"
+#include "ui_about_dialog.h"
 
 #include <QDesktopServices>
 #include <QFile>
@@ -26,9 +28,6 @@
 #include <openssl/crypto.h>
 #include <vpx/vpx_codec.h>
 #include <zstd.h>
-
-#include "build/version.h"
-#include "ui_about_dialog.h"
 
 namespace common {
 

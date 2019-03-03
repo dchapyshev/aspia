@@ -17,13 +17,12 @@
 //
 
 #include "client/file_transfer.h"
-
-#include <QTimerEvent>
-
 #include "base/logging.h"
 #include "client/file_status.h"
 #include "client/file_transfer_queue_builder.h"
 #include "common/file_packet.h"
+
+#include <QTimerEvent>
 
 namespace client {
 

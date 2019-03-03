@@ -17,16 +17,13 @@
 //
 
 #include "net/adapter_enumerator.h"
-
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-#include <iphlpapi.h>
-#include <setupapi.h>
-#include <devguid.h>
-
 #include "base/win/registry.h"
 #include "base/string_printf.h"
 #include "base/unicode.h"
+
+#include <iphlpapi.h>
+#include <setupapi.h>
+#include <devguid.h>
 
 namespace net {
 

@@ -19,9 +19,9 @@
 #ifndef BASE__SERVICE_CONTROLLER_H
 #define BASE__SERVICE_CONTROLLER_H
 
-#include <QStringList>
-
 #include "base/win/scoped_object.h"
+
+#include <QStringList>
 
 namespace base {
 

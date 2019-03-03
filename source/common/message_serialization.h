@@ -19,11 +19,11 @@
 #ifndef COMMON__MESSAGE_SERIALIZATION_H
 #define COMMON__MESSAGE_SERIALIZATION_H
 
+#include "base/logging.h"
+
 #include <QByteArray>
 
 #include <google/protobuf/message_lite.h>
-
-#include "base/logging.h"
 
 namespace common {
 

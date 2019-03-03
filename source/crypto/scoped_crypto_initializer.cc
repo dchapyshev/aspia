@@ -17,11 +17,10 @@
 //
 
 #include "crypto/scoped_crypto_initializer.h"
+#include "base/logging.h"
 
 #include <openssl/crypto.h>
 #include <openssl/ssl.h>
-
-#include "base/logging.h"
 
 namespace crypto {
 

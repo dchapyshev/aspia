@@ -19,13 +19,13 @@
 #ifndef CRYPTO__BIG_NUM_H
 #define CRYPTO__BIG_NUM_H
 
-#include <QByteArray>
-
-#include <memory>
-
 #include "base/const_buffer.h"
 #include "base/macros_magic.h"
 #include "crypto/openssl_util.h"
+
+#include <QByteArray>
+
+#include <memory>
 
 namespace crypto {
 

@@ -19,8 +19,6 @@
 #ifndef HOST__WIN__HOST_SESSION_PROCESS_H
 #define HOST__WIN__HOST_SESSION_PROCESS_H
 
-#include <QPointer>
-
 #include "base/win/session_id.h"
 #include "base/win/session_status.h"
 #include "host/win/host_process.h"

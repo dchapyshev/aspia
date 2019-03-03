@@ -19,12 +19,12 @@
 #ifndef CLIENT__CLIENT_FILE_TRANSFER_H
 #define CLIENT__CLIENT_FILE_TRANSFER_H
 
-#include <QQueue>
-
 #include "client/client.h"
 #include "client/connect_data.h"
 #include "common/file_request.h"
 #include "proto/file_transfer_session.pb.h"
+
+#include <QQueue>
 
 namespace common {
 class FileWorker;

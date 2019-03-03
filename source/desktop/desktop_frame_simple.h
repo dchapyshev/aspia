@@ -19,9 +19,9 @@
 #ifndef DESKTOP__DESKTOP_FRAME_SIMPLE_H
 #define DESKTOP__DESKTOP_FRAME_SIMPLE_H
 
-#include <memory>
-
 #include "desktop/desktop_frame.h"
+
+#include <memory>
 
 namespace desktop {
 

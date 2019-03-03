@@ -18,16 +18,14 @@
 
 #include "base/sys_info.h"
 
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-#include <lm.h>
-
-#include "base/win/registry.h"
 #include "base/base_paths.h"
 #include "base/logging.h"
 #include "base/string_printf.h"
 #include "base/unicode.h"
+#include "base/win/registry.h"
 #include "build/build_config.h"
+
+#include <lm.h>
 
 namespace base {
 

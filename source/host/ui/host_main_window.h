@@ -19,14 +19,14 @@
 #ifndef HOST__UI__HOST_MAIN_WINDOW_H
 #define HOST__UI__HOST_MAIN_WINDOW_H
 
-#include <QMainWindow>
-#include <QPointer>
-#include <QSystemTrayIcon>
-
 #include "base/macros_magic.h"
 #include "common/locale_loader.h"
 #include "host/host_settings.h"
 #include "ui_host_main_window.h"
+
+#include <QMainWindow>
+#include <QPointer>
+#include <QSystemTrayIcon>
 
 namespace host {
 

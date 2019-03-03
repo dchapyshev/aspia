@@ -19,9 +19,9 @@
 #ifndef CONSOLE__CONSOLE_TAB_H
 #define CONSOLE__CONSOLE_TAB_H
 
-#include <QWidget>
-
 #include "base/macros_magic.h"
+
+#include <QWidget>
 
 namespace console {
 

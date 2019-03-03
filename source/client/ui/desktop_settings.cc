@@ -17,7 +17,6 @@
 //
 
 #include "client/ui/desktop_settings.h"
-
 #include "base/xml_settings.h"
 
 namespace client {

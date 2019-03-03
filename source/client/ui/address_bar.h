@@ -19,10 +19,10 @@
 #ifndef CLIENT__UI__ADDRESS_BAR_H
 #define CLIENT__UI__ADDRESS_BAR_H
 
-#include <QComboBox>
-
 #include "base/macros_magic.h"
 #include "proto/file_transfer_session.pb.h"
+
+#include <QComboBox>
 
 class QLineEdit;
 class QTreeView;

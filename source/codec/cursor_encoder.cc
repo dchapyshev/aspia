@@ -17,7 +17,6 @@
 //
 
 #include "codec/cursor_encoder.h"
-
 #include "base/logging.h"
 
 namespace codec {

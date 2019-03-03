@@ -19,10 +19,10 @@
 #ifndef HOST__DESKTOP_CONFIG_TRACKER_H
 #define HOST__DESKTOP_CONFIG_TRACKER_H
 
-#include <optional>
-
 #include "base/macros_magic.h"
 #include "proto/desktop_session.pb.h"
+
+#include <optional>
 
 namespace host {
 

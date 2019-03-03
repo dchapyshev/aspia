@@ -19,11 +19,11 @@
 #ifndef UPDATER__UPDATE_DIALOG_H
 #define UPDATER__UPDATE_DIALOG_H
 
-#include <QDialog>
-#include <QPointer>
-
 #include "base/macros_magic.h"
 #include "updater/update_info.h"
+
+#include <QDialog>
+#include <QPointer>
 
 namespace Ui {
 class UpdateDialog;

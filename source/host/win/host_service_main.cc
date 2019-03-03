@@ -17,7 +17,6 @@
 //
 
 #include "host/win/host_service_main.h"
-
 #include "base/base_paths.h"
 #include "base/qt_logging.h"
 #include "crypto/scoped_crypto_initializer.h"

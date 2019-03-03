@@ -19,11 +19,11 @@
 #ifndef BASE__WIN__SCOPED_WTS_MEMORY_H
 #define BASE__WIN__SCOPED_WTS_MEMORY_H
 
+#include "base/macros_magic.h"
+
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <wtsapi32.h>
-
-#include "base/macros_magic.h"
 
 namespace base::win {
 

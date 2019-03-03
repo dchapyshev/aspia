@@ -19,10 +19,10 @@
 #ifndef CLIENT__UI__CLIENT_WINDOW_H
 #define CLIENT__UI__CLIENT_WINDOW_H
 
-#include <QWidget>
-
 #include "base/macros_magic.h"
 #include "client/connect_data.h"
+
+#include <QWidget>
 
 namespace client {
 

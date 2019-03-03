@@ -19,10 +19,10 @@
 #ifndef CLIENT__UI__SELECT_SCREEN_ACTION_H
 #define CLIENT__UI__SELECT_SCREEN_ACTION_H
 
-#include <QAction>
-
 #include "base/macros_magic.h"
 #include "proto/desktop_session_extensions.pb.h"
+
+#include <QAction>
 
 namespace client {
 

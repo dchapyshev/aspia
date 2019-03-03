@@ -16,9 +16,9 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include <gtest/gtest.h>
-
 #include "crypto/scoped_crypto_initializer.h"
+
+#include <gtest/gtest.h>
 
 int main(int argc, char **argv)
 {

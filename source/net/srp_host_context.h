@@ -19,10 +19,10 @@
 #ifndef NET__SRP_SERVER_CONTEXT_H
 #define NET__SRP_SERVER_CONTEXT_H
 
-#include <QString>
-
 #include "crypto/big_num.h"
 #include "proto/key_exchange.pb.h"
+
+#include <QString>
 
 namespace net {
 

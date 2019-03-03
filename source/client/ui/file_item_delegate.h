@@ -19,9 +19,9 @@
 #ifndef CLIENT__UI__FILE_ITEM_DELEGATE_H
 #define CLIENT__UI__FILE_ITEM_DELEGATE_H
 
-#include <QStyledItemDelegate>
-
 #include "base/macros_magic.h"
+
+#include <QStyledItemDelegate>
 
 namespace client {
 

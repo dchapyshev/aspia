@@ -19,13 +19,13 @@
 #ifndef HOST__HOST_UI_SERVER_H
 #define HOST__HOST_UI_SERVER_H
 
-#include <QObject>
-#include <QPointer>
-
 #include "base/macros_magic.h"
 #include "base/win/session_id.h"
 #include "base/win/session_status.h"
 #include "proto/notifier.pb.h"
+
+#include <QObject>
+#include <QPointer>
 
 namespace ipc {
 class Channel;

@@ -16,11 +16,11 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include <gtest/gtest.h>
-#include <libyuv/cpu_id.h>
-
 #include "base/aligned_memory.h"
 #include "desktop/diff_block_sse2.h"
+
+#include <gtest/gtest.h>
+#include <libyuv/cpu_id.h>
 
 namespace desktop {
 

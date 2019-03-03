@@ -19,9 +19,9 @@
 #ifndef BASE__XML_SETTINGS_H
 #define BASE__XML_SETTINGS_H
 
-#include <QSettings>
-
 #include "base/macros_magic.h"
+
+#include <QSettings>
 
 namespace base {
 

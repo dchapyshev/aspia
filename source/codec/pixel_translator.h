@@ -19,9 +19,9 @@
 #ifndef CODEC__PIXEL_TRANSLATOR_H
 #define CODEC__PIXEL_TRANSLATOR_H
 
-#include <memory>
-
 #include "desktop/pixel_format.h"
+
+#include <memory>
 
 namespace codec {
 

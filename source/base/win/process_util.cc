@@ -17,14 +17,13 @@
 //
 
 #include "base/win/process_util.h"
+#include "base/logging.h"
+#include "base/win/process.h"
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <tlhelp32.h>
 #include <shellapi.h>
-
-#include "base/logging.h"
-#include "base/win/process.h"
 
 namespace base::win {
 

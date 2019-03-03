@@ -17,13 +17,12 @@
 //
 
 #include "client/client_file_transfer.h"
-
-#include <QMetaType>
-#include <QThread>
-
 #include "client/ui/file_manager_window.h"
 #include "common/file_request.h"
 #include "common/file_worker.h"
+
+#include <QMetaType>
+#include <QThread>
 
 namespace client {
 

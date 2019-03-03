@@ -19,10 +19,10 @@
 #ifndef CONSOLE__CONSOLE_STATUSBAR_H
 #define CONSOLE__CONSOLE_STATUSBAR_H
 
-#include <QStatusBar>
-
 #include "base/macros_magic.h"
 #include "proto/address_book.pb.h"
+
+#include <QStatusBar>
 
 namespace console {
 

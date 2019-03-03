@@ -19,10 +19,10 @@
 #ifndef CLIENT__UI__FILE_LIST_H
 #define CLIENT__UI__FILE_LIST_H
 
-#include <QTreeView>
-
 #include "client/file_transfer.h"
 #include "proto/file_transfer_session.pb.h"
+
+#include <QTreeView>
 
 namespace client {
 

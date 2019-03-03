@@ -17,10 +17,9 @@
 //
 
 #include "net/address.h"
+#include "net/ip_util.h"
 
 #include <QStringView>
-
-#include "net/ip_util.h"
 
 namespace net {
 

@@ -19,13 +19,13 @@
 #ifndef CODEC__VIDEO_ENCODER_VPX_H
 #define CODEC__VIDEO_ENCODER_VPX_H
 
-#define VPX_CODEC_DISABLE_COMPAT 1
-#include <vpx/vpx_encoder.h>
-#include <vpx/vp8cx.h>
-
 #include "base/macros_magic.h"
 #include "codec/scoped_vpx_codec.h"
 #include "codec/video_encoder.h"
+
+#define VPX_CODEC_DISABLE_COMPAT 1
+#include <vpx/vpx_encoder.h>
+#include <vpx/vp8cx.h>
 
 namespace codec {
 

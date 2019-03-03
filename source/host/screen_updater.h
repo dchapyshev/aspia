@@ -19,10 +19,10 @@
 #ifndef HOST__SCREEN_UPDATER_H
 #define HOST__SCREEN_UPDATER_H
 
-#include <QObject>
-
 #include "base/macros_magic.h"
 #include "proto/desktop_session.pb.h"
+
+#include <QObject>
 
 namespace host {
 

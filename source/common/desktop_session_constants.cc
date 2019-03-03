@@ -17,7 +17,6 @@
 //
 
 #include "common/desktop_session_constants.h"
-
 #include "proto/desktop_session.pb.h"
 
 namespace common {

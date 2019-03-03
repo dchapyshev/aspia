@@ -19,9 +19,9 @@
 #ifndef COMMON__KEYCODE_CONVERTER_H
 #define COMMON__KEYCODE_CONVERTER_H
 
-#include <cstdint>
-
 #include "base/macros_magic.h"
+
+#include <cstdint>
 
 namespace common {
 

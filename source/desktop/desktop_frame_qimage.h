@@ -19,10 +19,11 @@
 #ifndef DESKTOP__DESKTOP_FRAME_QIMAGE_H
 #define DESKTOP__DESKTOP_FRAME_QIMAGE_H
 
-#include <QImage>
-#include <memory>
-
 #include "desktop/desktop_frame.h"
+
+#include <QImage>
+
+#include <memory>
 
 namespace desktop {
 

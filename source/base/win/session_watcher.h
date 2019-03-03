@@ -19,11 +19,11 @@
 #ifndef BASE__WIN__SESSION_WATCHER_H
 #define BASE__WIN__SESSION_WATCHER_H
 
-#include <QWidget>
-
 #include "base/macros_magic.h"
 #include "base/win/session_id.h"
 #include "base/win/session_status.h"
+
+#include <QWidget>
 
 namespace base::win {
 

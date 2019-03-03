@@ -17,17 +17,16 @@
 //
 
 #include "base/win/security_helpers.h"
+#include "base/logging.h"
+#include "base/typed_buffer.h"
+#include "base/win/scoped_local.h"
+
+#include <string>
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <objidl.h>
 #include <sddl.h>
-
-#include <string>
-
-#include "base/win/scoped_local.h"
-#include "base/logging.h"
-#include "base/typed_buffer.h"
 
 namespace base::win {
 

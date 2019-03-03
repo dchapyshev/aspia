@@ -17,7 +17,6 @@
 //
 
 #include "host/screen_updater.h"
-
 #include "host/screen_updater_impl.h"
 
 namespace host {

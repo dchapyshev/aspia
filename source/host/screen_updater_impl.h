@@ -19,11 +19,11 @@
 #ifndef HOST__SCREEN_UPDATER_IMPL_H
 #define HOST__SCREEN_UPDATER_IMPL_H
 
-#include <QEvent>
-#include <QThread>
-
 #include "desktop/screen_capturer.h"
 #include "proto/desktop_session.pb.h"
+
+#include <QEvent>
+#include <QThread>
 
 namespace codec {
 class CursorEncoder;

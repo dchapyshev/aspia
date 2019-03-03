@@ -19,9 +19,9 @@
 #ifndef HOST__PASSWORD_GENERATOR_H
 #define HOST__PASSWORD_GENERATOR_H
 
-#include <QString>
-
 #include "base/macros_magic.h"
+
+#include <QString>
 
 namespace host {
 

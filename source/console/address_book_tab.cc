@@ -18,10 +18,6 @@
 
 #include "console/address_book_tab.h"
 
-#include <QFileDialog>
-#include <QMenu>
-#include <QMessageBox>
-
 #include "common/message_serialization.h"
 #include "console/address_book_dialog.h"
 #include "console/computer_dialog.h"
@@ -32,6 +28,10 @@
 #include "crypto/data_cryptor_chacha20_poly1305.h"
 #include "crypto/password_hash.h"
 #include "crypto/secure_memory.h"
+
+#include <QFileDialog>
+#include <QMenu>
+#include <QMessageBox>
 
 namespace console {
 

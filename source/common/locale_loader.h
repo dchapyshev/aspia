@@ -19,10 +19,10 @@
 #ifndef COMMON__LOCALE_LOADER_H
 #define COMMON__LOCALE_LOADER_H
 
+#include "base/macros_magic.h"
+
 #include <QHash>
 #include <QStringList>
-
-#include "base/macros_magic.h"
 
 class QTranslator;
 

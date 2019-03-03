@@ -17,7 +17,6 @@
 //
 
 #include "base/smbios_parser.h"
-
 #include "base/string_util.h"
 
 namespace base {

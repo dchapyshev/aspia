@@ -19,13 +19,13 @@
 #ifndef BASE__WIN__REGISTRY_H
 #define BASE__WIN__REGISTRY_H
 
+#include "base/macros_magic.h"
+
 #include <string>
 #include <vector>
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-
-#include "base/macros_magic.h"
 
 namespace base::win {
 

@@ -16,10 +16,10 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include <gtest/gtest.h>
-
 #include "crypto/cryptor_aes256_gcm.h"
 #include "crypto/cryptor_chacha20_poly1305.h"
+
+#include <gtest/gtest.h>
 
 namespace crypto {
 

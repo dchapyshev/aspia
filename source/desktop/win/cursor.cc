@@ -17,7 +17,6 @@
 //
 
 #include "desktop/win/cursor.h"
-
 #include "base/logging.h"
 #include "base/win/scoped_gdi_object.h"
 #include "desktop/mouse_cursor.h"

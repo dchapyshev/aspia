@@ -17,13 +17,12 @@
 //
 
 #include "net/firewall_manager.h"
+#include "base/logging.h"
 
 #include <QUuid>
 
 #include <comutil.h>
 #include <unknwn.h>
-
-#include "base/logging.h"
 
 namespace net {
 

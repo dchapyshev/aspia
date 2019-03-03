@@ -19,12 +19,12 @@
 #ifndef COMMON__FILE_PACKETIZER_H
 #define COMMON__FILE_PACKETIZER_H
 
+#include "base/macros_magic.h"
+#include "proto/file_transfer_session.pb.h"
+
 #include <filesystem>
 #include <fstream>
 #include <memory>
-
-#include "base/macros_magic.h"
-#include "proto/file_transfer_session.pb.h"
 
 namespace common {
 

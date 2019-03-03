@@ -17,11 +17,10 @@
 //
 
 #include "client/ui/file_list_model.h"
-
-#include <QDateTime>
-
 #include "client/ui/file_mime_data.h"
 #include "common/file_platform_util.h"
+
+#include <QDateTime>
 
 namespace client {
 

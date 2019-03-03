@@ -17,7 +17,6 @@
 //
 
 #include "common/win/file_enumerator.h"
-
 #include "base/logging.h"
 
 namespace common {

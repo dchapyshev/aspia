@@ -17,7 +17,6 @@
 //
 
 #include "client/ui/client_window.h"
-
 #include "base/logging.h"
 #include "client/ui/authorization_dialog.h"
 #include "client/ui/client_dialog.h"

@@ -16,9 +16,9 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include <gtest/gtest.h>
-
 #include "base/bitset.h"
+
+#include <gtest/gtest.h>
 
 namespace base {
 

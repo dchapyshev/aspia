@@ -17,14 +17,13 @@
 //
 
 #include "base/string_util.h"
+#include "base/string_util_constants.h"
+#include "base/unicode.h"
 
 #include <algorithm>
 #include <cwctype>
 #include <cctype>
 #include <strsafe.h>
-
-#include "base/string_util_constants.h"
-#include "base/unicode.h"
 
 namespace base {
 

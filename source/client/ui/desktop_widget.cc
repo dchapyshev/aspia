@@ -17,14 +17,13 @@
 //
 
 #include "client/ui/desktop_widget.h"
+#include "common/keycode_converter.h"
+#include "desktop/desktop_frame_qimage.h"
+#include "proto/desktop_session.pb.h"
 
 #include <QApplication>
 #include <QPainter>
 #include <QWheelEvent>
-
-#include "common/keycode_converter.h"
-#include "desktop/desktop_frame_qimage.h"
-#include "proto/desktop_session.pb.h"
 
 namespace client {
 

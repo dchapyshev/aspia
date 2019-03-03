@@ -17,10 +17,9 @@
 //
 
 #include "common/keycode_converter.h"
+#include "build/build_config.h"
 
 #include <QtCore>
-
-#include "build/build_config.h"
 
 namespace common {
 

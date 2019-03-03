@@ -19,10 +19,10 @@
 #ifndef BASE__WIN__PRINTER_ENUMERATOR_H
 #define BASE__WIN__PRINTER_ENUMERATOR_H
 
+#include "base/macros_magic.h"
+
 #include <memory>
 #include <string>
-
-#include "base/macros_magic.h"
 
 struct _PRINTER_INFO_2W;
 

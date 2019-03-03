@@ -17,15 +17,14 @@
 //
 
 #include "host/host_ui_process.h"
-
-#include <QCoreApplication>
-#include <QUuid>
-
 #include "base/qt_logging.h"
 #include "common/message_serialization.h"
 #include "host/win/host_process.h"
 #include "ipc/ipc_channel.h"
 #include "proto/notifier.pb.h"
+
+#include <QCoreApplication>
+#include <QUuid>
 
 namespace host {
 

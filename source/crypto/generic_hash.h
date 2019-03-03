@@ -19,9 +19,9 @@
 #ifndef CRYPTO__GENERIC_HASH_H
 #define CRYPTO__GENERIC_HASH_H
 
-#include <QByteArray>
-
 #include "base/macros_magic.h"
+
+#include <QByteArray>
 
 struct evp_md_ctx_st;
 struct evp_md_st;

@@ -17,7 +17,6 @@
 //
 
 #include "client/ui/address_bar_model.h"
-
 #include "common/file_platform_util.h"
 
 namespace client {

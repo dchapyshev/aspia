@@ -19,12 +19,12 @@
 #ifndef NET__NETWORK_SERVER_H
 #define NET__NETWORK_SERVER_H
 
+#include "base/macros_magic.h"
+#include "net/srp_user.h"
+
 #include <QPointer>
 #include <QList>
 #include <QTcpServer>
-
-#include "base/macros_magic.h"
-#include "net/srp_user.h"
 
 namespace net {
 

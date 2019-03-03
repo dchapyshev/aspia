@@ -19,9 +19,9 @@
 #ifndef CRYPTO__PASSWORD_HASH_H
 #define CRYPTO__PASSWORD_HASH_H
 
-#include <QByteArray>
-
 #include "base/macros_magic.h"
+
+#include <QByteArray>
 
 namespace crypto {
 

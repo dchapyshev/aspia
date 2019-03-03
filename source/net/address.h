@@ -19,9 +19,9 @@
 #ifndef CONSOLE__ADDRESS_H
 #define CONSOLE__ADDRESS_H
 
-#include <QString>
-
 #include "build/build_config.h"
+
+#include <QString>
 
 namespace net {
 

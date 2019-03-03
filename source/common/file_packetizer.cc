@@ -17,7 +17,6 @@
 //
 
 #include "common/file_packetizer.h"
-
 #include "base/logging.h"
 #include "common/file_packet.h"
 

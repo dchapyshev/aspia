@@ -17,7 +17,6 @@
 //
 
 #include "base/debug.h"
-
 #include "build/build_config.h"
 
 namespace base {

@@ -17,19 +17,18 @@
 //
 
 #include "host/input_injector.h"
-
-#include <QRect>
-
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-#include <sas.h>
-
-#include <set>
-
 #include "base/win/registry.h"
 #include "base/win/scoped_thread_desktop.h"
 #include "base/logging.h"
 #include "common/keycode_converter.h"
+
+#include <QRect>
+
+#include <set>
+
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#include <sas.h>
 
 namespace host {
 

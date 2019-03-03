@@ -19,11 +19,10 @@
 #ifndef CLIENT__CLIENT_H
 #define CLIENT__CLIENT_H
 
-#include <QObject>
-
-#include "base/macros_magic.h"
 #include "client/connect_data.h"
 #include "net/network_channel_client.h"
+
+#include <QObject>
 
 namespace client {
 

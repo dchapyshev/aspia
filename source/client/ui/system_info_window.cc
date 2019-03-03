@@ -17,6 +17,7 @@
 //
 
 #include "client/ui/system_info_window.h"
+#include "client/ui/tree_to_html.h"
 
 #include <QClipboard>
 #include <QFileDialog>
@@ -24,8 +25,6 @@
 #include <QPrinter>
 #include <QPrintDialog>
 #include <QTextDocument>
-
-#include "client/ui/tree_to_html.h"
 
 namespace client {
 

@@ -19,10 +19,10 @@
 #ifndef BASE__WIN__SCOPED_HDC_H
 #define BASE__WIN__SCOPED_HDC_H
 
+#include "base/logging.h"
+
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-
-#include "base/logging.h"
 
 namespace base::win {
 

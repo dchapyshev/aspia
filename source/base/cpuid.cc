@@ -17,11 +17,10 @@
 //
 
 #include "base/cpuid.h"
+#include "base/bitset.h"
 
 #include <intrin.h>
 #include <cstring>
-
-#include "base/bitset.h"
 
 namespace base {
 

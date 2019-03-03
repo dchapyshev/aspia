@@ -17,14 +17,13 @@
 //
 
 #include "host/ui/host_notifier_window.h"
+#include "base/logging.h"
+#include "build/build_config.h"
 
 #include <QMenu>
 #include <QMouseEvent>
 #include <QScreen>
 #include <QTranslator>
-
-#include "base/logging.h"
-#include "build/build_config.h"
 
 namespace host {
 

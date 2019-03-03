@@ -17,10 +17,9 @@
 //
 
 #include "base/guid.h"
+#include "base/string_printf.h"
 
 #include <random>
-
-#include "base/string_printf.h"
 
 namespace base {
 

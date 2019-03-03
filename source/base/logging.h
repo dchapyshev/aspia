@@ -19,13 +19,12 @@
 #ifndef BASE__LOGGING_H
 #define BASE__LOGGING_H
 
+#include "base/scoped_clear_last_error.h"
+
 #include <filesystem>
 #include <sstream>
 #include <type_traits>
 #include <utility>
-
-#include "base/scoped_clear_last_error.h"
-
 
 // Instructions
 // ------------

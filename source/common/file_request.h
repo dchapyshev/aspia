@@ -19,12 +19,12 @@
 #ifndef COMMON__FILE_REQUEST_H
 #define COMMON__FILE_REQUEST_H
 
+#include "base/macros_magic.h"
+#include "proto/file_transfer_session.pb.h"
+
 #include <QObject>
 #include <QPointer>
 #include <QString>
-
-#include "base/macros_magic.h"
-#include "proto/file_transfer_session.pb.h"
 
 namespace common {
 

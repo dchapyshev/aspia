@@ -17,14 +17,13 @@
 //
 
 #include "host/ui/user_dialog.h"
-
-#include <QMessageBox>
-#include <QMouseEvent>
-
 #include "base/logging.h"
 #include "common/user_util.h"
 #include "net/srp_host_context.h"
 #include "proto/common.pb.h"
+
+#include <QMessageBox>
+#include <QMouseEvent>
 
 namespace host {
 

@@ -17,7 +17,6 @@
 //
 
 #include "desktop/differ.h"
-
 #include "base/logging.h"
 #include "desktop/diff_block_avx2.h"
 #include "desktop/diff_block_sse2.h"

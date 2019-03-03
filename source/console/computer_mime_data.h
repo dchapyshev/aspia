@@ -19,9 +19,9 @@
 #ifndef CONSOLE__COMPUTER_MIME_DATA_H
 #define CONSOLE__COMPUTER_MIME_DATA_H
 
-#include <QMimeData>
-
 #include "console/computer_item.h"
+
+#include <QMimeData>
 
 namespace console {
 

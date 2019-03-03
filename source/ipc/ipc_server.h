@@ -19,9 +19,9 @@
 #ifndef IPC__IPC_SERVER_H
 #define IPC__IPC_SERVER_H
 
-#include <QPointer>
-
 #include "base/macros_magic.h"
+
+#include <QPointer>
 
 class QLocalServer;
 

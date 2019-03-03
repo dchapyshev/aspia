@@ -17,15 +17,14 @@
 //
 
 #include "console/computer_tree.h"
+#include "console/computer_drag.h"
+#include "console/computer_item.h"
 
 #include <QApplication>
 #include <QHeaderView>
 #include <QMenu>
 #include <QMouseEvent>
 #include <QUuid>
-
-#include "console/computer_drag.h"
-#include "console/computer_item.h"
 
 namespace console {
 

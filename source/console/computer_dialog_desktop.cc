@@ -17,7 +17,6 @@
 //
 
 #include "console/computer_dialog_desktop.h"
-
 #include "base/logging.h"
 #include "codec/video_util.h"
 

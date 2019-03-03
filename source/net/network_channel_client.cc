@@ -17,9 +17,6 @@
 //
 
 #include "net/network_channel_client.h"
-
-#include <QNetworkProxy>
-
 #include "base/cpuid.h"
 #include "base/logging.h"
 #include "build/build_config.h"
@@ -29,10 +26,12 @@
 #include "crypto/secure_memory.h"
 #include "net/srp_client_context.h"
 
+#include <QNetworkProxy>
+
 #if defined(OS_WIN)
 #include <winsock2.h>
 #include <mstcpip.h>
-#endif
+#endif // defined(OS_WIN)
 
 namespace net {
 

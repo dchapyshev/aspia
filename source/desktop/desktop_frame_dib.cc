@@ -17,7 +17,6 @@
 //
 
 #include "desktop/desktop_frame_dib.h"
-
 #include "base/logging.h"
 
 namespace desktop {

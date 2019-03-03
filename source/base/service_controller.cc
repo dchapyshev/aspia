@@ -17,10 +17,9 @@
 //
 
 #include "base/service_controller.h"
+#include "base/logging.h"
 
 #include <memory>
-
-#include "base/logging.h"
 
 namespace base {
 

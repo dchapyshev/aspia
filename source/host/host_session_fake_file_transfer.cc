@@ -17,7 +17,6 @@
 //
 
 #include "host/host_session_fake_file_transfer.h"
-
 #include "common/message_serialization.h"
 #include "proto/file_transfer_session.pb.h"
 

@@ -17,13 +17,12 @@
 //
 
 #include "base/win/process.h"
-
-#include <psapi.h>
-#include <tlhelp32.h>
-
 #include "base/logging.h"
 #include "base/win/process_util.h"
 #include "base/win/scoped_impersonator.h"
+
+#include <psapi.h>
+#include <tlhelp32.h>
 
 namespace base::win {
 

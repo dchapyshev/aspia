@@ -17,12 +17,11 @@
 //
 
 #include "base/win/session_watcher.h"
+#include "base/logging.h"
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <wtsapi32.h>
-
-#include "base/logging.h"
 
 namespace base::win {
 

@@ -17,14 +17,13 @@
 //
 
 #include "common/locale_loader.h"
+#include "base/logging.h"
 
 #include <QCoreApplication>
 #include <QDir>
 #include "QLocale"
 #include <QTranslator>
 #include <QString>
-
-#include "base/logging.h"
 
 namespace common {
 

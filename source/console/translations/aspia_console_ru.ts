@@ -980,22 +980,22 @@
 <context>
     <name>console::ComputerDialog</name>
     <message>
-        <location filename="../computer_dialog.cc" line="164"/>
+        <location filename="../computer_dialog.cc" line="163"/>
         <source>General</source>
         <translation>Основные</translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="168"/>
+        <location filename="../computer_dialog.cc" line="167"/>
         <source>Sessions</source>
         <translation>Сессии</translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="175"/>
+        <location filename="../computer_dialog.cc" line="174"/>
         <source>Manage</source>
         <translation>Управление</translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="179"/>
+        <location filename="../computer_dialog.cc" line="178"/>
         <source>View</source>
         <translation>Просмотр</translation>
     </message>
@@ -1003,32 +1003,32 @@
 <context>
     <name>console::ComputerDialogDesktop</name>
     <message>
-        <location filename="../computer_dialog_desktop.cc" line="60"/>
+        <location filename="../computer_dialog_desktop.cc" line="59"/>
         <source>True color (32 bit)</source>
         <translation>True color (32 бит)</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.cc" line="61"/>
+        <location filename="../computer_dialog_desktop.cc" line="60"/>
         <source>High color (16 bit)</source>
         <translation>High color (16 бит)</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.cc" line="62"/>
+        <location filename="../computer_dialog_desktop.cc" line="61"/>
         <source>256 colors (8 bit)</source>
         <translation>256 цветов (8 бит)</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.cc" line="63"/>
+        <location filename="../computer_dialog_desktop.cc" line="62"/>
         <source>64 colors (6 bit)</source>
         <translation>64 цвета (6 бит)</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.cc" line="64"/>
+        <location filename="../computer_dialog_desktop.cc" line="63"/>
         <source>8 colors (3 bit)</source>
         <translation>8 цветов (3 бита)</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.cc" line="207"/>
+        <location filename="../computer_dialog_desktop.cc" line="206"/>
         <source>Compression ratio: %1</source>
         <translation>Уровень сжатия: %1</translation>
     </message>
@@ -1036,7 +1036,7 @@
 <context>
     <name>console::ComputerDialogGeneral</name>
     <message numerus="yes">
-        <location filename="../computer_dialog_general.cc" line="65"/>
+        <location filename="../computer_dialog_general.cc" line="64"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Слишком длинное имя. Максимальная длина имени %n символ.</numerusform>
@@ -1045,17 +1045,17 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_dialog_general.cc" line="72"/>
+        <location filename="../computer_dialog_general.cc" line="71"/>
         <source>Name can not be empty.</source>
         <translation>Имя не может быть пустым.</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_general.cc" line="82"/>
+        <location filename="../computer_dialog_general.cc" line="81"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>Имя пользователя не может быть пустым и может содержать только буквы алфавита, цифры и символы &quot;_&quot;,&quot;-&quot;,&quot;.&quot;.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../computer_dialog_general.cc" line="91"/>
+        <location filename="../computer_dialog_general.cc" line="90"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Слишком длинный комментарий. Максимальная длина комментария %n символ.</numerusform>
@@ -1064,12 +1064,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_dialog_general.cc" line="100"/>
+        <location filename="../computer_dialog_general.cc" line="99"/>
         <source>An invalid computer address was entered.</source>
         <translation>Введен некорректный адрес компьютера.</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_general.cc" line="131"/>
+        <location filename="../computer_dialog_general.cc" line="130"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
@@ -1192,80 +1192,80 @@
 <context>
     <name>console::MainWindow</name>
     <message>
-        <location filename="../console_main_window.cc" line="183"/>
+        <location filename="../console_main_window.cc" line="182"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="184"/>
+        <location filename="../console_main_window.cc" line="183"/>
         <source>Pinned address book file &quot;%1&quot; was not found.&lt;br/&gt;This file will be unpinned.</source>
         <translation>Закрепленный файл адресной книги &quot;%1&quot; не найден.&lt;br/&gt;Этот файл будет откреплен.</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="278"/>
+        <location filename="../console_main_window.cc" line="277"/>
         <source>Open Address Book</source>
         <translation>Открытие адресной книги</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="280"/>
+        <location filename="../console_main_window.cc" line="279"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Адресная книга Aspia (*.aab)</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="508"/>
-        <location filename="../console_main_window.cc" line="837"/>
+        <location filename="../console_main_window.cc" line="507"/>
+        <location filename="../console_main_window.cc" line="836"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="509"/>
-        <location filename="../console_main_window.cc" line="838"/>
+        <location filename="../console_main_window.cc" line="508"/>
+        <location filename="../console_main_window.cc" line="837"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation>Адресная книга &quot;%1&quot; изменена. Сохранить изменения?</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="697"/>
+        <location filename="../console_main_window.cc" line="696"/>
         <source>Close other tabs</source>
         <translation>Закрыть другие вкладки</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="704"/>
+        <location filename="../console_main_window.cc" line="703"/>
         <source>Close tab</source>
         <translation>Закрыть вкладку</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="707"/>
-        <location filename="../console_main_window.cc" line="714"/>
+        <location filename="../console_main_window.cc" line="706"/>
+        <location filename="../console_main_window.cc" line="713"/>
         <source>Pin tab</source>
         <translation>Закрепить вкладку</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="794"/>
+        <location filename="../console_main_window.cc" line="793"/>
         <source>Hide</source>
         <translation>Спрятать</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="809"/>
+        <location filename="../console_main_window.cc" line="808"/>
         <source>Show</source>
         <translation>Показать</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="916"/>
+        <location filename="../console_main_window.cc" line="915"/>
         <source>&lt;empty&gt;</source>
         <translation>&lt;пусто&gt;</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="937"/>
+        <location filename="../console_main_window.cc" line="936"/>
         <source>Aspia Console</source>
         <translation>Консоль Aspia</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="252"/>
+        <location filename="../console_main_window.cc" line="251"/>
         <source>Information</source>
         <translation>Информация</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="253"/>
+        <location filename="../console_main_window.cc" line="252"/>
         <source>Address Book &quot;%1&quot; is already open.</source>
         <translation>Адресная книга &quot;%1&quot; уже открыта.</translation>
     </message>
@@ -1273,12 +1273,12 @@
 <context>
     <name>console::OpenAddressBookDialog</name>
     <message>
-        <location filename="../open_address_book_dialog.cc" line="42"/>
+        <location filename="../open_address_book_dialog.cc" line="41"/>
         <source>Without Encryption</source>
         <translation>Без шифрования</translation>
     </message>
     <message>
-        <location filename="../open_address_book_dialog.cc" line="46"/>
+        <location filename="../open_address_book_dialog.cc" line="45"/>
         <source>ChaCha20 + Poly1305 (256-bit key)</source>
         <translation>ChaCha20 + Poly1305 (256-битный ключ)</translation>
     </message>

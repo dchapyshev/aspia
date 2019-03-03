@@ -17,18 +17,17 @@
 //
 
 #include "host/win/host_session_main.h"
+#include "base/base_paths.h"
+#include "base/qt_logging.h"
+#include "build/version.h"
+#include "crypto/scoped_crypto_initializer.h"
+#include "host/host_session.h"
 
 #include <QGuiApplication>
 #include <QCommandLineParser>
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-
-#include "base/base_paths.h"
-#include "base/qt_logging.h"
-#include "build/version.h"
-#include "crypto/scoped_crypto_initializer.h"
-#include "host/host_session.h"
 
 namespace host {
 

@@ -19,10 +19,10 @@
 #ifndef COMMON__CLIPBOARD_H
 #define COMMON__CLIPBOARD_H
 
-#include <QObject>
-
 #include "base/macros_magic.h"
 #include "proto/desktop_session.pb.h"
+
+#include <QObject>
 
 namespace common {
 

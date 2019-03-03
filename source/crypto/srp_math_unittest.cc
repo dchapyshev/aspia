@@ -16,10 +16,10 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include <gtest/gtest.h>
-
 #include "crypto/srp_constants.h"
 #include "crypto/srp_math.h"
+
+#include <gtest/gtest.h>
 
 namespace crypto {
 

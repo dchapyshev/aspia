@@ -19,12 +19,12 @@
 #ifndef NET__NETWORK_CHANNEL_H
 #define NET__NETWORK_CHANNEL_H
 
+#include "base/macros_magic.h"
+
 #include <QPointer>
 #include <QQueue>
 #include <QTcpSocket>
 #include <QVersionNumber>
-
-#include "base/macros_magic.h"
 
 namespace crypto {
 class Cryptor;

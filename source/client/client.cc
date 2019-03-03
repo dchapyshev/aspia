@@ -17,7 +17,6 @@
 //
 
 #include "client/client.h"
-
 #include "base/logging.h"
 #include "build/version.h"
 #include "client/config_factory.h"

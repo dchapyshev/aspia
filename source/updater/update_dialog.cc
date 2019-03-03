@@ -17,17 +17,16 @@
 //
 
 #include "updater/update_dialog.h"
-
-#include <QCloseEvent>
-#include <QDir>
-#include <QMessageBox>
-#include <QTemporaryFile>
-
 #include "base/win/process_util.h"
 #include "build/version.h"
 #include "updater/download_dialog.h"
 #include "updater/update_checker.h"
 #include "ui_update_dialog.h"
+
+#include <QCloseEvent>
+#include <QDir>
+#include <QMessageBox>
+#include <QTemporaryFile>
 
 namespace updater {
 

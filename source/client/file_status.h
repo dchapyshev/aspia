@@ -19,9 +19,9 @@
 #ifndef CLIENT__FILE_STATUS_H
 #define CLIENT__FILE_STATUS_H
 
-#include <QString>
-
 #include "proto/file_transfer_session.pb.h"
+
+#include <QString>
 
 namespace client {
 

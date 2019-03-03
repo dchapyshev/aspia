@@ -16,9 +16,9 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include <gtest/gtest.h>
-
 #include "base/scoped_clear_last_error.h"
+
+#include <gtest/gtest.h>
 
 #if defined(OS_WIN)
 #define WIN32_LEAN_AND_MEAN

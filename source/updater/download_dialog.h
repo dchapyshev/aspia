@@ -19,11 +19,11 @@
 #ifndef UPDATER__DOWNLOAD_DIALOG_H
 #define UPDATER__DOWNLOAD_DIALOG_H
 
-#include <QFile>
-#include <QNetworkAccessManager>
-
 #include "base/macros_magic.h"
 #include "ui_download_dialog.h"
+
+#include <QFile>
+#include <QNetworkAccessManager>
 
 namespace updater {
 

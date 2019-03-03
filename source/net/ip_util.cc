@@ -17,7 +17,6 @@
 //
 
 #include "net/ip_util.h"
-
 #include "build/build_config.h"
 
 #if defined(OS_WIN)

@@ -17,7 +17,6 @@
 //
 
 #include "net/srp_client_context.h"
-
 #include "base/logging.h"
 #include "crypto/generic_hash.h"
 #include "crypto/random.h"

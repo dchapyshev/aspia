@@ -19,9 +19,9 @@
 #ifndef CLIENT__UI__FILE_PATH_VALIDATOR_H
 #define CLIENT__UI__FILE_PATH_VALIDATOR_H
 
-#include <QValidator>
-
 #include "base/macros_magic.h"
+
+#include <QValidator>
 
 namespace client {
 

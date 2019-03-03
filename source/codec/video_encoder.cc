@@ -17,7 +17,6 @@
 //
 
 #include "codec/video_encoder.h"
-
 #include "desktop/desktop_frame.h"
 
 namespace codec {

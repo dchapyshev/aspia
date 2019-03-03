@@ -17,7 +17,6 @@
 //
 
 #include "desktop/pixel_format.h"
-
 #include "base/logging.h"
 
 namespace desktop {

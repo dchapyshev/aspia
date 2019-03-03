@@ -17,7 +17,6 @@
 //
 
 #include "net/network_server.h"
-
 #include "base/logging.h"
 #include "net/network_channel_host.h"
 

@@ -17,13 +17,6 @@
 //
 
 #include "client/ui/file_panel.h"
-
-#include <QAction>
-#include <QLineEdit>
-#include <QKeyEvent>
-#include <QMenu>
-#include <QMessageBox>
-
 #include "client/ui/address_bar_model.h"
 #include "client/ui/file_item_delegate.h"
 #include "client/ui/file_list_model.h"
@@ -31,6 +24,12 @@
 #include "client/file_status.h"
 #include "common/file_platform_util.h"
 #include "common/file_request.h"
+
+#include <QAction>
+#include <QLineEdit>
+#include <QKeyEvent>
+#include <QMenu>
+#include <QMessageBox>
 
 namespace client {
 

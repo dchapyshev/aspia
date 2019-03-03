@@ -17,11 +17,10 @@
 //
 
 #include "net/network_channel.h"
-
-#include <QNetworkProxy>
-
 #include "base/logging.h"
 #include "crypto/cryptor.h"
+
+#include <QNetworkProxy>
 
 namespace net {
 

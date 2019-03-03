@@ -17,7 +17,6 @@
 //
 
 #include "codec/cursor_decoder.h"
-
 #include "base/logging.h"
 #include "desktop/mouse_cursor_cache.h"
 

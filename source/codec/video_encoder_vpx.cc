@@ -17,14 +17,13 @@
 //
 
 #include "codec/video_encoder_vpx.h"
-
-#include <thread>
-
-#include <libyuv/convert_from_argb.h>
-
 #include "base/logging.h"
 #include "codec/video_util.h"
 #include "desktop/desktop_frame.h"
+
+#include <libyuv/convert_from_argb.h>
+
+#include <thread>
 
 namespace codec {
 

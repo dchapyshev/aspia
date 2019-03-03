@@ -17,9 +17,6 @@
 //
 
 #include "host/screen_updater_impl.h"
-
-#include <QCoreApplication>
-
 #include "codec/cursor_encoder.h"
 #include "codec/scale_reducer.h"
 #include "codec/video_encoder_vpx.h"
@@ -31,6 +28,8 @@
 #include "desktop/cursor_capturer_win.h"
 #include "desktop/screen_capturer_gdi.h"
 #include "proto/desktop_session_extensions.pb.h"
+
+#include <QCoreApplication>
 
 namespace host {
 

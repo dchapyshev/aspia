@@ -19,11 +19,6 @@
 #ifndef IPC__IPC_CHANNEL_H
 #define IPC__IPC_CHANNEL_H
 
-#include <QByteArray>
-#include <QLocalSocket>
-#include <QQueue>
-#include <QPointer>
-
 #include "base/macros_magic.h"
 #include "build/build_config.h"
 
@@ -31,6 +26,11 @@
 #include "base/process_handle.h"
 #include "base/win/session_id.h"
 #endif // defined(OS_WIN)
+
+#include <QByteArray>
+#include <QLocalSocket>
+#include <QQueue>
+#include <QPointer>
 
 namespace ipc {
 

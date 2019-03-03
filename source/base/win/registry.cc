@@ -17,7 +17,6 @@
 //
 
 #include "base/win/registry.h"
-
 #include "base/logging.h"
 
 namespace base::win {

@@ -19,10 +19,10 @@
 #ifndef DESKTOP__DESKTOP_FRAME_H
 #define DESKTOP__DESKTOP_FRAME_H
 
-#include <QRegion>
-
 #include "base/macros_magic.h"
 #include "desktop/pixel_format.h"
+
+#include <QRegion>
 
 namespace desktop {
 

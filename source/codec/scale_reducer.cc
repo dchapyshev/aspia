@@ -17,11 +17,10 @@
 //
 
 #include "codec/scale_reducer.h"
-
-#include <libyuv/scale_argb.h>
-
 #include "base/logging.h"
 #include "desktop/desktop_frame_aligned.h"
+
+#include <libyuv/scale_argb.h>
 
 namespace codec {
 

@@ -19,12 +19,11 @@
 #ifndef HOST__WIN__HOST_PROCESS_H
 #define HOST__WIN__HOST_PROCESS_H
 
-#include <QObject>
-#include <QPointer>
-
-#include "base/macros_magic.h"
 #include "base/win/process.h"
 #include "base/win/session_id.h"
+
+#include <QObject>
+#include <QPointer>
 
 namespace host {
 

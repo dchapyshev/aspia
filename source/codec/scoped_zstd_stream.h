@@ -19,9 +19,9 @@
 #ifndef CODEC__SCOPED_ZSTD_STREAM_H
 #define CODEC__SCOPED_ZSTD_STREAM_H
 
-#include <memory>
-
 #include <zstd.h>
+
+#include <memory>
 
 namespace codec {
 

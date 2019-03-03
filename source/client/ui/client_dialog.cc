@@ -17,14 +17,13 @@
 //
 
 #include "client/ui/client_dialog.h"
-
-#include <QMessageBox>
-
 #include "build/build_config.h"
 #include "client/ui/desktop_config_dialog.h"
 #include "client/config_factory.h"
 #include "common/desktop_session_constants.h"
 #include "net/address.h"
+
+#include <QMessageBox>
 
 namespace client {
 

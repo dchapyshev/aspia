@@ -17,7 +17,6 @@
 //
 
 #include "client/file_remover.h"
-
 #include "base/logging.h"
 #include "client/file_remove_queue_builder.h"
 #include "client/file_status.h"

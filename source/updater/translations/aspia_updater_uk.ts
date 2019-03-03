@@ -73,62 +73,62 @@
 <context>
     <name>updater::UpdateDialog</name>
     <message>
-        <location filename="../update_dialog.cc" line="120"/>
+        <location filename="../update_dialog.cc" line="119"/>
         <source>Unknown</source>
         <translation>Невідомо</translation>
     </message>
     <message>
-        <location filename="../update_dialog.cc" line="121"/>
+        <location filename="../update_dialog.cc" line="120"/>
         <source>Error retrieving update information.</source>
         <translation>Помилка під час отримання інформації про оновлення.</translation>
     </message>
     <message>
-        <location filename="../update_dialog.cc" line="139"/>
+        <location filename="../update_dialog.cc" line="138"/>
         <source>No updates available.</source>
         <translation>Немає доступних оновлень.</translation>
     </message>
     <message>
-        <location filename="../update_dialog.cc" line="51"/>
+        <location filename="../update_dialog.cc" line="50"/>
         <source>Receiving information...</source>
         <translation>Отримання інформації...</translation>
     </message>
     <message>
-        <location filename="../update_dialog.cc" line="102"/>
+        <location filename="../update_dialog.cc" line="101"/>
         <source>Cancel checking for updates. Please wait.</source>
         <translation>Відміна перевірки оновлень. Будь ласка, зачекайте.</translation>
     </message>
     <message>
-        <location filename="../update_dialog.cc" line="148"/>
+        <location filename="../update_dialog.cc" line="147"/>
         <source>An update will be downloaded. After the download is complete, the application will automatically close.</source>
         <translation>Оновлення буде завантажено. Після завершення завантаження програма автоматично закриється.</translation>
     </message>
     <message>
-        <location filename="../update_dialog.cc" line="150"/>
+        <location filename="../update_dialog.cc" line="149"/>
         <source>All connected sessions will be terminated. You cannot establish a connection until the update is complete.</source>
         <translation>Всі активні сесії буде припинено. Ви не зможете встановити з&apos;єднання поки оновлення не буде завершено.</translation>
     </message>
     <message>
-        <location filename="../update_dialog.cc" line="152"/>
+        <location filename="../update_dialog.cc" line="151"/>
         <source>All unsaved data will be lost.</source>
         <translation>Всі незбережені дані буде втрачено.</translation>
     </message>
     <message>
-        <location filename="../update_dialog.cc" line="153"/>
+        <location filename="../update_dialog.cc" line="152"/>
         <source>Continue?</source>
         <translation>Продовжити?</translation>
     </message>
     <message>
-        <location filename="../update_dialog.cc" line="156"/>
+        <location filename="../update_dialog.cc" line="155"/>
         <source>Confirmation</source>
         <translation>Підтвердження</translation>
     </message>
     <message>
-        <location filename="../update_dialog.cc" line="166"/>
+        <location filename="../update_dialog.cc" line="165"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
     <message>
-        <location filename="../update_dialog.cc" line="167"/>
+        <location filename="../update_dialog.cc" line="166"/>
         <source>An error occurred while installing the update: %1</source>
         <translation>Сталася помилка під час встановлення оновлення: %1</translation>
     </message>

@@ -16,13 +16,13 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
+#include "base/guid.h"
+#include "base/string_util.h"
+
 #include <gtest/gtest.h>
 
 #include <cstdint>
 #include <limits>
-
-#include "base/guid.h"
-#include "base/string_util.h"
 
 namespace base {
 

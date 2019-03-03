@@ -17,7 +17,6 @@
 //
 
 #include "host/host_session_fake_desktop.h"
-
 #include "codec/video_encoder_vpx.h"
 #include "codec/video_encoder_zstd.h"
 #include "codec/video_util.h"

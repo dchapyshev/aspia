@@ -19,9 +19,9 @@
 #ifndef CONSOLE__COMPUTER_GROUP_DRAG_H
 #define CONSOLE__COMPUTER_GROUP_DRAG_H
 
-#include <QDrag>
-
 #include "console/computer_group_mime_data.h"
+
+#include <QDrag>
 
 namespace console {
 

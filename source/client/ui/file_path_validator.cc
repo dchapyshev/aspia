@@ -17,7 +17,6 @@
 //
 
 #include "client/ui/file_path_validator.h"
-
 #include "common/file_platform_util.h"
 
 namespace client {

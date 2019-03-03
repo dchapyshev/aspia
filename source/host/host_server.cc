@@ -17,9 +17,6 @@
 //
 
 #include "host/host_server.h"
-
-#include <QCoreApplication>
-
 #include "base/guid.h"
 #include "base/qt_logging.h"
 #include "base/win/session_info.h"
@@ -27,6 +24,8 @@
 #include "host/host_settings.h"
 #include "net/firewall_manager.h"
 #include "net/network_channel_host.h"
+
+#include <QCoreApplication>
 
 namespace host {
 

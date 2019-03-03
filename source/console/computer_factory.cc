@@ -17,7 +17,6 @@
 //
 
 #include "console/computer_factory.h"
-
 #include "build/build_config.h"
 #include "base/logging.h"
 #include "codec/video_util.h"

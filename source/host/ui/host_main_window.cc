@@ -18,12 +18,6 @@
 
 #include "host/ui/host_main_window.h"
 
-#include <QCloseEvent>
-#include <QDesktopServices>
-#include <QFile>
-#include <QMessageBox>
-#include <QUrl>
-
 #include "base/qt_logging.h"
 #include "base/xml_settings.h"
 #include "common/ui/about_dialog.h"
@@ -34,6 +28,12 @@
 #include "host/host_ui_client.h"
 #include "host/password_generator.h"
 #include "net/adapter_enumerator.h"
+
+#include <QCloseEvent>
+#include <QDesktopServices>
+#include <QFile>
+#include <QMessageBox>
+#include <QUrl>
 
 namespace host {
 

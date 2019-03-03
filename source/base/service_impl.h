@@ -19,8 +19,6 @@
 #ifndef BASE__SERVICE_IMPL_H
 #define BASE__SERVICE_IMPL_H
 
-#include <QString>
-
 #include "base/macros_magic.h"
 #include "build/build_config.h"
 
@@ -28,6 +26,8 @@
 #include "base/win/session_id.h"
 #include "base/win/session_status.h"
 #endif // defined(OS_WIN)
+
+#include <QString>
 
 namespace base {
 

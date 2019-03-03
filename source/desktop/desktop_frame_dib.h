@@ -19,12 +19,10 @@
 #ifndef DESKTOP__DESKTOP_FRAME_DIB_H
 #define DESKTOP__DESKTOP_FRAME_DIB_H
 
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-#include <memory>
-
 #include "base/win/scoped_gdi_object.h"
 #include "desktop/desktop_frame.h"
+
+#include <memory>
 
 namespace desktop {
 

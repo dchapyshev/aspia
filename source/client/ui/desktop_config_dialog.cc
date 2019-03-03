@@ -17,7 +17,6 @@
 //
 
 #include "client/ui/desktop_config_dialog.h"
-
 #include "base/logging.h"
 #include "client/config_factory.h"
 #include "codec/video_util.h"

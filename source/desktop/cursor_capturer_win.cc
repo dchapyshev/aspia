@@ -17,7 +17,6 @@
 //
 
 #include "desktop/cursor_capturer_win.h"
-
 #include "base/win/scoped_hdc.h"
 #include "desktop/win/cursor.h"
 

@@ -17,13 +17,12 @@
 //
 
 #include "crypto/data_cryptor_chacha20_poly1305.h"
-
-#include <openssl/evp.h>
-
 #include "base/logging.h"
 #include "crypto/openssl_util.h"
 #include "crypto/random.h"
 #include "crypto/secure_memory.h"
+
+#include <openssl/evp.h>
 
 namespace crypto {
 

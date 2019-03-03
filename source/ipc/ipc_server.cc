@@ -17,13 +17,12 @@
 //
 
 #include "ipc/ipc_server.h"
-
-#include <QCoreApplication>
-#include <QLocalServer>
-
 #include "base/qt_logging.h"
 #include "crypto/random.h"
 #include "ipc/ipc_channel.h"
+
+#include <QCoreApplication>
+#include <QLocalServer>
 
 namespace ipc {
 

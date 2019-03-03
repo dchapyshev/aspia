@@ -17,13 +17,6 @@
 //
 
 #include "host/host_main.h"
-
-#include <QAbstractEventDispatcher>
-#include <QAbstractNativeEventFilter>
-#include <QApplication>
-#include <QCommandLineParser>
-#include <QMessageBox>
-
 #include "base/base_paths.h"
 #include "base/qt_logging.h"
 #include "base/win/scoped_thread_desktop.h"
@@ -34,6 +27,12 @@
 #include "host/host_settings.h"
 #include "host/host_single_application.h"
 #include "updater/update_dialog.h"
+
+#include <QAbstractEventDispatcher>
+#include <QAbstractNativeEventFilter>
+#include <QApplication>
+#include <QCommandLineParser>
+#include <QMessageBox>
 
 namespace {
 

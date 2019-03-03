@@ -17,11 +17,10 @@
 //
 
 #include "crypto/cryptor_aes256_gcm.h"
-
-#include <openssl/evp.h>
-
 #include "base/logging.h"
 #include "crypto/large_number_increment.h"
+
+#include <openssl/evp.h>
 
 namespace crypto {
 

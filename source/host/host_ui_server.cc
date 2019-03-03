@@ -17,7 +17,6 @@
 //
 
 #include "host/host_ui_server.h"
-
 #include "base/logging.h"
 #include "base/win/session_enumerator.h"
 #include "host/host_ui_constants.h"

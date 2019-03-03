@@ -19,9 +19,9 @@
 #ifndef HOST__UI__USER_TREE_ITEM_H
 #define HOST__UI__USER_TREE_ITEM_H
 
-#include <QTreeWidget>
-
 #include "base/macros_magic.h"
+
+#include <QTreeWidget>
 
 namespace net {
 struct SrpUser;

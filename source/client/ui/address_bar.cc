@@ -17,14 +17,13 @@
 //
 
 #include "client/ui/address_bar.h"
+#include "client/ui/address_bar_model.h"
+#include "client/ui/file_path_validator.h"
 
 #include <QLineEdit>
 #include <QMessageBox>
 #include <QTreeView>
 #include <QToolTip>
-
-#include "client/ui/address_bar_model.h"
-#include "client/ui/file_path_validator.h"
 
 namespace client {
 

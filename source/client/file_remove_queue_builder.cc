@@ -17,11 +17,10 @@
 //
 
 #include "client/file_remove_queue_builder.h"
-
-#include <QCoreApplication>
-
 #include "client/file_status.h"
 #include "common/file_request.h"
+
+#include <QCoreApplication>
 
 namespace client {
 

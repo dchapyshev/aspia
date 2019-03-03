@@ -19,9 +19,9 @@
 #ifndef BASE__SYS_INFO_H
 #define BASE__SYS_INFO_H
 
-#include <string>
-
 #include "base/macros_magic.h"
+
+#include <string>
 
 namespace base {
 

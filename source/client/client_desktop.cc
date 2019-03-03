@@ -17,17 +17,16 @@
 //
 
 #include "client/client_desktop.h"
-
-#include <QCursor>
-#include <QImage>
-#include <QPixmap>
-
 #include "base/logging.h"
 #include "codec/cursor_decoder.h"
 #include "codec/video_decoder.h"
 #include "codec/video_util.h"
 #include "common/desktop_session_constants.h"
 #include "desktop/mouse_cursor.h"
+
+#include <QCursor>
+#include <QImage>
+#include <QPixmap>
 
 namespace client {
 

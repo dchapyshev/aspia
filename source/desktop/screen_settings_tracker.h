@@ -19,10 +19,10 @@
 #ifndef DESKTOP__SCREEN_SETTINGS_TRACKER_H
 #define DESKTOP__SCREEN_SETTINGS_TRACKER_H
 
-#include <QRect>
-
 #include "base/macros_magic.h"
 #include "desktop/pixel_format.h"
+
+#include <QRect>
 
 namespace desktop {
 

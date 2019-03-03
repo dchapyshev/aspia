@@ -19,9 +19,9 @@
 #ifndef CLIENT__UI__FILE_MANAGER_SETTINGS_H
 #define CLIENT__UI__FILE_MANAGER_SETTINGS_H
 
-#include <QSettings>
-
 #include "base/macros_magic.h"
+
+#include <QSettings>
 
 namespace client {
 
