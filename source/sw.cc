@@ -39,6 +39,7 @@ void build(Solution &s)
     base.Public += "UNICODE"_def;
     base.Public += "NOMINMAX"_def;
     base.Public += "org.sw.demo.qtproject.qt.base.widgets-*"_dep;
+    base.Public += "org.sw.demo.qtproject.qt.base.network-*"_dep;
     base.Public += "org.sw.demo.qtproject.qt.base.xml-*"_dep;
     base.Public += "org.sw.demo.boost.align-1"_dep;
     automoc("org.sw.demo.qtproject.qt.base.tools.moc-*"_dep, base);
