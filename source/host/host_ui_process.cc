@@ -19,12 +19,13 @@
 #include "host/host_ui_process.h"
 #include "base/qt_logging.h"
 #include "common/message_serialization.h"
+#include "host/password_generator.h"
 #include "host/win/host_process.h"
 #include "ipc/ipc_channel.h"
+#include "net/adapter_enumerator.h"
 #include "proto/host.pb.h"
 
 #include <QCoreApplication>
-#include <QUuid>
 
 namespace host {
 
@@ -109,6 +110,9 @@ bool UiProcess::start()
     connect(channel_, &ipc::Channel::messageReceived, this, &UiProcess::onMessageReceived);
     connect(channel_, &ipc::Channel::disconnected, this, &UiProcess::stop, Qt::QueuedConnection);
 
+    sendCreditionals(proto::host::CreditionalsRequest::REFRESH |
+                     proto::host::CreditionalsRequest::NEW_PASSWORD);
+
     state_ = State::STARTED;
     channel_->start();
     return true;
@@ -145,7 +149,11 @@ void UiProcess::onMessageReceived(const QByteArray& buffer)
         return;
     }
 
-    if (message.has_kill_session())
+    if (message.has_creditionals_request())
+    {
+        sendCreditionals(message.creditionals_request().flags());
+    }
+    else if (message.has_kill_session())
     {
         emit killSession(message.kill_session().uuid());
     }
@@ -153,6 +161,41 @@ void UiProcess::onMessageReceived(const QByteArray& buffer)
     {
         LOG(LS_WARNING) << "Unhandled message from UI";
     }
+}
+
+void UiProcess::sendCreditionals(uint32_t flags)
+{
+    if (!flags)
+    {
+        LOG(LS_ERROR) << "Invalid flag value";
+        return;
+    }
+
+    proto::host::ServiceToUi message;
+
+    if ((flags & proto::host::CreditionalsRequest::NEW_PASSWORD) || session_password_.empty())
+    {
+        PasswordGenerator generator;
+
+        // TODO: Get password parameters from settings.
+        generator.setCharacters(PasswordGenerator::LOWER_CASE | PasswordGenerator::DIGITS);
+        generator.setLength(6);
+
+        session_password_ = generator.result();
+    }
+
+    message.mutable_creditionals()->set_password(session_password_);
+
+    for (net::AdapterEnumerator adapters; !adapters.isAtEnd(); adapters.advance())
+    {
+        for (net::AdapterEnumerator::IpAddressEnumerator addresses(adapters);
+             !addresses.isAtEnd(); addresses.advance())
+        {
+            message.mutable_creditionals()->add_ip(addresses.address());
+        }
+    }
+
+    channel_->send(common::serializeMessage(message));
 }
 
 } // namespace host

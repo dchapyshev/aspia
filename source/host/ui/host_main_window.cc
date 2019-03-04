@@ -26,8 +26,6 @@
 #include "host/ui/host_notifier_window.h"
 #include "host/host_settings.h"
 #include "host/host_ui_client.h"
-#include "host/password_generator.h"
-#include "net/adapter_enumerator.h"
 
 #include <QCloseEvent>
 #include <QDesktopServices>
@@ -55,8 +53,6 @@ MainWindow::MainWindow(Settings& settings, common::LocaleLoader& locale_loader, 
     tray_icon_.show();
 
     createLanguageMenu(settings.locale());
-    refreshIpList();
-    newPassword();
 
     connect(&tray_icon_, &QSystemTrayIcon::activated, [this](QSystemTrayIcon::ActivationReason reason)
     {
@@ -73,12 +69,7 @@ MainWindow::MainWindow(Settings& settings, common::LocaleLoader& locale_loader, 
     connect(ui.action_help, &QAction::triggered, this, &MainWindow::onHelp);
     connect(ui.action_about, &QAction::triggered, this, &MainWindow::onAbout);
 
-    connect(ui.button_refresh_ip_list, &QPushButton::released, this, &MainWindow::refreshIpList);
-    connect(ui.button_new_password, &QPushButton::released, this, &MainWindow::newPassword);
-
     setFixedHeight(sizeHint().height());
-
-
 }
 
 MainWindow::~MainWindow() = default;
@@ -88,6 +79,18 @@ void MainWindow::connectToService()
     if (!client_)
     {
         client_ = new UiClient(this);
+
+        connect(ui.button_new_password, &QPushButton::released, client_, &UiClient::newPassword);
+        connect(ui.button_refresh_ip_list, &QPushButton::released, client_, &UiClient::refresh);
+
+        connect(client_, &UiClient::creditionalsReceived,
+                this, &MainWindow::onCreditionalsReceived);
+
+        connect(client_, &UiClient::connected, [this]()
+        {
+            ui.button_new_password->setEnabled(true);
+            ui.button_refresh_ip_list->setEnabled(true);
+        });
 
         connect(client_, &UiClient::disconnected, this, &MainWindow::realClose);
         connect(client_, &UiClient::errorOccurred, client_, &UiClient::deleteLater);
@@ -150,35 +153,54 @@ void MainWindow::realClose()
     close();
 }
 
-void MainWindow::refreshIpList()
+void MainWindow::onCreditionalsReceived(const proto::host::Creditionals& creditionals)
 {
-    QString ip_list;
+    bool has_id = !creditionals.id().empty();
 
-    for (net::AdapterEnumerator adapters; !adapters.isAtEnd(); adapters.advance())
+    ui.label_icon_id->setEnabled(has_id);
+    ui.label_id->setEnabled(has_id);
+    ui.edit_id->setEnabled(has_id);
+
+    if (has_id)
+        ui.edit_id->setText(QString::fromStdString(creditionals.id()));
+    else
+        ui.edit_id->setText(tr("Not available"));
+
+    bool has_password = !creditionals.password().empty();
+
+    ui.label_icon_password->setEnabled(has_password);
+    ui.label_password->setEnabled(has_password);
+    ui.edit_password->setEnabled(has_password);
+
+    if (!creditionals.password().empty())
+        ui.edit_password->setText(QString::fromStdString(creditionals.password()));
+    else
+        ui.edit_password->setText(tr("Not available"));
+
+    bool has_ip = creditionals.ip_size() > 0;
+
+    ui.label_icon_ip->setEnabled(has_ip);
+    ui.label_ip->setEnabled(has_ip);
+    ui.edit_ip->setEnabled(has_ip);
+
+    if (has_ip)
     {
-        for (net::AdapterEnumerator::IpAddressEnumerator addresses(adapters);
-             !addresses.isAtEnd(); addresses.advance())
+        QString ip_list;
+
+        for (int i = 0; i < creditionals.ip_size(); ++i)
         {
             if (!ip_list.isEmpty())
                 ip_list += QStringLiteral(", ");
 
-            ip_list += QString::fromStdString(addresses.address());
+            ip_list += QString::fromStdString(creditionals.ip(i));
         }
+
+        ui.edit_ip->setText(ip_list);
     }
-
-    ui.edit_ip->setText(ip_list);
-}
-
-void MainWindow::newPassword()
-{
-    PasswordGenerator generator;
-
-    generator.setLength(8);
-    generator.setCharacters(PasswordGenerator::LOWER_CASE |
-                            PasswordGenerator::UPPER_CASE |
-                            PasswordGenerator::DIGITS);
-
-    ui.edit_password->setText(generator.result());
+    else
+    {
+        ui.edit_ip->setText(tr("Not available"));
+    }
 }
 
 void MainWindow::onLanguageChanged(QAction* action)

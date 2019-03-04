@@ -28,6 +28,10 @@
 #include <QPointer>
 #include <QSystemTrayIcon>
 
+namespace proto::host {
+class Creditionals;
+} // namespace proto::host
+
 namespace host {
 
 class NotifierWindow;
@@ -52,9 +56,8 @@ protected:
 
 private slots:
     void realClose();
-    void refreshIpList();
-    void newPassword();
 
+    void onCreditionalsReceived(const proto::host::Creditionals& creditionals);
     void onLanguageChanged(QAction* action);
     void onSettings();
     void onShowHide();

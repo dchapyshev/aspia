@@ -24,6 +24,25 @@ import "common.proto";
 
 package proto.host;
 
+message CreditionalsRequest
+{
+    enum Flags
+    {
+        BAD_FLAGS    = 0;
+        REFRESH      = 1;
+        NEW_PASSWORD = 2;
+    }
+
+    uint32 flags = 1;
+}
+
+message Creditionals
+{
+    repeated string ip = 1;
+    string id          = 2;
+    string password    = 3;
+}
+
 message ConnectEvent
 {
     string uuid              = 1;
@@ -44,11 +63,13 @@ message KillSession
 
 message UiToService
 {
-    KillSession kill_session = 1;
+    CreditionalsRequest creditionals_request = 1;
+    KillSession kill_session = 2;
 }
 
 message ServiceToUi
 {
-    ConnectEvent connect_event       = 1;
-    DisconnectEvent disconnect_event = 2;
+    Creditionals creditionals        = 1;
+    ConnectEvent connect_event       = 2;
+    DisconnectEvent disconnect_event = 3;
 }

@@ -64,6 +64,8 @@ private slots:
     void onMessageReceived(const QByteArray& buffer);
 
 private:
+    void sendCreditionals(uint32_t flags);
+
     // Contains the status of the UI process.
     State state_ = State::STOPPED;
 
@@ -71,6 +73,8 @@ private:
     ipc::Channel* channel_;
 
     base::win::Process* process_ = nullptr;
+
+    std::string session_password_;
 
     DISALLOW_COPY_AND_ASSIGN(UiProcess);
 };

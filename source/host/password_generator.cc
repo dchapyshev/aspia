@@ -50,7 +50,7 @@ int PasswordGenerator::length() const
     return length_;
 }
 
-QString PasswordGenerator::result() const
+std::string PasswordGenerator::result() const
 {
     std::vector<char> table;
 
@@ -77,7 +77,7 @@ QString PasswordGenerator::result() const
 
     std::shuffle(table.begin(), table.end(), generator);
 
-    QString result;
+    std::string result;
 
     for (int i = 0; i < length_; ++i)
     {

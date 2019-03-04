@@ -21,7 +21,7 @@
 
 #include "base/macros_magic.h"
 
-#include <QString>
+#include <string>
 
 namespace host {
 
@@ -47,7 +47,7 @@ public:
     void setLength(int value);
     int length() const;
 
-    QString result() const;
+    std::string result() const;
 
 private:
     uint32_t characters_ = kDefaultCharacters;

@@ -46,11 +46,15 @@ public:
     void start();
     void stop();
 
+    void refresh();
+    void newPassword();
     void killSession(const std::string& uuid);
 
 signals:
+    void connected();
     void disconnected();
     void errorOccurred();
+    void creditionalsReceived(const proto::host::Creditionals& creditionals);
     void connectEvent(const proto::host::ConnectEvent& event);
     void disconnectEvent(const proto::host::DisconnectEvent& event);
 

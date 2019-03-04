@@ -68,6 +68,9 @@
       <property name="enabled">
        <bool>false</bool>
       </property>
+      <property name="text">
+       <string>Not available</string>
+      </property>
       <property name="readOnly">
        <bool>true</bool>
       </property>
@@ -77,6 +80,9 @@
      <layout class="QHBoxLayout" name="horizontalLayout_2">
       <item>
        <widget class="QLabel" name="label_icon_ip">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
           <horstretch>0</horstretch>
@@ -96,6 +102,9 @@
       </item>
       <item>
        <widget class="QLabel" name="label_ip">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="text">
          <string>Your IP:</string>
         </property>
@@ -107,6 +116,12 @@
      <layout class="QHBoxLayout" name="horizontalLayout_6">
       <item>
        <widget class="QLineEdit" name="edit_ip">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="text">
+         <string>Not available</string>
+        </property>
         <property name="readOnly">
          <bool>true</bool>
         </property>
@@ -114,6 +129,9 @@
       </item>
       <item>
        <widget class="QPushButton" name="button_refresh_ip_list">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
           <horstretch>0</horstretch>
@@ -135,6 +153,9 @@
      <layout class="QHBoxLayout" name="horizontalLayout_4">
       <item>
        <widget class="QLabel" name="label_icon_password">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
           <horstretch>0</horstretch>
@@ -154,6 +175,9 @@
       </item>
       <item>
        <widget class="QLabel" name="label_password">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="text">
          <string>Password:</string>
         </property>
@@ -165,6 +189,12 @@
      <layout class="QHBoxLayout" name="horizontalLayout_5">
       <item>
        <widget class="QLineEdit" name="edit_password">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="text">
+         <string>Not available</string>
+        </property>
         <property name="readOnly">
          <bool>true</bool>
         </property>
@@ -172,6 +202,9 @@
       </item>
       <item>
        <widget class="QPushButton" name="button_new_password">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
           <horstretch>0</horstretch>

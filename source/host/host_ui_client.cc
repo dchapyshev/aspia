@@ -39,6 +39,8 @@ void UiClient::start()
     connect(channel_, &ipc::Channel::connected, [this]()
     {
         state_ = State::CONNECTED;
+        emit connected();
+
         channel_->start();
     });
 
@@ -61,6 +63,32 @@ void UiClient::stop()
     emit disconnected();
 }
 
+void UiClient::refresh()
+{
+    if (!channel_)
+        return;
+
+    proto::host::UiToService message;
+
+    message.mutable_creditionals_request()->set_flags(
+        proto::host::CreditionalsRequest::REFRESH);
+
+    channel_->send(common::serializeMessage(message));
+}
+
+void UiClient::newPassword()
+{
+    if (!channel_)
+        return;
+
+    proto::host::UiToService message;
+
+    message.mutable_creditionals_request()->set_flags(
+        proto::host::CreditionalsRequest::NEW_PASSWORD);
+
+    channel_->send(common::serializeMessage(message));
+}
+
 void UiClient::killSession(const std::string& uuid)
 {
     if (!channel_)
@@ -81,7 +109,11 @@ void UiClient::onChannelMessage(const QByteArray& buffer)
         return;
     }
 
-    if (message.has_connect_event())
+    if (message.has_creditionals())
+    {
+        emit creditionalsReceived(message.creditionals());
+    }
+    else if (message.has_connect_event())
     {
         emit connectEvent(message.connect_event());
     }
