@@ -29,4 +29,10 @@ Licensing
 ---------
 Project code is available under the GNU General Public License 3.
 
-For more information, see LICENSE.md.
+For more information, see [license agreement](LICENSE.md).
+
+See also
+--------
+- [Code of Conduct](CODE_OF_CONDUCT.md)
+- [Instructions for building the project](doc/building.md)
+- [Instructions for translators](doc/translators.md)
