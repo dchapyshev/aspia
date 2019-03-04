@@ -21,7 +21,7 @@ syntax = "proto3";
 option optimize_for = LITE_RUNTIME;
 
 import "common.proto";
-import "desktop_session.proto";
+import "desktop.proto";
 
 package proto.address_book;
 

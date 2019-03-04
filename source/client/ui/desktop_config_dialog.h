@@ -21,7 +21,7 @@
 
 #include "base/macros_magic.h"
 #include "proto/common.pb.h"
-#include "proto/desktop_session.pb.h"
+#include "proto/desktop.pb.h"
 #include "ui_desktop_config_dialog.h"
 
 #include <QDialog>

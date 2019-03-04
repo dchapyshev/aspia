@@ -377,7 +377,7 @@ void HostServer::sendConnectEvent(const SessionProcess* session_process)
     if (!ui_server_)
         return;
 
-    proto::notifier::ConnectEvent event;
+    proto::host::ConnectEvent event;
 
     event.set_session_type(session_process->sessionType());
     event.set_remote_address(session_process->remoteAddress().toStdString());

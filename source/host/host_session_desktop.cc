@@ -23,7 +23,7 @@
 #include "common/message_serialization.h"
 #include "host/input_injector.h"
 #include "host/host_system_info.h"
-#include "proto/desktop_session_extensions.pb.h"
+#include "proto/desktop_extensions.pb.h"
 #if defined(OS_WIN)
 #include "host/win/updater_launcher.h"
 #endif // defined(OS_WIN)

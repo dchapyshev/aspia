@@ -19,11 +19,11 @@
 list(APPEND SOURCE_PROTO
     address_book.proto
     common.proto
-    desktop_session.proto
-    desktop_session_extensions.proto
-    file_transfer_session.proto
+    desktop.proto
+    desktop_extensions.proto
+    file_transfer.proto
     key_exchange.proto
-    notifier.proto
+    host.proto
     system_info.proto)
 
 protobuf_generate_cpp(PROTO_CC_FILES PROTO_H_FILES ${SOURCE_PROTO})

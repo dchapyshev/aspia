@@ -21,7 +21,7 @@
 
 #include "base/macros_magic.h"
 #include "host/host_session_fake.h"
-#include "proto/desktop_session.pb.h"
+#include "proto/desktop.pb.h"
 
 namespace codec {
 class VideoEncoder;

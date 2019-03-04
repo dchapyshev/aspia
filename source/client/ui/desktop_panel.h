@@ -21,8 +21,8 @@
 
 #include "base/macros_magic.h"
 #include "proto/common.pb.h"
-#include "proto/desktop_session.pb.h"
-#include "proto/desktop_session_extensions.pb.h"
+#include "proto/desktop.pb.h"
+#include "proto/desktop_extensions.pb.h"
 #include "ui_desktop_panel.h"
 
 namespace client {

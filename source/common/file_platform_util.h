@@ -20,7 +20,7 @@
 #define COMMON__FILE_PLATFORM_UTIL_H
 
 #include "base/macros_magic.h"
-#include "proto/file_transfer_session.pb.h"
+#include "proto/file_transfer.pb.h"
 
 #include <QIcon>
 #include <QPair>

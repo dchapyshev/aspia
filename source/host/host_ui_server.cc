@@ -119,7 +119,7 @@ void UiServer::setSessionEvent(base::win::SessionStatus status, base::win::Sessi
 }
 
 void UiServer::setConnectEvent(
-    base::win::SessionId session_id, const proto::notifier::ConnectEvent& event)
+    base::win::SessionId session_id, const proto::host::ConnectEvent& event)
 {
     LOG(LS_INFO) << "Connect event (SID: " << session_id << ", UUID: " << event.uuid() << ")";
 

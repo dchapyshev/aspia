@@ -22,7 +22,7 @@
 #include "base/macros_magic.h"
 #include "base/win/session_id.h"
 #include "base/win/process.h"
-#include "proto/notifier.pb.h"
+#include "proto/host.pb.h"
 
 #include <QPointer>
 
@@ -44,7 +44,7 @@ public:
 
     base::win::SessionId sessionId() const;
 
-    void setConnectEvent(const proto::notifier::ConnectEvent& event);
+    void setConnectEvent(const proto::host::ConnectEvent& event);
     void setDisconnectEvent(const std::string& uuid);
 
     enum class State { STOPPED, STARTED };

@@ -91,7 +91,7 @@ void MainWindow::connectToService()
 
         connect(client_, &UiClient::disconnected, this, &MainWindow::realClose);
         connect(client_, &UiClient::errorOccurred, client_, &UiClient::deleteLater);
-        connect(client_, &UiClient::connectEvent, [this](const proto::notifier::ConnectEvent& event)
+        connect(client_, &UiClient::connectEvent, [this](const proto::host::ConnectEvent& event)
         {
             if (!notifier_)
             {

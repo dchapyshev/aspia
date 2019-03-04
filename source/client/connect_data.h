@@ -21,7 +21,7 @@
 
 #include "build/build_config.h"
 #include "proto/common.pb.h"
-#include "proto/desktop_session.pb.h"
+#include "proto/desktop.pb.h"
 
 #include <QString>
 

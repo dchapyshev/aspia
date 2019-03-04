@@ -21,7 +21,7 @@
 #include "common/message_serialization.h"
 #include "host/win/host_process.h"
 #include "ipc/ipc_channel.h"
-#include "proto/notifier.pb.h"
+#include "proto/host.pb.h"
 
 #include <QCoreApplication>
 #include <QUuid>
@@ -73,16 +73,16 @@ base::win::SessionId UiProcess::sessionId() const
     return channel_->clientSessionId();
 }
 
-void UiProcess::setConnectEvent(const proto::notifier::ConnectEvent& event)
+void UiProcess::setConnectEvent(const proto::host::ConnectEvent& event)
 {
-    proto::notifier::ServiceToNotifier message;
+    proto::host::ServiceToUi message;
     message.mutable_connect_event()->CopyFrom(event);
     channel_->send(common::serializeMessage(message));
 }
 
 void UiProcess::setDisconnectEvent(const std::string& uuid)
 {
-    proto::notifier::ServiceToNotifier message;
+    proto::host::ServiceToUi message;
     message.mutable_disconnect_event()->set_uuid(uuid);
     channel_->send(common::serializeMessage(message));
 }
@@ -136,7 +136,7 @@ void UiProcess::onProcessFinished(int exit_code)
 
 void UiProcess::onMessageReceived(const QByteArray& buffer)
 {
-    proto::notifier::NotifierToService message;
+    proto::host::UiToService message;
 
     if (!common::parseMessage(buffer, message))
     {

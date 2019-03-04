@@ -19,7 +19,7 @@
 #ifndef CODEC__VIDEO_DECODER_H
 #define CODEC__VIDEO_DECODER_H
 
-#include "proto/desktop_session.pb.h"
+#include "proto/desktop.pb.h"
 
 #include <memory>
 

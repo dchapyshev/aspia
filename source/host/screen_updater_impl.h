@@ -20,7 +20,7 @@
 #define HOST__SCREEN_UPDATER_IMPL_H
 
 #include "desktop/screen_capturer.h"
-#include "proto/desktop_session.pb.h"
+#include "proto/desktop.pb.h"
 
 #include <QEvent>
 #include <QThread>

@@ -20,7 +20,7 @@
 #define HOST__UI__HOST_NOTIFIER_WINDOW_H
 
 #include "base/macros_magic.h"
-#include "proto/notifier.pb.h"
+#include "proto/host.pb.h"
 #include "ui_host_notifier_window.h"
 
 namespace host {
@@ -34,8 +34,8 @@ public:
     ~NotifierWindow() = default;
 
 public slots:
-    void onConnectEvent(const proto::notifier::ConnectEvent& event);
-    void onDisconnectEvent(const proto::notifier::DisconnectEvent& event);
+    void onConnectEvent(const proto::host::ConnectEvent& event);
+    void onDisconnectEvent(const proto::host::DisconnectEvent& event);
     void disconnectAll();
 
 signals:

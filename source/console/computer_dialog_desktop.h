@@ -22,7 +22,7 @@
 #include "base/macros_magic.h"
 #include "console/computer_dialog_tab.h"
 #include "proto/common.pb.h"
-#include "proto/desktop_session.pb.h"
+#include "proto/desktop.pb.h"
 #include "ui_computer_dialog_desktop.h"
 
 namespace console {

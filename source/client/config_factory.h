@@ -20,7 +20,7 @@
 #define CLIENT__CONFIG_FACTORY_H
 
 #include "base/macros_magic.h"
-#include "proto/desktop_session.pb.h"
+#include "proto/desktop.pb.h"
 
 namespace client {
 

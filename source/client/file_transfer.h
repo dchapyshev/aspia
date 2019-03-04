@@ -21,7 +21,7 @@
 
 #include "client/file_transfer_task.h"
 #include "common/file_request.h"
-#include "proto/file_transfer_session.pb.h"
+#include "proto/file_transfer.pb.h"
 
 #include <QQueue>
 #include <QPair>

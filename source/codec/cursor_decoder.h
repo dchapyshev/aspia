@@ -21,7 +21,7 @@
 
 #include "base/macros_magic.h"
 #include "codec/scoped_zstd_stream.h"
-#include "proto/desktop_session.pb.h"
+#include "proto/desktop.pb.h"
 
 #include <memory>
 

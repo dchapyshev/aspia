@@ -19,7 +19,7 @@
 #ifndef CLIENT__FILE_STATUS_H
 #define CLIENT__FILE_STATUS_H
 
-#include "proto/file_transfer_session.pb.h"
+#include "proto/file_transfer.pb.h"
 
 #include <QString>
 

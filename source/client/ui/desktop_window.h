@@ -22,8 +22,8 @@
 #include "client/ui/client_window.h"
 #include "client/ui/desktop_widget.h"
 #include "client/client_desktop.h"
-#include "proto/desktop_session.pb.h"
-#include "proto/desktop_session_extensions.pb.h"
+#include "proto/desktop.pb.h"
+#include "proto/desktop_extensions.pb.h"
 
 class QHBoxLayout;
 class QScrollArea;

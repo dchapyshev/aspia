@@ -32,7 +32,7 @@ namespace {
 class SessionTreeItem : public QTreeWidgetItem
 {
 public:
-    SessionTreeItem(const proto::notifier::ConnectEvent& event)
+    SessionTreeItem(const proto::host::ConnectEvent& event)
         : uuid_(event.uuid())
     {
         switch (event.session_type())
@@ -93,13 +93,13 @@ NotifierWindow::NotifierWindow(QWidget* parent)
     updateWindowPosition();
 }
 
-void NotifierWindow::onConnectEvent(const proto::notifier::ConnectEvent& event)
+void NotifierWindow::onConnectEvent(const proto::host::ConnectEvent& event)
 {
     ui.tree->addTopLevelItem(new SessionTreeItem(event));
     ui.button_disconnect_all->setEnabled(true);
 }
 
-void NotifierWindow::onDisconnectEvent(const proto::notifier::DisconnectEvent& event)
+void NotifierWindow::onDisconnectEvent(const proto::host::DisconnectEvent& event)
 {
     for (int i = 0; i < ui.tree->topLevelItemCount(); ++i)
     {

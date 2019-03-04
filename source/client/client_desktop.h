@@ -20,7 +20,7 @@
 #define CLIENT__CLIENT_DESKTOP_H
 
 #include "client/client.h"
-#include "proto/desktop_session_extensions.pb.h"
+#include "proto/desktop_extensions.pb.h"
 #include "proto/system_info.pb.h"
 
 namespace codec {

@@ -22,7 +22,7 @@ option optimize_for = LITE_RUNTIME;
 
 import "common.proto";
 
-package proto.notifier;
+package proto.host;
 
 message ConnectEvent
 {
@@ -42,12 +42,12 @@ message KillSession
     string uuid = 1;
 }
 
-message NotifierToService
+message UiToService
 {
     KillSession kill_session = 1;
 }
 
-message ServiceToNotifier
+message ServiceToUi
 {
     ConnectEvent connect_event       = 1;
     DisconnectEvent disconnect_event = 2;

@@ -20,7 +20,7 @@
 #define CLIENT__UI__SELECT_SCREEN_ACTION_H
 
 #include "base/macros_magic.h"
-#include "proto/desktop_session_extensions.pb.h"
+#include "proto/desktop_extensions.pb.h"
 
 #include <QAction>
 

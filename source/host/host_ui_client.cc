@@ -66,14 +66,14 @@ void UiClient::killSession(const std::string& uuid)
     if (!channel_)
         return;
 
-    proto::notifier::NotifierToService message;
+    proto::host::UiToService message;
     message.mutable_kill_session()->set_uuid(uuid);
     channel_->send(common::serializeMessage(message));
 }
 
 void UiClient::onChannelMessage(const QByteArray& buffer)
 {
-    proto::notifier::ServiceToNotifier message;
+    proto::host::ServiceToUi message;
     if (!common::parseMessage(buffer, message))
     {
         LOG(LS_WARNING) << "Invalid message from service";

@@ -20,7 +20,7 @@
 #define CODEC__VIDEO_ENCODER_H
 
 #include "desktop/screen_settings_tracker.h"
-#include "proto/desktop_session.pb.h"
+#include "proto/desktop.pb.h"
 
 namespace desktop {
 class Frame;

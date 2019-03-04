@@ -22,7 +22,7 @@
 #include "base/macros_magic.h"
 #include "base/win/session_id.h"
 #include "base/win/session_status.h"
-#include "proto/notifier.pb.h"
+#include "proto/host.pb.h"
 
 #include <QObject>
 #include <QPointer>
@@ -55,7 +55,7 @@ public:
     bool hasUiForSession(base::win::SessionId session_id) const;
 
     void setSessionEvent(base::win::SessionStatus status, base::win::SessionId session_id);
-    void setConnectEvent(base::win::SessionId session_id, const proto::notifier::ConnectEvent& event);
+    void setConnectEvent(base::win::SessionId session_id, const proto::host::ConnectEvent& event);
     void setDisconnectEvent(base::win::SessionId session_id, const std::string& uuid);
 
 signals:

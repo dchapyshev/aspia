@@ -20,7 +20,7 @@
 #define HOST__HOST_UI_CLIENT_H
 
 #include "base/macros_magic.h"
-#include "proto/notifier.pb.h"
+#include "proto/host.pb.h"
 
 #include <QObject>
 #include <QPointer>
@@ -51,8 +51,8 @@ public:
 signals:
     void disconnected();
     void errorOccurred();
-    void connectEvent(const proto::notifier::ConnectEvent& event);
-    void disconnectEvent(const proto::notifier::DisconnectEvent& event);
+    void connectEvent(const proto::host::ConnectEvent& event);
+    void disconnectEvent(const proto::host::DisconnectEvent& event);
 
 private slots:
     void onChannelMessage(const QByteArray& buffer);
