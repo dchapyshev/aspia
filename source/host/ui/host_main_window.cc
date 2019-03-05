@@ -82,7 +82,7 @@ void MainWindow::connectToService()
 
         connect(ui.button_new_password, &QPushButton::released, client_, &UiClient::newPassword);
         connect(ui.button_refresh_ip_list, &QPushButton::released, client_, &UiClient::refresh);
-        connect(client_, &UiClient::creditialsReceived, this, &MainWindow::onCreditialsReceived);
+        connect(client_, &UiClient::credentialsReceived, this, &MainWindow::onCredentialsReceived);
 
         connect(client_, &UiClient::connected, [this]()
         {
@@ -151,24 +151,24 @@ void MainWindow::realClose()
     close();
 }
 
-void MainWindow::onCreditialsReceived(const proto::host::Creditials& creditials)
+void MainWindow::onCredentialsReceived(const proto::host::Credentials& credentials)
 {
-    bool has_id = !creditials.id().empty();
+    bool has_id = !credentials.id().empty();
 
     ui.label_icon_id->setEnabled(has_id);
     ui.label_id->setEnabled(has_id);
     ui.edit_id->setEnabled(has_id);
-    ui.edit_id->setText(has_id ? QString::fromStdString(creditials.id()) : tr("Not available"));
+    ui.edit_id->setText(has_id ? QString::fromStdString(credentials.id()) : tr("Not available"));
 
-    bool has_password = !creditials.password().empty();
+    bool has_password = !credentials.password().empty();
 
     ui.label_icon_password->setEnabled(has_password);
     ui.label_password->setEnabled(has_password);
     ui.edit_password->setEnabled(has_password);
     ui.edit_password->setText(has_password ?
-        QString::fromStdString(creditials.password()) : tr("Not available"));
+        QString::fromStdString(credentials.password()) : tr("Not available"));
 
-    bool has_ip = creditials.ip_size() > 0;
+    bool has_ip = credentials.ip_size() > 0;
 
     ui.label_icon_ip->setEnabled(has_ip);
     ui.label_ip->setEnabled(has_ip);
@@ -178,12 +178,12 @@ void MainWindow::onCreditialsReceived(const proto::host::Creditials& creditials)
     {
         QString ip_list;
 
-        for (int i = 0; i < creditials.ip_size(); ++i)
+        for (int i = 0; i < credentials.ip_size(); ++i)
         {
             if (!ip_list.isEmpty())
                 ip_list += QStringLiteral(", ");
 
-            ip_list += QString::fromStdString(creditials.ip(i));
+            ip_list += QString::fromStdString(credentials.ip(i));
         }
 
         ui.edit_ip->setText(ip_list);

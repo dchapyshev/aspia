@@ -29,7 +29,7 @@
 #include <QSystemTrayIcon>
 
 namespace proto::host {
-class Creditials;
+class Credentials;
 } // namespace proto::host
 
 namespace host {
@@ -57,7 +57,7 @@ protected:
 private slots:
     void realClose();
 
-    void onCreditialsReceived(const proto::host::Creditials& creditials);
+    void onCredentialsReceived(const proto::host::Credentials& credentials);
     void onLanguageChanged(QAction* action);
     void onSettings();
     void onShowHide();

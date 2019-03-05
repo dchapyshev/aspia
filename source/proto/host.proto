@@ -24,7 +24,7 @@ import "common.proto";
 
 package proto.host;
 
-message CreditialsRequest
+message CredentialsRequest
 {
     enum Flags
     {
@@ -36,7 +36,7 @@ message CreditialsRequest
     uint32 flags = 1;
 }
 
-message Creditials
+message Credentials
 {
     repeated string ip = 1;
     string id          = 2;
@@ -63,13 +63,13 @@ message KillSession
 
 message UiToService
 {
-    CreditialsRequest creditials_request = 1;
+    CredentialsRequest credentials_request = 1;
     KillSession kill_session = 2;
 }
 
 message ServiceToUi
 {
-    Creditials creditials            = 1;
+    Credentials credentials          = 1;
     ConnectEvent connect_event       = 2;
     DisconnectEvent disconnect_event = 3;
 }

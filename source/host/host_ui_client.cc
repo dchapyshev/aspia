@@ -70,8 +70,8 @@ void UiClient::refresh()
 
     proto::host::UiToService message;
 
-    message.mutable_creditials_request()->set_flags(
-        proto::host::CreditialsRequest::REFRESH);
+    message.mutable_credentials_request()->set_flags(
+        proto::host::CredentialsRequest::REFRESH);
 
     channel_->send(common::serializeMessage(message));
 }
@@ -83,8 +83,8 @@ void UiClient::newPassword()
 
     proto::host::UiToService message;
 
-    message.mutable_creditials_request()->set_flags(
-        proto::host::CreditialsRequest::NEW_PASSWORD);
+    message.mutable_credentials_request()->set_flags(
+        proto::host::CredentialsRequest::NEW_PASSWORD);
 
     channel_->send(common::serializeMessage(message));
 }
@@ -109,9 +109,9 @@ void UiClient::onChannelMessage(const QByteArray& buffer)
         return;
     }
 
-    if (message.has_creditials())
+    if (message.has_credentials())
     {
-        emit creditialsReceived(message.creditials());
+        emit credentialsReceived(message.credentials());
     }
     else if (message.has_connect_event())
     {

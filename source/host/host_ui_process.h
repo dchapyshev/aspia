@@ -64,7 +64,7 @@ private slots:
     void onMessageReceived(const QByteArray& buffer);
 
 private:
-    void sendCreditials(uint32_t flags);
+    void sendCredentials(uint32_t flags);
 
     // Contains the status of the UI process.
     State state_ = State::STOPPED;

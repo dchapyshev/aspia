@@ -110,8 +110,8 @@ bool UiProcess::start()
     connect(channel_, &ipc::Channel::messageReceived, this, &UiProcess::onMessageReceived);
     connect(channel_, &ipc::Channel::disconnected, this, &UiProcess::stop, Qt::QueuedConnection);
 
-    sendCreditials(proto::host::CreditialsRequest::REFRESH |
-                   proto::host::CreditialsRequest::NEW_PASSWORD);
+    sendCredentials(proto::host::CredentialsRequest::REFRESH |
+                    proto::host::CredentialsRequest::NEW_PASSWORD);
 
     state_ = State::STARTED;
     channel_->start();
@@ -149,9 +149,9 @@ void UiProcess::onMessageReceived(const QByteArray& buffer)
         return;
     }
 
-    if (message.has_creditials_request())
+    if (message.has_credentials_request())
     {
-        sendCreditials(message.creditials_request().flags());
+        sendCredentials(message.credentials_request().flags());
     }
     else if (message.has_kill_session())
     {
@@ -163,7 +163,7 @@ void UiProcess::onMessageReceived(const QByteArray& buffer)
     }
 }
 
-void UiProcess::sendCreditials(uint32_t flags)
+void UiProcess::sendCredentials(uint32_t flags)
 {
     if (!flags)
     {
@@ -173,7 +173,7 @@ void UiProcess::sendCreditials(uint32_t flags)
 
     proto::host::ServiceToUi message;
 
-    if ((flags & proto::host::CreditialsRequest::NEW_PASSWORD) || session_password_.empty())
+    if ((flags & proto::host::CredentialsRequest::NEW_PASSWORD) || session_password_.empty())
     {
         PasswordGenerator generator;
 
@@ -184,14 +184,14 @@ void UiProcess::sendCreditials(uint32_t flags)
         session_password_ = generator.result();
     }
 
-    message.mutable_creditials()->set_password(session_password_);
+    message.mutable_credentials()->set_password(session_password_);
 
     for (net::AdapterEnumerator adapters; !adapters.isAtEnd(); adapters.advance())
     {
         for (net::AdapterEnumerator::IpAddressEnumerator addresses(adapters);
              !addresses.isAtEnd(); addresses.advance())
         {
-            message.mutable_creditials()->add_ip(addresses.address());
+            message.mutable_credentials()->add_ip(addresses.address());
         }
     }
 
