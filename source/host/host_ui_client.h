@@ -54,7 +54,7 @@ signals:
     void connected();
     void disconnected();
     void errorOccurred();
-    void creditionalsReceived(const proto::host::Creditionals& creditionals);
+    void creditialsReceived(const proto::host::Creditials& ñreditials);
     void connectEvent(const proto::host::ConnectEvent& event);
     void disconnectEvent(const proto::host::DisconnectEvent& event);
 

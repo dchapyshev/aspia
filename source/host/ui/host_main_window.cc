@@ -82,9 +82,7 @@ void MainWindow::connectToService()
 
         connect(ui.button_new_password, &QPushButton::released, client_, &UiClient::newPassword);
         connect(ui.button_refresh_ip_list, &QPushButton::released, client_, &UiClient::refresh);
-
-        connect(client_, &UiClient::creditionalsReceived,
-                this, &MainWindow::onCreditionalsReceived);
+        connect(client_, &UiClient::creditialsReceived, this, &MainWindow::onCreditialsReceived);
 
         connect(client_, &UiClient::connected, [this]()
         {
@@ -153,31 +151,24 @@ void MainWindow::realClose()
     close();
 }
 
-void MainWindow::onCreditionalsReceived(const proto::host::Creditionals& creditionals)
+void MainWindow::onCreditialsReceived(const proto::host::Creditials& creditials)
 {
-    bool has_id = !creditionals.id().empty();
+    bool has_id = !creditials.id().empty();
 
     ui.label_icon_id->setEnabled(has_id);
     ui.label_id->setEnabled(has_id);
     ui.edit_id->setEnabled(has_id);
+    ui.edit_id->setText(has_id ? QString::fromStdString(creditials.id()) : tr("Not available"));
 
-    if (has_id)
-        ui.edit_id->setText(QString::fromStdString(creditionals.id()));
-    else
-        ui.edit_id->setText(tr("Not available"));
-
-    bool has_password = !creditionals.password().empty();
+    bool has_password = !creditials.password().empty();
 
     ui.label_icon_password->setEnabled(has_password);
     ui.label_password->setEnabled(has_password);
     ui.edit_password->setEnabled(has_password);
+    ui.edit_password->setText(has_password ?
+        QString::fromStdString(creditials.password()) : tr("Not available"));
 
-    if (!creditionals.password().empty())
-        ui.edit_password->setText(QString::fromStdString(creditionals.password()));
-    else
-        ui.edit_password->setText(tr("Not available"));
-
-    bool has_ip = creditionals.ip_size() > 0;
+    bool has_ip = creditials.ip_size() > 0;
 
     ui.label_icon_ip->setEnabled(has_ip);
     ui.label_ip->setEnabled(has_ip);
@@ -187,12 +178,12 @@ void MainWindow::onCreditionalsReceived(const proto::host::Creditionals& crediti
     {
         QString ip_list;
 
-        for (int i = 0; i < creditionals.ip_size(); ++i)
+        for (int i = 0; i < creditials.ip_size(); ++i)
         {
             if (!ip_list.isEmpty())
                 ip_list += QStringLiteral(", ");
 
-            ip_list += QString::fromStdString(creditionals.ip(i));
+            ip_list += QString::fromStdString(creditials.ip(i));
         }
 
         ui.edit_ip->setText(ip_list);

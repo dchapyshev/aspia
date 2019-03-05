@@ -110,8 +110,8 @@ bool UiProcess::start()
     connect(channel_, &ipc::Channel::messageReceived, this, &UiProcess::onMessageReceived);
     connect(channel_, &ipc::Channel::disconnected, this, &UiProcess::stop, Qt::QueuedConnection);
 
-    sendCreditionals(proto::host::CreditionalsRequest::REFRESH |
-                     proto::host::CreditionalsRequest::NEW_PASSWORD);
+    sendCreditials(proto::host::CreditialsRequest::REFRESH |
+                   proto::host::CreditialsRequest::NEW_PASSWORD);
 
     state_ = State::STARTED;
     channel_->start();
@@ -149,9 +149,9 @@ void UiProcess::onMessageReceived(const QByteArray& buffer)
         return;
     }
 
-    if (message.has_creditionals_request())
+    if (message.has_creditials_request())
     {
-        sendCreditionals(message.creditionals_request().flags());
+        sendCreditials(message.creditials_request().flags());
     }
     else if (message.has_kill_session())
     {
@@ -163,7 +163,7 @@ void UiProcess::onMessageReceived(const QByteArray& buffer)
     }
 }
 
-void UiProcess::sendCreditionals(uint32_t flags)
+void UiProcess::sendCreditials(uint32_t flags)
 {
     if (!flags)
     {
@@ -173,7 +173,7 @@ void UiProcess::sendCreditionals(uint32_t flags)
 
     proto::host::ServiceToUi message;
 
-    if ((flags & proto::host::CreditionalsRequest::NEW_PASSWORD) || session_password_.empty())
+    if ((flags & proto::host::CreditialsRequest::NEW_PASSWORD) || session_password_.empty())
     {
         PasswordGenerator generator;
 
@@ -184,14 +184,14 @@ void UiProcess::sendCreditionals(uint32_t flags)
         session_password_ = generator.result();
     }
 
-    message.mutable_creditionals()->set_password(session_password_);
+    message.mutable_creditials()->set_password(session_password_);
 
     for (net::AdapterEnumerator adapters; !adapters.isAtEnd(); adapters.advance())
     {
         for (net::AdapterEnumerator::IpAddressEnumerator addresses(adapters);
              !addresses.isAtEnd(); addresses.advance())
         {
-            message.mutable_creditionals()->add_ip(addresses.address());
+            message.mutable_creditials()->add_ip(addresses.address());
         }
     }
 
