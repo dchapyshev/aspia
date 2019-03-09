@@ -117,26 +117,36 @@ bool waitForValidInputDesktop()
     return true;
 }
 
+bool isHidden(const QStringList& arguments)
+{
+    QCommandLineOption hidden_option(QStringLiteral("hidden"), QString());
+
+    QCommandLineParser parser;
+    parser.addOption(hidden_option);
+
+    if (!parser.parse(arguments))
+    {
+        LOG(LS_ERROR) << "Could not parse parameters: " << parser.errorText();
+        return false;
+    }
+
+    return parser.isSet(hidden_option);
+}
+
 int runApplication(int argc, char* argv[])
 {
-    bool is_started_from_service = base::win::isProcessStartedFromService();
+    QStringList arguments;
 
-    if (!is_started_from_service)
+    for (int i = 0; i < argc; ++i)
+        arguments.append(QString::fromLocal8Bit(argv[i]));
+
+    bool is_hidden = isHidden(arguments);
+    if (!is_hidden)
     {
         if (!base::win::isProcessElevated())
         {
-            QStringList arguments;
-            QString program;
-
-            for (int i = 0; i < argc; ++i)
-            {
-                QString argument = QString::fromLocal8Bit(argv[i]);
-
-                if (i == 0)
-                    program = argument;
-                else
-                    arguments.append(argument);
-            }
+            QString program = arguments.first();
+            arguments.removeFirst();
 
             if (base::win::executeProcess(program, arguments,
                                           base::win::ProcessExecuteMode::ELEVATE))
@@ -180,6 +190,9 @@ int runApplication(int argc, char* argv[])
     QCommandLineOption update_option(QStringLiteral("update"),
         QApplication::translate("Host", "Run application update."));
 
+    QCommandLineOption hidden_option(QStringLiteral("hidden"), QString());
+    hidden_option.setFlags(QCommandLineOption::HiddenFromHelp);
+
     QCommandLineParser parser;
     parser.addHelpOption();
     parser.addVersionOption();
@@ -187,6 +200,7 @@ int runApplication(int argc, char* argv[])
     parser.addOption(export_option);
     parser.addOption(silent_option);
     parser.addOption(update_option);
+    parser.addOption(hidden_option);
     parser.process(application);
 
     if (parser.isSet(import_option) && parser.isSet(export_option))
@@ -236,7 +250,7 @@ int runApplication(int argc, char* argv[])
             QObject::connect(&application, &host::SingleApplication::activated,
                              &window, &host::MainWindow::activateHost);
 
-            if (is_started_from_service)
+            if (is_hidden)
             {
                 window.hideToTray();
             }

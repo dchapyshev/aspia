@@ -8,32 +8,32 @@
         <translation type="vanished">Запускает приложение спрятанным.</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="170"/>
+        <location filename="../host_main.cc" line="180"/>
         <source>The path to the file to import.</source>
         <translation>Путь к файлу для импорта.</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="174"/>
+        <location filename="../host_main.cc" line="184"/>
         <source>The path to the file to export.</source>
         <translation>Путь к файлу для экспорта.</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="178"/>
+        <location filename="../host_main.cc" line="188"/>
         <source>Enables silent mode when exporting and importing.</source>
         <translation>Включает тихий режим при экспортировании и импортировании.</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="181"/>
+        <location filename="../host_main.cc" line="191"/>
         <source>Run application update.</source>
         <translation>Запускает обновление приложения.</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="198"/>
+        <location filename="../host_main.cc" line="212"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="199"/>
+        <location filename="../host_main.cc" line="213"/>
         <source>Export and import parameters can not be specified together.</source>
         <translation>Параметры экспорта и импорта не могут быть указаны одновременно.</translation>
     </message>
