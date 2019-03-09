@@ -18,8 +18,8 @@
 
 #include "base/win/drive_enumerator.h"
 #include "base/logging.h"
-#include "base/string_printf.h"
-#include "base/unicode.h"
+#include "base/strings/string_printf.h"
+#include "base/strings/unicode.h"
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>

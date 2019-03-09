@@ -18,7 +18,7 @@
 
 #include "base/sys_info.h"
 #include "base/cpuid.h"
-#include "base/string_util.h"
+#include "base/strings/string_util.h"
 
 #include <algorithm>
 

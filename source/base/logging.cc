@@ -20,9 +20,9 @@
 #include "base/debug.h"
 
 #if defined(OS_WIN)
-#include "base/string_printf.h"
-#include "base/string_util.h"
-#include "base/unicode.h"
+#include "base/strings/string_printf.h"
+#include "base/strings/string_util.h"
+#include "base/strings/unicode.h"
 #endif // defined(OS_WIN)
 
 #include <fstream>

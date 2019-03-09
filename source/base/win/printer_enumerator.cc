@@ -18,7 +18,7 @@
 
 #include "base/win/printer_enumerator.h"
 #include "base/logging.h"
-#include "base/unicode.h"
+#include "base/strings/unicode.h"
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>

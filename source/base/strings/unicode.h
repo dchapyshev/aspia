@@ -16,25 +16,25 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__STRING_PRINTF_H
-#define BASE__STRING_PRINTF_H
+#ifndef BASE__STRINGS__UNICODE_H
+#define BASE__STRINGS__UNICODE_H
 
 #include <string>
 
 namespace base {
 
-// Return a C++ string given vprintf-like input.
-std::string stringPrintfV(const char* format, va_list args);
-std::wstring stringPrintfV(const wchar_t* format, va_list args);
+bool UTF16toUTF8(const std::wstring& in, std::string* out);
+bool UTF8toUTF16(const std::string& in, std::wstring* out);
 
-// Return a C++ string given printf-like input.
-std::string stringPrintf(const char* format, ...);
-std::wstring stringPrintf(const wchar_t* format, ...);
+bool UTF16toUTF8(const wchar_t* in, std::string* out);
+bool UTF8toUTF16(const char* in, std::wstring* out);
 
-// Store result into a supplied string and return it.
-const std::string& sStringPrintf(std::string* dst, const char* format, ...);
-const std::wstring& sStringPrintf(std::wstring* dst, const wchar_t* format, ...);
+std::wstring UTF16fromUTF8(const std::string& in);
+std::string UTF8fromUTF16(const std::wstring& in);
+
+std::wstring UTF16fromUTF8(const char* in);
+std::string UTF8fromUTF16(const wchar_t* in);
 
 } // namespace base
 
-#endif // BASE__STRING_PRINTF_H
+#endif // BASE__STRINGS__UNICODE_H

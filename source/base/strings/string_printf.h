@@ -16,15 +16,25 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__STRING_UTIL_CONSTANTS_H
-#define BASE__STRING_UTIL_CONSTANTS_H
+#ifndef BASE__STRINGS__STRING_PRINTF_H
+#define BASE__STRINGS__STRING_PRINTF_H
+
+#include <string>
 
 namespace base {
 
-extern const wchar_t kWhitespaceWide[];
-extern const char kWhitespaceASCII[];
-extern const char kUtf8ByteOrderMark[];
+// Return a C++ string given vprintf-like input.
+std::string stringPrintfV(const char* format, va_list args);
+std::wstring stringPrintfV(const wchar_t* format, va_list args);
+
+// Return a C++ string given printf-like input.
+std::string stringPrintf(const char* format, ...);
+std::wstring stringPrintf(const wchar_t* format, ...);
+
+// Store result into a supplied string and return it.
+const std::string& sStringPrintf(std::string* dst, const char* format, ...);
+const std::wstring& sStringPrintf(std::wstring* dst, const wchar_t* format, ...);
 
 } // namespace base
 
-#endif // BASE__STRING_UTIL_CONSTANTS_H
+#endif // BASE__STRINGS__STRING_PRINTF_H

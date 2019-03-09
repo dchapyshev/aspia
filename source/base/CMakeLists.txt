@@ -52,20 +52,12 @@ list(APPEND SOURCE_BASE
     smbios_parser.h
     smbios_reader.h
     smbios_reader_win.cc
-    string_printf.cc
-    string_printf.h
-    string_util.cc
-    string_util.h
-    string_util_constants.cc
-    string_util_constants.h
     sys_info.cc
     sys_info.h
     sys_info_win.cc
     thread_checker.cc
     thread_checker.h
     typed_buffer.h
-    unicode.cc
-    unicode.h
     xml_settings.cc
     xml_settings.h)
 
@@ -73,8 +65,20 @@ list(APPEND SOURCE_BASE_UNIT_TESTS
     aligned_memory_unittest.cc
     bitset_unittest.cc
     guid_unittest.cc
-    scoped_clear_last_error_unittest.cc
-    string_printf_unittest.cc)
+    scoped_clear_last_error_unittest.cc)
+
+list(APPEND SOURCE_BASE_STRINGS
+    strings/string_printf.cc
+    strings/string_printf.h
+    strings/string_util.cc
+    strings/string_util.h
+    strings/string_util_constants.cc
+    strings/string_util_constants.h
+    strings/unicode.cc
+    strings/unicode.h)
+
+list(APPEND SOURCE_BASE_STRINGS_UNIT_TESTS
+    strings/string_printf_unittest.cc)
 
 list(APPEND SOURCE_BASE_WIN
     win/desktop.cc
@@ -121,16 +125,19 @@ list(APPEND SOURCE_BASE_WIN_UNIT_TESTS
 
 source_group("" FILES ${SOURCE_BASE})
 source_group("" FILES ${SOURCE_BASE_UNIT_TESTS})
+source_group(strings FILES ${SOURCE_BASE_STRINGS})
+source_group(strings FILES ${SOURCE_BASE_STRINGS_UNIT_TESTS})
 source_group(win FILES ${SOURCE_BASE_WIN})
 source_group(win FILES ${SOURCE_BASE_WIN_UNIT_TESTS})
 
-add_library(aspia_base STATIC ${SOURCE_BASE} ${SOURCE_BASE_WIN})
+add_library(aspia_base STATIC ${SOURCE_BASE} ${SOURCE_BASE_STRINGS} ${SOURCE_BASE_WIN})
 target_link_libraries(aspia_base ${THIRD_PARTY_LIBS})
 
 # If the build of unit tests is enabled.
 if (BUILD_UNIT_TESTS)
     add_executable(aspia_base_tests
         ${SOURCE_BASE_UNIT_TESTS}
+        ${SOURCE_BASE_STRINGS_UNIT_TESTS}
         ${SOURCE_BASE_WIN_UNIT_TESTS})
     target_link_libraries(aspia_base_tests
         aspia_base

@@ -17,9 +17,9 @@
 //
 
 #include "net/adapter_enumerator.h"
+#include "base/strings/string_printf.h"
+#include "base/strings/unicode.h"
 #include "base/win/registry.h"
-#include "base/string_printf.h"
-#include "base/unicode.h"
 
 #include <iphlpapi.h>
 #include <setupapi.h>

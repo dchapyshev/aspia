@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__STRING_UTIL_H
-#define BASE__STRING_UTIL_H
+#ifndef BASE__STRINGS__STRING_UTIL_H
+#define BASE__STRINGS__STRING_UTIL_H
 
 #include <string>
 

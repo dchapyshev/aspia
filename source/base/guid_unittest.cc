@@ -17,7 +17,7 @@
 //
 
 #include "base/guid.h"
-#include "base/string_util.h"
+#include "base/strings/string_util.h"
 
 #include <gtest/gtest.h>
 

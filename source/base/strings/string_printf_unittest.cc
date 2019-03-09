@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/string_printf.h"
+#include "base/strings/string_printf.h"
 #include "build/build_config.h"
 
 #include <gtest/gtest.h>

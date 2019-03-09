@@ -16,9 +16,9 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/string_util.h"
-#include "base/string_util_constants.h"
-#include "base/unicode.h"
+#include "base/strings/string_util.h"
+#include "base/strings/string_util_constants.h"
+#include "base/strings/unicode.h"
 
 #include <algorithm>
 #include <cwctype>

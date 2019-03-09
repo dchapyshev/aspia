@@ -17,7 +17,7 @@
 //
 
 #include "base/guid.h"
-#include "base/string_printf.h"
+#include "base/strings/string_printf.h"
 
 #include <random>
 

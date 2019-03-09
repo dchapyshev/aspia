@@ -16,25 +16,15 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__UNICODE_H
-#define BASE__UNICODE_H
-
-#include <string>
+#ifndef BASE__STRING__UTIL_CONSTANTS_H
+#define BASE__STRING__UTIL_CONSTANTS_H
 
 namespace base {
 
-bool UTF16toUTF8(const std::wstring& in, std::string* out);
-bool UTF8toUTF16(const std::string& in, std::wstring* out);
-
-bool UTF16toUTF8(const wchar_t* in, std::string* out);
-bool UTF8toUTF16(const char* in, std::wstring* out);
-
-std::wstring UTF16fromUTF8(const std::string& in);
-std::string UTF8fromUTF16(const std::wstring& in);
-
-std::wstring UTF16fromUTF8(const char* in);
-std::string UTF8fromUTF16(const wchar_t* in);
+extern const wchar_t kWhitespaceWide[];
+extern const char kWhitespaceASCII[];
+extern const char kUtf8ByteOrderMark[];
 
 } // namespace base
 
-#endif // BASE__UNICODE_H
+#endif // BASE__STRING__UTIL_CONSTANTS_H
