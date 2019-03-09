@@ -31,12 +31,12 @@ constexpr int64_t kMaxWriteSize = 1200; // 1200 bytes
 
 QByteArray createWriteBuffer(const QByteArray& message_buffer)
 {
-    uint32_t message_size = message_buffer.size();
+    size_t message_size = message_buffer.size();
     if (!message_size || message_size > kMaxMessageSize)
         return QByteArray();
 
     uint8_t length_data[4];
-    int length_data_size = 1;
+    size_t length_data_size = 1;
 
     length_data[0] = message_size & 0x7F;
     if (message_size > 0x7F) // 127 bytes
@@ -361,7 +361,7 @@ void Channel::scheduleWrite()
     const QByteArray& source_buffer = write_.queue.front();
 
     // Calculate the size of the encrypted message.
-    int encrypted_data_size = cryptor_->encryptedDataSize(source_buffer.size());
+    size_t encrypted_data_size = cryptor_->encryptedDataSize(source_buffer.size());
     if (encrypted_data_size > kMaxMessageSize)
     {
         emit errorOccurred(Error::UNKNOWN);
@@ -369,7 +369,7 @@ void Channel::scheduleWrite()
     }
 
     uint8_t length_data[4];
-    int length_data_size = 1;
+    size_t length_data_size = 1;
 
     // Calculate the variable-length.
     length_data[0] = encrypted_data_size & 0x7F;

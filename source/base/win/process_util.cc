@@ -125,8 +125,7 @@ bool createPrivilegedToken(ScopedHandle* token_out)
     }
 
     // Enable the SE_TCB_NAME privilege.
-    if (!AdjustTokenPrivileges(privileged_token, FALSE, &state, 0,
-                               nullptr, nullptr))
+    if (!AdjustTokenPrivileges(privileged_token, FALSE, &state, 0, nullptr, nullptr))
     {
         PLOG(LS_WARNING) << "AdjustTokenPrivileges failed";
         return false;
@@ -138,26 +137,23 @@ bool createPrivilegedToken(ScopedHandle* token_out)
 
 bool isProcessStartedFromService()
 {
-    base::win::ScopedHandle snapshot(CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0));
+    ScopedHandle snapshot(CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0));
     if (!snapshot.isValid())
     {
         PLOG(LS_WARNING) << "CreateToolhelp32Snapshot failed";
         return false;
     }
 
-    DWORD process_id = GetCurrentProcessId();
-
     PROCESSENTRY32W entry;
     entry.dwSize = sizeof(entry);
 
-    BOOL ret = Process32FirstW(snapshot, &entry);
-    if (!ret)
+    if (!Process32FirstW(snapshot, &entry))
     {
         PLOG(LS_WARNING) << "Process32FirstW failed";
         return false;
     }
 
-    for (;;)
+    for (DWORD process_id = GetCurrentProcessId();;)
     {
         if (entry.th32ProcessID == process_id)
         {
@@ -175,8 +171,7 @@ bool isProcessStartedFromService()
             }
         }
 
-        ret = Process32NextW(snapshot, &entry);
-        if (!ret)
+        if (!Process32NextW(snapshot, &entry))
         {
             PLOG(LS_WARNING) << "Process32NextW failed";
             break;
