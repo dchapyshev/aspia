@@ -22,6 +22,7 @@
 #include "base/macros_magic.h"
 #include "base/win/session_id.h"
 #include "base/win/session_status.h"
+#include "net/srp_user.h"
 #include "proto/host.pb.h"
 
 #include <QObject>
@@ -44,6 +45,8 @@ public:
     explicit UiServer(QObject* parent = nullptr);
     ~UiServer();
 
+    using UserList = std::map<base::win::SessionId, net::SrpUser>;
+
     enum class State { STOPPED, STOPPING, STARTED };
     enum class ProcessEvent { CONNECTED, DISCONNECTED };
 
@@ -58,14 +61,20 @@ public:
     void setConnectEvent(base::win::SessionId session_id, const proto::host::ConnectEvent& event);
     void setDisconnectEvent(base::win::SessionId session_id, const std::string& uuid);
 
+    const UserList& userList() const { return user_list_; }
+
 signals:
     void processEvent(ProcessEvent event, base::win::SessionId session_id);
+    void userListChanged();
     void killSession(const std::string& uuid);
     void finished();
 
 private slots:
     void onChannelConnected(ipc::Channel* channel);
     void onProcessFinished();
+    void onUserChanged(base::win::SessionId session_id,
+                       const std::string& username,
+                       const std::string& password);
 
 private:
     State state_ = State::STOPPED;
@@ -75,6 +84,8 @@ private:
 
     // List of connected UI processes.
     std::list<UiProcess*> process_list_;
+
+    UserList user_list_;
 
     DISALLOW_COPY_AND_ASSIGN(UiServer);
 };

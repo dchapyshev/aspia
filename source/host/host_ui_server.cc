@@ -23,6 +23,7 @@
 #include "host/host_ui_process.h"
 #include "ipc/ipc_channel.h"
 #include "ipc/ipc_server.h"
+#include "net/srp_host_context.h"
 
 namespace host {
 
@@ -165,6 +166,7 @@ void UiServer::onChannelConnected(ipc::Channel* channel)
 
     UiProcess* process = new UiProcess(channel, this);
 
+    connect(process, &UiProcess::userChanged, this, &UiServer::onUserChanged);
     connect(process, &UiProcess::killSession, this, &UiServer::killSession);
     connect(process, &UiProcess::finished, this, &UiServer::onProcessFinished);
 
@@ -185,7 +187,13 @@ void UiServer::onProcessFinished()
 
         if (process->state() == UiProcess::State::STOPPED)
         {
-            emit processEvent(ProcessEvent::DISCONNECTED, process->sessionId());
+            base::win::SessionId session_id = process->sessionId();
+
+            auto result = user_list_.find(session_id);
+            if (result != user_list_.end())
+                user_list_.erase(result);
+
+            emit processEvent(ProcessEvent::DISCONNECTED, session_id);
 
             it = process_list_.erase(it);
             delete process;
@@ -195,6 +203,29 @@ void UiServer::onProcessFinished()
             ++it;
         }
     }
+
+    emit userListChanged();
+}
+
+void UiServer::onUserChanged(base::win::SessionId session_id,
+                             const std::string& username,
+                             const std::string& password)
+{
+    std::unique_ptr<net::SrpUser> user(
+        net::SrpHostContext::createUser(QString::fromStdString(username),
+                                        QString::fromStdString(password)));
+
+    auto result = user_list_.find(session_id);
+    if (result != user_list_.end())
+    {
+        result->second = std::move(*user);
+    }
+    else
+    {
+        user_list_.emplace(session_id, std::move(*user));
+    }
+
+    emit userListChanged();
 }
 
 } // namespace host

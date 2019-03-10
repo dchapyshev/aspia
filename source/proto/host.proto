@@ -40,7 +40,8 @@ message Credentials
 {
     repeated string ip = 1;
     string id          = 2;
-    string password    = 3;
+    string username    = 3;
+    string password    = 4;
 }
 
 message ConnectEvent

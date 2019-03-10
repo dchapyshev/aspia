@@ -174,17 +174,22 @@ void UiProcess::sendCredentials(uint32_t flags)
 
     proto::host::ServiceToUi message;
 
-    if ((flags & proto::host::CredentialsRequest::NEW_PASSWORD) || session_password_.empty())
+    if ((flags & proto::host::CredentialsRequest::NEW_PASSWORD) ||
+        session_username_.empty() || session_password_.empty())
     {
         PasswordGenerator generator;
 
         // TODO: Get password parameters from settings.
-        generator.setCharacters(PasswordGenerator::LOWER_CASE | PasswordGenerator::DIGITS);
-        generator.setLength(6);
+        generator.setCharacters(PasswordGenerator::UPPER_CASE | PasswordGenerator::DIGITS);
+        generator.setLength(5);
 
+        session_username_ = generator.result();
         session_password_ = generator.result();
+
+        emit userChanged(channel_->clientSessionId(), session_username_, session_password_);
     }
 
+    message.mutable_credentials()->set_username(session_username_);
     message.mutable_credentials()->set_password(session_password_);
 
     for (net::AdapterEnumerator adapters; !adapters.isAtEnd(); adapters.advance())

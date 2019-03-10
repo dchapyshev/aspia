@@ -165,8 +165,17 @@ void MainWindow::onCredentialsReceived(const proto::host::Credentials& credentia
     ui.label_icon_password->setEnabled(has_password);
     ui.label_password->setEnabled(has_password);
     ui.edit_password->setEnabled(has_password);
-    ui.edit_password->setText(has_password ?
-        QString::fromStdString(credentials.password()) : tr("Not available"));
+
+    if (has_password)
+    {
+        ui.edit_password->setText(QString::fromStdString(credentials.username()) +
+                                  QLatin1Char(' ') +
+                                  QString::fromStdString(credentials.password()));
+    }
+    else
+    {
+        ui.edit_password->setText(tr("Not available"));
+    }
 
     bool has_ip = credentials.ip_size() > 0;
 

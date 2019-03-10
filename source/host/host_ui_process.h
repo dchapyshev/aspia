@@ -57,6 +57,9 @@ public:
 signals:
     void started();
     void finished();
+    void userChanged(base::win::SessionId session_id,
+                     const std::string& username,
+                     const std::string& password);
     void killSession(const std::string& session_uuid);
 
 private slots:
@@ -74,6 +77,7 @@ private:
 
     base::win::Process* process_ = nullptr;
 
+    std::string session_username_;
     std::string session_password_;
 
     DISALLOW_COPY_AND_ASSIGN(UiProcess);
