@@ -18,26 +18,20 @@
 
 #include "base/strings/string_printf.h"
 
-#include <strsafe.h>
+#include <cstdarg>
 
 namespace base {
 
 namespace {
 
-HRESULT stringCchVPrintfT(char* buffer,
-                          size_t buffer_size,
-                          const char* format,
-                          va_list args)
+int vsnprintfT(char* buffer, size_t buffer_size, const char* format, va_list args)
 {
-    return StringCchVPrintfA(buffer, buffer_size, format, args);
+    return _vsnprintf(buffer, buffer_size, format, args);
 }
 
-HRESULT stringCchVPrintfT(wchar_t* buffer,
-                          size_t buffer_size,
-                          const wchar_t* format,
-                          va_list args)
+int vsnprintfT(wchar_t* buffer, size_t buffer_size, const wchar_t* format, va_list args)
 {
-    return StringCchVPrintfW(buffer, buffer_size, format, args);
+    return _vsnwprintf(buffer, buffer_size, format, args);
 }
 
 int vscprintfT(const char* format, va_list args)
@@ -57,7 +51,7 @@ StringType stringPrintfVT(const typename StringType::value_type* format, va_list
 
     va_copy(args_copy, args);
 
-    int length = vscprintfT(format, args_copy);
+    const int length = vscprintfT(format, args_copy);
     if (length <= 0)
     {
         va_end(args_copy);
@@ -67,13 +61,13 @@ StringType stringPrintfVT(const typename StringType::value_type* format, va_list
     StringType result;
     result.resize(length);
 
-    if (FAILED(stringCchVPrintfT(&result[0], length + 1, format, args_copy)))
-    {
-        va_end(args_copy);
-        return StringType();
-    }
+    const int ret = vsnprintfT(result.data(), length + 1, format, args_copy);
 
     va_end(args_copy);
+
+    if (ret < 0 || ret > length)
+        return StringType();
+
     return result;
 }
 
