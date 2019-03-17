@@ -20,41 +20,25 @@
 
 #include <gtest/gtest.h>
 
+#include <algorithm>
+
 namespace base {
 
 namespace {
 
 bool hasLower(const std::string& str)
 {
-    for (const auto& ch : str)
-    {
-        if (ch >= 'a' && ch <= 'z')
-            return true;
-    }
-
-    return false;
+    return std::any_of(str.begin(), str.end(), islower);
 }
 
 bool hasUpper(const std::string& str)
 {
-    for (const auto& ch : str)
-    {
-        if (ch >= 'A' && ch <= 'Z')
-            return true;
-    }
-
-    return false;
+    return std::any_of(str.begin(), str.end(), isupper);
 }
 
 bool hasDigit(const std::string& str)
 {
-    for (const auto& ch : str)
-    {
-        if (ch >= '0' && ch <= '9')
-            return true;
-    }
-
-    return false;
+    return std::any_of(str.begin(), str.end(), isdigit);
 }
 
 } // namespace
