@@ -76,44 +76,44 @@ MainWindow::~MainWindow() = default;
 
 void MainWindow::connectToService()
 {
-    if (!client_)
+    if (client_ && client_->state() != UiClient::State::NOT_CONNECTED)
+        return;
+
+    client_ = new UiClient(this);
+
+    connect(ui.button_new_password, &QPushButton::released, client_, &UiClient::newPassword);
+    connect(ui.button_refresh_ip_list, &QPushButton::released, client_, &UiClient::refresh);
+    connect(client_, &UiClient::credentialsReceived, this, &MainWindow::onCredentialsReceived);
+
+    connect(client_, &UiClient::connected, [this]()
     {
-        client_ = new UiClient(this);
+        ui.button_new_password->setEnabled(true);
+        ui.button_refresh_ip_list->setEnabled(true);
+    });
 
-        connect(ui.button_new_password, &QPushButton::released, client_, &UiClient::newPassword);
-        connect(ui.button_refresh_ip_list, &QPushButton::released, client_, &UiClient::refresh);
-        connect(client_, &UiClient::credentialsReceived, this, &MainWindow::onCredentialsReceived);
-
-        connect(client_, &UiClient::connected, [this]()
+    connect(client_, &UiClient::disconnected, this, &MainWindow::realClose);
+    connect(client_, &UiClient::errorOccurred, client_, &UiClient::deleteLater);
+    connect(client_, &UiClient::connectEvent, [this](const proto::host::ConnectEvent& event)
+    {
+        if (!notifier_)
         {
-            ui.button_new_password->setEnabled(true);
-            ui.button_refresh_ip_list->setEnabled(true);
-        });
+            notifier_ = new NotifierWindow();
 
-        connect(client_, &UiClient::disconnected, this, &MainWindow::realClose);
-        connect(client_, &UiClient::errorOccurred, client_, &UiClient::deleteLater);
-        connect(client_, &UiClient::connectEvent, [this](const proto::host::ConnectEvent& event)
-        {
-            if (!notifier_)
-            {
-                notifier_ = new NotifierWindow();
+            connect(client_, &UiClient::disconnectEvent,
+                    notifier_, &NotifierWindow::onDisconnectEvent);
 
-                connect(client_, &UiClient::disconnectEvent,
-                        notifier_, &NotifierWindow::onDisconnectEvent);
+            connect(notifier_, &NotifierWindow::killSession,
+                    client_, &UiClient::killSession);
 
-                connect(notifier_, &NotifierWindow::killSession,
-                        client_, &UiClient::killSession);
+            notifier_->setAttribute(Qt::WA_DeleteOnClose);
+            notifier_->show();
+            notifier_->activateWindow();
+        }
 
-                notifier_->setAttribute(Qt::WA_DeleteOnClose);
-                notifier_->show();
-                notifier_->activateWindow();
-            }
+        notifier_->onConnectEvent(event);
+    });
 
-            notifier_->onConnectEvent(event);
-        });
-
-        client_->start();
-    }
+    client_->start();
 }
 
 void MainWindow::activateHost()

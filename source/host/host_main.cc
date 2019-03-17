@@ -133,7 +133,7 @@ bool isHidden(const QStringList& arguments)
     return parser.isSet(hidden_option);
 }
 
-int runApplication(int argc, char* argv[])
+int runApplication(int& argc, char* argv[])
 {
     QStringList arguments;
 
@@ -238,10 +238,13 @@ int runApplication(int argc, char* argv[])
     {
         if (application.isRunning())
         {
+            LOG(LS_INFO) << "Application is already running. Previous instance will be activated";
             application.activate();
         }
         else
         {
+            LOG(LS_INFO) << "First instance of the application is running";
+
             QAbstractEventDispatcher::instance()->installNativeEventFilter(
                 EventFilter::instance());
 
