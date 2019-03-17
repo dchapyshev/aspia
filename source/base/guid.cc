@@ -17,7 +17,8 @@
 //
 
 #include "base/guid.h"
-#include "base/strings/string_printf.h"
+#include "base/endian.h"
+#include "base/logging.h"
 
 #if defined(USE_PCG_GENERATOR)
 #include <pcg_random.hpp>
@@ -28,6 +29,8 @@
 namespace base {
 
 namespace {
+
+const size_t kGUIDLength = 36U;
 
 bool isHexDigit(char c)
 {
@@ -41,9 +44,19 @@ bool isLowerHexDigit(char c)
     return (c >= '0' && c <= '9') || (c >= 'a' && c <= 'f');
 }
 
+void numberToHex(char*& target, const char* source, size_t source_count)
+{
+    static const char kTable[] = "0123456789abcdef";
+
+    for (size_t i = 0; i < source_count; ++i, target += 2)
+    {
+        target[0] = kTable[(source[i] >> 4) & 0x0F];
+        target[1] = kTable[source[i] & 0x0F];
+    }
+}
+
 bool isValidGUIDInternal(const std::string& guid, bool strict)
 {
-    const size_t kGUIDLength = 36U;
     if (guid.length() != kGUIDLength)
         return false;
 
@@ -65,25 +78,85 @@ bool isValidGUIDInternal(const std::string& guid, bool strict)
     return true;
 }
 
+template <class T>
+T randomDataToGUIDStringT(const uint64_t bytes[2])
+{
+    T result;
+    result.resize(kGUIDLength);
+
+    uint64_t big_endian[2];
+    big_endian[0] = Endian::toBig(bytes[0]);
+    big_endian[1] = Endian::toBig(bytes[1]);
+
+    const char* source = reinterpret_cast<const char*>(&big_endian[0]);
+    char* target = result.data();
+
+    numberToHex(target, source, 4);
+    *target++ = '-';
+    numberToHex(target, source + 4, 2);
+    *target++ = '-';
+    numberToHex(target, source + 6, 2);
+    *target++ = '-';
+    numberToHex(target, source + 8, 2);
+    *target++ = '-';
+    numberToHex(target, source + 10, 6);
+
+    return result;
+}
+
 } // namespace
 
-// static
-std::string Guid::create()
+Guid::Guid()
+    : bytes_{0, 0}
 {
+    // Nothing
+}
+
+Guid::Guid(const Guid& other)
+{
+    bytes_[0] = other.bytes_[0];
+    bytes_[1] = other.bytes_[1];
+}
+
+Guid& Guid::operator=(const Guid& other)
+{
+    if (this != &other)
+    {
+        bytes_[0] = other.bytes_[0];
+        bytes_[1] = other.bytes_[1];
+    }
+
+    return *this;
+}
+
+Guid::Guid(const uint64_t bytes[2])
+{
+    bytes_[0] = bytes[0];
+    bytes_[1] = bytes[1];
+}
+
+bool Guid::isNull() const
+{
+    return !bytes_[0] || !bytes_[1];
+}
+
+// static
+Guid Guid::create()
+{
+    uint64_t seed = std::chrono::high_resolution_clock::now().time_since_epoch().count();
+
 #if defined(USE_PCG_GENERATOR)
-    pcg_extras::seed_seq_from<std::random_device> random_device;
-    pcg32_fast enigne(random_device);
+    pcg32_fast engine(seed);
 #else // defined(USE_PCG_GENERATOR)
-    std::random_device random_device;
-    std::mt19937 enigne(random_device());
+    std::mt19937_64 engine(seed);
 #endif
 
     std::uniform_int_distribution<uint64_t> uniform_distance(
         std::numeric_limits<uint64_t>::min(), std::numeric_limits<uint64_t>::max());
 
     uint64_t sixteen_bytes[2];
-    sixteen_bytes[0] = uniform_distance(enigne);
-    sixteen_bytes[1] = uniform_distance(enigne);
+    sixteen_bytes[0] = uniform_distance(engine);
+    sixteen_bytes[1] = uniform_distance(engine);
 
     // Set the GUID to version 4 as described in RFC 4122, section 4.4.
     // The format of GUID version 4 must be xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx,
@@ -98,30 +171,47 @@ std::string Guid::create()
     sixteen_bytes[1] &= 0x3fffffffffffffffULL;
     sixteen_bytes[1] |= 0x8000000000000000ULL;
 
-    return randomDataToGUIDString(sixteen_bytes);
+    return Guid(sixteen_bytes);
 }
 
 // static
-bool Guid::isValid(const std::string& guid)
+bool Guid::isValidGuidString(const std::string& guid)
 {
     return isValidGUIDInternal(guid, false /* strict */);
 }
 
 // static
-bool Guid::isStrictValid(const std::string& guid)
+bool Guid::isStrictValidGuidString(const std::string& guid)
 {
     return isValidGUIDInternal(guid, true /* strict */);
+}
+
+std::string Guid::toStdString() const
+{
+    return randomDataToGUIDStringT<std::string>(bytes_);
+}
+
+#if defined(HAS_QT)
+QByteArray Guid::toByteArray() const
+{
+    return randomDataToGUIDStringT<QByteArray>(bytes_);
+}
+#endif // defined(HAS_QT)
+
+bool Guid::operator==(const Guid& other) const
+{
+    return bytes_[0] == other.bytes_[0] && bytes_[1] == other.bytes_[1];
+}
+
+bool Guid::operator!=(const Guid& other) const
+{
+    return bytes_[0] != other.bytes_[0] || bytes_[1] != other.bytes_[1];
 }
 
 // static
 std::string Guid::randomDataToGUIDString(const uint64_t bytes[2])
 {
-    return stringPrintf("%08x-%04x-%04x-%04x-%012llx",
-                        static_cast<unsigned int>(bytes[0] >> 32),
-                        static_cast<unsigned int>((bytes[0] >> 16) & 0x0000ffff),
-                        static_cast<unsigned int>(bytes[0] & 0x0000ffff),
-                        static_cast<unsigned int>(bytes[1] >> 48),
-                        bytes[1] & 0x0000ffffffffffffULL);
+    return randomDataToGUIDStringT<std::string>(bytes);
 }
 
 } // namespace base

@@ -283,7 +283,7 @@ void HostServer::onNewConnection()
         std::unique_ptr<SessionProcess> session_process(new SessionProcess(this));
 
         session_process->setNetworkChannel(channel);
-        session_process->setUuid(base::Guid::create());
+        session_process->setUuid(base::Guid::create().toStdString());
 
         connect(session_process.get(), &SessionProcess::finished,
                 this, &HostServer::onSessionFinished,
