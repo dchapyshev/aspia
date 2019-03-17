@@ -43,30 +43,15 @@ namespace base {
 namespace {
 
 const int kMaxPendingConnections = 25;
-const int kConnectTimeoutMs = 500;
+const int kConnectTimeoutMs = 1000;
+const int kDisconnectTimeoutMs = 1000;
 const int kReconnectIntervalMs = 500;
 const int kReconnectTryCount = 3;
-const int kReadTimeoutMs = 500;
-const int kWriteTimeoutMs = 500;
+const int kReadTimeoutMs = 1500;
+const int kWriteTimeoutMs = 1500;
 const int kMaxMessageSize = 1024 * 1024 * 1;
 
-QString createServerName()
-{
-    QByteArray path_hash = QCryptographicHash::hash(
-        QApplication::applicationFilePath().toLower().toUtf8(), QCryptographicHash::Md5);
-
-    QString user_session;
-
-#if defined(OS_WIN)
-    DWORD session_id = 0;
-    ProcessIdToSessionId(GetCurrentProcessId(), &session_id);
-    user_session = QString::number(session_id, 16);
-#else
-    user_session = QString::number(getuid(), 16);
-#endif
-
-    return QString::fromLatin1(path_hash.toHex()) + user_session;
-}
+const char kOkMessage[] = "OK";
 
 #if defined(OS_WIN)
 bool isSameApplication(const QLocalSocket* socket)
@@ -81,7 +66,7 @@ bool isSameApplication(const QLocalSocket* socket)
     }
 
     win::ScopedHandle other_process(
-        OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, process_id));
+        OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, FALSE, process_id));
     if (!other_process.isValid())
     {
         PLOG(LS_ERROR) << "OpenProcess failed";
@@ -89,18 +74,20 @@ bool isSameApplication(const QLocalSocket* socket)
     }
 
     wchar_t other_path[MAX_PATH];
+    DWORD size = MAX_PATH;
 
-    if (!GetModuleFileNameExW(other_process, nullptr, other_path, _countof(other_path)))
+    if (!QueryFullProcessImageNameW(other_process, 0, other_path, &size))
     {
-        PLOG(LS_ERROR) << "GetModuleFileNameExW failed";
+        PLOG(LS_ERROR) << "QueryFullProcessImageNameW failed";
         return false;
     }
 
     wchar_t current_path[MAX_PATH];
+    size = MAX_PATH;
 
-    if (!GetModuleFileNameExW(GetCurrentProcess(), nullptr, current_path, _countof(current_path)))
+    if (!QueryFullProcessImageNameW(GetCurrentProcess(), 0, current_path, &size))
     {
-        PLOG(LS_ERROR) << "GetModuleFileNameExW failed";
+        PLOG(LS_ERROR) << "QueryFullProcessImageNameW failed";
         return false;
     }
 
@@ -111,63 +98,62 @@ bool isSameApplication(const QLocalSocket* socket)
 } // namespace
 
 SingleApplication::SingleApplication(int& argc, char* argv[])
-    : QApplication(argc, argv),
-      server_name_(createServerName())
+    : QApplication(argc, argv)
 {
-    lock_file_name_ = QDir::tempPath() + QLatin1Char('/') + server_name_ + QStringLiteral(".lock");
+#if defined(OS_WIN)
+    DWORD id = 0;
+    ProcessIdToSessionId(GetCurrentProcessId(), &id);
+    QString session_id = QString::number(id);
+#else
+    QString session_id = QString::number(getuid());
+#endif
+
+    QString temp_path = QDir::tempPath();
+
+    if (temp_path.endsWith(QLatin1Char('\\')) || temp_path.endsWith(QLatin1Char('/')))
+        temp_path = temp_path.left(temp_path.length() - 1);
+
+    if (temp_path.endsWith(session_id))
+        temp_path = temp_path.left(temp_path.length() - session_id.length());
+
+    QByteArray app_path = QApplication::applicationFilePath().toLower().toUtf8();
+    QByteArray app_path_hash = QCryptographicHash::hash(app_path, QCryptographicHash::Md5);
+
+    server_name_ = QString::fromLatin1(app_path_hash.toHex()) + session_id;
+    lock_file_name_ = temp_path + QLatin1Char('/') + server_name_ + QStringLiteral(".lock");
     lock_file_ = new QLockFile(lock_file_name_);
 }
 
 SingleApplication::~SingleApplication()
 {
-    if (lock_file_->isLocked())
-    {
+    bool is_locked = lock_file_->isLocked();
+
+    if (is_locked)
         lock_file_->unlock();
+
+    delete lock_file_;
+
+    if (is_locked)
         QFile::remove(lock_file_name_);
-    }
 }
 
 bool SingleApplication::isRunning()
 {
     if (!lock_file_->tryLock())
+        return true;
+
+    server_ = new QLocalServer(this);
+
+    server_->setSocketOptions(QLocalServer::UserAccessOption);
+    server_->setMaxPendingConnections(kMaxPendingConnections);
+
+    if (!server_->listen(server_name_))
     {
-        std::unique_ptr<QLocalSocket> socket = std::make_unique<QLocalSocket>(this);
-
-        for (int i = 0; i < kReconnectTryCount; ++i)
-        {
-            socket->connectToServer(server_name_);
-
-            if (socket->waitForConnected(kConnectTimeoutMs))
-                break;
-
-            if (i == kReconnectTryCount - 1)
-                break;
-
-            QThread::msleep(kReconnectIntervalMs);
-        }
-
-        if (socket->isOpen())
-        {
-            socket_ = socket.release();
-            return true;
-        }
+        LOG(LS_ERROR) << "IPC server is not running on channel "
+                      << server_->serverName() << ": " << server_->errorString();
     }
     else
     {
-        std::unique_ptr<QLocalServer> server = std::make_unique<QLocalServer>(this);
-
-        server->setSocketOptions(QLocalServer::UserAccessOption);
-        server->setMaxPendingConnections(kMaxPendingConnections);
-
-        if (!server->listen(server_name_))
-        {
-            LOG(LS_ERROR) << "IPC server is not running on channel "
-                << server->serverName() << ": " << server->errorString();
-            return false;
-        }
-
-        server_ = server.release();
-
         connect(server_, &QLocalServer::newConnection, this, &SingleApplication::onNewConnection);
     }
 
@@ -182,14 +168,45 @@ void SingleApplication::sendMessage(const QByteArray& message)
         return;
     }
 
-    DCHECK(socket_);
+    QLocalSocket socket;
 
-    QDataStream stream(socket_);
+    for (int i = 0; i < kReconnectTryCount; ++i)
+    {
+        socket.connectToServer(server_name_);
+
+        if (socket.waitForConnected(kConnectTimeoutMs))
+            break;
+
+        if (i == kReconnectTryCount - 1)
+            break;
+
+        QThread::msleep(kReconnectIntervalMs);
+    }
+
+    if (socket.state() != QLocalSocket::LocalSocketState::ConnectedState)
+    {
+        LOG(LS_ERROR) << "Could not connect to server";
+        return;
+    }
+
+    QDataStream stream(&socket);
     stream.writeBytes(message.constData(), message.size());
 
-    if (!socket_->waitForBytesWritten(kWriteTimeoutMs))
+    if (!socket.waitForBytesWritten(kWriteTimeoutMs))
     {
         LOG(LS_ERROR) << "Timeout when sending a message";
+        return;
+    }
+
+    if (!socket.waitForReadyRead(kReadTimeoutMs))
+    {
+        LOG(LS_ERROR) << "Timeout when reading a message";
+        return;
+    }
+
+    if (socket.read(strlen(kOkMessage)) != kOkMessage)
+    {
+        LOG(LS_ERROR) << "Unknown status code";
         return;
     }
 }
@@ -200,12 +217,15 @@ void SingleApplication::onNewConnection()
 
     std::unique_ptr<QLocalSocket> socket(server_->nextPendingConnection());
     if (!socket)
+    {
+        LOG(LS_ERROR) << "Invalid socket";
         return;
+    }
 
 #if defined(OS_WIN)
     if (!isSameApplication(socket.get()))
     {
-        LOG(LS_ERROR) << "Attempt to connect from unknown application.";
+        LOG(LS_ERROR) << "Attempt to connect from unknown application";
         return;
     }
 #endif // defined(OS_WIN)
@@ -250,6 +270,10 @@ void SingleApplication::onNewConnection()
         remaining -= read_bytes;
     }
     while (remaining && socket->waitForReadyRead(kReadTimeoutMs));
+
+    socket->write(kOkMessage, strlen(kOkMessage));
+    socket->waitForBytesWritten(kWriteTimeoutMs);
+    socket->waitForDisconnected(kDisconnectTimeoutMs);
 
     emit messageReceived(message);
 }

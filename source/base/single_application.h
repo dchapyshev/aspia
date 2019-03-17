@@ -24,7 +24,6 @@
 #include <QApplication>
 
 class QLocalServer;
-class QLocalSocket;
 class QLockFile;
 
 namespace base {
@@ -53,9 +52,7 @@ private:
     QString server_name_;
 
     QLockFile* lock_file_ = nullptr;
-
     QLocalServer* server_ = nullptr;
-    QLocalSocket* socket_ = nullptr;
 
     DISALLOW_COPY_AND_ASSIGN(SingleApplication);
 };
