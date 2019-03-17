@@ -32,6 +32,8 @@ list(APPEND SOURCE_BASE
     logging.cc
     logging.h
     macros_magic.h
+    password_generator.cc
+    password_generator.h
     power_controller.h
     power_controller_win.cc
     process_handle.cc
@@ -65,6 +67,7 @@ list(APPEND SOURCE_BASE_UNIT_TESTS
     aligned_memory_unittest.cc
     bitset_unittest.cc
     guid_unittest.cc
+    password_generator_unittest.cc
     scoped_clear_last_error_unittest.cc)
 
 list(APPEND SOURCE_BASE_STRINGS

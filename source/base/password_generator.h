@@ -16,14 +16,14 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST__PASSWORD_GENERATOR_H
-#define HOST__PASSWORD_GENERATOR_H
+#ifndef BASE__PASSWORD_GENERATOR_H
+#define BASE__PASSWORD_GENERATOR_H
 
 #include "base/macros_magic.h"
 
 #include <string>
 
-namespace host {
+namespace base {
 
 class PasswordGenerator
 {
@@ -56,6 +56,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(PasswordGenerator);
 };
 
-} // namespace host
+} // namespace base
 
-#endif // HOST__PASSWORD_GENERATOR_H
+#endif // BASE__PASSWORD_GENERATOR_H

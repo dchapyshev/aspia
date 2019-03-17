@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/password_generator.h"
+#include "base/password_generator.h"
 
 #if defined(USE_PCG_GENERATOR)
 #include <pcg_random.hpp>
@@ -26,7 +26,7 @@
 #include <random>
 #include <vector>
 
-namespace host {
+namespace base {
 
 void PasswordGenerator::setCharacters(uint32_t value)
 {
@@ -97,4 +97,4 @@ std::string PasswordGenerator::result() const
     return result;
 }
 
-} // namespace host
+} // namespace base
