@@ -17,6 +17,7 @@
 //
 
 #include "base/xml_settings.h"
+#include "base/base64.h"
 
 #include <QtXml>
 
@@ -96,7 +97,7 @@ QString variantToString(const QVariant& value)
             break;
 
         case QMetaType::QByteArray:
-            result = value.toByteArray().toBase64();
+            result = Base64::encodeByteArray(value.toByteArray());
             break;
 
         case QMetaType::QRect:
@@ -132,7 +133,7 @@ QString variantToString(const QVariant& value)
                 stream << value;
             }
 
-            result = buffer.toBase64();
+            result = Base64::encodeByteArray(buffer);
         }
         break;
     }
@@ -144,11 +145,11 @@ QVariant stringToVariant(const QString& value, const QString& type)
 {
     if (type == QLatin1String("ByteArray"))
     {
-        return QVariant(QByteArray::fromBase64(value.toUtf8()));
+        return QVariant(Base64::decodeByteArray(value.toLatin1()));
     }
     else if (type == QLatin1String("Variant"))
     {
-        QByteArray buffer = QByteArray::fromBase64(value.toUtf8());
+        QByteArray buffer = Base64::decodeByteArray(value.toLatin1());
 
         QDataStream stream(&buffer, QIODevice::ReadOnly);
         stream.setVersion(QDataStream::Qt_5_12);

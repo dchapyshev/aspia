@@ -54,6 +54,7 @@ add_definitions(-D_UNICODE
                 -D_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS
                 -D_CRT_SECURE_NO_WARNINGS
                 -DNOMINMAX
+                -DHAS_QT
                 -DQT_NO_CAST_TO_ASCII
                 -DQT_NO_CAST_FROM_BYTEARRAY
                 -DQT_USE_QSTRINGBUILDER
