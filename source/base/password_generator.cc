@@ -78,21 +78,21 @@ std::string PasswordGenerator::result() const
 
 #if defined(USE_PCG_GENERATOR)
     pcg_extras::seed_seq_from<std::random_device> random_device;
-    pcg32 enigne(random_device);
+    pcg32 engine(random_device);
 
-    pcg_extras::shuffle(table.begin(), table.end(), enigne);
+    pcg_extras::shuffle(table.begin(), table.end(), engine);
 #else // defined(USE_PCG_GENERATOR)
     std::random_device random_device;
-    std::mt19937 enigne(random_device());
+    std::mt19937 engine(random_device());
 
-    std::shuffle(table.begin(), table.end(), enigne);
+    std::shuffle(table.begin(), table.end(), engine);
 #endif
 
     std::uniform_int_distribution<> uniform_distance(0, table.size() - 1);
     std::string result;
 
     for (int i = 0; i < length_; ++i)
-        result += table[uniform_distance(enigne)];
+        result += table[uniform_distance(engine)];
 
     return result;
 }
