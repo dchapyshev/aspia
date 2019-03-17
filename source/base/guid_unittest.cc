@@ -68,7 +68,7 @@ TEST(guid_test, guid_correctly_formatted)
 
 TEST(guid_test, guid_basic_uniqueness)
 {
-    const int kIterations = 500000;
+    const int kIterations = 10;
     for (int it = 0; it < kIterations; ++it)
     {
         std::string guid1 = Guid::create().toStdString();
@@ -76,6 +76,8 @@ TEST(guid_test, guid_basic_uniqueness)
         EXPECT_EQ(36U, guid1.length());
         EXPECT_EQ(36U, guid2.length());
         EXPECT_NE(guid1, guid2);
+        EXPECT_TRUE(isGUIDv4(guid1));
+        EXPECT_TRUE(isGUIDv4(guid2));
     }
 }
 
