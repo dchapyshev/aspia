@@ -31,6 +31,7 @@ list(APPEND SOURCE_BASE
     cpuid.h
     debug.cc
     debug.h
+    endian.h
     guid.cc
     guid.h
     logging.cc
