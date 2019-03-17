@@ -19,6 +19,7 @@
 cmake_minimum_required(VERSION 3.12.1)
 
 option(BUILD_UNIT_TESTS "Build unit tests" ON)
+option(USE_PCG_GENERATOR "Using PCG random generator" ON)
 
 set(CMAKE_SYSTEM_VERSION 7.0 CACHE TYPE INTERNAL FORCE)
 set(CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION 8.1 CACHE TYPE INTERNAL FORCE)
@@ -58,6 +59,10 @@ add_definitions(-D_UNICODE
                 -DQT_USE_QSTRINGBUILDER
                 -DCLIENT_IMPLEMENTATION
                 -DHOST_IMPLEMENTATION)
+
+if (USE_PCG_GENERATOR)
+    add_definitions(-DUSE_PCG_GENERATOR)
+endif()
 
 include_directories(
     ${PROJECT_SOURCE_DIR}

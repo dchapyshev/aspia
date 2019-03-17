@@ -19,8 +19,6 @@
 #include "base/guid.h"
 #include "base/strings/string_printf.h"
 
-#define USE_PCG_GENERATOR
-
 #if defined(USE_PCG_GENERATOR)
 #include <pcg_random.hpp>
 #endif // defined(USE_PCG_GENERATOR)

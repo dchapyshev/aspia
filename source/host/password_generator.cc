@@ -18,6 +18,10 @@
 
 #include "host/password_generator.h"
 
+#if defined(USE_PCG_GENERATOR)
+#include <pcg_random.hpp>
+#endif // defined(USE_PCG_GENERATOR)
+
 #include <algorithm>
 #include <random>
 #include <vector>
@@ -72,18 +76,23 @@ std::string PasswordGenerator::result() const
             table.push_back(i);
     }
 
-    std::random_device device;
-    std::mt19937 generator(device());
+#if defined(USE_PCG_GENERATOR)
+    pcg_extras::seed_seq_from<std::random_device> random_device;
+    pcg32 enigne(random_device);
 
-    std::shuffle(table.begin(), table.end(), generator);
+    pcg_extras::shuffle(table.begin(), table.end(), enigne);
+#else // defined(USE_PCG_GENERATOR)
+    std::random_device random_device;
+    std::mt19937 enigne(random_device());
 
+    std::shuffle(table.begin(), table.end(), enigne);
+#endif
+
+    std::uniform_int_distribution<> uniform_distance(0, table.size() - 1);
     std::string result;
 
     for (int i = 0; i < length_; ++i)
-    {
-        std::uniform_int_distribution<> dist(0, table.size() - 1);
-        result += table[dist(generator)];
-    }
+        result += table[uniform_distance(enigne)];
 
     return result;
 }
