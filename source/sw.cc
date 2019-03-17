@@ -38,10 +38,12 @@ void build(Solution &s)
     setup_target(base, "base");
     base.Public += "UNICODE"_def;
     base.Public += "NOMINMAX"_def;
+    base.Public += "USE_PCG_GENERATOR"_def;
     base.Public += "org.sw.demo.qtproject.qt.base.widgets-*"_dep;
     base.Public += "org.sw.demo.qtproject.qt.base.network-*"_dep;
     base.Public += "org.sw.demo.qtproject.qt.base.xml-*"_dep;
-    base.Public += "org.sw.demo.boost.align-1"_dep;
+    base.Public += "org.sw.demo.boost.align"_dep;
+    base.Public += "org.sw.demo.imneme.pcg_cpp-master"_dep;
     automoc("org.sw.demo.qtproject.qt.base.tools.moc-*"_dep, base);
 
     auto &desktop_capture = add_lib("desktop");
