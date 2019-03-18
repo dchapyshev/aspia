@@ -17,25 +17,18 @@
 //
 
 #include "host/input_injector.h"
-#include "base/win/registry.h"
 #include "base/win/scoped_thread_desktop.h"
 #include "base/logging.h"
 #include "common/keycode_converter.h"
+#include "host/sas_injector.h"
 
 #include <QRect>
 
 #include <set>
 
-#include <sas.h>
-
 namespace host {
 
 namespace {
-
-const wchar_t kSoftwareSASGenerationPath[] =
-    L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System";
-
-const wchar_t kSoftwareSASGeneration[] = L"SoftwareSASGeneration";
 
 const uint32_t kUsbCodeDelete = 0x07004c;
 const uint32_t kUsbCodeLeftCtrl = 0x0700e0;
@@ -91,7 +84,6 @@ public:
 
 private:
     void switchToInputDesktop();
-    void injectSAS();
     bool isCtrlAndAltPressed();
 
     base::ScopedThreadDesktop desktop_;
@@ -273,53 +265,6 @@ void InputInjectorImpl::switchToInputDesktop()
     // We send a notification to the system that it is used to prevent
     // the screen saver, going into hibernation mode, etc.
     SetThreadExecutionState(ES_SYSTEM_REQUIRED);
-}
-
-void InputInjectorImpl::injectSAS()
-{
-    static const DWORD kNone = 0;
-    static const DWORD kApplications = 2;
-
-    base::win::RegistryKey key;
-    DWORD old_state = kNone;
-
-    LONG status = key.create(HKEY_LOCAL_MACHINE, kSoftwareSASGenerationPath, KEY_READ | KEY_WRITE);
-    if (status != ERROR_SUCCESS)
-    {
-        LOG(LS_WARNING) << "key.create failed" << base::systemErrorCodeToString(status);
-    }
-    else
-    {
-        status = key.readValueDW(kSoftwareSASGeneration, &old_state);
-        if (status != ERROR_SUCCESS)
-        {
-            // The previous state is not defined.
-            // Consider that the software generation of SAS has been disabled.
-            old_state = kNone;
-        }
-
-        if (old_state < kApplications)
-        {
-            status = key.writeValue(kSoftwareSASGeneration, kApplications);
-            if (status != ERROR_SUCCESS)
-            {
-                LOG(LS_WARNING) << "key.writeValue failed"
-                                << base::systemErrorCodeToString(status);
-                key.close();
-            }
-        }
-    }
-
-    SendSAS(FALSE);
-
-    if (key.isValid())
-    {
-        status = key.writeValue(kSoftwareSASGeneration, old_state);
-        if (status != ERROR_SUCCESS)
-        {
-            LOG(LS_WARNING) << "key.writeValue failed" << base::systemErrorCodeToString(status);
-        }
-    }
 }
 
 bool InputInjectorImpl::isCtrlAndAltPressed()
