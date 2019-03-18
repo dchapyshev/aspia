@@ -27,12 +27,6 @@
 
 namespace host {
 
-namespace {
-
-const char kFileName[] = "aspia_host_session.exe";
-
-} // namespace
-
 SessionProcess::SessionProcess(QObject* parent)
     : QObject(parent)
 {
@@ -231,7 +225,7 @@ void SessionProcess::attachSession(base::win::SessionId session_id)
 
     session_process_->setSessionId(session_id_);
     session_process_->setProgram(
-        QCoreApplication::applicationDirPath() + QLatin1Char('/') + kFileName);
+        QCoreApplication::applicationDirPath() + QStringLiteral("/aspia_host_session.exe"));
 
     QStringList arguments;
 

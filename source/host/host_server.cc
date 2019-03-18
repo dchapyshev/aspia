@@ -298,14 +298,14 @@ void HostServer::onNewConnection()
     }
 }
 
-void HostServer::onUiProcessEvent(UiServer::ProcessEvent event, base::win::SessionId session_id)
+void HostServer::onUiProcessEvent(UiServer::EventType event, base::win::SessionId session_id)
 {
     for (auto session : sessions_)
     {
         if (session->sessionId() != session_id)
             continue;
 
-        if (event == UiServer::ProcessEvent::CONNECTED)
+        if (event == UiServer::EventType::CONNECTED)
         {
             sendConnectEvent(session);
 
@@ -320,7 +320,7 @@ void HostServer::onUiProcessEvent(UiServer::ProcessEvent event, base::win::Sessi
         }
         else
         {
-            DCHECK(event == UiServer::ProcessEvent::DISCONNECTED);
+            DCHECK(event == UiServer::EventType::DISCONNECTED);
 
             session->dettachSession();
 

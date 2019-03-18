@@ -67,6 +67,7 @@ private slots:
 
 private:
     void createLanguageMenu(const QString& current_locale);
+    void refeshCredentials();
 
     Ui::HostMainWindow ui;
 
@@ -80,6 +81,11 @@ private:
 
     QPointer<NotifierWindow> notifier_;
     QPointer<UiClient> client_;
+
+    std::string id_;
+    std::string ip_;
+    std::string username_;
+    std::string password_;
 
     DISALLOW_COPY_AND_ASSIGN(MainWindow);
 };

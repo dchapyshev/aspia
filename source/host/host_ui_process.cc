@@ -29,12 +29,6 @@
 
 namespace host {
 
-namespace {
-
-const char kFileName[] = "aspia_host.exe";
-
-} // namespace
-
 UiProcess::UiProcess(ipc::Channel* channel, QObject* parent)
     : QObject(parent),
       channel_(channel)
@@ -53,7 +47,7 @@ void UiProcess::create(base::win::SessionId session_id)
 
     process.setAccount(HostProcess::User);
     process.setSessionId(session_id);
-    process.setProgram(QCoreApplication::applicationDirPath() + QLatin1Char('/') + kFileName);
+    process.setProgram(QCoreApplication::applicationDirPath() + QStringLiteral("/aspia_host.exe"));
     process.setArguments(QStringList() << QStringLiteral("--hidden"));
 
     HostProcess::ErrorCode error_code = process.start();
@@ -174,8 +168,7 @@ void UiProcess::sendCredentials(uint32_t flags)
 
     proto::host::ServiceToUi message;
 
-    if ((flags & proto::host::CredentialsRequest::NEW_PASSWORD) ||
-        session_username_.empty() || session_password_.empty())
+    if ((flags & proto::host::CredentialsRequest::NEW_PASSWORD) || session_password_.empty())
     {
         base::PasswordGenerator generator;
 
@@ -184,13 +177,12 @@ void UiProcess::sendCredentials(uint32_t flags)
                                 base::PasswordGenerator::DIGITS);
         generator.setLength(5);
 
-        session_username_ = generator.result();
         session_password_ = generator.result();
 
-        emit userChanged(channel_->clientSessionId(), session_username_, session_password_);
+        emit userChanged(channel_->clientSessionId(), session_password_);
     }
 
-    message.mutable_credentials()->set_username(session_username_);
+    message.mutable_credentials()->set_username("#" + std::to_string(sessionId()));
     message.mutable_credentials()->set_password(session_password_);
 
     for (net::AdapterEnumerator adapters; !adapters.isAtEnd(); adapters.advance())

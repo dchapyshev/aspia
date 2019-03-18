@@ -48,7 +48,7 @@ public:
     using UserList = std::map<base::win::SessionId, net::SrpUser>;
 
     enum class State { STOPPED, STOPPING, STARTED };
-    enum class ProcessEvent { CONNECTED, DISCONNECTED };
+    enum class EventType { CONNECTED, DISCONNECTED };
 
     bool start();
     void stop();
@@ -64,7 +64,7 @@ public:
     const UserList& userList() const { return user_list_; }
 
 signals:
-    void processEvent(ProcessEvent event, base::win::SessionId session_id);
+    void processEvent(EventType event, base::win::SessionId session_id);
     void userListChanged();
     void killSession(const std::string& uuid);
     void finished();
@@ -72,9 +72,7 @@ signals:
 private slots:
     void onChannelConnected(ipc::Channel* channel);
     void onProcessFinished();
-    void onUserChanged(base::win::SessionId session_id,
-                       const std::string& username,
-                       const std::string& password);
+    void onUserChanged(base::win::SessionId session_id, const std::string& password);
 
 private:
     State state_ = State::STOPPED;

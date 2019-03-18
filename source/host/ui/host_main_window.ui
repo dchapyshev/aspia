@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>250</width>
+    <width>262</width>
     <height>201</height>
    </rect>
   </property>
@@ -57,7 +57,7 @@
          <bool>false</bool>
         </property>
         <property name="text">
-         <string>Your ID:</string>
+         <string>Your ID</string>
         </property>
        </widget>
       </item>
@@ -69,7 +69,7 @@
        <bool>false</bool>
       </property>
       <property name="text">
-       <string>Not available</string>
+       <string/>
       </property>
       <property name="readOnly">
        <bool>true</bool>
@@ -106,7 +106,7 @@
          <bool>false</bool>
         </property>
         <property name="text">
-         <string>Your IP:</string>
+         <string>Your IP</string>
         </property>
        </widget>
       </item>
@@ -120,7 +120,7 @@
          <bool>false</bool>
         </property>
         <property name="text">
-         <string>Not available</string>
+         <string/>
         </property>
         <property name="readOnly">
          <bool>true</bool>
@@ -150,57 +150,109 @@
      </layout>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_4">
-      <item>
-       <widget class="QLabel" name="label_icon_password">
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0">
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <widget class="QLabel" name="label_icon_user">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="pixmap">
+           <pixmap resource="../resources/host.qrc">:/img/user.png</pixmap>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_user">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="text">
+           <string>User</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="0" column="1">
+       <layout class="QHBoxLayout" name="horizontalLayout_4">
+        <item>
+         <widget class="QLabel" name="label_icon_password">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="pixmap">
+           <pixmap resource="../resources/host.qrc">:/img/key.png</pixmap>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_password">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="text">
+           <string>Password</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLineEdit" name="edit_user">
         <property name="enabled">
          <bool>false</bool>
-        </property>
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
         </property>
         <property name="text">
          <string/>
         </property>
-        <property name="pixmap">
-         <pixmap resource="../resources/host.qrc">:/img/key.png</pixmap>
-        </property>
         <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="label_password">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
-        <property name="text">
-         <string>Password:</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_5">
-      <item>
-       <widget class="QLineEdit" name="edit_password">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
-        <property name="text">
-         <string>Not available</string>
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
         </property>
         <property name="readOnly">
          <bool>true</bool>
         </property>
        </widget>
       </item>
-      <item>
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="edit_password">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
        <widget class="QPushButton" name="button_new_password">
         <property name="enabled">
          <bool>false</bool>
@@ -242,7 +294,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>250</width>
+     <width>262</width>
      <height>21</height>
     </rect>
    </property>

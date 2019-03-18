@@ -194,63 +194,81 @@
         <translation>Хост Aspia</translation>
     </message>
     <message>
-        <location filename="../ui/host_main_window.ui" line="60"/>
         <source>Your ID:</source>
-        <translation>Ваш ID:</translation>
+        <translation type="vanished">Ваш ID:</translation>
     </message>
     <message>
-        <location filename="../ui/host_main_window.ui" line="72"/>
-        <location filename="../ui/host_main_window.ui" line="123"/>
-        <location filename="../ui/host_main_window.ui" line="196"/>
         <source>Not available</source>
-        <translation>Недоступен</translation>
+        <translation type="vanished">Недоступен</translation>
     </message>
     <message>
-        <location filename="../ui/host_main_window.ui" line="109"/>
         <source>Your IP:</source>
-        <translation>Ваш IP:</translation>
+        <translation type="vanished">Ваш IP:</translation>
     </message>
     <message>
-        <location filename="../ui/host_main_window.ui" line="182"/>
+        <source>User:</source>
+        <translation type="vanished">Пользователь:</translation>
+    </message>
+    <message>
         <source>Password:</source>
-        <translation>Пароль:</translation>
+        <translation type="vanished">Пароль:</translation>
     </message>
     <message>
         <source>Start</source>
         <translation type="vanished">Запустить</translation>
     </message>
     <message>
-        <location filename="../ui/host_main_window.ui" line="260"/>
+        <location filename="../ui/host_main_window.ui" line="60"/>
+        <source>Your ID</source>
+        <translation>Ваш ID</translation>
+    </message>
+    <message>
+        <location filename="../ui/host_main_window.ui" line="109"/>
+        <source>Your IP</source>
+        <translation>Ваш IP</translation>
+    </message>
+    <message>
+        <location filename="../ui/host_main_window.ui" line="181"/>
+        <source>User</source>
+        <translation>Пользователь</translation>
+    </message>
+    <message>
+        <location filename="../ui/host_main_window.ui" line="217"/>
+        <source>Password</source>
+        <translation>Пароль</translation>
+    </message>
+    <message>
+        <location filename="../ui/host_main_window.ui" line="312"/>
         <source>Help</source>
         <translation>Помощь</translation>
     </message>
     <message>
-        <location filename="../ui/host_main_window.ui" line="268"/>
+        <location filename="../ui/host_main_window.ui" line="320"/>
         <source>Language</source>
         <translation>Язык</translation>
     </message>
     <message>
-        <location filename="../ui/host_main_window.ui" line="281"/>
+        <location filename="../ui/host_main_window.ui" line="333"/>
         <source>Exit</source>
         <translation>Выход</translation>
     </message>
     <message>
-        <location filename="../ui/host_main_window.ui" line="290"/>
+        <location filename="../ui/host_main_window.ui" line="342"/>
         <source>Online Help...</source>
         <translation>Онлайн справка...</translation>
     </message>
     <message>
-        <location filename="../ui/host_main_window.ui" line="302"/>
+        <location filename="../ui/host_main_window.ui" line="354"/>
         <source>About</source>
         <translation>О программе</translation>
     </message>
     <message>
-        <location filename="../ui/host_main_window.ui" line="311"/>
+        <location filename="../ui/host_main_window.ui" line="363"/>
         <source>Settings...</source>
         <translation>Параметры...</translation>
     </message>
     <message>
-        <location filename="../ui/host_main_window.ui" line="316"/>
+        <location filename="../ui/host_main_window.ui" line="368"/>
         <source>Hide</source>
         <translation>Спрятать</translation>
     </message>
@@ -688,35 +706,35 @@
 <context>
     <name>host::MainWindow</name>
     <message>
-        <location filename="../ui/host_main_window.cc" line="51"/>
+        <location filename="../ui/host_main_window.cc" line="55"/>
         <source>Aspia Host</source>
         <translation>Хост Aspia</translation>
     </message>
     <message>
-        <location filename="../ui/host_main_window.cc" line="128"/>
-        <location filename="../ui/host_main_window.cc" line="228"/>
+        <location filename="../ui/host_main_window.cc" line="132"/>
+        <location filename="../ui/host_main_window.cc" line="202"/>
         <source>Show</source>
         <translation>Показать</translation>
     </message>
     <message>
-        <location filename="../ui/host_main_window.cc" line="161"/>
-        <location filename="../ui/host_main_window.cc" line="177"/>
-        <location filename="../ui/host_main_window.cc" line="202"/>
+        <location filename="../ui/host_main_window.cc" line="46"/>
+        <location filename="../ui/host_main_window.cc" line="276"/>
+        <location filename="../ui/host_main_window.cc" line="283"/>
         <source>Not available</source>
         <translation>Недоступен</translation>
     </message>
     <message>
-        <location filename="../ui/host_main_window.cc" line="233"/>
+        <location filename="../ui/host_main_window.cc" line="207"/>
         <source>Hide</source>
         <translation>Спрятать</translation>
     </message>
     <message>
-        <location filename="../ui/host_main_window.cc" line="254"/>
+        <location filename="../ui/host_main_window.cc" line="228"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../ui/host_main_window.cc" line="255"/>
+        <location filename="../ui/host_main_window.cc" line="229"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation>Если вы выйдите из Aspia, то вы не сможете подключиться к этому компьютеру пока вы снова не включите компьютер или Aspia вручную. Вы действительно хотите выйти из приложения?</translation>
     </message>

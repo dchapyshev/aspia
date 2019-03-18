@@ -43,6 +43,10 @@ MainWindow::MainWindow(Settings& settings, common::LocaleLoader& locale_loader, 
     ui.setupUi(this);
     setWindowFlag(Qt::WindowMaximizeButtonHint, false);
 
+    QString text = tr("Not available");
+    ui.edit_id->setText(text);
+    ui.edit_ip->setText(text);
+
     tray_menu_.addAction(ui.action_show_hide);
     tray_menu_.addSeparator();
     tray_menu_.addAction(ui.action_exit);
@@ -153,54 +157,22 @@ void MainWindow::realClose()
 
 void MainWindow::onCredentialsReceived(const proto::host::Credentials& credentials)
 {
-    bool has_id = !credentials.id().empty();
+    std::string ip;
 
-    ui.label_icon_id->setEnabled(has_id);
-    ui.label_id->setEnabled(has_id);
-    ui.edit_id->setEnabled(has_id);
-    ui.edit_id->setText(has_id ? QString::fromStdString(credentials.id()) : tr("Not available"));
-
-    bool has_password = !credentials.password().empty();
-
-    ui.label_icon_password->setEnabled(has_password);
-    ui.label_password->setEnabled(has_password);
-    ui.edit_password->setEnabled(has_password);
-
-    if (has_password)
+    for (int i = 0; i < credentials.ip_size(); ++i)
     {
-        ui.edit_password->setText(QString::fromStdString(credentials.username()) +
-                                  QLatin1Char(' ') +
-                                  QString::fromStdString(credentials.password()));
-    }
-    else
-    {
-        ui.edit_password->setText(tr("Not available"));
+        if (!ip.empty())
+            ip += ", ";
+
+        ip += credentials.ip(i);
     }
 
-    bool has_ip = credentials.ip_size() > 0;
+    id_ = credentials.id();
+    ip_ = std::move(ip);
+    username_ = credentials.username();
+    password_ = credentials.password();
 
-    ui.label_icon_ip->setEnabled(has_ip);
-    ui.label_ip->setEnabled(has_ip);
-    ui.edit_ip->setEnabled(has_ip);
-
-    if (has_ip)
-    {
-        QString ip_list;
-
-        for (int i = 0; i < credentials.ip_size(); ++i)
-        {
-            if (!ip_list.isEmpty())
-                ip_list += QStringLiteral(", ");
-
-            ip_list += QString::fromStdString(credentials.ip(i));
-        }
-
-        ui.edit_ip->setText(ip_list);
-    }
-    else
-    {
-        ui.edit_ip->setText(tr("Not available"));
-    }
+    refeshCredentials();
 }
 
 void MainWindow::onLanguageChanged(QAction* action)
@@ -213,6 +185,8 @@ void MainWindow::onLanguageChanged(QAction* action)
     locale_loader_.installTranslators(new_locale);
 
     ui.retranslateUi(this);
+    refeshCredentials();
+
     settings_.setLocale(new_locale);
 }
 
@@ -290,6 +264,37 @@ void MainWindow::createLanguageMenu(const QString& current_locale)
 
         ui.menu_language->addAction(action_language);
     }
+}
+
+void MainWindow::refeshCredentials()
+{
+    bool has_id = !id_.empty();
+
+    ui.label_icon_id->setEnabled(has_id);
+    ui.label_id->setEnabled(has_id);
+    ui.edit_id->setEnabled(has_id);
+    ui.edit_id->setText(has_id ? QString::fromStdString(id_) : tr("Not available"));
+
+    bool has_ip = !ip_.empty();
+
+    ui.label_icon_ip->setEnabled(has_ip);
+    ui.label_ip->setEnabled(has_ip);
+    ui.edit_ip->setEnabled(has_ip);
+    ui.edit_ip->setText(has_ip ? QString::fromStdString(ip_) : tr("Not available"));
+
+    bool has_username = !username_.empty();
+
+    ui.label_icon_user->setEnabled(has_username);
+    ui.label_user->setEnabled(has_username);
+    ui.edit_user->setEnabled(has_username);
+    ui.edit_user->setText(has_username ? QString::fromStdString(username_) : QString());
+
+    bool has_password = !password_.empty();
+
+    ui.label_icon_password->setEnabled(has_password);
+    ui.label_password->setEnabled(has_password);
+    ui.edit_password->setEnabled(has_password);
+    ui.edit_password->setText(has_password ? QString::fromStdString(password_) : QString());
 }
 
 } // namespace host

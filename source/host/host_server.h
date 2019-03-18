@@ -50,7 +50,7 @@ protected:
 
 private slots:
     void onNewConnection();
-    void onUiProcessEvent(UiServer::ProcessEvent event, base::win::SessionId session_id);
+    void onUiProcessEvent(UiServer::EventType event, base::win::SessionId session_id);
     void onSessionFinished();
 
 private:

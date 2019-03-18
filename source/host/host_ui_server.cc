@@ -173,7 +173,7 @@ void UiServer::onChannelConnected(ipc::Channel* channel)
     process_list_.emplace_back(process);
     process->start();
 
-    emit processEvent(ProcessEvent::CONNECTED, session_id);
+    emit processEvent(EventType::CONNECTED, session_id);
 }
 
 void UiServer::onProcessFinished()
@@ -193,7 +193,7 @@ void UiServer::onProcessFinished()
             if (result != user_list_.end())
                 user_list_.erase(result);
 
-            emit processEvent(ProcessEvent::DISCONNECTED, session_id);
+            emit processEvent(EventType::DISCONNECTED, session_id);
 
             it = process_list_.erase(it);
             delete process;
@@ -207,12 +207,10 @@ void UiServer::onProcessFinished()
     emit userListChanged();
 }
 
-void UiServer::onUserChanged(base::win::SessionId session_id,
-                             const std::string& username,
-                             const std::string& password)
+void UiServer::onUserChanged(base::win::SessionId session_id, const std::string& password)
 {
     std::unique_ptr<net::SrpUser> user(
-        net::SrpHostContext::createUser(QString::fromStdString(username),
+        net::SrpHostContext::createUser(QString("#%1").arg(session_id),
                                         QString::fromStdString(password)));
 
     auto result = user_list_.find(session_id);
