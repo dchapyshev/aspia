@@ -31,7 +31,7 @@ class Clipboard;
 
 namespace host {
 
-class InputInjector;
+class InputThread;
 
 class SessionDesktop :
     public Session,
@@ -74,7 +74,7 @@ private:
 
     std::unique_ptr<ScreenUpdater> screen_updater_;
     std::unique_ptr<common::Clipboard> clipboard_;
-    std::unique_ptr<InputInjector> input_injector_;
+    std::unique_ptr<InputThread> input_thread_;
 
     DISALLOW_COPY_AND_ASSIGN(SessionDesktop);
 };

@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,14 +17,9 @@
 //
 
 #include "host/input_injector.h"
-#include "base/win/scoped_thread_desktop.h"
 #include "base/logging.h"
 #include "common/keycode_converter.h"
 #include "host/sas_injector.h"
-
-#include <QRect>
-
-#include <set>
 
 namespace host {
 
@@ -73,32 +68,9 @@ void sendKeyboardVirtualKey(WORD key_code, DWORD flags)
         PLOG(LS_WARNING) << "SendInput failed";
 }
 
-class InputInjectorImpl
-{
-public:
-    InputInjectorImpl(bool block_input);
-    ~InputInjectorImpl();
+} // namespace
 
-    void injectPointerEvent(const proto::desktop::PointerEvent& event);
-    void injectKeyEvent(const proto::desktop::KeyEvent& event);
-
-private:
-    void switchToInputDesktop();
-    bool isCtrlAndAltPressed();
-
-    base::ScopedThreadDesktop desktop_;
-
-    const bool block_input_;
-
-    std::set<uint32_t> pressed_keys_;
-    QPoint prev_mouse_pos_;
-
-    uint32_t prev_mouse_button_mask_ = 0;
-
-    DISALLOW_COPY_AND_ASSIGN(InputInjectorImpl);
-};
-
-InputInjectorImpl::InputInjectorImpl(bool block_input)
+InputInjector::InputInjector(bool block_input)
     : block_input_(block_input)
 {
     switchToInputDesktop();
@@ -107,7 +79,7 @@ InputInjectorImpl::InputInjectorImpl(bool block_input)
         BlockInput(TRUE);
 }
 
-InputInjectorImpl::~InputInjectorImpl()
+InputInjector::~InputInjector()
 {
     for (auto usb_keycode : pressed_keys_)
     {
@@ -120,7 +92,7 @@ InputInjectorImpl::~InputInjectorImpl()
     }
 }
 
-void InputInjectorImpl::injectPointerEvent(const proto::desktop::PointerEvent& event)
+void InputInjector::injectPointerEvent(const proto::desktop::PointerEvent& event)
 {
     switchToInputDesktop();
 
@@ -203,7 +175,7 @@ void InputInjectorImpl::injectPointerEvent(const proto::desktop::PointerEvent& e
     prev_mouse_button_mask_ = mask;
 }
 
-void InputInjectorImpl::injectKeyEvent(const proto::desktop::KeyEvent& event)
+void InputInjector::injectKeyEvent(const proto::desktop::KeyEvent& event)
 {
     if (event.flags() & proto::desktop::KeyEvent::PRESSED)
     {
@@ -252,7 +224,7 @@ void InputInjectorImpl::injectKeyEvent(const proto::desktop::KeyEvent& event)
     sendKeyboardScancode(static_cast<WORD>(scancode), flags);
 }
 
-void InputInjectorImpl::switchToInputDesktop()
+void InputInjector::switchToInputDesktop()
 {
     base::Desktop input_desktop(base::Desktop::inputDesktop());
 
@@ -267,7 +239,7 @@ void InputInjectorImpl::switchToInputDesktop()
     SetThreadExecutionState(ES_SYSTEM_REQUIRED);
 }
 
-bool InputInjectorImpl::isCtrlAndAltPressed()
+bool InputInjector::isCtrlAndAltPressed()
 {
     bool ctrl_pressed = false;
     bool alt_pressed = false;
@@ -282,78 +254,6 @@ bool InputInjectorImpl::isCtrlAndAltPressed()
     }
 
     return ctrl_pressed && alt_pressed;
-}
-
-} // namespace
-
-InputInjector::InputInjector(QObject* parent, bool block_input)
-    : QThread(parent),
-      block_input_(block_input)
-{
-    start(QThread::HighPriority);
-}
-
-InputInjector::~InputInjector()
-{
-    {
-        std::scoped_lock lock(input_queue_lock_);
-        terminate_ = true;
-        input_event_.notify_one();
-    }
-
-    wait();
-}
-
-void InputInjector::injectPointerEvent(const proto::desktop::PointerEvent& event)
-{
-    std::scoped_lock lock(input_queue_lock_);
-    incoming_input_queue_.emplace(event);
-    input_event_.notify_one();
-}
-
-void InputInjector::injectKeyEvent(const proto::desktop::KeyEvent& event)
-{
-    std::scoped_lock lock(input_queue_lock_);
-    incoming_input_queue_.emplace(event);
-    input_event_.notify_one();
-}
-
-void InputInjector::run()
-{
-    InputInjectorImpl impl(block_input_);
-
-    while (true)
-    {
-        std::queue<InputEvent> work_input_queue;
-
-        {
-            std::unique_lock lock(input_queue_lock_);
-
-            while (incoming_input_queue_.empty() && !terminate_)
-                input_event_.wait(lock);
-
-            if (terminate_)
-                return;
-
-            work_input_queue.swap(incoming_input_queue_);
-        }
-
-        while (!work_input_queue.empty())
-        {
-            const InputEvent& input_event = work_input_queue.front();
-
-            if (std::holds_alternative<proto::desktop::KeyEvent>(input_event))
-            {
-                impl.injectKeyEvent(std::get<proto::desktop::KeyEvent>(input_event));
-            }
-            else if (std::holds_alternative<proto::desktop::PointerEvent>(input_event))
-            {
-                impl.injectPointerEvent(std::get<proto::desktop::PointerEvent>(input_event));
-            }
-
-            work_input_queue.pop();
-        }
-    }
 }
 
 } // namespace host

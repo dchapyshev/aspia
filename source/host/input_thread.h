@@ -16,45 +16,48 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST__INPUT_INJECTOR_H
-#define HOST__INPUT_INJECTOR_H
+#ifndef HOST__INPUT_THREAD_H
+#define HOST__INPUT_THREAD_H
 
 #include "base/macros_magic.h"
-#include "base/win/scoped_thread_desktop.h"
 #include "proto/desktop.pb.h"
 
-#include <QRect>
 #include <QThread>
 
-#include <set>
+#include <condition_variable>
+#include <queue>
+#include <mutex>
+#include <variant>
 
 namespace host {
 
-class InputInjector
+class InputThread : public QThread
 {
+    Q_OBJECT
+
 public:
-    InputInjector(bool block_input);
-    ~InputInjector();
+    InputThread(QObject* parent, bool block_input);
+    ~InputThread();
 
     void injectPointerEvent(const proto::desktop::PointerEvent& event);
     void injectKeyEvent(const proto::desktop::KeyEvent& event);
 
+protected:
+    // QThread implementation.
+    void run() override;
+
 private:
-    void switchToInputDesktop();
-    bool isCtrlAndAltPressed();
+    using InputEvent = std::variant<proto::desktop::PointerEvent, proto::desktop::KeyEvent>;
 
-    base::ScopedThreadDesktop desktop_;
-
+    std::condition_variable input_event_;
+    std::mutex input_queue_lock_;
+    std::queue<InputEvent> incoming_input_queue_;
+    bool terminate_ = false;
     const bool block_input_;
 
-    std::set<uint32_t> pressed_keys_;
-    QPoint prev_mouse_pos_;
-
-    uint32_t prev_mouse_button_mask_ = 0;
-
-    DISALLOW_COPY_AND_ASSIGN(InputInjector);
+    DISALLOW_COPY_AND_ASSIGN(InputThread);
 };
 
 } // namespace host
 
-#endif // HOST__INPUT_INJECTOR_H
+#endif // HOST__INPUT_THREAD_H

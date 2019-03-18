@@ -21,7 +21,7 @@
 #include "common/clipboard.h"
 #include "common/desktop_session_constants.h"
 #include "common/message_serialization.h"
-#include "host/input_injector.h"
+#include "host/input_thread.h"
 #include "host/host_system_info.h"
 #include "proto/desktop_extensions.pb.h"
 #if defined(OS_WIN)
@@ -122,8 +122,8 @@ void SessionDesktop::readPointerEvent(const proto::desktop::PointerEvent& event)
         return;
     }
 
-    if (input_injector_)
-        input_injector_->injectPointerEvent(event);
+    if (input_thread_)
+        input_thread_->injectPointerEvent(event);
 }
 
 void SessionDesktop::readKeyEvent(const proto::desktop::KeyEvent& event)
@@ -135,8 +135,8 @@ void SessionDesktop::readKeyEvent(const proto::desktop::KeyEvent& event)
         return;
     }
 
-    if (input_injector_)
-        input_injector_->injectKeyEvent(event);
+    if (input_thread_)
+        input_thread_->injectKeyEvent(event);
 }
 
 void SessionDesktop::readClipboardEvent(const proto::desktop::ClipboardEvent& clipboard_event)
@@ -249,7 +249,7 @@ void SessionDesktop::readConfig(const proto::desktop::Config& config)
         if (mask & DesktopConfigTracker::HAS_INPUT)
         {
             bool block_input = config.flags() & proto::desktop::BLOCK_REMOTE_INPUT;
-            input_injector_.reset(new InputInjector(this, block_input));
+            input_thread_.reset(new InputThread(this, block_input));
         }
     }
 

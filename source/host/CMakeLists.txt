@@ -55,6 +55,8 @@ list(APPEND SOURCE_HOST_CORE
     host_ui_server.h
     input_injector.cc
     input_injector.h
+    input_thread.cc
+    input_thread.h
     sas_injector.cc
     sas_injector.h
     screen_updater.cc
