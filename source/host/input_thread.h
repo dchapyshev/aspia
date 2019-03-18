@@ -36,7 +36,7 @@ class InputThread : public QThread
     Q_OBJECT
 
 public:
-    InputThread(QObject* parent, bool block_input);
+    explicit InputThread(bool block_input);
     ~InputThread();
 
     void injectPointerEvent(const proto::desktop::PointerEvent& event);

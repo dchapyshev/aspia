@@ -22,9 +22,8 @@
 
 namespace host {
 
-InputThread::InputThread(QObject* parent, bool block_input)
-    : QThread(parent),
-      block_input_(block_input)
+InputThread::InputThread(bool block_input)
+    : block_input_(block_input)
 {
     start(QThread::HighPriority);
 }

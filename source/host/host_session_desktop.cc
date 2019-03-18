@@ -249,7 +249,7 @@ void SessionDesktop::readConfig(const proto::desktop::Config& config)
         if (mask & DesktopConfigTracker::HAS_INPUT)
         {
             bool block_input = config.flags() & proto::desktop::BLOCK_REMOTE_INPUT;
-            input_thread_.reset(new InputThread(this, block_input));
+            input_thread_.reset(new InputThread(block_input));
         }
     }
 
