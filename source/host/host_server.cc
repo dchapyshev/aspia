@@ -162,15 +162,12 @@ void HostServer::customEvent(QEvent* event)
 
         Settings settings;
 
-        if (settings.addFirewallRule())
+        net::FirewallManager firewall(QCoreApplication::applicationFilePath());
+        if (firewall.isValid())
         {
-            net::FirewallManager firewall(QCoreApplication::applicationFilePath());
-            if (firewall.isValid())
+            if (firewall.addTcpRule(kFirewallRuleName, kFirewallRuleDecription, settings.tcpPort()))
             {
-                if (firewall.addTcpRule(kFirewallRuleName, kFirewallRuleDecription, settings.tcpPort()))
-                {
-                    LOG(LS_INFO) << "Rule is added to the firewall";
-                }
+                LOG(LS_INFO) << "Rule is added to the firewall";
             }
         }
 

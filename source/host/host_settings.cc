@@ -107,16 +107,6 @@ void Settings::setTcpPort(uint16_t port)
     system_settings_.setValue(QStringLiteral("TcpPort"), port);
 }
 
-bool Settings::addFirewallRule() const
-{
-    return system_settings_.value(QStringLiteral("AddFirewallRule"), true).toBool();
-}
-
-void Settings::setAddFirewallRule(bool value)
-{
-    system_settings_.setValue(QStringLiteral("AddFirewallRule"), value);
-}
-
 net::SrpUserList Settings::userList() const
 {
     net::SrpUserList users;

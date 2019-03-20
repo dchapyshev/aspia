@@ -50,9 +50,6 @@ public:
     uint16_t tcpPort() const;
     void setTcpPort(uint16_t port);
 
-    bool addFirewallRule() const;
-    void setAddFirewallRule(bool value);
-
     net::SrpUserList userList() const;
     void setUserList(const net::SrpUserList& user_list);
 

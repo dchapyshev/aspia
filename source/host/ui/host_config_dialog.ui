@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>319</width>
-    <height>321</height>
+    <width>304</width>
+    <height>296</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,7 +16,7 @@
   <property name="sizeGripEnabled">
    <bool>true</bool>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_5">
+  <layout class="QVBoxLayout" name="verticalLayout_3">
    <item>
     <widget class="QTabWidget" name="tab_general">
      <property name="currentIndex">
@@ -26,7 +26,7 @@
       <attribute name="title">
        <string>General</string>
       </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_3">
+      <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
         <widget class="QGroupBox" name="groupBox">
          <property name="title">
@@ -79,38 +79,24 @@
          <property name="title">
           <string>Incoming Connections</string>
          </property>
-         <layout class="QVBoxLayout" name="verticalLayout_2">
+         <layout class="QHBoxLayout" name="horizontalLayout_4">
           <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_5">
-            <item>
-             <widget class="QLabel" name="label_port">
-              <property name="text">
-               <string>Port:</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QSpinBox" name="spinbox_port">
-              <property name="minimum">
-               <number>1</number>
-              </property>
-              <property name="maximum">
-               <number>65535</number>
-              </property>
-              <property name="value">
-               <number>8050</number>
-              </property>
-             </widget>
-            </item>
-           </layout>
+           <widget class="QLabel" name="label_port">
+            <property name="text">
+             <string>Port:</string>
+            </property>
+           </widget>
           </item>
           <item>
-           <widget class="QCheckBox" name="checkbox_add_firewall_rule">
-            <property name="text">
-             <string>Add a rule to the firewall when the service starts</string>
+           <widget class="QSpinBox" name="spinbox_port">
+            <property name="minimum">
+             <number>1</number>
             </property>
-            <property name="checked">
-             <bool>true</bool>
+            <property name="maximum">
+             <number>65535</number>
+            </property>
+            <property name="value">
+             <number>8050</number>
             </property>
            </widget>
           </item>

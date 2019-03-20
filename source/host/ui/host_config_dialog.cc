@@ -44,9 +44,6 @@ ConfigDialog::ConfigDialog(QWidget* parent)
     connect(ui.spinbox_port, QOverload<int>::of(&QSpinBox::valueChanged),
             this, &ConfigDialog::onConfigChanged);
 
-    connect(ui.checkbox_add_firewall_rule, &QCheckBox::toggled,
-            this, &ConfigDialog::onConfigChanged);
-
     connect(ui.checkbox_use_custom_server, &QCheckBox::toggled, [this](bool checked)
     {
         setConfigChanged(true);
@@ -272,7 +269,6 @@ void ConfigDialog::onButtonBoxClicked(QAbstractButton* button)
         }
 
         settings.setTcpPort(ui.spinbox_port->value());
-        settings.setAddFirewallRule(ui.checkbox_add_firewall_rule->isChecked());
         settings.setUserList(users_);
         settings.setUpdateServer(ui.edit_update_server->text());
 
@@ -346,8 +342,6 @@ void ConfigDialog::reloadAll()
     reloadUserList();
 
     ui.spinbox_port->setValue(settings.tcpPort());
-    ui.checkbox_add_firewall_rule->setChecked(settings.addFirewallRule());
-
     ui.checkbox_use_custom_server->setChecked(settings.updateServer() != DEFAULT_UPDATE_SERVER);
     ui.edit_update_server->setText(settings.updateServer());
 
