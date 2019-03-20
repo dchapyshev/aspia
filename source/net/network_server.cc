@@ -22,9 +22,8 @@
 
 namespace net {
 
-Server::Server(const SrpUserList& user_list, QObject* parent)
-    : QObject(parent),
-      user_list_(user_list)
+Server::Server(QObject* parent)
+    : QObject(parent)
 {
     // Nothing
 }
@@ -85,6 +84,11 @@ void Server::stop()
 
     tcp_server_->close();
     delete tcp_server_;
+}
+
+void Server::setUserList(const SrpUserList& user_list)
+{
+    user_list_ = user_list;
 }
 
 bool Server::hasReadyChannels() const

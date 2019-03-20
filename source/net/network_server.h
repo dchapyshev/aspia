@@ -35,11 +35,13 @@ class Server : public QObject
     Q_OBJECT
 
 public:
-    Server(const SrpUserList& user_list, QObject* parent = nullptr);
+    Server(QObject* parent = nullptr);
     ~Server() = default;
 
     bool start(uint16_t port);
     void stop();
+
+    void setUserList(const SrpUserList& user_list);
 
     bool hasReadyChannels() const;
     ChannelHost* nextReadyChannel();

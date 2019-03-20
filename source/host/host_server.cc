@@ -26,6 +26,7 @@
 #include "net/network_channel_host.h"
 
 #include <QCoreApplication>
+#include <QFileSystemWatcher>
 
 namespace host {
 
@@ -79,6 +80,8 @@ void HostServer::stop()
 
     LOG(LS_INFO) << "Stopping the server.";
     state_ = State::STOPPING;
+
+    delete settings_watcher_;
 
     for (auto session : sessions_)
     {
@@ -186,7 +189,8 @@ void HostServer::customEvent(QEvent* event)
             LOG(LS_INFO) << "UI server is started successfully";
         }
 
-        network_server_ = new net::Server(settings.userList(), this);
+        network_server_ = new net::Server(this);
+        network_server_->setUserList(settings.userList());
 
         connect(network_server_, &net::Server::newChannelReady,
                 this, &HostServer::onNewConnection);
@@ -200,6 +204,13 @@ void HostServer::customEvent(QEvent* event)
         {
             LOG(LS_INFO) << "Network server is started successfully";
         }
+
+        settings_watcher_ = new QFileSystemWatcher(this);
+
+        connect(settings_watcher_, &QFileSystemWatcher::fileChanged,
+                this, &HostServer::onSettingsChanged);
+
+        settings_watcher_->addPath(settings.filePath());
 
         state_ = State::STARTED;
     }
@@ -370,6 +381,12 @@ void HostServer::onSessionFinished()
             ++it;
         }
     }
+}
+
+void HostServer::onSettingsChanged()
+{
+    Settings settings;
+    network_server_->setUserList(settings.userList());
 }
 
 void HostServer::sendConnectEvent(const SessionProcess* session_process)

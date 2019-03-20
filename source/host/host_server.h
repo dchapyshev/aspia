@@ -25,6 +25,8 @@
 #include "ipc/ipc_channel.h"
 #include "net/network_server.h"
 
+class QFileSystemWatcher;
+
 namespace host {
 
 class SessionProcess;
@@ -52,6 +54,7 @@ private slots:
     void onNewConnection();
     void onUiProcessEvent(UiServer::EventType event, base::win::SessionId session_id);
     void onSessionFinished();
+    void onSettingsChanged();
 
 private:
     void sendConnectEvent(const SessionProcess* session_process);
@@ -60,6 +63,7 @@ private:
 
     State state_ = State::STOPPED;
 
+    QPointer<QFileSystemWatcher> settings_watcher_;
     QPointer<UiServer> ui_server_;
 
     // Accepts incoming network connections.
