@@ -432,7 +432,7 @@
     <message>
         <location filename="../ui/host_config_dialog.cc" line="152"/>
         <location filename="../ui/host_config_dialog.cc" line="229"/>
-        <location filename="../ui/host_config_dialog.cc" line="283"/>
+        <location filename="../ui/host_config_dialog.cc" line="282"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
@@ -454,7 +454,7 @@
     </message>
     <message>
         <location filename="../ui/host_config_dialog.cc" line="224"/>
-        <location filename="../ui/host_config_dialog.cc" line="278"/>
+        <location filename="../ui/host_config_dialog.cc" line="277"/>
         <source>Service configuration changed. For the changes to take effect, you must restart the service. Restart the service now?</source>
         <translation>Конфигурация службы изменена. Для принятия изменений требуется перезапуск службы. Перезапустить сейчас?</translation>
     </message>
@@ -470,85 +470,85 @@
     </message>
     <message>
         <location filename="../ui/host_config_dialog.cc" line="267"/>
-        <location filename="../ui/host_config_dialog.cc" line="437"/>
-        <location filename="../ui/host_config_dialog.cc" line="456"/>
-        <location filename="../ui/host_config_dialog.cc" line="471"/>
-        <location filename="../ui/host_config_dialog.cc" line="481"/>
-        <location filename="../ui/host_config_dialog.cc" line="497"/>
-        <location filename="../ui/host_config_dialog.cc" line="507"/>
+        <location filename="../ui/host_config_dialog.cc" line="444"/>
+        <location filename="../ui/host_config_dialog.cc" line="463"/>
+        <location filename="../ui/host_config_dialog.cc" line="478"/>
+        <location filename="../ui/host_config_dialog.cc" line="488"/>
+        <location filename="../ui/host_config_dialog.cc" line="504"/>
+        <location filename="../ui/host_config_dialog.cc" line="514"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="376"/>
+        <location filename="../ui/host_config_dialog.cc" line="383"/>
         <source>Remove</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="384"/>
+        <location filename="../ui/host_config_dialog.cc" line="391"/>
         <source>Started</source>
         <translation>Запущена</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="385"/>
+        <location filename="../ui/host_config_dialog.cc" line="392"/>
         <source>Stop</source>
         <translation>Остановить</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="390"/>
+        <location filename="../ui/host_config_dialog.cc" line="397"/>
         <source>Not started</source>
         <translation>Не запущена</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="391"/>
         <location filename="../ui/host_config_dialog.cc" line="398"/>
-        <location filename="../ui/host_config_dialog.cc" line="411"/>
+        <location filename="../ui/host_config_dialog.cc" line="405"/>
+        <location filename="../ui/host_config_dialog.cc" line="418"/>
         <source>Start</source>
         <translation>Запустить</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="397"/>
+        <location filename="../ui/host_config_dialog.cc" line="404"/>
         <source>Installed</source>
         <translation>Установлена</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="408"/>
+        <location filename="../ui/host_config_dialog.cc" line="415"/>
         <source>Not installed</source>
         <translation>Не установлена</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="410"/>
+        <location filename="../ui/host_config_dialog.cc" line="417"/>
         <source>Install</source>
         <translation>Установить</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="415"/>
+        <location filename="../ui/host_config_dialog.cc" line="422"/>
         <source>Current state: %1</source>
         <translation>Текущее состояние: %1</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="438"/>
+        <location filename="../ui/host_config_dialog.cc" line="445"/>
         <source>The service could not be installed.</source>
         <translation>Не удалось установить службу.</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="457"/>
+        <location filename="../ui/host_config_dialog.cc" line="464"/>
         <source>The service could not be removed.</source>
         <translation>Не удалось удалить службу.</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="472"/>
-        <location filename="../ui/host_config_dialog.cc" line="498"/>
+        <location filename="../ui/host_config_dialog.cc" line="479"/>
+        <location filename="../ui/host_config_dialog.cc" line="505"/>
         <source>Could not access the service.</source>
         <translation>Не удалось получить доступ к службе.</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="482"/>
+        <location filename="../ui/host_config_dialog.cc" line="489"/>
         <source>The service could not be started.</source>
         <translation>Не удалось запустить службу.</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="508"/>
+        <location filename="../ui/host_config_dialog.cc" line="515"/>
         <source>The service could not be stopped.</source>
         <translation>Не удалось остановить службу.</translation>
     </message>

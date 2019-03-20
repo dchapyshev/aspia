@@ -268,11 +268,10 @@ void ConfigDialog::onButtonBoxClicked(QAbstractButton* button)
             return;
         }
 
-        settings.setTcpPort(ui.spinbox_port->value());
-        settings.setUserList(users_);
-        settings.setUpdateServer(ui.edit_update_server->text());
+        bool service_restart_required = false;
 
-        if (isServiceStarted())
+        // Now we have only one parameter when changing which requires restarting the service.
+        if (isServiceStarted() && settings.tcpPort() != ui.spinbox_port->value())
         {
             QString message =
                 tr("Service configuration changed. "
@@ -285,11 +284,19 @@ void ConfigDialog::onButtonBoxClicked(QAbstractButton* button)
                                       QMessageBox::Yes,
                                       QMessageBox::No) == QMessageBox::Yes)
             {
-                restartService();
+                service_restart_required = true;
             }
         }
 
+        // Update the parameters.
+        settings.setTcpPort(ui.spinbox_port->value());
+        settings.setUserList(users_);
+        settings.setUpdateServer(ui.edit_update_server->text());
+
         setConfigChanged(false);
+
+        if (service_restart_required)
+            restartService();
     }
 
     if (standard_button == QDialogButtonBox::Apply)
