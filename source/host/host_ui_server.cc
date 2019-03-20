@@ -209,18 +209,17 @@ void UiServer::onProcessFinished()
 
 void UiServer::onUserChanged(base::win::SessionId session_id, const std::string& password)
 {
-    std::unique_ptr<net::SrpUser> user(
-        net::SrpHostContext::createUser(QString("#%1").arg(session_id),
-                                        QString::fromStdString(password)));
+    net::SrpUser user = net::SrpUser::create(QString("#%1").arg(session_id),
+                                             QString::fromStdString(password));
 
     auto result = user_list_.find(session_id);
     if (result != user_list_.end())
     {
-        result->second = std::move(*user);
+        result->second = std::move(user);
     }
     else
     {
-        user_list_.emplace(session_id, std::move(*user));
+        user_list_.emplace(session_id, std::move(user));
     }
 
     emit userListChanged();

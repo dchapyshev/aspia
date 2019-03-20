@@ -27,27 +27,28 @@
 
 namespace host {
 
-UserDialog::UserDialog(const net::SrpUserList& user_list, net::SrpUser* user, QWidget* parent)
+UserDialog::UserDialog(net::SrpUserList* user_list, int user_index, QWidget* parent)
     : QDialog(parent),
       user_list_(user_list),
-      user_(user)
+      user_index_(user_index)
 {
-    DCHECK(user_);
+    DCHECK(user_list_);
 
     ui.setupUi(this);
 
-    ui.edit_username->setText(user_->name);
-
-    if (!user->verifier.isEmpty())
+    if (user_index != -1)
     {
-        DCHECK(!user_->number.isEmpty());
-        DCHECK(!user_->generator.isEmpty());
-        DCHECK(!user_->salt.isEmpty());
+        const net::SrpUser& user = user_list_->at(user_index);
+
+        ui.checkbox_disable_user->setChecked(!(user.flags & net::SrpUser::ENABLED));
+        ui.edit_username->setText(user.name);
 
         setAccountChanged(false);
     }
-
-    ui.checkbox_disable_user->setChecked(!(user_->flags & net::SrpUser::ENABLED));
+    else
+    {
+        ui.checkbox_disable_user->setChecked(false);
+    }
 
     auto add_session_type = [&](const QIcon& icon,
                                 const QString& name,
@@ -60,10 +61,19 @@ UserDialog::UserDialog(const net::SrpUserList& user_list, net::SrpUser* user, QW
         item->setFlags(item->flags() | Qt::ItemIsUserCheckable);
         item->setData(0, Qt::UserRole, QVariant(session_type));
 
-        if (user->sessions & session_type)
-            item->setCheckState(0, Qt::Checked);
+        if (user_index != -1)
+        {
+            const net::SrpUser& user = user_list_->at(user_index);
+
+            if (user.sessions & session_type)
+                item->setCheckState(0, Qt::Checked);
+            else
+                item->setCheckState(0, Qt::Unchecked);
+        }
         else
-            item->setCheckState(0, Qt::Unchecked);
+        {
+            item->setCheckState(0, Qt::Checked);
+        }
 
         ui.tree_sessions->addTopLevelItem(item);
     };
@@ -122,9 +132,14 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
 {
     if (ui.button_box->standardButton(button) == QDialogButtonBox::Ok)
     {
+        net::SrpUser user;
+
+        if (user_index_ != -1)
+            user = user_list_->at(user_index_);
+
         if (account_changed_)
         {
-            QString name = ui.edit_username->text();
+            QString name = ui.edit_username->text().toLower();
             QString password = ui.edit_password->text();
 
             if (!common::UserUtil::isValidUserName(name))
@@ -134,28 +149,20 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
                                      tr("The user name can not be empty and can contain only alphabet"
                                         " characters, numbers and ""_"", ""-"", ""."" characters."),
                                      QMessageBox::Ok);
+                ui.edit_username->selectAll();
                 ui.edit_username->setFocus();
                 return;
             }
 
-            QString old_name = user_->name;
-
-            if (name.compare(old_name, Qt::CaseInsensitive) != 0)
+            if (name != user.name && user_list_->find(name) != -1)
             {
-                for (const auto& user : user_list_.list)
-                {
-                    QString existing_name = user.name;
-
-                    if (name.compare(existing_name, Qt::CaseInsensitive) == 0)
-                    {
-                        QMessageBox::warning(this,
-                                             tr("Warning"),
-                                             tr("The username you entered already exists."),
-                                             QMessageBox::Ok);
-                        ui.edit_username->setFocus();
-                        return;
-                    }
-                }
+                QMessageBox::warning(this,
+                                     tr("Warning"),
+                                     tr("The username you entered already exists."),
+                                     QMessageBox::Ok);
+                ui.edit_username->selectAll();
+                ui.edit_username->setFocus();
+                return;
             }
 
             if (password != ui.edit_password_repeat->text())
@@ -164,6 +171,7 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
                                      tr("Warning"),
                                      tr("The passwords you entered do not match."),
                                      QMessageBox::Ok);
+                ui.edit_password->selectAll();
                 ui.edit_password->setFocus();
                 return;
             }
@@ -175,6 +183,7 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
                                      tr("Password can not be empty and should not exceed %n characters.",
                                         "", common::UserUtil::kMaxPasswordLength),
                                      QMessageBox::Ok);
+                ui.edit_password->selectAll();
                 ui.edit_password->setFocus();
                 return;
             }
@@ -205,9 +214,8 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
                 }
             }
 
-            std::unique_ptr<net::SrpUser> user(
-                net::SrpHostContext::createUser(name.toLower(), password));
-            if (!user)
+            user = net::SrpUser::create(name, password);
+            if (!user.isValid())
             {
                 QMessageBox::warning(this,
                                      tr("Warning"),
@@ -215,8 +223,6 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
                                      QMessageBox::Ok);
                 return;
             }
-
-            *user_ = std::move(*user);
         }
 
         uint32_t sessions = 0;
@@ -231,8 +237,13 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
         if (!ui.checkbox_disable_user->isChecked())
             flags |= net::SrpUser::ENABLED;
 
-        user_->sessions = sessions;
-        user_->flags = flags;
+        user.sessions = sessions;
+        user.flags = flags;
+
+        if (user_index_ != -1)
+            user_list_->update(user_index_, user);
+        else
+            user_list_->add(user);
 
         accept();
     }

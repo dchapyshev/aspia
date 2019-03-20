@@ -29,32 +29,6 @@ namespace net {
 
 namespace {
 
-const size_t kUserSaltSize = 64; // In bytes.
-
-// Looks for the user in the list.
-// If the user is found, it returns an index in the list.
-// If the user is not found or disabled, -1 is returned.
-int findUser(const SrpUserList& users, const std::string& username_utf8)
-{
-    QString username = QString::fromStdString(username_utf8);
-
-    for (int i = 0; i < users.list.size(); ++i)
-    {
-        const SrpUser& user = users.list.at(i);
-
-        if (username.compare(user.name, Qt::CaseInsensitive) == 0)
-        {
-            // If the user is disabled, we assume that it was not found.
-            if (!(user.flags & SrpUser::ENABLED))
-                return -1;
-
-            return i;
-        }
-    }
-
-    return -1;
-}
-
 // Returns the size of the initialization vector for the specified method.
 // If the method is not supported, it returns 0.
 size_t ivSizeForMethod(proto::Method method)
@@ -85,33 +59,6 @@ SrpHostContext::~SrpHostContext()
     crypto::memZero(&decrypt_iv_);
 }
 
-// static
-SrpUser* SrpHostContext::createUser(const QString& username, const QString& password)
-{
-    std::unique_ptr<SrpUser> user = std::make_unique<SrpUser>();
-
-    user->name = username;
-    user->salt = crypto::Random::generateBuffer(kUserSaltSize);
-
-    user->number = QByteArray(
-        reinterpret_cast<const char*>(crypto::kSrpNg_8192.N.data()), crypto::kSrpNg_8192.N.size());
-    user->generator = QByteArray(
-        reinterpret_cast<const char*>(crypto::kSrpNg_8192.g.data()), crypto::kSrpNg_8192.g.size());
-
-    crypto::BigNum s = crypto::BigNum::fromByteArray(user->salt);
-    crypto::BigNum N = crypto::BigNum::fromByteArray(user->number);
-    crypto::BigNum g = crypto::BigNum::fromByteArray(user->generator);
-
-    crypto::BigNum v = crypto::SrpMath::calc_v(
-        username.toStdString(), password.toStdString(), s, N, g);
-
-    user->verifier = v.toByteArray();
-    if (user->verifier.isEmpty())
-        return nullptr;
-
-    return user.release();
-}
-
 proto::SrpServerKeyExchange* SrpHostContext::readIdentify(const proto::SrpIdentify& identify)
 {
     username_ = identify.username();
@@ -121,23 +68,23 @@ proto::SrpServerKeyExchange* SrpHostContext::readIdentify(const proto::SrpIdenti
     crypto::BigNum g;
     crypto::BigNum s;
 
-    int user_index = findUser(user_list_, username_);
+    int user_index = user_list_.find(QString::fromStdString(username_));
     if (user_index == -1)
     {
         session_types_ = proto::SESSION_TYPE_ALL;
 
         crypto::GenericHash hash(crypto::GenericHash::BLAKE2b512);
-        hash.addData(user_list_.seed_key);
+        hash.addData(user_list_.seedKey());
         hash.addData(identify.username());
 
         N_ = crypto::BigNum::fromBuffer(crypto::kSrpNg_8192.N);
         g = crypto::BigNum::fromBuffer(crypto::kSrpNg_8192.g);
         s = crypto::BigNum::fromByteArray(hash.result());
-        v_ = crypto::SrpMath::calc_v(username_, user_list_.seed_key.toStdString(), s, N_, g);
+        v_ = crypto::SrpMath::calc_v(username_, user_list_.seedKey().toStdString(), s, N_, g);
     }
     else
     {
-        const SrpUser& user = user_list_.list.at(user_index);
+        const SrpUser& user = user_list_.at(user_index);
 
         session_types_ = user.sessions;
 

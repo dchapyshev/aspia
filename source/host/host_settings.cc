@@ -121,10 +121,6 @@ net::SrpUserList Settings::userList() const
 {
     net::SrpUserList users;
 
-    users.seed_key = system_settings_.value(QStringLiteral("SeedKey")).toByteArray();
-    if (users.seed_key.isEmpty())
-        users.seed_key = crypto::Random::generateBuffer(64);
-
     int count = system_settings_.beginReadArray(QStringLiteral("Users"));
     for (int i = 0; i < count; ++i)
     {
@@ -139,16 +135,21 @@ net::SrpUserList Settings::userList() const
         user.sessions  = system_settings_.value(QStringLiteral("Sessions")).toUInt();
         user.flags     = system_settings_.value(QStringLiteral("Flags")).toUInt();
 
-        if (user.name.isEmpty() || user.salt.isEmpty() || user.verifier.isEmpty() ||
-            user.number.isEmpty() || user.generator.isEmpty())
+        if (!user.isValid())
         {
             LOG(LS_ERROR) << "The list of users is corrupted.";
             return net::SrpUserList();
         }
 
-        users.list.append(user);
+        users.add(user);
     }
     system_settings_.endArray();
+
+    QByteArray seed_key = system_settings_.value(QStringLiteral("SeedKey")).toByteArray();
+    if (seed_key.isEmpty())
+        seed_key = crypto::Random::generateBuffer(64);
+
+    users.setSeedKey(seed_key);
 
     return users;
 }
@@ -158,14 +159,14 @@ void Settings::setUserList(const net::SrpUserList& users)
     // Clear the old list of users.
     system_settings_.remove(QStringLiteral("Users"));
 
-    system_settings_.setValue(QStringLiteral("SeedKey"), users.seed_key);
+    system_settings_.setValue(QStringLiteral("SeedKey"), users.seedKey());
 
     system_settings_.beginWriteArray(QStringLiteral("Users"));
-    for (int i = 0; i < users.list.size(); ++i)
+    for (int i = 0; i < users.count(); ++i)
     {
         system_settings_.setArrayIndex(i);
 
-        const net::SrpUser& user = users.list.at(i);
+        const net::SrpUser& user = users.at(i);
 
         system_settings_.setValue(QStringLiteral("Name"), user.name);
         system_settings_.setValue(QStringLiteral("Salt"), user.salt);

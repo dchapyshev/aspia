@@ -125,12 +125,8 @@ void ConfigDialog::onCurrentUserChanged(
 
 void ConfigDialog::onAddUser()
 {
-    net::SrpUser user;
-    user.flags = net::SrpUser::ENABLED;
-
-    if (UserDialog(users_, &user, this).exec() == QDialog::Accepted)
+    if (UserDialog(&users_, -1, this).exec() == QDialog::Accepted)
     {
-        users_.list.push_back(std::move(user));
         setConfigChanged(true);
         reloadUserList();
     }
@@ -138,12 +134,11 @@ void ConfigDialog::onAddUser()
 
 void ConfigDialog::onModifyUser()
 {
-    UserTreeItem* user_item = dynamic_cast<UserTreeItem*>(ui.tree_users->currentItem());
+    UserTreeItem* user_item = static_cast<UserTreeItem*>(ui.tree_users->currentItem());
     if (!user_item)
         return;
 
-    net::SrpUser* user = &users_.list[user_item->userIndex()];
-    if (UserDialog(users_, user, this).exec() == QDialog::Accepted)
+    if (UserDialog(&users_, user_item->userIndex(), this).exec() == QDialog::Accepted)
     {
         setConfigChanged(true);
         reloadUserList();
@@ -152,7 +147,7 @@ void ConfigDialog::onModifyUser()
 
 void ConfigDialog::onDeleteUser()
 {
-    UserTreeItem* user_item = dynamic_cast<UserTreeItem*>(ui.tree_users->currentItem());
+    UserTreeItem* user_item = static_cast<UserTreeItem*>(ui.tree_users->currentItem());
     if (!user_item)
         return;
 
@@ -163,7 +158,7 @@ void ConfigDialog::onDeleteUser()
                               QMessageBox::Yes,
                               QMessageBox::No) == QMessageBox::Yes)
     {
-        users_.list.erase(users_.list.begin() + user_item->userIndex());
+        users_.remove(user_item->userIndex());
 
         setConfigChanged(true);
         reloadUserList();
@@ -365,8 +360,8 @@ void ConfigDialog::reloadUserList()
 {
     ui.tree_users->clear();
 
-    for (int i = 0; i < users_.list.size(); ++i)
-        ui.tree_users->addTopLevelItem(new UserTreeItem(i, users_.list.at(i)));
+    for (int i = 0; i < users_.count(); ++i)
+        ui.tree_users->addTopLevelItem(new UserTreeItem(i, users_.at(i)));
 
     ui.button_modify->setEnabled(false);
     ui.button_delete->setEnabled(false);

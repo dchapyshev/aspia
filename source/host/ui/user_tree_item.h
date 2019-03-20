@@ -24,7 +24,7 @@
 #include <QTreeWidget>
 
 namespace net {
-struct SrpUser;
+class SrpUser;
 } // namespace net
 
 namespace host {
@@ -32,13 +32,13 @@ namespace host {
 class UserTreeItem : public QTreeWidgetItem
 {
 public:
-    UserTreeItem(size_t index, const net::SrpUser& user);
+    UserTreeItem(int index, const net::SrpUser& user);
     ~UserTreeItem() = default;
 
-    size_t userIndex() const { return index_; }
+    int userIndex() const { return index_; }
 
 private:
-    size_t index_;
+    int index_;
 
     DISALLOW_COPY_AND_ASSIGN(UserTreeItem);
 };

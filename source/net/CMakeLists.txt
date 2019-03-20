@@ -37,6 +37,7 @@ list(APPEND SOURCE_NET
     srp_client_context.h
     srp_host_context.cc
     srp_host_context.h
+    srp_user.cc
     srp_user.h)
 
 list(APPEND SOURCE_NET_UNIT_TESTS

@@ -21,7 +21,7 @@
 
 namespace host {
 
-UserTreeItem::UserTreeItem(size_t index, const net::SrpUser& user)
+UserTreeItem::UserTreeItem(int index, const net::SrpUser& user)
     : index_(index)
 {
     if (user.flags & net::SrpUser::ENABLED)

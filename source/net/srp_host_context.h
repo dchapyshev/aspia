@@ -26,16 +26,14 @@
 
 namespace net {
 
-struct SrpUserList;
-struct SrpUser;
+class SrpUserList;
+class SrpUser;
 
 class SrpHostContext
 {
 public:
     SrpHostContext(proto::Method method, const SrpUserList& user_list);
     ~SrpHostContext();
-
-    static SrpUser* createUser(const QString& username, const QString& password);
 
     proto::SrpServerKeyExchange* readIdentify(const proto::SrpIdentify& identify);
     void readClientKeyExchange(const proto::SrpClientKeyExchange& client_key_exchange);

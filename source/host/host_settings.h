@@ -25,7 +25,7 @@
 #include <QSettings>
 
 namespace net {
-struct SrpUserList;
+class SrpUserList;
 } // namespace net
 
 namespace host {

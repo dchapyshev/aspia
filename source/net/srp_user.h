@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -19,14 +19,19 @@
 #ifndef NET__SRP_USER_H
 #define NET__SRP_USER_H
 
-#include <QList>
 #include <QByteArray>
+#include <QList>
 
 namespace net {
 
-struct SrpUser
+class SrpUser
 {
+public:
     enum Flags { ENABLED = 1 };
+
+    static SrpUser create(const QString& name, const QString& password);
+
+    bool isValid() const;
 
     QString name;
     QByteArray salt;
@@ -37,10 +42,26 @@ struct SrpUser
     uint32_t flags = 0;
 };
 
-struct SrpUserList
+class SrpUserList
 {
-    QByteArray seed_key;
-    QList<SrpUser> list;
+public:
+    SrpUserList() = default;
+
+    void add(const SrpUser& user);
+    void remove(const QString& username);
+    void remove(int index);
+    void update(int index, const SrpUser& user);
+
+    int find(const QString& username) const;
+    int count() const { return list_.count(); }
+    const SrpUser& at(int index) const;
+
+    const QByteArray& seedKey() const { return seed_key_; }
+    void setSeedKey(const QByteArray& seed_key);
+
+private:
+    QByteArray seed_key_;
+    QList<SrpUser> list_;
 };
 
 } // namespace net

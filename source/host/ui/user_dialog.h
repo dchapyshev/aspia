@@ -30,7 +30,7 @@ class UserDialog : public QDialog
     Q_OBJECT
 
 public:
-    UserDialog(const net::SrpUserList& user_list, net::SrpUser* user, QWidget* parent);
+    UserDialog(net::SrpUserList* user_list, int user_index, QWidget* parent);
     ~UserDialog() = default;
 
 protected:
@@ -47,8 +47,8 @@ private:
 
     Ui::UserDialog ui;
 
-    const net::SrpUserList& user_list_;
-    net::SrpUser* user_;
+    net::SrpUserList* user_list_;
+    const int user_index_;
 
     bool account_changed_ = true;
 
