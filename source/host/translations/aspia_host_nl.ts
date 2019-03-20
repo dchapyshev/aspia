@@ -82,6 +82,7 @@
     </message>
     <message>
         <location filename="../ui/host_config_dialog.ui" line="14"/>
+        <location filename="../ui/host_config_dialog.ui" line="109"/>
         <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
@@ -105,9 +106,8 @@
         <translation type="vanished">Firewall regel toevoegen bij het starten v.d. service</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.ui" line="109"/>
         <source>Import / Export Configuration</source>
-        <translation>Importeer / Exporteer Configuratie</translation>
+        <translation type="vanished">Importeer / Exporteer Configuratie</translation>
     </message>
     <message>
         <location filename="../ui/host_config_dialog.ui" line="128"/>

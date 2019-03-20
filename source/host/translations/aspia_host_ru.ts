@@ -86,6 +86,7 @@
     </message>
     <message>
         <location filename="../ui/host_config_dialog.ui" line="14"/>
+        <location filename="../ui/host_config_dialog.ui" line="109"/>
         <source>Settings</source>
         <translation>Параметры</translation>
     </message>
@@ -109,9 +110,8 @@
         <translation type="vanished">Добавлять правило в фаервол при запуске службы</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.ui" line="109"/>
         <source>Import / Export Configuration</source>
-        <translation>Импорт / экспорт конфигурации</translation>
+        <translation type="vanished">Импорт / экспорт конфигурации</translation>
     </message>
     <message>
         <location filename="../ui/host_config_dialog.ui" line="128"/>

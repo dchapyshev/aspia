@@ -82,6 +82,7 @@
     </message>
     <message>
         <location filename="../ui/host_config_dialog.ui" line="14"/>
+        <location filename="../ui/host_config_dialog.ui" line="109"/>
         <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
@@ -105,9 +106,8 @@
         <translation type="vanished">Додати правило файрвола при запуску служби</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.ui" line="109"/>
         <source>Import / Export Configuration</source>
-        <translation>Налаштування імпорта/експорта</translation>
+        <translation type="vanished">Налаштування імпорта/експорта</translation>
     </message>
     <message>
         <location filename="../ui/host_config_dialog.ui" line="128"/>
