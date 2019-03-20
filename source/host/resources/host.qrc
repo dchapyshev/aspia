@@ -16,10 +16,10 @@
     <file>check-none.png</file>
     <file>user.png</file>
     <file>user-disabled.png</file>
-    <file>user-minus.png</file>
-    <file>user-pencil.png</file>
-    <file>user-plus.png</file>
     <file>main.png</file>
+    <file>minus.png</file>
+    <file>pencil.png</file>
+    <file>plus.png</file>
     <file>folder-stand.png</file>
     <file>monitor.png</file>
     <file>monitor-keyboard.png</file>
