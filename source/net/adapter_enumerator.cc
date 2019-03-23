@@ -17,15 +17,52 @@
 //
 
 #include "net/adapter_enumerator.h"
+
 #include "base/strings/string_printf.h"
 #include "base/strings/unicode.h"
-#include "base/win/registry.h"
 
+#include <ws2tcpip.h>
 #include <iphlpapi.h>
-#include <setupapi.h>
-#include <devguid.h>
 
 namespace net {
+
+namespace {
+
+std::string addressToString(const SOCKET_ADDRESS& address)
+{
+    if (!address.lpSockaddr || address.iSockaddrLength <= 0)
+        return std::string();
+
+    char buffer[64] = { 0 };
+
+    switch (address.lpSockaddr->sa_family)
+    {
+        case AF_INET:
+        {
+            sockaddr_in* addr = reinterpret_cast<sockaddr_in*>(address.lpSockaddr);
+
+            if (!inet_ntop(AF_INET, &addr->sin_addr, buffer, _countof(buffer)))
+                return std::string();
+        }
+        break;
+
+        case AF_INET6:
+        {
+            sockaddr_in6* addr = reinterpret_cast<sockaddr_in6*>(address.lpSockaddr);
+
+            if (!inet_ntop(AF_INET6, &addr->sin6_addr, buffer, _countof(buffer)))
+                return std::string();
+        }
+        break;
+
+        default:
+            return std::string();
+    }
+
+    return buffer;
+}
+
+} // namespace
 
 //
 // AdapterEnumerator
@@ -33,30 +70,35 @@ namespace net {
 
 AdapterEnumerator::AdapterEnumerator()
 {
-    ULONG buffer_size = sizeof(IP_ADAPTER_INFO);
+    const ULONG flags = GAA_FLAG_INCLUDE_GATEWAYS | GAA_FLAG_SKIP_ANYCAST |
+        GAA_FLAG_SKIP_MULTICAST;
+
+    ULONG buffer_size = sizeof(IP_ADAPTER_ADDRESSES);
 
     adapters_buffer_ = std::make_unique<uint8_t[]>(buffer_size);
-    adapter_ = reinterpret_cast<PIP_ADAPTER_INFO>(adapters_buffer_.get());
+    adapter_ = reinterpret_cast<PIP_ADAPTER_ADDRESSES>(adapters_buffer_.get());
 
-    ULONG error_code = GetAdaptersInfo(adapter_, &buffer_size);
+    ULONG error_code = GetAdaptersAddresses(AF_INET, flags, nullptr, adapter_, &buffer_size);
     if (error_code != ERROR_SUCCESS)
     {
-        if (error_code != ERROR_BUFFER_OVERFLOW)
-        {
-            adapters_buffer_.reset();
-            adapter_ = nullptr;
-        }
-        else
+        if (error_code == ERROR_BUFFER_OVERFLOW)
         {
             adapters_buffer_ = std::make_unique<uint8_t[]>(buffer_size);
-            adapter_ = reinterpret_cast<PIP_ADAPTER_INFO>(adapters_buffer_.get());
+            adapter_ = reinterpret_cast<PIP_ADAPTER_ADDRESSES>(adapters_buffer_.get());
 
-            error_code = GetAdaptersInfo(adapter_, &buffer_size);
+            error_code = GetAdaptersAddresses(AF_INET, flags, nullptr, adapter_, &buffer_size);
             if (error_code != ERROR_SUCCESS)
             {
                 adapters_buffer_.reset();
                 adapter_ = nullptr;
+                return;
             }
+        }
+        else
+        {
+            adapters_buffer_.reset();
+            adapter_ = nullptr;
+            return;
         }
     }
 }
@@ -73,122 +115,19 @@ void AdapterEnumerator::advance()
     adapter_ = adapter_->Next;
 }
 
-static std::wstring GetAdapterRegistryPath(const char* adapter_name)
-{
-    static constexpr wchar_t kFormat[] =
-        L"SYSTEM\\CurrentControlSet\\Control\\Network\\{4D36E972-E325-11CE-BFC1-08002BE10318}\\%S\\Connection";
-
-    return base::stringPrintf(kFormat, adapter_name);
-}
-
 std::string AdapterEnumerator::adapterName() const
 {
-    HDEVINFO device_info =
-        SetupDiGetClassDevsW(&GUID_DEVCLASS_NET, nullptr, nullptr, DIGCF_PRESENT);
-
-    if (device_info == INVALID_HANDLE_VALUE)
-        return std::string();
-
-    std::wstring key_path = GetAdapterRegistryPath(adapter_->AdapterName);
-
-    base::win::RegistryKey key(HKEY_LOCAL_MACHINE, key_path.c_str(), KEY_READ);
-    if (!key.isValid())
-    {
-        SetupDiDestroyDeviceInfoList(device_info);
-        return std::string();
-    }
-
-    std::wstring adapter_id;
-
-    if (key.readValue(L"PnpInstanceID", &adapter_id) != ERROR_SUCCESS)
-    {
-        SetupDiDestroyDeviceInfoList(device_info);
-        return std::string();
-    }
-
-    SP_DEVINFO_DATA device_info_data;
-    device_info_data.cbSize = sizeof(device_info_data);
-
-    DWORD device_index = 0;
-
-    while (SetupDiEnumDeviceInfo(device_info, device_index, &device_info_data))
-    {
-        ++device_index;
-
-        wchar_t device_id[MAX_PATH] = { 0 };
-
-        if (!SetupDiGetDeviceInstanceIdW(device_info,
-                                         &device_info_data,
-                                         device_id,
-                                         ARRAYSIZE(device_id),
-                                         nullptr))
-        {
-            continue;
-        }
-
-        if (_wcsicmp(adapter_id.c_str(), device_id) == 0)
-        {
-            wchar_t device_name[MAX_PATH] = { 0 };
-
-            if (SetupDiGetDeviceRegistryPropertyW(device_info,
-                                                  &device_info_data,
-                                                  SPDRP_FRIENDLYNAME,
-                                                  nullptr,
-                                                  reinterpret_cast<PBYTE>(device_name),
-                                                  ARRAYSIZE(device_name),
-                                                  nullptr))
-            {
-                SetupDiDestroyDeviceInfoList(device_info);
-                return base::UTF8fromUTF16(device_name);
-            }
-
-            if (SetupDiGetDeviceRegistryPropertyW(device_info,
-                                                  &device_info_data,
-                                                  SPDRP_DEVICEDESC,
-                                                  nullptr,
-                                                  reinterpret_cast<PBYTE>(device_name),
-                                                  ARRAYSIZE(device_name),
-                                                  nullptr))
-            {
-                SetupDiDestroyDeviceInfoList(device_info);
-                return base::UTF8fromUTF16(device_name);
-            }
-
-            break;
-        }
-    }
-
-    SetupDiDestroyDeviceInfoList(device_info);
-    return std::string();
+    return base::UTF8fromUTF16(adapter_->Description);
 }
 
 std::string AdapterEnumerator::connectionName() const
 {
-    std::wstring key_path = GetAdapterRegistryPath(adapter_->AdapterName);
-
-    base::win::RegistryKey key(HKEY_LOCAL_MACHINE, key_path.c_str(), KEY_READ);
-    if (!key.isValid())
-        return std::string();
-
-    std::wstring name;
-
-    if (key.readValue(L"Name", &name) != ERROR_SUCCESS)
-        return std::string();
-
-    return base::UTF8fromUTF16(name);
+    return base::UTF8fromUTF16(adapter_->FriendlyName);
 }
 
 std::string AdapterEnumerator::interfaceType() const
 {
-    MIB_IFROW adapter_if_entry;
-
-    memset(&adapter_if_entry, 0, sizeof(adapter_if_entry));
-    adapter_if_entry.dwIndex = adapter_->Index;
-
-    if (GetIfEntry(&adapter_if_entry) != NO_ERROR)
-        return std::string();
-
-    switch (adapter_if_entry.dwType)
+    switch (adapter_->IfType)
     {
         case IF_TYPE_OTHER:
             return "Other";
@@ -224,74 +163,37 @@ std::string AdapterEnumerator::interfaceType() const
 
 uint32_t AdapterEnumerator::mtu() const
 {
-    MIB_IFROW adapter_if_entry;
-
-    memset(&adapter_if_entry, 0, sizeof(adapter_if_entry));
-    adapter_if_entry.dwIndex = adapter_->Index;
-
-    if (GetIfEntry(&adapter_if_entry) != NO_ERROR)
-        return 0;
-
-    return adapter_if_entry.dwMtu;
+    return adapter_->Mtu;
 }
 
-uint32_t AdapterEnumerator::speed() const
+uint64_t AdapterEnumerator::speed() const
 {
-    MIB_IFROW adapter_if_entry;
-
-    memset(&adapter_if_entry, 0, sizeof(adapter_if_entry));
-    adapter_if_entry.dwIndex = adapter_->Index;
-
-    if (GetIfEntry(&adapter_if_entry) != NO_ERROR)
-        return 0;
-
-    return adapter_if_entry.dwSpeed;
+    return adapter_->TransmitLinkSpeed;
 }
 
 std::string AdapterEnumerator::macAddress() const
 {
-    MIB_IFROW adapter_if_entry;
-
-    memset(&adapter_if_entry, 0, sizeof(adapter_if_entry));
-    adapter_if_entry.dwIndex = adapter_->Index;
-
-    if (GetIfEntry(&adapter_if_entry) != NO_ERROR)
+    if (!adapter_->PhysicalAddressLength)
         return std::string();
 
     return base::stringPrintf("%.2X-%.2X-%.2X-%.2X-%.2X-%.2X",
-                              adapter_if_entry.bPhysAddr[0],
-                              adapter_if_entry.bPhysAddr[1],
-                              adapter_if_entry.bPhysAddr[2],
-                              adapter_if_entry.bPhysAddr[3],
-                              adapter_if_entry.bPhysAddr[4],
-                              adapter_if_entry.bPhysAddr[5],
-                              adapter_if_entry.bPhysAddr[6]);
+                              adapter_->PhysicalAddress[0],
+                              adapter_->PhysicalAddress[1],
+                              adapter_->PhysicalAddress[2],
+                              adapter_->PhysicalAddress[3],
+                              adapter_->PhysicalAddress[4],
+                              adapter_->PhysicalAddress[5],
+                              adapter_->PhysicalAddress[6]);
 }
 
-bool AdapterEnumerator::isWinsEnabled() const
+bool AdapterEnumerator::isDhcp4Enabled() const
 {
-    return !!adapter_->HaveWins;
+    return !!adapter_->Dhcpv4Enabled;
 }
 
-std::string AdapterEnumerator::primaryWinsServer() const
+std::string AdapterEnumerator::dhcp4Server() const
 {
-    if (!isWinsEnabled())
-        return std::string();
-
-    return adapter_->PrimaryWinsServer.IpAddress.String;
-}
-
-std::string AdapterEnumerator::secondaryWinsServer() const
-{
-    if (!isWinsEnabled())
-        return std::string();
-
-    return adapter_->SecondaryWinsServer.IpAddress.String;
-}
-
-bool AdapterEnumerator::isDhcpEnabled() const
-{
-    return !!adapter_->DhcpEnabled;
+    return addressToString(adapter_->Dhcpv4Server);
 }
 
 //
@@ -299,21 +201,9 @@ bool AdapterEnumerator::isDhcpEnabled() const
 //
 
 AdapterEnumerator::IpAddressEnumerator::IpAddressEnumerator(const AdapterEnumerator& adapter)
-    : address_(&adapter.adapter_->IpAddressList)
+    : address_(adapter.adapter_->FirstUnicastAddress)
 {
-    while (true)
-    {
-        if (!address_)
-            break;
-
-        if (address_->IpAddress.String[0] != 0 &&
-            strcmp(address_->IpAddress.String, "0.0.0.0") != 0)
-        {
-            break;
-        }
-
-        address_ = address_->Next;
-    }
+    // Nothing
 }
 
 bool AdapterEnumerator::IpAddressEnumerator::isAtEnd() const
@@ -323,29 +213,27 @@ bool AdapterEnumerator::IpAddressEnumerator::isAtEnd() const
 
 void AdapterEnumerator::IpAddressEnumerator::advance()
 {
-    while (true)
-    {
-        address_ = address_->Next;
-
-        if (!address_)
-            break;
-
-        if (address_->IpAddress.String[0] != 0 &&
-            strcmp(address_->IpAddress.String, "0.0.0.0") != 0)
-        {
-            break;
-        }
-    }
+    address_ = address_->Next;
 }
 
 std::string AdapterEnumerator::IpAddressEnumerator::address() const
 {
-    return address_->IpAddress.String;
+    return addressToString(address_->Address);
 }
 
 std::string AdapterEnumerator::IpAddressEnumerator::mask() const
 {
-    return address_->IpMask.String;
+    in_addr addr;
+
+    if (ConvertLengthToIpv4Mask(address_->OnLinkPrefixLength, &addr.s_addr) != NO_ERROR)
+        return std::string();
+
+    char buffer[64] = { 0 };
+
+    if (!inet_ntop(AF_INET, &addr, buffer, _countof(buffer)))
+        return std::string();
+
+    return buffer;
 }
 
 //
@@ -353,21 +241,9 @@ std::string AdapterEnumerator::IpAddressEnumerator::mask() const
 //
 
 AdapterEnumerator::GatewayEnumerator::GatewayEnumerator(const AdapterEnumerator& adapter)
-    : address_(&adapter.adapter_->GatewayList)
+    : address_(adapter.adapter_->FirstGatewayAddress)
 {
-    while (true)
-    {
-        if (!address_)
-            break;
-
-        if (address_->IpAddress.String[0] != 0 &&
-            strcmp(address_->IpAddress.String, "0.0.0.0") != 0)
-        {
-            break;
-        }
-
-        address_ = address_->Next;
-    }
+    // Nothing
 }
 
 bool AdapterEnumerator::GatewayEnumerator::isAtEnd() const
@@ -377,70 +253,12 @@ bool AdapterEnumerator::GatewayEnumerator::isAtEnd() const
 
 void AdapterEnumerator::GatewayEnumerator::advance()
 {
-    while (true)
-    {
-        address_ = address_->Next;
-
-        if (!address_)
-            break;
-
-        if (strcmp(address_->IpAddress.String, "0.0.0.0") != 0)
-            break;
-    }
+    address_ = address_->Next;
 }
 
 std::string AdapterEnumerator::GatewayEnumerator::address() const
 {
-    return address_->IpAddress.String;
-}
-
-//
-// DhcpEnumerator
-//
-
-AdapterEnumerator::DhcpEnumerator::DhcpEnumerator(const AdapterEnumerator& adapter)
-    : address_(&adapter.adapter_->DhcpServer)
-{
-    while (true)
-    {
-        if (!address_)
-            break;
-
-        if (address_->IpAddress.String[0] != 0 &&
-            strcmp(address_->IpAddress.String, "0.0.0.0") != 0)
-        {
-            break;
-        }
-
-        address_ = address_->Next;
-    }
-}
-
-bool AdapterEnumerator::DhcpEnumerator::isAtEnd() const
-{
-    return address_ == nullptr;
-}
-
-void AdapterEnumerator::DhcpEnumerator::advance()
-{
-    while (true)
-    {
-        address_ = address_->Next;
-
-        if (!address_)
-            break;
-
-        if (address_->IpAddress.String[0] != 0 &&
-            strcmp(address_->IpAddress.String, "0.0.0.0") != 0)
-        {
-            break;
-        }
-    }
-}
-
-std::string AdapterEnumerator::DhcpEnumerator::address() const
-{
-    return address_->IpAddress.String;
+    return addressToString(address_->Address);
 }
 
 //
@@ -448,50 +266,9 @@ std::string AdapterEnumerator::DhcpEnumerator::address() const
 //
 
 AdapterEnumerator::DnsEnumerator::DnsEnumerator(const AdapterEnumerator& adapter)
+    : address_(adapter.adapter_->FirstDnsServerAddress)
 {
-    ULONG buffer_size = sizeof(IP_PER_ADAPTER_INFO);
-
-    info_buffer_ = std::make_unique<uint8_t[]>(buffer_size);
-    PIP_PER_ADAPTER_INFO info = reinterpret_cast<PIP_PER_ADAPTER_INFO>(info_buffer_.get());
-
-    ULONG error_code = GetPerAdapterInfo(adapter.adapter_->Index, info, &buffer_size);
-    if (error_code != ERROR_SUCCESS)
-    {
-        if (error_code != ERROR_BUFFER_OVERFLOW)
-        {
-            info_buffer_.reset();
-        }
-        else
-        {
-            info_buffer_ = std::make_unique<uint8_t[]>(buffer_size);
-            info = reinterpret_cast<PIP_PER_ADAPTER_INFO>(info_buffer_.get());
-
-            error_code = GetPerAdapterInfo(adapter.adapter_->Index, info, &buffer_size);
-            if (error_code != ERROR_SUCCESS)
-            {
-                info_buffer_.reset();
-            }
-        }
-    }
-
-    if (info_buffer_)
-    {
-        address_ = &info->DnsServerList;
-
-        while (true)
-        {
-            if (!address_)
-                break;
-
-            if (address_->IpAddress.String[0] != 0 &&
-                strcmp(address_->IpAddress.String, "0.0.0.0") != 0)
-            {
-                break;
-            }
-
-            address_ = address_->Next;
-        }
-    }
+    // Nothing
 }
 
 bool AdapterEnumerator::DnsEnumerator::isAtEnd() const
@@ -501,24 +278,12 @@ bool AdapterEnumerator::DnsEnumerator::isAtEnd() const
 
 void AdapterEnumerator::DnsEnumerator::advance()
 {
-    while (true)
-    {
-        address_ = address_->Next;
-
-        if (!address_)
-            break;
-
-        if (address_->IpAddress.String[0] != 0 &&
-            strcmp(address_->IpAddress.String, "0.0.0.0") != 0)
-        {
-            break;
-        }
-    }
+    address_ = address_->Next;
 }
 
 std::string AdapterEnumerator::DnsEnumerator::address() const
 {
-    return address_->IpAddress.String;
+    return addressToString(address_->Address);
 }
 
 } // namespace net

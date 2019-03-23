@@ -142,7 +142,14 @@ void createHostSystemInfo(proto::system_info::SystemInfo* system_info)
         adapter->set_interface(enumerator.interfaceType());
         adapter->set_speed(enumerator.speed());
         adapter->set_mac(enumerator.macAddress());
-        adapter->set_dhcp_enabled(enumerator.isDhcpEnabled());
+        adapter->set_dhcp_enabled(enumerator.isDhcp4Enabled());
+
+        if (enumerator.isDhcp4Enabled())
+        {
+            std::string dhcp4_server = enumerator.dhcp4Server();
+            if (!dhcp4_server.empty())
+                adapter->add_dhcp()->append(dhcp4_server);
+        }
 
         for (net::AdapterEnumerator::GatewayEnumerator gateway(enumerator);
              !gateway.isAtEnd(); gateway.advance())
@@ -163,12 +170,6 @@ void createHostSystemInfo(proto::system_info::SystemInfo* system_info)
              !dns.isAtEnd(); dns.advance())
         {
             adapter->add_dns()->assign(dns.address());
-        }
-
-        for (net::AdapterEnumerator::DhcpEnumerator dhcp(enumerator);
-             !dhcp.isAtEnd(); dhcp.advance())
-        {
-            adapter->add_dhcp()->append(dhcp.address());
         }
     }
 }

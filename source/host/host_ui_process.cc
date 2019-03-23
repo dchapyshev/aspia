@@ -190,7 +190,10 @@ void UiProcess::sendCredentials(uint32_t flags)
         for (net::AdapterEnumerator::IpAddressEnumerator addresses(adapters);
              !addresses.isAtEnd(); addresses.advance())
         {
-            message.mutable_credentials()->add_ip(addresses.address());
+            std::string ip = addresses.address();
+
+            if (ip != "127.0.0.1")
+                message.mutable_credentials()->add_ip(ip);
         }
     }
 

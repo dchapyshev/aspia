@@ -24,8 +24,10 @@
 #include <memory>
 #include <string>
 
-struct _IP_ADAPTER_INFO;
-struct _IP_ADDR_STRING;
+struct _IP_ADAPTER_ADDRESSES_LH;
+struct _IP_ADAPTER_UNICAST_ADDRESS_LH;
+struct _IP_ADAPTER_DNS_SERVER_ADDRESS_XP;
+struct _IP_ADAPTER_GATEWAY_ADDRESS_LH;
 
 namespace net {
 
@@ -42,12 +44,11 @@ public:
     std::string connectionName() const;
     std::string interfaceType() const;
     uint32_t mtu() const;
-    uint32_t speed() const;
+    uint64_t speed() const;
     std::string macAddress() const;
-    bool isWinsEnabled() const;
-    std::string primaryWinsServer() const;
-    std::string secondaryWinsServer() const;
-    bool isDhcpEnabled() const;
+
+    bool isDhcp4Enabled() const;
+    std::string dhcp4Server() const;
 
     class IpAddressEnumerator
     {
@@ -61,7 +62,7 @@ public:
         std::string mask() const;
 
     private:
-        _IP_ADDR_STRING* address_;
+        const _IP_ADAPTER_UNICAST_ADDRESS_LH* address_;
 
         DISALLOW_COPY_AND_ASSIGN(IpAddressEnumerator);
     };
@@ -76,24 +77,9 @@ public:
         std::string address() const;
 
     private:
-        _IP_ADDR_STRING* address_;
+        const _IP_ADAPTER_GATEWAY_ADDRESS_LH* address_;
 
         DISALLOW_COPY_AND_ASSIGN(GatewayEnumerator);
-    };
-
-    class DhcpEnumerator
-    {
-    public:
-        explicit DhcpEnumerator(const AdapterEnumerator& adapter);
-
-        bool isAtEnd() const;
-        void advance();
-        std::string address() const;
-
-    private:
-        _IP_ADDR_STRING* address_;
-
-        DISALLOW_COPY_AND_ASSIGN(DhcpEnumerator);
     };
 
     class DnsEnumerator
@@ -106,15 +92,14 @@ public:
         std::string address() const;
 
     private:
-        std::unique_ptr<uint8_t[]> info_buffer_;
-        _IP_ADDR_STRING* address_ = nullptr;
+        const _IP_ADAPTER_DNS_SERVER_ADDRESS_XP* address_ = nullptr;
 
         DISALLOW_COPY_AND_ASSIGN(DnsEnumerator);
     };
 
 private:
     std::unique_ptr<uint8_t[]> adapters_buffer_;
-    _IP_ADAPTER_INFO* adapter_;
+    _IP_ADAPTER_ADDRESSES_LH* adapter_;
 
     DISALLOW_COPY_AND_ASSIGN(AdapterEnumerator);
 };
