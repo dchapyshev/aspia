@@ -431,6 +431,8 @@ void logErrorNotReached(const char* file, int line)
 
 } // namespace base
 
+namespace std {
+
 #if defined(OS_WIN)
 std::ostream& operator<<(std::ostream& out, const std::wstring& wstr)
 {
@@ -442,3 +444,5 @@ std::ostream& std::operator<<(std::ostream& out, const wchar_t* wstr)
     return out << base::UTF8fromUTF16(wstr);
 }
 #endif // defined(OS_WIN)
+
+} // namespace std
