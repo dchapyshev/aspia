@@ -987,13 +987,13 @@
     </message>
     <message>
         <location filename="../console_window.cc" line="479"/>
-        <location filename="../console_window.cc" line="808"/>
+        <location filename="../console_window.cc" line="811"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
         <location filename="../console_window.cc" line="480"/>
-        <location filename="../console_window.cc" line="809"/>
+        <location filename="../console_window.cc" line="812"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation>Адресная книга &quot;%1&quot; изменена. Сохранить изменения?</translation>
     </message>
@@ -1014,32 +1014,32 @@
         <translation>Закрепить вкладку</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="765"/>
+        <location filename="../console_window.cc" line="768"/>
         <source>Hide</source>
         <translation>Спрятать</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="780"/>
+        <location filename="../console_window.cc" line="783"/>
         <source>Show</source>
         <translation>Показать</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="887"/>
+        <location filename="../console_window.cc" line="890"/>
         <source>&lt;empty&gt;</source>
         <translation>&lt;пусто&gt;</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="908"/>
+        <location filename="../console_window.cc" line="911"/>
         <source>Aspia Console</source>
         <translation>Консоль Aspia</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="942"/>
+        <location filename="../console_window.cc" line="945"/>
         <source>Information</source>
         <translation>Информация</translation>
     </message>
     <message>
-        <location filename="../console_window.cc" line="943"/>
+        <location filename="../console_window.cc" line="946"/>
         <source>Address Book &quot;%1&quot; is already open.</source>
         <translation>Адресная книга &quot;%1&quot; уже открыта.</translation>
     </message>
