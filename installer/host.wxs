@@ -4,7 +4,7 @@
  <!-- Variables -->
 <?define ProductName="Aspia Host"?>
 <?define Manufacturer="Dmitry Chapyshev"?>
-<?define Version="1.1.0"?>
+<?define Version="1.1.2"?>
 <?define InstallLocation="Aspia Host"?>
 <?define SourceFiles="..\build\Release"?>
 <?define ServiceName="aspia-host-service"?>
