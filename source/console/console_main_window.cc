@@ -742,8 +742,11 @@ void MainWindow::onTabContextMenu(const QPoint& pos)
     {
         if (pin_action->isChecked())
         {
-            if (!tab->save())
-                return;
+            if (tab->isChanged())
+            {
+                if (!tab->save())
+                    return;
+            }
 
             ui.tab_widget->setTabIcon(
                 tab_index, QIcon(QStringLiteral(":/img/address-book-pinned.png")));
