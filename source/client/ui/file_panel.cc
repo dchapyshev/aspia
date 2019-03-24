@@ -46,7 +46,12 @@ QString parentPath(const QString& path)
     if (last_slash == -1)
         return AddressBarModel::computerPath();
 
-    return path.left(last_slash);
+    QString result = path.left(last_slash);
+
+    if (common::FilePlatformUtil::isRootPath(result))
+        return AddressBarModel::computerPath();
+
+    return result;
 }
 
 } // namespace

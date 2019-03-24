@@ -112,10 +112,19 @@ QModelIndex AddressBarModel::setCurrentPath(const QString& path)
         QString normalized_path = normalizePath(path);
 
         if (!common::FilePlatformUtil::isValidPath(normalized_path) ||
-            common::FilePlatformUtil::isRelativePath(normalized_path) ||
-            normalized_path.contains(QLatin1String("//")) ||
             normalized_path.contains(QLatin1String("/../")) ||
             normalized_path.contains(QLatin1String("/./")))
+        {
+            emit invalidPathEntered();
+            return QModelIndex();
+        }
+        else if (!common::FilePlatformUtil::isNetworkPath(normalized_path) &&
+                 normalized_path.contains(QLatin1String("//")))
+        {
+            emit invalidPathEntered();
+            return QModelIndex();
+        }
+        else if (common::FilePlatformUtil::isRelativePath(normalized_path))
         {
             emit invalidPathEntered();
             return QModelIndex();

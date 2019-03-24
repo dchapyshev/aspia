@@ -17,12 +17,12 @@
 //
 
 #include "common/file_platform_util.h"
+#include "base/win/scoped_user_object.h"
 
 #include <QtWin>
+
 #include <shellapi.h>
 #include <shlwapi.h>
-
-#include "base/win/scoped_user_object.h"
 
 namespace common {
 
@@ -191,7 +191,25 @@ bool FilePlatformUtil::isValidFileName(const QString& file_name)
 // static
 bool FilePlatformUtil::isRelativePath(const QString& path)
 {
-    return !!PathIsRelativeW(qUtf16Printable(path));
+    QString native_path(path);
+    native_path.replace(QLatin1Char('/'), QLatin1Char('\\'));
+    return !!PathIsRelativeW(qUtf16Printable(native_path));
+}
+
+// static
+bool FilePlatformUtil::isNetworkPath(const QString& path)
+{
+    QString native_path(path);
+    native_path.replace(QLatin1Char('/'), QLatin1Char('\\'));
+    return !!PathIsNetworkPathW(qUtf16Printable(native_path));
+}
+
+// static
+bool FilePlatformUtil::isRootPath(const QString& path)
+{
+    QString native_path(path);
+    native_path.replace(QLatin1Char('/'), QLatin1Char('\\'));
+    return !!PathIsRootW(qUtf16Printable(native_path));
 }
 
 } // namespace common

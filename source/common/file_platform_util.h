@@ -19,12 +19,12 @@
 #ifndef COMMON__FILE_PLATFORM_UTIL_H
 #define COMMON__FILE_PLATFORM_UTIL_H
 
+#include "base/macros_magic.h"
+#include "proto/file_transfer_session.pb.h"
+
 #include <QIcon>
 #include <QPair>
 #include <QString>
-
-#include "base/macros_magic.h"
-#include "proto/file_transfer_session.pb.h"
 
 namespace common {
 
@@ -47,6 +47,8 @@ public:
     static bool isValidFileName(const QString& file_name);
 
     static bool isRelativePath(const QString& path);
+    static bool isNetworkPath(const QString& path);
+    static bool isRootPath(const QString& path);
 
 private:
     DISALLOW_COPY_AND_ASSIGN(FilePlatformUtil);
