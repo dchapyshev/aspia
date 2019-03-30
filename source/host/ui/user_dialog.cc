@@ -205,7 +205,7 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
                 }
             }
 
-            user = net::SrpUser::create(name, password);
+            user = net::SrpUser::create(name.toStdString(), password.toStdString());
             if (!user.isValid())
             {
                 QMessageBox::warning(this,

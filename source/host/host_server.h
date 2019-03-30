@@ -21,6 +21,7 @@
 
 #include "base/win/session_status.h"
 #include "host/dettach_timer.h"
+#include "host/host_settings.h"
 #include "host/host_ui_server.h"
 #include "host/win/host_process.h"
 #include "ipc/ipc_channel.h"
@@ -54,9 +55,9 @@ private slots:
     void onNewConnection();
     void onUiProcessEvent(UiServer::EventType event, base::win::SessionId session_id);
     void onSessionFinished();
-    void onSettingsChanged();
 
 private:
+    void reloadUsers();
     void startServer();
     void sendConnectEvent(const SessionProcess* session_process);
 
@@ -64,7 +65,9 @@ private:
 
     State state_ = State::STOPPED;
 
+    Settings settings_;
     std::unique_ptr<QFileSystemWatcher> settings_watcher_;
+
     std::unique_ptr<UiServer> ui_server_;
 
     // Accepts incoming network connections.

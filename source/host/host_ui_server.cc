@@ -203,8 +203,10 @@ void UiServer::onProcessFinished()
 
 void UiServer::onUserChanged(base::win::SessionId session_id, const std::string& password)
 {
-    net::SrpUser user = net::SrpUser::create(QString("#%1").arg(session_id),
-                                             QString::fromStdString(password));
+    net::SrpUser user = net::SrpUser::create("#" + std::to_string(session_id), password);
+
+    user.sessions = proto::SESSION_TYPE_ALL;
+    user.flags = net::SrpUser::ENABLED;
 
     auto result = users_.find(session_id);
     if (result != users_.end())

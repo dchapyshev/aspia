@@ -29,7 +29,7 @@ class SrpUser
 public:
     enum Flags { ENABLED = 1 };
 
-    static SrpUser create(const QString& name, const QString& password);
+    static SrpUser create(const std::string& name, const std::string& password);
 
     bool isValid() const;
 

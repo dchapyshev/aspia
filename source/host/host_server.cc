@@ -23,7 +23,6 @@
 #include "base/win/session_info.h"
 #include "common/session_type.h"
 #include "host/win/host_session_process.h"
-#include "host/host_settings.h"
 #include "net/firewall_manager.h"
 #include "net/network_channel_host.h"
 
@@ -136,7 +135,28 @@ void HostServer::onNewConnection()
             return;
         }
 
-        base::win::SessionId session_id = base::win::activeConsoleSessionId();
+        base::win::SessionId session_id = base::win::kInvalidSessionId;
+        std::string user_name = channel->userName();
+
+        if (user_name.front() != '#')
+        {
+            session_id = base::win::activeConsoleSessionId();
+        }
+        else
+        {
+            try
+            {
+                user_name.erase(user_name.begin());
+
+                if (!user_name.empty())
+                    session_id = std::stoul(user_name);
+            }
+            catch (const std::exception&)
+            {
+                // Ignore.
+            }
+        }
+
         QString peer_address = channel->peerAddress();
 
         base::win::SessionInfo session_info(session_id);
@@ -239,10 +259,15 @@ void HostServer::onSessionFinished()
     }
 }
 
-void HostServer::onSettingsChanged()
+void HostServer::reloadUsers()
 {
-    Settings settings;
-    network_server_->setUserList(settings.userList());
+    net::SrpUserList users = settings_.userList();
+
+    // Merge the list of regular users and session users.
+    for (const auto& session_user : ui_server_->userList())
+        users.add(session_user.second);
+
+    network_server_->setUserList(users);
 }
 
 void HostServer::startServer()
@@ -255,12 +280,10 @@ void HostServer::startServer()
 
     LOG(LS_INFO) << "Starting the server";
 
-    Settings settings;
-
     net::FirewallManager firewall(QCoreApplication::applicationFilePath());
     if (firewall.isValid())
     {
-        if (firewall.addTcpRule(kFirewallRuleName, kFirewallRuleDecription, settings.tcpPort()))
+        if (firewall.addTcpRule(kFirewallRuleName, kFirewallRuleDecription, settings_.tcpPort()))
         {
             LOG(LS_INFO) << "Rule is added to the firewall";
         }
@@ -269,6 +292,7 @@ void HostServer::startServer()
     ui_server_ = std::make_unique<UiServer>();
 
     connect(ui_server_.get(), &UiServer::processEvent, this, &HostServer::onUiProcessEvent);
+    connect(ui_server_.get(), &UiServer::userListChanged, this, &HostServer::reloadUsers);
     connect(ui_server_.get(), &UiServer::killSession, this, &HostServer::stopSession);
 
     if (!ui_server_->start())
@@ -282,12 +306,11 @@ void HostServer::startServer()
     }
 
     network_server_ = std::make_unique<net::Server>();
-    network_server_->setUserList(settings.userList());
 
     connect(network_server_.get(), &net::Server::newChannelReady,
             this, &HostServer::onNewConnection);
 
-    if (!network_server_->start(settings.tcpPort()))
+    if (!network_server_->start(settings_.tcpPort()))
     {
         QCoreApplication::quit();
         return;
@@ -300,10 +323,11 @@ void HostServer::startServer()
     settings_watcher_ = std::make_unique<QFileSystemWatcher>();
 
     connect(settings_watcher_.get(), &QFileSystemWatcher::fileChanged,
-            this, &HostServer::onSettingsChanged);
+            this, &HostServer::reloadUsers);
 
-    settings_watcher_->addPath(settings.filePath());
+    settings_watcher_->addPath(settings_.filePath());
 
+    reloadUsers();
     state_ = State::STARTED;
 }
 

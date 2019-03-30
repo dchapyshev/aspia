@@ -31,11 +31,11 @@ const size_t kUserSaltSize = 64; // In bytes.
 } // namespace
 
 // static
-SrpUser SrpUser::create(const QString& name, const QString& password)
+SrpUser SrpUser::create(const std::string& name, const std::string& password)
 {
     SrpUser user;
 
-    user.name = name;
+    user.name = QString::fromStdString(name);
     user.salt = crypto::Random::generateBuffer(kUserSaltSize);
 
     user.number = QByteArray(
@@ -46,7 +46,7 @@ SrpUser SrpUser::create(const QString& name, const QString& password)
     crypto::BigNum s = crypto::BigNum::fromByteArray(user.salt);
     crypto::BigNum N = crypto::BigNum::fromByteArray(user.number);
     crypto::BigNum g = crypto::BigNum::fromByteArray(user.generator);
-    crypto::BigNum v = crypto::SrpMath::calc_v(name.toStdString(), password.toStdString(), s, N, g);
+    crypto::BigNum v = crypto::SrpMath::calc_v(name, password, s, N, g);
 
     user.verifier = v.toByteArray();
     if (user.verifier.isEmpty())
