@@ -601,47 +601,44 @@
 <context>
     <name>host::UserDialog</name>
     <message>
-        <location filename="../ui/user_dialog.cc" line="82"/>
         <source>Desktop Manage</source>
-        <translation>Desktopverwaltung</translation>
+        <translation type="vanished">Desktopverwaltung</translation>
     </message>
     <message>
-        <location filename="../ui/user_dialog.cc" line="86"/>
         <source>Desktop View</source>
-        <translation>Desktopansicht</translation>
+        <translation type="vanished">Desktopansicht</translation>
     </message>
     <message>
-        <location filename="../ui/user_dialog.cc" line="90"/>
         <source>File Transfer</source>
-        <translation>Dateiübertragung</translation>
+        <translation type="vanished">Dateiübertragung</translation>
     </message>
     <message>
-        <location filename="../ui/user_dialog.cc" line="148"/>
-        <location filename="../ui/user_dialog.cc" line="160"/>
-        <location filename="../ui/user_dialog.cc" line="171"/>
-        <location filename="../ui/user_dialog.cc" line="182"/>
-        <location filename="../ui/user_dialog.cc" line="204"/>
-        <location filename="../ui/user_dialog.cc" line="221"/>
+        <location filename="../ui/user_dialog.cc" line="139"/>
+        <location filename="../ui/user_dialog.cc" line="151"/>
+        <location filename="../ui/user_dialog.cc" line="162"/>
+        <location filename="../ui/user_dialog.cc" line="173"/>
+        <location filename="../ui/user_dialog.cc" line="195"/>
+        <location filename="../ui/user_dialog.cc" line="212"/>
         <source>Warning</source>
         <translation>Warnung</translation>
     </message>
     <message>
-        <location filename="../ui/user_dialog.cc" line="149"/>
+        <location filename="../ui/user_dialog.cc" line="140"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>Der Benutzername darf nicht leer sein und darf nur Buchstaben, Zahlen und folgende Zeichen: &quot;_&quot;,&quot;-&quot;,&quot;.&quot; beinhalten.</translation>
     </message>
     <message>
-        <location filename="../ui/user_dialog.cc" line="161"/>
+        <location filename="../ui/user_dialog.cc" line="152"/>
         <source>The username you entered already exists.</source>
         <translation>Der eingegebene Benutzername existiert bereits.</translation>
     </message>
     <message>
-        <location filename="../ui/user_dialog.cc" line="172"/>
+        <location filename="../ui/user_dialog.cc" line="163"/>
         <source>The passwords you entered do not match.</source>
         <translation>Die eingegebenen Kennwörter stimmen nicht überein.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/user_dialog.cc" line="183"/>
+        <location filename="../ui/user_dialog.cc" line="174"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -649,12 +646,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../ui/user_dialog.cc" line="194"/>
+        <location filename="../ui/user_dialog.cc" line="185"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/user_dialog.cc" line="197"/>
+        <location filename="../ui/user_dialog.cc" line="188"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -662,17 +659,17 @@
         </translation>
     </message>
     <message>
-        <location filename="../ui/user_dialog.cc" line="201"/>
+        <location filename="../ui/user_dialog.cc" line="192"/>
         <source>Do you want to enter a different password?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/user_dialog.cc" line="222"/>
+        <location filename="../ui/user_dialog.cc" line="213"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/user_dialog.cc" line="281"/>
+        <location filename="../ui/user_dialog.cc" line="272"/>
         <source>Double-click to change</source>
         <translation>Doppelklicken, um zu ändern</translation>
     </message>

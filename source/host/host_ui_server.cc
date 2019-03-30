@@ -27,6 +27,28 @@
 
 namespace host {
 
+namespace {
+
+class IsProcessInSession
+{
+public:
+    IsProcessInSession(base::win::SessionId session_id)
+        : session_id_(session_id)
+    {
+        // Nothing
+    }
+
+    bool operator()(const std::unique_ptr<UiProcess>& process)
+    {
+        return process->sessionId() == session_id_;
+    }
+
+private:
+    base::win::SessionId session_id_;
+};
+
+} // namespace
+
 UiServer::UiServer(QObject* parent)
     : QObject(parent)
 {
@@ -46,7 +68,7 @@ bool UiServer::start()
         return false;
     }
 
-    std::unique_ptr<ipc::Server> server(new ipc::Server(this));
+    std::unique_ptr<ipc::Server> server(new ipc::Server());
     server->setChannelId(kIpcChannelIdForUI);
 
     connect(server.get(), &ipc::Server::newConnection, this, &UiServer::onChannelConnected);
@@ -63,7 +85,7 @@ bool UiServer::start()
     }
 
     state_ = State::STARTED;
-    server_ = server.release();
+    server_ = std::move(server);
     return true;
 }
 
@@ -74,19 +96,8 @@ void UiServer::stop()
 
     state_ = State::STOPPING;
 
-    if (server_)
-    {
-        server_->stop();
-        delete server_;
-    }
-
-    for (auto process : process_list_)
-    {
-        process->stop();
-        delete process;
-    }
-
-    process_list_.clear();
+    server_.reset();
+    processes_.clear();
 
     state_ = State::STOPPED;
     emit finished();
@@ -94,13 +105,7 @@ void UiServer::stop()
 
 bool UiServer::hasUiForSession(base::win::SessionId session_id) const
 {
-    for (const auto process : process_list_)
-    {
-        if (process->sessionId() == session_id)
-            return true;
-    }
-
-    return false;
+    return std::any_of(processes_.cbegin(), processes_.cend(), IsProcessInSession(session_id));
 }
 
 void UiServer::setSessionEvent(base::win::SessionStatus status, base::win::SessionId session_id)
@@ -124,28 +129,18 @@ void UiServer::setConnectEvent(
 {
     LOG(LS_INFO) << "Connect event (SID: " << session_id << ", UUID: " << event.uuid() << ")";
 
-    for (auto process : process_list_)
-    {
-        if (process->sessionId() == session_id)
-        {
-            process->setConnectEvent(event);
-            break;
-        }
-    }
+    auto result = std::find_if(processes_.cbegin(), processes_.cend(), IsProcessInSession(session_id));
+    if (result != processes_.cend())
+        (*result)->setConnectEvent(event);
 }
 
 void UiServer::setDisconnectEvent(base::win::SessionId session_id, const std::string& uuid)
 {
     LOG(LS_INFO) << "Disconnect event (SID: " << session_id << ", UUID: " << uuid << ")";
 
-    for (auto process : process_list_)
-    {
-        if (process->sessionId() == session_id)
-        {
-            process->setDisconnectEvent(uuid);
-            break;
-        }
-    }
+    auto result = std::find_if(processes_.cbegin(), processes_.cend(), IsProcessInSession(session_id));
+    if (result != processes_.cend())
+        (*result)->setDisconnectEvent(uuid);
 }
 
 void UiServer::onChannelConnected(ipc::Channel* channel)
@@ -164,13 +159,13 @@ void UiServer::onChannelConnected(ipc::Channel* channel)
                  << "PID: " << channel->clientProcessId() << ", "
                  << "SID: " << session_id << ")";
 
-    UiProcess* process = new UiProcess(channel, this);
+    UiProcess* process = new UiProcess(channel);
 
     connect(process, &UiProcess::userChanged, this, &UiServer::onUserChanged);
     connect(process, &UiProcess::killSession, this, &UiServer::killSession);
     connect(process, &UiProcess::finished, this, &UiServer::onProcessFinished);
 
-    process_list_.emplace_back(process);
+    processes_.emplace_front(process);
     process->start();
 
     emit processEvent(EventType::CONNECTED, session_id);
@@ -181,22 +176,21 @@ void UiServer::onProcessFinished()
     if (state_ == State::STOPPING)
         return;
 
-    for (auto it = process_list_.begin(); it != process_list_.end();)
+    for (auto it = processes_.begin(); it != processes_.end();)
     {
-        UiProcess* process = *it;
+        UiProcess* process = it->get();
 
         if (process->state() == UiProcess::State::STOPPED)
         {
             base::win::SessionId session_id = process->sessionId();
 
-            auto result = user_list_.find(session_id);
-            if (result != user_list_.end())
-                user_list_.erase(result);
+            auto result = users_.find(session_id);
+            if (result != users_.end())
+                users_.erase(result);
 
             emit processEvent(EventType::DISCONNECTED, session_id);
 
-            it = process_list_.erase(it);
-            delete process;
+            it = processes_.erase(it);
         }
         else
         {
@@ -212,14 +206,14 @@ void UiServer::onUserChanged(base::win::SessionId session_id, const std::string&
     net::SrpUser user = net::SrpUser::create(QString("#%1").arg(session_id),
                                              QString::fromStdString(password));
 
-    auto result = user_list_.find(session_id);
-    if (result != user_list_.end())
+    auto result = users_.find(session_id);
+    if (result != users_.end())
     {
         result->second = std::move(user);
     }
     else
     {
-        user_list_.emplace(session_id, std::move(user));
+        users_.emplace(session_id, std::move(user));
     }
 
     emit userListChanged();

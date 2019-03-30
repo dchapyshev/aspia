@@ -529,98 +529,98 @@
 <context>
     <name>client::AddressBarModel</name>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="80"/>
-        <location filename="../ui/address_bar_model.cc" line="444"/>
+        <location filename="../ui/address_bar_model.cc" line="81"/>
+        <location filename="../ui/address_bar_model.cc" line="454"/>
         <source>Home Folder</source>
         <translation>Домашній каталог</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="84"/>
+        <location filename="../ui/address_bar_model.cc" line="85"/>
         <source>Desktop</source>
         <translation>Робочий стіл</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="276"/>
+        <location filename="../ui/address_bar_model.cc" line="286"/>
         <source>Computer</source>
         <translation>Комп&apos;ютер</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="389"/>
+        <location filename="../ui/address_bar_model.cc" line="399"/>
         <source>Name</source>
         <translation>Ім&apos;я</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="392"/>
+        <location filename="../ui/address_bar_model.cc" line="402"/>
         <source>Type</source>
         <translation>Тип</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="395"/>
+        <location filename="../ui/address_bar_model.cc" line="405"/>
         <source>Total Space</source>
         <translation>Загальний простір</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="398"/>
+        <location filename="../ui/address_bar_model.cc" line="408"/>
         <source>Free Space</source>
         <translation>Вільний простір</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="429"/>
+        <location filename="../ui/address_bar_model.cc" line="439"/>
         <source>Optical Drive</source>
         <translation>Оптичний диск</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="432"/>
+        <location filename="../ui/address_bar_model.cc" line="442"/>
         <source>Removable Drive</source>
         <translation>Знімний диск</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="435"/>
+        <location filename="../ui/address_bar_model.cc" line="445"/>
         <source>Fixed Drive</source>
         <translation>Фіксований диск</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="438"/>
+        <location filename="../ui/address_bar_model.cc" line="448"/>
         <source>Network Drive</source>
         <translation>Мережевий диск</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="441"/>
+        <location filename="../ui/address_bar_model.cc" line="451"/>
         <source>RAM Drive</source>
         <translation>RAM диск</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="447"/>
+        <location filename="../ui/address_bar_model.cc" line="457"/>
         <source>Desktop Folder</source>
         <translation>Каталог робочого стола</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="450"/>
+        <location filename="../ui/address_bar_model.cc" line="460"/>
         <source>Unknown Drive</source>
         <translation>Невідомий диск</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="467"/>
+        <location filename="../ui/address_bar_model.cc" line="477"/>
         <source>TB</source>
         <translation>ТБ</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="472"/>
+        <location filename="../ui/address_bar_model.cc" line="482"/>
         <source>GB</source>
         <translation>ГБ</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="477"/>
+        <location filename="../ui/address_bar_model.cc" line="487"/>
         <source>MB</source>
         <translation>МБ</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="482"/>
+        <location filename="../ui/address_bar_model.cc" line="492"/>
         <source>kB</source>
         <translation>кБ</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="487"/>
+        <location filename="../ui/address_bar_model.cc" line="497"/>
         <source>B</source>
         <translation>Б</translation>
     </message>
@@ -739,27 +739,24 @@
 <context>
     <name>client::ClientDialog</name>
     <message>
-        <location filename="../ui/client_dialog.cc" line="41"/>
         <source>Desktop Manage</source>
-        <translation>Керування робочим столом</translation>
+        <translation type="vanished">Керування робочим столом</translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.cc" line="45"/>
         <source>Desktop View</source>
-        <translation>Перегляд робочого столу</translation>
+        <translation type="vanished">Перегляд робочого столу</translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.cc" line="49"/>
         <source>File Transfer</source>
-        <translation>Передача файлів</translation>
+        <translation type="vanished">Передача файлів</translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.cc" line="132"/>
+        <location filename="../ui/client_dialog.cc" line="133"/>
         <source>Warning</source>
         <translation type="unfinished">Попередження</translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.cc" line="133"/>
+        <location filename="../ui/client_dialog.cc" line="134"/>
         <source>An invalid computer address was entered.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -982,76 +979,76 @@
 <context>
     <name>client::FilePanel</name>
     <message>
-        <location filename="../ui/file_panel.cc" line="152"/>
-        <location filename="../ui/file_panel.cc" line="167"/>
-        <location filename="../ui/file_panel.cc" line="191"/>
-        <location filename="../ui/file_panel.cc" line="202"/>
-        <location filename="../ui/file_panel.cc" line="293"/>
-        <location filename="../ui/file_panel.cc" line="302"/>
-        <location filename="../ui/file_panel.cc" line="318"/>
-        <location filename="../ui/file_panel.cc" line="327"/>
+        <location filename="../ui/file_panel.cc" line="157"/>
+        <location filename="../ui/file_panel.cc" line="172"/>
+        <location filename="../ui/file_panel.cc" line="196"/>
+        <location filename="../ui/file_panel.cc" line="207"/>
+        <location filename="../ui/file_panel.cc" line="298"/>
+        <location filename="../ui/file_panel.cc" line="307"/>
+        <location filename="../ui/file_panel.cc" line="323"/>
+        <location filename="../ui/file_panel.cc" line="332"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="153"/>
+        <location filename="../ui/file_panel.cc" line="158"/>
         <source>Failed to get list of drives: %1</source>
         <translation>Не вдалося отримати список дисків: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="168"/>
+        <location filename="../ui/file_panel.cc" line="173"/>
         <source>Failed to get list of files: %1</source>
         <translation>Не вдалося отримати список файлів: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="192"/>
+        <location filename="../ui/file_panel.cc" line="197"/>
         <source>Failed to create directory: %1</source>
         <translation>Не вдалося створити каталог: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="203"/>
+        <location filename="../ui/file_panel.cc" line="208"/>
         <source>Failed to rename item: %1</source>
         <translation>Не давлося переіменувати об&apos;єкт: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="273"/>
+        <location filename="../ui/file_panel.cc" line="278"/>
         <source>%1 object(s) selected</source>
         <translation>%1 об&apos;єктів обрано</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="294"/>
-        <location filename="../ui/file_panel.cc" line="319"/>
+        <location filename="../ui/file_panel.cc" line="299"/>
+        <location filename="../ui/file_panel.cc" line="324"/>
         <source>Folder name can not be empty.</source>
         <translation>Ім&apos;я каталогу не може бути порожнім.</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="303"/>
-        <location filename="../ui/file_panel.cc" line="328"/>
+        <location filename="../ui/file_panel.cc" line="308"/>
+        <location filename="../ui/file_panel.cc" line="333"/>
         <source>Name contains invalid characters.</source>
         <translation>Ім&apos;я містить недійсні символи.</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="350"/>
+        <location filename="../ui/file_panel.cc" line="355"/>
         <source>&amp;Send	F11</source>
         <translation>&amp;Надіслати F11</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="352"/>
+        <location filename="../ui/file_panel.cc" line="357"/>
         <source>&amp;Delete	Delete</source>
         <translation>&amp;Видалити Delete</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="362"/>
+        <location filename="../ui/file_panel.cc" line="367"/>
         <source>&amp;Create Folder</source>
         <translation>&amp;Створити каталог</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="417"/>
+        <location filename="../ui/file_panel.cc" line="422"/>
         <source>Confirmation</source>
         <translation>Підтвердження</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="418"/>
+        <location filename="../ui/file_panel.cc" line="423"/>
         <source>Are you sure you want to delete the selected items?</source>
         <translation>Ви впевнені, що хочете видалити обрані об&apos;єкти?</translation>
     </message>

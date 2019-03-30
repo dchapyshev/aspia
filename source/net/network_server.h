@@ -36,7 +36,7 @@ class Server : public QObject
 
 public:
     Server(QObject* parent = nullptr);
-    ~Server() = default;
+    ~Server();
 
     bool start(uint16_t port);
     void stop();

@@ -359,18 +359,6 @@
 <context>
     <name>host::UserDialog</name>
     <message>
-        <source>Desktop Manage</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Desktop View</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>File Transfer</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>

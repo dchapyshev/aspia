@@ -18,6 +18,7 @@
 
 #include "host/ui/user_dialog.h"
 #include "base/logging.h"
+#include "common/session_type.h"
 #include "common/user_util.h"
 #include "net/srp_host_context.h"
 #include "proto/common.pb.h"
@@ -50,14 +51,12 @@ UserDialog::UserDialog(net::SrpUserList* user_list, int user_index, QWidget* par
         ui.checkbox_disable_user->setChecked(false);
     }
 
-    auto add_session_type = [&](const QIcon& icon,
-                                const QString& name,
-                                proto::SessionType session_type)
+    auto add_session = [&](const QString& icon, proto::SessionType session_type)
     {
         QTreeWidgetItem* item = new QTreeWidgetItem();
 
-        item->setText(0, name);
-        item->setIcon(0, icon);
+        item->setText(0, common::sessionTypeToLocalizedString(session_type));
+        item->setIcon(0, QIcon(icon));
         item->setFlags(item->flags() | Qt::ItemIsUserCheckable);
         item->setData(0, Qt::UserRole, QVariant(session_type));
 
@@ -78,17 +77,9 @@ UserDialog::UserDialog(net::SrpUserList* user_list, int user_index, QWidget* par
         ui.tree_sessions->addTopLevelItem(item);
     };
 
-    add_session_type(QIcon(QStringLiteral(":/img/monitor-keyboard.png")),
-                     tr("Desktop Manage"),
-                     proto::SESSION_TYPE_DESKTOP_MANAGE);
-
-    add_session_type(QIcon(QStringLiteral(":/img/monitor.png")),
-                     tr("Desktop View"),
-                     proto::SESSION_TYPE_DESKTOP_VIEW);
-
-    add_session_type(QIcon(QStringLiteral(":/img/folder-stand.png")),
-                     tr("File Transfer"),
-                     proto::SESSION_TYPE_FILE_TRANSFER);
+    add_session(QStringLiteral(":/img/monitor-keyboard.png"), proto::SESSION_TYPE_DESKTOP_MANAGE);
+    add_session(QStringLiteral(":/img/monitor.png"), proto::SESSION_TYPE_DESKTOP_VIEW);
+    add_session(QStringLiteral(":/img/folder-stand.png"), proto::SESSION_TYPE_FILE_TRANSFER);
 
     connect(ui.button_check_all, &QPushButton::released, this, &UserDialog::onCheckAllButtonPressed);
     connect(ui.button_check_none, &QPushButton::released, this, &UserDialog::onCheckNoneButtonPressed);

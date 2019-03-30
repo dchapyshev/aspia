@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,33 +16,19 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "desktop/mouse_cursor.h"
+#ifndef COMMON__SESSION_TYPE_H
+#define COMMON__SESSION_TYPE_H
 
-namespace desktop {
+#include "proto/common.pb.h"
 
-MouseCursor::MouseCursor(std::unique_ptr<uint8_t[]> data, const QSize& size, const QPoint& hotspot)
-    : data_(std::move(data)),
-      size_(size),
-      hotspot_(hotspot)
-{
-    // Nothing
-}
+#include <QString>
 
-int MouseCursor::stride() const
-{
-    return size_.width() * sizeof(uint32_t);
-}
+namespace common {
 
-bool MouseCursor::isEqual(const MouseCursor& other)
-{
-    if (size_ == other.size_ &&
-        hotspot_ == other.hotspot_ &&
-        memcmp(data_.get(), other.data_.get(), stride() * size_.height()) == 0)
-    {
-        return true;
-    }
+const char* sessionTypeToString(proto::SessionType session_type);
 
-    return false;
-}
+QString sessionTypeToLocalizedString(proto::SessionType session_type);
 
-} // namespace desktop
+} // namespace common
+
+#endif // COMMON__SESSION_TYPE_H

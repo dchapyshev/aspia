@@ -749,47 +749,44 @@
 <context>
     <name>host::UserDialog</name>
     <message>
-        <location filename="../ui/user_dialog.cc" line="82"/>
         <source>Desktop Manage</source>
-        <translation>Управление рабочим столом</translation>
+        <translation type="vanished">Управление рабочим столом</translation>
     </message>
     <message>
-        <location filename="../ui/user_dialog.cc" line="86"/>
         <source>Desktop View</source>
-        <translation>Просмотр рабочего стола</translation>
+        <translation type="vanished">Просмотр рабочего стола</translation>
     </message>
     <message>
-        <location filename="../ui/user_dialog.cc" line="90"/>
         <source>File Transfer</source>
-        <translation>Передача файлов</translation>
+        <translation type="vanished">Передача файлов</translation>
     </message>
     <message>
-        <location filename="../ui/user_dialog.cc" line="148"/>
-        <location filename="../ui/user_dialog.cc" line="160"/>
-        <location filename="../ui/user_dialog.cc" line="171"/>
-        <location filename="../ui/user_dialog.cc" line="182"/>
-        <location filename="../ui/user_dialog.cc" line="204"/>
-        <location filename="../ui/user_dialog.cc" line="221"/>
+        <location filename="../ui/user_dialog.cc" line="139"/>
+        <location filename="../ui/user_dialog.cc" line="151"/>
+        <location filename="../ui/user_dialog.cc" line="162"/>
+        <location filename="../ui/user_dialog.cc" line="173"/>
+        <location filename="../ui/user_dialog.cc" line="195"/>
+        <location filename="../ui/user_dialog.cc" line="212"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../ui/user_dialog.cc" line="149"/>
+        <location filename="../ui/user_dialog.cc" line="140"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>Имя пользователя не может быть пустым и может содержать только буквы алфавита, цифры и символы &quot;_&quot;,&quot;-&quot;,&quot;.&quot;.</translation>
     </message>
     <message>
-        <location filename="../ui/user_dialog.cc" line="161"/>
+        <location filename="../ui/user_dialog.cc" line="152"/>
         <source>The username you entered already exists.</source>
         <translation>Введенное имя пользователя уже существует.</translation>
     </message>
     <message>
-        <location filename="../ui/user_dialog.cc" line="172"/>
+        <location filename="../ui/user_dialog.cc" line="163"/>
         <source>The passwords you entered do not match.</source>
         <translation>Введенные пароли не совпадают.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/user_dialog.cc" line="183"/>
+        <location filename="../ui/user_dialog.cc" line="174"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
         <translation>
             <numerusform>Пароль не может быть пустой и не должен превышать %n символ.</numerusform>
@@ -798,12 +795,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../ui/user_dialog.cc" line="194"/>
+        <location filename="../ui/user_dialog.cc" line="185"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Введенный пароль не отвечает требованиям безопасности!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/user_dialog.cc" line="197"/>
+        <location filename="../ui/user_dialog.cc" line="188"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символа.</numerusform>
@@ -812,17 +809,17 @@
         </translation>
     </message>
     <message>
-        <location filename="../ui/user_dialog.cc" line="201"/>
+        <location filename="../ui/user_dialog.cc" line="192"/>
         <source>Do you want to enter a different password?</source>
         <translation>Вы хотите ввести другой пароль?</translation>
     </message>
     <message>
-        <location filename="../ui/user_dialog.cc" line="222"/>
+        <location filename="../ui/user_dialog.cc" line="213"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation>Неизвестная внутренняя ошибка при создании или изменении пользователя.</translation>
     </message>
     <message>
-        <location filename="../ui/user_dialog.cc" line="281"/>
+        <location filename="../ui/user_dialog.cc" line="272"/>
         <source>Double-click to change</source>
         <translation>Двойной щелчок для изменения</translation>
     </message>

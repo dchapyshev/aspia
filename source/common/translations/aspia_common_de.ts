@@ -35,6 +35,24 @@
     </message>
 </context>
 <context>
+    <name>SessionType</name>
+    <message>
+        <location filename="../session_type.cc" line="30"/>
+        <source>Desktop Manage</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../session_type.cc" line="33"/>
+        <source>Desktop View</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../session_type.cc" line="36"/>
+        <source>File Transfer</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>common::AboutDialog</name>
     <message>
         <location filename="../ui/about_dialog.cc" line="87"/>

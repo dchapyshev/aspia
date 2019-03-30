@@ -28,6 +28,11 @@ Server::Server(QObject* parent)
     // Nothing
 }
 
+Server::~Server()
+{
+    stop();
+}
+
 bool Server::start(uint16_t port)
 {
     if (!tcp_server_.isNull())
@@ -57,7 +62,7 @@ bool Server::start(uint16_t port)
 
 void Server::stop()
 {
-    if (tcp_server_.isNull())
+    if (!tcp_server_)
     {
         LOG(LS_WARNING) << "Server already stopped";
         return;

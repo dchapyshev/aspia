@@ -1245,13 +1245,13 @@
     </message>
     <message>
         <location filename="../console_main_window.cc" line="507"/>
-        <location filename="../console_main_window.cc" line="836"/>
+        <location filename="../console_main_window.cc" line="839"/>
         <source>Confirmation</source>
         <translation>Підтвердження</translation>
     </message>
     <message>
         <location filename="../console_main_window.cc" line="508"/>
-        <location filename="../console_main_window.cc" line="837"/>
+        <location filename="../console_main_window.cc" line="840"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation>Адресну книгу &quot;%1&quot; змінено. Зберегти зміни?</translation>
     </message>
@@ -1272,22 +1272,22 @@
         <translation>Закріпити вкладку</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="793"/>
+        <location filename="../console_main_window.cc" line="796"/>
         <source>Hide</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="808"/>
+        <location filename="../console_main_window.cc" line="811"/>
         <source>Show</source>
         <translation>Показати</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="915"/>
+        <location filename="../console_main_window.cc" line="918"/>
         <source>&lt;empty&gt;</source>
         <translation>&lt;порожньо&gt;</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="936"/>
+        <location filename="../console_main_window.cc" line="939"/>
         <source>Aspia Console</source>
         <translation>Консоль Aspia</translation>
     </message>

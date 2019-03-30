@@ -36,7 +36,10 @@ UiProcess::UiProcess(ipc::Channel* channel, QObject* parent)
     channel_->setParent(this);
 }
 
-UiProcess::~UiProcess() = default;
+UiProcess::~UiProcess()
+{
+    stop();
+}
 
 // static
 void UiProcess::create(base::win::SessionId session_id)
@@ -166,8 +169,6 @@ void UiProcess::sendCredentials(uint32_t flags)
         return;
     }
 
-    proto::host::ServiceToUi message;
-
     if ((flags & proto::host::CredentialsRequest::NEW_PASSWORD) || session_password_.empty())
     {
         base::PasswordGenerator generator;
@@ -182,8 +183,11 @@ void UiProcess::sendCredentials(uint32_t flags)
         emit userChanged(channel_->clientSessionId(), session_password_);
     }
 
-    message.mutable_credentials()->set_username("#" + std::to_string(sessionId()));
-    message.mutable_credentials()->set_password(session_password_);
+    proto::host::ServiceToUi message;
+
+    proto::host::Credentials* credentials = message.mutable_credentials();
+    credentials->set_username("#" + std::to_string(sessionId()));
+    credentials->set_password(session_password_);
 
     for (net::AdapterEnumerator adapters; !adapters.isAtEnd(); adapters.advance())
     {
@@ -193,7 +197,7 @@ void UiProcess::sendCredentials(uint32_t flags)
             std::string ip = addresses.address();
 
             if (ip != "127.0.0.1")
-                message.mutable_credentials()->add_ip(ip);
+                credentials->add_ip(ip);
         }
     }
 

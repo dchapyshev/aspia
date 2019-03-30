@@ -21,6 +21,8 @@ include(translations)
 list(APPEND SOURCE_HOST_CORE
     desktop_config_tracker.cc
     desktop_config_tracker.h
+    dettach_timer.cc
+    dettach_timer.h
     host_core.rc
     host_export.h
     host_main.cc

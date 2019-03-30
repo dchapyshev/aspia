@@ -61,7 +61,7 @@ public:
     void setConnectEvent(base::win::SessionId session_id, const proto::host::ConnectEvent& event);
     void setDisconnectEvent(base::win::SessionId session_id, const std::string& uuid);
 
-    const UserList& userList() const { return user_list_; }
+    const UserList& userList() const { return users_; }
 
 signals:
     void processEvent(EventType event, base::win::SessionId session_id);
@@ -78,12 +78,12 @@ private:
     State state_ = State::STOPPED;
 
     // IPC server accepts incoming connections from UI processes.
-    QPointer<ipc::Server> server_;
+    std::unique_ptr<ipc::Server> server_;
 
     // List of connected UI processes.
-    std::list<UiProcess*> process_list_;
+    std::list<std::unique_ptr<UiProcess>> processes_;
 
-    UserList user_list_;
+    UserList users_;
 
     DISALLOW_COPY_AND_ASSIGN(UiServer);
 };

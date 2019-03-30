@@ -20,6 +20,7 @@
 #define HOST__HOST_SERVER_H
 
 #include "base/win/session_status.h"
+#include "host/dettach_timer.h"
 #include "host/host_ui_server.h"
 #include "host/win/host_process.h"
 #include "ipc/ipc_channel.h"
@@ -48,7 +49,6 @@ public:
 protected:
     // QObject implementation.
     void customEvent(QEvent* event) override;
-    void timerEvent(QTimerEvent* event) override;
 
 private slots:
     void onNewConnection();
@@ -57,22 +57,23 @@ private slots:
     void onSettingsChanged();
 
 private:
+    void startServer();
     void sendConnectEvent(const SessionProcess* session_process);
 
     enum class State { STOPPED, STOPPING, STARTED };
 
     State state_ = State::STOPPED;
 
-    QPointer<QFileSystemWatcher> settings_watcher_;
-    QPointer<UiServer> ui_server_;
+    std::unique_ptr<QFileSystemWatcher> settings_watcher_;
+    std::unique_ptr<UiServer> ui_server_;
 
     // Accepts incoming network connections.
-    QPointer<net::Server> network_server_;
+    std::unique_ptr<net::Server> network_server_;
+
+    DettachTimer dettach_timer_;
 
     // Contains a list of connected sessions.
-    std::list<SessionProcess*> sessions_;
-
-    std::map<base::win::SessionId, int> dettach_timers_;
+    std::list<std::unique_ptr<SessionProcess>> sessions_;
 
     DISALLOW_COPY_AND_ASSIGN(HostServer);
 };

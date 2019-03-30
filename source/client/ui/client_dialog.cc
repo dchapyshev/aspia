@@ -17,10 +17,12 @@
 //
 
 #include "client/ui/client_dialog.h"
+
 #include "build/build_config.h"
 #include "client/ui/desktop_config_dialog.h"
 #include "client/config_factory.h"
 #include "common/desktop_session_constants.h"
+#include "common/session_type.h"
 #include "net/address.h"
 
 #include <QMessageBox>
@@ -37,17 +39,16 @@ ClientDialog::ClientDialog(QWidget* parent)
     ui.setupUi(this);
     setFixedHeight(sizeHint().height());
 
-    ui.combo_session_type->addItem(QIcon(QStringLiteral(":/img/monitor-keyboard.png")),
-                                   tr("Desktop Manage"),
-                                   QVariant(proto::SESSION_TYPE_DESKTOP_MANAGE));
+    auto add_session = [this](const QString& icon, proto::SessionType session_type)
+    {
+        ui.combo_session_type->addItem(QIcon(icon),
+                                       common::sessionTypeToLocalizedString(session_type),
+                                       QVariant(session_type));
+    };
 
-    ui.combo_session_type->addItem(QIcon(QStringLiteral(":/img/monitor.png")),
-                                   tr("Desktop View"),
-                                   QVariant(proto::SESSION_TYPE_DESKTOP_VIEW));
-
-    ui.combo_session_type->addItem(QIcon(QStringLiteral(":/img/folder-stand.png")),
-                                   tr("File Transfer"),
-                                   QVariant(proto::SESSION_TYPE_FILE_TRANSFER));
+    add_session(QStringLiteral(":/img/monitor-keyboard.png"), proto::SESSION_TYPE_DESKTOP_MANAGE);
+    add_session(QStringLiteral(":/img/monitor.png"), proto::SESSION_TYPE_DESKTOP_VIEW);
+    add_session(QStringLiteral(":/img/folder-stand.png"), proto::SESSION_TYPE_FILE_TRANSFER);
 
     int current_session_type =
         ui.combo_session_type->findData(QVariant(connect_data_.session_type));

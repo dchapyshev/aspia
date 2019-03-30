@@ -17,9 +17,11 @@
 //
 
 #include "host/host_server.h"
+
 #include "base/guid.h"
 #include "base/qt_logging.h"
 #include "base/win/session_info.h"
+#include "common/session_type.h"
 #include "host/win/host_session_process.h"
 #include "host/host_settings.h"
 #include "net/firewall_manager.h"
@@ -37,30 +39,23 @@ const char kFirewallRuleDecription[] = "Allow incoming TCP connections";
 
 const int kStartEvent = QEvent::User + 1;
 
-const char* sessionTypeToString(proto::SessionType session_type)
-{
-    switch (session_type)
-    {
-        case proto::SESSION_TYPE_DESKTOP_MANAGE:
-            return "Desktop Manage";
-
-        case proto::SESSION_TYPE_DESKTOP_VIEW:
-            return "Desktop View";
-
-        case proto::SESSION_TYPE_FILE_TRANSFER:
-            return "File Transfer";
-
-        default:
-            return "Unknown";
-    }
-}
-
 } // namespace
 
 HostServer::HostServer(QObject* parent)
     : QObject(parent)
 {
-    // Nothing
+    connect(&dettach_timer_, &DettachTimer::dettachSession, [this](base::win::SessionId session_id)
+    {
+        for (auto it = sessions_.begin(); it != sessions_.end();)
+        {
+            SessionProcess* process = it->get();
+
+            if (process->sessionId() == session_id)
+                it = sessions_.erase(it);
+            else
+                ++it;
+        }
+    });
 }
 
 HostServer::~HostServer()
@@ -78,30 +73,13 @@ void HostServer::stop()
     if (state_ == State::STOPPED || state_ == State::STOPPING)
         return;
 
-    LOG(LS_INFO) << "Stopping the server.";
+    LOG(LS_INFO) << "Stopping the server";
     state_ = State::STOPPING;
 
-    delete settings_watcher_;
-
-    for (auto session : sessions_)
-    {
-        session->stop();
-        delete session;
-    }
-
+    settings_watcher_.reset();
     sessions_.clear();
-
-    if (ui_server_)
-    {
-        ui_server_->stop();
-        delete ui_server_;
-    }
-
-    if (network_server_)
-    {
-        network_server_->stop();
-        delete network_server_;
-    }
+    ui_server_.reset();
+    network_server_.reset();
 
     net::FirewallManager firewall(QCoreApplication::applicationFilePath());
     if (firewall.isValid())
@@ -113,32 +91,19 @@ void HostServer::stop()
 
 void HostServer::setSessionEvent(base::win::SessionStatus status, base::win::SessionId session_id)
 {
-    for (const auto session : sessions_)
+    for (const auto& session : sessions_)
         session->setSessionEvent(status, session_id);
 
     if (ui_server_)
         ui_server_->setSessionEvent(status, session_id);
 
     if (status == base::win::SessionStatus::SESSION_LOGOFF)
-    {
-        for (auto it = dettach_timers_.begin(); it != dettach_timers_.end();)
-        {
-            if (it->first == session_id)
-            {
-                killTimer(it->second);
-                it = dettach_timers_.erase(it);
-            }
-            else
-            {
-                ++it;
-            }
-        }
-    }
+        dettach_timer_.sessionLogoff(session_id);
 }
 
 void HostServer::stopSession(const std::string& uuid)
 {
-    for (auto session : sessions_)
+    for (const auto& session : sessions_)
     {
         if (session->uuid() == uuid)
         {
@@ -151,93 +116,9 @@ void HostServer::stopSession(const std::string& uuid)
 void HostServer::customEvent(QEvent* event)
 {
     if (event->type() == kStartEvent)
-    {
-        LOG(LS_INFO) << "Starting the server";
-
-        if (network_server_)
-        {
-            DLOG(LS_WARNING) << "An attempt was start an already running server";
-            return;
-        }
-
-        Settings settings;
-
-        net::FirewallManager firewall(QCoreApplication::applicationFilePath());
-        if (firewall.isValid())
-        {
-            if (firewall.addTcpRule(kFirewallRuleName, kFirewallRuleDecription, settings.tcpPort()))
-            {
-                LOG(LS_INFO) << "Rule is added to the firewall";
-            }
-        }
-
-        ui_server_ = new UiServer(this);
-
-        connect(ui_server_, &UiServer::processEvent, this, &HostServer::onUiProcessEvent);
-        connect(ui_server_, &UiServer::killSession, this, &HostServer::stopSession);
-
-        if (!ui_server_->start())
-        {
-            QCoreApplication::quit();
-            return;
-        }
-        else
-        {
-            LOG(LS_INFO) << "UI server is started successfully";
-        }
-
-        network_server_ = new net::Server(this);
-        network_server_->setUserList(settings.userList());
-
-        connect(network_server_, &net::Server::newChannelReady,
-                this, &HostServer::onNewConnection);
-
-        if (!network_server_->start(settings.tcpPort()))
-        {
-            QCoreApplication::quit();
-            return;
-        }
-        else
-        {
-            LOG(LS_INFO) << "Network server is started successfully";
-        }
-
-        settings_watcher_ = new QFileSystemWatcher(this);
-
-        connect(settings_watcher_, &QFileSystemWatcher::fileChanged,
-                this, &HostServer::onSettingsChanged);
-
-        settings_watcher_->addPath(settings.filePath());
-
-        state_ = State::STARTED;
-    }
+        startServer();
 
     QObject::customEvent(event);
-}
-
-void HostServer::timerEvent(QTimerEvent* event)
-{
-    for (auto it = dettach_timers_.begin(); it != dettach_timers_.end();)
-    {
-        if (it->second == event->timerId())
-        {
-            killTimer(event->timerId());
-
-            for (auto session : sessions_)
-            {
-                if (session->sessionId() == it->first)
-                    session->stop();
-            }
-
-            it = dettach_timers_.erase(it);
-        }
-        else
-        {
-            ++it;
-        }
-    }
-
-    QObject::timerEvent(event);
 }
 
 void HostServer::onNewConnection()
@@ -288,7 +169,7 @@ void HostServer::onNewConnection()
         LOG(LS_INFO) << "New connected client: " << peer_address
                      << " (SID: " << session_id << ")";
 
-        std::unique_ptr<SessionProcess> session_process(new SessionProcess(this));
+        std::unique_ptr<SessionProcess> session_process = std::make_unique<SessionProcess>();
 
         session_process->setNetworkChannel(channel);
         session_process->setUuid(base::Guid::create().toStdString());
@@ -299,53 +180,32 @@ void HostServer::onNewConnection()
 
         if (session_process->start(session_id))
         {
-            SessionProcess* released_session_process = session_process.release();
-            sessions_.push_back(released_session_process);
-            sendConnectEvent(released_session_process);
+            sessions_.emplace_front(std::move(session_process));
+            sendConnectEvent(sessions_.front().get());
         }
     }
 }
 
 void HostServer::onUiProcessEvent(UiServer::EventType event, base::win::SessionId session_id)
 {
-    for (auto session : sessions_)
+    for (const auto& session : sessions_)
     {
         if (session->sessionId() != session_id)
             continue;
 
         if (event == UiServer::EventType::CONNECTED)
         {
-            sendConnectEvent(session);
+            sendConnectEvent(session.get());
 
-            auto result = dettach_timers_.find(session_id);
-            if (result != dettach_timers_.end())
-            {
-                killTimer(result->second);
-                dettach_timers_.erase(result);
-
+            if (dettach_timer_.sessionConnect(session_id))
                 session->attachSession(session_id);
-            }
         }
         else
         {
             DCHECK(event == UiServer::EventType::DISCONNECTED);
 
             session->dettachSession();
-
-            auto result = dettach_timers_.find(session_id);
-            if (result == dettach_timers_.end())
-            {
-                int timer_id = startTimer(std::chrono::seconds(60));
-                if (!timer_id)
-                {
-                    LOG(LS_ERROR) << "startTimer failed";
-                    session->stop();
-                }
-                else
-                {
-                    dettach_timers_.emplace(session_id, timer_id);
-                }
-            }
+            dettach_timer_.sessionDisconnect(session_id);
         }
     }
 }
@@ -357,11 +217,11 @@ void HostServer::onSessionFinished()
 
     for (auto it = sessions_.begin(); it != sessions_.end();)
     {
-        SessionProcess* session_process = *it;
+        SessionProcess* session_process = it->get();
 
         if (session_process->state() == SessionProcess::State::STOPPED)
         {
-            LOG(LS_INFO) << sessionTypeToString(session_process->sessionType())
+            LOG(LS_INFO) << common::sessionTypeToString(session_process->sessionType())
                          << " session is finished for " << session_process->userName();
 
             if (ui_server_)
@@ -371,7 +231,6 @@ void HostServer::onSessionFinished()
             }
 
             it = sessions_.erase(it);
-            delete session_process;
         }
         else
         {
@@ -384,6 +243,68 @@ void HostServer::onSettingsChanged()
 {
     Settings settings;
     network_server_->setUserList(settings.userList());
+}
+
+void HostServer::startServer()
+{
+    if (network_server_)
+    {
+        DLOG(LS_WARNING) << "An attempt was start an already running server";
+        return;
+    }
+
+    LOG(LS_INFO) << "Starting the server";
+
+    Settings settings;
+
+    net::FirewallManager firewall(QCoreApplication::applicationFilePath());
+    if (firewall.isValid())
+    {
+        if (firewall.addTcpRule(kFirewallRuleName, kFirewallRuleDecription, settings.tcpPort()))
+        {
+            LOG(LS_INFO) << "Rule is added to the firewall";
+        }
+    }
+
+    ui_server_ = std::make_unique<UiServer>();
+
+    connect(ui_server_.get(), &UiServer::processEvent, this, &HostServer::onUiProcessEvent);
+    connect(ui_server_.get(), &UiServer::killSession, this, &HostServer::stopSession);
+
+    if (!ui_server_->start())
+    {
+        QCoreApplication::quit();
+        return;
+    }
+    else
+    {
+        LOG(LS_INFO) << "UI server is started successfully";
+    }
+
+    network_server_ = std::make_unique<net::Server>();
+    network_server_->setUserList(settings.userList());
+
+    connect(network_server_.get(), &net::Server::newChannelReady,
+            this, &HostServer::onNewConnection);
+
+    if (!network_server_->start(settings.tcpPort()))
+    {
+        QCoreApplication::quit();
+        return;
+    }
+    else
+    {
+        LOG(LS_INFO) << "Network server is started successfully";
+    }
+
+    settings_watcher_ = std::make_unique<QFileSystemWatcher>();
+
+    connect(settings_watcher_.get(), &QFileSystemWatcher::fileChanged,
+            this, &HostServer::onSettingsChanged);
+
+    settings_watcher_->addPath(settings.filePath());
+
+    state_ = State::STARTED;
 }
 
 void HostServer::sendConnectEvent(const SessionProcess* session_process)

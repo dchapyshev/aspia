@@ -35,6 +35,24 @@
     </message>
 </context>
 <context>
+    <name>SessionType</name>
+    <message>
+        <location filename="../session_type.cc" line="30"/>
+        <source>Desktop Manage</source>
+        <translation>Управление рабочим столом</translation>
+    </message>
+    <message>
+        <location filename="../session_type.cc" line="33"/>
+        <source>Desktop View</source>
+        <translation>Просмотр рабочего стола</translation>
+    </message>
+    <message>
+        <location filename="../session_type.cc" line="36"/>
+        <source>File Transfer</source>
+        <translation>Передача файлов</translation>
+    </message>
+</context>
+<context>
     <name>common::AboutDialog</name>
     <message>
         <location filename="../ui/about_dialog.cc" line="87"/>

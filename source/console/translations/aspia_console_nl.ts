@@ -1238,13 +1238,13 @@
     </message>
     <message>
         <location filename="../console_main_window.cc" line="507"/>
-        <location filename="../console_main_window.cc" line="836"/>
+        <location filename="../console_main_window.cc" line="839"/>
         <source>Confirmation</source>
         <translation>Bevestiging</translation>
     </message>
     <message>
         <location filename="../console_main_window.cc" line="508"/>
-        <location filename="../console_main_window.cc" line="837"/>
+        <location filename="../console_main_window.cc" line="840"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation>Adresboek &quot;%1&quot; is aangepast. Wijzigingen opslaan?</translation>
     </message>
@@ -1265,22 +1265,22 @@
         <translation>Pin tab</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="793"/>
+        <location filename="../console_main_window.cc" line="796"/>
         <source>Hide</source>
         <translation>Verbergen</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="808"/>
+        <location filename="../console_main_window.cc" line="811"/>
         <source>Show</source>
         <translation>Weergeven</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="915"/>
+        <location filename="../console_main_window.cc" line="918"/>
         <source>&lt;empty&gt;</source>
         <translation>&lt;leeg&gt;</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="936"/>
+        <location filename="../console_main_window.cc" line="939"/>
         <source>Aspia Console</source>
         <translation>Aspia Console</translation>
     </message>
