@@ -95,7 +95,7 @@ HostProcess::ErrorCode createLoggedOnUserToken(
         {
             error_code = HostProcess::OtherError;
             LOG(LS_WARNING) << "WTSQueryUserToken failed: "
-                << base::systemErrorCodeToString(system_error_code);
+                            << base::systemErrorCodeToString(system_error_code);
         }
         else
         {

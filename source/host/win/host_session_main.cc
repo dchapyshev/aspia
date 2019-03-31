@@ -22,6 +22,7 @@
 #include "build/version.h"
 #include "crypto/scoped_crypto_initializer.h"
 #include "host/host_session.h"
+#include "host/win/host_starter_service.h"
 
 #include <QGuiApplication>
 #include <QCommandLineParser>
@@ -53,6 +54,9 @@ int runApplication(int argc, char *argv[])
     for (int i = 0; i < argc; ++i)
         arguments.append(QString::fromLocal8Bit(argv[i]));
 
+    QCommandLineOption service_id_option(
+        QStringLiteral("service_id"), QString(), QStringLiteral("service_id"));
+
     QCommandLineOption channel_id_option(
         QStringLiteral("channel_id"), QString(), QStringLiteral("channel_id"));
 
@@ -60,6 +64,7 @@ int runApplication(int argc, char *argv[])
         QStringLiteral("session_type"), QString(), QStringLiteral("session_type"));
 
     QCommandLineParser parser;
+    parser.addOption(service_id_option);
     parser.addOption(channel_id_option);
     parser.addOption(session_type_option);
 
@@ -69,7 +74,15 @@ int runApplication(int argc, char *argv[])
         return 1;
     }
 
-    if (parser.isSet(session_type_option) && parser.isSet(channel_id_option))
+    if (parser.isSet(service_id_option))
+    {
+        if (parser.isSet(session_type_option) && parser.isSet(channel_id_option))
+        {
+            StarterService service(parser.value(service_id_option));
+            return service.exec(argc, argv);
+        }
+    }
+    else if (parser.isSet(session_type_option) && parser.isSet(channel_id_option))
     {
         // At the end of the user's session, the program ends later than the others.
         SetProcessShutdownParameters(0, SHUTDOWN_NORETRY);

@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,26 +16,24 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST__HOST_SERVICE_H
-#define HOST__HOST_SERVICE_H
+#ifndef HOST__WIN__HOST_STARTER_SERVICE_H
+#define HOST__WIN__HOST_STARTER_SERVICE_H
 
 #include "base/service.h"
 
 #include <QCoreApplication>
 
-namespace base::win {
-class ScopedCOMInitializer;
-} // namespace base::win
-
 namespace host {
 
-class HostServer;
-
-class HostService : public base::Service<QCoreApplication>
+class StarterService : public base::Service<QCoreApplication>
 {
 public:
-    HostService();
-    ~HostService();
+    StarterService(const QString& service_id);
+    ~StarterService();
+
+    static bool startFromService(const QString& program,
+                                 const QStringList& arguments,
+                                 const QString& session_id);
 
 protected:
     // base::Service implementation.
@@ -44,12 +42,9 @@ protected:
     void sessionEvent(base::win::SessionStatus status, base::win::SessionId session_id) override;
 
 private:
-    std::unique_ptr<base::win::ScopedCOMInitializer> com_initializer_;
-    std::unique_ptr<HostServer> server_;
-
-    DISALLOW_COPY_AND_ASSIGN(HostService);
+    DISALLOW_COPY_AND_ASSIGN(StarterService);
 };
 
 } // namespace host
 
-#endif // HOST__HOST_SERVICE_H
+#endif // HOST__WIN__HOST_STARTER_SERVICE_H

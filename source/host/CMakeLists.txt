@@ -99,6 +99,8 @@ list(APPEND SOURCE_HOST_CORE_WIN
     win/host_session_main.h
     win/host_session_process.cc
     win/host_session_process.h
+    win/host_starter_service.cc
+    win/host_starter_service.h
     win/updater_launcher.cc
     win/updater_launcher.h)
 

@@ -59,7 +59,9 @@ const wchar_t kComProcessMandatoryLabel[] =
 } // namespace
 
 HostService::HostService()
-    : Service<QCoreApplication>(kHostServiceName, kHostServiceDisplayName, kHostServiceDescription)
+    : Service<QCoreApplication>(QLatin1String(kHostServiceName),
+                                QLatin1String(kHostServiceDisplayName),
+                                QLatin1String(kHostServiceDescription))
 {
     // Nothing
 }
@@ -68,14 +70,14 @@ HostService::~HostService() = default;
 
 void HostService::start()
 {
-    LOG(LS_INFO) << "Service is started.";
+    LOG(LS_INFO) << "Service is started";
 
     SetPriorityClass(GetCurrentProcess(), HIGH_PRIORITY_CLASS);
 
     com_initializer_.reset(new base::win::ScopedCOMInitializer());
     if (!com_initializer_->isSucceeded())
     {
-        LOG(LS_FATAL) << "COM not initialized.";
+        LOG(LS_FATAL) << "COM not initialized";
         return;
     }
 
@@ -90,7 +92,7 @@ void HostService::stop()
     server_.reset();
     com_initializer_.reset();
 
-    LOG(LS_INFO) << "Service is stopped.";
+    LOG(LS_INFO) << "Service is stopped";
 }
 
 void HostService::sessionEvent(base::win::SessionStatus status, base::win::SessionId session_id)
