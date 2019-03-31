@@ -32,10 +32,11 @@ void initQtLogging();
 
 } // namespace base
 
-std::ostream& operator<<(std::ostream& out, const QByteArray& qstr);
-std::ostream& operator<<(std::ostream& out, const QPoint& qstr);
-std::ostream& operator<<(std::ostream& out, const QRect& qstr);
-std::ostream& operator<<(std::ostream& out, const QSize& qstr);
+std::ostream& operator<<(std::ostream& out, const QByteArray& qbytearray);
+std::ostream& operator<<(std::ostream& out, const QPoint& qpoint);
+std::ostream& operator<<(std::ostream& out, const QRect& qrect);
+std::ostream& operator<<(std::ostream& out, const QSize& qsize);
 std::ostream& operator<<(std::ostream& out, const QString& qstr);
+std::ostream& operator<<(std::ostream& out, const QStringList& qstrlist);
 
 #endif // BASE__QT_LOGGING_H

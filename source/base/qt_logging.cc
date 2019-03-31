@@ -92,3 +92,18 @@ std::ostream& operator<<(std::ostream& out, const QString& qstr)
 {
     return out << qstr.toStdString();
 }
+
+std::ostream& operator<<(std::ostream& out, const QStringList& qstrlist)
+{
+    out << "QStringList(";
+
+    for (int i = 0; i < qstrlist.size(); ++i)
+    {
+        out << '"' << qstrlist.at(i) << '"';
+
+        if (i != qstrlist.size() - 1)
+            out << ", ";
+    }
+
+    return out << ")";
+}
