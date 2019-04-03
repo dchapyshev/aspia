@@ -66,6 +66,8 @@ list(APPEND SOURCE_DESKTOP_WIN
     win/cursor.h
     win/d3d_device.cc
     win/d3d_device.h
+    win/dxgi_texture.cc
+    win/dxgi_texture.h
     win/effects_disabler.cc
     win/effects_disabler.h
     win/screen_capture_utils.cc
