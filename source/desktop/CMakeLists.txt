@@ -64,6 +64,8 @@ list(APPEND SOURCE_DESKTOP_UNIT_TESTS
 list(APPEND SOURCE_DESKTOP_WIN
     win/cursor.cc
     win/cursor.h
+    win/d3d_device.cc
+    win/d3d_device.h
     win/effects_disabler.cc
     win/effects_disabler.h
     win/screen_capture_utils.cc
