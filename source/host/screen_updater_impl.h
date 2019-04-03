@@ -19,7 +19,7 @@
 #ifndef HOST__SCREEN_UPDATER_IMPL_H
 #define HOST__SCREEN_UPDATER_IMPL_H
 
-#include "desktop/screen_capturer.h"
+#include "desktop/screen_capturer_wrapper.h"
 #include "proto/desktop.pb.h"
 
 #include <QEvent>
@@ -77,7 +77,7 @@ private:
 
     std::unique_ptr<desktop::CaptureScheduler> capture_scheduler_;
 
-    std::unique_ptr<desktop::ScreenCapturer> screen_capturer_;
+    std::unique_ptr<desktop::ScreenCapturerWrapper> screen_capturer_;
     std::unique_ptr<codec::ScaleReducer> scale_reducer_;
     std::unique_ptr<codec::VideoEncoder> video_encoder_;
 

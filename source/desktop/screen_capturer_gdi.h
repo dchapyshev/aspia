@@ -20,26 +20,17 @@
 #define DESKTOP__SCREEN_CAPTURER_GDI_H
 
 #include "base/win/scoped_hdc.h"
-#include "base/win/scoped_thread_desktop.h"
 #include "desktop/screen_capturer.h"
 #include "desktop/screen_capture_frame_queue.h"
 
 namespace desktop {
 
 class Differ;
-class EffectsDisabler;
-class WallpaperDisabler;
 
 class ScreenCapturerGdi : public ScreenCapturer
 {
 public:
-    enum Flags
-    {
-        DISABLE_EFFECTS = 1,
-        DISABLE_WALLPAPER = 2
-    };
-
-    ScreenCapturerGdi(uint32_t flags);
+    ScreenCapturerGdi();
     ~ScreenCapturerGdi();
 
     // ScreenCapturer implementation.
@@ -48,15 +39,16 @@ public:
     bool selectScreen(ScreenId screen_id) override;
     const Frame* captureFrame() override;
 
+protected:
+    // ScreenCapturer implementation.
+    void reset() override;
+
 private:
     bool prepareCaptureResources();
-
-    const uint32_t flags_;
 
     ScreenId current_screen_id_ = kFullDesktopScreenId;
     QString current_device_key_;
 
-    base::ScopedThreadDesktop desktop_;
     Rect desktop_dc_rect_;
 
     std::unique_ptr<Differ> differ_;
@@ -64,9 +56,6 @@ private:
     base::win::ScopedCreateDC memory_dc_;
 
     ScreenCaptureFrameQueue<Frame> queue_;
-
-    std::unique_ptr<EffectsDisabler> effects_disabler_;
-    std::unique_ptr<WallpaperDisabler> wallpaper_disabler_;
 
     DISALLOW_COPY_AND_ASSIGN(ScreenCapturerGdi);
 };

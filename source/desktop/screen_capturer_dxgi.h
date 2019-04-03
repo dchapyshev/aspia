@@ -19,7 +19,6 @@
 #ifndef DESKTOP__SCREEN_CAPTURER_DXGI_H
 #define DESKTOP__SCREEN_CAPTURER_DXGI_H
 
-#include "base/macros_magic.h"
 #include "desktop/screen_capturer.h"
 #include "desktop/screen_capture_frame_queue.h"
 #include "desktop/win/dxgi_duplicator_controller.h"
@@ -31,7 +30,7 @@ class ScreenCapturerDxgi : public ScreenCapturer
 {
 public:
     ScreenCapturerDxgi();
-    ~ScreenCapturerDxgi() = default;
+    ~ScreenCapturerDxgi();
 
     // Whether the system supports DXGI based capturing.
     static bool isSupported();
@@ -48,6 +47,10 @@ public:
     bool screenList(ScreenList* screens) override;
     bool selectScreen(ScreenId screen_id) override;
     const Frame* captureFrame() override;
+
+protected:
+    // ScreenCapturer implementation.
+    void reset() override;
 
 private:
     const base::scoped_refptr<DxgiDuplicatorController> controller_;

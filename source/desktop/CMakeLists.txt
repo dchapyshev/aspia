@@ -62,6 +62,8 @@ list(APPEND SOURCE_DESKTOP
     screen_capturer_dxgi.h
     screen_capturer_gdi.cc
     screen_capturer_gdi.h
+    screen_capturer_wrapper.cc
+    screen_capturer_wrapper.h
     screen_settings_tracker.cc
     screen_settings_tracker.h
     shared_desktop_frame.cc

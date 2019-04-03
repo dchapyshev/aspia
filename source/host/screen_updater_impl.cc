@@ -17,6 +17,7 @@
 //
 
 #include "host/screen_updater_impl.h"
+
 #include "codec/cursor_encoder.h"
 #include "codec/scale_reducer.h"
 #include "codec/video_encoder_vpx.h"
@@ -26,8 +27,7 @@
 #include "common/message_serialization.h"
 #include "desktop/capture_scheduler.h"
 #include "desktop/cursor_capturer_win.h"
-#include "desktop/screen_capturer_dxgi.h"
-#include "desktop/screen_capturer_gdi.h"
+#include "desktop/screen_capturer_wrapper.h"
 #include "proto/desktop_extensions.pb.h"
 
 #include <QCoreApplication>
@@ -98,10 +98,10 @@ bool ScreenUpdaterImpl::startUpdater(const proto::desktop::Config& config)
         new desktop::CaptureScheduler(std::chrono::milliseconds(config.update_interval())));
 
     if (config.flags() & proto::desktop::DISABLE_DESKTOP_EFFECTS)
-        screen_capturer_flags_ |= desktop::ScreenCapturerGdi::DISABLE_EFFECTS;
+        screen_capturer_flags_ |= desktop::ScreenCapturerWrapper::DISABLE_EFFECTS;
 
     if (config.flags() & proto::desktop::DISABLE_DESKTOP_WALLPAPER)
-        screen_capturer_flags_ |= desktop::ScreenCapturerGdi::DISABLE_WALLPAPER;
+        screen_capturer_flags_ |= desktop::ScreenCapturerWrapper::DISABLE_WALLPAPER;
 
     start(QThread::HighPriority);
     return true;
@@ -120,17 +120,7 @@ void ScreenUpdaterImpl::selectScreen(desktop::ScreenCapturer::ScreenId screen_id
 
 void ScreenUpdaterImpl::run()
 {
-    if (desktop::ScreenCapturerDxgi::isSupported() &&
-        desktop::ScreenCapturerDxgi::isCurrentSessionSupported())
-    {
-        LOG(LS_INFO) << "Using DXGI capturer";
-        screen_capturer_.reset(new desktop::ScreenCapturerDxgi());
-    }
-    else
-    {
-        LOG(LS_INFO) << "Using GDI capturer";
-        screen_capturer_.reset(new desktop::ScreenCapturerGdi(screen_capturer_flags_));
-    }
+    screen_capturer_ = std::make_unique<desktop::ScreenCapturerWrapper>(screen_capturer_flags_);
 
     while (true)
     {

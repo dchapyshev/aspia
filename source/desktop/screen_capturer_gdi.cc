@@ -19,9 +19,7 @@
 #include "desktop/screen_capturer_gdi.h"
 #include "base/logging.h"
 #include "base/win/scoped_select_object.h"
-#include "desktop/win/effects_disabler.h"
 #include "desktop/win/screen_capture_utils.h"
-#include "desktop/win/wallpaper_disabler.h"
 #include "desktop/desktop_frame_dib.h"
 #include "desktop/differ.h"
 
@@ -29,12 +27,7 @@
 
 namespace desktop {
 
-ScreenCapturerGdi::ScreenCapturerGdi(uint32_t flags)
-    : flags_(flags)
-{
-    // Nothing
-}
-
+ScreenCapturerGdi::ScreenCapturerGdi() = default;
 ScreenCapturerGdi::~ScreenCapturerGdi() = default;
 
 int ScreenCapturerGdi::screenCount()
@@ -118,26 +111,15 @@ const Frame* ScreenCapturerGdi::captureFrame()
     return current;
 }
 
+void ScreenCapturerGdi::reset()
+{
+    // Release GDI resources otherwise SetThreadDesktop will fail.
+    desktop_dc_.reset();
+    memory_dc_.reset();
+}
+
 bool ScreenCapturerGdi::prepareCaptureResources()
 {
-    // Switch to the desktop receiving user input if different from the
-    // current one.
-    base::Desktop input_desktop(base::Desktop::inputDesktop());
-
-    if (input_desktop.isValid() && !desktop_.isSame(input_desktop))
-    {
-        // Release GDI resources otherwise SetThreadDesktop will fail.
-        desktop_dc_.reset();
-        memory_dc_.reset();
-
-        effects_disabler_.reset();
-        wallpaper_disabler_.reset();
-
-        // If SetThreadDesktop() fails, the thread is still assigned a desktop.
-        // So we can continue capture screen bits, just from the wrong desktop.
-        desktop_.setThreadDesktop(std::move(input_desktop));
-    }
-
     Rect desktop_rect = ScreenCaptureUtils::fullScreenRect();
 
     // If the display bounds have changed then recreate GDI resources.
@@ -145,9 +127,6 @@ bool ScreenCapturerGdi::prepareCaptureResources()
     {
         desktop_dc_.reset();
         memory_dc_.reset();
-
-        effects_disabler_.reset();
-        wallpaper_disabler_.reset();
 
         desktop_dc_rect_ = Rect();
     }
@@ -160,12 +139,6 @@ bool ScreenCapturerGdi::prepareCaptureResources()
         // Windows will restore Aero automatically if the process exits.
         // This has no effect under Windows 8 or higher. See crbug.com/124018.
         DwmEnableComposition(DWM_EC_DISABLECOMPOSITION);
-
-        if (flags_ & DISABLE_EFFECTS)
-            effects_disabler_ = std::make_unique<EffectsDisabler>();
-
-        if (flags_ & DISABLE_WALLPAPER)
-            wallpaper_disabler_ = std::make_unique<WallpaperDisabler>();
 
         // Create GDI device contexts to capture from the desktop into memory.
         desktop_dc_ = std::make_unique<base::win::ScopedGetDC>(nullptr);

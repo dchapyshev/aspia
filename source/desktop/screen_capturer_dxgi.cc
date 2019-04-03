@@ -93,6 +93,8 @@ ScreenCapturerDxgi::ScreenCapturerDxgi()
     // Nothing
 }
 
+ScreenCapturerDxgi::~ScreenCapturerDxgi() = default;
+
 // static
 bool ScreenCapturerDxgi::isSupported()
 {
@@ -200,6 +202,11 @@ const Frame* ScreenCapturerDxgi::captureFrame()
             return nullptr;
         }
     }
+}
+
+void ScreenCapturerDxgi::reset()
+{
+    queue_.reset();
 }
 
 } // namespace desktop
