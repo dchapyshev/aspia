@@ -30,7 +30,7 @@ class Differ;
 class EffectsDisabler;
 class WallpaperDisabler;
 
-class ScreenCapturerGDI : public ScreenCapturer
+class ScreenCapturerGdi : public ScreenCapturer
 {
 public:
     enum Flags
@@ -39,8 +39,8 @@ public:
         DISABLE_WALLPAPER = 2
     };
 
-    ScreenCapturerGDI(uint32_t flags);
-    ~ScreenCapturerGDI();
+    ScreenCapturerGdi(uint32_t flags);
+    ~ScreenCapturerGdi();
 
     // ScreenCapturer implementation.
     int screenCount() override;
@@ -68,7 +68,7 @@ private:
     std::unique_ptr<EffectsDisabler> effects_disabler_;
     std::unique_ptr<WallpaperDisabler> wallpaper_disabler_;
 
-    DISALLOW_COPY_AND_ASSIGN(ScreenCapturerGDI);
+    DISALLOW_COPY_AND_ASSIGN(ScreenCapturerGdi);
 };
 
 } // namespace desktop

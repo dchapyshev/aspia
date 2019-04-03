@@ -29,25 +29,25 @@
 
 namespace desktop {
 
-ScreenCapturerGDI::ScreenCapturerGDI(uint32_t flags)
+ScreenCapturerGdi::ScreenCapturerGdi(uint32_t flags)
     : flags_(flags)
 {
     // Nothing
 }
 
-ScreenCapturerGDI::~ScreenCapturerGDI() = default;
+ScreenCapturerGdi::~ScreenCapturerGdi() = default;
 
-int ScreenCapturerGDI::screenCount()
+int ScreenCapturerGdi::screenCount()
 {
     return ScreenCaptureUtils::screenCount();
 }
 
-bool ScreenCapturerGDI::screenList(ScreenList* screens)
+bool ScreenCapturerGdi::screenList(ScreenList* screens)
 {
     return ScreenCaptureUtils::screenList(screens);
 }
 
-bool ScreenCapturerGDI::selectScreen(ScreenId screen_id)
+bool ScreenCapturerGdi::selectScreen(ScreenId screen_id)
 {
     if (!ScreenCaptureUtils::isScreenValid(screen_id, &current_device_key_))
         return false;
@@ -59,7 +59,7 @@ bool ScreenCapturerGDI::selectScreen(ScreenId screen_id)
     return true;
 }
 
-const Frame* ScreenCapturerGDI::captureFrame()
+const Frame* ScreenCapturerGdi::captureFrame()
 {
     queue_.moveToNextFrame();
 
@@ -118,7 +118,7 @@ const Frame* ScreenCapturerGDI::captureFrame()
     return current;
 }
 
-bool ScreenCapturerGDI::prepareCaptureResources()
+bool ScreenCapturerGdi::prepareCaptureResources()
 {
     // Switch to the desktop receiving user input if different from the
     // current one.

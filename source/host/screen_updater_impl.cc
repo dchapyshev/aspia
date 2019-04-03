@@ -98,10 +98,10 @@ bool ScreenUpdaterImpl::startUpdater(const proto::desktop::Config& config)
         new desktop::CaptureScheduler(std::chrono::milliseconds(config.update_interval())));
 
     if (config.flags() & proto::desktop::DISABLE_DESKTOP_EFFECTS)
-        screen_capturer_flags_ |= desktop::ScreenCapturerGDI::DISABLE_EFFECTS;
+        screen_capturer_flags_ |= desktop::ScreenCapturerGdi::DISABLE_EFFECTS;
 
     if (config.flags() & proto::desktop::DISABLE_DESKTOP_WALLPAPER)
-        screen_capturer_flags_ |= desktop::ScreenCapturerGDI::DISABLE_WALLPAPER;
+        screen_capturer_flags_ |= desktop::ScreenCapturerGdi::DISABLE_WALLPAPER;
 
     start(QThread::HighPriority);
     return true;
@@ -129,7 +129,7 @@ void ScreenUpdaterImpl::run()
     else
     {
         LOG(LS_INFO) << "Using GDI capturer";
-        screen_capturer_.reset(new desktop::ScreenCapturerGDI(screen_capturer_flags_));
+        screen_capturer_.reset(new desktop::ScreenCapturerGdi(screen_capturer_flags_));
     }
 
     while (true)
