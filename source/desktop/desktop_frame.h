@@ -39,11 +39,20 @@ public:
     int stride() const { return stride_; }
     bool contains(int x, int y) const;
 
+    void copyPixelsFrom(const uint8_t* src_buffer, int src_stride, const QRect& dest_rect);
+    void copyPixelsFrom(const Frame& src_frame, const QPoint& src_pos, const QRect& dest_rect);
+
     const QRegion& constUpdatedRegion() const { return updated_region_; }
     QRegion* updatedRegion() { return &updated_region_; }
 
     const QPoint& topLeft() const { return top_left_; }
     void setTopLeft(const QPoint& top_left) { top_left_ = top_left; }
+
+    // Copies various information from |other|. Anything initialized in constructor are not copied.
+    // This function is usually used when sharing a source Frame with several clients: the original
+    // Frame should be kept unchanged. For example, BasicDesktopFrame::copyOf() and
+    // SharedFrame::share().
+    void copyFrameInfoFrom(const Frame& other);
 
 protected:
     Frame(const QSize& size, const PixelFormat& format, int stride, uint8_t* data);
@@ -54,9 +63,9 @@ protected:
     uint8_t* const data_;
 
 private:
-    const QSize size_;
-    const PixelFormat format_;
-    const int stride_;
+    QSize size_;
+    PixelFormat format_;
+    int stride_;
 
     QRegion updated_region_;
     QPoint top_left_;

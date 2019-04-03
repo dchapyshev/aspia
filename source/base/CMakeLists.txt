@@ -45,8 +45,10 @@ list(APPEND SOURCE_BASE
     process_handle.h
     qt_logging.cc
     qt_logging.h
+    ref_counted_object.h
     scoped_clear_last_error.cc
     scoped_clear_last_error.h
+    scoped_refptr.h
     service.h
     service_controller.cc
     service_controller.h

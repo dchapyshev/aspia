@@ -30,6 +30,8 @@ list(APPEND SOURCE_DESKTOP
     desktop_frame_dib.h
     desktop_frame_qimage.cc
     desktop_frame_qimage.h
+    desktop_frame_rotation.cc
+    desktop_frame_rotation.h
     desktop_frame_simple.cc
     desktop_frame_simple.h
     diff_block_avx2.cc
@@ -48,12 +50,16 @@ list(APPEND SOURCE_DESKTOP
     mouse_cursor_cache.h
     pixel_format.cc
     pixel_format.h
+    resolution_tracker.cc
+    resolution_tracker.h
     screen_capture_frame_queue.h
     screen_capturer.h
     screen_capturer_gdi.cc
     screen_capturer_gdi.h
     screen_settings_tracker.cc
-    screen_settings_tracker.h)
+    screen_settings_tracker.h
+    shared_desktop_frame.cc
+    shared_desktop_frame.h)
 
 list(APPEND SOURCE_DESKTOP_UNIT_TESTS
     diff_block_avx2_unittest.cc
@@ -66,6 +72,18 @@ list(APPEND SOURCE_DESKTOP_WIN
     win/cursor.h
     win/d3d_device.cc
     win/d3d_device.h
+    win/display_configuration_monitor.cc
+    win/display_configuration_monitor.h
+    win/dxgi_adapter_duplicator.cc
+    win/dxgi_adapter_duplicator.h
+    win/dxgi_context.cc
+    win/dxgi_context.h
+    win/dxgi_duplicator_controller.cc
+    win/dxgi_duplicator_controller.h
+    win/dxgi_frame.cc
+    win/dxgi_frame.h
+    win/dxgi_output_duplicator.cc
+    win/dxgi_output_duplicator.h
     win/dxgi_texture.cc
     win/dxgi_texture.h
     win/dxgi_texture_mapping.cc

@@ -1,0 +1,60 @@
+//
+// Aspia Project
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program. If not, see <https://www.gnu.org/licenses/>.
+//
+
+#ifndef DESKTOP__DESKTOP_FRAME_ROTATION_H
+#define DESKTOP__DESKTOP_FRAME_ROTATION_H
+
+#include "desktop/desktop_frame.h"
+
+namespace desktop {
+
+// Represents the rotation of a DesktopFrame.
+enum class Rotation
+{
+    CLOCK_WISE_0,
+    CLOCK_WISE_90,
+    CLOCK_WISE_180,
+    CLOCK_WISE_270,
+};
+
+// Rotates input Frame |source|, copies pixel in an unrotated rectangle
+// |source_rect| into the target rectangle of another Frame |target|.
+// Target rectangle here is the rotated |source_rect| plus |target_offset|.
+// |rotation| specifies |source| to |target| rotation. |source_rect| is in
+// |source| coordinate. |target_offset| is in |target| coordinate.
+// This function triggers check failure if |source| does not cover the
+// |source_rect|, or |target| does not cover the rotated |rect|.
+void rotateDesktopFrame(const Frame& source,
+                        const QRect& source_rect,
+                        const Rotation& rotation,
+                        const QPoint& target_offset,
+                        Frame* target);
+
+// Returns a reverse rotation of |rotation|.
+Rotation reverseRotation(Rotation rotation);
+
+// Returns a rotated QSize of |size|.
+QSize rotateSize(QSize size, Rotation rotation);
+
+// Returns a rotated DesktopRect of |rect|. The |size| represents the size of
+// the DesktopFrame which |rect| belongs in.
+QRect rotateRect(QRect rect, QSize size, Rotation rotation);
+
+} // namespace desktop
+
+#endif // DESKTOP__DESKTOP_FRAME_ROTATION_H

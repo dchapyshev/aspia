@@ -18,6 +18,8 @@
 
 #include "desktop/desktop_frame.h"
 
+#include "base/logging.h"
+
 namespace desktop {
 
 Frame::Frame(const QSize& size, const PixelFormat& format, int stride, uint8_t* data)
@@ -34,6 +36,25 @@ bool Frame::contains(int x, int y) const
     return (x >= 0 && x <= size_.width() && y >= 0 && y <= size_.height());
 }
 
+void Frame::copyPixelsFrom(const uint8_t* src_buffer, int src_stride, const QRect& dest_rect)
+{
+    CHECK(QRect(QPoint(0, 0), size()).contains(dest_rect));
+
+    uint8_t* dest = frameDataAtPos(dest_rect.topLeft());
+
+    for (int y = 0; y < dest_rect.height(); ++y)
+    {
+        memcpy(dest, src_buffer, format_.bytesPerPixel() * dest_rect.width());
+        src_buffer += src_stride;
+        dest += stride();
+    }
+}
+
+void Frame::copyPixelsFrom(const Frame& src_frame, const QPoint& src_pos, const QRect& dest_rect)
+{
+    copyPixelsFrom(src_frame.frameDataAtPos(src_pos), src_frame.stride(), dest_rect);
+}
+
 uint8_t* Frame::frameDataAtPos(const QPoint& pos) const
 {
     return frameDataAtPos(pos.x(), pos.y());
@@ -42,6 +63,15 @@ uint8_t* Frame::frameDataAtPos(const QPoint& pos) const
 uint8_t* Frame::frameDataAtPos(int x, int y) const
 {
     return frameData() + stride() * y + format_.bytesPerPixel() * x;
+}
+
+void Frame::copyFrameInfoFrom(const Frame& other)
+{
+    size_ = other.size_;
+    format_ = other.format_;
+    top_left_ = other.top_left_;
+    stride_ = other.stride_;
+    updated_region_ = other.updated_region_;
 }
 
 } // namespace desktop
