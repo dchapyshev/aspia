@@ -158,18 +158,18 @@ void DesktopWindow::configRequered()
     config_dialog_->activateWindow();
 }
 
-void DesktopWindow::setDesktopRect(const QRect& screen_rect)
+void DesktopWindow::setDesktopRect(const desktop::Rect& screen_rect)
 {
-    QSize prev_size;
+    desktop::Size prev_size;
 
     desktop::Frame* frame = desktop_->desktopFrame();
     if (frame)
         prev_size = desktop_->desktopFrame()->size();
 
-    QSize screen_size = screen_rect.size();
+    desktop::Size screen_size = screen_rect.size();
 
     desktop_->setDesktopSize(screen_size);
-    desktop_->resize(screen_size);
+    desktop_->resize(screen_size.toQSize());
 
     if (prev_size.isEmpty())
         autosizeWindow();
@@ -278,7 +278,7 @@ void DesktopWindow::onPointerEvent(const QPoint& pos, uint32_t mask)
     int remote_scale_factor = client->connectData().desktop_config.scale_factor();
     if (remote_scale_factor)
     {
-        const QSize& source_size = desktopFrame()->size();
+        const QSize& source_size = desktopFrame()->size().toQSize();
         QSize scaled_size = desktop_->size();
 
         double scale_x = (scaled_size.width() * 100) / static_cast<double>(source_size.width());
@@ -337,10 +337,9 @@ void DesktopWindow::autosizeWindow()
     if (!frame)
         return;
 
-    const QSize& remote_screen_size = desktop_->desktopFrame()->size();
-
+    QSize remote_screen_size = desktop_->desktopFrame()->size().toQSize();
     QRect local_screen_rect = QApplication::desktop()->availableGeometry(this);
-    QSize window_size = desktop_->desktopFrame()->size() + frameSize() - size();
+    QSize window_size = desktop_->desktopFrame()->size().toQSize() + frameSize() - size();
 
     if (window_size.width() < local_screen_rect.width() &&
         window_size.height() < local_screen_rect.height())
@@ -392,7 +391,7 @@ void DesktopWindow::onScalingChanged(bool enabled)
     if (!frame)
         return;
 
-    QSize scaled_size = frame->size();
+    QSize scaled_size = frame->size().toQSize();
 
     if (enabled)
         scaled_size.scale(size(), Qt::KeepAspectRatio);

@@ -104,7 +104,7 @@ public:
 
     // Returns dpi of current system. Returns an empty DesktopVector if system does not support
     // DXGI based capturer.
-    QPoint dpi();
+    Point dpi();
 
     // Returns the count of screens on the system. These screens can be retrieved by an integer in
     // the range of [0, ScreenCount()). If system does not support DXGI based capturer, this
@@ -178,12 +178,12 @@ private:
     int64_t numFramesCaptured() const;
 
     // Returns a DesktopSize to cover entire |desktop_rect_|.
-    QSize desktopSize() const;
+    Size desktopSize() const;
 
     // Returns the size of one screen. |id| should be >= 0. If system does not support DXGI based
     // capturer, or |id| is greater than the total screen count of all the Duplicators, this
-    // function returns an empty QRect.
-    QRect screenRect(int id) const;
+    // function returns an empty Rect.
+    Rect screenRect(int id) const;
 
     int screenCountUnlocked() const;
 
@@ -191,7 +191,7 @@ private:
 
     // Returns the desktop size of the selected screen |monitor_id|. Setting |monitor_id| < 0 to
     // return the entire screen size.
-    QSize selectedDesktopSize(int monitor_id) const;
+    Size selectedDesktopSize(int monitor_id) const;
 
     // Retries doDuplicateAll() for several times until numFramesCaptured() is large enough.
     // Returns false if doDuplicateAll() returns false, or numFramesCaptured() has never reached
@@ -215,8 +215,8 @@ private:
     // A self-incremented integer to compare with the one in Context. It ensures a Context instance
     // is always initialized after DxgiDuplicatorController.
     int identity_ = 0;
-    QRect desktop_rect_;
-    QPoint dpi_;
+    Rect desktop_rect_;
+    Point dpi_;
     std::vector<DxgiAdapterDuplicator> duplicators_;
     D3dInfo d3d_info_;
     DisplayConfigurationMonitor display_configuration_monitor_;

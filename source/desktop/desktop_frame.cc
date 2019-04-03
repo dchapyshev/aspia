@@ -22,7 +22,7 @@
 
 namespace desktop {
 
-Frame::Frame(const QSize& size, const PixelFormat& format, int stride, uint8_t* data)
+Frame::Frame(const Size& size, const PixelFormat& format, int stride, uint8_t* data)
     : size_(size),
       format_(format),
       stride_(stride),
@@ -36,9 +36,9 @@ bool Frame::contains(int x, int y) const
     return (x >= 0 && x <= size_.width() && y >= 0 && y <= size_.height());
 }
 
-void Frame::copyPixelsFrom(const uint8_t* src_buffer, int src_stride, const QRect& dest_rect)
+void Frame::copyPixelsFrom(const uint8_t* src_buffer, int src_stride, const Rect& dest_rect)
 {
-    CHECK(QRect(QPoint(0, 0), size()).contains(dest_rect));
+    CHECK(Rect::makeSize(size()).containsRect(dest_rect));
 
     uint8_t* dest = frameDataAtPos(dest_rect.topLeft());
 
@@ -50,12 +50,12 @@ void Frame::copyPixelsFrom(const uint8_t* src_buffer, int src_stride, const QRec
     }
 }
 
-void Frame::copyPixelsFrom(const Frame& src_frame, const QPoint& src_pos, const QRect& dest_rect)
+void Frame::copyPixelsFrom(const Frame& src_frame, const Point& src_pos, const Rect& dest_rect)
 {
     copyPixelsFrom(src_frame.frameDataAtPos(src_pos), src_frame.stride(), dest_rect);
 }
 
-uint8_t* Frame::frameDataAtPos(const QPoint& pos) const
+uint8_t* Frame::frameDataAtPos(const Point& pos) const
 {
     return frameDataAtPos(pos.x(), pos.y());
 }

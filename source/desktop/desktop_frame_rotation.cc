@@ -43,10 +43,10 @@ libyuv::RotationMode ToLibyuvRotationMode(Rotation rotation)
     return libyuv::kRotate0;
 }
 
-QRect rotateAndOffsetRect(QRect rect, QSize size, Rotation rotation, QPoint offset)
+Rect rotateAndOffsetRect(Rect rect, Size size, Rotation rotation, Point offset)
 {
-    QRect result = rotateRect(rect, size, rotation);
-    result.translate(offset);
+    Rect result = rotateRect(rect, size, rotation);
+    result.translate(offset.x(), offset.y());
     return result;
 }
 
@@ -69,55 +69,56 @@ Rotation reverseRotation(Rotation rotation)
     return Rotation::CLOCK_WISE_0;
 }
 
-QSize rotateSize(QSize size, Rotation rotation)
+Size rotateSize(Size size, Rotation rotation)
 {
     switch (rotation)
     {
         case Rotation::CLOCK_WISE_0:
         case Rotation::CLOCK_WISE_180:
             return size;
+
         case Rotation::CLOCK_WISE_90:
         case Rotation::CLOCK_WISE_270:
-            return QSize(size.height(), size.width());
+            return Size(size.height(), size.width());
     }
 
-    return QSize();
+    return Size();
 }
 
-QRect rotateRect(QRect rect, QSize size, Rotation rotation)
+Rect rotateRect(Rect rect, Size size, Rotation rotation)
 {
     switch (rotation)
     {
         case Rotation::CLOCK_WISE_0:
             return rect;
         case Rotation::CLOCK_WISE_90:
-            return QRect(QPoint(size.height() - rect.bottom(), rect.left()),
-                         QSize(rect.height(), rect.width()));
+            return Rect::makeXYWH(size.height() - rect.bottom(), rect.left(),
+                                  rect.height(), rect.width());
         case Rotation::CLOCK_WISE_180:
-            return QRect(QPoint(size.width() - rect.right(), size.height() - rect.bottom()),
-                         QSize(rect.width(), rect.height()));
+            return Rect::makeXYWH(size.width() - rect.right(), size.height() - rect.bottom(),
+                                  rect.width(), rect.height());
         case Rotation::CLOCK_WISE_270:
-            return QRect(QPoint(rect.top(), size.width() - rect.right()),
-                         QSize(rect.height(), rect.width()));
+            return Rect::makeXYWH(rect.top(), size.width() - rect.right(),
+                                  rect.height(), rect.width());
     }
 
-    return QRect();
+    return Rect();
 }
 
 void rotateDesktopFrame(const Frame& source,
-                        const QRect& source_rect,
+                        const Rect& source_rect,
                         const Rotation& rotation,
-                        const QPoint& target_offset,
+                        const Point& target_offset,
                         Frame* target)
 {
     DCHECK(target);
-    DCHECK(QRect(QPoint(0, 0), source.size()).contains(source_rect));
+    DCHECK(Rect::makeSize(source.size()).containsRect(source_rect));
 
     // The rectangle in |target|.
-    const QRect target_rect = rotateAndOffsetRect(
+    const Rect target_rect = rotateAndOffsetRect(
         source_rect, source.size(), rotation, target_offset);
 
-    DCHECK(QRect(QPoint(0, 0), target->size()).contains(target_rect));
+    DCHECK(Rect::makeSize(target->size()).containsRect(target_rect));
 
     if (target_rect.isEmpty())
         return;

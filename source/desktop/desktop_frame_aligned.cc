@@ -21,7 +21,7 @@
 
 namespace desktop {
 
-FrameAligned::FrameAligned(const QSize& size, const PixelFormat& format, int stride, uint8_t* data)
+FrameAligned::FrameAligned(const Size& size, const PixelFormat& format, int stride, uint8_t* data)
     : Frame(size, format, stride, data)
 {
     // Nothing
@@ -34,7 +34,7 @@ FrameAligned::~FrameAligned()
 
 // static
 std::unique_ptr<FrameAligned> FrameAligned::create(
-    const QSize& size, const PixelFormat& format, size_t alignment)
+    const Size& size, const PixelFormat& format, size_t alignment)
 {
     int bytes_per_row = size.width() * format.bytesPerPixel();
 

@@ -26,6 +26,7 @@
 #include "common/message_serialization.h"
 #include "desktop/capture_scheduler.h"
 #include "desktop/cursor_capturer_win.h"
+#include "desktop/screen_capturer_dxgi.h"
 #include "desktop/screen_capturer_gdi.h"
 #include "proto/desktop_extensions.pb.h"
 
@@ -119,7 +120,17 @@ void ScreenUpdaterImpl::selectScreen(desktop::ScreenCapturer::ScreenId screen_id
 
 void ScreenUpdaterImpl::run()
 {
-    screen_capturer_.reset(new desktop::ScreenCapturerGDI(screen_capturer_flags_));
+    if (desktop::ScreenCapturerDxgi::isSupported() &&
+        desktop::ScreenCapturerDxgi::isCurrentSessionSupported())
+    {
+        LOG(LS_INFO) << "Using DXGI capturer";
+        screen_capturer_.reset(new desktop::ScreenCapturerDxgi());
+    }
+    else
+    {
+        LOG(LS_INFO) << "Using GDI capturer";
+        screen_capturer_.reset(new desktop::ScreenCapturerGDI(screen_capturer_flags_));
+    }
 
     while (true)
     {

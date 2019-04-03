@@ -131,6 +131,8 @@ set(THIRD_PARTY_LIBS
     optimized zstd
     crypt32
     dwmapi
+    dxgi
+    d3d11
     imm32
     iphlpapi
     libcrypto

@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,31 +16,32 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef DESKTOP__SCREEN_CAPTURER_GDI_H
-#define DESKTOP__SCREEN_CAPTURER_GDI_H
+#ifndef DESKTOP__SCREEN_CAPTURER_DXGI_H
+#define DESKTOP__SCREEN_CAPTURER_DXGI_H
 
-#include "base/win/scoped_hdc.h"
-#include "base/win/scoped_thread_desktop.h"
+#include "base/macros_magic.h"
 #include "desktop/screen_capturer.h"
 #include "desktop/screen_capture_frame_queue.h"
+#include "desktop/win/dxgi_duplicator_controller.h"
+#include "desktop/win/dxgi_frame.h"
 
 namespace desktop {
 
-class Differ;
-class EffectsDisabler;
-class WallpaperDisabler;
-
-class ScreenCapturerGDI : public ScreenCapturer
+class ScreenCapturerDxgi : public ScreenCapturer
 {
 public:
-    enum Flags
-    {
-        DISABLE_EFFECTS = 1,
-        DISABLE_WALLPAPER = 2
-    };
+    ScreenCapturerDxgi();
+    ~ScreenCapturerDxgi() = default;
 
-    ScreenCapturerGDI(uint32_t flags);
-    ~ScreenCapturerGDI();
+    // Whether the system supports DXGI based capturing.
+    static bool isSupported();
+
+    // Whether current process is running in a Windows session which is supported by
+    // ScreenCapturerDxgi.
+    // Usually using ScreenCapturerDxgi in unsupported sessions will fail.
+    // But this behavior may vary on different Windows version. So consumers can
+    // always try isSupported() function.
+    static bool isCurrentSessionSupported();
 
     // ScreenCapturer implementation.
     int screenCount() override;
@@ -49,28 +50,15 @@ public:
     const Frame* captureFrame() override;
 
 private:
-    bool prepareCaptureResources();
-
-    const uint32_t flags_;
+    const base::scoped_refptr<DxgiDuplicatorController> controller_;
 
     ScreenId current_screen_id_ = kFullDesktopScreenId;
-    QString current_device_key_;
+    ScreenCaptureFrameQueue<DxgiFrame> queue_;
+    std::unique_ptr<Frame> frame_;
 
-    base::ScopedThreadDesktop desktop_;
-    Rect desktop_dc_rect_;
-
-    std::unique_ptr<Differ> differ_;
-    std::unique_ptr<base::win::ScopedGetDC> desktop_dc_;
-    base::win::ScopedCreateDC memory_dc_;
-
-    ScreenCaptureFrameQueue<Frame> queue_;
-
-    std::unique_ptr<EffectsDisabler> effects_disabler_;
-    std::unique_ptr<WallpaperDisabler> wallpaper_disabler_;
-
-    DISALLOW_COPY_AND_ASSIGN(ScreenCapturerGDI);
+    DISALLOW_COPY_AND_ASSIGN(ScreenCapturerDxgi);
 };
 
 } // namespace desktop
 
-#endif // DESKTOP__SCREEN_CAPTURER_GDI_H
+#endif // DESKTOP__SCREEN_CAPTURER_DXGI_H

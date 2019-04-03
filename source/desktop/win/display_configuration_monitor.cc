@@ -24,7 +24,7 @@ namespace desktop {
 
 bool DisplayConfigurationMonitor::isChanged()
 {
-    QRect rect = ScreenCaptureUtils::fullScreenRect();
+    Rect rect = ScreenCaptureUtils::fullScreenRect();
     if (!initialized_)
     {
         initialized_ = true;

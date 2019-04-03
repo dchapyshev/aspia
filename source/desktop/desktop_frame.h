@@ -22,7 +22,7 @@
 #include "base/macros_magic.h"
 #include "desktop/pixel_format.h"
 
-#include <QRegion>
+#include "desktop/desktop_region.h"
 
 namespace desktop {
 
@@ -31,22 +31,22 @@ class Frame
 public:
     virtual ~Frame() = default;
 
-    uint8_t* frameDataAtPos(const QPoint& pos) const;
+    uint8_t* frameDataAtPos(const Point& pos) const;
     uint8_t* frameDataAtPos(int x, int y) const;
     uint8_t* frameData() const { return data_; }
-    const QSize& size() const { return size_; }
+    const Size& size() const { return size_; }
     const PixelFormat& format() const { return format_; }
     int stride() const { return stride_; }
     bool contains(int x, int y) const;
 
-    void copyPixelsFrom(const uint8_t* src_buffer, int src_stride, const QRect& dest_rect);
-    void copyPixelsFrom(const Frame& src_frame, const QPoint& src_pos, const QRect& dest_rect);
+    void copyPixelsFrom(const uint8_t* src_buffer, int src_stride, const Rect& dest_rect);
+    void copyPixelsFrom(const Frame& src_frame, const Point& src_pos, const Rect& dest_rect);
 
-    const QRegion& constUpdatedRegion() const { return updated_region_; }
-    QRegion* updatedRegion() { return &updated_region_; }
+    const Region& constUpdatedRegion() const { return updated_region_; }
+    Region* updatedRegion() { return &updated_region_; }
 
-    const QPoint& topLeft() const { return top_left_; }
-    void setTopLeft(const QPoint& top_left) { top_left_ = top_left; }
+    const Point& topLeft() const { return top_left_; }
+    void setTopLeft(const Point& top_left) { top_left_ = top_left; }
 
     // Copies various information from |other|. Anything initialized in constructor are not copied.
     // This function is usually used when sharing a source Frame with several clients: the original
@@ -55,7 +55,7 @@ public:
     void copyFrameInfoFrom(const Frame& other);
 
 protected:
-    Frame(const QSize& size, const PixelFormat& format, int stride, uint8_t* data);
+    Frame(const Size& size, const PixelFormat& format, int stride, uint8_t* data);
 
     // Ownership of the buffers is defined by the classes that inherit from
     // this class. They must guarantee that the buffer is not deleted before
@@ -63,12 +63,12 @@ protected:
     uint8_t* const data_;
 
 private:
-    QSize size_;
+    Size size_;
     PixelFormat format_;
     int stride_;
 
-    QRegion updated_region_;
-    QPoint top_left_;
+    Region updated_region_;
+    Point top_left_;
 
     DISALLOW_COPY_AND_ASSIGN(Frame);
 };

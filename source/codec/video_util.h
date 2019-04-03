@@ -20,18 +20,17 @@
 #define CODEC__VIDEO_UTIL_H
 
 #include "base/macros_magic.h"
+#include "desktop/desktop_geometry.h"
 #include "desktop/pixel_format.h"
 #include "proto/desktop.pb.h"
-
-#include <QRect>
 
 namespace codec {
 
 class VideoUtil
 {
 public:
-    static QRect fromVideoRect(const proto::desktop::Rect& rect);
-    static void toVideoRect(const QRect& from, proto::desktop::Rect* to);
+    static desktop::Rect fromVideoRect(const proto::desktop::Rect& rect);
+    static void toVideoRect(const desktop::Rect& from, proto::desktop::Rect* to);
 
     static desktop::PixelFormat fromVideoPixelFormat(
         const proto::desktop::PixelFormat& format);

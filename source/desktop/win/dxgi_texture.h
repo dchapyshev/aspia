@@ -21,8 +21,6 @@
 
 #include "desktop/desktop_frame.h"
 
-#include <QSize>
-
 #include <memory>
 
 #include <D3D11.h>
@@ -43,7 +41,7 @@ public:
     // Returns false if anything wrong.
     bool copyFrom(const DXGI_OUTDUPL_FRAME_INFO& frame_info, IDXGIResource* resource);
 
-    const QSize& desktopSize() const { return desktop_size_; }
+    const Size& desktopSize() const { return desktop_size_; }
     uint8_t* bits() const { return static_cast<uint8_t*>(rect_.pBits); }
     int pitch() const { return static_cast<int>(rect_.Pitch); }
 
@@ -68,7 +66,7 @@ protected:
 
 private:
     DXGI_MAPPED_RECT rect_ = { 0 };
-    QSize desktop_size_;
+    Size desktop_size_;
     std::unique_ptr<Frame> frame_;
 };
 

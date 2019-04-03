@@ -21,6 +21,9 @@
 
 #include "desktop/desktop_frame.h"
 
+#include <QList>
+#include <QString>
+
 namespace desktop {
 
 class ScreenCapturer

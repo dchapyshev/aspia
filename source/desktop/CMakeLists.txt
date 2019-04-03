@@ -34,6 +34,10 @@ list(APPEND SOURCE_DESKTOP
     desktop_frame_rotation.h
     desktop_frame_simple.cc
     desktop_frame_simple.h
+    desktop_geometry.cc
+    desktop_geometry.h
+    desktop_region.cc
+    desktop_region.h
     diff_block_avx2.cc
     diff_block_avx2.h
     diff_block_c.cc
@@ -54,6 +58,8 @@ list(APPEND SOURCE_DESKTOP
     resolution_tracker.h
     screen_capture_frame_queue.h
     screen_capturer.h
+    screen_capturer_dxgi.cc
+    screen_capturer_dxgi.h
     screen_capturer_gdi.cc
     screen_capturer_gdi.h
     screen_settings_tracker.cc
@@ -62,6 +68,8 @@ list(APPEND SOURCE_DESKTOP
     shared_desktop_frame.h)
 
 list(APPEND SOURCE_DESKTOP_UNIT_TESTS
+    desktop_geometry_unittest.cc
+    desktop_region_unittest.cc
     diff_block_avx2_unittest.cc
     diff_block_c_unittest.cc
     diff_block_sse2_unittest.cc

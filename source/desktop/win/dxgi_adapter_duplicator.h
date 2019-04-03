@@ -57,11 +57,11 @@ public:
     bool duplicateMonitor(Context* context, int monitor_id, SharedFrame* target);
 
     // Returns desktop rect covered by this DxgiAdapterDuplicator.
-    QRect desktopRect() const { return desktop_rect_; }
+    Rect desktopRect() const { return desktop_rect_; }
 
     // Returns the size of one screen owned by this DxgiAdapterDuplicator. |id|
     // should be between [0, screenCount()).
-    QRect screenRect(int id) const;
+    Rect screenRect(int id) const;
 
     // Returns the device name of one screen owned by this DxgiAdapterDuplicator
     // in utf8 encoding. |id| should be between [0, screenCount()).
@@ -80,14 +80,14 @@ public:
 
     // Moves |desktop_rect_| and all underlying |duplicators_|. See
     // DxgiDuplicatorController::translateRect().
-    void translateRect(const QPoint& position);
+    void translateRect(const Point& position);
 
 private:
     bool doInitialize();
 
     const D3dDevice device_;
     std::vector<DxgiOutputDuplicator> duplicators_;
-    QRect desktop_rect_;
+    Rect desktop_rect_;
 };
 
 } // namespace desktop

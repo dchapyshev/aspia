@@ -19,7 +19,7 @@
 #ifndef DESKTOP__WIN__DISPLAY_CONFIGURATION_MONITOR_H
 #define DESKTOP__WIN__DISPLAY_CONFIGURATION_MONITOR_H
 
-#include <QRect>
+#include "desktop/desktop_geometry.h"
 
 namespace desktop {
 
@@ -37,7 +37,7 @@ public:
     void reset();
 
 private:
-    QRect rect_;
+    Rect rect_;
     bool initialized_ = false;
 };
 

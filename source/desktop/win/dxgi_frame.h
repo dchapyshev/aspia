@@ -50,9 +50,9 @@ private:
     friend class DxgiDuplicatorController;
 
     // Prepares current instance with desktop size and source id.
-    bool prepare(QSize size, ScreenCapturer::ScreenId source_id);
+    bool prepare(Size size, ScreenCapturer::ScreenId source_id);
 
-    // Should not be called if Prepare() is not executed or returns false.
+    // Should not be called if prepare() is not executed or returns false.
     Context* context();
 
     ResolutionTracker resolution_tracker_;

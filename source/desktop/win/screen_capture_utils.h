@@ -37,13 +37,13 @@ public:
 
     // Get the rect of the entire system in system coordinate system. I.e. the primary monitor
     // always starts from (0, 0).
-    static QRect fullScreenRect();
+    static Rect fullScreenRect();
 
     // Get the rect of the screen identified by |screen|, relative to the primary display's
     // top-left.
     // If the screen device key does not match |device_key|, or the screen does not exist, or any
     // error happens, an empty rect is returned.
-    static QRect screenRect(ScreenCapturer::ScreenId screen, const QString& device_key);
+    static Rect screenRect(ScreenCapturer::ScreenId screen, const QString& device_key);
 
     // The number of visible display monitors on a desktop.
     static int screenCount();

@@ -29,7 +29,7 @@ constexpr int kBytesPerPixel = 4;
 } // namespace
 
 FrameQImage::FrameQImage(QImage&& img)
-    : Frame(img.size(),
+    : Frame(Size::fromQSize(img.size()),
             PixelFormat::ARGB(),
             img.width() * kBytesPerPixel,
             img.bits()),
@@ -39,7 +39,7 @@ FrameQImage::FrameQImage(QImage&& img)
 }
 
 // static
-std::unique_ptr<FrameQImage> FrameQImage::create(const QSize& size)
+std::unique_ptr<FrameQImage> FrameQImage::create(const Size& size)
 {
     return std::unique_ptr<FrameQImage>(
         new FrameQImage(QImage(size.width(), size.height(), QImage::Format_RGB32)));

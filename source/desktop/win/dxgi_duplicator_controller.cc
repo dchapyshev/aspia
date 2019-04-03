@@ -146,13 +146,13 @@ DxgiDuplicatorController::Result DxgiDuplicatorController::duplicateMonitor(
     return doDuplicate(frame, monitor_id);
 }
 
-QPoint DxgiDuplicatorController::dpi()
+Point DxgiDuplicatorController::dpi()
 {
     std::scoped_lock lock(lock_);
     if (initialize())
         return dpi_;
 
-    return QPoint();
+    return Point();
 }
 
 int DxgiDuplicatorController::screenCount()
@@ -219,7 +219,7 @@ DxgiDuplicatorController::Result DxgiDuplicatorController::doDuplicate(
     if (!frame->prepare(selectedDesktopSize(monitor_id), monitor_id))
         return Result::FRAME_PREPARE_FAILED;
 
-    *frame->frame()->updatedRegion() = QRegion();
+    frame->frame()->updatedRegion()->clear();
 
     if (doDuplicateUnlocked(frame->context(), monitor_id, frame->frame()))
     {
@@ -289,7 +289,7 @@ bool DxgiDuplicatorController::doInitialize()
         return false;
     }
 
-    for (size_t i = 0; i < devices.size(); i++)
+    for (size_t i = 0; i < devices.size(); ++i)
     {
         D3D_FEATURE_LEVEL feature_level = devices[i].d3dDevice()->GetFeatureLevel();
 
@@ -313,7 +313,7 @@ bool DxgiDuplicatorController::doInitialize()
         DCHECK(!duplicator.desktopRect().isEmpty());
         duplicators_.push_back(std::move(duplicator));
 
-        desktop_rect_ = desktop_rect_.united(duplicators_.back().desktopRect());
+        desktop_rect_.unionWith(duplicators_.back().desktopRect());
     }
 
     translateRect();
@@ -322,7 +322,7 @@ bool DxgiDuplicatorController::doInitialize()
     // Use old DPI value if failed.
     if (hdc)
     {
-        dpi_ = QPoint(GetDeviceCaps(hdc, LOGPIXELSX), GetDeviceCaps(hdc, LOGPIXELSY));
+        dpi_.set(GetDeviceCaps(hdc, LOGPIXELSX), GetDeviceCaps(hdc, LOGPIXELSY));
         ReleaseDC(nullptr, hdc);
     }
 
@@ -338,7 +338,7 @@ bool DxgiDuplicatorController::doInitialize()
 
 void DxgiDuplicatorController::deinitialize()
 {
-    desktop_rect_ = QRect();
+    desktop_rect_ = Rect();
     duplicators_.clear();
     display_configuration_monitor_.reset();
 }
@@ -442,12 +442,12 @@ int64_t DxgiDuplicatorController::numFramesCaptured() const
     return min;
 }
 
-QSize DxgiDuplicatorController::desktopSize() const
+Size DxgiDuplicatorController::desktopSize() const
 {
     return desktop_rect_.size();
 }
 
-QRect DxgiDuplicatorController::screenRect(int id) const
+Rect DxgiDuplicatorController::screenRect(int id) const
 {
     DCHECK(id >= 0);
 
@@ -459,7 +459,7 @@ QRect DxgiDuplicatorController::screenRect(int id) const
             return duplicators_[i].screenRect(id);
     }
 
-    return QRect();
+    return Rect();
 }
 
 int DxgiDuplicatorController::screenCountUnlocked() const
@@ -483,7 +483,7 @@ void DxgiDuplicatorController::deviceNamesUnlocked(std::vector<std::string>* out
     }
 }
 
-QSize DxgiDuplicatorController::selectedDesktopSize(int monitor_id) const
+Size DxgiDuplicatorController::selectedDesktopSize(int monitor_id) const
 {
     if (monitor_id < 0)
         return desktopSize();
@@ -561,7 +561,7 @@ bool DxgiDuplicatorController::ensureFrameCaptured(Context* context, SharedFrame
 
 void DxgiDuplicatorController::translateRect()
 {
-    const QPoint position = QPoint(0, 0) - desktop_rect_.topLeft();
+    const Point position = Point().subtract(desktop_rect_.topLeft());
 
     desktop_rect_.translate(position);
 

@@ -20,7 +20,7 @@
 
 namespace desktop {
 
-FrameSimple::FrameSimple(const QSize& size, const PixelFormat& format, int stride, uint8_t* data)
+FrameSimple::FrameSimple(const Size& size, const PixelFormat& format, int stride, uint8_t* data)
     : Frame(size, format, stride, data)
 {
     // Nothing
@@ -32,7 +32,7 @@ FrameSimple::~FrameSimple()
 }
 
 // static
-std::unique_ptr<FrameSimple> FrameSimple::create(const QSize& size, const PixelFormat& format)
+std::unique_ptr<FrameSimple> FrameSimple::create(const Size& size, const PixelFormat& format)
 {
     int bytes_per_row = size.width() * format.bytesPerPixel();
 

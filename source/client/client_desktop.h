@@ -20,6 +20,7 @@
 #define CLIENT__CLIENT_DESKTOP_H
 
 #include "client/client.h"
+#include "desktop/desktop_geometry.h"
 #include "proto/desktop_extensions.pb.h"
 #include "proto/system_info.pb.h"
 
@@ -47,7 +48,7 @@ public:
         virtual void extensionListChanged() = 0;
         virtual void configRequered() = 0;
 
-        virtual void setDesktopRect(const QRect& screen_rect) = 0;
+        virtual void setDesktopRect(const desktop::Rect& screen_rect) = 0;
         virtual void drawDesktop() = 0;
         virtual desktop::Frame* desktopFrame() = 0;
 

@@ -31,11 +31,11 @@ class FrameDib : public Frame
 public:
     ~FrameDib() = default;
 
-    static std::unique_ptr<FrameDib> create(const QSize& size, const PixelFormat& format, HDC hdc);
+    static std::unique_ptr<FrameDib> create(const Size& size, const PixelFormat& format, HDC hdc);
     HBITMAP bitmap() { return bitmap_; }
 
 private:
-    FrameDib(const QSize& size, const PixelFormat& format, int stride, uint8_t* data, HBITMAP bitmap);
+    FrameDib(const Size& size, const PixelFormat& format, int stride, uint8_t* data, HBITMAP bitmap);
 
     base::win::ScopedHBITMAP bitmap_;
 

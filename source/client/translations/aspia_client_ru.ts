@@ -864,18 +864,18 @@
 <context>
     <name>client::DesktopWindow</name>
     <message>
-        <location filename="../ui/desktop_window.cc" line="364"/>
+        <location filename="../ui/desktop_window.cc" line="363"/>
         <source>Save File</source>
         <translation>Сохранение файла</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="366"/>
+        <location filename="../ui/desktop_window.cc" line="365"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG изображение (*.png);;BMP изображение (*.bmp)</translation>
     </message>
     <message>
         <location filename="../ui/desktop_window.cc" line="136"/>
-        <location filename="../ui/desktop_window.cc" line="386"/>
+        <location filename="../ui/desktop_window.cc" line="385"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
@@ -890,17 +890,17 @@
         <translation>Выбор поддерживаемой видео-кодировки отменен пользователем.</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="386"/>
+        <location filename="../ui/desktop_window.cc" line="385"/>
         <source>Could not save image</source>
         <translation>Не удалось сохранить изображение</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="525"/>
+        <location filename="../ui/desktop_window.cc" line="524"/>
         <source>Desktop Manage</source>
         <translation>Управление рабочим столом</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="530"/>
+        <location filename="../ui/desktop_window.cc" line="529"/>
         <source>Desktop View</source>
         <translation>Просмотр рабочего стола</translation>
     </message>

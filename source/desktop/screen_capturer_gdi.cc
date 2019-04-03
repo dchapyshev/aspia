@@ -53,7 +53,7 @@ bool ScreenCapturerGDI::selectScreen(ScreenId screen_id)
         return false;
 
     // At next screen capture, the resources are recreated.
-    desktop_dc_rect_ = QRect();
+    desktop_dc_rect_ = Rect();
 
     current_screen_id_ = screen_id;
     return true;
@@ -66,7 +66,7 @@ const Frame* ScreenCapturerGDI::captureFrame()
     if (!prepareCaptureResources())
         return nullptr;
 
-    QRect screen_rect = ScreenCaptureUtils::screenRect(current_screen_id_, current_device_key_);
+    Rect screen_rect = ScreenCaptureUtils::screenRect(current_screen_id_, current_device_key_);
     if (screen_rect.isEmpty())
     {
         LOG(LS_WARNING) << "Failed to get screen rect";
@@ -106,7 +106,7 @@ const Frame* ScreenCapturerGDI::captureFrame()
     if (!previous || previous->size() != current->size())
     {
         differ_ = std::make_unique<Differ>(screen_rect.size());
-        *current->updatedRegion() += QRect(QPoint(), screen_rect.size());
+        current->updatedRegion()->addRect(Rect::makeSize(screen_rect.size()));
     }
     else
     {
@@ -138,7 +138,7 @@ bool ScreenCapturerGDI::prepareCaptureResources()
         desktop_.setThreadDesktop(std::move(input_desktop));
     }
 
-    QRect desktop_rect = ScreenCaptureUtils::fullScreenRect();
+    Rect desktop_rect = ScreenCaptureUtils::fullScreenRect();
 
     // If the display bounds have changed then recreate GDI resources.
     if (desktop_rect != desktop_dc_rect_)
@@ -149,7 +149,7 @@ bool ScreenCapturerGDI::prepareCaptureResources()
         effects_disabler_.reset();
         wallpaper_disabler_.reset();
 
-        desktop_dc_rect_ = QRect();
+        desktop_dc_rect_ = Rect();
     }
 
     if (!desktop_dc_)

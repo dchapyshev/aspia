@@ -40,20 +40,20 @@ enum class Rotation
 // This function triggers check failure if |source| does not cover the
 // |source_rect|, or |target| does not cover the rotated |rect|.
 void rotateDesktopFrame(const Frame& source,
-                        const QRect& source_rect,
+                        const Rect& source_rect,
                         const Rotation& rotation,
-                        const QPoint& target_offset,
+                        const Point& target_offset,
                         Frame* target);
 
 // Returns a reverse rotation of |rotation|.
 Rotation reverseRotation(Rotation rotation);
 
 // Returns a rotated QSize of |size|.
-QSize rotateSize(QSize size, Rotation rotation);
+Size rotateSize(Size size, Rotation rotation);
 
 // Returns a rotated DesktopRect of |rect|. The |size| represents the size of
 // the DesktopFrame which |rect| belongs in.
-QRect rotateRect(QRect rect, QSize size, Rotation rotation);
+Rect rotateRect(Rect rect, Size size, Rotation rotation);
 
 } // namespace desktop
 

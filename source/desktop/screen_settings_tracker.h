@@ -20,9 +20,8 @@
 #define DESKTOP__SCREEN_SETTINGS_TRACKER_H
 
 #include "base/macros_magic.h"
+#include "desktop/desktop_geometry.h"
 #include "desktop/pixel_format.h"
-
-#include <QRect>
 
 namespace desktop {
 
@@ -31,16 +30,16 @@ class ScreenSettingsTracker
 public:
     ScreenSettingsTracker() = default;
 
-    bool isRectChanged(const QRect& screen_rect);
-    bool isSizeChanged(const QSize& screen_size);
+    bool isRectChanged(const Rect& screen_rect);
+    bool isSizeChanged(const Size& screen_size);
     bool isFormatChanged(const PixelFormat& pixel_format);
 
-    const QRect& screenRect() const { return screen_rect_; }
-    QSize screenSize() const { return screen_rect_.size(); }
+    const Rect& screenRect() const { return screen_rect_; }
+    Size screenSize() const { return screen_rect_.size(); }
     const PixelFormat& format() const { return pixel_format_; }
 
 private:
-    QRect screen_rect_;
+    Rect screen_rect_;
     PixelFormat pixel_format_;
 
     DISALLOW_COPY_AND_ASSIGN(ScreenSettingsTracker);

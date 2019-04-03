@@ -28,7 +28,7 @@ namespace desktop {
 DxgiFrame::DxgiFrame() = default;
 DxgiFrame::~DxgiFrame() = default;
 
-bool DxgiFrame::prepare(QSize size, ScreenCapturer::ScreenId source_id)
+bool DxgiFrame::prepare(Size size, ScreenCapturer::ScreenId source_id)
 {
     if (source_id != source_id_)
     {

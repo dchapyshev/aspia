@@ -225,7 +225,7 @@ void ClientDesktop::readVideoPacket(const proto::desktop::VideoPacket& packet)
 
     if (packet.has_format())
     {
-        QRect screen_rect = codec::VideoUtil::fromVideoRect(packet.format().screen_rect());
+        desktop::Rect screen_rect = codec::VideoUtil::fromVideoRect(packet.format().screen_rect());
 
         static const int kMaxValue = std::numeric_limits<uint16_t>::max();
         static const int kMinValue = -std::numeric_limits<uint16_t>::max();

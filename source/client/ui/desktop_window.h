@@ -56,7 +56,7 @@ public:
     // ClientDesktop::Delegate implementation.
     void extensionListChanged() override;
     void configRequered() override;
-    void setDesktopRect(const QRect& screen_rect) override;
+    void setDesktopRect(const desktop::Rect& screen_rect) override;
     void drawDesktop() override;
     desktop::Frame* desktopFrame() override;
     void setRemoteCursor(const QCursor& cursor) override;
@@ -106,7 +106,7 @@ private:
 
     bool is_maximized_ = false;
 
-    QPoint screen_top_left_;
+    desktop::Point screen_top_left_;
 
     DISALLOW_COPY_AND_ASSIGN(DesktopWindow);
 };

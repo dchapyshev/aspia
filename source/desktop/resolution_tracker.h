@@ -19,7 +19,7 @@
 #ifndef DESKTOP__RESOLUTION_TRACKER_H
 #define DESKTOP__RESOLUTION_TRACKER_H
 
-#include <QSize>
+#include "desktop/desktop_geometry.h"
 
 namespace desktop {
 
@@ -28,13 +28,13 @@ class ResolutionTracker final
 public:
     // Sets the resolution to |size|. Returns true if a previous size was recorded
     // and differs from |size|.
-    bool setResolution(QSize size);
+    bool setResolution(Size size);
 
     // Resets to the initial state.
     void reset();
 
 private:
-    QSize last_size_;
+    Size last_size_;
     bool initialized_ = false;
 };
 

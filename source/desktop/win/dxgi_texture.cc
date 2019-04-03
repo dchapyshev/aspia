@@ -69,7 +69,7 @@ bool DxgiTexture::copyFrom(const DXGI_OUTDUPL_FRAME_INFO& frame_info, IDXGIResou
     D3D11_TEXTURE2D_DESC desc = { 0 };
     texture->GetDesc(&desc);
 
-    desktop_size_ = QSize(desc.Width, desc.Height);
+    desktop_size_.set(desc.Width, desc.Height);
 
     return copyFromTexture(frame_info, texture.Get());
 }

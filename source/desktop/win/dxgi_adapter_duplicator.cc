@@ -108,7 +108,7 @@ bool DxgiAdapterDuplicator::doInitialize()
 
                 duplicators_.push_back(std::move(duplicator));
 
-                desktop_rect_ = desktop_rect_.united(duplicators_.back().desktopRect());
+                desktop_rect_.unionWith(duplicators_.back().desktopRect());
             }
             else
             {
@@ -175,10 +175,10 @@ bool DxgiAdapterDuplicator::duplicateMonitor(Context* context, int monitor_id, S
     DCHECK_LT(monitor_id, static_cast<int>(duplicators_.size()));
     DCHECK_EQ(context->contexts.size(), duplicators_.size());
 
-    return duplicators_[monitor_id].duplicate(&context->contexts[monitor_id], QPoint(), target);
+    return duplicators_[monitor_id].duplicate(&context->contexts[monitor_id], Point(), target);
 }
 
-QRect DxgiAdapterDuplicator::screenRect(int id) const
+Rect DxgiAdapterDuplicator::screenRect(int id) const
 {
     DCHECK_GE(id, 0);
     DCHECK_LT(id, static_cast<int>(duplicators_.size()));
@@ -209,7 +209,7 @@ int64_t DxgiAdapterDuplicator::numFramesCaptured() const
     return min;
 }
 
-void DxgiAdapterDuplicator::translateRect(const QPoint& position)
+void DxgiAdapterDuplicator::translateRect(const Point& position)
 {
     desktop_rect_.translate(position);
 

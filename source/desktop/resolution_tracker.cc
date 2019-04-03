@@ -20,7 +20,7 @@
 
 namespace desktop {
 
-bool ResolutionTracker::setResolution(QSize size)
+bool ResolutionTracker::setResolution(Size size)
 {
     if (!initialized_)
     {

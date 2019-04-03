@@ -69,16 +69,16 @@ bool ScreenCaptureUtils::isScreenValid(ScreenCapturer::ScreenId screen, QString*
 }
 
 // static
-QRect ScreenCaptureUtils::fullScreenRect()
+Rect ScreenCaptureUtils::fullScreenRect()
 {
-    return QRect(GetSystemMetrics(SM_XVIRTUALSCREEN),
-                 GetSystemMetrics(SM_YVIRTUALSCREEN),
-                 GetSystemMetrics(SM_CXVIRTUALSCREEN),
-                 GetSystemMetrics(SM_CYVIRTUALSCREEN));
+    return Rect::makeXYWH(GetSystemMetrics(SM_XVIRTUALSCREEN),
+                          GetSystemMetrics(SM_YVIRTUALSCREEN),
+                          GetSystemMetrics(SM_CXVIRTUALSCREEN),
+                          GetSystemMetrics(SM_CYVIRTUALSCREEN));
 }
 
 // static
-QRect ScreenCaptureUtils::screenRect(ScreenCapturer::ScreenId screen,
+Rect ScreenCaptureUtils::screenRect(ScreenCapturer::ScreenId screen,
                                      const QString& device_key)
 {
     if (screen == ScreenCapturer::kFullDesktopScreenId)
@@ -87,26 +87,26 @@ QRect ScreenCaptureUtils::screenRect(ScreenCapturer::ScreenId screen,
     DISPLAY_DEVICEW device;
     device.cb = sizeof(device);
     if (!EnumDisplayDevicesW(nullptr, screen, &device, 0))
-        return QRect();
+        return Rect();
 
     // Verifies the device index still maps to the same display device, to make sure we are
     // capturing the same device when devices are added or removed. DeviceKey is documented as
     // reserved, but it actually contains the registry key for the device and is unique for each
     // monitor, while DeviceID is not.
     if (wcscmp(device.DeviceKey, reinterpret_cast<const wchar_t*>(device_key.utf16())) != 0)
-        return QRect();
+        return Rect();
 
     DEVMODEW device_mode;
     device_mode.dmSize = sizeof(device_mode);
     device_mode.dmDriverExtra = 0;
 
     if (!EnumDisplaySettingsExW(device.DeviceName, ENUM_CURRENT_SETTINGS, &device_mode, 0))
-        return QRect();
+        return Rect();
 
-    return QRect(device_mode.dmPosition.x,
-                 device_mode.dmPosition.y,
-                 device_mode.dmPelsWidth,
-                 device_mode.dmPelsHeight);
+    return Rect::makeXYWH(device_mode.dmPosition.x,
+                          device_mode.dmPosition.y,
+                          device_mode.dmPelsWidth,
+                          device_mode.dmPelsHeight);
 }
 
 // static

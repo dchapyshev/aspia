@@ -31,10 +31,10 @@ public:
     ~FrameAligned();
 
     static std::unique_ptr<FrameAligned> create(
-        const QSize& size, const PixelFormat& format, size_t alignment);
+        const Size& size, const PixelFormat& format, size_t alignment);
 
 private:
-    FrameAligned(const QSize& size, const PixelFormat& format, int stride, uint8_t* data);
+    FrameAligned(const Size& size, const PixelFormat& format, int stride, uint8_t* data);
 
     DISALLOW_COPY_AND_ASSIGN(FrameAligned);
 };

@@ -40,10 +40,10 @@ const int kBytesPerBlock = kBytesPerPixel * kBlockSize;
 // height are multiples of kBlockSize, then this will never be called.
 //
 uint8_t diffPartialBlock(const uint8_t* prev_image,
-                        const uint8_t* curr_image,
-                        int bytes_per_row,
-                        int bytes_per_block,
-                        int height)
+                         const uint8_t* curr_image,
+                         int bytes_per_row,
+                         int bytes_per_block,
+                         int height)
 {
     for (int y = 0; y < height; ++y)
     {
@@ -59,8 +59,8 @@ uint8_t diffPartialBlock(const uint8_t* prev_image,
 
 } // namespace
 
-Differ::Differ(const QSize& size)
-    : screen_rect_(QRect(QPoint(), size)),
+Differ::Differ(const Size& size)
+    : screen_rect_(Rect::makeSize(size)),
       bytes_per_row_(size.width() * kBytesPerPixel),
       diff_width_(((size.width() + kBlockSize - 1) / kBlockSize) + 1),
       diff_height_(((size.height() + kBlockSize - 1) / kBlockSize) + 1),
@@ -215,7 +215,7 @@ void Differ::markDirtyBlocks(const uint8_t* prev_image, const uint8_t* curr_imag
 // blocks into a region.
 // The goal is to minimize the region that covers the dirty blocks.
 //
-void Differ::mergeBlocks(QRegion* dirty_region)
+void Differ::mergeBlocks(Region* dirty_region)
 {
     uint8_t* is_diff_row_start = diff_info_.get();
     const int diff_stride = diff_width_;
@@ -281,11 +281,13 @@ void Differ::mergeBlocks(QRegion* dirty_region)
                     }
                 } while (found_new_row);
 
-                QRect dirty_rect = QRect(x * kBlockSize, y * kBlockSize,
-                                         width * kBlockSize, height * kBlockSize);
+                Rect dirty_rect = Rect::makeXYWH(x * kBlockSize, y * kBlockSize,
+                                                 width * kBlockSize, height * kBlockSize);
+
+                dirty_rect.intersectWith(screen_rect_);
 
                 // Add rect to region.
-                *dirty_region += dirty_rect.intersected(screen_rect_);
+                dirty_region->addRect(dirty_rect);
             }
 
             // Increment to next block in this row.
@@ -299,9 +301,9 @@ void Differ::mergeBlocks(QRegion* dirty_region)
 
 void Differ::calcDirtyRegion(const uint8_t* prev_image,
                              const uint8_t* curr_image,
-                             QRegion* dirty_region)
+                             Region* dirty_region)
 {
-    *dirty_region = QRegion();
+    dirty_region->clear();
 
     // Identify all the blocks that contain changed pixels.
     markDirtyBlocks(prev_image, curr_image);

@@ -20,8 +20,7 @@
 #define DESKTOP__DIFFER_H
 
 #include "base/macros_magic.h"
-
-#include <QRegion>
+#include "desktop/desktop_region.h"
 
 #include <memory>
 
@@ -31,18 +30,18 @@ namespace desktop {
 class Differ
 {
 public:
-    explicit Differ(const QSize& size);
+    explicit Differ(const Size& size);
     ~Differ() = default;
 
     void calcDirtyRegion(const uint8_t* prev_image,
                          const uint8_t* curr_image,
-                         QRegion* changed_region);
+                         Region* changed_region);
 
 private:
     void markDirtyBlocks(const uint8_t* prev_image, const uint8_t* curr_image);
-    void mergeBlocks(QRegion* dirty_region);
+    void mergeBlocks(Region* dirty_region);
 
-    const QRect screen_rect_;
+    const Rect screen_rect_;
 
     const int bytes_per_row_;
 

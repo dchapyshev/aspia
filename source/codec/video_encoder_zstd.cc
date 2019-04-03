@@ -108,8 +108,10 @@ void VideoEncoderZstd::encode(const desktop::Frame* frame, proto::desktop::Video
 
     size_t data_size = 0;
 
-    for (const auto& rect : frame->constUpdatedRegion())
+    for (desktop::Region::Iterator it(frame->constUpdatedRegion()); !it.isAtEnd(); it.advance())
     {
+        const desktop::Rect& rect = it.rect();
+
         data_size += rect.width() * rect.height() * target_format_.bytesPerPixel();
         VideoUtil::toVideoRect(rect, packet->add_dirty_rect());
     }
@@ -122,8 +124,9 @@ void VideoEncoderZstd::encode(const desktop::Frame* frame, proto::desktop::Video
 
     uint8_t* translate_pos = translate_buffer_.get();
 
-    for (const auto& rect : frame->constUpdatedRegion())
+    for (desktop::Region::Iterator it(frame->constUpdatedRegion()); !it.isAtEnd(); it.advance())
     {
+        const desktop::Rect& rect = it.rect();
         const int stride = rect.width() * target_format_.bytesPerPixel();
 
         translator_->translate(frame->frameDataAtPos(rect.topLeft()),

@@ -65,10 +65,10 @@ public:
     // this function copies the content to the rectangle of (offset.x(), offset.y()) to
     // (offset.x() + desktop_rect_.width(), offset.y() + desktop_rect_.height()).
     // Returns false in case of a failure.
-    bool duplicate(Context* context, QPoint offset, SharedFrame* target);
+    bool duplicate(Context* context, Point offset, SharedFrame* target);
 
     // Returns the desktop rect covered by this DxgiOutputDuplicator.
-    QRect desktopRect() const { return desktop_rect_; }
+    Rect desktopRect() const { return desktop_rect_; }
 
     // Returns the device name from DXGI_OUTPUT_DESC in utf8 encoding.
     const std::string& deviceName() const { return device_name_; }
@@ -81,18 +81,16 @@ public:
     int64_t numFramesCaptured() const;
 
     // Moves |desktop_rect_|. See DxgiDuplicatorController::translateRect().
-    void translateRect(const QPoint& position);
+    void translateRect(const Point& position);
 
 private:
     // Calls doDetectUpdatedRegion(). If it fails, this function sets the |updated_region| as
     // entire untranslatedDesktopRect().
-    void detectUpdatedRegion(const DXGI_OUTDUPL_FRAME_INFO& frame_info,
-                             QRegion* updated_region);
+    void detectUpdatedRegion(const DXGI_OUTDUPL_FRAME_INFO& frame_info, Region* updated_region);
 
     // Returns untranslated updated region, which are directly returned by Windows APIs. Returns
     // false in case of a failure.
-    bool doDetectUpdatedRegion(const DXGI_OUTDUPL_FRAME_INFO& frame_info,
-                               QRegion* updated_region);
+    bool doDetectUpdatedRegion(const DXGI_OUTDUPL_FRAME_INFO& frame_info, Region* updated_region);
 
     bool releaseFrame();
 
@@ -101,27 +99,27 @@ private:
     bool duplicateOutput();
 
     // Returns a QRect with the same size of desktopSize(), but translated by offset.
-    QRect translatedDesktopRect(QPoint offset) const;
+    Rect translatedDesktopRect(Point offset) const;
 
     // Returns a QRect with the same size of desktopSize(), but starts from (0, 0).
-    QRect untranslatedDesktopRect() const;
+    Rect untranslatedDesktopRect() const;
 
     // Spreads changes from |context| to other registered Context(s) in contexts_.
     void spreadContextChange(const Context* const context);
 
     // Returns the size of desktop rectangle current instance representing.
-    QSize desktopSize() const;
+    Size desktopSize() const;
 
     const D3dDevice device_;
     const Microsoft::WRL::ComPtr<IDXGIOutput1> output_;
     const std::string device_name_;
-    QRect desktop_rect_;
+    Rect desktop_rect_;
     Microsoft::WRL::ComPtr<IDXGIOutputDuplication> duplication_;
     DXGI_OUTDUPL_DESC desc_;
     std::vector<uint8_t> metadata_;
     std::unique_ptr<DxgiTexture> texture_;
     Rotation rotation_;
-    QSize unrotated_size_;
+    Size unrotated_size_;
 
     // After each AcquireNextFrame() function call, updated_region_(s) of all active Context(s)
     // need to be updated. Since they have missed the change this time. And during next duplicate()
@@ -131,7 +129,7 @@ private:
     // The last full frame of this output and its offset. If on AcquireNextFrame() failed because
     // of timeout, i.e. no update, we can copy content from |last_frame_|.
     std::unique_ptr<SharedFrame> last_frame_;
-    QPoint last_frame_offset_;
+    Point last_frame_offset_;
 
     int64_t num_frames_captured_ = 0;
 };
