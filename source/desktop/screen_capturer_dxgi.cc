@@ -25,7 +25,7 @@ namespace desktop {
 
 namespace {
 
-bool screenListFromDeviceNames(const std::vector<std::string>& device_names,
+bool screenListFromDeviceNames(const std::vector<std::wstring>& device_names,
                                ScreenCapturer::ScreenList* screens)
 {
     DCHECK(screens->empty());
@@ -42,12 +42,11 @@ bool screenListFromDeviceNames(const std::vector<std::string>& device_names,
 
     for (const auto& device_name : device_names)
     {
-        QString device = QString::fromStdString(device_name);
         bool device_found = false;
 
         for (const auto& gdi_screen : gdi_screens)
         {
-            if (gdi_screen.title == device)
+            if (gdi_screen.title == device_name)
             {
                 screens->push_back(gdi_screen);
                 device_found = true;
@@ -67,7 +66,7 @@ bool screenListFromDeviceNames(const std::vector<std::string>& device_names,
     return true;
 }
 
-int indexFromScreenId(ScreenCapturer::ScreenId id, const std::vector<std::string>& device_names)
+int indexFromScreenId(ScreenCapturer::ScreenId id, const std::vector<std::wstring>& device_names)
 {
     ScreenCapturer::ScreenList screens;
 
@@ -115,7 +114,7 @@ int ScreenCapturerDxgi::screenCount()
 
 bool ScreenCapturerDxgi::screenList(ScreenList* screens)
 {
-    std::vector<std::string> device_names;
+    std::vector<std::wstring> device_names;
 
     if (!controller_->deviceNames(&device_names))
         return false;
@@ -131,7 +130,7 @@ bool ScreenCapturerDxgi::selectScreen(ScreenId screen_id)
         return true;
     }
 
-    std::vector<std::string> device_names;
+    std::vector<std::wstring> device_names;
 
     if (!controller_->deviceNames(&device_names))
         return false;

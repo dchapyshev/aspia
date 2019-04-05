@@ -26,9 +26,9 @@ namespace desktop {
 class ResolutionTracker final
 {
 public:
-    // Sets the resolution to |size|. Returns true if a previous size was recorded
-    // and differs from |size|.
-    bool setResolution(Size size);
+    // Sets the resolution to |size|. Returns true if a previous size was recorded and differs
+    // from |size|.
+    bool setResolution(const Size& size);
 
     // Resets to the initial state.
     void reset();

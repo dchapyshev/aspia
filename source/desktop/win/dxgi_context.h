@@ -28,13 +28,12 @@ namespace desktop {
 // A DxgiOutputContext stores the status of a single DxgiFrame of DxgiOutputDuplicator.
 struct DxgiOutputContext final
 {
-    // The updated region DxgiOutputDuplicator::DetectUpdatedRegion() output
-    // during last Duplicate() function call. It's always relative to the (0, 0).
+    // The updated region DxgiOutputDuplicator::DetectUpdatedRegion() output during last
+    // duplicate() function call. It's always relative to the (0, 0).
     Region updated_region;
 };
 
-// A DxgiAdapterContext stores the status of a single DxgiFrame of
-// DxgiAdapterDuplicator.
+// A DxgiAdapterContext stores the status of a single DxgiFrame of DxgiAdapterDuplicator.
 struct DxgiAdapterContext final
 {
     DxgiAdapterContext();
@@ -56,9 +55,8 @@ public:
     // Reset current Context, so it will be reinitialized next time.
     void reset();
 
-    // A Context will have an exactly same |controller_id| as
-    // DxgiDuplicatorController, to ensure it has been correctly setted up after
-    // each DxgiDuplicatorController::Initialize().
+    // A Context will have an exactly same |controller_id| as DxgiDuplicatorController, to ensure
+    // it has been correctly setted up after each DxgiDuplicatorController::initialize().
     int controller_id = 0;
 
     // Child DxgiAdapterContext belongs to this DxgiFrameContext.

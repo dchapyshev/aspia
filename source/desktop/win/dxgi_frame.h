@@ -50,7 +50,7 @@ private:
     friend class DxgiDuplicatorController;
 
     // Prepares current instance with desktop size and source id.
-    bool prepare(Size size, ScreenCapturer::ScreenId source_id);
+    bool prepare(const Size& size, ScreenCapturer::ScreenId source_id);
 
     // Should not be called if prepare() is not executed or returns false.
     Context* context();

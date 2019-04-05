@@ -19,7 +19,6 @@
 #include "desktop/win/dxgi_output_duplicator.h"
 
 #include "base/logging.h"
-#include "base/strings/unicode.h"
 #include "desktop/win/dxgi_texture_mapping.h"
 #include "desktop/win/dxgi_texture_staging.h"
 
@@ -39,9 +38,8 @@ using Microsoft::WRL::ComPtr;
 namespace {
 
 // Timeout for AcquireNextFrame() call.
-// DxgiDuplicatorController leverages external components to do the capture
-// scheduling. So here DxgiOutputDuplicator does not need to actively wait for a
-// new frame.
+// DxgiDuplicatorController leverages external components to do the capture scheduling. So here
+// DxgiOutputDuplicator does not need to actively wait for a new frame.
 const int kAcquireTimeoutMs = 0;
 
 Rect RECTToDesktopRect(const RECT& rect)
@@ -77,7 +75,7 @@ DxgiOutputDuplicator::DxgiOutputDuplicator(const D3dDevice& device,
                                            const DXGI_OUTPUT_DESC& desc)
     : device_(device),
       output_(output),
-      device_name_(base::UTF8fromUTF16(desc.DeviceName)),
+      device_name_(desc.DeviceName),
       desktop_rect_(RECTToDesktopRect(desc.DesktopCoordinates))
 {
     DCHECK(output_);
@@ -171,7 +169,7 @@ bool DxgiOutputDuplicator::releaseFrame()
     return true;
 }
 
-bool DxgiOutputDuplicator::duplicate(Context* context, Point offset, SharedFrame* target)
+bool DxgiOutputDuplicator::duplicate(Context* context, const Point& offset, SharedFrame* target)
 {
     DCHECK(duplication_);
     DCHECK(texture_);
@@ -257,10 +255,10 @@ bool DxgiOutputDuplicator::duplicate(Context* context, Point offset, SharedFrame
         // export last frame to the target.
         for (Region::Iterator it(updated_region); !it.isAtEnd(); it.advance())
         {
-            // The DesktopRect in |source|, starts from last_frame_offset_.
+            // The Rect in |source|, starts from last_frame_offset_.
             Rect source_rect = it.rect();
 
-            // The DesktopRect in |target|, starts from offset.
+            // The Rect in |target|, starts from offset.
             Rect target_rect = source_rect;
 
             source_rect.translate(last_frame_offset_);
@@ -283,7 +281,7 @@ bool DxgiOutputDuplicator::duplicate(Context* context, Point offset, SharedFrame
     return error.Error() == DXGI_ERROR_WAIT_TIMEOUT || releaseFrame();
 }
 
-Rect DxgiOutputDuplicator::translatedDesktopRect(Point offset) const
+Rect DxgiOutputDuplicator::translatedDesktopRect(const Point& offset) const
 {
     Rect result(Rect::makeSize(desktopSize()));
     result.translate(offset);
@@ -330,8 +328,7 @@ bool DxgiOutputDuplicator::doDetectUpdatedRegion(const DXGI_OUTDUPL_FRAME_INFO& 
     }
 
     UINT buff_size = 0;
-    DXGI_OUTDUPL_MOVE_RECT* move_rects =
-        reinterpret_cast<DXGI_OUTDUPL_MOVE_RECT*>(metadata_.data());
+    DXGI_OUTDUPL_MOVE_RECT* move_rects = reinterpret_cast<DXGI_OUTDUPL_MOVE_RECT*>(metadata_.data());
     size_t move_rects_count = 0;
 
     _com_error error = duplication_->GetFrameMoveRects(

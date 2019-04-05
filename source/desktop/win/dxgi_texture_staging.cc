@@ -64,8 +64,7 @@ bool DxgiTextureStaging::initializeStage(ID3D11Texture2D* texture)
         if (!recreate_needed)
             return true;
 
-        // The descriptions are not consistent, we need to create a new
-        // ID3D11Texture2D instance.
+        // The descriptions are not consistent, we need to create a new ID3D11Texture2D instance.
         stage_.Reset();
         surface_.Reset();
     }
@@ -145,8 +144,7 @@ bool DxgiTextureStaging::doRelease()
     }
 
     // If using staging mode, we only need to recreate ID3D11Texture2D instance.
-    // This will happen during next CopyFrom call. So this function always returns
-    // true.
+    // This will happen during next CopyFrom call. So this function always returns true.
     return true;
 }
 

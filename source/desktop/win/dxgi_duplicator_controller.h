@@ -74,7 +74,7 @@ public:
 
     // Converts |result| into user-friendly string representation. The return value should not be
     // used to identify error types.
-    static std::string resultName(Result result);
+    static const char* resultName(Result result);
 
     // Returns the singleton instance of DxgiDuplicatorController.
     static base::scoped_refptr<DxgiDuplicatorController> instance();
@@ -114,7 +114,7 @@ public:
     // Returns the device names of all screens on the system in utf8 encoding. These screens can be
     // retrieved by an integer in the range of [0, output->size()). If system does not support DXGI
     // based capturer, this function returns false.
-    bool deviceNames(std::vector<std::string>* output);
+    bool deviceNames(std::vector<std::wstring>* output);
 
 private:
     // DxgiFrameContext calls private unregister(Context*) function in reset().
@@ -187,7 +187,7 @@ private:
 
     int screenCountUnlocked() const;
 
-    void deviceNamesUnlocked(std::vector<std::string>* output) const;
+    void deviceNamesUnlocked(std::vector<std::wstring>* output) const;
 
     // Returns the desktop size of the selected screen |monitor_id|. Setting |monitor_id| < 0 to
     // return the entire screen size.

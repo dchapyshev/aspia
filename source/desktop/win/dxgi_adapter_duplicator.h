@@ -40,8 +40,8 @@ public:
     // DxgiDuplicatorController can create an instance.
     explicit DxgiAdapterDuplicator(const D3dDevice& device);
 
-    // Move constructor, to make it possible to store instances of
-    // DxgiAdapterDuplicator in std::vector<>.
+    // Move constructor, to make it possible to store instances of DxgiAdapterDuplicator in
+    // std::vector<>.
     DxgiAdapterDuplicator(DxgiAdapterDuplicator&& other);
 
     ~DxgiAdapterDuplicator();
@@ -57,15 +57,15 @@ public:
     bool duplicateMonitor(Context* context, int monitor_id, SharedFrame* target);
 
     // Returns desktop rect covered by this DxgiAdapterDuplicator.
-    Rect desktopRect() const { return desktop_rect_; }
+    const Rect& desktopRect() const { return desktop_rect_; }
 
-    // Returns the size of one screen owned by this DxgiAdapterDuplicator. |id|
-    // should be between [0, screenCount()).
+    // Returns the size of one screen owned by this DxgiAdapterDuplicator. |id| should be between
+    // [0, screenCount()).
     Rect screenRect(int id) const;
 
-    // Returns the device name of one screen owned by this DxgiAdapterDuplicator
-    // in utf8 encoding. |id| should be between [0, screenCount()).
-    const std::string& deviceName(int id) const;
+    // Returns the device name of one screen owned by this DxgiAdapterDuplicator. |id| should be
+    // between [0, screenCount()).
+    const std::wstring& deviceName(int id) const;
 
     // Returns the count of screens owned by this DxgiAdapterDuplicator. These screens can be
     // retrieved by an interger in the range of [0, screenCount()).

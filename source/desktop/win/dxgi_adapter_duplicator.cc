@@ -68,9 +68,8 @@ bool DxgiAdapterDuplicator::doInitialize()
 
         if (error.Error() == DXGI_ERROR_NOT_CURRENTLY_AVAILABLE)
         {
-            LOG(LS_WARNING) << "IDXGIAdapter::EnumOutputs returns "
-                               "NOT_CURRENTLY_AVAILABLE. This may happen when "
-                               "running in session 0.";
+            LOG(LS_WARNING) << "IDXGIAdapter::EnumOutputs returns NOT_CURRENTLY_AVAILABLE. "
+                               "This may happen when running in session 0";
             break;
         }
 
@@ -93,9 +92,8 @@ bool DxgiAdapterDuplicator::doInitialize()
 
                 if (error.Error() != S_OK || !output1)
                 {
-                    LOG(LS_WARNING) << "Failed to convert IDXGIOutput to IDXGIOutput1, "
-                                       "this usually means the system does not support "
-                                       "DirectX 11";
+                    LOG(LS_WARNING) << "Failed to convert IDXGIOutput to IDXGIOutput1, this "
+                                       "usually means the system does not support DirectX 11";
                     continue;
                 }
 
@@ -117,7 +115,7 @@ bool DxgiAdapterDuplicator::doInitialize()
                               << desc.DesktopCoordinates.top << ", "
                               << desc.DesktopCoordinates.left << ") - ("
                               << desc.DesktopCoordinates.bottom << ", "
-                              << desc.DesktopCoordinates.right << ") is ignored.";
+                              << desc.DesktopCoordinates.right << ") is ignored";
             }
         }
         else
@@ -186,7 +184,7 @@ Rect DxgiAdapterDuplicator::screenRect(int id) const
     return duplicators_[id].desktopRect();
 }
 
-const std::string& DxgiAdapterDuplicator::deviceName(int id) const
+const std::wstring& DxgiAdapterDuplicator::deviceName(int id) const
 {
     DCHECK_GE(id, 0);
     DCHECK_LT(id, static_cast<int>(duplicators_.size()));

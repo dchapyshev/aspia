@@ -41,10 +41,11 @@ void Frame::copyPixelsFrom(const uint8_t* src_buffer, int src_stride, const Rect
     CHECK(Rect::makeSize(size()).containsRect(dest_rect));
 
     uint8_t* dest = frameDataAtPos(dest_rect.topLeft());
+    size_t bytes_per_row = format_.bytesPerPixel() * dest_rect.width();
 
     for (int y = 0; y < dest_rect.height(); ++y)
     {
-        memcpy(dest, src_buffer, format_.bytesPerPixel() * dest_rect.width());
+        memcpy(dest, src_buffer, bytes_per_row);
         src_buffer += src_stride;
         dest += stride();
     }
