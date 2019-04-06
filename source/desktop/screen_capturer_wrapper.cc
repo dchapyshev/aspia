@@ -34,15 +34,16 @@ ScreenCapturerWrapper::ScreenCapturerWrapper(uint32_t flags)
 
     SetThreadExecutionState(ES_DISPLAY_REQUIRED);
 
-    if (ScreenCapturerDxgi::isSupported())
+    std::unique_ptr<ScreenCapturerDxgi> capturer_dxgi = std::make_unique<ScreenCapturerDxgi>();
+    if (capturer_dxgi->isSupported())
     {
         LOG(LS_INFO) << "Using DXGI capturer";
-        capturer_.reset(new ScreenCapturerDxgi());
+        capturer_ = std::move(capturer_dxgi);
     }
     else
     {
         LOG(LS_INFO) << "Using GDI capturer";
-        capturer_.reset(new ScreenCapturerGdi());
+        capturer_ = std::make_unique<ScreenCapturerGdi>();
     }
 }
 

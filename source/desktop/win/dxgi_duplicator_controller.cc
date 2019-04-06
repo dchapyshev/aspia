@@ -19,7 +19,7 @@
 #include "desktop/win/dxgi_duplicator_controller.h"
 
 #include "base/logging.h"
-#include "desktop/desktop_frame_simple.h"
+#include "desktop/desktop_frame_aligned.h"
 #include "desktop/win/dxgi_frame.h"
 #include "desktop/win/screen_capture_utils.h"
 
@@ -59,16 +59,6 @@ const char* DxgiDuplicatorController::resultName(DxgiDuplicatorController::Resul
 }
 
 // static
-base::scoped_refptr<DxgiDuplicatorController> DxgiDuplicatorController::instance()
-{
-    // The static instance won't be deleted to ensure it can be used by other threads even during
-    // program exiting.
-    static DxgiDuplicatorController* instance = new DxgiDuplicatorController();
-
-    return base::scoped_refptr<DxgiDuplicatorController>(instance);
-}
-
-// static
 bool DxgiDuplicatorController::isCurrentSessionSupported()
 {
     DWORD session_id = 0;
@@ -83,34 +73,15 @@ bool DxgiDuplicatorController::isCurrentSessionSupported()
     return session_id != 0;
 }
 
-DxgiDuplicatorController::DxgiDuplicatorController()
-    : refcount_(0)
-{
-    // Nothing
-}
+DxgiDuplicatorController::DxgiDuplicatorController() = default;
 
-void DxgiDuplicatorController::addRef()
+DxgiDuplicatorController::~DxgiDuplicatorController()
 {
-    int refcount = (++refcount_);
-    DCHECK(refcount > 0);
-}
-
-void DxgiDuplicatorController::release()
-{
-    int refcount = (--refcount_);
-    DCHECK(refcount >= 0);
-
-    if (refcount == 0)
-    {
-        LOG(LS_WARNING) << "Count of references reaches zero, DxgiDuplicatorController will be "
-                           "unloaded.";
-        unload();
-    }
+    deinitialize();
 }
 
 bool DxgiDuplicatorController::isSupported()
 {
-    std::scoped_lock lock(lock_);
     return initialize();
 }
 
@@ -118,7 +89,6 @@ bool DxgiDuplicatorController::retrieveD3dInfo(D3dInfo* info)
 {
     bool result = false;
     {
-        std::scoped_lock lock(lock_);
         result = initialize();
         *info = d3d_info_;
     }
@@ -126,7 +96,7 @@ bool DxgiDuplicatorController::retrieveD3dInfo(D3dInfo* info)
     if (!result)
     {
         LOG(LS_WARNING) << "Failed to initialize DXGI components, the D3dInfo retrieved may not "
-                           "accurate or out of date.";
+                           "accurate or out of date";
     }
 
     return result;
@@ -146,21 +116,24 @@ DxgiDuplicatorController::Result DxgiDuplicatorController::duplicateMonitor(
 
 int DxgiDuplicatorController::screenCount()
 {
-    std::scoped_lock lock(lock_);
-
     if (initialize())
-        return screenCountUnlocked();
+        return doScreenCount();
 
     return 0;
 }
 
 bool DxgiDuplicatorController::deviceNames(std::vector<std::wstring>* output)
 {
-    std::scoped_lock lock(lock_);
+    DCHECK(output);
 
     if (initialize())
     {
-        deviceNamesUnlocked(output);
+        for (const auto& duplicator : duplicators_)
+        {
+            for (int i = 0; i < duplicator.screenCount(); ++i)
+                output->push_back(duplicator.deviceName(i));
+        }
+
         return true;
     }
 
@@ -171,8 +144,6 @@ DxgiDuplicatorController::Result DxgiDuplicatorController::doDuplicate(
     DxgiFrame* frame, int monitor_id)
 {
     DCHECK(frame);
-
-    std::scoped_lock lock(lock_);
 
     // The dxgi components and APIs do not update the screen resolution without a reinitialization.
     // So we use the GetDC() function to retrieve the screen resolution to decide whether dxgi
@@ -192,7 +163,7 @@ DxgiDuplicatorController::Result DxgiDuplicatorController::doDuplicate(
         if (succeeded_duplications_ == 0 && !isCurrentSessionSupported())
         {
             LOG(LS_WARNING) << "Current binary is running in session 0. DXGI components cannot be "
-                               "initialized.";
+                               "initialized";
             return Result::UNSUPPORTED_SESSION;
         }
 
@@ -205,34 +176,44 @@ DxgiDuplicatorController::Result DxgiDuplicatorController::doDuplicate(
 
     frame->frame()->updatedRegion()->clear();
 
-    if (doDuplicateUnlocked(frame->context(), monitor_id, frame->frame()))
+    setup(frame->context());
+
+    if (ensureFrameCaptured(frame->context(), frame->frame()))
     {
-        ++succeeded_duplications_;
-        return Result::SUCCEEDED;
+        bool result;
+
+        if (monitor_id < 0)
+        {
+            // Capture entire screen.
+            result = doDuplicateAll(frame->context(), frame->frame());
+        }
+        else
+        {
+            result = doDuplicateOne(frame->context(), monitor_id, frame->frame());
+        }
+
+        if (result)
+        {
+            ++succeeded_duplications_;
+            return Result::SUCCEEDED;
+        }
     }
-    if (monitor_id >= screenCountUnlocked())
+
+    if (monitor_id >= doScreenCount())
     {
         // It's a user error to provide a |monitor_id| larger than screen count. We do not need to
         // deinitialize.
         return Result::INVALID_MONITOR_ID;
     }
 
-    // If the |monitor_id| is valid, but doDuplicateUnlocked() failed, something must be wrong from
-    // capturer APIs. We should deinitialize().
+    // If the |monitor_id| is valid, but doDuplicateAll() or doDuplicateOne failed, something must
+    // be wrong from capturer APIs. We should deinitialize().
     deinitialize();
     return Result::DUPLICATION_FAILED;
 }
 
-void DxgiDuplicatorController::unload()
-{
-    std::scoped_lock lock(lock_);
-    deinitialize();
-}
-
 void DxgiDuplicatorController::unregister(const Context* const context)
 {
-    std::scoped_lock lock(lock_);
-
     if (contextExpired(context))
     {
         // The Context has not been setup after a recent initialization, so it should not been
@@ -339,32 +320,6 @@ void DxgiDuplicatorController::setup(Context* context)
     }
 }
 
-bool DxgiDuplicatorController::doDuplicateUnlocked(Context* context,
-                                                   int monitor_id,
-                                                   SharedFrame* target)
-{
-    setup(context);
-
-    if (!ensureFrameCaptured(context, target))
-        return false;
-
-    bool result = false;
-    if (monitor_id < 0)
-    {
-        // Capture entire screen.
-        result = doDuplicateAll(context, target);
-    }
-    else
-    {
-        result = doDuplicateOne(context, monitor_id, target);
-    }
-
-    if (result)
-        return true;
-
-    return false;
-}
-
 bool DxgiDuplicatorController::doDuplicateAll(Context* context, SharedFrame* target)
 {
     for (size_t i = 0; i < duplicators_.size(); ++i)
@@ -419,7 +374,7 @@ Size DxgiDuplicatorController::desktopSize() const
 
 Rect DxgiDuplicatorController::screenRect(int id) const
 {
-    DCHECK(id >= 0);
+    DCHECK_GE(id, 0);
 
     for (size_t i = 0; i < duplicators_.size(); ++i)
     {
@@ -432,7 +387,7 @@ Rect DxgiDuplicatorController::screenRect(int id) const
     return Rect();
 }
 
-int DxgiDuplicatorController::screenCountUnlocked() const
+int DxgiDuplicatorController::doScreenCount() const
 {
     int result = 0;
 
@@ -440,17 +395,6 @@ int DxgiDuplicatorController::screenCountUnlocked() const
         result += duplicator.screenCount();
 
     return result;
-}
-
-void DxgiDuplicatorController::deviceNamesUnlocked(std::vector<std::wstring>* output) const
-{
-    DCHECK(output);
-
-    for (const auto& duplicator : duplicators_)
-    {
-        for (int i = 0; i < duplicator.screenCount(); ++i)
-            output->push_back(duplicator.deviceName(i));
-    }
 }
 
 Size DxgiDuplicatorController::selectedDesktopSize(int monitor_id) const
@@ -496,7 +440,8 @@ bool DxgiDuplicatorController::ensureFrameCaptured(Context* context, SharedFrame
     }
     else
     {
-        fallback_frame = SharedFrame::wrap(FrameSimple::create(desktopSize(), PixelFormat::ARGB()));
+        fallback_frame = SharedFrame::wrap(
+            FrameAligned::create(desktopSize(), PixelFormat::ARGB(), 32));
         shared_frame = fallback_frame.get();
     }
 

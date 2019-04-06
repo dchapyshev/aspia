@@ -38,15 +38,15 @@ class DxgiFrame final
 public:
     using Context = DxgiFrameContext;
 
-    DxgiFrame();
+    explicit DxgiFrame(std::shared_ptr<DxgiDuplicatorController>& controller);
     ~DxgiFrame();
 
     // Should not be called if prepare() is not executed or returns false.
     SharedFrame* frame() const;
 
 private:
-    // Allows DxgiDuplicatorController to access prepare() and context() function as well as
-    // Context class.
+    // Allows DxgiDuplicatorController to access prepare() and context() function as
+    // well as Context class.
     friend class DxgiDuplicatorController;
 
     // Prepares current instance with desktop size and source id.

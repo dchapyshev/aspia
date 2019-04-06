@@ -27,8 +27,6 @@
 
 #include <D3DCommon.h>
 
-#include <atomic>
-#include <mutex>
 #include <string>
 #include <vector>
 
@@ -46,6 +44,9 @@ namespace desktop {
 class DxgiDuplicatorController
 {
 public:
+    DxgiDuplicatorController();
+    ~DxgiDuplicatorController();
+
     using Context = DxgiFrameContext;
 
     // A collection of D3d information we are interested on, which may impact capturer performance
@@ -75,9 +76,6 @@ public:
     // Converts |result| into user-friendly string representation. The return value should not be
     // used to identify error types.
     static const char* resultName(Result result);
-
-    // Returns the singleton instance of DxgiDuplicatorController.
-    static base::scoped_refptr<DxgiDuplicatorController> instance();
 
     // See ScreenCapturerWinDirectx::isCurrentSessionSupported().
     static bool isCurrentSessionSupported();
@@ -116,33 +114,15 @@ private:
     // DxgiFrameContext calls private unregister(Context*) function in reset().
     friend void DxgiFrameContext::reset();
 
-    // scoped_refptr<DxgiDuplicatorController> accesses private addRef() and release() functions.
-    friend class base::scoped_refptr<DxgiDuplicatorController>;
-
-    // A private constructor to ensure consumers to use DxgiDuplicatorController::instance().
-    DxgiDuplicatorController();
-
-    // Not implemented: The singleton DxgiDuplicatorController instance should not be deleted.
-    ~DxgiDuplicatorController();
-
-    // RefCountedInterface implementations.
-    void addRef();
-    void release();
-
     // Does the real duplication work. Setting |monitor_id| < 0 to capture entire screen. This
     // function calls initialize(). And if the duplication failed, this function calls
     // deinitialize() to ensure the Dxgi components can be reinitialized next time.
     Result doDuplicate(DxgiFrame* frame, int monitor_id);
 
-    // Unload all the DXGI components and releases the resources. This function wraps
-    // deinitialize() with |lock_|.
-    void unload();
-
     // Unregisters Context from this instance and all DxgiAdapterDuplicator(s) it owns.
     void unregister(const Context* const context);
 
-    // All functions below should be called in |lock_| locked scope and should be
-    // after a successful initialize().
+    // All functions below should be called should be after a successful initialize().
 
     // If current instance has not been initialized, executes doInitialize() function, and returns
     // initialize result. Otherwise directly returns true.
@@ -162,8 +142,6 @@ private:
     // Updates Context if needed.
     void setup(Context* context);
 
-    bool doDuplicateUnlocked(Context* context, int monitor_id, SharedFrame* target);
-
     // Captures all monitors.
     bool doDuplicateAll(Context* context, SharedFrame* target);
 
@@ -181,9 +159,7 @@ private:
     // function returns an empty Rect.
     Rect screenRect(int id) const;
 
-    int screenCountUnlocked() const;
-
-    void deviceNamesUnlocked(std::vector<std::wstring>* output) const;
+    int doScreenCount() const;
 
     // Returns the desktop size of the selected screen |monitor_id|. Setting |monitor_id| < 0 to
     // return the entire screen size.
@@ -192,8 +168,8 @@ private:
     // Retries doDuplicateAll() for several times until numFramesCaptured() is large enough.
     // Returns false if doDuplicateAll() returns false, or numFramesCaptured() has never reached
     // the requirement.
-    // According to http://crbug.com/682112, dxgi capturer returns a black frame
-    // during first several capture attempts.
+    // According to http://crbug.com/682112, dxgi capturer returns a black frame during first
+    // several capture attempts.
     bool ensureFrameCaptured(Context* context, SharedFrame* target);
 
     // Moves |desktop_rect_| and all underlying |duplicators_|, putting top left corner of the
@@ -201,12 +177,6 @@ private:
     // coordinates. Called from doInitialize() after all DxgiAdapterDuplicator and
     // DxgiOutputDuplicator instances are initialized.
     void translateRect();
-
-    // The count of references which are now "living".
-    std::atomic_int refcount_;
-
-    // This lock must be locked whenever accessing any of the following objects.
-    std::recursive_mutex lock_;
 
     // A self-incremented integer to compare with the one in Context. It ensures a Context instance
     // is always initialized after DxgiDuplicatorController.

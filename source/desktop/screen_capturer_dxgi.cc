@@ -87,18 +87,17 @@ int indexFromScreenId(ScreenCapturer::ScreenId id, const std::vector<std::wstrin
 } // namespace
 
 ScreenCapturerDxgi::ScreenCapturerDxgi()
-    : controller_(DxgiDuplicatorController::instance())
+    : controller_(std::make_shared<DxgiDuplicatorController>())
 {
     // Nothing
 }
 
 ScreenCapturerDxgi::~ScreenCapturerDxgi() = default;
 
-// static
 bool ScreenCapturerDxgi::isSupported()
 {
     // Forwards isSupported() function call to DxgiDuplicatorController.
-    return DxgiDuplicatorController::instance()->isSupported();
+    return controller_->isSupported();
 }
 
 // static
@@ -148,7 +147,7 @@ const Frame* ScreenCapturerDxgi::captureFrame()
     queue_.moveToNextFrame();
 
     if (!queue_.currentFrame())
-        queue_.replaceCurrentFrame(std::make_unique<DxgiFrame>());
+        queue_.replaceCurrentFrame(std::make_unique<DxgiFrame>(controller_));
 
     DxgiDuplicatorController::Result result;
 
@@ -175,13 +174,13 @@ const Frame* ScreenCapturerDxgi::captureFrame()
         case DuplicateResult::UNSUPPORTED_SESSION:
         {
             LOG(LS_ERROR) << "Current binary is running on a session not supported "
-                             "by DirectX screen capturer.";
+                             "by DirectX screen capturer";
             return nullptr;
         }
 
         case DuplicateResult::FRAME_PREPARE_FAILED:
         {
-            LOG(LS_ERROR) << "Failed to allocate a new DesktopFrame.";
+            LOG(LS_ERROR) << "Failed to allocate a new Frame";
             // This usually means we do not have enough memory or SharedMemoryFactory cannot work
             // correctly.
             return nullptr;

@@ -33,7 +33,7 @@ public:
     ~ScreenCapturerDxgi();
 
     // Whether the system supports DXGI based capturing.
-    static bool isSupported();
+    bool isSupported();
 
     // Whether current process is running in a Windows session which is supported by
     // ScreenCapturerDxgi.
@@ -53,7 +53,7 @@ protected:
     void reset() override;
 
 private:
-    const base::scoped_refptr<DxgiDuplicatorController> controller_;
+    std::shared_ptr<DxgiDuplicatorController> controller_;
 
     ScreenId current_screen_id_ = kFullDesktopScreenId;
     ScreenCaptureFrameQueue<DxgiFrame> queue_;

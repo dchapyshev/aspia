@@ -19,13 +19,16 @@
 #include "desktop/win/dxgi_frame.h"
 
 #include "base/logging.h"
-#include "desktop/desktop_frame_simple.h"
-
-#include <utility>
+#include "desktop/desktop_frame_aligned.h"
 
 namespace desktop {
 
-DxgiFrame::DxgiFrame() = default;
+DxgiFrame::DxgiFrame(std::shared_ptr<DxgiDuplicatorController>& controller)
+    : context_(controller)
+{
+    // Nothing
+}
+
 DxgiFrame::~DxgiFrame() = default;
 
 bool DxgiFrame::prepare(const Size& size, ScreenCapturer::ScreenId source_id)
@@ -39,16 +42,16 @@ bool DxgiFrame::prepare(const Size& size, ScreenCapturer::ScreenId source_id)
 
     if (resolution_tracker_.setResolution(size))
     {
-        // Once the output size changed, recreate the SharedDesktopFrame.
+        // Once the output size changed, recreate the SharedFrame.
         frame_.reset();
     }
 
     if (!frame_)
     {
-        std::unique_ptr<Frame> frame = FrameSimple::create(size, PixelFormat::ARGB());
+        std::unique_ptr<Frame> frame = FrameAligned::create(size, PixelFormat::ARGB(), 32);
         if (!frame)
         {
-            LOG(LS_WARNING) << "DxgiFrame cannot create a new FrameSimple";
+            LOG(LS_WARNING) << "DxgiFrame cannot create a new FrameAligned";
             return false;
         }
 

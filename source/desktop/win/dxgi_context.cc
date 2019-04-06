@@ -26,7 +26,11 @@ DxgiAdapterContext::DxgiAdapterContext() = default;
 DxgiAdapterContext::DxgiAdapterContext(const DxgiAdapterContext& context) = default;
 DxgiAdapterContext::~DxgiAdapterContext() = default;
 
-DxgiFrameContext::DxgiFrameContext() = default;
+DxgiFrameContext::DxgiFrameContext(std::shared_ptr<DxgiDuplicatorController>& controller)
+    : controller(controller)
+{
+    // Nothing
+}
 
 DxgiFrameContext::~DxgiFrameContext()
 {
@@ -35,7 +39,7 @@ DxgiFrameContext::~DxgiFrameContext()
 
 void DxgiFrameContext::reset()
 {
-    DxgiDuplicatorController::instance()->unregister(this);
+    controller->unregister(this);
     controller_id = 0;
 }
 

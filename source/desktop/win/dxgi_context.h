@@ -21,9 +21,12 @@
 
 #include "desktop/desktop_region.h"
 
+#include <memory>
 #include <vector>
 
 namespace desktop {
+
+class DxgiDuplicatorController;
 
 // A DxgiOutputContext stores the status of a single DxgiFrame of DxgiOutputDuplicator.
 struct DxgiOutputContext final
@@ -48,7 +51,8 @@ struct DxgiAdapterContext final
 struct DxgiFrameContext final
 {
 public:
-    DxgiFrameContext();
+    explicit DxgiFrameContext(std::shared_ptr<DxgiDuplicatorController>& controller);
+
     // Unregister this Context instance from DxgiDuplicatorController during destructing.
     ~DxgiFrameContext();
 
@@ -61,6 +65,8 @@ public:
 
     // Child DxgiAdapterContext belongs to this DxgiFrameContext.
     std::vector<DxgiAdapterContext> contexts;
+
+    std::shared_ptr<DxgiDuplicatorController> controller;
 };
 
 } // namespace desktop
