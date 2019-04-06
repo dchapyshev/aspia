@@ -28,9 +28,6 @@
 #include <string>
 #include <thread>
 
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-
 namespace desktop {
 
 // static
@@ -145,15 +142,6 @@ DxgiDuplicatorController::Result DxgiDuplicatorController::duplicateMonitor(
 {
     DCHECK_GE(monitor_id, 0);
     return doDuplicate(frame, monitor_id);
-}
-
-Point DxgiDuplicatorController::dpi()
-{
-    std::scoped_lock lock(lock_);
-    if (initialize())
-        return dpi_;
-
-    return Point();
 }
 
 int DxgiDuplicatorController::screenCount()
@@ -311,14 +299,6 @@ bool DxgiDuplicatorController::doInitialize()
     }
 
     translateRect();
-
-    HDC hdc = GetDC(nullptr);
-    // Use old DPI value if failed.
-    if (hdc)
-    {
-        dpi_.set(GetDeviceCaps(hdc, LOGPIXELSX), GetDeviceCaps(hdc, LOGPIXELSY));
-        ReleaseDC(nullptr, hdc);
-    }
 
     ++identity_;
 
