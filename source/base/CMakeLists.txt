@@ -67,6 +67,8 @@ list(APPEND SOURCE_BASE
     thread_checker.cc
     thread_checker.h
     typed_buffer.h
+    version.cc
+    version.h
     xml_settings.cc
     xml_settings.h)
 
@@ -79,6 +81,8 @@ list(APPEND SOURCE_BASE_UNIT_TESTS
     scoped_clear_last_error_unittest.cc)
 
 list(APPEND SOURCE_BASE_STRINGS
+    strings/string_number_conversions.cc
+    strings/string_number_conversions.h
     strings/string_printf.cc
     strings/string_printf.h
     strings/string_util.cc
@@ -89,6 +93,7 @@ list(APPEND SOURCE_BASE_STRINGS
     strings/unicode.h)
 
 list(APPEND SOURCE_BASE_STRINGS_UNIT_TESTS
+    strings/string_number_conversions_unittest.cc
     strings/string_printf_unittest.cc)
 
 list(APPEND SOURCE_BASE_WIN
@@ -96,6 +101,8 @@ list(APPEND SOURCE_BASE_WIN
     win/desktop.h
     win/drive_enumerator.cc
     win/drive_enumerator.h
+    win/file_version_info.cc
+    win/file_version_info.h
     win/printer_enumerator.cc
     win/printer_enumerator.h
     win/process.cc
@@ -104,6 +111,8 @@ list(APPEND SOURCE_BASE_WIN
     win/process_util.h
     win/registry.cc
     win/registry.h
+    win/resource_util.cc
+    win/resource_util.h
     win/scoped_com_initializer.cc
     win/scoped_com_initializer.h
     win/scoped_gdi_object.h
@@ -128,7 +137,9 @@ list(APPEND SOURCE_BASE_WIN
     win/session_status.cc
     win/session_status.h
     win/session_watcher.cc
-    win/session_watcher.h)
+    win/session_watcher.h
+    win/windows_version.cc
+    win/windows_version.h)
 
 list(APPEND SOURCE_BASE_WIN_UNIT_TESTS
     win/registry_unittest.cc
