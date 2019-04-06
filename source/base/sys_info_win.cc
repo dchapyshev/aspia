@@ -22,6 +22,7 @@
 #include "base/strings/string_printf.h"
 #include "base/strings/unicode.h"
 #include "base/win/registry.h"
+#include "base/win/windows_version.h"
 #include "build/build_config.h"
 
 #include <lm.h>
@@ -109,79 +110,24 @@ std::string SysInfo::operatingSystemName()
 // static
 std::string SysInfo::operatingSystemVersion()
 {
-    std::filesystem::path kernel32_path;
-
-    if (!BasePaths::systemDir(&kernel32_path))
-        return std::string();
-
-    kernel32_path.append(L"kernel32.dll");
-
-    DWORD handle = 0;
-    DWORD size = GetFileVersionInfoSizeW(kernel32_path.c_str(), &handle);
-    if (!size)
-    {
-        PLOG(LS_WARNING) << "GetFileVersionInfoSizeW failed";
-        return std::string();
-    }
-
-    std::unique_ptr<uint8_t[]> buffer = std::make_unique<uint8_t[]>(size);
-
-    if (!GetFileVersionInfoW(kernel32_path.c_str(), handle, size, buffer.get()))
-    {
-        PLOG(LS_WARNING) << "GetFileVersionInfoW failed";
-        return std::string();
-    }
-
-    struct LangAndCodepage
-    {
-        WORD language;
-        WORD code_page;
-    } *translate;
-
-    UINT length = 0;
-
-    if (!VerQueryValueW(buffer.get(), L"\\VarFileInfo\\Translation",
-                        reinterpret_cast<void**>(&translate), &length))
-    {
-        PLOG(LS_WARNING) << "VerQueryValueW failed";
-        return std::string();
-    }
-
-    std::wstring subblock = stringPrintf(L"\\StringFileInfo\\%04x%04x\\ProductVersion",
-                                         translate->language, translate->code_page);
-
-    wchar_t* version = nullptr;
-
-    if (!VerQueryValueW(buffer.get(), subblock.c_str(),
-                        reinterpret_cast<void**>(&version), &length))
-    {
-        PLOG(LS_WARNING) << "VerQueryValueW failed";
-        return std::string();
-    }
-
-    if (!version)
-        return std::string();
-
-    return UTF8fromUTF16(version);
+    return base::win::OSInfo::instance()->kernel32BaseVersion().toString();
 }
 
 // static
 std::string SysInfo::operatingSystemArchitecture()
 {
-    SYSTEM_INFO system_info;
-    memset(&system_info, 0, sizeof(system_info));
-
-    GetNativeSystemInfo(&system_info);
-
-    switch (system_info.wProcessorArchitecture)
+    switch (base::win::OSInfo::instance()->architecture())
     {
-        case PROCESSOR_ARCHITECTURE_AMD64:
+        case base::win::OSInfo::X64_ARCHITECTURE:
             return "AMD64";
 
-        case PROCESSOR_ARCHITECTURE_INTEL:
+        case base::win::OSInfo::X86_ARCHITECTURE:
             return "X86";
 
-        case PROCESSOR_ARCHITECTURE_ARM:
+        case base::win::OSInfo::IA64_ARCHITECTURE:
+            return "IA64";
+
+        case base::win::OSInfo::ARM_ARCHITECTURE:
             return "ARM";
 
         default:

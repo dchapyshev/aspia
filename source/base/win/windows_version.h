@@ -99,6 +99,7 @@ public:
         X86_ARCHITECTURE,
         X64_ARCHITECTURE,
         IA64_ARCHITECTURE,
+        ARM_ARCHITECTURE,
         OTHER_ARCHITECTURE,
     };
 

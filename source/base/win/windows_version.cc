@@ -181,6 +181,10 @@ OSInfo::OSInfo(const _OSVERSIONINFOEXW& version_info,
             architecture_ = IA64_ARCHITECTURE;
             break;
 
+        case PROCESSOR_ARCHITECTURE_ARM:
+            architecture_ = ARM_ARCHITECTURE;
+            break;
+
         default:
             break;
     }
@@ -217,16 +221,16 @@ OSInfo::OSInfo(const _OSVERSIONINFOEXW& version_info,
             case PRODUCT_ENTERPRISE_EVALUATION:
             case PRODUCT_ENTERPRISE_N:
             case PRODUCT_ENTERPRISE_N_EVALUATION:
-            //case PRODUCT_ENTERPRISE_S:
-            //case PRODUCT_ENTERPRISE_S_EVALUATION:
-            //case PRODUCT_ENTERPRISE_S_N:
-            //case PRODUCT_ENTERPRISE_S_N_EVALUATION:
+            case PRODUCT_ENTERPRISE_S:
+            case PRODUCT_ENTERPRISE_S_EVALUATION:
+            case PRODUCT_ENTERPRISE_S_N:
+            case PRODUCT_ENTERPRISE_S_N_EVALUATION:
             case PRODUCT_BUSINESS:
             case PRODUCT_BUSINESS_N:
                 version_type_ = SUITE_ENTERPRISE;
                 break;
-            //case PRODUCT_EDUCATION:
-            //case PRODUCT_EDUCATION_N:
+            case PRODUCT_EDUCATION:
+            case PRODUCT_EDUCATION_N:
                 version_type_ = SUITE_EDUCATION;
                 break;
             case PRODUCT_HOME_BASIC:
