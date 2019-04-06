@@ -17,6 +17,7 @@
 //
 
 #include "host/win/host_session_main.h"
+
 #include "base/base_paths.h"
 #include "base/qt_logging.h"
 #include "build/version.h"

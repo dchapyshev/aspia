@@ -23,9 +23,7 @@
 #include "desktop/win/dxgi_frame.h"
 #include "desktop/win/screen_capture_utils.h"
 
-#include <algorithm>
 #include <chrono>
-#include <string>
 #include <thread>
 
 namespace desktop {

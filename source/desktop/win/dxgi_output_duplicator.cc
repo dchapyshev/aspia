@@ -116,14 +116,34 @@ bool DxgiOutputDuplicator::duplicateOutput()
 {
     DCHECK(!duplication_);
 
-    _com_error error =
-        output_->DuplicateOutput(static_cast<IUnknown*>(device_.d3dDevice()),
-                                 duplication_.GetAddressOf());
-    if (error.Error() != S_OK || !duplication_)
+    static const int kRetryCount = 10;
+    static const DWORD kRetryTimeoutMs = 100;
+
+    for (int i = 0; i < kRetryCount; ++i)
     {
-        LOG(LS_WARNING) << "Failed to duplicate output from IDXGIOutput1, error "
-                        << error.ErrorMessage() << ", with code " << error.Error();
-        return false;
+        _com_error error =
+            output_->DuplicateOutput(static_cast<IUnknown*>(device_.d3dDevice()),
+                                     duplication_.GetAddressOf());
+        if (error.Error() != S_OK || !duplication_)
+        {
+            // DuplicateOutput may temporarily return E_ACCESSDENIED.
+            if (error.Error() == E_ACCESSDENIED)
+            {
+                if (i + 1 < kRetryCount)
+                {
+                    Sleep(kRetryTimeoutMs);
+                    continue;
+                }
+            }
+
+            LOG(LS_WARNING) << "Failed to duplicate output from IDXGIOutput1, error "
+                            << error.ErrorMessage() << ", with code " << error.Error();
+            return false;
+        }
+        else
+        {
+            break;
+        }
     }
 
     memset(&desc_, 0, sizeof(desc_));
