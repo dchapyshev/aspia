@@ -107,13 +107,13 @@ public:
     Point dpi();
 
     // Returns the count of screens on the system. These screens can be retrieved by an integer in
-    // the range of [0, ScreenCount()). If system does not support DXGI based capturer, this
+    // the range of [0, screenCount()). If system does not support DXGI based capturer, this
     // function returns 0.
     int screenCount();
 
-    // Returns the device names of all screens on the system in utf8 encoding. These screens can be
-    // retrieved by an integer in the range of [0, output->size()). If system does not support DXGI
-    // based capturer, this function returns false.
+    // Returns the device names of all screens on the system. These screens can be retrieved by an
+    // integer in the range of [0, output->size()). If system does not support DXGI based capturer,
+    // this function returns false.
     bool deviceNames(std::vector<std::wstring>* output);
 
 private:
@@ -210,7 +210,7 @@ private:
     std::atomic_int refcount_;
 
     // This lock must be locked whenever accessing any of the following objects.
-    std::mutex lock_;
+    std::recursive_mutex lock_;
 
     // A self-incremented integer to compare with the one in Context. It ensures a Context instance
     // is always initialized after DxgiDuplicatorController.
