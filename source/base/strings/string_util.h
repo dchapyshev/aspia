@@ -51,6 +51,11 @@ std::string collapseWhitespaceASCII(const std::string& text,
 int compareCaseInsensitiveASCII(const std::string& first, const std::string& second);
 int compareCaseInsensitive(const std::wstring& first, const std::wstring& second);
 
+bool startsWith(std::string_view str, std::string_view search_for);
+bool startsWith(std::wstring_view str, std::wstring_view search_for);
+bool endsWith(std::string_view str, std::string_view search_for);
+bool endsWith(std::wstring_view str, std::wstring_view search_for);
+
 enum TrimPositions
 {
     TRIM_NONE     = 0,
