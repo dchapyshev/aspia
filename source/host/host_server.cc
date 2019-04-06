@@ -20,8 +20,10 @@
 
 #include "base/guid.h"
 #include "base/qt_logging.h"
+#include "base/strings/string_number_conversions.h"
 #include "base/win/session_info.h"
 #include "common/session_type.h"
+#include "host/power_save_blocker.h"
 #include "host/win/host_session_process.h"
 #include "net/firewall_manager.h"
 #include "net/network_channel_host.h"
@@ -144,17 +146,8 @@ void HostServer::onNewConnection()
         }
         else
         {
-            try
-            {
-                user_name.erase(user_name.begin());
-
-                if (!user_name.empty())
-                    session_id = std::stoul(user_name);
-            }
-            catch (const std::exception&)
-            {
-                // Ignore.
-            }
+            user_name.erase(user_name.begin());
+            base::stringToULong(user_name, &session_id);
         }
 
         QString peer_address = channel->peerAddress();
@@ -202,6 +195,9 @@ void HostServer::onNewConnection()
         {
             sessions_.emplace_front(std::move(session_process));
             sendConnectEvent(sessions_.front().get());
+
+            if (!power_save_blocker_)
+                power_save_blocker_.reset(new PowerSaveBlocker());
         }
     }
 }
@@ -257,6 +253,9 @@ void HostServer::onSessionFinished()
             ++it;
         }
     }
+
+    if (sessions_.empty())
+        power_save_blocker_.reset();
 }
 
 void HostServer::reloadUsers()

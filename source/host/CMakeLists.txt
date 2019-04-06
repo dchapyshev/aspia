@@ -59,6 +59,8 @@ list(APPEND SOURCE_HOST_CORE
     input_injector.h
     input_thread.cc
     input_thread.h
+    power_save_blocker.cc
+    power_save_blocker.h
     sas_injector.cc
     sas_injector.h
     screen_updater.cc

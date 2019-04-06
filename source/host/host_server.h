@@ -31,6 +31,7 @@ class QFileSystemWatcher;
 
 namespace host {
 
+class PowerSaveBlocker;
 class SessionProcess;
 struct SrpUserList;
 
@@ -77,6 +78,8 @@ private:
 
     // Contains a list of connected sessions.
     std::list<std::unique_ptr<SessionProcess>> sessions_;
+
+    std::unique_ptr<PowerSaveBlocker> power_save_blocker_;
 
     DISALLOW_COPY_AND_ASSIGN(HostServer);
 };
