@@ -1,7 +1,11 @@
 Instructions for building the project
 =====================================
 1. Download and install [Visual Studio Community 2017](https://www.visualstudio.com/downloads).
-   **Desktop development with C++** workload should be selected when installing.
+
+   1.1. **Desktop development with C++** workload should be selected when installing.
+
+   1.2. **SDK 10.0.17763.0** should be selected when installing.
+
 2. Download and install [CMake](https://cmake.org/download).
 3. Download pre-compiled [third-party libraries](https://files.aspia.org/dev/third_party.7z).
    If you want to compile these libraries yourself, then you must follow the instructions for compiling these libraries.
