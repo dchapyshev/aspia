@@ -140,7 +140,13 @@ int compareVersionComponents(const std::vector<uint32_t>& components1,
 }  // namespace
 
 Version::Version() = default;
+
 Version::Version(const Version& other) = default;
+Version& Version::operator=(const Version& other) = default;
+
+Version::Version(Version&& other) = default;
+Version& Version::operator=(Version&& other) = default;
+
 Version::~Version() = default;
 
 Version::Version(const std::string& version_str)

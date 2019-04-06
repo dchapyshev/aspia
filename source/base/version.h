@@ -34,6 +34,10 @@ public:
     Version();
 
     Version(const Version& other);
+    Version& operator=(const Version& other);
+
+    Version(Version&& other);
+    Version& operator=(Version&& other);
 
     // Initializes from a decimal dotted version number, like "0.1.1".
     // Each component is limited to a uint16_t. Call isValid() to learn the outcome.
