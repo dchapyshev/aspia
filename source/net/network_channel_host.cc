@@ -250,7 +250,7 @@ void ChannelHost::readSessionResponse(const QByteArray& buffer)
 
     const proto::Version& client_version = session_response.version();
 
-    peer_version_ = QVersionNumber(
+    peer_version_ = base::Version(
         client_version.major(), client_version.minor(), client_version.patch());
 
     srp_host_.reset();

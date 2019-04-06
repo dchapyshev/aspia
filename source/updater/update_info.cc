@@ -62,7 +62,7 @@ UpdateInfo UpdateInfo::fromXml(const QByteArray& buffer)
                 {
                     if (xml.name() == QLatin1String("version"))
                     {
-                        update_info.version_ = QVersionNumber::fromString(parseElement(xml));
+                        update_info.version_ = base::Version(parseElement(xml).toStdString());
                     }
                     else if (xml.name() == QLatin1String("description"))
                     {
@@ -97,7 +97,7 @@ UpdateInfo UpdateInfo::fromXml(const QByteArray& buffer)
 
 bool UpdateInfo::hasUpdate() const
 {
-    return !version_.isNull() && !url_.isEmpty();
+    return !version_.isValid() && !url_.isEmpty();
 }
 
 } // namespace updater

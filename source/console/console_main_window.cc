@@ -882,8 +882,7 @@ void MainWindow::onUpdateChecked(const updater::UpdateInfo& update_info)
     if (!update_info.isValid() || !update_info.hasUpdate())
         return;
 
-    QVersionNumber current_version =
-        QVersionNumber(ASPIA_VERSION_MAJOR, ASPIA_VERSION_MINOR, ASPIA_VERSION_PATCH);
+    base::Version current_version(ASPIA_VERSION_MAJOR, ASPIA_VERSION_MINOR, ASPIA_VERSION_PATCH);
 
     if (update_info.version() > current_version)
         updater::UpdateDialog(update_info, this).exec();

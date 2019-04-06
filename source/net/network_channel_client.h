@@ -22,8 +22,6 @@
 #include "net/network_channel.h"
 #include "proto/common.pb.h"
 
-#include <QVersionNumber>
-
 namespace net {
 
 class SrpClientContext;

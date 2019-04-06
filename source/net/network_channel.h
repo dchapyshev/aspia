@@ -20,11 +20,11 @@
 #define NET__NETWORK_CHANNEL_H
 
 #include "base/macros_magic.h"
+#include "base/version.h"
 
 #include <QPointer>
 #include <QQueue>
 #include <QTcpSocket>
-#include <QVersionNumber>
 
 namespace crypto {
 class Cryptor;
@@ -71,7 +71,7 @@ public:
     QString peerAddress() const;
 
     // Returns the version of the connected peer.
-    QVersionNumber peerVersion() const;
+    base::Version peerVersion() const { return peer_version_; }
 
 signals:
     // Emits when the connection is aborted.
@@ -102,7 +102,7 @@ public slots:
 
 protected:
     QPointer<QTcpSocket> socket_;
-    QVersionNumber peer_version_;
+    base::Version peer_version_;
 
     // Encrypts and decrypts data.
     std::unique_ptr<crypto::Cryptor> cryptor_;

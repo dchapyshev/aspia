@@ -39,6 +39,8 @@ public:
     Version(Version&& other);
     Version& operator=(Version&& other);
 
+    Version(uint32_t major, uint32_t minor, uint32_t build, uint32_t revision = 0);
+
     // Initializes from a decimal dotted version number, like "0.1.1".
     // Each component is limited to a uint16_t. Call isValid() to learn the outcome.
     explicit Version(const std::string& version_str);
@@ -66,7 +68,7 @@ public:
     int compareToWildcardString(const std::string& wildcard_string) const;
 
     // Return the string representation of this version.
-    const std::string asString() const;
+    const std::string toString() const;
 
     const std::vector<uint32_t>& components() const { return components_; }
 

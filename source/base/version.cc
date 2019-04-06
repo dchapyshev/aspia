@@ -147,6 +147,14 @@ Version& Version::operator=(const Version& other) = default;
 Version::Version(Version&& other) = default;
 Version& Version::operator=(Version&& other) = default;
 
+Version::Version(uint32_t major, uint32_t minor, uint32_t build, uint32_t revision)
+{
+    components_.push_back(major);
+    components_.push_back(minor);
+    components_.push_back(build);
+    components_.push_back(revision);
+}
+
 Version::~Version() = default;
 
 Version::Version(const std::string& version_str)
@@ -230,7 +238,7 @@ int Version::compareTo(const Version& other) const
     return compareVersionComponents(components_, other.components_);
 }
 
-const std::string Version::asString() const
+const std::string Version::toString() const
 {
     DCHECK(isValid());
 
@@ -279,7 +287,7 @@ bool operator>=(const Version& v1, const Version& v2)
 
 std::ostream& operator<<(std::ostream& stream, const Version& v)
 {
-    return stream << v.asString();
+    return stream << v.toString();
 }
 
 } // namespace base

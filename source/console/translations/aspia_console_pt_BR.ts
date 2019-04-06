@@ -1024,12 +1024,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="918"/>
+        <location filename="../console_main_window.cc" line="917"/>
         <source>&lt;empty&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="939"/>
+        <location filename="../console_main_window.cc" line="938"/>
         <source>Aspia Console</source>
         <translation type="unfinished"></translation>
     </message>

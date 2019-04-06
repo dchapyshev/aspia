@@ -40,10 +40,10 @@ public:
     ConnectData& connectData() { return connect_data_; }
 
     // Returns the version of the connected host.
-    QVersionNumber hostVersion() const;
+    base::Version hostVersion() const;
 
     // Returns the version of the current client.
-    QVersionNumber clientVersion() const;
+    base::Version clientVersion() const;
 
 signals:
     // Indicates that the session is started.

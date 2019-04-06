@@ -67,7 +67,7 @@ UpdateDialog::UpdateDialog(const UpdateInfo& update_info, QWidget* parent)
 {
     initialize();
 
-    ui->label_available->setText(update_info_.version().toString());
+    ui->label_available->setText(QString::fromStdString(update_info_.version().toString()));
     ui->label_url->setText(makeUrl(update_info_.url()));
     ui->edit_description->setText(update_info_.description());
     ui->button_update->setEnabled(true);
@@ -121,20 +121,20 @@ void UpdateDialog::onUpdateChecked(const UpdateInfo& update_info)
     }
     else
     {
-        QVersionNumber current_version(
+        base::Version current_version(
             ASPIA_VERSION_MAJOR, ASPIA_VERSION_MINOR, ASPIA_VERSION_PATCH);
-        QVersionNumber new_version = update_info.version();
+        base::Version new_version = update_info.version();
 
         if (new_version > current_version)
         {
-            ui->label_available->setText(new_version.toString());
+            ui->label_available->setText(QString::fromStdString(new_version.toString()));
             ui->edit_description->setText(update_info.description());
             ui->label_url->setText(makeUrl(update_info.url()));
             ui->button_update->setEnabled(true);
         }
         else
         {
-            ui->label_available->setText(current_version.toString());
+            ui->label_available->setText(QString::fromStdString(current_version.toString()));
             ui->edit_description->setText(tr("No updates available."));
         }
     }
@@ -217,10 +217,9 @@ void UpdateDialog::initialize()
     connect(ui->button_update, &QPushButton::released, this, &UpdateDialog::onUpdateNow);
     connect(ui->button_close, &QPushButton::released, this, &UpdateDialog::close);
 
-    QVersionNumber current_version(
-        ASPIA_VERSION_MAJOR, ASPIA_VERSION_MINOR, ASPIA_VERSION_PATCH);
+    base::Version current_version(ASPIA_VERSION_MAJOR, ASPIA_VERSION_MINOR, ASPIA_VERSION_PATCH);
 
-    ui->label_current->setText(current_version.toString());
+    ui->label_current->setText(QString::fromStdString(current_version.toString()));
 }
 
 } // namespace updater

@@ -19,8 +19,9 @@
 #ifndef UPDATER__UPDATE_INFO_H
 #define UPDATER__UPDATE_INFO_H
 
+#include "base/version.h"
+
 #include <QUrl>
-#include <QVersionNumber>
 
 namespace updater {
 
@@ -37,13 +38,13 @@ public:
     bool hasUpdate() const;
 
     bool isValid() const { return valid_; }
-    QVersionNumber version() const { return version_; }
+    base::Version version() const { return version_; }
     QString description() const { return description_; }
     QUrl url() const { return url_; }
 
 private:
     bool valid_ = false;
-    QVersionNumber version_;
+    base::Version version_;
     QString description_;
     QUrl url_;
 };

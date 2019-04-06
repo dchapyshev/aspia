@@ -52,17 +52,17 @@ void Client::start()
                             connect_data_.session_type);
 }
 
-QVersionNumber Client::hostVersion() const
+base::Version Client::hostVersion() const
 {
     if (!channel_)
-        return QVersionNumber();
+        return base::Version();
 
     return channel_->peerVersion();
 }
 
-QVersionNumber Client::clientVersion() const
+base::Version Client::clientVersion() const
 {
-    return QVersionNumber(ASPIA_VERSION_MAJOR, ASPIA_VERSION_MINOR, ASPIA_VERSION_PATCH);
+    return base::Version(ASPIA_VERSION_MAJOR, ASPIA_VERSION_MINOR, ASPIA_VERSION_PATCH);
 }
 
 void Client::sendMessage(const google::protobuf::MessageLite& message)
