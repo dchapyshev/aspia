@@ -78,7 +78,8 @@ list(APPEND SOURCE_BASE_UNIT_TESTS
     bitset_unittest.cc
     guid_unittest.cc
     password_generator_unittest.cc
-    scoped_clear_last_error_unittest.cc)
+    scoped_clear_last_error_unittest.cc
+    version_unittest.cc)
 
 list(APPEND SOURCE_BASE_STRINGS
     strings/string_number_conversions.cc

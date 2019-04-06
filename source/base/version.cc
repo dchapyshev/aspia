@@ -30,41 +30,65 @@ namespace base {
 
 namespace {
 
+std::vector<std::string_view> splitString(std::string_view str, char separator)
+{
+    std::vector<std::string_view> result;
+
+    if (str.empty())
+        return result;
+
+    size_t start = 0;
+
+    while (start != std::string_view::npos)
+    {
+        size_t end = str.find_first_of(separator, start);
+
+        std::string_view piece;
+
+        if (end == std::string_view::npos)
+        {
+            piece = str.substr(start);
+            start = std::string_view::npos;
+        }
+        else
+        {
+            piece = str.substr(start, end - start);
+            start = end + 1;
+        }
+
+        result.emplace_back(piece);
+    }
+
+    return result;
+}
+
 // Parses the |numbers| vector representing the different numbers inside the version string and
 // constructs a vector of valid integers. It stops when it reaches an invalid item (including the
 // wildcard character). |parsed| is the resulting integer vector. Function returns true if all
 // numbers were parsed successfully, false otherwise.
-bool ParseVersionNumbers(const std::string& version_str, std::vector<uint32_t>* parsed)
+bool parseVersionNumbers(const std::string& version_str, std::vector<uint32_t>* parsed)
 {
-    std::istringstream stream(version_str);
-
-    std::vector<std::string> numbers;
-    std::string number;
-
-    while (std::getline(stream, number, '.'))
-        numbers.emplace_back(std::move(number));
-
+    std::vector<std::string_view> numbers = splitString(version_str, '.');
     if (numbers.empty())
         return false;
 
     for (auto it = numbers.begin(); it != numbers.end(); ++it)
     {
-        if (startsWith(*it, "+"))
+        std::string_view str = *it;
+
+        if (str.empty())
+            return false;
+
+        if (startsWith(str, "+"))
             return false;
 
         unsigned int num;
 
-        try
-        {
-            num = std::stoul(*it);
-        }
-        catch (const std::exception&)
-        {
+        if (!stringToUint(str, &num))
             return false;
-        }
 
         // This throws out leading zeros for the first item only.
-        if (it == numbers.begin() && numberToString(num) != *it)
+        if (it == numbers.begin() && numberToString(num) != str)
             return false;
 
         // StringToUint returns unsigned int but Version fields are uint32_t.
@@ -79,7 +103,7 @@ bool ParseVersionNumbers(const std::string& version_str, std::vector<uint32_t>* 
 // Compares version components in |components1| with components in
 // |components2|. Returns -1, 0 or 1 if |components1| is less than, equal to,
 // or greater than |components2|, respectively.
-int CompareVersionComponents(const std::vector<uint32_t>& components1,
+int compareVersionComponents(const std::vector<uint32_t>& components1,
                              const std::vector<uint32_t>& components2)
 {
     const size_t count = std::min(components1.size(), components2.size());
@@ -123,52 +147,52 @@ Version::Version(const std::string& version_str)
 {
     std::vector<uint32_t> parsed;
 
-    if (!ParseVersionNumbers(version_str, &parsed))
+    if (!parseVersionNumbers(version_str, &parsed))
         return;
 
     components_.swap(parsed);
 }
 
-Version::Version(std::vector<uint32_t> components)
+Version::Version(const std::vector<uint32_t>& components)
     : components_(std::move(components))
 {
     // Nothing
 }
 
-bool Version::IsValid() const
+bool Version::isValid() const
 {
     return (!components_.empty());
 }
 
 // static
-bool Version::IsValidWildcardString(const std::string& wildcard_string)
+bool Version::isValidWildcardString(const std::string& wildcard_string)
 {
     std::string version_string = wildcard_string;
     if (endsWith(version_string, ".*"))
         version_string.resize(version_string.size() - 2);
 
     Version version(version_string);
-    return version.IsValid();
+    return version.isValid();
 }
 
-int Version::CompareToWildcardString(const std::string& wildcard_string) const
+int Version::compareToWildcardString(const std::string& wildcard_string) const
 {
-    DCHECK(IsValid());
-    DCHECK(Version::IsValidWildcardString(wildcard_string));
+    DCHECK(isValid());
+    DCHECK(Version::isValidWildcardString(wildcard_string));
 
     // Default behavior if the string doesn't end with a wildcard.
     if (!endsWith(wildcard_string, ".*"))
     {
         Version version(wildcard_string);
-        DCHECK(version.IsValid());
-        return CompareTo(version);
+        DCHECK(version.isValid());
+        return compareTo(version);
     }
 
     std::vector<uint32_t> parsed;
-    const bool success = ParseVersionNumbers(
+    const bool success = parseVersionNumbers(
         wildcard_string.substr(0, wildcard_string.length() - 2), &parsed);
     DCHECK(success);
-    const int comparison = CompareVersionComponents(components_, parsed);
+    const int comparison = compareVersionComponents(components_, parsed);
     // If the version is smaller than the wildcard version's |parsed| vector,
     // then the wildcard has no effect (e.g. comparing 1.2.3 and 1.3.*) and the
     // version is still smaller. Same logic for equality (e.g. comparing 1.2.2 to
@@ -192,17 +216,17 @@ int Version::CompareToWildcardString(const std::string& wildcard_string) const
     return 0;
 }
 
-int Version::CompareTo(const Version& other) const
+int Version::compareTo(const Version& other) const
 {
-    DCHECK(IsValid());
-    DCHECK(other.IsValid());
+    DCHECK(isValid());
+    DCHECK(other.isValid());
 
-    return CompareVersionComponents(components_, other.components_);
+    return compareVersionComponents(components_, other.components_);
 }
 
-const std::string Version::GetString() const
+const std::string Version::asString() const
 {
-    DCHECK(IsValid());
+    DCHECK(isValid());
 
     std::string version_str;
 
@@ -219,7 +243,7 @@ const std::string Version::GetString() const
 
 bool operator==(const Version& v1, const Version& v2)
 {
-    return v1.CompareTo(v2) == 0;
+    return v1.compareTo(v2) == 0;
 }
 
 bool operator!=(const Version& v1, const Version& v2)
@@ -229,27 +253,27 @@ bool operator!=(const Version& v1, const Version& v2)
 
 bool operator<(const Version& v1, const Version& v2)
 {
-    return v1.CompareTo(v2) < 0;
+    return v1.compareTo(v2) < 0;
 }
 
 bool operator<=(const Version& v1, const Version& v2)
 {
-    return v1.CompareTo(v2) <= 0;
+    return v1.compareTo(v2) <= 0;
 }
 
 bool operator>(const Version& v1, const Version& v2)
 {
-    return v1.CompareTo(v2) > 0;
+    return v1.compareTo(v2) > 0;
 }
 
 bool operator>=(const Version& v1, const Version& v2)
 {
-    return v1.CompareTo(v2) >= 0;
+    return v1.compareTo(v2) >= 0;
 }
 
 std::ostream& operator<<(std::ostream& stream, const Version& v)
 {
-    return stream << v.GetString();
+    return stream << v.asString();
 }
 
 } // namespace base

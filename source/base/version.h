@@ -30,41 +30,39 @@ namespace base {
 class Version
 {
 public:
-    // The only thing you can legally do to a default constructed
-    // Version object is assign to it.
+    // The only thing you can legally do to a default constructed Version object is assign to it.
     Version();
 
     Version(const Version& other);
 
     // Initializes from a decimal dotted version number, like "0.1.1".
-    // Each component is limited to a uint16_t. Call IsValid() to learn the outcome.
+    // Each component is limited to a uint16_t. Call isValid() to learn the outcome.
     explicit Version(const std::string& version_str);
 
-    // Initializes from a vector of components, like {1, 2, 3, 4}. Call IsValid() to learn the
+    // Initializes from a vector of components, like {1, 2, 3, 4}. Call isValid() to learn the
     // outcome.
-    explicit Version(std::vector<uint32_t> components);
+    explicit Version(const std::vector<uint32_t>& components);
 
     ~Version();
 
     // Returns true if the object contains a valid version number.
-    bool IsValid() const;
+    bool isValid() const;
 
     // Returns true if the version wildcard string is valid. The version wildcard string may end
-    // with ".*" (e.g. 1.2.*, 1.*). Any other arrangement with "*" is invalid
-    // (e.g. 1.*.3 or 1.2.3*). This functions defaults to standard
-    // Version behavior (IsValid) if no wildcard is present.
-    static bool IsValidWildcardString(const std::string& wildcard_string);
+    // with ".*" (e.g. 1.2.*, 1.*). Any other arrangement with "*" is invalid (e.g. 1.*.3 or 1.2.3*).
+    // This functions defaults to standard Version behavior (isValid) if no wildcard is present.
+    static bool isValidWildcardString(const std::string& wildcard_string);
 
     // Returns -1, 0, 1 for <, ==, >.
-    int CompareTo(const Version& other) const;
+    int compareTo(const Version& other) const;
 
     // Given a valid version object, compare if a |wildcard_string| results in a newer version.
     // This function will default to CompareTo if the string does not end in wildcard sequence
-    // ".*". IsValidWildcard(wildcard_string) must be true before using this function.
-    int CompareToWildcardString(const std::string& wildcard_string) const;
+    // ".*". isValidWildcard(wildcard_string) must be true before using this function.
+    int compareToWildcardString(const std::string& wildcard_string) const;
 
     // Return the string representation of this version.
-    const std::string GetString() const;
+    const std::string asString() const;
 
     const std::vector<uint32_t>& components() const { return components_; }
 
