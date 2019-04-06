@@ -19,8 +19,6 @@
 #ifndef DESKTOP__SHARED_DESKTOP_FRAME_H
 #define DESKTOP__SHARED_DESKTOP_FRAME_H
 
-#include "base/ref_counted_object.h"
-#include "base/scoped_refptr.h"
 #include "desktop/desktop_frame.h"
 
 #include <memory>
@@ -46,11 +44,9 @@ public:
     bool isShared();
 
 private:
-    using Core = base::RefCountedObject<std::unique_ptr<Frame>>;
+    SharedFrame(std::shared_ptr<Frame>& frame);
 
-    SharedFrame(base::scoped_refptr<Core> core);
-
-    const base::scoped_refptr<Core> core_;
+    std::shared_ptr<Frame> frame_;
 
     DISALLOW_COPY_AND_ASSIGN(SharedFrame);
 };

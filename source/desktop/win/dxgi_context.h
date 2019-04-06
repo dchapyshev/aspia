@@ -31,7 +31,7 @@ class DxgiDuplicatorController;
 // A DxgiOutputContext stores the status of a single DxgiFrame of DxgiOutputDuplicator.
 struct DxgiOutputContext final
 {
-    // The updated region DxgiOutputDuplicator::DetectUpdatedRegion() output during last
+    // The updated region DxgiOutputDuplicator::detectUpdatedRegion() output during last
     // duplicate() function call. It's always relative to the (0, 0).
     Region updated_region;
 };

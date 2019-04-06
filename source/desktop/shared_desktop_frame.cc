@@ -18,42 +18,39 @@
 
 #include "desktop/shared_desktop_frame.h"
 
-#include <memory>
-#include <type_traits>
-#include <utility>
-
 namespace desktop {
+
+SharedFrame::SharedFrame(std::shared_ptr<Frame>& frame)
+    : Frame(frame->size(), frame->format(), frame->stride(), frame->frameData()),
+      frame_(frame)
+{
+    copyFrameInfoFrom(*frame_);
+}
 
 SharedFrame::~SharedFrame() = default;
 
 // static
 std::unique_ptr<SharedFrame> SharedFrame::wrap(std::unique_ptr<Frame> desktop_frame)
 {
-    return std::unique_ptr<SharedFrame>(new SharedFrame(new Core(std::move(desktop_frame))));
+    std::shared_ptr<Frame> shared_frame(desktop_frame.release());
+    return std::unique_ptr<SharedFrame>(new SharedFrame(shared_frame));
 }
 
 bool SharedFrame::shareFrameWith(const SharedFrame& other) const
 {
-    return core_->get() == other.core_->get();
+    return frame_.get() == other.frame_.get();
 }
 
 std::unique_ptr<SharedFrame> SharedFrame::share()
 {
-    std::unique_ptr<SharedFrame> result(new SharedFrame(core_));
+    std::unique_ptr<SharedFrame> result(new SharedFrame(frame_));
     result->copyFrameInfoFrom(*this);
     return result;
 }
 
 bool SharedFrame::isShared()
 {
-    return !core_->hasOneRef();
-}
-
-SharedFrame::SharedFrame(base::scoped_refptr<Core> core)
-    : Frame((*core)->size(), (*core)->format(), (*core)->stride(), (*core)->frameData()),
-      core_(core)
-{
-    copyFrameInfoFrom(*(core_)->get());
+    return !frame_.unique();
 }
 
 } // namespace desktop

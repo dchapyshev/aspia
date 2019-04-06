@@ -45,8 +45,8 @@ public:
     SharedFrame* frame() const;
 
 private:
-    // Allows DxgiDuplicatorController to access prepare() and context() function as
-    // well as Context class.
+    // Allows DxgiDuplicatorController to access prepare() and context() function as well as
+    // Context class.
     friend class DxgiDuplicatorController;
 
     // Prepares current instance with desktop size and source id.

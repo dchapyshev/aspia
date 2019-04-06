@@ -63,9 +63,9 @@ protected:
     uint8_t* const data_;
 
 private:
-    Size size_;
-    PixelFormat format_;
-    int stride_;
+    const Size size_;
+    const PixelFormat format_;
+    const int stride_;
 
     Region updated_region_;
     Point top_left_;

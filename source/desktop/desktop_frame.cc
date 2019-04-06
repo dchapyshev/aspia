@@ -68,10 +68,7 @@ uint8_t* Frame::frameDataAtPos(int x, int y) const
 
 void Frame::copyFrameInfoFrom(const Frame& other)
 {
-    size_ = other.size_;
-    format_ = other.format_;
     top_left_ = other.top_left_;
-    stride_ = other.stride_;
     updated_region_ = other.updated_region_;
 }
 

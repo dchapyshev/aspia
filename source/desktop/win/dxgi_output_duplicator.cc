@@ -251,8 +251,8 @@ bool DxgiOutputDuplicator::duplicate(Context* context, const Point& offset, Shar
 
     if (last_frame_)
     {
-        // No change since last frame or AcquireNextFrame() timed out, we will
-        // export last frame to the target.
+        // No change since last frame or AcquireNextFrame() timed out, we will export last frame to
+        // the target.
         for (Region::Iterator it(updated_region); !it.isAtEnd(); it.advance())
         {
             // The Rect in |source|, starts from last_frame_offset_.
