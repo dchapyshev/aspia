@@ -29,11 +29,10 @@ namespace desktop {
 ScreenCapturerWrapper::ScreenCapturerWrapper(uint32_t flags)
     : flags_(flags)
 {
-    if (flags & DISABLE_EFFECTS)
-        effects_disabler_ = std::make_unique<EffectsDisabler>();
+    switchToInputDesktop();
+    atDesktopSwitch();
 
-    if (flags & DISABLE_WALLPAPER)
-        wallpaper_disabler_ = std::make_unique<WallpaperDisabler>();
+    SetThreadExecutionState(ES_DISPLAY_REQUIRED);
 
     if (ScreenCapturerDxgi::isSupported())
     {
@@ -66,31 +65,41 @@ bool ScreenCapturerWrapper::selectScreen(ScreenCapturer::ScreenId screen_id)
 
 const Frame* ScreenCapturerWrapper::captureFrame()
 {
-    prepare();
+    if (switchToInputDesktop())
+        atDesktopSwitch();
+
     return capturer_->captureFrame();
 }
 
-void ScreenCapturerWrapper::prepare()
+bool ScreenCapturerWrapper::switchToInputDesktop()
 {
     // Switch to the desktop receiving user input if different from the current one.
     base::Desktop input_desktop(base::Desktop::inputDesktop());
 
     if (input_desktop.isValid() && !desktop_.isSame(input_desktop))
     {
-        capturer_->reset();
+        if (capturer_)
+            capturer_->reset();
+
         effects_disabler_.reset();
         wallpaper_disabler_.reset();
 
         // If setThreadDesktop() fails, the thread is still assigned a desktop.
         // So we can continue capture screen bits, just from the wrong desktop.
         desktop_.setThreadDesktop(std::move(input_desktop));
-
-        if (flags_ & DISABLE_EFFECTS)
-            effects_disabler_ = std::make_unique<EffectsDisabler>();
-
-        if (flags_ & DISABLE_WALLPAPER)
-            wallpaper_disabler_ = std::make_unique<WallpaperDisabler>();
+        return true;
     }
+
+    return false;
+}
+
+void ScreenCapturerWrapper::atDesktopSwitch()
+{
+    if (flags_ & DISABLE_EFFECTS)
+        effects_disabler_ = std::make_unique<EffectsDisabler>();
+
+    if (flags_ & DISABLE_WALLPAPER)
+        wallpaper_disabler_ = std::make_unique<WallpaperDisabler>();
 }
 
 } // namespace desktop

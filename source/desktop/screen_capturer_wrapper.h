@@ -49,7 +49,8 @@ public:
     const Frame* captureFrame();
 
 private:
-    void prepare();
+    bool switchToInputDesktop();
+    void atDesktopSwitch();
 
     const uint32_t flags_;
 

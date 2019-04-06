@@ -109,7 +109,7 @@ bool ScreenCapturerDxgi::isCurrentSessionSupported()
 
 int ScreenCapturerDxgi::screenCount()
 {
-    return ScreenCaptureUtils::screenCount();
+    return controller_->screenCount();
 }
 
 bool ScreenCapturerDxgi::screenList(ScreenList* screens)
@@ -169,8 +169,7 @@ const Frame* ScreenCapturerDxgi::captureFrame()
     {
         case DuplicateResult::SUCCEEDED:
         {
-            frame_ = queue_.currentFrame()->frame()->share();
-            return frame_.get();
+            return queue_.currentFrame()->frame();
         }
 
         case DuplicateResult::UNSUPPORTED_SESSION:

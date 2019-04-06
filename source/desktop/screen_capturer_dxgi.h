@@ -57,7 +57,6 @@ private:
 
     ScreenId current_screen_id_ = kFullDesktopScreenId;
     ScreenCaptureFrameQueue<DxgiFrame> queue_;
-    std::unique_ptr<Frame> frame_;
 
     DISALLOW_COPY_AND_ASSIGN(ScreenCapturerDxgi);
 };
