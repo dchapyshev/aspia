@@ -19,6 +19,8 @@
 #include "desktop/screen_capturer_wrapper.h"
 
 #include "base/logging.h"
+#include "base/win/windows_version.h"
+#include "desktop/screen_capturer_dfmirage.h"
 #include "desktop/screen_capturer_dxgi.h"
 #include "desktop/screen_capturer_gdi.h"
 #include "desktop/win/effects_disabler.h"
@@ -33,6 +35,19 @@ ScreenCapturerWrapper::ScreenCapturerWrapper(uint32_t flags)
     atDesktopSwitch();
 
     SetThreadExecutionState(ES_DISPLAY_REQUIRED);
+
+    if (base::win::windowsVersion() == base::win::VERSION_WIN7)
+    {
+        std::unique_ptr<ScreenCapturerDFMirage> capturer_dfmirage =
+            std::make_unique<ScreenCapturerDFMirage>();
+
+        if (capturer_dfmirage->isSupported())
+        {
+            LOG(LS_INFO) << "Using DFMirage capturer";
+            capturer_ = std::move(capturer_dfmirage);
+            return;
+        }
+    }
 
     std::unique_ptr<ScreenCapturerDxgi> capturer_dxgi = std::make_unique<ScreenCapturerDxgi>();
     if (capturer_dxgi->isSupported())

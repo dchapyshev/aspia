@@ -86,6 +86,8 @@ public:
         hdc_ = h;
     }
 
+    bool isValid() const { return hdc_ != nullptr; }
+
     operator HDC() { return hdc_; }
 
 private:

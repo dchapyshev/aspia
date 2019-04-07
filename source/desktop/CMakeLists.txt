@@ -38,6 +38,9 @@ list(APPEND SOURCE_DESKTOP
     desktop_geometry.h
     desktop_region.cc
     desktop_region.h
+    dfmirage.h
+    dfmirage_helper.cc
+    dfmirage_helper.h
     diff_block_avx2.cc
     diff_block_avx2.h
     diff_block_c.cc
@@ -58,6 +61,8 @@ list(APPEND SOURCE_DESKTOP
     resolution_tracker.h
     screen_capture_frame_queue.h
     screen_capturer.h
+    screen_capturer_dfmirage.cc
+    screen_capturer_dfmirage.h
     screen_capturer_dxgi.cc
     screen_capturer_dxgi.h
     screen_capturer_gdi.cc

@@ -39,8 +39,11 @@ bool ScreenCaptureUtils::screenList(ScreenCapturer::ScreenList* screens)
             break;
 
         // We only care about active displays.
-        if (!(device.StateFlags & DISPLAY_DEVICE_ACTIVE))
+        if (!(device.StateFlags & DISPLAY_DEVICE_ACTIVE) ||
+            (device.StateFlags & DISPLAY_DEVICE_MIRRORING_DRIVER))
+        {
             continue;
+        }
 
         screens->push_back({device_index, QString::fromUtf16(
             reinterpret_cast<const ushort*>(device.DeviceName))});
