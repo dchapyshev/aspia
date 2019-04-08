@@ -90,7 +90,6 @@ private:
     using RowsAllocator = std::allocator<std::pair<const int, Row*>>;
 #endif // defined(USE_*)
 
-    using RowsAllocator = tbb::scalable_allocator<std::pair<const int, Row*>>;
     using Rows = std::map<const int, Row* , std::less<const int>, RowsAllocator>;
 
 public:
