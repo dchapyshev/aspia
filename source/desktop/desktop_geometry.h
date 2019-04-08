@@ -24,6 +24,7 @@
 #include <QSize>
 
 #include <cstdint>
+#include <ostream>
 
 namespace desktop {
 
@@ -239,8 +240,12 @@ public:
 
     // Returns true if |rect| lies within the boundaries of this rectangle.
     bool containsRect(const Rect& rect) const;
+
     void translate(int32_t dx, int32_t dy);
     void translate(const Point& pt) { translate(pt.x(), pt.y()); };
+
+    Rect translated(int32_t dx, int32_t dy) const;
+    Rect translated(const Point& pt) const { return translated(pt.x(), pt.y()); }
 
     // Finds intersection with |rect|.
     void intersectWith(const Rect& rect);
@@ -259,6 +264,12 @@ public:
 
     // Scales current Rect. This function does not impact the |top_| and |left_|.
     void scale(double horizontal, double vertical);
+
+    void move(const Point& pt) { move(pt.x(), pt.y()); }
+    void move(int32_t x, int32_t y);
+
+    Rect moved(const Point& pt) const { return moved(pt.x(), pt.y()); };
+    Rect moved(int32_t x, int32_t y) const;
 
     Rect& operator=(const Rect& other);
 
@@ -280,6 +291,10 @@ private:
     int32_t right_  = 0;
     int32_t bottom_ = 0;
 };
+
+std::ostream& operator<<(std::ostream& stream, const Rect& rect);
+std::ostream& operator<<(std::ostream& stream, const Point& point);
+std::ostream& operator<<(std::ostream& stream, const Size& size);
 
 } // namespace desktop
 

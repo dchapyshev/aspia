@@ -62,6 +62,13 @@ void Rect::translate(int32_t dx, int32_t dy)
     bottom_ += dy;
 }
 
+Rect Rect::translated(int32_t dx, int32_t dy) const
+{
+    Rect result(*this);
+    result.translate(dx, dy);
+    return result;
+}
+
 void Rect::intersectWith(const Rect& rect)
 {
     left_   = std::max(left(),   rect.left());
@@ -112,6 +119,21 @@ void Rect::scale(double horizontal, double vertical)
     bottom_ += height() * (vertical - 1);
 }
 
+void Rect::move(int32_t x, int32_t y)
+{
+    right_  += x - left_;
+    bottom_ += y - top_;
+    left_ = x;
+    top_  = y;
+}
+
+Rect Rect::moved(int32_t x, int32_t y) const
+{
+    Rect moved_rect(*this);
+    moved_rect.move(x, y);
+    return moved_rect;
+}
+
 Rect& Rect::operator=(const Rect& other)
 {
     left_   = other.left_;
@@ -120,6 +142,24 @@ Rect& Rect::operator=(const Rect& other)
     bottom_ = other.bottom_;
 
     return *this;
+}
+
+std::ostream& operator<<(std::ostream& stream, const Rect& rect)
+{
+    return stream << "Rect("
+                  << rect.left() << ' ' << rect.top() << ' '
+                  << rect.right() << ' ' << rect.bottom()
+                  << ')';
+}
+
+std::ostream& operator<<(std::ostream& stream, const Point& point)
+{
+    return stream << "Point(" << point.x() << ' ' << point.y() << ')';
+}
+
+std::ostream& operator<<(std::ostream& stream, const Size& size)
+{
+    return stream << "Size(" << size.width() << ' ' << size.height() << ')';
 }
 
 } // namespace desktop
