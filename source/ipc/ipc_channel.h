@@ -27,10 +27,15 @@
 #include "base/win/session_id.h"
 #endif // defined(OS_WIN)
 
+#if defined(USE_TBB)
+#include <tbb/scalable_allocator.h>
+#endif // defined(USE_TBB)
+
 #include <QByteArray>
 #include <QLocalSocket>
-#include <QQueue>
 #include <QPointer>
+
+#include <queue>
 
 namespace ipc {
 
@@ -89,7 +94,16 @@ private:
     const Type type_;
     QPointer<QLocalSocket> socket_;
 
-    QQueue<QByteArray> write_queue_;
+#if defined(USE_TBB)
+    using QueueAllocator = tbb::scalable_allocator<QByteArray>;
+#else // defined(USE_TBB)
+    using QueueAllocator = std::allocator<QByteArray>;
+#endif // defined(USE_*)
+
+    using QueueContainer = std::deque<QByteArray, QueueAllocator>;
+
+    // The queue contains unencrypted source messages.
+    std::queue<QByteArray, QueueContainer> write_queue_;
     MessageSizeType write_size_ = 0;
     int64_t written_ = 0;
 

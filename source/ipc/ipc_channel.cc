@@ -150,9 +150,9 @@ void Channel::start()
 
 void Channel::send(const QByteArray& buffer)
 {
-    bool schedule_write = write_queue_.isEmpty();
+    bool schedule_write = write_queue_.empty();
 
-    write_queue_.push_back(buffer);
+    write_queue_.emplace(buffer);
 
     if (schedule_write)
         scheduleWrite();
@@ -182,7 +182,7 @@ void Channel::onBytesWritten(int64_t bytes)
     }
     else
     {
-        write_queue_.pop_front();
+        write_queue_.pop();
         written_ = 0;
 
         if (!write_queue_.empty())
