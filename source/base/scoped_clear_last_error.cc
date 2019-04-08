@@ -21,7 +21,6 @@
 #include <cerrno>
 
 #if defined(OS_WIN)
-#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #endif // defined(OS_WIN)
 

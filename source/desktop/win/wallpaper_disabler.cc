@@ -21,7 +21,6 @@
 #include "base/win/scoped_impersonator.h"
 #include "base/logging.h"
 
-#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <wtsapi32.h>
 

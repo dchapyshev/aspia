@@ -19,7 +19,6 @@
 #include "desktop/win/effects_disabler.h"
 #include "base/logging.h"
 
-#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
 namespace desktop {

@@ -51,6 +51,7 @@ add_definitions(-D_UNICODE
                 -DPSAPI_VERSION=2
                 -D_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS
                 -D_CRT_SECURE_NO_WARNINGS
+                -DWIN32_LEAN_AND_MEAN
                 -DNOMINMAX
                 -DHAS_QT
                 -DQT_NO_CAST_TO_ASCII

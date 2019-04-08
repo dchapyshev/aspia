@@ -24,7 +24,6 @@
 #include "host/host_server.h"
 #include "host/host_settings.h"
 
-#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <sddl.h>
 

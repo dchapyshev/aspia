@@ -22,7 +22,6 @@
 #include "base/macros_magic.h"
 #include "base/thread_checker.h"
 
-#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
 namespace base::win {

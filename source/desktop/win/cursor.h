@@ -19,7 +19,6 @@
 #ifndef DESKTOP__WIN__CURSOR_H
 #define DESKTOP__WIN__CURSOR_H
 
-#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
 namespace desktop {

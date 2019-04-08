@@ -34,7 +34,6 @@ Q_IMPORT_PLUGIN(QWindowsVistaStylePlugin);
 #endif // defined(Q_OS_WIN)
 #endif // defined(QT_STATIC)
 
-#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
 extern "C" {

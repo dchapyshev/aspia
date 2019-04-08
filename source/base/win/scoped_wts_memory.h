@@ -21,7 +21,6 @@
 
 #include "base/macros_magic.h"
 
-#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <wtsapi32.h>
 

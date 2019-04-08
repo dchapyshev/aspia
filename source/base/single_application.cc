@@ -33,7 +33,6 @@
 #include <QThread>
 
 #if defined(OS_WIN)
-#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <psapi.h>
 #endif // defined(OS_WIN)
