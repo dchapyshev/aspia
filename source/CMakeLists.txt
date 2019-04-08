@@ -110,6 +110,7 @@ set(THIRD_PARTY_LIBS
     debug qtpcre2d
     debug qwindowsd
     debug qwindowsvistastyled
+    debug tbb_debug
     debug windowsprintersupportd
     debug zstdd
     optimized Qt5AccessibilitySupport
@@ -126,6 +127,7 @@ set(THIRD_PARTY_LIBS
     optimized qtpcre2
     optimized qwindows
     optimized qwindowsvistastyle
+    optimized tbb
     optimized windowsprintersupport
     optimized zstd
     crypt32
@@ -141,7 +143,6 @@ set(THIRD_PARTY_LIBS
     sas
     setupapi
     shlwapi
-    tbb
     userenv
     uxtheme
     version
