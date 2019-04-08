@@ -129,6 +129,7 @@ target_link_libraries(aspia_host_core
     aspia_proto
     aspia_updater
     ${THIRD_PARTY_LIBS})
+set_target_properties(aspia_host_core PROPERTIES COMPILE_DEFINITIONS "HOST_IMPLEMENTATION")
 
 if (USE_TBB)
     add_tbb(aspia_host_core ${ASPIA_THIRD_PARTY_DIR}/tbb)

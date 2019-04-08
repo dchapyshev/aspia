@@ -125,6 +125,7 @@ target_link_libraries(aspia_client
     aspia_net
     aspia_proto
     ${THIRD_PARTY_LIBS})
+set_target_properties(aspia_client PROPERTIES COMPILE_DEFINITIONS "CLIENT_IMPLEMENTATION")
 
 if(Qt5LinguistTools_FOUND)
     # Get the list of translation files.

@@ -41,24 +41,29 @@ find_package(Protobuf REQUIRED)
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 list(APPEND CMAKE_AUTORCC_OPTIONS -compress 9 -threshold 5)
 
-add_definitions(-D_UNICODE
-                -DUNICODE
-                -DNTDDI_VERSION=0x06010000
+# Target version.
+add_definitions(-DNTDDI_VERSION=0x06010000
                 -D_WIN32_WINNT=0x0601
                 -D_WIN32_WINDOWS=_WIN32_WINNT
                 -DWINVER=_WIN32_WINNT
                 -D_WIN32_IE=0x0800
-                -DPSAPI_VERSION=2
-                -D_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS
-                -D_CRT_SECURE_NO_WARNINGS
-                -DWIN32_LEAN_AND_MEAN
-                -DNOMINMAX
-                -DHAS_QT
+                -DPSAPI_VERSION=2)
+
+# For Qt.
+add_definitions(-DHAS_QT
                 -DQT_NO_CAST_TO_ASCII
                 -DQT_NO_CAST_FROM_BYTEARRAY
-                -DQT_USE_QSTRINGBUILDER
-                -DCLIENT_IMPLEMENTATION
-                -DHOST_IMPLEMENTATION)
+                -DQT_USE_QSTRINGBUILDER)
+
+# For Windows.
+add_definitions(-D_UNICODE
+                -DUNICODE
+                -DWIN32_LEAN_AND_MEAN
+                -DNOMINMAX)
+
+# Disable warnings.
+add_definitions(-D_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS
+                -D_CRT_SECURE_NO_WARNINGS)
 
 if (USE_PCG_GENERATOR)
     add_definitions(-DUSE_PCG_GENERATOR)
