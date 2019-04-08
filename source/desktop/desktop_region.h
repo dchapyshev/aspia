@@ -21,12 +21,14 @@
 
 #include "desktop/desktop_geometry.h"
 
+#include <tbb/scalable_allocator.h>
+
 #include <map>
 #include <vector>
 
 namespace desktop {
 
-// DesktopRegion represents a region of the screen or window.
+// Region represents a region of the screen or window.
 //
 // Internally each region is stored as a set of rows where each row contains one
 // or more rectangles aligned vertically.
@@ -51,7 +53,7 @@ private:
         int32_t right;
     };
 
-    using RowSpanSet = std::vector<RowSpan>;
+    using RowSpanSet = std::vector<RowSpan, tbb::scalable_allocator<RowSpan>>;
 
     // Row represents a single row of a region. A row is set of rectangles that
     // have the same vertical position.
@@ -72,11 +74,11 @@ private:
 
     // Type used to store list of rows in the region. The bottom position of row
     // is used as the key so that rows are always ordered by their position. The
-    // map stores pointers to make Translate() more efficient.
-    using Rows = std::map<int, Row*>;
+    // map stores pointers to make translate() more efficient.
+    using Rows = std::map<int, Row*, tbb::scalable_allocator<std::pair<int, Row*>>>;
 
 public:
-    // Iterator that can be used to iterate over rectangles of a DesktopRegion.
+    // Iterator that can be used to iterate over rectangles of a Region.
     // The region must not be mutated while the iterator is used.
     class Iterator
     {

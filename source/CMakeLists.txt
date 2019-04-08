@@ -71,6 +71,7 @@ include_directories(
     ${ASPIA_THIRD_PARTY_DIR}/openssl/include
     ${ASPIA_THIRD_PARTY_DIR}/pcg-cpp/include
     ${ASPIA_THIRD_PARTY_DIR}/protobuf/include
+    ${ASPIA_THIRD_PARTY_DIR}/tbb/include
     ${ASPIA_THIRD_PARTY_DIR}/zstd/include)
 
 link_directories(
@@ -83,6 +84,7 @@ link_directories(
     ${ASPIA_THIRD_PARTY_DIR}/qt/plugins/platforms
     ${ASPIA_THIRD_PARTY_DIR}/qt/plugins/printsupport
     ${ASPIA_THIRD_PARTY_DIR}/qt/plugins/styles
+    ${ASPIA_THIRD_PARTY_DIR}/tbb/lib
     ${ASPIA_THIRD_PARTY_DIR}/zstd/lib)
 
 set(THIRD_PARTY_LIBS
@@ -139,6 +141,7 @@ set(THIRD_PARTY_LIBS
     sas
     setupapi
     shlwapi
+    tbb
     userenv
     uxtheme
     version
