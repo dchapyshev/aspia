@@ -20,7 +20,7 @@
 
 namespace desktop {
 
-MouseCursor::MouseCursor(std::unique_ptr<uint8_t[]> data, const QSize& size, const QPoint& hotspot)
+MouseCursor::MouseCursor(std::unique_ptr<uint8_t[]> data, const Size& size, const Point& hotspot)
     : data_(std::move(data)),
       size_(size),
       hotspot_(hotspot)

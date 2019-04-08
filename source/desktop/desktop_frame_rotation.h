@@ -48,11 +48,11 @@ void rotateDesktopFrame(const Frame& source,
 // Returns a reverse rotation of |rotation|.
 Rotation reverseRotation(Rotation rotation);
 
-// Returns a rotated QSize of |size|.
+// Returns a rotated Size of |size|.
 Size rotateSize(const Size& size, Rotation rotation);
 
-// Returns a rotated DesktopRect of |rect|. The |size| represents the size of
-// the DesktopFrame which |rect| belongs in.
+// Returns a rotated Rect of |rect|. The |size| represents the size of the Frame which |rect|
+// belongs in.
 Rect rotateRect(const Rect& rect, const Size& size, Rotation rotation);
 
 } // namespace desktop

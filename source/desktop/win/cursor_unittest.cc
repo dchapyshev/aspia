@@ -66,7 +66,7 @@ bool ñonvertToMouseShapeAndCompare(unsigned left, unsigned right)
 
     int width = bitmap_info.bmWidth;
     int height = bitmap_info.bmHeight;
-    EXPECT_TRUE(QSize(width, height) == mouse_shape->size());
+    EXPECT_TRUE(Size(width, height) == mouse_shape->size());
 
     // Get the pixels from |scoped_color|.
     int size = width * height;

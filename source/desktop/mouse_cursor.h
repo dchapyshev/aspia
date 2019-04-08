@@ -19,8 +19,7 @@
 #ifndef DESKTOP__MOUSE_CURSOR_H
 #define DESKTOP__MOUSE_CURSOR_H
 
-#include <QPoint>
-#include <QSize>
+#include "desktop/desktop_geometry.h"
 
 #include <memory>
 
@@ -30,12 +29,12 @@ class MouseCursor
 {
 public:
     MouseCursor(std::unique_ptr<uint8_t[]> data,
-                const QSize& size,
-                const QPoint& hotspot);
+                const Size& size,
+                const Point& hotspot);
     ~MouseCursor() = default;
 
-    const QSize& size() const { return size_; }
-    const QPoint& hotSpot() const { return hotspot_; }
+    const Size& size() const { return size_; }
+    const Point& hotSpot() const { return hotspot_; }
     uint8_t* data() const { return data_.get(); }
 
     int stride() const;
@@ -44,8 +43,8 @@ public:
 
 private:
     std::unique_ptr<uint8_t[]> const data_;
-    const QSize size_;
-    const QPoint hotspot_;
+    const Size size_;
+    const Point hotspot_;
 };
 
 } // namespace desktop
