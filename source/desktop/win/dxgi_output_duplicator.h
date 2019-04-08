@@ -118,7 +118,7 @@ private:
     DXGI_OUTDUPL_DESC desc_;
     std::vector<uint8_t> metadata_;
     std::unique_ptr<DxgiTexture> texture_;
-    Rotation rotation_;
+    Rotation rotation_ = Rotation::CLOCK_WISE_0;
     Size unrotated_size_;
 
     // After each AcquireNextFrame() function call, updated_region_(s) of all active Context(s)

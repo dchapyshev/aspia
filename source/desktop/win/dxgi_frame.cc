@@ -55,12 +55,14 @@ bool DxgiFrame::prepare(const Size& size, ScreenCapturer::ScreenId source_id)
             return false;
         }
 
+        const Size& frame_size = frame->size();
+
         // DirectX capturer won't paint each pixel in the frame due to its one
         // capturer per monitor design. So once the new frame is created, we should
         // clear it to avoid the legacy image to be remained on it. See
         // http://crbug.com/708766.
-        DCHECK_EQ(frame->stride(), frame->size().width() * frame->format().bytesPerPixel());
-        memset(frame->frameData(), 0, frame->stride() * frame->size().height());
+        DCHECK_EQ(frame->stride(), frame_size.width() * frame->format().bytesPerPixel());
+        memset(frame->frameData(), 0, frame->stride() * frame_size.height());
 
         frame_ = SharedFrame::wrap(std::move(frame));
     }

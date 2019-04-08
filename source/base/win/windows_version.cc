@@ -301,10 +301,12 @@ base::Version OSInfo::kernel32BaseVersion() const
 
         CHECK(file_version_info);
 
-        const uint32_t major = HIWORD(file_version_info->fixed_file_info()->dwFileVersionMS);
-        const uint32_t minor = LOWORD(file_version_info->fixed_file_info()->dwFileVersionMS);
-        const uint32_t build = HIWORD(file_version_info->fixed_file_info()->dwFileVersionLS);
-        const uint32_t patch = LOWORD(file_version_info->fixed_file_info()->dwFileVersionLS);
+        const VS_FIXEDFILEINFO* file_info = file_version_info->fixed_file_info();
+
+        const uint32_t major = HIWORD(file_info->dwFileVersionMS);
+        const uint32_t minor = LOWORD(file_info->dwFileVersionMS);
+        const uint32_t build = HIWORD(file_info->dwFileVersionLS);
+        const uint32_t patch = LOWORD(file_info->dwFileVersionLS);
 
         return base::Version(std::vector<uint32_t>{major, minor, build, patch});
     }());

@@ -82,6 +82,8 @@ DxgiOutputDuplicator::DxgiOutputDuplicator(const D3dDevice& device,
     DCHECK(!desktop_rect_.isEmpty());
     DCHECK_GT(desktop_rect_.width(), 0);
     DCHECK_GT(desktop_rect_.height(), 0);
+
+    memset(&desc_, 0, sizeof(desc_));
 }
 
 DxgiOutputDuplicator::DxgiOutputDuplicator(DxgiOutputDuplicator&& other) = default;

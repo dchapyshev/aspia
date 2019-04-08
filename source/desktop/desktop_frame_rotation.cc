@@ -43,7 +43,10 @@ libyuv::RotationMode ToLibyuvRotationMode(Rotation rotation)
     return libyuv::kRotate0;
 }
 
-Rect rotateAndOffsetRect(Rect rect, Size size, Rotation rotation, Point offset)
+Rect rotateAndOffsetRect(const Rect& rect,
+                         const Size& size,
+                         Rotation rotation,
+                         const Point &offset)
 {
     Rect result = rotateRect(rect, size, rotation);
     result.translate(offset.x(), offset.y());
@@ -69,7 +72,7 @@ Rotation reverseRotation(Rotation rotation)
     return Rotation::CLOCK_WISE_0;
 }
 
-Size rotateSize(Size size, Rotation rotation)
+Size rotateSize(const Size& size, Rotation rotation)
 {
     switch (rotation)
     {
@@ -85,7 +88,7 @@ Size rotateSize(Size size, Rotation rotation)
     return Size();
 }
 
-Rect rotateRect(Rect rect, Size size, Rotation rotation)
+Rect rotateRect(const Rect& rect, const Size& size, Rotation rotation)
 {
     switch (rotation)
     {

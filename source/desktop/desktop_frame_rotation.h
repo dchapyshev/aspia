@@ -23,13 +23,13 @@
 
 namespace desktop {
 
-// Represents the rotation of a DesktopFrame.
+// Represents the rotation of a Frame.
 enum class Rotation
 {
-    CLOCK_WISE_0,
-    CLOCK_WISE_90,
-    CLOCK_WISE_180,
-    CLOCK_WISE_270,
+    CLOCK_WISE_0   = 0,
+    CLOCK_WISE_90  = 90,
+    CLOCK_WISE_180 = 180,
+    CLOCK_WISE_270 = 270,
 };
 
 // Rotates input Frame |source|, copies pixel in an unrotated rectangle
@@ -49,11 +49,11 @@ void rotateDesktopFrame(const Frame& source,
 Rotation reverseRotation(Rotation rotation);
 
 // Returns a rotated QSize of |size|.
-Size rotateSize(Size size, Rotation rotation);
+Size rotateSize(const Size& size, Rotation rotation);
 
 // Returns a rotated DesktopRect of |rect|. The |size| represents the size of
 // the DesktopFrame which |rect| belongs in.
-Rect rotateRect(Rect rect, Size size, Rotation rotation);
+Rect rotateRect(const Rect& rect, const Size& size, Rotation rotation);
 
 } // namespace desktop
 
