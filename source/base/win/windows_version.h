@@ -24,7 +24,6 @@
 
 #include <string>
 
-typedef void* HANDLE;
 struct _OSVERSIONINFOEXW;
 struct _SYSTEM_INFO;
 
@@ -130,10 +129,6 @@ public:
     size_t allocationGranularity() const { return allocation_granularity_; }
     WOW64Status wow64Status() const { return wow64_status_; }
     std::string processorModelName();
-
-    // Like wow64_status(), but for the supplied handle instead of the current
-    // process.  This doesn't touch member state, so you can bypass the singleton.
-    static WOW64Status wow64StatusForProcess(HANDLE process_handle);
 
 private:
     static OSInfo** instanceStorage();

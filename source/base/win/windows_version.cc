@@ -111,6 +111,16 @@ int readUBR()
     return static_cast<int>(ubr);
 }
 
+OSInfo::WOW64Status wow64StatusForProcess()
+{
+    BOOL is_wow64 = FALSE;
+
+    if (!IsWow64Process(GetCurrentProcess(), &is_wow64))
+        return OSInfo::WOW64_UNKNOWN;
+
+    return is_wow64 ? OSInfo::WOW64_ENABLED : OSInfo::WOW64_DISABLED;
+}
+
 } // namespace
 
 // static
@@ -155,7 +165,7 @@ OSInfo::OSInfo(const _OSVERSIONINFOEXW& version_info,
                int os_type)
     : version_(VERSION_PRE_XP),
       architecture_(OTHER_ARCHITECTURE),
-      wow64_status_(wow64StatusForProcess(GetCurrentProcess()))
+      wow64_status_(wow64StatusForProcess())
 {
     version_number_.major = version_info.dwMajorVersion;
     version_number_.minor = version_info.dwMinorVersion;
@@ -330,23 +340,6 @@ std::string OSInfo::processorModelName()
     }
 
     return processor_model_name_;
-}
-
-// static
-OSInfo::WOW64Status OSInfo::wow64StatusForProcess(HANDLE process_handle)
-{
-    typedef BOOL(WINAPI* IsWow64ProcessFunc)(HANDLE, PBOOL);
-
-    IsWow64ProcessFunc is_wow64_process = reinterpret_cast<IsWow64ProcessFunc>(
-        GetProcAddress(GetModuleHandleW(L"kernel32.dll"), "IsWow64Process"));
-    if (!is_wow64_process)
-        return WOW64_DISABLED;
-
-    BOOL is_wow64 = FALSE;
-    if (!(*is_wow64_process)(process_handle, &is_wow64))
-        return WOW64_UNKNOWN;
-
-    return is_wow64 ? WOW64_ENABLED : WOW64_DISABLED;
 }
 
 Version windowsVersion()

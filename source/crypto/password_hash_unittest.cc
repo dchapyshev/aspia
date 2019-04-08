@@ -44,11 +44,11 @@ TEST(PasswordHashTest, Scrypt)
         }
     };
 
-    for (size_t i = 0; i < _countof(kTestTable); ++i)
-    {
-        const int kCount = 3;
+    int count = 3;
 
-        for (int j = 0; j < kCount; ++j)
+    while (count-- >= 0)
+    {
+        for (size_t i = 0; i < _countof(kTestTable); ++i)
         {
             QByteArray result = PasswordHash::hash(
                 PasswordHash::SCRYPT,
