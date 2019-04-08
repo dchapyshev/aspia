@@ -24,6 +24,8 @@
 #include "console/console_single_application.h"
 #include "crypto/scoped_crypto_initializer.h"
 
+#include <tbb/tbbmalloc_proxy.h>
+
 #include <QCommandLineParser>
 #include <QMessageBox>
 

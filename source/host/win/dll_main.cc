@@ -16,10 +16,9 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include <QtGlobal>
+#include <tbb/tbbmalloc_proxy.h>
 
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
+#include <QtGlobal>
 
 #if defined(QT_STATIC)
 
@@ -32,6 +31,9 @@ Q_IMPORT_PLUGIN(QWindowsVistaStylePlugin);
 #error Platform support needed
 #endif // defined(Q_OS_WIN)
 #endif // defined(QT_STATIC)
+
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
 
 extern "C" {
 

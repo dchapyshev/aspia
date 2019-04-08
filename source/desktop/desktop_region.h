@@ -53,7 +53,8 @@ private:
         int32_t right;
     };
 
-    using RowSpanSet = std::vector<RowSpan, tbb::scalable_allocator<RowSpan>>;
+    using RowSpanSetAllocator = tbb::scalable_allocator<RowSpan>;
+    using RowSpanSet = std::vector<RowSpan, RowSpanSetAllocator>;
 
     // Row represents a single row of a region. A row is set of rectangles that
     // have the same vertical position.
@@ -75,7 +76,9 @@ private:
     // Type used to store list of rows in the region. The bottom position of row
     // is used as the key so that rows are always ordered by their position. The
     // map stores pointers to make translate() more efficient.
-    using Rows = std::map<int, Row*, tbb::scalable_allocator<std::pair<int, Row*>>>;
+
+    using RowsAllocator = tbb::scalable_allocator<std::pair<const int, Row*>>;
+    using Rows = std::map<const int, Row* , std::less<const int>, RowsAllocator>;
 
 public:
     // Iterator that can be used to iterate over rectangles of a Region.

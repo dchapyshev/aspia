@@ -275,42 +275,42 @@
 <context>
     <name>Console</name>
     <message>
-        <location filename="../console_main.cc" line="76"/>
+        <location filename="../console_main.cc" line="78"/>
         <source>Remote computer address.</source>
         <translation>Адрес удаленного компьютера.</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="77"/>
+        <location filename="../console_main.cc" line="79"/>
         <source>address</source>
         <translation>адрес</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="81"/>
+        <location filename="../console_main.cc" line="83"/>
         <source>Remote computer port.</source>
         <translation>Порт удаленного компьютера.</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="82"/>
+        <location filename="../console_main.cc" line="84"/>
         <source>port</source>
         <translation>порт</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="87"/>
+        <location filename="../console_main.cc" line="89"/>
         <source>Name of user.</source>
         <translation>Имя пользователя.</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="88"/>
+        <location filename="../console_main.cc" line="90"/>
         <source>username</source>
         <translation>имя_пользователя</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="92"/>
+        <location filename="../console_main.cc" line="94"/>
         <source>Session type. Possible values: desktop-manage, desktop-view, file-transfer.</source>
         <translation>Тип сессии. Возможные значения: desktop-manage, desktop-view, file-transfer.</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="98"/>
+        <location filename="../console_main.cc" line="100"/>
         <source>Open the client to connect to the computer.</source>
         <translation>Открыть клиент для подключения к компьютеру.</translation>
     </message>
@@ -319,27 +319,27 @@
         <translation type="vanished">Запуск программы с упрощенным интерфейсом пользователя.</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="101"/>
+        <location filename="../console_main.cc" line="103"/>
         <source>Aspia Console</source>
         <translation>Консоль Aspia</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="104"/>
+        <location filename="../console_main.cc" line="106"/>
         <source>file</source>
         <translation>файл</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="105"/>
+        <location filename="../console_main.cc" line="107"/>
         <source>The file to open.</source>
         <translation>Файл для открытия.</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="145"/>
+        <location filename="../console_main.cc" line="147"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="146"/>
+        <location filename="../console_main.cc" line="148"/>
         <source>Incorrect session type entered.</source>
         <translation>Введен некорректный тип сессии.</translation>
     </message>
