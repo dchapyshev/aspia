@@ -59,6 +59,11 @@ Region::Region(const Region& other)
     *this = other;
 }
 
+Region::Region(Region&& other)
+{
+    *this = std::move(other);
+}
+
 Region::~Region()
 {
     clear();
@@ -79,6 +84,16 @@ Region& Region::operator=(const Region& other)
         it->second = new Row(*row);
     }
 
+    return *this;
+}
+
+Region& Region::operator=(Region&& other)
+{
+    if (this == &other)
+        return *this;
+
+    clear();
+    rows_ = std::move(other.rows_);
     return *this;
 }
 
