@@ -16,6 +16,7 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 #
 
+include(tbb)
 include(translations)
 
 list(APPEND SOURCE_HOST_CORE
@@ -128,6 +129,10 @@ target_link_libraries(aspia_host_core
     aspia_proto
     aspia_updater
     ${THIRD_PARTY_LIBS})
+
+if (USE_TBB)
+    add_tbb(aspia_host_core ${ASPIA_THIRD_PARTY_DIR}/tbb)
+endif()
 
 if(Qt5LinguistTools_FOUND)
     # Get the list of translation files.

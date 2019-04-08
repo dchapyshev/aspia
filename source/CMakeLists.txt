@@ -20,6 +20,7 @@ cmake_minimum_required(VERSION 3.12.1)
 
 option(BUILD_UNIT_TESTS "Build unit tests" ON)
 option(USE_PCG_GENERATOR "Using PCG random generator" ON)
+option(USE_TBB "Using Intel TBB" ON)
 
 set(ASPIA_THIRD_PARTY_DIR "$ENV{ASPIA_THIRD_PARTY_DIR}")
 
@@ -60,6 +61,10 @@ add_definitions(-D_UNICODE
 
 if (USE_PCG_GENERATOR)
     add_definitions(-DUSE_PCG_GENERATOR)
+endif()
+
+if (USE_TBB)
+    add_definitions(-DUSE_TBB)
 endif()
 
 include_directories(

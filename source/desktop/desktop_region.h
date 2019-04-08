@@ -21,7 +21,9 @@
 
 #include "desktop/desktop_geometry.h"
 
+#if defined(USE_TBB)
 #include <tbb/scalable_allocator.h>
+#endif // defined(USE_TBB)
 
 #include <map>
 #include <vector>
@@ -53,7 +55,12 @@ private:
         int32_t right;
     };
 
+#if defined(USE_TBB)
     using RowSpanSetAllocator = tbb::scalable_allocator<RowSpan>;
+#else // defined(USE_TBB)
+    using RowSpanSetAllocator = std::allocator<RowSpan>;
+#endif // defined(USE_*)
+
     using RowSpanSet = std::vector<RowSpan, RowSpanSetAllocator>;
 
     // Row represents a single row of a region. A row is set of rectangles that
@@ -76,6 +83,12 @@ private:
     // Type used to store list of rows in the region. The bottom position of row
     // is used as the key so that rows are always ordered by their position. The
     // map stores pointers to make translate() more efficient.
+
+#if defined(USE_TBB)
+    using RowsAllocator = tbb::scalable_allocator<std::pair<const int, Row*>>;
+#else // defined(USE_TBB)
+    using RowsAllocator = std::allocator<std::pair<const int, Row*>>;
+#endif // defined(USE_*)
 
     using RowsAllocator = tbb::scalable_allocator<std::pair<const int, Row*>>;
     using Rows = std::map<const int, Row* , std::less<const int>, RowsAllocator>;

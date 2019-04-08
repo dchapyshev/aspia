@@ -275,42 +275,42 @@
 <context>
     <name>Console</name>
     <message>
-        <location filename="../console_main.cc" line="78"/>
+        <location filename="../console_main.cc" line="80"/>
         <source>Remote computer address.</source>
         <translation>Adres van computer op afstand.</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="79"/>
+        <location filename="../console_main.cc" line="81"/>
         <source>address</source>
         <translation>adres</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="83"/>
+        <location filename="../console_main.cc" line="85"/>
         <source>Remote computer port.</source>
         <translation>Poort van computer op afstand.</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="84"/>
+        <location filename="../console_main.cc" line="86"/>
         <source>port</source>
         <translation>poort</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="89"/>
+        <location filename="../console_main.cc" line="91"/>
         <source>Name of user.</source>
         <translation>Naam van de gebruiker.</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="90"/>
+        <location filename="../console_main.cc" line="92"/>
         <source>username</source>
         <translation>gebruikersnaam</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="94"/>
+        <location filename="../console_main.cc" line="96"/>
         <source>Session type. Possible values: desktop-manage, desktop-view, file-transfer.</source>
         <translation>Sessie type. Mogelijke waarden: desktop-manage, desktop-view, file-transfer.</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="100"/>
+        <location filename="../console_main.cc" line="102"/>
         <source>Open the client to connect to the computer.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -319,27 +319,27 @@
         <translation type="vanished">Voer het programma uit met een versimpelde user interface.</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="103"/>
+        <location filename="../console_main.cc" line="105"/>
         <source>Aspia Console</source>
         <translation>Aspia Console</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="106"/>
+        <location filename="../console_main.cc" line="108"/>
         <source>file</source>
         <translation>bestand</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="107"/>
+        <location filename="../console_main.cc" line="109"/>
         <source>The file to open.</source>
         <translation>Het bestand om te openen.</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="147"/>
+        <location filename="../console_main.cc" line="149"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="148"/>
+        <location filename="../console_main.cc" line="150"/>
         <source>Incorrect session type entered.</source>
         <translation type="unfinished"></translation>
     </message>

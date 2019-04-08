@@ -51,7 +51,9 @@ const char* kTranslators[] =
 
 const char* kThirdParty[] =
 {
+#if defined(USE_TBB)
     "tbb &copy; 2005-2019 Intel Corporation, Apache 2.0 License",
+#endif // defined(USE_TBB)
     "libvpx &copy; 2010, The WebM Project authors, BSD 3-Clause License",
     "libyuv &copy; 2011 The LibYuv Project Authors, BSD 3-Clause License",
     "openssl &copy; 1998-2018 The OpenSSL Project, OpenSSL License",
@@ -136,7 +138,10 @@ AboutDialog::AboutDialog(QWidget* parent)
         list->addItem(tr("%1 version: %2").arg(name).arg(version));
     };
 
+#if defined(USE_TBB)
     add_version("tbb", QString("%1.%2").arg(TBB_VERSION_MAJOR).arg(TBB_VERSION_MINOR));
+#endif // defined(USE_TBB)
+
     add_version("libvpx", vpx_codec_version_str());
     add_version("libyuv", QString::number(LIBYUV_VERSION));
     add_version("openssl", OpenSSL_version(OPENSSL_VERSION));

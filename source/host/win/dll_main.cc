@@ -16,7 +16,9 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
+#if defined(USE_TBB)
 #include <tbb/tbbmalloc_proxy.h>
+#endif // defined(USE_TBB)
 
 #include <QtGlobal>
 
