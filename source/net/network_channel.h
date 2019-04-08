@@ -22,9 +22,14 @@
 #include "base/macros_magic.h"
 #include "base/version.h"
 
+#if defined(USE_TBB)
+#include <tbb/scalable_allocator.h>
+#endif // defined(USE_TBB)
+
 #include <QPointer>
-#include <QQueue>
 #include <QTcpSocket>
+
+#include <queue>
 
 namespace crypto {
 class Cryptor;
@@ -134,8 +139,16 @@ private:
 
     struct WriteContext
     {
+#if defined(USE_TBB)
+        using QueueAllocator = tbb::scalable_allocator<QByteArray>;
+#else // defined(USE_TBB)
+        using QueueAllocator = std::allocator<QByteArray>;
+#endif // defined(USE_*)
+
+        using QueueContainer = std::deque<QByteArray, QueueAllocator>;
+
         // The queue contains unencrypted source messages.
-        QQueue<QByteArray> queue;
+        std::queue<QByteArray, QueueContainer> queue;
 
         // The buffer contains an encrypted message that is being sent to the current moment.
         QByteArray buffer;

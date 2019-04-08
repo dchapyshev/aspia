@@ -139,10 +139,10 @@ void Channel::send(const QByteArray& buffer)
         return;
     }
 
-    bool schedule_write = write_.queue.isEmpty();
+    bool schedule_write = write_.queue.empty();
 
     // Add the buffer to the queue for sending.
-    write_.queue.push_back(buffer);
+    write_.queue.emplace(buffer);
 
     if (schedule_write)
         scheduleWrite();
@@ -309,10 +309,10 @@ void Channel::onMessageWritten()
         DCHECK(!write_.queue.empty());
 
         // Delete the sent message from the queue.
-        write_.queue.pop_front();
+        write_.queue.pop();
 
         // If the queue is not empty, then we send the following message.
-        if (!write_.queue.isEmpty())
+        if (!write_.queue.empty())
             scheduleWrite();
     }
     else
