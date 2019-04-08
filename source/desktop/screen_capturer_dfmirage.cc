@@ -62,11 +62,84 @@ bool ScreenCapturerDFMirage::selectScreen(ScreenId screen_id)
 
 const Frame* ScreenCapturerDFMirage::captureFrame()
 {
+    if (!prepareCaptureResources())
+        return nullptr;
+
+    Region* updated_region = frame_->updatedRegion();
+
+    // Clearing the region from previous changes.
+    updated_region->clear();
+
+    // Update the list of changed areas.
+    helper_->addUpdatedRects(updated_region);
+
+    // Exclude a region that should not be captured.
+    updated_region->subtract(exclude_region_);
+
+    // Copy the image of the modified areas into the frame.
+    helper_->copyRegion(frame_.get(), *updated_region);
+
+    frame_->setTopLeft(helper_->screenRect().topLeft());
+    return frame_.get();
+}
+
+void ScreenCapturerDFMirage::reset()
+{
+    helper_.reset();
+    frame_.reset();
+}
+
+void ScreenCapturerDFMirage::updateExcludeRegion()
+{
+    exclude_region_.clear();
+
+    if (current_screen_id_ != kFullDesktopScreenId)
+        return;
+
+    exclude_region_.addRect(desktop_rect_.moved(0, 0));
+
+    ScreenList screen_list;
+    if (!ScreenCaptureUtils::screenList(&screen_list))
+        return;
+
+    for (const auto& screen : screen_list)
+    {
+        QString device_key;
+
+        if (ScreenCaptureUtils::isScreenValid(screen.id, &device_key))
+        {
+            Rect screen_rect = ScreenCaptureUtils::screenRect(screen.id, device_key);
+
+            int x = std::abs(screen_rect.x() - desktop_rect_.x());
+            int y = std::abs(screen_rect.y() - desktop_rect_.y());
+            int w = screen_rect.width();
+            int h = screen_rect.height();
+
+            exclude_region_.subtract(Rect::makeXYWH(x, y, w, h));
+        }
+    }
+}
+
+bool ScreenCapturerDFMirage::prepareCaptureResources()
+{
+    Rect desktop_rect = ScreenCaptureUtils::fullScreenRect();
+    if (desktop_rect.isEmpty())
+    {
+        LOG(LS_WARNING) << "Failed to get desktop rect";
+        return false;
+    }
+
+    if (desktop_rect != desktop_rect_)
+    {
+        desktop_rect_ = desktop_rect;
+        reset();
+    }
+
     Rect screen_rect = ScreenCaptureUtils::screenRect(current_screen_id_, current_device_key_);
     if (screen_rect.isEmpty())
     {
         LOG(LS_WARNING) << "Failed to get screen rect";
-        return nullptr;
+        return false;
     }
 
     if (helper_ && helper_->screenRect() != screen_rect)
@@ -81,8 +154,10 @@ const Frame* ScreenCapturerDFMirage::captureFrame()
         if (!helper_)
         {
             LOG(LS_WARNING) << "Failed to create DFMirage helper";
-            return nullptr;
+            return false;
         }
+
+        updateExcludeRegion();
     }
 
     if (!frame_)
@@ -91,49 +166,11 @@ const Frame* ScreenCapturerDFMirage::captureFrame()
         if (!frame_)
         {
             LOG(LS_WARNING) << "Failed to create frame";
-            return nullptr;
+            return false;
         }
     }
 
-    DfmChangesBuffer* changes_buffer = helper_->changesBuffer();
-    const uint8_t* source_buffer = helper_->screenBuffer();
-
-    Region* region = frame_->updatedRegion();
-    region->clear();
-
-    next_update_ = changes_buffer->counter;
-
-    for (int i = last_update_; i != next_update_; i = (i + 1) % kDfmMaxChanges)
-    {
-        const DfmRect* dfm_rect = &changes_buffer->records[i].rect;
-
-        Rect rect = Rect::makeLTRB(dfm_rect->left, dfm_rect->top, dfm_rect->right, dfm_rect->bottom);
-
-        rect.intersectWith(screen_rect);
-        if (!rect.isEmpty())
-        {
-            region->addRect(rect);
-
-            const size_t source_offset =
-                frame_->stride() * rect.y() + frame_->format().bytesPerPixel() * rect.x();
-
-            frame_->copyPixelsFrom(source_buffer + source_offset, frame_->stride(), rect);
-        }
-    }
-
-    last_update_ = next_update_;
-
-    frame_->setTopLeft(screen_rect.topLeft());
-    return frame_.get();
-}
-
-void ScreenCapturerDFMirage::reset()
-{
-    last_update_ = 0;
-    next_update_ = 0;
-
-    helper_.reset();
-    frame_.reset();
+    return true;
 }
 
 } // namespace desktop

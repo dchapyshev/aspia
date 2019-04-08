@@ -44,14 +44,19 @@ protected:
     void reset() override;
 
 private:
+    void updateExcludeRegion();
+    bool prepareCaptureResources();
+
     std::unique_ptr<DFMirageHelper> helper_;
     std::unique_ptr<Frame> frame_;
 
-    int last_update_ = 0;
-    int next_update_ = 0;
-
     ScreenId current_screen_id_ = kFullDesktopScreenId;
     QString current_device_key_;
+
+    Rect desktop_rect_;
+    Region exclude_region_;
+
+    std::list<Rect> screen_rects_;
 
     DISALLOW_COPY_AND_ASSIGN(ScreenCapturerDFMirage);
 };

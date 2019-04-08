@@ -20,12 +20,15 @@
 
 #include "base/strings/string_util.h"
 #include "base/win/registry.h"
+#include "desktop/desktop_frame.h"
 #include "desktop/win/screen_capture_utils.h"
 
 namespace desktop {
 
 namespace {
 
+static const int kBytesPerPixel = 4;
+static const int kBitsPerPixel = 32;
 static const int kExtendedDeviceModeSize = 3072;
 
 struct DeviceMode : DEVMODEW
@@ -38,6 +41,8 @@ struct DeviceMode : DEVMODEW
 DFMirageHelper::DFMirageHelper(const Rect& screen_rect)
     : screen_rect_(screen_rect)
 {
+    DCHECK(!screen_rect_.isEmpty());
+
     memset(&get_changes_buffer_, 0, sizeof(get_changes_buffer_));
 }
 
@@ -49,9 +54,9 @@ DFMirageHelper::~DFMirageHelper()
 }
 
 // static
-std::unique_ptr<DFMirageHelper> DFMirageHelper::create(const Rect& desktop_rect)
+std::unique_ptr<DFMirageHelper> DFMirageHelper::create(const Rect& screen_rect)
 {
-    std::unique_ptr<DFMirageHelper> helper(new DFMirageHelper(desktop_rect));
+    std::unique_ptr<DFMirageHelper> helper(new DFMirageHelper(screen_rect));
 
     if (!helper->findDisplayDevice())
     {
@@ -77,7 +82,44 @@ std::unique_ptr<DFMirageHelper> DFMirageHelper::create(const Rect& desktop_rect)
         return nullptr;
     }
 
+    LOG(LS_INFO) << "DFMirage helper created with rect: " << screen_rect;
     return helper;
+}
+
+void DFMirageHelper::addUpdatedRects(Region* updated_region) const
+{
+    DCHECK(updated_region);
+
+    Rect frame_rect = Rect::makeSize(screen_rect_.size());
+
+    const int next_update = get_changes_buffer_.changes_buffer->counter;
+
+    for (int i = last_update_; i != next_update; i = (i + 1) % kDfmMaxChanges)
+    {
+        const DfmRect* rect = &get_changes_buffer_.changes_buffer->records[i].rect;
+
+        Rect updated_rect = Rect::makeLTRB(rect->left, rect->top, rect->right, rect->bottom);
+        updated_rect.intersectWith(frame_rect);
+
+        updated_region->addRect(updated_rect);
+    }
+
+    last_update_ = next_update;
+}
+
+void DFMirageHelper::copyRegion(Frame* frame, const Region& updated_region) const
+{
+    DCHECK(frame);
+
+    const uint8_t* source_buffer = get_changes_buffer_.user_buffer;
+    const int source_stride = kBytesPerPixel * screen_rect_.width();
+
+    for (Region::Iterator it(updated_region); !it.isAtEnd(); it.advance())
+    {
+        const Rect& rect = it.rect();
+        const int source_offset = source_stride * rect.y() + sizeof(uint32_t) * rect.x();
+        frame->copyPixelsFrom(source_buffer + source_offset, source_stride, rect);
+    }
 }
 
 bool DFMirageHelper::update(bool load)
@@ -105,7 +147,7 @@ bool DFMirageHelper::update(bool load)
         device_mode.dmPelsHeight = screen_rect_.height();
         device_mode.dmPosition.x = screen_rect_.x();
         device_mode.dmPosition.y = screen_rect_.y();
-        device_mode.dmBitsPerPel = 32;
+        device_mode.dmBitsPerPel = kBitsPerPixel;
     }
 
     wcsncpy_s(device_mode.dmDeviceName, _countof(device_mode.dmDeviceName),

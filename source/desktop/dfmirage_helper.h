@@ -25,17 +25,19 @@
 
 namespace desktop {
 
+class Frame;
+class Region;
+
 class DFMirageHelper
 {
 public:
     ~DFMirageHelper();
 
-    static std::unique_ptr<DFMirageHelper> create(const Rect& desktop_rect);
+    static std::unique_ptr<DFMirageHelper> create(const Rect& screen_rect);
 
     const Rect& screenRect() const { return screen_rect_; }
-
-    const uint8_t* screenBuffer() { return get_changes_buffer_.user_buffer; }
-    DfmChangesBuffer* changesBuffer() { return get_changes_buffer_.changes_buffer; }
+    void addUpdatedRects(Region* updated_region) const;
+    void copyRegion(Frame* frame, const Region& updated_region) const;
 
 private:
     explicit DFMirageHelper(const Rect& screen_rect);
@@ -53,6 +55,8 @@ private:
     const Rect screen_rect_;
 
     DfmGetChangesBuffer get_changes_buffer_;
+
+    mutable int last_update_ = 0;
 
     DISALLOW_COPY_AND_ASSIGN(DFMirageHelper);
 };

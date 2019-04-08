@@ -21,7 +21,6 @@
 
 #include "base/macros_magic.h"
 #include "desktop/pixel_format.h"
-
 #include "desktop/desktop_region.h"
 
 namespace desktop {
