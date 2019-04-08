@@ -131,7 +131,7 @@ void ChannelClient::onConnected()
     struct tcp_keepalive alive;
 
     alive.onoff = 1; // On.
-    alive.keepalivetime = 30000; // 30 seconds.
+    alive.keepalivetime = 60000; // 60 seconds.
     alive.keepaliveinterval = 5000; // 5 seconds.
 
     DWORD bytes_returned;
