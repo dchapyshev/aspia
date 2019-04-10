@@ -17,11 +17,31 @@
 //
 
 #include "desktop/win/screen_capture_utils.h"
+
 #include "base/logging.h"
+#include "base/win/scoped_gdi_object.h"
+#include "desktop/win/bitmap_info.h"
 
 #include <windows.h>
 
 namespace desktop {
+
+namespace {
+
+int createShift(uint32_t bits)
+{
+    int shift = 0;
+
+    while ((shift < 32) && !(bits & 1))
+    {
+        bits >>= 1;
+        ++shift;
+    }
+
+    return shift;
+}
+
+} // namespace
 
 // static
 bool ScreenCaptureUtils::screenList(ScreenCapturer::ScreenList* screens)
@@ -115,6 +135,53 @@ Rect ScreenCaptureUtils::screenRect(ScreenCapturer::ScreenId screen,
 int ScreenCaptureUtils::screenCount()
 {
     return GetSystemMetrics(SM_CMONITORS);
+}
+
+// static
+PixelFormat ScreenCaptureUtils::detectPixelFormat(HDC desktop_dc)
+{
+    base::win::ScopedHBITMAP bitmap(reinterpret_cast<HBITMAP>(
+        GetCurrentObject(desktop_dc, OBJ_BITMAP)));
+
+    if (!bitmap)
+        return PixelFormat::ARGB();
+
+    BitmapInfo bitmap_info;
+    memset(&bitmap_info, 0, sizeof(bitmap_info));
+
+    bitmap_info.header.biSize = sizeof(bitmap_info.header);
+
+    if (!GetDIBits(desktop_dc, bitmap, 0, 0, nullptr,
+                   reinterpret_cast<BITMAPINFO*>(&bitmap_info), DIB_RGB_COLORS))
+    {
+        return PixelFormat::ARGB();
+    }
+
+    if (bitmap_info.header.biCompression != BI_BITFIELDS)
+        return PixelFormat::ARGB();
+
+    // Now bitmap_info.header.biCompression equals BI_BITFIELDS and we can get a table of colors.
+    if (!GetDIBits(desktop_dc, bitmap, 0, 0, nullptr,
+                   reinterpret_cast<BITMAPINFO*>(&bitmap_info), DIB_RGB_COLORS))
+    {
+        return PixelFormat::ARGB();
+    }
+
+    if (bitmap_info.header.biBitCount != 32 && bitmap_info.header.biBitCount != 16)
+        return PixelFormat::ARGB();
+
+    const uint16_t red_shift = createShift(bitmap_info.u.mask.red);
+    const uint16_t green_shift = createShift(bitmap_info.u.mask.green);
+    const uint16_t blue_shift = createShift(bitmap_info.u.mask.blue);
+
+    const uint16_t red_max = bitmap_info.u.mask.red >> red_shift;
+    const uint16_t green_max = bitmap_info.u.mask.green >> green_shift;
+    const uint16_t blue_max = bitmap_info.u.mask.blue >> blue_shift;
+
+    return PixelFormat(bitmap_info.header.biBitCount,
+                       red_max, green_max,
+                       blue_max, red_shift,
+                       green_shift, blue_shift);
 }
 
 } // namespace desktop

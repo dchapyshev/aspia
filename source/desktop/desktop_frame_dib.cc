@@ -17,7 +17,9 @@
 //
 
 #include "desktop/desktop_frame_dib.h"
+
 #include "base/logging.h"
+#include "desktop/win/bitmap_info.h"
 
 namespace desktop {
 
@@ -33,21 +35,6 @@ FrameDib::FrameDib(
 std::unique_ptr<FrameDib> FrameDib::create(const Size& size, const PixelFormat& format, HDC hdc)
 {
     int bytes_per_row = size.width() * format.bytesPerPixel();
-
-    struct BitmapInfo
-    {
-        BITMAPINFOHEADER header;
-        union
-        {
-            struct
-            {
-                uint32_t red;
-                uint32_t green;
-                uint32_t blue;
-            } mask;
-            RGBQUAD color[256];
-        } u;
-    };
 
     BitmapInfo bmi = { 0 };
     bmi.header.biSize      = sizeof(bmi.header);

@@ -83,6 +83,7 @@ list(APPEND SOURCE_DESKTOP_UNIT_TESTS
     diff_block_sse3_unittest.cc)
 
 list(APPEND SOURCE_DESKTOP_WIN
+    win/bitmap_info.h
     win/cursor.cc
     win/cursor.h
     win/d3d_device.cc

@@ -19,6 +19,7 @@
 #ifndef DESKTOP__WIN__SCREEN_CAPTURE_UTILS_H
 #define DESKTOP__WIN__SCREEN_CAPTURE_UTILS_H
 
+#include "desktop/pixel_format.h"
 #include "desktop/screen_capturer.h"
 
 namespace desktop {
@@ -47,6 +48,10 @@ public:
 
     // The number of visible display monitors on a desktop.
     static int screenCount();
+
+    // Detects the current pixel format. If the current format is not supported or an error has
+    // occurred, then returns PixelFormat::ARGB().
+    static PixelFormat detectPixelFormat(HDC desktop_dc);
 
 private:
     DISALLOW_COPY_AND_ASSIGN(ScreenCaptureUtils);
