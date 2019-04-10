@@ -48,6 +48,10 @@ private:
     bool findDisplayDevice();
     bool attachToDesktop(bool attach);
 
+    bool is_attached_ = false;
+    bool is_updated_ = false;
+    bool is_mapped_ = false;
+
     std::wstring device_key_;
     std::wstring device_name_;
 

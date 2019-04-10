@@ -48,9 +48,14 @@ DFMirageHelper::DFMirageHelper(const Rect& screen_rect)
 
 DFMirageHelper::~DFMirageHelper()
 {
-    mapMemory(false);
-    attachToDesktop(false);
-    update(false);
+    if (is_mapped_)
+        mapMemory(false);
+
+    if (is_attached_)
+        attachToDesktop(false);
+
+    if (is_updated_)
+        update(false);
 }
 
 // static
@@ -70,17 +75,23 @@ std::unique_ptr<DFMirageHelper> DFMirageHelper::create(const Rect& screen_rect)
         return nullptr;
     }
 
+    helper->is_attached_ = true;
+
     if (!helper->update(true))
     {
         LOG(LS_WARNING) << "Could not load mirror driver";
         return nullptr;
     }
 
+    helper->is_updated_ = true;
+
     if (!helper->mapMemory(true))
     {
         LOG(LS_WARNING) << "Could not map memory for mirror driver";
         return nullptr;
     }
+
+    helper->is_mapped_ = true;
 
     LOG(LS_INFO) << "DFMirage helper created with rect: " << screen_rect;
     return helper;
