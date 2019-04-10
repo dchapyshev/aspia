@@ -34,8 +34,10 @@ ScreenCapturerWrapper::ScreenCapturerWrapper(uint32_t flags)
     switchToInputDesktop();
     atDesktopSwitch();
 
+    // If the monitor is turned off, this call will turn it on.
     SetThreadExecutionState(ES_DISPLAY_REQUIRED);
 
+    // DFMirage screen capture is available only in Windows 7/2008 R2.
     if (base::win::windowsVersion() == base::win::VERSION_WIN7)
     {
         std::unique_ptr<ScreenCapturerDFMirage> capturer_dfmirage =
@@ -49,6 +51,7 @@ ScreenCapturerWrapper::ScreenCapturerWrapper(uint32_t flags)
         }
     }
 
+    // Desktop Duplication API is available in Windows 8+.
     std::unique_ptr<ScreenCapturerDxgi> capturer_dxgi = std::make_unique<ScreenCapturerDxgi>();
     if (capturer_dxgi->isSupported())
     {
@@ -66,21 +69,29 @@ ScreenCapturerWrapper::~ScreenCapturerWrapper() = default;
 
 int ScreenCapturerWrapper::screenCount()
 {
+    DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
+
     return capturer_->screenCount();
 }
 
 bool ScreenCapturerWrapper::screenList(ScreenCapturer::ScreenList* screens)
 {
+    DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
+
     return capturer_->screenList(screens);
 }
 
 bool ScreenCapturerWrapper::selectScreen(ScreenCapturer::ScreenId screen_id)
 {
+    DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
+
     return capturer_->selectScreen(screen_id);
 }
 
 const Frame* ScreenCapturerWrapper::captureFrame()
 {
+    DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
+
     if (switchToInputDesktop())
         atDesktopSwitch();
 
@@ -89,6 +100,8 @@ const Frame* ScreenCapturerWrapper::captureFrame()
 
 bool ScreenCapturerWrapper::switchToInputDesktop()
 {
+    DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
+
     // Switch to the desktop receiving user input if different from the current one.
     base::Desktop input_desktop(base::Desktop::inputDesktop());
 
@@ -111,6 +124,8 @@ bool ScreenCapturerWrapper::switchToInputDesktop()
 
 void ScreenCapturerWrapper::atDesktopSwitch()
 {
+    DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
+
     if (flags_ & DISABLE_EFFECTS)
         effects_disabler_ = std::make_unique<EffectsDisabler>();
 

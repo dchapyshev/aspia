@@ -20,6 +20,7 @@
 #define DESKTOP__SCREEN_CAPTURER_WRAPPER_H
 
 #include "base/macros_magic.h"
+#include "base/thread_checker.h"
 #include "base/win/scoped_thread_desktop.h"
 #include "desktop/screen_capturer.h"
 
@@ -60,6 +61,10 @@ private:
 
     std::unique_ptr<EffectsDisabler> effects_disabler_;
     std::unique_ptr<WallpaperDisabler> wallpaper_disabler_;
+
+    THREAD_CHECKER(thread_checker_);
+
+    DISALLOW_COPY_AND_ASSIGN(ScreenCapturerWrapper);
 };
 
 } // namespace desktop
