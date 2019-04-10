@@ -86,6 +86,12 @@ bool Settings::isWritable() const
     return system_settings_.isWritable();
 }
 
+void Settings::sync()
+{
+    system_settings_.sync();
+    user_settings_.sync();
+}
+
 QString Settings::locale() const
 {
     return user_settings_.value(

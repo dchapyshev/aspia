@@ -260,6 +260,11 @@ void HostServer::onSessionFinished()
 
 void HostServer::reloadUsers()
 {
+    LOG(LS_INFO) << "Changed settings detected";
+
+    // Reload settings.
+    settings_.sync();
+
     net::SrpUserList users = settings_.userList();
 
     // Merge the list of regular users and session users.

@@ -43,6 +43,7 @@ public:
 
     QString filePath() const;
     bool isWritable() const;
+    void sync();
 
     QString locale() const;
     void setLocale(const QString& locale);
