@@ -30,8 +30,8 @@ class DesktopSettings
 public:
     DesktopSettings();
 
-    bool scaling() const;
-    void setScaling(bool enable);
+    int scale() const;
+    void setScale(int value);
 
     bool autoScrolling() const;
     void setAutoScrolling(bool enable);

@@ -23,8 +23,6 @@ list(APPEND SOURCE_CODEC
     cursor_encoder.h
     pixel_translator.cc
     pixel_translator.h
-    scale_reducer.cc
-    scale_reducer.h
     scoped_vpx_codec.cc
     scoped_vpx_codec.h
     scoped_zstd_stream.cc

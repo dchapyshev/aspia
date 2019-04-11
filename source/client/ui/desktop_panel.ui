@@ -236,12 +236,12 @@
     <string>File transfer</string>
    </property>
   </action>
-  <action name="action_scaling">
+  <action name="action_scale">
    <property name="checkable">
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Scaling an image</string>
+    <string>Scale</string>
    </property>
   </action>
   <action name="action_send_key_combinations">
@@ -324,6 +324,65 @@
    </property>
    <property name="toolTip">
     <string>Close session</string>
+   </property>
+  </action>
+  <action name="action_scale100">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string notr="true">100%</string>
+   </property>
+  </action>
+  <action name="action_scale90">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string notr="true">90%</string>
+   </property>
+  </action>
+  <action name="action_scale80">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string notr="true">80%</string>
+   </property>
+  </action>
+  <action name="action_scale70">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string notr="true">70%</string>
+   </property>
+  </action>
+  <action name="action_scale60">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string notr="true">60%</string>
+   </property>
+  </action>
+  <action name="action_scale50">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string notr="true">50%</string>
+   </property>
+  </action>
+  <action name="action_fit_window">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Fit window</string>
    </property>
   </action>
  </widget>

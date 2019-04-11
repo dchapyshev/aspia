@@ -85,7 +85,7 @@ private slots:
     void onConfigChanged(const proto::desktop::Config& config);
     void autosizeWindow();
     void takeScreenshot();
-    void onScalingChanged(bool enabled = true);
+    void scaleDesktop();
 
 private:
     ClientDesktop* desktopClient();

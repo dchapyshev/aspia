@@ -20,6 +20,7 @@
 #define CLIENT__UI__DESKTOP_PANEL_H
 
 #include "base/macros_magic.h"
+#include "client/ui/desktop_settings.h"
 #include "proto/common.pb.h"
 #include "proto/desktop.pb.h"
 #include "proto/desktop_extensions.pb.h"
@@ -42,7 +43,7 @@ public:
 
     void setScreenList(const proto::desktop::ScreenList& screen_list);
 
-    bool scaling() const;
+    int scale() const { return scale_; }
     bool autoScrolling() const;
     bool sendKeyCombinations() const;
 
@@ -52,7 +53,7 @@ signals:
     void switchToAutosize();
     void settingsButton();
     void screenSelected(const proto::desktop::Screen& screen);
-    void scalingChanged(bool enabled);
+    void scaleChanged();
     void autoScrollChanged(bool enabled);
     void keyCombinationsChanged(bool enabled);
     void takeScreenshot();
@@ -77,6 +78,7 @@ private slots:
 private:
     void createAdditionalMenu(proto::SessionType session_type);
     void showCloseButton(bool show);
+    void updateScaleMenu();
     void updateSize();
     void delayedHide();
 
@@ -84,8 +86,13 @@ private:
 
     const proto::SessionType session_type_;
 
+    DesktopSettings settings_;
+
     QScopedPointer<QMenu> power_menu_;
     QMenu* additional_menu_ = nullptr;
+
+    QMenu* scale_menu_ = nullptr;
+    QActionGroup* scale_group_ = nullptr;
 
     QScopedPointer<QMenu> screens_menu_;
     QActionGroup* screens_group_ = nullptr;
@@ -94,6 +101,8 @@ private:
 
     bool allow_hide_ = true;
     bool leaved_ = true;
+
+    int scale_ = 100;
 
     DISALLOW_COPY_AND_ASSIGN(DesktopPanel);
 };

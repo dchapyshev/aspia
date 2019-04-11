@@ -19,7 +19,6 @@
 #include "host/screen_updater_impl.h"
 
 #include "codec/cursor_encoder.h"
-#include "codec/scale_reducer.h"
 #include "codec/video_encoder_vpx.h"
 #include "codec/video_encoder_zstd.h"
 #include "codec/video_util.h"

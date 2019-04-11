@@ -33,13 +33,13 @@ DesktopPanel::DesktopPanel(proto::SessionType session_type, QWidget* parent)
 {
     ui.setupUi(this);
 
-    DesktopSettings settings;
-    ui.action_scaling->setChecked(settings.scaling());
-    ui.action_autoscroll->setChecked(settings.autoScrolling());
+    ui.action_autoscroll->setChecked(settings_.autoScrolling());
+
+    scale_ = settings_.scale();
 
     // Sending key combinations is available only in desktop management.
     if (session_type == proto::SESSION_TYPE_DESKTOP_MANAGE)
-        ui.action_send_key_combinations->setChecked(settings.sendKeyCombinations());
+        ui.action_send_key_combinations->setChecked(settings_.sendKeyCombinations());
     else
         ui.action_send_key_combinations->setChecked(false);
 
@@ -76,13 +76,12 @@ DesktopPanel::DesktopPanel(proto::SessionType session_type, QWidget* parent)
 
 DesktopPanel::~DesktopPanel()
 {
-    DesktopSettings settings;
-    settings.setScaling(ui.action_scaling->isChecked());
-    settings.setAutoScrolling(ui.action_autoscroll->isChecked());
+    settings_.setScale(scale_);
+    settings_.setAutoScrolling(ui.action_autoscroll->isChecked());
 
     // Save the parameter only for desktop management.
     if (session_type_ == proto::SESSION_TYPE_DESKTOP_MANAGE)
-        settings.setSendKeyCombinations(ui.action_send_key_combinations->isChecked());
+        settings_.setSendKeyCombinations(ui.action_send_key_combinations->isChecked());
 }
 
 void DesktopPanel::enableScreenSelect(bool /* enable */)
@@ -198,11 +197,6 @@ void DesktopPanel::setScreenList(const proto::desktop::ScreenList& screen_list)
     ui.action_monitors->setEnabled(true);
 
     updateSize();
-}
-
-bool DesktopPanel::scaling() const
-{
-    return ui.action_scaling->isChecked();
 }
 
 bool DesktopPanel::autoScrolling() const
@@ -354,7 +348,22 @@ void DesktopPanel::createAdditionalMenu(proto::SessionType session_type)
 {
     // Create a menu and add actions to it.
     additional_menu_ = new QMenu(this);
-    additional_menu_->addAction(ui.action_scaling);
+
+    scale_group_ = new QActionGroup(additional_menu_);
+    scale_group_->addAction(ui.action_scale100);
+    scale_group_->addAction(ui.action_scale90);
+    scale_group_->addAction(ui.action_scale80);
+    scale_group_->addAction(ui.action_scale70);
+    scale_group_->addAction(ui.action_scale60);
+    scale_group_->addAction(ui.action_scale50);
+
+    scale_menu_ = additional_menu_->addMenu(tr("Scale"));
+    scale_menu_->addAction(ui.action_fit_window);
+    scale_menu_->addSeparator();
+    scale_menu_->addActions(scale_group_->actions());
+
+    updateScaleMenu();
+
     additional_menu_->addAction(ui.action_autoscroll);
 
     if (session_type == proto::SESSION_TYPE_DESKTOP_MANAGE)
@@ -376,10 +385,52 @@ void DesktopPanel::createAdditionalMenu(proto::SessionType session_type)
                 this, &DesktopPanel::keyCombinationsChanged);
     }
 
-    connect(ui.action_scaling, &QAction::toggled, [this](bool checked)
+    connect(scale_group_, &QActionGroup::triggered, [this](QAction* action)
+    {
+        if (action == ui.action_scale100)
+            scale_ = 100;
+        else if (action == ui.action_scale90)
+            scale_ = 90;
+        else if (action == ui.action_scale80)
+            scale_ = 80;
+        else if (action == ui.action_scale70)
+            scale_ = 70;
+        else if (action == ui.action_scale60)
+            scale_ = 60;
+        else if (action == ui.action_scale50)
+            scale_ = 50;
+        else
+            return;
+
+        emit scaleChanged();
+    });
+
+    connect(ui.action_fit_window, &QAction::toggled, [this](bool checked)
     {
         ui.action_autoscroll->setEnabled(!checked);
-        emit scalingChanged(checked);
+        scale_group_->setEnabled(!checked);
+
+        if (checked)
+        {
+            scale_ = -1;
+        }
+        else
+        {
+            if (ui.action_scale90->isChecked())
+                scale_ = 90;
+            else if (ui.action_scale80->isChecked())
+                scale_ = 80;
+            else if (ui.action_scale70->isChecked())
+                scale_ = 70;
+            else if (ui.action_scale60->isChecked())
+                scale_ = 60;
+            else if (ui.action_scale60->isChecked())
+                scale_ = 60;
+            else
+                scale_ = 100;
+        }
+
+        emit scaleChanged();
     });
 
     connect(ui.action_screenshot, &QAction::triggered, this, &DesktopPanel::takeScreenshot);
@@ -412,6 +463,36 @@ void DesktopPanel::showCloseButton(bool show)
     }
 
     updateSize();
+}
+
+void DesktopPanel::updateScaleMenu()
+{
+    if (scale_ == -1)
+    {
+        ui.action_fit_window->setChecked(true);
+        scale_group_->setEnabled(false);
+    }
+    else
+    {
+        ui.action_fit_window->setChecked(false);
+        scale_group_->setEnabled(true);
+
+        if (scale_ == 90)
+            ui.action_scale90->setChecked(true);
+        else if (scale_ == 80)
+            ui.action_scale80->setChecked(true);
+        else if (scale_ == 70)
+            ui.action_scale70->setChecked(true);
+        else if (scale_ == 60)
+            ui.action_scale60->setChecked(true);
+        else if (scale_ == 50)
+            ui.action_scale50->setChecked(true);
+        else
+        {
+            ui.action_scale100->setChecked(true);
+            scale_ = 100;
+        }
+    }
 }
 
 void DesktopPanel::updateSize()

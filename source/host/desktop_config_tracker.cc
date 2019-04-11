@@ -55,9 +55,6 @@ uint32_t DesktopConfigTracker::changesMask(const proto::desktop::Config& new_con
     if (old_config_->update_interval() != new_config.update_interval())
         result |= HAS_VIDEO;
 
-    if (old_config_->scale_factor() != new_config.scale_factor())
-        result |= HAS_VIDEO;
-
     if (old_config_->compress_ratio() != new_config.compress_ratio())
         result |= HAS_VIDEO;
 

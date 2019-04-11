@@ -179,6 +179,11 @@
         <translation>Geavanceerd menu</translation>
     </message>
     <message>
+        <location filename="../ui/desktop_panel.ui" line="244"/>
+        <source>Scale</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../ui/desktop_panel.ui" line="255"/>
         <source>Send key combinations</source>
         <translation>Stuur toets combinaties</translation>
@@ -230,6 +235,11 @@
         <translation>Sluit sessie</translation>
     </message>
     <message>
+        <location filename="../ui/desktop_panel.ui" line="385"/>
+        <source>Fit window</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../ui/desktop_panel.ui" line="218"/>
         <location filename="../ui/desktop_panel.ui" line="221"/>
         <location filename="../ui/desktop_panel.ui" line="224"/>
@@ -242,9 +252,8 @@
         <translation>Bestands overdracht</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="244"/>
         <source>Scaling an image</source>
-        <translation>Afbeelding schalen</translation>
+        <translation type="vanished">Afbeelding schalen</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.ui" line="201"/>
@@ -827,79 +836,84 @@
 <context>
     <name>client::DesktopPanel</name>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="177"/>
+        <location filename="../ui/desktop_panel.cc" line="176"/>
         <source>Monitor %1</source>
         <translation>Beeldscherm %1</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="310"/>
-        <location filename="../ui/desktop_panel.cc" line="321"/>
-        <location filename="../ui/desktop_panel.cc" line="332"/>
-        <location filename="../ui/desktop_panel.cc" line="343"/>
+        <location filename="../ui/desktop_panel.cc" line="304"/>
+        <location filename="../ui/desktop_panel.cc" line="315"/>
+        <location filename="../ui/desktop_panel.cc" line="326"/>
+        <location filename="../ui/desktop_panel.cc" line="337"/>
         <source>Confirmation</source>
         <translation>Bevestiging</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="311"/>
+        <location filename="../ui/desktop_panel.cc" line="305"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>Weet U zeker dat U de computer op afstand wilt afsluiten?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="322"/>
+        <location filename="../ui/desktop_panel.cc" line="316"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>Weet U zeker dat U de computer op afstand wilt herstarten?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="333"/>
+        <location filename="../ui/desktop_panel.cc" line="327"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>Weet U zeker dat U de gebruikers sessie van de computer op afstand wilt beeindigen?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="344"/>
+        <location filename="../ui/desktop_panel.cc" line="338"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>Weet U zeker dat U de gebruikers sessie van de computer op afstand wilt vergrendelen?</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_panel.cc" line="360"/>
+        <source>Scale</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>client::DesktopWindow</name>
     <message>
-        <location filename="../ui/desktop_window.cc" line="363"/>
+        <location filename="../ui/desktop_window.cc" line="367"/>
         <source>Save File</source>
         <translation>Bestand Opslaan</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="365"/>
+        <location filename="../ui/desktop_window.cc" line="369"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG Afbeelding (*.png);;BMP Afbeelding (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="136"/>
-        <location filename="../ui/desktop_window.cc" line="385"/>
+        <location filename="../ui/desktop_window.cc" line="149"/>
+        <location filename="../ui/desktop_window.cc" line="389"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="137"/>
+        <location filename="../ui/desktop_window.cc" line="150"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
         <translation>De huidige video encoding wordt niet ondersteund door de host. Specificeer AUB een andere encoding.</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="154"/>
+        <location filename="../ui/desktop_window.cc" line="167"/>
         <source>Selecting a supported video encoding is canceled by the user.</source>
         <translation>Selecteer een video encoding is geannuleerd door de gebruiker.</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="385"/>
+        <location filename="../ui/desktop_window.cc" line="389"/>
         <source>Could not save image</source>
         <translation>Kon het bestand niet opslaan</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="524"/>
+        <location filename="../ui/desktop_window.cc" line="530"/>
         <source>Desktop Manage</source>
         <translation>Bureaublad Beheren</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="529"/>
+        <location filename="../ui/desktop_window.cc" line="535"/>
         <source>Desktop View</source>
         <translation>Bureaublad Weergeven</translation>
     </message>
