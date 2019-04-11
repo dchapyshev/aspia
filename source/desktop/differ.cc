@@ -17,11 +17,12 @@
 //
 
 #include "desktop/differ.h"
+
 #include "base/logging.h"
-#include "desktop/diff_block_avx2.h"
-#include "desktop/diff_block_sse2.h"
-#include "desktop/diff_block_sse3.h"
-#include "desktop/diff_block_c.h"
+#include "desktop/diff_block_32bpp_avx2.h"
+#include "desktop/diff_block_32bpp_sse2.h"
+#include "desktop/diff_block_32bpp_sse3.h"
+#include "desktop/diff_block_32bpp_c.h"
 
 #include <libyuv/cpu_id.h>
 
@@ -84,44 +85,44 @@ Differ::Differ(const Size& size)
         LOG(LS_INFO) << "AVX2 differ loaded";
 
         if constexpr (kBlockSize == 8)
-            diff_full_block_func_ = diffFullBlock_8x8_AVX2;
+            diff_full_block_func_ = diffFullBlock_32bpp_8x8_AVX2;
         else if constexpr (kBlockSize == 16)
-            diff_full_block_func_ = diffFullBlock_16x16_AVX2;
+            diff_full_block_func_ = diffFullBlock_32bpp_16x16_AVX2;
         else if constexpr (kBlockSize == 32)
-            diff_full_block_func_ = diffFullBlock_32x32_AVX2;
+            diff_full_block_func_ = diffFullBlock_32bpp_32x32_AVX2;
     }
     else if (libyuv::TestCpuFlag(libyuv::kCpuHasSSSE3))
     {
         LOG(LS_INFO) << "SSE3 differ loaded";
 
         if constexpr (kBlockSize == 8)
-            diff_full_block_func_ = diffFullBlock_8x8_SSE3;
+            diff_full_block_func_ = diffFullBlock_32bpp_8x8_SSE3;
         else if constexpr (kBlockSize == 16)
-            diff_full_block_func_ = diffFullBlock_16x16_SSE3;
+            diff_full_block_func_ = diffFullBlock_32bpp_16x16_SSE3;
         else if constexpr (kBlockSize == 32)
-            diff_full_block_func_ = diffFullBlock_32x32_SSE3;
+            diff_full_block_func_ = diffFullBlock_32bpp_32x32_SSE3;
     }
     else if (libyuv::TestCpuFlag(libyuv::kCpuHasSSE2))
     {
         LOG(LS_INFO) << "SSE2 differ loaded";
 
         if constexpr (kBlockSize == 8)
-            diff_full_block_func_ = diffFullBlock_8x8_SSE2;
+            diff_full_block_func_ = diffFullBlock_32bpp_8x8_SSE2;
         else if constexpr (kBlockSize == 16)
-            diff_full_block_func_ = diffFullBlock_16x16_SSE2;
+            diff_full_block_func_ = diffFullBlock_32bpp_16x16_SSE2;
         else if constexpr (kBlockSize == 32)
-            diff_full_block_func_ = diffFullBlock_32x32_SSE2;
+            diff_full_block_func_ = diffFullBlock_32bpp_32x32_SSE2;
     }
     else
     {
         LOG(LS_INFO) << "C differ loaded";
 
         if constexpr (kBlockSize == 8)
-            diff_full_block_func_ = diffFullBlock_8x8_C;
+            diff_full_block_func_ = diffFullBlock_32bpp_8x8_C;
         else if constexpr (kBlockSize == 16)
-            diff_full_block_func_ = diffFullBlock_16x16_C;
+            diff_full_block_func_ = diffFullBlock_32bpp_16x16_C;
         else if constexpr (kBlockSize == 32)
-            diff_full_block_func_ = diffFullBlock_32x32_C;
+            diff_full_block_func_ = diffFullBlock_32bpp_32x32_C;
     }
 }
 

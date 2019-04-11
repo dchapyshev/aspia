@@ -17,10 +17,9 @@
 //
 
 #include "base/aligned_memory.h"
-#include "desktop/diff_block_avx2.h"
+#include "desktop/diff_block_32bpp_c.h"
 
 #include <gtest/gtest.h>
-#include <libyuv/cpu_id.h>
 
 namespace desktop {
 
@@ -31,7 +30,7 @@ using AlignedBuffer = std::unique_ptr<uint8_t, base::AlignedFreeDeleter>;
 // Run 900 times to mimic 1280x720.
 const int kTimesToRun = 900;
 const int kBytesPerPixel = 4;
-const int kAlignment = 32;
+const int kAlignment = 16;
 
 void generateData(uint8_t* data, int size)
 {
@@ -58,11 +57,8 @@ void prepareBuffers(AlignedBuffer* block1, AlignedBuffer* block2, int block_size
 
 } // namespace
 
-TEST(diff_block_avx2, block_difference_test_same)
+TEST(diff_block_c, block_difference_test_same)
 {
-    if (!libyuv::TestCpuFlag(libyuv::kCpuHasAVX2))
-        return;
-
     AlignedBuffer block1;
     AlignedBuffer block2;
 
@@ -74,7 +70,8 @@ TEST(diff_block_avx2, block_difference_test_same)
         // These blocks should match.
         for (int i = 0; i < kTimesToRun; ++i)
         {
-            int result = diffFullBlock_32x32_AVX2(block1.get(), block2.get(), kBlockSize * kBytesPerPixel);
+            int result = diffFullBlock_32bpp_32x32_C(
+                block1.get(), block2.get(), kBlockSize * kBytesPerPixel);
             EXPECT_EQ(0, result);
         }
     }
@@ -87,7 +84,8 @@ TEST(diff_block_avx2, block_difference_test_same)
         // These blocks should match.
         for (int i = 0; i < kTimesToRun; ++i)
         {
-            int result = diffFullBlock_16x16_AVX2(block1.get(), block2.get(), kBlockSize * kBytesPerPixel);
+            int result = diffFullBlock_32bpp_16x16_C(
+                block1.get(), block2.get(), kBlockSize * kBytesPerPixel);
             EXPECT_EQ(0, result);
         }
     }
@@ -100,17 +98,15 @@ TEST(diff_block_avx2, block_difference_test_same)
         // These blocks should match.
         for (int i = 0; i < kTimesToRun; ++i)
         {
-            int result = diffFullBlock_8x8_AVX2(block1.get(), block2.get(), kBlockSize * kBytesPerPixel);
+            int result = diffFullBlock_32bpp_8x8_C(
+                block1.get(), block2.get(), kBlockSize * kBytesPerPixel);
             EXPECT_EQ(0, result);
         }
     }
 }
 
-TEST(diff_block_avx2, block_difference_test_last)
+TEST(diff_block_c, block_difference_test_last)
 {
-    if (!libyuv::TestCpuFlag(libyuv::kCpuHasAVX2))
-        return;
-
     AlignedBuffer block1;
     AlignedBuffer block2;
 
@@ -122,7 +118,8 @@ TEST(diff_block_avx2, block_difference_test_last)
 
         for (int i = 0; i < kTimesToRun; ++i)
         {
-            int result = diffFullBlock_32x32_AVX2(block1.get(), block2.get(), kBlockSize * kBytesPerPixel);
+            int result = diffFullBlock_32bpp_32x32_C(
+                block1.get(), block2.get(), kBlockSize * kBytesPerPixel);
             EXPECT_EQ(1, result);
         }
     }
@@ -135,7 +132,8 @@ TEST(diff_block_avx2, block_difference_test_last)
 
         for (int i = 0; i < kTimesToRun; ++i)
         {
-            int result = diffFullBlock_16x16_AVX2(block1.get(), block2.get(), kBlockSize * kBytesPerPixel);
+            int result = diffFullBlock_32bpp_16x16_C(
+                block1.get(), block2.get(), kBlockSize * kBytesPerPixel);
             EXPECT_EQ(1, result);
         }
     }
@@ -148,17 +146,15 @@ TEST(diff_block_avx2, block_difference_test_last)
 
         for (int i = 0; i < kTimesToRun; ++i)
         {
-            int result = diffFullBlock_8x8_AVX2(block1.get(), block2.get(), kBlockSize * kBytesPerPixel);
+            int result = diffFullBlock_32bpp_8x8_C(
+                block1.get(), block2.get(), kBlockSize * kBytesPerPixel);
             EXPECT_EQ(1, result);
         }
     }
 }
 
-TEST(diff_block_avx2, block_difference_test_mid)
+TEST(diff_block_c, block_difference_test_mid)
 {
-    if (!libyuv::TestCpuFlag(libyuv::kCpuHasAVX2))
-        return;
-
     AlignedBuffer block1;
     AlignedBuffer block2;
 
@@ -170,7 +166,8 @@ TEST(diff_block_avx2, block_difference_test_mid)
 
         for (int i = 0; i < kTimesToRun; ++i)
         {
-            int result = diffFullBlock_32x32_AVX2(block1.get(), block2.get(), kBlockSize * kBytesPerPixel);
+            int result = diffFullBlock_32bpp_32x32_C(
+                block1.get(), block2.get(), kBlockSize * kBytesPerPixel);
             EXPECT_EQ(1, result);
         }
     }
@@ -183,7 +180,8 @@ TEST(diff_block_avx2, block_difference_test_mid)
 
         for (int i = 0; i < kTimesToRun; ++i)
         {
-            int result = diffFullBlock_16x16_AVX2(block1.get(), block2.get(), kBlockSize * kBytesPerPixel);
+            int result = diffFullBlock_32bpp_16x16_C(
+                block1.get(), block2.get(), kBlockSize * kBytesPerPixel);
             EXPECT_EQ(1, result);
         }
     }
@@ -196,17 +194,15 @@ TEST(diff_block_avx2, block_difference_test_mid)
 
         for (int i = 0; i < kTimesToRun; ++i)
         {
-            int result = diffFullBlock_8x8_AVX2(block1.get(), block2.get(), kBlockSize * kBytesPerPixel);
+            int result = diffFullBlock_32bpp_8x8_C(
+                block1.get(), block2.get(), kBlockSize * kBytesPerPixel);
             EXPECT_EQ(1, result);
         }
     }
 }
 
-TEST(diff_block_avx2, block_difference_test_first)
+TEST(diff_block_c, block_difference_test_first)
 {
-    if (!libyuv::TestCpuFlag(libyuv::kCpuHasAVX2))
-        return;
-
     AlignedBuffer block1;
     AlignedBuffer block2;
 
@@ -218,7 +214,8 @@ TEST(diff_block_avx2, block_difference_test_first)
 
         for (int i = 0; i < kTimesToRun; ++i)
         {
-            int result = diffFullBlock_32x32_AVX2(block1.get(), block2.get(), kBlockSize * kBytesPerPixel);
+            int result = diffFullBlock_32bpp_32x32_C(
+                block1.get(), block2.get(), kBlockSize * kBytesPerPixel);
             EXPECT_EQ(1, result);
         }
     }
@@ -231,7 +228,8 @@ TEST(diff_block_avx2, block_difference_test_first)
 
         for (int i = 0; i < kTimesToRun; ++i)
         {
-            int result = diffFullBlock_16x16_AVX2(block1.get(), block2.get(), kBlockSize * kBytesPerPixel);
+            int result = diffFullBlock_32bpp_16x16_C(
+                block1.get(), block2.get(), kBlockSize * kBytesPerPixel);
             EXPECT_EQ(1, result);
         }
     }
@@ -244,10 +242,11 @@ TEST(diff_block_avx2, block_difference_test_first)
 
         for (int i = 0; i < kTimesToRun; ++i)
         {
-            int result = diffFullBlock_8x8_AVX2(block1.get(), block2.get(), kBlockSize * kBytesPerPixel);
+            int result = diffFullBlock_32bpp_8x8_C(
+                block1.get(), block2.get(), kBlockSize * kBytesPerPixel);
             EXPECT_EQ(1, result);
         }
     }
 }
 
-}  // namespace desktop
+} // namespace desktop

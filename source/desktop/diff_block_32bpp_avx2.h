@@ -16,19 +16,22 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef DESKTOP__DIFF_BLOCK_SSE2_H
-#define DESKTOP__DIFF_BLOCK_SSE2_H
+#ifndef DESKTOP__DIFF_BLOCK_32BPP_AVX2_H
+#define DESKTOP__DIFF_BLOCK_32BPP_AVX2_H
 
 #include <cstdint>
 
 namespace desktop {
 
-uint8_t diffFullBlock_32x32_SSE2(const uint8_t* image1, const uint8_t* image2, int bytes_per_row);
+uint8_t diffFullBlock_32bpp_32x32_AVX2(
+    const uint8_t* image1, const uint8_t* image2, int bytes_per_row);
 
-uint8_t diffFullBlock_16x16_SSE2(const uint8_t* image1, const uint8_t* image2, int bytes_per_row);
+uint8_t diffFullBlock_32bpp_16x16_AVX2(
+    const uint8_t* image1, const uint8_t* image2, int bytes_per_row);
 
-uint8_t diffFullBlock_8x8_SSE2(const uint8_t* image1, const uint8_t* image2, int bytes_per_row);
+uint8_t diffFullBlock_32bpp_8x8_AVX2(
+    const uint8_t* image1, const uint8_t* image2, int bytes_per_row);
 
 } // namespace desktop
 
-#endif // DESKTOP__DIFF_BLOCK_SSE2_H
+#endif // DESKTOP__DIFF_BLOCK_32BPP_AVX2_H

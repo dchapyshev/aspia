@@ -41,14 +41,14 @@ list(APPEND SOURCE_DESKTOP
     dfmirage.h
     dfmirage_helper.cc
     dfmirage_helper.h
-    diff_block_avx2.cc
-    diff_block_avx2.h
-    diff_block_c.cc
-    diff_block_c.h
-    diff_block_sse2.cc
-    diff_block_sse2.h
-    diff_block_sse3.cc
-    diff_block_sse3.h
+    diff_block_32bpp_avx2.cc
+    diff_block_32bpp_avx2.h
+    diff_block_32bpp_c.cc
+    diff_block_32bpp_c.h
+    diff_block_32bpp_sse2.cc
+    diff_block_32bpp_sse2.h
+    diff_block_32bpp_sse3.cc
+    diff_block_32bpp_sse3.h
     differ.cc
     differ.h
     mouse_cursor.cc
@@ -77,10 +77,10 @@ list(APPEND SOURCE_DESKTOP
 list(APPEND SOURCE_DESKTOP_UNIT_TESTS
     desktop_geometry_unittest.cc
     desktop_region_unittest.cc
-    diff_block_avx2_unittest.cc
-    diff_block_c_unittest.cc
-    diff_block_sse2_unittest.cc
-    diff_block_sse3_unittest.cc)
+    diff_block_32bpp_avx2_unittest.cc
+    diff_block_32bpp_c_unittest.cc
+    diff_block_32bpp_sse2_unittest.cc
+    diff_block_32bpp_sse3_unittest.cc)
 
 list(APPEND SOURCE_DESKTOP_WIN
     win/bitmap_info.h

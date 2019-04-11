@@ -17,9 +17,10 @@
 //
 
 #include "base/aligned_memory.h"
-#include "desktop/diff_block_c.h"
+#include "desktop/diff_block_32bpp_sse3.h"
 
 #include <gtest/gtest.h>
+#include <libyuv/cpu_id.h>
 
 namespace desktop {
 
@@ -57,8 +58,11 @@ void prepareBuffers(AlignedBuffer* block1, AlignedBuffer* block2, int block_size
 
 } // namespace
 
-TEST(diff_block_c, block_difference_test_same)
+TEST(diff_block_sse3, block_difference_test_same)
 {
+    if (!libyuv::TestCpuFlag(libyuv::kCpuHasSSSE3))
+        return;
+
     AlignedBuffer block1;
     AlignedBuffer block2;
 
@@ -70,7 +74,8 @@ TEST(diff_block_c, block_difference_test_same)
         // These blocks should match.
         for (int i = 0; i < kTimesToRun; ++i)
         {
-            int result = diffFullBlock_32x32_C(block1.get(), block2.get(), kBlockSize * kBytesPerPixel);
+            int result = diffFullBlock_32bpp_32x32_SSE3(
+                block1.get(), block2.get(), kBlockSize * kBytesPerPixel);
             EXPECT_EQ(0, result);
         }
     }
@@ -83,7 +88,8 @@ TEST(diff_block_c, block_difference_test_same)
         // These blocks should match.
         for (int i = 0; i < kTimesToRun; ++i)
         {
-            int result = diffFullBlock_16x16_C(block1.get(), block2.get(), kBlockSize * kBytesPerPixel);
+            int result = diffFullBlock_32bpp_16x16_SSE3(
+                block1.get(), block2.get(), kBlockSize * kBytesPerPixel);
             EXPECT_EQ(0, result);
         }
     }
@@ -96,14 +102,18 @@ TEST(diff_block_c, block_difference_test_same)
         // These blocks should match.
         for (int i = 0; i < kTimesToRun; ++i)
         {
-            int result = diffFullBlock_8x8_C(block1.get(), block2.get(), kBlockSize * kBytesPerPixel);
+            int result = diffFullBlock_32bpp_8x8_SSE3(
+                block1.get(), block2.get(), kBlockSize * kBytesPerPixel);
             EXPECT_EQ(0, result);
         }
     }
 }
 
-TEST(diff_block_c, block_difference_test_last)
+TEST(diff_block_sse3, block_difference_test_last)
 {
+    if (!libyuv::TestCpuFlag(libyuv::kCpuHasSSSE3))
+        return;
+
     AlignedBuffer block1;
     AlignedBuffer block2;
 
@@ -115,7 +125,8 @@ TEST(diff_block_c, block_difference_test_last)
 
         for (int i = 0; i < kTimesToRun; ++i)
         {
-            int result = diffFullBlock_32x32_C(block1.get(), block2.get(), kBlockSize * kBytesPerPixel);
+            int result = diffFullBlock_32bpp_32x32_SSE3(
+                block1.get(), block2.get(), kBlockSize * kBytesPerPixel);
             EXPECT_EQ(1, result);
         }
     }
@@ -128,7 +139,8 @@ TEST(diff_block_c, block_difference_test_last)
 
         for (int i = 0; i < kTimesToRun; ++i)
         {
-            int result = diffFullBlock_16x16_C(block1.get(), block2.get(), kBlockSize * kBytesPerPixel);
+            int result = diffFullBlock_32bpp_16x16_SSE3(
+                block1.get(), block2.get(), kBlockSize * kBytesPerPixel);
             EXPECT_EQ(1, result);
         }
     }
@@ -141,14 +153,18 @@ TEST(diff_block_c, block_difference_test_last)
 
         for (int i = 0; i < kTimesToRun; ++i)
         {
-            int result = diffFullBlock_8x8_C(block1.get(), block2.get(), kBlockSize * kBytesPerPixel);
+            int result = diffFullBlock_32bpp_8x8_SSE3(
+                block1.get(), block2.get(), kBlockSize * kBytesPerPixel);
             EXPECT_EQ(1, result);
         }
     }
 }
 
-TEST(diff_block_c, block_difference_test_mid)
+TEST(diff_block_sse3, block_difference_test_mid)
 {
+    if (!libyuv::TestCpuFlag(libyuv::kCpuHasSSSE3))
+        return;
+
     AlignedBuffer block1;
     AlignedBuffer block2;
 
@@ -160,7 +176,8 @@ TEST(diff_block_c, block_difference_test_mid)
 
         for (int i = 0; i < kTimesToRun; ++i)
         {
-            int result = diffFullBlock_32x32_C(block1.get(), block2.get(), kBlockSize * kBytesPerPixel);
+            int result = diffFullBlock_32bpp_32x32_SSE3(
+                block1.get(), block2.get(), kBlockSize * kBytesPerPixel);
             EXPECT_EQ(1, result);
         }
     }
@@ -173,7 +190,8 @@ TEST(diff_block_c, block_difference_test_mid)
 
         for (int i = 0; i < kTimesToRun; ++i)
         {
-            int result = diffFullBlock_16x16_C(block1.get(), block2.get(), kBlockSize * kBytesPerPixel);
+            int result = diffFullBlock_32bpp_16x16_SSE3(
+                block1.get(), block2.get(), kBlockSize * kBytesPerPixel);
             EXPECT_EQ(1, result);
         }
     }
@@ -186,14 +204,18 @@ TEST(diff_block_c, block_difference_test_mid)
 
         for (int i = 0; i < kTimesToRun; ++i)
         {
-            int result = diffFullBlock_8x8_C(block1.get(), block2.get(), kBlockSize * kBytesPerPixel);
+            int result = diffFullBlock_32bpp_8x8_SSE3(
+                block1.get(), block2.get(), kBlockSize * kBytesPerPixel);
             EXPECT_EQ(1, result);
         }
     }
 }
 
-TEST(diff_block_c, block_difference_test_first)
+TEST(diff_block_sse3, block_difference_test_first)
 {
+    if (!libyuv::TestCpuFlag(libyuv::kCpuHasSSSE3))
+        return;
+
     AlignedBuffer block1;
     AlignedBuffer block2;
 
@@ -205,7 +227,8 @@ TEST(diff_block_c, block_difference_test_first)
 
         for (int i = 0; i < kTimesToRun; ++i)
         {
-            int result = diffFullBlock_32x32_C(block1.get(), block2.get(), kBlockSize * kBytesPerPixel);
+            int result = diffFullBlock_32bpp_32x32_SSE3(
+                block1.get(), block2.get(), kBlockSize * kBytesPerPixel);
             EXPECT_EQ(1, result);
         }
     }
@@ -218,7 +241,8 @@ TEST(diff_block_c, block_difference_test_first)
 
         for (int i = 0; i < kTimesToRun; ++i)
         {
-            int result = diffFullBlock_16x16_C(block1.get(), block2.get(), kBlockSize * kBytesPerPixel);
+            int result = diffFullBlock_32bpp_16x16_SSE3(
+                block1.get(), block2.get(), kBlockSize * kBytesPerPixel);
             EXPECT_EQ(1, result);
         }
     }
@@ -231,7 +255,8 @@ TEST(diff_block_c, block_difference_test_first)
 
         for (int i = 0; i < kTimesToRun; ++i)
         {
-            int result = diffFullBlock_8x8_C(block1.get(), block2.get(), kBlockSize * kBytesPerPixel);
+            int result = diffFullBlock_32bpp_8x8_SSE3(
+                block1.get(), block2.get(), kBlockSize * kBytesPerPixel);
             EXPECT_EQ(1, result);
         }
     }
