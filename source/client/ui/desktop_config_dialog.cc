@@ -94,7 +94,6 @@ DesktopConfigDialog::DesktopConfigDialog(proto::SessionType session_type,
     ui.slider_compression_ratio->setValue(config_.compress_ratio());
     onCompressionRatioChanged(config_.compress_ratio());
 
-    ui.spin_scale_factor->setValue(config_.scale_factor());
     ui.spin_update_interval->setValue(config_.update_interval());
 
     if (session_type == proto::SESSION_TYPE_DESKTOP_MANAGE)
@@ -196,7 +195,6 @@ void DesktopConfigDialog::onButtonBoxClicked(QAbstractButton* button)
             config_.set_compress_ratio(ui.slider_compression_ratio->value());
         }
 
-        config_.set_scale_factor(ui.spin_scale_factor->value());
         config_.set_update_interval(ui.spin_update_interval->value());
 
         uint32_t flags = 0;

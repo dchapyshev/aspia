@@ -97,47 +97,46 @@
         <translation>Віддалений екран</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="133"/>
         <source>Scale factor:</source>
-        <translation>Масштаб:</translation>
+        <translation type="vanished">Масштаб:</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="140"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="131"/>
         <source>Update interval:</source>
         <translation>Частота оновлення:</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="170"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="138"/>
         <source>ms</source>
         <translation>мс</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="204"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="170"/>
         <source>Advanced</source>
         <translation>Додатково</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="210"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="176"/>
         <source>Block remote input</source>
         <translation>Блокувати віддалений ввід</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="217"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="183"/>
         <source>Enable cursor shape</source>
         <translation>Показати курсор</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="224"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="190"/>
         <source>Enable clipboard</source>
         <translation>Буфер обміну</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="231"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="197"/>
         <source>Disable desktop effects</source>
         <translation>Відключити ефекти робочого стола</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="238"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="204"/>
         <source>Disable desktop wallpaper</source>
         <translation>Відключити шпалери робочого стола</translation>
     </message>
@@ -820,7 +819,7 @@
         <translation>8 кольорів (3 біти)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="151"/>
+        <location filename="../ui/desktop_config_dialog.cc" line="150"/>
         <source>Compression ratio: %1</source>
         <translation>Стиснення: %1</translation>
     </message>

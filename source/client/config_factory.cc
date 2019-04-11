@@ -28,10 +28,6 @@ const int kDefUpdateInterval = 30;
 const int kMinUpdateInterval = 15;
 const int kMaxUpdateInterval = 100;
 
-const int kDefScaleFactor = 100;
-const int kMinScaleFactor = 50;
-const int kMaxScaleFactor = 100;
-
 const int kDefCompressRatio = 8;
 const int kMinCompressRatio = 1;
 const int kMaxCompressRatio = 22;
@@ -66,7 +62,6 @@ void ConfigFactory::setDefaultDesktopManageConfig(proto::desktop::Config* config
     config->set_flags(kDefaultFlags);
     config->set_video_encoding(proto::desktop::VideoEncoding::VIDEO_ENCODING_ZSTD);
     config->set_compress_ratio(kDefCompressRatio);
-    config->set_scale_factor(kDefScaleFactor);
     config->set_update_interval(kDefUpdateInterval);
 
     codec::VideoUtil::toVideoPixelFormat(
@@ -84,7 +79,6 @@ void ConfigFactory::setDefaultDesktopViewConfig(proto::desktop::Config* config)
     config->set_flags(kDefaultFlags);
     config->set_video_encoding(proto::desktop::VideoEncoding::VIDEO_ENCODING_ZSTD);
     config->set_compress_ratio(kDefCompressRatio);
-    config->set_scale_factor(kDefScaleFactor);
     config->set_update_interval(kDefUpdateInterval);
 
     codec::VideoUtil::toVideoPixelFormat(
@@ -94,9 +88,6 @@ void ConfigFactory::setDefaultDesktopViewConfig(proto::desktop::Config* config)
 // static
 void ConfigFactory::fixupDesktopConfig(proto::desktop::Config* config)
 {
-    if (config->scale_factor() < kMinScaleFactor || config->scale_factor() > kMaxScaleFactor)
-        config->set_scale_factor(kDefScaleFactor);
-
     if (config->update_interval() < kMinUpdateInterval || config->update_interval() > kMaxUpdateInterval)
         config->set_update_interval(kDefUpdateInterval);
 

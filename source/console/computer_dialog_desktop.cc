@@ -94,7 +94,6 @@ void ComputerDialogDesktop::restoreSettings(
     ui.slider_compression_ratio->setValue(config.compress_ratio());
     onCompressionRatioChanged(config.compress_ratio());
 
-    ui.spin_scale_factor->setValue(config.scale_factor());
     ui.spin_update_interval->setValue(config.update_interval());
 
     if (session_type == proto::SESSION_TYPE_DESKTOP_MANAGE)
@@ -165,7 +164,6 @@ void ComputerDialogDesktop::saveSettings(proto::desktop::Config* config)
         config->set_compress_ratio(ui.slider_compression_ratio->value());
     }
 
-    config->set_scale_factor(ui.spin_scale_factor->value());
     config->set_update_interval(ui.spin_update_interval->value());
 
     uint32_t flags = 0;

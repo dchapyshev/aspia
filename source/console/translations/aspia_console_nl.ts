@@ -155,47 +155,46 @@
         <translation>Scherm op afstand</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="133"/>
         <source>Scale factor:</source>
-        <translation>Schaal factor:</translation>
+        <translation type="vanished">Schaal factor:</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="140"/>
+        <location filename="../computer_dialog_desktop.ui" line="131"/>
         <source>Update interval:</source>
         <translation>Verversings snelheid:</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="170"/>
+        <location filename="../computer_dialog_desktop.ui" line="138"/>
         <source>ms</source>
         <translation>ms</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="204"/>
+        <location filename="../computer_dialog_desktop.ui" line="170"/>
         <source>Advanced</source>
         <translation>Geavanceerd</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="210"/>
+        <location filename="../computer_dialog_desktop.ui" line="176"/>
         <source>Block remote input</source>
         <translation>Blokkeer input op afstand</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="217"/>
+        <location filename="../computer_dialog_desktop.ui" line="183"/>
         <source>Enable cursor shape</source>
         <translation>Cursor vorm inschakelen</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="224"/>
+        <location filename="../computer_dialog_desktop.ui" line="190"/>
         <source>Enable clipboard</source>
         <translation>Klembord inschakelen</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="231"/>
+        <location filename="../computer_dialog_desktop.ui" line="197"/>
         <source>Disable desktop effects</source>
         <translation>Bureaublad effecten uitschakelen</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="238"/>
+        <location filename="../computer_dialog_desktop.ui" line="204"/>
         <source>Disable desktop wallpaper</source>
         <translation>Bureaublad achtergrond verbergen</translation>
     </message>
@@ -1058,7 +1057,7 @@
         <translation>8 kleuren (3 bit)</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.cc" line="206"/>
+        <location filename="../computer_dialog_desktop.cc" line="204"/>
         <source>Compression ratio: %1</source>
         <translation>Compressie ratio: %1</translation>
     </message>

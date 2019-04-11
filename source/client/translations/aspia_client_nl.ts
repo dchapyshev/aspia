@@ -97,47 +97,46 @@
         <translation>Scherm op afstand</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="133"/>
         <source>Scale factor:</source>
-        <translation>Schaal factor:</translation>
+        <translation type="vanished">Schaal factor:</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="140"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="131"/>
         <source>Update interval:</source>
         <translation>Vernieuwings tijd:</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="170"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="138"/>
         <source>ms</source>
         <translation>ms</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="204"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="170"/>
         <source>Advanced</source>
         <translation>Geavanceerd</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="210"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="176"/>
         <source>Block remote input</source>
         <translation>Blokkeer invoer op afstand</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="217"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="183"/>
         <source>Enable cursor shape</source>
         <translation>Muis vorm inschakelen</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="224"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="190"/>
         <source>Enable clipboard</source>
         <translation>Klembord inschakelen</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="231"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="197"/>
         <source>Disable desktop effects</source>
         <translation>Schakel bureaublad effecten uit</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="238"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="204"/>
         <source>Disable desktop wallpaper</source>
         <translation>Geen bureaublad achtergrond</translation>
     </message>
@@ -820,7 +819,7 @@
         <translation>8 kleuren (3 bit)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="151"/>
+        <location filename="../ui/desktop_config_dialog.cc" line="150"/>
         <source>Compression ratio: %1</source>
         <translation>Compressie ratio: %1</translation>
     </message>

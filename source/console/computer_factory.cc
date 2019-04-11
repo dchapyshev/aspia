@@ -26,7 +26,6 @@ namespace console {
 namespace {
 
 const int kDefUpdateInterval = 30;
-const int kDefScaleFactor = 100;
 const int kDefCompressRatio = 8;
 
 void setDefaultDesktopManageConfig(proto::desktop::Config* config)
@@ -40,7 +39,6 @@ void setDefaultDesktopManageConfig(proto::desktop::Config* config)
     config->set_flags(kDefaultFlags);
     config->set_video_encoding(proto::desktop::VideoEncoding::VIDEO_ENCODING_ZSTD);
     config->set_compress_ratio(kDefCompressRatio);
-    config->set_scale_factor(kDefScaleFactor);
     config->set_update_interval(kDefUpdateInterval);
 
     codec::VideoUtil::toVideoPixelFormat(
@@ -57,7 +55,6 @@ void setDefaultDesktopViewConfig(proto::desktop::Config* config)
     config->set_flags(kDefaultFlags);
     config->set_video_encoding(proto::desktop::VideoEncoding::VIDEO_ENCODING_ZSTD);
     config->set_compress_ratio(kDefCompressRatio);
-    config->set_scale_factor(kDefScaleFactor);
     config->set_update_interval(kDefUpdateInterval);
 
     codec::VideoUtil::toVideoPixelFormat(

@@ -155,47 +155,42 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="133"/>
-        <source>Scale factor:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../computer_dialog_desktop.ui" line="140"/>
+        <location filename="../computer_dialog_desktop.ui" line="131"/>
         <source>Update interval:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="170"/>
+        <location filename="../computer_dialog_desktop.ui" line="138"/>
         <source>ms</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="204"/>
+        <location filename="../computer_dialog_desktop.ui" line="170"/>
         <source>Advanced</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="210"/>
+        <location filename="../computer_dialog_desktop.ui" line="176"/>
         <source>Block remote input</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="217"/>
+        <location filename="../computer_dialog_desktop.ui" line="183"/>
         <source>Enable cursor shape</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="224"/>
+        <location filename="../computer_dialog_desktop.ui" line="190"/>
         <source>Enable clipboard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="231"/>
+        <location filename="../computer_dialog_desktop.ui" line="197"/>
         <source>Disable desktop effects</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="238"/>
+        <location filename="../computer_dialog_desktop.ui" line="204"/>
         <source>Disable desktop wallpaper</source>
         <translation type="unfinished"></translation>
     </message>
@@ -861,7 +856,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.cc" line="206"/>
+        <location filename="../computer_dialog_desktop.cc" line="204"/>
         <source>Compression ratio: %1</source>
         <translation type="unfinished"></translation>
     </message>

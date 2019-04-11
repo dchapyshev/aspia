@@ -275,7 +275,7 @@ void DesktopWindow::onPointerEvent(const QPoint& pos, uint32_t mask)
 
     ClientDesktop* client = desktopClient();
 
-    int remote_scale_factor = client->connectData().desktop_config.scale_factor();
+    int remote_scale_factor = 100;
     if (remote_scale_factor)
     {
         const QSize& source_size = desktopFrame()->size().toQSize();
