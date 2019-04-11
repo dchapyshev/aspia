@@ -39,9 +39,7 @@ public:
     void encode(const desktop::Frame* frame, proto::desktop::VideoPacket* packet) override;
 
 private:
-    VideoEncoderZstd(std::unique_ptr<PixelTranslator> translator,
-                     const desktop::PixelFormat& target_format,
-                     int compression_ratio);
+    VideoEncoderZstd(const desktop::PixelFormat& target_format, int compression_ratio);
     void compressPacket(proto::desktop::VideoPacket* packet,
                         const uint8_t* input_data,
                         size_t input_size);

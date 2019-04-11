@@ -20,6 +20,7 @@
 
 #include "base/logging.h"
 #include "base/win/scoped_gdi_object.h"
+#include "base/win/scoped_hdc.h"
 #include "desktop/win/bitmap_info.h"
 
 #include <windows.h>
@@ -138,8 +139,12 @@ int ScreenCaptureUtils::screenCount()
 }
 
 // static
-PixelFormat ScreenCaptureUtils::detectPixelFormat(HDC desktop_dc)
+PixelFormat ScreenCaptureUtils::detectPixelFormat()
 {
+    base::win::ScopedGetDC desktop_dc(nullptr);
+    if (!desktop_dc)
+        return PixelFormat::ARGB();
+
     base::win::ScopedHBITMAP bitmap(reinterpret_cast<HBITMAP>(
         GetCurrentObject(desktop_dc, OBJ_BITMAP)));
 
@@ -179,9 +184,8 @@ PixelFormat ScreenCaptureUtils::detectPixelFormat(HDC desktop_dc)
     const uint16_t blue_max = bitmap_info.u.mask.blue >> blue_shift;
 
     return PixelFormat(bitmap_info.header.biBitCount,
-                       red_max, green_max,
-                       blue_max, red_shift,
-                       green_shift, blue_shift);
+                       red_max, green_max, blue_max,
+                       red_shift, green_shift, blue_shift);
 }
 
 } // namespace desktop

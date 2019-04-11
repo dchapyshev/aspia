@@ -78,7 +78,6 @@ private:
     std::unique_ptr<desktop::CaptureScheduler> capture_scheduler_;
 
     std::unique_ptr<desktop::ScreenCapturerWrapper> screen_capturer_;
-    std::unique_ptr<codec::ScaleReducer> scale_reducer_;
     std::unique_ptr<codec::VideoEncoder> video_encoder_;
 
     std::unique_ptr<desktop::CursorCapturer> cursor_capturer_;

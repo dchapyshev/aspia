@@ -56,10 +56,6 @@ ScreenUpdaterImpl::~ScreenUpdaterImpl()
 
 bool ScreenUpdaterImpl::startUpdater(const proto::desktop::Config& config)
 {
-    scale_reducer_.reset(codec::ScaleReducer::create(config.scale_factor()));
-    if (!scale_reducer_)
-        return false;
-
     switch (config.video_encoding())
     {
         case proto::desktop::VIDEO_ENCODING_VP8:
@@ -170,10 +166,7 @@ void ScreenUpdaterImpl::run()
             message_.Clear();
 
             if (!screen_frame->constUpdatedRegion().isEmpty())
-            {
-                video_encoder_->encode(scale_reducer_->scaleFrame(screen_frame),
-                                       message_.mutable_video_packet());
-            }
+                video_encoder_->encode(screen_frame, message_.mutable_video_packet());
 
             if (cursor_capturer_ && cursor_encoder_)
             {

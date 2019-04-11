@@ -36,35 +36,25 @@ uint8_t* outputBuffer(proto::desktop::VideoPacket* packet, size_t size)
 
 } // namespace
 
-VideoEncoderZstd::VideoEncoderZstd(std::unique_ptr<PixelTranslator> translator,
-                                   const desktop::PixelFormat& target_format,
+VideoEncoderZstd::VideoEncoderZstd(const desktop::PixelFormat& target_format,
                                    int compression_ratio)
     : target_format_(target_format),
       compress_ratio_(compression_ratio),
-      stream_(ZSTD_createCStream()),
-      translator_(std::move(translator))
+      stream_(ZSTD_createCStream())
 {
     // Nothing
 }
 
 // static
-VideoEncoderZstd* VideoEncoderZstd::create(
-    const desktop::PixelFormat& target_format, int compression_ratio)
+VideoEncoderZstd* VideoEncoderZstd::create(const desktop::PixelFormat& target_format,
+                                           int compression_ratio)
 {
     if (compression_ratio > ZSTD_maxCLevel())
         compression_ratio = ZSTD_maxCLevel();
     else if (compression_ratio < 1)
         compression_ratio = 1;
 
-    std::unique_ptr<PixelTranslator> translator =
-        PixelTranslator::create(desktop::PixelFormat::ARGB(), target_format);
-    if (!translator)
-    {
-        LOG(LS_WARNING) << "Unsupported pixel format";
-        return nullptr;
-    }
-
-    return new VideoEncoderZstd(std::move(translator), target_format, compression_ratio);
+    return new VideoEncoderZstd(target_format, compression_ratio);
 }
 
 void VideoEncoderZstd::compressPacket(proto::desktop::VideoPacket* packet,
@@ -104,6 +94,16 @@ void VideoEncoderZstd::encode(const desktop::Frame* frame, proto::desktop::Video
     {
         VideoUtil::toVideoPixelFormat(
             target_format_, packet->mutable_format()->mutable_pixel_format());
+    }
+
+    if (!translator_)
+    {
+        translator_ = PixelTranslator::create(frame->format(), target_format_);
+        if (!translator_)
+        {
+            LOG(LS_WARNING) << "Unsupported pixel format";
+            return;
+        }
     }
 
     size_t data_size = 0;

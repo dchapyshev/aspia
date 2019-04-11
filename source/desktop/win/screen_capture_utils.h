@@ -51,7 +51,7 @@ public:
 
     // Detects the current pixel format. If the current format is not supported or an error has
     // occurred, then returns PixelFormat::ARGB().
-    static PixelFormat detectPixelFormat(HDC desktop_dc);
+    static PixelFormat detectPixelFormat();
 
 private:
     DISALLOW_COPY_AND_ASSIGN(ScreenCaptureUtils);

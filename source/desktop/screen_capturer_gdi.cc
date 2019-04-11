@@ -17,8 +17,10 @@
 //
 
 #include "desktop/screen_capturer_gdi.h"
+
 #include "base/logging.h"
 #include "base/win/scoped_select_object.h"
+#include "desktop/win/bitmap_info.h"
 #include "desktop/win/screen_capture_utils.h"
 #include "desktop/desktop_frame_dib.h"
 #include "desktop/differ.h"
@@ -72,7 +74,7 @@ const Frame* ScreenCapturerGdi::captureFrame()
         DCHECK(memory_dc_);
 
         std::unique_ptr<Frame> frame = FrameDib::create(
-            screen_rect.size(), PixelFormat::ARGB(), memory_dc_);
+            screen_rect.size(), pixel_format_, memory_dc_);
         if (!frame)
         {
             LOG(LS_WARNING) << "Failed to create frame buffer";
@@ -149,6 +151,7 @@ bool ScreenCapturerGdi::prepareCaptureResources()
             return false;
         }
 
+        pixel_format_ = ScreenCaptureUtils::detectPixelFormat();
         desktop_dc_rect_ = desktop_rect;
 
         // Make sure the frame buffers will be reallocated.

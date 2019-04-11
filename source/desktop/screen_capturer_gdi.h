@@ -50,6 +50,7 @@ private:
     QString current_device_key_;
 
     Rect desktop_dc_rect_;
+    PixelFormat pixel_format_;
 
     std::unique_ptr<Differ> differ_;
     std::unique_ptr<base::win::ScopedGetDC> desktop_dc_;
