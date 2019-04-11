@@ -41,6 +41,8 @@ list(APPEND SOURCE_DESKTOP
     dfmirage.h
     dfmirage_helper.cc
     dfmirage_helper.h
+    diff_block_16bpp_c.cc
+    diff_block_16bpp_c.h
     diff_block_32bpp_avx2.cc
     diff_block_32bpp_avx2.h
     diff_block_32bpp_c.cc

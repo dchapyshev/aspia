@@ -21,6 +21,7 @@
 
 #include "base/macros_magic.h"
 #include "desktop/desktop_region.h"
+#include "desktop/pixel_format.h"
 
 #include <memory>
 
@@ -30,7 +31,7 @@ namespace desktop {
 class Differ
 {
 public:
-    explicit Differ(const Size& size);
+    Differ(const Size& size, const PixelFormat& format);
     ~Differ() = default;
 
     void calcDirtyRegion(const uint8_t* prev_image,
@@ -38,12 +39,19 @@ public:
                          Region* changed_region);
 
 private:
+    typedef uint8_t(*DiffFullBlockFunc)(const uint8_t*, const uint8_t*, int);
+
+    static DiffFullBlockFunc diffFunctionFor32bpp();
+    static DiffFullBlockFunc diffFunctionFor16bpp();
+
     void markDirtyBlocks(const uint8_t* prev_image, const uint8_t* curr_image);
     void mergeBlocks(Region* dirty_region);
 
     const Rect screen_rect_;
 
-    const int bytes_per_row_;
+    int bytes_per_pixel_;
+    int bytes_per_row_;
+    int bytes_per_block_;
 
     const int full_blocks_x_;
     const int full_blocks_y_;
@@ -58,7 +66,6 @@ private:
 
     std::unique_ptr<uint8_t[]> diff_info_;
 
-    typedef uint8_t(*DiffFullBlockFunc)(const uint8_t*, const uint8_t*, int);
     DiffFullBlockFunc diff_full_block_func_;
 
     DISALLOW_COPY_AND_ASSIGN(Differ);

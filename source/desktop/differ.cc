@@ -19,6 +19,7 @@
 #include "desktop/differ.h"
 
 #include "base/logging.h"
+#include "desktop/diff_block_16bpp_c.h"
 #include "desktop/diff_block_32bpp_avx2.h"
 #include "desktop/diff_block_32bpp_sse2.h"
 #include "desktop/diff_block_32bpp_sse3.h"
@@ -30,16 +31,12 @@ namespace desktop {
 
 namespace {
 
-const int kBytesPerPixel = 4;
 const int kBlockSize = 8;
-const int kBytesPerBlock = kBytesPerPixel * kBlockSize;
 
-//
-// Check for diffs in upper-left portion of the block. The size of the portion
-// to check is specified by the |width| and |height| values.
-// Note that if we force the capturer to always return images whose width and
-// height are multiples of kBlockSize, then this will never be called.
-//
+// Check for diffs in upper-left portion of the block. The size of the portion to check is
+// specified by the |width| and |height| values.
+// Note that if we force the capturer to always return images whose width and height are multiples
+// of kBlockSize, then this will never be called.
 uint8_t diffPartialBlock(const uint8_t* prev_image,
                          const uint8_t* curr_image,
                          int bytes_per_row,
@@ -58,16 +55,21 @@ uint8_t diffPartialBlock(const uint8_t* prev_image,
     return 0U;
 }
 
+
+
 } // namespace
 
-Differ::Differ(const Size& size)
+Differ::Differ(const Size& size, const PixelFormat& format)
     : screen_rect_(Rect::makeSize(size)),
-      bytes_per_row_(size.width() * kBytesPerPixel),
       diff_width_(((size.width() + kBlockSize - 1) / kBlockSize) + 1),
       diff_height_(((size.height() + kBlockSize - 1) / kBlockSize) + 1),
       full_blocks_x_(size.width() / kBlockSize),
       full_blocks_y_(size.height() / kBlockSize)
 {
+    bytes_per_pixel_ = format.bytesPerPixel();
+    bytes_per_row_ = size.width() * bytes_per_pixel_;
+    bytes_per_block_ = kBlockSize * bytes_per_pixel_;
+
     const int diff_info_size = diff_width_ * diff_height_;
 
     diff_info_ = std::make_unique<uint8_t[]>(diff_info_size);
@@ -80,55 +82,94 @@ Differ::Differ(const Size& size)
     // Offset from the start of one block-row to the next.
     block_stride_y_ = bytes_per_row_ * kBlockSize;
 
+    switch (format.bitsPerPixel())
+    {
+        case 32:
+            diff_full_block_func_ = diffFunctionFor32bpp();
+            break;
+
+        case 16:
+            diff_full_block_func_ = diffFunctionFor16bpp();
+            break;
+
+        default:
+            break;
+    }
+
+    CHECK(diff_full_block_func_);
+}
+
+// static
+Differ::DiffFullBlockFunc Differ::diffFunctionFor32bpp()
+{
+    DiffFullBlockFunc func = nullptr;
+
     if (libyuv::TestCpuFlag(libyuv::kCpuHasAVX2))
     {
-        LOG(LS_INFO) << "AVX2 differ loaded";
+        LOG(LS_INFO) << "AVX2 differ loaded (32bpp)";
 
         if constexpr (kBlockSize == 8)
-            diff_full_block_func_ = diffFullBlock_32bpp_8x8_AVX2;
+            func = diffFullBlock_32bpp_8x8_AVX2;
         else if constexpr (kBlockSize == 16)
-            diff_full_block_func_ = diffFullBlock_32bpp_16x16_AVX2;
+            func = diffFullBlock_32bpp_16x16_AVX2;
         else if constexpr (kBlockSize == 32)
-            diff_full_block_func_ = diffFullBlock_32bpp_32x32_AVX2;
+            func = diffFullBlock_32bpp_32x32_AVX2;
     }
     else if (libyuv::TestCpuFlag(libyuv::kCpuHasSSSE3))
     {
-        LOG(LS_INFO) << "SSE3 differ loaded";
+        LOG(LS_INFO) << "SSE3 differ loaded (32bpp)";
 
         if constexpr (kBlockSize == 8)
-            diff_full_block_func_ = diffFullBlock_32bpp_8x8_SSE3;
+            func = diffFullBlock_32bpp_8x8_SSE3;
         else if constexpr (kBlockSize == 16)
-            diff_full_block_func_ = diffFullBlock_32bpp_16x16_SSE3;
+            func = diffFullBlock_32bpp_16x16_SSE3;
         else if constexpr (kBlockSize == 32)
-            diff_full_block_func_ = diffFullBlock_32bpp_32x32_SSE3;
+            func = diffFullBlock_32bpp_32x32_SSE3;
     }
     else if (libyuv::TestCpuFlag(libyuv::kCpuHasSSE2))
     {
-        LOG(LS_INFO) << "SSE2 differ loaded";
+        LOG(LS_INFO) << "SSE2 differ loaded (32bpp)";
 
         if constexpr (kBlockSize == 8)
-            diff_full_block_func_ = diffFullBlock_32bpp_8x8_SSE2;
+            func = diffFullBlock_32bpp_8x8_SSE2;
         else if constexpr (kBlockSize == 16)
-            diff_full_block_func_ = diffFullBlock_32bpp_16x16_SSE2;
+            func = diffFullBlock_32bpp_16x16_SSE2;
         else if constexpr (kBlockSize == 32)
-            diff_full_block_func_ = diffFullBlock_32bpp_32x32_SSE2;
+            func = diffFullBlock_32bpp_32x32_SSE2;
     }
     else
     {
-        LOG(LS_INFO) << "C differ loaded";
+        LOG(LS_INFO) << "C differ loaded (32bpp)";
 
         if constexpr (kBlockSize == 8)
-            diff_full_block_func_ = diffFullBlock_32bpp_8x8_C;
+            func = diffFullBlock_32bpp_8x8_C;
         else if constexpr (kBlockSize == 16)
-            diff_full_block_func_ = diffFullBlock_32bpp_16x16_C;
+            func = diffFullBlock_32bpp_16x16_C;
         else if constexpr (kBlockSize == 32)
-            diff_full_block_func_ = diffFullBlock_32bpp_32x32_C;
+            func = diffFullBlock_32bpp_32x32_C;
     }
+
+    return func;
 }
 
-//
+// static
+Differ::DiffFullBlockFunc Differ::diffFunctionFor16bpp()
+{
+    DiffFullBlockFunc func = nullptr;
+
+    LOG(LS_INFO) << "C differ loaded (16bpp)";
+
+    if constexpr (kBlockSize == 8)
+        func = diffFullBlock_16bpp_8x8_C;
+    else if constexpr (kBlockSize == 16)
+        func = diffFullBlock_16bpp_16x16_C;
+    else if constexpr (kBlockSize == 32)
+        func = diffFullBlock_16bpp_32x32_C;
+
+    return func;
+}
+
 // Identify all of the blocks that contain changed pixels.
-//
 void Differ::markDirtyBlocks(const uint8_t* prev_image, const uint8_t* curr_image)
 {
     const uint8_t* prev_block_row_start = prev_image;
@@ -152,8 +193,8 @@ void Differ::markDirtyBlocks(const uint8_t* prev_image, const uint8_t* curr_imag
             // incorporated into a dirty rect.
             *is_different = diff_full_block_func_(prev_block, curr_block, bytes_per_row_);
 
-            prev_block += kBytesPerBlock;
-            curr_block += kBytesPerBlock;
+            prev_block += bytes_per_block_;
+            curr_block += bytes_per_block_;
 
             ++is_different;
         }
@@ -165,7 +206,7 @@ void Differ::markDirtyBlocks(const uint8_t* prev_image, const uint8_t* curr_imag
             *is_different = diffPartialBlock(prev_block,
                                              curr_block,
                                              bytes_per_row_,
-                                             kBytesPerBlock,
+                                             bytes_per_block_,
                                              kBlockSize);
         }
 
@@ -191,11 +232,11 @@ void Differ::markDirtyBlocks(const uint8_t* prev_image, const uint8_t* curr_imag
             *is_different = diffPartialBlock(prev_block,
                                              curr_block,
                                              bytes_per_row_,
-                                             kBytesPerBlock,
+                                             bytes_per_block_,
                                              partial_row_height_);
 
-            prev_block += kBytesPerBlock;
-            curr_block += kBytesPerBlock;
+            prev_block += bytes_per_block_;
+            curr_block += bytes_per_block_;
             ++is_different;
         }
 
@@ -205,7 +246,7 @@ void Differ::markDirtyBlocks(const uint8_t* prev_image, const uint8_t* curr_imag
                 diffPartialBlock(prev_block,
                                  curr_block,
                                  bytes_per_row_,
-                                 partial_column_width_ * kBytesPerPixel,
+                                 partial_column_width_ * bytes_per_pixel_,
                                  partial_row_height_);
         }
     }

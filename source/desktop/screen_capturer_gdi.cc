@@ -100,7 +100,7 @@ const Frame* ScreenCapturerGdi::captureFrame()
 
     if (!previous || previous->size() != current->size())
     {
-        differ_ = std::make_unique<Differ>(screen_rect.size());
+        differ_ = std::make_unique<Differ>(screen_rect.size(), pixel_format_);
         current->updatedRegion()->addRect(Rect::makeSize(screen_rect.size()));
     }
     else
