@@ -424,8 +424,8 @@ void DesktopPanel::createAdditionalMenu(proto::SessionType session_type)
                 scale_ = 70;
             else if (ui.action_scale60->isChecked())
                 scale_ = 60;
-            else if (ui.action_scale60->isChecked())
-                scale_ = 60;
+            else if (ui.action_scale50->isChecked())
+                scale_ = 50;
             else
                 scale_ = 100;
         }
