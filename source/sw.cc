@@ -37,8 +37,10 @@ void build(Solution &s)
     base -= "build/.*"_rr;
     setup_target(base, "base");
     base.Public += "UNICODE"_def;
+    base.Public += "WIN32_LEAN_AND_MEAN"_def;
     base.Public += "NOMINMAX"_def;
     base.Public += "USE_PCG_GENERATOR"_def;
+    base.Public += "HAS_QT"_def;
     base.Public += "org.sw.demo.qtproject.qt.base.widgets-*"_dep;
     base.Public += "org.sw.demo.qtproject.qt.base.network-*"_dep;
     base.Public += "org.sw.demo.qtproject.qt.base.xml-*"_dep;
@@ -47,9 +49,13 @@ void build(Solution &s)
     automoc("org.sw.demo.qtproject.qt.base.tools.moc-*"_dep, base);
 
     auto &desktop_capture = add_lib("desktop");
+    desktop_capture.Public += "USE_TBB"_def;
     desktop_capture.Public += base;
     desktop_capture.Public += "org.sw.demo.qtproject.qt.base.gui-*"_dep;
     desktop_capture.Public += "org.sw.demo.chromium.libyuv-master"_dep;
+    desktop_capture.Public += "org.sw.demo.intel.tbb"_dep;
+    desktop_capture.Public += "org.sw.demo.intel.tbb.malloc.proxy"_dep;
+    desktop_capture += "dxgi.lib"_slib;
 
     auto &protocol = aspia.addStaticLibrary("proto");
     protocol += "proto/.*\\.proto"_rr;
