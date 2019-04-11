@@ -21,6 +21,7 @@
 #include "codec/video_util.h"
 #include "desktop/desktop_frame.h"
 
+#include <libyuv/convert.h>
 #include <libyuv/convert_from_argb.h>
 
 #include <thread>
@@ -271,7 +272,7 @@ void VideoEncoderVPX::setActiveMap(const desktop::Rect& rect)
 void VideoEncoderVPX::prepareImageAndActiveMap(
     const desktop::Frame* frame, proto::desktop::VideoPacket* packet)
 {
-    int padding = ((encoding_ == proto::desktop::VIDEO_ENCODING_VP9) ? 8 : 3);
+    const int padding = ((encoding_ == proto::desktop::VIDEO_ENCODING_VP9) ? 8 : 3);
     desktop::Region updated_region;
 
     for (desktop::Region::Iterator it(frame->constUpdatedRegion()); !it.isAtEnd(); it.advance())
@@ -296,26 +297,45 @@ void VideoEncoderVPX::prepareImageAndActiveMap(
 
     memset(active_map_.active_map, 0, active_map_size_);
 
-    int y_stride = image_->stride[0];
-    int uv_stride = image_->stride[1];
+    const int y_stride = image_->stride[0];
+    const int uv_stride = image_->stride[1];
     uint8_t* y_data = image_->planes[0];
     uint8_t* u_data = image_->planes[1];
     uint8_t* v_data = image_->planes[2];
+
+    const int bits_per_pixel = frame->format().bitsPerPixel();
 
     for (desktop::Region::Iterator it(updated_region); !it.isAtEnd(); it.advance())
     {
         const desktop::Rect& rect = it.rect();
 
-        int y_offset = y_stride * rect.y() + rect.x();
-        int uv_offset = uv_stride * rect.y() / 2 + rect.x() / 2;
+        const int y_offset = y_stride * rect.y() + rect.x();
+        const int uv_offset = uv_stride * rect.y() / 2 + rect.x() / 2;
 
-        libyuv::ARGBToI420(frame->frameDataAtPos(rect.topLeft()),
-                           frame->stride(),
-                           y_data + y_offset, y_stride,
-                           u_data + uv_offset, uv_stride,
-                           v_data + uv_offset, uv_stride,
-                           rect.width(),
-                           rect.height());
+        if (bits_per_pixel == 32)
+        {
+            libyuv::ARGBToI420(frame->frameDataAtPos(rect.topLeft()),
+                               frame->stride(),
+                               y_data + y_offset, y_stride,
+                               u_data + uv_offset, uv_stride,
+                               v_data + uv_offset, uv_stride,
+                               rect.width(),
+                               rect.height());
+        }
+        else if (bits_per_pixel == 16)
+        {
+            libyuv::RGB565ToI420(frame->frameDataAtPos(rect.topLeft()),
+                                 frame->stride(),
+                                 y_data + y_offset, y_stride,
+                                 u_data + uv_offset, uv_stride,
+                                 v_data + uv_offset, uv_stride,
+                                 rect.width(),
+                                 rect.height());
+        }
+        else
+        {
+            NOTREACHED();
+        }
 
         VideoUtil::toVideoRect(rect, packet->add_dirty_rect());
         setActiveMap(rect);
