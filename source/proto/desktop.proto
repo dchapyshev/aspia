@@ -169,7 +169,7 @@ message Config
     PixelFormat pixel_format     = 3;
     uint32 update_interval       = 4;
     uint32 compress_ratio        = 5;
-    // Field 6. Deprecated.
+    uint32 scale_factor          = 6; // Deprecated. Must be equal to 100.
 }
 
 message HostToClient

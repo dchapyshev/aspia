@@ -88,6 +88,8 @@ void ConfigFactory::setDefaultDesktopViewConfig(proto::desktop::Config* config)
 // static
 void ConfigFactory::fixupDesktopConfig(proto::desktop::Config* config)
 {
+    config->set_scale_factor(100);
+
     if (config->update_interval() < kMinUpdateInterval || config->update_interval() > kMaxUpdateInterval)
         config->set_update_interval(kDefUpdateInterval);
 
