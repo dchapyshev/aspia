@@ -29,7 +29,7 @@ class SrpUser
 public:
     enum Flags { ENABLED = 1 };
 
-    static SrpUser create(const std::string& name, const std::string& password);
+    static SrpUser create(const QString& name, const QString& password);
 
     bool isValid() const;
 
@@ -58,6 +58,8 @@ public:
 
     const QByteArray& seedKey() const { return seed_key_; }
     void setSeedKey(const QByteArray& seed_key);
+
+    bool hasIndex(int index) const;
 
 private:
     QByteArray seed_key_;

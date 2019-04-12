@@ -36,7 +36,7 @@ public:
 
     void startKeyExchange();
 
-    const std::string& userName() const { return username_; }
+    const QString& userName() const { return username_; }
     proto::SessionType sessionType() const { return session_type_; }
 
 signals:
@@ -58,7 +58,7 @@ private:
 
     SrpUserList user_list_;
 
-    std::string username_;
+    QString username_;
     proto::SessionType session_type_ = proto::SESSION_TYPE_UNKNOWN;
 
     std::unique_ptr<SrpHostContext> srp_host_;

@@ -18,6 +18,7 @@
 
 #include "net/srp_user.h"
 
+#include "base/logging.h"
 #include "crypto/random.h"
 #include "crypto/srp_constants.h"
 #include "crypto/srp_math.h"
@@ -31,11 +32,11 @@ const size_t kUserSaltSize = 64; // In bytes.
 } // namespace
 
 // static
-SrpUser SrpUser::create(const std::string& name, const std::string& password)
+SrpUser SrpUser::create(const QString& name, const QString& password)
 {
     SrpUser user;
 
-    user.name = QString::fromStdString(name);
+    user.name = name;
     user.salt = crypto::Random::generateBuffer(kUserSaltSize);
 
     user.number = QByteArray(
@@ -76,11 +77,15 @@ void SrpUserList::remove(const QString& username)
 
 void SrpUserList::remove(int index)
 {
+    DCHECK(hasIndex(index));
+
     list_.removeAt(index);
 }
 
 void SrpUserList::update(int index, const SrpUser& user)
 {
+    DCHECK(hasIndex(index));
+
     list_.replace(index, user);
 }
 
@@ -90,8 +95,11 @@ int SrpUserList::find(const QString& username) const
     {
         const SrpUser& user = list_.at(i);
 
-        if (user.name == username && user.flags & SrpUser::ENABLED)
+        if ((user.name.compare(username, Qt::CaseInsensitive) == 0) &&
+            (user.flags & SrpUser::ENABLED))
+        {
             return i;
+        }
     }
 
     return -1;
@@ -99,12 +107,19 @@ int SrpUserList::find(const QString& username) const
 
 const SrpUser& SrpUserList::at(int index) const
 {
+    DCHECK(hasIndex(index));
+
     return list_.at(index);
 }
 
 void SrpUserList::setSeedKey(const QByteArray& seed_key)
 {
     seed_key_ = seed_key;
+}
+
+bool SrpUserList::hasIndex(int index) const
+{
+    return index >= 0 && index < list_.size();
 }
 
 } // namespace net

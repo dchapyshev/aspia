@@ -78,7 +78,7 @@ void SessionProcess::setUuid(std::string&& uuid)
     uuid_ = std::move(uuid);
 }
 
-const std::string& SessionProcess::userName() const
+const QString& SessionProcess::userName() const
 {
     return network_channel_->userName();
 }
@@ -115,7 +115,7 @@ bool SessionProcess::start(base::win::SessionId session_id)
         }
     }
 
-    if (network_channel_->userName().empty())
+    if (network_channel_->userName().isEmpty())
     {
         DLOG(LS_ERROR) << "Invalid user name";
         return false;

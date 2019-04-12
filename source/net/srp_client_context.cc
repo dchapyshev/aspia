@@ -102,8 +102,8 @@ SrpClientContext::SrpClientContext(proto::Method method,
                                    const QString& I,
                                    const QString& p)
     : method_(method),
-      I_(I.toStdString()),
-      p_(p.toStdString())
+      I_(I),
+      p_(p)
 {
     // Nothing
 }
@@ -141,7 +141,7 @@ proto::SrpIdentify* SrpClientContext::identify()
     std::unique_ptr<proto::SrpIdentify> identify =
         std::make_unique<proto::SrpIdentify>();
 
-    identify->set_username(I_);
+    identify->set_username(I_.toStdString());
 
     return identify.release();
 }

@@ -57,7 +57,7 @@ public:
 signals:
     void started();
     void finished();
-    void userChanged(base::win::SessionId session_id, const std::string& password);
+    void userChanged(base::win::SessionId session_id, const QString& password);
     void killSession(const std::string& session_uuid);
 
 private slots:

@@ -180,7 +180,7 @@ void UiProcess::sendCredentials(uint32_t flags)
 
         session_password_ = generator.result();
 
-        emit userChanged(channel_->clientSessionId(), session_password_);
+        emit userChanged(channel_->clientSessionId(), QString::fromStdString(session_password_));
     }
 
     proto::host::ServiceToUi message;

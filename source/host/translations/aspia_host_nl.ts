@@ -666,11 +666,11 @@
     </message>
     <message>
         <location filename="../ui/user_dialog.cc" line="139"/>
-        <location filename="../ui/user_dialog.cc" line="151"/>
-        <location filename="../ui/user_dialog.cc" line="162"/>
-        <location filename="../ui/user_dialog.cc" line="173"/>
-        <location filename="../ui/user_dialog.cc" line="195"/>
-        <location filename="../ui/user_dialog.cc" line="212"/>
+        <location filename="../ui/user_dialog.cc" line="152"/>
+        <location filename="../ui/user_dialog.cc" line="163"/>
+        <location filename="../ui/user_dialog.cc" line="174"/>
+        <location filename="../ui/user_dialog.cc" line="196"/>
+        <location filename="../ui/user_dialog.cc" line="213"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
@@ -680,17 +680,17 @@
         <translation>De gebruikersnaam mag niet leeg zijn, en alleen karakters uit het alfabet, nummers, _, -, . karakters bevatten.</translation>
     </message>
     <message>
-        <location filename="../ui/user_dialog.cc" line="152"/>
+        <location filename="../ui/user_dialog.cc" line="153"/>
         <source>The username you entered already exists.</source>
         <translation>De ingevoerde gebruikersnaam bestaat al.</translation>
     </message>
     <message>
-        <location filename="../ui/user_dialog.cc" line="163"/>
+        <location filename="../ui/user_dialog.cc" line="164"/>
         <source>The passwords you entered do not match.</source>
         <translation>De ingevoerde wachtwoorden komen niet overeen.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/user_dialog.cc" line="174"/>
+        <location filename="../ui/user_dialog.cc" line="175"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
         <translation>
             <numerusform>Wachtwoord mag niet leeg zijn en niet meer dan %n karakter bevatten.</numerusform>
@@ -698,12 +698,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../ui/user_dialog.cc" line="185"/>
+        <location filename="../ui/user_dialog.cc" line="186"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Het ingevoerde wachtwoord voldoet niet aan de beveilings eisen!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/user_dialog.cc" line="188"/>
+        <location filename="../ui/user_dialog.cc" line="189"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Het wachtwoord moet kleine, hoofdletters en nummers bevatten, en mag niet korter zijn dan %n karakter.</numerusform>
@@ -711,17 +711,17 @@
         </translation>
     </message>
     <message>
-        <location filename="../ui/user_dialog.cc" line="192"/>
+        <location filename="../ui/user_dialog.cc" line="193"/>
         <source>Do you want to enter a different password?</source>
         <translation>Wilt U een ander wachtwoord invoeren?</translation>
     </message>
     <message>
-        <location filename="../ui/user_dialog.cc" line="213"/>
+        <location filename="../ui/user_dialog.cc" line="214"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation>Onbekende interne fout bij het aanmaken of aanpassen van de gebruiker.</translation>
     </message>
     <message>
-        <location filename="../ui/user_dialog.cc" line="272"/>
+        <location filename="../ui/user_dialog.cc" line="273"/>
         <source>Double-click to change</source>
         <translation>Dubbelklik om te wijzigen</translation>
     </message>

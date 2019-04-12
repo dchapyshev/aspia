@@ -130,7 +130,7 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
 
         if (account_changed_)
         {
-            QString name = ui.edit_username->text().toLower();
+            QString name = ui.edit_username->text();
             QString password = ui.edit_password->text();
 
             if (!common::UserUtil::isValidUserName(name))
@@ -145,7 +145,8 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
                 return;
             }
 
-            if (name != user.name && user_list_->find(name) != -1)
+            if ((name.compare(user.name, Qt::CaseInsensitive) != 0) &&
+                (user_list_->find(name) != -1))
             {
                 QMessageBox::warning(this,
                                      tr("Warning"),
@@ -205,7 +206,7 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
                 }
             }
 
-            user = net::SrpUser::create(name.toStdString(), password.toStdString());
+            user = net::SrpUser::create(name, password);
             if (!user.isValid())
             {
                 QMessageBox::warning(this,

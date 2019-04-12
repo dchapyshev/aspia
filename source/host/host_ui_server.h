@@ -72,7 +72,7 @@ signals:
 private slots:
     void onChannelConnected(ipc::Channel* channel);
     void onProcessFinished();
-    void onUserChanged(base::win::SessionId session_id, const std::string& password);
+    void onUserChanged(base::win::SessionId session_id, const QString& password);
 
 private:
     State state_ = State::STOPPED;

@@ -138,7 +138,7 @@ void HostServer::onNewConnection()
         }
 
         base::win::SessionId session_id = base::win::kInvalidSessionId;
-        std::string user_name = channel->userName();
+        QString user_name = channel->userName();
 
         if (user_name.front() != '#')
         {
@@ -146,8 +146,12 @@ void HostServer::onNewConnection()
         }
         else
         {
-            user_name.erase(user_name.begin());
-            base::stringToULong(user_name, &session_id);
+            user_name.remove(0, 1);
+
+            bool ok;
+            session_id = user_name.toULong(&ok);
+            if (!ok)
+                session_id = base::win::kInvalidSessionId;
         }
 
         QString peer_address = channel->peerAddress();
@@ -344,7 +348,7 @@ void HostServer::sendConnectEvent(const SessionProcess* session_process)
 
     event.set_session_type(session_process->sessionType());
     event.set_remote_address(session_process->remoteAddress().toStdString());
-    event.set_username(session_process->userName());
+    event.set_username(session_process->userName().toStdString());
     event.set_uuid(session_process->uuid());
 
     ui_server_->setConnectEvent(session_process->sessionId(), event);

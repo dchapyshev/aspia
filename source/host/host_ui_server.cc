@@ -201,9 +201,9 @@ void UiServer::onProcessFinished()
     emit userListChanged();
 }
 
-void UiServer::onUserChanged(base::win::SessionId session_id, const std::string& password)
+void UiServer::onUserChanged(base::win::SessionId session_id, const QString& password)
 {
-    net::SrpUser user = net::SrpUser::create("#" + std::to_string(session_id), password);
+    net::SrpUser user = net::SrpUser::create("#" + QString::number(session_id), password);
 
     user.sessions = proto::SESSION_TYPE_ALL;
     user.flags = net::SrpUser::ENABLED;

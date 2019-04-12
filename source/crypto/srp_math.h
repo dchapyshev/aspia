@@ -21,6 +21,8 @@
 
 #include "crypto/big_num.h"
 
+#include <QString>
+
 namespace crypto {
 
 // This class implements primitives to perform authorization using SRP algorithm.
@@ -41,7 +43,7 @@ public:
 
     static BigNum calc_u(const BigNum& A, const BigNum& B, const BigNum& N);
     static BigNum calc_B(const BigNum& b, const BigNum& N, const BigNum& g, const BigNum& v);
-    static BigNum calc_x(const BigNum& s, const std::string& I, const std::string& p);
+    static BigNum calc_x(const BigNum& s, const QString& I, const QString& p);
     static BigNum calc_A(const BigNum& a, const BigNum& N, const BigNum& g);
 
     static BigNum calcServerKey(const BigNum& A, const BigNum& v, const BigNum& u, const BigNum& b,
@@ -56,7 +58,7 @@ public:
     // Checks if A % N == 0.
     static bool verify_A_mod_N(const BigNum& A, const BigNum& N);
 
-    static BigNum calc_v(const std::string& I, const std::string& p, const BigNum& s,
+    static BigNum calc_v(const QString& I, const QString& p, const BigNum& s,
                          const BigNum& N, const BigNum& g);
 
 private:

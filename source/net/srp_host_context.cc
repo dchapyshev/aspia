@@ -61,14 +61,14 @@ SrpHostContext::~SrpHostContext()
 
 proto::SrpServerKeyExchange* SrpHostContext::readIdentify(const proto::SrpIdentify& identify)
 {
-    username_ = identify.username();
-    if (username_.empty())
+    username_ = QString::fromStdString(identify.username());
+    if (username_.isEmpty())
         return nullptr;
 
     crypto::BigNum g;
     crypto::BigNum s;
 
-    int user_index = user_list_.find(QString::fromStdString(username_));
+    int user_index = user_list_.find(username_);
     if (user_index == -1)
     {
         session_types_ = proto::SESSION_TYPE_ALL;
@@ -80,7 +80,7 @@ proto::SrpServerKeyExchange* SrpHostContext::readIdentify(const proto::SrpIdenti
         N_ = crypto::BigNum::fromBuffer(crypto::kSrpNg_8192.N);
         g = crypto::BigNum::fromBuffer(crypto::kSrpNg_8192.g);
         s = crypto::BigNum::fromByteArray(hash.result());
-        v_ = crypto::SrpMath::calc_v(username_, user_list_.seedKey().toStdString(), s, N_, g);
+        v_ = crypto::SrpMath::calc_v(username_, user_list_.seedKey(), s, N_, g);
     }
     else
     {
