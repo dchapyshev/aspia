@@ -37,32 +37,7 @@ ScreenCapturerWrapper::ScreenCapturerWrapper(uint32_t flags)
     // If the monitor is turned off, this call will turn it on.
     SetThreadExecutionState(ES_DISPLAY_REQUIRED);
 
-    // DFMirage screen capture is available only in Windows 7/2008 R2.
-    if (base::win::windowsVersion() == base::win::VERSION_WIN7)
-    {
-        std::unique_ptr<ScreenCapturerDFMirage> capturer_dfmirage =
-            std::make_unique<ScreenCapturerDFMirage>();
-
-        if (capturer_dfmirage->isSupported())
-        {
-            LOG(LS_INFO) << "Using DFMirage capturer";
-            capturer_ = std::move(capturer_dfmirage);
-            return;
-        }
-    }
-
-    // Desktop Duplication API is available in Windows 8+.
-    std::unique_ptr<ScreenCapturerDxgi> capturer_dxgi = std::make_unique<ScreenCapturerDxgi>();
-    if (capturer_dxgi->isSupported())
-    {
-        LOG(LS_INFO) << "Using DXGI capturer";
-        capturer_ = std::move(capturer_dxgi);
-    }
-    else
-    {
-        LOG(LS_INFO) << "Using GDI capturer";
-        capturer_ = std::make_unique<ScreenCapturerGdi>();
-    }
+    selectCapturer();
 }
 
 ScreenCapturerWrapper::~ScreenCapturerWrapper() = default;
@@ -95,7 +70,58 @@ const Frame* ScreenCapturerWrapper::captureFrame()
     if (switchToInputDesktop())
         atDesktopSwitch();
 
-    return capturer_->captureFrame();
+    ScreenCapturer::Error error;
+    const Frame* frame = capturer_->captureFrame(&error);
+    if (!frame)
+    {
+        switch (error)
+        {
+            case ScreenCapturer::Error::TEMPORARY:
+                break;
+
+            case ScreenCapturer::Error::PERMANENT:
+                selectCapturer();
+                break;
+
+            default:
+                NOTREACHED();
+                break;
+        }
+    }
+
+    return frame;
+}
+
+void ScreenCapturerWrapper::selectCapturer()
+{
+    DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
+
+    // DFMirage screen capture is available only in Windows 7/2008 R2.
+    if (base::win::windowsVersion() == base::win::VERSION_WIN7)
+    {
+        std::unique_ptr<ScreenCapturerDFMirage> capturer_dfmirage =
+            std::make_unique<ScreenCapturerDFMirage>();
+
+        if (capturer_dfmirage->isSupported())
+        {
+            LOG(LS_INFO) << "Using DFMirage capturer";
+            capturer_ = std::move(capturer_dfmirage);
+            return;
+        }
+    }
+
+    // Desktop Duplication API is available in Windows 8+.
+    std::unique_ptr<ScreenCapturerDxgi> capturer_dxgi = std::make_unique<ScreenCapturerDxgi>();
+    if (capturer_dxgi->isSupported())
+    {
+        LOG(LS_INFO) << "Using DXGI capturer";
+        capturer_ = std::move(capturer_dxgi);
+    }
+    else
+    {
+        LOG(LS_INFO) << "Using GDI capturer";
+        capturer_ = std::make_unique<ScreenCapturerGdi>();
+    }
 }
 
 bool ScreenCapturerWrapper::switchToInputDesktop()

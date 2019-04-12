@@ -46,7 +46,7 @@ public:
     int screenCount() override;
     bool screenList(ScreenList* screens) override;
     bool selectScreen(ScreenId screen_id) override;
-    const Frame* captureFrame() override;
+    const Frame* captureFrame(Error* error) override;
 
 protected:
     // ScreenCapturer implementation.

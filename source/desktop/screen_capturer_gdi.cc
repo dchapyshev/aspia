@@ -54,7 +54,29 @@ bool ScreenCapturerGdi::selectScreen(ScreenId screen_id)
     return true;
 }
 
-const Frame* ScreenCapturerGdi::captureFrame()
+const Frame* ScreenCapturerGdi::captureFrame(Error* error)
+{
+    DCHECK(error);
+
+    const Frame* frame = captureImage();
+    if (!frame)
+    {
+        *error = Error::TEMPORARY;
+        return nullptr;
+    }
+
+    *error = Error::SUCCEEDED;
+    return frame;
+}
+
+void ScreenCapturerGdi::reset()
+{
+    // Release GDI resources otherwise SetThreadDesktop will fail.
+    desktop_dc_.reset();
+    memory_dc_.reset();
+}
+
+const Frame* ScreenCapturerGdi::captureImage()
 {
     queue_.moveToNextFrame();
 
@@ -111,13 +133,6 @@ const Frame* ScreenCapturerGdi::captureFrame()
     }
 
     return current;
-}
-
-void ScreenCapturerGdi::reset()
-{
-    // Release GDI resources otherwise SetThreadDesktop will fail.
-    desktop_dc_.reset();
-    memory_dc_.reset();
 }
 
 bool ScreenCapturerGdi::prepareCaptureResources()

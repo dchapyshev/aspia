@@ -50,6 +50,7 @@ public:
     const Frame* captureFrame();
 
 private:
+    void selectCapturer();
     bool switchToInputDesktop();
     void atDesktopSwitch();
 

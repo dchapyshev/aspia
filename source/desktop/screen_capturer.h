@@ -31,6 +31,8 @@ class ScreenCapturer
 public:
     virtual ~ScreenCapturer() = default;
 
+    enum class Error { SUCCEEDED, PERMANENT, TEMPORARY };
+
     using ScreenId = intptr_t;
 
     struct Screen
@@ -47,7 +49,7 @@ public:
     virtual int screenCount() = 0;
     virtual bool screenList(ScreenList* screens) = 0;
     virtual bool selectScreen(ScreenId screen_id) = 0;
-    virtual const Frame* captureFrame() = 0;
+    virtual const Frame* captureFrame(Error* error) = 0;
 
 protected:
     friend class ScreenCapturerWrapper;

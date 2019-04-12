@@ -142,8 +142,10 @@ bool ScreenCapturerDxgi::selectScreen(ScreenId screen_id)
     return true;
 }
 
-const Frame* ScreenCapturerDxgi::captureFrame()
+const Frame* ScreenCapturerDxgi::captureFrame(Error* error)
 {
+    DCHECK(error);
+
     queue_.moveToNextFrame();
 
     if (!queue_.currentFrame())
@@ -168,6 +170,7 @@ const Frame* ScreenCapturerDxgi::captureFrame()
     {
         case DuplicateResult::SUCCEEDED:
         {
+            *error = Error::SUCCEEDED;
             return queue_.currentFrame()->frame();
         }
 
@@ -175,6 +178,7 @@ const Frame* ScreenCapturerDxgi::captureFrame()
         {
             LOG(LS_ERROR) << "Current binary is running on a session not supported "
                              "by DirectX screen capturer";
+            *error = Error::PERMANENT;
             return nullptr;
         }
 
@@ -183,12 +187,14 @@ const Frame* ScreenCapturerDxgi::captureFrame()
             LOG(LS_ERROR) << "Failed to allocate a new Frame";
             // This usually means we do not have enough memory or SharedMemoryFactory cannot work
             // correctly.
+            *error = Error::PERMANENT;
             return nullptr;
         }
 
         case DuplicateResult::INVALID_MONITOR_ID:
         {
             LOG(LS_ERROR) << "Invalid monitor id " << current_screen_id_;
+            *error = Error::PERMANENT;
             return nullptr;
         }
 
@@ -196,6 +202,7 @@ const Frame* ScreenCapturerDxgi::captureFrame()
         case DuplicateResult::DUPLICATION_FAILED:
         default:
         {
+            *error = Error::TEMPORARY;
             return nullptr;
         }
     }

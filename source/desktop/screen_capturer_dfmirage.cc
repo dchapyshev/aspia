@@ -60,9 +60,12 @@ bool ScreenCapturerDFMirage::selectScreen(ScreenId screen_id)
     return true;
 }
 
-const Frame* ScreenCapturerDFMirage::captureFrame()
+const Frame* ScreenCapturerDFMirage::captureFrame(Error* error)
 {
-    if (!prepareCaptureResources())
+    DCHECK(error);
+
+    *error = prepareCaptureResources();
+    if (*error != Error::SUCCEEDED)
         return nullptr;
 
     Region* updated_region = frame_->updatedRegion();
@@ -120,13 +123,13 @@ void ScreenCapturerDFMirage::updateExcludeRegion()
     }
 }
 
-bool ScreenCapturerDFMirage::prepareCaptureResources()
+ScreenCapturerDFMirage::Error ScreenCapturerDFMirage::prepareCaptureResources()
 {
     Rect desktop_rect = ScreenCaptureUtils::fullScreenRect();
     if (desktop_rect.isEmpty())
     {
         LOG(LS_WARNING) << "Failed to get desktop rect";
-        return false;
+        return Error::TEMPORARY;
     }
 
     if (desktop_rect != desktop_rect_)
@@ -139,7 +142,7 @@ bool ScreenCapturerDFMirage::prepareCaptureResources()
     if (screen_rect.isEmpty())
     {
         LOG(LS_WARNING) << "Failed to get screen rect";
-        return false;
+        return Error::PERMANENT;
     }
 
     if (helper_ && helper_->screenRect() != screen_rect)
@@ -154,7 +157,7 @@ bool ScreenCapturerDFMirage::prepareCaptureResources()
         if (!helper_)
         {
             LOG(LS_WARNING) << "Failed to create DFMirage helper";
-            return false;
+            return Error::PERMANENT;
         }
 
         updateExcludeRegion();
@@ -166,11 +169,11 @@ bool ScreenCapturerDFMirage::prepareCaptureResources()
         if (!frame_)
         {
             LOG(LS_WARNING) << "Failed to create frame";
-            return false;
+            return Error::PERMANENT;
         }
     }
 
-    return true;
+    return Error::SUCCEEDED;
 }
 
 } // namespace desktop

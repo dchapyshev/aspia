@@ -37,7 +37,7 @@ public:
     int screenCount() override;
     bool screenList(ScreenList* screens) override;
     bool selectScreen(ScreenId screen_id) override;
-    const Frame* captureFrame() override;
+    const Frame* captureFrame(Error* error) override;
 
 protected:
     // ScreenCapturer implementation.
@@ -45,7 +45,7 @@ protected:
 
 private:
     void updateExcludeRegion();
-    bool prepareCaptureResources();
+    Error prepareCaptureResources();
 
     std::unique_ptr<DFMirageHelper> helper_;
     std::unique_ptr<Frame> frame_;
