@@ -47,8 +47,9 @@ MainWindow::MainWindow(Settings& settings, common::LocaleLoader& locale_loader, 
     ui.edit_id->setText(text);
     ui.edit_ip->setText(text);
 
-    tray_menu_.addAction(ui.action_show_hide);
+    tray_menu_.addAction(ui.action_settings);
     tray_menu_.addSeparator();
+    tray_menu_.addAction(ui.action_show_hide);
     tray_menu_.addAction(ui.action_exit);
 
     tray_icon_.setIcon(QIcon(QStringLiteral(":/img/main.png")));
@@ -192,7 +193,11 @@ void MainWindow::onLanguageChanged(QAction* action)
 
 void MainWindow::onSettings()
 {
+    QApplication::setQuitOnLastWindowClosed(false);
+
     ConfigDialog(this).exec();
+
+    QApplication::setQuitOnLastWindowClosed(true);
 }
 
 void MainWindow::onShowHide()
@@ -216,7 +221,11 @@ void MainWindow::onHelp()
 
 void MainWindow::onAbout()
 {
+    QApplication::setQuitOnLastWindowClosed(false);
+
     common::AboutDialog(this).exec();
+
+    QApplication::setQuitOnLastWindowClosed(true);
 }
 
 void MainWindow::onExit()

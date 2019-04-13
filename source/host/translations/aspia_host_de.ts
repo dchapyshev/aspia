@@ -557,35 +557,35 @@
 <context>
     <name>host::MainWindow</name>
     <message>
-        <location filename="../ui/host_main_window.cc" line="55"/>
+        <location filename="../ui/host_main_window.cc" line="56"/>
         <source>Aspia Host</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/host_main_window.cc" line="132"/>
-        <location filename="../ui/host_main_window.cc" line="202"/>
+        <location filename="../ui/host_main_window.cc" line="133"/>
+        <location filename="../ui/host_main_window.cc" line="207"/>
         <source>Show</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/host_main_window.cc" line="46"/>
-        <location filename="../ui/host_main_window.cc" line="276"/>
-        <location filename="../ui/host_main_window.cc" line="283"/>
+        <location filename="../ui/host_main_window.cc" line="285"/>
+        <location filename="../ui/host_main_window.cc" line="292"/>
         <source>Not available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/host_main_window.cc" line="207"/>
+        <location filename="../ui/host_main_window.cc" line="212"/>
         <source>Hide</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/host_main_window.cc" line="228"/>
+        <location filename="../ui/host_main_window.cc" line="237"/>
         <source>Confirmation</source>
         <translation>Bestätigung</translation>
     </message>
     <message>
-        <location filename="../ui/host_main_window.cc" line="229"/>
+        <location filename="../ui/host_main_window.cc" line="238"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation type="unfinished"></translation>
     </message>
