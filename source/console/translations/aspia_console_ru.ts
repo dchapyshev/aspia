@@ -1085,12 +1085,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.cc" line="75"/>
+        <location filename="../computer_group_dialog.cc" line="76"/>
         <source>Name can not be empty.</source>
         <translation>Имя не может быть пустым.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../computer_group_dialog.cc" line="83"/>
+        <location filename="../computer_group_dialog.cc" line="84"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Слишком длинный комментарий. Максимальная длина комментария %n символ.</numerusform>
@@ -1099,7 +1099,7 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.cc" line="110"/>
+        <location filename="../computer_group_dialog.cc" line="112"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>

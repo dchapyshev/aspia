@@ -68,6 +68,7 @@ void ComputerGroupDialog::buttonBoxClicked(QAbstractButton* button)
             showError(tr("Too long name. The maximum length of the name is %n characters.",
                          "", kMaxNameLength));
             ui.edit_name->setFocus();
+            ui.edit_name->selectAll();
             return;
         }
         else if (name.length() < kMinNameLength)
@@ -83,6 +84,7 @@ void ComputerGroupDialog::buttonBoxClicked(QAbstractButton* button)
             showError(tr("Too long comment. The maximum length of the comment is %n characters.",
                          "", kMaxCommentLength));
             ui.edit_comment->setFocus();
+            ui.edit_comment->selectAll();
             return;
         }
 

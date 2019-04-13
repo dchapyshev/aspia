@@ -1117,12 +1117,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.cc" line="75"/>
+        <location filename="../computer_group_dialog.cc" line="76"/>
         <source>Name can not be empty.</source>
         <translation>Ім&apos;я не може бути порожнім.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../computer_group_dialog.cc" line="83"/>
+        <location filename="../computer_group_dialog.cc" line="84"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Занадто довгий коментар. Максимальна довжина коментаря %n символ.</numerusform>
@@ -1131,7 +1131,7 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.cc" line="110"/>
+        <location filename="../computer_group_dialog.cc" line="112"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>

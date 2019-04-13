@@ -1058,12 +1058,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.cc" line="75"/>
+        <location filename="../computer_group_dialog.cc" line="76"/>
         <source>Name can not be empty.</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../computer_group_dialog.cc" line="83"/>
+        <location filename="../computer_group_dialog.cc" line="84"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation type="unfinished">
             <numerusform>Zu langer Kommentar. Die maximale Länge des Kommentars beträgt %n Zeichen.</numerusform>
@@ -1071,7 +1071,7 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.cc" line="110"/>
+        <location filename="../computer_group_dialog.cc" line="112"/>
         <source>Warning</source>
         <translation type="unfinished">Warnung</translation>
     </message>
