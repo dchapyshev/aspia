@@ -41,19 +41,19 @@ public:
 
     static ServiceHandler* instance;
 
-    enum StartupState
+    enum class State
     {
-        NotStarted,
-        ErrorOccurred,
-        ServiceMainCalled,
-        ApplicationCreated,
-        RunningAsConsole,
-        RunningAsService
+        NOT_STARTED,
+        ERROR_OCCURRED,
+        SERVICE_MAIN_CALLED,
+        APPLICATION_CREATED,
+        RUNNING_AS_CONSOLE,
+        RUNNING_AS_SERVICE
     };
 
     std::condition_variable startup_condition;
     std::mutex startup_lock;
-    StartupState startup_state = NotStarted;
+    State startup_state = State::NOT_STARTED;
 
     std::condition_variable event_condition;
     std::mutex event_lock;
@@ -183,13 +183,13 @@ void ServiceHandler::run()
         DWORD error_code = GetLastError();
         if (error_code == ERROR_FAILED_SERVICE_CONTROLLER_CONNECT)
         {
-            instance->startup_state = RunningAsConsole;
+            instance->startup_state = State::RUNNING_AS_CONSOLE;
         }
         else
         {
             LOG(LS_WARNING) << "StartServiceCtrlDispatcherW failed: "
                             << systemErrorCodeToString(error_code);
-            instance->startup_state = ErrorOccurred;
+            instance->startup_state = State::ERROR_OCCURRED;
         }
 
         instance->startup_condition.notify_all();
@@ -205,7 +205,7 @@ void WINAPI ServiceHandler::serviceMain(DWORD /* argc */, LPWSTR* /* argv */)
     // Start creating the QCoreApplication instance.
     {
         std::scoped_lock lock(instance->startup_lock);
-        instance->startup_state = ServiceMainCalled;
+        instance->startup_state = State::SERVICE_MAIN_CALLED;
         instance->startup_condition.notify_all();
     }
 
@@ -213,10 +213,10 @@ void WINAPI ServiceHandler::serviceMain(DWORD /* argc */, LPWSTR* /* argv */)
     {
         std::unique_lock lock(instance->startup_lock);
 
-        while (instance->startup_state != ApplicationCreated)
+        while (instance->startup_state != State::APPLICATION_CREATED)
             instance->startup_condition.wait(lock);
 
-        instance->startup_state = RunningAsService;
+        instance->startup_state = State::RUNNING_AS_SERVICE;
     }
 
     instance->status_handle_ = RegisterServiceCtrlHandlerExW(
@@ -392,30 +392,30 @@ ServiceImpl::ServiceImpl(const QString& name,
 
 int ServiceImpl::exec(int argc, char* argv[])
 {
-    QScopedPointer<ServiceHandler> handler(new ServiceHandler());
+    std::unique_ptr<ServiceHandler> handler(new ServiceHandler());
 
     // Waiting for the launch ServiceHandler::serviceMain.
     {
         std::unique_lock lock(handler->startup_lock);
-        handler->startup_state = ServiceHandler::NotStarted;
+        handler->startup_state = ServiceHandler::State::NOT_STARTED;
 
         // Starts handler thread.
         handler->start();
 
-        while (handler->startup_state == ServiceHandler::NotStarted)
+        while (handler->startup_state == ServiceHandler::State::NOT_STARTED)
             handler->startup_condition.wait(lock);
 
-        if (handler->startup_state == ServiceHandler::ErrorOccurred)
+        if (handler->startup_state == ServiceHandler::State::ERROR_OCCURRED)
             return 1;
     }
 
     // Creates QCoreApplication.
     createApplication(argc, argv);
 
-    QScopedPointer<QCoreApplication> application(QCoreApplication::instance());
+    std::unique_ptr<QCoreApplication> application(QCoreApplication::instance());
     DCHECK(application);
 
-    if (handler->startup_state == ServiceHandler::RunningAsConsole)
+    if (handler->startup_state == ServiceHandler::State::RUNNING_AS_CONSOLE)
     {
         QCommandLineOption install_option(QLatin1String("install"),
                                           QLatin1String("Install service"));
@@ -475,12 +475,12 @@ int ServiceImpl::exec(int argc, char* argv[])
         return 0;
     }
 
-    QScopedPointer<ServiceEventHandler> event_handler(new ServiceEventHandler());
+    std::unique_ptr<ServiceEventHandler> event_handler(new ServiceEventHandler());
 
     // Now we can complete the registration of the service.
     {
         std::scoped_lock lock(handler->startup_lock);
-        handler->startup_state = ServiceHandler::ApplicationCreated;
+        handler->startup_state = ServiceHandler::State::APPLICATION_CREATED;
         handler->startup_condition.notify_all();
     }
 
