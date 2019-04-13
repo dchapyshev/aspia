@@ -191,7 +191,7 @@ bool DFMirageHelper::mapMemory(bool map)
                             reinterpret_cast<LPSTR>(&get_changes_buffer_));
         if (ret <= 0)
         {
-            LOG(LS_WARNING) << "ExtEscape failed";
+            LOG(LS_WARNING) << "ExtEscape failed: " << ret;
             return false;
         }
     }
@@ -203,7 +203,7 @@ bool DFMirageHelper::mapMemory(bool map)
                             0, nullptr);
         if (ret <= 0)
         {
-            LOG(LS_WARNING) << "ExtEscape failed";
+            LOG(LS_WARNING) << "ExtEscape failed: " << ret;
         }
 
         memset(&get_changes_buffer_, 0, sizeof(get_changes_buffer_));
@@ -261,7 +261,24 @@ bool DFMirageHelper::attachToDesktop(bool attach)
         return false;
     }
 
-    status = device_key.writeValue(L"Attach.ToDesktop", static_cast<DWORD>(!!attach));
+    static const wchar_t kAttachToDesktop[] = L"Attach.ToDesktop";
+
+    if (attach)
+    {
+        DWORD attached;
+
+        status = device_key.readValueDW(kAttachToDesktop, &attached);
+        if (status == ERROR_SUCCESS)
+        {
+            if (attached != 0)
+            {
+                LOG(LS_WARNING) << "DFMirage driver is already attached by another application";
+                return false;
+            }
+        }
+    }
+
+    status = device_key.writeValue(kAttachToDesktop, static_cast<DWORD>(!!attach));
     if (status != ERROR_SUCCESS)
     {
         LOG(LS_WARNING) << "Unable to set value for registry key: "
