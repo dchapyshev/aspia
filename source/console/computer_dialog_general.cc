@@ -39,6 +39,19 @@ ComputerDialogGeneral::ComputerDialogGeneral(int type, QWidget* parent)
 
     connect(ui.button_show_password, &QPushButton::toggled,
             this, &ComputerDialogGeneral::showPasswordButtonToggled);
+
+    connect(ui.edit_address, &QLineEdit::textEdited, [this](const QString& text)
+    {
+        if (!has_name_)
+            ui.edit_name->setText(text);
+    });
+
+    connect(ui.edit_name, &QLineEdit::textEdited, [this](const QString& text)
+    {
+        has_name_ = !text.isEmpty();
+    });
+
+    ui.edit_address->setFocus();
 }
 
 void ComputerDialogGeneral::restoreSettings(
@@ -54,6 +67,10 @@ void ComputerDialogGeneral::restoreSettings(
     ui.edit_username->setText(QString::fromStdString(computer.username()));
     ui.edit_password->setText(QString::fromStdString(computer.password()));
     ui.edit_comment->setPlainText(QString::fromStdString(computer.comment()));
+
+    has_name_ = !computer.name().empty();
+    if (has_name_)
+        ui.edit_name->setFocus();
 }
 
 bool ComputerDialogGeneral::saveSettings(proto::address_book::Computer* computer)
@@ -64,6 +81,7 @@ bool ComputerDialogGeneral::saveSettings(proto::address_book::Computer* computer
         showError(tr("Too long name. The maximum length of the name is %n characters.",
                      "", kMaxNameLength));
         ui.edit_name->setFocus();
+        ui.edit_name->selectAll();
         return false;
     }
     else if (name.length() < kMinNameLength)
@@ -81,6 +99,7 @@ bool ComputerDialogGeneral::saveSettings(proto::address_book::Computer* computer
         showError(tr("The user name can not be empty and can contain only"
                      " alphabet characters, numbers and ""_"", ""-"", ""."" characters."));
         ui.edit_name->setFocus();
+        ui.edit_name->selectAll();
         return false;
     }
 
@@ -90,6 +109,7 @@ bool ComputerDialogGeneral::saveSettings(proto::address_book::Computer* computer
         showError(tr("Too long comment. The maximum length of the comment is %n characters.",
                      "", kMaxCommentLength));
         ui.edit_comment->setFocus();
+        ui.edit_comment->selectAll();
         return false;
     }
 
@@ -98,6 +118,7 @@ bool ComputerDialogGeneral::saveSettings(proto::address_book::Computer* computer
     {
         showError(tr("An invalid computer address was entered."));
         ui.edit_address->setFocus();
+        ui.edit_address->selectAll();
         return false;
     }
 

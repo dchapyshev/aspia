@@ -1065,7 +1065,7 @@
 <context>
     <name>console::ComputerDialogGeneral</name>
     <message numerus="yes">
-        <location filename="../computer_dialog_general.cc" line="64"/>
+        <location filename="../computer_dialog_general.cc" line="81"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Te lange naam. De maximum lengte is %n karakter.</numerusform>
@@ -1073,17 +1073,17 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_dialog_general.cc" line="71"/>
+        <location filename="../computer_dialog_general.cc" line="89"/>
         <source>Name can not be empty.</source>
         <translation>Naam mag niet leeg zijn.</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_general.cc" line="81"/>
+        <location filename="../computer_dialog_general.cc" line="99"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>De gebruikersnaam mag niet leeg zijn, en alleen karakters uit het alfabet, nummers, _, -, . karakters bevatten.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../computer_dialog_general.cc" line="90"/>
+        <location filename="../computer_dialog_general.cc" line="109"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Te lang commentaar. De maximale lengte is %n karakter.</numerusform>
@@ -1091,12 +1091,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_dialog_general.cc" line="99"/>
+        <location filename="../computer_dialog_general.cc" line="119"/>
         <source>An invalid computer address was entered.</source>
         <translation>Er is een ongeldig computer adres ingevoerd.</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_general.cc" line="130"/>
+        <location filename="../computer_dialog_general.cc" line="151"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>

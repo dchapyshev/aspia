@@ -1067,7 +1067,7 @@
 <context>
     <name>console::ComputerDialogGeneral</name>
     <message numerus="yes">
-        <location filename="../computer_dialog_general.cc" line="64"/>
+        <location filename="../computer_dialog_general.cc" line="81"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Занадто довге ім&apos;я. Максимальна довжина імені %n символ.</numerusform>
@@ -1076,17 +1076,17 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_dialog_general.cc" line="71"/>
+        <location filename="../computer_dialog_general.cc" line="89"/>
         <source>Name can not be empty.</source>
         <translation>Ім&apos;я не може бути порожнім.</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_general.cc" line="81"/>
+        <location filename="../computer_dialog_general.cc" line="99"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>Ім&apos;я користувача не може бути порожнім і має мустити тільки букви алфавіту, цифри, та символи &quot;&quot;_&quot;&quot;, &quot;&quot;-&quot;&quot;, &quot;&quot;.&quot;&quot;.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../computer_dialog_general.cc" line="90"/>
+        <location filename="../computer_dialog_general.cc" line="109"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Занадто довгий коментар. Максимальна довжина коментаря %n символ.</numerusform>
@@ -1095,12 +1095,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_dialog_general.cc" line="99"/>
+        <location filename="../computer_dialog_general.cc" line="119"/>
         <source>An invalid computer address was entered.</source>
         <translation>Введено невірну адресу комп&apos;ютера.</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_general.cc" line="130"/>
+        <location filename="../computer_dialog_general.cc" line="151"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>

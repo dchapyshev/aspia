@@ -45,6 +45,8 @@ private:
 
     Ui::ComputerDialogGeneral ui;
 
+    bool has_name_ = false;
+
     DISALLOW_COPY_AND_ASSIGN(ComputerDialogGeneral);
 };
 

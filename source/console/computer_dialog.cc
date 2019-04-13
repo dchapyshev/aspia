@@ -212,9 +212,7 @@ void ComputerDialog::init(const QString& parent_name)
     ui.widget->installEventFilter(this);
 
     ui.tree->setCurrentItem(general_item);
-
     ui.tree->expandAll();
-    ui.tree->setFocus();
 }
 
 void ComputerDialog::showTab(int type)
