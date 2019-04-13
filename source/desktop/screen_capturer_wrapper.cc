@@ -20,9 +20,9 @@
 
 #include "base/logging.h"
 #include "base/win/windows_version.h"
-#include "desktop/screen_capturer_dfmirage.h"
 #include "desktop/screen_capturer_dxgi.h"
 #include "desktop/screen_capturer_gdi.h"
+#include "desktop/screen_capturer_mirror.h"
 #include "desktop/win/effects_disabler.h"
 #include "desktop/win/wallpaper_disabler.h"
 
@@ -96,16 +96,16 @@ void ScreenCapturerWrapper::selectCapturer()
 {
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
 
-    // DFMirage screen capture is available only in Windows 7/2008 R2.
+    // Mirror screen capture is available only in Windows 7/2008 R2.
     if (base::win::windowsVersion() == base::win::VERSION_WIN7)
     {
-        std::unique_ptr<ScreenCapturerDFMirage> capturer_dfmirage =
-            std::make_unique<ScreenCapturerDFMirage>();
+        std::unique_ptr<ScreenCapturerMirror> capturer_mirror =
+            std::make_unique<ScreenCapturerMirror>();
 
-        if (capturer_dfmirage->isSupported())
+        if (capturer_mirror->isSupported())
         {
-            LOG(LS_INFO) << "Using DFMirage capturer";
-            capturer_ = std::move(capturer_dfmirage);
+            LOG(LS_INFO) << "Using mirror capturer";
+            capturer_ = std::move(capturer_mirror);
             return;
         }
     }

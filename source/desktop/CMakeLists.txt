@@ -53,22 +53,27 @@ list(APPEND SOURCE_DESKTOP
     diff_block_32bpp_sse3.h
     differ.cc
     differ.h
+    mirror_helper.cc
+    mirror_helper.h
     mouse_cursor.cc
     mouse_cursor.h
     mouse_cursor_cache.cc
     mouse_cursor_cache.h
+    mv2.h
+    mv2_helper.cc
+    mv2_helper.h
     pixel_format.cc
     pixel_format.h
     resolution_tracker.cc
     resolution_tracker.h
     screen_capture_frame_queue.h
     screen_capturer.h
-    screen_capturer_dfmirage.cc
-    screen_capturer_dfmirage.h
     screen_capturer_dxgi.cc
     screen_capturer_dxgi.h
     screen_capturer_gdi.cc
     screen_capturer_gdi.h
+    screen_capturer_mirror.cc
+    screen_capturer_mirror.h
     screen_capturer_wrapper.cc
     screen_capturer_wrapper.h
     screen_settings_tracker.cc

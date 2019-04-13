@@ -16,40 +16,51 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "desktop/screen_capturer_dfmirage.h"
+#include "desktop/screen_capturer_mirror.h"
 
 #include "base/logging.h"
 #include "desktop/dfmirage_helper.h"
+#include "desktop/mv2_helper.h"
 #include "desktop/desktop_frame_aligned.h"
 #include "desktop/win/screen_capture_utils.h"
 
 namespace desktop {
 
-ScreenCapturerDFMirage::ScreenCapturerDFMirage() = default;
-ScreenCapturerDFMirage::~ScreenCapturerDFMirage() = default;
+namespace {
 
-bool ScreenCapturerDFMirage::isSupported()
+std::unique_ptr<MirrorHelper> createHelper(const Rect& screen_rect)
+{
+    std::unique_ptr<MirrorHelper> helper = Mv2Helper::create(screen_rect);
+    if (!helper)
+        helper = DFMirageHelper::create(screen_rect);
+
+    return helper;
+}
+
+} // namespace
+
+ScreenCapturerMirror::ScreenCapturerMirror() = default;
+ScreenCapturerMirror::~ScreenCapturerMirror() = default;
+
+bool ScreenCapturerMirror::isSupported()
 {
     if (!helper_)
-    {
-        // If DFMirageHelper is not created, then create it.
-        helper_ = DFMirageHelper::create(ScreenCaptureUtils::fullScreenRect());
-    }
+        helper_ = createHelper(ScreenCaptureUtils::fullScreenRect());
 
     return helper_ != nullptr;
 }
 
-int ScreenCapturerDFMirage::screenCount()
+int ScreenCapturerMirror::screenCount()
 {
     return ScreenCaptureUtils::screenCount();
 }
 
-bool ScreenCapturerDFMirage::screenList(ScreenList* screens)
+bool ScreenCapturerMirror::screenList(ScreenList* screens)
 {
     return ScreenCaptureUtils::screenList(screens);
 }
 
-bool ScreenCapturerDFMirage::selectScreen(ScreenId screen_id)
+bool ScreenCapturerMirror::selectScreen(ScreenId screen_id)
 {
     if (!ScreenCaptureUtils::isScreenValid(screen_id, &current_device_key_))
         return false;
@@ -60,7 +71,7 @@ bool ScreenCapturerDFMirage::selectScreen(ScreenId screen_id)
     return true;
 }
 
-const Frame* ScreenCapturerDFMirage::captureFrame(Error* error)
+const Frame* ScreenCapturerMirror::captureFrame(Error* error)
 {
     DCHECK(error);
 
@@ -86,13 +97,13 @@ const Frame* ScreenCapturerDFMirage::captureFrame(Error* error)
     return frame_.get();
 }
 
-void ScreenCapturerDFMirage::reset()
+void ScreenCapturerMirror::reset()
 {
     helper_.reset();
     frame_.reset();
 }
 
-void ScreenCapturerDFMirage::updateExcludeRegion()
+void ScreenCapturerMirror::updateExcludeRegion()
 {
     exclude_region_.clear();
 
@@ -123,7 +134,7 @@ void ScreenCapturerDFMirage::updateExcludeRegion()
     }
 }
 
-ScreenCapturerDFMirage::Error ScreenCapturerDFMirage::prepareCaptureResources()
+ScreenCapturerMirror::Error ScreenCapturerMirror::prepareCaptureResources()
 {
     Rect desktop_rect = ScreenCaptureUtils::fullScreenRect();
     if (desktop_rect.isEmpty())
@@ -153,10 +164,10 @@ ScreenCapturerDFMirage::Error ScreenCapturerDFMirage::prepareCaptureResources()
 
     if (!helper_)
     {
-        helper_ = DFMirageHelper::create(screen_rect);
+        helper_ = createHelper(screen_rect);
         if (!helper_)
         {
-            LOG(LS_WARNING) << "Failed to create DFMirage helper";
+            LOG(LS_WARNING) << "Failed to create mirror helper";
             return Error::PERMANENT;
         }
 

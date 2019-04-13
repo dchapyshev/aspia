@@ -16,28 +16,29 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef DESKTOP__DFMIRAGE_HELPER_H
-#define DESKTOP__DFMIRAGE_HELPER_H
+#ifndef DESKTOP__MV2_HELPER_H
+#define DESKTOP__MV2_HELPER_H
 
 #include "base/win/scoped_hdc.h"
-#include "desktop/dfmirage.h"
+#include "base/win/scoped_object.h"
+#include "desktop/mv2.h"
 #include "desktop/mirror_helper.h"
 
 namespace desktop {
 
-class DFMirageHelper : public MirrorHelper
+class Mv2Helper : public MirrorHelper
 {
 public:
-    ~DFMirageHelper();
+    ~Mv2Helper();
 
-    static std::unique_ptr<DFMirageHelper> create(const Rect& screen_rect);
+    static std::unique_ptr<Mv2Helper> create(const Rect& screen_rect);
 
     const Rect& screenRect() const override { return screen_rect_; }
     void addUpdatedRects(Region* updated_region) const override;
     void copyRegion(Frame* frame, const Region& updated_region) const override;
 
 private:
-    explicit DFMirageHelper(const Rect& screen_rect);
+    explicit Mv2Helper(const Rect& screen_rect);
 
     bool update(bool load);
     bool mapMemory(bool map);
@@ -52,13 +53,16 @@ private:
     base::win::ScopedCreateDC driver_dc_;
     const Rect screen_rect_;
 
-    DfmGetChangesBuffer get_changes_buffer_;
+    uint8_t* shared_buffer_ = nullptr;
+
+    uint8_t* screen_buffer_ = nullptr;
+    Mv2ChangesBuffer* changes_buffer_ = nullptr;
 
     mutable int last_update_ = 0;
 
-    DISALLOW_COPY_AND_ASSIGN(DFMirageHelper);
+    DISALLOW_COPY_AND_ASSIGN(Mv2Helper);
 };
 
 } // namespace desktop
 
-#endif // DESKTOP__DFMIRAGE_HELPER_H
+#endif // DESKTOP__MV2_HELPER_H

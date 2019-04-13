@@ -16,20 +16,20 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef DESKTOP__SCREEN_CAPTURER_DFMIRAGE_H
-#define DESKTOP__SCREEN_CAPTURER_DFMIRAGE_H
+#ifndef DESKTOP__SCREEN_CAPTURER_MIRROR_H
+#define DESKTOP__SCREEN_CAPTURER_MIRROR_H
 
 #include "desktop/screen_capturer.h"
 
 namespace desktop {
 
-class DFMirageHelper;
+class MirrorHelper;
 
-class ScreenCapturerDFMirage : public ScreenCapturer
+class ScreenCapturerMirror : public ScreenCapturer
 {
 public:
-    ScreenCapturerDFMirage();
-    ~ScreenCapturerDFMirage();
+    ScreenCapturerMirror();
+    ~ScreenCapturerMirror();
 
     bool isSupported();
 
@@ -47,7 +47,7 @@ private:
     void updateExcludeRegion();
     Error prepareCaptureResources();
 
-    std::unique_ptr<DFMirageHelper> helper_;
+    std::unique_ptr<MirrorHelper> helper_;
     std::unique_ptr<Frame> frame_;
 
     ScreenId current_screen_id_ = kFullDesktopScreenId;
@@ -58,9 +58,9 @@ private:
 
     std::list<Rect> screen_rects_;
 
-    DISALLOW_COPY_AND_ASSIGN(ScreenCapturerDFMirage);
+    DISALLOW_COPY_AND_ASSIGN(ScreenCapturerMirror);
 };
 
 } // namespace desktop
 
-#endif // DESKTOP__SCREEN_CAPTURER_DFMIRAGE_H
+#endif // DESKTOP__SCREEN_CAPTURER_MIRROR_H
