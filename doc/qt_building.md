@@ -9,7 +9,7 @@ Sequence
 --------
 1. You must have built OpenSSL to build Qt.
 2. You must have installed:
-   - [Visual Studio 2017 (with SDK 8.1)](https://visualstudio.microsoft.com)
+   - [Visual Studio 2019 (with SDK 10.0.17763.0)](https://visualstudio.microsoft.com)
    - [Python](http://www.python.org/download)
    - [Perl](http://www.activestate.com/activeperl)
    - [jom](https://wiki.qt.io/Jom).

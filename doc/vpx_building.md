@@ -8,7 +8,7 @@ To build third-party components, refer to the assembly guide for these projects.
 Sequence
 --------
 1. You must have installed:
-   - [Visual Studio 2017 (with SDK 8.1)](https://visualstudio.microsoft.com)
+   - [Visual Studio 2019 (with SDK 10.0.17763.0)](https://visualstudio.microsoft.com)
    - [MSYS](http://www.mingw.org/wiki/MSYS)
    - [YASM](http://yasm.tortall.net) (version for "general use")
 3. Open "MSYS" and go to the directory with libvpx:

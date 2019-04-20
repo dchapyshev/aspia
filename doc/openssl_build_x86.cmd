@@ -1,10 +1,7 @@
 @echo off
 
-rem We assume that Visual Studio 2017 is installed to the default path.
-set VS_PATH="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build"
-
-rem x86 with Windows SDK 8.1
-call %VS_PATH%\vcvars32.bat 8.1
+rem We assume that Visual Studio 2019 is installed to the default path.
+set VS_PATH="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build"
 
 rem OpenSSL source directory
 if "%1" == "" ( goto :USAGE )
@@ -18,6 +15,8 @@ echo Usage: openssl_build_x86.cmd [openssl_src_dir] [openssl_out_dir]
 goto :END
 
 :START
+call %VS_PATH%\vcvars32.bat
+
 cd /d %1
 
 call perl Configure VC-WIN32 --prefix=%2 no-shared no-zlib

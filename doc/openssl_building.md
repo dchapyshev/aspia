@@ -8,7 +8,7 @@ To build third-party components, refer to the assembly guide for these projects.
 Sequence
 --------
 1. You must have installed:
-   - [Visual Studio 2017 (with SDK 8.1)](https://visualstudio.microsoft.com)
+   - [Visual Studio 2019 (with SDK 10.0.17763.0)](https://visualstudio.microsoft.com)
    - [Perl](http://www.activestate.com/activeperl)
    - [NASM](https://www.nasm.us).
 2. Open "Command Prompt" and go to the directory with "openssl_build_x86.cmd".

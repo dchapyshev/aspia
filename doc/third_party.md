@@ -10,5 +10,5 @@ Third-party components information
 | pcg-cpp    | 0.98.1  | MIT License                    | https://github.com/imneme/pcg-cpp/releases      |
 | openssl    | 1.1.1b  | OpenSSL License                | https://github.com/openssl/openssl/releases     |
 | protobuf   | 3.7.1   | BSD 3-Clause License           | https://github.com/google/protobuf/releases     |
-| qt         | 5.12.2  | GNU General Public License 3.0 | https://www.qt.io                               |
+| qt         | 5.12.3  | GNU General Public License 3.0 | https://www.qt.io                               |
 | zstd       | 1.4.0   | BSD License                    | https://github.com/facebook/zstd/releases       |
