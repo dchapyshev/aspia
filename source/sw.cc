@@ -1,7 +1,5 @@
 #pragma sw require header org.sw.demo.google.protobuf.protoc-3
 #pragma sw require header org.sw.demo.qtproject.qt.base.tools.moc-*
-#pragma sw require header org.sw.demo.qtproject.qt.tools.linguist.release-*
-#pragma sw require header org.sw.demo.qtproject.qt.translations-*
 
 void configure(Build &s)
 {
@@ -79,15 +77,15 @@ void build(Solution &s)
     auto qt_progs_and_tr = [](auto &t)
     {
         automoc("org.sw.demo.qtproject.qt.base.tools.moc-*"_dep, t);
-        rcc("org.sw.demo.qtproject.qt.base.tools.rcc-*"_dep, t, t.SourceDir / ("resources/" + t.pkg.ppath.back() + ".qrc"));
+        rcc("org.sw.demo.qtproject.qt.base.tools.rcc-*"_dep, t, t.SourceDir / ("resources/" + t.getPackage().ppath.back() + ".qrc"));
         qt_uic("org.sw.demo.qtproject.qt.base.tools.uic-*"_dep, t);
 
         // trs
         qt_tr("org.sw.demo.qtproject.qt-*"_dep, t);
-        t.configureFile(t.SourceDir / ("translations/" + t.pkg.ppath.back() + "_translations.qrc"),
-            t.BinaryDir / (t.pkg.ppath.back() + "_translations.qrc"), ConfigureFlags::CopyOnly);
+        t.configureFile(t.SourceDir / ("translations/" + t.getPackage().ppath.back() + "_translations.qrc"),
+            t.BinaryDir / (t.getPackage().ppath.back() + "_translations.qrc"), ConfigureFlags::CopyOnly);
         rcc("org.sw.demo.qtproject.qt.base.tools.rcc-*"_dep, t,
-            t.BinaryDir / (t.pkg.ppath.back() + "_translations.qrc"))
+            t.BinaryDir / (t.getPackage().ppath.back() + "_translations.qrc"))
             .c->working_directory = t.BinaryDir;
     };
 
