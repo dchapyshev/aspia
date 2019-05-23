@@ -5,8 +5,10 @@ void configure(Build &s)
 {
     if (s.isConfigSelected("mt"))
     {
-        s.Settings.Native.LibrariesType = LibraryType::Static;
-        s.Settings.Native.MT = true;
+        auto ss = s.createSettings();
+        ss.Native.LibrariesType = LibraryType::Static;
+        ss.Native.MT = true;
+        s.addSettings(ss);
     }
 }
 
@@ -90,7 +92,7 @@ void build(Solution &s)
     };
 
     auto &common = add_lib("common");
-    if (s.Settings.TargetOS.Type == OSType::Windows)
+    if (common.getSettings().TargetOS.Type == OSType::Windows)
         common.Public += "Shlwapi.lib"_lib;
     common.Public += codec, protocol;
     common.Public += "org.sw.demo.openssl.crypto-*.*.*.*"_dep;
@@ -102,7 +104,7 @@ void build(Solution &s)
     auto &network = add_lib("net");
     network.Public += crypto, common;
     network.Public += "org.sw.demo.qtproject.qt.base.network-*"_dep;
-    if (s.Settings.TargetOS.Type == OSType::Windows)
+    if (network.getSettings().TargetOS.Type == OSType::Windows)
         network.Public += "Setupapi.lib"_lib, "Winspool.lib"_lib;
     automoc("org.sw.demo.qtproject.qt.base.tools.moc-*"_dep, network);
 
@@ -116,7 +118,7 @@ void build(Solution &s)
     host -= ".*_entry_point.cc"_rr, ".*\\.rc"_rr;
     host += "host.rc";
     host += "HOST_IMPLEMENTATION"_def;
-    if (s.Settings.TargetOS.Type == OSType::Windows)
+    if (host.getSettings().TargetOS.Type == OSType::Windows)
         host.Public += "comsuppw.lib"_lib, "sas.lib"_lib;
     host.Public += common, ipc, updater;
     host.Public += "org.sw.demo.boost.property_tree-1"_dep;
@@ -155,7 +157,7 @@ void build(Solution &s)
     //
     auto &client = add_lib("client");
     client.Public += common, updater;
-    if (s.Settings.TargetOS.Type == OSType::Windows)
+    if (client.getSettings().TargetOS.Type == OSType::Windows)
         client.Public += "org.sw.demo.qtproject.qt.base.plugins.printsupport.windows-*"_dep;
     qt_progs_and_tr(client);
 
@@ -163,7 +165,7 @@ void build(Solution &s)
     auto &console = add_exe(aspia, "console");
     setup_target(console, "console");
     console.Public += client;
-    if (s.Settings.TargetOS.Type == OSType::Windows)
+    if (console.getSettings().TargetOS.Type == OSType::Windows)
     {
         console.Public += "org.sw.demo.qtproject.qt.base.plugins.platforms.windows-*"_dep;
         console.Public += "org.sw.demo.qtproject.qt.base.plugins.styles.windowsvista-*"_dep;
