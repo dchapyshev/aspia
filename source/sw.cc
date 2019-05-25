@@ -140,18 +140,18 @@ void build(Solution &s)
     };
 
     auto &host_config = add_exe(host, "config");
-    host_config += "host_entry_point.cc";
-    host_config += "host_core.rc";
+    host_config += "host/host_entry_point.cc";
+    host_config += "host/host_core.rc";
     host_config += host;
 
     auto &host_service = add_exe(host, "service");
-    host_service += "win/host_service_entry_point.cc";
-    host_service += "win/host_service.rc";
+    host_service += "host/win/host_service_entry_point.cc";
+    host_service += "host/win/host_service.rc";
     host_service += host;
 
     auto &host_session = add_exe(host, "session");
-    host_session += "win/host_session_entry_point.cc";
-    host_session += "win/host_session.rc";
+    host_session += "host/win/host_session_entry_point.cc";
+    host_session += "host/win/host_session.rc";
     host_session += host;
 
     //
