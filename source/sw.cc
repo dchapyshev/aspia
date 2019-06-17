@@ -23,8 +23,10 @@ void build(Solution &s)
         t.Public += "."_idir;
         t.setRootDirectory(name);
         t += ".*"_rr;
+        t.AllowEmptyRegexes = true;
         t -= ".*_unittest.*"_rr;
         t -= ".*_tests.*"_rr;
+        t.AllowEmptyRegexes = false;
         return t;
     };
 
