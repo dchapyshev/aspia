@@ -43,45 +43,16 @@ Q_IMPORT_PLUGIN(QWindowsPrinterSupportPlugin);
 #endif // defined(Q_OS_WIN)
 #endif // defined(QT_STATIC)
 
-namespace {
-
-std::filesystem::path loggingDir()
+int main(int argc, char *argv[])
 {
-    std::filesystem::path path;
+    Q_INIT_RESOURCE(qt_translations);
+    Q_INIT_RESOURCE(client);
+    Q_INIT_RESOURCE(client_translations);
+    Q_INIT_RESOURCE(common);
+    Q_INIT_RESOURCE(common_translations);
+    Q_INIT_RESOURCE(updater);
+    Q_INIT_RESOURCE(updater_translations);
 
-    if (!base::BasePaths::userAppData(&path))
-        return std::filesystem::path();
-
-    path.append("aspia/logs");
-    return path;
-}
-
-void tbbStatusToLog()
-{
-#if defined(USE_TBB)
-    char** func_replacement_log;
-    int func_replacement_status = TBB_malloc_replacement_log(&func_replacement_log);
-
-    if (func_replacement_status != 0)
-    {
-        LOG(LS_WARNING) << "tbbmalloc_proxy cannot replace memory allocation routines";
-
-        for (char** log_string = func_replacement_log; *log_string != 0; ++log_string)
-        {
-            LOG(LS_WARNING) << *log_string;
-        }
-    }
-    else
-    {
-        LOG(LS_INFO) << "tbbmalloc_proxy successfully initialized";
-    }
-#else
-    DLOG(LS_INFO) << "tbbmalloc_proxy is disabled";
-#endif
-}
-
-int runApplication(int argc, char *argv[])
-{
     console::Application application(argc, argv);
 
     console::Settings console_settings;
@@ -112,7 +83,7 @@ int runApplication(int argc, char *argv[])
     QCommandLineOption session_type_option(
         QStringLiteral("session-type"),
         QApplication::translate("Console", "Session type. Possible values: desktop-manage, "
-                                "desktop-view, file-transfer."),
+            "desktop-view, file-transfer."),
         QStringLiteral("desktop-manage"));
 
     QCommandLineOption client_option(
@@ -124,7 +95,7 @@ int runApplication(int argc, char *argv[])
     parser.addHelpOption();
     parser.addVersionOption();
     parser.addPositionalArgument(QApplication::translate("Console", "file"),
-                                 QApplication::translate("Console", "The file to open."));
+        QApplication::translate("Console", "The file to open."));
     parser.addOption(address_option);
     parser.addOption(port_option);
     parser.addOption(username_option);
@@ -196,10 +167,10 @@ int runApplication(int argc, char *argv[])
                 new console::MainWindow(console_settings, locale_loader, file_path));
 
             QObject::connect(&application, &console::Application::windowActivated,
-                             console_window.get(), &console::MainWindow::showConsole);
+                console_window.get(), &console::MainWindow::showConsole);
 
             QObject::connect(&application, &console::Application::fileOpened,
-                             console_window.get(), &console::MainWindow::openAddressBook);
+                console_window.get(), &console::MainWindow::openAddressBook);
 
             console_window->show();
             console_window->activateWindow();
@@ -207,31 +178,4 @@ int runApplication(int argc, char *argv[])
     }
 
     return application.exec();
-}
-
-} // namespace
-
-int main(int argc, char *argv[])
-{
-    Q_INIT_RESOURCE(qt_translations);
-    Q_INIT_RESOURCE(client);
-    Q_INIT_RESOURCE(client_translations);
-    Q_INIT_RESOURCE(common);
-    Q_INIT_RESOURCE(common_translations);
-    Q_INIT_RESOURCE(updater);
-    Q_INIT_RESOURCE(updater_translations);
-
-    base::LoggingSettings settings;
-    settings.destination = base::LOG_TO_FILE;
-    settings.log_dir = loggingDir();
-
-    base::initLogging(settings);
-    qt_base::initQtLogging();
-
-    tbbStatusToLog();
-
-    int result = runApplication(argc, argv);
-
-    base::shutdownLogging();
-    return result;
 }

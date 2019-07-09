@@ -4,32 +4,32 @@
 <context>
     <name>Host</name>
     <message>
-        <location filename="../host_main.cc" line="175"/>
+        <location filename="../host_main.cc" line="163"/>
         <source>The path to the file to import.</source>
         <translation>Шлях до файла для імпорту.</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="179"/>
+        <location filename="../host_main.cc" line="167"/>
         <source>The path to the file to export.</source>
         <translation>Глях до файла для експорту.</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="183"/>
+        <location filename="../host_main.cc" line="171"/>
         <source>Enables silent mode when exporting and importing.</source>
         <translation>Включає &quot;тихий режим&quot; під час експорту та імпорту.</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="186"/>
+        <location filename="../host_main.cc" line="174"/>
         <source>Run application update.</source>
         <translation>Запустити оновлення програми.</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="207"/>
+        <location filename="../host_main.cc" line="195"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="208"/>
+        <location filename="../host_main.cc" line="196"/>
         <source>Export and import parameters can not be specified together.</source>
         <translation>Параметри імпорту і експорту не можуть бути задані одночасно.</translation>
     </message>

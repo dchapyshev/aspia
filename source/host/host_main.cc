@@ -18,9 +18,8 @@
 
 #include "host/host_main.h"
 
-#include "base/base_paths.h"
-#include "base/win/scoped_thread_desktop.h"
 #include "base/win/process_util.h"
+#include "base/win/scoped_thread_desktop.h"
 #include "host/ui/host_main_window.h"
 #include "host/host_application.h"
 #include "host/host_settings.h"
@@ -71,25 +70,6 @@ bool EventFilter::nativeEventFilter(const QByteArray& event_type, void* message,
     return false;
 }
 
-std::filesystem::path loggingDir()
-{
-    std::filesystem::path path;
-
-    if (base::win::isProcessElevated())
-    {
-        if (!base::BasePaths::commonAppData(&path))
-            return std::filesystem::path();
-    }
-    else
-    {
-        if (!base::BasePaths::userAppData(&path))
-            return std::filesystem::path();
-    }
-
-    path.append("aspia/logs");
-    return path;
-}
-
 bool waitForValidInputDesktop()
 {
     int max_attempt_count = 600;
@@ -132,8 +112,16 @@ bool isHidden(const QStringList& arguments)
     return parser.isSet(hidden_option);
 }
 
-int runApplication(int& argc, char* argv[])
+} // namespace
+
+int hostMain(int argc, char* argv[])
 {
+    Q_INIT_RESOURCE(qt_translations);
+    Q_INIT_RESOURCE(common);
+    Q_INIT_RESOURCE(common_translations);
+    Q_INIT_RESOURCE(updater);
+    Q_INIT_RESOURCE(updater_translations);
+
     QStringList arguments;
 
     for (int i = 0; i < argc; ++i)
@@ -148,7 +136,7 @@ int runApplication(int& argc, char* argv[])
             arguments.removeFirst();
 
             if (base::win::executeProcess(program, arguments,
-                                          base::win::ProcessExecuteMode::ELEVATE))
+                base::win::ProcessExecuteMode::ELEVATE))
             {
                 return 0;
             }
@@ -246,7 +234,7 @@ int runApplication(int& argc, char* argv[])
             host::MainWindow window(host_settings, locale_loader);
 
             QObject::connect(&application, &host::Application::activated,
-                             &window, &host::MainWindow::activateHost);
+                &window, &host::MainWindow::activateHost);
 
             if (is_hidden)
             {
@@ -265,27 +253,4 @@ int runApplication(int& argc, char* argv[])
     }
 
     return 0;
-}
-
-} // namespace
-
-int hostMain(int argc, char* argv[])
-{
-    Q_INIT_RESOURCE(qt_translations);
-    Q_INIT_RESOURCE(common);
-    Q_INIT_RESOURCE(common_translations);
-    Q_INIT_RESOURCE(updater);
-    Q_INIT_RESOURCE(updater_translations);
-
-    base::LoggingSettings settings;
-    settings.destination = base::LOG_TO_FILE;
-    settings.log_dir = loggingDir();
-
-    base::initLogging(settings);
-    qt_base::initQtLogging();
-
-    int result = runApplication(argc, argv);
-
-    base::shutdownLogging();
-    return result;
 }

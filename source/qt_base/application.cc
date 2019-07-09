@@ -18,6 +18,8 @@
 
 #include "qt_base/application.h"
 
+#include "base/base_paths.h"
+#include "base/win/process_util.h"
 #include "build/build_config.h"
 #include "crypto/scoped_crypto_initializer.h"
 #include "qt_base/qt_logging.h"
@@ -33,6 +35,10 @@
 #include <QLocalSocket>
 #include <QLockFile>
 #include <QThread>
+
+#if defined(USE_TBB)
+#include <tbb/tbbmalloc_proxy.h>
+#endif // defined(USE_TBB)
 
 #if defined(OS_WIN)
 #include <Windows.h>
@@ -96,11 +102,63 @@ bool isSameApplication(const QLocalSocket* socket)
 }
 #endif // defined(OS_WIN)
 
+std::filesystem::path loggingDir()
+{
+    std::filesystem::path path;
+
+    if (base::win::isProcessElevated())
+    {
+        if (!base::BasePaths::commonAppData(&path))
+            return std::filesystem::path();
+    }
+    else
+    {
+        if (!base::BasePaths::userAppData(&path))
+            return std::filesystem::path();
+    }
+
+    path.append("aspia/logs");
+    return path;
+}
+
+void tbbStatusToLog()
+{
+#if defined(USE_TBB)
+    char** func_replacement_log;
+    int func_replacement_status = TBB_malloc_replacement_log(&func_replacement_log);
+
+    if (func_replacement_status != 0)
+    {
+        LOG(LS_WARNING) << "tbbmalloc_proxy cannot replace memory allocation routines";
+
+        for (char** log_string = func_replacement_log; *log_string != 0; ++log_string)
+        {
+            LOG(LS_WARNING) << *log_string;
+        }
+    }
+    else
+    {
+        LOG(LS_INFO) << "tbbmalloc_proxy successfully initialized";
+    }
+#else
+    DLOG(LS_INFO) << "tbbmalloc_proxy is disabled";
+#endif
+}
+
 } // namespace
 
 Application::Application(int& argc, char* argv[])
     : QApplication(argc, argv)
 {
+    base::LoggingSettings settings;
+    settings.destination = base::LOG_TO_FILE;
+    settings.log_dir = loggingDir();
+
+    base::initLogging(settings);
+    qt_base::initQtLogging();
+
+    tbbStatusToLog();
+
 #if defined(OS_WIN)
     DWORD id = 0;
     ProcessIdToSessionId(GetCurrentProcessId(), &id);
@@ -139,6 +197,8 @@ Application::~Application()
 
     if (is_locked)
         QFile::remove(lock_file_name_);
+
+    base::shutdownLogging();
 }
 
 bool Application::isRunning()
