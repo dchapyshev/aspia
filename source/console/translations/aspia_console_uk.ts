@@ -1280,12 +1280,12 @@
         <translation>Показати</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="917"/>
+        <location filename="../console_main_window.cc" line="918"/>
         <source>&lt;empty&gt;</source>
         <translation>&lt;порожньо&gt;</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="938"/>
+        <location filename="../console_main_window.cc" line="939"/>
         <source>Aspia Console</source>
         <translation>Консоль Aspia</translation>
     </message>

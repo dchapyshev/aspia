@@ -23,6 +23,7 @@
 
 #include <QHash>
 #include <QStringList>
+#include <QVector>
 
 class QTranslator;
 
@@ -34,19 +35,18 @@ public:
     LocaleLoader();
     ~LocaleLoader();
 
-    QStringList localeList() const;
-    QStringList sortedLocaleList() const;
-    QStringList fileList(const QString& locale_name) const;
-    bool contains(const QString& locale_name) const;
-    void installTranslators(const QString& locale_name);
+    using Locale = QPair<QString, QString>;
+    using LocaleList = QVector<Locale>;
 
-    static QString translationsDir();
+    LocaleList localeList() const;
+    bool contains(const QString& locale) const;
+    void installTranslators(const QString& locale);
 
 private:
     void removeTranslators();
 
     QHash<QString, QStringList> locale_list_;
-    QList<QTranslator*> translator_list_;
+    QVector<QTranslator*> translator_list_;
 
     DISALLOW_COPY_AND_ASSIGN(LocaleLoader);
 };

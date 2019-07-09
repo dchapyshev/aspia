@@ -18,20 +18,23 @@
 
 #include "qt_base/locale_loader.h"
 
-#include "base/logging.h"
-
 #include <QCoreApplication>
 #include <QDir>
 #include "QLocale"
 #include <QTranslator>
-#include <QString>
 
 namespace qt_base {
+
+namespace {
+
+const QString kTranslationsDir = QLatin1String(":/tr/");
+
+} // namespace
 
 LocaleLoader::LocaleLoader()
 {
     QStringList qm_file_list =
-        QDir(translationsDir()).entryList(QStringList() << QLatin1String("*.qm"));
+        QDir(kTranslationsDir).entryList(QStringList() << QLatin1String("*.qm"));
 
     QRegExp regexp(QLatin1String("([a-zA-Z0-9-_]+)_([^.]*).qm"));
 
@@ -54,78 +57,52 @@ LocaleLoader::~LocaleLoader()
     removeTranslators();
 }
 
-QStringList LocaleLoader::localeList() const
+LocaleLoader::LocaleList LocaleLoader::localeList() const
 {
-    QStringList list;
+    LocaleList list;
 
-    QHashIterator<QString, QStringList> iter(locale_list_);
-    while (iter.hasNext())
+    auto add_locale = [&](const QString& locale_code)
     {
-        iter.next();
-        list.push_back(iter.key());
-    }
+        list.push_back(
+            Locale(locale_code, QLocale::languageToString(QLocale(locale_code).language())));
+    };
 
-    const QString english_locale = QStringLiteral("en");
-    if (!locale_list_.contains(english_locale))
-        list.push_back(english_locale);
+    add_locale(QLatin1String("en"));
 
-    return list;
-}
+    for (auto it = locale_list_.constBegin(); it != locale_list_.constEnd(); ++it)
+        add_locale(it.key());
 
-QStringList LocaleLoader::sortedLocaleList() const
-{
-    QStringList list = localeList();
-
-    std::sort(list.begin(), list.end(), [](const QString& a, const QString& b)
+    std::sort(list.begin(), list.end(), [](const Locale& a, const Locale& b)
     {
-        return QString::compare(QLocale::languageToString(QLocale(a).language()),
-                                QLocale::languageToString(QLocale(b).language()),
-                                Qt::CaseInsensitive) < 0;
+        return QString::compare(a.second, b.second, Qt::CaseInsensitive) < 0;
     });
 
     return list;
 }
 
-QStringList LocaleLoader::fileList(const QString& locale_name) const
+bool LocaleLoader::contains(const QString& locale) const
 {
-    if (!contains(locale_name))
-        return QStringList();
-
-    return locale_list_[locale_name];
+    return locale_list_.contains(locale);
 }
 
-bool LocaleLoader::contains(const QString& locale_name) const
-{
-    return locale_list_.contains(locale_name);
-}
-
-void LocaleLoader::installTranslators(const QString& locale_name)
+void LocaleLoader::installTranslators(const QString& locale)
 {
     removeTranslators();
 
-    const QString translations_dir = translationsDir();
+    auto file_list = locale_list_.constFind(locale);
+    if (file_list == locale_list_.constEnd())
+        return;
 
-    for (const auto& qm_file : fileList(locale_name))
+    for (const auto& file : file_list.value())
     {
-        QTranslator* translator = new QTranslator();
+        QScopedPointer<QTranslator> translator(new QTranslator());
 
-        if (!translator->load(qm_file, translations_dir))
+        if (translator->load(file, kTranslationsDir))
         {
-            LOG(LS_WARNING) << "Translation file not loaded: " << qm_file.toStdString();
-            delete translator;
-        }
-        else
-        {
-            QCoreApplication::installTranslator(translator);
-            translator_list_.push_back(translator);
+            if (QCoreApplication::installTranslator(translator.get()))
+                translator_list_.push_back(translator.take());
         }
     }
-}
-
-// static
-QString LocaleLoader::translationsDir()
-{
-    return QLatin1String(":/tr/");
 }
 
 void LocaleLoader::removeTranslators()

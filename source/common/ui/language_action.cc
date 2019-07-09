@@ -18,15 +18,15 @@
 
 #include "common/ui/language_action.h"
 
-#include <QLocale>
-
 namespace common {
 
-LanguageAction::LanguageAction(const QString& locale, QObject* parent)
+LanguageAction::LanguageAction(const QString& locale_code,
+                               const QString& locale_name,
+                               QObject* parent)
     : QAction(parent),
-      locale_(locale)
+      locale_code_(locale_code)
 {
-    setText(QLocale::languageToString(QLocale(locale).language()));
+    setText(locale_name);
 }
 
 } // namespace common

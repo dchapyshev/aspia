@@ -621,8 +621,8 @@
     </message>
     <message>
         <location filename="../ui/host_main_window.cc" line="46"/>
-        <location filename="../ui/host_main_window.cc" line="285"/>
-        <location filename="../ui/host_main_window.cc" line="292"/>
+        <location filename="../ui/host_main_window.cc" line="286"/>
+        <location filename="../ui/host_main_window.cc" line="293"/>
         <source>Not available</source>
         <translation type="unfinished"></translation>
     </message>

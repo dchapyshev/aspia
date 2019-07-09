@@ -28,13 +28,15 @@ namespace common {
 class LanguageAction : public QAction
 {
 public:
-    explicit LanguageAction(const QString& locale, QObject* parent = nullptr);
+    LanguageAction(const QString& locale_code,
+                   const QString& locale_name,
+                   QObject* parent = nullptr);
     ~LanguageAction() = default;
 
-    QString locale() const { return locale_; }
+    const QString& locale() const { return locale_code_; }
 
 private:
-    QString locale_;
+    QString locale_code_;
 
     DISALLOW_COPY_AND_ASSIGN(LanguageAction);
 };

@@ -892,14 +892,15 @@ void MainWindow::createLanguageMenu(const QString& current_locale)
 {
     QActionGroup* language_group = new QActionGroup(this);
 
-    for (const auto& locale : locale_loader_.sortedLocaleList())
+    for (const auto& locale : locale_loader_.localeList())
     {
-        common::LanguageAction* action_language = new common::LanguageAction(locale, this);
+        common::LanguageAction* action_language =
+            new common::LanguageAction(locale.first, locale.second, this);
 
         action_language->setActionGroup(language_group);
         action_language->setCheckable(true);
 
-        if (current_locale == locale)
+        if (current_locale == locale.first)
             action_language->setChecked(true);
 
         ui.menu_language->addAction(action_language);
