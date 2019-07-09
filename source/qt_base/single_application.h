@@ -16,33 +16,47 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CONSOLE__CONSOLE_SINGLE_APPLICATION_H
-#define CONSOLE__CONSOLE_SINGLE_APPLICATION_H
+#ifndef QT_BASE__SINGLE_APPLICATION_H
+#define QT_BASE__SINGLE_APPLICATION_H
 
-#include "qt_base/single_application.h"
+#include "base/macros_magic.h"
 
-namespace console {
+#include <QApplication>
 
-class SingleApplication : public qt_base::SingleApplication
+class QLocalServer;
+class QLockFile;
+
+namespace qt_base {
+
+class SingleApplication : public QApplication
 {
     Q_OBJECT
 
 public:
     SingleApplication(int& argc, char* argv[]);
-    virtual ~SingleApplication() = default;
+    virtual ~SingleApplication();
+
+    bool isRunning();
 
 public slots:
-    void activateWindow();
-    void openFile(const QString& file_path);
+    void sendMessage(const QByteArray& message);
 
 signals:
-    void windowActivated();
-    void fileOpened(const QString& file_path);
+    void messageReceived(const QByteArray& message);
+
+private slots:
+    void onNewConnection();
 
 private:
+    QString lock_file_name_;
+    QString server_name_;
+
+    QLockFile* lock_file_ = nullptr;
+    QLocalServer* server_ = nullptr;
+
     DISALLOW_COPY_AND_ASSIGN(SingleApplication);
 };
 
-} // namespace console
+} // namespace qt_base
 
-#endif // CONSOLE__CONSOLE_SINGLE_APPLICATION_H
+#endif // QT_BASE__SINGLE_APPLICATION_H

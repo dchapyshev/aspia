@@ -17,9 +17,9 @@
 //
 
 #include "host/ui/host_config_dialog.h"
+
 #include "base/logging.h"
 #include "base/service_controller.h"
-#include "base/xml_settings.h"
 #include "build/build_config.h"
 #include "common/ui/about_dialog.h"
 #include "host/ui/user_dialog.h"
@@ -27,6 +27,7 @@
 #include "host/win/host_service_constants.h"
 #include "host/host_settings.h"
 #include "net/srp_user.h"
+#include "qt_base/xml_settings.h"
 #include "updater/update_dialog.h"
 
 #include <QFileDialog>

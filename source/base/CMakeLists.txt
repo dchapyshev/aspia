@@ -41,8 +41,6 @@ list(APPEND SOURCE_BASE
     power_controller_win.cc
     process_handle.cc
     process_handle.h
-    qt_logging.cc
-    qt_logging.h
     scoped_clear_last_error.cc
     scoped_clear_last_error.h
     service.h
@@ -50,8 +48,6 @@ list(APPEND SOURCE_BASE
     service_controller.h
     service_impl.h
     service_impl_win.cc
-    single_application.cc
-    single_application.h
     smbios.h
     smbios_parser.cc
     smbios_parser.h
@@ -64,9 +60,7 @@ list(APPEND SOURCE_BASE
     thread_checker.h
     typed_buffer.h
     version.cc
-    version.h
-    xml_settings.cc
-    xml_settings.h)
+    version.h)
 
 list(APPEND SOURCE_BASE_UNIT_TESTS
     aligned_memory_unittest.cc

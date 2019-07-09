@@ -18,11 +18,11 @@
 
 #include "host/win/host_starter_service.h"
 
-#include "base/qt_logging.h"
 #include "base/service_controller.h"
 #include "base/win/process.h"
 #include "build/build_config.h"
 #include "host/win/host_process.h"
+#include "qt_base/qt_logging.h"
 
 #include <random>
 

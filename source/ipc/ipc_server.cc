@@ -17,9 +17,10 @@
 //
 
 #include "ipc/ipc_server.h"
-#include "base/qt_logging.h"
+
 #include "crypto/random.h"
 #include "ipc/ipc_channel.h"
+#include "qt_base/qt_logging.h"
 
 #include <QCoreApplication>
 #include <QLocalServer>

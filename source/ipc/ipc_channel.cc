@@ -17,8 +17,9 @@
 //
 
 #include "ipc/ipc_channel.h"
-#include "base/qt_logging.h"
+
 #include "build/build_config.h"
+#include "qt_base/qt_logging.h"
 
 #if defined(OS_WIN)
 #include <Windows.h>

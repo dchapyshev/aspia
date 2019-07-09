@@ -18,14 +18,14 @@
 
 #include "host/ui/host_main_window.h"
 
-#include "base/qt_logging.h"
-#include "base/xml_settings.h"
 #include "common/ui/about_dialog.h"
 #include "common/ui/language_action.h"
 #include "host/ui/host_config_dialog.h"
 #include "host/ui/host_notifier_window.h"
 #include "host/host_settings.h"
 #include "host/host_ui_client.h"
+#include "qt_base/qt_logging.h"
+#include "qt_base/xml_settings.h"
 
 #include <QCloseEvent>
 #include <QDesktopServices>

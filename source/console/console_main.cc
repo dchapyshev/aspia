@@ -17,12 +17,13 @@
 //
 
 #include "base/base_paths.h"
-#include "base/qt_logging.h"
+
 #include "build/version.h"
 #include "client/ui/client_window.h"
 #include "console/console_main_window.h"
 #include "console/console_single_application.h"
 #include "crypto/scoped_crypto_initializer.h"
+#include "qt_base/qt_logging.h"
 
 #if defined(USE_TBB)
 #include <tbb/tbbmalloc_proxy.h>
@@ -232,7 +233,7 @@ int main(int argc, char *argv[])
     settings.log_dir = loggingDir();
 
     base::initLogging(settings);
-    base::initQtLogging();
+    qt_base::initQtLogging();
 
     crypto::ScopedCryptoInitializer crypto_initializer;
     CHECK(crypto_initializer.isSucceeded());

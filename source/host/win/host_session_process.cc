@@ -17,11 +17,12 @@
 //
 
 #include "host/win/host_session_process.h"
-#include "base/qt_logging.h"
+
 #include "host/host_session_fake.h"
 #include "ipc/ipc_channel.h"
 #include "ipc/ipc_server.h"
 #include "net/network_channel_host.h"
+#include "qt_base/qt_logging.h"
 
 #include <QCoreApplication>
 

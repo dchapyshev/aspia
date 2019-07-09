@@ -17,7 +17,8 @@
 //
 
 #include "console/console_single_application.h"
-#include "base/qt_logging.h"
+
+#include "qt_base/qt_logging.h"
 
 namespace console {
 
@@ -29,7 +30,7 @@ const char kOpenFile[] = "open_file:";
 } // namespace
 
 SingleApplication::SingleApplication(int& argc, char* argv[])
-    : base::SingleApplication(argc, argv)
+    : qt_base::SingleApplication(argc, argv)
 {
     connect(this, &SingleApplication::messageReceived, [this](const QByteArray& message)
     {

@@ -17,8 +17,9 @@
 //
 
 #include "updater/update_checker_impl.h"
-#include "base/qt_logging.h"
+
 #include "build/version.h"
+#include "qt_base/qt_logging.h"
 
 #include <QCoreApplication>
 #include <QEvent>

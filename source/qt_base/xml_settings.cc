@@ -1,6 +1,6 @@
 ﻿//
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,12 +16,13 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/xml_settings.h"
+#include "qt_base/xml_settings.h"
+
 #include "base/base64.h"
 
 #include <QtXml>
 
-namespace base {
+namespace qt_base {
 
 namespace {
 
@@ -97,7 +98,7 @@ QString variantToString(const QVariant& value)
             break;
 
         case QMetaType::QByteArray:
-            result = Base64::encodeByteArray(value.toByteArray());
+            result = base::Base64::encodeByteArray(value.toByteArray());
             break;
 
         case QMetaType::QRect:
@@ -133,7 +134,7 @@ QString variantToString(const QVariant& value)
                 stream << value;
             }
 
-            result = Base64::encodeByteArray(buffer);
+            result = base::Base64::encodeByteArray(buffer);
         }
         break;
     }
@@ -145,11 +146,11 @@ QVariant stringToVariant(const QString& value, const QString& type)
 {
     if (type == QLatin1String("ByteArray"))
     {
-        return QVariant(Base64::decodeByteArray(value.toLatin1()));
+        return QVariant(base::Base64::decodeByteArray(value.toLatin1()));
     }
     else if (type == QLatin1String("Variant"))
     {
-        QByteArray buffer = Base64::decodeByteArray(value.toLatin1());
+        QByteArray buffer = base::Base64::decodeByteArray(value.toLatin1());
 
         QDataStream stream(&buffer, QIODevice::ReadOnly);
         stream.setVersion(QDataStream::Qt_5_12);
@@ -317,4 +318,4 @@ bool XmlSettings::writeFunc(QIODevice& device, const QSettings::SettingsMap& map
     return !xml.hasError();
 }
 
-} // namespace base
+} // namespace qt_base

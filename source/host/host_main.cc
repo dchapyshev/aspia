@@ -17,8 +17,8 @@
 //
 
 #include "host/host_main.h"
+
 #include "base/base_paths.h"
-#include "base/qt_logging.h"
 #include "base/win/scoped_thread_desktop.h"
 #include "base/win/process_util.h"
 #include "build/version.h"
@@ -26,6 +26,7 @@
 #include "host/ui/host_main_window.h"
 #include "host/host_settings.h"
 #include "host/host_single_application.h"
+#include "qt_base/qt_logging.h"
 #include "updater/update_dialog.h"
 
 #include <QAbstractEventDispatcher>
@@ -287,7 +288,7 @@ int hostMain(int argc, char* argv[])
     settings.log_dir = loggingDir();
 
     base::initLogging(settings);
-    base::initQtLogging();
+    qt_base::initQtLogging();
 
     crypto::ScopedCryptoInitializer crypto_initializer;
     CHECK(crypto_initializer.isSucceeded());

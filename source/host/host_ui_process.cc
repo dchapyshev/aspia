@@ -17,13 +17,14 @@
 //
 
 #include "host/host_ui_process.h"
-#include "base/qt_logging.h"
+
 #include "common/message_serialization.h"
 #include "crypto/password_generator.h"
 #include "host/win/host_process.h"
 #include "ipc/ipc_channel.h"
 #include "net/adapter_enumerator.h"
 #include "proto/host.pb.h"
+#include "qt_base/qt_logging.h"
 
 #include <QCoreApplication>
 

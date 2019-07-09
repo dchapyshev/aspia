@@ -19,11 +19,11 @@
 #include "host/win/host_session_main.h"
 
 #include "base/base_paths.h"
-#include "base/qt_logging.h"
 #include "build/version.h"
 #include "crypto/scoped_crypto_initializer.h"
 #include "host/host_session.h"
 #include "host/win/host_starter_service.h"
+#include "qt_base/qt_logging.h"
 
 #include <QGuiApplication>
 #include <QCommandLineParser>
@@ -114,7 +114,7 @@ int hostSessionMain(int argc, char *argv[])
     settings.log_dir = loggingDir();
 
     base::initLogging(settings);
-    base::initQtLogging();
+    qt_base::initQtLogging();
 
     crypto::ScopedCryptoInitializer crypto_initializer;
     CHECK(crypto_initializer.isSucceeded());

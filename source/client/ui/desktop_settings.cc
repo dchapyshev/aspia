@@ -17,12 +17,13 @@
 //
 
 #include "client/ui/desktop_settings.h"
-#include "base/xml_settings.h"
+
+#include "qt_base/xml_settings.h"
 
 namespace client {
 
 DesktopSettings::DesktopSettings()
-    : settings_(base::XmlSettings::format(),
+    : settings_(qt_base::XmlSettings::format(),
                 QSettings::UserScope,
                 QStringLiteral("aspia"),
                 QStringLiteral("client"))

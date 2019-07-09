@@ -19,7 +19,6 @@
 #include "host/host_server.h"
 
 #include "base/guid.h"
-#include "base/qt_logging.h"
 #include "base/strings/string_number_conversions.h"
 #include "base/win/session_info.h"
 #include "common/session_type.h"
@@ -27,6 +26,7 @@
 #include "host/win/host_session_process.h"
 #include "net/firewall_manager.h"
 #include "net/network_channel_host.h"
+#include "qt_base/qt_logging.h"
 
 #include <QCoreApplication>
 #include <QFileSystemWatcher>

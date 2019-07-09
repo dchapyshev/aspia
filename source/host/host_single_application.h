@@ -19,11 +19,11 @@
 #ifndef HOST__HOST_SINGLE_APPLICATION_H
 #define HOST__HOST_SINGLE_APPLICATION_H
 
-#include "base/single_application.h"
+#include "qt_base/single_application.h"
 
 namespace host {
 
-class SingleApplication : public base::SingleApplication
+class SingleApplication : public qt_base::SingleApplication
 {
     Q_OBJECT
 

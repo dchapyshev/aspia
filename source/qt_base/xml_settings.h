@@ -16,47 +16,27 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__SINGLE_APPLICATION_H
-#define BASE__SINGLE_APPLICATION_H
+#ifndef QT_BASE__XML_SETTINGS_H
+#define QT_BASE__XML_SETTINGS_H
 
 #include "base/macros_magic.h"
 
-#include <QApplication>
+#include <QSettings>
 
-class QLocalServer;
-class QLockFile;
+namespace qt_base {
 
-namespace base {
-
-class SingleApplication : public QApplication
+class XmlSettings
 {
-    Q_OBJECT
-
 public:
-    SingleApplication(int& argc, char* argv[]);
-    virtual ~SingleApplication();
+    static QSettings::Format format();
 
-    bool isRunning();
-
-public slots:
-    void sendMessage(const QByteArray& message);
-
-signals:
-    void messageReceived(const QByteArray& message);
-
-private slots:
-    void onNewConnection();
+    static bool readFunc(QIODevice& device, QSettings::SettingsMap& map);
+    static bool writeFunc(QIODevice& device, const QSettings::SettingsMap& map);
 
 private:
-    QString lock_file_name_;
-    QString server_name_;
-
-    QLockFile* lock_file_ = nullptr;
-    QLocalServer* server_ = nullptr;
-
-    DISALLOW_COPY_AND_ASSIGN(SingleApplication);
+    DISALLOW_COPY_AND_ASSIGN(XmlSettings);
 };
 
-} // namespace base
+} // namespace qt_base
 
-#endif // BASE__SINGLE_APPLICATION_H
+#endif // QT_BASE__XML_SETTINGS_H

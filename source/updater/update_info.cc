@@ -17,7 +17,8 @@
 //
 
 #include "updater/update_info.h"
-#include "base/qt_logging.h"
+
+#include "qt_base/qt_logging.h"
 
 #include <QtXml>
 

@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,31 +16,31 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/qt_logging.h"
+#include "qt_base/qt_logging.h"
 
 #include <QDebug>
 
-namespace base {
+namespace qt_base {
 
 namespace {
 
-LoggingSeverity messageTypeToSeverity(QtMsgType type)
+base::LoggingSeverity messageTypeToSeverity(QtMsgType type)
 {
     switch (type)
     {
         case QtCriticalMsg:
-            return LS_ERROR;
+            return base::LS_ERROR;
 
         case QtFatalMsg:
-            return LS_FATAL;
+            return base::LS_FATAL;
 
         case QtInfoMsg:
-            return LS_INFO;
+            return base::LS_INFO;
 
         case QtDebugMsg:
         case QtWarningMsg:
         default:
-            return LS_WARNING;
+            return base::LS_WARNING;
     }
 }
 
@@ -52,7 +52,7 @@ void messageHandler(QtMsgType type,
     if (!filename)
         filename = "<empty>";
 
-    LogMessage log_message(filename, context.line, messageTypeToSeverity(type));
+    base::LogMessage log_message(filename, context.line, messageTypeToSeverity(type));
     log_message.stream() << msg;
 }
 
@@ -63,7 +63,7 @@ void initQtLogging()
     qInstallMessageHandler(messageHandler);
 }
 
-} // namespace base
+} // namespace qt_base
 
 std::ostream& operator<<(std::ostream& out, const QByteArray& qbytearray)
 {

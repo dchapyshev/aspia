@@ -99,6 +99,7 @@ target_link_libraries(aspia_console
     aspia_desktop
     aspia_net
     aspia_proto
+    aspia_qt_base
     aspia_updater
     ${THIRD_PARTY_LIBS})
 

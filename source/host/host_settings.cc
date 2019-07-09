@@ -17,11 +17,12 @@
 //
 
 #include "host/host_settings.h"
+
 #include "base/logging.h"
-#include "base/xml_settings.h"
 #include "build/build_config.h"
 #include "crypto/random.h"
 #include "net/srp_user.h"
+#include "qt_base/xml_settings.h"
 
 #include <QFile>
 #include <QLocale>
@@ -30,11 +31,11 @@
 namespace host {
 
 Settings::Settings()
-    : system_settings_(base::XmlSettings::format(),
+    : system_settings_(qt_base::XmlSettings::format(),
                        QSettings::SystemScope,
                        QLatin1String("aspia"),
                        QLatin1String("host")),
-      user_settings_(base::XmlSettings::format(),
+      user_settings_(qt_base::XmlSettings::format(),
                      QSettings::UserScope,
                      QLatin1String("aspia"),
                      QLatin1String("host"))
@@ -224,7 +225,7 @@ bool Settings::copySettings(
 
     QSettings::SettingsMap settings_map;
 
-    if (!base::XmlSettings::readFunc(source_file, settings_map))
+    if (!qt_base::XmlSettings::readFunc(source_file, settings_map))
     {
         if (!silent)
         {
@@ -238,7 +239,7 @@ bool Settings::copySettings(
         return false;
     }
 
-    if (!base::XmlSettings::writeFunc(target_file, settings_map))
+    if (!qt_base::XmlSettings::writeFunc(target_file, settings_map))
     {
         if (!silent)
         {

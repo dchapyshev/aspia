@@ -17,10 +17,11 @@
 //
 
 #include "host/win/host_service_main.h"
+
 #include "base/base_paths.h"
-#include "base/qt_logging.h"
 #include "crypto/scoped_crypto_initializer.h"
 #include "host/win/host_service.h"
+#include "qt_base/qt_logging.h"
 
 namespace host {
 
@@ -46,7 +47,7 @@ int hostServiceMain(int argc, char *argv[])
     settings.log_dir = loggingDir();
 
     base::initLogging(settings);
-    base::initQtLogging();
+    qt_base::initQtLogging();
 
     crypto::ScopedCryptoInitializer crypto_initializer;
     CHECK(crypto_initializer.isSucceeded());

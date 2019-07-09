@@ -16,9 +16,10 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/single_application.h"
-#include "base/qt_logging.h"
+#include "qt_base/single_application.h"
+
 #include "build/build_config.h"
+#include "qt_base/qt_logging.h"
 
 #if defined(OS_WIN)
 #include "base/win/scoped_object.h"
@@ -37,7 +38,7 @@
 #include <psapi.h>
 #endif // defined(OS_WIN)
 
-namespace base {
+namespace qt_base {
 
 namespace {
 
@@ -64,7 +65,7 @@ bool isSameApplication(const QLocalSocket* socket)
         return false;
     }
 
-    win::ScopedHandle other_process(
+    base::win::ScopedHandle other_process(
         OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, FALSE, process_id));
     if (!other_process.isValid())
     {
@@ -277,4 +278,4 @@ void SingleApplication::onNewConnection()
     emit messageReceived(message);
 }
 
-} // namespace base
+} // namespace qt_base
