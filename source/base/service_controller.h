@@ -41,6 +41,7 @@ public:
                                      const QString& file_path);
     static bool remove(const QString& name);
     static bool isInstalled(const QString& name);
+    static bool isRunning(const QString& name);
 
     void close();
 

@@ -192,6 +192,36 @@ bool ServiceController::isInstalled(const QString& name)
     return true;
 }
 
+// static
+bool ServiceController::isRunning(const QString& name)
+{
+    win::ScopedScHandle sc_manager(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_CONNECT));
+    if (!sc_manager.isValid())
+    {
+        PLOG(LS_WARNING) << "OpenSCManagerW failed";
+        return false;
+    }
+
+    win::ScopedScHandle service(OpenServiceW(sc_manager,
+                                             qUtf16Printable(name),
+                                             SERVICE_QUERY_STATUS));
+    if (!service.isValid())
+    {
+        PLOG(LS_WARNING) << "OpenServiceW failed";
+        return false;
+    }
+
+    SERVICE_STATUS status;
+
+    if (!QueryServiceStatus(service, &status))
+    {
+        PLOG(LS_WARNING) << "QueryServiceStatus failed";
+        return false;
+    }
+
+    return status.dwCurrentState != SERVICE_STOPPED;
+}
+
 void ServiceController::close()
 {
     service_.reset();
