@@ -24,10 +24,6 @@
 #include "build/build_config.h"
 #include "host/win/host_process.h"
 
-#if defined(USE_PCG_GENERATOR)
-#include <pcg_random.hpp>
-#endif // defined(USE_PCG_GENERATOR)
-
 #include <random>
 
 namespace host {
@@ -42,13 +38,8 @@ QString createUniqueId(const QString& session_id)
     static std::atomic_uint32_t last_service_id = 0;
     uint32_t service_id = last_service_id++;
 
-#if defined(USE_PCG_GENERATOR)
-    pcg_extras::seed_seq_from<std::random_device> random_device;
-    pcg32 engine(random_device);
-#else // defined(USE_PCG_GENERATOR)
     std::random_device random_device;
     std::mt19937 engine(random_device());
-#endif
 
     std::uniform_int_distribution<> uniform_distance(std::numeric_limits<uint32_t>::min(),
                                                      std::numeric_limits<uint32_t>::max());

@@ -19,7 +19,6 @@
 cmake_minimum_required(VERSION 3.14.2)
 
 option(BUILD_UNIT_TESTS "Build unit tests" ON)
-option(USE_PCG_GENERATOR "Using PCG random generator" ON)
 option(USE_TBB "Using Intel TBB" ON)
 
 set(ASPIA_THIRD_PARTY_DIR "$ENV{ASPIA_THIRD_PARTY_DIR}")
@@ -65,10 +64,6 @@ add_definitions(-D_UNICODE
 add_definitions(-D_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS
                 -D_CRT_SECURE_NO_WARNINGS)
 
-if (USE_PCG_GENERATOR)
-    add_definitions(-DUSE_PCG_GENERATOR)
-endif()
-
 if (USE_TBB)
     add_definitions(-DUSE_TBB)
 endif()
@@ -80,7 +75,6 @@ include_directories(
     ${ASPIA_THIRD_PARTY_DIR}/libvpx/include
     ${ASPIA_THIRD_PARTY_DIR}/libyuv/include
     ${ASPIA_THIRD_PARTY_DIR}/openssl/include
-    ${ASPIA_THIRD_PARTY_DIR}/pcg-cpp/include
     ${ASPIA_THIRD_PARTY_DIR}/protobuf/include
     ${ASPIA_THIRD_PARTY_DIR}/tbb/include
     ${ASPIA_THIRD_PARTY_DIR}/zstd/include)
