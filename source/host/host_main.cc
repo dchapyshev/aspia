@@ -24,8 +24,8 @@
 #include "build/version.h"
 #include "crypto/scoped_crypto_initializer.h"
 #include "host/ui/host_main_window.h"
+#include "host/host_application.h"
 #include "host/host_settings.h"
-#include "host/host_single_application.h"
 #include "qt_base/qt_logging.h"
 #include "updater/update_dialog.h"
 
@@ -162,7 +162,7 @@ int runApplication(int& argc, char* argv[])
             return 1;
     }
 
-    host::SingleApplication application(argc, argv);
+    host::Application application(argc, argv);
     application.setOrganizationName(QStringLiteral("Aspia"));
     application.setApplicationName(QStringLiteral("Host"));
     application.setApplicationVersion(QStringLiteral(ASPIA_VERSION_STRING));
@@ -251,7 +251,7 @@ int runApplication(int& argc, char* argv[])
 
             host::MainWindow window(host_settings, locale_loader);
 
-            QObject::connect(&application, &host::SingleApplication::activated,
+            QObject::connect(&application, &host::Application::activated,
                              &window, &host::MainWindow::activateHost);
 
             if (is_hidden)

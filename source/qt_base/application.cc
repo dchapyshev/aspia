@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "qt_base/single_application.h"
+#include "qt_base/application.h"
 
 #include "build/build_config.h"
 #include "qt_base/qt_logging.h"
@@ -97,7 +97,7 @@ bool isSameApplication(const QLocalSocket* socket)
 
 } // namespace
 
-SingleApplication::SingleApplication(int& argc, char* argv[])
+Application::Application(int& argc, char* argv[])
     : QApplication(argc, argv)
 {
 #if defined(OS_WIN)
@@ -124,7 +124,7 @@ SingleApplication::SingleApplication(int& argc, char* argv[])
     lock_file_ = new QLockFile(lock_file_name_);
 }
 
-SingleApplication::~SingleApplication()
+Application::~Application()
 {
     bool is_locked = lock_file_->isLocked();
 
@@ -137,7 +137,7 @@ SingleApplication::~SingleApplication()
         QFile::remove(lock_file_name_);
 }
 
-bool SingleApplication::isRunning()
+bool Application::isRunning()
 {
     if (!lock_file_->tryLock())
         return true;
@@ -154,13 +154,13 @@ bool SingleApplication::isRunning()
     }
     else
     {
-        connect(server_, &QLocalServer::newConnection, this, &SingleApplication::onNewConnection);
+        connect(server_, &QLocalServer::newConnection, this, &Application::onNewConnection);
     }
 
     return false;
 }
 
-void SingleApplication::sendMessage(const QByteArray& message)
+void Application::sendMessage(const QByteArray& message)
 {
     if (server_)
     {
@@ -211,7 +211,7 @@ void SingleApplication::sendMessage(const QByteArray& message)
     }
 }
 
-void SingleApplication::onNewConnection()
+void Application::onNewConnection()
 {
     DCHECK(server_);
 

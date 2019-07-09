@@ -16,31 +16,33 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST__HOST_SINGLE_APPLICATION_H
-#define HOST__HOST_SINGLE_APPLICATION_H
+#ifndef CONSOLE__CONSOLE_APPLICATION_H
+#define CONSOLE__CONSOLE_APPLICATION_H
 
-#include "qt_base/single_application.h"
+#include "qt_base/application.h"
 
-namespace host {
+namespace console {
 
-class SingleApplication : public qt_base::SingleApplication
+class Application : public qt_base::Application
 {
     Q_OBJECT
 
 public:
-    SingleApplication(int& argc, char* argv[]);
-    virtual ~SingleApplication() = default;
+    Application(int& argc, char* argv[]);
+    virtual ~Application() = default;
 
 public slots:
-    void activate();
+    void activateWindow();
+    void openFile(const QString& file_path);
 
 signals:
-    void activated();
+    void windowActivated();
+    void fileOpened(const QString& file_path);
 
 private:
-    DISALLOW_COPY_AND_ASSIGN(SingleApplication);
+    DISALLOW_COPY_AND_ASSIGN(Application);
 };
 
-} // namespace host
+} // namespace console
 
-#endif // HOST__HOST_SINGLE_APPLICATION_H
+#endif // CONSOLE__CONSOLE_APPLICATION_H

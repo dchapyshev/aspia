@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef QT_BASE__SINGLE_APPLICATION_H
-#define QT_BASE__SINGLE_APPLICATION_H
+#ifndef QT_BASE__APPLICATION_H
+#define QT_BASE__APPLICATION_H
 
 #include "base/macros_magic.h"
 
@@ -28,13 +28,13 @@ class QLockFile;
 
 namespace qt_base {
 
-class SingleApplication : public QApplication
+class Application : public QApplication
 {
     Q_OBJECT
 
 public:
-    SingleApplication(int& argc, char* argv[]);
-    virtual ~SingleApplication();
+    Application(int& argc, char* argv[]);
+    virtual ~Application();
 
     bool isRunning();
 
@@ -54,9 +54,9 @@ private:
     QLockFile* lock_file_ = nullptr;
     QLocalServer* server_ = nullptr;
 
-    DISALLOW_COPY_AND_ASSIGN(SingleApplication);
+    DISALLOW_COPY_AND_ASSIGN(Application);
 };
 
 } // namespace qt_base
 
-#endif // QT_BASE__SINGLE_APPLICATION_H
+#endif // QT_BASE__APPLICATION_H

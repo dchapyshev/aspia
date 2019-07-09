@@ -57,14 +57,14 @@ list(APPEND SOURCE_CONSOLE
     computer_tree.cc
     computer_tree.h
     console.rc
+    console_application.cc
+    console_application.h
     console_main.cc
     console_main_window.cc
     console_main_window.h
     console_main_window.ui
     console_settings.cc
     console_settings.h
-    console_single_application.cc
-    console_single_application.h
     console_statusbar.cc
     console_statusbar.h
     console_tab.cc

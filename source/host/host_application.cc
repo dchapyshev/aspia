@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/host_single_application.h"
+#include "host/host_application.h"
 
 #include "qt_base/qt_logging.h"
 
@@ -28,10 +28,10 @@ const char kActivateMessage[] = "activate";
 
 } // namespace
 
-SingleApplication::SingleApplication(int& argc, char* argv[])
-    : qt_base::SingleApplication(argc, argv)
+Application::Application(int& argc, char* argv[])
+    : qt_base::Application(argc, argv)
 {
-    connect(this, &SingleApplication::messageReceived, [this](const QByteArray& message)
+    connect(this, &Application::messageReceived, [this](const QByteArray& message)
     {
         if (message == kActivateMessage)
         {
@@ -44,7 +44,7 @@ SingleApplication::SingleApplication(int& argc, char* argv[])
     });
 }
 
-void SingleApplication::activate()
+void Application::activate()
 {
     sendMessage(kActivateMessage);
 }

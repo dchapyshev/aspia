@@ -20,8 +20,8 @@
 
 #include "build/version.h"
 #include "client/ui/client_window.h"
+#include "console/console_application.h"
 #include "console/console_main_window.h"
-#include "console/console_single_application.h"
 #include "crypto/scoped_crypto_initializer.h"
 #include "qt_base/qt_logging.h"
 
@@ -84,7 +84,7 @@ void tbbStatusToLog()
 
 int runApplication(int argc, char *argv[])
 {
-    console::SingleApplication application(argc, argv);
+    console::Application application(argc, argv);
 
     console::Settings console_settings;
     QString current_locale = console_settings.locale();
@@ -202,10 +202,10 @@ int runApplication(int argc, char *argv[])
             console_window.reset(
                 new console::MainWindow(console_settings, locale_loader, file_path));
 
-            QObject::connect(&application, &console::SingleApplication::windowActivated,
+            QObject::connect(&application, &console::Application::windowActivated,
                              console_window.get(), &console::MainWindow::showConsole);
 
-            QObject::connect(&application, &console::SingleApplication::fileOpened,
+            QObject::connect(&application, &console::Application::fileOpened,
                              console_window.get(), &console::MainWindow::openAddressBook);
 
             console_window->show();
