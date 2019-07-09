@@ -57,6 +57,30 @@ std::filesystem::path loggingDir()
     return path;
 }
 
+void tbbStatusToLog()
+{
+#if defined(USE_TBB)
+    char** func_replacement_log;
+    int func_replacement_status = TBB_malloc_replacement_log(&func_replacement_log);
+
+    if (func_replacement_status != 0)
+    {
+        LOG(LS_WARNING) << "tbbmalloc_proxy cannot replace memory allocation routines";
+
+        for (char** log_string = func_replacement_log; *log_string != 0; ++log_string)
+        {
+            LOG(LS_WARNING) << *log_string;
+        }
+    }
+    else
+    {
+        LOG(LS_INFO) << "tbbmalloc_proxy successfully initialized";
+    }
+#else
+    DLOG(LS_INFO) << "tbbmalloc_proxy is disabled";
+#endif
+}
+
 int runApplication(int argc, char *argv[])
 {
     console::SingleApplication application(argc, argv);
@@ -212,6 +236,8 @@ int main(int argc, char *argv[])
 
     crypto::ScopedCryptoInitializer crypto_initializer;
     CHECK(crypto_initializer.isSucceeded());
+
+    tbbStatusToLog();
 
     int result = runApplication(argc, argv);
 
