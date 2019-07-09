@@ -26,6 +26,10 @@
 class QLocalServer;
 class QLockFile;
 
+namespace crypto {
+class ScopedCryptoInitializer;
+} // namespace crypto
+
 namespace qt_base {
 
 class Application : public QApplication
@@ -53,6 +57,8 @@ private:
 
     QLockFile* lock_file_ = nullptr;
     QLocalServer* server_ = nullptr;
+
+    std::unique_ptr<crypto::ScopedCryptoInitializer> crypto_initializer_;
 
     DISALLOW_COPY_AND_ASSIGN(Application);
 };

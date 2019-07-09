@@ -4,32 +4,32 @@
 <context>
     <name>Host</name>
     <message>
-        <location filename="../host_main.cc" line="176"/>
+        <location filename="../host_main.cc" line="175"/>
         <source>The path to the file to import.</source>
         <translation>Pad naar het bestand om te importeren.</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="180"/>
+        <location filename="../host_main.cc" line="179"/>
         <source>The path to the file to export.</source>
         <translation>Pad naar het bestand om te exporteren.</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="184"/>
+        <location filename="../host_main.cc" line="183"/>
         <source>Enables silent mode when exporting and importing.</source>
         <translation>Schakelt stille modus in bij het exporteren en importeren.</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="187"/>
+        <location filename="../host_main.cc" line="186"/>
         <source>Run application update.</source>
         <translation>Applicatie update uitvoeren.</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="208"/>
+        <location filename="../host_main.cc" line="207"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="209"/>
+        <location filename="../host_main.cc" line="208"/>
         <source>Export and import parameters can not be specified together.</source>
         <translation>Export en import argumenten kunnen niet samen gespecificeerd worden.</translation>
     </message>
