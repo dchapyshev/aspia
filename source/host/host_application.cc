@@ -18,6 +18,7 @@
 
 #include "host/host_application.h"
 
+#include "build/version.h"
 #include "qt_base/qt_logging.h"
 
 namespace host {
@@ -31,6 +32,11 @@ const char kActivateMessage[] = "activate";
 Application::Application(int& argc, char* argv[])
     : qt_base::Application(argc, argv)
 {
+    setOrganizationName(QStringLiteral("Aspia"));
+    setApplicationName(QStringLiteral("Host"));
+    setApplicationVersion(QStringLiteral(ASPIA_VERSION_STRING));
+    setAttribute(Qt::AA_DisableWindowContextHelpButton, true);
+
     connect(this, &Application::messageReceived, [this](const QByteArray& message)
     {
         if (message == kActivateMessage)

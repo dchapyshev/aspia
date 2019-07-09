@@ -18,7 +18,6 @@
 
 #include "base/base_paths.h"
 
-#include "build/version.h"
 #include "client/ui/client_window.h"
 #include "console/console_application.h"
 #include "console/console_main_window.h"
@@ -94,11 +93,6 @@ int runApplication(int argc, char *argv[])
         console_settings.setLocale(QStringLiteral(DEFAULT_LOCALE));
 
     locale_loader.installTranslators(current_locale);
-
-    application.setOrganizationName(QStringLiteral("Aspia"));
-    application.setApplicationName(QStringLiteral("Console"));
-    application.setApplicationVersion(QStringLiteral(ASPIA_VERSION_STRING));
-    application.setAttribute(Qt::AA_DisableWindowContextHelpButton, true);
 
     QCommandLineOption address_option(
         QStringLiteral("address"),

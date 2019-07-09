@@ -18,6 +18,7 @@
 
 #include "console/console_application.h"
 
+#include "build/version.h"
 #include "qt_base/qt_logging.h"
 
 namespace console {
@@ -32,6 +33,11 @@ const char kOpenFile[] = "open_file:";
 Application::Application(int& argc, char* argv[])
     : qt_base::Application(argc, argv)
 {
+    setOrganizationName(QStringLiteral("Aspia"));
+    setApplicationName(QStringLiteral("Console"));
+    setApplicationVersion(QStringLiteral(ASPIA_VERSION_STRING));
+    setAttribute(Qt::AA_DisableWindowContextHelpButton, true);
+
     connect(this, &Application::messageReceived, [this](const QByteArray& message)
     {
         if (message.startsWith(kActivateWindow))

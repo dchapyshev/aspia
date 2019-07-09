@@ -21,7 +21,6 @@
 #include "base/base_paths.h"
 #include "base/win/scoped_thread_desktop.h"
 #include "base/win/process_util.h"
-#include "build/version.h"
 #include "crypto/scoped_crypto_initializer.h"
 #include "host/ui/host_main_window.h"
 #include "host/host_application.h"
@@ -163,10 +162,6 @@ int runApplication(int& argc, char* argv[])
     }
 
     host::Application application(argc, argv);
-    application.setOrganizationName(QStringLiteral("Aspia"));
-    application.setApplicationName(QStringLiteral("Host"));
-    application.setApplicationVersion(QStringLiteral(ASPIA_VERSION_STRING));
-    application.setAttribute(Qt::AA_DisableWindowContextHelpButton, true);
 
     host::Settings host_settings;
     common::LocaleLoader locale_loader;
