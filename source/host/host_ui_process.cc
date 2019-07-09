@@ -17,9 +17,9 @@
 //
 
 #include "host/host_ui_process.h"
-#include "base/password_generator.h"
 #include "base/qt_logging.h"
 #include "common/message_serialization.h"
+#include "crypto/password_generator.h"
 #include "host/win/host_process.h"
 #include "ipc/ipc_channel.h"
 #include "net/adapter_enumerator.h"
@@ -171,11 +171,11 @@ void UiProcess::sendCredentials(uint32_t flags)
 
     if ((flags & proto::host::CredentialsRequest::NEW_PASSWORD) || session_password_.empty())
     {
-        base::PasswordGenerator generator;
+        crypto::PasswordGenerator generator;
 
         // TODO: Get password parameters from settings.
-        generator.setCharacters(base::PasswordGenerator::UPPER_CASE |
-                                base::PasswordGenerator::DIGITS);
+        generator.setCharacters(crypto::PasswordGenerator::UPPER_CASE |
+                                crypto::PasswordGenerator::DIGITS);
         generator.setLength(5);
 
         session_password_ = generator.result();

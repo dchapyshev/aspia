@@ -16,13 +16,13 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/password_generator.h"
+#include "crypto/password_generator.h"
 
 #include <algorithm>
 #include <random>
 #include <vector>
 
-namespace base {
+namespace crypto {
 
 void PasswordGenerator::setCharacters(uint32_t value)
 {
@@ -86,4 +86,4 @@ std::string PasswordGenerator::result() const
     return result;
 }
 
-} // namespace base
+} // namespace crypto

@@ -33,6 +33,8 @@ list(APPEND SOURCE_CRYPTO
     large_number_increment.h
     openssl_util.cc
     openssl_util.h
+    password_generator.cc
+    password_generator.h
     password_hash.cc
     password_hash.h
     random.cc
@@ -52,6 +54,7 @@ list(APPEND SOURCE_CRYPTO_UNIT_TESTS
     data_cryptor_unittest.cc
     generic_hash_unittest.cc
     large_number_increment_unittest.cc
+    password_generator_unittest.cc
     password_hash_unittest.cc
     srp_math_unittest.cc)
 

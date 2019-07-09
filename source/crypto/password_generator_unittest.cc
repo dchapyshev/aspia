@@ -16,13 +16,13 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/password_generator.h"
+#include "crypto/password_generator.h"
 
 #include <gtest/gtest.h>
 
 #include <algorithm>
 
-namespace base {
+namespace crypto {
 
 namespace {
 
@@ -151,4 +151,4 @@ TEST(password_generator_test, DISABLED_benchmark)
     }
 }
 
-} // namespace base
+} // namespace crypto
