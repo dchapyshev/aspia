@@ -30,17 +30,17 @@ function(add_tbb _target _tbb_root_dir)
 
     add_custom_command(TARGET ${_target} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        ${_tbb_bin_dir}/$<$<CONFIG:Debug>:"${_tbb_debug}">$<$<CONFIG:Release>:"${_tbb_release}">
+        ${_tbb_bin_dir}/$<$<CONFIG:Debug>:"${_tbb_debug}">$<$<CONFIG:Release>:"${_tbb_release}">$<$<CONFIG:RelWithDebInfo>:"${_tbb_release}">$<$<CONFIG:MinSizeRel>:"${_tbb_release}">
         "${PROJECT_BINARY_DIR}/$<CONFIGURATION>")
 
     add_custom_command(TARGET ${_target} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        ${_tbb_bin_dir}/$<$<CONFIG:Debug>:"${_tbb_malloc_debug}">$<$<CONFIG:Release>:"${_tbb_malloc_release}">
+        ${_tbb_bin_dir}/$<$<CONFIG:Debug>:"${_tbb_malloc_debug}">$<$<CONFIG:Release>:"${_tbb_malloc_release}">$<$<CONFIG:RelWithDebInfo>:"${_tbb_malloc_release}">$<$<CONFIG:MinSizeRel>:"${_tbb_malloc_release}">
         "${PROJECT_BINARY_DIR}/$<CONFIGURATION>")
 
     add_custom_command(TARGET ${_target} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        ${_tbb_bin_dir}/$<$<CONFIG:Debug>:"${_tbb_malloc_proxy_debug}">$<$<CONFIG:Release>:"${_tbb_malloc_proxy_release}">
+        ${_tbb_bin_dir}/$<$<CONFIG:Debug>:"${_tbb_malloc_proxy_debug}">$<$<CONFIG:Release>:"${_tbb_malloc_proxy_release}">$<$<CONFIG:RelWithDebInfo>:"${_tbb_malloc_proxy_release}">$<$<CONFIG:MinSizeRel>:"${_tbb_malloc_proxy_release}">
         "${PROJECT_BINARY_DIR}/$<CONFIGURATION>")
 
 endfunction()
