@@ -60,10 +60,6 @@ add_definitions(-D_UNICODE
                 -DWIN32_LEAN_AND_MEAN
                 -DNOMINMAX)
 
-# Disable warnings.
-add_definitions(-D_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS
-                -D_CRT_SECURE_NO_WARNINGS)
-
 if (USE_TBB)
     add_definitions(-DUSE_TBB)
 endif()
