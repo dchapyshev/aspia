@@ -24,6 +24,8 @@ list(APPEND SOURCE_CRYPTO
     cryptor_aes256_gcm.h
     cryptor_chacha20_poly1305.cc
     cryptor_chacha20_poly1305.h
+    cryptor_fake.cc
+    cryptor_fake.h
     data_cryptor.h
     data_cryptor_chacha20_poly1305.cc
     data_cryptor_chacha20_poly1305.h
