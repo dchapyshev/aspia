@@ -66,7 +66,7 @@ DesktopWindow::DesktopWindow(const ConnectData& connect_data, QWidget* parent)
     scroll_area_->setWidget(desktop_);
 
     QPalette palette(scroll_area_->palette());
-    palette.setBrush(QPalette::Background, QBrush(QColor(25, 25, 25)));
+    palette.setBrush(QPalette::Window, QBrush(QColor(25, 25, 25)));
     scroll_area_->setPalette(palette);
 
     layout_ = new QHBoxLayout(this);
