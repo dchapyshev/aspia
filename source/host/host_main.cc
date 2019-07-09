@@ -151,7 +151,7 @@ int hostMain(int argc, char* argv[])
     host::Application application(argc, argv);
 
     host::Settings host_settings;
-    common::LocaleLoader locale_loader;
+    qt_base::LocaleLoader locale_loader;
 
     QString current_locale = host_settings.locale();
     if (!locale_loader.contains(current_locale))

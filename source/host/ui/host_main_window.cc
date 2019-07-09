@@ -35,7 +35,7 @@
 
 namespace host {
 
-MainWindow::MainWindow(Settings& settings, common::LocaleLoader& locale_loader, QWidget* parent)
+MainWindow::MainWindow(Settings& settings, qt_base::LocaleLoader& locale_loader, QWidget* parent)
     : QMainWindow(parent),
       settings_(settings),
       locale_loader_(locale_loader)

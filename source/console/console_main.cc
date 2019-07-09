@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
     console::Settings console_settings;
     QString current_locale = console_settings.locale();
 
-    common::LocaleLoader locale_loader;
+    qt_base::LocaleLoader locale_loader;
     if (!locale_loader.contains(current_locale))
         console_settings.setLocale(QStringLiteral(DEFAULT_LOCALE));
 

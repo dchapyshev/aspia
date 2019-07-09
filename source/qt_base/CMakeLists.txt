@@ -19,6 +19,8 @@
 list(APPEND SOURCE_QT_BASE
     application.cc
     application.h
+    locale_loader.cc
+    locale_loader.h
     qt_logging.cc
     qt_logging.h
     service.h

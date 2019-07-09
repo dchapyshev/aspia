@@ -20,8 +20,8 @@
 #define HOST__UI__HOST_MAIN_WINDOW_H
 
 #include "base/macros_magic.h"
-#include "common/locale_loader.h"
 #include "host/host_settings.h"
+#include "qt_base/locale_loader.h"
 #include "ui_host_main_window.h"
 
 #include <QMainWindow>
@@ -42,7 +42,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    MainWindow(Settings& settings, common::LocaleLoader& locale_loader, QWidget* parent = nullptr);
+    MainWindow(Settings& settings, qt_base::LocaleLoader& locale_loader, QWidget* parent = nullptr);
     ~MainWindow();
 
 public slots:
@@ -74,7 +74,7 @@ private:
     bool should_be_quit_ = false;
 
     Settings& settings_;
-    common::LocaleLoader& locale_loader_;
+    qt_base::LocaleLoader& locale_loader_;
 
     QSystemTrayIcon tray_icon_;
     QMenu tray_menu_;

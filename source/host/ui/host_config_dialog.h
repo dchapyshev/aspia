@@ -19,8 +19,8 @@
 #ifndef HOST__UI__HOST_CONFIG_DIALOG_H
 #define HOST__UI__HOST_CONFIG_DIALOG_H
 
-#include "common/locale_loader.h"
 #include "net/srp_user.h"
+#include "qt_base/locale_loader.h"
 #include "ui_host_config_dialog.h"
 
 namespace host {

@@ -56,7 +56,7 @@ private:
 } // namespace
 
 MainWindow::MainWindow(Settings& settings,
-                       common::LocaleLoader& locale_loader,
+                       qt_base::LocaleLoader& locale_loader,
                        const QString& file_path)
     : settings_(settings),
       locale_loader_(locale_loader)

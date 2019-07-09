@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef COMMON__LOCALE_LOADER_H
-#define COMMON__LOCALE_LOADER_H
+#ifndef QT_BASE__LOCALE_LOADER_H
+#define QT_BASE__LOCALE_LOADER_H
 
 #include "base/macros_magic.h"
 
@@ -26,7 +26,7 @@
 
 class QTranslator;
 
-namespace common {
+namespace qt_base {
 
 class LocaleLoader
 {
@@ -51,6 +51,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(LocaleLoader);
 };
 
-} // namespace common
+} // namespace qt_base
 
-#endif // COMMON__LOCALE_LOADER_H
+#endif // QT_BASE__LOCALE_LOADER_H
