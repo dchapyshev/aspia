@@ -18,10 +18,10 @@
 
 #include "host/win/host_starter_service.h"
 
-#include "base/service_controller.h"
 #include "base/win/process.h"
 #include "build/build_config.h"
 #include "host/win/host_process.h"
+#include "qt_base/service_controller.h"
 #include "qt_base/qt_logging.h"
 
 #include <random>
@@ -59,9 +59,9 @@ QString createName(const QString& name, const QString& unique_id)
 } // namespace
 
 StarterService::StarterService(const QString& service_id)
-    : base::Service<QCoreApplication>(createName(QLatin1String(kServiceName), service_id),
-                                      QLatin1String(kServiceDisplayName),
-                                      QString())
+    : qt_base::Service<QCoreApplication>(createName(QLatin1String(kServiceName), service_id),
+                                         QLatin1String(kServiceDisplayName),
+                                         QString())
 
 {
     // Nothing
@@ -88,7 +88,7 @@ bool StarterService::startFromService(const QString& program,
     QString command_line = base::win::Process::createCommandLine(program, service_arguments);
 
     // Install the service in the system.
-    base::ServiceController controller = base::ServiceController::install(
+    qt_base::ServiceController controller = qt_base::ServiceController::install(
         unique_name, QLatin1String(kServiceDisplayName), command_line);
     if (!controller.isValid())
         return false;
@@ -100,7 +100,7 @@ bool StarterService::startFromService(const QString& program,
         controller.close();
 
         // Remove service.
-        base::ServiceController::remove(unique_name);
+        qt_base::ServiceController::remove(unique_name);
         return false;
     }
 
@@ -157,7 +157,7 @@ void StarterService::start()
     }
 
     // Remove service.
-    if (!base::ServiceController::remove(serviceName()))
+    if (!qt_base::ServiceController::remove(serviceName()))
     {
         LOG(LS_ERROR) << "Could not remove service";
     }

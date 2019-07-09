@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,12 +16,13 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/service_controller.h"
+#include "qt_base/service_controller.h"
+
 #include "base/logging.h"
 
 #include <memory>
 
-namespace base {
+namespace qt_base {
 
 ServiceController::ServiceController() = default;
 
@@ -51,16 +52,16 @@ ServiceController::~ServiceController() = default;
 // static
 ServiceController ServiceController::open(const QString& name)
 {
-    win::ScopedScHandle sc_manager(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_ALL_ACCESS));
+    base::win::ScopedScHandle sc_manager(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_ALL_ACCESS));
     if (!sc_manager.isValid())
     {
         PLOG(LS_WARNING) << "OpenSCManagerW failed";
         return ServiceController();
     }
 
-    win::ScopedScHandle service(OpenServiceW(sc_manager,
-                                             qUtf16Printable(name),
-                                             SERVICE_ALL_ACCESS));
+    base::win::ScopedScHandle service(OpenServiceW(sc_manager,
+                                                   qUtf16Printable(name),
+                                                   SERVICE_ALL_ACCESS));
     if (!service.isValid())
     {
         PLOG(LS_WARNING) << "OpenServiceW failed";
@@ -75,7 +76,7 @@ ServiceController ServiceController::install(const QString& name,
                                              const QString& display_name,
                                              const QString& file_path)
 {
-    win::ScopedScHandle sc_manager(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_ALL_ACCESS));
+    base::win::ScopedScHandle sc_manager(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_ALL_ACCESS));
     if (!sc_manager.isValid())
     {
         PLOG(LS_WARNING) << "OpenSCManagerW failed";
@@ -85,19 +86,19 @@ ServiceController ServiceController::install(const QString& name,
     QString normalized_file_path = file_path;
     normalized_file_path.replace(QLatin1Char('/'), QLatin1Char('\\'));
 
-    win::ScopedScHandle service(CreateServiceW(sc_manager,
-                                               qUtf16Printable(name),
-                                               qUtf16Printable(display_name),
-                                               SERVICE_ALL_ACCESS,
-                                               SERVICE_WIN32_OWN_PROCESS,
-                                               SERVICE_AUTO_START,
-                                               SERVICE_ERROR_NORMAL,
-                                               qUtf16Printable(normalized_file_path),
-                                               nullptr,
-                                               nullptr,
-                                               nullptr,
-                                               nullptr,
-                                               nullptr));
+    base::win::ScopedScHandle service(CreateServiceW(sc_manager,
+                                                     qUtf16Printable(name),
+                                                     qUtf16Printable(display_name),
+                                                     SERVICE_ALL_ACCESS,
+                                                     SERVICE_WIN32_OWN_PROCESS,
+                                                     SERVICE_AUTO_START,
+                                                     SERVICE_ERROR_NORMAL,
+                                                     qUtf16Printable(normalized_file_path),
+                                                     nullptr,
+                                                     nullptr,
+                                                     nullptr,
+                                                     nullptr,
+                                                     nullptr));
     if (!service.isValid())
     {
         PLOG(LS_WARNING) << "CreateServiceW failed";
@@ -127,16 +128,16 @@ ServiceController ServiceController::install(const QString& name,
 // static
 bool ServiceController::remove(const QString& name)
 {
-    win::ScopedScHandle sc_manager(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_ALL_ACCESS));
+    base::win::ScopedScHandle sc_manager(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_ALL_ACCESS));
     if (!sc_manager.isValid())
     {
         PLOG(LS_WARNING) << "OpenSCManagerW failed";
         return false;
     }
 
-    win::ScopedScHandle service(OpenServiceW(sc_manager,
-                                             qUtf16Printable(name),
-                                             SERVICE_ALL_ACCESS));
+    base::win::ScopedScHandle service(OpenServiceW(sc_manager,
+                                                   qUtf16Printable(name),
+                                                   SERVICE_ALL_ACCESS));
     if (!service.isValid())
     {
         PLOG(LS_WARNING) << "OpenServiceW failed";
@@ -169,16 +170,16 @@ bool ServiceController::remove(const QString& name)
 // static
 bool ServiceController::isInstalled(const QString& name)
 {
-    win::ScopedScHandle sc_manager(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_CONNECT));
+    base::win::ScopedScHandle sc_manager(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_CONNECT));
     if (!sc_manager.isValid())
     {
         PLOG(LS_WARNING) << "OpenSCManagerW failed";
         return false;
     }
 
-    win::ScopedScHandle service(OpenServiceW(sc_manager,
-                                             qUtf16Printable(name),
-                                             SERVICE_QUERY_CONFIG));
+    base::win::ScopedScHandle service(OpenServiceW(sc_manager,
+                                                   qUtf16Printable(name),
+                                                   SERVICE_QUERY_CONFIG));
     if (!service.isValid())
     {
         if (GetLastError() != ERROR_SERVICE_DOES_NOT_EXIST)
@@ -195,16 +196,16 @@ bool ServiceController::isInstalled(const QString& name)
 // static
 bool ServiceController::isRunning(const QString& name)
 {
-    win::ScopedScHandle sc_manager(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_CONNECT));
+    base::win::ScopedScHandle sc_manager(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_CONNECT));
     if (!sc_manager.isValid())
     {
         PLOG(LS_WARNING) << "OpenSCManagerW failed";
         return false;
     }
 
-    win::ScopedScHandle service(OpenServiceW(sc_manager,
-                                             qUtf16Printable(name),
-                                             SERVICE_QUERY_STATUS));
+    base::win::ScopedScHandle service(OpenServiceW(sc_manager,
+                                                   qUtf16Printable(name),
+                                                   SERVICE_QUERY_STATUS));
     if (!service.isValid())
     {
         PLOG(LS_WARNING) << "OpenServiceW failed";
@@ -432,4 +433,4 @@ bool ServiceController::stop()
     return is_stopped;
 }
 
-} // namespace base
+} // namespace qt_base

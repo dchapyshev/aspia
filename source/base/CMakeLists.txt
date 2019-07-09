@@ -43,11 +43,6 @@ list(APPEND SOURCE_BASE
     process_handle.h
     scoped_clear_last_error.cc
     scoped_clear_last_error.h
-    service.h
-    service_controller.cc
-    service_controller.h
-    service_impl.h
-    service_impl_win.cc
     smbios.h
     smbios_parser.cc
     smbios_parser.h

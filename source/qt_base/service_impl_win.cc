@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,9 +16,10 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/service_impl.h"
+#include "qt_base/service_impl.h"
+
 #include "base/logging.h"
-#include "base/service_controller.h"
+#include "qt_base/service_controller.h"
 
 #include <QCommandLineParser>
 #include <QCoreApplication>
@@ -29,7 +30,7 @@
 
 #include <Windows.h>
 
-namespace base {
+namespace qt_base {
 
 class ServiceHandler : public QThread
 {
@@ -88,12 +89,12 @@ public:
 
     static void postStartEvent();
     static void postStopEvent();
-    static void postSessionEvent(win::SessionStatus status, win::SessionId session_id);
+    static void postSessionEvent(base::win::SessionStatus status, base::win::SessionId session_id);
 
     class SessionChangeEvent : public QEvent
     {
     public:
-        SessionChangeEvent(win::SessionStatus status, uint32_t session_id)
+        SessionChangeEvent(base::win::SessionStatus status, uint32_t session_id)
             : QEvent(QEvent::Type(kSessionEvent)),
               status_(status),
               session_id_(session_id)
@@ -101,12 +102,12 @@ public:
             // Nothing
         }
 
-        win::SessionStatus status() const { return status_; }
-        win::SessionId sessionId() const { return session_id_; }
+        base::win::SessionStatus status() const { return status_; }
+        base::win::SessionId sessionId() const { return session_id_; }
 
     private:
-        win::SessionStatus status_;
-        win::SessionId session_id_;
+        base::win::SessionStatus status_;
+        base::win::SessionId session_id_;
 
         DISALLOW_COPY_AND_ASSIGN(SessionChangeEvent);
     };
@@ -188,7 +189,7 @@ void ServiceHandler::run()
         else
         {
             LOG(LS_WARNING) << "StartServiceCtrlDispatcherW failed: "
-                            << systemErrorCodeToString(error_code);
+                            << base::systemErrorCodeToString(error_code);
             instance->startup_state = State::ERROR_OCCURRED;
         }
 
@@ -263,7 +264,7 @@ DWORD WINAPI ServiceHandler::serviceControlHandler(
 
             // Post event to application.
             ServiceEventHandler::postSessionEvent(
-                static_cast<win::SessionStatus>(event_type),
+                static_cast<base::win::SessionStatus>(event_type),
                 reinterpret_cast<WTSSESSION_NOTIFICATION*>(event_data)->dwSessionId);
 
             // Wait for the event to be processed by the application.
@@ -331,7 +332,8 @@ void ServiceEventHandler::postStopEvent()
 }
 
 // static
-void ServiceEventHandler::postSessionEvent(win::SessionStatus status, win::SessionId session_id)
+void ServiceEventHandler::postSessionEvent(base::win::SessionStatus status,
+                                           base::win::SessionId session_id)
 {
     if (instance)
         QCoreApplication::postEvent(instance, new SessionChangeEvent(status, session_id));
@@ -500,4 +502,4 @@ int ServiceImpl::exec(int argc, char* argv[])
     return ret;
 }
 
-} // namespace base
+} // namespace qt_base

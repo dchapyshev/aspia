@@ -19,7 +19,7 @@
 #ifndef HOST__HOST_SERVICE_H
 #define HOST__HOST_SERVICE_H
 
-#include "base/service.h"
+#include "qt_base/service.h"
 
 #include <QCoreApplication>
 
@@ -31,7 +31,7 @@ namespace host {
 
 class HostServer;
 
-class HostService : public base::Service<QCoreApplication>
+class HostService : public qt_base::Service<QCoreApplication>
 {
 public:
     HostService();

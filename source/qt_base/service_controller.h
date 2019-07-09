@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,14 +16,14 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__SERVICE_CONTROLLER_H
-#define BASE__SERVICE_CONTROLLER_H
+#ifndef QT_BASE__SERVICE_CONTROLLER_H
+#define QT_BASE__SERVICE_CONTROLLER_H
 
 #include "base/win/scoped_object.h"
 
 #include <QStringList>
 
-namespace base {
+namespace qt_base {
 
 class ServiceController
 {
@@ -63,12 +63,12 @@ protected:
     ServiceController(SC_HANDLE sc_manager, SC_HANDLE service);
 
 private:
-    win::ScopedScHandle sc_manager_;
-    mutable win::ScopedScHandle service_;
+    base::win::ScopedScHandle sc_manager_;
+    mutable base::win::ScopedScHandle service_;
 
     DISALLOW_COPY_AND_ASSIGN(ServiceController);
 };
 
-} // namespace base
+} // namespace qt_base
 
-#endif // BASE__SERVICE_CONTROLLER_H
+#endif // QT_BASE__SERVICE_CONTROLLER_H

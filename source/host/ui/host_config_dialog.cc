@@ -19,7 +19,6 @@
 #include "host/ui/host_config_dialog.h"
 
 #include "base/logging.h"
-#include "base/service_controller.h"
 #include "build/build_config.h"
 #include "common/ui/about_dialog.h"
 #include "host/ui/user_dialog.h"
@@ -27,6 +26,7 @@
 #include "host/win/host_service_constants.h"
 #include "host/host_settings.h"
 #include "net/srp_user.h"
+#include "qt_base/service_controller.h"
 #include "qt_base/xml_settings.h"
 #include "updater/update_dialog.h"
 
@@ -379,11 +379,11 @@ void ConfigDialog::reloadServiceStatus()
 
     QString state;
 
-    if (base::ServiceController::isInstalled(kHostServiceName))
+    if (qt_base::ServiceController::isInstalled(kHostServiceName))
     {
         ui.button_service_install_remove->setText(tr("Remove"));
 
-        base::ServiceController controller = base::ServiceController::open(kHostServiceName);
+        qt_base::ServiceController controller = qt_base::ServiceController::open(kHostServiceName);
         if (controller.isValid())
         {
             if (controller.isRunning())
@@ -425,7 +425,7 @@ void ConfigDialog::reloadServiceStatus()
 
 bool ConfigDialog::isServiceStarted()
 {
-    base::ServiceController controller = base::ServiceController::open(kHostServiceName);
+    qt_base::ServiceController controller = qt_base::ServiceController::open(kHostServiceName);
     if (controller.isValid())
         return controller.isRunning();
 
@@ -437,7 +437,7 @@ bool ConfigDialog::installService()
     QString service_file_path =
         QApplication::applicationDirPath() + QLatin1Char('/') + QLatin1String(kHostServiceFileName);
 
-    base::ServiceController controller = base::ServiceController::install(
+    qt_base::ServiceController controller = qt_base::ServiceController::install(
         kHostServiceName, kHostServiceDisplayName, service_file_path);
     if (!controller.isValid())
     {
@@ -458,7 +458,7 @@ bool ConfigDialog::installService()
 
 bool ConfigDialog::removeService()
 {
-    if (!base::ServiceController::remove(kHostServiceName))
+    if (!qt_base::ServiceController::remove(kHostServiceName))
     {
         QMessageBox::warning(this,
                              tr("Warning"),
@@ -472,7 +472,7 @@ bool ConfigDialog::removeService()
 
 bool ConfigDialog::startService()
 {
-    base::ServiceController controller = base::ServiceController::open(kHostServiceName);
+    qt_base::ServiceController controller = qt_base::ServiceController::open(kHostServiceName);
     if (!controller.isValid())
     {
         QMessageBox::warning(this,
@@ -498,7 +498,7 @@ bool ConfigDialog::startService()
 
 bool ConfigDialog::stopService()
 {
-    base::ServiceController controller = base::ServiceController::open(kHostServiceName);
+    qt_base::ServiceController controller = qt_base::ServiceController::open(kHostServiceName);
     if (!controller.isValid())
     {
         QMessageBox::warning(this,

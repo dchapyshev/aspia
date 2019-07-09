@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__SERVICE_IMPL_H
-#define BASE__SERVICE_IMPL_H
+#ifndef QT_BASE__SERVICE_IMPL_H
+#define QT_BASE__SERVICE_IMPL_H
 
 #include "base/macros_magic.h"
 #include "build/build_config.h"
@@ -29,7 +29,7 @@
 
 #include <QString>
 
-namespace base {
+namespace qt_base {
 
 class ServiceEventHandler;
 
@@ -54,7 +54,7 @@ protected:
     virtual void stop() = 0;
 
 #if defined(OS_WIN)
-    virtual void sessionEvent(win::SessionStatus event, win::SessionId session_id) = 0;
+    virtual void sessionEvent(base::win::SessionStatus event, base::win::SessionId session_id) = 0;
 #endif // defined(OS_WIN)
 
     virtual void createApplication(int& argc, char* argv[]) = 0;
@@ -70,6 +70,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(ServiceImpl);
 };
 
-} // namespace base
+} // namespace qt_base
 
-#endif // BASE__SERVICE_IMPL_H
+#endif // QT_BASE__SERVICE_IMPL_H

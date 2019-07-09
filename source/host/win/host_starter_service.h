@@ -19,13 +19,13 @@
 #ifndef HOST__WIN__HOST_STARTER_SERVICE_H
 #define HOST__WIN__HOST_STARTER_SERVICE_H
 
-#include "base/service.h"
+#include "qt_base/service.h"
 
 #include <QCoreApplication>
 
 namespace host {
 
-class StarterService : public base::Service<QCoreApplication>
+class StarterService : public qt_base::Service<QCoreApplication>
 {
 public:
     StarterService(const QString& service_id);

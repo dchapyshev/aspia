@@ -17,6 +17,7 @@
 //
 
 #include "host/win/host_service.h"
+
 #include "base/logging.h"
 #include "base/win/scoped_com_initializer.h"
 #include "base/win/security_helpers.h"

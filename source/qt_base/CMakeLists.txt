@@ -19,6 +19,11 @@
 list(APPEND SOURCE_QT_BASE
     qt_logging.cc
     qt_logging.h
+    service.h
+    service_controller.cc
+    service_controller.h
+    service_impl.h
+    service_impl_win.cc
     single_application.cc
     single_application.h
     xml_settings.cc
