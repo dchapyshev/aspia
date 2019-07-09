@@ -270,67 +270,67 @@
 <context>
     <name>Console</name>
     <message>
-        <location filename="../console_main.cc" line="69"/>
+        <location filename="../console_main.cc" line="66"/>
         <source>Remote computer address.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="70"/>
+        <location filename="../console_main.cc" line="67"/>
         <source>address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="74"/>
+        <location filename="../console_main.cc" line="71"/>
         <source>Remote computer port.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="75"/>
+        <location filename="../console_main.cc" line="72"/>
         <source>port</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="80"/>
+        <location filename="../console_main.cc" line="77"/>
         <source>Name of user.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="81"/>
+        <location filename="../console_main.cc" line="78"/>
         <source>username</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="85"/>
+        <location filename="../console_main.cc" line="82"/>
         <source>Session type. Possible values: desktop-manage, desktop-view, file-transfer.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="91"/>
+        <location filename="../console_main.cc" line="88"/>
         <source>Open the client to connect to the computer.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="94"/>
+        <location filename="../console_main.cc" line="91"/>
         <source>Aspia Console</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="97"/>
+        <location filename="../console_main.cc" line="94"/>
         <source>file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="98"/>
+        <location filename="../console_main.cc" line="95"/>
         <source>The file to open.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="138"/>
+        <location filename="../console_main.cc" line="135"/>
         <source>Warning</source>
         <translation type="unfinished">Warnung</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="139"/>
+        <location filename="../console_main.cc" line="136"/>
         <source>Incorrect session type entered.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1128,80 +1128,80 @@
 <context>
     <name>console::MainWindow</name>
     <message>
-        <location filename="../console_main_window.cc" line="182"/>
+        <location filename="../console_main_window.cc" line="180"/>
         <source>Warning</source>
         <translation>Warnung</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="183"/>
+        <location filename="../console_main_window.cc" line="181"/>
         <source>Pinned address book file &quot;%1&quot; was not found.&lt;br/&gt;This file will be unpinned.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="277"/>
+        <location filename="../console_main_window.cc" line="275"/>
         <source>Open Address Book</source>
         <translation>Adressbuch öffnen</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="279"/>
+        <location filename="../console_main_window.cc" line="277"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Aspia Adressbuch (*.aab)</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="507"/>
-        <location filename="../console_main_window.cc" line="839"/>
+        <location filename="../console_main_window.cc" line="505"/>
+        <location filename="../console_main_window.cc" line="837"/>
         <source>Confirmation</source>
         <translation>Bestätigung</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="508"/>
-        <location filename="../console_main_window.cc" line="840"/>
+        <location filename="../console_main_window.cc" line="506"/>
+        <location filename="../console_main_window.cc" line="838"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation>Adressbuch &quot;%1&quot; wurde geändert. Änderungen speichern?</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="696"/>
+        <location filename="../console_main_window.cc" line="694"/>
         <source>Close other tabs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="703"/>
+        <location filename="../console_main_window.cc" line="701"/>
         <source>Close tab</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="706"/>
-        <location filename="../console_main_window.cc" line="713"/>
+        <location filename="../console_main_window.cc" line="704"/>
+        <location filename="../console_main_window.cc" line="711"/>
         <source>Pin tab</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="796"/>
+        <location filename="../console_main_window.cc" line="794"/>
         <source>Hide</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="811"/>
+        <location filename="../console_main_window.cc" line="809"/>
         <source>Show</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="918"/>
+        <location filename="../console_main_window.cc" line="916"/>
         <source>&lt;empty&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="939"/>
+        <location filename="../console_main_window.cc" line="937"/>
         <source>Aspia Console</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="251"/>
+        <location filename="../console_main_window.cc" line="249"/>
         <source>Information</source>
         <translation>Information</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="252"/>
+        <location filename="../console_main_window.cc" line="250"/>
         <source>Address Book &quot;%1&quot; is already open.</source>
         <translation>Adressbuch &quot;%1&quot; ist bereits geöffnet.</translation>
     </message>

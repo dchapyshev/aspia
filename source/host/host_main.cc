@@ -151,13 +151,12 @@ int hostMain(int argc, char* argv[])
     host::Application application(argc, argv);
 
     host::Settings host_settings;
-    qt_base::LocaleLoader locale_loader;
 
     QString current_locale = host_settings.locale();
-    if (!locale_loader.contains(current_locale))
+    if (!application.hasLocale(current_locale))
         host_settings.setLocale(QStringLiteral(DEFAULT_LOCALE));
 
-    locale_loader.installTranslators(current_locale);
+    application.setLocale(host_settings.locale());
 
     QCommandLineOption import_option(QStringLiteral("import"),
         QApplication::translate("Host", "The path to the file to import."),
@@ -231,7 +230,7 @@ int hostMain(int argc, char* argv[])
             QAbstractEventDispatcher::instance()->installNativeEventFilter(
                 EventFilter::instance());
 
-            host::MainWindow window(host_settings, locale_loader);
+            host::MainWindow window(host_settings);
 
             QObject::connect(&application, &host::Application::activated,
                 &window, &host::MainWindow::activateHost);

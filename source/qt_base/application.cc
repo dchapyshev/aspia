@@ -184,6 +184,8 @@ Application::Application(int& argc, char* argv[])
 
     crypto_initializer_ = std::make_unique<crypto::ScopedCryptoInitializer>();
     CHECK(crypto_initializer_->isSucceeded());
+
+    locale_loader_ = std::make_unique<LocaleLoader>();
 }
 
 Application::~Application()
@@ -199,6 +201,12 @@ Application::~Application()
         QFile::remove(lock_file_name_);
 
     base::shutdownLogging();
+}
+
+// static
+Application* Application::instance()
+{
+    return static_cast<Application*>(QApplication::instance());
 }
 
 bool Application::isRunning()
@@ -222,6 +230,21 @@ bool Application::isRunning()
     }
 
     return false;
+}
+
+Application::LocaleList Application::localeList() const
+{
+    return locale_loader_->localeList();
+}
+
+void Application::setLocale(const QString& locale)
+{
+    locale_loader_->installTranslators(locale);
+}
+
+bool Application::hasLocale(const QString& locale)
+{
+    return locale_loader_->contains(locale);
 }
 
 void Application::sendMessage(const QByteArray& message)

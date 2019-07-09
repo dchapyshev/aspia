@@ -24,6 +24,7 @@
 #include "host/ui/host_notifier_window.h"
 #include "host/host_settings.h"
 #include "host/host_ui_client.h"
+#include "qt_base/application.h"
 #include "qt_base/qt_logging.h"
 #include "qt_base/xml_settings.h"
 
@@ -35,10 +36,9 @@
 
 namespace host {
 
-MainWindow::MainWindow(Settings& settings, qt_base::LocaleLoader& locale_loader, QWidget* parent)
+MainWindow::MainWindow(Settings& settings, QWidget* parent)
     : QMainWindow(parent),
-      settings_(settings),
-      locale_loader_(locale_loader)
+      settings_(settings)
 {
     ui.setupUi(this);
     setWindowFlag(Qt::WindowMaximizeButtonHint, false);
@@ -183,7 +183,8 @@ void MainWindow::onLanguageChanged(QAction* action)
         return;
 
     QString new_locale = language_action->locale();
-    locale_loader_.installTranslators(new_locale);
+
+    qt_base::Application::instance()->setLocale(new_locale);
 
     ui.retranslateUi(this);
     refeshCredentials();
@@ -261,7 +262,7 @@ void MainWindow::createLanguageMenu(const QString& current_locale)
 {
     QActionGroup* language_group = new QActionGroup(this);
 
-    for (const auto& locale : locale_loader_.localeList())
+    for (const auto& locale : qt_base::Application::instance()->localeList())
     {
         common::LanguageAction* action_language =
             new common::LanguageAction(locale.first, locale.second, this);

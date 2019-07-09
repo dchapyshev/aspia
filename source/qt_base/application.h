@@ -19,7 +19,7 @@
 #ifndef QT_BASE__APPLICATION_H
 #define QT_BASE__APPLICATION_H
 
-#include "base/macros_magic.h"
+#include "qt_base/locale_loader.h"
 
 #include <QApplication>
 
@@ -40,7 +40,16 @@ public:
     Application(int& argc, char* argv[]);
     virtual ~Application();
 
+    static Application* instance();
+
     bool isRunning();
+
+    using Locale = LocaleLoader::Locale;
+    using LocaleList = LocaleLoader::LocaleList;
+
+    LocaleList localeList() const;
+    void setLocale(const QString& locale);
+    bool hasLocale(const QString& locale);
 
 public slots:
     void sendMessage(const QByteArray& message);
@@ -59,6 +68,7 @@ private:
     QLocalServer* server_ = nullptr;
 
     std::unique_ptr<crypto::ScopedCryptoInitializer> crypto_initializer_;
+    std::unique_ptr<LocaleLoader> locale_loader_;
 
     DISALLOW_COPY_AND_ASSIGN(Application);
 };

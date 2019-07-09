@@ -23,7 +23,6 @@
 #include "console/mru.h"
 #include "updater/update_checker.h"
 #include "proto/address_book.pb.h"
-#include "qt_base/locale_loader.h"
 #include "ui_console_main_window.h"
 
 class QSystemTrayIcon;
@@ -39,7 +38,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    MainWindow(Settings& settings, qt_base::LocaleLoader& locale_loader, const QString& file_path);
+    MainWindow(Settings& settings, const QString& file_path);
     ~MainWindow();
 
 public slots:
@@ -101,7 +100,6 @@ private:
     Ui::ConsoleMainWindow ui;
 
     Settings& settings_;
-    qt_base::LocaleLoader& locale_loader_;
     Mru mru_;
 
     QScopedPointer<QSystemTrayIcon> tray_icon_;

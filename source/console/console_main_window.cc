@@ -26,6 +26,7 @@
 #include "console/address_book_tab.h"
 #include "console/console_settings.h"
 #include "console/update_settings_dialog.h"
+#include "qt_base/application.h"
 #include "updater/update_dialog.h"
 
 #include <QCloseEvent>
@@ -55,11 +56,8 @@ private:
 
 } // namespace
 
-MainWindow::MainWindow(Settings& settings,
-                       qt_base::LocaleLoader& locale_loader,
-                       const QString& file_path)
-    : settings_(settings),
-      locale_loader_(locale_loader)
+MainWindow::MainWindow(Settings& settings, const QString& file_path)
+    : settings_(settings)
 {
     ui.setupUi(this);
 
@@ -775,7 +773,7 @@ void MainWindow::onLanguageChanged(QAction* action)
     {
         QString new_locale = language_action->locale();
 
-        locale_loader_.installTranslators(new_locale);
+        qt_base::Application::instance()->setLocale(new_locale);
         ui.retranslateUi(this);
 
         for (int i = 0; i < ui.tab_widget->count(); ++i)
@@ -892,7 +890,7 @@ void MainWindow::createLanguageMenu(const QString& current_locale)
 {
     QActionGroup* language_group = new QActionGroup(this);
 
-    for (const auto& locale : locale_loader_.localeList())
+    for (const auto& locale : qt_base::Application::instance()->localeList())
     {
         common::LanguageAction* action_language =
             new common::LanguageAction(locale.first, locale.second, this);

@@ -4,32 +4,32 @@
 <context>
     <name>Host</name>
     <message>
-        <location filename="../host_main.cc" line="163"/>
+        <location filename="../host_main.cc" line="162"/>
         <source>The path to the file to import.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="167"/>
+        <location filename="../host_main.cc" line="166"/>
         <source>The path to the file to export.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="171"/>
+        <location filename="../host_main.cc" line="170"/>
         <source>Enables silent mode when exporting and importing.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="174"/>
+        <location filename="../host_main.cc" line="173"/>
         <source>Run application update.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="195"/>
+        <location filename="../host_main.cc" line="194"/>
         <source>Warning</source>
         <translation>Warnung</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="196"/>
+        <location filename="../host_main.cc" line="195"/>
         <source>Export and import parameters can not be specified together.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -563,29 +563,29 @@
     </message>
     <message>
         <location filename="../ui/host_main_window.cc" line="133"/>
-        <location filename="../ui/host_main_window.cc" line="207"/>
+        <location filename="../ui/host_main_window.cc" line="208"/>
         <source>Show</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/host_main_window.cc" line="46"/>
-        <location filename="../ui/host_main_window.cc" line="286"/>
-        <location filename="../ui/host_main_window.cc" line="293"/>
+        <location filename="../ui/host_main_window.cc" line="287"/>
+        <location filename="../ui/host_main_window.cc" line="294"/>
         <source>Not available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/host_main_window.cc" line="212"/>
+        <location filename="../ui/host_main_window.cc" line="213"/>
         <source>Hide</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/host_main_window.cc" line="237"/>
+        <location filename="../ui/host_main_window.cc" line="238"/>
         <source>Confirmation</source>
         <translation>Bestätigung</translation>
     </message>
     <message>
-        <location filename="../ui/host_main_window.cc" line="238"/>
+        <location filename="../ui/host_main_window.cc" line="239"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation type="unfinished"></translation>
     </message>
