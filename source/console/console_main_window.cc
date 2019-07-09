@@ -17,6 +17,7 @@
 //
 
 #include "console/console_main_window.h"
+
 #include "base/logging.h"
 #include "build/build_config.h"
 #include "build/version.h"
@@ -24,9 +25,8 @@
 #include "common/ui/about_dialog.h"
 #include "common/ui/language_action.h"
 #include "console/address_book_tab.h"
-#include "console/console_settings.h"
+#include "console/console_application.h"
 #include "console/update_settings_dialog.h"
-#include "qt_base/application.h"
 #include "updater/update_dialog.h"
 
 #include <QCloseEvent>
@@ -56,9 +56,10 @@ private:
 
 } // namespace
 
-MainWindow::MainWindow(Settings& settings, const QString& file_path)
-    : settings_(settings)
+MainWindow::MainWindow(const QString& file_path)
 {
+    Settings& settings = Application::instance()->settings();
+
     ui.setupUi(this);
 
     createLanguageMenu(settings.locale());
@@ -200,11 +201,11 @@ MainWindow::MainWindow(Settings& settings, const QString& file_path)
         UpdateSettingsDialog(this).exec();
     });
 
-    if (settings_.checkUpdates())
+    if (settings.checkUpdates())
     {
         updater::Checker* checker = new updater::Checker(this);
 
-        checker->setUpdateServer(settings_.updateServer());
+        checker->setUpdateServer(settings.updateServer());
         checker->setPackageName(QStringLiteral("console"));
 
         connect(checker, &updater::Checker::finished, this, &MainWindow::onUpdateChecked);
@@ -270,15 +271,17 @@ void MainWindow::onNew()
 
 void MainWindow::onOpen()
 {
+    Settings& settings = Application::instance()->settings();
+
     QString file_path =
         QFileDialog::getOpenFileName(this,
                                      tr("Open Address Book"),
-                                     settings_.lastDirectory(),
+                                     settings.lastDirectory(),
                                      tr("Aspia Address Book (*.aab)"));
     if (file_path.isEmpty())
         return;
 
-    settings_.setLastDirectory(QFileInfo(file_path).absolutePath());
+    settings.setLastDirectory(QFileInfo(file_path).absolutePath());
     openAddressBook(file_path);
 }
 
@@ -405,7 +408,9 @@ void MainWindow::onOnlineHelp()
 
 void MainWindow::onCheckUpdates()
 {
-    updater::UpdateDialog(settings_.updateServer(), QLatin1String("console"), this).exec();
+    updater::UpdateDialog(Application::instance()->settings().updateServer(),
+                          QLatin1String("console"),
+                          this).exec();
 }
 
 void MainWindow::onAbout()
@@ -768,23 +773,17 @@ void MainWindow::onTabContextMenu(const QPoint& pos)
 
 void MainWindow::onLanguageChanged(QAction* action)
 {
-    common::LanguageAction* language_action = dynamic_cast<common::LanguageAction*>(action);
-    if (language_action)
-    {
-        QString new_locale = language_action->locale();
+    Application* application = Application::instance();
 
-        qt_base::Application::instance()->setLocale(new_locale);
-        ui.retranslateUi(this);
+    QString new_locale = static_cast<common::LanguageAction*>(action)->locale();
 
-        for (int i = 0; i < ui.tab_widget->count(); ++i)
-        {
-            AddressBookTab* tab = dynamic_cast<AddressBookTab*>(ui.tab_widget->widget(i));
-            if (tab)
-                tab->retranslateUi();
-        }
+    application->settings().setLocale(new_locale);
+    application->setLocale(new_locale);
 
-        settings_.setLocale(new_locale);
-    }
+    ui.retranslateUi(this);
+
+    for (int i = 0; i < ui.tab_widget->count(); ++i)
+        static_cast<AddressBookTab*>(ui.tab_widget->widget(i))->retranslateUi();
 }
 
 void MainWindow::onShowHideToTray()
@@ -855,21 +854,23 @@ void MainWindow::closeEvent(QCloseEvent* event)
         }
     }
 
-    settings_.setToolBarEnabled(ui.action_toolbar->isChecked());
-    settings_.setStatusBarEnabled(ui.action_statusbar->isChecked());
-    settings_.setAlwaysShowTrayIcon(ui.action_show_tray_icon->isChecked());
-    settings_.setMinimizeToTray(ui.action_minimize_to_tray->isChecked());
-    settings_.setWindowGeometry(saveGeometry());
-    settings_.setWindowState(saveState());
-    settings_.setRecentOpen(mru_.recentOpen());
-    settings_.setPinnedFiles(mru_.pinnedFiles());
+    Settings& settings = Application::instance()->settings();
+
+    settings.setToolBarEnabled(ui.action_toolbar->isChecked());
+    settings.setStatusBarEnabled(ui.action_statusbar->isChecked());
+    settings.setAlwaysShowTrayIcon(ui.action_show_tray_icon->isChecked());
+    settings.setMinimizeToTray(ui.action_minimize_to_tray->isChecked());
+    settings.setWindowGeometry(saveGeometry());
+    settings.setWindowState(saveState());
+    settings.setRecentOpen(mru_.recentOpen());
+    settings.setPinnedFiles(mru_.pinnedFiles());
 
     if (ui.action_desktop_manage->isChecked())
-        settings_.setSessionType(proto::SESSION_TYPE_DESKTOP_MANAGE);
+        settings.setSessionType(proto::SESSION_TYPE_DESKTOP_MANAGE);
     else if (ui.action_desktop_view->isChecked())
-        settings_.setSessionType(proto::SESSION_TYPE_DESKTOP_VIEW);
+        settings.setSessionType(proto::SESSION_TYPE_DESKTOP_VIEW);
     else if (ui.action_file_transfer->isChecked())
-        settings_.setSessionType(proto::SESSION_TYPE_FILE_TRANSFER);
+        settings.setSessionType(proto::SESSION_TYPE_FILE_TRANSFER);
 
     QApplication::quit();
     QMainWindow::closeEvent(event);
@@ -890,7 +891,7 @@ void MainWindow::createLanguageMenu(const QString& current_locale)
 {
     QActionGroup* language_group = new QActionGroup(this);
 
-    for (const auto& locale : qt_base::Application::instance()->localeList())
+    for (const auto& locale : Application::instance()->localeList())
     {
         common::LanguageAction* action_language =
             new common::LanguageAction(locale.first, locale.second, this);

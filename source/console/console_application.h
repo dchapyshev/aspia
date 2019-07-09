@@ -19,6 +19,7 @@
 #ifndef CONSOLE__CONSOLE_APPLICATION_H
 #define CONSOLE__CONSOLE_APPLICATION_H
 
+#include "console/console_settings.h"
 #include "qt_base/application.h"
 
 namespace console {
@@ -31,6 +32,10 @@ public:
     Application(int& argc, char* argv[]);
     virtual ~Application() = default;
 
+    static Application* instance();
+
+    Settings& settings() { return settings_; }
+
 public slots:
     void activateWindow();
     void openFile(const QString& file_path);
@@ -40,6 +45,8 @@ signals:
     void fileOpened(const QString& file_path);
 
 private:
+    Settings settings_;
+
     DISALLOW_COPY_AND_ASSIGN(Application);
 };
 

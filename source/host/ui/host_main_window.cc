@@ -22,9 +22,8 @@
 #include "common/ui/language_action.h"
 #include "host/ui/host_config_dialog.h"
 #include "host/ui/host_notifier_window.h"
-#include "host/host_settings.h"
+#include "host/host_application.h"
 #include "host/host_ui_client.h"
-#include "qt_base/application.h"
 #include "qt_base/qt_logging.h"
 #include "qt_base/xml_settings.h"
 
@@ -36,9 +35,8 @@
 
 namespace host {
 
-MainWindow::MainWindow(Settings& settings, QWidget* parent)
-    : QMainWindow(parent),
-      settings_(settings)
+MainWindow::MainWindow(QWidget* parent)
+    : QMainWindow(parent)
 {
     ui.setupUi(this);
     setWindowFlag(Qt::WindowMaximizeButtonHint, false);
@@ -57,7 +55,7 @@ MainWindow::MainWindow(Settings& settings, QWidget* parent)
     tray_icon_.setContextMenu(&tray_menu_);
     tray_icon_.show();
 
-    createLanguageMenu(settings.locale());
+    createLanguageMenu(Application::instance()->settings().locale());
 
     connect(&tray_icon_, &QSystemTrayIcon::activated, [this](QSystemTrayIcon::ActivationReason reason)
     {
@@ -178,18 +176,14 @@ void MainWindow::onCredentialsReceived(const proto::host::Credentials& credentia
 
 void MainWindow::onLanguageChanged(QAction* action)
 {
-    common::LanguageAction* language_action = dynamic_cast<common::LanguageAction*>(action);
-    if (!language_action)
-        return;
+    QString new_locale = static_cast<common::LanguageAction*>(action)->locale();
+    Application* application = Application::instance();
 
-    QString new_locale = language_action->locale();
-
-    qt_base::Application::instance()->setLocale(new_locale);
+    application->settings().setLocale(new_locale);
+    application->setLocale(new_locale);
 
     ui.retranslateUi(this);
     refeshCredentials();
-
-    settings_.setLocale(new_locale);
 }
 
 void MainWindow::onSettings()

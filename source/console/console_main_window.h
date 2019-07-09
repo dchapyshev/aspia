@@ -19,7 +19,6 @@
 #ifndef CONSOLE__CONSOLE_MAIN_WINDOW_H
 #define CONSOLE__CONSOLE_MAIN_WINDOW_H
 
-#include "console/console_settings.h"
 #include "console/mru.h"
 #include "updater/update_checker.h"
 #include "proto/address_book.pb.h"
@@ -38,7 +37,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    MainWindow(Settings& settings, const QString& file_path);
+    explicit MainWindow(const QString& file_path);
     ~MainWindow();
 
 public slots:
@@ -98,8 +97,6 @@ private:
     void connectToComputer(const proto::address_book::Computer& computer);
 
     Ui::ConsoleMainWindow ui;
-
-    Settings& settings_;
     Mru mru_;
 
     QScopedPointer<QSystemTrayIcon> tray_icon_;

@@ -19,6 +19,7 @@
 #ifndef HOST__HOST_APPLICATION_H
 #define HOST__HOST_APPLICATION_H
 
+#include "host/host_settings.h"
 #include "qt_base/application.h"
 
 namespace host {
@@ -31,6 +32,10 @@ public:
     Application(int& argc, char* argv[]);
     virtual ~Application() = default;
 
+    static Application* instance();
+
+    Settings& settings() { return settings_; }
+
 public slots:
     void activate();
 
@@ -38,6 +43,8 @@ signals:
     void activated();
 
 private:
+    Settings settings_;
+
     DISALLOW_COPY_AND_ASSIGN(Application);
 };
 

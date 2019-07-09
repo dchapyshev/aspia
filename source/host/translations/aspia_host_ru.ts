@@ -8,32 +8,32 @@
         <translation type="vanished">Запускает приложение спрятанным.</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="162"/>
+        <location filename="../host_main.cc" line="154"/>
         <source>The path to the file to import.</source>
         <translation>Путь к файлу для импорта.</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="166"/>
+        <location filename="../host_main.cc" line="158"/>
         <source>The path to the file to export.</source>
         <translation>Путь к файлу для экспорта.</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="170"/>
+        <location filename="../host_main.cc" line="162"/>
         <source>Enables silent mode when exporting and importing.</source>
         <translation>Включает тихий режим при экспортировании и импортировании.</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="173"/>
+        <location filename="../host_main.cc" line="165"/>
         <source>Run application update.</source>
         <translation>Запускает обновление приложения.</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="194"/>
+        <location filename="../host_main.cc" line="186"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="195"/>
+        <location filename="../host_main.cc" line="187"/>
         <source>Export and import parameters can not be specified together.</source>
         <translation>Параметры экспорта и импорта не могут быть указаны одновременно.</translation>
     </message>
@@ -705,35 +705,35 @@
 <context>
     <name>host::MainWindow</name>
     <message>
-        <location filename="../ui/host_main_window.cc" line="56"/>
+        <location filename="../ui/host_main_window.cc" line="54"/>
         <source>Aspia Host</source>
         <translation>Хост Aspia</translation>
     </message>
     <message>
-        <location filename="../ui/host_main_window.cc" line="133"/>
-        <location filename="../ui/host_main_window.cc" line="208"/>
+        <location filename="../ui/host_main_window.cc" line="131"/>
+        <location filename="../ui/host_main_window.cc" line="202"/>
         <source>Show</source>
         <translation>Показать</translation>
     </message>
     <message>
-        <location filename="../ui/host_main_window.cc" line="46"/>
-        <location filename="../ui/host_main_window.cc" line="287"/>
-        <location filename="../ui/host_main_window.cc" line="294"/>
+        <location filename="../ui/host_main_window.cc" line="44"/>
+        <location filename="../ui/host_main_window.cc" line="281"/>
+        <location filename="../ui/host_main_window.cc" line="288"/>
         <source>Not available</source>
         <translation>Недоступен</translation>
     </message>
     <message>
-        <location filename="../ui/host_main_window.cc" line="213"/>
+        <location filename="../ui/host_main_window.cc" line="207"/>
         <source>Hide</source>
         <translation>Спрятать</translation>
     </message>
     <message>
-        <location filename="../ui/host_main_window.cc" line="238"/>
+        <location filename="../ui/host_main_window.cc" line="232"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../ui/host_main_window.cc" line="239"/>
+        <location filename="../ui/host_main_window.cc" line="233"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation>Если вы выйдите из Aspia, то вы не сможете подключиться к этому компьютеру пока вы снова не включите компьютер или Aspia вручную. Вы действительно хотите выйти из приложения?</translation>
     </message>

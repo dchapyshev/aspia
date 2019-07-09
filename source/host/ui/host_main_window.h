@@ -20,7 +20,6 @@
 #define HOST__UI__HOST_MAIN_WINDOW_H
 
 #include "base/macros_magic.h"
-#include "host/host_settings.h"
 #include "ui_host_main_window.h"
 
 #include <QMainWindow>
@@ -41,7 +40,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    MainWindow(Settings& settings, QWidget* parent = nullptr);
+    explicit MainWindow(QWidget* parent = nullptr);
     ~MainWindow();
 
 public slots:
@@ -71,8 +70,6 @@ private:
     Ui::HostMainWindow ui;
 
     bool should_be_quit_ = false;
-
-    Settings& settings_;
 
     QSystemTrayIcon tray_icon_;
     QMenu tray_menu_;

@@ -54,12 +54,6 @@ int main(int argc, char *argv[])
     Q_INIT_RESOURCE(updater_translations);
 
     console::Application application(argc, argv);
-    console::Settings console_settings;
-
-    if (!application.hasLocale(console_settings.locale()))
-        console_settings.setLocale(QStringLiteral(DEFAULT_LOCALE));
-
-    application.setLocale(console_settings.locale());
 
     QCommandLineOption address_option(
         QStringLiteral("address"),
@@ -160,7 +154,7 @@ int main(int argc, char *argv[])
         }
         else
         {
-            console_window.reset(new console::MainWindow(console_settings, file_path));
+            console_window.reset(new console::MainWindow(file_path));
 
             QObject::connect(&application, &console::Application::windowActivated,
                 console_window.get(), &console::MainWindow::showConsole);

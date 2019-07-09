@@ -150,14 +150,6 @@ int hostMain(int argc, char* argv[])
 
     host::Application application(argc, argv);
 
-    host::Settings host_settings;
-
-    QString current_locale = host_settings.locale();
-    if (!application.hasLocale(current_locale))
-        host_settings.setLocale(QStringLiteral(DEFAULT_LOCALE));
-
-    application.setLocale(host_settings.locale());
-
     QCommandLineOption import_option(QStringLiteral("import"),
         QApplication::translate("Host", "The path to the file to import."),
         QStringLiteral("file"));
@@ -210,7 +202,7 @@ int hostMain(int argc, char* argv[])
     }
     else if (parser.isSet(update_option))
     {
-        updater::UpdateDialog dialog(host_settings.updateServer(), QLatin1String("host"));
+        updater::UpdateDialog dialog(application.settings().updateServer(), QLatin1String("host"));
         dialog.show();
         dialog.activateWindow();
 
@@ -230,7 +222,7 @@ int hostMain(int argc, char* argv[])
             QAbstractEventDispatcher::instance()->installNativeEventFilter(
                 EventFilter::instance());
 
-            host::MainWindow window(host_settings);
+            host::MainWindow window;
 
             QObject::connect(&application, &host::Application::activated,
                 &window, &host::MainWindow::activateHost);

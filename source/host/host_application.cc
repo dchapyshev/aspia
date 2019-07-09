@@ -48,6 +48,17 @@ Application::Application(int& argc, char* argv[])
             LOG(LS_ERROR) << "Unhandled message";
         }
     });
+
+    if (!hasLocale(settings_.locale()))
+        settings_.setLocale(QStringLiteral(DEFAULT_LOCALE));
+
+    setLocale(settings_.locale());
+}
+
+// static
+Application* Application::instance()
+{
+    return static_cast<Application*>(QApplication::instance());
 }
 
 void Application::activate()
