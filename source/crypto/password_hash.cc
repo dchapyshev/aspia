@@ -23,9 +23,13 @@
 
 namespace crypto {
 
-// static
-QByteArray PasswordHash::hash(Type type, const QByteArray& password, const QByteArray& salt)
+namespace {
+
+template <typename InputT, typename OutputT>
+OutputT hashT(PasswordHash::Type type, InputT password, InputT salt)
 {
+    DCHECK_EQ(type, PasswordHash::Type::SCRYPT);
+
     // CPU/Memory cost parameter, must be larger than 1, a power of 2, and less than 2^(128 * r / 8).
     static const uint64_t N = 16384;
 
@@ -39,16 +43,30 @@ QByteArray PasswordHash::hash(Type type, const QByteArray& password, const QByte
     // 32MB
     static const uint64_t max_mem = 32 * 1024 * 1024;
 
-    QByteArray result;
-    result.resize(kBytesSize);
+    OutputT result;
+    result.resize(PasswordHash::kBytesSize);
 
-    int ret = EVP_PBE_scrypt(password.constData(), password.size(),
-                             reinterpret_cast<const uint8_t*>(salt.constData()), salt.size(),
+    int ret = EVP_PBE_scrypt(reinterpret_cast<const char*>(password.data()), password.size(),
+                             reinterpret_cast<const uint8_t*>(salt.data()), salt.size(),
                              N, r, p, max_mem,
                              reinterpret_cast<uint8_t*>(result.data()), result.size());
     CHECK_EQ(ret, 1) << "EVP_PBE_scrypt failed";
 
     return result;
+}
+
+} // namespace
+
+// static
+QByteArray PasswordHash::hash(Type type, const QByteArray& password, const QByteArray& salt)
+{
+    return hashT<const QByteArray&, QByteArray>(type, password, salt);
+}
+
+// static
+std::string PasswordHash::hash(Type type, std::string_view password, std::string_view salt)
+{
+    return hashT<std::string_view, std::string>(type, password, salt);
 }
 
 } // namespace crypto

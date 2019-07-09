@@ -830,22 +830,22 @@
 <context>
     <name>console::AddressBookDialog</name>
     <message>
-        <location filename="../address_book_dialog.cc" line="80"/>
+        <location filename="../address_book_dialog.cc" line="81"/>
         <source>Without Encryption</source>
         <translation>Без шифрування</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="82"/>
+        <location filename="../address_book_dialog.cc" line="83"/>
         <source>ChaCha20 + Poly1305 (256-bit key)</source>
         <translation>ChaCha20 + Poly1305 (256-бітний ключ)</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="97"/>
+        <location filename="../address_book_dialog.cc" line="98"/>
         <source>Double-click to change</source>
         <translation>Подвійний клік для зміни</translation>
     </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="168"/>
+        <location filename="../address_book_dialog.cc" line="169"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Занадто довге ім&apos;я. Максимальна довжина імені: %n символ.</numerusform>
@@ -854,12 +854,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="174"/>
+        <location filename="../address_book_dialog.cc" line="175"/>
         <source>Name can not be empty.</source>
         <translation>Ім&apos;я не може бути порожнім.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="181"/>
+        <location filename="../address_book_dialog.cc" line="182"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Занадто довгий коментар. Максимальна довжина коментаря: %n символ.</numerusform>
@@ -868,12 +868,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="209"/>
+        <location filename="../address_book_dialog.cc" line="210"/>
         <source>The passwords you entered do not match.</source>
         <translation>Введені паролі не співпадають.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="215"/>
+        <location filename="../address_book_dialog.cc" line="216"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
         <translation>
             <numerusform>Пароль не може бути порожнім або довшим за %n символ.</numerusform>
@@ -882,12 +882,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="223"/>
+        <location filename="../address_book_dialog.cc" line="224"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Введений пароль не задовільняє вимог безпеки!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="226"/>
+        <location filename="../address_book_dialog.cc" line="227"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Пароль має включати літери нижнього і верхнього регістру, числа і не має бути коротшим за %n символ.</numerusform>
@@ -896,23 +896,23 @@
         </translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="230"/>
+        <location filename="../address_book_dialog.cc" line="231"/>
         <source>Do you want to enter a different password?</source>
         <translation>Бажаєте ввести інший пароль?</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="233"/>
-        <location filename="../address_book_dialog.cc" line="370"/>
+        <location filename="../address_book_dialog.cc" line="234"/>
+        <location filename="../address_book_dialog.cc" line="364"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="331"/>
+        <location filename="../address_book_dialog.cc" line="325"/>
         <source>Confirmation</source>
         <translation>Підтвердження</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="332"/>
+        <location filename="../address_book_dialog.cc" line="326"/>
         <source>At change the size of hashing salt, you will need to re-enter the password. Continue?</source>
         <translation>Для зміни розміру солі хешування потрібно повторно ввести пароль. Продовжити?</translation>
     </message>
@@ -920,90 +920,89 @@
 <context>
     <name>console::AddressBookTab</name>
     <message>
-        <location filename="../address_book_tab.cc" line="228"/>
+        <location filename="../address_book_tab.cc" line="230"/>
         <source>Unable to open address book file &quot;%1&quot;.</source>
         <translation>Неможливо відкрити файл адресної книги &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="235"/>
+        <location filename="../address_book_tab.cc" line="237"/>
         <source>Unable to read address book file &quot;%1&quot;.</source>
         <translation>Неможливо прочитати файл адресної книги &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="244"/>
-        <location filename="../address_book_tab.cc" line="259"/>
+        <location filename="../address_book_tab.cc" line="246"/>
         <source>The address book file &quot;%1&quot; is corrupted or has an unknown format.</source>
         <translation>Файл адресної книги &quot;%1&quot; пошкоджено або він має невірний формат.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="282"/>
+        <location filename="../address_book_tab.cc" line="290"/>
         <source>Unable to decrypt the address book with the specified password.</source>
         <translation>Неможливо розшифрувати адресну книгу даним паролем.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="288"/>
+        <location filename="../address_book_tab.cc" line="296"/>
         <source>The address book file is corrupted or has an unknown format.</source>
         <translation>Файл адресної книги пошкоджено або він має невірний формат.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="298"/>
+        <location filename="../address_book_tab.cc" line="283"/>
         <source>The address book file is encrypted with an unsupported encryption type.</source>
         <translation>Тип шифрування адресної книги не підтримується.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="465"/>
+        <location filename="../address_book_tab.cc" line="464"/>
         <source>Are you sure you want to delete computer group &quot;%1&quot; and all child items?</source>
         <translation>Ви впевнені, що хочете видалити групу комп&apos;ютерів \&quot;%1\&quot; і всі дочірні об&apos;єкти?</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="469"/>
-        <location filename="../address_book_tab.cc" line="491"/>
+        <location filename="../address_book_tab.cc" line="468"/>
+        <location filename="../address_book_tab.cc" line="490"/>
         <source>Confirmation</source>
         <translation>Підтвердження</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="487"/>
+        <location filename="../address_book_tab.cc" line="486"/>
         <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
         <translation>Ви впевнені, що хочете видалити комп&apos;ютер\&quot;%1\&quot;?</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="746"/>
+        <location filename="../address_book_tab.cc" line="743"/>
         <source>Save Address Book</source>
         <translation>Зберегти адресну книгу</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="748"/>
+        <location filename="../address_book_tab.cc" line="745"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Адресна книга Aspia (*.aab)</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="758"/>
+        <location filename="../address_book_tab.cc" line="755"/>
         <source>Unable to create or open address book file.</source>
         <translation>Неможливо створити або відкрити файл адресної книги.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="770"/>
+        <location filename="../address_book_tab.cc" line="767"/>
         <source>Unable to write address book file.</source>
         <translation>Неможливо записати файл адресної книги.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="784"/>
+        <location filename="../address_book_tab.cc" line="781"/>
         <source>Root Group</source>
         <translation>Корінна група</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="795"/>
-        <location filename="../address_book_tab.cc" line="809"/>
+        <location filename="../address_book_tab.cc" line="792"/>
+        <location filename="../address_book_tab.cc" line="806"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="797"/>
+        <location filename="../address_book_tab.cc" line="794"/>
         <source>Could not open address book</source>
         <translation>Неможливо відкрити адресну книгу</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="811"/>
+        <location filename="../address_book_tab.cc" line="808"/>
         <source>Failed to save address book</source>
         <translation>Неможливо зберегти адресну книгу</translation>
     </message>

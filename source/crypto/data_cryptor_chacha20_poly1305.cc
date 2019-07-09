@@ -17,6 +17,7 @@
 //
 
 #include "crypto/data_cryptor_chacha20_poly1305.h"
+
 #include "base/logging.h"
 #include "crypto/openssl_util.h"
 #include "crypto/random.h"
@@ -33,7 +34,7 @@ static const size_t kIVSize = 12; // 96 bits, 12 bytes.
 static const size_t kTagSize = 16; // 128 bits, 16 bytes.
 static const size_t kHeaderSize = kIVSize + kTagSize;
 
-EVP_CIPHER_CTX_ptr createCipher(const QByteArray& key, const char* iv, int type)
+EVP_CIPHER_CTX_ptr createCipher(std::string_view key, const char* iv, int type)
 {
     if (key.size() != kKeySize)
     {
@@ -68,7 +69,7 @@ EVP_CIPHER_CTX_ptr createCipher(const QByteArray& key, const char* iv, int type)
     }
 
     if (EVP_CipherInit_ex(ctx.get(), nullptr, nullptr,
-                          reinterpret_cast<const uint8_t*>(key.constData()),
+                          reinterpret_cast<const uint8_t*>(key.data()),
                           reinterpret_cast<const uint8_t*>(iv),
                           type) != 1)
     {
@@ -81,7 +82,7 @@ EVP_CIPHER_CTX_ptr createCipher(const QByteArray& key, const char* iv, int type)
 
 } // namespace
 
-DataCryptorChaCha20Poly1305::DataCryptorChaCha20Poly1305(const QByteArray& key)
+DataCryptorChaCha20Poly1305::DataCryptorChaCha20Poly1305(std::string_view key)
     : key_(key)
 {
     // Nothing
@@ -92,9 +93,9 @@ DataCryptorChaCha20Poly1305::~DataCryptorChaCha20Poly1305()
     memZero(&key_);
 }
 
-bool DataCryptorChaCha20Poly1305::encrypt(const QByteArray& in, QByteArray* out)
+bool DataCryptorChaCha20Poly1305::encrypt(std::string_view in, std::string* out)
 {
-    if (in.isEmpty())
+    if (in.empty())
     {
         LOG(LS_WARNING) << "Empty buffer passed";
         return false;
@@ -120,7 +121,7 @@ bool DataCryptorChaCha20Poly1305::encrypt(const QByteArray& in, QByteArray* out)
     if (EVP_EncryptUpdate(cipher.get(),
                           reinterpret_cast<uint8_t*>(out->data()) + kHeaderSize,
                           &length,
-                          reinterpret_cast<const uint8_t*>(in.constData()),
+                          reinterpret_cast<const uint8_t*>(in.data()),
                           in.size()) != 1)
     {
         LOG(LS_WARNING) << "EVP_EncryptUpdate failed";
@@ -147,7 +148,7 @@ bool DataCryptorChaCha20Poly1305::encrypt(const QByteArray& in, QByteArray* out)
     return true;
 }
 
-bool DataCryptorChaCha20Poly1305::decrypt(const QByteArray& in, QByteArray* out)
+bool DataCryptorChaCha20Poly1305::decrypt(std::string_view in, std::string* out)
 {
     if (in.size() <= kHeaderSize)
     {
@@ -169,7 +170,7 @@ bool DataCryptorChaCha20Poly1305::decrypt(const QByteArray& in, QByteArray* out)
     if (EVP_DecryptUpdate(cipher.get(),
                           reinterpret_cast<uint8_t*>(out->data()),
                           &length,
-                          reinterpret_cast<const uint8_t*>(in.constData()) + kHeaderSize,
+                          reinterpret_cast<const uint8_t*>(in.data()) + kHeaderSize,
                           in.size() - kHeaderSize) != 1)
     {
         LOG(LS_WARNING) << "EVP_DecryptUpdate failed";
@@ -180,7 +181,7 @@ bool DataCryptorChaCha20Poly1305::decrypt(const QByteArray& in, QByteArray* out)
                             EVP_CTRL_AEAD_SET_TAG,
                             kTagSize,
                             reinterpret_cast<uint8_t*>(
-                                const_cast<char*>(in.constData())) + kIVSize) != 1)
+                                const_cast<char*>(in.data())) + kIVSize) != 1)
     {
         LOG(LS_WARNING) << "EVP_CIPHER_CTX_ctrl failed";
         return false;

@@ -23,6 +23,22 @@
 
 namespace crypto {
 
+namespace {
+
+template <class ContainerT>
+ContainerT generateBuffer(size_t size)
+{
+    ContainerT random_buffer;
+    random_buffer.resize(size);
+
+    bool result = Random::fillBuffer(random_buffer.data(), random_buffer.size());
+    CHECK(result);
+
+    return random_buffer;
+}
+
+} // namespace
+
 // static
 bool Random::fillBuffer(void* buffer, size_t size)
 {
@@ -33,19 +49,19 @@ bool Random::fillBuffer(void* buffer, size_t size)
 }
 
 // static
-QByteArray Random::generateBuffer(size_t size)
+QByteArray Random::byteArray(size_t size)
 {
-    QByteArray random_buffer;
-    random_buffer.resize(size);
-
-    bool result = fillBuffer(random_buffer.data(), random_buffer.size());
-    CHECK(result);
-
-    return random_buffer;
+    return generateBuffer<QByteArray>(size);
 }
 
 // static
-uint32_t Random::generateNumber()
+std::string Random::string(size_t size)
+{
+    return generateBuffer<std::string>(size);
+}
+
+// static
+uint32_t Random::number()
 {
     uint32_t ret;
 

@@ -94,7 +94,7 @@ proto::SrpServerKeyExchange* SrpHostContext::readIdentify(const proto::SrpIdenti
         v_ = crypto::BigNum::fromByteArray(user.verifier);
     }
 
-    b_ = crypto::BigNum::fromByteArray(crypto::Random::generateBuffer(128)); // 1024 bits.
+    b_ = crypto::BigNum::fromByteArray(crypto::Random::byteArray(128)); // 1024 bits.
     B_ = crypto::SrpMath::calc_B(b_, N_, g, v_);
 
     if (!N_.isValid() || !g.isValid() || !s.isValid() || !B_.isValid())
@@ -104,7 +104,7 @@ proto::SrpServerKeyExchange* SrpHostContext::readIdentify(const proto::SrpIdenti
     if (!iv_size)
         return nullptr;
 
-    encrypt_iv_ = crypto::Random::generateBuffer(iv_size);
+    encrypt_iv_ = crypto::Random::byteArray(iv_size);
 
     std::unique_ptr<proto::SrpServerKeyExchange> server_key_exchange =
         std::make_unique<proto::SrpServerKeyExchange>();

@@ -27,14 +27,14 @@ namespace crypto {
 class DataCryptorChaCha20Poly1305 : public DataCryptor
 {
 public:
-    DataCryptorChaCha20Poly1305(const QByteArray& key);
+    DataCryptorChaCha20Poly1305(std::string_view key);
     ~DataCryptorChaCha20Poly1305();
 
-    bool encrypt(const QByteArray& in, QByteArray* out) override;
-    bool decrypt(const QByteArray& in, QByteArray* out) override;
+    bool encrypt(std::string_view in, std::string* out) override;
+    bool decrypt(std::string_view in, std::string* out) override;
 
 private:
-    QByteArray key_;
+    std::string key_;
 
     DISALLOW_COPY_AND_ASSIGN(DataCryptorChaCha20Poly1305);
 };

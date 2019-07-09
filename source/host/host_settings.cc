@@ -143,7 +143,7 @@ net::SrpUserList Settings::userList() const
 
     QByteArray seed_key = system_settings_.value(QStringLiteral("SeedKey")).toByteArray();
     if (seed_key.isEmpty())
-        seed_key = crypto::Random::generateBuffer(64);
+        seed_key = crypto::Random::byteArray(64);
 
     users.setSeedKey(seed_key);
 

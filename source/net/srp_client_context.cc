@@ -176,14 +176,14 @@ proto::SrpClientKeyExchange* SrpClientContext::readServerKeyExchange(
     B_ = crypto::BigNum::fromStdString(server_key_exchange.b());
     decrypt_iv_ = QByteArray::fromStdString(server_key_exchange.iv());
 
-    a_ = crypto::BigNum::fromByteArray(crypto::Random::generateBuffer(128)); // 1024 bits.
+    a_ = crypto::BigNum::fromByteArray(crypto::Random::byteArray(128)); // 1024 bits.
     A_ = crypto::SrpMath::calc_A(a_, N_, g_);
 
     size_t iv_size = ivSizeForMethod(method_);
     if (!iv_size)
         return nullptr;
 
-    encrypt_iv_ = crypto::Random::generateBuffer(iv_size);
+    encrypt_iv_ = crypto::Random::byteArray(iv_size);
 
     std::unique_ptr<proto::SrpClientKeyExchange> client_key_exchange =
         std::make_unique<proto::SrpClientKeyExchange>();

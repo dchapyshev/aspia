@@ -33,10 +33,11 @@ public:
     static bool fillBuffer(void* buffer, size_t size);
 
     // Generates a random buffer of size |size|.
-    static QByteArray generateBuffer(size_t size);
+    static QByteArray byteArray(size_t size);
+    static std::string string(size_t size);
 
     // Generates a random number.
-    static uint32_t generateNumber();
+    static uint32_t number();
 
 private:
     DISALLOW_COPY_AND_ASSIGN(Random);

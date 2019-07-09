@@ -17,6 +17,7 @@
 //
 
 #include "console/address_book_tab.h"
+
 #include "common/message_serialization.h"
 #include "console/address_book_dialog.h"
 #include "console/computer_dialog.h"
@@ -25,6 +26,7 @@
 #include "console/console_settings.h"
 #include "console/open_address_book_dialog.h"
 #include "crypto/data_cryptor_chacha20_poly1305.h"
+#include "crypto/data_cryptor_fake.h"
 #include "crypto/password_hash.h"
 #include "crypto/secure_memory.h"
 
@@ -93,7 +95,7 @@ void cleanupFile(proto::address_book::File* file)
 AddressBookTab::AddressBookTab(const QString& file_path,
                                proto::address_book::File&& file,
                                proto::address_book::Data&& data,
-                               QByteArray&& key,
+                               std::string&& key,
                                QWidget* parent)
     : ConsoleTab(ConsoleTab::AddressBook, parent),
       file_path_(file_path),
@@ -203,7 +205,7 @@ AddressBookTab* AddressBookTab::createNew(QWidget* parent)
 {
     proto::address_book::File file;
     proto::address_book::Data data;
-    QByteArray key;
+    std::string key;
 
     AddressBookDialog dialog(parent, QString(), &file, &data, &key);
     if (dialog.exec() != QDialog::Accepted)
@@ -247,21 +249,15 @@ AddressBookTab* AddressBookTab::openFromFile(const QString& file_path, QWidget* 
     }
 
     proto::address_book::Data address_book_data;
-    QByteArray key;
+
+    std::unique_ptr<crypto::DataCryptor> cryptor;
+    std::string key;
 
     switch (address_book_file.encryption_type())
     {
         case proto::address_book::ENCRYPTION_TYPE_NONE:
-        {
-            if (!address_book_data.ParseFromString(address_book_file.data()))
-            {
-                showOpenError(parent,
-                              tr("The address book file \"%1\" is corrupted or has an unknown format.")
-                              .arg(file_path));
-                return nullptr;
-            }
-        }
-        break;
+            cryptor = std::make_unique<crypto::DataCryptorFake>();
+            break;
 
         case proto::address_book::ENCRYPTION_TYPE_CHACHA20_POLY1305:
         {
@@ -269,36 +265,39 @@ AddressBookTab* AddressBookTab::openFromFile(const QString& file_path, QWidget* 
             if (dialog.exec() != QDialog::Accepted)
                 return nullptr;
 
-            QByteArray salt = QByteArray::fromStdString(address_book_file.hashing_salt());
             key = crypto::PasswordHash::hash(
-                crypto::PasswordHash::SCRYPT, dialog.password().toUtf8(), salt);
+                crypto::PasswordHash::SCRYPT,
+                dialog.password().toStdString(),
+                address_book_file.hashing_salt());
 
-            std::unique_ptr<crypto::DataCryptor> cryptor =
-                std::make_unique<crypto::DataCryptorChaCha20Poly1305>(key);
-
-            QByteArray decrypted_data;
-            if (!cryptor->decrypt(QByteArray::fromStdString(address_book_file.data()), &decrypted_data))
-            {
-                showOpenError(parent, tr("Unable to decrypt the address book with the specified password."));
-                return nullptr;
-            }
-
-            if (!address_book_data.ParseFromArray(decrypted_data.constData(), decrypted_data.size()))
-            {
-                showOpenError(parent, tr("The address book file is corrupted or has an unknown format."));
-                return nullptr;
-            }
-
-            crypto::memZero(&decrypted_data);
+            cryptor = std::make_unique<crypto::DataCryptorChaCha20Poly1305>(key);
         }
         break;
 
         default:
-        {
-            showOpenError(parent, tr("The address book file is encrypted with an unsupported encryption type."));
-            return nullptr;
-        }
+            break;
     }
+
+    if (!cryptor)
+    {
+        showOpenError(parent, tr("The address book file is encrypted with an unsupported encryption type."));
+        return nullptr;
+    }
+
+    std::string decrypted_data;
+    if (!cryptor->decrypt(address_book_file.data(), &decrypted_data))
+    {
+        showOpenError(parent, tr("Unable to decrypt the address book with the specified password."));
+        return nullptr;
+    }
+
+    if (!address_book_data.ParseFromString(decrypted_data))
+    {
+        showOpenError(parent, tr("The address book file is corrupted or has an unknown format."));
+        return nullptr;
+    }
+
+    crypto::memZero(&decrypted_data);
 
     return new AddressBookTab(file_path,
                               std::move(address_book_file),
@@ -332,7 +331,7 @@ AddressBookTab* AddressBookTab::duplicateTab() const
     return new AddressBookTab(filePath(),
                               proto::address_book::File(file_),
                               proto::address_book::Data(data_),
-                              QByteArray(key_),
+                              std::string(key_),
                               static_cast<QWidget*>(parent()));
 }
 
@@ -711,31 +710,29 @@ void AddressBookTab::updateComputerList(ComputerGroupItem* computer_group)
 
 bool AddressBookTab::saveToFile(const QString& file_path)
 {
-    QByteArray serialized_data = common::serializeMessage(data_);
+    std::string serialized_data = data_.SerializeAsString();
+    std::unique_ptr<crypto::DataCryptor> cryptor;
 
     switch (file_.encryption_type())
     {
         case proto::address_book::ENCRYPTION_TYPE_NONE:
-            file_.set_data(serialized_data.toStdString());
+            cryptor = std::make_unique<crypto::DataCryptorFake>();
             break;
 
         case proto::address_book::ENCRYPTION_TYPE_CHACHA20_POLY1305:
-        {
-            std::unique_ptr<crypto::DataCryptor> cryptor =
-                std::make_unique<crypto::DataCryptorChaCha20Poly1305>(key_);
-
-            QByteArray encrypted_data;
-            CHECK(cryptor->encrypt(serialized_data, &encrypted_data));
-
-            file_.set_data(encrypted_data.toStdString());
-            crypto::memZero(&serialized_data);
-        }
-        break;
+            cryptor = std::make_unique<crypto::DataCryptorChaCha20Poly1305>(key_);
+            break;
 
         default:
             LOG(LS_FATAL) << "Unknown encryption type: " << file_.encryption_type();
             return false;
     }
+
+    std::string encrypted_data;
+    CHECK(cryptor->encrypt(serialized_data, &encrypted_data));
+    crypto::memZero(&serialized_data);
+
+    file_.set_data(std::move(encrypted_data));
 
     QString path = file_path;
     if (path.isEmpty())

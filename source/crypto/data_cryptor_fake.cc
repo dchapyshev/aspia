@@ -20,15 +20,15 @@
 
 namespace crypto {
 
-bool DataCryptorFake::encrypt(const QByteArray& in, QByteArray* out)
+bool DataCryptorFake::encrypt(std::string_view in, std::string* out)
 {
-    *out = in;
+    out->assign(in);
     return true;
 }
 
-bool DataCryptorFake::decrypt(const QByteArray& in, QByteArray* out)
+bool DataCryptorFake::decrypt(std::string_view in, std::string* out)
 {
-    *out = in;
+    out->assign(in);
     return true;
 }
 

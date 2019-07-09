@@ -37,7 +37,7 @@ SrpUser SrpUser::create(const QString& name, const QString& password)
     SrpUser user;
 
     user.name = name;
-    user.salt = crypto::Random::generateBuffer(kUserSaltSize);
+    user.salt = crypto::Random::byteArray(kUserSaltSize);
 
     user.number = QByteArray(
         reinterpret_cast<const char*>(crypto::kSrpNg_8192.N.data()), crypto::kSrpNg_8192.N.size());
