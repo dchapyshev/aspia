@@ -50,7 +50,7 @@ std::unique_ptr<SharedFrame> SharedFrame::share()
 
 bool SharedFrame::isShared()
 {
-    return !frame_.unique();
+    return frame_.use_count() > 1;
 }
 
 } // namespace desktop
