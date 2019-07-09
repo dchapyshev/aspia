@@ -77,6 +77,13 @@ public:
         return Traits::isValid(object_);
     }
 
+    void swap(ScopedObject& other)
+    {
+        T object = other.object_;
+        other.object_ = object_;
+        object_ = object;
+    }
+
     ScopedObject& operator=(ScopedObject&& other) noexcept
     {
         Traits::close(object_);
