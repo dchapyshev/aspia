@@ -23,7 +23,7 @@
 
 #include <string>
 
-#include <windows.h>
+#include <Windows.h>
 #include <objidl.h>
 #include <sddl.h>
 

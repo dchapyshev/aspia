@@ -21,7 +21,7 @@
 
 #include "base/macros_magic.h"
 
-#include <windows.h>
+#include <Windows.h>
 #include <wtsapi32.h>
 
 namespace base::win {

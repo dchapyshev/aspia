@@ -22,7 +22,7 @@
 #include "build/build_config.h"
 
 #if defined(OS_WIN)
-#include <windows.h>
+#include <Windows.h>
 #endif // defined(OS_WIN)
 
 namespace base {

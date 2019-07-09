@@ -22,7 +22,7 @@
 #include "base/macros_magic.h"
 #include "base/thread_checker.h"
 
-#include <windows.h>
+#include <Windows.h>
 
 namespace base::win {
 

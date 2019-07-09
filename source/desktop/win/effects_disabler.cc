@@ -19,7 +19,7 @@
 #include "desktop/win/effects_disabler.h"
 #include "base/logging.h"
 
-#include <windows.h>
+#include <Windows.h>
 
 namespace desktop {
 

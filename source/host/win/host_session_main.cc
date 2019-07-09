@@ -28,7 +28,7 @@
 #include <QGuiApplication>
 #include <QCommandLineParser>
 
-#include <windows.h>
+#include <Windows.h>
 
 namespace host {
 

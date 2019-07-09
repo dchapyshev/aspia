@@ -33,7 +33,7 @@
 #include <QThread>
 
 #if defined(OS_WIN)
-#include <windows.h>
+#include <Windows.h>
 #include <psapi.h>
 #endif // defined(OS_WIN)
 

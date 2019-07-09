@@ -20,7 +20,7 @@
 #include "base/logging.h"
 #include "base/strings/unicode.h"
 
-#include <windows.h>
+#include <Windows.h>
 #include <winspool.h>
 
 namespace base::win {

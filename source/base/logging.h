@@ -534,7 +534,7 @@ using SystemErrorCode = int;
 #error Platform support not implemented
 #endif
 
-// Alias for ::GetLastError() on Windows and errno on POSIX. Avoids having to pull in windows.h
+// Alias for ::GetLastError() on Windows and errno on POSIX. Avoids having to pull in Windows.h
 // just for GetLastError() and DWORD.
 SystemErrorCode lastSystemErrorCode();
 std::string systemErrorCodeToString(SystemErrorCode error_code);

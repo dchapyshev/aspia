@@ -34,7 +34,7 @@ Q_IMPORT_PLUGIN(QWindowsVistaStylePlugin);
 #endif // defined(Q_OS_WIN)
 #endif // defined(QT_STATIC)
 
-#include <windows.h>
+#include <Windows.h>
 
 extern "C" {
 

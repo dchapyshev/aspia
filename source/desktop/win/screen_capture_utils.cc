@@ -23,7 +23,7 @@
 #include "base/win/scoped_hdc.h"
 #include "desktop/win/bitmap_info.h"
 
-#include <windows.h>
+#include <Windows.h>
 
 namespace desktop {
 

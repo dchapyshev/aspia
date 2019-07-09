@@ -21,7 +21,7 @@
 #include "base/win/scoped_impersonator.h"
 #include "base/logging.h"
 
-#include <windows.h>
+#include <Windows.h>
 #include <wtsapi32.h>
 
 namespace desktop {

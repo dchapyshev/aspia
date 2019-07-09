@@ -24,7 +24,7 @@
 
 #include <filesystem>
 
-#include <windows.h>
+#include <Windows.h>
 
 namespace common {
 

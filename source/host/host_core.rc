@@ -16,11 +16,11 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include <windows.h>
+#include <Windows.h>
 
 LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 
-#define ASPIA_ORIGINAL_FILE_NAME "aspia_host.dll"
+#define ASPIA_ORIGINAL_FILE_NAME "aspia_host_core.dll"
 #define ASPIA_FILE_DESCRIPTION "Aspia Host Core"
 
 #include "build/version.rc"

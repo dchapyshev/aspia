@@ -25,7 +25,7 @@
 #include <string>
 #include <vector>
 
-#include <windows.h>
+#include <Windows.h>
 
 struct tagVS_FIXEDFILEINFO;
 typedef tagVS_FIXEDFILEINFO VS_FIXEDFILEINFO;

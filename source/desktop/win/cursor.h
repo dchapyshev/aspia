@@ -19,7 +19,7 @@
 #ifndef DESKTOP__WIN__CURSOR_H
 #define DESKTOP__WIN__CURSOR_H
 
-#include <windows.h>
+#include <Windows.h>
 
 namespace desktop {
 

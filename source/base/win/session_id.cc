@@ -21,7 +21,7 @@
 #include <limits>
 #include <type_traits>
 
-#include <windows.h>
+#include <Windows.h>
 
 namespace base::win {
 

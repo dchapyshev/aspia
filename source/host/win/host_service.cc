@@ -24,7 +24,7 @@
 #include "host/host_server.h"
 #include "host/host_settings.h"
 
-#include <windows.h>
+#include <Windows.h>
 #include <sddl.h>
 
 namespace host {
