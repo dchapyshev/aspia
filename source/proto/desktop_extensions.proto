@@ -36,6 +36,7 @@ message ScreenList
 {
     // List of screens (monitors) on the remote computer.
     repeated Screen screen = 1;
+    int64 current_screen = 2;
 }
 
 // Extension name: "power_control"
