@@ -39,17 +39,17 @@
     <message>
         <location filename="../session_type.cc" line="30"/>
         <source>Desktop Manage</source>
-        <translation type="unfinished"></translation>
+        <translation>Керування робочим столом</translation>
     </message>
     <message>
         <location filename="../session_type.cc" line="33"/>
         <source>Desktop View</source>
-        <translation type="unfinished"></translation>
+        <translation>Перегляд робочого столу</translation>
     </message>
     <message>
         <location filename="../session_type.cc" line="36"/>
         <source>File Transfer</source>
-        <translation type="unfinished"></translation>
+        <translation>Передача файлів</translation>
     </message>
 </context>
 <context>
@@ -62,17 +62,17 @@
     <message>
         <location filename="../ui/about_dialog.cc" line="95"/>
         <source>Aspia is free software released under GNU General Public License 3.</source>
-        <translation>Aspia - вільне програмне забезпечення, випущене під ліцензією GNU General Public License 3.</translation>
+        <translation>Aspia — вільне програмне забезпечення, випущене під ліцензією GNU General Public License 3.</translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.cc" line="96"/>
         <source>You can get a copy of license here:</source>
-        <translation>Переглянути ліцензію:</translation>
+        <translation>Ви можете отримати копію ліцензії тут:</translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.cc" line="101"/>
         <source>You can also get a translation of GNU GPL license here:</source>
-        <translation>Переглянути переклад ліцензії GNU GPL:</translation>
+        <translation>Ознайомитися з перекладом ліцензії GNU GPL на вашу мову можна тут:</translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.cc" line="106"/>
