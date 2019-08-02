@@ -695,10 +695,23 @@ void MainWindow::onTabContextMenu(const QPoint& pos)
 
     QMenu menu;
 
-    QAction* close_other_action = new QAction(
-        QIcon(QStringLiteral(":/img/ui-tab-multi-close.png")), tr("Close other tabs"), &menu);
+    QAction* close_other_action = nullptr;
     QAction* close_action;
     QAction* pin_action;
+
+    for (int i = 0; i < ui.tab_widget->count(); ++i)
+    {
+        AddressBookTab* tab_at = dynamic_cast<AddressBookTab*>(ui.tab_widget->widget(i));
+        if (!tab_at)
+            continue;
+
+        if (i != tab_index && !mru_.isPinnedFile(tab_at->filePath()))
+        {
+            close_other_action = new QAction(
+                QIcon(QStringLiteral(":/img/ui-tab-multi-close.png")), tr("Close other tabs"), &menu);
+            break;
+        }
+    }
 
     if (!is_pinned)
     {
@@ -721,8 +734,12 @@ void MainWindow::onTabContextMenu(const QPoint& pos)
 
     if (close_action)
         menu.addAction(close_action);
-    menu.addAction(close_other_action);
-    menu.addSeparator();
+    if (close_other_action)
+        menu.addAction(close_other_action);
+
+    if (close_action || close_other_action)
+        menu.addSeparator();
+
     menu.addAction(pin_action);
 
     QAction* action = menu.exec(tab_bar->mapToGlobal(pos));

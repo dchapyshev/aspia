@@ -1211,49 +1211,49 @@
     </message>
     <message>
         <location filename="../console_main_window.cc" line="510"/>
-        <location filename="../console_main_window.cc" line="836"/>
+        <location filename="../console_main_window.cc" line="853"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
         <location filename="../console_main_window.cc" line="511"/>
-        <location filename="../console_main_window.cc" line="837"/>
+        <location filename="../console_main_window.cc" line="854"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation>Адресная книга &quot;%1&quot; изменена. Сохранить изменения?</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="699"/>
+        <location filename="../console_main_window.cc" line="711"/>
         <source>Close other tabs</source>
         <translation>Закрыть другие вкладки</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="706"/>
+        <location filename="../console_main_window.cc" line="719"/>
         <source>Close tab</source>
         <translation>Закрыть вкладку</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="709"/>
-        <location filename="../console_main_window.cc" line="716"/>
+        <location filename="../console_main_window.cc" line="722"/>
+        <location filename="../console_main_window.cc" line="729"/>
         <source>Pin tab</source>
         <translation>Закрепить вкладку</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="793"/>
+        <location filename="../console_main_window.cc" line="810"/>
         <source>Hide</source>
         <translation>Спрятать</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="808"/>
+        <location filename="../console_main_window.cc" line="825"/>
         <source>Show</source>
         <translation>Показать</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="917"/>
+        <location filename="../console_main_window.cc" line="934"/>
         <source>&lt;empty&gt;</source>
         <translation>&lt;пусто&gt;</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="938"/>
+        <location filename="../console_main_window.cc" line="955"/>
         <source>Aspia Console</source>
         <translation>Консоль Aspia</translation>
     </message>

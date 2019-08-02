@@ -1236,49 +1236,49 @@
     </message>
     <message>
         <location filename="../console_main_window.cc" line="510"/>
-        <location filename="../console_main_window.cc" line="836"/>
+        <location filename="../console_main_window.cc" line="853"/>
         <source>Confirmation</source>
         <translation>Bevestiging</translation>
     </message>
     <message>
         <location filename="../console_main_window.cc" line="511"/>
-        <location filename="../console_main_window.cc" line="837"/>
+        <location filename="../console_main_window.cc" line="854"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation>Adresboek &quot;%1&quot; is aangepast. Wijzigingen opslaan?</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="699"/>
+        <location filename="../console_main_window.cc" line="711"/>
         <source>Close other tabs</source>
         <translation>Sluit andere tabs</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="706"/>
+        <location filename="../console_main_window.cc" line="719"/>
         <source>Close tab</source>
         <translation>Sluit tab</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="709"/>
-        <location filename="../console_main_window.cc" line="716"/>
+        <location filename="../console_main_window.cc" line="722"/>
+        <location filename="../console_main_window.cc" line="729"/>
         <source>Pin tab</source>
         <translation>Pin tab</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="793"/>
+        <location filename="../console_main_window.cc" line="810"/>
         <source>Hide</source>
         <translation>Verbergen</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="808"/>
+        <location filename="../console_main_window.cc" line="825"/>
         <source>Show</source>
         <translation>Weergeven</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="917"/>
+        <location filename="../console_main_window.cc" line="934"/>
         <source>&lt;empty&gt;</source>
         <translation>&lt;leeg&gt;</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="938"/>
+        <location filename="../console_main_window.cc" line="955"/>
         <source>Aspia Console</source>
         <translation>Aspia Console</translation>
     </message>
