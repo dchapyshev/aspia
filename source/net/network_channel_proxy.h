@@ -16,42 +16,46 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef NET__NETWORK_SERVER_H
-#define NET__NETWORK_SERVER_H
+#ifndef NET__NETWORK_CHANNEL_PROXY_H
+#define NET__NETWORK_CHANNEL_PROXY_H
 
-#include "base/macros_magic.h"
-
-#include <QPointer>
-#include <QList>
-#include <QTcpServer>
+#include "net/network_channel.h"
 
 namespace net {
 
-class Channel;
-
-class Server : public QObject
+class ChannelProxy
 {
 public:
-    Server() = default;
-    ~Server() = default;
+    bool connectToHost(const QString& address, uint16_t port);
+    bool disconnectFromHost();
 
-    class Delegate
-    {
-    public:
-        virtual ~Delegate() = default;
+    bool setListener(Listener* listener);
+    bool setCryptor(std::unique_ptr<crypto::Cryptor> cryptor);
 
-        virtual void onNewConnection(std::unique_ptr<Channel> channel) = 0;
-    };
+    bool isConnected() const;
+    bool isPaused() const;
 
-    bool start(uint16_t port, Delegate* delegate);
+    bool pause();
+    bool resume();
+
+    QString peerAddress() const;
+
+    bool send(const QByteArray& buffer);
 
 private:
-    std::unique_ptr<QTcpServer> tcp_server_;
-    Delegate* delegate_ = nullptr;
+    friend class Channel;
 
-    DISALLOW_COPY_AND_ASSIGN(Server);
+    explicit ChannelProxy(Channel* channel);
+
+    // Called directly by Channel::~Channel.
+    void willDestroyCurrentChannel();
+
+    Channel* channel_;
+    mutable std::mutex channel_lock_;
+
+    DISALLOW_COPY_AND_ASSIGN(ChannelProxy);
 };
 
 } // namespace net
 
-#endif // NET__NETWORK_SERVER_H
+#endif // NET__NETWORK_CHANNEL_PROXY_H

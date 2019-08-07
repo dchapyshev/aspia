@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -20,13 +20,12 @@
 #define NET__NETWORK_CHANNEL_H
 
 #include "base/macros_magic.h"
-#include "base/version.h"
+#include "net/network_error.h"
 
 #if defined(USE_TBB)
 #include <tbb/scalable_allocator.h>
 #endif // defined(USE_TBB)
 
-#include <QPointer>
 #include <QTcpSocket>
 
 #include <queue>
@@ -37,102 +36,81 @@ class Cryptor;
 
 namespace net {
 
+class ChannelProxy;
+class Listener;
+
 class Channel : public QObject
 {
     Q_OBJECT
 
 public:
-    enum class ChannelType { HOST, CLIENT };
-    enum class ChannelState { NOT_CONNECTED, CONNECTED, ENCRYPTED };
-    enum class KeyExchangeState { HELLO, IDENTIFY, KEY_EXCHANGE, SESSION, DONE };
-
-    enum class Error
-    {
-        UNKNOWN,                  // Unknown error.
-        NETWORK_ERROR,            // An error occurred with the network (e.g., the network cable
-                                  // was accidentally plugged out).
-        CONNECTION_REFUSED,       // The connection was refused by the peer (or timed out).
-        REMOTE_HOST_CLOSED,       // The remote host closed the connection.
-        SPECIFIED_HOST_NOT_FOUND, // The host address was not found.
-        SOCKET_TIMEOUT,           // The socket operation timed out.
-        ADDRESS_IN_USE,           // The address specified is already in use and was set to be exclusive.
-        ADDRESS_NOT_AVAILABLE,    // The address specified does not belong to the host.
-        PROTOCOL_FAILURE,         // Violation of the data exchange protocol.
-        ENCRYPTION_FAILURE,       // An error occurred while encrypting the message.
-        DECRYPTION_FAILURE,       // An error occurred while decrypting the message.
-        AUTHENTICATION_FAILURE,   // An error occured while authenticating.
-        SESSION_TYPE_NOT_ALLOWED  // The specified session type is not allowed for the user.
-    };
-
+    Channel();
     virtual ~Channel() = default;
 
-    // Returns the state of the data channel.
-    ChannelState channelState() const { return channel_state_; }
+    std::shared_ptr<ChannelProxy> channelProxy() { return proxy_; }
 
-    // If the channel is started, it returns true, if not, then false.
-    bool isStarted() const { return !read_.paused; }
+    // Connects to a host at the specified address and port.
+    void connectToHost(const QString& address, uint16_t port);
+
+    // Disconnects to remote host.
+    void disconnectFromHost();
+
+    // Sets an instance of the class to receive connection status notifications or new messages.
+    // You can change this in the process.
+    void setListener(Listener* listener);
+
+    // Sets an instance of a class to encrypt and decrypt messages.
+    // By default, a fake cryptographer is created that only copies the original message.
+    // You must explicitly establish a cryptographer before or after establishing a connection.
+    void setCryptor(std::unique_ptr<crypto::Cryptor> cryptor);
+
+    // Returns true if the channel is connected and false if not connected.
+    bool isConnected() const { return is_connected_; }
+
+    // Returns true if the channel is paused and false if not. If the channel is not connected,
+    // then the return value is undefined.
+    bool isPaused() const { return is_paused_; }
+
+    // Pauses the channel. After calling the method, new messages will not be read from the socket.
+    // If at the time the method was called, the message was read, then notification of this
+    // message will be received only after calling method resume().
+    void pause();
+
+    // After calling the method, reading new messages will continue.
+    void resume();
 
     // Returns the address of the connected peer.
     QString peerAddress() const;
-
-    // Returns the version of the connected peer.
-    base::Version peerVersion() const { return peer_version_; }
-
-signals:
-    // Emits when the connection is aborted.
-    void disconnected();
-
-    // Emitted when an error occurred. Parameter |message| contains a text description of the error.
-    void errorOccurred(Error error);
-
-    // Emitted when a new message is received.
-    void messageReceived(const QByteArray& buffer);
-
-public slots:
-    // Starts reading messages from the channel. After receiving each new message, the signal
-    // |messageReceived| will be emmited.
-    // If the channel is already started, it does nothing.
-    void start();
-
-    // Stops the channel. After calling this slot, new messages will not arrive and the sending of
-    // messages will be stopped. All messages that are in the sending queue will be deleted.
-    void stop();
-
-    // Pauses channel. Receiving incoming messages is suspended. To continue data transfer, you
-    // need to call slot |start|.
-    void pause();
 
     // Sends a message.
     void send(const QByteArray& buffer);
 
 protected:
-    QPointer<QTcpSocket> socket_;
-    base::Version peer_version_;
-
-    // Encrypts and decrypts data.
-    std::unique_ptr<crypto::Cryptor> cryptor_;
-
-    ChannelState channel_state_ = ChannelState::NOT_CONNECTED;
-    KeyExchangeState key_exchange_state_ = KeyExchangeState::HELLO;
-
-    Channel(ChannelType channel_type, QTcpSocket* socket, QObject* parent);
-
-    void sendInternal(const QByteArray& buffer);
-
-    virtual void internalMessageReceived(const QByteArray& buffer) = 0;
-    virtual void internalMessageWritten() = 0;
+    friend class Server;
+    explicit Channel(QTcpSocket* socket);
 
 private slots:
-    void onError(QAbstractSocket::SocketError error);
+    void onSocketError(QAbstractSocket::SocketError error);
     void onBytesWritten(int64_t bytes);
     void onReadyRead();
     void onMessageWritten();
     void onMessageReceived();
 
 private:
+    void init();
+    void errorOccurred(ErrorCode error_code);
     void scheduleWrite();
 
-    const ChannelType channel_type_;
+    std::shared_ptr<ChannelProxy> proxy_;
+    Listener* listener_ = nullptr;
+
+    QTcpSocket* socket_ = nullptr;
+
+    // Encrypts and decrypts data.
+    std::unique_ptr<crypto::Cryptor> cryptor_;
+
+    bool is_connected_ = false;
+    bool is_paused_ = true;
 
     // To this buffer decrypts the data received from the network.
     QByteArray decrypt_buffer_;
@@ -159,8 +137,6 @@ private:
 
     struct ReadContext
     {
-        bool paused = false;
-
         // To this buffer reads data from the network.
         QByteArray buffer;
 

@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,10 +17,18 @@
 //
 
 #include "net/network_channel.h"
+
 #include "base/logging.h"
-#include "crypto/cryptor.h"
+#include "crypto/cryptor_fake.h"
+#include "net/network_channel_proxy.h"
+#include "net/network_listener.h"
 
 #include <QNetworkProxy>
+
+#if defined(OS_WIN)
+#include <winsock2.h>
+#include <mstcpip.h>
+#endif // defined(OS_WIN)
 
 namespace net {
 
@@ -29,65 +37,106 @@ namespace {
 constexpr uint32_t kMaxMessageSize = 16 * 1024 * 1024; // 16 MB
 constexpr int64_t kMaxWriteSize = 1200; // 1200 bytes
 
-QByteArray createWriteBuffer(const QByteArray& message_buffer)
+void enableKeepAlive(QTcpSocket* socket)
 {
-    size_t message_size = message_buffer.size();
-    if (!message_size || message_size > kMaxMessageSize)
-        return QByteArray();
+#if defined(OS_WIN)
+    struct tcp_keepalive alive;
 
-    uint8_t length_data[4];
-    size_t length_data_size = 1;
+    alive.onoff = 1; // On.
+    alive.keepalivetime = 60000; // 60 seconds.
+    alive.keepaliveinterval = 5000; // 5 seconds.
 
-    length_data[0] = message_size & 0x7F;
-    if (message_size > 0x7F) // 127 bytes
+    DWORD bytes_returned;
+
+    if (WSAIoctl(socket->socketDescriptor(), SIO_KEEPALIVE_VALS,
+                 &alive, sizeof(alive), nullptr, 0, &bytes_returned,
+                 nullptr, nullptr) == SOCKET_ERROR)
     {
-        length_data[0] |= 0x80;
-        length_data[length_data_size++] = message_size >> 7 & 0x7F;
-
-        if (message_size > 0x3FFF) // 16383 bytes
-        {
-            length_data[1] |= 0x80;
-            length_data[length_data_size++] = message_size >> 14 & 0x7F;
-
-            if (message_size > 0x1FFFF) // 2097151 bytes
-            {
-                length_data[2] |= 0x80;
-                length_data[length_data_size++] = message_size >> 21 & 0xFF;
-            }
-        }
+        PLOG(LS_WARNING) << "WSAIoctl failed";
     }
+#else
+#warning Not implemented
+#endif
+}
 
-    QByteArray write_buffer;
-    write_buffer.resize(length_data_size + message_size);
-
-    memcpy(write_buffer.data(), length_data, length_data_size);
-    memcpy(write_buffer.data() + length_data_size, message_buffer.constData(), message_size);
-
-    return write_buffer;
+void disableNagle(QTcpSocket* socket)
+{
+    socket->setSocketOption(QTcpSocket::LowDelayOption, 1);
 }
 
 } // namespace
 
-Channel::Channel(ChannelType channel_type, QTcpSocket* socket, QObject* parent)
-    : QObject(parent),
-      channel_type_(channel_type),
-      socket_(socket)
+Channel::Channel()
+    : socket_(new QTcpSocket(this))
 {
-    DCHECK(!socket_.isNull());
+    init();
+}
 
+Channel::Channel(QTcpSocket* socket)
+    : socket_(socket)
+{
     socket_->setParent(this);
 
-    connect(socket_, &QTcpSocket::bytesWritten, this, &Channel::onBytesWritten);
-    connect(socket_, &QTcpSocket::readyRead, this, &Channel::onReadyRead);
+    disableNagle(socket_);
+    enableKeepAlive(socket_);
 
-    connect(socket_, &QTcpSocket::disconnected, this, &Channel::disconnected,
-            Qt::QueuedConnection);
+    is_connected_ = true;
 
-    connect(socket_, QOverload<QTcpSocket::SocketError>::of(&QTcpSocket::error),
-            this, &Channel::onError,
-            Qt::QueuedConnection);
+    init();
+}
 
-    connect(this, &Channel::errorOccurred, this, &Channel::stop);
+void Channel::connectToHost(const QString& address, uint16_t port)
+{
+    connect(socket_, &QTcpSocket::connected, [this]()
+    {
+        disableNagle(socket_);
+        enableKeepAlive(socket_);
+
+        is_connected_ = true;
+
+        if (listener_)
+            listener_->onNetworkConnected();
+    });
+
+    socket_->setProxy(QNetworkProxy::NoProxy);
+    socket_->connectToHost(address, port);
+}
+
+void Channel::disconnectFromHost()
+{
+    if (!is_connected_)
+        return;
+
+    is_connected_ = false;
+
+    socket_->abort();
+    socket_->waitForDisconnected();
+}
+
+void Channel::setListener(Listener* listener)
+{
+    listener_ = listener;
+}
+
+void Channel::setCryptor(std::unique_ptr<crypto::Cryptor> cryptor)
+{
+    cryptor_ = std::move(cryptor);
+}
+
+void Channel::pause()
+{
+    is_paused_ = true;
+}
+
+void Channel::resume()
+{
+    if (!is_connected_ || !is_paused_)
+        return;
+
+    is_paused_ = false;
+
+    // Start receiving messages.
+    onReadyRead();
 }
 
 QString Channel::peerAddress() const
@@ -102,40 +151,11 @@ QString Channel::peerAddress() const
     return address.toString();
 }
 
-void Channel::start()
-{
-    if (isStarted())
-        return;
-
-    read_.paused = false;
-
-    // Start receiving messages.
-    onReadyRead();
-}
-
-void Channel::stop()
-{
-    channel_state_ = ChannelState::NOT_CONNECTED;
-
-    if (socket_->state() != QTcpSocket::UnconnectedState)
-    {
-        socket_->abort();
-
-        if (socket_->state() != QTcpSocket::UnconnectedState)
-            socket_->waitForDisconnected();
-    }
-}
-
-void Channel::pause()
-{
-    read_.paused = true;
-}
-
 void Channel::send(const QByteArray& buffer)
 {
     if (buffer.isEmpty())
     {
-        emit errorOccurred(Error::UNKNOWN);
+        errorOccurred(ErrorCode::UNKNOWN);
         return;
     }
 
@@ -148,59 +168,47 @@ void Channel::send(const QByteArray& buffer)
         scheduleWrite();
 }
 
-void Channel::sendInternal(const QByteArray& buffer)
+void Channel::onSocketError(QAbstractSocket::SocketError error)
 {
-    write_.buffer = createWriteBuffer(buffer);
-    if (write_.buffer.isEmpty())
-    {
-        stop();
-        return;
-    }
-
-    socket_->write(write_.buffer);
-}
-
-void Channel::onError(QAbstractSocket::SocketError error)
-{
-    Error channel_error;
+    ErrorCode error_code;
 
     switch (error)
     {
         case QAbstractSocket::ConnectionRefusedError:
-            channel_error = Error::CONNECTION_REFUSED;
+            error_code = ErrorCode::CONNECTION_REFUSED;
             break;
 
         case QAbstractSocket::RemoteHostClosedError:
-            channel_error = Error::REMOTE_HOST_CLOSED;
+            error_code = ErrorCode::REMOTE_HOST_CLOSED;
             break;
 
         case QAbstractSocket::HostNotFoundError:
-            channel_error = Error::SPECIFIED_HOST_NOT_FOUND;
+            error_code = ErrorCode::SPECIFIED_HOST_NOT_FOUND;
             break;
 
         case QAbstractSocket::SocketTimeoutError:
-            channel_error = Error::SOCKET_TIMEOUT;
+            error_code = ErrorCode::SOCKET_TIMEOUT;
             break;
 
         case QAbstractSocket::AddressInUseError:
-            channel_error = Error::ADDRESS_IN_USE;
+            error_code = ErrorCode::ADDRESS_IN_USE;
             break;
 
         case QAbstractSocket::SocketAddressNotAvailableError:
-            channel_error = Error::ADDRESS_NOT_AVAILABLE;
+            error_code = ErrorCode::ADDRESS_NOT_AVAILABLE;
             break;
 
         case QAbstractSocket::NetworkError:
-            channel_error = Error::NETWORK_ERROR;
+            error_code = ErrorCode::NETWORK_ERROR;
             break;
 
         default:
             LOG(LS_WARNING) << "Unhandled value of Qt error: " << error;
-            channel_error = Error::UNKNOWN;
+            error_code = ErrorCode::UNKNOWN;
             break;
     }
 
-    emit errorOccurred(channel_error);
+    errorOccurred(error_code);
 }
 
 void Channel::onBytesWritten(int64_t bytes)
@@ -225,7 +233,7 @@ void Channel::onBytesWritten(int64_t bytes)
 
 void Channel::onReadyRead()
 {
-    if (read_.paused)
+    if (is_paused_)
         return;
 
     int64_t current = 0;
@@ -267,7 +275,7 @@ void Channel::onReadyRead()
 
                     if (!read_.buffer_size || read_.buffer_size > kMaxMessageSize)
                     {
-                        emit errorOccurred(Error::UNKNOWN);
+                        errorOccurred(ErrorCode::UNKNOWN);
                         return;
                     }
 
@@ -304,51 +312,67 @@ void Channel::onReadyRead()
 
 void Channel::onMessageWritten()
 {
-    if (channel_state_ == ChannelState::ENCRYPTED)
-    {
-        DCHECK(!write_.queue.empty());
+    DCHECK(!write_.queue.empty());
 
-        // Delete the sent message from the queue.
-        write_.queue.pop();
+    // Delete the sent message from the queue.
+    write_.queue.pop();
 
-        // If the queue is not empty, then we send the following message.
-        if (!write_.queue.empty())
-            scheduleWrite();
-    }
-    else
-    {
-        internalMessageWritten();
-    }
+    // If the queue is not empty, then we send the following message.
+    if (!write_.queue.empty())
+        scheduleWrite();
 }
 
 void Channel::onMessageReceived()
 {
-    if (channel_state_ == ChannelState::ENCRYPTED)
+    int decrypted_data_size = cryptor_->decryptedDataSize(read_.buffer.size());
+
+    if (decrypt_buffer_.capacity() < decrypted_data_size)
+        decrypt_buffer_.reserve(decrypted_data_size);
+
+    decrypt_buffer_.resize(decrypted_data_size);
+
+    if (!cryptor_->decrypt(read_.buffer.constData(),
+                           read_.buffer.size(),
+                           decrypt_buffer_.data()))
     {
-        int decrypted_data_size = cryptor_->decryptedDataSize(read_.buffer.size());
-
-        if (decrypt_buffer_.capacity() < decrypted_data_size)
-            decrypt_buffer_.reserve(decrypted_data_size);
-
-        decrypt_buffer_.resize(decrypted_data_size);
-
-        if (!cryptor_->decrypt(read_.buffer.constData(),
-                               read_.buffer.size(),
-                               decrypt_buffer_.data()))
-        {
-            emit errorOccurred(Error::DECRYPTION_FAILURE);
-            return;
-        }
-
-        emit messageReceived(decrypt_buffer_);
+        errorOccurred(ErrorCode::UNKNOWN);
+        return;
     }
-    else
-    {
-        internalMessageReceived(read_.buffer);
-    }
+
+    if (listener_)
+        listener_->onNetworkMessage(decrypt_buffer_);
 
     // Read next message.
     onReadyRead();
+}
+
+void Channel::init()
+{
+    proxy_.reset(new ChannelProxy(this));
+    cryptor_.reset(new crypto::CryptorFake());
+
+    connect(socket_, &QTcpSocket::bytesWritten, this, &Channel::onBytesWritten);
+    connect(socket_, &QTcpSocket::readyRead, this, &Channel::onReadyRead);
+
+    connect(socket_, QOverload<QTcpSocket::SocketError>::of(&QTcpSocket::error),
+            this, &Channel::onSocketError);
+
+    connect(socket_, &QTcpSocket::disconnected, [this]()
+    {
+        if (listener_)
+        {
+            listener_->onNetworkDisconnected();
+            listener_ = nullptr;
+        }
+    });
+}
+
+void Channel::errorOccurred(ErrorCode error_code)
+{
+    if (listener_)
+        listener_->onNetworkError(error_code);
+
+    disconnectFromHost();
 }
 
 void Channel::scheduleWrite()
@@ -359,7 +383,7 @@ void Channel::scheduleWrite()
     size_t encrypted_data_size = cryptor_->encryptedDataSize(source_buffer.size());
     if (encrypted_data_size > kMaxMessageSize)
     {
-        emit errorOccurred(Error::UNKNOWN);
+        errorOccurred(ErrorCode::UNKNOWN);
         return;
     }
 
@@ -404,7 +428,7 @@ void Channel::scheduleWrite()
                            source_buffer.size(),
                            write_.buffer.data() + length_data_size))
     {
-        emit errorOccurred(Error::ENCRYPTION_FAILURE);
+        errorOccurred(ErrorCode::UNKNOWN);
         return;
     }
 

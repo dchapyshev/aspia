@@ -16,42 +16,26 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef NET__NETWORK_SERVER_H
-#define NET__NETWORK_SERVER_H
+#ifndef NET__NETWORK_LISTENER_H
+#define NET__NETWORK_LISTENER_H
 
-#include "base/macros_magic.h"
+#include "net/network_error.h"
 
-#include <QPointer>
-#include <QList>
-#include <QTcpServer>
+#include <QByteArray>
 
 namespace net {
 
-class Channel;
-
-class Server : public QObject
+class Listener
 {
 public:
-    Server() = default;
-    ~Server() = default;
+    virtual ~Listener() = default;
 
-    class Delegate
-    {
-    public:
-        virtual ~Delegate() = default;
-
-        virtual void onNewConnection(std::unique_ptr<Channel> channel) = 0;
-    };
-
-    bool start(uint16_t port, Delegate* delegate);
-
-private:
-    std::unique_ptr<QTcpServer> tcp_server_;
-    Delegate* delegate_ = nullptr;
-
-    DISALLOW_COPY_AND_ASSIGN(Server);
+    virtual void onNetworkConnected() = 0;
+    virtual void onNetworkDisconnected() = 0;
+    virtual void onNetworkError(ErrorCode error_code) = 0;
+    virtual void onNetworkMessage(const QByteArray& buffer) = 0;
 };
 
 } // namespace net
 
-#endif // NET__NETWORK_SERVER_H
+#endif // NET__NETWORK_LISTENER_H

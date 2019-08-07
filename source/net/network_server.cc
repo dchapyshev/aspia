@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,138 +17,51 @@
 //
 
 #include "net/network_server.h"
-#include "base/logging.h"
-#include "net/network_channel_host.h"
+
+#include "net/network_channel.h"
+#include "qt_base/qt_logging.h"
 
 namespace net {
 
-Server::Server(QObject* parent)
-    : QObject(parent)
+bool Server::start(uint16_t port, Delegate* delegate)
 {
-    // Nothing
-}
+    DCHECK(delegate);
 
-Server::~Server()
-{
-    stop();
-}
-
-bool Server::start(uint16_t port)
-{
-    if (!tcp_server_.isNull())
+    if (tcp_server_)
     {
-        LOG(LS_WARNING) << "Server already started";
+        DLOG(LS_WARNING) << "Server already started";
         return false;
     }
 
-    tcp_server_ = new QTcpServer(this);
+    tcp_server_ = std::make_unique<QTcpServer>();
+    delegate_ = delegate;
 
-    connect(tcp_server_, &QTcpServer::newConnection, this, &Server::onNewConnection);
-    connect(tcp_server_, &QTcpServer::acceptError,
+    connect(tcp_server_.get(), &QTcpServer::newConnection, [this]()
+    {
+        while (tcp_server_->hasPendingConnections())
+        {
+            QTcpSocket* socket = tcp_server_->nextPendingConnection();
+            if (!socket)
+                continue;
+
+            delegate_->onNewConnection(std::unique_ptr<Channel>(new Channel(socket)));
+        }
+    });
+
+    connect(tcp_server_.get(), &QTcpServer::acceptError,
             [this](QAbstractSocket::SocketError /* error */)
     {
-        LOG(LS_WARNING) << "accept error: " << tcp_server_->errorString().toStdString();
+        LOG(LS_WARNING) << "accept error: " << tcp_server_->errorString();
         return;
     });
 
     if (!tcp_server_->listen(QHostAddress::Any, port))
     {
-        LOG(LS_WARNING) << "listen failed: " << tcp_server_->errorString().toStdString();
+        LOG(LS_WARNING) << "listen failed: " << tcp_server_->errorString();
         return false;
     }
 
     return true;
-}
-
-void Server::stop()
-{
-    if (!tcp_server_)
-    {
-        LOG(LS_WARNING) << "Server already stopped";
-        return;
-    }
-
-    for (auto it = pending_channels_.constBegin(); it != pending_channels_.constEnd(); ++it)
-    {
-        ChannelHost* network_channel = *it;
-
-        if (network_channel)
-            network_channel->stop();
-    }
-
-    for (auto it = ready_channels_.constBegin(); it != ready_channels_.constEnd(); ++it)
-    {
-        ChannelHost* network_channel = *it;
-
-        if (network_channel)
-            network_channel->stop();
-    }
-
-    pending_channels_.clear();
-    ready_channels_.clear();
-
-    tcp_server_->close();
-    delete tcp_server_;
-}
-
-void Server::setUserList(const SrpUserList& user_list)
-{
-    user_list_ = user_list;
-}
-
-bool Server::hasReadyChannels() const
-{
-    return !ready_channels_.isEmpty();
-}
-
-ChannelHost* Server::nextReadyChannel()
-{
-    if (ready_channels_.isEmpty())
-        return nullptr;
-
-    ChannelHost* network_channel = ready_channels_.front();
-    ready_channels_.pop_front();
-    return network_channel;
-}
-
-void Server::onNewConnection()
-{
-    QTcpSocket* socket = tcp_server_->nextPendingConnection();
-    if (!socket)
-        return;
-
-    ChannelHost* host_channel = new ChannelHost(socket, user_list_, this);
-    connect(host_channel, &ChannelHost::keyExchangeFinished, this, &Server::onChannelReady);
-    pending_channels_.push_back(host_channel);
-
-    // Start key exchange.
-    host_channel->startKeyExchange();
-}
-
-void Server::onChannelReady()
-{
-    auto it = pending_channels_.begin();
-
-    while (it != pending_channels_.end())
-    {
-        ChannelHost* network_channel = *it;
-
-        if (!network_channel)
-        {
-            it = pending_channels_.erase(it);
-        }
-        else if (network_channel->channelState() == Channel::ChannelState::ENCRYPTED)
-        {
-            it = pending_channels_.erase(it);
-
-            ready_channels_.push_back(network_channel);
-            emit newChannelReady();
-        }
-        else
-        {
-            ++it;
-        }
-    }
 }
 
 } // namespace net

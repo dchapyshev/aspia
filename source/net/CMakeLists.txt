@@ -27,18 +27,12 @@ list(APPEND SOURCE_NET
     ip_util.h
     network_channel.cc
     network_channel.h
-    network_channel_client.cc
-    network_channel_client.h
-    network_channel_host.cc
-    network_channel_host.h
+    network_channel_proxy.cc
+    network_channel_proxy.h
+    network_error.h
+    network_listener.h
     network_server.cc
-    network_server.h
-    srp_client_context.cc
-    srp_client_context.h
-    srp_host_context.cc
-    srp_host_context.h
-    srp_user.cc
-    srp_user.h)
+    network_server.h)
 
 list(APPEND SOURCE_NET_UNIT_TESTS
     address_unittest.cc)

@@ -16,42 +16,38 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef NET__NETWORK_SERVER_H
-#define NET__NETWORK_SERVER_H
-
-#include "base/macros_magic.h"
-
-#include <QPointer>
-#include <QList>
-#include <QTcpServer>
+#ifndef NET__NETWORK_ERROR_H
+#define NET__NETWORK_ERROR_H
 
 namespace net {
 
-class Channel;
-
-class Server : public QObject
+enum class ErrorCode
 {
-public:
-    Server() = default;
-    ~Server() = default;
+    // Unknown error.
+    UNKNOWN,
 
-    class Delegate
-    {
-    public:
-        virtual ~Delegate() = default;
+    // An error occurred with the network (e.g., the network cable was accidentally plugged out).
+    NETWORK_ERROR,
 
-        virtual void onNewConnection(std::unique_ptr<Channel> channel) = 0;
-    };
+    // The connection was refused by the peer (or timed out).
+    CONNECTION_REFUSED,
 
-    bool start(uint16_t port, Delegate* delegate);
+    // The remote host closed the connection.
+    REMOTE_HOST_CLOSED,
 
-private:
-    std::unique_ptr<QTcpServer> tcp_server_;
-    Delegate* delegate_ = nullptr;
+    // The host address was not found.
+    SPECIFIED_HOST_NOT_FOUND,
 
-    DISALLOW_COPY_AND_ASSIGN(Server);
+    // The socket operation timed out.
+    SOCKET_TIMEOUT,
+
+    // The address specified is already in use and was set to be exclusive.
+    ADDRESS_IN_USE,
+
+    // The address specified does not belong to the host.
+    ADDRESS_NOT_AVAILABLE
 };
 
 } // namespace net
 
-#endif // NET__NETWORK_SERVER_H
+#endif // NET__NETWORK_ERROR_H
