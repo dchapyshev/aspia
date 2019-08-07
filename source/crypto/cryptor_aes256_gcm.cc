@@ -17,8 +17,10 @@
 //
 
 #include "crypto/cryptor_aes256_gcm.h"
+
 #include "base/logging.h"
 #include "crypto/large_number_increment.h"
+#include "crypto/secure_memory.h"
 
 #include <openssl/evp.h>
 
@@ -72,12 +74,12 @@ EVP_CIPHER_CTX_ptr createCipher(const QByteArray& key, int type)
 
 CryptorAes256Gcm::CryptorAes256Gcm(EVP_CIPHER_CTX_ptr encrypt_ctx,
                                    EVP_CIPHER_CTX_ptr decrypt_ctx,
-                                   const QByteArray& encrypt_nonce,
-                                   const QByteArray& decrypt_nonce)
+                                   QByteArray&& encrypt_nonce,
+                                   QByteArray&& decrypt_nonce)
     : encrypt_ctx_(std::move(encrypt_ctx)),
       decrypt_ctx_(std::move(decrypt_ctx)),
-      encrypt_nonce_(encrypt_nonce),
-      decrypt_nonce_(decrypt_nonce)
+      encrypt_nonce_(std::move(encrypt_nonce)),
+      decrypt_nonce_(std::move(decrypt_nonce))
 {
     DCHECK_EQ(EVP_CIPHER_CTX_key_length(encrypt_ctx_.get()), kKeySize);
     DCHECK_EQ(EVP_CIPHER_CTX_iv_length(encrypt_ctx_.get()), kIVSize);
@@ -85,12 +87,15 @@ CryptorAes256Gcm::CryptorAes256Gcm(EVP_CIPHER_CTX_ptr encrypt_ctx,
     DCHECK_EQ(EVP_CIPHER_CTX_iv_length(decrypt_ctx_.get()), kIVSize);
 }
 
-CryptorAes256Gcm::~CryptorAes256Gcm() = default;
+CryptorAes256Gcm::~CryptorAes256Gcm()
+{
+    memZero(&encrypt_nonce_);
+    memZero(&decrypt_nonce_);
+}
 
 // static
-Cryptor* CryptorAes256Gcm::create(const QByteArray& key,
-                                  const QByteArray& encrypt_iv,
-                                  const QByteArray& decrypt_iv)
+std::unique_ptr<Cryptor> CryptorAes256Gcm::create(
+    QByteArray&& key, QByteArray&& encrypt_iv, QByteArray&& decrypt_iv)
 {
     if (key.size() != kKeySize || encrypt_iv.size() != kIVSize || decrypt_iv.size() != kIVSize)
     {
@@ -106,8 +111,9 @@ Cryptor* CryptorAes256Gcm::create(const QByteArray& key,
     if (!encrypt_ctx || !decrypt_ctx)
         return nullptr;
 
-    return new CryptorAes256Gcm(
-        std::move(encrypt_ctx), std::move(decrypt_ctx), encrypt_iv, decrypt_iv);
+    return std::unique_ptr<Cryptor>(
+        new CryptorAes256Gcm(std::move(encrypt_ctx), std::move(decrypt_ctx),
+                             std::move(encrypt_iv), std::move(decrypt_iv)));
 }
 
 size_t CryptorAes256Gcm::encryptedDataSize(size_t in_size)

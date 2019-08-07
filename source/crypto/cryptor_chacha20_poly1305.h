@@ -32,9 +32,8 @@ class CryptorChaCha20Poly1305 : public Cryptor
 public:
     ~CryptorChaCha20Poly1305();
 
-    static Cryptor* create(const QByteArray& key,
-                           const QByteArray& encrypt_iv,
-                           const QByteArray& decrypt_iv);
+    static std::unique_ptr<Cryptor> create(
+        QByteArray&& key, QByteArray&& encrypt_iv, QByteArray&& decrypt_iv);
 
     size_t encryptedDataSize(size_t in_size) override;
     bool encrypt(const char* in, size_t in_size, char* out) override;
@@ -45,8 +44,8 @@ public:
 protected:
     CryptorChaCha20Poly1305(EVP_CIPHER_CTX_ptr encrypt_ctx,
                             EVP_CIPHER_CTX_ptr decrypt_ctx,
-                            const QByteArray& encrypt_nonce,
-                            const QByteArray& decrypt_nonce);
+                            QByteArray&& encrypt_nonce,
+                            QByteArray&& decrypt_nonce);
 
 private:
     EVP_CIPHER_CTX_ptr encrypt_ctx_;
