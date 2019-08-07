@@ -62,9 +62,6 @@ protected:
     // client is ready to receive or send data.
     virtual void sessionStarted();
 
-    // Called when the client session is complete.
-    virtual void sessionFinished();
-
     // Called when an error occurred in the session.
     virtual void sessionError();
 

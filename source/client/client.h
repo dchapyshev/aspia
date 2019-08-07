@@ -19,14 +19,22 @@
 #ifndef CLIENT__CLIENT_H
 #define CLIENT__CLIENT_H
 
+#include "base/macros_magic.h"
+#include "base/version.h"
+#include "client/client_authenticator.h"
 #include "client/connect_data.h"
-#include "net/network_channel_client.h"
+#include "net/network_error.h"
+#include "net/network_listener.h"
 
 #include <QObject>
 
+namespace net {
+class Channel;
+} // namespace net
+
 namespace client {
 
-class Client : public QObject
+class Client : public QObject, public net::Listener
 {
     Q_OBJECT
 
@@ -40,33 +48,36 @@ public:
     ConnectData& connectData() { return connect_data_; }
 
     // Returns the version of the connected host.
-    base::Version hostVersion() const;
+    base::Version peerVersion() const;
 
     // Returns the version of the current client.
-    base::Version clientVersion() const;
+    base::Version version() const;
 
 signals:
     // Indicates that the session is started.
     void started();
 
-    // Indicates that the session is finished.
-    void finished();
-
     // Indicates an error in the session.
     void errorOccurred(const QString& message);
 
 protected:
-    // Reads the incoming message for the session.
-    virtual void messageReceived(const QByteArray& buffer) = 0;
-
     // Sends outgoing message.
     void sendMessage(const google::protobuf::MessageLite& message);
 
+    // net::Listener implementation.
+    void onNetworkConnected() override;
+    void onNetworkDisconnected() override;
+    void onNetworkError(net::ErrorCode error_code) override;
+
 private:
-    static QString networkErrorToString(net::Channel::Error error);
+    static QString errorToString(net::ErrorCode error_code);
+    static QString errorToString(Authenticator::Result result);
 
     ConnectData connect_data_;
-    net::ChannelClient* channel_;
+
+    std::unique_ptr<net::Channel> channel_;
+    std::shared_ptr<net::ChannelProxy> channel_proxy_;
+    std::unique_ptr<Authenticator> authenticator_;
 
     DISALLOW_COPY_AND_ASSIGN(Client);
 };

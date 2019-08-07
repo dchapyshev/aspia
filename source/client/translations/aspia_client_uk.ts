@@ -634,69 +634,125 @@
     </message>
 </context>
 <context>
+    <name>client::Channel</name>
+    <message>
+        <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
+        <translation type="obsolete">Виникла помилка з мережею (напр., мережевий кабель випадково від&apos;єднано).</translation>
+    </message>
+    <message>
+        <source>Connection was refused by the peer (or timed out).</source>
+        <translation type="obsolete">З&apos;єднання відхилено піром (або час вийшов).</translation>
+    </message>
+    <message>
+        <source>Remote host closed the connection.</source>
+        <translation type="obsolete">Віддалений хост закрив з&apos;єднання.</translation>
+    </message>
+    <message>
+        <source>Host address was not found.</source>
+        <translation type="obsolete">Адресу хоста не знайдено.</translation>
+    </message>
+    <message>
+        <source>Socket operation timed out.</source>
+        <translation type="obsolete">Вийшов час операції сокета.</translation>
+    </message>
+    <message>
+        <source>Address specified is already in use and was set to be exclusive.</source>
+        <translation type="obsolete">Введена адреса вже використовується і встановлена як унікальна.</translation>
+    </message>
+    <message>
+        <source>Address specified does not belong to the host.</source>
+        <translation type="obsolete">Введена адреса не належить хосту.</translation>
+    </message>
+    <message>
+        <source>An unknown error occurred.</source>
+        <translation type="obsolete">Виникла невідома помилка.</translation>
+    </message>
+    <message>
+        <source>Violation of the data exchange protocol.</source>
+        <translation type="obsolete">Порушення в протоколі передачі даних.</translation>
+    </message>
+    <message>
+        <source>An error occured while authenticating: wrong user name or password.</source>
+        <translation type="obsolete">Виникла помилка під час аутентифікації: невірне ім&apos;я користувача або пароль.</translation>
+    </message>
+    <message>
+        <source>Specified session type is not allowed for the user.</source>
+        <translation type="obsolete">Обраний тип сесії не дозволений для користувача.</translation>
+    </message>
+</context>
+<context>
     <name>client::Client</name>
     <message>
-        <location filename="../client.cc" line="93"/>
+        <location filename="../client.cc" line="120"/>
         <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
         <translation>Виникла помилка з мережею (напр., мережевий кабель випадково від&apos;єднано).</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="97"/>
+        <location filename="../client.cc" line="124"/>
         <source>Connection was refused by the peer (or timed out).</source>
         <translation>З&apos;єднання відхилено піром (або час вийшов).</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="101"/>
+        <location filename="../client.cc" line="128"/>
         <source>Remote host closed the connection.</source>
         <translation>Віддалений хост закрив з&apos;єднання.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="105"/>
+        <location filename="../client.cc" line="132"/>
         <source>Host address was not found.</source>
         <translation>Адресу хоста не знайдено.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="109"/>
+        <location filename="../client.cc" line="136"/>
         <source>Socket operation timed out.</source>
         <translation>Вийшов час операції сокета.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="113"/>
+        <location filename="../client.cc" line="140"/>
         <source>Address specified is already in use and was set to be exclusive.</source>
         <translation>Введена адреса вже використовується і встановлена як унікальна.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="117"/>
+        <location filename="../client.cc" line="144"/>
         <source>Address specified does not belong to the host.</source>
         <translation>Введена адреса не належить хосту.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="121"/>
+        <location filename="../client.cc" line="163"/>
+        <source>Authentication successfully completed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client.cc" line="167"/>
+        <source>Network authentication error.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client.cc" line="171"/>
         <source>Violation of the data exchange protocol.</source>
         <translation>Порушення в протоколі передачі даних.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="125"/>
         <source>An error occurred while encrypting the message.</source>
-        <translation>Виникла помилка під час шифрування повідомлення.</translation>
+        <translation type="vanished">Виникла помилка під час шифрування повідомлення.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="129"/>
         <source>An error occurred while decrypting the message.</source>
-        <translation>Виникла помилка під час розшифрування повідомлення.</translation>
+        <translation type="vanished">Виникла помилка під час розшифрування повідомлення.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="133"/>
+        <location filename="../client.cc" line="175"/>
         <source>An error occured while authenticating: wrong user name or password.</source>
         <translation>Виникла помилка під час аутентифікації: невірне ім&apos;я користувача або пароль.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="137"/>
+        <location filename="../client.cc" line="179"/>
         <source>Specified session type is not allowed for the user.</source>
         <translation>Обраний тип сесії не дозволений для користувача.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="141"/>
+        <location filename="../client.cc" line="148"/>
+        <location filename="../client.cc" line="183"/>
         <source>An unknown error occurred.</source>
         <translation>Виникла невідома помилка.</translation>
     </message>

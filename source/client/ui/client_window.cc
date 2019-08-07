@@ -131,11 +131,6 @@ void ClientWindow::startSession()
         activateWindow();
     });
 
-    connect(client_, &Client::finished, [this]()
-    {
-        sessionFinished();
-    });
-
     connect(client_, &Client::errorOccurred, [this](const QString& message)
     {
         // Hide session window.
@@ -153,11 +148,6 @@ void ClientWindow::startSession()
 }
 
 void ClientWindow::sessionStarted()
-{
-    // Nothing
-}
-
-void ClientWindow::sessionFinished()
 {
     // Nothing
 }

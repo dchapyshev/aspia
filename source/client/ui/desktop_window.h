@@ -25,6 +25,8 @@
 #include "proto/desktop.pb.h"
 #include "proto/desktop_extensions.pb.h"
 
+#include <QPointer>
+
 class QHBoxLayout;
 class QScrollArea;
 

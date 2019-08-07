@@ -49,7 +49,7 @@ ClientFileTransfer::~ClientFileTransfer()
 
 common::FileWorker* ClientFileTransfer::localWorker() { return worker_.get(); }
 
-void ClientFileTransfer::messageReceived(const QByteArray& buffer)
+void ClientFileTransfer::onNetworkMessage(const QByteArray& buffer)
 {
     proto::file_transfer::Reply reply;
 

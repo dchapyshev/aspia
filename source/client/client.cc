@@ -17,57 +17,49 @@
 //
 
 #include "client/client.h"
+
 #include "base/logging.h"
 #include "build/version.h"
 #include "client/config_factory.h"
+#include "client/client_authenticator_srp.h"
+#include "net/network_channel_proxy.h"
 
 namespace client {
 
 Client::Client(const ConnectData& connect_data, QObject* parent)
     : QObject(parent),
-      connect_data_(connect_data),
-      channel_(new net::ChannelClient(this))
+      connect_data_(connect_data)
 {
     ConfigFactory::fixupDesktopConfig(&connect_data_.desktop_config);
 
-    connect(channel_, &net::ChannelClient::connected, this, &Client::started);
-    connect(channel_, &net::ChannelClient::disconnected, this, &Client::finished);
-    connect(channel_, &net::ChannelClient::messageReceived, this, &Client::messageReceived);
-
-    connect(channel_, &net::ChannelClient::errorOccurred, [this](net::Channel::Error error)
-    {
-        emit errorOccurred(networkErrorToString(error));
-    });
-
-    connect(this, &Client::errorOccurred, channel_, &net::ChannelClient::stop);
-    connect(this, &Client::started, channel_, &net::Channel::start);
+    channel_ = std::make_unique<net::Channel>();
+    channel_proxy_ = channel_->channelProxy();
 }
 
 Client::~Client() = default;
 
 void Client::start()
 {
-    channel_->connectToHost(connect_data_.address, connect_data_.port,
-                            connect_data_.username, connect_data_.password,
-                            connect_data_.session_type);
+    channel_proxy_->setListener(this);
+    channel_proxy_->connectToHost(connect_data_.address, connect_data_.port);
 }
 
-base::Version Client::hostVersion() const
+base::Version Client::peerVersion() const
 {
-    if (!channel_)
+    if (!authenticator_)
         return base::Version();
 
-    return channel_->peerVersion();
+    return authenticator_->peerVersion();
 }
 
-base::Version Client::clientVersion() const
+base::Version Client::version() const
 {
     return base::Version(ASPIA_VERSION_MAJOR, ASPIA_VERSION_MINOR, ASPIA_VERSION_PATCH);
 }
 
 void Client::sendMessage(const google::protobuf::MessageLite& message)
 {
-    size_t size = message.ByteSizeLong();
+    const size_t size = message.ByteSizeLong();
     if (!size)
     {
         LOG(LS_WARNING) << "Empty messages are not allowed";
@@ -79,61 +71,111 @@ void Client::sendMessage(const google::protobuf::MessageLite& message)
 
     message.SerializeWithCachedSizesToArray(reinterpret_cast<uint8_t*>(buffer.data()));
 
-    channel_->send(buffer);
+    channel_proxy_->send(buffer);
+}
+
+void Client::onNetworkConnected()
+{
+    std::unique_ptr<AuthenticatorSrp> authenticator = std::make_unique<AuthenticatorSrp>();
+
+    authenticator->setSessionType(connect_data_.session_type);
+    authenticator->setUserName(connect_data_.username);
+    authenticator->setPassword(connect_data_.password);
+
+    authenticator_ = std::move(authenticator);
+
+    authenticator_->start(channel_->channelProxy(), [this](Authenticator::Result result)
+    {
+        channel_proxy_->setListener(this);
+
+        if (result != Authenticator::Result::SUCCESS)
+        {
+            emit errorOccurred(errorToString(result));
+            return;
+        }
+
+        channel_proxy_->resume();
+        emit started();
+    });
+}
+
+void Client::onNetworkDisconnected()
+{
+    // Nothing
+}
+
+void Client::onNetworkError(net::ErrorCode error_code)
+{
+    emit errorOccurred(errorToString(error_code));
 }
 
 // static
-QString Client::networkErrorToString(net::Channel::Error error)
+QString Client::errorToString(net::ErrorCode error_code)
 {
     const char* message;
 
-    switch (error)
+    switch (error_code)
     {
-        case net::Channel::Error::NETWORK_ERROR:
+        case net::ErrorCode::NETWORK_ERROR:
             message = QT_TR_NOOP("An error occurred with the network (e.g., the network cable was accidentally plugged out).");
             break;
 
-        case net::Channel::Error::CONNECTION_REFUSED:
+        case net::ErrorCode::CONNECTION_REFUSED:
             message = QT_TR_NOOP("Connection was refused by the peer (or timed out).");
             break;
 
-        case net::Channel::Error::REMOTE_HOST_CLOSED:
+        case net::ErrorCode::REMOTE_HOST_CLOSED:
             message = QT_TR_NOOP("Remote host closed the connection.");
             break;
 
-        case net::Channel::Error::SPECIFIED_HOST_NOT_FOUND:
+        case net::ErrorCode::SPECIFIED_HOST_NOT_FOUND:
             message = QT_TR_NOOP("Host address was not found.");
             break;
 
-        case net::Channel::Error::SOCKET_TIMEOUT:
+        case net::ErrorCode::SOCKET_TIMEOUT:
             message = QT_TR_NOOP("Socket operation timed out.");
             break;
 
-        case net::Channel::Error::ADDRESS_IN_USE:
+        case net::ErrorCode::ADDRESS_IN_USE:
             message = QT_TR_NOOP("Address specified is already in use and was set to be exclusive.");
             break;
 
-        case net::Channel::Error::ADDRESS_NOT_AVAILABLE:
+        case net::ErrorCode::ADDRESS_NOT_AVAILABLE:
             message = QT_TR_NOOP("Address specified does not belong to the host.");
             break;
 
-        case net::Channel::Error::PROTOCOL_FAILURE:
+        default:
+            message = QT_TR_NOOP("An unknown error occurred.");
+            break;
+    }
+
+    return tr(message);
+}
+
+// static
+QString Client::errorToString(Authenticator::Result result)
+{
+    const char* message;
+
+    switch (result)
+    {
+        case Authenticator::Result::SUCCESS:
+            message = QT_TR_NOOP("Authentication successfully completed.");
+            break;
+
+        case Authenticator::Result::NETWORK_ERROR:
+            message = QT_TR_NOOP("Network authentication error.");
+            break;
+
+        case Authenticator::Result::PROTOCOL_ERROR:
             message = QT_TR_NOOP("Violation of the data exchange protocol.");
             break;
 
-        case net::Channel::Error::ENCRYPTION_FAILURE:
-            message = QT_TR_NOOP("An error occurred while encrypting the message.");
-            break;
-
-        case net::Channel::Error::DECRYPTION_FAILURE:
-            message = QT_TR_NOOP("An error occurred while decrypting the message.");
-            break;
-
-        case net::Channel::Error::AUTHENTICATION_FAILURE:
+        case Authenticator::Result::ACCESS_DENIED:
             message = QT_TR_NOOP("An error occured while authenticating: wrong user name or password.");
             break;
 
-        case net::Channel::Error::SESSION_TYPE_NOT_ALLOWED:
+        case Authenticator::Result::SESSION_DENIED:
             message = QT_TR_NOOP("Specified session type is not allowed for the user.");
             break;
 

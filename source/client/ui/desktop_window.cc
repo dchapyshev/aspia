@@ -134,7 +134,7 @@ void DesktopWindow::extensionListChanged()
 
     if (extensions.contains(common::kRemoteUpdateExtension))
     {
-        if (client->clientVersion() > client->hostVersion())
+        if (client->version() > client->peerVersion())
             panel_->enableRemoteUpdate(true);
     }
 

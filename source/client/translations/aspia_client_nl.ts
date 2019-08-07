@@ -634,69 +634,125 @@
     </message>
 </context>
 <context>
+    <name>client::Channel</name>
+    <message>
+        <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
+        <translation type="obsolete">Er is een probleem opgetreden in het netwerk (bijv, de netwerk kabel is per ongelijk verwijderd).</translation>
+    </message>
+    <message>
+        <source>Connection was refused by the peer (or timed out).</source>
+        <translation type="obsolete">Verbinding is geweigerd door de peer (of er was een timeout).</translation>
+    </message>
+    <message>
+        <source>Remote host closed the connection.</source>
+        <translation type="obsolete">De remote host heeft de verbinding gesloten.</translation>
+    </message>
+    <message>
+        <source>Host address was not found.</source>
+        <translation type="obsolete">Host adres is niet gevonden.</translation>
+    </message>
+    <message>
+        <source>Socket operation timed out.</source>
+        <translation type="obsolete">Socket operatie gaf een timeout.</translation>
+    </message>
+    <message>
+        <source>Address specified is already in use and was set to be exclusive.</source>
+        <translation type="obsolete">Het opgegeven adres is al in gebruik, en is ingesteld als exclusief.</translation>
+    </message>
+    <message>
+        <source>Address specified does not belong to the host.</source>
+        <translation type="obsolete">Het opgegeven adres behoort niet toe aan de host.</translation>
+    </message>
+    <message>
+        <source>An unknown error occurred.</source>
+        <translation type="obsolete">Een onbekende error is opgetreden.</translation>
+    </message>
+    <message>
+        <source>Violation of the data exchange protocol.</source>
+        <translation type="obsolete">Schending van het data uitwisselings protocol.</translation>
+    </message>
+    <message>
+        <source>An error occured while authenticating: wrong user name or password.</source>
+        <translation type="obsolete">Er is een error opgetreden bij het authenticeren: verkeerde gebruikers naam of wachtwoord.</translation>
+    </message>
+    <message>
+        <source>Specified session type is not allowed for the user.</source>
+        <translation type="obsolete">Het gespecificeerde sessie type is niet toegestaan voor de gebruiker.</translation>
+    </message>
+</context>
+<context>
     <name>client::Client</name>
     <message>
-        <location filename="../client.cc" line="93"/>
+        <location filename="../client.cc" line="120"/>
         <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
         <translation>Er is een probleem opgetreden in het netwerk (bijv, de netwerk kabel is per ongelijk verwijderd).</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="97"/>
+        <location filename="../client.cc" line="124"/>
         <source>Connection was refused by the peer (or timed out).</source>
         <translation>Verbinding is geweigerd door de peer (of er was een timeout).</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="101"/>
+        <location filename="../client.cc" line="128"/>
         <source>Remote host closed the connection.</source>
         <translation>De remote host heeft de verbinding gesloten.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="105"/>
+        <location filename="../client.cc" line="132"/>
         <source>Host address was not found.</source>
         <translation>Host adres is niet gevonden.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="109"/>
+        <location filename="../client.cc" line="136"/>
         <source>Socket operation timed out.</source>
         <translation>Socket operatie gaf een timeout.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="113"/>
+        <location filename="../client.cc" line="140"/>
         <source>Address specified is already in use and was set to be exclusive.</source>
         <translation>Het opgegeven adres is al in gebruik, en is ingesteld als exclusief.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="117"/>
+        <location filename="../client.cc" line="144"/>
         <source>Address specified does not belong to the host.</source>
         <translation>Het opgegeven adres behoort niet toe aan de host.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="121"/>
+        <location filename="../client.cc" line="163"/>
+        <source>Authentication successfully completed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client.cc" line="167"/>
+        <source>Network authentication error.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client.cc" line="171"/>
         <source>Violation of the data exchange protocol.</source>
         <translation>Schending van het data uitwisselings protocol.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="125"/>
         <source>An error occurred while encrypting the message.</source>
-        <translation>Er is een error opgetreden bij het encrypten van het bericht.</translation>
+        <translation type="vanished">Er is een error opgetreden bij het encrypten van het bericht.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="129"/>
         <source>An error occurred while decrypting the message.</source>
-        <translation>Er is een error opgetreden bij het decrypten van het bericht.</translation>
+        <translation type="vanished">Er is een error opgetreden bij het decrypten van het bericht.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="133"/>
+        <location filename="../client.cc" line="175"/>
         <source>An error occured while authenticating: wrong user name or password.</source>
         <translation>Er is een error opgetreden bij het authenticeren: verkeerde gebruikers naam of wachtwoord.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="137"/>
+        <location filename="../client.cc" line="179"/>
         <source>Specified session type is not allowed for the user.</source>
         <translation>Het gespecificeerde sessie type is niet toegestaan voor de gebruiker.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="141"/>
+        <location filename="../client.cc" line="148"/>
+        <location filename="../client.cc" line="183"/>
         <source>An unknown error occurred.</source>
         <translation>Een onbekende error is opgetreden.</translation>
     </message>

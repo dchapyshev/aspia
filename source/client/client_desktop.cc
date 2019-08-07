@@ -38,7 +38,7 @@ ClientDesktop::ClientDesktop(const ConnectData& connect_data, Delegate* delegate
 
 ClientDesktop::~ClientDesktop() = default;
 
-void ClientDesktop::messageReceived(const QByteArray& buffer)
+void ClientDesktop::onNetworkMessage(const QByteArray& buffer)
 {
     incoming_message_.Clear();
 

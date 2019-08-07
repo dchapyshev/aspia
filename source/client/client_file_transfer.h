@@ -49,8 +49,8 @@ public slots:
     void remoteRequest(common::FileRequest* request);
 
 protected:
-    // Client implementation.
-    void messageReceived(const QByteArray& buffer) override;
+    // net::Listener implementation.
+    void onNetworkMessage(const QByteArray& buffer) override;
 
 private:
     void onSessionError(const QString& message);
