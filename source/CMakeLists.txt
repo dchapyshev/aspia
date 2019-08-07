@@ -16,7 +16,7 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 #
 
-cmake_minimum_required(VERSION 3.14.2)
+cmake_minimum_required(VERSION 3.15.0)
 
 option(BUILD_UNIT_TESTS "Build unit tests" ON)
 option(USE_TBB "Using Intel TBB" ON)
@@ -104,7 +104,7 @@ set(THIRD_PARTY_LIBS
     debug Qt5WindowsUIAutomationSupportd
     debug libprotobuf-lited
     debug vpxmtd
-    debug libyuvd
+    debug yuv_debug
     debug qtfreetyped
     debug qtharfbuzzd
     debug qtlibpngd
@@ -113,7 +113,7 @@ set(THIRD_PARTY_LIBS
     debug qwindowsvistastyled
     debug tbb_debug
     debug windowsprintersupportd
-    debug zstdd
+    debug libzstd_static_debug
     optimized Qt5AccessibilitySupport
     optimized Qt5EventDispatcherSupport
     optimized Qt5FontDatabaseSupport
@@ -121,7 +121,7 @@ set(THIRD_PARTY_LIBS
     optimized Qt5WindowsUIAutomationSupport
     optimized libprotobuf-lite
     optimized vpxmt
-    optimized libyuv
+    optimized yuv
     optimized qtfreetype
     optimized qtharfbuzz
     optimized qtlibpng
@@ -130,7 +130,7 @@ set(THIRD_PARTY_LIBS
     optimized qwindowsvistastyle
     optimized tbb
     optimized windowsprintersupport
-    optimized zstd
+    optimized libzstd_static
     crypt32
     dwmapi
     dxgi
@@ -152,8 +152,9 @@ set(THIRD_PARTY_LIBS
     wtsapi32)
 
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /Ob2 /Oi /Ot /Oy /GL /MT /MP /arch:SSE2 /fp:fast /wd4146")
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MTd /MP /wd4146")
+set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /GL /MP /arch:SSE2")
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MP")
 set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} /LTCG /INCREMENTAL:NO /OPT:REF")
 set(CMAKE_STATIC_LINKER_FLAGS_RELEASE "${CMAKE_STATIC_LINKER_FLAGS_RELEASE} /LTCG")
 set(CMAKE_EXE_LINKER_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE} /LTCG /INCREMENTAL:NO /OPT:REF")
