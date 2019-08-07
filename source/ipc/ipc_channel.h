@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -39,6 +39,8 @@
 
 namespace ipc {
 
+class ChannelProxy;
+class Listener;
 class Server;
 
 class Channel : public QObject
@@ -46,36 +48,25 @@ class Channel : public QObject
     Q_OBJECT
 
 public:
-    ~Channel() = default;
+    Channel();
+    ~Channel();
 
-    static Channel* createClient(QObject* parent = nullptr);
+    std::shared_ptr<ChannelProxy> channelProxy() { return proxy_; }
 
-    enum class Type { SERVER, CLIENT };
-    Type type() const { return type_; }
-
+    void setListener(Listener* listener);
     void connectToServer(const QString& channel_name);
 
-#if defined(OS_WIN)
-    base::ProcessId clientProcessId() const { return client_process_id_; }
-    base::ProcessId serverProcessId() const { return server_process_id_; }
-    base::win::SessionId clientSessionId() const { return client_session_id_; }
-    base::win::SessionId serverSessionId() const { return server_session_id_; }
-#endif // defined(OS_WIN)
+    bool isConnected() const { return is_connected_; }
 
-public slots:
-    void stop();
-
-    // Starts reading the message.
     void start();
 
     // Sends a message.
     void send(const QByteArray& buffer);
 
-signals:
-    void connected();
-    void disconnected();
-    void errorOccurred();
-    void messageReceived(const QByteArray& buffer);
+#if defined(OS_WIN)
+    base::ProcessId peerProcessId() const { return peer_process_id_; }
+    base::win::SessionId peerSessionId() const { return peer_session_id_; }
+#endif // defined(OS_WIN)
 
 private slots:
     void onError(QLocalSocket::LocalSocketError socket_error);
@@ -84,15 +75,16 @@ private slots:
 
 private:
     friend class Server;
-    Channel(Type type, QLocalSocket* socket, QObject* parent);
+    Channel(QLocalSocket* socket);
 
-    void initConnected();
+    void init();
     void scheduleWrite();
 
-    using MessageSizeType = uint32_t;
+    QLocalSocket* socket_;
 
-    const Type type_;
-    QPointer<QLocalSocket> socket_;
+    std::shared_ptr<ChannelProxy> proxy_;
+    Listener* listener_ = nullptr;
+    bool is_connected_ = false;
 
 #if defined(USE_TBB)
     using QueueAllocator = tbb::scalable_allocator<QByteArray>;
@@ -104,19 +96,17 @@ private:
 
     // The queue contains unencrypted source messages.
     std::queue<QByteArray, QueueContainer> write_queue_;
-    MessageSizeType write_size_ = 0;
+    uint32_t write_size_ = 0;
     int64_t written_ = 0;
 
     bool read_size_received_ = false;
     QByteArray read_buffer_;
-    MessageSizeType read_size_ = 0;
+    uint32_t read_size_ = 0;
     int64_t read_ = 0;
 
 #if defined(OS_WIN)
-    base::ProcessId client_process_id_ = base::kNullProcessId;
-    base::ProcessId server_process_id_ = base::kNullProcessId;
-    base::win::SessionId client_session_id_ = base::win::kInvalidSessionId;
-    base::win::SessionId server_session_id_ = base::win::kInvalidSessionId;
+    base::ProcessId peer_process_id_ = base::kNullProcessId;
+    base::win::SessionId peer_session_id_ = base::win::kInvalidSessionId;
 #endif // defined(OS_WIN)
 
     DISALLOW_COPY_AND_ASSIGN(Channel);

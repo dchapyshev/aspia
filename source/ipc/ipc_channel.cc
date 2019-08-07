@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -19,6 +19,8 @@
 #include "ipc/ipc_channel.h"
 
 #include "build/build_config.h"
+#include "ipc/ipc_channel_proxy.h"
+#include "ipc/ipc_listener.h"
 #include "qt_base/qt_logging.h"
 
 #if defined(OS_WIN)
@@ -89,69 +91,66 @@ base::win::SessionId serverSessionIdImpl(HANDLE pipe_handle)
 
 } // namespace
 
-Channel::Channel(Type type, QLocalSocket* socket, QObject* parent)
-    : QObject(parent),
-      type_(type),
-      socket_(socket)
+Channel::Channel()
+    : socket_(new QLocalSocket(this)),
+      proxy_(new ChannelProxy(this))
+{
+    // Nothing
+}
+
+Channel::Channel(QLocalSocket* socket)
+    : socket_(socket),
+      proxy_(new ChannelProxy(this)),
+      is_connected_(true)
 {
     DCHECK(socket_);
 
-    qRegisterMetaType<QLocalSocket::LocalSocketError>();
-
     socket_->setParent(this);
+    init();
 
-    if (type_ == Type::SERVER)
-        initConnected();
-
-    connect(socket_, &QLocalSocket::connected, [this]()
-    {
-        initConnected();
-        emit connected();
-    });
-
-    connect(socket_, &QLocalSocket::bytesWritten, this, &Channel::onBytesWritten);
-    connect(socket_, &QLocalSocket::readyRead, this, &Channel::onReadyRead);
-    connect(socket_, &QLocalSocket::disconnected, this, &Channel::disconnected);
-    connect(socket_, QOverload<QLocalSocket::LocalSocketError>::of(&QLocalSocket::error),
-            this, &Channel::onError);
+#if defined(OS_WIN)
+    HANDLE pipe_handle = reinterpret_cast<HANDLE>(socket_->socketDescriptor());
+    peer_process_id_ = clientProcessIdImpl(pipe_handle);
+    peer_session_id_ = clientSessionIdImpl(pipe_handle);
+#endif // defined(OS_WIN)
 }
 
-// static
-Channel* Channel::createClient(QObject* parent)
+Channel::~Channel()
 {
-    return new Channel(Type::CLIENT, new QLocalSocket(), parent);
+    if (!is_connected_)
+        return;
+
+    is_connected_ = false;
+
+    proxy_->willDestroyCurrentChannel();
+    proxy_ = nullptr;
+
+    socket_->abort();
+    socket_->waitForDisconnected();
+}
+
+void Channel::setListener(Listener* listener)
+{
+    listener_ = listener;
 }
 
 void Channel::connectToServer(const QString& channel_name)
 {
-    if (type_ != Type::CLIENT)
-    {
-        DLOG(LS_ERROR) << "Attempt to use server channel as client.";
-        return;
-    }
-
     socket_->connectToServer(channel_name);
-}
-
-void Channel::stop()
-{
-    if (socket_->state() != QLocalSocket::UnconnectedState)
-    {
-        socket_->abort();
-
-        if (socket_->state() != QLocalSocket::UnconnectedState)
-            socket_->waitForDisconnected();
-    }
 }
 
 void Channel::start()
 {
+    if (!is_connected_)
+        return;
+
+    // Start receiving messages.
     onReadyRead();
 }
 
 void Channel::send(const QByteArray& buffer)
 {
-    bool schedule_write = write_queue_.empty();
+    const bool schedule_write = write_queue_.empty();
 
     write_queue_.emplace(buffer);
 
@@ -162,7 +161,6 @@ void Channel::send(const QByteArray& buffer)
 void Channel::onError(QLocalSocket::LocalSocketError /* socket_error */)
 {
     LOG(LS_WARNING) << "IPC channel error: " << socket_->errorString();
-    emit errorOccurred();
 }
 
 void Channel::onBytesWritten(int64_t bytes)
@@ -171,15 +169,15 @@ void Channel::onBytesWritten(int64_t bytes)
 
     written_ += bytes;
 
-    if (written_ < sizeof(MessageSizeType))
+    if (written_ < sizeof(uint32_t))
     {
         socket_->write(reinterpret_cast<const char*>(&write_size_) + written_,
-                       sizeof(MessageSizeType) - written_);
+                       sizeof(uint32_t) - written_);
     }
-    else if (written_ < sizeof(MessageSizeType) + write_buffer.size())
+    else if (written_ < sizeof(uint32_t) + write_buffer.size())
     {
-        socket_->write(write_buffer.data() + (written_ - sizeof(MessageSizeType)),
-                       write_buffer.size() - (written_ - sizeof(MessageSizeType)));
+        socket_->write(write_buffer.data() + (written_ - sizeof(uint32_t)),
+                       write_buffer.size() - (written_ - sizeof(uint32_t)));
     }
     else
     {
@@ -200,8 +198,8 @@ void Channel::onReadyRead()
         if (!read_size_received_)
         {
             current = socket_->read(reinterpret_cast<char*>(&read_size_) + read_,
-                                    sizeof(MessageSizeType) - read_);
-            if (current + read_ == sizeof(MessageSizeType))
+                                    sizeof(uint32_t) - read_);
+            if (current + read_ == sizeof(uint32_t))
             {
                 read_size_received_ = true;
 
@@ -229,7 +227,8 @@ void Channel::onReadyRead()
             read_size_received_ = false;
             read_ = 0;
 
-            emit messageReceived(read_buffer_);
+            if (listener_)
+                listener_->onIpcMessage(read_buffer_);
             continue;
         }
 
@@ -240,16 +239,33 @@ void Channel::onReadyRead()
     }
 }
 
-void Channel::initConnected()
+void Channel::init()
 {
-#if defined(OS_WIN)
-    HANDLE pipe_handle = reinterpret_cast<HANDLE>(socket_->socketDescriptor());
+    qRegisterMetaType<QLocalSocket::LocalSocketError>();
 
-    client_process_id_ = clientProcessIdImpl(pipe_handle);
-    server_process_id_ = serverProcessIdImpl(pipe_handle);
-    client_session_id_ = clientSessionIdImpl(pipe_handle);
-    server_session_id_ = serverSessionIdImpl(pipe_handle);
+    connect(socket_, &QLocalSocket::connected, [this]()
+    {
+#if defined(OS_WIN)
+        HANDLE pipe_handle = reinterpret_cast<HANDLE>(socket_->socketDescriptor());
+        peer_process_id_ = serverProcessIdImpl(pipe_handle);
+        peer_session_id_ = serverSessionIdImpl(pipe_handle);
 #endif // defined(OS_WIN)
+
+        if (listener_)
+            listener_->onIpcConnected();
+    });
+
+    connect(socket_, &QLocalSocket::bytesWritten, this, &Channel::onBytesWritten);
+    connect(socket_, &QLocalSocket::readyRead, this, &Channel::onReadyRead);
+
+    connect(socket_, QOverload<QLocalSocket::LocalSocketError>::of(&QLocalSocket::error),
+            this, &Channel::onError);
+
+    connect(socket_, &QLocalSocket::disconnected, [this]()
+    {
+        if (listener_)
+            listener_->onIpcDisconnected();
+    });
 }
 
 void Channel::scheduleWrite()
@@ -264,7 +280,7 @@ void Channel::scheduleWrite()
         return;
     }
 
-    socket_->write(reinterpret_cast<const char*>(&write_size_), sizeof(MessageSizeType));
+    socket_->write(reinterpret_cast<const char*>(&write_size_), sizeof(uint32_t));
 }
 
 } // namespace ipc

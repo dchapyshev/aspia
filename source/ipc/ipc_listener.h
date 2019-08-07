@@ -16,47 +16,23 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef IPC__IPC_SERVER_H
-#define IPC__IPC_SERVER_H
+#ifndef IPC__IPC_LISTENER_H
+#define IPC__IPC_LISTENER_H
 
-#include "base/macros_magic.h"
-
-#include <QObject>
-
-class QLocalServer;
+#include <QByteArray>
 
 namespace ipc {
 
-class Channel;
-
-class Server : public QObject
+class Listener
 {
 public:
-    Server() = default;
-    ~Server() = default;
+    virtual ~Listener() = default;
 
-    class Delegate
-    {
-    public:
-        virtual ~Delegate() = default;
-
-        virtual void onNewConnection(std::unique_ptr<Channel> channel) = 0;
-    };
-
-    bool start(Delegate* delegate);
-    bool isStarted() const;
-
-    void setChannelId(const QString& channel_id);
-    QString channelId() const { return channel_id_; }
-
-private:
-    QString channel_id_;
-    std::unique_ptr<QLocalServer> server_;
-    Delegate* delegate_ = nullptr;
-
-    DISALLOW_COPY_AND_ASSIGN(Server);
+    virtual void onIpcConnected() = 0;
+    virtual void onIpcDisconnected() = 0;
+    virtual void onIpcMessage(const QByteArray& buffer) = 0;
 };
 
 } // namespace ipc
 
-#endif // IPC__IPC_SERVER_H
+#endif // IPC__IPC_LISTENER_H

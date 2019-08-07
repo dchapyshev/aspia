@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -42,26 +42,31 @@ QString generateUniqueChannelId()
 
 } // namespace
 
-Server::Server(QObject* parent)
-    : QObject(parent)
+bool Server::start(Delegate* delegate)
 {
-    // Nothing
-}
+    DCHECK(delegate);
 
-bool Server::start()
-{
     if (isStarted())
     {
-        LOG(LS_WARNING) << "An attempt was start an already running server.";
+        DLOG(LS_WARNING) << "An attempt was start an already running server.";
         return false;
     }
+
+    delegate_ = delegate;
 
     std::unique_ptr<QLocalServer> server(new QLocalServer(this));
 
     server->setSocketOptions(QLocalServer::OtherAccessOption);
     server->setMaxPendingConnections(25);
 
-    connect(server.get(), &QLocalServer::newConnection, this, &Server::onNewConnection);
+    connect(server.get(), &QLocalServer::newConnection, [this]()
+    {
+        if (server_->hasPendingConnections())
+        {
+            QLocalSocket* socket = server_->nextPendingConnection();
+            delegate_->onNewConnection(std::unique_ptr<Channel>(new Channel(socket)));
+        }
+    });
 
     QString channel_id = channel_id_;
 
@@ -75,18 +80,8 @@ bool Server::start()
     }
 
     channel_id_ = channel_id;
-    server_ = server.release();
+    server_ = std::move(server);
     return true;
-}
-
-void Server::stop()
-{
-    if (server_)
-    {
-        server_->close();
-        delete server_;
-        emit finished();
-    }
 }
 
 bool Server::isStarted() const
@@ -97,20 +92,6 @@ bool Server::isStarted() const
 void Server::setChannelId(const QString& channel_id)
 {
     channel_id_ = channel_id;
-}
-
-QString Server::channelId() const
-{
-    return channel_id_;
-}
-
-void Server::onNewConnection()
-{
-    if (server_->hasPendingConnections())
-    {
-        QLocalSocket* socket = server_->nextPendingConnection();
-        emit newConnection(new Channel(Channel::Type::SERVER, socket, nullptr));
-    }
 }
 
 } // namespace ipc

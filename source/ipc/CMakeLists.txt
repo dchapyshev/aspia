@@ -19,6 +19,9 @@
 list(APPEND SOURCE_IPC
     ipc_channel.cc
     ipc_channel.h
+    ipc_channel_proxy.cc
+    ipc_channel_proxy.h
+    ipc_listener.h
     ipc_server.cc
     ipc_server.h)
 
