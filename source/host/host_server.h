@@ -21,6 +21,7 @@
 
 #include "base/win/session_id.h"
 #include "base/win/session_status.h"
+#include "host/host_authenticator_manager.h"
 #include "host/host_settings.h"
 #include "net/network_server.h"
 
@@ -28,14 +29,23 @@ class QFileSystemWatcher;
 
 namespace host {
 
-class HostServer
+class Server
+    : public net::Server::Delegate,
+      public AuthenticatorManager::Delegate
 {
 public:
-    HostServer();
-    ~HostServer();
+    Server();
+    ~Server();
 
     void start();
     void setSessionEvent(base::win::SessionStatus status, base::win::SessionId session_id);
+
+protected:
+    // net::Server::Delegate implementation.
+    void onNewConnection(std::unique_ptr<net::Channel> channel) override;
+
+    // AuthenticatorManager::Delegate implementation.
+    void onNewSession(std::unique_ptr<ClientSession> session) override;
 
 private:
     std::unique_ptr<QFileSystemWatcher> settings_watcher_;
@@ -43,8 +53,9 @@ private:
 
     // Accepts incoming network connections.
     std::unique_ptr<net::Server> network_server_;
+    std::unique_ptr<AuthenticatorManager> authenticator_manager_;
 
-    DISALLOW_COPY_AND_ASSIGN(HostServer);
+    DISALLOW_COPY_AND_ASSIGN(Server);
 };
 
 } // namespace host

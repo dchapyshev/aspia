@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,42 +16,13 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef NET__NETWORK_SERVER_H
-#define NET__NETWORK_SERVER_H
+#include <Windows.h>
 
-#include "base/macros_magic.h"
+LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 
-#include <memory>
+1 RT_MANIFEST "host_service.manifest"
 
-class QTcpServer;
+#define ASPIA_ORIGINAL_FILE_NAME "aspia_host_service.exe"
+#define ASPIA_FILE_DESCRIPTION "Aspia Host Service"
 
-namespace net {
-
-class Channel;
-
-class Server
-{
-public:
-    Server();
-    ~Server();
-
-    class Delegate
-    {
-    public:
-        virtual ~Delegate() = default;
-
-        virtual void onNewConnection(std::unique_ptr<Channel> channel) = 0;
-    };
-
-    bool start(uint16_t port, Delegate* delegate);
-
-private:
-    std::unique_ptr<QTcpServer> tcp_server_;
-    Delegate* delegate_ = nullptr;
-
-    DISALLOW_COPY_AND_ASSIGN(Server);
-};
-
-} // namespace net
-
-#endif // NET__NETWORK_SERVER_H
+#include "build/version.rc"

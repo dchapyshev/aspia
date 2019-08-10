@@ -21,7 +21,12 @@
 #include "net/network_channel.h"
 #include "qt_base/qt_logging.h"
 
+#include <QTcpServer>
+
 namespace net {
+
+Server::Server() = default;
+Server::~Server() = default;
 
 bool Server::start(uint16_t port, Delegate* delegate)
 {
@@ -36,7 +41,7 @@ bool Server::start(uint16_t port, Delegate* delegate)
     tcp_server_ = std::make_unique<QTcpServer>();
     delegate_ = delegate;
 
-    connect(tcp_server_.get(), &QTcpServer::newConnection, [this]()
+    QObject::connect(tcp_server_.get(), &QTcpServer::newConnection, [this]()
     {
         while (tcp_server_->hasPendingConnections())
         {
@@ -48,8 +53,8 @@ bool Server::start(uint16_t port, Delegate* delegate)
         }
     });
 
-    connect(tcp_server_.get(), &QTcpServer::acceptError,
-            [this](QAbstractSocket::SocketError /* error */)
+    QObject::connect(tcp_server_.get(), &QTcpServer::acceptError,
+        [this](QAbstractSocket::SocketError /* error */)
     {
         LOG(LS_WARNING) << "accept error: " << tcp_server_->errorString();
         return;

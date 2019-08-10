@@ -20,6 +20,16 @@ include(tbb)
 include(translations)
 
 list(APPEND SOURCE_HOST_CORE
+    client_session.cc
+    client_session.h
+    client_session_desktop.cc
+    client_session_desktop.h
+    client_session_file_transfer.cc
+    client_session_file_transfer.h
+    host_authenticator.cc
+    host_authenticator.h
+    host_authenticator_manager.cc
+    host_authenticator_manager.h
     host_export.h
     host_server.cc
     host_server.h
@@ -60,4 +70,8 @@ set_target_properties(aspia_host_core PROPERTIES COMPILE_DEFINITIONS "HOST_IMPLE
 if (USE_TBB)
     add_tbb(aspia_host_core ${ASPIA_THIRD_PARTY_DIR}/tbb)
 endif()
+
+add_executable(aspia_host_service win/host_service_entry_point.cc win/host_service.rc)
+set_target_properties(aspia_host_service PROPERTIES LINK_FLAGS "/MANIFEST:NO")
+target_link_libraries(aspia_host_service aspia_host_core)
 

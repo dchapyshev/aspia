@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -58,17 +58,17 @@ const wchar_t kComProcessMandatoryLabel[] =
 
 } // namespace
 
-HostService::HostService()
-    : Service<QCoreApplication>(QLatin1String(kHostServiceName),
-                                QLatin1String(kHostServiceDisplayName),
-                                QLatin1String(kHostServiceDescription))
+Service::Service()
+    : qt_base::Service<QCoreApplication>(QLatin1String(kHostServiceName),
+                                         QLatin1String(kHostServiceDisplayName),
+                                         QLatin1String(kHostServiceDescription))
 {
     // Nothing
 }
 
-HostService::~HostService() = default;
+Service::~Service() = default;
 
-void HostService::start()
+void Service::start()
 {
     LOG(LS_INFO) << "Service is started";
 
@@ -81,11 +81,11 @@ void HostService::start()
 
     base::win::initializeComSecurity(kComProcessSd, kComProcessMandatoryLabel, false);
 
-    server_.reset(new HostServer());
+    server_.reset(new Server());
     server_->start();
 }
 
-void HostService::stop()
+void Service::stop()
 {
     server_.reset();
     com_initializer_.reset();
@@ -93,7 +93,7 @@ void HostService::stop()
     LOG(LS_INFO) << "Service is stopped";
 }
 
-void HostService::sessionEvent(base::win::SessionStatus status, base::win::SessionId session_id)
+void Service::sessionEvent(base::win::SessionStatus status, base::win::SessionId session_id)
 {
     if (server_)
         server_->setSessionEvent(status, session_id);

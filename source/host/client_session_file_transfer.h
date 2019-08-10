@@ -16,40 +16,24 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST__HOST_SERVICE_H
-#define HOST__HOST_SERVICE_H
+#ifndef HOST__CLIENT_SESSION_FILE_TRANSFER_H
+#define HOST__CLIENT_SESSION_FILE_TRANSFER_H
 
-#include "qt_base/service.h"
-
-#include <QCoreApplication>
-
-namespace base::win {
-class ScopedCOMInitializer;
-} // namespace base::win
+#include "base/macros_magic.h"
+#include "host/client_session.h"
 
 namespace host {
 
-class Server;
-
-class Service : public qt_base::Service<QCoreApplication>
+class ClientSessionFileTransfer : public ClientSession
 {
 public:
-    Service();
-    ~Service();
-
-protected:
-    // base::Service implementation.
-    void start() override;
-    void stop() override;
-    void sessionEvent(base::win::SessionStatus status, base::win::SessionId session_id) override;
+    ClientSessionFileTransfer(const QString& username, std::unique_ptr<net::Channel> channel);
+    ~ClientSessionFileTransfer();
 
 private:
-    std::unique_ptr<base::win::ScopedCOMInitializer> com_initializer_;
-    std::unique_ptr<Server> server_;
-
-    DISALLOW_COPY_AND_ASSIGN(Service);
+    DISALLOW_COPY_AND_ASSIGN(ClientSessionFileTransfer);
 };
 
 } // namespace host
 
-#endif // HOST__HOST_SERVICE_H
+#endif // HOST__CLIENT_SESSION_FILE_TRANSFER_H

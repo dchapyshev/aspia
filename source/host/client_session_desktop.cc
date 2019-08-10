@@ -16,40 +16,20 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST__HOST_SERVICE_H
-#define HOST__HOST_SERVICE_H
+#include "host/client_session_desktop.h"
 
-#include "qt_base/service.h"
-
-#include <QCoreApplication>
-
-namespace base::win {
-class ScopedCOMInitializer;
-} // namespace base::win
+#include "net/network_channel.h"
 
 namespace host {
 
-class Server;
-
-class Service : public qt_base::Service<QCoreApplication>
+ClientSessionDesktop::ClientSessionDesktop(proto::SessionType session_type,
+                                           const QString& username,
+                                           std::unique_ptr<net::Channel> channel)
+    : ClientSession(session_type, username, std::move(channel))
 {
-public:
-    Service();
-    ~Service();
+    // Nothing
+}
 
-protected:
-    // base::Service implementation.
-    void start() override;
-    void stop() override;
-    void sessionEvent(base::win::SessionStatus status, base::win::SessionId session_id) override;
-
-private:
-    std::unique_ptr<base::win::ScopedCOMInitializer> com_initializer_;
-    std::unique_ptr<Server> server_;
-
-    DISALLOW_COPY_AND_ASSIGN(Service);
-};
+ClientSessionDesktop::~ClientSessionDesktop() = default;
 
 } // namespace host
-
-#endif // HOST__HOST_SERVICE_H
