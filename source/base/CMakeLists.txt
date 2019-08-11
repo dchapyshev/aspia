@@ -26,6 +26,8 @@ list(APPEND SOURCE_BASE
     base64_constants.cc
     base64_constants.h
     bitset.h
+    byte_array.cc
+    byte_array.h
     const_buffer.h
     cpuid.cc
     cpuid.h
