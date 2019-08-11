@@ -45,7 +45,7 @@ class Channel : public QObject
 
 public:
     Channel();
-    virtual ~Channel() = default;
+    ~Channel();
 
     std::shared_ptr<ChannelProxy> channelProxy() { return proxy_; }
 

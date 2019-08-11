@@ -85,6 +85,12 @@ Channel::Channel(QTcpSocket* socket)
     init();
 }
 
+Channel::~Channel()
+{
+    proxy_->willDestroyCurrentChannel();
+    proxy_ = nullptr;
+}
+
 void Channel::connectToHost(const QString& address, uint16_t port)
 {
     connect(socket_, &QTcpSocket::connected, [this]()
