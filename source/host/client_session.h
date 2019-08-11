@@ -19,6 +19,7 @@
 #ifndef HOST__CLIENT_SESSION_H
 #define HOST__CLIENT_SESSION_H
 
+#include "base/version.h"
 #include "net/network_listener.h"
 #include "proto/common.pb.h"
 
@@ -36,19 +37,22 @@ class ClientSession : public net::Listener
 public:
     virtual ~ClientSession() = default;
 
-    static std::unique_ptr<ClientSession> create(proto::SessionType session_type,
-                                                 const QString& username,
-                                                 std::unique_ptr<net::Channel> channel);
+    static std::unique_ptr<ClientSession> create(
+        proto::SessionType session_type, std::unique_ptr<net::Channel> channel);
 
     std::string id() const { return id_; }
+
+    void setVersion(const base::Version& version);
+    const base::Version& version() const { return version_; }
+
+    void setUserName(const QString& username);
     QString userName() const { return username_; }
+
     proto::SessionType sessionType() const { return session_type_; }
     QString peerAddress() const;
 
 protected:
-    ClientSession(proto::SessionType session_type,
-                  const QString& user_name,
-                  std::unique_ptr<net::Channel> channel);
+    ClientSession(proto::SessionType session_type, std::unique_ptr<net::Channel> channel);
 
     void sendMessage(const QByteArray& buffer);
 
@@ -60,8 +64,9 @@ protected:
 
 private:
     std::string id_;
-    QString username_;
     proto::SessionType session_type_;
+    base::Version version_;
+    QString username_;
 
     std::unique_ptr<net::Channel> channel_;
     std::shared_ptr<net::ChannelProxy> channel_proxy_;

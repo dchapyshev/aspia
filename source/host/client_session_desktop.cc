@@ -22,10 +22,9 @@
 
 namespace host {
 
-ClientSessionDesktop::ClientSessionDesktop(proto::SessionType session_type,
-                                           const QString& username,
-                                           std::unique_ptr<net::Channel> channel)
-    : ClientSession(session_type, username, std::move(channel))
+ClientSessionDesktop::ClientSessionDesktop(
+    proto::SessionType session_type, std::unique_ptr<net::Channel> channel)
+    : ClientSession(session_type, std::move(channel))
 {
     // Nothing
 }

@@ -27,7 +27,7 @@ namespace host {
 class ClientSessionFileTransfer : public ClientSession
 {
 public:
-    ClientSessionFileTransfer(const QString& username, std::unique_ptr<net::Channel> channel);
+    ClientSessionFileTransfer(std::unique_ptr<net::Channel> channel);
     ~ClientSessionFileTransfer();
 
 private:

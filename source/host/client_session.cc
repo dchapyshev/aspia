@@ -19,42 +19,55 @@
 #include "host/client_session.h"
 
 #include "base/guid.h"
+#include "base/logging.h"
 #include "host/client_session_desktop.h"
 #include "host/client_session_file_transfer.h"
 #include "net/network_channel_proxy.h"
 
 namespace host {
 
-ClientSession::ClientSession(proto::SessionType session_type,
-                             const QString& username,
-                             std::unique_ptr<net::Channel> channel)
+ClientSession::ClientSession(
+    proto::SessionType session_type, std::unique_ptr<net::Channel> channel)
     : session_type_(session_type),
-      username_(username),
       channel_(std::move(channel))
 {
+    DCHECK(channel_);
+
     channel_proxy_ = channel_->channelProxy();
     id_ = base::Guid::create().toStdString();
 }
 
 // static
-std::unique_ptr<ClientSession> ClientSession::create(proto::SessionType session_type,
-                                                     const QString& username,
-                                                     std::unique_ptr<net::Channel> channel)
+std::unique_ptr<ClientSession> ClientSession::create(
+    proto::SessionType session_type, std::unique_ptr<net::Channel> channel)
 {
+    if (!channel)
+        return nullptr;
+
     switch (session_type)
     {
         case proto::SESSION_TYPE_DESKTOP_MANAGE:
         case proto::SESSION_TYPE_DESKTOP_VIEW:
             return std::unique_ptr<ClientSessionDesktop>(
-                new ClientSessionDesktop(session_type, username, std::move(channel)));
+                new ClientSessionDesktop(session_type, std::move(channel)));
 
         case proto::SESSION_TYPE_FILE_TRANSFER:
             return std::unique_ptr<ClientSessionFileTransfer>(
-                new ClientSessionFileTransfer(username, std::move(channel)));
+                new ClientSessionFileTransfer(std::move(channel)));
 
         default:
             return nullptr;
     }
+}
+
+void ClientSession::setVersion(const base::Version& version)
+{
+    version_ = version;
+}
+
+void ClientSession::setUserName(const QString& username)
+{
+    username_ = username;
 }
 
 QString ClientSession::peerAddress() const

@@ -67,7 +67,16 @@ std::unique_ptr<ClientSession> Authenticator::takeSession()
     if (state_ != State::SUCCESS)
         return nullptr;
 
-    return ClientSession::create(session_type_, username_, std::move(channel_));
+    std::unique_ptr<ClientSession> session =
+        ClientSession::create(session_type_, std::move(channel_));
+
+    if (session)
+    {
+        session->setVersion(peer_version_);
+        session->setUserName(username_);
+    }
+
+    return session;
 }
 
 void Authenticator::onNetworkConnected()

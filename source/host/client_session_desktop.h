@@ -27,9 +27,7 @@ namespace host {
 class ClientSessionDesktop : public ClientSession
 {
 public:
-    ClientSessionDesktop(proto::SessionType session_type,
-                         const QString& username,
-                         std::unique_ptr<net::Channel> channel);
+    ClientSessionDesktop(proto::SessionType session_type, std::unique_ptr<net::Channel> channel);
     ~ClientSessionDesktop();
 
 private:

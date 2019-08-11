@@ -22,9 +22,8 @@
 
 namespace host {
 
-ClientSessionFileTransfer::ClientSessionFileTransfer(const QString& username,
-                                                     std::unique_ptr<net::Channel> channel)
-    : ClientSession(proto::SESSION_TYPE_FILE_TRANSFER, username, std::move(channel))
+ClientSessionFileTransfer::ClientSessionFileTransfer(std::unique_ptr<net::Channel> channel)
+    : ClientSession(proto::SESSION_TYPE_FILE_TRANSFER, std::move(channel))
 {
     // Nothing
 }
