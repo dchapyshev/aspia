@@ -37,6 +37,10 @@ list(APPEND SOURCE_HOST_CORE
     host_settings.cc
     host_settings.h
     input_injector.h
+    input_injector_ipc.cc
+    input_injector_ipc.h
+    input_injector_win.cc
+    input_injector_win.h
     mouse_cursor_monitor.h
     screen_controls.h
     user.cc

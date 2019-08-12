@@ -16,22 +16,23 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST__INPUT_INJECTOR_H
-#define HOST__INPUT_INJECTOR_H
+#ifndef HOST__INPUT_INJECTOR_IPC_H
+#define HOST__INPUT_INJECTOR_IPC_H
 
-#include "proto/desktop.pb.h"
+#include "host/input_injector.h"
 
 namespace host {
 
-class InputInjector
+class InputInjectorIpc : public InputInjector
 {
 public:
-    virtual ~InputInjector() = default;
+    ~InputInjectorIpc() = default;
 
-    virtual void injectKeyEvent(const proto::desktop::KeyEvent& event) = 0;
-    virtual void injectPointerEvent(const proto::desktop::PointerEvent& event) = 0;
+    // InputInjector implementation.
+    void injectKeyEvent(const proto::desktop::KeyEvent& event) override;
+    void injectPointerEvent(const proto::desktop::PointerEvent& event) override;
 };
 
 } // namespace host
 
-#endif // HOST__INPUT_INJECTOR_H
+#endif // HOST__INPUT_INJECTOR_IPC_H

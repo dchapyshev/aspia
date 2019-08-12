@@ -16,22 +16,18 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST__INPUT_INJECTOR_H
-#define HOST__INPUT_INJECTOR_H
-
-#include "proto/desktop.pb.h"
+#include "host/input_injector_win.h"
 
 namespace host {
 
-class InputInjector
+void InputInjectorWin::injectKeyEvent(const proto::desktop::KeyEvent& event)
 {
-public:
-    virtual ~InputInjector() = default;
+    // TODO
+}
 
-    virtual void injectKeyEvent(const proto::desktop::KeyEvent& event) = 0;
-    virtual void injectPointerEvent(const proto::desktop::PointerEvent& event) = 0;
-};
+void InputInjectorWin::injectPointerEvent(const proto::desktop::PointerEvent& event)
+{
+    // TODO
+}
 
 } // namespace host
-
-#endif // HOST__INPUT_INJECTOR_H
