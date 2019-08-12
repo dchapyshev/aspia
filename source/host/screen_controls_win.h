@@ -16,23 +16,24 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST__SCREEN_CONTROLS_H
-#define HOST__SCREEN_CONTROLS_H
+#ifndef HOST__SCREEN_CONTROLS_WIN_H
+#define HOST__SCREEN_CONTROLS_WIN_H
 
-#include "desktop/desktop_geometry.h"
+#include "host/screen_controls.h"
 
 namespace host {
 
-class ScreenControls
+class ScreenControlsWin : public ScreenControls
 {
 public:
-    virtual ~ScreenControls() = default;
+    ~ScreenControlsWin() = default;
 
-    virtual void setScreenResolution(const desktop::Size& resolution) = 0;
-    virtual void setEffectsState(bool enable) = 0;
-    virtual void setWallpaperState(bool enable) = 0;
+    // ScreenControls implementation.
+    void setScreenResolution(const desktop::Size& resolution) override;
+    void setEffectsState(bool enable) override;
+    void setWallpaperState(bool enable) override;
 };
 
 } // namespace host
 
-#endif // HOST__SCREEN_CONTROLS_H
+#endif // HOST__SCREEN_CONTROLS_WIN_H

@@ -43,6 +43,10 @@ list(APPEND SOURCE_HOST_CORE
     input_injector_win.h
     mouse_cursor_monitor.h
     screen_controls.h
+    screen_controls_ipc.cc
+    screen_controls_ipc.h
+    screen_controls_win.cc
+    screen_controls_win.h
     user.cc
     user.h
     video_capturer.h)
