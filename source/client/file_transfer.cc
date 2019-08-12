@@ -97,16 +97,16 @@ FileTransferTask& FileTransfer::currentTask()
     return tasks_.front();
 }
 
-void FileTransfer::targetReply(const proto::file_transfer::Request& request,
-                               const proto::file_transfer::Reply& reply)
+void FileTransfer::targetReply(const proto::FileRequest& request,
+                               const proto::FileReply& reply)
 {
     if (tasks_.isEmpty())
         return;
 
     if (request.has_create_directory_request())
     {
-        if (reply.status() == proto::file_transfer::STATUS_SUCCESS ||
-            reply.status() == proto::file_transfer::STATUS_PATH_ALREADY_EXISTS)
+        if (reply.status() == proto::FileReply::STATUS_SUCCESS ||
+            reply.status() == proto::FileReply::STATUS_PATH_ALREADY_EXISTS)
         {
             processNextTask();
             return;
@@ -119,11 +119,11 @@ void FileTransfer::targetReply(const proto::file_transfer::Request& request,
     }
     else if (request.has_upload_request())
     {
-        if (reply.status() != proto::file_transfer::STATUS_SUCCESS)
+        if (reply.status() != proto::FileReply::STATUS_SUCCESS)
         {
             Error error_type = FileCreateError;
 
-            if (reply.status() == proto::file_transfer::STATUS_PATH_ALREADY_EXISTS)
+            if (reply.status() == proto::FileReply::STATUS_PATH_ALREADY_EXISTS)
                 error_type = FileAlreadyExists;
 
             processError(error_type,
@@ -133,12 +133,11 @@ void FileTransfer::targetReply(const proto::file_transfer::Request& request,
             return;
         }
 
-        sourceRequest(common::FileRequest::packetRequest(
-            proto::file_transfer::PacketRequest::NO_FLAGS));
+        sourceRequest(common::FileRequest::packetRequest(proto::FilePacketRequest::NO_FLAGS));
     }
     else if (request.has_packet())
     {
-        if (reply.status() != proto::file_transfer::STATUS_SUCCESS)
+        if (reply.status() != proto::FileReply::STATUS_SUCCESS)
         {
             processError(FileWriteError,
                          tr("Failed to write file \"%1\": %2")
@@ -174,15 +173,15 @@ void FileTransfer::targetReply(const proto::file_transfer::Request& request,
             }
         }
 
-        if (request.packet().flags() & proto::file_transfer::Packet::LAST_PACKET)
+        if (request.packet().flags() & proto::FilePacket::LAST_PACKET)
         {
             processNextTask();
             return;
         }
 
-        uint32_t flags = proto::file_transfer::PacketRequest::NO_FLAGS;
+        uint32_t flags = proto::FilePacketRequest::NO_FLAGS;
         if (is_canceled_)
-            flags = proto::file_transfer::PacketRequest::CANCEL;
+            flags = proto::FilePacketRequest::CANCEL;
 
         sourceRequest(common::FileRequest::packetRequest(flags));
     }
@@ -192,15 +191,15 @@ void FileTransfer::targetReply(const proto::file_transfer::Request& request,
     }
 }
 
-void FileTransfer::sourceReply(const proto::file_transfer::Request& request,
-                               const proto::file_transfer::Reply& reply)
+void FileTransfer::sourceReply(const proto::FileRequest& request,
+                               const proto::FileReply& reply)
 {
     if (tasks_.isEmpty())
         return;
 
     if (request.has_download_request())
     {
-        if (reply.status() != proto::file_transfer::STATUS_SUCCESS)
+        if (reply.status() != proto::FileReply::STATUS_SUCCESS)
         {
             processError(FileOpenError,
                          tr("Failed to open file \"%1\": %2")
@@ -214,7 +213,7 @@ void FileTransfer::sourceReply(const proto::file_transfer::Request& request,
     }
     else if (request.has_packet_request())
     {
-        if (reply.status() != proto::file_transfer::STATUS_SUCCESS)
+        if (reply.status() != proto::FileReply::STATUS_SUCCESS)
         {
             processError(FileReadError,
                          tr("Failed to read file \"%1\": %2")

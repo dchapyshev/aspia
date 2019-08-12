@@ -33,7 +33,7 @@ const char kSupportedExtensionsForView[] =
     "select_screen;system_info";
 
 const uint32_t kSupportedVideoEncodings =
-    proto::desktop::VIDEO_ENCODING_VP8 | proto::desktop::VIDEO_ENCODING_VP9 |
-    proto::desktop::VIDEO_ENCODING_ZSTD;
+    proto::VIDEO_ENCODING_VP8 | proto::VIDEO_ENCODING_VP9 |
+    proto::VIDEO_ENCODING_ZSTD;
 
 } // namespace common

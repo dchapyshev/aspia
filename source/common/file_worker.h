@@ -34,28 +34,21 @@ public:
     FileWorker(QObject* parent = nullptr);
     ~FileWorker() = default;
 
-    proto::file_transfer::Reply doRequest(const proto::file_transfer::Request& request);
+    proto::FileReply doRequest(const proto::FileRequest& request);
 
 public slots:
     void executeRequest(FileRequest* request);
 
 private:
-    proto::file_transfer::Reply doDriveListRequest();
-    proto::file_transfer::Reply doFileListRequest(
-        const proto::file_transfer::FileListRequest& request);
-    proto::file_transfer::Reply doCreateDirectoryRequest(
-        const proto::file_transfer::CreateDirectoryRequest& request);
-    proto::file_transfer::Reply doRenameRequest(
-        const proto::file_transfer::RenameRequest& request);
-    proto::file_transfer::Reply doRemoveRequest(
-        const proto::file_transfer::RemoveRequest& request);
-    proto::file_transfer::Reply doDownloadRequest(
-        const proto::file_transfer::DownloadRequest& request);
-    proto::file_transfer::Reply doUploadRequest(
-        const proto::file_transfer::UploadRequest& request);
-    proto::file_transfer::Reply doPacketRequest(
-        const proto::file_transfer::PacketRequest& request);
-    proto::file_transfer::Reply doPacket(const proto::file_transfer::Packet& packet);
+    proto::FileReply doDriveListRequest();
+    proto::FileReply doFileListRequest(const proto::FileListRequest& request);
+    proto::FileReply doCreateDirectoryRequest(const proto::CreateDirectoryRequest& request);
+    proto::FileReply doRenameRequest(const proto::RenameRequest& request);
+    proto::FileReply doRemoveRequest(const proto::RemoveRequest& request);
+    proto::FileReply doDownloadRequest(const proto::DownloadRequest& request);
+    proto::FileReply doUploadRequest(const proto::UploadRequest& request);
+    proto::FileReply doPacketRequest(const proto::FilePacketRequest& request);
+    proto::FileReply doPacket(const proto::FilePacket& packet);
 
     std::unique_ptr<FileDepacketizer> depacketizer_;
     std::unique_ptr<FilePacketizer> packetizer_;

@@ -33,10 +33,10 @@ public:
     ~CursorEncoder() = default;
 
     bool encode(std::unique_ptr<desktop::MouseCursor> mouse_cursor,
-                proto::desktop::CursorShape* cursor_shape);
+                proto::CursorShape* cursor_shape);
 
 private:
-    bool compressCursor(proto::desktop::CursorShape* cursor_shape,
+    bool compressCursor(proto::CursorShape* cursor_shape,
                         const desktop::MouseCursor* mouse_cursor);
 
     ScopedZstdCStream stream_;

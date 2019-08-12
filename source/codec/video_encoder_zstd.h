@@ -36,11 +36,11 @@ public:
     static VideoEncoderZstd* create(
         const desktop::PixelFormat& target_format, int compression_ratio);
 
-    void encode(const desktop::Frame* frame, proto::desktop::VideoPacket* packet) override;
+    void encode(const desktop::Frame* frame, proto::VideoPacket* packet) override;
 
 private:
     VideoEncoderZstd(const desktop::PixelFormat& target_format, int compression_ratio);
-    void compressPacket(proto::desktop::VideoPacket* packet,
+    void compressPacket(proto::VideoPacket* packet,
                         const uint8_t* input_data,
                         size_t input_size);
 

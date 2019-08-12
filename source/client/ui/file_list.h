@@ -38,7 +38,7 @@ public:
     ~FileList() = default;
 
     void showDriveList(AddressBarModel* model);
-    void showFileList(const proto::file_transfer::FileList& file_list);
+    void showFileList(const proto::FileList& file_list);
     void setMimeType(const QString& mime_type);
     bool isDriveListShown() const;
     bool isFileListShown() const;

@@ -29,8 +29,8 @@ public:
     ~InputInjectorWin() = default;
 
     // InputInjector implementation.
-    void injectKeyEvent(const proto::desktop::KeyEvent& event) override;
-    void injectPointerEvent(const proto::desktop::PointerEvent& event) override;
+    void injectKeyEvent(const proto::KeyEvent& event) override;
+    void injectPointerEvent(const proto::PointerEvent& event) override;
 };
 
 } // namespace host

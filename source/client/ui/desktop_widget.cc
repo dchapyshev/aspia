@@ -29,8 +29,7 @@ namespace client {
 
 namespace {
 
-constexpr uint32_t kWheelMask =
-    proto::desktop::PointerEvent::WHEEL_DOWN | proto::desktop::PointerEvent::WHEEL_UP;
+constexpr uint32_t kWheelMask = proto::PointerEvent::WHEEL_DOWN | proto::PointerEvent::WHEEL_UP;
 
 bool isNumLockActivated()
 {
@@ -98,13 +97,13 @@ void DesktopWidget::doMouseEvent(QEvent::Type event_type,
         mask = 0;
 
         if (buttons & Qt::LeftButton)
-            mask |= proto::desktop::PointerEvent::LEFT_BUTTON;
+            mask |= proto::PointerEvent::LEFT_BUTTON;
 
         if (buttons & Qt::MiddleButton)
-            mask |= proto::desktop::PointerEvent::MIDDLE_BUTTON;
+            mask |= proto::PointerEvent::MIDDLE_BUTTON;
 
         if (buttons & Qt::RightButton)
-            mask |= proto::desktop::PointerEvent::RIGHT_BUTTON;
+            mask |= proto::PointerEvent::RIGHT_BUTTON;
     }
 
     int wheel_steps = 0;
@@ -113,12 +112,12 @@ void DesktopWidget::doMouseEvent(QEvent::Type event_type,
     {
         if (delta.y() < 0)
         {
-            mask |= proto::desktop::PointerEvent::WHEEL_DOWN;
+            mask |= proto::PointerEvent::WHEEL_DOWN;
             wheel_steps = -delta.y() / QWheelEvent::DefaultDeltasPerStep;
         }
         else
         {
-            mask |= proto::desktop::PointerEvent::WHEEL_UP;
+            mask |= proto::PointerEvent::WHEEL_UP;
             wheel_steps = delta.y() / QWheelEvent::DefaultDeltasPerStep;
         }
 
@@ -155,10 +154,10 @@ void DesktopWidget::doKeyEvent(QKeyEvent* event)
     if (!enable_key_sequenses_ && isModifierKey(key))
         return;
 
-    uint32_t flags = ((event->type() == QEvent::KeyPress) ? proto::desktop::KeyEvent::PRESSED : 0);
+    uint32_t flags = ((event->type() == QEvent::KeyPress) ? proto::KeyEvent::PRESSED : 0);
 
-    flags |= (isCapsLockActivated() ? proto::desktop::KeyEvent::CAPSLOCK : 0);
-    flags |= (isNumLockActivated() ? proto::desktop::KeyEvent::NUMLOCK : 0);
+    flags |= (isCapsLockActivated() ? proto::KeyEvent::CAPSLOCK : 0);
+    flags |= (isNumLockActivated() ? proto::KeyEvent::NUMLOCK : 0);
 
     uint32_t usb_keycode =
         common::KeycodeConverter::nativeKeycodeToUsbKeycode(event->nativeScanCode());
@@ -196,15 +195,15 @@ void DesktopWidget::executeKeyCombination(int key_sequence)
 
     keys.push_back(key);
 
-    uint32_t flags = proto::desktop::KeyEvent::PRESSED;
+    uint32_t flags = proto::KeyEvent::PRESSED;
 
-    flags |= (isCapsLockActivated() ? proto::desktop::KeyEvent::CAPSLOCK : 0);
-    flags |= (isNumLockActivated() ? proto::desktop::KeyEvent::NUMLOCK : 0);
+    flags |= (isCapsLockActivated() ? proto::KeyEvent::CAPSLOCK : 0);
+    flags |= (isNumLockActivated() ? proto::KeyEvent::NUMLOCK : 0);
 
     for (auto it = keys.cbegin(); it != keys.cend(); ++it)
         executeKeyEvent(*it, flags);
 
-    flags ^= proto::desktop::KeyEvent::PRESSED;
+    flags ^= proto::KeyEvent::PRESSED;
 
     for (auto it = keys.crbegin(); it != keys.crend(); ++it)
         executeKeyEvent(*it, flags);
@@ -302,8 +301,8 @@ void DesktopWidget::focusOutEvent(QFocusEvent* event)
     {
         uint32_t flags = 0;
 
-        flags |= (isCapsLockActivated() ? proto::desktop::KeyEvent::CAPSLOCK : 0);
-        flags |= (isNumLockActivated() ? proto::desktop::KeyEvent::NUMLOCK : 0);
+        flags |= (isCapsLockActivated() ? proto::KeyEvent::CAPSLOCK : 0);
+        flags |= (isNumLockActivated() ? proto::KeyEvent::NUMLOCK : 0);
 
         for (const auto& key : pressed_keys_)
             executeKeyEvent(key, flags);
@@ -314,7 +313,7 @@ void DesktopWidget::focusOutEvent(QFocusEvent* event)
 
 void DesktopWidget::executeKeyEvent(uint32_t usb_keycode, uint32_t flags)
 {
-    if (flags & proto::desktop::KeyEvent::PRESSED)
+    if (flags & proto::KeyEvent::PRESSED)
         pressed_keys_.insert(usb_keycode);
     else
         pressed_keys_.erase(usb_keycode);
@@ -336,10 +335,10 @@ LRESULT CALLBACK DesktopWidget::keyboardHookProc(INT code, WPARAM wparam, LPARAM
             if (hook->vkCode != VK_CAPITAL && hook->vkCode != VK_NUMLOCK)
             {
                 uint32_t flags = ((wparam == WM_KEYDOWN || wparam == WM_SYSKEYDOWN) ?
-                                  proto::desktop::KeyEvent::PRESSED : 0);
+                                  proto::KeyEvent::PRESSED : 0);
 
-                flags |= (isCapsLockActivated() ? proto::desktop::KeyEvent::CAPSLOCK : 0);
-                flags |= (isNumLockActivated() ? proto::desktop::KeyEvent::NUMLOCK : 0);
+                flags |= (isCapsLockActivated() ? proto::KeyEvent::CAPSLOCK : 0);
+                flags |= (isNumLockActivated() ? proto::KeyEvent::NUMLOCK : 0);
 
                 uint32_t scan_code = hook->scanCode;
 

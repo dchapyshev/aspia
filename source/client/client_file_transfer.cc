@@ -29,8 +29,8 @@ namespace client {
 ClientFileTransfer::ClientFileTransfer(const ConnectData& connect_data, QObject* parent)
     : Client(connect_data, parent)
 {
-    qRegisterMetaType<proto::file_transfer::Request>();
-    qRegisterMetaType<proto::file_transfer::Reply>();
+    qRegisterMetaType<proto::FileRequest>();
+    qRegisterMetaType<proto::FileReply>();
 
     worker_thread_ = new QThread(this);
     worker_.reset(new common::FileWorker());
@@ -51,7 +51,7 @@ common::FileWorker* ClientFileTransfer::localWorker() { return worker_.get(); }
 
 void ClientFileTransfer::onNetworkMessage(const QByteArray& buffer)
 {
-    proto::file_transfer::Reply reply;
+    proto::FileReply reply;
 
     if (!reply.ParseFromArray(buffer.constData(), buffer.size()))
     {
@@ -59,7 +59,7 @@ void ClientFileTransfer::onNetworkMessage(const QByteArray& buffer)
         return;
     }
 
-    if (reply.status() == proto::file_transfer::STATUS_NO_LOGGED_ON_USER)
+    if (reply.status() == proto::FileReply::STATUS_NO_LOGGED_ON_USER)
     {
         onSessionError(tr("There are no logged in users. File transfer is not available"));
         return;

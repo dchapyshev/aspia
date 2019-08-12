@@ -760,42 +760,42 @@
 <context>
     <name>client::ClientDesktop</name>
     <message>
-        <location filename="../client_desktop.cc" line="47"/>
+        <location filename="../client_desktop.cc" line="48"/>
         <source>Invalid message from host</source>
         <translation>Неверное сообщение от хоста</translation>
     </message>
     <message>
-        <location filename="../client_desktop.cc" line="196"/>
+        <location filename="../client_desktop.cc" line="197"/>
         <source>There are no supported video encodings</source>
         <translation>Нет поддерживаемых видео-кодеков</translation>
     </message>
     <message>
-        <location filename="../client_desktop.cc" line="222"/>
+        <location filename="../client_desktop.cc" line="223"/>
         <source>Video decoder not initialized</source>
         <translation>Видео-декодер не инициализирован</translation>
     </message>
     <message>
-        <location filename="../client_desktop.cc" line="236"/>
+        <location filename="../client_desktop.cc" line="237"/>
         <source>Wrong video frame size</source>
         <translation>Неверный размер видео-кадра</translation>
     </message>
     <message>
-        <location filename="../client_desktop.cc" line="243"/>
+        <location filename="../client_desktop.cc" line="244"/>
         <source>Wrong video frame position</source>
         <translation>Неверное положение видео-кадра</translation>
     </message>
     <message>
-        <location filename="../client_desktop.cc" line="253"/>
+        <location filename="../client_desktop.cc" line="254"/>
         <source>The desktop frame is not initialized</source>
         <translation>Рабочий стол не инициализирован</translation>
     </message>
     <message>
-        <location filename="../client_desktop.cc" line="259"/>
+        <location filename="../client_desktop.cc" line="260"/>
         <source>The video packet could not be decoded</source>
         <translation>Не удалось декодировать видео-пакет</translation>
     </message>
     <message>
-        <location filename="../client_desktop.cc" line="344"/>
+        <location filename="../client_desktop.cc" line="345"/>
         <source>Session error</source>
         <translation>Ошибка сессии</translation>
     </message>
@@ -933,43 +933,43 @@
 <context>
     <name>client::DesktopWindow</name>
     <message>
-        <location filename="../ui/desktop_window.cc" line="367"/>
+        <location filename="../ui/desktop_window.cc" line="368"/>
         <source>Save File</source>
         <translation>Сохранение файла</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="369"/>
+        <location filename="../ui/desktop_window.cc" line="370"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG изображение (*.png);;BMP изображение (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="149"/>
-        <location filename="../ui/desktop_window.cc" line="389"/>
+        <location filename="../ui/desktop_window.cc" line="150"/>
+        <location filename="../ui/desktop_window.cc" line="390"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="150"/>
+        <location filename="../ui/desktop_window.cc" line="151"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
         <translation>Текущий видео-кодек не поддерживается хостом. Пожалуйста, выберите другой кодек.</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="167"/>
+        <location filename="../ui/desktop_window.cc" line="168"/>
         <source>Selecting a supported video encoding is canceled by the user.</source>
         <translation>Выбор поддерживаемой видео-кодировки отменен пользователем.</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="389"/>
+        <location filename="../ui/desktop_window.cc" line="390"/>
         <source>Could not save image</source>
         <translation>Не удалось сохранить изображение</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="530"/>
+        <location filename="../ui/desktop_window.cc" line="531"/>
         <source>Desktop Manage</source>
         <translation>Управление рабочим столом</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="535"/>
+        <location filename="../ui/desktop_window.cc" line="536"/>
         <source>Desktop View</source>
         <translation>Просмотр рабочего стола</translation>
     </message>
@@ -1048,76 +1048,76 @@
 <context>
     <name>client::FilePanel</name>
     <message>
-        <location filename="../ui/file_panel.cc" line="157"/>
-        <location filename="../ui/file_panel.cc" line="172"/>
-        <location filename="../ui/file_panel.cc" line="196"/>
-        <location filename="../ui/file_panel.cc" line="207"/>
-        <location filename="../ui/file_panel.cc" line="298"/>
-        <location filename="../ui/file_panel.cc" line="307"/>
-        <location filename="../ui/file_panel.cc" line="323"/>
-        <location filename="../ui/file_panel.cc" line="332"/>
+        <location filename="../ui/file_panel.cc" line="156"/>
+        <location filename="../ui/file_panel.cc" line="171"/>
+        <location filename="../ui/file_panel.cc" line="195"/>
+        <location filename="../ui/file_panel.cc" line="206"/>
+        <location filename="../ui/file_panel.cc" line="297"/>
+        <location filename="../ui/file_panel.cc" line="306"/>
+        <location filename="../ui/file_panel.cc" line="322"/>
+        <location filename="../ui/file_panel.cc" line="331"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="158"/>
+        <location filename="../ui/file_panel.cc" line="157"/>
         <source>Failed to get list of drives: %1</source>
         <translation>Не удалось получить список дисков: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="173"/>
+        <location filename="../ui/file_panel.cc" line="172"/>
         <source>Failed to get list of files: %1</source>
         <translation>Не удалось получить список файлов: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="197"/>
+        <location filename="../ui/file_panel.cc" line="196"/>
         <source>Failed to create directory: %1</source>
         <translation>Не удалось создать директорию: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="208"/>
+        <location filename="../ui/file_panel.cc" line="207"/>
         <source>Failed to rename item: %1</source>
         <translation>Не удалось переименовать элемент: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="278"/>
+        <location filename="../ui/file_panel.cc" line="277"/>
         <source>%1 object(s) selected</source>
         <translation>Выбрано объектов: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="299"/>
-        <location filename="../ui/file_panel.cc" line="324"/>
+        <location filename="../ui/file_panel.cc" line="298"/>
+        <location filename="../ui/file_panel.cc" line="323"/>
         <source>Folder name can not be empty.</source>
         <translation>Имя папки не может быть пустым.</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="308"/>
-        <location filename="../ui/file_panel.cc" line="333"/>
+        <location filename="../ui/file_panel.cc" line="307"/>
+        <location filename="../ui/file_panel.cc" line="332"/>
         <source>Name contains invalid characters.</source>
         <translation>Имя содержит некорректные символы.</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="355"/>
+        <location filename="../ui/file_panel.cc" line="354"/>
         <source>&amp;Send	F11</source>
         <translation>&amp;Отправить	F11</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="357"/>
+        <location filename="../ui/file_panel.cc" line="356"/>
         <source>&amp;Delete	Delete</source>
         <translation>&amp;Удалить	Delete</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="367"/>
+        <location filename="../ui/file_panel.cc" line="366"/>
         <source>&amp;Create Folder</source>
         <translation>&amp;Создать папку</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="422"/>
+        <location filename="../ui/file_panel.cc" line="421"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="423"/>
+        <location filename="../ui/file_panel.cc" line="422"/>
         <source>Are you sure you want to delete the selected items?</source>
         <translation>Вы действительно хотите удалить выбранные элементы?</translation>
     </message>
@@ -1166,12 +1166,12 @@
 <context>
     <name>client::FileRemover</name>
     <message>
-        <location filename="../file_remover.cc" line="82"/>
+        <location filename="../file_remover.cc" line="81"/>
         <source>An unexpected answer was received.</source>
         <translation>Получен неожиданный ответ на запрос.</translation>
     </message>
     <message>
-        <location filename="../file_remover.cc" line="110"/>
+        <location filename="../file_remover.cc" line="109"/>
         <source>Failed to delete &quot;%1&quot;: %2.</source>
         <translation>Не удалось удалить &quot;%1&quot;: %2.</translation>
     </message>
@@ -1189,23 +1189,23 @@
         <translation>Не удалось создать файл &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../file_transfer.cc" line="144"/>
+        <location filename="../file_transfer.cc" line="143"/>
         <source>Failed to write file &quot;%1&quot;: %2</source>
         <translation>Не удалось выполнить запись файла &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../file_transfer.cc" line="191"/>
-        <location filename="../file_transfer.cc" line="230"/>
+        <location filename="../file_transfer.cc" line="190"/>
+        <location filename="../file_transfer.cc" line="229"/>
         <source>An unexpected response to the request was received</source>
         <translation>Получен неожиданный ответ на запрос</translation>
     </message>
     <message>
-        <location filename="../file_transfer.cc" line="206"/>
+        <location filename="../file_transfer.cc" line="205"/>
         <source>Failed to open file &quot;%1&quot;: %2</source>
         <translation>Не удалось открыть файл &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../file_transfer.cc" line="220"/>
+        <location filename="../file_transfer.cc" line="219"/>
         <source>Failed to read file &quot;%1&quot;: %2</source>
         <translation>Не удалось прочитать файл &quot;%1&quot;: %2</translation>
     </message>

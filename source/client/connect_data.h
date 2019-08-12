@@ -39,7 +39,7 @@ struct ConnectData
     QString password;
 
     proto::SessionType session_type = proto::SESSION_TYPE_DESKTOP_MANAGE;
-    proto::desktop::Config desktop_config;
+    proto::DesktopConfig desktop_config;
 };
 
 } // namespace client

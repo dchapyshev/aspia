@@ -91,11 +91,11 @@ FileEnumerator::FileEnumerator(const std::filesystem::path& root_path)
         switch (error_code)
         {
             case ERROR_ACCESS_DENIED:
-                status_ = proto::file_transfer::STATUS_ACCESS_DENIED;
+                status_ = proto::FileReply::STATUS_ACCESS_DENIED;
                 break;
 
             case ERROR_NOT_READY:
-                status_ = proto::file_transfer::STATUS_DISK_NOT_READY;
+                status_ = proto::FileReply::STATUS_DISK_NOT_READY;
                 break;
 
             default:

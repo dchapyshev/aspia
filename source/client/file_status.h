@@ -25,7 +25,7 @@
 
 namespace client {
 
-QString fileStatusToString(proto::file_transfer::Status status);
+QString fileStatusToString(proto::FileReply::Status status);
 
 } // namespace client
 

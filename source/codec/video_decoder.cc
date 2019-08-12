@@ -23,17 +23,17 @@
 namespace codec {
 
 // static
-std::unique_ptr<VideoDecoder> VideoDecoder::create(proto::desktop::VideoEncoding encoding)
+std::unique_ptr<VideoDecoder> VideoDecoder::create(proto::VideoEncoding encoding)
 {
     switch (encoding)
     {
-        case proto::desktop::VIDEO_ENCODING_ZSTD:
+        case proto::VIDEO_ENCODING_ZSTD:
             return VideoDecoderZstd::create();
 
-        case proto::desktop::VIDEO_ENCODING_VP8:
+        case proto::VIDEO_ENCODING_VP8:
             return VideoDecoderVPX::createVP8();
 
-        case proto::desktop::VIDEO_ENCODING_VP9:
+        case proto::VIDEO_ENCODING_VP9:
             return VideoDecoderVPX::createVP9();
 
         default:

@@ -35,8 +35,8 @@ enum EncryptionType
 
 message SessionConfig
 {
-    desktop.Config desktop_manage = 1;
-    desktop.Config desktop_view   = 2;
+    DesktopConfig desktop_manage = 1;
+    DesktopConfig desktop_view   = 2;
 }
 
 message Computer

@@ -36,12 +36,12 @@ std::unique_ptr<VideoDecoderZstd> VideoDecoderZstd::create()
     return std::unique_ptr<VideoDecoderZstd>(new VideoDecoderZstd());
 }
 
-bool VideoDecoderZstd::decode(const proto::desktop::VideoPacket& packet,
+bool VideoDecoderZstd::decode(const proto::VideoPacket& packet,
                               desktop::Frame* target_frame)
 {
     if (packet.has_format())
     {
-        const proto::desktop::VideoPacketFormat& format = packet.format();
+        const proto::VideoPacketFormat& format = packet.format();
 
         source_frame_ = desktop::FrameAligned::create(
             desktop::Size(format.screen_rect().width(), format.screen_rect().height()),

@@ -54,10 +54,10 @@ public:
     bool isAtEnd() const;
     void advance();
 
-    proto::file_transfer::Status status() const { return status_; }
+    proto::FileReply::Status status() const { return status_; }
 
 private:
-    proto::file_transfer::Status status_ = proto::file_transfer::STATUS_SUCCESS;
+    proto::FileReply::Status status_ = proto::FileReply::STATUS_SUCCESS;
     HANDLE find_handle_ = INVALID_HANDLE_VALUE;
     FileInfo file_info_;
 

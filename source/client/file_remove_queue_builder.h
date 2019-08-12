@@ -53,8 +53,7 @@ public slots:
     void start(const QString& path, const QList<FileRemover::Item>& items);
 
     // Reads the reply to the request.
-    void reply(const proto::file_transfer::Request& request,
-               const proto::file_transfer::Reply& reply);
+    void reply(const proto::FileRequest& request, const proto::FileReply& reply);
 
 private:
     void processNextPendingTask();

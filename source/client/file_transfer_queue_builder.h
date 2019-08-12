@@ -55,8 +55,7 @@ public slots:
                const QList<FileTransfer::Item>& items);
 
     // Reads the reply to the request.
-    void reply(const proto::file_transfer::Request& request,
-               const proto::file_transfer::Reply& reply);
+    void reply(const proto::FileRequest& request, const proto::FileReply& reply);
 
 private:
     void addPendingTask(const QString& source_dir,

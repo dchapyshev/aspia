@@ -34,7 +34,7 @@ class AddressBarModel : public QAbstractItemModel
 public:
     explicit AddressBarModel(QObject* parent = nullptr);
 
-    void setDriveList(const proto::file_transfer::DriveList& list);
+    void setDriveList(const proto::DriveList& list);
     QModelIndex setCurrentPath(const QString& path);
     QString previousPath() const { return previous_path_; }
     QString pathAt(const QModelIndex& index) const;
@@ -63,13 +63,13 @@ signals:
     void invalidPathEntered();
 
 protected:
-    static QString typeToString(proto::file_transfer::DriveList::Item::Type type);
+    static QString typeToString(proto::DriveList::Item::Type type);
     static QString sizeToString(int64_t size);
 
 private:
     struct Drive
     {
-        proto::file_transfer::DriveList::Item::Type type;
+        proto::DriveList::Item::Type type;
         QIcon icon;
         QString name;
         QString path;

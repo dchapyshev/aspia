@@ -17,6 +17,7 @@
 //
 
 #include "client/client_desktop.h"
+
 #include "base/logging.h"
 #include "codec/cursor_decoder.h"
 #include "codec/video_decoder.h"
@@ -82,7 +83,7 @@ void ClientDesktop::sendKeyEvent(uint32_t usb_keycode, uint32_t flags)
 
     outgoing_message_.Clear();
 
-    proto::desktop::KeyEvent* event = outgoing_message_.mutable_key_event();
+    proto::KeyEvent* event = outgoing_message_.mutable_key_event();
     event->set_usb_keycode(usb_keycode);
     event->set_flags(flags);
 
@@ -96,7 +97,7 @@ void ClientDesktop::sendPointerEvent(const QPoint& pos, uint32_t mask)
 
     outgoing_message_.Clear();
 
-    proto::desktop::PointerEvent* event = outgoing_message_.mutable_pointer_event();
+    proto::PointerEvent* event = outgoing_message_.mutable_pointer_event();
     event->set_x(pos.x());
     event->set_y(pos.y());
     event->set_mask(mask);
@@ -104,7 +105,7 @@ void ClientDesktop::sendPointerEvent(const QPoint& pos, uint32_t mask)
     sendMessage(outgoing_message_);
 }
 
-void ClientDesktop::sendClipboardEvent(const proto::desktop::ClipboardEvent& event)
+void ClientDesktop::sendClipboardEvent(const proto::ClipboardEvent& event)
 {
     const ConnectData& connect_data = connectData();
 
@@ -112,7 +113,7 @@ void ClientDesktop::sendClipboardEvent(const proto::desktop::ClipboardEvent& eve
         return;
 
     uint32_t flags = connect_data.desktop_config.flags();
-    if (!(flags & proto::desktop::ENABLE_CLIPBOARD))
+    if (!(flags & proto::ENABLE_CLIPBOARD))
         return;
 
     outgoing_message_.Clear();
@@ -120,16 +121,16 @@ void ClientDesktop::sendClipboardEvent(const proto::desktop::ClipboardEvent& eve
     sendMessage(outgoing_message_);
 }
 
-void ClientDesktop::sendPowerControl(proto::desktop::PowerControl::Action action)
+void ClientDesktop::sendPowerControl(proto::PowerControl::Action action)
 {
     if (connectData().session_type != proto::SESSION_TYPE_DESKTOP_MANAGE)
         return;
 
     outgoing_message_.Clear();
 
-    proto::desktop::Extension* extension = outgoing_message_.mutable_extension();
+    proto::DesktopExtension* extension = outgoing_message_.mutable_extension();
 
-    proto::desktop::PowerControl power_control;
+    proto::PowerControl power_control;
     power_control.set_action(action);
 
     extension->set_name(common::kPowerControlExtension);
@@ -138,9 +139,9 @@ void ClientDesktop::sendPowerControl(proto::desktop::PowerControl::Action action
     sendMessage(outgoing_message_);
 }
 
-void ClientDesktop::sendConfig(const proto::desktop::Config& config)
+void ClientDesktop::sendConfig(const proto::DesktopConfig& config)
 {
-    if (!(config.flags() & proto::desktop::ENABLE_CURSOR_SHAPE))
+    if (!(config.flags() & proto::ENABLE_CURSOR_SHAPE))
         cursor_decoder_.reset();
 
     outgoing_message_.Clear();
@@ -148,11 +149,11 @@ void ClientDesktop::sendConfig(const proto::desktop::Config& config)
     sendMessage(outgoing_message_);
 }
 
-void ClientDesktop::sendScreen(const proto::desktop::Screen& screen)
+void ClientDesktop::sendScreen(const proto::Screen& screen)
 {
     outgoing_message_.Clear();
 
-    proto::desktop::Extension* extension = outgoing_message_.mutable_extension();
+    proto::DesktopExtension* extension = outgoing_message_.mutable_extension();
 
     extension->set_name(common::kSelectScreenExtension);
     extension->set_data(screen.SerializeAsString());
@@ -174,7 +175,7 @@ void ClientDesktop::sendSystemInfoRequest()
     sendMessage(outgoing_message_);
 }
 
-void ClientDesktop::readConfigRequest(const proto::desktop::ConfigRequest& config_request)
+void ClientDesktop::readConfigRequest(const proto::DesktopConfigRequest& config_request)
 {
     // The list of extensions is passed as a string. Extensions are separated by a semicolon.
     supported_extensions_ =
@@ -209,7 +210,7 @@ void ClientDesktop::readConfigRequest(const proto::desktop::ConfigRequest& confi
     }
 }
 
-void ClientDesktop::readVideoPacket(const proto::desktop::VideoPacket& packet)
+void ClientDesktop::readVideoPacket(const proto::VideoPacket& packet)
 {
     if (video_encoding_ != packet.encoding())
     {
@@ -263,7 +264,7 @@ void ClientDesktop::readVideoPacket(const proto::desktop::VideoPacket& packet)
     delegate_->drawDesktop();
 }
 
-void ClientDesktop::readCursorShape(const proto::desktop::CursorShape& cursor_shape)
+void ClientDesktop::readCursorShape(const proto::CursorShape& cursor_shape)
 {
     const ConnectData& connect_data = connectData();
 
@@ -271,7 +272,7 @@ void ClientDesktop::readCursorShape(const proto::desktop::CursorShape& cursor_sh
         return;
 
     uint32_t flags = connect_data.desktop_config.flags();
-    if (!(flags & proto::desktop::ENABLE_CURSOR_SHAPE))
+    if (!(flags & proto::ENABLE_CURSOR_SHAPE))
         return;
 
     if (!cursor_decoder_)
@@ -293,7 +294,7 @@ void ClientDesktop::readCursorShape(const proto::desktop::CursorShape& cursor_sh
                 mouse_cursor->hotSpot().y()));
 }
 
-void ClientDesktop::readClipboardEvent(const proto::desktop::ClipboardEvent& clipboard_event)
+void ClientDesktop::readClipboardEvent(const proto::ClipboardEvent& clipboard_event)
 {
     const ConnectData& connect_data = connectData();
 
@@ -301,17 +302,17 @@ void ClientDesktop::readClipboardEvent(const proto::desktop::ClipboardEvent& cli
         return;
 
     uint32_t flags = connect_data.desktop_config.flags();
-    if (!(flags & proto::desktop::ENABLE_CLIPBOARD))
+    if (!(flags & proto::ENABLE_CLIPBOARD))
         return;
 
     delegate_->setRemoteClipboard(clipboard_event);
 }
 
-void ClientDesktop::readExtension(const proto::desktop::Extension& extension)
+void ClientDesktop::readExtension(const proto::DesktopExtension& extension)
 {
     if (extension.name() == common::kSelectScreenExtension)
     {
-        proto::desktop::ScreenList screen_list;
+        proto::ScreenList screen_list;
 
         if (!screen_list.ParseFromString(extension.data()))
         {

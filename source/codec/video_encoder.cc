@@ -21,16 +21,16 @@
 
 namespace codec {
 
-void VideoEncoder::fillPacketInfo(proto::desktop::VideoEncoding encoding,
+void VideoEncoder::fillPacketInfo(proto::VideoEncoding encoding,
                                   const desktop::Frame* frame,
-                                  proto::desktop::VideoPacket* packet)
+                                  proto::VideoPacket* packet)
 {
     packet->set_encoding(encoding);
 
     if (screen_settings_tracker_.isRectChanged(
         desktop::Rect::makeXYWH(frame->topLeft(), frame->size())))
     {
-        proto::desktop::Rect* rect = packet->mutable_format()->mutable_screen_rect();
+        proto::Rect* rect = packet->mutable_format()->mutable_screen_rect();
 
         rect->set_x(frame->topLeft().x());
         rect->set_y(frame->topLeft().y());

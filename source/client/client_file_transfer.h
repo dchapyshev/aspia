@@ -32,8 +32,8 @@ class FileWorker;
 
 namespace client {
 
-Q_DECLARE_METATYPE(proto::file_transfer::Request);
-Q_DECLARE_METATYPE(proto::file_transfer::Reply);
+Q_DECLARE_METATYPE(proto::FileRequest);
+Q_DECLARE_METATYPE(proto::FileReply);
 
 class ClientFileTransfer : public Client
 {

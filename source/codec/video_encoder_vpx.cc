@@ -135,16 +135,16 @@ desktop::Rect alignRect(const desktop::Rect& rect)
 // static
 VideoEncoderVPX* VideoEncoderVPX::createVP8()
 {
-    return new VideoEncoderVPX(proto::desktop::VIDEO_ENCODING_VP8);
+    return new VideoEncoderVPX(proto::VIDEO_ENCODING_VP8);
 }
 
 // static
 VideoEncoderVPX* VideoEncoderVPX::createVP9()
 {
-    return new VideoEncoderVPX(proto::desktop::VIDEO_ENCODING_VP9);
+    return new VideoEncoderVPX(proto::VIDEO_ENCODING_VP9);
 }
 
-VideoEncoderVPX::VideoEncoderVPX(proto::desktop::VideoEncoding encoding)
+VideoEncoderVPX::VideoEncoderVPX(proto::VideoEncoding encoding)
     : encoding_(encoding)
 {
     memset(&active_map_, 0, sizeof(active_map_));
@@ -270,9 +270,9 @@ void VideoEncoderVPX::setActiveMap(const desktop::Rect& rect)
 }
 
 void VideoEncoderVPX::prepareImageAndActiveMap(
-    const desktop::Frame* frame, proto::desktop::VideoPacket* packet)
+    const desktop::Frame* frame, proto::VideoPacket* packet)
 {
-    const int padding = ((encoding_ == proto::desktop::VIDEO_ENCODING_VP9) ? 8 : 3);
+    const int padding = ((encoding_ == proto::VIDEO_ENCODING_VP9) ? 8 : 3);
     desktop::Region updated_region;
 
     for (desktop::Region::Iterator it(frame->constUpdatedRegion()); !it.isAtEnd(); it.advance())
@@ -342,7 +342,7 @@ void VideoEncoderVPX::prepareImageAndActiveMap(
     }
 }
 
-void VideoEncoderVPX::encode(const desktop::Frame* frame, proto::desktop::VideoPacket* packet)
+void VideoEncoderVPX::encode(const desktop::Frame* frame, proto::VideoPacket* packet)
 {
     fillPacketInfo(encoding_, frame, packet);
 
@@ -353,13 +353,13 @@ void VideoEncoderVPX::encode(const desktop::Frame* frame, proto::desktop::VideoP
         createImage(screen_size, &image_, &image_buffer_);
         createActiveMap(screen_size);
 
-        if (encoding_ == proto::desktop::VIDEO_ENCODING_VP8)
+        if (encoding_ == proto::VIDEO_ENCODING_VP8)
         {
             createVp8Codec(screen_size);
         }
         else
         {
-            DCHECK_EQ(encoding_, proto::desktop::VIDEO_ENCODING_VP9);
+            DCHECK_EQ(encoding_, proto::VIDEO_ENCODING_VP9);
             createVp9Codec(screen_size);
         }
     }

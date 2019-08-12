@@ -35,32 +35,32 @@ const int kMaxCompressRatio = 22;
 } // namespace
 
 // static
-proto::desktop::Config ConfigFactory::defaultDesktopManageConfig()
+proto::DesktopConfig ConfigFactory::defaultDesktopManageConfig()
 {
-    proto::desktop::Config config;
+    proto::DesktopConfig config;
     setDefaultDesktopManageConfig(&config);
     return config;
 }
 
 // static
-proto::desktop::Config ConfigFactory::defaultDesktopViewConfig()
+proto::DesktopConfig ConfigFactory::defaultDesktopViewConfig()
 {
-    proto::desktop::Config config;
+    proto::DesktopConfig config;
     setDefaultDesktopViewConfig(&config);
     return config;
 }
 
 // static
-void ConfigFactory::setDefaultDesktopManageConfig(proto::desktop::Config* config)
+void ConfigFactory::setDefaultDesktopManageConfig(proto::DesktopConfig* config)
 {
     DCHECK(config);
 
     static const uint32_t kDefaultFlags =
-        proto::desktop::ENABLE_CLIPBOARD | proto::desktop::ENABLE_CURSOR_SHAPE |
-        proto::desktop::DISABLE_DESKTOP_EFFECTS | proto::desktop::DISABLE_DESKTOP_WALLPAPER;
+        proto::ENABLE_CLIPBOARD | proto::ENABLE_CURSOR_SHAPE |
+        proto::DISABLE_DESKTOP_EFFECTS | proto::DISABLE_DESKTOP_WALLPAPER;
 
     config->set_flags(kDefaultFlags);
-    config->set_video_encoding(proto::desktop::VideoEncoding::VIDEO_ENCODING_ZSTD);
+    config->set_video_encoding(proto::VideoEncoding::VIDEO_ENCODING_ZSTD);
     config->set_compress_ratio(kDefCompressRatio);
     config->set_update_interval(kDefUpdateInterval);
 
@@ -69,15 +69,15 @@ void ConfigFactory::setDefaultDesktopManageConfig(proto::desktop::Config* config
 }
 
 // static
-void ConfigFactory::setDefaultDesktopViewConfig(proto::desktop::Config* config)
+void ConfigFactory::setDefaultDesktopViewConfig(proto::DesktopConfig* config)
 {
     DCHECK(config);
 
     static const uint32_t kDefaultFlags =
-        proto::desktop::DISABLE_DESKTOP_EFFECTS | proto::desktop::DISABLE_DESKTOP_WALLPAPER;
+        proto::DISABLE_DESKTOP_EFFECTS | proto::DISABLE_DESKTOP_WALLPAPER;
 
     config->set_flags(kDefaultFlags);
-    config->set_video_encoding(proto::desktop::VideoEncoding::VIDEO_ENCODING_ZSTD);
+    config->set_video_encoding(proto::VideoEncoding::VIDEO_ENCODING_ZSTD);
     config->set_compress_ratio(kDefCompressRatio);
     config->set_update_interval(kDefUpdateInterval);
 
@@ -86,7 +86,7 @@ void ConfigFactory::setDefaultDesktopViewConfig(proto::desktop::Config* config)
 }
 
 // static
-void ConfigFactory::fixupDesktopConfig(proto::desktop::Config* config)
+void ConfigFactory::fixupDesktopConfig(proto::DesktopConfig* config)
 {
     config->set_scale_factor(100);
 

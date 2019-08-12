@@ -36,15 +36,15 @@ class DesktopConfigDialog : public QDialog
 
 public:
     DesktopConfigDialog(proto::SessionType session_type,
-                        const proto::desktop::Config& config,
+                        const proto::DesktopConfig& config,
                         uint32_t video_encodings,
                         QWidget* parent = nullptr);
     ~DesktopConfigDialog();
 
-    const proto::desktop::Config& config() { return config_; }
+    const proto::DesktopConfig& config() { return config_; }
 
 signals:
-    void configChanged(const proto::desktop::Config& config);
+    void configChanged(const proto::DesktopConfig& config);
 
 private slots:
     void onCodecChanged(int item_index);
@@ -54,7 +54,7 @@ private slots:
 private:
     Ui::DesktopConfigDialog ui;
 
-    proto::desktop::Config config_;
+    proto::DesktopConfig config_;
 
     DISALLOW_COPY_AND_ASSIGN(DesktopConfigDialog);
 };

@@ -42,7 +42,7 @@ public:
         screen_.set_id(-1);
     }
 
-    SelectScreenAction(const proto::desktop::Screen& screen, const QString& title, QObject* parent)
+    SelectScreenAction(const proto::Screen& screen, const QString& title, QObject* parent)
         : QAction(parent),
           screen_(screen)
     {
@@ -50,10 +50,10 @@ public:
         setCheckable(true);
     }
 
-    const proto::desktop::Screen& screen() const { return screen_; }
+    const proto::Screen& screen() const { return screen_; }
 
 private:
-    proto::desktop::Screen screen_;
+    proto::Screen screen_;
 
     DISALLOW_COPY_AND_ASSIGN(SelectScreenAction);
 };

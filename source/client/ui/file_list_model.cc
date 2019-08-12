@@ -101,7 +101,7 @@ void FileListModel::setMimeType(const QString& mime_type)
     mime_type_ = mime_type;
 }
 
-void FileListModel::setFileList(const proto::file_transfer::FileList& list)
+void FileListModel::setFileList(const proto::FileList& list)
 {
     clear();
 
@@ -112,7 +112,7 @@ void FileListModel::setFileList(const proto::file_transfer::FileList& list)
 
     for (int i = 0; i < list.item_size(); ++i)
     {
-        const proto::file_transfer::FileList::Item& item = list.item(i);
+        const proto::FileList::Item& item = list.item(i);
 
         if (item.is_directory())
         {

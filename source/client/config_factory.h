@@ -27,14 +27,14 @@ namespace client {
 class ConfigFactory
 {
 public:
-    static proto::desktop::Config defaultDesktopManageConfig();
-    static proto::desktop::Config defaultDesktopViewConfig();
+    static proto::DesktopConfig defaultDesktopManageConfig();
+    static proto::DesktopConfig defaultDesktopViewConfig();
 
-    static void setDefaultDesktopManageConfig(proto::desktop::Config* config);
-    static void setDefaultDesktopViewConfig(proto::desktop::Config* config);
+    static void setDefaultDesktopManageConfig(proto::DesktopConfig* config);
+    static void setDefaultDesktopViewConfig(proto::DesktopConfig* config);
 
     // Corrects invalid values in the configuration if they are.
-    static void fixupDesktopConfig(proto::desktop::Config* config);
+    static void fixupDesktopConfig(proto::DesktopConfig* config);
 
 private:
     DISALLOW_COPY_AND_ASSIGN(ConfigFactory);

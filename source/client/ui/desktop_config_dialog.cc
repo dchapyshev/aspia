@@ -37,7 +37,7 @@ enum ColorDepth
 } // namespace
 
 DesktopConfigDialog::DesktopConfigDialog(proto::SessionType session_type,
-                                         const proto::desktop::Config& config,
+                                         const proto::DesktopConfig& config,
                                          uint32_t video_encodings,
                                          QWidget* parent)
     : QDialog(parent),
@@ -49,14 +49,14 @@ DesktopConfigDialog::DesktopConfigDialog(proto::SessionType session_type,
 
     QComboBox* combo_codec = ui.combo_codec;
 
-    if (video_encodings & proto::desktop::VIDEO_ENCODING_VP9)
-        combo_codec->addItem(QLatin1String("VP9"), proto::desktop::VIDEO_ENCODING_VP9);
+    if (video_encodings & proto::VIDEO_ENCODING_VP9)
+        combo_codec->addItem(QLatin1String("VP9"), proto::VIDEO_ENCODING_VP9);
 
-    if (video_encodings & proto::desktop::VIDEO_ENCODING_VP8)
-        combo_codec->addItem(QLatin1String("VP8"), proto::desktop::VIDEO_ENCODING_VP8);
+    if (video_encodings & proto::VIDEO_ENCODING_VP8)
+        combo_codec->addItem(QLatin1String("VP8"), proto::VIDEO_ENCODING_VP8);
 
-    if (video_encodings & proto::desktop::VIDEO_ENCODING_ZSTD)
-        combo_codec->addItem(QLatin1String("ZSTD"), proto::desktop::VIDEO_ENCODING_ZSTD);
+    if (video_encodings & proto::VIDEO_ENCODING_ZSTD)
+        combo_codec->addItem(QLatin1String("ZSTD"), proto::VIDEO_ENCODING_ZSTD);
 
     int current_codec = combo_codec->findData(config_.video_encoding());
     if (current_codec == -1)
@@ -98,13 +98,13 @@ DesktopConfigDialog::DesktopConfigDialog(proto::SessionType session_type,
 
     if (session_type == proto::SESSION_TYPE_DESKTOP_MANAGE)
     {
-        if (config_.flags() & proto::desktop::BLOCK_REMOTE_INPUT)
+        if (config_.flags() & proto::BLOCK_REMOTE_INPUT)
             ui.checkbox_block_remote_input->setChecked(true);
 
-        if (config_.flags() & proto::desktop::ENABLE_CURSOR_SHAPE)
+        if (config_.flags() & proto::ENABLE_CURSOR_SHAPE)
             ui.checkbox_cursor_shape->setChecked(true);
 
-        if (config_.flags() & proto::desktop::ENABLE_CLIPBOARD)
+        if (config_.flags() & proto::ENABLE_CLIPBOARD)
             ui.checkbox_clipboard->setChecked(true);
     }
     else
@@ -114,10 +114,10 @@ DesktopConfigDialog::DesktopConfigDialog(proto::SessionType session_type,
         ui.checkbox_clipboard->hide();
     }
 
-    if (config_.flags() & proto::desktop::DISABLE_DESKTOP_EFFECTS)
+    if (config_.flags() & proto::DISABLE_DESKTOP_EFFECTS)
         ui.checkbox_desktop_effects->setChecked(true);
 
-    if (config_.flags() & proto::desktop::DISABLE_DESKTOP_WALLPAPER)
+    if (config_.flags() & proto::DISABLE_DESKTOP_WALLPAPER)
         ui.checkbox_desktop_wallpaper->setChecked(true);
 
     connect(combo_codec, QOverload<int>::of(&QComboBox::currentIndexChanged),
@@ -135,7 +135,7 @@ DesktopConfigDialog::~DesktopConfigDialog() = default;
 void DesktopConfigDialog::onCodecChanged(int item_index)
 {
     bool has_pixel_format =
-        (ui.combo_codec->itemData(item_index).toInt() == proto::desktop::VIDEO_ENCODING_ZSTD);
+        (ui.combo_codec->itemData(item_index).toInt() == proto::VIDEO_ENCODING_ZSTD);
 
     ui.label_color_depth->setEnabled(has_pixel_format);
     ui.combo_color_depth->setEnabled(has_pixel_format);
@@ -154,12 +154,12 @@ void DesktopConfigDialog::onButtonBoxClicked(QAbstractButton* button)
 {
     if (ui.button_box->standardButton(button) == QDialogButtonBox::Ok)
     {
-        proto::desktop::VideoEncoding video_encoding =
-            static_cast<proto::desktop::VideoEncoding>(ui.combo_codec->currentData().toInt());
+        proto::VideoEncoding video_encoding =
+            static_cast<proto::VideoEncoding>(ui.combo_codec->currentData().toInt());
 
         config_.set_video_encoding(video_encoding);
 
-        if (video_encoding == proto::desktop::VIDEO_ENCODING_ZSTD)
+        if (video_encoding == proto::VIDEO_ENCODING_ZSTD)
         {
             desktop::PixelFormat pixel_format;
 
@@ -200,19 +200,19 @@ void DesktopConfigDialog::onButtonBoxClicked(QAbstractButton* button)
         uint32_t flags = 0;
 
         if (ui.checkbox_cursor_shape->isChecked() && ui.checkbox_cursor_shape->isEnabled())
-            flags |= proto::desktop::ENABLE_CURSOR_SHAPE;
+            flags |= proto::ENABLE_CURSOR_SHAPE;
 
         if (ui.checkbox_clipboard->isChecked() && ui.checkbox_clipboard->isEnabled())
-            flags |= proto::desktop::ENABLE_CLIPBOARD;
+            flags |= proto::ENABLE_CLIPBOARD;
 
         if (ui.checkbox_desktop_effects->isChecked())
-            flags |= proto::desktop::DISABLE_DESKTOP_EFFECTS;
+            flags |= proto::DISABLE_DESKTOP_EFFECTS;
 
         if (ui.checkbox_desktop_wallpaper->isChecked())
-            flags |= proto::desktop::DISABLE_DESKTOP_WALLPAPER;
+            flags |= proto::DISABLE_DESKTOP_WALLPAPER;
 
         if (ui.checkbox_block_remote_input->isChecked())
-            flags |= proto::desktop::BLOCK_REMOTE_INPUT;
+            flags |= proto::BLOCK_REMOTE_INPUT;
 
         config_.set_flags(flags);
 

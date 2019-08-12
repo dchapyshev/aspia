@@ -60,13 +60,13 @@ AddressBarModel::AddressBarModel(QObject* parent)
     // Nothing
 }
 
-void AddressBarModel::setDriveList(const proto::file_transfer::DriveList& list)
+void AddressBarModel::setDriveList(const proto::DriveList& list)
 {
     drives_.clear();
 
     for (int i = 0; i < list.item_size(); ++i)
     {
-        const proto::file_transfer::DriveList::Item& item = list.item(i);
+        const proto::DriveList::Item& item = list.item(i);
 
         Drive drive;
         drive.icon        = common::FilePlatformUtil::driveIcon(item.type());
@@ -77,11 +77,11 @@ void AddressBarModel::setDriveList(const proto::file_transfer::DriveList& list)
 
         switch (item.type())
         {
-            case proto::file_transfer::DriveList::Item::TYPE_HOME_FOLDER:
+            case proto::DriveList::Item::TYPE_HOME_FOLDER:
                 drive.name = tr("Home Folder");
                 break;
 
-            case proto::file_transfer::DriveList::Item::TYPE_DESKTOP_FOLDER:
+            case proto::DriveList::Item::TYPE_DESKTOP_FOLDER:
                 drive.name = tr("Desktop");
                 break;
 
@@ -338,8 +338,8 @@ QVariant AddressBarModel::data(const QModelIndex& index, int role) const
             {
                 if (index.column() == COLUMN_NAME)
                 {
-                    if (drive.type == proto::file_transfer::DriveList::Item::TYPE_DESKTOP_FOLDER ||
-                        drive.type == proto::file_transfer::DriveList::Item::TYPE_HOME_FOLDER)
+                    if (drive.type == proto::DriveList::Item::TYPE_DESKTOP_FOLDER ||
+                        drive.type == proto::DriveList::Item::TYPE_HOME_FOLDER)
                     {
                         return drive.name;
                     }
@@ -431,29 +431,29 @@ bool AddressBarModel::insertRows(int row, int count, const QModelIndex& parent)
 }
 
 // static
-QString AddressBarModel::typeToString(proto::file_transfer::DriveList::Item::Type type)
+QString AddressBarModel::typeToString(proto::DriveList::Item::Type type)
 {
     switch (type)
     {
-        case proto::file_transfer::DriveList::Item::TYPE_CDROM:
+        case proto::DriveList::Item::TYPE_CDROM:
             return tr("Optical Drive");
 
-        case proto::file_transfer::DriveList::Item::TYPE_REMOVABLE:
+        case proto::DriveList::Item::TYPE_REMOVABLE:
             return tr("Removable Drive");
 
-        case proto::file_transfer::DriveList::Item::TYPE_FIXED:
+        case proto::DriveList::Item::TYPE_FIXED:
             return tr("Fixed Drive");
 
-        case proto::file_transfer::DriveList::Item::TYPE_REMOTE:
+        case proto::DriveList::Item::TYPE_REMOTE:
             return tr("Network Drive");
 
-        case proto::file_transfer::DriveList::Item::TYPE_RAM:
+        case proto::DriveList::Item::TYPE_RAM:
             return tr("RAM Drive");
 
-        case proto::file_transfer::DriveList::Item::TYPE_HOME_FOLDER:
+        case proto::DriveList::Item::TYPE_HOME_FOLDER:
             return tr("Home Folder");
 
-        case proto::file_transfer::DriveList::Item::TYPE_DESKTOP_FOLDER:
+        case proto::DriveList::Item::TYPE_DESKTOP_FOLDER:
             return tr("Desktop Folder");
 
         default:

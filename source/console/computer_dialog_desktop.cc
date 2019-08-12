@@ -48,12 +48,12 @@ ComputerDialogDesktop::ComputerDialogDesktop(int type, QWidget* parent)
 }
 
 void ComputerDialogDesktop::restoreSettings(
-    proto::SessionType session_type, const proto::desktop::Config& config)
+    proto::SessionType session_type, const proto::DesktopConfig& config)
 {
     QComboBox* combo_codec = ui.combo_codec;
-    combo_codec->addItem(QLatin1String("VP9"), proto::desktop::VIDEO_ENCODING_VP9);
-    combo_codec->addItem(QLatin1String("VP8"), proto::desktop::VIDEO_ENCODING_VP8);
-    combo_codec->addItem(QLatin1String("ZSTD"), proto::desktop::VIDEO_ENCODING_ZSTD);
+    combo_codec->addItem(QLatin1String("VP9"), proto::VIDEO_ENCODING_VP9);
+    combo_codec->addItem(QLatin1String("VP8"), proto::VIDEO_ENCODING_VP8);
+    combo_codec->addItem(QLatin1String("ZSTD"), proto::VIDEO_ENCODING_ZSTD);
 
     QComboBox* combo_color_depth = ui.combo_color_depth;
     combo_color_depth->addItem(tr("True color (32 bit)"), COLOR_DEPTH_ARGB);
@@ -98,13 +98,13 @@ void ComputerDialogDesktop::restoreSettings(
 
     if (session_type == proto::SESSION_TYPE_DESKTOP_MANAGE)
     {
-        if (config.flags() & proto::desktop::BLOCK_REMOTE_INPUT)
+        if (config.flags() & proto::BLOCK_REMOTE_INPUT)
             ui.checkbox_block_remote_input->setChecked(true);
 
-        if (config.flags() & proto::desktop::ENABLE_CURSOR_SHAPE)
+        if (config.flags() & proto::ENABLE_CURSOR_SHAPE)
             ui.checkbox_cursor_shape->setChecked(true);
 
-        if (config.flags() & proto::desktop::ENABLE_CLIPBOARD)
+        if (config.flags() & proto::ENABLE_CLIPBOARD)
             ui.checkbox_clipboard->setChecked(true);
     }
     else
@@ -114,21 +114,21 @@ void ComputerDialogDesktop::restoreSettings(
         ui.checkbox_clipboard->hide();
     }
 
-    if (config.flags() & proto::desktop::DISABLE_DESKTOP_EFFECTS)
+    if (config.flags() & proto::DISABLE_DESKTOP_EFFECTS)
         ui.checkbox_desktop_effects->setChecked(true);
 
-    if (config.flags() & proto::desktop::DISABLE_DESKTOP_WALLPAPER)
+    if (config.flags() & proto::DISABLE_DESKTOP_WALLPAPER)
         ui.checkbox_desktop_wallpaper->setChecked(true);
 }
 
-void ComputerDialogDesktop::saveSettings(proto::desktop::Config* config)
+void ComputerDialogDesktop::saveSettings(proto::DesktopConfig* config)
 {
-    proto::desktop::VideoEncoding video_encoding =
-        static_cast<proto::desktop::VideoEncoding>(ui.combo_codec->currentData().toInt());
+    proto::VideoEncoding video_encoding =
+        static_cast<proto::VideoEncoding>(ui.combo_codec->currentData().toInt());
 
     config->set_video_encoding(video_encoding);
 
-    if (video_encoding == proto::desktop::VIDEO_ENCODING_ZSTD)
+    if (video_encoding == proto::VIDEO_ENCODING_ZSTD)
     {
         desktop::PixelFormat pixel_format;
 
@@ -169,19 +169,19 @@ void ComputerDialogDesktop::saveSettings(proto::desktop::Config* config)
     uint32_t flags = 0;
 
     if (ui.checkbox_cursor_shape->isChecked() && ui.checkbox_cursor_shape->isEnabled())
-        flags |= proto::desktop::ENABLE_CURSOR_SHAPE;
+        flags |= proto::ENABLE_CURSOR_SHAPE;
 
     if (ui.checkbox_clipboard->isChecked() && ui.checkbox_clipboard->isEnabled())
-        flags |= proto::desktop::ENABLE_CLIPBOARD;
+        flags |= proto::ENABLE_CLIPBOARD;
 
     if (ui.checkbox_desktop_effects->isChecked())
-        flags |= proto::desktop::DISABLE_DESKTOP_EFFECTS;
+        flags |= proto::DISABLE_DESKTOP_EFFECTS;
 
     if (ui.checkbox_desktop_wallpaper->isChecked())
-        flags |= proto::desktop::DISABLE_DESKTOP_WALLPAPER;
+        flags |= proto::DISABLE_DESKTOP_WALLPAPER;
 
     if (ui.checkbox_block_remote_input->isChecked())
-        flags |= proto::desktop::BLOCK_REMOTE_INPUT;
+        flags |= proto::BLOCK_REMOTE_INPUT;
 
     config->set_flags(flags);
 }
@@ -189,7 +189,7 @@ void ComputerDialogDesktop::saveSettings(proto::desktop::Config* config)
 void ComputerDialogDesktop::onCodecChanged(int item_index)
 {
     bool has_pixel_format =
-        (ui.combo_codec->itemData(item_index).toInt() == proto::desktop::VIDEO_ENCODING_ZSTD);
+        (ui.combo_codec->itemData(item_index).toInt() == proto::VIDEO_ENCODING_ZSTD);
 
     ui.label_color_depth->setEnabled(has_pixel_format);
     ui.combo_color_depth->setEnabled(has_pixel_format);

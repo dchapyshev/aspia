@@ -36,10 +36,10 @@ public:
 
 public slots:
     // Receiving the incoming clipboard.
-    void injectClipboardEvent(const proto::desktop::ClipboardEvent& event);
+    void injectClipboardEvent(const proto::ClipboardEvent& event);
 
 signals:
-    void clipboardEvent(const proto::desktop::ClipboardEvent& event);
+    void clipboardEvent(const proto::ClipboardEvent& event);
 
 private:
     std::string last_mime_type_;

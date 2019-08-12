@@ -17,6 +17,7 @@
 //
 
 #include "client/ui/desktop_window.h"
+
 #include "base/logging.h"
 #include "client/ui/desktop_config_dialog.h"
 #include "client/ui/desktop_panel.h"
@@ -205,12 +206,12 @@ void DesktopWindow::setRemoteCursor(const QCursor& cursor)
     desktop_->setCursor(cursor);
 }
 
-void DesktopWindow::setRemoteClipboard(const proto::desktop::ClipboardEvent& event)
+void DesktopWindow::setRemoteClipboard(const proto::ClipboardEvent& event)
 {
     clipboard_->injectClipboardEvent(event);
 }
 
-void DesktopWindow::setScreenList(const proto::desktop::ScreenList& screen_list)
+void DesktopWindow::setScreenList(const proto::ScreenList& screen_list)
 {
     panel_->setScreenList(screen_list);
 }
@@ -324,7 +325,7 @@ void DesktopWindow::changeSettings()
     config_dialog_->activateWindow();
 }
 
-void DesktopWindow::onConfigChanged(const proto::desktop::Config& config)
+void DesktopWindow::onConfigChanged(const proto::DesktopConfig& config)
 {
     ClientDesktop* session = static_cast<ClientDesktop*>(currentClient());
 

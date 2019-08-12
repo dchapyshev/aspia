@@ -41,7 +41,7 @@ public:
     void enableSystemInfo(bool enable);
     void enableRemoteUpdate(bool enable);
 
-    void setScreenList(const proto::desktop::ScreenList& screen_list);
+    void setScreenList(const proto::ScreenList& screen_list);
 
     int scale() const { return scale_; }
     bool autoScrolling() const;
@@ -52,13 +52,13 @@ signals:
     void switchToFullscreen(bool fullscreen);
     void switchToAutosize();
     void settingsButton();
-    void screenSelected(const proto::desktop::Screen& screen);
+    void screenSelected(const proto::Screen& screen);
     void scaleChanged();
     void autoScrollChanged(bool enabled);
     void keyCombinationsChanged(bool enabled);
     void takeScreenshot();
     void startSession(proto::SessionType session_type);
-    void powerControl(proto::desktop::PowerControl::Action action);
+    void powerControl(proto::PowerControl::Action action);
     void startRemoteUpdate();
     void startSystemInfo();
     void closeSession();

@@ -17,6 +17,7 @@
 //
 
 #include "console/computer_factory.h"
+
 #include "build/build_config.h"
 #include "base/logging.h"
 #include "codec/video_util.h"
@@ -28,16 +29,16 @@ namespace {
 const int kDefUpdateInterval = 30;
 const int kDefCompressRatio = 8;
 
-void setDefaultDesktopManageConfig(proto::desktop::Config* config)
+void setDefaultDesktopManageConfig(proto::DesktopConfig* config)
 {
     DCHECK(config);
 
     static const uint32_t kDefaultFlags =
-        proto::desktop::ENABLE_CLIPBOARD | proto::desktop::ENABLE_CURSOR_SHAPE |
-        proto::desktop::DISABLE_DESKTOP_EFFECTS | proto::desktop::DISABLE_DESKTOP_WALLPAPER;
+        proto::ENABLE_CLIPBOARD | proto::ENABLE_CURSOR_SHAPE |
+        proto::DISABLE_DESKTOP_EFFECTS | proto::DISABLE_DESKTOP_WALLPAPER;
 
     config->set_flags(kDefaultFlags);
-    config->set_video_encoding(proto::desktop::VideoEncoding::VIDEO_ENCODING_ZSTD);
+    config->set_video_encoding(proto::VideoEncoding::VIDEO_ENCODING_ZSTD);
     config->set_compress_ratio(kDefCompressRatio);
     config->set_update_interval(kDefUpdateInterval);
 
@@ -45,15 +46,15 @@ void setDefaultDesktopManageConfig(proto::desktop::Config* config)
         desktop::PixelFormat::RGB565(), config->mutable_pixel_format());
 }
 
-void setDefaultDesktopViewConfig(proto::desktop::Config* config)
+void setDefaultDesktopViewConfig(proto::DesktopConfig* config)
 {
     DCHECK(config);
 
     static const uint32_t kDefaultFlags =
-        proto::desktop::DISABLE_DESKTOP_EFFECTS | proto::desktop::DISABLE_DESKTOP_WALLPAPER;
+        proto::DISABLE_DESKTOP_EFFECTS | proto::DISABLE_DESKTOP_WALLPAPER;
 
     config->set_flags(kDefaultFlags);
-    config->set_video_encoding(proto::desktop::VideoEncoding::VIDEO_ENCODING_ZSTD);
+    config->set_video_encoding(proto::VideoEncoding::VIDEO_ENCODING_ZSTD);
     config->set_compress_ratio(kDefCompressRatio);
     config->set_update_interval(kDefUpdateInterval);
 

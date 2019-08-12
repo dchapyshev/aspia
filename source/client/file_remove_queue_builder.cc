@@ -17,6 +17,7 @@
 //
 
 #include "client/file_remove_queue_builder.h"
+
 #include "client/file_status.h"
 #include "common/file_request.h"
 
@@ -45,8 +46,7 @@ void FileRemoveQueueBuilder::start(const QString& path, const QList<FileRemover:
     processNextPendingTask();
 }
 
-void FileRemoveQueueBuilder::reply(const proto::file_transfer::Request& request,
-                                   const proto::file_transfer::Reply& reply)
+void FileRemoveQueueBuilder::reply(const proto::FileRequest& request, const proto::FileReply& reply)
 {
     if (!request.has_file_list_request())
     {
@@ -54,7 +54,7 @@ void FileRemoveQueueBuilder::reply(const proto::file_transfer::Request& request,
         return;
     }
 
-    if (reply.status() != proto::file_transfer::STATUS_SUCCESS)
+    if (reply.status() != proto::FileReply::STATUS_SUCCESS)
     {
         processError(tr("An error occurred while retrieving the list of files: %1")
                      .arg(fileStatusToString(reply.status())));
@@ -68,7 +68,7 @@ void FileRemoveQueueBuilder::reply(const proto::file_transfer::Request& request,
 
     for (int i = 0; i < reply.file_list().item_size(); ++i)
     {
-        const proto::file_transfer::FileList::Item& item = reply.file_list().item(i);
+        const proto::FileList::Item& item = reply.file_list().item(i);
 
         pending_tasks_.push_back(
             FileRemoveTask(path + QString::fromStdString(item.name()),

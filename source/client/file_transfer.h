@@ -107,10 +107,8 @@ protected:
     void timerEvent(QTimerEvent* event) override;
 
 private slots:
-    void targetReply(const proto::file_transfer::Request& request,
-                     const proto::file_transfer::Reply& reply);
-    void sourceReply(const proto::file_transfer::Request& request,
-                    const proto::file_transfer::Reply& reply);
+    void targetReply(const proto::FileRequest& request, const proto::FileReply& reply);
+    void sourceReply(const proto::FileRequest& request, const proto::FileReply& reply);
     void taskQueueError(const QString& message);
     void taskQueueReady();
 

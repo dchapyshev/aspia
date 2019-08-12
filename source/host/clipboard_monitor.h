@@ -33,10 +33,10 @@ public:
     public:
         virtual ~Delegate() = default;
 
-        virtual void onClipboardEvent(const proto::desktop::ClipboardEvent& event) = 0;
+        virtual void onClipboardEvent(const proto::ClipboardEvent& event) = 0;
     };
 
-    virtual void injectClipboardEvent(const proto::desktop::ClipboardEvent& event) = 0;
+    virtual void injectClipboardEvent(const proto::ClipboardEvent& event) = 0;
 };
 
 } // namespace host

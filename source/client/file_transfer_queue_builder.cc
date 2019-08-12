@@ -63,8 +63,8 @@ void FileTransferQueueBuilder::start(const QString& source_path,
     processNextPendingTask();
 }
 
-void FileTransferQueueBuilder::reply(const proto::file_transfer::Request& request,
-                                     const proto::file_transfer::Reply& reply)
+void FileTransferQueueBuilder::reply(const proto::FileRequest& request,
+                                     const proto::FileReply& reply)
 {
     DCHECK(!tasks_.isEmpty());
 
@@ -74,7 +74,7 @@ void FileTransferQueueBuilder::reply(const proto::file_transfer::Request& reques
         return;
     }
 
-    if (reply.status() != proto::file_transfer::STATUS_SUCCESS)
+    if (reply.status() != proto::FileReply::STATUS_SUCCESS)
     {
         processError(tr("An error occurred while retrieving the list of files: %1")
                      .arg(fileStatusToString(reply.status())));
@@ -87,7 +87,7 @@ void FileTransferQueueBuilder::reply(const proto::file_transfer::Request& reques
 
     for (int i = 0; i < reply.file_list().item_size(); ++i)
     {
-        const proto::file_transfer::FileList::Item& item = reply.file_list().item(i);
+        const proto::FileList::Item& item = reply.file_list().item(i);
 
         addPendingTask(last_task.sourcePath(),
                        last_task.targetPath(),

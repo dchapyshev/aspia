@@ -62,8 +62,8 @@ public:
     void drawDesktop() override;
     desktop::Frame* desktopFrame() override;
     void setRemoteCursor(const QCursor& cursor) override;
-    void setRemoteClipboard(const proto::desktop::ClipboardEvent& event) override;
-    void setScreenList(const proto::desktop::ScreenList& screen_list) override;
+    void setRemoteClipboard(const proto::ClipboardEvent& event) override;
+    void setScreenList(const proto::ScreenList& screen_list) override;
     void setSystemInfo(const proto::system_info::SystemInfo& system_info) override;
 
     // DesktopWidget::Delegate implementation.
@@ -84,7 +84,7 @@ protected:
 
 private slots:
     void changeSettings();
-    void onConfigChanged(const proto::desktop::Config& config);
+    void onConfigChanged(const proto::DesktopConfig& config);
     void autosizeWindow();
     void takeScreenshot();
     void scaleDesktop();

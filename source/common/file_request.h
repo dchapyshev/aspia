@@ -33,8 +33,8 @@ class FileRequest : public QObject
     Q_OBJECT
 
 public:
-    const proto::file_transfer::Request& request() const { return request_; }
-    void sendReply(const proto::file_transfer::Reply& reply);
+    const proto::FileRequest& request() const { return request_; }
+    void sendReply(const proto::FileReply& reply);
 
     static FileRequest* driveListRequest();
     static FileRequest* fileListRequest(const QString& path);
@@ -44,16 +44,15 @@ public:
     static FileRequest* downloadRequest(const QString& file_path);
     static FileRequest* uploadRequest(const QString& file_path, bool overwrite);
     static FileRequest* packetRequest(uint32_t flags);
-    static FileRequest* packet(const proto::file_transfer::Packet& packet);
+    static FileRequest* packet(const proto::FilePacket& packet);
 
 signals:
-    void replyReady(const proto::file_transfer::Request& request,
-                    const proto::file_transfer::Reply& reply);
+    void replyReady(const proto::FileRequest& request, const proto::FileReply& reply);
 
 private:
-    FileRequest(proto::file_transfer::Request&& request);
+    FileRequest(proto::FileRequest&& request);
 
-    proto::file_transfer::Request request_;
+    proto::FileRequest request_;
 
     DISALLOW_COPY_AND_ASSIGN(FileRequest);
 };

@@ -29,7 +29,7 @@ public:
     ~ClipboardMonitorWin() = default;
 
     // ClipboardMonitor implementation.
-    void injectClipboardEvent(const proto::desktop::ClipboardEvent& event) override;
+    void injectClipboardEvent(const proto::ClipboardEvent& event) override;
 };
 
 } // namespace host

@@ -74,8 +74,7 @@ void FileRemover::applyAction(Action action)
     }
 }
 
-void FileRemover::reply(const proto::file_transfer::Request& request,
-                        const proto::file_transfer::Reply& reply)
+void FileRemover::reply(const proto::FileRequest& request, const proto::FileReply& reply)
 {
     if (!request.has_remove_request())
     {
@@ -83,14 +82,14 @@ void FileRemover::reply(const proto::file_transfer::Request& request,
         return;
     }
 
-    if (reply.status() != proto::file_transfer::STATUS_SUCCESS)
+    if (reply.status() != proto::FileReply::STATUS_SUCCESS)
     {
         Actions actions;
 
         switch (reply.status())
         {
-            case proto::file_transfer::STATUS_PATH_NOT_FOUND:
-            case proto::file_transfer::STATUS_ACCESS_DENIED:
+            case proto::FileReply::STATUS_PATH_NOT_FOUND:
+            case proto::FileReply::STATUS_ACCESS_DENIED:
             {
                 if (failure_action_ != Ask)
                 {

@@ -146,12 +146,11 @@ void FilePanel::restoreState(const QByteArray& state)
     ui.list->restoreState(state);
 }
 
-void FilePanel::reply(const proto::file_transfer::Request& request,
-                      const proto::file_transfer::Reply& reply)
+void FilePanel::reply(const proto::FileRequest& request, const proto::FileReply& reply)
 {
     if (request.has_drive_list_request())
     {
-        if (reply.status() != proto::file_transfer::STATUS_SUCCESS)
+        if (reply.status() != proto::FileReply::STATUS_SUCCESS)
         {
             QMessageBox::warning(this,
                                  tr("Warning"),
@@ -166,7 +165,7 @@ void FilePanel::reply(const proto::file_transfer::Request& request,
     }
     else if (request.has_file_list_request())
     {
-        if (reply.status() != proto::file_transfer::STATUS_SUCCESS)
+        if (reply.status() != proto::FileReply::STATUS_SUCCESS)
         {
             QMessageBox::warning(this,
                                  tr("Warning"),
@@ -190,7 +189,7 @@ void FilePanel::reply(const proto::file_transfer::Request& request,
     }
     else if (request.has_create_directory_request())
     {
-        if (reply.status() != proto::file_transfer::STATUS_SUCCESS)
+        if (reply.status() != proto::FileReply::STATUS_SUCCESS)
         {
             QMessageBox::warning(this,
                                  tr("Warning"),
@@ -201,7 +200,7 @@ void FilePanel::reply(const proto::file_transfer::Request& request,
     }
     else if (request.has_rename_request())
     {
-        if (reply.status() != proto::file_transfer::STATUS_SUCCESS)
+        if (reply.status() != proto::FileReply::STATUS_SUCCESS)
         {
             QMessageBox::warning(this,
                                  tr("Warning"),

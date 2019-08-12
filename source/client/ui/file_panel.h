@@ -54,8 +54,7 @@ signals:
     void pathChanged(FilePanel* sender, const QString& path);
 
 public slots:
-    void reply(const proto::file_transfer::Request& request,
-               const proto::file_transfer::Reply& reply);
+    void reply(const proto::FileRequest& request, const proto::FileReply& reply);
     void refresh();
 
 protected:

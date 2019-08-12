@@ -20,12 +20,12 @@
 
 namespace codec {
 
-desktop::Rect VideoUtil::fromVideoRect(const proto::desktop::Rect& rect)
+desktop::Rect VideoUtil::fromVideoRect(const proto::Rect& rect)
 {
     return desktop::Rect::makeXYWH(rect.x(), rect.y(), rect.width(), rect.height());
 }
 
-void VideoUtil::toVideoRect(const desktop::Rect& from, proto::desktop::Rect* to)
+void VideoUtil::toVideoRect(const desktop::Rect& from, proto::Rect* to)
 {
     to->set_x(from.x());
     to->set_y(from.y());
@@ -33,7 +33,7 @@ void VideoUtil::toVideoRect(const desktop::Rect& from, proto::desktop::Rect* to)
     to->set_height(from.height());
 }
 
-desktop::PixelFormat VideoUtil::fromVideoPixelFormat(const proto::desktop::PixelFormat& format)
+desktop::PixelFormat VideoUtil::fromVideoPixelFormat(const proto::PixelFormat& format)
 {
     return desktop::PixelFormat(
         static_cast<uint8_t>(format.bits_per_pixel()),
@@ -45,8 +45,7 @@ desktop::PixelFormat VideoUtil::fromVideoPixelFormat(const proto::desktop::Pixel
         static_cast<uint8_t>(format.blue_shift()));
 }
 
-void VideoUtil::toVideoPixelFormat(
-    const desktop::PixelFormat& from, proto::desktop::PixelFormat* to)
+void VideoUtil::toVideoPixelFormat(const desktop::PixelFormat& from, proto::PixelFormat* to)
 {
     to->set_bits_per_pixel(from.bitsPerPixel());
 

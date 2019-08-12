@@ -20,7 +20,7 @@
 
 namespace host {
 
-void ClipboardMonitorIpc::injectClipboardEvent(const proto::desktop::ClipboardEvent& event)
+void ClipboardMonitorIpc::injectClipboardEvent(const proto::ClipboardEvent& event)
 {
     // TODO
 }

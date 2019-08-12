@@ -20,12 +20,12 @@
 
 namespace host {
 
-void InputInjectorIpc::injectKeyEvent(const proto::desktop::KeyEvent& event)
+void InputInjectorIpc::injectKeyEvent(const proto::KeyEvent& event)
 {
     // TODO
 }
 
-void InputInjectorIpc::injectPointerEvent(const proto::desktop::PointerEvent& event)
+void InputInjectorIpc::injectPointerEvent(const proto::PointerEvent& event)
 {
     // TODO
 }

@@ -61,7 +61,7 @@ std::unique_ptr<FileDepacketizer> FileDepacketizer::create(
         new FileDepacketizer(file_path, std::move(file_stream)));
 }
 
-bool FileDepacketizer::writeNextPacket(const proto::file_transfer::Packet& packet)
+bool FileDepacketizer::writeNextPacket(const proto::FilePacket& packet)
 {
     DCHECK(file_stream_.is_open());
 
@@ -70,7 +70,7 @@ bool FileDepacketizer::writeNextPacket(const proto::file_transfer::Packet& packe
     {
         // If an empty data packet with the last packet flag set is received, the transfer
         // is canceled.
-        if (packet.flags() & proto::file_transfer::Packet::LAST_PACKET)
+        if (packet.flags() & proto::FilePacket::LAST_PACKET)
             return true;
 
         LOG(LS_WARNING) << "Wrong packet size";
@@ -78,7 +78,7 @@ bool FileDepacketizer::writeNextPacket(const proto::file_transfer::Packet& packe
     }
 
     // The first packet must have the full file size.
-    if (packet.flags() & proto::file_transfer::Packet::FIRST_PACKET)
+    if (packet.flags() & proto::FilePacket::FIRST_PACKET)
     {
         file_size_ = packet.file_size();
         left_size_ = file_size_;
@@ -94,7 +94,7 @@ bool FileDepacketizer::writeNextPacket(const proto::file_transfer::Packet& packe
 
     left_size_ -= packet_size;
 
-    if (packet.flags() & proto::file_transfer::Packet::LAST_PACKET)
+    if (packet.flags() & proto::FilePacket::LAST_PACKET)
     {
         file_size_ = 0;
         file_stream_.close();

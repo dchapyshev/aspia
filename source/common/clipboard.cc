@@ -53,7 +53,7 @@ Clipboard::Clipboard(QObject* parent)
         text.replace(QLatin1String("\r\n"), QLatin1String("\n"));
 #endif
 
-        proto::desktop::ClipboardEvent event;
+        proto::ClipboardEvent event;
 
         event.set_mime_type(kMimeTypeTextUtf8);
         event.set_data(text.toStdString());
@@ -65,7 +65,7 @@ Clipboard::Clipboard(QObject* parent)
     });
 }
 
-void Clipboard::injectClipboardEvent(const proto::desktop::ClipboardEvent& event)
+void Clipboard::injectClipboardEvent(const proto::ClipboardEvent& event)
 {
     if (event.mime_type() != kMimeTypeTextUtf8)
         return;

@@ -53,8 +53,8 @@ public:
         virtual desktop::Frame* desktopFrame() = 0;
 
         virtual void setRemoteCursor(const QCursor& cursor) = 0;
-        virtual void setRemoteClipboard(const proto::desktop::ClipboardEvent& event) = 0;
-        virtual void setScreenList(const proto::desktop::ScreenList& screen_list) = 0;
+        virtual void setRemoteClipboard(const proto::ClipboardEvent& event) = 0;
+        virtual void setScreenList(const proto::ScreenList& screen_list) = 0;
         virtual void setSystemInfo(const proto::system_info::SystemInfo& system_info) = 0;
     };
 
@@ -66,10 +66,10 @@ public:
 
     void sendKeyEvent(uint32_t usb_keycode, uint32_t flags);
     void sendPointerEvent(const QPoint& pos, uint32_t mask);
-    void sendClipboardEvent(const proto::desktop::ClipboardEvent& event);
-    void sendPowerControl(proto::desktop::PowerControl::Action action);
-    void sendConfig(const proto::desktop::Config& config);
-    void sendScreen(const proto::desktop::Screen& screen);
+    void sendClipboardEvent(const proto::ClipboardEvent& event);
+    void sendPowerControl(proto::PowerControl::Action action);
+    void sendConfig(const proto::DesktopConfig& config);
+    void sendScreen(const proto::Screen& screen);
     void sendRemoteUpdate();
     void sendSystemInfoRequest();
 
@@ -78,23 +78,23 @@ protected:
     void onNetworkMessage(const QByteArray& buffer) override;
 
 private:
-    void readConfigRequest(const proto::desktop::ConfigRequest& config_request);
-    void readVideoPacket(const proto::desktop::VideoPacket& packet);
-    void readCursorShape(const proto::desktop::CursorShape& cursor_shape);
-    void readClipboardEvent(const proto::desktop::ClipboardEvent& clipboard_event);
-    void readExtension(const proto::desktop::Extension& extension);
+    void readConfigRequest(const proto::DesktopConfigRequest& config_request);
+    void readVideoPacket(const proto::VideoPacket& packet);
+    void readCursorShape(const proto::CursorShape& cursor_shape);
+    void readClipboardEvent(const proto::ClipboardEvent& clipboard_event);
+    void readExtension(const proto::DesktopExtension& extension);
 
     void onSessionError(const QString& message);
 
     Delegate* delegate_;
 
-    proto::desktop::HostToClient incoming_message_;
-    proto::desktop::ClientToHost outgoing_message_;
+    proto::HostToClient incoming_message_;
+    proto::ClientToHost outgoing_message_;
 
     QStringList supported_extensions_;
     uint32_t supported_video_encodings_ = 0;
 
-    proto::desktop::VideoEncoding video_encoding_ = proto::desktop::VIDEO_ENCODING_UNKNOWN;
+    proto::VideoEncoding video_encoding_ = proto::VIDEO_ENCODING_UNKNOWN;
     std::unique_ptr<codec::VideoDecoder> video_decoder_;
     std::unique_ptr<codec::CursorDecoder> cursor_decoder_;
 

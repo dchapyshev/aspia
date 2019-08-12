@@ -145,7 +145,7 @@ void DesktopPanel::enableRemoteUpdate(bool enable)
     updateSize();
 }
 
-void DesktopPanel::setScreenList(const proto::desktop::ScreenList& screen_list)
+void DesktopPanel::setScreenList(const proto::ScreenList& screen_list)
 {
     screens_menu_.reset();
 
@@ -306,7 +306,7 @@ void DesktopPanel::onPowerControl(QAction* action)
                                   QMessageBox::Yes,
                                   QMessageBox::No) == QMessageBox::Yes)
         {
-            emit powerControl(proto::desktop::PowerControl::ACTION_SHUTDOWN);
+            emit powerControl(proto::PowerControl::ACTION_SHUTDOWN);
         }
     }
     else if (action == ui.action_reboot)
@@ -317,7 +317,7 @@ void DesktopPanel::onPowerControl(QAction* action)
                                   QMessageBox::Yes,
                                   QMessageBox::No) == QMessageBox::Yes)
         {
-            emit powerControl(proto::desktop::PowerControl::ACTION_REBOOT);
+            emit powerControl(proto::PowerControl::ACTION_REBOOT);
         }
     }
     else if (action == ui.action_logoff)
@@ -328,7 +328,7 @@ void DesktopPanel::onPowerControl(QAction* action)
                                   QMessageBox::Yes,
                                   QMessageBox::No) == QMessageBox::Yes)
         {
-            emit powerControl(proto::desktop::PowerControl::ACTION_LOGOFF);
+            emit powerControl(proto::PowerControl::ACTION_LOGOFF);
         }
     }
     else if (action == ui.action_lock)
@@ -339,7 +339,7 @@ void DesktopPanel::onPowerControl(QAction* action)
                                   QMessageBox::Yes,
                                   QMessageBox::No) == QMessageBox::Yes)
         {
-            emit powerControl(proto::desktop::PowerControl::ACTION_LOCK);
+            emit powerControl(proto::PowerControl::ACTION_LOCK);
         }
     }
 }

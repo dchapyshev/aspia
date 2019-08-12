@@ -28,8 +28,8 @@ class InputInjector
 public:
     virtual ~InputInjector() = default;
 
-    virtual void injectKeyEvent(const proto::desktop::KeyEvent& event) = 0;
-    virtual void injectPointerEvent(const proto::desktop::PointerEvent& event) = 0;
+    virtual void injectKeyEvent(const proto::KeyEvent& event) = 0;
+    virtual void injectPointerEvent(const proto::PointerEvent& event) = 0;
 };
 
 } // namespace host

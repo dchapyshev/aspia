@@ -37,7 +37,7 @@ public:
                                                     bool overwrite);
 
     // Reads the packet and writes its contents to a file.
-    bool writeNextPacket(const proto::file_transfer::Packet& packet);
+    bool writeNextPacket(const proto::FilePacket& packet);
 
 private:
     FileDepacketizer(const std::filesystem::path& file_path, std::ofstream&& file_stream);

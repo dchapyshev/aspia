@@ -20,7 +20,7 @@ syntax = "proto3";
 
 option optimize_for = LITE_RUNTIME;
 
-package proto.desktop;
+package proto;
 
 message KeyEvent
 {
@@ -139,19 +139,19 @@ message VideoPacket
     bytes data = 4;
 }
 
-message Extension
+message DesktopExtension
 {
     string name = 1;
     bytes data  = 2;
 }
 
-message ConfigRequest
+message DesktopConfigRequest
 {
     string extensions      = 1;
     uint32 video_encodings = 2;
 }
 
-enum ConfigFlags
+enum DesktopFlags
 {
     NO_FLAGS                  = 0;
     ENABLE_CURSOR_SHAPE       = 1;
@@ -162,7 +162,7 @@ enum ConfigFlags
     BLOCK_REMOTE_INPUT        = 32;
 }
 
-message Config
+message DesktopConfig
 {
     uint32 flags                 = 1;
     VideoEncoding video_encoding = 2;
@@ -174,12 +174,12 @@ message Config
 
 message HostToClient
 {
-    VideoPacket video_packet       = 1;
+    VideoPacket video_packet            = 1;
     // Field 2 reserved for AudioPacket.
-    CursorShape cursor_shape       = 3;
-    ClipboardEvent clipboard_event = 4;
-    Extension extension            = 5;
-    ConfigRequest config_request   = 6;
+    CursorShape cursor_shape            = 3;
+    ClipboardEvent clipboard_event      = 4;
+    DesktopExtension extension          = 5;
+    DesktopConfigRequest config_request = 6;
 }
 
 message ClientToHost
@@ -189,6 +189,6 @@ message ClientToHost
     // Field 3 reserved for TouchEvent.
     // Field 4 reserved for TextEvent.
     ClipboardEvent clipboard_event = 5;
-    Extension extension            = 6;
-    Config config                  = 7;
+    DesktopExtension extension     = 6;
+    DesktopConfig config           = 7;
 }

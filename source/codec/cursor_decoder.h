@@ -38,10 +38,10 @@ public:
     CursorDecoder();
     ~CursorDecoder();
 
-    std::shared_ptr<desktop::MouseCursor> decode(const proto::desktop::CursorShape& cursor_shape);
+    std::shared_ptr<desktop::MouseCursor> decode(const proto::CursorShape& cursor_shape);
 
 private:
-    bool decompressCursor(const proto::desktop::CursorShape& cursor_shape,
+    bool decompressCursor(const proto::CursorShape& cursor_shape,
                           uint8_t* output_data,
                           size_t output_size);
 

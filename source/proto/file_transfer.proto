@@ -20,26 +20,7 @@ syntax = "proto3";
 
 option optimize_for = LITE_RUNTIME;
 
-package proto.file_transfer;
-
-enum Status
-{
-    STATUS_UNKNOWN             = 0;
-    STATUS_SUCCESS             = 1;
-    STATUS_NO_LOGGED_ON_USER   = 2;
-    STATUS_INVALID_REQUEST     = 3;
-    STATUS_INVALID_PATH_NAME   = 4;
-    STATUS_PATH_NOT_FOUND      = 5;
-    STATUS_PATH_ALREADY_EXISTS = 6;
-    STATUS_NO_DRIVES_FOUND     = 7;
-    STATUS_DISK_FULL           = 8;
-    STATUS_ACCESS_DENIED       = 9;
-    STATUS_FILE_OPEN_ERROR     = 10;
-    STATUS_FILE_CREATE_ERROR   = 11;
-    STATUS_FILE_WRITE_ERROR    = 12;
-    STATUS_FILE_READ_ERROR     = 13;
-    STATUS_DISK_NOT_READY      = 14;
-}
+package proto;
 
 message DriveList
 {
@@ -101,7 +82,7 @@ message DownloadRequest
    string path = 1;
 }
 
-message PacketRequest
+message FilePacketRequest
 {
     enum Flags
     {
@@ -112,7 +93,7 @@ message PacketRequest
     uint32 flags = 1;
 }
 
-message Packet
+message FilePacket
 {
     enum Flags
     {
@@ -142,15 +123,34 @@ message RemoveRequest
     string path = 1;
 }
 
-message Reply
+message FileReply
 {
-    Status status                = 1;
-    DriveList drive_list         = 2;
-    FileList file_list           = 3;
-    Packet packet                = 4;
+    enum Status
+    {
+        STATUS_UNKNOWN             = 0;
+        STATUS_SUCCESS             = 1;
+        STATUS_NO_LOGGED_ON_USER   = 2;
+        STATUS_INVALID_REQUEST     = 3;
+        STATUS_INVALID_PATH_NAME   = 4;
+        STATUS_PATH_NOT_FOUND      = 5;
+        STATUS_PATH_ALREADY_EXISTS = 6;
+        STATUS_NO_DRIVES_FOUND     = 7;
+        STATUS_DISK_FULL           = 8;
+        STATUS_ACCESS_DENIED       = 9;
+        STATUS_FILE_OPEN_ERROR     = 10;
+        STATUS_FILE_CREATE_ERROR   = 11;
+        STATUS_FILE_WRITE_ERROR    = 12;
+        STATUS_FILE_READ_ERROR     = 13;
+        STATUS_DISK_NOT_READY      = 14;
+    }
+
+    Status status    = 1;
+    DriveList drive_list = 2;
+    FileList file_list   = 3;
+    FilePacket packet    = 4;
 }
 
-message Request
+message FileRequest
 {
     DriveListRequest drive_list_request             = 1;
     FileListRequest file_list_request               = 2;
@@ -159,6 +159,6 @@ message Request
     RemoveRequest remove_request                    = 5;
     DownloadRequest download_request                = 6;
     UploadRequest upload_request                    = 7;
-    PacketRequest packet_request                    = 8;
-    Packet packet                                   = 9;
+    FilePacketRequest packet_request                = 8;
+    FilePacket packet                               = 9;
 }

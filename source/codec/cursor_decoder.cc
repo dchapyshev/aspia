@@ -30,7 +30,7 @@ CursorDecoder::CursorDecoder()
 
 CursorDecoder::~CursorDecoder() = default;
 
-bool CursorDecoder::decompressCursor(const proto::desktop::CursorShape& cursor_shape,
+bool CursorDecoder::decompressCursor(const proto::CursorShape& cursor_shape,
                                      uint8_t* output_data,
                                      size_t output_size)
 {
@@ -58,12 +58,11 @@ bool CursorDecoder::decompressCursor(const proto::desktop::CursorShape& cursor_s
     return true;
 }
 
-std::shared_ptr<desktop::MouseCursor> CursorDecoder::decode(
-    const proto::desktop::CursorShape& cursor_shape)
+std::shared_ptr<desktop::MouseCursor> CursorDecoder::decode(const proto::CursorShape& cursor_shape)
 {
     size_t cache_index;
 
-    if (cursor_shape.flags() & proto::desktop::CursorShape::CACHE)
+    if (cursor_shape.flags() & proto::CursorShape::CACHE)
     {
         // Bits 0-4 contain the cursor position in the cache.
         cache_index = cursor_shape.flags() & 0x1F;
@@ -92,7 +91,7 @@ std::shared_ptr<desktop::MouseCursor> CursorDecoder::decode(
                 size,
                 desktop::Point(cursor_shape.hotspot_x(), cursor_shape.hotspot_y()));
 
-        if (cursor_shape.flags() & proto::desktop::CursorShape::RESET_CACHE)
+        if (cursor_shape.flags() & proto::CursorShape::RESET_CACHE)
         {
             size_t cache_size = cursor_shape.flags() & 0x1F;
 

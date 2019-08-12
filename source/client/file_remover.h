@@ -70,8 +70,7 @@ signals:
 
 public slots:
     void applyAction(Action action);
-    void reply(const proto::file_transfer::Request& request,
-               const proto::file_transfer::Reply& reply);
+    void reply(const proto::FileRequest& request, const proto::FileReply& reply);
 
 private slots:
     void taskQueueError(const QString& message);

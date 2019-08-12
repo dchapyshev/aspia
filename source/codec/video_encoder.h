@@ -33,12 +33,12 @@ class VideoEncoder
 public:
     virtual ~VideoEncoder() = default;
 
-    virtual void encode(const desktop::Frame* frame, proto::desktop::VideoPacket* packet) = 0;
+    virtual void encode(const desktop::Frame* frame, proto::VideoPacket* packet) = 0;
 
 protected:
-    void fillPacketInfo(proto::desktop::VideoEncoding encoding,
+    void fillPacketInfo(proto::VideoEncoding encoding,
                         const desktop::Frame* frame,
-                        proto::desktop::VideoPacket* packet);
+                        proto::VideoPacket* packet);
 
 private:
     desktop::ScreenSettingsTracker screen_settings_tracker_;
