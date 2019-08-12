@@ -40,6 +40,8 @@ public:
     static std::unique_ptr<ClientSession> create(
         proto::SessionType session_type, std::unique_ptr<net::Channel> channel);
 
+    void start();
+
     std::string id() const { return id_; }
 
     void setVersion(const base::Version& version);
@@ -60,7 +62,6 @@ protected:
     void onNetworkConnected() override;
     void onNetworkDisconnected() override;
     void onNetworkError(net::ErrorCode error_code) override;
-    void onNetworkMessage(const QByteArray& buffer) override;
 
 private:
     std::string id_;

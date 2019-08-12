@@ -30,4 +30,9 @@ ClientSessionFileTransfer::ClientSessionFileTransfer(std::unique_ptr<net::Channe
 
 ClientSessionFileTransfer::~ClientSessionFileTransfer() = default;
 
+void ClientSessionFileTransfer::onNetworkMessage(const QByteArray& buffer)
+{
+    // TODO
+}
+
 } // namespace host

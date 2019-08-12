@@ -16,28 +16,17 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST__CLIENT_SESSION_FILE_TRANSFER_H
-#define HOST__CLIENT_SESSION_FILE_TRANSFER_H
-
-#include "base/macros_magic.h"
-#include "host/client_session.h"
+#ifndef HOST__MOUSE_CURSOR_MONITOR_H
+#define HOST__MOUSE_CURSOR_MONITOR_H
 
 namespace host {
 
-class ClientSessionFileTransfer : public ClientSession
+class MouseCursorMonitor
 {
 public:
-    ClientSessionFileTransfer(std::unique_ptr<net::Channel> channel);
-    ~ClientSessionFileTransfer();
-
-protected:
-    // net::Listener implementation.
-    void onNetworkMessage(const QByteArray& buffer) override;
-
-private:
-    DISALLOW_COPY_AND_ASSIGN(ClientSessionFileTransfer);
+    virtual ~MouseCursorMonitor() = default;
 };
 
 } // namespace host
 
-#endif // HOST__CLIENT_SESSION_FILE_TRANSFER_H
+#endif // HOST__MOUSE_CURSOR_MONITOR_H

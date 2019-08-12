@@ -26,6 +26,7 @@ list(APPEND SOURCE_HOST_CORE
     client_session_desktop.h
     client_session_file_transfer.cc
     client_session_file_transfer.h
+    clipboard_monitor.h
     host_authenticator.cc
     host_authenticator.h
     host_authenticator_manager.cc
@@ -35,8 +36,12 @@ list(APPEND SOURCE_HOST_CORE
     host_server.h
     host_settings.cc
     host_settings.h
+    input_injector.h
+    mouse_cursor_monitor.h
+    screen_controls.h
     user.cc
-    user.h)
+    user.h
+    video_capturer.h)
 
 list(APPEND SOURCE_HOST_CORE_WIN
     win/dll_main.cc

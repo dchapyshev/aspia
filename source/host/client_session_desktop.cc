@@ -18,6 +18,11 @@
 
 #include "host/client_session_desktop.h"
 
+#include "host/clipboard_monitor.h"
+#include "host/input_injector.h"
+#include "host/mouse_cursor_monitor.h"
+#include "host/screen_controls.h"
+#include "host/video_capturer.h"
 #include "net/network_channel.h"
 
 namespace host {
@@ -30,5 +35,36 @@ ClientSessionDesktop::ClientSessionDesktop(
 }
 
 ClientSessionDesktop::~ClientSessionDesktop() = default;
+
+void ClientSessionDesktop::setClipboardMonitor(std::unique_ptr<ClipboardMonitor> clipboard_monitor)
+{
+    clipboard_monitor_ = std::move(clipboard_monitor);
+}
+
+void ClientSessionDesktop::setInputInjector(std::unique_ptr<InputInjector> input_injector)
+{
+    input_injector_ = std::move(input_injector);
+}
+
+void ClientSessionDesktop::setMouseCursorMonitor(
+    std::unique_ptr<MouseCursorMonitor> mouse_cursor_monitor)
+{
+    mouse_cursor_monitor_ = std::move(mouse_cursor_monitor);
+}
+
+void ClientSessionDesktop::setScreenControls(std::unique_ptr<ScreenControls> screen_controls)
+{
+    screen_controls_ = std::move(screen_controls);
+}
+
+void ClientSessionDesktop::setVideoCapturer(std::unique_ptr<VideoCapturer> video_capturer)
+{
+    video_capturer_ = std::move(video_capturer);
+}
+
+void ClientSessionDesktop::onNetworkMessage(const QByteArray& buffer)
+{
+    // TODO
+}
 
 } // namespace host

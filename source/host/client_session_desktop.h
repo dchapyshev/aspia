@@ -24,13 +24,35 @@
 
 namespace host {
 
+class ClipboardMonitor;
+class InputInjector;
+class MouseCursorMonitor;
+class ScreenControls;
+class VideoCapturer;
+
 class ClientSessionDesktop : public ClientSession
 {
 public:
     ClientSessionDesktop(proto::SessionType session_type, std::unique_ptr<net::Channel> channel);
     ~ClientSessionDesktop();
 
+    void setClipboardMonitor(std::unique_ptr<ClipboardMonitor> clipboard_monitor);
+    void setInputInjector(std::unique_ptr<InputInjector> input_injector);
+    void setMouseCursorMonitor(std::unique_ptr<MouseCursorMonitor> mouse_cursor_monitor);
+    void setScreenControls(std::unique_ptr<ScreenControls> screen_controls);
+    void setVideoCapturer(std::unique_ptr<VideoCapturer> video_capturer);
+
+protected:
+    // net::Listener implementation.
+    void onNetworkMessage(const QByteArray& buffer) override;
+
 private:
+    std::unique_ptr<ClipboardMonitor> clipboard_monitor_;
+    std::unique_ptr<InputInjector> input_injector_;
+    std::unique_ptr<MouseCursorMonitor> mouse_cursor_monitor_;
+    std::unique_ptr<ScreenControls> screen_controls_;
+    std::unique_ptr<VideoCapturer> video_capturer_;
+
     DISALLOW_COPY_AND_ASSIGN(ClientSessionDesktop);
 };
 

@@ -60,6 +60,11 @@ std::unique_ptr<ClientSession> ClientSession::create(
     }
 }
 
+void ClientSession::start()
+{
+
+}
+
 void ClientSession::setVersion(const base::Version& version)
 {
     version_ = version;
@@ -82,7 +87,7 @@ void ClientSession::sendMessage(const QByteArray& buffer)
 
 void ClientSession::onNetworkConnected()
 {
-
+    NOTREACHED();
 }
 
 void ClientSession::onNetworkDisconnected()
@@ -91,10 +96,6 @@ void ClientSession::onNetworkDisconnected()
 }
 
 void ClientSession::onNetworkError(net::ErrorCode error_code)
-{
-
-}
-void ClientSession::onNetworkMessage(const QByteArray& buffer)
 {
 
 }
