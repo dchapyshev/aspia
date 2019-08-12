@@ -27,6 +27,10 @@ list(APPEND SOURCE_HOST_CORE
     client_session_file_transfer.cc
     client_session_file_transfer.h
     clipboard_monitor.h
+    clipboard_monitor_ipc.cc
+    clipboard_monitor_ipc.h
+    clipboard_monitor_win.cc
+    clipboard_monitor_win.h
     host_authenticator.cc
     host_authenticator.h
     host_authenticator_manager.cc

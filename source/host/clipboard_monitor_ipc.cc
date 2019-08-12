@@ -16,29 +16,13 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST__CLIPBOARD_MONITOR_H
-#define HOST__CLIPBOARD_MONITOR_H
-
-#include "proto/desktop.pb.h"
+#include "host/clipboard_monitor_ipc.h"
 
 namespace host {
 
-class ClipboardMonitor
+void ClipboardMonitorIpc::injectClipboardEvent(const proto::desktop::ClipboardEvent& event)
 {
-public:
-    virtual ~ClipboardMonitor() = default;
-
-    class Delegate
-    {
-    public:
-        virtual ~Delegate() = default;
-
-        virtual void onClipboardEvent(const proto::desktop::ClipboardEvent& event) = 0;
-    };
-
-    virtual void injectClipboardEvent(const proto::desktop::ClipboardEvent& event) = 0;
-};
+    // TODO
+}
 
 } // namespace host
-
-#endif // HOST__CLIPBOARD_MONITOR_H
