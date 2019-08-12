@@ -46,6 +46,11 @@ void Authenticator::start(std::shared_ptr<net::ChannelProxy> channel, Callback c
     channel_->send(common::serializeMessage(client_hello));
 }
 
+void Authenticator::sendMessage(const QByteArray& message)
+{
+    channel_->send(message);
+}
+
 void Authenticator::onFinished(Result result)
 {
     if (callback_)
@@ -77,7 +82,7 @@ void Authenticator::onNetworkMessage(const QByteArray& buffer)
         case State::HELLO:
         {
             proto::ServerHello server_hello;
-            if (!common::parseMessage(buffer, server_hello))
+            if (!common::parseMessage(buffer, &server_hello))
             {
                 onFinished(Result::PROTOCOL_ERROR);
                 return;
@@ -117,7 +122,7 @@ void Authenticator::onNetworkMessage(const QByteArray& buffer)
             }
 
             proto::SessionChallenge challenge;
-            if (!common::parseMessage(challenge_buffer, challenge))
+            if (!common::parseMessage(challenge_buffer, &challenge))
             {
                 onFinished(Result::PROTOCOL_ERROR);
                 return;

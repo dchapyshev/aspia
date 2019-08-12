@@ -104,7 +104,7 @@ void Authenticator::onNetworkMessage(const QByteArray& buffer)
         {
             proto::ClientHello client_hello;
 
-            if (!common::parseMessage(buffer, client_hello))
+            if (!common::parseMessage(buffer, &client_hello))
             {
                 onFailed();
                 return;
@@ -145,7 +145,7 @@ void Authenticator::onNetworkMessage(const QByteArray& buffer)
         {
             proto::SrpIdentify identify;
 
-            if (!common::parseMessage(buffer, identify))
+            if (!common::parseMessage(buffer, &identify))
             {
                 onFailed();
                 return;
@@ -212,7 +212,7 @@ void Authenticator::onNetworkMessage(const QByteArray& buffer)
         {
             proto::SrpClientKeyExchange client_key_exchange;
 
-            if (!common::parseMessage(buffer, client_key_exchange))
+            if (!common::parseMessage(buffer, &client_key_exchange))
             {
                 onFailed();
                 return;
@@ -256,7 +256,7 @@ void Authenticator::onNetworkMessage(const QByteArray& buffer)
             channel_->pause();
 
             proto::SessionResponse session_response;
-            if (!common::parseMessage(buffer, session_response))
+            if (!common::parseMessage(buffer, &session_response))
             {
                 onFailed();
                 return;

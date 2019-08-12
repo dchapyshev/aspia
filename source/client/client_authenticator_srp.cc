@@ -137,7 +137,7 @@ void AuthenticatorSrp::onStarted()
 bool AuthenticatorSrp::onMessage(const QByteArray& buffer)
 {
     proto::SrpServerKeyExchange server_key_exchange;
-    if (!common::parseMessage(buffer, server_key_exchange))
+    if (!common::parseMessage(buffer, &server_key_exchange))
     {
         onFinished(Result::PROTOCOL_ERROR);
         return false;
