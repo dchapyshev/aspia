@@ -22,6 +22,7 @@
 namespace base {
 
 extern const wchar_t kWhitespaceWide[];
+extern const char16_t kWhitespaceUtf16[];
 extern const char kWhitespaceASCII[];
 extern const char kUtf8ByteOrderMark[];
 

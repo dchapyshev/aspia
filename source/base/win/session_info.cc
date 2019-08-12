@@ -68,7 +68,7 @@ std::string SessionInfo::winStationName() const
     if (!isValid())
         return std::string();
 
-    return UTF8fromUTF16(info_->WinStationName);
+    return utf8FromWide(info_->WinStationName);
 }
 
 std::string SessionInfo::domain() const
@@ -76,7 +76,7 @@ std::string SessionInfo::domain() const
     if (!isValid())
         return std::string();
 
-    return UTF8fromUTF16(info_->Domain);
+    return utf8FromWide(info_->Domain);
 }
 
 std::string SessionInfo::userName() const
@@ -84,7 +84,7 @@ std::string SessionInfo::userName() const
     if (!isValid())
         return std::string();
 
-    return UTF8fromUTF16(info_->UserName);
+    return utf8FromWide(info_->UserName);
 }
 
 int64_t SessionInfo::connectTime() const

@@ -395,7 +395,7 @@ std::string systemErrorCodeToString(SystemErrorCode error_code)
     {
         std::wstring msg = collapseWhitespace(msgbuf, true) +
             stringPrintf(L" (0x%lX)", error_code);
-        return UTF8fromUTF16(msg);
+        return utf8FromWide(msg);
     }
 
     return stringPrintf("Error (0x%lX) while retrieving error. (0x%lX)",
@@ -435,13 +435,23 @@ namespace std {
 #if defined(OS_WIN)
 std::ostream& operator<<(std::ostream& out, const std::wstring& wstr)
 {
-    return out << base::UTF8fromUTF16(wstr);
+    return out << base::utf8FromWide(wstr);
 }
 
 std::ostream& std::operator<<(std::ostream& out, const wchar_t* wstr)
 {
-    return out << base::UTF8fromUTF16(wstr);
+    return out << (wstr ? base::utf8FromWide(wstr) : "nullptr");
 }
 #endif // defined(OS_WIN)
+
+std::ostream& operator<<(std::ostream& out, const char16_t* ustr)
+{
+    return out << (ustr ? base::utf8FromUtf16(ustr) : "nullptr");
+}
+
+std::ostream& operator<<(std::ostream& out, const std::u16string& ustr)
+{
+    return out << base::utf8FromUtf16(ustr);
+}
 
 } // namespace std

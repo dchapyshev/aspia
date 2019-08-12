@@ -88,22 +88,34 @@ bool PrinterEnumerator::isShared() const
 
 std::string PrinterEnumerator::name() const
 {
-    return UTF8fromUTF16(info_[current_].pPrinterName);
+    if (!info_[current_].pPrinterName)
+        return std::string();
+
+    return utf8FromWide(info_[current_].pPrinterName);
 }
 
 std::string PrinterEnumerator::shareName() const
 {
-    return UTF8fromUTF16(info_[current_].pShareName);
+    if (!info_[current_].pShareName)
+        return std::string();
+
+    return utf8FromWide(info_[current_].pShareName);
 }
 
 std::string PrinterEnumerator::portName() const
 {
-    return UTF8fromUTF16(info_[current_].pPortName);
+    if (!info_[current_].pPortName)
+        return std::string();
+
+    return utf8FromWide(info_[current_].pPortName);
 }
 
 std::string PrinterEnumerator::driverName() const
 {
-    return UTF8fromUTF16(info_[current_].pDriverName);
+    if (!info_[current_].pDriverName)
+        return std::string();
+
+    return utf8FromWide(info_[current_].pDriverName);
 }
 
 std::string PrinterEnumerator::deviceName() const
@@ -111,7 +123,7 @@ std::string PrinterEnumerator::deviceName() const
     if (!info_[current_].pDevMode)
         return std::string();
 
-    return UTF8fromUTF16(info_[current_].pDevMode->dmDeviceName);
+    return utf8FromWide(info_[current_].pDevMode->dmDeviceName);
 }
 
 int PrinterEnumerator::paperWidth() const
@@ -140,27 +152,42 @@ int PrinterEnumerator::printQuality() const
 
 std::string PrinterEnumerator::printProcessor() const
 {
-    return UTF8fromUTF16(info_[current_].pPrintProcessor);
+    if (!info_[current_].pPrintProcessor)
+        return std::string();
+
+    return utf8FromWide(info_[current_].pPrintProcessor);
 }
 
 std::string PrinterEnumerator::dataType() const
 {
-    return UTF8fromUTF16(info_[current_].pDatatype);
+    if (!info_[current_].pDatatype)
+        return std::string();
+
+    return utf8FromWide(info_[current_].pDatatype);
 }
 
 std::string PrinterEnumerator::serverName() const
 {
-    return UTF8fromUTF16(info_[current_].pServerName);
+    if (!info_[current_].pServerName)
+        return std::string();
+
+    return utf8FromWide(info_[current_].pServerName);
 }
 
 std::string PrinterEnumerator::location() const
 {
-    return UTF8fromUTF16(info_[current_].pLocation);
+    if (!info_[current_].pLocation)
+        return std::string();
+
+    return utf8FromWide(info_[current_].pLocation);
 }
 
 std::string PrinterEnumerator::comment() const
 {
-    return UTF8fromUTF16(info_[current_].pComment);
+    if (!info_[current_].pComment)
+        return std::string();
+
+    return utf8FromWide(info_[current_].pComment);
 }
 
 int PrinterEnumerator::jobsCount() const

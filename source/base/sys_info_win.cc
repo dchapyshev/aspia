@@ -104,7 +104,7 @@ std::string SysInfo::operatingSystemName()
         return std::string();
     }
 
-    return UTF8fromUTF16(value);
+    return utf8FromWide(value);
 }
 
 // static
@@ -180,7 +180,7 @@ std::string SysInfo::computerName()
         return std::string();
     }
 
-    return UTF8fromUTF16(buffer);
+    return utf8FromWide(buffer);
 }
 
 // static
@@ -203,14 +203,14 @@ std::string SysInfo::computerDomain()
         return std::string();
     }
 
-    return UTF8fromUTF16(buffer.get());
+    return utf8FromWide(buffer.get());
 }
 
 // static
 std::string SysInfo::computerWorkgroup()
 {
     NETSETUP_JOIN_STATUS buffer_type = NetSetupWorkgroupName;
-    wchar_t* buffer;
+    wchar_t* buffer = nullptr;
 
     DWORD ret = NetGetJoinInformation(nullptr, &buffer, &buffer_type);
     if (ret != NERR_Success)
@@ -219,8 +219,10 @@ std::string SysInfo::computerWorkgroup()
         return std::string();
     }
 
-    std::string result = UTF8fromUTF16(buffer);
+    if (!buffer)
+        return std::string();
 
+    std::string result = utf8FromWide(buffer);
     NetApiBufferFree(buffer);
     return result;
 }

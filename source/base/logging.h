@@ -577,6 +577,9 @@ std::ostream& operator<<(std::ostream& out, const wchar_t* wstr);
 std::ostream& operator<<(std::ostream& out, const std::wstring& wstr);
 #endif // defined(OS_WIN)
 
+std::ostream& operator<<(std::ostream& out, const char16_t* ustr);
+std::ostream& operator<<(std::ostream& out, const std::u16string& ustr);
+
 } // namespace std
 
 // The NOTIMPLEMENTED() macro annotates codepaths which have not been implemented yet. If output

@@ -28,6 +28,8 @@ list(APPEND SOURCE_BASE
     bitset.h
     byte_array.cc
     byte_array.h
+    command_line.cc
+    command_line.h
     const_buffer.h
     cpuid.cc
     cpuid.h
@@ -76,6 +78,7 @@ list(APPEND SOURCE_BASE_STRINGS
     strings/string_util.h
     strings/string_util_constants.cc
     strings/string_util_constants.h
+    strings/string_util_win.cc
     strings/unicode.cc
     strings/unicode.h)
 

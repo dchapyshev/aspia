@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -23,17 +23,69 @@
 
 namespace base {
 
-bool UTF16toUTF8(const std::wstring& in, std::string* out);
-bool UTF8toUTF16(const std::string& in, std::wstring* out);
+//
+// UTF-16 <-> UTF-8.
+//
 
-bool UTF16toUTF8(const wchar_t* in, std::string* out);
-bool UTF8toUTF16(const char* in, std::wstring* out);
+bool utf16ToUtf8(std::u16string_view in, std::string* out);
+bool utf8ToUtf16(std::string_view in, std::u16string* out);
 
-std::wstring UTF16fromUTF8(const std::string& in);
-std::string UTF8fromUTF16(const std::wstring& in);
+std::u16string utf16FromUtf8(std::string_view in);
+std::string utf8FromUtf16(std::u16string_view in);
 
-std::wstring UTF16fromUTF8(const char* in);
-std::string UTF8fromUTF16(const wchar_t* in);
+//
+// Wide <-> UTF-8.
+//
+
+bool wideToUtf8(std::wstring_view in, std::string* out);
+bool utf8ToWide(std::string_view in, std::wstring* out);
+
+std::wstring wideFromUtf8(std::string_view in);
+std::string utf8FromWide(std::wstring_view in);
+
+//
+// Wide <-> UTF-16.
+//
+
+bool wideToUtf16(std::wstring_view in, std::u16string* out);
+bool utf16ToWide(std::u16string_view in, std::wstring* out);
+
+std::wstring wideFromUtf16(std::u16string_view in);
+std::u16string utf16FromWide(std::wstring_view in);
+
+//
+// ASCII <-> UTF-16.
+//
+
+std::string asciiFromUtf16(std::u16string_view in);
+std::u16string utf16FromAscii(std::string_view in);
+
+//
+// ASCII <-> Wide.
+//
+
+std::string asciiFromWide(std::wstring_view in);
+std::wstring wideFromAscii(std::string_view in);
+
+//
+// Local 8 bit <-> UTF-16.
+//
+
+bool utf16ToLocal8Bit(std::u16string_view in, std::string* out);
+bool local8BitToUtf16(std::string_view in, std::u16string* out);
+
+std::u16string utf16FromLocal8Bit(std::string_view in);
+std::string local8BitFromUtf16(std::u16string_view in);
+
+//
+// Local 8 bit <-> Wide.
+//
+
+bool wideToLocal8Bit(std::wstring_view in, std::string* out);
+bool local8BitToWide(std::string_view in, std::wstring* out);
+
+std::wstring wideFromLocal8Bit(std::string_view in);
+std::string local8BitFromWide(std::wstring_view in);
 
 } // namespace base
 

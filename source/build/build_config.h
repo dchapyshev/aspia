@@ -58,6 +58,10 @@
 #define FORCEINLINE inline
 #endif
 
+#if defined(OS_WIN)
+#define WCHAR_T_IS_UTF16
+#endif
+
 #define DEFAULT_LOCALE        "en"
 #define DEFAULT_HOST_TCP_PORT 8050
 #define DEFAULT_UPDATE_SERVER "https://update.aspia.org"

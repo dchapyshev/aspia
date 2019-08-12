@@ -117,12 +117,18 @@ void AdapterEnumerator::advance()
 
 std::string AdapterEnumerator::adapterName() const
 {
-    return base::UTF8fromUTF16(adapter_->Description);
+    if (!adapter_->Description)
+        return std::string();
+
+    return base::utf8FromWide(adapter_->Description);
 }
 
 std::string AdapterEnumerator::connectionName() const
 {
-    return base::UTF8fromUTF16(adapter_->FriendlyName);
+    if (!adapter_->FriendlyName)
+        return std::string();
+
+    return base::utf8FromWide(adapter_->FriendlyName);
 }
 
 std::string AdapterEnumerator::interfaceType() const

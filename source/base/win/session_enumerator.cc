@@ -58,27 +58,42 @@ SessionId SessionEnumerator::sessionId() const
 
 std::string SessionEnumerator::sessionName() const
 {
-    return base::UTF8fromUTF16(info_[current_]->pSessionName);
+    if (!info_[current_]->pSessionName)
+        return std::string();
+
+    return base::utf8FromWide(info_[current_]->pSessionName);
 }
 
 std::string SessionEnumerator::hostName() const
 {
-    return base::UTF8fromUTF16(info_[current_]->pHostName);
+    if (!info_[current_]->pHostName)
+        return std::string();
+
+    return base::utf8FromWide(info_[current_]->pHostName);
 }
 
 std::string SessionEnumerator::userName() const
 {
-    return base::UTF8fromUTF16(info_[current_]->pUserName);
+    if (!info_[current_]->pUserName)
+        return std::string();
+
+    return base::utf8FromWide(info_[current_]->pUserName);
 }
 
 std::string SessionEnumerator::domainName() const
 {
-    return base::UTF8fromUTF16(info_[current_]->pDomainName);
+    if (!info_[current_]->pDomainName)
+        return std::string();
+
+    return base::utf8FromWide(info_[current_]->pDomainName);
 }
 
 std::string SessionEnumerator::farmName() const
 {
-    return base::UTF8fromUTF16(info_[current_]->pFarmName);
+    if (!info_[current_]->pFarmName)
+        return std::string();
+
+    return base::utf8FromWide(info_[current_]->pFarmName);
 }
 
 } // namespace base::win

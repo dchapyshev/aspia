@@ -19,6 +19,8 @@
 #ifndef BASE__STRINGS__STRING_UTIL_H
 #define BASE__STRINGS__STRING_UTIL_H
 
+#include "build/build_config.h"
+
 #include <string>
 
 namespace base {
@@ -71,7 +73,15 @@ enum TrimPositions
 // It is safe to use the same variable for both |input| and |output| (this is
 // the normal usage to trim in-place).
 bool trimString(const std::string& input, std::string_view trim_chars, std::string& output);
-bool trimString(const std::wstring& input, std::wstring_view trim_chars, std::wstring& output);
+bool trimString(const std::u16string& input, std::u16string_view trim_chars, std::u16string& output);
+
+// string_view versions of the above. The returned pieces refer to the original buffer.
+std::u16string_view trimString(std::u16string_view input,
+                               std::u16string_view trim_chars,
+                               TrimPositions positions);
+std::string_view trimString(std::string_view input,
+                            std::string_view trim_chars,
+                            TrimPositions positions);
 
 // Trims any whitespace from either end of the input string.
 //
@@ -80,24 +90,108 @@ bool trimString(const std::wstring& input, std::wstring_view trim_chars, std::ws
 //
 // The std::string versions return where whitespace was found.
 // NOTE: Safe to use the same variable for both input and output.
-TrimPositions trimWhitespace(const std::wstring& input,
+TrimPositions trimWhitespace(const std::u16string& input,
                              TrimPositions positions,
-                             std::wstring& output);
+                             std::u16string& output);
+std::u16string_view trimWhitespace(std::u16string_view input, TrimPositions positions);
+
 TrimPositions trimWhitespaceASCII(const std::string& input,
                                   TrimPositions positions,
                                   std::string& output);
+std::string_view trimWhitespaceASCII(std::string_view input, TrimPositions positions);
 
 void removeChars(std::string* str, std::string_view substr);
 void removeChars(std::wstring* str, std::wstring_view substr);
 
-std::wstring toUpper(std::wstring_view in);
-std::wstring toLower(std::wstring_view in);
+// ASCII-specific tolower.  The standard library's tolower is locale sensitive, so we don't want to
+// use it here.
+inline char toLowerASCII(char c)
+{
+    return (c >= 'A' && c <= 'Z') ? (c + ('a' - 'A')) : c;
+}
+
+inline char16_t toLowerASCII(char16_t c)
+{
+    return (c >= 'A' && c <= 'Z') ? (c + ('a' - 'A')) : c;
+}
+
+// ASCII-specific toupper.  The standard library's toupper is locale sensitive, so we don't want to
+// use it here.
+inline char toUpperASCII(char c)
+{
+    return (c >= 'a' && c <= 'z') ? (c + ('A' - 'a')) : c;
+}
+
+inline char16_t toUpperASCII(char16_t c)
+{
+    return (c >= 'a' && c <= 'z') ? (c + ('A' - 'a')) : c;
+}
+
+std::u16string toUpperASCII(std::u16string_view in);
+std::u16string toLowerASCII(std::u16string_view in);
 
 std::string toUpperASCII(std::string_view in);
 std::string toLowerASCII(std::string_view in);
 
+std::u16string toUpper(std::u16string_view in);
+std::u16string toLower(std::u16string_view in);
+
 const std::string& emptyString();
 const std::wstring& emptyStringW();
+
+#if defined(WCHAR_T_IS_UTF16)
+
+inline wchar_t* asWritableWide(char16_t* str)
+{
+    return reinterpret_cast<wchar_t*>(str);
+}
+
+inline wchar_t* asWritableWide(std::u16string& str)
+{
+    return reinterpret_cast<wchar_t*>(str.data());
+}
+
+inline const wchar_t* asWide(const char16_t* str)
+{
+    return reinterpret_cast<const wchar_t*>(str);
+}
+
+inline const wchar_t* asWide(const std::u16string& str)
+{
+    return reinterpret_cast<const wchar_t*>(str.data());
+}
+
+inline const wchar_t* asWide(std::u16string_view str)
+{
+    return reinterpret_cast<const wchar_t*>(str.data());
+}
+
+inline char16_t* asWritableUtf16(wchar_t* str)
+{
+    return reinterpret_cast<char16_t*>(str);
+}
+
+inline char16_t* asWritableUtf16(std::wstring& str)
+{
+    return reinterpret_cast<char16_t*>(str.data());
+}
+
+inline const char16_t* asUtf16(const wchar_t* str)
+{
+    return reinterpret_cast<const char16_t*>(str);
+}
+
+inline const char16_t* asUtf16(const std::wstring& str)
+{
+    return reinterpret_cast<const char16_t*>(str.data());
+}
+
+inline const char16_t* asUtf16(std::wstring_view str)
+{
+    return reinterpret_cast<const char16_t*>(str.data());
+}
+
+#endif // defined(WCHAR_T_IS_UTF16)
 
 } // namespace base
 

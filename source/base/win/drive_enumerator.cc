@@ -124,7 +124,7 @@ std::string DriveEnumerator::DriveInfo::fileSystem() const
         return std::string();
     }
 
-    return UTF8fromUTF16(fs);
+    return utf8FromWide(fs);
 }
 
 std::string DriveEnumerator::DriveInfo::volumeName() const
@@ -140,7 +140,7 @@ std::string DriveEnumerator::DriveInfo::volumeName() const
         return std::string();
     }
 
-    return UTF8fromUTF16(name);
+    return utf8FromWide(name);
 }
 
 std::string DriveEnumerator::DriveInfo::volumeSerial() const

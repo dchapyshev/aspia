@@ -371,11 +371,13 @@ bool endsWith(std::wstring_view str, std::wstring_view search_for)
     return endsWithT<wchar_t>(str, search_for);
 }
 
+namespace {
+
 template <class Str>
 TrimPositions trimStringT(const Str& input,
-                          const typename Str::value_type* trim_chars,
-                          TrimPositions positions,
-                          Str& output)
+    const typename Str::value_type* trim_chars,
+    TrimPositions positions,
+    Str& output)
 {
     // Find the edges of leading/trailing whitespace as desired. Need to use
     // a StringPiece version of input to be able to call find* on it with the
@@ -408,21 +410,57 @@ TrimPositions trimStringT(const Str& input,
         ((last_good_char == last_char) ? TRIM_NONE : TRIM_TRAILING));
 }
 
+template <typename StringType>
+StringType trimStringViewT(StringType input, StringType trim_chars, TrimPositions positions)
+{
+    size_t begin = (positions & TRIM_LEADING) ? input.find_first_not_of(trim_chars) : 0;
+    size_t end = (positions & TRIM_TRAILING) ? input.find_last_not_of(trim_chars) + 1 : input.size();
+
+    if (begin > input.size())
+        begin = input.size();
+
+    if (end > input.size())
+        end = input.size();
+
+    return input.substr(begin, end - begin);
+}
+
+} // namespace
+
 bool trimString(const std::string& input, std::string_view trim_chars, std::string& output)
 {
     return trimStringT(input, trim_chars.data(), TRIM_ALL, output) != TRIM_NONE;
 }
 
-bool trimString(const std::wstring& input, std::wstring_view trim_chars, std::wstring& output)
+bool trimString(const std::u16string& input, std::u16string_view trim_chars, std::u16string& output)
 {
     return trimStringT(input, trim_chars.data(), TRIM_ALL, output) != TRIM_NONE;
 }
 
-TrimPositions trimWhitespace(const std::wstring& input,
-                             TrimPositions positions,
-                             std::wstring& output)
+std::u16string_view trimString(std::u16string_view input,
+                               std::u16string_view trim_chars,
+                               TrimPositions positions)
 {
-    return trimStringT(input, kWhitespaceWide, positions, output);
+    return trimStringViewT(input, trim_chars, positions);
+}
+
+std::string_view trimString(std::string_view input,
+                            std::string_view trim_chars,
+                            TrimPositions positions)
+{
+    return trimStringViewT(input, trim_chars, positions);
+}
+
+TrimPositions trimWhitespace(const std::u16string& input,
+                             TrimPositions positions,
+                             std::u16string& output)
+{
+    return trimStringT(input, kWhitespaceUtf16, positions, output);
+}
+
+std::u16string_view trimWhitespace(std::u16string_view input, TrimPositions positions)
+{
+    return trimStringViewT(input, std::u16string_view(kWhitespaceUtf16), positions);
 }
 
 TrimPositions trimWhitespaceASCII(const std::string& input,
@@ -430,6 +468,11 @@ TrimPositions trimWhitespaceASCII(const std::string& input,
                                   std::string& output)
 {
     return trimStringT(input, kWhitespaceASCII, positions, output);
+}
+
+std::string_view trimWhitespaceASCII(std::string_view input, TrimPositions positions)
+{
+    return trimStringViewT(input, std::string_view(kWhitespaceASCII), positions);
 }
 
 void removeChars(std::string* str, std::string_view substr)
@@ -442,34 +485,52 @@ void removeChars(std::wstring* str, std::wstring_view substr)
     removeCharsT(str, substr);
 }
 
-std::wstring toUpper(std::wstring_view in)
+namespace {
+
+template <typename CharType>
+std::basic_string<CharType> toLowerASCIIT(std::basic_string_view<CharType> str)
 {
-    std::wstring out(in);
-    std::transform(out.begin(), out.end(), out.begin(), std::towupper);
-    return out;
+    std::basic_string<CharType> ret;
+    ret.reserve(str.size());
+
+    for (size_t i = 0; i < str.size(); ++i)
+        ret.push_back(toLowerASCII(str[i]));
+
+    return ret;
 }
 
-std::wstring toLower(std::wstring_view in)
+template <typename CharType>
+std::basic_string<CharType> toUpperASCIIT(std::basic_string_view<CharType> str)
 {
-    std::wstring out(in);
-    std::transform(out.begin(), out.end(), out.begin(), std::towlower);
-    return out;
+    std::basic_string<CharType> ret;
+    ret.reserve(str.size());
+
+    for (size_t i = 0; i < str.size(); ++i)
+        ret.push_back(toUpperASCII(str[i]));
+
+    return ret;
+}
+
+}  // namespace
+
+std::u16string toUpperASCII(std::u16string_view in)
+{
+    return toUpperASCIIT<char16_t>(in);
+}
+
+std::u16string toLowerASCII(std::u16string_view in)
+{
+    return toLowerASCIIT<char16_t>(in);
 }
 
 std::string toUpperASCII(std::string_view in)
 {
-    std::string out(in);
-    std::transform(out.begin(), out.end(), out.begin(),
-        [](unsigned char c) { return static_cast<char>(std::toupper(c)); });
-    return out;
+    return toUpperASCIIT<char>(in);
 }
 
 std::string toLowerASCII(std::string_view in)
 {
-    std::string out(in);
-    std::transform(out.begin(), out.end(), out.begin(),
-        [](unsigned char c) { return static_cast<char>(std::tolower(c)); });
-    return out;
+    return toLowerASCIIT<char>(in);
 }
 
 const std::string& emptyString()

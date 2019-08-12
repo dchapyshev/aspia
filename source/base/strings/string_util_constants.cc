@@ -48,11 +48,18 @@ namespace base {
   0x3000, /* IDEOGRAPHIC SPACE */         \
   0
 
-const wchar_t kWhitespaceWide[] = {
+const wchar_t kWhitespaceWide[] =
+{
     WHITESPACE_UNICODE
 };
 
-const char kWhitespaceASCII[] = {
+const char16_t kWhitespaceUtf16[] =
+{
+    WHITESPACE_UNICODE
+};
+
+const char kWhitespaceASCII[] =
+{
     0x09,    // CHARACTER TABULATION
     0x0A,    // LINE FEED (LF)
     0x0B,    // LINE TABULATION
