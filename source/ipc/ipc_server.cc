@@ -42,11 +42,14 @@ QString generateUniqueChannelId()
 
 } // namespace
 
+Server::Server() = default;
+Server::~Server() = default;
+
 bool Server::start(Delegate* delegate)
 {
     DCHECK(delegate);
 
-    if (isStarted())
+    if (server_)
     {
         DLOG(LS_WARNING) << "An attempt was start an already running server.";
         return false;
@@ -54,12 +57,12 @@ bool Server::start(Delegate* delegate)
 
     delegate_ = delegate;
 
-    std::unique_ptr<QLocalServer> server(new QLocalServer(this));
+    std::unique_ptr<QLocalServer> server(new QLocalServer());
 
     server->setSocketOptions(QLocalServer::OtherAccessOption);
     server->setMaxPendingConnections(25);
 
-    connect(server.get(), &QLocalServer::newConnection, [this]()
+    QObject::connect(server.get(), &QLocalServer::newConnection, [this]()
     {
         if (server_->hasPendingConnections())
         {
@@ -82,11 +85,6 @@ bool Server::start(Delegate* delegate)
     channel_id_ = channel_id;
     server_ = std::move(server);
     return true;
-}
-
-bool Server::isStarted() const
-{
-    return server_ != nullptr;
 }
 
 void Server::setChannelId(const QString& channel_id)

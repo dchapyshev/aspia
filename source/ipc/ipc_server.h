@@ -21,7 +21,7 @@
 
 #include "base/macros_magic.h"
 
-#include <QObject>
+#include <QString>
 
 class QLocalServer;
 
@@ -29,11 +29,11 @@ namespace ipc {
 
 class Channel;
 
-class Server : public QObject
+class Server
 {
 public:
-    Server() = default;
-    ~Server() = default;
+    Server();
+    ~Server();
 
     class Delegate
     {
@@ -44,7 +44,6 @@ public:
     };
 
     bool start(Delegate* delegate);
-    bool isStarted() const;
 
     void setChannelId(const QString& channel_id);
     QString channelId() const { return channel_id_; }
