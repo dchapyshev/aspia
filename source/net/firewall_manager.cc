@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,20 +17,19 @@
 //
 
 #include "net/firewall_manager.h"
-#include "base/logging.h"
 
-#include <QUuid>
+#include "base/guid.h"
+#include "base/logging.h"
+#include "base/strings/unicode.h"
 
 #include <comutil.h>
 #include <unknwn.h>
 
 namespace net {
 
-FirewallManager::FirewallManager(const QString& application_path)
+FirewallManager::FirewallManager(const std::filesystem::path& application_path)
     : application_path_(application_path)
 {
-    application_path_.replace(QLatin1Char('/'), QLatin1Char('\\'));
-
     // Retrieve INetFwPolicy2
     HRESULT hr = CoCreateInstance(CLSID_NetFwPolicy2, nullptr, CLSCTX_ALL,
                                   IID_PPV_ARGS(&firewall_policy_));
@@ -89,15 +88,15 @@ bool FirewallManager::isFirewallEnabled() const
 
 bool FirewallManager::hasAnyRule()
 {
-    QVector<Microsoft::WRL::ComPtr<INetFwRule>> rules;
+    std::vector<Microsoft::WRL::ComPtr<INetFwRule>> rules;
     allRules(&rules);
 
     return !rules.empty();
 }
 
-bool FirewallManager::addTcpRule(const QString& rule_name,
-                                 const QString& description,
-                                 int port)
+bool FirewallManager::addTcpRule(std::wstring_view rule_name,
+                                 std::wstring_view description,
+                                 uint16_t port)
 {
     // Delete the rule. According MDSN |INetFwRules::Add| should replace rule with same
     // "rule identifier". It's not clear what is "rule identifier", but it can successfully
@@ -113,9 +112,9 @@ bool FirewallManager::addTcpRule(const QString& rule_name,
         return false;
     }
 
-    rule->put_Name(_bstr_t(qUtf16Printable(rule_name)));
-    rule->put_Description(_bstr_t(qUtf16Printable(description)));
-    rule->put_ApplicationName(_bstr_t(qUtf16Printable(application_path_)));
+    rule->put_Name(_bstr_t(rule_name.data()));
+    rule->put_Description(_bstr_t(description.data()));
+    rule->put_ApplicationName(_bstr_t(application_path_.c_str()));
     rule->put_Protocol(NET_FW_IP_PROTOCOL_TCP);
     rule->put_Direction(NET_FW_RULE_DIR_IN);
     rule->put_Enabled(VARIANT_TRUE);
@@ -133,9 +132,9 @@ bool FirewallManager::addTcpRule(const QString& rule_name,
     return true;
 }
 
-void FirewallManager::deleteRuleByName(const QString& rule_name)
+void FirewallManager::deleteRuleByName(std::wstring_view rule_name)
 {
-    QVector<Microsoft::WRL::ComPtr<INetFwRule>> rules;
+    std::vector<Microsoft::WRL::ComPtr<INetFwRule>> rules;
     allRules(&rules);
 
     for (const auto& rule : rules)
@@ -152,24 +151,21 @@ void FirewallManager::deleteRuleByName(const QString& rule_name)
         if (!bstr_rule_name)
             continue;
 
-        QString name = QString::fromUtf16(reinterpret_cast<const ushort*>(
-            static_cast<const wchar_t*>(bstr_rule_name)));
-
-        if (name.compare(rule_name, Qt::CaseInsensitive) == 0)
+        if (_wcsicmp(rule_name.data(), static_cast<const wchar_t*>(bstr_rule_name)) == 0)
             deleteRule(rule);
     }
 }
 
 void FirewallManager::deleteAllRules()
 {
-    QVector<Microsoft::WRL::ComPtr<INetFwRule>> rules;
+    std::vector<Microsoft::WRL::ComPtr<INetFwRule>> rules;
     allRules(&rules);
 
     for (const auto& rule : rules)
         deleteRule(rule);
 }
 
-void FirewallManager::allRules(QVector<Microsoft::WRL::ComPtr<INetFwRule>>* rules)
+void FirewallManager::allRules(std::vector<Microsoft::WRL::ComPtr<INetFwRule>>* rules)
 {
     Microsoft::WRL::ComPtr<IUnknown> rules_enum_unknown;
 
@@ -237,7 +233,7 @@ void FirewallManager::deleteRule(Microsoft::WRL::ComPtr<INetFwRule> rule)
 {
     // Rename rule to unique name and delete by unique name. We can't just delete rule by name.
     // Multiple rules with the same name and different app are possible.
-    _bstr_t unique_name(qUtf16Printable(QUuid::createUuid().toString()));
+    _bstr_t unique_name(base::wideFromUtf8(base::Guid::create().toStdString()).c_str());
 
     rule->put_Name(unique_name);
     firewall_rules_->Remove(unique_name);

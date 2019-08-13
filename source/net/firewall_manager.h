@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -21,7 +21,8 @@
 
 #include "base/macros_magic.h"
 
-#include <QVector>
+#include <filesystem>
+#include <vector>
 
 #include <wrl/client.h>
 #include <netfw.h>
@@ -31,7 +32,7 @@ namespace net {
 class FirewallManager
 {
 public:
-    explicit FirewallManager(const QString& application_path);
+    explicit FirewallManager(const std::filesystem::path& application_path);
     ~FirewallManager() = default;
 
     // Returns true if firewall manager is valid.
@@ -45,19 +46,19 @@ public:
 
     // Adds a firewall rule allowing inbound connections to the application on
     // TCP port |port|. Replaces the rule if it already exists. Needs elevation.
-    bool addTcpRule(const QString& rule_name,
-                    const QString& description,
-                    int port);
+    bool addTcpRule(std::wstring_view rule_name,
+                    std::wstring_view description,
+                    uint16_t port);
 
     // Deletes all rules with specified name. Needs elevation.
-    void deleteRuleByName(const QString& rule_name);
+    void deleteRuleByName(std::wstring_view rule_name);
 
     // Deletes all rules for current app. Needs elevation.
     void deleteAllRules();
 
 private:
     // Returns the list of rules applying to the application.
-    void allRules(QVector<Microsoft::WRL::ComPtr<INetFwRule>>* rules);
+    void allRules(std::vector<Microsoft::WRL::ComPtr<INetFwRule>>* rules);
 
     // Deletes rules. Needs elevation.
     void deleteRule(Microsoft::WRL::ComPtr<INetFwRule> rule);
@@ -65,7 +66,7 @@ private:
     Microsoft::WRL::ComPtr<INetFwPolicy2> firewall_policy_;
     Microsoft::WRL::ComPtr<INetFwRules> firewall_rules_;
 
-    QString application_path_;
+    std::filesystem::path application_path_;
 
     DISALLOW_COPY_AND_ASSIGN(FirewallManager);
 };
