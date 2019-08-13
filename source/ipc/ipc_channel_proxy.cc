@@ -69,6 +69,17 @@ bool ChannelProxy::start()
     return true;
 }
 
+bool ChannelProxy::send(const QByteArray& buffer)
+{
+    std::scoped_lock lock(channel_lock_);
+
+    if (!channel_)
+        return false;
+
+    channel_->send(buffer);
+    return true;
+}
+
 void ChannelProxy::willDestroyCurrentChannel()
 {
     std::scoped_lock lock(channel_lock_);

@@ -32,6 +32,7 @@ public:
     bool connectToServer(const QString& channel_name);
     bool isConnected() const;
     bool start();
+    bool send(const QByteArray& buffer);
 
 private:
     friend class Channel;
