@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -37,7 +37,8 @@ public:
     static std::string string(size_t size);
 
     // Generates a random number.
-    static uint32_t number();
+    static uint32_t number32();
+    static uint64_t number64();
 
 private:
     DISALLOW_COPY_AND_ASSIGN(Random);

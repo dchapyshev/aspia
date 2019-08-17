@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,6 +17,7 @@
 //
 
 #include "crypto/random.h"
+
 #include "base/logging.h"
 
 #include <openssl/rand.h>
@@ -35,6 +36,17 @@ ContainerT generateBuffer(size_t size)
     CHECK(result);
 
     return random_buffer;
+}
+
+template <typename NumberT>
+NumberT generateNumber()
+{
+    NumberT ret;
+
+    bool result = fillBuffer(&ret, sizeof(ret));
+    CHECK(result);
+
+    return ret;
 }
 
 } // namespace
@@ -61,14 +73,15 @@ std::string Random::string(size_t size)
 }
 
 // static
-uint32_t Random::number()
+uint32_t Random::number32()
 {
-    uint32_t ret;
+    return generateNumber<uint32_t>();
+}
 
-    bool result = fillBuffer(&ret, sizeof(ret));
-    CHECK(result);
-
-    return ret;
+// static
+uint64_t Random::number64()
+{
+    return generateNumber<uint64_t>();
 }
 
 } // namespace crypto
