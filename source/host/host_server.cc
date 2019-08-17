@@ -18,9 +18,8 @@
 
 #include "host/host_server.h"
 
+#include "base/base_paths.h"
 #include "host/client_session.h"
-#include "host/host_authenticator_manager.h"
-#include "host/user.h"
 #include "net/firewall_manager.h"
 #include "net/network_channel.h"
 #include "qt_base/qt_logging.h"
@@ -31,8 +30,8 @@ namespace host {
 
 namespace {
 
-const char kFirewallRuleName[] = "Aspia Host Service";
-const char kFirewallRuleDecription[] = "Allow incoming TCP connections";
+const wchar_t kFirewallRuleName[] = L"Aspia Host Service";
+const wchar_t kFirewallRuleDecription[] = L"Allow incoming TCP connections";
 
 } // namespace
 
@@ -43,13 +42,11 @@ Server::~Server()
     LOG(LS_INFO) << "Stopping the server";
 
     settings_watcher_.reset();
+    authenticator_manager_.reset();
+    user_session_manager_.reset();
     network_server_.reset();
 
-    net::FirewallManager firewall(QCoreApplication::applicationFilePath());
-    if (firewall.isValid())
-    {
-        firewall.deleteRuleByName(kFirewallRuleName);
-    }
+    deleteFirewallRules();
 
     LOG(LS_INFO) << "Server is stopped";
 }
@@ -62,28 +59,7 @@ void Server::start()
         return;
     }
 
-    LOG(LS_INFO) << "Starting the server";
-
-    net::FirewallManager firewall(QCoreApplication::applicationFilePath());
-    if (firewall.isValid())
-    {
-        if (firewall.addTcpRule(kFirewallRuleName, kFirewallRuleDecription, settings_.tcpPort()))
-        {
-            LOG(LS_INFO) << "Rule is added to the firewall";
-        }
-    }
-
-    network_server_ = std::make_unique<net::Server>();
-    if (!network_server_->start(settings_.tcpPort(), this))
-    {
-        QCoreApplication::quit();
-        return;
-    }
-
-    LOG(LS_INFO) << "Network server is started successfully";
-
-    authenticator_manager_ = std::make_unique<AuthenticatorManager>(this);
-    authenticator_manager_->setUserList(std::make_shared<UserList>(settings_.userList()));
+    LOG(LS_INFO) << "Starting the host server";
 
     settings_watcher_ = std::make_unique<QFileSystemWatcher>();
 
@@ -92,32 +68,92 @@ void Server::start()
         // Synchronize the parameters from the file.
         settings_.sync();
 
-        // Updating the list of users.
-        authenticator_manager_->setUserList(std::make_shared<UserList>(settings_.userList()));
+        // Reload user lists.
+        reloadUserList();
     });
 
     settings_watcher_->addPath(settings_.filePath());
+
+    authenticator_manager_ = std::make_unique<AuthenticatorManager>(this);
+
+    user_session_manager_ = std::make_unique<UserSessionManager>();
+    user_session_manager_->start(this);
+
+    reloadUserList();
+    addFirewallRules();
+
+    network_server_ = std::make_unique<net::Server>();
+    if (!network_server_->start(settings_.tcpPort(), this))
+    {
+        QCoreApplication::quit();
+        return;
+    }
+
+    LOG(LS_INFO) << "Host server is started successfully";
 }
 
 void Server::setSessionEvent(base::win::SessionStatus status, base::win::SessionId session_id)
 {
-    // TODO
+    if (user_session_manager_)
+        user_session_manager_->setSessionEvent(status, session_id);
 }
 
 void Server::onNewConnection(std::unique_ptr<net::Channel> channel)
 {
-    LOG(LS_INFO) << "New connection from: " << channel->peerAddress();
-
-    DCHECK(authenticator_manager_);
-    authenticator_manager_->addNewChannel(std::move(channel));
+    if (authenticator_manager_)
+        authenticator_manager_->addNewChannel(std::move(channel));
 }
 
 void Server::onNewSession(std::unique_ptr<ClientSession> session)
 {
-    LOG(LS_INFO) << "Client connected";
-    LOG(LS_INFO) << "ID: " << session->id();
-    LOG(LS_INFO) << "Username: " << session->userName();
-    LOG(LS_INFO) << "Peer IP: " << session->peerAddress();
+    if (user_session_manager_)
+        user_session_manager_->addNewSession(std::move(session));
+}
+
+void Server::onUserListChanged()
+{
+    reloadUserList();
+}
+
+void Server::addFirewallRules()
+{
+    std::filesystem::path file_path;
+    if (!base::BasePaths::currentExecFile(&file_path))
+        return;
+
+    net::FirewallManager firewall(file_path);
+    if (!firewall.isValid())
+        return;
+
+    if (!firewall.addTcpRule(kFirewallRuleName, kFirewallRuleDecription, settings_.tcpPort()))
+        return;
+
+    LOG(LS_INFO) << "Rule is added to the firewall";
+}
+
+void Server::deleteFirewallRules()
+{
+    std::filesystem::path file_path;
+    if (!base::BasePaths::currentExecFile(&file_path))
+        return;
+
+    net::FirewallManager firewall(file_path);
+    if (!firewall.isValid())
+        return;
+
+    firewall.deleteRuleByName(kFirewallRuleName);
+}
+
+void Server::reloadUserList()
+{
+    // Read the list of regular users.
+    std::shared_ptr<UserList> user_list = std::make_shared<UserList>(settings_.userList());
+
+    // Add a list of one-time users to the list of regular users.
+    user_list->merge(user_session_manager_->userList());
+
+    // Updating the list of users.
+    authenticator_manager_->setUserList(user_list);
 }
 
 } // namespace host

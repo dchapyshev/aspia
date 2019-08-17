@@ -19,9 +19,8 @@
 #ifndef HOST__HOST_SERVER_H
 #define HOST__HOST_SERVER_H
 
-#include "base/win/session_id.h"
-#include "base/win/session_status.h"
 #include "host/host_authenticator_manager.h"
+#include "host/user_session_manager.h"
 #include "host/host_settings.h"
 #include "net/network_server.h"
 
@@ -31,7 +30,8 @@ namespace host {
 
 class Server
     : public net::Server::Delegate,
-      public AuthenticatorManager::Delegate
+      public AuthenticatorManager::Delegate,
+      public UserSessionManager::Delegate
 {
 public:
     Server();
@@ -47,13 +47,21 @@ protected:
     // AuthenticatorManager::Delegate implementation.
     void onNewSession(std::unique_ptr<ClientSession> session) override;
 
+    // UserSessionManager::Delegate implementation.
+    void onUserListChanged() override;
+
 private:
+    void addFirewallRules();
+    void deleteFirewallRules();
+    void reloadUserList();
+
     std::unique_ptr<QFileSystemWatcher> settings_watcher_;
     Settings settings_;
 
     // Accepts incoming network connections.
     std::unique_ptr<net::Server> network_server_;
     std::unique_ptr<AuthenticatorManager> authenticator_manager_;
+    std::unique_ptr<UserSessionManager> user_session_manager_;
 
     DISALLOW_COPY_AND_ASSIGN(Server);
 };

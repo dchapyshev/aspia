@@ -51,6 +51,7 @@ public:
     void remove(const QString& username);
     void remove(int index);
     void update(int index, const User& user);
+    void merge(const UserList& user_list);
 
     int find(const QString& username) const;
     int count() const { return list_.count(); }

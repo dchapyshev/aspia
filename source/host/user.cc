@@ -89,6 +89,12 @@ void UserList::update(int index, const User& user)
     list_.replace(index, user);
 }
 
+void UserList::merge(const UserList& user_list)
+{
+    for (const auto& user : user_list.list_)
+        add(user);
+}
+
 int UserList::find(const QString& username) const
 {
     for (int i = 0; i < list_.size(); ++i)
