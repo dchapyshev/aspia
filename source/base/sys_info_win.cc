@@ -17,8 +17,9 @@
 //
 
 #include "base/sys_info.h"
-#include "base/base_paths.h"
+
 #include "base/logging.h"
+#include "base/files/base_paths.h"
 #include "base/strings/string_printf.h"
 #include "base/strings/unicode.h"
 #include "base/win/registry.h"

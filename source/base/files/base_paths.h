@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__BASE_PATHS_H
-#define BASE__BASE_PATHS_H
+#ifndef BASE__FILES__BASE_PATHS_H
+#define BASE__FILES__BASE_PATHS_H
 
 #include "base/macros_magic.h"
 
@@ -61,4 +61,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__BASE_PATHS_H
+#endif // BASE__FILES__BASE_PATHS_H

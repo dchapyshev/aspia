@@ -19,8 +19,6 @@
 list(APPEND SOURCE_BASE
     aligned_memory.cc
     aligned_memory.h
-    base_paths.cc
-    base_paths.h
     base64.cc
     base64.h
     base64_constants.cc
@@ -47,17 +45,24 @@ list(APPEND SOURCE_BASE
     process_handle.h
     scoped_clear_last_error.cc
     scoped_clear_last_error.h
+    settings.cc
+    settings.h
     smbios.h
     smbios_parser.cc
     smbios_parser.h
     smbios_reader.h
     smbios_reader_win.cc
+    stream_converter.h
     sys_info.cc
     sys_info.h
     sys_info_win.cc
     typed_buffer.h
     version.cc
-    version.h)
+    version.h
+    xml_sax_writer.cc
+    xml_sax_writer.h
+    xml_settings.cc
+    xml_settings.h)
 
 list(APPEND SOURCE_BASE_UNIT_TESTS
     aligned_memory_unittest.cc
@@ -65,7 +70,14 @@ list(APPEND SOURCE_BASE_UNIT_TESTS
     bitset_unittest.cc
     guid_unittest.cc
     scoped_clear_last_error_unittest.cc
+    stream_converter_unittest.cc
     version_unittest.cc)
+
+list(APPEND SOURCE_BASE_FILES
+    files/base_paths.cc
+    files/base_paths.h
+    files/scoped_temp_file.cc
+    files/scoped_temp_file.h)
 
 list(APPEND SOURCE_BASE_MESSAGE_LOOP
     message_loop/message_loop.cc
@@ -88,6 +100,8 @@ list(APPEND SOURCE_BASE_STRINGS
     strings/string_number_conversions.h
     strings/string_printf.cc
     strings/string_printf.h
+    strings/string_split.cc
+    strings/string_split.h
     strings/string_util.cc
     strings/string_util.h
     strings/string_util_constants.cc
@@ -98,7 +112,8 @@ list(APPEND SOURCE_BASE_STRINGS
 
 list(APPEND SOURCE_BASE_STRINGS_UNIT_TESTS
     strings/string_number_conversions_unittest.cc
-    strings/string_printf_unittest.cc)
+    strings/string_printf_unittest.cc
+    strings/string_split_unittest.cc)
 
 list(APPEND SOURCE_BASE_THREADING
     threading/simple_thread.cc
@@ -165,6 +180,7 @@ list(APPEND SOURCE_BASE_WIN_UNIT_TESTS
 
 source_group("" FILES ${SOURCE_BASE})
 source_group("" FILES ${SOURCE_BASE_UNIT_TESTS})
+source_group(files FILES ${SOURCE_BASE_FILES})
 source_group(message_loop FILES ${SOURCE_BASE_MESSAGE_LOOP})
 source_group(strings FILES ${SOURCE_BASE_STRINGS})
 source_group(strings FILES ${SOURCE_BASE_STRINGS_UNIT_TESTS})
@@ -174,6 +190,7 @@ source_group(win FILES ${SOURCE_BASE_WIN_UNIT_TESTS})
 
 add_library(aspia_base STATIC
     ${SOURCE_BASE}
+    ${SOURCE_BASE_FILES}
     ${SOURCE_BASE_MESSAGE_LOOP}
     ${SOURCE_BASE_STRINGS}
     ${SOURCE_BASE_THREADING}
