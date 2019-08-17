@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -29,22 +29,6 @@ void memZero(void* data, size_t data_size)
 }
 
 void memZero(std::string* str)
-{
-    if (!str)
-        return;
-
-    memZero(str->data(), str->size());
-}
-
-void memZero(QString* str)
-{
-    if (!str)
-        return;
-
-    memZero(str->data(), str->size());
-}
-
-void memZero(QByteArray* str)
 {
     if (!str)
         return;

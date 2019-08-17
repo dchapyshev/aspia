@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -19,9 +19,8 @@
 #ifndef CRYPTO__PASSWORD_HASH_H
 #define CRYPTO__PASSWORD_HASH_H
 
+#include "base/byte_array.h"
 #include "base/macros_magic.h"
-
-#include <QByteArray>
 
 namespace crypto {
 
@@ -34,7 +33,9 @@ public:
     static const size_t kBitsSize = 256;
     static const size_t kBytesSize = kBitsSize / kBitsPerByte;
 
-    static QByteArray hash(Type type, const QByteArray& password, const QByteArray& salt);
+    static base::ByteArray hash(
+        Type type, const base::ByteArray& password, const base::ByteArray& salt);
+
     static std::string hash(Type type, std::string_view password, std::string_view salt);
 
 private:

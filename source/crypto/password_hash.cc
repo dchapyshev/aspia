@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,6 +17,7 @@
 //
 
 #include "crypto/password_hash.h"
+
 #include "base/logging.h"
 
 #include <openssl/evp.h>
@@ -58,9 +59,10 @@ OutputT hashT(PasswordHash::Type type, InputT password, InputT salt)
 } // namespace
 
 // static
-QByteArray PasswordHash::hash(Type type, const QByteArray& password, const QByteArray& salt)
+base::ByteArray PasswordHash::hash(
+    Type type, const base::ByteArray& password, const base::ByteArray& salt)
 {
-    return hashT<const QByteArray&, QByteArray>(type, password, salt);
+    return hashT<const base::ByteArray&, base::ByteArray>(type, password, salt);
 }
 
 // static
