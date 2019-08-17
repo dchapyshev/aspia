@@ -48,6 +48,10 @@ add_definitions(-DNTDDI_VERSION=0x06010000
                 -D_WIN32_IE=0x0800
                 -DPSAPI_VERSION=2)
 
+# For Asio.
+add_definitions(-DASIO_STANDALONE
+                -DASIO_NO_DEPRECATED)
+
 # For Qt.
 add_definitions(-DHAS_QT
                 -DQT_NO_CAST_TO_ASCII
@@ -67,6 +71,7 @@ endif()
 include_directories(
     ${PROJECT_SOURCE_DIR}
     ${PROJECT_BINARY_DIR}
+    ${ASPIA_THIRD_PARTY_DIR}/asio/include
     ${ASPIA_THIRD_PARTY_DIR}/googletest/include
     ${ASPIA_THIRD_PARTY_DIR}/libvpx/include
     ${ASPIA_THIRD_PARTY_DIR}/libyuv/include

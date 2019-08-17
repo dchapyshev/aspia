@@ -3,6 +3,7 @@ Third-party components information
 
 | Name       | Version | License                        | URL                                              |
 |------------|---------|--------------------------------|--------------------------------------------------|
+| asio       | 1.12.2  | Boost Software License 1.0     | https://github.com/chriskohlhoff/asio/releases   |
 | googletest | 1.8.1   | BSD 3-Clause License           | https://github.com/google/googletest/releases    |
 | libvpx     | 1.8.1   | BSD 3-Clause License           | https://chromium.googlesource.com/webm/libvpx    |
 | libyuv     | 1724    | BSD 3-Clause License           | https://chromium.googlesource.com/libyuv/libyuv  |
