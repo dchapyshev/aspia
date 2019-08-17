@@ -59,6 +59,8 @@ list(APPEND SOURCE_BASE
     typed_buffer.h
     version.cc
     version.h
+    waitable_timer.cc
+    waitable_timer.h
     xml_sax_writer.cc
     xml_sax_writer.h
     xml_settings.cc
