@@ -76,6 +76,11 @@ list(APPEND SOURCE_BASE_UNIT_TESTS
 list(APPEND SOURCE_BASE_FILES
     files/base_paths.cc
     files/base_paths.h
+    files/file_path_watcher.cc
+    files/file_path_watcher.h
+    files/file_path_watcher_win.cc
+    files/file_util.cc
+    files/file_util.h
     files/scoped_temp_file.cc
     files/scoped_temp_file.h)
 
