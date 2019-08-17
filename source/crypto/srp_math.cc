@@ -19,6 +19,8 @@
 #include "crypto/srp_math.h"
 
 #include "base/logging.h"
+#include "base/strings/string_util.h"
+#include "base/strings/unicode.h"
 #include "crypto/generic_hash.h"
 
 #include <openssl/opensslv.h>
@@ -110,20 +112,20 @@ BigNum SrpMath::calc_B(const BigNum& b, const BigNum& N, const BigNum& g, const 
 
 // static
 // x = BLAKE2b512(s | BLAKE2b512(I | ":" | p))
-BigNum SrpMath::calc_x(const BigNum& s, const QString& I, const QString& p)
+BigNum SrpMath::calc_x(const BigNum& s, std::u16string_view I, std::u16string_view p)
 {
-    return calc_x(s, I, p.toStdString());
+    return calc_x(s, I, base::utf8FromUtf16(p));
 }
 
 // static
-BigNum SrpMath::calc_x(const BigNum& s, const QString& I, std::string_view p)
+BigNum SrpMath::calc_x(const BigNum& s, std::u16string_view I, std::string_view p)
 {
-    if (!s.isValid() || I.isEmpty() || p.empty())
+    if (!s.isValid() || I.empty() || p.empty())
         return BigNum();
 
     GenericHash hash(GenericHash::BLAKE2b512);
 
-    hash.addData(I.toLower().toStdString());
+    hash.addData(base::utf8FromUtf16(base::toLower(I)));
     hash.addData(":");
     hash.addData(p);
 
@@ -263,10 +265,10 @@ bool SrpMath::verify_A_mod_N(const BigNum& A, const BigNum& N)
 }
 
 // static
-BigNum SrpMath::calc_v(const QString& I, const QString& p, const BigNum& s,
+BigNum SrpMath::calc_v(std::u16string_view I, std::u16string_view p, const BigNum& s,
                        const BigNum& N, const BigNum& g)
 {
-    if (I.isEmpty() || p.isEmpty() || !N.isValid() || !g.isValid() || !s.isValid())
+    if (I.empty() || p.empty() || !N.isValid() || !g.isValid() || !s.isValid())
         return BigNum();
 
     BigNum::Context ctx = BigNum::Context::create();
@@ -284,10 +286,10 @@ BigNum SrpMath::calc_v(const QString& I, const QString& p, const BigNum& s,
 }
 
 // static
-BigNum SrpMath::calc_v(const QString& I, std::string_view p, const BigNum& s,
+BigNum SrpMath::calc_v(std::u16string_view I, std::string_view p, const BigNum& s,
                        const BigNum& N, const BigNum& g)
 {
-    if (I.isEmpty() || p.empty() || !N.isValid() || !g.isValid() || !s.isValid())
+    if (I.empty() || p.empty() || !N.isValid() || !g.isValid() || !s.isValid())
         return BigNum();
 
     BigNum::Context ctx = BigNum::Context::create();
