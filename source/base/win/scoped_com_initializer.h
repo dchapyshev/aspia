@@ -19,7 +19,7 @@
 #ifndef BASE__WIN__SCOPED_COM_INITIALIZER_H
 #define BASE__WIN__SCOPED_COM_INITIALIZER_H
 
-#include "base/thread_checker.h"
+#include "base/threading/thread_checker.h"
 
 #include <objbase.h>
 

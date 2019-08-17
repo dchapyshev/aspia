@@ -24,12 +24,7 @@ list(APPEND SOURCE_QT_BASE
     qt_logging.cc
     qt_logging.h
     qt_xml_settings.cc
-    qt_xml_settings.h
-    service.h
-    service_controller.cc
-    service_controller.h
-    service_impl.h
-    service_impl_win.cc)
+    qt_xml_settings.h)
 
 source_group("" FILES ${SOURCE_QT_BASE})
 

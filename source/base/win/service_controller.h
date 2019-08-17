@@ -16,14 +16,16 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef QT_BASE__SERVICE_CONTROLLER_H
-#define QT_BASE__SERVICE_CONTROLLER_H
+#ifndef BASE__WIN__SERVICE_CONTROLLER_H
+#define BASE__WIN__SERVICE_CONTROLLER_H
 
 #include "base/win/scoped_object.h"
 
-#include <QStringList>
+#include <filesystem>
+#include <string>
+#include <vector>
 
-namespace qt_base {
+namespace base::win {
 
 class ServiceController
 {
@@ -35,23 +37,23 @@ public:
 
     virtual ~ServiceController();
 
-    static ServiceController open(const QString& name);
-    static ServiceController install(const QString& name,
-                                     const QString& display_name,
-                                     const QString& file_path);
-    static bool remove(const QString& name);
-    static bool isInstalled(const QString& name);
-    static bool isRunning(const QString& name);
+    static ServiceController open(std::u16string_view name);
+    static ServiceController install(std::u16string_view name,
+                                     std::u16string_view display_name,
+                                     const std::filesystem::path& file_path);
+    static bool remove(std::u16string_view name);
+    static bool isInstalled(std::u16string_view name);
+    static bool isRunning(std::u16string_view name);
 
     void close();
 
-    bool setDescription(const QString& description);
-    QString description() const;
+    bool setDescription(std::u16string_view description);
+    std::u16string description() const;
 
-    bool setDependencies(const QStringList& dependencies);
-    QStringList dependencies() const;
+    bool setDependencies(const std::vector<std::u16string>& dependencies);
+    std::vector<std::u16string> dependencies() const;
 
-    QString filePath() const;
+    std::filesystem::path filePath() const;
 
     bool isValid() const;
     bool isRunning() const;
@@ -63,12 +65,12 @@ protected:
     ServiceController(SC_HANDLE sc_manager, SC_HANDLE service);
 
 private:
-    base::win::ScopedScHandle sc_manager_;
-    mutable base::win::ScopedScHandle service_;
+    ScopedScHandle sc_manager_;
+    mutable ScopedScHandle service_;
 
     DISALLOW_COPY_AND_ASSIGN(ServiceController);
 };
 
-} // namespace qt_base
+} // namespace base::win
 
-#endif // QT_BASE__SERVICE_CONTROLLER_H
+#endif // BASE__WIN__SERVICE_CONTROLLER_H

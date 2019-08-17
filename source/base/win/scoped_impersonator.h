@@ -20,7 +20,7 @@
 #define BASE__WIN__SCOPED_IMPERSONATOR_H
 
 #include "base/macros_magic.h"
-#include "base/thread_checker.h"
+#include "base/threading/thread_checker.h"
 
 #include <Windows.h>
 

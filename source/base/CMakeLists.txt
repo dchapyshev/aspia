@@ -1,6 +1,6 @@
 #
 # Aspia Project
-# Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+# Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -55,8 +55,6 @@ list(APPEND SOURCE_BASE
     sys_info.cc
     sys_info.h
     sys_info_win.cc
-    thread_checker.cc
-    thread_checker.h
     typed_buffer.h
     version.cc
     version.h)
@@ -68,6 +66,22 @@ list(APPEND SOURCE_BASE_UNIT_TESTS
     guid_unittest.cc
     scoped_clear_last_error_unittest.cc
     version_unittest.cc)
+
+list(APPEND SOURCE_BASE_MESSAGE_LOOP
+    message_loop/message_loop.cc
+    message_loop/message_loop.h
+    message_loop/message_loop_proxy.cc
+    message_loop/message_loop_proxy.h
+    message_loop/message_pump.h
+    message_loop/message_pump_asio.cc
+    message_loop/message_pump_asio.h
+    message_loop/message_pump_default.cc
+    message_loop/message_pump_default.h
+    message_loop/message_pump_dispatcher.h
+    message_loop/message_pump_win.cc
+    message_loop/message_pump_win.h
+    message_loop/pending_task.cc
+    message_loop/pending_task.h)
 
 list(APPEND SOURCE_BASE_STRINGS
     strings/string_number_conversions.cc
@@ -86,6 +100,14 @@ list(APPEND SOURCE_BASE_STRINGS_UNIT_TESTS
     strings/string_number_conversions_unittest.cc
     strings/string_printf_unittest.cc)
 
+list(APPEND SOURCE_BASE_THREADING
+    threading/simple_thread.cc
+    threading/simple_thread.h
+    threading/thread.cc
+    threading/thread.h
+    threading/thread_checker.cc
+    threading/thread_checker.h)
+
 list(APPEND SOURCE_BASE_WIN
     win/desktop.cc
     win/desktop.h
@@ -93,6 +115,8 @@ list(APPEND SOURCE_BASE_WIN
     win/drive_enumerator.h
     win/file_version_info.cc
     win/file_version_info.h
+    win/message_window.cc
+    win/message_window.h
     win/printer_enumerator.cc
     win/printer_enumerator.h
     win/process.cc
@@ -118,6 +142,10 @@ list(APPEND SOURCE_BASE_WIN
     win/scoped_wts_memory.h
     win/security_helpers.cc
     win/security_helpers.h
+    win/service.cc
+    win/service.h
+    win/service_controller.cc
+    win/service_controller.h
     win/session_enumerator.cc
     win/session_enumerator.h
     win/session_id.cc
@@ -137,12 +165,19 @@ list(APPEND SOURCE_BASE_WIN_UNIT_TESTS
 
 source_group("" FILES ${SOURCE_BASE})
 source_group("" FILES ${SOURCE_BASE_UNIT_TESTS})
+source_group(message_loop FILES ${SOURCE_BASE_MESSAGE_LOOP})
 source_group(strings FILES ${SOURCE_BASE_STRINGS})
 source_group(strings FILES ${SOURCE_BASE_STRINGS_UNIT_TESTS})
+source_group(threading FILES ${SOURCE_BASE_THREADING})
 source_group(win FILES ${SOURCE_BASE_WIN})
 source_group(win FILES ${SOURCE_BASE_WIN_UNIT_TESTS})
 
-add_library(aspia_base STATIC ${SOURCE_BASE} ${SOURCE_BASE_STRINGS} ${SOURCE_BASE_WIN})
+add_library(aspia_base STATIC
+    ${SOURCE_BASE}
+    ${SOURCE_BASE_MESSAGE_LOOP}
+    ${SOURCE_BASE_STRINGS}
+    ${SOURCE_BASE_THREADING}
+    ${SOURCE_BASE_WIN})
 target_link_libraries(aspia_base ${THIRD_PARTY_LIBS})
 
 # If the build of unit tests is enabled.
