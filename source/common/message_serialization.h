@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -19,34 +19,33 @@
 #ifndef COMMON__MESSAGE_SERIALIZATION_H
 #define COMMON__MESSAGE_SERIALIZATION_H
 
+#include "base/byte_array.h"
 #include "base/logging.h"
-
-#include <QByteArray>
 
 #include <google/protobuf/message_lite.h>
 
 namespace common {
 
-static QByteArray serializeMessage(const google::protobuf::MessageLite& message)
+static base::ByteArray serializeMessage(const google::protobuf::MessageLite& message)
 {
-    size_t size = message.ByteSizeLong();
+    const size_t size = message.ByteSizeLong();
     if (!size)
     {
         LOG(LS_WARNING) << "Empty messages are not allowed";
-        return QByteArray();
+        return base::ByteArray();
     }
 
-    QByteArray buffer;
+    base::ByteArray buffer;
     buffer.resize(size);
 
-    message.SerializeWithCachedSizesToArray(reinterpret_cast<uint8_t*>(buffer.data()));
+    message.SerializeWithCachedSizesToArray(buffer.data());
     return buffer;
 }
 
 template <class T>
-bool parseMessage(const QByteArray& buffer, T* message)
+bool parseMessage(const base::ByteArray& buffer, T* message)
 {
-    if (!message->ParseFromArray(buffer.constData(), buffer.size()))
+    if (!message->ParseFromArray(buffer.data(), buffer.size()))
     {
         LOG(LS_WARNING) << "Received message that is not a valid protocol buffer";
         return false;

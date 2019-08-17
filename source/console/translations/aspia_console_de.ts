@@ -925,28 +925,28 @@
         <translation type="unfinished">Die Adressbuchdatei konnte nicht erstellt oder geöffnet werden.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="767"/>
+        <location filename="../address_book_tab.cc" line="768"/>
         <source>Unable to write address book file.</source>
         <translation type="unfinished">Die Adressbuchdatei konnte nicht geschrieben werden.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="781"/>
+        <location filename="../address_book_tab.cc" line="782"/>
         <source>Root Group</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="792"/>
-        <location filename="../address_book_tab.cc" line="806"/>
+        <location filename="../address_book_tab.cc" line="793"/>
+        <location filename="../address_book_tab.cc" line="807"/>
         <source>Warning</source>
         <translation type="unfinished">Warnung</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="794"/>
+        <location filename="../address_book_tab.cc" line="795"/>
         <source>Could not open address book</source>
         <translation type="unfinished">Adressbuch konnte nicht geöffnet werden</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="808"/>
+        <location filename="../address_book_tab.cc" line="809"/>
         <source>Failed to save address book</source>
         <translation type="unfinished">Speichern des Adressbuchs fehlgeschlagen</translation>
     </message>

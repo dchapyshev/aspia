@@ -96,7 +96,7 @@ void Authenticator::onNetworkError(net::ErrorCode error_code)
     LOG(LS_WARNING) << "Network error: " << static_cast<int>(error_code);
 }
 
-void Authenticator::onNetworkMessage(const QByteArray& buffer)
+void Authenticator::onNetworkMessage(const base::ByteArray& buffer)
 {
     switch (internal_state_)
     {
@@ -178,10 +178,10 @@ void Authenticator::onNetworkMessage(const QByteArray& buffer)
 
                 session_types_ = user.sessions;
 
-                N_ = crypto::BigNum::fromByteArray(user.number);
-                g_ = crypto::BigNum::fromByteArray(user.generator);
-                s_ = crypto::BigNum::fromByteArray(user.salt);
-                v_ = crypto::BigNum::fromByteArray(user.verifier);
+                N_ = crypto::BigNum::fromStdString(user.number);
+                g_ = crypto::BigNum::fromStdString(user.generator);
+                s_ = crypto::BigNum::fromStdString(user.salt);
+                v_ = crypto::BigNum::fromStdString(user.verifier);
             }
 
             b_ = crypto::BigNum::fromByteArray(crypto::Random::byteArray(128)); // 1024 bits.
@@ -202,7 +202,7 @@ void Authenticator::onNetworkMessage(const QByteArray& buffer)
             server_key_exchange.set_generator(g_.toStdString());
             server_key_exchange.set_salt(s_.toStdString());
             server_key_exchange.set_b(B_.toStdString());
-            server_key_exchange.set_iv(encrypt_iv_.toStdString());
+            server_key_exchange.set_iv(base::toStdString(encrypt_iv_));
 
             channel_->send(common::serializeMessage(server_key_exchange));
         }
@@ -219,9 +219,9 @@ void Authenticator::onNetworkMessage(const QByteArray& buffer)
             }
 
             A_ = crypto::BigNum::fromStdString(client_key_exchange.a());
-            decrypt_iv_ = QByteArray::fromStdString(client_key_exchange.iv());
+            decrypt_iv_ = base::fromStdString(client_key_exchange.iv());
 
-            if (!A_.isValid() || decrypt_iv_.isEmpty())
+            if (!A_.isValid() || decrypt_iv_.empty())
             {
                 onFailed();
                 return;
@@ -303,10 +303,11 @@ std::unique_ptr<crypto::Cryptor> Authenticator::takeCryptor()
         case proto::METHOD_SRP_AES256_GCM:
         case proto::METHOD_SRP_CHACHA20_POLY1305:
         {
-            QByteArray temp = server_key.toByteArray();
-            if (!temp.isEmpty())
+            base::ByteArray temp = server_key.toByteArray();
+            if (!temp.empty())
             {
-                QByteArray key = crypto::GenericHash::hash(crypto::GenericHash::BLAKE2s256, temp);
+                base::ByteArray key =
+                    crypto::GenericHash::hash(crypto::GenericHash::BLAKE2s256, temp);
 
                 crypto::memZero(&temp);
 

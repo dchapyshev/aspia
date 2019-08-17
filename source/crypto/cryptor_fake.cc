@@ -30,7 +30,7 @@ size_t CryptorFake::encryptedDataSize(size_t in_size)
     return in_size;
 }
 
-bool CryptorFake::encrypt(const char* in, size_t in_size, char* out)
+bool CryptorFake::encrypt(const uint8_t* in, size_t in_size, uint8_t* out)
 {
     memcpy(out, in, in_size);
     return true;
@@ -41,7 +41,7 @@ size_t CryptorFake::decryptedDataSize(size_t in_size)
     return in_size;
 }
 
-bool CryptorFake::decrypt(const char* in, size_t in_size, char* out)
+bool CryptorFake::decrypt(const uint8_t* in, size_t in_size, uint8_t* out)
 {
     memcpy(out, in, in_size);
     return true;

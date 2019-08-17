@@ -56,7 +56,7 @@ public:
 protected:
     ClientSession(proto::SessionType session_type, std::unique_ptr<net::Channel> channel);
 
-    void sendMessage(const QByteArray& buffer);
+    void sendMessage(base::ByteArray&& buffer);
 
     // net::Listener implementation.
     void onNetworkConnected() override;

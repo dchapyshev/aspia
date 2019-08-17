@@ -42,7 +42,7 @@ protected:
     // Authenticator implementation.
     uint32_t methods() const override;
     void onStarted() override;
-    bool onMessage(const QByteArray& buffer) override;
+    bool onMessage(const base::ByteArray& buffer) override;
     std::unique_ptr<crypto::Cryptor> takeCryptor() override;
 
 private:
@@ -57,8 +57,8 @@ private:
     crypto::BigNum a_;
     crypto::BigNum A_;
 
-    QByteArray encrypt_iv_;
-    QByteArray decrypt_iv_;
+    base::ByteArray encrypt_iv_;
+    base::ByteArray decrypt_iv_;
 
     DISALLOW_COPY_AND_ASSIGN(AuthenticatorSrp);
 };

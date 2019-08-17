@@ -75,7 +75,7 @@ public:
 
 protected:
     // net::Listener implementation.
-    void onNetworkMessage(const QByteArray& buffer) override;
+    void onNetworkMessage(const base::ByteArray& buffer) override;
 
 private:
     void readConfigRequest(const proto::DesktopConfigRequest& config_request);

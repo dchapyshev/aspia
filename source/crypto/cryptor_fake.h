@@ -31,10 +31,10 @@ public:
     ~CryptorFake();
 
     size_t encryptedDataSize(size_t in_size) override;
-    bool encrypt(const char* in, size_t in_size, char* out) override;
+    bool encrypt(const uint8_t* in, size_t in_size, uint8_t* out) override;
 
     size_t decryptedDataSize(size_t in_size) override;
-    bool decrypt(const char* in, size_t in_size, char* out) override;
+    bool decrypt(const uint8_t* in, size_t in_size, uint8_t* out) override;
 
 private:
     DISALLOW_COPY_AND_ASSIGN(CryptorFake);

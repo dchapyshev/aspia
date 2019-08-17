@@ -66,12 +66,12 @@ void Client::sendMessage(const google::protobuf::MessageLite& message)
         return;
     }
 
-    QByteArray buffer;
+    base::ByteArray buffer;
     buffer.resize(size);
 
-    message.SerializeWithCachedSizesToArray(reinterpret_cast<uint8_t*>(buffer.data()));
+    message.SerializeWithCachedSizesToArray(buffer.data());
 
-    channel_proxy_->send(buffer);
+    channel_proxy_->send(std::move(buffer));
 }
 
 void Client::onNetworkConnected()

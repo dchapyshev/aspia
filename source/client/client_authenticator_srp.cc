@@ -134,7 +134,7 @@ void AuthenticatorSrp::onStarted()
     sendMessage(common::serializeMessage(identify));
 }
 
-bool AuthenticatorSrp::onMessage(const QByteArray& buffer)
+bool AuthenticatorSrp::onMessage(const base::ByteArray& buffer)
 {
     proto::SrpServerKeyExchange server_key_exchange;
     if (!common::parseMessage(buffer, &server_key_exchange))
@@ -159,7 +159,7 @@ bool AuthenticatorSrp::onMessage(const QByteArray& buffer)
     g_ = crypto::BigNum::fromStdString(server_key_exchange.generator());
     s_ = crypto::BigNum::fromStdString(server_key_exchange.salt());
     B_ = crypto::BigNum::fromStdString(server_key_exchange.b());
-    decrypt_iv_ = QByteArray::fromStdString(server_key_exchange.iv());
+    decrypt_iv_ = base::fromStdString(server_key_exchange.iv());
 
     a_ = crypto::BigNum::fromByteArray(crypto::Random::byteArray(128)); // 1024 bits.
     A_ = crypto::SrpMath::calc_A(a_, N_, g_);
@@ -167,7 +167,7 @@ bool AuthenticatorSrp::onMessage(const QByteArray& buffer)
 
     proto::SrpClientKeyExchange client_key_exchange;
     client_key_exchange.set_a(A_.toStdString());
-    client_key_exchange.set_iv(encrypt_iv_.toStdString());
+    client_key_exchange.set_iv(base::toStdString(encrypt_iv_));
 
     sendMessage(common::serializeMessage(client_key_exchange));
     return true;
@@ -191,7 +191,7 @@ std::unique_ptr<crypto::Cryptor> AuthenticatorSrp::takeCryptor()
     }
 
     // AES256-GCM and ChaCha20-Poly1305 requires 256 bit key.
-    QByteArray key_buffer =
+    base::ByteArray key_buffer =
         crypto::GenericHash::hash(crypto::GenericHash::BLAKE2s256, key.toByteArray());
 
     switch (method())

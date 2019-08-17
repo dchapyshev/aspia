@@ -49,11 +49,11 @@ ClientFileTransfer::~ClientFileTransfer()
 
 common::FileWorker* ClientFileTransfer::localWorker() { return worker_.get(); }
 
-void ClientFileTransfer::onNetworkMessage(const QByteArray& buffer)
+void ClientFileTransfer::onNetworkMessage(const base::ByteArray& buffer)
 {
     proto::FileReply reply;
 
-    if (!reply.ParseFromArray(buffer.constData(), buffer.size()))
+    if (!reply.ParseFromArray(buffer.data(), buffer.size()))
     {
         onSessionError(tr("Invalid message from host"));
         return;

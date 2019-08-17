@@ -80,9 +80,9 @@ QString ClientSession::peerAddress() const
     return channel_proxy_->peerAddress();
 }
 
-void ClientSession::sendMessage(const QByteArray& buffer)
+void ClientSession::sendMessage(base::ByteArray&& buffer)
 {
-    channel_proxy_->send(buffer);
+    channel_proxy_->send(std::move(buffer));
 }
 
 void ClientSession::onNetworkConnected()

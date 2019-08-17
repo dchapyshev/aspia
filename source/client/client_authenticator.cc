@@ -46,9 +46,9 @@ void Authenticator::start(std::shared_ptr<net::ChannelProxy> channel, Callback c
     channel_->send(common::serializeMessage(client_hello));
 }
 
-void Authenticator::sendMessage(const QByteArray& message)
+void Authenticator::sendMessage(base::ByteArray&& message)
 {
-    channel_->send(message);
+    channel_->send(std::move(message));
 }
 
 void Authenticator::onFinished(Result result)
@@ -75,7 +75,7 @@ void Authenticator::onNetworkError(net::ErrorCode error_code)
     LOG(LS_INFO) << "Network error: " << static_cast<int>(error_code);
 }
 
-void Authenticator::onNetworkMessage(const QByteArray& buffer)
+void Authenticator::onNetworkMessage(const base::ByteArray& buffer)
 {
     switch (state_)
     {
@@ -112,7 +112,7 @@ void Authenticator::onNetworkMessage(const QByteArray& buffer)
                 return;
             }
 
-            QByteArray challenge_buffer;
+            base::ByteArray challenge_buffer;
             challenge_buffer.resize(cryptor->decryptedDataSize(buffer.size()));
 
             if (!cryptor->decrypt(buffer.data(), buffer.size(), challenge_buffer.data()))

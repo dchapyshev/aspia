@@ -40,7 +40,7 @@ public:
 
     QString peerAddress() const;
 
-    bool send(const QByteArray& buffer);
+    bool send(base::ByteArray&& buffer);
 
 private:
     friend class Channel;

@@ -78,7 +78,7 @@ protected:
     void onNetworkConnected() override;
     void onNetworkDisconnected() override;
     void onNetworkError(net::ErrorCode error_code) override;
-    void onNetworkMessage(const QByteArray& buffer) override;
+    void onNetworkMessage(const base::ByteArray& buffer) override;
 
 private:
     std::unique_ptr<crypto::Cryptor> takeCryptor();
@@ -115,8 +115,8 @@ private:
     // User name.
     QString username_;
 
-    QByteArray encrypt_iv_;
-    QByteArray decrypt_iv_;
+    base::ByteArray encrypt_iv_;
+    base::ByteArray decrypt_iv_;
 
     crypto::BigNum N_;
     crypto::BigNum g_;

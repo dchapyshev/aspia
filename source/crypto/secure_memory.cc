@@ -52,4 +52,12 @@ void memZero(QByteArray* str)
     memZero(str->data(), str->size());
 }
 
+void memZero(base::ByteArray* str)
+{
+    if (!str)
+        return;
+
+    memZero(str->data(), str->size());
+}
+
 } // namespace crypto

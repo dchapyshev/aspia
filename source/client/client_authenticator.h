@@ -65,17 +65,17 @@ public:
 protected:
     virtual uint32_t methods() const = 0;
     virtual void onStarted() = 0;
-    virtual bool onMessage(const QByteArray& message) = 0;
+    virtual bool onMessage(const base::ByteArray& message) = 0;
     virtual std::unique_ptr<crypto::Cryptor> takeCryptor() = 0;
 
-    void sendMessage(const QByteArray& message);
+    void sendMessage(base::ByteArray&& message);
     void onFinished(Result result);
 
     // net::Listener implementation.
     void onNetworkConnected() override;
     void onNetworkDisconnected() override;
     void onNetworkError(net::ErrorCode error_code) override;
-    void onNetworkMessage(const QByteArray& buffer) override;
+    void onNetworkMessage(const base::ByteArray& buffer) override;
 
 private:
     enum class State

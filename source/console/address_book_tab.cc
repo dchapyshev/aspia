@@ -756,9 +756,10 @@ bool AddressBookTab::saveToFile(const QString& file_path)
         return false;
     }
 
-    QByteArray buffer = common::serializeMessage(file_);
+    base::ByteArray buffer = common::serializeMessage(file_);
 
-    int64_t bytes_written = file.write(buffer);
+    int64_t bytes_written = file.write(
+        reinterpret_cast<const char*>(buffer.data()), buffer.size());
 
     crypto::memZero(buffer.data(), buffer.size());
 

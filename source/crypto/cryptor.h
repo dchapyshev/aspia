@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -19,6 +19,8 @@
 #ifndef CRYPTO__CRYPTOR_H
 #define CRYPTO__CRYPTOR_H
 
+#include <cstdint>
+
 namespace crypto {
 
 class Cryptor
@@ -27,10 +29,10 @@ public:
     virtual ~Cryptor() = default;
 
     virtual size_t encryptedDataSize(size_t in_size) = 0;
-    virtual bool encrypt(const char* in, size_t in_size, char* out) = 0;
+    virtual bool encrypt(const uint8_t* in, size_t in_size, uint8_t* out) = 0;
 
     virtual size_t decryptedDataSize(size_t in_size) = 0;
-    virtual bool decrypt(const char* in, size_t in_size, char* out) = 0;
+    virtual bool decrypt(const uint8_t* in, size_t in_size, uint8_t* out) = 0;
 };
 
 } // namespace crypto

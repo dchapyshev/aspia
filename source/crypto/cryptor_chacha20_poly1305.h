@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -19,11 +19,10 @@
 #ifndef CRYPTO__CRYPTOR_CHACHA20_POLY1305_H
 #define CRYPTO__CRYPTOR_CHACHA20_POLY1305_H
 
+#include "base/byte_array.h"
 #include "base/macros_magic.h"
 #include "crypto/cryptor.h"
 #include "crypto/openssl_util.h"
-
-#include <QByteArray>
 
 namespace crypto {
 
@@ -33,26 +32,26 @@ public:
     ~CryptorChaCha20Poly1305();
 
     static std::unique_ptr<Cryptor> create(
-        QByteArray&& key, QByteArray&& encrypt_iv, QByteArray&& decrypt_iv);
+        base::ByteArray&& key, base::ByteArray&& encrypt_iv, base::ByteArray&& decrypt_iv);
 
     size_t encryptedDataSize(size_t in_size) override;
-    bool encrypt(const char* in, size_t in_size, char* out) override;
+    bool encrypt(const uint8_t* in, size_t in_size, uint8_t* out) override;
 
     size_t decryptedDataSize(size_t in_size) override;
-    bool decrypt(const char* in, size_t in_size, char* out) override;
+    bool decrypt(const uint8_t* in, size_t in_size, uint8_t* out) override;
 
 protected:
     CryptorChaCha20Poly1305(EVP_CIPHER_CTX_ptr encrypt_ctx,
                             EVP_CIPHER_CTX_ptr decrypt_ctx,
-                            QByteArray&& encrypt_nonce,
-                            QByteArray&& decrypt_nonce);
+                            base::ByteArray&& encrypt_nonce,
+                            base::ByteArray&& decrypt_nonce);
 
 private:
     EVP_CIPHER_CTX_ptr encrypt_ctx_;
     EVP_CIPHER_CTX_ptr decrypt_ctx_;
 
-    QByteArray encrypt_nonce_;
-    QByteArray decrypt_nonce_;
+    base::ByteArray encrypt_nonce_;
+    base::ByteArray decrypt_nonce_;
 
     DISALLOW_COPY_AND_ASSIGN(CryptorChaCha20Poly1305);
 };

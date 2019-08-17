@@ -150,11 +150,11 @@ void Channel::start()
     onReadyRead();
 }
 
-void Channel::send(const QByteArray& buffer)
+void Channel::send(base::ByteArray&& buffer)
 {
     const bool schedule_write = write_queue_.empty();
 
-    write_queue_.emplace(buffer);
+    write_queue_.emplace(std::move(buffer));
 
     if (schedule_write)
         scheduleWrite();
@@ -162,7 +162,7 @@ void Channel::send(const QByteArray& buffer)
 
 void Channel::onBytesWritten(int64_t bytes)
 {
-    const QByteArray& write_buffer = write_queue_.front();
+    const base::ByteArray& write_buffer = write_queue_.front();
 
     written_ += bytes;
 
@@ -173,8 +173,9 @@ void Channel::onBytesWritten(int64_t bytes)
     }
     else if (written_ < sizeof(uint32_t) + write_buffer.size())
     {
-        socket_->write(write_buffer.data() + (written_ - sizeof(uint32_t)),
-                       write_buffer.size() - (written_ - sizeof(uint32_t)));
+        socket_->write(
+            reinterpret_cast<const char*>(write_buffer.data()) + (written_ - sizeof(uint32_t)),
+            write_buffer.size() - (written_ - sizeof(uint32_t)));
     }
     else
     {
@@ -217,7 +218,8 @@ void Channel::onReadyRead()
         }
         else if (read_ < read_size_)
         {
-            current = socket_->read(read_buffer_.data() + read_, read_size_ - read_);
+            current = socket_->read(
+                reinterpret_cast<char*>(read_buffer_.data()) + read_, read_size_ - read_);
         }
         else
         {
@@ -273,7 +275,7 @@ void Channel::init()
 
 void Channel::scheduleWrite()
 {
-    const QByteArray& write_buffer = write_queue_.front();
+    const base::ByteArray& write_buffer = write_queue_.front();
 
     write_size_ = write_buffer.size();
     if (!write_size_ || write_size_ > kMaxMessageSize)

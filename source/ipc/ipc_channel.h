@@ -19,6 +19,7 @@
 #ifndef IPC__IPC_CHANNEL_H
 #define IPC__IPC_CHANNEL_H
 
+#include "base/byte_array.h"
 #include "base/macros_magic.h"
 #include "build/build_config.h"
 
@@ -31,7 +32,6 @@
 #include <tbb/scalable_allocator.h>
 #endif // defined(USE_TBB)
 
-#include <QByteArray>
 #include <QObject>
 
 #include <queue>
@@ -62,7 +62,7 @@ public:
     void start();
 
     // Sends a message.
-    void send(const QByteArray& buffer);
+    void send(base::ByteArray&& buffer);
 
 #if defined(OS_WIN)
     base::ProcessId peerProcessId() const { return peer_process_id_; }
@@ -87,20 +87,20 @@ private:
     bool is_connected_ = false;
 
 #if defined(USE_TBB)
-    using QueueAllocator = tbb::scalable_allocator<QByteArray>;
+    using QueueAllocator = tbb::scalable_allocator<base::ByteArray>;
 #else // defined(USE_TBB)
-    using QueueAllocator = std::allocator<QByteArray>;
+    using QueueAllocator = std::allocator<base::ByteArray>;
 #endif // defined(USE_*)
 
-    using QueueContainer = std::deque<QByteArray, QueueAllocator>;
+    using QueueContainer = std::deque<base::ByteArray, QueueAllocator>;
 
     // The queue contains unencrypted source messages.
-    std::queue<QByteArray, QueueContainer> write_queue_;
+    std::queue<base::ByteArray, QueueContainer> write_queue_;
     uint32_t write_size_ = 0;
     int64_t written_ = 0;
 
     bool read_size_received_ = false;
-    QByteArray read_buffer_;
+    base::ByteArray read_buffer_;
     uint32_t read_size_ = 0;
     int64_t read_ = 0;
 

@@ -83,7 +83,7 @@ protected:
     // ipc::Listener implementation.
     void onIpcConnected() override;
     void onIpcDisconnected() override;
-    void onIpcMessage(const QByteArray& buffer) override;
+    void onIpcMessage(const base::ByteArray& buffer) override;
 
 private:
     std::unique_ptr<ipc::Channel> ipc_channel_;

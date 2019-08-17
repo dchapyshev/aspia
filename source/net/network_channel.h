@@ -19,6 +19,7 @@
 #ifndef NET__NETWORK_CHANNEL_H
 #define NET__NETWORK_CHANNEL_H
 
+#include "base/byte_array.h"
 #include "base/macros_magic.h"
 #include "net/network_error.h"
 
@@ -83,7 +84,7 @@ public:
     QString peerAddress() const;
 
     // Sends a message.
-    void send(const QByteArray& buffer);
+    void send(base::ByteArray&& buffer);
 
 protected:
     friend class Server;
@@ -113,23 +114,23 @@ private:
     bool is_paused_ = true;
 
     // To this buffer decrypts the data received from the network.
-    QByteArray decrypt_buffer_;
+    base::ByteArray decrypt_buffer_;
 
     struct WriteContext
     {
 #if defined(USE_TBB)
-        using QueueAllocator = tbb::scalable_allocator<QByteArray>;
+        using QueueAllocator = tbb::scalable_allocator<base::ByteArray>;
 #else // defined(USE_TBB)
-        using QueueAllocator = std::allocator<QByteArray>;
+        using QueueAllocator = std::allocator<base::ByteArray>;
 #endif // defined(USE_*)
 
-        using QueueContainer = std::deque<QByteArray, QueueAllocator>;
+        using QueueContainer = std::deque<base::ByteArray, QueueAllocator>;
 
         // The queue contains unencrypted source messages.
-        std::queue<QByteArray, QueueContainer> queue;
+        std::queue<base::ByteArray, QueueContainer> queue;
 
         // The buffer contains an encrypted message that is being sent to the current moment.
-        QByteArray buffer;
+        base::ByteArray buffer;
 
         // Number of bytes transferred from the |buffer|.
         int64_t bytes_transferred = 0;
@@ -138,7 +139,7 @@ private:
     struct ReadContext
     {
         // To this buffer reads data from the network.
-        QByteArray buffer;
+        base::ByteArray buffer;
 
         // If the flag is set to true, then the buffer size is read from the network, if false,
         // then no.

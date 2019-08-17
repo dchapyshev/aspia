@@ -19,6 +19,8 @@
 #ifndef CRYPTO__SECURE_MEMORY_H
 #define CRYPTO__SECURE_MEMORY_H
 
+#include "base/byte_array.h"
+
 #include <QString>
 
 namespace crypto {
@@ -27,6 +29,7 @@ void memZero(void* data, size_t data_size);
 void memZero(std::string* str);
 void memZero(QString* str);
 void memZero(QByteArray* str);
+void memZero(base::ByteArray* str);
 
 } // namespace crypto
 

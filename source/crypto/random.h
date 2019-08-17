@@ -19,9 +19,8 @@
 #ifndef CRYPTO__RANDOM_H
 #define CRYPTO__RANDOM_H
 
+#include "base/byte_array.h"
 #include "base/macros_magic.h"
-
-#include <QByteArray>
 
 namespace crypto {
 
@@ -33,7 +32,7 @@ public:
     static bool fillBuffer(void* buffer, size_t size);
 
     // Generates a random buffer of size |size|.
-    static QByteArray byteArray(size_t size);
+    static base::ByteArray byteArray(size_t size);
     static std::string string(size_t size);
 
     // Generates a random number.

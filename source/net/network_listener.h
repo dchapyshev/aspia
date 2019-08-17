@@ -19,9 +19,8 @@
 #ifndef NET__NETWORK_LISTENER_H
 #define NET__NETWORK_LISTENER_H
 
+#include "base/byte_array.h"
 #include "net/network_error.h"
-
-#include <QByteArray>
 
 namespace net {
 
@@ -33,7 +32,7 @@ public:
     virtual void onNetworkConnected() = 0;
     virtual void onNetworkDisconnected() = 0;
     virtual void onNetworkError(ErrorCode error_code) = 0;
-    virtual void onNetworkMessage(const QByteArray& buffer) = 0;
+    virtual void onNetworkMessage(const base::ByteArray& buffer) = 0;
 };
 
 } // namespace net

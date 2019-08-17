@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,6 +17,7 @@
 //
 
 #include "crypto/srp_math.h"
+
 #include "base/logging.h"
 #include "crypto/generic_hash.h"
 
@@ -111,17 +112,23 @@ BigNum SrpMath::calc_B(const BigNum& b, const BigNum& N, const BigNum& g, const 
 // x = BLAKE2b512(s | BLAKE2b512(I | ":" | p))
 BigNum SrpMath::calc_x(const BigNum& s, const QString& I, const QString& p)
 {
-    if (!s.isValid() || I.isEmpty() || p.isEmpty())
+    return calc_x(s, I, p.toStdString());
+}
+
+// static
+BigNum SrpMath::calc_x(const BigNum& s, const QString& I, std::string_view p)
+{
+    if (!s.isValid() || I.isEmpty() || p.empty())
         return BigNum();
 
     GenericHash hash(GenericHash::BLAKE2b512);
 
-    hash.addData(I.toLower().toUtf8());
-    hash.addData(":", 1);
-    hash.addData(p.toUtf8());
+    hash.addData(I.toLower().toStdString());
+    hash.addData(":");
+    hash.addData(p);
 
-    QByteArray temp = hash.result();
-    QByteArray salt = s.toByteArray();
+    base::ByteArray temp = hash.result();
+    base::ByteArray salt = s.toByteArray();
 
     hash.reset();
 
@@ -260,6 +267,27 @@ BigNum SrpMath::calc_v(const QString& I, const QString& p, const BigNum& s,
                        const BigNum& N, const BigNum& g)
 {
     if (I.isEmpty() || p.isEmpty() || !N.isValid() || !g.isValid() || !s.isValid())
+        return BigNum();
+
+    BigNum::Context ctx = BigNum::Context::create();
+    BigNum v = BigNum::create();
+
+    if (!ctx.isValid() || !v.isValid())
+        return BigNum();
+
+    BigNum x = calc_x(s, I, p);
+
+    if (!BN_mod_exp(v, g, x, N, ctx))
+        return BigNum();
+
+    return v;
+}
+
+// static
+BigNum SrpMath::calc_v(const QString& I, std::string_view p, const BigNum& s,
+                       const BigNum& N, const BigNum& g)
+{
+    if (I.isEmpty() || p.empty() || !N.isValid() || !g.isValid() || !s.isValid())
         return BigNum();
 
     BigNum::Context ctx = BigNum::Context::create();

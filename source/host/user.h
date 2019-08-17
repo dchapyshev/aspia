@@ -34,10 +34,10 @@ public:
     bool isValid() const;
 
     QString name;
-    QByteArray salt;
-    QByteArray verifier;
-    QByteArray number;
-    QByteArray generator;
+    std::string salt;
+    std::string verifier;
+    std::string number;
+    std::string generator;
     uint32_t sessions = 0;
     uint32_t flags = 0;
 };
@@ -57,13 +57,13 @@ public:
     int count() const { return list_.count(); }
     const User& at(int index) const;
 
-    const QByteArray& seedKey() const { return seed_key_; }
-    void setSeedKey(const QByteArray& seed_key);
+    const std::string& seedKey() const { return seed_key_; }
+    void setSeedKey(const std::string& seed_key);
 
     bool hasIndex(int index) const;
 
 private:
-    QByteArray seed_key_;
+    std::string seed_key_;
     QList<User> list_;
 };
 

@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -44,6 +44,7 @@ public:
     static BigNum calc_u(const BigNum& A, const BigNum& B, const BigNum& N);
     static BigNum calc_B(const BigNum& b, const BigNum& N, const BigNum& g, const BigNum& v);
     static BigNum calc_x(const BigNum& s, const QString& I, const QString& p);
+    static BigNum calc_x(const BigNum& s, const QString& I, std::string_view p);
     static BigNum calc_A(const BigNum& a, const BigNum& N, const BigNum& g);
 
     static BigNum calcServerKey(const BigNum& A, const BigNum& v, const BigNum& u, const BigNum& b,
@@ -59,6 +60,9 @@ public:
     static bool verify_A_mod_N(const BigNum& A, const BigNum& N);
 
     static BigNum calc_v(const QString& I, const QString& p, const BigNum& s,
+                         const BigNum& N, const BigNum& g);
+
+    static BigNum calc_v(const QString& I, std::string_view p, const BigNum& s,
                          const BigNum& N, const BigNum& g);
 
 private:

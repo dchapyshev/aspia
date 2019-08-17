@@ -37,20 +37,20 @@ User User::create(const QString& name, const QString& password)
     User user;
 
     user.name = name;
-    user.salt = crypto::Random::byteArray(kUserSaltSize);
+    user.salt = crypto::Random::string(kUserSaltSize);
 
-    user.number = QByteArray(
+    user.number = std::string(
         reinterpret_cast<const char*>(crypto::kSrpNg_8192.N.data()), crypto::kSrpNg_8192.N.size());
-    user.generator = QByteArray(
+    user.generator = std::string(
         reinterpret_cast<const char*>(crypto::kSrpNg_8192.g.data()), crypto::kSrpNg_8192.g.size());
 
-    crypto::BigNum s = crypto::BigNum::fromByteArray(user.salt);
-    crypto::BigNum N = crypto::BigNum::fromByteArray(user.number);
-    crypto::BigNum g = crypto::BigNum::fromByteArray(user.generator);
+    crypto::BigNum s = crypto::BigNum::fromStdString(user.salt);
+    crypto::BigNum N = crypto::BigNum::fromStdString(user.number);
+    crypto::BigNum g = crypto::BigNum::fromStdString(user.generator);
     crypto::BigNum v = crypto::SrpMath::calc_v(name, password, s, N, g);
 
-    user.verifier = v.toByteArray();
-    if (user.verifier.isEmpty())
+    user.verifier = v.toStdString();
+    if (user.verifier.empty())
         return User();
 
     return user;
@@ -58,8 +58,8 @@ User User::create(const QString& name, const QString& password)
 
 bool User::isValid() const
 {
-    return !name.isEmpty() && !salt.isEmpty() && !number.isEmpty() &&
-           !generator.isEmpty() && !verifier.isEmpty();
+    return !name.isEmpty() && !salt.empty() && !number.empty() &&
+           !generator.empty() && !verifier.empty();
 }
 
 void UserList::add(const User& user)
@@ -118,7 +118,7 @@ const User& UserList::at(int index) const
     return list_.at(index);
 }
 
-void UserList::setSeedKey(const QByteArray& seed_key)
+void UserList::setSeedKey(const std::string& seed_key)
 {
     seed_key_ = seed_key;
 }

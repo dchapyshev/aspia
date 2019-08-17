@@ -19,12 +19,12 @@
 #ifndef CRYPTO__LARGE_NUMBER_INCREMENT_H
 #define CRYPTO__LARGE_NUMBER_INCREMENT_H
 
-#include <QByteArray>
+#include "base/byte_array.h"
 
 namespace crypto {
 
 void largeNumberIncrement(uint8_t* buffer, size_t buffer_size);
-void largeNumberIncrement(QByteArray* buffer);
+void largeNumberIncrement(base::ByteArray* buffer);
 
 } // namespace crypto
 

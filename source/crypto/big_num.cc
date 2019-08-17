@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -70,19 +70,19 @@ std::string BigNum::toStdString() const
     return result;
 }
 
-QByteArray BigNum::toByteArray() const
+base::ByteArray BigNum::toByteArray() const
 {
     if (!isValid())
-        return QByteArray();
+        return base::ByteArray();
 
     int length = BN_num_bytes(num_.get());
     if (length <= 0)
-        return QByteArray();
+        return base::ByteArray();
 
-    QByteArray result;
+    base::ByteArray result;
     result.resize(length);
 
-    BN_bn2bin(num_.get(), reinterpret_cast<uint8_t*>(result.data()));
+    BN_bn2bin(num_.get(), result.data());
     return result;
 }
 
@@ -105,9 +105,9 @@ BigNum BigNum::fromStdString(const std::string& string)
 }
 
 // static
-BigNum BigNum::fromByteArray(const QByteArray& array)
+BigNum BigNum::fromByteArray(const base::ByteArray& array)
 {
-    return BigNum(reinterpret_cast<const uint8_t*>(array.constData()), array.size());
+    return BigNum(array.data(), array.size());
 }
 
 BigNum::Context::Context(Context&& other) noexcept

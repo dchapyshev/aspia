@@ -76,7 +76,7 @@ void UserSession::onIpcDisconnected()
     LOG(LS_INFO) << "IPC DISCON";
 }
 
-void UserSession::onIpcMessage(const QByteArray& buffer)
+void UserSession::onIpcMessage(const base::ByteArray& buffer)
 {
     proto::UiToService message;
 

@@ -19,7 +19,7 @@
 #ifndef IPC__IPC_LISTENER_H
 #define IPC__IPC_LISTENER_H
 
-#include <QByteArray>
+#include "base/byte_array.h"
 
 namespace ipc {
 
@@ -30,7 +30,7 @@ public:
 
     virtual void onIpcConnected() = 0;
     virtual void onIpcDisconnected() = 0;
-    virtual void onIpcMessage(const QByteArray& buffer) = 0;
+    virtual void onIpcMessage(const base::ByteArray& buffer) = 0;
 };
 
 } // namespace ipc

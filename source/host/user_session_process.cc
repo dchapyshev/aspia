@@ -68,7 +68,7 @@ void UserSessionProcess::onIpcDisconnected()
     delegate_->onStateChanged();
 }
 
-void UserSessionProcess::onIpcMessage(const QByteArray& buffer)
+void UserSessionProcess::onIpcMessage(const base::ByteArray& buffer)
 {
     proto::ServiceToUi message;
 

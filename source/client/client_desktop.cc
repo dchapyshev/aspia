@@ -39,11 +39,11 @@ ClientDesktop::ClientDesktop(const ConnectData& connect_data, Delegate* delegate
 
 ClientDesktop::~ClientDesktop() = default;
 
-void ClientDesktop::onNetworkMessage(const QByteArray& buffer)
+void ClientDesktop::onNetworkMessage(const base::ByteArray& buffer)
 {
     incoming_message_.Clear();
 
-    if (!incoming_message_.ParseFromArray(buffer.constData(), buffer.size()))
+    if (!incoming_message_.ParseFromArray(buffer.data(), buffer.size()))
     {
         onSessionError(tr("Invalid message from host"));
         return;

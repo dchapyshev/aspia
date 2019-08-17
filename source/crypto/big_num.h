@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -19,11 +19,10 @@
 #ifndef CRYPTO__BIG_NUM_H
 #define CRYPTO__BIG_NUM_H
 
+#include "base/byte_array.h"
 #include "base/const_buffer.h"
 #include "base/macros_magic.h"
 #include "crypto/openssl_util.h"
-
-#include <QByteArray>
 
 #include <memory>
 
@@ -48,12 +47,12 @@ public:
     const bignum_st* get() const { return num_.get(); }
 
     std::string toStdString() const;
-    QByteArray toByteArray() const;
+    base::ByteArray toByteArray() const;
 
     static BigNum create();
     static BigNum fromBuffer(const base::ConstBuffer& buffer);
     static BigNum fromStdString(const std::string& string);
-    static BigNum fromByteArray(const QByteArray& array);
+    static BigNum fromByteArray(const base::ByteArray& array);
 
     operator bignum_st*() const { return num_.get(); }
 

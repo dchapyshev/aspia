@@ -157,9 +157,9 @@ QString Channel::peerAddress() const
     return address.toString();
 }
 
-void Channel::send(const QByteArray& buffer)
+void Channel::send(base::ByteArray&& buffer)
 {
-    if (buffer.isEmpty())
+    if (buffer.empty())
     {
         errorOccurred(ErrorCode::UNKNOWN);
         return;
@@ -226,7 +226,9 @@ void Channel::onBytesWritten(int64_t bytes)
         int64_t bytes_to_write =
             std::min(write_.buffer.size() - write_.bytes_transferred, kMaxWriteSize);
 
-        socket_->write(write_.buffer.constData() + write_.bytes_transferred, bytes_to_write);
+        socket_->write(
+            reinterpret_cast<const char*>(write_.buffer.data()) + write_.bytes_transferred,
+            bytes_to_write);
     }
     else
     {
@@ -297,8 +299,9 @@ void Channel::onReadyRead()
         }
         else if (read_.bytes_transferred < read_.buffer.size())
         {
-            current = socket_->read(read_.buffer.data() + read_.bytes_transferred,
-                                    read_.buffer.size() - read_.bytes_transferred);
+            current = socket_->read(
+                reinterpret_cast<char*>(read_.buffer.data()) + read_.bytes_transferred,
+                read_.buffer.size() - read_.bytes_transferred);
         }
         else
         {
@@ -337,9 +340,7 @@ void Channel::onMessageReceived()
 
     decrypt_buffer_.resize(decrypted_data_size);
 
-    if (!cryptor_->decrypt(read_.buffer.constData(),
-                           read_.buffer.size(),
-                           decrypt_buffer_.data()))
+    if (!cryptor_->decrypt(read_.buffer.data(), read_.buffer.size(), decrypt_buffer_.data()))
     {
         errorOccurred(ErrorCode::UNKNOWN);
         return;
@@ -383,7 +384,7 @@ void Channel::errorOccurred(ErrorCode error_code)
 
 void Channel::scheduleWrite()
 {
-    const QByteArray& source_buffer = write_.queue.front();
+    const base::ByteArray& source_buffer = write_.queue.front();
 
     // Calculate the size of the encrypted message.
     size_t encrypted_data_size = cryptor_->encryptedDataSize(source_buffer.size());
@@ -430,7 +431,7 @@ void Channel::scheduleWrite()
     memcpy(write_.buffer.data(), length_data, length_data_size);
 
     // Encrypt the message.
-    if (!cryptor_->encrypt(source_buffer.constData(),
+    if (!cryptor_->encrypt(source_buffer.data(),
                            source_buffer.size(),
                            write_.buffer.data() + length_data_size))
     {
@@ -439,7 +440,7 @@ void Channel::scheduleWrite()
     }
 
     // Send the buffer to the recipient.
-    socket_->write(write_.buffer);
+    socket_->write(reinterpret_cast<const char*>(write_.buffer.data()), write_.buffer.size());
 }
 
 } // namespace net

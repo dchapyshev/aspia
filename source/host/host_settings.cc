@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -125,10 +125,10 @@ UserList Settings::userList() const
 
         User user;
         user.name      = system_settings_.value(QStringLiteral("Name")).toString();
-        user.salt      = system_settings_.value(QStringLiteral("Salt")).toByteArray();
-        user.verifier  = system_settings_.value(QStringLiteral("Verifier")).toByteArray();
-        user.number    = system_settings_.value(QStringLiteral("Number")).toByteArray();
-        user.generator = system_settings_.value(QStringLiteral("Generator")).toByteArray();
+        user.salt      = system_settings_.value(QStringLiteral("Salt")).toByteArray().toStdString();
+        user.verifier  = system_settings_.value(QStringLiteral("Verifier")).toByteArray().toStdString();
+        user.number    = system_settings_.value(QStringLiteral("Number")).toByteArray().toStdString();
+        user.generator = system_settings_.value(QStringLiteral("Generator")).toByteArray().toStdString();
         user.sessions  = system_settings_.value(QStringLiteral("Sessions")).toUInt();
         user.flags     = system_settings_.value(QStringLiteral("Flags")).toUInt();
 
@@ -142,9 +142,9 @@ UserList Settings::userList() const
     }
     system_settings_.endArray();
 
-    QByteArray seed_key = system_settings_.value(QStringLiteral("SeedKey")).toByteArray();
-    if (seed_key.isEmpty())
-        seed_key = crypto::Random::byteArray(64);
+    std::string seed_key = system_settings_.value(QStringLiteral("SeedKey")).toByteArray().toStdString();
+    if (seed_key.empty())
+        seed_key = crypto::Random::string(64);
 
     users.setSeedKey(seed_key);
 
@@ -156,7 +156,7 @@ void Settings::setUserList(const UserList& users)
     // Clear the old list of users.
     system_settings_.remove(QStringLiteral("Users"));
 
-    system_settings_.setValue(QStringLiteral("SeedKey"), users.seedKey());
+    system_settings_.setValue(QStringLiteral("SeedKey"), QByteArray::fromStdString(users.seedKey()));
 
     system_settings_.beginWriteArray(QStringLiteral("Users"));
     for (int i = 0; i < users.count(); ++i)
@@ -166,10 +166,10 @@ void Settings::setUserList(const UserList& users)
         const User& user = users.at(i);
 
         system_settings_.setValue(QStringLiteral("Name"), user.name);
-        system_settings_.setValue(QStringLiteral("Salt"), user.salt);
-        system_settings_.setValue(QStringLiteral("Verifier"), user.verifier);
-        system_settings_.setValue(QStringLiteral("Number"), user.number);
-        system_settings_.setValue(QStringLiteral("Generator"), user.generator);
+        system_settings_.setValue(QStringLiteral("Salt"), QByteArray::fromStdString(user.salt));
+        system_settings_.setValue(QStringLiteral("Verifier"), QByteArray::fromStdString(user.verifier));
+        system_settings_.setValue(QStringLiteral("Number"), QByteArray::fromStdString(user.number));
+        system_settings_.setValue(QStringLiteral("Generator"), QByteArray::fromStdString(user.generator));
         system_settings_.setValue(QStringLiteral("Sessions"), user.sessions);
         system_settings_.setValue(QStringLiteral("Flags"), user.flags);
     }

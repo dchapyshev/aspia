@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -19,9 +19,8 @@
 #ifndef CRYPTO__GENERIC_HASH_H
 #define CRYPTO__GENERIC_HASH_H
 
+#include "base/byte_array.h"
 #include "base/macros_magic.h"
-
-#include <QByteArray>
 
 struct evp_md_ctx_st;
 struct evp_md_st;
@@ -45,15 +44,15 @@ public:
     GenericHash(Type type);
     ~GenericHash();
 
-    static QByteArray hash(Type type, const void* data, size_t size);
-    static QByteArray hash(Type type, const std::string& data);
-    static QByteArray hash(Type type, const QByteArray& data);
+    static base::ByteArray hash(Type type, const void* data, size_t size);
+    static base::ByteArray hash(Type type, std::string_view data);
+    static base::ByteArray hash(Type type, const base::ByteArray& data);
 
     void addData(const void* data, size_t size);
-    void addData(const std::string& data);
-    void addData(const QByteArray& data);
+    void addData(std::string_view data);
+    void addData(const base::ByteArray& data);
 
-    QByteArray result() const;
+    base::ByteArray result() const;
 
     void reset();
 
