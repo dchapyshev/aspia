@@ -43,7 +43,7 @@ NumberT generateNumber()
 {
     NumberT ret;
 
-    bool result = fillBuffer(&ret, sizeof(ret));
+    bool result = Random::fillBuffer(&ret, sizeof(ret));
     CHECK(result);
 
     return ret;
