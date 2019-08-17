@@ -16,13 +16,11 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include <Windows.h>
+#if defined(USE_TBB)
+#include <tbb/tbbmalloc_proxy.h>
+#endif // defined(USE_TBB)
 
-LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
-
-1 RT_MANIFEST "router.manifest"
-
-#define ASPIA_ORIGINAL_FILE_NAME "aspia_router.exe"
-#define ASPIA_FILE_DESCRIPTION "Aspia Router Service"
-
-#include "build/version.rc"
+int main(int argc, char* argv[])
+{
+    return 0;
+}

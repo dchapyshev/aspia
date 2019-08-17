@@ -1,6 +1,6 @@
 #
 # Aspia Project
-# Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+# Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -179,6 +179,7 @@ add_subdirectory(host)
 add_subdirectory(ipc)
 add_subdirectory(net)
 add_subdirectory(proto)
+add_subdirectory(proxy)
 add_subdirectory(qt_base)
 add_subdirectory(router)
 add_subdirectory(updater)
