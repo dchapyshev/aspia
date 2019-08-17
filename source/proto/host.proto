@@ -22,18 +22,18 @@ option optimize_for = LITE_RUNTIME;
 
 import "common.proto";
 
-package proto.host;
+package proto;
 
 message CredentialsRequest
 {
-    enum Flags
+    enum Type
     {
-        BAD_FLAGS    = 0;
+        UNKNOWN_TYPE = 0;
         REFRESH      = 1;
         NEW_PASSWORD = 2;
     }
 
-    uint32 flags = 1;
+    Type type = 1;
 }
 
 message Credentials
