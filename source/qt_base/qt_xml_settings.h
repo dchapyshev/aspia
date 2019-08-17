@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef QT_BASE__XML_SETTINGS_H
-#define QT_BASE__XML_SETTINGS_H
+#ifndef QT_BASE__QT_XML_SETTINGS_H
+#define QT_BASE__QT_XML_SETTINGS_H
 
 #include "base/macros_magic.h"
 
@@ -25,7 +25,7 @@
 
 namespace qt_base {
 
-class XmlSettings
+class QtXmlSettings
 {
 public:
     static QSettings::Format format();
@@ -34,9 +34,9 @@ public:
     static bool writeFunc(QIODevice& device, const QSettings::SettingsMap& map);
 
 private:
-    DISALLOW_COPY_AND_ASSIGN(XmlSettings);
+    DISALLOW_COPY_AND_ASSIGN(QtXmlSettings);
 };
 
 } // namespace qt_base
 
-#endif // QT_BASE__XML_SETTINGS_H
+#endif // QT_BASE__QT_XML_SETTINGS_H

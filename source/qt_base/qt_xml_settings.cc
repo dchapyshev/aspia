@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "qt_base/xml_settings.h"
+#include "qt_base/qt_xml_settings.h"
 
 #include "base/base64.h"
 
@@ -28,8 +28,8 @@ namespace {
 
 QSettings::Format g_xml_format =
     QSettings::registerFormat(QStringLiteral("xml"),
-                              XmlSettings::readFunc,
-                              XmlSettings::writeFunc,
+                              QtXmlSettings::readFunc,
+                              QtXmlSettings::writeFunc,
                               Qt::CaseSensitive);
 
 QString variantToType(const QVariant& value)
@@ -193,13 +193,13 @@ QVariant stringToVariant(const QString& value, const QString& type)
 } // namespace
 
 // static
-QSettings::Format XmlSettings::format()
+QSettings::Format QtXmlSettings::format()
 {
     return g_xml_format;
 }
 
 // static
-bool XmlSettings::readFunc(QIODevice& device, QSettings::SettingsMap& map)
+bool QtXmlSettings::readFunc(QIODevice& device, QSettings::SettingsMap& map)
 {
     QXmlStreamReader xml(&device);
     QStringList segments;
@@ -268,7 +268,7 @@ bool XmlSettings::readFunc(QIODevice& device, QSettings::SettingsMap& map)
 }
 
 // static
-bool XmlSettings::writeFunc(QIODevice& device, const QSettings::SettingsMap& map)
+bool QtXmlSettings::writeFunc(QIODevice& device, const QSettings::SettingsMap& map)
 {
     QXmlStreamWriter xml(&device);
 

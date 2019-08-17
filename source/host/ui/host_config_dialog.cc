@@ -27,7 +27,7 @@
 #include "host/host_settings.h"
 #include "host/user.h"
 #include "qt_base/service_controller.h"
-#include "qt_base/xml_settings.h"
+#include "qt_base/qt_xml_settings.h"
 #include "updater/update_dialog.h"
 
 #include <QFileDialog>

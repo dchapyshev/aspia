@@ -25,7 +25,7 @@
 #include "host/host_application.h"
 #include "host/user_session_process.h"
 #include "qt_base/qt_logging.h"
-#include "qt_base/xml_settings.h"
+#include "qt_base/qt_xml_settings.h"
 
 #include <QCloseEvent>
 #include <QDesktopServices>

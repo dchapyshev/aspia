@@ -23,13 +23,13 @@ list(APPEND SOURCE_QT_BASE
     locale_loader.h
     qt_logging.cc
     qt_logging.h
+    qt_xml_settings.cc
+    qt_xml_settings.h
     service.h
     service_controller.cc
     service_controller.h
     service_impl.h
-    service_impl_win.cc
-    xml_settings.cc
-    xml_settings.h)
+    service_impl_win.cc)
 
 source_group("" FILES ${SOURCE_QT_BASE})
 
