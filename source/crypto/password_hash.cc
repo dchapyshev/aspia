@@ -27,7 +27,7 @@ namespace crypto {
 namespace {
 
 template <typename InputT, typename OutputT>
-OutputT hashT(PasswordHash::Type type, InputT password, InputT salt)
+OutputT hashT(PasswordHash::Type type, std::string_view password, InputT salt)
 {
     DCHECK_EQ(type, PasswordHash::Type::SCRYPT);
 
@@ -47,7 +47,7 @@ OutputT hashT(PasswordHash::Type type, InputT password, InputT salt)
     OutputT result;
     result.resize(PasswordHash::kBytesSize);
 
-    int ret = EVP_PBE_scrypt(reinterpret_cast<const char*>(password.data()), password.size(),
+    int ret = EVP_PBE_scrypt(password.data(), password.size(),
                              reinterpret_cast<const uint8_t*>(salt.data()), salt.size(),
                              N, r, p, max_mem,
                              reinterpret_cast<uint8_t*>(result.data()), result.size());
@@ -60,9 +60,9 @@ OutputT hashT(PasswordHash::Type type, InputT password, InputT salt)
 
 // static
 base::ByteArray PasswordHash::hash(
-    Type type, const base::ByteArray& password, const base::ByteArray& salt)
+    Type type, std::string_view password, const base::ByteArray& salt)
 {
-    return hashT<const base::ByteArray&, base::ByteArray>(type, password, salt);
+    return hashT<const base::ByteArray, base::ByteArray>(type, password, salt);
 }
 
 // static

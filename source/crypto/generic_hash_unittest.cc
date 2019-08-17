@@ -26,9 +26,9 @@ TEST(GenericHashTest, Blake2b512)
 {
     struct TestData
     {
-        QByteArray data1;
-        QByteArray data2;
-        QByteArray expected;
+        std::string_view data1;
+        std::string_view data2;
+        std::string_view expected;
     } const kTestTable[] =
     {
         {
@@ -52,11 +52,11 @@ TEST(GenericHashTest, Blake2b512)
         {
             GenericHash hash(GenericHash::BLAKE2b512);
 
-            hash.addData(QByteArray::fromHex(kTestTable[i].data1));
-            hash.addData(QByteArray::fromHex(kTestTable[i].data2));
+            hash.addData(base::fromHex(kTestTable[i].data1));
+            hash.addData(base::fromHex(kTestTable[i].data2));
 
-            QByteArray expected = QByteArray::fromHex(kTestTable[i].expected);
-            QByteArray result = hash.result();
+            base::ByteArray expected = base::fromHex(kTestTable[i].expected);
+            base::ByteArray result = hash.result();
 
             EXPECT_EQ(expected.size(), 64);
             EXPECT_EQ(result.size(), 64);
@@ -71,9 +71,9 @@ TEST(GenericHashTest, Blake2s256)
 {
     struct TestData
     {
-        QByteArray data1;
-        QByteArray data2;
-        QByteArray expected;
+        std::string_view data1;
+        std::string_view data2;
+        std::string_view expected;
     } const kTestTable[] =
     {
         {
@@ -97,11 +97,11 @@ TEST(GenericHashTest, Blake2s256)
         {
             GenericHash hash(GenericHash::BLAKE2s256);
 
-            hash.addData(QByteArray::fromHex(kTestTable[i].data1));
-            hash.addData(QByteArray::fromHex(kTestTable[i].data2));
+            hash.addData(base::fromHex(kTestTable[i].data1));
+            hash.addData(base::fromHex(kTestTable[i].data2));
 
-            QByteArray expected = QByteArray::fromHex(kTestTable[i].expected);
-            QByteArray result = hash.result();
+            base::ByteArray expected = base::fromHex(kTestTable[i].expected);
+            base::ByteArray result = hash.result();
 
             EXPECT_EQ(expected.size(), 32);
             EXPECT_EQ(result.size(), 32);

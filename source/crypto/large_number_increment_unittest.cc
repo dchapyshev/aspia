@@ -24,8 +24,8 @@ namespace crypto {
 
 TEST(LargeNumberIncrementTest, Test)
 {
-    QByteArray number1 = QByteArray::fromHex("0000000000000000");
-    QByteArray result1 = QByteArray::fromHex("0000000000989680");
+    base::ByteArray number1 = base::fromHex("0000000000000000");
+    base::ByteArray result1 = base::fromHex("0000000000989680");
 
     for (size_t i = 0; i < 10000000; ++i)
     {
@@ -34,8 +34,8 @@ TEST(LargeNumberIncrementTest, Test)
 
     EXPECT_EQ(number1, result1);
 
-    QByteArray number2 = QByteArray::fromHex("FFFFFFFFFFFFFFFA");
-    QByteArray result2 = QByteArray::fromHex("0000000000000004");
+    base::ByteArray number2 = base::fromHex("FFFFFFFFFFFFFFFA");
+    base::ByteArray result2 = base::fromHex("0000000000000004");
 
     for (size_t i = 0; i < 10; ++i)
     {

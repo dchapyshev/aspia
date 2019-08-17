@@ -24,20 +24,18 @@ namespace crypto {
 
 TEST(DataCryptorChaCha20Poly1305Test, TestVector)
 {
-    const QByteArray key = QByteArray::fromHex(
-        "1ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014");
-    const QByteArray message = QByteArray::fromHex(
-        "5ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014"
-        "5ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014");
+    const std::string_view key = "1ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014";
+    const std::string_view message = "5ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014"
+                                     "5ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014";
 
     std::unique_ptr<DataCryptor> cryptor = std::make_unique<DataCryptorChaCha20Poly1305>(key);
 
-    QByteArray encrypted_message;
+    std::string encrypted_message;
     bool ret = cryptor->encrypt(message, &encrypted_message);
     ASSERT_TRUE(ret);
     ASSERT_EQ(encrypted_message.size(), message.size() + 28);
 
-    QByteArray decrypted_message;
+    std::string decrypted_message;
 
     ret = cryptor->decrypt(encrypted_message, &decrypted_message);
     ASSERT_TRUE(ret);
@@ -47,24 +45,21 @@ TEST(DataCryptorChaCha20Poly1305Test, TestVector)
 
 TEST(DataCryptorChaCha20Poly1305Test, WrongKey)
 {
-    const QByteArray key = QByteArray::fromHex(
-        "1ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014");
-    const QByteArray wrong_key = QByteArray::fromHex(
-        "2ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014");
-    const QByteArray message = QByteArray::fromHex(
-        "3da8b455bd39746dc50145ce26794165a808ec425684e9384c27c2249951256812125683");
+    const std::string_view key = "1ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014";
+    const std::string_view wrong_key = "2ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014";
+    const std::string_view message = "3da8b455bd39746dc50145ce26794165a808ec425684e9384c27c2249951256812125683";
 
     std::unique_ptr<DataCryptor> cryptor1 =
         std::make_unique<DataCryptorChaCha20Poly1305>(key);
     std::unique_ptr<DataCryptor> cryptor2 =
         std::make_unique<DataCryptorChaCha20Poly1305>(wrong_key);
 
-    QByteArray encrypted_message;
+    std::string encrypted_message;
     bool ret = cryptor1->encrypt(message, &encrypted_message);
     ASSERT_TRUE(ret);
     ASSERT_EQ(encrypted_message.size(), message.size() + 28);
 
-    QByteArray decrypted_message;
+    std::string decrypted_message;
 
     ret = cryptor2->decrypt(encrypted_message, &decrypted_message);
     ASSERT_FALSE(ret);

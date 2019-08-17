@@ -34,7 +34,7 @@ public:
     static const size_t kBytesSize = kBitsSize / kBitsPerByte;
 
     static base::ByteArray hash(
-        Type type, const base::ByteArray& password, const base::ByteArray& salt);
+        Type type, std::string_view password, const base::ByteArray& salt);
 
     static std::string hash(Type type, std::string_view password, std::string_view salt);
 
