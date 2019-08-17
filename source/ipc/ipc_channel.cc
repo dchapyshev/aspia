@@ -23,6 +23,8 @@
 #include "ipc/ipc_listener.h"
 #include "qt_base/qt_logging.h"
 
+#include <QLocalSocket>
+
 #if defined(OS_WIN)
 #include <Windows.h>
 #endif // defined(OS_WIN)
@@ -95,7 +97,7 @@ Channel::Channel()
     : socket_(new QLocalSocket(this)),
       proxy_(new ChannelProxy(this))
 {
-    // Nothing
+    init();
 }
 
 Channel::Channel(QLocalSocket* socket)
@@ -156,11 +158,6 @@ void Channel::send(const QByteArray& buffer)
 
     if (schedule_write)
         scheduleWrite();
-}
-
-void Channel::onError(QLocalSocket::LocalSocketError /* socket_error */)
-{
-    LOG(LS_WARNING) << "IPC channel error: " << socket_->errorString();
 }
 
 void Channel::onBytesWritten(int64_t bytes)
@@ -245,6 +242,8 @@ void Channel::init()
 
     connect(socket_, &QLocalSocket::connected, [this]()
     {
+        is_connected_ = true;
+
 #if defined(OS_WIN)
         HANDLE pipe_handle = reinterpret_cast<HANDLE>(socket_->socketDescriptor());
         peer_process_id_ = serverProcessIdImpl(pipe_handle);
@@ -258,11 +257,15 @@ void Channel::init()
     connect(socket_, &QLocalSocket::bytesWritten, this, &Channel::onBytesWritten);
     connect(socket_, &QLocalSocket::readyRead, this, &Channel::onReadyRead);
 
-    connect(socket_, QOverload<QLocalSocket::LocalSocketError>::of(&QLocalSocket::error),
-            this, &Channel::onError);
+    connect(socket_, QOverload<QLocalSocket::LocalSocketError>::of(&QLocalSocket::error), [this]()
+    {
+        LOG(LS_WARNING) << "IPC channel error: " << socket_->errorString();
+    });
 
     connect(socket_, &QLocalSocket::disconnected, [this]()
     {
+        is_connected_ = false;
+
         if (listener_)
             listener_->onIpcDisconnected();
     });

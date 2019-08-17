@@ -37,7 +37,7 @@ QString generateUniqueChannelId()
     return QString("%1.%2.%3")
         .arg(QCoreApplication::applicationPid())
         .arg(channel_id)
-        .arg(crypto::Random::number());
+        .arg(crypto::Random::number32());
 }
 
 } // namespace

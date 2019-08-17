@@ -32,10 +32,11 @@
 #endif // defined(USE_TBB)
 
 #include <QByteArray>
-#include <QLocalSocket>
-#include <QPointer>
+#include <QObject>
 
 #include <queue>
+
+class QLocalSocket;
 
 namespace ipc {
 
@@ -69,7 +70,6 @@ public:
 #endif // defined(OS_WIN)
 
 private slots:
-    void onError(QLocalSocket::LocalSocketError socket_error);
     void onBytesWritten(int64_t bytes);
     void onReadyRead();
 
