@@ -137,6 +137,8 @@ list(APPEND SOURCE_BASE_WIN
     win/file_version_info.h
     win/message_window.cc
     win/message_window.h
+    win/object_watcher.cc
+    win/object_watcher.h
     win/printer_enumerator.cc
     win/printer_enumerator.h
     win/process.cc
