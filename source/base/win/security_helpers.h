@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -19,7 +19,17 @@
 #ifndef BASE__WIN__SECURITY_HELPERS_H
 #define BASE__WIN__SECURITY_HELPERS_H
 
+#include "base/typed_buffer.h"
+
+#include <string>
+
+#include <Windows.h>
+
 namespace base::win {
+
+using ScopedAcl = TypedBuffer<ACL>;
+using ScopedSd = TypedBuffer<SECURITY_DESCRIPTOR>;
+using ScopedSid = TypedBuffer<SID>;
 
 // Initializes COM security of the process applying the passed security
 // descriptor.  The function configures the following settings:
@@ -32,6 +42,10 @@ namespace base::win {
 bool initializeComSecurity(const wchar_t* security_descriptor,
                            const wchar_t* mandatory_label,
                            bool activate_as_activator);
+
+bool userSidString(std::wstring* user_sid);
+
+ScopedSd convertSddlToSd(const std::wstring& sddl);
 
 } // namespace base::win
 

@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,23 +17,18 @@
 //
 
 #include "base/win/security_helpers.h"
+
 #include "base/logging.h"
 #include "base/typed_buffer.h"
 #include "base/win/scoped_local.h"
+#include "base/win/scoped_object.h"
 
-#include <string>
-
-#include <Windows.h>
 #include <objidl.h>
 #include <sddl.h>
 
 namespace base::win {
 
 namespace {
-
-using ScopedAcl = TypedBuffer<ACL>;
-using ScopedSd = TypedBuffer<SECURITY_DESCRIPTOR>;
-using ScopedSid = TypedBuffer<SID>;
 
 bool makeScopedAbsoluteSd(const ScopedSd& relative_sd,
                           ScopedSd* absolute_sd,
@@ -99,24 +94,6 @@ bool makeScopedAbsoluteSd(const ScopedSd& relative_sd,
     return true;
 }
 
-ScopedSd convertSddlToSd(const std::wstring& sddl)
-{
-    ScopedLocal<PSECURITY_DESCRIPTOR> raw_sd;
-    ULONG length = 0;
-
-    if (!ConvertStringSecurityDescriptorToSecurityDescriptorW(sddl.c_str(), SDDL_REVISION_1,
-                                                              raw_sd.recieve(), &length))
-    {
-        PLOG(LS_WARNING) << "ConvertStringSecurityDescriptorToSecurityDescriptorW failed";
-        return ScopedSd();
-    }
-
-    ScopedSd sd(length);
-    memcpy(sd.get(), raw_sd, length);
-
-    return sd;
-}
-
 } // namespace
 
 bool initializeComSecurity(const wchar_t* security_descriptor,
@@ -171,6 +148,52 @@ bool initializeComSecurity(const wchar_t* security_descriptor,
         return false;
     }
 
+    return true;
+}
+
+ScopedSd convertSddlToSd(const std::wstring& sddl)
+{
+    ScopedLocal<PSECURITY_DESCRIPTOR> raw_sd;
+    ULONG length = 0;
+
+    if (!ConvertStringSecurityDescriptorToSecurityDescriptorW(sddl.c_str(), SDDL_REVISION_1,
+        raw_sd.recieve(), &length))
+    {
+        PLOG(LS_WARNING) << "ConvertStringSecurityDescriptorToSecurityDescriptorW failed";
+        return ScopedSd();
+    }
+
+    ScopedSd sd(length);
+    memcpy(sd.get(), raw_sd, length);
+
+    return sd;
+}
+
+bool userSidString(std::wstring* user_sid)
+{
+    // Get the current token.
+    ScopedHandle token;
+    if (!OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, token.recieve()))
+        return false;
+
+    DWORD size = sizeof(TOKEN_USER) + SECURITY_MAX_SID_SIZE;
+    std::unique_ptr<BYTE[]> user_bytes = std::make_unique<BYTE[]>(size);
+
+    TOKEN_USER* user = reinterpret_cast<TOKEN_USER*>(user_bytes.get());
+
+    if (!GetTokenInformation(token, TokenUser, user, size, &size))
+        return false;
+
+    if (!user->User.Sid)
+        return false;
+
+    // Convert the data to a string.
+    ScopedLocal<wchar_t*> sid_string;
+
+    if (!ConvertSidToStringSidW(user->User.Sid, sid_string.recieve()))
+        return false;
+
+    user_sid->assign(sid_string);
     return true;
 }
 
