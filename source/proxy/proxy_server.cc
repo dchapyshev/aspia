@@ -16,44 +16,32 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "proxy/win/proxy_service.h"
-
-#include "base/logging.h"
-#include "base/message_loop/message_pump_asio.h"
 #include "proxy/proxy_server.h"
-#include "proxy/win/proxy_service_constants.h"
+
+#include "net/network_channel.h"
 
 namespace proxy {
 
-Service::Service()
-    : base::win::Service(kProxyServiceName, base::MessageLoop::Type::ASIO)
+Server::Server(asio::io_context& io_context)
+    : io_context_(io_context)
 {
     // Nothing
 }
 
-Service::~Service() = default;
+Server::~Server() = default;
 
-void Service::onStart()
+void Server::start()
 {
-    base::MessageLoop* message_loop = messageLoop();
-    DCHECK(message_loop);
+    if (network_server_)
+        return;
 
-    base::MessagePumpForAsio* message_pump = message_loop->pumpAsio();
-    DCHECK(message_pump);
-
-    server_ = std::make_unique<Server>(message_pump->ioContext());
-    server_->start();
+    network_server_ = std::make_unique<net::Server>(io_context_);
+    network_server_->start(0, this);
 }
 
-void Service::onStop()
+void Server::onNewConnection(std::unique_ptr<net::Channel> channel)
 {
-    server_.reset();
-}
-
-void Service::onSessionEvent(
-    base::win::SessionStatus /* event */, base::win::SessionId /* session_id */)
-{
-    // Nothing
+    // TODO
 }
 
 } // namespace proxy

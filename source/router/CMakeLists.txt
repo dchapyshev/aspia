@@ -19,7 +19,9 @@
 include(tbb)
 
 list(APPEND SOURCE_ROUTER
-    router_main.cc)
+    router_main.cc
+    router_server.cc
+    router_server.h)
 
 list(APPEND SOURCE_ROUTER_WIN
     win/router_service.cc

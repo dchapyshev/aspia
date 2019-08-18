@@ -18,6 +18,9 @@
 
 #include "router/win/router_service.h"
 
+#include "base/logging.h"
+#include "base/message_loop/message_pump_asio.h"
+#include "router/router_server.h"
 #include "router/win/router_service_constants.h"
 
 namespace router {
@@ -32,12 +35,19 @@ Service::~Service() = default;
 
 void Service::onStart()
 {
-    // TODO
+    base::MessageLoop* message_loop = messageLoop();
+    DCHECK(message_loop);
+
+    base::MessagePumpForAsio* message_pump = message_loop->pumpAsio();
+    DCHECK(message_pump);
+
+    server_ = std::make_unique<Server>(message_pump->ioContext());
+    server_->start();
 }
 
 void Service::onStop()
 {
-    // TODO
+    server_.reset();
 }
 
 void Service::onSessionEvent(

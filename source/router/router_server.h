@@ -16,33 +16,32 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ROUTER__WIN__ROUTER_SERVICE_H
-#define ROUTER__WIN__ROUTER_SERVICE_H
+#ifndef ROUTER__ROUTER_SERVER_H
+#define ROUTER__ROUTER_SERVER_H
 
-#include "base/win/service.h"
+#include "net/network_server.h"
 
 namespace router {
 
-class Server;
-
-class Service : public base::win::Service
+class Server : public net::Server::Delegate
 {
 public:
-    Service();
-    ~Service();
+    explicit Server(asio::io_context& io_context);
+    ~Server();
+
+    void start();
 
 protected:
-    // base::win::Service implementation.
-    void onStart() override;
-    void onStop() override;
-    void onSessionEvent(base::win::SessionStatus event, base::win::SessionId session_id) override;
+    // net::Server::Delegate implementation.
+    void onNewConnection(std::unique_ptr<net::Channel> channel) override;
 
 private:
-    std::unique_ptr<Server> server_;
+    asio::io_context& io_context_;
+    std::unique_ptr<net::Server> network_server_;
 
-    DISALLOW_COPY_AND_ASSIGN(Service);
+    DISALLOW_COPY_AND_ASSIGN(Server);
 };
 
 } // namespace router
 
-#endif // ROUTER__WIN__ROUTER_SERVICE_H
+#endif // ROUTER__ROUTER_SERVER_H

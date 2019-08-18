@@ -23,6 +23,8 @@
 
 namespace proxy {
 
+class Server;
+
 class Service : public base::win::Service
 {
 public:
@@ -36,6 +38,8 @@ protected:
     void onSessionEvent(base::win::SessionStatus event, base::win::SessionId session_id) override;
 
 private:
+    std::unique_ptr<Server> server_;
+
     DISALLOW_COPY_AND_ASSIGN(Service);
 };
 
