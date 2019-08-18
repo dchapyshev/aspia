@@ -35,20 +35,48 @@ namespace base {
 // If it was possible to convert the string to a number, then true is returned, otherwise false.
 
 bool stringToInt(std::string_view input, int* output);
+bool stringToInt(std::u16string_view input, int* output);
+
 bool stringToUint(std::string_view input, unsigned* output);
+bool stringToUint(std::u16string_view input, unsigned* output);
+
+bool stringToUShort(std::string_view input, unsigned short* output);
+bool stringToUShort(std::u16string_view input, unsigned short* output);
+
 bool stringToULong(std::string_view input, unsigned long* output);
+bool stringToULong(std::u16string_view input, unsigned long* output);
+
 bool stringToInt64(std::string_view input, int64_t* output);
+bool stringToInt64(std::u16string_view input, int64_t* output);
+
 bool stringToUint64(std::string_view input, uint64_t* output);
+bool stringToUint64(std::u16string_view input, uint64_t* output);
+
 bool stringToSizeT(std::string_view input, size_t* output);
+bool stringToSizeT(std::u16string_view input, size_t* output);
 
 // Functions to convert a number to a string.
 
 std::string numberToString(int value);
+std::u16string numberToString16(int value);
+
 std::string numberToString(unsigned int value);
+std::u16string numberToString16(unsigned int value);
+
 std::string numberToString(long value);
+std::u16string numberToString16(long value);
+
+std::string numberToString(unsigned short value);
+std::u16string numberToString16(unsigned short value);
+
 std::string numberToString(unsigned long value);
+std::u16string numberToString16(unsigned long value);
+
 std::string numberToString(long long value);
+std::u16string numberToString16(long long value);
+
 std::string numberToString(unsigned long long value);
+std::u16string numberToString16(unsigned long long value);
 
 } // namespace base
 
