@@ -28,25 +28,25 @@ ChannelProxy::ChannelProxy(Channel* channel)
     // Nothing
 }
 
-bool ChannelProxy::connectToHost(const QString& address, uint16_t port)
+bool ChannelProxy::connect(std::u16string_view address, uint16_t port)
 {
     std::scoped_lock lock(channel_lock_);
 
     if (!channel_)
         return false;
 
-    channel_->connectToHost(address, port);
+    channel_->connect(address, port);
     return true;
 }
 
-bool ChannelProxy::disconnectFromHost()
+bool ChannelProxy::disconnect()
 {
     std::scoped_lock lock(channel_lock_);
 
     if (!channel_)
         return false;
 
-    channel_->disconnectFromHost();
+    channel_->disconnect();
     return true;
 }
 
@@ -114,12 +114,12 @@ bool ChannelProxy::resume()
     return true;
 }
 
-QString ChannelProxy::peerAddress() const
+std::u16string ChannelProxy::peerAddress() const
 {
     std::scoped_lock lock(channel_lock_);
 
     if (!channel_)
-        return QString();
+        return std::u16string();
 
     return channel_->peerAddress();
 }

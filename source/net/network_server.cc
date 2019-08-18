@@ -18,55 +18,47 @@
 
 #include "net/network_server.h"
 
+#include "base/logging.h"
 #include "net/network_channel.h"
-#include "qt_base/qt_logging.h"
-
-#include <QTcpServer>
 
 namespace net {
 
-Server::Server() = default;
+Server::Server(asio::io_context& io_context)
+    : io_context_(io_context)
+{
+    // Nothing
+}
+
 Server::~Server() = default;
 
-bool Server::start(uint16_t port, Delegate* delegate)
+void Server::start(uint16_t port, Delegate* delegate)
 {
-    DCHECK(delegate);
-
-    if (tcp_server_)
-    {
-        DLOG(LS_WARNING) << "Server already started";
-        return false;
-    }
-
-    tcp_server_ = std::make_unique<QTcpServer>();
     delegate_ = delegate;
 
-    QObject::connect(tcp_server_.get(), &QTcpServer::newConnection, [this]()
-    {
-        while (tcp_server_->hasPendingConnections())
-        {
-            QTcpSocket* socket = tcp_server_->nextPendingConnection();
-            if (!socket)
-                continue;
+    DCHECK(delegate_);
 
-            delegate_->onNewConnection(std::unique_ptr<Channel>(new Channel(socket)));
-        }
+    asio::ip::tcp::endpoint endpoint(asio::ip::tcp::v4(), port);
+    acceptor_ = std::make_unique<asio::ip::tcp::acceptor>(io_context_, endpoint);
+
+    doAccept();
+}
+
+void Server::doAccept()
+{
+    acceptor_->async_accept([this](const std::error_code& error_code, asio::ip::tcp::socket socket)
+    {
+        if (error_code)
+            return;
+
+        std::unique_ptr<Channel> channel =
+            std::unique_ptr<Channel>(new Channel(io_context_, std::move(socket)));
+
+        // Connection accepted.
+        delegate_->onNewConnection(std::move(channel));
+
+        // Accept next connection.
+        doAccept();
     });
-
-    QObject::connect(tcp_server_.get(), &QTcpServer::acceptError,
-        [this](QAbstractSocket::SocketError /* error */)
-    {
-        LOG(LS_WARNING) << "accept error: " << tcp_server_->errorString();
-        return;
-    });
-
-    if (!tcp_server_->listen(QHostAddress::Any, port))
-    {
-        LOG(LS_WARNING) << "listen failed: " << tcp_server_->errorString();
-        return false;
-    }
-
-    return true;
 }
 
 } // namespace net

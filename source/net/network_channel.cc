@@ -19,11 +19,16 @@
 #include "net/network_channel.h"
 
 #include "base/logging.h"
+#include "base/strings/unicode.h"
 #include "crypto/cryptor_fake.h"
 #include "net/network_channel_proxy.h"
 #include "net/network_listener.h"
 
-#include <QNetworkProxy>
+#include <asio/connect.hpp>
+#include <asio/read.hpp>
+#include <asio/write.hpp>
+
+#include <functional>
 
 #if defined(OS_WIN)
 #include <winsock2.h>
@@ -34,10 +39,9 @@ namespace net {
 
 namespace {
 
-constexpr uint32_t kMaxMessageSize = 16 * 1024 * 1024; // 16 MB
-constexpr int64_t kMaxWriteSize = 1200; // 1200 bytes
+const uint32_t kMaxMessageSize = 16 * 1024 * 1024; // 16 MB
 
-void enableKeepAlive(QTcpSocket* socket)
+void enableKeepAlive(asio::ip::tcp::socket& socket)
 {
 #if defined(OS_WIN)
     struct tcp_keepalive alive;
@@ -48,7 +52,7 @@ void enableKeepAlive(QTcpSocket* socket)
 
     DWORD bytes_returned;
 
-    if (WSAIoctl(socket->socketDescriptor(), SIO_KEEPALIVE_VALS,
+    if (WSAIoctl(socket.native_handle(), SIO_KEEPALIVE_VALS,
                  &alive, sizeof(alive), nullptr, 0, &bytes_returned,
                  nullptr, nullptr) == SOCKET_ERROR)
     {
@@ -59,64 +63,52 @@ void enableKeepAlive(QTcpSocket* socket)
 #endif
 }
 
-void disableNagle(QTcpSocket* socket)
+void disableNagle(asio::ip::tcp::socket& socket)
 {
-    socket->setSocketOption(QTcpSocket::LowDelayOption, 1);
+    // Disable the algorithm of Nagle.
+    asio::ip::tcp::no_delay option(true);
+
+    asio::error_code error_code;
+    socket.set_option(option, error_code);
+
+    if (error_code)
+    {
+        LOG(LS_ERROR) << "Failed to disable Nagle's algorithm: " << error_code.message();
+    }
 }
 
 } // namespace
 
-Channel::Channel()
-    : socket_(new QTcpSocket(this))
+Channel::Channel(asio::io_context& io_context)
+    : io_context_(io_context),
+      resolver_(std::make_unique<asio::ip::tcp::resolver>(io_context)),
+      socket_(io_context),
+      proxy_(new ChannelProxy(this))
 {
-    init();
+    // Nothing
 }
 
-Channel::Channel(QTcpSocket* socket)
-    : socket_(socket)
+Channel::Channel(asio::io_context& io_context, asio::ip::tcp::socket&& socket)
+    : io_context_(io_context),
+      socket_(std::move(socket)),
+      proxy_(new ChannelProxy(this)),
+      is_connected_(true)
 {
-    socket_->setParent(this);
-
+    DCHECK(socket_.is_open());
     disableNagle(socket_);
-    enableKeepAlive(socket_);
-
-    is_connected_ = true;
-
-    init();
 }
 
 Channel::~Channel()
 {
     proxy_->willDestroyCurrentChannel();
     proxy_ = nullptr;
+
+    disconnect();
 }
 
-void Channel::connectToHost(const QString& address, uint16_t port)
+std::shared_ptr<ChannelProxy> Channel::channelProxy()
 {
-    connect(socket_, &QTcpSocket::connected, [this]()
-    {
-        disableNagle(socket_);
-        enableKeepAlive(socket_);
-
-        is_connected_ = true;
-
-        if (listener_)
-            listener_->onNetworkConnected();
-    });
-
-    socket_->setProxy(QNetworkProxy::NoProxy);
-    socket_->connectToHost(address, port);
-}
-
-void Channel::disconnectFromHost()
-{
-    if (!is_connected_)
-        return;
-
-    is_connected_ = false;
-
-    socket_->abort();
-    socket_->waitForDisconnected();
+    return proxy_;
 }
 
 void Channel::setListener(Listener* listener)
@@ -127,6 +119,85 @@ void Channel::setListener(Listener* listener)
 void Channel::setCryptor(std::unique_ptr<crypto::Cryptor> cryptor)
 {
     cryptor_ = std::move(cryptor);
+}
+
+std::u16string Channel::peerAddress() const
+{
+    if (!socket_.is_open())
+        return std::u16string();
+
+    return base::utf16FromLocal8Bit(socket_.remote_endpoint().address().to_string());
+}
+
+void Channel::connect(std::u16string_view address, uint16_t port)
+{
+    DCHECK(resolver_);
+
+    if (is_connected_)
+        return;
+
+    resolver_->async_resolve(base::local8BitFromUtf16(address), std::to_string(port), [this](
+        const std::error_code& error_code, const asio::ip::tcp::resolver::results_type& endpoints)
+    {
+        if (error_code)
+        {
+            onErrorOccurred(error_code);
+            return;
+        }
+
+        asio::async_connect(socket_, endpoints, [this](
+            const std::error_code& error_code, const asio::ip::tcp::endpoint& endpoint)
+        {
+            if (error_code)
+            {
+                onErrorOccurred(error_code);
+                return;
+            }
+
+            disableNagle(socket_);
+            enableKeepAlive(socket_);
+
+            cryptor_ = std::make_unique<crypto::CryptorFake>();
+            is_connected_ = true;
+
+            if (listener_)
+                listener_->onNetworkConnected();
+        });
+    });
+}
+
+void Channel::disconnect()
+{
+    if (!is_connected_)
+        return;
+
+    is_connected_ = false;
+
+    std::error_code ignored_code;
+    socket_.shutdown(asio::ip::tcp::socket::shutdown_both, ignored_code);
+    socket_.close(ignored_code);
+
+    reloadWriteQueue();
+
+    // Remove all messages from the write queue.
+    while (!write_.work_queue.empty())
+        write_.work_queue.pop();
+
+    if (listener_)
+    {
+        listener_->onNetworkDisconnected();
+        listener_ = nullptr;
+    }
+}
+
+bool Channel::isConnected() const
+{
+    return is_connected_;
+}
+
+bool Channel::isPaused() const
+{
+    return is_paused_;
 }
 
 void Channel::pause()
@@ -141,256 +212,202 @@ void Channel::resume()
 
     is_paused_ = false;
 
-    // Start receiving messages.
-    onReadyRead();
-}
+    // If we have a message that was received before the pause command.
+    if (read_.buffer_size)
+        onMessageReceived();
 
-QString Channel::peerAddress() const
-{
-    QHostAddress address = socket_->peerAddress();
+    DCHECK_EQ(read_.bytes_transfered, 0);
+    DCHECK_EQ(read_.buffer_size, 0);
 
-    bool ok = false;
-    QHostAddress ipv4_address(address.toIPv4Address(&ok));
-    if (ok)
-        return ipv4_address.toString();
-
-    return address.toString();
+    doReadSize();
 }
 
 void Channel::send(base::ByteArray&& buffer)
 {
-    if (buffer.empty())
-    {
-        errorOccurred(ErrorCode::UNKNOWN);
-        return;
-    }
+    std::scoped_lock lock(write_.incoming_queue_lock);
 
-    bool schedule_write = write_.queue.empty();
+    const bool schedule_write = write_.incoming_queue.empty();
 
     // Add the buffer to the queue for sending.
-    write_.queue.emplace(buffer);
+    write_.incoming_queue.emplace(std::move(buffer));
 
-    if (schedule_write)
-        scheduleWrite();
-}
-
-void Channel::onSocketError(QAbstractSocket::SocketError error)
-{
-    ErrorCode error_code;
-
-    switch (error)
-    {
-        case QAbstractSocket::ConnectionRefusedError:
-            error_code = ErrorCode::CONNECTION_REFUSED;
-            break;
-
-        case QAbstractSocket::RemoteHostClosedError:
-            error_code = ErrorCode::REMOTE_HOST_CLOSED;
-            break;
-
-        case QAbstractSocket::HostNotFoundError:
-            error_code = ErrorCode::SPECIFIED_HOST_NOT_FOUND;
-            break;
-
-        case QAbstractSocket::SocketTimeoutError:
-            error_code = ErrorCode::SOCKET_TIMEOUT;
-            break;
-
-        case QAbstractSocket::AddressInUseError:
-            error_code = ErrorCode::ADDRESS_IN_USE;
-            break;
-
-        case QAbstractSocket::SocketAddressNotAvailableError:
-            error_code = ErrorCode::ADDRESS_NOT_AVAILABLE;
-            break;
-
-        case QAbstractSocket::NetworkError:
-            error_code = ErrorCode::NETWORK_ERROR;
-            break;
-
-        default:
-            LOG(LS_WARNING) << "Unhandled value of Qt error: " << error;
-            error_code = ErrorCode::UNKNOWN;
-            break;
-    }
-
-    errorOccurred(error_code);
-}
-
-void Channel::onBytesWritten(int64_t bytes)
-{
-    write_.bytes_transferred += bytes;
-
-    if (write_.bytes_transferred < write_.buffer.size())
-    {
-        int64_t bytes_to_write =
-            std::min(write_.buffer.size() - write_.bytes_transferred, kMaxWriteSize);
-
-        socket_->write(
-            reinterpret_cast<const char*>(write_.buffer.data()) + write_.bytes_transferred,
-            bytes_to_write);
-    }
-    else
-    {
-        onMessageWritten();
-
-        write_.buffer.clear();
-        write_.bytes_transferred = 0;
-    }
-}
-
-void Channel::onReadyRead()
-{
-    if (is_paused_)
+    if (!schedule_write)
         return;
 
-    int64_t current = 0;
-
-    for (;;)
-    {
-        if (!read_.buffer_size_received)
-        {
-            uint8_t byte;
-
-            current = socket_->read(reinterpret_cast<char*>(&byte), sizeof(byte));
-            if (current == sizeof(byte))
-            {
-                switch (read_.bytes_transferred)
-                {
-                    case 0:
-                        read_.buffer_size += byte & 0x7F;
-                        break;
-
-                    case 1:
-                        read_.buffer_size += (byte & 0x7F) << 7;
-                        break;
-
-                    case 2:
-                        read_.buffer_size += (byte & 0x7F) << 14;
-                        break;
-
-                    case 3:
-                        read_.buffer_size += byte << 21;
-                        break;
-
-                    default:
-                        break;
-                }
-
-                if (!(byte & 0x80) || read_.bytes_transferred == 3)
-                {
-                    read_.buffer_size_received = true;
-
-                    if (!read_.buffer_size || read_.buffer_size > kMaxMessageSize)
-                    {
-                        errorOccurred(ErrorCode::UNKNOWN);
-                        return;
-                    }
-
-                    if (read_.buffer.capacity() < read_.buffer_size)
-                        read_.buffer.reserve(read_.buffer_size);
-
-                    read_.buffer.resize(read_.buffer_size);
-                    read_.buffer_size = 0;
-                    read_.bytes_transferred = 0;
-                    continue;
-                }
-            }
-        }
-        else if (read_.bytes_transferred < read_.buffer.size())
-        {
-            current = socket_->read(
-                reinterpret_cast<char*>(read_.buffer.data()) + read_.bytes_transferred,
-                read_.buffer.size() - read_.bytes_transferred);
-        }
-        else
-        {
-            read_.buffer_size_received = false;
-            read_.bytes_transferred = 0;
-
-            onMessageReceived();
-            return;
-        }
-
-        if (current <= 0)
-            return;
-
-        read_.bytes_transferred += current;
-    }
+    asio::post(io_context_, std::bind(&Channel::scheduleWrite, this));
 }
 
-void Channel::onMessageWritten()
+void Channel::onErrorOccurred(const std::error_code& error_code)
 {
-    DCHECK(!write_.queue.empty());
+    if (error_code == asio::error::operation_aborted)
+        return;
 
-    // Delete the sent message from the queue.
-    write_.queue.pop();
+    ErrorCode error = ErrorCode::UNKNOWN;
 
-    // If the queue is not empty, then we send the following message.
-    if (!write_.queue.empty())
-        scheduleWrite();
+    if (error_code == asio::error::connection_refused)
+        error = ErrorCode::CONNECTION_REFUSED;
+    else if (error_code == asio::error::address_in_use)
+        error = ErrorCode::ADDRESS_IN_USE;
+    else if (error_code == asio::error::timed_out)
+        error = ErrorCode::SOCKET_TIMEOUT;
+    else if (error_code == asio::error::host_unreachable)
+        error = ErrorCode::ADDRESS_NOT_AVAILABLE;
+    else if (error_code == asio::error::connection_reset)
+        error = ErrorCode::REMOTE_HOST_CLOSED;
+    else if (error_code == asio::error::network_down)
+        error = ErrorCode::NETWORK_ERROR;
+
+    if (listener_)
+        listener_->onNetworkError(error);
+
+    disconnect();
+}
+
+void Channel::doReadSize()
+{
+    asio::async_read(socket_, asio::buffer(&read_.one_byte, 1), [this](
+        const std::error_code& error_code, size_t bytes_transferred)
+    {
+        if (error_code)
+        {
+            onErrorOccurred(error_code);
+            return;
+        }
+
+        DCHECK_EQ(bytes_transferred, 1);
+
+        read_.bytes_transfered += bytes_transferred;
+
+        switch (read_.bytes_transfered)
+        {
+            case 1:
+                read_.buffer_size += read_.one_byte & 0x7F;
+                break;
+
+            case 2:
+                read_.buffer_size += (read_.one_byte & 0x7F) << 7;
+                break;
+
+            case 3:
+                read_.buffer_size += (read_.one_byte & 0x7F) << 14;
+                break;
+
+            case 4:
+                read_.buffer_size += read_.one_byte << 21;
+                break;
+
+            default:
+                break;
+        }
+
+        if ((read_.one_byte & 0x80) && (read_.bytes_transfered < 4))
+        {
+            doReadSize();
+            return;
+        }
+
+        doReadContent();
+    });
+}
+
+void Channel::doReadContent()
+{
+    if (!read_.buffer_size || read_.buffer_size > kMaxMessageSize)
+    {
+        onErrorOccurred(asio::error::message_size);
+        return;
+    }
+
+    if (read_.buffer.capacity() < read_.buffer_size)
+        read_.buffer.reserve(read_.buffer_size);
+
+    read_.buffer.resize(read_.buffer_size);
+
+    asio::async_read(socket_, asio::buffer(read_.buffer.data(), read_.buffer.size()), [this](
+        const std::error_code & error_code, size_t bytes_transferred)
+    {
+        if (error_code)
+        {
+            onErrorOccurred(error_code);
+            return;
+        }
+
+        DCHECK_EQ(bytes_transferred, read_.buffer.size());
+
+        if (is_paused_)
+            return;
+
+        onMessageReceived();
+
+        if (is_paused_)
+            return;
+
+        DCHECK_EQ(read_.bytes_transfered, 0);
+        DCHECK_EQ(read_.buffer_size, 0);
+
+        doReadSize();
+    });
 }
 
 void Channel::onMessageReceived()
 {
-    int decrypted_data_size = cryptor_->decryptedDataSize(read_.buffer.size());
+    base::ByteArray output_buffer;
+    output_buffer.resize(cryptor_->decryptedDataSize(read_.buffer.size()));
 
-    if (decrypt_buffer_.capacity() < decrypted_data_size)
-        decrypt_buffer_.reserve(decrypted_data_size);
-
-    decrypt_buffer_.resize(decrypted_data_size);
-
-    if (!cryptor_->decrypt(read_.buffer.data(), read_.buffer.size(), decrypt_buffer_.data()))
+    if (!cryptor_->decrypt(read_.buffer.data(),
+                           read_.buffer.size(),
+                           output_buffer.data()))
     {
-        errorOccurred(ErrorCode::UNKNOWN);
+        onErrorOccurred(asio::error::access_denied);
         return;
     }
 
     if (listener_)
-        listener_->onNetworkMessage(decrypt_buffer_);
+        listener_->onNetworkMessage(output_buffer);
 
-    // Read next message.
-    onReadyRead();
+    read_.bytes_transfered = 0;
+    read_.buffer_size = 0;
 }
 
-void Channel::init()
+bool Channel::reloadWriteQueue()
 {
-    proxy_.reset(new ChannelProxy(this));
-    cryptor_.reset(new crypto::CryptorFake());
+    if (!write_.work_queue.empty())
+        return false;
 
-    connect(socket_, &QTcpSocket::bytesWritten, this, &Channel::onBytesWritten);
-    connect(socket_, &QTcpSocket::readyRead, this, &Channel::onReadyRead);
+    std::scoped_lock lock(write_.incoming_queue_lock);
 
-    connect(socket_, QOverload<QTcpSocket::SocketError>::of(&QTcpSocket::error),
-            this, &Channel::onSocketError);
+    if (write_.incoming_queue.empty())
+        return false;
 
-    connect(socket_, &QTcpSocket::disconnected, [this]()
-    {
-        if (listener_)
-        {
-            listener_->onNetworkDisconnected();
-            listener_ = nullptr;
-        }
-    });
-}
+    write_.incoming_queue.fastSwap(write_.work_queue);
+    DCHECK(write_.incoming_queue.empty());
 
-void Channel::errorOccurred(ErrorCode error_code)
-{
-    if (listener_)
-        listener_->onNetworkError(error_code);
-
-    disconnectFromHost();
+    return true;
 }
 
 void Channel::scheduleWrite()
 {
-    const base::ByteArray& source_buffer = write_.queue.front();
+    if (!reloadWriteQueue())
+        return;
+
+    doWrite();
+}
+
+void Channel::doWrite()
+{
+    const base::ByteArray& source_buffer = write_.work_queue.front();
+    if (source_buffer.empty())
+    {
+        onErrorOccurred(asio::error::message_size);
+        return;
+    }
 
     // Calculate the size of the encrypted message.
-    size_t encrypted_data_size = cryptor_->encryptedDataSize(source_buffer.size());
-    if (encrypted_data_size > kMaxMessageSize)
+    const size_t target_data_size = cryptor_->encryptedDataSize(source_buffer.size());
+
+    if (target_data_size > kMaxMessageSize)
     {
-        errorOccurred(ErrorCode::UNKNOWN);
+        onErrorOccurred(asio::error::message_size);
         return;
     }
 
@@ -398,27 +415,27 @@ void Channel::scheduleWrite()
     size_t length_data_size = 1;
 
     // Calculate the variable-length.
-    length_data[0] = encrypted_data_size & 0x7F;
-    if (encrypted_data_size > 0x7F) // 127 bytes
+    length_data[0] = target_data_size & 0x7F;
+    if (target_data_size > 0x7F) // 127 bytes
     {
         length_data[0] |= 0x80;
-        length_data[length_data_size++] = encrypted_data_size >> 7 & 0x7F;
+        length_data[length_data_size++] = target_data_size >> 7 & 0x7F;
 
-        if (encrypted_data_size > 0x3FFF) // 16383 bytes
+        if (target_data_size > 0x3FFF) // 16383 bytes
         {
             length_data[1] |= 0x80;
-            length_data[length_data_size++] = encrypted_data_size >> 14 & 0x7F;
+            length_data[length_data_size++] = target_data_size >> 14 & 0x7F;
 
-            if (encrypted_data_size > 0x1FFFF) // 2097151 bytes
+            if (target_data_size > 0x1FFFF) // 2097151 bytes
             {
                 length_data[2] |= 0x80;
-                length_data[length_data_size++] = encrypted_data_size >> 21 & 0xFF;
+                length_data[length_data_size++] = target_data_size >> 21 & 0xFF;
             }
         }
     }
 
     // Now we can calculate the full size.
-    int total_size = length_data_size + encrypted_data_size;
+    const size_t total_size = length_data_size + target_data_size;
 
     // If the reserved buffer size is less, then increase it.
     if (write_.buffer.capacity() < total_size)
@@ -435,12 +452,34 @@ void Channel::scheduleWrite()
                            source_buffer.size(),
                            write_.buffer.data() + length_data_size))
     {
-        errorOccurred(ErrorCode::UNKNOWN);
+        onErrorOccurred(asio::error::access_denied);
         return;
     }
 
     // Send the buffer to the recipient.
-    socket_->write(reinterpret_cast<const char*>(write_.buffer.data()), write_.buffer.size());
+    asio::async_write(socket_,
+                      asio::buffer(write_.buffer.data(), write_.buffer.size()),
+                      [this](const std::error_code& error_code, size_t bytes_transferred)
+    {
+        WriteQueue& work_queue = write_.work_queue;
+
+        DCHECK(!work_queue.empty());
+
+        if (error_code)
+        {
+            onErrorOccurred(error_code);
+            return;
+        }
+
+        // Delete the sent message from the queue.
+        work_queue.pop();
+
+        // If the queue is not empty, then we send the following message.
+        if (work_queue.empty() && !reloadWriteQueue())
+            return;
+
+        doWrite();
+    });
 }
 
 } // namespace net

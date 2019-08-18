@@ -23,12 +23,10 @@
 #include "base/macros_magic.h"
 #include "net/network_error.h"
 
-#if defined(USE_TBB)
-#include <tbb/scalable_allocator.h>
-#endif // defined(USE_TBB)
+#include <asio/ip/tcp.hpp>
 
-#include <QTcpSocket>
-
+#include <memory>
+#include <mutex>
 #include <queue>
 
 namespace crypto {
@@ -39,22 +37,16 @@ namespace net {
 
 class ChannelProxy;
 class Listener;
+class Server;
 
-class Channel : public QObject
+class Channel
 {
-    Q_OBJECT
-
 public:
-    Channel();
+    // Constructor available for client.
+    explicit Channel(asio::io_context& io_context);
     ~Channel();
 
-    std::shared_ptr<ChannelProxy> channelProxy() { return proxy_; }
-
-    // Connects to a host at the specified address and port.
-    void connectToHost(const QString& address, uint16_t port);
-
-    // Disconnects to remote host.
-    void disconnectFromHost();
+    std::shared_ptr<ChannelProxy> channelProxy();
 
     // Sets an instance of the class to receive connection status notifications or new messages.
     // You can change this in the process.
@@ -65,12 +57,21 @@ public:
     // You must explicitly establish a cryptographer before or after establishing a connection.
     void setCryptor(std::unique_ptr<crypto::Cryptor> cryptor);
 
+    // Gets the address of the remote host as a string.
+    std::u16string peerAddress() const;
+
+    // Connects to a host at the specified address and port.
+    void connect(std::u16string_view address, uint16_t port);
+
+    // Disconnects to remote host.
+    void disconnect();
+
     // Returns true if the channel is connected and false if not connected.
-    bool isConnected() const { return is_connected_; }
+    bool isConnected() const;
 
     // Returns true if the channel is paused and false if not. If the channel is not connected,
     // then the return value is undefined.
-    bool isPaused() const { return is_paused_; }
+    bool isPaused() const;
 
     // Pauses the channel. After calling the method, new messages will not be read from the socket.
     // If at the time the method was called, the message was read, then notification of this
@@ -80,82 +81,73 @@ public:
     // After calling the method, reading new messages will continue.
     void resume();
 
-    // Returns the address of the connected peer.
-    QString peerAddress() const;
-
-    // Sends a message.
+    // Sending a message. The method call is thread safe. After the call, the message will be added
+    // to the queue to be sent.
     void send(base::ByteArray&& buffer);
 
 protected:
     friend class Server;
-    explicit Channel(QTcpSocket* socket);
 
-private slots:
-    void onSocketError(QAbstractSocket::SocketError error);
-    void onBytesWritten(int64_t bytes);
-    void onReadyRead();
-    void onMessageWritten();
-    void onMessageReceived();
+    // Constructor available for server. An already connected socket is being moved.
+    Channel(asio::io_context& io_context, asio::ip::tcp::socket&& socket);
 
 private:
-    void init();
-    void errorOccurred(ErrorCode error_code);
+    void onErrorOccurred(const std::error_code& error_code);
+    void doReadSize();
+    void doReadContent();
+    void onMessageReceived();
+    bool reloadWriteQueue();
     void scheduleWrite();
+    void doWrite();
+
+    asio::io_context& io_context_;
+    std::unique_ptr<asio::ip::tcp::resolver> resolver_;
+    asio::ip::tcp::socket socket_;
+    std::unique_ptr<crypto::Cryptor> cryptor_;
 
     std::shared_ptr<ChannelProxy> proxy_;
     Listener* listener_ = nullptr;
 
-    QTcpSocket* socket_ = nullptr;
-
-    // Encrypts and decrypts data.
-    std::unique_ptr<crypto::Cryptor> cryptor_;
-
     bool is_connected_ = false;
     bool is_paused_ = true;
 
-    // To this buffer decrypts the data received from the network.
-    base::ByteArray decrypt_buffer_;
+#if defined(USE_TBB)
+    using QueueAllocator = tbb::scalable_allocator<base::ByteArray>;
+#else // defined(USE_TBB)
+    using QueueAllocator = std::allocator<base::ByteArray>;
+#endif // defined(USE_*)
+
+    using QueueContainer = std::deque<base::ByteArray, QueueAllocator>;
+
+    class WriteQueue : public std::queue<base::ByteArray, QueueContainer>
+    {
+    public:
+        void fastSwap(WriteQueue& queue)
+        {
+            // Calls std::deque::swap.
+            c.swap(queue.c);
+        }
+    };
 
     struct WriteContext
     {
-#if defined(USE_TBB)
-        using QueueAllocator = tbb::scalable_allocator<base::ByteArray>;
-#else // defined(USE_TBB)
-        using QueueAllocator = std::allocator<base::ByteArray>;
-#endif // defined(USE_*)
+        WriteQueue incoming_queue;
+        std::mutex incoming_queue_lock;
 
-        using QueueContainer = std::deque<base::ByteArray, QueueAllocator>;
-
-        // The queue contains unencrypted source messages.
-        std::queue<base::ByteArray, QueueContainer> queue;
-
-        // The buffer contains an encrypted message that is being sent to the current moment.
+        WriteQueue work_queue;
         base::ByteArray buffer;
-
-        // Number of bytes transferred from the |buffer|.
-        int64_t bytes_transferred = 0;
     };
 
     struct ReadContext
     {
-        // To this buffer reads data from the network.
+        uint8_t one_byte = 0;
         base::ByteArray buffer;
-
-        // If the flag is set to true, then the buffer size is read from the network, if false,
-        // then no.
-        bool buffer_size_received = false;
-
-        // Size of |buffer|.
-        int buffer_size = 0;
-
-        // Number of bytes read into the |buffer|.
-        int64_t bytes_transferred = 0;
+        size_t buffer_size = 0;
+        size_t bytes_transfered = 0;
     };
 
-    ReadContext read_;
     WriteContext write_;
-
-    DISALLOW_COPY_AND_ASSIGN(Channel);
+    ReadContext read_;
 };
 
 } // namespace net

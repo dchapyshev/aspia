@@ -26,8 +26,8 @@ namespace net {
 class ChannelProxy
 {
 public:
-    bool connectToHost(const QString& address, uint16_t port);
-    bool disconnectFromHost();
+    bool connect(std::u16string_view address, uint16_t port);
+    bool disconnect();
 
     bool setListener(Listener* listener);
     bool setCryptor(std::unique_ptr<crypto::Cryptor> cryptor);
@@ -38,7 +38,7 @@ public:
     bool pause();
     bool resume();
 
-    QString peerAddress() const;
+    std::u16string peerAddress() const;
 
     bool send(base::ByteArray&& buffer);
 

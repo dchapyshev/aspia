@@ -21,9 +21,7 @@
 
 #include "base/macros_magic.h"
 
-#include <memory>
-
-class QTcpServer;
+#include <asio/ip/tcp.hpp>
 
 namespace net {
 
@@ -32,7 +30,7 @@ class Channel;
 class Server
 {
 public:
-    Server();
+    explicit Server(asio::io_context& io_context);
     ~Server();
 
     class Delegate
@@ -43,10 +41,13 @@ public:
         virtual void onNewConnection(std::unique_ptr<Channel> channel) = 0;
     };
 
-    bool start(uint16_t port, Delegate* delegate);
+    void start(uint16_t port, Delegate* delegate);
 
 private:
-    std::unique_ptr<QTcpServer> tcp_server_;
+    void doAccept();
+
+    asio::io_context& io_context_;
+    std::unique_ptr<asio::ip::tcp::acceptor> acceptor_;
     Delegate* delegate_ = nullptr;
 
     DISALLOW_COPY_AND_ASSIGN(Server);
