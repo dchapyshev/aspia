@@ -33,7 +33,15 @@ void memZero(std::string* str)
     if (!str)
         return;
 
-    memZero(str->data(), str->size());
+    memZero(str->data(), str->length() * sizeof(char));
+}
+
+void memZero(std::u16string* str)
+{
+    if (!str)
+        return;
+
+    memZero(str->data(), str->length() * sizeof(char16_t));
 }
 
 void memZero(base::ByteArray* str)

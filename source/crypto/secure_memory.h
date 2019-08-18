@@ -25,6 +25,7 @@ namespace crypto {
 
 void memZero(void* data, size_t data_size);
 void memZero(std::string* str);
+void memZero(std::u16string* str);
 void memZero(base::ByteArray* str);
 
 } // namespace crypto
