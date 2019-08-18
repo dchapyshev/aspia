@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -50,8 +50,9 @@ std::wstring collapseWhitespace(const std::wstring& text,
 std::string collapseWhitespaceASCII(const std::string& text,
                                     bool trim_sequences_with_line_breaks);
 
-int compareCaseInsensitiveASCII(const std::string& first, const std::string& second);
-int compareCaseInsensitive(const std::wstring& first, const std::wstring& second);
+int compareCaseInsensitiveASCII(std::string_view first, std::string_view second);
+int compareCaseInsensitiveASCII(std::u16string_view first, std::u16string_view second);
+int compareCaseInsensitive(std::u16string_view first, std::u16string_view second);
 
 bool startsWith(std::string_view str, std::string_view search_for);
 bool startsWith(std::wstring_view str, std::wstring_view search_for);

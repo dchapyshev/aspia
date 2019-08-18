@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,6 +17,7 @@
 //
 
 #include "base/strings/string_util.h"
+
 #include "base/strings/string_util_constants.h"
 #include "base/strings/unicode.h"
 
@@ -320,14 +321,49 @@ std::string collapseWhitespaceASCII(const std::string& text,
     return collapseWhitespaceT(text, trim_sequences_with_line_breaks);
 }
 
-int compareCaseInsensitiveASCII(const std::string& first, const std::string& second)
+namespace {
+
+template <class CharType>
+int compareCaseInsensitiveASCIIT(std::basic_string_view<CharType> a,
+                                 std::basic_string_view<CharType> b)
 {
-    return _stricmp(first.c_str(), second.c_str());
+    // Find the first characters that aren't equal and compare them.  If the end of one of the
+    // strings is found before a nonequal character, the lengths of the strings are compared.
+    size_t i = 0;
+
+    while (i < a.length() && i < b.length())
+    {
+        CharType lower_a = toLowerASCII(a[i]);
+        CharType lower_b = toLowerASCII(b[i]);
+
+        if (lower_a < lower_b)
+            return -1;
+        if (lower_a > lower_b)
+            return 1;
+        ++i;
+    }
+
+    // End of one string hit before finding a different character. Expect the
+    // common case to be "strings equal" at this point so check that first.
+    if (a.length() == b.length())
+        return 0;
+
+    if (a.length() < b.length())
+        return -1;
+
+    return 1;
 }
 
-int compareCaseInsensitive(const std::wstring& first, const std::wstring& second)
+} // namespace
+
+int compareCaseInsensitiveASCII(std::string_view first, std::string_view second)
 {
-    return _wcsicmp(first.c_str(), second.c_str());
+    return compareCaseInsensitiveASCIIT<char>(first, second);
+}
+
+int compareCaseInsensitiveASCII(std::u16string_view first, std::u16string_view second)
+{
+    return compareCaseInsensitiveASCIIT<char16_t>(first, second);
 }
 
 template<typename CharType>
