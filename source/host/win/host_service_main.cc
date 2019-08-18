@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -18,10 +18,10 @@
 
 #include "host/win/host_service_main.h"
 
-#include "base/base_paths.h"
+#include "base/logging.h"
+#include "base/files/base_paths.h"
 #include "crypto/scoped_crypto_initializer.h"
 #include "host/win/host_service.h"
-#include "qt_base/qt_logging.h"
 
 namespace host {
 
@@ -47,15 +47,14 @@ int hostServiceMain(int argc, char *argv[])
     settings.log_dir = loggingDir();
 
     base::initLogging(settings);
-    qt_base::initQtLogging();
 
     crypto::ScopedCryptoInitializer crypto_initializer;
     CHECK(crypto_initializer.isSucceeded());
 
-    int result = Service().exec(argc, argv);
+    Service().exec();
 
     base::shutdownLogging();
-    return result;
+    return 0;
 }
 
 } // namespace host

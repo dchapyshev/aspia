@@ -338,125 +338,125 @@
 <context>
     <name>host::ConfigDialog</name>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="153"/>
-        <location filename="../ui/host_config_dialog.cc" line="230"/>
-        <location filename="../ui/host_config_dialog.cc" line="283"/>
+        <location filename="../ui/host_config_dialog.cc" line="154"/>
+        <location filename="../ui/host_config_dialog.cc" line="231"/>
+        <location filename="../ui/host_config_dialog.cc" line="284"/>
         <source>Confirmation</source>
         <translation>Bestätigung</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="154"/>
+        <location filename="../ui/host_config_dialog.cc" line="155"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation>Möchten Sie den Benutzer &quot;%1&quot; wirklich löschen?</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="216"/>
+        <location filename="../ui/host_config_dialog.cc" line="217"/>
         <source>Import</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="216"/>
-        <location filename="../ui/host_config_dialog.cc" line="246"/>
+        <location filename="../ui/host_config_dialog.cc" line="217"/>
+        <location filename="../ui/host_config_dialog.cc" line="247"/>
         <source>XML-files (*.xml)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="225"/>
-        <location filename="../ui/host_config_dialog.cc" line="278"/>
+        <location filename="../ui/host_config_dialog.cc" line="226"/>
+        <location filename="../ui/host_config_dialog.cc" line="279"/>
         <source>Service configuration changed. For the changes to take effect, you must restart the service. Restart the service now?</source>
         <translation>Servicekonfiguration geändert. Damit die Änderungen wirksam werden, müssen Sie den Dienst neu starten. Den Dienst jetzt neu?</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="246"/>
+        <location filename="../ui/host_config_dialog.cc" line="247"/>
         <source>Export</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="265"/>
+        <location filename="../ui/host_config_dialog.cc" line="266"/>
         <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
         <translation>Die Konfiguration kann nicht geschrieben werden. Stellen Sie sicher, dass Sie über ausreichende Schreibrechte verfügen.</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="268"/>
-        <location filename="../ui/host_config_dialog.cc" line="445"/>
-        <location filename="../ui/host_config_dialog.cc" line="464"/>
-        <location filename="../ui/host_config_dialog.cc" line="479"/>
-        <location filename="../ui/host_config_dialog.cc" line="489"/>
-        <location filename="../ui/host_config_dialog.cc" line="505"/>
-        <location filename="../ui/host_config_dialog.cc" line="515"/>
+        <location filename="../ui/host_config_dialog.cc" line="269"/>
+        <location filename="../ui/host_config_dialog.cc" line="451"/>
+        <location filename="../ui/host_config_dialog.cc" line="470"/>
+        <location filename="../ui/host_config_dialog.cc" line="485"/>
+        <location filename="../ui/host_config_dialog.cc" line="495"/>
+        <location filename="../ui/host_config_dialog.cc" line="511"/>
+        <location filename="../ui/host_config_dialog.cc" line="521"/>
         <source>Warning</source>
         <translation>Warnung</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="384"/>
+        <location filename="../ui/host_config_dialog.cc" line="385"/>
         <source>Remove</source>
         <translation>Löschen</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="392"/>
+        <location filename="../ui/host_config_dialog.cc" line="394"/>
         <source>Started</source>
         <translation>Gestartet</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="393"/>
+        <location filename="../ui/host_config_dialog.cc" line="395"/>
         <source>Stop</source>
         <translation>Stopp</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="398"/>
+        <location filename="../ui/host_config_dialog.cc" line="400"/>
         <source>Not started</source>
         <translation>Nicht gestartet</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="399"/>
-        <location filename="../ui/host_config_dialog.cc" line="406"/>
-        <location filename="../ui/host_config_dialog.cc" line="419"/>
+        <location filename="../ui/host_config_dialog.cc" line="401"/>
+        <location filename="../ui/host_config_dialog.cc" line="408"/>
+        <location filename="../ui/host_config_dialog.cc" line="421"/>
         <source>Start</source>
         <translation>Starten</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="405"/>
+        <location filename="../ui/host_config_dialog.cc" line="407"/>
         <source>Installed</source>
         <translation>Installiert</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="416"/>
+        <location filename="../ui/host_config_dialog.cc" line="418"/>
         <source>Not installed</source>
         <translation>Nicht installiert</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="418"/>
+        <location filename="../ui/host_config_dialog.cc" line="420"/>
         <source>Install</source>
         <translation>Installieren</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="423"/>
+        <location filename="../ui/host_config_dialog.cc" line="425"/>
         <source>Current state: %1</source>
         <translation>Aktueller Zustand: %1</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="446"/>
+        <location filename="../ui/host_config_dialog.cc" line="452"/>
         <source>The service could not be installed.</source>
         <translation>Dienst konnte nicht installiert werden.</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="465"/>
+        <location filename="../ui/host_config_dialog.cc" line="471"/>
         <source>The service could not be removed.</source>
         <translation>Dienst konnte nicht gelöscht werden.</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="480"/>
-        <location filename="../ui/host_config_dialog.cc" line="506"/>
+        <location filename="../ui/host_config_dialog.cc" line="486"/>
+        <location filename="../ui/host_config_dialog.cc" line="512"/>
         <source>Could not access the service.</source>
         <translation>Kann nicht auf den Dienst zugreifen.</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="490"/>
+        <location filename="../ui/host_config_dialog.cc" line="496"/>
         <source>The service could not be started.</source>
         <translation>Dienst konnte nicht gestartet werden.</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="516"/>
+        <location filename="../ui/host_config_dialog.cc" line="522"/>
         <source>The service could not be stopped.</source>
         <translation>Dienst konnte nicht angehalten werden.</translation>
     </message>
@@ -613,32 +613,32 @@
         <translation type="vanished">Dateiübertragung</translation>
     </message>
     <message>
-        <location filename="../ui/user_dialog.cc" line="139"/>
-        <location filename="../ui/user_dialog.cc" line="152"/>
-        <location filename="../ui/user_dialog.cc" line="163"/>
-        <location filename="../ui/user_dialog.cc" line="174"/>
-        <location filename="../ui/user_dialog.cc" line="196"/>
-        <location filename="../ui/user_dialog.cc" line="213"/>
+        <location filename="../ui/user_dialog.cc" line="140"/>
+        <location filename="../ui/user_dialog.cc" line="153"/>
+        <location filename="../ui/user_dialog.cc" line="164"/>
+        <location filename="../ui/user_dialog.cc" line="175"/>
+        <location filename="../ui/user_dialog.cc" line="197"/>
+        <location filename="../ui/user_dialog.cc" line="214"/>
         <source>Warning</source>
         <translation>Warnung</translation>
     </message>
     <message>
-        <location filename="../ui/user_dialog.cc" line="140"/>
+        <location filename="../ui/user_dialog.cc" line="141"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>Der Benutzername darf nicht leer sein und darf nur Buchstaben, Zahlen und folgende Zeichen: &quot;_&quot;,&quot;-&quot;,&quot;.&quot; beinhalten.</translation>
     </message>
     <message>
-        <location filename="../ui/user_dialog.cc" line="153"/>
+        <location filename="../ui/user_dialog.cc" line="154"/>
         <source>The username you entered already exists.</source>
         <translation>Der eingegebene Benutzername existiert bereits.</translation>
     </message>
     <message>
-        <location filename="../ui/user_dialog.cc" line="164"/>
+        <location filename="../ui/user_dialog.cc" line="165"/>
         <source>The passwords you entered do not match.</source>
         <translation>Die eingegebenen Kennwörter stimmen nicht überein.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/user_dialog.cc" line="175"/>
+        <location filename="../ui/user_dialog.cc" line="176"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -646,12 +646,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../ui/user_dialog.cc" line="186"/>
+        <location filename="../ui/user_dialog.cc" line="187"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/user_dialog.cc" line="189"/>
+        <location filename="../ui/user_dialog.cc" line="190"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -659,17 +659,17 @@
         </translation>
     </message>
     <message>
-        <location filename="../ui/user_dialog.cc" line="193"/>
+        <location filename="../ui/user_dialog.cc" line="194"/>
         <source>Do you want to enter a different password?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/user_dialog.cc" line="214"/>
+        <location filename="../ui/user_dialog.cc" line="215"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/user_dialog.cc" line="273"/>
+        <location filename="../ui/user_dialog.cc" line="274"/>
         <source>Double-click to change</source>
         <translation>Doppelklicken, um zu ändern</translation>
     </message>

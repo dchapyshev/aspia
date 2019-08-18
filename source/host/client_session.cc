@@ -70,12 +70,12 @@ void ClientSession::setVersion(const base::Version& version)
     version_ = version;
 }
 
-void ClientSession::setUserName(const QString& username)
+void ClientSession::setUserName(std::u16string_view username)
 {
     username_ = username;
 }
 
-QString ClientSession::peerAddress() const
+std::u16string ClientSession::peerAddress() const
 {
     return channel_proxy_->peerAddress();
 }

@@ -19,7 +19,9 @@
 #include "host/host_authenticator.h"
 
 #include "base/cpuid.h"
+#include "base/logging.h"
 #include "base/version.h"
+#include "base/strings/unicode.h"
 #include "build/version.h"
 #include "common/message_serialization.h"
 #include "crypto/cryptor_aes256_gcm.h"
@@ -33,7 +35,6 @@
 #include "host/user.h"
 #include "net/network_channel.h"
 #include "proto/key_exchange.pb.h"
-#include "qt_base/qt_logging.h"
 
 namespace host {
 
@@ -96,7 +97,7 @@ void Authenticator::onNetworkError(net::ErrorCode error_code)
     LOG(LS_WARNING) << "Network error: " << static_cast<int>(error_code);
 }
 
-void Authenticator::onNetworkMessage(const base::ByteArray& buffer)
+void Authenticator::onNetworkMessage(base::ByteArray& buffer)
 {
     switch (internal_state_)
     {
@@ -151,14 +152,14 @@ void Authenticator::onNetworkMessage(const base::ByteArray& buffer)
                 return;
             }
 
-            username_ = QString::fromStdString(identify.username());
-            if (username_.isEmpty())
+            username_ = base::utf16FromUtf8(identify.username());
+            if (username_.empty())
             {
                 onFailed();
                 return;
             }
 
-            const int user_index = userlist_->find(username_);
+            const size_t user_index = userlist_->find(username_);
             if (user_index == -1)
             {
                 session_types_ = proto::SESSION_TYPE_ALL;

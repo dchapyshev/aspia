@@ -62,7 +62,7 @@ void ClientSessionDesktop::setVideoCapturer(std::unique_ptr<VideoCapturer> video
     video_capturer_ = std::move(video_capturer);
 }
 
-void ClientSessionDesktop::onNetworkMessage(const base::ByteArray& buffer)
+void ClientSessionDesktop::onNetworkMessage(base::ByteArray& buffer)
 {
     // TODO
 }

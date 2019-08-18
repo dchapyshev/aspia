@@ -19,6 +19,7 @@
 #include "host/user_session.h"
 
 #include "base/logging.h"
+#include "base/strings/unicode.h"
 #include "common/message_serialization.h"
 #include "crypto/password_generator.h"
 #include "client_session.h"
@@ -47,7 +48,7 @@ void UserSession::start(Delegate* delegate)
     updateCredentials();
 
     ipc_channel_proxy_->setListener(this);
-    ipc_channel_proxy_->start();
+    ipc_channel_proxy_->resume();
 }
 
 base::win::SessionId UserSession::sessionId() const
@@ -57,7 +58,7 @@ base::win::SessionId UserSession::sessionId() const
 
 User UserSession::user() const
 {
-    return User::create(QString::fromStdString(username_), QString::fromStdString(password_));
+    return User::create(base::utf16FromAscii(username_), base::utf16FromAscii(password_));
 }
 
 void UserSession::addNewSession(std::unique_ptr<ClientSession> client_session)

@@ -32,7 +32,7 @@ public:
 
 protected:
     // net::Listener implementation.
-    void onNetworkMessage(const base::ByteArray& buffer) override;
+    void onNetworkMessage(base::ByteArray& buffer) override;
 
 private:
     DISALLOW_COPY_AND_ASSIGN(ClientSessionFileTransfer);

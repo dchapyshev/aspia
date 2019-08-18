@@ -18,7 +18,7 @@
 
 #include "host/host_server.h"
 
-#include "base/base_paths.h"
+#include "base/files/base_paths.h"
 #include "host/client_session.h"
 #include "net/firewall_manager.h"
 #include "net/network_channel.h"
@@ -35,7 +35,11 @@ const wchar_t kFirewallRuleDecription[] = L"Allow incoming TCP connections";
 
 } // namespace
 
-Server::Server() = default;
+Server::Server(asio::io_context& io_context)
+    : io_context_(io_context)
+{
+    // Nothing
+}
 
 Server::~Server()
 {
@@ -76,18 +80,14 @@ void Server::start()
 
     authenticator_manager_ = std::make_unique<AuthenticatorManager>(this);
 
-    user_session_manager_ = std::make_unique<UserSessionManager>();
+    user_session_manager_ = std::make_unique<UserSessionManager>(io_context_);
     user_session_manager_->start(this);
 
     reloadUserList();
     addFirewallRules();
 
-    network_server_ = std::make_unique<net::Server>();
-    if (!network_server_->start(settings_.tcpPort(), this))
-    {
-        QCoreApplication::quit();
-        return;
-    }
+    network_server_ = std::make_unique<net::Server>(io_context_);
+    network_server_->start(settings_.tcpPort(), this);
 
     LOG(LS_INFO) << "Host server is started successfully";
 }

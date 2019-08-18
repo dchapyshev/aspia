@@ -21,12 +21,16 @@
 #include "common/message_serialization.h"
 #include "host/user_session_constants.h"
 #include "ipc/ipc_channel_proxy.h"
+#include "qt_base/application.h"
 
 namespace host {
 
 UserSessionProcess::UserSessionProcess()
 {
-    ipc_channel_ = std::make_unique<ipc::Channel>();
+    asio::io_context* io_context = qt_base::Application::ioContext();
+    DCHECK(io_context);
+
+    ipc_channel_ = std::make_unique<ipc::Channel>(*io_context);
 }
 
 UserSessionProcess::~UserSessionProcess() = default;
@@ -38,7 +42,7 @@ void UserSessionProcess::start(Delegate* delegate)
     DCHECK(delegate_);
 
     ipc_channel_->setListener(this);
-    ipc_channel_->connectToServer(kIpcChannelIdForUI);
+    ipc_channel_->connect(kIpcChannelIdForUI);
 }
 
 void UserSessionProcess::killClient(const std::string& uuid)
@@ -59,7 +63,7 @@ void UserSessionProcess::onIpcConnected()
 {
     state_ = State::CONNECTED;
     delegate_->onStateChanged();
-    ipc_channel_->start();
+    ipc_channel_->resume();
 }
 
 void UserSessionProcess::onIpcDisconnected()

@@ -124,7 +124,7 @@ UserList Settings::userList() const
         system_settings_.setArrayIndex(i);
 
         User user;
-        user.name      = system_settings_.value(QStringLiteral("Name")).toString();
+        user.name      = system_settings_.value(QStringLiteral("Name")).toString().toStdU16String();
         user.salt      = system_settings_.value(QStringLiteral("Salt")).toByteArray().toStdString();
         user.verifier  = system_settings_.value(QStringLiteral("Verifier")).toByteArray().toStdString();
         user.number    = system_settings_.value(QStringLiteral("Number")).toByteArray().toStdString();
@@ -165,7 +165,7 @@ void Settings::setUserList(const UserList& users)
 
         const User& user = users.at(i);
 
-        system_settings_.setValue(QStringLiteral("Name"), user.name);
+        system_settings_.setValue(QStringLiteral("Name"), QString::fromStdU16String(user.name));
         system_settings_.setValue(QStringLiteral("Salt"), QByteArray::fromStdString(user.salt));
         system_settings_.setValue(QStringLiteral("Verifier"), QByteArray::fromStdString(user.verifier));
         system_settings_.setValue(QStringLiteral("Number"), QByteArray::fromStdString(user.number));

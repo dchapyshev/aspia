@@ -35,7 +35,7 @@ class UserSessionManager
       public UserSession::Delegate
 {
 public:
-    UserSessionManager();
+    UserSessionManager(asio::io_context& io_context);
     ~UserSessionManager();
 
     class Delegate
@@ -54,6 +54,7 @@ public:
 protected:
     // ipc::Server::Delegate implementation.
     void onNewConnection(std::unique_ptr<ipc::Channel> channel) override;
+    void onErrorOccurred() override;
 
     // UserSession::Delegate implementation.
     void onUserSessionStarted() override { }
@@ -62,6 +63,7 @@ protected:
 private:
     void startSessionProcess(base::win::SessionId session_id);
 
+    asio::io_context& io_context_;
     std::unique_ptr<ipc::Server> ipc_server_;
     std::list<std::unique_ptr<UserSession>> sessions_;
     Delegate* delegate_ = nullptr;

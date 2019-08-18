@@ -18,9 +18,11 @@
 
 #include "host/user_session_manager.h"
 
-#include "base/base_paths.h"
 #include "base/command_line.h"
 #include "base/logging.h"
+#include "base/files/base_paths.h"
+#include "base/strings/string_number_conversions.h"
+#include "base/strings/string_util.h"
 #include "base/win/scoped_impersonator.h"
 #include "base/win/scoped_object.h"
 #include "base/win/session_enumerator.h"
@@ -218,7 +220,12 @@ bool createProcessWithToken(HANDLE token, const base::CommandLine& command_line)
 
 } // namespace
 
-UserSessionManager::UserSessionManager() = default;
+UserSessionManager::UserSessionManager(asio::io_context& io_context)
+    : io_context_(io_context)
+{
+    // Nothing
+}
+
 UserSessionManager::~UserSessionManager() = default;
 
 bool UserSessionManager::start(Delegate* delegate)
@@ -231,13 +238,10 @@ bool UserSessionManager::start(Delegate* delegate)
 
     delegate_ = delegate;
 
-    ipc_server_ = std::make_unique<ipc::Server>();
-
-    // The channel id is the same for all incoming connections.
-    ipc_server_->setChannelId(kIpcChannelIdForUI);
+    ipc_server_ = std::make_unique<ipc::Server>(io_context_);
 
     // Start the server which will accept incoming connections from UI processes in user sessions.
-    if (!ipc_server_->start(this))
+    if (!ipc_server_->start(kIpcChannelIdForUI, this))
         return false;
 
     for (base::win::SessionEnumerator session; !session.isAtEnd(); session.advance())
@@ -273,15 +277,12 @@ void UserSessionManager::addNewSession(std::unique_ptr<ClientSession> client_ses
 {
     base::win::SessionId session_id;
 
-    QString username = client_session->userName();
-    if (username.startsWith("#"))
+    std::u16string username = client_session->userName();
+    if (base::startsWith(username, u"#"))
     {
-        username.remove(0, 1);
+        username.erase(username.begin());
 
-        bool success;
-
-        session_id = username.toULong(&success);
-        if (!success)
+        if (!base::stringToULong(username, &session_id))
             return;
     }
     else
@@ -313,6 +314,11 @@ void UserSessionManager::onNewConnection(std::unique_ptr<ipc::Channel> channel)
 {
     sessions_.emplace_back(std::make_unique<UserSession>(std::move(channel)));
     sessions_.back()->start(this);
+}
+
+void UserSessionManager::onErrorOccurred()
+{
+    // TODO
 }
 
 void UserSessionManager::startSessionProcess(base::win::SessionId session_id)

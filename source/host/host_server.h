@@ -34,7 +34,7 @@ class Server
       public UserSessionManager::Delegate
 {
 public:
-    Server();
+    Server(asio::io_context& io_context);
     ~Server();
 
     void start();
@@ -54,6 +54,8 @@ private:
     void addFirewallRules();
     void deleteFirewallRules();
     void reloadUserList();
+
+    asio::io_context& io_context_;
 
     std::unique_ptr<QFileSystemWatcher> settings_watcher_;
     Settings settings_;

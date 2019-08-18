@@ -19,6 +19,8 @@
 #include "host/ui/host_config_dialog.h"
 
 #include "base/logging.h"
+#include "base/files/base_paths.h"
+#include "base/win/service_controller.h"
 #include "build/build_config.h"
 #include "common/ui/about_dialog.h"
 #include "host/ui/user_dialog.h"
@@ -26,7 +28,6 @@
 #include "host/win/host_service_constants.h"
 #include "host/host_settings.h"
 #include "host/user.h"
-#include "qt_base/service_controller.h"
 #include "qt_base/qt_xml_settings.h"
 #include "updater/update_dialog.h"
 
@@ -379,11 +380,12 @@ void ConfigDialog::reloadServiceStatus()
 
     QString state;
 
-    if (qt_base::ServiceController::isInstalled(kHostServiceName))
+    if (base::win::ServiceController::isInstalled(kHostServiceName))
     {
         ui.button_service_install_remove->setText(tr("Remove"));
 
-        qt_base::ServiceController controller = qt_base::ServiceController::open(kHostServiceName);
+        base::win::ServiceController controller =
+            base::win::ServiceController::open(kHostServiceName);
         if (controller.isValid())
         {
             if (controller.isRunning())
@@ -425,7 +427,7 @@ void ConfigDialog::reloadServiceStatus()
 
 bool ConfigDialog::isServiceStarted()
 {
-    qt_base::ServiceController controller = qt_base::ServiceController::open(kHostServiceName);
+    base::win::ServiceController controller = base::win::ServiceController::open(kHostServiceName);
     if (controller.isValid())
         return controller.isRunning();
 
@@ -434,10 +436,14 @@ bool ConfigDialog::isServiceStarted()
 
 bool ConfigDialog::installService()
 {
-    QString service_file_path =
-        QApplication::applicationDirPath() + QLatin1Char('/') + QLatin1String(kHostServiceFileName);
+    std::filesystem::path service_file_path;
 
-    qt_base::ServiceController controller = qt_base::ServiceController::install(
+    if (!base::BasePaths::currentExecDir(&service_file_path))
+        return false;
+
+    service_file_path.append(kHostServiceFileName);
+
+    base::win::ServiceController controller = base::win::ServiceController::install(
         kHostServiceName, kHostServiceDisplayName, service_file_path);
     if (!controller.isValid())
     {
@@ -449,7 +455,7 @@ bool ConfigDialog::installService()
     }
     else
     {
-        controller.setDependencies(QStringList() << "RpcSs" << "Tcpip" << "NDIS" << "AFD");
+        controller.setDependencies({ u"RpcSs", u"Tcpip", u"NDIS", u"AFD" });
         controller.setDescription(kHostServiceDescription);
     }
 
@@ -458,7 +464,7 @@ bool ConfigDialog::installService()
 
 bool ConfigDialog::removeService()
 {
-    if (!qt_base::ServiceController::remove(kHostServiceName))
+    if (!base::win::ServiceController::remove(kHostServiceName))
     {
         QMessageBox::warning(this,
                              tr("Warning"),
@@ -472,7 +478,7 @@ bool ConfigDialog::removeService()
 
 bool ConfigDialog::startService()
 {
-    qt_base::ServiceController controller = qt_base::ServiceController::open(kHostServiceName);
+    base::win::ServiceController controller = base::win::ServiceController::open(kHostServiceName);
     if (!controller.isValid())
     {
         QMessageBox::warning(this,
@@ -498,7 +504,7 @@ bool ConfigDialog::startService()
 
 bool ConfigDialog::stopService()
 {
-    qt_base::ServiceController controller = qt_base::ServiceController::open(kHostServiceName);
+    base::win::ServiceController controller = base::win::ServiceController::open(kHostServiceName);
     if (!controller.isValid())
     {
         QMessageBox::warning(this,

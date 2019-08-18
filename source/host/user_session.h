@@ -24,6 +24,7 @@
 #include "host/user.h"
 #include "ipc/ipc_listener.h"
 
+#include <list>
 #include <memory>
 
 namespace ipc {

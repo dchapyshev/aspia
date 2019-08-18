@@ -23,8 +23,6 @@
 #include "net/network_listener.h"
 #include "proto/common.pb.h"
 
-#include <QString>
-
 namespace net {
 class Channel;
 class ChannelProxy;
@@ -47,11 +45,11 @@ public:
     void setVersion(const base::Version& version);
     const base::Version& version() const { return version_; }
 
-    void setUserName(const QString& username);
-    QString userName() const { return username_; }
+    void setUserName(std::u16string_view username);
+    const std::u16string& userName() const { return username_; }
 
     proto::SessionType sessionType() const { return session_type_; }
-    QString peerAddress() const;
+    std::u16string peerAddress() const;
 
 protected:
     ClientSession(proto::SessionType session_type, std::unique_ptr<net::Channel> channel);
@@ -67,7 +65,7 @@ private:
     std::string id_;
     proto::SessionType session_type_;
     base::Version version_;
-    QString username_;
+    std::u16string username_;
 
     std::unique_ptr<net::Channel> channel_;
     std::shared_ptr<net::ChannelProxy> channel_proxy_;

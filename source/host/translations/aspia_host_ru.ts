@@ -430,125 +430,125 @@
 <context>
     <name>host::ConfigDialog</name>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="153"/>
-        <location filename="../ui/host_config_dialog.cc" line="230"/>
-        <location filename="../ui/host_config_dialog.cc" line="283"/>
+        <location filename="../ui/host_config_dialog.cc" line="154"/>
+        <location filename="../ui/host_config_dialog.cc" line="231"/>
+        <location filename="../ui/host_config_dialog.cc" line="284"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="154"/>
+        <location filename="../ui/host_config_dialog.cc" line="155"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation>Вы действительно хотите удалить пользователя &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="216"/>
+        <location filename="../ui/host_config_dialog.cc" line="217"/>
         <source>Import</source>
         <translation>Импорт</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="216"/>
-        <location filename="../ui/host_config_dialog.cc" line="246"/>
+        <location filename="../ui/host_config_dialog.cc" line="217"/>
+        <location filename="../ui/host_config_dialog.cc" line="247"/>
         <source>XML-files (*.xml)</source>
         <translation>XML-файлы (*.xml)</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="225"/>
-        <location filename="../ui/host_config_dialog.cc" line="278"/>
+        <location filename="../ui/host_config_dialog.cc" line="226"/>
+        <location filename="../ui/host_config_dialog.cc" line="279"/>
         <source>Service configuration changed. For the changes to take effect, you must restart the service. Restart the service now?</source>
         <translation>Конфигурация службы изменена. Для принятия изменений требуется перезапуск службы. Перезапустить сейчас?</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="246"/>
+        <location filename="../ui/host_config_dialog.cc" line="247"/>
         <source>Export</source>
         <translation>Экспорт</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="265"/>
+        <location filename="../ui/host_config_dialog.cc" line="266"/>
         <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
         <translation>Конфигурация не может быть записана. Проверьте имеются ли у вас достаточные права для записи.</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="268"/>
-        <location filename="../ui/host_config_dialog.cc" line="445"/>
-        <location filename="../ui/host_config_dialog.cc" line="464"/>
-        <location filename="../ui/host_config_dialog.cc" line="479"/>
-        <location filename="../ui/host_config_dialog.cc" line="489"/>
-        <location filename="../ui/host_config_dialog.cc" line="505"/>
-        <location filename="../ui/host_config_dialog.cc" line="515"/>
+        <location filename="../ui/host_config_dialog.cc" line="269"/>
+        <location filename="../ui/host_config_dialog.cc" line="451"/>
+        <location filename="../ui/host_config_dialog.cc" line="470"/>
+        <location filename="../ui/host_config_dialog.cc" line="485"/>
+        <location filename="../ui/host_config_dialog.cc" line="495"/>
+        <location filename="../ui/host_config_dialog.cc" line="511"/>
+        <location filename="../ui/host_config_dialog.cc" line="521"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="384"/>
+        <location filename="../ui/host_config_dialog.cc" line="385"/>
         <source>Remove</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="392"/>
+        <location filename="../ui/host_config_dialog.cc" line="394"/>
         <source>Started</source>
         <translation>Запущена</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="393"/>
+        <location filename="../ui/host_config_dialog.cc" line="395"/>
         <source>Stop</source>
         <translation>Остановить</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="398"/>
+        <location filename="../ui/host_config_dialog.cc" line="400"/>
         <source>Not started</source>
         <translation>Не запущена</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="399"/>
-        <location filename="../ui/host_config_dialog.cc" line="406"/>
-        <location filename="../ui/host_config_dialog.cc" line="419"/>
+        <location filename="../ui/host_config_dialog.cc" line="401"/>
+        <location filename="../ui/host_config_dialog.cc" line="408"/>
+        <location filename="../ui/host_config_dialog.cc" line="421"/>
         <source>Start</source>
         <translation>Запустить</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="405"/>
+        <location filename="../ui/host_config_dialog.cc" line="407"/>
         <source>Installed</source>
         <translation>Установлена</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="416"/>
+        <location filename="../ui/host_config_dialog.cc" line="418"/>
         <source>Not installed</source>
         <translation>Не установлена</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="418"/>
+        <location filename="../ui/host_config_dialog.cc" line="420"/>
         <source>Install</source>
         <translation>Установить</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="423"/>
+        <location filename="../ui/host_config_dialog.cc" line="425"/>
         <source>Current state: %1</source>
         <translation>Текущее состояние: %1</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="446"/>
+        <location filename="../ui/host_config_dialog.cc" line="452"/>
         <source>The service could not be installed.</source>
         <translation>Не удалось установить службу.</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="465"/>
+        <location filename="../ui/host_config_dialog.cc" line="471"/>
         <source>The service could not be removed.</source>
         <translation>Не удалось удалить службу.</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="480"/>
-        <location filename="../ui/host_config_dialog.cc" line="506"/>
+        <location filename="../ui/host_config_dialog.cc" line="486"/>
+        <location filename="../ui/host_config_dialog.cc" line="512"/>
         <source>Could not access the service.</source>
         <translation>Не удалось получить доступ к службе.</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="490"/>
+        <location filename="../ui/host_config_dialog.cc" line="496"/>
         <source>The service could not be started.</source>
         <translation>Не удалось запустить службу.</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="516"/>
+        <location filename="../ui/host_config_dialog.cc" line="522"/>
         <source>The service could not be stopped.</source>
         <translation>Не удалось остановить службу.</translation>
     </message>
@@ -761,32 +761,32 @@
         <translation type="vanished">Передача файлов</translation>
     </message>
     <message>
-        <location filename="../ui/user_dialog.cc" line="139"/>
-        <location filename="../ui/user_dialog.cc" line="152"/>
-        <location filename="../ui/user_dialog.cc" line="163"/>
-        <location filename="../ui/user_dialog.cc" line="174"/>
-        <location filename="../ui/user_dialog.cc" line="196"/>
-        <location filename="../ui/user_dialog.cc" line="213"/>
+        <location filename="../ui/user_dialog.cc" line="140"/>
+        <location filename="../ui/user_dialog.cc" line="153"/>
+        <location filename="../ui/user_dialog.cc" line="164"/>
+        <location filename="../ui/user_dialog.cc" line="175"/>
+        <location filename="../ui/user_dialog.cc" line="197"/>
+        <location filename="../ui/user_dialog.cc" line="214"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../ui/user_dialog.cc" line="140"/>
+        <location filename="../ui/user_dialog.cc" line="141"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>Имя пользователя не может быть пустым и может содержать только буквы алфавита, цифры и символы &quot;_&quot;,&quot;-&quot;,&quot;.&quot;.</translation>
     </message>
     <message>
-        <location filename="../ui/user_dialog.cc" line="153"/>
+        <location filename="../ui/user_dialog.cc" line="154"/>
         <source>The username you entered already exists.</source>
         <translation>Введенное имя пользователя уже существует.</translation>
     </message>
     <message>
-        <location filename="../ui/user_dialog.cc" line="164"/>
+        <location filename="../ui/user_dialog.cc" line="165"/>
         <source>The passwords you entered do not match.</source>
         <translation>Введенные пароли не совпадают.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/user_dialog.cc" line="175"/>
+        <location filename="../ui/user_dialog.cc" line="176"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
         <translation>
             <numerusform>Пароль не может быть пустой и не должен превышать %n символ.</numerusform>
@@ -795,12 +795,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../ui/user_dialog.cc" line="186"/>
+        <location filename="../ui/user_dialog.cc" line="187"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Введенный пароль не отвечает требованиям безопасности!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/user_dialog.cc" line="189"/>
+        <location filename="../ui/user_dialog.cc" line="190"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символа.</numerusform>
@@ -809,17 +809,17 @@
         </translation>
     </message>
     <message>
-        <location filename="../ui/user_dialog.cc" line="193"/>
+        <location filename="../ui/user_dialog.cc" line="194"/>
         <source>Do you want to enter a different password?</source>
         <translation>Вы хотите ввести другой пароль?</translation>
     </message>
     <message>
-        <location filename="../ui/user_dialog.cc" line="214"/>
+        <location filename="../ui/user_dialog.cc" line="215"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation>Неизвестная внутренняя ошибка при создании или изменении пользователя.</translation>
     </message>
     <message>
-        <location filename="../ui/user_dialog.cc" line="273"/>
+        <location filename="../ui/user_dialog.cc" line="274"/>
         <source>Double-click to change</source>
         <translation>Двойной щелчок для изменения</translation>
     </message>

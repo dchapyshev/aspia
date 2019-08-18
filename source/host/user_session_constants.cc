@@ -20,6 +20,6 @@
 
 namespace host {
 
-const char kIpcChannelIdForUI[] = "aspia_ipc_channel_for_ui";
+const char16_t kIpcChannelIdForUI[] = u"aspia_ipc_channel_for_ui";
 
 } // namespace host

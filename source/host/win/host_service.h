@@ -19,9 +19,7 @@
 #ifndef HOST__HOST_SERVICE_H
 #define HOST__HOST_SERVICE_H
 
-#include "qt_base/service.h"
-
-#include <QCoreApplication>
+#include "base/win/service.h"
 
 namespace base::win {
 class ScopedCOMInitializer;
@@ -31,17 +29,17 @@ namespace host {
 
 class Server;
 
-class Service : public qt_base::Service<QCoreApplication>
+class Service : public base::win::Service
 {
 public:
     Service();
     ~Service();
 
 protected:
-    // base::Service implementation.
-    void start() override;
-    void stop() override;
-    void sessionEvent(base::win::SessionStatus status, base::win::SessionId session_id) override;
+    // base::win::Service implementation.
+    void onStart() override;
+    void onStop() override;
+    void onSessionEvent(base::win::SessionStatus status, base::win::SessionId session_id) override;
 
 private:
     std::unique_ptr<base::win::ScopedCOMInitializer> com_initializer_;

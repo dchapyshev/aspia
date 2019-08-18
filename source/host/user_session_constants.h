@@ -21,7 +21,7 @@
 
 namespace host {
 
-extern const char kIpcChannelIdForUI[];
+extern const char16_t kIpcChannelIdForUI[];
 
 } // namespace host
 

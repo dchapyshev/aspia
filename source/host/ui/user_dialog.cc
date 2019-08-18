@@ -19,6 +19,7 @@
 #include "host/ui/user_dialog.h"
 
 #include "base/logging.h"
+#include "base/strings/string_util.h"
 #include "common/session_type.h"
 #include "common/user_util.h"
 #include "proto/common.pb.h"
@@ -28,7 +29,7 @@
 
 namespace host {
 
-UserDialog::UserDialog(UserList* user_list, int user_index, QWidget* parent)
+UserDialog::UserDialog(UserList* user_list, size_t user_index, QWidget* parent)
     : QDialog(parent),
       user_list_(user_list),
       user_index_(user_index)
@@ -42,7 +43,7 @@ UserDialog::UserDialog(UserList* user_list, int user_index, QWidget* parent)
         const User& user = user_list_->at(user_index);
 
         ui.checkbox_disable_user->setChecked(!(user.flags & User::ENABLED));
-        ui.edit_username->setText(user.name);
+        ui.edit_username->setText(QString::fromStdU16String(user.name));
 
         setAccountChanged(false);
     }
@@ -130,8 +131,8 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
 
         if (account_changed_)
         {
-            QString name = ui.edit_username->text();
-            QString password = ui.edit_password->text();
+            std::u16string name = ui.edit_username->text().toStdU16String();
+            std::u16string password = ui.edit_password->text().toStdU16String();
 
             if (!common::UserUtil::isValidUserName(name))
             {
@@ -145,7 +146,7 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
                 return;
             }
 
-            if ((name.compare(user.name, Qt::CaseInsensitive) != 0) &&
+            if ((base::compareCaseInsensitive(name, user.name) != 0) &&
                 (user_list_->find(name) != -1))
             {
                 QMessageBox::warning(this,

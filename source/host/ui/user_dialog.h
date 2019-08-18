@@ -30,7 +30,7 @@ class UserDialog : public QDialog
     Q_OBJECT
 
 public:
-    UserDialog(UserList* user_list, int user_index, QWidget* parent);
+    UserDialog(UserList* user_list, size_t user_index, QWidget* parent);
     ~UserDialog() = default;
 
 protected:
@@ -48,7 +48,7 @@ private:
     Ui::UserDialog ui;
 
     UserList* user_list_;
-    const int user_index_;
+    const size_t user_index_;
 
     bool account_changed_ = true;
 

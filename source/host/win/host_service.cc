@@ -19,6 +19,7 @@
 #include "host/win/host_service.h"
 
 #include "base/logging.h"
+#include "base/message_loop/message_pump_asio.h"
 #include "base/win/scoped_com_initializer.h"
 #include "base/win/security_helpers.h"
 #include "host/win/host_service_constants.h"
@@ -59,18 +60,22 @@ const wchar_t kComProcessMandatoryLabel[] =
 } // namespace
 
 Service::Service()
-    : qt_base::Service<QCoreApplication>(QLatin1String(kHostServiceName),
-                                         QLatin1String(kHostServiceDisplayName),
-                                         QLatin1String(kHostServiceDescription))
+    : base::win::Service(kHostServiceName, base::MessageLoop::Type::ASIO)
 {
     // Nothing
 }
 
 Service::~Service() = default;
 
-void Service::start()
+void Service::onStart()
 {
     LOG(LS_INFO) << "Service is started";
+
+    base::MessageLoop* message_loop = messageLoop();
+    DCHECK(message_loop);
+
+    base::MessagePumpForAsio* message_pump = message_loop->pumpAsio();
+    DCHECK(message_pump);
 
     com_initializer_.reset(new base::win::ScopedCOMInitializer());
     if (!com_initializer_->isSucceeded())
@@ -81,11 +86,11 @@ void Service::start()
 
     base::win::initializeComSecurity(kComProcessSd, kComProcessMandatoryLabel, false);
 
-    server_.reset(new Server());
+    server_ = std::make_unique<Server>(message_pump->ioContext());
     server_->start();
 }
 
-void Service::stop()
+void Service::onStop()
 {
     server_.reset();
     com_initializer_.reset();
@@ -93,7 +98,7 @@ void Service::stop()
     LOG(LS_INFO) << "Service is stopped";
 }
 
-void Service::sessionEvent(base::win::SessionStatus status, base::win::SessionId session_id)
+void Service::onSessionEvent(base::win::SessionStatus status, base::win::SessionId session_id)
 {
     if (server_)
         server_->setSessionEvent(status, session_id);

@@ -24,8 +24,6 @@
 #include "net/network_listener.h"
 #include "proto/key_exchange.pb.h"
 
-#include <QString>
-
 namespace crypto {
 class Cryptor;
 } // namespace crypto
@@ -78,7 +76,7 @@ protected:
     void onNetworkConnected() override;
     void onNetworkDisconnected() override;
     void onNetworkError(net::ErrorCode error_code) override;
-    void onNetworkMessage(const base::ByteArray& buffer) override;
+    void onNetworkMessage(base::ByteArray& buffer) override;
 
 private:
     std::unique_ptr<crypto::Cryptor> takeCryptor();
@@ -113,7 +111,7 @@ private:
     base::Version peer_version_;
 
     // User name.
-    QString username_;
+    std::u16string username_;
 
     base::ByteArray encrypt_iv_;
     base::ByteArray decrypt_iv_;
