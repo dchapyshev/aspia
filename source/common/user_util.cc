@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -18,16 +18,15 @@
 
 #include "common/user_util.h"
 
+#include <cwctype>
+
 namespace common {
 
 namespace {
 
-bool isValidUserNameChar(const QChar& username_char)
+bool isValidUserNameChar(char16_t username_char)
 {
-    if (username_char.isLetter())
-        return true;
-
-    if (username_char.isDigit())
+    if (std::iswalnum(username_char))
         return true;
 
     if (username_char == '.' ||
@@ -43,14 +42,14 @@ bool isValidUserNameChar(const QChar& username_char)
 } // namespace
 
 // static
-bool UserUtil::isValidUserName(const QString& username)
+bool UserUtil::isValidUserName(std::u16string_view username)
 {
-    int length = username.length();
+    size_t length = username.length();
 
-    if (length <= 0 || length > kMaxUserNameLength)
+    if (!length || length > kMaxUserNameLength)
         return false;
 
-    for (int i = 0; i < length; ++i)
+    for (size_t i = 0; i < length; ++i)
     {
         if (!isValidUserNameChar(username[i]))
             return false;
@@ -60,9 +59,9 @@ bool UserUtil::isValidUserName(const QString& username)
 }
 
 // static
-bool UserUtil::isValidPassword(const QString& password)
+bool UserUtil::isValidPassword(std::u16string_view password)
 {
-    int length = password.length();
+    size_t length = password.length();
 
     if (length < kMinPasswordLength || length > kMaxPasswordLength)
         return false;
@@ -71,9 +70,9 @@ bool UserUtil::isValidPassword(const QString& password)
 }
 
 // static
-bool UserUtil::isSafePassword(const QString& password)
+bool UserUtil::isSafePassword(std::u16string_view password)
 {
-    int length = password.length();
+    size_t length = password.length();
 
     if (length < kSafePasswordLength)
         return false;
@@ -82,13 +81,18 @@ bool UserUtil::isSafePassword(const QString& password)
     bool has_lower = false;
     bool has_digit = false;
 
-    for (int i = 0; i < length; ++i)
+    for (size_t i = 0; i < length; ++i)
     {
-        const QChar& character = password[i];
+        char16_t character = password[i];
 
-        has_upper |= character.isUpper();
-        has_lower |= character.isLower();
-        has_digit |= character.isDigit();
+        if (std::iswupper(character))
+            has_upper = true;
+
+        if (std::iswlower(character))
+            has_lower = true;
+
+        if (std::iswdigit(character))
+            has_digit = true;
     }
 
     return has_upper && has_lower && has_digit;
