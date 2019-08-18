@@ -38,6 +38,7 @@ public:
     void exec();
 
     const std::u16string& name() { return name_; }
+    MessageLoop* messageLoop() { return message_loop_.get(); }
     std::shared_ptr<MessageLoopProxy> messageLoopProxy() { return message_loop_proxy_; }
 
 protected:
