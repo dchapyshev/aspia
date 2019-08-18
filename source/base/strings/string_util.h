@@ -55,9 +55,16 @@ int compareCaseInsensitiveASCII(std::u16string_view first, std::u16string_view s
 int compareCaseInsensitive(std::u16string_view first, std::u16string_view second);
 
 bool startsWith(std::string_view str, std::string_view search_for);
+bool startsWith(std::u16string_view str, std::u16string_view search_for);
+#if defined(OS_WIN)
 bool startsWith(std::wstring_view str, std::wstring_view search_for);
+#endif // defined(OS_WIN)
+
 bool endsWith(std::string_view str, std::string_view search_for);
+bool endsWith(std::u16string_view str, std::u16string_view search_for);
+#if defined(OS_WIN)
 bool endsWith(std::wstring_view str, std::wstring_view search_for);
+#endif // defined(OS_WIN)
 
 enum TrimPositions
 {

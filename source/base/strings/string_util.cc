@@ -380,10 +380,17 @@ bool startsWith(std::string_view str, std::string_view search_for)
     return startsWithT<char>(str, search_for);
 }
 
+bool startsWith(std::u16string_view str, std::u16string_view search_for)
+{
+    return startsWithT<char16_t>(str, search_for);
+}
+
+#if defined(OS_WIN)
 bool startsWith(std::wstring_view str, std::wstring_view search_for)
 {
     return startsWithT<wchar_t>(str, search_for);
 }
+#endif // defined(OS_WIN)
 
 template <typename CharType>
 bool endsWithT(std::basic_string_view<CharType> str, std::basic_string_view<CharType> search_for)
@@ -402,10 +409,17 @@ bool endsWith(std::string_view str, std::string_view search_for)
     return endsWithT<char>(str, search_for);
 }
 
+bool endsWith(std::u16string_view str, std::u16string_view search_for)
+{
+    return endsWithT<char16_t>(str, search_for);
+}
+
+#if defined(OS_WIN)
 bool endsWith(std::wstring_view str, std::wstring_view search_for)
 {
     return endsWithT<wchar_t>(str, search_for);
 }
+#endif // defined(OS_WIN)
 
 namespace {
 
