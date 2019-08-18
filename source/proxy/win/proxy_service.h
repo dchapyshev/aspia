@@ -16,37 +16,29 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/logging.h"
-#include "base/files/base_paths.h"
-#include "proxy/win/proxy_service.h"
+#ifndef PROXY__WIN__PROXY_SERVICE_H
+#define PROXY__WIN__PROXY_SERVICE_H
 
-#if defined(USE_TBB)
-#include <tbb/tbbmalloc_proxy.h>
-#endif // defined(USE_TBB)
+#include "base/win/service.h"
 
-namespace {
+namespace proxy {
 
-std::filesystem::path loggingDir()
+class Service : public base::win::Service
 {
-    std::filesystem::path path;
+public:
+    Service();
+    ~Service();
 
-    if (!base::BasePaths::commonAppData(&path))
-        return std::filesystem::path();
+protected:
+    // base::win::Service implementation.
+    void onStart() override;
+    void onStop() override;
+    void onSessionEvent(base::win::SessionStatus event, base::win::SessionId session_id) override;
 
-    path.append("aspia/logs");
-    return path;
-}
+private:
+    DISALLOW_COPY_AND_ASSIGN(Service);
+};
 
-} // namespace
+} // namespace proxy
 
-int main(int argc, char* argv[])
-{
-    base::LoggingSettings settings;
-    settings.destination = base::LOG_TO_FILE;
-    settings.log_dir = loggingDir();
-
-    proxy::Service().exec();
-
-    base::shutdownLogging();
-    return 0;
-}
+#endif // PROXY__WIN__PROXY_SERVICE_H

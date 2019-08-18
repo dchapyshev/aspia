@@ -16,37 +16,34 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/logging.h"
-#include "base/files/base_paths.h"
-#include "proxy/win/proxy_service.h"
+#include "router/win/router_service.h"
 
-#if defined(USE_TBB)
-#include <tbb/tbbmalloc_proxy.h>
-#endif // defined(USE_TBB)
+#include "router/win/router_service_constants.h"
 
-namespace {
+namespace router {
 
-std::filesystem::path loggingDir()
+Service::Service()
+    : base::win::Service(kRouterServiceName, base::MessageLoop::Type::ASIO)
 {
-    std::filesystem::path path;
-
-    if (!base::BasePaths::commonAppData(&path))
-        return std::filesystem::path();
-
-    path.append("aspia/logs");
-    return path;
+    // Nothing
 }
 
-} // namespace
+Service::~Service() = default;
 
-int main(int argc, char* argv[])
+void Service::onStart()
 {
-    base::LoggingSettings settings;
-    settings.destination = base::LOG_TO_FILE;
-    settings.log_dir = loggingDir();
-
-    proxy::Service().exec();
-
-    base::shutdownLogging();
-    return 0;
+    // TODO
 }
+
+void Service::onStop()
+{
+    // TODO
+}
+
+void Service::onSessionEvent(
+    base::win::SessionStatus /* event */, base::win::SessionId /* session_id */)
+{
+    // Nothing
+}
+
+} // namespace router

@@ -16,11 +16,37 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
+#include "base/logging.h"
+#include "base/files/base_paths.h"
+#include "router/win/router_service.h"
+
 #if defined(USE_TBB)
 #include <tbb/tbbmalloc_proxy.h>
 #endif // defined(USE_TBB)
 
+namespace {
+
+std::filesystem::path loggingDir()
+{
+    std::filesystem::path path;
+
+    if (!base::BasePaths::commonAppData(&path))
+        return std::filesystem::path();
+
+    path.append("aspia/logs");
+    return path;
+}
+
+} // namespace
+
 int main(int argc, char* argv[])
 {
+    base::LoggingSettings settings;
+    settings.destination = base::LOG_TO_FILE;
+    settings.log_dir = loggingDir();
+
+    router::Service().exec();
+
+    base::shutdownLogging();
     return 0;
 }

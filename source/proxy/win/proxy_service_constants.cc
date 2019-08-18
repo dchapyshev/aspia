@@ -16,37 +16,16 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/logging.h"
-#include "base/files/base_paths.h"
-#include "proxy/win/proxy_service.h"
+#include "proxy/win/proxy_service_constants.h"
 
-#if defined(USE_TBB)
-#include <tbb/tbbmalloc_proxy.h>
-#endif // defined(USE_TBB)
+namespace proxy {
 
-namespace {
+const char16_t kProxyServiceFileName[] = u"aspia_proxy.exe";
 
-std::filesystem::path loggingDir()
-{
-    std::filesystem::path path;
+const char16_t kProxyServiceName[] = u"aspia-proxy";
 
-    if (!base::BasePaths::commonAppData(&path))
-        return std::filesystem::path();
+const char16_t kProxyServiceDisplayName[] = u"Aspia Proxy Service";
 
-    path.append("aspia/logs");
-    return path;
-}
+const char16_t kProxyServiceDescription[] = u"Proxies user traffic to bypass NAT.";
 
-} // namespace
-
-int main(int argc, char* argv[])
-{
-    base::LoggingSettings settings;
-    settings.destination = base::LOG_TO_FILE;
-    settings.log_dir = loggingDir();
-
-    proxy::Service().exec();
-
-    base::shutdownLogging();
-    return 0;
-}
+} // namespace proxy

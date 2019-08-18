@@ -21,9 +21,16 @@ include(tbb)
 list(APPEND SOURCE_ROUTER
     router_main.cc)
 
-source_group("" FILES ${SOURCE_ROUTER})
+list(APPEND SOURCE_ROUTER_WIN
+    win/router_service.cc
+    win/router_service.h
+    win/router_service_constants.cc
+    win/router_service_constants.h)
 
-add_executable(aspia_router router_main.cc win/router.rc)
+source_group("" FILES ${SOURCE_ROUTER})
+source_group(win FILES ${SOURCE_ROUTER_WIN})
+
+add_executable(aspia_router ${SOURCE_ROUTER} ${SOURCE_ROUTER_WIN} win/router.rc)
 set_target_properties(aspia_router PROPERTIES LINK_FLAGS "/MANIFEST:NO")
 target_link_libraries(aspia_router
     aspia_base

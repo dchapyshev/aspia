@@ -21,9 +21,16 @@ include(tbb)
 list(APPEND SOURCE_PROXY
     proxy_main.cc)
 
-source_group("" FILES ${SOURCE_PROXY})
+list(APPEND SOURCE_PROXY_WIN
+    win/proxy_service.cc
+    win/proxy_service.h
+    win/proxy_service_constants.cc
+    win/proxy_service_constants.h)
 
-add_executable(aspia_proxy proxy_main.cc win/proxy.rc)
+source_group("" FILES ${SOURCE_PROXY})
+source_group(win FILES ${SOURCE_PROXY_WIN})
+
+add_executable(aspia_proxy ${SOURCE_PROXY} ${SOURCE_PROXY_WIN} win/proxy.rc)
 set_target_properties(aspia_proxy PROPERTIES LINK_FLAGS "/MANIFEST:NO")
 target_link_libraries(aspia_proxy
     aspia_base
