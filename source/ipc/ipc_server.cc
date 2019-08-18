@@ -68,14 +68,6 @@ bool Server::start(std::u16string_view channel_id, Delegate* delegate)
     return doAccept();
 }
 
-void Server::stop()
-{
-    delegate_ = nullptr;
-
-    if (stream_)
-        stream_.reset();
-}
-
 bool Server::doAccept()
 {
     std::wstring user_sid;
@@ -136,16 +128,18 @@ bool Server::doAccept()
 
         if (error_code)
         {
-            delegate_->onIpcServerError();
+            delegate_->onErrorOccurred();
             return;
         }
 
-        delegate_->onIpcServerConnection(
-            std::unique_ptr<Channel>(new Channel(io_context_, std::move(*stream_))));
+        std::unique_ptr<Channel> channel =
+            std::unique_ptr<Channel>(new Channel(io_context_, std::move(*stream_)));
+
+        delegate_->onNewConnection(std::move(channel));
 
         // Waiting for the next connection.
         if (!doAccept())
-            delegate_->onIpcServerError();
+            delegate_->onErrorOccurred();
     });
 
     if (!ConnectNamedPipe(stream_->native_handle(), overlapped.get()))

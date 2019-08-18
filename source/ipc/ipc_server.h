@@ -40,12 +40,11 @@ public:
     public:
         virtual ~Delegate() = default;
 
-        virtual void onIpcServerConnection(std::unique_ptr<Channel> channel) = 0;
-        virtual void onIpcServerError() = 0;
+        virtual void onNewConnection(std::unique_ptr<Channel> channel) = 0;
+        virtual void onErrorOccurred() = 0;
     };
 
     bool start(std::u16string_view channel_id, Delegate* delegate);
-    void stop();
 
 private:
     bool doAccept();
