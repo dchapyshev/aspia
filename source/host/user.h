@@ -19,8 +19,8 @@
 #ifndef HOST__USER_H
 #define HOST__USER_H
 
-#include <QByteArray>
-#include <QList>
+#include <string>
+#include <vector>
 
 namespace host {
 
@@ -29,11 +29,11 @@ class User
 public:
     enum Flags { ENABLED = 1 };
 
-    static User create(const QString& name, const QString& password);
+    static User create(std::u16string_view name, std::u16string_view password);
 
     bool isValid() const;
 
-    QString name;
+    std::u16string name;
     std::string salt;
     std::string verifier;
     std::string number;
@@ -48,23 +48,23 @@ public:
     UserList() = default;
 
     void add(const User& user);
-    void remove(const QString& username);
-    void remove(int index);
-    void update(int index, const User& user);
+    void remove(std::u16string_view username);
+    void remove(size_t index);
+    void update(size_t index, const User& user);
     void merge(const UserList& user_list);
 
-    int find(const QString& username) const;
-    int count() const { return list_.count(); }
-    const User& at(int index) const;
+    size_t find(std::u16string_view username) const;
+    size_t count() const { return list_.size(); }
+    const User& at(size_t index) const;
 
     const std::string& seedKey() const { return seed_key_; }
     void setSeedKey(const std::string& seed_key);
 
-    bool hasIndex(int index) const;
+    bool hasIndex(size_t index) const;
 
 private:
     std::string seed_key_;
-    QList<User> list_;
+    std::vector<User> list_;
 };
 
 } // namespace host

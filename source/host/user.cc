@@ -19,6 +19,7 @@
 #include "host/user.h"
 
 #include "base/logging.h"
+#include "base/strings/string_util.h"
 #include "crypto/random.h"
 #include "crypto/srp_constants.h"
 #include "crypto/srp_math.h"
@@ -32,7 +33,7 @@ const size_t kUserSaltSize = 64; // In bytes.
 } // namespace
 
 // static
-User User::create(const QString& name, const QString& password)
+User User::create(std::u16string_view name, std::u16string_view password)
 {
     User user;
 
@@ -58,7 +59,7 @@ User User::create(const QString& name, const QString& password)
 
 bool User::isValid() const
 {
-    return !name.isEmpty() && !salt.empty() && !number.empty() &&
+    return !name.empty() && !salt.empty() && !number.empty() &&
            !generator.empty() && !verifier.empty();
 }
 
@@ -68,25 +69,23 @@ void UserList::add(const User& user)
         list_.push_back(user);
 }
 
-void UserList::remove(const QString& username)
+void UserList::remove(std::u16string_view username)
 {
-    int index = find(username);
+    size_t index = find(username);
     if (index != -1)
-        list_.removeAt(index);
+        remove(index);
 }
 
-void UserList::remove(int index)
+void UserList::remove(size_t index)
 {
     DCHECK(hasIndex(index));
-
-    list_.removeAt(index);
+    list_.erase(list_.begin() + index);
 }
 
-void UserList::update(int index, const User& user)
+void UserList::update(size_t index, const User& user)
 {
     DCHECK(hasIndex(index));
-
-    list_.replace(index, user);
+    list_[index] = user;
 }
 
 void UserList::merge(const UserList& user_list)
@@ -95,13 +94,13 @@ void UserList::merge(const UserList& user_list)
         add(user);
 }
 
-int UserList::find(const QString& username) const
+size_t UserList::find(std::u16string_view username) const
 {
-    for (int i = 0; i < list_.size(); ++i)
+    for (size_t i = 0; i < list_.size(); ++i)
     {
         const User& user = list_.at(i);
 
-        if ((user.name.compare(username, Qt::CaseInsensitive) == 0) &&
+        if ((base::compareCaseInsensitive(user.name, username) == 0) &&
             (user.flags & User::ENABLED))
         {
             return i;
@@ -111,10 +110,9 @@ int UserList::find(const QString& username) const
     return -1;
 }
 
-const User& UserList::at(int index) const
+const User& UserList::at(size_t index) const
 {
     DCHECK(hasIndex(index));
-
     return list_.at(index);
 }
 
@@ -123,9 +121,9 @@ void UserList::setSeedKey(const std::string& seed_key)
     seed_key_ = seed_key;
 }
 
-bool UserList::hasIndex(int index) const
+bool UserList::hasIndex(size_t index) const
 {
-    return index >= 0 && index < list_.size();
+    return index < list_.size();
 }
 
 } // namespace host
