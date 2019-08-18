@@ -28,13 +28,11 @@
 
 #include <QObject>
 
-namespace net {
-class Channel;
-} // namespace net
-
 namespace client {
 
-class Client : public QObject, public net::Listener
+class Channel;
+
+class Client : public QObject
 {
     Q_OBJECT
 
@@ -61,23 +59,15 @@ signals:
     void errorOccurred(const QString& message);
 
 protected:
+    // Reads the incoming message for the session.
+    virtual void onMessageReceived(const base::ByteArray& buffer) = 0;
+
     // Sends outgoing message.
     void sendMessage(const google::protobuf::MessageLite& message);
 
-    // net::Listener implementation.
-    void onNetworkConnected() override;
-    void onNetworkDisconnected() override;
-    void onNetworkError(net::ErrorCode error_code) override;
-
 private:
-    static QString errorToString(net::ErrorCode error_code);
-    static QString errorToString(Authenticator::Result result);
-
     ConnectData connect_data_;
-
-    std::unique_ptr<net::Channel> channel_;
-    std::shared_ptr<net::ChannelProxy> channel_proxy_;
-    std::unique_ptr<Authenticator> authenticator_;
+    std::unique_ptr<Channel> channel_;
 
     DISALLOW_COPY_AND_ASSIGN(Client);
 };

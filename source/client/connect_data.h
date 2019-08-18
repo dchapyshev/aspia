@@ -23,8 +23,6 @@
 #include "proto/common.pb.h"
 #include "proto/desktop.pb.h"
 
-#include <QString>
-
 namespace client {
 
 struct ConnectData
@@ -32,11 +30,11 @@ struct ConnectData
     ConnectData();
     ~ConnectData();
 
-    QString computer_name;
-    QString address;
+    std::u16string computer_name;
+    std::u16string address;
     uint16_t port = DEFAULT_HOST_TCP_PORT;
-    QString username;
-    QString password;
+    std::u16string username;
+    std::u16string password;
 
     proto::SessionType session_type = proto::SESSION_TYPE_DESKTOP_MANAGE;
     proto::DesktopConfig desktop_config;

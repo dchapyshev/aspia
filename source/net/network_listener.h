@@ -32,7 +32,7 @@ public:
     virtual void onNetworkConnected() = 0;
     virtual void onNetworkDisconnected() = 0;
     virtual void onNetworkError(ErrorCode error_code) = 0;
-    virtual void onNetworkMessage(const base::ByteArray& buffer) = 0;
+    virtual void onNetworkMessage(base::ByteArray& buffer) = 0;
 };
 
 } // namespace net

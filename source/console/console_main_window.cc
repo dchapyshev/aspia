@@ -19,6 +19,7 @@
 #include "console/console_main_window.h"
 
 #include "base/logging.h"
+#include "base/strings/unicode.h"
 #include "build/build_config.h"
 #include "build/version.h"
 #include "client/ui/client_window.h"
@@ -1053,11 +1054,11 @@ void MainWindow::connectToComputer(const proto::address_book::Computer& computer
 {
     client::ConnectData connect_data;
 
-    connect_data.computer_name = QString::fromStdString(computer.name());
-    connect_data.address       = QString::fromStdString(computer.address());
+    connect_data.computer_name = base::utf16FromUtf8(computer.name());
+    connect_data.address       = base::utf16FromUtf8(computer.address());
     connect_data.port          = computer.port();
-    connect_data.username      = QString::fromStdString(computer.username());
-    connect_data.password      = QString::fromStdString(computer.password());
+    connect_data.username      = base::utf16FromUtf8(computer.username());
+    connect_data.password      = base::utf16FromUtf8(computer.password());
     connect_data.session_type  = computer.session_type();
 
     switch (computer.session_type())

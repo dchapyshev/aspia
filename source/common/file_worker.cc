@@ -19,7 +19,7 @@
 #include "common/file_worker.h"
 
 #include "build/build_config.h"
-#include "base/base_paths.h"
+#include "base/files/base_paths.h"
 #include "base/logging.h"
 #include "common/file_platform_util.h"
 

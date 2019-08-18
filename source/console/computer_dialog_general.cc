@@ -17,6 +17,8 @@
 //
 
 #include "console/computer_dialog_general.h"
+
+#include "base/strings/unicode.h"
 #include "common/user_util.h"
 #include "net/address.h"
 
@@ -58,12 +60,12 @@ void ComputerDialogGeneral::restoreSettings(
     const QString& parent_name, const proto::address_book::Computer& computer)
 {
     net::Address address;
-    address.setHost(QString::fromStdString(computer.address()));
+    address.setHost(base::utf16FromUtf8(computer.address()));
     address.setPort(computer.port());
 
     ui.edit_parent_name->setText(parent_name);
     ui.edit_name->setText(QString::fromStdString(computer.name()));
-    ui.edit_address->setText(address.toString());
+    ui.edit_address->setText(QString::fromStdU16String(address.toString()));
     ui.edit_username->setText(QString::fromStdString(computer.username()));
     ui.edit_password->setText(QString::fromStdString(computer.password()));
     ui.edit_comment->setPlainText(QString::fromStdString(computer.comment()));
@@ -113,7 +115,7 @@ bool ComputerDialogGeneral::saveSettings(proto::address_book::Computer* computer
         return false;
     }
 
-    net::Address address = net::Address::fromString(ui.edit_address->text());
+    net::Address address = net::Address::fromString(ui.edit_address->text().toStdU16String());
     if (!address.isValid())
     {
         showError(tr("An invalid computer address was entered."));
@@ -123,7 +125,7 @@ bool ComputerDialogGeneral::saveSettings(proto::address_book::Computer* computer
     }
 
     computer->set_name(name.toStdString());
-    computer->set_address(address.host().toStdString());
+    computer->set_address(base::utf8FromUtf16(address.host()));
     computer->set_port(address.port());
     computer->set_username(username.toStdString());
     computer->set_password(password.toStdString());

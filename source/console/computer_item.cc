@@ -17,6 +17,8 @@
 //
 
 #include "console/computer_item.h"
+
+#include "base/strings/unicode.h"
 #include "console/computer_group_item.h"
 #include "net/address.h"
 
@@ -36,11 +38,11 @@ ComputerItem::ComputerItem(proto::address_book::Computer* computer,
 void ComputerItem::updateItem()
 {
     net::Address address;
-    address.setHost(QString::fromStdString(computer_->address()));
+    address.setHost(base::utf16FromUtf8(computer_->address()));
     address.setPort(computer_->port());
 
     setText(COLUMN_INDEX_NAME, QString::fromStdString(computer_->name()));
-    setText(COLUMN_INDEX_ADDRESS, address.toString());
+    setText(COLUMN_INDEX_ADDRESS, QString::fromStdU16String(address.toString()));
     setText(COLUMN_INDEX_COMMENT, QString::fromStdString(computer_->comment()).replace('\n', ' '));
 
     setText(COLUMN_INDEX_CREATED, QDateTime::fromSecsSinceEpoch(

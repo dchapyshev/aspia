@@ -537,10 +537,10 @@ QString DesktopWindow::createWindowTitle(const ConnectData& connect_data)
     }
 
     QString computer_name;
-    if (!connect_data.computer_name.isEmpty())
-        computer_name = connect_data.computer_name;
+    if (!connect_data.computer_name.empty())
+        computer_name = QString::fromStdU16String(connect_data.computer_name);
     else
-        computer_name = connect_data.address;
+        computer_name = QString::fromStdU16String(connect_data.address);
 
     return QString("%1 - %2").arg(computer_name).arg(session_name);
 }

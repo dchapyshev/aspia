@@ -16,8 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/base_paths.h"
-
+#include "base/files/base_paths.h"
 #include "client/ui/client_window.h"
 #include "console/console_application.h"
 #include "console/console_main_window.h"
@@ -104,9 +103,9 @@ int main(int argc, char *argv[])
     else if (parser.isSet(address_option))
     {
         client::ConnectData connect_data;
-        connect_data.address = parser.value(address_option);
+        connect_data.address = parser.value(address_option).toStdU16String();
         connect_data.port = parser.value(port_option).toUShort();
-        connect_data.username = parser.value(username_option);
+        connect_data.username = parser.value(username_option).toStdU16String();
 
         QString session_type = parser.value(session_type_option);
 

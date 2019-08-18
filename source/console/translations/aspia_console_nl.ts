@@ -274,42 +274,42 @@
 <context>
     <name>Console</name>
     <message>
-        <location filename="../console_main.cc" line="60"/>
+        <location filename="../console_main.cc" line="59"/>
         <source>Remote computer address.</source>
         <translation>Adres van computer op afstand.</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="61"/>
+        <location filename="../console_main.cc" line="60"/>
         <source>address</source>
         <translation>adres</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="65"/>
+        <location filename="../console_main.cc" line="64"/>
         <source>Remote computer port.</source>
         <translation>Poort van computer op afstand.</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="66"/>
+        <location filename="../console_main.cc" line="65"/>
         <source>port</source>
         <translation>poort</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="71"/>
+        <location filename="../console_main.cc" line="70"/>
         <source>Name of user.</source>
         <translation>Naam van de gebruiker.</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="72"/>
+        <location filename="../console_main.cc" line="71"/>
         <source>username</source>
         <translation>gebruikersnaam</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="76"/>
+        <location filename="../console_main.cc" line="75"/>
         <source>Session type. Possible values: desktop-manage, desktop-view, file-transfer.</source>
         <translation>Sessie type. Mogelijke waarden: desktop-manage, desktop-view, file-transfer.</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="82"/>
+        <location filename="../console_main.cc" line="81"/>
         <source>Open the client to connect to the computer.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -318,27 +318,27 @@
         <translation type="vanished">Voer het programma uit met een versimpelde user interface.</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="85"/>
+        <location filename="../console_main.cc" line="84"/>
         <source>Aspia Console</source>
         <translation>Aspia Console</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="88"/>
+        <location filename="../console_main.cc" line="87"/>
         <source>file</source>
         <translation>bestand</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="89"/>
+        <location filename="../console_main.cc" line="88"/>
         <source>The file to open.</source>
         <translation>Het bestand om te openen.</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="129"/>
+        <location filename="../console_main.cc" line="128"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="130"/>
+        <location filename="../console_main.cc" line="129"/>
         <source>Incorrect session type entered.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1064,7 +1064,7 @@
 <context>
     <name>console::ComputerDialogGeneral</name>
     <message numerus="yes">
-        <location filename="../computer_dialog_general.cc" line="81"/>
+        <location filename="../computer_dialog_general.cc" line="83"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Te lange naam. De maximum lengte is %n karakter.</numerusform>
@@ -1072,17 +1072,17 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_dialog_general.cc" line="89"/>
+        <location filename="../computer_dialog_general.cc" line="91"/>
         <source>Name can not be empty.</source>
         <translation>Naam mag niet leeg zijn.</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_general.cc" line="99"/>
+        <location filename="../computer_dialog_general.cc" line="101"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>De gebruikersnaam mag niet leeg zijn, en alleen karakters uit het alfabet, nummers, _, -, . karakters bevatten.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../computer_dialog_general.cc" line="109"/>
+        <location filename="../computer_dialog_general.cc" line="111"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Te lang commentaar. De maximale lengte is %n karakter.</numerusform>
@@ -1090,12 +1090,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_dialog_general.cc" line="119"/>
+        <location filename="../computer_dialog_general.cc" line="121"/>
         <source>An invalid computer address was entered.</source>
         <translation>Er is een ongeldig computer adres ingevoerd.</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_general.cc" line="151"/>
+        <location filename="../computer_dialog_general.cc" line="153"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
@@ -1215,80 +1215,80 @@
 <context>
     <name>console::MainWindow</name>
     <message>
-        <location filename="../console_main_window.cc" line="181"/>
+        <location filename="../console_main_window.cc" line="182"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="182"/>
+        <location filename="../console_main_window.cc" line="183"/>
         <source>Pinned address book file &quot;%1&quot; was not found.&lt;br/&gt;This file will be unpinned.</source>
         <translation>Het vastgepinde adres boek bestand &quot;%1&quot; is niet gevonden.&lt;br/&gt;Het bestand zal ge-unpind worden.</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="278"/>
+        <location filename="../console_main_window.cc" line="279"/>
         <source>Open Address Book</source>
         <translation>Open Adresboek</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="280"/>
+        <location filename="../console_main_window.cc" line="281"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Aspia Adresboek (*.aab)</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="510"/>
-        <location filename="../console_main_window.cc" line="853"/>
+        <location filename="../console_main_window.cc" line="511"/>
+        <location filename="../console_main_window.cc" line="854"/>
         <source>Confirmation</source>
         <translation>Bevestiging</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="511"/>
-        <location filename="../console_main_window.cc" line="854"/>
+        <location filename="../console_main_window.cc" line="512"/>
+        <location filename="../console_main_window.cc" line="855"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation>Adresboek &quot;%1&quot; is aangepast. Wijzigingen opslaan?</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="711"/>
+        <location filename="../console_main_window.cc" line="712"/>
         <source>Close other tabs</source>
         <translation>Sluit andere tabs</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="719"/>
+        <location filename="../console_main_window.cc" line="720"/>
         <source>Close tab</source>
         <translation>Sluit tab</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="722"/>
-        <location filename="../console_main_window.cc" line="729"/>
+        <location filename="../console_main_window.cc" line="723"/>
+        <location filename="../console_main_window.cc" line="730"/>
         <source>Pin tab</source>
         <translation>Pin tab</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="810"/>
+        <location filename="../console_main_window.cc" line="811"/>
         <source>Hide</source>
         <translation>Verbergen</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="825"/>
+        <location filename="../console_main_window.cc" line="826"/>
         <source>Show</source>
         <translation>Weergeven</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="934"/>
+        <location filename="../console_main_window.cc" line="935"/>
         <source>&lt;empty&gt;</source>
         <translation>&lt;leeg&gt;</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="955"/>
+        <location filename="../console_main_window.cc" line="956"/>
         <source>Aspia Console</source>
         <translation>Aspia Console</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="250"/>
+        <location filename="../console_main_window.cc" line="251"/>
         <source>Information</source>
         <translation>Informatie</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="251"/>
+        <location filename="../console_main_window.cc" line="252"/>
         <source>Address Book &quot;%1&quot; is already open.</source>
         <translation>Adresboek &quot;%1&quot; is al geopend.</translation>
     </message>

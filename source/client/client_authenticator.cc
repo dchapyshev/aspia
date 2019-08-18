@@ -75,7 +75,7 @@ void Authenticator::onNetworkError(net::ErrorCode error_code)
     LOG(LS_INFO) << "Network error: " << static_cast<int>(error_code);
 }
 
-void Authenticator::onNetworkMessage(const base::ByteArray& buffer)
+void Authenticator::onNetworkMessage(base::ByteArray& buffer)
 {
     switch (state_)
     {

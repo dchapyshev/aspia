@@ -126,7 +126,7 @@ void ClientDialog::sessionConfigButtonPressed()
 
 void ClientDialog::connectButtonPressed()
 {
-    net::Address address = net::Address::fromString(ui.edit_address->text());
+    net::Address address = net::Address::fromString(ui.edit_address->text().toStdU16String());
     if (!address.isValid())
     {
         QMessageBox::warning(this,

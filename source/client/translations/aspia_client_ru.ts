@@ -636,101 +636,105 @@
 <context>
     <name>client::Channel</name>
     <message>
+        <location filename="../client_channel.cc" line="234"/>
         <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
-        <translation type="obsolete">Произошла ошибка в сети (например, сетевой кабель был случайно отключен).</translation>
+        <translation type="unfinished">Произошла ошибка в сети (например, сетевой кабель был случайно отключен).</translation>
     </message>
     <message>
+        <location filename="../client_channel.cc" line="238"/>
         <source>Connection was refused by the peer (or timed out).</source>
-        <translation type="obsolete">Подключение было отклонено другой стороной (или превышено время ожидания).</translation>
+        <translation type="unfinished">Подключение было отклонено другой стороной (или превышено время ожидания).</translation>
     </message>
     <message>
+        <location filename="../client_channel.cc" line="242"/>
         <source>Remote host closed the connection.</source>
-        <translation type="obsolete">Удаленный узел закрыл подключение.</translation>
+        <translation type="unfinished">Удаленный узел закрыл подключение.</translation>
     </message>
     <message>
+        <location filename="../client_channel.cc" line="246"/>
         <source>Host address was not found.</source>
-        <translation type="obsolete">Не найден адрес удаленного узла.</translation>
+        <translation type="unfinished">Не найден адрес удаленного узла.</translation>
     </message>
     <message>
+        <location filename="../client_channel.cc" line="250"/>
         <source>Socket operation timed out.</source>
-        <translation type="obsolete">Превышено время ожидания.</translation>
+        <translation type="unfinished">Превышено время ожидания.</translation>
     </message>
     <message>
+        <location filename="../client_channel.cc" line="254"/>
         <source>Address specified is already in use and was set to be exclusive.</source>
-        <translation type="obsolete">Указанный адрес уже используется и был установлен монопольно.</translation>
+        <translation type="unfinished">Указанный адрес уже используется и был установлен монопольно.</translation>
     </message>
     <message>
+        <location filename="../client_channel.cc" line="258"/>
         <source>Address specified does not belong to the host.</source>
-        <translation type="obsolete">Указанный адрес не принадлежит узлу.</translation>
+        <translation type="unfinished">Указанный адрес не принадлежит узлу.</translation>
     </message>
     <message>
+        <location filename="../client_channel.cc" line="262"/>
+        <location filename="../client_channel.cc" line="297"/>
         <source>An unknown error occurred.</source>
-        <translation type="obsolete">Произошла неизвестная ошибка.</translation>
+        <translation type="unfinished">Произошла неизвестная ошибка.</translation>
     </message>
     <message>
+        <location filename="../client_channel.cc" line="277"/>
+        <source>Authentication successfully completed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client_channel.cc" line="281"/>
+        <source>Network authentication error.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client_channel.cc" line="285"/>
         <source>Violation of the data exchange protocol.</source>
-        <translation type="obsolete">Нарушение протокола обмена данными.</translation>
+        <translation type="unfinished">Нарушение протокола обмена данными.</translation>
     </message>
     <message>
+        <location filename="../client_channel.cc" line="289"/>
         <source>An error occured while authenticating: wrong user name or password.</source>
-        <translation type="obsolete">Произошла ошибка при аутентификации: неправильное имя пользователя или пароль.</translation>
+        <translation type="unfinished">Произошла ошибка при аутентификации: неправильное имя пользователя или пароль.</translation>
     </message>
     <message>
+        <location filename="../client_channel.cc" line="293"/>
         <source>Specified session type is not allowed for the user.</source>
-        <translation type="obsolete">Указанный тип сессии не разрешен для пользователя.</translation>
+        <translation type="unfinished">Указанный тип сессии не разрешен для пользователя.</translation>
     </message>
 </context>
 <context>
     <name>client::Client</name>
     <message>
-        <location filename="../client.cc" line="120"/>
         <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
-        <translation>Произошла ошибка в сети (например, сетевой кабель был случайно отключен).</translation>
+        <translation type="vanished">Произошла ошибка в сети (например, сетевой кабель был случайно отключен).</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="124"/>
         <source>Connection was refused by the peer (or timed out).</source>
-        <translation>Подключение было отклонено другой стороной (или превышено время ожидания).</translation>
+        <translation type="vanished">Подключение было отклонено другой стороной (или превышено время ожидания).</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="128"/>
         <source>Remote host closed the connection.</source>
-        <translation>Удаленный узел закрыл подключение.</translation>
+        <translation type="vanished">Удаленный узел закрыл подключение.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="132"/>
         <source>Host address was not found.</source>
-        <translation>Не найден адрес удаленного узла.</translation>
+        <translation type="vanished">Не найден адрес удаленного узла.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="136"/>
         <source>Socket operation timed out.</source>
-        <translation>Превышено время ожидания.</translation>
+        <translation type="vanished">Превышено время ожидания.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="140"/>
         <source>Address specified is already in use and was set to be exclusive.</source>
-        <translation>Указанный адрес уже используется и был установлен монопольно.</translation>
+        <translation type="vanished">Указанный адрес уже используется и был установлен монопольно.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="144"/>
         <source>Address specified does not belong to the host.</source>
-        <translation>Указанный адрес не принадлежит узлу.</translation>
+        <translation type="vanished">Указанный адрес не принадлежит узлу.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="163"/>
-        <source>Authentication successfully completed.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client.cc" line="167"/>
-        <source>Network authentication error.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client.cc" line="171"/>
         <source>Violation of the data exchange protocol.</source>
-        <translation>Нарушение протокола обмена данными.</translation>
+        <translation type="vanished">Нарушение протокола обмена данными.</translation>
     </message>
     <message>
         <source>An error occurred while encrypting the message.</source>
@@ -741,20 +745,16 @@
         <translation type="vanished">Произошла ошибка при расшифровке сообщения.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="175"/>
         <source>An error occured while authenticating: wrong user name or password.</source>
-        <translation>Произошла ошибка при аутентификации: неправильное имя пользователя или пароль.</translation>
+        <translation type="vanished">Произошла ошибка при аутентификации: неправильное имя пользователя или пароль.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="179"/>
         <source>Specified session type is not allowed for the user.</source>
-        <translation>Указанный тип сессии не разрешен для пользователя.</translation>
+        <translation type="vanished">Указанный тип сессии не разрешен для пользователя.</translation>
     </message>
     <message>
-        <location filename="../client.cc" line="148"/>
-        <location filename="../client.cc" line="183"/>
         <source>An unknown error occurred.</source>
-        <translation>Произошла неизвестная ошибка.</translation>
+        <translation type="vanished">Произошла неизвестная ошибка.</translation>
     </message>
 </context>
 <context>
@@ -828,17 +828,17 @@
 <context>
     <name>client::ClientFileTransfer</name>
     <message>
-        <location filename="../client_file_transfer.cc" line="58"/>
+        <location filename="../client_file_transfer.cc" line="59"/>
         <source>Invalid message from host</source>
         <translation>Неверное сообщение от хоста</translation>
     </message>
     <message>
-        <location filename="../client_file_transfer.cc" line="64"/>
+        <location filename="../client_file_transfer.cc" line="65"/>
         <source>There are no logged in users. File transfer is not available</source>
         <translation>Нет вошедших в систему пользователей. Передача файлов недоступна</translation>
     </message>
     <message>
-        <location filename="../client_file_transfer.cc" line="82"/>
+        <location filename="../client_file_transfer.cc" line="83"/>
         <source>Session error</source>
         <translation>Ошибка сессии</translation>
     </message>

@@ -22,8 +22,6 @@
 #include "client/client_authenticator.h"
 #include "crypto/big_num.h"
 
-#include <QString>
-
 namespace client {
 
 class AuthenticatorSrp : public Authenticator
@@ -32,11 +30,11 @@ public:
     AuthenticatorSrp();
     ~AuthenticatorSrp() = default;
 
-    void setUserName(const QString& username);
-    const QString& userName() const;
+    void setUserName(std::u16string_view username);
+    const std::u16string& userName() const;
 
-    void setPassword(const QString& password);
-    const QString& password() const;
+    void setPassword(std::u16string_view password);
+    const std::u16string& password() const;
 
 protected:
     // Authenticator implementation.
@@ -46,8 +44,8 @@ protected:
     std::unique_ptr<crypto::Cryptor> takeCryptor() override;
 
 private:
-    QString username_;
-    QString password_;
+    std::u16string username_;
+    std::u16string password_;
 
     crypto::BigNum N_;
     crypto::BigNum g_;

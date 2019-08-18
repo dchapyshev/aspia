@@ -25,6 +25,8 @@ list(APPEND SOURCE_CLIENT
     client_authenticator.h
     client_authenticator_srp.cc
     client_authenticator_srp.h
+    client_channel.cc
+    client_channel.h
     client_desktop.cc
     client_desktop.h
     client_file_transfer.cc

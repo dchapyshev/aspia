@@ -19,6 +19,7 @@
 #include "client/client_authenticator_srp.h"
 
 #include "base/cpuid.h"
+#include "base/strings/unicode.h"
 #include "common/message_serialization.h"
 #include "crypto/cryptor_aes256_gcm.h"
 #include "crypto/cryptor_chacha20_poly1305.h"
@@ -86,22 +87,22 @@ bool verifyNg(const std::string& N, const std::string& g)
 
 AuthenticatorSrp::AuthenticatorSrp() = default;
 
-void AuthenticatorSrp::setUserName(const QString& username)
+void AuthenticatorSrp::setUserName(std::u16string_view username)
 {
     username_ = username;
 }
 
-const QString& AuthenticatorSrp::userName() const
+const std::u16string& AuthenticatorSrp::userName() const
 {
     return username_;
 }
 
-void AuthenticatorSrp::setPassword(const QString& password)
+void AuthenticatorSrp::setPassword(std::u16string_view password)
 {
     password_ = password;
 }
 
-const QString& AuthenticatorSrp::password() const
+const std::u16string& AuthenticatorSrp::password() const
 {
     return password_;
 }
@@ -130,7 +131,7 @@ void AuthenticatorSrp::onStarted()
     }
 
     proto::SrpIdentify identify;
-    identify.set_username(username_.toStdString());
+    identify.set_username(base::utf8FromUtf16(username_));
     sendMessage(common::serializeMessage(identify));
 }
 

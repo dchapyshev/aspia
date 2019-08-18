@@ -17,6 +17,7 @@
 //
 
 #include "client/client_file_transfer.h"
+
 #include "client/ui/file_manager_window.h"
 #include "common/file_request.h"
 #include "common/file_worker.h"
@@ -49,7 +50,7 @@ ClientFileTransfer::~ClientFileTransfer()
 
 common::FileWorker* ClientFileTransfer::localWorker() { return worker_.get(); }
 
-void ClientFileTransfer::onNetworkMessage(const base::ByteArray& buffer)
+void ClientFileTransfer::onMessageReceived(const base::ByteArray& buffer)
 {
     proto::FileReply reply;
 

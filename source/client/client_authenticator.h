@@ -75,7 +75,7 @@ protected:
     void onNetworkConnected() override;
     void onNetworkDisconnected() override;
     void onNetworkError(net::ErrorCode error_code) override;
-    void onNetworkMessage(const base::ByteArray& buffer) override;
+    void onNetworkMessage(base::ByteArray& buffer) override;
 
 private:
     enum class State

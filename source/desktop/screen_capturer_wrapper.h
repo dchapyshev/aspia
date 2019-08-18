@@ -20,7 +20,7 @@
 #define DESKTOP__SCREEN_CAPTURER_WRAPPER_H
 
 #include "base/macros_magic.h"
-#include "base/thread_checker.h"
+#include "base/threading/thread_checker.h"
 #include "base/win/scoped_thread_desktop.h"
 #include "desktop/screen_capturer.h"
 

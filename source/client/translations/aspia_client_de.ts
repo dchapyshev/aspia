@@ -626,70 +626,70 @@
     </message>
 </context>
 <context>
-    <name>client::Client</name>
+    <name>client::Channel</name>
     <message>
-        <location filename="../client.cc" line="120"/>
+        <location filename="../client_channel.cc" line="234"/>
         <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client.cc" line="124"/>
+        <location filename="../client_channel.cc" line="238"/>
         <source>Connection was refused by the peer (or timed out).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client.cc" line="128"/>
+        <location filename="../client_channel.cc" line="242"/>
         <source>Remote host closed the connection.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client.cc" line="132"/>
+        <location filename="../client_channel.cc" line="246"/>
         <source>Host address was not found.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client.cc" line="136"/>
+        <location filename="../client_channel.cc" line="250"/>
         <source>Socket operation timed out.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client.cc" line="140"/>
+        <location filename="../client_channel.cc" line="254"/>
         <source>Address specified is already in use and was set to be exclusive.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client.cc" line="144"/>
+        <location filename="../client_channel.cc" line="258"/>
         <source>Address specified does not belong to the host.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client.cc" line="148"/>
-        <location filename="../client.cc" line="183"/>
+        <location filename="../client_channel.cc" line="262"/>
+        <location filename="../client_channel.cc" line="297"/>
         <source>An unknown error occurred.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client.cc" line="163"/>
+        <location filename="../client_channel.cc" line="277"/>
         <source>Authentication successfully completed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client.cc" line="167"/>
+        <location filename="../client_channel.cc" line="281"/>
         <source>Network authentication error.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client.cc" line="171"/>
+        <location filename="../client_channel.cc" line="285"/>
         <source>Violation of the data exchange protocol.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client.cc" line="175"/>
+        <location filename="../client_channel.cc" line="289"/>
         <source>An error occured while authenticating: wrong user name or password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client.cc" line="179"/>
+        <location filename="../client_channel.cc" line="293"/>
         <source>Specified session type is not allowed for the user.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -765,17 +765,17 @@
 <context>
     <name>client::ClientFileTransfer</name>
     <message>
-        <location filename="../client_file_transfer.cc" line="58"/>
+        <location filename="../client_file_transfer.cc" line="59"/>
         <source>Invalid message from host</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_file_transfer.cc" line="64"/>
+        <location filename="../client_file_transfer.cc" line="65"/>
         <source>There are no logged in users. File transfer is not available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_file_transfer.cc" line="82"/>
+        <location filename="../client_file_transfer.cc" line="83"/>
         <source>Session error</source>
         <translation type="unfinished"></translation>
     </message>

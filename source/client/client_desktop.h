@@ -74,8 +74,8 @@ public:
     void sendSystemInfoRequest();
 
 protected:
-    // net::Listener implementation.
-    void onNetworkMessage(const base::ByteArray& buffer) override;
+    // Client implementation.
+    void onMessageReceived(const base::ByteArray& buffer) override;
 
 private:
     void readConfigRequest(const proto::DesktopConfigRequest& config_request);

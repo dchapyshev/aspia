@@ -78,18 +78,18 @@ bool ClientWindow::connectToHost(const ConnectData* connect_data, QWidget* paren
         data = *connect_data;
     }
 
-    if (data.username.isEmpty() || data.password.isEmpty())
+    if (data.username.empty() || data.password.empty())
     {
         AuthorizationDialog auth_dialog(parent);
 
-        auth_dialog.setUserName(data.username);
-        auth_dialog.setPassword(data.password);
+        auth_dialog.setUserName(QString::fromStdU16String(data.username));
+        auth_dialog.setPassword(QString::fromStdU16String(data.password));
 
         if (auth_dialog.exec() == AuthorizationDialog::Rejected)
             return false;
 
-        data.username = auth_dialog.userName();
-        data.password = auth_dialog.password();
+        data.username = auth_dialog.userName().toStdU16String();
+        data.password = auth_dialog.password().toStdU16String();
     }
 
     ClientWindow* window = create(data, parent);

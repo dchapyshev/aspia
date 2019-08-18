@@ -18,7 +18,8 @@
 
 #include "qt_base/application.h"
 
-#include "base/base_paths.h"
+#include "base/files/base_paths.h"
+#include "base/message_loop/message_pump_asio.h"
 #include "base/win/process_util.h"
 #include "build/build_config.h"
 #include "crypto/scoped_crypto_initializer.h"
@@ -186,6 +187,9 @@ Application::Application(int& argc, char* argv[])
     CHECK(crypto_initializer_->isSucceeded());
 
     locale_loader_ = std::make_unique<LocaleLoader>();
+
+    // Run the thread for IO.
+    io_thread_.start(base::MessageLoop::Type::ASIO, this);
 }
 
 Application::~Application()
@@ -207,6 +211,34 @@ Application::~Application()
 Application* Application::instance()
 {
     return static_cast<Application*>(QApplication::instance());
+}
+
+// static
+std::shared_ptr<base::MessageLoopProxy> Application::ioRunner()
+{
+    Application* instance = Application::instance();
+    if (!instance)
+        return nullptr;
+
+    return instance->io_runner_;
+}
+
+// static
+asio::io_context* Application::ioContext()
+{
+    Application* instance = Application::instance();
+    if (!instance)
+        return nullptr;
+
+    base::MessageLoop* message_loop = instance->io_thread_.messageLoop();
+    if (!message_loop)
+        return nullptr;
+
+    base::MessagePumpForAsio* message_pump = message_loop->pumpAsio();
+    if (!message_pump)
+        return nullptr;
+
+    return &message_pump->ioContext();
 }
 
 bool Application::isRunning()
@@ -296,6 +328,11 @@ void Application::sendMessage(const QByteArray& message)
         LOG(LS_ERROR) << "Unknown status code";
         return;
     }
+}
+
+void Application::onBeforeThreadRunning()
+{
+    io_runner_ = io_thread_.messageLoopProxy();
 }
 
 void Application::onNewConnection()

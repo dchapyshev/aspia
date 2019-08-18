@@ -39,7 +39,7 @@ ClientDesktop::ClientDesktop(const ConnectData& connect_data, Delegate* delegate
 
 ClientDesktop::~ClientDesktop() = default;
 
-void ClientDesktop::onNetworkMessage(const base::ByteArray& buffer)
+void ClientDesktop::onMessageReceived(const base::ByteArray& buffer)
 {
     incoming_message_.Clear();
 

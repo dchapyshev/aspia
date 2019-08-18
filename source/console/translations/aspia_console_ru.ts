@@ -274,42 +274,42 @@
 <context>
     <name>Console</name>
     <message>
-        <location filename="../console_main.cc" line="60"/>
+        <location filename="../console_main.cc" line="59"/>
         <source>Remote computer address.</source>
         <translation>Адрес удаленного компьютера.</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="61"/>
+        <location filename="../console_main.cc" line="60"/>
         <source>address</source>
         <translation>адрес</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="65"/>
+        <location filename="../console_main.cc" line="64"/>
         <source>Remote computer port.</source>
         <translation>Порт удаленного компьютера.</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="66"/>
+        <location filename="../console_main.cc" line="65"/>
         <source>port</source>
         <translation>порт</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="71"/>
+        <location filename="../console_main.cc" line="70"/>
         <source>Name of user.</source>
         <translation>Имя пользователя.</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="72"/>
+        <location filename="../console_main.cc" line="71"/>
         <source>username</source>
         <translation>имя_пользователя</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="76"/>
+        <location filename="../console_main.cc" line="75"/>
         <source>Session type. Possible values: desktop-manage, desktop-view, file-transfer.</source>
         <translation>Тип сессии. Возможные значения: desktop-manage, desktop-view, file-transfer.</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="82"/>
+        <location filename="../console_main.cc" line="81"/>
         <source>Open the client to connect to the computer.</source>
         <translation>Открыть клиент для подключения к компьютеру.</translation>
     </message>
@@ -318,27 +318,27 @@
         <translation type="vanished">Запуск программы с упрощенным интерфейсом пользователя.</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="85"/>
+        <location filename="../console_main.cc" line="84"/>
         <source>Aspia Console</source>
         <translation>Консоль Aspia</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="88"/>
+        <location filename="../console_main.cc" line="87"/>
         <source>file</source>
         <translation>файл</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="89"/>
+        <location filename="../console_main.cc" line="88"/>
         <source>The file to open.</source>
         <translation>Файл для открытия.</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="129"/>
+        <location filename="../console_main.cc" line="128"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="130"/>
+        <location filename="../console_main.cc" line="129"/>
         <source>Incorrect session type entered.</source>
         <translation>Введен некорректный тип сессии.</translation>
     </message>
@@ -1034,7 +1034,7 @@
 <context>
     <name>console::ComputerDialogGeneral</name>
     <message numerus="yes">
-        <location filename="../computer_dialog_general.cc" line="81"/>
+        <location filename="../computer_dialog_general.cc" line="83"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Слишком длинное имя. Максимальная длина имени %n символ.</numerusform>
@@ -1043,17 +1043,17 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_dialog_general.cc" line="89"/>
+        <location filename="../computer_dialog_general.cc" line="91"/>
         <source>Name can not be empty.</source>
         <translation>Имя не может быть пустым.</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_general.cc" line="99"/>
+        <location filename="../computer_dialog_general.cc" line="101"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>Имя пользователя не может быть пустым и может содержать только буквы алфавита, цифры и символы &quot;_&quot;,&quot;-&quot;,&quot;.&quot;.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../computer_dialog_general.cc" line="109"/>
+        <location filename="../computer_dialog_general.cc" line="111"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Слишком длинный комментарий. Максимальная длина комментария %n символ.</numerusform>
@@ -1062,12 +1062,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_dialog_general.cc" line="119"/>
+        <location filename="../computer_dialog_general.cc" line="121"/>
         <source>An invalid computer address was entered.</source>
         <translation>Введен некорректный адрес компьютера.</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_general.cc" line="151"/>
+        <location filename="../computer_dialog_general.cc" line="153"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
@@ -1190,80 +1190,80 @@
 <context>
     <name>console::MainWindow</name>
     <message>
-        <location filename="../console_main_window.cc" line="181"/>
+        <location filename="../console_main_window.cc" line="182"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="182"/>
+        <location filename="../console_main_window.cc" line="183"/>
         <source>Pinned address book file &quot;%1&quot; was not found.&lt;br/&gt;This file will be unpinned.</source>
         <translation>Закрепленный файл адресной книги &quot;%1&quot; не найден.&lt;br/&gt;Этот файл будет откреплен.</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="278"/>
+        <location filename="../console_main_window.cc" line="279"/>
         <source>Open Address Book</source>
         <translation>Открытие адресной книги</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="280"/>
+        <location filename="../console_main_window.cc" line="281"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Адресная книга Aspia (*.aab)</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="510"/>
-        <location filename="../console_main_window.cc" line="853"/>
+        <location filename="../console_main_window.cc" line="511"/>
+        <location filename="../console_main_window.cc" line="854"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="511"/>
-        <location filename="../console_main_window.cc" line="854"/>
+        <location filename="../console_main_window.cc" line="512"/>
+        <location filename="../console_main_window.cc" line="855"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation>Адресная книга &quot;%1&quot; изменена. Сохранить изменения?</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="711"/>
+        <location filename="../console_main_window.cc" line="712"/>
         <source>Close other tabs</source>
         <translation>Закрыть другие вкладки</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="719"/>
+        <location filename="../console_main_window.cc" line="720"/>
         <source>Close tab</source>
         <translation>Закрыть вкладку</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="722"/>
-        <location filename="../console_main_window.cc" line="729"/>
+        <location filename="../console_main_window.cc" line="723"/>
+        <location filename="../console_main_window.cc" line="730"/>
         <source>Pin tab</source>
         <translation>Закрепить вкладку</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="810"/>
+        <location filename="../console_main_window.cc" line="811"/>
         <source>Hide</source>
         <translation>Спрятать</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="825"/>
+        <location filename="../console_main_window.cc" line="826"/>
         <source>Show</source>
         <translation>Показать</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="934"/>
+        <location filename="../console_main_window.cc" line="935"/>
         <source>&lt;empty&gt;</source>
         <translation>&lt;пусто&gt;</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="955"/>
+        <location filename="../console_main_window.cc" line="956"/>
         <source>Aspia Console</source>
         <translation>Консоль Aspia</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="250"/>
+        <location filename="../console_main_window.cc" line="251"/>
         <source>Information</source>
         <translation>Информация</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="251"/>
+        <location filename="../console_main_window.cc" line="252"/>
         <source>Address Book &quot;%1&quot; is already open.</source>
         <translation>Адресная книга &quot;%1&quot; уже открыта.</translation>
     </message>
