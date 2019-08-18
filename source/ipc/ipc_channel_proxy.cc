@@ -37,14 +37,24 @@ bool ChannelProxy::setListener(Listener* listener)
     return true;
 }
 
-bool ChannelProxy::connectToServer(const QString& channel_name)
+bool ChannelProxy::connect(std::u16string_view channel_id)
 {
     std::scoped_lock lock(channel_lock_);
 
     if (!channel_)
         return false;
 
-    channel_->connectToServer(channel_name);
+    return channel_->connect(channel_id);
+}
+
+bool ChannelProxy::disconnect()
+{
+    std::scoped_lock lock(channel_lock_);
+
+    if (!channel_)
+        return false;
+
+    channel_->disconnect();
     return true;
 }
 
@@ -58,14 +68,35 @@ bool ChannelProxy::isConnected() const
     return channel_->isConnected();
 }
 
-bool ChannelProxy::start()
+bool ChannelProxy::isPaused() const
 {
     std::scoped_lock lock(channel_lock_);
 
     if (!channel_)
         return false;
 
-    channel_->start();
+    return channel_->isPaused();
+}
+
+bool ChannelProxy::pause()
+{
+    std::scoped_lock lock(channel_lock_);
+
+    if (!channel_)
+        return false;
+
+    channel_->pause();
+    return true;
+}
+
+bool ChannelProxy::resume()
+{
+    std::scoped_lock lock(channel_lock_);
+
+    if (!channel_)
+        return false;
+
+    channel_->resume();
     return true;
 }
 

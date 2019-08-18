@@ -21,21 +21,29 @@
 
 #include "ipc/ipc_channel.h"
 
-#include <mutex>
-
 namespace ipc {
 
 class ChannelProxy
 {
 public:
     bool setListener(Listener* listener);
-    bool connectToServer(const QString& channel_name);
+
+    [[nodiscard]]
+    bool connect(std::u16string_view channel_id);
+
+    bool disconnect();
+
     bool isConnected() const;
-    bool start();
+    bool isPaused() const;
+
+    bool pause();
+    bool resume();
+
     bool send(base::ByteArray&& buffer);
 
 private:
     friend class Channel;
+
     explicit ChannelProxy(Channel* channel);
 
     // Called directly by Channel::~Channel.

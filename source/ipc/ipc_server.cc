@@ -18,78 +18,150 @@
 
 #include "ipc/ipc_server.h"
 
+#include "base/logging.h"
+#include "base/strings/string_printf.h"
+#include "base/strings/unicode.h"
+#include "base/win/security_helpers.h"
 #include "crypto/random.h"
 #include "ipc/ipc_channel.h"
-#include "qt_base/qt_logging.h"
 
-#include <QCoreApplication>
-#include <QLocalServer>
+#include <asio/windows/overlapped_ptr.hpp>
 
 namespace ipc {
 
 namespace {
 
-QString generateUniqueChannelId()
-{
-    static std::atomic_uint32_t last_channel_id = 0;
-    uint32_t channel_id = last_channel_id++;
-
-    return QString("%1.%2.%3")
-        .arg(QCoreApplication::applicationPid())
-        .arg(channel_id)
-        .arg(crypto::Random::number32());
-}
+const DWORD kAcceptTimeout = 5000; // ms
+const DWORD kPipeBufferSize = 512 * 1024; // 512 kB
 
 } // namespace
 
-Server::Server() = default;
-Server::~Server() = default;
+Server::Server(asio::io_context& io_context)
+    : io_context_(io_context)
+{
+    // Nothing
+}
 
-bool Server::start(Delegate* delegate)
+// static
+std::u16string Server::createUniqueId()
+{
+    static std::atomic_uint32_t last_channel_id = 0;
+
+    uint32_t channel_id = last_channel_id++;
+    uint32_t process_id = GetCurrentProcessId();
+    uint32_t random_number = crypto::Random::number32();
+
+    return base::utf16FromAscii(
+        base::stringPrintf("%lu.%lu.%lu", process_id, channel_id, random_number));
+}
+
+bool Server::start(std::u16string_view channel_id, Delegate* delegate)
 {
     DCHECK(delegate);
 
-    if (server_)
-    {
-        DLOG(LS_WARNING) << "An attempt was start an already running server.";
+    if (channel_id.empty())
         return false;
-    }
 
+    channel_name_ = Channel::channelName(channel_id);
     delegate_ = delegate;
 
-    std::unique_ptr<QLocalServer> server(new QLocalServer());
+    return doAccept();
+}
 
-    server->setSocketOptions(QLocalServer::OtherAccessOption);
-    server->setMaxPendingConnections(25);
+void Server::stop()
+{
+    delegate_ = nullptr;
 
-    QObject::connect(server.get(), &QLocalServer::newConnection, [this]()
+    if (stream_)
+        stream_.reset();
+}
+
+bool Server::doAccept()
+{
+    std::wstring user_sid;
+
+    if (!base::win::userSidString(&user_sid))
     {
-        if (server_->hasPendingConnections())
-        {
-            QLocalSocket* socket = server_->nextPendingConnection();
-            delegate_->onNewConnection(std::unique_ptr<Channel>(new Channel(socket)));
-        }
-    });
-
-    QString channel_id = channel_id_;
-
-    if (channel_id.isEmpty())
-        channel_id = generateUniqueChannelId();
-
-    if (!server->listen(channel_id))
-    {
-        LOG(LS_WARNING) << "listen failed: " << server->errorString();
+        LOG(LS_ERROR) << "Failed to query the current user SID";
         return false;
     }
 
-    channel_id_ = channel_id;
-    server_ = std::move(server);
-    return true;
-}
+    // Create a security descriptor that gives full access to the caller and authenticated users
+    // and denies access by anyone else.
+    std::wstring security_descriptor =
+        base::stringPrintf(L"O:%sG:%sD:(A;;GA;;;%s)(A;;GA;;;AU)",
+            user_sid.c_str(),
+            user_sid.c_str(),
+            user_sid.c_str());
 
-void Server::setChannelId(const QString& channel_id)
-{
-    channel_id_ = channel_id;
+    base::win::ScopedSd sd = base::win::convertSddlToSd(security_descriptor);
+    if (!sd.get())
+    {
+        LOG(LS_ERROR) << "Failed to create a security descriptor";
+        return false;
+    }
+
+    SECURITY_ATTRIBUTES security_attributes = { 0 };
+    security_attributes.nLength = sizeof(security_attributes);
+    security_attributes.lpSecurityDescriptor = sd.get();
+    security_attributes.bInheritHandle = FALSE;
+
+    const DWORD open_mode = FILE_FLAG_OVERLAPPED | FILE_FLAG_FIRST_PIPE_INSTANCE;
+    const DWORD pipe_mode = PIPE_TYPE_BYTE | PIPE_READMODE_BYTE | PIPE_REJECT_REMOTE_CLIENTS;
+
+    stream_ = std::make_unique<asio::windows::stream_handle>(io_context_);
+
+    std::error_code error_code;
+    stream_->assign(CreateNamedPipeW(reinterpret_cast<const wchar_t*>(channel_name_.c_str()),
+                                     open_mode | PIPE_ACCESS_DUPLEX,
+                                     pipe_mode,
+                                     1,
+                                     kPipeBufferSize,
+                                     kPipeBufferSize,
+                                     kAcceptTimeout,
+                                     &security_attributes),
+                    error_code);
+
+    if (error_code)
+    {
+        LOG(LS_WARNING) << "CreateNamedPipeW failed: " << error_code.message();
+        return false;
+    }
+
+    asio::windows::overlapped_ptr overlapped(io_context_,
+        [this](const std::error_code& error_code, size_t /* bytes_transferred */)
+    {
+        if (!delegate_)
+            return;
+
+        if (error_code)
+        {
+            delegate_->onIpcServerError();
+            return;
+        }
+
+        delegate_->onIpcServerConnection(
+            std::unique_ptr<Channel>(new Channel(io_context_, std::move(*stream_))));
+
+        // Waiting for the next connection.
+        if (!doAccept())
+            delegate_->onIpcServerError();
+    });
+
+    if (!ConnectNamedPipe(stream_->native_handle(), overlapped.get()))
+    {
+        DWORD last_error = GetLastError();
+
+        if (last_error != ERROR_IO_PENDING)
+        {
+            overlapped.complete(
+                std::error_code(last_error, asio::error::get_system_category()), 0);
+            return false;
+        }
+    }
+
+    overlapped.release();
+    return true;
 }
 
 } // namespace ipc

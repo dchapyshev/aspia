@@ -21,9 +21,8 @@
 
 #include "base/macros_magic.h"
 
-#include <QString>
-
-class QLocalServer;
+#include <asio/io_context.hpp>
+#include <asio/windows/stream_handle.hpp>
 
 namespace ipc {
 
@@ -32,26 +31,30 @@ class Channel;
 class Server
 {
 public:
-    Server();
-    ~Server();
+    Server(asio::io_context& io_context);
+
+    static std::u16string createUniqueId();
 
     class Delegate
     {
     public:
         virtual ~Delegate() = default;
 
-        virtual void onNewConnection(std::unique_ptr<Channel> channel) = 0;
+        virtual void onIpcServerConnection(std::unique_ptr<Channel> channel) = 0;
+        virtual void onIpcServerError() = 0;
     };
 
-    bool start(Delegate* delegate);
-
-    void setChannelId(const QString& channel_id);
-    QString channelId() const { return channel_id_; }
+    bool start(std::u16string_view channel_id, Delegate* delegate);
+    void stop();
 
 private:
-    QString channel_id_;
-    std::unique_ptr<QLocalServer> server_;
+    bool doAccept();
+
     Delegate* delegate_ = nullptr;
+
+    asio::io_context& io_context_;
+    std::unique_ptr<asio::windows::stream_handle> stream_;
+    std::u16string channel_name_;
 
     DISALLOW_COPY_AND_ASSIGN(Server);
 };

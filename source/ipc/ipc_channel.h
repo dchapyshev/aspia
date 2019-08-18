@@ -21,22 +21,13 @@
 
 #include "base/byte_array.h"
 #include "base/macros_magic.h"
-#include "build/build_config.h"
-
-#if defined(OS_WIN)
 #include "base/process_handle.h"
 #include "base/win/session_id.h"
-#endif // defined(OS_WIN)
 
-#if defined(USE_TBB)
-#include <tbb/scalable_allocator.h>
-#endif // defined(USE_TBB)
+#include <asio/windows/stream_handle.hpp>
 
-#include <QObject>
-
+#include <mutex>
 #include <queue>
-
-class QLocalSocket;
 
 namespace ipc {
 
@@ -44,47 +35,55 @@ class ChannelProxy;
 class Listener;
 class Server;
 
-class Channel : public QObject
+class Channel
 {
-    Q_OBJECT
-
 public:
-    Channel();
+    explicit Channel(asio::io_context& io_context);
     ~Channel();
 
-    std::shared_ptr<ChannelProxy> channelProxy() { return proxy_; }
+    std::shared_ptr<ChannelProxy> channelProxy();
 
+    // Sets an instance of the class to receive connection status notifications or new messages.
+    // You can change this in the process.
     void setListener(Listener* listener);
-    void connectToServer(const QString& channel_name);
 
-    bool isConnected() const { return is_connected_; }
+    [[nodiscard]]
+    bool connect(std::u16string_view channel_id);
 
-    void start();
+    void disconnect();
 
-    // Sends a message.
+    bool isConnected() const;
+    bool isPaused() const;
+
+    void pause();
+    void resume();
+
     void send(base::ByteArray&& buffer);
 
-#if defined(OS_WIN)
     base::ProcessId peerProcessId() const { return peer_process_id_; }
     base::win::SessionId peerSessionId() const { return peer_session_id_; }
-#endif // defined(OS_WIN)
-
-private slots:
-    void onBytesWritten(int64_t bytes);
-    void onReadyRead();
 
 private:
     friend class Server;
-    Channel(QLocalSocket* socket);
 
-    void init();
+    Channel(asio::io_context& io_context, asio::windows::stream_handle&& stream);
+    static std::u16string channelName(std::u16string_view channel_id);
+
+    void onErrorOccurred(const std::error_code& error_code);
+    bool reloadWriteQueue();
     void scheduleWrite();
+    void doWrite();
+    void doReadMessage();
+    void onMessageReceived();
 
-    QLocalSocket* socket_;
+    asio::io_context& io_context_;
+    asio::windows::stream_handle stream_;
 
     std::shared_ptr<ChannelProxy> proxy_;
     Listener* listener_ = nullptr;
+
     bool is_connected_ = false;
+    bool is_paused_ = true;
 
 #if defined(USE_TBB)
     using QueueAllocator = tbb::scalable_allocator<base::ByteArray>;
@@ -94,20 +93,27 @@ private:
 
     using QueueContainer = std::deque<base::ByteArray, QueueAllocator>;
 
-    // The queue contains unencrypted source messages.
-    std::queue<base::ByteArray, QueueContainer> write_queue_;
+    class WriteQueue : public std::queue<base::ByteArray, QueueContainer>
+    {
+    public:
+        void fastSwap(WriteQueue& queue)
+        {
+            // Calls std::deque::swap.
+            c.swap(queue.c);
+        }
+    };
+
+    WriteQueue incoming_write_queue_;
+    std::mutex incoming_write_queue_lock_;
+
+    WriteQueue work_write_queue_;
     uint32_t write_size_ = 0;
-    int64_t written_ = 0;
 
-    bool read_size_received_ = false;
-    base::ByteArray read_buffer_;
     uint32_t read_size_ = 0;
-    int64_t read_ = 0;
+    base::ByteArray read_buffer_;
 
-#if defined(OS_WIN)
     base::ProcessId peer_process_id_ = base::kNullProcessId;
     base::win::SessionId peer_session_id_ = base::win::kInvalidSessionId;
-#endif // defined(OS_WIN)
 
     DISALLOW_COPY_AND_ASSIGN(Channel);
 };
