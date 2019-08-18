@@ -19,12 +19,12 @@
 #ifndef NET__IP_UTIL_H
 #define NET__IP_UTIL_H
 
-#include <QString>
+#include <string_view>
 
 namespace net {
 
-bool isValidIpV4Address(const QString& address);
-bool isValidIpV6Address(const QString& address);
+bool isValidIpV4Address(std::u16string_view address);
+bool isValidIpV6Address(std::u16string_view address);
 
 } // namespace net
 

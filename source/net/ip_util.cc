@@ -17,6 +17,8 @@
 //
 
 #include "net/ip_util.h"
+
+#include "base/strings/unicode.h"
 #include "build/build_config.h"
 
 #if defined(OS_WIN)
@@ -27,16 +29,16 @@
 
 namespace net {
 
-bool isValidIpV4Address(const QString& address)
+bool isValidIpV4Address(std::u16string_view address)
 {
     struct sockaddr_in sa;
-    return inet_pton(AF_INET, address.toLocal8Bit().constData(), &(sa.sin_addr)) != 0;
+    return inet_pton(AF_INET, base::local8BitFromUtf16(address).c_str(), &(sa.sin_addr)) != 0;
 }
 
-bool isValidIpV6Address(const QString& address)
+bool isValidIpV6Address(std::u16string_view address)
 {
     struct sockaddr_in6 sa;
-    return inet_pton(AF_INET6, address.toLocal8Bit().constData(), &(sa.sin6_addr)) != 0;
+    return inet_pton(AF_INET6, base::local8BitFromUtf16(address).c_str(), &(sa.sin6_addr)) != 0;
 }
 
 } // namespace net

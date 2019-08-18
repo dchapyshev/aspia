@@ -21,7 +21,7 @@
 
 #include "build/build_config.h"
 
-#include <QString>
+#include <string>
 
 namespace net {
 
@@ -33,19 +33,17 @@ public:
     Address(const Address& other);
     Address& operator=(const Address& other);
 
-    Address(Address&& other);
-    Address& operator=(Address&& other);
+    Address(Address&& other) noexcept;
+    Address& operator=(Address&& other) noexcept;
 
     ~Address() = default;
 
-    static Address fromString(const QString& str);
-    static Address fromStdString(const std::string& str);
+    static Address fromString(std::u16string_view str);
 
-    QString toString() const;
-    std::string toStdString() const;
+    std::u16string toString() const;
 
-    void setHost(const QString& host);
-    QString host() const;
+    void setHost(std::u16string_view host);
+    std::u16string host() const;
 
     void setPort(uint16_t port);
     uint16_t port() const;
@@ -58,9 +56,9 @@ public:
     bool operator!=(const Address& other);
 
 private:
-    Address(QString&& host, uint16_t port);
+    Address(std::u16string&& host, uint16_t port);
 
-    QString host_;
+    std::u16string host_;
     uint16_t port_ = 0;
 };
 
