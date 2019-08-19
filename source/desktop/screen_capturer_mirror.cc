@@ -118,7 +118,7 @@ void ScreenCapturerMirror::updateExcludeRegion()
 
     for (const auto& screen : screen_list)
     {
-        QString device_key;
+        std::wstring device_key;
 
         if (ScreenCaptureUtils::isScreenValid(screen.id, &device_key))
         {

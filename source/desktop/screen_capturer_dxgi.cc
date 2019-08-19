@@ -19,6 +19,7 @@
 #include "desktop/screen_capturer_dxgi.h"
 
 #include "base/logging.h"
+#include "base/strings/unicode.h"
 #include "desktop/win/screen_capture_utils.h"
 
 namespace desktop {
@@ -46,7 +47,9 @@ bool screenListFromDeviceNames(const std::vector<std::wstring>& device_names,
 
         for (const auto& gdi_screen : gdi_screens)
         {
-            if (gdi_screen.title == device_name)
+            std::string device_name_utf8 = base::utf8FromWide(device_name);
+
+            if (gdi_screen.title == device_name_utf8)
             {
                 screens->push_back(gdi_screen);
                 device_found = true;
@@ -59,7 +62,7 @@ bool screenListFromDeviceNames(const std::vector<std::wstring>& device_names,
         {
             // devices_names[i] has not been found in gdi_names, so use max_screen_id.
             ++max_screen_id;
-            screens->push_back({ max_screen_id, QString() });
+            screens->push_back({ max_screen_id, std::string() });
         }
     }
 

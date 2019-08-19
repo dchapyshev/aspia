@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -21,8 +21,8 @@
 
 #include "desktop/desktop_frame.h"
 
-#include <QList>
-#include <QString>
+#include <string>
+#include <vector>
 
 namespace desktop {
 
@@ -38,10 +38,10 @@ public:
     struct Screen
     {
         ScreenId id;
-        QString title;
+        std::string title;
     };
 
-    using ScreenList = QList<Screen>;
+    using ScreenList = std::vector<Screen>;
 
     static const ScreenId kFullDesktopScreenId = -1;
     static const ScreenId kInvalidScreenId = -2;

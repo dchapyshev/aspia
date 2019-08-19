@@ -21,6 +21,8 @@
 
 #include "desktop/screen_capturer.h"
 
+#include <list>
+
 namespace desktop {
 
 class MirrorHelper;
@@ -51,7 +53,7 @@ private:
     std::unique_ptr<Frame> frame_;
 
     ScreenId current_screen_id_ = kFullDesktopScreenId;
-    QString current_device_key_;
+    std::wstring current_device_key_;
 
     Rect desktop_rect_;
     Region exclude_region_;

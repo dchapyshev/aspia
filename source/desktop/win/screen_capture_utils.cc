@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -19,6 +19,7 @@
 #include "desktop/win/screen_capture_utils.h"
 
 #include "base/logging.h"
+#include "base/strings/unicode.h"
 #include "base/win/scoped_gdi_object.h"
 #include "base/win/scoped_hdc.h"
 #include "desktop/win/bitmap_info.h"
@@ -65,15 +66,14 @@ bool ScreenCaptureUtils::screenList(ScreenCapturer::ScreenList* screens)
             continue;
         }
 
-        screens->push_back({device_index, QString::fromUtf16(
-            reinterpret_cast<const ushort*>(device.DeviceName))});
+        screens->push_back({device_index, base::utf8FromWide(device.DeviceName) });
     }
 
     return true;
 }
 
 // static
-bool ScreenCaptureUtils::isScreenValid(ScreenCapturer::ScreenId screen, QString* device_key)
+bool ScreenCaptureUtils::isScreenValid(ScreenCapturer::ScreenId screen, std::wstring* device_key)
 {
     if (screen == ScreenCapturer::kFullDesktopScreenId)
     {
@@ -87,7 +87,7 @@ bool ScreenCaptureUtils::isScreenValid(ScreenCapturer::ScreenId screen, QString*
     if (!EnumDisplayDevicesW(nullptr, screen, &device, 0))
         return false;
 
-    *device_key = QString::fromUtf16(reinterpret_cast<const ushort*>(device.DeviceKey));
+    *device_key = device.DeviceKey;
     return true;
 }
 
@@ -102,7 +102,7 @@ Rect ScreenCaptureUtils::fullScreenRect()
 
 // static
 Rect ScreenCaptureUtils::screenRect(ScreenCapturer::ScreenId screen,
-                                     const QString& device_key)
+                                    const std::wstring& device_key)
 {
     if (screen == ScreenCapturer::kFullDesktopScreenId)
         return fullScreenRect();
@@ -116,7 +116,7 @@ Rect ScreenCaptureUtils::screenRect(ScreenCapturer::ScreenId screen,
     // capturing the same device when devices are added or removed. DeviceKey is documented as
     // reserved, but it actually contains the registry key for the device and is unique for each
     // monitor, while DeviceID is not.
-    if (wcscmp(device.DeviceKey, reinterpret_cast<const wchar_t*>(device_key.utf16())) != 0)
+    if (device.DeviceKey != device_key)
         return Rect();
 
     DEVMODEW device_mode;
