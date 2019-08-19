@@ -45,8 +45,8 @@ public:
                                           std::string_view application_name,
                                           std::string_view file_name);
 
-    static bool readFile(const std::filesystem::path& file, SettingsMap& map);
-    static bool writeFile(const std::filesystem::path& file, const SettingsMap& map);
+    static bool readFile(const std::filesystem::path& file, Map& map);
+    static bool writeFile(const std::filesystem::path& file, const Map& map);
 
 private:
     std::filesystem::path path_;

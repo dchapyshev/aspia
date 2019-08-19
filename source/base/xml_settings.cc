@@ -36,7 +36,7 @@ namespace {
 
 bool parseXmlNode(const rapidxml::xml_node<>* node,
                   std::vector<std::string_view>* segments,
-                  XmlSettings::SettingsMap* map)
+                  XmlSettings::Map* map)
 {
     if (!node)
         return true;
@@ -167,7 +167,7 @@ std::filesystem::path XmlSettings::filePath(Scope scope,
 }
 
 // static
-bool XmlSettings::readFile(const std::filesystem::path& file, SettingsMap& map)
+bool XmlSettings::readFile(const std::filesystem::path& file, Map& map)
 {
     map.clear();
 
@@ -196,7 +196,7 @@ bool XmlSettings::readFile(const std::filesystem::path& file, SettingsMap& map)
 }
 
 // static
-bool XmlSettings::writeFile(const std::filesystem::path& file, const SettingsMap& map)
+bool XmlSettings::writeFile(const std::filesystem::path& file, const Map& map)
 {
     std::error_code ignored_code;
 
