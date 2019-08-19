@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -275,39 +275,46 @@ const uint8_t kSrpGenerator_19[] = { 19 };
 
 } // namespace
 
-const SrpNg kSrpNg_1024 =
+const SrpNgPair kSrpNgPair_1024 =
 {
-    { kSrpGroup_1024, sizeof(kSrpGroup_1024) }, { kSrpGenerator_2, sizeof(kSrpGenerator_2) }
+    { reinterpret_cast<const char*>(kSrpGroup_1024), sizeof(kSrpGroup_1024) },
+    { reinterpret_cast<const char*>(kSrpGenerator_2), sizeof(kSrpGenerator_2) }
 };
 
-const SrpNg kSrpNg_1536 =
+const SrpNgPair kSrpNgPair_1536 =
 {
-    { kSrpGroup_1536, sizeof(kSrpGroup_1536) }, { kSrpGenerator_2, sizeof(kSrpGenerator_2) }
+    { reinterpret_cast<const char*>(kSrpGroup_1536), sizeof(kSrpGroup_1536) },
+    { reinterpret_cast<const char*>(kSrpGenerator_2), sizeof(kSrpGenerator_2) }
 };
 
-const SrpNg kSrpNg_2048 =
+const SrpNgPair kSrpNgPair_2048 =
 {
-    { kSrpGroup_2048, sizeof(kSrpGroup_2048) }, { kSrpGenerator_2, sizeof(kSrpGenerator_2) }
+    { reinterpret_cast<const char*>(kSrpGroup_2048), sizeof(kSrpGroup_2048) },
+    { reinterpret_cast<const char*>(kSrpGenerator_2), sizeof(kSrpGenerator_2) }
 };
 
-const SrpNg kSrpNg_3072 =
+const SrpNgPair kSrpNgPair_3072 =
 {
-    { kSrpGroup_3072, sizeof(kSrpGroup_3072) }, { kSrpGenerator_5, sizeof(kSrpGenerator_5) }
+    { reinterpret_cast<const char*>(kSrpGroup_3072), sizeof(kSrpGroup_3072) },
+    { reinterpret_cast<const char*>(kSrpGenerator_5), sizeof(kSrpGenerator_5) }
 };
 
-const SrpNg kSrpNg_4096 =
+const SrpNgPair kSrpNgPair_4096 =
 {
-    { kSrpGroup_4096, sizeof(kSrpGroup_4096) }, { kSrpGenerator_5, sizeof(kSrpGenerator_5) }
+    { reinterpret_cast<const char*>(kSrpGroup_4096), sizeof(kSrpGroup_4096) },
+    { reinterpret_cast<const char*>(kSrpGenerator_5), sizeof(kSrpGenerator_5) }
 };
 
-const SrpNg kSrpNg_6144 =
+const SrpNgPair kSrpNgPair_6144 =
 {
-    { kSrpGroup_6144, sizeof(kSrpGroup_6144) }, { kSrpGenerator_5, sizeof(kSrpGenerator_5) }
+    { reinterpret_cast<const char*>(kSrpGroup_6144), sizeof(kSrpGroup_6144) },
+    { reinterpret_cast<const char*>(kSrpGenerator_5), sizeof(kSrpGenerator_5) }
 };
 
-const SrpNg kSrpNg_8192 =
+const SrpNgPair kSrpNgPair_8192 =
 {
-    { kSrpGroup_8192, sizeof(kSrpGroup_8192) }, { kSrpGenerator_19, sizeof(kSrpGenerator_19) }
+    { reinterpret_cast<const char*>(kSrpGroup_8192), sizeof(kSrpGroup_8192) },
+    { reinterpret_cast<const char*>(kSrpGenerator_19), sizeof(kSrpGenerator_19) }
 };
 
 } // namespace crypto
