@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,6 +17,7 @@
 //
 
 #include "base/win/process_util.h"
+
 #include "base/logging.h"
 #include "base/win/process.h"
 
@@ -48,20 +49,24 @@ bool isProcessElevated()
     return elevation.TokenIsElevated != 0;
 }
 
-bool executeProcess(const QString& program, const QStringList& arguments, ProcessExecuteMode mode)
+bool createProcess(const CommandLine& command_line, ProcessExecuteMode mode)
 {
-    QString normalized_program = Process::normalizedProgram(program);
-    QString parameters = Process::createParamaters(arguments);
+    return createProcess(command_line.program(), command_line.argumentsString(), mode);
+}
 
+bool createProcess(const std::filesystem::path& program,
+                   std::u16string_view arguments,
+                   ProcessExecuteMode mode)
+{
     SHELLEXECUTEINFOW sei;
     memset(&sei, 0, sizeof(sei));
 
-    sei.cbSize       = sizeof(sei);
-    sei.lpVerb       = ((mode == ProcessExecuteMode::ELEVATE) ? L"runas" : L"open");
-    sei.lpFile       = reinterpret_cast<const wchar_t*>(normalized_program.utf16());
-    sei.hwnd         = nullptr;
-    sei.nShow        = SW_SHOW;
-    sei.lpParameters = reinterpret_cast<const wchar_t*>(parameters.utf16());
+    sei.cbSize = sizeof(sei);
+    sei.lpVerb = ((mode == ProcessExecuteMode::ELEVATE) ? L"runas" : L"open");
+    sei.lpFile = program.c_str();
+    sei.hwnd = nullptr;
+    sei.nShow = SW_SHOW;
+    sei.lpParameters = reinterpret_cast<const wchar_t*>(arguments.data());
 
     if (!ShellExecuteExW(&sei))
     {
@@ -70,11 +75,6 @@ bool executeProcess(const QString& program, const QStringList& arguments, Proces
     }
 
     return true;
-}
-
-bool executeProcess(const QString& program, ProcessExecuteMode mode)
-{
-    return executeProcess(program, QStringList(), mode);
 }
 
 bool copyProcessToken(DWORD desired_access, ScopedHandle* token_out)

@@ -4,22 +4,6 @@
 <context>
     <name>Host</name>
     <message>
-        <source>The path to the file to import.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>The path to the file to export.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Enables silent mode when exporting and importing.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Run application update.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>

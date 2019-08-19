@@ -4,32 +4,12 @@
 <context>
     <name>Host</name>
     <message>
-        <location filename="../host_main.cc" line="154"/>
-        <source>The path to the file to import.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../host_main.cc" line="158"/>
-        <source>The path to the file to export.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../host_main.cc" line="162"/>
-        <source>Enables silent mode when exporting and importing.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../host_main.cc" line="165"/>
-        <source>Run application update.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../host_main.cc" line="186"/>
+        <location filename="../host_main.cc" line="95"/>
         <source>Warning</source>
         <translation>Warnung</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="187"/>
+        <location filename="../host_main.cc" line="96"/>
         <source>Export and import parameters can not be specified together.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -258,46 +238,46 @@
 <context>
     <name>Settings</name>
     <message>
-        <location filename="../host_settings.cc" line="56"/>
-        <location filename="../host_settings.cc" line="72"/>
+        <location filename="../host_settings.cc" line="57"/>
+        <location filename="../host_settings.cc" line="74"/>
         <source>Information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host_settings.cc" line="57"/>
+        <location filename="../host_settings.cc" line="58"/>
         <source>The configuration was successfully imported.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host_settings.cc" line="73"/>
+        <location filename="../host_settings.cc" line="75"/>
         <source>The configuration was successfully exported.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host_settings.cc" line="201"/>
-        <location filename="../host_settings.cc" line="217"/>
-        <location filename="../host_settings.cc" line="234"/>
-        <location filename="../host_settings.cc" line="247"/>
+        <location filename="../host_settings.cc" line="203"/>
+        <location filename="../host_settings.cc" line="219"/>
+        <location filename="../host_settings.cc" line="236"/>
+        <location filename="../host_settings.cc" line="249"/>
         <source>Warning</source>
         <translation>Warnung</translation>
     </message>
     <message>
-        <location filename="../host_settings.cc" line="202"/>
+        <location filename="../host_settings.cc" line="204"/>
         <source>Could not open source file: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host_settings.cc" line="218"/>
+        <location filename="../host_settings.cc" line="220"/>
         <source>Could not open target file: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host_settings.cc" line="235"/>
+        <location filename="../host_settings.cc" line="237"/>
         <source>Unable to read the source file: the file is damaged or has an unknown format.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host_settings.cc" line="248"/>
+        <location filename="../host_settings.cc" line="250"/>
         <source>Unable to write the target file.</source>
         <translation type="unfinished"></translation>
     </message>

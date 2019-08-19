@@ -218,7 +218,7 @@ void ConfigDialog::onImport()
     if (file_path.isEmpty())
         return;
 
-    if (Settings::importFromFile(file_path, false, this))
+    if (Settings::importFromFile(file_path.toStdU16String(), false, this))
     {
         if (isServiceStarted())
         {
@@ -248,7 +248,7 @@ void ConfigDialog::onExport()
     if (file_path.isEmpty())
         return;
 
-    Settings::exportToFile(file_path, false, this);
+    Settings::exportToFile(file_path.toStdU16String(), false, this);
 }
 
 void ConfigDialog::onButtonBoxClicked(QAbstractButton* button)

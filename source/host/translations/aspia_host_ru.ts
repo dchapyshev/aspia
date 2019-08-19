@@ -8,32 +8,28 @@
         <translation type="vanished">Запускает приложение спрятанным.</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="154"/>
         <source>The path to the file to import.</source>
-        <translation>Путь к файлу для импорта.</translation>
+        <translation type="vanished">Путь к файлу для импорта.</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="158"/>
         <source>The path to the file to export.</source>
-        <translation>Путь к файлу для экспорта.</translation>
+        <translation type="vanished">Путь к файлу для экспорта.</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="162"/>
         <source>Enables silent mode when exporting and importing.</source>
-        <translation>Включает тихий режим при экспортировании и импортировании.</translation>
+        <translation type="vanished">Включает тихий режим при экспортировании и импортировании.</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="165"/>
         <source>Run application update.</source>
-        <translation>Запускает обновление приложения.</translation>
+        <translation type="vanished">Запускает обновление приложения.</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="186"/>
+        <location filename="../host_main.cc" line="95"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="187"/>
+        <location filename="../host_main.cc" line="96"/>
         <source>Export and import parameters can not be specified together.</source>
         <translation>Параметры экспорта и импорта не могут быть указаны одновременно.</translation>
     </message>
@@ -350,46 +346,46 @@
 <context>
     <name>Settings</name>
     <message>
-        <location filename="../host_settings.cc" line="56"/>
-        <location filename="../host_settings.cc" line="72"/>
+        <location filename="../host_settings.cc" line="57"/>
+        <location filename="../host_settings.cc" line="74"/>
         <source>Information</source>
         <translation>Информация</translation>
     </message>
     <message>
-        <location filename="../host_settings.cc" line="57"/>
+        <location filename="../host_settings.cc" line="58"/>
         <source>The configuration was successfully imported.</source>
         <translation>Конфигурация успешно импортирована.</translation>
     </message>
     <message>
-        <location filename="../host_settings.cc" line="73"/>
+        <location filename="../host_settings.cc" line="75"/>
         <source>The configuration was successfully exported.</source>
         <translation>Конфигурация успешно экспортирована.</translation>
     </message>
     <message>
-        <location filename="../host_settings.cc" line="201"/>
-        <location filename="../host_settings.cc" line="217"/>
-        <location filename="../host_settings.cc" line="234"/>
-        <location filename="../host_settings.cc" line="247"/>
+        <location filename="../host_settings.cc" line="203"/>
+        <location filename="../host_settings.cc" line="219"/>
+        <location filename="../host_settings.cc" line="236"/>
+        <location filename="../host_settings.cc" line="249"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../host_settings.cc" line="202"/>
+        <location filename="../host_settings.cc" line="204"/>
         <source>Could not open source file: %1</source>
         <translation>Не удалось открыть исходный файл: %1</translation>
     </message>
     <message>
-        <location filename="../host_settings.cc" line="218"/>
+        <location filename="../host_settings.cc" line="220"/>
         <source>Could not open target file: %1</source>
         <translation>Не удалось открыть файл назначения: %1</translation>
     </message>
     <message>
-        <location filename="../host_settings.cc" line="235"/>
+        <location filename="../host_settings.cc" line="237"/>
         <source>Unable to read the source file: the file is damaged or has an unknown format.</source>
         <translation>Не удалось прочитать исходный файл: файл поврежден или имеет неизвестный формат.</translation>
     </message>
     <message>
-        <location filename="../host_settings.cc" line="248"/>
+        <location filename="../host_settings.cc" line="250"/>
         <source>Unable to write the target file.</source>
         <translation>Не удалось записать файл назначения.</translation>
     </message>

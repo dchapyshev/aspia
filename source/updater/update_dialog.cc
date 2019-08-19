@@ -17,6 +17,7 @@
 //
 
 #include "updater/update_dialog.h"
+
 #include "base/win/process_util.h"
 #include "build/version.h"
 #include "updater/download_dialog.h"
@@ -182,18 +183,18 @@ void UpdateDialog::onUpdateNow()
                 QString file_name(file.fileName());
                 file_name.replace(QLatin1Char('/'), QLatin1Char('\\'));
 
-                QStringList arguments;
+                std::u16string arguments;
 
                 // Normal install.
-                arguments << QLatin1String("/i");
+                arguments += u"/i ";
 
                 // MSI package file.
-                arguments << file_name;
+                arguments += file_name.toStdU16String();
 
                 // Basic UI with no modal dialog boxes.
-                arguments << QLatin1String("/qb-!");
+                arguments += u" /qb-!";
 
-                if (base::win::executeProcess(QLatin1String("msiexec"),
+                if (base::win::createProcess(u"msiexec",
                                               arguments,
                                               base::win::ProcessExecuteMode::ELEVATE))
                 {

@@ -21,6 +21,8 @@
 
 #include "base/macros_magic.h"
 
+#include <filesystem>
+
 #include <QCoreApplication>
 #include <QSettings>
 
@@ -36,8 +38,10 @@ public:
     Settings();
     ~Settings();
 
-    static bool importFromFile(const QString& path, bool silent, QWidget* parent = nullptr);
-    static bool exportToFile(const QString& path, bool silent, QWidget* parent = nullptr);
+    static bool importFromFile(
+        const std::filesystem::path& path, bool silent, QWidget* parent = nullptr);
+    static bool exportToFile(
+        const std::filesystem::path& path, bool silent, QWidget* parent = nullptr);
 
     QString filePath() const;
     bool isWritable() const;

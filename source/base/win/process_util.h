@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -19,21 +19,26 @@
 #ifndef BASE__WIN__PROCESS_UTIL_H
 #define BASE__WIN__PROCESS_UTIL_H
 
+#include "base/command_line.h"
 #include "base/win/scoped_object.h"
-
-#include <QStringList>
 
 namespace base::win {
 
 bool isProcessElevated();
 
-enum class ProcessExecuteMode { NORMAL, ELEVATE };
+enum class ProcessExecuteMode
+{
+    NORMAL, ELEVATE
+};
 
-bool executeProcess(const QString& program,
-                    const QStringList& arguments,
-                    ProcessExecuteMode mode = ProcessExecuteMode::NORMAL);
+bool createProcess(
+    const CommandLine& command_line,
+    ProcessExecuteMode mode = ProcessExecuteMode::NORMAL);
 
-bool executeProcess(const QString& program, ProcessExecuteMode mode = ProcessExecuteMode::NORMAL);
+bool createProcess(
+    const std::filesystem::path& program,
+    std::u16string_view arguments,
+    ProcessExecuteMode mode = ProcessExecuteMode::NORMAL);
 
 bool copyProcessToken(DWORD desired_access, ScopedHandle* token_out);
 

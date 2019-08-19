@@ -18,57 +18,18 @@
 
 #include "host/host_main.h"
 
+#include "base/command_line.h"
+#include "base/logging.h"
 #include "base/win/process_util.h"
 #include "base/win/scoped_thread_desktop.h"
 #include "host/ui/host_main_window.h"
 #include "host/host_application.h"
-#include "host/host_settings.h"
-#include "qt_base/qt_logging.h"
 #include "updater/update_dialog.h"
 
-#include <QAbstractEventDispatcher>
-#include <QAbstractNativeEventFilter>
 #include <QApplication>
-#include <QCommandLineParser>
 #include <QMessageBox>
 
 namespace {
-
-class EventFilter : public QAbstractNativeEventFilter
-{
-public:
-    ~EventFilter() = default;
-
-    static EventFilter* instance();
-
-    // QAbstractNativeEventFilter implementation.
-    bool nativeEventFilter(const QByteArray& event_type, void* message, long* result) override;
-
-private:
-    EventFilter() = default;
-
-    DISALLOW_COPY_AND_ASSIGN(EventFilter);
-};
-
-// static
-EventFilter* EventFilter::instance()
-{
-    static EventFilter event_filter;
-    return &event_filter;
-}
-
-bool EventFilter::nativeEventFilter(const QByteArray& event_type, void* message, long* result)
-{
-    MSG* native_message = reinterpret_cast<MSG*>(message);
-
-    if (native_message->message == WM_QUERYENDSESSION || native_message->message == WM_ENDSESSION)
-    {
-        *result = TRUE;
-        return true;
-    }
-
-    return false;
-}
 
 bool waitForValidInputDesktop()
 {
@@ -96,22 +57,6 @@ bool waitForValidInputDesktop()
     return true;
 }
 
-bool isHidden(const QStringList& arguments)
-{
-    QCommandLineOption hidden_option(QStringLiteral("hidden"), QString());
-
-    QCommandLineParser parser;
-    parser.addOption(hidden_option);
-
-    if (!parser.parse(arguments))
-    {
-        LOG(LS_ERROR) << "Could not parse parameters: " << parser.errorText();
-        return false;
-    }
-
-    return parser.isSet(hidden_option);
-}
-
 } // namespace
 
 int hostMain(int argc, char* argv[])
@@ -122,24 +67,15 @@ int hostMain(int argc, char* argv[])
     Q_INIT_RESOURCE(updater);
     Q_INIT_RESOURCE(updater_translations);
 
-    QStringList arguments;
+    base::CommandLine command_line(argc, argv);
 
-    for (int i = 0; i < argc; ++i)
-        arguments.append(QString::fromLocal8Bit(argv[i]));
-
-    bool is_hidden = isHidden(arguments);
+    bool is_hidden = command_line.hasSwitch(u"hidden");
     if (!is_hidden)
     {
         if (!base::win::isProcessElevated())
         {
-            QString program = arguments.first();
-            arguments.removeFirst();
-
-            if (base::win::executeProcess(program, arguments,
-                base::win::ProcessExecuteMode::ELEVATE))
-            {
+            if (base::win::createProcess(command_line, base::win::ProcessExecuteMode::ELEVATE))
                 return 0;
-            }
         }
     }
     else
@@ -150,36 +86,9 @@ int hostMain(int argc, char* argv[])
 
     host::Application application(argc, argv);
 
-    QCommandLineOption import_option(QStringLiteral("import"),
-        QApplication::translate("Host", "The path to the file to import."),
-        QStringLiteral("file"));
-
-    QCommandLineOption export_option(QStringLiteral("export"),
-        QApplication::translate("Host", "The path to the file to export."),
-        QStringLiteral("file"));
-
-    QCommandLineOption silent_option(QStringLiteral("silent"),
-        QApplication::translate("Host", "Enables silent mode when exporting and importing."));
-
-    QCommandLineOption update_option(QStringLiteral("update"),
-        QApplication::translate("Host", "Run application update."));
-
-    QCommandLineOption hidden_option(QStringLiteral("hidden"), QString());
-    hidden_option.setFlags(QCommandLineOption::HiddenFromHelp);
-
-    QCommandLineParser parser;
-    parser.addHelpOption();
-    parser.addVersionOption();
-    parser.addOption(import_option);
-    parser.addOption(export_option);
-    parser.addOption(silent_option);
-    parser.addOption(update_option);
-    parser.addOption(hidden_option);
-    parser.process(application);
-
-    if (parser.isSet(import_option) && parser.isSet(export_option))
+    if (command_line.hasSwitch(u"import") && command_line.hasSwitch(u"export"))
     {
-        if (!parser.isSet(silent_option))
+        if (!command_line.hasSwitch(u"silent"))
         {
             QMessageBox::warning(
                 nullptr,
@@ -190,23 +99,33 @@ int hostMain(int argc, char* argv[])
 
         return 1;
     }
-    else if (parser.isSet(import_option))
+    else if (command_line.hasSwitch(u"import"))
     {
-        if (!host::Settings::importFromFile(parser.value(import_option), parser.isSet(silent_option)))
+        if (!host::Settings::importFromFile(command_line.switchValuePath(u"import"),
+                                            command_line.hasSwitch(u"silent")))
+        {
             return 1;
+        }
     }
-    else if (parser.isSet(export_option))
+    else if (command_line.hasSwitch(u"export"))
     {
-        if (!host::Settings::exportToFile(parser.value(export_option), parser.isSet(silent_option)))
+        if (!host::Settings::exportToFile(command_line.switchValuePath(u"export"),
+                                          command_line.hasSwitch(u"silent")))
+        {
             return 1;
+        }
     }
-    else if (parser.isSet(update_option))
+    else if (command_line.hasSwitch(u"update"))
     {
-        updater::UpdateDialog dialog(application.settings().updateServer(), QLatin1String("host"));
+        updater::UpdateDialog dialog(application.settings().updateServer(), "host");
         dialog.show();
         dialog.activateWindow();
 
         return application.exec();
+    }
+    else if (command_line.hasSwitch(u"help"))
+    {
+        // TODO
     }
     else
     {
@@ -216,13 +135,10 @@ int hostMain(int argc, char* argv[])
         }
         else
         {
-            QAbstractEventDispatcher::instance()->installNativeEventFilter(
-                EventFilter::instance());
-
             host::MainWindow window;
 
             QObject::connect(&application, &host::Application::activated,
-                &window, &host::MainWindow::activateHost);
+                             &window, &host::MainWindow::activateHost);
 
             if (is_hidden)
             {

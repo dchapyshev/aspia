@@ -46,9 +46,10 @@ Settings::Settings()
 Settings::~Settings() = default;
 
 // static
-bool Settings::importFromFile(const QString& path, bool silent, QWidget* parent)
+bool Settings::importFromFile(const std::filesystem::path& path, bool silent, QWidget* parent)
 {
-    bool result = copySettings(path, Settings().filePath(), silent, parent);
+    bool result = copySettings(
+        QString::fromStdWString(path.native()), Settings().filePath(), silent, parent);
 
     if (!silent && result)
     {
@@ -62,9 +63,10 @@ bool Settings::importFromFile(const QString& path, bool silent, QWidget* parent)
 }
 
 // static
-bool Settings::exportToFile(const QString& path, bool silent, QWidget* parent)
+bool Settings::exportToFile(const std::filesystem::path& path, bool silent, QWidget* parent)
 {
-    bool result = copySettings(Settings().filePath(), path, silent, parent);
+    bool result = copySettings(
+        Settings().filePath(), QString::fromStdWString(path.native()), silent, parent);
 
     if (!silent && result)
     {
