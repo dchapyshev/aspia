@@ -115,30 +115,20 @@ UserList Settings::userList() const
 {
     UserList users;
 
-    size_t count = system_settings_.beginReadArray("Users");
-    for (size_t i = 0; i < count; ++i)
+    for (const auto& item : system_settings_.getArray("Users"))
     {
-        system_settings_.setArrayIndex(i);
-
         User user;
 
-        user.name      = system_settings_.get<std::u16string>("Name");
-        user.salt      = system_settings_.get<base::ByteArray>("Salt");
-        user.verifier  = system_settings_.get<base::ByteArray>("Verifier");
-        user.number    = system_settings_.get<base::ByteArray>("Number");
-        user.generator = system_settings_.get<base::ByteArray>("Generator");
-        user.sessions  = system_settings_.get<uint32_t>("Sessions");
-        user.flags     = system_settings_.get<uint32_t>("Flags");
+        user.name      = item.get<std::u16string>("Name");
+        user.salt      = item.get<base::ByteArray>("Salt");
+        user.verifier  = item.get<base::ByteArray>("Verifier");
+        user.number    = item.get<base::ByteArray>("Number");
+        user.generator = item.get<base::ByteArray>("Generator");
+        user.sessions  = item.get<uint32_t>("Sessions");
+        user.flags     = item.get<uint32_t>("Flags");
 
-        if (!user.isValid())
-        {
-            LOG(LS_ERROR) << "The list of users is corrupted.";
-            return UserList();
-        }
-
-        users.add(user);
+        users.add(std::move(user));
     }
-    system_settings_.endArray();
 
     base::ByteArray seed_key = system_settings_.get<base::ByteArray>("SeedKey");
     if (seed_key.empty())
@@ -154,24 +144,26 @@ void Settings::setUserList(const UserList& users)
     // Clear the old list of users.
     system_settings_.remove("Users");
 
-    system_settings_.set("SeedKey", users.seedKey());
+    base::Settings::Array users_array;
 
-    system_settings_.beginWriteArray("Users");
     for (size_t i = 0; i < users.count(); ++i)
     {
-        system_settings_.setArrayIndex(i);
-
         const User& user = users.at(i);
 
-        system_settings_.set("Name", user.name);
-        system_settings_.set("Salt", user.salt);
-        system_settings_.set("Verifier", user.verifier);
-        system_settings_.set("Number", user.number);
-        system_settings_.set("Generator", user.generator);
-        system_settings_.set("Sessions", user.sessions);
-        system_settings_.set("Flags", user.flags);
+        base::Settings item;
+        item.set("Name", user.name);
+        item.set("Salt", user.salt);
+        item.set("Verifier", user.verifier);
+        item.set("Number", user.number);
+        item.set("Generator", user.generator);
+        item.set("Sessions", user.sessions);
+        item.set("Flags", user.flags);
+
+        users_array.emplace_back(std::move(item));
     }
-    system_settings_.endArray();
+
+    system_settings_.setArray("Users", users_array);
+    system_settings_.set("SeedKey", users.seedKey());
 }
 
 std::string Settings::updateServer() const

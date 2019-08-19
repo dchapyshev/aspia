@@ -18,6 +18,7 @@
 
 #include "base/settings.h"
 
+#include "base/strings/string_number_conversions.h"
 #include "base/strings/string_util.h"
 
 namespace base {
@@ -34,67 +35,56 @@ Settings::Settings(Map&& map) noexcept
     // Nothing
 }
 
-void Settings::remove(std::string_view key)
+Settings::Array Settings::getArray(const std::string& key) const
 {
-    if (map_.empty())
-        return;
+    const size_t array_size = get<size_t>(key + kSeparator + "size");
+    Array result;
 
-    std::string prefix(key);
-    prefix += kSeparator;
+    for (size_t i = 0; i < array_size; ++i)
+        result.emplace_back(getGroup(key + kSeparator + base::numberToString(i)));
 
-    for (auto it = map_.begin(); it != map_.end();)
+    return result;
+}
+
+void Settings::setArray(const std::string& key, const Array& array)
+{
+    for (const auto& array_item : array)
+        setGroup(key, array_item);
+
+    set(key + kSeparator + "size", array.size());
+}
+
+Settings Settings::getGroup(const std::string& key) const
+{
+    const std::string prefix = key + kSeparator;
+    Map map;
+
+    for (auto it = map_.cbegin(); it != map_.cend(); ++it)
     {
         if (base::startsWith(it->first, prefix))
+            map.insert_or_assign(it->first.substr(prefix.length()), it->second);
+    }
+
+    return Settings(std::move(map));
+}
+
+void Settings::setGroup(const std::string& key, const Settings& group)
+{
+    const Map& array_map = group.constMap();
+
+    for (auto it = array_map.cbegin(); it != array_map.cend(); ++it)
+        map_.insert_or_assign(key + kSeparator + it->first, it->second);
+}
+
+void Settings::remove(const std::string& key)
+{
+    for (auto it = map_.begin(); it != map_.end();)
+    {
+        if (base::startsWith(it->first, key + kSeparator))
             it = map_.erase(it);
         else
             ++it;
     }
-}
-
-size_t Settings::beginReadArray(std::string_view name)
-{
-    array_prefix_ = name;
-    array_prefix_ += kSeparator;
-    array_index_ = 0;
-    array_size_ = 0;
-
-    auto result = map_.find(array_prefix_ + "size");
-    if (result == map_.cend())
-        return 0;
-
-    std::optional<size_t> size = StreamConverter<size_t>::get_value(result->second);
-    if (!size.has_value())
-        return 0;
-
-    return size.value();
-}
-
-void Settings::beginWriteArray(std::string_view name)
-{
-    array_prefix_ = name;
-    array_prefix_ += kSeparator;
-}
-
-void Settings::setArrayIndex(size_t index)
-{
-    array_index_ = index;
-    ++array_size_;
-}
-
-void Settings::endArray()
-{
-    map_.insert_or_assign(array_prefix_ + "size",
-        StreamConverter<size_t>::set_value(array_size_ + 1).value_or(std::string()));
-
-    array_prefix_.clear();
-}
-
-std::string Settings::actualKeyName(const std::string& key) const
-{
-    if (array_prefix_.empty())
-        return key;
-
-    return array_prefix_ + std::to_string(array_index_) + kSeparator + key;
 }
 
 } // namespace base

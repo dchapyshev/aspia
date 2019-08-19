@@ -362,8 +362,8 @@
         <translation>Конфигурация успешно экспортирована.</translation>
     </message>
     <message>
-        <location filename="../host_settings.cc" line="201"/>
-        <location filename="../host_settings.cc" line="214"/>
+        <location filename="../host_settings.cc" line="193"/>
+        <location filename="../host_settings.cc" line="206"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
@@ -376,12 +376,12 @@
         <translation type="vanished">Не удалось открыть файл назначения: %1</translation>
     </message>
     <message>
-        <location filename="../host_settings.cc" line="202"/>
+        <location filename="../host_settings.cc" line="194"/>
         <source>Unable to read the source file: the file is damaged or has an unknown format.</source>
         <translation>Не удалось прочитать исходный файл: файл поврежден или имеет неизвестный формат.</translation>
     </message>
     <message>
-        <location filename="../host_settings.cc" line="215"/>
+        <location filename="../host_settings.cc" line="207"/>
         <source>Unable to write the target file.</source>
         <translation>Не удалось записать файл назначения.</translation>
     </message>

@@ -302,18 +302,18 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host_settings.cc" line="201"/>
-        <location filename="../host_settings.cc" line="214"/>
+        <location filename="../host_settings.cc" line="193"/>
+        <location filename="../host_settings.cc" line="206"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../host_settings.cc" line="202"/>
+        <location filename="../host_settings.cc" line="194"/>
         <source>Unable to read the source file: the file is damaged or has an unknown format.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host_settings.cc" line="215"/>
+        <location filename="../host_settings.cc" line="207"/>
         <source>Unable to write the target file.</source>
         <translation type="unfinished"></translation>
     </message>

@@ -30,6 +30,8 @@ class Settings
 {
 public:
     using Map = std::map<std::string, std::string>;
+    using Array = std::vector<Settings>;
+
     static const char kSeparator = '/';
 
     Settings() = default;
@@ -38,8 +40,8 @@ public:
     Settings(const Settings& other) = default;
     Settings& operator=(const Settings& other) = default;
 
-    Settings(Settings&& other) = default;
-    Settings& operator=(Settings&& other) = default;
+    Settings(Settings&& other) noexcept = default;
+    Settings& operator=(Settings&& other) noexcept = default;
 
     explicit Settings(const Map& map);
     explicit Settings(Map&& map) noexcept;
@@ -60,7 +62,7 @@ public:
     template <typename T>
     T get(const std::string& key, const T& default_value = defaultValue<T>()) const
     {
-        Map::const_iterator result = map_.find(actualKeyName(key));
+        Map::const_iterator result = map_.find(key);
         if (result == map_.cend())
             return default_value;
 
@@ -70,28 +72,22 @@ public:
     template <typename T>
     void set(const std::string& key, const T& value)
     {
-        map_.insert_or_assign(actualKeyName(key),
-            StreamConverter<T>::set_value(value).value_or(std::string()));
+        map_.insert_or_assign(key, StreamConverter<T>::set_value(value).value_or(std::string()));
     }
 
-    void remove(std::string_view key);
+    Array getArray(const std::string& key) const;
+    void setArray(const std::string& key, const Array& array);
 
-    size_t beginReadArray(std::string_view name);
-    void beginWriteArray(std::string_view name);
-    void setArrayIndex(size_t index);
-    void endArray();
+    Settings getGroup(const std::string& key) const;
+    void setGroup(const std::string& key, const Settings& group);
+
+    void remove(const std::string& key);
 
     const Map& constMap() const { return map_; }
     Map& map() { return map_; }
 
 private:
-    std::string actualKeyName(const std::string& key) const;
-
     Map map_;
-
-    std::string array_prefix_;
-    size_t array_index_ = 0;
-    size_t array_size_ = 0;
 };
 
 } // namespace base

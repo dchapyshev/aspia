@@ -302,8 +302,8 @@
         <translation>Кофігурацію експортовано успішно.</translation>
     </message>
     <message>
-        <location filename="../host_settings.cc" line="201"/>
-        <location filename="../host_settings.cc" line="214"/>
+        <location filename="../host_settings.cc" line="193"/>
+        <location filename="../host_settings.cc" line="206"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
@@ -316,12 +316,12 @@
         <translation type="vanished">Неможливо відкрити цільовий файл: %1</translation>
     </message>
     <message>
-        <location filename="../host_settings.cc" line="202"/>
+        <location filename="../host_settings.cc" line="194"/>
         <source>Unable to read the source file: the file is damaged or has an unknown format.</source>
         <translation>Неможливо прочитати вихідний файл: файл пошкоджено або формат файлу невідомний.</translation>
     </message>
     <message>
-        <location filename="../host_settings.cc" line="215"/>
+        <location filename="../host_settings.cc" line="207"/>
         <source>Unable to write the target file.</source>
         <translation>Неможливо записати цільовий файл.</translation>
     </message>
