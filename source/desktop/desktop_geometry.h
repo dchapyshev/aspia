@@ -19,10 +19,6 @@
 #ifndef DESKTOP__DESKTOP_GEOMETRY_H
 #define DESKTOP__DESKTOP_GEOMETRY_H
 
-#include <QRect>
-#include <QPoint>
-#include <QSize>
-
 #include <cstdint>
 #include <ostream>
 
@@ -48,13 +44,6 @@ public:
     }
 
     ~Point() = default;
-
-    static Point fromQPoint(const QPoint& point)
-    {
-        return Point(point.x(), point.y());
-    }
-
-    QPoint toQPoint() const { return QPoint(x_, y_); }
 
     int32_t x() const { return x_; }
     int32_t y() const { return y_; }
@@ -122,13 +111,6 @@ public:
     }
 
     ~Size() = default;
-
-    static Size fromQSize(const QSize& size)
-    {
-        return Size(size.width(), size.height());
-    }
-
-    QSize toQSize() const { return QSize(width_, height_); }
 
     int32_t width() const { return width_; }
     int32_t height() const { return height_; }
@@ -199,16 +181,6 @@ public:
     static Rect makeSize(const Size& size)
     {
         return Rect(0, 0, size.width(), size.height());
-    }
-
-    static Rect fromQRect(const QRect& rect)
-    {
-        return Rect::makeLTRB(rect.left(), rect.top(), rect.right(), rect.bottom());
-    }
-
-    QRect toQRect() const
-    {
-        return QRect(left(), top(), width(), height());
     }
 
     int32_t left() const { return left_; }

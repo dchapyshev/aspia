@@ -933,18 +933,18 @@
 <context>
     <name>client::DesktopWindow</name>
     <message>
-        <location filename="../ui/desktop_window.cc" line="368"/>
+        <location filename="../ui/desktop_window.cc" line="369"/>
         <source>Save File</source>
         <translation>Bestand Opslaan</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="370"/>
+        <location filename="../ui/desktop_window.cc" line="371"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG Afbeelding (*.png);;BMP Afbeelding (*.bmp)</translation>
     </message>
     <message>
         <location filename="../ui/desktop_window.cc" line="150"/>
-        <location filename="../ui/desktop_window.cc" line="390"/>
+        <location filename="../ui/desktop_window.cc" line="391"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
@@ -959,17 +959,17 @@
         <translation>Selecteer een video encoding is geannuleerd door de gebruiker.</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="390"/>
+        <location filename="../ui/desktop_window.cc" line="391"/>
         <source>Could not save image</source>
         <translation>Kon het bestand niet opslaan</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="531"/>
+        <location filename="../ui/desktop_window.cc" line="532"/>
         <source>Desktop Manage</source>
         <translation>Bureaublad Beheren</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="536"/>
+        <location filename="../ui/desktop_window.cc" line="537"/>
         <source>Desktop View</source>
         <translation>Bureaublad Weergeven</translation>
     </message>

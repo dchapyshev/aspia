@@ -847,7 +847,7 @@
     <name>client::DesktopWindow</name>
     <message>
         <location filename="../ui/desktop_window.cc" line="150"/>
-        <location filename="../ui/desktop_window.cc" line="390"/>
+        <location filename="../ui/desktop_window.cc" line="391"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
@@ -862,27 +862,27 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="368"/>
+        <location filename="../ui/desktop_window.cc" line="369"/>
         <source>Save File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="370"/>
+        <location filename="../ui/desktop_window.cc" line="371"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="390"/>
+        <location filename="../ui/desktop_window.cc" line="391"/>
         <source>Could not save image</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="531"/>
+        <location filename="../ui/desktop_window.cc" line="532"/>
         <source>Desktop Manage</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="536"/>
+        <location filename="../ui/desktop_window.cc" line="537"/>
         <source>Desktop View</source>
         <translation type="unfinished"></translation>
     </message>

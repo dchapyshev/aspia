@@ -284,7 +284,7 @@ void DesktopWindow::onPointerEvent(const QPoint& pos, uint32_t mask)
         scroll_timer_id_ = 0;
     }
 
-    const QSize& source_size = desktopFrame()->size().toQSize();
+    const desktop::Size& source_size = desktopFrame()->size();
     QSize scaled_size = desktop_->size();
 
     double scale_x = (scaled_size.width() * 100) / static_cast<double>(source_size.width());
@@ -340,11 +340,12 @@ void DesktopWindow::autosizeWindow()
     if (!frame)
         return;
 
-    QSize remote_screen_size =
-        scaledSize(desktop_->desktopFrame()->size().toQSize(), panel_->scale());
+    QSize frame_size(desktop_->desktopFrame()->size().width(),
+                     desktop_->desktopFrame()->size().height());
 
+    QSize remote_screen_size = scaledSize(frame_size, panel_->scale());
     QRect local_screen_rect = QApplication::desktop()->availableGeometry(this);
-    QSize window_size = desktop_->desktopFrame()->size().toQSize() + frameSize() - size();
+    QSize window_size = frame_size + frameSize() - size();
 
     if (window_size.width() < local_screen_rect.width() &&
         window_size.height() < local_screen_rect.height())
@@ -396,7 +397,7 @@ void DesktopWindow::scaleDesktop()
     if (!frame)
         return;
 
-    QSize frame_size = frame->size().toQSize();
+    QSize frame_size(frame->size().width(), frame->size().height());
     QSize target_size;
 
     int scale = panel_->scale();

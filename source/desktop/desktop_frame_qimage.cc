@@ -29,7 +29,7 @@ constexpr int kBytesPerPixel = 4;
 } // namespace
 
 FrameQImage::FrameQImage(QImage&& img)
-    : Frame(Size::fromQSize(img.size()),
+    : Frame(Size(img.size().width(), img.size().height()),
             PixelFormat::ARGB(),
             img.width() * kBytesPerPixel,
             img.bits()),
