@@ -45,7 +45,7 @@ public:
     template <class InputBufferT, class OutputBufferT>
     static OutputBufferT encodeT(const InputBufferT& input)
     {
-        const size_t input_length = input.length();
+        const size_t input_length = input.size();
         if (!input_length)
             return OutputBufferT();
 
