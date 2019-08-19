@@ -19,6 +19,10 @@
 #ifndef BASE__STREAM_CONVERTER_H
 #define BASE__STREAM_CONVERTER_H
 
+#include "base/base64.h"
+#include "base/byte_array.h"
+#include "base/strings/unicode.h"
+
 #include <optional>
 #include <sstream>
 #include <string>
@@ -42,6 +46,46 @@ class StreamConverter
 
             if (!stream.eof())
                 stream >> std::ws;
+        }
+    };
+
+    template <>
+    struct ConverterImpl<std::u16string>
+    {
+        static void insert(std::ostringstream& stream, const std::u16string& value)
+        {
+            stream << base::utf8FromUtf16(value);
+        }
+
+        static void extract(std::istringstream& stream, std::u16string& value)
+        {
+            std::string temp;
+            stream >> temp;
+
+            if (!stream.eof())
+                stream >> std::ws;
+
+            value = base::utf16FromUtf8(temp);
+        }
+    };
+
+    template <>
+    struct ConverterImpl<base::ByteArray>
+    {
+        static void insert(std::ostringstream& stream, const base::ByteArray& value)
+        {
+            stream << base::Base64::encodeT<base::ByteArray, std::string>(value);
+        }
+
+        static void extract(std::istringstream& stream, base::ByteArray& value)
+        {
+            std::string temp;
+            stream >> temp;
+
+            if (!stream.eof())
+                stream >> std::ws;
+
+            value = base::Base64::decodeT<std::string, base::ByteArray>(temp);
         }
     };
 
