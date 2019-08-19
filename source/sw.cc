@@ -42,7 +42,6 @@ void build(Solution &s)
     base.Public += "WIN32_LEAN_AND_MEAN"_def;
     base.Public += "NOMINMAX"_def;
     base.Public += "USE_PCG_GENERATOR"_def;
-    base.Public += "HAS_QT"_def;
     base.Public += "org.sw.demo.qtproject.qt.base.widgets-*"_dep;
     base.Public += "org.sw.demo.qtproject.qt.base.network-*"_dep;
     base.Public += "org.sw.demo.qtproject.qt.base.xml-*"_dep;

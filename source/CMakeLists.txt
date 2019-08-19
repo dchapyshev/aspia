@@ -53,8 +53,7 @@ add_definitions(-DASIO_STANDALONE
                 -DASIO_NO_DEPRECATED)
 
 # For Qt.
-add_definitions(-DHAS_QT
-                -DQT_NO_CAST_TO_ASCII
+add_definitions(-DQT_NO_CAST_TO_ASCII
                 -DQT_NO_CAST_FROM_BYTEARRAY
                 -DQT_USE_QSTRINGBUILDER)
 
