@@ -51,7 +51,7 @@ public:
 
     static BigNum create();
     static BigNum fromBuffer(const base::ConstBuffer& buffer);
-    static BigNum fromStdString(const std::string& string);
+    static BigNum fromStdString(std::string_view string);
     static BigNum fromByteArray(const base::ByteArray& array);
 
     operator bignum_st*() const { return num_.get(); }

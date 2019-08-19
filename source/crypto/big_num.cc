@@ -99,7 +99,7 @@ BigNum BigNum::fromBuffer(const base::ConstBuffer& buffer)
 }
 
 // static
-BigNum BigNum::fromStdString(const std::string& string)
+BigNum BigNum::fromStdString(std::string_view string)
 {
     return BigNum(reinterpret_cast<const uint8_t*>(string.data()), string.size());
 }
