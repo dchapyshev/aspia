@@ -23,29 +23,37 @@
 #include "base/win/session_id.h"
 #include "base/win/session_status.h"
 
-#include <QWidget>
+#include <memory>
+
+#include <Windows.h>
 
 namespace base::win {
 
-class SessionWatcher : public QWidget
+class MessageWindow;
+
+class SessionWatcher
 {
-    Q_OBJECT
-
 public:
-    explicit SessionWatcher(QWidget* parent = nullptr);
-    ~SessionWatcher() = default;
+    SessionWatcher();
+    ~SessionWatcher();
 
-    void start();
+    class Delegate
+    {
+    public:
+        virtual ~Delegate() = default;
+
+        virtual void onSessionEvent(SessionStatus status, SessionId session_id) = 0;
+    };
+
+    bool start(Delegate* delegate);
     void stop();
 
-signals:
-    void sessionEvent(SessionStatus status, SessionId session_id);
-
-protected:
-    // QWidget implementation.
-    bool nativeEvent(const QByteArray& event_type, void* message, long* result) override;
-
 private:
+    bool onMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESULT& result);
+
+    std::unique_ptr<MessageWindow> window_;
+    Delegate* delegate_ = nullptr;
+
     DISALLOW_COPY_AND_ASSIGN(SessionWatcher);
 };
 

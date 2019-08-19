@@ -17,65 +17,71 @@
 //
 
 #include "base/win/session_watcher.h"
-#include "base/logging.h"
 
-#include <Windows.h>
+#include "base/logging.h"
+#include "base/win/message_window.h"
+
 #include <wtsapi32.h>
 
 namespace base::win {
 
-SessionWatcher::SessionWatcher(QWidget* parent)
-    : QWidget(parent)
+SessionWatcher::SessionWatcher() = default;
+
+SessionWatcher::~SessionWatcher()
 {
-    // Nothing
+    stop();
 }
 
-void SessionWatcher::start()
+bool SessionWatcher::start(Delegate* delegate)
 {
-    HWND native_window = reinterpret_cast<HWND>(winId());
-    if (!native_window)
+    if (window_)
+        return false;
+
+    delegate_ = delegate;
+    DCHECK(delegate_);
+
+    std::unique_ptr<MessageWindow> window = std::make_unique<MessageWindow>();
+
+    if (!window->create(std::bind(&SessionWatcher::onMessage,
+                                  this,
+                                  std::placeholders::_1, std::placeholders::_2,
+                                  std::placeholders::_3, std::placeholders::_4)))
     {
-        LOG(LS_ERROR) << "Unable to get native window";
-        return;
+        return false;
     }
 
-    if (!WTSRegisterSessionNotification(native_window, NOTIFY_FOR_ALL_SESSIONS))
+    if (!WTSRegisterSessionNotification(window->hwnd(), NOTIFY_FOR_ALL_SESSIONS))
     {
         PLOG(LS_ERROR) << "WTSRegisterSessionNotification failed";
-        return;
+        return false;
     }
+
+    window_ = std::move(window);
+    return true;
 }
 
 void SessionWatcher::stop()
 {
-    HWND native_window = reinterpret_cast<HWND>(winId());
-    if (!native_window)
-    {
-        LOG(LS_ERROR) << "Unable to get native window";
+    if (!window_)
         return;
-    }
 
-    if (!WTSUnRegisterSessionNotification(native_window))
-    {
-        PLOG(LS_ERROR) << "WTSUnRegisterSessionNotification failed";
-        return;
-    }
+    WTSUnRegisterSessionNotification(window_->hwnd());
+    window_.reset();
+    delegate_ = nullptr;
 }
 
-bool SessionWatcher::nativeEvent(const QByteArray& /* event_type */, void* message, long* result)
+bool SessionWatcher::onMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESULT& result)
 {
-    MSG* native_message = reinterpret_cast<MSG*>(message);
-    if (!native_message)
-        return false;
+    if (message == WM_WTSSESSION_CHANGE)
+    {
+        delegate_->onSessionEvent(
+            static_cast<SessionStatus>(wParam), static_cast<SessionId>(lParam));
 
-    if (native_message->message != WM_WTSSESSION_CHANGE)
-        return false;
+        result = 0;
+        return true;
+    }
 
-    emit sessionEvent(static_cast<SessionStatus>(native_message->wParam),
-                      static_cast<SessionId>(native_message->lParam));
-
-    *result = 0;
-    return true;
+    return false;
 }
 
 } // namespace base::win
