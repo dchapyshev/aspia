@@ -22,13 +22,13 @@
 
 namespace base {
 
-Settings::Settings(const SettingsMap& map)
+Settings::Settings(const Map& map)
     : map_(map)
 {
     // Nothing
 }
 
-Settings::Settings(SettingsMap&& map)
+Settings::Settings(Map&& map) noexcept
     : map_(std::move(map))
 {
     // Nothing

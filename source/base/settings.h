@@ -29,7 +29,7 @@ namespace base {
 class Settings
 {
 public:
-    using SettingsMap = std::map<std::string, std::string>;
+    using Map = std::map<std::string, std::string>;
     static const char kSeparator = '/';
 
     Settings() = default;
@@ -41,24 +41,37 @@ public:
     Settings(Settings&& other) = default;
     Settings& operator=(Settings&& other) = default;
 
-    explicit Settings(const SettingsMap& map);
-    explicit Settings(SettingsMap&& map);
+    explicit Settings(const Map& map);
+    explicit Settings(Map&& map) noexcept;
 
-    template <typename ValueType>
-    ValueType get(std::string_view key, const ValueType& default_value) const
+    template <typename T, typename std::enable_if<!std::is_arithmetic<T>::value>::type* = nullptr>
+    static T defaultValue()
     {
-        SettingsMap::const_iterator result = map_.find(actualKeyName(key));
+        return T();
+    }
+
+    template <typename T, typename std::enable_if<std::is_arithmetic<T>::value>::type* = nullptr>
+    static T defaultValue()
+    {
+        // For all arithmetic types, return 0 as the default value.
+        return static_cast<T>(0);
+    }
+
+    template <typename T>
+    T get(const std::string& key, const T& default_value = defaultValue<T>()) const
+    {
+        Map::const_iterator result = map_.find(actualKeyName(key));
         if (result == map_.cend())
             return default_value;
 
-        return StreamConverter<ValueType>::get_value(result->second).value_or(default_value);
+        return StreamConverter<T>::get_value(result->second).value_or(default_value);
     }
 
-    template <typename ValueType>
-    void set(std::string_view key, const ValueType& value)
+    template <typename T>
+    void set(const std::string& key, const T& value)
     {
         map_.insert_or_assign(actualKeyName(key),
-            StreamConverter<ValueType>::set_value(value).value_or(std::string()));
+            StreamConverter<T>::set_value(value).value_or(std::string()));
     }
 
     void remove(std::string_view key);
@@ -68,13 +81,13 @@ public:
     void setArrayIndex(size_t index);
     void endArray();
 
-    const SettingsMap& constMap() const { return map_; }
-    SettingsMap& map() { return map_; }
+    const Map& constMap() const { return map_; }
+    Map& map() { return map_; }
 
 private:
     std::string actualKeyName(const std::string& key) const;
 
-    SettingsMap map_;
+    Map map_;
 
     std::string array_prefix_;
     size_t array_index_ = 0;
