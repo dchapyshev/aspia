@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,6 +17,7 @@
 //
 
 #include "base/guid.h"
+
 #include "base/endian.h"
 #include "base/logging.h"
 
@@ -181,13 +182,6 @@ std::string Guid::toStdString() const
 {
     return randomDataToGUIDStringT<std::string>(bytes_);
 }
-
-#if defined(HAS_QT)
-QByteArray Guid::toByteArray() const
-{
-    return randomDataToGUIDStringT<QByteArray>(bytes_);
-}
-#endif // defined(HAS_QT)
 
 bool Guid::operator==(const Guid& other) const
 {

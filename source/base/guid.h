@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -21,10 +21,6 @@
 
 #include "base/macros_magic.h"
 #include "build/build_config.h"
-
-#if defined(HAS_QT)
-#include <QByteArray>
-#endif // defined(HAS_QT)
 
 #include <string>
 
@@ -63,10 +59,6 @@ public:
     static bool isStrictValidGuidString(const std::string& guid);
 
     std::string toStdString() const;
-
-#if defined(HAS_QT)
-    QByteArray toByteArray() const;
-#endif // defined(HAS_QT)
 
     bool operator==(const Guid& other) const;
     bool operator!=(const Guid& other) const;
