@@ -18,13 +18,12 @@
 
 #include "host/host_server.h"
 
+#include "base/logging.h"
 #include "base/files/base_paths.h"
+#include "base/files/file_path_watcher.h"
 #include "host/client_session.h"
 #include "net/firewall_manager.h"
 #include "net/network_channel.h"
-#include "qt_base/qt_logging.h"
-
-#include <QFileSystemWatcher>
 
 namespace host {
 
@@ -65,18 +64,21 @@ void Server::start()
 
     LOG(LS_INFO) << "Starting the host server";
 
-    settings_watcher_ = std::make_unique<QFileSystemWatcher>();
-
-    QObject::connect(settings_watcher_.get(), &QFileSystemWatcher::fileChanged, [this]()
+    settings_watcher_ = std::make_unique<base::FilePathWatcher>();
+    settings_watcher_->watch(settings_.filePath(), false,
+        [this](const std::filesystem::path& path, bool error)
     {
-        // Synchronize the parameters from the file.
-        settings_.sync();
+        if (!error)
+        {
+            DCHECK_EQ(path, settings_.filePath());
 
-        // Reload user lists.
-        reloadUserList();
+            // Synchronize the parameters from the file.
+            settings_.sync();
+
+            // Reload user lists.
+            reloadUserList();
+        }
     });
-
-    settings_watcher_->addPath(settings_.filePath());
 
     authenticator_manager_ = std::make_unique<AuthenticatorManager>(this);
 

@@ -114,11 +114,11 @@ BigNum SrpMath::calc_B(const BigNum& b, const BigNum& N, const BigNum& g, const 
 // x = BLAKE2b512(s | BLAKE2b512(I | ":" | p))
 BigNum SrpMath::calc_x(const BigNum& s, std::u16string_view I, std::u16string_view p)
 {
-    return calc_x(s, I, base::utf8FromUtf16(p));
+    return calc_x(s, I, base::fromStdString(base::utf8FromUtf16(p)));
 }
 
 // static
-BigNum SrpMath::calc_x(const BigNum& s, std::u16string_view I, std::string_view p)
+BigNum SrpMath::calc_x(const BigNum& s, std::u16string_view I, const base::ByteArray& p)
 {
     if (!s.isValid() || I.empty() || p.empty())
         return BigNum();
@@ -286,7 +286,7 @@ BigNum SrpMath::calc_v(std::u16string_view I, std::u16string_view p, const BigNu
 }
 
 // static
-BigNum SrpMath::calc_v(std::u16string_view I, std::string_view p, const BigNum& s,
+BigNum SrpMath::calc_v(std::u16string_view I, const base::ByteArray& p, const BigNum& s,
                        const BigNum& N, const BigNum& g)
 {
     if (I.empty() || p.empty() || !N.isValid() || !g.isValid() || !s.isValid())

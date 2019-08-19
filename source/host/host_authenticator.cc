@@ -168,8 +168,8 @@ void Authenticator::onNetworkMessage(base::ByteArray& buffer)
                 hash.addData(userlist_->seedKey());
                 hash.addData(identify.username());
 
-                N_ = crypto::BigNum::fromBuffer(crypto::kSrpNg_8192.N);
-                g_ = crypto::BigNum::fromBuffer(crypto::kSrpNg_8192.g);
+                N_ = crypto::BigNum::fromStdString(crypto::kSrpNgPair_8192.first);
+                g_ = crypto::BigNum::fromStdString(crypto::kSrpNgPair_8192.second);
                 s_ = crypto::BigNum::fromByteArray(hash.result());
                 v_ = crypto::SrpMath::calc_v(username_, userlist_->seedKey(), s_, N_, g_);
             }
@@ -179,10 +179,10 @@ void Authenticator::onNetworkMessage(base::ByteArray& buffer)
 
                 session_types_ = user.sessions;
 
-                N_ = crypto::BigNum::fromStdString(user.number);
-                g_ = crypto::BigNum::fromStdString(user.generator);
-                s_ = crypto::BigNum::fromStdString(user.salt);
-                v_ = crypto::BigNum::fromStdString(user.verifier);
+                N_ = crypto::BigNum::fromByteArray(user.number);
+                g_ = crypto::BigNum::fromByteArray(user.generator);
+                s_ = crypto::BigNum::fromByteArray(user.salt);
+                v_ = crypto::BigNum::fromByteArray(user.verifier);
             }
 
             b_ = crypto::BigNum::fromByteArray(crypto::Random::byteArray(128)); // 1024 bits.

@@ -117,7 +117,8 @@ int hostMain(int argc, char* argv[])
     }
     else if (command_line.hasSwitch(u"update"))
     {
-        updater::UpdateDialog dialog(application.settings().updateServer(), "host");
+        updater::UpdateDialog dialog(
+            QString::fromStdString(application.settings().updateServer()), "host");
         dialog.show();
         dialog.activateWindow();
 

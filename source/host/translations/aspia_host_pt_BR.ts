@@ -172,14 +172,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Could not open source file: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Could not open target file: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Unable to read the source file: the file is damaged or has an unknown format.</source>
         <translation type="unfinished"></translation>
     </message>

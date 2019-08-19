@@ -32,45 +32,27 @@ namespace client {
 
 namespace {
 
-bool verifyNg(const std::string& N, const std::string& g)
+bool verifyNg(std::string_view N, std::string_view g)
 {
     switch (N.size())
     {
         case 512: // 4096 bit
         {
-            if (memcmp(N.data(), crypto::kSrpNg_4096.N.data(), crypto::kSrpNg_4096.N.size()) != 0)
-                return false;
-
-            if (g.size() != crypto::kSrpNg_4096.g.size())
-                return false;
-
-            if (memcmp(g.data(), crypto::kSrpNg_4096.g.data(), crypto::kSrpNg_4096.g.size()) != 0)
+            if (N != crypto::kSrpNgPair_4096.first || g != crypto::kSrpNgPair_4096.second)
                 return false;
         }
         break;
 
         case 768: // 6144 bit
         {
-            if (memcmp(N.data(), crypto::kSrpNg_6144.N.data(), crypto::kSrpNg_6144.N.size()) != 0)
-                return false;
-
-            if (g.size() != crypto::kSrpNg_6144.g.size())
-                return false;
-
-            if (memcmp(g.data(), crypto::kSrpNg_6144.g.data(), crypto::kSrpNg_6144.g.size()) != 0)
+            if (N != crypto::kSrpNgPair_6144.first || g != crypto::kSrpNgPair_6144.second)
                 return false;
         }
         break;
 
         case 1024: // 8192 bit
         {
-            if (memcmp(N.data(), crypto::kSrpNg_8192.N.data(), crypto::kSrpNg_8192.N.size()) != 0)
-                return false;
-
-            if (g.size() != crypto::kSrpNg_8192.g.size())
-                return false;
-
-            if (memcmp(g.data(), crypto::kSrpNg_8192.g.data(), crypto::kSrpNg_8192.g.size()) != 0)
+            if (N != crypto::kSrpNgPair_8192.first || g != crypto::kSrpNgPair_8192.second)
                 return false;
         }
         break;

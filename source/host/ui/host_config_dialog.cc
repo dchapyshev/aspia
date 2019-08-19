@@ -61,7 +61,8 @@ ConfigDialog::ConfigDialog(QWidget* parent)
 
     connect(ui.button_check_updates, &QPushButton::released, [this]()
     {
-        updater::UpdateDialog(Settings().updateServer(), QLatin1String("host"), this).exec();
+        updater::UpdateDialog(
+            QString::fromStdString(Settings().updateServer()), "host", this).exec();
     });
 
     connect(ui.tree_users, &QTreeWidget::customContextMenuRequested,
@@ -293,7 +294,7 @@ void ConfigDialog::onButtonBoxClicked(QAbstractButton* button)
         // Update the parameters.
         settings.setTcpPort(ui.spinbox_port->value());
         settings.setUserList(users_);
-        settings.setUpdateServer(ui.edit_update_server->text());
+        settings.setUpdateServer(ui.edit_update_server->text().toStdString());
 
         setConfigChanged(false);
 
@@ -352,7 +353,7 @@ void ConfigDialog::reloadAll()
 
     ui.spinbox_port->setValue(settings.tcpPort());
     ui.checkbox_use_custom_server->setChecked(settings.updateServer() != DEFAULT_UPDATE_SERVER);
-    ui.edit_update_server->setText(settings.updateServer());
+    ui.edit_update_server->setText(QString::fromStdString(settings.updateServer()));
 
     ui.edit_update_server->setEnabled(ui.checkbox_use_custom_server->isChecked());
 

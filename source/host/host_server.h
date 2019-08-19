@@ -24,7 +24,9 @@
 #include "host/host_settings.h"
 #include "net/network_server.h"
 
-class QFileSystemWatcher;
+namespace base {
+class FilePathWatcher;
+} // namespace base
 
 namespace host {
 
@@ -57,7 +59,7 @@ private:
 
     asio::io_context& io_context_;
 
-    std::unique_ptr<QFileSystemWatcher> settings_watcher_;
+    std::unique_ptr<base::FilePathWatcher> settings_watcher_;
     Settings settings_;
 
     // Accepts incoming network connections.

@@ -20,6 +20,7 @@
 #define HOST__HOST_SETTINGS_H
 
 #include "base/macros_magic.h"
+#include "base/xml_settings.h"
 
 #include <filesystem>
 
@@ -43,7 +44,7 @@ public:
     static bool exportToFile(
         const std::filesystem::path& path, bool silent, QWidget* parent = nullptr);
 
-    QString filePath() const;
+    const std::filesystem::path& filePath() const;
     bool isWritable() const;
     void sync();
 
@@ -56,14 +57,16 @@ public:
     UserList userList() const;
     void setUserList(const UserList& user_list);
 
-    QString updateServer() const;
-    void setUpdateServer(const QString& server);
+    std::string updateServer() const;
+    void setUpdateServer(const std::string& server);
 
 private:
-    static bool copySettings(
-        const QString& source_path, const QString& target_path, bool silent, QWidget* parent);
+    static bool copySettings(const std::filesystem::path& source_path,
+                             const std::filesystem::path& target_path,
+                             bool silent,
+                             QWidget* parent);
 
-    mutable QSettings system_settings_;
+    mutable base::XmlSettings system_settings_;
     QSettings user_settings_;
 
     DISALLOW_COPY_AND_ASSIGN(Settings);

@@ -19,6 +19,8 @@
 #ifndef HOST__USER_H
 #define HOST__USER_H
 
+#include "base/byte_array.h"
+
 #include <string>
 #include <vector>
 
@@ -34,10 +36,10 @@ public:
     bool isValid() const;
 
     std::u16string name;
-    std::string salt;
-    std::string verifier;
-    std::string number;
-    std::string generator;
+    base::ByteArray salt;
+    base::ByteArray verifier;
+    base::ByteArray number;
+    base::ByteArray generator;
     uint32_t sessions = 0;
     uint32_t flags = 0;
 };
@@ -57,13 +59,13 @@ public:
     size_t count() const { return list_.size(); }
     const User& at(size_t index) const;
 
-    const std::string& seedKey() const { return seed_key_; }
-    void setSeedKey(const std::string& seed_key);
+    const base::ByteArray& seedKey() const { return seed_key_; }
+    void setSeedKey(const base::ByteArray& seed_key);
 
     bool hasIndex(size_t index) const;
 
 private:
-    std::string seed_key_;
+    base::ByteArray seed_key_;
     std::vector<User> list_;
 };
 

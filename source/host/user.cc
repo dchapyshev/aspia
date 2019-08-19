@@ -38,19 +38,16 @@ User User::create(std::u16string_view name, std::u16string_view password)
     User user;
 
     user.name = name;
-    user.salt = crypto::Random::string(kUserSaltSize);
+    user.salt = crypto::Random::byteArray(kUserSaltSize);
+    user.number = base::fromStdString(crypto::kSrpNgPair_8192.first);
+    user.generator = base::fromStdString(crypto::kSrpNgPair_8192.second);
 
-    user.number = std::string(
-        reinterpret_cast<const char*>(crypto::kSrpNg_8192.N.data()), crypto::kSrpNg_8192.N.size());
-    user.generator = std::string(
-        reinterpret_cast<const char*>(crypto::kSrpNg_8192.g.data()), crypto::kSrpNg_8192.g.size());
-
-    crypto::BigNum s = crypto::BigNum::fromStdString(user.salt);
-    crypto::BigNum N = crypto::BigNum::fromStdString(user.number);
-    crypto::BigNum g = crypto::BigNum::fromStdString(user.generator);
+    crypto::BigNum s = crypto::BigNum::fromByteArray(user.salt);
+    crypto::BigNum N = crypto::BigNum::fromByteArray(user.number);
+    crypto::BigNum g = crypto::BigNum::fromByteArray(user.generator);
     crypto::BigNum v = crypto::SrpMath::calc_v(name, password, s, N, g);
 
-    user.verifier = v.toStdString();
+    user.verifier = v.toByteArray();
     if (user.verifier.empty())
         return User();
 
@@ -116,7 +113,7 @@ const User& UserList::at(size_t index) const
     return list_.at(index);
 }
 
-void UserList::setSeedKey(const std::string& seed_key)
+void UserList::setSeedKey(const base::ByteArray& seed_key)
 {
     seed_key_ = seed_key;
 }
