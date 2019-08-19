@@ -98,7 +98,7 @@ QString variantToString(const QVariant& value)
             break;
 
         case QMetaType::QByteArray:
-            result = base::Base64::encodeByteArray(value.toByteArray());
+            result = base::Base64::encodeT<QByteArray, QByteArray>(value.toByteArray());
             break;
 
         case QMetaType::QRect:
@@ -134,7 +134,7 @@ QString variantToString(const QVariant& value)
                 stream << value;
             }
 
-            result = base::Base64::encodeByteArray(buffer);
+            result = base::Base64::encodeT<QByteArray, QByteArray>(buffer);
         }
         break;
     }
@@ -146,11 +146,11 @@ QVariant stringToVariant(const QString& value, const QString& type)
 {
     if (type == QLatin1String("ByteArray"))
     {
-        return QVariant(base::Base64::decodeByteArray(value.toLatin1()));
+        return QVariant(base::Base64::decodeT<QByteArray, QByteArray>(value.toLatin1()));
     }
     else if (type == QLatin1String("Variant"))
     {
-        QByteArray buffer = base::Base64::decodeByteArray(value.toLatin1());
+        QByteArray buffer = base::Base64::decodeT<QByteArray, QByteArray>(value.toLatin1());
 
         QDataStream stream(&buffer, QIODevice::ReadOnly);
         stream.setVersion(QDataStream::Qt_5_12);

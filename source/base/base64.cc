@@ -20,6 +20,7 @@
 //
 
 #include "base/base64.h"
+
 #include "base/base64_constants.h"
 #include "base/logging.h"
 #include "build/build_config.h"
@@ -30,19 +31,36 @@ namespace {
 
 const uint32_t kBadChar = 0x01FFFFFF;
 const char kPaddingChar = '=';
-const size_t kErrorResult = static_cast<size_t>(-1);
 
-size_t encodedLength(size_t len)
+} // namespace
+
+// static
+void Base64::encode(const std::string& input, std::string* output)
 {
-    return ((len + 2) / 3 * 4 + 1);
+    DCHECK(output);
+    output->swap(encode(input));
 }
 
-size_t decodedLength(size_t len)
+// static
+std::string Base64::encode(const std::string& input)
 {
-    return (len / 4 * 3 + 2);
+    return encodeT<std::string, std::string>(input);
 }
 
-size_t encodeImpl(char* dest, const char* str, size_t len)
+// static
+bool Base64::decode(const std::string& input, std::string* output)
+{
+    return decodeT<std::string>(input, output);
+}
+
+// static
+std::string Base64::decode(const std::string& input)
+{
+    return decodeT<std::string, std::string>(input);
+}
+
+// static
+size_t Base64::encodeImpl(char* dest, const char* str, size_t len)
 {
     uint8_t* p = reinterpret_cast<uint8_t*>(dest);
     size_t i = 0;
@@ -93,7 +111,8 @@ size_t encodeImpl(char* dest, const char* str, size_t len)
 }
 
 #if (ARCH_CPU_BIG_ENDIAN == 1)
-int decodeImpl(char* dest, const char* src, int len)
+// static
+int Base64::decodeImpl(char* dest, const char* src, int len)
 {
     if (len == 0)
         return 0;
@@ -114,10 +133,10 @@ int decodeImpl(char* dest, const char* src, int len)
     int leftover = len % 4;
     size_t chunks = (leftover == 0) ? len / 4 - 1 : len / 4;
 
-    uint8_t* p = reinterpret_cast<uint8_t*>(dest);
+    uint8_t * p = reinterpret_cast<uint8_t*>(dest);
     uint32_t x = 0;
-    uint32_t* dest_int = reinterpret_cast<uint32_t*>(p);
-    const uint32_t* src_int = reinterpret_cast<const uint32_t*>(src);
+    uint32_t * dest_int = reinterpret_cast<uint32_t*>(p);
+    const uint32_t * src_int = reinterpret_cast<const uint32_t*>(src);
     uint32_t y = *src_int++;
 
     for (i = 0; i < chunks; ++i)
@@ -177,7 +196,8 @@ int decodeImpl(char* dest, const char* src, int len)
     return 3 * chunks + (6 * leftover) / 8;
 }
 #elif (ARCH_CPU_LITTLE_ENDIAN == 1)
-size_t decodeImpl(char* dest, const char* src, size_t len)
+// static
+size_t Base64::decodeImpl(char* dest, const char* src, size_t len)
 {
     if (!len)
         return 0;
@@ -198,9 +218,9 @@ size_t decodeImpl(char* dest, const char* src, size_t len)
     int leftover = len % 4;
     size_t chunks = (leftover == 0) ? len / 4 - 1 : len / 4;
 
-    uint8_t* p = reinterpret_cast<uint8_t*>(dest);
+    uint8_t * p = reinterpret_cast<uint8_t*>(dest);
     uint32_t x = 0;
-    const uint8_t* y = reinterpret_cast<const uint8_t*>(src);
+    const uint8_t * y = reinterpret_cast<const uint8_t*>(src);
 
     for (i = 0; i < chunks; ++i, y += 4)
     {
@@ -223,7 +243,7 @@ size_t decodeImpl(char* dest, const char* src, size_t len)
 
             *p++ = reinterpret_cast<uint8_t*>(&x)[0];
             *p++ = reinterpret_cast<uint8_t*>(&x)[1];
-            *p   = reinterpret_cast<uint8_t*>(&x)[2];
+            *p = reinterpret_cast<uint8_t*>(&x)[2];
             return (chunks + 1) * 3;
         }
         break;
@@ -246,7 +266,7 @@ size_t decodeImpl(char* dest, const char* src, size_t len)
         {
             x = kD0[y[0]] | kD1[y[1]] | kD2[y[2]]; // 0x3c
             *p++ = reinterpret_cast<uint8_t*>(&x)[0];
-            *p   = reinterpret_cast<uint8_t*>(&x)[1];
+            *p = reinterpret_cast<uint8_t*>(&x)[1];
         }
         break;
     }
@@ -260,106 +280,16 @@ size_t decodeImpl(char* dest, const char* src, size_t len)
 #error CPU endian not specified
 #endif
 
-template<class BufferType>
-BufferType encodeT(const BufferType& input)
-{
-    size_t input_length = input.length();
-    if (!input_length)
-        return BufferType();
-
-    BufferType result;
-    result.resize(encodedLength(input_length));
-
-    size_t output_size = encodeImpl(result.data(), input.data(), input_length);
-    result.resize(output_size);
-
-    return result;
-}
-
-template<class BufferType>
-bool decodeT(const BufferType& input, BufferType* output)
-{
-    DCHECK(output);
-
-    size_t input_length = input.length();
-    if (!input_length)
-        return false;
-
-    BufferType temp;
-    temp.resize(decodedLength(input_length));
-
-    size_t output_size = decodeImpl(temp.data(), input.data(), input_length);
-    if (output_size == kErrorResult)
-        return false;
-
-    temp.resize(output_size);
-    output->swap(temp);
-    return true;
-}
-
-template<class BufferType>
-BufferType decodeT(const BufferType& input)
-{
-    BufferType result;
-
-    if (!decodeT(input, &result))
-        return BufferType();
-
-    return result;
-}
-
-} // namespace
-
 // static
-void Base64::encode(const std::string& input, std::string* output)
+size_t Base64::encodedLength(size_t len)
 {
-    DCHECK(output);
-    output->swap(encode(input));
+    return ((len + 2) / 3 * 4 + 1);
 }
 
 // static
-std::string Base64::encode(const std::string& input)
+size_t Base64::decodedLength(size_t len)
 {
-    return encodeT<std::string>(input);
+    return (len / 4 * 3 + 2);
 }
-
-// static
-bool Base64::decode(const std::string& input, std::string* output)
-{
-    return decodeT<std::string>(input, output);
-}
-
-// static
-std::string Base64::decode(const std::string& input)
-{
-    return decodeT<std::string>(input);
-}
-
-#if defined(HAS_QT)
-// static
-void Base64::encodeByteArray(const QByteArray& input, QByteArray* output)
-{
-    DCHECK(output);
-    output->swap(encodeByteArray(input));
-}
-
-// static
-QByteArray Base64::encodeByteArray(const QByteArray& input)
-{
-    return encodeT<QByteArray>(input);
-}
-
-// static
-bool Base64::decodeByteArray(const QByteArray& input, QByteArray* output)
-{
-    return decodeT<QByteArray>(input, output);
-}
-
-// static
-QByteArray Base64::decodeByteArray(const QByteArray& input)
-{
-    return decodeT<QByteArray>(input);
-}
-#endif // defined(HAS_QT)
 
 } // namespace base

@@ -20,6 +20,8 @@
 
 #include <gtest/gtest.h>
 
+#include <QByteArray>
+
 namespace base {
 
 namespace {
@@ -99,18 +101,18 @@ TEST(base64_test, DISABLED_benchmark)
     for (int i = 0; i < kIterationCount; ++i)
     {
         QByteArray source_1(kTestData1);
-        QByteArray encoded_1 = Base64::encodeByteArray(source_1);
+        QByteArray encoded_1 = Base64::encodeT<QByteArray, QByteArray>(source_1);
 
         QByteArray decoded_1;
-        Base64::decodeByteArray(encoded_1, &decoded_1);
+        Base64::decodeT<QByteArray, QByteArray>(encoded_1, &decoded_1);
 
         EXPECT_EQ(source_1, decoded_1);
 
         QByteArray source_2(kTestData2);
-        QByteArray encoded_2 = Base64::encodeByteArray(source_2);
+        QByteArray encoded_2 = Base64::encodeT<QByteArray, QByteArray>(source_2);
 
         QByteArray decoded_2;
-        Base64::decodeByteArray(encoded_2, &decoded_2);
+        Base64::decodeT<QByteArray, QByteArray>(encoded_2, &decoded_2);
 
         EXPECT_EQ(source_2, decoded_2);
     }

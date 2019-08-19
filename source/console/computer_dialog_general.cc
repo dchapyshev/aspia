@@ -93,10 +93,10 @@ bool ComputerDialogGeneral::saveSettings(proto::address_book::Computer* computer
         return false;
     }
 
-    QString username = ui.edit_username->text();
-    QString password = ui.edit_password->text();
+    std::u16string username = ui.edit_username->text().toStdU16String();
+    std::u16string password = ui.edit_password->text().toStdU16String();
 
-    if (!username.isEmpty() && !common::UserUtil::isValidUserName(username))
+    if (!username.empty() && !common::UserUtil::isValidUserName(username))
     {
         showError(tr("The user name can not be empty and can contain only"
                      " alphabet characters, numbers and ""_"", ""-"", ""."" characters."));
@@ -127,8 +127,8 @@ bool ComputerDialogGeneral::saveSettings(proto::address_book::Computer* computer
     computer->set_name(name.toStdString());
     computer->set_address(base::utf8FromUtf16(address.host()));
     computer->set_port(address.port());
-    computer->set_username(username.toStdString());
-    computer->set_password(password.toStdString());
+    computer->set_username(base::utf8FromUtf16(username));
+    computer->set_password(base::utf8FromUtf16(password));
     computer->set_comment(comment.toStdString());
     return true;
 }
