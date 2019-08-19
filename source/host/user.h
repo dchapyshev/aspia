@@ -21,9 +21,6 @@
 
 #include "base/byte_array.h"
 
-#include <string>
-#include <vector>
-
 namespace host {
 
 class User
