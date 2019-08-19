@@ -66,6 +66,12 @@ void UserList::add(const User& user)
         list_.push_back(user);
 }
 
+void UserList::add(User&& user)
+{
+    if (user.isValid())
+        list_.emplace_back(std::move(user));
+}
+
 void UserList::remove(std::u16string_view username)
 {
     size_t index = find(username);

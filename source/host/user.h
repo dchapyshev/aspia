@@ -26,10 +26,18 @@ namespace host {
 class User
 {
 public:
+    User() = default;
+    ~User() = default;
+
+    User(const User& other) = default;
+    User& operator=(const User& other) = default;
+
+    User(User&& other) noexcept = default;
+    User& operator=(User&& other) noexcept = default;
+
     enum Flags { ENABLED = 1 };
 
     static User create(std::u16string_view name, std::u16string_view password);
-
     bool isValid() const;
 
     std::u16string name;
@@ -47,6 +55,7 @@ public:
     UserList() = default;
 
     void add(const User& user);
+    void add(User&& user);
     void remove(std::u16string_view username);
     void remove(size_t index);
     void update(size_t index, const User& user);
