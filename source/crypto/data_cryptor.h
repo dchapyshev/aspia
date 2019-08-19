@@ -19,7 +19,7 @@
 #ifndef CRYPTO__DATA_CRYPTOR_H
 #define CRYPTO__DATA_CRYPTOR_H
 
-#include <QByteArray>
+#include <string>
 
 namespace crypto {
 
