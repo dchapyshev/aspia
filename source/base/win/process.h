@@ -20,30 +20,31 @@
 #define BASE__WIN__PROCESS_H
 
 #include "base/process_handle.h"
+#include "base/win/object_watcher.h"
 #include "base/win/scoped_object.h"
 #include "base/win/session_id.h"
 
-#include <QWinEventNotifier>
+#include <filesystem>
+#include <functional>
 
 namespace base::win {
 
-class Process : public QObject
+class Process : public ObjectWatcher::Delegate
 {
-    Q_OBJECT
-
 public:
-    Process(ProcessId process_id, QObject* parent = nullptr);
-    Process(HANDLE process, HANDLE thread, QObject* parent = nullptr);
+    Process(ProcessId process_id);
+    Process(HANDLE process, HANDLE thread);
     ~Process();
 
-    static QString createCommandLine(const QString& program, const QStringList& arguments);
-    static QString normalizedProgram(const QString& program);
-    static QString createParamaters(const QStringList& arguments);
+    using ExitCallback = std::function<void(int exit_code)>;
+
+    void startWatching(const ExitCallback& callback);
+    void stopWatching();
 
     bool isValid() const;
 
-    QString filePath() const;
-    QString fileName() const;
+    std::filesystem::path filePath() const;
+    std::u16string fileName() const;
     ProcessId processId() const;
     SessionId sessionId() const;
 
@@ -54,20 +55,16 @@ public:
 
     HANDLE native() const { return process_.get(); }
 
-signals:
-    void finished(int exit_code);
+protected:
+    // ObjectWatcher::Delegate implementation.
+    void onObjectSignaled(HANDLE object) override;
 
 private:
-    void initNotifier();
-
-    enum class State { INVALID, STARTED, FINISHED };
-
-    QWinEventNotifier* notifier_ = nullptr;
+    ObjectWatcher watcher_;
+    ExitCallback callback_;
 
     ScopedHandle process_;
     ScopedHandle thread_;
-
-    State state_ = State::INVALID;
 
     DISALLOW_COPY_AND_ASSIGN(Process);
 };

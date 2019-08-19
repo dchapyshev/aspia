@@ -75,8 +75,7 @@ BOOL CALLBACK terminateEnumProc(HWND hwnd, LPARAM lparam)
 
 } // namespace
 
-Process::Process(ProcessId process_id, QObject* parent)
-    : QObject(parent)
+Process::Process(ProcessId process_id)
 {
     // We need SE_DEBUG_NAME privilege to open the process.
     ScopedHandle privileged_token;
@@ -94,83 +93,32 @@ Process::Process(ProcessId process_id, QObject* parent)
         return;
     }
 
-    process_.reset(process.release());
-    initNotifier();
-
-    state_ = State::STARTED;
+    process_.swap(process);
 }
 
-Process::Process(HANDLE process, HANDLE thread, QObject* parent)
-    : QObject(parent),
-      process_(process),
+Process::Process(HANDLE process, HANDLE thread)
+    : process_(process),
       thread_(thread)
 {
-    if (!process_.isValid())
-        return;
-
-    initNotifier();
-
-    state_ = State::STARTED;
+    // Nothing
 }
 
-Process::~Process() = default;
-
-// static
-QString Process::createCommandLine(const QString& program, const QStringList& arguments)
+Process::~Process()
 {
-    QString args;
-
-    if (!program.isEmpty())
-        args = normalizedProgram(program) + QLatin1Char(' ');
-
-    args += createParamaters(arguments);
-    return args;
+    stopWatching();
 }
 
-// static
-QString Process::normalizedProgram(const QString& program)
+void Process::startWatching(const ExitCallback& callback)
 {
-    QString normalized = program;
+    DCHECK(callback);
 
-    if (!normalized.startsWith(QLatin1Char('\"')) &&
-        !normalized.endsWith(QLatin1Char('\"')) &&
-        normalized.contains(QLatin1Char(' ')))
-    {
-        normalized = QLatin1Char('\"') + normalized + QLatin1Char('\"');
-    }
-
-    normalized.replace(QLatin1Char('/'), QLatin1Char('\\'));
-    return normalized;
+    callback_ = callback;
+    watcher_.startWatchingOnce(process_.get(), this);
 }
 
-// static
-QString Process::createParamaters(const QStringList& arguments)
+void Process::stopWatching()
 {
-    QString parameters;
-
-    for (int i = 0; i < arguments.size(); ++i)
-    {
-        QString tmp = arguments.at(i);
-
-        // Quotes are escaped and their preceding backslashes are doubled.
-        tmp.replace(QRegExp(QLatin1String("(\\\\*)\"")), QLatin1String("\\1\\1\\\""));
-
-        if (tmp.isEmpty() || tmp.contains(QLatin1Char(' ')) || tmp.contains(QLatin1Char('\t')))
-        {
-            // The argument must not end with a \ since this would be interpreted as escaping the
-            // quote -- rather put the \ behind the quote: e.g. rather use "foo"\ than "foo\"
-            int len = tmp.length();
-            while (len > 0 && tmp.at(len - 1) == QLatin1Char('\\'))
-                --len;
-
-            tmp.insert(len, QLatin1Char('\"'));
-            tmp.prepend(QLatin1Char('\"'));
-        }
-
-        parameters += QLatin1Char(' ') + tmp;
-    }
-
-    return parameters;
+    watcher_.stopWatching();
 }
 
 bool Process::isValid() const
@@ -178,30 +126,30 @@ bool Process::isValid() const
     return process_.isValid();
 }
 
-QString Process::filePath() const
+std::filesystem::path Process::filePath() const
 {
     wchar_t buffer[MAX_PATH] = { 0 };
 
     if (!GetModuleFileNameExW(process_.get(), nullptr, buffer, _countof(buffer)))
     {
         PLOG(LS_WARNING) << "GetModuleFileNameExW failed";
-        return QString();
+        return std::filesystem::path();
     }
 
-    return QString::fromUtf16(reinterpret_cast<const ushort*>(buffer));
+    return buffer;
 }
 
-QString Process::fileName() const
+std::u16string Process::fileName() const
 {
     wchar_t buffer[MAX_PATH] = { 0 };
 
     if (GetProcessImageFileNameW(process_.get(), buffer, _countof(buffer)))
     {
         PLOG(LS_WARNING) << "GetProcessImageFileNameW failed";
-        return QString();
+        return std::u16string();
     }
 
-    return QString::fromUtf16(reinterpret_cast<const ushort*>(buffer));
+    return reinterpret_cast<const char16_t*>(buffer);
 }
 
 ProcessId Process::processId() const
@@ -286,22 +234,10 @@ void Process::terminate()
     }
 }
 
-void Process::initNotifier()
+void Process::onObjectSignaled(HANDLE object)
 {
-    notifier_ = new QWinEventNotifier(process_, this);
-
-    connect(notifier_, &QWinEventNotifier::activated, [this](HANDLE process_handle)
-    {
-        DCHECK_EQ(process_handle, process_.get());
-
-        if (state_ != State::STARTED)
-            return;
-
-        state_ = State::FINISHED;
-        emit finished(exitCode());
-    });
-
-    notifier_->setEnabled(true);
+    DCHECK_EQ(object, process_.get());
+    callback_(exitCode());
 }
 
 } // namespace base::win
