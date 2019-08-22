@@ -98,7 +98,6 @@ TEST(VersionTest, GetVersionFromString)
 
     for (const auto& i : cases)
     {
-        printf("case %d\n", index);
         base::Version version(i.input);
         EXPECT_EQ(i.success, version.isValid());
         if (i.success)
