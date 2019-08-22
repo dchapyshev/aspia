@@ -19,6 +19,7 @@
 #include "client/client_desktop.h"
 
 #include "base/logging.h"
+#include "base/strings/string_split.h"
 #include "codec/cursor_decoder.h"
 #include "codec/video_decoder.h"
 #include "codec/video_util.h"
@@ -178,8 +179,9 @@ void ClientDesktop::sendSystemInfoRequest()
 void ClientDesktop::readConfigRequest(const proto::DesktopConfigRequest& config_request)
 {
     // The list of extensions is passed as a string. Extensions are separated by a semicolon.
-    supported_extensions_ =
-        QString::fromStdString(config_request.extensions()).split(QLatin1Char(';'));
+    supported_extensions_ = base::splitString(config_request.extensions(), ";",
+                                              base::TRIM_WHITESPACE,
+                                              base::SPLIT_WANT_NONEMPTY);
 
     // The list of supported video encodings is passed as a bit field.
     supported_video_encodings_ = config_request.video_encodings();

@@ -19,6 +19,7 @@
 #include "client/ui/desktop_window.h"
 
 #include "base/logging.h"
+#include "base/stl_util.h"
 #include "client/ui/desktop_config_dialog.h"
 #include "client/ui/desktop_panel.h"
 #include "client/ui/system_info_window.h"
@@ -128,20 +129,20 @@ DesktopWindow::~DesktopWindow() = default;
 void DesktopWindow::extensionListChanged()
 {
     ClientDesktop* client = desktopClient();
-    const QStringList& extensions = client->supportedExtensions();
+    const std::vector<std::string>& extensions = client->supportedExtensions();
 
     // By default, remote update is disabled.
     panel_->enableRemoteUpdate(false);
 
-    if (extensions.contains(common::kRemoteUpdateExtension))
+    if (base::contains(extensions, common::kRemoteUpdateExtension))
     {
         if (client->version() > client->peerVersion())
             panel_->enableRemoteUpdate(true);
     }
 
-    panel_->enablePowerControl(extensions.contains(common::kPowerControlExtension));
-    panel_->enableScreenSelect(extensions.contains(common::kSelectScreenExtension));
-    panel_->enableSystemInfo(extensions.contains(common::kSystemInfoExtension));
+    panel_->enablePowerControl(base::contains(extensions, common::kPowerControlExtension));
+    panel_->enableScreenSelect(base::contains(extensions, common::kSelectScreenExtension));
+    panel_->enableSystemInfo(base::contains(extensions, common::kSystemInfoExtension));
 }
 
 void DesktopWindow::configRequered()

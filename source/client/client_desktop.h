@@ -61,7 +61,7 @@ public:
     ClientDesktop(const ConnectData& connect_data, Delegate* delegate, QObject* parent);
     ~ClientDesktop();
 
-    const QStringList& supportedExtensions() const { return supported_extensions_; }
+    const std::vector<std::string>& supportedExtensions() const { return supported_extensions_; }
     uint32_t supportedVideoEncodings() const { return supported_video_encodings_; }
 
     void sendKeyEvent(uint32_t usb_keycode, uint32_t flags);
@@ -91,7 +91,7 @@ private:
     proto::HostToClient incoming_message_;
     proto::ClientToHost outgoing_message_;
 
-    QStringList supported_extensions_;
+    std::vector<std::string> supported_extensions_;
     uint32_t supported_video_encodings_ = 0;
 
     proto::VideoEncoding video_encoding_ = proto::VIDEO_ENCODING_UNKNOWN;
