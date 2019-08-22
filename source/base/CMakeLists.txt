@@ -52,6 +52,7 @@ list(APPEND SOURCE_BASE
     smbios_parser.h
     smbios_reader.h
     smbios_reader_win.cc
+    stl_util.h
     stream_converter.h
     sys_info.cc
     sys_info.h
