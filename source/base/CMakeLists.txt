@@ -73,6 +73,7 @@ list(APPEND SOURCE_BASE_UNIT_TESTS
     bitset_unittest.cc
     guid_unittest.cc
     scoped_clear_last_error_unittest.cc
+    stl_util_unittest.cc
     stream_converter_unittest.cc
     version_unittest.cc)
 
