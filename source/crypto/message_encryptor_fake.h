@@ -16,25 +16,28 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CRYPTO__CRYPTOR_H
-#define CRYPTO__CRYPTOR_H
+#ifndef CRYPTO__MESSAGE_ENCRYPTOR_FAKE_H
+#define CRYPTO__MESSAGE_ENCRYPTOR_FAKE_H
 
-#include <cstdint>
+#include "base/macros_magic.h"
+#include "crypto/message_encryptor.h"
 
 namespace crypto {
 
-class Cryptor
+class MessageEncryptorFake : public MessageEncryptor
 {
 public:
-    virtual ~Cryptor() = default;
+    MessageEncryptorFake();
+    ~MessageEncryptorFake();
 
-    virtual size_t encryptedDataSize(size_t in_size) = 0;
-    virtual bool encrypt(const uint8_t* in, size_t in_size, uint8_t* out) = 0;
+    // MessageEncryptor implementation.
+    size_t encryptedDataSize(size_t in_size) override;
+    bool encrypt(const uint8_t* in, size_t in_size, uint8_t* out) override;
 
-    virtual size_t decryptedDataSize(size_t in_size) = 0;
-    virtual bool decrypt(const uint8_t* in, size_t in_size, uint8_t* out) = 0;
+private:
+    DISALLOW_COPY_AND_ASSIGN(MessageEncryptorFake);
 };
 
 } // namespace crypto
 
-#endif // CRYPTO__CRYPTOR_H
+#endif // CRYPTO__MESSAGE_ENCRYPTOR_FAKE_H

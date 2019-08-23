@@ -16,35 +16,28 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "crypto/cryptor_fake.h"
+#ifndef CRYPTO__MESSAGE_DECRYPTOR_FAKE_H
+#define CRYPTO__MESSAGE_DECRYPTOR_FAKE_H
 
-#include <cstring>
+#include "base/macros_magic.h"
+#include "crypto/message_decryptor.h"
 
 namespace crypto {
 
-CryptorFake::CryptorFake() = default;
-CryptorFake::~CryptorFake() = default;
-
-size_t CryptorFake::encryptedDataSize(size_t in_size)
+class MessageDecryptorFake : public MessageDecryptor
 {
-    return in_size;
-}
+public:
+    MessageDecryptorFake();
+    ~MessageDecryptorFake();
 
-bool CryptorFake::encrypt(const uint8_t* in, size_t in_size, uint8_t* out)
-{
-    memcpy(out, in, in_size);
-    return true;
-}
+    // MessageDecryptor implementation.
+    size_t decryptedDataSize(size_t in_size) override;
+    bool decrypt(const uint8_t* in, size_t in_size, uint8_t* out) override;
 
-size_t CryptorFake::decryptedDataSize(size_t in_size)
-{
-    return in_size;
-}
-
-bool CryptorFake::decrypt(const uint8_t* in, size_t in_size, uint8_t* out)
-{
-    memcpy(out, in, in_size);
-    return true;
-}
+private:
+    DISALLOW_COPY_AND_ASSIGN(MessageDecryptorFake);
+};
 
 } // namespace crypto
+
+#endif // CRYPTO__MESSAGE_DECRYPTOR_FAKE_H

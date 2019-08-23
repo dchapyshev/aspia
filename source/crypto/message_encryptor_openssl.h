@@ -16,46 +16,40 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CRYPTO__CRYPTOR_AES256_GCM_H
-#define CRYPTO__CRYPTOR_AES256_GCM_H
+#ifndef CRYPTO__MESSAGE_ENCRYPTOR_OPENSSL_H
+#define CRYPTO__MESSAGE_ENCRYPTOR_OPENSSL_H
 
 #include "base/byte_array.h"
 #include "base/macros_magic.h"
-#include "crypto/cryptor.h"
+#include "crypto/message_encryptor.h"
 #include "crypto/openssl_util.h"
 
 namespace crypto {
 
-class CryptorAes256Gcm : public Cryptor
+class MessageEncryptorOpenssl : public MessageEncryptor
 {
 public:
-    ~CryptorAes256Gcm();
+    ~MessageEncryptorOpenssl();
 
-    static std::unique_ptr<Cryptor> create(
-        base::ByteArray&& key, base::ByteArray&& encrypt_iv, base::ByteArray&& decrypt_iv);
+    static std::unique_ptr<MessageEncryptor> createForAes256Gcm(
+        const base::ByteArray& key, const base::ByteArray& iv);
 
+    static std::unique_ptr<MessageEncryptor> createForChaCha20Poly1305(
+        const base::ByteArray& key, const base::ByteArray& iv);
+
+    // MessageEncryptor implementation.
     size_t encryptedDataSize(size_t in_size) override;
     bool encrypt(const uint8_t* in, size_t in_size, uint8_t* out) override;
 
-    size_t decryptedDataSize(size_t in_size) override;
-    bool decrypt(const uint8_t* in, size_t in_size, uint8_t* out) override;
-
-protected:
-    CryptorAes256Gcm(EVP_CIPHER_CTX_ptr encrypt_ctx,
-                     EVP_CIPHER_CTX_ptr decrypt_ctx,
-                     base::ByteArray&& encrypt_nonce,
-                     base::ByteArray&& decrypt_nonce);
-
 private:
-    EVP_CIPHER_CTX_ptr encrypt_ctx_;
-    EVP_CIPHER_CTX_ptr decrypt_ctx_;
+    MessageEncryptorOpenssl(EVP_CIPHER_CTX_ptr ctx, const base::ByteArray& iv);
 
-    base::ByteArray encrypt_nonce_;
-    base::ByteArray decrypt_nonce_;
+    EVP_CIPHER_CTX_ptr ctx_;
+    base::ByteArray iv_;
 
-    DISALLOW_COPY_AND_ASSIGN(CryptorAes256Gcm);
+    DISALLOW_COPY_AND_ASSIGN(MessageEncryptorOpenssl);
 };
 
 } // namespace crypto
 
-#endif // CRYPTO__CRYPTOR_AES256_GCM_H
+#endif // CRYPTO__MESSAGE_ENCRYPTOR_OPENSSL_H

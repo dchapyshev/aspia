@@ -19,13 +19,6 @@
 list(APPEND SOURCE_CRYPTO
     big_num.cc
     big_num.h
-    cryptor.h
-    cryptor_aes256_gcm.cc
-    cryptor_aes256_gcm.h
-    cryptor_chacha20_poly1305.cc
-    cryptor_chacha20_poly1305.h
-    cryptor_fake.cc
-    cryptor_fake.h
     data_cryptor.h
     data_cryptor_chacha20_poly1305.cc
     data_cryptor_chacha20_poly1305.h
@@ -35,6 +28,16 @@ list(APPEND SOURCE_CRYPTO
     generic_hash.h
     large_number_increment.cc
     large_number_increment.h
+    message_decryptor.h
+    message_decryptor_fake.cc
+    message_decryptor_fake.h
+    message_decryptor_openssl.cc
+    message_decryptor_openssl.h
+    message_encryptor.h
+    message_encryptor_fake.cc
+    message_encryptor_fake.h
+    message_encryptor_openssl.cc
+    message_encryptor_openssl.h
     openssl_util.cc
     openssl_util.h
     password_generator.cc

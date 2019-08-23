@@ -19,6 +19,8 @@
 #ifndef CRYPTO__OPENSSL_UTIL_H
 #define CRYPTO__OPENSSL_UTIL_H
 
+#include "base/byte_array.h"
+
 #include <memory>
 
 struct bignum_ctx;
@@ -45,6 +47,21 @@ struct EVP_CIPHER_CTX_Deleter
 using BIGNUM_CTX_ptr = std::unique_ptr<bignum_ctx, BIGNUM_CTX_Deleter>;
 using BIGNUM_ptr = std::unique_ptr<bignum_st, BIGNUM_Deleter>;
 using EVP_CIPHER_CTX_ptr = std::unique_ptr<evp_cipher_ctx_st, EVP_CIPHER_CTX_Deleter>;
+
+enum class CipherType
+{
+    AES256_GCM,
+    CHACHA20_POLY1305
+};
+
+enum class CipherMode
+{
+    ENCRYPT,
+    DECRYPT
+};
+
+EVP_CIPHER_CTX_ptr createCipher(
+    CipherType type, CipherMode mode, const base::ByteArray& key, int iv_size);
 
 } // namespace crypto
 
