@@ -1,7 +1,7 @@
 @echo off
 
-rem We assume that Visual Studio 2019 is installed to the default path.
-set VS_PATH="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build"
+rem We assume that Visual Studio 2017 is installed to the default path.
+set VS_PATH="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build"
 
 rem Qt source directory
 if "%1" == "" ( goto :USAGE )
