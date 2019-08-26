@@ -25,7 +25,7 @@ cd /d %1
 call configure ^
     -opensource ^
     -confirm-license ^
-    -platform win32-msvc2019 ^
+    -platform win32-msvc2017 ^
     -debug-and-release ^
     -static ^
     -static-runtime ^
