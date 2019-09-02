@@ -129,16 +129,3 @@ message NetworkAdapters
 
     repeated Adapter adapter = 1;
 }
-
-message SystemInfo
-{
-    Computer computer                = 1;
-    OperatingSystem operating_system = 2;
-    Motherboard motherboard          = 3;
-    Bios bios                        = 4;
-    Processor processor              = 5;
-    Memory memory                    = 6;
-    LogicalDrives logical_drives     = 7;
-    Printers printers                = 8;
-    NetworkAdapters network_adapters = 9;
-}

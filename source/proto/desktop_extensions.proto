@@ -20,6 +20,8 @@ syntax = "proto3";
 
 option optimize_for = LITE_RUNTIME;
 
+import "system_info.proto";
+
 package proto;
 
 // Extension name: "select_screen"
@@ -53,4 +55,19 @@ message PowerControl
     }
 
     Action action = 1;
+}
+
+// Extension name: "system_info"
+// Sent by host to client.
+message SystemInfo
+{
+    system_info.Computer computer                = 1;
+    system_info.OperatingSystem operating_system = 2;
+    system_info.Motherboard motherboard          = 3;
+    system_info.Bios bios                        = 4;
+    system_info.Processor processor              = 5;
+    system_info.Memory memory                    = 6;
+    system_info.LogicalDrives logical_drives     = 7;
+    system_info.Printers printers                = 8;
+    system_info.NetworkAdapters network_adapters = 9;
 }
