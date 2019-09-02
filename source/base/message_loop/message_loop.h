@@ -20,6 +20,7 @@
 #define BASE__MESSAGE_LOOP__MESSAGE_LOOP_H
 
 #include "base/macros_magic.h"
+#include "base/task_runner.h"
 #include "base/message_loop/message_pump.h"
 #include "base/message_loop/message_pump_dispatcher.h"
 #include "base/message_loop/pending_task.h"
@@ -54,7 +55,7 @@ public:
 
     Type type() const { return type_; }
 
-    void run(Dispatcher *dispatcher = nullptr);
+    void run(Dispatcher* dispatcher = nullptr);
 
     static MessageLoop* current();
 
@@ -64,7 +65,7 @@ public:
 
     MessagePumpForAsio* pumpAsio() const;
 
-    std::shared_ptr<MessageLoopProxy> messageLoopProxy() const;
+    std::shared_ptr<TaskRunner> taskRunner() const;
 
 protected:
     friend class MessageLoopProxy;

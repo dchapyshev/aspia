@@ -39,7 +39,7 @@ public:
 
     const std::u16string& name() { return name_; }
     MessageLoop* messageLoop() { return message_loop_.get(); }
-    std::shared_ptr<MessageLoopProxy> messageLoopProxy() { return message_loop_proxy_; }
+    std::shared_ptr<TaskRunner> taskRunner() { return task_runner_; }
 
 protected:
     friend class ServiceThread;
@@ -52,7 +52,7 @@ private:
     MessageLoop::Type type_;
     std::u16string name_;
     std::unique_ptr<MessageLoop> message_loop_;
-    std::shared_ptr<MessageLoopProxy> message_loop_proxy_;
+    std::shared_ptr<TaskRunner> task_runner_;
 
     DISALLOW_COPY_AND_ASSIGN(Service);
 };

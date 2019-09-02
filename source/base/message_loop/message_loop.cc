@@ -131,7 +131,7 @@ MessagePumpForAsio* MessageLoop::pumpAsio() const
     return static_cast<MessagePumpForAsio*>(pump_.get());
 }
 
-std::shared_ptr<MessageLoopProxy> MessageLoop::messageLoopProxy() const
+std::shared_ptr<TaskRunner> MessageLoop::taskRunner() const
 {
     return proxy_;
 }

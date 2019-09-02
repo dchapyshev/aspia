@@ -21,14 +21,14 @@
 namespace base {
 
 // static
-std::shared_ptr<MessageLoopProxy> MessageLoopProxy::current()
+std::shared_ptr<TaskRunner> MessageLoopProxy::current()
 {
     MessageLoop* current = MessageLoop::current();
 
     if (!current)
         return nullptr;
 
-    return current->messageLoopProxy();
+    return current->taskRunner();
 }
 
 bool MessageLoopProxy::postTask(PendingTask::Callback callback)

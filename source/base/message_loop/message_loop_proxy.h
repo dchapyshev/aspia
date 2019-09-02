@@ -19,21 +19,23 @@
 #ifndef BASE__MESSAGE_LOOP__MESSAGE_LOOP_PROXY_H
 #define BASE__MESSAGE_LOOP__MESSAGE_LOOP_PROXY_H
 
+#include "base/task_runner.h"
 #include "base/message_loop/message_loop.h"
 #include "base/message_loop/pending_task.h"
 
 namespace base {
 
-class MessageLoopProxy
+class MessageLoopProxy : public TaskRunner
 {
 public:
-    static std::shared_ptr<MessageLoopProxy> current();
+    static std::shared_ptr<TaskRunner> current();
 
-    bool postTask(PendingTask::Callback callback);
-    bool postDelayedTask(PendingTask::Callback callback,
-                         const MessageLoop::Milliseconds& delay);
+    // TaskRunner implementation.
+    bool belongsToCurrentThread() const override;
+    bool postTask(Callback callback) override;
+    bool postDelayedTask(Callback callback, const Milliseconds& delay) override;
+
     bool postQuit();
-    bool belongsToCurrentThread() const;
 
 private:
     friend class MessageLoop;

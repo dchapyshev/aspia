@@ -68,7 +68,7 @@ private:
         DWORD control_code, DWORD event_type, LPVOID event_data, LPVOID context);
 
     Service* service_;
-    std::shared_ptr<MessageLoopProxy> runner_;
+    std::shared_ptr<TaskRunner> task_runner_;
 
     SERVICE_STATUS_HANDLE status_handle_ = nullptr;
     SERVICE_STATUS status_;
@@ -88,8 +88,8 @@ ServiceThread::ServiceThread(Service* service)
     DCHECK(!self);
     self = this;
 
-    runner_ = service->messageLoopProxy();
-    DCHECK(runner_);
+    task_runner_ = service->taskRunner();
+    DCHECK(task_runner_);
 
     memset(&status_, 0, sizeof(status_));
 }
@@ -135,7 +135,7 @@ void ServiceThread::doEvent(EventCallback callback)
     std::unique_lock lock(event_lock);
     event_processed = false;
 
-    runner_->postTask([callback]()
+    task_runner_->postTask([callback]()
     {
         std::scoped_lock lock(self->event_lock);
 
@@ -291,7 +291,7 @@ void Service::exec()
     }
 
     message_loop_ = std::make_unique<MessageLoop>(type_);
-    message_loop_proxy_ = message_loop_->messageLoopProxy();
+    task_runner_ = message_loop_->taskRunner();
 
     // Now we can complete the registration of the service.
     {

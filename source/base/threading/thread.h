@@ -72,9 +72,9 @@ public:
     bool isRunning() const { return running_; }
     MessageLoop* messageLoop() const { return message_loop_; }
 
-    std::shared_ptr<MessageLoopProxy> messageLoopProxy() const
+    std::shared_ptr<TaskRunner> taskRunner() const
     {
-        return message_loop_ ? message_loop_->messageLoopProxy() : nullptr;
+        return message_loop_ ? message_loop_->taskRunner() : nullptr;
     }
 
     uint32_t threadId() const { return thread_id_; }

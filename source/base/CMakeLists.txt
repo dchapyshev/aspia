@@ -57,6 +57,7 @@ list(APPEND SOURCE_BASE
     sys_info.cc
     sys_info.h
     sys_info_win.cc
+    task_runner.h
     typed_buffer.h
     version.cc
     version.h
