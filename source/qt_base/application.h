@@ -19,7 +19,6 @@
 #ifndef QT_BASE__APPLICATION_H
 #define QT_BASE__APPLICATION_H
 
-#include "base/threading/thread.h"
 #include "qt_base/locale_loader.h"
 
 #include <asio/io_context.hpp>
@@ -29,15 +28,17 @@
 class QLocalServer;
 class QLockFile;
 
+namespace base {
+class TaskRunner;
+} // namespace base
+
 namespace crypto {
 class ScopedCryptoInitializer;
 } // namespace crypto
 
 namespace qt_base {
 
-class Application
-    : public QApplication,
-      public base::Thread::Delegate
+class Application : public QApplication
 {
     Q_OBJECT
 
@@ -46,9 +47,7 @@ public:
     virtual ~Application();
 
     static Application* instance();
-
-    static std::shared_ptr<base::MessageLoopProxy> ioRunner();
-    static asio::io_context* ioContext();
+    static std::shared_ptr<base::TaskRunner> taskRunner();
 
     bool isRunning();
 
@@ -65,10 +64,6 @@ public slots:
 signals:
     void messageReceived(const QByteArray& message);
 
-protected:
-    // base::Thread::Delegate implementation.
-    void onBeforeThreadRunning() override;
-
 private slots:
     void onNewConnection();
 
@@ -81,9 +76,7 @@ private:
 
     std::unique_ptr<crypto::ScopedCryptoInitializer> crypto_initializer_;
     std::unique_ptr<LocaleLoader> locale_loader_;
-
-    base::Thread io_thread_;
-    std::shared_ptr<base::MessageLoopProxy> io_runner_;
+    std::shared_ptr<base::TaskRunner> task_runner_;
 
     DISALLOW_COPY_AND_ASSIGN(Application);
 };
