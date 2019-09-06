@@ -21,7 +21,8 @@
 
 #include "base/macros_magic.h"
 
-#include <asio/ip/tcp.hpp>
+#include <cstdint>
+#include <memory>
 
 namespace net {
 
@@ -44,11 +45,8 @@ public:
     void start(uint16_t port, Delegate* delegate);
 
 private:
-    void doAccept();
-
-    asio::io_context& io_context_;
-    std::unique_ptr<asio::ip::tcp::acceptor> acceptor_;
-    Delegate* delegate_ = nullptr;
+    class Impl;
+    std::shared_ptr<Impl> impl_;
 
     DISALLOW_COPY_AND_ASSIGN(Server);
 };

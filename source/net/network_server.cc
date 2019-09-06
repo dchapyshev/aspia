@@ -23,17 +23,42 @@
 #include "base/message_loop/message_pump_asio.h"
 #include "net/network_channel.h"
 
+#include <asio/ip/tcp.hpp>
+
 namespace net {
 
-Server::Server()
-    : io_context_(base::MessageLoop::current()->pumpAsio()->ioContext())
+class Server::Impl : public std::enable_shared_from_this<Impl>
+{
+public:
+    Impl(asio::io_context& io_context);
+    ~Impl();
+
+    void start(uint16_t port, Delegate* delegate);
+    void stop();
+
+private:
+    void doAccept();
+    void onAccept(const std::error_code& error_code, asio::ip::tcp::socket socket);
+
+    asio::io_context& io_context_;
+    std::unique_ptr<asio::ip::tcp::acceptor> acceptor_;
+    Delegate* delegate_ = nullptr;
+
+    DISALLOW_COPY_AND_ASSIGN(Impl);
+};
+
+Server::Impl::Impl(asio::io_context& io_context)
+    : io_context_(io_context)
 {
     // Nothing
 }
 
-Server::~Server() = default;
+Server::Impl::~Impl()
+{
+    DCHECK(!acceptor_);
+}
 
-void Server::start(uint16_t port, Delegate* delegate)
+void Server::Impl::start(uint16_t port, Delegate* delegate)
 {
     delegate_ = delegate;
 
@@ -45,22 +70,50 @@ void Server::start(uint16_t port, Delegate* delegate)
     doAccept();
 }
 
-void Server::doAccept()
+void Server::Impl::stop()
 {
-    acceptor_->async_accept([this](const std::error_code& error_code, asio::ip::tcp::socket socket)
-    {
-        if (error_code)
-            return;
+    delegate_ = nullptr;
+    acceptor_.reset();
+}
 
-        std::unique_ptr<Channel> channel =
-            std::unique_ptr<Channel>(new Channel(std::move(socket)));
+void Server::Impl::doAccept()
+{
+    acceptor_->async_accept(
+        std::bind(&Impl::onAccept, shared_from_this(), std::placeholders::_1, std::placeholders::_2));
+}
 
-        // Connection accepted.
-        delegate_->onNewConnection(std::move(channel));
+void Server::Impl::onAccept(const std::error_code& error_code, asio::ip::tcp::socket socket)
+{
+    if (!delegate_)
+        return;
 
-        // Accept next connection.
-        doAccept();
-    });
+    if (error_code)
+        return;
+
+    std::unique_ptr<Channel> channel =
+        std::unique_ptr<Channel>(new Channel(std::move(socket)));
+
+    // Connection accepted.
+    delegate_->onNewConnection(std::move(channel));
+
+    // Accept next connection.
+    doAccept();
+}
+
+Server::Server()
+    : impl_(std::make_shared<Impl>(base::MessageLoop::current()->pumpAsio()->ioContext()))
+{
+    // Nothing
+}
+
+Server::~Server()
+{
+    impl_->stop();
+}
+
+void Server::start(uint16_t port, Delegate* delegate)
+{
+    impl_->start(port, delegate);
 }
 
 } // namespace net
