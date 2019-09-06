@@ -110,9 +110,10 @@ bool QtTaskRunner::postTask(Callback task)
     return impl_->postTask(std::move(task));
 }
 
-bool QtTaskRunner::postDelayedTask(Callback callback, const Milliseconds& delay)
+bool QtTaskRunner::postDelayedTask(Callback /* callback */, const Milliseconds& /* delay */)
 {
     NOTIMPLEMENTED();
+    return false;
 }
 
 } // namespace qt_base
