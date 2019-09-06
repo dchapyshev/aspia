@@ -17,6 +17,7 @@
 //
 
 #include "base/files/base_paths.h"
+#include "client/ui/client_dialog.h"
 #include "client/ui/client_window.h"
 #include "console/console_application.h"
 #include "console/console_main_window.h"
@@ -97,29 +98,28 @@ int main(int argc, char *argv[])
 
     if (parser.isSet(client_option))
     {
-        if (!client::ClientWindow::connectToHost())
-            return 0;
+        client::ClientDialog().exec();
     }
     else if (parser.isSet(address_option))
     {
-        client::ConnectData connect_data;
-        connect_data.address = parser.value(address_option).toStdU16String();
-        connect_data.port = parser.value(port_option).toUShort();
-        connect_data.username = parser.value(username_option).toStdU16String();
+        client::Config config;
+        config.address  = parser.value(address_option).toStdU16String();
+        config.port     = parser.value(port_option).toUShort();
+        config.username = parser.value(username_option).toStdU16String();
 
         QString session_type = parser.value(session_type_option);
 
         if (session_type == QLatin1String("desktop-manage"))
         {
-            connect_data.session_type = proto::SESSION_TYPE_DESKTOP_MANAGE;
+            config.session_type = proto::SESSION_TYPE_DESKTOP_MANAGE;
         }
         else if (session_type == QLatin1String("desktop-view"))
         {
-            connect_data.session_type = proto::SESSION_TYPE_DESKTOP_VIEW;
+            config.session_type = proto::SESSION_TYPE_DESKTOP_VIEW;
         }
         else if (session_type == QLatin1String("file-transfer"))
         {
-            connect_data.session_type = proto::SESSION_TYPE_FILE_TRANSFER;
+            config.session_type = proto::SESSION_TYPE_FILE_TRANSFER;
         }
         else
         {
@@ -131,8 +131,11 @@ int main(int argc, char *argv[])
             return 1;
         }
 
-        if (!client::ClientWindow::connectToHost(&connect_data))
-            return 0;
+        //client::ClientWindow* client_window = new client::ClientWindow();
+        //client_window->setAttribute(Qt::WA_DeleteOnClose);
+
+        //if (!client_window->connectToHost(config))
+        //    return 0;
     }
     else
     {

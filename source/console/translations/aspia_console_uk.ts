@@ -274,42 +274,42 @@
 <context>
     <name>Console</name>
     <message>
-        <location filename="../console_main.cc" line="59"/>
+        <location filename="../console_main.cc" line="60"/>
         <source>Remote computer address.</source>
         <translation>Адреса віддаленого комп&apos;ютера.</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="60"/>
+        <location filename="../console_main.cc" line="61"/>
         <source>address</source>
         <translation>адреса</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="64"/>
+        <location filename="../console_main.cc" line="65"/>
         <source>Remote computer port.</source>
         <translation>Порт віддаленого комп&apos;ютера.</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="65"/>
+        <location filename="../console_main.cc" line="66"/>
         <source>port</source>
         <translation>порт</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="70"/>
+        <location filename="../console_main.cc" line="71"/>
         <source>Name of user.</source>
         <translation>Ім&apos;я користувача.</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="71"/>
+        <location filename="../console_main.cc" line="72"/>
         <source>username</source>
         <translation>ім&apos;я користувача</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="75"/>
+        <location filename="../console_main.cc" line="76"/>
         <source>Session type. Possible values: desktop-manage, desktop-view, file-transfer.</source>
         <translation>Тип сессії. Можливі значення: керування робочим столом, перегляд робочого стола, передача файлів.</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="81"/>
+        <location filename="../console_main.cc" line="82"/>
         <source>Open the client to connect to the computer.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -318,17 +318,17 @@
         <translation type="vanished">Запустити програму із спрощеним інтерфейсом користувача.</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="84"/>
+        <location filename="../console_main.cc" line="85"/>
         <source>Aspia Console</source>
         <translation>Консоль Aspia</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="87"/>
+        <location filename="../console_main.cc" line="88"/>
         <source>file</source>
         <translation>файл</translation>
     </message>
     <message>
-        <location filename="../console_main.cc" line="88"/>
+        <location filename="../console_main.cc" line="89"/>
         <source>The file to open.</source>
         <translation>Файл для відкриття.</translation>
     </message>
@@ -1222,80 +1222,80 @@
 <context>
     <name>console::MainWindow</name>
     <message>
-        <location filename="../console_main_window.cc" line="182"/>
+        <location filename="../console_main_window.cc" line="183"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="183"/>
+        <location filename="../console_main_window.cc" line="184"/>
         <source>Pinned address book file &quot;%1&quot; was not found.&lt;br/&gt;This file will be unpinned.</source>
         <translation>Закріплений файл адресної книги &quot;%1&quot; не знайдено. &lt;br/&gt; Цей файл буде відкріплено.</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="279"/>
+        <location filename="../console_main_window.cc" line="280"/>
         <source>Open Address Book</source>
         <translation>Відкрити адресну книгу</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="281"/>
+        <location filename="../console_main_window.cc" line="282"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Адресна книга Aspia (*.aab)</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="511"/>
-        <location filename="../console_main_window.cc" line="854"/>
+        <location filename="../console_main_window.cc" line="512"/>
+        <location filename="../console_main_window.cc" line="855"/>
         <source>Confirmation</source>
         <translation>Підтвердження</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="512"/>
-        <location filename="../console_main_window.cc" line="855"/>
+        <location filename="../console_main_window.cc" line="513"/>
+        <location filename="../console_main_window.cc" line="856"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation>Адресну книгу &quot;%1&quot; змінено. Зберегти зміни?</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="712"/>
+        <location filename="../console_main_window.cc" line="713"/>
         <source>Close other tabs</source>
         <translation>Закрити інші вкладки</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="720"/>
+        <location filename="../console_main_window.cc" line="721"/>
         <source>Close tab</source>
         <translation>Закрити вкладку</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="723"/>
-        <location filename="../console_main_window.cc" line="730"/>
+        <location filename="../console_main_window.cc" line="724"/>
+        <location filename="../console_main_window.cc" line="731"/>
         <source>Pin tab</source>
         <translation>Закріпити вкладку</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="811"/>
+        <location filename="../console_main_window.cc" line="812"/>
         <source>Hide</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="826"/>
+        <location filename="../console_main_window.cc" line="827"/>
         <source>Show</source>
         <translation>Показати</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="935"/>
+        <location filename="../console_main_window.cc" line="936"/>
         <source>&lt;empty&gt;</source>
         <translation>&lt;порожньо&gt;</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="956"/>
+        <location filename="../console_main_window.cc" line="957"/>
         <source>Aspia Console</source>
         <translation>Консоль Aspia</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="251"/>
+        <location filename="../console_main_window.cc" line="252"/>
         <source>Information</source>
         <translation>Інформація</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="252"/>
+        <location filename="../console_main_window.cc" line="253"/>
         <source>Address Book &quot;%1&quot; is already open.</source>
         <translation>Адресну книгу &quot;%1&quot; вже відкрито.</translation>
     </message>

@@ -22,7 +22,8 @@
 #include "base/strings/unicode.h"
 #include "build/build_config.h"
 #include "build/version.h"
-#include "client/ui/client_window.h"
+#include "client/ui/client_dialog.h"
+#include "client/ui/qt_desktop_window.h"
 #include "common/ui/about_dialog.h"
 #include "common/ui/language_action.h"
 #include "console/address_book_tab.h"
@@ -421,7 +422,7 @@ void MainWindow::onAbout()
 
 void MainWindow::onFastConnect()
 {
-    client::ClientWindow::connectToHost();
+    client::ClientDialog().exec();
 }
 
 void MainWindow::onDesktopManageConnect()
@@ -1052,30 +1053,47 @@ bool MainWindow::hasUnpinnedTabs() const
 
 void MainWindow::connectToComputer(const proto::address_book::Computer& computer)
 {
-    client::ConnectData connect_data;
+    client::Config config;
 
-    connect_data.computer_name = base::utf16FromUtf8(computer.name());
-    connect_data.address       = base::utf16FromUtf8(computer.address());
-    connect_data.port          = computer.port();
-    connect_data.username      = base::utf16FromUtf8(computer.username());
-    connect_data.password      = base::utf16FromUtf8(computer.password());
-    connect_data.session_type  = computer.session_type();
+    config.computer_name = base::utf16FromUtf8(computer.name());
+    config.address       = base::utf16FromUtf8(computer.address());
+    config.port          = computer.port();
+    config.username      = base::utf16FromUtf8(computer.username());
+    config.password      = base::utf16FromUtf8(computer.password());
+    config.session_type  = computer.session_type();
 
-    switch (computer.session_type())
+    client::ClientWindow* client_window;
+
+    switch (config.session_type)
     {
         case proto::SESSION_TYPE_DESKTOP_MANAGE:
-            connect_data.desktop_config = computer.session_config().desktop_manage();
-            break;
+        {
+            client_window = new client::QtDesktopWindow(
+                config.session_type, computer.session_config().desktop_manage());
+        }
+        break;
 
         case proto::SESSION_TYPE_DESKTOP_VIEW:
-            connect_data.desktop_config = computer.session_config().desktop_view();
+        {
+            client_window = new client::QtDesktopWindow(
+                config.session_type, computer.session_config().desktop_view());
+        }
+        break;
+
+        case proto::SESSION_TYPE_FILE_TRANSFER:
+            // TODO
             break;
 
         default:
+            NOTREACHED();
             break;
     }
 
-    client::ClientWindow::connectToHost(&connect_data);
+    if (!client_window)
+        return;
+
+    client_window->setAttribute(Qt::WA_DeleteOnClose);
+    client_window->connectToHost(config);
 }
 
 } // namespace console
