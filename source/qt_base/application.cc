@@ -152,8 +152,13 @@ Application::Application(int& argc, char* argv[])
     : QApplication(argc, argv)
 {
     base::LoggingSettings settings;
-    settings.destination = base::LOG_TO_FILE;
     settings.log_dir = loggingDir();
+
+#if defined(NDEBUG)
+    settings.destination = base::LOG_TO_FILE;
+#else
+    settings.destination = base::LOG_TO_ALL;
+#endif
 
     base::initLogging(settings);
     qt_base::initQtLogging();
