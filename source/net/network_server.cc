@@ -19,12 +19,14 @@
 #include "net/network_server.h"
 
 #include "base/logging.h"
+#include "base/message_loop/message_loop.h"
+#include "base/message_loop/message_pump_asio.h"
 #include "net/network_channel.h"
 
 namespace net {
 
-Server::Server(asio::io_context& io_context)
-    : io_context_(io_context)
+Server::Server()
+    : io_context_(base::MessageLoop::current()->pumpAsio()->ioContext())
 {
     // Nothing
 }
@@ -51,7 +53,7 @@ void Server::doAccept()
             return;
 
         std::unique_ptr<Channel> channel =
-            std::unique_ptr<Channel>(new Channel(io_context_, std::move(socket)));
+            std::unique_ptr<Channel>(new Channel(std::move(socket)));
 
         // Connection accepted.
         delegate_->onNewConnection(std::move(channel));

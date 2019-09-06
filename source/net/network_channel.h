@@ -26,11 +26,10 @@
 #include <asio/ip/tcp.hpp>
 
 #include <memory>
-#include <mutex>
-#include <queue>
 
 namespace crypto {
-class Cryptor;
+class MessageEncryptor;
+class MessageDecryptor;
 } // namespace crypto
 
 namespace net {
@@ -38,12 +37,15 @@ namespace net {
 class ChannelProxy;
 class Listener;
 class Server;
+class SocketConnector;
+class SocketReader;
+class SocketWriter;
 
 class Channel
 {
 public:
     // Constructor available for client.
-    explicit Channel(asio::io_context& io_context);
+    Channel();
     ~Channel();
 
     std::shared_ptr<ChannelProxy> channelProxy();
@@ -55,16 +57,14 @@ public:
     // Sets an instance of a class to encrypt and decrypt messages.
     // By default, a fake cryptographer is created that only copies the original message.
     // You must explicitly establish a cryptographer before or after establishing a connection.
-    void setCryptor(std::unique_ptr<crypto::Cryptor> cryptor);
+    void setEncryptor(std::unique_ptr<crypto::MessageEncryptor> encryptor);
+    void setDecryptor(std::unique_ptr<crypto::MessageDecryptor> decryptor);
 
     // Gets the address of the remote host as a string.
     std::u16string peerAddress() const;
 
     // Connects to a host at the specified address and port.
     void connect(std::u16string_view address, uint16_t port);
-
-    // Disconnects to remote host.
-    void disconnect();
 
     // Returns true if the channel is connected and false if not connected.
     bool isConnected() const;
@@ -89,65 +89,33 @@ protected:
     friend class Server;
 
     // Constructor available for server. An already connected socket is being moved.
-    Channel(asio::io_context& io_context, asio::ip::tcp::socket&& socket);
+    Channel(asio::ip::tcp::socket&& socket);
+
+    // Initializes internal components.
+    void init();
+
+    // Disconnects to remote host. The method is not available for an external call.
+    // To disconnect, you must destroy the channel by calling the destructor.
+    void disconnect();
 
 private:
+    void onConnected();
     void onErrorOccurred(const std::error_code& error_code);
-    void doReadSize();
-    void doReadContent();
-    void onMessageReceived();
-    bool reloadWriteQueue();
-    void scheduleWrite();
-    void doWrite();
+    void onMessageReceived(const base::ByteArray& buffer);
+    void onMessageWritten();
 
     asio::io_context& io_context_;
-    std::unique_ptr<asio::ip::tcp::resolver> resolver_;
     asio::ip::tcp::socket socket_;
-    std::unique_ptr<crypto::Cryptor> cryptor_;
 
-    std::shared_ptr<ChannelProxy> proxy_;
     Listener* listener_ = nullptr;
-
     bool is_connected_ = false;
-    bool is_paused_ = true;
 
-#if defined(USE_TBB)
-    using QueueAllocator = tbb::scalable_allocator<base::ByteArray>;
-#else // defined(USE_TBB)
-    using QueueAllocator = std::allocator<base::ByteArray>;
-#endif // defined(USE_*)
+    std::shared_ptr<SocketConnector> connector_;
+    std::shared_ptr<SocketReader> reader_;
+    std::shared_ptr<SocketWriter> writer_;
+    std::shared_ptr<ChannelProxy> proxy_;
 
-    using QueueContainer = std::deque<base::ByteArray, QueueAllocator>;
-
-    class WriteQueue : public std::queue<base::ByteArray, QueueContainer>
-    {
-    public:
-        void fastSwap(WriteQueue& queue)
-        {
-            // Calls std::deque::swap.
-            c.swap(queue.c);
-        }
-    };
-
-    struct WriteContext
-    {
-        WriteQueue incoming_queue;
-        std::mutex incoming_queue_lock;
-
-        WriteQueue work_queue;
-        base::ByteArray buffer;
-    };
-
-    struct ReadContext
-    {
-        uint8_t one_byte = 0;
-        base::ByteArray buffer;
-        size_t buffer_size = 0;
-        size_t bytes_transfered = 0;
-    };
-
-    WriteContext write_;
-    ReadContext read_;
+    DISALLOW_COPY_AND_ASSIGN(Channel);
 };
 
 } // namespace net

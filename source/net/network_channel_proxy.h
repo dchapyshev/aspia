@@ -26,32 +26,30 @@ namespace net {
 class ChannelProxy
 {
 public:
-    bool connect(std::u16string_view address, uint16_t port);
-    bool disconnect();
+    void connect(std::u16string_view address, uint16_t port);
 
-    bool setListener(Listener* listener);
-    bool setCryptor(std::unique_ptr<crypto::Cryptor> cryptor);
+    void setListener(Listener* listener);
+    void setEncryptor(std::unique_ptr<crypto::MessageEncryptor> encryptor);
+    void setDecryptor(std::unique_ptr<crypto::MessageDecryptor> decryptor);
 
     bool isConnected() const;
     bool isPaused() const;
 
-    bool pause();
-    bool resume();
+    void pause();
+    void resume();
 
     std::u16string peerAddress() const;
 
-    bool send(base::ByteArray&& buffer);
+    void send(base::ByteArray&& buffer);
 
 private:
     friend class Channel;
-
     explicit ChannelProxy(Channel* channel);
 
     // Called directly by Channel::~Channel.
     void willDestroyCurrentChannel();
 
     Channel* channel_;
-    mutable std::mutex channel_lock_;
 
     DISALLOW_COPY_AND_ASSIGN(ChannelProxy);
 };

@@ -29,10 +29,10 @@ class Listener
 public:
     virtual ~Listener() = default;
 
-    virtual void onNetworkConnected() = 0;
-    virtual void onNetworkDisconnected() = 0;
-    virtual void onNetworkError(ErrorCode error_code) = 0;
-    virtual void onNetworkMessage(base::ByteArray& buffer) = 0;
+    virtual void onConnected() = 0;
+    virtual void onDisconnected(ErrorCode error_code) = 0;
+    virtual void onMessageReceived(const base::ByteArray& buffer) = 0;
+    virtual void onMessageWritten() = 0;
 };
 
 } // namespace net

@@ -16,43 +16,15 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef NET__NETWORK_SERVER_H
-#define NET__NETWORK_SERVER_H
+#ifndef NET__SOCKET_CONSTANTS_H
+#define NET__SOCKET_CONSTANTS_H
 
-#include "base/macros_magic.h"
-
-#include <asio/ip/tcp.hpp>
+#include <cstdint>
 
 namespace net {
 
-class Channel;
-
-class Server
-{
-public:
-    Server();
-    ~Server();
-
-    class Delegate
-    {
-    public:
-        virtual ~Delegate() = default;
-
-        virtual void onNewConnection(std::unique_ptr<Channel> channel) = 0;
-    };
-
-    void start(uint16_t port, Delegate* delegate);
-
-private:
-    void doAccept();
-
-    asio::io_context& io_context_;
-    std::unique_ptr<asio::ip::tcp::acceptor> acceptor_;
-    Delegate* delegate_ = nullptr;
-
-    DISALLOW_COPY_AND_ASSIGN(Server);
-};
+static const size_t kMaxMessageSize = 16 * 1024 * 1024; // 16 MB
 
 } // namespace net
 
-#endif // NET__NETWORK_SERVER_H
+#endif // NET__SOCKET_CONSTANTS_H
