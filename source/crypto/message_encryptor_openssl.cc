@@ -20,7 +20,6 @@
 
 #include "base/logging.h"
 #include "crypto/large_number_increment.h"
-#include "crypto/secure_memory.h"
 
 #include <openssl/evp.h>
 
@@ -42,10 +41,7 @@ MessageEncryptorOpenssl::MessageEncryptorOpenssl(EVP_CIPHER_CTX_ptr ctx, const b
     DCHECK_EQ(EVP_CIPHER_CTX_iv_length(ctx_.get()), kIVSize);
 }
 
-MessageEncryptorOpenssl::~MessageEncryptorOpenssl()
-{
-    memZero(&iv_);
-}
+MessageEncryptorOpenssl::~MessageEncryptorOpenssl() = default;
 
 // static
 std::unique_ptr<MessageEncryptor> MessageEncryptorOpenssl::createForAes256Gcm(
