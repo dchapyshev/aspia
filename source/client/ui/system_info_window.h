@@ -20,7 +20,7 @@
 #define CLIENT__UI__SYSTEM_INFO_WINDOW_H
 
 #include "base/macros_magic.h"
-#include "proto/system_info.pb.h"
+#include "proto/desktop_extensions.pb.h"
 #include "ui_system_info_window.h"
 
 namespace client {
@@ -33,7 +33,7 @@ public:
     explicit SystemInfoWindow(QWidget* parent = nullptr);
     ~SystemInfoWindow();
 
-    void setSystemInfo(const proto::system_info::SystemInfo& system_info);
+    void setSystemInfo(const proto::SystemInfo& system_info);
 
 signals:
     void systemInfoRequired();

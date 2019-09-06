@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,14 +16,14 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__UI__DESKTOP_WINDOW_H
-#define CLIENT__UI__DESKTOP_WINDOW_H
+#ifndef CLIENT__UI__QT_DESKTOP_WINDOW_H
+#define CLIENT__UI__QT_DESKTOP_WINDOW_H
 
+#include "base/version.h"
+#include "client/client_desktop.h"
+#include "client/desktop_window.h"
 #include "client/ui/client_window.h"
 #include "client/ui/desktop_widget.h"
-#include "client/client_desktop.h"
-#include "proto/desktop.pb.h"
-#include "proto/desktop_extensions.pb.h"
 
 #include <QPointer>
 
@@ -44,27 +44,34 @@ class DesktopConfigDialog;
 class DesktopPanel;
 class SystemInfoWindow;
 
-class DesktopWindow :
+class QtDesktopWindow :
     public ClientWindow,
-    public ClientDesktop::Delegate,
+    public DesktopWindow,
     public DesktopWidget::Delegate
 {
     Q_OBJECT
 
 public:
-    DesktopWindow(const ConnectData& connect_data, QWidget* parent);
-    ~DesktopWindow();
+    QtDesktopWindow(proto::SessionType session_type,
+                    const proto::DesktopConfig& desktop_config,
+                    QWidget* parent = nullptr);
+    ~QtDesktopWindow();
 
-    // ClientDesktop::Delegate implementation.
-    void extensionListChanged() override;
-    void configRequered() override;
-    void setDesktopRect(const desktop::Rect& screen_rect) override;
-    void drawDesktop() override;
-    desktop::Frame* desktopFrame() override;
-    void setRemoteCursor(const QCursor& cursor) override;
-    void setRemoteClipboard(const proto::ClipboardEvent& event) override;
+    // ClientWindow implementation.
+    std::unique_ptr<Client> createClient(
+        std::shared_ptr<base::TaskRunner> ui_task_runner) override;
+
+    // DesktopWindow implementation.
+    void showWindow(std::shared_ptr<DesktopControlProxy> desktop_control_proxy,
+                    const base::Version& peer_version) override;
+    void configRequired() override;
+    void setCapabilities(const std::string& extensions, uint32_t video_encodings) override;
     void setScreenList(const proto::ScreenList& screen_list) override;
-    void setSystemInfo(const proto::system_info::SystemInfo& system_info) override;
+    void setSystemInfo(const proto::SystemInfo& system_info) override;
+    std::unique_ptr<FrameFactory> frameFactory() override;
+    void drawFrame(std::shared_ptr<desktop::Frame> frame) override;
+    void drawMouseCursor(std::shared_ptr<desktop::MouseCursor> mouse_cursor) override;
+    void injectClipboardEvent(const proto::ClipboardEvent& event) override;
 
     // DesktopWidget::Delegate implementation.
     void onPointerEvent(const QPoint& pos, uint32_t mask) override;
@@ -75,12 +82,8 @@ protected:
     // QWidget implementation.
     void timerEvent(QTimerEvent* event) override;
     void resizeEvent(QResizeEvent* event) override;
-    void closeEvent(QCloseEvent* event) override;
     void leaveEvent(QEvent* event) override;
     bool eventFilter(QObject* object, QEvent* event) override;
-
-    // ClientWindow implementation.
-    void sessionError() override;
 
 private slots:
     void changeSettings();
@@ -90,9 +93,12 @@ private slots:
     void scaleDesktop();
 
 private:
-    ClientDesktop* desktopClient();
+    const proto::SessionType session_type_;
+    proto::DesktopConfig desktop_config_;
 
-    static QString createWindowTitle(const ConnectData& connect_data);
+    std::shared_ptr<DesktopControlProxy> desktop_control_proxy_;
+    base::Version peer_version_;
+    uint32_t video_encodings_ = 0;
 
     QHBoxLayout* layout_ = nullptr;
     QScrollArea* scroll_area_ = nullptr;
@@ -100,7 +106,6 @@ private:
     DesktopWidget* desktop_ = nullptr;
     common::Clipboard* clipboard_ = nullptr;
 
-    QPointer<DesktopConfigDialog> config_dialog_;
     QPointer<SystemInfoWindow> system_info_;
 
     int scroll_timer_id_ = 0;
@@ -110,9 +115,9 @@ private:
 
     desktop::Point screen_top_left_;
 
-    DISALLOW_COPY_AND_ASSIGN(DesktopWindow);
+    DISALLOW_COPY_AND_ASSIGN(QtDesktopWindow);
 };
 
 } // namespace client
 
-#endif // CLIENT__UI__DESKTOP_WINDOW_H
+#endif // CLIENT__UI__QT_DESKTOP_WINDOW_H

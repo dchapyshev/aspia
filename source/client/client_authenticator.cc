@@ -18,135 +18,188 @@
 
 #include "client/client_authenticator.h"
 
+#include "base/cpuid.h"
 #include "base/logging.h"
+#include "base/strings/unicode.h"
 #include "common/message_serialization.h"
-#include "crypto/cryptor.h"
+#include "crypto/message_decryptor_openssl.h"
+#include "crypto/message_encryptor_openssl.h"
+#include "crypto/generic_hash.h"
+#include "crypto/random.h"
+#include "crypto/srp_constants.h"
+#include "crypto/srp_math.h"
 #include "net/network_channel_proxy.h"
 
 namespace client {
+
+namespace {
+
+bool verifyNg(std::string_view N, std::string_view g)
+{
+    switch (N.size())
+    {
+        case 512: // 4096 bit
+        {
+            if (N != crypto::kSrpNgPair_4096.first || g != crypto::kSrpNgPair_4096.second)
+                return false;
+        }
+        break;
+
+        case 768: // 6144 bit
+        {
+            if (N != crypto::kSrpNgPair_6144.first || g != crypto::kSrpNgPair_6144.second)
+                return false;
+        }
+        break;
+
+        case 1024: // 8192 bit
+        {
+            if (N != crypto::kSrpNgPair_8192.first || g != crypto::kSrpNgPair_8192.second)
+                return false;
+        }
+        break;
+
+        // We do not allow groups less than 512 bytes (4096 bits).
+        default:
+            return false;
+    }
+
+    return true;
+}
+
+std::unique_ptr<crypto::MessageEncryptor> createMessageEncryptor(
+    proto::Method method, const base::ByteArray& key, const base::ByteArray& iv)
+{
+    switch (method)
+    {
+        case proto::METHOD_SRP_AES256_GCM:
+            return crypto::MessageEncryptorOpenssl::createForAes256Gcm(key, iv);
+
+        case proto::METHOD_SRP_CHACHA20_POLY1305:
+            return crypto::MessageEncryptorOpenssl::createForChaCha20Poly1305(key, iv);
+
+        default:
+            return nullptr;
+    }
+}
+
+std::unique_ptr<crypto::MessageDecryptor> createMessageDecryptor(
+    proto::Method method, const base::ByteArray& key, const base::ByteArray& iv)
+{
+    switch (method)
+    {
+        case proto::METHOD_SRP_AES256_GCM:
+            return crypto::MessageDecryptorOpenssl::createForAes256Gcm(key, iv);
+
+        case proto::METHOD_SRP_CHACHA20_POLY1305:
+            return crypto::MessageDecryptorOpenssl::createForChaCha20Poly1305(key, iv);
+
+        default:
+            return nullptr;
+    }
+}
+
+} // namespace
+
+Authenticator::Authenticator() = default;
+
+Authenticator::~Authenticator() = default;
+
+void Authenticator::setUserName(std::u16string_view username)
+{
+    username_ = username;
+}
+
+const std::u16string& Authenticator::userName() const
+{
+    return username_;
+}
+
+void Authenticator::setPassword(std::u16string_view password)
+{
+    password_ = password;
+}
+
+const std::u16string& Authenticator::password() const
+{
+    return password_;
+}
 
 void Authenticator::setSessionType(proto::SessionType session_type)
 {
     session_type_ = session_type;
 }
 
-void Authenticator::start(std::shared_ptr<net::ChannelProxy> channel, Callback callback)
+void Authenticator::start(std::shared_ptr<net::ChannelProxy> channel_proxy, Callback callback)
 {
-    channel_ = channel;
+    channel_proxy_ = channel_proxy;
     callback_ = callback;
 
-    DCHECK(channel_);
+    DCHECK(channel_proxy_);
     DCHECK(callback_);
 
-    proto::ClientHello client_hello;
-    client_hello.set_methods(methods());
+    channel_proxy_->setListener(this);
+    channel_proxy_->resume();
 
-    channel_->setListener(this);
-    channel_->resume();
-    channel_->send(common::serializeMessage(client_hello));
+    state_ = State::SEND_CLIENT_HELLO;
+    sendClientHello();
 }
 
-void Authenticator::sendMessage(base::ByteArray&& message)
+void Authenticator::onConnected()
 {
-    channel_->send(std::move(message));
-}
-
-void Authenticator::onFinished(Result result)
-{
-    if (callback_)
-    {
-        callback_(result);
-        callback_ = nullptr;
-    }
-}
-
-void Authenticator::onNetworkConnected()
-{
+    // The authenticator receives the channel always in an already connected state.
     NOTREACHED();
 }
 
-void Authenticator::onNetworkDisconnected()
-{
-    onFinished(Result::NETWORK_ERROR);
-}
-
-void Authenticator::onNetworkError(net::ErrorCode error_code)
+void Authenticator::onDisconnected(net::ErrorCode error_code)
 {
     LOG(LS_INFO) << "Network error: " << static_cast<int>(error_code);
+
+    finished(ErrorCode::NETWORK_ERROR);
 }
 
-void Authenticator::onNetworkMessage(base::ByteArray& buffer)
+void Authenticator::onMessageReceived(const base::ByteArray& buffer)
 {
     switch (state_)
     {
-        case State::HELLO:
+        case State::READ_SERVER_HELLO:
         {
-            proto::ServerHello server_hello;
-            if (!common::parseMessage(buffer, &server_hello))
+            if (readServerHello(buffer))
             {
-                onFinished(Result::PROTOCOL_ERROR);
-                return;
+                state_ = State::SEND_IDENTIFY;
+                sendIdentify();
             }
-
-            method_ = server_hello.method();
-            state_ = State::AUTHENTICATION;
-
-            onStarted();
         }
         break;
 
-        case State::AUTHENTICATION:
+        case State::READ_SERVER_KEY_EXCHANGE:
         {
-
-            if (onMessage(buffer))
-                state_ = State::SESSION;
+            if (readServerKeyExchange(buffer))
+            {
+                state_ = State::SEND_CLIENT_KEY_EXCHANGE;
+                sendClientKeyExchange();
+            }
         }
         break;
 
-        case State::SESSION:
+        case State::READ_SESSION_CHALLENGE:
         {
-            std::unique_ptr<crypto::Cryptor> cryptor = takeCryptor();
-            if (!cryptor)
+            if (readSessionChallenge(buffer))
             {
-                onFinished(Result::UNKNOWN_ERROR);
-                return;
+                std::unique_ptr<crypto::MessageEncryptor> message_encryptor =
+                    createMessageEncryptor(method_, key_, encrypt_iv_);
+                if (!message_encryptor)
+                {
+                    finished(ErrorCode::UNKNOWN_ERROR);
+                    return;
+                }
+
+                // Install the encryptor. Now all sent messages will be encrypted.
+                channel_proxy_->setEncryptor(std::move(message_encryptor));
+
+                state_ = State::SEND_SESSION_RESPONSE;
+                sendSessionResponse();
             }
-
-            base::ByteArray challenge_buffer;
-            challenge_buffer.resize(cryptor->decryptedDataSize(buffer.size()));
-
-            if (!cryptor->decrypt(buffer.data(), buffer.size(), challenge_buffer.data()))
-            {
-                onFinished(Result::ACCESS_DENIED);
-                return;
-            }
-
-            proto::SessionChallenge challenge;
-            if (!common::parseMessage(challenge_buffer, &challenge))
-            {
-                onFinished(Result::PROTOCOL_ERROR);
-                return;
-            }
-
-            if (!(challenge.session_types() & session_type_))
-            {
-                onFinished(Result::SESSION_DENIED);
-                return;
-            }
-
-            const proto::Version& peer_version = challenge.version();
-
-            peer_version_ = base::Version(
-                peer_version.major(), peer_version.minor(), peer_version.patch());
-
-            proto::SessionResponse response;
-            response.set_session_type(session_type_);
-
-            channel_->pause();
-            channel_->setCryptor(std::move(cryptor));
-            channel_->send(common::serializeMessage(response));
-
-            onFinished(Result::SUCCESS);
         }
         break;
 
@@ -156,6 +209,193 @@ void Authenticator::onNetworkMessage(base::ByteArray& buffer)
         }
         break;
     }
+}
+
+void Authenticator::onMessageWritten()
+{
+    switch (state_)
+    {
+        case State::SEND_CLIENT_HELLO:
+            state_ = State::READ_SERVER_HELLO;
+            break;
+
+        case State::SEND_IDENTIFY:
+            state_ = State::READ_SERVER_KEY_EXCHANGE;
+            break;
+
+        case State::SEND_CLIENT_KEY_EXCHANGE:
+        {
+            std::unique_ptr<crypto::MessageDecryptor> message_decryptor =
+                createMessageDecryptor(method_, key_, decrypt_iv_);
+            if (!message_decryptor)
+            {
+                finished(ErrorCode::UNKNOWN_ERROR);
+                return;
+            }
+
+            // After the decryptor is installed, all incoming messages will be decrypted in it.
+            // We do not install an encryptor here because the next message should be sent
+            // without encryption.
+            channel_proxy_->setDecryptor(std::move(message_decryptor));
+
+            state_ = State::READ_SESSION_CHALLENGE;
+        }
+        break;
+
+        case State::SEND_SESSION_RESPONSE:
+        {
+            state_ = State::FINISHED;
+            channel_proxy_->pause();
+
+            finished(ErrorCode::SUCCESS);
+        }
+        break;
+    }
+}
+
+void Authenticator::sendClientHello()
+{
+    uint32_t methods = proto::METHOD_SRP_CHACHA20_POLY1305;
+
+    if (base::CPUID::hasAesNi())
+        methods |= proto::METHOD_SRP_AES256_GCM;
+
+    proto::ClientHello client_hello;
+    client_hello.set_methods(methods);
+
+    channel_proxy_->send(common::serializeMessage(client_hello));
+}
+
+bool Authenticator::readServerHello(const base::ByteArray& buffer)
+{
+    proto::ServerHello server_hello;
+    if (!common::parseMessage(buffer, &server_hello))
+    {
+        finished(ErrorCode::PROTOCOL_ERROR);
+        return false;
+    }
+
+    method_ = server_hello.method();
+
+    switch (method_)
+    {
+        case proto::METHOD_SRP_AES256_GCM:
+        case proto::METHOD_SRP_CHACHA20_POLY1305:
+            break;
+
+        default:
+            finished(ErrorCode::PROTOCOL_ERROR);
+            return false;
+    }
+
+    return true;
+}
+
+void Authenticator::sendIdentify()
+{
+    proto::SrpIdentify identify;
+    identify.set_username(base::utf8FromUtf16(username_));
+
+    channel_proxy_->send(common::serializeMessage(identify));
+}
+
+bool Authenticator::readServerKeyExchange(const base::ByteArray& buffer)
+{
+    proto::SrpServerKeyExchange server_key_exchange;
+    if (!common::parseMessage(buffer, &server_key_exchange))
+    {
+        finished(ErrorCode::PROTOCOL_ERROR);
+        return false;
+    }
+
+    if (server_key_exchange.salt().size() < 64 || server_key_exchange.b().size() < 128)
+    {
+        finished(ErrorCode::PROTOCOL_ERROR);
+        return false;
+    }
+
+    if (!verifyNg(server_key_exchange.number(), server_key_exchange.generator()))
+    {
+        finished(ErrorCode::PROTOCOL_ERROR);
+        return false;
+    }
+
+    N_ = crypto::BigNum::fromStdString(server_key_exchange.number());
+    g_ = crypto::BigNum::fromStdString(server_key_exchange.generator());
+    s_ = crypto::BigNum::fromStdString(server_key_exchange.salt());
+    B_ = crypto::BigNum::fromStdString(server_key_exchange.b());
+    decrypt_iv_ = base::fromStdString(server_key_exchange.iv());
+
+    a_ = crypto::BigNum::fromByteArray(crypto::Random::byteArray(128)); // 1024 bits.
+    A_ = crypto::SrpMath::calc_A(a_, N_, g_);
+    encrypt_iv_ = crypto::Random::byteArray(12);
+
+    if (!crypto::SrpMath::verify_B_mod_N(B_, N_))
+    {
+        LOG(LS_WARNING) << "Invalid B or N";
+        return false;
+    }
+
+    crypto::BigNum u = crypto::SrpMath::calc_u(A_, B_, N_);
+    crypto::BigNum x = crypto::SrpMath::calc_x(s_, username_, password_);
+    crypto::BigNum key = crypto::SrpMath::calcClientKey(N_, B_, g_, x, a_, u);
+    if (!key.isValid())
+    {
+        LOG(LS_WARNING) << "Empty encryption key generated";
+        return false;
+    }
+
+    // AES256-GCM and ChaCha20-Poly1305 requires 256 bit key.
+    key_ = crypto::GenericHash::hash(crypto::GenericHash::BLAKE2s256, key.toByteArray());
+    return true;
+}
+
+void Authenticator::sendClientKeyExchange()
+{
+    proto::SrpClientKeyExchange client_key_exchange;
+    client_key_exchange.set_a(A_.toStdString());
+    client_key_exchange.set_iv(base::toStdString(encrypt_iv_));
+
+    channel_proxy_->send(common::serializeMessage(client_key_exchange));
+}
+
+bool Authenticator::readSessionChallenge(const base::ByteArray& buffer)
+{
+    proto::SessionChallenge challenge;
+    if (!common::parseMessage(buffer, &challenge))
+    {
+        finished(ErrorCode::PROTOCOL_ERROR);
+        return false;
+    }
+
+    if (!(challenge.session_types() & session_type_))
+    {
+        finished(ErrorCode::SESSION_DENIED);
+        return false;
+    }
+
+    const proto::Version& peer_version = challenge.version();
+    peer_version_ = base::Version(
+        peer_version.major(), peer_version.minor(), peer_version.patch());
+
+    return true;
+}
+
+void Authenticator::sendSessionResponse()
+{
+    proto::SessionResponse response;
+    response.set_session_type(session_type_);
+
+    channel_proxy_->send(common::serializeMessage(response));
+}
+
+void Authenticator::finished(ErrorCode error_code)
+{
+    if (channel_proxy_)
+        channel_proxy_->setListener(nullptr);
+
+    if (callback_)
+        callback_(error_code);
 }
 
 } // namespace client

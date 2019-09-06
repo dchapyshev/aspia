@@ -19,9 +19,10 @@
 #ifndef CLIENT__CLIENT_DESKTOP_H
 #define CLIENT__CLIENT_DESKTOP_H
 
+#include "base/macros_magic.h"
 #include "client/client.h"
+#include "client/desktop_control.h"
 #include "desktop/desktop_geometry.h"
-#include "proto/desktop_extensions.pb.h"
 #include "proto/system_info.pb.h"
 
 namespace codec {
@@ -35,47 +36,38 @@ class Frame;
 
 namespace client {
 
-class ClientDesktop : public Client
+class DesktopControlProxy;
+class DesktopWindow;
+class DesktopWindowProxy;
+
+class ClientDesktop
+    : public Client,
+      public DesktopControl
 {
-    Q_OBJECT
-
 public:
-    class Delegate
-    {
-    public:
-        virtual ~Delegate() = default;
-
-        virtual void extensionListChanged() = 0;
-        virtual void configRequered() = 0;
-
-        virtual void setDesktopRect(const desktop::Rect& screen_rect) = 0;
-        virtual void drawDesktop() = 0;
-        virtual desktop::Frame* desktopFrame() = 0;
-
-        virtual void setRemoteCursor(const QCursor& cursor) = 0;
-        virtual void setRemoteClipboard(const proto::ClipboardEvent& event) = 0;
-        virtual void setScreenList(const proto::ScreenList& screen_list) = 0;
-        virtual void setSystemInfo(const proto::system_info::SystemInfo& system_info) = 0;
-    };
-
-    ClientDesktop(const ConnectData& connect_data, Delegate* delegate, QObject* parent);
+    explicit ClientDesktop(std::shared_ptr<base::TaskRunner> ui_task_runner);
     ~ClientDesktop();
 
-    const std::vector<std::string>& supportedExtensions() const { return supported_extensions_; }
-    uint32_t supportedVideoEncodings() const { return supported_video_encodings_; }
+    void setDesktopWindow(DesktopWindow* desktop_window);
 
-    void sendKeyEvent(uint32_t usb_keycode, uint32_t flags);
-    void sendPointerEvent(const QPoint& pos, uint32_t mask);
-    void sendClipboardEvent(const proto::ClipboardEvent& event);
-    void sendPowerControl(proto::PowerControl::Action action);
-    void sendConfig(const proto::DesktopConfig& config);
-    void sendScreen(const proto::Screen& screen);
-    void sendRemoteUpdate();
-    void sendSystemInfoRequest();
+    // DesktopControl implementation.
+    void setDesktopConfig(const proto::DesktopConfig& config) override;
+    void setCurrentScreen(const proto::Screen& screen) override;
+    void onKeyEvent(const proto::KeyEvent& event) override;
+    void onPointerEvent(const proto::PointerEvent& event) override;
+    void onClipboardEvent(const proto::ClipboardEvent& event) override;
+    void onPowerControl(proto::PowerControl::Action action) override;
+    void onRemoteUpdate() override;
+    void onSystemInfoRequest() override;
 
 protected:
     // Client implementation.
+    void onSessionStarted(const base::Version& peer_version) override;
+    void onSessionStopped() override;
+
+    // net::Listener implementation.
     void onMessageReceived(const base::ByteArray& buffer) override;
+    void onMessageWritten() override;
 
 private:
     void readConfigRequest(const proto::DesktopConfigRequest& config_request);
@@ -84,15 +76,15 @@ private:
     void readClipboardEvent(const proto::ClipboardEvent& clipboard_event);
     void readExtension(const proto::DesktopExtension& extension);
 
-    void onSessionError(const QString& message);
+    bool started_ = false;
 
-    Delegate* delegate_;
+    std::shared_ptr<DesktopControlProxy> desktop_control_proxy_;
+    std::unique_ptr<DesktopWindowProxy> desktop_window_proxy_;
+    std::shared_ptr<desktop::Frame> desktop_frame_;
+    proto::DesktopConfig desktop_config_;
 
     proto::HostToClient incoming_message_;
     proto::ClientToHost outgoing_message_;
-
-    std::vector<std::string> supported_extensions_;
-    uint32_t supported_video_encodings_ = 0;
 
     proto::VideoEncoding video_encoding_ = proto::VIDEO_ENCODING_UNKNOWN;
     std::unique_ptr<codec::VideoDecoder> video_decoder_;

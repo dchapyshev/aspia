@@ -19,26 +19,46 @@
 #include "client/client_desktop.h"
 
 #include "base/logging.h"
-#include "base/strings/string_split.h"
+#include "client/desktop_control_proxy.h"
+#include "client/desktop_window.h"
+#include "client/desktop_window_proxy.h"
 #include "codec/cursor_decoder.h"
 #include "codec/video_decoder.h"
 #include "codec/video_util.h"
 #include "common/desktop_session_constants.h"
+#include "desktop/desktop_frame.h"
 #include "desktop/mouse_cursor.h"
-
-#include <QCursor>
-#include <QPixmap>
 
 namespace client {
 
-ClientDesktop::ClientDesktop(const ConnectData& connect_data, Delegate* delegate, QObject* parent)
-    : Client(connect_data, parent),
-      delegate_(delegate)
+ClientDesktop::ClientDesktop(std::shared_ptr<base::TaskRunner> ui_task_runner)
+    : Client(ui_task_runner)
 {
     // Nothing
 }
 
 ClientDesktop::~ClientDesktop() = default;
+
+void ClientDesktop::setDesktopWindow(DesktopWindow* desktop_window)
+{
+    DCHECK(uiTaskRunner()->belongsToCurrentThread());
+
+    desktop_window_proxy_ = DesktopWindowProxy::create(uiTaskRunner(), desktop_window);
+}
+
+void ClientDesktop::onSessionStarted(const base::Version& peer_version)
+{
+    desktop_control_proxy_ = std::make_shared<DesktopControlProxy>(ioTaskRunner(), this);
+    started_ = true;
+
+    desktop_window_proxy_->showWindow(desktop_control_proxy_, peer_version);
+}
+
+void ClientDesktop::onSessionStopped()
+{
+    started_ = false;
+    desktop_control_proxy_->dettach();
+}
 
 void ClientDesktop::onMessageReceived(const base::ByteArray& buffer)
 {
@@ -46,7 +66,7 @@ void ClientDesktop::onMessageReceived(const base::ByteArray& buffer)
 
     if (!incoming_message_.ParseFromArray(buffer.data(), buffer.size()))
     {
-        onSessionError(tr("Invalid message from host"));
+        LOG(LS_ERROR) << "Invalid message from host";
         return;
     }
 
@@ -77,44 +97,65 @@ void ClientDesktop::onMessageReceived(const base::ByteArray& buffer)
     }
 }
 
-void ClientDesktop::sendKeyEvent(uint32_t usb_keycode, uint32_t flags)
+void ClientDesktop::onMessageWritten()
 {
-    if (connectData().session_type != proto::SESSION_TYPE_DESKTOP_MANAGE)
+    // Nothing
+}
+
+void ClientDesktop::setDesktopConfig(const proto::DesktopConfig& desktop_config)
+{
+    desktop_config_ = desktop_config;
+
+    // If the session is not already running, then we do not need to send the configuration.
+    if (!started_)
         return;
 
+    if (!(desktop_config_.flags() & proto::ENABLE_CURSOR_SHAPE))
+        cursor_decoder_.reset();
+
+    outgoing_message_.Clear();
+    outgoing_message_.mutable_config()->CopyFrom(desktop_config_);
+    sendMessage(outgoing_message_);
+}
+
+void ClientDesktop::setCurrentScreen(const proto::Screen& screen)
+{
     outgoing_message_.Clear();
 
-    proto::KeyEvent* event = outgoing_message_.mutable_key_event();
-    event->set_usb_keycode(usb_keycode);
-    event->set_flags(flags);
+    proto::DesktopExtension* extension = outgoing_message_.mutable_extension();
+
+    extension->set_name(common::kSelectScreenExtension);
+    extension->set_data(screen.SerializeAsString());
 
     sendMessage(outgoing_message_);
 }
 
-void ClientDesktop::sendPointerEvent(const QPoint& pos, uint32_t mask)
+void ClientDesktop::onKeyEvent(const proto::KeyEvent& event)
 {
-    if (connectData().session_type != proto::SESSION_TYPE_DESKTOP_MANAGE)
+    if (sessionType() != proto::SESSION_TYPE_DESKTOP_MANAGE)
         return;
 
     outgoing_message_.Clear();
-
-    proto::PointerEvent* event = outgoing_message_.mutable_pointer_event();
-    event->set_x(pos.x());
-    event->set_y(pos.y());
-    event->set_mask(mask);
-
+    outgoing_message_.mutable_key_event()->CopyFrom(event);
     sendMessage(outgoing_message_);
 }
 
-void ClientDesktop::sendClipboardEvent(const proto::ClipboardEvent& event)
+void ClientDesktop::onPointerEvent(const proto::PointerEvent& event)
 {
-    const ConnectData& connect_data = connectData();
-
-    if (connect_data.session_type != proto::SESSION_TYPE_DESKTOP_MANAGE)
+    if (sessionType() != proto::SESSION_TYPE_DESKTOP_MANAGE)
         return;
 
-    uint32_t flags = connect_data.desktop_config.flags();
-    if (!(flags & proto::ENABLE_CLIPBOARD))
+    outgoing_message_.Clear();
+    outgoing_message_.mutable_pointer_event()->CopyFrom(event);
+    sendMessage(outgoing_message_);
+}
+
+void ClientDesktop::onClipboardEvent(const proto::ClipboardEvent& event)
+{
+    if (sessionType() != proto::SESSION_TYPE_DESKTOP_MANAGE)
+        return;
+
+    if (!(desktop_config_.flags() & proto::ENABLE_CLIPBOARD))
         return;
 
     outgoing_message_.Clear();
@@ -122,9 +163,9 @@ void ClientDesktop::sendClipboardEvent(const proto::ClipboardEvent& event)
     sendMessage(outgoing_message_);
 }
 
-void ClientDesktop::sendPowerControl(proto::PowerControl::Action action)
+void ClientDesktop::onPowerControl(proto::PowerControl::Action action)
 {
-    if (connectData().session_type != proto::SESSION_TYPE_DESKTOP_MANAGE)
+    if (sessionType() != proto::SESSION_TYPE_DESKTOP_MANAGE)
         return;
 
     outgoing_message_.Clear();
@@ -140,36 +181,14 @@ void ClientDesktop::sendPowerControl(proto::PowerControl::Action action)
     sendMessage(outgoing_message_);
 }
 
-void ClientDesktop::sendConfig(const proto::DesktopConfig& config)
-{
-    if (!(config.flags() & proto::ENABLE_CURSOR_SHAPE))
-        cursor_decoder_.reset();
-
-    outgoing_message_.Clear();
-    outgoing_message_.mutable_config()->CopyFrom(config);
-    sendMessage(outgoing_message_);
-}
-
-void ClientDesktop::sendScreen(const proto::Screen& screen)
-{
-    outgoing_message_.Clear();
-
-    proto::DesktopExtension* extension = outgoing_message_.mutable_extension();
-
-    extension->set_name(common::kSelectScreenExtension);
-    extension->set_data(screen.SerializeAsString());
-
-    sendMessage(outgoing_message_);
-}
-
-void ClientDesktop::sendRemoteUpdate()
+void ClientDesktop::onRemoteUpdate()
 {
     outgoing_message_.Clear();
     outgoing_message_.mutable_extension()->set_name(common::kRemoteUpdateExtension);
     sendMessage(outgoing_message_);
 }
 
-void ClientDesktop::sendSystemInfoRequest()
+void ClientDesktop::onSystemInfoRequest()
 {
     outgoing_message_.Clear();
     outgoing_message_.mutable_extension()->set_name(common::kSystemInfoExtension);
@@ -178,37 +197,21 @@ void ClientDesktop::sendSystemInfoRequest()
 
 void ClientDesktop::readConfigRequest(const proto::DesktopConfigRequest& config_request)
 {
-    // The list of extensions is passed as a string. Extensions are separated by a semicolon.
-    supported_extensions_ = base::splitString(config_request.extensions(), ";",
-                                              base::TRIM_WHITESPACE,
-                                              base::SPLIT_WANT_NONEMPTY);
-
-    // The list of supported video encodings is passed as a bit field.
-    supported_video_encodings_ = config_request.video_encodings();
-
-    // We notify the window about changes in the list of extensions.
+    // We notify the window about changes in the list of extensions and video encodings.
     // A window can disable/enable some of its capabilities in accordance with this information.
-    delegate_->extensionListChanged();
+    desktop_window_proxy_->setCapabilities(
+        config_request.extensions(), config_request.video_encodings());
 
     // If current video encoding not supported.
-    if (!(config_request.video_encodings() & connectData().desktop_config.video_encoding()))
+    if (!(config_request.video_encodings() & desktop_config_.video_encoding()))
     {
-        // Check whether we have supported encodings.
-        if (!(config_request.video_encodings() & common::kSupportedVideoEncodings))
-        {
-            onSessionError(tr("There are no supported video encodings"));
-            return;
-        }
-        else
-        {
-            // We tell the window about the need to change the encoding.
-            delegate_->configRequered();
-        }
+        // We tell the window about the need to change the encoding.
+        desktop_window_proxy_->configRequired();
     }
     else
     {
         // Everything is fine, we send the current configuration.
-        sendConfig(connectData().desktop_config);
+        setDesktopConfig(desktop_config_);
     }
 }
 
@@ -222,7 +225,7 @@ void ClientDesktop::readVideoPacket(const proto::VideoPacket& packet)
 
     if (!video_decoder_)
     {
-        onSessionError(tr("Video decoder not initialized"));
+        LOG(LS_ERROR) << "Video decoder not initialized";
         return;
     }
 
@@ -236,45 +239,42 @@ void ClientDesktop::readVideoPacket(const proto::VideoPacket& packet)
         if (screen_rect.width()  <= 0 || screen_rect.width()  >= kMaxValue ||
             screen_rect.height() <= 0 || screen_rect.height() >= kMaxValue)
         {
-            onSessionError(tr("Wrong video frame size"));
+            LOG(LS_ERROR) << "Wrong video frame size";
             return;
         }
 
         if (screen_rect.x() < kMinValue || screen_rect.x() >= kMaxValue ||
             screen_rect.y() < kMinValue || screen_rect.y() >= kMaxValue)
         {
-            onSessionError(tr("Wrong video frame position"));
+            LOG(LS_ERROR) << "Wrong video frame position";
             return;
         }
 
-        delegate_->setDesktopRect(screen_rect);
+        desktop_frame_ = desktop_window_proxy_->allocateFrame(screen_rect.size());
+        desktop_frame_->setTopLeft(screen_rect.topLeft());
     }
 
-    desktop::Frame* frame = delegate_->desktopFrame();
-    if (!frame)
+    if (!desktop_frame_)
     {
-        onSessionError(tr("The desktop frame is not initialized"));
+        LOG(LS_ERROR) << "The desktop frame is not initialized";
         return;
     }
 
-    if (!video_decoder_->decode(packet, frame))
+    if (!video_decoder_->decode(packet, desktop_frame_.get()))
     {
-        onSessionError(tr("The video packet could not be decoded"));
+        LOG(LS_ERROR) << "The video packet could not be decoded";
         return;
     }
 
-    delegate_->drawDesktop();
+    desktop_window_proxy_->drawFrame(desktop_frame_);
 }
 
 void ClientDesktop::readCursorShape(const proto::CursorShape& cursor_shape)
 {
-    const ConnectData& connect_data = connectData();
-
-    if (connect_data.session_type != proto::SESSION_TYPE_DESKTOP_MANAGE)
+    if (sessionType() != proto::SESSION_TYPE_DESKTOP_MANAGE)
         return;
 
-    uint32_t flags = connect_data.desktop_config.flags();
-    if (!(flags & proto::ENABLE_CURSOR_SHAPE))
+    if (!(desktop_config_.flags() & proto::ENABLE_CURSOR_SHAPE))
         return;
 
     if (!cursor_decoder_)
@@ -284,30 +284,18 @@ void ClientDesktop::readCursorShape(const proto::CursorShape& cursor_shape)
     if (!mouse_cursor)
         return;
 
-    QImage image(mouse_cursor->data(),
-                 mouse_cursor->size().width(),
-                 mouse_cursor->size().height(),
-                 mouse_cursor->stride(),
-                 QImage::Format::Format_ARGB32);
-
-    delegate_->setRemoteCursor(
-        QCursor(QPixmap::fromImage(image),
-                mouse_cursor->hotSpot().x(),
-                mouse_cursor->hotSpot().y()));
+    desktop_window_proxy_->drawMouseCursor(mouse_cursor);
 }
 
 void ClientDesktop::readClipboardEvent(const proto::ClipboardEvent& clipboard_event)
 {
-    const ConnectData& connect_data = connectData();
-
-    if (connect_data.session_type != proto::SESSION_TYPE_DESKTOP_MANAGE)
+    if (sessionType() != proto::SESSION_TYPE_DESKTOP_MANAGE)
         return;
 
-    uint32_t flags = connect_data.desktop_config.flags();
-    if (!(flags & proto::ENABLE_CLIPBOARD))
+    if (!(desktop_config_.flags() & proto::ENABLE_CLIPBOARD))
         return;
 
-    delegate_->setRemoteClipboard(clipboard_event);
+    desktop_window_proxy_->injectClipboardEvent(clipboard_event);
 }
 
 void ClientDesktop::readExtension(const proto::DesktopExtension& extension)
@@ -322,11 +310,11 @@ void ClientDesktop::readExtension(const proto::DesktopExtension& extension)
             return;
         }
 
-        delegate_->setScreenList(screen_list);
+        desktop_window_proxy_->setScreenList(screen_list);
     }
     else if (extension.name() == common::kSystemInfoExtension)
     {
-        proto::system_info::SystemInfo system_info;
+        proto::SystemInfo system_info;
 
         if (!system_info.ParseFromString(extension.data()))
         {
@@ -334,17 +322,12 @@ void ClientDesktop::readExtension(const proto::DesktopExtension& extension)
             return;
         }
 
-        delegate_->setSystemInfo(system_info);
+        desktop_window_proxy_->setSystemInfo(system_info);
     }
     else
     {
         LOG(LS_WARNING) << "Unknown extension: " << extension.name();
     }
-}
-
-void ClientDesktop::onSessionError(const QString& message)
-{
-    emit errorOccurred(QString("%1: %2.").arg(tr("Session error").arg(message)));
 }
 
 } // namespace client

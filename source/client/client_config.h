@@ -16,43 +16,26 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__UI__CLIENT_DIALOG_H
-#define CLIENT__UI__CLIENT_DIALOG_H
+#ifndef CLIENT__CLIENT_CONFIG_H
+#define CLIENT__CLIENT_CONFIG_H
 
-#include "base/macros_magic.h"
-#include "client/client_config.h"
-#include "proto/desktop.pb.h"
-
-#include <QDialog>
-
-namespace Ui {
-class ClientDialog;
-} // namespace Ui
+#include "proto/common.pb.h"
 
 namespace client {
 
-class ClientDialog : public QDialog
+struct Config
 {
-    Q_OBJECT
+    Config();
+    ~Config();
 
-public:
-    explicit ClientDialog(QWidget* parent = nullptr);
-    ~ClientDialog();
-
-private slots:
-    void sessionTypeChanged(int item_index);
-    void sessionConfigButtonPressed();
-    void connectButtonPressed();
-
-private:
-    std::unique_ptr<Ui::ClientDialog> ui;
-
-    Config config_;
-    proto::DesktopConfig desktop_config_;
-
-    DISALLOW_COPY_AND_ASSIGN(ClientDialog);
+    std::u16string computer_name;
+    std::u16string address;
+    uint16_t port;
+    std::u16string username;
+    std::u16string password;
+    proto::SessionType session_type;
 };
 
 } // namespace client
 
-#endif // CLIENT__UI__CLIENT_DIALOG_H
+#endif // CLIENT__CLIENT_CONFIG_H

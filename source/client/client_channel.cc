@@ -19,110 +19,41 @@
 #include "client/client_channel.h"
 
 #include "base/logging.h"
-#include "base/message_loop/message_loop_proxy.h"
+#include "base/message_loop/message_loop_task_runner.h"
 #include "build/version.h"
 #include "client/client_authenticator_srp.h"
 #include "net/network_channel_proxy.h"
 #include "qt_base/application.h"
-
-#include <QApplication>
-#include <QEvent>
+#include "qt_base/qt_task_runner.h"
 
 namespace client {
-
-namespace {
-
-class MessageEvent : public QEvent
-{
-public:
-    static const int kType = QEvent::User + 1;
-
-    MessageEvent(base::ByteArray&& buffer)
-        : QEvent(QEvent::Type(kType)),
-          buffer(std::move(buffer))
-    {
-        // Nothing
-    }
-
-    base::ByteArray buffer;
-
-private:
-    DISALLOW_COPY_AND_ASSIGN(MessageEvent);
-};
-
-class ConnectEvent : public QEvent
-{
-public:
-    static const int kType = QEvent::User + 2;
-
-    ConnectEvent()
-        : QEvent(QEvent::Type(kType))
-    {
-        // Nothing
-    }
-
-private:
-    DISALLOW_COPY_AND_ASSIGN(ConnectEvent);
-};
-
-class DisconnectEvent : public QEvent
-{
-public:
-    static const int kType = QEvent::User + 3;
-
-    DisconnectEvent()
-        : QEvent(QEvent::Type(kType))
-    {
-        // Nothing
-    }
-
-private:
-    DISALLOW_COPY_AND_ASSIGN(DisconnectEvent);
-};
-
-class ErrorEvent : public QEvent
-{
-public:
-    static const int kType = QEvent::User + 4;
-
-    ErrorEvent(const QString& message)
-        : QEvent(QEvent::Type(kType)),
-          message(message)
-    {
-        // Nothing
-    }
-
-    QString message;
-
-private:
-    DISALLOW_COPY_AND_ASSIGN(ErrorEvent);
-};
-
-} // namespace
 
 Channel::Channel(QObject* parent)
     : QObject(parent)
 {
-    io_runner_ = qt_base::Application::ioRunner();
-    DCHECK(io_runner_);
+    io_runner_ = std::make_unique<base::MessageLoopTaskRunner>(qt_base::Application::ioRunner());
+    qt_runner_ = std::make_unique<qt_base::QtTaskRunner>();
+}
+
+Channel::~Channel() = default;
+
+void Channel::connectToHost(std::u16string_view address, uint16_t port,
+                            std::u16string_view username, std::u16string_view password,
+                            proto::SessionType session_type)
+{
+    if (!io_runner_->belongsToCurrentThread())
+    {
+        io_runner_->postTask(
+            std::bind(&Channel::connectToHost, this, address, port, username, password, session_type));
+        return;
+    }
 
     asio::io_context* io_context = qt_base::Application::ioContext();
     DCHECK(io_context);
 
     channel_ = std::make_unique<net::Channel>(*io_context);
     channel_proxy_ = channel_->channelProxy();
-}
 
-Channel::~Channel()
-{
-    channel_proxy_->setListener(nullptr);
-    channel_.reset();
-}
-
-void Channel::connectToHost(std::u16string_view address, uint16_t port,
-                            std::u16string_view username, std::u16string_view password,
-                            proto::SessionType session_type)
-{
     std::unique_ptr<AuthenticatorSrp> authenticator = std::make_unique<AuthenticatorSrp>();
 
     authenticator->setSessionType(session_type);
@@ -143,7 +74,8 @@ void Channel::disconnectFromHost()
         return;
     }
 
-    channel_proxy_->disconnect();
+    if (channel_proxy_)
+        channel_proxy_->disconnect();
 }
 
 void Channel::resume()
@@ -154,73 +86,85 @@ void Channel::resume()
         return;
     }
 
-    channel_proxy_->resume();
+    if (channel_proxy_)
+        channel_proxy_->resume();
 }
 
-void Channel::send(base::ByteArray&& buffer)
+void Channel::send(const base::ByteArray& buffer)
 {
-    channel_proxy_->send(std::move(buffer));
-}
-
-const base::Version& Channel::peerVersion() const
-{
-    return authenticator_->peerVersion();
-}
-
-void Channel::customEvent(QEvent* event)
-{
-    switch (event->type())
+    io_runner_->postTask([this, buffer]
     {
-        case MessageEvent::kType:
-            emit messageReceived(reinterpret_cast<MessageEvent*>(event)->buffer);
-            break;
+        if (channel_proxy_)
+            channel_proxy_->send(buffer);
+    });
+}
 
-        case ConnectEvent::kType:
-            emit connected();
-            break;
+base::Version Channel::peerVersion() const
+{
+    if (!authenticator_)
+        return base::Version();
 
-        case DisconnectEvent::kType:
-            emit disconnected();
-            break;
-
-        case ErrorEvent::kType:
-            emit errorOccurred(reinterpret_cast<ErrorEvent*>(event)->message);
-            break;
-
-        default:
-            break;
-    }
+    return authenticator_->peerVersion();
 }
 
 void Channel::onNetworkConnected()
 {
-    authenticator_->start(channel_proxy_, [this](Authenticator::Result result)
-    {
-        channel_proxy_->setListener(this);
+    DCHECK(authenticator_);
 
-        if (result != Authenticator::Result::SUCCESS)
-        {
-            QApplication::postEvent(this, new ErrorEvent(errorToString(result)));
-            return;
-        }
-
-        QApplication::postEvent(this, new ConnectEvent());
-    });
+    authenticator_->start(
+        channel_proxy_, std::bind(&Channel::onAuthenticatorFinished, this, std::placeholders::_1));
 }
 
 void Channel::onNetworkDisconnected()
 {
-    QApplication::postEvent(this, new DisconnectEvent());
+    if (!qt_runner_->belongsToCurrentThread())
+    {
+        qt_runner_->postTask(std::bind(&Channel::onNetworkDisconnected, this));
+        return;
+    }
+
+    emit disconnected();
 }
 
 void Channel::onNetworkError(net::ErrorCode error)
 {
-    QApplication::postEvent(this, new ErrorEvent(errorToString(error)));
+    if (!qt_runner_->belongsToCurrentThread())
+    {
+        qt_runner_->postTask(std::bind(&Channel::onNetworkError, this, error));
+        return;
+    }
+
+    emit errorOccurred(errorToString(error));
 }
 
-void Channel::onNetworkMessage(base::ByteArray& buffer)
+void Channel::onNetworkMessage(const base::ByteArray& buffer)
 {
-    QApplication::postEvent(this, new MessageEvent(std::move(buffer)));
+    if (!qt_runner_->belongsToCurrentThread())
+    {
+        qt_runner_->postTask(std::bind(&Channel::onNetworkMessage, this, buffer));
+        return;
+    }
+
+    emit messageReceived(buffer);
+}
+
+void Channel::onAuthenticatorFinished(Authenticator::Result result)
+{
+    if (!qt_runner_->belongsToCurrentThread())
+    {
+        qt_runner_->postTask(std::bind(&Channel::onAuthenticatorFinished, this, result));
+        return;
+    }
+
+    channel_proxy_->setListener(this);
+
+    if (result != Authenticator::Result::SUCCESS)
+    {
+        emit errorOccurred(errorToString(result));
+        return;
+    }
+
+    emit connected();
 }
 
 // static

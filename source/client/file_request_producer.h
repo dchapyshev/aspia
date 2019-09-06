@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,30 +16,22 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__CONNECT_DATA_H
-#define CLIENT__CONNECT_DATA_H
+#ifndef CLIENT__FILE_REQUEST_PRODUCER_H
+#define CLIENT__FILE_REQUEST_PRODUCER_H
 
-#include "build/build_config.h"
-#include "proto/common.pb.h"
-#include "proto/desktop.pb.h"
+#include "proto/file_transfer.pb.h"
 
 namespace client {
 
-struct ConnectData
+class FileRequestProducer
 {
-    ConnectData();
-    ~ConnectData();
+public:
+    virtual ~FileRequestProducer() = default;
 
-    std::u16string computer_name;
-    std::u16string address;
-    uint16_t port = DEFAULT_HOST_TCP_PORT;
-    std::u16string username;
-    std::u16string password;
-
-    proto::SessionType session_type = proto::SESSION_TYPE_DESKTOP_MANAGE;
-    proto::DesktopConfig desktop_config;
+    virtual void onLocalReply(const proto::FileReply& reply) = 0;
+    virtual void onRemoteReply(const proto::FileReply& reply) = 0;
 };
 
 } // namespace client
 
-#endif // CLIENT__CONNECT_DATA_H
+#endif // CLIENT__FILE_REQUEST_PRODUCER_H

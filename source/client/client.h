@@ -19,57 +19,84 @@
 #ifndef CLIENT__CLIENT_H
 #define CLIENT__CLIENT_H
 
-#include "base/macros_magic.h"
 #include "base/version.h"
-#include "client/client_authenticator.h"
-#include "client/connect_data.h"
-#include "net/network_error.h"
+#include "base/threading/thread.h"
+#include "client/client_config.h"
 #include "net/network_listener.h"
 
-#include <QObject>
+namespace base {
+class TaskRunner;
+} // namespace base
+
+namespace net {
+class Channel;
+class ChannelProxy;
+} // namespace net
 
 namespace client {
 
-class Channel;
+class Authenticator;
+class StatusWindow;
+class StatusWindowProxy;
 
-class Client : public QObject
+class Client
+    : public base::Thread::Delegate,
+      public net::Listener
 {
-    Q_OBJECT
-
 public:
-    Client(const ConnectData& connect_data, QObject* parent);
+    explicit Client(std::shared_ptr<base::TaskRunner> ui_task_runner);
     virtual ~Client();
 
-    // Starts session.
-    void start();
+    // Starts a session.
+    bool start(const Config& config);
 
-    ConnectData& connectData() { return connect_data_; }
+    // Stops a session.
+    void stop();
 
-    // Returns the version of the connected host.
-    base::Version peerVersion() const;
+    // Sets the implementation of the status window.
+    // The method must be called before calling method start().
+    void setStatusWindow(StatusWindow* status_window);
 
     // Returns the version of the current client.
-    base::Version version() const;
-
-signals:
-    // Indicates that the session is started.
-    void started();
-
-    // Indicates an error in the session.
-    void errorOccurred(const QString& message);
+    static base::Version version();
 
 protected:
-    // Reads the incoming message for the session.
-    virtual void onMessageReceived(const base::ByteArray& buffer) = 0;
+    std::shared_ptr<base::TaskRunner> ioTaskRunner() const;
+    std::shared_ptr<base::TaskRunner> uiTaskRunner() const;
+
+    std::u16string computerName() const;
+    proto::SessionType sessionType() const;
+
+    // Indicates that the session is started.
+    // When calling this method, the client implementation should display a session window.
+    virtual void onSessionStarted(const base::Version& peer_version) = 0;
+
+    // Indicates that the session is stopped.
+    // When calling this method, the client implementation must destroy the session window.
+    virtual void onSessionStopped() = 0;
 
     // Sends outgoing message.
     void sendMessage(const google::protobuf::MessageLite& message);
 
-private:
-    ConnectData connect_data_;
-    std::unique_ptr<Channel> channel_;
+    // base::Thread::Delegate implementation.
+    void onBeforeThreadRunning() override;
+    void onAfterThreadRunning() override;
 
-    DISALLOW_COPY_AND_ASSIGN(Client);
+    // net::Listener implementation.
+    void onConnected() override;
+    void onDisconnected(net::ErrorCode error_code) override;
+
+private:
+    base::Thread io_thread_;
+    std::shared_ptr<base::TaskRunner> io_task_runner_;
+    std::shared_ptr<base::TaskRunner> ui_task_runner_;
+
+    std::unique_ptr<net::Channel> channel_;
+    std::shared_ptr<net::ChannelProxy> channel_proxy_;
+    std::unique_ptr<Authenticator> authenticator_;
+    std::unique_ptr<StatusWindowProxy> status_window_proxy_;
+
+    Config config_;
 };
 
 } // namespace client

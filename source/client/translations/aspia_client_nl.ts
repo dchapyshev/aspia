@@ -36,6 +36,14 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>User Name:</source>
+        <translation type="obsolete">Gebruikers Naam:</translation>
+    </message>
+    <message>
+        <source>Password:</source>
+        <translation type="obsolete">Wachtwoord:</translation>
+    </message>
+    <message>
         <location filename="../ui/client_dialog.ui" line="102"/>
         <source>Connect</source>
         <translation>Verbinden</translation>
@@ -636,68 +644,68 @@
 <context>
     <name>client::Channel</name>
     <message>
-        <location filename="../client_channel.cc" line="234"/>
+        <location filename="../client_channel.cc" line="178"/>
         <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
         <translation type="unfinished">Er is een probleem opgetreden in het netwerk (bijv, de netwerk kabel is per ongelijk verwijderd).</translation>
     </message>
     <message>
-        <location filename="../client_channel.cc" line="238"/>
+        <location filename="../client_channel.cc" line="182"/>
         <source>Connection was refused by the peer (or timed out).</source>
         <translation type="unfinished">Verbinding is geweigerd door de peer (of er was een timeout).</translation>
     </message>
     <message>
-        <location filename="../client_channel.cc" line="242"/>
+        <location filename="../client_channel.cc" line="186"/>
         <source>Remote host closed the connection.</source>
         <translation type="unfinished">De remote host heeft de verbinding gesloten.</translation>
     </message>
     <message>
-        <location filename="../client_channel.cc" line="246"/>
+        <location filename="../client_channel.cc" line="190"/>
         <source>Host address was not found.</source>
         <translation type="unfinished">Host adres is niet gevonden.</translation>
     </message>
     <message>
-        <location filename="../client_channel.cc" line="250"/>
+        <location filename="../client_channel.cc" line="194"/>
         <source>Socket operation timed out.</source>
         <translation type="unfinished">Socket operatie gaf een timeout.</translation>
     </message>
     <message>
-        <location filename="../client_channel.cc" line="254"/>
+        <location filename="../client_channel.cc" line="198"/>
         <source>Address specified is already in use and was set to be exclusive.</source>
         <translation type="unfinished">Het opgegeven adres is al in gebruik, en is ingesteld als exclusief.</translation>
     </message>
     <message>
-        <location filename="../client_channel.cc" line="258"/>
+        <location filename="../client_channel.cc" line="202"/>
         <source>Address specified does not belong to the host.</source>
         <translation type="unfinished">Het opgegeven adres behoort niet toe aan de host.</translation>
     </message>
     <message>
-        <location filename="../client_channel.cc" line="262"/>
-        <location filename="../client_channel.cc" line="297"/>
+        <location filename="../client_channel.cc" line="206"/>
+        <location filename="../client_channel.cc" line="241"/>
         <source>An unknown error occurred.</source>
         <translation type="unfinished">Een onbekende error is opgetreden.</translation>
     </message>
     <message>
-        <location filename="../client_channel.cc" line="277"/>
+        <location filename="../client_channel.cc" line="221"/>
         <source>Authentication successfully completed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_channel.cc" line="281"/>
+        <location filename="../client_channel.cc" line="225"/>
         <source>Network authentication error.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_channel.cc" line="285"/>
+        <location filename="../client_channel.cc" line="229"/>
         <source>Violation of the data exchange protocol.</source>
         <translation type="unfinished">Schending van het data uitwisselings protocol.</translation>
     </message>
     <message>
-        <location filename="../client_channel.cc" line="289"/>
+        <location filename="../client_channel.cc" line="233"/>
         <source>An error occured while authenticating: wrong user name or password.</source>
         <translation type="unfinished">Er is een error opgetreden bij het authenticeren: verkeerde gebruikers naam of wachtwoord.</translation>
     </message>
     <message>
-        <location filename="../client_channel.cc" line="293"/>
+        <location filename="../client_channel.cc" line="237"/>
         <source>Specified session type is not allowed for the user.</source>
         <translation type="unfinished">Het gespecificeerde sessie type is niet toegestaan voor de gebruiker.</translation>
     </message>
@@ -760,44 +768,36 @@
 <context>
     <name>client::ClientDesktop</name>
     <message>
-        <location filename="../client_desktop.cc" line="48"/>
         <source>Invalid message from host</source>
-        <translation>Ongeldig bericht van de host</translation>
+        <translation type="vanished">Ongeldig bericht van de host</translation>
     </message>
     <message>
-        <location filename="../client_desktop.cc" line="197"/>
         <source>There are no supported video encodings</source>
-        <translation>Er zijn geen ondersteunde video encodings</translation>
+        <translation type="vanished">Er zijn geen ondersteunde video encodings</translation>
     </message>
     <message>
-        <location filename="../client_desktop.cc" line="223"/>
         <source>Video decoder not initialized</source>
-        <translation>Video decoder is niet geinitialiseerd</translation>
+        <translation type="vanished">Video decoder is niet geinitialiseerd</translation>
     </message>
     <message>
-        <location filename="../client_desktop.cc" line="237"/>
         <source>Wrong video frame size</source>
-        <translation>Verkeerd video frame grootte</translation>
+        <translation type="vanished">Verkeerd video frame grootte</translation>
     </message>
     <message>
-        <location filename="../client_desktop.cc" line="244"/>
         <source>Wrong video frame position</source>
-        <translation>Verkeerd video frame positie</translation>
+        <translation type="vanished">Verkeerd video frame positie</translation>
     </message>
     <message>
-        <location filename="../client_desktop.cc" line="254"/>
         <source>The desktop frame is not initialized</source>
-        <translation>Het bureaublad frame is niet geinitialiseerd</translation>
+        <translation type="vanished">Het bureaublad frame is niet geinitialiseerd</translation>
     </message>
     <message>
-        <location filename="../client_desktop.cc" line="260"/>
         <source>The video packet could not be decoded</source>
-        <translation>Het video pakket kon niet gedecodeerd worden</translation>
+        <translation type="vanished">Het video pakket kon niet gedecodeerd worden</translation>
     </message>
     <message>
-        <location filename="../client_desktop.cc" line="345"/>
         <source>Session error</source>
-        <translation>Sessie fout</translation>
+        <translation type="vanished">Sessie fout</translation>
     </message>
 </context>
 <context>
@@ -815,12 +815,12 @@
         <translation type="vanished">Bestands Overdracht</translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.cc" line="133"/>
+        <location filename="../ui/client_dialog.cc" line="136"/>
         <source>Warning</source>
         <translation type="unfinished">Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.cc" line="134"/>
+        <location filename="../ui/client_dialog.cc" line="137"/>
         <source>An invalid computer address was entered.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -828,17 +828,17 @@
 <context>
     <name>client::ClientFileTransfer</name>
     <message>
-        <location filename="../client_file_transfer.cc" line="59"/>
+        <location filename="../client_file_transfer.cc" line="41"/>
         <source>Invalid message from host</source>
         <translation>Ongeldig bericht van de host</translation>
     </message>
     <message>
-        <location filename="../client_file_transfer.cc" line="65"/>
+        <location filename="../client_file_transfer.cc" line="47"/>
         <source>There are no logged in users. File transfer is not available</source>
         <translation>Er zijn geen ingelogde gebruikers. Bestandsoverdracht is niet beschikbaar</translation>
     </message>
     <message>
-        <location filename="../client_file_transfer.cc" line="83"/>
+        <location filename="../client_file_transfer.cc" line="66"/>
         <source>Session error</source>
         <translation>Sessie fout</translation>
     </message>
@@ -846,14 +846,99 @@
 <context>
     <name>client::ClientWindow</name>
     <message>
-        <location filename="../ui/client_window.cc" line="117"/>
+        <location filename="../ui/client_window.cc" line="85"/>
         <source>Attempt to connect to %1:%2.</source>
         <translation>Probeer te verbinden met %1:%2.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="124"/>
+        <location filename="../ui/client_window.cc" line="95"/>
+        <source>Connection established.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="106"/>
+        <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
+        <translation type="unfinished">Er is een probleem opgetreden in het netwerk (bijv, de netwerk kabel is per ongelijk verwijderd).</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="110"/>
+        <source>Connection was refused by the peer (or timed out).</source>
+        <translation type="unfinished">Verbinding is geweigerd door de peer (of er was een timeout).</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="114"/>
+        <source>Remote host closed the connection.</source>
+        <translation type="unfinished">De remote host heeft de verbinding gesloten.</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="118"/>
+        <source>Host address was not found.</source>
+        <translation type="unfinished">Host adres is niet gevonden.</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="122"/>
+        <source>Socket operation timed out.</source>
+        <translation type="unfinished">Socket operatie gaf een timeout.</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="126"/>
+        <source>Address specified is already in use and was set to be exclusive.</source>
+        <translation type="unfinished">Het opgegeven adres is al in gebruik, en is ingesteld als exclusief.</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="130"/>
+        <source>Address specified does not belong to the host.</source>
+        <translation type="unfinished">Het opgegeven adres behoort niet toe aan de host.</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="140"/>
+        <location filename="../ui/client_window.cc" line="175"/>
+        <source>An unknown error occurred.</source>
+        <translation type="unfinished">Een onbekende error is opgetreden.</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="155"/>
+        <source>Authentication successfully completed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="159"/>
+        <source>Network authentication error.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="163"/>
+        <source>Violation of the data exchange protocol.</source>
+        <translation type="unfinished">Schending van het data uitwisselings protocol.</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="167"/>
+        <source>An error occured while authenticating: wrong user name or password.</source>
+        <translation type="unfinished">Er is een error opgetreden bij het authenticeren: verkeerde gebruikers naam of wachtwoord.</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="171"/>
+        <source>Specified session type is not allowed for the user.</source>
+        <translation type="unfinished">Het gespecificeerde sessie type is niet toegestaan voor de gebruiker.</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="189"/>
+        <source>Desktop Manage</source>
+        <translation type="unfinished">Bureaublad Beheren</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="193"/>
+        <source>Desktop View</source>
+        <translation type="unfinished">Bureaublad Weergeven</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="197"/>
+        <source>File Transfer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Session started.</source>
-        <translation>Sessie begonnen.</translation>
+        <translation type="vanished">Sessie begonnen.</translation>
     </message>
 </context>
 <context>
@@ -933,45 +1018,36 @@
 <context>
     <name>client::DesktopWindow</name>
     <message>
-        <location filename="../ui/desktop_window.cc" line="369"/>
         <source>Save File</source>
-        <translation>Bestand Opslaan</translation>
+        <translation type="vanished">Bestand Opslaan</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="371"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
-        <translation>PNG Afbeelding (*.png);;BMP Afbeelding (*.bmp)</translation>
+        <translation type="vanished">PNG Afbeelding (*.png);;BMP Afbeelding (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="150"/>
-        <location filename="../ui/desktop_window.cc" line="391"/>
         <source>Warning</source>
-        <translation>Waarschuwing</translation>
+        <translation type="vanished">Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="151"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
-        <translation>De huidige video encoding wordt niet ondersteund door de host. Specificeer AUB een andere encoding.</translation>
+        <translation type="vanished">De huidige video encoding wordt niet ondersteund door de host. Specificeer AUB een andere encoding.</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="168"/>
         <source>Selecting a supported video encoding is canceled by the user.</source>
-        <translation>Selecteer een video encoding is geannuleerd door de gebruiker.</translation>
+        <translation type="vanished">Selecteer een video encoding is geannuleerd door de gebruiker.</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="391"/>
         <source>Could not save image</source>
-        <translation>Kon het bestand niet opslaan</translation>
+        <translation type="vanished">Kon het bestand niet opslaan</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="532"/>
         <source>Desktop Manage</source>
-        <translation>Bureaublad Beheren</translation>
+        <translation type="vanished">Bureaublad Beheren</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="537"/>
         <source>Desktop View</source>
-        <translation>Bureaublad Weergeven</translation>
+        <translation type="vanished">Bureaublad Weergeven</translation>
     </message>
 </context>
 <context>
@@ -1274,6 +1350,53 @@
         <location filename="../file_transfer_queue_builder.cc" line="79"/>
         <source>An error occurred while retrieving the list of files: %1</source>
         <translation>Er is een fout opgetreden bij het ontvangen van de bestandslijst: %1</translation>
+    </message>
+</context>
+<context>
+    <name>client::QtDesktopWindow</name>
+    <message>
+        <source>Desktop Manage</source>
+        <translation type="obsolete">Bureaublad Beheren</translation>
+    </message>
+    <message>
+        <source>Desktop View</source>
+        <translation type="obsolete">Bureaublad Weergeven</translation>
+    </message>
+    <message>
+        <location filename="../ui/qt_desktop_window.cc" line="181"/>
+        <location filename="../ui/qt_desktop_window.cc" line="189"/>
+        <location filename="../ui/qt_desktop_window.cc" line="452"/>
+        <source>Warning</source>
+        <translation type="unfinished">Waarschuwing</translation>
+    </message>
+    <message>
+        <location filename="../ui/qt_desktop_window.cc" line="182"/>
+        <source>There are no supported video encodings.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/qt_desktop_window.cc" line="190"/>
+        <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
+        <translation type="unfinished">De huidige video encoding wordt niet ondersteund door de host. Specificeer AUB een andere encoding.</translation>
+    </message>
+    <message>
+        <source>Selecting a supported video encoding is canceled by the user.</source>
+        <translation type="obsolete">Selecteer een video encoding is geannuleerd door de gebruiker.</translation>
+    </message>
+    <message>
+        <location filename="../ui/qt_desktop_window.cc" line="430"/>
+        <source>Save File</source>
+        <translation type="unfinished">Bestand Opslaan</translation>
+    </message>
+    <message>
+        <location filename="../ui/qt_desktop_window.cc" line="432"/>
+        <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
+        <translation type="unfinished">PNG Afbeelding (*.png);;BMP Afbeelding (*.bmp)</translation>
+    </message>
+    <message>
+        <location filename="../ui/qt_desktop_window.cc" line="452"/>
+        <source>Could not save image</source>
+        <translation type="unfinished">Kon het bestand niet opslaan</translation>
     </message>
 </context>
 <context>

@@ -16,13 +16,13 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__UI__CLIENT_WINDOW_H
-#define CLIENT__UI__CLIENT_WINDOW_H
+#ifndef CLIENT__STATUS_WINDOW_PROXY_H
+#define CLIENT__STATUS_WINDOW_PROXY_H
 
-#include "client/client_config.h"
+#include "base/macros_magic.h"
 #include "client/status_window.h"
 
-#include <QWidget>
+#include <memory>
 
 namespace base {
 class TaskRunner;
@@ -30,30 +30,13 @@ class TaskRunner;
 
 namespace client {
 
-class Client;
-class StatusDialog;
-
-class ClientWindow
-    : public QWidget,
-      public StatusWindow
+class StatusWindowProxy : public StatusWindow
 {
-    Q_OBJECT
-
 public:
-    explicit ClientWindow(QWidget* parent = nullptr);
-    virtual ~ClientWindow();
+    ~StatusWindowProxy();
 
-    // Connects to a host.
-    // If the username and/or password are not specified in the connection parameters, the
-    // authorization dialog will be displayed.
-    bool connectToHost(Config config);
-
-protected:
-    virtual std::unique_ptr<Client> createClient(
-        std::shared_ptr<base::TaskRunner> ui_task_runner) = 0;
-
-    // QWidget implementation.
-    void closeEvent(QCloseEvent* event) override;
+    static std::unique_ptr<StatusWindowProxy> create(
+        std::shared_ptr<base::TaskRunner> ui_task_runner, StatusWindow* status_window);
 
     // StatusWindow implementation.
     void onStarted(const std::u16string& address, uint16_t port) override;
@@ -63,13 +46,15 @@ protected:
     void onAccessDenied(Authenticator::ErrorCode error_code) override;
 
 private:
-    void setClientTitle(const Config& config);
-    void onErrorOccurred(const QString& message);
+    StatusWindowProxy(std::shared_ptr<base::TaskRunner> ui_task_runner,
+                      StatusWindow* status_window);
 
-    std::unique_ptr<Client> client_;
-    StatusDialog* status_dialog_ = nullptr;
+    class Impl;
+    std::shared_ptr<Impl> impl_;
+
+    DISALLOW_COPY_AND_ASSIGN(StatusWindowProxy);
 };
 
 } // namespace client
 
-#endif // CLIENT__UI__CLIENT_WINDOW_H
+#endif // CLIENT__STATUS_WINDOW_PROXY_H

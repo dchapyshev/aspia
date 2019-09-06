@@ -36,6 +36,14 @@
         <translation>Адрес:</translation>
     </message>
     <message>
+        <source>User Name:</source>
+        <translation type="obsolete">Имя пользователя:</translation>
+    </message>
+    <message>
+        <source>Password:</source>
+        <translation type="obsolete">Пароль:</translation>
+    </message>
+    <message>
         <location filename="../ui/client_dialog.ui" line="102"/>
         <source>Connect</source>
         <translation>Подключиться</translation>
@@ -636,68 +644,68 @@
 <context>
     <name>client::Channel</name>
     <message>
-        <location filename="../client_channel.cc" line="234"/>
+        <location filename="../client_channel.cc" line="178"/>
         <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
         <translation type="unfinished">Произошла ошибка в сети (например, сетевой кабель был случайно отключен).</translation>
     </message>
     <message>
-        <location filename="../client_channel.cc" line="238"/>
+        <location filename="../client_channel.cc" line="182"/>
         <source>Connection was refused by the peer (or timed out).</source>
         <translation type="unfinished">Подключение было отклонено другой стороной (или превышено время ожидания).</translation>
     </message>
     <message>
-        <location filename="../client_channel.cc" line="242"/>
+        <location filename="../client_channel.cc" line="186"/>
         <source>Remote host closed the connection.</source>
         <translation type="unfinished">Удаленный узел закрыл подключение.</translation>
     </message>
     <message>
-        <location filename="../client_channel.cc" line="246"/>
+        <location filename="../client_channel.cc" line="190"/>
         <source>Host address was not found.</source>
         <translation type="unfinished">Не найден адрес удаленного узла.</translation>
     </message>
     <message>
-        <location filename="../client_channel.cc" line="250"/>
+        <location filename="../client_channel.cc" line="194"/>
         <source>Socket operation timed out.</source>
         <translation type="unfinished">Превышено время ожидания.</translation>
     </message>
     <message>
-        <location filename="../client_channel.cc" line="254"/>
+        <location filename="../client_channel.cc" line="198"/>
         <source>Address specified is already in use and was set to be exclusive.</source>
         <translation type="unfinished">Указанный адрес уже используется и был установлен монопольно.</translation>
     </message>
     <message>
-        <location filename="../client_channel.cc" line="258"/>
+        <location filename="../client_channel.cc" line="202"/>
         <source>Address specified does not belong to the host.</source>
         <translation type="unfinished">Указанный адрес не принадлежит узлу.</translation>
     </message>
     <message>
-        <location filename="../client_channel.cc" line="262"/>
-        <location filename="../client_channel.cc" line="297"/>
+        <location filename="../client_channel.cc" line="206"/>
+        <location filename="../client_channel.cc" line="241"/>
         <source>An unknown error occurred.</source>
         <translation type="unfinished">Произошла неизвестная ошибка.</translation>
     </message>
     <message>
-        <location filename="../client_channel.cc" line="277"/>
+        <location filename="../client_channel.cc" line="221"/>
         <source>Authentication successfully completed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_channel.cc" line="281"/>
+        <location filename="../client_channel.cc" line="225"/>
         <source>Network authentication error.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_channel.cc" line="285"/>
+        <location filename="../client_channel.cc" line="229"/>
         <source>Violation of the data exchange protocol.</source>
         <translation type="unfinished">Нарушение протокола обмена данными.</translation>
     </message>
     <message>
-        <location filename="../client_channel.cc" line="289"/>
+        <location filename="../client_channel.cc" line="233"/>
         <source>An error occured while authenticating: wrong user name or password.</source>
         <translation type="unfinished">Произошла ошибка при аутентификации: неправильное имя пользователя или пароль.</translation>
     </message>
     <message>
-        <location filename="../client_channel.cc" line="293"/>
+        <location filename="../client_channel.cc" line="237"/>
         <source>Specified session type is not allowed for the user.</source>
         <translation type="unfinished">Указанный тип сессии не разрешен для пользователя.</translation>
     </message>
@@ -760,44 +768,36 @@
 <context>
     <name>client::ClientDesktop</name>
     <message>
-        <location filename="../client_desktop.cc" line="48"/>
         <source>Invalid message from host</source>
-        <translation>Неверное сообщение от хоста</translation>
+        <translation type="vanished">Неверное сообщение от хоста</translation>
     </message>
     <message>
-        <location filename="../client_desktop.cc" line="197"/>
         <source>There are no supported video encodings</source>
-        <translation>Нет поддерживаемых видео-кодеков</translation>
+        <translation type="vanished">Нет поддерживаемых видео-кодеков</translation>
     </message>
     <message>
-        <location filename="../client_desktop.cc" line="223"/>
         <source>Video decoder not initialized</source>
-        <translation>Видео-декодер не инициализирован</translation>
+        <translation type="vanished">Видео-декодер не инициализирован</translation>
     </message>
     <message>
-        <location filename="../client_desktop.cc" line="237"/>
         <source>Wrong video frame size</source>
-        <translation>Неверный размер видео-кадра</translation>
+        <translation type="vanished">Неверный размер видео-кадра</translation>
     </message>
     <message>
-        <location filename="../client_desktop.cc" line="244"/>
         <source>Wrong video frame position</source>
-        <translation>Неверное положение видео-кадра</translation>
+        <translation type="vanished">Неверное положение видео-кадра</translation>
     </message>
     <message>
-        <location filename="../client_desktop.cc" line="254"/>
         <source>The desktop frame is not initialized</source>
-        <translation>Рабочий стол не инициализирован</translation>
+        <translation type="vanished">Рабочий стол не инициализирован</translation>
     </message>
     <message>
-        <location filename="../client_desktop.cc" line="260"/>
         <source>The video packet could not be decoded</source>
-        <translation>Не удалось декодировать видео-пакет</translation>
+        <translation type="vanished">Не удалось декодировать видео-пакет</translation>
     </message>
     <message>
-        <location filename="../client_desktop.cc" line="345"/>
         <source>Session error</source>
-        <translation>Ошибка сессии</translation>
+        <translation type="vanished">Ошибка сессии</translation>
     </message>
 </context>
 <context>
@@ -815,12 +815,12 @@
         <translation type="vanished">Передача файлов</translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.cc" line="133"/>
+        <location filename="../ui/client_dialog.cc" line="136"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.cc" line="134"/>
+        <location filename="../ui/client_dialog.cc" line="137"/>
         <source>An invalid computer address was entered.</source>
         <translation>Введен некорректный адрес компьютера.</translation>
     </message>
@@ -828,17 +828,17 @@
 <context>
     <name>client::ClientFileTransfer</name>
     <message>
-        <location filename="../client_file_transfer.cc" line="59"/>
+        <location filename="../client_file_transfer.cc" line="41"/>
         <source>Invalid message from host</source>
         <translation>Неверное сообщение от хоста</translation>
     </message>
     <message>
-        <location filename="../client_file_transfer.cc" line="65"/>
+        <location filename="../client_file_transfer.cc" line="47"/>
         <source>There are no logged in users. File transfer is not available</source>
         <translation>Нет вошедших в систему пользователей. Передача файлов недоступна</translation>
     </message>
     <message>
-        <location filename="../client_file_transfer.cc" line="83"/>
+        <location filename="../client_file_transfer.cc" line="66"/>
         <source>Session error</source>
         <translation>Ошибка сессии</translation>
     </message>
@@ -846,14 +846,99 @@
 <context>
     <name>client::ClientWindow</name>
     <message>
-        <location filename="../ui/client_window.cc" line="117"/>
+        <location filename="../ui/client_window.cc" line="85"/>
         <source>Attempt to connect to %1:%2.</source>
         <translation>Попытка подключения к %1:%2.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="124"/>
+        <location filename="../ui/client_window.cc" line="95"/>
+        <source>Connection established.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="106"/>
+        <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
+        <translation type="unfinished">Произошла ошибка в сети (например, сетевой кабель был случайно отключен).</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="110"/>
+        <source>Connection was refused by the peer (or timed out).</source>
+        <translation type="unfinished">Подключение было отклонено другой стороной (или превышено время ожидания).</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="114"/>
+        <source>Remote host closed the connection.</source>
+        <translation type="unfinished">Удаленный узел закрыл подключение.</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="118"/>
+        <source>Host address was not found.</source>
+        <translation type="unfinished">Не найден адрес удаленного узла.</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="122"/>
+        <source>Socket operation timed out.</source>
+        <translation type="unfinished">Превышено время ожидания.</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="126"/>
+        <source>Address specified is already in use and was set to be exclusive.</source>
+        <translation type="unfinished">Указанный адрес уже используется и был установлен монопольно.</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="130"/>
+        <source>Address specified does not belong to the host.</source>
+        <translation type="unfinished">Указанный адрес не принадлежит узлу.</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="140"/>
+        <location filename="../ui/client_window.cc" line="175"/>
+        <source>An unknown error occurred.</source>
+        <translation type="unfinished">Произошла неизвестная ошибка.</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="155"/>
+        <source>Authentication successfully completed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="159"/>
+        <source>Network authentication error.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="163"/>
+        <source>Violation of the data exchange protocol.</source>
+        <translation type="unfinished">Нарушение протокола обмена данными.</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="167"/>
+        <source>An error occured while authenticating: wrong user name or password.</source>
+        <translation type="unfinished">Произошла ошибка при аутентификации: неправильное имя пользователя или пароль.</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="171"/>
+        <source>Specified session type is not allowed for the user.</source>
+        <translation type="unfinished">Указанный тип сессии не разрешен для пользователя.</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="189"/>
+        <source>Desktop Manage</source>
+        <translation type="unfinished">Управление рабочим столом</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="193"/>
+        <source>Desktop View</source>
+        <translation type="unfinished">Просмотр рабочего стола</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="197"/>
+        <source>File Transfer</source>
+        <translation type="unfinished">Передача файлов</translation>
+    </message>
+    <message>
         <source>Session started.</source>
-        <translation>Сессия запущена.</translation>
+        <translation type="vanished">Сессия запущена.</translation>
     </message>
 </context>
 <context>
@@ -933,45 +1018,36 @@
 <context>
     <name>client::DesktopWindow</name>
     <message>
-        <location filename="../ui/desktop_window.cc" line="369"/>
         <source>Save File</source>
-        <translation>Сохранение файла</translation>
+        <translation type="vanished">Сохранение файла</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="371"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
-        <translation>PNG изображение (*.png);;BMP изображение (*.bmp)</translation>
+        <translation type="vanished">PNG изображение (*.png);;BMP изображение (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="150"/>
-        <location filename="../ui/desktop_window.cc" line="391"/>
         <source>Warning</source>
-        <translation>Предупреждение</translation>
+        <translation type="vanished">Предупреждение</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="151"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
-        <translation>Текущий видео-кодек не поддерживается хостом. Пожалуйста, выберите другой кодек.</translation>
+        <translation type="vanished">Текущий видео-кодек не поддерживается хостом. Пожалуйста, выберите другой кодек.</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="168"/>
         <source>Selecting a supported video encoding is canceled by the user.</source>
-        <translation>Выбор поддерживаемой видео-кодировки отменен пользователем.</translation>
+        <translation type="vanished">Выбор поддерживаемой видео-кодировки отменен пользователем.</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="391"/>
         <source>Could not save image</source>
-        <translation>Не удалось сохранить изображение</translation>
+        <translation type="vanished">Не удалось сохранить изображение</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="532"/>
         <source>Desktop Manage</source>
-        <translation>Управление рабочим столом</translation>
+        <translation type="vanished">Управление рабочим столом</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_window.cc" line="537"/>
         <source>Desktop View</source>
-        <translation>Просмотр рабочего стола</translation>
+        <translation type="vanished">Просмотр рабочего стола</translation>
     </message>
 </context>
 <context>
@@ -1274,6 +1350,53 @@
         <location filename="../file_transfer_queue_builder.cc" line="79"/>
         <source>An error occurred while retrieving the list of files: %1</source>
         <translation>Произошла ошибка при получении списка файлов: %1</translation>
+    </message>
+</context>
+<context>
+    <name>client::QtDesktopWindow</name>
+    <message>
+        <source>Desktop Manage</source>
+        <translation type="obsolete">Управление рабочим столом</translation>
+    </message>
+    <message>
+        <source>Desktop View</source>
+        <translation type="obsolete">Просмотр рабочего стола</translation>
+    </message>
+    <message>
+        <location filename="../ui/qt_desktop_window.cc" line="181"/>
+        <location filename="../ui/qt_desktop_window.cc" line="189"/>
+        <location filename="../ui/qt_desktop_window.cc" line="452"/>
+        <source>Warning</source>
+        <translation type="unfinished">Предупреждение</translation>
+    </message>
+    <message>
+        <location filename="../ui/qt_desktop_window.cc" line="182"/>
+        <source>There are no supported video encodings.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/qt_desktop_window.cc" line="190"/>
+        <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
+        <translation type="unfinished">Текущий видео-кодек не поддерживается хостом. Пожалуйста, выберите другой кодек.</translation>
+    </message>
+    <message>
+        <source>Selecting a supported video encoding is canceled by the user.</source>
+        <translation type="obsolete">Выбор поддерживаемой видео-кодировки отменен пользователем.</translation>
+    </message>
+    <message>
+        <location filename="../ui/qt_desktop_window.cc" line="430"/>
+        <source>Save File</source>
+        <translation type="unfinished">Сохранение файла</translation>
+    </message>
+    <message>
+        <location filename="../ui/qt_desktop_window.cc" line="432"/>
+        <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
+        <translation type="unfinished">PNG изображение (*.png);;BMP изображение (*.bmp)</translation>
+    </message>
+    <message>
+        <location filename="../ui/qt_desktop_window.cc" line="452"/>
+        <source>Could not save image</source>
+        <translation type="unfinished">Не удалось сохранить изображение</translation>
     </message>
 </context>
 <context>

@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,18 +16,21 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/connect_data.h"
-#include "client/config_factory.h"
+#include "client/client_config.h"
+
+#include "build/build_config.h"
 #include "crypto/secure_memory.h"
 
 namespace client {
 
-ConnectData::ConnectData()
+Config::Config()
+    : port(DEFAULT_HOST_TCP_PORT),
+      session_type(proto::SESSION_TYPE_DESKTOP_MANAGE)
 {
-    ConfigFactory::setDefaultDesktopManageConfig(&desktop_config);
+    // Nothing
 }
 
-ConnectData::~ConnectData()
+Config::~Config()
 {
     crypto::memZero(&password);
 }

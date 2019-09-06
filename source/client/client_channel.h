@@ -27,7 +27,7 @@
 #include <QObject>
 
 namespace base {
-class MessageLoopProxy;
+class TaskRunner;
 } // namespace base
 
 namespace net {
@@ -54,10 +54,10 @@ public:
     void disconnectFromHost();
     void resume();
 
-    void send(base::ByteArray&& buffer);
+    void send(const base::ByteArray& buffer);
 
     // Returns the version of the connected peer.
-    const base::Version& peerVersion() const;
+    base::Version peerVersion() const;
 
 signals:
     // Emits when a secure connection is established.
@@ -73,20 +73,20 @@ signals:
     void messageReceived(const base::ByteArray& buffer);
 
 protected:
-    // QObject implementation.
-    void customEvent(QEvent* event) override;
-
     // net::Listener implementation.
     void onNetworkConnected() override;
     void onNetworkDisconnected() override;
     void onNetworkError(net::ErrorCode error) override;
-    void onNetworkMessage(base::ByteArray& buffer) override;
+    void onNetworkMessage(const base::ByteArray& buffer) override;
 
 private:
+    void onAuthenticatorFinished(Authenticator::Result result);
+
     static QString errorToString(net::ErrorCode error);
     static QString errorToString(Authenticator::Result result);
 
-    std::shared_ptr<base::MessageLoopProxy> io_runner_;
+    std::unique_ptr<base::TaskRunner> qt_runner_;
+    std::unique_ptr<base::TaskRunner> io_runner_;
     std::unique_ptr<net::Channel> channel_;
     std::shared_ptr<net::ChannelProxy> channel_proxy_;
     std::unique_ptr<Authenticator> authenticator_;

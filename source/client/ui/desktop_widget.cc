@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -68,14 +68,14 @@ DesktopWidget::DesktopWidget(Delegate* delegate, QWidget* parent)
     setMouseTracking(true);
 }
 
-void DesktopWidget::setDesktopSize(const desktop::Size& screen_size)
-{
-    frame_ = desktop::FrameQImage::create(screen_size);
-}
-
 desktop::Frame* DesktopWidget::desktopFrame()
 {
     return frame_.get();
+}
+
+void DesktopWidget::setDesktopFrame(std::shared_ptr<desktop::Frame> frame)
+{
+    frame_ = frame;
 }
 
 void DesktopWidget::doMouseEvent(QEvent::Type event_type,
@@ -223,11 +223,12 @@ void DesktopWidget::enableKeyCombinations(bool enable)
 
 void DesktopWidget::paintEvent(QPaintEvent* /* event */)
 {
-    if (frame_)
+    desktop::FrameQImage* frame = reinterpret_cast<desktop::FrameQImage*>(frame_.get());
+    if (frame)
     {
         QPainter painter(this);
         painter.setRenderHint(QPainter::SmoothPixmapTransform);
-        painter.drawImage(rect(), frame_->constImage());
+        painter.drawImage(rect(), frame->constImage());
     }
 
     delegate_->onDrawDesktop();

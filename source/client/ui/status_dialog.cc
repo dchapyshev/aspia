@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@ StatusDialog::StatusDialog(QWidget* parent)
     connect(ui.button_cancel, &QPushButton::released, this, &StatusDialog::close);
 }
 
-void StatusDialog::addStatus(const QString& status)
+void StatusDialog::addMessage(const QString& message)
 {
     if (isHidden())
     {
@@ -39,7 +39,7 @@ void StatusDialog::addStatus(const QString& status)
     }
 
     ui.edit_status->appendPlainText(
-        QString("%1 %2").arg(QTime::currentTime().toString()).arg(status));
+        QString("%1 %2").arg(QTime::currentTime().toString()).arg(message));
 }
 
 } // namespace client

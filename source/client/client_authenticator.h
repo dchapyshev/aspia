@@ -21,13 +21,15 @@
 
 #include "base/macros_magic.h"
 #include "base/version.h"
+#include "crypto/big_num.h"
 #include "net/network_listener.h"
 #include "proto/key_exchange.pb.h"
 
 #include <functional>
 
 namespace crypto {
-class Cryptor;
+class MessageDecryptor;
+class MessageEncryptor;
 } // namespace crypto
 
 namespace net {
@@ -39,8 +41,14 @@ namespace client {
 class Authenticator : public net::Listener
 {
 public:
-    Authenticator() = default;
-    virtual ~Authenticator() = default;
+    Authenticator();
+    ~Authenticator();
+
+    void setUserName(std::u16string_view username);
+    const std::u16string& userName() const;
+
+    void setPassword(std::u16string_view password);
+    const std::u16string& password() const;
 
     void setSessionType(proto::SessionType session_type);
     proto::SessionType sessionType() const { return session_type_; }
@@ -48,7 +56,7 @@ public:
     proto::Method method() const { return method_; }
     const base::Version& peerVersion() const { return peer_version_; }
 
-    enum class Result
+    enum class ErrorCode
     {
         SUCCESS,
         UNKNOWN_ERROR,
@@ -58,40 +66,66 @@ public:
         SESSION_DENIED
     };
 
-    using Callback = std::function<void(Result result)>;
+    using Callback = std::function<void(ErrorCode error_code)>;
 
-    void start(std::shared_ptr<net::ChannelProxy> channel, Callback callback);
+    // Starts authentication.
+    // |callback| is called upon completion. The authenticator guarantees that no code inside it
+    // will be executed after call callback (you can remove the authenticator inside this callback).
+    void start(std::shared_ptr<net::ChannelProxy> channel_proxy, Callback callback);
 
 protected:
-    virtual uint32_t methods() const = 0;
-    virtual void onStarted() = 0;
-    virtual bool onMessage(const base::ByteArray& message) = 0;
-    virtual std::unique_ptr<crypto::Cryptor> takeCryptor() = 0;
-
-    void sendMessage(base::ByteArray&& message);
-    void onFinished(Result result);
-
     // net::Listener implementation.
-    void onNetworkConnected() override;
-    void onNetworkDisconnected() override;
-    void onNetworkError(net::ErrorCode error_code) override;
-    void onNetworkMessage(base::ByteArray& buffer) override;
+    void onConnected() override;
+    void onDisconnected(net::ErrorCode error_code) override;
+    void onMessageReceived(const base::ByteArray& buffer) override;
+    void onMessageWritten() override;
 
 private:
+    void sendClientHello();
+    bool readServerHello(const base::ByteArray& buffer);
+    void sendIdentify();
+    bool readServerKeyExchange(const base::ByteArray& buffer);
+    void sendClientKeyExchange();
+    bool readSessionChallenge(const base::ByteArray& buffer);
+    void sendSessionResponse();
+    void finished(ErrorCode error_code);
+
     enum class State
     {
-        HELLO,
-        AUTHENTICATION,
-        SESSION
+        NOT_STARTED,
+        SEND_CLIENT_HELLO,
+        READ_SERVER_HELLO,
+        SEND_IDENTIFY,
+        READ_SERVER_KEY_EXCHANGE,
+        SEND_CLIENT_KEY_EXCHANGE,
+        READ_SESSION_CHALLENGE,
+        SEND_SESSION_RESPONSE,
+        FINISHED
     };
 
-    std::shared_ptr<net::ChannelProxy> channel_;
+    State state_ = State::NOT_STARTED;
+
+    std::shared_ptr<net::ChannelProxy> channel_proxy_;
     Callback callback_;
 
-    State state_ = State::HELLO;
+    std::u16string username_;
+    std::u16string password_;
+
     proto::Method method_ = proto::METHOD_UNKNOWN;
     proto::SessionType session_type_ = proto::SESSION_TYPE_UNKNOWN;
     base::Version peer_version_;
+
+    crypto::BigNum N_;
+    crypto::BigNum g_;
+    crypto::BigNum s_;
+    crypto::BigNum B_;
+
+    crypto::BigNum a_;
+    crypto::BigNum A_;
+
+    base::ByteArray key_;
+    base::ByteArray encrypt_iv_;
+    base::ByteArray decrypt_iv_;
 
     DISALLOW_COPY_AND_ASSIGN(Authenticator);
 };

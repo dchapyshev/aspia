@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -55,8 +55,8 @@ public:
     DesktopWidget(Delegate* delegate, QWidget* parent);
     ~DesktopWidget() = default;
 
-    void setDesktopSize(const desktop::Size& screen_size);
     desktop::Frame* desktopFrame();
+    void setDesktopFrame(std::shared_ptr<desktop::Frame> frame);
 
     void doMouseEvent(QEvent::Type event_type,
                       const Qt::MouseButtons& buttons,
@@ -96,7 +96,7 @@ private:
 
     Delegate* delegate_;
 
-    std::unique_ptr<desktop::FrameQImage> frame_;
+    std::shared_ptr<desktop::Frame> frame_;
     bool enable_key_sequenses_ = true;
 
     QPoint prev_pos_;

@@ -161,7 +161,7 @@ SystemInfoWindow::SystemInfoWindow(QWidget* parent)
 
 SystemInfoWindow::~SystemInfoWindow() = default;
 
-void SystemInfoWindow::setSystemInfo(const proto::system_info::SystemInfo& system_info)
+void SystemInfoWindow::setSystemInfo(const proto::SystemInfo& system_info)
 {
     ui.tree->clear();
 

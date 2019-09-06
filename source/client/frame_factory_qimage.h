@@ -16,43 +16,26 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__UI__CLIENT_DIALOG_H
-#define CLIENT__UI__CLIENT_DIALOG_H
+#ifndef CLIENT__FRAME_FACTORY_QIMAGE_H
+#define CLIENT__FRAME_FACTORY_QIMAGE_H
 
 #include "base/macros_magic.h"
-#include "client/client_config.h"
-#include "proto/desktop.pb.h"
-
-#include <QDialog>
-
-namespace Ui {
-class ClientDialog;
-} // namespace Ui
+#include "client/frame_factory.h"
 
 namespace client {
 
-class ClientDialog : public QDialog
+class FrameFactoryQImage : public FrameFactory
 {
-    Q_OBJECT
-
 public:
-    explicit ClientDialog(QWidget* parent = nullptr);
-    ~ClientDialog();
+    FrameFactoryQImage();
+    ~FrameFactoryQImage();
 
-private slots:
-    void sessionTypeChanged(int item_index);
-    void sessionConfigButtonPressed();
-    void connectButtonPressed();
+    std::shared_ptr<desktop::Frame> allocateFrame(const desktop::Size& size) override;
 
 private:
-    std::unique_ptr<Ui::ClientDialog> ui;
-
-    Config config_;
-    proto::DesktopConfig desktop_config_;
-
-    DISALLOW_COPY_AND_ASSIGN(ClientDialog);
+    DISALLOW_COPY_AND_ASSIGN(FrameFactoryQImage);
 };
 
 } // namespace client
 
-#endif // CLIENT__UI__CLIENT_DIALOG_H
+#endif // CLIENT__FRAME_FACTORY_QIMAGE_H

@@ -18,37 +18,19 @@
 
 #include "client/client_file_transfer.h"
 
-#include "client/ui/file_manager_window.h"
-#include "common/file_request.h"
+#include "client/file_request_producer_proxy.h"
 #include "common/file_worker.h"
-
-#include <QMetaType>
-#include <QThread>
 
 namespace client {
 
-ClientFileTransfer::ClientFileTransfer(const ConnectData& connect_data, QObject* parent)
-    : Client(connect_data, parent)
+ClientFileTransfer::ClientFileTransfer(const Config& config)
+    : Client(config),
+      local_worker_(std::make_unique<common::FileWorker>())
 {
-    qRegisterMetaType<proto::FileRequest>();
-    qRegisterMetaType<proto::FileReply>();
-
-    worker_thread_ = new QThread(this);
-    worker_.reset(new common::FileWorker());
-    worker_->moveToThread(worker_thread_);
-    worker_thread_->start();
+    // Nothing
 }
 
-ClientFileTransfer::~ClientFileTransfer()
-{
-    worker_thread_->quit();
-    worker_thread_->wait();
-
-    for (auto request : requests_)
-        delete request;
-}
-
-common::FileWorker* ClientFileTransfer::localWorker() { return worker_.get(); }
+ClientFileTransfer::~ClientFileTransfer() = default;
 
 void ClientFileTransfer::onMessageReceived(const base::ByteArray& buffer)
 {
@@ -66,16 +48,17 @@ void ClientFileTransfer::onMessageReceived(const base::ByteArray& buffer)
         return;
     }
 
-    QScopedPointer<common::FileRequest> request(requests_.front());
-    requests_.pop_front();
-
-    request->sendReply(reply);
+    request_producer_->onRemoteReply(reply);
 }
 
-void ClientFileTransfer::remoteRequest(common::FileRequest* request)
+void ClientFileTransfer::localRequest(const proto::FileRequest& request)
 {
-    requests_.push_back(QPointer<common::FileRequest>(request));
-    sendMessage(request->request());
+    request_producer_->onLocalReply(local_worker_->doRequest(request));
+}
+
+void ClientFileTransfer::remoteRequest(const proto::FileRequest& request)
+{
+    sendMessage(request);
 }
 
 void ClientFileTransfer::onSessionError(const QString& message)

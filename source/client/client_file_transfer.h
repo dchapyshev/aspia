@@ -19,12 +19,9 @@
 #ifndef CLIENT__CLIENT_FILE_TRANSFER_H
 #define CLIENT__CLIENT_FILE_TRANSFER_H
 
+#include "base/macros_magic.h"
 #include "client/client.h"
-#include "client/connect_data.h"
-#include "common/file_request.h"
-#include "proto/file_transfer.pb.h"
-
-#include <QQueue>
+#include "client/file_request_consumer.h"
 
 namespace common {
 class FileWorker;
@@ -32,21 +29,19 @@ class FileWorker;
 
 namespace client {
 
-Q_DECLARE_METATYPE(proto::FileRequest);
-Q_DECLARE_METATYPE(proto::FileReply);
+class FileRequestProducerProxy;
 
-class ClientFileTransfer : public Client
+class ClientFileTransfer
+    : public Client,
+      public FileRequestConsumer
 {
-    Q_OBJECT
-
 public:
-    ClientFileTransfer(const ConnectData& connect_data, QObject* parent);
+    explicit ClientFileTransfer(const Config& config);
     ~ClientFileTransfer();
 
-    common::FileWorker* localWorker();
-
-public slots:
-    void remoteRequest(common::FileRequest* request);
+    // FileRequestConsumer implementation.
+    void localRequest(const proto::FileRequest& request) override;
+    void remoteRequest(const proto::FileRequest& request) override;
 
 protected:
     // Client implementation.
@@ -55,10 +50,8 @@ protected:
 private:
     void onSessionError(const QString& message);
 
-    QScopedPointer<common::FileWorker> worker_;
-    QThread* worker_thread_;
-
-    QQueue<QPointer<common::FileRequest>> requests_;
+    std::unique_ptr<common::FileWorker> local_worker_;
+    std::unique_ptr<FileRequestProducerProxy> request_producer_;
 
     DISALLOW_COPY_AND_ASSIGN(ClientFileTransfer);
 };
