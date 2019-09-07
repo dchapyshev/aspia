@@ -85,6 +85,20 @@ public:
     // to the queue to be sent.
     void send(base::ByteArray&& buffer);
 
+    // Disable or enable the algorithm of Nagle.
+    bool setNoDelay(bool enable);
+
+    // Enables or disables sending keep alive packets.
+    // If the |enable| is set to true, TCP keep-alive is enabled. If |enable| is false, then
+    // disabled and |time| and |interval| are ignored.
+    // |time| specifies the timeout, in milliseconds, with no activity until the first keep-alive
+    // packet is sent.
+    // |interval| specifies the interval, in milliseconds, between when successive keep-alive
+    // packets are sent if no acknowledgement is received.
+    bool setKeepAlive(bool enable,
+                      const std::chrono::milliseconds& time = std::chrono::milliseconds(),
+                      const std::chrono::milliseconds& interval = std::chrono::milliseconds());
+
 protected:
     friend class Server;
 
@@ -108,7 +122,7 @@ private:
     asio::ip::tcp::socket socket_;
 
     Listener* listener_ = nullptr;
-    bool is_connected_ = false;
+    bool connected_ = false;
 
     std::shared_ptr<SocketConnector> connector_;
     std::shared_ptr<SocketReader> reader_;

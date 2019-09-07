@@ -109,6 +109,24 @@ void ChannelProxy::send(base::ByteArray&& buffer)
     channel_->send(std::move(buffer));
 }
 
+bool ChannelProxy::setNoDelay(bool enable)
+{
+    if (!channel_)
+        return false;
+
+    return channel_->setNoDelay(enable);
+}
+
+bool ChannelProxy::setKeepAlive(bool enable,
+                                const std::chrono::milliseconds& time,
+                                const std::chrono::milliseconds& interval)
+{
+    if (!channel_)
+        return false;
+
+    return channel_->setKeepAlive(enable, time, interval);
+}
+
 void ChannelProxy::willDestroyCurrentChannel()
 {
     channel_ = nullptr;

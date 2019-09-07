@@ -37,46 +37,6 @@
 
 namespace net {
 
-namespace {
-
-void enableKeepAlive(asio::ip::tcp::socket& socket)
-{
-#if defined(OS_WIN)
-    struct tcp_keepalive alive;
-
-    alive.onoff = 1; // On.
-    alive.keepalivetime = 60000; // 60 seconds.
-    alive.keepaliveinterval = 5000; // 5 seconds.
-
-    DWORD bytes_returned;
-
-    if (WSAIoctl(socket.native_handle(), SIO_KEEPALIVE_VALS,
-                 &alive, sizeof(alive), nullptr, 0, &bytes_returned,
-                 nullptr, nullptr) == SOCKET_ERROR)
-    {
-        PLOG(LS_WARNING) << "WSAIoctl failed";
-    }
-#else
-    #warning Not implemented
-#endif
-}
-
-void disableNagle(asio::ip::tcp::socket& socket)
-{
-    // Disable the algorithm of Nagle.
-    asio::ip::tcp::no_delay option(true);
-
-    asio::error_code error_code;
-    socket.set_option(option, error_code);
-
-    if (error_code)
-    {
-        LOG(LS_ERROR) << "Failed to disable Nagle's algorithm: " << error_code.message();
-    }
-}
-
-} // namespace
-
 Channel::Channel()
     : io_context_(base::MessageLoop::current()->pumpAsio()->ioContext()),
       socket_(io_context_),
@@ -94,10 +54,9 @@ Channel::Channel(asio::ip::tcp::socket&& socket)
     : io_context_(base::MessageLoop::current()->pumpAsio()->ioContext()),
       socket_(std::move(socket)),
       proxy_(new ChannelProxy(this)),
-      is_connected_(true)
+      connected_(true)
 {
     DCHECK(socket_.is_open());
-    disableNagle(socket_);
     init();
 }
 
@@ -147,12 +106,15 @@ std::u16string Channel::peerAddress() const
 
 void Channel::connect(std::u16string_view address, uint16_t port)
 {
+    if (connected_)
+        return;
+
     connector_->connect(address, port);
 }
 
 bool Channel::isConnected() const
 {
-    return is_connected_;
+    return connected_;
 }
 
 bool Channel::isPaused() const
@@ -167,7 +129,7 @@ void Channel::pause()
 
 void Channel::resume()
 {
-    if (!is_connected_)
+    if (!connected_)
         return;
 
     reader_->resume();
@@ -176,6 +138,49 @@ void Channel::resume()
 void Channel::send(base::ByteArray&& buffer)
 {
     return writer_->send(std::move(buffer));
+}
+
+bool Channel::setNoDelay(bool enable)
+{
+    asio::ip::tcp::no_delay option(enable);
+
+    asio::error_code error_code;
+    socket_.set_option(option, error_code);
+
+    if (error_code)
+    {
+        LOG(LS_ERROR) << "Failed to disable Nagle's algorithm: " << error_code.message();
+        return false;
+    }
+
+    return true;
+}
+
+bool Channel::setKeepAlive(bool enable,
+                           const std::chrono::milliseconds& time,
+                           const std::chrono::milliseconds& interval)
+{
+#if defined(OS_WIN)
+    struct tcp_keepalive alive;
+
+    alive.onoff = enable ? TRUE : FALSE;
+    alive.keepalivetime = time.count();
+    alive.keepaliveinterval = interval.count();
+
+    DWORD bytes_returned;
+
+    if (WSAIoctl(socket_.native_handle(), SIO_KEEPALIVE_VALS,
+                 &alive, sizeof(alive), nullptr, 0, &bytes_returned,
+                 nullptr, nullptr) == SOCKET_ERROR)
+    {
+        PLOG(LS_WARNING) << "WSAIoctl failed";
+        return false;
+    }
+#else
+    #warning Not implemented
+#endif
+
+    return true;
 }
 
 void Channel::init()
@@ -193,10 +198,10 @@ void Channel::init()
 
 void Channel::disconnect()
 {
-    if (!is_connected_)
+    if (!connected_)
         return;
 
-    is_connected_ = false;
+    connected_ = false;
 
     std::error_code ignored_code;
 
@@ -206,10 +211,7 @@ void Channel::disconnect()
 
 void Channel::onConnected()
 {
-    disableNagle(socket_);
-    enableKeepAlive(socket_);
-
-    is_connected_ = true;
+    connected_ = true;
 
     if (listener_)
         listener_->onConnected();

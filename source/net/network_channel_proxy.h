@@ -42,6 +42,11 @@ public:
 
     void send(base::ByteArray&& buffer);
 
+    bool setNoDelay(bool enable);
+    bool setKeepAlive(bool enable,
+                      const std::chrono::milliseconds& time = std::chrono::milliseconds(),
+                      const std::chrono::milliseconds& interval = std::chrono::milliseconds());
+
 private:
     friend class Channel;
     explicit ChannelProxy(Channel* channel);

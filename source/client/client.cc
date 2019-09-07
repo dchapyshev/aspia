@@ -127,6 +127,9 @@ void Client::onAfterThreadRunning()
 
 void Client::onConnected()
 {
+    channel_proxy_->setKeepAlive(true, std::chrono::minutes(1), std::chrono::seconds(1));
+    channel_proxy_->setNoDelay(true);
+
     authenticator_ = std::make_unique<Authenticator>();
 
     authenticator_->setUserName(config_.username);
