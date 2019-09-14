@@ -19,8 +19,8 @@
 #ifndef CRYPTO__RANDOM_H
 #define CRYPTO__RANDOM_H
 
-#include "base/byte_array.h"
 #include "base/macros_magic.h"
+#include "base/memory/byte_array.h"
 
 namespace crypto {
 

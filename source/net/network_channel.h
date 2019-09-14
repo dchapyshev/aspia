@@ -19,8 +19,8 @@
 #ifndef NET__NETWORK_CHANNEL_H
 #define NET__NETWORK_CHANNEL_H
 
-#include "base/byte_array.h"
 #include "base/macros_magic.h"
+#include "base/memory/byte_array.h"
 #include "net/network_error.h"
 
 #include <asio/ip/tcp.hpp>

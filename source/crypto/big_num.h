@@ -19,9 +19,8 @@
 #ifndef CRYPTO__BIG_NUM_H
 #define CRYPTO__BIG_NUM_H
 
-#include "base/byte_array.h"
-#include "base/const_buffer.h"
 #include "base/macros_magic.h"
+#include "base/memory/byte_array.h"
 #include "crypto/openssl_util.h"
 
 #include <memory>
@@ -50,7 +49,6 @@ public:
     base::ByteArray toByteArray() const;
 
     static BigNum create();
-    static BigNum fromBuffer(const base::ConstBuffer& buffer);
     static BigNum fromStdString(std::string_view string);
     static BigNum fromByteArray(const base::ByteArray& array);
 

@@ -19,8 +19,8 @@
 #ifndef NET__SOCKET_READER_H
 #define NET__SOCKET_READER_H
 
-#include "base/byte_array.h"
 #include "base/macros_magic.h"
+#include "base/memory/byte_array.h"
 
 #include <asio/ip/tcp.hpp>
 

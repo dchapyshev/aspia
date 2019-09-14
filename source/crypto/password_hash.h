@@ -19,8 +19,8 @@
 #ifndef CRYPTO__PASSWORD_HASH_H
 #define CRYPTO__PASSWORD_HASH_H
 
-#include "base/byte_array.h"
 #include "base/macros_magic.h"
+#include "base/memory/byte_array.h"
 
 namespace crypto {
 

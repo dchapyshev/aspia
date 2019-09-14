@@ -19,8 +19,8 @@
 #ifndef CRYPTO__GENERIC_HASH_H
 #define CRYPTO__GENERIC_HASH_H
 
-#include "base/byte_array.h"
 #include "base/macros_magic.h"
+#include "base/memory/byte_array.h"
 
 struct evp_md_ctx_st;
 struct evp_md_st;

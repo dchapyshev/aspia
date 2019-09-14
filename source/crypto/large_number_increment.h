@@ -19,7 +19,7 @@
 #ifndef CRYPTO__LARGE_NUMBER_INCREMENT_H
 #define CRYPTO__LARGE_NUMBER_INCREMENT_H
 
-#include "base/byte_array.h"
+#include "base/memory/byte_array.h"
 
 namespace crypto {
 

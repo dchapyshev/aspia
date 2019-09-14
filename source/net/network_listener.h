@@ -19,7 +19,7 @@
 #ifndef NET__NETWORK_LISTENER_H
 #define NET__NETWORK_LISTENER_H
 
-#include "base/byte_array.h"
+#include "base/memory/byte_array.h"
 #include "net/network_error.h"
 
 namespace net {

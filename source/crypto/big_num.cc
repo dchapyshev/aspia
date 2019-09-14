@@ -93,12 +93,6 @@ BigNum BigNum::create()
 }
 
 // static
-BigNum BigNum::fromBuffer(const base::ConstBuffer& buffer)
-{
-    return BigNum(reinterpret_cast<const uint8_t*>(buffer.data()), buffer.size());
-}
-
-// static
 BigNum BigNum::fromStdString(std::string_view string)
 {
     return BigNum(reinterpret_cast<const uint8_t*>(string.data()), string.size());

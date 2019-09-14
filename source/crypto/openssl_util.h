@@ -19,7 +19,7 @@
 #ifndef CRYPTO__OPENSSL_UTIL_H
 #define CRYPTO__OPENSSL_UTIL_H
 
-#include "base/byte_array.h"
+#include "base/memory/byte_array.h"
 
 #include <memory>
 

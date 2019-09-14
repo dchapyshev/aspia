@@ -19,7 +19,7 @@
 #ifndef CRYPTO__SECURE_MEMORY_H
 #define CRYPTO__SECURE_MEMORY_H
 
-#include "base/byte_array.h"
+#include "base/memory/byte_array.h"
 
 namespace crypto {
 
