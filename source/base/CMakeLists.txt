@@ -17,18 +17,13 @@
 #
 
 list(APPEND SOURCE_BASE
-    aligned_memory.cc
-    aligned_memory.h
     base64.cc
     base64.h
     base64_constants.cc
     base64_constants.h
     bitset.h
-    byte_array.cc
-    byte_array.h
     command_line.cc
     command_line.h
-    const_buffer.h
     cpuid.cc
     cpuid.h
     debug.cc
@@ -58,7 +53,6 @@ list(APPEND SOURCE_BASE
     sys_info.h
     sys_info_win.cc
     task_runner.h
-    typed_buffer.h
     version.cc
     version.h
     waitable_timer.cc
@@ -69,7 +63,6 @@ list(APPEND SOURCE_BASE
     xml_settings.h)
 
 list(APPEND SOURCE_BASE_UNIT_TESTS
-    aligned_memory_unittest.cc
     base64_unittest.cc
     bitset_unittest.cc
     guid_unittest.cc
@@ -88,6 +81,16 @@ list(APPEND SOURCE_BASE_FILES
     files/file_util.h
     files/scoped_temp_file.cc
     files/scoped_temp_file.h)
+
+list(APPEND SOURCE_BASE_MEMORY
+    memory/aligned_memory.cc
+    memory/aligned_memory.h
+    memory/byte_array.cc
+    memory/byte_array.h
+    memory/typed_buffer.h)
+
+list(APPEND SOURCE_BASE_MEMORY_UNIT_TESTS
+    memory/aligned_memory_unittest.cc)
 
 list(APPEND SOURCE_BASE_MESSAGE_LOOP
     message_loop/message_loop.cc
@@ -193,6 +196,8 @@ list(APPEND SOURCE_BASE_WIN_UNIT_TESTS
 source_group("" FILES ${SOURCE_BASE})
 source_group("" FILES ${SOURCE_BASE_UNIT_TESTS})
 source_group(files FILES ${SOURCE_BASE_FILES})
+source_group(memory FILES ${SOURCE_BASE_MEMORY})
+source_group(memory FILES ${SOURCE_BASE_MEMORY_UNIT_TESTS})
 source_group(message_loop FILES ${SOURCE_BASE_MESSAGE_LOOP})
 source_group(strings FILES ${SOURCE_BASE_STRINGS})
 source_group(strings FILES ${SOURCE_BASE_STRINGS_UNIT_TESTS})
@@ -203,6 +208,7 @@ source_group(win FILES ${SOURCE_BASE_WIN_UNIT_TESTS})
 add_library(aspia_base STATIC
     ${SOURCE_BASE}
     ${SOURCE_BASE_FILES}
+    ${SOURCE_BASE_MEMORY}
     ${SOURCE_BASE_MESSAGE_LOOP}
     ${SOURCE_BASE_STRINGS}
     ${SOURCE_BASE_THREADING}
@@ -213,6 +219,7 @@ target_link_libraries(aspia_base ${THIRD_PARTY_LIBS})
 if (BUILD_UNIT_TESTS)
     add_executable(aspia_base_tests
         ${SOURCE_BASE_UNIT_TESTS}
+        ${SOURCE_BASE_MEMORY_UNIT_TESTS}
         ${SOURCE_BASE_STRINGS_UNIT_TESTS}
         ${SOURCE_BASE_WIN_UNIT_TESTS})
     target_link_libraries(aspia_base_tests

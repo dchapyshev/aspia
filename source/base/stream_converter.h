@@ -20,7 +20,7 @@
 #define BASE__STREAM_CONVERTER_H
 
 #include "base/base64.h"
-#include "base/byte_array.h"
+#include "base/memory/byte_array.h"
 #include "base/strings/unicode.h"
 
 #include <optional>

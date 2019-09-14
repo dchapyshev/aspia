@@ -19,7 +19,6 @@
 #include "base/win/security_helpers.h"
 
 #include "base/logging.h"
-#include "base/typed_buffer.h"
 #include "base/win/scoped_local.h"
 #include "base/win/scoped_object.h"
 

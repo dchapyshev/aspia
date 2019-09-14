@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -45,8 +45,8 @@
 //   std::unique_ptr<float, AlignedFreeDeleter> my_array(
 //       static_cast<float*>(alignedAlloc(size, alignment)));
 
-#ifndef BASE__ALIGNED_MEMORY_H
-#define BASE__ALIGNED_MEMORY_H
+#ifndef BASE__MEMORY__ALIGNED_MEMORY_H
+#define BASE__MEMORY__ALIGNED_MEMORY_H
 
 #include "build/build_config.h"
 
@@ -82,4 +82,4 @@ struct AlignedFreeDeleter
 
 }  // namespace base
 
-#endif // BASE__ALIGNED_MEMORY_H
+#endif // BASE__MEMORY__ALIGNED_MEMORY_H

@@ -19,7 +19,7 @@
 #ifndef BASE__WIN__SECURITY_HELPERS_H
 #define BASE__WIN__SECURITY_HELPERS_H
 
-#include "base/typed_buffer.h"
+#include "base/memory/typed_buffer.h"
 
 #include <string>
 

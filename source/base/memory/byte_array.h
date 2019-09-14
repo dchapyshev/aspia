@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__BYTE_ARRAY_H
-#define BASE__BYTE_ARRAY_H
+#ifndef BASE__MEMORY__BYTE_ARRAY_H
+#define BASE__MEMORY__BYTE_ARRAY_H
 
 #if defined(USE_TBB)
 #include <tbb/scalable_allocator.h>
@@ -49,4 +49,4 @@ std::ostream& operator<<(std::ostream& out, const ByteArray& bytearray);
 
 } // namespace base
 
-#endif // BASE__BYTE_ARRAY_H
+#endif // BASE__MEMORY__BYTE_ARRAY_H

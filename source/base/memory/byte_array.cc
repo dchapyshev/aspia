@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/byte_array.h"
+#include "base/memory/byte_array.h"
 
 #include "base/logging.h"
 

@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,7 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/aligned_memory.h"
+#include "base/memory/aligned_memory.h"
+
 #include "base/logging.h"
 
 #if defined(OS_ANDROID)
@@ -32,7 +33,7 @@ void* alignedAlloc(size_t size, size_t alignment)
     DCHECK_EQ((alignment % sizeof(void*)), 0U);
 
 #if defined(OS_WIN)
-    void* ptr =  _aligned_malloc(size, alignment);
+    void* ptr = _aligned_malloc(size, alignment);
 #elif defined(OS_ANDROID)
     ptr = memalign(alignment, size);
 #else

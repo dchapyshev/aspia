@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__TYPED_BUFFER_H
-#define BASE__TYPED_BUFFER_H
+#ifndef BASE__MEMORY__TYPED_BUFFER_H
+#define BASE__MEMORY__TYPED_BUFFER_H
 
 #include "base/macros_magic.h"
 
@@ -116,4 +116,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__TYPED_BUFFER_H
+#endif // BASE__MEMORY__TYPED_BUFFER_H

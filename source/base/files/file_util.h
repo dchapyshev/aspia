@@ -19,7 +19,7 @@
 #ifndef BASE__FILES__FILE_UTIL_H
 #define BASE__FILES__FILE_UTIL_H
 
-#include "base/byte_array.h"
+#include "base/memory/byte_array.h"
 
 #include <filesystem>
 
