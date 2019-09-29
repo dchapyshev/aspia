@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,7 +17,8 @@
 //
 
 #include "desktop/desktop_frame_aligned.h"
-#include "base/aligned_memory.h"
+
+#include "base/memory/aligned_memory.h"
 
 namespace desktop {
 
