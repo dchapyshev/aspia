@@ -20,22 +20,28 @@
 
 #include "base/logging.h"
 
+#include <Windows.h>
+
 namespace base {
 
-WaitableTimer::~WaitableTimer()
+class WaitableTimer::Impl
 {
-    stop();
-}
+public:
+    Impl(const std::chrono::milliseconds& time_delta, TimeoutCallback signal_callback);
+    ~Impl();
 
-void WaitableTimer::start(const std::chrono::milliseconds& time_delta,
+private:
+    static void NTAPI timerProc(LPVOID context, BOOLEAN timer_or_wait_fired);
+
+    TimeoutCallback signal_callback_;
+    HANDLE timer_handle_ = nullptr;
+};
+
+WaitableTimer::Impl::Impl(const std::chrono::milliseconds& time_delta,
                           TimeoutCallback signal_callback)
+    : signal_callback_(std::move(signal_callback))
 {
     DCHECK(time_delta.count() < std::numeric_limits<DWORD>::max());
-
-    if (timer_handle_)
-        return;
-
-    signal_callback_ = std::move(signal_callback);
 
     BOOL ret = CreateTimerQueueTimer(&timer_handle_,
                                      nullptr,
@@ -47,31 +53,44 @@ void WaitableTimer::start(const std::chrono::milliseconds& time_delta,
     CHECK(ret);
 }
 
+WaitableTimer::Impl::~Impl()
+{
+    if (!DeleteTimerQueueTimer(nullptr, timer_handle_, INVALID_HANDLE_VALUE))
+    {
+        DPLOG(LS_WARNING) << "DeleteTimerQueueTimer failed";
+    }
+}
+
+// static
+void NTAPI WaitableTimer::Impl::timerProc(LPVOID context, BOOLEAN /* timer_or_wait_fired */)
+{
+    Impl* self = reinterpret_cast<Impl*>(context);
+    DCHECK(self);
+
+    self->signal_callback_();
+}
+
+WaitableTimer::WaitableTimer() = default;
+
+WaitableTimer::~WaitableTimer()
+{
+    impl_.reset();
+}
+
+void WaitableTimer::start(const std::chrono::milliseconds& time_delta,
+                          TimeoutCallback signal_callback)
+{
+    impl_ = std::make_unique<Impl>(time_delta, std::move(signal_callback));
+}
+
 void WaitableTimer::stop()
 {
-    if (timer_handle_)
-    {
-        if (!DeleteTimerQueueTimer(nullptr, timer_handle_, INVALID_HANDLE_VALUE))
-        {
-            DPLOG(LS_WARNING) << "DeleteTimerQueueTimer failed";
-        }
-
-        timer_handle_ = nullptr;
-    }
+    impl_.reset();
 }
 
 bool WaitableTimer::isActive() const
 {
-    return timer_handle_ != nullptr;
-}
-
-// static
-void NTAPI WaitableTimer::timerProc(LPVOID context, BOOLEAN /* timer_or_wait_fired */)
-{
-    WaitableTimer* self = reinterpret_cast<WaitableTimer*>(context);
-    DCHECK(self);
-
-    self->signal_callback_();
+    return impl_ != nullptr;
 }
 
 } // namespace base

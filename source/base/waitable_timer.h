@@ -24,14 +24,12 @@
 #include <chrono>
 #include <functional>
 
-#include <Windows.h>
-
 namespace base {
 
 class WaitableTimer
 {
 public:
-    WaitableTimer() = default;
+    WaitableTimer();
     ~WaitableTimer();
 
     using TimeoutCallback = std::function<void()>;
@@ -47,11 +45,8 @@ public:
     bool isActive() const;
 
 private:
-    static void NTAPI timerProc(LPVOID context, BOOLEAN timer_or_wait_fired);
-
-private:
-    TimeoutCallback signal_callback_;
-    HANDLE timer_handle_ = nullptr;
+    class Impl;
+    std::unique_ptr<Impl> impl_;
 
     DISALLOW_COPY_AND_ASSIGN(WaitableTimer);
 };
