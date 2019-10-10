@@ -31,13 +31,18 @@ std::shared_ptr<TaskRunner> MessageLoopTaskRunner::current()
     return current->taskRunner();
 }
 
-bool MessageLoopTaskRunner::postTask(PendingTask::Callback callback)
+bool MessageLoopTaskRunner::belongsToCurrentThread() const
+{
+    return thread_id_ == std::this_thread::get_id();
+}
+
+bool MessageLoopTaskRunner::postTask(const Callback& callback)
 {
     std::shared_lock lock(loop_lock_);
 
     if (loop_)
     {
-        loop_->postTask(std::move(callback));
+        loop_->postTask(callback);
         return true;
     }
 
@@ -45,22 +50,17 @@ bool MessageLoopTaskRunner::postTask(PendingTask::Callback callback)
 }
 
 bool MessageLoopTaskRunner::postDelayedTask(
-    PendingTask::Callback callback, const MessageLoop::Milliseconds& delay)
+    const Callback& callback, const MessageLoop::Milliseconds& delay)
 {
     std::shared_lock lock(loop_lock_);
 
     if (loop_)
     {
-        loop_->postDelayedTask(std::move(callback), delay);
+        loop_->postDelayedTask(callback, delay);
         return true;
     }
 
     return false;
-}
-
-bool MessageLoopTaskRunner::belongsToCurrentThread() const
-{
-    return thread_id_ == std::this_thread::get_id();
 }
 
 MessageLoopTaskRunner::MessageLoopTaskRunner(MessageLoop* loop)

@@ -103,20 +103,20 @@ PendingTask::Callback MessageLoop::quitClosure()
     return std::bind(&MessageLoop::quit, this);
 }
 
-void MessageLoop::postTask(PendingTask::Callback callback)
+void MessageLoop::postTask(const PendingTask::Callback& callback)
 {
     DCHECK(callback != nullptr);
 
-    PendingTask pending_task(std::move(callback), calculateDelayedRuntime(Milliseconds::zero()));
-    addToIncomingQueue(pending_task);
+    PendingTask pending_task(callback, calculateDelayedRuntime(Milliseconds::zero()));
+    addToIncomingQueue(&pending_task);
 }
 
-void MessageLoop::postDelayedTask(PendingTask::Callback callback, const Milliseconds& delay)
+void MessageLoop::postDelayedTask(const PendingTask::Callback& callback, const Milliseconds& delay)
 {
     DCHECK(callback != nullptr);
 
-    PendingTask pending_task(std::move(callback), calculateDelayedRuntime(delay));
-    addToIncomingQueue(pending_task);
+    PendingTask pending_task(callback, calculateDelayedRuntime(delay));
+    addToIncomingQueue(&pending_task);
 }
 
 #if defined(OS_WIN)
@@ -158,7 +158,7 @@ void MessageLoop::addToDelayedWorkQueue(const PendingTask& pending_task)
     delayed_work_queue_.emplace(new_pending_task);
 }
 
-void MessageLoop::addToIncomingQueue(PendingTask& pending_task)
+void MessageLoop::addToIncomingQueue(PendingTask* pending_task)
 {
     std::shared_ptr<MessagePump> pump;
 
@@ -167,9 +167,9 @@ void MessageLoop::addToIncomingQueue(PendingTask& pending_task)
 
         const bool empty = incoming_queue_.empty();
 
-        incoming_queue_.emplace(pending_task);
+        incoming_queue_.emplace(*pending_task);
 
-        pending_task.callback = nullptr;
+        pending_task->callback = nullptr;
 
         if (!empty)
             return;

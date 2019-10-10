@@ -75,8 +75,8 @@ protected:
     using TimePoint = MessagePump::TimePoint;
     using Milliseconds = MessagePump::Milliseconds;
 
-    void postTask(PendingTask::Callback callback);
-    void postDelayedTask(PendingTask::Callback callback, const Milliseconds& delay);
+    void postTask(const PendingTask::Callback& callback);
+    void postDelayedTask(const PendingTask::Callback& callback, const Milliseconds& delay);
 
     PendingTask::Callback quitClosure();
 
@@ -91,7 +91,7 @@ protected:
     // Caller retains ownership of |pending_task|, but this function will reset the value of
     // pending_task->task. This is needed to ensure that the posting call stack does not retain
     // pending_task->task beyond this function call.
-    void addToIncomingQueue(PendingTask& pending_task);
+    void addToIncomingQueue(PendingTask* pending_task);
 
     // Load tasks from the incoming_queue_ into work_queue_ if the latter is empty. The former
     // requires a lock to access, while the latter is directly accessible on this thread.

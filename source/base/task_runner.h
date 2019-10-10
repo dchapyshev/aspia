@@ -34,8 +34,8 @@ public:
     using Milliseconds = std::chrono::milliseconds;
 
     virtual bool belongsToCurrentThread() const = 0;
-    virtual bool postTask(Callback task) = 0;
-    virtual bool postDelayedTask(Callback callback, const Milliseconds& delay) = 0;
+    virtual bool postTask(const Callback& task) = 0;
+    virtual bool postDelayedTask(const Callback& callback, const Milliseconds& delay) = 0;
 };
 
 } // namespace base

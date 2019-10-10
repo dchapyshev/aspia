@@ -33,9 +33,9 @@ class TaskEvent : public QEvent
 public:
     static const int kType = QEvent::User + 1;
 
-    explicit TaskEvent(base::TaskRunner::Callback callback)
+    explicit TaskEvent(const base::TaskRunner::Callback& callback)
         : QEvent(QEvent::Type(kType)),
-          callback(std::move(callback))
+          callback(callback)
     {
         // Nothing
     }
@@ -55,7 +55,7 @@ public:
     ~Impl();
 
     bool belongsToCurrentThread() const;
-    bool postTask(Callback task);
+    bool postTask(const Callback& callback);
 
 protected:
     // QObject implementation.
@@ -80,9 +80,9 @@ bool QtTaskRunner::Impl::belongsToCurrentThread() const
     return QThread::currentThreadId() == current_thread_;
 }
 
-bool QtTaskRunner::Impl::postTask(Callback task)
+bool QtTaskRunner::Impl::postTask(const Callback& callback)
 {
-    QApplication::postEvent(this, new TaskEvent(std::move(task)));
+    QApplication::postEvent(this, new TaskEvent(callback));
     return true;
 }
 
@@ -105,12 +105,12 @@ bool QtTaskRunner::belongsToCurrentThread() const
     return impl_->belongsToCurrentThread();
 }
 
-bool QtTaskRunner::postTask(Callback task)
+bool QtTaskRunner::postTask(const Callback& callback)
 {
-    return impl_->postTask(std::move(task));
+    return impl_->postTask(callback);
 }
 
-bool QtTaskRunner::postDelayedTask(Callback /* callback */, const Milliseconds& /* delay */)
+bool QtTaskRunner::postDelayedTask(const Callback& /* callback */, const Milliseconds& /* delay */)
 {
     NOTIMPLEMENTED();
     return false;
