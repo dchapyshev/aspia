@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,6 +17,7 @@
 //
 
 #include "common/win/file_enumerator.h"
+
 #include "base/logging.h"
 
 namespace common {
@@ -91,11 +92,11 @@ FileEnumerator::FileEnumerator(const std::filesystem::path& root_path)
         switch (error_code)
         {
             case ERROR_ACCESS_DENIED:
-                status_ = proto::FileReply::STATUS_ACCESS_DENIED;
+                error_code_ = proto::FILE_ERROR_ACCESS_DENIED;
                 break;
 
             case ERROR_NOT_READY:
-                status_ = proto::FileReply::STATUS_DISK_NOT_READY;
+                error_code_ = proto::FILE_ERROR_DISK_NOT_READY;
                 break;
 
             default:

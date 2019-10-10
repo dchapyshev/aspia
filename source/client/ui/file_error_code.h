@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,34 +16,17 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__FILE_REMOVE_TASK_H
-#define CLIENT__FILE_REMOVE_TASK_H
+#ifndef CLIENT__UI__FILE_ERROR_CODE_H
+#define CLIENT__UI__FILE_ERROR_CODE_H
+
+#include "proto/file_transfer.pb.h"
 
 #include <QString>
 
 namespace client {
 
-class FileRemoveTask
-{
-public:
-    FileRemoveTask(const QString& path, bool is_directory);
-
-    FileRemoveTask(const FileRemoveTask& other);
-    FileRemoveTask& operator=(const FileRemoveTask& other);
-
-    FileRemoveTask(FileRemoveTask&& other) noexcept;
-    FileRemoveTask& operator=(FileRemoveTask&& other) noexcept;
-
-    ~FileRemoveTask() = default;
-
-    const QString& path() const { return path_; }
-    bool isDirectory() const { return is_directory_; }
-
-private:
-    QString path_;
-    bool is_directory_;
-};
+QString fileErrorToString(proto::FileError error_code);
 
 } // namespace client
 
-#endif // CLIENT__FILE_REMOVE_TASK_H
+#endif // CLIENT__UI__FILE_ERROR_CODE_H

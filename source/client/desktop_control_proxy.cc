@@ -34,12 +34,14 @@ DesktopControlProxy::DesktopControlProxy(std::shared_ptr<base::TaskRunner> io_ta
     DCHECK(desktop_control_);
 }
 
-DesktopControlProxy::~DesktopControlProxy() = default;
+DesktopControlProxy::~DesktopControlProxy()
+{
+    DCHECK(!desktop_control_);
+}
 
 void DesktopControlProxy::dettach()
 {
     DCHECK(io_task_runner_->belongsToCurrentThread());
-
     desktop_control_ = nullptr;
 }
 

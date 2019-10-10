@@ -16,37 +16,31 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__FILE_REQUEST_PRODUCER_PROXY_H
-#define CLIENT__FILE_REQUEST_PRODUCER_PROXY_H
+#ifndef COMMON__FILE_REQUEST_PRODUCER_PROXY_H
+#define COMMON__FILE_REQUEST_PRODUCER_PROXY_H
 
 #include "base/macros_magic.h"
-#include "proto/file_transfer.pb.h"
+#include "common/file_request_producer.h"
 
-namespace base {
-class TaskRunner;
-} // namespace base
+namespace common {
 
-namespace client {
-
-class FileRequestProducer;
-
-class FileRequestProducerProxy
+class FileRequestProducerProxy : public FileRequestProducer
 {
 public:
-    FileRequestProducerProxy(const std::weak_ptr<FileRequestProducer>& request_producer,
-                             std::unique_ptr<base::TaskRunner> task_runner);
+    explicit FileRequestProducerProxy(FileRequestProducer* request_producer);
     ~FileRequestProducerProxy();
 
-    void onLocalReply(const proto::FileReply& reply);
-    void onRemoteReply(const proto::FileReply& reply);
+    void dettach();
+
+    // FileRequestProducer implementation.
+    void onReply(std::shared_ptr<FileRequest> request) override;
 
 private:
-    std::weak_ptr<FileRequestProducer> request_producer_;
-    std::unique_ptr<base::TaskRunner> task_runner_;
+    FileRequestProducer* request_producer_;
 
     DISALLOW_COPY_AND_ASSIGN(FileRequestProducerProxy);
 };
 
-} // namespace client
+} // namespace common
 
-#endif // CLIENT__FILE_REQUEST_PRODUCER_PROXY_H
+#endif // COMMON__FILE_REQUEST_PRODUCER_PROXY_H

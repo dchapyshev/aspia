@@ -270,6 +270,79 @@
     </message>
 </context>
 <context>
+    <name>FileError</name>
+    <message>
+        <location filename="../ui/file_error_code.cc" line="32"/>
+        <source>Successfully completed</source>
+        <translation type="unfinished">Успешно завершено</translation>
+    </message>
+    <message>
+        <location filename="../ui/file_error_code.cc" line="36"/>
+        <source>Invalid request</source>
+        <translation type="unfinished">Неверный запрос</translation>
+    </message>
+    <message>
+        <location filename="../ui/file_error_code.cc" line="40"/>
+        <source>Invalid directory or file name</source>
+        <translation type="unfinished">Неверное имя директории или файла</translation>
+    </message>
+    <message>
+        <location filename="../ui/file_error_code.cc" line="44"/>
+        <source>Path not found</source>
+        <translation type="unfinished">Путь не найден</translation>
+    </message>
+    <message>
+        <location filename="../ui/file_error_code.cc" line="48"/>
+        <source>Path already exists</source>
+        <translation type="unfinished">Путь уже существует</translation>
+    </message>
+    <message>
+        <location filename="../ui/file_error_code.cc" line="52"/>
+        <source>No drives found</source>
+        <translation type="unfinished">Диски не найдены</translation>
+    </message>
+    <message>
+        <location filename="../ui/file_error_code.cc" line="56"/>
+        <source>Disk full</source>
+        <translation type="unfinished">Недостаточно свободного места на диске</translation>
+    </message>
+    <message>
+        <location filename="../ui/file_error_code.cc" line="60"/>
+        <source>Access denied</source>
+        <translation type="unfinished">Доступ запрещен</translation>
+    </message>
+    <message>
+        <location filename="../ui/file_error_code.cc" line="64"/>
+        <source>Could not open file for reading</source>
+        <translation type="unfinished">Не удалось открыть файл для чтения</translation>
+    </message>
+    <message>
+        <location filename="../ui/file_error_code.cc" line="68"/>
+        <source>Could not create or replace file</source>
+        <translation type="unfinished">Не удалось создать или заменить файл</translation>
+    </message>
+    <message>
+        <location filename="../ui/file_error_code.cc" line="72"/>
+        <source>Could not write to file</source>
+        <translation type="unfinished">Не удалось выполнить запись в файл</translation>
+    </message>
+    <message>
+        <location filename="../ui/file_error_code.cc" line="76"/>
+        <source>Could not read file</source>
+        <translation type="unfinished">Не удалось выполнить чтение файла</translation>
+    </message>
+    <message>
+        <location filename="../ui/file_error_code.cc" line="80"/>
+        <source>Drive not ready</source>
+        <translation type="unfinished">Дисковод не готов</translation>
+    </message>
+    <message>
+        <location filename="../ui/file_error_code.cc" line="84"/>
+        <source>Unknown error code</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>FileNameEditor</name>
     <message>
         <location filename="../ui/file_item_delegate.cc" line="55"/>
@@ -364,88 +437,89 @@
 <context>
     <name>QCoreApplication</name>
     <message>
-        <location filename="../file_status.cc" line="30"/>
         <source>Successfully completed</source>
         <comment>FileStatus</comment>
-        <translation>Успешно завершено</translation>
+        <translation type="vanished">Успешно завершено</translation>
     </message>
     <message>
-        <location filename="../file_status.cc" line="33"/>
         <source>Invalid request</source>
         <comment>FileStatus</comment>
-        <translation>Неверный запрос</translation>
+        <translation type="vanished">Неверный запрос</translation>
     </message>
     <message>
-        <location filename="../file_status.cc" line="36"/>
         <source>Invalid directory or file name</source>
         <comment>FileStatus</comment>
-        <translation>Неверное имя директории или файла</translation>
+        <translation type="vanished">Неверное имя директории или файла</translation>
     </message>
     <message>
-        <location filename="../file_status.cc" line="39"/>
         <source>Path not found</source>
         <comment>FileStatus</comment>
-        <translation>Путь не найден</translation>
+        <translation type="vanished">Путь не найден</translation>
     </message>
     <message>
-        <location filename="../file_status.cc" line="42"/>
         <source>Path already exists</source>
         <comment>FileStatus</comment>
-        <translation>Путь уже существует</translation>
+        <translation type="vanished">Путь уже существует</translation>
     </message>
     <message>
-        <location filename="../file_status.cc" line="45"/>
         <source>No drives found</source>
         <comment>FileStatus</comment>
-        <translation>Диски не найдены</translation>
+        <translation type="vanished">Диски не найдены</translation>
     </message>
     <message>
-        <location filename="../file_status.cc" line="48"/>
         <source>Disk full</source>
         <comment>FileStatus</comment>
-        <translation>Недостаточно свободного места на диске</translation>
+        <translation type="vanished">Недостаточно свободного места на диске</translation>
     </message>
     <message>
-        <location filename="../file_status.cc" line="51"/>
         <source>Access denied</source>
         <comment>FileStatus</comment>
-        <translation>Доступ запрещен</translation>
+        <translation type="vanished">Доступ запрещен</translation>
     </message>
     <message>
-        <location filename="../file_status.cc" line="54"/>
         <source>Could not open file for reading</source>
         <comment>FileStatus</comment>
-        <translation>Не удалось открыть файл для чтения</translation>
+        <translation type="vanished">Не удалось открыть файл для чтения</translation>
     </message>
     <message>
-        <location filename="../file_status.cc" line="57"/>
         <source>Could not create or replace file</source>
         <comment>FileStatus</comment>
-        <translation>Не удалось создать или заменить файл</translation>
+        <translation type="vanished">Не удалось создать или заменить файл</translation>
     </message>
     <message>
-        <location filename="../file_status.cc" line="60"/>
         <source>Could not write to file</source>
         <comment>FileStatus</comment>
-        <translation>Не удалось выполнить запись в файл</translation>
+        <translation type="vanished">Не удалось выполнить запись в файл</translation>
     </message>
     <message>
-        <location filename="../file_status.cc" line="63"/>
         <source>Could not read file</source>
         <comment>FileStatus</comment>
-        <translation>Не удалось выполнить чтение файла</translation>
+        <translation type="vanished">Не удалось выполнить чтение файла</translation>
     </message>
     <message>
-        <location filename="../file_status.cc" line="66"/>
         <source>Drive not ready</source>
         <comment>FileStatus</comment>
-        <translation>Дисковод не готов</translation>
+        <translation type="vanished">Дисковод не готов</translation>
     </message>
     <message>
-        <location filename="../file_status.cc" line="69"/>
         <source>Unknown status code</source>
         <comment>FileStatus</comment>
-        <translation>Неизвестный код состояния</translation>
+        <translation type="vanished">Неизвестный код состояния</translation>
+    </message>
+</context>
+<context>
+    <name>QtFileManagerWindow</name>
+    <message>
+        <source>Local Computer</source>
+        <translation type="obsolete">Локальный компьютер</translation>
+    </message>
+    <message>
+        <source>Remote Computer</source>
+        <translation type="obsolete">Удаленный компьютер</translation>
+    </message>
+    <message>
+        <source>File Transfer</source>
+        <translation type="obsolete">Передача файлов</translation>
     </message>
 </context>
 <context>
@@ -828,111 +902,108 @@
 <context>
     <name>client::ClientFileTransfer</name>
     <message>
-        <location filename="../client_file_transfer.cc" line="41"/>
         <source>Invalid message from host</source>
-        <translation>Неверное сообщение от хоста</translation>
+        <translation type="vanished">Неверное сообщение от хоста</translation>
     </message>
     <message>
-        <location filename="../client_file_transfer.cc" line="47"/>
         <source>There are no logged in users. File transfer is not available</source>
-        <translation>Нет вошедших в систему пользователей. Передача файлов недоступна</translation>
+        <translation type="vanished">Нет вошедших в систему пользователей. Передача файлов недоступна</translation>
     </message>
     <message>
-        <location filename="../client_file_transfer.cc" line="66"/>
         <source>Session error</source>
-        <translation>Ошибка сессии</translation>
+        <translation type="vanished">Ошибка сессии</translation>
     </message>
 </context>
 <context>
     <name>client::ClientWindow</name>
     <message>
-        <location filename="../ui/client_window.cc" line="85"/>
+        <location filename="../ui/client_window.cc" line="90"/>
         <source>Attempt to connect to %1:%2.</source>
         <translation>Попытка подключения к %1:%2.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="95"/>
+        <location filename="../ui/client_window.cc" line="100"/>
         <source>Connection established.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="106"/>
+        <location filename="../ui/client_window.cc" line="111"/>
         <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
         <translation type="unfinished">Произошла ошибка в сети (например, сетевой кабель был случайно отключен).</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="110"/>
+        <location filename="../ui/client_window.cc" line="115"/>
         <source>Connection was refused by the peer (or timed out).</source>
         <translation type="unfinished">Подключение было отклонено другой стороной (или превышено время ожидания).</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="114"/>
+        <location filename="../ui/client_window.cc" line="119"/>
         <source>Remote host closed the connection.</source>
         <translation type="unfinished">Удаленный узел закрыл подключение.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="118"/>
+        <location filename="../ui/client_window.cc" line="123"/>
         <source>Host address was not found.</source>
         <translation type="unfinished">Не найден адрес удаленного узла.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="122"/>
+        <location filename="../ui/client_window.cc" line="127"/>
         <source>Socket operation timed out.</source>
         <translation type="unfinished">Превышено время ожидания.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="126"/>
+        <location filename="../ui/client_window.cc" line="131"/>
         <source>Address specified is already in use and was set to be exclusive.</source>
         <translation type="unfinished">Указанный адрес уже используется и был установлен монопольно.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="130"/>
+        <location filename="../ui/client_window.cc" line="135"/>
         <source>Address specified does not belong to the host.</source>
         <translation type="unfinished">Указанный адрес не принадлежит узлу.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="140"/>
-        <location filename="../ui/client_window.cc" line="175"/>
+        <location filename="../ui/client_window.cc" line="145"/>
+        <location filename="../ui/client_window.cc" line="180"/>
         <source>An unknown error occurred.</source>
         <translation type="unfinished">Произошла неизвестная ошибка.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="155"/>
+        <location filename="../ui/client_window.cc" line="160"/>
         <source>Authentication successfully completed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="159"/>
+        <location filename="../ui/client_window.cc" line="164"/>
         <source>Network authentication error.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="163"/>
+        <location filename="../ui/client_window.cc" line="168"/>
         <source>Violation of the data exchange protocol.</source>
         <translation type="unfinished">Нарушение протокола обмена данными.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="167"/>
+        <location filename="../ui/client_window.cc" line="172"/>
         <source>An error occured while authenticating: wrong user name or password.</source>
         <translation type="unfinished">Произошла ошибка при аутентификации: неправильное имя пользователя или пароль.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="171"/>
+        <location filename="../ui/client_window.cc" line="176"/>
         <source>Specified session type is not allowed for the user.</source>
         <translation type="unfinished">Указанный тип сессии не разрешен для пользователя.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="189"/>
+        <location filename="../ui/client_window.cc" line="194"/>
         <source>Desktop Manage</source>
         <translation type="unfinished">Управление рабочим столом</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="193"/>
+        <location filename="../ui/client_window.cc" line="198"/>
         <source>Desktop View</source>
         <translation type="unfinished">Просмотр рабочего стола</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="197"/>
+        <location filename="../ui/client_window.cc" line="202"/>
         <source>File Transfer</source>
         <translation type="unfinished">Передача файлов</translation>
     </message>
@@ -1106,94 +1177,84 @@
 <context>
     <name>client::FileManagerWindow</name>
     <message>
-        <location filename="../ui/file_manager_window.cc" line="45"/>
         <source>Local Computer</source>
-        <translation>Локальный компьютер</translation>
+        <translation type="vanished">Локальный компьютер</translation>
     </message>
     <message>
-        <location filename="../ui/file_manager_window.cc" line="48"/>
         <source>Remote Computer</source>
-        <translation>Удаленный компьютер</translation>
+        <translation type="vanished">Удаленный компьютер</translation>
     </message>
     <message>
-        <location filename="../ui/file_manager_window.cc" line="292"/>
         <source>File Transfer</source>
-        <translation>Передача файлов</translation>
+        <translation type="vanished">Передача файлов</translation>
     </message>
 </context>
 <context>
     <name>client::FilePanel</name>
     <message>
-        <location filename="../ui/file_panel.cc" line="156"/>
-        <location filename="../ui/file_panel.cc" line="171"/>
-        <location filename="../ui/file_panel.cc" line="195"/>
-        <location filename="../ui/file_panel.cc" line="206"/>
-        <location filename="../ui/file_panel.cc" line="297"/>
-        <location filename="../ui/file_panel.cc" line="306"/>
-        <location filename="../ui/file_panel.cc" line="322"/>
-        <location filename="../ui/file_panel.cc" line="331"/>
+        <location filename="../ui/file_panel.cc" line="435"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="157"/>
+        <location filename="../ui/file_panel.cc" line="96"/>
         <source>Failed to get list of drives: %1</source>
         <translation>Не удалось получить список дисков: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="172"/>
+        <location filename="../ui/file_panel.cc" line="111"/>
         <source>Failed to get list of files: %1</source>
         <translation>Не удалось получить список файлов: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="196"/>
+        <location filename="../ui/file_panel.cc" line="135"/>
         <source>Failed to create directory: %1</source>
         <translation>Не удалось создать директорию: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="207"/>
+        <location filename="../ui/file_panel.cc" line="146"/>
         <source>Failed to rename item: %1</source>
         <translation>Не удалось переименовать элемент: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="277"/>
+        <location filename="../ui/file_panel.cc" line="268"/>
         <source>%1 object(s) selected</source>
         <translation>Выбрано объектов: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="298"/>
-        <location filename="../ui/file_panel.cc" line="323"/>
+        <location filename="../ui/file_panel.cc" line="287"/>
+        <location filename="../ui/file_panel.cc" line="305"/>
         <source>Folder name can not be empty.</source>
         <translation>Имя папки не может быть пустым.</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="307"/>
-        <location filename="../ui/file_panel.cc" line="332"/>
+        <location filename="../ui/file_panel.cc" line="293"/>
+        <location filename="../ui/file_panel.cc" line="311"/>
         <source>Name contains invalid characters.</source>
         <translation>Имя содержит некорректные символы.</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="354"/>
+        <location filename="../ui/file_panel.cc" line="332"/>
         <source>&amp;Send	F11</source>
         <translation>&amp;Отправить	F11</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="356"/>
+        <location filename="../ui/file_panel.cc" line="334"/>
         <source>&amp;Delete	Delete</source>
         <translation>&amp;Удалить	Delete</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="366"/>
+        <location filename="../ui/file_panel.cc" line="344"/>
         <source>&amp;Create Folder</source>
         <translation>&amp;Создать папку</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="421"/>
+        <location filename="../ui/file_panel.cc" line="401"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="422"/>
+        <location filename="../ui/file_panel.cc" line="402"/>
         <source>Are you sure you want to delete the selected items?</source>
         <translation>Вы действительно хотите удалить выбранные элементы?</translation>
     </message>
@@ -1201,27 +1262,37 @@
 <context>
     <name>client::FileRemoveDialog</name>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="62"/>
+        <location filename="../ui/file_remove_dialog.cc" line="90"/>
         <source>Deleting: %1</source>
         <translation>Удаление: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="86"/>
+        <location filename="../ui/file_remove_dialog.cc" line="116"/>
+        <source>An error occurred while retrieving the list of files: %1</source>
+        <translation type="unfinished">Произошла ошибка при получении списка файлов: %1</translation>
+    </message>
+    <message>
+        <location filename="../ui/file_remove_dialog.cc" line="121"/>
+        <source>Failed to delete &quot;%1&quot;: %2.</source>
+        <translation type="unfinished">Не удалось удалить &quot;%1&quot;: %2.</translation>
+    </message>
+    <message>
+        <location filename="../ui/file_remove_dialog.cc" line="128"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="94"/>
+        <location filename="../ui/file_remove_dialog.cc" line="136"/>
         <source>Skip</source>
         <translation>Пропустить</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="97"/>
+        <location filename="../ui/file_remove_dialog.cc" line="139"/>
         <source>Skip All</source>
         <translation>Пропустить все</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="100"/>
+        <location filename="../ui/file_remove_dialog.cc" line="142"/>
         <source>Abort</source>
         <translation>Прервать</translation>
     </message>
@@ -1229,127 +1300,149 @@
 <context>
     <name>client::FileRemoveQueueBuilder</name>
     <message>
-        <location filename="../file_remove_queue_builder.cc" line="53"/>
         <source>An unexpected answer was received.</source>
-        <translation>Получен неожиданный ответ на запрос.</translation>
+        <translation type="vanished">Получен неожиданный ответ на запрос.</translation>
     </message>
     <message>
-        <location filename="../file_remove_queue_builder.cc" line="59"/>
         <source>An error occurred while retrieving the list of files: %1</source>
-        <translation>Произошла ошибка при получении списка файлов: %1</translation>
+        <translation type="vanished">Произошла ошибка при получении списка файлов: %1</translation>
     </message>
 </context>
 <context>
     <name>client::FileRemover</name>
     <message>
-        <location filename="../file_remover.cc" line="81"/>
         <source>An unexpected answer was received.</source>
-        <translation>Получен неожиданный ответ на запрос.</translation>
+        <translation type="vanished">Получен неожиданный ответ на запрос.</translation>
     </message>
     <message>
-        <location filename="../file_remover.cc" line="109"/>
         <source>Failed to delete &quot;%1&quot;: %2.</source>
-        <translation>Не удалось удалить &quot;%1&quot;: %2.</translation>
+        <translation type="vanished">Не удалось удалить &quot;%1&quot;: %2.</translation>
     </message>
 </context>
 <context>
     <name>client::FileTransfer</name>
     <message>
-        <location filename="../file_transfer.cc" line="116"/>
         <source>Failed to create directory &quot;%1&quot;: %2</source>
-        <translation>Не удалось создать директорию &quot;%1&quot;: %2</translation>
+        <translation type="vanished">Не удалось создать директорию &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../file_transfer.cc" line="130"/>
         <source>Failed to create file &quot;%1&quot;: %2</source>
-        <translation>Не удалось создать файл &quot;%1&quot;: %2</translation>
+        <translation type="vanished">Не удалось создать файл &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../file_transfer.cc" line="143"/>
         <source>Failed to write file &quot;%1&quot;: %2</source>
-        <translation>Не удалось выполнить запись файла &quot;%1&quot;: %2</translation>
+        <translation type="vanished">Не удалось выполнить запись файла &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../file_transfer.cc" line="190"/>
-        <location filename="../file_transfer.cc" line="229"/>
         <source>An unexpected response to the request was received</source>
-        <translation>Получен неожиданный ответ на запрос</translation>
+        <translation type="vanished">Получен неожиданный ответ на запрос</translation>
     </message>
     <message>
-        <location filename="../file_transfer.cc" line="205"/>
         <source>Failed to open file &quot;%1&quot;: %2</source>
-        <translation>Не удалось открыть файл &quot;%1&quot;: %2</translation>
+        <translation type="vanished">Не удалось открыть файл &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../file_transfer.cc" line="219"/>
         <source>Failed to read file &quot;%1&quot;: %2</source>
-        <translation>Не удалось прочитать файл &quot;%1&quot;: %2</translation>
+        <translation type="vanished">Не удалось прочитать файл &quot;%1&quot;: %2</translation>
     </message>
 </context>
 <context>
     <name>client::FileTransferDialog</name>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="72"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="98"/>
         <source>Current Task: Copying items.</source>
         <translation>Текущая задача: копирование элементов.</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="84"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="110"/>
         <source>From: %1</source>
         <translation>Из: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="89"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="115"/>
         <source>To: %1</source>
         <translation>В: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="119"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="143"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="131"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="155"/>
         <source>Skip</source>
         <translation>Пропустить</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="134"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="158"/>
         <source>Skip All</source>
         <translation>Пропустить все</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="137"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="161"/>
         <source>Replace</source>
         <translation>Заменить</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="140"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="164"/>
         <source>Replace All</source>
         <translation>Заменить все</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="143"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="167"/>
         <source>Abort</source>
         <translation>Прервать</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="223"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="241"/>
         <source>Current Task: Cancel transfer of files.</source>
         <translation>Текущая задача: Отмена передачи файлов.</translation>
+    </message>
+    <message>
+        <location filename="../ui/file_transfer_dialog.cc" line="255"/>
+        <source>An error occurred while building the file queue for copying</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/file_transfer_dialog.cc" line="261"/>
+        <source>Failed to create directory &quot;%1&quot;: %2</source>
+        <translation type="unfinished">Не удалось создать директорию &quot;%1&quot;: %2</translation>
+    </message>
+    <message>
+        <location filename="../ui/file_transfer_dialog.cc" line="270"/>
+        <source>Failed to create file &quot;%1&quot;: %2</source>
+        <translation type="unfinished">Не удалось создать файл &quot;%1&quot;: %2</translation>
+    </message>
+    <message>
+        <location filename="../ui/file_transfer_dialog.cc" line="278"/>
+        <source>Failed to open file &quot;%1&quot;: %2</source>
+        <translation type="unfinished">Не удалось открыть файл &quot;%1&quot;: %2</translation>
+    </message>
+    <message>
+        <location filename="../ui/file_transfer_dialog.cc" line="286"/>
+        <source>Failed to write file &quot;%1&quot;: %2</source>
+        <translation type="unfinished">Не удалось выполнить запись файла &quot;%1&quot;: %2</translation>
+    </message>
+    <message>
+        <location filename="../ui/file_transfer_dialog.cc" line="294"/>
+        <source>Failed to read file &quot;%1&quot;: %2</source>
+        <translation type="unfinished">Не удалось прочитать файл &quot;%1&quot;: %2</translation>
+    </message>
+    <message>
+        <location filename="../ui/file_transfer_dialog.cc" line="302"/>
+        <source>Unknown error type while copying files</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>client::FileTransferQueueBuilder</name>
     <message>
-        <location filename="../file_transfer_queue_builder.cc" line="73"/>
         <source>An unexpected answer was received.</source>
-        <translation>Получен неожиданный ответ на запрос.</translation>
+        <translation type="vanished">Получен неожиданный ответ на запрос.</translation>
     </message>
     <message>
-        <location filename="../file_transfer_queue_builder.cc" line="79"/>
         <source>An error occurred while retrieving the list of files: %1</source>
-        <translation>Произошла ошибка при получении списка файлов: %1</translation>
+        <translation type="vanished">Произошла ошибка при получении списка файлов: %1</translation>
     </message>
 </context>
 <context>
@@ -1363,19 +1456,19 @@
         <translation type="obsolete">Просмотр рабочего стола</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="181"/>
-        <location filename="../ui/qt_desktop_window.cc" line="189"/>
-        <location filename="../ui/qt_desktop_window.cc" line="452"/>
+        <location filename="../ui/qt_desktop_window.cc" line="201"/>
+        <location filename="../ui/qt_desktop_window.cc" line="209"/>
+        <location filename="../ui/qt_desktop_window.cc" line="472"/>
         <source>Warning</source>
         <translation type="unfinished">Предупреждение</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="182"/>
+        <location filename="../ui/qt_desktop_window.cc" line="202"/>
         <source>There are no supported video encodings.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="190"/>
+        <location filename="../ui/qt_desktop_window.cc" line="210"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
         <translation type="unfinished">Текущий видео-кодек не поддерживается хостом. Пожалуйста, выберите другой кодек.</translation>
     </message>
@@ -1384,19 +1477,32 @@
         <translation type="obsolete">Выбор поддерживаемой видео-кодировки отменен пользователем.</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="430"/>
+        <location filename="../ui/qt_desktop_window.cc" line="450"/>
         <source>Save File</source>
         <translation type="unfinished">Сохранение файла</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="432"/>
+        <location filename="../ui/qt_desktop_window.cc" line="452"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation type="unfinished">PNG изображение (*.png);;BMP изображение (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="452"/>
+        <location filename="../ui/qt_desktop_window.cc" line="472"/>
         <source>Could not save image</source>
         <translation type="unfinished">Не удалось сохранить изображение</translation>
+    </message>
+</context>
+<context>
+    <name>client::QtFileManagerWindow</name>
+    <message>
+        <location filename="../ui/qt_file_manager_window.cc" line="46"/>
+        <source>Local Computer</source>
+        <translation type="unfinished">Локальный компьютер</translation>
+    </message>
+    <message>
+        <location filename="../ui/qt_file_manager_window.cc" line="47"/>
+        <source>Remote Computer</source>
+        <translation type="unfinished">Удаленный компьютер</translation>
     </message>
 </context>
 <context>

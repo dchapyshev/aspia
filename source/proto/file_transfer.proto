@@ -123,28 +123,28 @@ message RemoveRequest
     string path = 1;
 }
 
+enum FileError
+{
+    FILE_ERROR_UNKNOWN             = 0;
+    FILE_ERROR_SUCCESS             = 1;
+    FILE_ERROR_NO_LOGGED_ON_USER   = 2;
+    FILE_ERROR_INVALID_REQUEST     = 3;
+    FILE_ERROR_INVALID_PATH_NAME   = 4;
+    FILE_ERROR_PATH_NOT_FOUND      = 5;
+    FILE_ERROR_PATH_ALREADY_EXISTS = 6;
+    FILE_ERROR_NO_DRIVES_FOUND     = 7;
+    FILE_ERROR_DISK_FULL           = 8;
+    FILE_ERROR_ACCESS_DENIED       = 9;
+    FILE_ERROR_FILE_OPEN_ERROR     = 10;
+    FILE_ERROR_FILE_CREATE_ERROR   = 11;
+    FILE_ERROR_FILE_WRITE_ERROR    = 12;
+    FILE_ERROR_FILE_READ_ERROR     = 13;
+    FILE_ERROR_DISK_NOT_READY      = 14;
+}
+
 message FileReply
 {
-    enum Status
-    {
-        STATUS_UNKNOWN             = 0;
-        STATUS_SUCCESS             = 1;
-        STATUS_NO_LOGGED_ON_USER   = 2;
-        STATUS_INVALID_REQUEST     = 3;
-        STATUS_INVALID_PATH_NAME   = 4;
-        STATUS_PATH_NOT_FOUND      = 5;
-        STATUS_PATH_ALREADY_EXISTS = 6;
-        STATUS_NO_DRIVES_FOUND     = 7;
-        STATUS_DISK_FULL           = 8;
-        STATUS_ACCESS_DENIED       = 9;
-        STATUS_FILE_OPEN_ERROR     = 10;
-        STATUS_FILE_CREATE_ERROR   = 11;
-        STATUS_FILE_WRITE_ERROR    = 12;
-        STATUS_FILE_READ_ERROR     = 13;
-        STATUS_DISK_NOT_READY      = 14;
-    }
-
-    Status status    = 1;
+    FileError error_code = 1;
     DriveList drive_list = 2;
     FileList file_list   = 3;
     FilePacket packet    = 4;

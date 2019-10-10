@@ -16,22 +16,17 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__FILE_REQUEST_PRODUCER_H
-#define CLIENT__FILE_REQUEST_PRODUCER_H
+#ifndef COMMON__FILE_TASK_TARGET_H
+#define COMMON__FILE_TASK_TARGET_H
 
-#include "proto/file_transfer.pb.h"
+namespace common {
 
-namespace client {
-
-class FileRequestProducer
+enum class FileTaskTarget
 {
-public:
-    virtual ~FileRequestProducer() = default;
-
-    virtual void onLocalReply(const proto::FileReply& reply) = 0;
-    virtual void onRemoteReply(const proto::FileReply& reply) = 0;
+    LOCAL, // Local task.
+    REMOTE // Remote task.
 };
 
 } // namespace client
 
-#endif // CLIENT__FILE_REQUEST_PRODUCER_H
+#endif // COMMON__FILE_TASK_TARGET_H

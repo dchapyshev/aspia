@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -24,44 +24,37 @@
 namespace client {
 
 // The class prepares the task queue to perform the deletion.
-class FileRemoveQueueBuilder : public QObject
+class FileRemoveQueueBuilder : public common::FileRequestProducer
 {
-    Q_OBJECT
-
 public:
-    explicit FileRemoveQueueBuilder(QObject* parent = nullptr);
-    ~FileRemoveQueueBuilder() = default;
+    FileRemoveQueueBuilder(
+        std::shared_ptr<common::FileRequestConsumerProxy> request_consumer_proxy,
+        common::FileTaskTarget target);
+    ~FileRemoveQueueBuilder();
 
-    // Returns the queue of tasks.
-    QQueue<FileRemoveTask> taskQueue() const;
+    using FinishCallback = std::function<void(proto::FileError)>;
 
-signals:
-    // Signals about the start of execution.
-    void started();
-
-    // Signals about the end of execution.
-    void finished();
-
-    // Signals an error when building a task queue. |message| contains a description of the error.
-    void error(const QString& message);
-
-    // Signals an outbound request.
-    void newRequest(common::FileRequest* request);
-
-public slots:
     // Starts building of the task queue.
-    void start(const QString& path, const QList<FileRemover::Item>& items);
+    void start(const FileRemover::TaskList& items, FinishCallback callback);
 
-    // Reads the reply to the request.
-    void reply(const proto::FileRequest& request, const proto::FileReply& reply);
+    FileRemover::TaskList takeQueue();
+
+protected:
+    // FileRequestProducer implementation.
+    void onReply(std::shared_ptr<common::FileRequest> request) override;
 
 private:
-    void processNextPendingTask();
-    void processError(const QString& message);
-    void sendRequest(common::FileRequest* request);
+    void doPendingTasks();
+    void onAborted(proto::FileError error_code);
 
-    QQueue<FileRemoveTask> pending_tasks_;
-    QQueue<FileRemoveTask> tasks_;
+    std::shared_ptr<common::FileRequestConsumerProxy> request_consumer_proxy_;
+    std::shared_ptr<common::FileRequestProducerProxy> request_producer_proxy_;
+    std::unique_ptr<FileRequestFactory> request_factory_;
+
+    FinishCallback callback_;
+
+    FileRemover::TaskList pending_tasks_;
+    FileRemover::TaskList tasks_;
 
     DISALLOW_COPY_AND_ASSIGN(FileRemoveQueueBuilder);
 };

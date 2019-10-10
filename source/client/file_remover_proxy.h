@@ -16,11 +16,10 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__FILE_REQUEST_CONSUMER_PROXY_H
-#define CLIENT__FILE_REQUEST_CONSUMER_PROXY_H
+#ifndef CLIENT__FILE_REMOVER_PROXY_H
+#define CLIENT__FILE_REMOVER_PROXY_H
 
-#include "base/macros_magic.h"
-#include "proto/file_transfer.pb.h"
+#include "client/file_remover.h"
 
 namespace base {
 class TaskRunner;
@@ -28,25 +27,22 @@ class TaskRunner;
 
 namespace client {
 
-class FileRequestConsumer;
-
-class FileRequestConsumerProxy
+class FileRemoverProxy : public std::enable_shared_from_this<FileRemoverProxy>
 {
 public:
-    FileRequestConsumerProxy(const std::weak_ptr<FileRequestConsumer>& request_consumer,
-                             std::unique_ptr<base::TaskRunner> task_runner);
-    ~FileRequestConsumerProxy();
+    FileRemoverProxy(std::shared_ptr<base::TaskRunner> io_task_runner, FileRemover* remover);
+    ~FileRemoverProxy();
 
-    void localRequest(const proto::FileRequest& request);
-    void remoteRequest(const proto::FileRequest& request);
+    void dettach();
+
+    void stop();
+    void setAction(FileRemover::Action action);
 
 private:
-    std::weak_ptr<FileRequestConsumer> request_consumer_;
-    std::unique_ptr<base::TaskRunner> task_runner_;
-
-    DISALLOW_COPY_AND_ASSIGN(FileRequestConsumerProxy);
+    std::shared_ptr<base::TaskRunner> io_task_runner_;
+    FileRemover* remover_;
 };
 
 } // namespace client
 
-#endif // CLIENT__FILE_REQUEST_CONSUMER_PROXY_H
+#endif // CLIENT__FILE_REMOVER_PROXY_H

@@ -32,6 +32,13 @@ list(APPEND SOURCE_COMMON
     file_platform_util_win.cc
     file_request.cc
     file_request.h
+    file_request_consumer.h
+    file_request_consumer_proxy.cc
+    file_request_consumer_proxy.h
+    file_request_producer.h
+    file_request_producer_proxy.cc
+    file_request_producer_proxy.h
+    file_task_target.h
     file_worker.cc
     file_worker.h
     keycode_converter.cc

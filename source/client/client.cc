@@ -122,7 +122,14 @@ void Client::onBeforeThreadRunning()
 
 void Client::onAfterThreadRunning()
 {
+    // Network connection is no longer available.
     channel_.reset();
+
+    if (session_started_)
+    {
+        // Session stopped.
+        onSessionStopped();
+    }
 }
 
 void Client::onConnected()
@@ -152,6 +159,8 @@ void Client::onConnected()
 
         status_window_proxy_->onConnected();
 
+        session_started_ = true;
+
         // Signal that everything is ready to start the session (connection established,
         // authentication passed).
         onSessionStarted(authenticator->peerVersion());
@@ -163,9 +172,6 @@ void Client::onConnected()
 
 void Client::onDisconnected(net::ErrorCode error_code)
 {
-    // Session stopped.
-    onSessionStopped();
-
     // Show an error to the user.
     status_window_proxy_->onDisconnected(error_code);
 }

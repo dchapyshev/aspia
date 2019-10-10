@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,17 +16,23 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__FILE_STATUS_H
-#define CLIENT__FILE_STATUS_H
+#ifndef COMMON__FILE_REQUEST_PRODUCER_H
+#define COMMON__FILE_REQUEST_PRODUCER_H
 
-#include "proto/file_transfer.pb.h"
+#include <memory>
 
-#include <QString>
+namespace common {
 
-namespace client {
+class FileRequest;
 
-QString fileStatusToString(proto::FileReply::Status status);
+class FileRequestProducer
+{
+public:
+    virtual ~FileRequestProducer() = default;
 
-} // namespace client
+    virtual void onReply(std::shared_ptr<FileRequest> request) = 0;
+};
 
-#endif // CLIENT__FILE_STATUS_H
+} // namespace common
+
+#endif // COMMON__FILE_REQUEST_PRODUCER_H

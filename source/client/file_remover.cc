@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,148 +17,198 @@
 //
 
 #include "client/file_remover.h"
+
 #include "base/logging.h"
 #include "client/file_remove_queue_builder.h"
-#include "client/file_status.h"
+#include "client/file_remove_window_proxy.h"
+#include "client/file_remover_proxy.h"
+#include "client/file_request_factory.h"
+#include "common/file_request.h"
+#include "common/file_request_consumer_proxy.h"
+#include "common/file_request_producer_proxy.h"
 
 namespace client {
 
-FileRemover::FileRemover(QObject* parent)
-    : QObject(parent)
+FileRemover::FileRemover(std::shared_ptr<base::TaskRunner> io_task_runner,
+                         std::shared_ptr<FileRemoveWindowProxy> remove_window_proxy,
+                         std::shared_ptr<common::FileRequestConsumerProxy> request_consumer_proxy,
+                         common::FileTaskTarget target)
+    : remover_proxy_(std::make_shared<FileRemoverProxy>(io_task_runner, this)),
+      remove_window_proxy_(remove_window_proxy),
+      request_consumer_proxy_(request_consumer_proxy),
+      request_producer_proxy_(std::make_shared<common::FileRequestProducerProxy>(this))
 {
-    // Nothing
+    DCHECK(remove_window_proxy_);
+    DCHECK(request_consumer_proxy_);
+
+    request_factory_ = std::make_unique<FileRequestFactory>(request_producer_proxy_, target);
 }
 
-void FileRemover::start(const QString& path, const QList<Item>& items)
+FileRemover::~FileRemover()
 {
-    builder_ = new FileRemoveQueueBuilder();
-
-    connect(builder_, &FileRemoveQueueBuilder::started,
-            this, &FileRemover::started);
-
-    connect(builder_, &FileRemoveQueueBuilder::error,
-            this, &FileRemover::taskQueueError);
-
-    connect(builder_, &FileRemoveQueueBuilder::finished,
-            this, &FileRemover::taskQueueReady);
-
-    connect(builder_, &FileRemoveQueueBuilder::finished,
-            builder_, &FileRemoveQueueBuilder::deleteLater);
-
-    connect(builder_, &FileRemoveQueueBuilder::newRequest,
-            this, &FileRemover::newRequest);
-
-    builder_->start(path, items);
+    request_producer_proxy_->dettach();
+    remover_proxy_->dettach();
 }
 
-void FileRemover::applyAction(Action action)
+void FileRemover::start(const TaskList& items, FinishCallback callback)
+{
+    finish_callback_ = callback;
+
+    // Asynchronously start UI.
+    remove_window_proxy_->start(remover_proxy_);
+
+    queue_builder_ = std::make_unique<FileRemoveQueueBuilder>(
+        request_consumer_proxy_, request_factory_->target());
+
+    // Start building a list of objects for deletion.
+    queue_builder_->start(items, [this](proto::FileError error_code)
+    {
+        if (error_code == proto::FILE_ERROR_SUCCESS)
+        {
+            tasks_ = queue_builder_->takeQueue();
+            tasks_count_ = tasks_.size();
+
+            doNextTask();
+        }
+        else
+        {
+            remove_window_proxy_->errorOccurred(std::string(), error_code, ACTION_ABORT);
+        }
+
+        queue_builder_.reset();
+    });
+}
+
+void FileRemover::stop()
+{
+    queue_builder_.reset();
+    tasks_.clear();
+
+    onFinished();
+}
+
+void FileRemover::setAction(Action action)
 {
     switch (action)
     {
-        case Skip:
-            processNextTask();
+        case ACTION_SKIP:
+            doNextTask();
             break;
 
-        case SkipAll:
+        case ACTION_SKIP_ALL:
             failure_action_ = action;
-            processNextTask();
+            doNextTask();
             break;
 
-        case Abort:
-            emit finished();
+        case ACTION_ABORT:
+            onFinished();
             break;
 
         default:
-            LOG(LS_FATAL) << "Unexpected action: " << action;
+            NOTREACHED();
             break;
     }
 }
 
-void FileRemover::reply(const proto::FileRequest& request, const proto::FileReply& reply)
+void FileRemover::onReply(std::shared_ptr<common::FileRequest> request)
 {
-    if (!request.has_remove_request())
+    const proto::FileRequest& file_request = request->request();
+    const proto::FileReply& file_reply = request->reply();
+
+    if (!file_request.has_remove_request())
     {
-        emit error(this, Abort, tr("An unexpected answer was received."));
+        remove_window_proxy_->errorOccurred(
+            file_request.remove_request().path(), proto::FILE_ERROR_UNKNOWN, ACTION_ABORT);
         return;
     }
 
-    if (reply.status() != proto::FileReply::STATUS_SUCCESS)
+    if (file_reply.error_code() != proto::FILE_ERROR_SUCCESS)
     {
-        Actions actions;
+        uint32_t actions;
 
-        switch (reply.status())
+        switch (file_reply.error_code())
         {
-            case proto::FileReply::STATUS_PATH_NOT_FOUND:
-            case proto::FileReply::STATUS_ACCESS_DENIED:
+            case proto::FILE_ERROR_PATH_NOT_FOUND:
+            case proto::FILE_ERROR_ACCESS_DENIED:
             {
-                if (failure_action_ != Ask)
+                if (failure_action_ != ACTION_ASK)
                 {
-                    applyAction(failure_action_);
+                    setAction(failure_action_);
                     return;
                 }
 
-                actions = Abort | Skip | SkipAll;
+                actions = ACTION_ABORT | ACTION_SKIP | ACTION_SKIP_ALL;
             }
             break;
 
             default:
-                actions = Abort;
+                actions = ACTION_ABORT;
                 break;
         }
 
-        emit error(this, actions, tr("Failed to delete \"%1\": %2.")
-                   .arg(QString::fromStdString(request.remove_request().path()))
-                   .arg(fileStatusToString(reply.status())));
+        remove_window_proxy_->errorOccurred(
+            file_request.remove_request().path(), file_reply.error_code(), actions);
         return;
     }
 
-    processNextTask();
-}
-
-void FileRemover::taskQueueError(const QString& message)
-{
-    emit error(this, Abort, message);
-}
-
-void FileRemover::taskQueueReady()
-{
-    DCHECK(builder_ != nullptr);
-
-    tasks_ = builder_->taskQueue();
-    tasks_count_ = tasks_.size();
-
-    processTask();
-}
-
-void FileRemover::processTask()
-{
-    if (tasks_.isEmpty())
-    {
-        emit finished();
-        return;
-    }
-
-    DCHECK(tasks_count_ != 0);
-
-    int percentage = (tasks_count_ - tasks_.size()) * 100 / tasks_count_;
-
-    emit progressChanged(tasks_.front().path(), percentage);
-
-    sendRequest(common::FileRequest::removeRequest(tasks_.front().path()));
-}
-
-void FileRemover::processNextTask()
-{
-    if (!tasks_.isEmpty())
+    // The task is completed. We delete it.
+    if (!tasks_.empty())
         tasks_.pop_front();
 
-    processTask();
+    doNextTask();
 }
 
-void FileRemover::sendRequest(common::FileRequest* request)
+void FileRemover::doNextTask()
 {
-    connect(request, &common::FileRequest::replyReady, this, &FileRemover::reply);
-    emit newRequest(request);
+    if (tasks_.empty())
+    {
+        onFinished();
+        return;
+    }
+
+    DCHECK_NE(tasks_count_, 0);
+
+    const size_t percentage = (tasks_count_ - tasks_.size()) * 100 / tasks_count_;
+    const std::string& path = tasks_.front().path();
+
+    // Updating progress in UI.
+    remove_window_proxy_->setCurrentProgress(path, percentage);
+
+    // Send a request to delete the next item.
+    request_consumer_proxy_->doRequest(request_factory_->removeRequest(path));
+}
+
+void FileRemover::onFinished()
+{
+    FinishCallback callback;
+    callback.swap(finish_callback_);
+
+    if (callback)
+    {
+        remove_window_proxy_->stop();
+        callback();
+    }
+}
+
+FileRemover::Task::Task(std::string&& path, bool is_directory)
+    : path_(std::move(path)),
+      is_directory_(is_directory)
+{
+    // Nothing
+}
+
+FileRemover::Task::Task(Task&& other) noexcept
+    : path_(std::move(other.path_)),
+      is_directory_(other.is_directory_)
+{
+    // Nothing
+}
+
+FileRemover::Task& FileRemover::Task::operator=(Task&& other) noexcept
+{
+    path_ = std::move(other.path_);
+    is_directory_ = other.is_directory_;
+    return *this;
 }
 
 } // namespace client

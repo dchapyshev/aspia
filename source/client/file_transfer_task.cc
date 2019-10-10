@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -20,12 +20,12 @@
 
 namespace client {
 
-FileTransferTask::FileTransferTask(const QString& source_path,
-                                   const QString& target_path,
+FileTransferTask::FileTransferTask(std::string&& source_path,
+                                   std::string&& target_path,
                                    bool is_directory,
                                    int64_t size)
-    : source_path_(source_path),
-      target_path_(target_path),
+    : source_path_(std::move(source_path)),
+      target_path_(std::move(target_path)),
       is_directory_(is_directory),
       size_(size)
 {

@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -18,6 +18,12 @@
 
 #include "client/ui/file_transfer_dialog.h"
 
+#include "base/logging.h"
+#include "client/file_transfer_proxy.h"
+#include "client/file_transfer_window_proxy.h"
+#include "client/ui/file_error_code.h"
+#include "qt_base/application.h"
+
 #include <QCloseEvent>
 #include <QPushButton>
 #include <QMessageBox>
@@ -30,7 +36,9 @@
 namespace client {
 
 FileTransferDialog::FileTransferDialog(QWidget* parent)
-    : QDialog(parent)
+    : QDialog(parent),
+      transfer_window_proxy_(std::make_shared<FileTransferWindowProxy>(
+          qt_base::Application::taskRunner(), this))
 {
     ui.setupUi(this);
     setFixedHeight(sizeHint().height());
@@ -53,18 +61,36 @@ FileTransferDialog::FileTransferDialog(QWidget* parent)
     }
 #endif
 
-    label_metrics_.reset(new QFontMetrics(ui.label_source->font()));
+    label_metrics_ = std::make_unique<QFontMetrics>(ui.label_source->font());
 }
 
 FileTransferDialog::~FileTransferDialog()
 {
+    transfer_window_proxy_->dettach();
+
 #if defined(OS_WIN)
     if (taskbar_progress_)
         taskbar_progress_->hide();
 #endif
 }
 
-void FileTransferDialog::setCurrentItem(const QString& source_path, const QString& target_path)
+void FileTransferDialog::start(std::shared_ptr<FileTransferProxy> transfer_proxy)
+{
+    transfer_proxy_ = transfer_proxy;
+    DCHECK(transfer_proxy_);
+
+    show();
+    activateWindow();
+}
+
+void FileTransferDialog::stop()
+{
+    finished_ = true;
+    close();
+}
+
+void FileTransferDialog::setCurrentItem(
+    const std::string& source_path, const std::string& target_path)
 {
     if (task_queue_building_)
     {
@@ -81,12 +107,12 @@ void FileTransferDialog::setCurrentItem(const QString& source_path, const QStrin
     }
 
     QString source_text = label_metrics_->elidedText(
-        tr("From: %1").arg(source_path),
+        tr("From: %1").arg(QString::fromStdString(source_path)),
         Qt::ElideMiddle,
         ui.label_source->width());
 
     QString target_text = label_metrics_->elidedText(
-        tr("To: %1").arg(target_path),
+        tr("To: %1").arg(QString::fromStdString(target_path)),
         Qt::ElideMiddle,
         ui.label_target->width());
 
@@ -94,7 +120,7 @@ void FileTransferDialog::setCurrentItem(const QString& source_path, const QStrin
     ui.label_target->setText(target_text);
 }
 
-void FileTransferDialog::setProgress(int total, int current)
+void FileTransferDialog::setCurrentProgress(int total, int current)
 {
     ui.progress_total->setValue(total);
     ui.progress_current->setValue(current);
@@ -105,9 +131,7 @@ void FileTransferDialog::setProgress(int total, int current)
 #endif
 }
 
-void FileTransferDialog::showError(FileTransfer* transfer,
-                                   FileTransfer::Error error_type,
-                                   const QString& message)
+void FileTransferDialog::errorOccurred(const FileTransfer::Error& error)
 {
 #if defined(OS_WIN)
     if (taskbar_progress_)
@@ -118,28 +142,28 @@ void FileTransferDialog::showError(FileTransfer* transfer,
 
     dialog->setWindowTitle(tr("Warning"));
     dialog->setIcon(QMessageBox::Warning);
-    dialog->setText(message);
+    dialog->setText(errorToMessage(error));
 
     QAbstractButton* skip_button = nullptr;
     QAbstractButton* skip_all_button = nullptr;
     QAbstractButton* replace_button = nullptr;
     QAbstractButton* replace_all_button = nullptr;
 
-    FileTransfer::Actions actions = transfer->availableActions(error_type);
+    const uint32_t available_actions = error.availableActions();
 
-    if (actions & FileTransfer::Skip)
+    if (available_actions & FileTransfer::Error::ACTION_SKIP)
         skip_button = dialog->addButton(tr("Skip"), QMessageBox::ButtonRole::ActionRole);
 
-    if (actions & FileTransfer::SkipAll)
+    if (available_actions & FileTransfer::Error::ACTION_SKIP_ALL)
         skip_all_button = dialog->addButton(tr("Skip All"), QMessageBox::ButtonRole::ActionRole);
 
-    if (actions & FileTransfer::Replace)
+    if (available_actions & FileTransfer::Error::ACTION_REPLACE)
         replace_button = dialog->addButton(tr("Replace"), QMessageBox::ButtonRole::ActionRole);
 
-    if (actions & FileTransfer::ReplaceAll)
+    if (available_actions & FileTransfer::Error::ACTION_REPLACE_ALL)
         replace_all_button = dialog->addButton(tr("Replace All"), QMessageBox::ButtonRole::ActionRole);
 
-    if (actions & FileTransfer::Abort)
+    if (available_actions & FileTransfer::Error::ACTION_ABORT)
         dialog->addButton(tr("Abort"), QMessageBox::ButtonRole::ActionRole);
 
     connect(dialog, &QMessageBox::buttonClicked, [&](QAbstractButton* button)
@@ -148,30 +172,30 @@ void FileTransferDialog::showError(FileTransfer* transfer,
         {
             if (button == skip_button)
             {
-                transfer->applyAction(error_type, FileTransfer::Skip);
+                transfer_proxy_->setAction(error.type(), FileTransfer::Error::ACTION_SKIP);
                 return;
             }
 
             if (button == skip_all_button)
             {
-                transfer->applyAction(error_type, FileTransfer::SkipAll);
+                transfer_proxy_->setAction(error.type(), FileTransfer::Error::ACTION_SKIP_ALL);
                 return;
             }
 
             if (button == replace_button)
             {
-                transfer->applyAction(error_type, FileTransfer::Replace);
+                transfer_proxy_->setAction(error.type(), FileTransfer::Error::ACTION_REPLACE);
                 return;
             }
 
             if (button == replace_all_button)
             {
-                transfer->applyAction(error_type, FileTransfer::ReplaceAll);
+                transfer_proxy_->setAction(error.type(), FileTransfer::Error::ACTION_REPLACE_ALL);
                 return;
             }
         }
 
-        transfer->applyAction(error_type, FileTransfer::Abort);
+        transfer_proxy_->setAction(error.type(), FileTransfer::Error::ACTION_ABORT);
     });
 
     connect(dialog, &QMessageBox::finished, dialog, &QMessageBox::deleteLater);
@@ -182,12 +206,6 @@ void FileTransferDialog::showError(FileTransfer* transfer,
     if (taskbar_progress_)
         taskbar_progress_->resume();
 #endif
-}
-
-void FileTransferDialog::onTransferFinished()
-{
-    finished_ = true;
-    close();
 }
 
 void FileTransferDialog::keyPressEvent(QKeyEvent* event)
@@ -209,21 +227,82 @@ void FileTransferDialog::closeEvent(QCloseEvent* event)
 {
     if (finished_)
     {
-        QDialog::closeEvent(event);
-        return;
+        event->accept();
+        accept();
     }
+    else
+    {
+        event->ignore();
 
-    event->ignore();
+        if (!closing_)
+        {
+            closing_ = true;
 
-    if (closing_)
-        return;
+            ui.label_task->setText(tr("Current Task: Cancel transfer of files."));
+            ui.button_box->setDisabled(true);
 
-    closing_ = true;
+            transfer_proxy_->stop();
+        }
+    }
+}
 
-    ui.label_task->setText(tr("Current Task: Cancel transfer of files."));
-    ui.button_box->setDisabled(true);
+QString FileTransferDialog::errorToMessage(const FileTransfer::Error& error)
+{
+    switch (error.type())
+    {
+        case FileTransfer::Error::Type::QUEUE:
+        {
+            return tr("An error occurred while building the file queue for copying");
+        }
+        break;
 
-    emit transferCanceled();
+        case FileTransfer::Error::Type::CREATE_DIRECTORY:
+        {
+            return tr("Failed to create directory \"%1\": %2")
+                .arg(QString::fromStdString(error.path()))
+                .arg(fileErrorToString(error.code()));
+        }
+        break;
+
+        case FileTransfer::Error::Type::CREATE_FILE:
+        case FileTransfer::Error::Type::ALREADY_EXISTS:
+        {
+            return tr("Failed to create file \"%1\": %2")
+                .arg(QString::fromStdString(error.path()))
+                .arg(fileErrorToString(error.code()));
+        }
+        break;
+
+        case FileTransfer::Error::Type::OPEN_FILE:
+        {
+            return tr("Failed to open file \"%1\": %2")
+                .arg(QString::fromStdString(error.path()))
+                .arg(fileErrorToString(error.code()));
+        }
+        break;
+
+        case FileTransfer::Error::Type::WRITE_FILE:
+        {
+            return tr("Failed to write file \"%1\": %2")
+                .arg(QString::fromStdString(error.path()))
+                .arg(fileErrorToString(error.code()));
+        }
+        break;
+
+        case FileTransfer::Error::Type::READ_FILE:
+        {
+            return tr("Failed to read file \"%1\": %2")
+                .arg(QString::fromStdString(error.path()))
+                .arg(fileErrorToString(error.code()));
+        }
+        break;
+
+        default:
+        {
+            return tr("Unknown error type while copying files");
+        }
+        break;
+    }
 }
 
 } // namespace client

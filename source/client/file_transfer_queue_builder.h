@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -24,51 +24,47 @@
 namespace client {
 
 // The class prepares the task queue to perform the downloading/uploading.
-class FileTransferQueueBuilder : public QObject
+class FileTransferQueueBuilder : public common::FileRequestProducer
 {
-    Q_OBJECT
-
 public:
-    explicit FileTransferQueueBuilder(QObject* parent = nullptr);
-    ~FileTransferQueueBuilder() = default;
+    FileTransferQueueBuilder(
+        std::shared_ptr<common::FileRequestConsumerProxy> request_consumer_proxy,
+        common::FileTaskTarget target);
+    ~FileTransferQueueBuilder();
 
-    // Returns the queue of tasks.
-    QQueue<FileTransferTask> taskQueue() const;
+    using FinishCallback = std::function<void(proto::FileError)>;
 
-signals:
-    // Signals about the start of execution.
-    void started();
-
-    // Signals about the end of execution.
-    void finished();
-
-    // Signals an error when building a task queue. |message| contains a description of the error.
-    void error(const QString& message);
-
-    // Signals an outbound request.
-    void newRequest(common::FileRequest* request);
-
-public slots:
     // Starts building of the task queue.
-    void start(const QString& source_path,
-               const QString& target_path,
-               const QList<FileTransfer::Item>& items);
+    void start(const std::string& source_path,
+               const std::string& target_path,
+               const std::vector<FileTransfer::Item>& items,
+               const FinishCallback& callback);
 
-    // Reads the reply to the request.
-    void reply(const proto::FileRequest& request, const proto::FileReply& reply);
+    FileTransfer::TaskList takeQueue();
+    int64_t totalSize() const;
+
+protected:
+    // FileRequestProducer implementation.
+    void onReply(std::shared_ptr<common::FileRequest> request) override;
 
 private:
-    void addPendingTask(const QString& source_dir,
-                        const QString& target_dir,
-                        const QString& item_name,
+    void addPendingTask(const std::string& source_dir,
+                        const std::string& target_dir,
+                        const std::string& item_name,
                         bool is_directory,
-                        qint64 size);
-    void processNextPendingTask();
-    void processError(const QString& message);
-    void sendRequest(common::FileRequest* request);
+                        int64_t size);
+    void doPendingTasks();
+    void onAborted(proto::FileError error_code);
 
-    QQueue<FileTransferTask> pending_tasks_;
-    QQueue<FileTransferTask> tasks_;
+    std::shared_ptr<common::FileRequestConsumerProxy> request_consumer_proxy_;
+    std::shared_ptr<common::FileRequestProducerProxy> request_producer_proxy_;
+    std::unique_ptr<FileRequestFactory> request_factory_;
+
+    FinishCallback callback_;
+
+    FileTransfer::TaskList pending_tasks_;
+    FileTransfer::TaskList tasks_;
+    int64_t total_size_ = 0;
 
     DISALLOW_COPY_AND_ASSIGN(FileTransferQueueBuilder);
 };

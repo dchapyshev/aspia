@@ -48,6 +48,8 @@ public:
     // authorization dialog will be displayed.
     bool connectToHost(Config config);
 
+    Config config() const;
+
 protected:
     virtual std::unique_ptr<Client> createClient(
         std::shared_ptr<base::TaskRunner> ui_task_runner) = 0;

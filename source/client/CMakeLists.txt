@@ -27,8 +27,8 @@ list(APPEND SOURCE_CLIENT
     client_config.h
     client_desktop.cc
     client_desktop.h
-#    client_file_transfer.cc
-#    client_file_transfer.h
+    client_file_transfer.cc
+    client_file_transfer.h
     config_factory.cc
     config_factory.h
     desktop_control.h
@@ -37,26 +37,34 @@ list(APPEND SOURCE_CLIENT
     desktop_window.h
     desktop_window_proxy.cc
     desktop_window_proxy.h
-#    file_remove_queue_builder.cc
-#    file_remove_queue_builder.h
-#    file_remove_task.cc
-#    file_remove_task.h
-#    file_remover.cc
-#    file_remover.h
-#    file_request_consumer.h
-#    file_request_consumer_proxy.cc
-#    file_request_consumer_proxy.h
-#    file_request_producer.h
-#    file_request_producer_proxy.cc
-#    file_request_producer_proxy.h
-#    file_status.cc
-#    file_status.h
-#    file_transfer.cc
-#    file_transfer.h
-#    file_transfer_queue_builder.cc
-#    file_transfer_queue_builder.h
-#    file_transfer_task.cc
-#    file_transfer_task.h
+    file_control.h
+    file_control_proxy.cc
+    file_control_proxy.h
+    file_manager_window.h
+    file_manager_window_proxy.cc
+    file_manager_window_proxy.h
+    file_remove_queue_builder.cc
+    file_remove_queue_builder.h
+    file_remove_window.h
+    file_remove_window_proxy.cc
+    file_remove_window_proxy.h
+    file_remover.cc
+    file_remover.h
+    file_remover_proxy.cc
+    file_remover_proxy.h
+    file_request_factory.cc
+    file_request_factory.h
+    file_transfer.cc
+    file_transfer.h
+    file_transfer_proxy.cc
+    file_transfer_proxy.h
+    file_transfer_queue_builder.cc
+    file_transfer_queue_builder.h
+    file_transfer_task.cc
+    file_transfer_task.h
+    file_transfer_window.h
+    file_transfer_window_proxy.cc
+    file_transfer_window_proxy.h
     frame_factory.h
     frame_factory_qimage.cc
     frame_factory_qimage.h
@@ -68,10 +76,10 @@ list(APPEND SOURCE_CLIENT_RESOURCES
     resources/client.qrc)
 
 list(APPEND SOURCE_CLIENT_UI
-#    ui/address_bar.cc
-#    ui/address_bar.h
-#    ui/address_bar_model.cc
-#    ui/address_bar_model.h
+    ui/address_bar.cc
+    ui/address_bar.h
+    ui/address_bar_model.cc
+    ui/address_bar_model.h
     ui/authorization_dialog.cc
     ui/authorization_dialog.h
     ui/authorization_dialog.ui
@@ -83,41 +91,43 @@ list(APPEND SOURCE_CLIENT_UI
     ui/desktop_config_dialog.cc
     ui/desktop_config_dialog.h
     ui/desktop_config_dialog.ui
-#    ui/file_name_validator.cc
-#    ui/file_name_validator.h
+    ui/file_name_validator.cc
+    ui/file_name_validator.h
     ui/desktop_panel.cc
     ui/desktop_panel.h
     ui/desktop_panel.ui
     ui/desktop_widget.cc
     ui/desktop_widget.h
+    ui/file_error_code.cc
+    ui/file_error_code.h
     ui/desktop_settings.cc
     ui/desktop_settings.h
-#    ui/file_item_delegate.cc
-#    ui/file_item_delegate.h
-#    ui/file_list.cc
-#    ui/file_list.h
-#    ui/file_list_model.cc
-#    ui/file_list_model.h
-#    ui/file_manager_settings.cc
-#    ui/file_manager_settings.h
-#    ui/file_manager_window.cc
-#    ui/file_manager_window.h
-#    ui/file_manager_window.ui
-#    ui/file_mime_data.cc
-#    ui/file_mime_data.h
-#    ui/file_path_validator.cc
-#    ui/file_path_validator.h
-#    ui/file_panel.cc
-#    ui/file_panel.h
-#    ui/file_panel.ui
-#    ui/file_remove_dialog.cc
-#    ui/file_remove_dialog.h
-#    ui/file_remove_dialog.ui
-#    ui/file_transfer_dialog.cc
-#    ui/file_transfer_dialog.h
-#    ui/file_transfer_dialog.ui
+    ui/file_item_delegate.cc
+    ui/file_item_delegate.h
+    ui/file_list.cc
+    ui/file_list.h
+    ui/file_list_model.cc
+    ui/file_list_model.h
+    ui/file_manager_settings.cc
+    ui/file_manager_settings.h
+    ui/file_mime_data.cc
+    ui/file_mime_data.h
+    ui/file_path_validator.cc
+    ui/file_path_validator.h
+    ui/file_panel.cc
+    ui/file_panel.h
+    ui/file_panel.ui
+    ui/file_remove_dialog.cc
+    ui/file_remove_dialog.h
+    ui/file_remove_dialog.ui
+    ui/file_transfer_dialog.cc
+    ui/file_transfer_dialog.h
+    ui/file_transfer_dialog.ui
     ui/qt_desktop_window.cc
     ui/qt_desktop_window.h
+    ui/qt_file_manager_window.cc
+    ui/qt_file_manager_window.h
+    ui/qt_file_manager_window.ui
     ui/select_screen_action.h
     ui/status_dialog.cc
     ui/status_dialog.h

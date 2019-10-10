@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -54,10 +54,10 @@ public:
     bool isAtEnd() const;
     void advance();
 
-    proto::FileReply::Status status() const { return status_; }
+    proto::FileError errorCode() const { return error_code_; }
 
 private:
-    proto::FileReply::Status status_ = proto::FileReply::STATUS_SUCCESS;
+    proto::FileError error_code_ = proto::FILE_ERROR_SUCCESS;
     HANDLE find_handle_ = INVALID_HANDLE_VALUE;
     FileInfo file_info_;
 

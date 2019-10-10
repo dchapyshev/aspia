@@ -68,6 +68,11 @@ bool ClientWindow::connectToHost(Config config)
     return client_->start(config);
 }
 
+Config ClientWindow::config() const
+{
+    return client_->config();
+}
+
 void ClientWindow::closeEvent(QCloseEvent* event)
 {
     client_->stop();

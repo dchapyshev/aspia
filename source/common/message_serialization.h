@@ -19,8 +19,8 @@
 #ifndef COMMON__MESSAGE_SERIALIZATION_H
 #define COMMON__MESSAGE_SERIALIZATION_H
 
-#include "base/byte_array.h"
 #include "base/logging.h"
+#include "base/memory/byte_array.h"
 
 #include <google/protobuf/message_lite.h>
 

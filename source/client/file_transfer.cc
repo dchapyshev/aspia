@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,136 +17,251 @@
 //
 
 #include "client/file_transfer.h"
-#include "base/logging.h"
-#include "client/file_status.h"
-#include "client/file_transfer_queue_builder.h"
-#include "common/file_packet.h"
 
-#include <QTimerEvent>
+#include "base/logging.h"
+#include "client/file_request_factory.h"
+#include "client/file_transfer_proxy.h"
+#include "client/file_transfer_queue_builder.h"
+#include "client/file_transfer_window_proxy.h"
+#include "common/file_request_consumer_proxy.h"
+#include "common/file_packet.h"
+#include "common/file_request_producer_proxy.h"
 
 namespace client {
 
-FileTransfer::FileTransfer(Type type, QObject* parent)
-    : QObject(parent),
+namespace {
+
+struct ActionsMap
+{
+    FileTransfer::Error::Type type;
+    uint32_t available_actions;
+    FileTransfer::Error::Action default_action;
+} static const kActions[] =
+{
+    {
+        FileTransfer::Error::Type::CREATE_DIRECTORY,
+        FileTransfer::Error::ACTION_ABORT | FileTransfer::Error::ACTION_SKIP |
+            FileTransfer::Error::ACTION_SKIP_ALL,
+        FileTransfer::Error::ACTION_ASK
+    },
+    {
+        FileTransfer::Error::Type::CREATE_FILE,
+        FileTransfer::Error::ACTION_ABORT | FileTransfer::Error::ACTION_SKIP |
+            FileTransfer::Error::ACTION_SKIP_ALL,
+        FileTransfer::Error::ACTION_ASK
+    },
+    {
+        FileTransfer::Error::Type::OPEN_FILE,
+        FileTransfer::Error::ACTION_ABORT | FileTransfer::Error::ACTION_SKIP |
+            FileTransfer::Error::ACTION_SKIP_ALL,
+        FileTransfer::Error::ACTION_ASK
+    },
+    {
+        FileTransfer::Error::Type::ALREADY_EXISTS,
+        FileTransfer::Error::ACTION_ABORT | FileTransfer::Error::ACTION_SKIP |
+            FileTransfer::Error::ACTION_SKIP_ALL | FileTransfer::Error::ACTION_REPLACE |
+            FileTransfer::Error::ACTION_REPLACE_ALL,
+        FileTransfer::Error::ACTION_ASK
+    },
+    {
+        FileTransfer::Error::Type::WRITE_FILE,
+        FileTransfer::Error::ACTION_ABORT | FileTransfer::Error::ACTION_SKIP |
+            FileTransfer::Error::ACTION_SKIP_ALL,
+        FileTransfer::Error::ACTION_ASK
+    },
+    {
+        FileTransfer::Error::Type::READ_FILE,
+        FileTransfer::Error::ACTION_ABORT | FileTransfer::Error::ACTION_SKIP |
+            FileTransfer::Error::ACTION_SKIP_ALL,
+        FileTransfer::Error::ACTION_ASK
+    },
+    {
+        FileTransfer::Error::Type::OTHER,
+        FileTransfer::Error::ACTION_ABORT,
+        FileTransfer::Error::ACTION_ASK
+    }
+};
+
+} // namespace
+
+FileTransfer::FileTransfer(std::shared_ptr<base::TaskRunner> io_task_runner,
+                           std::shared_ptr<FileTransferWindowProxy> transfer_window_proxy,
+                           std::shared_ptr<common::FileRequestConsumerProxy> request_consumer_proxy,
+                           Type type)
+    : io_task_runner_(io_task_runner),
+      transfer_proxy_(std::make_shared<FileTransferProxy>(io_task_runner, this)),
+      transfer_window_proxy_(transfer_window_proxy),
+      request_consumer_proxy_(request_consumer_proxy),
+      request_producer_proxy_(std::make_shared<common::FileRequestProducerProxy>(this)),
       type_(type)
 {
-    actions_.insert(OtherError, QPair<Actions, Action>(Abort, Ask));
-    actions_.insert(DirectoryCreateError,
-                    QPair<Actions, Action>(Abort | Skip | SkipAll, Ask));
-    actions_.insert(FileCreateError,
-                    QPair<Actions, Action>(Abort | Skip | SkipAll, Ask));
-    actions_.insert(FileOpenError,
-                    QPair<Actions, Action>(Abort | Skip | SkipAll, Ask));
-    actions_.insert(FileAlreadyExists,
-                    QPair<Actions, Action>(Abort | Skip | SkipAll | Replace | ReplaceAll, Ask));
-    actions_.insert(FileWriteError,
-                    QPair<Actions, Action>(Abort | Skip | SkipAll, Ask));
-    actions_.insert(FileReadError,
-                    QPair<Actions, Action>(Abort | Skip | SkipAll, Ask));
+    // Nothing
 }
 
-void FileTransfer::start(const QString& source_path,
-                         const QString& target_path,
-                         const QList<Item>& items)
+FileTransfer::~FileTransfer()
 {
-    builder_ = new FileTransferQueueBuilder();
+    request_producer_proxy_->dettach();
+    transfer_proxy_->dettach();
+}
 
-    connect(builder_, &FileTransferQueueBuilder::started, this, &FileTransfer::started);
-    connect(builder_, &FileTransferQueueBuilder::error, this, &FileTransfer::taskQueueError);
-    connect(builder_, &FileTransferQueueBuilder::finished, this, &FileTransfer::taskQueueReady);
+void FileTransfer::start(const std::string& source_path,
+                         const std::string& target_path,
+                         const std::vector<Item>& items,
+                         const FinishCallback& finish_callback)
+{
+    finish_callback_ = finish_callback;
 
-    if (type_ == Downloader)
+    std::unique_ptr<FileRequestFactory> request_factory_local =
+        std::make_unique<FileRequestFactory>(
+            request_producer_proxy_, common::FileTaskTarget::LOCAL);
+
+    std::unique_ptr<FileRequestFactory> request_factory_remote =
+        std::make_unique<FileRequestFactory>(
+            request_producer_proxy_, common::FileTaskTarget::REMOTE);
+
+    if (type_ == Type::DOWNLOADER)
     {
-        connect(builder_, &FileTransferQueueBuilder::newRequest, this, &FileTransfer::remoteRequest);
+        request_factory_source_ = std::move(request_factory_remote);
+        request_factory_target_ = std::move(request_factory_local);
     }
     else
     {
-        DCHECK(type_ == Uploader);
-        connect(builder_, &FileTransferQueueBuilder::newRequest, this, &FileTransfer::localRequest);
+        DCHECK_EQ(type_, Type::UPLOADER);
+
+        request_factory_source_ = std::move(request_factory_local);
+        request_factory_target_ = std::move(request_factory_remote);
     }
 
-    connect(builder_, &FileTransferQueueBuilder::finished,
-            builder_, &FileTransferQueueBuilder::deleteLater);
+    // Asynchronously start UI.
+    transfer_window_proxy_->start(transfer_proxy_);
 
-    builder_->start(source_path, target_path, items);
+    queue_builder_ = std::make_unique<FileTransferQueueBuilder>(
+        request_consumer_proxy_, request_factory_source_->target());
+
+    // Start building a list of objects for transfer.
+    queue_builder_->start(source_path, target_path, items, [this](proto::FileError error_code)
+    {
+        if (error_code == proto::FILE_ERROR_SUCCESS)
+        {
+            tasks_ = queue_builder_->takeQueue();
+            total_size_ = queue_builder_->totalSize();
+
+            if (tasks_.empty())
+            {
+                onFinished();
+            }
+            else
+            {
+                doFrontTask(false);
+            }
+        }
+        else
+        {
+            onError(Error::Type::QUEUE, proto::FILE_ERROR_UNKNOWN);
+        }
+
+        queue_builder_.reset();
+    });
 }
 
 void FileTransfer::stop()
 {
-    cancel_timer_id_ = startTimer(std::chrono::seconds(5));
-    is_canceled_ = true;
+    if (queue_builder_)
+    {
+        queue_builder_.reset();
+        onFinished();
+    }
+    else
+    {
+        is_canceled_ = true;
+        cancel_timer_.start(
+            io_task_runner_, std::chrono::seconds(5), std::bind(&FileTransfer::onFinished, this));
+    }
 }
 
-FileTransfer::Actions FileTransfer::availableActions(Error error_type) const
+void FileTransfer::setActionForErrorType(Error::Type error_type, Error::Action action)
 {
-    return actions_[error_type].first;
+    actions_.insert_or_assign(error_type, action);
 }
 
-FileTransfer::Action FileTransfer::defaultAction(Error error_type) const
+void FileTransfer::onReply(std::shared_ptr<common::FileRequest> request)
 {
-    return actions_[error_type].second;
+    if (type_ == Type::DOWNLOADER)
+    {
+        if (request->target() == common::FileTaskTarget::LOCAL)
+        {
+            targetReply(request->request(), request->reply());
+        }
+        else
+        {
+            DCHECK_EQ(request->target(), common::FileTaskTarget::REMOTE);
+
+            sourceReply(request->request(), request->reply());
+        }
+    }
+    else
+    {
+        DCHECK_EQ(type_, Type::UPLOADER);
+
+        if (request->target() == common::FileTaskTarget::LOCAL)
+        {
+            sourceReply(request->request(), request->reply());
+        }
+        else
+        {
+            DCHECK_EQ(request->target(), common::FileTaskTarget::REMOTE);
+
+            targetReply(request->request(), request->reply());
+        }
+    }
 }
 
-void FileTransfer::setDefaultAction(Error error_type, Action action)
-{
-    actions_[error_type].second = action;
-}
-
-FileTransferTask& FileTransfer::currentTask()
+FileTransferTask& FileTransfer::frontTask()
 {
     return tasks_.front();
 }
 
-void FileTransfer::targetReply(const proto::FileRequest& request,
-                               const proto::FileReply& reply)
+void FileTransfer::targetReply(const proto::FileRequest& request, const proto::FileReply& reply)
 {
-    if (tasks_.isEmpty())
+    if (tasks_.empty())
         return;
 
     if (request.has_create_directory_request())
     {
-        if (reply.status() == proto::FileReply::STATUS_SUCCESS ||
-            reply.status() == proto::FileReply::STATUS_PATH_ALREADY_EXISTS)
+        if (reply.error_code() == proto::FILE_ERROR_SUCCESS ||
+            reply.error_code() == proto::FILE_ERROR_PATH_ALREADY_EXISTS)
         {
-            processNextTask();
+            doNextTask();
             return;
         }
 
-        processError(DirectoryCreateError,
-                     tr("Failed to create directory \"%1\": %2")
-                     .arg(currentTask().targetPath())
-                     .arg(fileStatusToString(reply.status())));
+        onError(Error::Type::CREATE_DIRECTORY, reply.error_code(), frontTask().targetPath());
     }
     else if (request.has_upload_request())
     {
-        if (reply.status() != proto::FileReply::STATUS_SUCCESS)
+        if (reply.error_code() != proto::FILE_ERROR_SUCCESS)
         {
-            Error error_type = FileCreateError;
+            Error::Type error_type = Error::Type::CREATE_FILE;
 
-            if (reply.status() == proto::FileReply::STATUS_PATH_ALREADY_EXISTS)
-                error_type = FileAlreadyExists;
+            if (reply.error_code() == proto::FILE_ERROR_PATH_ALREADY_EXISTS)
+                error_type = Error::Type::ALREADY_EXISTS;
 
-            processError(error_type,
-                         tr("Failed to create file \"%1\": %2")
-                         .arg(currentTask().targetPath())
-                         .arg(fileStatusToString(reply.status())));
+            onError(error_type, reply.error_code(), frontTask().targetPath());
             return;
         }
 
-        sourceRequest(common::FileRequest::packetRequest(proto::FilePacketRequest::NO_FLAGS));
+        request_consumer_proxy_->doRequest(
+            request_factory_source_->packetRequest(proto::FilePacketRequest::NO_FLAGS));
     }
     else if (request.has_packet())
     {
-        if (reply.status() != proto::FileReply::STATUS_SUCCESS)
+        if (reply.error_code() != proto::FILE_ERROR_SUCCESS)
         {
-            processError(FileWriteError,
-                         tr("Failed to write file \"%1\": %2")
-                         .arg(currentTask().targetPath())
-                         .arg(fileStatusToString(reply.status())));
+            onError(Error::Type::WRITE_FILE, reply.error_code(), frontTask().targetPath());
             return;
         }
 
-        int64_t full_task_size = currentTask().size();
+        const int64_t full_task_size = frontTask().size();
         if (full_task_size && total_size_)
         {
             int64_t packet_size = common::kMaxFilePacketSize;
@@ -161,21 +276,21 @@ void FileTransfer::targetReply(const proto::FileRequest& request,
 
             total_transfered_size_ += packet_size;
 
-            int task_percentage = task_transfered_size_ * 100 / full_task_size;
-            int total_percentage = total_transfered_size_ * 100 / total_size_;
+            const int task_percentage = task_transfered_size_ * 100 / full_task_size;
+            const int total_percentage = total_transfered_size_ * 100 / total_size_;
 
             if (task_percentage != task_percentage_ || total_percentage != total_percentage_)
             {
                 task_percentage_ = task_percentage;
                 total_percentage_ = total_percentage;
 
-                emit progressChanged(total_percentage_, task_percentage_);
+                transfer_window_proxy_->setCurrentProgress(total_percentage_, task_percentage_);
             }
         }
 
         if (request.packet().flags() & proto::FilePacket::LAST_PACKET)
         {
-            processNextTask();
+            doNextTask();
             return;
         }
 
@@ -183,208 +298,175 @@ void FileTransfer::targetReply(const proto::FileRequest& request,
         if (is_canceled_)
             flags = proto::FilePacketRequest::CANCEL;
 
-        sourceRequest(common::FileRequest::packetRequest(flags));
+        request_consumer_proxy_->doRequest(request_factory_source_->packetRequest(flags));
     }
     else
     {
-        emit error(this, OtherError, tr("An unexpected response to the request was received"));
+        onError(Error::Type::OTHER, proto::FILE_ERROR_UNKNOWN);
     }
 }
 
-void FileTransfer::sourceReply(const proto::FileRequest& request,
-                               const proto::FileReply& reply)
+void FileTransfer::sourceReply(const proto::FileRequest& request, const proto::FileReply& reply)
 {
-    if (tasks_.isEmpty())
+    if (tasks_.empty())
         return;
 
     if (request.has_download_request())
     {
-        if (reply.status() != proto::FileReply::STATUS_SUCCESS)
+        FileTransferTask& front_task = frontTask();
+
+        if (reply.error_code() != proto::FILE_ERROR_SUCCESS)
         {
-            processError(FileOpenError,
-                         tr("Failed to open file \"%1\": %2")
-                         .arg(currentTask().sourcePath()
-                         .arg(fileStatusToString(reply.status()))));
+            onError(Error::Type::OPEN_FILE, reply.error_code(), front_task.sourcePath());
             return;
         }
 
-        targetRequest(common::FileRequest::uploadRequest(currentTask().targetPath(),
-                                                         currentTask().overwrite()));
+        request_consumer_proxy_->doRequest(
+            request_factory_target_->uploadRequest(
+                front_task.targetPath(), front_task.overwrite()));
     }
     else if (request.has_packet_request())
     {
-        if (reply.status() != proto::FileReply::STATUS_SUCCESS)
+        if (reply.error_code() != proto::FILE_ERROR_SUCCESS)
         {
-            processError(FileReadError,
-                         tr("Failed to read file \"%1\": %2")
-                         .arg(currentTask().sourcePath())
-                         .arg(fileStatusToString(reply.status())));
+            onError(Error::Type::READ_FILE, reply.error_code(), frontTask().sourcePath());
             return;
         }
 
-        targetRequest(common::FileRequest::packet(reply.packet()));
+        request_consumer_proxy_->doRequest(request_factory_target_->packet(reply.packet()));
     }
     else
     {
-        emit error(this, OtherError, tr("An unexpected response to the request was received"));
+        onError(Error::Type::OTHER, proto::FILE_ERROR_UNKNOWN);
     }
 }
 
-void FileTransfer::timerEvent(QTimerEvent* event)
-{
-    if (event->timerId() == cancel_timer_id_)
-    {
-        DCHECK(is_canceled_);
-
-        killTimer(cancel_timer_id_);
-        cancel_timer_id_ = 0;
-
-        tasks_.clear();
-
-        emit finished();
-    }
-}
-
-void FileTransfer::taskQueueError(const QString& message)
-{
-    emit error(this, OtherError, message);
-}
-
-void FileTransfer::taskQueueReady()
-{
-    DCHECK(builder_ != nullptr);
-
-    tasks_ = builder_->taskQueue();
-    if (tasks_.isEmpty())
-    {
-        emit finished();
-        return;
-    }
-
-    for (const auto& task : tasks_)
-        total_size_ += task.size();
-
-    processTask(false);
-}
-
-void FileTransfer::applyAction(Error error_type, Action action)
+void FileTransfer::setAction(Error::Type error_type, Error::Action action)
 {
     switch (action)
     {
-        case Action::Abort:
-            emit finished();
+        case Error::ACTION_ABORT:
+            onFinished();
             break;
 
-        case Action::Replace:
-        case Action::ReplaceAll:
+        case Error::ACTION_REPLACE:
+        case Error::ACTION_REPLACE_ALL:
         {
-            if (action == Action::ReplaceAll)
-                setDefaultAction(error_type, action);
+            if (action == Error::ACTION_REPLACE_ALL)
+                setActionForErrorType(error_type, action);
 
-            processTask(true);
+            doFrontTask(true);
         }
         break;
 
-        case Action::Skip:
-        case Action::SkipAll:
+        case Error::ACTION_SKIP:
+        case Error::ACTION_SKIP_ALL:
         {
-            if (action == Action::SkipAll)
-                setDefaultAction(error_type, action);
+            if (action == Error::ACTION_SKIP_ALL)
+                setActionForErrorType(error_type, action);
 
-            processNextTask();
+            doNextTask();
         }
         break;
 
         default:
-            LOG(LS_FATAL) << "Unexpected action";
+            NOTREACHED();
             break;
     }
 }
 
-void FileTransfer::processTask(bool overwrite)
+void FileTransfer::doFrontTask(bool overwrite)
 {
     task_percentage_ = 0;
     task_transfered_size_ = 0;
 
-    FileTransferTask& task = currentTask();
+    FileTransferTask& front_task = frontTask();
+    front_task.setOverwrite(overwrite);
 
-    task.setOverwrite(overwrite);
+    transfer_window_proxy_->setCurrentItem(front_task.sourcePath(), front_task.targetPath());
 
-    emit currentItemChanged(task.sourcePath(), task.targetPath());
-
-    if (task.isDirectory())
+    if (front_task.isDirectory())
     {
-        targetRequest(common::FileRequest::createDirectoryRequest(task.targetPath()));
+        request_consumer_proxy_->doRequest(
+            request_factory_target_->createDirectoryRequest(front_task.targetPath()));
     }
     else
     {
-        sourceRequest(common::FileRequest::FileRequest::downloadRequest(task.sourcePath()));
+        request_consumer_proxy_->doRequest(
+            request_factory_source_->downloadRequest(front_task.sourcePath()));
     }
 }
 
-void FileTransfer::processNextTask()
+void FileTransfer::doNextTask()
 {
     if (is_canceled_)
-        tasks_.clear();
+    {
+        while (!tasks_.empty())
+            tasks_.pop_front();
+    }
 
-    if (!tasks_.isEmpty())
+    if (!tasks_.empty())
     {
         // Delete the task only after confirmation of its successful execution.
         tasks_.pop_front();
     }
 
-    if (tasks_.isEmpty())
+    if (tasks_.empty())
     {
-        if (cancel_timer_id_)
-            killTimer(cancel_timer_id_);
+        if (cancel_timer_.isActive())
+            cancel_timer_.stop();
 
-        emit finished();
+        onFinished();
         return;
     }
 
-    processTask(false);
+    doFrontTask(false);
 }
 
-void FileTransfer::processError(Error error_type, const QString& message)
+void FileTransfer::onError(Error::Type type, proto::FileError code, const std::string& path)
 {
-    Action action = defaultAction(error_type);
-    if (action != Ask)
+    auto default_action = actions_.find(type);
+    if (default_action != actions_.end())
     {
-        applyAction(error_type, action);
+        setAction(type, default_action->second);
         return;
     }
 
-    emit error(this, error_type, message);
+    transfer_window_proxy_->errorOccurred(Error(type, code, path));
 }
 
-void FileTransfer::sourceRequest(common::FileRequest* request)
+void FileTransfer::onFinished()
 {
-    connect(request, &common::FileRequest::replyReady, this, &FileTransfer::sourceReply);
+    FinishCallback callback;
+    callback.swap(finish_callback_);
 
-    if (type_ == Downloader)
+    if (callback)
     {
-        emit remoteRequest(request);
-    }
-    else
-    {
-        DCHECK(type_ == Uploader);
-        emit localRequest(request);
+        transfer_window_proxy_->stop();
+        callback();
     }
 }
 
-void FileTransfer::targetRequest(common::FileRequest* request)
+uint32_t FileTransfer::Error::availableActions() const
 {
-    connect(request, &common::FileRequest::replyReady, this, &FileTransfer::targetReply);
+    for (size_t i = 0; i < sizeof(kActions) / sizeof(kActions[0]); ++i)
+    {
+        if (kActions[i].type == type_)
+            return kActions[i].available_actions;
+    }
 
-    if (type_ == Downloader)
+    return 0;
+}
+
+FileTransfer::Error::Action FileTransfer::Error::defaultAction() const
+{
+    for (size_t i = 0; i < sizeof(kActions) / sizeof(kActions[0]); ++i)
     {
-        emit localRequest(request);
+        if (kActions[i].type == type_)
+            return kActions[i].default_action;
     }
-    else
-    {
-        DCHECK(type_ == Uploader);
-        emit remoteRequest(request);
-    }
+
+    return Action::ACTION_ABORT;
 }
 
 } // namespace client

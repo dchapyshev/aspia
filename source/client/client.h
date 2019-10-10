@@ -60,6 +60,8 @@ public:
     // Returns the version of the current client.
     static base::Version version();
 
+    Config config() const { return config_; }
+
 protected:
     std::shared_ptr<base::TaskRunner> ioTaskRunner() const;
     std::shared_ptr<base::TaskRunner> uiTaskRunner() const;
@@ -96,6 +98,7 @@ private:
     std::unique_ptr<Authenticator> authenticator_;
     std::unique_ptr<StatusWindowProxy> status_window_proxy_;
 
+    bool session_started_ = false;
     Config config_;
 };
 

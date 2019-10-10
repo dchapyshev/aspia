@@ -26,6 +26,7 @@
 #include "client/frame_factory_qimage.h"
 #include "client/ui/desktop_config_dialog.h"
 #include "client/ui/desktop_panel.h"
+#include "client/ui/qt_file_manager_window.h"
 #include "client/ui/system_info_window.h"
 #include "common/clipboard.h"
 #include "common/desktop_session_constants.h"
@@ -92,6 +93,7 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
     connect(panel_, &DesktopPanel::switchToAutosize, this, &QtDesktopWindow::autosizeWindow);
     connect(panel_, &DesktopPanel::takeScreenshot, this, &QtDesktopWindow::takeScreenshot);
     connect(panel_, &DesktopPanel::scaleChanged, this, &QtDesktopWindow::scaleDesktop);
+    connect(panel_, &DesktopPanel::closeSession, this, &QtDesktopWindow::close);
 
     connect(panel_, &DesktopPanel::screenSelected, [this](const proto::Screen& screen)
     {
@@ -112,8 +114,6 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
     {
         desktop_control_proxy_->onSystemInfoRequest();
     });
-
-    connect(panel_, &DesktopPanel::closeSession, this, &QtDesktopWindow::close);
 
     connect(panel_, &DesktopPanel::switchToFullscreen, [this](bool fullscreen)
     {
@@ -137,16 +137,29 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
     desktop_->installEventFilter(this);
     scroll_area_->viewport()->installEventFilter(this);
 
-    clipboard_ = new common::Clipboard(this);
-    connect(clipboard_, &common::Clipboard::clipboardEvent,
-            [this](const proto::ClipboardEvent& event)
-    {
-        desktop_control_proxy_->onClipboardEvent(event);
-    });
-
     connect(panel_, &DesktopPanel::startSession, [this](proto::SessionType session_type)
     {
-        // TODO
+        client::Config session_config = config();
+        session_config.session_type = session_type;
+
+        client::ClientWindow* client_window = nullptr;
+
+        switch (session_config.session_type)
+        {
+            case proto::SESSION_TYPE_FILE_TRANSFER:
+                client_window = new client::QtFileManagerWindow();
+                break;
+
+            default:
+                NOTREACHED();
+                break;
+        }
+
+        if (!client_window)
+            return;
+
+        client_window->setAttribute(Qt::WA_DeleteOnClose);
+        client_window->connectToHost(session_config);
     });
 }
 
@@ -168,6 +181,13 @@ void QtDesktopWindow::showWindow(
 {
     desktop_control_proxy_ = desktop_control_proxy;
     peer_version_ = peer_version;
+
+    clipboard_ = new common::Clipboard(this);
+    connect(clipboard_, &common::Clipboard::clipboardEvent,
+            [this](const proto::ClipboardEvent& event)
+    {
+        desktop_control_proxy_->onClipboardEvent(event);
+    });
 
     show();
     activateWindow();

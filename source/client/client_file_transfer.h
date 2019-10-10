@@ -19,39 +19,89 @@
 #ifndef CLIENT__CLIENT_FILE_TRANSFER_H
 #define CLIENT__CLIENT_FILE_TRANSFER_H
 
-#include "base/macros_magic.h"
 #include "client/client.h"
-#include "client/file_request_consumer.h"
+#include "client/file_control.h"
+#include "common/file_request_consumer.h"
+#include "common/file_request_producer.h"
 
 namespace common {
+class FileRequestConsumerProxy;
+class FileRequestProducerProxy;
 class FileWorker;
 } // namespace common
 
+namespace proto {
+class FileReply;
+} // namespace proto
+
 namespace client {
 
-class FileRequestProducerProxy;
+class FileControlProxy;
+class FileManagerWindow;
+class FileManagerWindowProxy;
+class FileRequestFactory;
 
 class ClientFileTransfer
     : public Client,
-      public FileRequestConsumer
+      public common::FileRequestConsumer,
+      public common::FileRequestProducer,
+      public FileControl
 {
 public:
-    explicit ClientFileTransfer(const Config& config);
+    explicit ClientFileTransfer(std::shared_ptr<base::TaskRunner> ui_task_runner);
     ~ClientFileTransfer();
 
+    void setFileManagerWindow(FileManagerWindow* file_manager_window);
+
     // FileRequestConsumer implementation.
-    void localRequest(const proto::FileRequest& request) override;
-    void remoteRequest(const proto::FileRequest& request) override;
+    void doRequest(std::shared_ptr<common::FileRequest> request) override;
 
 protected:
     // Client implementation.
+    void onSessionStarted(const base::Version& peer_version) override;
+    void onSessionStopped() override;
+
+    // net::Listener implementation.
     void onMessageReceived(const base::ByteArray& buffer) override;
+    void onMessageWritten() override;
+
+    // FileRequestProducer implementation.
+    void onReply(std::shared_ptr<common::FileRequest> request) override;
 
 private:
-    void onSessionError(const QString& message);
+    void doNextRemoteRequest();
 
+    FileRequestFactory* requestFactory(common::FileTaskTarget target);
+
+    // FileControl implementation.
+    void getDriveList(common::FileTaskTarget target) override;
+    void getFileList(common::FileTaskTarget target, const std::string& path) override;
+    void createDirectory(common::FileTaskTarget target, const std::string& path) override;
+    void rename(common::FileTaskTarget target,
+                const std::string& old_path,
+                const std::string& new_path) override;
+    void remove(common::FileTaskTarget target,
+                std::shared_ptr<FileRemoveWindowProxy> remove_window_proxy,
+                const FileRemover::TaskList& items) override;
+    void transfer(std::shared_ptr<FileTransferWindowProxy> transfer_window_proxy,
+                  FileTransfer::Type transfer_type,
+                  const std::string& source_path,
+                  const std::string& target_path,
+                  const std::vector<FileTransfer::Item>& items) override;
+
+    std::shared_ptr<common::FileRequestConsumerProxy> request_consumer_proxy_;
+    std::shared_ptr<common::FileRequestProducerProxy> request_producer_proxy_;
+
+    std::unique_ptr<FileRequestFactory> local_request_factory_;
+    std::unique_ptr<FileRequestFactory> remote_request_factory_;
+
+    std::queue<std::shared_ptr<common::FileRequest>> remote_request_queue_;
     std::unique_ptr<common::FileWorker> local_worker_;
-    std::unique_ptr<FileRequestProducerProxy> request_producer_;
+
+    std::shared_ptr<FileControlProxy> file_control_proxy_;
+    std::unique_ptr<FileManagerWindowProxy> file_manager_window_proxy_;
+    std::unique_ptr<FileRemover> remover_;
+    std::unique_ptr<FileTransfer> transfer_;
 
     DISALLOW_COPY_AND_ASSIGN(ClientFileTransfer);
 };

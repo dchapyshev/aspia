@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -19,78 +19,99 @@
 #ifndef CLIENT__FILE_REMOVER_H
 #define CLIENT__FILE_REMOVER_H
 
-#include "client/file_remove_task.h"
-#include "common/file_request.h"
+#include "base/macros_magic.h"
+#include "common/file_request_producer.h"
+#include "common/file_task_target.h"
 #include "proto/file_transfer.pb.h"
 
-#include <QQueue>
+#include <deque>
+
+namespace base {
+class TaskRunner;
+} // namespace base
+
+namespace common {
+class FileRequestConsumerProxy;
+class FileRequestProducerProxy;
+} // namespace common
 
 namespace client {
 
 class FileRemoveQueueBuilder;
+class FileRemoveWindowProxy;
+class FileRemoverProxy;
+class FileRequestFactory;
 
-class FileRemover : public QObject
+class FileRemover : public common::FileRequestProducer
 {
-    Q_OBJECT
-
 public:
-    explicit FileRemover(QObject* parent = nullptr);
-    ~FileRemover() = default;
+    FileRemover(std::shared_ptr<base::TaskRunner> io_task_runner,
+                std::shared_ptr<FileRemoveWindowProxy> remove_window_proxy,
+                std::shared_ptr<common::FileRequestConsumerProxy> request_consumer_proxy,
+                common::FileTaskTarget target);
+    ~FileRemover();
 
     enum Action
     {
-        Ask     = 0,
-        Abort   = 1,
-        Skip    = 2,
-        SkipAll = 4
+        ACTION_ASK      = 0,
+        ACTION_ABORT    = 1,
+        ACTION_SKIP     = 2,
+        ACTION_SKIP_ALL = 4
     };
-    Q_DECLARE_FLAGS(Actions, Action)
 
-    struct Item
+    class Task
     {
-        Item(const QString& name, bool is_directory)
-            : name(name),
-              is_directory(is_directory)
-        {
-            // Nothing
-        }
+    public:
+        Task(std::string&& path, bool is_directory);
 
-        QString name;
-        bool is_directory;
+        Task(const Task& other) = default;
+        Task& operator=(const Task& other) = default;
+
+        Task(Task&& other) noexcept;
+        Task& operator=(Task&& other) noexcept;
+
+        ~Task() = default;
+
+        const std::string& path() const { return path_; }
+        bool isDirectory() const { return is_directory_; }
+
+    private:
+        std::string path_;
+        bool is_directory_;
     };
 
-    void start(const QString& path, const QList<Item>& items);
 
-signals:
-    void started();
-    void finished();
-    void progressChanged(const QString& name, int percentage);
-    void error(FileRemover* remover, FileRemover::Actions actions, const QString& message);
-    void newRequest(common::FileRequest* request);
+    using TaskList = std::deque<Task>;
+    using FinishCallback = std::function<void()>;
 
-public slots:
-    void applyAction(Action action);
-    void reply(const proto::FileRequest& request, const proto::FileReply& reply);
+    void start(const TaskList& items, FinishCallback callback);
+    void stop();
+    void setAction(Action action);
 
-private slots:
-    void taskQueueError(const QString& message);
-    void taskQueueReady();
+protected:
+    // common::FileRequestProducer implementation.
+    void onReply(std::shared_ptr<common::FileRequest> request) override;
 
 private:
-    void processTask();
-    void processNextTask();
-    void sendRequest(common::FileRequest* request);
+    void doNextTask();
+    void onFinished();
 
-    FileRemoveQueueBuilder* builder_ = nullptr;
-    QQueue<FileRemoveTask> tasks_;
+    std::shared_ptr<FileRemoverProxy> remover_proxy_;
+    std::shared_ptr<FileRemoveWindowProxy> remove_window_proxy_;
+    std::shared_ptr<common::FileRequestConsumerProxy> request_consumer_proxy_;
+    std::shared_ptr<common::FileRequestProducerProxy> request_producer_proxy_;
+    std::unique_ptr<FileRequestFactory> request_factory_;
 
-    Action failure_action_ = Ask;
-    int tasks_count_ = 0;
+    std::unique_ptr<FileRemoveQueueBuilder> queue_builder_;
+
+    TaskList tasks_;
+    FinishCallback finish_callback_;
+
+    Action failure_action_ = ACTION_ASK;
+    size_t tasks_count_ = 0;
 
     DISALLOW_COPY_AND_ASSIGN(FileRemover);
 };
-
-Q_DECLARE_OPERATORS_FOR_FLAGS(FileRemover::Actions)
 
 } // namespace client
 

@@ -262,6 +262,79 @@
     </message>
 </context>
 <context>
+    <name>FileError</name>
+    <message>
+        <location filename="../ui/file_error_code.cc" line="32"/>
+        <source>Successfully completed</source>
+        <translation type="unfinished">Erfolgreich abgeschlossen</translation>
+    </message>
+    <message>
+        <location filename="../ui/file_error_code.cc" line="36"/>
+        <source>Invalid request</source>
+        <translation type="unfinished">Ungültige Anfrage</translation>
+    </message>
+    <message>
+        <location filename="../ui/file_error_code.cc" line="40"/>
+        <source>Invalid directory or file name</source>
+        <translation type="unfinished">Ungültiger Verzeichnis- oder Dateiname</translation>
+    </message>
+    <message>
+        <location filename="../ui/file_error_code.cc" line="44"/>
+        <source>Path not found</source>
+        <translation type="unfinished">Pfad nicht gefunden</translation>
+    </message>
+    <message>
+        <location filename="../ui/file_error_code.cc" line="48"/>
+        <source>Path already exists</source>
+        <translation type="unfinished">Pfad existiert bereits</translation>
+    </message>
+    <message>
+        <location filename="../ui/file_error_code.cc" line="52"/>
+        <source>No drives found</source>
+        <translation type="unfinished">Keine Laufwerke gefunden</translation>
+    </message>
+    <message>
+        <location filename="../ui/file_error_code.cc" line="56"/>
+        <source>Disk full</source>
+        <translation type="unfinished">Festplatte voll</translation>
+    </message>
+    <message>
+        <location filename="../ui/file_error_code.cc" line="60"/>
+        <source>Access denied</source>
+        <translation type="unfinished">Zugriff verweigert</translation>
+    </message>
+    <message>
+        <location filename="../ui/file_error_code.cc" line="64"/>
+        <source>Could not open file for reading</source>
+        <translation type="unfinished">Datei konnte nicht zum Lesen geöffnet werden</translation>
+    </message>
+    <message>
+        <location filename="../ui/file_error_code.cc" line="68"/>
+        <source>Could not create or replace file</source>
+        <translation type="unfinished">Datei konnte nicht erstellt oder ersetzt werden</translation>
+    </message>
+    <message>
+        <location filename="../ui/file_error_code.cc" line="72"/>
+        <source>Could not write to file</source>
+        <translation type="unfinished">Konnte nicht in die Datei schreiben</translation>
+    </message>
+    <message>
+        <location filename="../ui/file_error_code.cc" line="76"/>
+        <source>Could not read file</source>
+        <translation type="unfinished">Datei konnte nicht gelesen werden</translation>
+    </message>
+    <message>
+        <location filename="../ui/file_error_code.cc" line="80"/>
+        <source>Drive not ready</source>
+        <translation type="unfinished">Laufwerk nicht bereit</translation>
+    </message>
+    <message>
+        <location filename="../ui/file_error_code.cc" line="84"/>
+        <source>Unknown error code</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>FileNameEditor</name>
     <message>
         <location filename="../ui/file_item_delegate.cc" line="55"/>
@@ -356,88 +429,89 @@
 <context>
     <name>QCoreApplication</name>
     <message>
-        <location filename="../file_status.cc" line="30"/>
         <source>Successfully completed</source>
         <comment>FileStatus</comment>
-        <translation>Erfolgreich abgeschlossen</translation>
+        <translation type="vanished">Erfolgreich abgeschlossen</translation>
     </message>
     <message>
-        <location filename="../file_status.cc" line="33"/>
         <source>Invalid request</source>
         <comment>FileStatus</comment>
-        <translation>Ungültige Anfrage</translation>
+        <translation type="vanished">Ungültige Anfrage</translation>
     </message>
     <message>
-        <location filename="../file_status.cc" line="36"/>
         <source>Invalid directory or file name</source>
         <comment>FileStatus</comment>
-        <translation>Ungültiger Verzeichnis- oder Dateiname</translation>
+        <translation type="vanished">Ungültiger Verzeichnis- oder Dateiname</translation>
     </message>
     <message>
-        <location filename="../file_status.cc" line="39"/>
         <source>Path not found</source>
         <comment>FileStatus</comment>
-        <translation>Pfad nicht gefunden</translation>
+        <translation type="vanished">Pfad nicht gefunden</translation>
     </message>
     <message>
-        <location filename="../file_status.cc" line="42"/>
         <source>Path already exists</source>
         <comment>FileStatus</comment>
-        <translation>Pfad existiert bereits</translation>
+        <translation type="vanished">Pfad existiert bereits</translation>
     </message>
     <message>
-        <location filename="../file_status.cc" line="45"/>
         <source>No drives found</source>
         <comment>FileStatus</comment>
-        <translation>Keine Laufwerke gefunden</translation>
+        <translation type="vanished">Keine Laufwerke gefunden</translation>
     </message>
     <message>
-        <location filename="../file_status.cc" line="48"/>
         <source>Disk full</source>
         <comment>FileStatus</comment>
-        <translation>Festplatte voll</translation>
+        <translation type="vanished">Festplatte voll</translation>
     </message>
     <message>
-        <location filename="../file_status.cc" line="51"/>
         <source>Access denied</source>
         <comment>FileStatus</comment>
-        <translation>Zugriff verweigert</translation>
+        <translation type="vanished">Zugriff verweigert</translation>
     </message>
     <message>
-        <location filename="../file_status.cc" line="54"/>
         <source>Could not open file for reading</source>
         <comment>FileStatus</comment>
-        <translation>Datei konnte nicht zum Lesen geöffnet werden</translation>
+        <translation type="vanished">Datei konnte nicht zum Lesen geöffnet werden</translation>
     </message>
     <message>
-        <location filename="../file_status.cc" line="57"/>
         <source>Could not create or replace file</source>
         <comment>FileStatus</comment>
-        <translation>Datei konnte nicht erstellt oder ersetzt werden</translation>
+        <translation type="vanished">Datei konnte nicht erstellt oder ersetzt werden</translation>
     </message>
     <message>
-        <location filename="../file_status.cc" line="60"/>
         <source>Could not write to file</source>
         <comment>FileStatus</comment>
-        <translation>Konnte nicht in die Datei schreiben</translation>
+        <translation type="vanished">Konnte nicht in die Datei schreiben</translation>
     </message>
     <message>
-        <location filename="../file_status.cc" line="63"/>
         <source>Could not read file</source>
         <comment>FileStatus</comment>
-        <translation>Datei konnte nicht gelesen werden</translation>
+        <translation type="vanished">Datei konnte nicht gelesen werden</translation>
     </message>
     <message>
-        <location filename="../file_status.cc" line="66"/>
         <source>Drive not ready</source>
         <comment>FileStatus</comment>
-        <translation>Laufwerk nicht bereit</translation>
+        <translation type="vanished">Laufwerk nicht bereit</translation>
     </message>
     <message>
-        <location filename="../file_status.cc" line="69"/>
         <source>Unknown status code</source>
         <comment>FileStatus</comment>
-        <translation>Unbekannter Statuscode</translation>
+        <translation type="vanished">Unbekannter Statuscode</translation>
+    </message>
+</context>
+<context>
+    <name>QtFileManagerWindow</name>
+    <message>
+        <source>Local Computer</source>
+        <translation type="obsolete">Lokaler Computer</translation>
+    </message>
+    <message>
+        <source>Remote Computer</source>
+        <translation type="obsolete">Remote Computer</translation>
+    </message>
+    <message>
+        <source>File Transfer</source>
+        <translation type="obsolete">Dateiübertragung</translation>
     </message>
 </context>
 <context>
@@ -728,113 +802,95 @@
     </message>
 </context>
 <context>
-    <name>client::ClientFileTransfer</name>
-    <message>
-        <location filename="../client_file_transfer.cc" line="41"/>
-        <source>Invalid message from host</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client_file_transfer.cc" line="47"/>
-        <source>There are no logged in users. File transfer is not available</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client_file_transfer.cc" line="66"/>
-        <source>Session error</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>client::ClientWindow</name>
     <message>
-        <location filename="../ui/client_window.cc" line="85"/>
+        <location filename="../ui/client_window.cc" line="90"/>
         <source>Attempt to connect to %1:%2.</source>
         <translation type="unfinished">Versuch, eine Verbindung mit %1:%2 herzustellen.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="95"/>
+        <location filename="../ui/client_window.cc" line="100"/>
         <source>Connection established.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="106"/>
+        <location filename="../ui/client_window.cc" line="111"/>
         <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="110"/>
+        <location filename="../ui/client_window.cc" line="115"/>
         <source>Connection was refused by the peer (or timed out).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="114"/>
+        <location filename="../ui/client_window.cc" line="119"/>
         <source>Remote host closed the connection.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="118"/>
+        <location filename="../ui/client_window.cc" line="123"/>
         <source>Host address was not found.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="122"/>
+        <location filename="../ui/client_window.cc" line="127"/>
         <source>Socket operation timed out.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="126"/>
+        <location filename="../ui/client_window.cc" line="131"/>
         <source>Address specified is already in use and was set to be exclusive.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="130"/>
+        <location filename="../ui/client_window.cc" line="135"/>
         <source>Address specified does not belong to the host.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="140"/>
-        <location filename="../ui/client_window.cc" line="175"/>
+        <location filename="../ui/client_window.cc" line="145"/>
+        <location filename="../ui/client_window.cc" line="180"/>
         <source>An unknown error occurred.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="155"/>
+        <location filename="../ui/client_window.cc" line="160"/>
         <source>Authentication successfully completed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="159"/>
+        <location filename="../ui/client_window.cc" line="164"/>
         <source>Network authentication error.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="163"/>
+        <location filename="../ui/client_window.cc" line="168"/>
         <source>Violation of the data exchange protocol.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="167"/>
+        <location filename="../ui/client_window.cc" line="172"/>
         <source>An error occured while authenticating: wrong user name or password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="171"/>
+        <location filename="../ui/client_window.cc" line="176"/>
         <source>Specified session type is not allowed for the user.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="189"/>
+        <location filename="../ui/client_window.cc" line="194"/>
         <source>Desktop Manage</source>
         <translation type="unfinished">Desktopverwaltung</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="193"/>
+        <location filename="../ui/client_window.cc" line="198"/>
         <source>Desktop View</source>
         <translation type="unfinished">Desktopansicht</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="197"/>
+        <location filename="../ui/client_window.cc" line="202"/>
         <source>File Transfer</source>
         <translation type="unfinished">Dateiübertragung</translation>
     </message>
@@ -988,94 +1044,84 @@
 <context>
     <name>client::FileManagerWindow</name>
     <message>
-        <location filename="../ui/file_manager_window.cc" line="45"/>
         <source>Local Computer</source>
-        <translation type="unfinished">Lokaler Computer</translation>
+        <translation type="obsolete">Lokaler Computer</translation>
     </message>
     <message>
-        <location filename="../ui/file_manager_window.cc" line="48"/>
         <source>Remote Computer</source>
-        <translation type="unfinished">Remote Computer</translation>
+        <translation type="obsolete">Remote Computer</translation>
     </message>
     <message>
-        <location filename="../ui/file_manager_window.cc" line="292"/>
         <source>File Transfer</source>
-        <translation type="unfinished">Dateiübertragung</translation>
+        <translation type="obsolete">Dateiübertragung</translation>
     </message>
 </context>
 <context>
     <name>client::FilePanel</name>
     <message>
-        <location filename="../ui/file_panel.cc" line="156"/>
-        <location filename="../ui/file_panel.cc" line="171"/>
-        <location filename="../ui/file_panel.cc" line="195"/>
-        <location filename="../ui/file_panel.cc" line="206"/>
-        <location filename="../ui/file_panel.cc" line="297"/>
-        <location filename="../ui/file_panel.cc" line="306"/>
-        <location filename="../ui/file_panel.cc" line="322"/>
-        <location filename="../ui/file_panel.cc" line="331"/>
+        <location filename="../ui/file_panel.cc" line="435"/>
         <source>Warning</source>
         <translation type="unfinished">Warnung</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="157"/>
+        <location filename="../ui/file_panel.cc" line="96"/>
         <source>Failed to get list of drives: %1</source>
         <translation type="unfinished">Fehler beim Abrufen der Laufwerksliste: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="172"/>
+        <location filename="../ui/file_panel.cc" line="111"/>
         <source>Failed to get list of files: %1</source>
         <translation type="unfinished">Fehler beim Abrufen der Dateiliste: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="196"/>
+        <location filename="../ui/file_panel.cc" line="135"/>
         <source>Failed to create directory: %1</source>
         <translation type="unfinished">Fehler beim Erstellen des Verzeichnisses: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="207"/>
+        <location filename="../ui/file_panel.cc" line="146"/>
         <source>Failed to rename item: %1</source>
         <translation type="unfinished">Fehler beim Umbenennen des Elements: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="277"/>
+        <location filename="../ui/file_panel.cc" line="268"/>
         <source>%1 object(s) selected</source>
         <translation type="unfinished">%1 Objekt(e) ausgewählt</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="298"/>
-        <location filename="../ui/file_panel.cc" line="323"/>
+        <location filename="../ui/file_panel.cc" line="287"/>
+        <location filename="../ui/file_panel.cc" line="305"/>
         <source>Folder name can not be empty.</source>
         <translation type="unfinished">Ordnername darf nicht leer sein.</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="307"/>
-        <location filename="../ui/file_panel.cc" line="332"/>
+        <location filename="../ui/file_panel.cc" line="293"/>
+        <location filename="../ui/file_panel.cc" line="311"/>
         <source>Name contains invalid characters.</source>
         <translation type="unfinished">Name beinhaltet ungültige Zeichen.</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="354"/>
+        <location filename="../ui/file_panel.cc" line="332"/>
         <source>&amp;Send	F11</source>
         <translation type="unfinished">&amp;Senden F11</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="356"/>
+        <location filename="../ui/file_panel.cc" line="334"/>
         <source>&amp;Delete	Delete</source>
         <translation type="unfinished">&amp;Löschen Entf</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="366"/>
+        <location filename="../ui/file_panel.cc" line="344"/>
         <source>&amp;Create Folder</source>
         <translation type="unfinished">&amp;Ordner erstellen</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="421"/>
+        <location filename="../ui/file_panel.cc" line="401"/>
         <source>Confirmation</source>
         <translation type="unfinished">Bestätigung</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="422"/>
+        <location filename="../ui/file_panel.cc" line="402"/>
         <source>Are you sure you want to delete the selected items?</source>
         <translation type="unfinished">Möchten Sie die ausgewählten Elemente wirklich löschen?</translation>
     </message>
@@ -1083,27 +1129,37 @@
 <context>
     <name>client::FileRemoveDialog</name>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="62"/>
+        <location filename="../ui/file_remove_dialog.cc" line="90"/>
         <source>Deleting: %1</source>
         <translation type="unfinished">Löschen: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="86"/>
+        <location filename="../ui/file_remove_dialog.cc" line="116"/>
+        <source>An error occurred while retrieving the list of files: %1</source>
+        <translation type="unfinished">Beim Abrufen der Dateiliste ist ein Fehler aufgetreten: %1</translation>
+    </message>
+    <message>
+        <location filename="../ui/file_remove_dialog.cc" line="121"/>
+        <source>Failed to delete &quot;%1&quot;: %2.</source>
+        <translation type="unfinished">Fehler beim Löschen &quot;%1&quot;: %2.</translation>
+    </message>
+    <message>
+        <location filename="../ui/file_remove_dialog.cc" line="128"/>
         <source>Warning</source>
         <translation type="unfinished">Warnung</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="94"/>
+        <location filename="../ui/file_remove_dialog.cc" line="136"/>
         <source>Skip</source>
         <translation type="unfinished">Überspringen</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="97"/>
+        <location filename="../ui/file_remove_dialog.cc" line="139"/>
         <source>Skip All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="100"/>
+        <location filename="../ui/file_remove_dialog.cc" line="142"/>
         <source>Abort</source>
         <translation type="unfinished">Abbrechen</translation>
     </message>
@@ -1111,127 +1167,149 @@
 <context>
     <name>client::FileRemoveQueueBuilder</name>
     <message>
-        <location filename="../file_remove_queue_builder.cc" line="53"/>
         <source>An unexpected answer was received.</source>
-        <translation type="unfinished">Eine unerwartete Antwort wurde erhalten.</translation>
+        <translation type="obsolete">Eine unerwartete Antwort wurde erhalten.</translation>
     </message>
     <message>
-        <location filename="../file_remove_queue_builder.cc" line="59"/>
         <source>An error occurred while retrieving the list of files: %1</source>
-        <translation type="unfinished">Beim Abrufen der Dateiliste ist ein Fehler aufgetreten: %1</translation>
+        <translation type="obsolete">Beim Abrufen der Dateiliste ist ein Fehler aufgetreten: %1</translation>
     </message>
 </context>
 <context>
     <name>client::FileRemover</name>
     <message>
-        <location filename="../file_remover.cc" line="81"/>
         <source>An unexpected answer was received.</source>
-        <translation type="unfinished">Eine unerwartete Antwort wurde erhalten.</translation>
+        <translation type="obsolete">Eine unerwartete Antwort wurde erhalten.</translation>
     </message>
     <message>
-        <location filename="../file_remover.cc" line="109"/>
         <source>Failed to delete &quot;%1&quot;: %2.</source>
-        <translation type="unfinished">Fehler beim Löschen &quot;%1&quot;: %2.</translation>
+        <translation type="obsolete">Fehler beim Löschen &quot;%1&quot;: %2.</translation>
     </message>
 </context>
 <context>
     <name>client::FileTransfer</name>
     <message>
-        <location filename="../file_transfer.cc" line="116"/>
         <source>Failed to create directory &quot;%1&quot;: %2</source>
-        <translation type="unfinished">Fehler beim Erstellen des Verzeichnisses &quot;%1&quot;: %2</translation>
+        <translation type="obsolete">Fehler beim Erstellen des Verzeichnisses &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../file_transfer.cc" line="130"/>
         <source>Failed to create file &quot;%1&quot;: %2</source>
-        <translation type="unfinished">Fehler beim Erstellen der Datei &quot;%1&quot;: %2</translation>
+        <translation type="obsolete">Fehler beim Erstellen der Datei &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../file_transfer.cc" line="143"/>
         <source>Failed to write file &quot;%1&quot;: %2</source>
-        <translation type="unfinished">Fehler beim Schreiben der Datei &quot;%1&quot;: %2</translation>
+        <translation type="obsolete">Fehler beim Schreiben der Datei &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../file_transfer.cc" line="190"/>
-        <location filename="../file_transfer.cc" line="229"/>
         <source>An unexpected response to the request was received</source>
-        <translation type="unfinished">Eine unerwartete Antwort auf die Anfrage wurde empfangen</translation>
+        <translation type="obsolete">Eine unerwartete Antwort auf die Anfrage wurde empfangen</translation>
     </message>
     <message>
-        <location filename="../file_transfer.cc" line="205"/>
         <source>Failed to open file &quot;%1&quot;: %2</source>
-        <translation type="unfinished">Fehler beim Öffnen der Datei &quot;%1&quot;: %2</translation>
+        <translation type="obsolete">Fehler beim Öffnen der Datei &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../file_transfer.cc" line="219"/>
         <source>Failed to read file &quot;%1&quot;: %2</source>
-        <translation type="unfinished">Fehler beim Lesen der Datei &quot;%1&quot;: %2</translation>
+        <translation type="obsolete">Fehler beim Lesen der Datei &quot;%1&quot;: %2</translation>
     </message>
 </context>
 <context>
     <name>client::FileTransferDialog</name>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="72"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="98"/>
         <source>Current Task: Copying items.</source>
         <translation type="unfinished">Aktuelle Aufgabe: Elemente kopieren.</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="84"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="110"/>
         <source>From: %1</source>
         <translation type="unfinished">Von: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="89"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="115"/>
         <source>To: %1</source>
         <translation type="unfinished">Zu: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="119"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="143"/>
         <source>Warning</source>
         <translation type="unfinished">Warnung</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="131"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="155"/>
         <source>Skip</source>
         <translation type="unfinished">Überspringen</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="134"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="158"/>
         <source>Skip All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="137"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="161"/>
         <source>Replace</source>
         <translation type="unfinished">Ersetzen</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="140"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="164"/>
         <source>Replace All</source>
         <translation type="unfinished">Alle ersetzen</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="143"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="167"/>
         <source>Abort</source>
         <translation type="unfinished">Abbrechen</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="223"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="241"/>
         <source>Current Task: Cancel transfer of files.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/file_transfer_dialog.cc" line="255"/>
+        <source>An error occurred while building the file queue for copying</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/file_transfer_dialog.cc" line="261"/>
+        <source>Failed to create directory &quot;%1&quot;: %2</source>
+        <translation type="unfinished">Fehler beim Erstellen des Verzeichnisses &quot;%1&quot;: %2</translation>
+    </message>
+    <message>
+        <location filename="../ui/file_transfer_dialog.cc" line="270"/>
+        <source>Failed to create file &quot;%1&quot;: %2</source>
+        <translation type="unfinished">Fehler beim Erstellen der Datei &quot;%1&quot;: %2</translation>
+    </message>
+    <message>
+        <location filename="../ui/file_transfer_dialog.cc" line="278"/>
+        <source>Failed to open file &quot;%1&quot;: %2</source>
+        <translation type="unfinished">Fehler beim Öffnen der Datei &quot;%1&quot;: %2</translation>
+    </message>
+    <message>
+        <location filename="../ui/file_transfer_dialog.cc" line="286"/>
+        <source>Failed to write file &quot;%1&quot;: %2</source>
+        <translation type="unfinished">Fehler beim Schreiben der Datei &quot;%1&quot;: %2</translation>
+    </message>
+    <message>
+        <location filename="../ui/file_transfer_dialog.cc" line="294"/>
+        <source>Failed to read file &quot;%1&quot;: %2</source>
+        <translation type="unfinished">Fehler beim Lesen der Datei &quot;%1&quot;: %2</translation>
+    </message>
+    <message>
+        <location filename="../ui/file_transfer_dialog.cc" line="302"/>
+        <source>Unknown error type while copying files</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>client::FileTransferQueueBuilder</name>
     <message>
-        <location filename="../file_transfer_queue_builder.cc" line="73"/>
         <source>An unexpected answer was received.</source>
-        <translation type="unfinished">Eine unerwartete Antwort wurde erhalten.</translation>
+        <translation type="obsolete">Eine unerwartete Antwort wurde erhalten.</translation>
     </message>
     <message>
-        <location filename="../file_transfer_queue_builder.cc" line="79"/>
         <source>An error occurred while retrieving the list of files: %1</source>
-        <translation type="unfinished">Beim Abrufen der Dateiliste ist ein Fehler aufgetreten: %1</translation>
+        <translation type="obsolete">Beim Abrufen der Dateiliste ist ein Fehler aufgetreten: %1</translation>
     </message>
 </context>
 <context>
@@ -1245,36 +1323,49 @@
         <translation type="obsolete">Desktopansicht</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="181"/>
-        <location filename="../ui/qt_desktop_window.cc" line="189"/>
-        <location filename="../ui/qt_desktop_window.cc" line="452"/>
+        <location filename="../ui/qt_desktop_window.cc" line="201"/>
+        <location filename="../ui/qt_desktop_window.cc" line="209"/>
+        <location filename="../ui/qt_desktop_window.cc" line="472"/>
         <source>Warning</source>
         <translation type="unfinished">Warnung</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="182"/>
+        <location filename="../ui/qt_desktop_window.cc" line="202"/>
         <source>There are no supported video encodings.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="190"/>
+        <location filename="../ui/qt_desktop_window.cc" line="210"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="430"/>
+        <location filename="../ui/qt_desktop_window.cc" line="450"/>
         <source>Save File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="432"/>
+        <location filename="../ui/qt_desktop_window.cc" line="452"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="452"/>
+        <location filename="../ui/qt_desktop_window.cc" line="472"/>
         <source>Could not save image</source>
         <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>client::QtFileManagerWindow</name>
+    <message>
+        <location filename="../ui/qt_file_manager_window.cc" line="46"/>
+        <source>Local Computer</source>
+        <translation type="unfinished">Lokaler Computer</translation>
+    </message>
+    <message>
+        <location filename="../ui/qt_file_manager_window.cc" line="47"/>
+        <source>Remote Computer</source>
+        <translation type="unfinished">Remote Computer</translation>
     </message>
 </context>
 <context>

@@ -24,6 +24,7 @@
 #include "build/version.h"
 #include "client/ui/client_dialog.h"
 #include "client/ui/qt_desktop_window.h"
+#include "client/ui/qt_file_manager_window.h"
 #include "common/ui/about_dialog.h"
 #include "common/ui/language_action.h"
 #include "console/address_book_tab.h"
@@ -1062,7 +1063,7 @@ void MainWindow::connectToComputer(const proto::address_book::Computer& computer
     config.password      = base::utf16FromUtf8(computer.password());
     config.session_type  = computer.session_type();
 
-    client::ClientWindow* client_window;
+    client::ClientWindow* client_window = nullptr;
 
     switch (config.session_type)
     {
@@ -1081,7 +1082,7 @@ void MainWindow::connectToComputer(const proto::address_book::Computer& computer
         break;
 
         case proto::SESSION_TYPE_FILE_TRANSFER:
-            // TODO
+            client_window = new client::QtFileManagerWindow();
             break;
 
         default:

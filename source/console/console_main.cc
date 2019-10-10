@@ -17,8 +17,10 @@
 //
 
 #include "base/files/base_paths.h"
+#include "client/config_factory.h"
 #include "client/ui/client_dialog.h"
-#include "client/ui/client_window.h"
+#include "client/ui/qt_desktop_window.h"
+#include "client/ui/qt_file_manager_window.h"
 #include "console/console_application.h"
 #include "console/console_main_window.h"
 #include "qt_base/qt_logging.h"
@@ -131,11 +133,39 @@ int main(int argc, char *argv[])
             return 1;
         }
 
-        //client::ClientWindow* client_window = new client::ClientWindow();
-        //client_window->setAttribute(Qt::WA_DeleteOnClose);
+        client::ClientWindow* client_window = nullptr;
 
-        //if (!client_window->connectToHost(config))
-        //    return 0;
+        switch (config.session_type)
+        {
+            case proto::SESSION_TYPE_DESKTOP_MANAGE:
+            {
+                client_window = new client::QtDesktopWindow(
+                    config.session_type, client::ConfigFactory::defaultDesktopManageConfig());
+            }
+            break;
+
+            case proto::SESSION_TYPE_DESKTOP_VIEW:
+            {
+                client_window = new client::QtDesktopWindow(
+                    config.session_type, client::ConfigFactory::defaultDesktopViewConfig());
+            }
+            break;
+
+            case proto::SESSION_TYPE_FILE_TRANSFER:
+                client_window = new client::QtFileManagerWindow();
+                break;
+
+            default:
+                NOTREACHED();
+                break;
+        }
+
+        if (!client_window)
+            return 0;
+
+        client_window->setAttribute(Qt::WA_DeleteOnClose);
+        if (!client_window->connectToHost(config))
+            return 0;
     }
     else
     {

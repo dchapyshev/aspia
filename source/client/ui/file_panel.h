@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -34,6 +34,11 @@ public:
     explicit FilePanel(QWidget* parent = nullptr);
     ~FilePanel() = default;
 
+    void onDriveList(proto::FileError error_code, const proto::DriveList& drive_list);
+    void onFileList(proto::FileError error_code, const proto::FileList& file_list);
+    void onCreateDirectory(proto::FileError error_code);
+    void onRename(proto::FileError error_code);
+
     void setPanelName(const QString& name);
     void setMimeType(const QString& mime_type);
     void setTransferAllowed(bool allowed);
@@ -45,16 +50,18 @@ public:
     void restoreState(const QByteArray& state);
 
 signals:
-    void newRequest(common::FileRequest* request);
-    void removeItems(FilePanel* sender, const QList<FileRemover::Item>& items);
-    void sendItems(FilePanel* sender, const QList<FileTransfer::Item>& items);
+    void getDriveList();
+    void getFileList(const QString& path);
+    void rename(const QString& old_name, const QString& new_name);
+    void createDirectory(const QString& path);
+    void removeItems(FilePanel* sender, const FileRemover::TaskList& items);
+    void sendItems(FilePanel* sender, const std::vector<FileTransfer::Item>& items);
     void receiveItems(FilePanel* sender,
                       const QString& folder,
-                      const QList<FileTransfer::Item>& items);
+                      const std::vector<FileTransfer::Item>& items);
     void pathChanged(FilePanel* sender, const QString& path);
 
 public slots:
-    void reply(const proto::FileRequest& request, const proto::FileReply& reply);
     void refresh();
 
 protected:
@@ -76,7 +83,7 @@ private slots:
     void sendSelected();
 
 private:
-    void sendRequest(common::FileRequest* request);
+    void showError(const QString& message);
 
     Ui::FilePanel ui;
 

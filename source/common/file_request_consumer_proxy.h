@@ -16,22 +16,31 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__FILE_REQUEST_CONSUMER_H
-#define CLIENT__FILE_REQUEST_CONSUMER_H
+#ifndef COMMON__FILE_REQUEST_CONSUMER_PROXY_H
+#define COMMON__FILE_REQUEST_CONSUMER_PROXY_H
 
-#include "proto/file_transfer.pb.h"
+#include "base/macros_magic.h"
+#include "common/file_request_consumer.h"
 
-namespace client {
+namespace common {
 
-class FileRequestConsumer
+class FileRequestConsumerProxy : public FileRequestConsumer
 {
 public:
-    virtual ~FileRequestConsumer() = default;
+    explicit FileRequestConsumerProxy(FileRequestConsumer* request_consumer);
+    ~FileRequestConsumerProxy();
 
-    virtual void localRequest(const proto::FileRequest& request) = 0;
-    virtual void remoteRequest(const proto::FileRequest& request) = 0;
+    void dettach();
+
+    // FileRequestConsumer implementation.
+    void doRequest(std::shared_ptr<FileRequest> request) override;
+
+private:
+    FileRequestConsumer* request_consumer_;
+
+    DISALLOW_COPY_AND_ASSIGN(FileRequestConsumerProxy);
 };
 
-} // namespace client
+} // namespace common
 
-#endif // CLIENT__FILE_REQUEST_CONSUMER_H
+#endif // COMMON__FILE_REQUEST_CONSUMER_PROXY_H
