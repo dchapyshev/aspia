@@ -95,8 +95,8 @@ list(APPEND SOURCE_BASE_MEMORY_UNIT_TESTS
 list(APPEND SOURCE_BASE_MESSAGE_LOOP
     message_loop/message_loop.cc
     message_loop/message_loop.h
-    message_loop/message_loop_proxy.cc
-    message_loop/message_loop_proxy.h
+    message_loop/message_loop_task_runner.cc
+    message_loop/message_loop_task_runner.h
     message_loop/message_pump.h
     message_loop/message_pump_asio.cc
     message_loop/message_pump_asio.h

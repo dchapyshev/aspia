@@ -31,7 +31,7 @@
 
 namespace base {
 
-class MessageLoopProxy;
+class MessageLoopTaskRunner;
 class MessagePumpForAsio;
 class MessagePumpForWin;
 class Thread;
@@ -68,7 +68,7 @@ public:
     std::shared_ptr<TaskRunner> taskRunner() const;
 
 protected:
-    friend class MessageLoopProxy;
+    friend class MessageLoopTaskRunner;
     friend class Thread;
 
     using Clock = MessagePump::Clock;
@@ -130,7 +130,7 @@ protected:
     // The next sequence number to use for delayed tasks.
     int next_sequence_num_ = 0;
 
-    std::shared_ptr<MessageLoopProxy> proxy_;
+    std::shared_ptr<MessageLoopTaskRunner> proxy_;
 
 private:
     void quit();

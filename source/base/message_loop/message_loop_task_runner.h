@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__MESSAGE_LOOP__MESSAGE_LOOP_PROXY_H
-#define BASE__MESSAGE_LOOP__MESSAGE_LOOP_PROXY_H
+#ifndef BASE__MESSAGE_LOOP__MESSAGE_LOOP_TASK_RUNNER_H
+#define BASE__MESSAGE_LOOP__MESSAGE_LOOP_TASK_RUNNER_H
 
 #include "base/task_runner.h"
 #include "base/message_loop/message_loop.h"
@@ -25,7 +25,7 @@
 
 namespace base {
 
-class MessageLoopProxy : public TaskRunner
+class MessageLoopTaskRunner : public TaskRunner
 {
 public:
     static std::shared_ptr<TaskRunner> current();
@@ -40,7 +40,7 @@ public:
 private:
     friend class MessageLoop;
 
-    explicit MessageLoopProxy(MessageLoop* loop);
+    explicit MessageLoopTaskRunner(MessageLoop* loop);
 
     // Called directly by MessageLoop::~MessageLoop.
     void willDestroyCurrentMessageLoop();
@@ -49,9 +49,9 @@ private:
     mutable std::mutex loop_lock_;
     std::thread::id thread_id_;
 
-    DISALLOW_COPY_AND_ASSIGN(MessageLoopProxy);
+    DISALLOW_COPY_AND_ASSIGN(MessageLoopTaskRunner);
 };
 
 } // namespace base
 
-#endif // BASE__MESSAGE_LOOP__MESSAGE_LOOP_PROXY_H
+#endif // BASE__MESSAGE_LOOP__MESSAGE_LOOP_TASK_RUNNER_H

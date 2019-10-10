@@ -18,7 +18,7 @@
 
 #include "base/message_loop/message_loop.h"
 
-#include "base/message_loop/message_loop_proxy.h"
+#include "base/message_loop/message_loop_task_runner.h"
 #include "base/message_loop/message_pump_asio.h"
 #include "base/message_loop/message_pump_default.h"
 #include "base/logging.h"
@@ -46,7 +46,7 @@ MessageLoop::MessageLoop(Type type)
 
     message_loop_for_current_thread = this;
 
-    proxy_.reset(new MessageLoopProxy(this));
+    proxy_.reset(new MessageLoopTaskRunner(this));
 
     switch (type)
     {

@@ -16,12 +16,12 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/message_loop/message_loop_proxy.h"
+#include "base/message_loop/message_loop_task_runner.h"
 
 namespace base {
 
 // static
-std::shared_ptr<TaskRunner> MessageLoopProxy::current()
+std::shared_ptr<TaskRunner> MessageLoopTaskRunner::current()
 {
     MessageLoop* current = MessageLoop::current();
 
@@ -31,7 +31,7 @@ std::shared_ptr<TaskRunner> MessageLoopProxy::current()
     return current->taskRunner();
 }
 
-bool MessageLoopProxy::postTask(PendingTask::Callback callback)
+bool MessageLoopTaskRunner::postTask(PendingTask::Callback callback)
 {
     std::scoped_lock lock(loop_lock_);
 
@@ -44,7 +44,7 @@ bool MessageLoopProxy::postTask(PendingTask::Callback callback)
     return false;
 }
 
-bool MessageLoopProxy::postDelayedTask(PendingTask::Callback callback,
+bool MessageLoopTaskRunner::postDelayedTask(PendingTask::Callback callback,
                                        const MessageLoop::Milliseconds& delay)
 {
     std::scoped_lock lock(loop_lock_);
@@ -58,7 +58,7 @@ bool MessageLoopProxy::postDelayedTask(PendingTask::Callback callback,
     return false;
 }
 
-bool MessageLoopProxy::postQuit()
+bool MessageLoopTaskRunner::postQuit()
 {
     std::scoped_lock lock(loop_lock_);
 
@@ -71,12 +71,12 @@ bool MessageLoopProxy::postQuit()
     return false;
 }
 
-bool MessageLoopProxy::belongsToCurrentThread() const
+bool MessageLoopTaskRunner::belongsToCurrentThread() const
 {
     return thread_id_ == std::this_thread::get_id();
 }
 
-MessageLoopProxy::MessageLoopProxy(MessageLoop* loop)
+MessageLoopTaskRunner::MessageLoopTaskRunner(MessageLoop* loop)
     : loop_(loop),
       thread_id_(std::this_thread::get_id())
 {
@@ -84,7 +84,7 @@ MessageLoopProxy::MessageLoopProxy(MessageLoop* loop)
 }
 
 // Called directly by MessageLoop::~MessageLoop.
-void MessageLoopProxy::willDestroyCurrentMessageLoop()
+void MessageLoopTaskRunner::willDestroyCurrentMessageLoop()
 {
     std::scoped_lock lock(loop_lock_);
     loop_ = nullptr;
