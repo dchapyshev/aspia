@@ -25,7 +25,7 @@
 namespace client {
 
 FileRemoveWindowProxy::FileRemoveWindowProxy(
-    std::shared_ptr<base::TaskRunner> ui_task_runner, FileRemoveWindow* remove_window)
+    std::shared_ptr<base::TaskRunner>& ui_task_runner, FileRemoveWindow* remove_window)
     : ui_task_runner_(ui_task_runner),
       remove_window_(remove_window)
 {

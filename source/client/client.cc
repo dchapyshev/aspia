@@ -25,7 +25,7 @@
 
 namespace client {
 
-Client::Client(std::shared_ptr<base::TaskRunner> ui_task_runner)
+Client::Client(std::shared_ptr<base::TaskRunner>& ui_task_runner)
     : ui_task_runner_(ui_task_runner)
 {
     DCHECK(ui_task_runner_);

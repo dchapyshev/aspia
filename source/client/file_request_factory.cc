@@ -24,7 +24,7 @@
 namespace client {
 
 FileRequestFactory::FileRequestFactory(
-    std::shared_ptr<common::FileRequestProducerProxy> producer_proxy,
+    std::shared_ptr<common::FileRequestProducerProxy>& producer_proxy,
     common::FileTaskTarget target)
     : producer_proxy_(producer_proxy),
       target_(target)

@@ -29,9 +29,9 @@
 
 namespace client {
 
-FileRemover::FileRemover(std::shared_ptr<base::TaskRunner> io_task_runner,
-                         std::shared_ptr<FileRemoveWindowProxy> remove_window_proxy,
-                         std::shared_ptr<common::FileRequestConsumerProxy> request_consumer_proxy,
+FileRemover::FileRemover(std::shared_ptr<base::TaskRunner>& io_task_runner,
+                         std::shared_ptr<FileRemoveWindowProxy>& remove_window_proxy,
+                         std::shared_ptr<common::FileRequestConsumerProxy>& request_consumer_proxy,
                          common::FileTaskTarget target)
     : remover_proxy_(std::make_shared<FileRemoverProxy>(io_task_runner, this)),
       remove_window_proxy_(remove_window_proxy),
@@ -50,7 +50,7 @@ FileRemover::~FileRemover()
     remover_proxy_->dettach();
 }
 
-void FileRemover::start(const TaskList& items, FinishCallback callback)
+void FileRemover::start(const TaskList& items, const FinishCallback& callback)
 {
     finish_callback_ = callback;
 

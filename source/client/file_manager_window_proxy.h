@@ -40,7 +40,7 @@ public:
     ~FileManagerWindowProxy();
 
     static std::unique_ptr<FileManagerWindowProxy> create(
-        std::shared_ptr<base::TaskRunner> ui_task_runner, FileManagerWindow* file_manager_window);
+        std::shared_ptr<base::TaskRunner>& ui_task_runner, FileManagerWindow* file_manager_window);
 
     void start(std::shared_ptr<FileControlProxy> file_control_proxy);
     void onDriveList(common::FileTaskTarget target,
@@ -53,7 +53,7 @@ public:
     void onRename(common::FileTaskTarget target, proto::FileError error_code);
 
 private:
-    FileManagerWindowProxy(std::shared_ptr<base::TaskRunner> ui_task_runner,
+    FileManagerWindowProxy(std::shared_ptr<base::TaskRunner>& ui_task_runner,
                            FileManagerWindow* file_manager_window);
 
     class Impl;

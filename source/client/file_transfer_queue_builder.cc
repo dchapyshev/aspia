@@ -27,7 +27,7 @@
 namespace client {
 
 FileTransferQueueBuilder::FileTransferQueueBuilder(
-    std::shared_ptr<common::FileRequestConsumerProxy> request_consumer_proxy,
+    std::shared_ptr<common::FileRequestConsumerProxy>& request_consumer_proxy,
     common::FileTaskTarget target)
     : request_consumer_proxy_(request_consumer_proxy),
       request_producer_proxy_(std::make_shared<common::FileRequestProducerProxy>(this))

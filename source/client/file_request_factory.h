@@ -32,7 +32,7 @@ namespace client {
 class FileRequestFactory
 {
 public:
-    FileRequestFactory(std::shared_ptr<common::FileRequestProducerProxy> producer_proxy,
+    FileRequestFactory(std::shared_ptr<common::FileRequestProducerProxy>& producer_proxy,
                        common::FileTaskTarget target);
     ~FileRequestFactory();
 

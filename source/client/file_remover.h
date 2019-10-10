@@ -45,9 +45,9 @@ class FileRequestFactory;
 class FileRemover : public common::FileRequestProducer
 {
 public:
-    FileRemover(std::shared_ptr<base::TaskRunner> io_task_runner,
-                std::shared_ptr<FileRemoveWindowProxy> remove_window_proxy,
-                std::shared_ptr<common::FileRequestConsumerProxy> request_consumer_proxy,
+    FileRemover(std::shared_ptr<base::TaskRunner>& io_task_runner,
+                std::shared_ptr<FileRemoveWindowProxy>& remove_window_proxy,
+                std::shared_ptr<common::FileRequestConsumerProxy>& request_consumer_proxy,
                 common::FileTaskTarget target);
     ~FileRemover();
 
@@ -84,7 +84,7 @@ public:
     using TaskList = std::deque<Task>;
     using FinishCallback = std::function<void()>;
 
-    void start(const TaskList& items, FinishCallback callback);
+    void start(const TaskList& items, const FinishCallback& callback);
     void stop();
     void setAction(Action action);
 

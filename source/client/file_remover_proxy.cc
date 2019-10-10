@@ -24,7 +24,7 @@
 namespace client {
 
 FileRemoverProxy::FileRemoverProxy(
-    std::shared_ptr<base::TaskRunner> io_task_runner, FileRemover* remover)
+    std::shared_ptr<base::TaskRunner>& io_task_runner, FileRemover* remover)
     : io_task_runner_(io_task_runner),
       remover_(remover)
 {

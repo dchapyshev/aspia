@@ -26,7 +26,7 @@ namespace client {
 class StatusWindowProxy::Impl : public std::enable_shared_from_this<Impl>
 {
 public:
-    Impl(std::shared_ptr<base::TaskRunner> ui_task_runner, StatusWindow* status_window);
+    Impl(std::shared_ptr<base::TaskRunner>& ui_task_runner, StatusWindow* status_window);
     ~Impl();
 
     void onStarted(const std::u16string& address, uint16_t port);
@@ -42,7 +42,7 @@ private:
     DISALLOW_COPY_AND_ASSIGN(Impl);
 };
 
-StatusWindowProxy::Impl::Impl(std::shared_ptr<base::TaskRunner> ui_task_runner,
+StatusWindowProxy::Impl::Impl(std::shared_ptr<base::TaskRunner>& ui_task_runner,
                               StatusWindow* status_window)
     : ui_task_runner_(ui_task_runner),
       status_window_(status_window)
@@ -120,7 +120,7 @@ void StatusWindowProxy::Impl::onAccessDenied(Authenticator::ErrorCode error_code
         status_window_->onAccessDenied(error_code);
 }
 
-StatusWindowProxy::StatusWindowProxy(std::shared_ptr<base::TaskRunner> ui_task_runner,
+StatusWindowProxy::StatusWindowProxy(std::shared_ptr<base::TaskRunner>& ui_task_runner,
                                      StatusWindow* status_window)
     : impl_(std::make_shared<Impl>(ui_task_runner, status_window))
 {
@@ -134,7 +134,7 @@ StatusWindowProxy::~StatusWindowProxy()
 
 // static
 std::unique_ptr<StatusWindowProxy> StatusWindowProxy::create(
-    std::shared_ptr<base::TaskRunner> ui_task_runner, StatusWindow* status_window)
+    std::shared_ptr<base::TaskRunner>& ui_task_runner, StatusWindow* status_window)
 {
     if (!ui_task_runner || !status_window)
         return nullptr;

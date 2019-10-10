@@ -29,7 +29,7 @@
 
 namespace client {
 
-ClientFileTransfer::ClientFileTransfer(std::shared_ptr<base::TaskRunner> ui_task_runner)
+ClientFileTransfer::ClientFileTransfer(std::shared_ptr<base::TaskRunner>& ui_task_runner)
     : Client(ui_task_runner)
 {
     // Nothing

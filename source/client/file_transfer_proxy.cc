@@ -24,7 +24,7 @@
 namespace client {
 
 FileTransferProxy::FileTransferProxy(
-    std::shared_ptr<base::TaskRunner> io_task_runner, FileTransfer* file_transfer)
+    std::shared_ptr<base::TaskRunner>& io_task_runner, FileTransfer* file_transfer)
     : io_task_runner_(io_task_runner),
       file_transfer_(file_transfer)
 {

@@ -27,7 +27,7 @@ namespace client {
 class FileManagerWindowProxy::Impl : public std::enable_shared_from_this<Impl>
 {
 public:
-    Impl(std::shared_ptr<base::TaskRunner> ui_task_runner, FileManagerWindow* file_manager_window);
+    Impl(std::shared_ptr<base::TaskRunner>& ui_task_runner, FileManagerWindow* file_manager_window);
     ~Impl();
 
     void dettach();
@@ -50,7 +50,7 @@ private:
 };
 
 FileManagerWindowProxy::Impl::Impl(
-    std::shared_ptr<base::TaskRunner> ui_task_runner, FileManagerWindow* file_manager_window)
+    std::shared_ptr<base::TaskRunner>& ui_task_runner, FileManagerWindow* file_manager_window)
     : ui_task_runner_(ui_task_runner),
       file_manager_window_(file_manager_window)
 {
@@ -144,7 +144,7 @@ void FileManagerWindowProxy::Impl::onRename(
 }
 
 FileManagerWindowProxy::FileManagerWindowProxy(
-    std::shared_ptr<base::TaskRunner> ui_task_runner, FileManagerWindow* file_manager_window)
+    std::shared_ptr<base::TaskRunner>& ui_task_runner, FileManagerWindow* file_manager_window)
     : impl_(std::make_shared<Impl>(ui_task_runner, file_manager_window))
 {
     // Nothing
@@ -157,7 +157,7 @@ FileManagerWindowProxy::~FileManagerWindowProxy()
 
 // static
 std::unique_ptr<FileManagerWindowProxy> FileManagerWindowProxy::create(
-    std::shared_ptr<base::TaskRunner> ui_task_runner, FileManagerWindow* file_manager_window)
+    std::shared_ptr<base::TaskRunner>& ui_task_runner, FileManagerWindow* file_manager_window)
 {
     if (!ui_task_runner || !file_manager_window)
         return nullptr;

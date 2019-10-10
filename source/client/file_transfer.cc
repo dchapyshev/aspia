@@ -84,9 +84,9 @@ struct ActionsMap
 
 } // namespace
 
-FileTransfer::FileTransfer(std::shared_ptr<base::TaskRunner> io_task_runner,
-                           std::shared_ptr<FileTransferWindowProxy> transfer_window_proxy,
-                           std::shared_ptr<common::FileRequestConsumerProxy> request_consumer_proxy,
+FileTransfer::FileTransfer(std::shared_ptr<base::TaskRunner>& io_task_runner,
+                           std::shared_ptr<FileTransferWindowProxy>& transfer_window_proxy,
+                           std::shared_ptr<common::FileRequestConsumerProxy>& request_consumer_proxy,
                            Type type)
     : io_task_runner_(io_task_runner),
       transfer_proxy_(std::make_shared<FileTransferProxy>(io_task_runner, this)),

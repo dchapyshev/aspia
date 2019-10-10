@@ -130,7 +130,7 @@ void Authenticator::setSessionType(proto::SessionType session_type)
     session_type_ = session_type;
 }
 
-void Authenticator::start(std::shared_ptr<net::ChannelProxy> channel_proxy, Callback callback)
+void Authenticator::start(std::shared_ptr<net::ChannelProxy>& channel_proxy, Callback callback)
 {
     channel_proxy_ = channel_proxy;
     callback_ = callback;

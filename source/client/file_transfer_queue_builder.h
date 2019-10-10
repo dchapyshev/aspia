@@ -28,7 +28,7 @@ class FileTransferQueueBuilder : public common::FileRequestProducer
 {
 public:
     FileTransferQueueBuilder(
-        std::shared_ptr<common::FileRequestConsumerProxy> request_consumer_proxy,
+        std::shared_ptr<common::FileRequestConsumerProxy>& request_consumer_proxy,
         common::FileTaskTarget target);
     ~FileTransferQueueBuilder();
 

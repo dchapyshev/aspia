@@ -24,7 +24,7 @@
 namespace client {
 
 FileControlProxy::FileControlProxy(
-    std::shared_ptr<base::TaskRunner> io_task_runner, FileControl* file_control)
+    std::shared_ptr<base::TaskRunner>& io_task_runner, FileControl* file_control)
     : io_task_runner_(io_task_runner),
       file_control_(file_control)
 {

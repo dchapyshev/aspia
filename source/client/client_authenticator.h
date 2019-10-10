@@ -71,7 +71,7 @@ public:
     // Starts authentication.
     // |callback| is called upon completion. The authenticator guarantees that no code inside it
     // will be executed after call callback (you can remove the authenticator inside this callback).
-    void start(std::shared_ptr<net::ChannelProxy> channel_proxy, Callback callback);
+    void start(std::shared_ptr<net::ChannelProxy>& channel_proxy, Callback callback);
 
 protected:
     // net::Listener implementation.

@@ -32,7 +32,7 @@ namespace client {
 class DesktopWindowProxy::Impl : public std::enable_shared_from_this<Impl>
 {
 public:
-    Impl(std::shared_ptr<base::TaskRunner> ui_task_runner, DesktopWindow* desktop_window);
+    Impl(std::shared_ptr<base::TaskRunner>& ui_task_runner, DesktopWindow* desktop_window);
     ~Impl();
 
     void showWindow(std::shared_ptr<DesktopControlProxy> desktop_control_proxy,
@@ -59,7 +59,7 @@ private:
     DISALLOW_COPY_AND_ASSIGN(Impl);
 };
 
-DesktopWindowProxy::Impl::Impl(std::shared_ptr<base::TaskRunner> ui_task_runner,
+DesktopWindowProxy::Impl::Impl(std::shared_ptr<base::TaskRunner>& ui_task_runner,
                                DesktopWindow* desktop_window)
     : ui_task_runner_(ui_task_runner),
       desktop_window_(desktop_window)
@@ -192,7 +192,7 @@ void DesktopWindowProxy::Impl::injectClipboardEvent(const proto::ClipboardEvent&
         desktop_window_->injectClipboardEvent(event);
 }
 
-DesktopWindowProxy::DesktopWindowProxy(std::shared_ptr<base::TaskRunner> ui_task_runner,
+DesktopWindowProxy::DesktopWindowProxy(std::shared_ptr<base::TaskRunner>& ui_task_runner,
                                        DesktopWindow* desktop_window)
     : impl_(std::make_shared<Impl>(ui_task_runner, desktop_window))
 {
@@ -206,7 +206,7 @@ DesktopWindowProxy::~DesktopWindowProxy()
 
 // static
 std::unique_ptr<DesktopWindowProxy> DesktopWindowProxy::create(
-    std::shared_ptr<base::TaskRunner> ui_task_runner, DesktopWindow* desktop_window)
+    std::shared_ptr<base::TaskRunner>& ui_task_runner, DesktopWindow* desktop_window)
 {
     if (!ui_task_runner || !desktop_window)
         return nullptr;

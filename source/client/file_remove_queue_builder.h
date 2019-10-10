@@ -28,14 +28,14 @@ class FileRemoveQueueBuilder : public common::FileRequestProducer
 {
 public:
     FileRemoveQueueBuilder(
-        std::shared_ptr<common::FileRequestConsumerProxy> request_consumer_proxy,
+        std::shared_ptr<common::FileRequestConsumerProxy>& request_consumer_proxy,
         common::FileTaskTarget target);
     ~FileRemoveQueueBuilder();
 
     using FinishCallback = std::function<void(proto::FileError)>;
 
     // Starts building of the task queue.
-    void start(const FileRemover::TaskList& items, FinishCallback callback);
+    void start(const FileRemover::TaskList& items, const FinishCallback& callback);
 
     FileRemover::TaskList takeQueue();
 

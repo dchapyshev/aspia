@@ -24,7 +24,7 @@
 
 namespace client {
 
-DesktopControlProxy::DesktopControlProxy(std::shared_ptr<base::TaskRunner> io_task_runner,
+DesktopControlProxy::DesktopControlProxy(std::shared_ptr<base::TaskRunner>& io_task_runner,
                                          DesktopControl* desktop_control)
     : io_task_runner_(io_task_runner),
       desktop_control_(desktop_control)
