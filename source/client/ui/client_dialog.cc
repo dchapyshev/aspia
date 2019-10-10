@@ -20,9 +20,10 @@
 
 #include "base/logging.h"
 #include "build/build_config.h"
-#include "client/ui/qt_desktop_window.h"
-#include "client/ui/desktop_config_dialog.h"
 #include "client/config_factory.h"
+#include "client/ui/desktop_config_dialog.h"
+#include "client/ui/qt_desktop_window.h"
+#include "client/ui/qt_file_manager_window.h"
 #include "common/desktop_session_constants.h"
 #include "common/session_type.h"
 #include "net/address.h"
@@ -147,7 +148,7 @@ void ClientDialog::connectButtonPressed()
         config_.port = address.port();
         config_.session_type = session_type;
 
-        ClientWindow* client_window;
+        ClientWindow* client_window = nullptr;
 
         switch (config_.session_type)
         {
@@ -160,7 +161,7 @@ void ClientDialog::connectButtonPressed()
             break;
 
             case proto::SESSION_TYPE_FILE_TRANSFER:
-                // TODO
+                client_window = new client::QtFileManagerWindow(parentWidget());
                 break;
 
             default:
