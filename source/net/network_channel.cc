@@ -224,7 +224,9 @@ void Channel::onErrorOccurred(const std::error_code& error_code)
 
     ErrorCode error = ErrorCode::UNKNOWN;
 
-    if (error_code == asio::error::connection_refused)
+    if (error_code == asio::error::host_not_found)
+        error = ErrorCode::SPECIFIED_HOST_NOT_FOUND;
+    else if (error_code == asio::error::connection_refused)
         error = ErrorCode::CONNECTION_REFUSED;
     else if (error_code == asio::error::address_in_use)
         error = ErrorCode::ADDRESS_IN_USE;
