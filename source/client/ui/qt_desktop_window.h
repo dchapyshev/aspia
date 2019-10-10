@@ -59,7 +59,7 @@ public:
 
     // ClientWindow implementation.
     std::unique_ptr<Client> createClient(
-        std::shared_ptr<base::TaskRunner> ui_task_runner) override;
+        std::shared_ptr<base::TaskRunner>& ui_task_runner) override;
 
     // DesktopWindow implementation.
     void showWindow(std::shared_ptr<DesktopControlProxy> desktop_control_proxy,

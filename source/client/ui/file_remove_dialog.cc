@@ -71,7 +71,7 @@ FileRemoveDialog::~FileRemoveDialog()
 
 void FileRemoveDialog::start(std::shared_ptr<FileRemoverProxy> remover_proxy)
 {
-    remover_proxy_ = remover_proxy;
+    remover_proxy_ = std::move(remover_proxy);
     DCHECK(remover_proxy_);
 
     show();

@@ -889,12 +889,12 @@
         <translation type="vanished">Передача файлів</translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.cc" line="136"/>
+        <location filename="../ui/client_dialog.cc" line="137"/>
         <source>Warning</source>
         <translation type="unfinished">Попередження</translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.cc" line="137"/>
+        <location filename="../ui/client_dialog.cc" line="138"/>
         <source>An invalid computer address was entered.</source>
         <translation type="unfinished"></translation>
     </message>

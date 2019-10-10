@@ -73,9 +73,9 @@ desktop::Frame* DesktopWidget::desktopFrame()
     return frame_.get();
 }
 
-void DesktopWidget::setDesktopFrame(std::shared_ptr<desktop::Frame> frame)
+void DesktopWidget::setDesktopFrame(std::shared_ptr<desktop::Frame>& frame)
 {
-    frame_ = frame;
+    frame_ = std::move(frame);
 }
 
 void DesktopWidget::doMouseEvent(QEvent::Type event_type,

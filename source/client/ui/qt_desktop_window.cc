@@ -166,7 +166,7 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
 QtDesktopWindow::~QtDesktopWindow() = default;
 
 std::unique_ptr<Client> QtDesktopWindow::createClient(
-    std::shared_ptr<base::TaskRunner> ui_task_runner)
+    std::shared_ptr<base::TaskRunner>& ui_task_runner)
 {
     std::unique_ptr<ClientDesktop> client = std::make_unique<ClientDesktop>(ui_task_runner);
 
@@ -179,7 +179,7 @@ std::unique_ptr<Client> QtDesktopWindow::createClient(
 void QtDesktopWindow::showWindow(
     std::shared_ptr<DesktopControlProxy> desktop_control_proxy, const base::Version& peer_version)
 {
-    desktop_control_proxy_ = desktop_control_proxy;
+    desktop_control_proxy_ = std::move(desktop_control_proxy);
     peer_version_ = peer_version;
 
     clipboard_ = new common::Clipboard(this);
@@ -279,14 +279,14 @@ void QtDesktopWindow::drawFrame(std::shared_ptr<desktop::Frame> frame)
 
     if (current_frame != frame.get())
     {
+        screen_top_left_ = frame->topLeft();
+
         desktop_->setDesktopFrame(frame);
 
         scaleDesktop();
 
         if (!current_frame)
             autosizeWindow();
-
-        screen_top_left_ = frame->topLeft();
     }
 
     desktop_->update();
@@ -423,14 +423,14 @@ void QtDesktopWindow::autosizeWindow()
 
     QSize frame_size(desktop_->desktopFrame()->size().width(),
                      desktop_->desktopFrame()->size().height());
-
-    QSize remote_screen_size = scaledSize(frame_size, panel_->scale());
     QRect local_screen_rect = QApplication::desktop()->availableGeometry(this);
     QSize window_size = frame_size + frameSize() - size();
 
     if (window_size.width() < local_screen_rect.width() &&
         window_size.height() < local_screen_rect.height())
     {
+        QSize remote_screen_size = scaledSize(frame_size, panel_->scale());
+
         showNormal();
 
         resize(remote_screen_size);

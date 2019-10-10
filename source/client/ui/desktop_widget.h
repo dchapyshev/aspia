@@ -56,7 +56,7 @@ public:
     ~DesktopWidget() = default;
 
     desktop::Frame* desktopFrame();
-    void setDesktopFrame(std::shared_ptr<desktop::Frame> frame);
+    void setDesktopFrame(std::shared_ptr<desktop::Frame>& frame);
 
     void doMouseEvent(QEvent::Type event_type,
                       const Qt::MouseButtons& buttons,

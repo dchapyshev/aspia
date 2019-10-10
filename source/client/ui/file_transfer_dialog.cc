@@ -76,7 +76,7 @@ FileTransferDialog::~FileTransferDialog()
 
 void FileTransferDialog::start(std::shared_ptr<FileTransferProxy> transfer_proxy)
 {
-    transfer_proxy_ = transfer_proxy;
+    transfer_proxy_ = std::move(transfer_proxy);
     DCHECK(transfer_proxy_);
 
     show();
