@@ -33,7 +33,7 @@ std::shared_ptr<TaskRunner> MessageLoopTaskRunner::current()
 
 bool MessageLoopTaskRunner::postTask(PendingTask::Callback callback)
 {
-    std::scoped_lock lock(loop_lock_);
+    std::shared_lock lock(loop_lock_);
 
     if (loop_)
     {
@@ -44,10 +44,10 @@ bool MessageLoopTaskRunner::postTask(PendingTask::Callback callback)
     return false;
 }
 
-bool MessageLoopTaskRunner::postDelayedTask(PendingTask::Callback callback,
-                                       const MessageLoop::Milliseconds& delay)
+bool MessageLoopTaskRunner::postDelayedTask(
+    PendingTask::Callback callback, const MessageLoop::Milliseconds& delay)
 {
-    std::scoped_lock lock(loop_lock_);
+    std::shared_lock lock(loop_lock_);
 
     if (loop_)
     {
@@ -60,7 +60,7 @@ bool MessageLoopTaskRunner::postDelayedTask(PendingTask::Callback callback,
 
 bool MessageLoopTaskRunner::postQuit()
 {
-    std::scoped_lock lock(loop_lock_);
+    std::shared_lock lock(loop_lock_);
 
     if (loop_)
     {
@@ -86,7 +86,7 @@ MessageLoopTaskRunner::MessageLoopTaskRunner(MessageLoop* loop)
 // Called directly by MessageLoop::~MessageLoop.
 void MessageLoopTaskRunner::willDestroyCurrentMessageLoop()
 {
-    std::scoped_lock lock(loop_lock_);
+    std::unique_lock lock(loop_lock_);
     loop_ = nullptr;
 }
 

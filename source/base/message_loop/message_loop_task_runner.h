@@ -23,6 +23,8 @@
 #include "base/message_loop/message_loop.h"
 #include "base/message_loop/pending_task.h"
 
+#include <shared_mutex>
+
 namespace base {
 
 class MessageLoopTaskRunner : public TaskRunner
@@ -46,7 +48,7 @@ private:
     void willDestroyCurrentMessageLoop();
 
     MessageLoop* loop_;
-    mutable std::mutex loop_lock_;
+    mutable std::shared_mutex loop_lock_;
     std::thread::id thread_id_;
 
     DISALLOW_COPY_AND_ASSIGN(MessageLoopTaskRunner);
