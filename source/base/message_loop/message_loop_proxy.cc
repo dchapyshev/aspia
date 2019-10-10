@@ -73,12 +73,12 @@ bool MessageLoopProxy::postQuit()
 
 bool MessageLoopProxy::belongsToCurrentThread() const
 {
-    std::scoped_lock lock(loop_lock_);
-    return loop_ && MessageLoop::current() == loop_;
+    return thread_id_ == std::this_thread::get_id();
 }
 
 MessageLoopProxy::MessageLoopProxy(MessageLoop* loop)
-    : loop_(loop)
+    : loop_(loop),
+      thread_id_(std::this_thread::get_id())
 {
     // Nothing
 }

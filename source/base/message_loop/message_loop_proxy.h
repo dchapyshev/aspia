@@ -47,6 +47,7 @@ private:
 
     MessageLoop* loop_;
     mutable std::mutex loop_lock_;
+    std::thread::id thread_id_;
 
     DISALLOW_COPY_AND_ASSIGN(MessageLoopProxy);
 };
