@@ -20,16 +20,24 @@
 
 namespace crypto {
 
-bool DataCryptorFake::encrypt(std::string_view in, std::string* out)
+namespace {
+
+bool copyUnchangedData(std::string_view in, std::string* out)
 {
     out->assign(in);
     return true;
 }
 
+} // namespace
+
+bool DataCryptorFake::encrypt(std::string_view in, std::string* out)
+{
+    return copyUnchangedData(in, out);
+}
+
 bool DataCryptorFake::decrypt(std::string_view in, std::string* out)
 {
-    out->assign(in);
-    return true;
+    return copyUnchangedData(in, out);
 }
 
 } // namespace crypto
