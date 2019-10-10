@@ -37,8 +37,6 @@ public:
     bool postTask(Callback callback) override;
     bool postDelayedTask(Callback callback, const Milliseconds& delay) override;
 
-    bool postQuit();
-
 private:
     friend class MessageLoop;
 

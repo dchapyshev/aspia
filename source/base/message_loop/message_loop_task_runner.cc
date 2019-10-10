@@ -58,19 +58,6 @@ bool MessageLoopTaskRunner::postDelayedTask(
     return false;
 }
 
-bool MessageLoopTaskRunner::postQuit()
-{
-    std::shared_lock lock(loop_lock_);
-
-    if (loop_)
-    {
-        loop_->postTask(std::move(loop_->quitClosure()));
-        return true;
-    }
-
-    return false;
-}
-
 bool MessageLoopTaskRunner::belongsToCurrentThread() const
 {
     return thread_id_ == std::this_thread::get_id();
