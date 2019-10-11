@@ -19,7 +19,7 @@
 #ifndef CLIENT__FILE_MANAGER_WINDOW_H
 #define CLIENT__FILE_MANAGER_WINDOW_H
 
-#include "common/file_task_target.h"
+#include "common/file_task.h"
 #include "proto/file_transfer.pb.h"
 
 namespace client {
@@ -34,20 +34,20 @@ public:
     virtual void start(std::shared_ptr<FileControlProxy> file_control_proxy) = 0;
 
     // Called when a response to a drive list request is received.
-    virtual void onDriveList(common::FileTaskTarget target,
+    virtual void onDriveList(common::FileTask::Target target,
                              proto::FileError error_code,
                              const proto::DriveList& drive_list) = 0;
 
     // Called when a response to a file list request is received.
-    virtual void onFileList(common::FileTaskTarget target,
+    virtual void onFileList(common::FileTask::Target target,
                             proto::FileError error_code,
                             const proto::FileList& file_list) = 0;
 
     // Called upon receipt of a response to a directory creation request.
-    virtual void onCreateDirectory(common::FileTaskTarget target, proto::FileError error_code) = 0;
+    virtual void onCreateDirectory(common::FileTask::Target target, proto::FileError error_code) = 0;
 
     // Called upon receipt of a response to a request to rename a file or directory.
-    virtual void onRename(common::FileTaskTarget target, proto::FileError error_code) = 0;
+    virtual void onRename(common::FileTask::Target target, proto::FileError error_code) = 0;
 };
 
 } // namespace client

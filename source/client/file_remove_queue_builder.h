@@ -24,12 +24,12 @@
 namespace client {
 
 // The class prepares the task queue to perform the deletion.
-class FileRemoveQueueBuilder : public common::FileRequestProducer
+class FileRemoveQueueBuilder : public common::FileTaskProducer
 {
 public:
     FileRemoveQueueBuilder(
-        std::shared_ptr<common::FileRequestConsumerProxy>& request_consumer_proxy,
-        common::FileTaskTarget target);
+        std::shared_ptr<common::FileTaskConsumerProxy>& task_consumer_proxy,
+        common::FileTask::Target target);
     ~FileRemoveQueueBuilder();
 
     using FinishCallback = std::function<void(proto::FileError)>;
@@ -40,16 +40,16 @@ public:
     FileRemover::TaskList takeQueue();
 
 protected:
-    // FileRequestProducer implementation.
-    void onReply(std::shared_ptr<common::FileRequest> request) override;
+    // FileTaskProducer implementation.
+    void onTaskDone(std::shared_ptr<common::FileTask> task) override;
 
 private:
     void doPendingTasks();
     void onAborted(proto::FileError error_code);
 
-    std::shared_ptr<common::FileRequestConsumerProxy> request_consumer_proxy_;
-    std::shared_ptr<common::FileRequestProducerProxy> request_producer_proxy_;
-    std::unique_ptr<FileRequestFactory> request_factory_;
+    std::shared_ptr<common::FileTaskConsumerProxy> task_consumer_proxy_;
+    std::shared_ptr<common::FileTaskProducerProxy> task_producer_proxy_;
+    std::unique_ptr<common::FileTaskFactory> task_factory_;
 
     FinishCallback callback_;
 

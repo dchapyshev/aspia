@@ -16,11 +16,10 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef COMMON__FILE_REQUEST_H
-#define COMMON__FILE_REQUEST_H
+#ifndef COMMON__FILE_TASK_H
+#define COMMON__FILE_TASK_H
 
 #include "base/macros_magic.h"
-#include "common/file_task_target.h"
 
 #include <memory>
 
@@ -31,19 +30,25 @@ class FileReply;
 
 namespace common {
 
-class FileRequestFactory;
-class FileRequestProducerProxy;
+class FileTaskFactory;
+class FileTaskProducerProxy;
 
-class FileRequest : public std::enable_shared_from_this<FileRequest>
+class FileTask : public std::enable_shared_from_this<FileTask>
 {
 public:
-    FileRequest(std::shared_ptr<FileRequestProducerProxy> producer_proxy,
-                std::unique_ptr<proto::FileRequest> request,
-                FileTaskTarget target);
-    virtual ~FileRequest();
+    enum class Target
+    {
+        LOCAL, // Local task.
+        REMOTE // Remote task.
+    };
+
+    FileTask(std::shared_ptr<FileTaskProducerProxy>& producer_proxy,
+             std::unique_ptr<proto::FileRequest> request,
+             Target target);
+    virtual ~FileTask();
 
     // Returns the target of the current request. It can be a local computer or a remote computer.
-    FileTaskTarget target() const { return target_; }
+    Target target() const { return target_; }
 
     // Returns the data of the current request.
     const proto::FileRequest& request() const;
@@ -57,15 +62,15 @@ public:
     void setReply(std::unique_ptr<proto::FileReply> reply);
 
 private:
-    std::shared_ptr<FileRequestProducerProxy> producer_proxy_;
-    const FileTaskTarget target_;
+    std::shared_ptr<FileTaskProducerProxy> producer_proxy_;
+    const Target target_;
 
     std::unique_ptr<proto::FileRequest> request_;
     std::unique_ptr<proto::FileReply> reply_;
 
-    DISALLOW_COPY_AND_ASSIGN(FileRequest);
+    DISALLOW_COPY_AND_ASSIGN(FileTask);
 };
 
 } // namespace common
 
-#endif // COMMON__FILE_REQUEST_H
+#endif // COMMON__FILE_TASK_H

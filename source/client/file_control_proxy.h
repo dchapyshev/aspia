@@ -35,15 +35,15 @@ public:
 
     void dettach();
 
-    void getDriveList(common::FileTaskTarget target);
-    void getFileList(common::FileTaskTarget target, const std::string& path);
-    void createDirectory(common::FileTaskTarget target, const std::string& path);
+    void getDriveList(common::FileTask::Target target);
+    void getFileList(common::FileTask::Target target, const std::string& path);
+    void createDirectory(common::FileTask::Target target, const std::string& path);
 
-    void rename(common::FileTaskTarget target,
+    void rename(common::FileTask::Target target,
                 const std::string& old_path,
                 const std::string& new_path);
 
-    void remove(common::FileTaskTarget target,
+    void remove(common::FileTask::Target target,
                 std::shared_ptr<FileRemoveWindowProxy> remove_window_proxy,
                 const FileRemover::TaskList& items);
 

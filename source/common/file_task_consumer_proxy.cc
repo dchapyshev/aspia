@@ -16,32 +16,32 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "common/file_request_producer_proxy.h"
+#include "common/file_task_consumer_proxy.h"
 
 #include "base/logging.h"
 
 namespace common {
 
-FileRequestProducerProxy::FileRequestProducerProxy(FileRequestProducer* request_producer)
-    : request_producer_(request_producer)
+FileTaskConsumerProxy::FileTaskConsumerProxy(FileTaskConsumer* task_consumer)
+    : task_consumer_(task_consumer)
 {
-    DCHECK(request_producer_);
+    DCHECK(task_consumer_);
 }
 
-FileRequestProducerProxy::~FileRequestProducerProxy()
+FileTaskConsumerProxy::~FileTaskConsumerProxy()
 {
-    DCHECK(!request_producer_);
+    DCHECK(!task_consumer_);
 }
 
-void FileRequestProducerProxy::dettach()
+void FileTaskConsumerProxy::dettach()
 {
-    request_producer_ = nullptr;
+    task_consumer_ = nullptr;
 }
 
-void FileRequestProducerProxy::onReply(std::shared_ptr<FileRequest> request)
+void FileTaskConsumerProxy::doTask(std::shared_ptr<FileTask> task)
 {
-    if (request_producer_)
-        request_producer_->onReply(request);
+    if (task_consumer_)
+        task_consumer_->doTask(task);
 }
 
 } // namespace common

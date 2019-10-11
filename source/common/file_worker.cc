@@ -25,7 +25,7 @@
 #include "common/file_depacketizer.h"
 #include "common/file_packetizer.h"
 #include "common/file_platform_util.h"
-#include "common/file_request.h"
+#include "common/file_task.h"
 
 #if defined(OS_WIN)
 #include "base/win/drive_enumerator.h"
@@ -37,10 +37,10 @@ namespace common {
 class FileWorker::Impl : public std::enable_shared_from_this<Impl>
 {
 public:
-    Impl(std::shared_ptr<base::TaskRunner> task_runner);
+    Impl(std::shared_ptr<base::TaskRunner>& task_runner);
     ~Impl();
 
-    void sendRequest(std::shared_ptr<common::FileRequest> request);
+    void doTask(std::shared_ptr<FileTask>& task);
 
 private:
     std::unique_ptr<proto::FileReply> doRequest(const proto::FileRequest& request);
@@ -61,7 +61,7 @@ private:
     DISALLOW_COPY_AND_ASSIGN(Impl);
 };
 
-FileWorker::Impl::Impl(std::shared_ptr<base::TaskRunner> task_runner)
+FileWorker::Impl::Impl(std::shared_ptr<base::TaskRunner>& task_runner)
     : task_runner_(task_runner)
 {
     DCHECK(task_runner_);
@@ -69,12 +69,12 @@ FileWorker::Impl::Impl(std::shared_ptr<base::TaskRunner> task_runner)
 
 FileWorker::Impl::~Impl() = default;
 
-void FileWorker::Impl::sendRequest(std::shared_ptr<common::FileRequest> request)
+void FileWorker::Impl::doTask(std::shared_ptr<FileTask>& task)
 {
     auto self = shared_from_this();
-    task_runner_->postTask([self, request]()
+    task_runner_->postTask([self, task]()
     {
-        request->setReply(self->doRequest(request->request()));
+        task->setReply(self->doRequest(task->request()));
     });
 }
 
@@ -447,7 +447,7 @@ std::unique_ptr<proto::FileReply> FileWorker::Impl::doPacket(const proto::FilePa
     return reply;
 }
 
-FileWorker::FileWorker(std::shared_ptr<base::TaskRunner> task_runner)
+FileWorker::FileWorker(std::shared_ptr<base::TaskRunner>& task_runner)
     : impl_(std::make_shared<Impl>(task_runner))
 {
     // Nothing
@@ -455,9 +455,9 @@ FileWorker::FileWorker(std::shared_ptr<base::TaskRunner> task_runner)
 
 FileWorker::~FileWorker() = default;
 
-void FileWorker::sendRequest(std::shared_ptr<common::FileRequest> request)
+void FileWorker::doTask(std::shared_ptr<FileTask>& task)
 {
-    impl_->sendRequest(request);
+    impl_->doTask(task);
 }
 
 } // namespace common

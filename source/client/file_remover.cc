@@ -22,31 +22,30 @@
 #include "client/file_remove_queue_builder.h"
 #include "client/file_remove_window_proxy.h"
 #include "client/file_remover_proxy.h"
-#include "client/file_request_factory.h"
-#include "common/file_request.h"
-#include "common/file_request_consumer_proxy.h"
-#include "common/file_request_producer_proxy.h"
+#include "common/file_task_factory.h"
+#include "common/file_task_consumer_proxy.h"
+#include "common/file_task_producer_proxy.h"
 
 namespace client {
 
 FileRemover::FileRemover(std::shared_ptr<base::TaskRunner>& io_task_runner,
                          std::shared_ptr<FileRemoveWindowProxy>& remove_window_proxy,
-                         std::shared_ptr<common::FileRequestConsumerProxy>& request_consumer_proxy,
-                         common::FileTaskTarget target)
+                         std::shared_ptr<common::FileTaskConsumerProxy>& task_consumer_proxy,
+                         common::FileTask::Target target)
     : remover_proxy_(std::make_shared<FileRemoverProxy>(io_task_runner, this)),
       remove_window_proxy_(remove_window_proxy),
-      request_consumer_proxy_(request_consumer_proxy),
-      request_producer_proxy_(std::make_shared<common::FileRequestProducerProxy>(this))
+      task_consumer_proxy_(task_consumer_proxy),
+      task_producer_proxy_(std::make_shared<common::FileTaskProducerProxy>(this))
 {
     DCHECK(remove_window_proxy_);
-    DCHECK(request_consumer_proxy_);
+    DCHECK(task_consumer_proxy_);
 
-    request_factory_ = std::make_unique<FileRequestFactory>(request_producer_proxy_, target);
+    task_factory_ = std::make_unique<common::FileTaskFactory>(task_producer_proxy_, target);
 }
 
 FileRemover::~FileRemover()
 {
-    request_producer_proxy_->dettach();
+    task_producer_proxy_->dettach();
     remover_proxy_->dettach();
 }
 
@@ -58,7 +57,7 @@ void FileRemover::start(const TaskList& items, const FinishCallback& callback)
     remove_window_proxy_->start(remover_proxy_);
 
     queue_builder_ = std::make_unique<FileRemoveQueueBuilder>(
-        request_consumer_proxy_, request_factory_->target());
+        task_consumer_proxy_, task_factory_->target());
 
     // Start building a list of objects for deletion.
     queue_builder_->start(items, [this](proto::FileError error_code)
@@ -110,23 +109,23 @@ void FileRemover::setAction(Action action)
     }
 }
 
-void FileRemover::onReply(std::shared_ptr<common::FileRequest> request)
+void FileRemover::onTaskDone(std::shared_ptr<common::FileTask> task)
 {
-    const proto::FileRequest& file_request = request->request();
-    const proto::FileReply& file_reply = request->reply();
+    const proto::FileRequest& request = task->request();
+    const proto::FileReply& reply = task->reply();
 
-    if (!file_request.has_remove_request())
+    if (!request.has_remove_request())
     {
         remove_window_proxy_->errorOccurred(
-            file_request.remove_request().path(), proto::FILE_ERROR_UNKNOWN, ACTION_ABORT);
+            request.remove_request().path(), proto::FILE_ERROR_UNKNOWN, ACTION_ABORT);
         return;
     }
 
-    if (file_reply.error_code() != proto::FILE_ERROR_SUCCESS)
+    if (reply.error_code() != proto::FILE_ERROR_SUCCESS)
     {
         uint32_t actions;
 
-        switch (file_reply.error_code())
+        switch (reply.error_code())
         {
             case proto::FILE_ERROR_PATH_NOT_FOUND:
             case proto::FILE_ERROR_ACCESS_DENIED:
@@ -147,7 +146,7 @@ void FileRemover::onReply(std::shared_ptr<common::FileRequest> request)
         }
 
         remove_window_proxy_->errorOccurred(
-            file_request.remove_request().path(), file_reply.error_code(), actions);
+            request.remove_request().path(), reply.error_code(), actions);
         return;
     }
 
@@ -175,7 +174,7 @@ void FileRemover::doNextTask()
     remove_window_proxy_->setCurrentProgress(path, percentage);
 
     // Send a request to delete the next item.
-    request_consumer_proxy_->doRequest(request_factory_->removeRequest(path));
+    task_consumer_proxy_->doTask(task_factory_->remove(path));
 }
 
 void FileRemover::onFinished()

@@ -43,8 +43,8 @@ QtFileManagerWindow::QtFileManagerWindow(QWidget* parent)
 
     QString mime_type = FileMimeData::createMimeType();
 
-    initPanel(common::FileTaskTarget::LOCAL, tr("Local Computer"), mime_type, ui->local_panel);
-    initPanel(common::FileTaskTarget::REMOTE, tr("Remote Computer"), mime_type, ui->remote_panel);
+    initPanel(common::FileTask::Target::LOCAL, tr("Local Computer"), mime_type, ui->local_panel);
+    initPanel(common::FileTask::Target::REMOTE, tr("Remote Computer"), mime_type, ui->remote_panel);
 
     ui->local_panel->setFocus();
 }
@@ -73,56 +73,56 @@ void QtFileManagerWindow::start(std::shared_ptr<FileControlProxy> file_control_p
 }
 
 void QtFileManagerWindow::onDriveList(
-    common::FileTaskTarget target, proto::FileError error_code, const proto::DriveList& drive_list)
+    common::FileTask::Target target, proto::FileError error_code, const proto::DriveList& drive_list)
 {
-    if (target == common::FileTaskTarget::LOCAL)
+    if (target == common::FileTask::Target::LOCAL)
     {
         ui->local_panel->onDriveList(error_code, drive_list);
     }
     else
     {
-        DCHECK_EQ(target, common::FileTaskTarget::REMOTE);
+        DCHECK_EQ(target, common::FileTask::Target::REMOTE);
         ui->remote_panel->onDriveList(error_code, drive_list);
     }
 }
 
 void QtFileManagerWindow::onFileList(
-    common::FileTaskTarget target, proto::FileError error_code, const proto::FileList& file_list)
+    common::FileTask::Target target, proto::FileError error_code, const proto::FileList& file_list)
 {
-    if (target == common::FileTaskTarget::LOCAL)
+    if (target == common::FileTask::Target::LOCAL)
     {
         ui->local_panel->onFileList(error_code, file_list);
     }
     else
     {
-        DCHECK_EQ(target, common::FileTaskTarget::REMOTE);
+        DCHECK_EQ(target, common::FileTask::Target::REMOTE);
         ui->remote_panel->onFileList(error_code, file_list);
     }
 }
 
 void QtFileManagerWindow::onCreateDirectory(
-    common::FileTaskTarget target, proto::FileError error_code)
+    common::FileTask::Target target, proto::FileError error_code)
 {
-    if (target == common::FileTaskTarget::LOCAL)
+    if (target == common::FileTask::Target::LOCAL)
     {
         ui->local_panel->onCreateDirectory(error_code);
     }
     else
     {
-        DCHECK_EQ(target, common::FileTaskTarget::REMOTE);
+        DCHECK_EQ(target, common::FileTask::Target::REMOTE);
         ui->remote_panel->onCreateDirectory(error_code);
     }
 }
 
-void QtFileManagerWindow::onRename(common::FileTaskTarget target, proto::FileError error_code)
+void QtFileManagerWindow::onRename(common::FileTask::Target target, proto::FileError error_code)
 {
-    if (target == common::FileTaskTarget::LOCAL)
+    if (target == common::FileTask::Target::LOCAL)
     {
         ui->local_panel->onRename(error_code);
     }
     else
     {
-        DCHECK_EQ(target, common::FileTaskTarget::REMOTE);
+        DCHECK_EQ(target, common::FileTask::Target::REMOTE);
         ui->remote_panel->onRename(error_code);
     }
 }
@@ -193,16 +193,16 @@ void QtFileManagerWindow::removeItems(FilePanel* sender, const FileRemover::Task
         setFocus();
     });
 
-    common::FileTaskTarget target;
+    common::FileTask::Target target;
 
     if (sender == ui->local_panel)
     {
-        target = common::FileTaskTarget::LOCAL;
+        target = common::FileTask::Target::LOCAL;
     }
     else
     {
         DCHECK_EQ(sender, ui->remote_panel);
-        target = common::FileTaskTarget::REMOTE;
+        target = common::FileTask::Target::REMOTE;
     }
 
     file_control_proxy_->remove(target, remove_dialog_->windowProxy(), items);
@@ -290,7 +290,7 @@ void QtFileManagerWindow::onPathChanged(FilePanel* sender, const QString& path)
 }
 
 void QtFileManagerWindow::initPanel(
-    common::FileTaskTarget target, const QString& title, const QString& mime_type, FilePanel* panel)
+    common::FileTask::Target target, const QString& title, const QString& mime_type, FilePanel* panel)
 {
     panel->setPanelName(title);
     panel->setMimeType(mime_type);

@@ -24,12 +24,12 @@
 namespace client {
 
 // The class prepares the task queue to perform the downloading/uploading.
-class FileTransferQueueBuilder : public common::FileRequestProducer
+class FileTransferQueueBuilder : public common::FileTaskProducer
 {
 public:
     FileTransferQueueBuilder(
-        std::shared_ptr<common::FileRequestConsumerProxy>& request_consumer_proxy,
-        common::FileTaskTarget target);
+        std::shared_ptr<common::FileTaskConsumerProxy>& task_consumer_proxy,
+        common::FileTask::Target target);
     ~FileTransferQueueBuilder();
 
     using FinishCallback = std::function<void(proto::FileError)>;
@@ -44,8 +44,8 @@ public:
     int64_t totalSize() const;
 
 protected:
-    // FileRequestProducer implementation.
-    void onReply(std::shared_ptr<common::FileRequest> request) override;
+    // FileTaskProducer implementation.
+    void onTaskDone(std::shared_ptr<common::FileTask> task) override;
 
 private:
     void addPendingTask(const std::string& source_dir,
@@ -56,9 +56,9 @@ private:
     void doPendingTasks();
     void onAborted(proto::FileError error_code);
 
-    std::shared_ptr<common::FileRequestConsumerProxy> request_consumer_proxy_;
-    std::shared_ptr<common::FileRequestProducerProxy> request_producer_proxy_;
-    std::unique_ptr<FileRequestFactory> request_factory_;
+    std::shared_ptr<common::FileTaskConsumerProxy> task_consumer_proxy_;
+    std::shared_ptr<common::FileTaskProducerProxy> task_producer_proxy_;
+    std::unique_ptr<common::FileTaskFactory> task_factory_;
 
     FinishCallback callback_;
 

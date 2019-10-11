@@ -33,14 +33,14 @@ public:
     void dettach();
 
     void start(std::shared_ptr<FileControlProxy> file_control_proxy);
-    void onDriveList(common::FileTaskTarget target,
+    void onDriveList(common::FileTask::Target target,
                      proto::FileError error_code,
                      const proto::DriveList& drive_list);
-    void onFileList(common::FileTaskTarget target,
+    void onFileList(common::FileTask::Target target,
                     proto::FileError error_code,
                     const proto::FileList& file_list);
-    void onCreateDirectory(common::FileTaskTarget target, proto::FileError error_code);
-    void onRename(common::FileTaskTarget target, proto::FileError error_code);
+    void onCreateDirectory(common::FileTask::Target target, proto::FileError error_code);
+    void onRename(common::FileTask::Target target, proto::FileError error_code);
 
 private:
     std::shared_ptr<base::TaskRunner> ui_task_runner_;
@@ -88,7 +88,7 @@ void FileManagerWindowProxy::Impl::start(std::shared_ptr<FileControlProxy> file_
 }
 
 void FileManagerWindowProxy::Impl::onDriveList(
-    common::FileTaskTarget target, proto::FileError error_code, const proto::DriveList& drive_list)
+    common::FileTask::Target target, proto::FileError error_code, const proto::DriveList& drive_list)
 {
     if (!ui_task_runner_->belongsToCurrentThread())
     {
@@ -102,7 +102,7 @@ void FileManagerWindowProxy::Impl::onDriveList(
 }
 
 void FileManagerWindowProxy::Impl::onFileList(
-    common::FileTaskTarget target, proto::FileError error_code, const proto::FileList& file_list)
+    common::FileTask::Target target, proto::FileError error_code, const proto::FileList& file_list)
 {
     if (!ui_task_runner_->belongsToCurrentThread())
     {
@@ -116,7 +116,7 @@ void FileManagerWindowProxy::Impl::onFileList(
 }
 
 void FileManagerWindowProxy::Impl::onCreateDirectory(
-    common::FileTaskTarget target, proto::FileError error_code)
+    common::FileTask::Target target, proto::FileError error_code)
 {
     if (!ui_task_runner_->belongsToCurrentThread())
     {
@@ -130,7 +130,7 @@ void FileManagerWindowProxy::Impl::onCreateDirectory(
 }
 
 void FileManagerWindowProxy::Impl::onRename(
-    common::FileTaskTarget target, proto::FileError error_code)
+    common::FileTask::Target target, proto::FileError error_code)
 {
     if (!ui_task_runner_->belongsToCurrentThread())
     {
@@ -172,24 +172,24 @@ void FileManagerWindowProxy::start(std::shared_ptr<FileControlProxy> file_contro
 }
 
 void FileManagerWindowProxy::onDriveList(
-    common::FileTaskTarget target, proto::FileError error_code, const proto::DriveList& drive_list)
+    common::FileTask::Target target, proto::FileError error_code, const proto::DriveList& drive_list)
 {
     impl_->onDriveList(target, error_code, drive_list);
 }
 
 void FileManagerWindowProxy::onFileList(
-    common::FileTaskTarget target, proto::FileError error_code, const proto::FileList& file_list)
+    common::FileTask::Target target, proto::FileError error_code, const proto::FileList& file_list)
 {
     impl_->onFileList(target, error_code, file_list);
 }
 
 void FileManagerWindowProxy::onCreateDirectory(
-    common::FileTaskTarget target, proto::FileError error_code)
+    common::FileTask::Target target, proto::FileError error_code)
 {
     impl_->onCreateDirectory(target, error_code);
 }
 
-void FileManagerWindowProxy::onRename(common::FileTaskTarget target, proto::FileError error_code)
+void FileManagerWindowProxy::onRename(common::FileTask::Target target, proto::FileError error_code)
 {
     impl_->onRename(target, error_code);
 }

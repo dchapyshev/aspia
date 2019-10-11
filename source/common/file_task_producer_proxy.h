@@ -16,23 +16,31 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef COMMON__FILE_REQUEST_CONSUMER_H
-#define COMMON__FILE_REQUEST_CONSUMER_H
+#ifndef COMMON__FILE_TASK_PRODUCER_PROXY_H
+#define COMMON__FILE_TASK_PRODUCER_PROXY_H
 
-#include <memory>
+#include "base/macros_magic.h"
+#include "common/file_task_producer.h"
 
 namespace common {
 
-class FileRequest;
-
-class FileRequestConsumer
+class FileTaskProducerProxy : public FileTaskProducer
 {
 public:
-    virtual ~FileRequestConsumer() = default;
+    explicit FileTaskProducerProxy(FileTaskProducer* task_producer);
+    ~FileTaskProducerProxy();
 
-    virtual void doRequest(std::shared_ptr<FileRequest> request) = 0;
+    void dettach();
+
+    // FileTaskProducer implementation.
+    void onTaskDone(std::shared_ptr<FileTask> task) override;
+
+private:
+    FileTaskProducer* task_producer_;
+
+    DISALLOW_COPY_AND_ASSIGN(FileTaskProducerProxy);
 };
 
 } // namespace common
 
-#endif // COMMON__FILE_REQUEST_CONSUMER_H
+#endif // COMMON__FILE_REQUEST_PRODUCER_PROXY_H

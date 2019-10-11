@@ -16,23 +16,23 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef COMMON__FILE_REQUEST_PRODUCER_H
-#define COMMON__FILE_REQUEST_PRODUCER_H
+#ifndef COMMON__FILE_TASK_CONSUMER_H
+#define COMMON__FILE_TASK_CONSUMER_H
 
 #include <memory>
 
 namespace common {
 
-class FileRequest;
+class FileTask;
 
-class FileRequestProducer
+class FileTaskConsumer
 {
 public:
-    virtual ~FileRequestProducer() = default;
+    virtual ~FileTaskConsumer() = default;
 
-    virtual void onReply(std::shared_ptr<FileRequest> request) = 0;
+    virtual void doTask(std::shared_ptr<FileTask> task) = 0;
 };
 
 } // namespace common
 
-#endif // COMMON__FILE_REQUEST_PRODUCER_H
+#endif // COMMON__FILE_TASK_CONSUMER_H

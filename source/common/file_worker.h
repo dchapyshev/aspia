@@ -29,15 +29,15 @@ class TaskRunner;
 
 namespace common {
 
-class FileRequest;
+class FileTask;
 
 class FileWorker
 {
 public:
-    FileWorker(std::shared_ptr<base::TaskRunner> task_runner);
+    FileWorker(std::shared_ptr<base::TaskRunner>& task_runner);
     ~FileWorker();
 
-    void sendRequest(std::shared_ptr<common::FileRequest> request);
+    void doTask(std::shared_ptr<FileTask>& task);
 
 private:
     class Impl;

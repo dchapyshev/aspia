@@ -20,27 +20,26 @@
 
 #include "base/logging.h"
 #include "base/strings/string_util.h"
-#include "client/file_request_factory.h"
-#include "common/file_request.h"
-#include "common/file_request_consumer_proxy.h"
-#include "common/file_request_producer_proxy.h"
+#include "common/file_task_factory.h"
+#include "common/file_task_consumer_proxy.h"
+#include "common/file_task_producer_proxy.h"
 
 namespace client {
 
 FileRemoveQueueBuilder::FileRemoveQueueBuilder(
-    std::shared_ptr<common::FileRequestConsumerProxy>& request_consumer_proxy,
-    common::FileTaskTarget target)
-    : request_consumer_proxy_(request_consumer_proxy),
-      request_producer_proxy_(std::make_shared<common::FileRequestProducerProxy>(this))
+    std::shared_ptr<common::FileTaskConsumerProxy>& task_consumer_proxy,
+    common::FileTask::Target target)
+    : task_consumer_proxy_(task_consumer_proxy),
+      task_producer_proxy_(std::make_shared<common::FileTaskProducerProxy>(this))
 {
-    DCHECK(request_consumer_proxy_);
+    DCHECK(task_consumer_proxy_);
 
-    request_factory_ = std::make_unique<FileRequestFactory>(request_producer_proxy_, target);
+    task_factory_ = std::make_unique<common::FileTaskFactory>(task_producer_proxy_, target);
 }
 
 FileRemoveQueueBuilder::~FileRemoveQueueBuilder()
 {
-    request_producer_proxy_->dettach();
+    task_producer_proxy_->dettach();
 }
 
 void FileRemoveQueueBuilder::start(
@@ -59,28 +58,28 @@ FileRemover::TaskList FileRemoveQueueBuilder::takeQueue()
     return std::move(tasks_);
 }
 
-void FileRemoveQueueBuilder::onReply(std::shared_ptr<common::FileRequest> request)
+void FileRemoveQueueBuilder::onTaskDone(std::shared_ptr<common::FileTask> task)
 {
-    const proto::FileRequest& file_request = request->request();
-    const proto::FileReply& file_reply = request->reply();
+    const proto::FileRequest& request = task->request();
+    const proto::FileReply& reply = task->reply();
 
-    if (!file_request.has_file_list_request())
+    if (!request.has_file_list_request())
     {
         onAborted(proto::FILE_ERROR_UNKNOWN);
         return;
     }
 
-    if (file_reply.error_code() != proto::FILE_ERROR_SUCCESS)
+    if (reply.error_code() != proto::FILE_ERROR_SUCCESS)
     {
-        onAborted(file_reply.error_code());
+        onAborted(reply.error_code());
         return;
     }
 
-    const std::string& path = file_request.file_list_request().path();
+    const std::string& path = request.file_list_request().path();
 
-    for (int i = 0; i < file_reply.file_list().item_size(); ++i)
+    for (int i = 0; i < reply.file_list().item_size(); ++i)
     {
-        const proto::FileList::Item& item = file_reply.file_list().item(i);
+        const proto::FileList::Item& item = reply.file_list().item(i);
         std::string item_path = path + '/' + item.name();
 
         pending_tasks_.emplace_back(std::move(item_path), item.is_directory());
@@ -98,8 +97,7 @@ void FileRemoveQueueBuilder::doPendingTasks()
 
         if (tasks_.front().isDirectory())
         {
-            request_consumer_proxy_->doRequest(
-                request_factory_->fileListRequest(tasks_.front().path()));
+            task_consumer_proxy_->doTask(task_factory_->fileList(tasks_.front().path()));
             return;
         }
     }

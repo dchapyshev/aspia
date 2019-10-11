@@ -21,12 +21,13 @@
 
 #include "client/client.h"
 #include "client/file_control.h"
-#include "common/file_request_consumer.h"
-#include "common/file_request_producer.h"
+#include "common/file_task_consumer.h"
+#include "common/file_task_producer.h"
 
 namespace common {
-class FileRequestConsumerProxy;
-class FileRequestProducerProxy;
+class FileTaskConsumerProxy;
+class FileTaskProducerProxy;
+class FileTaskFactory;
 class FileWorker;
 } // namespace common
 
@@ -39,13 +40,12 @@ namespace client {
 class FileControlProxy;
 class FileManagerWindow;
 class FileManagerWindowProxy;
-class FileRequestFactory;
 
 class ClientFileTransfer
     : public Client,
-      public common::FileRequestConsumer,
-      public common::FileRequestProducer,
-      public FileControl
+      public FileControl,
+      public common::FileTaskConsumer,
+      public common::FileTaskProducer
 {
 public:
     explicit ClientFileTransfer(std::shared_ptr<base::TaskRunner>& ui_task_runner);
@@ -53,8 +53,8 @@ public:
 
     void setFileManagerWindow(FileManagerWindow* file_manager_window);
 
-    // FileRequestConsumer implementation.
-    void doRequest(std::shared_ptr<common::FileRequest> request) override;
+    // FileTaskConsumer implementation.
+    void doTask(std::shared_ptr<common::FileTask> task) override;
 
 protected:
     // Client implementation.
@@ -65,22 +65,22 @@ protected:
     void onMessageReceived(const base::ByteArray& buffer) override;
     void onMessageWritten() override;
 
-    // FileRequestProducer implementation.
-    void onReply(std::shared_ptr<common::FileRequest> request) override;
+    // FileTaskProducer implementation.
+    void onTaskDone(std::shared_ptr<common::FileTask> task) override;
 
 private:
-    void doNextRemoteRequest();
+    void doNextRemoteTask();
 
-    FileRequestFactory* requestFactory(common::FileTaskTarget target);
+    common::FileTaskFactory* taskFactory(common::FileTask::Target target);
 
     // FileControl implementation.
-    void getDriveList(common::FileTaskTarget target) override;
-    void getFileList(common::FileTaskTarget target, const std::string& path) override;
-    void createDirectory(common::FileTaskTarget target, const std::string& path) override;
-    void rename(common::FileTaskTarget target,
+    void getDriveList(common::FileTask::Target target) override;
+    void getFileList(common::FileTask::Target target, const std::string& path) override;
+    void createDirectory(common::FileTask::Target target, const std::string& path) override;
+    void rename(common::FileTask::Target target,
                 const std::string& old_path,
                 const std::string& new_path) override;
-    void remove(common::FileTaskTarget target,
+    void remove(common::FileTask::Target target,
                 std::shared_ptr<FileRemoveWindowProxy> remove_window_proxy,
                 const FileRemover::TaskList& items) override;
     void transfer(std::shared_ptr<FileTransferWindowProxy> transfer_window_proxy,
@@ -89,13 +89,13 @@ private:
                   const std::string& target_path,
                   const std::vector<FileTransfer::Item>& items) override;
 
-    std::shared_ptr<common::FileRequestConsumerProxy> request_consumer_proxy_;
-    std::shared_ptr<common::FileRequestProducerProxy> request_producer_proxy_;
+    std::shared_ptr<common::FileTaskConsumerProxy> task_consumer_proxy_;
+    std::shared_ptr<common::FileTaskProducerProxy> task_producer_proxy_;
 
-    std::unique_ptr<FileRequestFactory> local_request_factory_;
-    std::unique_ptr<FileRequestFactory> remote_request_factory_;
+    std::unique_ptr<common::FileTaskFactory> local_task_factory_;
+    std::unique_ptr<common::FileTaskFactory> remote_task_factory_;
 
-    std::queue<std::shared_ptr<common::FileRequest>> remote_request_queue_;
+    std::queue<std::shared_ptr<common::FileTask>> remote_task_queue_;
     std::unique_ptr<common::FileWorker> local_worker_;
 
     std::shared_ptr<FileControlProxy> file_control_proxy_;

@@ -19,9 +19,8 @@
 #ifndef CLIENT__FILE_REMOVER_H
 #define CLIENT__FILE_REMOVER_H
 
-#include "base/macros_magic.h"
-#include "common/file_request_producer.h"
-#include "common/file_task_target.h"
+#include "common/file_task.h"
+#include "common/file_task_producer.h"
 #include "proto/file_transfer.pb.h"
 
 #include <deque>
@@ -31,8 +30,9 @@ class TaskRunner;
 } // namespace base
 
 namespace common {
-class FileRequestConsumerProxy;
-class FileRequestProducerProxy;
+class FileTaskFactory;
+class FileTaskConsumerProxy;
+class FileTaskProducerProxy;
 } // namespace common
 
 namespace client {
@@ -40,15 +40,14 @@ namespace client {
 class FileRemoveQueueBuilder;
 class FileRemoveWindowProxy;
 class FileRemoverProxy;
-class FileRequestFactory;
 
-class FileRemover : public common::FileRequestProducer
+class FileRemover : public common::FileTaskProducer
 {
 public:
     FileRemover(std::shared_ptr<base::TaskRunner>& io_task_runner,
                 std::shared_ptr<FileRemoveWindowProxy>& remove_window_proxy,
-                std::shared_ptr<common::FileRequestConsumerProxy>& request_consumer_proxy,
-                common::FileTaskTarget target);
+                std::shared_ptr<common::FileTaskConsumerProxy>& task_consumer_proxy,
+                common::FileTask::Target target);
     ~FileRemover();
 
     enum Action
@@ -89,8 +88,8 @@ public:
     void setAction(Action action);
 
 protected:
-    // common::FileRequestProducer implementation.
-    void onReply(std::shared_ptr<common::FileRequest> request) override;
+    // common::FileTaskProducer implementation.
+    void onTaskDone(std::shared_ptr<common::FileTask> task) override;
 
 private:
     void doNextTask();
@@ -98,9 +97,9 @@ private:
 
     std::shared_ptr<FileRemoverProxy> remover_proxy_;
     std::shared_ptr<FileRemoveWindowProxy> remove_window_proxy_;
-    std::shared_ptr<common::FileRequestConsumerProxy> request_consumer_proxy_;
-    std::shared_ptr<common::FileRequestProducerProxy> request_producer_proxy_;
-    std::unique_ptr<FileRequestFactory> request_factory_;
+    std::shared_ptr<common::FileTaskConsumerProxy> task_consumer_proxy_;
+    std::shared_ptr<common::FileTaskProducerProxy> task_producer_proxy_;
+    std::unique_ptr<common::FileTaskFactory> task_factory_;
 
     std::unique_ptr<FileRemoveQueueBuilder> queue_builder_;
 

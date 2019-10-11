@@ -52,8 +52,6 @@ list(APPEND SOURCE_CLIENT
     file_remover.h
     file_remover_proxy.cc
     file_remover_proxy.h
-    file_request_factory.cc
-    file_request_factory.h
     file_transfer.cc
     file_transfer.h
     file_transfer_proxy.cc

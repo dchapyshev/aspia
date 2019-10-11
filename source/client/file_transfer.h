@@ -20,8 +20,8 @@
 #define CLIENT__FILE_TRANSFER_H
 
 #include "base/waitable_timer.h"
-#include "common/file_request_producer.h"
-#include "common/file_task_target.h"
+#include "common/file_task.h"
+#include "common/file_task_producer.h"
 #include "client/file_transfer_task.h"
 #include "proto/file_transfer.pb.h"
 
@@ -32,18 +32,18 @@ class TaskRunner;
 } // namespace base
 
 namespace common {
-class FileRequestConsumerProxy;
-class FileRequestProducerProxy;
+class FileTaskConsumerProxy;
+class FileTaskProducerProxy;
+class FileTaskFactory;
 } // namespace common
 
 namespace client {
 
-class FileRequestFactory;
 class FileTransferProxy;
 class FileTransferQueueBuilder;
 class FileTransferWindowProxy;
 
-class FileTransfer : public common::FileRequestProducer
+class FileTransfer : public common::FileTaskProducer
 {
 public:
     enum class Type
@@ -128,7 +128,7 @@ public:
 
     FileTransfer(std::shared_ptr<base::TaskRunner>& io_task_runner,
                  std::shared_ptr<FileTransferWindowProxy>& transfer_window_proxy,
-                 std::shared_ptr<common::FileRequestConsumerProxy>& request_consumer_proxy,
+                 std::shared_ptr<common::FileTaskConsumerProxy>& task_consumer_proxy,
                  Type type);
     ~FileTransfer();
 
@@ -141,8 +141,8 @@ public:
     void setAction(Error::Type error_type, Error::Action action);
 
 protected:
-    // common::FileRequestProducer implementation.
-    void onReply(std::shared_ptr<common::FileRequest> request) override;
+    // common::FileTaskProducer implementation.
+    void onTaskDone(std::shared_ptr<common::FileTask> task) override;
 
 private:
     FileTransferTask& frontTask();
@@ -157,10 +157,10 @@ private:
     std::shared_ptr<base::TaskRunner> io_task_runner_;
     std::shared_ptr<FileTransferProxy> transfer_proxy_;
     std::shared_ptr<FileTransferWindowProxy> transfer_window_proxy_;
-    std::shared_ptr<common::FileRequestConsumerProxy> request_consumer_proxy_;
-    std::shared_ptr<common::FileRequestProducerProxy> request_producer_proxy_;
-    std::unique_ptr<FileRequestFactory> request_factory_source_;
-    std::unique_ptr<FileRequestFactory> request_factory_target_;
+    std::shared_ptr<common::FileTaskConsumerProxy> task_consumer_proxy_;
+    std::shared_ptr<common::FileTaskProducerProxy> task_producer_proxy_;
+    std::unique_ptr<common::FileTaskFactory> task_factory_source_;
+    std::unique_ptr<common::FileTaskFactory> task_factory_target_;
 
     base::WaitableTimer cancel_timer_;
 

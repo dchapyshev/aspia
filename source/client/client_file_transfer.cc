@@ -21,10 +21,9 @@
 #include "base/logging.h"
 #include "client/file_control_proxy.h"
 #include "client/file_manager_window_proxy.h"
-#include "client/file_request_factory.h"
-#include "common/file_request.h"
-#include "common/file_request_consumer_proxy.h"
-#include "common/file_request_producer_proxy.h"
+#include "common/file_task_factory.h"
+#include "common/file_task_consumer_proxy.h"
+#include "common/file_task_producer_proxy.h"
 #include "common/file_worker.h"
 
 namespace client {
@@ -48,14 +47,14 @@ void ClientFileTransfer::setFileManagerWindow(FileManagerWindow* file_manager_wi
 
 void ClientFileTransfer::onSessionStarted(const base::Version& /* peer_version */)
 {
-    request_consumer_proxy_ = std::make_shared<common::FileRequestConsumerProxy>(this);
-    request_producer_proxy_ = std::make_shared<common::FileRequestProducerProxy>(this);
+    task_consumer_proxy_ = std::make_shared<common::FileTaskConsumerProxy>(this);
+    task_producer_proxy_ = std::make_shared<common::FileTaskProducerProxy>(this);
 
-    local_request_factory_ = std::make_unique<FileRequestFactory>(
-        request_producer_proxy_, common::FileTaskTarget::LOCAL);
+    local_task_factory_ = std::make_unique<common::FileTaskFactory>(
+        task_producer_proxy_, common::FileTask::Target::LOCAL);
 
-    remote_request_factory_ = std::make_unique<FileRequestFactory>(
-        request_producer_proxy_, common::FileTaskTarget::REMOTE);
+    remote_task_factory_ = std::make_unique<common::FileTaskFactory>(
+        task_producer_proxy_, common::FileTask::Target::REMOTE);
 
     file_control_proxy_ = std::make_shared<FileControlProxy>(ioTaskRunner(), this);
     local_worker_ = std::make_unique<common::FileWorker>(ioTaskRunner());
@@ -65,8 +64,8 @@ void ClientFileTransfer::onSessionStarted(const base::Version& /* peer_version *
 
 void ClientFileTransfer::onSessionStopped()
 {
-    request_consumer_proxy_->dettach();
-    request_producer_proxy_->dettach();
+    task_consumer_proxy_->dettach();
+    task_producer_proxy_->dettach();
     file_control_proxy_->dettach();
 
     remover_.reset();
@@ -84,13 +83,13 @@ void ClientFileTransfer::onMessageReceived(const base::ByteArray& buffer)
     }
 
     // Move the reply to the request and notify the sender.
-    remote_request_queue_.front()->setReply(std::move(reply));
+    remote_task_queue_.front()->setReply(std::move(reply));
 
     // Remove the request from the queue.
-    remote_request_queue_.pop();
+    remote_task_queue_.pop();
 
     // Execute the next request.
-    doNextRemoteRequest();
+    doNextRemoteTask();
 }
 
 void ClientFileTransfer::onMessageWritten()
@@ -98,28 +97,28 @@ void ClientFileTransfer::onMessageWritten()
     // Nothing
 }
 
-void ClientFileTransfer::onReply(std::shared_ptr<common::FileRequest> request)
+void ClientFileTransfer::onTaskDone(std::shared_ptr<common::FileTask> task)
 {
-    const proto::FileRequest& file_request = request->request();
-    const proto::FileReply& file_reply = request->reply();
+    const proto::FileRequest& request = task->request();
+    const proto::FileReply& reply = task->reply();
 
-    if (file_request.has_drive_list_request())
+    if (request.has_drive_list_request())
     {
         file_manager_window_proxy_->onDriveList(
-            request->target(), file_reply.error_code(), file_reply.drive_list());
+            task->target(), reply.error_code(), reply.drive_list());
     }
-    else if (file_request.has_file_list_request())
+    else if (request.has_file_list_request())
     {
         file_manager_window_proxy_->onFileList(
-            request->target(), file_reply.error_code(), file_reply.file_list());
+            task->target(), reply.error_code(), reply.file_list());
     }
-    else if (file_request.has_create_directory_request())
+    else if (request.has_create_directory_request())
     {
-        file_manager_window_proxy_->onCreateDirectory(request->target(), file_reply.error_code());
+        file_manager_window_proxy_->onCreateDirectory(task->target(), reply.error_code());
     }
-    else if (file_request.has_rename_request())
+    else if (request.has_rename_request())
     {
-        file_manager_window_proxy_->onRename(request->target(), file_reply.error_code());
+        file_manager_window_proxy_->onRename(task->target(), reply.error_code());
     }
     else
     {
@@ -127,82 +126,82 @@ void ClientFileTransfer::onReply(std::shared_ptr<common::FileRequest> request)
     }
 }
 
-void ClientFileTransfer::doRequest(std::shared_ptr<common::FileRequest> request)
+void ClientFileTransfer::doTask(std::shared_ptr<common::FileTask> task)
 {
-    if (request->target() == common::FileTaskTarget::LOCAL)
+    if (task->target() == common::FileTask::Target::LOCAL)
     {
-        local_worker_->sendRequest(request);
+        local_worker_->doTask(task);
     }
     else
     {
-        const bool schedule = remote_request_queue_.empty();
+        const bool schedule = remote_task_queue_.empty();
 
         // Add the request to the queue.
-        remote_request_queue_.emplace(request);
+        remote_task_queue_.emplace(task);
 
         // If the request queue was empty, then run execution.
         if (schedule)
-            doNextRemoteRequest();
+            doNextRemoteTask();
     }
 }
 
-void ClientFileTransfer::doNextRemoteRequest()
+void ClientFileTransfer::doNextRemoteTask()
 {
-    if (remote_request_queue_.empty())
+    if (remote_task_queue_.empty())
         return;
 
     // Send a request to the remote computer.
-    sendMessage(remote_request_queue_.front()->request());
+    sendMessage(remote_task_queue_.front()->request());
 }
 
-FileRequestFactory* ClientFileTransfer::requestFactory(common::FileTaskTarget target)
+common::FileTaskFactory* ClientFileTransfer::taskFactory(common::FileTask::Target target)
 {
-    FileRequestFactory* request_factory;
+    common::FileTaskFactory* task_factory;
 
-    if (target == common::FileTaskTarget::LOCAL)
+    if (target == common::FileTask::Target::LOCAL)
     {
-        request_factory = local_request_factory_.get();
+        task_factory = local_task_factory_.get();
     }
     else
     {
-        DCHECK_EQ(target, common::FileTaskTarget::REMOTE);
-        request_factory = remote_request_factory_.get();
+        DCHECK_EQ(target, common::FileTask::Target::REMOTE);
+        task_factory = remote_task_factory_.get();
     }
 
-    DCHECK(request_factory);
-    return request_factory;
+    DCHECK(task_factory);
+    return task_factory;
 }
 
-void ClientFileTransfer::getDriveList(common::FileTaskTarget target)
+void ClientFileTransfer::getDriveList(common::FileTask::Target target)
 {
-    request_consumer_proxy_->doRequest(requestFactory(target)->driveListRequest());
+    task_consumer_proxy_->doTask(taskFactory(target)->driveList());
 }
 
-void ClientFileTransfer::getFileList(common::FileTaskTarget target, const std::string& path)
+void ClientFileTransfer::getFileList(common::FileTask::Target target, const std::string& path)
 {
-    request_consumer_proxy_->doRequest(requestFactory(target)->fileListRequest(path));
+    task_consumer_proxy_->doTask(taskFactory(target)->fileList(path));
 }
 
-void ClientFileTransfer::createDirectory(common::FileTaskTarget target, const std::string& path)
+void ClientFileTransfer::createDirectory(common::FileTask::Target target, const std::string& path)
 {
-    request_consumer_proxy_->doRequest(requestFactory(target)->createDirectoryRequest(path));
+    task_consumer_proxy_->doTask(taskFactory(target)->createDirectory(path));
 }
 
-void ClientFileTransfer::rename(common::FileTaskTarget target,
+void ClientFileTransfer::rename(common::FileTask::Target target,
                                 const std::string& old_path,
                                 const std::string& new_path)
 {
-    request_consumer_proxy_->doRequest(requestFactory(target)->renameRequest(old_path, new_path));
+    task_consumer_proxy_->doTask(taskFactory(target)->rename(old_path, new_path));
 }
 
-void ClientFileTransfer::remove(common::FileTaskTarget target,
+void ClientFileTransfer::remove(common::FileTask::Target target,
                                 std::shared_ptr<FileRemoveWindowProxy> remove_window_proxy,
                                 const FileRemover::TaskList& items)
 {
     DCHECK(!remover_);
 
     remover_ = std::make_unique<FileRemover>(
-        ioTaskRunner(), remove_window_proxy, request_consumer_proxy_, target);
+        ioTaskRunner(), remove_window_proxy, task_consumer_proxy_, target);
 
     remover_->start(items, [this]()
     {
@@ -219,7 +218,7 @@ void ClientFileTransfer::transfer(std::shared_ptr<FileTransferWindowProxy> trans
     DCHECK(!transfer_);
 
     transfer_ = std::make_unique<FileTransfer>(
-        ioTaskRunner(), transfer_window_proxy, request_consumer_proxy_, transfer_type);
+        ioTaskRunner(), transfer_window_proxy, task_consumer_proxy_, transfer_type);
 
     transfer_->start(source_path, target_path, items, [this]()
     {

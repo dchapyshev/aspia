@@ -44,7 +44,7 @@ void FileControlProxy::dettach()
     file_control_ = nullptr;
 }
 
-void FileControlProxy::getDriveList(common::FileTaskTarget target)
+void FileControlProxy::getDriveList(common::FileTask::Target target)
 {
     if (!io_task_runner_->belongsToCurrentThread())
     {
@@ -57,7 +57,7 @@ void FileControlProxy::getDriveList(common::FileTaskTarget target)
         file_control_->getDriveList(target);
 }
 
-void FileControlProxy::getFileList(common::FileTaskTarget target, const std::string& path)
+void FileControlProxy::getFileList(common::FileTask::Target target, const std::string& path)
 {
     if (!io_task_runner_->belongsToCurrentThread())
     {
@@ -70,7 +70,7 @@ void FileControlProxy::getFileList(common::FileTaskTarget target, const std::str
         file_control_->getFileList(target, path);
 }
 
-void FileControlProxy::createDirectory(common::FileTaskTarget target, const std::string& path)
+void FileControlProxy::createDirectory(common::FileTask::Target target, const std::string& path)
 {
     if (!io_task_runner_->belongsToCurrentThread())
     {
@@ -84,7 +84,7 @@ void FileControlProxy::createDirectory(common::FileTaskTarget target, const std:
 }
 
 void FileControlProxy::rename(
-    common::FileTaskTarget target, const std::string& old_path, const std::string& new_path)
+    common::FileTask::Target target, const std::string& old_path, const std::string& new_path)
 {
     if (!io_task_runner_->belongsToCurrentThread())
     {
@@ -97,7 +97,7 @@ void FileControlProxy::rename(
         file_control_->rename(target, old_path, new_path);
 }
 
-void FileControlProxy::remove(common::FileTaskTarget target,
+void FileControlProxy::remove(common::FileTask::Target target,
                               std::shared_ptr<FileRemoveWindowProxy> remove_window_proxy,
                               const FileRemover::TaskList& items)
 {

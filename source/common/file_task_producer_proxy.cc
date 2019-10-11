@@ -16,31 +16,32 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef COMMON__FILE_REQUEST_PRODUCER_PROXY_H
-#define COMMON__FILE_REQUEST_PRODUCER_PROXY_H
+#include "common/file_task_producer_proxy.h"
 
-#include "base/macros_magic.h"
-#include "common/file_request_producer.h"
+#include "base/logging.h"
 
 namespace common {
 
-class FileRequestProducerProxy : public FileRequestProducer
+FileTaskProducerProxy::FileTaskProducerProxy(FileTaskProducer* task_producer)
+    : task_producer_(task_producer)
 {
-public:
-    explicit FileRequestProducerProxy(FileRequestProducer* request_producer);
-    ~FileRequestProducerProxy();
+    DCHECK(task_producer_);
+}
 
-    void dettach();
+FileTaskProducerProxy::~FileTaskProducerProxy()
+{
+    DCHECK(!task_producer_);
+}
 
-    // FileRequestProducer implementation.
-    void onReply(std::shared_ptr<FileRequest> request) override;
+void FileTaskProducerProxy::dettach()
+{
+    task_producer_ = nullptr;
+}
 
-private:
-    FileRequestProducer* request_producer_;
-
-    DISALLOW_COPY_AND_ASSIGN(FileRequestProducerProxy);
-};
+void FileTaskProducerProxy::onTaskDone(std::shared_ptr<FileTask> task)
+{
+    if (task_producer_)
+        task_producer_->onTaskDone(task);
+}
 
 } // namespace common
-
-#endif // COMMON__FILE_REQUEST_PRODUCER_PROXY_H

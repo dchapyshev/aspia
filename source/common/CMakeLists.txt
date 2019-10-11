@@ -30,15 +30,16 @@ list(APPEND SOURCE_COMMON
     file_packetizer.h
     file_platform_util.h
     file_platform_util_win.cc
-    file_request.cc
-    file_request.h
-    file_request_consumer.h
-    file_request_consumer_proxy.cc
-    file_request_consumer_proxy.h
-    file_request_producer.h
-    file_request_producer_proxy.cc
-    file_request_producer_proxy.h
-    file_task_target.h
+    file_task.cc
+    file_task.h
+    file_task_consumer.h
+    file_task_consumer_proxy.cc
+    file_task_consumer_proxy.h
+    file_task_factory.cc
+    file_task_factory.h
+    file_task_producer.h
+    file_task_producer_proxy.cc
+    file_task_producer_proxy.h
     file_worker.cc
     file_worker.h
     keycode_converter.cc

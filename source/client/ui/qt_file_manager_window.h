@@ -52,14 +52,14 @@ public:
 
     // FileManagerWindow implementation.
     void start(std::shared_ptr<FileControlProxy> file_control_proxy) override;
-    void onDriveList(common::FileTaskTarget target,
+    void onDriveList(common::FileTask::Target target,
                      proto::FileError error_code,
                      const proto::DriveList& drive_list) override;
-    void onFileList(common::FileTaskTarget target,
+    void onFileList(common::FileTask::Target target,
                     proto::FileError error_code,
                     const proto::FileList& file_list) override;
-    void onCreateDirectory(common::FileTaskTarget target, proto::FileError error_code) override;
-    void onRename(common::FileTaskTarget target, proto::FileError error_code) override;
+    void onCreateDirectory(common::FileTask::Target target, proto::FileError error_code) override;
+    void onRename(common::FileTask::Target target, proto::FileError error_code) override;
 
     QByteArray saveState() const;
     void restoreState(const QByteArray& state);
@@ -85,7 +85,7 @@ private:
                        const QString& target_path,
                        const std::vector<FileTransfer::Item>& items);
 
-    void initPanel(common::FileTaskTarget target,
+    void initPanel(common::FileTask::Target target,
                    const QString& title,
                    const QString& mime_type,
                    FilePanel* panel);

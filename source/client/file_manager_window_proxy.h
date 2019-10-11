@@ -19,8 +19,7 @@
 #ifndef CLIENT__FILE_MANAGER_WINDOW_PROXY_H
 #define CLIENT__FILE_MANAGER_WINDOW_PROXY_H
 
-#include "base/macros_magic.h"
-#include "common/file_task_target.h"
+#include "common/file_task.h"
 #include "proto/file_transfer.pb.h"
 
 #include <memory>
@@ -43,14 +42,14 @@ public:
         std::shared_ptr<base::TaskRunner>& ui_task_runner, FileManagerWindow* file_manager_window);
 
     void start(std::shared_ptr<FileControlProxy> file_control_proxy);
-    void onDriveList(common::FileTaskTarget target,
+    void onDriveList(common::FileTask::Target target,
                      proto::FileError error_code,
                      const proto::DriveList& drive_list);
-    void onFileList(common::FileTaskTarget target,
+    void onFileList(common::FileTask::Target target,
                     proto::FileError error_code,
                     const proto::FileList& file_list);
-    void onCreateDirectory(common::FileTaskTarget target, proto::FileError error_code);
-    void onRename(common::FileTaskTarget target, proto::FileError error_code);
+    void onCreateDirectory(common::FileTask::Target target, proto::FileError error_code);
+    void onRename(common::FileTask::Target target, proto::FileError error_code);
 
 private:
     FileManagerWindowProxy(std::shared_ptr<base::TaskRunner>& ui_task_runner,

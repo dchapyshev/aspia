@@ -29,15 +29,15 @@ class FileControl
 public:
     virtual ~FileControl() = default;
 
-    virtual void getDriveList(common::FileTaskTarget target) = 0;
-    virtual void getFileList(common::FileTaskTarget target, const std::string& path) = 0;
-    virtual void createDirectory(common::FileTaskTarget target, const std::string& path) = 0;
+    virtual void getDriveList(common::FileTask::Target target) = 0;
+    virtual void getFileList(common::FileTask::Target target, const std::string& path) = 0;
+    virtual void createDirectory(common::FileTask::Target target, const std::string& path) = 0;
 
-    virtual void rename(common::FileTaskTarget target,
+    virtual void rename(common::FileTask::Target target,
                         const std::string& old_path,
                         const std::string& new_path) = 0;
 
-    virtual void remove(common::FileTaskTarget target,
+    virtual void remove(common::FileTask::Target target,
                         std::shared_ptr<FileRemoveWindowProxy> remove_window_proxy,
                         const FileRemover::TaskList& items) = 0;
 

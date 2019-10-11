@@ -16,17 +16,31 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef COMMON__FILE_TASK_TARGET_H
-#define COMMON__FILE_TASK_TARGET_H
+#ifndef COMMON__FILE_TASK_CONSUMER_PROXY_H
+#define COMMON__FILE_TASK_CONSUMER_PROXY_H
+
+#include "base/macros_magic.h"
+#include "common/file_task_consumer.h"
 
 namespace common {
 
-enum class FileTaskTarget
+class FileTaskConsumerProxy : public FileTaskConsumer
 {
-    LOCAL, // Local task.
-    REMOTE // Remote task.
+public:
+    explicit FileTaskConsumerProxy(FileTaskConsumer* task_consumer);
+    ~FileTaskConsumerProxy();
+
+    void dettach();
+
+    // FileTaskConsumer implementation.
+    void doTask(std::shared_ptr<FileTask> task) override;
+
+private:
+    FileTaskConsumer* task_consumer_;
+
+    DISALLOW_COPY_AND_ASSIGN(FileTaskConsumerProxy);
 };
 
-} // namespace client
+} // namespace common
 
-#endif // COMMON__FILE_TASK_TARGET_H
+#endif // COMMON__FILE_TASK_CONSUMER_PROXY_H
