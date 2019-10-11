@@ -216,7 +216,7 @@ void FileTransfer::onTaskDone(std::shared_ptr<common::FileTask> task)
     }
 }
 
-FileTransferTask& FileTransfer::frontTask()
+FileTransfer::Task& FileTransfer::frontTask()
 {
     return tasks_.front();
 }
@@ -313,7 +313,7 @@ void FileTransfer::sourceReply(const proto::FileRequest& request, const proto::F
 
     if (request.has_download_request())
     {
-        FileTransferTask& front_task = frontTask();
+        Task& front_task = frontTask();
 
         if (reply.error_code() != proto::FILE_ERROR_SUCCESS)
         {
@@ -379,7 +379,7 @@ void FileTransfer::doFrontTask(bool overwrite)
     task_percentage_ = 0;
     task_transfered_size_ = 0;
 
-    FileTransferTask& front_task = frontTask();
+    Task& front_task = frontTask();
     front_task.setOverwrite(overwrite);
 
     transfer_window_proxy_->setCurrentItem(front_task.sourcePath(), front_task.targetPath());
@@ -466,6 +466,34 @@ FileTransfer::Error::Action FileTransfer::Error::defaultAction() const
     }
 
     return Action::ACTION_ABORT;
+}
+
+FileTransfer::Task::Task(std::string&& source_path, std::string&& target_path,
+                         bool is_directory, int64_t size)
+    : source_path_(std::move(source_path)),
+      target_path_(std::move(target_path)),
+      is_directory_(is_directory),
+      size_(size)
+{
+    // Nothing
+}
+
+FileTransfer::Task::Task(Task&& other) noexcept
+    : source_path_(std::move(other.source_path_)),
+      target_path_(std::move(other.target_path_)),
+      is_directory_(other.is_directory_),
+      size_(other.size_)
+{
+    // Nothing
+}
+
+FileTransfer::Task& FileTransfer::Task::operator=(Task&& other) noexcept
+{
+    source_path_ = std::move(other.source_path_);
+    target_path_ = std::move(other.target_path_);
+    is_directory_ = other.is_directory_;
+    size_ = other.size_;
+    return *this;
 }
 
 } // namespace client

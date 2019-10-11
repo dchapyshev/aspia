@@ -22,7 +22,6 @@
 #include "base/waitable_timer.h"
 #include "common/file_task.h"
 #include "common/file_task_producer.h"
-#include "client/file_transfer_task.h"
 #include "proto/file_transfer.pb.h"
 
 #include <queue>
@@ -123,7 +122,37 @@ public:
         int64_t size;
     };
 
-    using TaskList = std::deque<FileTransferTask>;
+    class Task
+    {
+    public:
+        Task(std::string&& source_path, std::string&& target_path,
+             bool is_directory, int64_t size);
+
+        Task(const Task& other) = default;
+        Task& operator=(const Task& other) = default;
+
+        Task(Task&& other) noexcept;
+        Task& operator=(Task&& other) noexcept;
+
+        ~Task() = default;
+
+        const std::string& sourcePath() const { return source_path_; }
+        const std::string& targetPath() const { return target_path_; }
+        bool isDirectory() const { return is_directory_; }
+        int64_t size() const { return size_; }
+
+        bool overwrite() const { return overwrite_; }
+        void setOverwrite(bool value) { overwrite_ = value; }
+
+    private:
+        std::string source_path_;
+        std::string target_path_;
+        bool is_directory_;
+        bool overwrite_ = false;
+        int64_t size_;
+    };
+
+    using TaskList = std::deque<Task>;
     using FinishCallback = std::function<void()>;
 
     FileTransfer(std::shared_ptr<base::TaskRunner>& io_task_runner,
@@ -145,7 +174,7 @@ protected:
     void onTaskDone(std::shared_ptr<common::FileTask> task) override;
 
 private:
-    FileTransferTask& frontTask();
+    Task& frontTask();
     void targetReply(const proto::FileRequest& request, const proto::FileReply& reply);
     void sourceReply(const proto::FileRequest& request, const proto::FileReply& reply);
     void doFrontTask(bool overwrite);

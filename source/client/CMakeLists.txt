@@ -58,8 +58,6 @@ list(APPEND SOURCE_CLIENT
     file_transfer_proxy.h
     file_transfer_queue_builder.cc
     file_transfer_queue_builder.h
-    file_transfer_task.cc
-    file_transfer_task.h
     file_transfer_window.h
     file_transfer_window_proxy.cc
     file_transfer_window_proxy.h

@@ -85,7 +85,7 @@ void FileTransferQueueBuilder::onTaskDone(std::shared_ptr<common::FileTask> task
     }
 
     // If we get a list of files, then the last task is a directory.
-    const FileTransferTask& last_task = tasks_.back();
+    const FileTransfer::Task& last_task = tasks_.back();
     DCHECK(last_task.isDirectory());
 
     for (int i = 0; i < reply.file_list().item_size(); ++i)
