@@ -35,8 +35,8 @@ public:
 
     void dettach();
 
-    void getDriveList(common::FileTask::Target target);
-    void getFileList(common::FileTask::Target target, const std::string& path);
+    void driveList(common::FileTask::Target target);
+    void fileList(common::FileTask::Target target, const std::string& path);
     void createDirectory(common::FileTask::Target target, const std::string& path);
 
     void rename(common::FileTask::Target target,

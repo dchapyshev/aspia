@@ -50,8 +50,8 @@ public:
     void restoreState(const QByteArray& state);
 
 signals:
-    void getDriveList();
-    void getFileList(const QString& path);
+    void driveList();
+    void fileList(const QString& path);
     void rename(const QString& old_name, const QString& new_name);
     void createDirectory(const QString& path);
     void removeItems(FilePanel* sender, const FileRemover::TaskList& items);

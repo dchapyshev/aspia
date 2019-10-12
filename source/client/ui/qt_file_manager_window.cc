@@ -295,14 +295,14 @@ void QtFileManagerWindow::initPanel(
     panel->setPanelName(title);
     panel->setMimeType(mime_type);
 
-    connect(panel, &FilePanel::getDriveList, [this, target]()
+    connect(panel, &FilePanel::driveList, [this, target]()
     {
-        file_control_proxy_->getDriveList(target);
+        file_control_proxy_->driveList(target);
     });
 
-    connect(panel, &FilePanel::getFileList, [this, target](const QString& path)
+    connect(panel, &FilePanel::fileList, [this, target](const QString& path)
     {
-        file_control_proxy_->getFileList(target, path.toStdString());
+        file_control_proxy_->fileList(target, path.toStdString());
     });
 
     connect(panel, &FilePanel::rename,

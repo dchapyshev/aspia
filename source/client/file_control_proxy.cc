@@ -44,30 +44,30 @@ void FileControlProxy::dettach()
     file_control_ = nullptr;
 }
 
-void FileControlProxy::getDriveList(common::FileTask::Target target)
+void FileControlProxy::driveList(common::FileTask::Target target)
 {
     if (!io_task_runner_->belongsToCurrentThread())
     {
         io_task_runner_->postTask(
-            std::bind(&FileControlProxy::getDriveList, shared_from_this(), target));
+            std::bind(&FileControlProxy::driveList, shared_from_this(), target));
         return;
     }
 
     if (file_control_)
-        file_control_->getDriveList(target);
+        file_control_->driveList(target);
 }
 
-void FileControlProxy::getFileList(common::FileTask::Target target, const std::string& path)
+void FileControlProxy::fileList(common::FileTask::Target target, const std::string& path)
 {
     if (!io_task_runner_->belongsToCurrentThread())
     {
         io_task_runner_->postTask(
-            std::bind(&FileControlProxy::getFileList, shared_from_this(), target, path));
+            std::bind(&FileControlProxy::fileList, shared_from_this(), target, path));
         return;
     }
 
     if (file_control_)
-        file_control_->getFileList(target, path);
+        file_control_->fileList(target, path);
 }
 
 void FileControlProxy::createDirectory(common::FileTask::Target target, const std::string& path)

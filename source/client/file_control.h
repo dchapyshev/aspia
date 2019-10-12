@@ -29,8 +29,8 @@ class FileControl
 public:
     virtual ~FileControl() = default;
 
-    virtual void getDriveList(common::FileTask::Target target) = 0;
-    virtual void getFileList(common::FileTask::Target target, const std::string& path) = 0;
+    virtual void driveList(common::FileTask::Target target) = 0;
+    virtual void fileList(common::FileTask::Target target, const std::string& path) = 0;
     virtual void createDirectory(common::FileTask::Target target, const std::string& path) = 0;
 
     virtual void rename(common::FileTask::Target target,

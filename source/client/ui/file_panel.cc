@@ -169,7 +169,7 @@ void FilePanel::onPathChanged(const QString& path)
     }
     else
     {
-        emit getFileList(path);
+        emit fileList(path);
     }
 }
 
@@ -207,7 +207,7 @@ void FilePanel::restoreState(const QByteArray& state)
 
 void FilePanel::refresh()
 {
-    emit getDriveList();
+    emit driveList();
 }
 
 void FilePanel::keyPressEvent(QKeyEvent* event)

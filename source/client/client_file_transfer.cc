@@ -172,12 +172,12 @@ common::FileTaskFactory* ClientFileTransfer::taskFactory(common::FileTask::Targe
     return task_factory;
 }
 
-void ClientFileTransfer::getDriveList(common::FileTask::Target target)
+void ClientFileTransfer::driveList(common::FileTask::Target target)
 {
     task_consumer_proxy_->doTask(taskFactory(target)->driveList());
 }
 
-void ClientFileTransfer::getFileList(common::FileTask::Target target, const std::string& path)
+void ClientFileTransfer::fileList(common::FileTask::Target target, const std::string& path)
 {
     task_consumer_proxy_->doTask(taskFactory(target)->fileList(path));
 }

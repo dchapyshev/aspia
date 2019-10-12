@@ -74,8 +74,8 @@ private:
     common::FileTaskFactory* taskFactory(common::FileTask::Target target);
 
     // FileControl implementation.
-    void getDriveList(common::FileTask::Target target) override;
-    void getFileList(common::FileTask::Target target, const std::string& path) override;
+    void driveList(common::FileTask::Target target) override;
+    void fileList(common::FileTask::Target target, const std::string& path) override;
     void createDirectory(common::FileTask::Target target, const std::string& path) override;
     void rename(common::FileTask::Target target,
                 const std::string& old_path,
