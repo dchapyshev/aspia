@@ -91,7 +91,7 @@ void SocketReader::doReadSize()
     asio::async_read(*socket_,
                      asio::buffer(&one_byte_, 1),
                      std::bind(&SocketReader::onReadSize,
-                               shared_from_this(),
+                               this,
                                std::placeholders::_1,
                                std::placeholders::_2));
 }
@@ -160,7 +160,7 @@ void SocketReader::doReadContent()
     asio::async_read(*socket_,
                      asio::buffer(read_buffer_.data(), read_buffer_.size()),
                      std::bind(&SocketReader::onReadContent,
-                               shared_from_this(),
+                               this,
                                std::placeholders::_1,
                                std::placeholders::_2));
 }

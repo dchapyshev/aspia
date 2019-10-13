@@ -50,7 +50,7 @@ void SocketConnector::connect(std::u16string_view address, uint16_t port)
 {
     resolver_.async_resolve(base::local8BitFromUtf16(address), std::to_string(port),
                             std::bind(&SocketConnector::onResolved,
-                                      shared_from_this(),
+                                      this,
                                       std::placeholders::_1,
                                       std::placeholders::_2));
 }
@@ -69,7 +69,7 @@ void SocketConnector::onResolved(const std::error_code& error_code,
 
     asio::async_connect(*socket_, endpoints,
                         std::bind(&SocketConnector::onConnected,
-                                  shared_from_this(),
+                                  this,
                                   std::placeholders::_1,
                                   std::placeholders::_2));
 }

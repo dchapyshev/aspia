@@ -131,7 +131,7 @@ void SocketWriter::doWrite()
     asio::async_write(*socket_,
                       asio::buffer(write_buffer_.data(), write_buffer_.size()),
                       std::bind(&SocketWriter::onWrite,
-                                shared_from_this(),
+                                this,
                                 std::placeholders::_1,
                                 std::placeholders::_2));
 }

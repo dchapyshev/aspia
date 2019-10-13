@@ -32,7 +32,7 @@ class MessageDecryptor;
 
 namespace net {
 
-class SocketReader : public std::enable_shared_from_this<SocketReader>
+class SocketReader
 {
 public:
     using ReadFailedCallback = std::function<void(const std::error_code&)>;
@@ -83,6 +83,8 @@ private:
 
     ReadFailedCallback read_failed_callback_;
     ReadMessageCallback read_message_callback_;
+
+    DISALLOW_COPY_AND_ASSIGN(SocketReader);
 };
 
 } // namespace net

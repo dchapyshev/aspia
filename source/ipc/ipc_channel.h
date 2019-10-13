@@ -22,12 +22,10 @@
 #include "base/macros_magic.h"
 #include "base/process_handle.h"
 #include "base/memory/byte_array.h"
+#include "base/memory/scalable_queue.h"
 #include "base/win/session_id.h"
 
 #include <asio/windows/stream_handle.hpp>
-
-#include <mutex>
-#include <queue>
 
 namespace ipc {
 
@@ -83,15 +81,7 @@ private:
     bool is_connected_ = false;
     bool is_paused_ = true;
 
-#if defined(USE_TBB)
-    using QueueAllocator = tbb::scalable_allocator<base::ByteArray>;
-#else // defined(USE_TBB)
-    using QueueAllocator = std::allocator<base::ByteArray>;
-#endif // defined(USE_*)
-
-    using WriteQueue = std::queue<base::ByteArray, std::deque<base::ByteArray, QueueAllocator>>;
-
-    WriteQueue write_queue_;
+    base::ScalableQueue<base::ByteArray> write_queue_;
     uint32_t write_size_ = 0;
 
     uint32_t read_size_ = 0;

@@ -19,6 +19,8 @@
 #ifndef BASE__MEMORY__BYTE_ARRAY_H
 #define BASE__MEMORY__BYTE_ARRAY_H
 
+#include "build/build_config.h"
+
 #if defined(USE_TBB)
 #include <tbb/scalable_allocator.h>
 #endif // defined(USE_TBB)

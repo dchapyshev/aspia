@@ -21,6 +21,7 @@
 
 #include "base/macros_magic.h"
 #include "base/memory/byte_array.h"
+#include "base/memory/scalable_queue.h"
 
 #include <asio/ip/tcp.hpp>
 
@@ -34,7 +35,7 @@ class MessageEncryptor;
 
 namespace net {
 
-class SocketWriter : public std::enable_shared_from_this<SocketWriter>
+class SocketWriter
 {
 public:
     using WriteFailedCallback = std::function<void(const std::error_code&)>;
@@ -55,22 +56,16 @@ private:
     void doWrite();
     void onWrite(const std::error_code& error_code, size_t bytes_transferred);
 
-#if defined(USE_TBB)
-    using QueueAllocator = tbb::scalable_allocator<base::ByteArray>;
-#else // defined(USE_TBB)
-    using QueueAllocator = std::allocator<base::ByteArray>;
-#endif // defined(USE_*)
-
-    using WriteQueue = std::queue<base::ByteArray, std::deque<base::ByteArray, QueueAllocator>>;
-
     asio::ip::tcp::socket* socket_ = nullptr;
     std::unique_ptr<crypto::MessageEncryptor> encryptor_;
 
-    WriteQueue write_queue_;
+    base::ScalableQueue<base::ByteArray> write_queue_;
     base::ByteArray write_buffer_;
 
     WriteDoneCallback write_done_callback_;
     WriteFailedCallback write_failed_callback_;
+
+    DISALLOW_COPY_AND_ASSIGN(SocketWriter);
 };
 
 } // namespace net

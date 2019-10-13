@@ -42,7 +42,7 @@ Channel::Channel()
       socket_(io_context_),
       proxy_(new ChannelProxy(this))
 {
-    connector_ = std::make_shared<SocketConnector>(io_context_);
+    connector_ = std::make_unique<SocketConnector>(io_context_);
     connector_->attach(&socket_,
         std::bind(&Channel::onConnected, this),
         std::bind(&Channel::onErrorOccurred, this, std::placeholders::_1));
@@ -185,12 +185,12 @@ bool Channel::setKeepAlive(bool enable,
 
 void Channel::init()
 {
-    reader_ = std::make_shared<SocketReader>();
+    reader_ = std::make_unique<SocketReader>();
     reader_->attach(&socket_,
         std::bind(&Channel::onMessageReceived, this, std::placeholders::_1),
         std::bind(&Channel::onErrorOccurred, this, std::placeholders::_1));
 
-    writer_ = std::make_shared<SocketWriter>();
+    writer_ = std::make_unique<SocketWriter>();
     writer_->attach(&socket_,
         std::bind(&Channel::onMessageWritten, this),
         std::bind(&Channel::onErrorOccurred, this, std::placeholders::_1));

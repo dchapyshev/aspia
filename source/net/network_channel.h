@@ -124,9 +124,9 @@ private:
     Listener* listener_ = nullptr;
     bool connected_ = false;
 
-    std::shared_ptr<SocketConnector> connector_;
-    std::shared_ptr<SocketReader> reader_;
-    std::shared_ptr<SocketWriter> writer_;
+    std::unique_ptr<SocketConnector> connector_;
+    std::unique_ptr<SocketReader> reader_;
+    std::unique_ptr<SocketWriter> writer_;
     std::shared_ptr<ChannelProxy> proxy_;
 
     DISALLOW_COPY_AND_ASSIGN(Channel);

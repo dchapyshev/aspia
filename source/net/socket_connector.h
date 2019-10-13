@@ -27,7 +27,7 @@
 
 namespace net {
 
-class SocketConnector : public std::enable_shared_from_this<SocketConnector>
+class SocketConnector
 {
 public:
     using ConnectCallback = std::function<void()>;
