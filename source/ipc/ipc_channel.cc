@@ -193,12 +193,6 @@ void Channel::disconnect()
     std::error_code ignored_code;
     stream_.close(ignored_code);
 
-    reloadWriteQueue();
-
-    // Remove all messages from the write queue.
-    while (!work_write_queue_.empty())
-        work_write_queue_.pop();
-
     if (listener_)
     {
         listener_->onDisconnected();
@@ -239,17 +233,13 @@ void Channel::resume()
 
 void Channel::send(base::ByteArray&& buffer)
 {
-    std::scoped_lock lock(incoming_write_queue_lock_);
-
-    const bool schedule_write = incoming_write_queue_.empty();
+    const bool schedule_write = write_queue_.empty();
 
     // Add the buffer to the queue for sending.
-    incoming_write_queue_.emplace(std::move(buffer));
+    write_queue_.emplace(std::move(buffer));
 
-    if (!schedule_write)
-        return;
-
-    asio::post(io_context_, std::bind(&Channel::scheduleWrite, this));
+    if (schedule_write)
+        doWrite();
 }
 
 // static
@@ -271,33 +261,9 @@ void Channel::onErrorOccurred(const std::error_code& error_code)
     disconnect();
 }
 
-bool Channel::reloadWriteQueue()
-{
-    if (!work_write_queue_.empty())
-        return false;
-
-    std::scoped_lock lock(incoming_write_queue_lock_);
-
-    if (incoming_write_queue_.empty())
-        return false;
-
-    incoming_write_queue_.fastSwap(work_write_queue_);
-    DCHECK(incoming_write_queue_.empty());
-
-    return true;
-}
-
-void Channel::scheduleWrite()
-{
-    if (!reloadWriteQueue())
-        return;
-
-    doWrite();
-}
-
 void Channel::doWrite()
 {
-    write_size_ = work_write_queue_.front().size();
+    write_size_ = write_queue_.front().size();
 
     if (!write_size_ || write_size_ > kMaxMessageSize)
     {
@@ -315,9 +281,9 @@ void Channel::doWrite()
         }
 
         DCHECK_EQ(bytes_transferred, sizeof(write_size_));
-        DCHECK(!work_write_queue_.empty());
+        DCHECK(!write_queue_.empty());
 
-        const base::ByteArray& buffer = work_write_queue_.front();
+        const base::ByteArray& buffer = write_queue_.front();
 
         // Send the buffer to the recipient.
         asio::async_write(stream_, asio::buffer(buffer.data(), buffer.size()),
@@ -330,13 +296,13 @@ void Channel::doWrite()
             }
 
             DCHECK_EQ(bytes_transferred, write_size_);
-            DCHECK(!work_write_queue_.empty());
+            DCHECK(!write_queue_.empty());
 
             // Delete the sent message from the queue.
-            work_write_queue_.pop();
+            write_queue_.pop();
 
             // If the queue is not empty, then we send the following message.
-            if (work_write_queue_.empty() && !reloadWriteQueue())
+            if (write_queue_.empty())
                 return;
 
             doWrite();

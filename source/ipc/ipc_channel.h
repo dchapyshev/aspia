@@ -70,8 +70,6 @@ private:
     static std::u16string channelName(std::u16string_view channel_id);
 
     void onErrorOccurred(const std::error_code& error_code);
-    bool reloadWriteQueue();
-    void scheduleWrite();
     void doWrite();
     void doReadMessage();
     void onMessageReceived();
@@ -91,22 +89,9 @@ private:
     using QueueAllocator = std::allocator<base::ByteArray>;
 #endif // defined(USE_*)
 
-    using QueueContainer = std::deque<base::ByteArray, QueueAllocator>;
+    using WriteQueue = std::queue<base::ByteArray, std::deque<base::ByteArray, QueueAllocator>>;
 
-    class WriteQueue : public std::queue<base::ByteArray, QueueContainer>
-    {
-    public:
-        void fastSwap(WriteQueue& queue)
-        {
-            // Calls std::deque::swap.
-            c.swap(queue.c);
-        }
-    };
-
-    WriteQueue incoming_write_queue_;
-    std::mutex incoming_write_queue_lock_;
-
-    WriteQueue work_write_queue_;
+    WriteQueue write_queue_;
     uint32_t write_size_ = 0;
 
     uint32_t read_size_ = 0;
