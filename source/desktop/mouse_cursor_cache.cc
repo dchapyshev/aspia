@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,6 +17,7 @@
 //
 
 #include "desktop/mouse_cursor_cache.h"
+
 #include "base/logging.h"
 
 namespace desktop {
@@ -28,8 +29,8 @@ constexpr size_t kMaxCacheSize = 31;
 
 } // namespace
 
-MouseCursorCache::MouseCursorCache(size_t cache_size) :
-    cache_size_(cache_size)
+MouseCursorCache::MouseCursorCache(size_t cache_size)
+    : cache_size_(cache_size)
 {
     // Nothing
 }

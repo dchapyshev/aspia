@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -19,9 +19,8 @@
 #ifndef DESKTOP__MOUSE_CURSOR_CACHE_H
 #define DESKTOP__MOUSE_CURSOR_CACHE_H
 
+#include "base/memory/scalable_queue.h"
 #include "desktop/mouse_cursor.h"
-
-#include <deque>
 
 namespace desktop {
 
@@ -57,7 +56,7 @@ public:
     static bool isValidCacheSize(size_t size);
 
 private:
-    std::deque<std::shared_ptr<MouseCursor>> cache_;
+    base::ScalableDeque<std::shared_ptr<MouseCursor>> cache_;
     const size_t cache_size_;
 };
 
