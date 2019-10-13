@@ -27,6 +27,8 @@
 
 namespace base {
 
+class TaskRunner;
+
 // This class lets you register interest in changes on a std::filesystem::path. The callback will
 // get called whenever the file or directory referenced by the std::filesystem::path is changed,
 // including created or deleted. Due to limitations in the underlying OS APIs, FilePathWatcher has
@@ -35,11 +37,11 @@ namespace base {
 // detect the creation and deletion of files in a watched directory, but will not detect
 // modifications to those files. See file_path_watcher_kqueue.cc for details.
 //
-// Must be destroyed on the sequence that invokes Watch().
+// Must be destroyed on the sequence that invokes watch().
 class FilePathWatcher
 {
 public:
-    // Callback type for Watch(). |path| points to the file that was updated, and |error| is true
+    // Callback type for watch(). |path| points to the file that was updated, and |error| is true
     // if the platform specific code detected an error. In that case, the callback won't be invoked
     // again.
     using Callback = std::function<void(const std::filesystem::path& path, bool error)>;
@@ -48,7 +50,7 @@ public:
     class PlatformDelegate
     {
     public:
-        PlatformDelegate();
+        explicit PlatformDelegate(std::shared_ptr<TaskRunner>& task_runner);
         virtual ~PlatformDelegate();
 
         // Start watching for the given |path| and notify |delegate| about changes.
@@ -63,6 +65,11 @@ public:
     protected:
         friend class FilePathWatcher;
 
+        std::shared_ptr<TaskRunner> taskRunner() const
+        {
+            return task_runner_;
+        }
+
         // Must be called before the PlatformDelegate is deleted.
         void setCancelled()
         {
@@ -75,12 +82,13 @@ public:
         }
 
     private:
+        std::shared_ptr<TaskRunner> task_runner_;
         bool cancelled_;
 
         DISALLOW_COPY_AND_ASSIGN(PlatformDelegate);
     };
 
-    FilePathWatcher();
+    explicit FilePathWatcher(std::shared_ptr<TaskRunner>& task_runner);
     ~FilePathWatcher();
 
     // Returns true if the platform and OS version support recursive watches.

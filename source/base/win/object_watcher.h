@@ -21,9 +21,13 @@
 
 #include "base/macros_magic.h"
 
-#include <chrono>
+#include <memory>
 
 #include <Windows.h>
+
+namespace base {
+class TaskRunner;
+} // namespace base
 
 namespace base::win {
 
@@ -63,7 +67,7 @@ namespace base::win {
 class ObjectWatcher
 {
 public:
-    ObjectWatcher();
+    explicit ObjectWatcher(std::shared_ptr<TaskRunner>& task_runner);
     ~ObjectWatcher();
 
     class Delegate
@@ -98,15 +102,10 @@ public:
     HANDLE watchedObject() const;
 
 private:
-    bool startWatchingInternal(HANDLE object, Delegate* delegate, bool execute_only_once);
-    void reset();
+    class Impl;
+    std::shared_ptr<Impl> impl_;
 
-    // Called on a background thread when done waiting.
-    static void CALLBACK doneWaiting(PVOID context, BOOLEAN timed_out);
-
-    Delegate* delegate_ = nullptr;
-    HANDLE wait_object_ = nullptr;
-    HANDLE object_ = nullptr;
+    DISALLOW_COPY_AND_ASSIGN(ObjectWatcher);
 };
 
 } // namespace base::win

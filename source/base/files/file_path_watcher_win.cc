@@ -19,6 +19,7 @@
 #include "base/files/file_path_watcher.h"
 
 #include "base/logging.h"
+#include "base/task_runner.h"
 #include "base/win/object_watcher.h"
 
 namespace base {
@@ -29,7 +30,7 @@ class FilePathWatcherImpl : public FilePathWatcher::PlatformDelegate,
                             public base::win::ObjectWatcher::Delegate
 {
 public:
-    FilePathWatcherImpl() = default;
+    FilePathWatcherImpl(std::shared_ptr<TaskRunner>& task_runner);
     ~FilePathWatcherImpl() override;
 
     // FilePathWatcher::PlatformDelegate implementation.
@@ -87,8 +88,18 @@ private:
     DISALLOW_COPY_AND_ASSIGN(FilePathWatcherImpl);
 };
 
+FilePathWatcherImpl::FilePathWatcherImpl(std::shared_ptr<TaskRunner>& task_runner)
+    : FilePathWatcher::PlatformDelegate(task_runner),
+      watcher_(task_runner)
+{
+    // Nothing
+}
+
 FilePathWatcherImpl::~FilePathWatcherImpl()
 {
+    DCHECK(!taskRunner());
+    DCHECK(taskRunner()->belongsToCurrentThread());
+
     if (was_deleted_ptr_)
         *was_deleted_ptr_ = true;
 }
@@ -116,7 +127,6 @@ bool FilePathWatcherImpl::watch(const std::filesystem::path& path,
         return false;
 
     watcher_.startWatchingOnce(handle_, this);
-
     return true;
 }
 
@@ -129,6 +139,7 @@ void FilePathWatcherImpl::cancel()
         return;
     }
 
+    DCHECK(taskRunner()->belongsToCurrentThread());
     setCancelled();
 
     if (handle_ != INVALID_HANDLE_VALUE)
@@ -139,6 +150,7 @@ void FilePathWatcherImpl::cancel()
 
 void FilePathWatcherImpl::onObjectSignaled(HANDLE object)
 {
+    DCHECK(taskRunner()->belongsToCurrentThread());
     DCHECK_EQ(object, handle_);
     DCHECK(!was_deleted_ptr_);
 
@@ -274,7 +286,7 @@ bool FilePathWatcherImpl::updateWatch()
             break;
 
         // Abort if we hit the root directory.
-        child_dirs.push_back(watched_path.parent_path());
+        child_dirs.emplace_back(watched_path.parent_path());
 
         std::filesystem::path parent(watched_path);
         parent.remove_filename();
@@ -321,9 +333,9 @@ void FilePathWatcherImpl::destroyWatch()
 
 }  // namespace
 
-FilePathWatcher::FilePathWatcher()
+FilePathWatcher::FilePathWatcher(std::shared_ptr<TaskRunner>& task_runner)
 {
-    impl_ = std::make_unique<FilePathWatcherImpl>();
+    impl_ = std::make_unique<FilePathWatcherImpl>(task_runner);
 }
 
 } // namespace base
