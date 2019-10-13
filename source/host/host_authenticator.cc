@@ -46,7 +46,7 @@ void Authenticator::start(std::unique_ptr<net::Channel> channel,
                           Delegate* delegate)
 {
     channel_ = std::move(channel);
-    userlist_ = userlist;
+    userlist_ = std::move(userlist);
     delegate_ = delegate;
 
     DCHECK_EQ(internal_state_, InternalState::HELLO);

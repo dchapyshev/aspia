@@ -34,8 +34,8 @@ AuthenticatorManager::~AuthenticatorManager() = default;
 
 void AuthenticatorManager::setUserList(std::shared_ptr<UserList> userlist)
 {
-    DCHECK(userlist);
-    userlist_ = userlist;
+    userlist_ = std::move(userlist);
+    DCHECK(userlist_);
 }
 
 void AuthenticatorManager::addNewChannel(std::unique_ptr<net::Channel> channel)

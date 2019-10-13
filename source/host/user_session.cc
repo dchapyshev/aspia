@@ -89,13 +89,15 @@ void UserSession::onMessageReceived(const base::ByteArray& buffer)
 
     if (message.has_credentials_request())
     {
-        if (message.credentials_request().type() == proto::CredentialsRequest::NEW_PASSWORD)
+        proto::CredentialsRequest::Type type = message.credentials_request().type();
+
+        if (type == proto::CredentialsRequest::NEW_PASSWORD)
         {
             updateCredentials();
         }
         else
         {
-            DCHECK_EQ(message.credentials_request().type(), proto::CredentialsRequest::REFRESH);
+            DCHECK_EQ(type, proto::CredentialsRequest::REFRESH);
         }
 
         sendCredentials();
