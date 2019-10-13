@@ -26,20 +26,20 @@ namespace ipc {
 class ChannelProxy
 {
 public:
-    bool setListener(Listener* listener);
+    void setListener(Listener* listener);
 
     [[nodiscard]]
     bool connect(std::u16string_view channel_id);
 
-    bool disconnect();
+    void disconnect();
 
     bool isConnected() const;
     bool isPaused() const;
 
-    bool pause();
-    bool resume();
+    void pause();
+    void resume();
 
-    bool send(base::ByteArray&& buffer);
+    void send(base::ByteArray&& buffer);
 
 private:
     friend class Channel;
@@ -50,7 +50,6 @@ private:
     void willDestroyCurrentChannel();
 
     Channel* channel_;
-    mutable std::mutex channel_lock_;
 
     DISALLOW_COPY_AND_ASSIGN(ChannelProxy);
 };

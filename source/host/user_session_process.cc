@@ -21,16 +21,12 @@
 #include "common/message_serialization.h"
 #include "host/user_session_constants.h"
 #include "ipc/ipc_channel_proxy.h"
-#include "qt_base/application.h"
 
 namespace host {
 
 UserSessionProcess::UserSessionProcess()
 {
-    asio::io_context* io_context = qt_base::Application::ioContext();
-    DCHECK(io_context);
-
-    ipc_channel_ = std::make_unique<ipc::Channel>(*io_context);
+    ipc_channel_ = std::make_unique<ipc::Channel>();
 }
 
 UserSessionProcess::~UserSessionProcess() = default;
@@ -45,13 +41,6 @@ void UserSessionProcess::start(Delegate* delegate)
     ipc_channel_->connect(kIpcChannelIdForUI);
 }
 
-void UserSessionProcess::killClient(const std::string& uuid)
-{
-    proto::UiToService message;
-    message.mutable_kill_session()->set_uuid(uuid);
-    ipc_channel_->send(common::serializeMessage(message));
-}
-
 void UserSessionProcess::updateCredentials(proto::CredentialsRequest::Type request_type)
 {
     proto::UiToService message;
@@ -59,20 +48,27 @@ void UserSessionProcess::updateCredentials(proto::CredentialsRequest::Type reque
     ipc_channel_->send(common::serializeMessage(message));
 }
 
-void UserSessionProcess::onIpcConnected()
+void UserSessionProcess::killClient(const std::string& uuid)
+{
+    proto::UiToService message;
+    message.mutable_kill_session()->set_uuid(uuid);
+    ipc_channel_->send(common::serializeMessage(message));
+}
+
+void UserSessionProcess::onConnected()
 {
     state_ = State::CONNECTED;
     delegate_->onStateChanged();
     ipc_channel_->resume();
 }
 
-void UserSessionProcess::onIpcDisconnected()
+void UserSessionProcess::onDisconnected()
 {
     state_ = State::DISCONNECTED;
     delegate_->onStateChanged();
 }
 
-void UserSessionProcess::onIpcMessage(const base::ByteArray& buffer)
+void UserSessionProcess::onMessageReceived(const base::ByteArray& buffer)
 {
     proto::ServiceToUi message;
 

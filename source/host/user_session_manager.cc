@@ -220,11 +220,7 @@ bool createProcessWithToken(HANDLE token, const base::CommandLine& command_line)
 
 } // namespace
 
-UserSessionManager::UserSessionManager(asio::io_context& io_context)
-    : io_context_(io_context)
-{
-    // Nothing
-}
+UserSessionManager::UserSessionManager() = default;
 
 UserSessionManager::~UserSessionManager() = default;
 
@@ -238,7 +234,7 @@ bool UserSessionManager::start(Delegate* delegate)
 
     delegate_ = delegate;
 
-    ipc_server_ = std::make_unique<ipc::Server>(io_context_);
+    ipc_server_ = std::make_unique<ipc::Server>();
 
     // Start the server which will accept incoming connections from UI processes in user sessions.
     if (!ipc_server_->start(kIpcChannelIdForUI, this))

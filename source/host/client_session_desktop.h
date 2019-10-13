@@ -44,7 +44,8 @@ public:
 
 protected:
     // net::Listener implementation.
-    void onNetworkMessage(base::ByteArray& buffer) override;
+    void onMessageReceived(const base::ByteArray& buffer) override;
+    void onMessageWritten() override;
 
 private:
     std::unique_ptr<ClipboardMonitor> clipboard_monitor_;

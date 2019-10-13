@@ -85,17 +85,12 @@ void ClientSession::sendMessage(base::ByteArray&& buffer)
     channel_proxy_->send(std::move(buffer));
 }
 
-void ClientSession::onNetworkConnected()
+void ClientSession::onConnected()
 {
     NOTREACHED();
 }
 
-void ClientSession::onNetworkDisconnected()
-{
-
-}
-
-void ClientSession::onNetworkError(net::ErrorCode error_code)
+void ClientSession::onDisconnected(net::ErrorCode error_code)
 {
 
 }

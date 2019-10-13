@@ -19,7 +19,7 @@
 #ifndef HOST__USER_H
 #define HOST__USER_H
 
-#include "base/byte_array.h"
+#include "base/memory/byte_array.h"
 
 namespace host {
 

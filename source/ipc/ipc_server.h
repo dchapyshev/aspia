@@ -31,7 +31,7 @@ class Channel;
 class Server
 {
 public:
-    Server(asio::io_context& io_context);
+    Server();
 
     static std::u16string createUniqueId();
 

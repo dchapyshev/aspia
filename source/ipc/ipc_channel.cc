@@ -19,6 +19,8 @@
 #include "ipc/ipc_channel.h"
 
 #include "base/logging.h"
+#include "base/message_loop/message_loop.h"
+#include "base/message_loop/message_pump_asio.h"
 #include "base/strings/unicode.h"
 #include "base/win/scoped_object.h"
 #include "ipc/ipc_channel_proxy.h"
@@ -91,9 +93,9 @@ base::win::SessionId serverSessionIdImpl(HANDLE pipe_handle)
 
 } // namespace
 
-Channel::Channel(asio::io_context& io_context)
-    : io_context_(io_context),
-      stream_(io_context),
+Channel::Channel()
+    : io_context_(base::MessageLoop::current()->pumpAsio()->ioContext()),
+      stream_(io_context_),
       proxy_(new ChannelProxy(this))
 {
     // Nothing
@@ -175,7 +177,7 @@ bool Channel::connect(std::u16string_view channel_id)
     asio::post(io_context_, [this]()
     {
         if (listener_)
-            listener_->onIpcConnected();
+            listener_->onConnected();
     });
 
     return true;
@@ -199,7 +201,7 @@ void Channel::disconnect()
 
     if (listener_)
     {
-        listener_->onIpcDisconnected();
+        listener_->onDisconnected();
         listener_ = nullptr;
     }
 }
@@ -395,7 +397,7 @@ void Channel::doReadMessage()
 void Channel::onMessageReceived()
 {
     if (listener_)
-        listener_->onIpcMessage(read_buffer_);
+        listener_->onMessageReceived(read_buffer_);
 
     read_size_ = 0;
 }

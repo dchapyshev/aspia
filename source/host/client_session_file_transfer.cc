@@ -30,9 +30,14 @@ ClientSessionFileTransfer::ClientSessionFileTransfer(std::unique_ptr<net::Channe
 
 ClientSessionFileTransfer::~ClientSessionFileTransfer() = default;
 
-void ClientSessionFileTransfer::onNetworkMessage(base::ByteArray& buffer)
+void ClientSessionFileTransfer::onMessageReceived(const base::ByteArray& buffer)
 {
     // TODO
+}
+
+void ClientSessionFileTransfer::onMessageWritten()
+{
+
 }
 
 } // namespace host

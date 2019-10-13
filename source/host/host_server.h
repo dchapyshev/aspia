@@ -26,6 +26,7 @@
 
 namespace base {
 class FilePathWatcher;
+class TaskRunner;
 } // namespace base
 
 namespace host {
@@ -36,7 +37,7 @@ class Server
       public UserSessionManager::Delegate
 {
 public:
-    Server(asio::io_context& io_context);
+    Server(std::shared_ptr<base::TaskRunner>& task_runner);
     ~Server();
 
     void start();
@@ -57,7 +58,7 @@ private:
     void deleteFirewallRules();
     void reloadUserList();
 
-    asio::io_context& io_context_;
+    std::shared_ptr<base::TaskRunner> task_runner_;
 
     std::unique_ptr<base::FilePathWatcher> settings_watcher_;
     Settings settings_;

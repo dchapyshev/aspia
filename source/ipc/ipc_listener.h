@@ -19,7 +19,7 @@
 #ifndef IPC__IPC_LISTENER_H
 #define IPC__IPC_LISTENER_H
 
-#include "base/byte_array.h"
+#include "base/memory/byte_array.h"
 
 namespace ipc {
 
@@ -28,9 +28,9 @@ class Listener
 public:
     virtual ~Listener() = default;
 
-    virtual void onIpcConnected() = 0;
-    virtual void onIpcDisconnected() = 0;
-    virtual void onIpcMessage(const base::ByteArray& buffer) = 0;
+    virtual void onConnected() = 0;
+    virtual void onDisconnected() = 0;
+    virtual void onMessageReceived(const base::ByteArray& buffer) = 0;
 };
 
 } // namespace ipc

@@ -24,8 +24,8 @@
 #include "base/strings/unicode.h"
 #include "build/version.h"
 #include "common/message_serialization.h"
-#include "crypto/cryptor_aes256_gcm.h"
-#include "crypto/cryptor_chacha20_poly1305.h"
+#include "crypto/message_decryptor_openssl.h"
+#include "crypto/message_encryptor_openssl.h"
 #include "crypto/generic_hash.h"
 #include "crypto/random.h"
 #include "crypto/secure_memory.h"
@@ -80,24 +80,19 @@ std::unique_ptr<ClientSession> Authenticator::takeSession()
     return session;
 }
 
-void Authenticator::onNetworkConnected()
+void Authenticator::onConnected()
 {
     NOTREACHED();
 }
 
-void Authenticator::onNetworkDisconnected()
+void Authenticator::onDisconnected(net::ErrorCode error_code)
 {
+    LOG(LS_WARNING) << "Network error: " << static_cast<int>(error_code);
     onFailed();
 }
 
-void Authenticator::onNetworkError(net::ErrorCode error_code)
-{
-    // We only write errors to the log.
-    // If an error occurs, the connection will also be disconnected; error handling is there.
-    LOG(LS_WARNING) << "Network error: " << static_cast<int>(error_code);
-}
 
-void Authenticator::onNetworkMessage(base::ByteArray& buffer)
+void Authenticator::onMessageReceived(const base::ByteArray& buffer)
 {
     switch (internal_state_)
     {
@@ -228,15 +223,38 @@ void Authenticator::onNetworkMessage(base::ByteArray& buffer)
                 return;
             }
 
-            std::unique_ptr<crypto::Cryptor> cryptor = takeCryptor();
-            if (!cryptor)
+            base::ByteArray key = createKey();
+
+            std::unique_ptr<crypto::MessageEncryptor> encryptor;
+            std::unique_ptr<crypto::MessageDecryptor> decryptor;
+
+            if (method_ == proto::METHOD_SRP_AES256_GCM)
+            {
+                encryptor = crypto::MessageEncryptorOpenssl::createForAes256Gcm(key, encrypt_iv_);
+                decryptor = crypto::MessageDecryptorOpenssl::createForAes256Gcm(key, decrypt_iv_);
+            }
+            else
+            {
+                DCHECK_EQ(method_, proto::METHOD_SRP_CHACHA20_POLY1305);
+
+                encryptor =
+                    crypto::MessageEncryptorOpenssl::createForChaCha20Poly1305(key, encrypt_iv_);
+                decryptor =
+                    crypto::MessageDecryptorOpenssl::createForChaCha20Poly1305(key, decrypt_iv_);
+            }
+
+            crypto::memZero(&key);
+
+            if (!encryptor || !decryptor)
             {
                 onFailed();
                 return;
             }
 
             internal_state_ = InternalState::SESSION;
-            channel_->setCryptor(std::move(cryptor));
+
+            channel_->setEncryptor(std::move(encryptor));
+            channel_->setDecryptor(std::move(decryptor));
 
             proto::SessionChallenge session_challenge;
             session_challenge.set_session_types(session_types_);
@@ -286,17 +304,21 @@ void Authenticator::onNetworkMessage(base::ByteArray& buffer)
     }
 }
 
-std::unique_ptr<crypto::Cryptor> Authenticator::takeCryptor()
+void Authenticator::onMessageWritten()
+{
+    // Nothing
+}
+
+base::ByteArray Authenticator::createKey()
 {
     if (!crypto::SrpMath::verify_A_mod_N(A_, N_))
     {
         LOG(LS_ERROR) << "SrpMath::verify_A_mod_N failed";
-        return nullptr;
+        return base::ByteArray();
     }
 
     crypto::BigNum u = crypto::SrpMath::calc_u(A_, B_, N_);
     crypto::BigNum server_key = crypto::SrpMath::calcServerKey(A_, v_, u, b_, N_);
-    std::unique_ptr<crypto::Cryptor> cryptor;
 
     switch (method_)
     {
@@ -307,23 +329,11 @@ std::unique_ptr<crypto::Cryptor> Authenticator::takeCryptor()
             base::ByteArray temp = server_key.toByteArray();
             if (!temp.empty())
             {
-                base::ByteArray key =
-                    crypto::GenericHash::hash(crypto::GenericHash::BLAKE2s256, temp);
+                base::ByteArray key = crypto::GenericHash::hash(
+                    crypto::GenericHash::BLAKE2s256, temp);
 
                 crypto::memZero(&temp);
-
-                if (method_ == proto::METHOD_SRP_AES256_GCM)
-                {
-                    cryptor = crypto::CryptorAes256Gcm::create(
-                        std::move(key), std::move(encrypt_iv_), std::move(decrypt_iv_));
-                }
-                else
-                {
-                    DCHECK_EQ(method_, proto::METHOD_SRP_CHACHA20_POLY1305);
-
-                    cryptor = crypto::CryptorChaCha20Poly1305::create(
-                        std::move(key), std::move(encrypt_iv_), std::move(decrypt_iv_));
-                }
+                return key;
             }
         }
         break;
@@ -335,7 +345,7 @@ std::unique_ptr<crypto::Cryptor> Authenticator::takeCryptor()
         break;
     }
 
-    return cryptor;
+    return base::ByteArray();
 }
 
 void Authenticator::onFailed()

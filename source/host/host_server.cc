@@ -19,6 +19,7 @@
 #include "host/host_server.h"
 
 #include "base/logging.h"
+#include "base/task_runner.h"
 #include "base/files/base_paths.h"
 #include "base/files/file_path_watcher.h"
 #include "host/client_session.h"
@@ -34,8 +35,8 @@ const wchar_t kFirewallRuleDecription[] = L"Allow incoming TCP connections";
 
 } // namespace
 
-Server::Server(asio::io_context& io_context)
-    : io_context_(io_context)
+Server::Server(std::shared_ptr<base::TaskRunner>& task_runner)
+    : task_runner_(task_runner)
 {
     // Nothing
 }
@@ -64,7 +65,7 @@ void Server::start()
 
     LOG(LS_INFO) << "Starting the host server";
 
-    settings_watcher_ = std::make_unique<base::FilePathWatcher>();
+    settings_watcher_ = std::make_unique<base::FilePathWatcher>(task_runner_);
     settings_watcher_->watch(settings_.filePath(), false,
         [this](const std::filesystem::path& path, bool error)
     {
@@ -82,13 +83,13 @@ void Server::start()
 
     authenticator_manager_ = std::make_unique<AuthenticatorManager>(this);
 
-    user_session_manager_ = std::make_unique<UserSessionManager>(io_context_);
+    user_session_manager_ = std::make_unique<UserSessionManager>();
     user_session_manager_->start(this);
 
     reloadUserList();
     addFirewallRules();
 
-    network_server_ = std::make_unique<net::Server>(io_context_);
+    network_server_ = std::make_unique<net::Server>();
     network_server_->start(settings_.tcpPort(), this);
 
     LOG(LS_INFO) << "Host server is started successfully";

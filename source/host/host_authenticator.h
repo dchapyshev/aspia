@@ -24,10 +24,6 @@
 #include "net/network_listener.h"
 #include "proto/key_exchange.pb.h"
 
-namespace crypto {
-class Cryptor;
-} // namespace crypto
-
 namespace net {
 class Channel;
 } // namespace net
@@ -73,13 +69,13 @@ public:
 
 protected:
     // net::Listener implementation.
-    void onNetworkConnected() override;
-    void onNetworkDisconnected() override;
-    void onNetworkError(net::ErrorCode error_code) override;
-    void onNetworkMessage(base::ByteArray& buffer) override;
+    void onConnected() override;
+    void onDisconnected(net::ErrorCode error_code) override;
+    void onMessageReceived(const base::ByteArray& buffer) override;
+    void onMessageWritten() override;
 
 private:
-    std::unique_ptr<crypto::Cryptor> takeCryptor();
+    base::ByteArray createKey();
     void onFailed();
 
     std::unique_ptr<net::Channel> channel_;

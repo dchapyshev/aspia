@@ -19,9 +19,9 @@
 #ifndef IPC__IPC_CHANNEL_H
 #define IPC__IPC_CHANNEL_H
 
-#include "base/byte_array.h"
 #include "base/macros_magic.h"
 #include "base/process_handle.h"
+#include "base/memory/byte_array.h"
 #include "base/win/session_id.h"
 
 #include <asio/windows/stream_handle.hpp>
@@ -38,7 +38,7 @@ class Server;
 class Channel
 {
 public:
-    explicit Channel(asio::io_context& io_context);
+    Channel();
     ~Channel();
 
     std::shared_ptr<ChannelProxy> channelProxy();

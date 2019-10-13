@@ -72,8 +72,8 @@ public:
 
     void start(Delegate* delegate);
 
-    void killClient(const std::string& uuid);
     void updateCredentials(proto::CredentialsRequest::Type request_type);
+    void killClient(const std::string& uuid);
 
     State state() const { return state_; }
     const proto::Credentials& credentials() const { return credentials_; }
@@ -81,9 +81,9 @@ public:
 
 protected:
     // ipc::Listener implementation.
-    void onIpcConnected() override;
-    void onIpcDisconnected() override;
-    void onIpcMessage(const base::ByteArray& buffer) override;
+    void onConnected() override;
+    void onDisconnected() override;
+    void onMessageReceived(const base::ByteArray& buffer) override;
 
 private:
     std::unique_ptr<ipc::Channel> ipc_channel_;

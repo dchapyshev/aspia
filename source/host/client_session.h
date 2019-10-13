@@ -57,9 +57,8 @@ protected:
     void sendMessage(base::ByteArray&& buffer);
 
     // net::Listener implementation.
-    void onNetworkConnected() override;
-    void onNetworkDisconnected() override;
-    void onNetworkError(net::ErrorCode error_code) override;
+    void onConnected() override;
+    void onDisconnected(net::ErrorCode error_code) override;
 
 private:
     std::string id_;

@@ -65,6 +65,8 @@ list(APPEND SOURCE_HOST_CORE
     user_session_manager.h
     user_session_process.cc
     user_session_process.h
+    user_session_process_proxy.cc
+    user_session_process_proxy.h
     video_capturer.h)
 
 list(APPEND SOURCE_HOST_CORE_RESOURCES

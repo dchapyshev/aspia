@@ -19,6 +19,8 @@
 #include "ipc/ipc_server.h"
 
 #include "base/logging.h"
+#include "base/message_loop/message_loop.h"
+#include "base/message_loop/message_pump_asio.h"
 #include "base/strings/string_printf.h"
 #include "base/strings/unicode.h"
 #include "base/win/security_helpers.h"
@@ -36,8 +38,8 @@ const DWORD kPipeBufferSize = 512 * 1024; // 512 kB
 
 } // namespace
 
-Server::Server(asio::io_context& io_context)
-    : io_context_(io_context)
+Server::Server()
+    : io_context_(base::MessageLoop::current()->pumpAsio()->ioContext())
 {
     // Nothing
 }

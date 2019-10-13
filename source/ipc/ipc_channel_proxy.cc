@@ -26,42 +26,28 @@ ChannelProxy::ChannelProxy(Channel* channel)
     // Nothing
 }
 
-bool ChannelProxy::setListener(Listener* listener)
+void ChannelProxy::setListener(Listener* listener)
 {
-    std::scoped_lock lock(channel_lock_);
-
-    if (!channel_)
-        return false;
-
-    channel_->setListener(listener);
-    return true;
+    if (channel_)
+        channel_->setListener(listener);
 }
 
 bool ChannelProxy::connect(std::u16string_view channel_id)
 {
-    std::scoped_lock lock(channel_lock_);
-
     if (!channel_)
         return false;
 
     return channel_->connect(channel_id);
 }
 
-bool ChannelProxy::disconnect()
+void ChannelProxy::disconnect()
 {
-    std::scoped_lock lock(channel_lock_);
-
-    if (!channel_)
-        return false;
-
-    channel_->disconnect();
-    return true;
+    if (channel_)
+        channel_->disconnect();
 }
 
 bool ChannelProxy::isConnected() const
 {
-    std::scoped_lock lock(channel_lock_);
-
     if (!channel_)
         return false;
 
@@ -70,50 +56,32 @@ bool ChannelProxy::isConnected() const
 
 bool ChannelProxy::isPaused() const
 {
-    std::scoped_lock lock(channel_lock_);
-
     if (!channel_)
         return false;
 
     return channel_->isPaused();
 }
 
-bool ChannelProxy::pause()
+void ChannelProxy::pause()
 {
-    std::scoped_lock lock(channel_lock_);
-
-    if (!channel_)
-        return false;
-
-    channel_->pause();
-    return true;
+    if (channel_)
+        channel_->pause();
 }
 
-bool ChannelProxy::resume()
+void ChannelProxy::resume()
 {
-    std::scoped_lock lock(channel_lock_);
-
-    if (!channel_)
-        return false;
-
-    channel_->resume();
-    return true;
+    if (channel_)
+        channel_->resume();
 }
 
-bool ChannelProxy::send(base::ByteArray&& buffer)
+void ChannelProxy::send(base::ByteArray&& buffer)
 {
-    std::scoped_lock lock(channel_lock_);
-
-    if (!channel_)
-        return false;
-
-    channel_->send(std::move(buffer));
-    return true;
+    if (channel_)
+        channel_->send(std::move(buffer));
 }
 
 void ChannelProxy::willDestroyCurrentChannel()
 {
-    std::scoped_lock lock(channel_lock_);
     channel_ = nullptr;
 }
 

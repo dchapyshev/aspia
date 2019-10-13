@@ -19,7 +19,6 @@
 #include "host/win/host_service.h"
 
 #include "base/logging.h"
-#include "base/message_loop/message_pump_asio.h"
 #include "base/win/scoped_com_initializer.h"
 #include "base/win/security_helpers.h"
 #include "host/win/host_service_constants.h"
@@ -71,12 +70,6 @@ void Service::onStart()
 {
     LOG(LS_INFO) << "Service is started";
 
-    base::MessageLoop* message_loop = messageLoop();
-    DCHECK(message_loop);
-
-    base::MessagePumpForAsio* message_pump = message_loop->pumpAsio();
-    DCHECK(message_pump);
-
     com_initializer_.reset(new base::win::ScopedCOMInitializer());
     if (!com_initializer_->isSucceeded())
     {
@@ -86,7 +79,7 @@ void Service::onStart()
 
     base::win::initializeComSecurity(kComProcessSd, kComProcessMandatoryLabel, false);
 
-    server_ = std::make_unique<Server>(message_pump->ioContext());
+    server_ = std::make_unique<Server>(taskRunner());
     server_->start();
 }
 

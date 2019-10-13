@@ -67,17 +67,17 @@ void UserSession::addNewSession(std::unique_ptr<ClientSession> client_session)
     clients_.back()->start();
 }
 
-void UserSession::onIpcConnected()
+void UserSession::onConnected()
 {
     NOTREACHED();
 }
 
-void UserSession::onIpcDisconnected()
+void UserSession::onDisconnected()
 {
     LOG(LS_INFO) << "IPC DISCON";
 }
 
-void UserSession::onIpcMessage(const base::ByteArray& buffer)
+void UserSession::onMessageReceived(const base::ByteArray& buffer)
 {
     proto::UiToService message;
 
