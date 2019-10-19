@@ -23,7 +23,9 @@ list(APPEND SOURCE_IPC
     ipc_channel_proxy.h
     ipc_listener.h
     ipc_server.cc
-    ipc_server.h)
+    ipc_server.h
+    shared_memory.cc
+    shared_memory.h)
 
 source_group("" FILES ${SOURCE_IPC})
 
