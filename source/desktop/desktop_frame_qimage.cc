@@ -31,7 +31,6 @@ constexpr int kBytesPerPixel = 4;
 FrameQImage::FrameQImage(QImage&& img)
     : Frame(Size(img.size().width(), img.size().height()),
             PixelFormat::ARGB(),
-            img.width() * kBytesPerPixel,
             img.bits()),
       image_(std::move(img))
 {

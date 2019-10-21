@@ -20,8 +20,8 @@
 
 namespace desktop {
 
-FrameSimple::FrameSimple(const Size& size, const PixelFormat& format, int stride, uint8_t* data)
-    : Frame(size, format, stride, data)
+FrameSimple::FrameSimple(const Size& size, const PixelFormat& format, uint8_t* data)
+    : Frame(size, format, data)
 {
     // Nothing
 }
@@ -41,7 +41,7 @@ std::unique_ptr<FrameSimple> FrameSimple::create(const Size& size, const PixelFo
     if (!data)
         return nullptr;
 
-    return std::unique_ptr<FrameSimple>(new FrameSimple(size, format, bytes_per_row, data));
+    return std::unique_ptr<FrameSimple>(new FrameSimple(size, format, data));
 }
 
 } // namespace desktop

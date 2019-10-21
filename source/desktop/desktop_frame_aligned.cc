@@ -22,8 +22,8 @@
 
 namespace desktop {
 
-FrameAligned::FrameAligned(const Size& size, const PixelFormat& format, int stride, uint8_t* data)
-    : Frame(size, format, stride, data)
+FrameAligned::FrameAligned(const Size& size, const PixelFormat& format, uint8_t* data)
+    : Frame(size, format, data)
 {
     // Nothing
 }
@@ -44,7 +44,7 @@ std::unique_ptr<FrameAligned> FrameAligned::create(
     if (!data)
         return nullptr;
 
-    return std::unique_ptr<FrameAligned>(new FrameAligned(size, format, bytes_per_row, data));
+    return std::unique_ptr<FrameAligned>(new FrameAligned(size, format, data));
 }
 
 } // namespace desktop

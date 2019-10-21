@@ -24,8 +24,8 @@
 namespace desktop {
 
 FrameDib::FrameDib(
-    const Size& size, const PixelFormat& format, int stride, uint8_t* data, HBITMAP bitmap)
-    : Frame(size, format, stride, data),
+    const Size& size, const PixelFormat& format, uint8_t* data, HBITMAP bitmap)
+    : Frame(size, format, data),
       bitmap_(bitmap)
 {
     // Nothing
@@ -83,7 +83,7 @@ std::unique_ptr<FrameDib> FrameDib::create(const Size& size, const PixelFormat& 
     }
 
     return std::unique_ptr<FrameDib>(
-        new FrameDib(size, format, bytes_per_row, reinterpret_cast<uint8_t*>(data), bitmap));
+        new FrameDib(size, format, reinterpret_cast<uint8_t*>(data), bitmap));
 }
 
 } // namespace desktop

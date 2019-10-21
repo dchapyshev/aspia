@@ -35,7 +35,7 @@ public:
     HBITMAP bitmap() { return bitmap_; }
 
 private:
-    FrameDib(const Size& size, const PixelFormat& format, int stride, uint8_t* data, HBITMAP bitmap);
+    FrameDib(const Size& size, const PixelFormat& format,uint8_t* data, HBITMAP bitmap);
 
     base::win::ScopedHBITMAP bitmap_;
 

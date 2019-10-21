@@ -22,10 +22,10 @@
 
 namespace desktop {
 
-Frame::Frame(const Size& size, const PixelFormat& format, int stride, uint8_t* data)
+Frame::Frame(const Size& size, const PixelFormat& format, uint8_t* data)
     : size_(size),
       format_(format),
-      stride_(stride),
+      stride_(format.bytesPerPixel() * size.width()),
       data_(data)
 {
     // Nothing

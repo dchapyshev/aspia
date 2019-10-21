@@ -54,7 +54,7 @@ public:
     void copyFrameInfoFrom(const Frame& other);
 
 protected:
-    Frame(const Size& size, const PixelFormat& format, int stride, uint8_t* data);
+    Frame(const Size& size, const PixelFormat& format, uint8_t* data);
 
     // Ownership of the buffers is defined by the classes that inherit from
     // this class. They must guarantee that the buffer is not deleted before
