@@ -36,7 +36,8 @@ public:
     explicit DxgiDesktopFrame(const DxgiTexture& texture)
         : Frame(texture.desktopSize(),
                 PixelFormat::ARGB(),
-                texture.bits())
+                texture.bits(),
+                nullptr)
     {
         // Nothing
     }

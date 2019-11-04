@@ -24,12 +24,14 @@
 #include "desktop/win/screen_capture_utils.h"
 #include "desktop/desktop_frame_dib.h"
 #include "desktop/differ.h"
+#include "ipc/shared_memory_factory.h"
 
 #include <dwmapi.h>
 
 namespace desktop {
 
 ScreenCapturerGdi::ScreenCapturerGdi() = default;
+
 ScreenCapturerGdi::~ScreenCapturerGdi() = default;
 
 int ScreenCapturerGdi::screenCount()
@@ -54,11 +56,11 @@ bool ScreenCapturerGdi::selectScreen(ScreenId screen_id)
     return true;
 }
 
-const Frame* ScreenCapturerGdi::captureFrame(Error* error)
+std::unique_ptr<SharedFrame> ScreenCapturerGdi::captureFrame(Error* error)
 {
     DCHECK(error);
 
-    const Frame* frame = captureImage();
+    std::unique_ptr<SharedFrame> frame = captureImage();
     if (!frame)
     {
         *error = Error::TEMPORARY;
@@ -76,7 +78,7 @@ void ScreenCapturerGdi::reset()
     memory_dc_.reset();
 }
 
-const Frame* ScreenCapturerGdi::captureImage()
+std::unique_ptr<SharedFrame> ScreenCapturerGdi::captureImage()
 {
     queue_.moveToNextFrame();
 
@@ -96,18 +98,18 @@ const Frame* ScreenCapturerGdi::captureImage()
         DCHECK(memory_dc_);
 
         std::unique_ptr<Frame> frame = FrameDib::create(
-            screen_rect.size(), pixel_format_, memory_dc_);
+            screen_rect.size(), pixel_format_, sharedMemoryFactory(), memory_dc_);
         if (!frame)
         {
             LOG(LS_WARNING) << "Failed to create frame buffer";
             return nullptr;
         }
 
-        queue_.replaceCurrentFrame(std::move(frame));
+        queue_.replaceCurrentFrame(SharedFrame::wrap(std::move(frame)));
     }
 
-    FrameDib* current = static_cast<FrameDib*>(queue_.currentFrame());
-    FrameDib* previous = static_cast<FrameDib*>(queue_.previousFrame());
+    FrameDib* current = static_cast<FrameDib*>(queue_.currentFrame()->underlyingFrame());
+    FrameDib* previous = static_cast<FrameDib*>(queue_.previousFrame()->underlyingFrame());
 
     base::win::ScopedSelectObject select_object(memory_dc_, current->bitmap());
 
@@ -132,7 +134,7 @@ const Frame* ScreenCapturerGdi::captureImage()
                                  current->updatedRegion());
     }
 
-    return current;
+    return queue_.currentFrame()->share();
 }
 
 bool ScreenCapturerGdi::prepareCaptureResources()

@@ -22,7 +22,10 @@
 #include "desktop/dfmirage_helper.h"
 #include "desktop/mv2_helper.h"
 #include "desktop/desktop_frame_aligned.h"
+#include "desktop/shared_desktop_frame.h"
+#include "desktop/shared_memory_desktop_frame.h"
 #include "desktop/win/screen_capture_utils.h"
+#include "ipc/shared_memory_factory.h"
 
 namespace desktop {
 
@@ -40,6 +43,7 @@ std::unique_ptr<MirrorHelper> createHelper(const Rect& screen_rect)
 } // namespace
 
 ScreenCapturerMirror::ScreenCapturerMirror() = default;
+
 ScreenCapturerMirror::~ScreenCapturerMirror() = default;
 
 bool ScreenCapturerMirror::isSupported()
@@ -71,7 +75,7 @@ bool ScreenCapturerMirror::selectScreen(ScreenId screen_id)
     return true;
 }
 
-const Frame* ScreenCapturerMirror::captureFrame(Error* error)
+std::unique_ptr<SharedFrame> ScreenCapturerMirror::captureFrame(Error* error)
 {
     DCHECK(error);
 
@@ -94,7 +98,7 @@ const Frame* ScreenCapturerMirror::captureFrame(Error* error)
     helper_->copyRegion(frame_.get(), *updated_region);
 
     frame_->setTopLeft(helper_->screenRect().topLeft());
-    return frame_.get();
+    return frame_->share();
 }
 
 void ScreenCapturerMirror::reset()
@@ -176,7 +180,18 @@ ScreenCapturerMirror::Error ScreenCapturerMirror::prepareCaptureResources()
 
     if (!frame_)
     {
-        frame_ = FrameAligned::create(screen_rect.size(), PixelFormat::ARGB(), 32);
+        std::unique_ptr<Frame> frame;
+
+        ipc::SharedMemoryFactory* factory = sharedMemoryFactory();
+        if (factory)
+        {
+            frame = SharedMemoryFrame::create(screen_rect.size(), PixelFormat::ARGB(), factory);
+        }
+        else
+        {
+            frame = FrameAligned::create(screen_rect.size(), PixelFormat::ARGB(), 32);
+        }
+
         if (!frame_)
         {
             LOG(LS_WARNING) << "Failed to create frame";

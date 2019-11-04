@@ -19,13 +19,9 @@
 #ifndef DESKTOP__SCREEN_CAPTURER_WRAPPER_H
 #define DESKTOP__SCREEN_CAPTURER_WRAPPER_H
 
-#include "base/macros_magic.h"
 #include "base/threading/thread_checker.h"
 #include "base/win/scoped_thread_desktop.h"
 #include "desktop/screen_capturer.h"
-
-#include <cstdint>
-#include <memory>
 
 namespace desktop {
 
@@ -35,7 +31,7 @@ class WallpaperDisabler;
 class ScreenCapturerWrapper
 {
 public:
-    ScreenCapturerWrapper(uint32_t flags);
+    explicit ScreenCapturerWrapper(uint32_t flags);
     ~ScreenCapturerWrapper();
 
     enum Flags
@@ -47,7 +43,8 @@ public:
     int screenCount();
     bool screenList(ScreenCapturer::ScreenList* screens);
     bool selectScreen(ScreenCapturer::ScreenId screen_id);
-    const Frame* captureFrame();
+    std::unique_ptr<SharedFrame> captureFrame();
+    void setSharedMemoryFactory(std::unique_ptr<ipc::SharedMemoryFactory> shared_memory_factory);
 
 private:
     void selectCapturer();
@@ -55,11 +52,9 @@ private:
     void atDesktopSwitch();
 
     const uint32_t flags_;
-
     base::ScopedThreadDesktop desktop_;
 
     std::unique_ptr<ScreenCapturer> capturer_;
-
     std::unique_ptr<EffectsDisabler> effects_disabler_;
     std::unique_ptr<WallpaperDisabler> wallpaper_disabler_;
 

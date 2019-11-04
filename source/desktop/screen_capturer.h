@@ -24,7 +24,13 @@
 #include <string>
 #include <vector>
 
+namespace ipc {
+class SharedMemoryFactory;
+} // namespace ipc
+
 namespace desktop {
+
+class SharedFrame;
 
 class ScreenCapturer
 {
@@ -49,11 +55,17 @@ public:
     virtual int screenCount() = 0;
     virtual bool screenList(ScreenList* screens) = 0;
     virtual bool selectScreen(ScreenId screen_id) = 0;
-    virtual const Frame* captureFrame(Error* error) = 0;
+    virtual std::unique_ptr<SharedFrame> captureFrame(Error* error) = 0;
+
+    void setSharedMemoryFactory(std::unique_ptr<ipc::SharedMemoryFactory> shared_memory_factory);
+    ipc::SharedMemoryFactory* sharedMemoryFactory() const;
 
 protected:
     friend class ScreenCapturerWrapper;
     virtual void reset() = 0;
+
+private:
+    std::unique_ptr<ipc::SharedMemoryFactory> shared_memory_factory_;
 };
 
 } // namespace desktop

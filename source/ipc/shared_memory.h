@@ -19,10 +19,13 @@
 #ifndef IPC__SHARED_MEMORY_H
 #define IPC__SHARED_MEMORY_H
 
+#include "build/build_config.h"
+
+#if defined(OS_WIN)
 #include "base/win/scoped_object.h"
+#endif // defined(OS_WIN)
 
 #include <memory>
-#include <string>
 
 namespace ipc {
 
@@ -37,17 +40,27 @@ public:
         READ_WRITE
     };
 
-    static std::unique_ptr<SharedMemory> create(Mode mode, std::string_view name, size_t size);
-    static std::unique_ptr<SharedMemory> map(Mode mode, std::string_view name);
-    static std::string createUniqueName();
+#if defined(OS_WIN)
+    using Handle = HANDLE;
+#else
+    using Handle = int;
+#endif
 
-    void* get() { return memory_; }
+    static const Handle kInvalidHandle;
+
+    static std::unique_ptr<SharedMemory> create(Mode mode, size_t size);
+    static std::unique_ptr<SharedMemory> open(Mode mode, int id);
+
+    void* data() { return data_; }
+    Handle handle() const { return handle_.get(); }
+    int id() const { return id_; }
 
 private:
-    SharedMemory(base::win::ScopedHandle&& file, void* memory);
+    SharedMemory(int id, base::win::ScopedHandle&& handle, void* data);
 
-    base::win::ScopedHandle file_;
-    void* memory_ = nullptr;
+    base::win::ScopedHandle handle_;
+    void* data_;
+    int id_;
 
     DISALLOW_COPY_AND_ASSIGN(SharedMemory);
 };

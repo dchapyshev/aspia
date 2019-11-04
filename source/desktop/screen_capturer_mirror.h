@@ -23,6 +23,10 @@
 
 #include <list>
 
+namespace ipc {
+class SharedMemoryFactory;
+} // namespace ipc
+
 namespace desktop {
 
 class MirrorHelper;
@@ -39,7 +43,7 @@ public:
     int screenCount() override;
     bool screenList(ScreenList* screens) override;
     bool selectScreen(ScreenId screen_id) override;
-    const Frame* captureFrame(Error* error) override;
+    std::unique_ptr<SharedFrame> captureFrame(Error* error) override;
 
 protected:
     // ScreenCapturer implementation.
@@ -50,7 +54,7 @@ private:
     Error prepareCaptureResources();
 
     std::unique_ptr<MirrorHelper> helper_;
-    std::unique_ptr<Frame> frame_;
+    std::unique_ptr<SharedFrame> frame_;
 
     ScreenId current_screen_id_ = kFullDesktopScreenId;
     std::wstring current_device_key_;

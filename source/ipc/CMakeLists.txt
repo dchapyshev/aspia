@@ -25,7 +25,9 @@ list(APPEND SOURCE_IPC
     ipc_server.cc
     ipc_server.h
     shared_memory.cc
-    shared_memory.h)
+    shared_memory.h
+    shared_memory_factory.cc
+    shared_memory_factory.h)
 
 source_group("" FILES ${SOURCE_IPC})
 

@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,32 +16,21 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "desktop/desktop_frame_simple.h"
+#include "desktop/screen_capturer.h"
+
+#include "ipc/shared_memory_factory.h"
 
 namespace desktop {
 
-FrameSimple::FrameSimple(const Size& size, const PixelFormat& format, uint8_t* data)
-    : Frame(size, format, data, nullptr)
+void ScreenCapturer::setSharedMemoryFactory(
+    std::unique_ptr<ipc::SharedMemoryFactory> shared_memory_factory)
 {
-    // Nothing
+    shared_memory_factory_ = std::move(shared_memory_factory);
 }
 
-FrameSimple::~FrameSimple()
+ipc::SharedMemoryFactory* ScreenCapturer::sharedMemoryFactory() const
 {
-    free(data_);
-}
-
-// static
-std::unique_ptr<FrameSimple> FrameSimple::create(const Size& size, const PixelFormat& format)
-{
-    int bytes_per_row = size.width() * format.bytesPerPixel();
-
-    uint8_t* data =
-        reinterpret_cast<uint8_t*>(malloc(bytes_per_row * size.height()));
-    if (!data)
-        return nullptr;
-
-    return std::unique_ptr<FrameSimple>(new FrameSimple(size, format, data));
+    return shared_memory_factory_.get();
 }
 
 } // namespace desktop

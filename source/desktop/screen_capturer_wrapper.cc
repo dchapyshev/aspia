@@ -25,6 +25,7 @@
 #include "desktop/screen_capturer_mirror.h"
 #include "desktop/win/effects_disabler.h"
 #include "desktop/win/wallpaper_disabler.h"
+#include "ipc/shared_memory_factory.h"
 
 namespace desktop {
 
@@ -63,7 +64,7 @@ bool ScreenCapturerWrapper::selectScreen(ScreenCapturer::ScreenId screen_id)
     return capturer_->selectScreen(screen_id);
 }
 
-const Frame* ScreenCapturerWrapper::captureFrame()
+std::unique_ptr<SharedFrame> ScreenCapturerWrapper::captureFrame()
 {
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
 
@@ -71,7 +72,7 @@ const Frame* ScreenCapturerWrapper::captureFrame()
         atDesktopSwitch();
 
     ScreenCapturer::Error error;
-    const Frame* frame = capturer_->captureFrame(&error);
+    std::unique_ptr<SharedFrame> frame = capturer_->captureFrame(&error);
     if (!frame)
     {
         switch (error)
@@ -90,6 +91,12 @@ const Frame* ScreenCapturerWrapper::captureFrame()
     }
 
     return frame;
+}
+
+void ScreenCapturerWrapper::setSharedMemoryFactory(
+    std::unique_ptr<ipc::SharedMemoryFactory> shared_memory_factory)
+{
+    capturer_->setSharedMemoryFactory(std::move(shared_memory_factory));
 }
 
 void ScreenCapturerWrapper::selectCapturer()

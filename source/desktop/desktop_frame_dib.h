@@ -24,6 +24,10 @@
 
 #include <memory>
 
+namespace ipc {
+class SharedMemoryFactory;
+} // namespace ipc
+
 namespace desktop {
 
 class FrameDib : public Frame
@@ -31,13 +35,22 @@ class FrameDib : public Frame
 public:
     ~FrameDib() = default;
 
-    static std::unique_ptr<FrameDib> create(const Size& size, const PixelFormat& format, HDC hdc);
+    static std::unique_ptr<FrameDib> create(const Size& size,
+                                            const PixelFormat& format,
+                                            ipc::SharedMemoryFactory* shared_memory_factory,
+                                            HDC hdc);
+
     HBITMAP bitmap() { return bitmap_; }
 
 private:
-    FrameDib(const Size& size, const PixelFormat& format,uint8_t* data, HBITMAP bitmap);
+    FrameDib(const Size& size,
+             const PixelFormat& format,
+             uint8_t* data,
+             std::unique_ptr<ipc::SharedMemory> shared_memory,
+             HBITMAP bitmap);
 
     base::win::ScopedHBITMAP bitmap_;
+    std::unique_ptr<ipc::SharedMemory> owned_shared_memory_;
 
     DISALLOW_COPY_AND_ASSIGN(FrameDib);
 };

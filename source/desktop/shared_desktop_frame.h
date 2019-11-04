@@ -43,6 +43,8 @@ public:
     // no clones of the object.
     bool isShared();
 
+    Frame* underlyingFrame();
+
 private:
     SharedFrame(std::shared_ptr<Frame>& frame);
 

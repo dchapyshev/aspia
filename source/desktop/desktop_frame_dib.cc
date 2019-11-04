@@ -20,26 +20,36 @@
 
 #include "base/logging.h"
 #include "desktop/win/bitmap_info.h"
+#include "ipc/shared_memory.h"
+#include "ipc/shared_memory_factory.h"
 
 namespace desktop {
 
-FrameDib::FrameDib(
-    const Size& size, const PixelFormat& format, uint8_t* data, HBITMAP bitmap)
-    : Frame(size, format, data),
-      bitmap_(bitmap)
+FrameDib::FrameDib(const Size& size,
+                   const PixelFormat& format,
+                   uint8_t* data,
+                   std::unique_ptr<ipc::SharedMemory> shared_memory,
+                   HBITMAP bitmap)
+    : Frame(size, format, data, shared_memory.get()),
+      bitmap_(bitmap),
+      owned_shared_memory_(std::move(shared_memory))
 {
     // Nothing
 }
 
 // static
-std::unique_ptr<FrameDib> FrameDib::create(const Size& size, const PixelFormat& format, HDC hdc)
+std::unique_ptr<FrameDib> FrameDib::create(const Size& size,
+                                           const PixelFormat& format,
+                                           ipc::SharedMemoryFactory* shared_memory_factory,
+                                           HDC hdc)
 {
-    int bytes_per_row = size.width() * format.bytesPerPixel();
+    const int bytes_per_row = size.width() * format.bytesPerPixel();
+    const int buffer_size = bytes_per_row * size.height();
 
     BitmapInfo bmi = { 0 };
     bmi.header.biSize      = sizeof(bmi.header);
     bmi.header.biBitCount  = format.bitsPerPixel();
-    bmi.header.biSizeImage = bytes_per_row * size.height();
+    bmi.header.biSizeImage = buffer_size;
     bmi.header.biPlanes    = 1;
     bmi.header.biWidth     = size.width();
     bmi.header.biHeight    = -size.height();
@@ -68,13 +78,22 @@ std::unique_ptr<FrameDib> FrameDib::create(const Size& size, const PixelFormat& 
         }
     }
 
+    std::unique_ptr<ipc::SharedMemory> shared_memory;
+    HANDLE section_handle = nullptr;
+
+    if (shared_memory_factory)
+    {
+        shared_memory = shared_memory_factory->create(buffer_size);
+        section_handle = shared_memory->handle();
+    }
+
     void* data = nullptr;
 
     HBITMAP bitmap = CreateDIBSection(hdc,
                                       reinterpret_cast<LPBITMAPINFO>(&bmi),
                                       DIB_RGB_COLORS,
                                       &data,
-                                      nullptr,
+                                      section_handle,
                                       0);
     if (!bitmap)
     {
@@ -82,8 +101,8 @@ std::unique_ptr<FrameDib> FrameDib::create(const Size& size, const PixelFormat& 
         return nullptr;
     }
 
-    return std::unique_ptr<FrameDib>(
-        new FrameDib(size, format, reinterpret_cast<uint8_t*>(data), bitmap));
+    return std::unique_ptr<FrameDib>(new FrameDib(
+        size, format, reinterpret_cast<uint8_t*>(data), std::move(shared_memory), bitmap));
 }
 
 } // namespace desktop

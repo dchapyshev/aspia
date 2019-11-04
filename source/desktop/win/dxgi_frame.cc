@@ -20,11 +20,14 @@
 
 #include "base/logging.h"
 #include "desktop/desktop_frame_aligned.h"
+#include "desktop/shared_memory_desktop_frame.h"
 
 namespace desktop {
 
-DxgiFrame::DxgiFrame(std::shared_ptr<DxgiDuplicatorController>& controller)
-    : context_(controller)
+DxgiFrame::DxgiFrame(std::shared_ptr<DxgiDuplicatorController>& controller,
+                     ipc::SharedMemoryFactory* shared_memory_factory)
+    : context_(controller),
+      shared_memory_factory_(shared_memory_factory)
 {
     // Nothing
 }
@@ -48,10 +51,20 @@ bool DxgiFrame::prepare(const Size& size, ScreenCapturer::ScreenId source_id)
 
     if (!frame_)
     {
-        std::unique_ptr<Frame> frame = FrameAligned::create(size, PixelFormat::ARGB(), 32);
+        std::unique_ptr<Frame> frame;
+
+        if (shared_memory_factory_)
+        {
+            frame = SharedMemoryFrame::create(size, PixelFormat::ARGB(), shared_memory_factory_);
+        }
+        else
+        {
+            frame = FrameAligned::create(size, PixelFormat::ARGB(), 32);
+        }
+
         if (!frame)
         {
-            LOG(LS_WARNING) << "DxgiFrame cannot create a new FrameAligned";
+            LOG(LS_WARNING) << "DxgiFrame cannot create a new DesktopFrame";
             return false;
         }
 

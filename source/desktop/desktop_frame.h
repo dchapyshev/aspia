@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -23,12 +23,18 @@
 #include "desktop/pixel_format.h"
 #include "desktop/desktop_region.h"
 
+namespace ipc {
+class SharedMemory;
+} // namespace ipc
+
 namespace desktop {
 
 class Frame
 {
 public:
     virtual ~Frame() = default;
+
+    ipc::SharedMemory* sharedMemory() const { return shared_memory_; }
 
     uint8_t* frameDataAtPos(const Point& pos) const;
     uint8_t* frameDataAtPos(int x, int y) const;
@@ -54,12 +60,16 @@ public:
     void copyFrameInfoFrom(const Frame& other);
 
 protected:
-    Frame(const Size& size, const PixelFormat& format, uint8_t* data);
+    Frame(const Size& size,
+          const PixelFormat& format,
+          uint8_t* data,
+          ipc::SharedMemory* shared_memory);
 
     // Ownership of the buffers is defined by the classes that inherit from
     // this class. They must guarantee that the buffer is not deleted before
     // the frame is deleted.
     uint8_t* const data_;
+    ipc::SharedMemory* const shared_memory_;
 
 private:
     const Size size_;

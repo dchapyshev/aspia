@@ -22,6 +22,11 @@
 #include "base/win/scoped_hdc.h"
 #include "desktop/screen_capturer.h"
 #include "desktop/screen_capture_frame_queue.h"
+#include "desktop/shared_desktop_frame.h"
+
+namespace ipc {
+class SharedMemoryFactory;
+} // namespace ipc
 
 namespace desktop {
 
@@ -37,14 +42,14 @@ public:
     int screenCount() override;
     bool screenList(ScreenList* screens) override;
     bool selectScreen(ScreenId screen_id) override;
-    const Frame* captureFrame(Error* error) override;
+    std::unique_ptr<SharedFrame> captureFrame(Error* error) override;
 
 protected:
     // ScreenCapturer implementation.
     void reset() override;
 
 private:
-    const Frame* captureImage();
+    std::unique_ptr<SharedFrame> captureImage();
     bool prepareCaptureResources();
 
     ScreenId current_screen_id_ = kFullDesktopScreenId;
@@ -57,7 +62,7 @@ private:
     std::unique_ptr<base::win::ScopedGetDC> desktop_dc_;
     base::win::ScopedCreateDC memory_dc_;
 
-    ScreenCaptureFrameQueue<Frame> queue_;
+    ScreenCaptureFrameQueue<SharedFrame> queue_;
 
     DISALLOW_COPY_AND_ASSIGN(ScreenCapturerGdi);
 };

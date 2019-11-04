@@ -21,6 +21,7 @@
 #include "base/logging.h"
 #include "base/strings/unicode.h"
 #include "desktop/win/screen_capture_utils.h"
+#include "ipc/shared_memory_factory.h"
 
 namespace desktop {
 
@@ -145,14 +146,17 @@ bool ScreenCapturerDxgi::selectScreen(ScreenId screen_id)
     return true;
 }
 
-const Frame* ScreenCapturerDxgi::captureFrame(Error* error)
+std::unique_ptr<SharedFrame> ScreenCapturerDxgi::captureFrame(Error* error)
 {
     DCHECK(error);
 
     queue_.moveToNextFrame();
 
     if (!queue_.currentFrame())
-        queue_.replaceCurrentFrame(std::make_unique<DxgiFrame>(controller_));
+    {
+        queue_.replaceCurrentFrame(
+            std::make_unique<DxgiFrame>(controller_, sharedMemoryFactory()));
+    }
 
     DxgiDuplicatorController::Result result;
 
@@ -174,7 +178,7 @@ const Frame* ScreenCapturerDxgi::captureFrame(Error* error)
         case DuplicateResult::SUCCEEDED:
         {
             *error = Error::SUCCEEDED;
-            return queue_.currentFrame()->frame();
+            return queue_.currentFrame()->frame()->share();
         }
 
         case DuplicateResult::UNSUPPORTED_SESSION:

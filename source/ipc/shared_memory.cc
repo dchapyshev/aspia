@@ -22,7 +22,8 @@
 #include "base/strings/string_number_conversions.h"
 #include "base/strings/string_util.h"
 #include "base/strings/unicode.h"
-#include "crypto/random.h"
+
+#include <random>
 
 #include <AclAPI.h>
 
@@ -30,14 +31,10 @@ namespace ipc {
 
 namespace {
 
-std::u16string createFilePath(std::string_view name)
+std::u16string createFilePath(int id)
 {
     static const char16_t kPrefix[] = u"Global\\aspia_";
-
-    std::u16string result(kPrefix);
-    result.append(base::utf16FromAscii(name));
-
-    return result;
+    return kPrefix + base::numberToString16(id);
 }
 
 bool modeToDesiredAccess(SharedMemory::Mode mode, DWORD* desired_access)
@@ -59,11 +56,8 @@ bool modeToDesiredAccess(SharedMemory::Mode mode, DWORD* desired_access)
 }
 
 bool createFileMapping(
-    SharedMemory::Mode mode, std::string_view name, size_t size, base::win::ScopedHandle* out)
+    SharedMemory::Mode mode, int id, size_t size, base::win::ScopedHandle* out)
 {
-    if (name.empty())
-        return false;
-
     DWORD protect;
 
     switch (mode)
@@ -84,7 +78,7 @@ bool createFileMapping(
     const DWORD low = size & 0xFFFFFFFF;
     const DWORD high = static_cast<DWORD64>(size) >> 32 & 0xFFFFFFFF;
 
-    std::u16string path = createFilePath(name);
+    std::u16string path = createFilePath(id);
 
     base::win::ScopedHandle file(CreateFileMappingW(
         INVALID_HANDLE_VALUE, nullptr, protect, high, low, base::asWide(path)));
@@ -112,17 +106,14 @@ bool createFileMapping(
     return true;
 }
 
-bool openFileMapping(SharedMemory::Mode mode, std::string_view name, base::win::ScopedHandle* out)
+bool openFileMapping(SharedMemory::Mode mode, int id, base::win::ScopedHandle* out)
 {
-    if (name.empty())
-        return false;
-
     DWORD desired_access;
     if (!modeToDesiredAccess(mode, &desired_access))
         return false;
 
     base::win::ScopedHandle file(
-        OpenFileMappingW(desired_access, FALSE, base::asWide(createFilePath(name))));
+        OpenFileMappingW(desired_access, FALSE, base::asWide(createFilePath(id))));
     if (!file.isValid())
     {
         PLOG(LS_WARNING) << "OpenFileMappingW failed";
@@ -151,24 +142,47 @@ bool mapViewOfFile(SharedMemory::Mode mode, HANDLE file, void** memory)
 
 } // namespace
 
-SharedMemory::SharedMemory(base::win::ScopedHandle&& file, void* memory)
-    : file_(std::move(file)),
-      memory_(memory)
+#if defined(OS_WIN)
+const SharedMemory::Handle kInvalidHandle = nullptr;
+#else
+const SharedMemory::Handle kInvalidHandle = -1;
+#endif
+
+SharedMemory::SharedMemory(int id, base::win::ScopedHandle&& handle, void* data)
+    : handle_(std::move(handle)),
+      data_(data),
+      id_(id)
 {
     // Nothing
 }
 
 SharedMemory::~SharedMemory()
 {
-    if (memory_)
-        UnmapViewOfFile(memory_);
+    UnmapViewOfFile(data_);
 }
 
 // static
-std::unique_ptr<SharedMemory> SharedMemory::create(Mode mode, std::string_view name, size_t size)
+std::unique_ptr<SharedMemory> SharedMemory::create(Mode mode, size_t size)
 {
+    static const int kRetryCount = 10;
+
     base::win::ScopedHandle file;
-    if (!createFileMapping(mode, name, size, &file))
+    int id;
+
+    std::random_device device;
+    std::mt19937 generator(device);
+
+    std::uniform_int_distribution<> distance(0, std::numeric_limits<int>::max());
+
+    for (int i = 0; i < kRetryCount; ++i)
+    {
+        id = distance(generator);
+
+        if (createFileMapping(mode, id, size, &file))
+            break;
+    }
+
+    if (!file.isValid())
         return nullptr;
 
     void* memory;
@@ -177,29 +191,21 @@ std::unique_ptr<SharedMemory> SharedMemory::create(Mode mode, std::string_view n
 
     memset(memory, 0, size);
 
-    return std::unique_ptr<SharedMemory>(new SharedMemory(std::move(file), memory));
+    return std::unique_ptr<SharedMemory>(new SharedMemory(id, std::move(file), memory));
 }
 
 // static
-std::unique_ptr<SharedMemory> SharedMemory::map(Mode mode, std::string_view name)
+std::unique_ptr<SharedMemory> SharedMemory::open(Mode mode, int id)
 {
     base::win::ScopedHandle file;
-    if (!openFileMapping(mode, name, &file))
+    if (!openFileMapping(mode, id, &file))
         return nullptr;
 
     void* memory;
     if (!mapViewOfFile(mode, file, &memory))
         return nullptr;
 
-    return std::unique_ptr<SharedMemory>(new SharedMemory(std::move(file), memory));
-}
-
-// static
-std::string SharedMemory::createUniqueName()
-{
-    return base::numberToString(GetCurrentProcessId()) +
-           base::numberToString(crypto::Random::number64()) +
-           base::numberToString(crypto::Random::number64());
+    return std::unique_ptr<SharedMemory>(new SharedMemory(id, std::move(file), memory));
 }
 
 } // namespace ipc

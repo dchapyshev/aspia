@@ -27,6 +27,10 @@
 #include <memory>
 #include <vector>
 
+namespace ipc {
+class SharedMemoryFactory;
+} // namespace ipc
+
 namespace desktop {
 
 class DxgiDuplicatorController;
@@ -38,7 +42,8 @@ class DxgiFrame final
 public:
     using Context = DxgiFrameContext;
 
-    explicit DxgiFrame(std::shared_ptr<DxgiDuplicatorController>& controller);
+    explicit DxgiFrame(std::shared_ptr<DxgiDuplicatorController>& controller,
+                       ipc::SharedMemoryFactory* shared_memory_factory);
     ~DxgiFrame();
 
     // Should not be called if prepare() is not executed or returns false.
@@ -55,6 +60,7 @@ private:
     // Should not be called if prepare() is not executed or returns false.
     Context* context();
 
+    ipc::SharedMemoryFactory* const shared_memory_factory_;
     ResolutionTracker resolution_tracker_;
     ScreenCapturer::ScreenId source_id_ = ScreenCapturer::kFullDesktopScreenId;
     std::unique_ptr<SharedFrame> frame_;

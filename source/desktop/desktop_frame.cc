@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -22,13 +22,18 @@
 
 namespace desktop {
 
-Frame::Frame(const Size& size, const PixelFormat& format, uint8_t* data)
+Frame::Frame(const Size& size,
+             const PixelFormat& format,
+             uint8_t* data,
+             ipc::SharedMemory* shared_memory)
     : size_(size),
       format_(format),
       stride_(format.bytesPerPixel() * size.width()),
-      data_(data)
+      data_(data),
+      shared_memory_(shared_memory)
 {
-    // Nothing
+    DCHECK(size_.width() >= 0);
+    DCHECK(size_.height() >= 0);
 }
 
 bool Frame::contains(int x, int y) const

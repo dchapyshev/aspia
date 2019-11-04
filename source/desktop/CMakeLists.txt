@@ -67,6 +67,7 @@ list(APPEND SOURCE_DESKTOP
     resolution_tracker.cc
     resolution_tracker.h
     screen_capture_frame_queue.h
+    screen_capturer.cc
     screen_capturer.h
     screen_capturer_dxgi.cc
     screen_capturer_dxgi.h
@@ -79,7 +80,9 @@ list(APPEND SOURCE_DESKTOP
     screen_settings_tracker.cc
     screen_settings_tracker.h
     shared_desktop_frame.cc
-    shared_desktop_frame.h)
+    shared_desktop_frame.h
+    shared_memory_desktop_frame.cc
+    shared_memory_desktop_frame.h)
 
 list(APPEND SOURCE_DESKTOP_UNIT_TESTS
     desktop_geometry_unittest.cc

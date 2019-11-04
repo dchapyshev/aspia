@@ -21,7 +21,7 @@
 namespace desktop {
 
 SharedFrame::SharedFrame(std::shared_ptr<Frame>& frame)
-    : Frame(frame->size(), frame->format(), frame->frameData()),
+    : Frame(frame->size(), frame->format(), frame->frameData(), frame->sharedMemory()),
       frame_(frame)
 {
     copyFrameInfoFrom(*frame_);
@@ -51,6 +51,11 @@ std::unique_ptr<SharedFrame> SharedFrame::share()
 bool SharedFrame::isShared()
 {
     return frame_.use_count() > 1;
+}
+
+Frame* SharedFrame::underlyingFrame()
+{
+    return frame_.get();
 }
 
 } // namespace desktop
