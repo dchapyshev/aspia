@@ -46,7 +46,7 @@ public:
     Frame* underlyingFrame();
 
 private:
-    SharedFrame(std::shared_ptr<Frame>& frame);
+    explicit SharedFrame(std::shared_ptr<Frame>& frame);
 
     std::shared_ptr<Frame> frame_;
 
