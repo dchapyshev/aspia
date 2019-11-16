@@ -16,43 +16,43 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "ipc/shared_memory_factory.h"
-
-#include "ipc/shared_memory.h"
 #include "ipc/shared_memory_factory_proxy.h"
+
+#include "base/logging.h"
+#include "ipc/shared_memory_factory.h"
 
 namespace ipc {
 
-SharedMemoryFactory::SharedMemoryFactory(Delegate* delegate)
-    : factory_proxy_(std::make_shared<SharedMemoryFactoryProxy>(this)),
-      delegate_(delegate)
+SharedMemoryFactoryProxy::SharedMemoryFactoryProxy(SharedMemoryFactory* factory)
+    : factory_(factory)
 {
     // Nothing
 }
 
-SharedMemoryFactory::~SharedMemoryFactory()
+SharedMemoryFactoryProxy::~SharedMemoryFactoryProxy()
 {
-    factory_proxy_->dettach();
+    DCHECK(!factory_);
 }
 
-std::unique_ptr<SharedMemory> SharedMemoryFactory::create(size_t size)
+void SharedMemoryFactoryProxy::dettach()
 {
-    return SharedMemory::create(SharedMemory::Mode::READ_WRITE, size, factory_proxy_);
+    factory_ = nullptr;
 }
 
-std::unique_ptr<SharedMemory> SharedMemoryFactory::open(int id)
+void SharedMemoryFactoryProxy::onSharedMemoryCreate(int id)
 {
-    return SharedMemory::open(SharedMemory::Mode::READ_ONLY, id, factory_proxy_);
+    if (!factory_)
+        return;
+
+    factory_->onSharedMemoryCreate(id);
 }
 
-void SharedMemoryFactory::onSharedMemoryCreate(int id)
+void SharedMemoryFactoryProxy::onSharedMemoryDestroy(int id)
 {
-    delegate_->onSharedMemoryCreate(id);
-}
+    if (!factory_)
+        return;
 
-void SharedMemoryFactory::onSharedMemoryDestroy(int id)
-{
-    delegate_->onSharedMemoryDestroy(id);
+    factory_->onSharedMemoryDestroy(id);
 }
 
 } // namespace ipc

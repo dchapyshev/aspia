@@ -25,9 +25,12 @@
 #include "base/win/scoped_object.h"
 #endif // defined(OS_WIN)
 
+#include <cstddef>
 #include <memory>
 
 namespace ipc {
+
+class SharedMemoryFactoryProxy;
 
 class SharedMemory
 {
@@ -48,16 +51,22 @@ public:
 
     static const Handle kInvalidHandle;
 
-    static std::unique_ptr<SharedMemory> create(Mode mode, size_t size);
-    static std::unique_ptr<SharedMemory> open(Mode mode, int id);
+    static std::unique_ptr<SharedMemory> create(
+        Mode mode, size_t size, std::shared_ptr<SharedMemoryFactoryProxy> factory_proxy = nullptr);
+    static std::unique_ptr<SharedMemory> open(
+        Mode mode, int id, std::shared_ptr<SharedMemoryFactoryProxy> factory_proxy = nullptr);
 
     void* data() { return data_; }
     Handle handle() const { return handle_.get(); }
     int id() const { return id_; }
 
 private:
-    SharedMemory(int id, base::win::ScopedHandle&& handle, void* data);
+    SharedMemory(int id,
+                 base::win::ScopedHandle&& handle,
+                 void* data,
+                 std::shared_ptr<SharedMemoryFactoryProxy> factory_proxy);
 
+    std::shared_ptr<SharedMemoryFactoryProxy> factory_proxy_;
     base::win::ScopedHandle handle_;
     void* data_;
     int id_;

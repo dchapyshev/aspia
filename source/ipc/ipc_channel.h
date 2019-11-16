@@ -45,7 +45,6 @@ public:
     // You can change this in the process.
     void setListener(Listener* listener);
 
-    [[nodiscard]]
     bool connect(std::u16string_view channel_id);
 
     void disconnect();

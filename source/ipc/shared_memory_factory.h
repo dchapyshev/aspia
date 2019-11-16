@@ -30,13 +30,37 @@ class SharedMemory;
 class SharedMemoryFactory
 {
 public:
-    SharedMemoryFactory() = default;
-    ~SharedMemoryFactory() = default;
+    class Delegate
+    {
+    public:
+        virtual ~Delegate() = default;
 
+        // Called when a shared memory is successfully created or opened.
+        virtual void onSharedMemoryCreate(int id) = 0;
+
+        // Called when the shared memory is destroyed.
+        virtual void onSharedMemoryDestroy(int id) = 0;
+    };
+
+    explicit SharedMemoryFactory(Delegate* delegate);
+    ~SharedMemoryFactory();
+
+    // Creates a new shared memory. If an error occurs, nullptr is returned.
     std::unique_ptr<SharedMemory> create(size_t size);
+
+    // Opens an existing shared memory.
+    // If shared memory does not exist, nullptr is returned.
+    // If any other error occurs, nullptr is returned.
     std::unique_ptr<SharedMemory> open(int id);
 
 private:
+    friend class SharedMemoryFactoryProxy;
+    void onSharedMemoryCreate(int id);
+    void onSharedMemoryDestroy(int id);
+
+    std::shared_ptr<SharedMemoryFactoryProxy> factory_proxy_;
+    Delegate* delegate_;
+
     DISALLOW_COPY_AND_ASSIGN(SharedMemoryFactory);
 };
 

@@ -22,6 +22,7 @@
 #include "base/strings/string_number_conversions.h"
 #include "base/strings/string_util.h"
 #include "base/strings/unicode.h"
+#include "ipc/shared_memory_factory_proxy.h"
 
 #include <random>
 
@@ -55,8 +56,7 @@ bool modeToDesiredAccess(SharedMemory::Mode mode, DWORD* desired_access)
     }
 }
 
-bool createFileMapping(
-    SharedMemory::Mode mode, int id, size_t size, base::win::ScopedHandle* out)
+bool createFileMapping(SharedMemory::Mode mode, int id, size_t size, base::win::ScopedHandle* out)
 {
     DWORD protect;
 
@@ -148,21 +148,30 @@ const SharedMemory::Handle kInvalidHandle = nullptr;
 const SharedMemory::Handle kInvalidHandle = -1;
 #endif
 
-SharedMemory::SharedMemory(int id, base::win::ScopedHandle&& handle, void* data)
-    : handle_(std::move(handle)),
+SharedMemory::SharedMemory(int id,
+                           base::win::ScopedHandle&& handle,
+                           void* data,
+                           std::shared_ptr<SharedMemoryFactoryProxy> factory_proxy)
+    : factory_proxy_(std::move(factory_proxy)),
+      handle_(std::move(handle)),
       data_(data),
       id_(id)
 {
-    // Nothing
+    if (factory_proxy_)
+        factory_proxy_->onSharedMemoryCreate(id_);
 }
 
 SharedMemory::~SharedMemory()
 {
+    if (factory_proxy_)
+        factory_proxy_->onSharedMemoryDestroy(id_);
+
     UnmapViewOfFile(data_);
 }
 
 // static
-std::unique_ptr<SharedMemory> SharedMemory::create(Mode mode, size_t size)
+std::unique_ptr<SharedMemory> SharedMemory::create(
+    Mode mode, size_t size, std::shared_ptr<SharedMemoryFactoryProxy> factory_proxy)
 {
     static const int kRetryCount = 10;
 
@@ -170,7 +179,7 @@ std::unique_ptr<SharedMemory> SharedMemory::create(Mode mode, size_t size)
     int id;
 
     std::random_device device;
-    std::mt19937 generator(device);
+    std::mt19937 generator(device());
 
     std::uniform_int_distribution<> distance(0, std::numeric_limits<int>::max());
 
@@ -191,11 +200,13 @@ std::unique_ptr<SharedMemory> SharedMemory::create(Mode mode, size_t size)
 
     memset(memory, 0, size);
 
-    return std::unique_ptr<SharedMemory>(new SharedMemory(id, std::move(file), memory));
+    return std::unique_ptr<SharedMemory>(
+        new SharedMemory(id, std::move(file), memory, std::move(factory_proxy)));
 }
 
 // static
-std::unique_ptr<SharedMemory> SharedMemory::open(Mode mode, int id)
+std::unique_ptr<SharedMemory> SharedMemory::open(
+    Mode mode, int id, std::shared_ptr<SharedMemoryFactoryProxy> factory_proxy)
 {
     base::win::ScopedHandle file;
     if (!openFileMapping(mode, id, &file))
@@ -205,7 +216,8 @@ std::unique_ptr<SharedMemory> SharedMemory::open(Mode mode, int id)
     if (!mapViewOfFile(mode, file, &memory))
         return nullptr;
 
-    return std::unique_ptr<SharedMemory>(new SharedMemory(id, std::move(file), memory));
+    return std::unique_ptr<SharedMemory>(
+        new SharedMemory(id, std::move(file), memory, std::move(factory_proxy)));
 }
 
 } // namespace ipc
