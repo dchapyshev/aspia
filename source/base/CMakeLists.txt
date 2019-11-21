@@ -55,6 +55,8 @@ list(APPEND SOURCE_BASE
     task_runner.h
     version.cc
     version.h
+    waitable_event.cc
+    waitable_event.h
     waitable_timer.cc
     waitable_timer.h
     xml_sax_writer.cc
