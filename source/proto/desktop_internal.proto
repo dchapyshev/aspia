@@ -1,0 +1,114 @@
+//
+// Aspia Project
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program. If not, see <https://www.gnu.org/licenses/>.
+//
+// WARNING! For internal use only, on the host side. Messages in this file are not intended for
+// transmission over the network.
+//
+
+syntax = "proto3";
+
+option optimize_for = LITE_RUNTIME;
+
+import "desktop.proto";
+import "desktop_extensions.proto";
+
+package proto.internal;
+
+message SerializedDesktopFrame
+{
+    int32 shared_buffer_id   = 1;
+    PixelFormat pixel_format = 2;
+    Rect desktop_rect        = 3;
+    repeated Rect dirty_rect = 4;
+}
+
+message SerializedMouseCursor
+{
+    int32 shared_buffer_id = 1;
+    int32 width            = 2;
+    int32 height           = 3;
+    int32 hotspot_x        = 4;
+    int32 hotspot_y        = 5;
+}
+
+message CreateSharedBuffer
+{
+    int32 shared_buffer_id = 1;
+}
+
+message ReleaseSharedBuffer
+{
+    int32 shared_buffer_id = 1;
+}
+
+message CaptureFrame
+{
+    int32 dummy = 1;
+}
+
+message CaptureFrameResult
+{
+    SerializedDesktopFrame frame = 1;
+}
+
+message CaptureCursor
+{
+    int32 dummy = 1;
+}
+
+message CaptureCursorResult
+{
+    SerializedMouseCursor mouse_cursor = 1;
+}
+
+message SelectSource
+{
+    Screen screen = 1;
+}
+
+message SetDesktopFeatures
+{
+    bool wallpaper = 1;
+    bool effects   = 2;
+}
+
+message SetBlockInput
+{
+    bool state = 1;
+}
+
+message ServiceToDesktop
+{
+    SelectSource select_source              = 1;
+    CaptureFrame capture_frame              = 2;
+    CaptureCursor capture_cursor            = 3;
+    KeyEvent key_event                      = 4;
+    PointerEvent pointer_event              = 5;
+    ClipboardEvent clipboard_event          = 6;
+    SetDesktopFeatures set_desktop_features = 7;
+    SetBlockInput set_block_input           = 8;
+}
+
+message DesktopToService
+{
+    ScreenList screen_list                    = 1;
+    CreateSharedBuffer create_shared_buffer   = 2;
+    ReleaseSharedBuffer release_shared_buffer = 3;
+    CaptureFrameResult capture_frame_result   = 4;
+    CaptureCursorResult capture_cursor_result = 5;
+    ClipboardEvent clipboard_event            = 6;
+}

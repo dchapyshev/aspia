@@ -117,7 +117,7 @@ message NetworkAdapters
 
         string adapter_name      = 1;
         string connection_name   = 2;
-        string interface         = 3;
+        string iface             = 3;
         uint64 speed             = 4;
         string mac               = 5;
         bool dhcp_enabled        = 6;

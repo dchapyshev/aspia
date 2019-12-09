@@ -21,6 +21,7 @@ list(APPEND SOURCE_PROTO
     common.proto
     desktop.proto
     desktop_extensions.proto
+    desktop_internal.proto
     file_transfer.proto
     key_exchange.proto
     host.proto

@@ -15,6 +15,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
+// WARNING! For internal use only, on the host side. Messages in this file are not intended for
+// transmission over the network.
+//
 
 syntax = "proto3";
 
