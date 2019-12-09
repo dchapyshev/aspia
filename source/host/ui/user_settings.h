@@ -16,29 +16,34 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST__CLIPBOARD_MONITOR_H
-#define HOST__CLIPBOARD_MONITOR_H
+#ifndef HOST__UI__USER_SETTINGS_H
+#define HOST__UI__USER_SETTINGS_H
 
-#include "proto/desktop.pb.h"
+#include "base/macros_magic.h"
+
+#include <QSettings>
 
 namespace host {
 
-class ClipboardMonitor
+class UserSettings
 {
 public:
-    virtual ~ClipboardMonitor() = default;
+    UserSettings();
+    ~UserSettings();
 
-    class Delegate
-    {
-    public:
-        virtual ~Delegate() = default;
+    QString filePath() const;
+    bool isWritable() const;
+    void sync();
 
-        virtual void onClipboardEvent(const proto::ClipboardEvent& event) = 0;
-    };
+    QString locale() const;
+    void setLocale(const QString& locale);
 
-    virtual void injectClipboardEvent(const proto::ClipboardEvent& event) = 0;
+private:
+    QSettings settings_;
+
+    DISALLOW_COPY_AND_ASSIGN(UserSettings);
 };
 
 } // namespace host
 
-#endif // HOST__CLIPBOARD_MONITOR_H
+#endif // HOST__UI__USER_SETTINGS_H

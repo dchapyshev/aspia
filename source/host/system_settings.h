@@ -16,22 +16,43 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST__CLIPBOARD_MONITOR_IPC_H
-#define HOST__CLIPBOARD_MONITOR_IPC_H
+#ifndef HOST__SYSTEM_SETTINGS_H
+#define HOST__SYSTEM_SETTINGS_H
 
-#include "host/clipboard_monitor.h"
+#include "base/macros_magic.h"
+#include "base/xml_settings.h"
+
+#include <filesystem>
 
 namespace host {
 
-class ClipboardMonitorIpc : public ClipboardMonitor
+class UserList;
+
+class SystemSettings
 {
 public:
-    ~ClipboardMonitorIpc() = default;
+    SystemSettings();
+    ~SystemSettings();
 
-    // ClipboardMonitor implementation.
-    void injectClipboardEvent(const proto::ClipboardEvent& event) override;
+    const std::filesystem::path& filePath() const;
+    bool isWritable() const;
+    void sync();
+
+    uint16_t tcpPort() const;
+    void setTcpPort(uint16_t port);
+
+    UserList userList() const;
+    void setUserList(const UserList& user_list);
+
+    std::string updateServer() const;
+    void setUpdateServer(const std::string& server);
+
+private:
+    base::XmlSettings settings_;
+
+    DISALLOW_COPY_AND_ASSIGN(SystemSettings);
 };
 
 } // namespace host
 
-#endif // HOST__CLIPBOARD_MONITOR_IPC_H
+#endif // HOST__SYSTEM_SETTINGS_H

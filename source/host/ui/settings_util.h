@@ -16,49 +16,26 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST__HOST_SETTINGS_H
-#define HOST__HOST_SETTINGS_H
+#ifndef HOST__UI__SETTINGS_UTIL_H
+#define HOST__UI__SETTINGS_UTIL_H
 
 #include "base/macros_magic.h"
-#include "base/xml_settings.h"
 
 #include <filesystem>
 
 #include <QCoreApplication>
-#include <QSettings>
 
 namespace host {
 
-class UserList;
-
-class Settings
+class SettingsUtil
 {
-    Q_DECLARE_TR_FUNCTIONS(Settings)
+    Q_DECLARE_TR_FUNCTIONS(SettingsUtil)
 
 public:
-    Settings();
-    ~Settings();
-
     static bool importFromFile(
         const std::filesystem::path& path, bool silent, QWidget* parent = nullptr);
     static bool exportToFile(
         const std::filesystem::path& path, bool silent, QWidget* parent = nullptr);
-
-    const std::filesystem::path& filePath() const;
-    bool isWritable() const;
-    void sync();
-
-    QString locale() const;
-    void setLocale(const QString& locale);
-
-    uint16_t tcpPort() const;
-    void setTcpPort(uint16_t port);
-
-    UserList userList() const;
-    void setUserList(const UserList& user_list);
-
-    std::string updateServer() const;
-    void setUpdateServer(const std::string& server);
 
 private:
     static bool copySettings(const std::filesystem::path& source_path,
@@ -66,12 +43,9 @@ private:
                              bool silent,
                              QWidget* parent);
 
-    mutable base::XmlSettings system_settings_;
-    QSettings user_settings_;
-
-    DISALLOW_COPY_AND_ASSIGN(Settings);
+    DISALLOW_COPY_AND_ASSIGN(SettingsUtil);
 };
 
 } // namespace host
 
-#endif // HOST__HOST_SETTINGS_H
+#endif // HOST__UI__SETTINGS_UTIL_H
