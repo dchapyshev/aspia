@@ -17,6 +17,7 @@
 //
 
 #include "codec/video_encoder_zstd.h"
+
 #include "base/logging.h"
 #include "codec/pixel_translator.h"
 #include "codec/video_util.h"
@@ -46,15 +47,16 @@ VideoEncoderZstd::VideoEncoderZstd(const desktop::PixelFormat& target_format,
 }
 
 // static
-VideoEncoderZstd* VideoEncoderZstd::create(const desktop::PixelFormat& target_format,
-                                           int compression_ratio)
+std::unique_ptr<VideoEncoderZstd> VideoEncoderZstd::create(
+    const desktop::PixelFormat& target_format, int compression_ratio)
 {
     if (compression_ratio > ZSTD_maxCLevel())
         compression_ratio = ZSTD_maxCLevel();
     else if (compression_ratio < 1)
         compression_ratio = 1;
 
-    return new VideoEncoderZstd(target_format, compression_ratio);
+    return std::unique_ptr<VideoEncoderZstd>(
+        new VideoEncoderZstd(target_format, compression_ratio));
 }
 
 void VideoEncoderZstd::compressPacket(proto::VideoPacket* packet,
@@ -91,10 +93,7 @@ void VideoEncoderZstd::encode(const desktop::Frame* frame, proto::VideoPacket* p
     fillPacketInfo(proto::VIDEO_ENCODING_ZSTD, frame, packet);
 
     if (packet->has_format())
-    {
-        VideoUtil::toVideoPixelFormat(
-            target_format_, packet->mutable_format()->mutable_pixel_format());
-    }
+        serializePixelFormat(target_format_, packet->mutable_format()->mutable_pixel_format());
 
     if (!translator_)
     {
@@ -113,7 +112,7 @@ void VideoEncoderZstd::encode(const desktop::Frame* frame, proto::VideoPacket* p
         const desktop::Rect& rect = it.rect();
 
         data_size += rect.width() * rect.height() * target_format_.bytesPerPixel();
-        VideoUtil::toVideoRect(rect, packet->add_dirty_rect());
+        serializeRect(rect, packet->add_dirty_rect());
     }
 
     if (translate_buffer_size_ < data_size)

@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,6 +17,7 @@
 //
 
 #include "codec/video_encoder_vpx.h"
+
 #include "base/logging.h"
 #include "codec/video_util.h"
 #include "desktop/desktop_frame.h"
@@ -133,15 +134,15 @@ desktop::Rect alignRect(const desktop::Rect& rect)
 } // namespace
 
 // static
-VideoEncoderVPX* VideoEncoderVPX::createVP8()
+std::unique_ptr<VideoEncoderVPX> VideoEncoderVPX::createVP8()
 {
-    return new VideoEncoderVPX(proto::VIDEO_ENCODING_VP8);
+    return std::unique_ptr<VideoEncoderVPX>(new VideoEncoderVPX(proto::VIDEO_ENCODING_VP8));
 }
 
 // static
-VideoEncoderVPX* VideoEncoderVPX::createVP9()
+std::unique_ptr<VideoEncoderVPX> VideoEncoderVPX::createVP9()
 {
-    return new VideoEncoderVPX(proto::VIDEO_ENCODING_VP9);
+    return std::unique_ptr<VideoEncoderVPX>(new VideoEncoderVPX(proto::VIDEO_ENCODING_VP9));
 }
 
 VideoEncoderVPX::VideoEncoderVPX(proto::VideoEncoding encoding)
@@ -337,7 +338,7 @@ void VideoEncoderVPX::prepareImageAndActiveMap(
             NOTREACHED();
         }
 
-        VideoUtil::toVideoRect(rect, packet->add_dirty_rect());
+        serializeRect(rect, packet->add_dirty_rect());
         setActiveMap(rect);
     }
 }

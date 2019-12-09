@@ -20,12 +20,12 @@
 
 namespace codec {
 
-desktop::Rect VideoUtil::fromVideoRect(const proto::Rect& rect)
+desktop::Rect parseRect(const proto::Rect& rect)
 {
     return desktop::Rect::makeXYWH(rect.x(), rect.y(), rect.width(), rect.height());
 }
 
-void VideoUtil::toVideoRect(const desktop::Rect& from, proto::Rect* to)
+void serializeRect(const desktop::Rect& from, proto::Rect* to)
 {
     to->set_x(from.x());
     to->set_y(from.y());
@@ -33,7 +33,7 @@ void VideoUtil::toVideoRect(const desktop::Rect& from, proto::Rect* to)
     to->set_height(from.height());
 }
 
-desktop::PixelFormat VideoUtil::fromVideoPixelFormat(const proto::PixelFormat& format)
+desktop::PixelFormat parsePixelFormat(const proto::PixelFormat& format)
 {
     return desktop::PixelFormat(
         static_cast<uint8_t>(format.bits_per_pixel()),
@@ -45,7 +45,7 @@ desktop::PixelFormat VideoUtil::fromVideoPixelFormat(const proto::PixelFormat& f
         static_cast<uint8_t>(format.blue_shift()));
 }
 
-void VideoUtil::toVideoPixelFormat(const desktop::PixelFormat& from, proto::PixelFormat* to)
+void serializePixelFormat(const desktop::PixelFormat& from, proto::PixelFormat* to)
 {
     to->set_bits_per_pixel(from.bitsPerPixel());
 

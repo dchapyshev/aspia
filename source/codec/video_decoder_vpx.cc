@@ -46,7 +46,7 @@ bool convertImage(const proto::VideoPacket& packet,
 
     for (int i = 0; i < packet.dirty_rect_size(); ++i)
     {
-        desktop::Rect rect = VideoUtil::fromVideoRect(packet.dirty_rect(i));
+        desktop::Rect rect = parseRect(packet.dirty_rect(i));
 
         if (!frame_rect.containsRect(rect))
         {

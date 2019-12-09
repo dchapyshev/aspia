@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -34,8 +34,8 @@ class VideoEncoderVPX : public VideoEncoder
 public:
     ~VideoEncoderVPX() = default;
 
-    static VideoEncoderVPX* createVP8();
-    static VideoEncoderVPX* createVP9();
+    static std::unique_ptr<VideoEncoderVPX> createVP8();
+    static std::unique_ptr<VideoEncoderVPX> createVP9();
 
     void encode(const desktop::Frame* frame, proto::VideoPacket* packet) override;
 

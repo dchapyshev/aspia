@@ -45,7 +45,7 @@ bool VideoDecoderZstd::decode(const proto::VideoPacket& packet,
 
         source_frame_ = desktop::FrameAligned::create(
             desktop::Size(format.screen_rect().width(), format.screen_rect().height()),
-            VideoUtil::fromVideoPixelFormat(format.pixel_format()), 32);
+            parsePixelFormat(format.pixel_format()), 32);
 
         translator_ = PixelTranslator::create(source_frame_->format(), target_frame->format());
     }
@@ -66,7 +66,7 @@ bool VideoDecoderZstd::decode(const proto::VideoPacket& packet,
 
     for (int i = 0; i < packet.dirty_rect_size(); ++i)
     {
-        desktop::Rect rect = VideoUtil::fromVideoRect(packet.dirty_rect(i));
+        desktop::Rect rect = parseRect(packet.dirty_rect(i));
 
         if (!frame_rect.containsRect(rect))
         {

@@ -33,7 +33,7 @@ class VideoEncoderZstd : public VideoEncoder
 public:
     ~VideoEncoderZstd() = default;
 
-    static VideoEncoderZstd* create(
+    static std::unique_ptr<VideoEncoderZstd> create(
         const desktop::PixelFormat& target_format, int compression_ratio);
 
     void encode(const desktop::Frame* frame, proto::VideoPacket* packet) override;

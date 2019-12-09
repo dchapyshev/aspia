@@ -26,17 +26,10 @@
 
 namespace codec {
 
-class VideoUtil
-{
-public:
-    static desktop::Rect fromVideoRect(const proto::Rect& rect);
-    static void toVideoRect(const desktop::Rect& from, proto::Rect* to);
-    static desktop::PixelFormat fromVideoPixelFormat(const proto::PixelFormat& format);
-    static void toVideoPixelFormat(const desktop::PixelFormat& from, proto::PixelFormat* to);
-
-private:
-    DISALLOW_COPY_AND_ASSIGN(VideoUtil);
-};
+desktop::Rect parseRect(const proto::Rect& rect);
+void serializeRect(const desktop::Rect& from, proto::Rect* to);
+desktop::PixelFormat parsePixelFormat(const proto::PixelFormat& format);
+void serializePixelFormat(const desktop::PixelFormat& from, proto::PixelFormat* to);
 
 } // namespace codec
 
