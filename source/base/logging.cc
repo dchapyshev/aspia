@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,11 +17,10 @@
 //
 
 #include "base/logging.h"
+
 #include "base/debug.h"
 
 #if defined(OS_WIN)
-#include "base/strings/string_printf.h"
-#include "base/strings/string_util.h"
 #include "base/strings/unicode.h"
 #endif // defined(OS_WIN)
 
@@ -372,47 +371,11 @@ void LogMessage::init(const char* file, int line)
     message_start_ = stream_.str().length();
 }
 
-SystemErrorCode lastSystemErrorCode()
-{
-#if defined(OS_WIN)
-    return ::GetLastError();
-#elif defined(OS_POSIX)
-    return errno;
-#else
-#error Platform support not implemented
-#endif
-}
-
-std::string systemErrorCodeToString(SystemErrorCode error_code)
-{
-#if defined(OS_WIN)
-    constexpr int kErrorMessageBufferSize = 256;
-    wchar_t msgbuf[kErrorMessageBufferSize];
-
-    DWORD len = FormatMessageW(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
-                               nullptr, error_code, 0, msgbuf, _countof(msgbuf), nullptr);
-    if (len)
-    {
-        std::wstring msg = collapseWhitespace(msgbuf, true) +
-            stringPrintf(L" (0x%lX)", error_code);
-        return utf8FromWide(msg);
-    }
-
-    return stringPrintf("Error (0x%lX) while retrieving error. (0x%lX)",
-                        GetLastError(),
-                        error_code);
-#elif (OS_POSIX)
-    return strerror(error_code);
-#else
-#error Platform support not implemented
-#endif
-}
-
 ErrorLogMessage::ErrorLogMessage(const char* file,
                                  int line,
                                  LoggingSeverity severity,
-                                 SystemErrorCode error_code)
-    : error_code_(error_code),
+                                 SystemError error)
+    : error_(error),
       log_message_(file, line, severity)
 {
     // Nothing
@@ -420,7 +383,7 @@ ErrorLogMessage::ErrorLogMessage(const char* file,
 
 ErrorLogMessage::~ErrorLogMessage()
 {
-    stream() << ": " << systemErrorCodeToString(error_code_);
+    stream() << ": " << error_.toString();
 }
 
 void logErrorNotReached(const char* file, int line)

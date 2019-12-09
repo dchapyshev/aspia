@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -20,6 +20,7 @@
 #define BASE__LOGGING_H
 
 #include "base/scoped_clear_last_error.h"
+#include "base/system_error.h"
 
 #include <filesystem>
 #include <sstream>
@@ -188,7 +189,7 @@ bool shouldCreateLogMessage(LoggingSeverity severity);
   LOG_IF(FATAL, !(condition)) << "Assert failed: " #condition ". "
 
 #define PLOG_STREAM(severity) \
-  COMPACT_LOG_EX_ ## severity(ErrorLogMessage, ::base::lastSystemErrorCode()).stream()
+  COMPACT_LOG_EX_ ## severity(ErrorLogMessage, ::base::SystemError::last()).stream()
 
 #define PLOG(severity) \
   LAZY_STREAM(PLOG_STREAM(severity), LOG_IS_ON(severity))
@@ -526,24 +527,11 @@ public:
     void operator&(std::ostream&) { }
 };
 
-#if defined(OS_WIN)
-using SystemErrorCode = unsigned long;
-#elif defined(OS_POSIX)
-using SystemErrorCode = int;
-#else
-#error Platform support not implemented
-#endif
-
-// Alias for ::GetLastError() on Windows and errno on POSIX. Avoids having to pull in Windows.h
-// just for GetLastError() and DWORD.
-SystemErrorCode lastSystemErrorCode();
-std::string systemErrorCodeToString(SystemErrorCode error_code);
-
 // Appends a formatted system message of the GetLastError() type.
 class ErrorLogMessage
 {
 public:
-    ErrorLogMessage(const char* file, int line, LoggingSeverity severity, SystemErrorCode err);
+    ErrorLogMessage(const char* file, int line, LoggingSeverity severity, SystemError error);
 
     // Appends the error message before destructing the encapsulated class.
     ~ErrorLogMessage();
@@ -551,7 +539,7 @@ public:
     std::ostream& stream() { return log_message_.stream(); }
 
 private:
-    SystemErrorCode error_code_;
+    SystemError error_;
     LogMessage log_message_;
 
     DISALLOW_COPY_AND_ASSIGN(ErrorLogMessage);

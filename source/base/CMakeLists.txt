@@ -52,6 +52,8 @@ list(APPEND SOURCE_BASE
     sys_info.cc
     sys_info.h
     sys_info_win.cc
+    system_error.cc
+    system_error.h
     task_runner.h
     version.cc
     version.h

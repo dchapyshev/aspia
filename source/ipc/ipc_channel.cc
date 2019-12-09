@@ -153,7 +153,7 @@ bool Channel::connect(std::u16string_view channel_id)
         if (error_code != ERROR_PIPE_BUSY)
         {
             LOG(LS_WARNING) << "Failed to connect to the named pipe: "
-                            << base::systemErrorCodeToString(error_code);
+                            << base::SystemError(error_code).toString();
             return false;
         }
 
