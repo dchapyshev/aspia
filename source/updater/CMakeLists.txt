@@ -58,7 +58,7 @@ if(Qt5LinguistTools_FOUND)
         ${PROJECT_SOURCE_DIR}/updater/*.h
         ${PROJECT_SOURCE_DIR}/updater/*.ui)
 
-    qt5_create_translation(TS_UPDATER_UPDATE ${UPDATER_TR_SOURCES} ${UPDATER_TS_FILES})
+    create_translation(TS_UPDATER_UPDATE ${UPDATER_TR_SOURCES} ${UPDATER_TS_FILES})
     add_custom_target(aspia_updater_ts_update DEPENDS ${TS_UPDATER_UPDATE})
 else()
     message(WARNING "Qt5 linguist tools not found. Internationalization support will be disabled.")
