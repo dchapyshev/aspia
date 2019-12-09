@@ -927,7 +927,7 @@
         <translation type="unfinished">8 Farben (3 Bit)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="150"/>
+        <location filename="../ui/desktop_config_dialog.cc" line="149"/>
         <source>Compression ratio: %1</source>
         <translation type="unfinished">Kompressionsrate: %1</translation>
     </message>

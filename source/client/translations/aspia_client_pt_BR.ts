@@ -803,7 +803,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="150"/>
+        <location filename="../ui/desktop_config_dialog.cc" line="149"/>
         <source>Compression ratio: %1</source>
         <translation type="unfinished"></translation>
     </message>

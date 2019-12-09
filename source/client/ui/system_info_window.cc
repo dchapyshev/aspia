@@ -375,8 +375,8 @@ void SystemInfoWindow::setSystemInfo(const proto::SystemInfo& system_info)
             if (!adapter.adapter_name().empty())
                 group << mk(tr("Adapter Name"), adapter.adapter_name());
 
-            if (!adapter.interface().empty())
-                group << mk(tr("Interface Type"), adapter.interface());
+            if (!adapter.iface().empty())
+                group << mk(tr("Interface Type"), adapter.iface());
 
             if (adapter.speed())
                 group << mk(tr("Connection Speed"), speedToString(adapter.speed()));

@@ -93,6 +93,7 @@ FileTransfer::FileTransfer(std::shared_ptr<base::TaskRunner>& io_task_runner,
       transfer_window_proxy_(transfer_window_proxy),
       task_consumer_proxy_(task_consumer_proxy),
       task_producer_proxy_(std::make_shared<common::FileTaskProducerProxy>(this)),
+      cancel_timer_(io_task_runner),
       type_(type)
 {
     // Nothing
@@ -174,8 +175,7 @@ void FileTransfer::stop()
     else
     {
         is_canceled_ = true;
-        cancel_timer_.start(
-            io_task_runner_, std::chrono::seconds(5), std::bind(&FileTransfer::onFinished, this));
+        cancel_timer_.start(std::chrono::seconds(5), std::bind(&FileTransfer::onFinished, this));
     }
 }
 

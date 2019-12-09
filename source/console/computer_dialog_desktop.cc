@@ -69,9 +69,7 @@ void ComputerDialogDesktop::restoreSettings(
     combo_codec->setCurrentIndex(current_codec);
     onCodecChanged(current_codec);
 
-    desktop::PixelFormat pixel_format =
-        codec::VideoUtil::fromVideoPixelFormat(config.pixel_format());
-
+    desktop::PixelFormat pixel_format = codec::parsePixelFormat(config.pixel_format());
     ColorDepth color_depth;
 
     if (pixel_format.isEqual(desktop::PixelFormat::ARGB()))
@@ -159,7 +157,7 @@ void ComputerDialogDesktop::saveSettings(proto::DesktopConfig* config)
                 break;
         }
 
-        codec::VideoUtil::toVideoPixelFormat(pixel_format, config->mutable_pixel_format());
+        codec::serializePixelFormat(pixel_format, config->mutable_pixel_format());
 
         config->set_compress_ratio(ui.slider_compression_ratio->value());
     }

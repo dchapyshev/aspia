@@ -64,8 +64,7 @@ void ConfigFactory::setDefaultDesktopManageConfig(proto::DesktopConfig* config)
     config->set_compress_ratio(kDefCompressRatio);
     config->set_update_interval(kDefUpdateInterval);
 
-    codec::VideoUtil::toVideoPixelFormat(
-        desktop::PixelFormat::RGB565(), config->mutable_pixel_format());
+    codec::serializePixelFormat(desktop::PixelFormat::RGB565(), config->mutable_pixel_format());
 }
 
 // static
@@ -81,8 +80,7 @@ void ConfigFactory::setDefaultDesktopViewConfig(proto::DesktopConfig* config)
     config->set_compress_ratio(kDefCompressRatio);
     config->set_update_interval(kDefUpdateInterval);
 
-    codec::VideoUtil::toVideoPixelFormat(
-        desktop::PixelFormat::RGB565(), config->mutable_pixel_format());
+    codec::serializePixelFormat(desktop::PixelFormat::RGB565(), config->mutable_pixel_format());
 }
 
 // static
