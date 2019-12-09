@@ -154,7 +154,7 @@
     </message>
 </context>
 <context>
-    <name>Settings</name>
+    <name>SettingsUtil</name>
     <message>
         <source>Information</source>
         <translation type="unfinished"></translation>

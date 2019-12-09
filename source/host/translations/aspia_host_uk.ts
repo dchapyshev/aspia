@@ -20,12 +20,12 @@
         <translation type="vanished">Запустити оновлення програми.</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="95"/>
+        <location filename="../host_main.cc" line="96"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="96"/>
+        <location filename="../host_main.cc" line="97"/>
         <source>Export and import parameters can not be specified together.</source>
         <translation>Параметри імпорту і експорту не можуть бути задані одночасно.</translation>
     </message>
@@ -286,26 +286,20 @@
 <context>
     <name>Settings</name>
     <message>
-        <location filename="../host_settings.cc" line="53"/>
-        <location filename="../host_settings.cc" line="69"/>
         <source>Information</source>
-        <translation>Інформація</translation>
+        <translation type="vanished">Інформація</translation>
     </message>
     <message>
-        <location filename="../host_settings.cc" line="54"/>
         <source>The configuration was successfully imported.</source>
-        <translation>Конфігурацію імпортовано успішно.</translation>
+        <translation type="vanished">Конфігурацію імпортовано успішно.</translation>
     </message>
     <message>
-        <location filename="../host_settings.cc" line="70"/>
         <source>The configuration was successfully exported.</source>
-        <translation>Кофігурацію експортовано успішно.</translation>
+        <translation type="vanished">Кофігурацію експортовано успішно.</translation>
     </message>
     <message>
-        <location filename="../host_settings.cc" line="193"/>
-        <location filename="../host_settings.cc" line="206"/>
         <source>Warning</source>
-        <translation>Попередження</translation>
+        <translation type="vanished">Попередження</translation>
     </message>
     <message>
         <source>Could not open source file: %1</source>
@@ -316,14 +310,47 @@
         <translation type="vanished">Неможливо відкрити цільовий файл: %1</translation>
     </message>
     <message>
-        <location filename="../host_settings.cc" line="194"/>
         <source>Unable to read the source file: the file is damaged or has an unknown format.</source>
-        <translation>Неможливо прочитати вихідний файл: файл пошкоджено або формат файлу невідомний.</translation>
+        <translation type="vanished">Неможливо прочитати вихідний файл: файл пошкоджено або формат файлу невідомний.</translation>
     </message>
     <message>
-        <location filename="../host_settings.cc" line="207"/>
         <source>Unable to write the target file.</source>
-        <translation>Неможливо записати цільовий файл.</translation>
+        <translation type="vanished">Неможливо записати цільовий файл.</translation>
+    </message>
+</context>
+<context>
+    <name>SettingsUtil</name>
+    <message>
+        <location filename="../ui/settings_util.cc" line="36"/>
+        <location filename="../ui/settings_util.cc" line="52"/>
+        <source>Information</source>
+        <translation type="unfinished">Інформація</translation>
+    </message>
+    <message>
+        <location filename="../ui/settings_util.cc" line="37"/>
+        <source>The configuration was successfully imported.</source>
+        <translation type="unfinished">Конфігурацію імпортовано успішно.</translation>
+    </message>
+    <message>
+        <location filename="../ui/settings_util.cc" line="53"/>
+        <source>The configuration was successfully exported.</source>
+        <translation type="unfinished">Кофігурацію експортовано успішно.</translation>
+    </message>
+    <message>
+        <location filename="../ui/settings_util.cc" line="74"/>
+        <location filename="../ui/settings_util.cc" line="87"/>
+        <source>Warning</source>
+        <translation type="unfinished">Попередження</translation>
+    </message>
+    <message>
+        <location filename="../ui/settings_util.cc" line="75"/>
+        <source>Unable to read the source file: the file is damaged or has an unknown format.</source>
+        <translation type="unfinished">Неможливо прочитати вихідний файл: файл пошкоджено або формат файлу невідомний.</translation>
+    </message>
+    <message>
+        <location filename="../ui/settings_util.cc" line="88"/>
+        <source>Unable to write the target file.</source>
+        <translation type="unfinished">Неможливо записати цільовий файл.</translation>
     </message>
 </context>
 <context>
@@ -362,125 +389,125 @@
 <context>
     <name>host::ConfigDialog</name>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="155"/>
-        <location filename="../ui/host_config_dialog.cc" line="232"/>
-        <location filename="../ui/host_config_dialog.cc" line="285"/>
+        <location filename="../ui/host_config_dialog.cc" line="157"/>
+        <location filename="../ui/host_config_dialog.cc" line="234"/>
+        <location filename="../ui/host_config_dialog.cc" line="287"/>
         <source>Confirmation</source>
         <translation>Підтвердження</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="156"/>
+        <location filename="../ui/host_config_dialog.cc" line="158"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation>Ви впевнені, що хочете видалити користувача &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="218"/>
+        <location filename="../ui/host_config_dialog.cc" line="220"/>
         <source>Import</source>
         <translation>Імпорт</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="218"/>
-        <location filename="../ui/host_config_dialog.cc" line="248"/>
+        <location filename="../ui/host_config_dialog.cc" line="220"/>
+        <location filename="../ui/host_config_dialog.cc" line="250"/>
         <source>XML-files (*.xml)</source>
         <translation>XML-файли (*.xml)</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="227"/>
-        <location filename="../ui/host_config_dialog.cc" line="280"/>
+        <location filename="../ui/host_config_dialog.cc" line="229"/>
+        <location filename="../ui/host_config_dialog.cc" line="282"/>
         <source>Service configuration changed. For the changes to take effect, you must restart the service. Restart the service now?</source>
         <translation>Налаштування сервісу замінено. Для примінення нових налаштувань потрібно перезапустити сервіс. Перезапустити сервіс зараз?</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="248"/>
+        <location filename="../ui/host_config_dialog.cc" line="250"/>
         <source>Export</source>
         <translation>Експорт</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="267"/>
+        <location filename="../ui/host_config_dialog.cc" line="269"/>
         <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
         <translation>Неможливо записати налаштування.Переконайтеся, що у вас є відповідні права для запису.</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="270"/>
-        <location filename="../ui/host_config_dialog.cc" line="452"/>
-        <location filename="../ui/host_config_dialog.cc" line="471"/>
-        <location filename="../ui/host_config_dialog.cc" line="486"/>
-        <location filename="../ui/host_config_dialog.cc" line="496"/>
-        <location filename="../ui/host_config_dialog.cc" line="512"/>
-        <location filename="../ui/host_config_dialog.cc" line="522"/>
+        <location filename="../ui/host_config_dialog.cc" line="272"/>
+        <location filename="../ui/host_config_dialog.cc" line="454"/>
+        <location filename="../ui/host_config_dialog.cc" line="473"/>
+        <location filename="../ui/host_config_dialog.cc" line="488"/>
+        <location filename="../ui/host_config_dialog.cc" line="498"/>
+        <location filename="../ui/host_config_dialog.cc" line="514"/>
+        <location filename="../ui/host_config_dialog.cc" line="524"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="386"/>
+        <location filename="../ui/host_config_dialog.cc" line="388"/>
         <source>Remove</source>
         <translation>Видалити</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="395"/>
+        <location filename="../ui/host_config_dialog.cc" line="397"/>
         <source>Started</source>
         <translation>Розпочато</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="396"/>
+        <location filename="../ui/host_config_dialog.cc" line="398"/>
         <source>Stop</source>
         <translation>Зупинити</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="401"/>
+        <location filename="../ui/host_config_dialog.cc" line="403"/>
         <source>Not started</source>
         <translation>Не розпочато</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="402"/>
-        <location filename="../ui/host_config_dialog.cc" line="409"/>
-        <location filename="../ui/host_config_dialog.cc" line="422"/>
+        <location filename="../ui/host_config_dialog.cc" line="404"/>
+        <location filename="../ui/host_config_dialog.cc" line="411"/>
+        <location filename="../ui/host_config_dialog.cc" line="424"/>
         <source>Start</source>
         <translation>Почати</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="408"/>
+        <location filename="../ui/host_config_dialog.cc" line="410"/>
         <source>Installed</source>
         <translation>Встановлено</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="419"/>
+        <location filename="../ui/host_config_dialog.cc" line="421"/>
         <source>Not installed</source>
         <translation>Не встановлено</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="421"/>
+        <location filename="../ui/host_config_dialog.cc" line="423"/>
         <source>Install</source>
         <translation>Встановити</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="426"/>
+        <location filename="../ui/host_config_dialog.cc" line="428"/>
         <source>Current state: %1</source>
         <translation>Поточний стан: %1</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="453"/>
+        <location filename="../ui/host_config_dialog.cc" line="455"/>
         <source>The service could not be installed.</source>
         <translation>Неможливо встановити службу.</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="472"/>
+        <location filename="../ui/host_config_dialog.cc" line="474"/>
         <source>The service could not be removed.</source>
         <translation>Неможливо видалити службу.</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="487"/>
-        <location filename="../ui/host_config_dialog.cc" line="513"/>
+        <location filename="../ui/host_config_dialog.cc" line="489"/>
+        <location filename="../ui/host_config_dialog.cc" line="515"/>
         <source>Could not access the service.</source>
         <translation>Немає доступу до служби.</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="497"/>
+        <location filename="../ui/host_config_dialog.cc" line="499"/>
         <source>The service could not be started.</source>
         <translation>Неможливо запустити службу.</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="523"/>
+        <location filename="../ui/host_config_dialog.cc" line="525"/>
         <source>The service could not be stopped.</source>
         <translation>Неможливо зупинити службу.</translation>
     </message>
