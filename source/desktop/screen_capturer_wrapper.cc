@@ -29,8 +29,8 @@
 
 namespace desktop {
 
-ScreenCapturerWrapper::ScreenCapturerWrapper(uint32_t flags)
-    : flags_(flags)
+ScreenCapturerWrapper::ScreenCapturerWrapper(Delegate* delegate)
+    : delegate_(delegate)
 {
     switchToInputDesktop();
     atDesktopSwitch();
@@ -43,33 +43,29 @@ ScreenCapturerWrapper::ScreenCapturerWrapper(uint32_t flags)
 
 ScreenCapturerWrapper::~ScreenCapturerWrapper() = default;
 
-int ScreenCapturerWrapper::screenCount()
+void ScreenCapturerWrapper::selectScreen(ScreenCapturer::ScreenId screen_id)
 {
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
 
-    return capturer_->screenCount();
+    if (capturer_->selectScreen(screen_id))
+    {
+        ScreenCapturer::ScreenList screens;
+
+        if (capturer_->screenList(&screens))
+            delegate_->onScreenListChanged(screens, screen_id);
+    }
 }
 
-bool ScreenCapturerWrapper::screenList(ScreenCapturer::ScreenList* screens)
-{
-    DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
-
-    return capturer_->screenList(screens);
-}
-
-bool ScreenCapturerWrapper::selectScreen(ScreenCapturer::ScreenId screen_id)
-{
-    DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
-
-    return capturer_->selectScreen(screen_id);
-}
-
-std::unique_ptr<SharedFrame> ScreenCapturerWrapper::captureFrame()
+void ScreenCapturerWrapper::captureFrame()
 {
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
 
     if (switchToInputDesktop())
         atDesktopSwitch();
+
+    int count = capturer_->screenCount();
+    if (screen_count_ != count)
+        selectScreen(ScreenCapturer::kFullDesktopScreenId);
 
     ScreenCapturer::Error error;
     std::unique_ptr<SharedFrame> frame = capturer_->captureFrame(&error);
@@ -90,13 +86,22 @@ std::unique_ptr<SharedFrame> ScreenCapturerWrapper::captureFrame()
         }
     }
 
-    return frame;
+    delegate_->onScreenCaptured(std::move(frame));
 }
 
-void ScreenCapturerWrapper::setSharedMemoryFactory(
-    std::unique_ptr<ipc::SharedMemoryFactory> shared_memory_factory)
+void ScreenCapturerWrapper::setSharedMemoryFactory(ipc::SharedMemoryFactory* shared_memory_factory)
 {
-    capturer_->setSharedMemoryFactory(std::move(shared_memory_factory));
+    capturer_->setSharedMemoryFactory(shared_memory_factory);
+}
+
+void ScreenCapturerWrapper::enableWallpaper(bool enable)
+{
+    enable_wallpaper_ = enable;
+}
+
+void ScreenCapturerWrapper::enableEffects(bool enable)
+{
+    enable_effects_ = enable;
 }
 
 void ScreenCapturerWrapper::selectCapturer()
@@ -159,10 +164,10 @@ void ScreenCapturerWrapper::atDesktopSwitch()
 {
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
 
-    if (flags_ & DISABLE_EFFECTS)
+    if (!enable_effects_)
         effects_disabler_ = std::make_unique<EffectsDisabler>();
 
-    if (flags_ & DISABLE_WALLPAPER)
+    if (!enable_wallpaper_)
         wallpaper_disabler_ = std::make_unique<WallpaperDisabler>();
 }
 

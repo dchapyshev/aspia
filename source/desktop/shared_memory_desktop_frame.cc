@@ -25,7 +25,7 @@ namespace desktop {
 
 SharedMemoryFrame::SharedMemoryFrame(const Size& size,
                   const PixelFormat& format,
-                  ipc::SharedMemory* shared_memory)
+                  ipc::SharedMemoryBase* shared_memory)
     : Frame(size, format, reinterpret_cast<uint8_t*>(shared_memory->data()), shared_memory)
 {
     // Nothing
@@ -62,7 +62,7 @@ std::unique_ptr<Frame> SharedMemoryFrame::open(
 
 // static
 std::unique_ptr<Frame> SharedMemoryFrame::attach(
-    const Size& size, const PixelFormat& format, std::unique_ptr<ipc::SharedMemory> shared_memory)
+    const Size& size, const PixelFormat& format, std::unique_ptr<ipc::SharedMemoryBase> shared_memory)
 {
     return std::unique_ptr<Frame>(new SharedMemoryFrame(size, format, shared_memory.release()));
 }

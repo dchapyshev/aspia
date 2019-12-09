@@ -25,6 +25,7 @@
 #include <memory>
 
 namespace ipc {
+class SharedMemory;
 class SharedMemoryFactory;
 } // namespace ipc
 

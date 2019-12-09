@@ -24,7 +24,7 @@
 #include "desktop/desktop_region.h"
 
 namespace ipc {
-class SharedMemory;
+class SharedMemoryBase;
 } // namespace ipc
 
 namespace desktop {
@@ -34,7 +34,7 @@ class Frame
 public:
     virtual ~Frame() = default;
 
-    ipc::SharedMemory* sharedMemory() const { return shared_memory_; }
+    ipc::SharedMemoryBase* sharedMemory() const { return shared_memory_; }
 
     uint8_t* frameDataAtPos(const Point& pos) const;
     uint8_t* frameDataAtPos(int x, int y) const;
@@ -63,13 +63,13 @@ protected:
     Frame(const Size& size,
           const PixelFormat& format,
           uint8_t* data,
-          ipc::SharedMemory* shared_memory);
+          ipc::SharedMemoryBase* shared_memory);
 
     // Ownership of the buffers is defined by the classes that inherit from
     // this class. They must guarantee that the buffer is not deleted before
     // the frame is deleted.
     uint8_t* const data_;
-    ipc::SharedMemory* const shared_memory_;
+    ipc::SharedMemoryBase* const shared_memory_;
 
 private:
     const Size size_;

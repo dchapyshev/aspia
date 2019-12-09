@@ -25,7 +25,7 @@ namespace desktop {
 Frame::Frame(const Size& size,
              const PixelFormat& format,
              uint8_t* data,
-             ipc::SharedMemory* shared_memory)
+             ipc::SharedMemoryBase* shared_memory)
     : size_(size),
       format_(format),
       stride_(format.bytesPerPixel() * size.width()),

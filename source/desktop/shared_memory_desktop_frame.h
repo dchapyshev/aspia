@@ -39,12 +39,12 @@ public:
         const Size& size, const PixelFormat& format, int id, ipc::SharedMemoryFactory* shared_memory_factory);
 
     static std::unique_ptr<Frame> attach(
-        const Size& size, const PixelFormat& format, std::unique_ptr<ipc::SharedMemory> shared_memory);
+        const Size& size, const PixelFormat& format, std::unique_ptr<ipc::SharedMemoryBase> shared_memory);
 
 private:
     SharedMemoryFrame(const Size& size,
                       const PixelFormat& format,
-                      ipc::SharedMemory* shared_memory);
+                      ipc::SharedMemoryBase* shared_memory);
 
     DISALLOW_COPY_AND_ASSIGN(SharedMemoryFrame);
 };

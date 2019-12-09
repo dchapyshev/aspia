@@ -31,28 +31,38 @@ class WallpaperDisabler;
 class ScreenCapturerWrapper
 {
 public:
-    explicit ScreenCapturerWrapper(uint32_t flags);
-    ~ScreenCapturerWrapper();
-
-    enum Flags
+    class Delegate
     {
-        DISABLE_EFFECTS = 1,
-        DISABLE_WALLPAPER = 2
+    public:
+        virtual ~Delegate() = default;
+
+        virtual void onScreenListChanged(
+            const ScreenCapturer::ScreenList& list, ScreenCapturer::ScreenId current) = 0;
+        virtual void onScreenCaptured(std::unique_ptr<SharedFrame> frame) = 0;
     };
 
-    int screenCount();
-    bool screenList(ScreenCapturer::ScreenList* screens);
-    bool selectScreen(ScreenCapturer::ScreenId screen_id);
-    std::unique_ptr<SharedFrame> captureFrame();
-    void setSharedMemoryFactory(std::unique_ptr<ipc::SharedMemoryFactory> shared_memory_factory);
+    explicit ScreenCapturerWrapper(Delegate* delegate);
+    ~ScreenCapturerWrapper();
+
+    void selectScreen(ScreenCapturer::ScreenId screen_id);
+    void captureFrame();
+    void setSharedMemoryFactory(ipc::SharedMemoryFactory* shared_memory_factory);
+    void enableWallpaper(bool enable);
+    void enableEffects(bool enable);
 
 private:
     void selectCapturer();
     bool switchToInputDesktop();
     void atDesktopSwitch();
+    void doSelectScreen();
 
-    const uint32_t flags_;
+    Delegate* delegate_;
+
     base::ScopedThreadDesktop desktop_;
+
+    bool enable_effects_ = true;
+    bool enable_wallpaper_ = true;
+    int screen_count_ = 0;
 
     std::unique_ptr<ScreenCapturer> capturer_;
     std::unique_ptr<EffectsDisabler> effects_disabler_;

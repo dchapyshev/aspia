@@ -57,7 +57,7 @@ public:
     virtual bool selectScreen(ScreenId screen_id) = 0;
     virtual std::unique_ptr<SharedFrame> captureFrame(Error* error) = 0;
 
-    void setSharedMemoryFactory(std::unique_ptr<ipc::SharedMemoryFactory> shared_memory_factory);
+    void setSharedMemoryFactory(ipc::SharedMemoryFactory* shared_memory_factory);
     ipc::SharedMemoryFactory* sharedMemoryFactory() const;
 
 protected:
@@ -65,7 +65,7 @@ protected:
     virtual void reset() = 0;
 
 private:
-    std::unique_ptr<ipc::SharedMemoryFactory> shared_memory_factory_;
+    ipc::SharedMemoryFactory* shared_memory_factory_;
 };
 
 } // namespace desktop

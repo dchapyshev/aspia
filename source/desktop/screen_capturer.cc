@@ -22,15 +22,14 @@
 
 namespace desktop {
 
-void ScreenCapturer::setSharedMemoryFactory(
-    std::unique_ptr<ipc::SharedMemoryFactory> shared_memory_factory)
+void ScreenCapturer::setSharedMemoryFactory(ipc::SharedMemoryFactory* shared_memory_factory)
 {
-    shared_memory_factory_ = std::move(shared_memory_factory);
+    shared_memory_factory_ = shared_memory_factory;
 }
 
 ipc::SharedMemoryFactory* ScreenCapturer::sharedMemoryFactory() const
 {
-    return shared_memory_factory_.get();
+    return shared_memory_factory_;
 }
 
 } // namespace desktop
