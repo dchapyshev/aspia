@@ -32,10 +32,10 @@ namespace ipc {
 
 class SharedMemoryFactoryProxy;
 
-class SharedMemory
+class SharedMemoryBase
 {
 public:
-    ~SharedMemory();
+    virtual ~SharedMemoryBase() = default;
 
     enum class Mode
     {
@@ -51,14 +51,25 @@ public:
 
     static const Handle kInvalidHandle;
 
+    virtual void* data()  = 0;
+    virtual Handle handle() const = 0;
+    virtual int id() const = 0;
+};
+
+class SharedMemory : public SharedMemoryBase
+{
+public:
+    virtual ~SharedMemory();
+
     static std::unique_ptr<SharedMemory> create(
         Mode mode, size_t size, std::shared_ptr<SharedMemoryFactoryProxy> factory_proxy = nullptr);
     static std::unique_ptr<SharedMemory> open(
         Mode mode, int id, std::shared_ptr<SharedMemoryFactoryProxy> factory_proxy = nullptr);
 
-    void* data() { return data_; }
-    Handle handle() const { return handle_.get(); }
-    int id() const { return id_; }
+    // SharedMemoryBase implementation.
+    void* data() override { return data_; }
+    Handle handle() const override { return handle_.get(); }
+    int id() const override { return id_; }
 
 private:
     SharedMemory(int id,
