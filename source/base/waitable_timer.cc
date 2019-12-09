@@ -109,18 +109,21 @@ void WaitableTimer::Impl::onSignal()
         signal_callback_();
 }
 
-WaitableTimer::WaitableTimer() = default;
+WaitableTimer::WaitableTimer(std::shared_ptr<TaskRunner>& task_runner)
+    : task_runner_(task_runner)
+{
+    DCHECK(task_runner_);
+}
 
 WaitableTimer::~WaitableTimer()
 {
     stop();
 }
 
-void WaitableTimer::start(std::shared_ptr<TaskRunner>& task_runner,
-                          const std::chrono::milliseconds& time_delta,
+void WaitableTimer::start(const std::chrono::milliseconds& time_delta,
                           TimeoutCallback signal_callback)
 {
-    impl_ = std::make_shared<Impl>(task_runner, time_delta, std::move(signal_callback));
+    impl_ = std::make_shared<Impl>(task_runner_, time_delta, std::move(signal_callback));
 }
 
 void WaitableTimer::stop()
