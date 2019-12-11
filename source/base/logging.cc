@@ -19,6 +19,7 @@
 #include "base/logging.h"
 
 #include "base/debug.h"
+#include "base/system_time.h"
 
 #if defined(OS_WIN)
 #include "base/strings/unicode.h"
@@ -29,10 +30,6 @@
 #include <mutex>
 #include <ostream>
 #include <thread>
-
-#if defined(OS_WIN)
-#include <Windows.h>
-#endif // defined(OS_WIN)
 
 namespace base {
 
@@ -76,50 +73,6 @@ void removeOldFiles(const std::filesystem::path& path,
     }
 }
 
-std::string logFileName()
-{
-    std::ostringstream stream;
-
-#if defined(OS_WIN)
-    SYSTEMTIME local_time;
-    GetLocalTime(&local_time);
-
-    stream << std::setfill('0')
-           << std::setw(4) << local_time.wYear
-           << std::setw(2) << local_time.wMonth
-           << std::setw(2) << local_time.wDay
-           << '-'
-           << std::setw(2) << local_time.wHour
-           << std::setw(2) << local_time.wMinute
-           << std::setw(2) << local_time.wSecond
-           << '.'
-           << std::setw(3) << local_time.wMilliseconds;
-#elif defined(OS_POSIX)
-    timeval tv;
-    gettimeofday(&tv, nullptr);
-    time_t t = tv.tv_sec;
-    struct tm local_time;
-    localtime_r(&t, &local_time);
-    struct tm* tm_time = &local_time;
-
-    stream_ << std::setfill('0')
-            << std::setw(4) << 1900 + tm_time->tm_year
-            << std::setw(2) << 1 + tm_time->tm_mon
-            << std::setw(2) << tm_time->tm_mday
-            << '-'
-            << std::setw(2) << tm_time->tm_hour
-            << std::setw(2) << tm_time->tm_min
-            << std::setw(2) << tm_time->tm_sec
-            << '.'
-            << std::setw(6) << tv.tv_usec;
-#else
-#error Platform support not implemented
-#endif
-
-    stream << ".log";
-    return stream.str();
-}
-
 std::filesystem::path defaultLogFileDir()
 {
     std::error_code error_code;
@@ -131,7 +84,22 @@ std::filesystem::path defaultLogFileDir()
     return path;
 }
 
-bool initLoggingImpl(const LoggingSettings& settings)
+} // namespace
+
+// This is never instantiated, it's just used for EAT_STREAM_PARAMETERS to have
+// an object of the correct type on the LHS of the unused part of the ternary
+// operator.
+std::ostream* g_swallow_stream;
+
+LoggingSettings::LoggingSettings()
+    : destination(LOG_DEFAULT),
+      min_log_level(LS_INFO),
+      max_log_age(7)
+{
+    // Nothing
+}
+
+bool initLogging(const LoggingSettings& settings)
 {
     std::scoped_lock lock(g_log_file_lock);
     g_log_file.close();
@@ -159,53 +127,43 @@ bool initLoggingImpl(const LoggingSettings& settings)
             return false;
     }
 
+    SystemTime time = SystemTime::now();
+
+    std::ostringstream file_name_stream;
+    file_name_stream << std::setfill('0')
+                     << std::setw(4) << time.year()
+                     << std::setw(2) << time.month()
+                     << std::setw(2) << time.day()
+                     << '-'
+                     << std::setw(2) << time.hour()
+                     << std::setw(2) << time.minute()
+                     << std::setw(2) << time.second()
+                     << '.'
+                     << std::setw(3) << time.millisecond()
+                     << ".log";
+
     std::filesystem::path file_path(file_dir);
-    file_path.append(logFileName());
+    file_path.append(file_name_stream.str());
 
     g_log_file.open(file_path);
     if (!g_log_file.is_open())
         return false;
 
-    std::filesystem::file_time_type current_time =
+    std::filesystem::file_time_type file_time =
         std::filesystem::last_write_time(file_path, error_code);
     if (!error_code)
-        removeOldFiles(file_dir, current_time, settings.max_log_age);
+        removeOldFiles(file_dir, file_time, settings.max_log_age);
 
-    return true;
-}
-
-void shutdownLoggingImpl()
-{
-    std::scoped_lock lock(g_log_file_lock);
-    g_log_file.close();
-}
-
-} // namespace
-
-// This is never instantiated, it's just used for EAT_STREAM_PARAMETERS to have
-// an object of the correct type on the LHS of the unused part of the ternary
-// operator.
-std::ostream* g_swallow_stream;
-
-LoggingSettings::LoggingSettings()
-    : destination(LOG_DEFAULT),
-      min_log_level(LS_INFO),
-      max_log_age(7)
-{
-    // Nothing
-}
-
-bool initLogging(const LoggingSettings& settings)
-{
-    bool result = initLoggingImpl(settings);
     LOG(LS_INFO) << "Logging started";
-    return result;
+    return true;
 }
 
 void shutdownLogging()
 {
     LOG(LS_INFO) << "Logging finished";
-    shutdownLoggingImpl();
+
+    std::scoped_lock lock(g_log_file_lock);
+    g_log_file.close();
 }
 
 bool shouldCreateLogMessage(LoggingSeverity severity)
@@ -298,9 +256,7 @@ LogMessage::~LogMessage()
 
     if ((g_logging_destination & LOG_TO_SYSTEM_DEBUG_LOG) != 0)
     {
-#if defined(OS_WIN)
-        OutputDebugStringA(message.c_str());
-#endif // defined(OS_WIN)
+        debugPrint(message.data());
 
         fwrite(message.data(), message.size(), 1, stderr);
         fflush(stderr);
@@ -338,35 +294,16 @@ void LogMessage::init(const char* file, int line)
     if (last_slash_pos != std::string_view::npos)
         filename.remove_prefix(last_slash_pos + 1);
 
-#if defined(OS_WIN)
-    SYSTEMTIME local_time;
-    GetLocalTime(&local_time);
+    SystemTime time = SystemTime::now();
 
     stream_ << std::setfill('0')
-            << std::setw(2) << local_time.wHour   << ':'
-            << std::setw(2) << local_time.wMinute << ':'
-            << std::setw(2) << local_time.wSecond << '.'
-            << std::setw(3) << local_time.wMilliseconds;
-#elif defined(OS_POSIX)
-    timeval tv;
-    gettimeofday(&tv, nullptr);
-    time_t t = tv.tv_sec;
-    struct tm local_time;
-    localtime_r(&t, &local_time);
-    struct tm* tm_time = &local_time;
-
-    stream_ << std::setfill('0')
-            << std::setw(2) << tm_time->tm_hour << ':'
-            << std::setw(2) << tm_time->tm_min  << ':'
-            << std::setw(2) << tm_time->tm_sec  << '.'
-            << std::setw(6) << tv.tv_usec;
-#else
-#error Platform support not implemented
-#endif
-
-    stream_ << ' ' << std::this_thread::get_id();
-    stream_ << ' ' << severityName(severity_);
-    stream_ << ' ' << filename.data() << ":" << line << "] ";
+            << std::setw(2) << time.hour()        << ':'
+            << std::setw(2) << time.minute()      << ':'
+            << std::setw(2) << time.second()      << '.'
+            << std::setw(3) << time.millisecond() << ' '
+            << std::this_thread::get_id()         << ' '
+            << severityName(severity_)            << ' '
+            << filename.data() << ":" << line << "] ";
 
     message_start_ = stream_.str().length();
 }

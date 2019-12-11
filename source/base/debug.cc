@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,9 +17,23 @@
 //
 
 #include "base/debug.h"
+
 #include "build/build_config.h"
 
+#if defined(OS_WIN)
+#include <Windows.h>
+#endif
+
 namespace base {
+
+void debugPrint(const char* str)
+{
+#if defined(OS_WIN)
+    OutputDebugStringA(str);
+#else
+#warning Platform support not implemented
+#endif
+}
 
 void debugBreak()
 {

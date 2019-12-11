@@ -253,8 +253,8 @@ private:
 //   CHECK_EQ(2, a);
 #define CHECK_OP(name, op, val1, val2)                                                           \
   switch (0) case 0: default:                                                                    \
-  if (::base::CheckOpResult true_if_passed =                                                    \
-      ::base::check##name##Impl((val1), (val2), #val1 " " #op " " #val2));                      \
+  if (::base::CheckOpResult true_if_passed =                                                     \
+      ::base::check##name##Impl((val1), (val2), #val1 " " #op " " #val2));                       \
   else                                                                                           \
       ::base::LogMessage(__FILE__, __LINE__, true_if_passed.message()).stream()
 
@@ -336,14 +336,14 @@ std::string* makeCheckOpString(const std::string& v1, const std::string& v2, con
         if ((v1 op v2))                                                                          \
             return nullptr;                                                                      \
         else                                                                                     \
-            return ::base::makeCheckOpString(v1, v2, names);                                    \
+            return ::base::makeCheckOpString(v1, v2, names);                                     \
     }                                                                                            \
     inline std::string* check##name##Impl(int v1, int v2, const char* names)                     \
     {                                                                                            \
         if ((v1 op v2))                                                                          \
             return nullptr;                                                                      \
         else                                                                                     \
-            return ::base::makeCheckOpString(v1, v2, names);                                    \
+            return ::base::makeCheckOpString(v1, v2, names);                                     \
     }
 
 DEFINE_CHECK_OP_IMPL(EQ, ==)
@@ -420,12 +420,12 @@ DEFINE_CHECK_OP_IMPL(GT, > )
 
 #define DCHECK_OP(name, op, val1, val2)                                                          \
     switch (0) case 0: default:                                                                  \
-    if (::base::CheckOpResult true_if_passed =                                                  \
+    if (::base::CheckOpResult true_if_passed =                                                   \
         DCHECK_IS_ON() ?                                                                         \
-        ::base::check##name##Impl((val1), (val2),  #val1 " " #op " " #val2) : nullptr);         \
+        ::base::check##name##Impl((val1), (val2),  #val1 " " #op " " #val2) : nullptr);          \
     else                                                                                         \
-        ::base::LogMessage(__FILE__, __LINE__, ::base::LS_DCHECK,                              \
-                            true_if_passed.message()).stream()
+        ::base::LogMessage(__FILE__, __LINE__, ::base::LS_DCHECK,                                \
+                           true_if_passed.message()).stream()
 
 #else  // DCHECK_IS_ON()
 
@@ -437,8 +437,8 @@ DEFINE_CHECK_OP_IMPL(GT, > )
 // |val1| and |val2| appear twice in this version of the macro expansion, this is OK, since the
 // expression is never actually evaluated.
 #define DCHECK_OP(name, op, val1, val2)                                                          \
-  EAT_STREAM_PARAMETERS << (::base::makeCheckOpValueString(::base::g_swallow_stream, val1),    \
-                            ::base::makeCheckOpValueString(::base::g_swallow_stream, val2),    \
+  EAT_STREAM_PARAMETERS << (::base::makeCheckOpValueString(::base::g_swallow_stream, val1),      \
+                            ::base::makeCheckOpValueString(::base::g_swallow_stream, val2),      \
                             (val1)op(val2))
 
 #endif  // DCHECK_IS_ON()
