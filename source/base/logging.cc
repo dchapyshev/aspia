@@ -84,22 +84,7 @@ std::filesystem::path defaultLogFileDir()
     return path;
 }
 
-} // namespace
-
-// This is never instantiated, it's just used for EAT_STREAM_PARAMETERS to have
-// an object of the correct type on the LHS of the unused part of the ternary
-// operator.
-std::ostream* g_swallow_stream;
-
-LoggingSettings::LoggingSettings()
-    : destination(LOG_DEFAULT),
-      min_log_level(LS_INFO),
-      max_log_age(7)
-{
-    // Nothing
-}
-
-bool initLogging(const LoggingSettings& settings)
+bool initLoggingImpl(const LoggingSettings& settings)
 {
     std::scoped_lock lock(g_log_file_lock);
     g_log_file.close();
@@ -153,6 +138,29 @@ bool initLogging(const LoggingSettings& settings)
         std::filesystem::last_write_time(file_path, error_code);
     if (!error_code)
         removeOldFiles(file_dir, file_time, settings.max_log_age);
+
+    return true;
+}
+
+} // namespace
+
+// This is never instantiated, it's just used for EAT_STREAM_PARAMETERS to have
+// an object of the correct type on the LHS of the unused part of the ternary
+// operator.
+std::ostream* g_swallow_stream;
+
+LoggingSettings::LoggingSettings()
+    : destination(LOG_DEFAULT),
+      min_log_level(LS_INFO),
+      max_log_age(7)
+{
+    // Nothing
+}
+
+bool initLogging(const LoggingSettings& settings)
+{
+    if (!initLoggingImpl(settings))
+        return false;
 
     LOG(LS_INFO) << "Logging started";
     return true;
