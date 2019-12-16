@@ -22,6 +22,7 @@
 #include "client/desktop_control_proxy.h"
 #include "client/desktop_window.h"
 #include "client/desktop_window_proxy.h"
+#include "client/config_factory.h"
 #include "codec/cursor_decoder.h"
 #include "codec/video_decoder.h"
 #include "codec/video_util.h"
@@ -105,6 +106,8 @@ void ClientDesktop::onMessageWritten()
 void ClientDesktop::setDesktopConfig(const proto::DesktopConfig& desktop_config)
 {
     desktop_config_ = desktop_config;
+
+    ConfigFactory::fixupDesktopConfig(&desktop_config_);
 
     // If the session is not already running, then we do not need to send the configuration.
     if (!started_)
@@ -231,7 +234,7 @@ void ClientDesktop::readVideoPacket(const proto::VideoPacket& packet)
 
     if (packet.has_format())
     {
-        desktop::Rect screen_rect = codec::parseRect(packet.format().screen_rect());
+        const proto::Rect& screen_rect = packet.format().screen_rect();
 
         static const int kMaxValue = std::numeric_limits<uint16_t>::max();
         static const int kMinValue = -std::numeric_limits<uint16_t>::max();
@@ -250,8 +253,10 @@ void ClientDesktop::readVideoPacket(const proto::VideoPacket& packet)
             return;
         }
 
-        desktop_frame_ = desktop_window_proxy_->allocateFrame(screen_rect.size());
-        desktop_frame_->setTopLeft(screen_rect.topLeft());
+        desktop_frame_ = desktop_window_proxy_->allocateFrame(
+            desktop::Size(screen_rect.width(), screen_rect.height()));
+
+        desktop_frame_->setTopLeft(desktop::Point(screen_rect.x(), screen_rect.y()));
     }
 
     if (!desktop_frame_)
