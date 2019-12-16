@@ -98,7 +98,7 @@ proto::SessionType Client::sessionType() const
 
 void Client::sendMessage(const google::protobuf::MessageLite& message)
 {
-    channel_proxy_->send(common::serializeMessage(message));
+    channel_->send(common::serializeMessage(message));
 }
 
 void Client::onBeforeThreadRunning()
@@ -111,13 +111,12 @@ void Client::onBeforeThreadRunning()
 
     // Create a network channel for messaging.
     channel_ = std::make_unique<net::Channel>();
-    channel_proxy_ = channel_->channelProxy();
 
     // Set the listener for the network channel.
-    channel_proxy_->setListener(this);
+    channel_->setListener(this);
 
     // Now connect to the host.
-    channel_proxy_->connect(config_.address, config_.port);
+    channel_->connect(config_.address, config_.port);
 }
 
 void Client::onAfterThreadRunning()
@@ -134,8 +133,8 @@ void Client::onAfterThreadRunning()
 
 void Client::onConnected()
 {
-    channel_proxy_->setKeepAlive(true, std::chrono::minutes(1), std::chrono::seconds(1));
-    channel_proxy_->setNoDelay(true);
+    channel_->setKeepAlive(true, std::chrono::minutes(1), std::chrono::seconds(1));
+    channel_->setNoDelay(true);
 
     authenticator_ = std::make_unique<Authenticator>();
 
@@ -143,19 +142,20 @@ void Client::onConnected()
     authenticator_->setPassword(config_.password);
     authenticator_->setSessionType(config_.session_type);
 
-    authenticator_->start(channel_proxy_, [this](Authenticator::ErrorCode error_code)
+    authenticator_->start(std::move(channel_), [this](Authenticator::ErrorCode error_code)
     {
         // Authenticator is no longer needed.
         std::unique_ptr<Authenticator> authenticator(std::move(authenticator_));
-
-        // The authenticator takes the listener on itself, we return the receipt of notifications.
-        channel_proxy_->setListener(this);
 
         if (error_code != Authenticator::ErrorCode::SUCCESS)
         {
             status_window_proxy_->onAccessDenied(error_code);
             return;
         }
+
+        // The authenticator takes the listener on itself, we return the receipt of notifications.
+        channel_ = authenticator->takeChannel();
+        channel_->setListener(this);
 
         status_window_proxy_->onConnected();
 
@@ -166,7 +166,7 @@ void Client::onConnected()
         onSessionStarted(authenticator->peerVersion());
 
         // Now the session will receive incoming messages.
-        channel_proxy_->resume();
+        channel_->resume();
     });
 }
 

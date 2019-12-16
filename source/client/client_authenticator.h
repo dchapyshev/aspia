@@ -33,7 +33,7 @@ class MessageEncryptor;
 } // namespace crypto
 
 namespace net {
-class ChannelProxy;
+class Channel;
 } // namespace net
 
 namespace client {
@@ -71,7 +71,9 @@ public:
     // Starts authentication.
     // |callback| is called upon completion. The authenticator guarantees that no code inside it
     // will be executed after call callback (you can remove the authenticator inside this callback).
-    void start(std::shared_ptr<net::ChannelProxy>& channel_proxy, Callback callback);
+    void start(std::unique_ptr<net::Channel> channel, Callback callback);
+
+    std::unique_ptr<net::Channel> takeChannel();
 
 protected:
     // net::Listener implementation.
@@ -105,7 +107,7 @@ private:
 
     State state_ = State::NOT_STARTED;
 
-    std::shared_ptr<net::ChannelProxy> channel_proxy_;
+    std::unique_ptr<net::Channel> channel_;
     Callback callback_;
 
     std::u16string username_;

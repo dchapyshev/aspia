@@ -28,7 +28,7 @@
 #include "crypto/random.h"
 #include "crypto/srp_constants.h"
 #include "crypto/srp_math.h"
-#include "net/network_channel_proxy.h"
+#include "net/network_channel.h"
 
 namespace client {
 
@@ -130,19 +130,24 @@ void Authenticator::setSessionType(proto::SessionType session_type)
     session_type_ = session_type;
 }
 
-void Authenticator::start(std::shared_ptr<net::ChannelProxy>& channel_proxy, Callback callback)
+void Authenticator::start(std::unique_ptr<net::Channel> channel, Callback callback)
 {
-    channel_proxy_ = channel_proxy;
-    callback_ = callback;
+    channel_ = std::move(channel);
+    callback_ = std::move(callback);
 
-    DCHECK(channel_proxy_);
+    DCHECK(channel_);
     DCHECK(callback_);
 
-    channel_proxy_->setListener(this);
-    channel_proxy_->resume();
+    channel_->setListener(this);
+    channel_->resume();
 
     state_ = State::SEND_CLIENT_HELLO;
     sendClientHello();
+}
+
+std::unique_ptr<net::Channel> Authenticator::takeChannel()
+{
+    return std::move(channel_);
 }
 
 void Authenticator::onConnected()
@@ -195,7 +200,7 @@ void Authenticator::onMessageReceived(const base::ByteArray& buffer)
                 }
 
                 // Install the encryptor. Now all sent messages will be encrypted.
-                channel_proxy_->setEncryptor(std::move(message_encryptor));
+                channel_->setEncryptor(std::move(message_encryptor));
 
                 state_ = State::SEND_SESSION_RESPONSE;
                 sendSessionResponse();
@@ -236,7 +241,7 @@ void Authenticator::onMessageWritten()
             // After the decryptor is installed, all incoming messages will be decrypted in it.
             // We do not install an encryptor here because the next message should be sent
             // without encryption.
-            channel_proxy_->setDecryptor(std::move(message_decryptor));
+            channel_->setDecryptor(std::move(message_decryptor));
 
             state_ = State::READ_SESSION_CHALLENGE;
         }
@@ -245,8 +250,6 @@ void Authenticator::onMessageWritten()
         case State::SEND_SESSION_RESPONSE:
         {
             state_ = State::FINISHED;
-            channel_proxy_->pause();
-
             finished(ErrorCode::SUCCESS);
         }
         break;
@@ -263,7 +266,7 @@ void Authenticator::sendClientHello()
     proto::ClientHello client_hello;
     client_hello.set_methods(methods);
 
-    channel_proxy_->send(common::serializeMessage(client_hello));
+    channel_->send(common::serializeMessage(client_hello));
 }
 
 bool Authenticator::readServerHello(const base::ByteArray& buffer)
@@ -296,7 +299,7 @@ void Authenticator::sendIdentify()
     proto::SrpIdentify identify;
     identify.set_username(base::utf8FromUtf16(username_));
 
-    channel_proxy_->send(common::serializeMessage(identify));
+    channel_->send(common::serializeMessage(identify));
 }
 
 bool Authenticator::readServerKeyExchange(const base::ByteArray& buffer)
@@ -356,7 +359,7 @@ void Authenticator::sendClientKeyExchange()
     client_key_exchange.set_a(A_.toStdString());
     client_key_exchange.set_iv(base::toStdString(encrypt_iv_));
 
-    channel_proxy_->send(common::serializeMessage(client_key_exchange));
+    channel_->send(common::serializeMessage(client_key_exchange));
 }
 
 bool Authenticator::readSessionChallenge(const base::ByteArray& buffer)
@@ -386,16 +389,14 @@ void Authenticator::sendSessionResponse()
     proto::SessionResponse response;
     response.set_session_type(session_type_);
 
-    channel_proxy_->send(common::serializeMessage(response));
+    channel_->send(common::serializeMessage(response));
 }
 
 void Authenticator::finished(ErrorCode error_code)
 {
-    if (channel_proxy_)
-        channel_proxy_->setListener(nullptr);
-
-    if (callback_)
-        callback_(error_code);
+    channel_->pause();
+    channel_->setListener(nullptr);
+    callback_(error_code);
 }
 
 } // namespace client

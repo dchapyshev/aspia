@@ -30,7 +30,6 @@ class TaskRunner;
 
 namespace net {
 class Channel;
-class ChannelProxy;
 } // namespace net
 
 namespace client {
@@ -94,7 +93,6 @@ private:
     std::shared_ptr<base::TaskRunner> ui_task_runner_;
 
     std::unique_ptr<net::Channel> channel_;
-    std::shared_ptr<net::ChannelProxy> channel_proxy_;
     std::unique_ptr<Authenticator> authenticator_;
     std::unique_ptr<StatusWindowProxy> status_window_proxy_;
 
