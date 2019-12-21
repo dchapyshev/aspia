@@ -102,7 +102,7 @@ void build(Solution &s)
 
     auto &common = add_lib("common");
     if (common.getBuildSettings().TargetOS.Type == OSType::Windows)
-        common.Public += "Shlwapi.lib"_lib;
+        common.Public += "Shlwapi.lib"_slib;
     common.Public += codec, protocol;
     common.Public += "org.sw.demo.openssl.crypto-*.*.*.*"_dep;
     common.Public += "org.sw.demo.qtproject.qt.base.widgets-*"_dep;
@@ -114,7 +114,7 @@ void build(Solution &s)
     network.Public += crypto, common;
     network.Public += "org.sw.demo.qtproject.qt.base.network-*"_dep;
     if (network.getBuildSettings().TargetOS.Type == OSType::Windows)
-        network.Public += "Setupapi.lib"_lib, "Winspool.lib"_lib;
+        network.Public += "Setupapi.lib"_slib, "Winspool.lib"_slib;
     automoc("org.sw.demo.qtproject.qt.base.tools.moc-*"_dep, network);
 
     auto &updater = add_lib("updater");
@@ -128,7 +128,7 @@ void build(Solution &s)
     host += "host.rc";
     host += "HOST_IMPLEMENTATION"_def;
     if (host.getBuildSettings().TargetOS.Type == OSType::Windows)
-        host.Public += "comsuppw.lib"_lib, "sas.lib"_lib;
+        host.Public += "comsuppw.lib"_slib, "sas.lib"_slib;
     host.Public += common, ipc, updater;
     host.Public += "org.sw.demo.boost.property_tree-1"_dep;
     host.Public += "org.sw.demo.qtproject.qt.base.plugins.platforms.windows-*"_dep;
