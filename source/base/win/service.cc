@@ -273,6 +273,9 @@ Service::~Service() = default;
 
 void Service::exec()
 {
+    message_loop_ = std::make_unique<MessageLoop>(type_);
+    task_runner_ = message_loop_->taskRunner();
+
     std::unique_ptr<ServiceThread> service_thread = std::make_unique<ServiceThread>(this);
 
     // Waiting for the launch ServiceThread::serviceMain.
@@ -289,9 +292,6 @@ void Service::exec()
         if (service_thread->startup_state == ServiceThread::State::ERROR_OCCURRED)
             return;
     }
-
-    message_loop_ = std::make_unique<MessageLoop>(type_);
-    task_runner_ = message_loop_->taskRunner();
 
     // Now we can complete the registration of the service.
     {
