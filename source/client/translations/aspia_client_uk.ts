@@ -718,70 +718,48 @@
 <context>
     <name>client::Channel</name>
     <message>
-        <location filename="../client_channel.cc" line="178"/>
         <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
-        <translation type="unfinished">Виникла помилка з мережею (напр., мережевий кабель випадково від&apos;єднано).</translation>
+        <translation type="obsolete">Виникла помилка з мережею (напр., мережевий кабель випадково від&apos;єднано).</translation>
     </message>
     <message>
-        <location filename="../client_channel.cc" line="182"/>
         <source>Connection was refused by the peer (or timed out).</source>
-        <translation type="unfinished">З&apos;єднання відхилено піром (або час вийшов).</translation>
+        <translation type="obsolete">З&apos;єднання відхилено піром (або час вийшов).</translation>
     </message>
     <message>
-        <location filename="../client_channel.cc" line="186"/>
         <source>Remote host closed the connection.</source>
-        <translation type="unfinished">Віддалений хост закрив з&apos;єднання.</translation>
+        <translation type="obsolete">Віддалений хост закрив з&apos;єднання.</translation>
     </message>
     <message>
-        <location filename="../client_channel.cc" line="190"/>
         <source>Host address was not found.</source>
-        <translation type="unfinished">Адресу хоста не знайдено.</translation>
+        <translation type="obsolete">Адресу хоста не знайдено.</translation>
     </message>
     <message>
-        <location filename="../client_channel.cc" line="194"/>
         <source>Socket operation timed out.</source>
-        <translation type="unfinished">Вийшов час операції сокета.</translation>
+        <translation type="obsolete">Вийшов час операції сокета.</translation>
     </message>
     <message>
-        <location filename="../client_channel.cc" line="198"/>
         <source>Address specified is already in use and was set to be exclusive.</source>
-        <translation type="unfinished">Введена адреса вже використовується і встановлена як унікальна.</translation>
+        <translation type="obsolete">Введена адреса вже використовується і встановлена як унікальна.</translation>
     </message>
     <message>
-        <location filename="../client_channel.cc" line="202"/>
         <source>Address specified does not belong to the host.</source>
-        <translation type="unfinished">Введена адреса не належить хосту.</translation>
+        <translation type="obsolete">Введена адреса не належить хосту.</translation>
     </message>
     <message>
-        <location filename="../client_channel.cc" line="206"/>
-        <location filename="../client_channel.cc" line="241"/>
         <source>An unknown error occurred.</source>
-        <translation type="unfinished">Виникла невідома помилка.</translation>
+        <translation type="obsolete">Виникла невідома помилка.</translation>
     </message>
     <message>
-        <location filename="../client_channel.cc" line="221"/>
-        <source>Authentication successfully completed.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client_channel.cc" line="225"/>
-        <source>Network authentication error.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client_channel.cc" line="229"/>
         <source>Violation of the data exchange protocol.</source>
-        <translation type="unfinished">Порушення в протоколі передачі даних.</translation>
+        <translation type="obsolete">Порушення в протоколі передачі даних.</translation>
     </message>
     <message>
-        <location filename="../client_channel.cc" line="233"/>
         <source>An error occured while authenticating: wrong user name or password.</source>
-        <translation type="unfinished">Виникла помилка під час аутентифікації: невірне ім&apos;я користувача або пароль.</translation>
+        <translation type="obsolete">Виникла помилка під час аутентифікації: невірне ім&apos;я користувача або пароль.</translation>
     </message>
     <message>
-        <location filename="../client_channel.cc" line="237"/>
         <source>Specified session type is not allowed for the user.</source>
-        <translation type="unfinished">Обраний тип сесії не дозволений для користувача.</translation>
+        <translation type="obsolete">Обраний тип сесії не дозволений для користувача.</translation>
     </message>
 </context>
 <context>
