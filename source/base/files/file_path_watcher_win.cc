@@ -97,8 +97,7 @@ FilePathWatcherImpl::FilePathWatcherImpl(std::shared_ptr<TaskRunner>& task_runne
 
 FilePathWatcherImpl::~FilePathWatcherImpl()
 {
-    DCHECK(!taskRunner());
-    DCHECK(taskRunner()->belongsToCurrentThread());
+    DCHECK(!taskRunner() || taskRunner()->belongsToCurrentThread());
 
     if (was_deleted_ptr_)
         *was_deleted_ptr_ = true;
