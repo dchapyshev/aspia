@@ -20,9 +20,9 @@
 
 #include "common/ui/about_dialog.h"
 #include "common/ui/language_action.h"
+#include "host/ui/host_application.h"
 #include "host/ui/host_config_dialog.h"
 #include "host/ui/host_notifier_window.h"
-#include "host/host_application.h"
 #include "host/user_session_process.h"
 #include "qt_base/qt_logging.h"
 #include "qt_base/qt_xml_settings.h"

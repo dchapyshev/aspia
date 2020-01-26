@@ -26,13 +26,21 @@ list(APPEND SOURCE_HOST_CORE
     client_session_desktop.h
     client_session_file_transfer.cc
     client_session_file_transfer.h
-    clipboard_monitor.h
-    clipboard_monitor_ipc.cc
-    clipboard_monitor_ipc.h
-    clipboard_monitor_win.cc
-    clipboard_monitor_win.h
-    host_application.cc
-    host_application.h
+    desktop_agent_main.cc
+    desktop_agent_main.h
+    desktop_session.h
+    desktop_session_manager.cc
+    desktop_session_manager.h
+    desktop_session_agent.cc
+    desktop_session_agent.h
+    desktop_session_fake.cc
+    desktop_session_fake.h
+    desktop_session_ipc.cc
+    desktop_session_ipc.h
+    desktop_session_process.cc
+    desktop_session_process.h
+    desktop_session_proxy.cc
+    desktop_session_proxy.h
     host_authenticator.cc
     host_authenticator.h
     host_authenticator_manager.cc
@@ -42,19 +50,13 @@ list(APPEND SOURCE_HOST_CORE
     host_main.h
     host_server.cc
     host_server.h
-    host_settings.cc
-    host_settings.h
     input_injector.h
-    input_injector_ipc.cc
-    input_injector_ipc.h
     input_injector_win.cc
     input_injector_win.h
-    mouse_cursor_monitor.h
-    screen_controls.h
-    screen_controls_ipc.cc
-    screen_controls_ipc.h
-    screen_controls_win.cc
-    screen_controls_win.h
+    sas_injector.cc
+    sas_injector.h
+    system_settings.cc
+    system_settings.h
     user.cc
     user.h
     user_session.cc
@@ -67,12 +69,16 @@ list(APPEND SOURCE_HOST_CORE
     user_session_process.h
     user_session_process_proxy.cc
     user_session_process_proxy.h
-    video_capturer.h)
+    video_capturer.h
+    video_frame_pump.cc
+    video_frame_pump.h)
 
 list(APPEND SOURCE_HOST_CORE_RESOURCES
     resources/host.qrc)
 
 list(APPEND SOURCE_HOST_CORE_UI
+    ui/host_application.cc
+    ui/host_application.h
     ui/host_config_dialog.cc
     ui/host_config_dialog.h
     ui/host_config_dialog.ui
@@ -82,9 +88,13 @@ list(APPEND SOURCE_HOST_CORE_UI
     ui/host_notifier_window.cc
     ui/host_notifier_window.h
     ui/host_notifier_window.ui
+    ui/settings_util.cc
+    ui/settings_util.h
     ui/user_dialog.cc
     ui/user_dialog.h
     ui/user_dialog.ui
+    ui/user_settings.cc
+    ui/user_settings.h
     ui/user_tree_item.cc
     ui/user_tree_item.h)
 
@@ -138,7 +148,7 @@ if(Qt5LinguistTools_FOUND)
         ${PROJECT_SOURCE_DIR}/host/*.h
         ${PROJECT_SOURCE_DIR}/host/*.ui)
 
-    qt5_create_translation(TS_HOST_UPDATE ${HOST_TR_SOURCES} ${HOST_TS_FILES})
+    create_translation(TS_HOST_UPDATE ${HOST_TR_SOURCES} ${HOST_TS_FILES})
     add_custom_target(aspia_host_ts_update DEPENDS ${TS_HOST_UPDATE})
 else()
     message(WARNING "Qt5 linguist tools not found. Internationalization support will be disabled.")
@@ -153,3 +163,6 @@ add_executable(aspia_host_service win/host_service_entry_point.cc win/host_servi
 set_target_properties(aspia_host_service PROPERTIES LINK_FLAGS "/MANIFEST:NO")
 target_link_libraries(aspia_host_service aspia_host_core)
 
+add_executable(aspia_desktop_agent desktop_agent_entry_point.cc desktop_agent.rc)
+set_target_properties(aspia_desktop_agent PROPERTIES LINK_FLAGS "/MANIFEST:NO")
+target_link_libraries(aspia_desktop_agent aspia_host_core)

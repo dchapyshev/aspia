@@ -19,42 +19,38 @@
 #ifndef NET__NETWORK_CHANNEL_PROXY_H
 #define NET__NETWORK_CHANNEL_PROXY_H
 
+#include "base/memory/scalable_queue.h"
 #include "net/network_channel.h"
+
+#include <shared_mutex>
+
+namespace base {
+class TaskRunner;
+} // namespace base
 
 namespace net {
 
-class ChannelProxy
+class ChannelProxy : public std::enable_shared_from_this<ChannelProxy>
 {
 public:
-    void connect(std::u16string_view address, uint16_t port);
-
-    void setListener(Listener* listener);
-    void setEncryptor(std::unique_ptr<crypto::MessageEncryptor> encryptor);
-    void setDecryptor(std::unique_ptr<crypto::MessageDecryptor> decryptor);
-
-    bool isConnected() const;
-    bool isPaused() const;
-
-    void pause();
-    void resume();
-
-    std::u16string peerAddress() const;
-
     void send(base::ByteArray&& buffer);
-
-    bool setNoDelay(bool enable);
-    bool setKeepAlive(bool enable,
-                      const std::chrono::milliseconds& time = std::chrono::milliseconds(),
-                      const std::chrono::milliseconds& interval = std::chrono::milliseconds());
 
 private:
     friend class Channel;
-    explicit ChannelProxy(Channel* channel);
+    ChannelProxy(std::shared_ptr<base::TaskRunner> task_runner, Channel* channel);
 
     // Called directly by Channel::~Channel.
     void willDestroyCurrentChannel();
 
+    void scheduleWrite();
+    bool reloadWriteQueue(base::ScalableQueue<base::ByteArray>* work_queue);
+
+    std::shared_ptr<base::TaskRunner> task_runner_;
+
     Channel* channel_;
+
+    base::ScalableQueue<base::ByteArray> incoming_queue_;
+    std::mutex incoming_queue_lock_;
 
     DISALLOW_COPY_AND_ASSIGN(ChannelProxy);
 };

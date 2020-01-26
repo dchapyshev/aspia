@@ -28,6 +28,7 @@ class InputInjector
 public:
     virtual ~InputInjector() = default;
 
+    virtual void setBlockInput(bool enable) = 0;
     virtual void injectKeyEvent(const proto::KeyEvent& event) = 0;
     virtual void injectPointerEvent(const proto::PointerEvent& event) = 0;
 };

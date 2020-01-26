@@ -22,11 +22,12 @@
 #include "base/logging.h"
 #include "base/win/process_util.h"
 #include "base/win/scoped_thread_desktop.h"
+#include "host/system_settings.h"
+#include "host/ui/host_application.h"
 #include "host/ui/host_main_window.h"
-#include "host/host_application.h"
+#include "host/ui/settings_util.h"
 #include "updater/update_dialog.h"
 
-#include <QApplication>
 #include <QMessageBox>
 
 namespace {
@@ -101,16 +102,16 @@ int hostMain(int argc, char* argv[])
     }
     else if (command_line.hasSwitch(u"import"))
     {
-        if (!host::Settings::importFromFile(command_line.switchValuePath(u"import"),
-                                            command_line.hasSwitch(u"silent")))
+        if (!host::SettingsUtil::importFromFile(command_line.switchValuePath(u"import"),
+                                                command_line.hasSwitch(u"silent")))
         {
             return 1;
         }
     }
     else if (command_line.hasSwitch(u"export"))
     {
-        if (!host::Settings::exportToFile(command_line.switchValuePath(u"export"),
-                                          command_line.hasSwitch(u"silent")))
+        if (!host::SettingsUtil::exportToFile(command_line.switchValuePath(u"export"),
+                                              command_line.hasSwitch(u"silent")))
         {
             return 1;
         }
@@ -118,7 +119,7 @@ int hostMain(int argc, char* argv[])
     else if (command_line.hasSwitch(u"update"))
     {
         updater::UpdateDialog dialog(
-            QString::fromStdString(application.settings().updateServer()), "host");
+            QString::fromStdString(host::SystemSettings().updateServer()), "host");
         dialog.show();
         dialog.activateWindow();
 

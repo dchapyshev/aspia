@@ -35,7 +35,7 @@ class UserSessionManager
       public UserSession::Delegate
 {
 public:
-    UserSessionManager();
+    explicit UserSessionManager(std::shared_ptr<base::TaskRunner> task_runner);
     ~UserSessionManager();
 
     class Delegate
@@ -63,6 +63,7 @@ protected:
 private:
     void startSessionProcess(base::win::SessionId session_id);
 
+    std::shared_ptr<base::TaskRunner> task_runner_;
     std::unique_ptr<ipc::Server> ipc_server_;
     std::list<std::unique_ptr<UserSession>> sessions_;
     Delegate* delegate_ = nullptr;

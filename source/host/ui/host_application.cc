@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/host_application.h"
+#include "host/ui/host_application.h"
 
 #include "build/version.h"
 #include "qt_base/qt_logging.h"
@@ -32,9 +32,9 @@ const char kActivateMessage[] = "activate";
 Application::Application(int& argc, char* argv[])
     : qt_base::Application(argc, argv)
 {
-    setOrganizationName(QStringLiteral("Aspia"));
-    setApplicationName(QStringLiteral("Host"));
-    setApplicationVersion(QStringLiteral(ASPIA_VERSION_STRING));
+    setOrganizationName(QLatin1String("Aspia"));
+    setApplicationName(QLatin1String("Host"));
+    setApplicationVersion(QLatin1String(ASPIA_VERSION_STRING));
     setAttribute(Qt::AA_DisableWindowContextHelpButton, true);
 
     connect(this, &Application::messageReceived, [this](const QByteArray& message)
@@ -50,7 +50,7 @@ Application::Application(int& argc, char* argv[])
     });
 
     if (!hasLocale(settings_.locale()))
-        settings_.setLocale(QStringLiteral(DEFAULT_LOCALE));
+        settings_.setLocale(QLatin1String(DEFAULT_LOCALE));
 
     setLocale(settings_.locale());
 }

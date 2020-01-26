@@ -25,8 +25,10 @@
 #include "common/ui/about_dialog.h"
 #include "host/ui/user_dialog.h"
 #include "host/ui/user_tree_item.h"
+#include "host/ui/user_settings.h"
+#include "host/ui/settings_util.h"
 #include "host/win/host_service_constants.h"
-#include "host/host_settings.h"
+#include "host/system_settings.h"
 #include "host/user.h"
 #include "qt_base/qt_xml_settings.h"
 #include "updater/update_dialog.h"
@@ -62,7 +64,7 @@ ConfigDialog::ConfigDialog(QWidget* parent)
     connect(ui.button_check_updates, &QPushButton::released, [this]()
     {
         updater::UpdateDialog(
-            QString::fromStdString(Settings().updateServer()), "host", this).exec();
+            QString::fromStdString(SystemSettings().updateServer()), "host", this).exec();
     });
 
     connect(ui.tree_users, &QTreeWidget::customContextMenuRequested,
@@ -219,7 +221,7 @@ void ConfigDialog::onImport()
     if (file_path.isEmpty())
         return;
 
-    if (Settings::importFromFile(file_path.toStdU16String(), false, this))
+    if (SettingsUtil::importFromFile(file_path.toStdU16String(), false, this))
     {
         if (isServiceStarted())
         {
@@ -249,7 +251,7 @@ void ConfigDialog::onExport()
     if (file_path.isEmpty())
         return;
 
-    Settings::exportToFile(file_path.toStdU16String(), false, this);
+    SettingsUtil::exportToFile(file_path.toStdU16String(), false, this);
 }
 
 void ConfigDialog::onButtonBoxClicked(QAbstractButton* button)
@@ -259,7 +261,7 @@ void ConfigDialog::onButtonBoxClicked(QAbstractButton* button)
     if (isConfigChanged() && (standard_button == QDialogButtonBox::Ok ||
                               standard_button == QDialogButtonBox::Apply))
     {
-        Settings settings;
+        SystemSettings settings;
 
         if (!settings.isWritable())
         {
@@ -344,7 +346,7 @@ bool ConfigDialog::isConfigChanged() const
 
 void ConfigDialog::reloadAll()
 {
-    Settings settings;
+    SystemSettings settings;
 
     users_ = settings.userList();
 

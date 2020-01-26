@@ -19,6 +19,8 @@
 #ifndef HOST__INPUT_INJECTOR_WIN_H
 #define HOST__INPUT_INJECTOR_WIN_H
 
+#include "base/win/scoped_thread_desktop.h"
+#include "desktop/desktop_geometry.h"
 #include "host/input_injector.h"
 
 namespace host {
@@ -26,11 +28,27 @@ namespace host {
 class InputInjectorWin : public InputInjector
 {
 public:
+    InputInjectorWin() = default;
     ~InputInjectorWin() = default;
 
     // InputInjector implementation.
+    void setBlockInput(bool enable) override;
     void injectKeyEvent(const proto::KeyEvent& event) override;
     void injectPointerEvent(const proto::PointerEvent& event) override;
+
+private:
+    void switchToInputDesktop();
+    bool isCtrlAndAltPressed();
+
+    base::ScopedThreadDesktop desktop_;
+
+    bool block_input_;
+    std::set<uint32_t> pressed_keys_;
+
+    desktop::Point prev_mouse_pos_;
+    uint32_t prev_mouse_button_mask_ = 0;
+
+    DISALLOW_COPY_AND_ASSIGN(InputInjectorWin);
 };
 
 } // namespace host

@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,38 +16,13 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST__HOST_APPLICATION_H
-#define HOST__HOST_APPLICATION_H
+#include <Windows.h>
 
-#include "host/host_settings.h"
-#include "qt_base/application.h"
+LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 
-namespace host {
+1 RT_MANIFEST "desktop_agent.manifest"
 
-class Application : public qt_base::Application
-{
-    Q_OBJECT
+#define ASPIA_ORIGINAL_FILE_NAME "aspia_desktop_agent.exe"
+#define ASPIA_FILE_DESCRIPTION "Aspia Desktop Agent"
 
-public:
-    Application(int& argc, char* argv[]);
-    virtual ~Application() = default;
-
-    static Application* instance();
-
-    Settings& settings() { return settings_; }
-
-public slots:
-    void activate();
-
-signals:
-    void activated();
-
-private:
-    Settings settings_;
-
-    DISALLOW_COPY_AND_ASSIGN(Application);
-};
-
-} // namespace host
-
-#endif // HOST__HOST_APPLICATION_H
+#include "build/version.rc"

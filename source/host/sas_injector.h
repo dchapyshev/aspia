@@ -16,33 +16,13 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/client_session_file_transfer.h"
-
-#include "net/network_channel.h"
+#ifndef HOST__SAS_INJECTOR_H
+#define HOST__SAS_INJECTOR_H
 
 namespace host {
 
-ClientSessionFileTransfer::ClientSessionFileTransfer(std::unique_ptr<net::Channel> channel)
-    : ClientSession(proto::SESSION_TYPE_FILE_TRANSFER, std::move(channel))
-{
-    // Nothing
-}
-
-ClientSessionFileTransfer::~ClientSessionFileTransfer() = default;
-
-void ClientSessionFileTransfer::onMessageReceived(const base::ByteArray& buffer)
-{
-    // TODO
-}
-
-void ClientSessionFileTransfer::onMessageWritten()
-{
-
-}
-
-void ClientSessionFileTransfer::onStarted()
-{
-
-}
+void injectSAS();
 
 } // namespace host
+
+#endif // HOST__SAS_INJECTOR_H

@@ -220,7 +220,11 @@ bool createProcessWithToken(HANDLE token, const base::CommandLine& command_line)
 
 } // namespace
 
-UserSessionManager::UserSessionManager() = default;
+UserSessionManager::UserSessionManager(std::shared_ptr<base::TaskRunner> task_runner)
+    : task_runner_(std::move(task_runner))
+{
+    DCHECK(task_runner_);
+}
 
 UserSessionManager::~UserSessionManager() = default;
 
@@ -308,7 +312,7 @@ UserList UserSessionManager::userList() const
 
 void UserSessionManager::onNewConnection(std::unique_ptr<ipc::Channel> channel)
 {
-    sessions_.emplace_back(std::make_unique<UserSession>(std::move(channel)));
+    sessions_.emplace_back(std::make_unique<UserSession>(task_runner_, std::move(channel)));
     sessions_.back()->start(this);
 }
 

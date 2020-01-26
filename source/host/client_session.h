@@ -30,16 +30,34 @@ class ChannelProxy;
 
 namespace host {
 
+class DesktopSessionProxy;
+
 class ClientSession : public net::Listener
 {
 public:
     virtual ~ClientSession() = default;
 
+    class Delegate
+    {
+    public:
+        virtual ~Delegate() = default;
+
+        virtual void onClientSessionFinished() = 0;
+    };
+
+    enum class State
+    {
+        CREATED, // Session created but not yet started.
+        STARTED, // Session started.
+        FINISHED // Session is stopped.
+    };
+
     static std::unique_ptr<ClientSession> create(
         proto::SessionType session_type, std::unique_ptr<net::Channel> channel);
 
-    void start();
+    void start(Delegate* delegate);
 
+    State state() const { return state_; }
     std::string id() const { return id_; }
 
     void setVersion(const base::Version& version);
@@ -54,6 +72,8 @@ public:
 protected:
     ClientSession(proto::SessionType session_type, std::unique_ptr<net::Channel> channel);
 
+    virtual void onStarted() = 0;
+    std::shared_ptr<net::ChannelProxy> channelProxy();
     void sendMessage(base::ByteArray&& buffer);
 
     // net::Listener implementation.
@@ -61,13 +81,14 @@ protected:
     void onDisconnected(net::ErrorCode error_code) override;
 
 private:
+    State state_ = State::CREATED;
     std::string id_;
     proto::SessionType session_type_;
     base::Version version_;
     std::u16string username_;
 
     std::unique_ptr<net::Channel> channel_;
-    std::shared_ptr<net::ChannelProxy> channel_proxy_;
+    Delegate* delegate_ = nullptr;
 };
 
 } // namespace host

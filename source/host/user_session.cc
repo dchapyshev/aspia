@@ -19,20 +19,28 @@
 #include "host/user_session.h"
 
 #include "base/logging.h"
+#include "base/task_runner.h"
+#include "base/strings/string_number_conversions.h"
 #include "base/strings/unicode.h"
 #include "common/message_serialization.h"
 #include "crypto/password_generator.h"
-#include "client_session.h"
+#include "desktop/desktop_frame.h"
+#include "host/client_session_desktop.h"
+#include "host/desktop_session_proxy.h"
 #include "ipc/ipc_channel_proxy.h"
 #include "net/adapter_enumerator.h"
 #include "proto/host.pb.h"
 
 namespace host {
 
-UserSession::UserSession(std::unique_ptr<ipc::Channel> ipc_channel)
-    : ipc_channel_(std::move(ipc_channel))
+UserSession::UserSession(
+    std::shared_ptr<base::TaskRunner> task_runner, std::unique_ptr<ipc::Channel> ipc_channel)
+    : task_runner_(std::move(task_runner)),
+      ipc_channel_(std::move(ipc_channel))
 {
+    DCHECK(task_runner_);
     DCHECK(ipc_channel_);
+
     ipc_channel_proxy_ = ipc_channel_->channelProxy();
     session_id_ = ipc_channel_->peerSessionId();
 }
@@ -42,8 +50,11 @@ UserSession::~UserSession() = default;
 void UserSession::start(Delegate* delegate)
 {
     delegate_ = delegate;
-
     DCHECK(delegate_);
+
+    desktop_session_ = std::make_unique<DesktopSessionManager>(task_runner_, this);
+    desktop_session_proxy_ = desktop_session_->sessionProxy();
+    desktop_session_->attachSession(session_id_);
 
     updateCredentials();
 
@@ -64,7 +75,7 @@ User UserSession::user() const
 void UserSession::addNewSession(std::unique_ptr<ClientSession> client_session)
 {
     clients_.emplace_back(std::move(client_session));
-    clients_.back()->start();
+    clients_.back()->start(this);
 }
 
 void UserSession::onConnected()
@@ -112,19 +123,99 @@ void UserSession::onMessageReceived(const base::ByteArray& buffer)
     }
 }
 
+void UserSession::onDesktopSessionStarted()
+{
+    for (auto& client : clients_)
+    {
+
+    }
+}
+
+void UserSession::onDesktopSessionStopped()
+{
+    clients_.clear();
+}
+
+void UserSession::onScreenCaptured(std::unique_ptr<desktop::Frame> frame)
+{
+    for (const auto& client : clients_)
+    {
+        const proto::SessionType session_type = client->sessionType();
+
+        if (session_type == proto::SESSION_TYPE_DESKTOP_MANAGE ||
+            session_type == proto::SESSION_TYPE_DESKTOP_VIEW)
+        {
+            ClientSessionDesktop* desktop_client =
+                static_cast<ClientSessionDesktop*>(client.get());
+
+            desktop_client->encodeFrame(*frame);
+        }
+    }
+
+    desktop_session_proxy_->captureScreen();
+}
+
+void UserSession::onScreenListChanged(const proto::ScreenList& list)
+{
+    for (const auto& client : clients_)
+    {
+        const proto::SessionType session_type = client->sessionType();
+
+        if (session_type == proto::SESSION_TYPE_DESKTOP_MANAGE ||
+            session_type == proto::SESSION_TYPE_DESKTOP_VIEW)
+        {
+            ClientSessionDesktop* desktop_client =
+                static_cast<ClientSessionDesktop*>(client.get());
+
+            desktop_client->setScreenList(list);
+        }
+    }
+}
+
+void UserSession::onClipboardEvent(const proto::ClipboardEvent& event)
+{
+    for (const auto& client : clients_)
+    {
+        const proto::SessionType session_type = client->sessionType();
+
+        if (session_type == proto::SESSION_TYPE_DESKTOP_MANAGE)
+        {
+            ClientSessionDesktop* desktop_client =
+                static_cast<ClientSessionDesktop*>(client.get());
+
+            desktop_client->injectClipboardEvent(event);
+        }
+    }
+}
+
+void UserSession::onClientSessionFinished()
+{
+    for (auto it = clients_.begin(); it != clients_.end();)
+    {
+        if ((*it)->state() == ClientSession::State::FINISHED)
+        {
+            it = clients_.erase(it);
+        }
+        else
+        {
+            ++it;
+        }
+    }
+}
+
 void UserSession::updateCredentials()
 {
     crypto::PasswordGenerator generator;
 
     static const uint32_t kPasswordCharacters = crypto::PasswordGenerator::UPPER_CASE |
         crypto::PasswordGenerator::LOWER_CASE | crypto::PasswordGenerator::DIGITS;
-    static const int kPasswordLength = 5;
+    static const int kPasswordLength = 6;
 
     // TODO: Get password parameters from settings.
     generator.setCharacters(kPasswordCharacters);
     generator.setLength(kPasswordLength);
 
-    username_ = "#" + std::to_string(sessionId());
+    username_ = "#" + base::numberToString(sessionId());
     password_ = generator.result();
 }
 

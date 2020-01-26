@@ -33,7 +33,6 @@ ClientSession::ClientSession(
 {
     DCHECK(channel_);
 
-    channel_proxy_ = channel_->channelProxy();
     id_ = base::Guid::create().toStdString();
 }
 
@@ -60,9 +59,15 @@ std::unique_ptr<ClientSession> ClientSession::create(
     }
 }
 
-void ClientSession::start()
+void ClientSession::start(Delegate* delegate)
 {
+    state_ = State::STARTED;
 
+    delegate_ = delegate;
+    DCHECK(delegate_);
+
+    channel_->setListener(this);
+    channel_->resume();
 }
 
 void ClientSession::setVersion(const base::Version& version)
@@ -77,12 +82,17 @@ void ClientSession::setUserName(std::u16string_view username)
 
 std::u16string ClientSession::peerAddress() const
 {
-    return channel_proxy_->peerAddress();
+    return channel_->peerAddress();
+}
+
+std::shared_ptr<net::ChannelProxy> ClientSession::channelProxy()
+{
+    return channel_->channelProxy();
 }
 
 void ClientSession::sendMessage(base::ByteArray&& buffer)
 {
-    channel_proxy_->send(std::move(buffer));
+    channel_->send(std::move(buffer));
 }
 
 void ClientSession::onConnected()
@@ -92,7 +102,10 @@ void ClientSession::onConnected()
 
 void ClientSession::onDisconnected(net::ErrorCode error_code)
 {
+    LOG(LS_WARNING) << "Client disconnected with error code " << static_cast<int>(error_code);
 
+    state_ = State::FINISHED;
+    delegate_->onClientSessionFinished();
 }
 
 } // namespace host

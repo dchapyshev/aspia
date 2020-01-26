@@ -83,7 +83,7 @@ void Server::start()
 
     authenticator_manager_ = std::make_unique<AuthenticatorManager>(this);
 
-    user_session_manager_ = std::make_unique<UserSessionManager>();
+    user_session_manager_ = std::make_unique<UserSessionManager>(task_runner_);
     user_session_manager_->start(this);
 
     reloadUserList();

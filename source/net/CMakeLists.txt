@@ -37,9 +37,7 @@ list(APPEND SOURCE_NET
     socket_connector.h
     socket_constants.h
     socket_reader.cc
-    socket_reader.h
-    socket_writer.cc
-    socket_writer.h)
+    socket_reader.h)
 
 list(APPEND SOURCE_NET_UNIT_TESTS
     address_unittest.cc)

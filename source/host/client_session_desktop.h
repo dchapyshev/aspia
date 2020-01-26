@@ -21,14 +21,17 @@
 
 #include "base/macros_magic.h"
 #include "host/client_session.h"
+#include "proto/desktop.pb.h"
+#include "proto/desktop_extensions.pb.h"
+
+namespace desktop {
+class Frame;
+} // namespace desktop
 
 namespace host {
 
-class ClipboardMonitor;
-class InputInjector;
-class MouseCursorMonitor;
-class ScreenControls;
-class VideoCapturer;
+class DesktopSessionProxy;
+class VideoFramePump;
 
 class ClientSessionDesktop : public ClientSession
 {
@@ -36,23 +39,27 @@ public:
     ClientSessionDesktop(proto::SessionType session_type, std::unique_ptr<net::Channel> channel);
     ~ClientSessionDesktop();
 
-    void setClipboardMonitor(std::unique_ptr<ClipboardMonitor> clipboard_monitor);
-    void setInputInjector(std::unique_ptr<InputInjector> input_injector);
-    void setMouseCursorMonitor(std::unique_ptr<MouseCursorMonitor> mouse_cursor_monitor);
-    void setScreenControls(std::unique_ptr<ScreenControls> screen_controls);
-    void setVideoCapturer(std::unique_ptr<VideoCapturer> video_capturer);
+    void setDesktopSessionProxy(std::shared_ptr<DesktopSessionProxy> desktop_session_proxy);
+
+    void encodeFrame(const desktop::Frame& frame);
+    void setScreenList(const proto::ScreenList& list);
+    void injectClipboardEvent(const proto::ClipboardEvent& event);
 
 protected:
     // net::Listener implementation.
     void onMessageReceived(const base::ByteArray& buffer) override;
     void onMessageWritten() override;
 
+    // ClientSession implementation.
+    void onStarted() override;
+
 private:
-    std::unique_ptr<ClipboardMonitor> clipboard_monitor_;
-    std::unique_ptr<InputInjector> input_injector_;
-    std::unique_ptr<MouseCursorMonitor> mouse_cursor_monitor_;
-    std::unique_ptr<ScreenControls> screen_controls_;
-    std::unique_ptr<VideoCapturer> video_capturer_;
+    void readExtension(const proto::DesktopExtension& extension);
+    void readConfig(const proto::DesktopConfig& config);
+
+    std::shared_ptr<DesktopSessionProxy> desktop_session_proxy_;
+    std::unique_ptr<VideoFramePump> frame_pump_;
+    std::vector<std::string> extensions_;
 
     DISALLOW_COPY_AND_ASSIGN(ClientSessionDesktop);
 };

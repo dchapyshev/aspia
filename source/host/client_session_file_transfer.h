@@ -35,6 +35,9 @@ protected:
     void onMessageReceived(const base::ByteArray& buffer) override;
     void onMessageWritten() override;
 
+    // ClientSession implementation.
+    void onStarted() override;
+
 private:
     DISALLOW_COPY_AND_ASSIGN(ClientSessionFileTransfer);
 };

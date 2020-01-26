@@ -21,6 +21,7 @@
 
 #include "base/macros_magic.h"
 #include "base/memory/byte_array.h"
+#include "base/memory/scalable_queue.h"
 #include "net/network_error.h"
 
 #include <asio/ip/tcp.hpp>
@@ -39,7 +40,6 @@ class Listener;
 class Server;
 class SocketConnector;
 class SocketReader;
-class SocketWriter;
 
 class Channel
 {
@@ -113,10 +113,15 @@ protected:
     void disconnect();
 
 private:
+    friend class ChannelProxy;
+
     void onConnected();
     void onErrorOccurred(const std::error_code& error_code);
     void onMessageReceived(const base::ByteArray& buffer);
     void onMessageWritten();
+
+    void doWrite();
+    void onWrite(const std::error_code& error_code, size_t bytes_transferred);
 
     asio::io_context& io_context_;
     asio::ip::tcp::socket socket_;
@@ -126,8 +131,12 @@ private:
 
     std::unique_ptr<SocketConnector> connector_;
     std::unique_ptr<SocketReader> reader_;
-    std::unique_ptr<SocketWriter> writer_;
     std::shared_ptr<ChannelProxy> proxy_;
+
+    std::unique_ptr<crypto::MessageEncryptor> encryptor_;
+
+    base::ScalableQueue<base::ByteArray> write_queue_;
+    base::ByteArray write_buffer_;
 
     DISALLOW_COPY_AND_ASSIGN(Channel);
 };

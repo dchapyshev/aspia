@@ -16,33 +16,40 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/client_session_file_transfer.h"
+#ifndef HOST__DESKTOP_SESSION_PROCESS_H
+#define HOST__DESKTOP_SESSION_PROCESS_H
 
-#include "net/network_channel.h"
+#include "base/win/scoped_object.h"
+#include "base/win/session_id.h"
+
+#include <memory>
+#include <string_view>
+
+namespace ipc {
+class Channel;
+} // namespace ipc
 
 namespace host {
 
-ClientSessionFileTransfer::ClientSessionFileTransfer(std::unique_ptr<net::Channel> channel)
-    : ClientSession(proto::SESSION_TYPE_FILE_TRANSFER, std::move(channel))
+class DesktopSessionProcess
 {
-    // Nothing
-}
+public:
+    ~DesktopSessionProcess();
 
-ClientSessionFileTransfer::~ClientSessionFileTransfer() = default;
+    static std::unique_ptr<DesktopSessionProcess> create(
+        base::win::SessionId session_id, std::u16string_view channel_id);
 
-void ClientSessionFileTransfer::onMessageReceived(const base::ByteArray& buffer)
-{
-    // TODO
-}
+    void kill();
 
-void ClientSessionFileTransfer::onMessageWritten()
-{
+private:
+    DesktopSessionProcess(base::win::ScopedHandle&& process, base::win::ScopedHandle&& thread);
 
-}
+    base::win::ScopedHandle process_;
+    base::win::ScopedHandle thread_;
 
-void ClientSessionFileTransfer::onStarted()
-{
-
-}
+    DISALLOW_COPY_AND_ASSIGN(DesktopSessionProcess);
+};
 
 } // namespace host
+
+#endif // HOST__DESKTOP_SESSION_PROCESS_H

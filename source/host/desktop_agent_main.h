@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,13 +16,11 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/clipboard_monitor_ipc.h"
+#ifndef HOST__DESKTOP_AGENT_MAIN_H
+#define HOST__DESKTOP_AGENT_MAIN_H
 
-namespace host {
+#include "host/host_export.h"
 
-void ClipboardMonitorIpc::injectClipboardEvent(const proto::ClipboardEvent& event)
-{
-    // TODO
-}
+int HOST_EXPORT desktopAgentMain(int argc, char* argv[]);
 
-} // namespace host
+#endif // HOST__DESKTOP_AGENT_MAIN_H

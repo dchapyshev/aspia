@@ -23,12 +23,13 @@
 #include "base/message_loop/message_pump_asio.h"
 #include "base/strings/unicode.h"
 #include "crypto/message_decryptor.h"
-#include "crypto/message_encryptor.h"
+#include "crypto/message_encryptor_fake.h"
 #include "net/network_channel_proxy.h"
 #include "net/network_listener.h"
 #include "net/socket_connector.h"
 #include "net/socket_reader.h"
-#include "net/socket_writer.h"
+
+#include <asio/write.hpp>
 
 #if defined(OS_WIN)
 #include <winsock2.h>
@@ -37,10 +38,17 @@
 
 namespace net {
 
+namespace {
+
+static const size_t kMaxMessageSize = 16 * 1024 * 1024; // 16 MB
+
+} // namespace
+
 Channel::Channel()
     : io_context_(base::MessageLoop::current()->pumpAsio()->ioContext()),
       socket_(io_context_),
-      proxy_(new ChannelProxy(this))
+      proxy_(new ChannelProxy(base::MessageLoop::current()->taskRunner(), this)),
+      encryptor_(std::make_unique<crypto::MessageEncryptorFake>())
 {
     connector_ = std::make_unique<SocketConnector>(io_context_);
     connector_->attach(&socket_,
@@ -53,7 +61,8 @@ Channel::Channel()
 Channel::Channel(asio::ip::tcp::socket&& socket)
     : io_context_(base::MessageLoop::current()->pumpAsio()->ioContext()),
       socket_(std::move(socket)),
-      proxy_(new ChannelProxy(this)),
+      proxy_(new ChannelProxy(base::MessageLoop::current()->taskRunner(), this)),
+      encryptor_(std::make_unique<crypto::MessageEncryptorFake>()),
       connected_(true)
 {
     DCHECK(socket_.is_open());
@@ -71,7 +80,6 @@ Channel::~Channel()
         connector_->dettach();
 
     reader_->dettach();
-    writer_->dettach();
 
     disconnect();
 }
@@ -88,7 +96,7 @@ void Channel::setListener(Listener* listener)
 
 void Channel::setEncryptor(std::unique_ptr<crypto::MessageEncryptor> encryptor)
 {
-    writer_->setEncryptor(std::move(encryptor));
+    encryptor_ = std::move(encryptor);
 }
 
 void Channel::setDecryptor(std::unique_ptr<crypto::MessageDecryptor> decryptor)
@@ -137,7 +145,13 @@ void Channel::resume()
 
 void Channel::send(base::ByteArray&& buffer)
 {
-    return writer_->send(std::move(buffer));
+    const bool schedule_write = write_queue_.empty();
+
+    // Add the buffer to the queue for sending.
+    write_queue_.emplace(std::move(buffer));
+
+    if (schedule_write)
+        doWrite();
 }
 
 bool Channel::setNoDelay(bool enable)
@@ -188,11 +202,6 @@ void Channel::init()
     reader_ = std::make_unique<SocketReader>();
     reader_->attach(&socket_,
         std::bind(&Channel::onMessageReceived, this, std::placeholders::_1),
-        std::bind(&Channel::onErrorOccurred, this, std::placeholders::_1));
-
-    writer_ = std::make_unique<SocketWriter>();
-    writer_->attach(&socket_,
-        std::bind(&Channel::onMessageWritten, this),
         std::bind(&Channel::onErrorOccurred, this, std::placeholders::_1));
 }
 
@@ -261,6 +270,100 @@ void Channel::onMessageWritten()
 {
     if (listener_)
         listener_->onMessageWritten();
+}
+
+void Channel::doWrite()
+{
+    const base::ByteArray& source_buffer = write_queue_.front();
+    if (source_buffer.empty())
+    {
+        onErrorOccurred(asio::error::message_size);
+        return;
+    }
+
+    // Calculate the size of the encrypted message.
+    const size_t target_data_size = encryptor_->encryptedDataSize(source_buffer.size());
+
+    if (target_data_size > kMaxMessageSize)
+    {
+        onErrorOccurred(asio::error::message_size);
+        return;
+    }
+
+    uint8_t length_data[4];
+    size_t length_data_size = 1;
+
+    // Calculate the variable-length.
+    length_data[0] = target_data_size & 0x7F;
+    if (target_data_size > 0x7F) // 127 bytes
+    {
+        length_data[0] |= 0x80;
+        length_data[length_data_size++] = target_data_size >> 7 & 0x7F;
+
+        if (target_data_size > 0x3FFF) // 16383 bytes
+        {
+            length_data[1] |= 0x80;
+            length_data[length_data_size++] = target_data_size >> 14 & 0x7F;
+
+            if (target_data_size > 0x1FFFF) // 2097151 bytes
+            {
+                length_data[2] |= 0x80;
+                length_data[length_data_size++] = target_data_size >> 21 & 0xFF;
+            }
+        }
+    }
+
+    // Now we can calculate the full size.
+    const size_t total_size = length_data_size + target_data_size;
+
+    // If the reserved buffer size is less, then increase it.
+    if (write_buffer_.capacity() < total_size)
+        write_buffer_.reserve(total_size);
+
+    // Change the size of the buffer.
+    write_buffer_.resize(total_size);
+
+    // Copy the size of the message to the buffer.
+    memcpy(write_buffer_.data(), length_data, length_data_size);
+
+    // Encrypt the message.
+    if (!encryptor_->encrypt(source_buffer.data(),
+                             source_buffer.size(),
+                             write_buffer_.data() + length_data_size))
+    {
+        onErrorOccurred(asio::error::access_denied);
+        return;
+    }
+
+    // Send the buffer to the recipient.
+    asio::async_write(socket_,
+                      asio::buffer(write_buffer_.data(), write_buffer_.size()),
+                      std::bind(&Channel::onWrite,
+                                this,
+                                std::placeholders::_1,
+                                std::placeholders::_2));
+}
+
+void Channel::onWrite(const std::error_code& error_code, size_t bytes_transferred)
+{
+    DCHECK(!write_queue_.empty());
+
+    if (error_code)
+    {
+        onErrorOccurred(error_code);
+        return;
+    }
+
+    onMessageWritten();
+
+    // Delete the sent message from the queue.
+    write_queue_.pop();
+
+    // If the queue is not empty, then we send the following message.
+    if (write_queue_.empty() && !proxy_->reloadWriteQueue(&write_queue_))
+        return;
+
+    doWrite();
 }
 
 } // namespace net

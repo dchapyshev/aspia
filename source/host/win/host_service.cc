@@ -23,7 +23,6 @@
 #include "base/win/security_helpers.h"
 #include "host/win/host_service_constants.h"
 #include "host/host_server.h"
-#include "host/host_settings.h"
 
 #include <Windows.h>
 #include <sddl.h>
@@ -62,6 +61,7 @@ Service::Service()
     : base::win::Service(kHostServiceName, base::MessageLoop::Type::ASIO)
 {
     // Nothing
+    LOG(LS_INFO) << "SERVICE CONSTRUCTOR";
 }
 
 Service::~Service() = default;
@@ -70,7 +70,7 @@ void Service::onStart()
 {
     LOG(LS_INFO) << "Service is started";
 
-    com_initializer_.reset(new base::win::ScopedCOMInitializer());
+    com_initializer_ = std::make_unique<base::win::ScopedCOMInitializer>();
     if (!com_initializer_->isSucceeded())
     {
         LOG(LS_FATAL) << "COM not initialized";
@@ -85,6 +85,8 @@ void Service::onStart()
 
 void Service::onStop()
 {
+    LOG(LS_INFO) << "Service stopping...";
+
     server_.reset();
     com_initializer_.reset();
 
@@ -93,6 +95,9 @@ void Service::onStop()
 
 void Service::onSessionEvent(base::win::SessionStatus status, base::win::SessionId session_id)
 {
+    LOG(LS_INFO) << "Session event detected (status = " << static_cast<int>(status)
+                 << ", session_id = " << static_cast<int>(session_id) << ")";
+
     if (server_)
         server_->setSessionEvent(status, session_id);
 }

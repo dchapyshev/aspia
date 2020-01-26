@@ -16,33 +16,38 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/client_session_file_transfer.h"
+#ifndef HOST__UI__HOST_APPLICATION_H
+#define HOST__UI__HOST_APPLICATION_H
 
-#include "net/network_channel.h"
+#include "host/ui/user_settings.h"
+#include "qt_base/application.h"
 
 namespace host {
 
-ClientSessionFileTransfer::ClientSessionFileTransfer(std::unique_ptr<net::Channel> channel)
-    : ClientSession(proto::SESSION_TYPE_FILE_TRANSFER, std::move(channel))
+class Application : public qt_base::Application
 {
-    // Nothing
-}
+    Q_OBJECT
 
-ClientSessionFileTransfer::~ClientSessionFileTransfer() = default;
+public:
+    Application(int& argc, char* argv[]);
+    virtual ~Application() = default;
 
-void ClientSessionFileTransfer::onMessageReceived(const base::ByteArray& buffer)
-{
-    // TODO
-}
+    static Application* instance();
 
-void ClientSessionFileTransfer::onMessageWritten()
-{
+    UserSettings& settings() { return settings_; }
 
-}
+public slots:
+    void activate();
 
-void ClientSessionFileTransfer::onStarted()
-{
+signals:
+    void activated();
 
-}
+private:
+    UserSettings settings_;
+
+    DISALLOW_COPY_AND_ASSIGN(Application);
+};
 
 } // namespace host
+
+#endif // HOST__UI__HOST_APPLICATION_H

@@ -21,7 +21,7 @@
 
 #include "host/host_authenticator_manager.h"
 #include "host/user_session_manager.h"
-#include "host/host_settings.h"
+#include "host/system_settings.h"
 #include "net/network_server.h"
 
 namespace base {
@@ -61,7 +61,7 @@ private:
     std::shared_ptr<base::TaskRunner> task_runner_;
 
     std::unique_ptr<base::FilePathWatcher> settings_watcher_;
-    Settings settings_;
+    SystemSettings settings_;
 
     // Accepts incoming network connections.
     std::unique_ptr<net::Server> network_server_;

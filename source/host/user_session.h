@@ -21,6 +21,8 @@
 
 #include "base/macros_magic.h"
 #include "base/win/session_id.h"
+#include "host/client_session.h"
+#include "host/desktop_session_manager.h"
 #include "host/user.h"
 #include "ipc/ipc_listener.h"
 
@@ -34,12 +36,14 @@ class ChannelProxy;
 
 namespace host {
 
-class ClientSession;
-
-class UserSession : public ipc::Listener
+class UserSession
+    : public ipc::Listener,
+      public DesktopSession::Delegate,
+      public ClientSession::Delegate
 {
 public:
-    explicit UserSession(std::unique_ptr<ipc::Channel> ipc_channel);
+    UserSession(std::shared_ptr<base::TaskRunner> task_runner,
+                std::unique_ptr<ipc::Channel> ipc_channel);
     ~UserSession();
 
     class Delegate
@@ -64,11 +68,22 @@ protected:
     void onDisconnected() override;
     void onMessageReceived(const base::ByteArray& buffer) override;
 
+    // DesktopSession::Delegate implementation.
+    void onDesktopSessionStarted() override;
+    void onDesktopSessionStopped() override;
+    void onScreenCaptured(std::unique_ptr<desktop::Frame> frame) override;
+    void onScreenListChanged(const proto::ScreenList& list) override;
+    void onClipboardEvent(const proto::ClipboardEvent& event) override;
+
+    // ClientSession::Delegate implementation.
+    void onClientSessionFinished() override;
+
 private:
     void updateCredentials();
     void sendCredentials();
     void killClientSession(const std::string& id);
 
+    std::shared_ptr<base::TaskRunner> task_runner_;
     std::unique_ptr<ipc::Channel> ipc_channel_;
     std::shared_ptr<ipc::ChannelProxy> ipc_channel_proxy_;
 
@@ -77,6 +92,8 @@ private:
     std::string password_;
 
     std::list<std::unique_ptr<ClientSession>> clients_;
+    std::unique_ptr<DesktopSessionManager> desktop_session_;
+    std::shared_ptr<DesktopSessionProxy> desktop_session_proxy_;
 
     Delegate* delegate_ = nullptr;
 
