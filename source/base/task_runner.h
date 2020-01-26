@@ -36,6 +36,7 @@ public:
     virtual bool belongsToCurrentThread() const = 0;
     virtual bool postTask(const Callback& task) = 0;
     virtual bool postDelayedTask(const Callback& callback, const Milliseconds& delay) = 0;
+    virtual bool postQuit() = 0;
 };
 
 } // namespace base

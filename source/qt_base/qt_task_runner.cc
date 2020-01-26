@@ -116,4 +116,10 @@ bool QtTaskRunner::postDelayedTask(const Callback& /* callback */, const Millise
     return false;
 }
 
+bool QtTaskRunner::postQuit()
+{
+    NOTIMPLEMENTED();
+    return false;
+}
+
 } // namespace qt_base

@@ -36,6 +36,7 @@ public:
     bool belongsToCurrentThread() const override;
     bool postTask(const Callback& callback) override;
     bool postDelayedTask(const Callback& callback, const Milliseconds& delay) override;
+    bool postQuit() override;
 
 private:
     friend class MessageLoop;
