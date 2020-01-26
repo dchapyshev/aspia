@@ -16,38 +16,38 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "crypto/cryptor_aes256_gcm.h"
-#include "crypto/cryptor_chacha20_poly1305.h"
+#include "crypto/message_encryptor_openssl.h"
+#include "crypto/message_decryptor_openssl.h"
 
 #include <gtest/gtest.h>
 
 namespace crypto {
 
-void testVector(Cryptor* client_cryptor, Cryptor* host_cryptor)
+void testVector(MessageEncryptor* client_encryptor, MessageDecryptor* client_decryptor,
+                MessageEncryptor* host_encryptor, MessageDecryptor* host_decryptor)
 {
     base::ByteArray message_for_host = base::fromHex(
         "6006ee8029610876ec2facd5fc9ce6bd6dc03d4a5ddb4d6c28f2ff048d4f7eb7bcf5048c901a4adaa7fd8aa65bc95ca1d9f21ced474a45e9c6e7344184d6d715");
 
     base::ByteArray encrypted_msg_for_host;
 
-    encrypted_msg_for_host.resize(
-        client_cryptor->encryptedDataSize(message_for_host.size()));
+    encrypted_msg_for_host.resize(client_encryptor->encryptedDataSize(message_for_host.size()));
     ASSERT_EQ(encrypted_msg_for_host.size(), message_for_host.size() + 16);
 
-    bool ret = client_cryptor->encrypt(message_for_host.data(),
-                                       message_for_host.size(),
-                                       encrypted_msg_for_host.data());
+    bool ret = client_encryptor->encrypt(message_for_host.data(),
+                                         message_for_host.size(),
+                                         encrypted_msg_for_host.data());
     ASSERT_TRUE(ret);
 
     base::ByteArray decrypted_msg_for_host;
 
     decrypted_msg_for_host.resize(
-        host_cryptor->decryptedDataSize(encrypted_msg_for_host.size()));
+        host_decryptor->decryptedDataSize(encrypted_msg_for_host.size()));
     ASSERT_EQ(decrypted_msg_for_host.size(), encrypted_msg_for_host.size() - 16);
 
-    ret = host_cryptor->decrypt(encrypted_msg_for_host.data(),
-                                encrypted_msg_for_host.size(),
-                                decrypted_msg_for_host.data());
+    ret = host_decryptor->decrypt(encrypted_msg_for_host.data(),
+                                  encrypted_msg_for_host.size(),
+                                  decrypted_msg_for_host.data());
     ASSERT_TRUE(ret);
     ASSERT_EQ(decrypted_msg_for_host, message_for_host);
 
@@ -57,10 +57,10 @@ void testVector(Cryptor* client_cryptor, Cryptor* host_cryptor)
     base::ByteArray encrypted_msg_for_client;
 
     encrypted_msg_for_client.resize(
-        host_cryptor->encryptedDataSize(message_for_client.size()));
+        host_encryptor->encryptedDataSize(message_for_client.size()));
     ASSERT_EQ(encrypted_msg_for_client.size(), message_for_client.size() + 16);
 
-    ret = host_cryptor->encrypt(message_for_client.data(),
+    ret = host_encryptor->encrypt(message_for_client.data(),
                                 message_for_client.size(),
                                 encrypted_msg_for_client.data());
     ASSERT_TRUE(ret);
@@ -68,17 +68,17 @@ void testVector(Cryptor* client_cryptor, Cryptor* host_cryptor)
     base::ByteArray decrypted_msg_for_client;
 
     decrypted_msg_for_client.resize(
-        client_cryptor->decryptedDataSize(encrypted_msg_for_client.size()));
+        client_decryptor->decryptedDataSize(encrypted_msg_for_client.size()));
     ASSERT_EQ(decrypted_msg_for_client.size(), encrypted_msg_for_client.size() - 16);
 
-    ret = client_cryptor->decrypt(encrypted_msg_for_client.data(),
-                                  encrypted_msg_for_client.size(),
-                                  decrypted_msg_for_client.data());
+    ret = client_decryptor->decrypt(encrypted_msg_for_client.data(),
+                                    encrypted_msg_for_client.size(),
+                                    decrypted_msg_for_client.data());
     ASSERT_TRUE(ret);
     ASSERT_EQ(decrypted_msg_for_client, message_for_client);
 }
 
-void wrongKey(Cryptor* client_cryptor, Cryptor* host_cryptor)
+void wrongKey(MessageEncryptor* client_encryptor, MessageDecryptor* host_decryptor)
 {
     base::ByteArray message_for_host = base::fromHex(
         "6006ee8029610876ec2facd5fc9ce6bd6dc03d4a5ddb4d6c28f2ff048d4f7eb7bcf5048c901a4adaa7fd");
@@ -86,23 +86,23 @@ void wrongKey(Cryptor* client_cryptor, Cryptor* host_cryptor)
     base::ByteArray encrypted_msg_for_host;
 
     encrypted_msg_for_host.resize(
-        client_cryptor->encryptedDataSize(message_for_host.size()));
+        client_encryptor->encryptedDataSize(message_for_host.size()));
     ASSERT_EQ(encrypted_msg_for_host.size(), message_for_host.size() + 16);
 
-    bool ret = client_cryptor->encrypt(message_for_host.data(),
-                                       message_for_host.size(),
-                                       encrypted_msg_for_host.data());
+    bool ret = client_encryptor->encrypt(message_for_host.data(),
+                                         message_for_host.size(),
+                                         encrypted_msg_for_host.data());
     ASSERT_TRUE(ret);
 
     base::ByteArray decrypted_msg_for_host;
 
     decrypted_msg_for_host.resize(
-        host_cryptor->decryptedDataSize(encrypted_msg_for_host.size()));
+        host_decryptor->decryptedDataSize(encrypted_msg_for_host.size()));
     ASSERT_EQ(decrypted_msg_for_host.size(), encrypted_msg_for_host.size() - 16);
 
-    ret = host_cryptor->decrypt(encrypted_msg_for_host.data(),
-                                encrypted_msg_for_host.size(),
-                                decrypted_msg_for_host.data());
+    ret = host_decryptor->decrypt(encrypted_msg_for_host.data(),
+                                  encrypted_msg_for_host.size(),
+                                  decrypted_msg_for_host.data());
     ASSERT_FALSE(ret);
 }
 
@@ -117,17 +117,26 @@ TEST(CryptorAes256GcmTest, TestVector)
     EXPECT_EQ(encrypt_iv.size(), 12);
     EXPECT_EQ(decrypt_iv.size(), 12);
 
-    std::unique_ptr<Cryptor> client_cryptor(CryptorAes256Gcm::create(
-        base::ByteArray(key), base::ByteArray(encrypt_iv), base::ByteArray(decrypt_iv)));
-    ASSERT_NE(client_cryptor, nullptr);
+    std::unique_ptr<MessageEncryptor> client_encryptor =
+        MessageEncryptorOpenssl::createForAes256Gcm(key, encrypt_iv);
+    ASSERT_NE(client_encryptor, nullptr);
 
-    std::unique_ptr<Cryptor> host_cryptor(CryptorAes256Gcm::create(
-        base::ByteArray(key), base::ByteArray(decrypt_iv), base::ByteArray(encrypt_iv)));
-    ASSERT_NE(host_cryptor, nullptr);
+    std::unique_ptr<MessageDecryptor> client_decryptor =
+        MessageDecryptorOpenssl::createForAes256Gcm(key, decrypt_iv);
+    ASSERT_NE(client_decryptor, nullptr);
+
+    std::unique_ptr<MessageEncryptor> host_encryptor =
+        MessageEncryptorOpenssl::createForAes256Gcm(key, decrypt_iv);
+    ASSERT_NE(host_encryptor, nullptr);
+
+    std::unique_ptr<MessageDecryptor> host_decryptor =
+        MessageDecryptorOpenssl::createForAes256Gcm(key, encrypt_iv);
+    ASSERT_NE(host_encryptor, nullptr);
 
     for (int i = 0; i < 100; ++i)
     {
-        testVector(client_cryptor.get(), host_cryptor.get());
+        testVector(client_encryptor.get(), client_decryptor.get(),
+                   host_encryptor.get(), host_decryptor.get());
     }
 }
 
@@ -137,22 +146,20 @@ TEST(CryptorAes256GcmTest, WrongKey)
         base::fromHex("5ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014");
     const base::ByteArray host_key =
         base::fromHex("1ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014");
-    const base::ByteArray encrypt_iv = base::fromHex("ee7eb0e6fb24d445597f3e6f");
-    const base::ByteArray decrypt_iv = base::fromHex("924988304848184805f07167");
+    const base::ByteArray iv = base::fromHex("ee7eb0e6fb24d445597f3e6f");
 
     EXPECT_EQ(client_key.size(), 32);
-    EXPECT_EQ(encrypt_iv.size(), 12);
-    EXPECT_EQ(decrypt_iv.size(), 12);
+    EXPECT_EQ(iv.size(), 12);
 
-    std::unique_ptr<Cryptor> client_cryptor(CryptorAes256Gcm::create(
-        base::ByteArray(client_key), base::ByteArray(encrypt_iv), base::ByteArray(decrypt_iv)));
-    ASSERT_NE(client_cryptor, nullptr);
+    std::unique_ptr<MessageEncryptor> client_encryptor =
+        MessageEncryptorOpenssl::createForAes256Gcm(client_key, iv);
+    ASSERT_NE(client_encryptor, nullptr);
 
-    std::unique_ptr<Cryptor> host_cryptor(CryptorAes256Gcm::create(
-        base::ByteArray(host_key), base::ByteArray(decrypt_iv), base::ByteArray(encrypt_iv)));
-    ASSERT_NE(host_cryptor, nullptr);
+    std::unique_ptr<MessageDecryptor> host_decryptor =
+        MessageDecryptorOpenssl::createForAes256Gcm(host_key, iv);
+    ASSERT_NE(host_decryptor, nullptr);
 
-    wrongKey(client_cryptor.get(), host_cryptor.get());
+    wrongKey(client_encryptor.get(), host_decryptor.get());
 }
 
 TEST(CryptorChaCha20Poly1305Test, TestVector)
@@ -166,17 +173,26 @@ TEST(CryptorChaCha20Poly1305Test, TestVector)
     EXPECT_EQ(encrypt_iv.size(), 12);
     EXPECT_EQ(decrypt_iv.size(), 12);
 
-    std::unique_ptr<Cryptor> client_cryptor(CryptorChaCha20Poly1305::create(
-        base::ByteArray(key), base::ByteArray(encrypt_iv), base::ByteArray(decrypt_iv)));
-    ASSERT_NE(client_cryptor, nullptr);
+    std::unique_ptr<MessageEncryptor> client_encryptor =
+        MessageEncryptorOpenssl::createForChaCha20Poly1305(key, encrypt_iv);
+    ASSERT_NE(client_encryptor, nullptr);
 
-    std::unique_ptr<Cryptor> host_cryptor(CryptorChaCha20Poly1305::create(
-        base::ByteArray(key), base::ByteArray(decrypt_iv), base::ByteArray(encrypt_iv)));
-    ASSERT_NE(host_cryptor, nullptr);
+    std::unique_ptr<MessageDecryptor> client_decryptor =
+        MessageDecryptorOpenssl::createForChaCha20Poly1305(key, decrypt_iv);
+    ASSERT_NE(client_decryptor, nullptr);
+
+    std::unique_ptr<MessageEncryptor> host_encryptor =
+        MessageEncryptorOpenssl::createForChaCha20Poly1305(key, decrypt_iv);
+    ASSERT_NE(host_encryptor, nullptr);
+
+    std::unique_ptr<MessageDecryptor> host_decryptor =
+        MessageDecryptorOpenssl::createForChaCha20Poly1305(key, encrypt_iv);
+    ASSERT_NE(host_encryptor, nullptr);
 
     for (int i = 0; i < 100; ++i)
     {
-        testVector(client_cryptor.get(), host_cryptor.get());
+        testVector(client_encryptor.get(), client_decryptor.get(),
+                   host_encryptor.get(), host_decryptor.get());
     }
 }
 
@@ -186,22 +202,20 @@ TEST(CryptorChaCha20Poly1305Test, WrongKey)
         base::fromHex("5ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014");
     const base::ByteArray host_key =
         base::fromHex("1ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014");
-    const base::ByteArray encrypt_iv = base::fromHex("ee7eb0e6fb24d445597f3e6f");
-    const base::ByteArray decrypt_iv = base::fromHex("924988304848184805f07167");
+    const base::ByteArray iv = base::fromHex("ee7eb0e6fb24d445597f3e6f");
 
     EXPECT_EQ(client_key.size(), 32);
-    EXPECT_EQ(encrypt_iv.size(), 12);
-    EXPECT_EQ(decrypt_iv.size(), 12);
+    EXPECT_EQ(iv.size(), 12);
 
-    std::unique_ptr<Cryptor> client_cryptor(CryptorChaCha20Poly1305::create(
-        base::ByteArray(client_key), base::ByteArray(encrypt_iv), base::ByteArray(decrypt_iv)));
-    ASSERT_NE(client_cryptor, nullptr);
+    std::unique_ptr<MessageEncryptor> client_encryptor =
+        MessageEncryptorOpenssl::createForAes256Gcm(client_key, iv);
+    ASSERT_NE(client_encryptor, nullptr);
 
-    std::unique_ptr<Cryptor> host_cryptor(CryptorChaCha20Poly1305::create(
-        base::ByteArray(host_key), base::ByteArray(decrypt_iv), base::ByteArray(encrypt_iv)));
-    ASSERT_NE(host_cryptor, nullptr);
+    std::unique_ptr<MessageDecryptor> host_decryptor =
+        MessageDecryptorOpenssl::createForAes256Gcm(host_key, iv);
+    ASSERT_NE(host_decryptor, nullptr);
 
-    wrongKey(client_cryptor.get(), host_cryptor.get());
+    wrongKey(client_encryptor.get(), host_decryptor.get());
 }
 
 } // namespace crypto

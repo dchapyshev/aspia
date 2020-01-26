@@ -18,7 +18,7 @@
 
 #include "crypto/data_cryptor_chacha20_poly1305.h"
 
-#include "base/byte_array.h"
+#include "base/memory/byte_array.h"
 
 #include <gtest/gtest.h>
 
