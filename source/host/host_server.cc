@@ -43,7 +43,7 @@ Server::Server(std::shared_ptr<base::TaskRunner>& task_runner)
 
 Server::~Server()
 {
-    LOG(LS_INFO) << "Stopping the server";
+    LOG(LS_INFO) << "Stopping the server...";
 
     settings_watcher_.reset();
     authenticator_manager_.reset();

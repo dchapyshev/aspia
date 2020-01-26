@@ -51,8 +51,6 @@ int hostServiceMain(int argc, char *argv[])
     crypto::ScopedCryptoInitializer crypto_initializer;
     CHECK(crypto_initializer.isSucceeded());
 
-    LOG(LS_INFO) << "BEGIN SERVICE";
-
     Service().exec();
 
     base::shutdownLogging();

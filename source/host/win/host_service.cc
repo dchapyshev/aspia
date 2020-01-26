@@ -61,7 +61,6 @@ Service::Service()
     : base::win::Service(kHostServiceName, base::MessageLoop::Type::ASIO)
 {
     // Nothing
-    LOG(LS_INFO) << "SERVICE CONSTRUCTOR";
 }
 
 Service::~Service() = default;
@@ -96,7 +95,7 @@ void Service::onStop()
 void Service::onSessionEvent(base::win::SessionStatus status, base::win::SessionId session_id)
 {
     LOG(LS_INFO) << "Session event detected (status = " << static_cast<int>(status)
-                 << ", session_id = " << static_cast<int>(session_id) << ")";
+                 << ", session_id = " << session_id << ")";
 
     if (server_)
         server_->setSessionEvent(status, session_id);

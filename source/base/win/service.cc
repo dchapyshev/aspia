@@ -36,7 +36,7 @@ public:
     using EventCallback = std::function<void()>;
 
     void setStatus(DWORD status);
-    void doEvent(EventCallback callback);
+    void doEvent(EventCallback callback, bool quit = false);
 
     static ServiceThread* self;
 
@@ -130,16 +130,22 @@ void ServiceThread::setStatus(DWORD status)
     }
 }
 
-void ServiceThread::doEvent(EventCallback callback)
+void ServiceThread::doEvent(EventCallback callback, bool quit)
 {
     std::unique_lock lock(event_lock);
     event_processed = false;
 
-    task_runner_->postTask([callback]()
+    task_runner_->postTask([callback, quit]()
     {
         std::scoped_lock lock(self->event_lock);
 
         callback();
+
+        if (quit)
+        {
+            // A message loop termination command was received.
+            self->task_runner_->postQuit();
+        }
 
         // Set the event flag is processed.
         self->event_processed = true;
@@ -251,7 +257,7 @@ DWORD WINAPI ServiceThread::serviceControlHandler(
             if (control_code == SERVICE_CONTROL_STOP)
                 self->setStatus(SERVICE_STOP_PENDING);
 
-            self->doEvent(std::bind(&Service::onStop, self->service_));
+            self->doEvent(std::bind(&Service::onStop, self->service_), true);
         }
         return NO_ERROR;
 
