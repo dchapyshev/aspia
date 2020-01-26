@@ -47,7 +47,7 @@
    <item>
     <widget class="QLabel" name="label_copyright">
      <property name="text">
-      <string notr="true">© 2016-2019 Dmitry Chapyshev</string>
+      <string notr="true">© 2016-2020 Dmitry Chapyshev</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
