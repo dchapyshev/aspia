@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -20,52 +20,49 @@
 
 #include "common/message_serialization.h"
 #include "host/user_session_constants.h"
+#include "host/user_session_process_proxy.h"
+#include "host/user_session_window_proxy.h"
 #include "ipc/ipc_channel_proxy.h"
 
 namespace host {
 
-UserSessionProcess::UserSessionProcess()
+UserSessionProcess::UserSessionProcess(std::shared_ptr<UserSessionWindowProxy> window_proxy)
+    : window_proxy_(std::move(window_proxy))
 {
-    ipc_channel_ = std::make_unique<ipc::Channel>();
+    DCHECK(window_proxy_);
 }
 
 UserSessionProcess::~UserSessionProcess() = default;
 
-void UserSessionProcess::start(Delegate* delegate)
+void UserSessionProcess::start()
 {
-    delegate_ = delegate;
+    io_thread_.start(base::MessageLoop::Type::ASIO, this);
+}
 
-    DCHECK(delegate_);
+void UserSessionProcess::onBeforeThreadRunning()
+{
+    process_proxy_ = std::make_shared<UserSessionProcessProxy>(io_thread_.taskRunner(), this);
 
+    ipc_channel_ = std::make_unique<ipc::Channel>();
     ipc_channel_->setListener(this);
     ipc_channel_->connect(kIpcChannelIdForUI);
 }
 
-void UserSessionProcess::updateCredentials(proto::CredentialsRequest::Type request_type)
+void UserSessionProcess::onAfterThreadRunning()
 {
-    proto::UiToService message;
-    message.mutable_credentials_request()->set_type(request_type);
-    ipc_channel_->send(common::serializeMessage(message));
-}
-
-void UserSessionProcess::killClient(const std::string& uuid)
-{
-    proto::UiToService message;
-    message.mutable_kill_session()->set_uuid(uuid);
-    ipc_channel_->send(common::serializeMessage(message));
+    ipc_channel_.reset();
+    process_proxy_.reset();
 }
 
 void UserSessionProcess::onConnected()
 {
-    state_ = State::CONNECTED;
-    delegate_->onStateChanged();
+    window_proxy_->onStateChanged(State::CONNECTED);
     ipc_channel_->resume();
 }
 
 void UserSessionProcess::onDisconnected()
 {
-    state_ = State::DISCONNECTED;
-    delegate_->onStateChanged();
+    window_proxy_->onStateChanged(State::DISCONNECTED);
 }
 
 void UserSessionProcess::onMessageReceived(const base::ByteArray& buffer)
@@ -81,7 +78,7 @@ void UserSessionProcess::onMessageReceived(const base::ByteArray& buffer)
     if (message.has_connect_event())
     {
         clients_.emplace_back(message.connect_event());
-        delegate_->onClientListChanged();
+        window_proxy_->onClientListChanged(clients_);
     }
     else if (message.has_disconnect_event())
     {
@@ -94,17 +91,30 @@ void UserSessionProcess::onMessageReceived(const base::ByteArray& buffer)
             }
         }
 
-        delegate_->onClientListChanged();
+        window_proxy_->onClientListChanged(clients_);
     }
     else if (message.has_credentials())
     {
-        credentials_ = message.credentials();
-        delegate_->onCredentialsChanged();
+        window_proxy_->onCredentialsChanged(message.credentials());
     }
     else
     {
         DLOG(LS_ERROR) << "Unhandled message from service";
     }
+}
+
+void UserSessionProcess::updateCredentials(proto::CredentialsRequest::Type request_type)
+{
+    proto::UiToService message;
+    message.mutable_credentials_request()->set_type(request_type);
+    ipc_channel_->send(common::serializeMessage(message));
+}
+
+void UserSessionProcess::killClient(const std::string& uuid)
+{
+    proto::UiToService message;
+    message.mutable_kill_session()->set_uuid(uuid);
+    ipc_channel_->send(common::serializeMessage(message));
 }
 
 } // namespace host

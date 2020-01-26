@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2019 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -20,6 +20,7 @@
 #define HOST__USER_SESSION_PROCESS_H
 
 #include "base/macros_magic.h"
+#include "base/threading/thread.h"
 #include "ipc/ipc_listener.h"
 #include "proto/host.pb.h"
 
@@ -29,26 +30,18 @@ class Channel;
 
 namespace host {
 
-class UserSessionProcess : public ipc::Listener
+class UserSessionProcessProxy;
+class UserSessionWindowProxy;
+
+class UserSessionProcess
+    : public base::Thread::Delegate,
+      public ipc::Listener
 {
 public:
-    UserSessionProcess();
-    ~UserSessionProcess();
-
     enum class State
     {
         CONNECTED,
         DISCONNECTED
-    };
-
-    class Delegate
-    {
-    public:
-        virtual ~Delegate() = default;
-
-        virtual void onStateChanged() = 0;
-        virtual void onClientListChanged() = 0;
-        virtual void onCredentialsChanged() = 0;
     };
 
     struct Client
@@ -70,29 +63,36 @@ public:
 
     using ClientList = std::vector<Client>;
 
-    void start(Delegate* delegate);
+    explicit UserSessionProcess(std::shared_ptr<UserSessionWindowProxy> window_proxy);
+    ~UserSessionProcess();
 
-    void updateCredentials(proto::CredentialsRequest::Type request_type);
-    void killClient(const std::string& uuid);
+    void start();
 
-    State state() const { return state_; }
-    const proto::Credentials& credentials() const { return credentials_; }
-    const ClientList& clients() const { return clients_; }
+    std::shared_ptr<UserSessionProcessProxy> processProxy() const { return process_proxy_; }
 
 protected:
+    // base::Thread::Delegate implementation.
+    void onBeforeThreadRunning() override;
+    void onAfterThreadRunning() override;
+
     // ipc::Listener implementation.
     void onConnected() override;
     void onDisconnected() override;
     void onMessageReceived(const base::ByteArray& buffer) override;
 
 private:
+    friend class UserSessionProcessProxy;
+
+    void updateCredentials(proto::CredentialsRequest::Type request_type);
+    void killClient(const std::string& uuid);
+
+    base::Thread io_thread_;
+
+    std::shared_ptr<UserSessionProcessProxy> process_proxy_;
+    std::shared_ptr<UserSessionWindowProxy> window_proxy_;
     std::unique_ptr<ipc::Channel> ipc_channel_;
 
-    State state_ = State::DISCONNECTED;
-    proto::Credentials credentials_;
     ClientList clients_;
-
-    Delegate* delegate_ = nullptr;
 
     DISALLOW_COPY_AND_ASSIGN(UserSessionProcess);
 };

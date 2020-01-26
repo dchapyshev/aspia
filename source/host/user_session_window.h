@@ -16,32 +16,23 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST__USER_SESSION_PROCESS_PROXY_H
-#define HOST__USER_SESSION_PROCESS_PROXY_H
+#ifndef HOST__USER_SESSION_WINDOW_H
+#define HOST__USER_SESSION_WINDOW_H
 
 #include "host/user_session_process.h"
 
 namespace host {
 
-class UserSessionProcessProxy : public std::enable_shared_from_this<UserSessionProcessProxy>
+class UserSessionWindow
 {
 public:
-    UserSessionProcessProxy(
-        std::shared_ptr<base::TaskRunner> io_task_runner, UserSessionProcess* process);
-    ~UserSessionProcessProxy();
+    virtual ~UserSessionWindow() = default;
 
-    void dettach();
-
-    void updateCredentials(proto::CredentialsRequest::Type request_type);
-    void killClient(const std::string& uuid);
-
-private:
-    std::shared_ptr<base::TaskRunner> io_task_runner_;
-    UserSessionProcess* process_;
-
-    DISALLOW_COPY_AND_ASSIGN(UserSessionProcessProxy);
+    virtual void onStateChanged(UserSessionProcess::State state) = 0;
+    virtual void onClientListChanged(const UserSessionProcess::ClientList& clients) = 0;
+    virtual void onCredentialsChanged(const proto::Credentials& credentials) = 0;
 };
 
 } // namespace host
 
-#endif // HOST__USER_SESSION_PROCESS_PROXY_H
+#endif // HOST__USER_SESSION_WINDOW_H

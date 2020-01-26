@@ -20,10 +20,12 @@
 
 #include "common/ui/about_dialog.h"
 #include "common/ui/language_action.h"
+#include "host/user_session_process.h"
+#include "host/user_session_process_proxy.h"
+#include "host/user_session_window_proxy.h"
 #include "host/ui/host_application.h"
 #include "host/ui/host_config_dialog.h"
 #include "host/ui/host_notifier_window.h"
-#include "host/user_session_process.h"
 #include "qt_base/qt_logging.h"
 #include "qt_base/qt_xml_settings.h"
 
@@ -36,7 +38,9 @@
 namespace host {
 
 MainWindow::MainWindow(QWidget* parent)
-    : QMainWindow(parent)
+    : QMainWindow(parent),
+      window_proxy_(std::make_shared<UserSessionWindowProxy>(
+          qt_base::Application::taskRunner(), this))
 {
     ui.setupUi(this);
     setWindowFlag(Qt::WindowMaximizeButtonHint, false);
@@ -76,14 +80,14 @@ MainWindow::MainWindow(QWidget* parent)
 
     connect(ui.button_new_password, &QPushButton::released, [this]()
     {
-        if (session_)
-            session_->updateCredentials(proto::CredentialsRequest::NEW_PASSWORD);
+        if (process_proxy_)
+            process_proxy_->updateCredentials(proto::CredentialsRequest::NEW_PASSWORD);
     });
 
     connect(ui.button_refresh_ip_list, &QPushButton::released, [this]()
     {
-        if (session_)
-            session_->updateCredentials(proto::CredentialsRequest::REFRESH);
+        if (process_proxy_)
+            process_proxy_->updateCredentials(proto::CredentialsRequest::REFRESH);
     });
 }
 
@@ -91,8 +95,10 @@ MainWindow::~MainWindow() = default;
 
 void MainWindow::connectToService()
 {
-    session_ = std::make_unique<UserSessionProcess>();
-    session_->start(this);
+    session_ = std::make_unique<UserSessionProcess>(window_proxy_);
+    session_->start();
+
+    process_proxy_ = session_->processProxy();
 }
 
 void MainWindow::activateHost()
@@ -117,6 +123,8 @@ void MainWindow::closeEvent(QCloseEvent* event)
     }
     else
     {
+        window_proxy_->dettach();
+
         if (notifier_)
             notifier_->close();
 
@@ -124,27 +132,28 @@ void MainWindow::closeEvent(QCloseEvent* event)
     }
 }
 
-void MainWindow::onStateChanged()
+void MainWindow::onStateChanged(UserSessionProcess::State state)
 {
-    if (session_->state() == UserSessionProcess::State::CONNECTED)
+    if (state == UserSessionProcess::State::CONNECTED)
     {
         ui.button_new_password->setEnabled(true);
         ui.button_refresh_ip_list->setEnabled(true);
 
-        session_->updateCredentials(proto::CredentialsRequest::REFRESH);
+        if (process_proxy_)
+            process_proxy_->updateCredentials(proto::CredentialsRequest::REFRESH);
     }
     else
     {
-        DCHECK_EQ(session_->state(), UserSessionProcess::State::DISCONNECTED);
+        DCHECK_EQ(state, UserSessionProcess::State::DISCONNECTED);
         realClose();
     }
 }
 
-void MainWindow::onClientListChanged()
+void MainWindow::onClientListChanged(const UserSessionProcess::ClientList& clients)
 {
     if (notifier_)
     {
-        notifier_->onClientListChanged(session_->clients());
+        notifier_->onClientListChanged(clients);
     }
     else
     {
@@ -152,8 +161,8 @@ void MainWindow::onClientListChanged()
 
         connect(notifier_, &NotifierWindow::killSession, [this](const std::string& uuid)
         {
-            if (session_)
-                session_->killClient(uuid);
+            if (process_proxy_)
+                process_proxy_->killClient(uuid);
         });
 
         notifier_->setAttribute(Qt::WA_DeleteOnClose);
@@ -162,9 +171,8 @@ void MainWindow::onClientListChanged()
     }
 }
 
-void MainWindow::onCredentialsChanged()
+void MainWindow::onCredentialsChanged(const proto::Credentials& credentials)
 {
-    const proto::Credentials& credentials = session_->credentials();
     std::string ip;
 
     for (int i = 0; i < credentials.ip_size(); ++i)
@@ -221,7 +229,7 @@ void MainWindow::onLanguageChanged(QAction* action)
     application->setLocale(new_locale);
 
     ui.retranslateUi(this);
-    onCredentialsChanged();
+    //onCredentialsChanged();
 }
 
 void MainWindow::onSettings()

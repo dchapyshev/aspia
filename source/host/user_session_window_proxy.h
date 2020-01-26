@@ -16,32 +16,35 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST__USER_SESSION_PROCESS_PROXY_H
-#define HOST__USER_SESSION_PROCESS_PROXY_H
+#ifndef HOST__USER_SESSION_WINDOW_PROXY_H
+#define HOST__USER_SESSION_WINDOW_PROXY_H
 
 #include "host/user_session_process.h"
 
 namespace host {
 
-class UserSessionProcessProxy : public std::enable_shared_from_this<UserSessionProcessProxy>
+class UserSessionWindow;
+
+class UserSessionWindowProxy : public std::enable_shared_from_this<UserSessionWindowProxy>
 {
 public:
-    UserSessionProcessProxy(
-        std::shared_ptr<base::TaskRunner> io_task_runner, UserSessionProcess* process);
-    ~UserSessionProcessProxy();
+    UserSessionWindowProxy(
+        std::shared_ptr<base::TaskRunner> ui_task_runner, UserSessionWindow* window);
+    ~UserSessionWindowProxy();
 
     void dettach();
 
-    void updateCredentials(proto::CredentialsRequest::Type request_type);
-    void killClient(const std::string& uuid);
+    void onStateChanged(UserSessionProcess::State state);
+    void onClientListChanged(const UserSessionProcess::ClientList& clients);
+    void onCredentialsChanged(const proto::Credentials& credentials);
 
 private:
-    std::shared_ptr<base::TaskRunner> io_task_runner_;
-    UserSessionProcess* process_;
+    std::shared_ptr<base::TaskRunner> ui_task_runner_;
+    UserSessionWindow* window_;
 
-    DISALLOW_COPY_AND_ASSIGN(UserSessionProcessProxy);
+    DISALLOW_COPY_AND_ASSIGN(UserSessionWindowProxy);
 };
 
 } // namespace host
 
-#endif // HOST__USER_SESSION_PROCESS_PROXY_H
+#endif // HOST__USER_SESSION_WINDOW_PROXY_H
