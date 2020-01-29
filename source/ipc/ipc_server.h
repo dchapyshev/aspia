@@ -20,6 +20,7 @@
 #define IPC__IPC_SERVER_H
 
 #include "base/macros_magic.h"
+#include "base/threading/thread_checker.h"
 
 #include <asio/io_context.hpp>
 #include <asio/windows/stream_handle.hpp>
@@ -32,6 +33,7 @@ class Server
 {
 public:
     Server();
+    ~Server();
 
     static std::u16string createUniqueId();
 
@@ -54,6 +56,8 @@ private:
     asio::io_context& io_context_;
     std::unique_ptr<asio::windows::stream_handle> stream_;
     std::u16string channel_name_;
+
+    THREAD_CHECKER(thread_checker_);
 
     DISALLOW_COPY_AND_ASSIGN(Server);
 };

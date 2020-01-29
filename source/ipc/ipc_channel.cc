@@ -18,6 +18,7 @@
 
 #include "ipc/ipc_channel.h"
 
+#include "base/location.h"
 #include "base/logging.h"
 #include "base/message_loop/message_loop.h"
 #include "base/message_loop/message_pump_asio.h"
@@ -113,8 +114,12 @@ Channel::Channel(asio::io_context& io_context, asio::windows::stream_handle&& st
 
 Channel::~Channel()
 {
+    DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
+
     proxy_->willDestroyCurrentChannel();
     proxy_ = nullptr;
+
+    listener_ = nullptr;
 
     disconnect();
 }
@@ -131,6 +136,8 @@ void Channel::setListener(Listener* listener)
 
 bool Channel::connect(std::u16string_view channel_id)
 {
+    DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
+
     const DWORD flags = SECURITY_SQOS_PRESENT | SECURITY_IDENTIFICATION | FILE_FLAG_OVERLAPPED;
     std::u16string channel_name = channelName(channel_id);
 
@@ -185,12 +192,16 @@ bool Channel::connect(std::u16string_view channel_id)
 
 void Channel::disconnect()
 {
+    DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
+
     if (!is_connected_)
         return;
 
     is_connected_ = false;
 
     std::error_code ignored_code;
+
+    stream_.cancel(ignored_code);
     stream_.close(ignored_code);
 
     if (listener_)
@@ -202,21 +213,26 @@ void Channel::disconnect()
 
 bool Channel::isConnected() const
 {
+    DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
     return is_connected_;
 }
 
 bool Channel::isPaused() const
 {
+    DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
     return is_paused_;
 }
 
 void Channel::pause()
 {
+    DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
     is_paused_ = true;
 }
 
 void Channel::resume()
 {
+    DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
+
     if (!is_connected_ || !is_paused_)
         return;
 
@@ -233,6 +249,8 @@ void Channel::resume()
 
 void Channel::send(base::ByteArray&& buffer)
 {
+    DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
+
     const bool schedule_write = write_queue_.empty();
 
     // Add the buffer to the queue for sending.
@@ -250,13 +268,14 @@ std::u16string Channel::channelName(std::u16string_view channel_id)
     return name;
 }
 
-void Channel::onErrorOccurred(const std::error_code& error_code)
+void Channel::onErrorOccurred(const base::Location& location, const std::error_code& error_code)
 {
     if (error_code == asio::error::operation_aborted)
         return;
 
-    LOG(LS_WARNING) << "Error in the IPC channel: "
-                    << base::utf16FromLocal8Bit(error_code.message());
+    LOG(LS_WARNING) << "Error in IPC channel: "
+                    << base::utf16FromLocal8Bit(error_code.message())
+                    << " (" << location.toString() << ")";
 
     disconnect();
 }
@@ -267,7 +286,7 @@ void Channel::doWrite()
 
     if (!write_size_ || write_size_ > kMaxMessageSize)
     {
-        onErrorOccurred(asio::error::message_size);
+        onErrorOccurred(FROM_HERE, asio::error::message_size);
         return;
     }
 
@@ -276,7 +295,7 @@ void Channel::doWrite()
     {
         if (error_code)
         {
-            onErrorOccurred(error_code);
+            onErrorOccurred(FROM_HERE, error_code);
             return;
         }
 
@@ -291,7 +310,7 @@ void Channel::doWrite()
         {
             if (error_code)
             {
-                onErrorOccurred(error_code);
+                onErrorOccurred(FROM_HERE, error_code);
                 return;
             }
 
@@ -317,7 +336,7 @@ void Channel::doReadMessage()
     {
         if (error_code)
         {
-            onErrorOccurred(error_code);
+            onErrorOccurred(FROM_HERE, error_code);
             return;
         }
 
@@ -325,7 +344,7 @@ void Channel::doReadMessage()
 
         if (!read_size_ || read_size_ > kMaxMessageSize)
         {
-            onErrorOccurred(asio::error::message_size);
+            onErrorOccurred(FROM_HERE, asio::error::message_size);
             return;
         }
 
@@ -339,7 +358,7 @@ void Channel::doReadMessage()
         {
             if (error_code)
             {
-                onErrorOccurred(error_code);
+                onErrorOccurred(FROM_HERE, error_code);
                 return;
             }
 

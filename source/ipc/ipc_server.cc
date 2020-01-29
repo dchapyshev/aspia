@@ -23,6 +23,7 @@
 #include "base/message_loop/message_pump_asio.h"
 #include "base/strings/string_printf.h"
 #include "base/strings/unicode.h"
+#include "base/win/scoped_object.h"
 #include "base/win/security_helpers.h"
 #include "crypto/random.h"
 #include "ipc/ipc_channel.h"
@@ -44,6 +45,11 @@ Server::Server()
     // Nothing
 }
 
+Server::~Server()
+{
+    DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
+}
+
 // static
 std::u16string Server::createUniqueId()
 {
@@ -59,6 +65,7 @@ std::u16string Server::createUniqueId()
 
 bool Server::start(std::u16string_view channel_id, Delegate* delegate)
 {
+    DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
     DCHECK(delegate);
 
     if (channel_id.empty())
@@ -84,9 +91,9 @@ bool Server::doAccept()
     // and denies access by anyone else.
     std::wstring security_descriptor =
         base::stringPrintf(L"O:%sG:%sD:(A;;GA;;;%s)(A;;GA;;;AU)",
-            user_sid.c_str(),
-            user_sid.c_str(),
-            user_sid.c_str());
+                           user_sid.c_str(),
+                           user_sid.c_str(),
+                           user_sid.c_str());
 
     base::win::ScopedSd sd = base::win::convertSddlToSd(security_descriptor);
     if (!sd.get())
@@ -103,24 +110,25 @@ bool Server::doAccept()
     const DWORD open_mode = FILE_FLAG_OVERLAPPED | FILE_FLAG_FIRST_PIPE_INSTANCE;
     const DWORD pipe_mode = PIPE_TYPE_BYTE | PIPE_READMODE_BYTE | PIPE_REJECT_REMOTE_CLIENTS;
 
-    stream_ = std::make_unique<asio::windows::stream_handle>(io_context_);
-
-    std::error_code error_code;
-    stream_->assign(CreateNamedPipeW(reinterpret_cast<const wchar_t*>(channel_name_.c_str()),
-                                     open_mode | PIPE_ACCESS_DUPLEX,
-                                     pipe_mode,
-                                     1,
-                                     kPipeBufferSize,
-                                     kPipeBufferSize,
-                                     kAcceptTimeout,
-                                     &security_attributes),
-                    error_code);
-
-    if (error_code)
+    base::win::ScopedHandle handle(
+        CreateNamedPipeW(reinterpret_cast<const wchar_t*>(channel_name_.c_str()),
+                         open_mode | PIPE_ACCESS_DUPLEX,
+                         pipe_mode,
+                         1,
+                         kPipeBufferSize,
+                         kPipeBufferSize,
+                         kAcceptTimeout,
+                         &security_attributes));
+    if (!handle.isValid())
     {
-        LOG(LS_WARNING) << "CreateNamedPipeW failed: " << error_code.message();
+        PLOG(LS_WARNING) << "CreateNamedPipeW failed";
         return false;
     }
+
+    stream_ = std::make_unique<asio::windows::stream_handle>(io_context_);
+
+    std::error_code ignored_code;
+    stream_->assign(handle.release(), ignored_code);
 
     asio::windows::overlapped_ptr overlapped(io_context_,
         [this](const std::error_code& error_code, size_t /* bytes_transferred */)

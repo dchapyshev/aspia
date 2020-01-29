@@ -23,9 +23,14 @@
 #include "base/process_handle.h"
 #include "base/memory/byte_array.h"
 #include "base/memory/scalable_queue.h"
+#include "base/threading/thread_checker.h"
 #include "base/win/session_id.h"
 
 #include <asio/windows/stream_handle.hpp>
+
+namespace base {
+class Location;
+} // namespace base
 
 namespace ipc {
 
@@ -66,7 +71,7 @@ private:
     Channel(asio::io_context& io_context, asio::windows::stream_handle&& stream);
     static std::u16string channelName(std::u16string_view channel_id);
 
-    void onErrorOccurred(const std::error_code& error_code);
+    void onErrorOccurred(const base::Location& location, const std::error_code& error_code);
     void doWrite();
     void doReadMessage();
     void onMessageReceived();
@@ -88,6 +93,8 @@ private:
 
     base::ProcessId peer_process_id_ = base::kNullProcessId;
     base::win::SessionId peer_session_id_ = base::win::kInvalidSessionId;
+
+    THREAD_CHECKER(thread_checker_);
 
     DISALLOW_COPY_AND_ASSIGN(Channel);
 };
