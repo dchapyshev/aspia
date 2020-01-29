@@ -18,6 +18,7 @@
 
 #include "net/socket_connector.h"
 
+#include "base/location.h"
 #include "base/strings/unicode.h"
 
 #include <asio/connect.hpp>
@@ -63,7 +64,7 @@ void SocketConnector::onResolved(const std::error_code& error_code,
 
     if (error_code)
     {
-        error_callback_(error_code);
+        error_callback_(FROM_HERE, error_code);
         return;
     }
 
@@ -82,7 +83,7 @@ void SocketConnector::onConnected(const std::error_code& error_code,
 
     if (error_code)
     {
-        error_callback_(error_code);
+        error_callback_(FROM_HERE, error_code);
         return;
     }
 

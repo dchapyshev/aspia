@@ -25,15 +25,19 @@
 
 #include <functional>
 
+namespace base {
+class Location;
+} // namespace base
+
 namespace net {
 
 class SocketConnector
 {
 public:
     using ConnectCallback = std::function<void()>;
-    using ErrorCallback = std::function<void(const std::error_code& error_code)>;
+    using ErrorCallback = std::function<void(const base::Location&, const std::error_code&)>;
 
-    SocketConnector(asio::io_context& io_context);
+    explicit SocketConnector(asio::io_context& io_context);
     ~SocketConnector();
 
     void attach(asio::ip::tcp::socket* socket,

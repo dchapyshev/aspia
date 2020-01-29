@@ -26,6 +26,10 @@
 
 #include <functional>
 
+namespace base {
+class Location;
+} // namespace base
+
 namespace crypto {
 class MessageDecryptor;
 } // namespace crypto
@@ -35,7 +39,7 @@ namespace net {
 class SocketReader
 {
 public:
-    using ReadFailedCallback = std::function<void(const std::error_code&)>;
+    using ReadFailedCallback = std::function<void(const base::Location&, const std::error_code&)>;
     using ReadMessageCallback = std::function<void(const base::ByteArray&)>;
 
     SocketReader();

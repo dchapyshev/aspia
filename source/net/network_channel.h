@@ -28,6 +28,10 @@
 
 #include <memory>
 
+namespace base {
+class Location;
+} // namespace base
+
 namespace crypto {
 class MessageEncryptor;
 class MessageDecryptor;
@@ -116,7 +120,7 @@ private:
     friend class ChannelProxy;
 
     void onConnected();
-    void onErrorOccurred(const std::error_code& error_code);
+    void onErrorOccurred(const base::Location& location, const std::error_code& error_code);
     void onMessageReceived(const base::ByteArray& buffer);
     void onMessageWritten();
 

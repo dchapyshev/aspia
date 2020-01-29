@@ -203,12 +203,6 @@ void Channel::disconnect()
 
     stream_.cancel(ignored_code);
     stream_.close(ignored_code);
-
-    if (listener_)
-    {
-        listener_->onDisconnected();
-        listener_ = nullptr;
-    }
 }
 
 bool Channel::isConnected() const
@@ -275,9 +269,16 @@ void Channel::onErrorOccurred(const base::Location& location, const std::error_c
 
     LOG(LS_WARNING) << "Error in IPC channel: "
                     << base::utf16FromLocal8Bit(error_code.message())
-                    << " (" << location.toString() << ")";
+                    << " (code: " << error_code.value()
+                    << ", location: " << location.toString() << ")";
 
     disconnect();
+
+    if (listener_)
+    {
+        listener_->onDisconnected();
+        listener_ = nullptr;
+    }
 }
 
 void Channel::doWrite()

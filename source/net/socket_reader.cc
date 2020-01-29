@@ -18,6 +18,7 @@
 
 #include "net/socket_reader.h"
 
+#include "base/location.h"
 #include "base/logging.h"
 #include "crypto/message_decryptor_fake.h"
 #include "net/socket_constants.h"
@@ -103,7 +104,7 @@ void SocketReader::onReadSize(const std::error_code& error_code, size_t bytes_tr
 
     if (error_code)
     {
-        read_failed_callback_(error_code);
+        read_failed_callback_(FROM_HERE, error_code);
         return;
     }
 
@@ -148,7 +149,7 @@ void SocketReader::doReadContent()
 
     if (!read_buffer_size_ || read_buffer_size_ > kMaxMessageSize)
     {
-        read_failed_callback_(asio::error::message_size);
+        read_failed_callback_(FROM_HERE, asio::error::message_size);
         return;
     }
 
@@ -172,7 +173,7 @@ void SocketReader::onReadContent(const std::error_code& error_code, size_t bytes
 
     if (error_code)
     {
-        read_failed_callback_(error_code);
+        read_failed_callback_(FROM_HERE, error_code);
         return;
     }
 
@@ -209,7 +210,7 @@ void SocketReader::onMessageReceived()
 
     if (!decryptor_->decrypt(read_buffer_.data(), read_buffer_.size(), decrypt_buffer_.data()))
     {
-        read_failed_callback_(asio::error::access_denied);
+        read_failed_callback_(FROM_HERE, asio::error::access_denied);
         return;
     }
 

@@ -18,6 +18,7 @@
 
 #include "net/network_channel.h"
 
+#include "base/location.h"
 #include "base/logging.h"
 #include "base/message_loop/message_loop.h"
 #include "base/message_loop/message_pump_asio.h"
@@ -53,7 +54,7 @@ Channel::Channel()
     connector_ = std::make_unique<SocketConnector>(io_context_);
     connector_->attach(&socket_,
         std::bind(&Channel::onConnected, this),
-        std::bind(&Channel::onErrorOccurred, this, std::placeholders::_1));
+        std::bind(&Channel::onErrorOccurred, this, std::placeholders::_1, std::placeholders::_2));
 
     init();
 }
@@ -202,7 +203,7 @@ void Channel::init()
     reader_ = std::make_unique<SocketReader>();
     reader_->attach(&socket_,
         std::bind(&Channel::onMessageReceived, this, std::placeholders::_1),
-        std::bind(&Channel::onErrorOccurred, this, std::placeholders::_1));
+        std::bind(&Channel::onErrorOccurred, this, std::placeholders::_1, std::placeholders::_2));
 }
 
 void Channel::disconnect()
@@ -226,7 +227,7 @@ void Channel::onConnected()
         listener_->onConnected();
 }
 
-void Channel::onErrorOccurred(const std::error_code& error_code)
+void Channel::onErrorOccurred(const base::Location& location, const std::error_code& error_code)
 {
     if (error_code == asio::error::operation_aborted)
         return;
@@ -249,7 +250,8 @@ void Channel::onErrorOccurred(const std::error_code& error_code)
         error = ErrorCode::NETWORK_ERROR;
 
     LOG(LS_WARNING) << "Network error: " << base::utf16FromLocal8Bit(error_code.message())
-                    << " (" << error_code.value() << ")";
+                    << " (code: " << error_code.value()
+                    << ", location: " << location.toString() << ")";
 
     disconnect();
 
@@ -277,7 +279,7 @@ void Channel::doWrite()
     const base::ByteArray& source_buffer = write_queue_.front();
     if (source_buffer.empty())
     {
-        onErrorOccurred(asio::error::message_size);
+        onErrorOccurred(FROM_HERE, asio::error::message_size);
         return;
     }
 
@@ -286,7 +288,7 @@ void Channel::doWrite()
 
     if (target_data_size > kMaxMessageSize)
     {
-        onErrorOccurred(asio::error::message_size);
+        onErrorOccurred(FROM_HERE, asio::error::message_size);
         return;
     }
 
@@ -331,7 +333,7 @@ void Channel::doWrite()
                              source_buffer.size(),
                              write_buffer_.data() + length_data_size))
     {
-        onErrorOccurred(asio::error::access_denied);
+        onErrorOccurred(FROM_HERE, asio::error::access_denied);
         return;
     }
 
@@ -350,7 +352,7 @@ void Channel::onWrite(const std::error_code& error_code, size_t bytes_transferre
 
     if (error_code)
     {
-        onErrorOccurred(error_code);
+        onErrorOccurred(FROM_HERE, error_code);
         return;
     }
 
