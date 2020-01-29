@@ -103,7 +103,7 @@ protected:
     friend class Server;
 
     // Constructor available for server. An already connected socket is being moved.
-    Channel(asio::ip::tcp::socket&& socket);
+    explicit Channel(asio::ip::tcp::socket&& socket);
 
     // Initializes internal components.
     void init();
