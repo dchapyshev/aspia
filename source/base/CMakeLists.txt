@@ -24,6 +24,7 @@ list(APPEND SOURCE_BASE
     bitset.h
     command_line.cc
     command_line.h
+    compiler_specific.h
     cpuid.cc
     cpuid.h
     debug.cc
@@ -31,6 +32,8 @@ list(APPEND SOURCE_BASE
     endian.h
     guid.cc
     guid.h
+    location.cc
+    location.h
     logging.cc
     logging.h
     macros_magic.h
