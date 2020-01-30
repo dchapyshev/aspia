@@ -95,16 +95,14 @@ base::win::SessionId serverSessionIdImpl(HANDLE pipe_handle)
 } // namespace
 
 Channel::Channel()
-    : io_context_(base::MessageLoop::current()->pumpAsio()->ioContext()),
-      stream_(io_context_),
+    : stream_(base::MessageLoop::current()->pumpAsio()->ioContext()),
       proxy_(new ChannelProxy(this))
 {
     // Nothing
 }
 
-Channel::Channel(asio::io_context& io_context, asio::windows::stream_handle&& stream)
-    : io_context_(io_context),
-      stream_(std::move(stream)),
+Channel::Channel(asio::windows::stream_handle&& stream)
+    : stream_(std::move(stream)),
       proxy_(new ChannelProxy(this)),
       is_connected_(true)
 {
@@ -180,13 +178,6 @@ bool Channel::connect(std::u16string_view channel_id)
     peer_session_id_ = serverSessionIdImpl(stream_.native_handle());
 
     is_connected_ = true;
-
-    asio::post(io_context_, [this]()
-    {
-        if (listener_)
-            listener_->onConnected();
-    });
-
     return true;
 }
 

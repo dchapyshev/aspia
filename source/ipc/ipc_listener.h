@@ -28,7 +28,6 @@ class Listener
 public:
     virtual ~Listener() = default;
 
-    virtual void onConnected() = 0;
     virtual void onDisconnected() = 0;
     virtual void onMessageReceived(const base::ByteArray& buffer) = 0;
 };

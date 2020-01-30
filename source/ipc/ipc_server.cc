@@ -143,7 +143,7 @@ bool Server::doAccept()
         }
 
         std::unique_ptr<Channel> channel =
-            std::unique_ptr<Channel>(new Channel(io_context_, std::move(*stream_)));
+            std::unique_ptr<Channel>(new Channel(std::move(*stream_)));
 
         delegate_->onNewConnection(std::move(channel));
 
