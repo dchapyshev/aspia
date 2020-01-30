@@ -58,7 +58,6 @@ public:
 
 protected:
     // ipc::Listener implementation.
-    void onConnected() override;
     void onDisconnected() override;
     void onMessageReceived(const base::ByteArray& buffer) override;
 

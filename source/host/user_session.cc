@@ -54,7 +54,7 @@ void UserSession::start(Delegate* delegate)
 
     desktop_session_ = std::make_unique<DesktopSessionManager>(task_runner_, this);
     desktop_session_proxy_ = desktop_session_->sessionProxy();
-    desktop_session_->attachSession(session_id_);
+    //desktop_session_->attachSession(session_id_);
 
     updateCredentials();
 
@@ -76,11 +76,6 @@ void UserSession::addNewSession(std::unique_ptr<ClientSession> client_session)
 {
     clients_.emplace_back(std::move(client_session));
     clients_.back()->start(this);
-}
-
-void UserSession::onConnected()
-{
-    NOTREACHED();
 }
 
 void UserSession::onDisconnected()

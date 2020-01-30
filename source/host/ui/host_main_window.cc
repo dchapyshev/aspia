@@ -136,6 +136,8 @@ void MainWindow::onStateChanged(UserSessionProcess::State state)
 {
     if (state == UserSessionProcess::State::CONNECTED)
     {
+        LOG(LS_INFO) << "The connection to the service was successfully established";
+
         ui.button_new_password->setEnabled(true);
         ui.button_refresh_ip_list->setEnabled(true);
 
@@ -145,6 +147,8 @@ void MainWindow::onStateChanged(UserSessionProcess::State state)
     else
     {
         DCHECK_EQ(state, UserSessionProcess::State::DISCONNECTED);
+
+        LOG(LS_INFO) << "The connection to the service is lost. The application will be closed";
         realClose();
     }
 }

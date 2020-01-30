@@ -121,11 +121,6 @@ void DesktopSessionIpc::injectClipboardEvent(const proto::ClipboardEvent& event)
     channel_->send(common::serializeMessage(outgoing_message_));
 }
 
-void DesktopSessionIpc::onConnected()
-{
-    NOTREACHED();
-}
-
 void DesktopSessionIpc::onDisconnected()
 {
     delegate_->onDesktopSessionStopped();

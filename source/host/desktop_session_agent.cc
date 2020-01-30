@@ -37,13 +37,12 @@ DesktopSessionAgent::~DesktopSessionAgent() = default;
 void DesktopSessionAgent::start(std::u16string_view channel_id)
 {
     channel_ = std::make_unique<ipc::Channel>();
-    channel_->connect(channel_id);
-}
 
-void DesktopSessionAgent::onConnected()
-{
-    // A window is created to monitor the clipboard. We cannot create windows in the current thread.
-    // Create a separate thread.
+    if (!channel_->connect(channel_id))
+        return;
+
+    // A window is created to monitor the clipboard. We cannot create windows in the current
+    // thread. Create a separate thread.
     //clipboard_thread_ = std::make_unique<base::Thread>();
     //clipboard_thread_->start(base::MessageLoop::Type::WIN);
 

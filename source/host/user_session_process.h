@@ -76,7 +76,6 @@ protected:
     void onAfterThreadRunning() override;
 
     // ipc::Listener implementation.
-    void onConnected() override;
     void onDisconnected() override;
     void onMessageReceived(const base::ByteArray& buffer) override;
 

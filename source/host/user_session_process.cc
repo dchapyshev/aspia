@@ -32,7 +32,10 @@ UserSessionProcess::UserSessionProcess(std::shared_ptr<UserSessionWindowProxy> w
     DCHECK(window_proxy_);
 }
 
-UserSessionProcess::~UserSessionProcess() = default;
+UserSessionProcess::~UserSessionProcess()
+{
+    io_thread_.stop();
+}
 
 void UserSessionProcess::start()
 {
@@ -45,19 +48,18 @@ void UserSessionProcess::onBeforeThreadRunning()
 
     ipc_channel_ = std::make_unique<ipc::Channel>();
     ipc_channel_->setListener(this);
-    ipc_channel_->connect(kIpcChannelIdForUI);
+
+    if (ipc_channel_->connect(kIpcChannelIdForUI))
+    {
+        window_proxy_->onStateChanged(State::CONNECTED);
+        ipc_channel_->resume();
+    }
 }
 
 void UserSessionProcess::onAfterThreadRunning()
 {
     ipc_channel_.reset();
     process_proxy_.reset();
-}
-
-void UserSessionProcess::onConnected()
-{
-    window_proxy_->onStateChanged(State::CONNECTED);
-    ipc_channel_->resume();
 }
 
 void UserSessionProcess::onDisconnected()
