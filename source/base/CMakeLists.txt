@@ -78,7 +78,8 @@ list(APPEND SOURCE_BASE_UNIT_TESTS
     scoped_clear_last_error_unittest.cc
     stl_util_unittest.cc
     stream_converter_unittest.cc
-    version_unittest.cc)
+    version_unittest.cc
+    xml_settings_unittest.cc)
 
 list(APPEND SOURCE_BASE_FILES
     files/base_paths.cc
