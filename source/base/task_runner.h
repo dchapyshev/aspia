@@ -19,6 +19,8 @@
 #ifndef BASE__TASK_RUNNER_H
 #define BASE__TASK_RUNNER_H
 
+#include "base/macros_magic.h"
+
 #include <chrono>
 #include <functional>
 #include <memory>
@@ -37,6 +39,25 @@ public:
     virtual bool postTask(const Callback& task) = 0;
     virtual bool postDelayedTask(const Callback& callback, const Milliseconds& delay) = 0;
     virtual bool postQuit() = 0;
+
+    template <class T>
+    class DeleteHelper
+    {
+    public:
+        static void doDelete(const void* object)
+        {
+            delete reinterpret_cast<const T*>(object);
+        }
+
+    private:
+        DISALLOW_COPY_AND_ASSIGN(DeleteHelper);
+    };
+
+    template <class T>
+    void deleteSoon(const T* object)
+    {
+        postTask(std::bind(&DeleteHelper<T>::doDelete, object));
+    }
 };
 
 } // namespace base
