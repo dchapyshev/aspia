@@ -29,6 +29,7 @@
 #include <string>
 
 namespace base {
+class TaskRunner;
 class Thread;
 } // namespace base
 
@@ -51,7 +52,7 @@ class DesktopSessionAgent
       public desktop::ScreenCapturerWrapper::Delegate
 {
 public:
-    DesktopSessionAgent();
+    explicit DesktopSessionAgent(std::shared_ptr<base::TaskRunner> task_runner);
     ~DesktopSessionAgent();
 
     void start(std::u16string_view channel_id);
@@ -71,6 +72,8 @@ protected:
     void onScreenCaptured(std::unique_ptr<desktop::SharedFrame> frame) override;
 
 private:
+    std::shared_ptr<base::TaskRunner> task_runner_;
+
     std::unique_ptr<ipc::Channel> channel_;
     proto::internal::ServiceToDesktop incoming_message_;
     proto::internal::DesktopToService outgoing_message_;

@@ -30,7 +30,11 @@
 
 namespace host {
 
-DesktopSessionAgent::DesktopSessionAgent() = default;
+DesktopSessionAgent::DesktopSessionAgent(std::shared_ptr<base::TaskRunner> task_runner)
+    : task_runner_(std::move(task_runner))
+{
+    // Nothing
+}
 
 DesktopSessionAgent::~DesktopSessionAgent() = default;
 
@@ -40,6 +44,9 @@ void DesktopSessionAgent::start(std::u16string_view channel_id)
 
     if (!channel_->connect(channel_id))
         return;
+
+    channel_->setListener(this);
+    channel_->resume();
 
     // A window is created to monitor the clipboard. We cannot create windows in the current
     // thread. Create a separate thread.
@@ -64,6 +71,8 @@ void DesktopSessionAgent::onDisconnected()
     screen_capturer_.reset();
     shared_memory_factory_.reset();
     clipboard_thread_.reset();
+
+    task_runner_->postQuit();
 }
 
 void DesktopSessionAgent::onMessageReceived(const base::ByteArray& buffer)
