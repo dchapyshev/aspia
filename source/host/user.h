@@ -63,6 +63,7 @@ public:
 
     size_t find(std::u16string_view username) const;
     size_t count() const { return list_.size(); }
+    bool empty() const { return list_.empty(); }
     const User& at(size_t index) const;
 
     const base::ByteArray& seedKey() const { return seed_key_; }
