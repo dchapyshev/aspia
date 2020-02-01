@@ -41,7 +41,6 @@ UserSession::UserSession(
     DCHECK(task_runner_);
     DCHECK(ipc_channel_);
 
-    ipc_channel_proxy_ = ipc_channel_->channelProxy();
     session_id_ = ipc_channel_->peerSessionId();
 }
 
@@ -54,12 +53,12 @@ void UserSession::start(Delegate* delegate)
 
     desktop_session_ = std::make_unique<DesktopSessionManager>(task_runner_, this);
     desktop_session_proxy_ = desktop_session_->sessionProxy();
-    //desktop_session_->attachSession(session_id_);
+    desktop_session_->attachSession(session_id_);
 
     updateCredentials();
 
-    ipc_channel_proxy_->setListener(this);
-    ipc_channel_proxy_->resume();
+    ipc_channel_->setListener(this);
+    ipc_channel_->resume();
 }
 
 base::win::SessionId UserSession::sessionId() const
@@ -234,7 +233,7 @@ void UserSession::sendCredentials()
         }
     }
 
-    ipc_channel_proxy_->send(common::serializeMessage(message));
+    ipc_channel_->send(common::serializeMessage(message));
 }
 
 void UserSession::killClientSession(const std::string& id)

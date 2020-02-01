@@ -84,7 +84,6 @@ private:
 
     std::shared_ptr<base::TaskRunner> task_runner_;
     std::unique_ptr<ipc::Channel> ipc_channel_;
-    std::shared_ptr<ipc::ChannelProxy> ipc_channel_proxy_;
 
     base::win::SessionId session_id_ = base::win::kInvalidSessionId;
     std::string username_;
