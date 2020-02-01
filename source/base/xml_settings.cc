@@ -209,13 +209,9 @@ bool XmlSettings::writeFile(const std::filesystem::path& file, const Map& map)
             return false;
     }
 
-    std::ofstream stream;
+    std::stringstream string_stream;
 
-    stream.open(file, std::ofstream::binary | std::ofstream::trunc);
-    if (!stream.is_open())
-        return false;
-
-    XmlSaxWriter xml(stream);
+    XmlSaxWriter xml(string_stream);
 
     xml.startDocument();
     xml.startElement("Settings");
@@ -254,7 +250,16 @@ bool XmlSettings::writeFile(const std::filesystem::path& file, const Map& map)
     xml.endElement();
     xml.endDocument();
 
-    return !stream.fail();
+    std::ofstream file_stream;
+
+    file_stream.open(file, std::ofstream::binary | std::ofstream::out | std::ofstream::trunc);
+    if (!file_stream.is_open())
+        return false;
+
+    // It is necessary to write a file in one operation.
+    file_stream << string_stream.str();
+
+    return !file_stream.fail();
 }
 
 } // namespace base

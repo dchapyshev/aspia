@@ -28,7 +28,7 @@ template <class Container>
 bool readFileT(const std::filesystem::path& filename, Container* buffer)
 {
     std::ifstream stream;
-    stream.open(filename, std::ifstream::binary);
+    stream.open(filename, std::ifstream::binary | std::ifstream::in);
     if (!stream.is_open())
         return false;
 
@@ -52,7 +52,7 @@ bool readFileT(const std::filesystem::path& filename, Container* buffer)
 bool writeFile(const std::filesystem::path& filename, const void* data, size_t size)
 {
     std::ofstream stream;
-    stream.open(filename, std::ofstream::binary | std::ofstream::trunc);
+    stream.open(filename, std::ofstream::binary | std::ofstream::out | std::ofstream::trunc);
     if (!stream.is_open())
         return false;
 
