@@ -23,7 +23,12 @@
 #include "base/threading/thread_checker.h"
 
 #include <asio/io_context.hpp>
-#include <asio/windows/stream_handle.hpp>
+
+#include <array>
+
+namespace base {
+class Location;
+} // namespace base
 
 namespace ipc {
 
@@ -49,13 +54,17 @@ public:
     bool start(std::u16string_view channel_id, Delegate* delegate);
 
 private:
-    bool doAccept();
+    bool runListener(size_t index);
+    void onNewConnection(size_t index, std::unique_ptr<Channel> channel);
+    void onErrorOccurred(const base::Location& location);
 
     Delegate* delegate_ = nullptr;
 
     asio::io_context& io_context_;
-    std::unique_ptr<asio::windows::stream_handle> stream_;
     std::u16string channel_name_;
+
+    class Listener;
+    std::array<std::shared_ptr<Listener>, 8> listeners_;
 
     THREAD_CHECKER(thread_checker_);
 

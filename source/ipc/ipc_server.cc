@@ -18,6 +18,7 @@
 
 #include "ipc/ipc_server.h"
 
+#include "base/location.h"
 #include "base/logging.h"
 #include "base/message_loop/message_loop.h"
 #include "base/message_loop/message_pump_asio.h"
@@ -28,7 +29,9 @@
 #include "crypto/random.h"
 #include "ipc/ipc_channel.h"
 
+#include <asio/post.hpp>
 #include <asio/windows/overlapped_ptr.hpp>
+#include <asio/windows/stream_handle.hpp>
 
 namespace ipc {
 
@@ -39,15 +42,145 @@ const DWORD kPipeBufferSize = 512 * 1024; // 512 kB
 
 } // namespace
 
+class Server::Listener : public std::enable_shared_from_this<Listener>
+{
+public:
+    Listener(Server* server, size_t index);
+
+    void dettach() { server_ = nullptr; }
+
+    bool listen(asio::io_context& io_context, std::u16string_view channel_name);
+    void onNewConnetion(const std::error_code& error_code, size_t bytes_transferred);
+
+private:
+    Server* server_;
+    const size_t index_;
+
+    std::unique_ptr<asio::windows::stream_handle> handle_;
+    std::unique_ptr<asio::windows::overlapped_ptr> overlapped_;
+
+    DISALLOW_COPY_AND_ASSIGN(Listener);
+};
+
+Server::Listener::Listener(Server* server, size_t index)
+    : server_(server),
+      index_(index)
+{
+    // Nothing
+}
+
+bool Server::Listener::listen(asio::io_context& io_context, std::u16string_view channel_name)
+{
+    std::wstring user_sid;
+
+    if (!base::win::userSidString(&user_sid))
+    {
+        LOG(LS_ERROR) << "Failed to query the current user SID";
+        return nullptr;
+    }
+
+    // Create a security descriptor that gives full access to the caller and authenticated users
+    // and denies access by anyone else.
+    std::wstring security_descriptor =
+        base::stringPrintf(L"O:%sG:%sD:(A;;GA;;;%s)(A;;GA;;;AU)",
+                           user_sid.c_str(),
+                           user_sid.c_str(),
+                           user_sid.c_str());
+
+    base::win::ScopedSd sd = base::win::convertSddlToSd(security_descriptor);
+    if (!sd.get())
+    {
+        LOG(LS_ERROR) << "Failed to create a security descriptor";
+        return nullptr;
+    }
+
+    SECURITY_ATTRIBUTES security_attributes = { 0 };
+    security_attributes.nLength = sizeof(security_attributes);
+    security_attributes.lpSecurityDescriptor = sd.get();
+    security_attributes.bInheritHandle = FALSE;
+
+    base::win::ScopedHandle handle(
+        CreateNamedPipeW(reinterpret_cast<const wchar_t*>(channel_name.data()),
+                         FILE_FLAG_OVERLAPPED | PIPE_ACCESS_DUPLEX,
+                         PIPE_TYPE_BYTE | PIPE_READMODE_BYTE | PIPE_REJECT_REMOTE_CLIENTS,
+                         PIPE_UNLIMITED_INSTANCES,
+                         kPipeBufferSize,
+                         kPipeBufferSize,
+                         kAcceptTimeout,
+                         &security_attributes));
+    if (!handle.isValid())
+    {
+        PLOG(LS_WARNING) << "CreateNamedPipeW failed";
+        return nullptr;
+    }
+
+    handle_ = std::make_unique<asio::windows::stream_handle>(io_context, handle.release());
+
+    overlapped_ = std::make_unique<asio::windows::overlapped_ptr>(
+        io_context,
+        std::bind(&Server::Listener::onNewConnetion,
+                  shared_from_this(),
+                  std::placeholders::_1,
+                  std::placeholders::_2));
+
+    if (!ConnectNamedPipe(handle_->native_handle(), overlapped_->get()))
+    {
+        DWORD last_error = GetLastError();
+
+        switch (last_error)
+        {
+            case ERROR_PIPE_CONNECTED:
+                break;
+
+            case ERROR_IO_PENDING:
+                overlapped_->release();
+                return true;
+
+            default:
+                overlapped_->complete(
+                    std::error_code(last_error, asio::error::get_system_category()), 0);
+                return false;
+        }
+    }
+
+    overlapped_->complete(std::error_code(), 0);
+    return true;
+}
+
+void Server::Listener::onNewConnetion(
+    const std::error_code& error_code, size_t /* bytes_transferred */)
+{
+    if (!server_)
+        return;
+
+    if (error_code)
+    {
+        server_->onErrorOccurred(FROM_HERE);
+        return;
+    }
+
+    std::unique_ptr<Channel> channel =
+        std::unique_ptr<Channel>(new Channel(std::move(*handle_)));
+
+    server_->onNewConnection(index_, std::move(channel));
+}
+
 Server::Server()
     : io_context_(base::MessageLoop::current()->pumpAsio()->ioContext())
 {
-    // Nothing
+    for (size_t i = 0; i < listeners_.size(); ++i)
+        listeners_[i] = std::make_shared<Listener>(this, i);
 }
 
 Server::~Server()
 {
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
+
+    for (size_t i = 0; i < listeners_.size(); ++i)
+    {
+        if (listeners_[i])
+            listeners_[i]->dettach();
+    }
 }
 
 // static
@@ -69,103 +202,40 @@ bool Server::start(std::u16string_view channel_id, Delegate* delegate)
     DCHECK(delegate);
 
     if (channel_id.empty())
+    {
+        DLOG(LS_ERROR) << "Empty channel id";
         return false;
+    }
 
     channel_name_ = Channel::channelName(channel_id);
     delegate_ = delegate;
 
-    return doAccept();
+    for (size_t i = 0; i < listeners_.size(); ++i)
+    {
+        if (!runListener(i))
+            return false;
+    }
+
+    return true;
 }
 
-bool Server::doAccept()
+bool Server::runListener(size_t index)
 {
-    std::wstring user_sid;
+    return listeners_[index]->listen(io_context_, channel_name_);
+}
 
-    if (!base::win::userSidString(&user_sid))
-    {
-        LOG(LS_ERROR) << "Failed to query the current user SID";
-        return false;
-    }
+void Server::onNewConnection(size_t index, std::unique_ptr<Channel> channel)
+{
+    delegate_->onNewConnection(std::move(channel));
+    runListener(index);
+}
 
-    // Create a security descriptor that gives full access to the caller and authenticated users
-    // and denies access by anyone else.
-    std::wstring security_descriptor =
-        base::stringPrintf(L"O:%sG:%sD:(A;;GA;;;%s)(A;;GA;;;AU)",
-                           user_sid.c_str(),
-                           user_sid.c_str(),
-                           user_sid.c_str());
+void Server::onErrorOccurred(const base::Location& location)
+{
+    LOG(LS_WARNING) << "Error in IPC server with name: " << channel_name_
+                    << " (" << location.toString() << ")";
 
-    base::win::ScopedSd sd = base::win::convertSddlToSd(security_descriptor);
-    if (!sd.get())
-    {
-        LOG(LS_ERROR) << "Failed to create a security descriptor";
-        return false;
-    }
-
-    SECURITY_ATTRIBUTES security_attributes = { 0 };
-    security_attributes.nLength = sizeof(security_attributes);
-    security_attributes.lpSecurityDescriptor = sd.get();
-    security_attributes.bInheritHandle = FALSE;
-
-    const DWORD open_mode = FILE_FLAG_OVERLAPPED | FILE_FLAG_FIRST_PIPE_INSTANCE;
-    const DWORD pipe_mode = PIPE_TYPE_BYTE | PIPE_READMODE_BYTE | PIPE_REJECT_REMOTE_CLIENTS;
-
-    base::win::ScopedHandle handle(
-        CreateNamedPipeW(reinterpret_cast<const wchar_t*>(channel_name_.c_str()),
-                         open_mode | PIPE_ACCESS_DUPLEX,
-                         pipe_mode,
-                         1,
-                         kPipeBufferSize,
-                         kPipeBufferSize,
-                         kAcceptTimeout,
-                         &security_attributes));
-    if (!handle.isValid())
-    {
-        PLOG(LS_WARNING) << "CreateNamedPipeW failed";
-        return false;
-    }
-
-    stream_ = std::make_unique<asio::windows::stream_handle>(io_context_);
-
-    std::error_code ignored_code;
-    stream_->assign(handle.release(), ignored_code);
-
-    asio::windows::overlapped_ptr overlapped(io_context_,
-        [this](const std::error_code& error_code, size_t /* bytes_transferred */)
-    {
-        if (!delegate_)
-            return;
-
-        if (error_code)
-        {
-            delegate_->onErrorOccurred();
-            return;
-        }
-
-        std::unique_ptr<Channel> channel =
-            std::unique_ptr<Channel>(new Channel(std::move(*stream_)));
-
-        delegate_->onNewConnection(std::move(channel));
-
-        // Waiting for the next connection.
-        if (!doAccept())
-            delegate_->onErrorOccurred();
-    });
-
-    if (!ConnectNamedPipe(stream_->native_handle(), overlapped.get()))
-    {
-        DWORD last_error = GetLastError();
-
-        if (last_error != ERROR_IO_PENDING)
-        {
-            overlapped.complete(
-                std::error_code(last_error, asio::error::get_system_category()), 0);
-            return false;
-        }
-    }
-
-    overlapped.release();
-    return true;
+    delegate_->onErrorOccurred();
 }
 
 } // namespace ipc
