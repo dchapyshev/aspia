@@ -69,6 +69,8 @@ void Server::start()
     settings_watcher_->watch(settings_.filePath(), false,
         [this](const std::filesystem::path& path, bool error)
     {
+        LOG(LS_INFO) << "Configuration file change detected";
+
         if (!error)
         {
             DCHECK_EQ(path, settings_.filePath());
