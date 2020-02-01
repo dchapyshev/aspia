@@ -48,8 +48,8 @@ Settings::Array Settings::getArray(const std::string& key) const
 
 void Settings::setArray(const std::string& key, const Array& array)
 {
-    for (const auto& array_item : array)
-        setGroup(key, array_item);
+    for (size_t i = 0; i < array.size(); ++i)
+        setGroup(key + kSeparator + base::numberToString(i), array[i]);
 
     set(key + kSeparator + "size", array.size());
 }
