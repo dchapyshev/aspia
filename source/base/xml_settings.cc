@@ -179,7 +179,16 @@ bool XmlSettings::readFile(const std::filesystem::path& file, Map& map)
         return false;
 
     rapidxml::xml_document<> doc;
-    doc.parse<0>(buffer.data());
+
+    try
+    {
+        doc.parse<0>(buffer.data());
+    }
+    catch (const rapidxml::parse_error& error)
+    {
+        LOG(LS_ERROR) << "The configuration file is damaged: " << error.what();
+        return false;
+    }
 
     rapidxml::xml_node<>* root_node = doc.first_node("Settings");
     if (!root_node)
