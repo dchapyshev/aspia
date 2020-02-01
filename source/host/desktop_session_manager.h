@@ -68,6 +68,7 @@ protected:
 private:
     enum class State { STOPPED, STARTING, STOPPING, DETACHED, ATTACHED };
 
+    std::shared_ptr<base::TaskRunner> task_runner_;
     std::unique_ptr<ipc::Server> server_;
     std::unique_ptr<DesktopSession> session_;
     std::shared_ptr<DesktopSessionProxy> session_proxy_;

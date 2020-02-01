@@ -19,6 +19,7 @@
 #include "host/desktop_session_manager.h"
 
 #include "base/logging.h"
+#include "base/task_runner.h"
 #include "desktop/desktop_frame.h"
 #include "host/desktop_session_fake.h"
 #include "host/desktop_session_ipc.h"
@@ -30,7 +31,8 @@ namespace host {
 
 DesktopSessionManager::DesktopSessionManager(
     std::shared_ptr<base::TaskRunner> task_runner, DesktopSession::Delegate* delegate)
-    : session_attach_timer_(task_runner),
+    : task_runner_(task_runner),
+      session_attach_timer_(task_runner),
       session_proxy_(std::make_shared<DesktopSessionProxy>(task_runner)),
       delegate_(delegate)
 {
@@ -105,7 +107,7 @@ std::shared_ptr<DesktopSessionProxy> DesktopSessionManager::sessionProxy() const
 void DesktopSessionManager::onNewConnection(std::unique_ptr<ipc::Channel> channel)
 {
     session_attach_timer_.stop();
-    server_.reset();
+    task_runner_->deleteSoon(server_.release());
 
     session_ = std::make_unique<DesktopSessionIpc>(std::move(channel), this);
     session_proxy_->attach(session_.get());
