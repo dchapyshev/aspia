@@ -75,7 +75,7 @@ private:
     QMenu tray_menu_;
     QPointer<NotifierWindow> notifier_;
 
-    std::unique_ptr<UserSessionProcess> session_;
+    std::unique_ptr<UserSessionProcess> process_;
     std::shared_ptr<UserSessionProcessProxy> process_proxy_;
     std::shared_ptr<UserSessionWindowProxy> window_proxy_;
 

@@ -95,10 +95,8 @@ MainWindow::~MainWindow() = default;
 
 void MainWindow::connectToService()
 {
-    session_ = std::make_unique<UserSessionProcess>(window_proxy_);
-    session_->start();
-
-    process_proxy_ = session_->processProxy();
+    process_ = std::make_unique<UserSessionProcess>(window_proxy_);
+    process_->start();
 }
 
 void MainWindow::activateHost()
@@ -141,8 +139,8 @@ void MainWindow::onStateChanged(UserSessionProcess::State state)
         ui.button_new_password->setEnabled(true);
         ui.button_refresh_ip_list->setEnabled(true);
 
-        if (process_proxy_)
-            process_proxy_->updateCredentials(proto::CredentialsRequest::REFRESH);
+        process_proxy_ = process_->processProxy();
+        process_proxy_->updateCredentials(proto::CredentialsRequest::REFRESH);
     }
     else
     {
@@ -233,7 +231,9 @@ void MainWindow::onLanguageChanged(QAction* action)
     application->setLocale(new_locale);
 
     ui.retranslateUi(this);
-    //onCredentialsChanged();
+
+    if (process_proxy_)
+        process_proxy_->updateCredentials(proto::CredentialsRequest::REFRESH);
 }
 
 void MainWindow::onSettings()

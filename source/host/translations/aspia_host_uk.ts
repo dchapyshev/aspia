@@ -653,15 +653,15 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/host_main_window.cc" line="113"/>
+        <location filename="../ui/host_main_window.cc" line="111"/>
         <location filename="../ui/host_main_window.cc" line="252"/>
         <source>Show</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/host_main_window.cc" line="48"/>
-        <location filename="../ui/host_main_window.cc" line="195"/>
-        <location filename="../ui/host_main_window.cc" line="202"/>
+        <location filename="../ui/host_main_window.cc" line="193"/>
+        <location filename="../ui/host_main_window.cc" line="200"/>
         <source>Not available</source>
         <translation type="unfinished"></translation>
     </message>
