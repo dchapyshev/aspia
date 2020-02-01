@@ -108,9 +108,9 @@ XmlSettings::~XmlSettings()
 
 bool XmlSettings::isWritable() const
 {
-    std::error_code ignored_code;
+    std::error_code error_code;
 
-    if (std::filesystem::exists(path_, ignored_code))
+    if (std::filesystem::exists(path_, error_code))
     {
         std::ofstream stream;
         stream.open(path_, std::ofstream::binary);
@@ -118,8 +118,11 @@ bool XmlSettings::isWritable() const
     }
     else
     {
-        if (!std::filesystem::create_directories(path_.parent_path(), ignored_code))
-            return false;
+        if (!std::filesystem::create_directories(path_.parent_path(), error_code))
+        {
+            if (error_code)
+                return false;
+        }
 
         ScopedTempFile temp_file(path_);
         return temp_file.stream().is_open();
@@ -198,10 +201,13 @@ bool XmlSettings::readFile(const std::filesystem::path& file, Map& map)
 // static
 bool XmlSettings::writeFile(const std::filesystem::path& file, const Map& map)
 {
-    std::error_code ignored_code;
+    std::error_code error_code;
 
-    if (!std::filesystem::create_directories(file.parent_path(), ignored_code))
-        return false;
+    if (!std::filesystem::create_directories(file.parent_path(), error_code))
+    {
+        if (error_code)
+            return false;
+    }
 
     std::ofstream stream;
 
