@@ -24,6 +24,10 @@
 #include "net/network_listener.h"
 #include "proto/key_exchange.pb.h"
 
+namespace base {
+class Location;
+} // namespace base
+
 namespace net {
 class Channel;
 } // namespace net
@@ -76,7 +80,7 @@ protected:
 
 private:
     base::ByteArray createKey();
-    void onFailed();
+    void onFailed(const base::Location& location);
 
     std::unique_ptr<net::Channel> channel_;
     std::shared_ptr<UserList> userlist_;

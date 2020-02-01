@@ -19,6 +19,7 @@
 #include "host/host_authenticator.h"
 
 #include "base/cpuid.h"
+#include "base/location.h"
 #include "base/logging.h"
 #include "base/version.h"
 #include "base/strings/unicode.h"
@@ -60,7 +61,7 @@ void Authenticator::start(std::unique_ptr<net::Channel> channel,
     channel_->resume();
 
     // We are waiting for message ClientHello from the client.
-    LOG(LS_INFO) << "Authentication started for " << channel_->peerAddress();
+    LOG(LS_INFO) << "Authentication started for: " << channel_->peerAddress();
 }
 
 std::unique_ptr<ClientSession> Authenticator::takeSession()
@@ -88,7 +89,7 @@ void Authenticator::onConnected()
 void Authenticator::onDisconnected(net::ErrorCode error_code)
 {
     LOG(LS_WARNING) << "Network error: " << static_cast<int>(error_code);
-    onFailed();
+    onFailed(FROM_HERE);
 }
 
 
@@ -102,7 +103,7 @@ void Authenticator::onMessageReceived(const base::ByteArray& buffer)
 
             if (!common::parseMessage(buffer, &client_hello))
             {
-                onFailed();
+                onFailed(FROM_HERE);
                 return;
             }
 
@@ -110,7 +111,7 @@ void Authenticator::onMessageReceived(const base::ByteArray& buffer)
                 !(client_hello.methods() & proto::METHOD_SRP_CHACHA20_POLY1305))
             {
                 // No authentication methods supported.
-                onFailed();
+                onFailed(FROM_HERE);
                 return;
             }
 
@@ -143,14 +144,14 @@ void Authenticator::onMessageReceived(const base::ByteArray& buffer)
 
             if (!common::parseMessage(buffer, &identify))
             {
-                onFailed();
+                onFailed(FROM_HERE);
                 return;
             }
 
             username_ = base::utf16FromUtf8(identify.username());
             if (username_.empty())
             {
-                onFailed();
+                onFailed(FROM_HERE);
                 return;
             }
 
@@ -185,7 +186,7 @@ void Authenticator::onMessageReceived(const base::ByteArray& buffer)
 
             if (!N_.isValid() || !g_.isValid() || !s_.isValid() || !B_.isValid())
             {
-                onFailed();
+                onFailed(FROM_HERE);
                 return;
             }
 
@@ -210,7 +211,7 @@ void Authenticator::onMessageReceived(const base::ByteArray& buffer)
 
             if (!common::parseMessage(buffer, &client_key_exchange))
             {
-                onFailed();
+                onFailed(FROM_HERE);
                 return;
             }
 
@@ -219,7 +220,7 @@ void Authenticator::onMessageReceived(const base::ByteArray& buffer)
 
             if (!A_.isValid() || decrypt_iv_.empty())
             {
-                onFailed();
+                onFailed(FROM_HERE);
                 return;
             }
 
@@ -247,7 +248,7 @@ void Authenticator::onMessageReceived(const base::ByteArray& buffer)
 
             if (!encryptor || !decryptor)
             {
-                onFailed();
+                onFailed(FROM_HERE);
                 return;
             }
 
@@ -277,7 +278,7 @@ void Authenticator::onMessageReceived(const base::ByteArray& buffer)
             proto::SessionResponse session_response;
             if (!common::parseMessage(buffer, &session_response))
             {
-                onFailed();
+                onFailed(FROM_HERE);
                 return;
             }
 
@@ -348,13 +349,14 @@ base::ByteArray Authenticator::createKey()
     return base::ByteArray();
 }
 
-void Authenticator::onFailed()
+void Authenticator::onFailed(const base::Location& location)
 {
     // If the network channel is already destroyed, then exit (we have a repeated notification).
     if (!channel_)
         return;
 
-    LOG(LS_INFO) << "Authentication failed for " << channel_->peerAddress();
+    LOG(LS_INFO) << "Authentication failed for: " << channel_->peerAddress()
+                 << " (" << location.toString() << ")";
 
     // Destroy the network channel.
     channel_->setListener(nullptr);
