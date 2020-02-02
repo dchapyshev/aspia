@@ -121,7 +121,7 @@ void VideoFramePump::reloadWorkFrame()
     if (input_frame_->constUpdatedRegion().isEmpty())
         return;
 
-    if (!input_frame_->shareFrameWith(*work_frame_))
+    if (!work_frame_ || !input_frame_->shareFrameWith(*work_frame_))
         work_frame_ = input_frame_->share();
 
     work_frame_->copyFrameInfoFrom(*input_frame_);
