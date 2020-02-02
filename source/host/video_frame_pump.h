@@ -54,6 +54,7 @@ protected:
     void run() override;
 
 private:
+    void waitForFirstFrame();
     void reloadWorkFrame();
 
     std::shared_ptr<net::ChannelProxy> channel_proxy_;

@@ -48,7 +48,7 @@ void VideoFramePump::encodeFrame(const desktop::Frame& frame)
 {
     std::scoped_lock lock(input_frame_lock_);
 
-    if (frame.size() != input_frame_->size() || frame.format() != input_frame_->format())
+    if (!input_frame_ || frame.size() != input_frame_->size() || frame.format() != input_frame_->format())
     {
         std::unique_ptr<desktop::Frame> input_frame =
             desktop::FrameAligned::create(frame.size(), frame.format(), 32);
@@ -77,6 +77,8 @@ void VideoFramePump::encodeFrame(const desktop::Frame& frame)
 
 void VideoFramePump::run()
 {
+    waitForFirstFrame();
+
     while (!isStopping())
     {
         reloadWorkFrame();
@@ -92,6 +94,20 @@ void VideoFramePump::run()
 
             // Clear the region.
             work_frame_->updatedRegion()->clear();
+        }
+
+        work_event_.wait();
+    }
+}
+
+void VideoFramePump::waitForFirstFrame()
+{
+    while (!isStopping())
+    {
+        {
+            std::scoped_lock lock(input_frame_lock_);
+            if (input_frame_)
+                return;
         }
 
         work_event_.wait();
