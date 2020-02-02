@@ -78,6 +78,8 @@ protected:
     void onClientSessionFinished() override;
 
 private:
+    void sendConnectEvent(const ClientSession& client_session);
+    void sendDisconnectEvent(const std::string& session_id);
     void updateCredentials();
     void sendCredentials();
     void killClientSession(const std::string& id);

@@ -75,6 +75,9 @@ void UserSession::addNewSession(std::unique_ptr<ClientSession> client_session)
 {
     clients_.emplace_back(std::move(client_session));
     clients_.back()->start(this);
+
+    // Notify the UI of a new connection.
+    sendConnectEvent(*clients_.back());
 }
 
 void UserSession::onDisconnected()
@@ -121,7 +124,7 @@ void UserSession::onDesktopSessionStarted()
 {
     for (auto& client : clients_)
     {
-
+        sendConnectEvent(*client);
     }
 }
 
@@ -186,8 +189,13 @@ void UserSession::onClientSessionFinished()
 {
     for (auto it = clients_.begin(); it != clients_.end();)
     {
-        if ((*it)->state() == ClientSession::State::FINISHED)
+        ClientSession* client_session = it->get();
+
+        if (client_session->state() == ClientSession::State::FINISHED)
         {
+            // Notification of the UI about disconnecting the client.
+            sendDisconnectEvent(client_session->id());
+
             it = clients_.erase(it);
         }
         else
@@ -195,6 +203,26 @@ void UserSession::onClientSessionFinished()
             ++it;
         }
     }
+}
+
+void UserSession::sendConnectEvent(const ClientSession& client_session)
+{
+    proto::ServiceToUi message;
+    proto::ConnectEvent* event = message.mutable_connect_event();
+
+    event->set_remote_address(base::utf8FromUtf16(client_session.peerAddress()));
+    event->set_username(base::utf8FromUtf16(client_session.userName()));
+    event->set_session_type(client_session.sessionType());
+    event->set_uuid(client_session.id());
+
+    ipc_channel_->send(common::serializeMessage(message));
+}
+
+void UserSession::sendDisconnectEvent(const std::string& session_id)
+{
+    proto::ServiceToUi message;
+    message.mutable_disconnect_event()->set_uuid(session_id);
+    ipc_channel_->send(common::serializeMessage(message));
 }
 
 void UserSession::updateCredentials()
