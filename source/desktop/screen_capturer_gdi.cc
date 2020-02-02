@@ -108,10 +108,11 @@ std::unique_ptr<SharedFrame> ScreenCapturerGdi::captureImage()
         queue_.replaceCurrentFrame(SharedFrame::wrap(std::move(frame)));
     }
 
-    FrameDib* current = static_cast<FrameDib*>(queue_.currentFrame()->underlyingFrame());
-    FrameDib* previous = static_cast<FrameDib*>(queue_.previousFrame()->underlyingFrame());
+    SharedFrame* current = queue_.currentFrame();
+    SharedFrame* previous = queue_.previousFrame();
 
-    base::win::ScopedSelectObject select_object(memory_dc_, current->bitmap());
+    base::win::ScopedSelectObject select_object(
+        memory_dc_, static_cast<FrameDib*>(current->underlyingFrame())->bitmap());
 
     BitBlt(memory_dc_,
            0, 0,
@@ -134,7 +135,7 @@ std::unique_ptr<SharedFrame> ScreenCapturerGdi::captureImage()
                                  current->updatedRegion());
     }
 
-    return queue_.currentFrame()->share();
+    return current->share();
 }
 
 bool ScreenCapturerGdi::prepareCaptureResources()
