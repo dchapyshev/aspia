@@ -68,6 +68,8 @@ void ClientSession::start(Delegate* delegate)
 
     channel_->setListener(this);
     channel_->resume();
+
+    onStarted();
 }
 
 void ClientSession::setVersion(const base::Version& version)
@@ -102,7 +104,7 @@ void ClientSession::onConnected()
 
 void ClientSession::onDisconnected(net::ErrorCode error_code)
 {
-    LOG(LS_WARNING) << "Client disconnected with error code " << static_cast<int>(error_code);
+    LOG(LS_WARNING) << "Client disconnected with error: " << net::errorToString(error_code);
 
     state_ = State::FINISHED;
     delegate_->onClientSessionFinished();
