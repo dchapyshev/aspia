@@ -19,6 +19,8 @@
 #ifndef NET__NETWORK_ERROR_H
 #define NET__NETWORK_ERROR_H
 
+#include <string>
+
 namespace net {
 
 enum class ErrorCode
@@ -47,6 +49,10 @@ enum class ErrorCode
     // The address specified does not belong to the host.
     ADDRESS_NOT_AVAILABLE
 };
+
+// Converts an error code to a human readable string.
+// Does not support localization. Used for logs.
+std::string errorToString(ErrorCode error_code);
 
 } // namespace net
 

@@ -29,6 +29,7 @@ list(APPEND SOURCE_NET
     network_channel.h
     network_channel_proxy.cc
     network_channel_proxy.h
+    network_error.cc
     network_error.h
     network_listener.h
     network_server.cc
