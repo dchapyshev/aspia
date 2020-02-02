@@ -68,7 +68,7 @@ public:
 private:
     friend class Server;
 
-    explicit Channel(asio::windows::stream_handle&& stream);
+    Channel(std::u16string_view channel_name, asio::windows::stream_handle&& stream);
     static std::u16string channelName(std::u16string_view channel_id);
 
     void onErrorOccurred(const base::Location& location, const std::error_code& error_code);
@@ -76,6 +76,7 @@ private:
     void doReadMessage();
     void onMessageReceived();
 
+    std::u16string channel_name_;
     asio::windows::stream_handle stream_;
 
     std::shared_ptr<ChannelProxy> proxy_;

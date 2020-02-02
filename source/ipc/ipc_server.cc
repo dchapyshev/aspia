@@ -160,7 +160,7 @@ void Server::Listener::onNewConnetion(
     }
 
     std::unique_ptr<Channel> channel =
-        std::unique_ptr<Channel>(new Channel(std::move(*handle_)));
+        std::unique_ptr<Channel>(new Channel(server_->channel_name_, std::move(*handle_)));
 
     server_->onNewConnection(index_, std::move(channel));
 }

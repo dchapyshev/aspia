@@ -39,6 +39,7 @@ namespace {
 
 const char16_t kPipeNamePrefix[] = u"\\\\.\\pipe\\aspia.";
 const uint32_t kMaxMessageSize = 16 * 1024 * 1024; // 16MB
+const DWORD kConnectTimeout = 5000; // ms
 
 base::ProcessId clientProcessIdImpl(HANDLE pipe_handle)
 {
@@ -101,8 +102,9 @@ Channel::Channel()
     // Nothing
 }
 
-Channel::Channel(asio::windows::stream_handle&& stream)
-    : stream_(std::move(stream)),
+Channel::Channel(std::u16string_view channel_name, asio::windows::stream_handle&& stream)
+    : channel_name_(channel_name),
+      stream_(std::move(stream)),
       proxy_(new ChannelProxy(this)),
       is_connected_(true)
 {
@@ -137,13 +139,13 @@ bool Channel::connect(std::u16string_view channel_id)
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
 
     const DWORD flags = SECURITY_SQOS_PRESENT | SECURITY_IDENTIFICATION | FILE_FLAG_OVERLAPPED;
-    std::u16string channel_name = channelName(channel_id);
+    channel_name_ = channelName(channel_id);
 
     base::win::ScopedHandle handle;
 
     while (true)
     {
-        handle.reset(CreateFileW(reinterpret_cast<const wchar_t*>(channel_name.c_str()),
+        handle.reset(CreateFileW(reinterpret_cast<const wchar_t*>(channel_name_.c_str()),
                                  GENERIC_WRITE | GENERIC_READ,
                                  0,
                                  nullptr,
@@ -162,7 +164,8 @@ bool Channel::connect(std::u16string_view channel_id)
             return false;
         }
 
-        if (!WaitNamedPipeW(reinterpret_cast<const wchar_t*>(channel_name.c_str()), 5000))
+        if (!WaitNamedPipeW(reinterpret_cast<const wchar_t*>(channel_name_.c_str()),
+                            kConnectTimeout))
         {
             PLOG(LS_WARNING) << "WaitNamedPipeW failed";
             return false;
@@ -258,7 +261,7 @@ void Channel::onErrorOccurred(const base::Location& location, const std::error_c
     if (error_code == asio::error::operation_aborted)
         return;
 
-    LOG(LS_WARNING) << "Error in IPC channel: "
+    LOG(LS_WARNING) << "Error in IPC channel '" << channel_name_ << "': "
                     << base::utf16FromLocal8Bit(error_code.message())
                     << " (code: " << error_code.value()
                     << ", location: " << location.toString() << ")";
