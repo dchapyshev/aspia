@@ -153,11 +153,7 @@ void MainWindow::onStateChanged(UserSessionProcess::State state)
 
 void MainWindow::onClientListChanged(const UserSessionProcess::ClientList& clients)
 {
-    if (notifier_)
-    {
-        notifier_->onClientListChanged(clients);
-    }
-    else
+    if (!notifier_)
     {
         notifier_ = new NotifierWindow();
 
@@ -171,6 +167,8 @@ void MainWindow::onClientListChanged(const UserSessionProcess::ClientList& clien
         notifier_->show();
         notifier_->activateWindow();
     }
+
+    notifier_->onClientListChanged(clients);
 }
 
 void MainWindow::onCredentialsChanged(const proto::Credentials& credentials)
