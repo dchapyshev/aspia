@@ -31,6 +31,11 @@
 #include <ostream>
 #include <thread>
 
+#if defined(OS_WIN)
+#include <Windows.h>
+#include <Psapi.h>
+#endif // defined(OS_WIN)
+
 namespace base {
 
 namespace {
@@ -161,6 +166,23 @@ bool initLogging(const LoggingSettings& settings)
 {
     if (!initLoggingImpl(settings))
         return false;
+
+#if defined(OS_WIN)
+    wchar_t buffer[MAX_PATH] = { 0 };
+
+    if (GetModuleFileNameExW(GetCurrentProcess(), nullptr, buffer, _countof(buffer)))
+    {
+        LOG(LS_INFO) << "Executable file: " << buffer;
+    }
+
+#if defined(NDEBUG)
+    LOG(LS_INFO) << "Debug build: No";
+#else
+    LOG(LS_INFO) << "Debug build: Yes";
+#endif // defined(NDEBUG)
+#else
+#warning Not implemented
+#endif
 
     LOG(LS_INFO) << "Logging started";
     return true;
