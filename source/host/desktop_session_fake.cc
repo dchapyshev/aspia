@@ -88,15 +88,15 @@ void DesktopSessionFake::captureScreen()
             data[x] = color_queue_[color_index_];
     }
 
-    std::unique_ptr<desktop::SharedFrame> frame = frame_->share();
+    desktop::Region* updated_region = frame_->updatedRegion();
 
-    desktop::Region* updated_region = frame->updatedRegion();
+    updated_region->clear();
     updated_region->addRect(
         desktop::Rect::makeXYWH(old_box_pos_x, old_box_pos_y, kBoxWidth, kBoxHeight));
     updated_region->addRect(
         desktop::Rect::makeXYWH(box_pos_x_, box_pos_y_, kBoxWidth, kBoxHeight));
 
-    delegate_->onScreenCaptured(std::move(frame));
+    delegate_->onScreenCaptured(*frame_);
 }
 
 void DesktopSessionFake::selectScreen(const proto::Screen& /* screen */)

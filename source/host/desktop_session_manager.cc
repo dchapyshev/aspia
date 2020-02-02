@@ -136,9 +136,9 @@ void DesktopSessionManager::onDesktopSessionStopped()
     dettachSession();
 }
 
-void DesktopSessionManager::onScreenCaptured(std::unique_ptr<desktop::Frame> frame)
+void DesktopSessionManager::onScreenCaptured(const desktop::Frame& frame)
 {
-    delegate_->onScreenCaptured(std::move(frame));
+    delegate_->onScreenCaptured(frame);
 }
 
 void DesktopSessionManager::onScreenListChanged(const proto::ScreenList& list)

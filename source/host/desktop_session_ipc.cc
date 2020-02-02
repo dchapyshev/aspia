@@ -82,7 +82,9 @@ DesktopSessionIpc::~DesktopSessionIpc() = default;
 
 void DesktopSessionIpc::start()
 {
+    channel_->setListener(this);
     channel_->resume();
+
     delegate_->onDesktopSessionStarted();
 }
 
@@ -187,7 +189,7 @@ void DesktopSessionIpc::onCaptureFrameResult(const proto::internal::CaptureFrame
     for (int i = 0; i < serialized_frame.dirty_rect_size(); ++i)
         frame->updatedRegion()->addRect(codec::parseRect(serialized_frame.dirty_rect(i)));
 
-    delegate_->onScreenCaptured(std::move(frame));
+    delegate_->onScreenCaptured(*frame);
 }
 
 void DesktopSessionIpc::onCaptureCursorResult(const proto::internal::CaptureCursorResult& result)

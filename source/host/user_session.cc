@@ -59,6 +59,8 @@ void UserSession::start(Delegate* delegate)
 
     ipc_channel_->setListener(this);
     ipc_channel_->resume();
+
+    delegate_->onUserSessionStarted();
 }
 
 base::win::SessionId UserSession::sessionId() const
@@ -73,16 +75,36 @@ User UserSession::user() const
 
 void UserSession::addNewSession(std::unique_ptr<ClientSession> client_session)
 {
+    ClientSession* session = client_session.get();
+    DCHECK(session);
+
     clients_.emplace_back(std::move(client_session));
-    clients_.back()->start(this);
+
+    switch (session->sessionType())
+    {
+        case proto::SESSION_TYPE_DESKTOP_MANAGE:
+        case proto::SESSION_TYPE_DESKTOP_VIEW:
+        {
+            ClientSessionDesktop* desktop_client_session =
+                static_cast<ClientSessionDesktop*>(session);
+
+            desktop_client_session->setDesktopSessionProxy(desktop_session_proxy_);
+        }
+        break;
+
+        default:
+            break;
+    }
+
+    session->start(this);
 
     // Notify the UI of a new connection.
-    sendConnectEvent(*clients_.back());
+    sendConnectEvent(*session);
 }
 
 void UserSession::onDisconnected()
 {
-    LOG(LS_INFO) << "IPC DISCON";
+    LOG(LS_INFO) << "IPC DISCONNECTED";
 }
 
 void UserSession::onMessageReceived(const base::ByteArray& buffer)
@@ -133,7 +155,7 @@ void UserSession::onDesktopSessionStopped()
     clients_.clear();
 }
 
-void UserSession::onScreenCaptured(std::unique_ptr<desktop::Frame> frame)
+void UserSession::onScreenCaptured(const desktop::Frame& frame)
 {
     for (const auto& client : clients_)
     {
@@ -145,7 +167,7 @@ void UserSession::onScreenCaptured(std::unique_ptr<desktop::Frame> frame)
             ClientSessionDesktop* desktop_client =
                 static_cast<ClientSessionDesktop*>(client.get());
 
-            desktop_client->encodeFrame(*frame);
+            desktop_client->encodeFrame(frame);
         }
     }
 
