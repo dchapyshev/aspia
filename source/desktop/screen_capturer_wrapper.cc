@@ -65,7 +65,10 @@ void ScreenCapturerWrapper::captureFrame()
 
     int count = capturer_->screenCount();
     if (screen_count_ != count)
+    {
+        screen_count_ = count;
         selectScreen(ScreenCapturer::kFullDesktopScreenId);
+    }
 
     ScreenCapturer::Error error;
     std::unique_ptr<SharedFrame> frame = capturer_->captureFrame(&error);
