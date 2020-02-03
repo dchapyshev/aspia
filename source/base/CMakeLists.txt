@@ -168,10 +168,13 @@ list(APPEND SOURCE_BASE_WIN
     win/registry.h
     win/resource_util.cc
     win/resource_util.h
+    win/scoped_clipboard.cc
+    win/scoped_clipboard.h
     win/scoped_com_initializer.cc
     win/scoped_com_initializer.h
     win/scoped_gdi_object.h
     win/scoped_hdc.h
+    win/scoped_hglobal.h
     win/scoped_impersonator.cc
     win/scoped_impersonator.h
     win/scoped_local.h
