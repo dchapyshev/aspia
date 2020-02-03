@@ -23,10 +23,6 @@
 
 #include <memory>
 
-namespace base {
-class TaskRunner;
-} // namespace base
-
 namespace proto {
 class KeyEvent;
 class PointerEvent;
