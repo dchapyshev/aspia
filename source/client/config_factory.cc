@@ -24,10 +24,6 @@ namespace client {
 
 namespace {
 
-const int kDefUpdateInterval = 30;
-const int kMinUpdateInterval = 15;
-const int kMaxUpdateInterval = 100;
-
 const int kDefCompressRatio = 8;
 const int kMinCompressRatio = 1;
 const int kMaxCompressRatio = 22;
@@ -62,7 +58,6 @@ void ConfigFactory::setDefaultDesktopManageConfig(proto::DesktopConfig* config)
     config->set_flags(kDefaultFlags);
     config->set_video_encoding(proto::VideoEncoding::VIDEO_ENCODING_ZSTD);
     config->set_compress_ratio(kDefCompressRatio);
-    config->set_update_interval(kDefUpdateInterval);
 
     codec::serializePixelFormat(desktop::PixelFormat::RGB565(), config->mutable_pixel_format());
 }
@@ -78,7 +73,6 @@ void ConfigFactory::setDefaultDesktopViewConfig(proto::DesktopConfig* config)
     config->set_flags(kDefaultFlags);
     config->set_video_encoding(proto::VideoEncoding::VIDEO_ENCODING_ZSTD);
     config->set_compress_ratio(kDefCompressRatio);
-    config->set_update_interval(kDefUpdateInterval);
 
     codec::serializePixelFormat(desktop::PixelFormat::RGB565(), config->mutable_pixel_format());
 }
@@ -87,9 +81,7 @@ void ConfigFactory::setDefaultDesktopViewConfig(proto::DesktopConfig* config)
 void ConfigFactory::fixupDesktopConfig(proto::DesktopConfig* config)
 {
     config->set_scale_factor(100);
-
-    if (config->update_interval() < kMinUpdateInterval || config->update_interval() > kMaxUpdateInterval)
-        config->set_update_interval(kDefUpdateInterval);
+    config->set_update_interval(30);
 
     if (config->compress_ratio() < kMinCompressRatio || config->compress_ratio() > kMaxCompressRatio)
         config->set_compress_ratio(kDefCompressRatio);

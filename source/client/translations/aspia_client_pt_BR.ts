@@ -81,46 +81,31 @@
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.ui" line="123"/>
-        <source>Remote Screen</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="131"/>
-        <source>Update interval:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="138"/>
-        <source>ms</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="170"/>
         <source>Advanced</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="176"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="129"/>
         <source>Block remote input</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="183"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="136"/>
         <source>Enable cursor shape</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="190"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="143"/>
         <source>Enable clipboard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="197"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="150"/>
         <source>Disable desktop effects</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="204"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="157"/>
         <source>Disable desktop wallpaper</source>
         <translation type="unfinished"></translation>
     </message>
@@ -734,7 +719,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="149"/>
+        <location filename="../ui/desktop_config_dialog.cc" line="147"/>
         <source>Compression ratio: %1</source>
         <translation type="unfinished"></translation>
     </message>

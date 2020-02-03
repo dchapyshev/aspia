@@ -100,51 +100,48 @@
         <translation>Beste</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="123"/>
         <source>Remote Screen</source>
-        <translation>Scherm op afstand</translation>
+        <translation type="vanished">Scherm op afstand</translation>
     </message>
     <message>
         <source>Scale factor:</source>
         <translation type="vanished">Schaal factor:</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="131"/>
         <source>Update interval:</source>
-        <translation>Vernieuwings tijd:</translation>
+        <translation type="vanished">Vernieuwings tijd:</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="138"/>
         <source>ms</source>
-        <translation>ms</translation>
+        <translation type="vanished">ms</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="170"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="123"/>
         <source>Advanced</source>
         <translation>Geavanceerd</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="176"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="129"/>
         <source>Block remote input</source>
         <translation>Blokkeer invoer op afstand</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="183"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="136"/>
         <source>Enable cursor shape</source>
         <translation>Muis vorm inschakelen</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="190"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="143"/>
         <source>Enable clipboard</source>
         <translation>Klembord inschakelen</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="197"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="150"/>
         <source>Disable desktop effects</source>
         <translation>Schakel bureaublad effecten uit</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="204"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="157"/>
         <source>Disable desktop wallpaper</source>
         <translation>Geen bureaublad achtergrond</translation>
     </message>
@@ -1014,7 +1011,7 @@
         <translation>8 kleuren (3 bit)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="149"/>
+        <location filename="../ui/desktop_config_dialog.cc" line="147"/>
         <source>Compression ratio: %1</source>
         <translation>Compressie ratio: %1</translation>
     </message>

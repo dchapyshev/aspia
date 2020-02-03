@@ -100,51 +100,48 @@
         <translation>Сильнее</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="123"/>
         <source>Remote Screen</source>
-        <translation>Удаленный экран</translation>
+        <translation type="vanished">Удаленный экран</translation>
     </message>
     <message>
         <source>Scale factor:</source>
         <translation type="vanished">Масштаб экрана:</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="131"/>
         <source>Update interval:</source>
-        <translation>Интервал обновления:</translation>
+        <translation type="vanished">Интервал обновления:</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="138"/>
         <source>ms</source>
-        <translation>мс</translation>
+        <translation type="vanished">мс</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="170"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="123"/>
         <source>Advanced</source>
         <translation>Дополнительно</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="176"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="129"/>
         <source>Block remote input</source>
         <translation>Блокировать удаленный ввод</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="183"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="136"/>
         <source>Enable cursor shape</source>
         <translation>Включить изображение курсора</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="190"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="143"/>
         <source>Enable clipboard</source>
         <translation>Включить буфер обмена</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="197"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="150"/>
         <source>Disable desktop effects</source>
         <translation>Отключить эффекты рабочего стола</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="204"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="157"/>
         <source>Disable desktop wallpaper</source>
         <translation>Отключить обои рабочего стола</translation>
     </message>
@@ -1018,7 +1015,7 @@
         <translation>8 цветов (3 бита)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="149"/>
+        <location filename="../ui/desktop_config_dialog.cc" line="147"/>
         <source>Compression ratio: %1</source>
         <translation>Уровень сжатия: %1</translation>
     </message>
