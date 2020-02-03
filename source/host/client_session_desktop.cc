@@ -18,6 +18,7 @@
 
 #include "host/client_session_desktop.h"
 
+#include "base/power_controller.h"
 #include "base/strings/string_split.h"
 #include "codec/video_encoder_vpx.h"
 #include "codec/video_encoder_zstd.h"
@@ -178,7 +179,36 @@ void ClientSessionDesktop::readExtension(const proto::DesktopExtension& extensio
     }
     else if (extension.name() == common::kPowerControlExtension)
     {
-        // TODO
+        proto::PowerControl power_control;
+
+        if (!power_control.ParseFromString(extension.data()))
+        {
+            LOG(LS_ERROR) << "Unable to parse power control extension data";
+            return;
+        }
+
+        switch (power_control.action())
+        {
+            case proto::PowerControl::ACTION_SHUTDOWN:
+                base::PowerController::shutdown();
+                break;
+
+            case proto::PowerControl::ACTION_REBOOT:
+                base::PowerController::reboot();
+                break;
+
+            case proto::PowerControl::ACTION_LOGOFF:
+                desktop_session_proxy_->logoffUserSession();
+                break;
+
+            case proto::PowerControl::ACTION_LOCK:
+                desktop_session_proxy_->lockUserSession();
+                break;
+
+            default:
+                LOG(LS_WARNING) << "Unhandled power control action: " << power_control.action();
+                break;
+        }
     }
     else if (extension.name() == common::kRemoteUpdateExtension)
     {

@@ -132,6 +132,16 @@ void DesktopSessionFake::injectClipboardEvent(const proto::ClipboardEvent& /* ev
     // Nothing. Ignore the event.
 }
 
+void DesktopSessionFake::logoffUserSession()
+{
+    // Nothing
+}
+
+void DesktopSessionFake::lockUserSession()
+{
+    // Nothing
+}
+
 void DesktopSessionFake::nextBoxColor()
 {
     color_index_ = (color_index_ + 1) % kQueueLength;

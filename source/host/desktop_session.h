@@ -61,6 +61,9 @@ public:
     virtual void injectKeyEvent(const proto::KeyEvent& event) = 0;
     virtual void injectPointerEvent(const proto::PointerEvent& event) = 0;
     virtual void injectClipboardEvent(const proto::ClipboardEvent& event) = 0;
+
+    virtual void logoffUserSession() = 0;
+    virtual void lockUserSession() = 0;
 };
 
 } // namespace host

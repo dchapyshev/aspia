@@ -47,6 +47,8 @@ public:
     void injectKeyEvent(const proto::KeyEvent& event);
     void injectPointerEvent(const proto::PointerEvent& event);
     void injectClipboardEvent(const proto::ClipboardEvent& event);
+    void logoffUserSession();
+    void lockUserSession();
 
 private:
     friend class DesktopSessionManager;

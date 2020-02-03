@@ -130,6 +130,20 @@ void DesktopSessionIpc::injectClipboardEvent(const proto::ClipboardEvent& event)
     channel_->send(common::serializeMessage(outgoing_message_));
 }
 
+void DesktopSessionIpc::logoffUserSession()
+{
+    outgoing_message_.Clear();
+    outgoing_message_.mutable_logoff_user_session()->set_dummy(1);
+    channel_->send(common::serializeMessage(outgoing_message_));
+}
+
+void DesktopSessionIpc::lockUserSession()
+{
+    outgoing_message_.Clear();
+    outgoing_message_.mutable_lock_user_session()->set_dummy(1);
+    channel_->send(common::serializeMessage(outgoing_message_));
+}
+
 void DesktopSessionIpc::onDisconnected()
 {
     delegate_->onDesktopSessionStopped();

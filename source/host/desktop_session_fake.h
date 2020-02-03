@@ -42,6 +42,8 @@ public:
     void injectKeyEvent(const proto::KeyEvent& event) override;
     void injectPointerEvent(const proto::PointerEvent& event) override;
     void injectClipboardEvent(const proto::ClipboardEvent& event) override;
+    void logoffUserSession() override;
+    void lockUserSession() override;
 
 private:
     void nextBoxColor();

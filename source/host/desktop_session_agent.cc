@@ -19,6 +19,7 @@
 #include "host/desktop_session_agent.h"
 
 #include "base/logging.h"
+#include "base/power_controller.h"
 #include "base/threading/thread.h"
 #include "codec/video_util.h"
 #include "common/message_serialization.h"
@@ -111,6 +112,14 @@ void DesktopSessionAgent::onMessageReceived(const base::ByteArray& buffer)
     {
         if (input_injector_)
             input_injector_->setBlockInput(incoming_message_.set_block_input().state());
+    }
+    else if (incoming_message_.has_logoff_user_session())
+    {
+        base::PowerController::logoff();
+    }
+    else if (incoming_message_.has_lock_user_session())
+    {
+        base::PowerController::lock();
     }
     else
     {

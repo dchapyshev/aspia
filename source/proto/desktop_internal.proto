@@ -92,6 +92,16 @@ message SetBlockInput
     bool state = 1;
 }
 
+message LogoffUserSession
+{
+    int32 dummy = 1;
+}
+
+message LockUserSession
+{
+    int32 dummy = 1;
+}
+
 message ServiceToDesktop
 {
     StartSession start_session            = 1;
@@ -103,6 +113,9 @@ message ServiceToDesktop
     KeyEvent key_event                    = 7;
     PointerEvent pointer_event            = 8;
     ClipboardEvent clipboard_event        = 9;
+    LogoffUserSession logoff_user_session = 10;
+    LockUserSession lock_user_session     = 11;
+
 }
 
 message DesktopToService

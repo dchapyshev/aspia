@@ -66,6 +66,18 @@ void DesktopSessionProxy::injectClipboardEvent(const proto::ClipboardEvent& even
         desktop_session_->injectClipboardEvent(event);
 }
 
+void DesktopSessionProxy::logoffUserSession()
+{
+    if (desktop_session_)
+        desktop_session_->logoffUserSession();
+}
+
+void DesktopSessionProxy::lockUserSession()
+{
+    if (desktop_session_)
+        desktop_session_->lockUserSession();
+}
+
 void DesktopSessionProxy::attach(DesktopSession* desktop_session)
 {
     desktop_session_ = desktop_session;
