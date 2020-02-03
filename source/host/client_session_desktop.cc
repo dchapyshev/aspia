@@ -29,6 +29,7 @@
 #include "host/desktop_session_proxy.h"
 #include "host/host_system_info.h"
 #include "host/video_frame_pump.h"
+#include "host/win/updater_launcher.h"
 #include "net/network_channel.h"
 
 namespace host {
@@ -212,7 +213,8 @@ void ClientSessionDesktop::readExtension(const proto::DesktopExtension& extensio
     }
     else if (extension.name() == common::kRemoteUpdateExtension)
     {
-        // TODO
+        // FIXME: Running in session the current user, not console.
+        launchUpdater(WTSGetActiveConsoleSessionId());
     }
     else if (extension.name() == common::kSystemInfoExtension)
     {

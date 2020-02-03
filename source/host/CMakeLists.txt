@@ -110,7 +110,9 @@ list(APPEND SOURCE_HOST_CORE_WIN
     win/host_service_constants.cc
     win/host_service_constants.h
     win/host_service_main.cc
-    win/host_service_main.h)
+    win/host_service_main.h
+    win/updater_launcher.cc
+    win/updater_launcher.h)
 
 source_group("" FILES ${SOURCE_HOST_CORE})
 source_group(moc FILES ${SOURCE_HOST_CORE_MOC})
