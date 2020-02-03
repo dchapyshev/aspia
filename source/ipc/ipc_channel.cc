@@ -97,7 +97,7 @@ base::win::SessionId serverSessionIdImpl(HANDLE pipe_handle)
 
 Channel::Channel()
     : stream_(base::MessageLoop::current()->pumpAsio()->ioContext()),
-      proxy_(new ChannelProxy(this))
+      proxy_(new ChannelProxy(base::MessageLoop::current()->taskRunner(), this))
 {
     // Nothing
 }
@@ -105,7 +105,7 @@ Channel::Channel()
 Channel::Channel(std::u16string_view channel_name, asio::windows::stream_handle&& stream)
     : channel_name_(channel_name),
       stream_(std::move(stream)),
-      proxy_(new ChannelProxy(this)),
+      proxy_(new ChannelProxy(base::MessageLoop::current()->taskRunner(), this)),
       is_connected_(true)
 {
     peer_process_id_ = clientProcessIdImpl(stream_.native_handle());
@@ -316,7 +316,7 @@ void Channel::doWrite()
             write_queue_.pop();
 
             // If the queue is not empty, then we send the following message.
-            if (write_queue_.empty())
+            if (write_queue_.empty() && !proxy_->reloadWriteQueue(&write_queue_))
                 return;
 
             doWrite();

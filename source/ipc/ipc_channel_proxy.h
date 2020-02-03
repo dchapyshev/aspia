@@ -21,35 +21,32 @@
 
 #include "ipc/ipc_channel.h"
 
+namespace base {
+class TaskRunner;
+} // namespace base
+
 namespace ipc {
 
-class ChannelProxy
+class ChannelProxy : public std::enable_shared_from_this<ChannelProxy>
 {
 public:
-    void setListener(Listener* listener);
-
-    [[nodiscard]]
-    bool connect(std::u16string_view channel_id);
-
-    void disconnect();
-
-    bool isConnected() const;
-    bool isPaused() const;
-
-    void pause();
-    void resume();
-
     void send(base::ByteArray&& buffer);
 
 private:
     friend class Channel;
-
-    explicit ChannelProxy(Channel* channel);
+    ChannelProxy(std::shared_ptr<base::TaskRunner> task_runner, Channel* channel);
 
     // Called directly by Channel::~Channel.
     void willDestroyCurrentChannel();
 
+    void scheduleWrite();
+    bool reloadWriteQueue(base::ScalableQueue<base::ByteArray>* work_queue);
+
+    std::shared_ptr<base::TaskRunner> task_runner_;
     Channel* channel_;
+
+    base::ScalableQueue<base::ByteArray> incoming_queue_;
+    std::mutex incoming_queue_lock_;
 
     DISALLOW_COPY_AND_ASSIGN(ChannelProxy);
 };

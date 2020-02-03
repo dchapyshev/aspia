@@ -50,6 +50,7 @@ public:
     // You can change this in the process.
     void setListener(Listener* listener);
 
+    [[nodiscard]]
     bool connect(std::u16string_view channel_id);
 
     void disconnect();
@@ -67,6 +68,7 @@ public:
 
 private:
     friend class Server;
+    friend class ChannelProxy;
 
     Channel(std::u16string_view channel_name, asio::windows::stream_handle&& stream);
     static std::u16string channelName(std::u16string_view channel_id);

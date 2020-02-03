@@ -18,71 +18,62 @@
 
 #include "ipc/ipc_channel_proxy.h"
 
+#include "base/logging.h"
+#include "base/task_runner.h"
+
 namespace ipc {
 
-ChannelProxy::ChannelProxy(Channel* channel)
-    : channel_(channel)
+ChannelProxy::ChannelProxy(std::shared_ptr<base::TaskRunner> task_runner, Channel* channel)
+    : task_runner_(std::move(task_runner)),
+      channel_(channel)
 {
-    // Nothing
-}
-
-void ChannelProxy::setListener(Listener* listener)
-{
-    if (channel_)
-        channel_->setListener(listener);
-}
-
-bool ChannelProxy::connect(std::u16string_view channel_id)
-{
-    if (!channel_)
-        return false;
-
-    return channel_->connect(channel_id);
-}
-
-void ChannelProxy::disconnect()
-{
-    if (channel_)
-        channel_->disconnect();
-}
-
-bool ChannelProxy::isConnected() const
-{
-    if (!channel_)
-        return false;
-
-    return channel_->isConnected();
-}
-
-bool ChannelProxy::isPaused() const
-{
-    if (!channel_)
-        return false;
-
-    return channel_->isPaused();
-}
-
-void ChannelProxy::pause()
-{
-    if (channel_)
-        channel_->pause();
-}
-
-void ChannelProxy::resume()
-{
-    if (channel_)
-        channel_->resume();
+    DCHECK(task_runner_ && channel_);
 }
 
 void ChannelProxy::send(base::ByteArray&& buffer)
 {
-    if (channel_)
-        channel_->send(std::move(buffer));
+    std::scoped_lock lock(incoming_queue_lock_);
+
+    bool schedule_write = incoming_queue_.empty();
+
+    incoming_queue_.emplace(std::move(buffer));
+
+    if (!schedule_write)
+        return;
+
+    task_runner_->postTask(std::bind(&ChannelProxy::scheduleWrite, shared_from_this()));
 }
 
 void ChannelProxy::willDestroyCurrentChannel()
 {
     channel_ = nullptr;
+}
+
+void ChannelProxy::scheduleWrite()
+{
+    if (!channel_)
+        return;
+
+    if (!reloadWriteQueue(&channel_->write_queue_))
+        return;
+
+    channel_->doWrite();
+}
+
+bool ChannelProxy::reloadWriteQueue(base::ScalableQueue<base::ByteArray>* work_queue)
+{
+    if (!work_queue->empty())
+        return false;
+
+    std::scoped_lock lock(incoming_queue_lock_);
+
+    if (incoming_queue_.empty())
+        return false;
+
+    incoming_queue_.swap(*work_queue);
+    DCHECK(incoming_queue_.empty());
+
+    return true;
 }
 
 } // namespace ipc
