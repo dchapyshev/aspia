@@ -34,6 +34,7 @@ class Thread;
 } // namespace base
 
 namespace desktop {
+class CaptureScheduler;
 class SharedFrame;
 } // namespace desktop
 
@@ -72,6 +73,11 @@ protected:
     void onScreenCaptured(std::unique_ptr<desktop::SharedFrame> frame) override;
 
 private:
+    void startSession();
+    void stopSession();
+    void captureBegin();
+    void captureEnd();
+
     std::shared_ptr<base::TaskRunner> task_runner_;
 
     std::unique_ptr<ipc::Channel> channel_;
@@ -82,6 +88,7 @@ private:
     std::unique_ptr<InputInjector> input_injector_;
 
     std::unique_ptr<ipc::SharedMemoryFactory> shared_memory_factory_;
+    std::unique_ptr<desktop::CaptureScheduler> capture_scheduler_;
     std::unique_ptr<desktop::ScreenCapturerWrapper> screen_capturer_;
     std::unique_ptr<desktop::SharedFrame> last_frame_;
 

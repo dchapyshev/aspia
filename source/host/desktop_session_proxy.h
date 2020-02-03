@@ -27,10 +27,6 @@ namespace base {
 class TaskRunner;
 } // namespace base
 
-namespace desktop {
-class CaptureScheduler;
-} // namespace desktop
-
 namespace proto {
 class KeyEvent;
 class PointerEvent;
@@ -46,10 +42,11 @@ class DesktopSessionManager;
 class DesktopSessionProxy : public std::enable_shared_from_this<DesktopSessionProxy>
 {
 public:
-    explicit DesktopSessionProxy(std::shared_ptr<base::TaskRunner> task_runner);
+    DesktopSessionProxy();
     ~DesktopSessionProxy();
 
-    void captureScreen();
+    void startSession();
+    void stopSession();
     void selectScreen(const proto::Screen& screen);
     void injectKeyEvent(const proto::KeyEvent& event);
     void injectPointerEvent(const proto::PointerEvent& event);
@@ -61,10 +58,6 @@ private:
     void attach(DesktopSession* desktop_session);
     void dettach();
 
-    void captureNextFrame();
-
-    std::shared_ptr<base::TaskRunner> task_runner_;
-    std::unique_ptr<desktop::CaptureScheduler> capture_scheduler_;
     DesktopSession* desktop_session_ = nullptr;
 
     DISALLOW_COPY_AND_ASSIGN(DesktopSessionProxy);

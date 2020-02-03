@@ -36,7 +36,8 @@ public:
 
     // DesktopSession implementation.
     void start() override;
-    void captureScreen() override;
+    void startSession() override;
+    void stopSession() override;
     void selectScreen(const proto::Screen& screen) override;
     void injectKeyEvent(const proto::KeyEvent& event) override;
     void injectPointerEvent(const proto::PointerEvent& event) override;
@@ -64,6 +65,7 @@ private:
     int box_speed_y_;
 
     uint32_t prev_pointer_mask_ = 0;
+
     std::unique_ptr<desktop::SharedFrame> frame_;
     Delegate* delegate_;
 

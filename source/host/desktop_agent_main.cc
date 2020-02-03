@@ -45,8 +45,8 @@ int desktopAgentMain(int argc, char* argv[])
             std::unique_ptr<base::MessageLoop> message_loop =
                 std::make_unique<base::MessageLoop>(base::MessageLoop::Type::ASIO);
 
-            std::unique_ptr<host::DesktopSessionAgent> desktop_agent =
-                std::make_unique<host::DesktopSessionAgent>(message_loop->taskRunner());
+            std::shared_ptr<host::DesktopSessionAgent> desktop_agent =
+                std::make_shared<host::DesktopSessionAgent>(message_loop->taskRunner());
 
             desktop_agent->start(command_line.switchValue(u"channel_id"));
             message_loop->run();

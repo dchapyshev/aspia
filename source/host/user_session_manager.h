@@ -57,8 +57,8 @@ protected:
     void onErrorOccurred() override;
 
     // UserSession::Delegate implementation.
-    void onUserSessionStarted() override { }
-    void onUserSessionFinished() override { }
+    void onUserSessionStarted() override;
+    void onUserSessionFinished() override;
 
 private:
     void startSessionProcess(base::win::SessionId session_id);

@@ -40,7 +40,8 @@ public:
 
     // DesktopSession implementation.
     void start() override;
-    void captureScreen() override;
+    void startSession() override;
+    void stopSession() override;
     void selectScreen(const proto::Screen& screen) override;
     void injectKeyEvent(const proto::KeyEvent& event) override;
     void injectPointerEvent(const proto::PointerEvent& event) override;
@@ -55,8 +56,7 @@ private:
     class SharedBuffer;
     using SharedBuffers = std::map<int, std::unique_ptr<SharedBuffer>>;
 
-    void onCaptureFrameResult(const proto::internal::CaptureFrameResult& result);
-    void onCaptureCursorResult(const proto::internal::CaptureCursorResult& result);
+    void onEncodeFrame(const proto::internal::EncodeFrame& encode_frame);
     void onCreateSharedBuffer(int shared_buffer_id);
     void onReleaseSharedBuffer(int shared_buffer_id);
     std::unique_ptr<SharedBuffer> sharedBuffer(int shared_buffer_id);

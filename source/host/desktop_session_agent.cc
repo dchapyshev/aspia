@@ -22,6 +22,7 @@
 #include "base/threading/thread.h"
 #include "codec/video_util.h"
 #include "common/message_serialization.h"
+#include "desktop/capture_scheduler.h"
 #include "desktop/screen_capturer_wrapper.h"
 #include "desktop/shared_desktop_frame.h"
 #include "host/input_injector_win.h"
@@ -47,31 +48,11 @@ void DesktopSessionAgent::start(std::u16string_view channel_id)
 
     channel_->setListener(this);
     channel_->resume();
-
-    // A window is created to monitor the clipboard. We cannot create windows in the current
-    // thread. Create a separate thread.
-    //clipboard_thread_ = std::make_unique<base::Thread>();
-    //clipboard_thread_->start(base::MessageLoop::Type::WIN);
-
-    //std::shared_ptr<base::TaskRunner> clipboard_task_runner = clipboard_thread_->taskRunner();
-
-    // Create a shared memory factory.
-    // We will receive notifications of all creations and destruction of shared memory.
-    shared_memory_factory_ = std::make_unique<ipc::SharedMemoryFactory>(this);
-
-    screen_capturer_ = std::make_unique<desktop::ScreenCapturerWrapper>(this);
-    screen_capturer_->setSharedMemoryFactory(shared_memory_factory_.get());
-
-    input_injector_ = std::make_unique<InputInjectorWin>();
 }
 
 void DesktopSessionAgent::onDisconnected()
 {
-    input_injector_.reset();
-    screen_capturer_.reset();
-    shared_memory_factory_.reset();
-    clipboard_thread_.reset();
-
+    stopSession();
     task_runner_->postQuit();
 }
 
@@ -85,41 +66,51 @@ void DesktopSessionAgent::onMessageReceived(const base::ByteArray& buffer)
         return;
     }
 
-    if (incoming_message_.has_select_source())
+    if (incoming_message_.has_encode_frame_result())
     {
-        screen_capturer_->selectScreen(incoming_message_.select_source().screen().id());
-    }
-    else if (incoming_message_.has_capture_frame())
-    {
-        screen_capturer_->captureFrame();
-    }
-    else if (incoming_message_.has_capture_cursor())
-    {
-        // TODO
-    }
-    else if (incoming_message_.has_key_event())
-    {
-        input_injector_->injectKeyEvent(incoming_message_.key_event());
+        captureEnd();
     }
     else if (incoming_message_.has_pointer_event())
     {
-        input_injector_->injectPointerEvent(incoming_message_.pointer_event());
+        if (input_injector_)
+            input_injector_->injectPointerEvent(incoming_message_.pointer_event());
+    }
+    else if (incoming_message_.has_key_event())
+    {
+        if (input_injector_)
+            input_injector_->injectKeyEvent(incoming_message_.key_event());
     }
     else if (incoming_message_.has_clipboard_event())
     {
         // TODO
     }
-    else if (incoming_message_.has_set_desktop_features())
+    else if (incoming_message_.has_start_session())
     {
-        const proto::internal::SetDesktopFeatures& set_desktop_features =
-            incoming_message_.set_desktop_features();
+        startSession();
+    }
+    else if (incoming_message_.has_stop_session())
+    {
+        stopSession();
+    }
+    else if (incoming_message_.has_select_source())
+    {
+        if (screen_capturer_)
+            screen_capturer_->selectScreen(incoming_message_.select_source().screen().id());
+    }
+    else if (incoming_message_.has_set_features())
+    {
+        const proto::internal::SetFeatures& set_features = incoming_message_.set_features();
 
-        screen_capturer_->enableWallpaper(set_desktop_features.wallpaper());
-        screen_capturer_->enableEffects(set_desktop_features.effects());
+        if (screen_capturer_)
+        {
+            screen_capturer_->enableWallpaper(set_features.wallpaper());
+            screen_capturer_->enableEffects(set_features.effects());
+        }
     }
     else if (incoming_message_.has_set_block_input())
     {
-        input_injector_->setBlockInput(incoming_message_.set_block_input().state());
+        if (input_injector_)
+            input_injector_->setBlockInput(incoming_message_.set_block_input().state());
     }
     else
     {
@@ -148,7 +139,6 @@ void DesktopSessionAgent::onScreenListChanged(
     outgoing_message_.Clear();
 
     proto::ScreenList* screen_list = outgoing_message_.mutable_screen_list();
-
     screen_list->set_current_screen(current);
 
     for (const auto& list_item : list)
@@ -163,10 +153,16 @@ void DesktopSessionAgent::onScreenListChanged(
 
 void DesktopSessionAgent::onScreenCaptured(std::unique_ptr<desktop::SharedFrame> frame)
 {
+    if (frame->constUpdatedRegion().isEmpty())
+    {
+        captureEnd();
+        return;
+    }
+
     outgoing_message_.Clear();
 
     proto::internal::SerializedDesktopFrame* serialized_frame =
-        outgoing_message_.mutable_capture_frame_result()->mutable_frame();
+        outgoing_message_.mutable_encode_frame()->mutable_frame();
 
     serialized_frame->set_shared_buffer_id(frame->sharedMemory()->id());
 
@@ -180,6 +176,74 @@ void DesktopSessionAgent::onScreenCaptured(std::unique_ptr<desktop::SharedFrame>
 
     last_frame_ = std::move(frame);
     channel_->send(common::serializeMessage(outgoing_message_));
+}
+
+void DesktopSessionAgent::startSession()
+{
+    if (input_injector_)
+    {
+        LOG(LS_INFO) << "Session already started";
+        return;
+    }
+
+    LOG(LS_INFO) << "Session start...";
+
+    input_injector_ = std::make_unique<InputInjectorWin>();
+
+    // A window is created to monitor the clipboard. We cannot create windows in the current
+    // thread. Create a separate thread.
+    //clipboard_thread_ = std::make_unique<base::Thread>();
+    //clipboard_thread_->start(base::MessageLoop::Type::WIN);
+
+    //std::shared_ptr<base::TaskRunner> clipboard_task_runner = clipboard_thread_->taskRunner();
+
+    // Create a shared memory factory.
+    // We will receive notifications of all creations and destruction of shared memory.
+    shared_memory_factory_ = std::make_unique<ipc::SharedMemoryFactory>(this);
+
+    capture_scheduler_ = std::make_unique<desktop::CaptureScheduler>(
+        std::chrono::milliseconds(33));
+
+    screen_capturer_ = std::make_unique<desktop::ScreenCapturerWrapper>(this);
+    screen_capturer_->setSharedMemoryFactory(shared_memory_factory_.get());
+
+    LOG(LS_INFO) << "Session successfully started";
+
+    task_runner_->postTask(std::bind(&DesktopSessionAgent::captureBegin, shared_from_this()));
+}
+
+void DesktopSessionAgent::stopSession()
+{
+    LOG(LS_INFO) << "Session stop...";
+
+    input_injector_.reset();
+    capture_scheduler_.reset();
+    screen_capturer_.reset();
+    shared_memory_factory_.reset();
+    clipboard_thread_.reset();
+
+    LOG(LS_INFO) << "Session successfully stopped";
+}
+
+void DesktopSessionAgent::captureBegin()
+{
+    if (!capture_scheduler_ || !screen_capturer_)
+        return;
+
+    capture_scheduler_->beginCapture();
+    screen_capturer_->captureFrame();
+}
+
+void DesktopSessionAgent::captureEnd()
+{
+    if (!capture_scheduler_)
+        return;
+
+    capture_scheduler_->endCapture();
+
+    task_runner_->postDelayedTask(
+        std::bind(&DesktopSessionAgent::captureBegin, shared_from_this()),
+        capture_scheduler_->nextCaptureDelay());
 }
 
 } // namespace host

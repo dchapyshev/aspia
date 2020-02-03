@@ -57,7 +57,7 @@ void DesktopSessionFake::start()
     frame_ = desktop::SharedFrame::wrap(std::move(frame));
 }
 
-void DesktopSessionFake::captureScreen()
+void DesktopSessionFake::startSession()
 {
     int old_box_pos_x = box_pos_x_;
     int old_box_pos_y = box_pos_y_;
@@ -97,6 +97,11 @@ void DesktopSessionFake::captureScreen()
         desktop::Rect::makeXYWH(box_pos_x_, box_pos_y_, kBoxWidth, kBoxHeight));
 
     delegate_->onScreenCaptured(*frame_);
+}
+
+void DesktopSessionFake::stopSession()
+{
+    // TODO
 }
 
 void DesktopSessionFake::selectScreen(const proto::Screen& /* screen */)

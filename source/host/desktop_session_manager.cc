@@ -33,7 +33,7 @@ DesktopSessionManager::DesktopSessionManager(
     std::shared_ptr<base::TaskRunner> task_runner, DesktopSession::Delegate* delegate)
     : task_runner_(task_runner),
       session_attach_timer_(task_runner),
-      session_proxy_(std::make_shared<DesktopSessionProxy>(task_runner)),
+      session_proxy_(std::make_shared<DesktopSessionProxy>()),
       delegate_(delegate)
 {
     // Nothing

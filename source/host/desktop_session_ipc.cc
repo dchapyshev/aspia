@@ -88,10 +88,17 @@ void DesktopSessionIpc::start()
     delegate_->onDesktopSessionStarted();
 }
 
-void DesktopSessionIpc::captureScreen()
+void DesktopSessionIpc::startSession()
 {
     outgoing_message_.Clear();
-    outgoing_message_.mutable_capture_frame()->set_dummy(1);
+    outgoing_message_.mutable_start_session()->set_dummy(1);
+    channel_->send(common::serializeMessage(outgoing_message_));
+}
+
+void DesktopSessionIpc::stopSession()
+{
+    outgoing_message_.Clear();
+    outgoing_message_.mutable_stop_session()->set_dummy(1);
     channel_->send(common::serializeMessage(outgoing_message_));
 }
 
@@ -138,7 +145,11 @@ void DesktopSessionIpc::onMessageReceived(const base::ByteArray& buffer)
         return;
     }
 
-    if (incoming_message_.has_screen_list())
+    if (incoming_message_.has_encode_frame())
+    {
+        onEncodeFrame(incoming_message_.encode_frame());
+    }
+    else if (incoming_message_.has_screen_list())
     {
         delegate_->onScreenListChanged(incoming_message_.screen_list());
     }
@@ -149,14 +160,6 @@ void DesktopSessionIpc::onMessageReceived(const base::ByteArray& buffer)
     else if (incoming_message_.has_release_shared_buffer())
     {
         onReleaseSharedBuffer(incoming_message_.release_shared_buffer().shared_buffer_id());
-    }
-    else if (incoming_message_.has_capture_frame_result())
-    {
-        onCaptureFrameResult(incoming_message_.capture_frame_result());
-    }
-    else if (incoming_message_.has_capture_cursor_result())
-    {
-        onCaptureCursorResult(incoming_message_.capture_cursor_result());
     }
     else if (incoming_message_.has_clipboard_event())
     {
@@ -169,9 +172,9 @@ void DesktopSessionIpc::onMessageReceived(const base::ByteArray& buffer)
     }
 }
 
-void DesktopSessionIpc::onCaptureFrameResult(const proto::internal::CaptureFrameResult& result)
+void DesktopSessionIpc::onEncodeFrame(const proto::internal::EncodeFrame& encode_frame)
 {
-    const proto::internal::SerializedDesktopFrame& serialized_frame = result.frame();
+    const proto::internal::SerializedDesktopFrame& serialized_frame = encode_frame.frame();
 
     std::unique_ptr<SharedBuffer> shared_buffer = sharedBuffer(serialized_frame.shared_buffer_id());
     if (!shared_buffer)
@@ -190,11 +193,10 @@ void DesktopSessionIpc::onCaptureFrameResult(const proto::internal::CaptureFrame
         frame->updatedRegion()->addRect(codec::parseRect(serialized_frame.dirty_rect(i)));
 
     delegate_->onScreenCaptured(*frame);
-}
 
-void DesktopSessionIpc::onCaptureCursorResult(const proto::internal::CaptureCursorResult& result)
-{
-    // TODO
+    outgoing_message_.Clear();
+    outgoing_message_.mutable_encode_frame_result()->set_dummy(1);
+    channel_->send(common::serializeMessage(outgoing_message_));
 }
 
 void DesktopSessionIpc::onCreateSharedBuffer(int shared_buffer_id)

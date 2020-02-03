@@ -55,24 +55,25 @@ message ReleaseSharedBuffer
     int32 shared_buffer_id = 1;
 }
 
-message CaptureFrame
+message StartSession
 {
     int32 dummy = 1;
 }
 
-message CaptureFrameResult
+message StopSession
+{
+    int32 dummy = 1;
+}
+
+message EncodeFrame
 {
     SerializedDesktopFrame frame = 1;
+    SerializedMouseCursor mouse_cursor = 2;
 }
 
-message CaptureCursor
+message EncodeFrameResult
 {
     int32 dummy = 1;
-}
-
-message CaptureCursorResult
-{
-    SerializedMouseCursor mouse_cursor = 1;
 }
 
 message SelectSource
@@ -80,7 +81,7 @@ message SelectSource
     Screen screen = 1;
 }
 
-message SetDesktopFeatures
+message SetFeatures
 {
     bool wallpaper = 1;
     bool effects   = 2;
@@ -93,14 +94,15 @@ message SetBlockInput
 
 message ServiceToDesktop
 {
-    SelectSource select_source              = 1;
-    CaptureFrame capture_frame              = 2;
-    CaptureCursor capture_cursor            = 3;
-    KeyEvent key_event                      = 4;
-    PointerEvent pointer_event              = 5;
-    ClipboardEvent clipboard_event          = 6;
-    SetDesktopFeatures set_desktop_features = 7;
-    SetBlockInput set_block_input           = 8;
+    StartSession start_session            = 1;
+    StopSession stop_session              = 2;
+    SelectSource select_source            = 3;
+    EncodeFrameResult encode_frame_result = 4;
+    SetFeatures set_features              = 5;
+    SetBlockInput set_block_input         = 6;
+    KeyEvent key_event                    = 7;
+    PointerEvent pointer_event            = 8;
+    ClipboardEvent clipboard_event        = 9;
 }
 
 message DesktopToService
@@ -108,7 +110,6 @@ message DesktopToService
     ScreenList screen_list                    = 1;
     CreateSharedBuffer create_shared_buffer   = 2;
     ReleaseSharedBuffer release_shared_buffer = 3;
-    CaptureFrameResult capture_frame_result   = 4;
-    CaptureCursorResult capture_cursor_result = 5;
-    ClipboardEvent clipboard_event            = 6;
+    EncodeFrame encode_frame                  = 4;
+    ClipboardEvent clipboard_event            = 5;
 }

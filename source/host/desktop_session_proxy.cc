@@ -19,41 +19,27 @@
 #include "host/desktop_session_proxy.h"
 
 #include "base/logging.h"
-#include "base/task_runner.h"
-#include "desktop/capture_scheduler.h"
 #include "host/desktop_session.h"
 
 namespace host {
 
-DesktopSessionProxy::DesktopSessionProxy(std::shared_ptr<base::TaskRunner> task_runner)
-    : task_runner_(std::move(task_runner))
-{
-    DCHECK(task_runner_);
-}
+DesktopSessionProxy::DesktopSessionProxy() = default;
 
 DesktopSessionProxy::~DesktopSessionProxy()
 {
     DCHECK(!desktop_session_);
 }
 
-void DesktopSessionProxy::captureScreen()
+void DesktopSessionProxy::startSession()
 {
-    if (capture_scheduler_)
-    {
-        capture_scheduler_->endCapture();
+    if (desktop_session_)
+        desktop_session_->startSession();
+}
 
-        task_runner_->postDelayedTask(
-            std::bind(&DesktopSessionProxy::captureNextFrame, shared_from_this()),
-            capture_scheduler_->nextCaptureDelay());
-    }
-    else
-    {
-        capture_scheduler_ =
-            std::make_unique<desktop::CaptureScheduler>(std::chrono::milliseconds(30));
-
-        task_runner_->postTask(
-            std::bind(&DesktopSessionProxy::captureNextFrame, shared_from_this()));
-    }
+void DesktopSessionProxy::stopSession()
+{
+    if (desktop_session_)
+        desktop_session_->stopSession();
 }
 
 void DesktopSessionProxy::selectScreen(const proto::Screen& screen)
@@ -89,16 +75,6 @@ void DesktopSessionProxy::attach(DesktopSession* desktop_session)
 void DesktopSessionProxy::dettach()
 {
     desktop_session_ = nullptr;
-}
-
-void DesktopSessionProxy::captureNextFrame()
-{
-    DCHECK(capture_scheduler_);
-
-    capture_scheduler_->beginCapture();
-
-    if (desktop_session_)
-        desktop_session_->captureScreen();
 }
 
 } // namespace host

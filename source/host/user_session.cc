@@ -89,6 +89,7 @@ void UserSession::addNewSession(std::unique_ptr<ClientSession> client_session)
                 static_cast<ClientSessionDesktop*>(session);
 
             desktop_client_session->setDesktopSessionProxy(desktop_session_proxy_);
+            desktop_session_proxy_->startSession();
         }
         break;
 
@@ -170,8 +171,6 @@ void UserSession::onScreenCaptured(const desktop::Frame& frame)
             desktop_client->encodeFrame(frame);
         }
     }
-
-    desktop_session_proxy_->captureScreen();
 }
 
 void UserSession::onScreenListChanged(const proto::ScreenList& list)
@@ -209,6 +208,8 @@ void UserSession::onClipboardEvent(const proto::ClipboardEvent& event)
 
 void UserSession::onClientSessionFinished()
 {
+    size_t desktop_session_count = 0;
+
     for (auto it = clients_.begin(); it != clients_.end();)
     {
         ClientSession* client_session = it->get();
@@ -222,9 +223,23 @@ void UserSession::onClientSessionFinished()
         }
         else
         {
+            switch (client_session->sessionType())
+            {
+                case proto::SESSION_TYPE_DESKTOP_MANAGE:
+                case proto::SESSION_TYPE_DESKTOP_VIEW:
+                    ++desktop_session_count;
+                    break;
+
+                default:
+                    break;
+            }
+
             ++it;
         }
     }
+
+    if (!desktop_session_count)
+        desktop_session_proxy_->stopSession();
 }
 
 void UserSession::sendConnectEvent(const ClientSession& client_session)

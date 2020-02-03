@@ -54,7 +54,8 @@ public:
 
     virtual void start() = 0;
 
-    virtual void captureScreen() = 0;
+    virtual void startSession() = 0;
+    virtual void stopSession() = 0;
     virtual void selectScreen(const proto::Screen& screen) = 0;
 
     virtual void injectKeyEvent(const proto::KeyEvent& event) = 0;

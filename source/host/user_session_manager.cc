@@ -319,6 +319,17 @@ void UserSessionManager::onNewConnection(std::unique_ptr<ipc::Channel> channel)
 void UserSessionManager::onErrorOccurred()
 {
     // TODO
+    LOG(LS_INFO) << "ON ERROR OCCURRED";
+}
+
+void UserSessionManager::onUserSessionStarted()
+{
+    LOG(LS_INFO) << "ON USER SESSION STARTED";
+}
+
+void UserSessionManager::onUserSessionFinished()
+{
+    LOG(LS_INFO) << "ON USER SESSION FINISHED";
 }
 
 void UserSessionManager::startSessionProcess(base::win::SessionId session_id)
