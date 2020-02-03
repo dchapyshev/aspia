@@ -26,6 +26,7 @@
 #include "common/message_serialization.h"
 #include "desktop/desktop_frame.h"
 #include "host/desktop_session_proxy.h"
+#include "host/host_system_info.h"
 #include "host/video_frame_pump.h"
 #include "net/network_channel.h"
 
@@ -185,7 +186,16 @@ void ClientSessionDesktop::readExtension(const proto::DesktopExtension& extensio
     }
     else if (extension.name() == common::kSystemInfoExtension)
     {
-        // TODO
+        proto::SystemInfo system_info;
+        createHostSystemInfo(&system_info);
+
+        proto::HostToClient message;
+
+        proto::DesktopExtension* extension = message.mutable_extension();
+        extension->set_name(common::kSystemInfoExtension);
+        extension->set_data(system_info.SerializeAsString());
+
+        sendMessage(common::serializeMessage(message));
     }
     else
     {

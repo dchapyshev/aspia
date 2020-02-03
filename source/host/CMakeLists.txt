@@ -50,6 +50,8 @@ list(APPEND SOURCE_HOST_CORE
     host_main.h
     host_server.cc
     host_server.h
+    host_system_info.cc
+    host_system_info.h
     input_injector.h
     input_injector_win.cc
     input_injector_win.h
