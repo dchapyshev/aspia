@@ -24,15 +24,12 @@
 #include "client/desktop_window.h"
 #include "client/ui/client_window.h"
 #include "client/ui/desktop_widget.h"
+#include "common/clipboard.h"
 
 #include <QPointer>
 
 class QHBoxLayout;
 class QScrollArea;
-
-namespace common {
-class Clipboard;
-} // namespace common
 
 namespace desktop {
 class Frame;
@@ -47,7 +44,8 @@ class SystemInfoWindow;
 class QtDesktopWindow :
     public ClientWindow,
     public DesktopWindow,
-    public DesktopWidget::Delegate
+    public DesktopWidget::Delegate,
+    public common::Clipboard::Delegate
 {
     Q_OBJECT
 
@@ -85,6 +83,9 @@ protected:
     void leaveEvent(QEvent* event) override;
     bool eventFilter(QObject* object, QEvent* event) override;
 
+    // common::Clipboard::Delegate implementation.
+    void onClipboardEvent(const proto::ClipboardEvent& event) override;
+
 private slots:
     void changeSettings();
     void onConfigChanged(const proto::DesktopConfig& config);
@@ -100,11 +101,12 @@ private:
     base::Version peer_version_;
     uint32_t video_encodings_ = 0;
 
+    std::unique_ptr<common::Clipboard> clipboard_;
+
     QHBoxLayout* layout_ = nullptr;
     QScrollArea* scroll_area_ = nullptr;
     DesktopPanel* panel_ = nullptr;
     DesktopWidget* desktop_ = nullptr;
-    common::Clipboard* clipboard_ = nullptr;
 
     QPointer<SystemInfoWindow> system_info_;
 

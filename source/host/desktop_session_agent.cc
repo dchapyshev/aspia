@@ -83,7 +83,8 @@ void DesktopSessionAgent::onMessageReceived(const base::ByteArray& buffer)
     }
     else if (incoming_message_.has_clipboard_event())
     {
-        // TODO
+        if (clipboard_monitor_)
+            clipboard_monitor_->injectClipboardEvent(incoming_message_.clipboard_event());
     }
     else if (incoming_message_.has_start_session())
     {
@@ -187,6 +188,13 @@ void DesktopSessionAgent::onScreenCaptured(std::unique_ptr<desktop::SharedFrame>
     channel_->send(common::serializeMessage(outgoing_message_));
 }
 
+void DesktopSessionAgent::onClipboardEvent(const proto::ClipboardEvent& event)
+{
+    outgoing_message_.Clear();
+    outgoing_message_.mutable_clipboard_event()->CopyFrom(event);
+    channel_->send(common::serializeMessage(outgoing_message_));
+}
+
 void DesktopSessionAgent::startSession()
 {
     if (input_injector_)
@@ -201,10 +209,8 @@ void DesktopSessionAgent::startSession()
 
     // A window is created to monitor the clipboard. We cannot create windows in the current
     // thread. Create a separate thread.
-    //clipboard_thread_ = std::make_unique<base::Thread>();
-    //clipboard_thread_->start(base::MessageLoop::Type::WIN);
-
-    //std::shared_ptr<base::TaskRunner> clipboard_task_runner = clipboard_thread_->taskRunner();
+    clipboard_monitor_ = std::make_unique<ClipboardMonitor>();
+    clipboard_monitor_->start(task_runner_, this);
 
     // Create a shared memory factory.
     // We will receive notifications of all creations and destruction of shared memory.
@@ -229,7 +235,7 @@ void DesktopSessionAgent::stopSession()
     capture_scheduler_.reset();
     screen_capturer_.reset();
     shared_memory_factory_.reset();
-    clipboard_thread_.reset();
+    clipboard_monitor_.reset();
 
     LOG(LS_INFO) << "Session successfully stopped";
 }

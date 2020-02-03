@@ -21,6 +21,7 @@
 
 #include "base/macros_magic.h"
 #include "desktop/screen_capturer_wrapper.h"
+#include "host/clipboard_monitor.h"
 #include "ipc/ipc_listener.h"
 #include "ipc/shared_memory_factory.h"
 #include "proto/desktop_internal.pb.h"
@@ -50,7 +51,8 @@ class DesktopSessionAgent
     : public std::enable_shared_from_this<DesktopSessionAgent>,
       public ipc::Listener,
       public ipc::SharedMemoryFactory::Delegate,
-      public desktop::ScreenCapturerWrapper::Delegate
+      public desktop::ScreenCapturerWrapper::Delegate,
+      public common::Clipboard::Delegate
 {
 public:
     explicit DesktopSessionAgent(std::shared_ptr<base::TaskRunner> task_runner);
@@ -72,6 +74,9 @@ protected:
                              desktop::ScreenCapturer::ScreenId current) override;
     void onScreenCaptured(std::unique_ptr<desktop::SharedFrame> frame) override;
 
+    // common::Clipboard::Delegate implementation.
+    void onClipboardEvent(const proto::ClipboardEvent& event) override;
+
 private:
     void startSession();
     void stopSession();
@@ -84,7 +89,7 @@ private:
     proto::internal::ServiceToDesktop incoming_message_;
     proto::internal::DesktopToService outgoing_message_;
 
-    std::unique_ptr<base::Thread> clipboard_thread_;
+    std::unique_ptr<ClipboardMonitor> clipboard_monitor_;
     std::unique_ptr<InputInjector> input_injector_;
 
     std::unique_ptr<ipc::SharedMemoryFactory> shared_memory_factory_;

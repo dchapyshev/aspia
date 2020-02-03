@@ -28,7 +28,6 @@
 #include "client/ui/desktop_panel.h"
 #include "client/ui/qt_file_manager_window.h"
 #include "client/ui/system_info_window.h"
-#include "common/clipboard.h"
 #include "common/desktop_session_constants.h"
 #include "desktop/desktop_frame_qimage.h"
 #include "desktop/mouse_cursor.h"
@@ -182,12 +181,8 @@ void QtDesktopWindow::showWindow(
     desktop_control_proxy_ = std::move(desktop_control_proxy);
     peer_version_ = peer_version;
 
-    clipboard_ = new common::Clipboard(this);
-    connect(clipboard_, &common::Clipboard::clipboardEvent,
-            [this](const proto::ClipboardEvent& event)
-    {
-        desktop_control_proxy_->onClipboardEvent(event);
-    });
+    clipboard_ = std::make_unique<common::Clipboard>();
+    clipboard_->start(this);
 
     show();
     activateWindow();
@@ -573,6 +568,11 @@ bool QtDesktopWindow::eventFilter(QObject* object, QEvent* event)
     }
 
     return QWidget::eventFilter(object, event);
+}
+
+void QtDesktopWindow::onClipboardEvent(const proto::ClipboardEvent& event)
+{
+    desktop_control_proxy_->onClipboardEvent(event);
 }
 
 } // namespace client

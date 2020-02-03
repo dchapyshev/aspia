@@ -22,26 +22,47 @@
 #include "base/macros_magic.h"
 #include "proto/desktop.pb.h"
 
-#include <QObject>
+#include <memory>
+
+namespace base::win {
+class MessageWindow;
+} // namespace base::win
+
+#include <Windows.h>
 
 namespace common {
 
-class Clipboard : public QObject
+class Clipboard
 {
-    Q_OBJECT
-
 public:
-    Clipboard(QObject* parent = nullptr);
-    ~Clipboard() = default;
+    Clipboard();
+    ~Clipboard();
 
-public slots:
+    class Delegate
+    {
+    public:
+        virtual ~Delegate() = default;
+
+        virtual void onClipboardEvent(const proto::ClipboardEvent& event) = 0;
+    };
+
+    void start(Delegate* delegate);
+
     // Receiving the incoming clipboard.
     void injectClipboardEvent(const proto::ClipboardEvent& event);
 
-signals:
-    void clipboardEvent(const proto::ClipboardEvent& event);
-
 private:
+    void stop();
+
+    // Handles messages received by |window_|.
+    bool onMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESULT& result);
+    void onClipboardUpdate();
+
+    Delegate* delegate_;
+
+    // Used to subscribe to WM_CLIPBOARDUPDATE messages.
+    std::unique_ptr<base::win::MessageWindow> window_;
+
     std::string last_mime_type_;
     std::string last_data_;
 
