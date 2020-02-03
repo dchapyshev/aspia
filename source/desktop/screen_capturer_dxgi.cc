@@ -146,7 +146,7 @@ bool ScreenCapturerDxgi::selectScreen(ScreenId screen_id)
     return true;
 }
 
-std::unique_ptr<SharedFrame> ScreenCapturerDxgi::captureFrame(Error* error)
+const Frame* ScreenCapturerDxgi::captureFrame(Error* error)
 {
     DCHECK(error);
 
@@ -178,7 +178,7 @@ std::unique_ptr<SharedFrame> ScreenCapturerDxgi::captureFrame(Error* error)
         case DuplicateResult::SUCCEEDED:
         {
             *error = Error::SUCCEEDED;
-            return queue_.currentFrame()->frame()->share();
+            return queue_.currentFrame()->frame();
         }
 
         case DuplicateResult::UNSUPPORTED_SESSION:

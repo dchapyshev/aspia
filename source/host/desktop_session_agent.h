@@ -72,7 +72,7 @@ protected:
     // desktop::ScreenCapturerWrapper::Delegate implementation.
     void onScreenListChanged(const desktop::ScreenCapturer::ScreenList& list,
                              desktop::ScreenCapturer::ScreenId current) override;
-    void onScreenCaptured(std::unique_ptr<desktop::SharedFrame> frame) override;
+    void onScreenCaptured(const desktop::Frame& frame) override;
 
     // common::Clipboard::Delegate implementation.
     void onClipboardEvent(const proto::ClipboardEvent& event) override;
@@ -95,7 +95,6 @@ private:
     std::unique_ptr<ipc::SharedMemoryFactory> shared_memory_factory_;
     std::unique_ptr<desktop::CaptureScheduler> capture_scheduler_;
     std::unique_ptr<desktop::ScreenCapturerWrapper> screen_capturer_;
-    std::unique_ptr<desktop::SharedFrame> last_frame_;
 
     DISALLOW_COPY_AND_ASSIGN(DesktopSessionAgent);
 };

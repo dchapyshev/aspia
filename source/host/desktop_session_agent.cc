@@ -161,9 +161,9 @@ void DesktopSessionAgent::onScreenListChanged(
     channel_->send(common::serializeMessage(outgoing_message_));
 }
 
-void DesktopSessionAgent::onScreenCaptured(std::unique_ptr<desktop::SharedFrame> frame)
+void DesktopSessionAgent::onScreenCaptured(const desktop::Frame& frame)
 {
-    if (frame->constUpdatedRegion().isEmpty())
+    if (frame.constUpdatedRegion().isEmpty())
     {
         captureEnd();
         return;
@@ -174,17 +174,16 @@ void DesktopSessionAgent::onScreenCaptured(std::unique_ptr<desktop::SharedFrame>
     proto::internal::SerializedDesktopFrame* serialized_frame =
         outgoing_message_.mutable_encode_frame()->mutable_frame();
 
-    serialized_frame->set_shared_buffer_id(frame->sharedMemory()->id());
+    serialized_frame->set_shared_buffer_id(frame.sharedMemory()->id());
 
-    desktop::Rect frame_rect = desktop::Rect::makeXYWH(frame->topLeft(), frame->size());
+    desktop::Rect frame_rect = desktop::Rect::makeXYWH(frame.topLeft(), frame.size());
 
     codec::serializeRect(frame_rect, serialized_frame->mutable_desktop_rect());
-    codec::serializePixelFormat(frame->format(), serialized_frame->mutable_pixel_format());
+    codec::serializePixelFormat(frame.format(), serialized_frame->mutable_pixel_format());
 
-    for (desktop::Region::Iterator it(frame->constUpdatedRegion()); !it.isAtEnd(); it.advance())
+    for (desktop::Region::Iterator it(frame.constUpdatedRegion()); !it.isAtEnd(); it.advance())
         codec::serializeRect(it.rect(), serialized_frame->add_dirty_rect());
 
-    last_frame_ = std::move(frame);
     channel_->send(common::serializeMessage(outgoing_message_));
 }
 

@@ -71,7 +71,7 @@ void ScreenCapturerWrapper::captureFrame()
     }
 
     ScreenCapturer::Error error;
-    std::unique_ptr<SharedFrame> frame = capturer_->captureFrame(&error);
+    const Frame* frame = capturer_->captureFrame(&error);
     if (!frame)
     {
         switch (error)
@@ -89,7 +89,7 @@ void ScreenCapturerWrapper::captureFrame()
         }
     }
 
-    delegate_->onScreenCaptured(std::move(frame));
+    delegate_->onScreenCaptured(*frame);
 }
 
 void ScreenCapturerWrapper::setSharedMemoryFactory(ipc::SharedMemoryFactory* shared_memory_factory)

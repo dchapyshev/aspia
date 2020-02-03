@@ -75,7 +75,7 @@ bool ScreenCapturerMirror::selectScreen(ScreenId screen_id)
     return true;
 }
 
-std::unique_ptr<SharedFrame> ScreenCapturerMirror::captureFrame(Error* error)
+const Frame* ScreenCapturerMirror::captureFrame(Error* error)
 {
     DCHECK(error);
 
@@ -98,7 +98,7 @@ std::unique_ptr<SharedFrame> ScreenCapturerMirror::captureFrame(Error* error)
     helper_->copyRegion(frame_.get(), *updated_region);
 
     frame_->setTopLeft(helper_->screenRect().topLeft());
-    return frame_->share();
+    return frame_.get();
 }
 
 void ScreenCapturerMirror::reset()

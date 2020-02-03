@@ -56,11 +56,11 @@ bool ScreenCapturerGdi::selectScreen(ScreenId screen_id)
     return true;
 }
 
-std::unique_ptr<SharedFrame> ScreenCapturerGdi::captureFrame(Error* error)
+const Frame* ScreenCapturerGdi::captureFrame(Error* error)
 {
     DCHECK(error);
 
-    std::unique_ptr<SharedFrame> frame = captureImage();
+    const Frame* frame = captureImage();
     if (!frame)
     {
         *error = Error::TEMPORARY;
@@ -78,7 +78,7 @@ void ScreenCapturerGdi::reset()
     memory_dc_.reset();
 }
 
-std::unique_ptr<SharedFrame> ScreenCapturerGdi::captureImage()
+const Frame* ScreenCapturerGdi::captureImage()
 {
     queue_.moveToNextFrame();
 
@@ -105,14 +105,14 @@ std::unique_ptr<SharedFrame> ScreenCapturerGdi::captureImage()
             return nullptr;
         }
 
-        queue_.replaceCurrentFrame(SharedFrame::wrap(std::move(frame)));
+        queue_.replaceCurrentFrame(std::move(frame));
     }
 
-    SharedFrame* current = queue_.currentFrame();
-    SharedFrame* previous = queue_.previousFrame();
+    Frame* current = queue_.currentFrame();
+    Frame* previous = queue_.previousFrame();
 
     base::win::ScopedSelectObject select_object(
-        memory_dc_, static_cast<FrameDib*>(current->underlyingFrame())->bitmap());
+        memory_dc_, static_cast<FrameDib*>(current)->bitmap());
 
     BitBlt(memory_dc_,
            0, 0,
@@ -135,7 +135,7 @@ std::unique_ptr<SharedFrame> ScreenCapturerGdi::captureImage()
                                  current->updatedRegion());
     }
 
-    return current->share();
+    return current;
 }
 
 bool ScreenCapturerGdi::prepareCaptureResources()

@@ -55,7 +55,7 @@ public:
     virtual int screenCount() = 0;
     virtual bool screenList(ScreenList* screens) = 0;
     virtual bool selectScreen(ScreenId screen_id) = 0;
-    virtual std::unique_ptr<SharedFrame> captureFrame(Error* error) = 0;
+    virtual const Frame* captureFrame(Error* error) = 0;
 
     void setSharedMemoryFactory(ipc::SharedMemoryFactory* shared_memory_factory);
     ipc::SharedMemoryFactory* sharedMemoryFactory() const;

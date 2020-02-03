@@ -38,7 +38,7 @@ public:
 
         virtual void onScreenListChanged(
             const ScreenCapturer::ScreenList& list, ScreenCapturer::ScreenId current) = 0;
-        virtual void onScreenCaptured(std::unique_ptr<SharedFrame> frame) = 0;
+        virtual void onScreenCaptured(const Frame& frame) = 0;
     };
 
     explicit ScreenCapturerWrapper(Delegate* delegate);
