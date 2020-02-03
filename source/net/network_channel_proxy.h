@@ -19,7 +19,6 @@
 #ifndef NET__NETWORK_CHANNEL_PROXY_H
 #define NET__NETWORK_CHANNEL_PROXY_H
 
-#include "base/memory/scalable_queue.h"
 #include "net/network_channel.h"
 
 #include <shared_mutex>
