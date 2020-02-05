@@ -180,16 +180,14 @@ ScreenCapturerMirror::Error ScreenCapturerMirror::prepareCaptureResources()
 
     if (!frame_)
     {
-        std::unique_ptr<Frame> frame;
-
         ipc::SharedMemoryFactory* factory = sharedMemoryFactory();
         if (factory)
         {
-            frame = SharedMemoryFrame::create(screen_rect.size(), PixelFormat::ARGB(), factory);
+            frame_ = SharedMemoryFrame::create(screen_rect.size(), PixelFormat::ARGB(), factory);
         }
         else
         {
-            frame = FrameAligned::create(screen_rect.size(), PixelFormat::ARGB(), 32);
+            frame_ = FrameAligned::create(screen_rect.size(), PixelFormat::ARGB(), 32);
         }
 
         if (!frame_)
