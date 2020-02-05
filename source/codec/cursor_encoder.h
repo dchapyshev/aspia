@@ -32,7 +32,7 @@ public:
     CursorEncoder();
     ~CursorEncoder() = default;
 
-    bool encode(std::unique_ptr<desktop::MouseCursor> mouse_cursor,
+    bool encode(std::shared_ptr<desktop::MouseCursor> mouse_cursor,
                 proto::CursorShape* cursor_shape);
 
 private:

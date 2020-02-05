@@ -109,6 +109,11 @@ void DesktopSessionFake::selectScreen(const proto::Screen& /* screen */)
     // Nothing
 }
 
+void DesktopSessionFake::setFeatures(const proto::internal::SetFeatures& /* features */)
+{
+    // Nothing
+}
+
 void DesktopSessionFake::injectKeyEvent(const proto::KeyEvent& event)
 {
     // When release the button, change the color of the box.

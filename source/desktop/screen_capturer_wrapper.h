@@ -25,7 +25,9 @@
 
 namespace desktop {
 
+class CursorCapturer;
 class EffectsDisabler;
+class MouseCursor;
 class WallpaperDisabler;
 
 class ScreenCapturerWrapper
@@ -38,7 +40,7 @@ public:
 
         virtual void onScreenListChanged(
             const ScreenCapturer::ScreenList& list, ScreenCapturer::ScreenId current) = 0;
-        virtual void onScreenCaptured(const Frame& frame) = 0;
+        virtual void onScreenCaptured(const Frame* frame, const MouseCursor* mouse_cursor) = 0;
     };
 
     explicit ScreenCapturerWrapper(Delegate* delegate);
@@ -47,6 +49,7 @@ public:
     void selectScreen(ScreenCapturer::ScreenId screen_id);
     void captureFrame();
     void setSharedMemoryFactory(ipc::SharedMemoryFactory* shared_memory_factory);
+    void enableCursor(bool enable);
     void enableWallpaper(bool enable);
     void enableEffects(bool enable);
 
@@ -64,7 +67,8 @@ private:
     bool enable_wallpaper_ = true;
     int screen_count_ = 0;
 
-    std::unique_ptr<ScreenCapturer> capturer_;
+    std::unique_ptr<ScreenCapturer> screen_capturer_;
+    std::unique_ptr<CursorCapturer> cursor_capturer_;
     std::unique_ptr<EffectsDisabler> effects_disabler_;
     std::unique_ptr<WallpaperDisabler> wallpaper_disabler_;
 

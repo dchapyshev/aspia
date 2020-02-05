@@ -141,6 +141,11 @@ void DesktopSessionManager::onScreenCaptured(const desktop::Frame& frame)
     delegate_->onScreenCaptured(frame);
 }
 
+void DesktopSessionManager::onCursorCaptured(std::shared_ptr<desktop::MouseCursor> mouse_cursor)
+{
+    delegate_->onCursorCaptured(std::move(mouse_cursor));
+}
+
 void DesktopSessionManager::onScreenListChanged(const proto::ScreenList& list)
 {
     delegate_->onScreenListChanged(list);

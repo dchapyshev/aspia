@@ -24,8 +24,13 @@
 #include "proto/desktop.pb.h"
 #include "proto/desktop_extensions.pb.h"
 
+namespace codec {
+class CursorEncoder;
+} // namespace codec
+
 namespace desktop {
 class Frame;
+class MouseCursor;
 } // namespace desktop
 
 namespace host {
@@ -42,6 +47,7 @@ public:
     void setDesktopSessionProxy(std::shared_ptr<DesktopSessionProxy> desktop_session_proxy);
 
     void encodeFrame(const desktop::Frame& frame);
+    void encodeMouseCursor(std::shared_ptr<desktop::MouseCursor> mouse_cursor);
     void setScreenList(const proto::ScreenList& list);
     void injectClipboardEvent(const proto::ClipboardEvent& event);
 
@@ -59,6 +65,7 @@ private:
 
     std::shared_ptr<DesktopSessionProxy> desktop_session_proxy_;
     std::unique_ptr<VideoFramePump> frame_pump_;
+    std::unique_ptr<codec::CursorEncoder> cursor_encoder_;
     std::vector<std::string> extensions_;
 
     DISALLOW_COPY_AND_ASSIGN(ClientSessionDesktop);

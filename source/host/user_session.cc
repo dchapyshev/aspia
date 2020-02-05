@@ -173,6 +173,23 @@ void UserSession::onScreenCaptured(const desktop::Frame& frame)
     }
 }
 
+void UserSession::onCursorCaptured(std::shared_ptr<desktop::MouseCursor> mouse_cursor)
+{
+    for (const auto& client : clients_)
+    {
+        const proto::SessionType session_type = client->sessionType();
+
+        if (session_type == proto::SESSION_TYPE_DESKTOP_MANAGE ||
+            session_type == proto::SESSION_TYPE_DESKTOP_VIEW)
+        {
+            ClientSessionDesktop* desktop_client =
+                static_cast<ClientSessionDesktop*>(client.get());
+
+            desktop_client->encodeMouseCursor(mouse_cursor);
+        }
+    }
+}
+
 void UserSession::onScreenListChanged(const proto::ScreenList& list)
 {
     for (const auto& client : clients_)

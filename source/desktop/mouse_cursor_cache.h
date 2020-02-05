@@ -39,7 +39,7 @@ public:
     size_t find(const MouseCursor* mouse_cursor);
 
     // Adds the cursor to the cache and returns the index of the added element.
-    size_t add(std::unique_ptr<MouseCursor> mouse_cursor);
+    size_t add(std::shared_ptr<MouseCursor> mouse_cursor);
 
     // Returns the pointer to the cached cursor by its index in the cache.
     std::shared_ptr<MouseCursor> get(size_t index);

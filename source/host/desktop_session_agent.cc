@@ -24,6 +24,7 @@
 #include "codec/video_util.h"
 #include "common/message_serialization.h"
 #include "desktop/capture_scheduler.h"
+#include "desktop/mouse_cursor.h"
 #include "desktop/screen_capturer_wrapper.h"
 #include "desktop/shared_desktop_frame.h"
 #include "host/input_injector_win.h"
@@ -105,6 +106,7 @@ void DesktopSessionAgent::onMessageReceived(const base::ByteArray& buffer)
 
         if (screen_capturer_)
         {
+            screen_capturer_->enableCursor(set_features.cursor());
             screen_capturer_->enableWallpaper(set_features.wallpaper());
             screen_capturer_->enableEffects(set_features.effects());
         }
@@ -161,30 +163,51 @@ void DesktopSessionAgent::onScreenListChanged(
     channel_->send(common::serializeMessage(outgoing_message_));
 }
 
-void DesktopSessionAgent::onScreenCaptured(const desktop::Frame& frame)
+void DesktopSessionAgent::onScreenCaptured(
+    const desktop::Frame* frame, const desktop::MouseCursor* mouse_cursor)
 {
-    if (frame.constUpdatedRegion().isEmpty())
-    {
-        captureEnd();
-        return;
-    }
-
     outgoing_message_.Clear();
 
-    proto::internal::SerializedDesktopFrame* serialized_frame =
-        outgoing_message_.mutable_encode_frame()->mutable_frame();
+    proto::internal::EncodeFrame* encode_frame = outgoing_message_.mutable_encode_frame();
 
-    serialized_frame->set_shared_buffer_id(frame.sharedMemory()->id());
+    if (frame && !frame->constUpdatedRegion().isEmpty())
+    {
+        proto::internal::SerializedDesktopFrame* serialized_frame = encode_frame->mutable_frame();
 
-    desktop::Rect frame_rect = desktop::Rect::makeXYWH(frame.topLeft(), frame.size());
+        serialized_frame->set_shared_buffer_id(frame->sharedMemory()->id());
 
-    codec::serializeRect(frame_rect, serialized_frame->mutable_desktop_rect());
-    codec::serializePixelFormat(frame.format(), serialized_frame->mutable_pixel_format());
+        desktop::Rect frame_rect = desktop::Rect::makeXYWH(frame->topLeft(), frame->size());
 
-    for (desktop::Region::Iterator it(frame.constUpdatedRegion()); !it.isAtEnd(); it.advance())
-        codec::serializeRect(it.rect(), serialized_frame->add_dirty_rect());
+        codec::serializeRect(frame_rect, serialized_frame->mutable_desktop_rect());
+        codec::serializePixelFormat(frame->format(), serialized_frame->mutable_pixel_format());
 
-    channel_->send(common::serializeMessage(outgoing_message_));
+        for (desktop::Region::Iterator it(frame->constUpdatedRegion()); !it.isAtEnd(); it.advance())
+            codec::serializeRect(it.rect(), serialized_frame->add_dirty_rect());
+    }
+
+    if (mouse_cursor)
+    {
+        const desktop::Size& cursor_size = mouse_cursor->size();
+
+        proto::internal::SerializedMouseCursor* serialized_mouse_cursor =
+            encode_frame->mutable_mouse_cursor();
+
+        serialized_mouse_cursor->set_width(cursor_size.width());
+        serialized_mouse_cursor->set_height(cursor_size.height());
+        serialized_mouse_cursor->set_hotspot_x(mouse_cursor->hotSpot().x());
+        serialized_mouse_cursor->set_hotspot_y(mouse_cursor->hotSpot().y());
+        serialized_mouse_cursor->set_data(
+            mouse_cursor->data(), mouse_cursor->stride() * cursor_size.height());
+    }
+
+    if (encode_frame->has_frame() || encode_frame->has_mouse_cursor())
+    {
+        channel_->send(common::serializeMessage(outgoing_message_));
+    }
+    else
+    {
+        captureEnd();
+    }
 }
 
 void DesktopSessionAgent::onClipboardEvent(const proto::ClipboardEvent& event)

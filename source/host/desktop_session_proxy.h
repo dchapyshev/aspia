@@ -28,6 +28,9 @@ class KeyEvent;
 class PointerEvent;
 class ClipboardEvent;
 class Screen;
+namespace internal {
+class SetFeatures;
+} // namespace internal
 } // namespace proto
 
 namespace host {
@@ -44,6 +47,7 @@ public:
     void startSession();
     void stopSession();
     void selectScreen(const proto::Screen& screen);
+    void setFeatures(const proto::internal::SetFeatures& features);
     void injectKeyEvent(const proto::KeyEvent& event);
     void injectPointerEvent(const proto::PointerEvent& event);
     void injectClipboardEvent(const proto::ClipboardEvent& event);

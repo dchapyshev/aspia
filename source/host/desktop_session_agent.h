@@ -72,7 +72,8 @@ protected:
     // desktop::ScreenCapturerWrapper::Delegate implementation.
     void onScreenListChanged(const desktop::ScreenCapturer::ScreenList& list,
                              desktop::ScreenCapturer::ScreenId current) override;
-    void onScreenCaptured(const desktop::Frame& frame) override;
+    void onScreenCaptured(const desktop::Frame* frame,
+                          const desktop::MouseCursor* mouse_cursor) override;
 
     // common::Clipboard::Delegate implementation.
     void onClipboardEvent(const proto::ClipboardEvent& event) override;

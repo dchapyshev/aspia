@@ -43,6 +43,7 @@ public:
     void startSession() override;
     void stopSession() override;
     void selectScreen(const proto::Screen& screen) override;
+    void setFeatures(const proto::internal::SetFeatures& features) override;
     void injectKeyEvent(const proto::KeyEvent& event) override;
     void injectPointerEvent(const proto::PointerEvent& event) override;
     void injectClipboardEvent(const proto::ClipboardEvent& event) override;

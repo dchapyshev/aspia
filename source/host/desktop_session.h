@@ -23,6 +23,7 @@
 
 namespace desktop {
 class Frame;
+class MouseCursor;
 } // namespace desktop
 
 namespace proto {
@@ -31,6 +32,9 @@ class KeyEvent;
 class PointerEvent;
 class Screen;
 class ScreenList;
+namespace internal {
+class SetFeatures;
+} // namespace internal
 } // namespace proto
 
 namespace host {
@@ -48,6 +52,7 @@ public:
         virtual void onDesktopSessionStarted() = 0;
         virtual void onDesktopSessionStopped() = 0;
         virtual void onScreenCaptured(const desktop::Frame& frame) = 0;
+        virtual void onCursorCaptured(std::shared_ptr<desktop::MouseCursor> mouse_cursor) = 0;
         virtual void onScreenListChanged(const proto::ScreenList& list) = 0;
         virtual void onClipboardEvent(const proto::ClipboardEvent& event) = 0;
     };
@@ -57,6 +62,7 @@ public:
     virtual void startSession() = 0;
     virtual void stopSession() = 0;
     virtual void selectScreen(const proto::Screen& screen) = 0;
+    virtual void setFeatures(const proto::internal::SetFeatures& features) = 0;
 
     virtual void injectKeyEvent(const proto::KeyEvent& event) = 0;
     virtual void injectPointerEvent(const proto::PointerEvent& event) = 0;

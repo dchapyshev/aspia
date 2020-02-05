@@ -20,6 +20,7 @@
 
 #include "base/power_controller.h"
 #include "base/strings/string_split.h"
+#include "codec/cursor_encoder.h"
 #include "codec/video_encoder_vpx.h"
 #include "codec/video_encoder_zstd.h"
 #include "codec/video_util.h"
@@ -31,6 +32,7 @@
 #include "host/video_frame_pump.h"
 #include "host/win/updater_launcher.h"
 #include "net/network_channel.h"
+#include "proto/desktop_internal.pb.h"
 
 namespace host {
 
@@ -127,6 +129,16 @@ void ClientSessionDesktop::encodeFrame(const desktop::Frame& frame)
 {
     if (frame_pump_)
         frame_pump_->encodeFrame(frame);
+}
+
+void ClientSessionDesktop::encodeMouseCursor(std::shared_ptr<desktop::MouseCursor> mouse_cursor)
+{
+    if (!cursor_encoder_)
+        return;
+
+    proto::HostToClient message;
+    if (cursor_encoder_->encode(std::move(mouse_cursor), message.mutable_cursor_shape()))
+        sendMessage(common::serializeMessage(message));
 }
 
 void ClientSessionDesktop::setScreenList(const proto::ScreenList& list)
@@ -267,6 +279,18 @@ void ClientSessionDesktop::readConfig(const proto::DesktopConfig& config)
         LOG(LS_ERROR) << "Video encoder not initialized!";
         return;
     }
+
+    cursor_encoder_.reset();
+
+    if (config.flags() & proto::ENABLE_CURSOR_SHAPE)
+        cursor_encoder_ = std::make_unique<codec::CursorEncoder>();
+
+    proto::internal::SetFeatures features;
+    features.set_cursor(config.flags() & proto::ENABLE_CURSOR_SHAPE);
+    features.set_effects(!(config.flags() & proto::DISABLE_DESKTOP_EFFECTS));
+    features.set_wallpaper(!(config.flags() & proto::DISABLE_DESKTOP_WALLPAPER));
+
+    desktop_session_proxy_->setFeatures(features);
 
     frame_pump_ = std::make_unique<VideoFramePump>(channelProxy(), std::move(video_encoder));
     frame_pump_->start();

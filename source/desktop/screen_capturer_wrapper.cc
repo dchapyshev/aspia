@@ -20,6 +20,8 @@
 
 #include "base/logging.h"
 #include "base/win/windows_version.h"
+#include "desktop/cursor_capturer_win.h"
+#include "desktop/mouse_cursor.h"
 #include "desktop/screen_capturer_dxgi.h"
 #include "desktop/screen_capturer_gdi.h"
 #include "desktop/screen_capturer_mirror.h"
@@ -47,11 +49,11 @@ void ScreenCapturerWrapper::selectScreen(ScreenCapturer::ScreenId screen_id)
 {
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
 
-    if (capturer_->selectScreen(screen_id))
+    if (screen_capturer_->selectScreen(screen_id))
     {
         ScreenCapturer::ScreenList screens;
 
-        if (capturer_->screenList(&screens))
+        if (screen_capturer_->screenList(&screens))
             delegate_->onScreenListChanged(screens, screen_id);
     }
 }
@@ -63,7 +65,7 @@ void ScreenCapturerWrapper::captureFrame()
     if (switchToInputDesktop())
         atDesktopSwitch();
 
-    int count = capturer_->screenCount();
+    int count = screen_capturer_->screenCount();
     if (screen_count_ != count)
     {
         screen_count_ = count;
@@ -71,7 +73,7 @@ void ScreenCapturerWrapper::captureFrame()
     }
 
     ScreenCapturer::Error error;
-    const Frame* frame = capturer_->captureFrame(&error);
+    const Frame* frame = screen_capturer_->captureFrame(&error);
     if (!frame)
     {
         switch (error)
@@ -89,12 +91,25 @@ void ScreenCapturerWrapper::captureFrame()
         }
     }
 
-    delegate_->onScreenCaptured(*frame);
+    std::unique_ptr<MouseCursor> mouse_cursor;
+
+    if (cursor_capturer_)
+        mouse_cursor.reset(cursor_capturer_->captureCursor());
+
+    delegate_->onScreenCaptured(frame, mouse_cursor.get());
 }
 
 void ScreenCapturerWrapper::setSharedMemoryFactory(ipc::SharedMemoryFactory* shared_memory_factory)
 {
-    capturer_->setSharedMemoryFactory(shared_memory_factory);
+    screen_capturer_->setSharedMemoryFactory(shared_memory_factory);
+}
+
+void ScreenCapturerWrapper::enableCursor(bool enable)
+{
+    cursor_capturer_.reset();
+
+    if (enable)
+        cursor_capturer_ = std::make_unique<CursorCapturerWin>();
 }
 
 void ScreenCapturerWrapper::enableWallpaper(bool enable)
@@ -120,7 +135,7 @@ void ScreenCapturerWrapper::selectCapturer()
         if (capturer_mirror->isSupported())
         {
             LOG(LS_INFO) << "Using mirror capturer";
-            capturer_ = std::move(capturer_mirror);
+            screen_capturer_ = std::move(capturer_mirror);
             return;
         }
     }
@@ -130,12 +145,12 @@ void ScreenCapturerWrapper::selectCapturer()
     if (capturer_dxgi->isSupported())
     {
         LOG(LS_INFO) << "Using DXGI capturer";
-        capturer_ = std::move(capturer_dxgi);
+        screen_capturer_ = std::move(capturer_dxgi);
     }
     else
     {
         LOG(LS_INFO) << "Using GDI capturer";
-        capturer_ = std::make_unique<ScreenCapturerGdi>();
+        screen_capturer_ = std::make_unique<ScreenCapturerGdi>();
     }
 }
 
@@ -148,8 +163,8 @@ bool ScreenCapturerWrapper::switchToInputDesktop()
 
     if (input_desktop.isValid() && !desktop_.isSame(input_desktop))
     {
-        if (capturer_)
-            capturer_->reset();
+        if (screen_capturer_)
+            screen_capturer_->reset();
 
         effects_disabler_.reset();
         wallpaper_disabler_.reset();

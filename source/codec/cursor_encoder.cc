@@ -77,7 +77,7 @@ bool CursorEncoder::compressCursor(proto::CursorShape* cursor_shape,
     return true;
 }
 
-bool CursorEncoder::encode(std::unique_ptr<desktop::MouseCursor> mouse_cursor,
+bool CursorEncoder::encode(std::shared_ptr<desktop::MouseCursor> mouse_cursor,
                            proto::CursorShape* cursor_shape)
 {
     if (!mouse_cursor)

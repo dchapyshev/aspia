@@ -21,6 +21,7 @@
 #include "base/logging.h"
 #include "codec/video_util.h"
 #include "common/message_serialization.h"
+#include "desktop/mouse_cursor.h"
 #include "desktop/shared_memory_desktop_frame.h"
 #include "ipc/ipc_channel.h"
 #include "ipc/shared_memory.h"
@@ -109,6 +110,13 @@ void DesktopSessionIpc::selectScreen(const proto::Screen& screen)
     channel_->send(common::serializeMessage(outgoing_message_));
 }
 
+void DesktopSessionIpc::setFeatures(const proto::internal::SetFeatures& features)
+{
+    outgoing_message_.Clear();
+    outgoing_message_.mutable_set_features()->CopyFrom(features);
+    channel_->send(common::serializeMessage(outgoing_message_));
+}
+
 void DesktopSessionIpc::injectKeyEvent(const proto::KeyEvent& event)
 {
     outgoing_message_.Clear();
@@ -188,25 +196,48 @@ void DesktopSessionIpc::onMessageReceived(const base::ByteArray& buffer)
 
 void DesktopSessionIpc::onEncodeFrame(const proto::internal::EncodeFrame& encode_frame)
 {
-    const proto::internal::SerializedDesktopFrame& serialized_frame = encode_frame.frame();
+    if (encode_frame.has_frame())
+    {
+        const proto::internal::SerializedDesktopFrame& serialized_frame = encode_frame.frame();
 
-    std::unique_ptr<SharedBuffer> shared_buffer = sharedBuffer(serialized_frame.shared_buffer_id());
-    if (!shared_buffer)
-        return;
+        std::unique_ptr<SharedBuffer> shared_buffer = sharedBuffer(serialized_frame.shared_buffer_id());
+        if (!shared_buffer)
+            return;
 
-    const proto::Rect& frame_rect = serialized_frame.desktop_rect();
+        const proto::Rect& frame_rect = serialized_frame.desktop_rect();
 
-    std::unique_ptr<desktop::Frame> frame =
-        desktop::SharedMemoryFrame::attach(desktop::Size(frame_rect.width(), frame_rect.height()),
-                                           codec::parsePixelFormat(serialized_frame.pixel_format()),
-                                           std::move(shared_buffer));
+        std::unique_ptr<desktop::Frame> frame = desktop::SharedMemoryFrame::attach(
+            desktop::Size(frame_rect.width(), frame_rect.height()),
+            codec::parsePixelFormat(serialized_frame.pixel_format()),
+            std::move(shared_buffer));
 
-    frame->setTopLeft(desktop::Point(frame_rect.x(), frame_rect.y()));
+        frame->setTopLeft(desktop::Point(frame_rect.x(), frame_rect.y()));
 
-    for (int i = 0; i < serialized_frame.dirty_rect_size(); ++i)
-        frame->updatedRegion()->addRect(codec::parseRect(serialized_frame.dirty_rect(i)));
+        for (int i = 0; i < serialized_frame.dirty_rect_size(); ++i)
+            frame->updatedRegion()->addRect(codec::parseRect(serialized_frame.dirty_rect(i)));
 
-    delegate_->onScreenCaptured(*frame);
+        delegate_->onScreenCaptured(*frame);
+    }
+
+    if (encode_frame.has_mouse_cursor())
+    {
+        const proto::internal::SerializedMouseCursor& serialized_mouse_cursor =
+            encode_frame.mouse_cursor();
+
+        desktop::Size size = desktop::Size(
+            serialized_mouse_cursor.width(), serialized_mouse_cursor.height());
+        desktop::Point hotspot = desktop::Point(
+            serialized_mouse_cursor.hotspot_x(), serialized_mouse_cursor.hotspot_y());
+        std::unique_ptr<uint8_t[]> data =
+            std::make_unique<uint8_t[]>(serialized_mouse_cursor.data().size());
+
+        memcpy(data.get(),
+               serialized_mouse_cursor.data().data(),
+               serialized_mouse_cursor.data().size());
+
+        delegate_->onCursorCaptured(
+            std::make_shared<desktop::MouseCursor>(std::move(data), size, hotspot));
+    }
 
     outgoing_message_.Clear();
     outgoing_message_.mutable_encode_frame_result()->set_dummy(1);

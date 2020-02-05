@@ -54,7 +54,7 @@ size_t MouseCursorCache::find(const MouseCursor* mouse_cursor)
     return kInvalidIndex;
 }
 
-size_t MouseCursorCache::add(std::unique_ptr<MouseCursor> mouse_cursor)
+size_t MouseCursorCache::add(std::shared_ptr<MouseCursor> mouse_cursor)
 {
     DCHECK(mouse_cursor);
 

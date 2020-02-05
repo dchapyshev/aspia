@@ -38,11 +38,11 @@ message SerializedDesktopFrame
 
 message SerializedMouseCursor
 {
-    int32 shared_buffer_id = 1;
-    int32 width            = 2;
-    int32 height           = 3;
-    int32 hotspot_x        = 4;
-    int32 hotspot_y        = 5;
+    int32 width     = 1;
+    int32 height    = 2;
+    int32 hotspot_x = 3;
+    int32 hotspot_y = 4;
+    bytes data      = 5;
 }
 
 message CreateSharedBuffer
@@ -85,6 +85,7 @@ message SetFeatures
 {
     bool wallpaper = 1;
     bool effects   = 2;
+    bool cursor    = 3;
 }
 
 message SetBlockInput

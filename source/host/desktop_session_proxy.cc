@@ -48,6 +48,12 @@ void DesktopSessionProxy::selectScreen(const proto::Screen& screen)
         desktop_session_->selectScreen(screen);
 }
 
+void DesktopSessionProxy::setFeatures(const proto::internal::SetFeatures& features)
+{
+    if (desktop_session_)
+        desktop_session_->setFeatures(features);
+}
+
 void DesktopSessionProxy::injectKeyEvent(const proto::KeyEvent& event)
 {
     if (desktop_session_)
