@@ -56,10 +56,10 @@ void ConfigFactory::setDefaultDesktopManageConfig(proto::DesktopConfig* config)
         proto::DISABLE_DESKTOP_EFFECTS | proto::DISABLE_DESKTOP_WALLPAPER;
 
     config->set_flags(kDefaultFlags);
-    config->set_video_encoding(proto::VideoEncoding::VIDEO_ENCODING_ZSTD);
+    config->set_video_encoding(proto::VideoEncoding::VIDEO_ENCODING_VP8);
     config->set_compress_ratio(kDefCompressRatio);
 
-    codec::serializePixelFormat(desktop::PixelFormat::RGB565(), config->mutable_pixel_format());
+    codec::serializePixelFormat(desktop::PixelFormat::RGB332(), config->mutable_pixel_format());
 }
 
 // static
@@ -71,10 +71,10 @@ void ConfigFactory::setDefaultDesktopViewConfig(proto::DesktopConfig* config)
         proto::DISABLE_DESKTOP_EFFECTS | proto::DISABLE_DESKTOP_WALLPAPER;
 
     config->set_flags(kDefaultFlags);
-    config->set_video_encoding(proto::VideoEncoding::VIDEO_ENCODING_ZSTD);
+    config->set_video_encoding(proto::VideoEncoding::VIDEO_ENCODING_VP8);
     config->set_compress_ratio(kDefCompressRatio);
 
-    codec::serializePixelFormat(desktop::PixelFormat::RGB565(), config->mutable_pixel_format());
+    codec::serializePixelFormat(desktop::PixelFormat::RGB332(), config->mutable_pixel_format());
 }
 
 // static
