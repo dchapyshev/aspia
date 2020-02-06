@@ -26,7 +26,7 @@ namespace proxy {
 class Server : public net::Server::Delegate
 {
 public:
-    explicit Server(asio::io_context& io_context);
+    Server();
     ~Server();
 
     void start();
@@ -36,7 +36,6 @@ protected:
     void onNewConnection(std::unique_ptr<net::Channel> channel) override;
 
 private:
-    asio::io_context& io_context_;
     std::unique_ptr<net::Server> network_server_;
 
     DISALLOW_COPY_AND_ASSIGN(Server);

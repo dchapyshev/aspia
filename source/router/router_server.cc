@@ -22,11 +22,7 @@
 
 namespace router {
 
-Server::Server(asio::io_context& io_context)
-    : io_context_(io_context)
-{
-    // Nothing
-}
+Server::Server() = default;
 
 Server::~Server() = default;
 
@@ -35,7 +31,7 @@ void Server::start()
     if (network_server_)
         return;
 
-    network_server_ = std::make_unique<net::Server>(io_context_);
+    network_server_ = std::make_unique<net::Server>();
     network_server_->start(0, this);
 }
 

@@ -35,13 +35,7 @@ Service::~Service() = default;
 
 void Service::onStart()
 {
-    base::MessageLoop* message_loop = messageLoop();
-    DCHECK(message_loop);
-
-    base::MessagePumpForAsio* message_pump = message_loop->pumpAsio();
-    DCHECK(message_pump);
-
-    server_ = std::make_unique<Server>(message_pump->ioContext());
+    server_ = std::make_unique<Server>();
     server_->start();
 }
 
