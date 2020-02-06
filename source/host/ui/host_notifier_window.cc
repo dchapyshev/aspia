@@ -114,7 +114,7 @@ void NotifierWindow::disconnectAll()
 {
     for (int i = 0; i < ui.tree->topLevelItemCount(); ++i)
     {
-        SessionTreeItem* item = dynamic_cast<SessionTreeItem*>(ui.tree->topLevelItem(i));
+        SessionTreeItem* item = static_cast<SessionTreeItem*>(ui.tree->topLevelItem(i));
         if (item)
             emit killSession(item->uuid());
     }
@@ -128,8 +128,8 @@ bool NotifierWindow::eventFilter(QObject* object, QEvent* event)
         {
             case QEvent::MouseButtonPress:
             {
-                QMouseEvent* mouse_event = dynamic_cast<QMouseEvent*>(event);
-                if (mouse_event && mouse_event->button() == Qt::LeftButton)
+                QMouseEvent* mouse_event = static_cast<QMouseEvent*>(event);
+                if (mouse_event->button() == Qt::LeftButton)
                 {
                     start_pos_ = mouse_event->pos();
                     return true;
@@ -139,8 +139,8 @@ bool NotifierWindow::eventFilter(QObject* object, QEvent* event)
 
             case QEvent::MouseMove:
             {
-                QMouseEvent* mouse_event = dynamic_cast<QMouseEvent*>(event);
-                if (mouse_event && mouse_event->buttons() & Qt::LeftButton && start_pos_.x() >= 0)
+                QMouseEvent* mouse_event = static_cast<QMouseEvent*>(event);
+                if (mouse_event->buttons() & Qt::LeftButton && start_pos_.x() >= 0)
                 {
                     QPoint diff = mouse_event->pos() - start_pos_;
                     move(pos() + diff);
@@ -178,7 +178,7 @@ void NotifierWindow::onShowHidePressed()
 
 void NotifierWindow::onContextMenu(const QPoint& point)
 {
-    SessionTreeItem* item = dynamic_cast<SessionTreeItem*>(ui.tree->itemAt(point));
+    SessionTreeItem* item = static_cast<SessionTreeItem*>(ui.tree->itemAt(point));
     if (!item)
         return;
 
