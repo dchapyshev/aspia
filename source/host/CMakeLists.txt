@@ -76,7 +76,6 @@ list(APPEND SOURCE_HOST_CORE
     user_session_window.h
     user_session_window_proxy.cc
     user_session_window_proxy.h
-    video_capturer.h
     video_frame_pump.cc
     video_frame_pump.h)
 
