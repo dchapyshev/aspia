@@ -49,7 +49,6 @@ public:
     void selectScreen(ScreenCapturer::ScreenId screen_id);
     void captureFrame();
     void setSharedMemoryFactory(ipc::SharedMemoryFactory* shared_memory_factory);
-    void enableCursor(bool enable);
     void enableWallpaper(bool enable);
     void enableEffects(bool enable);
 

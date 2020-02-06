@@ -82,8 +82,7 @@ message EnableFeatures
 {
     bool wallpaper   = 1;
     bool effects     = 2;
-    bool cursor      = 3;
-    bool block_input = 4;
+    bool block_input = 3;
 }
 
 message UserSessionControl

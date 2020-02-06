@@ -102,7 +102,6 @@ void DesktopSessionAgent::onMessageReceived(const base::ByteArray& buffer)
 
         if (screen_capturer_)
         {
-            screen_capturer_->enableCursor(features.cursor());
             screen_capturer_->enableWallpaper(features.wallpaper());
             screen_capturer_->enableEffects(features.effects());
         }

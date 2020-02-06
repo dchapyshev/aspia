@@ -92,9 +92,7 @@ void ScreenCapturerWrapper::captureFrame()
     }
 
     std::unique_ptr<MouseCursor> mouse_cursor;
-
-    if (cursor_capturer_)
-        mouse_cursor.reset(cursor_capturer_->captureCursor());
+    mouse_cursor.reset(cursor_capturer_->captureCursor());
 
     delegate_->onScreenCaptured(frame, mouse_cursor.get());
 }
@@ -104,27 +102,32 @@ void ScreenCapturerWrapper::setSharedMemoryFactory(ipc::SharedMemoryFactory* sha
     screen_capturer_->setSharedMemoryFactory(shared_memory_factory);
 }
 
-void ScreenCapturerWrapper::enableCursor(bool enable)
-{
-    cursor_capturer_.reset();
-
-    if (enable)
-        cursor_capturer_ = std::make_unique<CursorCapturerWin>();
-}
-
 void ScreenCapturerWrapper::enableWallpaper(bool enable)
 {
     enable_wallpaper_ = enable;
+
+    wallpaper_disabler_.reset();
+
+    if (!enable)
+        wallpaper_disabler_ = std::make_unique<WallpaperDisabler>();
 }
 
 void ScreenCapturerWrapper::enableEffects(bool enable)
 {
     enable_effects_ = enable;
+
+    effects_disabler_.reset();
+
+    if (!enable)
+        effects_disabler_ = std::make_unique<EffectsDisabler>();
+
 }
 
 void ScreenCapturerWrapper::selectCapturer()
 {
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
+
+    cursor_capturer_ = std::make_unique<CursorCapturerWin>();
 
     // Mirror screen capture is available only in Windows 7/2008 R2.
     if (base::win::windowsVersion() == base::win::VERSION_WIN7)

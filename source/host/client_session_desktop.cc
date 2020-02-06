@@ -288,7 +288,6 @@ void ClientSessionDesktop::readConfig(const proto::DesktopConfig& config)
         cursor_encoder_ = std::make_unique<codec::CursorEncoder>();
 
     proto::internal::EnableFeatures features;
-    features.set_cursor(config.flags() & proto::ENABLE_CURSOR_SHAPE);
     features.set_effects(!(config.flags() & proto::DISABLE_DESKTOP_EFFECTS));
     features.set_wallpaper(!(config.flags() & proto::DISABLE_DESKTOP_WALLPAPER));
     features.set_block_input(config.flags() & proto::BLOCK_REMOTE_INPUT);
