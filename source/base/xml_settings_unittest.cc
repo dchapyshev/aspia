@@ -18,6 +18,8 @@
 
 #include "base/xml_settings.h"
 
+#include <filesystem>
+
 #include <gtest/gtest.h>
 
 namespace base {
@@ -59,7 +61,7 @@ TEST(XmlSettingsTest, SettingsTest)
 
     settings->setArray("Users", test_array);
 
-    EXPECT_EQ(settings->get<uint32_t>("TcpPort", -1), 8050);
+    EXPECT_EQ(settings->get<uint32_t>("TcpPort", 0), 8050);
     EXPECT_EQ(settings->get<base::ByteArray>("SeedKey", base::ByteArray()), kSeedKey);
 
     test_array = settings->getArray("Users");
@@ -74,17 +76,32 @@ TEST(XmlSettingsTest, SettingsTest)
     // Re-open settings file.
     settings = std::make_unique<XmlSettings>(XmlSettings::Scope::USER, "test", "temp.xml");
 
-    EXPECT_EQ(settings->get<uint32_t>("TcpPort", -1), 8050);
+    EXPECT_EQ(settings->get<uint32_t>("TcpPort", 0), 8050);
     EXPECT_EQ(settings->get<base::ByteArray>("SeedKey", base::ByteArray()), kSeedKey);
 
     test_array = settings->getArray("Users");
+    EXPECT_FALSE(test_array.empty());
 
-    for (size_t i = 0; i < std::size(kUserList); ++i)
+    if (!test_array.empty())
     {
-        EXPECT_EQ(test_array[i].get<std::string>("Name", std::string()), kUserList[i].name);
-        EXPECT_EQ(test_array[i].get<base::ByteArray>("Salt", base::ByteArray()), base::fromHex(kUserList[i].salt));
-        EXPECT_EQ(test_array[i].get<uint32_t>("Flags", -1), kUserList[i].flags);
+        for (size_t i = 0; i < std::size(kUserList); ++i)
+        {
+            EXPECT_EQ(test_array[i].get<std::string>("Name", std::string()), kUserList[i].name);
+            EXPECT_EQ(test_array[i].get<base::ByteArray>("Salt", base::ByteArray()), base::fromHex(kUserList[i].salt));
+            EXPECT_EQ(test_array[i].get<uint32_t>("Flags", -1), kUserList[i].flags);
+        }
     }
+
+    std::filesystem::path file_path = settings->filePath();
+    settings.reset();
+
+    std::error_code ignored_code;
+
+    bool ret = std::filesystem::remove(file_path, ignored_code);
+    EXPECT_TRUE(ret);
+
+    ret = std::filesystem::remove(file_path.parent_path(), ignored_code);
+    EXPECT_TRUE(ret);
 }
 
 } // namespace base
