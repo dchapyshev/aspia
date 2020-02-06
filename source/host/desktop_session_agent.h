@@ -19,15 +19,11 @@
 #ifndef HOST__DESKTOP_SESSION_AGENT_H
 #define HOST__DESKTOP_SESSION_AGENT_H
 
-#include "base/macros_magic.h"
 #include "desktop/screen_capturer_wrapper.h"
 #include "host/clipboard_monitor.h"
 #include "ipc/ipc_listener.h"
 #include "ipc/shared_memory_factory.h"
 #include "proto/desktop_internal.pb.h"
-
-#include <memory>
-#include <string>
 
 namespace base {
 class TaskRunner;
@@ -79,8 +75,7 @@ protected:
     void onClipboardEvent(const proto::ClipboardEvent& event) override;
 
 private:
-    void startSession();
-    void stopSession();
+    void enableSession(bool enable);
     void captureBegin();
     void captureEnd();
 

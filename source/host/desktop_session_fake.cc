@@ -57,7 +57,7 @@ void DesktopSessionFake::start()
     frame_ = desktop::SharedFrame::wrap(std::move(frame));
 }
 
-void DesktopSessionFake::startSession()
+void DesktopSessionFake::enableSession(bool enable)
 {
     int old_box_pos_x = box_pos_x_;
     int old_box_pos_y = box_pos_y_;
@@ -99,17 +99,12 @@ void DesktopSessionFake::startSession()
     delegate_->onScreenCaptured(*frame_);
 }
 
-void DesktopSessionFake::stopSession()
-{
-    // TODO
-}
-
 void DesktopSessionFake::selectScreen(const proto::Screen& /* screen */)
 {
     // Nothing
 }
 
-void DesktopSessionFake::setFeatures(const proto::internal::SetFeatures& /* features */)
+void DesktopSessionFake::enableFeatures(const proto::internal::EnableFeatures& /* features */)
 {
     // Nothing
 }
@@ -137,12 +132,8 @@ void DesktopSessionFake::injectClipboardEvent(const proto::ClipboardEvent& /* ev
     // Nothing. Ignore the event.
 }
 
-void DesktopSessionFake::logoffUserSession()
-{
-    // Nothing
-}
-
-void DesktopSessionFake::lockUserSession()
+void DesktopSessionFake::userSessionControl(
+    proto::internal::UserSessionControl::Action /* action */)
 {
     // Nothing
 }

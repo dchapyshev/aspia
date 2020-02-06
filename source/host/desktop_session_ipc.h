@@ -22,7 +22,6 @@
 #include "base/macros_magic.h"
 #include "host/desktop_session.h"
 #include "ipc/ipc_listener.h"
-#include "proto/desktop_internal.pb.h"
 
 namespace ipc {
 class Channel;
@@ -40,15 +39,13 @@ public:
 
     // DesktopSession implementation.
     void start() override;
-    void startSession() override;
-    void stopSession() override;
+    void enableSession(bool enable) override;
     void selectScreen(const proto::Screen& screen) override;
-    void setFeatures(const proto::internal::SetFeatures& features) override;
+    void enableFeatures(const proto::internal::EnableFeatures& features) override;
     void injectKeyEvent(const proto::KeyEvent& event) override;
     void injectPointerEvent(const proto::PointerEvent& event) override;
     void injectClipboardEvent(const proto::ClipboardEvent& event) override;
-    void logoffUserSession() override;
-    void lockUserSession() override;
+    void userSessionControl(proto::internal::UserSessionControl::Action action) override;
 
 protected:
     // ipc::Listener implementation.

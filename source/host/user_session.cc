@@ -89,7 +89,7 @@ void UserSession::addNewSession(std::unique_ptr<ClientSession> client_session)
                 static_cast<ClientSessionDesktop*>(session);
 
             desktop_client_session->setDesktopSessionProxy(desktop_session_proxy_);
-            desktop_session_proxy_->startSession();
+            desktop_session_proxy_->enableSession(true);
         }
         break;
 
@@ -260,7 +260,7 @@ void UserSession::onClientSessionFinished()
     }
 
     if (!desktop_session_count)
-        desktop_session_proxy_->stopSession();
+        desktop_session_proxy_->enableSession(false);
 }
 
 void UserSession::sendConnectEvent(const ClientSession& client_session)

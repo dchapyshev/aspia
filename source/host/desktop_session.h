@@ -19,23 +19,14 @@
 #ifndef HOST__DESKTOP_SESSION_H
 #define HOST__DESKTOP_SESSION_H
 
+#include "proto/desktop_internal.pb.h"
+
 #include <memory>
 
 namespace desktop {
 class Frame;
 class MouseCursor;
 } // namespace desktop
-
-namespace proto {
-class ClipboardEvent;
-class KeyEvent;
-class PointerEvent;
-class Screen;
-class ScreenList;
-namespace internal {
-class SetFeatures;
-} // namespace internal
-} // namespace proto
 
 namespace host {
 
@@ -59,17 +50,15 @@ public:
 
     virtual void start() = 0;
 
-    virtual void startSession() = 0;
-    virtual void stopSession() = 0;
+    virtual void enableSession(bool enable) = 0;
     virtual void selectScreen(const proto::Screen& screen) = 0;
-    virtual void setFeatures(const proto::internal::SetFeatures& features) = 0;
+    virtual void enableFeatures(const proto::internal::EnableFeatures& features) = 0;
 
     virtual void injectKeyEvent(const proto::KeyEvent& event) = 0;
     virtual void injectPointerEvent(const proto::PointerEvent& event) = 0;
     virtual void injectClipboardEvent(const proto::ClipboardEvent& event) = 0;
 
-    virtual void logoffUserSession() = 0;
-    virtual void lockUserSession() = 0;
+    virtual void userSessionControl(proto::internal::UserSessionControl::Action action) = 0;
 };
 
 } // namespace host

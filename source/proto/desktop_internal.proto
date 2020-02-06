@@ -45,24 +45,21 @@ message SerializedMouseCursor
     bytes data      = 5;
 }
 
-message CreateSharedBuffer
+message SharedBuffer
 {
-    int32 shared_buffer_id = 1;
+    enum Type
+    {
+        CREATE  = 0;
+        RELEASE = 1;
+    }
+
+    Type type = 1;
+    int32 shared_buffer_id = 2;
 }
 
-message ReleaseSharedBuffer
+message EnableSession
 {
-    int32 shared_buffer_id = 1;
-}
-
-message StartSession
-{
-    int32 dummy = 1;
-}
-
-message StopSession
-{
-    int32 dummy = 1;
+    bool enable = 1;
 }
 
 message EncodeFrame
@@ -81,49 +78,41 @@ message SelectSource
     Screen screen = 1;
 }
 
-message SetFeatures
+message EnableFeatures
 {
-    bool wallpaper = 1;
-    bool effects   = 2;
-    bool cursor    = 3;
+    bool wallpaper   = 1;
+    bool effects     = 2;
+    bool cursor      = 3;
+    bool block_input = 4;
 }
 
-message SetBlockInput
+message UserSessionControl
 {
-    bool state = 1;
-}
+    enum Action
+    {
+        LOGOFF = 0;
+        LOCK   = 1;
+    }
 
-message LogoffUserSession
-{
-    int32 dummy = 1;
-}
-
-message LockUserSession
-{
-    int32 dummy = 1;
+    Action action = 1;
 }
 
 message ServiceToDesktop
 {
-    StartSession start_session            = 1;
-    StopSession stop_session              = 2;
-    SelectSource select_source            = 3;
-    EncodeFrameResult encode_frame_result = 4;
-    SetFeatures set_features              = 5;
-    SetBlockInput set_block_input         = 6;
-    KeyEvent key_event                    = 7;
-    PointerEvent pointer_event            = 8;
-    ClipboardEvent clipboard_event        = 9;
-    LogoffUserSession logoff_user_session = 10;
-    LockUserSession lock_user_session     = 11;
-
+    EnableSession enable_session            = 1;
+    SelectSource select_source              = 2;
+    EncodeFrameResult encode_frame_result   = 3;
+    EnableFeatures enable_features          = 4;
+    KeyEvent key_event                      = 5;
+    PointerEvent pointer_event              = 6;
+    ClipboardEvent clipboard_event          = 7;
+    UserSessionControl user_session_control = 8;
 }
 
 message DesktopToService
 {
-    ScreenList screen_list                    = 1;
-    CreateSharedBuffer create_shared_buffer   = 2;
-    ReleaseSharedBuffer release_shared_buffer = 3;
-    EncodeFrame encode_frame                  = 4;
-    ClipboardEvent clipboard_event            = 5;
+    ScreenList screen_list         = 1;
+    SharedBuffer shared_buffer     = 2;
+    EncodeFrame encode_frame       = 3;
+    ClipboardEvent clipboard_event = 4;
 }

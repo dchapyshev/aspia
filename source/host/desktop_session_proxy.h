@@ -20,18 +20,9 @@
 #define HOST__DESKTOP_SESSION_PROXY_H
 
 #include "base/macros_magic.h"
+#include "proto/desktop_internal.pb.h"
 
 #include <memory>
-
-namespace proto {
-class KeyEvent;
-class PointerEvent;
-class ClipboardEvent;
-class Screen;
-namespace internal {
-class SetFeatures;
-} // namespace internal
-} // namespace proto
 
 namespace host {
 
@@ -44,15 +35,13 @@ public:
     DesktopSessionProxy();
     ~DesktopSessionProxy();
 
-    void startSession();
-    void stopSession();
+    void enableSession(bool enable);
     void selectScreen(const proto::Screen& screen);
-    void setFeatures(const proto::internal::SetFeatures& features);
+    void enableFeatures(const proto::internal::EnableFeatures& features);
     void injectKeyEvent(const proto::KeyEvent& event);
     void injectPointerEvent(const proto::PointerEvent& event);
     void injectClipboardEvent(const proto::ClipboardEvent& event);
-    void logoffUserSession();
-    void lockUserSession();
+    void userSessionControl(proto::internal::UserSessionControl::Action action);
 
 private:
     friend class DesktopSessionManager;

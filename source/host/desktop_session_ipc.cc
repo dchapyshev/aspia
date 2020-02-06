@@ -89,17 +89,10 @@ void DesktopSessionIpc::start()
     delegate_->onDesktopSessionStarted();
 }
 
-void DesktopSessionIpc::startSession()
+void DesktopSessionIpc::enableSession(bool enable)
 {
     outgoing_message_.Clear();
-    outgoing_message_.mutable_start_session()->set_dummy(1);
-    channel_->send(common::serializeMessage(outgoing_message_));
-}
-
-void DesktopSessionIpc::stopSession()
-{
-    outgoing_message_.Clear();
-    outgoing_message_.mutable_stop_session()->set_dummy(1);
+    outgoing_message_.mutable_enable_session()->set_enable(enable);
     channel_->send(common::serializeMessage(outgoing_message_));
 }
 
@@ -110,10 +103,10 @@ void DesktopSessionIpc::selectScreen(const proto::Screen& screen)
     channel_->send(common::serializeMessage(outgoing_message_));
 }
 
-void DesktopSessionIpc::setFeatures(const proto::internal::SetFeatures& features)
+void DesktopSessionIpc::enableFeatures(const proto::internal::EnableFeatures& features)
 {
     outgoing_message_.Clear();
-    outgoing_message_.mutable_set_features()->CopyFrom(features);
+    outgoing_message_.mutable_enable_features()->CopyFrom(features);
     channel_->send(common::serializeMessage(outgoing_message_));
 }
 
@@ -138,17 +131,10 @@ void DesktopSessionIpc::injectClipboardEvent(const proto::ClipboardEvent& event)
     channel_->send(common::serializeMessage(outgoing_message_));
 }
 
-void DesktopSessionIpc::logoffUserSession()
+void DesktopSessionIpc::userSessionControl(proto::internal::UserSessionControl::Action action)
 {
     outgoing_message_.Clear();
-    outgoing_message_.mutable_logoff_user_session()->set_dummy(1);
-    channel_->send(common::serializeMessage(outgoing_message_));
-}
-
-void DesktopSessionIpc::lockUserSession()
-{
-    outgoing_message_.Clear();
-    outgoing_message_.mutable_lock_user_session()->set_dummy(1);
+    outgoing_message_.mutable_user_session_control()->set_action(action);
     channel_->send(common::serializeMessage(outgoing_message_));
 }
 
@@ -175,13 +161,22 @@ void DesktopSessionIpc::onMessageReceived(const base::ByteArray& buffer)
     {
         delegate_->onScreenListChanged(incoming_message_.screen_list());
     }
-    else if (incoming_message_.has_create_shared_buffer())
+    else if (incoming_message_.has_shared_buffer())
     {
-        onCreateSharedBuffer(incoming_message_.create_shared_buffer().shared_buffer_id());
-    }
-    else if (incoming_message_.has_release_shared_buffer())
-    {
-        onReleaseSharedBuffer(incoming_message_.release_shared_buffer().shared_buffer_id());
+        switch (incoming_message_.shared_buffer().type())
+        {
+            case proto::internal::SharedBuffer::CREATE:
+                onCreateSharedBuffer(incoming_message_.shared_buffer().shared_buffer_id());
+                break;
+
+            case proto::internal::SharedBuffer::RELEASE:
+                onReleaseSharedBuffer(incoming_message_.shared_buffer().shared_buffer_id());
+                break;
+
+            default:
+                NOTREACHED();
+                break;
+        }
     }
     else if (incoming_message_.has_clipboard_event())
     {
