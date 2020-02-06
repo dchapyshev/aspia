@@ -19,7 +19,6 @@
 #ifndef HOST__UI__HOST_NOTIFIER_WINDOW_H
 #define HOST__UI__HOST_NOTIFIER_WINDOW_H
 
-#include "base/macros_magic.h"
 #include "host/user_session_process.h"
 #include "ui_host_notifier_window.h"
 
