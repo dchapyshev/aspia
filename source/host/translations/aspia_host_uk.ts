@@ -256,7 +256,7 @@
         <translation>Підключення</translation>
     </message>
     <message>
-        <location filename="../ui/host_notifier_window.ui" line="330"/>
+        <location filename="../ui/host_notifier_window.ui" line="327"/>
         <source>Disconnect All</source>
         <translation>Відключити все</translation>
     </message>

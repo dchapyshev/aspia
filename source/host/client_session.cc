@@ -72,6 +72,12 @@ void ClientSession::start(Delegate* delegate)
     onStarted();
 }
 
+void ClientSession::stop()
+{
+    state_ = State::FINISHED;
+    delegate_->onClientSessionFinished();
+}
+
 void ClientSession::setVersion(const base::Version& version)
 {
     version_ = version;

@@ -212,7 +212,7 @@
         <translation>Verbindungen</translation>
     </message>
     <message>
-        <location filename="../ui/host_notifier_window.ui" line="330"/>
+        <location filename="../ui/host_notifier_window.ui" line="327"/>
         <source>Disconnect All</source>
         <translation type="unfinished"></translation>
     </message>

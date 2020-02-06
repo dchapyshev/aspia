@@ -56,6 +56,7 @@ public:
         proto::SessionType session_type, std::unique_ptr<net::Channel> channel);
 
     void start(Delegate* delegate);
+    void stop();
 
     State state() const { return state_; }
     std::string id() const { return id_; }

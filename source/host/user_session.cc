@@ -236,6 +236,10 @@ void UserSession::onClientSessionFinished()
             // Notification of the UI about disconnecting the client.
             sendDisconnectEvent(client_session->id());
 
+            // Session will be destroyed after completion of the current call.
+            task_runner_->deleteSoon(it->release());
+
+            // Delete a session from the list.
             it = clients_.erase(it);
         }
         else
@@ -320,11 +324,11 @@ void UserSession::sendCredentials()
 
 void UserSession::killClientSession(const std::string& id)
 {
-    for (auto client = clients_.begin(); client != clients_.end(); ++client)
+    for (auto it = clients_.begin(); it != clients_.end(); ++it)
     {
-        if (client->get()->id() == id)
+        if (it->get()->id() == id)
         {
-            clients_.erase(client);
+            it->get()->stop();
             break;
         }
     }
