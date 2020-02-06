@@ -53,7 +53,7 @@ protected:
     // UserSessionWindow implementation.
     void onStateChanged(UserSessionAgent::State state) override;
     void onClientListChanged(const UserSessionAgent::ClientList& clients) override;
-    void onCredentialsChanged(const proto::Credentials& credentials) override;
+    void onCredentialsChanged(const proto::internal::Credentials& credentials) override;
 
 private slots:
     void realClose();

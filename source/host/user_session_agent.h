@@ -22,7 +22,7 @@
 #include "base/macros_magic.h"
 #include "base/threading/thread.h"
 #include "ipc/ipc_listener.h"
-#include "proto/host.pb.h"
+#include "proto/host_internal.pb.h"
 
 namespace ipc {
 class Channel;
@@ -46,7 +46,7 @@ public:
 
     struct Client
     {
-        explicit Client(const proto::ConnectEvent& event)
+        explicit Client(const proto::internal::ConnectEvent& event)
             : uuid(event.uuid()),
               address(event.remote_address()),
               username(event.username()),
@@ -82,7 +82,7 @@ protected:
 private:
     friend class UserSessionAgentProxy;
 
-    void updateCredentials(proto::CredentialsRequest::Type request_type);
+    void updateCredentials(proto::internal::CredentialsRequest::Type request_type);
     void killClient(const std::string& uuid);
 
     base::Thread io_thread_;

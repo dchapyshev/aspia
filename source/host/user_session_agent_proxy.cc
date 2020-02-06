@@ -39,7 +39,8 @@ void UserSessionAgentProxy::dettach()
     agent_ = nullptr;
 }
 
-void UserSessionAgentProxy::updateCredentials(proto::CredentialsRequest::Type request_type)
+void UserSessionAgentProxy::updateCredentials(
+    proto::internal::CredentialsRequest::Type request_type)
 {
     if (!io_task_runner_->belongsToCurrentThread())
     {

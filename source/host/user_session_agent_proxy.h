@@ -32,7 +32,7 @@ public:
 
     void dettach();
 
-    void updateCredentials(proto::CredentialsRequest::Type request_type);
+    void updateCredentials(proto::internal::CredentialsRequest::Type request_type);
     void killClient(const std::string& uuid);
 
 private:

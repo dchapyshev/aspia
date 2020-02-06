@@ -69,7 +69,7 @@ void UserSessionAgent::onDisconnected()
 
 void UserSessionAgent::onMessageReceived(const base::ByteArray& buffer)
 {
-    proto::ServiceToUi message;
+    proto::internal::ServiceToUi message;
 
     if (!common::parseMessage(buffer, &message))
     {
@@ -105,16 +105,16 @@ void UserSessionAgent::onMessageReceived(const base::ByteArray& buffer)
     }
 }
 
-void UserSessionAgent::updateCredentials(proto::CredentialsRequest::Type request_type)
+void UserSessionAgent::updateCredentials(proto::internal::CredentialsRequest::Type request_type)
 {
-    proto::UiToService message;
+    proto::internal::UiToService message;
     message.mutable_credentials_request()->set_type(request_type);
     ipc_channel_->send(common::serializeMessage(message));
 }
 
 void UserSessionAgent::killClient(const std::string& uuid)
 {
-    proto::UiToService message;
+    proto::internal::UiToService message;
     message.mutable_kill_session()->set_uuid(uuid);
     ipc_channel_->send(common::serializeMessage(message));
 }

@@ -70,7 +70,7 @@ void UserSessionWindowProxy::onClientListChanged(const UserSessionAgent::ClientL
         window_->onClientListChanged(clients);
 }
 
-void UserSessionWindowProxy::onCredentialsChanged(const proto::Credentials& credentials)
+void UserSessionWindowProxy::onCredentialsChanged(const proto::internal::Credentials& credentials)
 {
     if (!ui_task_runner_->belongsToCurrentThread())
     {

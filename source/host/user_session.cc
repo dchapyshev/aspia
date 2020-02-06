@@ -29,7 +29,7 @@
 #include "host/desktop_session_proxy.h"
 #include "ipc/ipc_channel_proxy.h"
 #include "net/adapter_enumerator.h"
-#include "proto/host.pb.h"
+#include "proto/host_internal.pb.h"
 
 namespace host {
 
@@ -110,7 +110,7 @@ void UserSession::onDisconnected()
 
 void UserSession::onMessageReceived(const base::ByteArray& buffer)
 {
-    proto::UiToService message;
+    proto::internal::UiToService message;
 
     if (!common::parseMessage(buffer, &message))
     {
@@ -120,15 +120,15 @@ void UserSession::onMessageReceived(const base::ByteArray& buffer)
 
     if (message.has_credentials_request())
     {
-        proto::CredentialsRequest::Type type = message.credentials_request().type();
+        proto::internal::CredentialsRequest::Type type = message.credentials_request().type();
 
-        if (type == proto::CredentialsRequest::NEW_PASSWORD)
+        if (type == proto::internal::CredentialsRequest::NEW_PASSWORD)
         {
             updateCredentials();
         }
         else
         {
-            DCHECK_EQ(type, proto::CredentialsRequest::REFRESH);
+            DCHECK_EQ(type, proto::internal::CredentialsRequest::REFRESH);
         }
 
         sendCredentials();
@@ -265,8 +265,8 @@ void UserSession::onClientSessionFinished()
 
 void UserSession::sendConnectEvent(const ClientSession& client_session)
 {
-    proto::ServiceToUi message;
-    proto::ConnectEvent* event = message.mutable_connect_event();
+    proto::internal::ServiceToUi message;
+    proto::internal::ConnectEvent* event = message.mutable_connect_event();
 
     event->set_remote_address(base::utf8FromUtf16(client_session.peerAddress()));
     event->set_username(base::utf8FromUtf16(client_session.userName()));
@@ -278,7 +278,7 @@ void UserSession::sendConnectEvent(const ClientSession& client_session)
 
 void UserSession::sendDisconnectEvent(const std::string& session_id)
 {
-    proto::ServiceToUi message;
+    proto::internal::ServiceToUi message;
     message.mutable_disconnect_event()->set_uuid(session_id);
     ipc_channel_->send(common::serializeMessage(message));
 }
@@ -301,9 +301,9 @@ void UserSession::updateCredentials()
 
 void UserSession::sendCredentials()
 {
-    proto::ServiceToUi message;
+    proto::internal::ServiceToUi message;
 
-    proto::Credentials* credentials = message.mutable_credentials();
+    proto::internal::Credentials* credentials = message.mutable_credentials();
     credentials->set_username(username_);
     credentials->set_password(password_);
 

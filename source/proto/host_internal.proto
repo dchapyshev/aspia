@@ -25,7 +25,7 @@ option optimize_for = LITE_RUNTIME;
 
 import "common.proto";
 
-package proto;
+package proto.internal;
 
 message CredentialsRequest
 {

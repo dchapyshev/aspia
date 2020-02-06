@@ -81,13 +81,13 @@ MainWindow::MainWindow(QWidget* parent)
     connect(ui.button_new_password, &QPushButton::released, [this]()
     {
         if (agent_proxy_)
-            agent_proxy_->updateCredentials(proto::CredentialsRequest::NEW_PASSWORD);
+            agent_proxy_->updateCredentials(proto::internal::CredentialsRequest::NEW_PASSWORD);
     });
 
     connect(ui.button_refresh_ip_list, &QPushButton::released, [this]()
     {
         if (agent_proxy_)
-            agent_proxy_->updateCredentials(proto::CredentialsRequest::REFRESH);
+            agent_proxy_->updateCredentials(proto::internal::CredentialsRequest::REFRESH);
     });
 }
 
@@ -140,7 +140,7 @@ void MainWindow::onStateChanged(UserSessionAgent::State state)
         ui.button_refresh_ip_list->setEnabled(true);
 
         agent_proxy_ = agent_->agentProxy();
-        agent_proxy_->updateCredentials(proto::CredentialsRequest::REFRESH);
+        agent_proxy_->updateCredentials(proto::internal::CredentialsRequest::REFRESH);
     }
     else
     {
@@ -171,7 +171,7 @@ void MainWindow::onClientListChanged(const UserSessionAgent::ClientList& clients
     notifier_->onClientListChanged(clients);
 }
 
-void MainWindow::onCredentialsChanged(const proto::Credentials& credentials)
+void MainWindow::onCredentialsChanged(const proto::internal::Credentials& credentials)
 {
     std::string ip;
 
@@ -231,7 +231,7 @@ void MainWindow::onLanguageChanged(QAction* action)
     ui.retranslateUi(this);
 
     if (agent_proxy_)
-        agent_proxy_->updateCredentials(proto::CredentialsRequest::REFRESH);
+        agent_proxy_->updateCredentials(proto::internal::CredentialsRequest::REFRESH);
 }
 
 void MainWindow::onSettings()
