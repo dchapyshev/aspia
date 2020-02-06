@@ -33,12 +33,7 @@ list(APPEND SOURCE_NET
     network_error.h
     network_listener.h
     network_server.cc
-    network_server.h
-    socket_connector.cc
-    socket_connector.h
-    socket_constants.h
-    socket_reader.cc
-    socket_reader.h)
+    network_server.h)
 
 list(APPEND SOURCE_NET_UNIT_TESTS
     address_unittest.cc)

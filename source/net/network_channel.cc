@@ -23,13 +23,13 @@
 #include "base/message_loop/message_loop.h"
 #include "base/message_loop/message_pump_asio.h"
 #include "base/strings/unicode.h"
-#include "crypto/message_decryptor.h"
 #include "crypto/message_encryptor_fake.h"
+#include "crypto/message_decryptor_fake.h"
 #include "net/network_channel_proxy.h"
 #include "net/network_listener.h"
-#include "net/socket_connector.h"
-#include "net/socket_reader.h"
 
+#include <asio/connect.hpp>
+#include <asio/read.hpp>
 #include <asio/write.hpp>
 
 #if defined(OS_WIN)
@@ -48,15 +48,12 @@ static const size_t kMaxMessageSize = 16 * 1024 * 1024; // 16 MB
 Channel::Channel()
     : io_context_(base::MessageLoop::current()->pumpAsio()->ioContext()),
       socket_(io_context_),
+      resolver_(std::make_unique<asio::ip::tcp::resolver>(io_context_)),
       proxy_(new ChannelProxy(base::MessageLoop::current()->taskRunner(), this)),
-      encryptor_(std::make_unique<crypto::MessageEncryptorFake>())
+      encryptor_(std::make_unique<crypto::MessageEncryptorFake>()),
+      decryptor_(std::make_unique<crypto::MessageDecryptorFake>())
 {
-    connector_ = std::make_unique<SocketConnector>(io_context_);
-    connector_->attach(&socket_,
-        std::bind(&Channel::onConnected, this),
-        std::bind(&Channel::onErrorOccurred, this, std::placeholders::_1, std::placeholders::_2));
-
-    init();
+    // Nothing
 }
 
 Channel::Channel(asio::ip::tcp::socket&& socket)
@@ -64,10 +61,10 @@ Channel::Channel(asio::ip::tcp::socket&& socket)
       socket_(std::move(socket)),
       proxy_(new ChannelProxy(base::MessageLoop::current()->taskRunner(), this)),
       encryptor_(std::make_unique<crypto::MessageEncryptorFake>()),
+      decryptor_(std::make_unique<crypto::MessageDecryptorFake>()),
       connected_(true)
 {
     DCHECK(socket_.is_open());
-    init();
 }
 
 Channel::~Channel()
@@ -76,11 +73,6 @@ Channel::~Channel()
     proxy_ = nullptr;
 
     listener_ = nullptr;
-
-    if (connector_)
-        connector_->dettach();
-
-    reader_->dettach();
 
     disconnect();
 }
@@ -102,7 +94,7 @@ void Channel::setEncryptor(std::unique_ptr<crypto::MessageEncryptor> encryptor)
 
 void Channel::setDecryptor(std::unique_ptr<crypto::MessageDecryptor> decryptor)
 {
-    reader_->setDecryptor(std::move(decryptor));
+    decryptor_ = std::move(decryptor);
 }
 
 std::u16string Channel::peerAddress() const
@@ -115,10 +107,35 @@ std::u16string Channel::peerAddress() const
 
 void Channel::connect(std::u16string_view address, uint16_t port)
 {
-    if (connected_)
+    if (connected_ || !resolver_)
         return;
 
-    connector_->connect(address, port);
+    resolver_->async_resolve(base::local8BitFromUtf16(address), std::to_string(port),
+        [this](const std::error_code& error_code,
+               const asio::ip::tcp::resolver::results_type& endpoints)
+    {
+        if (error_code)
+        {
+            onErrorOccurred(FROM_HERE, error_code);
+            return;
+        }
+
+        asio::async_connect(socket_, endpoints,
+            [this](const std::error_code& error_code,
+                   const asio::ip::tcp::endpoint& /* endpoint */)
+        {
+            if (error_code)
+            {
+                onErrorOccurred(FROM_HERE, error_code);
+                return;
+            }
+
+            connected_ = true;
+
+            if (listener_)
+                listener_->onConnected();
+        });
+    });
 }
 
 bool Channel::isConnected() const
@@ -128,20 +145,33 @@ bool Channel::isConnected() const
 
 bool Channel::isPaused() const
 {
-    return reader_->isPaused();
+    return paused_;
 }
 
 void Channel::pause()
 {
-    reader_->pause();
+    paused_ = true;
 }
 
 void Channel::resume()
 {
-    if (!connected_)
+    if (!connected_ || !paused_)
         return;
 
-    reader_->resume();
+    paused_ = false;
+
+    // We already have an incomplete read operation.
+    if (state_ != ReadState::IDLE)
+        return;
+
+    // If we have a message that was received before the pause command.
+    if (read_buffer_size_)
+        onMessageReceived();
+
+    DCHECK_EQ(bytes_transfered_, 0);
+    DCHECK_EQ(read_buffer_size_, 0);
+
+    doReadSize();
 }
 
 void Channel::send(base::ByteArray&& buffer)
@@ -198,14 +228,6 @@ bool Channel::setKeepAlive(bool enable,
     return true;
 }
 
-void Channel::init()
-{
-    reader_ = std::make_unique<SocketReader>();
-    reader_->attach(&socket_,
-        std::bind(&Channel::onMessageReceived, this, std::placeholders::_1),
-        std::bind(&Channel::onErrorOccurred, this, std::placeholders::_1, std::placeholders::_2));
-}
-
 void Channel::disconnect()
 {
     if (!connected_)
@@ -217,14 +239,6 @@ void Channel::disconnect()
 
     socket_.cancel(ignored_code);
     socket_.close(ignored_code);
-}
-
-void Channel::onConnected()
-{
-    connected_ = true;
-
-    if (listener_)
-        listener_->onConnected();
 }
 
 void Channel::onErrorOccurred(const base::Location& location, const std::error_code& error_code)
@@ -262,16 +276,32 @@ void Channel::onErrorOccurred(const base::Location& location, const std::error_c
     }
 }
 
-void Channel::onMessageReceived(const base::ByteArray& buffer)
-{
-    if (listener_)
-        listener_->onMessageReceived(buffer);
-}
-
 void Channel::onMessageWritten()
 {
     if (listener_)
         listener_->onMessageWritten();
+}
+
+void Channel::onMessageReceived()
+{
+    const size_t decrypt_buffer_size = decryptor_->decryptedDataSize(read_buffer_.size());
+
+    if (decrypt_buffer_.capacity() < decrypt_buffer_size)
+        decrypt_buffer_.reserve(decrypt_buffer_size);
+
+    decrypt_buffer_.resize(decrypt_buffer_size);
+
+    if (!decryptor_->decrypt(read_buffer_.data(), read_buffer_.size(), decrypt_buffer_.data()))
+    {
+        onErrorOccurred(FROM_HERE, asio::error::access_denied);
+        return;
+    }
+
+    if (listener_)
+        listener_->onMessageReceived(decrypt_buffer_);
+
+    bytes_transfered_ = 0;
+    read_buffer_size_ = 0;
 }
 
 void Channel::doWrite()
@@ -366,6 +396,114 @@ void Channel::onWrite(const std::error_code& error_code, size_t bytes_transferre
         return;
 
     doWrite();
+}
+
+void Channel::doReadSize()
+{
+    state_ = ReadState::READ_SIZE;
+
+    asio::async_read(socket_,
+                     asio::buffer(&one_byte_, 1),
+                     std::bind(&Channel::onReadSize,
+                               this,
+                               std::placeholders::_1,
+                               std::placeholders::_2));
+}
+
+void Channel::onReadSize(const std::error_code& error_code, size_t bytes_transferred)
+{
+    if (error_code)
+    {
+        onErrorOccurred(FROM_HERE, error_code);
+        return;
+    }
+
+    DCHECK_EQ(bytes_transferred, 1);
+
+    bytes_transfered_ += bytes_transferred;
+
+    switch (bytes_transfered_)
+    {
+        case 1:
+            read_buffer_size_ += one_byte_ & 0x7F;
+            break;
+
+        case 2:
+            read_buffer_size_ += (one_byte_ & 0x7F) << 7;
+            break;
+
+        case 3:
+            read_buffer_size_ += (one_byte_ & 0x7F) << 14;
+            break;
+
+        case 4:
+            read_buffer_size_ += one_byte_ << 21;
+            break;
+
+        default:
+            break;
+    }
+
+    if ((one_byte_ & 0x80) && (bytes_transfered_ < 4))
+    {
+        doReadSize();
+        return;
+    }
+
+    doReadContent();
+}
+
+void Channel::doReadContent()
+{
+    state_ = ReadState::READ_CONTENT;
+
+    if (!read_buffer_size_ || read_buffer_size_ > kMaxMessageSize)
+    {
+        onErrorOccurred(FROM_HERE, asio::error::message_size);
+        return;
+    }
+
+    if (read_buffer_.capacity() < read_buffer_size_)
+        read_buffer_.reserve(read_buffer_size_);
+
+    read_buffer_.resize(read_buffer_size_);
+
+    asio::async_read(socket_,
+                     asio::buffer(read_buffer_.data(), read_buffer_.size()),
+                     std::bind(&Channel::onReadContent,
+                               this,
+                               std::placeholders::_1,
+                               std::placeholders::_2));
+}
+
+void Channel::onReadContent(const std::error_code& error_code, size_t bytes_transferred)
+{
+    if (error_code)
+    {
+        onErrorOccurred(FROM_HERE, error_code);
+        return;
+    }
+
+    DCHECK_EQ(bytes_transferred, read_buffer_.size());
+
+    if (paused_)
+    {
+        state_ = ReadState::IDLE;
+        return;
+    }
+
+    onMessageReceived();
+
+    if (paused_)
+    {
+        state_ = ReadState::IDLE;
+        return;
+    }
+
+    DCHECK_EQ(bytes_transfered_, 0);
+    DCHECK_EQ(read_buffer_size_, 0);
+
+    doReadSize();
 }
 
 } // namespace net

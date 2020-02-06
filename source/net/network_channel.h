@@ -42,8 +42,6 @@ namespace net {
 class ChannelProxy;
 class Listener;
 class Server;
-class SocketConnector;
-class SocketReader;
 
 class Channel
 {
@@ -109,9 +107,6 @@ protected:
     // Constructor available for server. An already connected socket is being moved.
     explicit Channel(asio::ip::tcp::socket&& socket);
 
-    // Initializes internal components.
-    void init();
-
     // Disconnects to remote host. The method is not available for an external call.
     // To disconnect, you must destroy the channel by calling the destructor.
     void disconnect();
@@ -119,28 +114,47 @@ protected:
 private:
     friend class ChannelProxy;
 
-    void onConnected();
     void onErrorOccurred(const base::Location& location, const std::error_code& error_code);
-    void onMessageReceived(const base::ByteArray& buffer);
     void onMessageWritten();
+    void onMessageReceived();
 
     void doWrite();
     void onWrite(const std::error_code& error_code, size_t bytes_transferred);
 
+    void doReadSize();
+    void onReadSize(const std::error_code& error_code, size_t bytes_transferred);
+
+    void doReadContent();
+    void onReadContent(const std::error_code& error_code, size_t bytes_transferred);
+
+    std::shared_ptr<ChannelProxy> proxy_;
     asio::io_context& io_context_;
     asio::ip::tcp::socket socket_;
+    std::unique_ptr<asio::ip::tcp::resolver> resolver_;
 
     Listener* listener_ = nullptr;
     bool connected_ = false;
-
-    std::unique_ptr<SocketConnector> connector_;
-    std::unique_ptr<SocketReader> reader_;
-    std::shared_ptr<ChannelProxy> proxy_;
+    bool paused_ = true;
 
     std::unique_ptr<crypto::MessageEncryptor> encryptor_;
+    std::unique_ptr<crypto::MessageDecryptor> decryptor_;
 
     base::ScalableQueue<base::ByteArray> write_queue_;
     base::ByteArray write_buffer_;
+
+    enum class ReadState
+    {
+        IDLE,        // No reads are in progress right now.
+        READ_SIZE,   // Reading the message size.
+        READ_CONTENT // Reading the contents of the message.
+    };
+
+    ReadState state_ = ReadState::IDLE;
+    uint8_t one_byte_ = 0;
+    base::ByteArray read_buffer_;
+    base::ByteArray decrypt_buffer_;
+    size_t read_buffer_size_ = 0;
+    size_t bytes_transfered_ = 0;
 
     DISALLOW_COPY_AND_ASSIGN(Channel);
 };
