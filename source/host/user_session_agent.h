@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST__USER_SESSION_PROCESS_H
-#define HOST__USER_SESSION_PROCESS_H
+#ifndef HOST__USER_SESSION_AGENT_H
+#define HOST__USER_SESSION_AGENT_H
 
 #include "base/macros_magic.h"
 #include "base/threading/thread.h"
@@ -30,10 +30,10 @@ class Channel;
 
 namespace host {
 
-class UserSessionProcessProxy;
+class UserSessionAgentProxy;
 class UserSessionWindowProxy;
 
-class UserSessionProcess
+class UserSessionAgent
     : public base::Thread::Delegate,
       public ipc::Listener
 {
@@ -63,12 +63,12 @@ public:
 
     using ClientList = std::vector<Client>;
 
-    explicit UserSessionProcess(std::shared_ptr<UserSessionWindowProxy> window_proxy);
-    ~UserSessionProcess();
+    explicit UserSessionAgent(std::shared_ptr<UserSessionWindowProxy> window_proxy);
+    ~UserSessionAgent();
 
     void start();
 
-    std::shared_ptr<UserSessionProcessProxy> processProxy() const { return process_proxy_; }
+    std::shared_ptr<UserSessionAgentProxy> agentProxy() const { return agent_proxy_; }
 
 protected:
     // base::Thread::Delegate implementation.
@@ -80,22 +80,22 @@ protected:
     void onMessageReceived(const base::ByteArray& buffer) override;
 
 private:
-    friend class UserSessionProcessProxy;
+    friend class UserSessionAgentProxy;
 
     void updateCredentials(proto::CredentialsRequest::Type request_type);
     void killClient(const std::string& uuid);
 
     base::Thread io_thread_;
 
-    std::shared_ptr<UserSessionProcessProxy> process_proxy_;
+    std::shared_ptr<UserSessionAgentProxy> agent_proxy_;
     std::shared_ptr<UserSessionWindowProxy> window_proxy_;
     std::unique_ptr<ipc::Channel> ipc_channel_;
 
     ClientList clients_;
 
-    DISALLOW_COPY_AND_ASSIGN(UserSessionProcess);
+    DISALLOW_COPY_AND_ASSIGN(UserSessionAgent);
 };
 
 } // namespace host
 
-#endif // HOST__USER_SESSION_PROCESS_H
+#endif // HOST__USER_SESSION_AGENT_H

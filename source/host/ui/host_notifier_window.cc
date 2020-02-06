@@ -33,7 +33,7 @@ namespace {
 class SessionTreeItem : public QTreeWidgetItem
 {
 public:
-    SessionTreeItem(const UserSessionProcess::Client& client)
+    SessionTreeItem(const UserSessionAgent::Client& client)
         : uuid_(client.uuid)
     {
         switch (client.session_type)
@@ -94,7 +94,7 @@ NotifierWindow::NotifierWindow(QWidget* parent)
     updateWindowPosition();
 }
 
-void NotifierWindow::onClientListChanged(const UserSessionProcess::ClientList& clients)
+void NotifierWindow::onClientListChanged(const UserSessionAgent::ClientList& clients)
 {
     if (!clients.empty())
     {

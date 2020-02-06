@@ -19,7 +19,7 @@
 #ifndef HOST__UI__HOST_MAIN_WINDOW_H
 #define HOST__UI__HOST_MAIN_WINDOW_H
 
-#include "host/user_session_process.h"
+#include "host/user_session_agent.h"
 #include "host/user_session_window.h"
 #include "ui_host_main_window.h"
 
@@ -51,8 +51,8 @@ protected:
     void closeEvent(QCloseEvent* event) override;
 
     // UserSessionWindow implementation.
-    void onStateChanged(UserSessionProcess::State state) override;
-    void onClientListChanged(const UserSessionProcess::ClientList& clients) override;
+    void onStateChanged(UserSessionAgent::State state) override;
+    void onClientListChanged(const UserSessionAgent::ClientList& clients) override;
     void onCredentialsChanged(const proto::Credentials& credentials) override;
 
 private slots:
@@ -75,8 +75,8 @@ private:
     QMenu tray_menu_;
     QPointer<NotifierWindow> notifier_;
 
-    std::unique_ptr<UserSessionProcess> process_;
-    std::shared_ptr<UserSessionProcessProxy> process_proxy_;
+    std::unique_ptr<UserSessionAgent> agent_;
+    std::shared_ptr<UserSessionAgentProxy> agent_proxy_;
     std::shared_ptr<UserSessionWindowProxy> window_proxy_;
 
     DISALLOW_COPY_AND_ASSIGN(MainWindow);

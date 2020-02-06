@@ -16,53 +16,53 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/user_session_process_proxy.h"
+#include "host/user_session_agent_proxy.h"
 
 #include "base/logging.h"
 
 namespace host {
 
-UserSessionProcessProxy::UserSessionProcessProxy(
-    std::shared_ptr<base::TaskRunner> io_task_runner, UserSessionProcess* process)
+UserSessionAgentProxy::UserSessionAgentProxy(
+    std::shared_ptr<base::TaskRunner> io_task_runner, UserSessionAgent* agent)
     : io_task_runner_(std::move(io_task_runner)),
-      process_(process)
+      agent_(agent)
 {
-    DCHECK(io_task_runner_ && process_);
+    DCHECK(io_task_runner_ && agent_);
     DCHECK(io_task_runner_->belongsToCurrentThread());
 }
 
-UserSessionProcessProxy::~UserSessionProcessProxy() = default;
+UserSessionAgentProxy::~UserSessionAgentProxy() = default;
 
-void UserSessionProcessProxy::dettach()
+void UserSessionAgentProxy::dettach()
 {
     DCHECK(io_task_runner_->belongsToCurrentThread());
-    process_ = nullptr;
+    agent_ = nullptr;
 }
 
-void UserSessionProcessProxy::updateCredentials(proto::CredentialsRequest::Type request_type)
+void UserSessionAgentProxy::updateCredentials(proto::CredentialsRequest::Type request_type)
 {
     if (!io_task_runner_->belongsToCurrentThread())
     {
         io_task_runner_->postTask(std::bind(
-            &UserSessionProcessProxy::updateCredentials, shared_from_this(), request_type));
+            &UserSessionAgentProxy::updateCredentials, shared_from_this(), request_type));
         return;
     }
 
-    if (process_)
-        process_->updateCredentials(request_type);
+    if (agent_)
+        agent_->updateCredentials(request_type);
 }
 
-void UserSessionProcessProxy::killClient(const std::string& uuid)
+void UserSessionAgentProxy::killClient(const std::string& uuid)
 {
     if (!io_task_runner_->belongsToCurrentThread())
     {
         io_task_runner_->postTask(std::bind(
-            &UserSessionProcessProxy::killClient, shared_from_this(), uuid));
+            &UserSessionAgentProxy::killClient, shared_from_this(), uuid));
         return;
     }
 
-    if (process_)
-        process_->killClient(uuid);
+    if (agent_)
+        agent_->killClient(uuid);
 }
 
 } // namespace host

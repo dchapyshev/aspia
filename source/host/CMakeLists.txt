@@ -65,14 +65,14 @@ list(APPEND SOURCE_HOST_CORE
     user.h
     user_session.cc
     user_session.h
+    user_session_agent.cc
+    user_session_agent.h
+    user_session_agent_proxy.cc
+    user_session_agent_proxy.h
     user_session_constants.cc
     user_session_constants.h
     user_session_manager.cc
     user_session_manager.h
-    user_session_process.cc
-    user_session_process.h
-    user_session_process_proxy.cc
-    user_session_process_proxy.h
     user_session_window.h
     user_session_window_proxy.cc
     user_session_window_proxy.h

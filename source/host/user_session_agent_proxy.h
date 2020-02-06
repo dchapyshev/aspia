@@ -16,19 +16,19 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST__USER_SESSION_PROCESS_PROXY_H
-#define HOST__USER_SESSION_PROCESS_PROXY_H
+#ifndef HOST__USER_SESSION_AGENT_PROXY_H
+#define HOST__USER_SESSION_AGENT_PROXY_H
 
-#include "host/user_session_process.h"
+#include "host/user_session_agent.h"
 
 namespace host {
 
-class UserSessionProcessProxy : public std::enable_shared_from_this<UserSessionProcessProxy>
+class UserSessionAgentProxy : public std::enable_shared_from_this<UserSessionAgentProxy>
 {
 public:
-    UserSessionProcessProxy(
-        std::shared_ptr<base::TaskRunner> io_task_runner, UserSessionProcess* process);
-    ~UserSessionProcessProxy();
+    UserSessionAgentProxy(
+        std::shared_ptr<base::TaskRunner> io_task_runner, UserSessionAgent* agent);
+    ~UserSessionAgentProxy();
 
     void dettach();
 
@@ -37,11 +37,11 @@ public:
 
 private:
     std::shared_ptr<base::TaskRunner> io_task_runner_;
-    UserSessionProcess* process_;
+    UserSessionAgent* agent_;
 
-    DISALLOW_COPY_AND_ASSIGN(UserSessionProcessProxy);
+    DISALLOW_COPY_AND_ASSIGN(UserSessionAgentProxy);
 };
 
 } // namespace host
 
-#endif // HOST__USER_SESSION_PROCESS_PROXY_H
+#endif // HOST__USER_SESSION_AGENT_PROXY_H

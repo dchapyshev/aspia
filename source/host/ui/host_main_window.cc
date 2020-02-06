@@ -20,8 +20,8 @@
 
 #include "common/ui/about_dialog.h"
 #include "common/ui/language_action.h"
-#include "host/user_session_process.h"
-#include "host/user_session_process_proxy.h"
+#include "host/user_session_agent.h"
+#include "host/user_session_agent_proxy.h"
 #include "host/user_session_window_proxy.h"
 #include "host/ui/host_application.h"
 #include "host/ui/host_config_dialog.h"
@@ -80,14 +80,14 @@ MainWindow::MainWindow(QWidget* parent)
 
     connect(ui.button_new_password, &QPushButton::released, [this]()
     {
-        if (process_proxy_)
-            process_proxy_->updateCredentials(proto::CredentialsRequest::NEW_PASSWORD);
+        if (agent_proxy_)
+            agent_proxy_->updateCredentials(proto::CredentialsRequest::NEW_PASSWORD);
     });
 
     connect(ui.button_refresh_ip_list, &QPushButton::released, [this]()
     {
-        if (process_proxy_)
-            process_proxy_->updateCredentials(proto::CredentialsRequest::REFRESH);
+        if (agent_proxy_)
+            agent_proxy_->updateCredentials(proto::CredentialsRequest::REFRESH);
     });
 }
 
@@ -95,8 +95,8 @@ MainWindow::~MainWindow() = default;
 
 void MainWindow::connectToService()
 {
-    process_ = std::make_unique<UserSessionProcess>(window_proxy_);
-    process_->start();
+    agent_ = std::make_unique<UserSessionAgent>(window_proxy_);
+    agent_->start();
 }
 
 void MainWindow::activateHost()
@@ -130,28 +130,28 @@ void MainWindow::closeEvent(QCloseEvent* event)
     }
 }
 
-void MainWindow::onStateChanged(UserSessionProcess::State state)
+void MainWindow::onStateChanged(UserSessionAgent::State state)
 {
-    if (state == UserSessionProcess::State::CONNECTED)
+    if (state == UserSessionAgent::State::CONNECTED)
     {
         LOG(LS_INFO) << "The connection to the service was successfully established";
 
         ui.button_new_password->setEnabled(true);
         ui.button_refresh_ip_list->setEnabled(true);
 
-        process_proxy_ = process_->processProxy();
-        process_proxy_->updateCredentials(proto::CredentialsRequest::REFRESH);
+        agent_proxy_ = agent_->agentProxy();
+        agent_proxy_->updateCredentials(proto::CredentialsRequest::REFRESH);
     }
     else
     {
-        DCHECK_EQ(state, UserSessionProcess::State::DISCONNECTED);
+        DCHECK_EQ(state, UserSessionAgent::State::DISCONNECTED);
 
         LOG(LS_INFO) << "The connection to the service is lost. The application will be closed";
         realClose();
     }
 }
 
-void MainWindow::onClientListChanged(const UserSessionProcess::ClientList& clients)
+void MainWindow::onClientListChanged(const UserSessionAgent::ClientList& clients)
 {
     if (!notifier_)
     {
@@ -159,8 +159,8 @@ void MainWindow::onClientListChanged(const UserSessionProcess::ClientList& clien
 
         connect(notifier_, &NotifierWindow::killSession, [this](const std::string& uuid)
         {
-            if (process_proxy_)
-                process_proxy_->killClient(uuid);
+            if (agent_proxy_)
+                agent_proxy_->killClient(uuid);
         });
 
         notifier_->setAttribute(Qt::WA_DeleteOnClose);
@@ -230,8 +230,8 @@ void MainWindow::onLanguageChanged(QAction* action)
 
     ui.retranslateUi(this);
 
-    if (process_proxy_)
-        process_proxy_->updateCredentials(proto::CredentialsRequest::REFRESH);
+    if (agent_proxy_)
+        agent_proxy_->updateCredentials(proto::CredentialsRequest::REFRESH);
 }
 
 void MainWindow::onSettings()

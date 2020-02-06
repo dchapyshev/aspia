@@ -19,7 +19,7 @@
 #ifndef HOST__USER_SESSION_WINDOW_H
 #define HOST__USER_SESSION_WINDOW_H
 
-#include "host/user_session_process.h"
+#include "host/user_session_agent.h"
 
 namespace host {
 
@@ -28,8 +28,8 @@ class UserSessionWindow
 public:
     virtual ~UserSessionWindow() = default;
 
-    virtual void onStateChanged(UserSessionProcess::State state) = 0;
-    virtual void onClientListChanged(const UserSessionProcess::ClientList& clients) = 0;
+    virtual void onStateChanged(UserSessionAgent::State state) = 0;
+    virtual void onClientListChanged(const UserSessionAgent::ClientList& clients) = 0;
     virtual void onCredentialsChanged(const proto::Credentials& credentials) = 0;
 };
 

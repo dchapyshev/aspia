@@ -44,7 +44,7 @@ void UserSessionWindowProxy::dettach()
     window_ = nullptr;
 }
 
-void UserSessionWindowProxy::onStateChanged(UserSessionProcess::State state)
+void UserSessionWindowProxy::onStateChanged(UserSessionAgent::State state)
 {
     if (!ui_task_runner_->belongsToCurrentThread())
     {
@@ -57,7 +57,7 @@ void UserSessionWindowProxy::onStateChanged(UserSessionProcess::State state)
         window_->onStateChanged(state);
 }
 
-void UserSessionWindowProxy::onClientListChanged(const UserSessionProcess::ClientList& clients)
+void UserSessionWindowProxy::onClientListChanged(const UserSessionAgent::ClientList& clients)
 {
     if (!ui_task_runner_->belongsToCurrentThread())
     {

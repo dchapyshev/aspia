@@ -19,7 +19,7 @@
 #ifndef HOST__UI__HOST_NOTIFIER_WINDOW_H
 #define HOST__UI__HOST_NOTIFIER_WINDOW_H
 
-#include "host/user_session_process.h"
+#include "host/user_session_agent.h"
 #include "ui_host_notifier_window.h"
 
 namespace host {
@@ -33,7 +33,7 @@ public:
     ~NotifierWindow() = default;
 
 public slots:
-    void onClientListChanged(const UserSessionProcess::ClientList& clients);
+    void onClientListChanged(const UserSessionAgent::ClientList& clients);
     void disconnectAll();
 
 signals:
