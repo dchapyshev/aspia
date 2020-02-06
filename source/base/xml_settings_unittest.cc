@@ -73,6 +73,8 @@ TEST(XmlSettingsTest, SettingsTest)
         EXPECT_EQ(test_array[i].get<uint32_t>("Flags", -1), kUserList[i].flags);
     }
 
+    settings.reset();
+
     // Re-open settings file.
     settings = std::make_unique<XmlSettings>(XmlSettings::Scope::USER, "test", "temp.xml");
 
