@@ -16,7 +16,7 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 #
 
-cmake_minimum_required(VERSION 3.15.0)
+cmake_minimum_required(VERSION 3.16.0)
 
 option(BUILD_UNIT_TESTS "Build unit tests" ON)
 option(USE_TBB "Using Intel TBB" ON)
@@ -102,6 +102,9 @@ set(THIRD_PARTY_LIBS
     Qt5::WinMain
     Qt5::WinExtras
     Qt5::Xml
+    Qt5::QWindowsIntegrationPlugin
+    Qt5::QWindowsVistaStylePlugin
+    Qt5::QWindowsPrinterSupportPlugin
     debug Qt5AccessibilitySupportd
     debug Qt5EventDispatcherSupportd
     debug Qt5FontDatabaseSupportd
@@ -114,11 +117,8 @@ set(THIRD_PARTY_LIBS
     debug qtharfbuzzd
     debug qtlibpngd
     debug qtpcre2d
-    debug qwindowsd
-    debug qwindowsvistastyled
     debug tbb_debug
-    debug windowsprintersupportd
-    debug libzstd_static_debug
+    debug zstd_static_debug
     optimized Qt5AccessibilitySupport
     optimized Qt5EventDispatcherSupport
     optimized Qt5FontDatabaseSupport
@@ -131,11 +131,8 @@ set(THIRD_PARTY_LIBS
     optimized qtharfbuzz
     optimized qtlibpng
     optimized qtpcre2
-    optimized qwindows
-    optimized qwindowsvistastyle
     optimized tbb
-    optimized windowsprintersupport
-    optimized libzstd_static
+    optimized zstd_static
     crypt32
     dwmapi
     dxgi
