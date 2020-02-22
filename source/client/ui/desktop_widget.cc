@@ -17,8 +17,9 @@
 //
 
 #include "client/ui/desktop_widget.h"
+
 #include "common/keycode_converter.h"
-#include "desktop/desktop_frame_qimage.h"
+#include "client/ui/frame_qimage.h"
 #include "proto/desktop.pb.h"
 
 #include <QApplication>
@@ -223,7 +224,7 @@ void DesktopWidget::enableKeyCombinations(bool enable)
 
 void DesktopWidget::paintEvent(QPaintEvent* /* event */)
 {
-    desktop::FrameQImage* frame = reinterpret_cast<desktop::FrameQImage*>(frame_.get());
+    FrameQImage* frame = reinterpret_cast<FrameQImage*>(frame_.get());
     if (frame)
     {
         QPainter painter(this);

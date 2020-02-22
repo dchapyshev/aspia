@@ -31,10 +31,6 @@
 #include <memory>
 #include <set>
 
-namespace desktop {
-class FrameQImage;
-} // namespace desktop
-
 namespace client {
 
 class DesktopWidget : public QWidget
