@@ -16,9 +16,9 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/frame_factory_qimage.h"
+#include "client/ui/frame_factory_qimage.h"
 
-#include "desktop/desktop_frame_qimage.h"
+#include "client/ui/frame_qimage.h"
 
 namespace client {
 
@@ -28,7 +28,7 @@ FrameFactoryQImage::~FrameFactoryQImage() = default;
 
 std::shared_ptr<desktop::Frame> FrameFactoryQImage::allocateFrame(const desktop::Size& size)
 {
-    return std::shared_ptr<desktop::Frame>(desktop::FrameQImage::create(size).release());
+    return std::shared_ptr<desktop::Frame>(FrameQImage::create(size).release());
 }
 
 } // namespace client

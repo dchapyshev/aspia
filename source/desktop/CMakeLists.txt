@@ -28,8 +28,6 @@ list(APPEND SOURCE_DESKTOP
     desktop_frame_aligned.h
     desktop_frame_dib.cc
     desktop_frame_dib.h
-    desktop_frame_qimage.cc
-    desktop_frame_qimage.h
     desktop_frame_rotation.cc
     desktop_frame_rotation.h
     desktop_frame_simple.cc

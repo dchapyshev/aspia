@@ -16,37 +16,26 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef DESKTOP__DESKTOP_FRAME_QIMAGE_H
-#define DESKTOP__DESKTOP_FRAME_QIMAGE_H
+#ifndef CLIENT__UI__FRAME_FACTORY_QIMAGE_H
+#define CLIENT__UI__FRAME_FACTORY_QIMAGE_H
 
-#include "desktop/desktop_frame.h"
+#include "base/macros_magic.h"
+#include "client/frame_factory.h"
 
-#include <QImage>
+namespace client {
 
-#include <memory>
-
-namespace desktop {
-
-class FrameQImage : public Frame
+class FrameFactoryQImage : public FrameFactory
 {
 public:
-    ~FrameQImage() = default;
+    FrameFactoryQImage();
+    ~FrameFactoryQImage();
 
-    static std::unique_ptr<FrameQImage> create(const Size& size);
-    static std::unique_ptr<FrameQImage> create(const QPixmap& pixmap);
-    static std::unique_ptr<FrameQImage> create(QImage&& image);
-
-    const QImage& constImage() const { return image_; }
-    QImage* image() { return &image_; }
+    std::shared_ptr<desktop::Frame> allocateFrame(const desktop::Size& size) override;
 
 private:
-    FrameQImage(QImage&& img);
-
-    QImage image_;
-
-    DISALLOW_COPY_AND_ASSIGN(FrameQImage);
+    DISALLOW_COPY_AND_ASSIGN(FrameFactoryQImage);
 };
 
-} // namespace desktop
+} // namespace client
 
-#endif // DESKTOP__DESKTOP_FRAME_QIMAGE_H
+#endif // CLIENT__UI__FRAME_FACTORY_QIMAGE_H

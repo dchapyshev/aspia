@@ -16,26 +16,37 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__FRAME_FACTORY_QIMAGE_H
-#define CLIENT__FRAME_FACTORY_QIMAGE_H
+#ifndef CLIENT__UI__FRAME_QIMAGE_H
+#define CLIENT__UI__FRAME_QIMAGE_H
 
-#include "base/macros_magic.h"
-#include "client/frame_factory.h"
+#include "desktop/desktop_frame.h"
+
+#include <QImage>
+
+#include <memory>
 
 namespace client {
 
-class FrameFactoryQImage : public FrameFactory
+class FrameQImage : public desktop::Frame
 {
 public:
-    FrameFactoryQImage();
-    ~FrameFactoryQImage();
+    ~FrameQImage() = default;
 
-    std::shared_ptr<desktop::Frame> allocateFrame(const desktop::Size& size) override;
+    static std::unique_ptr<FrameQImage> create(const desktop::Size& size);
+    static std::unique_ptr<FrameQImage> create(const QPixmap& pixmap);
+    static std::unique_ptr<FrameQImage> create(QImage&& image);
+
+    const QImage& constImage() const { return image_; }
+    QImage* image() { return &image_; }
 
 private:
-    DISALLOW_COPY_AND_ASSIGN(FrameFactoryQImage);
+    FrameQImage(QImage&& img);
+
+    QImage image_;
+
+    DISALLOW_COPY_AND_ASSIGN(FrameQImage);
 };
 
 } // namespace client
 
-#endif // CLIENT__FRAME_FACTORY_QIMAGE_H
+#endif // CLIENT__UI__FRAME_QIMAGE_H

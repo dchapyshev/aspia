@@ -23,13 +23,13 @@
 #include "base/strings/string_split.h"
 #include "client/client_desktop.h"
 #include "client/desktop_control_proxy.h"
-#include "client/frame_factory_qimage.h"
 #include "client/ui/desktop_config_dialog.h"
 #include "client/ui/desktop_panel.h"
+#include "client/ui/frame_factory_qimage.h"
+#include "client/ui/frame_qimage.h"
 #include "client/ui/qt_file_manager_window.h"
 #include "client/ui/system_info_window.h"
 #include "common/desktop_session_constants.h"
-#include "desktop/desktop_frame_qimage.h"
 #include "desktop/mouse_cursor.h"
 
 #include <QApplication>
@@ -449,7 +449,7 @@ void QtDesktopWindow::takeScreenshot()
     if (file_path.isEmpty() || selected_filter.isEmpty())
         return;
 
-    desktop::FrameQImage* frame = dynamic_cast<desktop::FrameQImage*>(desktop_->desktopFrame());
+    FrameQImage* frame = dynamic_cast<FrameQImage*>(desktop_->desktopFrame());
     if (!frame)
         return;
 
