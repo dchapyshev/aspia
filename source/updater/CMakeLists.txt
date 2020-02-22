@@ -43,7 +43,7 @@ add_library(aspia_updater STATIC
     ${SOURCE_UPDATER}
     ${SOURCE_UPDATER_RESOURCES}
     ${SOURCE_UPDATER_UI})
-target_link_libraries(aspia_updater aspia_base ${THIRD_PARTY_LIBS})
+target_link_libraries(aspia_updater aspia_base ${QT_LIBS} ${THIRD_PARTY_LIBS})
 
 if(Qt5LinguistTools_FOUND)
     # Get the list of translation files.

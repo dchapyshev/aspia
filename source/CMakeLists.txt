@@ -93,7 +93,7 @@ link_directories(
     ${ASPIA_THIRD_PARTY_DIR}/tbb/lib
     ${ASPIA_THIRD_PARTY_DIR}/zstd/lib)
 
-set(THIRD_PARTY_LIBS
+set(QT_LIBS
     Qt5::Core
     Qt5::Gui
     Qt5::Network
@@ -110,37 +110,27 @@ set(THIRD_PARTY_LIBS
     debug Qt5FontDatabaseSupportd
     debug Qt5ThemeSupportd
     debug Qt5WindowsUIAutomationSupportd
-    debug libprotobuf-lited
-    debug vpxmtd
-    debug yuv_debug
     debug qtfreetyped
     debug qtharfbuzzd
     debug qtlibpngd
     debug qtpcre2d
-    debug tbb_debug
-    debug zstd_static_debug
     optimized Qt5AccessibilitySupport
     optimized Qt5EventDispatcherSupport
     optimized Qt5FontDatabaseSupport
     optimized Qt5ThemeSupport
     optimized Qt5WindowsUIAutomationSupport
-    optimized libprotobuf-lite
-    optimized vpxmt
-    optimized yuv
     optimized qtfreetype
     optimized qtharfbuzz
     optimized qtlibpng
-    optimized qtpcre2
-    optimized tbb
-    optimized zstd_static
+    optimized qtpcre2)
+
+set(WINDOWS_LIBS
     crypt32
     dwmapi
     dxgi
     d3d11
     imm32
     iphlpapi
-    libcrypto
-    libssl
     mpr
     netapi32
     sas
@@ -152,6 +142,20 @@ set(THIRD_PARTY_LIBS
     winmm
     ws2_32
     wtsapi32)
+
+set(THIRD_PARTY_LIBS
+    debug libprotobuf-lited
+    debug vpxmtd
+    debug yuv_debug
+    debug tbb_debug
+    debug zstd_static_debug
+    optimized libprotobuf-lite
+    optimized vpxmt
+    optimized yuv
+    optimized tbb
+    optimized zstd_static
+    libcrypto
+    libssl)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")

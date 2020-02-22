@@ -33,4 +33,5 @@ source_group("" FILES ${SOURCE_QT_BASE})
 add_library(aspia_qt_base STATIC ${SOURCE_QT_BASE})
 target_link_libraries(aspia_qt_base
     aspia_base
+    ${QT_LIBS}
     ${THIRD_PARTY_LIBS})
