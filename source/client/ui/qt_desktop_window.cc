@@ -449,7 +449,7 @@ void QtDesktopWindow::takeScreenshot()
     if (file_path.isEmpty() || selected_filter.isEmpty())
         return;
 
-    FrameQImage* frame = dynamic_cast<FrameQImage*>(desktop_->desktopFrame());
+    FrameQImage* frame = static_cast<FrameQImage*>(desktop_->desktopFrame());
     if (!frame)
         return;
 
