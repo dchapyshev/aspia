@@ -175,3 +175,8 @@ add_executable(aspia_desktop_agent desktop_agent_entry_point.cc desktop_agent.rc
 set_target_properties(aspia_desktop_agent PROPERTIES WIN32_EXECUTABLE TRUE)
 set_target_properties(aspia_desktop_agent PROPERTIES LINK_FLAGS "/MANIFEST:NO")
 target_link_libraries(aspia_desktop_agent aspia_host_core)
+
+if(NOT TARGET BUILD_HOST)
+    add_custom_target(BUILD_HOST)
+    add_dependencies(BUILD_HOST aspia_host_core aspia_host aspia_host_service aspia_desktop_agent)
+endif()
