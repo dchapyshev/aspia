@@ -36,10 +36,18 @@ public:
     using Milliseconds = std::chrono::milliseconds;
 
     virtual bool belongsToCurrentThread() const = 0;
-    virtual bool postTask(const Callback& task) = 0;
-    virtual bool postDelayedTask(const Callback& callback, const Milliseconds& delay) = 0;
-    virtual bool postQuit() = 0;
+    virtual void postTask(const Callback& task) = 0;
+    virtual void postDelayedTask(const Callback& callback, const Milliseconds& delay) = 0;
+    virtual void postNonNestableTask(const Callback& callback) = 0;
+    virtual void postNonNestableDelayedTask(const Callback& callback, const Milliseconds& delay) = 0;
+    virtual void postQuit() = 0;
 
+    // Template helpers which use function indirection to erase T from the function signature while
+    // still remembering it so we can call the correct destructor/release function.
+    //
+    // We use this trick so we don't need to include bind.h in a header file like task_runner.h.
+    // We also wrap the helpers in a templated class to make it easier for users of DeleteSoon to
+    // declare the helper as a friend.
     template <class T>
     class DeleteHelper
     {
@@ -53,10 +61,41 @@ public:
         DISALLOW_COPY_AND_ASSIGN(DeleteHelper);
     };
 
+    // An internal TaskRunner-like class helper for DeleteHelper. We don't want to expose the do*()
+    // functions directly since the void* argument makes it possible to pass/ an object of the
+    // wrong type to delete. Instead, we force callers to go through these internal helpers for
+    // type safety. TaskRunner-like classes which expose deleteSoon or method should friend the
+    // appropriate helper and implement a corresponding *Internal method with the following
+    // signature:
+    //
+    // bool(void(*function)(const void*), void* object)
+    //
+    // An implementation of this function should simply create a std::function from (function,
+    // object) and return the result of posting the task.
+    template <class T, class ReturnType>
+    class DeleteHelperInternal
+    {
+    public:
+        template <class TaskRunnerType>
+        static ReturnType deleteViaTaskRunner(TaskRunnerType* task_runner, const T* object)
+        {
+            return task_runner->deleteSoonInternal(&DeleteHelper<T>::doDelete, object);
+        }
+
+    private:
+        DISALLOW_COPY_AND_ASSIGN(DeleteHelperInternal);
+    };
+
     template <class T>
     void deleteSoon(const T* object)
     {
-        postTask(std::bind(&DeleteHelper<T>::doDelete, object));
+        DeleteHelperInternal<T, void>::deleteViaTaskRunner(this, object);
+    }
+
+private:
+    void deleteSoonInternal(void(*deleter)(const void*), const void* object)
+    {
+        postNonNestableTask(std::bind(deleter, object));
     }
 };
 

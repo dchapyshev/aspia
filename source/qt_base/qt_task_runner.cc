@@ -55,7 +55,7 @@ public:
     ~Impl();
 
     bool belongsToCurrentThread() const;
-    bool postTask(const Callback& callback);
+    void postTask(const Callback& callback, int priority);
 
 protected:
     // QObject implementation.
@@ -80,10 +80,9 @@ bool QtTaskRunner::Impl::belongsToCurrentThread() const
     return QThread::currentThreadId() == current_thread_;
 }
 
-bool QtTaskRunner::Impl::postTask(const Callback& callback)
+void QtTaskRunner::Impl::postTask(const Callback& callback, int priority)
 {
-    QApplication::postEvent(this, new TaskEvent(callback));
-    return true;
+    QApplication::postEvent(this, new TaskEvent(callback), priority);
 }
 
 void QtTaskRunner::Impl::customEvent(QEvent* event)
@@ -105,21 +104,30 @@ bool QtTaskRunner::belongsToCurrentThread() const
     return impl_->belongsToCurrentThread();
 }
 
-bool QtTaskRunner::postTask(const Callback& callback)
+void QtTaskRunner::postTask(const Callback& callback)
 {
-    return impl_->postTask(callback);
+    impl_->postTask(callback, Qt::NormalEventPriority);
 }
 
-bool QtTaskRunner::postDelayedTask(const Callback& /* callback */, const Milliseconds& /* delay */)
+void QtTaskRunner::postDelayedTask(const Callback& /* callback */, const Milliseconds& /* delay */)
 {
     NOTIMPLEMENTED();
-    return false;
 }
 
-bool QtTaskRunner::postQuit()
+void QtTaskRunner::postNonNestableTask(const Callback& callback)
+{
+    impl_->postTask(callback, Qt::LowEventPriority);
+}
+
+void QtTaskRunner::postNonNestableDelayedTask(
+    const Callback& /* callback */, const Milliseconds& /* delay */)
 {
     NOTIMPLEMENTED();
-    return false;
+}
+
+void QtTaskRunner::postQuit()
+{
+    NOTIMPLEMENTED();
 }
 
 } // namespace qt_base

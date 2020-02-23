@@ -48,6 +48,10 @@ public:
         // delayed work (timer events) is currently empty, and no additional calls to this function
         // need to be scheduled.
         virtual bool doDelayedWork(TimePoint& next_delayed_work_time) = 0;
+
+        // Called from within run() just before the message pump goes to sleep.
+        // Returns true to indicate that idle work was done.
+        virtual bool doIdleWork() = 0;
     };
 
     virtual ~MessagePump() = default;

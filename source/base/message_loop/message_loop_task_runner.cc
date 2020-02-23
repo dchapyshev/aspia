@@ -36,44 +36,45 @@ bool MessageLoopTaskRunner::belongsToCurrentThread() const
     return thread_id_ == std::this_thread::get_id();
 }
 
-bool MessageLoopTaskRunner::postTask(const Callback& callback)
+void MessageLoopTaskRunner::postTask(const Callback& callback)
 {
     std::shared_lock lock(loop_lock_);
 
     if (loop_)
-    {
         loop_->postTask(callback);
-        return true;
-    }
-
-    return false;
 }
 
-bool MessageLoopTaskRunner::postDelayedTask(
-    const Callback& callback, const MessageLoop::Milliseconds& delay)
+void MessageLoopTaskRunner::postDelayedTask(const Callback& callback, const Milliseconds& delay)
 {
     std::shared_lock lock(loop_lock_);
 
     if (loop_)
-    {
         loop_->postDelayedTask(callback, delay);
-        return true;
-    }
-
-    return false;
 }
 
-bool MessageLoopTaskRunner::postQuit()
+void MessageLoopTaskRunner::postNonNestableTask(const Callback& callback)
 {
     std::shared_lock lock(loop_lock_);
 
     if (loop_)
-    {
-        loop_->postTask(loop_->quitClosure());
-        return true;
-    }
+        loop_->postNonNestableTask(callback);
+}
 
-    return false;
+void MessageLoopTaskRunner::postNonNestableDelayedTask(
+    const Callback& callback, const Milliseconds& delay)
+{
+    std::shared_lock lock(loop_lock_);
+
+    if (loop_)
+        loop_->postNonNestableDelayedTask(callback, delay);
+}
+
+void MessageLoopTaskRunner::postQuit()
+{
+    std::shared_lock lock(loop_lock_);
+
+    if (loop_)
+        loop_->postTask(loop_->quitClosure());
 }
 
 MessageLoopTaskRunner::MessageLoopTaskRunner(MessageLoop* loop)

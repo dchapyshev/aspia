@@ -70,8 +70,24 @@ MessageLoop::~MessageLoop()
 {
     DCHECK_EQ(this, current());
 
-    reloadWorkQueue();
-    deletePendingTasks();
+    // Clean up any unprocessed tasks, but take care: deleting a task could result in the addition
+    // of more tasks (e.g., via DeleteSoon). We set a limit on the number of times we will allow a
+    // deleted task to generate more tasks. Normally, we should only pass through this loop once or
+    // twice. If we end up hitting the loop limit, then it is probably due to one task that is
+    // being stubborn. Inspect the queues to see who is left.
+    bool did_work;
+    for (int i = 0; i < 100; ++i)
+    {
+        reloadWorkQueue();
+        deletePendingTasks();
+
+        // If we end up with empty queues, then break out of the loop.
+        did_work = deletePendingTasks();
+        if (!did_work)
+            break;
+    }
+
+    DCHECK(!did_work);
 
     proxy_->willDestroyCurrentMessageLoop();
     proxy_ = nullptr;
@@ -107,7 +123,7 @@ void MessageLoop::postTask(const PendingTask::Callback& callback)
 {
     DCHECK(callback != nullptr);
 
-    PendingTask pending_task(callback, calculateDelayedRuntime(Milliseconds::zero()));
+    PendingTask pending_task(callback, calculateDelayedRuntime(Milliseconds::zero()), true);
     addToIncomingQueue(&pending_task);
 }
 
@@ -115,7 +131,24 @@ void MessageLoop::postDelayedTask(const PendingTask::Callback& callback, const M
 {
     DCHECK(callback != nullptr);
 
-    PendingTask pending_task(callback, calculateDelayedRuntime(delay));
+    PendingTask pending_task(callback, calculateDelayedRuntime(delay), true);
+    addToIncomingQueue(&pending_task);
+}
+
+void MessageLoop::postNonNestableTask(const PendingTask::Callback& callback)
+{
+    DCHECK(callback != nullptr);
+
+    PendingTask pending_task(callback, calculateDelayedRuntime(Milliseconds::zero()), false);
+    addToIncomingQueue(&pending_task);
+}
+
+void MessageLoop::postNonNestableDelayedTask(
+    const PendingTask::Callback& callback, const Milliseconds& delay)
+{
+    DCHECK(callback != nullptr);
+
+    PendingTask pending_task(callback, calculateDelayedRuntime(delay), false);
     addToIncomingQueue(&pending_task);
 }
 
@@ -146,6 +179,22 @@ void MessageLoop::runTask(const PendingTask& pending_task)
     pending_task.callback();
 
     nestable_tasks_allowed_ = true;
+}
+
+bool MessageLoop::deferOrRunPendingTask(const PendingTask& pending_task)
+{
+    if (pending_task.nestable)
+    {
+        runTask(pending_task);
+
+        // Show that we ran a task (Note: a new one might arrive as a consequence!).
+        return true;
+    }
+
+    // We couldn't run the task now because we're in a nested message loop
+    // and the task isn't nestable.
+    deferred_non_nestable_work_queue_.push(pending_task);
+    return false;
 }
 
 void MessageLoop::addToDelayedWorkQueue(const PendingTask& pending_task)
@@ -185,24 +234,43 @@ void MessageLoop::reloadWorkQueue()
     if (!work_queue_.empty())
         return;
 
-    {
-        std::scoped_lock lock(incoming_queue_lock_);
+    std::scoped_lock lock(incoming_queue_lock_);
 
-        if (incoming_queue_.empty())
-            return;
+    if (incoming_queue_.empty())
+        return;
 
-        incoming_queue_.Swap(work_queue_);
-        DCHECK(incoming_queue_.empty());
-    }
+    incoming_queue_.Swap(&work_queue_);
+    DCHECK(incoming_queue_.empty());
 }
 
-void MessageLoop::deletePendingTasks()
+bool MessageLoop::deletePendingTasks()
 {
+    bool did_work = !work_queue_.empty();
+
     while (!work_queue_.empty())
+    {
+        PendingTask pending_task = work_queue_.front();
         work_queue_.pop();
+
+        if (pending_task.delayed_run_time != TimePoint())
+        {
+            // We want to delete delayed tasks in the same order in which they would normally be
+            // deleted in case of any funny dependencies between delayed tasks.
+            addToDelayedWorkQueue(pending_task);
+        }
+    }
+
+    did_work |= !deferred_non_nestable_work_queue_.empty();
+
+    while (!deferred_non_nestable_work_queue_.empty())
+        deferred_non_nestable_work_queue_.pop();
+
+    did_work |= !delayed_work_queue_.empty();
 
     while (!delayed_work_queue_.empty())
         delayed_work_queue_.pop();
+
+    return did_work;
 }
 
 // static
@@ -249,7 +317,8 @@ bool MessageLoop::doWork()
             }
             else
             {
-                runTask(pending_task);
+                if (deferOrRunPendingTask(pending_task))
+                    return true;
             }
         }
         while (!work_queue_.empty());
@@ -290,6 +359,17 @@ bool MessageLoop::doDelayedWork(TimePoint& next_delayed_work_time)
 
     if (!delayed_work_queue_.empty())
         next_delayed_work_time = delayed_work_queue_.top().delayed_run_time;
+
+    return deferOrRunPendingTask(pending_task);
+}
+
+bool MessageLoop::doIdleWork()
+{
+    if (deferred_non_nestable_work_queue_.empty())
+        return false;
+
+    PendingTask pending_task = deferred_non_nestable_work_queue_.front();
+    deferred_non_nestable_work_queue_.pop();
 
     runTask(pending_task);
     return true;

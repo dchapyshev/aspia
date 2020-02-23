@@ -77,11 +77,18 @@ protected:
 
     void postTask(const PendingTask::Callback& callback);
     void postDelayedTask(const PendingTask::Callback& callback, const Milliseconds& delay);
+    void postNonNestableTask(const PendingTask::Callback& callback);
+    void postNonNestableDelayedTask(
+        const PendingTask::Callback& callback, const Milliseconds& delay);
 
     PendingTask::Callback quitClosure();
 
     // Runs the specified PendingTask.
     void runTask(const PendingTask& pending_task);
+
+    // Calls RunTask or queues the pending_task on the deferred task list if it cannot be run right
+    // now. Returns true if the task was run.
+    bool deferOrRunPendingTask(const PendingTask& pending_task);
 
     // Adds the pending task to delayed_work_queue_.
     void addToDelayedWorkQueue(const PendingTask& pending_task);
@@ -97,7 +104,7 @@ protected:
     // requires a lock to access, while the latter is directly accessible on this thread.
     void reloadWorkQueue();
 
-    void deletePendingTasks();
+    bool deletePendingTasks();
 
     // Calculates the time at which a PendingTask should run.
     static TimePoint calculateDelayedRuntime(const Milliseconds& delay);
@@ -105,18 +112,23 @@ protected:
     // MessagePump::Delegate methods:
     bool doWork() override;
     bool doDelayedWork(TimePoint& next_delayed_work_time) override;
+    bool doIdleWork() override;
 
     const Type type_;
-
-    // Contains delayed tasks, sorted by their 'delayed_run_time' property.
-    DelayedTaskQueue delayed_work_queue_;
 
     // A recent snapshot of Clock::now(), used to check delayed_work_queue_.
     TimePoint recent_time_;
 
+    // Contains delayed tasks, sorted by their 'delayed_run_time' property.
+    DelayedTaskQueue delayed_work_queue_;
+
     // A list of tasks that need to be processed by this instance.  Note that this queue is only
     // accessed (push/pop) by our current thread.
     TaskQueue work_queue_;
+
+    // A queue of non-nestable tasks that we had to defer because when it came time to execute them
+    // we were in a nested message loop. They will execute once we're out of nested message loops.
+    TaskQueue deferred_non_nestable_work_queue_;
 
     // A recursion block that prevents accidentally running additional tasks when insider a
     // (accidentally induced?) nested message pump.

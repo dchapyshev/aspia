@@ -39,6 +39,13 @@ void MessagePumpDefault::run(Delegate* delegate)
         if (did_work)
             continue;
 
+        did_work = delegate->doIdleWork();
+        if (!keep_running_)
+            break;
+
+        if (did_work)
+            continue;
+
         if (delayed_work_time_ == TimePoint())
         {
             std::unique_lock lock(have_work_lock_);

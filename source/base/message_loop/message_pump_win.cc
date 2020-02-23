@@ -181,6 +181,13 @@ void MessagePumpForWin::doRunLoop()
         if (more_work_is_plausible)
             continue;
 
+        more_work_is_plausible = state_->delegate->doIdleWork();
+        if (state_->should_quit)
+            break;
+
+        if (more_work_is_plausible)
+            continue;
+
         waitForWork(); // Wait (sleep) until we have work to do again.
     }
 }

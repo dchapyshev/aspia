@@ -34,9 +34,11 @@ public:
 
     // TaskRunner implementation.
     bool belongsToCurrentThread() const override;
-    bool postTask(const Callback& callback) override;
-    bool postDelayedTask(const Callback& callback, const Milliseconds& delay) override;
-    bool postQuit() override;
+    void postTask(const Callback& callback) override;
+    void postDelayedTask(const Callback& callback, const Milliseconds& delay) override;
+    void postNonNestableTask(const Callback& callback) override;
+    void postNonNestableDelayedTask(const Callback& callback, const Milliseconds& delay) override;
+    void postQuit() override;
 
 private:
     friend class MessageLoop;

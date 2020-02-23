@@ -51,6 +51,13 @@ void MessagePumpForAsio::run(Delegate* delegate)
         if (did_work)
             continue;
 
+        did_work = delegate->doIdleWork();
+        if (!keep_running_)
+            break;
+
+        if (did_work)
+            continue;
+
         if (delayed_work_time_ == TimePoint())
         {
             // Restart the io_context in preparation for a subsequent run_one() invocation.

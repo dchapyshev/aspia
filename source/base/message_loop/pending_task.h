@@ -36,28 +36,31 @@ public:
     using TimePoint = std::chrono::time_point<Clock>;
 
     explicit PendingTask(const Callback& callback);
-    PendingTask(const Callback& callback, const TimePoint& delayed_run_time);
+    PendingTask(const Callback& callback, const TimePoint& delayed_run_time, bool nestable);
     ~PendingTask() = default;
 
     // Used to support sorting.
     bool operator<(const PendingTask& other) const;
+
+    // The task to run.
+    Callback callback;
 
     // Secondary sort key for run time.
     int sequence_num = 0;
 
     TimePoint delayed_run_time;
 
-    // The task to run.
-    Callback callback;
+    // OK to dispatch from a nested loop.
+    bool nestable;
 };
 
 // Wrapper around std::queue specialized for PendingTask which adds a Swap helper method.
 class TaskQueue : public ScalableQueue<PendingTask>
 {
 public:
-    void Swap(TaskQueue& queue)
+    void Swap(TaskQueue* queue)
     {
-        c.swap(queue.c); // Calls std::deque::swap.
+        c.swap(queue->c); // Calls std::deque::swap.
     }
 };
 

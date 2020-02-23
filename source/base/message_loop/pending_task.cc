@@ -26,9 +26,10 @@ PendingTask::PendingTask(const Callback& callback)
     // Nothing
 }
 
-PendingTask::PendingTask(const Callback& callback, const TimePoint& delayed_run_time)
+PendingTask::PendingTask(const Callback& callback, const TimePoint& delayed_run_time, bool nestable)
     : callback(callback),
-      delayed_run_time(delayed_run_time)
+      delayed_run_time(delayed_run_time),
+      nestable(nestable)
 {
     // Nothing
 }
