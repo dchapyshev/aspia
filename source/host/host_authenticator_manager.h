@@ -24,6 +24,10 @@
 #include <list>
 #include <memory>
 
+namespace base {
+class TaskRunner;
+} // namespace base
+
 namespace net {
 class Channel;
 } // namespace net
@@ -42,7 +46,7 @@ public:
         virtual void onNewSession(std::unique_ptr<ClientSession> session) = 0;
     };
 
-    explicit AuthenticatorManager(Delegate* delegate);
+    AuthenticatorManager(std::shared_ptr<base::TaskRunner> task_runner, Delegate* delegate);
     ~AuthenticatorManager();
 
     void setUserList(std::shared_ptr<UserList> userlist);
@@ -57,6 +61,7 @@ protected:
     void onComplete() override;
 
 private:
+    std::shared_ptr<base::TaskRunner> task_runner_;
     std::shared_ptr<UserList> userlist_;
     std::list<std::unique_ptr<Authenticator>> pending_;
     Delegate* delegate_;

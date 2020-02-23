@@ -19,15 +19,18 @@
 #include "host/host_authenticator_manager.h"
 
 #include "base/logging.h"
+#include "base/task_runner.h"
 #include "host/client_session.h"
 #include "net/network_channel.h"
 
 namespace host {
 
-AuthenticatorManager::AuthenticatorManager(Delegate* delegate)
-    : delegate_(delegate)
+AuthenticatorManager::AuthenticatorManager(
+    std::shared_ptr<base::TaskRunner> task_runner, Delegate* delegate)
+    : task_runner_(std::move(task_runner)),
+      delegate_(delegate)
 {
-    DCHECK(delegate_);
+    DCHECK(task_runner_ && delegate_);
 }
 
 AuthenticatorManager::~AuthenticatorManager() = default;
@@ -58,17 +61,13 @@ void AuthenticatorManager::onComplete()
         switch (current->state())
         {
             case Authenticator::State::SUCCESS:
-            {
-                delegate_->onNewSession(current->takeSession());
-
-                // Authenticator not needed anymore.
-                it = pending_.erase(it);
-            }
-            break;
-
             case Authenticator::State::FAILED:
             {
-                // Authentication failed, delete the connection.
+                if (current->state() == Authenticator::State::SUCCESS)
+                    delegate_->onNewSession(current->takeSession());
+
+                // Authenticator not needed anymore.
+                task_runner_->deleteSoon(it->release());
                 it = pending_.erase(it);
             }
             break;

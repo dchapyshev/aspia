@@ -83,7 +83,7 @@ void Server::start()
         }
     });
 
-    authenticator_manager_ = std::make_unique<AuthenticatorManager>(this);
+    authenticator_manager_ = std::make_unique<AuthenticatorManager>(task_runner_, this);
 
     user_session_manager_ = std::make_unique<UserSessionManager>(task_runner_);
     user_session_manager_->start(this);
