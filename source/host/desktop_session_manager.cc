@@ -47,6 +47,8 @@ DesktopSessionManager::~DesktopSessionManager()
 
 void DesktopSessionManager::attachSession(base::win::SessionId session_id)
 {
+    LOG(LS_INFO) << "Attach session with ID: " << session_id;
+
     if (state_ == State::STOPPED)
     {
         session_attach_timer_.start(
@@ -60,6 +62,8 @@ void DesktopSessionManager::attachSession(base::win::SessionId session_id)
     server_ = std::make_unique<ipc::Server>();
     if (!server_->start(channel_id, this))
     {
+        LOG(LS_ERROR) << "Failed to start IPC server";
+
         onErrorOccurred();
         return;
     }
@@ -68,6 +72,8 @@ void DesktopSessionManager::attachSession(base::win::SessionId session_id)
         DesktopSessionProcess::create(session_id, channel_id);
     if (!process)
     {
+        LOG(LS_ERROR) << "Failed to create session process";
+
         onErrorOccurred();
         return;
     }
@@ -77,6 +83,8 @@ void DesktopSessionManager::dettachSession()
 {
     if (state_ == State::STOPPED || state_ == State::DETACHED)
         return;
+
+    LOG(LS_INFO) << "Dettach session";
 
     if (state_ != State::STOPPING)
         state_ = State::DETACHED;
@@ -90,8 +98,11 @@ void DesktopSessionManager::dettachSession()
     if (state_ == State::STOPPING)
         return;
 
-    session_attach_timer_.start(
-        std::chrono::minutes(1), std::bind(&DesktopSessionManager::onErrorOccurred, this));
+    session_attach_timer_.start(std::chrono::minutes(1), [this]()
+    {
+        LOG(LS_ERROR) << "Timeout while waiting for session";
+        onErrorOccurred();
+    });
 
     // The real session process has ended. We create a temporary fake session.
     session_ = std::make_unique<DesktopSessionFake>(this);
@@ -106,8 +117,10 @@ std::shared_ptr<DesktopSessionProxy> DesktopSessionManager::sessionProxy() const
 
 void DesktopSessionManager::onNewConnection(std::unique_ptr<ipc::Channel> channel)
 {
+    LOG(LS_INFO) << "Session process successfully connected";
+
     session_attach_timer_.stop();
-    task_runner_->deleteSoon(server_.release());
+    task_runner_->deleteSoon(std::move(server_));
 
     session_ = std::make_unique<DesktopSessionIpc>(std::move(channel), this);
     session_proxy_->attach(session_.get());

@@ -33,13 +33,18 @@
 
 namespace host {
 
-UserSession::UserSession(
-    std::shared_ptr<base::TaskRunner> task_runner, std::unique_ptr<ipc::Channel> ipc_channel)
+UserSession::UserSession(std::shared_ptr<base::TaskRunner> task_runner,
+                         std::unique_ptr<ipc::Channel> ipc_channel)
     : task_runner_(std::move(task_runner)),
       ipc_channel_(std::move(ipc_channel))
 {
     DCHECK(task_runner_);
     DCHECK(ipc_channel_);
+
+    type_ = UserSession::Type::CONSOLE;
+
+    if (ipc_channel_->peerSessionId() != base::win::activeConsoleSessionId())
+        type_ = UserSession::Type::RDP;
 
     session_id_ = ipc_channel_->peerSessionId();
 }
@@ -61,6 +66,11 @@ void UserSession::start(Delegate* delegate)
     ipc_channel_->resume();
 
     delegate_->onUserSessionStarted();
+}
+
+UserSession::Type UserSession::type() const
+{
+    return type_;
 }
 
 base::win::SessionId UserSession::sessionId() const
@@ -101,6 +111,31 @@ void UserSession::addNewSession(std::unique_ptr<ClientSession> client_session)
 
     // Notify the UI of a new connection.
     sendConnectEvent(*session);
+}
+
+void UserSession::setSessionEvent(base::win::SessionStatus status, base::win::SessionId session_id)
+{
+    switch (status)
+    {
+        case base::win::SessionStatus::CONSOLE_CONNECT:
+        {
+            desktop_session_->attachSession(session_id);
+            session_id_ = session_id;
+        }
+        break;
+
+        case base::win::SessionStatus::CONSOLE_DISCONNECT:
+        {
+            desktop_session_->dettachSession();
+        }
+        break;
+
+        default:
+        {
+            // Ignore other events.
+        }
+        break;
+    }
 }
 
 void UserSession::onDisconnected()
@@ -145,15 +180,41 @@ void UserSession::onMessageReceived(const base::ByteArray& buffer)
 
 void UserSession::onDesktopSessionStarted()
 {
-    for (auto& client : clients_)
+    LOG(LS_INFO) << "The desktop session is connected";
+
+    bool has_desktop_clients = false;
+
+    for (const auto& client : clients_)
     {
-        sendConnectEvent(*client);
+        switch (client->sessionType())
+        {
+            case proto::SESSION_TYPE_DESKTOP_MANAGE:
+            case proto::SESSION_TYPE_DESKTOP_VIEW:
+                has_desktop_clients = true;
+                break;
+
+            default:
+                break;
+        }
     }
+
+    if (has_desktop_clients)
+        desktop_session_proxy_->enableSession(true);
 }
 
 void UserSession::onDesktopSessionStopped()
 {
-    clients_.clear();
+    LOG(LS_INFO) << "The desktop session is disconnected";
+
+    if (type_ == Type::CONSOLE)
+    {
+
+    }
+    else
+    {
+        DCHECK_EQ(type_, Type::RDP);
+        clients_.clear();
+    }
 }
 
 void UserSession::onScreenCaptured(const desktop::Frame& frame)
@@ -237,7 +298,7 @@ void UserSession::onClientSessionFinished()
             sendDisconnectEvent(client_session->id());
 
             // Session will be destroyed after completion of the current call.
-            task_runner_->deleteSoon(it->release());
+            task_runner_->deleteSoon(std::move(*it));
 
             // Delete a session from the list.
             it = clients_.erase(it);

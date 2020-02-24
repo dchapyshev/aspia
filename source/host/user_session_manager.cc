@@ -271,6 +271,10 @@ void UserSessionManager::setSessionEvent(
         }
         break;
     }
+
+    // Send an event of each session.
+    for (const auto& session : sessions_)
+        session->setSessionEvent(status, session_id);
 }
 
 void UserSessionManager::addNewSession(std::unique_ptr<ClientSession> client_session)

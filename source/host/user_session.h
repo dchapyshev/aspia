@@ -26,7 +26,6 @@
 #include "host/user.h"
 #include "ipc/ipc_listener.h"
 
-#include <list>
 #include <memory>
 
 namespace ipc {
@@ -42,9 +41,11 @@ class UserSession
       public ClientSession::Delegate
 {
 public:
-    UserSession(std::shared_ptr<base::TaskRunner> task_runner,
-                std::unique_ptr<ipc::Channel> ipc_channel);
-    ~UserSession();
+    enum class Type
+    {
+        CONSOLE,
+        RDP
+    };
 
     class Delegate
     {
@@ -55,12 +56,18 @@ public:
         virtual void onUserSessionFinished() = 0;
     };
 
+    UserSession(std::shared_ptr<base::TaskRunner> task_runner,
+                std::unique_ptr<ipc::Channel> ipc_channel);
+    ~UserSession();
+
     void start(Delegate* delegate);
 
+    Type type() const;
     base::win::SessionId sessionId() const;
     User user() const;
 
     void addNewSession(std::unique_ptr<ClientSession> client_session);
+    void setSessionEvent(base::win::SessionStatus status, base::win::SessionId session_id);
 
 protected:
     // ipc::Listener implementation.
@@ -88,11 +95,12 @@ private:
     std::shared_ptr<base::TaskRunner> task_runner_;
     std::unique_ptr<ipc::Channel> ipc_channel_;
 
-    base::win::SessionId session_id_ = base::win::kInvalidSessionId;
+    Type type_;
+    base::win::SessionId session_id_;
     std::string username_;
     std::string password_;
 
-    std::list<std::unique_ptr<ClientSession>> clients_;
+    std::vector<std::unique_ptr<ClientSession>> clients_;
     std::unique_ptr<DesktopSessionManager> desktop_session_;
     std::shared_ptr<DesktopSessionProxy> desktop_session_proxy_;
 
