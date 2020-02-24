@@ -54,6 +54,12 @@ class UserList
 public:
     UserList() = default;
 
+    UserList(const UserList& other) = default;
+    UserList& operator=(const UserList& other) = default;
+
+    UserList(UserList&& other) noexcept = default;
+    UserList& operator=(UserList&& other) noexcept = default;
+
     void add(const User& user);
     void add(User&& user);
     void remove(std::u16string_view username);
