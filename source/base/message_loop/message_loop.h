@@ -75,11 +75,10 @@ protected:
     using TimePoint = MessagePump::TimePoint;
     using Milliseconds = MessagePump::Milliseconds;
 
-    void postTask(const PendingTask::Callback& callback);
-    void postDelayedTask(const PendingTask::Callback& callback, const Milliseconds& delay);
-    void postNonNestableTask(const PendingTask::Callback& callback);
-    void postNonNestableDelayedTask(
-        const PendingTask::Callback& callback, const Milliseconds& delay);
+    void postTask(PendingTask::Callback callback);
+    void postDelayedTask(PendingTask::Callback callback, Milliseconds delay);
+    void postNonNestableTask(PendingTask::Callback callback);
+    void postNonNestableDelayedTask(PendingTask::Callback callback, Milliseconds delay);
 
     PendingTask::Callback quitClosure();
 
@@ -107,11 +106,11 @@ protected:
     bool deletePendingTasks();
 
     // Calculates the time at which a PendingTask should run.
-    static TimePoint calculateDelayedRuntime(const Milliseconds& delay);
+    static TimePoint calculateDelayedRuntime(Milliseconds delay);
 
     // MessagePump::Delegate methods:
     bool doWork() override;
-    bool doDelayedWork(TimePoint& next_delayed_work_time) override;
+    bool doDelayedWork(TimePoint* next_delayed_work_time) override;
     bool doIdleWork() override;
 
     const Type type_;

@@ -37,7 +37,7 @@ public:
     void run(Delegate* delegate) override;
     void quit() override;
     void scheduleWork() override;
-    void scheduleDelayedWork(const TimePoint& delayed_work_time) override;
+    void scheduleDelayedWork(TimePoint delayed_work_time) override;
 
 private:
     // This flag is set to false when run() should return.

@@ -119,36 +119,47 @@ PendingTask::Callback MessageLoop::quitClosure()
     return std::bind(&MessageLoop::quit, this);
 }
 
-void MessageLoop::postTask(const PendingTask::Callback& callback)
+void MessageLoop::postTask(PendingTask::Callback callback)
 {
     DCHECK(callback != nullptr);
 
-    PendingTask pending_task(callback, calculateDelayedRuntime(Milliseconds::zero()), true);
+    PendingTask pending_task(std::move(callback),
+                             calculateDelayedRuntime(Milliseconds::zero()),
+                             true);
+
     addToIncomingQueue(&pending_task);
 }
 
-void MessageLoop::postDelayedTask(const PendingTask::Callback& callback, const Milliseconds& delay)
+void MessageLoop::postDelayedTask(PendingTask::Callback callback, Milliseconds delay)
 {
     DCHECK(callback != nullptr);
 
-    PendingTask pending_task(callback, calculateDelayedRuntime(delay), true);
+    PendingTask pending_task(std::move(callback),
+                             calculateDelayedRuntime(delay),
+                             true);
+
     addToIncomingQueue(&pending_task);
 }
 
-void MessageLoop::postNonNestableTask(const PendingTask::Callback& callback)
+void MessageLoop::postNonNestableTask(PendingTask::Callback callback)
 {
     DCHECK(callback != nullptr);
 
-    PendingTask pending_task(callback, calculateDelayedRuntime(Milliseconds::zero()), false);
+    PendingTask pending_task(std::move(callback),
+                             calculateDelayedRuntime(Milliseconds::zero()),
+                             false);
+
     addToIncomingQueue(&pending_task);
 }
 
-void MessageLoop::postNonNestableDelayedTask(
-    const PendingTask::Callback& callback, const Milliseconds& delay)
+void MessageLoop::postNonNestableDelayedTask(PendingTask::Callback callback, Milliseconds delay)
 {
     DCHECK(callback != nullptr);
 
-    PendingTask pending_task(callback, calculateDelayedRuntime(delay), false);
+    PendingTask pending_task(std::move(callback),
+                             calculateDelayedRuntime(delay),
+                             false);
+
     addToIncomingQueue(&pending_task);
 }
 
@@ -274,7 +285,7 @@ bool MessageLoop::deletePendingTasks()
 }
 
 // static
-MessageLoop::TimePoint MessageLoop::calculateDelayedRuntime(const Milliseconds& delay)
+MessageLoop::TimePoint MessageLoop::calculateDelayedRuntime(Milliseconds delay)
 {
     TimePoint delayed_run_time;
 
@@ -328,11 +339,11 @@ bool MessageLoop::doWork()
     return false;
 }
 
-bool MessageLoop::doDelayedWork(TimePoint& next_delayed_work_time)
+bool MessageLoop::doDelayedWork(TimePoint* next_delayed_work_time)
 {
     if (!nestable_tasks_allowed_ || delayed_work_queue_.empty())
     {
-        recent_time_ = next_delayed_work_time = TimePoint();
+        recent_time_ = *next_delayed_work_time = TimePoint();
         return false;
     }
 
@@ -349,7 +360,7 @@ bool MessageLoop::doDelayedWork(TimePoint& next_delayed_work_time)
         recent_time_ = Clock::now();
         if (next_run_time > recent_time_)
         {
-            next_delayed_work_time = next_run_time;
+            *next_delayed_work_time = next_run_time;
             return false;
         }
     }
@@ -358,7 +369,7 @@ bool MessageLoop::doDelayedWork(TimePoint& next_delayed_work_time)
     delayed_work_queue_.pop();
 
     if (!delayed_work_queue_.empty())
-        next_delayed_work_time = delayed_work_queue_.top().delayed_run_time;
+        *next_delayed_work_time = delayed_work_queue_.top().delayed_run_time;
 
     return deferOrRunPendingTask(pending_task);
 }

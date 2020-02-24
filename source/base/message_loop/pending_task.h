@@ -35,8 +35,8 @@ public:
     using Clock = std::chrono::high_resolution_clock;
     using TimePoint = std::chrono::time_point<Clock>;
 
-    explicit PendingTask(const Callback& callback);
-    PendingTask(const Callback& callback, const TimePoint& delayed_run_time, bool nestable);
+    explicit PendingTask(Callback&& callback);
+    PendingTask(Callback&& callback, TimePoint delayed_run_time, bool nestable);
     ~PendingTask() = default;
 
     // Used to support sorting.

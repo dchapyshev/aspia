@@ -20,14 +20,14 @@
 
 namespace base {
 
-PendingTask::PendingTask(const Callback& callback)
-    : callback(callback)
+PendingTask::PendingTask(Callback&& callback)
+    : callback(std::move(callback))
 {
     // Nothing
 }
 
-PendingTask::PendingTask(const Callback& callback, const TimePoint& delayed_run_time, bool nestable)
-    : callback(callback),
+PendingTask::PendingTask(Callback&& callback, TimePoint delayed_run_time, bool nestable)
+    : callback(std::move(callback)),
       delayed_run_time(delayed_run_time),
       nestable(nestable)
 {

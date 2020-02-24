@@ -68,7 +68,7 @@ void MessagePumpForWin::scheduleWork()
     InterlockedExchange(&work_state_, READY);
 }
 
-void MessagePumpForWin::scheduleDelayedWork(const TimePoint& delayed_work_time)
+void MessagePumpForWin::scheduleDelayedWork(TimePoint delayed_work_time)
 {
     // We would *like* to provide high resolution timers. Windows timers using SetTimer() have a
     // 10ms granularity. We have to use WM_TIMER as a wakeup mechanism because the application can
@@ -164,7 +164,7 @@ void MessagePumpForWin::doRunLoop()
         if (state_->should_quit)
             break;
 
-        more_work_is_plausible |= state_->delegate->doDelayedWork(delayed_work_time_);
+        more_work_is_plausible |= state_->delegate->doDelayedWork(&delayed_work_time_);
 
         // If we did not process any delayed work, then we can assume that our existing WM_TIMER if
         // any will fire when delayed work should run. We don't want to disturb that timer if it is
@@ -262,7 +262,7 @@ void MessagePumpForWin::handleTimerMessage()
     if (!state_)
         return;
 
-    state_->delegate->doDelayedWork(delayed_work_time_);
+    state_->delegate->doDelayedWork(&delayed_work_time_);
     if (delayed_work_time_ != TimePoint())
     {
         // A bit gratuitous to set delayed_work_time_ again, but oh well.

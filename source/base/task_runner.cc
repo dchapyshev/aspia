@@ -16,35 +16,13 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef QT_BASE__QT_TASK_RUNNER_H
-#define QT_BASE__QT_TASK_RUNNER_H
-
-#include "base/macros_magic.h"
 #include "base/task_runner.h"
 
-namespace qt_base {
+namespace base {
 
-class QtTaskRunner : public base::TaskRunner
+void TaskRunner::deleteSoonInternal(void(*deleter)(const void*), const void* object)
 {
-public:
-    QtTaskRunner();
-    ~QtTaskRunner();
+    postNonNestableTask(std::bind(deleter, object));
+}
 
-    // TaskRunner implementation.
-    bool belongsToCurrentThread() const override;
-    void postTask(Callback callback) override;
-    void postDelayedTask(Callback callback, Milliseconds delay) override;
-    void postNonNestableTask(Callback callback) override;
-    void postNonNestableDelayedTask(Callback callback, Milliseconds delay) override;
-    void postQuit() override;
-
-private:
-    class Impl;
-    std::unique_ptr<Impl> impl_;
-
-    DISALLOW_COPY_AND_ASSIGN(QtTaskRunner);
-};
-
-} // namespace qt_base
-
-#endif // QT_BASE__QT_TASK_RUNNER_H
+} // namespace base
