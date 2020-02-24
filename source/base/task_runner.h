@@ -42,34 +42,22 @@ public:
     virtual void postNonNestableDelayedTask(Callback callback, Milliseconds delay) = 0;
     virtual void postQuit() = 0;
 
-    // Template helpers which use function indirection to erase T from the function signature while
-    // still remembering it so we can call the correct destructor/release function.
-    //
-    // We use this trick so we don't need to include bind.h in a header file like task_runner.h.
-    // We also wrap the helpers in a templated class to make it easier for users of deleteSoon to
-    // declare the helper as a friend.
     template <class T>
-    class DeleteHelper
+    static void doDelete(const void* object)
     {
-    private:
-        static void doDelete(const void* object)
-        {
-            delete static_cast<const T*>(object);
-        }
-
-        friend class TaskRunner;
-    };
+        delete static_cast<const T*>(object);
+    }
 
     template <class T>
     void deleteSoon(const T* object)
     {
-        deleteSoonInternal(&DeleteHelper<T>::doDelete, object);
+        deleteSoonInternal(&TaskRunner::doDelete<T>, object);
     }
 
     template <class T>
-    bool deleteSoon(std::unique_ptr<T> object)
+    void deleteSoon(std::unique_ptr<T> object)
     {
-        return deleteSoon(object.release());
+        deleteSoon(object.release());
     }
 
 private:

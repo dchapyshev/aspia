@@ -67,7 +67,7 @@ void AuthenticatorManager::onComplete()
                     delegate_->onNewSession(current->takeSession());
 
                 // Authenticator not needed anymore.
-                task_runner_->deleteSoon(it->release());
+                task_runner_->deleteSoon(std::move(*it));
                 it = pending_.erase(it);
             }
             break;
