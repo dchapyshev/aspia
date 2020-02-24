@@ -21,6 +21,7 @@
 #include "base/logging.h"
 #include "base/win/scoped_com_initializer.h"
 #include "base/win/security_helpers.h"
+#include "base/win/session_status.h"
 #include "host/win/host_service_constants.h"
 #include "host/host_server.h"
 
@@ -94,7 +95,7 @@ void Service::onStop()
 
 void Service::onSessionEvent(base::win::SessionStatus status, base::win::SessionId session_id)
 {
-    LOG(LS_INFO) << "Session event detected (status = " << static_cast<int>(status)
+    LOG(LS_INFO) << "Session event detected (status = " << base::win::sessionStatusToString(status)
                  << ", session_id = " << session_id << ")";
 
     if (server_)
