@@ -122,45 +122,25 @@ PendingTask::Callback MessageLoop::quitClosure()
 void MessageLoop::postTask(PendingTask::Callback callback)
 {
     DCHECK(callback != nullptr);
-
-    PendingTask pending_task(std::move(callback),
-                             calculateDelayedRuntime(Milliseconds::zero()),
-                             true);
-
-    addToIncomingQueue(&pending_task);
+    addToIncomingQueue(std::move(callback), Milliseconds::zero(), true);
 }
 
 void MessageLoop::postDelayedTask(PendingTask::Callback callback, Milliseconds delay)
 {
     DCHECK(callback != nullptr);
-
-    PendingTask pending_task(std::move(callback),
-                             calculateDelayedRuntime(delay),
-                             true);
-
-    addToIncomingQueue(&pending_task);
+    addToIncomingQueue(std::move(callback), delay, true);
 }
 
 void MessageLoop::postNonNestableTask(PendingTask::Callback callback)
 {
     DCHECK(callback != nullptr);
-
-    PendingTask pending_task(std::move(callback),
-                             calculateDelayedRuntime(Milliseconds::zero()),
-                             false);
-
-    addToIncomingQueue(&pending_task);
+    addToIncomingQueue(std::move(callback), Milliseconds::zero(), false);
 }
 
 void MessageLoop::postNonNestableDelayedTask(PendingTask::Callback callback, Milliseconds delay)
 {
     DCHECK(callback != nullptr);
-
-    PendingTask pending_task(std::move(callback),
-                             calculateDelayedRuntime(delay),
-                             false);
-
-    addToIncomingQueue(&pending_task);
+    addToIncomingQueue(std::move(callback), delay, false);
 }
 
 #if defined(OS_WIN)
@@ -204,7 +184,7 @@ bool MessageLoop::deferOrRunPendingTask(const PendingTask& pending_task)
 
     // We couldn't run the task now because we're in a nested message loop
     // and the task isn't nestable.
-    deferred_non_nestable_work_queue_.push(pending_task);
+    deferred_non_nestable_work_queue_.emplace(pending_task);
     return false;
 }
 
@@ -218,7 +198,8 @@ void MessageLoop::addToDelayedWorkQueue(const PendingTask& pending_task)
     delayed_work_queue_.emplace(new_pending_task);
 }
 
-void MessageLoop::addToIncomingQueue(PendingTask* pending_task)
+void MessageLoop::addToIncomingQueue(
+    PendingTask::Callback&& callback, Milliseconds delay, bool nestable)
 {
     std::shared_ptr<MessagePump> pump;
 
@@ -227,9 +208,9 @@ void MessageLoop::addToIncomingQueue(PendingTask* pending_task)
 
         const bool empty = incoming_queue_.empty();
 
-        incoming_queue_.emplace(*pending_task);
-
-        pending_task->callback = nullptr;
+        incoming_queue_.emplace(std::move(callback),
+                                calculateDelayedRuntime(delay),
+                                nestable);
 
         if (!empty)
             return;
