@@ -188,14 +188,15 @@ bool MessageLoop::deferOrRunPendingTask(const PendingTask& pending_task)
     return false;
 }
 
-void MessageLoop::addToDelayedWorkQueue(const PendingTask& pending_task)
+void MessageLoop::addToDelayedWorkQueue(PendingTask* pending_task)
 {
     // Move to the delayed work queue.  Initialize the sequence number before inserting into the
     // delayed_work_queue_. The sequence number is used to faciliate FIFO sorting when two tasks
     // have the same delayed_run_time value.
-    PendingTask new_pending_task(pending_task);
-    new_pending_task.sequence_num = next_sequence_num_++;
-    delayed_work_queue_.emplace(new_pending_task);
+    delayed_work_queue_.emplace(std::move(pending_task->callback),
+                                pending_task->delayed_run_time,
+                                pending_task->nestable,
+                                next_sequence_num_++);
 }
 
 void MessageLoop::addToIncomingQueue(
@@ -248,7 +249,7 @@ bool MessageLoop::deletePendingTasks()
         {
             // We want to delete delayed tasks in the same order in which they would normally be
             // deleted in case of any funny dependencies between delayed tasks.
-            addToDelayedWorkQueue(pending_task);
+            addToDelayedWorkQueue(&pending_task);
         }
     }
 
@@ -301,7 +302,7 @@ bool MessageLoop::doWork()
             {
                 const bool reschedule = delayed_work_queue_.empty();
 
-                addToDelayedWorkQueue(pending_task);
+                addToDelayedWorkQueue(&pending_task);
 
                 // If we changed the topmost task, then it is time to reschedule.
                 if (reschedule)

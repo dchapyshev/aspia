@@ -90,7 +90,7 @@ protected:
     bool deferOrRunPendingTask(const PendingTask& pending_task);
 
     // Adds the pending task to delayed_work_queue_.
-    void addToDelayedWorkQueue(const PendingTask& pending_task);
+    void addToDelayedWorkQueue(PendingTask* pending_task);
 
     // Adds the pending task to our incoming_queue_.
     //
