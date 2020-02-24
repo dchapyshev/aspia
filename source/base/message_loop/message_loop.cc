@@ -202,23 +202,22 @@ void MessageLoop::addToDelayedWorkQueue(PendingTask* pending_task)
 void MessageLoop::addToIncomingQueue(
     PendingTask::Callback&& callback, Milliseconds delay, bool nestable)
 {
-    std::shared_ptr<MessagePump> pump;
+    bool empty;
 
     {
         std::scoped_lock lock(incoming_queue_lock_);
 
-        const bool empty = incoming_queue_.empty();
+        empty = incoming_queue_.empty();
 
         incoming_queue_.emplace(std::move(callback),
                                 calculateDelayedRuntime(delay),
                                 nestable);
-
-        if (!empty)
-            return;
-
-        pump = pump_;
     }
 
+    if (!empty)
+        return;
+
+    std::shared_ptr<MessagePump> pump(pump_);
     pump->scheduleWork();
 }
 
