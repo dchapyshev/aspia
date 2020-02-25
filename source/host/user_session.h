@@ -90,7 +90,7 @@ private:
     void sendDisconnectEvent(const std::string& session_id);
     void updateCredentials();
     void sendCredentials();
-    void killClientSession(const std::string& id);
+    void killClientSession(std::string_view id);
 
     std::shared_ptr<base::TaskRunner> task_runner_;
     std::unique_ptr<ipc::Channel> ipc_channel_;
@@ -100,7 +100,9 @@ private:
     std::string username_;
     std::string password_;
 
-    std::vector<std::unique_ptr<ClientSession>> clients_;
+    std::vector<std::unique_ptr<ClientSession>> desktop_clients_;
+    std::vector<std::unique_ptr<ClientSession>> file_transfer_clients_;
+
     std::unique_ptr<DesktopSessionManager> desktop_session_;
     std::shared_ptr<DesktopSessionProxy> desktop_session_proxy_;
 

@@ -85,32 +85,43 @@ User UserSession::user() const
 
 void UserSession::addNewSession(std::unique_ptr<ClientSession> client_session)
 {
-    ClientSession* session = client_session.get();
-    DCHECK(session);
+    DCHECK(client_session);
 
-    clients_.emplace_back(std::move(client_session));
+    ClientSession* client_session_ptr = client_session.get();
 
-    switch (session->sessionType())
+    switch (client_session_ptr->sessionType())
     {
         case proto::SESSION_TYPE_DESKTOP_MANAGE:
         case proto::SESSION_TYPE_DESKTOP_VIEW:
         {
+            desktop_clients_.emplace_back(std::move(client_session));
+
             ClientSessionDesktop* desktop_client_session =
-                static_cast<ClientSessionDesktop*>(session);
+                static_cast<ClientSessionDesktop*>(client_session_ptr);
 
             desktop_client_session->setDesktopSessionProxy(desktop_session_proxy_);
             desktop_session_proxy_->enableSession(true);
         }
         break;
 
+        case proto::SESSION_TYPE_FILE_TRANSFER:
+        {
+            file_transfer_clients_.emplace_back(std::move(client_session));
+        }
+        break;
+
         default:
-            break;
+        {
+            NOTREACHED();
+            return;
+        }
+        break;
     }
 
-    session->start(this);
+    client_session_ptr->start(this);
 
     // Notify the UI of a new connection.
-    sendConnectEvent(*session);
+    sendConnectEvent(*client_session_ptr);
 }
 
 void UserSession::setSessionEvent(base::win::SessionStatus status, base::win::SessionId session_id)
@@ -182,23 +193,7 @@ void UserSession::onDesktopSessionStarted()
 {
     LOG(LS_INFO) << "The desktop session is connected";
 
-    bool has_desktop_clients = false;
-
-    for (const auto& client : clients_)
-    {
-        switch (client->sessionType())
-        {
-            case proto::SESSION_TYPE_DESKTOP_MANAGE:
-            case proto::SESSION_TYPE_DESKTOP_VIEW:
-                has_desktop_clients = true;
-                break;
-
-            default:
-                break;
-        }
-    }
-
-    if (has_desktop_clients)
+    if (!desktop_clients_.empty())
         desktop_session_proxy_->enableSession(true);
 }
 
@@ -213,35 +208,26 @@ void UserSession::onDesktopSessionStopped()
     else
     {
         DCHECK_EQ(type_, Type::RDP);
-        clients_.clear();
+        desktop_clients_.clear();
     }
 }
 
 void UserSession::onScreenCaptured(const desktop::Frame& frame)
 {
-    for (const auto& client : clients_)
+    for (const auto& client : desktop_clients_)
     {
-        const proto::SessionType session_type = client->sessionType();
+        ClientSessionDesktop* desktop_client =
+            static_cast<ClientSessionDesktop*>(client.get());
 
-        if (session_type == proto::SESSION_TYPE_DESKTOP_MANAGE ||
-            session_type == proto::SESSION_TYPE_DESKTOP_VIEW)
-        {
-            ClientSessionDesktop* desktop_client =
-                static_cast<ClientSessionDesktop*>(client.get());
-
-            desktop_client->encodeFrame(frame);
-        }
+        desktop_client->encodeFrame(frame);
     }
 }
 
 void UserSession::onCursorCaptured(std::shared_ptr<desktop::MouseCursor> mouse_cursor)
 {
-    for (const auto& client : clients_)
+    for (const auto& client : desktop_clients_)
     {
-        const proto::SessionType session_type = client->sessionType();
-
-        if (session_type == proto::SESSION_TYPE_DESKTOP_MANAGE ||
-            session_type == proto::SESSION_TYPE_DESKTOP_VIEW)
+        if (client->sessionType() == proto::SESSION_TYPE_DESKTOP_MANAGE)
         {
             ClientSessionDesktop* desktop_client =
                 static_cast<ClientSessionDesktop*>(client.get());
@@ -253,28 +239,20 @@ void UserSession::onCursorCaptured(std::shared_ptr<desktop::MouseCursor> mouse_c
 
 void UserSession::onScreenListChanged(const proto::ScreenList& list)
 {
-    for (const auto& client : clients_)
+    for (const auto& client : desktop_clients_)
     {
-        const proto::SessionType session_type = client->sessionType();
+        ClientSessionDesktop* desktop_client =
+            static_cast<ClientSessionDesktop*>(client.get());
 
-        if (session_type == proto::SESSION_TYPE_DESKTOP_MANAGE ||
-            session_type == proto::SESSION_TYPE_DESKTOP_VIEW)
-        {
-            ClientSessionDesktop* desktop_client =
-                static_cast<ClientSessionDesktop*>(client.get());
-
-            desktop_client->setScreenList(list);
-        }
+        desktop_client->setScreenList(list);
     }
 }
 
 void UserSession::onClipboardEvent(const proto::ClipboardEvent& event)
 {
-    for (const auto& client : clients_)
+    for (const auto& client : desktop_clients_)
     {
-        const proto::SessionType session_type = client->sessionType();
-
-        if (session_type == proto::SESSION_TYPE_DESKTOP_MANAGE)
+        if (client->sessionType() == proto::SESSION_TYPE_DESKTOP_MANAGE)
         {
             ClientSessionDesktop* desktop_client =
                 static_cast<ClientSessionDesktop*>(client.get());
@@ -286,41 +264,34 @@ void UserSession::onClipboardEvent(const proto::ClipboardEvent& event)
 
 void UserSession::onClientSessionFinished()
 {
-    size_t desktop_session_count = 0;
-
-    for (auto it = clients_.begin(); it != clients_.end();)
+    auto delete_finished = [this](std::vector<std::unique_ptr<ClientSession>>* list)
     {
-        ClientSession* client_session = it->get();
-
-        if (client_session->state() == ClientSession::State::FINISHED)
+        for (auto it = list->begin(); it != list->end();)
         {
-            // Notification of the UI about disconnecting the client.
-            sendDisconnectEvent(client_session->id());
+            ClientSession* client_session = it->get();
 
-            // Session will be destroyed after completion of the current call.
-            task_runner_->deleteSoon(std::move(*it));
-
-            // Delete a session from the list.
-            it = clients_.erase(it);
-        }
-        else
-        {
-            switch (client_session->sessionType())
+            if (client_session->state() == ClientSession::State::FINISHED)
             {
-                case proto::SESSION_TYPE_DESKTOP_MANAGE:
-                case proto::SESSION_TYPE_DESKTOP_VIEW:
-                    ++desktop_session_count;
-                    break;
+                // Notification of the UI about disconnecting the client.
+                sendDisconnectEvent(client_session->id());
 
-                default:
-                    break;
+                // Session will be destroyed after completion of the current call.
+                task_runner_->deleteSoon(std::move(*it));
+
+                // Delete a session from the list.
+                it = list->erase(it);
             }
-
-            ++it;
+            else
+            {
+                ++it;
+            }
         }
-    }
+    };
 
-    if (!desktop_session_count)
+    delete_finished(&desktop_clients_);
+    delete_finished(&file_transfer_clients_);
+
+    if (desktop_clients_.empty())
         desktop_session_proxy_->enableSession(false);
 }
 
@@ -383,16 +354,22 @@ void UserSession::sendCredentials()
     ipc_channel_->send(common::serializeMessage(message));
 }
 
-void UserSession::killClientSession(const std::string& id)
+void UserSession::killClientSession(std::string_view id)
 {
-    for (auto it = clients_.begin(); it != clients_.end(); ++it)
+    auto stop_by_id = [](std::vector<std::unique_ptr<ClientSession>>* list, std::string_view id)
     {
-        if (it->get()->id() == id)
+        for (const auto& client_session : *list)
         {
-            it->get()->stop();
-            break;
+            if (client_session->id() == id)
+            {
+                client_session->stop();
+                break;
+            }
         }
-    }
+    };
+
+    stop_by_id(&desktop_clients_, id);
+    stop_by_id(&file_transfer_clients_, id);
 }
 
 } // namespace host
