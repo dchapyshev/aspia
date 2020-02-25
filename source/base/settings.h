@@ -73,6 +73,7 @@ public:
     void set(const std::string& key, const T& value)
     {
         map_.insert_or_assign(key, StreamConverter<T>::set_value(value).value_or(std::string()));
+        is_changed_ = true;
     }
 
     Array getArray(const std::string& key) const;
@@ -86,7 +87,10 @@ public:
     const Map& constMap() const { return map_; }
     Map& map() { return map_; }
 
+    bool isChanged() const { return is_changed_; }
+
 private:
+    bool is_changed_ = false;
     Map map_;
 };
 

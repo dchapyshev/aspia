@@ -103,7 +103,8 @@ XmlSettings::XmlSettings(Scope scope,
 
 XmlSettings::~XmlSettings()
 {
-    writeFile(path_, constMap());
+    if (isChanged())
+        writeFile(path_, constMap());
 }
 
 bool XmlSettings::isWritable() const

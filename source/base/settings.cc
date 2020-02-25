@@ -52,6 +52,8 @@ void Settings::setArray(const std::string& key, const Array& array)
         setGroup(key + kSeparator + base::numberToString(i), array[i]);
 
     set(key + kSeparator + "size", array.size());
+
+    is_changed_ = true;
 }
 
 Settings Settings::getGroup(const std::string& key) const
@@ -74,6 +76,8 @@ void Settings::setGroup(const std::string& key, const Settings& group)
 
     for (auto it = array_map.cbegin(); it != array_map.cend(); ++it)
         map_.insert_or_assign(key + kSeparator + it->first, it->second);
+
+    is_changed_ = true;
 }
 
 void Settings::remove(const std::string& key)
@@ -85,6 +89,8 @@ void Settings::remove(const std::string& key)
         else
             ++it;
     }
+
+    is_changed_ = true;
 }
 
 } // namespace base
