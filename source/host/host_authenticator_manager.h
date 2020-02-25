@@ -21,7 +21,6 @@
 
 #include "host/host_authenticator.h"
 
-#include <list>
 #include <memory>
 
 namespace base {
@@ -63,7 +62,7 @@ protected:
 private:
     std::shared_ptr<base::TaskRunner> task_runner_;
     std::shared_ptr<UserList> userlist_;
-    std::list<std::unique_ptr<Authenticator>> pending_;
+    std::vector<std::unique_ptr<Authenticator>> pending_;
     Delegate* delegate_;
 
     DISALLOW_COPY_AND_ASSIGN(AuthenticatorManager);

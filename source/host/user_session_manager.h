@@ -24,8 +24,6 @@
 #include "host/user_session.h"
 #include "ipc/ipc_server.h"
 
-#include <list>
-
 namespace host {
 
 class UserSession;
@@ -65,7 +63,7 @@ private:
 
     std::shared_ptr<base::TaskRunner> task_runner_;
     std::unique_ptr<ipc::Server> ipc_server_;
-    std::list<std::unique_ptr<UserSession>> sessions_;
+    std::vector<std::unique_ptr<UserSession>> sessions_;
     Delegate* delegate_ = nullptr;
 
     DISALLOW_COPY_AND_ASSIGN(UserSessionManager);
