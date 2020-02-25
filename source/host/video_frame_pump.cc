@@ -85,12 +85,14 @@ void VideoFramePump::run()
 
         if (!work_frame_->constUpdatedRegion().isEmpty())
         {
-            outgoing_message_.Clear();
+            proto::VideoPacket* packet = outgoing_message_.mutable_video_packet();
 
             // Encode the frame into a video packet.
-            encoder_->encode(work_frame_.get(), outgoing_message_.mutable_video_packet());
+            encoder_->encode(work_frame_.get(), packet);
 
             channel_proxy_->send(common::serializeMessage(outgoing_message_));
+
+            packet->Clear();
 
             // Clear the region.
             work_frame_->updatedRegion()->clear();
