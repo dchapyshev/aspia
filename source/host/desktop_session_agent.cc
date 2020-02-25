@@ -36,7 +36,8 @@ namespace host {
 DesktopSessionAgent::DesktopSessionAgent(std::shared_ptr<base::TaskRunner> task_runner)
     : task_runner_(std::move(task_runner))
 {
-    // Nothing
+    // At the end of the user's session, the program ends later than the others.
+    SetProcessShutdownParameters(0, SHUTDOWN_NORETRY);
 }
 
 DesktopSessionAgent::~DesktopSessionAgent() = default;
