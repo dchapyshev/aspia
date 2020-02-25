@@ -46,7 +46,7 @@ void AuthenticatorManager::addNewChannel(std::unique_ptr<net::Channel> channel)
     DCHECK(channel);
 
     // Create a new authenticator for the connection and put it on the list.
-    pending_.emplace_back(std::make_unique<Authenticator>());
+    pending_.emplace_back(std::make_unique<Authenticator>(task_runner_));
 
     // Start the authentication process.
     pending_.back()->start(std::move(channel), userlist_, this);

@@ -39,7 +39,18 @@
 
 namespace host {
 
-Authenticator::Authenticator() = default;
+namespace {
+
+constexpr std::chrono::minutes kTimeout{ 1 };
+
+} // namespace
+
+Authenticator::Authenticator(std::shared_ptr<base::TaskRunner> task_runner)
+    : timer_(task_runner)
+{
+    // Nothing
+}
+
 Authenticator::~Authenticator() = default;
 
 void Authenticator::start(std::unique_ptr<net::Channel> channel,
@@ -56,6 +67,11 @@ void Authenticator::start(std::unique_ptr<net::Channel> channel,
     DCHECK(delegate_);
 
     state_ = State::PENDING;
+
+    timer_.start(kTimeout, [this]()
+    {
+        onFailed(FROM_HERE);
+    });
 
     channel_->setListener(this);
     channel_->resume();
@@ -91,7 +107,6 @@ void Authenticator::onDisconnected(net::ErrorCode error_code)
     LOG(LS_WARNING) << "Network error: " << net::errorToString(error_code);
     onFailed(FROM_HERE);
 }
-
 
 void Authenticator::onMessageReceived(const base::ByteArray& buffer)
 {
@@ -291,6 +306,8 @@ void Authenticator::onMessageReceived(const base::ByteArray& buffer)
             LOG(LS_INFO) << "Authentication completed successfully for "
                          << channel_->peerAddress();
 
+            timer_.stop();
+
             // Authentication completed successfully.
             state_ = State::SUCCESS;
 
@@ -357,6 +374,8 @@ void Authenticator::onFailed(const base::Location& location)
 
     LOG(LS_INFO) << "Authentication failed for: " << channel_->peerAddress()
                  << " (" << location.toString() << ")";
+
+    timer_.stop();
 
     // Destroy the network channel.
     channel_->setListener(nullptr);

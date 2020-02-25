@@ -20,6 +20,7 @@
 #define HOST__HOST_AUTHENTICATOR_H
 
 #include "base/version.h"
+#include "base/waitable_timer.h"
 #include "crypto/big_num.h"
 #include "net/network_listener.h"
 #include "proto/key_exchange.pb.h"
@@ -40,7 +41,7 @@ class UserList;
 class Authenticator : public net::Listener
 {
 public:
-    Authenticator();
+    explicit Authenticator(std::shared_ptr<base::TaskRunner> task_runner);
     ~Authenticator();
 
     enum class State
@@ -82,6 +83,7 @@ private:
     base::ByteArray createKey();
     void onFailed(const base::Location& location);
 
+    base::WaitableTimer timer_;
     std::unique_ptr<net::Channel> channel_;
     std::shared_ptr<UserList> userlist_;
 
