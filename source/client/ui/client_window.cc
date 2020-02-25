@@ -75,7 +75,8 @@ Config ClientWindow::config() const
 
 void ClientWindow::closeEvent(QCloseEvent* event)
 {
-    client_->stop();
+    if (client_)
+        client_->stop();
 }
 
 void ClientWindow::onStarted(const std::u16string& address, uint16_t port)
