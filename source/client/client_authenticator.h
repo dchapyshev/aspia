@@ -27,6 +27,10 @@
 
 #include <functional>
 
+namespace base {
+class Location;
+} // namespace base
+
 namespace crypto {
 class MessageDecryptor;
 class MessageEncryptor;
@@ -75,6 +79,8 @@ public:
 
     std::unique_ptr<net::Channel> takeChannel();
 
+    static const char* errorToString(Authenticator::ErrorCode error_code);
+
 protected:
     // net::Listener implementation.
     void onConnected() override;
@@ -90,7 +96,7 @@ private:
     void sendClientKeyExchange();
     bool readSessionChallenge(const base::ByteArray& buffer);
     void sendSessionResponse();
-    void finished(ErrorCode error_code);
+    void finished(const base::Location& location, ErrorCode error_code);
 
     enum class State
     {

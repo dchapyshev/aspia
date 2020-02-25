@@ -19,6 +19,7 @@
 #include "client/client_authenticator.h"
 
 #include "base/cpuid.h"
+#include "base/location.h"
 #include "base/logging.h"
 #include "base/strings/unicode.h"
 #include "common/message_serialization.h"
@@ -150,6 +151,31 @@ std::unique_ptr<net::Channel> Authenticator::takeChannel()
     return std::move(channel_);
 }
 
+// static
+const char* Authenticator::errorToString(Authenticator::ErrorCode error_code)
+{
+    switch (error_code)
+    {
+        case Authenticator::ErrorCode::SUCCESS:
+            return "SUCCESS";
+
+        case Authenticator::ErrorCode::NETWORK_ERROR:
+            return "NETWORK_ERROR";
+
+        case Authenticator::ErrorCode::PROTOCOL_ERROR:
+            return "PROTOCOL_ERROR";
+
+        case Authenticator::ErrorCode::ACCESS_DENIED:
+            return "ACCESS_DENIED";
+
+        case Authenticator::ErrorCode::SESSION_DENIED:
+            return "SESSION_DENIED";
+
+        default:
+            return "UNKNOWN";
+    }
+}
+
 void Authenticator::onConnected()
 {
     // The authenticator receives the channel always in an already connected state.
@@ -158,9 +184,9 @@ void Authenticator::onConnected()
 
 void Authenticator::onDisconnected(net::ErrorCode error_code)
 {
-    LOG(LS_INFO) << "Network error: " << static_cast<int>(error_code);
+    LOG(LS_INFO) << "Network error: " << net::errorToString(error_code);
 
-    finished(ErrorCode::NETWORK_ERROR);
+    finished(FROM_HERE, ErrorCode::NETWORK_ERROR);
 }
 
 void Authenticator::onMessageReceived(const base::ByteArray& buffer)
@@ -195,7 +221,7 @@ void Authenticator::onMessageReceived(const base::ByteArray& buffer)
                     createMessageEncryptor(method_, key_, encrypt_iv_);
                 if (!message_encryptor)
                 {
-                    finished(ErrorCode::UNKNOWN_ERROR);
+                    finished(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
                     return;
                 }
 
@@ -234,7 +260,7 @@ void Authenticator::onMessageWritten()
                 createMessageDecryptor(method_, key_, decrypt_iv_);
             if (!message_decryptor)
             {
-                finished(ErrorCode::UNKNOWN_ERROR);
+                finished(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
                 return;
             }
 
@@ -250,7 +276,7 @@ void Authenticator::onMessageWritten()
         case State::SEND_SESSION_RESPONSE:
         {
             state_ = State::FINISHED;
-            finished(ErrorCode::SUCCESS);
+            finished(FROM_HERE, ErrorCode::SUCCESS);
         }
         break;
     }
@@ -274,7 +300,7 @@ bool Authenticator::readServerHello(const base::ByteArray& buffer)
     proto::ServerHello server_hello;
     if (!common::parseMessage(buffer, &server_hello))
     {
-        finished(ErrorCode::PROTOCOL_ERROR);
+        finished(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
         return false;
     }
 
@@ -287,7 +313,7 @@ bool Authenticator::readServerHello(const base::ByteArray& buffer)
             break;
 
         default:
-            finished(ErrorCode::PROTOCOL_ERROR);
+            finished(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
             return false;
     }
 
@@ -307,19 +333,19 @@ bool Authenticator::readServerKeyExchange(const base::ByteArray& buffer)
     proto::SrpServerKeyExchange server_key_exchange;
     if (!common::parseMessage(buffer, &server_key_exchange))
     {
-        finished(ErrorCode::PROTOCOL_ERROR);
+        finished(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
         return false;
     }
 
     if (server_key_exchange.salt().size() < 64 || server_key_exchange.b().size() < 128)
     {
-        finished(ErrorCode::PROTOCOL_ERROR);
+        finished(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
         return false;
     }
 
     if (!verifyNg(server_key_exchange.number(), server_key_exchange.generator()))
     {
-        finished(ErrorCode::PROTOCOL_ERROR);
+        finished(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
         return false;
     }
 
@@ -367,13 +393,13 @@ bool Authenticator::readSessionChallenge(const base::ByteArray& buffer)
     proto::SessionChallenge challenge;
     if (!common::parseMessage(buffer, &challenge))
     {
-        finished(ErrorCode::PROTOCOL_ERROR);
+        finished(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
         return false;
     }
 
     if (!(challenge.session_types() & session_type_))
     {
-        finished(ErrorCode::SESSION_DENIED);
+        finished(FROM_HERE, ErrorCode::SESSION_DENIED);
         return false;
     }
 
@@ -392,8 +418,11 @@ void Authenticator::sendSessionResponse()
     channel_->send(common::serializeMessage(response));
 }
 
-void Authenticator::finished(ErrorCode error_code)
+void Authenticator::finished(const base::Location& location, ErrorCode error_code)
 {
+    LOG(LS_INFO) << "Authenticator finished with code: " << errorToString(error_code)
+                 << "(" << location.toString() << ")";
+
     channel_->pause();
     channel_->setListener(nullptr);
     callback_(error_code);
