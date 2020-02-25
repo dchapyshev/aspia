@@ -54,33 +54,33 @@ void ClientSessionDesktop::setDesktopSessionProxy(
 
 void ClientSessionDesktop::onMessageReceived(const base::ByteArray& buffer)
 {
-    proto::ClientToHost message;
+    incoming_message_.Clear();
 
-    if (!common::parseMessage(buffer, &message))
+    if (!common::parseMessage(buffer, &incoming_message_))
     {
         LOG(LS_ERROR) << "Invalid message from client";
         return;
     }
 
-    if (message.has_pointer_event())
+    if (incoming_message_.has_pointer_event())
     {
-        desktop_session_proxy_->injectPointerEvent(message.pointer_event());
+        desktop_session_proxy_->injectPointerEvent(incoming_message_.pointer_event());
     }
-    else if (message.has_key_event())
+    else if (incoming_message_.has_key_event())
     {
-        desktop_session_proxy_->injectKeyEvent(message.key_event());
+        desktop_session_proxy_->injectKeyEvent(incoming_message_.key_event());
     }
-    else if (message.has_clipboard_event())
+    else if (incoming_message_.has_clipboard_event())
     {
-        desktop_session_proxy_->injectClipboardEvent(message.clipboard_event());
+        desktop_session_proxy_->injectClipboardEvent(incoming_message_.clipboard_event());
     }
-    else if (message.has_extension())
+    else if (incoming_message_.has_extension())
     {
-        readExtension(message.extension());
+        readExtension(incoming_message_.extension());
     }
-    else if (message.has_config())
+    else if (incoming_message_.has_config())
     {
-        readConfig(message.config());
+        readConfig(incoming_message_.config());
     }
     else
     {
@@ -112,17 +112,15 @@ void ClientSessionDesktop::onStarted()
     // Add supported extensions to the list.
     extensions_ = base::splitString(extensions, ";", base::KEEP_WHITESPACE, base::SPLIT_WANT_ALL);
 
-    proto::HostToClient message;
-
     // Create a configuration request.
-    proto::DesktopConfigRequest* request = message.mutable_config_request();
+    proto::DesktopConfigRequest* request = outgoing_message_.mutable_config_request();
 
     // Add supported extensions and video encodings.
     request->set_extensions(extensions);
     request->set_video_encodings(common::kSupportedVideoEncodings);
 
     // Send the request.
-    sendMessage(common::serializeMessage(message));
+    sendMessage(common::serializeMessage(outgoing_message_));
 }
 
 void ClientSessionDesktop::encodeFrame(const desktop::Frame& frame)
@@ -136,27 +134,29 @@ void ClientSessionDesktop::encodeMouseCursor(std::shared_ptr<desktop::MouseCurso
     if (!cursor_encoder_)
         return;
 
-    proto::HostToClient message;
-    if (cursor_encoder_->encode(std::move(mouse_cursor), message.mutable_cursor_shape()))
-        sendMessage(common::serializeMessage(message));
+    outgoing_message_.Clear();
+
+    if (cursor_encoder_->encode(std::move(mouse_cursor), outgoing_message_.mutable_cursor_shape()))
+        sendMessage(common::serializeMessage(outgoing_message_));
 }
 
 void ClientSessionDesktop::setScreenList(const proto::ScreenList& list)
 {
-    proto::HostToClient message;
+    outgoing_message_.Clear();
 
-    proto::DesktopExtension* extension = message.mutable_extension();
+    proto::DesktopExtension* extension = outgoing_message_.mutable_extension();
     extension->set_name(common::kSelectScreenExtension);
     extension->set_data(list.SerializeAsString());
 
-    sendMessage(common::serializeMessage(message));
+    sendMessage(common::serializeMessage(outgoing_message_));
 }
 
 void ClientSessionDesktop::injectClipboardEvent(const proto::ClipboardEvent& event)
 {
-    proto::HostToClient message;
-    message.mutable_clipboard_event()->CopyFrom(event);
-    sendMessage(common::serializeMessage(message));
+    outgoing_message_.Clear();
+
+    outgoing_message_.mutable_clipboard_event()->CopyFrom(event);
+    sendMessage(common::serializeMessage(outgoing_message_));
 }
 
 void ClientSessionDesktop::readExtension(const proto::DesktopExtension& extension)
@@ -235,13 +235,13 @@ void ClientSessionDesktop::readExtension(const proto::DesktopExtension& extensio
         proto::SystemInfo system_info;
         createHostSystemInfo(&system_info);
 
-        proto::HostToClient message;
+        outgoing_message_.Clear();
 
-        proto::DesktopExtension* extension = message.mutable_extension();
+        proto::DesktopExtension* extension = outgoing_message_.mutable_extension();
         extension->set_name(common::kSystemInfoExtension);
         extension->set_data(system_info.SerializeAsString());
 
-        sendMessage(common::serializeMessage(message));
+        sendMessage(common::serializeMessage(outgoing_message_));
     }
     else
     {

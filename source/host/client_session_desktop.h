@@ -68,6 +68,9 @@ private:
     std::unique_ptr<codec::CursorEncoder> cursor_encoder_;
     std::vector<std::string> extensions_;
 
+    proto::ClientToHost incoming_message_;
+    proto::HostToClient outgoing_message_;
+
     DISALLOW_COPY_AND_ASSIGN(ClientSessionDesktop);
 };
 
