@@ -21,8 +21,6 @@
 
 #include "desktop/screen_capturer.h"
 
-#include <list>
-
 namespace ipc {
 class SharedMemoryFactory;
 } // namespace ipc
@@ -61,8 +59,6 @@ private:
 
     Rect desktop_rect_;
     Region exclude_region_;
-
-    std::list<Rect> screen_rects_;
 
     DISALLOW_COPY_AND_ASSIGN(ScreenCapturerMirror);
 };
