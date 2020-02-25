@@ -316,6 +316,15 @@ UserList UserSessionManager::userList() const
 
 void UserSessionManager::onNewConnection(std::unique_ptr<ipc::Channel> channel)
 {
+    for (const auto& session : sessions_)
+    {
+        if (session->sessionId() == channel->peerSessionId())
+        {
+            session->restart(std::move(channel));
+            return;
+        }
+    }
+
     sessions_.emplace_back(std::make_unique<UserSession>(task_runner_, std::move(channel)));
     sessions_.back()->start(this);
 }

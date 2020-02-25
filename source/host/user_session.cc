@@ -68,6 +68,24 @@ void UserSession::start(Delegate* delegate)
     delegate_->onUserSessionStarted();
 }
 
+void UserSession::restart(std::unique_ptr<ipc::Channel> ipc_channel)
+{
+    ipc_channel_ = std::move(ipc_channel);
+    DCHECK(ipc_channel_);
+
+    ipc_channel_->setListener(this);
+    ipc_channel_->resume();
+
+    auto send_connection_list = [this](const ClientSessionList& list)
+    {
+        for (const auto& client : list)
+            sendConnectEvent(*client);
+    };
+
+    send_connection_list(desktop_clients_);
+    send_connection_list(file_transfer_clients_);
+}
+
 UserSession::Type UserSession::type() const
 {
     return type_;
@@ -269,7 +287,7 @@ void UserSession::onClipboardEvent(const proto::ClipboardEvent& event)
 
 void UserSession::onClientSessionFinished()
 {
-    auto delete_finished = [this](std::vector<std::unique_ptr<ClientSession>>* list)
+    auto delete_finished = [this](ClientSessionList* list)
     {
         for (auto it = list->begin(); it != list->end();)
         {
@@ -361,7 +379,7 @@ void UserSession::sendCredentials()
 
 void UserSession::killClientSession(std::string_view id)
 {
-    auto stop_by_id = [](std::vector<std::unique_ptr<ClientSession>>* list, std::string_view id)
+    auto stop_by_id = [](ClientSessionList* list, std::string_view id)
     {
         for (const auto& client_session : *list)
         {

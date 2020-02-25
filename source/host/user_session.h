@@ -61,6 +61,7 @@ public:
     ~UserSession();
 
     void start(Delegate* delegate);
+    void restart(std::unique_ptr<ipc::Channel> ipc_channel);
 
     Type type() const;
     base::win::SessionId sessionId() const;
@@ -100,8 +101,11 @@ private:
     std::string username_;
     std::string password_;
 
-    std::vector<std::unique_ptr<ClientSession>> desktop_clients_;
-    std::vector<std::unique_ptr<ClientSession>> file_transfer_clients_;
+    using ClientSessionPtr = std::unique_ptr<ClientSession>;
+    using ClientSessionList = std::vector<ClientSessionPtr>;
+
+    ClientSessionList desktop_clients_;
+    ClientSessionList file_transfer_clients_;
 
     std::unique_ptr<DesktopSessionManager> desktop_session_;
     std::shared_ptr<DesktopSessionProxy> desktop_session_proxy_;
