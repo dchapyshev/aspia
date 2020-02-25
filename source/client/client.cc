@@ -121,7 +121,7 @@ void Client::onBeforeThreadRunning()
 
 void Client::onAfterThreadRunning()
 {
-    // Network connection is no longer available.
+    authenticator_.reset();
     channel_.reset();
 
     if (session_started_)
