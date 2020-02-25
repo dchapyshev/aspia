@@ -80,7 +80,12 @@ base::win::SessionId UserSession::sessionId() const
 
 User UserSession::user() const
 {
-    return User::create(base::utf16FromAscii(username_), base::utf16FromAscii(password_));
+    User user = User::create(base::utf16FromAscii(username_), base::utf16FromAscii(password_));
+
+    user.sessions = proto::SESSION_TYPE_ALL;
+    user.flags = User::ENABLED;
+
+    return user;
 }
 
 void UserSession::addNewSession(std::unique_ptr<ClientSession> client_session)
