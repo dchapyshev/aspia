@@ -88,7 +88,7 @@ void Authenticator::onConnected()
 
 void Authenticator::onDisconnected(net::ErrorCode error_code)
 {
-    LOG(LS_WARNING) << "Network error: " << static_cast<int>(error_code);
+    LOG(LS_WARNING) << "Network error: " << net::errorToString(error_code);
     onFailed(FROM_HERE);
 }
 
