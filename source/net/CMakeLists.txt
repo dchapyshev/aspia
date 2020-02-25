@@ -53,6 +53,7 @@ if (BUILD_UNIT_TESTS)
         optimized gtest_main
         debug gtestd
         debug gtest_maind
+        ${WINDOWS_LIBS}
         ${THIRD_PARTY_LIBS})
 
     add_test(NAME aspia_net_tests COMMAND aspia_net_tests)
