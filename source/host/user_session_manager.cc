@@ -328,7 +328,7 @@ void UserSessionManager::onErrorOccurred()
 
 void UserSessionManager::onUserSessionStarted()
 {
-    LOG(LS_INFO) << "ON USER SESSION STARTED";
+    delegate_->onUserListChanged();
 }
 
 void UserSessionManager::onUserSessionFinished()
