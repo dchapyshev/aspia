@@ -600,93 +600,93 @@
 <context>
     <name>client::ClientWindow</name>
     <message>
-        <location filename="../ui/client_window.cc" line="90"/>
+        <location filename="../ui/client_window.cc" line="91"/>
         <source>Attempt to connect to %1:%2.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="100"/>
+        <location filename="../ui/client_window.cc" line="101"/>
         <source>Connection established.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="111"/>
+        <location filename="../ui/client_window.cc" line="112"/>
         <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="115"/>
+        <location filename="../ui/client_window.cc" line="116"/>
         <source>Connection was refused by the peer (or timed out).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="119"/>
+        <location filename="../ui/client_window.cc" line="120"/>
         <source>Remote host closed the connection.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="123"/>
+        <location filename="../ui/client_window.cc" line="124"/>
         <source>Host address was not found.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="127"/>
+        <location filename="../ui/client_window.cc" line="128"/>
         <source>Socket operation timed out.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="131"/>
+        <location filename="../ui/client_window.cc" line="132"/>
         <source>Address specified is already in use and was set to be exclusive.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="135"/>
+        <location filename="../ui/client_window.cc" line="136"/>
         <source>Address specified does not belong to the host.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="145"/>
-        <location filename="../ui/client_window.cc" line="180"/>
+        <location filename="../ui/client_window.cc" line="146"/>
+        <location filename="../ui/client_window.cc" line="181"/>
         <source>An unknown error occurred.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="160"/>
+        <location filename="../ui/client_window.cc" line="161"/>
         <source>Authentication successfully completed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="164"/>
+        <location filename="../ui/client_window.cc" line="165"/>
         <source>Network authentication error.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="168"/>
+        <location filename="../ui/client_window.cc" line="169"/>
         <source>Violation of the data exchange protocol.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="172"/>
+        <location filename="../ui/client_window.cc" line="173"/>
         <source>An error occured while authenticating: wrong user name or password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="176"/>
+        <location filename="../ui/client_window.cc" line="177"/>
         <source>Specified session type is not allowed for the user.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="194"/>
+        <location filename="../ui/client_window.cc" line="195"/>
         <source>Desktop Manage</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="198"/>
+        <location filename="../ui/client_window.cc" line="199"/>
         <source>Desktop View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="202"/>
+        <location filename="../ui/client_window.cc" line="203"/>
         <source>File Transfer</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1017,34 +1017,34 @@
 <context>
     <name>client::QtDesktopWindow</name>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="196"/>
-        <location filename="../ui/qt_desktop_window.cc" line="204"/>
-        <location filename="../ui/qt_desktop_window.cc" line="467"/>
+        <location filename="../ui/qt_desktop_window.cc" line="197"/>
+        <location filename="../ui/qt_desktop_window.cc" line="205"/>
+        <location filename="../ui/qt_desktop_window.cc" line="468"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="197"/>
+        <location filename="../ui/qt_desktop_window.cc" line="198"/>
         <source>There are no supported video encodings.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="205"/>
+        <location filename="../ui/qt_desktop_window.cc" line="206"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="445"/>
+        <location filename="../ui/qt_desktop_window.cc" line="446"/>
         <source>Save File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="447"/>
+        <location filename="../ui/qt_desktop_window.cc" line="448"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="467"/>
+        <location filename="../ui/qt_desktop_window.cc" line="468"/>
         <source>Could not save image</source>
         <translation type="unfinished"></translation>
     </message>

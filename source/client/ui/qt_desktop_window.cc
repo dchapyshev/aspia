@@ -158,7 +158,8 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
             return;
 
         client_window->setAttribute(Qt::WA_DeleteOnClose);
-        client_window->connectToHost(session_config);
+        if (!client_window->connectToHost(session_config))
+            client_window->close();
     });
 }
 

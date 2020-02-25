@@ -1094,7 +1094,8 @@ void MainWindow::connectToComputer(const proto::address_book::Computer& computer
         return;
 
     client_window->setAttribute(Qt::WA_DeleteOnClose);
-    client_window->connectToHost(config);
+    if (!client_window->connectToHost(config))
+        client_window->close();
 }
 
 } // namespace console
