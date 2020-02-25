@@ -1092,7 +1092,7 @@
         <translation>Er is een ongeldig computer adres ingevoerd.</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_general.cc" line="153"/>
+        <location filename="../computer_dialog_general.cc" line="155"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>

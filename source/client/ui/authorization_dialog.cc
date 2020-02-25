@@ -78,6 +78,8 @@ void AuthorizationDialog::onShowPasswordButtonToggled(bool checked)
         ui.edit_password->setInputMethodHints(Qt::ImhHiddenText | Qt::ImhSensitiveData |
                                               Qt::ImhNoAutoUppercase | Qt::ImhNoPredictiveText);
     }
+
+    ui.edit_password->setFocus();
 }
 
 void AuthorizationDialog::onButtonBoxClicked(QAbstractButton* button)

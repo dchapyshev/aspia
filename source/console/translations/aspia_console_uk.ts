@@ -1096,7 +1096,7 @@
         <translation>Введено невірну адресу комп&apos;ютера.</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_general.cc" line="153"/>
+        <location filename="../computer_dialog_general.cc" line="155"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
