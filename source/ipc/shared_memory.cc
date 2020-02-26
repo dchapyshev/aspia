@@ -98,7 +98,7 @@ bool createFileMapping(SharedMemory::Mode mode, int id, size_t size, base::win::
         file, SE_FILE_OBJECT, DACL_SECURITY_INFORMATION, nullptr, nullptr, nullptr, nullptr);
     if (error_code != ERROR_SUCCESS)
     {
-        LOG(LS_WARNING) << "SetSecurityInfo failed: " << base::SystemError(error_code).toString();
+        LOG(LS_WARNING) << "SetSecurityInfo failed: " << base::SystemError::toString(error_code);
         return false;
     }
 

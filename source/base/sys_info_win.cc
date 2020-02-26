@@ -92,7 +92,7 @@ std::string SysInfo::operatingSystemName()
                            access);
     if (status != ERROR_SUCCESS)
     {
-        LOG(LS_WARNING) << "Unable to open registry key: " << SystemError(status).toString();
+        LOG(LS_WARNING) << "Unable to open registry key: " << SystemError::toString(status);
         return std::string();
     }
 
@@ -101,7 +101,7 @@ std::string SysInfo::operatingSystemName()
     status = key.readValue(L"ProductName", &value);
     if (status != ERROR_SUCCESS)
     {
-        LOG(LS_WARNING) << "Unable to read registry key: " << SystemError(status).toString();
+        LOG(LS_WARNING) << "Unable to read registry key: " << SystemError::toString(status);
         return std::string();
     }
 

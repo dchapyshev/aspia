@@ -100,8 +100,8 @@ FileEnumerator::FileEnumerator(const std::filesystem::path& root_path)
                 break;
 
             default:
-                LOG(LS_WARNING) << "Unhandled error code"
-                                << base::SystemError(error_code).toString();
+                LOG(LS_WARNING) << "Unhandled error code: "
+                                << base::SystemError::toString(error_code);
                 break;
         }
     }

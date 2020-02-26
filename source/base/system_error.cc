@@ -55,21 +55,27 @@ SystemError::Code SystemError::code() const
 
 std::string SystemError::toString()
 {
+    return toString(code_);
+}
+
+// static
+std::string SystemError::toString(Code code)
+{
 #if defined(OS_WIN)
     constexpr int kErrorMessageBufferSize = 256;
     wchar_t msgbuf[kErrorMessageBufferSize];
 
     DWORD len = FormatMessageW(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
-                               nullptr, code_, 0, msgbuf, std::size(msgbuf), nullptr);
+                               nullptr, code, 0, msgbuf, std::size(msgbuf), nullptr);
     if (len)
     {
-        std::wstring msg = collapseWhitespace(msgbuf, true) + stringPrintf(L" (0x%lX)", code_);
+        std::wstring msg = collapseWhitespace(msgbuf, true) + stringPrintf(L" (0x%lX)", code);
         return utf8FromWide(msg);
     }
 
     return stringPrintf("Error (0x%lX) while retrieving error. (0x%lX)",
                         GetLastError(),
-                        code_);
+                        code);
 #elif (OS_POSIX)
     return strerror(code_);
 #else

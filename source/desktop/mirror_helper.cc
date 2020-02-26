@@ -73,7 +73,7 @@ bool MirrorHelper::attachToDesktop(std::wstring_view key_path, bool attach)
     if (status != ERROR_SUCCESS)
     {
         LOG(LS_WARNING) << "Unable to open registry key for device: "
-                        << base::SystemError(status).toString();
+                        << base::SystemError::toString(status);
         return false;
     }
 
@@ -98,7 +98,7 @@ bool MirrorHelper::attachToDesktop(std::wstring_view key_path, bool attach)
     if (status != ERROR_SUCCESS)
     {
         LOG(LS_WARNING) << "Unable to set value for registry key: "
-                        << base::SystemError(status).toString();
+                        << base::SystemError::toString(status);
         return false;
     }
 

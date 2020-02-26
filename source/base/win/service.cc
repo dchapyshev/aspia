@@ -180,7 +180,7 @@ void ServiceThread::run()
         else
         {
             LOG(LS_WARNING) << "StartServiceCtrlDispatcherW failed: "
-                            << SystemError(error_code).toString();
+                            << SystemError::toString(error_code);
             self->startup_state = State::ERROR_OCCURRED;
         }
 

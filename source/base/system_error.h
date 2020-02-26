@@ -52,6 +52,8 @@ public:
     // Returns a string description of the error in UTF-8 encoding.
     std::string toString();
 
+    static std::string toString(Code code);
+
 private:
     const Code code_;
 };

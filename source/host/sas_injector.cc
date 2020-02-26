@@ -55,7 +55,7 @@ ScopedSasPolicy::ScopedSasPolicy()
                               KEY_READ | KEY_WRITE);
     if (status != ERROR_SUCCESS)
     {
-        LOG(LS_WARNING) << "key.create failed: " << base::SystemError(status).toString();
+        LOG(LS_WARNING) << "key.create failed: " << base::SystemError::toString(status);
         return;
     }
 
@@ -72,7 +72,7 @@ ScopedSasPolicy::ScopedSasPolicy()
         status = key_.writeValue(kSoftwareSASGeneration, kApplications);
         if (status != ERROR_SUCCESS)
         {
-            LOG(LS_WARNING) << "key.writeValue failed: " << base::SystemError(status).toString();
+            LOG(LS_WARNING) << "key.writeValue failed: " << base::SystemError::toString(status);
             key_.close();
         }
     }
@@ -86,7 +86,7 @@ ScopedSasPolicy::~ScopedSasPolicy()
     LONG status = key_.writeValue(kSoftwareSASGeneration, old_state_);
     if (status != ERROR_SUCCESS)
     {
-        LOG(LS_WARNING) << "key.writeValue failed: " << base::SystemError(status).toString();
+        LOG(LS_WARNING) << "key.writeValue failed: " << base::SystemError::toString(status);
         return;
     }
 }
