@@ -190,19 +190,19 @@ TEST_F(RegistryTest, TruncatedCharTest)
     const wchar_t kName[] = L"name";
     // kData size is not a multiple of sizeof(wchar_t).
     const uint8_t kData[] = { 1, 2, 3, 4, 5 };
-    EXPECT_EQ(5u, _countof(kData));
-    ASSERT_EQ(ERROR_SUCCESS, key.writeValue(kName, kData, _countof(kData), REG_BINARY));
+    EXPECT_EQ(5u, std::size(kData));
+    ASSERT_EQ(ERROR_SUCCESS, key.writeValue(kName, kData, std::size(kData), REG_BINARY));
 
     RegistryValueIterator iterator(HKEY_CURRENT_USER, foo_key.c_str());
     ASSERT_TRUE(iterator.valid());
     EXPECT_STREQ(kName, iterator.name());
     // ValueSize() is in bytes.
-    ASSERT_EQ(_countof(kData), iterator.valueSize());
+    ASSERT_EQ(std::size(kData), iterator.valueSize());
     // Value() is NUL terminated.
     int end = (iterator.valueSize() + sizeof(wchar_t) - 1) / sizeof(wchar_t);
     EXPECT_NE(L'\0', iterator.value()[end - 1]);
     EXPECT_EQ(L'\0', iterator.value()[end]);
-    EXPECT_EQ(0, std::memcmp(kData, iterator.value(), _countof(kData)));
+    EXPECT_EQ(0, std::memcmp(kData, iterator.value(), std::size(kData)));
     ++iterator;
     EXPECT_FALSE(iterator.valid());
 }

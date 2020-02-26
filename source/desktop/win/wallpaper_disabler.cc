@@ -88,7 +88,7 @@ WallpaperDisabler::WallpaperDisabler()
 {
     wchar_t buffer[MAX_PATH] = { 0 };
 
-    if (!SystemParametersInfoW(SPI_GETDESKWALLPAPER, _countof(buffer), buffer, 0))
+    if (!SystemParametersInfoW(SPI_GETDESKWALLPAPER, std::size(buffer), buffer, 0))
     {
         PLOG(LS_WARNING) << "SystemParametersInfoW(SPI_GETDESKWALLPAPER) failed";
         return;

@@ -31,7 +31,7 @@ bool BasePaths::windowsDir(std::filesystem::path* result)
 
     wchar_t buffer[MAX_PATH] = { 0 };
 
-    if (!GetWindowsDirectoryW(buffer, _countof(buffer)))
+    if (!GetWindowsDirectoryW(buffer, std::size(buffer)))
     {
         PLOG(LS_ERROR) << "GetWindowsDirectoryW failed";
         return false;
@@ -48,7 +48,7 @@ bool BasePaths::systemDir(std::filesystem::path* result)
 
     wchar_t buffer[MAX_PATH] = { 0 };
 
-    if (!::GetSystemDirectoryW(buffer, _countof(buffer)))
+    if (!GetSystemDirectoryW(buffer, std::size(buffer)))
     {
         PLOG(LS_ERROR) << "GetSystemDirectoryW failed";
         return false;
@@ -172,7 +172,7 @@ bool BasePaths::currentExecFile(std::filesystem::path* result)
 
     wchar_t buffer[MAX_PATH] = { 0 };
 
-    if (!GetModuleFileNameW(nullptr, buffer, _countof(buffer)))
+    if (!GetModuleFileNameW(nullptr, buffer, std::size(buffer)))
     {
         PLOG(LS_ERROR) << "GetModuleFileNameW failed";
         return false;

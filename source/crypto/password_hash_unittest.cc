@@ -48,7 +48,7 @@ TEST(PasswordHashTest, Scrypt)
 
     while (count-- >= 0)
     {
-        for (size_t i = 0; i < _countof(kTestTable); ++i)
+        for (size_t i = 0; i < std::size(kTestTable); ++i)
         {
             base::ByteArray result = PasswordHash::hash(
                 PasswordHash::Type::SCRYPT,

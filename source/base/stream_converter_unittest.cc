@@ -57,7 +57,7 @@ TEST(stream_converter_test, for_bool)
         { "   0 ",     true,  false }
     };
 
-    for (size_t i = 0; i < _countof(kTable); ++i)
+    for (size_t i = 0; i < std::size(kTable); ++i)
     {
         std::optional<bool> result = StreamConverter<bool>::get_value(kTable[i].source_value);
 
@@ -92,7 +92,7 @@ TEST(stream_converter_test, for_string)
         { "  ",       false, nullptr }
     };
 
-    for (size_t i = 0; i < _countof(kTableForGet); ++i)
+    for (size_t i = 0; i < std::size(kTableForGet); ++i)
     {
         std::optional<std::string> result =
             StreamConverter<std::string>::get_value(kTableForGet[i].source_value);
@@ -110,7 +110,7 @@ TEST(stream_converter_test, for_string)
         { "   ",  true, "   "  }
     };
 
-    for (size_t i = 0; i < _countof(kTableForSet); ++i)
+    for (size_t i = 0; i < std::size(kTableForSet); ++i)
     {
         std::optional<std::string> result =
             StreamConverter<std::string>::set_value(kTableForSet[i].source_value);
@@ -138,7 +138,7 @@ TEST(stream_converter_test, for_double)
         { "  1.000  ", true,  1.0 }
     };
 
-    for (size_t i = 0; i < _countof(kTable); ++i)
+    for (size_t i = 0; i < std::size(kTable); ++i)
     {
         std::optional<double> result = StreamConverter<double>::get_value(kTable[i].source_value);
 
@@ -169,7 +169,7 @@ TEST(stream_converter_test, for_uint16_t)
         { "   ",     false, 0  }
     };
 
-    for (size_t i = 0; i < _countof(kTable); ++i)
+    for (size_t i = 0; i < std::size(kTable); ++i)
     {
         std::optional<uint16_t> result = StreamConverter<uint16_t>::get_value(kTable[i].source_value);
 

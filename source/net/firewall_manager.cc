@@ -69,7 +69,7 @@ bool FirewallManager::isFirewallEnabled() const
         NET_FW_PROFILE2_DOMAIN
     };
 
-    for (size_t i = 0; i < _countof(kProfileTypes); ++i)
+    for (size_t i = 0; i < std::size(kProfileTypes); ++i)
     {
         if ((profile_types & kProfileTypes[i]) != 0)
         {

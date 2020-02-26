@@ -60,7 +60,7 @@ std::string SystemError::toString()
     wchar_t msgbuf[kErrorMessageBufferSize];
 
     DWORD len = FormatMessageW(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
-                               nullptr, code_, 0, msgbuf, _countof(msgbuf), nullptr);
+                               nullptr, code_, 0, msgbuf, std::size(msgbuf), nullptr);
     if (len)
     {
         std::wstring msg = collapseWhitespace(msgbuf, true) + stringPrintf(L" (0x%lX)", code_);

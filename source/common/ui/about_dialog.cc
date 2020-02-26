@@ -108,11 +108,11 @@ AboutDialog::AboutDialog(QWidget* parent)
         .arg(tr("GitHub page:")).arg(kGitHubLink);
 
     QString developers =
-        createList(tr("Developers:"), kDevelopers, _countof(kDevelopers));
+        createList(tr("Developers:"), kDevelopers, std::size(kDevelopers));
     QString translators =
-        createList(tr("Translators:"), kTranslators, _countof(kTranslators));
+        createList(tr("Translators:"), kTranslators, std::size(kTranslators));
     QString third_party =
-        createList(tr("Third-party components:"), kThirdParty, _countof(kThirdParty));
+        createList(tr("Third-party components:"), kThirdParty, std::size(kThirdParty));
 
     QString html;
 

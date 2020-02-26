@@ -43,11 +43,11 @@ TEST(string_printf_test, string_printf_bounds)
     const int kSrcLen = 1026;
     char src[kSrcLen];
 
-    for (size_t i = 0; i < _countof(src); i++)
+    for (size_t i = 0; i < std::size(src); i++)
         src[i] = 'A';
 
     wchar_t srcw[kSrcLen];
-    for (size_t i = 0; i < _countof(srcw); i++)
+    for (size_t i = 0; i < std::size(srcw); i++)
         srcw[i] = 'A';
 
     for (int i = 1; i < 3; i++)
@@ -70,7 +70,7 @@ TEST(string_printf_test, string_printf_bounds)
 TEST(string_printf_test, grow)
 {
     char src[1026];
-    for (size_t i = 0; i < _countof(src); i++)
+    for (size_t i = 0; i < std::size(src); i++)
         src[i] = 'A';
     src[1025] = 0;
 

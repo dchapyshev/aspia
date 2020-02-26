@@ -161,7 +161,7 @@ bool DFMirageHelper::update(bool load)
         device_mode.dmBitsPerPel = kBitsPerPixel;
     }
 
-    wcsncpy_s(device_mode.dmDeviceName, _countof(device_mode.dmDeviceName),
+    wcsncpy_s(device_mode.dmDeviceName, std::size(device_mode.dmDeviceName),
               device_name_.c_str(), device_name_.length());
 
     LONG status = ChangeDisplaySettingsExW(

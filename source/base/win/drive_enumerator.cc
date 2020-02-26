@@ -118,7 +118,7 @@ std::string DriveEnumerator::DriveInfo::fileSystem() const
     if (!GetVolumeInformationW(path_.c_str(), nullptr,
                                0,
                                nullptr, nullptr, nullptr,
-                               fs, _countof(fs)))
+                               fs, std::size(fs)))
     {
         DPLOG(LS_ERROR) << "GetVolumeInformationW failed";
         return std::string();
@@ -132,7 +132,7 @@ std::string DriveEnumerator::DriveInfo::volumeName() const
     wchar_t name[MAX_PATH];
 
     if (!GetVolumeInformationW(path_.c_str(), name,
-                               _countof(name),
+                               std::size(name),
                                nullptr, nullptr, nullptr,
                                nullptr, 0))
     {

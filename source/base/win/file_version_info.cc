@@ -225,7 +225,7 @@ bool FileVersionInfo::value(const wchar_t* name, std::wstring* value_str)
 
     i = 0;
 
-    while (i < _countof(lang_codepage))
+    while (i < std::size(lang_codepage))
     {
         wchar_t sub_block[MAX_PATH];
         WORD language = lang_codepage[i++];

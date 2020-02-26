@@ -48,7 +48,7 @@ TEST(GenericHashTest, Blake2b512)
 
     while (count-- >= 0)
     {
-        for (size_t i = 0; i < _countof(kTestTable); ++i)
+        for (size_t i = 0; i < std::size(kTestTable); ++i)
         {
             GenericHash hash(GenericHash::BLAKE2b512);
 
@@ -93,7 +93,7 @@ TEST(GenericHashTest, Blake2s256)
 
     while (count-- >= 0)
     {
-        for (size_t i = 0; i < _countof(kTestTable); ++i)
+        for (size_t i = 0; i < std::size(kTestTable); ++i)
         {
             GenericHash hash(GenericHash::BLAKE2s256);
 

@@ -53,7 +53,7 @@ const char* severityName(LoggingSeverity severity)
         "INFO", "WARNING", "ERROR", "FATAL"
     };
 
-    static_assert(LS_NUMBER == _countof(kLogSeverityNames));
+    static_assert(LS_NUMBER == std::size(kLogSeverityNames));
 
     if (severity >= 0 && severity < LS_NUMBER)
         return kLogSeverityNames[severity];
@@ -170,7 +170,7 @@ bool initLogging(const LoggingSettings& settings)
 #if defined(OS_WIN)
     wchar_t buffer[MAX_PATH] = { 0 };
 
-    if (GetModuleFileNameExW(GetCurrentProcess(), nullptr, buffer, _countof(buffer)))
+    if (GetModuleFileNameExW(GetCurrentProcess(), nullptr, buffer, std::size(buffer)))
     {
         LOG(LS_INFO) << "Executable file: " << buffer;
     }
@@ -181,7 +181,7 @@ bool initLogging(const LoggingSettings& settings)
     LOG(LS_INFO) << "Debug build: Yes";
 #endif // defined(NDEBUG)
 #else
-#warning Not implemented
+    #warning Not implemented
 #endif
 
     LOG(LS_INFO) << "Logging started";

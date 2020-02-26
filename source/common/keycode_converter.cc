@@ -41,7 +41,7 @@ namespace {
 #undef USB_KEYMAP
 #undef USB_KEYMAP_DECLARATION
 
-const size_t kKeycodeMapEntries = _countof(usb_keycode_map);
+const size_t kKeycodeMapEntries = std::size(usb_keycode_map);
 
 } // namespace
 

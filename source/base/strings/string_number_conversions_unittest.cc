@@ -169,7 +169,7 @@ TEST(StringNumberConversionsTest, StringToInt)
     // embedded NUL characters. The NUL and extra data after it should be
     // interpreted as junk after the number.
     const char input[] = "6\06";
-    std::string input_string(input, _countof(input) - 1);
+    std::string input_string(input, std::size(input) - 1);
     int output;
     EXPECT_FALSE(stringToInt(input_string, &output));
 }
@@ -227,7 +227,7 @@ TEST(StringNumberConversionsTest, StringToUint)
     // embedded NUL characters.  The NUL and extra data after it should be
     // interpreted as junk after the number.
     const char input[] = "6\06";
-    std::string input_string(input, _countof(input) - 1);
+    std::string input_string(input, std::size(input) - 1);
     unsigned output;
     EXPECT_FALSE(stringToUint(input_string, &output));
 }
@@ -291,7 +291,7 @@ TEST(StringNumberConversionsTest, StringToInt64)
     // embedded NUL characters.  The NUL and extra data after it should be
     // interpreted as junk after the number.
     const char input[] = "6\06";
-    std::string input_string(input, _countof(input) - 1);
+    std::string input_string(input, std::size(input) - 1);
     int64_t output;
     EXPECT_FALSE(stringToInt64(input_string, &output));
 }
@@ -357,7 +357,7 @@ TEST(StringNumberConversionsTest, StringToUint64)
     // embedded NUL characters.  The NUL and extra data after it should be
     // interpreted as junk after the number.
     const char input[] = "6\06";
-    std::string input_string(input, _countof(input) - 1);
+    std::string input_string(input, std::size(input) - 1);
     uint64_t output;
     EXPECT_FALSE(stringToUint64(input_string, &output));
 }
@@ -425,7 +425,7 @@ TEST(StringNumberConversionsTest, StringToSizeT)
     // embedded NUL characters.  The NUL and extra data after it should be
     // interpreted as junk after the number.
     const char input[] = "6\06";
-    std::string input_string(input, _countof(input) - 1);
+    std::string input_string(input, std::size(input) - 1);
     size_t output;
     EXPECT_FALSE(stringToSizeT(input_string, &output));
 }

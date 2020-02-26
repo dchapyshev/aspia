@@ -41,7 +41,7 @@ std::string addressToString(const SOCKET_ADDRESS& address)
         {
             sockaddr_in* addr = reinterpret_cast<sockaddr_in*>(address.lpSockaddr);
 
-            if (!inet_ntop(AF_INET, &addr->sin_addr, buffer, _countof(buffer)))
+            if (!inet_ntop(AF_INET, &addr->sin_addr, buffer, std::size(buffer)))
                 return std::string();
         }
         break;
@@ -50,7 +50,7 @@ std::string addressToString(const SOCKET_ADDRESS& address)
         {
             sockaddr_in6* addr = reinterpret_cast<sockaddr_in6*>(address.lpSockaddr);
 
-            if (!inet_ntop(AF_INET6, &addr->sin6_addr, buffer, _countof(buffer)))
+            if (!inet_ntop(AF_INET6, &addr->sin6_addr, buffer, std::size(buffer)))
                 return std::string();
         }
         break;
@@ -236,7 +236,7 @@ std::string AdapterEnumerator::IpAddressEnumerator::mask() const
 
     char buffer[64] = { 0 };
 
-    if (!inet_ntop(AF_INET, &addr, buffer, _countof(buffer)))
+    if (!inet_ntop(AF_INET, &addr, buffer, std::size(buffer)))
         return std::string();
 
     return buffer;
