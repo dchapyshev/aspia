@@ -46,7 +46,7 @@ protected:
     void onClipboardEvent(const proto::ClipboardEvent& event) override;
 
 private:
-    common::Clipboard::Delegate* delegate_;
+    common::Clipboard::Delegate* delegate_ = nullptr;
 
     std::unique_ptr<base::Thread> ui_thread_;
     std::shared_ptr<base::TaskRunner> caller_task_runner_;
