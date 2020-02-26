@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "desktop/mirror_helper.h"
+#include "desktop/win/mirror_helper.h"
 
 #include "base/logging.h"
 #include "base/strings/string_util.h"

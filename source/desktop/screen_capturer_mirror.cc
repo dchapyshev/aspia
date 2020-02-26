@@ -19,8 +19,8 @@
 #include "desktop/screen_capturer_mirror.h"
 
 #include "base/logging.h"
-#include "desktop/dfmirage_helper.h"
-#include "desktop/mv2_helper.h"
+#include "desktop/win/dfmirage_helper.h"
+#include "desktop/win/mv2_helper.h"
 #include "desktop/desktop_frame_aligned.h"
 #include "desktop/shared_desktop_frame.h"
 #include "desktop/shared_memory_desktop_frame.h"

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef DESKTOP__DFMIRAGE_H
-#define DESKTOP__DFMIRAGE_H
+#ifndef DESKTOP__WIN__DFMIRAGE_H
+#define DESKTOP__WIN__DFMIRAGE_H
 
 #include "build/build_config.h"
 
@@ -103,4 +103,4 @@ typedef struct
 
 } // desktop
 
-#endif // DESKTOP__DFMIRAGE_H
+#endif // DESKTOP__WIN__DFMIRAGE_H

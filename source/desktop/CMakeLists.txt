@@ -36,9 +36,6 @@ list(APPEND SOURCE_DESKTOP
     desktop_geometry.h
     desktop_region.cc
     desktop_region.h
-    dfmirage.h
-    dfmirage_helper.cc
-    dfmirage_helper.h
     diff_block_16bpp_c.cc
     diff_block_16bpp_c.h
     diff_block_32bpp_avx2.cc
@@ -51,15 +48,10 @@ list(APPEND SOURCE_DESKTOP
     diff_block_32bpp_sse3.h
     differ.cc
     differ.h
-    mirror_helper.cc
-    mirror_helper.h
     mouse_cursor.cc
     mouse_cursor.h
     mouse_cursor_cache.cc
     mouse_cursor_cache.h
-    mv2.h
-    mv2_helper.cc
-    mv2_helper.h
     pixel_format.cc
     pixel_format.h
     resolution_tracker.cc
@@ -96,6 +88,9 @@ list(APPEND SOURCE_DESKTOP_WIN
     win/cursor.h
     win/d3d_device.cc
     win/d3d_device.h
+    win/dfmirage.h
+    win/dfmirage_helper.cc
+    win/dfmirage_helper.h
     win/display_configuration_monitor.cc
     win/display_configuration_monitor.h
     win/dxgi_adapter_duplicator.cc
@@ -116,6 +111,11 @@ list(APPEND SOURCE_DESKTOP_WIN
     win/dxgi_texture_staging.h
     win/effects_disabler.cc
     win/effects_disabler.h
+    win/mirror_helper.cc
+    win/mirror_helper.h
+    win/mv2.h
+    win/mv2_helper.cc
+    win/mv2_helper.h
     win/screen_capture_utils.cc
     win/screen_capture_utils.h
     win/wallpaper_disabler.cc

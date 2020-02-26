@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef DESKTOP__MIRROR_HELPER_H
-#define DESKTOP__MIRROR_HELPER_H
+#ifndef DESKTOP__WIN__MIRROR_HELPER_H
+#define DESKTOP__WIN__MIRROR_HELPER_H
 
 #include "desktop/desktop_geometry.h"
 
@@ -46,4 +46,4 @@ protected:
 
 } // namespace desktop
 
-#endif // DESKTOP__MIRROR_HELPER_H
+#endif // DESKTOP__WIN__MIRROR_HELPER_H

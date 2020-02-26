@@ -16,13 +16,13 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef DESKTOP__MV2_HELPER_H
-#define DESKTOP__MV2_HELPER_H
+#ifndef DESKTOP__WIN__MV2_HELPER_H
+#define DESKTOP__WIN__MV2_HELPER_H
 
 #include "base/win/scoped_hdc.h"
 #include "base/win/scoped_object.h"
-#include "desktop/mv2.h"
-#include "desktop/mirror_helper.h"
+#include "desktop/win/mv2.h"
+#include "desktop/win/mirror_helper.h"
 
 namespace desktop {
 
@@ -65,4 +65,4 @@ private:
 
 } // namespace desktop
 
-#endif // DESKTOP__MV2_HELPER_H
+#endif // DESKTOP__WIN__MV2_HELPER_H

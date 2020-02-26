@@ -16,12 +16,12 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef DESKTOP__DFMIRAGE_HELPER_H
-#define DESKTOP__DFMIRAGE_HELPER_H
+#ifndef DESKTOP__WIN__DFMIRAGE_HELPER_H
+#define DESKTOP__WIN__DFMIRAGE_HELPER_H
 
 #include "base/win/scoped_hdc.h"
-#include "desktop/dfmirage.h"
-#include "desktop/mirror_helper.h"
+#include "desktop/win/dfmirage.h"
+#include "desktop/win/mirror_helper.h"
 
 namespace desktop {
 
@@ -61,4 +61,4 @@ private:
 
 } // namespace desktop
 
-#endif // DESKTOP__DFMIRAGE_HELPER_H
+#endif // DESKTOP__WIN__DFMIRAGE_HELPER_H

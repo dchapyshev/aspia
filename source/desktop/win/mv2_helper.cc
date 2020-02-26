@@ -16,9 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "desktop/dfmirage_helper.h"
+#include "desktop/win/mv2_helper.h"
 
-#include "base/strings/string_util.h"
 #include "desktop/desktop_frame.h"
 
 namespace desktop {
@@ -27,24 +26,16 @@ namespace {
 
 static const int kBytesPerPixel = 4;
 static const int kBitsPerPixel = 32;
-static const int kExtendedDeviceModeSize = 3072;
-
-struct DeviceMode : DEVMODEW
-{
-    char extension[kExtendedDeviceModeSize];
-};
 
 } // namespace
 
-DFMirageHelper::DFMirageHelper(const Rect& screen_rect)
+Mv2Helper::Mv2Helper(const Rect& screen_rect)
     : screen_rect_(screen_rect)
 {
     DCHECK(!screen_rect_.isEmpty());
-
-    memset(&get_changes_buffer_, 0, sizeof(get_changes_buffer_));
 }
 
-DFMirageHelper::~DFMirageHelper()
+Mv2Helper::~Mv2Helper()
 {
     if (is_mapped_)
         mapMemory(false);
@@ -57,15 +48,15 @@ DFMirageHelper::~DFMirageHelper()
 }
 
 // static
-std::unique_ptr<DFMirageHelper> DFMirageHelper::create(const Rect& screen_rect)
+std::unique_ptr<Mv2Helper> Mv2Helper::create(const Rect& screen_rect)
 {
-    std::unique_ptr<DFMirageHelper> helper(new DFMirageHelper(screen_rect));
+    std::unique_ptr<Mv2Helper> helper(new Mv2Helper(screen_rect));
 
-    if (!MirrorHelper::findDisplayDevice(L"Mirage Driver",
+    if (!MirrorHelper::findDisplayDevice(L"mv video hook driver2",
                                          &helper->device_name_,
                                          &helper->device_key_))
     {
-        LOG(LS_WARNING) << "Could not find dfmirage mirror driver";
+        LOG(LS_WARNING) << "Could not find mv2 mirror driver";
         return nullptr;
     }
 
@@ -93,21 +84,21 @@ std::unique_ptr<DFMirageHelper> DFMirageHelper::create(const Rect& screen_rect)
 
     helper->is_mapped_ = true;
 
-    LOG(LS_INFO) << "DFMirage helper created with rect: " << screen_rect;
+    LOG(LS_INFO) << "MV2 helper created with rect: " << screen_rect;
     return helper;
 }
 
-void DFMirageHelper::addUpdatedRects(Region* updated_region) const
+void Mv2Helper::addUpdatedRects(Region* updated_region) const
 {
     DCHECK(updated_region);
 
     Rect frame_rect = Rect::makeSize(screen_rect_.size());
 
-    const int next_update = get_changes_buffer_.changes_buffer->counter;
+    const int next_update = changes_buffer_->counter;
 
-    for (int i = last_update_; i != next_update; i = (i + 1) % kDfmMaxChanges)
+    for (int i = last_update_; i != next_update; i = (i + 1) % kMv2MaxChanges)
     {
-        const DfmRect* rect = &get_changes_buffer_.changes_buffer->records[i].rect;
+        const Mv2Rect* rect = &changes_buffer_->records[i].rect;
 
         Rect updated_rect = Rect::makeLTRB(rect->left, rect->top, rect->right, rect->bottom);
         updated_rect.intersectWith(frame_rect);
@@ -118,11 +109,11 @@ void DFMirageHelper::addUpdatedRects(Region* updated_region) const
     last_update_ = next_update;
 }
 
-void DFMirageHelper::copyRegion(Frame* frame, const Region& updated_region) const
+void Mv2Helper::copyRegion(Frame* frame, const Region& updated_region) const
 {
     DCHECK(frame);
 
-    const uint8_t* source_buffer = get_changes_buffer_.user_buffer;
+    const uint8_t* source_buffer = screen_buffer_;
     const int source_stride = kBytesPerPixel * screen_rect_.width();
 
     for (Region::Iterator it(updated_region); !it.isAtEnd(); it.advance())
@@ -133,24 +124,13 @@ void DFMirageHelper::copyRegion(Frame* frame, const Region& updated_region) cons
     }
 }
 
-bool DFMirageHelper::update(bool load)
+bool Mv2Helper::update(bool load)
 {
-    static const DWORD dmf_devmodewext_magic_sig = 0xDF20C0DE;
-
-    DeviceMode device_mode;
-    device_mode.dmDriverExtra = 2 * sizeof(DWORD);
-
-    DWORD* extended_header = reinterpret_cast<DWORD*>(&device_mode.extension[0]);
-    extended_header[0] = dmf_devmodewext_magic_sig;
-    extended_header[1] = 0;
-
-    WORD extra_saved = device_mode.dmDriverExtra;
-
+    DEVMODE device_mode;
     memset(&device_mode, 0, sizeof(device_mode));
 
-    device_mode.dmSize        = sizeof(DEVMODEW);
-    device_mode.dmDriverExtra = extra_saved;
-    device_mode.dmFields      = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT | DM_POSITION;
+    device_mode.dmSize = sizeof(DEVMODEW);
+    device_mode.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT | DM_POSITION;
 
     if (load)
     {
@@ -175,7 +155,7 @@ bool DFMirageHelper::update(bool load)
     return true;
 }
 
-bool DFMirageHelper::mapMemory(bool map)
+bool Mv2Helper::mapMemory(bool map)
 {
     if (map)
     {
@@ -186,27 +166,76 @@ bool DFMirageHelper::mapMemory(bool map)
             return false;
         }
 
-        int ret = ExtEscape(driver_dc_, DFM_ESC_USM_PIPE_MAP, 0, nullptr,
-                            sizeof(get_changes_buffer_),
-                            reinterpret_cast<LPSTR>(&get_changes_buffer_));
-        if (ret <= 0)
+        base::win::ScopedHandle file0;
+        base::win::ScopedHandle file1;
+
+        file0.reset(CreateFileW(L"c:\\video0.dat",
+                                GENERIC_READ | GENERIC_WRITE,
+                                FILE_SHARE_READ | FILE_SHARE_WRITE,
+                                nullptr, OPEN_EXISTING, 0, nullptr));
+        file1.reset(CreateFileW(L"c:\\video1.dat",
+                                GENERIC_READ | GENERIC_WRITE,
+                                FILE_SHARE_READ | FILE_SHARE_WRITE,
+                                nullptr, OPEN_EXISTING, 0, nullptr));
+
+        base::win::ScopedHandle file;
+
+        if (file0.isValid() && !file1.isValid())
+            file.reset(file0.release());
+
+        if (file1.isValid() && !file0.isValid())
+            file.reset(file1.release());
+
+        if (file0.isValid() && file1.isValid())
         {
-            LOG(LS_WARNING) << "ExtEscape failed: " << ret;
+            const DWORD size0 = GetFileSize(file0, nullptr);
+            const DWORD size1 = GetFileSize(file1, nullptr);
+
+            const DWORD buffer_size = kBytesPerPixel *
+                                      screen_rect_.width() * screen_rect_.height() +
+                                      sizeof(Mv2ChangesBuffer);
+
+            if (size0 == buffer_size)
+                file.reset(file0.release());
+
+            if (size1 == buffer_size)
+                file.reset(file1.release());
+        }
+
+        if (!file.isValid())
+        {
+            LOG(LS_WARNING) << "Unable to open file";
             return false;
         }
+
+        base::win::ScopedHandle file_map(
+            CreateFileMappingW(file, nullptr, PAGE_READWRITE, 0, 0, nullptr));
+        if (!file_map.isValid())
+        {
+            PLOG(LS_WARNING) << "CreateFileMappingW failed";
+            return false;
+        }
+
+        shared_buffer_ = reinterpret_cast<uint8_t*>(
+            MapViewOfFile(file_map, FILE_MAP_READ, 0, 0, 0));
+        if (!shared_buffer_)
+        {
+            PLOG(LS_WARNING) << "MapViewOfFile failed";
+            return false;
+        }
+
+        screen_buffer_ = shared_buffer_ + sizeof(Mv2ChangesBuffer);
+        changes_buffer_ = reinterpret_cast<Mv2ChangesBuffer*>(shared_buffer_);
     }
     else
     {
-        int ret = ExtEscape(driver_dc_, DFM_ESC_USM_PIPE_UNMAP,
-                            sizeof(get_changes_buffer_),
-                            reinterpret_cast<LPSTR>(&get_changes_buffer_),
-                            0, nullptr);
-        if (ret <= 0)
-        {
-            LOG(LS_WARNING) << "ExtEscape failed: " << ret;
-        }
+        UnmapViewOfFile(shared_buffer_);
 
-        memset(&get_changes_buffer_, 0, sizeof(get_changes_buffer_));
+        shared_buffer_ = nullptr;
+
+        screen_buffer_ = nullptr;
+        changes_buffer_ = nullptr;
+
         driver_dc_.reset();
     }
 
