@@ -83,9 +83,9 @@
 namespace base {
 
 #if defined(NDEBUG) && !defined(DCHECK_ALWAYS_ON)
-#define DCHECK_IS_ON() 0
+#define DCHECK_IS_ON() false
 #else
-#define DCHECK_IS_ON() 1
+#define DCHECK_IS_ON() true
 #endif
 
 // Where to record logging output? A flat file and/or system debug log via OutputDebugString.
@@ -217,14 +217,14 @@ class CheckOpResult
 {
 public:
     // |message| must be non-null if and only if the check failed.
-    CheckOpResult(std::string* message)
+    constexpr CheckOpResult(std::string* message)
         : message_(message)
     {
         // Nothing
     }
 
     // Returns true if the check succeeded.
-    operator bool() const { return !message_; }
+    constexpr operator bool() const { return !message_; }
     // Returns the message.
     std::string* message() { return message_; }
 
@@ -331,14 +331,14 @@ std::string* makeCheckOpString(const std::string& v1, const std::string& v2, con
 // template version of the function on values of unnamed enum type - see comment below.
 #define DEFINE_CHECK_OP_IMPL(name, op)                                                           \
     template <class t1, class t2>                                                                \
-    inline std::string* check##name##Impl(const t1& v1, const t2& v2, const char* names)         \
+    constexpr std::string* check##name##Impl(const t1& v1, const t2& v2, const char* names)      \
     {                                                                                            \
         if ((v1 op v2))                                                                          \
             return nullptr;                                                                      \
         else                                                                                     \
             return ::base::makeCheckOpString(v1, v2, names);                                     \
     }                                                                                            \
-    inline std::string* check##name##Impl(int v1, int v2, const char* names)                     \
+    constexpr std::string* check##name##Impl(int v1, int v2, const char* names)                  \
     {                                                                                            \
         if ((v1 op v2))                                                                          \
             return nullptr;                                                                      \
