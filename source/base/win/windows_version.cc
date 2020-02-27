@@ -27,8 +27,6 @@ namespace base::win {
 
 namespace {
 
-typedef BOOL(WINAPI *GetProductInfoPtr)(DWORD, DWORD, DWORD, DWORD, PDWORD);
-
 // Helper to map a major.minor.x.build version (e.g. 6.1) to a Windows release.
 Version majorMinorBuildToVersion(int major, int minor, int build)
 {
@@ -137,16 +135,8 @@ OSInfo** OSInfo::instanceStorage()
         GetNativeSystemInfo(&system_info);
 
         DWORD os_type = 0;
-        if (version_info.dwMajorVersion == 6 || version_info.dwMajorVersion == 10)
-        {
-            // Only present on Vista+.
-            GetProductInfoPtr get_product_info =
-                reinterpret_cast<GetProductInfoPtr>(::GetProcAddress(
-                    GetModuleHandleW(L"kernel32.dll"), "GetProductInfo"));
-
-            get_product_info(version_info.dwMajorVersion, version_info.dwMinorVersion,
-                             0, 0, &os_type);
-        }
+        GetProductInfo(version_info.dwMajorVersion, version_info.dwMinorVersion,
+                       0, 0, &os_type);
 
         return new OSInfo(version_info, system_info, os_type);
     }();
