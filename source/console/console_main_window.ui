@@ -65,6 +65,7 @@
      <property name="title">
       <string>Recent open</string>
      </property>
+     <addaction name="action_remember_last"/>
      <addaction name="action_clear_mru"/>
      <addaction name="separator"/>
     </widget>
@@ -520,6 +521,17 @@
   <action name="action_clear_mru">
    <property name="text">
     <string>Clear</string>
+   </property>
+  </action>
+  <action name="action_remember_last">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Remember latest</string>
    </property>
   </action>
  </widget>

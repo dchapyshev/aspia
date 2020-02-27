@@ -71,6 +71,8 @@ list(APPEND SOURCE_CONSOLE
     console_tab.h
     mru.cc
     mru.h
+    mru_action.cc
+    mru_action.h
     open_address_book_dialog.cc
     open_address_book_dialog.h
     open_address_book_dialog.ui

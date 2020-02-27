@@ -50,6 +50,9 @@ public:
     QByteArray columnsState() const;
     void setColumnsState(const QByteArray& state);
 
+    bool isRecentOpenEnabled() const;
+    void setRecentOpenEnabled(bool enable);
+
     QStringList recentOpen() const;
     void setRecentOpen(const QStringList& list);
 

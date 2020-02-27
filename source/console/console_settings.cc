@@ -95,6 +95,16 @@ void Settings::setColumnsState(const QByteArray& state)
     settings_.setValue(QStringLiteral("ColumnsState"), state);
 }
 
+bool Settings::isRecentOpenEnabled() const
+{
+    return settings_.value(QStringLiteral("EnableRecentOpen"), true).toBool();
+}
+
+void Settings::setRecentOpenEnabled(bool enable)
+{
+    settings_.setValue(QStringLiteral("EnableRecentOpen"), enable);
+}
+
 QStringList Settings::recentOpen() const
 {
     return settings_.value(QStringLiteral("RecentOpen")).toStringList();
