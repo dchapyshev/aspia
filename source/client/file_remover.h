@@ -24,6 +24,8 @@
 #include "common/file_task_producer.h"
 #include "proto/file_transfer.pb.h"
 
+#include <functional>
+
 namespace base {
 class TaskRunner;
 } // namespace base
