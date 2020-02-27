@@ -46,14 +46,21 @@ class MruAction : public QAction
 {
 public:
     MruAction(const QString& file, QObject* parent = nullptr)
-        : QAction(file, parent)
+        : QAction(file, parent),
+          file_path_(file)
     {
-        // Nothing
+        if (file.isEmpty())
+        {
+            setText(tr("<empty>"));
+            setEnabled(false);
+        }
     }
 
-    QString filePath() const { return text(); }
+    QString filePath() const { return file_path_; }
 
 private:
+    QString file_path_;
+
     DISALLOW_COPY_AND_ASSIGN(MruAction);
 };
 
@@ -83,14 +90,7 @@ MainWindow::MainWindow(const QString& file_path)
     ui.status_bar->setVisible(ui.action_statusbar->isChecked());
     showTrayIcon(ui.action_show_tray_icon->isChecked());
 
-    connect(ui.menu_recent_open, &QMenu::triggered, [this](QAction* action)
-    {
-        MruAction* mru_action = dynamic_cast<MruAction*>(action);
-        if (!mru_action)
-            return;
-
-        openAddressBook(mru_action->filePath());
-    });
+    connect(ui.menu_recent_open, &QMenu::triggered, this, &MainWindow::onRecentOpenTriggered);
 
     QTabBar* tab_bar = ui.tab_widget->tabBar();
     tab_bar->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -806,6 +806,36 @@ void MainWindow::onLanguageChanged(QAction* action)
         static_cast<AddressBookTab*>(ui.tab_widget->widget(i))->retranslateUi();
 }
 
+void MainWindow::onRecentOpenTriggered(QAction* action)
+{
+    if (action == ui.action_clear_mru)
+    {
+        int ret = QMessageBox(
+            QMessageBox::Question,
+            tr("Confirmation"),
+            tr("The list of recently opened address books will be cleared. Continue?"),
+            QMessageBox::Yes | QMessageBox::No,
+            this).exec();
+        if (ret == QMessageBox::Yes)
+        {
+            mru_.clearRecentOpen();
+            rebuildMruMenu();
+        }
+    }
+    else
+    {
+        MruAction* mru_action = dynamic_cast<MruAction*>(action);
+        if (!mru_action)
+            return;
+
+        QString file_path = mru_action->filePath();
+        if (file_path.isEmpty())
+            return;
+
+        openAddressBook(file_path);
+    }
+}
+
 void MainWindow::onShowHideToTray()
 {
     if (isHidden())
@@ -928,15 +958,18 @@ void MainWindow::createLanguageMenu(const QString& current_locale)
 
 void MainWindow::rebuildMruMenu()
 {
-    ui.menu_recent_open->clear();
+    for (QAction* action : ui.menu_recent_open->actions())
+    {
+        MruAction* mru_action = dynamic_cast<MruAction*>(action);
+        if (mru_action)
+            ui.menu_recent_open->removeAction(action);
+    }
 
     const QStringList file_list = mru_.recentOpen();
 
     if (file_list.isEmpty())
     {
-        QAction* action = new QAction(tr("<empty>"), ui.menu_recent_open);
-        action->setEnabled(false);
-        ui.menu_recent_open->addAction(action);
+        ui.menu_recent_open->addAction(new MruAction(QString(), ui.menu_recent_open));
     }
     else
     {

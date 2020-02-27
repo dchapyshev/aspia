@@ -41,6 +41,8 @@ public:
     void unpinFile(const QString& file_path);
     bool isPinnedFile(const QString& file_path) const;
 
+    void clearRecentOpen();
+
 private:
     QStringList recent_list_;
     QStringList pinned_list_;

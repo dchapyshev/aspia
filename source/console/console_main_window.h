@@ -83,6 +83,7 @@ private slots:
     void onComputerDoubleClicked(proto::address_book::Computer* computer);
     void onTabContextMenu(const QPoint& pos);
     void onLanguageChanged(QAction* action);
+    void onRecentOpenTriggered(QAction* action);
     void onShowHideToTray();
     void onUpdateChecked(const updater::UpdateInfo& update_info);
 

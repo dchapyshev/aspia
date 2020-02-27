@@ -121,4 +121,9 @@ bool Mru::isPinnedFile(const QString& file_path) const
 #endif
 }
 
+void Mru::clearRecentOpen()
+{
+    recent_list_.clear();
+}
+
 } // namespace console
