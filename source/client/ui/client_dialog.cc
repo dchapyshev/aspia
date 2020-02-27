@@ -21,6 +21,7 @@
 #include "base/logging.h"
 #include "build/build_config.h"
 #include "client/config_factory.h"
+#include "client/ui/client_settings.h"
 #include "client/ui/desktop_config_dialog.h"
 #include "client/ui/qt_desktop_window.h"
 #include "client/ui/qt_file_manager_window.h"
@@ -44,6 +45,10 @@ ClientDialog::ClientDialog(QWidget* parent)
     ui->setupUi(this);
     setFixedHeight(sizeHint().height());
 
+    ClientSettings settings;
+    ui->combo_address->addItems(settings.addressList());
+    ui->combo_address->setCurrentIndex(0);
+
     auto add_session = [this](const QString& icon, proto::SessionType session_type)
     {
         ui->combo_session_type->addItem(QIcon(icon),
@@ -62,6 +67,14 @@ ClientDialog::ClientDialog(QWidget* parent)
         sessionTypeChanged(current_session_type);
     }
 
+    connect(ui->button_clear, &QPushButton::released, [this]()
+    {
+        ui->combo_address->clear();
+
+        ClientSettings settings;
+        settings.setAddressList(QStringList());
+    });
+
     connect(ui->combo_session_type, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &ClientDialog::sessionTypeChanged);
 
@@ -71,7 +84,7 @@ ClientDialog::ClientDialog(QWidget* parent)
     connect(ui->button_connect, &QPushButton::released,
             this, &ClientDialog::connectButtonPressed);
 
-    ui->edit_address->setFocus();
+    ui->combo_address->setFocus();
 }
 
 ClientDialog::~ClientDialog() = default;
@@ -130,17 +143,33 @@ void ClientDialog::sessionConfigButtonPressed()
 
 void ClientDialog::connectButtonPressed()
 {
-    net::Address address = net::Address::fromString(ui->edit_address->text().toStdU16String());
+    QString current_address = ui->combo_address->currentText();
+
+    net::Address address = net::Address::fromString(current_address.toStdU16String());
     if (!address.isValid())
     {
         QMessageBox::warning(this,
                              tr("Warning"),
                              tr("An invalid computer address was entered."),
                              QMessageBox::Ok);
-        ui->edit_address->setFocus();
+        ui->combo_address->setFocus();
     }
     else
     {
+        int current_index = ui->combo_address->findText(current_address);
+        if (current_index != -1)
+            ui->combo_address->removeItem(current_index);
+
+        ui->combo_address->insertItem(0, current_address);
+        ui->combo_address->setCurrentIndex(0);
+
+        QStringList address_list;
+        for (int i = 0; i < std::min(ui->combo_address->count(), 15); ++i)
+            address_list.append(ui->combo_address->itemText(i));
+
+        ClientSettings settings;
+        settings.setAddressList(address_list);
+
         proto::SessionType session_type = static_cast<proto::SessionType>(
             ui->combo_session_type->currentData().toInt());
 
@@ -173,10 +202,15 @@ void ClientDialog::connectButtonPressed()
             return;
 
         client_window->setAttribute(Qt::WA_DeleteOnClose);
-        client_window->connectToHost(config_);
-
-        accept();
-        close();
+        if (!client_window->connectToHost(config_))
+        {
+            client_window->close();
+        }
+        else
+        {
+            accept();
+            close();
+        }
     }
 }
 

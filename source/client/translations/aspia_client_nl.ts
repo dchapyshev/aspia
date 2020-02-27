@@ -44,7 +44,7 @@
         <translation type="obsolete">Wachtwoord:</translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.ui" line="102"/>
+        <location filename="../ui/client_dialog.ui" line="126"/>
         <source>Connect</source>
         <translation>Verbinden</translation>
     </message>
@@ -57,7 +57,7 @@
         <translation type="vanished">Server Poort:</translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.ui" line="45"/>
+        <location filename="../ui/client_dialog.ui" line="69"/>
         <source>Session Type:</source>
         <translation>Sessie Type:</translation>
     </message>
@@ -860,12 +860,12 @@
         <translation type="vanished">Bestands Overdracht</translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.cc" line="137"/>
+        <location filename="../ui/client_dialog.cc" line="152"/>
         <source>Warning</source>
         <translation type="unfinished">Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.cc" line="138"/>
+        <location filename="../ui/client_dialog.cc" line="153"/>
         <source>An invalid computer address was entered.</source>
         <translation type="unfinished"></translation>
     </message>

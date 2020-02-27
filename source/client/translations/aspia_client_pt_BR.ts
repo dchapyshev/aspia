@@ -32,12 +32,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.ui" line="45"/>
+        <location filename="../ui/client_dialog.ui" line="69"/>
         <source>Session Type:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.ui" line="102"/>
+        <location filename="../ui/client_dialog.ui" line="126"/>
         <source>Connect</source>
         <translation type="unfinished"></translation>
     </message>
@@ -587,12 +587,12 @@
 <context>
     <name>client::ClientDialog</name>
     <message>
-        <location filename="../ui/client_dialog.cc" line="137"/>
+        <location filename="../ui/client_dialog.cc" line="152"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.cc" line="138"/>
+        <location filename="../ui/client_dialog.cc" line="153"/>
         <source>An invalid computer address was entered.</source>
         <translation type="unfinished"></translation>
     </message>

@@ -80,6 +80,8 @@ list(APPEND SOURCE_CLIENT_UI
     ui/client_dialog.cc
     ui/client_dialog.h
     ui/client_dialog.ui
+    ui/client_settings.cc
+    ui/client_settings.h
     ui/client_window.cc
     ui/client_window.h
     ui/desktop_config_dialog.cc
