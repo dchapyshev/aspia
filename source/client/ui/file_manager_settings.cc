@@ -18,32 +18,37 @@
 
 #include "client/ui/file_manager_settings.h"
 
+#include "qt_base/qt_xml_settings.h"
+
 namespace client {
 
 FileManagerSettings::FileManagerSettings()
-    : settings_(QSettings::UserScope, QStringLiteral("aspia"), QStringLiteral("client"))
+    : settings_(qt_base::QtXmlSettings::format(),
+                QSettings::UserScope,
+                QLatin1String("aspia"),
+                QLatin1String("client"))
 {
     // Nothing
 }
 
 QByteArray FileManagerSettings::windowGeometry() const
 {
-    return settings_.value(QStringLiteral("FileManager/WindowGeometry")).toByteArray();
+    return settings_.value(QLatin1String("FileManager/WindowGeometry")).toByteArray();
 }
 
 void FileManagerSettings::setWindowGeometry(const QByteArray& geometry)
 {
-    settings_.setValue(QStringLiteral("FileManager/WindowGeometry"), geometry);
+    settings_.setValue(QLatin1String("FileManager/WindowGeometry"), geometry);
 }
 
 QByteArray FileManagerSettings::windowState() const
 {
-    return settings_.value(QStringLiteral("FileManager/WindowState")).toByteArray();
+    return settings_.value(QLatin1String("FileManager/WindowState")).toByteArray();
 }
 
 void FileManagerSettings::setWindowState(const QByteArray& state)
 {
-    settings_.setValue(QStringLiteral("FileManager/WindowState"), state);
+    settings_.setValue(QLatin1String("FileManager/WindowState"), state);
 }
 
 } // namespace client
