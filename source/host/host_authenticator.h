@@ -92,13 +92,16 @@ private:
 
     enum class InternalState
     {
-        HELLO,          // Detection state of supported authentication methods.
-        IDENTIFY,       // Username definition.
-        KEY_EXCHANGE,   // Key exchange.
-        SESSION         // Authentication is completed, a session request occurs.
+        READ_CLIENT_HELLO,
+        SEND_SERVER_HELLO,
+        READ_IDENTIFY,
+        SEND_SERVER_KEY_EXCHANGE,
+        READ_CLIENT_KEY_EXCHANGE,
+        SEND_SESSION_CHALLENGE,
+        READ_SESSION_RESPONSE
     };
 
-    InternalState internal_state_ = InternalState::HELLO;
+    InternalState internal_state_ = InternalState::READ_CLIENT_HELLO;
 
     // Bitmask of allowed session types for the user.
     uint32_t session_types_ = 0;
