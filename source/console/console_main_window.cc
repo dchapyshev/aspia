@@ -791,6 +791,8 @@ void MainWindow::onLanguageChanged(QAction* action)
 
     for (int i = 0; i < ui.tab_widget->count(); ++i)
         static_cast<AddressBookTab*>(ui.tab_widget->widget(i))->retranslateUi();
+
+    rebuildMruMenu();
 }
 
 void MainWindow::onRecentOpenTriggered(QAction* action)

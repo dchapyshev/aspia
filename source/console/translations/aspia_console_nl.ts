@@ -1243,14 +1243,14 @@
     </message>
     <message>
         <location filename="../console_main_window.cc" line="500"/>
-        <location filename="../console_main_window.cc" line="803"/>
-        <location filename="../console_main_window.cc" line="880"/>
+        <location filename="../console_main_window.cc" line="805"/>
+        <location filename="../console_main_window.cc" line="882"/>
         <source>Confirmation</source>
         <translation>Bevestiging</translation>
     </message>
     <message>
         <location filename="../console_main_window.cc" line="501"/>
-        <location filename="../console_main_window.cc" line="881"/>
+        <location filename="../console_main_window.cc" line="883"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation>Adresboek &quot;%1&quot; is aangepast. Wijzigingen opslaan?</translation>
     </message>
@@ -1271,17 +1271,17 @@
         <translation>Pin tab</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="804"/>
+        <location filename="../console_main_window.cc" line="806"/>
         <source>The list of recently opened address books will be cleared. Continue?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="837"/>
+        <location filename="../console_main_window.cc" line="839"/>
         <source>Hide</source>
         <translation>Verbergen</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="852"/>
+        <location filename="../console_main_window.cc" line="854"/>
         <source>Show</source>
         <translation>Weergeven</translation>
     </message>
@@ -1290,7 +1290,7 @@
         <translation type="vanished">&lt;leeg&gt;</translation>
     </message>
     <message>
-        <location filename="../console_main_window.cc" line="988"/>
+        <location filename="../console_main_window.cc" line="989"/>
         <source>Aspia Console</source>
         <translation>Aspia Console</translation>
     </message>
