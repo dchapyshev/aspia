@@ -342,7 +342,7 @@ void UserSessionManager::onUserSessionStarted()
 
 void UserSessionManager::onUserSessionFinished()
 {
-    LOG(LS_INFO) << "ON USER SESSION FINISHED";
+    delegate_->onUserListChanged();
 }
 
 void UserSessionManager::startSessionProcess(base::win::SessionId session_id)

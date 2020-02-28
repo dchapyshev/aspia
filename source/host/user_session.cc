@@ -72,6 +72,8 @@ void UserSession::restart(std::unique_ptr<ipc::Channel> ipc_channel)
     ipc_channel_ = std::move(ipc_channel);
     DCHECK(ipc_channel_);
 
+    updateCredentials();
+
     ipc_channel_->setListener(this);
     ipc_channel_->resume();
 
@@ -83,6 +85,8 @@ void UserSession::restart(std::unique_ptr<ipc::Channel> ipc_channel)
 
     send_connection_list(desktop_clients_);
     send_connection_list(file_transfer_clients_);
+
+    delegate_->onUserSessionStarted();
 }
 
 UserSession::Type UserSession::type() const
@@ -97,6 +101,11 @@ base::win::SessionId UserSession::sessionId() const
 
 User UserSession::user() const
 {
+    // If the session is not running, then there is no authentication data. Return the incorrect
+    // user.
+    if (username_.empty() || password_.empty())
+        return User();
+
     User user = User::create(base::utf16FromAscii(username_), base::utf16FromAscii(password_));
 
     user.sessions = proto::SESSION_TYPE_ALL;
@@ -159,7 +168,7 @@ void UserSession::setSessionEvent(base::win::SessionStatus status, base::win::Se
 
         case base::win::SessionStatus::CONSOLE_DISCONNECT:
         {
-            desktop_session_->dettachSession();
+            onSessionDettached();
         }
         break;
 
@@ -173,7 +182,7 @@ void UserSession::setSessionEvent(base::win::SessionStatus status, base::win::Se
 
 void UserSession::onDisconnected()
 {
-    LOG(LS_INFO) << "IPC DISCONNECTED";
+    onSessionDettached();
 }
 
 void UserSession::onMessageReceived(const base::ByteArray& buffer)
@@ -305,6 +314,16 @@ void UserSession::onClientSessionFinished()
 
     if (desktop_clients_.empty())
         desktop_session_proxy_->enableSession(false);
+}
+
+void UserSession::onSessionDettached()
+{
+    desktop_session_->dettachSession();
+
+    username_.clear();
+    password_.clear();
+
+    delegate_->onUserSessionFinished();
 }
 
 void UserSession::sendConnectEvent(const ClientSession& client_session)
