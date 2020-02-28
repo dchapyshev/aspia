@@ -30,6 +30,8 @@ UserSessionAgent::UserSessionAgent(std::shared_ptr<UserSessionWindowProxy> windo
     : window_proxy_(std::move(window_proxy))
 {
     DCHECK(window_proxy_);
+
+    SetProcessShutdownParameters(0x3FF, SHUTDOWN_NORETRY);
 }
 
 UserSessionAgent::~UserSessionAgent()
