@@ -21,11 +21,50 @@
 #include "build/version.h"
 #include "qt_base/qt_logging.h"
 
+#include <QAbstractEventDispatcher>
+#include <QAbstractNativeEventFilter>
+
 namespace host {
 
 namespace {
 
 const char kActivateMessage[] = "activate";
+
+class EventFilter : public QAbstractNativeEventFilter
+{
+public:
+    ~EventFilter() = default;
+
+    static EventFilter* instance();
+
+    // QAbstractNativeEventFilter implementation.
+    bool nativeEventFilter(const QByteArray& event_type, void* message, long* result) override;
+
+private:
+    EventFilter() = default;
+
+    DISALLOW_COPY_AND_ASSIGN(EventFilter);
+};
+
+// static
+EventFilter* EventFilter::instance()
+{
+    static EventFilter event_filter;
+    return &event_filter;
+}
+
+bool EventFilter::nativeEventFilter(const QByteArray& event_type, void* message, long* result)
+{
+    MSG* native_message = reinterpret_cast<MSG*>(message);
+
+    if (native_message->message == WM_QUERYENDSESSION || native_message->message == WM_ENDSESSION)
+    {
+        *result = TRUE;
+        return true;
+    }
+
+    return false;
+}
 
 } // namespace
 
@@ -36,6 +75,9 @@ Application::Application(int& argc, char* argv[])
     setApplicationName(QLatin1String("Host"));
     setApplicationVersion(QLatin1String(ASPIA_VERSION_STRING));
     setAttribute(Qt::AA_DisableWindowContextHelpButton, true);
+
+    QAbstractEventDispatcher::instance()->installNativeEventFilter(
+        EventFilter::instance());
 
     connect(this, &Application::messageReceived, [this](const QByteArray& message)
     {
