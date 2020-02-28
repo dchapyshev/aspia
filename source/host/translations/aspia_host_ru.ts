@@ -384,33 +384,33 @@
         <location filename="../ui/settings_util.cc" line="36"/>
         <location filename="../ui/settings_util.cc" line="52"/>
         <source>Information</source>
-        <translation type="unfinished">Информация</translation>
+        <translation>Информация</translation>
     </message>
     <message>
         <location filename="../ui/settings_util.cc" line="37"/>
         <source>The configuration was successfully imported.</source>
-        <translation type="unfinished">Конфигурация успешно импортирована.</translation>
+        <translation>Конфигурация успешно импортирована.</translation>
     </message>
     <message>
         <location filename="../ui/settings_util.cc" line="53"/>
         <source>The configuration was successfully exported.</source>
-        <translation type="unfinished">Конфигурация успешно экспортирована.</translation>
+        <translation>Конфигурация успешно экспортирована.</translation>
     </message>
     <message>
         <location filename="../ui/settings_util.cc" line="74"/>
         <location filename="../ui/settings_util.cc" line="87"/>
         <source>Warning</source>
-        <translation type="unfinished">Предупреждение</translation>
+        <translation>Предупреждение</translation>
     </message>
     <message>
         <location filename="../ui/settings_util.cc" line="75"/>
         <source>Unable to read the source file: the file is damaged or has an unknown format.</source>
-        <translation type="unfinished">Не удалось прочитать исходный файл: файл поврежден или имеет неизвестный формат.</translation>
+        <translation>Не удалось прочитать исходный файл: файл поврежден или имеет неизвестный формат.</translation>
     </message>
     <message>
         <location filename="../ui/settings_util.cc" line="88"/>
         <source>Unable to write the target file.</source>
-        <translation type="unfinished">Не удалось записать файл назначения.</translation>
+        <translation>Не удалось записать файл назначения.</translation>
     </message>
 </context>
 <context>

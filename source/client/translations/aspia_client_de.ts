@@ -707,12 +707,22 @@
         <translation type="obsolete">Dateiübertragung</translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.cc" line="152"/>
+        <location filename="../ui/client_dialog.cc" line="74"/>
+        <source>Confirmation</source>
+        <translation type="unfinished">Bestätigung</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_dialog.cc" line="75"/>
+        <source>The list of entered addresses will be cleared. Continue?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/client_dialog.cc" line="161"/>
         <source>Warning</source>
         <translation type="unfinished">Warnung</translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.cc" line="153"/>
+        <location filename="../ui/client_dialog.cc" line="162"/>
         <source>An invalid computer address was entered.</source>
         <translation type="unfinished"></translation>
     </message>

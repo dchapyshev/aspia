@@ -69,10 +69,19 @@ ClientDialog::ClientDialog(QWidget* parent)
 
     connect(ui->button_clear, &QPushButton::released, [this]()
     {
-        ui->combo_address->clear();
+        int ret = QMessageBox::question(
+            this,
+            tr("Confirmation"),
+            tr("The list of entered addresses will be cleared. Continue?"),
+            QMessageBox::Yes | QMessageBox::No);
 
-        ClientSettings settings;
-        settings.setAddressList(QStringList());
+        if (ret == QMessageBox::Yes)
+        {
+            ui->combo_address->clear();
+
+            ClientSettings settings;
+            settings.setAddressList(QStringList());
+        }
     });
 
     connect(ui->combo_session_type, QOverload<int>::of(&QComboBox::currentIndexChanged),

@@ -396,7 +396,7 @@
     <message>
         <location filename="../console_main_window.ui" line="192"/>
         <source>Ctrl+N</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../console_main_window.ui" line="201"/>
@@ -406,7 +406,7 @@
     <message>
         <location filename="../console_main_window.ui" line="204"/>
         <source>Ctrl+O</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../console_main_window.ui" line="216"/>
@@ -416,7 +416,7 @@
     <message>
         <location filename="../console_main_window.ui" line="219"/>
         <source>Ctrl+S</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../console_main_window.ui" line="227"/>
@@ -426,7 +426,7 @@
     <message>
         <location filename="../console_main_window.ui" line="230"/>
         <source>Ctrl+Alt+S</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../console_main_window.ui" line="238"/>
@@ -436,7 +436,7 @@
     <message>
         <location filename="../console_main_window.ui" line="241"/>
         <source>Ctrl+W</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../console_main_window.ui" line="250"/>
@@ -496,7 +496,7 @@
     <message>
         <location filename="../console_main_window.ui" line="373"/>
         <source>F1</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../console_main_window.ui" line="382"/>
@@ -559,7 +559,7 @@
     <message>
         <location filename="../console_main_window.ui" line="497"/>
         <source>Ctrl+Shift+S</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../console_main_window.ui" line="505"/>
@@ -569,7 +569,7 @@
     <message>
         <location filename="../console_main_window.ui" line="508"/>
         <source>Ctrl+Shift+W</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../console_main_window.ui" line="513"/>
@@ -584,12 +584,12 @@
     <message>
         <location filename="../console_main_window.ui" line="523"/>
         <source>Clear</source>
-        <translation type="unfinished"></translation>
+        <translation>Очистить</translation>
     </message>
     <message>
         <location filename="../console_main_window.ui" line="534"/>
         <source>Remember latest</source>
-        <translation type="unfinished"></translation>
+        <translation>Сохранять последние</translation>
     </message>
 </context>
 <context>
@@ -1248,7 +1248,7 @@
     <message>
         <location filename="../console_main_window.cc" line="806"/>
         <source>The list of recently opened address books will be cleared. Continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>Список недавно открытых адресных книг будет очищен. Продолжить?</translation>
     </message>
     <message>
         <location filename="../console_main_window.cc" line="839"/>
@@ -1285,7 +1285,7 @@
     <message>
         <location filename="../mru_action.cc" line="29"/>
         <source>&lt;empty&gt;</source>
-        <translation type="unfinished">&lt;пусто&gt;</translation>
+        <translation>&lt;пусто&gt;</translation>
     </message>
 </context>
 <context>

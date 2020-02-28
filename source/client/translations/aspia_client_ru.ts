@@ -271,72 +271,72 @@
     <message>
         <location filename="../ui/file_error_code.cc" line="32"/>
         <source>Successfully completed</source>
-        <translation type="unfinished">Успешно завершено</translation>
+        <translation>Успешно завершено</translation>
     </message>
     <message>
         <location filename="../ui/file_error_code.cc" line="36"/>
         <source>Invalid request</source>
-        <translation type="unfinished">Неверный запрос</translation>
+        <translation>Неверный запрос</translation>
     </message>
     <message>
         <location filename="../ui/file_error_code.cc" line="40"/>
         <source>Invalid directory or file name</source>
-        <translation type="unfinished">Неверное имя директории или файла</translation>
+        <translation>Неверное имя директории или файла</translation>
     </message>
     <message>
         <location filename="../ui/file_error_code.cc" line="44"/>
         <source>Path not found</source>
-        <translation type="unfinished">Путь не найден</translation>
+        <translation>Путь не найден</translation>
     </message>
     <message>
         <location filename="../ui/file_error_code.cc" line="48"/>
         <source>Path already exists</source>
-        <translation type="unfinished">Путь уже существует</translation>
+        <translation>Путь уже существует</translation>
     </message>
     <message>
         <location filename="../ui/file_error_code.cc" line="52"/>
         <source>No drives found</source>
-        <translation type="unfinished">Диски не найдены</translation>
+        <translation>Диски не найдены</translation>
     </message>
     <message>
         <location filename="../ui/file_error_code.cc" line="56"/>
         <source>Disk full</source>
-        <translation type="unfinished">Недостаточно свободного места на диске</translation>
+        <translation>Недостаточно свободного места на диске</translation>
     </message>
     <message>
         <location filename="../ui/file_error_code.cc" line="60"/>
         <source>Access denied</source>
-        <translation type="unfinished">Доступ запрещен</translation>
+        <translation>Доступ запрещен</translation>
     </message>
     <message>
         <location filename="../ui/file_error_code.cc" line="64"/>
         <source>Could not open file for reading</source>
-        <translation type="unfinished">Не удалось открыть файл для чтения</translation>
+        <translation>Не удалось открыть файл для чтения</translation>
     </message>
     <message>
         <location filename="../ui/file_error_code.cc" line="68"/>
         <source>Could not create or replace file</source>
-        <translation type="unfinished">Не удалось создать или заменить файл</translation>
+        <translation>Не удалось создать или заменить файл</translation>
     </message>
     <message>
         <location filename="../ui/file_error_code.cc" line="72"/>
         <source>Could not write to file</source>
-        <translation type="unfinished">Не удалось выполнить запись в файл</translation>
+        <translation>Не удалось выполнить запись в файл</translation>
     </message>
     <message>
         <location filename="../ui/file_error_code.cc" line="76"/>
         <source>Could not read file</source>
-        <translation type="unfinished">Не удалось выполнить чтение файла</translation>
+        <translation>Не удалось выполнить чтение файла</translation>
     </message>
     <message>
         <location filename="../ui/file_error_code.cc" line="80"/>
         <source>Drive not ready</source>
-        <translation type="unfinished">Дисковод не готов</translation>
+        <translation>Дисковод не готов</translation>
     </message>
     <message>
         <location filename="../ui/file_error_code.cc" line="84"/>
         <source>Unknown error code</source>
-        <translation type="unfinished"></translation>
+        <translation>Неизвестный код ошибки</translation>
     </message>
 </context>
 <context>
@@ -864,12 +864,22 @@
         <translation type="vanished">Передача файлов</translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.cc" line="152"/>
+        <location filename="../ui/client_dialog.cc" line="74"/>
+        <source>Confirmation</source>
+        <translation>Подтверждение</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_dialog.cc" line="75"/>
+        <source>The list of entered addresses will be cleared. Continue?</source>
+        <translation>Список введенных адресов будет очищен. Продолжить?</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_dialog.cc" line="161"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.cc" line="153"/>
+        <location filename="../ui/client_dialog.cc" line="162"/>
         <source>An invalid computer address was entered.</source>
         <translation>Введен некорректный адрес компьютера.</translation>
     </message>
@@ -899,88 +909,88 @@
     <message>
         <location filename="../ui/client_window.cc" line="101"/>
         <source>Connection established.</source>
-        <translation type="unfinished"></translation>
+        <translation>Соединение установлено.</translation>
     </message>
     <message>
         <location filename="../ui/client_window.cc" line="112"/>
         <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
-        <translation type="unfinished">Произошла ошибка в сети (например, сетевой кабель был случайно отключен).</translation>
+        <translation>Произошла ошибка в сети (например, сетевой кабель был случайно отключен).</translation>
     </message>
     <message>
         <location filename="../ui/client_window.cc" line="116"/>
         <source>Connection was refused by the peer (or timed out).</source>
-        <translation type="unfinished">Подключение было отклонено другой стороной (или превышено время ожидания).</translation>
+        <translation>Подключение было отклонено другой стороной (или превышено время ожидания).</translation>
     </message>
     <message>
         <location filename="../ui/client_window.cc" line="120"/>
         <source>Remote host closed the connection.</source>
-        <translation type="unfinished">Удаленный узел закрыл подключение.</translation>
+        <translation>Удаленный узел закрыл подключение.</translation>
     </message>
     <message>
         <location filename="../ui/client_window.cc" line="124"/>
         <source>Host address was not found.</source>
-        <translation type="unfinished">Не найден адрес удаленного узла.</translation>
+        <translation>Не найден адрес удаленного узла.</translation>
     </message>
     <message>
         <location filename="../ui/client_window.cc" line="128"/>
         <source>Socket operation timed out.</source>
-        <translation type="unfinished">Превышено время ожидания.</translation>
+        <translation>Превышено время ожидания.</translation>
     </message>
     <message>
         <location filename="../ui/client_window.cc" line="132"/>
         <source>Address specified is already in use and was set to be exclusive.</source>
-        <translation type="unfinished">Указанный адрес уже используется и был установлен монопольно.</translation>
+        <translation>Указанный адрес уже используется и был установлен монопольно.</translation>
     </message>
     <message>
         <location filename="../ui/client_window.cc" line="136"/>
         <source>Address specified does not belong to the host.</source>
-        <translation type="unfinished">Указанный адрес не принадлежит узлу.</translation>
+        <translation>Указанный адрес не принадлежит узлу.</translation>
     </message>
     <message>
         <location filename="../ui/client_window.cc" line="146"/>
         <location filename="../ui/client_window.cc" line="181"/>
         <source>An unknown error occurred.</source>
-        <translation type="unfinished">Произошла неизвестная ошибка.</translation>
+        <translation>Произошла неизвестная ошибка.</translation>
     </message>
     <message>
         <location filename="../ui/client_window.cc" line="161"/>
         <source>Authentication successfully completed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Аутентификация успешно завершена.</translation>
     </message>
     <message>
         <location filename="../ui/client_window.cc" line="165"/>
         <source>Network authentication error.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ошибка сети при аутентификации.</translation>
     </message>
     <message>
         <location filename="../ui/client_window.cc" line="169"/>
         <source>Violation of the data exchange protocol.</source>
-        <translation type="unfinished">Нарушение протокола обмена данными.</translation>
+        <translation>Нарушение протокола обмена данными.</translation>
     </message>
     <message>
         <location filename="../ui/client_window.cc" line="173"/>
         <source>An error occured while authenticating: wrong user name or password.</source>
-        <translation type="unfinished">Произошла ошибка при аутентификации: неправильное имя пользователя или пароль.</translation>
+        <translation>Произошла ошибка при аутентификации: неправильное имя пользователя или пароль.</translation>
     </message>
     <message>
         <location filename="../ui/client_window.cc" line="177"/>
         <source>Specified session type is not allowed for the user.</source>
-        <translation type="unfinished">Указанный тип сессии не разрешен для пользователя.</translation>
+        <translation>Указанный тип сессии не разрешен для пользователя.</translation>
     </message>
     <message>
         <location filename="../ui/client_window.cc" line="195"/>
         <source>Desktop Manage</source>
-        <translation type="unfinished">Управление рабочим столом</translation>
+        <translation>Управление рабочим столом</translation>
     </message>
     <message>
         <location filename="../ui/client_window.cc" line="199"/>
         <source>Desktop View</source>
-        <translation type="unfinished">Просмотр рабочего стола</translation>
+        <translation>Просмотр рабочего стола</translation>
     </message>
     <message>
         <location filename="../ui/client_window.cc" line="203"/>
         <source>File Transfer</source>
-        <translation type="unfinished">Передача файлов</translation>
+        <translation>Передача файлов</translation>
     </message>
     <message>
         <source>Session started.</source>
@@ -1244,12 +1254,12 @@
     <message>
         <location filename="../ui/file_remove_dialog.cc" line="116"/>
         <source>An error occurred while retrieving the list of files: %1</source>
-        <translation type="unfinished">Произошла ошибка при получении списка файлов: %1</translation>
+        <translation>Произошла ошибка при получении списка файлов: %1</translation>
     </message>
     <message>
         <location filename="../ui/file_remove_dialog.cc" line="121"/>
         <source>Failed to delete &quot;%1&quot;: %2.</source>
-        <translation type="unfinished">Не удалось удалить &quot;%1&quot;: %2.</translation>
+        <translation>Не удалось удалить &quot;%1&quot;: %2.</translation>
     </message>
     <message>
         <location filename="../ui/file_remove_dialog.cc" line="128"/>
@@ -1376,37 +1386,37 @@
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="255"/>
         <source>An error occurred while building the file queue for copying</source>
-        <translation type="unfinished"></translation>
+        <translation>Произошла ошибка при построении очереди файлов для копирования</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="261"/>
         <source>Failed to create directory &quot;%1&quot;: %2</source>
-        <translation type="unfinished">Не удалось создать директорию &quot;%1&quot;: %2</translation>
+        <translation>Не удалось создать директорию &quot;%1&quot;: %2</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="270"/>
         <source>Failed to create file &quot;%1&quot;: %2</source>
-        <translation type="unfinished">Не удалось создать файл &quot;%1&quot;: %2</translation>
+        <translation>Не удалось создать файл &quot;%1&quot;: %2</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="278"/>
         <source>Failed to open file &quot;%1&quot;: %2</source>
-        <translation type="unfinished">Не удалось открыть файл &quot;%1&quot;: %2</translation>
+        <translation>Не удалось открыть файл &quot;%1&quot;: %2</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="286"/>
         <source>Failed to write file &quot;%1&quot;: %2</source>
-        <translation type="unfinished">Не удалось выполнить запись файла &quot;%1&quot;: %2</translation>
+        <translation>Не удалось выполнить запись файла &quot;%1&quot;: %2</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="294"/>
         <source>Failed to read file &quot;%1&quot;: %2</source>
-        <translation type="unfinished">Не удалось прочитать файл &quot;%1&quot;: %2</translation>
+        <translation>Не удалось прочитать файл &quot;%1&quot;: %2</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="302"/>
         <source>Unknown error type while copying files</source>
-        <translation type="unfinished"></translation>
+        <translation>Неизвестный тип ошибки при копировании файлов</translation>
     </message>
 </context>
 <context>
@@ -1435,17 +1445,17 @@
         <location filename="../ui/qt_desktop_window.cc" line="205"/>
         <location filename="../ui/qt_desktop_window.cc" line="468"/>
         <source>Warning</source>
-        <translation type="unfinished">Предупреждение</translation>
+        <translation>Предупреждение</translation>
     </message>
     <message>
         <location filename="../ui/qt_desktop_window.cc" line="198"/>
         <source>There are no supported video encodings.</source>
-        <translation type="unfinished"></translation>
+        <translation>Нет поддерживаемых кодировок видео.</translation>
     </message>
     <message>
         <location filename="../ui/qt_desktop_window.cc" line="206"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
-        <translation type="unfinished">Текущий видео-кодек не поддерживается хостом. Пожалуйста, выберите другой кодек.</translation>
+        <translation>Текущий видео-кодек не поддерживается хостом. Пожалуйста, выберите другой кодек.</translation>
     </message>
     <message>
         <source>Selecting a supported video encoding is canceled by the user.</source>
@@ -1454,17 +1464,17 @@
     <message>
         <location filename="../ui/qt_desktop_window.cc" line="446"/>
         <source>Save File</source>
-        <translation type="unfinished">Сохранение файла</translation>
+        <translation>Сохранение файла</translation>
     </message>
     <message>
         <location filename="../ui/qt_desktop_window.cc" line="448"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
-        <translation type="unfinished">PNG изображение (*.png);;BMP изображение (*.bmp)</translation>
+        <translation>PNG изображение (*.png);;BMP изображение (*.bmp)</translation>
     </message>
     <message>
         <location filename="../ui/qt_desktop_window.cc" line="468"/>
         <source>Could not save image</source>
-        <translation type="unfinished">Не удалось сохранить изображение</translation>
+        <translation>Не удалось сохранить изображение</translation>
     </message>
 </context>
 <context>
@@ -1472,12 +1482,12 @@
     <message>
         <location filename="../ui/qt_file_manager_window.cc" line="46"/>
         <source>Local Computer</source>
-        <translation type="unfinished">Локальный компьютер</translation>
+        <translation>Локальный компьютер</translation>
     </message>
     <message>
         <location filename="../ui/qt_file_manager_window.cc" line="47"/>
         <source>Remote Computer</source>
-        <translation type="unfinished">Удаленный компьютер</translation>
+        <translation>Удаленный компьютер</translation>
     </message>
 </context>
 <context>
