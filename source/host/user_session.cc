@@ -29,7 +29,6 @@
 #include "host/desktop_session_proxy.h"
 #include "ipc/ipc_channel_proxy.h"
 #include "net/adapter_enumerator.h"
-#include "proto/host_internal.pb.h"
 
 namespace host {
 
@@ -179,17 +178,18 @@ void UserSession::onDisconnected()
 
 void UserSession::onMessageReceived(const base::ByteArray& buffer)
 {
-    proto::internal::UiToService message;
+    incoming_message_.Clear();
 
-    if (!common::parseMessage(buffer, &message))
+    if (!common::parseMessage(buffer, &incoming_message_))
     {
         LOG(LS_ERROR) << "Invalid message from UI";
         return;
     }
 
-    if (message.has_credentials_request())
+    if (incoming_message_.has_credentials_request())
     {
-        proto::internal::CredentialsRequest::Type type = message.credentials_request().type();
+        proto::internal::CredentialsRequest::Type type =
+            incoming_message_.credentials_request().type();
 
         if (type == proto::internal::CredentialsRequest::NEW_PASSWORD)
         {
@@ -202,9 +202,9 @@ void UserSession::onMessageReceived(const base::ByteArray& buffer)
 
         sendCredentials();
     }
-    else if (message.has_kill_session())
+    else if (incoming_message_.has_kill_session())
     {
-        killClientSession(message.kill_session().uuid());
+        killClientSession(incoming_message_.kill_session().uuid());
     }
     else
     {
@@ -239,10 +239,7 @@ void UserSession::onScreenCaptured(const desktop::Frame& frame)
 {
     for (const auto& client : desktop_clients_)
     {
-        ClientSessionDesktop* desktop_client =
-            static_cast<ClientSessionDesktop*>(client.get());
-
-        desktop_client->encodeFrame(frame);
+        static_cast<ClientSessionDesktop*>(client.get())->encodeFrame(frame);
     }
 }
 
@@ -251,12 +248,7 @@ void UserSession::onCursorCaptured(std::shared_ptr<desktop::MouseCursor> mouse_c
     for (const auto& client : desktop_clients_)
     {
         if (client->sessionType() == proto::SESSION_TYPE_DESKTOP_MANAGE)
-        {
-            ClientSessionDesktop* desktop_client =
-                static_cast<ClientSessionDesktop*>(client.get());
-
-            desktop_client->encodeMouseCursor(mouse_cursor);
-        }
+            static_cast<ClientSessionDesktop*>(client.get())->encodeMouseCursor(mouse_cursor);
     }
 }
 
@@ -264,10 +256,7 @@ void UserSession::onScreenListChanged(const proto::ScreenList& list)
 {
     for (const auto& client : desktop_clients_)
     {
-        ClientSessionDesktop* desktop_client =
-            static_cast<ClientSessionDesktop*>(client.get());
-
-        desktop_client->setScreenList(list);
+        static_cast<ClientSessionDesktop*>(client.get())->setScreenList(list);
     }
 }
 
@@ -320,22 +309,22 @@ void UserSession::onClientSessionFinished()
 
 void UserSession::sendConnectEvent(const ClientSession& client_session)
 {
-    proto::internal::ServiceToUi message;
-    proto::internal::ConnectEvent* event = message.mutable_connect_event();
+    outgoing_message_.Clear();
+    proto::internal::ConnectEvent* event = outgoing_message_.mutable_connect_event();
 
     event->set_remote_address(base::utf8FromUtf16(client_session.peerAddress()));
     event->set_username(base::utf8FromUtf16(client_session.userName()));
     event->set_session_type(client_session.sessionType());
     event->set_uuid(client_session.id());
 
-    ipc_channel_->send(common::serializeMessage(message));
+    ipc_channel_->send(common::serializeMessage(outgoing_message_));
 }
 
 void UserSession::sendDisconnectEvent(const std::string& session_id)
 {
-    proto::internal::ServiceToUi message;
-    message.mutable_disconnect_event()->set_uuid(session_id);
-    ipc_channel_->send(common::serializeMessage(message));
+    outgoing_message_.Clear();
+    outgoing_message_.mutable_disconnect_event()->set_uuid(session_id);
+    ipc_channel_->send(common::serializeMessage(outgoing_message_));
 }
 
 void UserSession::updateCredentials()
@@ -356,9 +345,9 @@ void UserSession::updateCredentials()
 
 void UserSession::sendCredentials()
 {
-    proto::internal::ServiceToUi message;
+    outgoing_message_.Clear();
 
-    proto::internal::Credentials* credentials = message.mutable_credentials();
+    proto::internal::Credentials* credentials = outgoing_message_.mutable_credentials();
     credentials->set_username(username_);
     credentials->set_password(password_);
 
@@ -374,7 +363,7 @@ void UserSession::sendCredentials()
         }
     }
 
-    ipc_channel_->send(common::serializeMessage(message));
+    ipc_channel_->send(common::serializeMessage(outgoing_message_));
 }
 
 void UserSession::killClientSession(std::string_view id)

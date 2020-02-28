@@ -25,6 +25,7 @@
 #include "host/desktop_session_manager.h"
 #include "host/user.h"
 #include "ipc/ipc_listener.h"
+#include "proto/host_internal.pb.h"
 
 #include <memory>
 
@@ -109,6 +110,9 @@ private:
 
     std::unique_ptr<DesktopSessionManager> desktop_session_;
     std::shared_ptr<DesktopSessionProxy> desktop_session_proxy_;
+
+    proto::internal::UiToService incoming_message_;
+    proto::internal::ServiceToUi outgoing_message_;
 
     Delegate* delegate_ = nullptr;
 

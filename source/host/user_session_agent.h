@@ -91,6 +91,9 @@ private:
     std::shared_ptr<UserSessionWindowProxy> window_proxy_;
     std::unique_ptr<ipc::Channel> ipc_channel_;
 
+    proto::internal::ServiceToUi incoming_message_;
+    proto::internal::UiToService outgoing_message_;
+
     ClientList clients_;
 
     DISALLOW_COPY_AND_ASSIGN(UserSessionAgent);

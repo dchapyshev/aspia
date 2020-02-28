@@ -71,24 +71,24 @@ void UserSessionAgent::onDisconnected()
 
 void UserSessionAgent::onMessageReceived(const base::ByteArray& buffer)
 {
-    proto::internal::ServiceToUi message;
+    incoming_message_.Clear();
 
-    if (!common::parseMessage(buffer, &message))
+    if (!common::parseMessage(buffer, &incoming_message_))
     {
         DLOG(LS_ERROR) << "Invalid message from service";
         return;
     }
 
-    if (message.has_connect_event())
+    if (incoming_message_.has_connect_event())
     {
-        clients_.emplace_back(message.connect_event());
+        clients_.emplace_back(incoming_message_.connect_event());
         window_proxy_->onClientListChanged(clients_);
     }
-    else if (message.has_disconnect_event())
+    else if (incoming_message_.has_disconnect_event())
     {
         for (auto it = clients_.begin(); it != clients_.end(); ++it)
         {
-            if (it->uuid == message.disconnect_event().uuid())
+            if (it->uuid == incoming_message_.disconnect_event().uuid())
             {
                 clients_.erase(it);
                 break;
@@ -97,9 +97,9 @@ void UserSessionAgent::onMessageReceived(const base::ByteArray& buffer)
 
         window_proxy_->onClientListChanged(clients_);
     }
-    else if (message.has_credentials())
+    else if (incoming_message_.has_credentials())
     {
-        window_proxy_->onCredentialsChanged(message.credentials());
+        window_proxy_->onCredentialsChanged(incoming_message_.credentials());
     }
     else
     {
@@ -109,16 +109,16 @@ void UserSessionAgent::onMessageReceived(const base::ByteArray& buffer)
 
 void UserSessionAgent::updateCredentials(proto::internal::CredentialsRequest::Type request_type)
 {
-    proto::internal::UiToService message;
-    message.mutable_credentials_request()->set_type(request_type);
-    ipc_channel_->send(common::serializeMessage(message));
+    outgoing_message_.Clear();
+    outgoing_message_.mutable_credentials_request()->set_type(request_type);
+    ipc_channel_->send(common::serializeMessage(outgoing_message_));
 }
 
 void UserSessionAgent::killClient(const std::string& uuid)
 {
-    proto::internal::UiToService message;
-    message.mutable_kill_session()->set_uuid(uuid);
-    ipc_channel_->send(common::serializeMessage(message));
+    outgoing_message_.Clear();
+    outgoing_message_.mutable_kill_session()->set_uuid(uuid);
+    ipc_channel_->send(common::serializeMessage(outgoing_message_));
 }
 
 } // namespace host
