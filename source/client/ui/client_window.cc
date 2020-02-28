@@ -108,6 +108,10 @@ void ClientWindow::onDisconnected(net::ErrorCode error_code)
 
     switch (error_code)
     {
+        case net::ErrorCode::ACCESS_DENIED:
+            message = QT_TR_NOOP("Cryptography error (message encryption or decryption failed).");
+            break;
+
         case net::ErrorCode::NETWORK_ERROR:
             message = QT_TR_NOOP("An error occurred with the network (e.g., the network cable was accidentally plugged out).");
             break;

@@ -909,82 +909,87 @@
     </message>
     <message>
         <location filename="../ui/client_window.cc" line="112"/>
+        <source>Cryptography error (message encryption or decryption failed).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="116"/>
         <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
         <translation type="unfinished">Er is een probleem opgetreden in het netwerk (bijv, de netwerk kabel is per ongelijk verwijderd).</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="116"/>
+        <location filename="../ui/client_window.cc" line="120"/>
         <source>Connection was refused by the peer (or timed out).</source>
         <translation type="unfinished">Verbinding is geweigerd door de peer (of er was een timeout).</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="120"/>
+        <location filename="../ui/client_window.cc" line="124"/>
         <source>Remote host closed the connection.</source>
         <translation type="unfinished">De remote host heeft de verbinding gesloten.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="124"/>
+        <location filename="../ui/client_window.cc" line="128"/>
         <source>Host address was not found.</source>
         <translation type="unfinished">Host adres is niet gevonden.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="128"/>
+        <location filename="../ui/client_window.cc" line="132"/>
         <source>Socket operation timed out.</source>
         <translation type="unfinished">Socket operatie gaf een timeout.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="132"/>
+        <location filename="../ui/client_window.cc" line="136"/>
         <source>Address specified is already in use and was set to be exclusive.</source>
         <translation type="unfinished">Het opgegeven adres is al in gebruik, en is ingesteld als exclusief.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="136"/>
+        <location filename="../ui/client_window.cc" line="140"/>
         <source>Address specified does not belong to the host.</source>
         <translation type="unfinished">Het opgegeven adres behoort niet toe aan de host.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="146"/>
-        <location filename="../ui/client_window.cc" line="181"/>
+        <location filename="../ui/client_window.cc" line="150"/>
+        <location filename="../ui/client_window.cc" line="185"/>
         <source>An unknown error occurred.</source>
         <translation type="unfinished">Een onbekende error is opgetreden.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="161"/>
+        <location filename="../ui/client_window.cc" line="165"/>
         <source>Authentication successfully completed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="165"/>
+        <location filename="../ui/client_window.cc" line="169"/>
         <source>Network authentication error.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="169"/>
+        <location filename="../ui/client_window.cc" line="173"/>
         <source>Violation of the data exchange protocol.</source>
         <translation type="unfinished">Schending van het data uitwisselings protocol.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="173"/>
+        <location filename="../ui/client_window.cc" line="177"/>
         <source>An error occured while authenticating: wrong user name or password.</source>
         <translation type="unfinished">Er is een error opgetreden bij het authenticeren: verkeerde gebruikers naam of wachtwoord.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="177"/>
+        <location filename="../ui/client_window.cc" line="181"/>
         <source>Specified session type is not allowed for the user.</source>
         <translation type="unfinished">Het gespecificeerde sessie type is niet toegestaan voor de gebruiker.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="195"/>
+        <location filename="../ui/client_window.cc" line="199"/>
         <source>Desktop Manage</source>
         <translation type="unfinished">Bureaublad Beheren</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="199"/>
+        <location filename="../ui/client_window.cc" line="203"/>
         <source>Desktop View</source>
         <translation type="unfinished">Bureaublad Weergeven</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="203"/>
+        <location filename="../ui/client_window.cc" line="207"/>
         <source>File Transfer</source>
         <translation type="unfinished"></translation>
     </message>

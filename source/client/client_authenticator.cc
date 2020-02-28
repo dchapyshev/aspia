@@ -186,7 +186,12 @@ void Authenticator::onDisconnected(net::ErrorCode error_code)
 {
     LOG(LS_INFO) << "Network error: " << net::errorToString(error_code);
 
-    finished(FROM_HERE, ErrorCode::NETWORK_ERROR);
+    ErrorCode result = ErrorCode::NETWORK_ERROR;
+
+    if (error_code == net::ErrorCode::ACCESS_DENIED)
+        result = ErrorCode::ACCESS_DENIED;
+
+    finished(FROM_HERE, result);
 }
 
 void Authenticator::onMessageReceived(const base::ByteArray& buffer)

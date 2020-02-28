@@ -913,82 +913,87 @@
     </message>
     <message>
         <location filename="../ui/client_window.cc" line="112"/>
+        <source>Cryptography error (message encryption or decryption failed).</source>
+        <translation>Ошибка криптографии (не удалось зашифровать или расшифровать сообщение).</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="116"/>
         <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
         <translation>Произошла ошибка в сети (например, сетевой кабель был случайно отключен).</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="116"/>
+        <location filename="../ui/client_window.cc" line="120"/>
         <source>Connection was refused by the peer (or timed out).</source>
         <translation>Подключение было отклонено другой стороной (или превышено время ожидания).</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="120"/>
+        <location filename="../ui/client_window.cc" line="124"/>
         <source>Remote host closed the connection.</source>
         <translation>Удаленный узел закрыл подключение.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="124"/>
+        <location filename="../ui/client_window.cc" line="128"/>
         <source>Host address was not found.</source>
         <translation>Не найден адрес удаленного узла.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="128"/>
+        <location filename="../ui/client_window.cc" line="132"/>
         <source>Socket operation timed out.</source>
         <translation>Превышено время ожидания.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="132"/>
+        <location filename="../ui/client_window.cc" line="136"/>
         <source>Address specified is already in use and was set to be exclusive.</source>
         <translation>Указанный адрес уже используется и был установлен монопольно.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="136"/>
+        <location filename="../ui/client_window.cc" line="140"/>
         <source>Address specified does not belong to the host.</source>
         <translation>Указанный адрес не принадлежит узлу.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="146"/>
-        <location filename="../ui/client_window.cc" line="181"/>
+        <location filename="../ui/client_window.cc" line="150"/>
+        <location filename="../ui/client_window.cc" line="185"/>
         <source>An unknown error occurred.</source>
         <translation>Произошла неизвестная ошибка.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="161"/>
+        <location filename="../ui/client_window.cc" line="165"/>
         <source>Authentication successfully completed.</source>
         <translation>Аутентификация успешно завершена.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="165"/>
+        <location filename="../ui/client_window.cc" line="169"/>
         <source>Network authentication error.</source>
         <translation>Ошибка сети при аутентификации.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="169"/>
+        <location filename="../ui/client_window.cc" line="173"/>
         <source>Violation of the data exchange protocol.</source>
         <translation>Нарушение протокола обмена данными.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="173"/>
+        <location filename="../ui/client_window.cc" line="177"/>
         <source>An error occured while authenticating: wrong user name or password.</source>
         <translation>Произошла ошибка при аутентификации: неправильное имя пользователя или пароль.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="177"/>
+        <location filename="../ui/client_window.cc" line="181"/>
         <source>Specified session type is not allowed for the user.</source>
         <translation>Указанный тип сессии не разрешен для пользователя.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="195"/>
+        <location filename="../ui/client_window.cc" line="199"/>
         <source>Desktop Manage</source>
         <translation>Управление рабочим столом</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="199"/>
+        <location filename="../ui/client_window.cc" line="203"/>
         <source>Desktop View</source>
         <translation>Просмотр рабочего стола</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="203"/>
+        <location filename="../ui/client_window.cc" line="207"/>
         <source>File Transfer</source>
         <translation>Передача файлов</translation>
     </message>
