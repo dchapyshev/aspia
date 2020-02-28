@@ -28,6 +28,10 @@ std::string errorToString(ErrorCode error_code)
 
     switch (error_code)
     {
+        case ErrorCode::ACCESS_DENIED:
+            str = "ACCESS_DENIED";
+            break;
+
         case ErrorCode::NETWORK_ERROR:
             str = "NETWORK_ERROR";
             break;

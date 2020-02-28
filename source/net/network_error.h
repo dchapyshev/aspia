@@ -28,6 +28,9 @@ enum class ErrorCode
     // Unknown error.
     UNKNOWN,
 
+    // Cryptography error (message encryption or decryption failed).
+    ACCESS_DENIED,
+
     // An error occurred with the network (e.g., the network cable was accidentally plugged out).
     NETWORK_ERROR,
 
