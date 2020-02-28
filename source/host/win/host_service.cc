@@ -70,6 +70,8 @@ void Service::onStart()
 {
     LOG(LS_INFO) << "Service is started";
 
+    SetPriorityClass(GetCurrentProcess(), HIGH_PRIORITY_CLASS);
+
     com_initializer_ = std::make_unique<base::win::ScopedCOMInitializer>();
     if (!com_initializer_->isSucceeded())
     {

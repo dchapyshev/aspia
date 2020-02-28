@@ -38,6 +38,7 @@ DesktopSessionAgent::DesktopSessionAgent(std::shared_ptr<base::TaskRunner> task_
 {
     // At the end of the user's session, the program ends later than the others.
     SetProcessShutdownParameters(0, SHUTDOWN_NORETRY);
+    SetPriorityClass(GetCurrentProcess(), HIGH_PRIORITY_CLASS);
 }
 
 DesktopSessionAgent::~DesktopSessionAgent() = default;
