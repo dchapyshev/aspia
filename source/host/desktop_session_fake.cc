@@ -45,7 +45,7 @@ public:
 private:
     void generateFrame();
 
-    Delegate* delegate_;
+    Delegate* delegate_ = nullptr;
 
     std::shared_ptr<base::TaskRunner> task_runner_;
     std::unique_ptr<desktop::Frame> frame_;
