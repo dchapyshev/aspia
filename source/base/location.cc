@@ -60,11 +60,22 @@ Location::Location(const char* function_name,
 #endif
 }
 
-std::string Location::toString() const
+std::string Location::toString(PathType path_type) const
 {
     if (hasSourceInfo())
     {
-        return std::string(function_name_) + "@" + file_name_ + ":" + numberToString(line_number_);
+        std::string_view file_name(file_name_);
+
+        if (path_type == SHORT_PATH)
+        {
+            size_t last_slash_pos = file_name.find_last_of("\\/");
+            if (last_slash_pos != std::string_view::npos)
+                file_name.remove_prefix(last_slash_pos + 1);
+        }
+
+        return std::string(function_name_) + "@" +
+               std::string(file_name) + ":" +
+               numberToString(line_number_);
     }
 
     return stringPrintf("pc:%p", program_counter_);

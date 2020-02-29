@@ -69,9 +69,15 @@ public:
     // default initialized Location objects, which will be nullptr.
     const void* programCounter() const { return program_counter_; }
 
+    enum PathType
+    {
+        FULL_PATH,
+        SHORT_PATH
+    };
+
     // Converts to the most user-readable form possible. If function and filename
     // are not available, this will return "pc:<hex address>".
-    std::string toString() const;
+    std::string toString(PathType path_type = SHORT_PATH) const;
 
     static Location createFromHere(const char* file_name);
     static Location createFromHere(const char* function_name,
@@ -85,20 +91,20 @@ private:
     const void* program_counter_ = nullptr;
 };
 
-#ifndef NDEBUG
+#if defined(ENABLE_LOCATION_SOURCE)
 
 // Full source information should be included.
 #define FROM_HERE FROM_HERE_WITH_EXPLICIT_FUNCTION(__func__)
 #define FROM_HERE_WITH_EXPLICIT_FUNCTION(function_name) \
     ::base::Location::createFromHere(function_name, __FILE__, __LINE__)
 
-#else // NDEBUG
+#else
 
 #define FROM_HERE ::base::Location::createFromHere(__FILE__)
 #define FROM_HERE_WITH_EXPLICIT_FUNCTION(function_name) \
     ::base::Location::createFromHere(function_name, __FILE__, -1)
 
-#endif // NDEBUG
+#endif
 
 } // namespace base
 
