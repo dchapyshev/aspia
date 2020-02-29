@@ -36,7 +36,21 @@ public:
 
     SessionId sessionId() const;
 
-    WTS_CONNECTSTATE_CLASS connectState() const;
+    enum class ConnectState
+    {
+        ACTIVE        = WTSActive,       // User logged on to WinStation.
+        CONNECTED     = WTSConnected,    // WinStation connected to client.
+        CONNECT_QUERY = WTSConnectQuery, // In the process of connecting to client.
+        SHADOW        = WTSShadow,       // Shadowing another WinStation.
+        DISCONNECTED  = WTSDisconnected, // WinStation logged on without client.
+        IDLE          = WTSIdle,         // Waiting for client to connect.
+        LISTEN        = WTSListen,       // WinStation is listening for connection.
+        RESET         = WTSReset,        // WinStation is being reset.
+        DOWN          = WTSDown,         // WinStation is down due to error.
+        INIT          = WTSInit,         // WinStation in initialization.
+    };
+
+    ConnectState connectState() const;
 
     std::string winStationName() const;
     std::string domain() const;

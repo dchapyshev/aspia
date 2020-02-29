@@ -55,12 +55,12 @@ SessionId SessionInfo::sessionId() const
     return info_->SessionId;
 }
 
-WTS_CONNECTSTATE_CLASS SessionInfo::connectState() const
+SessionInfo::ConnectState SessionInfo::connectState() const
 {
     if (!isValid())
-        return WTSDisconnected;
+        return ConnectState::DISCONNECTED;
 
-    return info_->State;
+    return static_cast<ConnectState>(info_->State);
 }
 
 std::string SessionInfo::winStationName() const
