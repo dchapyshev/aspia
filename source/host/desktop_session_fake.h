@@ -26,10 +26,6 @@ namespace base {
 class TaskRunner;
 } // namespace base
 
-namespace desktop {
-class SharedFrame;
-} // namespace desktop
-
 namespace host {
 
 class DesktopSessionFake : public DesktopSession

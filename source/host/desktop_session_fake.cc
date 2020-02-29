@@ -21,8 +21,6 @@
 #include "base/logging.h"
 #include "base/task_runner.h"
 #include "desktop/desktop_frame_simple.h"
-#include "desktop/shared_desktop_frame.h"
-#include "proto/desktop.pb.h"
 
 namespace host {
 
