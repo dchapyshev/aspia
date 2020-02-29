@@ -66,7 +66,6 @@ private:
     std::shared_ptr<DesktopSessionProxy> desktop_session_proxy_;
     std::unique_ptr<VideoFramePump> frame_pump_;
     std::unique_ptr<codec::CursorEncoder> cursor_encoder_;
-    std::vector<std::string> extensions_;
 
     proto::ClientToHost incoming_message_;
     proto::HostToClient outgoing_message_;

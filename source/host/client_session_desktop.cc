@@ -19,7 +19,6 @@
 #include "host/client_session_desktop.h"
 
 #include "base/power_controller.h"
-#include "base/strings/string_split.h"
 #include "codec/cursor_encoder.h"
 #include "codec/video_encoder_vpx.h"
 #include "codec/video_encoder_zstd.h"
@@ -109,9 +108,6 @@ void ClientSessionDesktop::onStarted()
         extensions = common::kSupportedExtensionsForView;
     }
 
-    // Add supported extensions to the list.
-    extensions_ = base::splitString(extensions, ";", base::KEEP_WHITESPACE, base::SPLIT_WANT_ALL);
-
     // Create a configuration request.
     proto::DesktopConfigRequest* request = outgoing_message_.mutable_config_request();
 
@@ -161,23 +157,6 @@ void ClientSessionDesktop::injectClipboardEvent(const proto::ClipboardEvent& eve
 
 void ClientSessionDesktop::readExtension(const proto::DesktopExtension& extension)
 {
-    bool extension_found = false;
-
-    for (const auto& item : extensions_)
-    {
-        if (item == extension.name())
-        {
-            extension_found = true;
-            break;
-        }
-    }
-
-    if (!extension_found)
-    {
-        DLOG(LS_WARNING) << "Unsupported or disabled extensions: " << extension.name();
-        return;
-    }
-
     if (extension.name() == common::kSelectScreenExtension)
     {
         proto::Screen screen;
