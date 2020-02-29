@@ -97,8 +97,8 @@ void Service::onStop()
 
 void Service::onSessionEvent(base::win::SessionStatus status, base::win::SessionId session_id)
 {
-    LOG(LS_INFO) << "Session event detected (status = " << base::win::sessionStatusToString(status)
-                 << ", session_id = " << session_id << ")";
+    LOG(LS_INFO) << "Session event detected (status: " << base::win::sessionStatusToString(status)
+                 << ", session_id: " << session_id << ")";
 
     if (server_)
         server_->setSessionEvent(status, session_id);
