@@ -56,19 +56,20 @@ private:
 };
 
 DesktopSessionFake::FrameGenerator::FrameGenerator(std::shared_ptr<base::TaskRunner> task_runner)
-    : task_runner_(std::move(task_runner)),
-      frame_(desktop::FrameSimple::create(
-          desktop::Size(kFrameWidth, kFrameHeight), desktop::PixelFormat::ARGB()))
+    : task_runner_(std::move(task_runner))
 {
     DCHECK(task_runner_);
-
-    memset(frame_->frameData(), 0, frame_->stride() * frame_->size().height());
 }
 
 void DesktopSessionFake::FrameGenerator::start(Delegate* delegate)
 {
     delegate_ = delegate;
     DCHECK(delegate);
+
+    frame_ = desktop::FrameSimple::create(
+        desktop::Size(kFrameWidth, kFrameHeight), desktop::PixelFormat::ARGB());
+
+    memset(frame_->frameData(), 0, frame_->stride() * frame_->size().height());
 
     generateFrame();
 }
@@ -96,6 +97,10 @@ void DesktopSessionFake::FrameGenerator::generateFrame()
         task_runner_->postDelayedTask(
             std::bind(&FrameGenerator::generateFrame, shared_from_this()),
             std::chrono::milliseconds(1000));
+    }
+    else
+    {
+        frame_.reset();
     }
 }
 
