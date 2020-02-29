@@ -67,7 +67,7 @@ namespace base::win {
 class ObjectWatcher
 {
 public:
-    explicit ObjectWatcher(std::shared_ptr<TaskRunner>& task_runner);
+    explicit ObjectWatcher(std::shared_ptr<TaskRunner> task_runner);
     ~ObjectWatcher();
 
     class Delegate

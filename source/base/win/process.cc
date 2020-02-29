@@ -75,8 +75,8 @@ BOOL CALLBACK terminateEnumProc(HWND hwnd, LPARAM lparam)
 
 } // namespace
 
-Process::Process(std::shared_ptr<TaskRunner>& task_runner, ProcessId process_id)
-    : watcher_(task_runner)
+Process::Process(std::shared_ptr<TaskRunner> task_runner, ProcessId process_id)
+    : watcher_(std::move(task_runner))
 {
     // We need SE_DEBUG_NAME privilege to open the process.
     ScopedHandle privileged_token;
@@ -97,8 +97,8 @@ Process::Process(std::shared_ptr<TaskRunner>& task_runner, ProcessId process_id)
     process_.swap(process);
 }
 
-Process::Process(std::shared_ptr<TaskRunner>& task_runner, HANDLE process, HANDLE thread)
-    : watcher_(task_runner),
+Process::Process(std::shared_ptr<TaskRunner> task_runner, HANDLE process, HANDLE thread)
+    : watcher_(std::move(task_runner)),
       process_(process),
       thread_(thread)
 {
