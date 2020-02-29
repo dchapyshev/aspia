@@ -100,7 +100,7 @@ void DesktopSessionManager::dettachSession(const base::Location& location)
 
     session_attach_timer_.stop();
     session_proxy_->dettach();
-    session_.reset();
+    task_runner_->deleteSoon(std::move(session_));
 
     LOG(LS_INFO) << "Session process is detached";
 
