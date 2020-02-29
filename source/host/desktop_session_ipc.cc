@@ -91,9 +91,16 @@ void DesktopSessionIpc::start()
 
 void DesktopSessionIpc::enableSession(bool enable)
 {
+    enabled_ = enable;
+
     outgoing_message_.Clear();
     outgoing_message_.mutable_enable_session()->set_enable(enable);
     channel_->send(common::serializeMessage(outgoing_message_));
+}
+
+bool DesktopSessionIpc::isEnabledSession() const
+{
+    return enabled_;
 }
 
 void DesktopSessionIpc::selectScreen(const proto::Screen& screen)

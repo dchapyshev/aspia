@@ -261,10 +261,7 @@ void UserSession::onScreenCaptured(const desktop::Frame& frame)
 void UserSession::onCursorCaptured(std::shared_ptr<desktop::MouseCursor> mouse_cursor)
 {
     for (const auto& client : desktop_clients_)
-    {
-        if (client->sessionType() == proto::SESSION_TYPE_DESKTOP_MANAGE)
-            static_cast<ClientSessionDesktop*>(client.get())->encodeMouseCursor(mouse_cursor);
-    }
+        static_cast<ClientSessionDesktop*>(client.get())->encodeMouseCursor(mouse_cursor);
 }
 
 void UserSession::onScreenListChanged(const proto::ScreenList& list)

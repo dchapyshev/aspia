@@ -36,6 +36,14 @@ void DesktopSessionProxy::enableSession(bool enable)
         desktop_session_->enableSession(enable);
 }
 
+bool DesktopSessionProxy::isEnabledSession() const
+{
+    if (!desktop_session_)
+        return false;
+
+    return desktop_session_->isEnabledSession();
+}
+
 void DesktopSessionProxy::selectScreen(const proto::Screen& screen)
 {
     if (desktop_session_)

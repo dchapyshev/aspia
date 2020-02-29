@@ -36,6 +36,7 @@ public:
     ~DesktopSessionProxy();
 
     void enableSession(bool enable);
+    bool isEnabledSession() const;
     void selectScreen(const proto::Screen& screen);
     void enableFeatures(const proto::internal::EnableFeatures& features);
     void injectKeyEvent(const proto::KeyEvent& event);
