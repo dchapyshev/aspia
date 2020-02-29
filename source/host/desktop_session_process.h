@@ -22,6 +22,7 @@
 #include "base/win/scoped_object.h"
 #include "base/win/session_id.h"
 
+#include <filesystem>
 #include <memory>
 #include <string_view>
 
@@ -38,6 +39,7 @@ public:
 
     static std::unique_ptr<DesktopSessionProcess> create(
         base::win::SessionId session_id, std::u16string_view channel_id);
+    static std::filesystem::path filePath();
 
     void kill();
 

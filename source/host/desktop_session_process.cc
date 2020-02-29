@@ -193,13 +193,7 @@ DesktopSessionProcess::~DesktopSessionProcess() = default;
 std::unique_ptr<DesktopSessionProcess> DesktopSessionProcess::create(
     base::win::SessionId session_id, std::u16string_view channel_id)
 {
-    std::filesystem::path file_path;
-    if (!base::BasePaths::currentExecDir(&file_path))
-        return nullptr;
-
-    file_path.append(kDesktopAgentFile);
-
-    base::CommandLine command_line(file_path);
+    base::CommandLine command_line(filePath());
     command_line.appendSwitch(u"channel_id", channel_id);
 
     base::win::ScopedHandle session_token;
@@ -214,6 +208,17 @@ std::unique_ptr<DesktopSessionProcess> DesktopSessionProcess::create(
 
     return std::unique_ptr<DesktopSessionProcess>(
         new DesktopSessionProcess(std::move(process_handle), std::move(thread_handle)));
+}
+
+// static
+std::filesystem::path DesktopSessionProcess::filePath()
+{
+    std::filesystem::path file_path;
+    if (!base::BasePaths::currentExecDir(&file_path))
+        return std::filesystem::path();
+
+    file_path.append(kDesktopAgentFile);
+    return file_path;
 }
 
 void DesktopSessionProcess::kill()

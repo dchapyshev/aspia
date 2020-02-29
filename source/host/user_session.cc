@@ -18,9 +18,11 @@
 
 #include "host/user_session.h"
 
+#include "base/location.h"
 #include "base/logging.h"
 #include "base/task_runner.h"
 #include "base/strings/string_number_conversions.h"
+#include "base/strings/string_util.h"
 #include "base/strings/unicode.h"
 #include "common/message_serialization.h"
 #include "crypto/password_generator.h"
@@ -33,19 +35,19 @@
 namespace host {
 
 UserSession::UserSession(std::shared_ptr<base::TaskRunner> task_runner,
-                         std::unique_ptr<ipc::Channel> ipc_channel)
-    : task_runner_(std::move(task_runner)),
-      ipc_channel_(std::move(ipc_channel))
+                         base::win::SessionId session_id,
+                         std::unique_ptr<ipc::Channel> channel)
+    : task_runner_(task_runner),
+      channel_(std::move(channel)),
+      attach_timer_(task_runner),
+      session_id_(session_id)
 {
     DCHECK(task_runner_);
-    DCHECK(ipc_channel_);
 
     type_ = UserSession::Type::CONSOLE;
 
-    if (ipc_channel_->peerSessionId() != base::win::activeConsoleSessionId())
+    if (session_id_ != base::win::activeConsoleSessionId())
         type_ = UserSession::Type::RDP;
-
-    session_id_ = ipc_channel_->peerSessionId();
 }
 
 UserSession::~UserSession() = default;
@@ -55,48 +57,56 @@ void UserSession::start(Delegate* delegate)
     delegate_ = delegate;
     DCHECK(delegate_);
 
+    LOG(LS_INFO) << "User session started "
+                 << (channel_ ? "with" : "without")
+                 << " connection to UI";
+
     desktop_session_ = std::make_unique<DesktopSessionManager>(task_runner_, this);
     desktop_session_proxy_ = desktop_session_->sessionProxy();
-    desktop_session_->attachSession(session_id_);
+    desktop_session_->attachSession(FROM_HERE, session_id_);
 
     updateCredentials();
 
-    ipc_channel_->setListener(this);
-    ipc_channel_->resume();
-
-    delegate_->onUserSessionStarted();
-}
-
-void UserSession::restart(std::unique_ptr<ipc::Channel> ipc_channel)
-{
-    ipc_channel_ = std::move(ipc_channel);
-    DCHECK(ipc_channel_);
-
-    updateCredentials();
-
-    ipc_channel_->setListener(this);
-    ipc_channel_->resume();
-
-    auto send_connection_list = [this](const ClientSessionList& list)
+    if (channel_)
     {
-        for (const auto& client : list)
-            sendConnectEvent(*client);
-    };
+        channel_->setListener(this);
+        channel_->resume();
+    }
 
-    send_connection_list(desktop_clients_);
-    send_connection_list(file_transfer_clients_);
-
+    state_ = State::STARTED;
     delegate_->onUserSessionStarted();
 }
 
-UserSession::Type UserSession::type() const
+void UserSession::restart(std::unique_ptr<ipc::Channel> channel)
 {
-    return type_;
-}
+    channel_ = std::move(channel);
 
-base::win::SessionId UserSession::sessionId() const
-{
-    return session_id_;
+    LOG(LS_INFO) << "User session restarted "
+                 << (channel_ ? "with" : "without")
+                 << " connection to UI";
+
+    attach_timer_.stop();
+    updateCredentials();
+
+    desktop_session_->attachSession(FROM_HERE, session_id_);
+
+    if (channel_)
+    {
+        channel_->setListener(this);
+        channel_->resume();
+
+        auto send_connection_list = [this](const ClientSessionList& list)
+        {
+            for (const auto& client : list)
+                sendConnectEvent(*client);
+        };
+
+        send_connection_list(desktop_clients_);
+        send_connection_list(file_transfer_clients_);
+    }
+
+    state_ = State::STARTED;
+    delegate_->onUserSessionStarted();
 }
 
 User UserSession::user() const
@@ -156,14 +166,19 @@ void UserSession::setSessionEvent(base::win::SessionStatus status, base::win::Se
     {
         case base::win::SessionStatus::CONSOLE_CONNECT:
         {
-            desktop_session_->attachSession(session_id);
             session_id_ = session_id;
+
+            if (desktop_session_)
+                desktop_session_->attachSession(FROM_HERE, session_id);
         }
         break;
 
         case base::win::SessionStatus::CONSOLE_DISCONNECT:
         {
-            onSessionDettached();
+            if (desktop_session_)
+                desktop_session_->dettachSession(FROM_HERE);
+
+            onSessionDettached(FROM_HERE);
         }
         break;
 
@@ -177,7 +192,7 @@ void UserSession::setSessionEvent(base::win::SessionStatus status, base::win::Se
 
 void UserSession::onDisconnected()
 {
-    onSessionDettached();
+    onSessionDettached(FROM_HERE);
 }
 
 void UserSession::onMessageReceived(const base::ByteArray& buffer)
@@ -218,7 +233,7 @@ void UserSession::onMessageReceived(const base::ByteArray& buffer)
 
 void UserSession::onDesktopSessionStarted()
 {
-    LOG(LS_INFO) << "The desktop session is connected";
+    LOG(LS_INFO) << "Desktop session is connected";
 
     if (!desktop_clients_.empty())
         desktop_session_proxy_->enableSession(true);
@@ -226,25 +241,21 @@ void UserSession::onDesktopSessionStarted()
 
 void UserSession::onDesktopSessionStopped()
 {
-    LOG(LS_INFO) << "The desktop session is disconnected";
+    LOG(LS_INFO) << "Desktop session is disconnected";
 
-    if (type_ == Type::CONSOLE)
+    if (type_ == Type::RDP)
     {
-
-    }
-    else
-    {
-        DCHECK_EQ(type_, Type::RDP);
         desktop_clients_.clear();
+        file_transfer_clients_.clear();
+
+        onSessionDettached(FROM_HERE);
     }
 }
 
 void UserSession::onScreenCaptured(const desktop::Frame& frame)
 {
     for (const auto& client : desktop_clients_)
-    {
         static_cast<ClientSessionDesktop*>(client.get())->encodeFrame(frame);
-    }
 }
 
 void UserSession::onCursorCaptured(std::shared_ptr<desktop::MouseCursor> mouse_cursor)
@@ -259,9 +270,7 @@ void UserSession::onCursorCaptured(std::shared_ptr<desktop::MouseCursor> mouse_c
 void UserSession::onScreenListChanged(const proto::ScreenList& list)
 {
     for (const auto& client : desktop_clients_)
-    {
         static_cast<ClientSessionDesktop*>(client.get())->setScreenList(list);
-    }
 }
 
 void UserSession::onClipboardEvent(const proto::ClipboardEvent& event)
@@ -311,18 +320,53 @@ void UserSession::onClientSessionFinished()
         desktop_session_proxy_->enableSession(false);
 }
 
-void UserSession::onSessionDettached()
+void UserSession::onSessionDettached(const base::Location& location)
 {
-    desktop_session_->dettachSession();
+    if (state_ == State::DETTACHED)
+        return;
 
+    LOG(LS_INFO) << "Dettach session (from: " << location.toString() << ")";
+
+    task_runner_->deleteSoon(std::move(channel_));
     username_.clear();
     password_.clear();
 
-    delegate_->onUserSessionFinished();
+    auto stop_one_time_clients = [](const ClientSessionList& list)
+    {
+        for (const auto& client : list)
+        {
+            if (base::startsWith(client->userName(), u"#"))
+                client->stop();
+        }
+    };
+
+    stop_one_time_clients(desktop_clients_);
+    stop_one_time_clients(file_transfer_clients_);
+
+    state_ = State::DETTACHED;
+    delegate_->onUserSessionDettached();
+
+    if (type_ == Type::RDP)
+    {
+        delegate_->onUserSessionFinished();
+    }
+    else
+    {
+        attach_timer_.start(std::chrono::minutes(1), [this]()
+        {
+            LOG(LS_INFO) << "Session attach timeout";
+
+            state_ = State::FINISHED;
+            delegate_->onUserSessionFinished();
+        });
+    }
 }
 
 void UserSession::sendConnectEvent(const ClientSession& client_session)
 {
+    if (!channel_)
+        return;
+
     outgoing_message_.Clear();
     proto::internal::ConnectEvent* event = outgoing_message_.mutable_connect_event();
 
@@ -331,14 +375,17 @@ void UserSession::sendConnectEvent(const ClientSession& client_session)
     event->set_session_type(client_session.sessionType());
     event->set_uuid(client_session.id());
 
-    ipc_channel_->send(common::serializeMessage(outgoing_message_));
+    channel_->send(common::serializeMessage(outgoing_message_));
 }
 
 void UserSession::sendDisconnectEvent(const std::string& session_id)
 {
+    if (!channel_)
+        return;
+
     outgoing_message_.Clear();
     outgoing_message_.mutable_disconnect_event()->set_uuid(session_id);
-    ipc_channel_->send(common::serializeMessage(outgoing_message_));
+    channel_->send(common::serializeMessage(outgoing_message_));
 }
 
 void UserSession::updateCredentials()
@@ -359,6 +406,9 @@ void UserSession::updateCredentials()
 
 void UserSession::sendCredentials()
 {
+    if (!channel_)
+        return;
+
     outgoing_message_.Clear();
 
     proto::internal::Credentials* credentials = outgoing_message_.mutable_credentials();
@@ -377,7 +427,7 @@ void UserSession::sendCredentials()
         }
     }
 
-    ipc_channel_->send(common::serializeMessage(outgoing_message_));
+    channel_->send(common::serializeMessage(outgoing_message_));
 }
 
 void UserSession::killClientSession(std::string_view id)

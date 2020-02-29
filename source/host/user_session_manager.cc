@@ -20,12 +20,14 @@
 
 #include "base/command_line.h"
 #include "base/logging.h"
+#include "base/task_runner.h"
 #include "base/files/base_paths.h"
 #include "base/strings/string_number_conversions.h"
 #include "base/strings/string_util.h"
 #include "base/win/scoped_impersonator.h"
 #include "base/win/scoped_object.h"
 #include "base/win/session_enumerator.h"
+#include "base/win/session_info.h"
 #include "host/client_session.h"
 #include "host/user_session.h"
 #include "host/user_session_constants.h"
@@ -116,6 +118,13 @@ bool createLoggedOnUserToken(DWORD session_id, base::win::ScopedHandle* token_ou
 
         if (!WTSQueryUserToken(session_id, user_token.recieve()))
         {
+            DWORD error_code = GetLastError();
+            if (error_code == ERROR_NO_TOKEN)
+            {
+                token_out->reset();
+                return true;
+            }
+
             PLOG(LS_WARNING) << "WTSQueryUserToken failed";
             return false;
         }
@@ -211,6 +220,11 @@ bool createProcessWithToken(HANDLE token, const base::CommandLine& command_line)
         return false;
     }
 
+    if (!SetPriorityClass(process_info.hProcess, NORMAL_PRIORITY_CLASS))
+    {
+        PLOG(LS_WARNING) << "SetPriorityClass failed";
+    }
+
     CloseHandle(process_info.hThread);
     CloseHandle(process_info.hProcess);
     DestroyEnvironmentBlock(environment);
@@ -256,8 +270,13 @@ bool UserSessionManager::start(Delegate* delegate)
 void UserSessionManager::setSessionEvent(
     base::win::SessionStatus status, base::win::SessionId session_id)
 {
+    // Send an event of each session.
+    for (const auto& session : sessions_)
+        session->setSessionEvent(status, session_id);
+
     switch (status)
     {
+        case base::win::SessionStatus::CONSOLE_CONNECT:
         case base::win::SessionStatus::SESSION_LOGON:
         {
             // Start UI process in user session.
@@ -271,14 +290,12 @@ void UserSessionManager::setSessionEvent(
         }
         break;
     }
-
-    // Send an event of each session.
-    for (const auto& session : sessions_)
-        session->setSessionEvent(status, session_id);
 }
 
 void UserSessionManager::addNewSession(std::unique_ptr<ClientSession> client_session)
 {
+    LOG(LS_INFO) << "Adding a new client connection (user: " << client_session->userName() << ")";
+
     base::win::SessionId session_id;
 
     std::u16string username = client_session->userName();
@@ -298,6 +315,30 @@ void UserSessionManager::addNewSession(std::unique_ptr<ClientSession> client_ses
     {
         if (session->sessionId() == session_id)
         {
+            if (session->state() == UserSession::State::DETTACHED)
+            {
+                base::win::SessionInfo session_info(session_id);
+                if (!session_info.isValid())
+                {
+                    LOG(LS_ERROR) << "Unable to determine session state. Connection aborted";
+                    return;
+                }
+
+                switch (session_info.connectState())
+                {
+                    case base::win::SessionInfo::ConnectState::CONNECTED:
+                    {
+                        LOG(LS_INFO) << "Session exists, but there are no logged in users";
+                        session->restart(nullptr);
+                    }
+                    break;
+
+                    default:
+                        LOG(LS_INFO) << "No connected UI. Connection rejected";
+                        return;
+                }
+            }
+
             session->addNewSession(std::move(client_session));
             break;
         }
@@ -316,23 +357,24 @@ UserList UserSessionManager::userList() const
 
 void UserSessionManager::onNewConnection(std::unique_ptr<ipc::Channel> channel)
 {
-    for (const auto& session : sessions_)
+    std::filesystem::path reference_path;
+    if (!base::BasePaths::currentExecDir(&reference_path))
+        return;
+
+    reference_path.append(kExecutableNameForUi);
+
+    if (reference_path != channel->peerFilePath())
     {
-        if (session->sessionId() == channel->peerSessionId())
-        {
-            session->restart(std::move(channel));
-            return;
-        }
+        LOG(LS_ERROR) << "An attempt was made to connect from an unknown application";
+        return;
     }
 
-    sessions_.emplace_back(std::make_unique<UserSession>(task_runner_, std::move(channel)));
-    sessions_.back()->start(this);
+    addUserSession(channel->peerSessionId(), std::move(channel));
 }
 
 void UserSessionManager::onErrorOccurred()
 {
-    // TODO
-    LOG(LS_INFO) << "ON ERROR OCCURRED";
+    // Ignore.
 }
 
 void UserSessionManager::onUserSessionStarted()
@@ -340,9 +382,25 @@ void UserSessionManager::onUserSessionStarted()
     delegate_->onUserListChanged();
 }
 
-void UserSessionManager::onUserSessionFinished()
+void UserSessionManager::onUserSessionDettached()
 {
     delegate_->onUserListChanged();
+}
+
+void UserSessionManager::onUserSessionFinished()
+{
+    for (auto it = sessions_.begin(); it != sessions_.end();)
+    {
+        if (it->get()->state() == UserSession::State::FINISHED)
+        {
+            task_runner_->deleteSoon(std::move(*it));
+            it = sessions_.erase(it);
+        }
+        else
+        {
+            ++it;
+        }
+    }
 }
 
 void UserSessionManager::startSessionProcess(base::win::SessionId session_id)
@@ -354,6 +412,14 @@ void UserSessionManager::startSessionProcess(base::win::SessionId session_id)
     if (!createLoggedOnUserToken(session_id, &user_token))
         return;
 
+    if (!user_token.isValid())
+    {
+        // If there is no user logged in, but the session exists, then add the session without
+        // connecting to UI (we cannot start UI if the user is not logged in).
+        addUserSession(session_id, nullptr);
+        return;
+    }
+
     std::filesystem::path file_path;
     if (!base::BasePaths::currentExecDir(&file_path))
         return;
@@ -364,6 +430,23 @@ void UserSessionManager::startSessionProcess(base::win::SessionId session_id)
     command_line.appendSwitch(u"hidden");
 
     createProcessWithToken(user_token, command_line);
+}
+
+void UserSessionManager::addUserSession(
+    base::win::SessionId session_id, std::unique_ptr<ipc::Channel> channel)
+{
+    for (const auto& session : sessions_)
+    {
+        if (session->sessionId() == session_id)
+        {
+            session->restart(std::move(channel));
+            return;
+        }
+    }
+
+    sessions_.emplace_back(std::make_unique<UserSession>(
+        task_runner_, session_id, std::move(channel)));
+    sessions_.back()->start(this);
 }
 
 } // namespace host

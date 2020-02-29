@@ -19,15 +19,13 @@
 #ifndef HOST__USER_SESSION_H
 #define HOST__USER_SESSION_H
 
-#include "base/macros_magic.h"
+#include "base/waitable_timer.h"
 #include "base/win/session_id.h"
 #include "host/client_session.h"
 #include "host/desktop_session_manager.h"
 #include "host/user.h"
 #include "ipc/ipc_listener.h"
 #include "proto/host_internal.pb.h"
-
-#include <memory>
 
 namespace ipc {
 class Channel;
@@ -48,24 +46,34 @@ public:
         RDP
     };
 
+    enum class State
+    {
+        STARTED,
+        DETTACHED,
+        FINISHED
+    };
+
     class Delegate
     {
     public:
         virtual ~Delegate() = default;
 
         virtual void onUserSessionStarted() = 0;
+        virtual void onUserSessionDettached() = 0;
         virtual void onUserSessionFinished() = 0;
     };
 
     UserSession(std::shared_ptr<base::TaskRunner> task_runner,
-                std::unique_ptr<ipc::Channel> ipc_channel);
+                base::win::SessionId session_id,
+                std::unique_ptr<ipc::Channel> channel);
     ~UserSession();
 
     void start(Delegate* delegate);
-    void restart(std::unique_ptr<ipc::Channel> ipc_channel);
+    void restart(std::unique_ptr<ipc::Channel> channel);
 
-    Type type() const;
-    base::win::SessionId sessionId() const;
+    Type type() const { return type_; }
+    State state() const { return state_; }
+    base::win::SessionId sessionId() const { return session_id_; }
     User user() const;
 
     void addNewSession(std::unique_ptr<ClientSession> client_session);
@@ -88,7 +96,7 @@ protected:
     void onClientSessionFinished() override;
 
 private:
-    void onSessionDettached();
+    void onSessionDettached(const base::Location& location);
     void sendConnectEvent(const ClientSession& client_session);
     void sendDisconnectEvent(const std::string& session_id);
     void updateCredentials();
@@ -96,9 +104,12 @@ private:
     void killClientSession(std::string_view id);
 
     std::shared_ptr<base::TaskRunner> task_runner_;
-    std::unique_ptr<ipc::Channel> ipc_channel_;
+    std::unique_ptr<ipc::Channel> channel_;
 
     Type type_;
+    State state_ = State::DETTACHED;
+    base::WaitableTimer attach_timer_;
+
     base::win::SessionId session_id_;
     std::string username_;
     std::string password_;

@@ -26,6 +26,10 @@
 #include "ipc/ipc_server.h"
 #include "proto/desktop_internal.pb.h"
 
+namespace base {
+class Location;
+} // namespace base
+
 namespace desktop {
 class Frame;
 } // namespace desktop
@@ -48,8 +52,8 @@ public:
                           DesktopSession::Delegate* delegate);
     ~DesktopSessionManager();
 
-    void attachSession(base::win::SessionId session_id);
-    void dettachSession();
+    void attachSession(const base::Location& location, base::win::SessionId session_id);
+    void dettachSession(const base::Location& location);
 
     std::shared_ptr<DesktopSessionProxy> sessionProxy() const;
 

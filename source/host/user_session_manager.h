@@ -56,10 +56,12 @@ protected:
 
     // UserSession::Delegate implementation.
     void onUserSessionStarted() override;
+    void onUserSessionDettached() override;
     void onUserSessionFinished() override;
 
 private:
     void startSessionProcess(base::win::SessionId session_id);
+    void addUserSession(base::win::SessionId session_id, std::unique_ptr<ipc::Channel> channel);
 
     std::shared_ptr<base::TaskRunner> task_runner_;
     std::unique_ptr<ipc::Server> ipc_server_;
