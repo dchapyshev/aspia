@@ -33,6 +33,8 @@
 
 #include <functional>
 
+#include <psapi.h>
+
 namespace ipc {
 
 namespace {
@@ -246,6 +248,27 @@ void Channel::send(base::ByteArray&& buffer)
 
     if (schedule_write)
         doWrite();
+}
+
+std::filesystem::path Channel::peerFilePath() const
+{
+    base::win::ScopedHandle process(
+        OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, peer_process_id_));
+    if (!process.isValid())
+    {
+        PLOG(LS_WARNING) << "OpenProcess failed";
+        return std::filesystem::path();
+    }
+
+    wchar_t buffer[MAX_PATH] = { 0 };
+
+    if (!GetModuleFileNameExW(process.get(), nullptr, buffer, std::size(buffer)))
+    {
+        PLOG(LS_WARNING) << "GetModuleFileNameExW failed";
+        return std::filesystem::path();
+    }
+
+    return buffer;
 }
 
 // static

@@ -19,7 +19,6 @@
 #ifndef IPC__IPC_CHANNEL_H
 #define IPC__IPC_CHANNEL_H
 
-#include "base/macros_magic.h"
 #include "base/process_handle.h"
 #include "base/memory/byte_array.h"
 #include "base/memory/scalable_queue.h"
@@ -27,6 +26,8 @@
 #include "base/win/session_id.h"
 
 #include <asio/windows/stream_handle.hpp>
+
+#include <filesystem>
 
 namespace base {
 class Location;
@@ -65,6 +66,7 @@ public:
 
     base::ProcessId peerProcessId() const { return peer_process_id_; }
     base::win::SessionId peerSessionId() const { return peer_session_id_; }
+    std::filesystem::path peerFilePath() const;
 
 private:
     friend class Server;
