@@ -47,6 +47,9 @@ DesktopSessionManager::~DesktopSessionManager()
 
 void DesktopSessionManager::attachSession(base::win::SessionId session_id)
 {
+    if (state_ == State::ATTACHED)
+        return;
+
     LOG(LS_INFO) << "Attach session with ID: " << session_id;
 
     if (state_ == State::STOPPED)
