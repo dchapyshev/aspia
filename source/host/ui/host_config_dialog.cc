@@ -127,23 +127,40 @@ void ConfigDialog::onCurrentUserChanged(
 
 void ConfigDialog::onAddUser()
 {
-    if (UserDialog(&users_, -1, this).exec() == QDialog::Accepted)
+    QStringList exist_names;
+
+    for (int i = 0; i < ui.tree_users->topLevelItemCount(); ++i)
+        exist_names.append(ui.tree_users->topLevelItem(i)->text(0));
+
+    UserDialog dialog(User(), exist_names, this);
+    if (dialog.exec() == QDialog::Accepted)
     {
+        ui.tree_users->addTopLevelItem(new UserTreeItem(dialog.user()));
         setConfigChanged(true);
-        reloadUserList();
     }
 }
 
 void ConfigDialog::onModifyUser()
 {
-    UserTreeItem* user_item = static_cast<UserTreeItem*>(ui.tree_users->currentItem());
-    if (!user_item)
+    UserTreeItem* current_item = static_cast<UserTreeItem*>(ui.tree_users->currentItem());
+    if (!current_item)
         return;
 
-    if (UserDialog(&users_, user_item->userIndex(), this).exec() == QDialog::Accepted)
+    QString current_name = current_item->text(0);
+    QStringList exist_names;
+
+    for (int i = 0; i < ui.tree_users->topLevelItemCount(); ++i)
     {
+        QString name = ui.tree_users->topLevelItem(i)->text(0);
+        if (name.compare(current_name, Qt::CaseInsensitive) != 0)
+            exist_names.append(name);
+    }
+
+    UserDialog dialog(current_item->user(), exist_names, this);
+    if (dialog.exec() == QDialog::Accepted)
+    {
+        current_item->setUser(dialog.user());
         setConfigChanged(true);
-        reloadUserList();
     }
 }
 
@@ -160,10 +177,8 @@ void ConfigDialog::onDeleteUser()
                               QMessageBox::Yes,
                               QMessageBox::No) == QMessageBox::Yes)
     {
-        users_.remove(user_item->userIndex());
-
+        delete user_item;
         setConfigChanged(true);
-        reloadUserList();
     }
 }
 
@@ -293,9 +308,19 @@ void ConfigDialog::onButtonBoxClicked(QAbstractButton* button)
             }
         }
 
+        UserList user_list;
+
+        for (int i = 0; i < ui.tree_users->topLevelItemCount(); ++i)
+        {
+            UserTreeItem* user_tree_item =
+                static_cast<UserTreeItem*>(ui.tree_users->topLevelItem(i));
+
+            user_list.add(user_tree_item->user());
+        }
+
         // Update the parameters.
         settings.setTcpPort(ui.spinbox_port->value());
-        settings.setUserList(users_);
+        settings.setUserList(user_list);
         settings.setUpdateServer(ui.edit_update_server->text().toStdString());
 
         setConfigChanged(false);
@@ -348,10 +373,8 @@ void ConfigDialog::reloadAll()
 {
     SystemSettings settings;
 
-    users_ = settings.userList();
-
     reloadServiceStatus();
-    reloadUserList();
+    reloadUserList(settings.userList());
 
     ui.spinbox_port->setValue(settings.tcpPort());
     ui.checkbox_use_custom_server->setChecked(settings.updateServer() != DEFAULT_UPDATE_SERVER);
@@ -362,12 +385,12 @@ void ConfigDialog::reloadAll()
     setConfigChanged(false);
 }
 
-void ConfigDialog::reloadUserList()
+void ConfigDialog::reloadUserList(const UserList& user_list)
 {
     ui.tree_users->clear();
 
-    for (int i = 0; i < users_.count(); ++i)
-        ui.tree_users->addTopLevelItem(new UserTreeItem(i, users_.at(i)));
+    for (UserList::Iterator it(user_list); !it.isAtEnd(); it.advance())
+        ui.tree_users->addTopLevelItem(new UserTreeItem(it.user()));
 
     ui.button_modify->setEnabled(false);
     ui.button_delete->setEnabled(false);

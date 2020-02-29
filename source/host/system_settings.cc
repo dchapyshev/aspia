@@ -91,9 +91,9 @@ void SystemSettings::setUserList(const UserList& users)
 
     base::Settings::Array users_array;
 
-    for (size_t i = 0; i < users.count(); ++i)
+    for (UserList::Iterator it(users); !it.isAtEnd(); it.advance())
     {
-        const User& user = users.at(i);
+        const User& user = it.user();
 
         base::Settings item;
         item.set("Name", user.name);

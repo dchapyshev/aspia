@@ -22,15 +22,26 @@
 
 namespace host {
 
-UserTreeItem::UserTreeItem(int index, const User& user)
-    : index_(index)
+UserTreeItem::UserTreeItem(const User& user)
+    : user_(user)
 {
-    if (user.flags & User::ENABLED)
+    updateData();
+}
+
+void UserTreeItem::setUser(const User& user)
+{
+    user_ = user;
+    updateData();
+}
+
+void UserTreeItem::updateData()
+{
+    if (user_.flags & User::ENABLED)
         setIcon(0, QIcon(QLatin1String(":/img/user.png")));
     else
         setIcon(0, QIcon(QLatin1String(":/img/user-disabled.png")));
 
-    setText(0, QString::fromStdU16String(user.name));
+    setText(0, QString::fromStdU16String(user_.name));
 }
 
 } // namespace host

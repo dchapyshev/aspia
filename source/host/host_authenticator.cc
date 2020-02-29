@@ -170,8 +170,8 @@ void Authenticator::onMessageReceived(const base::ByteArray& buffer)
                 return;
             }
 
-            const size_t user_index = userlist_->find(username_);
-            if (user_index == -1)
+            const User& user = userlist_->find(username_);
+            if (!user.isValid())
             {
                 session_types_ = proto::SESSION_TYPE_ALL;
 
@@ -186,8 +186,6 @@ void Authenticator::onMessageReceived(const base::ByteArray& buffer)
             }
             else
             {
-                const User& user = userlist_->at(user_index);
-
                 session_types_ = user.sessions;
 
                 N_ = crypto::BigNum::fromByteArray(user.number);

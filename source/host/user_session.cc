@@ -101,11 +101,6 @@ base::win::SessionId UserSession::sessionId() const
 
 User UserSession::user() const
 {
-    // If the session is not running, then there is no authentication data. Return the incorrect
-    // user.
-    if (username_.empty() || password_.empty())
-        return User();
-
     User user = User::create(base::utf16FromAscii(username_), base::utf16FromAscii(password_));
 
     user.sessions = proto::SESSION_TYPE_ALL;

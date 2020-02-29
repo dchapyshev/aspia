@@ -19,7 +19,6 @@
 #include "host/ui/user_dialog.h"
 
 #include "base/logging.h"
-#include "base/strings/string_util.h"
 #include "common/session_type.h"
 #include "common/user_util.h"
 #include "proto/common.pb.h"
@@ -29,19 +28,15 @@
 
 namespace host {
 
-UserDialog::UserDialog(UserList* user_list, size_t user_index, QWidget* parent)
+UserDialog::UserDialog(const User& user, const QStringList& exist_names, QWidget* parent)
     : QDialog(parent),
-      user_list_(user_list),
-      user_index_(user_index)
+      exist_names_(exist_names),
+      user_(user)
 {
-    DCHECK(user_list_);
-
     ui.setupUi(this);
 
-    if (user_index != -1)
+    if (user.isValid())
     {
-        const User& user = user_list_->at(user_index);
-
         ui.checkbox_disable_user->setChecked(!(user.flags & User::ENABLED));
         ui.edit_username->setText(QString::fromStdU16String(user.name));
 
@@ -61,10 +56,8 @@ UserDialog::UserDialog(UserList* user_list, size_t user_index, QWidget* parent)
         item->setFlags(item->flags() | Qt::ItemIsUserCheckable);
         item->setData(0, Qt::UserRole, QVariant(session_type));
 
-        if (user_index != -1)
+        if (user.isValid())
         {
-            const User& user = user_list_->at(user_index);
-
             if (user.sessions & session_type)
                 item->setCheckState(0, Qt::Checked);
             else
@@ -124,11 +117,6 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
 {
     if (ui.button_box->standardButton(button) == QDialogButtonBox::Ok)
     {
-        User user;
-
-        if (user_index_ != -1)
-            user = user_list_->at(user_index_);
-
         if (account_changed_)
         {
             std::u16string name = ui.edit_username->text().toStdU16String();
@@ -146,8 +134,7 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
                 return;
             }
 
-            if ((base::compareCaseInsensitive(name, user.name) != 0) &&
-                (user_list_->find(name) != -1))
+            if (exist_names_.contains(name, Qt::CaseInsensitive))
             {
                 QMessageBox::warning(this,
                                      tr("Warning"),
@@ -207,8 +194,8 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
                 }
             }
 
-            user = User::create(name, password);
-            if (!user.isValid())
+            user_ = User::create(name, password);
+            if (!user_.isValid())
             {
                 QMessageBox::warning(this,
                                      tr("Warning"),
@@ -230,13 +217,8 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
         if (!ui.checkbox_disable_user->isChecked())
             flags |= User::ENABLED;
 
-        user.sessions = sessions;
-        user.flags = flags;
-
-        if (user_index_ != -1)
-            user_list_->update(user_index_, user);
-        else
-            user_list_->add(user);
+        user_.sessions = sessions;
+        user_.flags = flags;
 
         accept();
     }

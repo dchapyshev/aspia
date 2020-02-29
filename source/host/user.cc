@@ -28,6 +28,7 @@ namespace host {
 
 namespace {
 
+const User kInvalidUser;
 const size_t kUserSaltSize = 64; // In bytes.
 
 } // namespace
@@ -35,6 +36,9 @@ const size_t kUserSaltSize = 64; // In bytes.
 // static
 User User::create(std::u16string_view name, std::u16string_view password)
 {
+    if (name.empty() || password.empty())
+        return User();
+
     User user;
 
     user.name = name;
@@ -63,7 +67,7 @@ bool User::isValid() const
 void UserList::add(const User& user)
 {
     if (user.isValid())
-        list_.push_back(user);
+        list_.emplace_back(user);
 }
 
 void UserList::add(User&& user)
@@ -72,51 +76,29 @@ void UserList::add(User&& user)
         list_.emplace_back(std::move(user));
 }
 
-void UserList::remove(std::u16string_view username)
-{
-    size_t index = find(username);
-    if (index != -1)
-        remove(index);
-}
-
-void UserList::remove(size_t index)
-{
-    DCHECK(hasIndex(index));
-    list_.erase(list_.begin() + index);
-}
-
-void UserList::update(size_t index, const User& user)
-{
-    DCHECK(hasIndex(index));
-    list_[index] = user;
-}
-
 void UserList::merge(const UserList& user_list)
 {
     for (const auto& user : user_list.list_)
         add(user);
 }
 
-size_t UserList::find(std::u16string_view username) const
+void UserList::merge(UserList&& user_list)
 {
-    for (size_t i = 0; i < list_.size(); ++i)
-    {
-        const User& user = list_.at(i);
-
-        if ((base::compareCaseInsensitive(user.name, username) == 0) &&
-            (user.flags & User::ENABLED))
-        {
-            return i;
-        }
-    }
-
-    return -1;
+    for (auto& user : user_list.list_)
+        add(std::move(user));
 }
 
-const User& UserList::at(size_t index) const
+const User& UserList::find(std::u16string_view username) const
 {
-    DCHECK(hasIndex(index));
-    return list_.at(index);
+    const User* user = &kInvalidUser;
+
+    for (const auto& item : list_)
+    {
+        if (base::compareCaseInsensitive(username, item.name) == 0)
+            user = &item;
+    }
+
+    return *user;
 }
 
 void UserList::setSeedKey(const base::ByteArray& seed_key)
@@ -124,9 +106,36 @@ void UserList::setSeedKey(const base::ByteArray& seed_key)
     seed_key_ = seed_key;
 }
 
-bool UserList::hasIndex(size_t index) const
+void UserList::setSeedKey(base::ByteArray&& seed_key)
 {
-    return index < list_.size();
+    seed_key_ = std::move(seed_key);
+}
+
+UserList::Iterator::Iterator(const UserList& list)
+    : list_(list.list_),
+      pos_(list.list_.cbegin())
+{
+    // Nothing
+}
+
+UserList::Iterator::~Iterator() = default;
+
+const User& UserList::Iterator::user() const
+{
+    if (isAtEnd())
+        return kInvalidUser;
+
+    return *pos_;
+}
+
+bool UserList::Iterator::isAtEnd() const
+{
+    return pos_ == list_.cend();
+}
+
+void UserList::Iterator::advance()
+{
+    ++pos_;
 }
 
 } // namespace host

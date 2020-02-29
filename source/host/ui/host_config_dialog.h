@@ -50,7 +50,7 @@ private:
     void setConfigChanged(bool changed);
     bool isConfigChanged() const;
     void reloadAll();
-    void reloadUserList();
+    void reloadUserList(const UserList& user_list);
     void reloadServiceStatus();
     bool isServiceStarted();
     bool installService();
@@ -60,7 +60,6 @@ private:
     bool restartService();
 
     Ui::HostConfigDialog ui;
-    UserList users_;
 
     enum class ServiceState { NOT_INSTALLED, ACCESS_DENIED, NOT_STARTED, STARTED };
     ServiceState service_state_;

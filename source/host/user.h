@@ -62,20 +62,31 @@ public:
 
     void add(const User& user);
     void add(User&& user);
-    void remove(std::u16string_view username);
-    void remove(size_t index);
-    void update(size_t index, const User& user);
     void merge(const UserList& user_list);
+    void merge(UserList&& user_list);
 
-    size_t find(std::u16string_view username) const;
+    const User& find(std::u16string_view username) const;
     size_t count() const { return list_.size(); }
     bool empty() const { return list_.empty(); }
-    const User& at(size_t index) const;
 
     const base::ByteArray& seedKey() const { return seed_key_; }
     void setSeedKey(const base::ByteArray& seed_key);
+    void setSeedKey(base::ByteArray&& seed_key);
 
-    bool hasIndex(size_t index) const;
+    class Iterator
+    {
+    public:
+        Iterator(const UserList& list);
+        ~Iterator();
+
+        const User& user() const;
+        bool isAtEnd() const;
+        void advance();
+
+    private:
+        const std::vector<User>& list_;
+        std::vector<User>::const_iterator pos_;
+    };
 
 private:
     base::ByteArray seed_key_;

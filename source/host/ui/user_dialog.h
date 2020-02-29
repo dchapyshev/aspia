@@ -30,8 +30,10 @@ class UserDialog : public QDialog
     Q_OBJECT
 
 public:
-    UserDialog(UserList* user_list, size_t user_index, QWidget* parent);
+    UserDialog(const User& user, const QStringList& exist_names, QWidget* parent);
     ~UserDialog() = default;
+
+    User user() { return user_; }
 
 protected:
     // QDialog implementation.
@@ -47,9 +49,8 @@ private:
 
     Ui::UserDialog ui;
 
-    UserList* user_list_;
-    const size_t user_index_;
-
+    QStringList exist_names_;
+    User user_;
     bool account_changed_ = true;
 
     DISALLOW_COPY_AND_ASSIGN(UserDialog);

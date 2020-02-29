@@ -20,6 +20,7 @@
 #define HOST__UI__USER_TREE_ITEM_H
 
 #include "base/macros_magic.h"
+#include "host/user.h"
 
 #include <QTreeWidget>
 
@@ -30,14 +31,16 @@ class User;
 class UserTreeItem : public QTreeWidgetItem
 {
 public:
-    UserTreeItem(int index, const User& user);
+    UserTreeItem(const User& user);
     ~UserTreeItem() = default;
 
-    int userIndex() const { return index_; }
+    const User& user() const { return user_; }
+    void setUser(const User& user);
 
 private:
-    int index_;
+    void updateData();
 
+    User user_;
     DISALLOW_COPY_AND_ASSIGN(UserTreeItem);
 };
 
