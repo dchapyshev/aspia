@@ -21,96 +21,55 @@
 #include "base/logging.h"
 #include "base/task_runner.h"
 
-#include <Windows.h>
-
 namespace base {
 
 class WaitableTimer::Impl : public std::enable_shared_from_this<Impl>
 {
 public:
-    Impl(std::shared_ptr<TaskRunner>& task_runner,
-         const std::chrono::milliseconds& time_delta,
-         TimeoutCallback signal_callback);
+    explicit Impl(TimeoutCallback signal_callback);
     ~Impl();
 
-    void stop();
+    void start(std::chrono::milliseconds time_delta, std::shared_ptr<TaskRunner>& task_runner);
+    void dettach();
 
 private:
-    static void NTAPI timerProc(LPVOID context, BOOLEAN timer_or_wait_fired);
     void onSignal();
 
     TimeoutCallback signal_callback_;
-    HANDLE timer_handle_ = nullptr;
-
-    std::shared_ptr<TaskRunner> task_runner_;
 
     DISALLOW_COPY_AND_ASSIGN(Impl);
 };
 
-WaitableTimer::Impl::Impl(std::shared_ptr<TaskRunner>& task_runner,
-                          const std::chrono::milliseconds& time_delta,
-                          TimeoutCallback signal_callback)
-    : task_runner_(task_runner),
-      signal_callback_(std::move(signal_callback))
+WaitableTimer::Impl::Impl(TimeoutCallback signal_callback)
+    : signal_callback_(std::move(signal_callback))
 {
-    DCHECK(task_runner_);
-    DCHECK(task_runner_->belongsToCurrentThread());
-    DCHECK(time_delta.count() < std::numeric_limits<DWORD>::max());
     DCHECK(signal_callback_);
-
-    BOOL ret = CreateTimerQueueTimer(&timer_handle_,
-                                     nullptr,
-                                     timerProc,
-                                     this,
-                                     static_cast<DWORD>(time_delta.count()),
-                                     0,
-                                     WT_EXECUTEONLYONCE);
-    CHECK(ret);
 }
 
 WaitableTimer::Impl::~Impl()
 {
-    stop();
+    dettach();
 }
 
-void WaitableTimer::Impl::stop()
+void WaitableTimer::Impl::start(
+    std::chrono::milliseconds time_delta, std::shared_ptr<TaskRunner>& task_runner)
 {
-    DCHECK(task_runner_->belongsToCurrentThread());
+    task_runner->postDelayedTask(std::bind(&Impl::onSignal, shared_from_this()), time_delta);
+}
 
-    if (!signal_callback_)
-        return;
-
-    if (!DeleteTimerQueueTimer(nullptr, timer_handle_, INVALID_HANDLE_VALUE))
-    {
-        DPLOG(LS_WARNING) << "DeleteTimerQueueTimer failed";
-    }
-
+void WaitableTimer::Impl::dettach()
+{
     signal_callback_ = nullptr;
-}
-
-// static
-void NTAPI WaitableTimer::Impl::timerProc(LPVOID context, BOOLEAN /* timer_or_wait_fired */)
-{
-    Impl* self = reinterpret_cast<Impl*>(context);
-    DCHECK(self);
-
-    self->onSignal();
 }
 
 void WaitableTimer::Impl::onSignal()
 {
-    if (!task_runner_->belongsToCurrentThread())
-    {
-        task_runner_->postTask(std::bind(&Impl::onSignal, shared_from_this()));
-        return;
-    }
-
     if (signal_callback_)
         signal_callback_();
 }
 
-WaitableTimer::WaitableTimer(std::shared_ptr<TaskRunner>& task_runner)
-    : task_runner_(task_runner)
+WaitableTimer::WaitableTimer(std::shared_ptr<TaskRunner> task_runner)
+    : task_runner_(std::move(task_runner))
 {
     DCHECK(task_runner_);
 }
@@ -120,10 +79,11 @@ WaitableTimer::~WaitableTimer()
     stop();
 }
 
-void WaitableTimer::start(const std::chrono::milliseconds& time_delta,
+void WaitableTimer::start(std::chrono::milliseconds time_delta,
                           TimeoutCallback signal_callback)
 {
-    impl_ = std::make_shared<Impl>(task_runner_, time_delta, std::move(signal_callback));
+    impl_ = std::make_shared<Impl>(std::move(signal_callback));
+    impl_->start(time_delta, task_runner_);
 }
 
 void WaitableTimer::stop()
@@ -131,7 +91,7 @@ void WaitableTimer::stop()
     if (!impl_)
         return;
 
-    impl_->stop();
+    impl_->dettach();
     impl_.reset();
 }
 
