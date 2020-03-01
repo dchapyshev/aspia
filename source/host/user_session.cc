@@ -235,8 +235,11 @@ void UserSession::onDesktopSessionStarted()
 {
     LOG(LS_INFO) << "Desktop session is connected";
 
-    if (!desktop_clients_.empty())
-        desktop_session_proxy_->enableSession(true);
+    bool enable_session = !desktop_clients_.empty();
+
+    desktop_session_proxy_->enableSession(enable_session);
+    if (enable_session)
+        desktop_session_proxy_->restoreState();
 }
 
 void UserSession::onDesktopSessionStopped()

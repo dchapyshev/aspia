@@ -23,25 +23,28 @@
 
 namespace host {
 
-DesktopSessionProxy::DesktopSessionProxy() = default;
+DesktopSessionProxy::DesktopSessionProxy()
+{
+    resetFeatures();
+}
 
 DesktopSessionProxy::~DesktopSessionProxy()
 {
     DCHECK(!desktop_session_);
 }
 
-void DesktopSessionProxy::enableSession(bool enable)
+void DesktopSessionProxy::restoreState()
 {
-    if (desktop_session_)
-        desktop_session_->enableSession(enable);
+    enableFeatures(features_);
 }
 
-bool DesktopSessionProxy::isEnabledSession() const
+void DesktopSessionProxy::enableSession(bool enable)
 {
-    if (!desktop_session_)
-        return false;
+    if (!enable)
+        resetFeatures();
 
-    return desktop_session_->isEnabledSession();
+    if (desktop_session_)
+        desktop_session_->enableSession(enable);
 }
 
 void DesktopSessionProxy::selectScreen(const proto::Screen& screen)
@@ -52,8 +55,10 @@ void DesktopSessionProxy::selectScreen(const proto::Screen& screen)
 
 void DesktopSessionProxy::enableFeatures(const proto::internal::EnableFeatures& features)
 {
+    mergeFeatures(features);
+ 
     if (desktop_session_)
-        desktop_session_->enableFeatures(features);
+        desktop_session_->enableFeatures(features_);
 }
 
 void DesktopSessionProxy::injectKeyEvent(const proto::KeyEvent& event)
@@ -89,6 +94,35 @@ void DesktopSessionProxy::attach(DesktopSession* desktop_session)
 void DesktopSessionProxy::dettach()
 {
     desktop_session_ = nullptr;
+}
+
+void DesktopSessionProxy::mergeFeatures(const proto::internal::EnableFeatures& features)
+{
+    // If at least one client has disabled effects, then the effects will be disabled for everyone.
+    if (!features.effects() || !features_.effects())
+        features_.set_effects(false);
+    else
+        features_.set_effects(true);
+
+    // If at least one client has disabled the wallpaper, then the effects will be disabled for
+    // everyone.
+    if (!features.wallpaper() || !features_.wallpaper())
+        features_.set_wallpaper(false);
+    else
+        features_.set_wallpaper(true);
+
+    // If at least one client has enabled input block, then the block will be enabled for everyone.
+    if (features.block_input() || features_.block_input())
+        features_.set_block_input(true);
+    else
+        features_.set_block_input(false);
+}
+
+void DesktopSessionProxy::resetFeatures()
+{
+    features_.set_wallpaper(true);
+    features_.set_effects(true);
+    features_.set_block_input(false);
 }
 
 } // namespace host

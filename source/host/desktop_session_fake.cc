@@ -40,8 +40,6 @@ public:
     void start(Delegate* delegate);
     void stop();
 
-    bool isStarted() const;
-
 private:
     void generateFrame();
 
@@ -75,11 +73,6 @@ void DesktopSessionFake::FrameGenerator::start(Delegate* delegate)
 void DesktopSessionFake::FrameGenerator::stop()
 {
     delegate_ = nullptr;
-}
-
-bool DesktopSessionFake::FrameGenerator::isStarted() const
-{
-    return delegate_ != nullptr;
 }
 
 void DesktopSessionFake::FrameGenerator::generateFrame()
@@ -117,7 +110,7 @@ DesktopSessionFake::~DesktopSessionFake()
 
 void DesktopSessionFake::start()
 {
-    // Nothing
+    delegate_->onDesktopSessionStarted();
 }
 
 void DesktopSessionFake::enableSession(bool enable)
@@ -126,11 +119,6 @@ void DesktopSessionFake::enableSession(bool enable)
         frame_generator_->start(delegate_);
     else
         frame_generator_->stop();
-}
-
-bool DesktopSessionFake::isEnabledSession() const
-{
-    return frame_generator_->isStarted();
 }
 
 void DesktopSessionFake::selectScreen(const proto::Screen& /* screen */)

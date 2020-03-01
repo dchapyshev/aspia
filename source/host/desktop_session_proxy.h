@@ -35,8 +35,9 @@ public:
     DesktopSessionProxy();
     ~DesktopSessionProxy();
 
+    void restoreState();
+
     void enableSession(bool enable);
-    bool isEnabledSession() const;
     void selectScreen(const proto::Screen& screen);
     void enableFeatures(const proto::internal::EnableFeatures& features);
     void injectKeyEvent(const proto::KeyEvent& event);
@@ -50,7 +51,11 @@ private:
     void attach(DesktopSession* desktop_session);
     void dettach();
 
+    void mergeFeatures(const proto::internal::EnableFeatures& features);
+    void resetFeatures();
+
     DesktopSession* desktop_session_ = nullptr;
+    proto::internal::EnableFeatures features_;
 
     DISALLOW_COPY_AND_ASSIGN(DesktopSessionProxy);
 };

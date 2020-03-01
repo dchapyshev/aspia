@@ -40,7 +40,6 @@ public:
     // DesktopSession implementation.
     void start() override;
     void enableSession(bool enable) override;
-    bool isEnabledSession() const override;
     void selectScreen(const proto::Screen& screen) override;
     void enableFeatures(const proto::internal::EnableFeatures& features) override;
     void injectKeyEvent(const proto::KeyEvent& event) override;
@@ -64,8 +63,6 @@ private:
 
     std::unique_ptr<ipc::Channel> channel_;
     SharedBuffers shared_buffers_;
-
-    bool enabled_ = false;
 
     proto::internal::ServiceToDesktop outgoing_message_;
     proto::internal::DesktopToService incoming_message_;

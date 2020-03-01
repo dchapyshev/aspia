@@ -98,8 +98,6 @@ void DesktopSessionManager::dettachSession(const base::Location& location)
     if (state_ != State::STOPPING)
         state_ = State::DETACHED;
 
-    bool is_enabled = session_->isEnabledSession();
-
     session_attach_timer_.stop();
     session_proxy_->dettach();
     task_runner_->deleteSoon(std::move(session_));
@@ -119,9 +117,6 @@ void DesktopSessionManager::dettachSession(const base::Location& location)
     session_ = std::make_unique<DesktopSessionFake>(task_runner_, this);
     session_proxy_->attach(session_.get());
     session_->start();
-
-    if (is_enabled)
-        session_->enableSession(true);
 }
 
 std::shared_ptr<DesktopSessionProxy> DesktopSessionManager::sessionProxy() const
