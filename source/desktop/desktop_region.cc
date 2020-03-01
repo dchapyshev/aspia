@@ -536,7 +536,7 @@ void Region::addSpanToRow(Row* row, int32_t left, int32_t right)
     if (end == row->spans.begin())
     {
         // There are no overlaps. Just insert the new span at the beginning.
-        row->spans.insert(row->spans.begin(), RowSpan(left, right));
+        row->spans.emplace(row->spans.begin(), left, right);
         return;
     }
 
@@ -549,7 +549,7 @@ void Region::addSpanToRow(Row* row, int32_t left, int32_t right)
     if (end < start)
     {
         // There are no overlaps. Just insert the new span at the correct position.
-        row->spans.insert(start, RowSpan(left, right));
+        row->spans.emplace(start, left, right);
         return;
     }
 
