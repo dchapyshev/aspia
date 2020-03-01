@@ -93,6 +93,7 @@ protected:
     void onClipboardEvent(const proto::ClipboardEvent& event) override;
 
     // ClientSession::Delegate implementation.
+    void onClientSessionConfigured() override;
     void onClientSessionFinished() override;
 
 private:

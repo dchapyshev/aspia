@@ -235,11 +235,8 @@ void UserSession::onDesktopSessionStarted()
 {
     LOG(LS_INFO) << "Desktop session is connected";
 
-    bool enable_session = !desktop_clients_.empty();
-
-    desktop_session_proxy_->enableSession(enable_session);
-    if (enable_session)
-        desktop_session_proxy_->restoreState();
+    desktop_session_proxy_->enableSession(!desktop_clients_.empty());
+    onClientSessionConfigured();
 }
 
 void UserSession::onDesktopSessionStopped()
@@ -285,6 +282,37 @@ void UserSession::onClipboardEvent(const proto::ClipboardEvent& event)
             desktop_client->injectClipboardEvent(event);
         }
     }
+}
+
+void UserSession::onClientSessionConfigured()
+{
+    if (desktop_clients_.empty())
+        return;
+
+    proto::internal::EnableFeatures system_features;
+
+    for (const auto& client : desktop_clients_)
+    {
+        const proto::internal::EnableFeatures& client_features =
+            static_cast<ClientSessionDesktop*>(client.get())->features();
+
+        // If at least one client has disabled effects, then the effects will be disabled for
+        // everyone.
+        system_features.set_disable_effects(
+            system_features.disable_effects() || client_features.disable_effects());
+
+        // If at least one client has disabled the wallpaper, then the effects will be disabled for
+        // everyone.
+        system_features.set_disable_wallpaper(
+            system_features.disable_wallpaper() || client_features.disable_wallpaper());
+
+        // If at least one client has enabled input block, then the block will be enabled for
+        // everyone.
+        system_features.set_block_input(
+            system_features.block_input() || client_features.block_input());
+    }
+
+    desktop_session_proxy_->enableFeatures(system_features);
 }
 
 void UserSession::onClientSessionFinished()

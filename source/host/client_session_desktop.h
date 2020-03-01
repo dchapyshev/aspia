@@ -23,6 +23,7 @@
 #include "host/client_session.h"
 #include "proto/desktop.pb.h"
 #include "proto/desktop_extensions.pb.h"
+#include "proto/desktop_internal.pb.h"
 
 namespace codec {
 class CursorEncoder;
@@ -51,6 +52,8 @@ public:
     void setScreenList(const proto::ScreenList& list);
     void injectClipboardEvent(const proto::ClipboardEvent& event);
 
+    const proto::internal::EnableFeatures& features() const { return features_; }
+
 protected:
     // net::Listener implementation.
     void onMessageReceived(const base::ByteArray& buffer) override;
@@ -66,6 +69,7 @@ private:
     std::shared_ptr<DesktopSessionProxy> desktop_session_proxy_;
     std::unique_ptr<VideoFramePump> frame_pump_;
     std::unique_ptr<codec::CursorEncoder> cursor_encoder_;
+    proto::internal::EnableFeatures features_;
 
     proto::ClientToHost incoming_message_;
     proto::HostToClient outgoing_message_;

@@ -42,6 +42,7 @@ public:
     public:
         virtual ~Delegate() = default;
 
+        virtual void onClientSessionConfigured() = 0;
         virtual void onClientSessionFinished() = 0;
     };
 
@@ -81,6 +82,8 @@ protected:
     void onConnected() override;
     void onDisconnected(net::ErrorCode error_code) override;
 
+    Delegate* delegate_ = nullptr;
+
 private:
     State state_ = State::CREATED;
     std::string id_;
@@ -89,7 +92,6 @@ private:
     std::u16string username_;
 
     std::unique_ptr<net::Channel> channel_;
-    Delegate* delegate_ = nullptr;
 };
 
 } // namespace host

@@ -266,12 +266,11 @@ void ClientSessionDesktop::readConfig(const proto::DesktopConfig& config)
     if (config.flags() & proto::ENABLE_CURSOR_SHAPE)
         cursor_encoder_ = std::make_unique<codec::CursorEncoder>();
 
-    proto::internal::EnableFeatures features;
-    features.set_effects(!(config.flags() & proto::DISABLE_DESKTOP_EFFECTS));
-    features.set_wallpaper(!(config.flags() & proto::DISABLE_DESKTOP_WALLPAPER));
-    features.set_block_input(config.flags() & proto::BLOCK_REMOTE_INPUT);
+    features_.set_disable_effects(config.flags() & proto::DISABLE_DESKTOP_EFFECTS);
+    features_.set_disable_wallpaper(config.flags() & proto::DISABLE_DESKTOP_WALLPAPER);
+    features_.set_block_input(config.flags() & proto::BLOCK_REMOTE_INPUT);
 
-    desktop_session_proxy_->enableFeatures(features);
+    delegate_->onClientSessionConfigured();
 
     frame_pump_ = std::make_unique<VideoFramePump>(channelProxy(), std::move(video_encoder));
     frame_pump_->start();
