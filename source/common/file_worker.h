@@ -34,10 +34,10 @@ class FileTask;
 class FileWorker
 {
 public:
-    FileWorker(std::shared_ptr<base::TaskRunner>& task_runner);
+    explicit FileWorker(std::shared_ptr<base::TaskRunner> task_runner);
     ~FileWorker();
 
-    void doTask(std::shared_ptr<FileTask>& task);
+    void doTask(std::shared_ptr<FileTask> task);
 
 private:
     class Impl;

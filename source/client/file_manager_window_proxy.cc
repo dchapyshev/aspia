@@ -33,6 +33,7 @@ public:
     void dettach();
 
     void start(std::shared_ptr<FileControlProxy> file_control_proxy);
+    void onErrorOccurred(proto::FileError error_code);
     void onDriveList(common::FileTask::Target target,
                      proto::FileError error_code,
                      const proto::DriveList& drive_list);
@@ -85,6 +86,19 @@ void FileManagerWindowProxy::Impl::start(std::shared_ptr<FileControlProxy> file_
 
     if (file_manager_window_)
         file_manager_window_->start(file_manager_proxy);
+}
+
+void FileManagerWindowProxy::Impl::onErrorOccurred(proto::FileError error_code)
+{
+    if (!ui_task_runner_->belongsToCurrentThread())
+    {
+        ui_task_runner_->postTask(
+            std::bind(&Impl::onErrorOccurred, shared_from_this(), error_code));
+        return;
+    }
+
+    if (file_manager_window_)
+        file_manager_window_->onErrorOccurred(error_code);
 }
 
 void FileManagerWindowProxy::Impl::onDriveList(
@@ -169,6 +183,11 @@ std::unique_ptr<FileManagerWindowProxy> FileManagerWindowProxy::create(
 void FileManagerWindowProxy::start(std::shared_ptr<FileControlProxy> file_control_proxy)
 {
     impl_->start(file_control_proxy);
+}
+
+void FileManagerWindowProxy::onErrorOccurred(proto::FileError error_code)
+{
+    impl_->onErrorOccurred(error_code);
 }
 
 void FileManagerWindowProxy::onDriveList(

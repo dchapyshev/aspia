@@ -37,10 +37,10 @@ namespace common {
 class FileWorker::Impl : public std::enable_shared_from_this<Impl>
 {
 public:
-    Impl(std::shared_ptr<base::TaskRunner>& task_runner);
+    Impl(std::shared_ptr<base::TaskRunner> task_runner);
     ~Impl();
 
-    void doTask(std::shared_ptr<FileTask>& task);
+    void doTask(std::shared_ptr<FileTask> task);
 
 private:
     std::unique_ptr<proto::FileReply> doRequest(const proto::FileRequest& request);
@@ -61,15 +61,15 @@ private:
     DISALLOW_COPY_AND_ASSIGN(Impl);
 };
 
-FileWorker::Impl::Impl(std::shared_ptr<base::TaskRunner>& task_runner)
-    : task_runner_(task_runner)
+FileWorker::Impl::Impl(std::shared_ptr<base::TaskRunner> task_runner)
+    : task_runner_(std::move(task_runner))
 {
     DCHECK(task_runner_);
 }
 
 FileWorker::Impl::~Impl() = default;
 
-void FileWorker::Impl::doTask(std::shared_ptr<FileTask>& task)
+void FileWorker::Impl::doTask(std::shared_ptr<FileTask> task)
 {
     auto self = shared_from_this();
     task_runner_->postTask([self, task]()
@@ -447,17 +447,17 @@ std::unique_ptr<proto::FileReply> FileWorker::Impl::doPacket(const proto::FilePa
     return reply;
 }
 
-FileWorker::FileWorker(std::shared_ptr<base::TaskRunner>& task_runner)
-    : impl_(std::make_shared<Impl>(task_runner))
+FileWorker::FileWorker(std::shared_ptr<base::TaskRunner> task_runner)
+    : impl_(std::make_shared<Impl>(std::move(task_runner)))
 {
     // Nothing
 }
 
 FileWorker::~FileWorker() = default;
 
-void FileWorker::doTask(std::shared_ptr<FileTask>& task)
+void FileWorker::doTask(std::shared_ptr<FileTask> task)
 {
-    impl_->doTask(task);
+    impl_->doTask(std::move(task));
 }
 
 } // namespace common

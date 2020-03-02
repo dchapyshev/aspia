@@ -82,14 +82,25 @@ void ClientFileTransfer::onMessageReceived(const base::ByteArray& buffer)
         return;
     }
 
-    // Move the reply to the request and notify the sender.
-    remote_task_queue_.front()->setReply(std::move(reply));
+    if (reply->error_code() == proto::FILE_ERROR_NO_LOGGED_ON_USER)
+    {
+        file_manager_window_proxy_->onErrorOccurred(reply->error_code());
+    }
+    else if (!remote_task_queue_.empty())
+    {
+        // Move the reply to the request and notify the sender.
+        remote_task_queue_.front()->setReply(std::move(reply));
 
-    // Remove the request from the queue.
-    remote_task_queue_.pop();
+        // Remove the request from the queue.
+        remote_task_queue_.pop();
 
-    // Execute the next request.
-    doNextRemoteTask();
+        // Execute the next request.
+        doNextRemoteTask();
+    }
+    else
+    {
+        file_manager_window_proxy_->onErrorOccurred(proto::FILE_ERROR_UNKNOWN);
+    }
 }
 
 void ClientFileTransfer::onMessageWritten()
@@ -130,14 +141,14 @@ void ClientFileTransfer::doTask(std::shared_ptr<common::FileTask> task)
 {
     if (task->target() == common::FileTask::Target::LOCAL)
     {
-        local_worker_->doTask(task);
+        local_worker_->doTask(std::move(task));
     }
     else
     {
         const bool schedule = remote_task_queue_.empty();
 
         // Add the request to the queue.
-        remote_task_queue_.emplace(task);
+        remote_task_queue_.emplace(std::move(task));
 
         // If the request queue was empty, then run execution.
         if (schedule)

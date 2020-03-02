@@ -33,6 +33,8 @@ public:
 
     virtual void start(std::shared_ptr<FileControlProxy> file_control_proxy) = 0;
 
+    virtual void onErrorOccurred(proto::FileError error_code) = 0;
+
     // Called when a response to a drive list request is received.
     virtual void onDriveList(common::FileTask::Target target,
                              proto::FileError error_code,

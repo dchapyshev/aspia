@@ -23,11 +23,14 @@
 #include "client/file_control_proxy.h"
 #include "client/client_file_transfer.h"
 #include "client/ui/address_bar_model.h"
+#include "client/ui/file_error_code.h"
 #include "client/ui/file_remove_dialog.h"
 #include "client/ui/file_transfer_dialog.h"
 #include "client/ui/file_manager_settings.h"
 #include "client/ui/file_mime_data.h"
 #include "common/file_worker.h"
+
+#include <QMessageBox>
 
 namespace client {
 
@@ -70,6 +73,15 @@ void QtFileManagerWindow::start(std::shared_ptr<FileControlProxy> file_control_p
     show();
     activateWindow();
     refresh();
+}
+
+void QtFileManagerWindow::onErrorOccurred(proto::FileError error_code)
+{
+    QMessageBox::warning(this,
+                         tr("Warning"),
+                         tr("Session error: %1").arg(fileErrorToString(error_code)),
+                         QMessageBox::Ok);
+    close();
 }
 
 void QtFileManagerWindow::onDriveList(

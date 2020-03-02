@@ -42,6 +42,7 @@ public:
         std::shared_ptr<base::TaskRunner>& ui_task_runner, FileManagerWindow* file_manager_window);
 
     void start(std::shared_ptr<FileControlProxy> file_control_proxy);
+    void onErrorOccurred(proto::FileError error_code);
     void onDriveList(common::FileTask::Target target,
                      proto::FileError error_code,
                      const proto::DriveList& drive_list);

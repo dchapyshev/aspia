@@ -80,6 +80,10 @@ QString fileErrorToString(proto::FileError error_code)
             message = QT_TRANSLATE_NOOP("FileError", "Drive not ready");
             break;
 
+        case proto::FILE_ERROR_NO_LOGGED_ON_USER:
+            message = QT_TRANSLATE_NOOP("FileError", "No logged in user");
+            break;
+
         default:
             message = QT_TRANSLATE_NOOP("FileError", "Unknown error code");
             break;

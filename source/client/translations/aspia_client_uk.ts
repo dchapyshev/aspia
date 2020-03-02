@@ -335,6 +335,11 @@
     </message>
     <message>
         <location filename="../ui/file_error_code.cc" line="84"/>
+        <source>No logged in user</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/file_error_code.cc" line="88"/>
         <source>Unknown error code</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1485,14 +1490,24 @@
 <context>
     <name>client::QtFileManagerWindow</name>
     <message>
-        <location filename="../ui/qt_file_manager_window.cc" line="46"/>
+        <location filename="../ui/qt_file_manager_window.cc" line="49"/>
         <source>Local Computer</source>
         <translation type="unfinished">Локальний комп&apos;ютер</translation>
     </message>
     <message>
-        <location filename="../ui/qt_file_manager_window.cc" line="47"/>
+        <location filename="../ui/qt_file_manager_window.cc" line="50"/>
         <source>Remote Computer</source>
         <translation type="unfinished">Віддалений комп&apos;ютер</translation>
+    </message>
+    <message>
+        <location filename="../ui/qt_file_manager_window.cc" line="81"/>
+        <source>Warning</source>
+        <translation type="unfinished">Попередження</translation>
+    </message>
+    <message>
+        <location filename="../ui/qt_file_manager_window.cc" line="82"/>
+        <source>Session error: %1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
