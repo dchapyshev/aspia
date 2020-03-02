@@ -85,6 +85,13 @@ SOFTWARE.
 #define INLINE
 #endif
 
+#ifndef MAXSHORT
+#define MAXSHORT 32767
+#endif
+#ifndef MINSHORT
+#define MINSHORT -MAXSHORT
+#endif
+
 #undef assert
 #ifdef DEBUG
 #define assert(expr) {if (!(expr)) \

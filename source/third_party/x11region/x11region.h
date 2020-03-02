@@ -59,13 +59,6 @@ SOFTWARE.
 #define NullBox ((BoxPtr)0)
 #define NullRegion ((RegionPtr)0)
 
-#ifndef MAXSHORT
-#define MAXSHORT 32767
-#endif
-#ifndef MINSHORT
-#define MINSHORT -MAXSHORT
-#endif
-
 #define CT_YXBANDED 18
 
 #define xalloc(n)        malloc(n)
