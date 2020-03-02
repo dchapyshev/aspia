@@ -28,7 +28,6 @@
 #include "desktop/desktop_frame.h"
 #include "host/desktop_session_proxy.h"
 #include "host/host_system_info.h"
-#include "host/video_frame_pump.h"
 #include "host/win/updater_launcher.h"
 #include "net/network_channel.h"
 #include "proto/desktop_internal.pb.h"
@@ -121,8 +120,16 @@ void ClientSessionDesktop::onStarted()
 
 void ClientSessionDesktop::encodeFrame(const desktop::Frame& frame)
 {
-    if (frame_pump_)
-        frame_pump_->encodeFrame(frame);
+    if (!video_encoder_)
+        return;
+
+    outgoing_message_.Clear();
+    proto::VideoPacket* packet = outgoing_message_.mutable_video_packet();
+
+    // Encode the frame into a video packet.
+    video_encoder_->encode(&frame, packet);
+
+    sendMessage(common::serializeMessage(outgoing_message_));
 }
 
 void ClientSessionDesktop::encodeMouseCursor(std::shared_ptr<desktop::MouseCursor> mouse_cursor)
@@ -230,20 +237,18 @@ void ClientSessionDesktop::readExtension(const proto::DesktopExtension& extensio
 
 void ClientSessionDesktop::readConfig(const proto::DesktopConfig& config)
 {
-    std::unique_ptr<codec::VideoEncoder> video_encoder;
-
     switch (config.video_encoding())
     {
         case proto::VIDEO_ENCODING_VP8:
-            video_encoder = codec::VideoEncoderVPX::createVP8();
+            video_encoder_ = codec::VideoEncoderVPX::createVP8();
             break;
 
         case proto::VIDEO_ENCODING_VP9:
-            video_encoder = codec::VideoEncoderVPX::createVP9();
+            video_encoder_ = codec::VideoEncoderVPX::createVP9();
             break;
 
         case proto::VIDEO_ENCODING_ZSTD:
-            video_encoder = codec::VideoEncoderZstd::create(
+            video_encoder_ = codec::VideoEncoderZstd::create(
                 codec::parsePixelFormat(config.pixel_format()), config.compress_ratio());
             break;
 
@@ -255,7 +260,7 @@ void ClientSessionDesktop::readConfig(const proto::DesktopConfig& config)
         break;
     }
 
-    if (!video_encoder)
+    if (!video_encoder_)
     {
         LOG(LS_ERROR) << "Video encoder not initialized!";
         return;
@@ -271,9 +276,6 @@ void ClientSessionDesktop::readConfig(const proto::DesktopConfig& config)
     features_.set_block_input(config.flags() & proto::BLOCK_REMOTE_INPUT);
 
     delegate_->onClientSessionConfigured();
-
-    frame_pump_ = std::make_unique<VideoFramePump>(channelProxy(), std::move(video_encoder));
-    frame_pump_->start();
 }
 
 } // namespace host

@@ -75,9 +75,7 @@ list(APPEND SOURCE_HOST_CORE
     user_session_manager.h
     user_session_window.h
     user_session_window_proxy.cc
-    user_session_window_proxy.h
-    video_frame_pump.cc
-    video_frame_pump.h)
+    user_session_window_proxy.h)
 
 list(APPEND SOURCE_HOST_CORE_RESOURCES
     resources/host.qrc)

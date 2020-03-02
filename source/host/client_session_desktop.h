@@ -27,6 +27,7 @@
 
 namespace codec {
 class CursorEncoder;
+class VideoEncoder;
 } // namespace codec
 
 namespace desktop {
@@ -37,7 +38,6 @@ class MouseCursor;
 namespace host {
 
 class DesktopSessionProxy;
-class VideoFramePump;
 
 class ClientSessionDesktop : public ClientSession
 {
@@ -67,7 +67,7 @@ private:
     void readConfig(const proto::DesktopConfig& config);
 
     std::shared_ptr<DesktopSessionProxy> desktop_session_proxy_;
-    std::unique_ptr<VideoFramePump> frame_pump_;
+    std::unique_ptr<codec::VideoEncoder> video_encoder_;
     std::unique_ptr<codec::CursorEncoder> cursor_encoder_;
     proto::internal::EnableFeatures features_;
 
