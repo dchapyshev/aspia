@@ -32,4 +32,4 @@ jobs:
       shell: sh
 
     - name: build
-      run: ./sw build
+      run: ./sw build source
