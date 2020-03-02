@@ -21,12 +21,9 @@
 
 #include "desktop/desktop_geometry.h"
 
-#if defined(USE_TBB)
-#include <tbb/scalable_allocator.h>
-#endif // defined(USE_TBB)
-
-#include <map>
-#include <vector>
+extern "C" {
+#include "third_party/x11region/x11region.h"
+} // extern "C"
 
 namespace desktop {
 
@@ -36,62 +33,6 @@ namespace desktop {
 // or more rectangles aligned vertically.
 class Region
 {
-private:
-    // The following private types need to be declared first because they are used
-    // in the public Iterator.
-
-    // RowSpan represents a horizontal span withing a single row.
-    struct RowSpan
-    {
-        RowSpan(int32_t left, int32_t right);
-
-        // Used by std::vector<>.
-        bool operator==(const RowSpan& that) const
-        {
-            return left == that.left && right == that.right;
-        }
-
-        int32_t left;
-        int32_t right;
-    };
-
-#if defined(USE_TBB)
-    using RowSpanSetAllocator = tbb::scalable_allocator<RowSpan>;
-#else // defined(USE_TBB)
-    using RowSpanSetAllocator = std::allocator<RowSpan>;
-#endif // defined(USE_*)
-
-    using RowSpanSet = std::vector<RowSpan, RowSpanSetAllocator>;
-
-    // Row represents a single row of a region. A row is set of rectangles that
-    // have the same vertical position.
-    struct Row
-    {
-        Row(const Row&);
-        Row(Row&&) noexcept;
-        Row(int32_t top, int32_t bottom);
-        ~Row();
-
-        Row& operator=(const Row& other);
-
-        int32_t top;
-        int32_t bottom;
-
-        RowSpanSet spans;
-    };
-
-    // Type used to store list of rows in the region. The bottom position of row
-    // is used as the key so that rows are always ordered by their position. The
-    // map stores pointers to make translate() more efficient.
-
-#if defined(USE_TBB)
-    using RowsAllocator = tbb::scalable_allocator<std::pair<const int, Row*>>;
-#else // defined(USE_TBB)
-    using RowsAllocator = std::allocator<std::pair<const int, Row*>>;
-#endif // defined(USE_*)
-
-    using Rows = std::map<const int, Row* , std::less<const int>, RowsAllocator>;
-
 public:
     // Iterator that can be used to iterate over rectangles of a Region.
     // The region must not be mutated while the iterator is used.
@@ -104,20 +45,16 @@ public:
         bool isAtEnd() const;
         void advance();
 
-        const Rect& rect() const { return rect_; }
+        Rect rect() const
+        {
+            const BoxRec& current = rects_[pos_];
+            return Rect::makeLTRB(current.x1, current.y1, current.x2, current.y2);
+        }
 
     private:
-        const Region& region_;
-
-        // Updates |rect_| based on the current |row_| and |row_span_|. If
-        // |row_span_| matches spans on consecutive rows then they are also merged
-        // into |rect_|, to generate more efficient output.
-        void updateCurrentRect();
-
-        Rows::const_iterator row_;
-        Rows::const_iterator previous_row_;
-        RowSpanSet::const_iterator row_span_;
-        Rect rect_;
+        const BoxRec* rects_;
+        long count_;
+        long pos_;
     };
 
     Region();
@@ -130,7 +67,7 @@ public:
     Region& operator=(const Region& other);
     Region& operator=(Region&& other);
 
-    bool isEmpty() const { return rows_.empty(); }
+    bool isEmpty() const;
 
     bool equals(const Region& region) const;
 
@@ -166,29 +103,7 @@ public:
     void swap(Region* region);
 
 private:
-    // Comparison functions used for std::lower_bound(). Compare left or right
-    // edges withs a given |value|.
-    static bool compareSpanLeft(const RowSpan& r, int32_t value);
-    static bool compareSpanRight(const RowSpan& r, int32_t value);
-
-    // Adds a new span to the row, coalescing spans if necessary.
-    static void addSpanToRow(Row* row, int32_t left, int32_t right);
-
-    // Returns true if the |span| exists in the given |row|.
-    static bool isSpanInRow(const Row& row, const RowSpan& rect);
-
-    // Calculates the intersection of two sets of spans.
-    static void intersectRows(const RowSpanSet& set1, const RowSpanSet& set2, RowSpanSet& output);
-
-    static void subtractRows(const RowSpanSet& set_a, const RowSpanSet& set_b, RowSpanSet& output);
-
-    // Merges |row| with the row above it if they contain the same spans. Doesn't
-    // do anything if called with |row| set to rows_.begin() (i.e. first row of
-    // the region). If the rows were merged |row| remains a valid iterator to the
-    // merged row.
-    void mergeWithPrecedingRow(Rows::iterator row_it);
-
-    Rows rows_;
+    RegionRec x11reg_;
 };
 
 } // namespace desktop

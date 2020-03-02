@@ -158,7 +158,8 @@ set(THIRD_PARTY_LIBS
     optimized zstd_static
     libcrypto
     libssl
-    modp_b64)
+    modp_b64
+    x11region)
 
 # C++ compliller flags.
 set(CMAKE_CXX_STANDARD 17)
