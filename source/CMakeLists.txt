@@ -18,6 +18,8 @@
 
 cmake_minimum_required(VERSION 3.16.0)
 
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+
 option(BUILD_UNIT_TESTS "Build unit tests" ON)
 option(USE_TBB "Using Intel TBB" ON)
 
@@ -157,13 +159,22 @@ set(THIRD_PARTY_LIBS
     libcrypto
     libssl)
 
+# C++ compliller flags.
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /GL /MP /arch:SSE2")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MP")
+
+# C compiller flags.
+set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} /GL /MP /arch:SSE2")
+set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} /MP")
+
+# Linker flags.
 set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} /LTCG /INCREMENTAL:NO /OPT:REF")
 set(CMAKE_STATIC_LINKER_FLAGS_RELEASE "${CMAKE_STATIC_LINKER_FLAGS_RELEASE} /LTCG")
 set(CMAKE_EXE_LINKER_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE} /LTCG /INCREMENTAL:NO /OPT:REF")
+
+# Static runtime library.
+set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
@@ -188,4 +199,5 @@ add_subdirectory(proto)
 add_subdirectory(proxy)
 add_subdirectory(qt_base)
 add_subdirectory(router)
+add_subdirectory(third_party)
 add_subdirectory(updater)
