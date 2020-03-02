@@ -27,7 +27,7 @@ namespace host {
 class ClientSessionFileTransfer : public ClientSession
 {
 public:
-    ClientSessionFileTransfer(std::unique_ptr<net::Channel> channel);
+    explicit ClientSessionFileTransfer(std::unique_ptr<net::Channel> channel);
     ~ClientSessionFileTransfer();
 
 protected:
@@ -39,6 +39,9 @@ protected:
     void onStarted() override;
 
 private:
+    class Worker;
+    std::unique_ptr<Worker> worker_;
+
     DISALLOW_COPY_AND_ASSIGN(ClientSessionFileTransfer);
 };
 
