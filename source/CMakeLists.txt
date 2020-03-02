@@ -157,7 +157,8 @@ set(THIRD_PARTY_LIBS
     optimized tbb
     optimized zstd_static
     libcrypto
-    libssl)
+    libssl
+    modp_b64)
 
 # C++ compliller flags.
 set(CMAKE_CXX_STANDARD 17)

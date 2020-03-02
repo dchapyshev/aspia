@@ -19,8 +19,6 @@
 list(APPEND SOURCE_BASE
     base64.cc
     base64.h
-    base64_constants.cc
-    base64_constants.h
     bitset.h
     command_line.cc
     command_line.h
