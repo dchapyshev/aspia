@@ -4,7 +4,7 @@ Remote desktop and file transfer tool.
 
 |Build Status|Coverity Scan Status|
 |:--:|:--:|
-|[![Build Status](https://ci.appveyor.com/api/projects/status/i7353lnxrgmi2omq/branch/master?svg=true)](https://ci.appveyor.com/project/dchapyshev/aspia/branch/master)|[![Coverity Scan Status](https://scan.coverity.com/projects/13117/badge.svg)](https://scan.coverity.com/projects/aspia-remote-desktop)|
+|[![Build Status](https://ci.appveyor.com/api/projects/status/i7353lnxrgmi2omq/branch/master?svg=true)](https://ci.appveyor.com/project/dchapyshev/aspia/branch/master) ![Build status](https://github.com/dchapyshev/aspia/workflows/windows/badge.svg)|[![Coverity Scan Status](https://scan.coverity.com/projects/13117/badge.svg)](https://scan.coverity.com/projects/aspia-remote-desktop)|
 
 Currently supported
 -------------------
