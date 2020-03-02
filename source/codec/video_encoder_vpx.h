@@ -22,6 +22,7 @@
 #include "base/macros_magic.h"
 #include "codec/scoped_vpx_codec.h"
 #include "codec/video_encoder.h"
+#include "desktop/desktop_region.h"
 
 #define VPX_CODEC_DISABLE_COMPAT 1
 #include <vpx/vpx_encoder.h>
@@ -50,6 +51,7 @@ private:
 
     const proto::VideoEncoding encoding_;
 
+    desktop::Region updated_region_;
     ScopedVpxCodec codec_ = nullptr;
 
     size_t active_map_size_ = 0;

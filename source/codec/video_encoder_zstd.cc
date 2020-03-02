@@ -93,7 +93,14 @@ void VideoEncoderZstd::encode(const desktop::Frame* frame, proto::VideoPacket* p
     fillPacketInfo(proto::VIDEO_ENCODING_ZSTD, frame, packet);
 
     if (packet->has_format())
+    {
         serializePixelFormat(target_format_, packet->mutable_format()->mutable_pixel_format());
+        updated_region_ = desktop::Region(desktop::Rect::makeSize(frame->size()));
+    }
+    else
+    {
+        updated_region_ = frame->constUpdatedRegion();
+    }
 
     if (!translator_)
     {
@@ -107,7 +114,7 @@ void VideoEncoderZstd::encode(const desktop::Frame* frame, proto::VideoPacket* p
 
     size_t data_size = 0;
 
-    for (desktop::Region::Iterator it(frame->constUpdatedRegion()); !it.isAtEnd(); it.advance())
+    for (desktop::Region::Iterator it(updated_region_); !it.isAtEnd(); it.advance())
     {
         const desktop::Rect& rect = it.rect();
 
@@ -123,7 +130,7 @@ void VideoEncoderZstd::encode(const desktop::Frame* frame, proto::VideoPacket* p
 
     uint8_t* translate_pos = translate_buffer_.get();
 
-    for (desktop::Region::Iterator it(frame->constUpdatedRegion()); !it.isAtEnd(); it.advance())
+    for (desktop::Region::Iterator it(updated_region_); !it.isAtEnd(); it.advance())
     {
         const desktop::Rect& rect = it.rect();
         const int stride = rect.width() * target_format_.bytesPerPixel();

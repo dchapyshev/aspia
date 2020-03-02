@@ -22,6 +22,7 @@
 #include "base/memory/aligned_memory.h"
 #include "codec/scoped_zstd_stream.h"
 #include "codec/video_encoder.h"
+#include "desktop/desktop_region.h"
 #include "desktop/pixel_format.h"
 
 namespace codec {
@@ -44,7 +45,7 @@ private:
                         const uint8_t* input_data,
                         size_t input_size);
 
-    // Client's pixel format
+    desktop::Region updated_region_;
     desktop::PixelFormat target_format_;
     int compress_ratio_;
     ScopedZstdCStream stream_;

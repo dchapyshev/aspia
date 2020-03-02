@@ -274,7 +274,6 @@ void VideoEncoderVPX::prepareImageAndActiveMap(
     const desktop::Frame* frame, proto::VideoPacket* packet)
 {
     const int padding = ((encoding_ == proto::VIDEO_ENCODING_VP9) ? 8 : 3);
-    desktop::Region updated_region;
 
     for (desktop::Region::Iterator it(frame->constUpdatedRegion()); !it.isAtEnd(); it.advance())
     {
@@ -286,7 +285,7 @@ void VideoEncoderVPX::prepareImageAndActiveMap(
         // must be listed in the active map. After padding we align each rectangle to 16x16
         // active-map macroblocks. This implicitly ensures all rects have even top-left coords,
         // which is is required by ARGBToI420().
-        updated_region.addRect(
+        updated_region_.addRect(
             alignRect(desktop::Rect::makeLTRB(rect.left() - padding, rect.top() - padding,
                                             rect.right() + padding, rect.bottom() + padding)));
     }
@@ -294,7 +293,7 @@ void VideoEncoderVPX::prepareImageAndActiveMap(
     // Clip back to the screen dimensions, in case they're not macroblock aligned. The conversion
     // routines don't require even width & height, so this is safe even if the source dimensions
     // are not even.
-    updated_region.intersectWith(desktop::Rect::makeWH(image_->w, image_->h));
+    updated_region_.intersectWith(desktop::Rect::makeWH(image_->w, image_->h));
 
     memset(active_map_.active_map, 0, active_map_size_);
 
@@ -306,7 +305,7 @@ void VideoEncoderVPX::prepareImageAndActiveMap(
 
     const int bits_per_pixel = frame->format().bitsPerPixel();
 
-    for (desktop::Region::Iterator it(updated_region); !it.isAtEnd(); it.advance())
+    for (desktop::Region::Iterator it(updated_region_); !it.isAtEnd(); it.advance())
     {
         const desktop::Rect& rect = it.rect();
 
@@ -363,6 +362,12 @@ void VideoEncoderVPX::encode(const desktop::Frame* frame, proto::VideoPacket* pa
             DCHECK_EQ(encoding_, proto::VIDEO_ENCODING_VP9);
             createVp9Codec(screen_size);
         }
+
+        updated_region_ = desktop::Region(desktop::Rect::makeSize(screen_size));
+    }
+    else
+    {
+        updated_region_.clear();
     }
 
     // Convert the updated capture data ready for encode.
