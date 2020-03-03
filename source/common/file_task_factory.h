@@ -32,7 +32,7 @@ namespace common {
 class FileTaskFactory
 {
 public:
-    FileTaskFactory(std::shared_ptr<FileTaskProducerProxy>& producer_proxy, FileTask::Target target);
+    FileTaskFactory(std::shared_ptr<FileTaskProducerProxy> producer_proxy, FileTask::Target target);
     ~FileTaskFactory();
 
     FileTask::Target target() const { return target_; }

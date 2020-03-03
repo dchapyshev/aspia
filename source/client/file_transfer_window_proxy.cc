@@ -25,8 +25,8 @@
 namespace client {
 
 FileTransferWindowProxy::FileTransferWindowProxy(
-    std::shared_ptr<base::TaskRunner>& ui_task_runner, FileTransferWindow* file_transfer_window)
-    : ui_task_runner_(ui_task_runner),
+    std::shared_ptr<base::TaskRunner> ui_task_runner, FileTransferWindow* file_transfer_window)
+    : ui_task_runner_(std::move(ui_task_runner)),
       file_transfer_window_(file_transfer_window)
 {
     DCHECK(ui_task_runner_);

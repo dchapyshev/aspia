@@ -36,7 +36,7 @@ public:
     ~StatusWindowProxy();
 
     static std::unique_ptr<StatusWindowProxy> create(
-        std::shared_ptr<base::TaskRunner>& ui_task_runner, StatusWindow* status_window);
+        std::shared_ptr<base::TaskRunner> ui_task_runner, StatusWindow* status_window);
 
     // StatusWindow implementation.
     void onStarted(const std::u16string& address, uint16_t port) override;
@@ -46,7 +46,7 @@ public:
     void onAccessDenied(Authenticator::ErrorCode error_code) override;
 
 private:
-    StatusWindowProxy(std::shared_ptr<base::TaskRunner>& ui_task_runner,
+    StatusWindowProxy(std::shared_ptr<base::TaskRunner> ui_task_runner,
                       StatusWindow* status_window);
 
     class Impl;

@@ -45,7 +45,7 @@ class ClientDesktop
       public DesktopControl
 {
 public:
-    explicit ClientDesktop(std::shared_ptr<base::TaskRunner>& ui_task_runner);
+    explicit ClientDesktop(std::shared_ptr<base::TaskRunner> ui_task_runner);
     ~ClientDesktop();
 
     void setDesktopWindow(DesktopWindow* desktop_window);

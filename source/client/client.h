@@ -43,7 +43,7 @@ class Client
       public net::Listener
 {
 public:
-    explicit Client(std::shared_ptr<base::TaskRunner>& ui_task_runner);
+    explicit Client(std::shared_ptr<base::TaskRunner> ui_task_runner);
     virtual ~Client();
 
     // Starts a session.

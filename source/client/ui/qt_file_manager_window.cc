@@ -55,10 +55,10 @@ QtFileManagerWindow::QtFileManagerWindow(QWidget* parent)
 QtFileManagerWindow::~QtFileManagerWindow() = default;
 
 std::unique_ptr<Client> QtFileManagerWindow::createClient(
-    std::shared_ptr<base::TaskRunner>& ui_task_runner)
+    std::shared_ptr<base::TaskRunner> ui_task_runner)
 {
     std::unique_ptr<ClientFileTransfer> client =
-        std::make_unique<ClientFileTransfer>(ui_task_runner);
+        std::make_unique<ClientFileTransfer>(std::move(ui_task_runner));
 
     client->setFileManagerWindow(this);
 

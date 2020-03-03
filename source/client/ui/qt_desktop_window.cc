@@ -166,9 +166,10 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
 QtDesktopWindow::~QtDesktopWindow() = default;
 
 std::unique_ptr<Client> QtDesktopWindow::createClient(
-    std::shared_ptr<base::TaskRunner>& ui_task_runner)
+    std::shared_ptr<base::TaskRunner> ui_task_runner)
 {
-    std::unique_ptr<ClientDesktop> client = std::make_unique<ClientDesktop>(ui_task_runner);
+    std::unique_ptr<ClientDesktop> client =
+        std::make_unique<ClientDesktop>(std::move(ui_task_runner));
 
     client->setDesktopConfig(desktop_config_);
     client->setDesktopWindow(this);

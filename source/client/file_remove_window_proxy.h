@@ -38,7 +38,7 @@ class FileRemoveWindowProxy : public std::enable_shared_from_this<FileRemoveWind
 {
 public:
     FileRemoveWindowProxy(
-        std::shared_ptr<base::TaskRunner>& ui_task_runner, FileRemoveWindow* remove_window);
+        std::shared_ptr<base::TaskRunner> ui_task_runner, FileRemoveWindow* remove_window);
     ~FileRemoveWindowProxy();
 
     void dettach();

@@ -28,7 +28,7 @@ class FileRemoveQueueBuilder : public common::FileTaskProducer
 {
 public:
     FileRemoveQueueBuilder(
-        std::shared_ptr<common::FileTaskConsumerProxy>& task_consumer_proxy,
+        std::shared_ptr<common::FileTaskConsumerProxy> task_consumer_proxy,
         common::FileTask::Target target);
     ~FileRemoveQueueBuilder();
 

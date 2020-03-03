@@ -33,7 +33,7 @@ namespace client {
 class FileTransferProxy : public std::enable_shared_from_this<FileTransferProxy>
 {
 public:
-    FileTransferProxy(std::shared_ptr<base::TaskRunner>& io_task_runner, FileTransfer* file_transfer);
+    FileTransferProxy(std::shared_ptr<base::TaskRunner> io_task_runner, FileTransfer* file_transfer);
     ~FileTransferProxy();
 
     void dettach();

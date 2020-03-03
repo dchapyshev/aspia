@@ -35,10 +35,10 @@ const wchar_t kFirewallRuleDecription[] = L"Allow incoming TCP connections";
 
 } // namespace
 
-Server::Server(std::shared_ptr<base::TaskRunner>& task_runner)
-    : task_runner_(task_runner)
+Server::Server(std::shared_ptr<base::TaskRunner> task_runner)
+    : task_runner_(std::move(task_runner))
 {
-    // Nothing
+    DCHECK(task_runner_);
 }
 
 Server::~Server()

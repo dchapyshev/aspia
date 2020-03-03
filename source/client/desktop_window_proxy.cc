@@ -32,7 +32,7 @@ namespace client {
 class DesktopWindowProxy::Impl : public std::enable_shared_from_this<Impl>
 {
 public:
-    Impl(std::shared_ptr<base::TaskRunner>& ui_task_runner, DesktopWindow* desktop_window);
+    Impl(std::shared_ptr<base::TaskRunner> ui_task_runner, DesktopWindow* desktop_window);
     ~Impl();
 
     void showWindow(std::shared_ptr<DesktopControlProxy> desktop_control_proxy,
@@ -59,9 +59,9 @@ private:
     DISALLOW_COPY_AND_ASSIGN(Impl);
 };
 
-DesktopWindowProxy::Impl::Impl(std::shared_ptr<base::TaskRunner>& ui_task_runner,
+DesktopWindowProxy::Impl::Impl(std::shared_ptr<base::TaskRunner> ui_task_runner,
                                DesktopWindow* desktop_window)
-    : ui_task_runner_(ui_task_runner),
+    : ui_task_runner_(std::move(ui_task_runner)),
       desktop_window_(desktop_window)
 {
     frame_factory_ = desktop_window_->frameFactory();
@@ -192,9 +192,9 @@ void DesktopWindowProxy::Impl::injectClipboardEvent(const proto::ClipboardEvent&
         desktop_window_->injectClipboardEvent(event);
 }
 
-DesktopWindowProxy::DesktopWindowProxy(std::shared_ptr<base::TaskRunner>& ui_task_runner,
+DesktopWindowProxy::DesktopWindowProxy(std::shared_ptr<base::TaskRunner> ui_task_runner,
                                        DesktopWindow* desktop_window)
-    : impl_(std::make_shared<Impl>(ui_task_runner, desktop_window))
+    : impl_(std::make_shared<Impl>(std::move(ui_task_runner), desktop_window))
 {
     // Nothing
 }
@@ -206,13 +206,13 @@ DesktopWindowProxy::~DesktopWindowProxy()
 
 // static
 std::unique_ptr<DesktopWindowProxy> DesktopWindowProxy::create(
-    std::shared_ptr<base::TaskRunner>& ui_task_runner, DesktopWindow* desktop_window)
+    std::shared_ptr<base::TaskRunner> ui_task_runner, DesktopWindow* desktop_window)
 {
     if (!ui_task_runner || !desktop_window)
         return nullptr;
 
     return std::unique_ptr<DesktopWindowProxy>(
-        new DesktopWindowProxy(ui_task_runner, desktop_window));
+        new DesktopWindowProxy(std::move(ui_task_runner), desktop_window));
 }
 
 void DesktopWindowProxy::configRequired()

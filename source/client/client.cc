@@ -25,8 +25,8 @@
 
 namespace client {
 
-Client::Client(std::shared_ptr<base::TaskRunner>& ui_task_runner)
-    : ui_task_runner_(ui_task_runner)
+Client::Client(std::shared_ptr<base::TaskRunner> ui_task_runner)
+    : ui_task_runner_(std::move(ui_task_runner))
 {
     DCHECK(ui_task_runner_);
     DCHECK(ui_task_runner_->belongsToCurrentThread());

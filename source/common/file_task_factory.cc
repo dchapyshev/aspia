@@ -24,8 +24,8 @@
 namespace common {
 
 FileTaskFactory::FileTaskFactory(
-    std::shared_ptr<FileTaskProducerProxy>& producer_proxy, FileTask::Target target)
-    : producer_proxy_(producer_proxy),
+    std::shared_ptr<FileTaskProducerProxy> producer_proxy, FileTask::Target target)
+    : producer_proxy_(std::move(producer_proxy)),
       target_(target)
 {
     DCHECK(producer_proxy_);

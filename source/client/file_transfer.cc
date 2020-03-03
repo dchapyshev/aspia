@@ -84,14 +84,14 @@ struct ActionsMap
 
 } // namespace
 
-FileTransfer::FileTransfer(std::shared_ptr<base::TaskRunner>& io_task_runner,
-                           std::shared_ptr<FileTransferWindowProxy>& transfer_window_proxy,
-                           std::shared_ptr<common::FileTaskConsumerProxy>& task_consumer_proxy,
+FileTransfer::FileTransfer(std::shared_ptr<base::TaskRunner> io_task_runner,
+                           std::shared_ptr<FileTransferWindowProxy> transfer_window_proxy,
+                           std::shared_ptr<common::FileTaskConsumerProxy> task_consumer_proxy,
                            Type type)
     : io_task_runner_(io_task_runner),
       transfer_proxy_(std::make_shared<FileTransferProxy>(io_task_runner, this)),
-      transfer_window_proxy_(transfer_window_proxy),
-      task_consumer_proxy_(task_consumer_proxy),
+      transfer_window_proxy_(std::move(transfer_window_proxy)),
+      task_consumer_proxy_(std::move(task_consumer_proxy)),
       task_producer_proxy_(std::make_shared<common::FileTaskProducerProxy>(this)),
       cancel_timer_(io_task_runner),
       type_(type)

@@ -154,9 +154,9 @@ public:
     using TaskList = base::ScalableDeque<Task>;
     using FinishCallback = std::function<void()>;
 
-    FileTransfer(std::shared_ptr<base::TaskRunner>& io_task_runner,
-                 std::shared_ptr<FileTransferWindowProxy>& transfer_window_proxy,
-                 std::shared_ptr<common::FileTaskConsumerProxy>& task_consumer_proxy,
+    FileTransfer(std::shared_ptr<base::TaskRunner> io_task_runner,
+                 std::shared_ptr<FileTransferWindowProxy> transfer_window_proxy,
+                 std::shared_ptr<common::FileTaskConsumerProxy> task_consumer_proxy,
                  Type type);
     ~FileTransfer();
 

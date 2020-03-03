@@ -47,8 +47,7 @@ public:
     ~QtFileManagerWindow();
 
     // ClientWindow implementation.
-    std::unique_ptr<Client> createClient(
-        std::shared_ptr<base::TaskRunner>& ui_task_runner) override;
+    std::unique_ptr<Client> createClient(std::shared_ptr<base::TaskRunner> ui_task_runner) override;
 
     // FileManagerWindow implementation.
     void start(std::shared_ptr<FileControlProxy> file_control_proxy) override;

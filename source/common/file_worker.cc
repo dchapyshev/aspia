@@ -37,7 +37,7 @@ namespace common {
 class FileWorker::Impl : public std::enable_shared_from_this<Impl>
 {
 public:
-    Impl(std::shared_ptr<base::TaskRunner> task_runner);
+    explicit Impl(std::shared_ptr<base::TaskRunner> task_runner);
     ~Impl();
 
     void doTask(std::shared_ptr<FileTask> task);

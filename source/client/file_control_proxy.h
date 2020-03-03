@@ -30,7 +30,7 @@ namespace client {
 class FileControlProxy : public std::enable_shared_from_this<FileControlProxy>
 {
 public:
-    FileControlProxy(std::shared_ptr<base::TaskRunner>& io_task_runner, FileControl* file_control);
+    FileControlProxy(std::shared_ptr<base::TaskRunner> io_task_runner, FileControl* file_control);
     ~FileControlProxy();
 
     void dettach();

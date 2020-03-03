@@ -27,9 +27,9 @@
 namespace client {
 
 FileRemoveQueueBuilder::FileRemoveQueueBuilder(
-    std::shared_ptr<common::FileTaskConsumerProxy>& task_consumer_proxy,
+    std::shared_ptr<common::FileTaskConsumerProxy> task_consumer_proxy,
     common::FileTask::Target target)
-    : task_consumer_proxy_(task_consumer_proxy),
+    : task_consumer_proxy_(std::move(task_consumer_proxy)),
       task_producer_proxy_(std::make_shared<common::FileTaskProducerProxy>(this))
 {
     DCHECK(task_consumer_proxy_);

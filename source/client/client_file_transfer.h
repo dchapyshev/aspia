@@ -48,7 +48,7 @@ class ClientFileTransfer
       public common::FileTaskProducer
 {
 public:
-    explicit ClientFileTransfer(std::shared_ptr<base::TaskRunner>& ui_task_runner);
+    explicit ClientFileTransfer(std::shared_ptr<base::TaskRunner> ui_task_runner);
     ~ClientFileTransfer();
 
     void setFileManagerWindow(FileManagerWindow* file_manager_window);

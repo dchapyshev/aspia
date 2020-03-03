@@ -52,7 +52,7 @@ public:
 
 protected:
     virtual std::unique_ptr<Client> createClient(
-        std::shared_ptr<base::TaskRunner>& ui_task_runner) = 0;
+        std::shared_ptr<base::TaskRunner> ui_task_runner) = 0;
 
     // QWidget implementation.
     void closeEvent(QCloseEvent* event) override;

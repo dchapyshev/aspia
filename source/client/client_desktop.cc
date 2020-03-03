@@ -32,8 +32,8 @@
 
 namespace client {
 
-ClientDesktop::ClientDesktop(std::shared_ptr<base::TaskRunner>& ui_task_runner)
-    : Client(ui_task_runner)
+ClientDesktop::ClientDesktop(std::shared_ptr<base::TaskRunner> ui_task_runner)
+    : Client(std::move(ui_task_runner))
 {
     // Nothing
 }

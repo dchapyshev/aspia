@@ -45,9 +45,9 @@ class FileRemoverProxy;
 class FileRemover : public common::FileTaskProducer
 {
 public:
-    FileRemover(std::shared_ptr<base::TaskRunner>& io_task_runner,
-                std::shared_ptr<FileRemoveWindowProxy>& remove_window_proxy,
-                std::shared_ptr<common::FileTaskConsumerProxy>& task_consumer_proxy,
+    FileRemover(std::shared_ptr<base::TaskRunner> io_task_runner,
+                std::shared_ptr<FileRemoveWindowProxy> remove_window_proxy,
+                std::shared_ptr<common::FileTaskConsumerProxy> task_consumer_proxy,
                 common::FileTask::Target target);
     ~FileRemover();
 

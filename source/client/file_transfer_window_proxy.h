@@ -33,7 +33,7 @@ class FileTransferWindowProxy : public std::enable_shared_from_this<FileTransfer
 {
 public:
     FileTransferWindowProxy(
-        std::shared_ptr<base::TaskRunner>& ui_task_runner, FileTransferWindow* file_transfer_window);
+        std::shared_ptr<base::TaskRunner> ui_task_runner, FileTransferWindow* file_transfer_window);
     ~FileTransferWindowProxy();
 
     void dettach();

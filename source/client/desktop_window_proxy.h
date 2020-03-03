@@ -53,7 +53,7 @@ public:
     ~DesktopWindowProxy();
 
     static std::unique_ptr<DesktopWindowProxy> create(
-        std::shared_ptr<base::TaskRunner>& ui_task_runner, DesktopWindow* desktop_window);
+        std::shared_ptr<base::TaskRunner> ui_task_runner, DesktopWindow* desktop_window);
 
     void showWindow(std::shared_ptr<DesktopControlProxy> desktop_control_proxy,
                     const base::Version& peer_version);
@@ -71,7 +71,7 @@ public:
     void injectClipboardEvent(const proto::ClipboardEvent& event);
 
 private:
-    DesktopWindowProxy(std::shared_ptr<base::TaskRunner>& ui_task_runner,
+    DesktopWindowProxy(std::shared_ptr<base::TaskRunner> ui_task_runner,
                        DesktopWindow* desktop_window);
 
     class Impl;

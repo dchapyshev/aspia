@@ -30,7 +30,7 @@ namespace client {
 class FileRemoverProxy : public std::enable_shared_from_this<FileRemoverProxy>
 {
 public:
-    FileRemoverProxy(std::shared_ptr<base::TaskRunner>& io_task_runner, FileRemover* remover);
+    FileRemoverProxy(std::shared_ptr<base::TaskRunner> io_task_runner, FileRemover* remover);
     ~FileRemoverProxy();
 
     void dettach();

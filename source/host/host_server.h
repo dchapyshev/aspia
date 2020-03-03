@@ -37,7 +37,7 @@ class Server
       public UserSessionManager::Delegate
 {
 public:
-    Server(std::shared_ptr<base::TaskRunner>& task_runner);
+    explicit Server(std::shared_ptr<base::TaskRunner> task_runner);
     ~Server();
 
     void start();
