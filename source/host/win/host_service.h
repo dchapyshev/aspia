@@ -39,7 +39,7 @@ protected:
     // base::win::Service implementation.
     void onStart() override;
     void onStop() override;
-    void onSessionEvent(base::win::SessionStatus status, base::win::SessionId session_id) override;
+    void onSessionEvent(base::win::SessionStatus status, base::SessionId session_id) override;
 
 private:
     std::unique_ptr<base::win::ScopedCOMInitializer> com_initializer_;

@@ -20,7 +20,7 @@
 #define BASE__WIN__SERVICE_H
 
 #include "base/message_loop/message_loop.h"
-#include "base/win/session_id.h"
+#include "base/session_id.h"
 #include "base/win/session_status.h"
 
 namespace base::win {

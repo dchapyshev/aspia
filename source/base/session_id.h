@@ -16,10 +16,14 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__WIN__SESSION_ID_H
-#define BASE__WIN__SESSION_ID_H
+#ifndef BASE__SESSION_ID_H
+#define BASE__SESSION_ID_H
 
-namespace base::win {
+#include "build/build_config.h"
+
+namespace base {
+
+#if defined(OS_WIN)
 
 using SessionId = unsigned long;
 const SessionId kInvalidSessionId = 0xFFFFFFFF;
@@ -27,6 +31,12 @@ const SessionId kServiceSessionId = 0;
 
 SessionId activeConsoleSessionId();
 
-} // namespace base::win
+#else // defined(OS_*)
 
-#endif // BASE__WIN__SESSION_ID_H
+#error Not implemented
+
+#endif
+
+} // namespace base
+
+#endif // BASE__SESSION_ID_H

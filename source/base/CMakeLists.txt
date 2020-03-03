@@ -41,6 +41,8 @@ list(APPEND SOURCE_BASE
     process_handle.h
     scoped_clear_last_error.cc
     scoped_clear_last_error.h
+    session_id.cc
+    session_id.h
     settings.cc
     settings.h
     smbios.h
@@ -191,8 +193,6 @@ list(APPEND SOURCE_BASE_WIN
     win/service_controller.h
     win/session_enumerator.cc
     win/session_enumerator.h
-    win/session_id.cc
-    win/session_id.h
     win/session_info.cc
     win/session_info.h
     win/session_status.cc

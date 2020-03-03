@@ -268,7 +268,7 @@ bool UserSessionManager::start(Delegate* delegate)
 }
 
 void UserSessionManager::setSessionEvent(
-    base::win::SessionStatus status, base::win::SessionId session_id)
+    base::win::SessionStatus status, base::SessionId session_id)
 {
     // Send an event of each session.
     for (const auto& session : sessions_)
@@ -296,7 +296,7 @@ void UserSessionManager::addNewSession(std::unique_ptr<ClientSession> client_ses
 {
     LOG(LS_INFO) << "Adding a new client connection (user: " << client_session->userName() << ")";
 
-    base::win::SessionId session_id;
+    base::SessionId session_id;
 
     std::u16string username = client_session->userName();
     if (base::startsWith(username, u"#"))
@@ -308,7 +308,7 @@ void UserSessionManager::addNewSession(std::unique_ptr<ClientSession> client_ses
     }
     else
     {
-        session_id = base::win::activeConsoleSessionId();
+        session_id = base::activeConsoleSessionId();
     }
 
     for (const auto& session : sessions_)
@@ -403,9 +403,9 @@ void UserSessionManager::onUserSessionFinished()
     }
 }
 
-void UserSessionManager::startSessionProcess(base::win::SessionId session_id)
+void UserSessionManager::startSessionProcess(base::SessionId session_id)
 {
-    if (session_id == base::win::kServiceSessionId)
+    if (session_id == base::kServiceSessionId)
         return;
 
     base::win::ScopedHandle user_token;
@@ -433,7 +433,7 @@ void UserSessionManager::startSessionProcess(base::win::SessionId session_id)
 }
 
 void UserSessionManager::addUserSession(
-    base::win::SessionId session_id, std::unique_ptr<ipc::Channel> channel)
+    base::SessionId session_id, std::unique_ptr<ipc::Channel> channel)
 {
     for (const auto& session : sessions_)
     {

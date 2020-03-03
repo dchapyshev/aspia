@@ -36,7 +36,7 @@
 namespace host {
 
 UserSession::UserSession(std::shared_ptr<base::TaskRunner> task_runner,
-                         base::win::SessionId session_id,
+                         base::SessionId session_id,
                          std::unique_ptr<ipc::Channel> channel)
     : task_runner_(task_runner),
       channel_(std::move(channel)),
@@ -47,7 +47,7 @@ UserSession::UserSession(std::shared_ptr<base::TaskRunner> task_runner,
 
     type_ = UserSession::Type::CONSOLE;
 
-    if (session_id_ != base::win::activeConsoleSessionId())
+    if (session_id_ != base::activeConsoleSessionId())
         type_ = UserSession::Type::RDP;
 }
 
@@ -165,7 +165,7 @@ void UserSession::addNewSession(std::unique_ptr<ClientSession> client_session)
     sendConnectEvent(*client_session_ptr);
 }
 
-void UserSession::setSessionEvent(base::win::SessionStatus status, base::win::SessionId session_id)
+void UserSession::setSessionEvent(base::win::SessionStatus status, base::SessionId session_id)
 {
     switch (status)
     {

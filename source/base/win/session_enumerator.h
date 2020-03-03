@@ -20,8 +20,8 @@
 #define BASE__WIN__SESSION_ENUMERATOR_H
 
 #include "base/macros_magic.h"
+#include "base/session_id.h"
 #include "base/win/scoped_wts_memory.h"
-#include "base/win/session_id.h"
 
 #include <string>
 

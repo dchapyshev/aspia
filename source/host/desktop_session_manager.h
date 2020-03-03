@@ -19,8 +19,8 @@
 #ifndef HOST__DESKTOP_SESSION_MANAGER_H
 #define HOST__DESKTOP_SESSION_MANAGER_H
 
+#include "base/session_id.h"
 #include "base/waitable_timer.h"
-#include "base/win/session_id.h"
 #include "base/win/session_status.h"
 #include "host/desktop_session.h"
 #include "ipc/ipc_server.h"
@@ -52,7 +52,7 @@ public:
                           DesktopSession::Delegate* delegate);
     ~DesktopSessionManager();
 
-    void attachSession(const base::Location& location, base::win::SessionId session_id);
+    void attachSession(const base::Location& location, base::SessionId session_id);
     void dettachSession(const base::Location& location);
 
     std::shared_ptr<DesktopSessionProxy> sessionProxy() const;

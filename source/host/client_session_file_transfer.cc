@@ -98,7 +98,7 @@ class ClientSessionFileTransfer::Worker
       public common::FileTaskProducer
 {
 public:
-    Worker(base::win::SessionId session_id, std::shared_ptr<net::ChannelProxy> channel_proxy);
+    Worker(base::SessionId session_id, std::shared_ptr<net::ChannelProxy> channel_proxy);
     ~Worker();
 
     void start();
@@ -114,7 +114,7 @@ protected:
 
 private:
     base::Thread thread_;
-    const base::win::SessionId session_id_;
+    const base::SessionId session_id_;
     std::unique_ptr<base::win::ScopedImpersonator> impersonator_;
     std::shared_ptr<net::ChannelProxy> channel_proxy_;
     std::shared_ptr<common::FileTaskProducerProxy> producer_proxy_;
@@ -124,7 +124,7 @@ private:
 };
 
 ClientSessionFileTransfer::Worker::Worker(
-    base::win::SessionId session_id, std::shared_ptr<net::ChannelProxy> channel_proxy)
+    base::SessionId session_id, std::shared_ptr<net::ChannelProxy> channel_proxy)
     : session_id_(session_id),
       channel_proxy_(std::move(channel_proxy))
 {
@@ -197,7 +197,7 @@ ClientSessionFileTransfer::ClientSessionFileTransfer(std::unique_ptr<net::Channe
 
 ClientSessionFileTransfer::~ClientSessionFileTransfer() = default;
 
-void ClientSessionFileTransfer::setSessionId(base::win::SessionId session_id)
+void ClientSessionFileTransfer::setSessionId(base::SessionId session_id)
 {
     session_id_ = session_id;
 }

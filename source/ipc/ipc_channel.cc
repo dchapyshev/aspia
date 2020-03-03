@@ -69,27 +69,27 @@ base::ProcessId serverProcessIdImpl(HANDLE pipe_handle)
     return process_id;
 }
 
-base::win::SessionId clientSessionIdImpl(HANDLE pipe_handle)
+base::SessionId clientSessionIdImpl(HANDLE pipe_handle)
 {
-    ULONG session_id = base::win::kInvalidSessionId;
+    ULONG session_id = base::kInvalidSessionId;
 
     if (!GetNamedPipeClientSessionId(pipe_handle, &session_id))
     {
         PLOG(LS_WARNING) << "GetNamedPipeClientSessionId failed";
-        return base::win::kInvalidSessionId;
+        return base::kInvalidSessionId;
     }
 
     return session_id;
 }
 
-base::win::SessionId serverSessionIdImpl(HANDLE pipe_handle)
+base::SessionId serverSessionIdImpl(HANDLE pipe_handle)
 {
-    ULONG session_id = base::win::kInvalidSessionId;
+    ULONG session_id = base::kInvalidSessionId;
 
     if (!GetNamedPipeServerSessionId(pipe_handle, &session_id))
     {
         PLOG(LS_WARNING) << "GetNamedPipeServerSessionId failed";
-        return base::win::kInvalidSessionId;
+        return base::kInvalidSessionId;
     }
 
     return session_id;

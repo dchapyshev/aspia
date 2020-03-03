@@ -97,7 +97,7 @@ void Server::start()
     LOG(LS_INFO) << "Host server is started successfully";
 }
 
-void Server::setSessionEvent(base::win::SessionStatus status, base::win::SessionId session_id)
+void Server::setSessionEvent(base::win::SessionStatus status, base::SessionId session_id)
 {
     if (user_session_manager_)
         user_session_manager_->setSessionEvent(status, session_id);

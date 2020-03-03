@@ -191,7 +191,7 @@ DesktopSessionProcess::~DesktopSessionProcess() = default;
 
 // static
 std::unique_ptr<DesktopSessionProcess> DesktopSessionProcess::create(
-    base::win::SessionId session_id, std::u16string_view channel_id)
+    base::SessionId session_id, std::u16string_view channel_id)
 {
     base::CommandLine command_line(filePath());
     command_line.appendSwitch(u"channel_id", channel_id);

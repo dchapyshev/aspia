@@ -147,9 +147,9 @@ bool createProcessWithToken(HANDLE token, const base::CommandLine& command_line)
 
 } // namespace
 
-bool launchUpdater(base::win::SessionId session_id)
+bool launchUpdater(base::SessionId session_id)
 {
-    if (session_id == base::win::kInvalidSessionId || session_id == base::win::kServiceSessionId)
+    if (session_id == base::kInvalidSessionId || session_id == base::kServiceSessionId)
     {
         DLOG(LS_ERROR) << "Invalid session id: " << session_id;
         return false;

@@ -19,8 +19,8 @@
 #ifndef HOST__USER_SESSION_H
 #define HOST__USER_SESSION_H
 
+#include "base/session_id.h"
 #include "base/waitable_timer.h"
-#include "base/win/session_id.h"
 #include "host/client_session.h"
 #include "host/desktop_session_manager.h"
 #include "host/user.h"
@@ -64,7 +64,7 @@ public:
     };
 
     UserSession(std::shared_ptr<base::TaskRunner> task_runner,
-                base::win::SessionId session_id,
+                base::SessionId session_id,
                 std::unique_ptr<ipc::Channel> channel);
     ~UserSession();
 
@@ -73,11 +73,11 @@ public:
 
     Type type() const { return type_; }
     State state() const { return state_; }
-    base::win::SessionId sessionId() const { return session_id_; }
+    base::SessionId sessionId() const { return session_id_; }
     User user() const;
 
     void addNewSession(std::unique_ptr<ClientSession> client_session);
-    void setSessionEvent(base::win::SessionStatus status, base::win::SessionId session_id);
+    void setSessionEvent(base::win::SessionStatus status, base::SessionId session_id);
 
 protected:
     // ipc::Listener implementation.
@@ -111,7 +111,7 @@ private:
     State state_ = State::DETTACHED;
     base::WaitableTimer attach_timer_;
 
-    base::win::SessionId session_id_;
+    base::SessionId session_id_;
     std::string username_;
     std::string password_;
 

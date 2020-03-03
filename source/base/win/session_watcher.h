@@ -20,7 +20,7 @@
 #define BASE__WIN__SESSION_WATCHER_H
 
 #include "base/macros_magic.h"
-#include "base/win/session_id.h"
+#include "base/session_id.h"
 #include "base/win/session_status.h"
 
 #include <memory>

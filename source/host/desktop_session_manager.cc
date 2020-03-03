@@ -47,7 +47,7 @@ DesktopSessionManager::~DesktopSessionManager()
 }
 
 void DesktopSessionManager::attachSession(
-    const base::Location& location, base::win::SessionId session_id)
+    const base::Location& location, base::SessionId session_id)
 {
     if (state_ == State::ATTACHED)
         return;

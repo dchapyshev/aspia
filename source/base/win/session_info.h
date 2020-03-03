@@ -19,8 +19,8 @@
 #ifndef BASE__WIN__SESSION_INFO_H
 #define BASE__WIN__SESSION_INFO_H
 
+#include "base/session_id.h"
 #include "base/win/scoped_wts_memory.h"
-#include "base/win/session_id.h"
 
 #include <string>
 

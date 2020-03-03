@@ -20,9 +20,9 @@
 #define BASE__WIN__PROCESS_H
 
 #include "base/process_handle.h"
+#include "base/session_id.h"
 #include "base/win/object_watcher.h"
 #include "base/win/scoped_object.h"
-#include "base/win/session_id.h"
 
 #include <filesystem>
 #include <functional>

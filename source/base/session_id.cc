@@ -16,14 +16,18 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/win/session_id.h"
+#include "base/session_id.h"
 
 #include <limits>
 #include <type_traits>
 
+#if defined(OS_WIN)
 #include <Windows.h>
+#endif // defined(OS_WIN)
 
-namespace base::win {
+namespace base {
+
+#if defined(OS_WIN)
 
 static_assert(std::is_same<SessionId, DWORD>());
 static_assert(kInvalidSessionId == std::numeric_limits<DWORD>::max());
@@ -33,4 +37,6 @@ SessionId activeConsoleSessionId()
     return WTSGetActiveConsoleSessionId();
 }
 
-} // namespace base::win
+#endif // defined(OS_WIN)
+
+} // namespace base

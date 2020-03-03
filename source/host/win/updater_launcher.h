@@ -19,11 +19,11 @@
 #ifndef HOST__WIN__UPDATER_LAUNCHER_H
 #define HOST__WIN__UPDATER_LAUNCHER_H
 
-#include "base/win/session_id.h"
+#include "base/session_id.h"
 
 namespace host {
 
-bool launchUpdater(base::win::SessionId session_id);
+bool launchUpdater(base::SessionId session_id);
 
 } // namespace host
 
