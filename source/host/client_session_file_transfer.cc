@@ -98,7 +98,7 @@ class ClientSessionFileTransfer::Worker
       public common::FileTaskProducer
 {
 public:
-    explicit Worker(std::shared_ptr<net::ChannelProxy> channel_proxy);
+    Worker(base::win::SessionId session_id, std::shared_ptr<net::ChannelProxy> channel_proxy);
     ~Worker();
 
     void start();
@@ -114,6 +114,7 @@ protected:
 
 private:
     base::Thread thread_;
+    const base::win::SessionId session_id_;
     std::unique_ptr<base::win::ScopedImpersonator> impersonator_;
     std::shared_ptr<net::ChannelProxy> channel_proxy_;
     std::shared_ptr<common::FileTaskProducerProxy> producer_proxy_;
@@ -122,8 +123,10 @@ private:
     DISALLOW_COPY_AND_ASSIGN(Worker);
 };
 
-ClientSessionFileTransfer::Worker::Worker(std::shared_ptr<net::ChannelProxy> channel_proxy)
-    : channel_proxy_(std::move(channel_proxy))
+ClientSessionFileTransfer::Worker::Worker(
+    base::win::SessionId session_id, std::shared_ptr<net::ChannelProxy> channel_proxy)
+    : session_id_(session_id),
+      channel_proxy_(std::move(channel_proxy))
 {
     // Nothing
 }
@@ -158,7 +161,7 @@ void ClientSessionFileTransfer::Worker::postRequest(std::unique_ptr<proto::FileR
 void ClientSessionFileTransfer::Worker::onBeforeThreadRunning()
 {
     base::win::ScopedHandle user_token;
-    if (!createLoggedOnUserToken(WTSGetActiveConsoleSessionId(), &user_token))
+    if (!createLoggedOnUserToken(session_id_, &user_token))
         return;
 
     impersonator_ = std::make_unique<base::win::ScopedImpersonator>();
@@ -194,6 +197,11 @@ ClientSessionFileTransfer::ClientSessionFileTransfer(std::unique_ptr<net::Channe
 
 ClientSessionFileTransfer::~ClientSessionFileTransfer() = default;
 
+void ClientSessionFileTransfer::setSessionId(base::win::SessionId session_id)
+{
+    session_id_ = session_id;
+}
+
 void ClientSessionFileTransfer::onMessageReceived(const base::ByteArray& buffer)
 {
     std::unique_ptr<proto::FileRequest> request = std::make_unique<proto::FileRequest>();
@@ -206,7 +214,7 @@ void ClientSessionFileTransfer::onMessageReceived(const base::ByteArray& buffer)
 
     if (!worker_)
     {
-        worker_ = std::make_unique<Worker>(channelProxy());
+        worker_ = std::make_unique<Worker>(session_id_, channelProxy());
         worker_->start();
     }
 

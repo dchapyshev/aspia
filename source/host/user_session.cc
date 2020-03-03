@@ -28,6 +28,7 @@
 #include "crypto/password_generator.h"
 #include "desktop/desktop_frame.h"
 #include "host/client_session_desktop.h"
+#include "host/client_session_file_transfer.h"
 #include "host/desktop_session_proxy.h"
 #include "ipc/ipc_channel_proxy.h"
 #include "net/adapter_enumerator.h"
@@ -142,6 +143,10 @@ void UserSession::addNewSession(std::unique_ptr<ClientSession> client_session)
 
         case proto::SESSION_TYPE_FILE_TRANSFER:
         {
+            ClientSessionFileTransfer* file_transfer_client_session =
+                static_cast<ClientSessionFileTransfer*>(client_session_ptr);
+
+            file_transfer_client_session->setSessionId(sessionId());
             file_transfer_clients_.emplace_back(std::move(client_session));
         }
         break;
@@ -359,17 +364,16 @@ void UserSession::onSessionDettached(const base::Location& location)
     username_.clear();
     password_.clear();
 
-    auto stop_one_time_clients = [](const ClientSessionList& list)
+    // Stop one-time desktop clients.
+    for (const auto& client : desktop_clients_)
     {
-        for (const auto& client : list)
-        {
-            if (base::startsWith(client->userName(), u"#"))
-                client->stop();
-        }
-    };
+        if (base::startsWith(client->userName(), u"#"))
+            client->stop();
+    }
 
-    stop_one_time_clients(desktop_clients_);
-    stop_one_time_clients(file_transfer_clients_);
+    // Stop all file transfer clients.
+    for (const auto& client : file_transfer_clients_)
+        client->stop();
 
     state_ = State::DETTACHED;
     delegate_->onUserSessionDettached();

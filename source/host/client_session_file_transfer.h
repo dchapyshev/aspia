@@ -20,6 +20,7 @@
 #define HOST__CLIENT_SESSION_FILE_TRANSFER_H
 
 #include "base/macros_magic.h"
+#include "base/win/session_id.h"
 #include "host/client_session.h"
 
 namespace host {
@@ -29,6 +30,8 @@ class ClientSessionFileTransfer : public ClientSession
 public:
     explicit ClientSessionFileTransfer(std::unique_ptr<net::Channel> channel);
     ~ClientSessionFileTransfer();
+
+    void setSessionId(base::win::SessionId session_id);
 
 protected:
     // net::Listener implementation.
@@ -41,6 +44,8 @@ protected:
 private:
     class Worker;
     std::unique_ptr<Worker> worker_;
+
+    base::win::SessionId session_id_ = base::win::kInvalidSessionId;
 
     DISALLOW_COPY_AND_ASSIGN(ClientSessionFileTransfer);
 };
