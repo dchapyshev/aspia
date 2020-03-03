@@ -36,12 +36,56 @@ namespace host {
 
 namespace {
 
-bool createLoggedOnUserToken(base::win::ScopedHandle* token_out)
+bool createLoggedOnUserToken(DWORD session_id, base::win::ScopedHandle* token_out)
 {
-    if (!WTSQueryUserToken(WTSGetActiveConsoleSessionId(), token_out->recieve()))
+    base::win::ScopedHandle user_token;
+    if (!WTSQueryUserToken(session_id, user_token.recieve()))
     {
         PLOG(LS_WARNING) << "WTSQueryUserToken failed";
         return false;
+    }
+
+    TOKEN_ELEVATION_TYPE elevation_type;
+    DWORD returned_length;
+
+    if (!GetTokenInformation(user_token,
+                             TokenElevationType,
+                             &elevation_type,
+                             sizeof(elevation_type),
+                             &returned_length))
+    {
+        PLOG(LS_WARNING) << "GetTokenInformation failed";
+        return false;
+    }
+
+    switch (elevation_type)
+    {
+        // The token is a limited token.
+        case TokenElevationTypeLimited:
+        {
+            TOKEN_LINKED_TOKEN linked_token_info;
+
+            // Get the unfiltered token for a silent UAC bypass.
+            if (!GetTokenInformation(user_token,
+                                     TokenLinkedToken,
+                                     &linked_token_info,
+                                     sizeof(linked_token_info),
+                                     &returned_length))
+            {
+                PLOG(LS_WARNING) << "GetTokenInformation failed";
+                return false;
+            }
+
+            // Attach linked token.
+            token_out->reset(linked_token_info.LinkedToken);
+        }
+        break;
+
+        case TokenElevationTypeDefault: // The token does not have a linked token.
+        case TokenElevationTypeFull:    // The token is an elevated token.
+        default:
+            token_out->reset(user_token.release());
+            break;
     }
 
     return true;
@@ -114,7 +158,7 @@ void ClientSessionFileTransfer::Worker::postRequest(std::unique_ptr<proto::FileR
 void ClientSessionFileTransfer::Worker::onBeforeThreadRunning()
 {
     base::win::ScopedHandle user_token;
-    if (!createLoggedOnUserToken(&user_token))
+    if (!createLoggedOnUserToken(WTSGetActiveConsoleSessionId(), &user_token))
         return;
 
     impersonator_ = std::make_unique<base::win::ScopedImpersonator>();
