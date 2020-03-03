@@ -121,8 +121,8 @@ void ClientSessionFileTransfer::Worker::onBeforeThreadRunning()
     if (!impersonator_->loggedOnUser(user_token))
         return;
 
-    impl_ = std::make_unique<common::FileWorker>(thread_.taskRunner());
     producer_proxy_ = std::make_shared<common::FileTaskProducerProxy>(this);
+    impl_ = std::make_unique<common::FileWorker>(thread_.taskRunner());
 }
 
 void ClientSessionFileTransfer::Worker::onAfterThreadRunning()
@@ -134,6 +134,7 @@ void ClientSessionFileTransfer::Worker::onAfterThreadRunning()
     }
 
     impl_.reset();
+    impersonator_.reset();
 }
 
 void ClientSessionFileTransfer::Worker::onTaskDone(std::shared_ptr<common::FileTask> task)
