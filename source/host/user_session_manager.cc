@@ -44,80 +44,12 @@ const wchar_t kExecutableNameForUi[] = L"aspia_host.exe";
 // Name of the default session desktop.
 const wchar_t kDefaultDesktopName[] = L"winsta0\\default";
 
-bool copyProcessToken(DWORD desired_access, base::win::ScopedHandle* token_out)
-{
-    base::win::ScopedHandle process_token;
-
-    if (!OpenProcessToken(GetCurrentProcess(),
-                          TOKEN_DUPLICATE | desired_access,
-                          process_token.recieve()))
-    {
-        PLOG(LS_WARNING) << "OpenProcessToken failed";
-        return false;
-    }
-
-    if (!DuplicateTokenEx(process_token,
-                          desired_access,
-                          nullptr,
-                          SecurityImpersonation,
-                          TokenPrimary,
-                          token_out->recieve()))
-    {
-        PLOG(LS_WARNING) << "DuplicateTokenEx failed";
-        return false;
-    }
-
-    return true;
-}
-
-bool createPrivilegedToken(base::win::ScopedHandle* token_out)
-{
-    base::win::ScopedHandle privileged_token;
-    const DWORD desired_access = TOKEN_ADJUST_PRIVILEGES | TOKEN_IMPERSONATE |
-        TOKEN_DUPLICATE | TOKEN_QUERY;
-
-    if (!copyProcessToken(desired_access, &privileged_token))
-        return false;
-
-    // Get the LUID for the SE_TCB_NAME privilege.
-    TOKEN_PRIVILEGES state;
-    state.PrivilegeCount = 1;
-    state.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
-
-    if (!LookupPrivilegeValueW(nullptr, SE_TCB_NAME, &state.Privileges[0].Luid))
-    {
-        PLOG(LS_WARNING) << "LookupPrivilegeValueW failed";
-        return false;
-    }
-
-    // Enable the SE_TCB_NAME privilege.
-    if (!AdjustTokenPrivileges(privileged_token, FALSE, &state, 0, nullptr, nullptr))
-    {
-        PLOG(LS_WARNING) << "AdjustTokenPrivileges failed";
-        return false;
-    }
-
-    token_out->reset(privileged_token.release());
-    return true;
-}
-
 bool createLoggedOnUserToken(DWORD session_id, base::win::ScopedHandle* token_out)
 {
-    base::win::ScopedHandle privileged_token;
-
-    if (!createPrivilegedToken(&privileged_token))
-        return false;
-
     base::win::ScopedHandle user_token;
 
+    if (!WTSQueryUserToken(session_id, user_token.recieve()))
     {
-        base::win::ScopedImpersonator impersonator;
-
-        if (!impersonator.loggedOnUser(privileged_token))
-            return false;
-
-        if (!WTSQueryUserToken(session_id, user_token.recieve()))
-        {
             DWORD error_code = GetLastError();
             if (error_code == ERROR_NO_TOKEN)
             {
@@ -127,7 +59,6 @@ bool createLoggedOnUserToken(DWORD session_id, base::win::ScopedHandle* token_ou
 
             PLOG(LS_WARNING) << "WTSQueryUserToken failed";
             return false;
-        }
     }
 
     TOKEN_ELEVATION_TYPE elevation_type;
