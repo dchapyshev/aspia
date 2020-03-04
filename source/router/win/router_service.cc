@@ -45,7 +45,7 @@ void Service::onStop()
 }
 
 void Service::onSessionEvent(
-    base::win::SessionStatus /* event */, base::win::SessionId /* session_id */)
+    base::win::SessionStatus /* event */, base::SessionId /* session_id */)
 {
     // Nothing
 }
