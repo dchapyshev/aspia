@@ -31,7 +31,7 @@ namespace desktop {
 
 namespace {
 
-const int kBlockSize = 8;
+const int kBlockSize = 16;
 
 // Check for diffs in upper-left portion of the block. The size of the portion to check is
 // specified by the |width| and |height| values.
