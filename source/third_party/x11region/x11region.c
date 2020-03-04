@@ -159,10 +159,10 @@ SOFTWARE.
 
 /* true iff (x,y) is in Box */
 #define INBOX(r,x,y) \
-      ( ((r)->x2 >  x) && \
-        ((r)->x1 <= x) && \
-        ((r)->y2 >  y) && \
-        ((r)->y1 <= y) )
+      ( ((r)->x2 >  (x)) && \
+        ((r)->x1 <= (x)) && \
+        ((r)->y2 >  (y)) && \
+        ((r)->y1 <= (y)) )
 
 /* true iff Box r1 contains Box r2 */
 #define SUBSUMES(r1,r2) \
