@@ -175,12 +175,7 @@ Server::Server()
 Server::~Server()
 {
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
-
-    for (size_t i = 0; i < listeners_.size(); ++i)
-    {
-        if (listeners_[i])
-            listeners_[i]->dettach();
-    }
+    stop();
 }
 
 // static
@@ -219,6 +214,20 @@ bool Server::start(std::u16string_view channel_id, Delegate* delegate)
     return true;
 }
 
+void Server::stop()
+{
+    delegate_ = nullptr;
+
+    for (size_t i = 0; i < listeners_.size(); ++i)
+    {
+        if (listeners_[i])
+        {
+            listeners_[i]->dettach();
+            listeners_[i].reset();
+        }
+    }
+}
+
 bool Server::runListener(size_t index)
 {
     return listeners_[index]->listen(io_context_, channel_name_);
@@ -226,8 +235,11 @@ bool Server::runListener(size_t index)
 
 void Server::onNewConnection(size_t index, std::unique_ptr<Channel> channel)
 {
-    delegate_->onNewConnection(std::move(channel));
-    runListener(index);
+    if (delegate_)
+    {
+        delegate_->onNewConnection(std::move(channel));
+        runListener(index);
+    }
 }
 
 void Server::onErrorOccurred(const base::Location& location)
@@ -235,7 +247,8 @@ void Server::onErrorOccurred(const base::Location& location)
     LOG(LS_WARNING) << "Error in IPC server with name: " << channel_name_
                     << " (" << location.toString() << ")";
 
-    delegate_->onErrorOccurred();
+    if (delegate_)
+        delegate_->onErrorOccurred();
 }
 
 } // namespace ipc

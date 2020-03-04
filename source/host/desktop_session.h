@@ -49,6 +49,7 @@ public:
     };
 
     virtual void start() = 0;
+    virtual void stop() = 0;
 
     virtual void enableSession(bool enable) = 0;
     virtual void selectScreen(const proto::Screen& screen) = 0;

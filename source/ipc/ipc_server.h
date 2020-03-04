@@ -52,6 +52,7 @@ public:
     };
 
     bool start(std::u16string_view channel_id, Delegate* delegate);
+    void stop();
 
 private:
     bool runListener(size_t index);

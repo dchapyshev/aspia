@@ -100,7 +100,7 @@ DesktopSessionFake::DesktopSessionFake(
     : frame_generator_(std::make_shared<FrameGenerator>(std::move(task_runner))),
       delegate_(delegate)
 {
-    // Nothing
+    DCHECK(delegate_);
 }
 
 DesktopSessionFake::~DesktopSessionFake()
@@ -110,7 +110,14 @@ DesktopSessionFake::~DesktopSessionFake()
 
 void DesktopSessionFake::start()
 {
-    delegate_->onDesktopSessionStarted();
+    if (delegate_)
+        delegate_->onDesktopSessionStarted();
+}
+
+void DesktopSessionFake::stop()
+{
+    delegate_ = nullptr;
+    frame_generator_->stop();
 }
 
 void DesktopSessionFake::enableSession(bool enable)

@@ -116,4 +116,9 @@ void Server::start(uint16_t port, Delegate* delegate)
     impl_->start(port, delegate);
 }
 
+void Server::stop()
+{
+    impl_->stop();
+}
+
 } // namespace net

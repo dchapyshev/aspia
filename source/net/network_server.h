@@ -43,6 +43,7 @@ public:
     };
 
     void start(uint16_t port, Delegate* delegate);
+    void stop();
 
 private:
     class Impl;

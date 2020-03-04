@@ -83,10 +83,18 @@ DesktopSessionIpc::~DesktopSessionIpc() = default;
 
 void DesktopSessionIpc::start()
 {
+    if (!delegate_)
+        return;
+
     channel_->setListener(this);
     channel_->resume();
 
     delegate_->onDesktopSessionStarted();
+}
+
+void DesktopSessionIpc::stop()
+{
+    delegate_ = nullptr;
 }
 
 void DesktopSessionIpc::enableSession(bool enable)
@@ -140,7 +148,8 @@ void DesktopSessionIpc::userSessionControl(proto::internal::UserSessionControl::
 
 void DesktopSessionIpc::onDisconnected()
 {
-    delegate_->onDesktopSessionStopped();
+    if (delegate_)
+        delegate_->onDesktopSessionStopped();
 }
 
 void DesktopSessionIpc::onMessageReceived(const base::ByteArray& buffer)
@@ -159,7 +168,8 @@ void DesktopSessionIpc::onMessageReceived(const base::ByteArray& buffer)
     }
     else if (incoming_message_.has_screen_list())
     {
-        delegate_->onScreenListChanged(incoming_message_.screen_list());
+        if (delegate_)
+            delegate_->onScreenListChanged(incoming_message_.screen_list());
     }
     else if (incoming_message_.has_shared_buffer())
     {
@@ -180,7 +190,8 @@ void DesktopSessionIpc::onMessageReceived(const base::ByteArray& buffer)
     }
     else if (incoming_message_.has_clipboard_event())
     {
-        delegate_->onClipboardEvent(incoming_message_.clipboard_event());
+        if (delegate_)
+            delegate_->onClipboardEvent(incoming_message_.clipboard_event());
     }
     else
     {
@@ -211,7 +222,8 @@ void DesktopSessionIpc::onEncodeFrame(const proto::internal::EncodeFrame& encode
         for (int i = 0; i < serialized_frame.dirty_rect_size(); ++i)
             frame->updatedRegion()->addRect(codec::parseRect(serialized_frame.dirty_rect(i)));
 
-        delegate_->onScreenCaptured(*frame);
+        if (delegate_)
+            delegate_->onScreenCaptured(*frame);
     }
 
     if (encode_frame.has_mouse_cursor())
@@ -230,8 +242,11 @@ void DesktopSessionIpc::onEncodeFrame(const proto::internal::EncodeFrame& encode
 
         memcpy(data.get(), serialized_data.data(), serialized_data.size());
 
-        delegate_->onCursorCaptured(
-            std::make_shared<desktop::MouseCursor>(std::move(data), size, hotspot));
+        if (delegate_)
+        {
+            delegate_->onCursorCaptured(
+                std::make_shared<desktop::MouseCursor>(std::move(data), size, hotspot));
+        }
     }
 
     outgoing_message_.Clear();

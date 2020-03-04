@@ -72,15 +72,21 @@ void DesktopSessionProxy::userSessionControl(proto::internal::UserSessionControl
         desktop_session_->userSessionControl(action);
 }
 
-void DesktopSessionProxy::attach(DesktopSession* desktop_session)
+void DesktopSessionProxy::attachAndStart(DesktopSession* desktop_session)
 {
     desktop_session_ = desktop_session;
     DCHECK(desktop_session_);
+
+    desktop_session_->start();
 }
 
-void DesktopSessionProxy::dettach()
+void DesktopSessionProxy::stopAndDettach()
 {
-    desktop_session_ = nullptr;
+    if (desktop_session_)
+    {
+        desktop_session_->stop();
+        desktop_session_ = nullptr;
+    }
 }
 
 } // namespace host

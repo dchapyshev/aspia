@@ -46,8 +46,8 @@ public:
 private:
     friend class DesktopSessionManager;
 
-    void attach(DesktopSession* desktop_session);
-    void dettach();
+    void attachAndStart(DesktopSession* desktop_session);
+    void stopAndDettach();
 
     DesktopSession* desktop_session_ = nullptr;
 

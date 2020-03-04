@@ -99,7 +99,7 @@ void DesktopSessionManager::dettachSession(const base::Location& location)
         state_ = State::DETACHED;
 
     session_attach_timer_.stop();
-    session_proxy_->dettach();
+    session_proxy_->stopAndDettach();
     task_runner_->deleteSoon(std::move(session_));
 
     LOG(LS_INFO) << "Session process is detached";
@@ -115,8 +115,7 @@ void DesktopSessionManager::dettachSession(const base::Location& location)
 
     // The real session process has ended. We create a temporary fake session.
     session_ = std::make_unique<DesktopSessionFake>(task_runner_, this);
-    session_proxy_->attach(session_.get());
-    session_->start();
+    session_proxy_->attachAndStart(session_.get());
 }
 
 std::shared_ptr<DesktopSessionProxy> DesktopSessionManager::sessionProxy() const
@@ -135,13 +134,17 @@ void DesktopSessionManager::onNewConnection(std::unique_ptr<ipc::Channel> channe
     LOG(LS_INFO) << "Session process successfully connected";
 
     session_attach_timer_.stop();
-    task_runner_->deleteSoon(std::move(server_));
+
+    if (server_)
+    {
+        server_->stop();
+        task_runner_->deleteSoon(std::move(server_));
+    }
 
     session_ = std::make_unique<DesktopSessionIpc>(std::move(channel), this);
-    session_proxy_->attach(session_.get());
 
     state_ = State::ATTACHED;
-    session_->start();
+    session_proxy_->attachAndStart(session_.get());
 }
 
 void DesktopSessionManager::onErrorOccurred()
