@@ -380,13 +380,13 @@ void Channel::doWrite()
 
 void Channel::onWrite(const std::error_code& error_code, size_t bytes_transferred)
 {
-    DCHECK(!write_queue_.empty());
-
     if (error_code)
     {
         onErrorOccurred(FROM_HERE, error_code);
         return;
     }
+
+    DCHECK(!write_queue_.empty());
 
     onMessageWritten();
 
