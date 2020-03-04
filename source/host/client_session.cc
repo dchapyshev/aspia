@@ -93,6 +93,11 @@ std::u16string ClientSession::peerAddress() const
     return channel_->peerAddress();
 }
 
+void ClientSession::setSessionId(base::SessionId session_id)
+{
+    session_id_ = session_id;
+}
+
 std::shared_ptr<net::ChannelProxy> ClientSession::channelProxy()
 {
     return channel_->channelProxy();

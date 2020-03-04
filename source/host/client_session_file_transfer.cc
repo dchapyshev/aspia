@@ -197,11 +197,6 @@ ClientSessionFileTransfer::ClientSessionFileTransfer(std::unique_ptr<net::Channe
 
 ClientSessionFileTransfer::~ClientSessionFileTransfer() = default;
 
-void ClientSessionFileTransfer::setSessionId(base::SessionId session_id)
-{
-    session_id_ = session_id;
-}
-
 void ClientSessionFileTransfer::onMessageReceived(const base::ByteArray& buffer)
 {
     std::unique_ptr<proto::FileRequest> request = std::make_unique<proto::FileRequest>();
@@ -214,7 +209,7 @@ void ClientSessionFileTransfer::onMessageReceived(const base::ByteArray& buffer)
 
     if (!worker_)
     {
-        worker_ = std::make_unique<Worker>(session_id_, channelProxy());
+        worker_ = std::make_unique<Worker>(sessionId(), channelProxy());
         worker_->start();
     }
 

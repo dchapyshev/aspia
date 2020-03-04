@@ -143,10 +143,6 @@ void UserSession::addNewSession(std::unique_ptr<ClientSession> client_session)
 
         case proto::SESSION_TYPE_FILE_TRANSFER:
         {
-            ClientSessionFileTransfer* file_transfer_client_session =
-                static_cast<ClientSessionFileTransfer*>(client_session_ptr);
-
-            file_transfer_client_session->setSessionId(sessionId());
             file_transfer_clients_.emplace_back(std::move(client_session));
         }
         break;
@@ -159,6 +155,7 @@ void UserSession::addNewSession(std::unique_ptr<ClientSession> client_session)
         break;
     }
 
+    client_session_ptr->setSessionId(sessionId());
     client_session_ptr->start(this);
 
     // Notify the UI of a new connection.
@@ -172,6 +169,9 @@ void UserSession::setSessionEvent(base::win::SessionStatus status, base::Session
         case base::win::SessionStatus::CONSOLE_CONNECT:
         {
             session_id_ = session_id;
+
+            for (const auto& client : desktop_clients_)
+                client->setSessionId(session_id);
 
             if (desktop_session_)
                 desktop_session_->attachSession(FROM_HERE, session_id);

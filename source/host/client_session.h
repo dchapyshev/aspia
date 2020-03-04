@@ -19,6 +19,7 @@
 #ifndef HOST__CLIENT_SESSION_H
 #define HOST__CLIENT_SESSION_H
 
+#include "base/session_id.h"
 #include "base/version.h"
 #include "net/network_listener.h"
 #include "proto/common.pb.h"
@@ -71,6 +72,9 @@ public:
     proto::SessionType sessionType() const { return session_type_; }
     std::u16string peerAddress() const;
 
+    void setSessionId(base::SessionId session_id);
+    base::SessionId sessionId() const { return session_id_; }
+
 protected:
     ClientSession(proto::SessionType session_type, std::unique_ptr<net::Channel> channel);
 
@@ -85,6 +89,7 @@ protected:
     Delegate* delegate_ = nullptr;
 
 private:
+    base::SessionId session_id_ = base::kInvalidSessionId;
     State state_ = State::CREATED;
     std::string id_;
     proto::SessionType session_type_;

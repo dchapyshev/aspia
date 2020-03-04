@@ -213,8 +213,7 @@ void ClientSessionDesktop::readExtension(const proto::DesktopExtension& extensio
     }
     else if (extension.name() == common::kRemoteUpdateExtension)
     {
-        // FIXME: Running in session the current user, not console.
-        launchUpdater(WTSGetActiveConsoleSessionId());
+        launchUpdater(sessionId());
     }
     else if (extension.name() == common::kSystemInfoExtension)
     {
