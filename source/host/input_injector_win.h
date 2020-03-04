@@ -42,7 +42,7 @@ private:
 
     base::ScopedThreadDesktop desktop_;
 
-    bool block_input_;
+    bool block_input_ = false;
     std::set<uint32_t> pressed_keys_;
 
     desktop::Point prev_mouse_pos_;
