@@ -46,6 +46,7 @@ class Server::Listener : public std::enable_shared_from_this<Listener>
 {
 public:
     Listener(Server* server, size_t index);
+    ~Listener();
 
     void dettach() { server_ = nullptr; }
 
@@ -69,6 +70,8 @@ Server::Listener::Listener(Server* server, size_t index)
     // Nothing
 }
 
+Server::Listener::~Listener() = default;
+
 bool Server::Listener::listen(asio::io_context& io_context, std::u16string_view channel_name)
 {
     std::wstring user_sid;
@@ -76,7 +79,7 @@ bool Server::Listener::listen(asio::io_context& io_context, std::u16string_view 
     if (!base::win::userSidString(&user_sid))
     {
         LOG(LS_ERROR) << "Failed to query the current user SID";
-        return nullptr;
+        return false;
     }
 
     // Create a security descriptor that gives full access to the caller and authenticated users
@@ -91,7 +94,7 @@ bool Server::Listener::listen(asio::io_context& io_context, std::u16string_view 
     if (!sd.get())
     {
         LOG(LS_ERROR) << "Failed to create a security descriptor";
-        return nullptr;
+        return false;
     }
 
     SECURITY_ATTRIBUTES security_attributes = { 0 };
@@ -111,7 +114,7 @@ bool Server::Listener::listen(asio::io_context& io_context, std::u16string_view 
     if (!handle.isValid())
     {
         PLOG(LS_WARNING) << "CreateNamedPipeW failed";
-        return nullptr;
+        return false;
     }
 
     handle_ = std::make_unique<asio::windows::stream_handle>(io_context, handle.release());
@@ -230,7 +233,11 @@ void Server::stop()
 
 bool Server::runListener(size_t index)
 {
-    return listeners_[index]->listen(io_context_, channel_name_);
+    std::shared_ptr<Listener> listener = listeners_[index];
+    if (!listener)
+        return false;
+
+    return listener->listen(io_context_, channel_name_);
 }
 
 void Server::onNewConnection(size_t index, std::unique_ptr<Channel> channel)
