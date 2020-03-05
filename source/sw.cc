@@ -36,6 +36,7 @@ void build(Solution &s)
     };
 
     auto &base = aspia.addStaticLibrary("base");
+    base += "third_party/modp_b64/.*\\.[hc]"_rr;
     base -= "build/.*"_rr;
     setup_target(base, "base");
     base.Public += "UNICODE"_def;
@@ -54,7 +55,9 @@ void build(Solution &s)
     base.Public += "org.sw.demo.intel.tbb.malloc.proxy"_dep;
     automoc("org.sw.demo.qtproject.qt.base.tools.moc"_dep, base);
 
-    auto &desktop_capture = add_lib("desktop");
+    auto &desktop_capture = aspia.addStaticLibrary("desktop");
+    desktop_capture += "third_party/x11region/.*\\.[hc]"_rr;
+    setup_target(desktop_capture, "desktop");
     desktop_capture.Public += base;
     desktop_capture.Public += "org.sw.demo.qtproject.qt.base.gui"_dep;
     desktop_capture.Public += "org.sw.demo.chromium.libyuv-master"_dep;
