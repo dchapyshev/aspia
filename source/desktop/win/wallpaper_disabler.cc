@@ -90,7 +90,7 @@ WallpaperDisabler::WallpaperDisabler()
 
     if (!SystemParametersInfoW(SPI_GETDESKWALLPAPER, std::size(buffer), buffer, 0))
     {
-        PLOG(LS_WARNING) << "SystemParametersInfoW(SPI_GETDESKWALLPAPER) failed";
+        DPLOG(LS_WARNING) << "SystemParametersInfoW(SPI_GETDESKWALLPAPER) failed";
         return;
     }
 

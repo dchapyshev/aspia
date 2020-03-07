@@ -48,7 +48,7 @@ std::unique_ptr<EffectsDisabler::State> EffectsDisabler::saveState()
     }
     else
     {
-        PLOG(LS_WARNING) << "SystemParametersInfoW(SPI_GETDRAGFULLWINDOWS) failed";
+        DPLOG(LS_WARNING) << "SystemParametersInfoW(SPI_GETDRAGFULLWINDOWS) failed";
     }
 
     ANIMATIONINFO animation;
@@ -60,7 +60,7 @@ std::unique_ptr<EffectsDisabler::State> EffectsDisabler::saveState()
     }
     else
     {
-        PLOG(LS_WARNING) << "SystemParametersInfoW(SPI_GETANIMATION) failed";
+        DPLOG(LS_WARNING) << "SystemParametersInfoW(SPI_GETANIMATION) failed";
     }
 
     BOOL menu_animation;
@@ -71,7 +71,7 @@ std::unique_ptr<EffectsDisabler::State> EffectsDisabler::saveState()
     }
     else
     {
-        PLOG(LS_WARNING) << "SystemParametersInfoW(SPI_GETMENUANIMATION) failed";
+        DPLOG(LS_WARNING) << "SystemParametersInfoW(SPI_GETMENUANIMATION) failed";
     }
 
     BOOL tooltip_animation;
@@ -82,7 +82,7 @@ std::unique_ptr<EffectsDisabler::State> EffectsDisabler::saveState()
     }
     else
     {
-        PLOG(LS_WARNING) << "SystemParametersInfoW(SPI_GETTOOLTIPANIMATION) failed";
+        DPLOG(LS_WARNING) << "SystemParametersInfoW(SPI_GETTOOLTIPANIMATION) failed";
     }
 
     BOOL combobox_animation;
@@ -93,7 +93,7 @@ std::unique_ptr<EffectsDisabler::State> EffectsDisabler::saveState()
     }
     else
     {
-        PLOG(LS_WARNING) << "SystemParametersInfoW(SPI_GETCOMBOBOXANIMATION) failed";
+        DPLOG(LS_WARNING) << "SystemParametersInfoW(SPI_GETCOMBOBOXANIMATION) failed";
     }
 
     BOOL selection_fade;
@@ -104,7 +104,7 @@ std::unique_ptr<EffectsDisabler::State> EffectsDisabler::saveState()
     }
     else
     {
-        PLOG(LS_WARNING) << "SystemParametersInfoW(SPI_GETSELECTIONFADE) failed";
+        DPLOG(LS_WARNING) << "SystemParametersInfoW(SPI_GETSELECTIONFADE) failed";
     }
 
     BOOL listbox_smooth_scrolling;
@@ -115,7 +115,7 @@ std::unique_ptr<EffectsDisabler::State> EffectsDisabler::saveState()
     }
     else
     {
-        PLOG(LS_WARNING) << "SystemParametersInfoW(SPI_GETLISTBOXSMOOTHSCROLLING) failed";
+        DPLOG(LS_WARNING) << "SystemParametersInfoW(SPI_GETLISTBOXSMOOTHSCROLLING) failed";
     }
 
     BOOL ui_effects;
@@ -126,7 +126,7 @@ std::unique_ptr<EffectsDisabler::State> EffectsDisabler::saveState()
     }
     else
     {
-        PLOG(LS_WARNING) << "SystemParametersInfoW(SPI_GETUIEFFECTS) failed";
+        DPLOG(LS_WARNING) << "SystemParametersInfoW(SPI_GETUIEFFECTS) failed";
     }
 
     BOOL client_area_animation;
@@ -137,7 +137,7 @@ std::unique_ptr<EffectsDisabler::State> EffectsDisabler::saveState()
     }
     else
     {
-        PLOG(LS_WARNING) << "SystemParametersInfoW(SPI_GETCLIENTAREAANIMATION) failed";
+        DPLOG(LS_WARNING) << "SystemParametersInfoW(SPI_GETCLIENTAREAANIMATION) failed";
     }
 
     BOOL gradient_captions;
@@ -148,7 +148,7 @@ std::unique_ptr<EffectsDisabler::State> EffectsDisabler::saveState()
     }
     else
     {
-        PLOG(LS_WARNING) << "SystemParametersInfoW(SPI_GETGRADIENTCAPTIONS) failed";
+        DPLOG(LS_WARNING) << "SystemParametersInfoW(SPI_GETGRADIENTCAPTIONS) failed";
     }
 
     BOOL hot_tracking;
@@ -159,7 +159,7 @@ std::unique_ptr<EffectsDisabler::State> EffectsDisabler::saveState()
     }
     else
     {
-        PLOG(LS_WARNING) << "SystemParametersInfoW(SPI_GETHOTTRACKING) failed";
+        DPLOG(LS_WARNING) << "SystemParametersInfoW(SPI_GETHOTTRACKING) failed";
     }
 
     return state;
@@ -174,7 +174,7 @@ void EffectsDisabler::changeState(State* state, bool value)
     {
         if (!SystemParametersInfoW(SPI_SETDRAGFULLWINDOWS, enable, 0, SPIF_SENDCHANGE))
         {
-            PLOG(LS_WARNING) << "SystemParametersInfoW(SPI_SETDRAGFULLWINDOWS) failed";
+            DPLOG(LS_WARNING) << "SystemParametersInfoW(SPI_SETDRAGFULLWINDOWS) failed";
         }
     }
 
@@ -186,7 +186,7 @@ void EffectsDisabler::changeState(State* state, bool value)
 
         if (!SystemParametersInfoW(SPI_SETANIMATION, sizeof(animation), &animation, SPIF_SENDCHANGE))
         {
-            PLOG(LS_WARNING) << "SystemParametersInfoW(SPI_SETANIMATION) failed";
+            DPLOG(LS_WARNING) << "SystemParametersInfoW(SPI_SETANIMATION) failed";
         }
     }
 
@@ -197,7 +197,7 @@ void EffectsDisabler::changeState(State* state, bool value)
                                    reinterpret_cast<void*>(enable),
                                    SPIF_SENDCHANGE))
         {
-            PLOG(LS_WARNING) << "SystemParametersInfoW(SPI_SETMENUANIMATION) failed";
+            DPLOG(LS_WARNING) << "SystemParametersInfoW(SPI_SETMENUANIMATION) failed";
         }
     }
 
@@ -208,7 +208,7 @@ void EffectsDisabler::changeState(State* state, bool value)
                                    reinterpret_cast<void*>(enable),
                                    SPIF_SENDCHANGE))
         {
-            PLOG(LS_WARNING) << "SystemParametersInfoW(SPI_SETTOOLTIPANIMATION) failed";
+            DPLOG(LS_WARNING) << "SystemParametersInfoW(SPI_SETTOOLTIPANIMATION) failed";
         }
     }
 
@@ -219,7 +219,7 @@ void EffectsDisabler::changeState(State* state, bool value)
                                    reinterpret_cast<void*>(enable),
                                    SPIF_SENDCHANGE))
         {
-            PLOG(LS_WARNING) << "SystemParametersInfoW(SPI_SETCOMBOBOXANIMATION) failed";
+            DPLOG(LS_WARNING) << "SystemParametersInfoW(SPI_SETCOMBOBOXANIMATION) failed";
         }
     }
 
@@ -230,7 +230,7 @@ void EffectsDisabler::changeState(State* state, bool value)
                                    reinterpret_cast<void*>(enable),
                                    SPIF_SENDCHANGE))
         {
-            PLOG(LS_WARNING) << "SystemParametersInfoW(SPI_SETSELECTIONFADE) failed";
+            DPLOG(LS_WARNING) << "SystemParametersInfoW(SPI_SETSELECTIONFADE) failed";
         }
     }
 
@@ -241,7 +241,7 @@ void EffectsDisabler::changeState(State* state, bool value)
                                    reinterpret_cast<void*>(enable),
                                    SPIF_SENDCHANGE))
         {
-            PLOG(LS_WARNING) << "SystemParametersInfoW(SPI_SETLISTBOXSMOOTHSCROLLING) failed";
+            DPLOG(LS_WARNING) << "SystemParametersInfoW(SPI_SETLISTBOXSMOOTHSCROLLING) failed";
         }
     }
 
@@ -252,7 +252,7 @@ void EffectsDisabler::changeState(State* state, bool value)
                                    reinterpret_cast<void*>(enable),
                                    SPIF_SENDCHANGE))
         {
-            PLOG(LS_WARNING) << "SystemParametersInfoW(SPI_SETUIEFFECTS) failed";
+            DPLOG(LS_WARNING) << "SystemParametersInfoW(SPI_SETUIEFFECTS) failed";
         }
     }
 
@@ -263,7 +263,7 @@ void EffectsDisabler::changeState(State* state, bool value)
                                    reinterpret_cast<void*>(enable),
                                    SPIF_SENDCHANGE))
         {
-            PLOG(LS_WARNING) << "SystemParametersInfoW(SPI_SETCLIENTAREAANIMATION) failed";
+            DPLOG(LS_WARNING) << "SystemParametersInfoW(SPI_SETCLIENTAREAANIMATION) failed";
         }
     }
 
@@ -274,7 +274,7 @@ void EffectsDisabler::changeState(State* state, bool value)
                                    reinterpret_cast<void*>(enable),
                                    SPIF_SENDCHANGE))
         {
-            PLOG(LS_WARNING) << "SystemParametersInfoW(SPI_SETGRADIENTCAPTIONS) failed";
+            DPLOG(LS_WARNING) << "SystemParametersInfoW(SPI_SETGRADIENTCAPTIONS) failed";
         }
     }
 
@@ -285,7 +285,7 @@ void EffectsDisabler::changeState(State* state, bool value)
                                    reinterpret_cast<void*>(enable),
                                    SPIF_SENDCHANGE))
         {
-            PLOG(LS_WARNING) << "SystemParametersInfoW(SPI_SETHOTTRACKING) failed";
+            DPLOG(LS_WARNING) << "SystemParametersInfoW(SPI_SETHOTTRACKING) failed";
         }
     }
 }
