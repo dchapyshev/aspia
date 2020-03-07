@@ -111,6 +111,8 @@ list(APPEND SOURCE_DESKTOP_WIN
     win/dxgi_texture_staging.h
     win/effects_disabler.cc
     win/effects_disabler.h
+    win/font_smoothing_disabler.cc
+    win/font_smoothing_disabler.h
     win/mirror_helper.cc
     win/mirror_helper.h
     win/mv2.h
