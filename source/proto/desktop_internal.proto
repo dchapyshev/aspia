@@ -80,9 +80,10 @@ message SelectSource
 
 message EnableFeatures
 {
-    bool disable_wallpaper = 1;
-    bool disable_effects   = 2;
-    bool block_input       = 3;
+    bool disable_font_smoothing = 1;
+    bool disable_wallpaper      = 2;
+    bool disable_effects        = 3;
+    bool block_input            = 4;
 }
 
 message UserSessionControl

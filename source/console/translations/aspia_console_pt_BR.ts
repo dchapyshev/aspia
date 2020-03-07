@@ -179,6 +179,11 @@
         <source>Disable desktop wallpaper</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../computer_dialog_desktop.ui" line="164"/>
+        <source>Disable font smoothing</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ComputerDialogGeneral</name>
@@ -850,7 +855,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.cc" line="198"/>
+        <location filename="../computer_dialog_desktop.cc" line="204"/>
         <source>Compression ratio: %1</source>
         <translation type="unfinished"></translation>
     </message>

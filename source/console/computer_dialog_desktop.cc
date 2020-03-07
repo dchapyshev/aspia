@@ -115,6 +115,9 @@ void ComputerDialogDesktop::restoreSettings(
 
     if (config.flags() & proto::DISABLE_DESKTOP_WALLPAPER)
         ui.checkbox_desktop_wallpaper->setChecked(true);
+
+    if (config.flags() & proto::DISABLE_FONT_SMOOTHING)
+        ui.checkbox_font_smoothing->setChecked(true);
 }
 
 void ComputerDialogDesktop::saveSettings(proto::DesktopConfig* config)
@@ -173,6 +176,9 @@ void ComputerDialogDesktop::saveSettings(proto::DesktopConfig* config)
 
     if (ui.checkbox_desktop_wallpaper->isChecked())
         flags |= proto::DISABLE_DESKTOP_WALLPAPER;
+
+    if (ui.checkbox_font_smoothing->isChecked())
+        flags |= proto::DISABLE_FONT_SMOOTHING;
 
     if (ui.checkbox_block_remote_input->isChecked())
         flags |= proto::BLOCK_REMOTE_INPUT;

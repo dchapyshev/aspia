@@ -25,6 +25,7 @@
 #include "desktop/screen_capturer_dxgi.h"
 #include "desktop/screen_capturer_gdi.h"
 #include "desktop/screen_capturer_mirror.h"
+#include "desktop/win/font_smoothing_disabler.h"
 #include "desktop/win/effects_disabler.h"
 #include "desktop/win/wallpaper_disabler.h"
 #include "ipc/shared_memory_factory.h"
@@ -105,7 +106,6 @@ void ScreenCapturerWrapper::setSharedMemoryFactory(ipc::SharedMemoryFactory* sha
 void ScreenCapturerWrapper::enableWallpaper(bool enable)
 {
     enable_wallpaper_ = enable;
-
     wallpaper_disabler_.reset();
 
     if (!enable)
@@ -115,12 +115,20 @@ void ScreenCapturerWrapper::enableWallpaper(bool enable)
 void ScreenCapturerWrapper::enableEffects(bool enable)
 {
     enable_effects_ = enable;
-
     effects_disabler_.reset();
 
     if (!enable)
         effects_disabler_ = std::make_unique<EffectsDisabler>();
 
+}
+
+void ScreenCapturerWrapper::enableFontSmoothing(bool enable)
+{
+    enable_font_smoothing_ = enable;
+    font_smoothing_disabler_.reset();
+
+    if (!enable)
+        font_smoothing_disabler_ = std::make_unique<FontSmoothingDisabler>();
 }
 
 void ScreenCapturerWrapper::selectCapturer()
@@ -171,6 +179,7 @@ bool ScreenCapturerWrapper::switchToInputDesktop()
 
         effects_disabler_.reset();
         wallpaper_disabler_.reset();
+        font_smoothing_disabler_.reset();
 
         // If setThreadDesktop() fails, the thread is still assigned a desktop.
         // So we can continue capture screen bits, just from the wrong desktop.
@@ -190,6 +199,9 @@ void ScreenCapturerWrapper::atDesktopSwitch()
 
     if (!enable_wallpaper_)
         wallpaper_disabler_ = std::make_unique<WallpaperDisabler>();
+
+    if (!enable_font_smoothing_)
+        font_smoothing_disabler_ = std::make_unique<FontSmoothingDisabler>();
 }
 
 } // namespace desktop

@@ -301,6 +301,11 @@ void UserSession::onClientSessionConfigured()
         const proto::internal::EnableFeatures& client_features =
             static_cast<ClientSessionDesktop*>(client.get())->features();
 
+        // If at least one client has disabled font smoothing, then the font smoothing will be
+        // disabled for everyone.
+        system_features.set_disable_font_smoothing(
+            system_features.disable_font_smoothing() || client_features.disable_font_smoothing());
+
         // If at least one client has disabled effects, then the effects will be disabled for
         // everyone.
         system_features.set_disable_effects(

@@ -100,6 +100,11 @@
         <translation>Beste</translation>
     </message>
     <message>
+        <location filename="../ui/desktop_config_dialog.ui" line="164"/>
+        <source>Disable font smoothing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Remote Screen</source>
         <translation type="vanished">Scherm op afstand</translation>
     </message>
@@ -1031,7 +1036,7 @@
         <translation>8 kleuren (3 bit)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="147"/>
+        <location filename="../ui/desktop_config_dialog.cc" line="150"/>
         <source>Compression ratio: %1</source>
         <translation>Compressie ratio: %1</translation>
     </message>

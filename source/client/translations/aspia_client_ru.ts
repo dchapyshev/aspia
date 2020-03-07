@@ -100,6 +100,11 @@
         <translation>Сильнее</translation>
     </message>
     <message>
+        <location filename="../ui/desktop_config_dialog.ui" line="164"/>
+        <source>Disable font smoothing</source>
+        <translation>Отключить сглаживание шрифтов</translation>
+    </message>
+    <message>
         <source>Remote Screen</source>
         <translation type="vanished">Удаленный экран</translation>
     </message>
@@ -1035,7 +1040,7 @@
         <translation>8 цветов (3 бита)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="147"/>
+        <location filename="../ui/desktop_config_dialog.cc" line="150"/>
         <source>Compression ratio: %1</source>
         <translation>Уровень сжатия: %1</translation>
     </message>

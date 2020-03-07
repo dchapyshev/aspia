@@ -100,6 +100,11 @@
         <translation>Якісно</translation>
     </message>
     <message>
+        <location filename="../ui/desktop_config_dialog.ui" line="164"/>
+        <source>Disable font smoothing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Remote Screen</source>
         <translation type="vanished">Віддалений екран</translation>
     </message>
@@ -1035,7 +1040,7 @@
         <translation>8 кольорів (3 біти)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="147"/>
+        <location filename="../ui/desktop_config_dialog.cc" line="150"/>
         <source>Compression ratio: %1</source>
         <translation>Стиснення: %1</translation>
     </message>

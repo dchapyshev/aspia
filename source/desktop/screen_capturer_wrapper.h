@@ -27,6 +27,7 @@ namespace desktop {
 
 class CursorCapturer;
 class EffectsDisabler;
+class FontSmoothingDisabler;
 class MouseCursor;
 class WallpaperDisabler;
 
@@ -51,6 +52,7 @@ public:
     void setSharedMemoryFactory(ipc::SharedMemoryFactory* shared_memory_factory);
     void enableWallpaper(bool enable);
     void enableEffects(bool enable);
+    void enableFontSmoothing(bool enable);
 
 private:
     void selectCapturer();
@@ -63,12 +65,15 @@ private:
 
     bool enable_effects_ = true;
     bool enable_wallpaper_ = true;
+    bool enable_font_smoothing_ = true;
     int screen_count_ = 0;
 
     std::unique_ptr<ScreenCapturer> screen_capturer_;
     std::unique_ptr<CursorCapturer> cursor_capturer_;
+
     std::unique_ptr<EffectsDisabler> effects_disabler_;
     std::unique_ptr<WallpaperDisabler> wallpaper_disabler_;
+    std::unique_ptr<FontSmoothingDisabler> font_smoothing_disabler_;
 
     THREAD_CHECKER(thread_checker_);
 

@@ -159,6 +159,13 @@
         </widget>
        </item>
        <item>
+        <widget class="QCheckBox" name="checkbox_font_smoothing">
+         <property name="text">
+          <string>Disable font smoothing</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <spacer name="verticalSpacer_2">
          <property name="orientation">
           <enum>Qt::Vertical</enum>

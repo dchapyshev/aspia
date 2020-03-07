@@ -129,6 +129,11 @@
         <source>Disable desktop wallpaper</source>
         <translation>Desktop-Hintergrundbild deaktivieren</translation>
     </message>
+    <message>
+        <location filename="../ui/desktop_config_dialog.ui" line="164"/>
+        <source>Disable font smoothing</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>DesktopPanel</name>
@@ -863,7 +868,7 @@
         <translation type="unfinished">8 Farben (3 Bit)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="147"/>
+        <location filename="../ui/desktop_config_dialog.cc" line="150"/>
         <source>Compression ratio: %1</source>
         <translation type="unfinished">Kompressionsrate: %1</translation>
     </message>
