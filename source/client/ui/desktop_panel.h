@@ -61,6 +61,7 @@ signals:
     void powerControl(proto::PowerControl::Action action);
     void startRemoteUpdate();
     void startSystemInfo();
+    void minimizeSession();
     void closeSession();
 
 protected:
@@ -77,7 +78,7 @@ private slots:
 
 private:
     void createAdditionalMenu(proto::SessionType session_type);
-    void showCloseButton(bool show);
+    void showFullScreenButtons(bool show);
     void updateScaleMenu();
     void updateSize();
     void delayedHide();

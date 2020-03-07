@@ -49,6 +49,7 @@ DesktopPanel::DesktopPanel(proto::SessionType session_type, QWidget* parent)
     connect(ui.action_autoscroll, &QAction::triggered, this, &DesktopPanel::autoScrollChanged);
     connect(ui.action_update, &QAction::triggered, this, &DesktopPanel::startRemoteUpdate);
     connect(ui.action_system_info, &QAction::triggered, this, &DesktopPanel::startSystemInfo);
+    connect(ui.action_minimize, &QAction::triggered, this, &DesktopPanel::minimizeSession);
     connect(ui.action_close, &QAction::triggered, this, &DesktopPanel::closeSession);
 
     createAdditionalMenu(session_type);
@@ -69,7 +70,7 @@ DesktopPanel::DesktopPanel(proto::SessionType session_type, QWidget* parent)
     });
 
     ui.frame->hide();
-    showCloseButton(false);
+    showFullScreenButtons(false);
 
     hide_timer_id_ = startTimer(std::chrono::seconds(1));
 }
@@ -272,7 +273,7 @@ void DesktopPanel::onFullscreenButton(bool checked)
             QIcon(QStringLiteral(":/img/application-resize-full.png")));
     }
 
-    showCloseButton(checked);
+    showFullScreenButtons(checked);
 
     emit switchToFullscreen(checked);
 }
@@ -285,7 +286,7 @@ void DesktopPanel::onAutosizeButton()
             QIcon(QStringLiteral(":/img/application-resize-full.png")));
         ui.action_fullscreen->setChecked(false);
 
-        showCloseButton(false);
+        showFullScreenButtons(false);
     }
 
     emit switchToAutosize();
@@ -444,8 +445,10 @@ void DesktopPanel::createAdditionalMenu(proto::SessionType session_type)
     });
 }
 
-void DesktopPanel::showCloseButton(bool show)
+void DesktopPanel::showFullScreenButtons(bool show)
 {
+    ui.action_minimize->setVisible(show);
+    ui.action_minimize->setEnabled(show);
     ui.action_close->setVisible(show);
     ui.action_close->setEnabled(show);
 

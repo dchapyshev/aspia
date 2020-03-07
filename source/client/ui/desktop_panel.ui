@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>236</width>
+    <width>261</width>
     <height>40</height>
    </rect>
   </property>
@@ -74,6 +74,7 @@
      <addaction name="action_update"/>
      <addaction name="action_menu"/>
      <addaction name="separator"/>
+     <addaction name="action_minimize"/>
      <addaction name="action_close"/>
     </widget>
    </item>
@@ -383,6 +384,18 @@
    </property>
    <property name="text">
     <string>Fit window</string>
+   </property>
+  </action>
+  <action name="action_minimize">
+   <property name="icon">
+    <iconset resource="../resources/client.qrc">
+     <normaloff>:/img/arrow-stop-270.png</normaloff>:/img/arrow-stop-270.png</iconset>
+   </property>
+   <property name="text">
+    <string>Minimize</string>
+   </property>
+   <property name="toolTip">
+    <string>Minimize window</string>
    </property>
   </action>
  </widget>

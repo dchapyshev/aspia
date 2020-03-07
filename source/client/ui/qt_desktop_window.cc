@@ -92,6 +92,7 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
     connect(panel_, &DesktopPanel::switchToAutosize, this, &QtDesktopWindow::autosizeWindow);
     connect(panel_, &DesktopPanel::takeScreenshot, this, &QtDesktopWindow::takeScreenshot);
     connect(panel_, &DesktopPanel::scaleChanged, this, &QtDesktopWindow::scaleDesktop);
+    connect(panel_, &DesktopPanel::minimizeSession, this, &QtDesktopWindow::showMinimized);
     connect(panel_, &DesktopPanel::closeSession, this, &QtDesktopWindow::close);
 
     connect(panel_, &DesktopPanel::screenSelected, [this](const proto::Screen& screen)
