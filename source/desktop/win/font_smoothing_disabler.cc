@@ -28,14 +28,19 @@ FontSmoothingDisabler::FontSmoothingDisabler()
     if (SystemParametersInfoW(SPI_GETFONTSMOOTHING, 0, &enabled, 0))
         is_enabled_ = !!enabled;
 
-    if (SystemParametersInfoW(SPI_SETFONTSMOOTHING, FALSE, 0, SPIF_SENDCHANGE))
-        is_changed_ = true;
+    if (is_enabled_)
+    {
+        if (SystemParametersInfoW(SPI_SETFONTSMOOTHING, FALSE, 0, SPIF_SENDCHANGE))
+            is_changed_ = true;
+    }
 }
 
 FontSmoothingDisabler::~FontSmoothingDisabler()
 {
     if (is_changed_ && is_enabled_)
+    {
         SystemParametersInfoW(SPI_SETFONTSMOOTHING, !!is_enabled_, 0, SPIF_SENDCHANGE);
+    }
 }
 
 } // namespace desktop
