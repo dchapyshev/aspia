@@ -52,8 +52,8 @@ void ConfigFactory::setDefaultDesktopManageConfig(proto::DesktopConfig* config)
     DCHECK(config);
 
     static const uint32_t kDefaultFlags =
-        proto::ENABLE_CLIPBOARD | proto::ENABLE_CURSOR_SHAPE |
-        proto::DISABLE_DESKTOP_EFFECTS | proto::DISABLE_DESKTOP_WALLPAPER;
+        proto::ENABLE_CLIPBOARD | proto::ENABLE_CURSOR_SHAPE | proto::DISABLE_DESKTOP_EFFECTS |
+        proto::DISABLE_DESKTOP_WALLPAPER | proto::DISABLE_FONT_SMOOTHING;
 
     config->set_flags(kDefaultFlags);
     config->set_video_encoding(proto::VideoEncoding::VIDEO_ENCODING_VP8);
@@ -68,7 +68,8 @@ void ConfigFactory::setDefaultDesktopViewConfig(proto::DesktopConfig* config)
     DCHECK(config);
 
     static const uint32_t kDefaultFlags =
-        proto::DISABLE_DESKTOP_EFFECTS | proto::DISABLE_DESKTOP_WALLPAPER;
+        proto::DISABLE_DESKTOP_EFFECTS | proto::DISABLE_DESKTOP_WALLPAPER |
+        proto::DISABLE_FONT_SMOOTHING;
 
     config->set_flags(kDefaultFlags);
     config->set_video_encoding(proto::VideoEncoding::VIDEO_ENCODING_VP8);

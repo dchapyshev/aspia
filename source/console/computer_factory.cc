@@ -34,15 +34,15 @@ void setDefaultDesktopManageConfig(proto::DesktopConfig* config)
     DCHECK(config);
 
     static const uint32_t kDefaultFlags =
-        proto::ENABLE_CLIPBOARD | proto::ENABLE_CURSOR_SHAPE |
-        proto::DISABLE_DESKTOP_EFFECTS | proto::DISABLE_DESKTOP_WALLPAPER;
+        proto::ENABLE_CLIPBOARD | proto::ENABLE_CURSOR_SHAPE | proto::DISABLE_DESKTOP_EFFECTS |
+        proto::DISABLE_DESKTOP_WALLPAPER | proto::DISABLE_FONT_SMOOTHING;
 
     config->set_flags(kDefaultFlags);
-    config->set_video_encoding(proto::VideoEncoding::VIDEO_ENCODING_ZSTD);
+    config->set_video_encoding(proto::VideoEncoding::VIDEO_ENCODING_VP8);
     config->set_compress_ratio(kDefCompressRatio);
     config->set_update_interval(kDefUpdateInterval);
 
-    codec::serializePixelFormat(desktop::PixelFormat::RGB565(), config->mutable_pixel_format());
+    codec::serializePixelFormat(desktop::PixelFormat::RGB332(), config->mutable_pixel_format());
 }
 
 void setDefaultDesktopViewConfig(proto::DesktopConfig* config)
@@ -50,14 +50,15 @@ void setDefaultDesktopViewConfig(proto::DesktopConfig* config)
     DCHECK(config);
 
     static const uint32_t kDefaultFlags =
-        proto::DISABLE_DESKTOP_EFFECTS | proto::DISABLE_DESKTOP_WALLPAPER;
+        proto::DISABLE_DESKTOP_EFFECTS | proto::DISABLE_DESKTOP_WALLPAPER |
+        proto::DISABLE_FONT_SMOOTHING;
 
     config->set_flags(kDefaultFlags);
-    config->set_video_encoding(proto::VideoEncoding::VIDEO_ENCODING_ZSTD);
+    config->set_video_encoding(proto::VideoEncoding::VIDEO_ENCODING_VP8);
     config->set_compress_ratio(kDefCompressRatio);
     config->set_update_interval(kDefUpdateInterval);
 
-    codec::serializePixelFormat(desktop::PixelFormat::RGB565(), config->mutable_pixel_format());
+    codec::serializePixelFormat(desktop::PixelFormat::RGB332(), config->mutable_pixel_format());
 }
 
 } // namespace
