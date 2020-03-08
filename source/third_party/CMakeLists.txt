@@ -17,4 +17,5 @@
 #
 
 add_subdirectory(modp_b64)
+add_subdirectory(sqlite)
 add_subdirectory(x11region)
