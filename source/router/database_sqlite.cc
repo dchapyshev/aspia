@@ -18,28 +18,66 @@
 
 #include "router/database_sqlite.h"
 
+#include "base/logging.h"
+#include "base/files/base_paths.h"
+#include "build/build_config.h"
+
 namespace router {
 
-DatabaseSqlite::DatabaseSqlite()
+DatabaseSqlite::DatabaseSqlite(sqlite3* db)
+    : db_(db)
 {
-
+    DCHECK(db_);
 }
 
 DatabaseSqlite::~DatabaseSqlite()
 {
-
+    sqlite3_close(db_);
 }
 
 // static
 std::unique_ptr<DatabaseSqlite> DatabaseSqlite::open()
 {
-    return nullptr;
+    std::filesystem::path file_path = filePath();
+    if (file_path.empty())
+    {
+        LOG(LS_WARNING) << "Invalid file path";
+        return nullptr;
+    }
+
+    sqlite3* db;
+
+    int error_code = sqlite3_open(file_path.u8string().c_str(), &db);
+    if (error_code != SQLITE_OK)
+    {
+        LOG(LS_WARNING) << "sqlite3_open failed: " << sqlite3_errstr(error_code);
+        return nullptr;
+    }
+
+    return std::unique_ptr<DatabaseSqlite>(new DatabaseSqlite(db));
 }
 
 // static
 std::unique_ptr<DatabaseSqlite> DatabaseSqlite::create()
 {
     return nullptr;
+}
+
+// static
+std::filesystem::path DatabaseSqlite::filePath()
+{
+    std::filesystem::path file_path;
+
+#if defined(OS_WIN)
+    if (!base::BasePaths::commonAppData(&file_path))
+        return std::filesystem::path();
+
+    file_path.append(u"aspia/router/router.db");
+#else // defined(OS_*)
+#error Not implemented
+#endif // defined(OS_*)
+
+    return file_path;
 }
 
 DatabaseSqlite::UserList DatabaseSqlite::userList() const

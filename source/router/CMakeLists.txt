@@ -42,7 +42,11 @@ target_link_libraries(aspia_router
     aspia_crypto
     aspia_net
     aspia_proto
-    ${THIRD_PARTY_LIBS})
+    libcrypto
+    libssl
+    modp_b64
+    sqlite
+    ${Protobuf_LITE_LIBRARIES})
 
 if (USE_TBB)
     add_tbb(aspia_router ${ASPIA_THIRD_PARTY_DIR}/tbb)

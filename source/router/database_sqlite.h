@@ -23,6 +23,8 @@
 #include "router/database.h"
 #include "third_party/sqlite/sqlite3.h"
 
+#include <filesystem>
+
 namespace router {
 
 class DatabaseSqlite : public Database
@@ -32,6 +34,7 @@ public:
 
     static std::unique_ptr<DatabaseSqlite> open();
     static std::unique_ptr<DatabaseSqlite> create();
+    static std::filesystem::path filePath();
 
     // Database implementation.
     UserList userList() const override;
@@ -40,7 +43,9 @@ public:
     std::string id(std::string_view key) const override;
 
 private:
-    DatabaseSqlite();
+    explicit DatabaseSqlite(sqlite3* db);
+
+    sqlite3* db_;
 
     DISALLOW_COPY_AND_ASSIGN(DatabaseSqlite);
 };
