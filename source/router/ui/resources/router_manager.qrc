@@ -1,0 +1,9 @@
+<RCC>
+  <qresource prefix="/img">
+    <file>user.png</file>
+    <file>user-disabled.png</file>
+    <file>minus.png</file>
+    <file>pencil.png</file>
+    <file>plus.png</file>
+  </qresource>
+</RCC>
