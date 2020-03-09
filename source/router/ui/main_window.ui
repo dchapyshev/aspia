@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>572</width>
-    <height>471</height>
+    <width>512</width>
+    <height>453</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -167,6 +167,137 @@
             </layout>
            </item>
           </layout>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tab_proxy">
+       <attribute name="title">
+        <string>Proxy List</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_10">
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_8">
+          <item>
+           <widget class="QPushButton" name="button_add_proxy">
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="resources/router_manager.qrc">
+              <normaloff>:/img/plus.png</normaloff>:/img/plus.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="button_modify_proxy">
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="resources/router_manager.qrc">
+              <normaloff>:/img/pencil.png</normaloff>:/img/pencil.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="button_delete_proxy">
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="resources/router_manager.qrc">
+              <normaloff>:/img/minus.png</normaloff>:/img/minus.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_5">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QTreeWidget" name="tree_proxy">
+          <column>
+           <property name="text">
+            <string>Address</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Port</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Enabled</string>
+           </property>
+          </column>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tab_black_list">
+       <attribute name="title">
+        <string>Black List</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_8">
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_5">
+          <item>
+           <widget class="QPushButton" name="button_add_to_black_list">
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="resources/router_manager.qrc">
+              <normaloff>:/img/plus.png</normaloff>:/img/plus.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="button_remove_from_black_list">
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="resources/router_manager.qrc">
+              <normaloff>:/img/minus.png</normaloff>:/img/minus.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_4">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QTreeWidget" name="tree_black_list">
+          <column>
+           <property name="text">
+            <string>IP address</string>
+           </property>
+          </column>
          </widget>
         </item>
        </layout>

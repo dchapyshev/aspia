@@ -21,6 +21,9 @@ include(translations)
 
 list(APPEND SOURCE_ROUTER_MANAGER
     main.cc
+    connect_dialog.cc
+    connect_dialog.h
+    connect_dialog.ui
     main_window.cc
     main_window.h
     main_window.ui
@@ -44,6 +47,7 @@ target_link_libraries(aspia_router_manager
     aspia_crypto
     aspia_net
     aspia_proto
+    aspia_qt_base
     ${QT_LIBS}
     ${WINDOWS_LIBS}
     ${THIRD_PARTY_LIBS})

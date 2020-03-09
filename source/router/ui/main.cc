@@ -16,6 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
+#include "build/version.h"
+#include "router/ui/connect_dialog.h"
 #include "router/ui/main_window.h"
 
 #include <QApplication>
@@ -42,6 +44,15 @@ int main(int argc, char *argv[])
     Q_INIT_RESOURCE(qt_translations);
 
     QApplication application(argc, argv);
+
+    QApplication::setOrganizationName(QLatin1String("Aspia"));
+    QApplication::setApplicationName(QLatin1String("Host"));
+    QApplication::setApplicationVersion(QLatin1String(ASPIA_VERSION_STRING));
+    QApplication::setAttribute(Qt::AA_DisableWindowContextHelpButton, true);
+
+    router::ConnectDialog connect_dialog;
+    if (connect_dialog.exec() != QDialog::Accepted)
+        return 0;
 
     router::MainWindow main_window;
     main_window.show();
