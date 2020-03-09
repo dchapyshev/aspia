@@ -20,9 +20,14 @@
 #define ROUTER__UI__CONNECT_DIALOG_H
 
 #include "base/macros_magic.h"
+#include "router/ui/settings.h"
 #include "ui_connect_dialog.h"
 
 #include <QDialog>
+
+namespace qt_base {
+class LocaleLoader;
+} // namespace qt_base
 
 namespace router {
 
@@ -31,7 +36,7 @@ class ConnectDialog : public QDialog
     Q_OBJECT
 
 public:
-    ConnectDialog();
+    explicit ConnectDialog(qt_base::LocaleLoader& locale_loader);
     ~ConnectDialog();
 
     QString address() const;
@@ -39,8 +44,20 @@ public:
     QString userName() const;
     QString password() const;
 
+protected:
+    // QDialog implementation.
+    void closeEvent(QCloseEvent* event) override;
+
 private:
+    void onCurrentLanguageChanged(int index);
+    void onCurrentRouterChanged(int index);
+    void onButtonBoxClicked(QAbstractButton* button);
+    void reloadMru();
+
     Ui::ConnectDialog ui;
+    qt_base::LocaleLoader& locale_loader_;
+    Settings settings_;
+    Settings::MruList mru_;
 
     DISALLOW_COPY_AND_ASSIGN(ConnectDialog);
 };

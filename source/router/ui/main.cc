@@ -17,6 +17,7 @@
 //
 
 #include "build/version.h"
+#include "qt_base/locale_loader.h"
 #include "router/ui/connect_dialog.h"
 #include "router/ui/main_window.h"
 
@@ -50,7 +51,9 @@ int main(int argc, char *argv[])
     QApplication::setApplicationVersion(QLatin1String(ASPIA_VERSION_STRING));
     QApplication::setAttribute(Qt::AA_DisableWindowContextHelpButton, true);
 
-    router::ConnectDialog connect_dialog;
+    qt_base::LocaleLoader locale_loader;
+
+    router::ConnectDialog connect_dialog(locale_loader);
     if (connect_dialog.exec() != QDialog::Accepted)
         return 0;
 

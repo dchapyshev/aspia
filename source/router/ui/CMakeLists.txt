@@ -27,7 +27,9 @@ list(APPEND SOURCE_ROUTER_MANAGER
     main_window.cc
     main_window.h
     main_window.ui
-    router_manager.rc)
+    router_manager.rc
+    settings.cc
+    settings.h)
 
 list(APPEND SOURCE_ROUTER_MANAGER_RESOURCES
     resources/router_manager.qrc)
