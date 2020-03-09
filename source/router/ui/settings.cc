@@ -63,6 +63,16 @@ Settings::MruList Settings::mru() const
     }
     settings_.endArray();
 
+    if (mru.isEmpty())
+    {
+        MruEntry entry;
+        entry.address = QLatin1String("localhost");
+        entry.port = 8061;
+        entry.username = QLatin1String("admin");
+
+        mru.push_back(entry);
+    }
+
     return mru;
 }
 
