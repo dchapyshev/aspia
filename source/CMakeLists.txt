@@ -145,16 +145,15 @@ set(WINDOWS_LIBS
     wtsapi32)
 
 set(THIRD_PARTY_LIBS
-    debug libprotobuf-lited
     debug vpxmtd
     debug yuv_debug
     debug tbb_debug
     debug zstd_static_debug
-    optimized libprotobuf-lite
     optimized vpxmt
     optimized yuv
     optimized tbb
     optimized zstd_static
+    ${Protobuf_LITE_LIBRARIES}
     libcrypto
     libssl
     modp_b64
