@@ -1,0 +1,117 @@
+//
+// Aspia Project
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program. If not, see <https://www.gnu.org/licenses/>.
+//
+
+syntax = "proto3";
+
+option optimize_for = LITE_RUNTIME;
+
+import "common.proto";
+
+package proto;
+
+enum IdentifyMethod
+{
+    IDENTIFY_METHOD_ANONYMOUS = 0;
+    IDENTIFY_METHOD_SRP       = 1;
+}
+
+enum EncryptionMethod
+{
+    ENCRYPTION_METHOD_UNKNOWN           = 0;
+    ENCRYPTION_METHOD_CHACHA20_POLY1305 = 1;
+    ENCRYPTION_METHOD_AES256_GCM        = 2;
+}
+
+message PeerHello
+{
+    IdentifyMethod identify_method = 1;
+    uint32 encryption_methods      = 2;
+}
+
+message RouterHello
+{
+    IdentifyMethod identify_method     = 1;
+    EncryptionMethod encryption_method = 2;
+}
+
+message PeerIdChallenge
+{
+    Version version = 1;
+    bytes key       = 2;
+}
+
+message PeerIdResponse
+{
+    string peer_id = 1;
+}
+
+enum ConnectionType
+{
+    CONNECTION_TYPE_UNKNOWN = 0;
+    CONNECTION_TYPE_DIRECT  = 1;
+    CONNECTION_TYPE_RELAY   = 2;
+}
+
+message EndPoint
+{
+    string host = 1;
+    uint32 port = 2;
+}
+
+message ConnectionRequest
+{
+    string peer_id = 1;
+}
+
+message ConnectionCandidate
+{
+    repeated EndPoint end_point = 1;
+}
+
+message ConnectionOffer
+{
+    ConnectionType type = 1;
+    EndPoint address    = 2;
+    bytes key           = 3;
+}
+
+message ConnectionResponse
+{
+    enum ErrorCode
+    {
+        UNKNOWN        = 0;
+        SUCCESS        = 1;
+        PEER_NOT_FOUND = 2;
+    }
+
+    ErrorCode error_code  = 1;
+    ConnectionOffer offer = 2;
+}
+
+message RouterToPeer
+{
+    ConnectionRequest connection_request   = 1;
+    ConnectionResponse connection_response = 2;
+    ConnectionOffer connection_offer       = 3;
+}
+
+message PeerToRouter
+{
+    ConnectionRequest connection_request     = 1;
+    ConnectionCandidate connection_candidate = 2;
+}
