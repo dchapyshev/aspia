@@ -72,14 +72,14 @@ endif()
 include_directories(
     ${PROJECT_SOURCE_DIR}
     ${PROJECT_BINARY_DIR}
-    ${ASPIA_THIRD_PARTY_DIR}/asio/include
     ${ASPIA_THIRD_PARTY_DIR}/googletest/include
     ${ASPIA_THIRD_PARTY_DIR}/libvpx/include
     ${ASPIA_THIRD_PARTY_DIR}/libyuv/include
     ${ASPIA_THIRD_PARTY_DIR}/openssl/include
     ${ASPIA_THIRD_PARTY_DIR}/protobuf/include
     ${ASPIA_THIRD_PARTY_DIR}/tbb/include
-    ${ASPIA_THIRD_PARTY_DIR}/zstd/include)
+    ${ASPIA_THIRD_PARTY_DIR}/zstd/include
+    third_party/asio)
 
 link_directories(
     ${ASPIA_THIRD_PARTY_DIR}/googletest/lib
