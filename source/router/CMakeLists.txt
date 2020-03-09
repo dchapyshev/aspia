@@ -19,6 +19,9 @@
 include(tbb)
 
 list(APPEND SOURCE_ROUTER
+    database.h
+    database_sqlite.cc
+    database_sqlite.h
     router_main.cc
     router_server.cc
     router_server.h)
