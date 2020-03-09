@@ -25,8 +25,7 @@
 #include "base/files/scoped_temp_file.h"
 #include "base/strings/string_split.h"
 
-#include <rapidxml.hpp>
-#include <rapidxml_print.hpp>
+#include "third_party/rapidxml/rapidxml.hpp"
 
 #include <fstream>
 
