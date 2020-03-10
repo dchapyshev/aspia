@@ -30,8 +30,17 @@ class UserDialog : public QDialog
 
 public:
     explicit UserDialog(QWidget* parent = nullptr);
+    ~UserDialog();
+
+    void setUserName(const QString& username);
+    QString userName() const;
+    QString password() const;
+    void setEnabled(bool enable);
+    bool isEnabled() const;
 
 private:
+    void onButtonBoxClicked(QAbstractButton* button);
+
     Ui::UserDialog ui;
 
     DISALLOW_COPY_AND_ASSIGN(UserDialog);

@@ -218,7 +218,7 @@
         <translation>Пароль (повторить):</translation>
     </message>
     <message>
-        <location filename="../user_dialog.ui" line="65"/>
+        <location filename="../user_dialog.ui" line="73"/>
         <source>Enable</source>
         <translation>Включить</translation>
     </message>
@@ -229,6 +229,55 @@
         <location filename="../channel.cc" line="61"/>
         <location filename="../channel.cc" line="155"/>
         <source>Unknown internal error: message with incorrect size.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>router::UserDialog</name>
+    <message>
+        <location filename="../user_dialog.cc" line="73"/>
+        <location filename="../user_dialog.cc" line="86"/>
+        <location filename="../user_dialog.cc" line="100"/>
+        <location filename="../user_dialog.cc" line="123"/>
+        <source>Warning</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../user_dialog.cc" line="74"/>
+        <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../user_dialog.cc" line="87"/>
+        <source>The passwords you entered do not match.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../user_dialog.cc" line="101"/>
+        <source>Password can not be empty and should not exceed %n characters.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="../user_dialog.cc" line="113"/>
+        <source>Password you entered does not meet the security requirements!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../user_dialog.cc" line="116"/>
+        <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="../user_dialog.cc" line="120"/>
+        <source>Do you want to enter a different password?</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

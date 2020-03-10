@@ -30,8 +30,13 @@ class ProxyDialog : public QDialog
 
 public:
     explicit ProxyDialog(QWidget* parent = nullptr);
+    ~ProxyDialog();
 
 private:
+    void onCreateKeys();
+    void onCheckKeys();
+    void onButtonBoxClicked(QAbstractButton* button);
+
     Ui::ProxyDialog ui;
 
     DISALLOW_COPY_AND_ASSIGN(ProxyDialog);

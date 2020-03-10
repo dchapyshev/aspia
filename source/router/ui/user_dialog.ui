@@ -50,10 +50,18 @@
         <widget class="QLineEdit" name="edit_username"/>
        </item>
        <item>
-        <widget class="QLineEdit" name="edit_password"/>
+        <widget class="QLineEdit" name="edit_password">
+         <property name="echoMode">
+          <enum>QLineEdit::Password</enum>
+         </property>
+        </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="edit_password_retry"/>
+        <widget class="QLineEdit" name="edit_password_retry">
+         <property name="echoMode">
+          <enum>QLineEdit::Password</enum>
+         </property>
+        </widget>
        </item>
       </layout>
      </item>

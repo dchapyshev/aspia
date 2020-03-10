@@ -18,12 +18,43 @@
 
 #include "router/ui/proxy_dialog.h"
 
+#include <QAbstractButton>
+
 namespace router {
 
 ProxyDialog::ProxyDialog(QWidget* parent)
     : QDialog(parent)
 {
     ui.setupUi(this);
+
+    connect(ui.button_create_keys, &QPushButton::released, this, &ProxyDialog::onCreateKeys);
+    connect(ui.button_check_keys, &QPushButton::released, this, &ProxyDialog::onCheckKeys);
+    connect(ui.buttonbox, &QDialogButtonBox::clicked, this, &ProxyDialog::onButtonBoxClicked);
+}
+
+ProxyDialog::~ProxyDialog() = default;
+
+void ProxyDialog::onCreateKeys()
+{
+
+}
+
+void ProxyDialog::onCheckKeys()
+{
+
+}
+
+void ProxyDialog::onButtonBoxClicked(QAbstractButton* button)
+{
+    QDialogButtonBox::StandardButton standard_button = ui.buttonbox->standardButton(button);
+    if (standard_button == QDialogButtonBox::Ok)
+    {
+        accept();
+    }
+    else
+    {
+        reject();
+    }
 }
 
 } // namespace router
