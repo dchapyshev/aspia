@@ -139,6 +139,8 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
     {
         reject();
     }
+
+    close();
 }
 
 } // namespace router

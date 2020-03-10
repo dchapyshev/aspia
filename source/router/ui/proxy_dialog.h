@@ -32,6 +32,19 @@ public:
     explicit ProxyDialog(QWidget* parent = nullptr);
     ~ProxyDialog();
 
+    void setAddress(const QString& address);
+    QString address() const;
+    void setPort(uint16_t port);
+    uint16_t port() const;
+    void setReconnectTimeout(int timeout);
+    int reconnectTimeout() const;
+    void setPrivateKey(const QString& private_key);
+    QString privateKey() const;
+    void setPublicKey(const QString& public_key);
+    QString publicKey() const;
+    void setEnabled(bool enable);
+    bool isEnabled() const;
+
 private:
     void onCreateKeys();
     void onCheckKeys();

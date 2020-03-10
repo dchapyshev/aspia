@@ -34,6 +34,66 @@ ProxyDialog::ProxyDialog(QWidget* parent)
 
 ProxyDialog::~ProxyDialog() = default;
 
+void ProxyDialog::setAddress(const QString& address)
+{
+    ui.edit_address->setText(address);
+}
+
+QString ProxyDialog::address() const
+{
+    return ui.edit_address->text();
+}
+
+void ProxyDialog::setPort(uint16_t port)
+{
+    ui.spinbox_port->setValue(port);
+}
+
+uint16_t ProxyDialog::port() const
+{
+    return ui.spinbox_port->value();
+}
+
+void ProxyDialog::setReconnectTimeout(int timeout)
+{
+    ui.spinbox_reconnect_timeout->setValue(timeout);
+}
+
+int ProxyDialog::reconnectTimeout() const
+{
+    return ui.spinbox_reconnect_timeout->value();
+}
+
+void ProxyDialog::setPrivateKey(const QString& private_key)
+{
+    ui.edit_private_key->setPlainText(private_key);
+}
+
+QString ProxyDialog::privateKey() const
+{
+    return ui.edit_private_key->toPlainText();
+}
+
+void ProxyDialog::setPublicKey(const QString& public_key)
+{
+    ui.edit_public_key->setPlainText(public_key);
+}
+
+QString ProxyDialog::publicKey() const
+{
+    return ui.edit_public_key->toPlainText();
+}
+
+void ProxyDialog::setEnabled(bool enable)
+{
+    ui.checkbox_enable->setChecked(enable);
+}
+
+bool ProxyDialog::isEnabled() const
+{
+    return ui.checkbox_enable->isChecked();
+}
+
 void ProxyDialog::onCreateKeys()
 {
 
@@ -55,6 +115,8 @@ void ProxyDialog::onButtonBoxClicked(QAbstractButton* button)
     {
         reject();
     }
+
+    close();
 }
 
 } // namespace router

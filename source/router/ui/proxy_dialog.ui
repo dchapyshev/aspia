@@ -93,7 +93,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QTextEdit" name="edit_private_key"/>
+    <widget class="QPlainTextEdit" name="edit_private_key"/>
    </item>
    <item>
     <widget class="QLabel" name="label_public_key">
@@ -103,7 +103,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QTextEdit" name="edit_public_key"/>
+    <widget class="QPlainTextEdit" name="edit_public_key"/>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
