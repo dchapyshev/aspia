@@ -16,43 +16,39 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ROUTER__UI__MAIN_WINDOW_H
-#define ROUTER__UI__MAIN_WINDOW_H
+#ifndef ROUTER__UI__ROUTER_H
+#define ROUTER__UI__ROUTER_H
 
 #include "base/macros_magic.h"
-#include "ui_main_window.h"
 
-#include <QMainWindow>
+#include <QObject>
 
 namespace router {
 
-class MainWindow : public QMainWindow
+class Router : public QObject
 {
     Q_OBJECT
 
 public:
-    MainWindow();
-    ~MainWindow();
+    explicit Router(QObject* parent = nullptr);
+    ~Router();
+
+    void disconnectOne(const QString& peer_id);
+    void disconnectAll();
+    void refresh();
+
+    void addProxy();
+    void modifyProxy();
+    void deleteProxy();
+
+    void addUser();
+    void modifyUser();
+    void deleteUser();
 
 private:
-    void onDisconnectOne();
-    void onDisconnectAll();
-    void onRefresh();
-    void onAddProxy();
-    void onModifyProxy();
-    void onDeleteProxy();
-    void onAddManager();
-    void onModifyManager();
-    void onDeleteManager();
-    void onAddUser();
-    void onModifyUser();
-    void onDeleteUser();
-
-    Ui::MainWindow ui;
-
-    DISALLOW_COPY_AND_ASSIGN(MainWindow);
+    DISALLOW_COPY_AND_ASSIGN(Router);
 };
 
 } // namespace router
 
-#endif // ROUTER__UI__MAIN_WINDOW_H
+#endif // ROUTER__UI__ROUTER_H

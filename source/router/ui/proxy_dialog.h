@@ -16,43 +16,27 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ROUTER__UI__MAIN_WINDOW_H
-#define ROUTER__UI__MAIN_WINDOW_H
+#ifndef ROUTER__UI__PROXY_DIALOG_H
+#define ROUTER__UI__PROXY_DIALOG_H
 
 #include "base/macros_magic.h"
-#include "ui_main_window.h"
-
-#include <QMainWindow>
+#include "ui_proxy_dialog.h"
 
 namespace router {
 
-class MainWindow : public QMainWindow
+class ProxyDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    MainWindow();
-    ~MainWindow();
+    explicit ProxyDialog(QWidget* parent = nullptr);
 
 private:
-    void onDisconnectOne();
-    void onDisconnectAll();
-    void onRefresh();
-    void onAddProxy();
-    void onModifyProxy();
-    void onDeleteProxy();
-    void onAddManager();
-    void onModifyManager();
-    void onDeleteManager();
-    void onAddUser();
-    void onModifyUser();
-    void onDeleteUser();
+    Ui::ProxyDialog ui;
 
-    Ui::MainWindow ui;
-
-    DISALLOW_COPY_AND_ASSIGN(MainWindow);
+    DISALLOW_COPY_AND_ASSIGN(ProxyDialog);
 };
 
 } // namespace router
 
-#endif // ROUTER__UI__MAIN_WINDOW_H
+#endif // ROUTER__UI__PROXY_DIALOG_H

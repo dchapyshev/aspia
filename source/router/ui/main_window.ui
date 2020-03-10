@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>488</width>
+    <width>545</width>
     <height>320</height>
    </rect>
   </property>
@@ -183,15 +183,15 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="tab_black_list">
+      <widget class="QWidget" name="tab_managers">
        <attribute name="title">
-        <string>Black List</string>
+        <string>Managers</string>
        </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout_8">
+       <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_5">
+         <layout class="QHBoxLayout" name="horizontalLayout_3">
           <item>
-           <widget class="QPushButton" name="button_add_to_black_list">
+           <widget class="QPushButton" name="button_add_manager">
             <property name="text">
              <string/>
             </property>
@@ -202,7 +202,18 @@
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="button_remove_from_black_list">
+           <widget class="QPushButton" name="button_modify_manager">
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="resources/router_manager.qrc">
+              <normaloff>:/img/pencil.png</normaloff>:/img/pencil.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="button_delete_manager">
             <property name="text">
              <string/>
             </property>
@@ -213,13 +224,13 @@
            </widget>
           </item>
           <item>
-           <spacer name="horizontalSpacer_4">
+           <spacer name="horizontalSpacer_2">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
             </property>
             <property name="sizeHint" stdset="0">
              <size>
-              <width>40</width>
+              <width>79</width>
               <height>20</height>
              </size>
             </property>
@@ -228,10 +239,15 @@
          </layout>
         </item>
         <item>
-         <widget class="QTreeWidget" name="tree_black_list">
+         <widget class="QTreeWidget" name="tree_managers">
           <column>
            <property name="text">
-            <string>IP address</string>
+            <string>User name</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Enabled</string>
            </property>
           </column>
          </widget>

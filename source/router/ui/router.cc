@@ -16,43 +16,61 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ROUTER__UI__MAIN_WINDOW_H
-#define ROUTER__UI__MAIN_WINDOW_H
-
-#include "base/macros_magic.h"
-#include "ui_main_window.h"
-
-#include <QMainWindow>
+#include "router/ui/router.h"
 
 namespace router {
 
-class MainWindow : public QMainWindow
+Router::Router(QObject* parent)
+    : QObject(parent)
 {
-    Q_OBJECT
+    // Nothing
+}
 
-public:
-    MainWindow();
-    ~MainWindow();
+Router::~Router() = default;
 
-private:
-    void onDisconnectOne();
-    void onDisconnectAll();
-    void onRefresh();
-    void onAddProxy();
-    void onModifyProxy();
-    void onDeleteProxy();
-    void onAddManager();
-    void onModifyManager();
-    void onDeleteManager();
-    void onAddUser();
-    void onModifyUser();
-    void onDeleteUser();
+void Router::disconnectOne(const QString& peer_id)
+{
 
-    Ui::MainWindow ui;
+}
 
-    DISALLOW_COPY_AND_ASSIGN(MainWindow);
-};
+void Router::disconnectAll()
+{
+
+}
+
+void Router::refresh()
+{
+
+}
+
+void Router::addProxy()
+{
+
+}
+
+void Router::modifyProxy()
+{
+
+}
+
+void Router::deleteProxy()
+{
+
+}
+
+void Router::addUser()
+{
+
+}
+
+void Router::modifyUser()
+{
+
+}
+
+void Router::deleteUser()
+{
+
+}
 
 } // namespace router
-
-#endif // ROUTER__UI__MAIN_WINDOW_H

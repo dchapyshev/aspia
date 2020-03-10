@@ -80,13 +80,13 @@
     </message>
     <message>
         <location filename="../main_window.ui" line="55"/>
-        <location filename="../main_window.ui" line="300"/>
+        <location filename="../main_window.ui" line="245"/>
+        <location filename="../main_window.ui" line="316"/>
         <source>User name</source>
         <translation>Имя пользователя</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="60"/>
-        <location filename="../main_window.ui" line="234"/>
         <source>IP address</source>
         <translation>IP адрес</translation>
     </message>
@@ -121,20 +121,115 @@
         <translation>Порт</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="188"/>
         <source>Black List</source>
-        <translation>Черный список</translation>
+        <translation type="vanished">Черный список</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="243"/>
+        <location filename="../main_window.ui" line="188"/>
+        <source>Managers</source>
+        <translation>Управляющие</translation>
+    </message>
+    <message>
+        <location filename="../main_window.ui" line="259"/>
         <source>Users</source>
         <translation>Пользователи</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="179"/>
-        <location filename="../main_window.ui" line="305"/>
+        <location filename="../main_window.ui" line="250"/>
+        <location filename="../main_window.ui" line="321"/>
         <source>Enabled</source>
         <translation>Включен</translation>
+    </message>
+</context>
+<context>
+    <name>ProxyDialog</name>
+    <message>
+        <location filename="../proxy_dialog.ui" line="14"/>
+        <source>Proxy Properties</source>
+        <translation>Свойства прокси</translation>
+    </message>
+    <message>
+        <location filename="../proxy_dialog.ui" line="27"/>
+        <source>Address:</source>
+        <translation>Адрес:</translation>
+    </message>
+    <message>
+        <location filename="../proxy_dialog.ui" line="34"/>
+        <source>Port:</source>
+        <translation>Порт:</translation>
+    </message>
+    <message>
+        <location filename="../proxy_dialog.ui" line="41"/>
+        <source>Reconnect timeout:</source>
+        <translation>Таймаут переподключения:</translation>
+    </message>
+    <message>
+        <location filename="../proxy_dialog.ui" line="68"/>
+        <source> seconds</source>
+        <translation> секунд</translation>
+    </message>
+    <message>
+        <location filename="../proxy_dialog.ui" line="91"/>
+        <source>Private key:</source>
+        <translation>Закрытый ключ:</translation>
+    </message>
+    <message>
+        <location filename="../proxy_dialog.ui" line="101"/>
+        <source>Public key:</source>
+        <translation>Открытый ключ:</translation>
+    </message>
+    <message>
+        <location filename="../proxy_dialog.ui" line="126"/>
+        <source>Create keys</source>
+        <translation>Создать ключи</translation>
+    </message>
+    <message>
+        <location filename="../proxy_dialog.ui" line="133"/>
+        <source>Check keys</source>
+        <translation>Проверить ключи</translation>
+    </message>
+    <message>
+        <location filename="../proxy_dialog.ui" line="142"/>
+        <source>Enable</source>
+        <translation>Включить</translation>
+    </message>
+</context>
+<context>
+    <name>UserDialog</name>
+    <message>
+        <location filename="../user_dialog.ui" line="14"/>
+        <source>User Properties</source>
+        <translation>Свойства пользователя</translation>
+    </message>
+    <message>
+        <location filename="../user_dialog.ui" line="27"/>
+        <source>Name:</source>
+        <translation>Имя:</translation>
+    </message>
+    <message>
+        <location filename="../user_dialog.ui" line="34"/>
+        <source>Password:</source>
+        <translation>Пароль:</translation>
+    </message>
+    <message>
+        <location filename="../user_dialog.ui" line="41"/>
+        <source>Password (retry):</source>
+        <translation>Пароль (повторить):</translation>
+    </message>
+    <message>
+        <location filename="../user_dialog.ui" line="65"/>
+        <source>Enable</source>
+        <translation>Включить</translation>
+    </message>
+</context>
+<context>
+    <name>router::Channel</name>
+    <message>
+        <location filename="../channel.cc" line="61"/>
+        <location filename="../channel.cc" line="155"/>
+        <source>Unknown internal error: message with incorrect size.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

@@ -20,16 +20,26 @@ include(tbb)
 include(translations)
 
 list(APPEND SOURCE_ROUTER_MANAGER
-    main.cc
+    channel.cc
+    channel.h
     connect_dialog.cc
     connect_dialog.h
     connect_dialog.ui
+    main.cc
     main_window.cc
     main_window.h
     main_window.ui
+    proxy_dialog.cc
+    proxy_dialog.h
+    proxy_dialog.ui
+    router.cc
+    router.h
     router_manager.rc
     settings.cc
-    settings.h)
+    settings.h
+    user_dialog.cc
+    user_dialog.h
+    user_dialog.ui)
 
 list(APPEND SOURCE_ROUTER_MANAGER_RESOURCES
     resources/router_manager.qrc)
