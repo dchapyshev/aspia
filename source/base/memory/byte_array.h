@@ -47,6 +47,8 @@ std::string toStdString(const ByteArray& in);
 ByteArray fromHex(std::string_view in);
 std::string toHex(const ByteArray& in);
 
+int compare(const base::ByteArray& first, const base::ByteArray& second);
+
 std::ostream& operator<<(std::ostream& out, const ByteArray& bytearray);
 
 } // namespace base

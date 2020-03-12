@@ -88,7 +88,7 @@ ByteArray fromHex(std::string_view in)
             return ByteArray();
 
         if (high_part)
-            out.push_back(0x10 * hex);
+            out.emplace_back(0x10 * hex);
         else
             out.back() += hex;
 
@@ -106,9 +106,26 @@ std::string toHex(const ByteArray& in)
     std::stringstream stream;
 
     for (size_t i = 0; i < in.size(); ++i)
-        stream << std::hex << in[i];
+    {
+        stream << std::hex << std::uppercase << std::setw(2) << std::setfill('0')
+               << static_cast<int>(in[i]);
+    }
 
     return stream.str();
+}
+
+int compare(const base::ByteArray& first, const base::ByteArray& second)
+{
+    if (first.empty() && second.empty())
+        return 0;
+
+    if (first.size() < second.size())
+        return -1;
+
+    if (first.size() > second.size())
+        return 1;
+
+    return memcmp(first.data(), second.data(), first.size());
 }
 
 std::ostream& operator<<(std::ostream& out, const ByteArray& bytearray)

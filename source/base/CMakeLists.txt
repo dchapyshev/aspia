@@ -102,7 +102,8 @@ list(APPEND SOURCE_BASE_MEMORY
     memory/typed_buffer.h)
 
 list(APPEND SOURCE_BASE_MEMORY_UNIT_TESTS
-    memory/aligned_memory_unittest.cc)
+    memory/aligned_memory_unittest.cc
+    memory/byte_array_unittest.cc)
 
 list(APPEND SOURCE_BASE_MESSAGE_LOOP
     message_loop/message_loop.cc
