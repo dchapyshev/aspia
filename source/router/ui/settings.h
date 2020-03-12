@@ -53,8 +53,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(Settings);
 };
 
-Q_DECLARE_METATYPE(Settings::MruEntry);
-
 } // namespace router
 
 #endif // ROUTER__UI__SETTINGS_H
