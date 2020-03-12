@@ -26,28 +26,14 @@ namespace crypto {
 
 void PasswordGenerator::setCharacters(uint32_t value)
 {
-    if (!value)
-        return;
-
-    characters_ = value;
+    if (value)
+        characters_ = value;
 }
 
-uint32_t PasswordGenerator::characters() const
+void PasswordGenerator::setLength(size_t value)
 {
-    return characters_;
-}
-
-void PasswordGenerator::setLength(int value)
-{
-    if (value <= 0)
-        return;
-
-    length_ = value;
-}
-
-int PasswordGenerator::length() const
-{
-    return length_;
+    if (value)
+        length_ = value;
 }
 
 std::string PasswordGenerator::result() const
@@ -57,19 +43,19 @@ std::string PasswordGenerator::result() const
     if (characters_ & LOWER_CASE)
     {
         for (char i = 'a'; i < 'z'; ++i)
-            table.push_back(i);
+            table.emplace_back(i);
     }
 
     if (characters_ & UPPER_CASE)
     {
         for (char i = 'A'; i < 'Z'; ++i)
-            table.push_back(i);
+            table.emplace_back(i);
     }
 
     if (characters_ & DIGITS)
     {
         for (char i = '0'; i < '9'; ++i)
-            table.push_back(i);
+            table.emplace_back(i);
     }
 
     std::random_device random_device;
@@ -78,10 +64,12 @@ std::string PasswordGenerator::result() const
     std::shuffle(table.begin(), table.end(), engine);
 
     std::uniform_int_distribution<> uniform_distance(0, table.size() - 1);
-    std::string result;
 
-    for (int i = 0; i < length_; ++i)
-        result += table[uniform_distance(engine)];
+    std::string result;
+    result.resize(length_);
+
+    for (size_t i = 0; i < length_; ++i)
+        result[i] = table[uniform_distance(engine)];
 
     return result;
 }

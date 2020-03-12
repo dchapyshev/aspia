@@ -39,19 +39,19 @@ public:
     };
 
     static const uint32_t kDefaultCharacters = UPPER_CASE | LOWER_CASE | DIGITS;
-    static const int kDefaultLength = 8;
+    static const size_t kDefaultLength = 8;
 
     void setCharacters(uint32_t value);
-    uint32_t characters() const;
+    uint32_t characters() const { return characters_; }
 
-    void setLength(int value);
-    int length() const;
+    void setLength(size_t value);
+    size_t length() const { return length_; }
 
     std::string result() const;
 
 private:
     uint32_t characters_ = kDefaultCharacters;
-    int length_ = kDefaultLength;
+    size_t length_ = kDefaultLength;
 
     DISALLOW_COPY_AND_ASSIGN(PasswordGenerator);
 };
