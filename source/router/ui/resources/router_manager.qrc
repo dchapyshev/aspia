@@ -1,5 +1,7 @@
 <RCC>
   <qresource prefix="/img">
+    <file>arrow.png</file>
+    <file>arrow-180.png</file>
     <file>user.png</file>
     <file>user-disabled.png</file>
     <file>minus.png</file>

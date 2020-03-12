@@ -183,77 +183,6 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="tab_managers">
-       <attribute name="title">
-        <string>Managers</string>
-       </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout_2">
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_3">
-          <item>
-           <widget class="QPushButton" name="button_add_manager">
-            <property name="text">
-             <string/>
-            </property>
-            <property name="icon">
-             <iconset resource="resources/router_manager.qrc">
-              <normaloff>:/img/plus.png</normaloff>:/img/plus.png</iconset>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="button_modify_manager">
-            <property name="text">
-             <string/>
-            </property>
-            <property name="icon">
-             <iconset resource="resources/router_manager.qrc">
-              <normaloff>:/img/pencil.png</normaloff>:/img/pencil.png</iconset>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="button_delete_manager">
-            <property name="text">
-             <string/>
-            </property>
-            <property name="icon">
-             <iconset resource="resources/router_manager.qrc">
-              <normaloff>:/img/minus.png</normaloff>:/img/minus.png</iconset>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <spacer name="horizontalSpacer_2">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>79</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <widget class="QTreeWidget" name="tree_managers">
-          <column>
-           <property name="text">
-            <string>User name</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Enabled</string>
-           </property>
-          </column>
-         </widget>
-        </item>
-       </layout>
-      </widget>
       <widget class="QWidget" name="tab_users">
        <attribute name="title">
         <string>Users</string>
@@ -319,6 +248,86 @@
           <column>
            <property name="text">
             <string>Enabled</string>
+           </property>
+          </column>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tab_logging">
+       <attribute name="title">
+        <string>Logging</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_5">
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_5">
+          <item>
+           <widget class="QLabel" name="label_log_page">
+            <property name="text">
+             <string>Page</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="combobox_log_page"/>
+          </item>
+          <item>
+           <widget class="QPushButton" name="button_prev_log_page">
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="resources/router_manager.qrc">
+              <normaloff>:/img/arrow-180.png</normaloff>:/img/arrow-180.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="button_next_log_page">
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="resources/router_manager.qrc">
+              <normaloff>:/img/arrow.png</normaloff>:/img/arrow.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_4">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QTreeWidget" name="tree_log">
+          <column>
+           <property name="text">
+            <string>Time stamp</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>IP</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>ID</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Action</string>
            </property>
           </column>
          </widget>

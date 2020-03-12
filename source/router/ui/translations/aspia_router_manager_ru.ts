@@ -81,7 +81,6 @@
     <message>
         <location filename="../main_window.ui" line="55"/>
         <location filename="../main_window.ui" line="245"/>
-        <location filename="../main_window.ui" line="316"/>
         <source>User name</source>
         <translation>Имя пользователя</translation>
     </message>
@@ -121,23 +120,51 @@
         <translation>Порт</translation>
     </message>
     <message>
+        <location filename="../main_window.ui" line="259"/>
+        <source>Logging</source>
+        <translation>Логирование</translation>
+    </message>
+    <message>
+        <location filename="../main_window.ui" line="267"/>
+        <source>Page</source>
+        <translation>Страница</translation>
+    </message>
+    <message>
+        <location filename="../main_window.ui" line="315"/>
+        <source>Time stamp</source>
+        <translation>Отметка времени</translation>
+    </message>
+    <message>
+        <location filename="../main_window.ui" line="320"/>
+        <source>IP</source>
+        <translation>IP</translation>
+    </message>
+    <message>
+        <location filename="../main_window.ui" line="325"/>
+        <source>ID</source>
+        <translation>ID</translation>
+    </message>
+    <message>
+        <location filename="../main_window.ui" line="330"/>
+        <source>Action</source>
+        <translation>Действие</translation>
+    </message>
+    <message>
         <source>Black List</source>
         <translation type="vanished">Черный список</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="188"/>
         <source>Managers</source>
-        <translation>Управляющие</translation>
+        <translation type="vanished">Управляющие</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="259"/>
+        <location filename="../main_window.ui" line="188"/>
         <source>Users</source>
         <translation>Пользователи</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="179"/>
         <location filename="../main_window.ui" line="250"/>
-        <location filename="../main_window.ui" line="321"/>
         <source>Enabled</source>
         <translation>Включен</translation>
     </message>
@@ -229,7 +256,7 @@
         <location filename="../channel.cc" line="61"/>
         <location filename="../channel.cc" line="155"/>
         <source>Unknown internal error: message with incorrect size.</source>
-        <translation type="unfinished"></translation>
+        <translation>Неизвестная внутренняя ошибка: сообщение с некорректным размером.</translation>
     </message>
 </context>
 <context>
@@ -240,45 +267,45 @@
         <location filename="../user_dialog.cc" line="100"/>
         <location filename="../user_dialog.cc" line="123"/>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Предупреждение</translation>
     </message>
     <message>
         <location filename="../user_dialog.cc" line="74"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
-        <translation type="unfinished"></translation>
+        <translation>Имя пользователя не может быть пустым и должно содержать только буквы алфавита, цифры и символы _, -, .</translation>
     </message>
     <message>
         <location filename="../user_dialog.cc" line="87"/>
         <source>The passwords you entered do not match.</source>
-        <translation type="unfinished"></translation>
+        <translation>Введенные пароли не совпадают.</translation>
     </message>
     <message numerus="yes">
         <location filename="../user_dialog.cc" line="101"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Пароль не может быть пустым и не должен быть длиннее %n символа.</numerusform>
+            <numerusform>Пароль не может быть пустым и не должен быть длиннее %n символов.</numerusform>
+            <numerusform>Пароль не может быть пустым и не должен быть длиннее %n символов.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../user_dialog.cc" line="113"/>
         <source>Password you entered does not meet the security requirements!</source>
-        <translation type="unfinished"></translation>
+        <translation>Введенный пароль не отвечает требованиям безопасности!</translation>
     </message>
     <message numerus="yes">
         <location filename="../user_dialog.cc" line="116"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Пароль должен содержать символы в нижнем и верхнем регистре, цифры и не может быть короче %n символа.</numerusform>
+            <numerusform>Пароль должен содержать символы в нижнем и верхнем регистре, цифры и не может быть короче %n символов.</numerusform>
+            <numerusform>Пароль должен содержать символы в нижнем и верхнем регистре, цифры и не может быть короче %n символов.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../user_dialog.cc" line="120"/>
         <source>Do you want to enter a different password?</source>
-        <translation type="unfinished"></translation>
+        <translation>Вы хотите ввести другой пароль?</translation>
     </message>
 </context>
 </TS>

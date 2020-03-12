@@ -41,9 +41,6 @@ private:
     void onAddProxy();
     void onModifyProxy();
     void onDeleteProxy();
-    void onAddManager();
-    void onModifyManager();
-    void onDeleteManager();
     void onAddUser();
     void onModifyUser();
     void onDeleteUser();

@@ -37,10 +37,6 @@ MainWindow::MainWindow()
     connect(ui.button_modify_proxy, &QPushButton::released, this, &MainWindow::onModifyProxy);
     connect(ui.button_delete_proxy, &QPushButton::released, this, &MainWindow::onDeleteProxy);
 
-    connect(ui.button_add_manager, &QPushButton::released, this, &MainWindow::onAddManager);
-    connect(ui.button_modify_manager, &QPushButton::released, this, &MainWindow::onModifyManager);
-    connect(ui.button_delete_manager, &QPushButton::released, this, &MainWindow::onDeleteManager);
-
     connect(ui.button_add_user, &QPushButton::released, this, &MainWindow::onAddUser);
     connect(ui.button_modify_user, &QPushButton::released, this, &MainWindow::onModifyUser);
     connect(ui.button_delete_user, &QPushButton::released, this, &MainWindow::onDeleteUser);
@@ -77,21 +73,6 @@ void MainWindow::onModifyProxy()
 }
 
 void MainWindow::onDeleteProxy()
-{
-
-}
-
-void MainWindow::onAddManager()
-{
-    UserDialog(this).exec();
-}
-
-void MainWindow::onModifyManager()
-{
-
-}
-
-void MainWindow::onDeleteManager()
 {
 
 }
