@@ -122,8 +122,8 @@ void Authenticator::onMessageReceived(const base::ByteArray& buffer)
                 return;
             }
 
-            if (!(client_hello.methods() & proto::METHOD_SRP_AES256_GCM) &&
-                !(client_hello.methods() & proto::METHOD_SRP_CHACHA20_POLY1305))
+            if (!(client_hello.encryption() & proto::ENCRYPTION_AES256_GCM) &&
+                !(client_hello.encryption() & proto::ENCRYPTION_CHACHA20_POLY1305))
             {
                 // No authentication methods supported.
                 onFailed(FROM_HERE);
@@ -132,22 +132,23 @@ void Authenticator::onMessageReceived(const base::ByteArray& buffer)
 
             proto::ServerHello server_hello;
 
-            if ((client_hello.methods() & proto::METHOD_SRP_AES256_GCM) && base::CPUID::hasAesNi())
+            if ((client_hello.encryption() & proto::ENCRYPTION_AES256_GCM) &&
+                base::CPUID::hasAesNi())
             {
                 // If both sides of the connection support AES, then method AES256 GCM is the
                 // fastest option.
-                server_hello.set_method(proto::METHOD_SRP_AES256_GCM);
+                server_hello.set_encryption(proto::ENCRYPTION_AES256_GCM);
             }
             else
             {
                 // Otherwise, we use ChaCha20+Poly1305. This works faster in the absence of
                 // hardware support AES.
-                server_hello.set_method(proto::METHOD_SRP_CHACHA20_POLY1305);
+                server_hello.set_encryption(proto::ENCRYPTION_CHACHA20_POLY1305);
             }
 
             // Now we are in the authentication phase.
             internal_state_ = InternalState::SEND_SERVER_HELLO;
-            method_ = server_hello.method();
+            encryption_ = server_hello.encryption();
 
             channel_->send(common::serializeMessage(server_hello));
         }
@@ -242,14 +243,14 @@ void Authenticator::onMessageReceived(const base::ByteArray& buffer)
             std::unique_ptr<crypto::MessageEncryptor> encryptor;
             std::unique_ptr<crypto::MessageDecryptor> decryptor;
 
-            if (method_ == proto::METHOD_SRP_AES256_GCM)
+            if (encryption_ == proto::ENCRYPTION_AES256_GCM)
             {
                 encryptor = crypto::MessageEncryptorOpenssl::createForAes256Gcm(key, encrypt_iv_);
                 decryptor = crypto::MessageDecryptorOpenssl::createForAes256Gcm(key, decrypt_iv_);
             }
             else
             {
-                DCHECK_EQ(method_, proto::METHOD_SRP_CHACHA20_POLY1305);
+                DCHECK_EQ(encryption_, proto::ENCRYPTION_CHACHA20_POLY1305);
 
                 encryptor =
                     crypto::MessageEncryptorOpenssl::createForChaCha20Poly1305(key, encrypt_iv_);
@@ -353,11 +354,11 @@ base::ByteArray Authenticator::createKey()
     crypto::BigNum u = crypto::SrpMath::calc_u(A_, B_, N_);
     crypto::BigNum server_key = crypto::SrpMath::calcServerKey(A_, v_, u, b_, N_);
 
-    switch (method_)
+    switch (encryption_)
     {
         // AES256-GCM and ChaCha20-Poly1305 requires 256 bit key.
-        case proto::METHOD_SRP_AES256_GCM:
-        case proto::METHOD_SRP_CHACHA20_POLY1305:
+        case proto::ENCRYPTION_AES256_GCM:
+        case proto::ENCRYPTION_CHACHA20_POLY1305:
         {
             base::ByteArray temp = server_key.toByteArray();
             if (!temp.empty())
@@ -373,7 +374,7 @@ base::ByteArray Authenticator::createKey()
 
         default:
         {
-            LOG(LS_ERROR) << "Unknown method: " << method_;
+            LOG(LS_ERROR) << "Unknown encryption method: " << encryption_;
         }
         break;
     }

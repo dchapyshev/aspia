@@ -57,7 +57,8 @@ public:
     void setSessionType(proto::SessionType session_type);
     proto::SessionType sessionType() const { return session_type_; }
 
-    proto::Method method() const { return method_; }
+    proto::Encryption encryption() const { return encryption_; }
+    proto::Identify identify() const { return identify_; }
     const base::Version& peerVersion() const { return peer_version_; }
 
     enum class ErrorCode
@@ -119,7 +120,8 @@ private:
     std::u16string username_;
     std::u16string password_;
 
-    proto::Method method_ = proto::METHOD_UNKNOWN;
+    proto::Encryption encryption_ = proto::ENCRYPTION_UNKNOWN;
+    proto::Identify identify_ = proto::IDENTIFY_SRP;
     proto::SessionType session_type_ = proto::SESSION_TYPE_UNKNOWN;
     base::Version peer_version_;
 

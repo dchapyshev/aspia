@@ -69,14 +69,14 @@ bool verifyNg(std::string_view N, std::string_view g)
 }
 
 std::unique_ptr<crypto::MessageEncryptor> createMessageEncryptor(
-    proto::Method method, const base::ByteArray& key, const base::ByteArray& iv)
+    proto::Encryption encryption, const base::ByteArray& key, const base::ByteArray& iv)
 {
-    switch (method)
+    switch (encryption)
     {
-        case proto::METHOD_SRP_AES256_GCM:
+        case proto::ENCRYPTION_AES256_GCM:
             return crypto::MessageEncryptorOpenssl::createForAes256Gcm(key, iv);
 
-        case proto::METHOD_SRP_CHACHA20_POLY1305:
+        case proto::ENCRYPTION_CHACHA20_POLY1305:
             return crypto::MessageEncryptorOpenssl::createForChaCha20Poly1305(key, iv);
 
         default:
@@ -85,14 +85,14 @@ std::unique_ptr<crypto::MessageEncryptor> createMessageEncryptor(
 }
 
 std::unique_ptr<crypto::MessageDecryptor> createMessageDecryptor(
-    proto::Method method, const base::ByteArray& key, const base::ByteArray& iv)
+    proto::Encryption encryption, const base::ByteArray& key, const base::ByteArray& iv)
 {
-    switch (method)
+    switch (encryption)
     {
-        case proto::METHOD_SRP_AES256_GCM:
+        case proto::ENCRYPTION_AES256_GCM:
             return crypto::MessageDecryptorOpenssl::createForAes256Gcm(key, iv);
 
-        case proto::METHOD_SRP_CHACHA20_POLY1305:
+        case proto::ENCRYPTION_CHACHA20_POLY1305:
             return crypto::MessageDecryptorOpenssl::createForChaCha20Poly1305(key, iv);
 
         default:
@@ -223,7 +223,7 @@ void Authenticator::onMessageReceived(const base::ByteArray& buffer)
             if (readSessionChallenge(buffer))
             {
                 std::unique_ptr<crypto::MessageEncryptor> message_encryptor =
-                    createMessageEncryptor(method_, key_, encrypt_iv_);
+                    createMessageEncryptor(encryption_, key_, encrypt_iv_);
                 if (!message_encryptor)
                 {
                     finished(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
@@ -262,7 +262,7 @@ void Authenticator::onMessageWritten()
         case State::SEND_CLIENT_KEY_EXCHANGE:
         {
             std::unique_ptr<crypto::MessageDecryptor> message_decryptor =
-                createMessageDecryptor(method_, key_, decrypt_iv_);
+                createMessageDecryptor(encryption_, key_, decrypt_iv_);
             if (!message_decryptor)
             {
                 finished(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
@@ -289,13 +289,13 @@ void Authenticator::onMessageWritten()
 
 void Authenticator::sendClientHello()
 {
-    uint32_t methods = proto::METHOD_SRP_CHACHA20_POLY1305;
+    uint32_t encryption = proto::ENCRYPTION_CHACHA20_POLY1305;
 
     if (base::CPUID::hasAesNi())
-        methods |= proto::METHOD_SRP_AES256_GCM;
+        encryption |= proto::ENCRYPTION_AES256_GCM;
 
     proto::ClientHello client_hello;
-    client_hello.set_methods(methods);
+    client_hello.set_encryption(encryption);
 
     channel_->send(common::serializeMessage(client_hello));
 }
@@ -309,12 +309,13 @@ bool Authenticator::readServerHello(const base::ByteArray& buffer)
         return false;
     }
 
-    method_ = server_hello.method();
+    encryption_ = server_hello.encryption();
+    identify_ = server_hello.identify();
 
-    switch (method_)
+    switch (encryption_)
     {
-        case proto::METHOD_SRP_AES256_GCM:
-        case proto::METHOD_SRP_CHACHA20_POLY1305:
+        case proto::ENCRYPTION_AES256_GCM:
+        case proto::ENCRYPTION_CHACHA20_POLY1305:
             break;
 
         default:

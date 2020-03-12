@@ -110,7 +110,8 @@ private:
     proto::SessionType session_type_ = proto::SESSION_TYPE_UNKNOWN;
 
     // Selected authentication method.
-    proto::Method method_ = proto::METHOD_UNKNOWN;
+    proto::Encryption encryption_ = proto::ENCRYPTION_UNKNOWN;
+    proto::Identify identify_ = proto::IDENTIFY_SRP;
 
     // Remote client version.
     base::Version peer_version_;
