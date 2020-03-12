@@ -38,25 +38,32 @@ void PasswordGenerator::setLength(size_t value)
 
 std::string PasswordGenerator::result() const
 {
-    std::vector<char> table;
+    constexpr std::string_view lower_case = "abcdefghijklmnopqrstuvwxyz";
+    constexpr std::string_view upper_case = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    constexpr std::string_view digits = "0123456789";
+
+    size_t table_length = 0;
 
     if (characters_ & LOWER_CASE)
-    {
-        for (char i = 'a'; i < 'z'; ++i)
-            table.emplace_back(i);
-    }
+        table_length += lower_case.length();
 
     if (characters_ & UPPER_CASE)
-    {
-        for (char i = 'A'; i < 'Z'; ++i)
-            table.emplace_back(i);
-    }
+        table_length += upper_case.length();
 
     if (characters_ & DIGITS)
-    {
-        for (char i = '0'; i < '9'; ++i)
-            table.emplace_back(i);
-    }
+        table_length += digits.length();
+
+    std::string table;
+    table.reserve(table_length);
+
+    if (characters_ & LOWER_CASE)
+        table.append(lower_case);
+
+    if (characters_ & UPPER_CASE)
+        table.append(upper_case);
+
+    if (characters_ & DIGITS)
+        table.append(digits);
 
     std::random_device random_device;
     std::mt19937 engine(random_device());
