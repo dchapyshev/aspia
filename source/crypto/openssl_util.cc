@@ -41,6 +41,16 @@ void EVP_CIPHER_CTX_Deleter::operator()(evp_cipher_ctx_st* ctx)
     EVP_CIPHER_CTX_free(ctx);
 }
 
+void EVP_PKEY_CTX_Deleter::operator()(evp_pkey_ctx_st* ctx)
+{
+    EVP_PKEY_CTX_free(ctx);
+}
+
+void EVP_PKEY_Deleter::operator()(evp_pkey_st* pkey)
+{
+    EVP_PKEY_free(pkey);
+}
+
 namespace {
 
 const EVP_CIPHER* cipherType(CipherType type)

@@ -26,6 +26,8 @@ list(APPEND SOURCE_CRYPTO
     data_cryptor_fake.h
     generic_hash.cc
     generic_hash.h
+    key_pair.cc
+    key_pair.h
     large_number_increment.cc
     large_number_increment.h
     message_decryptor.h
@@ -60,6 +62,7 @@ list(APPEND SOURCE_CRYPTO_UNIT_TESTS
     cryptor_unittest.cc
     data_cryptor_unittest.cc
     generic_hash_unittest.cc
+    key_pair_unittest.cc
     large_number_increment_unittest.cc
     password_generator_unittest.cc
     password_hash_unittest.cc
