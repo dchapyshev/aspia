@@ -1,0 +1,17 @@
+name: sw
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-latest]
+
+    steps:
+    - uses: actions/checkout@v1
+    - uses: egorpugin/sw-action@master
+
+    - name: build
+      run: ./sw build source
