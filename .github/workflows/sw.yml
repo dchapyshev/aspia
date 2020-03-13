@@ -15,3 +15,6 @@ jobs:
 
     - name: build
       run: ./sw build source
+
+    - name: test
+      run: ./sw test source
