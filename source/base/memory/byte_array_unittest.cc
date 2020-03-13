@@ -31,7 +31,7 @@ uint64_t randomNumber64()
     std::random_device random_device;
     std::mt19937 engine(random_device());
 
-    std::uniform_int_distribution<> uniform_distance(0, std::numeric_limits<uint64_t>::max());
+    std::uniform_int_distribution<uint64_t> uniform_distance(0, std::numeric_limits<uint64_t>::max());
     return uniform_distance(engine);
 }
 
