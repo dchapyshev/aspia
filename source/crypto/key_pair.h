@@ -28,6 +28,7 @@ namespace crypto {
 class KeyPair
 {
 public:
+    KeyPair();
     KeyPair(KeyPair&& other) noexcept;
     KeyPair& operator=(KeyPair&& other) noexcept;
     ~KeyPair();
@@ -43,7 +44,7 @@ public:
     base::ByteArray sessionKey(const base::ByteArray& peer_public_key) const;
 
 private:
-    explicit KeyPair(EVP_PKEY_ptr&& pkey = nullptr) noexcept;
+    explicit KeyPair(EVP_PKEY_ptr&& pkey) noexcept;
 
     EVP_PKEY_ptr pkey_;
 

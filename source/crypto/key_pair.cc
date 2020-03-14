@@ -24,6 +24,8 @@
 
 namespace crypto {
 
+KeyPair::KeyPair() = default;
+
 KeyPair::KeyPair(EVP_PKEY_ptr&& pkey) noexcept
     : pkey_(std::move(pkey))
 {
