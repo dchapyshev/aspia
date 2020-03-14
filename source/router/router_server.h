@@ -20,13 +20,20 @@
 #define ROUTER__ROUTER_SERVER_H
 
 #include "net/network_server.h"
+#include "router/authenticator_manager.h"
+#include "router/session.h"
 
 namespace router {
 
-class Server : public net::Server::Delegate
+class Database;
+
+class Server
+    : public net::Server::Delegate,
+      public AuthenticatorManager::Delegate,
+      public Session::Delegate
 {
 public:
-    Server();
+    explicit Server(std::shared_ptr<base::TaskRunner> task_runner);
     ~Server();
 
     void start();
@@ -35,8 +42,18 @@ protected:
     // net::Server::Delegate implementation.
     void onNewConnection(std::unique_ptr<net::Channel> channel) override;
 
+    // AuthenticatorManager::Delegate implementation.
+    void onNewSession(std::unique_ptr<Session> session) override;
+
+    // Session::Delegate implementation.
+    void onSessionFinished() override;
+
 private:
+    std::shared_ptr<base::TaskRunner> task_runner_;
+    std::unique_ptr<Database> database_;
     std::unique_ptr<net::Server> network_server_;
+    std::unique_ptr<AuthenticatorManager> authenticator_manager_;
+    std::vector<std::unique_ptr<Session>> sessions_;
 
     DISALLOW_COPY_AND_ASSIGN(Server);
 };

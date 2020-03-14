@@ -42,6 +42,11 @@ void Session::start(Delegate* delegate)
     channel_->resume();
 }
 
+bool Session::isFinished() const
+{
+    return true;
+}
+
 void Session::onConnected()
 {
     NOTREACHED();

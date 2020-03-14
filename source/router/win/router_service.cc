@@ -35,7 +35,7 @@ Service::~Service() = default;
 
 void Service::onStart()
 {
-    server_ = std::make_unique<Server>();
+    server_ = std::make_unique<Server>(taskRunner());
     server_->start();
 }
 

@@ -18,11 +18,19 @@
 
 #include "router/router_server.h"
 
+#include "base/logging.h"
+#include "base/task_runner.h"
 #include "net/network_channel.h"
+#include "router/database_sqlite.h"
+#include "router/settings.h"
 
 namespace router {
 
-Server::Server() = default;
+Server::Server(std::shared_ptr<base::TaskRunner> task_runner)
+    : task_runner_(std::move(task_runner))
+{
+    DCHECK(task_runner_);
+}
 
 Server::~Server() = default;
 
@@ -31,13 +39,46 @@ void Server::start()
     if (network_server_)
         return;
 
+    database_ = DatabaseSqlite::open();
+    if (!database_)
+        return;
+
+    authenticator_manager_ = std::make_unique<AuthenticatorManager>(task_runner_, this);
+    authenticator_manager_->setUserList(std::make_shared<UserList>(database_->userList()));
+
     network_server_ = std::make_unique<net::Server>();
-    network_server_->start(0, this);
+    network_server_->start(Settings().port(), this);
 }
 
 void Server::onNewConnection(std::unique_ptr<net::Channel> channel)
 {
-    // TODO
+    if (authenticator_manager_)
+        authenticator_manager_->addNewChannel(std::move(channel));
+}
+
+void Server::onNewSession(std::unique_ptr<Session> session)
+{
+    sessions_.emplace_back(std::move(session));
+    sessions_.back()->start(this);
+}
+
+void Server::onSessionFinished()
+{
+    for (auto it = sessions_.begin(); it != sessions_.end();)
+    {
+        if (it->get()->isFinished())
+        {
+            // Session will be destroyed after completion of the current call.
+            task_runner_->deleteSoon(std::move(*it));
+
+            // Delete a session from the list.
+            it = sessions_.erase(it);
+        }
+        else
+        {
+            ++it;
+        }
+    }
 }
 
 } // namespace router

@@ -42,12 +42,13 @@ public:
     public:
         virtual ~Delegate() = default;
 
-        virtual void onPeerFinished() = 0;
+        virtual void onSessionFinished() = 0;
     };
 
     void start(Delegate* delegate);
 
     const std::string& peerId() const { return peer_id_; }
+    bool isFinished() const;
 
 protected:
     // net::Listener implementation.
