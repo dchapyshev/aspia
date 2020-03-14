@@ -41,7 +41,8 @@ public:
     AuthenticatorManager(std::shared_ptr<base::TaskRunner> task_runner, Delegate* delegate);
     ~AuthenticatorManager();
 
-    void setUserList(std::shared_ptr<UserList> userlist);
+    void setPrivateKey(const base::ByteArray& private_key);
+    void setUserList(std::shared_ptr<UserList> user_list);
     void addNewChannel(std::unique_ptr<net::Channel> channel);
 
 protected:
@@ -53,7 +54,8 @@ private:
     Delegate* delegate_;
 
     std::vector<std::unique_ptr<Authenticator>> pending_;
-    std::shared_ptr<UserList> userlist_;
+    std::shared_ptr<UserList> user_list_;
+    base::ByteArray private_key_;
 
     DISALLOW_COPY_AND_ASSIGN(AuthenticatorManager);
 };

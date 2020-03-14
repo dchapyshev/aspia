@@ -34,20 +34,25 @@ Server::Server(std::shared_ptr<base::TaskRunner> task_runner)
 
 Server::~Server() = default;
 
-void Server::start()
+bool Server::start()
 {
     if (network_server_)
-        return;
+        return false;
 
     database_ = DatabaseSqlite::open();
     if (!database_)
-        return;
+        return false;
+
+    Settings settings;
 
     authenticator_manager_ = std::make_unique<AuthenticatorManager>(task_runner_, this);
+    authenticator_manager_->setPrivateKey(settings.privateKey());
     authenticator_manager_->setUserList(std::make_shared<UserList>(database_->userList()));
 
     network_server_ = std::make_unique<net::Server>();
-    network_server_->start(Settings().port(), this);
+    network_server_->start(settings.port(), this);
+
+    return true;
 }
 
 void Server::onNewConnection(std::unique_ptr<net::Channel> channel)

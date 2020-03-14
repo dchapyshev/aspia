@@ -20,6 +20,7 @@
 
 #include "base/logging.h"
 #include "base/task_runner.h"
+#include "crypto/secure_memory.h"
 #include "net/network_channel.h"
 #include "router/session.h"
 
@@ -33,23 +34,36 @@ AuthenticatorManager::AuthenticatorManager(
     DCHECK(task_runner_ && delegate_);
 }
 
-AuthenticatorManager::~AuthenticatorManager() = default;
-
-void AuthenticatorManager::setUserList(std::shared_ptr<UserList> userlist)
+AuthenticatorManager::~AuthenticatorManager()
 {
-    userlist_ = std::move(userlist);
-    DCHECK(userlist_);
+    crypto::memZero(&private_key_);
+}
+
+void AuthenticatorManager::setPrivateKey(const base::ByteArray& private_key)
+{
+    private_key_ = private_key;
+    DCHECK(!private_key_.empty());
+}
+
+void AuthenticatorManager::setUserList(std::shared_ptr<UserList> user_list)
+{
+    user_list_ = std::move(user_list);
+    DCHECK(user_list_);
 }
 
 void AuthenticatorManager::addNewChannel(std::unique_ptr<net::Channel> channel)
 {
     DCHECK(channel);
 
-    // Create a new authenticator for the connection and put it on the list.
-    pending_.emplace_back(std::make_unique<Authenticator>(task_runner_, std::move(channel)));
+    std::unique_ptr<Authenticator> authenticator =
+        std::make_unique<Authenticator>(task_runner_, std::move(channel));
 
     // Start the authentication process.
-    pending_.back()->start(userlist_, this);
+    if (!authenticator->start(private_key_, user_list_, this))
+        return;
+
+    // Create a new authenticator for the connection and put it on the list.
+    pending_.emplace_back(std::move(authenticator));
 }
 
 void AuthenticatorManager::onComplete()

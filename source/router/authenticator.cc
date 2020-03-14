@@ -34,16 +34,25 @@ Authenticator::Authenticator(std::shared_ptr<base::TaskRunner> task_runner,
 
 Authenticator::~Authenticator() = default;
 
-void Authenticator::start(std::shared_ptr<UserList> userlist, Delegate* delegate)
+bool Authenticator::start(
+    const base::ByteArray& private_key, std::shared_ptr<UserList> user_list, Delegate* delegate)
 {
-    userlist_ = std::move(userlist);
-    DCHECK(userlist_);
+    key_pair_ = crypto::KeyPair::fromPrivateKey(private_key);
+    if (!key_pair_.isValid())
+        return false;
+
+    user_list_ = std::move(user_list);
+    if (!user_list)
+        return false;
 
     delegate_ = delegate;
-    DCHECK(delegate_);
+    if (!delegate_)
+        return false;
 
     channel_->setListener(this);
     channel_->resume();
+
+    return true;
 }
 
 std::unique_ptr<Session> Authenticator::takeSession()

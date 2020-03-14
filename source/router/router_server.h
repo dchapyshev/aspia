@@ -36,7 +36,7 @@ public:
     explicit Server(std::shared_ptr<base::TaskRunner> task_runner);
     ~Server();
 
-    void start();
+    bool start();
 
 protected:
     // net::Server::Delegate implementation.

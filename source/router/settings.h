@@ -30,6 +30,7 @@ public:
     ~Settings();
 
     uint16_t port() const;
+    base::ByteArray privateKey() const;
 
 private:
     base::XmlSettings impl_;

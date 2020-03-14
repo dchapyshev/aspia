@@ -19,7 +19,8 @@
 #ifndef ROUTER__AUTHENTICATOR_H
 #define ROUTER__AUTHENTICATOR_H
 
-#include "base/macros_magic.h"
+#include "crypto/big_num.h"
+#include "crypto/key_pair.h"
 #include "net/network_listener.h"
 
 namespace base {
@@ -58,7 +59,9 @@ public:
         SUCCESS  // The authenticator completed successfully.
     };
 
-    void start(std::shared_ptr<UserList> userlist, Delegate* delegate);
+    bool start(const base::ByteArray& private_key,
+               std::shared_ptr<UserList> user_list,
+               Delegate* delegate);
 
     State state() const { return state_; }
     std::unique_ptr<Session> takeSession();
@@ -73,10 +76,22 @@ protected:
 private:
     std::shared_ptr<base::TaskRunner> task_runner_;
     std::unique_ptr<net::Channel> channel_;
-    std::shared_ptr<UserList> userlist_;
+    std::shared_ptr<UserList> user_list_;
+    crypto::KeyPair key_pair_;
 
     State state_ = State::STOPPED;
     Delegate* delegate_ = nullptr;
+
+    base::ByteArray encrypt_iv_;
+    base::ByteArray decrypt_iv_;
+
+    crypto::BigNum N_;
+    crypto::BigNum g_;
+    crypto::BigNum v_;
+    crypto::BigNum s_;
+    crypto::BigNum b_;
+    crypto::BigNum B_;
+    crypto::BigNum A_;
 
     DISALLOW_COPY_AND_ASSIGN(Authenticator);
 };

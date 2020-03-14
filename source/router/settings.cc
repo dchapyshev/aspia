@@ -33,4 +33,9 @@ uint16_t Settings::port() const
     return impl_.get<uint16_t>("Port", DEFAULT_ROUTER_TCP_PORT);
 }
 
+base::ByteArray Settings::privateKey() const
+{
+    return impl_.get<base::ByteArray>("PrivateKey");
+}
+
 } // namespace router
