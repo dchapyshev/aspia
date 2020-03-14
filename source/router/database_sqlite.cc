@@ -80,7 +80,7 @@ std::filesystem::path DatabaseSqlite::filePath()
     return file_path;
 }
 
-DatabaseSqlite::UserList DatabaseSqlite::userList() const
+UserList DatabaseSqlite::userList() const
 {
     return UserList();
 }

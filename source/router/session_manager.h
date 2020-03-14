@@ -16,24 +16,21 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ROUTER__DATABASE_H
-#define ROUTER__DATABASE_H
+#ifndef ROUTER__SESSION_MANAGER_H
+#define ROUTER__SESSION_MANAGER_H
 
-#include "router/user.h"
+#include "router/session.h"
 
 namespace router {
 
-class Database
+class SessionManager : public Session
 {
 public:
-    virtual ~Database() = default;
 
-    virtual UserList userList() const = 0;
-    virtual bool addUser(const User& user) = 0;
-    virtual bool removeUser(std::u16string_view name) = 0;
-    virtual std::string id(std::string_view key) const = 0;
+private:
+    DISALLOW_COPY_AND_ASSIGN(SessionManager);
 };
 
 } // namespace router
 
-#endif // ROUTER__DATABASE_H
+#endif // ROUTER__SESSION_MANAGER_H

@@ -19,12 +19,24 @@
 include(tbb)
 
 list(APPEND SOURCE_ROUTER
+    authenticator.cc
+    authenticator.h
+    authenticator_manager.cc
+    authenticator_manager.h
     database.h
     database_sqlite.cc
     database_sqlite.h
     router_main.cc
     router_server.cc
-    router_server.h)
+    router_server.h
+    session.cc
+    session.h
+    session_manager.cc
+    session_manager.h
+    session_peer.cc
+    session_peer.h
+    user.cc
+    user.h)
 
 list(APPEND SOURCE_ROUTER_WIN
     win/router_service.cc
@@ -42,6 +54,7 @@ target_link_libraries(aspia_router
     aspia_crypto
     aspia_net
     aspia_proto
+    crypt32
     libcrypto
     libssl
     modp_b64

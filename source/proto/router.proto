@@ -24,6 +24,13 @@ import "common.proto";
 
 package proto;
 
+enum RouterSession
+{
+    ROUTER_SESSION_UNKNOWN = 0;
+    ROUTER_SESSION_MANAGER = 1;
+    ROUTER_SESSION_PEER    = 2;
+}
+
 message PeerIdChallenge
 {
     Version version = 1;
