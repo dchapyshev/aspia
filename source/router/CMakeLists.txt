@@ -35,6 +35,8 @@ list(APPEND SOURCE_ROUTER
     session_manager.h
     session_peer.cc
     session_peer.h
+    settings.cc
+    settings.h
     user.cc
     user.h)
 

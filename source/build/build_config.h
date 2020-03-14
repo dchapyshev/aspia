@@ -63,8 +63,12 @@
 #endif
 
 #define DEFAULT_LOCALE        "en"
-#define DEFAULT_HOST_TCP_PORT 8050
 #define DEFAULT_UPDATE_SERVER "https://update.aspia.org"
+
+#define DEFAULT_HOST_TCP_PORT   8050
+#define DEFAULT_ROUTER_TCP_PORT 8060
+#define DEFAULT_PROXY_TCP_PORT  8070
+
 #define ENABLE_LOCATION_SOURCE
 
 #endif // ASPIA_BUILD_CONFIG_H
