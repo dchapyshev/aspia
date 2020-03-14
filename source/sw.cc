@@ -17,7 +17,7 @@ void build(Solution &s)
     auto &aspia = s.addProject("aspia", "master");
     aspia += Git("https://github.com/dchapyshev/aspia", "", "{v}");
 
-    auto setup_target = [&aspia](auto &t, const String &name) -> decltype(auto)
+    auto setup_target = [&aspia](auto &t, const String &name, bool add_tests = false) -> decltype(auto)
     {
         t.CPPVersion = CPPLanguageStandard::CPP17;
         t.Public += "."_idir;
@@ -27,18 +27,31 @@ void build(Solution &s)
         t -= ".*_unittest.*"_rr;
         t -= ".*_tests.*"_rr;
         t.AllowEmptyRegexes = false;
+
+        // test
+        if (add_tests)
+        {
+            auto &bt = t.addExecutable("test");
+            bt += cpp17;
+            bt += FileRegex(name, ".*_unittest.*", true);
+            bt += t;
+            bt += "org.sw.demo.google.googletest.gmock"_dep;
+            bt += "org.sw.demo.google.googletest.gtest.main"_dep;
+            t.addTest(bt);
+        }
+
         return t;
     };
 
-    auto add_lib = [&aspia, &setup_target](const String &name) -> decltype(auto)
+    auto add_lib = [&aspia, &setup_target](const String &name, bool add_tests = false) -> decltype(auto)
     {
-        return setup_target(aspia.addStaticLibrary(name), name);
+        return setup_target(aspia.addStaticLibrary(name), name, add_tests);
     };
 
     auto &base = aspia.addStaticLibrary("base");
     base += "third_party/modp_b64/.*\\.[hc]"_rr;
     base -= "build/.*"_rr;
-    setup_target(base, "base");
+    setup_target(base, "base", true);
     base.Public += "UNICODE"_def;
     base.Public += "WIN32_LEAN_AND_MEAN"_def;
     base.Public += "NOMINMAX"_def;
@@ -57,7 +70,7 @@ void build(Solution &s)
 
     auto &desktop_capture = aspia.addStaticLibrary("desktop");
     desktop_capture += "third_party/x11region/.*\\.[hc]"_rr;
-    setup_target(desktop_capture, "desktop");
+    setup_target(desktop_capture, "desktop", true);
     desktop_capture.Public += base;
     desktop_capture.Public += "org.sw.demo.qtproject.qt.base.gui"_dep;
     desktop_capture.Public += "org.sw.demo.chromium.libyuv-master"_dep;
@@ -80,7 +93,7 @@ void build(Solution &s)
     codec.Public += "org.sw.demo.facebook.zstd.zstd"_dep;
     codec.Public += "org.sw.demo.webmproject.vpx"_dep;
 
-    auto &crypto = add_lib("crypto");
+    auto &crypto = add_lib("crypto", true);
     crypto.Public += base;
     crypto.Public += "org.sw.demo.openssl.crypto"_dep;
 
@@ -116,7 +129,7 @@ void build(Solution &s)
     qt_progs_and_tr(common);
     qt_translations_rcc("org.sw.demo.qtproject.qt"_dep, aspia, common, "translations/qt_translations.qrc");
 
-    auto &network = add_lib("net");
+    auto &network = add_lib("net", true);
     network.Public += crypto, common;
     network.Public += "org.sw.demo.qtproject.qt.base.network"_dep;
     if (network.getBuildSettings().TargetOS.Type == OSType::Windows)
