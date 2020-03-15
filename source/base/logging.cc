@@ -249,29 +249,32 @@ std::string* makeCheckOpString(const std::string& v1, const std::string& v2, con
     return makeCheckOpString<std::string, std::string>(v1, v2, names);
 }
 
-LogMessage::LogMessage(const char* file, int line, LoggingSeverity severity)
-    : severity_(severity), file_(file), line_(line)
+LogMessage::LogMessage(std::string_view file, int line, LoggingSeverity severity)
+    : severity_(severity)
 {
     init(file, line);
 }
 
-LogMessage::LogMessage(const char* file, int line, const char* condition)
-    : severity_(LS_FATAL), file_(file), line_(line)
+LogMessage::LogMessage(std::string_view file, int line, const char* condition)
+    : severity_(LS_FATAL)
 {
     init(file, line);
     stream_ << "Check failed: " << condition << ". ";
 }
 
-LogMessage::LogMessage(const char* file, int line, std::string* result)
-    : severity_(LS_FATAL), file_(file), line_(line)
+LogMessage::LogMessage(std::string_view file, int line, std::string* result)
+    : severity_(LS_FATAL)
 {
     std::unique_ptr<std::string> result_deleter(result);
     init(file, line);
     stream_ << "Check failed: " << *result;
 }
 
-LogMessage::LogMessage(const char* file, int line, LoggingSeverity severity, std::string* result)
-    : severity_(severity), file_(file), line_(line)
+LogMessage::LogMessage(std::string_view file,
+                       int line,
+                       LoggingSeverity severity,
+                       std::string* result)
+    : severity_(severity)
 {
     std::unique_ptr<std::string> result_deleter(result);
     init(file, line);
@@ -316,13 +319,11 @@ LogMessage::~LogMessage()
 }
 
 // Writes the common header info to the stream.
-void LogMessage::init(const char* file, int line)
+void LogMessage::init(std::string_view file, int line)
 {
-    std::string_view filename(file);
-
-    size_t last_slash_pos = filename.find_last_of("\\/");
+    size_t last_slash_pos = file.find_last_of("\\/");
     if (last_slash_pos != std::string_view::npos)
-        filename.remove_prefix(last_slash_pos + 1);
+        file.remove_prefix(last_slash_pos + 1);
 
     SystemTime time = SystemTime::now();
 
@@ -333,12 +334,12 @@ void LogMessage::init(const char* file, int line)
             << std::setw(3) << time.millisecond() << ' '
             << std::this_thread::get_id()         << ' '
             << severityName(severity_)            << ' '
-            << filename.data() << ":" << line << "] ";
+            << file.data() << ":" << line << "] ";
 
     message_start_ = stream_.str().length();
 }
 
-ErrorLogMessage::ErrorLogMessage(const char* file,
+ErrorLogMessage::ErrorLogMessage(std::string_view file,
                                  int line,
                                  LoggingSeverity severity,
                                  SystemError error)

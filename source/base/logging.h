@@ -370,7 +370,7 @@ DEFINE_CHECK_OP_IMPL(GT, > )
 #define DLOG_ASSERT(condition) LOG_ASSERT(condition)
 #define DPLOG_IF(severity, condition) PLOG_IF(severity, condition)
 
-#else  // DCHECK_IS_ON()
+#else // DCHECK_IS_ON()
 
 // If !DCHECK_IS_ON(), we want to avoid emitting any references to |condition| (which may reference
 // a variable defined only if DCHECK_IS_ON()).
@@ -381,7 +381,7 @@ DEFINE_CHECK_OP_IMPL(GT, > )
 #define DLOG_ASSERT(condition) EAT_STREAM_PARAMETERS
 #define DPLOG_IF(severity, condition) EAT_STREAM_PARAMETERS
 
-#endif  // DCHECK_IS_ON()
+#endif // DCHECK_IS_ON()
 
 #define DLOG(severity) LAZY_STREAM(LOG_STREAM(severity), DLOG_IS_ON(severity))
 #define DPLOG(severity) LAZY_STREAM(PLOG_STREAM(severity), DLOG_IS_ON(severity))
@@ -403,12 +403,12 @@ DEFINE_CHECK_OP_IMPL(GT, > )
 #define DPCHECK(condition) \
   LAZY_STREAM(PLOG_STREAM(LS_DCHECK), !(condition)) << "Check failed: " #condition ". "
 
-#else  // DCHECK_IS_ON()
+#else // DCHECK_IS_ON()
 
 #define DCHECK(condition) EAT_STREAM_PARAMETERS << !(condition)
 #define DPCHECK(condition) EAT_STREAM_PARAMETERS << !(condition)
 
-#endif  // DCHECK_IS_ON()
+#endif // DCHECK_IS_ON()
 
 // Helper macro for binary operators.
 // Don't use this macro directly in your code, use DCHECK_EQ et al below.
@@ -427,7 +427,7 @@ DEFINE_CHECK_OP_IMPL(GT, > )
         ::base::LogMessage(__FILE__, __LINE__, ::base::LS_DCHECK,                                \
                            true_if_passed.message()).stream()
 
-#else  // DCHECK_IS_ON()
+#else // DCHECK_IS_ON()
 
 // When DCHECKs aren't enabled, DCHECK_OP still needs to reference operator<< overloads for |val1|
 // and |val2| to avoid potential compiler warnings about unused functions. For the same reason, it
@@ -441,7 +441,7 @@ DEFINE_CHECK_OP_IMPL(GT, > )
                             ::base::makeCheckOpValueString(::base::g_swallow_stream, val2),      \
                             (val1)op(val2))
 
-#endif  // DCHECK_IS_ON()
+#endif // DCHECK_IS_ON()
 
 // Equality/Inequality checks - compare two values, and log a LOG_DCHECK message including the two
 // values when the result is not as expected.  The values must have operator<<(ostream, ...)
@@ -480,17 +480,17 @@ class LogMessage
 {
 public:
     // Used for LOG(severity).
-    LogMessage(const char* file, int line, LoggingSeverity severity);
+    LogMessage(std::string_view file, int line, LoggingSeverity severity);
 
     // Used for CHECK(). Implied severity = LOG_FATAL.
-    LogMessage(const char* file, int line, const char* condition);
+    LogMessage(std::string_view file, int line, const char* condition);
 
     // Used for CHECK_EQ(), etc. Takes ownership of the given string.
     // Implied severity = LOG_FATAL.
-    LogMessage(const char* file, int line, std::string* result);
+    LogMessage(std::string_view file, int line, std::string* result);
 
     // Used for DCHECK_EQ(), etc. Takes ownership of the given string.
-    LogMessage(const char* file, int line, LoggingSeverity severity, std::string* result);
+    LogMessage(std::string_view file, int line, LoggingSeverity severity, std::string* result);
 
     ~LogMessage();
 
@@ -500,17 +500,13 @@ public:
     std::string str() { return stream_.str(); }
 
 private:
-    void init(const char* file, int line);
+    void init(std::string_view file, int line);
 
     LoggingSeverity severity_;
     std::ostringstream stream_;
 
     // Offset of the start of the message (past prefix // info).
     size_t message_start_;
-
-    // The file and line information passed in to the constructor.
-    const char* file_;
-    const int line_;
 
     ScopedClearLastError last_error_;
 
@@ -531,7 +527,7 @@ public:
 class ErrorLogMessage
 {
 public:
-    ErrorLogMessage(const char* file, int line, LoggingSeverity severity, SystemError error);
+    ErrorLogMessage(std::string_view file, int line, LoggingSeverity severity, SystemError error);
 
     // Appends the error message before destructing the encapsulated class.
     ~ErrorLogMessage();
