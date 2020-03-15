@@ -113,7 +113,7 @@ void UserList::setSeedKey(base::ByteArray&& seed_key)
 
 UserList::Iterator::Iterator(const UserList& list)
     : list_(list.list_),
-    pos_(list.list_.cbegin())
+      pos_(list.list_.cbegin())
 {
     // Nothing
 }
