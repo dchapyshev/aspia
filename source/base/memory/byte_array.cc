@@ -21,7 +21,6 @@
 #include "base/logging.h"
 
 #include <algorithm>
-#include <sstream>
 
 namespace base {
 
@@ -39,6 +38,11 @@ int charToHex(char ch)
         return ch - 'A' + 10;
 
     return -1;
+}
+
+char hexToChar(int value)
+{
+    return "0123456789ABCDEF"[value & 0xF];
 }
 
 } // namespace
@@ -77,24 +81,27 @@ ByteArray fromHex(std::string_view in)
     if (in.empty())
         return ByteArray();
 
-    bool high_part = (in.size() % 2) == 0;
-
     ByteArray out;
+    out.resize((in.size() + 1) / 2);
 
-    for (size_t i = 0; i < in.size(); ++i)
+    ByteArray::iterator result = out.end();
+
+    bool is_odd = true;
+    for (auto it = in.crbegin(); it != in.crend(); ++it)
     {
-        int hex = charToHex(in[i]);
+        const int hex = charToHex(*it);
         if (hex == -1)
-            return ByteArray();
+            continue;
 
-        if (high_part)
-            out.emplace_back(0x10 * hex);
+        if (is_odd)
+            *--result = hex;
         else
-            out.back() += hex;
+            *result |= hex << 4;
 
-        high_part = !high_part;
+        is_odd = !is_odd;
     }
 
+    out.erase(out.begin(), result);
     return out;
 }
 
@@ -103,15 +110,18 @@ std::string toHex(const ByteArray& in)
     if (in.empty())
         return std::string();
 
-    std::stringstream stream;
+    std::string out;
+    out.resize(in.size() * 2);
 
-    for (size_t i = 0; i < in.size(); ++i)
+    char *dst = out.data();
+
+    for (const auto& hex : in)
     {
-        stream << std::hex << std::uppercase << std::setw(2) << std::setfill('0')
-               << static_cast<int>(in[i]);
+        *dst++ = hexToChar(hex >> 4);
+        *dst++ = hexToChar(hex & 0xF);
     }
 
-    return stream.str();
+    return out;
 }
 
 int compare(const base::ByteArray& first, const base::ByteArray& second)

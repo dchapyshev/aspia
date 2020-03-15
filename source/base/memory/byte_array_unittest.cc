@@ -101,6 +101,23 @@ TEST(ByteArray, HexConvert)
 
     std::string target_hex = toHex(array);
     EXPECT_EQ(source_hex, target_hex);
+
+    struct Table
+    {
+        const char* hex;
+        const char* expected;
+    } table[] =
+    {
+        { "0B1", "00B1" },
+        { "0", "00" },
+        { " 0", "00" },
+        { "0 ", "00" }
+    };
+
+    for (size_t i = 0; i < std::size(table); ++i)
+    {
+        EXPECT_EQ(toHex(fromHex(table[i].hex)), table[i].expected);
+    }
 }
 
 } // namespace base
