@@ -26,6 +26,8 @@ namespace router {
 class SessionManager : public Session
 {
 public:
+    explicit SessionManager(std::unique_ptr<net::Channel> channel);
+    ~SessionManager();
 
 private:
     DISALLOW_COPY_AND_ASSIGN(SessionManager);

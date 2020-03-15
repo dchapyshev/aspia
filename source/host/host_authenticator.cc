@@ -68,10 +68,7 @@ void Authenticator::start(std::unique_ptr<net::Channel> channel,
 
     state_ = State::PENDING;
 
-    timer_.start(kTimeout, [this]()
-    {
-        onFailed(FROM_HERE);
-    });
+    timer_.start(kTimeout, std::bind(&Authenticator::onFailed, this, FROM_HERE));
 
     channel_->setListener(this);
     channel_->resume();
@@ -125,7 +122,7 @@ void Authenticator::onMessageReceived(const base::ByteArray& buffer)
             if (!(client_hello.encryption() & proto::ENCRYPTION_AES256_GCM) &&
                 !(client_hello.encryption() & proto::ENCRYPTION_CHACHA20_POLY1305))
             {
-                // No authentication methods supported.
+                // No encryption methods supported.
                 onFailed(FROM_HERE);
                 return;
             }
@@ -300,7 +297,7 @@ void Authenticator::onMessageReceived(const base::ByteArray& buffer)
             peer_version_ = base::Version(
                 peer_version.major(), peer_version.minor(), peer_version.patch());
 
-            session_type_ = session_response.session_type();
+            session_type_ = static_cast<proto::SessionType>(session_response.session_type());
 
             LOG(LS_INFO) << "Authentication completed successfully for "
                          << channel_->peerAddress();

@@ -71,7 +71,7 @@ enum Encryption
 message ClientHello
 {
     uint32 encryption = 1;
-    uint32 identify   = 2;
+    Identify identify = 2;
     bytes public_key  = 3;
     bytes iv          = 4;
 }
@@ -80,8 +80,7 @@ message ClientHello
 message ServerHello
 {
     Encryption encryption = 1;
-    Identify identify     = 2;
-    bytes iv              = 3;
+    bytes iv              = 2;
 }
 
 // Client to server.
@@ -118,5 +117,5 @@ message SessionChallenge
 message SessionResponse
 {
     Version version = 1;
-    SessionType session_type = 2;
+    uint32 session_type = 2;
 }

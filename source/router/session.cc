@@ -47,6 +47,16 @@ bool Session::isFinished() const
     return true;
 }
 
+void Session::setVersion(const base::Version& version)
+{
+    version_ = version;
+}
+
+void Session::setUserName(const std::u16string& username)
+{
+    username_ = username;
+}
+
 void Session::onConnected()
 {
     NOTREACHED();

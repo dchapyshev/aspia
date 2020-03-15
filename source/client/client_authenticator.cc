@@ -310,8 +310,6 @@ bool Authenticator::readServerHello(const base::ByteArray& buffer)
     }
 
     encryption_ = server_hello.encryption();
-    identify_ = server_hello.identify();
-
     switch (encryption_)
     {
         case proto::ENCRYPTION_AES256_GCM:

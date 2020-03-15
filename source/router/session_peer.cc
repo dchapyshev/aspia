@@ -18,8 +18,16 @@
 
 #include "router/session_peer.h"
 
+#include "net/network_channel.h"
+
 namespace router {
 
+SessionPeer::SessionPeer(std::unique_ptr<net::Channel> channel)
+    : Session(std::move(channel))
+{
+    // Nothing
+}
 
+SessionPeer::~SessionPeer() = default;
 
 } // namespace router

@@ -18,8 +18,16 @@
 
 #include "router/session_manager.h"
 
+#include "net/network_channel.h"
+
 namespace router {
 
+SessionManager::SessionManager(std::unique_ptr<net::Channel> channel)
+    : Session(std::move(channel))
+{
+    // Nothing
+}
 
+SessionManager::~SessionManager() = default;
 
 } // namespace router

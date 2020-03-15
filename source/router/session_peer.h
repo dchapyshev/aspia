@@ -26,6 +26,8 @@ namespace router {
 class SessionPeer : public Session
 {
 public:
+    explicit SessionPeer(std::unique_ptr<net::Channel> channel);
+    ~SessionPeer();
 
 private:
     DISALLOW_COPY_AND_ASSIGN(SessionPeer);

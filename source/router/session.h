@@ -20,6 +20,7 @@
 #define ROUTER__SESSION_H
 
 #include "base/macros_magic.h"
+#include "base/version.h"
 #include "net/network_listener.h"
 
 #include <memory>
@@ -47,8 +48,12 @@ public:
 
     void start(Delegate* delegate);
 
-    const std::string& peerId() const { return peer_id_; }
     bool isFinished() const;
+
+    void setVersion(const base::Version& version);
+    const base::Version& version() const { return version_; }
+    void setUserName(const std::u16string& username);
+    const std::u16string& userName() const { return username_; }
 
 protected:
     // net::Listener implementation.
@@ -59,7 +64,8 @@ protected:
 
 private:
     std::unique_ptr<net::Channel> channel_;
-    std::string peer_id_;
+    std::u16string username_;
+    base::Version version_;
 
     Delegate* delegate_ = nullptr;
 };

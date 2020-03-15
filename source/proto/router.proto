@@ -20,8 +20,6 @@ syntax = "proto3";
 
 option optimize_for = LITE_RUNTIME;
 
-import "common.proto";
-
 package proto;
 
 enum RouterSession
@@ -29,17 +27,6 @@ enum RouterSession
     ROUTER_SESSION_UNKNOWN = 0;
     ROUTER_SESSION_MANAGER = 1;
     ROUTER_SESSION_PEER    = 2;
-}
-
-message PeerIdChallenge
-{
-    Version version = 1;
-    bytes key       = 2;
-}
-
-message PeerIdResponse
-{
-    string peer_id = 1;
 }
 
 enum ConnectionType
@@ -53,6 +40,16 @@ message EndPoint
 {
     string host = 1;
     uint32 port = 2;
+}
+
+message PeerIdRequest
+{
+    bytes key = 1;
+}
+
+message PeerIdResponse
+{
+    string peer_id = 1;
 }
 
 message ConnectionRequest
@@ -88,13 +85,15 @@ message ConnectionResponse
 
 message RouterToPeer
 {
-    ConnectionRequest connection_request   = 1;
-    ConnectionResponse connection_response = 2;
-    ConnectionOffer connection_offer       = 3;
+    PeerIdResponse peer_id_response        = 1;
+    ConnectionRequest connection_request   = 2;
+    ConnectionResponse connection_response = 3;
+    ConnectionOffer connection_offer       = 4;
 }
 
 message PeerToRouter
 {
-    ConnectionRequest connection_request     = 1;
-    ConnectionCandidate connection_candidate = 2;
+    PeerIdRequest peer_id_request            = 1;
+    ConnectionRequest connection_request     = 2;
+    ConnectionCandidate connection_candidate = 3;
 }
