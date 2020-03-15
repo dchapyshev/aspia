@@ -97,3 +97,167 @@ message PeerToRouter
     ConnectionRequest connection_request     = 2;
     ConnectionCandidate connection_candidate = 3;
 }
+
+message User
+{
+    message Access
+    {
+        uint32 log   = 1;
+        uint32 user  = 2;
+        uint32 proxy = 3;
+    }
+
+    uint64 entry_id = 1;
+    string name     = 2;
+    string password = 3;
+    uint32 sessions = 4;
+    uint32 flags    = 5;
+    Access access   = 6;
+}
+
+message Proxy
+{
+    uint64 entry_id    = 1;
+    EndPoint end_point = 2;
+    uint32 timeout     = 3;
+    bytes private_key  = 4;
+    uint32 flags       = 5;
+}
+
+message Log
+{
+    uint64 entry_id  = 1;
+    uint64 timestamp = 2;
+    string ip        = 3;
+    string peer_id   = 4;
+    string action    = 5;
+}
+
+message UserListRequest
+{
+    uint32 dummy = 1;
+}
+
+message UserListResponse
+{
+    enum ErrorCode
+    {
+        SUCCESS       = 0;
+        ACCESS_DENIED = 1;
+    }
+
+    ErrorCode error_code = 1;
+    repeated User user   = 2;
+}
+
+message UserModifyRequest
+{
+    enum Action
+    {
+        ACTION_ADD    = 0;
+        ACTION_UPDATE = 1;
+        ACTION_DELETE = 2;
+    }
+
+    Action action = 1;
+    User user     = 2;
+}
+
+message UserModifyResponse
+{
+    enum ErrorCode
+    {
+        UNKNOWN          = 0;
+        SUCCESS          = 1;
+        ACCESS_DENIED    = 2;
+        INVALID_ID       = 3;
+        INVALID_NAME     = 4;
+        INVALID_PASSWORD = 5;
+        INVALID_SESSIONS = 6;
+        INVALID_FLAGS    = 7;
+    }
+
+    ErrorCode error_code = 1;
+}
+
+message ProxyListRequest
+{
+    uint32 dummy = 1;
+}
+
+message ProxyListResponse
+{
+    enum ErrorCode
+    {
+        SUCCESS       = 0;
+        ACCESS_DENIED = 1;
+    }
+
+    ErrorCode error_code = 1;
+    repeated Proxy proxy = 2;
+}
+
+message ProxyModifyRequest
+{
+    enum Action
+    {
+        ACTION_ADD    = 0;
+        ACTION_UPDATE = 1;
+        ACTION_DELETE = 2;
+    }
+
+    Action action = 1;
+    Proxy proxy   = 2;
+}
+
+message ProxyModifyResponse
+{
+    enum ErrorCode
+    {
+        UNKNOWN             = 0;
+        SUCCESS             = 1;
+        ACCESS_DENIED       = 2;
+        INVALID_ID          = 3;
+        INVALID_END_POINT   = 4;
+        INVALID_TIMEOUT     = 5;
+        INVALID_PRIVATE_KEY = 6;
+        INVALID_FLAGS       = 7;
+    }
+
+    ErrorCode error_code = 1;
+}
+
+message LogListRequest
+{
+    uint32 dummy = 1;
+}
+
+message LogListResponse
+{
+    enum ErrorCode
+    {
+        SUCCESS       = 0;
+        ACCESS_DENIED = 1;
+    }
+
+    ErrorCode error_code = 1;
+    repeated Log log     = 2;
+}
+
+message RouterToManager
+{
+    UserListResponse user_list_response       = 1;
+    UserModifyResponse user_modify_response   = 2;
+    ProxyListResponse proxy_list_response     = 3;
+    ProxyModifyResponse proxy_modify_response = 4;
+    LogListResponse log_list_response         = 5;
+}
+
+message ManagerToRouter
+{
+    UserListRequest user_list_request       = 1;
+    UserModifyRequest user_modify_request   = 2;
+    ProxyListRequest proxy_list_request     = 3;
+    ProxyModifyRequest proxy_modify_request = 4;
+    LogListRequest log_list_request         = 5;
+}
