@@ -18,7 +18,10 @@
 
 #include "router/ui/proxy_dialog.h"
 
+#include "crypto/key_pair.h"
+
 #include <QAbstractButton>
+#include <QMessageBox>
 
 namespace router {
 
@@ -96,12 +99,67 @@ bool ProxyDialog::isEnabled() const
 
 void ProxyDialog::onCreateKeys()
 {
+    crypto::KeyPair key_pair = crypto::KeyPair::create(crypto::KeyPair::Type::X25519);
+    if (!key_pair.isValid())
+    {
+        QMessageBox::warning(this,
+                             tr("Warning"),
+                             tr("Error generating keys."),
+                             QMessageBox::Ok);
+        return;
+    }
 
+    ui.edit_private_key->setPlainText(
+        QString::fromStdString(base::toHex(key_pair.privateKey())));
+    ui.edit_public_key->setPlainText(
+        QString::fromStdString(base::toHex(key_pair.publicKey())));
 }
 
 void ProxyDialog::onCheckKeys()
 {
+    base::ByteArray private_key = base::fromHex(ui.edit_private_key->toPlainText().toStdString());
+    if (private_key.empty())
+    {
+        QMessageBox::warning(this,
+                             tr("Warning"),
+                             tr("Private key not entered."),
+                             QMessageBox::Ok);
+        return;
+    }
 
+    base::ByteArray public_key = base::fromHex(ui.edit_public_key->toPlainText().toStdString());
+    if (public_key.empty())
+    {
+        QMessageBox::warning(this,
+                             tr("Warning"),
+                             tr("Public key not entered."),
+                             QMessageBox::Ok);
+        return;
+    }
+
+    crypto::KeyPair key_pair = crypto::KeyPair::fromPrivateKey(private_key);
+    if (!key_pair.isValid())
+    {
+        QMessageBox::warning(this,
+                             tr("Warning"),
+                             tr("Invalid private key entered."),
+                             QMessageBox::Ok);
+        return;
+    }
+
+    if (base::compare(public_key, key_pair.publicKey()) != 0)
+    {
+        QMessageBox::warning(this,
+                             tr("Warning"),
+                             tr("An invalid key pair has been entered."),
+                             QMessageBox::Ok);
+        return;
+    }
+
+    QMessageBox::information(this,
+                             tr("Information"),
+                             tr("The correct key pair has been entered."),
+                             QMessageBox::Ok);
 }
 
 void ProxyDialog::onButtonBoxClicked(QAbstractButton* button)

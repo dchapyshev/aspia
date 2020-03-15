@@ -207,17 +207,17 @@
         <translation>Открытый ключ:</translation>
     </message>
     <message>
-        <location filename="../proxy_dialog.ui" line="126"/>
+        <location filename="../proxy_dialog.ui" line="130"/>
         <source>Create keys</source>
         <translation>Создать ключи</translation>
     </message>
     <message>
-        <location filename="../proxy_dialog.ui" line="133"/>
+        <location filename="../proxy_dialog.ui" line="137"/>
         <source>Check keys</source>
         <translation>Проверить ключи</translation>
     </message>
     <message>
-        <location filename="../proxy_dialog.ui" line="142"/>
+        <location filename="../proxy_dialog.ui" line="146"/>
         <source>Enable</source>
         <translation>Включить</translation>
     </message>
@@ -257,6 +257,53 @@
         <location filename="../channel.cc" line="155"/>
         <source>Unknown internal error: message with incorrect size.</source>
         <translation>Неизвестная внутренняя ошибка: сообщение с некорректным размером.</translation>
+    </message>
+</context>
+<context>
+    <name>router::ProxyDialog</name>
+    <message>
+        <location filename="../proxy_dialog.cc" line="106"/>
+        <location filename="../proxy_dialog.cc" line="124"/>
+        <location filename="../proxy_dialog.cc" line="134"/>
+        <location filename="../proxy_dialog.cc" line="144"/>
+        <location filename="../proxy_dialog.cc" line="153"/>
+        <source>Warning</source>
+        <translation type="unfinished">Предупреждение</translation>
+    </message>
+    <message>
+        <location filename="../proxy_dialog.cc" line="107"/>
+        <source>Error generating keys.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../proxy_dialog.cc" line="125"/>
+        <source>Private key not entered.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../proxy_dialog.cc" line="135"/>
+        <source>Public key not entered.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../proxy_dialog.cc" line="145"/>
+        <source>Invalid private key entered.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../proxy_dialog.cc" line="154"/>
+        <source>An invalid key pair has been entered.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../proxy_dialog.cc" line="160"/>
+        <source>Information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../proxy_dialog.cc" line="161"/>
+        <source>The correct key pair has been entered.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
