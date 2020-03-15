@@ -79,6 +79,9 @@ KeyPair KeyPair::create(Type type)
 // static
 KeyPair KeyPair::fromPrivateKey(const base::ByteArray& private_key)
 {
+    if (private_key.empty())
+        return KeyPair();
+
     return KeyPair(EVP_PKEY_ptr(EVP_PKEY_new_raw_private_key(
         EVP_PKEY_X25519, nullptr, private_key.data(), private_key.size())));
 }
@@ -158,6 +161,9 @@ base::ByteArray KeyPair::publicKey() const
 
 base::ByteArray KeyPair::sessionKey(const base::ByteArray& peer_public_key) const
 {
+    if (peer_public_key.empty())
+        return base::ByteArray();
+
     EVP_PKEY_ptr public_key(EVP_PKEY_new_raw_public_key(
         EVP_PKEY_X25519, nullptr, peer_public_key.data(), peer_public_key.size()));
     if (!public_key)
