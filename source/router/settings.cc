@@ -35,7 +35,7 @@ uint16_t Settings::port() const
 
 base::ByteArray Settings::privateKey() const
 {
-    return impl_.get<base::ByteArray>("PrivateKey");
+    return base::fromHex(impl_.get<std::string>("PrivateKey"));
 }
 
 } // namespace router
