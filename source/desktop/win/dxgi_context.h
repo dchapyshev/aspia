@@ -41,6 +41,7 @@ struct DxgiAdapterContext final
 {
     DxgiAdapterContext();
     DxgiAdapterContext(const DxgiAdapterContext& other);
+    DxgiAdapterContext& operator=(const DxgiAdapterContext& other);
     ~DxgiAdapterContext();
 
     // Child DxgiOutputContext belongs to this AdapterContext.

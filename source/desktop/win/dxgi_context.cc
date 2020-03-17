@@ -24,6 +24,7 @@ namespace desktop {
 
 DxgiAdapterContext::DxgiAdapterContext() = default;
 DxgiAdapterContext::DxgiAdapterContext(const DxgiAdapterContext& context) = default;
+DxgiAdapterContext& DxgiAdapterContext::operator=(const DxgiAdapterContext& other) = default;
 DxgiAdapterContext::~DxgiAdapterContext() = default;
 
 DxgiFrameContext::DxgiFrameContext(std::shared_ptr<DxgiDuplicatorController>& controller)
