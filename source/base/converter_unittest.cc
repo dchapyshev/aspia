@@ -67,7 +67,7 @@ TEST(converter_test, for_bool)
         {
             EXPECT_EQ(result.value(), kTable[i].expected_value);
 
-            std::optional<std::string> string = Converter<bool>::set_value(result.value());
+            std::string string = Converter<bool>::set_value(result.value());
 
             EXPECT_EQ(string, result.value() ? "true" : "false");
         }
@@ -112,13 +112,8 @@ TEST(converter_test, for_string)
 
     for (size_t i = 0; i < std::size(kTableForSet); ++i)
     {
-        std::optional<std::string> result =
-            Converter<std::string>::set_value(kTableForSet[i].source_value);
-
-        EXPECT_EQ(result.has_value(), kTableForSet[i].expected_has_value);
-
-        if (result.has_value())
-            EXPECT_EQ(result.value(), kTableForSet[i].expected_value);
+        std::string result = Converter<std::string>::set_value(kTableForSet[i].source_value);
+        EXPECT_EQ(result, kTableForSet[i].expected_value);
     }
 }
 
