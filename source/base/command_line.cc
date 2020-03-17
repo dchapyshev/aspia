@@ -83,9 +83,8 @@ void appendSwitchesAndArguments(CommandLine* command_line, const CommandLine::St
 
     for (size_t i = 1; i < argv.size(); ++i)
     {
-        std::u16string arg = argv[i];
-
-        trimWhitespace(arg, TRIM_ALL, arg);
+        std::u16string arg;
+        trimWhitespace(argv[i], TRIM_ALL, &arg);
 
         std::u16string switch_string;
         std::u16string switch_value;
@@ -274,7 +273,7 @@ std::filesystem::path CommandLine::program() const
 
 void CommandLine::setProgram(const std::filesystem::path& program)
 {
-    trimWhitespace(program.u16string(), TRIM_ALL, argv_[0]);
+    trimWhitespace(program.u16string(), TRIM_ALL, &argv_[0]);
 }
 
 bool CommandLine::isEmpty() const

@@ -103,7 +103,7 @@ std::string smbiosString(const SmbiosTable* table, uint8_t number)
     }
 
     std::string result;
-    trimWhitespaceASCII(string, TRIM_ALL, result);
+    trimWhitespaceASCII(string, TRIM_ALL, &result);
     return result;
 }
 

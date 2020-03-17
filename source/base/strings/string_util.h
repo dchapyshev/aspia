@@ -80,8 +80,8 @@ enum TrimPositions
 //
 // It is safe to use the same variable for both |input| and |output| (this is
 // the normal usage to trim in-place).
-bool trimString(const std::string& input, std::string_view trim_chars, std::string& output);
-bool trimString(const std::u16string& input, std::u16string_view trim_chars, std::u16string& output);
+bool trimString(std::string_view input, std::string_view trim_chars, std::string* output);
+bool trimString(std::u16string_view input, std::u16string_view trim_chars, std::u16string* output);
 
 // string_view versions of the above. The returned pieces refer to the original buffer.
 std::u16string_view trimString(std::u16string_view input,
@@ -98,14 +98,14 @@ std::string_view trimString(std::string_view input,
 //
 // The std::string versions return where whitespace was found.
 // NOTE: Safe to use the same variable for both input and output.
-TrimPositions trimWhitespace(const std::u16string& input,
+TrimPositions trimWhitespace(std::u16string_view input,
                              TrimPositions positions,
-                             std::u16string& output);
+                             std::u16string* output);
 std::u16string_view trimWhitespace(std::u16string_view input, TrimPositions positions);
 
-TrimPositions trimWhitespaceASCII(const std::string& input,
+TrimPositions trimWhitespaceASCII(std::string_view input,
                                   TrimPositions positions,
-                                  std::string& output);
+                                  std::string* output);
 std::string_view trimWhitespaceASCII(std::string_view input, TrimPositions positions);
 
 void removeChars(std::string* str, std::string_view substr);

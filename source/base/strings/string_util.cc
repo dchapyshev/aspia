@@ -417,41 +417,41 @@ bool endsWith(std::wstring_view str, std::wstring_view search_for)
 
 namespace {
 
-template <class Str>
-TrimPositions trimStringT(const Str& input,
-    const typename Str::value_type* trim_chars,
-    TrimPositions positions,
-    Str& output)
+template <typename CharType>
+TrimPositions trimStringT(std::basic_string_view<CharType> input,
+                          std::basic_string_view<CharType> trim_chars,
+                          TrimPositions positions,
+                          std::basic_string<CharType>* output)
 {
     // Find the edges of leading/trailing whitespace as desired. Need to use
     // a StringPiece version of input to be able to call find* on it with the
     // StringPiece version of trim_chars (normally the trim_chars will be a
     // constant so avoid making a copy).
-    Str input_piece(input);
     const size_t last_char = input.length() - 1;
     const size_t first_good_char = (positions & TRIM_LEADING) ?
-        input_piece.find_first_not_of(trim_chars) : 0;
+        input.find_first_not_of(trim_chars) : 0;
     const size_t last_good_char = (positions & TRIM_TRAILING) ?
-        input_piece.find_last_not_of(trim_chars) : last_char;
+        input.find_last_not_of(trim_chars) : last_char;
 
     // When the string was all trimmed, report that we stripped off characters
     // from whichever position the caller was interested in. For empty input, we
     // stripped no characters, but we still need to clear |output|.
     if (input.empty() ||
-        (first_good_char == Str::npos) || (last_good_char == Str::npos))
+        first_good_char == std::basic_string_view<CharType>::npos ||
+        last_good_char == std::basic_string_view<CharType>::npos)
     {
         bool input_was_empty = input.empty();  // in case output == &input
-        output.clear();
+        output->clear();
         return input_was_empty ? TRIM_NONE : positions;
     }
 
     // Trim.
-    output = input.substr(first_good_char, last_good_char - first_good_char + 1);
+    output->assign(input.data() + first_good_char, last_good_char - first_good_char + 1);
 
     // Return where we trimmed from.
     return static_cast<TrimPositions>(
-        ((first_good_char == 0) ? TRIM_NONE : TRIM_LEADING) |
-        ((last_good_char == last_char) ? TRIM_NONE : TRIM_TRAILING));
+        (first_good_char == 0 ? TRIM_NONE : TRIM_LEADING) |
+        (last_good_char == last_char ? TRIM_NONE : TRIM_TRAILING));
 }
 
 template <typename StringType>
@@ -471,14 +471,14 @@ StringType trimStringViewT(StringType input, StringType trim_chars, TrimPosition
 
 } // namespace
 
-bool trimString(const std::string& input, std::string_view trim_chars, std::string& output)
+bool trimString(std::string_view input, std::string_view trim_chars, std::string* output)
 {
-    return trimStringT(input, trim_chars.data(), TRIM_ALL, output) != TRIM_NONE;
+    return trimStringT(input, trim_chars, TRIM_ALL, output) != TRIM_NONE;
 }
 
-bool trimString(const std::u16string& input, std::u16string_view trim_chars, std::u16string& output)
+bool trimString(std::u16string_view input, std::u16string_view trim_chars, std::u16string* output)
 {
-    return trimStringT(input, trim_chars.data(), TRIM_ALL, output) != TRIM_NONE;
+    return trimStringT(input, trim_chars, TRIM_ALL, output) != TRIM_NONE;
 }
 
 std::u16string_view trimString(std::u16string_view input,
@@ -495,11 +495,11 @@ std::string_view trimString(std::string_view input,
     return trimStringViewT(input, trim_chars, positions);
 }
 
-TrimPositions trimWhitespace(const std::u16string& input,
+TrimPositions trimWhitespace(std::u16string_view input,
                              TrimPositions positions,
-                             std::u16string& output)
+                             std::u16string* output)
 {
-    return trimStringT(input, kWhitespaceUtf16, positions, output);
+    return trimStringT(input, std::u16string_view(kWhitespaceUtf16), positions, output);
 }
 
 std::u16string_view trimWhitespace(std::u16string_view input, TrimPositions positions)
@@ -507,11 +507,11 @@ std::u16string_view trimWhitespace(std::u16string_view input, TrimPositions posi
     return trimStringViewT(input, std::u16string_view(kWhitespaceUtf16), positions);
 }
 
-TrimPositions trimWhitespaceASCII(const std::string& input,
+TrimPositions trimWhitespaceASCII(std::string_view input,
                                   TrimPositions positions,
-                                  std::string& output)
+                                  std::string* output)
 {
-    return trimStringT(input, kWhitespaceASCII, positions, output);
+    return trimStringT(input, std::string_view(kWhitespaceASCII), positions, output);
 }
 
 std::string_view trimWhitespaceASCII(std::string_view input, TrimPositions positions)
