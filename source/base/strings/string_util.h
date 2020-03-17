@@ -25,29 +25,29 @@
 
 namespace base {
 
-std::string replaceLfByCrLf(const std::string& in);
-std::string replaceCrLfByLf(const std::string& in);
+std::string replaceLfByCrLf(std::string_view in);
+std::string replaceCrLfByLf(std::string_view in);
 
-bool isStringUTF8(const char* data, size_t length);
-bool isStringUTF8(const std::string& string);
+bool isStringUTF8(std::string_view str);
+bool isStringASCII(std::string_view str);
+bool isStringASCII(std::u16string_view str);
 
-bool isStringASCII(const char* data, size_t length);
-bool isStringASCII(const std::string& string);
-
-bool isStringASCII(const wchar_t* data, size_t length);
-bool isStringASCII(const std::wstring& string);
-
-// Searches  for CR or LF characters. Removes all contiguous whitespace
-// strings that contain them. This is useful when trying to deal with text
-// copied from terminals.
+// Searches for CR or LF characters. Removes all contiguous whitespace strings that contain them.
+// This is useful when trying to deal with text copied from terminals.
 // Returns |text|, with the following three transformations:
 // (1) Leading and trailing whitespace is trimmed.
 // (2) If |trim_sequences_with_line_breaks| is true, any other whitespace
 //     sequences containing a CR or LF are trimmed.
 // (3) All other whitespace sequences are converted to single spaces.
-std::wstring collapseWhitespace(const std::wstring& text,
+std::u16string collapseWhitespace(std::u16string_view text,
+                                  bool trim_sequences_with_line_breaks);
+
+#if defined(OS_WIN)
+std::wstring collapseWhitespace(std::wstring_view text,
                                 bool trim_sequences_with_line_breaks);
-std::string collapseWhitespaceASCII(const std::string& text,
+#endif // defined(OS_WIN)
+
+std::string collapseWhitespaceASCII(std::string_view text,
                                     bool trim_sequences_with_line_breaks);
 
 int compareCaseInsensitiveASCII(std::string_view first, std::string_view second);

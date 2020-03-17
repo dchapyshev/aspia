@@ -117,10 +117,11 @@ bool doIsStringASCII(const Char* characters, size_t length)
     return !(all_char_bits & non_ascii_bit_mask);
 }
 
-template<typename STR>
-STR collapseWhitespaceT(const STR& text, bool trim_sequences_with_line_breaks)
+template<typename CharType>
+std::basic_string<CharType> collapseWhitespaceT(
+    std::basic_string_view<CharType> text, bool trim_sequences_with_line_breaks)
 {
-    STR result;
+    std::basic_string<CharType> result;
     result.resize(text.size());
 
     // Set flags to pretend we're already in a trimmed whitespace sequence, so we
@@ -129,7 +130,7 @@ STR collapseWhitespaceT(const STR& text, bool trim_sequences_with_line_breaks)
     bool already_trimmed = true;
 
     int chars_written = 0;
-    for (typename STR::const_iterator i(text.begin()); i != text.end(); ++i)
+    for (std::basic_string_view<CharType>::const_iterator i(text.begin()); i != text.end(); ++i)
     {
         if (isUnicodeWhitespace(*i))
         {
@@ -177,7 +178,7 @@ void removeCharsT(StringType* str, std::basic_string_view<typename StringType::v
 
 } // namespace
 
-std::string replaceLfByCrLf(const std::string& in)
+std::string replaceLfByCrLf(std::string_view in)
 {
     std::string out;
 
@@ -202,7 +203,7 @@ std::string replaceLfByCrLf(const std::string& in)
     return out;
 }
 
-std::string replaceCrLfByLf(const std::string& in)
+std::string replaceCrLfByLf(std::string_view in)
 {
     std::string out;
 
@@ -232,10 +233,10 @@ std::string replaceCrLfByLf(const std::string& in)
     return out;
 }
 
-bool isStringUTF8(const char* data, size_t length)
+bool isStringUTF8(std::string_view str)
 {
-    const char* ptr = data;
-    const char* ptr_end = data + length;
+    const char* ptr = str.data();
+    const char* ptr_end = str.data() + str.length();
 
     while (ptr != ptr_end)
     {
@@ -273,27 +274,12 @@ bool isStringUTF8(const char* data, size_t length)
     return true;
 }
 
-bool isStringUTF8(const std::string& string)
-{
-    return isStringUTF8(string.data(), string.length());
-}
-
-bool isStringASCII(const char* data, size_t length)
-{
-    return doIsStringASCII(data, length);
-}
-
-bool isStringASCII(const std::string& string)
+bool isStringASCII(std::string_view string)
 {
     return doIsStringASCII(string.data(), string.length());
 }
 
-bool isStringASCII(const wchar_t* data, size_t length)
-{
-    return doIsStringASCII(data, length);
-}
-
-bool isStringASCII(const std::wstring& string)
+bool isStringASCII(std::u16string_view string)
 {
     return doIsStringASCII(string.data(), string.length());
 }
@@ -309,13 +295,21 @@ bool isUnicodeWhitespace(wchar_t c)
     return false;
 }
 
-std::wstring collapseWhitespace(const std::wstring& text,
-                                bool trim_sequences_with_line_breaks)
+std::u16string collapseWhitespace(std::u16string_view text,
+                                  bool trim_sequences_with_line_breaks)
 {
     return collapseWhitespaceT(text, trim_sequences_with_line_breaks);
 }
 
-std::string collapseWhitespaceASCII(const std::string& text,
+#if defined(OS_WIN)
+std::wstring collapseWhitespace(std::wstring_view text,
+                                bool trim_sequences_with_line_breaks)
+{
+    return collapseWhitespaceT(text, trim_sequences_with_line_breaks);
+}
+#endif // defined(OS_WIN)
+
+std::string collapseWhitespaceASCII(std::string_view text,
                                     bool trim_sequences_with_line_breaks)
 {
     return collapseWhitespaceT(text, trim_sequences_with_line_breaks);
