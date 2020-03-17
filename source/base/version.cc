@@ -66,7 +66,7 @@ std::vector<std::string_view> splitString(std::string_view str, char separator)
 // constructs a vector of valid integers. It stops when it reaches an invalid item (including the
 // wildcard character). |parsed| is the resulting integer vector. Function returns true if all
 // numbers were parsed successfully, false otherwise.
-bool parseVersionNumbers(const std::string& version_str, std::vector<uint32_t>* parsed)
+bool parseVersionNumbers(std::string_view version_str, std::vector<uint32_t>* parsed)
 {
     std::vector<std::string_view> numbers = splitString(version_str, '.');
     if (numbers.empty())
@@ -157,7 +157,7 @@ Version::Version(uint32_t major, uint32_t minor, uint32_t build, uint32_t revisi
 
 Version::~Version() = default;
 
-Version::Version(const std::string& version_str)
+Version::Version(std::string_view version_str)
 {
     std::vector<uint32_t> parsed;
 
@@ -179,9 +179,9 @@ bool Version::isValid() const
 }
 
 // static
-bool Version::isValidWildcardString(const std::string& wildcard_string)
+bool Version::isValidWildcardString(std::string_view wildcard_string)
 {
-    std::string version_string = wildcard_string;
+    std::string version_string(wildcard_string);
     if (endsWith(version_string, ".*"))
         version_string.resize(version_string.size() - 2);
 
@@ -189,7 +189,7 @@ bool Version::isValidWildcardString(const std::string& wildcard_string)
     return version.isValid();
 }
 
-int Version::compareToWildcardString(const std::string& wildcard_string) const
+int Version::compareToWildcardString(std::string_view wildcard_string) const
 {
     DCHECK(isValid());
     DCHECK(Version::isValidWildcardString(wildcard_string));

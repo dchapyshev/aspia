@@ -43,7 +43,7 @@ public:
 
     // Initializes from a decimal dotted version number, like "0.1.1".
     // Each component is limited to a uint16_t. Call isValid() to learn the outcome.
-    explicit Version(const std::string& version_str);
+    explicit Version(std::string_view version_str);
 
     // Initializes from a vector of components, like {1, 2, 3, 4}. Call isValid() to learn the
     // outcome.
@@ -57,7 +57,7 @@ public:
     // Returns true if the version wildcard string is valid. The version wildcard string may end
     // with ".*" (e.g. 1.2.*, 1.*). Any other arrangement with "*" is invalid (e.g. 1.*.3 or 1.2.3*).
     // This functions defaults to standard Version behavior (isValid) if no wildcard is present.
-    static bool isValidWildcardString(const std::string& wildcard_string);
+    static bool isValidWildcardString(std::string_view wildcard_string);
 
     // Returns -1, 0, 1 for <, ==, >.
     int compareTo(const Version& other) const;
@@ -65,7 +65,7 @@ public:
     // Given a valid version object, compare if a |wildcard_string| results in a newer version.
     // This function will default to CompareTo if the string does not end in wildcard sequence
     // ".*". isValidWildcard(wildcard_string) must be true before using this function.
-    int compareToWildcardString(const std::string& wildcard_string) const;
+    int compareToWildcardString(std::string_view wildcard_string) const;
 
     // Return the string representation of this version.
     const std::string toString() const;
