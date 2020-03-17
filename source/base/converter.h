@@ -82,28 +82,84 @@ struct ConverterImpl<ByteArray>
 };
 
 template <>
-struct ConverterImpl<int>
+struct ConverterImpl<int64_t>
 {
-    static bool fromString(std::string_view str, int* value)
+    static bool fromString(std::string_view str, int64_t* value)
     {
-        return stringToInt(str, value);
+        return stringToInt64(str, value);
     }
 
-    static std::string toString(int value)
+    static std::string toString(int64_t value)
     {
         return numberToString(value);
     }
 };
 
 template <>
-struct ConverterImpl<size_t>
+struct ConverterImpl<int32_t>
 {
-    static bool fromString(std::string_view str, size_t* value)
+    static bool fromString(std::string_view str, int32_t* value)
     {
-        return stringToSizeT(str, value);
+        return stringToInt(str, value);
     }
 
-    static std::string toString(size_t value)
+    static std::string toString(int32_t value)
+    {
+        return numberToString(value);
+    }
+};
+
+template <>
+struct ConverterImpl<int16_t>
+{
+    static bool fromString(std::string_view str, int16_t* value)
+    {
+        return stringToShort(str, value);
+    }
+
+    static std::string toString(int16_t value)
+    {
+        return numberToString(value);
+    }
+};
+
+template <>
+struct ConverterImpl<int8_t>
+{
+    static bool fromString(std::string_view str, int8_t* value)
+    {
+        return stringToChar(str, value);
+    }
+
+    static std::string toString(int8_t value)
+    {
+        return numberToString(value);
+    }
+};
+
+template <>
+struct ConverterImpl<uint64_t>
+{
+    static bool fromString(std::string_view str, uint64_t* value)
+    {
+        return stringToUint64(str, value);
+    }
+
+    static std::string toString(uint64_t value)
+    {
+        return numberToString(value);
+    }
+};
+
+template <>
+struct ConverterImpl<uint32_t>
+{
+    static bool fromString(std::string_view str, uint32_t* value)
+    {
+        return stringToUint(str, value);
+    }
+
+    static std::string toString(uint32_t value)
     {
         return numberToString(value);
     }
@@ -117,7 +173,21 @@ struct ConverterImpl<uint16_t>
         return stringToUShort(str, value);
     }
 
-    static std::string toString(size_t value)
+    static std::string toString(uint16_t value)
+    {
+        return numberToString(value);
+    }
+};
+
+template <>
+struct ConverterImpl<uint8_t>
+{
+    static bool fromString(std::string_view str, uint8_t* value)
+    {
+        return stringToUChar(str, value);
+    }
+
+    static std::string toString(uint8_t value)
     {
         return numberToString(value);
     }

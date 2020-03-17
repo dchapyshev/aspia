@@ -379,12 +379,42 @@ bool stringToInt(std::u16string_view input, int* output)
     return string16ToIntImpl(input, output);
 }
 
-bool stringToUint(std::string_view input, unsigned* output)
+bool stringToUint(std::string_view input, unsigned int* output)
 {
     return stringToIntImpl(input, output);
 }
 
-bool stringToUint(std::u16string_view input, unsigned* output)
+bool stringToUint(std::u16string_view input, unsigned int* output)
+{
+    return string16ToIntImpl(input, output);
+}
+
+bool stringToChar(std::string_view input, signed char* output)
+{
+    return stringToIntImpl(input, output);
+}
+
+bool stringToChar(std::u16string_view input, signed char* output)
+{
+    return string16ToIntImpl(input, output);
+}
+
+bool stringToShort(std::string_view input, short* output)
+{
+    return stringToIntImpl(input, output);
+}
+
+bool stringToShort(std::u16string_view input, short* output)
+{
+    return string16ToIntImpl(input, output);
+}
+
+bool stringToUChar(std::string_view input, unsigned char* output)
+{
+    return stringToIntImpl(input, output);
+}
+
+bool stringToUChar(std::u16string_view input, unsigned char* output)
 {
     return string16ToIntImpl(input, output);
 }
@@ -429,16 +459,6 @@ bool stringToUint64(std::u16string_view input, uint64_t* output)
     return string16ToIntImpl(input, output);
 }
 
-bool stringToSizeT(std::string_view input, size_t* output)
-{
-    return stringToIntImpl(input, output);
-}
-
-bool stringToSizeT(std::u16string_view input, size_t* output)
-{
-    return string16ToIntImpl(input, output);
-}
-
 std::string numberToString(int value)
 {
     return IntToStringT<std::string, int>::IntToString(value);
@@ -467,6 +487,36 @@ std::string numberToString(long value)
 std::u16string numberToString16(long value)
 {
     return IntToStringT<std::u16string, long>::IntToString(value);
+}
+
+std::string numberToString(signed char value)
+{
+    return IntToStringT<std::string, signed char>::IntToString(value);
+}
+
+std::u16string numberToString16(signed char value)
+{
+    return IntToStringT<std::u16string, signed char>::IntToString(value);
+}
+
+std::string numberToString(short value)
+{
+    return IntToStringT<std::string, short>::IntToString(value);
+}
+
+std::u16string numberToString16(short value)
+{
+    return IntToStringT<std::u16string, short>::IntToString(value);
+}
+
+std::string numberToString(unsigned char value)
+{
+    return IntToStringT<std::string, unsigned char>::IntToString(value);
+}
+
+std::u16string numberToString16(unsigned char value)
+{
+    return IntToStringT<std::u16string, unsigned char>::IntToString(value);
 }
 
 std::string numberToString(unsigned short value)
