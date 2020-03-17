@@ -226,7 +226,7 @@ void DesktopSessionIpc::onEncodeFrame(const proto::internal::EncodeFrame& encode
             delegate_->onScreenCaptured(*frame);
     }
 
-    if (encode_frame.has_mouse_cursor())
+    if (encode_frame.has_mouse_cursor() && delegate_)
     {
         const proto::internal::SerializedMouseCursor& serialized_mouse_cursor =
             encode_frame.mouse_cursor();
@@ -242,11 +242,8 @@ void DesktopSessionIpc::onEncodeFrame(const proto::internal::EncodeFrame& encode
 
         memcpy(data.get(), serialized_data.data(), serialized_data.size());
 
-        if (delegate_)
-        {
-            delegate_->onCursorCaptured(
-                std::make_shared<desktop::MouseCursor>(std::move(data), size, hotspot));
-        }
+        delegate_->onCursorCaptured(
+            std::make_shared<desktop::MouseCursor>(std::move(data), size, hotspot));
     }
 
     outgoing_message_.Clear();
