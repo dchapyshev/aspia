@@ -28,7 +28,9 @@ using Microsoft::WRL::ComPtr;
 
 D3dDevice::D3dDevice() = default;
 D3dDevice::D3dDevice(const D3dDevice& other) = default;
+D3dDevice& D3dDevice::operator=(const D3dDevice& other) = default;
 D3dDevice::D3dDevice(D3dDevice&& other) = default;
+D3dDevice& D3dDevice::operator=(D3dDevice&& other) = default;
 D3dDevice::~D3dDevice() = default;
 
 bool D3dDevice::initialize(const ComPtr<IDXGIAdapter>& adapter)

@@ -34,7 +34,9 @@ class D3dDevice
 {
 public:
     D3dDevice(const D3dDevice& other);
+    D3dDevice& operator=(const D3dDevice& other);
     D3dDevice(D3dDevice&& other);
+    D3dDevice& operator=(D3dDevice&& other);
     ~D3dDevice();
 
     ID3D11Device* d3dDevice() const { return d3d_device_.Get(); }
