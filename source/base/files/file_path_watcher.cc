@@ -40,8 +40,8 @@ bool FilePathWatcher::recursiveWatchAvailable()
 #endif
 }
 
-FilePathWatcher::PlatformDelegate::PlatformDelegate(std::shared_ptr<TaskRunner>& task_runner)
-    : task_runner_(task_runner),
+FilePathWatcher::PlatformDelegate::PlatformDelegate(std::shared_ptr<TaskRunner> task_runner)
+    : task_runner_(std::move(task_runner)),
       cancelled_(false)
 {
     // Nothing

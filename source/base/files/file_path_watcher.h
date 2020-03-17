@@ -50,7 +50,7 @@ public:
     class PlatformDelegate
     {
     public:
-        explicit PlatformDelegate(std::shared_ptr<TaskRunner>& task_runner);
+        explicit PlatformDelegate(std::shared_ptr<TaskRunner> task_runner);
         virtual ~PlatformDelegate();
 
         // Start watching for the given |path| and notify |delegate| about changes.
@@ -88,7 +88,7 @@ public:
         DISALLOW_COPY_AND_ASSIGN(PlatformDelegate);
     };
 
-    explicit FilePathWatcher(std::shared_ptr<TaskRunner>& task_runner);
+    explicit FilePathWatcher(std::shared_ptr<TaskRunner> task_runner);
     ~FilePathWatcher();
 
     // Returns true if the platform and OS version support recursive watches.

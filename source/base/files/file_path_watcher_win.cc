@@ -30,7 +30,7 @@ class FilePathWatcherImpl : public FilePathWatcher::PlatformDelegate,
                             public base::win::ObjectWatcher::Delegate
 {
 public:
-    FilePathWatcherImpl(std::shared_ptr<TaskRunner>& task_runner);
+    FilePathWatcherImpl(std::shared_ptr<TaskRunner> task_runner);
     ~FilePathWatcherImpl() override;
 
     // FilePathWatcher::PlatformDelegate implementation.
@@ -88,7 +88,7 @@ private:
     DISALLOW_COPY_AND_ASSIGN(FilePathWatcherImpl);
 };
 
-FilePathWatcherImpl::FilePathWatcherImpl(std::shared_ptr<TaskRunner>& task_runner)
+FilePathWatcherImpl::FilePathWatcherImpl(std::shared_ptr<TaskRunner> task_runner)
     : FilePathWatcher::PlatformDelegate(task_runner),
       watcher_(task_runner)
 {
@@ -332,9 +332,9 @@ void FilePathWatcherImpl::destroyWatch()
 
 }  // namespace
 
-FilePathWatcher::FilePathWatcher(std::shared_ptr<TaskRunner>& task_runner)
+FilePathWatcher::FilePathWatcher(std::shared_ptr<TaskRunner> task_runner)
 {
-    impl_ = std::make_unique<FilePathWatcherImpl>(task_runner);
+    impl_ = std::make_unique<FilePathWatcherImpl>(std::move(task_runner));
 }
 
 } // namespace base
