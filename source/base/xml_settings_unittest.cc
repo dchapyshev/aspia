@@ -24,6 +24,20 @@
 
 namespace base {
 
+namespace {
+
+bool removeFile(const std::filesystem::path& file_path)
+{
+    std::error_code ignored_code;
+
+    if (!std::filesystem::remove(file_path, ignored_code))
+        return false;
+
+    return std::filesystem::remove(file_path.parent_path(), ignored_code);
+}
+
+} // namespace
+
 TEST(XmlSettingsTest, SettingsTest)
 {
     static const base::ByteArray kSeedKey = base::fromHex("0FB4A836124156ABFF4E1212");
@@ -97,12 +111,38 @@ TEST(XmlSettingsTest, SettingsTest)
     std::filesystem::path file_path = settings->filePath();
     settings.reset();
 
-    std::error_code ignored_code;
-
-    bool ret = std::filesystem::remove(file_path, ignored_code);
+    bool ret = removeFile(file_path);
     EXPECT_TRUE(ret);
+}
 
-    ret = std::filesystem::remove(file_path.parent_path(), ignored_code);
+TEST(XmlSettingsTest, DISABLED_Performance)
+{
+    std::unique_ptr<XmlSettings> settings =
+        std::make_unique<XmlSettings>(XmlSettings::Scope::USER, "test", "temp.xml");
+
+    for (size_t i = 0; i < 1000000; ++i)
+    {
+        settings->set<bool>("key1", true);
+
+        Settings group1;
+        group1.set<bool>("value1", true);
+        group1.set<bool>("value2", true);
+
+        settings->setGroup("group", group1);
+
+        Settings group2 = settings->getGroup("group");
+        EXPECT_TRUE(group2.get<bool>("value1"));
+        EXPECT_TRUE(group2.get<bool>("value2"));
+
+        EXPECT_TRUE(settings->get<bool>("key1"));
+
+        settings->remove("group");
+    }
+
+    std::filesystem::path file_path = settings->filePath();
+    settings.reset();
+
+    bool ret = removeFile(file_path);
     EXPECT_TRUE(ret);
 }
 

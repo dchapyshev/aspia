@@ -19,26 +19,40 @@
 #ifndef BASE__SETTINGS_H
 #define BASE__SETTINGS_H
 
-#include "base/stream_converter.h"
+#include "base/converter.h"
 
 #include <map>
 #include <vector>
 
 namespace base {
 
+namespace internal {
+
+struct StringLess
+{
+    using is_transparent = void;
+
+    bool operator()(std::string_view lhs, std::string_view rhs) const
+    {
+        return lhs < rhs;
+    }
+};
+
+} // namespace internal
+
 class Settings
 {
 public:
-    using Map = std::map<std::string, std::string>;
+    using Map = std::map<std::string, std::string, internal::StringLess>;
     using Array = std::vector<Settings>;
 
-    static const char kSeparator = '/';
+    static const std::string_view kSeparator;
 
     Settings() = default;
     virtual ~Settings() = default;
 
-    Settings(const Settings& other) = default;
-    Settings& operator=(const Settings& other) = default;
+    Settings(const Settings& other);
+    Settings& operator=(const Settings& other);
 
     Settings(Settings&& other) noexcept = default;
     Settings& operator=(Settings&& other) noexcept = default;
@@ -60,29 +74,29 @@ public:
     }
 
     template <typename T>
-    T get(const std::string& key, const T& default_value = defaultValue<T>()) const
+    T get(std::string_view key, const T& default_value = defaultValue<T>()) const
     {
         Map::const_iterator result = map_.find(key);
         if (result == map_.cend())
             return default_value;
 
-        return StreamConverter<T>::get_value(result->second).value_or(default_value);
+        return Converter<T>::get_value(result->second).value_or(default_value);
     }
 
     template <typename T>
-    void set(const std::string& key, const T& value)
+    void set(std::string_view key, const T& value)
     {
-        map_.insert_or_assign(key, StreamConverter<T>::set_value(value).value_or(std::string()));
+        map_.insert_or_assign(std::string(key), Converter<T>::set_value(value));
         is_changed_ = true;
     }
 
-    Array getArray(const std::string& key) const;
-    void setArray(const std::string& key, const Array& array);
+    Array getArray(std::string_view key) const;
+    void setArray(std::string_view key, const Array& array);
 
-    Settings getGroup(const std::string& key) const;
-    void setGroup(const std::string& key, const Settings& group);
+    Settings getGroup(std::string_view key) const;
+    void setGroup(std::string_view key, const Settings& group);
 
-    void remove(const std::string& key);
+    void remove(std::string_view key);
 
     const Map& constMap() const { return map_; }
     Map& map() { return map_; }

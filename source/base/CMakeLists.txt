@@ -23,6 +23,7 @@ list(APPEND SOURCE_BASE
     command_line.cc
     command_line.h
     compiler_specific.h
+    converter.h
     cpuid.cc
     cpuid.h
     debug.cc
@@ -51,7 +52,6 @@ list(APPEND SOURCE_BASE
     smbios_reader.h
     smbios_reader_win.cc
     stl_util.h
-    stream_converter.h
     sys_info.cc
     sys_info.h
     sys_info_win.cc
@@ -75,10 +75,10 @@ list(APPEND SOURCE_BASE
 list(APPEND SOURCE_BASE_UNIT_TESTS
     base64_unittest.cc
     bitset_unittest.cc
+    converter_unittest.cc
     guid_unittest.cc
     scoped_clear_last_error_unittest.cc
     stl_util_unittest.cc
-    stream_converter_unittest.cc
     version_unittest.cc
     xml_settings_unittest.cc)
 

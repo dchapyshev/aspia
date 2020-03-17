@@ -18,10 +18,27 @@
 
 #include "base/settings.h"
 
+#include "base/strings/strcat.h"
 #include "base/strings/string_number_conversions.h"
 #include "base/strings/string_util.h"
 
 namespace base {
+
+const std::string_view Settings::kSeparator = { "/" };
+
+Settings::Settings(const Settings& other)
+    : map_(other.map_)
+{
+    // Nothing
+}
+
+Settings& Settings::operator=(const Settings& other)
+{
+    if (&other != this)
+        map_ = other.map_;
+
+    return *this;
+}
 
 Settings::Settings(const Map& map)
     : map_(map)
@@ -35,30 +52,33 @@ Settings::Settings(Map&& map) noexcept
     // Nothing
 }
 
-Settings::Array Settings::getArray(const std::string& key) const
+Settings::Array Settings::getArray(std::string_view key) const
 {
-    const size_t array_size = get<size_t>(key + kSeparator + "size");
+    const size_t array_size = get<size_t>(base::strCat({ key, kSeparator, "size" }));
     Array result;
 
     for (size_t i = 0; i < array_size; ++i)
-        result.emplace_back(getGroup(key + kSeparator + base::numberToString(i)));
+    {
+        result.emplace_back(getGroup(
+            base::strCat({ key, kSeparator, base::numberToString(i) })));
+    }
 
     return result;
 }
 
-void Settings::setArray(const std::string& key, const Array& array)
+void Settings::setArray(std::string_view key, const Array& array)
 {
     for (size_t i = 0; i < array.size(); ++i)
-        setGroup(key + kSeparator + base::numberToString(i), array[i]);
+        setGroup(base::strCat({ key, kSeparator, base::numberToString(i) }), array[i]);
 
-    set(key + kSeparator + "size", array.size());
+    set(base::strCat({ key, kSeparator, "size" }), array.size());
 
     is_changed_ = true;
 }
 
-Settings Settings::getGroup(const std::string& key) const
+Settings Settings::getGroup(std::string_view key) const
 {
-    const std::string prefix = key + kSeparator;
+    const std::string prefix = base::strCat({ key, kSeparator });
     Map map;
 
     for (auto it = map_.cbegin(); it != map_.cend(); ++it)
@@ -70,21 +90,23 @@ Settings Settings::getGroup(const std::string& key) const
     return Settings(std::move(map));
 }
 
-void Settings::setGroup(const std::string& key, const Settings& group)
+void Settings::setGroup(std::string_view key, const Settings& group)
 {
     const Map& array_map = group.constMap();
 
     for (auto it = array_map.cbegin(); it != array_map.cend(); ++it)
-        map_.insert_or_assign(key + kSeparator + it->first, it->second);
+        map_.insert_or_assign(base::strCat({ key, kSeparator, it->first }), it->second);
 
     is_changed_ = true;
 }
 
-void Settings::remove(const std::string& key)
+void Settings::remove(std::string_view key)
 {
+    const std::string prefix = base::strCat({ key, kSeparator });
+
     for (auto it = map_.begin(); it != map_.end();)
     {
-        if (base::startsWith(it->first, key + kSeparator))
+        if (base::startsWith(it->first, prefix))
             it = map_.erase(it);
         else
             ++it;
