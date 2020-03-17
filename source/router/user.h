@@ -35,37 +35,20 @@ public:
     User(User&& other) noexcept = default;
     User& operator=(User&& other) noexcept = default;
 
-    enum Flags
+    enum UserFlags
     {
-        ENABLED = 1
+        ENABLED = 1,
+        MANAGER = 2
     };
 
-    struct AccessFlags
+    enum AccessFlags
     {
-        enum Log
-        {
-            LOG_VIEW = 1
-        };
-
-        enum User
-        {
-            USER_VIEW   = 1,
-            USER_CREATE = 2,
-            USER_CHANGE = 4,
-            USER_DELETE = 8
-        };
-
-        enum Proxy
-        {
-            PROXY_VIEW   = 1,
-            PROXY_CREATE = 2,
-            PROXY_CHANGE = 4,
-            PROXY_DELETE = 8
-        };
-
-        uint32_t log = 0;
-        uint32_t user = 0;
-        uint32_t proxy = 0;
+        LOG_READ    = 1,
+        LOG_WRITE   = 2,
+        USER_READ   = 4,
+        USER_WRITE  = 8,
+        PROXY_READ  = 16,
+        PROXY_WRITE = 32
     };
 
     static User create(std::u16string_view name, std::u16string_view password);
@@ -78,7 +61,7 @@ public:
     base::ByteArray generator;
     uint32_t sessions = 0;
     uint32_t flags = 0;
-    AccessFlags access;
+    uint32_t access = 0;
 };
 
 class UserList

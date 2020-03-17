@@ -25,10 +25,41 @@
 
 namespace router {
 
+namespace {
+
+class AccessItem : public QTreeWidgetItem
+{
+public:
+    enum class Type { LOG, USER, PROXY };
+
+    explicit AccessItem(Type type, const QString& title, uint32_t mask)
+        : type(type)
+    {
+        setText(0, title);
+
+        setCheckState(1, Qt::Checked);
+        setCheckState(2, Qt::Checked);
+    }
+
+    Type type;
+
+private:
+    DISALLOW_COPY_AND_ASSIGN(AccessItem);
+};
+
+} // namespace
+
 UserDialog::UserDialog(QWidget* parent)
     : QDialog(parent)
 {
     ui.setupUi(this);
+
+    ui.tree_access->addTopLevelItem(new AccessItem(AccessItem::Type::LOG, tr("Logs"), 0));
+    ui.tree_access->addTopLevelItem(new AccessItem(AccessItem::Type::USER, tr("Users"), 0));
+    ui.tree_access->addTopLevelItem(new AccessItem(AccessItem::Type::PROXY, tr("Proxy"), 0));
+
+    for (int i = 0; i < ui.tree_access->columnCount(); ++i)
+        ui.tree_access->resizeColumnToContents(i);
 
     connect(ui.buttonbox, &QDialogButtonBox::clicked, this, &UserDialog::onButtonBoxClicked);
 }
