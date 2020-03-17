@@ -45,9 +45,11 @@ ClientDialog::ClientDialog(QWidget* parent)
     ui->setupUi(this);
     setFixedHeight(sizeHint().height());
 
+    QComboBox* combo_address = ui->combo_address;
+
     ClientSettings settings;
-    ui->combo_address->addItems(settings.addressList());
-    ui->combo_address->setCurrentIndex(0);
+    combo_address->addItems(settings.addressList());
+    combo_address->setCurrentIndex(0);
 
     auto add_session = [this](const QString& icon, proto::SessionType session_type)
     {
@@ -93,7 +95,7 @@ ClientDialog::ClientDialog(QWidget* parent)
     connect(ui->button_connect, &QPushButton::released,
             this, &ClientDialog::connectButtonPressed);
 
-    ui->combo_address->setFocus();
+    combo_address->setFocus();
 }
 
 ClientDialog::~ClientDialog() = default;
@@ -152,7 +154,8 @@ void ClientDialog::sessionConfigButtonPressed()
 
 void ClientDialog::connectButtonPressed()
 {
-    QString current_address = ui->combo_address->currentText();
+    QComboBox* combo_address = ui->combo_address;
+    QString current_address = combo_address->currentText();
 
     net::Address address = net::Address::fromString(current_address.toStdU16String());
     if (!address.isValid())
@@ -161,20 +164,20 @@ void ClientDialog::connectButtonPressed()
                              tr("Warning"),
                              tr("An invalid computer address was entered."),
                              QMessageBox::Ok);
-        ui->combo_address->setFocus();
+        combo_address->setFocus();
     }
     else
     {
-        int current_index = ui->combo_address->findText(current_address);
+        int current_index = combo_address->findText(current_address);
         if (current_index != -1)
-            ui->combo_address->removeItem(current_index);
+            combo_address->removeItem(current_index);
 
-        ui->combo_address->insertItem(0, current_address);
-        ui->combo_address->setCurrentIndex(0);
+        combo_address->insertItem(0, current_address);
+        combo_address->setCurrentIndex(0);
 
         QStringList address_list;
-        for (int i = 0; i < std::min(ui->combo_address->count(), 15); ++i)
-            address_list.append(ui->combo_address->itemText(i));
+        for (int i = 0; i < std::min(combo_address->count(), 15); ++i)
+            address_list.append(combo_address->itemText(i));
 
         ClientSettings settings;
         settings.setAddressList(address_list);

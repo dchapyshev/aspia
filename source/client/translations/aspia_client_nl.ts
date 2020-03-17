@@ -880,22 +880,22 @@
         <translation type="vanished">Bestands Overdracht</translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.cc" line="74"/>
+        <location filename="../ui/client_dialog.cc" line="76"/>
         <source>Confirmation</source>
         <translation type="unfinished">Bevestiging</translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.cc" line="75"/>
+        <location filename="../ui/client_dialog.cc" line="77"/>
         <source>The list of entered addresses will be cleared. Continue?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.cc" line="161"/>
+        <location filename="../ui/client_dialog.cc" line="164"/>
         <source>Warning</source>
         <translation type="unfinished">Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.cc" line="162"/>
+        <location filename="../ui/client_dialog.cc" line="165"/>
         <source>An invalid computer address was entered.</source>
         <translation type="unfinished"></translation>
     </message>

@@ -884,22 +884,22 @@
         <translation type="vanished">Передача файлов</translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.cc" line="74"/>
+        <location filename="../ui/client_dialog.cc" line="76"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.cc" line="75"/>
+        <location filename="../ui/client_dialog.cc" line="77"/>
         <source>The list of entered addresses will be cleared. Continue?</source>
         <translation>Список введенных адресов будет очищен. Продолжить?</translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.cc" line="161"/>
+        <location filename="../ui/client_dialog.cc" line="164"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.cc" line="162"/>
+        <location filename="../ui/client_dialog.cc" line="165"/>
         <source>An invalid computer address was entered.</source>
         <translation>Введен некорректный адрес компьютера.</translation>
     </message>
