@@ -122,6 +122,8 @@ list(APPEND SOURCE_BASE_MESSAGE_LOOP
     message_loop/pending_task.h)
 
 list(APPEND SOURCE_BASE_STRINGS
+    strings/strcat.cc
+    strings/strcat.h
     strings/string_number_conversions.cc
     strings/string_number_conversions.h
     strings/string_printf.cc
