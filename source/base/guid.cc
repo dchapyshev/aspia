@@ -52,7 +52,7 @@ void numberToHex(char*& target, const char* source, size_t source_count)
     }
 }
 
-bool isValidGUIDInternal(const std::string& guid, bool strict)
+bool isValidGUIDInternal(std::string_view guid, bool strict)
 {
     if (guid.length() != kGUIDLength)
         return false;
@@ -167,13 +167,13 @@ Guid Guid::create()
 }
 
 // static
-bool Guid::isValidGuidString(const std::string& guid)
+bool Guid::isValidGuidString(std::string_view guid)
 {
     return isValidGUIDInternal(guid, false /* strict */);
 }
 
 // static
-bool Guid::isStrictValidGuidString(const std::string& guid)
+bool Guid::isStrictValidGuidString(std::string_view guid)
 {
     return isValidGUIDInternal(guid, true /* strict */);
 }
