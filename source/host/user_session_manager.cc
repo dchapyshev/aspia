@@ -300,7 +300,11 @@ void UserSessionManager::onNewConnection(std::unique_ptr<ipc::Channel> channel)
         return;
     }
 
-    addUserSession(channel->peerSessionId(), std::move(channel));
+    base::SessionId session_id = channel->peerSessionId();
+    if (session_id == base::kInvalidSessionId)
+        return;
+
+    addUserSession(session_id, std::move(channel));
 }
 
 void UserSessionManager::onErrorOccurred()
