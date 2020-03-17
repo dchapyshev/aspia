@@ -72,8 +72,6 @@ void Settings::setArray(std::string_view key, const Array& array)
         setGroup(base::strCat({ key, kSeparator, base::numberToString(i) }), array[i]);
 
     set(base::strCat({ key, kSeparator, "size" }), array.size());
-
-    is_changed_ = true;
 }
 
 Settings Settings::getGroup(std::string_view key) const
