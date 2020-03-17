@@ -29,18 +29,18 @@ class Base64
 {
 public:
     // Encodes the input string in base64. The encoding can be done in-place.
-    static void encode(const std::string& input, std::string* output);
+    static void encode(std::string_view input, std::string* output);
 
     // Encodes the input string in base64.
-    static std::string encode(const std::string& input);
+    static std::string encode(std::string_view input);
 
     // Decodes the base64 input string. Returns true if successful and false otherwise.
     // The output string is only modified if successful. The decoding can be done in-place.
-    static bool decode(const std::string& input, std::string* output);
+    static bool decode(std::string_view input, std::string* output);
 
     // Decodes the base64 input string. If an error occurred during decoding, an empty string
     // is returned.
-    static std::string decode(const std::string& input);
+    static std::string decode(std::string_view input);
 
     template <class InputBufferT, class OutputBufferT>
     static OutputBufferT encodeT(const InputBufferT& input)
