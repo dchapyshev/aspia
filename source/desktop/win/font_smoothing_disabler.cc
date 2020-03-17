@@ -39,7 +39,7 @@ FontSmoothingDisabler::~FontSmoothingDisabler()
 {
     if (is_changed_ && is_enabled_)
     {
-        SystemParametersInfoW(SPI_SETFONTSMOOTHING, !!is_enabled_, 0, SPIF_SENDCHANGE);
+        SystemParametersInfoW(SPI_SETFONTSMOOTHING, TRUE, 0, SPIF_SENDCHANGE);
     }
 }
 
