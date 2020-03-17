@@ -109,7 +109,7 @@ bool Region::equals(const Region& region) const
     if (isEmpty() && region.isEmpty())
         return true;
 
-    return (miRegionsEqual(region_cast(&x11reg_), region_cast(&region.x11reg_)) == TRUE);
+    return (miRegionsEqual(region_cast(&x11reg_), region_cast(&region.x11reg_)) != FALSE);
 }
 
 void Region::clear()
