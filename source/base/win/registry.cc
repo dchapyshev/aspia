@@ -464,7 +464,6 @@ LONG RegistryKey::deleteKeyRecurse(HKEY root_key, const std::wstring& name, REGS
         subkey_name += L"\\";
 
     // Enumerate the keys
-    result = ERROR_SUCCESS;
     const DWORD kMaxKeyNameLength = MAX_PATH;
     const size_t base_key_length = subkey_name.length();
     std::wstring key_name;
