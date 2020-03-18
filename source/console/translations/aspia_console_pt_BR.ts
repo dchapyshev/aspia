@@ -369,215 +369,215 @@
     </message>
     <message>
         <location filename="../console_main_window.ui" line="148"/>
-        <location filename="../console_main_window.ui" line="442"/>
+        <location filename="../console_main_window.ui" line="443"/>
         <source>Tool Bar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main_window.ui" line="190"/>
+        <location filename="../console_main_window.ui" line="191"/>
         <source>&amp;New address book</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main_window.ui" line="193"/>
+        <location filename="../console_main_window.ui" line="194"/>
         <source>Ctrl+N</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main_window.ui" line="202"/>
+        <location filename="../console_main_window.ui" line="203"/>
         <source>&amp;Open address book...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main_window.ui" line="205"/>
+        <location filename="../console_main_window.ui" line="206"/>
         <source>Ctrl+O</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main_window.ui" line="217"/>
+        <location filename="../console_main_window.ui" line="218"/>
         <source>&amp;Save</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main_window.ui" line="220"/>
+        <location filename="../console_main_window.ui" line="221"/>
         <source>Ctrl+S</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main_window.ui" line="228"/>
+        <location filename="../console_main_window.ui" line="229"/>
         <source>Save &amp;as...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main_window.ui" line="231"/>
+        <location filename="../console_main_window.ui" line="232"/>
         <source>Ctrl+Alt+S</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main_window.ui" line="239"/>
+        <location filename="../console_main_window.ui" line="240"/>
         <source>&amp;Close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main_window.ui" line="242"/>
+        <location filename="../console_main_window.ui" line="243"/>
         <source>Ctrl+W</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main_window.ui" line="251"/>
+        <location filename="../console_main_window.ui" line="252"/>
         <source>&amp;Exit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main_window.ui" line="263"/>
+        <location filename="../console_main_window.ui" line="264"/>
         <source>Add Computer Group</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main_window.ui" line="275"/>
+        <location filename="../console_main_window.ui" line="276"/>
         <source>Modify Computer Group</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main_window.ui" line="287"/>
+        <location filename="../console_main_window.ui" line="288"/>
         <source>Delete Computer Group</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main_window.ui" line="299"/>
+        <location filename="../console_main_window.ui" line="300"/>
         <source>Add Computer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main_window.ui" line="311"/>
+        <location filename="../console_main_window.ui" line="312"/>
         <source>Modify Computer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main_window.ui" line="323"/>
+        <location filename="../console_main_window.ui" line="324"/>
         <source>Delete Computer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main_window.ui" line="338"/>
+        <location filename="../console_main_window.ui" line="339"/>
         <source>Desktop &amp;Manage</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main_window.ui" line="350"/>
+        <location filename="../console_main_window.ui" line="351"/>
         <source>Desktop &amp;View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main_window.ui" line="362"/>
+        <location filename="../console_main_window.ui" line="363"/>
         <source>&amp;File Transfer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main_window.ui" line="371"/>
+        <location filename="../console_main_window.ui" line="372"/>
         <source>&amp;Online Help...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main_window.ui" line="374"/>
+        <location filename="../console_main_window.ui" line="375"/>
         <source>F1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main_window.ui" line="383"/>
+        <location filename="../console_main_window.ui" line="384"/>
         <source>&amp;About</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main_window.ui" line="395"/>
+        <location filename="../console_main_window.ui" line="396"/>
         <source>Address Book Properties</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main_window.ui" line="404"/>
-        <location filename="../console_main_window.ui" line="407"/>
+        <location filename="../console_main_window.ui" line="405"/>
+        <location filename="../console_main_window.ui" line="408"/>
         <source>Desktop Manage</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main_window.ui" line="416"/>
-        <location filename="../console_main_window.ui" line="419"/>
+        <location filename="../console_main_window.ui" line="417"/>
+        <location filename="../console_main_window.ui" line="420"/>
         <source>Desktop View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main_window.ui" line="428"/>
-        <location filename="../console_main_window.ui" line="431"/>
+        <location filename="../console_main_window.ui" line="429"/>
+        <location filename="../console_main_window.ui" line="432"/>
         <source>File Transfer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main_window.ui" line="453"/>
+        <location filename="../console_main_window.ui" line="454"/>
         <source>Status Bar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main_window.ui" line="462"/>
+        <location filename="../console_main_window.ui" line="463"/>
         <source>Fast Connect...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main_window.ui" line="470"/>
+        <location filename="../console_main_window.ui" line="471"/>
         <source>Show tray icon</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main_window.ui" line="478"/>
+        <location filename="../console_main_window.ui" line="479"/>
         <source>Minimize to tray</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main_window.ui" line="483"/>
+        <location filename="../console_main_window.ui" line="484"/>
         <source>Hide</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main_window.ui" line="495"/>
+        <location filename="../console_main_window.ui" line="496"/>
         <source>Save all</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main_window.ui" line="498"/>
+        <location filename="../console_main_window.ui" line="499"/>
         <source>Ctrl+Shift+S</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main_window.ui" line="506"/>
+        <location filename="../console_main_window.ui" line="507"/>
         <source>Close all</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main_window.ui" line="509"/>
+        <location filename="../console_main_window.ui" line="510"/>
         <source>Ctrl+Shift+W</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main_window.ui" line="514"/>
+        <location filename="../console_main_window.ui" line="515"/>
         <source>Check for updates...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main_window.ui" line="519"/>
+        <location filename="../console_main_window.ui" line="520"/>
         <source>Update Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main_window.ui" line="524"/>
+        <location filename="../console_main_window.ui" line="525"/>
         <source>Clear</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main_window.ui" line="535"/>
+        <location filename="../console_main_window.ui" line="536"/>
         <source>Remember latest</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console_main_window.ui" line="547"/>
+        <location filename="../console_main_window.ui" line="548"/>
         <source>Copy Computer</source>
         <translation type="unfinished"></translation>
     </message>

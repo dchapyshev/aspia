@@ -171,6 +171,7 @@
    <addaction name="action_modify_computer_group"/>
    <addaction name="action_delete_computer_group"/>
    <addaction name="action_add_computer"/>
+   <addaction name="action_copy_computer"/>
    <addaction name="action_modify_computer"/>
    <addaction name="action_delete_computer"/>
    <addaction name="separator"/>
