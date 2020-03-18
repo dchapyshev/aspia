@@ -37,6 +37,7 @@ Application::Application(int& argc, char* argv[])
     setApplicationName(QStringLiteral("Console"));
     setApplicationVersion(QStringLiteral(ASPIA_VERSION_STRING));
     setAttribute(Qt::AA_DisableWindowContextHelpButton, true);
+    setQuitOnLastWindowClosed(false);
 
     connect(this, &Application::messageReceived, [this](const QByteArray& message)
     {
