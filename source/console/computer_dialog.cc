@@ -17,6 +17,7 @@
 //
 
 #include "console/computer_dialog.h"
+
 #include "client/config_factory.h"
 #include "console/computer_dialog_desktop.h"
 #include "console/computer_dialog_general.h"
@@ -42,26 +43,86 @@ enum ItemType
 } // namespace
 
 ComputerDialog::ComputerDialog(QWidget* parent,
+                               Mode mode,
                                const QString& parent_name,
-                               const proto::address_book::Computer& computer)
+                               const std::optional<proto::address_book::Computer>& computer)
     : QDialog(parent),
-      mode_(Mode::MODIFY_COMPUTER),
-      computer_(computer)
+      mode_(mode),
+      computer_(computer.value_or(ComputerFactory::defaultComputer()))
 {
+    ui.setupUi(this);
+
     client::ConfigFactory::fixupDesktopConfig(
         computer_.mutable_session_config()->mutable_desktop_manage());
     client::ConfigFactory::fixupDesktopConfig(
         computer_.mutable_session_config()->mutable_desktop_view());
 
-    init(parent_name);
-}
+    if (mode_ == Mode::COPY)
+    {
+        computer_.set_name(computer_.name() + ' ' + tr("(copy)").toStdString());
+    }
 
-ComputerDialog::ComputerDialog(QWidget* parent, const QString& parent_name)
-    : QDialog(parent),
-      mode_(Mode::CREATE_COMPUTER),
-      computer_(ComputerFactory::defaultComputer())
-{
-    init(parent_name);
+    restoreGeometry(settings_.computerDialogGeometry());
+    ui.splitter->restoreState(settings_.computerDialogState());
+
+    connect(ui.tree, &QTreeWidget::currentItemChanged, this, &ComputerDialog::onTabChanged);
+    connect(ui.button_box, &QDialogButtonBox::clicked, this, &ComputerDialog::buttonBoxClicked);
+
+    QTreeWidgetItem* general_item = new QTreeWidgetItem(ITEM_TYPE_GENERAL);
+    general_item->setIcon(0, QIcon(QStringLiteral(":/img/computer.png")));
+    general_item->setText(0, tr("General"));
+
+    QTreeWidgetItem* sessions_item = new QTreeWidgetItem(ITEM_TYPE_PARENT);
+    sessions_item->setIcon(0, QIcon(QStringLiteral(":/img/settings.png")));
+    sessions_item->setText(0, tr("Sessions"));
+
+    ui.tree->addTopLevelItem(general_item);
+    ui.tree->addTopLevelItem(sessions_item);
+
+    QTreeWidgetItem* desktop_manage_item = new QTreeWidgetItem(ITEM_TYPE_DESKTOP_MANAGE);
+    desktop_manage_item->setIcon(0, QIcon(QStringLiteral(":/img/monitor-keyboard.png")));
+    desktop_manage_item->setText(0, tr("Manage"));
+
+    QTreeWidgetItem* desktop_view_item = new QTreeWidgetItem(ITEM_TYPE_DESKTOP_VIEW);
+    desktop_view_item->setIcon(0, QIcon(QStringLiteral(":/img/monitor.png")));
+    desktop_view_item->setText(0, tr("View"));
+
+    sessions_item->addChild(desktop_manage_item);
+    sessions_item->addChild(desktop_view_item);
+
+    ComputerDialogParent* parent_tab =
+        new ComputerDialogParent(ITEM_TYPE_PARENT, ui.widget);
+    ComputerDialogGeneral* general_tab =
+        new ComputerDialogGeneral(ITEM_TYPE_GENERAL, ui.widget);
+    ComputerDialogDesktop* desktop_manage_tab =
+        new ComputerDialogDesktop(ITEM_TYPE_DESKTOP_MANAGE, ui.widget);
+    ComputerDialogDesktop* desktop_view_tab =
+        new ComputerDialogDesktop(ITEM_TYPE_DESKTOP_VIEW, ui.widget);
+
+    general_tab->restoreSettings(parent_name, computer_);
+    desktop_manage_tab->restoreSettings(
+        proto::SESSION_TYPE_DESKTOP_MANAGE, computer_.session_config().desktop_manage());
+    desktop_view_tab->restoreSettings(
+        proto::SESSION_TYPE_DESKTOP_VIEW, computer_.session_config().desktop_view());
+
+    tabs_.append(general_tab);
+    tabs_.append(desktop_manage_tab);
+    tabs_.append(desktop_view_tab);
+    tabs_.append(parent_tab);
+
+    QSize min_size;
+
+    for (auto tab : tabs_)
+    {
+        min_size.setWidth(std::max(tab->sizeHint().width(), min_size.width()));
+        min_size.setHeight(std::max(tab->minimumSizeHint().height(), min_size.height()));
+    }
+
+    ui.widget->setMinimumSize(min_size);
+    ui.widget->installEventFilter(this);
+
+    ui.tree->setCurrentItem(general_item);
+    ui.tree->expandAll();
 }
 
 ComputerDialog::~ComputerDialog()
@@ -133,7 +194,7 @@ void ComputerDialog::buttonBoxClicked(QAbstractButton* button)
 
         int64_t current_time = QDateTime::currentSecsSinceEpoch();
 
-        if (mode_ == Mode::CREATE_COMPUTER)
+        if (mode_ == Mode::CREATE || mode_ == Mode::COPY)
             computer_.set_create_time(current_time);
 
         computer_.set_modify_time(current_time);
@@ -146,73 +207,6 @@ void ComputerDialog::buttonBoxClicked(QAbstractButton* button)
     }
 
     close();
-}
-
-void ComputerDialog::init(const QString& parent_name)
-{
-    ui.setupUi(this);
-
-    restoreGeometry(settings_.computerDialogGeometry());
-    ui.splitter->restoreState(settings_.computerDialogState());
-
-    connect(ui.tree, &QTreeWidget::currentItemChanged, this, &ComputerDialog::onTabChanged);
-    connect(ui.button_box, &QDialogButtonBox::clicked, this, &ComputerDialog::buttonBoxClicked);
-
-    QTreeWidgetItem* general_item = new QTreeWidgetItem(ITEM_TYPE_GENERAL);
-    general_item->setIcon(0, QIcon(QStringLiteral(":/img/computer.png")));
-    general_item->setText(0, tr("General"));
-
-    QTreeWidgetItem* sessions_item = new QTreeWidgetItem(ITEM_TYPE_PARENT);
-    sessions_item->setIcon(0, QIcon(QStringLiteral(":/img/settings.png")));
-    sessions_item->setText(0, tr("Sessions"));
-
-    ui.tree->addTopLevelItem(general_item);
-    ui.tree->addTopLevelItem(sessions_item);
-
-    QTreeWidgetItem* desktop_manage_item = new QTreeWidgetItem(ITEM_TYPE_DESKTOP_MANAGE);
-    desktop_manage_item->setIcon(0, QIcon(QStringLiteral(":/img/monitor-keyboard.png")));
-    desktop_manage_item->setText(0, tr("Manage"));
-
-    QTreeWidgetItem* desktop_view_item = new QTreeWidgetItem(ITEM_TYPE_DESKTOP_VIEW);
-    desktop_view_item->setIcon(0, QIcon(QStringLiteral(":/img/monitor.png")));
-    desktop_view_item->setText(0, tr("View"));
-
-    sessions_item->addChild(desktop_manage_item);
-    sessions_item->addChild(desktop_view_item);
-
-    ComputerDialogParent* parent_tab =
-        new ComputerDialogParent(ITEM_TYPE_PARENT, ui.widget);
-    ComputerDialogGeneral* general_tab =
-        new ComputerDialogGeneral(ITEM_TYPE_GENERAL, ui.widget);
-    ComputerDialogDesktop* desktop_manage_tab =
-        new ComputerDialogDesktop(ITEM_TYPE_DESKTOP_MANAGE, ui.widget);
-    ComputerDialogDesktop* desktop_view_tab =
-        new ComputerDialogDesktop(ITEM_TYPE_DESKTOP_VIEW, ui.widget);
-
-    general_tab->restoreSettings(parent_name, computer_);
-    desktop_manage_tab->restoreSettings(
-        proto::SESSION_TYPE_DESKTOP_MANAGE, computer_.session_config().desktop_manage());
-    desktop_view_tab->restoreSettings(
-        proto::SESSION_TYPE_DESKTOP_VIEW, computer_.session_config().desktop_view());
-
-    tabs_.append(general_tab);
-    tabs_.append(desktop_manage_tab);
-    tabs_.append(desktop_view_tab);
-    tabs_.append(parent_tab);
-
-    QSize min_size;
-
-    for (auto tab : tabs_)
-    {
-        min_size.setWidth(std::max(tab->sizeHint().width(), min_size.width()));
-        min_size.setHeight(std::max(tab->minimumSizeHint().height(), min_size.height()));
-    }
-
-    ui.widget->setMinimumSize(min_size);
-    ui.widget->installEventFilter(this);
-
-    ui.tree->setCurrentItem(general_item);
-    ui.tree->expandAll();
 }
 
 void ComputerDialog::showTab(int type)

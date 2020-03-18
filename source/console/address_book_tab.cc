@@ -376,7 +376,9 @@ void AddressBookTab::addComputer()
     if (!parent_item)
         return;
 
-    ComputerDialog dialog(this, parentName(parent_item));
+    ComputerDialog dialog(this,
+                          ComputerDialog::Mode::CREATE,
+                          parentName(parent_item));
     if (dialog.exec() != QDialog::Accepted)
         return;
 
@@ -387,6 +389,35 @@ void AddressBookTab::addComputer()
     if (ui.tree_group->currentItem() == parent_item)
     {
         ui.tree_computer->addTopLevelItem(new ComputerItem(computer, parent_item));
+    }
+
+    setChanged(true);
+}
+
+void AddressBookTab::copyComputer()
+{
+    ComputerItem* current_item = dynamic_cast<ComputerItem*>(ui.tree_computer->currentItem());
+    if (!current_item)
+        return;
+
+    ComputerGroupItem* parent_group_item = current_item->parentComputerGroupItem();
+    if (!parent_group_item)
+        return;
+
+    ComputerDialog dialog(this,
+                          ComputerDialog::Mode::COPY,
+                          parentName(parent_group_item),
+                          *current_item->computer());
+    if (dialog.exec() != QDialog::Accepted)
+        return;
+
+    proto::address_book::Computer* computer =
+        new proto::address_book::Computer(dialog.computer());
+
+    parent_group_item->addChildComputer(computer);
+    if (ui.tree_group->currentItem() == parent_group_item)
+    {
+        ui.tree_computer->addTopLevelItem(new ComputerItem(computer, parent_group_item));
     }
 
     setChanged(true);
@@ -439,6 +470,7 @@ void AddressBookTab::modifyComputer()
         return;
 
     ComputerDialog dialog(this,
+                          ComputerDialog::Mode::MODIFY,
                           parentName(current_item->parentComputerGroupItem()),
                           *current_item->computer());
     if (dialog.exec() != QDialog::Accepted)

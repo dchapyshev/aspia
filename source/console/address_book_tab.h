@@ -55,6 +55,7 @@ public:
 public slots:
     void addComputerGroup();
     void addComputer();
+    void copyComputer();
     void modifyAddressBook();
     void modifyComputerGroup();
     void modifyComputer();

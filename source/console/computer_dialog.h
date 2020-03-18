@@ -24,6 +24,8 @@
 #include "proto/address_book.pb.h"
 #include "ui_computer_dialog.h"
 
+#include <optional>
+
 #include <QDialog>
 
 class QAbstractButton;
@@ -35,10 +37,12 @@ class ComputerDialog : public QDialog
     Q_OBJECT
 
 public:
+    enum class Mode { CREATE, COPY, MODIFY };
+
     ComputerDialog(QWidget* parent,
+                   Mode mode,
                    const QString& parent_name,
-                   const proto::address_book::Computer& computer);
-    ComputerDialog(QWidget* parent, const QString& parent_name);
+                   const std::optional<proto::address_book::Computer>& computer = std::nullopt);
     ~ComputerDialog();
 
     const proto::address_book::Computer& computer() const { return computer_; }
@@ -53,10 +57,7 @@ private slots:
     void buttonBoxClicked(QAbstractButton* button);
 
 private:
-    void init(const QString& parent_name);
     void showTab(int type);
-
-    enum class Mode { CREATE_COMPUTER, MODIFY_COMPUTER };
 
     Ui::ComputerDialog ui;
     QWidgetList tabs_;

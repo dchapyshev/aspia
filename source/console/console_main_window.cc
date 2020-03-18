@@ -89,6 +89,7 @@ MainWindow::MainWindow(const QString& file_path)
             this, &MainWindow::onAddressBookProperties);
 
     connect(ui.action_add_computer, &QAction::triggered, this, &MainWindow::onAddComputer);
+    connect(ui.action_copy_computer, &QAction::triggered, this, &MainWindow::onCopyComputer);
     connect(ui.action_modify_computer, &QAction::triggered, this, &MainWindow::onModifyComputer);
 
     connect(ui.action_delete_computer, &QAction::triggered,
@@ -356,6 +357,13 @@ void MainWindow::onAddComputer()
         tab->addComputer();
 }
 
+void MainWindow::onCopyComputer()
+{
+    AddressBookTab* tab = currentAddressBookTab();
+    if (tab)
+        tab->copyComputer();
+}
+
 void MainWindow::onModifyComputer()
 {
     AddressBookTab* tab = currentAddressBookTab();
@@ -559,8 +567,9 @@ void MainWindow::onAddressBookChanged(bool changed)
 void MainWindow::onComputerGroupActivated(bool activated, bool is_root)
 {
     ui.action_add_computer_group->setEnabled(activated);
-
     ui.action_add_computer->setEnabled(activated);
+
+    ui.action_copy_computer->setEnabled(false);
     ui.action_modify_computer->setEnabled(false);
     ui.action_delete_computer->setEnabled(false);
 
@@ -593,6 +602,7 @@ void MainWindow::onComputerGroupActivated(bool activated, bool is_root)
 void MainWindow::onComputerActivated(bool activated)
 {
     ui.action_modify_computer->setEnabled(activated);
+    ui.action_copy_computer->setEnabled(activated);
     ui.action_delete_computer->setEnabled(activated);
 }
 
@@ -628,6 +638,7 @@ void MainWindow::onComputerContextMenu(ComputerItem* computer_item, const QPoint
         menu.addAction(ui.action_file_transfer_connect);
         menu.addSeparator();
         menu.addAction(ui.action_modify_computer);
+        menu.addAction(ui.action_copy_computer);
         menu.addAction(ui.action_delete_computer);
     }
     else

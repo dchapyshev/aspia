@@ -93,6 +93,7 @@
     <addaction name="action_delete_computer_group"/>
     <addaction name="separator"/>
     <addaction name="action_add_computer"/>
+    <addaction name="action_copy_computer"/>
     <addaction name="action_modify_computer"/>
     <addaction name="action_delete_computer"/>
    </widget>
@@ -532,6 +533,18 @@
    </property>
    <property name="text">
     <string>Remember latest</string>
+   </property>
+  </action>
+  <action name="action_copy_computer">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources/console.qrc">
+     <normaloff>:/img/computer-copy.png</normaloff>:/img/computer-copy.png</iconset>
+   </property>
+   <property name="text">
+    <string>Copy Computer</string>
    </property>
   </action>
  </widget>

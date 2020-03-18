@@ -1,6 +1,7 @@
 <RCC>
   <qresource prefix="/img">
     <file>ui-tab-close.png</file>
+    <file>computer-copy.png</file>
     <file>ui-tab-multi-close.png</file>
     <file>lock-unlock.png</file>
     <file>lock.png</file>

@@ -59,6 +59,7 @@ private slots:
     void onCloseAll();
     void onAddressBookProperties();
     void onAddComputer();
+    void onCopyComputer();
     void onModifyComputer();
     void onDeleteComputer();
     void onAddComputerGroup();
