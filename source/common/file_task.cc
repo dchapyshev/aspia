@@ -24,10 +24,10 @@
 
 namespace common {
 
-FileTask::FileTask(std::shared_ptr<FileTaskProducerProxy>& producer_proxy,
+FileTask::FileTask(std::shared_ptr<FileTaskProducerProxy> producer_proxy,
                    std::unique_ptr<proto::FileRequest> request,
                    Target target)
-    : producer_proxy_(producer_proxy),
+    : producer_proxy_(std::move(producer_proxy)),
       request_(std::move(request)),
       target_(target)
 {

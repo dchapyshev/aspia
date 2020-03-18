@@ -42,7 +42,7 @@ public:
         REMOTE // Remote task.
     };
 
-    FileTask(std::shared_ptr<FileTaskProducerProxy>& producer_proxy,
+    FileTask(std::shared_ptr<FileTaskProducerProxy> producer_proxy,
              std::unique_ptr<proto::FileRequest> request,
              Target target);
     virtual ~FileTask();
