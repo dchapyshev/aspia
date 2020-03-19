@@ -28,7 +28,8 @@ class CursorCapturer
 public:
     virtual ~CursorCapturer() = default;
 
-    virtual MouseCursor* captureCursor() = 0;
+    virtual const MouseCursor* captureCursor() = 0;
+    virtual void reset() = 0;
 };
 
 } // namespace desktop

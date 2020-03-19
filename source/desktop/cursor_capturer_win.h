@@ -36,12 +36,14 @@ class CursorCapturerWin : public CursorCapturer
 {
 public:
     CursorCapturerWin();
-    ~CursorCapturerWin() = default;
+    ~CursorCapturerWin();
 
-    MouseCursor* captureCursor() override;
+    const MouseCursor* captureCursor() override;
+    void reset() override;
 
 private:
     std::unique_ptr<base::win::ScopedGetDC> desktop_dc_;
+    std::unique_ptr<MouseCursor> mouse_cursor_;
     CURSORINFO prev_cursor_info_;
 
     DISALLOW_COPY_AND_ASSIGN(CursorCapturerWin);

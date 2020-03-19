@@ -92,10 +92,7 @@ void ScreenCapturerWrapper::captureFrame()
         }
     }
 
-    std::unique_ptr<MouseCursor> mouse_cursor;
-    mouse_cursor.reset(cursor_capturer_->captureCursor());
-
-    delegate_->onScreenCaptured(frame, mouse_cursor.get());
+    delegate_->onScreenCaptured(frame, cursor_capturer_->captureCursor());
 }
 
 void ScreenCapturerWrapper::setSharedMemoryFactory(ipc::SharedMemoryFactory* shared_memory_factory)
@@ -176,6 +173,9 @@ bool ScreenCapturerWrapper::switchToInputDesktop()
     {
         if (screen_capturer_)
             screen_capturer_->reset();
+
+        if (cursor_capturer_)
+            cursor_capturer_->reset();
 
         effects_disabler_.reset();
         wallpaper_disabler_.reset();
