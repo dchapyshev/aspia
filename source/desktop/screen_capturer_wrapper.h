@@ -63,9 +63,9 @@ private:
 
     base::ScopedThreadDesktop desktop_;
 
-    bool enable_effects_ = true;
-    bool enable_wallpaper_ = true;
-    bool enable_font_smoothing_ = true;
+    bool enable_effects_ = false;
+    bool enable_wallpaper_ = false;
+    bool enable_font_smoothing_ = false;
     int screen_count_ = 0;
 
     std::unique_ptr<ScreenCapturer> screen_capturer_;
