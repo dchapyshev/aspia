@@ -42,7 +42,7 @@ public:
     std::unique_ptr<proto::FilePacket> readNextPacket(const proto::FilePacketRequest& request);
 
 private:
-    FilePacketizer(std::ifstream&& file_stream);
+    explicit FilePacketizer(std::ifstream&& file_stream);
 
     std::ifstream file_stream_;
 
