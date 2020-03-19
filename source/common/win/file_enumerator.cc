@@ -19,6 +19,7 @@
 #include "common/win/file_enumerator.h"
 
 #include "base/logging.h"
+#include "base/strings/unicode.h"
 
 namespace common {
 
@@ -56,6 +57,11 @@ bool FileEnumerator::FileInfo::isDirectory() const
 std::filesystem::path FileEnumerator::FileInfo::name() const
 {
     return std::filesystem::path(find_data_.cFileName);
+}
+
+std::string FileEnumerator::FileInfo::u8name() const
+{
+    return base::utf8FromWide(find_data_.cFileName);
 }
 
 int64_t FileEnumerator::FileInfo::size() const
