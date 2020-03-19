@@ -22,7 +22,6 @@
 #include "base/power_controller.h"
 #include "base/threading/thread.h"
 #include "codec/video_util.h"
-#include "common/message_serialization.h"
 #include "desktop/capture_scheduler.h"
 #include "desktop/mouse_cursor.h"
 #include "desktop/screen_capturer_wrapper.h"
@@ -64,7 +63,7 @@ void DesktopSessionAgent::onMessageReceived(const base::ByteArray& buffer)
 {
     incoming_message_.Clear();
 
-    if (!common::parseMessage(buffer, &incoming_message_))
+    if (!base::parse(buffer, &incoming_message_))
     {
         LOG(LS_ERROR) << "Invalid message from service";
         return;
@@ -144,7 +143,7 @@ void DesktopSessionAgent::onSharedMemoryCreate(int id)
     shared_buffer->set_type(proto::internal::SharedBuffer::CREATE);
     shared_buffer->set_shared_buffer_id(id);
 
-    channel_->send(common::serializeMessage(outgoing_message_));
+    channel_->send(base::serialize(outgoing_message_));
 }
 
 void DesktopSessionAgent::onSharedMemoryDestroy(int id)
@@ -155,7 +154,7 @@ void DesktopSessionAgent::onSharedMemoryDestroy(int id)
     shared_buffer->set_type(proto::internal::SharedBuffer::RELEASE);
     shared_buffer->set_shared_buffer_id(id);
 
-    channel_->send(common::serializeMessage(outgoing_message_));
+    channel_->send(base::serialize(outgoing_message_));
 }
 
 void DesktopSessionAgent::onScreenListChanged(
@@ -173,7 +172,7 @@ void DesktopSessionAgent::onScreenListChanged(
         screen->set_title(list_item.title);
     }
 
-    channel_->send(common::serializeMessage(outgoing_message_));
+    channel_->send(base::serialize(outgoing_message_));
 }
 
 void DesktopSessionAgent::onScreenCaptured(
@@ -212,7 +211,7 @@ void DesktopSessionAgent::onScreenCaptured(
 
     if (encode_frame->has_frame() || encode_frame->has_mouse_cursor())
     {
-        channel_->send(common::serializeMessage(outgoing_message_));
+        channel_->send(base::serialize(outgoing_message_));
     }
     else
     {
@@ -224,7 +223,7 @@ void DesktopSessionAgent::onClipboardEvent(const proto::ClipboardEvent& event)
 {
     outgoing_message_.Clear();
     outgoing_message_.mutable_clipboard_event()->CopyFrom(event);
-    channel_->send(common::serializeMessage(outgoing_message_));
+    channel_->send(base::serialize(outgoing_message_));
 }
 
 void DesktopSessionAgent::enableSession(bool enable)

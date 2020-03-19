@@ -44,7 +44,6 @@ list(APPEND SOURCE_COMMON
     file_worker.h
     keycode_converter.cc
     keycode_converter.h
-    message_serialization.h
     session_type.cc
     session_type.h
     user_util.cc

@@ -18,7 +18,7 @@
 
 #include "console/address_book_tab.h"
 
-#include "common/message_serialization.h"
+#include "base/logging.h"
 #include "console/address_book_dialog.h"
 #include "console/computer_dialog.h"
 #include "console/computer_group_dialog.h"
@@ -788,7 +788,7 @@ bool AddressBookTab::saveToFile(const QString& file_path)
         return false;
     }
 
-    base::ByteArray buffer = common::serializeMessage(file_);
+    base::ByteArray buffer = base::serialize(file_);
 
     int64_t bytes_written = file.write(
         reinterpret_cast<const char*>(buffer.data()), buffer.size());

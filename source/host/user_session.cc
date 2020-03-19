@@ -24,7 +24,6 @@
 #include "base/strings/string_number_conversions.h"
 #include "base/strings/string_util.h"
 #include "base/strings/unicode.h"
-#include "common/message_serialization.h"
 #include "crypto/password_generator.h"
 #include "desktop/desktop_frame.h"
 #include "host/client_session_desktop.h"
@@ -204,7 +203,7 @@ void UserSession::onMessageReceived(const base::ByteArray& buffer)
 {
     incoming_message_.Clear();
 
-    if (!common::parseMessage(buffer, &incoming_message_))
+    if (!base::parse(buffer, &incoming_message_))
     {
         LOG(LS_ERROR) << "Invalid message from UI";
         return;
@@ -412,7 +411,7 @@ void UserSession::sendConnectEvent(const ClientSession& client_session)
     event->set_session_type(client_session.sessionType());
     event->set_uuid(client_session.id());
 
-    channel_->send(common::serializeMessage(outgoing_message_));
+    channel_->send(base::serialize(outgoing_message_));
 }
 
 void UserSession::sendDisconnectEvent(const std::string& session_id)
@@ -422,7 +421,7 @@ void UserSession::sendDisconnectEvent(const std::string& session_id)
 
     outgoing_message_.Clear();
     outgoing_message_.mutable_disconnect_event()->set_uuid(session_id);
-    channel_->send(common::serializeMessage(outgoing_message_));
+    channel_->send(base::serialize(outgoing_message_));
 }
 
 void UserSession::updateCredentials()
@@ -464,7 +463,7 @@ void UserSession::sendCredentials()
         }
     }
 
-    channel_->send(common::serializeMessage(outgoing_message_));
+    channel_->send(base::serialize(outgoing_message_));
 }
 
 void UserSession::killClientSession(std::string_view id)

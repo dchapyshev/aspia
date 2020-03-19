@@ -24,7 +24,6 @@
 #include "base/version.h"
 #include "base/strings/unicode.h"
 #include "build/version.h"
-#include "common/message_serialization.h"
 #include "crypto/message_decryptor_openssl.h"
 #include "crypto/message_encryptor_openssl.h"
 #include "crypto/generic_hash.h"
@@ -113,7 +112,7 @@ void Authenticator::onMessageReceived(const base::ByteArray& buffer)
         {
             proto::ClientHello client_hello;
 
-            if (!common::parseMessage(buffer, &client_hello))
+            if (!base::parse(buffer, &client_hello))
             {
                 onFailed(FROM_HERE);
                 return;
@@ -147,7 +146,7 @@ void Authenticator::onMessageReceived(const base::ByteArray& buffer)
             internal_state_ = InternalState::SEND_SERVER_HELLO;
             encryption_ = server_hello.encryption();
 
-            channel_->send(common::serializeMessage(server_hello));
+            channel_->send(base::serialize(server_hello));
         }
         break;
 
@@ -155,7 +154,7 @@ void Authenticator::onMessageReceived(const base::ByteArray& buffer)
         {
             proto::SrpIdentify identify;
 
-            if (!common::parseMessage(buffer, &identify))
+            if (!base::parse(buffer, &identify))
             {
                 onFailed(FROM_HERE);
                 return;
@@ -212,7 +211,7 @@ void Authenticator::onMessageReceived(const base::ByteArray& buffer)
             server_key_exchange.set_b(B_.toStdString());
             server_key_exchange.set_iv(base::toStdString(encrypt_iv_));
 
-            channel_->send(common::serializeMessage(server_key_exchange));
+            channel_->send(base::serialize(server_key_exchange));
         }
         break;
 
@@ -220,7 +219,7 @@ void Authenticator::onMessageReceived(const base::ByteArray& buffer)
         {
             proto::SrpClientKeyExchange client_key_exchange;
 
-            if (!common::parseMessage(buffer, &client_key_exchange))
+            if (!base::parse(buffer, &client_key_exchange))
             {
                 onFailed(FROM_HERE);
                 return;
@@ -276,7 +275,7 @@ void Authenticator::onMessageReceived(const base::ByteArray& buffer)
             version->set_minor(ASPIA_VERSION_MINOR);
             version->set_patch(ASPIA_VERSION_PATCH);
 
-            channel_->send(common::serializeMessage(session_challenge));
+            channel_->send(base::serialize(session_challenge));
         }
         break;
 
@@ -287,7 +286,7 @@ void Authenticator::onMessageReceived(const base::ByteArray& buffer)
             channel_->pause();
 
             proto::SessionResponse session_response;
-            if (!common::parseMessage(buffer, &session_response))
+            if (!base::parse(buffer, &session_response))
             {
                 onFailed(FROM_HERE);
                 return;

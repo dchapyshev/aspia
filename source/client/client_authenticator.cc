@@ -22,7 +22,6 @@
 #include "base/location.h"
 #include "base/logging.h"
 #include "base/strings/unicode.h"
-#include "common/message_serialization.h"
 #include "crypto/message_decryptor_openssl.h"
 #include "crypto/message_encryptor_openssl.h"
 #include "crypto/generic_hash.h"
@@ -297,13 +296,13 @@ void Authenticator::sendClientHello()
     proto::ClientHello client_hello;
     client_hello.set_encryption(encryption);
 
-    channel_->send(common::serializeMessage(client_hello));
+    channel_->send(base::serialize(client_hello));
 }
 
 bool Authenticator::readServerHello(const base::ByteArray& buffer)
 {
     proto::ServerHello server_hello;
-    if (!common::parseMessage(buffer, &server_hello))
+    if (!base::parse(buffer, &server_hello))
     {
         finished(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
         return false;
@@ -329,13 +328,13 @@ void Authenticator::sendIdentify()
     proto::SrpIdentify identify;
     identify.set_username(base::utf8FromUtf16(username_));
 
-    channel_->send(common::serializeMessage(identify));
+    channel_->send(base::serialize(identify));
 }
 
 bool Authenticator::readServerKeyExchange(const base::ByteArray& buffer)
 {
     proto::SrpServerKeyExchange server_key_exchange;
-    if (!common::parseMessage(buffer, &server_key_exchange))
+    if (!base::parse(buffer, &server_key_exchange))
     {
         finished(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
         return false;
@@ -389,13 +388,13 @@ void Authenticator::sendClientKeyExchange()
     client_key_exchange.set_a(A_.toStdString());
     client_key_exchange.set_iv(base::toStdString(encrypt_iv_));
 
-    channel_->send(common::serializeMessage(client_key_exchange));
+    channel_->send(base::serialize(client_key_exchange));
 }
 
 bool Authenticator::readSessionChallenge(const base::ByteArray& buffer)
 {
     proto::SessionChallenge challenge;
-    if (!common::parseMessage(buffer, &challenge))
+    if (!base::parse(buffer, &challenge))
     {
         finished(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
         return false;
@@ -419,7 +418,7 @@ void Authenticator::sendSessionResponse()
     proto::SessionResponse response;
     response.set_session_type(session_type_);
 
-    channel_->send(common::serializeMessage(response));
+    channel_->send(base::serialize(response));
 }
 
 void Authenticator::finished(const base::Location& location, ErrorCode error_code)

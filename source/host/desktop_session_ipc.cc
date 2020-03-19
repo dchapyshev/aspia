@@ -20,7 +20,6 @@
 
 #include "base/logging.h"
 #include "codec/video_util.h"
-#include "common/message_serialization.h"
 #include "desktop/mouse_cursor.h"
 #include "desktop/shared_memory_desktop_frame.h"
 #include "ipc/ipc_channel.h"
@@ -101,49 +100,49 @@ void DesktopSessionIpc::enableSession(bool enable)
 {
     outgoing_message_.Clear();
     outgoing_message_.mutable_enable_session()->set_enable(enable);
-    channel_->send(common::serializeMessage(outgoing_message_));
+    channel_->send(base::serialize(outgoing_message_));
 }
 
 void DesktopSessionIpc::selectScreen(const proto::Screen& screen)
 {
     outgoing_message_.Clear();
     outgoing_message_.mutable_select_source()->mutable_screen()->CopyFrom(screen);
-    channel_->send(common::serializeMessage(outgoing_message_));
+    channel_->send(base::serialize(outgoing_message_));
 }
 
 void DesktopSessionIpc::enableFeatures(const proto::internal::EnableFeatures& features)
 {
     outgoing_message_.Clear();
     outgoing_message_.mutable_enable_features()->CopyFrom(features);
-    channel_->send(common::serializeMessage(outgoing_message_));
+    channel_->send(base::serialize(outgoing_message_));
 }
 
 void DesktopSessionIpc::injectKeyEvent(const proto::KeyEvent& event)
 {
     outgoing_message_.Clear();
     outgoing_message_.mutable_key_event()->CopyFrom(event);
-    channel_->send(common::serializeMessage(outgoing_message_));
+    channel_->send(base::serialize(outgoing_message_));
 }
 
 void DesktopSessionIpc::injectPointerEvent(const proto::PointerEvent& event)
 {
     outgoing_message_.Clear();
     outgoing_message_.mutable_pointer_event()->CopyFrom(event);
-    channel_->send(common::serializeMessage(outgoing_message_));
+    channel_->send(base::serialize(outgoing_message_));
 }
 
 void DesktopSessionIpc::injectClipboardEvent(const proto::ClipboardEvent& event)
 {
     outgoing_message_.Clear();
     outgoing_message_.mutable_clipboard_event()->CopyFrom(event);
-    channel_->send(common::serializeMessage(outgoing_message_));
+    channel_->send(base::serialize(outgoing_message_));
 }
 
 void DesktopSessionIpc::userSessionControl(proto::internal::UserSessionControl::Action action)
 {
     outgoing_message_.Clear();
     outgoing_message_.mutable_user_session_control()->set_action(action);
-    channel_->send(common::serializeMessage(outgoing_message_));
+    channel_->send(base::serialize(outgoing_message_));
 }
 
 void DesktopSessionIpc::onDisconnected()
@@ -156,7 +155,7 @@ void DesktopSessionIpc::onMessageReceived(const base::ByteArray& buffer)
 {
     incoming_message_.Clear();
 
-    if (!common::parseMessage(buffer, &incoming_message_))
+    if (!base::parse(buffer, &incoming_message_))
     {
         LOG(LS_ERROR) << "Invalid message from desktop";
         return;
@@ -245,7 +244,7 @@ void DesktopSessionIpc::onEncodeFrame(const proto::internal::EncodeFrame& encode
 
     outgoing_message_.Clear();
     outgoing_message_.mutable_encode_frame_result()->set_dummy(1);
-    channel_->send(common::serializeMessage(outgoing_message_));
+    channel_->send(base::serialize(outgoing_message_));
 }
 
 void DesktopSessionIpc::onCreateSharedBuffer(int shared_buffer_id)

@@ -18,7 +18,7 @@
 
 #include "host/user_session_agent.h"
 
-#include "common/message_serialization.h"
+#include "base/logging.h"
 #include "host/user_session_constants.h"
 #include "host/user_session_agent_proxy.h"
 #include "host/user_session_window_proxy.h"
@@ -73,7 +73,7 @@ void UserSessionAgent::onMessageReceived(const base::ByteArray& buffer)
 {
     incoming_message_.Clear();
 
-    if (!common::parseMessage(buffer, &incoming_message_))
+    if (!base::parse(buffer, &incoming_message_))
     {
         DLOG(LS_ERROR) << "Invalid message from service";
         return;
@@ -111,14 +111,14 @@ void UserSessionAgent::updateCredentials(proto::internal::CredentialsRequest::Ty
 {
     outgoing_message_.Clear();
     outgoing_message_.mutable_credentials_request()->set_type(request_type);
-    ipc_channel_->send(common::serializeMessage(outgoing_message_));
+    ipc_channel_->send(base::serialize(outgoing_message_));
 }
 
 void UserSessionAgent::killClient(const std::string& uuid)
 {
     outgoing_message_.Clear();
     outgoing_message_.mutable_kill_session()->set_uuid(uuid);
-    ipc_channel_->send(common::serializeMessage(outgoing_message_));
+    ipc_channel_->send(base::serialize(outgoing_message_));
 }
 
 } // namespace host

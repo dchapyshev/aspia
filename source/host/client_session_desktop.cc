@@ -18,13 +18,13 @@
 
 #include "host/client_session_desktop.h"
 
+#include "base/logging.h"
 #include "base/power_controller.h"
 #include "codec/cursor_encoder.h"
 #include "codec/video_encoder_vpx.h"
 #include "codec/video_encoder_zstd.h"
 #include "codec/video_util.h"
 #include "common/desktop_session_constants.h"
-#include "common/message_serialization.h"
 #include "desktop/desktop_frame.h"
 #include "host/desktop_session_proxy.h"
 #include "host/host_system_info.h"
@@ -54,7 +54,7 @@ void ClientSessionDesktop::onMessageReceived(const base::ByteArray& buffer)
 {
     incoming_message_.Clear();
 
-    if (!common::parseMessage(buffer, &incoming_message_))
+    if (!base::parse(buffer, &incoming_message_))
     {
         LOG(LS_ERROR) << "Invalid message from client";
         return;
@@ -115,7 +115,7 @@ void ClientSessionDesktop::onStarted()
     request->set_video_encodings(common::kSupportedVideoEncodings);
 
     // Send the request.
-    sendMessage(common::serializeMessage(outgoing_message_));
+    sendMessage(base::serialize(outgoing_message_));
 }
 
 void ClientSessionDesktop::encodeFrame(const desktop::Frame& frame)
@@ -129,7 +129,7 @@ void ClientSessionDesktop::encodeFrame(const desktop::Frame& frame)
     // Encode the frame into a video packet.
     video_encoder_->encode(&frame, packet);
 
-    sendMessage(common::serializeMessage(outgoing_message_));
+    sendMessage(base::serialize(outgoing_message_));
 }
 
 void ClientSessionDesktop::encodeMouseCursor(std::shared_ptr<desktop::MouseCursor> mouse_cursor)
@@ -140,7 +140,7 @@ void ClientSessionDesktop::encodeMouseCursor(std::shared_ptr<desktop::MouseCurso
     outgoing_message_.Clear();
 
     if (cursor_encoder_->encode(std::move(mouse_cursor), outgoing_message_.mutable_cursor_shape()))
-        sendMessage(common::serializeMessage(outgoing_message_));
+        sendMessage(base::serialize(outgoing_message_));
 }
 
 void ClientSessionDesktop::setScreenList(const proto::ScreenList& list)
@@ -151,7 +151,7 @@ void ClientSessionDesktop::setScreenList(const proto::ScreenList& list)
     extension->set_name(common::kSelectScreenExtension);
     extension->set_data(list.SerializeAsString());
 
-    sendMessage(common::serializeMessage(outgoing_message_));
+    sendMessage(base::serialize(outgoing_message_));
 }
 
 void ClientSessionDesktop::injectClipboardEvent(const proto::ClipboardEvent& event)
@@ -159,7 +159,7 @@ void ClientSessionDesktop::injectClipboardEvent(const proto::ClipboardEvent& eve
     outgoing_message_.Clear();
 
     outgoing_message_.mutable_clipboard_event()->CopyFrom(event);
-    sendMessage(common::serializeMessage(outgoing_message_));
+    sendMessage(base::serialize(outgoing_message_));
 }
 
 void ClientSessionDesktop::readExtension(const proto::DesktopExtension& extension)
@@ -226,7 +226,7 @@ void ClientSessionDesktop::readExtension(const proto::DesktopExtension& extensio
         extension->set_name(common::kSystemInfoExtension);
         extension->set_data(system_info.SerializeAsString());
 
-        sendMessage(common::serializeMessage(outgoing_message_));
+        sendMessage(base::serialize(outgoing_message_));
     }
     else
     {

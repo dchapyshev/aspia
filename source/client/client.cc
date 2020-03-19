@@ -18,9 +18,9 @@
 
 #include "client/client.h"
 
+#include "base/logging.h"
 #include "build/version.h"
 #include "client/status_window_proxy.h"
-#include "common/message_serialization.h"
 #include "net/network_channel_proxy.h"
 
 namespace client {
@@ -98,7 +98,7 @@ proto::SessionType Client::sessionType() const
 
 void Client::sendMessage(const google::protobuf::MessageLite& message)
 {
-    channel_->send(common::serializeMessage(message));
+    channel_->send(base::serialize(message));
 }
 
 void Client::onBeforeThreadRunning()
