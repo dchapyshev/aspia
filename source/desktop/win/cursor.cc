@@ -167,22 +167,20 @@ MouseCursor* mouseCursorFromHCursor(HDC dc, HCURSOR cursor)
 
     uint32_t* mask_plane = mask_data.get();
 
-    std::unique_ptr<uint8_t[]> image;
-    size_t image_size;
+    base::ByteArray image;
 
     bool has_alpha = false;
 
     if (is_color)
     {
-        image_size = width * height * kBytesPerPixel;
-        image = std::make_unique<uint8_t[]>(image_size);
+        image.resize(width * height * kBytesPerPixel);
 
         // Get the pixels from the color bitmap.
         if (!GetDIBits(dc,
                        scoped_color,
                        0,
                        height,
-                       image.get(),
+                       image.data(),
                        reinterpret_cast<BITMAPINFO*>(&bmi),
                        DIB_RGB_COLORS))
         {
@@ -192,7 +190,7 @@ MouseCursor* mouseCursorFromHCursor(HDC dc, HCURSOR cursor)
 
         // GetDIBits() does not provide any indication whether the bitmap has
         // alpha channel, so we use HasAlphaChannel() below to find it out.
-        has_alpha = hasAlphaChannel(reinterpret_cast<const uint32_t*>(image.get()), width, height);
+        has_alpha = hasAlphaChannel(reinterpret_cast<const uint32_t*>(image.data()), width, height);
     }
     else
     {
@@ -201,11 +199,10 @@ MouseCursor* mouseCursorFromHCursor(HDC dc, HCURSOR cursor)
         // need to divide by 2 to get the correct mask height.
         height /= 2;
 
-        image_size = width * height * kBytesPerPixel;
-        image = std::make_unique<uint8_t[]>(image_size);
+        image.resize(width * height * kBytesPerPixel);
 
         // The XOR mask becomes the color bitmap.
-        memcpy(image.get(), mask_plane + (width * height), image_size);
+        memcpy(image.data(), mask_plane + (width * height), image.size());
     }
 
     //
@@ -215,7 +212,7 @@ MouseCursor* mouseCursorFromHCursor(HDC dc, HCURSOR cursor)
     if (!has_alpha)
     {
         bool add_outline = false;
-        uint32_t* dst = reinterpret_cast<uint32_t*>(image.get());
+        uint32_t* dst = reinterpret_cast<uint32_t*>(image.data());
         uint32_t* mask = mask_plane;
 
         for (int y = 0; y < height; ++y)
@@ -257,13 +254,12 @@ MouseCursor* mouseCursorFromHCursor(HDC dc, HCURSOR cursor)
 
         if (add_outline)
         {
-            addCursorOutline(width, height, reinterpret_cast<uint32_t*>(image.get()));
+            addCursorOutline(width, height, reinterpret_cast<uint32_t*>(image.data()));
         }
     }
 
-    // Pre-multiply the resulting pixels since MouseCursor uses premultiplied
-    // images.
-    alphaMul(reinterpret_cast<uint32_t*>(image.get()), width, height);
+    // Pre-multiply the resulting pixels since MouseCursor uses premultiplied images.
+    alphaMul(reinterpret_cast<uint32_t*>(image.data()), width, height);
 
     return new MouseCursor(std::move(image),
                            Size(width, height),

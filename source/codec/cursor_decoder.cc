@@ -17,6 +17,7 @@
 //
 
 #include "codec/cursor_decoder.h"
+
 #include "base/logging.h"
 #include "desktop/mouse_cursor_cache.h"
 
@@ -30,20 +31,21 @@ CursorDecoder::CursorDecoder()
 
 CursorDecoder::~CursorDecoder() = default;
 
-bool CursorDecoder::decompressCursor(const proto::CursorShape& cursor_shape,
-                                     uint8_t* output_data,
-                                     size_t output_size)
+base::ByteArray CursorDecoder::decompressCursor(const proto::CursorShape& cursor_shape)
 {
     const std::string& data = cursor_shape.data();
 
     if (data.empty())
-        return false;
+        return base::ByteArray();
+
+    base::ByteArray image;
+    image.resize(cursor_shape.width() * cursor_shape.height() * sizeof(uint32_t));
 
     size_t ret = ZSTD_initDStream(stream_.get());
     DCHECK(!ZSTD_isError(ret)) << ZSTD_getErrorName(ret);
 
     ZSTD_inBuffer input = { data.data(), data.size(), 0 };
-    ZSTD_outBuffer output = { output_data, output_size, 0 };
+    ZSTD_outBuffer output = { image.data(), image.size(), 0 };
 
     while (input.pos < input.size)
     {
@@ -51,11 +53,11 @@ bool CursorDecoder::decompressCursor(const proto::CursorShape& cursor_shape,
         if (ZSTD_isError(ret))
         {
             LOG(LS_WARNING) << "ZSTD_decompressStream failed: " << ZSTD_getErrorName(ret);
-            return false;
+            return base::ByteArray();
         }
     }
 
-    return true;
+    return image;
 }
 
 std::shared_ptr<desktop::MouseCursor> CursorDecoder::decode(const proto::CursorShape& cursor_shape)
@@ -79,10 +81,8 @@ std::shared_ptr<desktop::MouseCursor> CursorDecoder::decode(const proto::CursorS
             return nullptr;
         }
 
-        size_t image_size = size.width() * size.height() * sizeof(uint32_t);
-        std::unique_ptr<uint8_t[]> image = std::make_unique<uint8_t[]>(image_size);
-
-        if (!decompressCursor(cursor_shape, image.get(), image_size))
+        base::ByteArray image = decompressCursor(cursor_shape);
+        if (image.empty())
             return nullptr;
 
         std::unique_ptr<desktop::MouseCursor> mouse_cursor =

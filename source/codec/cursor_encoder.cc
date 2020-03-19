@@ -51,8 +51,8 @@ bool CursorEncoder::compressCursor(proto::CursorShape* cursor_shape,
     size_t ret = ZSTD_initCStream(stream_.get(), kCompressionRatio);
     DCHECK(!ZSTD_isError(ret)) << ZSTD_getErrorName(ret);
 
-    const size_t input_size = mouse_cursor->stride() * mouse_cursor->size().height();
-    const uint8_t* input_data = mouse_cursor->data();
+    const size_t input_size = mouse_cursor->constImage().size();
+    const uint8_t* input_data = mouse_cursor->constImage().data();
 
     const size_t output_size = ZSTD_compressBound(input_size);
     uint8_t* output_data = outputBuffer(cursor_shape, output_size);

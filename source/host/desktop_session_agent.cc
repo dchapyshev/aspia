@@ -200,17 +200,14 @@ void DesktopSessionAgent::onScreenCaptured(
 
     if (mouse_cursor)
     {
-        const desktop::Size& cursor_size = mouse_cursor->size();
-
         proto::internal::SerializedMouseCursor* serialized_mouse_cursor =
             encode_frame->mutable_mouse_cursor();
 
-        serialized_mouse_cursor->set_width(cursor_size.width());
-        serialized_mouse_cursor->set_height(cursor_size.height());
-        serialized_mouse_cursor->set_hotspot_x(mouse_cursor->hotSpot().x());
-        serialized_mouse_cursor->set_hotspot_y(mouse_cursor->hotSpot().y());
-        serialized_mouse_cursor->set_data(
-            mouse_cursor->data(), mouse_cursor->stride() * cursor_size.height());
+        serialized_mouse_cursor->set_width(mouse_cursor->width());
+        serialized_mouse_cursor->set_height(mouse_cursor->height());
+        serialized_mouse_cursor->set_hotspot_x(mouse_cursor->hotSpotX());
+        serialized_mouse_cursor->set_hotspot_y(mouse_cursor->hotSpotY());
+        serialized_mouse_cursor->set_data(base::toStdString(mouse_cursor->constImage()));
     }
 
     if (encode_frame->has_frame() || encode_frame->has_mouse_cursor())

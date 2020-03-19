@@ -20,6 +20,7 @@
 #define CODEC__CURSOR_DECODER_H
 
 #include "base/macros_magic.h"
+#include "base/memory/byte_array.h"
 #include "codec/scoped_zstd_stream.h"
 #include "proto/desktop.pb.h"
 
@@ -41,9 +42,7 @@ public:
     std::shared_ptr<desktop::MouseCursor> decode(const proto::CursorShape& cursor_shape);
 
 private:
-    bool decompressCursor(const proto::CursorShape& cursor_shape,
-                          uint8_t* output_data,
-                          size_t output_size);
+    base::ByteArray decompressCursor(const proto::CursorShape& cursor_shape);
 
     std::unique_ptr<desktop::MouseCursorCache> cache_;
     ScopedZstdDStream stream_;

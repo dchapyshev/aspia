@@ -237,13 +237,10 @@ void DesktopSessionIpc::onEncodeFrame(const proto::internal::EncodeFrame& encode
             serialized_mouse_cursor.width(), serialized_mouse_cursor.height());
         desktop::Point hotspot = desktop::Point(
             serialized_mouse_cursor.hotspot_x(), serialized_mouse_cursor.hotspot_y());
-        std::unique_ptr<uint8_t[]> data =
-            std::make_unique<uint8_t[]>(serialized_data.size());
-
-        memcpy(data.get(), serialized_data.data(), serialized_data.size());
 
         delegate_->onCursorCaptured(
-            std::make_shared<desktop::MouseCursor>(std::move(data), size, hotspot));
+            std::make_shared<desktop::MouseCursor>(
+                base::fromStdString(serialized_mouse_cursor.data()), size, hotspot));
     }
 
     outgoing_message_.Clear();

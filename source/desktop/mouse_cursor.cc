@@ -20,8 +20,8 @@
 
 namespace desktop {
 
-MouseCursor::MouseCursor(std::unique_ptr<uint8_t[]> data, const Size& size, const Point& hotspot)
-    : data_(std::move(data)),
+MouseCursor::MouseCursor(base::ByteArray&& image, const Size& size, const Point& hotspot)
+    : image_(std::move(image)),
       size_(size),
       hotspot_(hotspot)
 {
@@ -35,14 +35,8 @@ int MouseCursor::stride() const
 
 bool MouseCursor::isEqual(const MouseCursor& other)
 {
-    if (size_ == other.size_ &&
-        hotspot_ == other.hotspot_ &&
-        memcmp(data_.get(), other.data_.get(), stride() * size_.height()) == 0)
-    {
-        return true;
-    }
-
-    return false;
+    return (size_ == other.size_ && hotspot_ == other.hotspot_ &&
+            base::compare(image_, other.image_) == 0);
 }
 
 } // namespace desktop

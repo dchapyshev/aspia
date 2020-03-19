@@ -292,15 +292,14 @@ void QtDesktopWindow::drawFrame(std::shared_ptr<desktop::Frame> frame)
 
 void QtDesktopWindow::drawMouseCursor(std::shared_ptr<desktop::MouseCursor> mouse_cursor)
 {
-    QImage image(mouse_cursor->data(),
-                 mouse_cursor->size().width(),
-                 mouse_cursor->size().height(),
+    QImage image(mouse_cursor->constImage().data(),
+                 mouse_cursor->width(),
+                 mouse_cursor->height(),
                  mouse_cursor->stride(),
                  QImage::Format::Format_ARGB32);
 
-    desktop_->setCursor(QCursor(QPixmap::fromImage(image),
-                                mouse_cursor->hotSpot().x(),
-                                mouse_cursor->hotSpot().y()));
+    desktop_->setCursor(QCursor(
+        QPixmap::fromImage(image), mouse_cursor->hotSpotX(), mouse_cursor->hotSpotY()));
 }
 
 void QtDesktopWindow::injectClipboardEvent(const proto::ClipboardEvent& event)
