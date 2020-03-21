@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,10 +17,9 @@
 //
 
 #include "client/ui/file_name_validator.h"
-
 #include "common/file_platform_util.h"
 
-namespace aspia {
+namespace client {
 
 FileNameValidator::FileNameValidator(QObject* parent)
     : QValidator(parent)
@@ -32,7 +31,8 @@ FileNameValidator::State FileNameValidator::validate(QString& input, int& pos) c
 {
     if (!input.isEmpty())
     {
-        const QList<QChar>& invalid_characters = FilePlatformUtil::invalidFileNameCharacters();
+        const QList<QChar>& invalid_characters =
+            common::FilePlatformUtil::invalidFileNameCharacters();
 
         for (const auto& character : input)
         {
@@ -50,7 +50,7 @@ FileNameValidator::State FileNameValidator::validate(QString& input, int& pos) c
 void FileNameValidator::fixup(QString& input) const
 {
     const QList<QChar>& invalid_characters =
-        FilePlatformUtil::invalidFileNameCharacters();
+        common::FilePlatformUtil::invalidFileNameCharacters();
 
     for (auto it = input.begin(); it != input.end(); ++it)
     {
@@ -59,4 +59,4 @@ void FileNameValidator::fixup(QString& input) const
     }
 }
 
-} // namespace aspia
+} // namespace client

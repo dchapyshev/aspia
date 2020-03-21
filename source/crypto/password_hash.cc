@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -18,16 +18,19 @@
 
 #include "crypto/password_hash.h"
 
-#include <openssl/opensslv.h>
-#include <openssl/evp.h>
-
 #include "base/logging.h"
 
-namespace aspia {
+#include <openssl/evp.h>
 
-// static
-std::string PasswordHash::hash(Type type, const std::string& password, const std::string& salt)
+namespace crypto {
+
+namespace {
+
+template <typename InputT, typename OutputT>
+OutputT hashT(PasswordHash::Type type, std::string_view password, InputT salt)
 {
+    DCHECK_EQ(type, PasswordHash::Type::SCRYPT);
+
     // CPU/Memory cost parameter, must be larger than 1, a power of 2, and less than 2^(128 * r / 8).
     static const uint64_t N = 16384;
 
@@ -41,11 +44,11 @@ std::string PasswordHash::hash(Type type, const std::string& password, const std
     // 32MB
     static const uint64_t max_mem = 32 * 1024 * 1024;
 
-    std::string result;
-    result.resize(kBytesSize);
+    OutputT result;
+    result.resize(PasswordHash::kBytesSize);
 
-    int ret = EVP_PBE_scrypt(password.c_str(), password.size(),
-                             reinterpret_cast<const uint8_t*>(salt.c_str()), salt.size(),
+    int ret = EVP_PBE_scrypt(password.data(), password.size(),
+                             reinterpret_cast<const uint8_t*>(salt.data()), salt.size(),
                              N, r, p, max_mem,
                              reinterpret_cast<uint8_t*>(result.data()), result.size());
     CHECK_EQ(ret, 1) << "EVP_PBE_scrypt failed";
@@ -53,4 +56,19 @@ std::string PasswordHash::hash(Type type, const std::string& password, const std
     return result;
 }
 
-} // namespace aspia
+} // namespace
+
+// static
+base::ByteArray PasswordHash::hash(
+    Type type, std::string_view password, const base::ByteArray& salt)
+{
+    return hashT<const base::ByteArray, base::ByteArray>(type, password, salt);
+}
+
+// static
+std::string PasswordHash::hash(Type type, std::string_view password, std::string_view salt)
+{
+    return hashT<std::string_view, std::string>(type, password, salt);
+}
+
+} // namespace crypto

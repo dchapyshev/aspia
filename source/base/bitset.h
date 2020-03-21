@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,15 +16,13 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_BASE__BITSET_H_
-#define ASPIA_BASE__BITSET_H_
+#ifndef ASPIA_BASE__BITSET_H
+#define ASPIA_BASE__BITSET_H
 
-#include <limits>
 #include <cassert>
+#include <limits>
 
-#include "base/logging.h"
-
-namespace aspia {
+namespace base {
 
 template<typename NumericType>
 class BitSet
@@ -44,9 +42,17 @@ public:
     // Returns the value of the bit range at the range from |from| to |to|.
     NumericType range(size_t from, size_t to) const
     {
-        DCHECK(from <= to && from < size() && to < size());
+        if (from > size() - 1)
+            return 0;
+
+        NumericType v = value_ >> from;
+
+        to -= from;
+        if (to >= size() - 1)
+            return v;
+
         const NumericType mask = (static_cast<NumericType>(1) << (to + 1)) - 1;
-        return ((value_ & mask) >> from);
+        return v & mask;
     }
 
     // Checks if all bits are set to true.
@@ -68,7 +74,8 @@ public:
     // Sets the bit at position |pos| to the value |value|.
     BitSet& set(size_t pos, bool value = true)
     {
-        DCHECK(pos < size());
+        if (pos > size() - 1)
+            return *this;
 
         const NumericType mask = static_cast<NumericType>(1) << pos;
 
@@ -100,7 +107,8 @@ public:
     // Flips the bit at the position |pos|.
     BitSet& flip(size_t pos)
     {
-        assert(pos < size());
+        if (pos > size() - 1)
+            return *this;
 
         value_ ^= static_cast<NumericType>(1) << pos;
         return *this;
@@ -117,7 +125,7 @@ public:
                 ++counter;
         }
 
-        return count;
+        return counter;
     }
 
     // Returns numberic value of bitset.
@@ -146,6 +154,6 @@ private:
     NumericType value_ = 0;
 };
 
-} // namespace aspia
+} // namespace base
 
-#endif // ASPIA_BASE__BITSET_H_
+#endif // ASPIA_BASE__BITSET_H

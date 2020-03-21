@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,17 +17,15 @@
 //
 
 #include "client/ui/address_bar.h"
+#include "client/ui/address_bar_model.h"
+#include "client/ui/file_path_validator.h"
 
-#include <QHeaderView>
 #include <QLineEdit>
 #include <QMessageBox>
 #include <QTreeView>
 #include <QToolTip>
 
-#include "client/ui/address_bar_model.h"
-#include "client/ui/file_path_validator.h"
-
-namespace aspia {
+namespace client {
 
 AddressBar::AddressBar(QWidget* parent)
     : QComboBox(parent)
@@ -66,7 +64,7 @@ AddressBar::AddressBar(QWidget* parent)
     {
         QString characters;
 
-        for (const auto& character : FilePlatformUtil::invalidPathCharacters())
+        for (const auto& character : common::FilePlatformUtil::invalidPathCharacters())
         {
             if (!characters.isEmpty())
                 characters += QLatin1String(", ");
@@ -85,7 +83,7 @@ AddressBar::AddressBar(QWidget* parent)
     });
 }
 
-void AddressBar::setDriveList(const proto::file_transfer::DriveList& list)
+void AddressBar::setDriveList(const proto::DriveList& list)
 {
     model_->setDriveList(list);
     emit pathChanged(currentPath());
@@ -137,4 +135,4 @@ void AddressBar::onPathIndexChanged(const QModelIndex& index)
     emit pathChanged(currentPath());
 }
 
-} // namespace aspia
+} // namespace client

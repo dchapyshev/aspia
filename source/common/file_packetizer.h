@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,18 +16,17 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_COMMON__FILE_PACKETIZER_H_
-#define ASPIA_COMMON__FILE_PACKETIZER_H_
+#ifndef COMMON__FILE_PACKETIZER_H
+#define COMMON__FILE_PACKETIZER_H
+
+#include "base/macros_magic.h"
+#include "proto/file_transfer.pb.h"
 
 #include <filesystem>
 #include <fstream>
 #include <memory>
 
-#include "base/macros_magic.h"
-#include "codec/scoped_zstd_stream.h"
-#include "protocol/file_transfer_session.pb.h"
-
-namespace aspia {
+namespace common {
 
 class FilePacketizer
 {
@@ -40,23 +39,19 @@ public:
     static std::unique_ptr<FilePacketizer> create(const std::filesystem::path& file_path);
 
     // Creates a packet for transferring.
-    std::unique_ptr<proto::file_transfer::Packet> readNextPacket(
-        const proto::file_transfer::PacketRequest& request);
+    std::unique_ptr<proto::FilePacket> readNextPacket(const proto::FilePacketRequest& request);
 
 private:
     FilePacketizer(std::ifstream&& file_stream);
 
     std::ifstream file_stream_;
-    std::string read_buffer_;
 
     uint64_t file_size_ = 0;
     uint64_t left_size_ = 0;
 
-    ScopedZstdCStream compressor_;
-
     DISALLOW_COPY_AND_ASSIGN(FilePacketizer);
 };
 
-} // namespace aspia
+} // namespace common
 
-#endif // ASPIA_COMMON__FILE_PACKETIZER_H_
+#endif // COMMON__FILE_PACKETIZER_H

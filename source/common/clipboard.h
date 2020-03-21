@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,41 +16,59 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_COMMON__CLIPBOARD_H_
-#define ASPIA_COMMON__CLIPBOARD_H_
-
-#include <QObject>
+#ifndef COMMON__CLIPBOARD_H
+#define COMMON__CLIPBOARD_H
 
 #include "base/macros_magic.h"
-#include "protocol/desktop_session.pb.h"
+#include "proto/desktop.pb.h"
 
-namespace aspia {
+#include <memory>
 
-class Clipboard : public QObject
+namespace base::win {
+class MessageWindow;
+} // namespace base::win
+
+#include <Windows.h>
+
+namespace common {
+
+class Clipboard
 {
-    Q_OBJECT
-
 public:
-    Clipboard(QObject* parent = nullptr);
+    Clipboard();
     ~Clipboard();
 
-public slots:
+    class Delegate
+    {
+    public:
+        virtual ~Delegate() = default;
+
+        virtual void onClipboardEvent(const proto::ClipboardEvent& event) = 0;
+    };
+
+    void start(Delegate* delegate);
+
     // Receiving the incoming clipboard.
-    void injectClipboardEvent(const proto::desktop::ClipboardEvent& event);
-
-signals:
-    void clipboardEvent(const proto::desktop::ClipboardEvent& event);
-
-private slots:
-    void dataChanged();
+    void injectClipboardEvent(const proto::ClipboardEvent& event);
 
 private:
+    void stop();
+
+    // Handles messages received by |window_|.
+    bool onMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESULT& result);
+    void onClipboardUpdate();
+
+    Delegate* delegate_;
+
+    // Used to subscribe to WM_CLIPBOARDUPDATE messages.
+    std::unique_ptr<base::win::MessageWindow> window_;
+
     std::string last_mime_type_;
     std::string last_data_;
 
     DISALLOW_COPY_AND_ASSIGN(Clipboard);
 };
 
-} // namespace aspia
+} // namespace common
 
-#endif // ASPIA_COMMON__CLIPBOARD_H_
+#endif // COMMON__CLIPBOARD_H

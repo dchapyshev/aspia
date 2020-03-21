@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,48 +16,62 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_IPC__IPC_SERVER_H_
-#define ASPIA_IPC__IPC_SERVER_H_
-
-#include <QPointer>
+#ifndef IPC__IPC_SERVER_H
+#define IPC__IPC_SERVER_H
 
 #include "base/macros_magic.h"
+#include "base/threading/thread_checker.h"
 
-class QLocalServer;
+#include <asio/io_context.hpp>
 
-namespace aspia {
+#include <array>
 
-class IpcChannel;
+namespace base {
+class Location;
+} // namespace base
 
-class IpcServer : public QObject
+namespace ipc {
+
+class Channel;
+
+class Server
 {
-    Q_OBJECT
-
 public:
-    explicit IpcServer(QObject* parent = nullptr);
-    ~IpcServer() = default;
+    Server();
+    ~Server();
 
-    bool isStarted() const;
+    static std::u16string createUniqueId();
 
-public slots:
-    void start();
+    class Delegate
+    {
+    public:
+        virtual ~Delegate() = default;
+
+        virtual void onNewConnection(std::unique_ptr<Channel> channel) = 0;
+        virtual void onErrorOccurred() = 0;
+    };
+
+    bool start(std::u16string_view channel_id, Delegate* delegate);
     void stop();
 
-signals:
-    void started(const QString& channel_id);
-    void finished();
-    void newConnection(IpcChannel* channel);
-    void errorOccurred();
-
-private slots:
-    void onNewConnection();
-
 private:
-    QPointer<QLocalServer> server_;
+    bool runListener(size_t index);
+    void onNewConnection(size_t index, std::unique_ptr<Channel> channel);
+    void onErrorOccurred(const base::Location& location);
 
-    DISALLOW_COPY_AND_ASSIGN(IpcServer);
+    Delegate* delegate_ = nullptr;
+
+    asio::io_context& io_context_;
+    std::u16string channel_name_;
+
+    class Listener;
+    std::array<std::shared_ptr<Listener>, 8> listeners_;
+
+    THREAD_CHECKER(thread_checker_);
+
+    DISALLOW_COPY_AND_ASSIGN(Server);
 };
 
-} // namespace aspia
+} // namespace ipc
 
-#endif // ASPIA_IPC__IPC_SERVER_H_
+#endif // IPC__IPC_SERVER_H

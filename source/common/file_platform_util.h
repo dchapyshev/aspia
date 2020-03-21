@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,17 +16,17 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_COMMON__FILE_PLATFORM_UTIL_H_
-#define ASPIA_COMMON__FILE_PLATFORM_UTIL_H_
+#ifndef COMMON__FILE_PLATFORM_UTIL_H
+#define COMMON__FILE_PLATFORM_UTIL_H
+
+#include "base/macros_magic.h"
+#include "proto/file_transfer.pb.h"
 
 #include <QIcon>
 #include <QPair>
 #include <QString>
 
-#include "base/macros_magic.h"
-#include "protocol/file_transfer_session.pb.h"
-
-namespace aspia {
+namespace common {
 
 class FilePlatformUtil
 {
@@ -38,7 +38,7 @@ public:
     static QIcon computerIcon();
     static QIcon directoryIcon();
 
-    static QIcon driveIcon(proto::file_transfer::DriveList::Item::Type type);
+    static QIcon driveIcon(proto::DriveList::Item::Type type);
 
     static const QList<QChar>& invalidFileNameCharacters();
     static const QList<QChar>& invalidPathCharacters();
@@ -47,11 +47,13 @@ public:
     static bool isValidFileName(const QString& file_name);
 
     static bool isRelativePath(const QString& path);
+    static bool isNetworkPath(const QString& path);
+    static bool isRootPath(const QString& path);
 
 private:
     DISALLOW_COPY_AND_ASSIGN(FilePlatformUtil);
 };
 
-} // namespace aspia
+} // namespace common
 
-#endif // ASPIA_COMMON__FILE_PLATFORM_UTIL_H_
+#endif // COMMON__FILE_PLATFORM_UTIL_H

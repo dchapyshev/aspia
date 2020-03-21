@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,40 +16,42 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CODEC__VIDEO_ENCODER_VPX_H_
-#define ASPIA_CODEC__VIDEO_ENCODER_VPX_H_
+#ifndef CODEC__VIDEO_ENCODER_VPX_H
+#define CODEC__VIDEO_ENCODER_VPX_H
+
+#include "base/macros_magic.h"
+#include "codec/scoped_vpx_codec.h"
+#include "codec/video_encoder.h"
+#include "desktop/desktop_region.h"
 
 #define VPX_CODEC_DISABLE_COMPAT 1
 #include <vpx/vpx_encoder.h>
 #include <vpx/vp8cx.h>
 
-#include "base/macros_magic.h"
-#include "codec/scoped_vpx_codec.h"
-#include "codec/video_encoder.h"
-
-namespace aspia {
+namespace codec {
 
 class VideoEncoderVPX : public VideoEncoder
 {
 public:
     ~VideoEncoderVPX() = default;
 
-    static VideoEncoderVPX* createVP8();
-    static VideoEncoderVPX* createVP9();
+    static std::unique_ptr<VideoEncoderVPX> createVP8();
+    static std::unique_ptr<VideoEncoderVPX> createVP9();
 
-    void encode(const DesktopFrame* frame, proto::desktop::VideoPacket* packet) override;
+    void encode(const desktop::Frame* frame, proto::VideoPacket* packet) override;
 
 private:
-    VideoEncoderVPX(proto::desktop::VideoEncoding encoding);
+    VideoEncoderVPX(proto::VideoEncoding encoding);
 
-    void createActiveMap(const DesktopSize& size);
-    void createVp8Codec(const DesktopSize& size);
-    void createVp9Codec(const DesktopSize& size);
-    void prepareImageAndActiveMap(const DesktopFrame* frame, proto::desktop::VideoPacket* packet);
-    void setActiveMap(const DesktopRect& rect);
+    void createActiveMap(const desktop::Size& size);
+    void createVp8Codec(const desktop::Size& size);
+    void createVp9Codec(const desktop::Size& size);
+    void prepareImageAndActiveMap(const desktop::Frame* frame, proto::VideoPacket* packet);
+    void setActiveMap(const desktop::Rect& rect);
 
-    const proto::desktop::VideoEncoding encoding_;
+    const proto::VideoEncoding encoding_;
 
+    desktop::Region updated_region_;
     ScopedVpxCodec codec_ = nullptr;
 
     size_t active_map_size_ = 0;
@@ -64,6 +66,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(VideoEncoderVPX);
 };
 
-} // namespace aspia
+} // namespace codec
 
-#endif // ASPIA_CODEC___VIDEO_ENCODER_VPX_H_
+#endif // CODEC___VIDEO_ENCODER_VPX_H

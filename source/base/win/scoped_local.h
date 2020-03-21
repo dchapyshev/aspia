@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,16 +16,14 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_BASE__WIN__SCOPED_LOCAL_H_
-#define ASPIA_BASE__WIN__SCOPED_LOCAL_H_
-
-#define WIN32_LEAN_AND_MEAN
-#define NOMINMAX
-#include <windows.h>
+#ifndef BASE__WIN__SCOPED_LOCAL_H
+#define BASE__WIN__SCOPED_LOCAL_H
 
 #include "base/macros_magic.h"
 
-namespace aspia {
+#include <Windows.h>
+
+namespace base::win {
 
 template <typename T>
 class ScopedLocal
@@ -102,6 +100,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(ScopedLocal);
 };
 
-} // namespace aspia
+} // namespace base::win
 
-#endif // ASPIA_BASE__WIN__SCOPED_LOCAL_H_
+#endif // BASE__WIN__SCOPED_LOCAL_H

@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,27 +16,23 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CRYPTO__SRP_CONSTANTS_H_
-#define ASPIA_CRYPTO__SRP_CONSTANTS_H_
+#ifndef CRYPTO__SRP_CONSTANTS_H
+#define CRYPTO__SRP_CONSTANTS_H
 
-#include "base/const_buffer.h"
+#include <string_view>
 
-namespace aspia {
+namespace crypto {
 
-struct SrpNg
-{
-    const ConstBuffer N;
-    const ConstBuffer g;
-};
+using SrpNgPair = std::pair<std::string_view, std::string_view>;
 
-extern const SrpNg kSrpNg_1024;
-extern const SrpNg kSrpNg_1536;
-extern const SrpNg kSrpNg_2048;
-extern const SrpNg kSrpNg_3072;
-extern const SrpNg kSrpNg_4096;
-extern const SrpNg kSrpNg_6144;
-extern const SrpNg kSrpNg_8192;
+extern const SrpNgPair kSrpNgPair_1024;
+extern const SrpNgPair kSrpNgPair_1536;
+extern const SrpNgPair kSrpNgPair_2048;
+extern const SrpNgPair kSrpNgPair_3072;
+extern const SrpNgPair kSrpNgPair_4096;
+extern const SrpNgPair kSrpNgPair_6144;
+extern const SrpNgPair kSrpNgPair_8192;
 
-} // namespace aspia
+} // namespace crypto
 
-#endif // ASPIA_CRYPTO__SRP_CONSTANTS_H_
+#endif // CRYPTO__SRP_CONSTANTS_H

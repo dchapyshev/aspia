@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,12 +16,12 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CRYPTO__SCOPED_CRYPTO_INITIALIZER_H_
-#define ASPIA_CRYPTO__SCOPED_CRYPTO_INITIALIZER_H_
+#ifndef CRYPTO__SCOPED_CRYPTO_INITIALIZER_H
+#define CRYPTO__SCOPED_CRYPTO_INITIALIZER_H
 
 #include "base/macros_magic.h"
 
-namespace aspia {
+namespace crypto {
 
 class ScopedCryptoInitializer
 {
@@ -36,6 +36,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(ScopedCryptoInitializer);
 };
 
-} // namespace aspia
+} // namespace crypto
 
-#endif // ASPIA_CRYPTO__SCOPED_CRYPTO_INITIALIZER_H_
+#endif // CRYPTO__SCOPED_CRYPTO_INITIALIZER_H

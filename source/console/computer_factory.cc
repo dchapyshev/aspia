@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -22,53 +22,43 @@
 #include "base/logging.h"
 #include "codec/video_util.h"
 
-namespace aspia {
+namespace console {
 
 namespace {
 
 const int kDefUpdateInterval = 30;
-const int kMinUpdateInterval = 15;
-const int kMaxUpdateInterval = 100;
-
-const int kDefScaleFactor = 100;
-const int kMinScaleFactor = 50;
-const int kMaxScaleFactor = 100;
-
 const int kDefCompressRatio = 8;
-const int kMinCompressRatio = 1;
-const int kMaxCompressRatio = 22;
 
-void setDefaultDesktopManageConfig(proto::desktop::Config* config)
+void setDefaultDesktopManageConfig(proto::DesktopConfig* config)
 {
     DCHECK(config);
 
     static const uint32_t kDefaultFlags =
-        proto::desktop::ENABLE_CLIPBOARD | proto::desktop::ENABLE_CURSOR_SHAPE |
-        proto::desktop::DISABLE_DESKTOP_EFFECTS | proto::desktop::DISABLE_DESKTOP_WALLPAPER;
+        proto::ENABLE_CLIPBOARD | proto::ENABLE_CURSOR_SHAPE | proto::DISABLE_DESKTOP_EFFECTS |
+        proto::DISABLE_DESKTOP_WALLPAPER | proto::DISABLE_FONT_SMOOTHING;
 
     config->set_flags(kDefaultFlags);
-    config->set_video_encoding(proto::desktop::VideoEncoding::VIDEO_ENCODING_ZSTD);
+    config->set_video_encoding(proto::VideoEncoding::VIDEO_ENCODING_VP8);
     config->set_compress_ratio(kDefCompressRatio);
-    config->set_scale_factor(kDefScaleFactor);
     config->set_update_interval(kDefUpdateInterval);
 
-    VideoUtil::toVideoPixelFormat(PixelFormat::RGB565(), config->mutable_pixel_format());
+    codec::serializePixelFormat(desktop::PixelFormat::RGB332(), config->mutable_pixel_format());
 }
 
-void setDefaultDesktopViewConfig(proto::desktop::Config* config)
+void setDefaultDesktopViewConfig(proto::DesktopConfig* config)
 {
     DCHECK(config);
 
     static const uint32_t kDefaultFlags =
-        proto::desktop::DISABLE_DESKTOP_EFFECTS | proto::desktop::DISABLE_DESKTOP_WALLPAPER;
+        proto::DISABLE_DESKTOP_EFFECTS | proto::DISABLE_DESKTOP_WALLPAPER |
+        proto::DISABLE_FONT_SMOOTHING;
 
     config->set_flags(kDefaultFlags);
-    config->set_video_encoding(proto::desktop::VideoEncoding::VIDEO_ENCODING_ZSTD);
+    config->set_video_encoding(proto::VideoEncoding::VIDEO_ENCODING_VP8);
     config->set_compress_ratio(kDefCompressRatio);
-    config->set_scale_factor(kDefScaleFactor);
     config->set_update_interval(kDefUpdateInterval);
 
-    VideoUtil::toVideoPixelFormat(PixelFormat::RGB565(), config->mutable_pixel_format());
+    codec::serializePixelFormat(desktop::PixelFormat::RGB332(), config->mutable_pixel_format());
 }
 
 } // namespace
@@ -87,4 +77,4 @@ proto::address_book::Computer ComputerFactory::defaultComputer()
     return computer;
 }
 
-} // namespace aspia
+} // namespace console

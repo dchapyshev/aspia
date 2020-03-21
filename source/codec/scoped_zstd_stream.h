@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,14 +16,14 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CODEC__SCOPED_ZSTD_STREAM_H_
-#define ASPIA_CODEC__SCOPED_ZSTD_STREAM_H_
-
-#include <memory>
+#ifndef CODEC__SCOPED_ZSTD_STREAM_H
+#define CODEC__SCOPED_ZSTD_STREAM_H
 
 #include <zstd.h>
 
-namespace aspia {
+#include <memory>
+
+namespace codec {
 
 struct ZstdCStreamDeleter
 {
@@ -38,6 +38,6 @@ struct ZstdDStreamDeleter
 using ScopedZstdCStream = std::unique_ptr<ZSTD_CStream, ZstdCStreamDeleter>;
 using ScopedZstdDStream = std::unique_ptr<ZSTD_DStream, ZstdDStreamDeleter>;
 
-} // namespace aspia
+} // namespace codec
 
-#endif // ASPIA_CODEC__SCOPED_ZSTD_STREAM_H_
+#endif // CODEC__SCOPED_ZSTD_STREAM_H

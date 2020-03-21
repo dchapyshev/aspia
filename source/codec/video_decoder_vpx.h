@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,18 +16,18 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CODEC__VIDEO_DECODER_VPX_H_
-#define ASPIA_CODEC__VIDEO_DECODER_VPX_H_
-
-#define VPX_CODEC_DISABLE_COMPAT 1
-#include <vpx/vpx_decoder.h>
-#include <vpx/vp8dx.h>
+#ifndef CODEC__VIDEO_DECODER_VPX_H
+#define CODEC__VIDEO_DECODER_VPX_H
 
 #include "base/macros_magic.h"
 #include "codec/scoped_vpx_codec.h"
 #include "codec/video_decoder.h"
 
-namespace aspia {
+#define VPX_CODEC_DISABLE_COMPAT 1
+#include <vpx/vpx_decoder.h>
+#include <vpx/vp8dx.h>
+
+namespace codec {
 
 class VideoDecoderVPX : public VideoDecoder
 {
@@ -37,16 +37,16 @@ public:
     static std::unique_ptr<VideoDecoderVPX> createVP8();
     static std::unique_ptr<VideoDecoderVPX> createVP9();
 
-    bool decode(const proto::desktop::VideoPacket& packet, DesktopFrame* frame) override;
+    bool decode(const proto::VideoPacket& packet, desktop::Frame* frame) override;
 
 private:
-    explicit VideoDecoderVPX(proto::desktop::VideoEncoding encoding);
+    explicit VideoDecoderVPX(proto::VideoEncoding encoding);
 
     ScopedVpxCodec codec_;
 
     DISALLOW_COPY_AND_ASSIGN(VideoDecoderVPX);
 };
 
-} // namespace aspia
+} // namespace codec
 
-#endif // ASPIA_CODEC__VIDEO_DECODER_VPX_H_
+#endif // CODEC__VIDEO_DECODER_VPX_H

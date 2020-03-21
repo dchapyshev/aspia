@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,16 +16,14 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_BASE__WIN__SCOPED_HANDLE_H_
-#define ASPIA_BASE__WIN__SCOPED_HANDLE_H_
-
-#define WIN32_LEAN_AND_MEAN
-#define NOMINMAX
-#include <windows.h>
+#ifndef BASE__WIN__SCOPED_HANDLE_H
+#define BASE__WIN__SCOPED_HANDLE_H
 
 #include "base/macros_magic.h"
 
-namespace aspia {
+#include <Windows.h>
+
+namespace base::win {
 
 template<class T, class Traits>
 class ScopedObject
@@ -77,6 +75,13 @@ public:
     bool isValid() const
     {
         return Traits::isValid(object_);
+    }
+
+    void swap(ScopedObject& other)
+    {
+        T object = other.object_;
+        other.object_ = object_;
+        object_ = object;
     }
 
     ScopedObject& operator=(ScopedObject&& other) noexcept
@@ -150,6 +155,6 @@ using ScopedHandle = ScopedObject<HANDLE, HandleObjectTraits>;
 using ScopedScHandle = ScopedObject<SC_HANDLE, ScHandleObjectTraits>;
 using ScopedEventLog = ScopedObject<HANDLE, EventLogObjectTraits>;
 
-} // namespace aspia
+} // namespace base::win
 
-#endif // ASPIA_BASE__WIN__SCOPED_HANDLE_H_
+#endif // BASE__WIN__SCOPED_HANDLE_H

@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,14 +16,14 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CONSOLE__COMPUTER_GROUP_MIME_DATA_H_
-#define ASPIA_CONSOLE__COMPUTER_GROUP_MIME_DATA_H_
-
-#include <QMimeData>
+#ifndef CONSOLE__COMPUTER_GROUP_MIME_DATA_H
+#define CONSOLE__COMPUTER_GROUP_MIME_DATA_H
 
 #include "console/computer_group_item.h"
 
-namespace aspia {
+#include <QMimeData>
+
+namespace console {
 
 class ComputerGroupMimeData : public QMimeData
 {
@@ -31,15 +31,10 @@ public:
     ComputerGroupMimeData() = default;
     virtual ~ComputerGroupMimeData() = default;
 
-    static QString mimeType()
-    {
-        return QStringLiteral("application/computer_group");
-    }
-
-    void setComputerGroupItem(ComputerGroupItem* computer_group_item)
+    void setComputerGroupItem(ComputerGroupItem* computer_group_item, const QString& mime_type)
     {
         computer_group_item_ = computer_group_item;
-        setData(mimeType(), QByteArray());
+        setData(mime_type, QByteArray());
     }
 
     ComputerGroupItem* computerGroup() const
@@ -51,6 +46,6 @@ private:
     ComputerGroupItem* computer_group_item_ = nullptr;
 };
 
-} // namespace aspia
+} // namespace console
 
-#endif // ASPIA_CONSOLE__COMPUTER_GROUP_MIME_DATA_H_
+#endif // CONSOLE__COMPUTER_GROUP_MIME_DATA_H

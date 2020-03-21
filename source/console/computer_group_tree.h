@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,13 +16,12 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CONSOLE__COMPUTER_GROUP_TREE_H_
-#define ASPIA_CONSOLE__COMPUTER_GROUP_TREE_H_
+#ifndef CONSOLE__COMPUTER_GROUP_TREE_H
+#define CONSOLE__COMPUTER_GROUP_TREE_H
 
-#include "base/macros_magic.h"
 #include "console/computer_group_drag.h"
 
-namespace aspia {
+namespace console {
 
 class ComputerGroupTree : public QTreeWidget
 {
@@ -32,6 +31,9 @@ public:
     ComputerGroupTree(QWidget* parent);
     ~ComputerGroupTree() = default;
 
+    void setComputerMimeType(const QString& mime_type);
+    bool dragging() const;
+
 signals:
     void itemDropped();
 
@@ -40,6 +42,7 @@ protected:
     void mousePressEvent(QMouseEvent* event) override;
     void mouseMoveEvent(QMouseEvent* event) override;
     void dragEnterEvent(QDragEnterEvent* event) override;
+    void dragLeaveEvent(QDragLeaveEvent* event) override;
     void dragMoveEvent(QDragMoveEvent* event) override;
     void dropEvent(QDropEvent* event) override;
     void startDrag(Qt::DropActions supported_actions) override;
@@ -47,11 +50,15 @@ protected:
 private:
     bool isAllowedDropTarget(ComputerGroupItem* target, ComputerGroupItem* item);
 
+    QString computer_mime_type_;
+    QString computer_group_mime_type_;
+
     QPoint start_pos_;
+    bool dragging_ = false;
 
     DISALLOW_COPY_AND_ASSIGN(ComputerGroupTree);
 };
 
-} // namespace aspia
+} // namespace console
 
-#endif // ASPIA_CONSOLE__COMPUTER_GROUP_TREE_H_
+#endif // CONSOLE__COMPUTER_GROUP_TREE_H

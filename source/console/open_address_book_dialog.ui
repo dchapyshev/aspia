@@ -49,7 +49,7 @@
            <string/>
           </property>
           <property name="pixmap">
-           <pixmap resource="resources/console.qrc">:/icon/lock-medium.png</pixmap>
+           <pixmap resource="resources/console.qrc">:/img/lock-medium.png</pixmap>
           </property>
          </widget>
         </item>
@@ -130,7 +130,7 @@
               </property>
               <property name="icon">
                <iconset resource="resources/console.qrc">
-                <normaloff>:/icon/eye.png</normaloff>:/icon/eye.png</iconset>
+                <normaloff>:/img/eye.png</normaloff>:/img/eye.png</iconset>
               </property>
               <property name="checkable">
                <bool>true</bool>

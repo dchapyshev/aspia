@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -18,72 +18,37 @@
 
 #include "client/ui/file_manager_settings.h"
 
-namespace aspia {
+#include "qt_base/qt_xml_settings.h"
+
+namespace client {
 
 FileManagerSettings::FileManagerSettings()
-    : settings_(QSettings::UserScope, QStringLiteral("aspia"), QStringLiteral("client"))
+    : settings_(qt_base::QtXmlSettings::format(),
+                QSettings::UserScope,
+                QLatin1String("aspia"),
+                QLatin1String("client"))
 {
     // Nothing
 }
 
 QByteArray FileManagerSettings::windowGeometry() const
 {
-    return settings_.value(QStringLiteral("file_manager/window_geometry")).toByteArray();
+    return settings_.value(QLatin1String("FileManager/WindowGeometry")).toByteArray();
 }
 
 void FileManagerSettings::setWindowGeometry(const QByteArray& geometry)
 {
-    settings_.setValue(QStringLiteral("file_manager/window_geometry"), geometry);
+    settings_.setValue(QLatin1String("FileManager/WindowGeometry"), geometry);
 }
 
-QByteArray FileManagerSettings::splitterState() const
+QByteArray FileManagerSettings::windowState() const
 {
-    return settings_.value(QStringLiteral("file_manager/splitter_state")).toByteArray();
+    return settings_.value(QLatin1String("FileManager/WindowState")).toByteArray();
 }
 
-void FileManagerSettings::setSplitterState(const QByteArray& state)
+void FileManagerSettings::setWindowState(const QByteArray& state)
 {
-    settings_.setValue(QStringLiteral("file_manager/splitter_state"), state);
+    settings_.setValue(QLatin1String("FileManager/WindowState"), state);
 }
 
-QByteArray FileManagerSettings::localDriveListState() const
-{
-    return settings_.value(QStringLiteral("file_manager/local_drive_list_state")).toByteArray();
-}
-
-void FileManagerSettings::setLocalDriveListState(const QByteArray& state)
-{
-    settings_.setValue(QStringLiteral("file_manager/local_drive_list_state"), state);
-}
-
-QByteArray FileManagerSettings::localFileListState() const
-{
-    return settings_.value(QStringLiteral("file_manager/local_file_list_state")).toByteArray();
-}
-
-void FileManagerSettings::setLocalFileListState(const QByteArray& state)
-{
-    settings_.setValue(QStringLiteral("file_manager/local_file_list_state"), state);
-}
-
-QByteArray FileManagerSettings::remoteDriveListState() const
-{
-    return settings_.value(QStringLiteral("file_manager/remote_drive_list_state")).toByteArray();
-}
-
-void FileManagerSettings::setRemoteDriveListState(const QByteArray& state)
-{
-    settings_.setValue(QStringLiteral("file_manager/remote_drive_list_state"), state);
-}
-
-QByteArray FileManagerSettings::remoteFileListState() const
-{
-    return settings_.value(QStringLiteral("file_manager/remote_file_list_state")).toByteArray();
-}
-
-void FileManagerSettings::setRemoteFileListState(const QByteArray& state)
-{
-    settings_.setValue(QStringLiteral("file_manager/remote_file_list_state"), state);
-}
-
-} // namespace aspia
+} // namespace client

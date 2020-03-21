@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,22 +16,22 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CLIENT__UI__DESKTOP_SETTINGS_H_
-#define ASPIA_CLIENT__UI__DESKTOP_SETTINGS_H_
-
-#include <QSettings>
+#ifndef CLIENT__UI__DESKTOP_SETTINGS_H
+#define CLIENT__UI__DESKTOP_SETTINGS_H
 
 #include "base/macros_magic.h"
 
-namespace aspia {
+#include <QSettings>
+
+namespace client {
 
 class DesktopSettings
 {
 public:
     DesktopSettings();
 
-    bool scaling() const;
-    void setScaling(bool enable);
+    int scale() const;
+    void setScale(int value);
 
     bool autoScrolling() const;
     void setAutoScrolling(bool enable);
@@ -45,6 +45,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(DesktopSettings);
 };
 
-} // namespace aspia
+} // namespace client
 
-#endif // ASPIA_CLIENT__UI__DESKTOP_SETTINGS_H_
+#endif // CLIENT__UI__DESKTOP_SETTINGS_H

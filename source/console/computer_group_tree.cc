@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,20 +17,31 @@
 //
 
 #include "console/computer_group_tree.h"
-
-#include <QDropEvent>
-#include <QApplication>
-
 #include "console/computer_mime_data.h"
 
-namespace aspia {
+#include <QApplication>
+#include <QDropEvent>
+#include <QUuid>
+
+namespace console {
 
 ComputerGroupTree::ComputerGroupTree(QWidget* parent)
-    : QTreeWidget(parent)
+    : QTreeWidget(parent),
+      computer_group_mime_type_(QString("application/%1").arg(QUuid::createUuid().toString()))
 {
     QTreeWidgetItem* invisible_root = invisibleRootItem();
     invisible_root->setFlags(invisible_root->flags() ^ Qt::ItemIsDropEnabled);
     setAcceptDrops(true);
+}
+
+void ComputerGroupTree::setComputerMimeType(const QString& mime_type)
+{
+    computer_mime_type_ = mime_type;
+}
+
+bool ComputerGroupTree::dragging() const
+{
+    return dragging_;
 }
 
 void ComputerGroupTree::mousePressEvent(QMouseEvent* event)
@@ -61,11 +72,19 @@ void ComputerGroupTree::dragEnterEvent(QDragEnterEvent* event)
 {
     const QMimeData* mime_data = event->mimeData();
 
-    if (mime_data->hasFormat(ComputerGroupMimeData::mimeType()) ||
-        mime_data->hasFormat(ComputerMimeData::mimeType()))
+    if (mime_data->hasFormat(computer_group_mime_type_) ||
+        mime_data->hasFormat(computer_mime_type_))
     {
         event->acceptProposedAction();
     }
+
+    dragging_ = true;
+}
+
+void ComputerGroupTree::dragLeaveEvent(QDragLeaveEvent* event)
+{
+    dragging_ = false;
+    QTreeWidget::dragLeaveEvent(event);
 }
 
 void ComputerGroupTree::dragMoveEvent(QDragMoveEvent* event)
@@ -74,18 +93,20 @@ void ComputerGroupTree::dragMoveEvent(QDragMoveEvent* event)
 
     const QMimeData* mime_data = event->mimeData();
 
-    if (mime_data->hasFormat(ComputerGroupMimeData::mimeType()))
+    if (mime_data->hasFormat(computer_group_mime_type_))
     {
         ComputerGroupItem* source_item = dynamic_cast<ComputerGroupItem*>(itemAt(start_pos_));
         ComputerGroupItem* target_item = dynamic_cast<ComputerGroupItem*>(itemAt(event->pos()));
 
         if (isAllowedDropTarget(target_item, source_item))
         {
-            setCurrentItem(target_item);
+            clearSelection();
+
+            target_item->setSelected(true);
             event->acceptProposedAction();
         }
     }
-    else if (mime_data->hasFormat(ComputerMimeData::mimeType()))
+    else if (mime_data->hasFormat(computer_mime_type_))
     {
         ComputerGroupItem* target_item = dynamic_cast<ComputerGroupItem*>(itemAt(event->pos()));
         if (target_item)
@@ -97,7 +118,9 @@ void ComputerGroupTree::dragMoveEvent(QDragMoveEvent* event)
                 ComputerItem* computer_item = computer_mime_data->computerItem();
                 if (computer_item && computer_item->parentComputerGroupItem() != target_item)
                 {
-                    setCurrentItem(target_item);
+                    clearSelection();
+
+                    target_item->setSelected(true);
                     event->acceptProposedAction();
                 }
             }
@@ -117,7 +140,7 @@ void ComputerGroupTree::dropEvent(QDropEvent* event)
     if (!mime_data)
         return;
 
-    if (mime_data->hasFormat(ComputerGroupMimeData::mimeType()))
+    if (mime_data->hasFormat(computer_group_mime_type_))
     {
         const ComputerGroupMimeData* computer_group_mime_data =
             dynamic_cast<const ComputerGroupMimeData*>(event->mimeData());
@@ -125,6 +148,9 @@ void ComputerGroupTree::dropEvent(QDropEvent* event)
         {
             ComputerGroupItem* target_group_item =
                 dynamic_cast<ComputerGroupItem*>(itemAt(event->pos()));
+            if (!target_group_item)
+                return;
+
             ComputerGroupItem* source_group_item =
                 computer_group_mime_data->computerGroup();
 
@@ -143,12 +169,13 @@ void ComputerGroupTree::dropEvent(QDropEvent* event)
 
             target_group_item->addChildComputerGroup(computer_group);
             target_group_item->setExpanded(true);
-            setCurrentItem(target_group_item);
+
+            setCurrentItem(source_group_item);
 
             emit itemDropped();
         }
     }
-    else if (mime_data->hasFormat(ComputerMimeData::mimeType()))
+    else if (mime_data->hasFormat(computer_mime_type_))
     {
         const ComputerMimeData* computer_mime_data =
             dynamic_cast<const ComputerMimeData*>(event->mimeData());
@@ -176,6 +203,8 @@ void ComputerGroupTree::dropEvent(QDropEvent* event)
             }
         }
     }
+
+    dragging_ = false;
 }
 
 bool ComputerGroupTree::isAllowedDropTarget(ComputerGroupItem* target, ComputerGroupItem* item)
@@ -216,7 +245,7 @@ void ComputerGroupTree::startDrag(Qt::DropActions supported_actions)
     {
         ComputerGroupDrag* drag = new ComputerGroupDrag(this);
 
-        drag->setComputerGroupItem(computer_group);
+        drag->setComputerGroupItem(computer_group, computer_group_mime_type_);
 
         QIcon icon = computer_group->icon(0);
         drag->setPixmap(icon.pixmap(icon.actualSize(QSize(16, 16))));
@@ -225,4 +254,4 @@ void ComputerGroupTree::startDrag(Qt::DropActions supported_actions)
     }
 }
 
-} // namespace aspia
+} // namespace console

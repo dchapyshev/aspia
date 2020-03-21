@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
 
 #include "base/logging.h"
 
-namespace aspia {
+namespace common {
 
 namespace {
 
@@ -92,15 +92,16 @@ FileEnumerator::FileEnumerator(const std::filesystem::path& root_path)
         switch (error_code)
         {
             case ERROR_ACCESS_DENIED:
-                status_ = proto::file_transfer::STATUS_ACCESS_DENIED;
+                error_code_ = proto::FILE_ERROR_ACCESS_DENIED;
                 break;
 
             case ERROR_NOT_READY:
-                status_ = proto::file_transfer::STATUS_DISK_NOT_READY;
+                error_code_ = proto::FILE_ERROR_DISK_NOT_READY;
                 break;
 
             default:
-                LOG(LS_WARNING) << "Unhandled error code" << systemErrorCodeToString(error_code);
+                LOG(LS_WARNING) << "Unhandled error code: "
+                                << base::SystemError::toString(error_code);
                 break;
         }
     }
@@ -147,4 +148,4 @@ void FileEnumerator::advance()
     }
 }
 
-} // namespace aspia
+} // namespace common

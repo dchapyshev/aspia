@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,14 +16,14 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CONSOLE__ADDRESS_BOOK_DIALOG_H_
-#define ASPIA_CONSOLE__ADDRESS_BOOK_DIALOG_H_
+#ifndef CONSOLE__ADDRESS_BOOK_DIALOG_H
+#define CONSOLE__ADDRESS_BOOK_DIALOG_H
 
 #include "base/macros_magic.h"
-#include "protocol/address_book.pb.h"
+#include "proto/address_book.pb.h"
 #include "ui_address_book_dialog.h"
 
-namespace aspia {
+namespace console {
 
 class AddressBookDialog : public QDialog
 {
@@ -62,6 +62,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(AddressBookDialog);
 };
 
-} // namespace aspia
+} // namespace console
 
-#endif // ASPIA_CONSOLE__ADDRESS_BOOK_DIALOG_H_
+#endif // CONSOLE__ADDRESS_BOOK_DIALOG_H

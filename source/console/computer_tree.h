@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,14 +16,14 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CONSOLE__COMPUTER_TREE_H_
-#define ASPIA_CONSOLE__COMPUTER_TREE_H_
-
-#include <QTreeWidget>
+#ifndef CONSOLE__COMPUTER_TREE_H
+#define CONSOLE__COMPUTER_TREE_H
 
 #include "base/macros_magic.h"
 
-namespace aspia {
+#include <QTreeWidget>
+
+namespace console {
 
 class ComputerTree : public QTreeWidget
 {
@@ -32,6 +32,8 @@ class ComputerTree : public QTreeWidget
 public:
     explicit ComputerTree(QWidget* parent = nullptr);
     ~ComputerTree() = default;
+
+    QString mimeType() const { return mime_type_; }
 
 protected:
     // QTreeWidget implementation.
@@ -47,10 +49,11 @@ private slots:
 
 private:
     QPoint start_pos_;
+    QString mime_type_;
 
     DISALLOW_COPY_AND_ASSIGN(ComputerTree);
 };
 
-} // namespace aspia
+} // namespace console
 
-#endif // ASPIA_CONSOLE__COMPUTER_TREE_H_
+#endif // CONSOLE__COMPUTER_TREE_H

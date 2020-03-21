@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,10 +17,9 @@
 //
 
 #include "codec/cursor_encoder.h"
-
 #include "base/logging.h"
 
-namespace aspia {
+namespace codec {
 
 namespace {
 
@@ -30,7 +29,7 @@ constexpr uint8_t kCacheSize = 16;
 // The compression ratio can be in the range of 1 to 22.
 constexpr int kCompressionRatio = 8;
 
-uint8_t* outputBuffer(proto::desktop::CursorShape* cursor_shape, size_t size)
+uint8_t* outputBuffer(proto::CursorShape* cursor_shape, size_t size)
 {
     cursor_shape->mutable_data()->resize(size);
     return reinterpret_cast<uint8_t*>(cursor_shape->mutable_data()->data());
@@ -46,8 +45,8 @@ CursorEncoder::CursorEncoder()
     static_assert(kCompressionRatio >= 1 && kCompressionRatio <= 22);
 }
 
-bool CursorEncoder::compressCursor(proto::desktop::CursorShape* cursor_shape,
-                                   const MouseCursor* mouse_cursor)
+bool CursorEncoder::compressCursor(proto::CursorShape* cursor_shape,
+                                   const desktop::MouseCursor* mouse_cursor)
 {
     size_t ret = ZSTD_initCStream(stream_.get(), kCompressionRatio);
     DCHECK(!ZSTD_isError(ret)) << ZSTD_getErrorName(ret);
@@ -78,13 +77,13 @@ bool CursorEncoder::compressCursor(proto::desktop::CursorShape* cursor_shape,
     return true;
 }
 
-bool CursorEncoder::encode(std::unique_ptr<MouseCursor> mouse_cursor,
-                           proto::desktop::CursorShape* cursor_shape)
+bool CursorEncoder::encode(std::shared_ptr<desktop::MouseCursor> mouse_cursor,
+                           proto::CursorShape* cursor_shape)
 {
     if (!mouse_cursor)
         return false;
 
-    const DesktopSize& size = mouse_cursor->size();
+    const desktop::Size& size = mouse_cursor->size();
     const int kMaxSize = std::numeric_limits<int16_t>::max() / 2;
 
     if (size.width() <= 0 || size.width() > kMaxSize ||
@@ -97,7 +96,7 @@ bool CursorEncoder::encode(std::unique_ptr<MouseCursor> mouse_cursor,
     size_t index = cache_.find(mouse_cursor.get());
 
     // The cursor is not found in the cache.
-    if (index == MouseCursorCache::kInvalidIndex)
+    if (index == desktop::MouseCursorCache::kInvalidIndex)
     {
         cursor_shape->set_width(size.width());
         cursor_shape->set_height(size.height());
@@ -110,17 +109,17 @@ bool CursorEncoder::encode(std::unique_ptr<MouseCursor> mouse_cursor,
         // If the cache is empty, then set the cache reset flag on the client
         // side and pass the maximum cache size.
         cursor_shape->set_flags(cache_.isEmpty() ?
-            (proto::desktop::CursorShape::RESET_CACHE | (kCacheSize & 0x1F)) : 0);
+            (proto::CursorShape::RESET_CACHE | (kCacheSize & 0x1F)) : 0);
 
         // Add the cursor to the cache.
         cache_.add(std::move(mouse_cursor));
     }
     else
     {
-        cursor_shape->set_flags(proto::desktop::CursorShape::CACHE | (index & 0x1F));
+        cursor_shape->set_flags(proto::CursorShape::CACHE | (index & 0x1F));
     }
 
     return true;
 }
 
-} // namespace aspia
+} // namespace codec

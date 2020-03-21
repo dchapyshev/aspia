@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -18,152 +18,214 @@
 
 #include "console/console_settings.h"
 
+#include "build/build_config.h"
+#include "qt_base/qt_xml_settings.h"
+
 #include <QDir>
+#include <QLocale>
 
-namespace aspia {
+namespace console {
 
-ConsoleSettings::ConsoleSettings()
-    : settings_(QSettings::UserScope, QStringLiteral("aspia"), QStringLiteral("console"))
+Settings::Settings()
+    : settings_(qt_base::QtXmlSettings::format(),
+                QSettings::UserScope,
+                QStringLiteral("aspia"),
+                QStringLiteral("console"))
 {
     // Nothing
 }
 
-// static
-QString ConsoleSettings::defaultLocale()
+QString Settings::locale() const
 {
-    return QStringLiteral("en");
+    return settings_.value(QStringLiteral("Locale"), QLocale::system().bcp47Name()).toString();
 }
 
-QString ConsoleSettings::locale() const
+void Settings::setLocale(const QString& locale)
 {
-    return settings_.value(QStringLiteral("locale"), defaultLocale()).toString();
+    settings_.setValue(QStringLiteral("Locale"), locale);
 }
 
-void ConsoleSettings::setLocale(const QString& locale)
+QString Settings::lastDirectory() const
 {
-    settings_.setValue(QStringLiteral("locale"), locale);
+    return settings_.value(QStringLiteral("LastDirectory"), QDir::homePath()).toString();
 }
 
-QString ConsoleSettings::lastDirectory() const
+void Settings::setLastDirectory(const QString& directory_path)
 {
-    return settings_.value(QStringLiteral("last_dir"), QDir::homePath()).toString();
+    settings_.setValue(QStringLiteral("LastDirectory"), directory_path);
 }
 
-void ConsoleSettings::setLastDirectory(const QString& directory_path)
+QByteArray Settings::windowGeometry() const
 {
-    settings_.setValue(QStringLiteral("last_dir"), directory_path);
+    return settings_.value(QStringLiteral("WindowGeometry")).toByteArray();
 }
 
-QByteArray ConsoleSettings::windowGeometry() const
+void Settings::setWindowGeometry(const QByteArray& geometry)
 {
-    return settings_.value(QStringLiteral("window_geometry")).toByteArray();
+    settings_.setValue(QStringLiteral("WindowGeometry"), geometry);
 }
 
-void ConsoleSettings::setWindowGeometry(const QByteArray& geometry)
+QByteArray Settings::windowState() const
 {
-    settings_.setValue(QStringLiteral("window_geometry"), geometry);
+    return settings_.value(QStringLiteral("WindowState")).toByteArray();
 }
 
-QByteArray ConsoleSettings::windowState() const
+void Settings::setWindowState(const QByteArray& state)
 {
-    return settings_.value(QStringLiteral("window_state")).toByteArray();
+    settings_.setValue(QStringLiteral("WindowState"), state);
 }
 
-void ConsoleSettings::setWindowState(const QByteArray& state)
+QByteArray Settings::splitterState() const
 {
-    settings_.setValue(QStringLiteral("window_state"), state);
+    return settings_.value(QStringLiteral("SplitterState")).toByteArray();
 }
 
-QByteArray ConsoleSettings::splitterState() const
+void Settings::setSplitterState(const QByteArray& state)
 {
-    return settings_.value(QStringLiteral("splitter_state")).toByteArray();
+    settings_.setValue(QStringLiteral("SplitterState"), state);
 }
 
-void ConsoleSettings::setSplitterState(const QByteArray& state)
+QByteArray Settings::columnsState() const
 {
-    settings_.setValue(QStringLiteral("splitter_state"), state);
+    return settings_.value(QStringLiteral("ColumnsState")).toByteArray();
 }
 
-QByteArray ConsoleSettings::columnsState() const
+void Settings::setColumnsState(const QByteArray& state)
 {
-    return settings_.value(QStringLiteral("columns_state")).toByteArray();
+    settings_.setValue(QStringLiteral("ColumnsState"), state);
 }
 
-void ConsoleSettings::setColumnsState(const QByteArray& state)
+bool Settings::isRecentOpenEnabled() const
 {
-    settings_.setValue(QStringLiteral("columns_state"), state);
+    return settings_.value(QStringLiteral("EnableRecentOpen"), true).toBool();
 }
 
-QStringList ConsoleSettings::recentOpen() const
+void Settings::setRecentOpenEnabled(bool enable)
 {
-    return settings_.value(QStringLiteral("recent_open")).toStringList();
+    settings_.setValue(QStringLiteral("EnableRecentOpen"), enable);
 }
 
-void ConsoleSettings::setRecentOpen(const QStringList& mru)
+QStringList Settings::recentOpen() const
 {
-    settings_.setValue(QStringLiteral("recent_open"), mru);
+    return settings_.value(QStringLiteral("RecentOpen")).toStringList();
 }
 
-QStringList ConsoleSettings::pinnedFiles() const
+void Settings::setRecentOpen(const QStringList& mru)
 {
-    return settings_.value(QStringLiteral("pinned_files")).toStringList();
+    settings_.setValue(QStringLiteral("RecentOpen"), mru);
 }
 
-void ConsoleSettings::setPinnedFiles(const QStringList& tabs)
+QStringList Settings::pinnedFiles() const
 {
-    settings_.setValue(QStringLiteral("pinned_files"), tabs);
+    return settings_.value(QStringLiteral("PinnedFiles")).toStringList();
 }
 
-bool ConsoleSettings::isToolBarEnabled() const
+void Settings::setPinnedFiles(const QStringList& tabs)
 {
-    return settings_.value(QStringLiteral("toolbar"), true).toBool();
+    settings_.setValue(QStringLiteral("PinnedFiles"), tabs);
 }
 
-void ConsoleSettings::setToolBarEnabled(bool enable)
+bool Settings::isToolBarEnabled() const
 {
-    settings_.setValue(QStringLiteral("toolbar"), enable);
+    return settings_.value(QStringLiteral("Toolbar"), true).toBool();
 }
 
-bool ConsoleSettings::isStatusBarEnabled() const
+void Settings::setToolBarEnabled(bool enable)
 {
-    return settings_.value(QStringLiteral("statusbar"), true).toBool();
+    settings_.setValue(QStringLiteral("Toolbar"), enable);
 }
 
-void ConsoleSettings::setStatusBarEnabled(bool enable)
+bool Settings::isStatusBarEnabled() const
 {
-    settings_.setValue(QStringLiteral("statusbar"), enable);
+    return settings_.value(QStringLiteral("Statusbar"), true).toBool();
 }
 
-bool ConsoleSettings::minimizeToTray() const
+void Settings::setStatusBarEnabled(bool enable)
 {
-    return settings_.value(QStringLiteral("minimize_to_tray"), false).toBool();
+    settings_.setValue(QStringLiteral("Statusbar"), enable);
 }
 
-void ConsoleSettings::setMinimizeToTray(bool enable)
+bool Settings::minimizeToTray() const
 {
-    settings_.setValue(QStringLiteral("minimize_to_tray"), enable);
+    return settings_.value(QStringLiteral("MinimizeToTray"), false).toBool();
 }
 
-bool ConsoleSettings::alwaysShowTrayIcon() const
+void Settings::setMinimizeToTray(bool enable)
 {
-    return settings_.value(QStringLiteral("always_show_tray_icon"), false).toBool();
+    settings_.setValue(QStringLiteral("MinimizeToTray"), enable);
 }
 
-void ConsoleSettings::setAlwaysShowTrayIcon(bool enable)
+bool Settings::alwaysShowTrayIcon() const
 {
-    settings_.setValue(QStringLiteral("always_show_tray_icon"), enable);
+    return settings_.value(QStringLiteral("AlwaysShowTrayIcon"), false).toBool();
 }
 
-proto::SessionType ConsoleSettings::sessionType()
+void Settings::setAlwaysShowTrayIcon(bool enable)
+{
+    settings_.setValue(QStringLiteral("AlwaysShowTrayIcon"), enable);
+}
+
+proto::SessionType Settings::sessionType() const
 {
     return static_cast<proto::SessionType>(
-        settings_.value(QStringLiteral("session_type"),
+        settings_.value(QStringLiteral("SessionType"),
                         proto::SESSION_TYPE_DESKTOP_MANAGE).toInt());
 }
 
-void ConsoleSettings::setSessionType(proto::SessionType session_type)
+void Settings::setSessionType(proto::SessionType session_type)
 {
-    settings_.setValue(QStringLiteral("session_type"), session_type);
+    settings_.setValue(QStringLiteral("SessionType"), session_type);
 }
 
-} // namespace aspia
+bool Settings::checkUpdates() const
+{
+    return settings_.value(QStringLiteral("CheckUpdates"), true).toBool();
+}
+
+void Settings::setCheckUpdates(bool check)
+{
+    settings_.setValue(QStringLiteral("CheckUpdates"), check);
+}
+
+QString Settings::updateServer() const
+{
+    return settings_.value(QStringLiteral("UpdateServer"), DEFAULT_UPDATE_SERVER)
+        .toString().toLower();
+}
+
+void Settings::setUpdateServer(const QString& server)
+{
+    settings_.setValue(QStringLiteral("UpdateServer"), server.toLower());
+}
+
+QByteArray Settings::computerDialogGeometry() const
+{
+    return settings_.value(QStringLiteral("ComputerDialogGeometry")).toByteArray();
+}
+
+void Settings::setComputerDialogGeometry(const QByteArray& geometry)
+{
+    settings_.setValue(QStringLiteral("ComputerDialogGeometry"), geometry);
+}
+
+QByteArray Settings::computerDialogState() const
+{
+    return settings_.value(QStringLiteral("ComputerDialogState")).toByteArray();
+}
+
+void Settings::setComputerDialogState(const QByteArray& state)
+{
+    settings_.setValue(QStringLiteral("ComputerDialogState"), state);
+}
+
+QByteArray Settings::computerGroupDialogGeometry() const
+{
+    return settings_.value(QStringLiteral("ComputerGroupDialogGeometry")).toByteArray();
+}
+
+void Settings::setComputerGroupDialogGeometry(const QByteArray& geometry)
+{
+    settings_.setValue(QStringLiteral("ComputerGroupDialogGeometry"), geometry);
+}
+
+} // namespace console

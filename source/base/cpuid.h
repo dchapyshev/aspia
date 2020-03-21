@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,12 +16,12 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_BASE__CPUID_H_
-#define ASPIA_BASE__CPUID_H_
+#ifndef BASE__CPUID_H
+#define BASE__CPUID_H
 
 #include <cstdint>
 
-namespace aspia {
+namespace base {
 
 class CPUID
 {
@@ -53,6 +53,6 @@ private:
     int cpu_info_[4] = { -1, -1, -1, -1 };
 };
 
-} // namespace aspia
+} // namespace base
 
-#endif // ASPIA_BASE__CPUID_H_
+#endif // BASE__CPUID_H

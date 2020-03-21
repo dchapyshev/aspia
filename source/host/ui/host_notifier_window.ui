@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>223</width>
-    <height>163</height>
+    <width>213</width>
+    <height>152</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
@@ -66,7 +66,7 @@ background: #CFCFCF;
 padding: 3px;</string>
         </property>
         <property name="text">
-         <string notr="true">&lt;img src=&quot;:/icon/main.png&quot;/&gt;</string>
+         <string notr="true">&lt;img src=&quot;:/img/main.png&quot;/&gt;</string>
         </property>
        </widget>
       </item>
@@ -101,7 +101,7 @@ background: #C0C0C0;
         </property>
         <property name="icon">
          <iconset resource="../resources/host.qrc">
-          <normaloff>:/icon/arrow-left-gray.png</normaloff>:/icon/arrow-left-gray.png</iconset>
+          <normaloff>:/img/arrow-left-gray.png</normaloff>:/img/arrow-left-gray.png</iconset>
         </property>
        </widget>
       </item>
@@ -242,14 +242,27 @@ padding: 30px;
          <enum>Qt::CustomContextMenu</enum>
         </property>
         <property name="styleSheet">
-         <string notr="true">border: none;
-margin: 2px;</string>
+         <string notr="true">QTreeWidget {
+border: none;
+margin: 2px;
+}
+QTreeWidget::item {
+border: 1px solid white;
+color: #000;
+}
+QTreeWidget::item:hover {
+border: 1px solid #AAAAAA;
+background: #EBEBEB;
+}
+QTreeWidget::item:selected {
+background: #EBEBEB;
+}</string>
         </property>
         <property name="frameShape">
          <enum>QFrame::NoFrame</enum>
         </property>
         <property name="selectionBehavior">
-         <enum>QAbstractItemView::SelectItems</enum>
+         <enum>QAbstractItemView::SelectRows</enum>
         </property>
         <property name="indentation">
          <number>0</number>
@@ -259,7 +272,7 @@ margin: 2px;</string>
         </attribute>
         <column>
          <property name="text">
-          <string notr="true"/>
+          <string notr="true">0</string>
          </property>
         </column>
        </widget>
@@ -293,15 +306,12 @@ margin: 2px;</string>
         </item>
         <item>
          <widget class="QPushButton" name="button_disconnect_all">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
           <property name="styleSheet">
            <string notr="true">QPushButton {
 border: 1px solid #AAAAAA;
 background: white;
 color: black;
-padding: 5px;
+padding: 3px;
 }
 QPushButton:hover {
 background: #EBEBEB;
@@ -315,6 +325,10 @@ color: gray;
           </property>
           <property name="text">
            <string>Disconnect All</string>
+          </property>
+          <property name="icon">
+           <iconset resource="../resources/host.qrc">
+            <normaloff>:/img/cross-script.png</normaloff>:/img/cross-script.png</iconset>
           </property>
          </widget>
         </item>

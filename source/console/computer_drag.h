@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,32 +16,32 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CONSOLE__COMPUTER_DRAG_H_
-#define ASPIA_CONSOLE__COMPUTER_DRAG_H_
-
-#include <QDrag>
+#ifndef CONSOLE__COMPUTER_DRAG_H
+#define CONSOLE__COMPUTER_DRAG_H
 
 #include "console/computer_mime_data.h"
 
-namespace aspia {
+#include <QDrag>
+
+namespace console {
 
 class ComputerDrag : public QDrag
 {
 public:
-    ComputerDrag(QObject* dragSource = nullptr)
-        : QDrag(dragSource)
+    ComputerDrag(QObject* drag_source = nullptr)
+        : QDrag(drag_source)
     {
         // Nothing
     }
 
-    void setComputerItem(ComputerItem* computer_item)
+    void setComputerItem(ComputerItem* computer_item, const QString& mime_type)
     {
         ComputerMimeData* mime_data = new ComputerMimeData();
-        mime_data->setComputerItem(computer_item);
+        mime_data->setComputerItem(computer_item, mime_type);
         setMimeData(mime_data);
     }
 };
 
-} // namespace aspia
+} // namespace console
 
-#endif // ASPIA_CONSOLE__COMPUTER_DRAG_H_
+#endif // CONSOLE__COMPUTER_DRAG_H

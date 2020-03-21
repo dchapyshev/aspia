@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,18 +16,17 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_COMMON__FILE_DEPACKETIZER_H_
-#define ASPIA_COMMON__FILE_DEPACKETIZER_H_
+#ifndef COMMON__FILE_DEPACKETIZER_H
+#define COMMON__FILE_DEPACKETIZER_H
+
+#include "base/macros_magic.h"
+#include "proto/file_transfer.pb.h"
 
 #include <filesystem>
 #include <fstream>
 #include <memory>
 
-#include "base/macros_magic.h"
-#include "codec/scoped_zstd_stream.h"
-#include "protocol/file_transfer_session.pb.h"
-
-namespace aspia {
+namespace common {
 
 class FileDepacketizer
 {
@@ -38,23 +37,20 @@ public:
                                                     bool overwrite);
 
     // Reads the packet and writes its contents to a file.
-    bool writeNextPacket(const proto::file_transfer::Packet& packet);
+    bool writeNextPacket(const proto::FilePacket& packet);
 
 private:
     FileDepacketizer(const std::filesystem::path& file_path, std::ofstream&& file_stream);
 
     std::filesystem::path file_path_;
     std::ofstream file_stream_;
-    std::string write_buffer_;
 
     uint64_t file_size_ = 0;
     uint64_t left_size_ = 0;
 
-    ScopedZstdDStream decompressor_;
-
     DISALLOW_COPY_AND_ASSIGN(FileDepacketizer);
 };
 
-} // namespace aspia
+} // namespace common
 
-#endif // ASPIA_COMMON__FILE_DEPACKETIZER_H_
+#endif // COMMON__FILE_DEPACKETIZER_H

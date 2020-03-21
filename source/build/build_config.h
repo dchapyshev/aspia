@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,14 +16,12 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_BUILD_CONFIG_H_
-#define ASPIA_BUILD_CONFIG_H_
+#ifndef ASPIA_BUILD_CONFIG_H
+#define ASPIA_BUILD_CONFIG_H
 
 // OS detection.
 #if defined(_WIN32)
 #define OS_WIN
-#elif defined(__linux__ )
-#define OS_LINUX
 #else
 #error Unknown OS
 #endif
@@ -53,11 +51,24 @@
 #endif
 
 #if defined(CC_MSVC)
-#define INLINE __forceinline
+#define FORCEINLINE __forceinline
+#elif defined(CC_GCC) && __GNUC__ > 3
+#define FORCEINLINE inline __attribute__ ((__always_inline__))
 #else
-#define INLINE inline
+#define FORCEINLINE inline
 #endif
 
-#define DEFAULT_HOST_TCP_PORT 8050
+#if defined(OS_WIN)
+#define WCHAR_T_IS_UTF16
+#endif
 
-#endif // ASPIA_BUILD_CONFIG_H_
+#define DEFAULT_LOCALE        "en"
+#define DEFAULT_UPDATE_SERVER "https://update.aspia.org"
+
+#define DEFAULT_HOST_TCP_PORT   8050
+#define DEFAULT_ROUTER_TCP_PORT 8060
+#define DEFAULT_PROXY_TCP_PORT  8070
+
+#define ENABLE_LOCATION_SOURCE
+
+#endif // ASPIA_BUILD_CONFIG_H

@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -18,188 +18,186 @@
 
 #include "console/computer_dialog.h"
 
+#include "client/config_factory.h"
+#include "console/computer_dialog_desktop.h"
+#include "console/computer_dialog_general.h"
+#include "console/computer_dialog_parent.h"
+#include "console/computer_factory.h"
+#include "crypto/secure_memory.h"
+
+#include <QAbstractButton>
 #include <QDateTime>
-#include <QMessageBox>
 
-#include "client/ui/desktop_config_dialog.h"
-#include "common/user_util.h"
-#include "console/computer_group_item.h"
-
-namespace aspia {
+namespace console {
 
 namespace {
 
-constexpr int kMaxNameLength = 64;
-constexpr int kMinNameLength = 1;
-constexpr int kMaxCommentLength = 2048;
+enum ItemType
+{
+    ITEM_TYPE_PARENT,
+    ITEM_TYPE_GENERAL,
+    ITEM_TYPE_DESKTOP_MANAGE,
+    ITEM_TYPE_DESKTOP_VIEW
+};
 
 } // namespace
 
 ComputerDialog::ComputerDialog(QWidget* parent,
                                Mode mode,
-                               proto::address_book::Computer* computer,
-                               proto::address_book::ComputerGroup* parent_computer_group)
+                               const QString& parent_name,
+                               const std::optional<proto::address_book::Computer>& computer)
     : QDialog(parent),
       mode_(mode),
-      computer_(computer)
+      computer_(computer.value_or(ComputerFactory::defaultComputer()))
 {
     ui.setupUi(this);
 
-    ui.combo_session_config->addItem(QIcon(QStringLiteral(":/icon/monitor-keyboard.png")),
-                                     tr("Desktop Manage"),
-                                     QVariant(proto::SESSION_TYPE_DESKTOP_MANAGE));
+    client::ConfigFactory::fixupDesktopConfig(
+        computer_.mutable_session_config()->mutable_desktop_manage());
+    client::ConfigFactory::fixupDesktopConfig(
+        computer_.mutable_session_config()->mutable_desktop_view());
 
-    ui.combo_session_config->addItem(QIcon(QStringLiteral(":/icon/monitor.png")),
-                                     tr("Desktop View"),
-                                     QVariant(proto::SESSION_TYPE_DESKTOP_VIEW));
+    if (mode_ == Mode::COPY)
+    {
+        computer_.set_name(computer_.name() + ' ' + tr("(copy)").toStdString());
+    }
 
-    ui.combo_session_config->addItem(QIcon(QStringLiteral(":/icon/folder-stand.png")),
-                                     tr("File Transfer"),
-                                     QVariant(proto::SESSION_TYPE_FILE_TRANSFER));
+    restoreGeometry(settings_.computerDialogGeometry());
+    ui.splitter->restoreState(settings_.computerDialogState());
 
-    ui.edit_parent_name->setText(QString::fromStdString(parent_computer_group->name()));
-    ui.edit_name->setText(QString::fromStdString(computer_->name()));
-    ui.edit_address->setText(QString::fromStdString(computer_->address()));
-    ui.spinbox_port->setValue(computer_->port());
-    ui.edit_username->setText(QString::fromStdString(computer_->username()));
-    ui.edit_password->setText(QString::fromStdString(computer->password()));
-    ui.edit_comment->setPlainText(QString::fromStdString(computer->comment()));
+    connect(ui.tree, &QTreeWidget::currentItemChanged, this, &ComputerDialog::onTabChanged);
+    connect(ui.button_box, &QDialogButtonBox::clicked, this, &ComputerDialog::buttonBoxClicked);
 
-    connect(ui.combo_session_config, QOverload<int>::of(&QComboBox::currentIndexChanged),
-            this, &ComputerDialog::sessionTypeChanged);
+    QTreeWidgetItem* general_item = new QTreeWidgetItem(ITEM_TYPE_GENERAL);
+    general_item->setIcon(0, QIcon(QStringLiteral(":/img/computer.png")));
+    general_item->setText(0, tr("General"));
 
-    connect(ui.button_show_password, &QPushButton::toggled,
-            this, &ComputerDialog::showPasswordButtonToggled);
+    QTreeWidgetItem* sessions_item = new QTreeWidgetItem(ITEM_TYPE_PARENT);
+    sessions_item->setIcon(0, QIcon(QStringLiteral(":/img/settings.png")));
+    sessions_item->setText(0, tr("Sessions"));
 
-    connect(ui.button_session_config, &QPushButton::pressed,
-            this, &ComputerDialog::sessionConfigButtonPressed);
+    ui.tree->addTopLevelItem(general_item);
+    ui.tree->addTopLevelItem(sessions_item);
 
-    connect(ui.button_box, &QDialogButtonBox::clicked,
-            this, &ComputerDialog::buttonBoxClicked);
+    QTreeWidgetItem* desktop_manage_item = new QTreeWidgetItem(ITEM_TYPE_DESKTOP_MANAGE);
+    desktop_manage_item->setIcon(0, QIcon(QStringLiteral(":/img/monitor-keyboard.png")));
+    desktop_manage_item->setText(0, tr("Manage"));
+
+    QTreeWidgetItem* desktop_view_item = new QTreeWidgetItem(ITEM_TYPE_DESKTOP_VIEW);
+    desktop_view_item->setIcon(0, QIcon(QStringLiteral(":/img/monitor.png")));
+    desktop_view_item->setText(0, tr("View"));
+
+    sessions_item->addChild(desktop_manage_item);
+    sessions_item->addChild(desktop_view_item);
+
+    ComputerDialogParent* parent_tab =
+        new ComputerDialogParent(ITEM_TYPE_PARENT, ui.widget);
+    ComputerDialogGeneral* general_tab =
+        new ComputerDialogGeneral(ITEM_TYPE_GENERAL, ui.widget);
+    ComputerDialogDesktop* desktop_manage_tab =
+        new ComputerDialogDesktop(ITEM_TYPE_DESKTOP_MANAGE, ui.widget);
+    ComputerDialogDesktop* desktop_view_tab =
+        new ComputerDialogDesktop(ITEM_TYPE_DESKTOP_VIEW, ui.widget);
+
+    general_tab->restoreSettings(parent_name, computer_);
+    desktop_manage_tab->restoreSettings(
+        proto::SESSION_TYPE_DESKTOP_MANAGE, computer_.session_config().desktop_manage());
+    desktop_view_tab->restoreSettings(
+        proto::SESSION_TYPE_DESKTOP_VIEW, computer_.session_config().desktop_view());
+
+    tabs_.append(general_tab);
+    tabs_.append(desktop_manage_tab);
+    tabs_.append(desktop_view_tab);
+    tabs_.append(parent_tab);
+
+    QSize min_size;
+
+    for (auto tab : tabs_)
+    {
+        min_size.setWidth(std::max(tab->sizeHint().width(), min_size.width()));
+        min_size.setHeight(std::max(tab->minimumSizeHint().height(), min_size.height()));
+    }
+
+    ui.widget->setMinimumSize(min_size);
+    ui.widget->installEventFilter(this);
+
+    ui.tree->setCurrentItem(general_item);
+    ui.tree->expandAll();
 }
 
-void ComputerDialog::sessionTypeChanged(int item_index)
+ComputerDialog::~ComputerDialog()
 {
-    proto::SessionType session_type = static_cast<proto::SessionType>(
-        ui.combo_session_config->itemData(item_index).toInt());
-
-    switch (session_type)
-    {
-        case proto::SESSION_TYPE_DESKTOP_MANAGE:
-        case proto::SESSION_TYPE_DESKTOP_VIEW:
-            ui.button_session_config->setEnabled(true);
-            break;
-
-        default:
-            ui.button_session_config->setEnabled(false);
-            break;
-    }
+    crypto::memZero(computer_.mutable_name());
+    crypto::memZero(computer_.mutable_address());
+    crypto::memZero(computer_.mutable_username());
+    crypto::memZero(computer_.mutable_password());
+    crypto::memZero(computer_.mutable_comment());
 }
 
-void ComputerDialog::showPasswordButtonToggled(bool checked)
+void ComputerDialog::closeEvent(QCloseEvent* event)
 {
-    if (checked)
-    {
-        ui.edit_password->setEchoMode(QLineEdit::Normal);
-        ui.edit_password->setInputMethodHints(Qt::ImhNone);
-    }
-    else
-    {
-        ui.edit_password->setEchoMode(QLineEdit::Password);
-        ui.edit_password->setInputMethodHints(Qt::ImhHiddenText | Qt::ImhSensitiveData |
-                                              Qt::ImhNoAutoUppercase | Qt::ImhNoPredictiveText);
-    }
+    settings_.setComputerDialogGeometry(saveGeometry());
+    settings_.setComputerDialogState(ui.splitter->saveState());
+    QDialog::closeEvent(event);
 }
 
-void ComputerDialog::sessionConfigButtonPressed()
+bool ComputerDialog::eventFilter(QObject* watched, QEvent* event)
 {
-    proto::SessionType session_type =
-        static_cast<proto::SessionType>(ui.combo_session_config->currentData().toInt());
-
-    switch (session_type)
+    if (watched == ui.widget && event->type() == QEvent::Resize)
     {
-        case proto::SESSION_TYPE_DESKTOP_MANAGE:
-        {
-            DesktopConfigDialog dialog(session_type,
-                                       computer_->session_config().desktop_manage(),
-                                       this);
-            if (dialog.exec() == QDialog::Accepted)
-            {
-                computer_->mutable_session_config()->mutable_desktop_manage()->CopyFrom(
-                    dialog.config());
-            }
-        }
-        break;
-
-        case proto::SESSION_TYPE_DESKTOP_VIEW:
-        {
-            DesktopConfigDialog dialog(session_type,
-                                       computer_->session_config().desktop_view(),
-                                       this);
-            if (dialog.exec() == QDialog::Accepted)
-            {
-                computer_->mutable_session_config()->mutable_desktop_view()->CopyFrom(
-                    dialog.config());
-            }
-        }
-        break;
-
-        default:
-            break;
+        for (auto tab : tabs_)
+            tab->resize(ui.widget->size());
     }
+
+    return QDialog::eventFilter(watched, event);
+}
+
+void ComputerDialog::onTabChanged(QTreeWidgetItem* current)
+{
+    if (current)
+        showTab(current->type());
 }
 
 void ComputerDialog::buttonBoxClicked(QAbstractButton* button)
 {
     if (ui.button_box->standardButton(button) == QDialogButtonBox::Ok)
     {
-        QString name = ui.edit_name->text();
-        if (name.length() > kMaxNameLength)
+        for (auto tab : tabs_)
         {
-            showError(tr("Too long name. The maximum length of the name is %n characters.",
-                         "", kMaxNameLength));
-            ui.edit_name->setFocus();
-            return;
-        }
-        else if (name.length() < kMinNameLength)
-        {
-            showError(tr("Name can not be empty."));
-            ui.edit_name->setFocus();
-            return;
-        }
+            int type = static_cast<ComputerDialogTab*>(tab)->type();
 
-        QString username = ui.edit_username->text();
-        QString password = ui.edit_password->text();
+            if (type == ITEM_TYPE_GENERAL)
+            {
+                ComputerDialogGeneral* general_tab =
+                    static_cast<ComputerDialogGeneral*>(tab);
 
-        if (!username.isEmpty() && !UserUtil::isValidUserName(username))
-        {
-            showError(tr("The user name can not be empty and can contain only"
-                         " alphabet characters, numbers and ""_"", ""-"", ""."" characters."));
-            ui.edit_name->setFocus();
-            return;
-        }
+                if (!general_tab->saveSettings(&computer_))
+                    return;
+            }
+            else if (type == ITEM_TYPE_DESKTOP_MANAGE)
+            {
+                ComputerDialogDesktop* desktop_tab =
+                    static_cast<ComputerDialogDesktop*>(tab);
 
-        QString comment = ui.edit_comment->toPlainText();
-        if (comment.length() > kMaxCommentLength)
-        {
-            showError(tr("Too long comment. The maximum length of the comment is %n characters.",
-                         "", kMaxCommentLength));
-            ui.edit_comment->setFocus();
-            return;
+                desktop_tab->saveSettings(
+                    computer_.mutable_session_config()->mutable_desktop_manage());
+            }
+            else if (type == ITEM_TYPE_DESKTOP_VIEW)
+            {
+                ComputerDialogDesktop* desktop_tab =
+                    static_cast<ComputerDialogDesktop*>(tab);
+
+                desktop_tab->saveSettings(
+                    computer_.mutable_session_config()->mutable_desktop_view());
+            }
         }
 
         int64_t current_time = QDateTime::currentSecsSinceEpoch();
 
-        if (mode_ == CreateComputer)
-            computer_->set_create_time(current_time);
+        if (mode_ == Mode::CREATE || mode_ == Mode::COPY)
+            computer_.set_create_time(current_time);
 
-        computer_->set_modify_time(current_time);
-        computer_->set_name(name.toStdString());
-        computer_->set_address(ui.edit_address->text().toStdString());
-        computer_->set_port(ui.spinbox_port->value());
-        computer_->set_username(username.toStdString());
-        computer_->set_password(password.toStdString());
-        computer_->set_comment(comment.toStdString());
+        computer_.set_modify_time(current_time);
 
         accept();
     }
@@ -211,9 +209,15 @@ void ComputerDialog::buttonBoxClicked(QAbstractButton* button)
     close();
 }
 
-void ComputerDialog::showError(const QString& message)
+void ComputerDialog::showTab(int type)
 {
-    QMessageBox(QMessageBox::Warning, tr("Warning"), message, QMessageBox::Ok, this).exec();
+    for (auto tab : tabs_)
+    {
+        if (static_cast<ComputerDialogTab*>(tab)->type() == type)
+            tab->show();
+        else
+            tab->hide();
+    }
 }
 
-} // namespace aspia
+} // namespace console

@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,15 +16,25 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#define WIN32_LEAN_AND_MEAN
-#define NOMINMAX
-#include <windows.h>
-
+#if defined(USE_TBB)
 #include <tbb/tbbmalloc_proxy.h>
+#endif // defined(USE_TBB)
+
+#include <QtGlobal>
+
+#if defined(QT_STATIC)
 
 #include <QtPlugin>
+
+#if defined(Q_OS_WIN)
 Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin);
 Q_IMPORT_PLUGIN(QWindowsVistaStylePlugin);
+#else
+#error Platform support needed
+#endif // defined(Q_OS_WIN)
+#endif // defined(QT_STATIC)
+
+#include <Windows.h>
 
 extern "C" {
 

@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,14 +16,14 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CONSOLE__CONSOLE_TAB_H_
-#define ASPIA_CONSOLE__CONSOLE_TAB_H_
-
-#include <QWidget>
+#ifndef CONSOLE__CONSOLE_TAB_H
+#define CONSOLE__CONSOLE_TAB_H
 
 #include "base/macros_magic.h"
 
-namespace aspia {
+#include <QWidget>
+
+namespace console {
 
 class ConsoleTab : public QWidget
 {
@@ -43,6 +43,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(ConsoleTab);
 };
 
-} // namespace aspia
+} // namespace console
 
-#endif // ASPIA_CONSOLE__CONSOLE_TAB_H_
+#endif // CONSOLE__CONSOLE_TAB_H

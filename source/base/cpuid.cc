@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,12 +17,12 @@
 //
 
 #include "base/cpuid.h"
-
-#include <cstring>
-
 #include "base/bitset.h"
 
-namespace aspia {
+#include <intrin.h>
+#include <cstring>
+
+namespace base {
 
 CPUID::CPUID(const CPUID& other)
 {
@@ -40,37 +40,23 @@ CPUID& CPUID::operator=(const CPUID& other)
 
 void CPUID::get(int leaf)
 {
-    #ifdef CC_MSVC
     __cpuid(cpu_info_, leaf);
-    #endif
 }
 
 void CPUID::get(int leaf, int subleaf)
 {
-    #ifdef CC_MSVC
     __cpuidex(cpu_info_, leaf, subleaf);
-    #endif
 }
 
 // static
 bool CPUID::hasAesNi()
 {
-    unsigned int b;
+    // Check if function 1 is supported.
+    if (CPUID(0).eax() < 1)
+        return false;
 
-    #ifdef CC_GCC
-    //TODO: perform actual check
-    b = 0;
-    #endif
-    #ifdef CC_MSVC
-    __asm
-    {
-        mov     eax, 1
-        cpuid
-        mov     b, ecx
-    }
-    #endif
-
-    return (b & (1 << 25)) != 0;
+    // Bit 25 of register ECX set to 1 indicates the support of AES instructions.
+    return BitSet<uint32_t>(CPUID(1).ecx()).test(25);
 }
 
-} // namespace aspia
+} // namespace base

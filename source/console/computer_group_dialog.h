@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,13 +16,14 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CONSOLE__COMPUTER_GROUP_DIALOG_H_
-#define ASPIA_CONSOLE__COMPUTER_GROUP_DIALOG_H_
+#ifndef CONSOLE__COMPUTER_GROUP_DIALOG_H
+#define CONSOLE__COMPUTER_GROUP_DIALOG_H
 
 #include "console/computer_group_item.h"
+#include "console/console_settings.h"
 #include "ui_computer_group_dialog.h"
 
-namespace aspia {
+namespace console {
 
 class ComputerGroupDialog : public QDialog
 {
@@ -33,9 +34,13 @@ public:
 
     ComputerGroupDialog(QWidget* parent,
                         Mode mode,
-                        proto::address_book::ComputerGroup* computer_group,
-                        proto::address_book::ComputerGroup* parent_computer_group);
+                        const QString& parent_name,
+                        proto::address_book::ComputerGroup* computer_group);
     ~ComputerGroupDialog() = default;
+
+protected:
+    // QDialog implementation.
+    void closeEvent(QCloseEvent* event) override;
 
 private slots:
     void buttonBoxClicked(QAbstractButton* button);
@@ -45,12 +50,14 @@ private:
 
     Ui::ComputerGroupDialog ui;
 
+    Settings settings_;
+
     const Mode mode_;
     proto::address_book::ComputerGroup* computer_group_;
 
     DISALLOW_COPY_AND_ASSIGN(ComputerGroupDialog);
 };
 
-} // namespace aspia
+} // namespace console
 
-#endif // ASPIA_CONSOLE__COMPUTER_GROUP_DIALOG_H_
+#endif // CONSOLE__COMPUTER_GROUP_DIALOG_H

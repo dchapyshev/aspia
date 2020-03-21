@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -18,14 +18,14 @@
 
 #include "codec/video_util.h"
 
-namespace aspia {
+namespace codec {
 
-DesktopRect VideoUtil::fromVideoRect(const proto::desktop::Rect& rect)
+desktop::Rect parseRect(const proto::Rect& rect)
 {
-    return DesktopRect::makeXYWH(rect.x(), rect.y(), rect.width(), rect.height());
+    return desktop::Rect::makeXYWH(rect.x(), rect.y(), rect.width(), rect.height());
 }
 
-void VideoUtil::toVideoRect(const DesktopRect& from, proto::desktop::Rect* to)
+void serializeRect(const desktop::Rect& from, proto::Rect* to)
 {
     to->set_x(from.x());
     to->set_y(from.y());
@@ -33,18 +33,19 @@ void VideoUtil::toVideoRect(const DesktopRect& from, proto::desktop::Rect* to)
     to->set_height(from.height());
 }
 
-PixelFormat VideoUtil::fromVideoPixelFormat(const proto::desktop::PixelFormat& format)
+desktop::PixelFormat parsePixelFormat(const proto::PixelFormat& format)
 {
-    return PixelFormat(static_cast<uint8_t>(format.bits_per_pixel()),
-                       static_cast<uint16_t>(format.red_max()),
-                       static_cast<uint16_t>(format.green_max()),
-                       static_cast<uint16_t>(format.blue_max()),
-                       static_cast<uint8_t>(format.red_shift()),
-                       static_cast<uint8_t>(format.green_shift()),
-                       static_cast<uint8_t>(format.blue_shift()));
+    return desktop::PixelFormat(
+        static_cast<uint8_t>(format.bits_per_pixel()),
+        static_cast<uint16_t>(format.red_max()),
+        static_cast<uint16_t>(format.green_max()),
+        static_cast<uint16_t>(format.blue_max()),
+        static_cast<uint8_t>(format.red_shift()),
+        static_cast<uint8_t>(format.green_shift()),
+        static_cast<uint8_t>(format.blue_shift()));
 }
 
-void VideoUtil::toVideoPixelFormat(const PixelFormat& from, proto::desktop::PixelFormat* to)
+void serializePixelFormat(const desktop::PixelFormat& from, proto::PixelFormat* to)
 {
     to->set_bits_per_pixel(from.bitsPerPixel());
 
@@ -57,4 +58,4 @@ void VideoUtil::toVideoPixelFormat(const PixelFormat& from, proto::desktop::Pixe
     to->set_blue_shift(from.blueShift());
 }
 
-} // namespace aspia
+} // namespace codec

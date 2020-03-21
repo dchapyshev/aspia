@@ -1,6 +1,6 @@
 #
 # Aspia Project
-# Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+# Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -19,18 +19,31 @@
 list(APPEND SOURCE_CRYPTO
     big_num.cc
     big_num.h
-    cryptor.h
-    cryptor_aes256_gcm.cc
-    cryptor_aes256_gcm.h
-    cryptor_chacha20_poly1305.cc
-    cryptor_chacha20_poly1305.h
     data_cryptor.h
     data_cryptor_chacha20_poly1305.cc
     data_cryptor_chacha20_poly1305.h
+    data_cryptor_fake.cc
+    data_cryptor_fake.h
     generic_hash.cc
     generic_hash.h
+    key_pair.cc
+    key_pair.h
+    large_number_increment.cc
+    large_number_increment.h
+    message_decryptor.h
+    message_decryptor_fake.cc
+    message_decryptor_fake.h
+    message_decryptor_openssl.cc
+    message_decryptor_openssl.h
+    message_encryptor.h
+    message_encryptor_fake.cc
+    message_encryptor_fake.h
+    message_encryptor_openssl.cc
+    message_encryptor_openssl.h
     openssl_util.cc
     openssl_util.h
+    password_generator.cc
+    password_generator.h
     password_hash.cc
     password_hash.h
     random.cc
@@ -45,6 +58,14 @@ list(APPEND SOURCE_CRYPTO
     srp_math.h)
 
 list(APPEND SOURCE_CRYPTO_UNIT_TESTS
+    crypto_tests_main.cc
+    cryptor_unittest.cc
+    data_cryptor_unittest.cc
+    generic_hash_unittest.cc
+    key_pair_unittest.cc
+    large_number_increment_unittest.cc
+    password_generator_unittest.cc
+    password_hash_unittest.cc
     srp_math_unittest.cc)
 
 source_group("" FILES ${SOURCE_CRYPTO} ${SOURCE_CRYPTO_UNIT_TESTS})
@@ -64,6 +85,7 @@ if (BUILD_UNIT_TESTS)
         optimized gtest_main
         debug gtestd
         debug gtest_maind
+        ${WINDOWS_LIBS}
         ${THIRD_PARTY_LIBS})
 
     add_test(NAME aspia_crypto_tests COMMAND aspia_crypto_tests)

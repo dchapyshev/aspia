@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,17 +16,16 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CRYPTO__GENERIC_HASH_H_
-#define ASPIA_CRYPTO__GENERIC_HASH_H_
-
-#include <string>
+#ifndef CRYPTO__GENERIC_HASH_H
+#define CRYPTO__GENERIC_HASH_H
 
 #include "base/macros_magic.h"
+#include "base/memory/byte_array.h"
 
 struct evp_md_ctx_st;
 struct evp_md_st;
 
-namespace aspia {
+namespace crypto {
 
 class GenericHash
 {
@@ -45,13 +44,15 @@ public:
     GenericHash(Type type);
     ~GenericHash();
 
-    static std::string hash(Type type, const void* data, size_t size);
-    static std::string hash(Type type, const std::string& data);
+    static base::ByteArray hash(Type type, const void* data, size_t size);
+    static base::ByteArray hash(Type type, std::string_view data);
+    static base::ByteArray hash(Type type, const base::ByteArray& data);
 
     void addData(const void* data, size_t size);
-    void addData(const std::string& data);
+    void addData(std::string_view data);
+    void addData(const base::ByteArray& data);
 
-    std::string result() const;
+    base::ByteArray result() const;
 
     void reset();
 
@@ -62,6 +63,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(GenericHash);
 };
 
-} // namespace aspia
+} // namespace crypto
 
-#endif // ASPIA_CRYPTO__GENERIC_HASH_H_
+#endif // CRYPTO__GENERIC_HASH_H

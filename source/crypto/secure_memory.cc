@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -18,23 +18,38 @@
 
 #include "crypto/secure_memory.h"
 
-#include <openssl/opensslv.h>
 #include <openssl/crypto.h>
 
-namespace aspia {
+namespace crypto {
 
-void secureMemZero(void* data, size_t data_size)
+void memZero(void* data, size_t data_size)
 {
     if (data && data_size)
         OPENSSL_cleanse(data, data_size);
 }
 
-void secureMemZero(std::string* str)
+void memZero(std::string* str)
 {
     if (!str)
         return;
 
-    secureMemZero(str->data(), str->size());
+    memZero(str->data(), str->length() * sizeof(char));
 }
 
-} // namespace aspia
+void memZero(std::u16string* str)
+{
+    if (!str)
+        return;
+
+    memZero(str->data(), str->length() * sizeof(char16_t));
+}
+
+void memZero(base::ByteArray* str)
+{
+    if (!str)
+        return;
+
+    memZero(str->data(), str->size());
+}
+
+} // namespace crypto

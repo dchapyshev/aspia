@@ -1,6 +1,6 @@
 #
 # Aspia Project
-# Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+# Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -16,12 +16,12 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 #
 
-cmake_minimum_required(VERSION 3.12.1)
+cmake_minimum_required(VERSION 3.16.0)
+
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 option(BUILD_UNIT_TESTS "Build unit tests" ON)
-
-set(CMAKE_SYSTEM_VERSION 7.0 CACHE TYPE INTERNAL FORCE)
-set(CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION 8.1 CACHE TYPE INTERNAL FORCE)
+option(USE_TBB "Using Intel TBB" ON)
 
 set(ASPIA_THIRD_PARTY_DIR "$ENV{ASPIA_THIRD_PARTY_DIR}")
 
@@ -35,39 +35,51 @@ set(CMAKE_AUTORCC ON)
 
 set(CMAKE_PREFIX_PATH "${ASPIA_THIRD_PARTY_DIR}/qt;${ASPIA_THIRD_PARTY_DIR}/protobuf")
 
-find_package(Qt5 REQUIRED Core Gui Network Widgets)
-IF (WIN32)
-  find_package(Qt5 REQUIRED WinExtras)
-ELSE()
-ENDIF()
-
+find_package(Qt5 REQUIRED Core Gui Network PrintSupport Widgets WinExtras Xml)
 find_package(Qt5LinguistTools)
 find_package(Protobuf REQUIRED)
 
-add_definitions(-D_UNICODE
-                -DNTDDI_VERSION=0x06010000
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+list(APPEND CMAKE_AUTORCC_OPTIONS -compress 9 -threshold 5)
+
+# Target version.
+add_definitions(-DNTDDI_VERSION=0x06010000
                 -D_WIN32_WINNT=0x0601
                 -D_WIN32_WINDOWS=_WIN32_WINNT
                 -DWINVER=_WIN32_WINNT
                 -D_WIN32_IE=0x0800
-                -DPSAPI_VERSION=2
-                -D_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING
-                -D_CRT_SECURE_NO_WARNINGS
-                -DQT_USE_QSTRINGBUILDER
-                -DCLIENT_IMPLEMENTATION
-                -DHOST_IMPLEMENTATION)
+                -DPSAPI_VERSION=2)
+
+# For Asio.
+add_definitions(-DASIO_STANDALONE
+                -DASIO_NO_DEPRECATED)
+
+# For Qt.
+add_definitions(-DQT_NO_CAST_TO_ASCII
+                -DQT_NO_CAST_FROM_BYTEARRAY
+                -DQT_USE_QSTRINGBUILDER)
+
+# For Windows.
+add_definitions(-D_UNICODE
+                -DUNICODE
+                -DWIN32_LEAN_AND_MEAN
+                -DNOMINMAX)
+
+if (USE_TBB)
+    add_definitions(-DUSE_TBB)
+endif()
 
 include_directories(
     ${PROJECT_SOURCE_DIR}
     ${PROJECT_BINARY_DIR}
-    ${ASPIA_THIRD_PARTY_DIR}/boost/include
     ${ASPIA_THIRD_PARTY_DIR}/googletest/include
     ${ASPIA_THIRD_PARTY_DIR}/libvpx/include
     ${ASPIA_THIRD_PARTY_DIR}/libyuv/include
     ${ASPIA_THIRD_PARTY_DIR}/openssl/include
     ${ASPIA_THIRD_PARTY_DIR}/protobuf/include
     ${ASPIA_THIRD_PARTY_DIR}/tbb/include
-    ${ASPIA_THIRD_PARTY_DIR}/zstd/include)
+    ${ASPIA_THIRD_PARTY_DIR}/zstd/include
+    third_party/asio)
 
 link_directories(
     ${ASPIA_THIRD_PARTY_DIR}/googletest/lib
@@ -77,55 +89,53 @@ link_directories(
     ${ASPIA_THIRD_PARTY_DIR}/protobuf/lib
     ${ASPIA_THIRD_PARTY_DIR}/qt/lib
     ${ASPIA_THIRD_PARTY_DIR}/qt/plugins/platforms
+    ${ASPIA_THIRD_PARTY_DIR}/qt/plugins/printsupport
     ${ASPIA_THIRD_PARTY_DIR}/qt/plugins/styles
     ${ASPIA_THIRD_PARTY_DIR}/tbb/lib
     ${ASPIA_THIRD_PARTY_DIR}/zstd/lib)
 
-set(THIRD_PARTY_LIBS
+set(QT_LIBS
     Qt5::Core
     Qt5::Gui
     Qt5::Network
+    Qt5::PrintSupport
     Qt5::Widgets
-    #Qt5::WinMain
-    #Qt5::WinExtras
+    Qt5::WinMain
+    Qt5::WinExtras
+    Qt5::Xml
+    Qt5::QWindowsIntegrationPlugin
+    Qt5::QWindowsVistaStylePlugin
+    Qt5::QWindowsPrinterSupportPlugin
     debug Qt5AccessibilitySupportd
     debug Qt5EventDispatcherSupportd
     debug Qt5FontDatabaseSupportd
     debug Qt5ThemeSupportd
     debug Qt5WindowsUIAutomationSupportd
-    debug libprotobuf-lited
-    debug libvpxd
-    debug libyuvd
     debug qtfreetyped
     debug qtharfbuzzd
     debug qtlibpngd
     debug qtpcre2d
-    debug qwindowsd
-    debug qwindowsvistastyled
-    debug zstdd
     optimized Qt5AccessibilitySupport
     optimized Qt5EventDispatcherSupport
     optimized Qt5FontDatabaseSupport
     optimized Qt5ThemeSupport
     optimized Qt5WindowsUIAutomationSupport
-    optimized libprotobuf-lite
-    optimized libvpx
-    optimized libyuv
     optimized qtfreetype
     optimized qtharfbuzz
     optimized qtlibpng
-    optimized qtpcre2
-    optimized qwindows
-    optimized qwindowsvistastyle
-    optimized zstd
+    optimized qtpcre2)
+
+set(WINDOWS_LIBS
     crypt32
     dwmapi
+    dxgi
+    d3d11
     imm32
     iphlpapi
-    libcrypto
     mpr
     netapi32
     sas
+    setupapi
     shlwapi
     userenv
     uxtheme
@@ -134,15 +144,37 @@ set(THIRD_PARTY_LIBS
     ws2_32
     wtsapi32)
 
+set(THIRD_PARTY_LIBS
+    debug vpxmtd
+    debug yuv_debug
+    debug tbb_debug
+    debug zstd_static_debug
+    optimized vpxmt
+    optimized yuv
+    optimized tbb
+    optimized zstd_static
+    ${Protobuf_LITE_LIBRARIES}
+    libcrypto
+    libssl
+    modp_b64
+    x11region)
+
+# C++ compliller flags.
 set(CMAKE_CXX_STANDARD 17)
-IF (WIN32)
-    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /Ob2 /Oi /Ot /Oy /GL /MT /MP /arch:SSE2 /fp:fast /wd4146")
-    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MTd /MP /wd4146")
-    set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} /LTCG /INCREMENTAL:NO /OPT:REF")
-    set(CMAKE_STATIC_LINKER_FLAGS_RELEASE "${CMAKE_STATIC_LINKER_FLAGS_RELEASE} /LTCG")
-    set(CMAKE_EXE_LINKER_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE} /LTCG /INCREMENTAL:NO /OPT:REF")
-ELSE()
-ENDIF()
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /GL /MP /arch:SSE2")
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MP")
+
+# C compiller flags.
+set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} /GL /MP /arch:SSE2")
+set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} /MP")
+
+# Linker flags.
+set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} /LTCG /INCREMENTAL:NO /OPT:REF")
+set(CMAKE_STATIC_LINKER_FLAGS_RELEASE "${CMAKE_STATIC_LINKER_FLAGS_RELEASE} /LTCG")
+set(CMAKE_EXE_LINKER_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE} /LTCG /INCREMENTAL:NO /OPT:REF")
+
+# Static runtime library.
+set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
@@ -159,8 +191,13 @@ add_subdirectory(codec)
 add_subdirectory(common)
 add_subdirectory(console)
 add_subdirectory(crypto)
-add_subdirectory(desktop_capture)
+add_subdirectory(desktop)
 add_subdirectory(host)
 add_subdirectory(ipc)
-add_subdirectory(network)
-add_subdirectory(protocol)
+add_subdirectory(net)
+add_subdirectory(proto)
+add_subdirectory(proxy)
+add_subdirectory(qt_base)
+add_subdirectory(router)
+add_subdirectory(third_party)
+add_subdirectory(updater)

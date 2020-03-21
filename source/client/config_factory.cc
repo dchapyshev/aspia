@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,22 +17,12 @@
 //
 
 #include "client/config_factory.h"
-
 #include "base/logging.h"
-#include "build/build_config.h"
 #include "codec/video_util.h"
 
-namespace aspia {
+namespace client {
 
 namespace {
-
-const int kDefUpdateInterval = 30;
-const int kMinUpdateInterval = 15;
-const int kMaxUpdateInterval = 100;
-
-const int kDefScaleFactor = 100;
-const int kMinScaleFactor = 50;
-const int kMaxScaleFactor = 100;
 
 const int kDefCompressRatio = 8;
 const int kMinCompressRatio = 1;
@@ -41,67 +31,61 @@ const int kMaxCompressRatio = 22;
 } // namespace
 
 // static
-proto::desktop::Config ConfigFactory::defaultDesktopManageConfig()
+proto::DesktopConfig ConfigFactory::defaultDesktopManageConfig()
 {
-    proto::desktop::Config config;
+    proto::DesktopConfig config;
     setDefaultDesktopManageConfig(&config);
     return config;
 }
 
 // static
-proto::desktop::Config ConfigFactory::defaultDesktopViewConfig()
+proto::DesktopConfig ConfigFactory::defaultDesktopViewConfig()
 {
-    proto::desktop::Config config;
+    proto::DesktopConfig config;
     setDefaultDesktopViewConfig(&config);
     return config;
 }
 
 // static
-void ConfigFactory::setDefaultDesktopManageConfig(proto::desktop::Config* config)
+void ConfigFactory::setDefaultDesktopManageConfig(proto::DesktopConfig* config)
 {
     DCHECK(config);
 
     static const uint32_t kDefaultFlags =
-        proto::desktop::ENABLE_CLIPBOARD | proto::desktop::ENABLE_CURSOR_SHAPE |
-        proto::desktop::DISABLE_DESKTOP_EFFECTS | proto::desktop::DISABLE_DESKTOP_WALLPAPER;
+        proto::ENABLE_CLIPBOARD | proto::ENABLE_CURSOR_SHAPE | proto::DISABLE_DESKTOP_EFFECTS |
+        proto::DISABLE_DESKTOP_WALLPAPER | proto::DISABLE_FONT_SMOOTHING;
 
     config->set_flags(kDefaultFlags);
-    config->set_video_encoding(proto::desktop::VideoEncoding::VIDEO_ENCODING_ZSTD);
+    config->set_video_encoding(proto::VideoEncoding::VIDEO_ENCODING_VP8);
     config->set_compress_ratio(kDefCompressRatio);
-    config->set_scale_factor(kDefScaleFactor);
-    config->set_update_interval(kDefUpdateInterval);
 
-    VideoUtil::toVideoPixelFormat(PixelFormat::RGB565(), config->mutable_pixel_format());
+    codec::serializePixelFormat(desktop::PixelFormat::RGB332(), config->mutable_pixel_format());
 }
 
 // static
-void ConfigFactory::setDefaultDesktopViewConfig(proto::desktop::Config* config)
+void ConfigFactory::setDefaultDesktopViewConfig(proto::DesktopConfig* config)
 {
     DCHECK(config);
 
     static const uint32_t kDefaultFlags =
-        proto::desktop::DISABLE_DESKTOP_EFFECTS | proto::desktop::DISABLE_DESKTOP_WALLPAPER;
+        proto::DISABLE_DESKTOP_EFFECTS | proto::DISABLE_DESKTOP_WALLPAPER |
+        proto::DISABLE_FONT_SMOOTHING;
 
     config->set_flags(kDefaultFlags);
-    config->set_video_encoding(proto::desktop::VideoEncoding::VIDEO_ENCODING_ZSTD);
+    config->set_video_encoding(proto::VideoEncoding::VIDEO_ENCODING_VP8);
     config->set_compress_ratio(kDefCompressRatio);
-    config->set_scale_factor(kDefScaleFactor);
-    config->set_update_interval(kDefUpdateInterval);
 
-    VideoUtil::toVideoPixelFormat(PixelFormat::RGB565(), config->mutable_pixel_format());
+    codec::serializePixelFormat(desktop::PixelFormat::RGB332(), config->mutable_pixel_format());
 }
 
 // static
-void ConfigFactory::fixupDesktopConfig(proto::desktop::Config* config)
+void ConfigFactory::fixupDesktopConfig(proto::DesktopConfig* config)
 {
-    if (config->scale_factor() < kMinScaleFactor || config->scale_factor() > kMaxScaleFactor)
-        config->set_scale_factor(kDefScaleFactor);
-
-    if (config->update_interval() < kMinUpdateInterval || config->update_interval() > kMaxUpdateInterval)
-        config->set_update_interval(kDefUpdateInterval);
+    config->set_scale_factor(100);
+    config->set_update_interval(30);
 
     if (config->compress_ratio() < kMinCompressRatio || config->compress_ratio() > kMaxCompressRatio)
         config->set_compress_ratio(kDefCompressRatio);
 }
 
-} // namespace aspia
+} // namespace client

@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,70 +16,61 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_HOST__HOST_SERVER_H_
-#define ASPIA_HOST__HOST_SERVER_H_
+#ifndef HOST__HOST_SERVER_H
+#define HOST__HOST_SERVER_H
 
-#include "host/win/host_process.h"
-#include "ipc/ipc_channel.h"
-#include "network/network_server.h"
+#include "host/host_authenticator_manager.h"
+#include "host/user_session_manager.h"
+#include "host/system_settings.h"
+#include "net/network_server.h"
 
-namespace aspia {
+namespace base {
+class FilePathWatcher;
+class TaskRunner;
+} // namespace base
 
-class Host;
-struct SrpUserList;
+namespace host {
 
-class HostServer : public QObject
+class Server
+    : public net::Server::Delegate,
+      public AuthenticatorManager::Delegate,
+      public UserSessionManager::Delegate
 {
-    Q_OBJECT
-
 public:
-    HostServer(QObject* parent = nullptr);
-    ~HostServer();
+    explicit Server(std::shared_ptr<base::TaskRunner> task_runner);
+    ~Server();
 
-    bool start();
-    void stop();
-    void setSessionChanged(uint32_t event, uint32_t session_id);
+    void start();
+    void setSessionEvent(base::win::SessionStatus status, base::SessionId session_id);
 
-signals:
-    void sessionChanged(uint32_t event, uint32_t session_id);
+protected:
+    // net::Server::Delegate implementation.
+    void onNewConnection(std::unique_ptr<net::Channel> channel) override;
 
-private slots:
-    void onNewConnection();
-    void onHostFinished(Host* host);
-    void onIpcServerStarted(const QString& channel_id);
-    void onIpcNewConnection(IpcChannel* channel);
-    void onIpcMessageReceived(const QByteArray& buffer);
-    void onNotifierProcessError(HostProcess::ErrorCode error_code);
-    void restartNotifier();
+    // AuthenticatorManager::Delegate implementation.
+    void onNewSession(std::unique_ptr<ClientSession> session) override;
+
+    // UserSessionManager::Delegate implementation.
+    void onUserListChanged() override;
 
 private:
-    enum class NotifierState { STOPPED, STARTING, STARTED };
+    void addFirewallRules();
+    void deleteFirewallRules();
+    void reloadUserList();
 
-    void startNotifier();
-    void stopNotifier();
-    void sessionToNotifier(const Host& host);
-    void sessionCloseToNotifier(const Host& host);
+    std::shared_ptr<base::TaskRunner> task_runner_;
+
+    std::unique_ptr<base::FilePathWatcher> settings_watcher_;
+    SystemSettings settings_;
 
     // Accepts incoming network connections.
-    QPointer<NetworkServer> network_server_;
+    std::unique_ptr<net::Server> network_server_;
+    std::unique_ptr<AuthenticatorManager> authenticator_manager_;
+    std::unique_ptr<UserSessionManager> user_session_manager_;
 
-    // Contains the status of the notifier process.
-    NotifierState notifier_state_ = NotifierState::STOPPED;
-
-    // Starts and monitors the status of the notifier process.
-    QPointer<HostProcess> notifier_process_;
-
-    bool has_user_session_ = true;
-
-    // The channel is used to communicate with the notifier process.
-    QPointer<IpcChannel> ipc_channel_;
-
-    // Contains a list of connected sessions.
-    QList<QPointer<Host>> session_list_;
-
-    DISALLOW_COPY_AND_ASSIGN(HostServer);
+    DISALLOW_COPY_AND_ASSIGN(Server);
 };
 
-} // namespace aspia
+} // namespace host
 
-#endif // ASPIA_HOST__HOST_SERVER_H_
+#endif // HOST__HOST_SERVER_H

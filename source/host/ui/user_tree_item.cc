@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -18,19 +18,30 @@
 
 #include "host/ui/user_tree_item.h"
 
-#include "network/srp_user.h"
+#include "host/user.h"
 
-namespace aspia {
+namespace host {
 
-UserTreeItem::UserTreeItem(size_t index, const SrpUser& user)
-    : index_(index)
+UserTreeItem::UserTreeItem(const User& user)
+    : user_(user)
 {
-    if (user.flags & SrpUser::ENABLED)
-        setIcon(0, QIcon(QStringLiteral(":/icon/user.png")));
-    else
-        setIcon(0, QIcon(QStringLiteral(":/icon/user-disabled.png")));
-
-    setText(0, QString::fromStdString(user.name));
+    updateData();
 }
 
-} // namespace aspia
+void UserTreeItem::setUser(const User& user)
+{
+    user_ = user;
+    updateData();
+}
+
+void UserTreeItem::updateData()
+{
+    if (user_.flags & User::ENABLED)
+        setIcon(0, QIcon(QLatin1String(":/img/user.png")));
+    else
+        setIcon(0, QIcon(QLatin1String(":/img/user-disabled.png")));
+
+    setText(0, QString::fromStdU16String(user_.name));
+}
+
+} // namespace host

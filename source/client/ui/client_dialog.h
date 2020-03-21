@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,14 +16,20 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CLIENT__UI__CLIENT_DIALOG_H_
-#define ASPIA_CLIENT__UI__CLIENT_DIALOG_H_
+#ifndef CLIENT__UI__CLIENT_DIALOG_H
+#define CLIENT__UI__CLIENT_DIALOG_H
 
 #include "base/macros_magic.h"
-#include "client/connect_data.h"
-#include "ui_client_dialog.h"
+#include "client/client_config.h"
+#include "proto/desktop.pb.h"
 
-namespace aspia {
+#include <QDialog>
+
+namespace Ui {
+class ClientDialog;
+} // namespace Ui
+
+namespace client {
 
 class ClientDialog : public QDialog
 {
@@ -33,20 +39,20 @@ public:
     explicit ClientDialog(QWidget* parent = nullptr);
     ~ClientDialog();
 
-    const ConnectData& connectData() const { return connect_data_; }
-
 private slots:
     void sessionTypeChanged(int item_index);
     void sessionConfigButtonPressed();
     void connectButtonPressed();
 
 private:
-    Ui::ClientDialog ui;
-    ConnectData connect_data_;
+    std::unique_ptr<Ui::ClientDialog> ui;
+
+    Config config_;
+    proto::DesktopConfig desktop_config_;
 
     DISALLOW_COPY_AND_ASSIGN(ClientDialog);
 };
 
-} // namespace aspia
+} // namespace client
 
-#endif // ASPIA_CLIENT__UI__CLIENT_DIALOG_H_
+#endif // CLIENT__UI__CLIENT_DIALOG_H

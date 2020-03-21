@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -18,7 +18,7 @@
 
 #include "console/console_tab.h"
 
-namespace aspia {
+namespace console {
 
 ConsoleTab::ConsoleTab(Type type, QWidget* parent)
     : QWidget(parent), type_(type)
@@ -26,4 +26,4 @@ ConsoleTab::ConsoleTab(Type type, QWidget* parent)
     // Nothing
 }
 
-} // namespace aspia
+} // namespace console

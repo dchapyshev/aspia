@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,58 +16,91 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CLIENT__FILE_TRANSFER_H_
-#define ASPIA_CLIENT__FILE_TRANSFER_H_
+#ifndef CLIENT__FILE_TRANSFER_H
+#define CLIENT__FILE_TRANSFER_H
 
-#include <QQueue>
-#include <QPair>
-#include <QPointer>
-#include <QMap>
+#include "base/waitable_timer.h"
+#include "base/memory/scalable_queue.h"
+#include "common/file_task.h"
+#include "common/file_task_producer.h"
+#include "proto/file_transfer.pb.h"
 
-#include "client/file_transfer_task.h"
-#include "common/file_request.h"
-#include "protocol/file_transfer_session.pb.h"
+namespace base {
+class TaskRunner;
+} // namespace base
 
-namespace aspia {
+namespace common {
+class FileTaskConsumerProxy;
+class FileTaskProducerProxy;
+class FileTaskFactory;
+} // namespace common
 
+namespace client {
+
+class FileTransferProxy;
 class FileTransferQueueBuilder;
+class FileTransferWindowProxy;
 
-class FileTransfer : public QObject
+class FileTransfer : public common::FileTaskProducer
 {
-    Q_OBJECT
-
 public:
-    enum Type
+    enum class Type
     {
-        Downloader = 0,
-        Uploader   = 1
+        DOWNLOADER,
+        UPLOADER
     };
 
-    enum Error
+    class Error
     {
-        OtherError           = 0,
-        DirectoryCreateError = 1,
-        FileCreateError      = 2,
-        FileOpenError        = 3,
-        FileAlreadyExists    = 4,
-        FileWriteError       = 5,
-        FileReadError        = 6
-    };
+    public:
+        enum class Type
+        {
+            QUEUE,
+            CREATE_DIRECTORY,
+            CREATE_FILE,
+            OPEN_FILE,
+            ALREADY_EXISTS,
+            WRITE_FILE,
+            READ_FILE,
+            OTHER
+        };
 
-    enum Action
-    {
-        Ask        = 0,
-        Abort      = 1,
-        Skip       = 2,
-        SkipAll    = 4,
-        Replace    = 8,
-        ReplaceAll = 16
+        enum Action
+        {
+            ACTION_ASK = 0,
+            ACTION_ABORT = 1,
+            ACTION_SKIP = 2,
+            ACTION_SKIP_ALL = 4,
+            ACTION_REPLACE = 8,
+            ACTION_REPLACE_ALL = 16
+        };
+
+        Error(Type type, proto::FileError code, const std::string& path)
+            : type_(type),
+              code_(code),
+              path_(path)
+        {
+            // Nothing
+        }
+
+        ~Error() = default;
+
+        Type type() const { return type_; }
+        proto::FileError code() const { return code_; }
+        const std::string& path() const { return path_; }
+
+        uint32_t availableActions() const;
+        Action defaultAction() const;
+
+    private:
+        const Type type_;
+        const proto::FileError code_;
+        const std::string path_;
     };
-    Q_DECLARE_FLAGS(Actions, Action)
 
     struct Item
     {
-        Item(const QString& name, int64_t size, bool is_directory)
+        Item(const std::string& name, int64_t size, bool is_directory)
             : name(name),
               size(size),
               is_directory(is_directory)
@@ -75,58 +108,97 @@ public:
             // Nothing
         }
 
-        QString name;
+        Item(std::string&& name, int64_t size, bool is_directory)
+            : name(std::move(name)),
+              size(size),
+              is_directory(is_directory)
+        {
+            // Nothing
+        }
+
+        std::string name;
         bool is_directory;
         int64_t size;
     };
 
-    FileTransfer(Type type, QObject* parent);
-    ~FileTransfer() = default;
+    class Task
+    {
+    public:
+        Task(std::string&& source_path, std::string&& target_path,
+             bool is_directory, int64_t size);
 
-    void start(const QString& source_path,
-               const QString& target_path,
-               const QList<Item>& items);
+        Task(const Task& other) = default;
+        Task& operator=(const Task& other) = default;
+
+        Task(Task&& other) noexcept;
+        Task& operator=(Task&& other) noexcept;
+
+        ~Task() = default;
+
+        const std::string& sourcePath() const { return source_path_; }
+        const std::string& targetPath() const { return target_path_; }
+        bool isDirectory() const { return is_directory_; }
+        int64_t size() const { return size_; }
+
+        bool overwrite() const { return overwrite_; }
+        void setOverwrite(bool value) { overwrite_ = value; }
+
+    private:
+        std::string source_path_;
+        std::string target_path_;
+        bool is_directory_;
+        bool overwrite_ = false;
+        int64_t size_;
+    };
+
+    using TaskList = base::ScalableDeque<Task>;
+    using FinishCallback = std::function<void()>;
+
+    FileTransfer(std::shared_ptr<base::TaskRunner> io_task_runner,
+                 std::shared_ptr<FileTransferWindowProxy> transfer_window_proxy,
+                 std::shared_ptr<common::FileTaskConsumerProxy> task_consumer_proxy,
+                 Type type);
+    ~FileTransfer();
+
+    void start(const std::string& source_path,
+               const std::string& target_path,
+               const std::vector<Item>& items,
+               const FinishCallback& finish_callback);
     void stop();
 
-    Actions availableActions(Error error_type) const;
-    Action defaultAction(Error error_type) const;
-    void setDefaultAction(Error error_type, Action action);
-    void applyAction(Error error_type, Action action);
-
-    FileTransferTask& currentTask();
-
-signals:
-    void started();
-    void finished();
-    void currentItemChanged(const QString& source_path, const QString& target_path);
-    void progressChanged(int total, int current);
-    void error(FileTransfer* transfer, FileTransfer::Error error_type, const QString& message);
-    void localRequest(FileRequest* request);
-    void remoteRequest(FileRequest* request);
+    void setAction(Error::Type error_type, Error::Action action);
 
 protected:
-    void timerEvent(QTimerEvent* event) override;
-
-private slots:
-    void targetReply(const proto::file_transfer::Request& request,
-                     const proto::file_transfer::Reply& reply);
-    void sourceReply(const proto::file_transfer::Request& request,
-                    const proto::file_transfer::Reply& reply);
-    void taskQueueError(const QString& message);
-    void taskQueueReady();
+    // common::FileTaskProducer implementation.
+    void onTaskDone(std::shared_ptr<common::FileTask> task) override;
 
 private:
-    void processTask(bool overwrite);
-    void processNextTask();
-    void processError(Error error_type, const QString& message);
-    void sourceRequest(FileRequest* request);
-    void targetRequest(FileRequest* request);
+    Task& frontTask();
+    void targetReply(const proto::FileRequest& request, const proto::FileReply& reply);
+    void sourceReply(const proto::FileRequest& request, const proto::FileReply& reply);
+    void doFrontTask(bool overwrite);
+    void doNextTask();
+    void onError(Error::Type type, proto::FileError code, const std::string& path = std::string());
+    void setActionForErrorType(Error::Type error_type, Error::Action action);
+    void onFinished();
+
+    std::shared_ptr<base::TaskRunner> io_task_runner_;
+    std::shared_ptr<FileTransferProxy> transfer_proxy_;
+    std::shared_ptr<FileTransferWindowProxy> transfer_window_proxy_;
+    std::shared_ptr<common::FileTaskConsumerProxy> task_consumer_proxy_;
+    std::shared_ptr<common::FileTaskProducerProxy> task_producer_proxy_;
+    std::unique_ptr<common::FileTaskFactory> task_factory_source_;
+    std::unique_ptr<common::FileTaskFactory> task_factory_target_;
+
+    base::WaitableTimer cancel_timer_;
 
     // The map contains available actions for the error and the current action.
-    QMap<Error, QPair<Actions, Action>> actions_;
-    QPointer<FileTransferQueueBuilder> builder_;
-    QQueue<FileTransferTask> tasks_;
+    std::map<Error::Type, Error::Action> actions_;
+    std::unique_ptr<FileTransferQueueBuilder> queue_builder_;
+    TaskList tasks_;
     const Type type_;
+
+    FinishCallback finish_callback_;
 
     int64_t total_size_ = 0;
     int64_t total_transfered_size_ = 0;
@@ -136,13 +208,10 @@ private:
     int task_percentage_ = 0;
 
     bool is_canceled_ = false;
-    int cancel_timer_id_ = 0;
 
     DISALLOW_COPY_AND_ASSIGN(FileTransfer);
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(FileTransfer::Actions)
+} // namespace client
 
-} // namespace aspia
-
-#endif // ASPIA_CLIENT__FILE_TRANSFER_H_
+#endif // CLIENT__FILE_TRANSFER_H

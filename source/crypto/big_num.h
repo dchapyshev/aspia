@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,17 +16,16 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CRYPTO__BIG_NUM_H_
-#define ASPIA_CRYPTO__BIG_NUM_H_
+#ifndef CRYPTO__BIG_NUM_H
+#define CRYPTO__BIG_NUM_H
 
-#include <memory>
-#include <string>
-
-#include "base/const_buffer.h"
 #include "base/macros_magic.h"
+#include "base/memory/byte_array.h"
 #include "crypto/openssl_util.h"
 
-namespace aspia {
+#include <memory>
+
+namespace crypto {
 
 class BigNum
 {
@@ -47,10 +46,11 @@ public:
     const bignum_st* get() const { return num_.get(); }
 
     std::string toStdString() const;
+    base::ByteArray toByteArray() const;
 
     static BigNum create();
-    static BigNum fromBuffer(const ConstBuffer& buffer);
-    static BigNum fromStdString(const std::string& string);
+    static BigNum fromStdString(std::string_view string);
+    static BigNum fromByteArray(const base::ByteArray& array);
 
     operator bignum_st*() const { return num_.get(); }
 
@@ -92,14 +92,13 @@ private:
         // Nothing
     }
 
-    explicit BigNum(const ConstBuffer& buffer);
-    explicit BigNum(const std::string& string);
+    BigNum(const uint8_t* buffer, size_t buffer_size);
 
     BIGNUM_ptr num_;
 
     DISALLOW_COPY_AND_ASSIGN(BigNum);
 };
 
-} // namespace aspia
+} // namespace crypto
 
-#endif // ASPIA_CRYPTO__BIG_NUM_H_
+#endif // CRYPTO__BIG_NUM_H

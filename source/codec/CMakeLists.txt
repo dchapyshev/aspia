@@ -1,6 +1,6 @@
 #
 # Aspia Project
-# Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+# Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -23,8 +23,6 @@ list(APPEND SOURCE_CODEC
     cursor_encoder.h
     pixel_translator.cc
     pixel_translator.h
-    scale_reducer.cc
-    scale_reducer.h
     scoped_vpx_codec.cc
     scoped_vpx_codec.h
     scoped_zstd_stream.cc
@@ -52,5 +50,6 @@ source_group("" FILES ${SOURCE_CODEC})
 add_library(aspia_codec STATIC ${SOURCE_CODEC})
 target_link_libraries(aspia_codec
     aspia_base
-    aspia_protocol
+    aspia_desktop
+    aspia_proto
     ${THIRD_PARTY_LIBS})

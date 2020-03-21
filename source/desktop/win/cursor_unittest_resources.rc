@@ -1,0 +1,36 @@
+//
+// Aspia Project
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program. If not, see <https://www.gnu.org/licenses/>.
+//
+
+#include "desktop/win/cursor_unittest_resources.h"
+
+// These cursors are matched with their less than 32bpp counterparts below.
+IDD_CURSOR1_32BPP CURSOR "cursor_test_data/1_32bpp.cur"
+IDD_CURSOR2_32BPP CURSOR "cursor_test_data/2_32bpp.cur"
+IDD_CURSOR3_32BPP CURSOR "cursor_test_data/3_32bpp.cur"
+
+// Matches IDD_CURSOR1_32BPP.
+IDD_CURSOR1_24BPP CURSOR "cursor_test_data/1_24bpp.cur"
+
+// Matches IDD_CURSOR1_32BPP.
+IDD_CURSOR1_8BPP CURSOR "cursor_test_data/1_8bpp.cur"
+
+// Matches IDD_CURSOR2_32BPP.
+IDD_CURSOR2_1BPP CURSOR "cursor_test_data/2_1bpp.cur"
+
+// Matches IDD_CURSOR3_32BPP.
+IDD_CURSOR3_4BPP CURSOR "cursor_test_data/3_4bpp.cur"

@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,20 +16,23 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CLIENT__UI__FILE_TRANSFER_DIALOG_H_
-#define ASPIA_CLIENT__UI__FILE_TRANSFER_DIALOG_H_
+#ifndef CLIENT__UI__FILE_TRANSFER_DIALOG_H
+#define CLIENT__UI__FILE_TRANSFER_DIALOG_H
 
 #include "build/build_config.h"
 #include "client/file_transfer.h"
+#include "client/file_transfer_window.h"
 #include "ui_file_transfer_dialog.h"
 
 #if defined(OS_WIN)
 class QWinTaskbarProgress;
 #endif
 
-namespace aspia {
+namespace client {
 
-class FileTransferDialog : public QDialog
+class FileTransferDialog
+    : public QDialog,
+      public FileTransferWindow
 {
     Q_OBJECT
 
@@ -37,20 +40,28 @@ public:
     explicit FileTransferDialog(QWidget* parent = nullptr);
     ~FileTransferDialog();
 
-public slots:
-    void setCurrentItem(const QString& source_path, const QString& target_path);
-    void setProgress(int total, int current);
-    void showError(FileTransfer* transfer, FileTransfer::Error error_type, const QString& message);
-    void onTransferFinished();
+    std::shared_ptr<FileTransferWindowProxy> windowProxy() { return transfer_window_proxy_; }
 
-signals:
-    void transferCanceled();
+    // FileTransferWindow implementation.
+    void start(std::shared_ptr<FileTransferProxy> transfer_proxy) override;
+    void stop() override;
+    void setCurrentItem(const std::string& source_path, const std::string& target_path) override;
+    void setCurrentProgress(int total, int current) override;
+    void errorOccurred(const FileTransfer::Error& error) override;
 
 protected:
-    void closeEvent(QCloseEvent* event);
+    // QDialog implementation.
+    void keyPressEvent(QKeyEvent* event) override;
+    void closeEvent(QCloseEvent* event) override;
 
 private:
+    QString errorToMessage(const FileTransfer::Error& error);
+
     Ui::FileTransferDialog ui;
+
+    std::shared_ptr<FileTransferProxy> transfer_proxy_;
+    std::shared_ptr<FileTransferWindowProxy> transfer_window_proxy_;
+    std::unique_ptr<QFontMetrics> label_metrics_;
 
 #if defined(OS_WIN)
     QWinTaskbarProgress* taskbar_progress_ = nullptr;
@@ -63,6 +74,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(FileTransferDialog);
 };
 
-} // namespace aspia
+} // namespace client
 
-#endif // ASPIA_CLIENT__UI__FILE_TRANSFER_DIALOG_H_
+#endif // CLIENT__UI__FILE_TRANSFER_DIALOG_H

@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_BASE__MACROS_MAGIC_H_
-#define ASPIA_BASE__MACROS_MAGIC_H_
+#ifndef BASE__MACROS_MAGIC_H
+#define BASE__MACROS_MAGIC_H
 
 // Put this in the declarations for a class to be uncopyable.
 #define DISALLOW_COPY(TypeName) \
@@ -39,4 +39,4 @@
     TypeName() = delete;                         \
     DISALLOW_COPY_AND_ASSIGN(TypeName)
 
-#endif // ASPIA_BASE__MACROS_MAGIC_H_
+#endif // BASE__MACROS_MAGIC_H

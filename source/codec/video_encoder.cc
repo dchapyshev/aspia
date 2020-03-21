@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,21 +17,20 @@
 //
 
 #include "codec/video_encoder.h"
+#include "desktop/desktop_frame.h"
 
-#include "desktop_capture/desktop_frame.h"
+namespace codec {
 
-namespace aspia {
-
-void VideoEncoder::fillPacketInfo(proto::desktop::VideoEncoding encoding,
-                                  const DesktopFrame* frame,
-                                  proto::desktop::VideoPacket* packet)
+void VideoEncoder::fillPacketInfo(proto::VideoEncoding encoding,
+                                  const desktop::Frame* frame,
+                                  proto::VideoPacket* packet)
 {
     packet->set_encoding(encoding);
 
     if (screen_settings_tracker_.isRectChanged(
-        DesktopRect::makeXYWH(frame->topLeft(), frame->size())))
+        desktop::Rect::makeXYWH(frame->topLeft(), frame->size())))
     {
-        proto::desktop::Rect* rect = packet->mutable_format()->mutable_screen_rect();
+        proto::Rect* rect = packet->mutable_format()->mutable_screen_rect();
 
         rect->set_x(frame->topLeft().x());
         rect->set_y(frame->topLeft().y());
@@ -40,4 +39,4 @@ void VideoEncoder::fillPacketInfo(proto::desktop::VideoEncoding encoding,
     }
 }
 
-} // namespace aspia
+} // namespace codec

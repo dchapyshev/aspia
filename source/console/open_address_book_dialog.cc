@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,10 +17,9 @@
 //
 
 #include "console/open_address_book_dialog.h"
-
 #include "base/logging.h"
 
-namespace aspia {
+namespace console {
 
 OpenAddressBookDialog::OpenAddressBookDialog(QWidget* parent,
                                              const QString& file_path,
@@ -85,4 +84,4 @@ void OpenAddressBookDialog::buttonBoxClicked(QAbstractButton* button)
     close();
 }
 
-} // namespace aspia
+} // namespace console

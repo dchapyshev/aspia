@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,55 +16,46 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include <QCommandLineParser>
+#include "base/files/base_paths.h"
+#include "client/config_factory.h"
+#include "client/ui/client_dialog.h"
+#include "client/ui/qt_desktop_window.h"
+#include "client/ui/qt_file_manager_window.h"
+#include "console/console_application.h"
+#include "console/console_main_window.h"
+#include "qt_base/qt_logging.h"
 
+#if defined(USE_TBB)
 #include <tbb/tbbmalloc_proxy.h>
+#endif // defined(USE_TBB)
 
-#include <QtGlobal>
+#include <QCommandLineParser>
+#include <QMessageBox>
+
+#if defined(QT_STATIC)
+
 #include <QtPlugin>
 
+#if defined(Q_OS_WIN)
 Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin);
 Q_IMPORT_PLUGIN(QWindowsVistaStylePlugin);
-
-#include "base/logging.h"
-#include "build/version.h"
-#include "client/client_pool.h"
-#include "console/console_window.h"
-#include "console/console_settings.h"
-#include "crypto/scoped_crypto_initializer.h"
-
-using namespace aspia;
+Q_IMPORT_PLUGIN(QWindowsPrinterSupportPlugin);
+#else
+#error Platform support needed
+#endif // defined(Q_OS_WIN)
+#endif // defined(QT_STATIC)
 
 int main(int argc, char *argv[])
 {
+    Q_INIT_RESOURCE(qt_translations);
     Q_INIT_RESOURCE(client);
+    Q_INIT_RESOURCE(client_translations);
+    Q_INIT_RESOURCE(common);
+    Q_INIT_RESOURCE(common_translations);
+    Q_INIT_RESOURCE(updater);
+    Q_INIT_RESOURCE(updater_translations);
 
-    LoggingSettings settings;
-    settings.logging_dest = LOG_TO_ALL;
-
-    ScopedLogging logging(settings);
-
-    ScopedCryptoInitializer crypto_initializer;
-    CHECK(crypto_initializer.isSucceeded());
-
-    QApplication application(argc, argv);
-
-    ConsoleSettings console_settings;
-    QString current_locale = console_settings.locale();
-
-    LocaleLoader locale_loader;
-    if (!locale_loader.contains(current_locale))
-    {
-        current_locale = ConsoleSettings::defaultLocale();
-        console_settings.setLocale(current_locale);
-    }
-
-    locale_loader.installTranslators(current_locale);
-
-    application.setOrganizationName(QStringLiteral("Aspia"));
-    application.setApplicationName(QApplication::translate("Console", "Console"));
-    application.setApplicationVersion(QStringLiteral(ASPIA_VERSION_STRING));
-    application.setAttribute(Qt::AA_DisableWindowContextHelpButton, true);
+    console::Application application(argc, argv);
 
     QCommandLineOption address_option(
         QStringLiteral("address"),
@@ -85,50 +76,95 @@ int main(int argc, char *argv[])
     QCommandLineOption session_type_option(
         QStringLiteral("session-type"),
         QApplication::translate("Console", "Session type. Possible values: desktop-manage, "
-                                "desktop-view, file-transfer."),
+            "desktop-view, file-transfer."),
         QStringLiteral("desktop-manage"));
 
-    QCommandLineOption simple_ui_option(
-        QStringLiteral("simple-ui"),
-        QApplication::translate("Console", "Run the program with a simplified user interface."));
+    QCommandLineOption client_option(
+        QStringLiteral("client"),
+        QApplication::translate("Console", "Open the client to connect to the computer."));
 
     QCommandLineParser parser;
     parser.setApplicationDescription(QApplication::translate("Console", "Aspia Console"));
     parser.addHelpOption();
     parser.addVersionOption();
     parser.addPositionalArgument(QApplication::translate("Console", "file"),
-                                 QApplication::translate("Console", "The file to open."));
+        QApplication::translate("Console", "The file to open."));
     parser.addOption(address_option);
     parser.addOption(port_option);
     parser.addOption(username_option);
     parser.addOption(session_type_option);
-    parser.addOption(simple_ui_option);
+    parser.addOption(client_option);
     parser.process(application);
 
-    QScopedPointer<ConsoleWindow> console_window;
+    QScopedPointer<console::MainWindow> console_window;
 
-    if (parser.isSet(simple_ui_option))
+    if (parser.isSet(client_option))
     {
-        if (!ClientPool::connect())
-            return 0;
+        client::ClientDialog().exec();
     }
     else if (parser.isSet(address_option))
     {
-        ConnectData connect_data;
-        connect_data.address  = parser.value(address_option).toStdString();
-        connect_data.port     = parser.value(port_option).toUShort();
-        connect_data.username = parser.value(username_option).toStdString();
+        client::Config config;
+        config.address  = parser.value(address_option).toStdU16String();
+        config.port     = parser.value(port_option).toUShort();
+        config.username = parser.value(username_option).toStdU16String();
 
         QString session_type = parser.value(session_type_option);
 
-        if (session_type == "desktop-manage")
-            connect_data.session_type = proto::SESSION_TYPE_DESKTOP_MANAGE;
-        else if (session_type == "desktop-view")
-            connect_data.session_type = proto::SESSION_TYPE_DESKTOP_VIEW;
-        else if (session_type == "file-transfer")
-            connect_data.session_type = proto::SESSION_TYPE_FILE_TRANSFER;
+        if (session_type == QLatin1String("desktop-manage"))
+        {
+            config.session_type = proto::SESSION_TYPE_DESKTOP_MANAGE;
+        }
+        else if (session_type == QLatin1String("desktop-view"))
+        {
+            config.session_type = proto::SESSION_TYPE_DESKTOP_VIEW;
+        }
+        else if (session_type == QLatin1String("file-transfer"))
+        {
+            config.session_type = proto::SESSION_TYPE_FILE_TRANSFER;
+        }
+        else
+        {
+            QMessageBox::warning(
+                nullptr,
+                QApplication::translate("Console", "Warning"),
+                QApplication::translate("Console", "Incorrect session type entered."),
+                QMessageBox::Ok);
+            return 1;
+        }
 
-        if (!ClientPool::connect(connect_data))
+        client::ClientWindow* client_window = nullptr;
+
+        switch (config.session_type)
+        {
+            case proto::SESSION_TYPE_DESKTOP_MANAGE:
+            {
+                client_window = new client::QtDesktopWindow(
+                    config.session_type, client::ConfigFactory::defaultDesktopManageConfig());
+            }
+            break;
+
+            case proto::SESSION_TYPE_DESKTOP_VIEW:
+            {
+                client_window = new client::QtDesktopWindow(
+                    config.session_type, client::ConfigFactory::defaultDesktopViewConfig());
+            }
+            break;
+
+            case proto::SESSION_TYPE_FILE_TRANSFER:
+                client_window = new client::QtFileManagerWindow();
+                break;
+
+            default:
+                NOTREACHED();
+                break;
+        }
+
+        if (!client_window)
+            return 0;
+
+        client_window->setAttribute(Qt::WA_DeleteOnClose);
+        if (!client_window->connectToHost(config))
             return 0;
     }
     else
@@ -139,9 +175,28 @@ int main(int argc, char *argv[])
         if (!arguments.isEmpty())
             file_path = arguments.front();
 
-        console_window.reset(new ConsoleWindow(locale_loader, file_path));
-        console_window->show();
-        console_window->activateWindow();
+        if (application.isRunning())
+        {
+            if (file_path.isEmpty())
+                application.activateWindow();
+            else
+                application.openFile(file_path);
+
+            return 0;
+        }
+        else
+        {
+            console_window.reset(new console::MainWindow(file_path));
+
+            QObject::connect(&application, &console::Application::windowActivated,
+                console_window.get(), &console::MainWindow::showConsole);
+
+            QObject::connect(&application, &console::Application::fileOpened,
+                console_window.get(), &console::MainWindow::openAddressBook);
+
+            console_window->show();
+            console_window->activateWindow();
+        }
     }
 
     return application.exec();

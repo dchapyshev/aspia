@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,12 +16,12 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CONSOLE__MRU_H_
-#define ASPIA_CONSOLE__MRU_H_
+#ifndef CONSOLE__MRU_H
+#define CONSOLE__MRU_H
 
 #include <QStringList>
 
-namespace aspia {
+namespace console {
 
 class Mru
 {
@@ -41,11 +41,13 @@ public:
     void unpinFile(const QString& file_path);
     bool isPinnedFile(const QString& file_path) const;
 
+    void clearRecentOpen();
+
 private:
     QStringList recent_list_;
     QStringList pinned_list_;
 };
 
-} // namespace aspia
+} // namespace console
 
-#endif // ASPIA_CONSOLE__MRU_H_
+#endif // CONSOLE__MRU_H

@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,18 +16,18 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CLIENT__UI__ADDRESS_BAR_H_
-#define ASPIA_CLIENT__UI__ADDRESS_BAR_H_
-
-#include <QComboBox>
+#ifndef CLIENT__UI__ADDRESS_BAR_H
+#define CLIENT__UI__ADDRESS_BAR_H
 
 #include "base/macros_magic.h"
-#include "protocol/file_transfer_session.pb.h"
+#include "proto/file_transfer.pb.h"
+
+#include <QComboBox>
 
 class QLineEdit;
 class QTreeView;
 
-namespace aspia {
+namespace client {
 
 class AddressBarModel;
 
@@ -38,7 +38,7 @@ class AddressBar : public QComboBox
 public:
     explicit AddressBar(QWidget* parent = nullptr);
 
-    void setDriveList(const proto::file_transfer::DriveList& list);
+    void setDriveList(const proto::DriveList& list);
     void setCurrentPath(const QString& path);
     QString currentPath() const;
     QString previousPath() const;
@@ -62,6 +62,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(AddressBar);
 };
 
-} // namespace aspia
+} // namespace client
 
-#endif // ASPIA_CLIENT__UI__ADDRESS_BAR_H_
+#endif // CLIENT__UI__ADDRESS_BAR_H

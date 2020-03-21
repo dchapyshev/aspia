@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,13 +17,12 @@
 //
 
 #include "crypto/scoped_crypto_initializer.h"
+#include "base/logging.h"
 
 #include <openssl/crypto.h>
 #include <openssl/ssl.h>
 
-#include "base/logging.h"
-
-namespace aspia {
+namespace crypto {
 
 ScopedCryptoInitializer::ScopedCryptoInitializer()
 {
@@ -42,4 +41,4 @@ ScopedCryptoInitializer::~ScopedCryptoInitializer()
     OPENSSL_cleanup();
 }
 
-} // namespace aspia
+} // namespace crypto

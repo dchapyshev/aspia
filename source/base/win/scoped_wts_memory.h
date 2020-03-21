@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,12 +16,15 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_BASE__WIN__SCOPED_WTS_MEMORY_H_
-#define ASPIA_BASE__WIN__SCOPED_WTS_MEMORY_H_
-
-#include <wtsapi32.h>
+#ifndef BASE__WIN__SCOPED_WTS_MEMORY_H
+#define BASE__WIN__SCOPED_WTS_MEMORY_H
 
 #include "base/macros_magic.h"
+
+#include <Windows.h>
+#include <wtsapi32.h>
+
+namespace base::win {
 
 template <typename T>
 class ScopedWtsMemory
@@ -29,7 +32,7 @@ class ScopedWtsMemory
 public:
     ScopedWtsMemory() = default;
 
-    explicit ScopedWtsMemory(T memory)
+    explicit ScopedWtsMemory(T* memory)
         : memory_(memory)
     {
         // Nothing
@@ -37,22 +40,22 @@ public:
 
     ~ScopedWtsMemory() { close(); }
 
-    T get() { return memory_; }
+    T* get() { return memory_; }
 
-    void reset(T memory)
+    void reset(T* memory)
     {
         close();
         memory_ = memory;
     }
 
-    T release()
+    T* release()
     {
-        T memory = memory_;
+        T* memory = memory_;
         memory_ = nullptr;
         return memory;
     }
 
-    T* recieve()
+    T** recieve()
     {
         close();
         return &memory_;
@@ -63,12 +66,12 @@ public:
         return (memory_ != nullptr);
     }
 
-    operator T() { return memory_; }
-
-    T operator [](DWORD index) const
+    T* operator [](DWORD index) const
     {
         return &memory_[index];
     }
+
+    T* operator->() const { return memory_; }
 
 private:
     void close()
@@ -80,9 +83,11 @@ private:
         }
     }
 
-    T memory_ = nullptr;
+    T* memory_ = nullptr;
 
     DISALLOW_COPY_AND_ASSIGN(ScopedWtsMemory);
 };
 
-#endif // ASPIA_BASE__WIN__SCOPED_WTS_MEMORY_H_
+} // namespace base::win
+
+#endif // BASE__WIN__SCOPED_WTS_MEMORY_H

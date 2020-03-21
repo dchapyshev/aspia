@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,15 +16,15 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CONSOLE__CONSOLE_STATUSBAR_H_
-#define ASPIA_CONSOLE__CONSOLE_STATUSBAR_H_
+#ifndef CONSOLE__CONSOLE_STATUSBAR_H
+#define CONSOLE__CONSOLE_STATUSBAR_H
+
+#include "base/macros_magic.h"
+#include "proto/address_book.pb.h"
 
 #include <QStatusBar>
 
-#include "base/macros_magic.h"
-#include "protocol/address_book.pb.h"
-
-namespace aspia {
+namespace console {
 
 class ConsoleStatusBar : public QStatusBar
 {
@@ -41,6 +41,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(ConsoleStatusBar);
 };
 
-} // namespace aspia
+} // namespace console
 
-#endif // ASPIA_CONSOLE__CONSOLE_STATUSBAR_H_
+#endif // CONSOLE__CONSOLE_STATUSBAR_H

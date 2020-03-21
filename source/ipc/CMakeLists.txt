@@ -1,6 +1,6 @@
 #
 # Aspia Project
-# Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+# Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -19,8 +19,17 @@
 list(APPEND SOURCE_IPC
     ipc_channel.cc
     ipc_channel.h
+    ipc_channel_proxy.cc
+    ipc_channel_proxy.h
+    ipc_listener.h
     ipc_server.cc
-    ipc_server.h)
+    ipc_server.h
+    shared_memory.cc
+    shared_memory.h
+    shared_memory_factory.cc
+    shared_memory_factory.h
+    shared_memory_factory_proxy.cc
+    shared_memory_factory_proxy.h)
 
 source_group("" FILES ${SOURCE_IPC})
 

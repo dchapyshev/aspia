@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,48 +16,23 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_HOST__INPUT_INJECTOR_H_
-#define ASPIA_HOST__INPUT_INJECTOR_H_
+#ifndef HOST__INPUT_INJECTOR_H
+#define HOST__INPUT_INJECTOR_H
 
-#include <QThread>
+#include "proto/desktop.pb.h"
 
-#include <condition_variable>
-#include <queue>
-#include <mutex>
-#include <variant>
+namespace host {
 
-#include "base/macros_magic.h"
-#include "protocol/desktop_session.pb.h"
-
-namespace aspia {
-
-class InputInjector : public QThread
+class InputInjector
 {
-    Q_OBJECT
-
 public:
-    InputInjector(QObject* parent, bool block_input);
-    ~InputInjector();
+    virtual ~InputInjector() = default;
 
-    void injectPointerEvent(const proto::desktop::PointerEvent& event);
-    void injectKeyEvent(const proto::desktop::KeyEvent& event);
-
-protected:
-    // QThread implementation.
-    void run() override;
-
-private:
-    using InputEvent = std::variant<proto::desktop::PointerEvent, proto::desktop::KeyEvent>;
-
-    std::condition_variable input_event_;
-    std::mutex input_queue_lock_;
-    std::queue<InputEvent> incoming_input_queue_;
-    bool terminate_ = false;
-    const bool block_input_;
-
-    DISALLOW_COPY_AND_ASSIGN(InputInjector);
+    virtual void setBlockInput(bool enable) = 0;
+    virtual void injectKeyEvent(const proto::KeyEvent& event) = 0;
+    virtual void injectPointerEvent(const proto::PointerEvent& event) = 0;
 };
 
-} // namespace aspia
+} // namespace host
 
-#endif // ASPIA_HOST__INPUT_INJECTOR_H_
+#endif // HOST__INPUT_INJECTOR_H

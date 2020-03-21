@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,16 +16,15 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CLIENT__UI__FILE_LIST_MODEL_H_
-#define ASPIA_CLIENT__UI__FILE_LIST_MODEL_H_
+#ifndef CLIENT__UI__FILE_LIST_MODEL_H
+#define CLIENT__UI__FILE_LIST_MODEL_H
+
+#include "client/file_transfer.h"
 
 #include <QAbstractItemModel>
 #include <QIcon>
 
-#include "base/macros_magic.h"
-#include "client/file_transfer.h"
-
-namespace aspia {
+namespace client {
 
 class FileListModel : public QAbstractItemModel
 {
@@ -36,7 +35,7 @@ public:
 
     void setMimeType(const QString& mime_type);
     QString mimeType() const { return mime_type_; }
-    void setFileList(const proto::file_transfer::FileList& file_list);
+    void setFileList(const proto::FileList& file_list);
     void setSortOrder(int column, Qt::SortOrder order);
     void clear();
     bool isFolder(const QModelIndex& index) const;
@@ -66,7 +65,7 @@ public:
 signals:
     void nameChangeRequest(const QString& old_name, const QString& new_name);
     void createFolderRequest(const QString& name);
-    void fileListDropped(const QString& folder_name, const QList<FileTransfer::Item>& files);
+    void fileListDropped(const QString& folder_name, const std::vector<FileTransfer::Item>& files);
 
 protected:
     void sortItems(int column, Qt::SortOrder order);
@@ -103,6 +102,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(FileListModel);
 };
 
-} // namespace aspia
+} // namespace client
 
-#endif // ASPIA_CLIENT__UI__FILE_LIST_MODEL_H_
+#endif // CLIENT__UI__FILE_LIST_MODEL_H

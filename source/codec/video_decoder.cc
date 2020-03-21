@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,24 +17,23 @@
 //
 
 #include "codec/video_decoder.h"
-
 #include "codec/video_decoder_vpx.h"
 #include "codec/video_decoder_zstd.h"
 
-namespace aspia {
+namespace codec {
 
 // static
-std::unique_ptr<VideoDecoder> VideoDecoder::create(proto::desktop::VideoEncoding encoding)
+std::unique_ptr<VideoDecoder> VideoDecoder::create(proto::VideoEncoding encoding)
 {
     switch (encoding)
     {
-        case proto::desktop::VIDEO_ENCODING_ZSTD:
+        case proto::VIDEO_ENCODING_ZSTD:
             return VideoDecoderZstd::create();
 
-        case proto::desktop::VIDEO_ENCODING_VP8:
+        case proto::VIDEO_ENCODING_VP8:
             return VideoDecoderVPX::createVP8();
 
-        case proto::desktop::VIDEO_ENCODING_VP9:
+        case proto::VIDEO_ENCODING_VP9:
             return VideoDecoderVPX::createVP9();
 
         default:
@@ -42,4 +41,4 @@ std::unique_ptr<VideoDecoder> VideoDecoder::create(proto::desktop::VideoEncoding
     }
 }
 
-} // namespace aspia
+} // namespace codec

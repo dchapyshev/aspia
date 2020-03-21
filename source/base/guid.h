@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,18 +16,26 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_BASE__GUID_H_
-#define ASPIA_BASE__GUID_H_
+#ifndef BASE__GUID_H
+#define BASE__GUID_H
+
+#include "base/macros_magic.h"
+#include "build/build_config.h"
 
 #include <string>
 
-#include "base/macros_magic.h"
-
-namespace aspia {
+namespace base {
 
 class Guid
 {
 public:
+    Guid();
+
+    Guid(const Guid& other);
+    Guid& operator=(const Guid& other);
+
+    bool isNull() const;
+
     // Generate a 128-bit random GUID in the form of version 4 as described in
     // RFC 4122, section 4.4.
     // The format of GUID version 4 must be xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx,
@@ -36,27 +44,34 @@ public:
     //
     // A cryptographically secure random source will be used, but consider using
     // UnguessableToken for greater type-safety if GUID format is unnecessary.
-    static std::string create();
+    static Guid create();
 
     // Returns true if the input string conforms to the version 4 GUID format.
     // Note that this does NOT check if the hexadecimal values "a" through "f"
     // are in lower case characters, as Version 4 RFC says onput they're
     // case insensitive. (Use isStrictValid for checking if the
     // given string is valid output string)
-    static bool isValid(const std::string& guid);
+    static bool isValidGuidString(std::string_view guid);
 
     // Returns true if the input string is valid version 4 GUID output string.
     // This also checks if the hexadecimal values "a" through "f" are in lower
     // case characters.
-    static bool isStrictValid(const std::string& guid);
+    static bool isStrictValidGuidString(std::string_view guid);
+
+    std::string toStdString() const;
+
+    bool operator==(const Guid& other) const;
+    bool operator!=(const Guid& other) const;
 
     // For unit testing purposes only. Do not use outside of tests.
     static std::string randomDataToGUIDString(const uint64_t bytes[2]);
 
 private:
-    DISALLOW_COPY_AND_ASSIGN(Guid);
+    Guid(const uint64_t bytes[2]);
+
+    uint64_t bytes_[2];
 };
 
-} // namespace aspia
+} // namespace base
 
-#endif // ASPIA_BASE__GUID_H_
+#endif // BASE__GUID_H

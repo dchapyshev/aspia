@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,11 +16,11 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
+#include <Windows.h>
 
 LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 
+1 RT_MANIFEST "console.manifest"
 IDI_ICON1 ICON "console/resources/main.ico"
 IDI_ICON2 ICON "console/resources/address-book.ico"
 

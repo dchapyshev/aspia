@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -18,382 +18,147 @@
 
 #include "host/host_server.h"
 
-#include <QCoreApplication>
-
-#include "base/base_paths.h"
-#include "base/guid.h"
 #include "base/logging.h"
-#include "common/message_serialization.h"
-#include "host/win/host.h"
-#include "host/host_settings.h"
-#include "ipc/ipc_server.h"
-#include "network/firewall_manager.h"
-#include "network/network_channel_host.h"
-#include "protocol/notifier.pb.h"
+#include "base/task_runner.h"
+#include "base/files/base_paths.h"
+#include "base/files/file_path_watcher.h"
+#include "host/client_session.h"
+#include "net/firewall_manager.h"
+#include "net/network_channel.h"
 
-namespace aspia {
+namespace host {
 
 namespace {
 
 const wchar_t kFirewallRuleName[] = L"Aspia Host Service";
 const wchar_t kFirewallRuleDecription[] = L"Allow incoming TCP connections";
-const char kNotifierFileName[] = "aspia_host_session.exe";
-
-const char* sessionTypeToString(proto::SessionType session_type)
-{
-    switch (session_type)
-    {
-        case proto::SESSION_TYPE_DESKTOP_MANAGE:
-            return "Desktop Manage";
-
-        case proto::SESSION_TYPE_DESKTOP_VIEW:
-            return "Desktop View";
-
-        case proto::SESSION_TYPE_FILE_TRANSFER:
-            return "File Transfer";
-
-        default:
-            return "Unknown";
-    }
-}
 
 } // namespace
 
-HostServer::HostServer(QObject* parent)
-    : QObject(parent)
+Server::Server(std::shared_ptr<base::TaskRunner> task_runner)
+    : task_runner_(std::move(task_runner))
 {
-    // Nothing
+    DCHECK(task_runner_);
 }
 
-HostServer::~HostServer()
+Server::~Server()
 {
-    stop();
-}
+    LOG(LS_INFO) << "Stopping the server...";
 
-bool HostServer::start()
-{
-    LOG(LS_INFO) << "Starting the server";
+    settings_watcher_.reset();
+    authenticator_manager_.reset();
+    user_session_manager_.reset();
+    network_server_.reset();
 
-    if (network_server_)
-    {
-        LOG(LS_WARNING) << "An attempt was start an already running server.";
-        return false;
-    }
-
-    HostSettings settings;
-
-    if (settings.addFirewallRule())
-    {
-        std::filesystem::path file_path;
-        if (BasePaths::currentExecFile(&file_path))
-        {
-            FirewallManager firewall(file_path);
-            if (firewall.isValid())
-            {
-                if (firewall.addTcpRule(kFirewallRuleName, kFirewallRuleDecription, settings.tcpPort()))
-                {
-                    LOG(LS_INFO) << "Rule is added to the firewall";
-                }
-            }
-        }
-    }
-
-    network_server_ = new NetworkServer(settings.userList(), this);
-
-    connect(network_server_, &NetworkServer::newChannelReady,
-            this, &HostServer::onNewConnection);
-
-    if (!network_server_->start(settings.tcpPort()))
-        return false;
-
-    LOG(LS_INFO) << "Server is started on port " << settings.tcpPort();
-    return true;
-}
-
-void HostServer::stop()
-{
-    LOG(LS_INFO) << "Stopping the server";
-
-    for (auto session : session_list_)
-        session->stop();
-
-    stopNotifier();
-
-    std::unique_ptr<NetworkServer> network_server_deleter(network_server_);
-    if (network_server_)
-        network_server_->stop();
-
-    std::filesystem::path file_path;
-    if (BasePaths::currentExecFile(&file_path))
-    {
-        FirewallManager firewall(file_path);
-        if (firewall.isValid())
-            firewall.deleteRuleByName(kFirewallRuleName);
-    }
+    deleteFirewallRules();
 
     LOG(LS_INFO) << "Server is stopped";
 }
 
-void HostServer::setSessionChanged(uint32_t event, uint32_t session_id)
+void Server::start()
 {
-    emit sessionChanged(event, session_id);
-
-    switch (event)
+    if (network_server_)
     {
-        case WTS_CONSOLE_CONNECT:
+        DLOG(LS_WARNING) << "An attempt was start an already running server";
+        return;
+    }
+
+    LOG(LS_INFO) << "Starting the host server";
+
+    settings_watcher_ = std::make_unique<base::FilePathWatcher>(task_runner_);
+    settings_watcher_->watch(settings_.filePath(), false,
+        [this](const std::filesystem::path& path, bool error)
+    {
+        LOG(LS_INFO) << "Configuration file change detected";
+
+        if (!error)
         {
-            if (!session_list_.isEmpty())
-                startNotifier();
+            DCHECK_EQ(path, settings_.filePath());
+
+            // Synchronize the parameters from the file.
+            settings_.sync();
+
+            // Reload user lists.
+            reloadUserList();
         }
-        break;
+    });
 
-        case WTS_CONSOLE_DISCONNECT:
-        {
-            has_user_session_ = false;
-            stopNotifier();
-        }
-        break;
+    authenticator_manager_ = std::make_unique<AuthenticatorManager>(task_runner_, this);
 
-        case WTS_SESSION_LOGON:
-        {
-            if (session_id == WTSGetActiveConsoleSessionId() && !session_list_.isEmpty())
-            {
-                has_user_session_ = true;
-                startNotifier();
-            }
-        }
-        break;
+    user_session_manager_ = std::make_unique<UserSessionManager>(task_runner_);
+    user_session_manager_->start(this);
 
-        default:
-            break;
-    }
+    reloadUserList();
+    addFirewallRules();
+
+    network_server_ = std::make_unique<net::Server>();
+    network_server_->start(settings_.tcpPort(), this);
+
+    LOG(LS_INFO) << "Host server is started successfully";
 }
 
-void HostServer::onNewConnection()
+void Server::setSessionEvent(base::win::SessionStatus status, base::SessionId session_id)
 {
-    while (network_server_->hasReadyChannels())
-    {
-        NetworkChannelHost* channel = network_server_->nextReadyChannel();
-        if (!channel)
-            continue;
-
-        LOG(LS_INFO) << "New connected client: " << channel->peerAddress().toStdString();
-
-        std::unique_ptr<Host> host(new Host(this));
-
-        host->setNetworkChannel(channel);
-        host->setUuid(Guid::create());
-
-        connect(this, &HostServer::sessionChanged, host.get(), &Host::sessionChanged);
-        connect(host.get(), &Host::finished, this, &HostServer::onHostFinished, Qt::QueuedConnection);
-
-        if (host->start())
-        {
-            if (notifier_state_ == NotifierState::STOPPED)
-                startNotifier();
-            else
-                sessionToNotifier(*host);
-
-            session_list_.push_back(host.release());
-        }
-    }
+    if (user_session_manager_)
+        user_session_manager_->setSessionEvent(status, session_id);
 }
 
-void HostServer::onHostFinished(Host* host)
+void Server::onNewConnection(std::unique_ptr<net::Channel> channel)
 {
-    LOG(LS_INFO) << sessionTypeToString(host->sessionType())
-                 << " session is finished for " << host->userName();
-
-    for (auto it = session_list_.begin(); it != session_list_.end(); ++it)
-    {
-        if (*it != host)
-            continue;
-
-        session_list_.erase(it);
-
-        std::unique_ptr<Host> host_deleter(host);
-        sessionCloseToNotifier(*host);
-        break;
-    }
+    if (authenticator_manager_)
+        authenticator_manager_->addNewChannel(std::move(channel));
 }
 
-void HostServer::onIpcServerStarted(const QString& channel_id)
+void Server::onNewSession(std::unique_ptr<ClientSession> session)
 {
-    DCHECK_EQ(notifier_state_, NotifierState::STARTING);
-
-    notifier_process_ = new HostProcess(this);
-
-    notifier_process_->setAccount(HostProcess::User);
-    notifier_process_->setSessionId(WTSGetActiveConsoleSessionId());
-    notifier_process_->setProgram(
-        QCoreApplication::applicationDirPath() + QLatin1Char('/') + kNotifierFileName);
-    notifier_process_->setArguments(
-        QStringList() << QStringLiteral("--channel_id") << channel_id);
-
-    connect(notifier_process_, &HostProcess::errorOccurred,
-            this, &HostServer::onNotifierProcessError);
-
-    connect(notifier_process_, &HostProcess::finished,
-            this, &HostServer::restartNotifier);
-
-    // Start the process. After the start, the process must connect to the IPC server and
-    // slot |onIpcNewConnection| will be called.
-    notifier_process_->start();
+    if (user_session_manager_)
+        user_session_manager_->addNewSession(std::move(session));
 }
 
-void HostServer::onIpcNewConnection(IpcChannel* channel)
+void Server::onUserListChanged()
 {
-    DCHECK_EQ(notifier_state_, NotifierState::STARTING);
-
-    LOG(LS_INFO) << "Notifier is started";
-    notifier_state_ = NotifierState::STARTED;
-
-    // Clients can disconnect while the notifier is started.
-    if (session_list_.isEmpty())
-    {
-        std::unique_ptr<IpcChannel> channel_deleter(channel);
-        stopNotifier();
-        return;
-    }
-
-    ipc_channel_ = channel;
-    ipc_channel_->setParent(this);
-
-    connect(ipc_channel_, &IpcChannel::disconnected, ipc_channel_, &IpcChannel::deleteLater);
-    connect(ipc_channel_, &IpcChannel::disconnected, this, &HostServer::restartNotifier);
-    connect(ipc_channel_, &IpcChannel::messageReceived, this, &HostServer::onIpcMessageReceived);
-
-    // Send information about all connected sessions to the notifier.
-    for (const auto& session : session_list_)
-        sessionToNotifier(*session);
-
-    ipc_channel_->start();
+    reloadUserList();
 }
 
-void HostServer::onNotifierProcessError(HostProcess::ErrorCode error_code)
+void Server::addFirewallRules()
 {
-    if (error_code == HostProcess::NoLoggedOnUser)
-    {
-        LOG(LS_INFO) << "There is no logged on user. The notifier will not be started.";
-        has_user_session_ = false;
-        stopNotifier();
-    }
-    else
-    {
-        LOG(LS_WARNING) << "Unable to start notifier. The server will be stopped.";
-        stop();
-    }
-}
-
-void HostServer::restartNotifier()
-{
-    if (notifier_state_ == NotifierState::STOPPED)
+    std::filesystem::path file_path;
+    if (!base::BasePaths::currentExecFile(&file_path))
         return;
 
-    stopNotifier();
-
-    // The notifier is not needed if there are no active sessions.
-    if (session_list_.isEmpty() || !has_user_session_)
+    net::FirewallManager firewall(file_path);
+    if (!firewall.isValid())
         return;
 
-    startNotifier();
+    if (!firewall.addTcpRule(kFirewallRuleName, kFirewallRuleDecription, settings_.tcpPort()))
+        return;
+
+    LOG(LS_INFO) << "Rule is added to the firewall";
 }
 
-void HostServer::onIpcMessageReceived(const QByteArray& buffer)
+void Server::deleteFirewallRules()
 {
-    proto::notifier::NotifierToService message;
-
-    if (!parseMessage(buffer, message))
-    {
-        LOG(LS_WARNING) << "Invaliid message from notifier.";
-        stop();
+    std::filesystem::path file_path;
+    if (!base::BasePaths::currentExecFile(&file_path))
         return;
-    }
 
-    if (message.has_kill_session())
-    {
-        LOG(LS_INFO) << "Command to terminate the session from the notifier is received.";
+    net::FirewallManager firewall(file_path);
+    if (!firewall.isValid())
+        return;
 
-        const std::string& uuid = message.kill_session().uuid();
-
-        for (const auto& session : session_list_)
-        {
-            if (session->uuid() == uuid)
-            {
-                session->stop();
-                break;
-            }
-        }
-    }
-    else
-    {
-        LOG(LS_WARNING) << "Unhandled message from notifier";
-    }
+    firewall.deleteRuleByName(kFirewallRuleName);
 }
 
-void HostServer::startNotifier()
+void Server::reloadUserList()
 {
-    if (notifier_state_ != NotifierState::STOPPED)
-        return;
+    // Read the list of regular users.
+    std::shared_ptr<UserList> user_list = std::make_shared<UserList>(settings_.userList());
 
-    LOG(LS_INFO) << "Starting the notifier";
-    notifier_state_ = NotifierState::STARTING;
+    // Add a list of one-time users to the list of regular users.
+    user_list->merge(user_session_manager_->userList());
 
-    IpcServer* ipc_server = new IpcServer(this);
-
-    connect(ipc_server, &IpcServer::started, this, &HostServer::onIpcServerStarted);
-    connect(ipc_server, &IpcServer::finished, ipc_server, &IpcServer::deleteLater);
-    connect(ipc_server, &IpcServer::newConnection, this, &HostServer::onIpcNewConnection);
-    connect(ipc_server, &IpcServer::errorOccurred, this, &HostServer::stop, Qt::QueuedConnection);
-
-    // Start IPC server. After its successful start, slot |onIpcServerStarted| will be called,
-    // which will start the process.
-    ipc_server->start();
+    // Updating the list of users.
+    authenticator_manager_->setUserList(user_list);
 }
 
-void HostServer::stopNotifier()
-{
-    if (notifier_state_ == NotifierState::STOPPED)
-        return;
-
-    notifier_state_ = NotifierState::STOPPED;
-
-    if (!ipc_channel_.isNull())
-        ipc_channel_->stop();
-
-    if (!notifier_process_.isNull())
-    {
-        notifier_process_->terminate();
-        delete notifier_process_;
-    }
-
-    LOG(LS_INFO) << "Notifier is stopped";
-}
-
-void HostServer::sessionToNotifier(const Host& host)
-{
-    if (ipc_channel_.isNull())
-        return;
-
-    proto::notifier::ServiceToNotifier message;
-
-    proto::notifier::Session* session = message.mutable_session();
-    session->set_uuid(host.uuid());
-    session->set_remote_address(host.remoteAddress().toStdString());
-    session->set_username(host.userName());
-    session->set_session_type(host.sessionType());
-
-    ipc_channel_->send(serializeMessage(message));
-}
-
-void HostServer::sessionCloseToNotifier(const Host& host)
-{
-    if (ipc_channel_.isNull())
-        return;
-
-    proto::notifier::ServiceToNotifier message;
-    message.mutable_session_close()->set_uuid(host.uuid());
-    ipc_channel_->send(serializeMessage(message));
-}
-
-} // namespace aspia
+} // namespace host

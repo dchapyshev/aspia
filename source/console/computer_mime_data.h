@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,14 +16,14 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CONSOLE__COMPUTER_MIME_DATA_H_
-#define ASPIA_CONSOLE__COMPUTER_MIME_DATA_H_
-
-#include <QMimeData>
+#ifndef CONSOLE__COMPUTER_MIME_DATA_H
+#define CONSOLE__COMPUTER_MIME_DATA_H
 
 #include "console/computer_item.h"
 
-namespace aspia {
+#include <QMimeData>
+
+namespace console {
 
 class ComputerMimeData : public QMimeData
 {
@@ -31,15 +31,10 @@ public:
     ComputerMimeData() = default;
     virtual ~ComputerMimeData() = default;
 
-    static QString mimeType()
-    {
-        return QStringLiteral("application/computer");
-    }
-
-    void setComputerItem(ComputerItem* computer_item)
+    void setComputerItem(ComputerItem* computer_item, const QString& mime_type)
     {
         computer_item_ = computer_item;
-        setData(mimeType(), QByteArray());
+        setData(mime_type, QByteArray());
     }
 
     ComputerItem* computerItem() const
@@ -51,6 +46,6 @@ private:
     ComputerItem* computer_item_ = nullptr;
 };
 
-} // namespace aspia
+} // namespace console
 
-#endif // ASPIA_CONSOLE__COMPUTER_MIME_DATA_H_
+#endif // CONSOLE__COMPUTER_MIME_DATA_H

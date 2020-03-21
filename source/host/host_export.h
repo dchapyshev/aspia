@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA__HOST_EXPORT_H_
-#define ASPIA__HOST_EXPORT_H_
+#ifndef HOST_EXPORT_H
+#define HOST_EXPORT_H
 
 #if defined(HOST_IMPLEMENTATION)
 #define HOST_EXPORT __declspec(dllexport)
@@ -25,4 +25,4 @@
 #define HOST_EXPORT __declspec(dllimport)
 #endif // defined(HOST_IMPLEMENTATION)
 
-#endif // ASPIA__HOST_EXPORT_H_
+#endif // HOST_EXPORT_H

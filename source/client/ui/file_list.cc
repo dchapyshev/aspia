@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,16 +17,15 @@
 //
 
 #include "client/ui/file_list.h"
+#include "client/ui/address_bar_model.h"
+#include "client/ui/file_item_delegate.h"
+#include "client/ui/file_list_model.h"
 
 #include <QHeaderView>
 #include <QKeyEvent>
 #include <QProxyStyle>
 
-#include "client/ui/address_bar_model.h"
-#include "client/ui/file_item_delegate.h"
-#include "client/ui/file_list_model.h"
-
-namespace aspia {
+namespace client {
 
 namespace {
 
@@ -90,7 +89,7 @@ void FileList::showDriveList(AddressBarModel* model)
     header()->restoreState(drive_list_state_);
 }
 
-void FileList::showFileList(const proto::file_transfer::FileList& file_list)
+void FileList::showFileList(const proto::FileList& file_list)
 {
     saveColumnsState();
     model_->clear();
@@ -132,36 +131,41 @@ void FileList::createFolder()
     }
 }
 
-void FileList::setDriveListState(const QByteArray& state)
+void FileList::restoreState(const QByteArray& state)
 {
-    drive_list_state_ = state;
+    QDataStream stream(state);
+    stream.setVersion(QDataStream::Qt_5_12);
+
+    stream >> drive_list_state_;
+    stream >> file_list_state_;
 
     if (isDriveListShown())
         header()->restoreState(drive_list_state_);
-}
-
-QByteArray FileList::driveListState() const
-{
-    if (isDriveListShown())
-        return header()->saveState();
-
-    return drive_list_state_;
-}
-
-void FileList::setFileListState(const QByteArray& state)
-{
-    file_list_state_ = state;
-
-    if (isFileListShown())
+    else
         header()->restoreState(file_list_state_);
 }
 
-QByteArray FileList::fileListState() const
+QByteArray FileList::saveState() const
 {
-    if (isFileListShown())
-        return header()->saveState();
+    QByteArray buffer;
 
-    return file_list_state_;
+    {
+        QDataStream stream(&buffer, QIODevice::WriteOnly);
+        stream.setVersion(QDataStream::Qt_5_12);
+
+        if (isDriveListShown())
+        {
+            stream << header()->saveState();
+            stream << file_list_state_;
+        }
+        else
+        {
+            stream << drive_list_state_;
+            stream << header()->saveState();
+        }
+    }
+
+    return buffer;
 }
 
 void FileList::keyPressEvent(QKeyEvent* event)
@@ -192,8 +196,12 @@ void FileList::mouseDoubleClickEvent(QMouseEvent* event)
 
 void FileList::saveColumnsState()
 {
-    drive_list_state_ = driveListState();
-    file_list_state_ = fileListState();
+    QByteArray state = header()->saveState();
+
+    if (isDriveListShown())
+        drive_list_state_ = std::move(state);
+    else
+        file_list_state_ = std::move(state);
 }
 
-} // namespace aspia
+} // namespace client

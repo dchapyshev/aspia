@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,14 +16,13 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CRYPTO__PASSWORD_HASH_H_
-#define ASPIA_CRYPTO__PASSWORD_HASH_H_
-
-#include <string>
+#ifndef CRYPTO__PASSWORD_HASH_H
+#define CRYPTO__PASSWORD_HASH_H
 
 #include "base/macros_magic.h"
+#include "base/memory/byte_array.h"
 
-namespace aspia {
+namespace crypto {
 
 class PasswordHash
 {
@@ -34,12 +33,15 @@ public:
     static const size_t kBitsSize = 256;
     static const size_t kBytesSize = kBitsSize / kBitsPerByte;
 
-    static std::string hash(Type type, const std::string& password, const std::string& salt);
+    static base::ByteArray hash(
+        Type type, std::string_view password, const base::ByteArray& salt);
+
+    static std::string hash(Type type, std::string_view password, std::string_view salt);
 
 private:
     DISALLOW_COPY_AND_ASSIGN(PasswordHash);
 };
 
-} // namespace aspia
+} // namespace crypto
 
-#endif // ASPIA_CRYPTO__PASSWORD_HASH_H_
+#endif // CRYPTO__PASSWORD_HASH_H

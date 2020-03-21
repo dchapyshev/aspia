@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,15 +16,15 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
+#include "base/guid.h"
+#include "base/strings/string_util.h"
+
 #include <gtest/gtest.h>
 
 #include <cstdint>
 #include <limits>
 
-#include "base/guid.h"
-#include "base/string_util.h"
-
-namespace aspia {
+namespace base {
 
 namespace {
 
@@ -32,7 +32,7 @@ bool isGUIDv4(const std::string& guid)
 {
     // The format of GUID version 4 must be xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx,
     // where y is one of [8, 9, A, B].
-    return Guid::isValid(guid) && guid[14] == '4' &&
+    return Guid::isValidGuidString(guid) && guid[14] == '4' &&
         (guid[19] == '8' || guid[19] == '9' || guid[19] == 'A' ||
          guid[19] == 'a' || guid[19] == 'B' || guid[19] == 'b');
 }
@@ -58,11 +58,11 @@ TEST(guid_test, guid_correctly_formatted)
     const int kIterations = 10;
     for (int it = 0; it < kIterations; ++it)
     {
-        std::string guid = Guid::create();
-        EXPECT_TRUE(Guid::isValid(guid));
-        EXPECT_TRUE(Guid::isStrictValid(guid));
-        EXPECT_TRUE(Guid::isValid(toLowerASCII(guid)));
-        EXPECT_TRUE(Guid::isValid(toUpperASCII(guid)));
+        std::string guid = Guid::create().toStdString();
+        EXPECT_TRUE(Guid::isValidGuidString(guid));
+        EXPECT_TRUE(Guid::isStrictValidGuidString(guid));
+        EXPECT_TRUE(Guid::isValidGuidString(toLowerASCII(guid)));
+        EXPECT_TRUE(Guid::isValidGuidString(toUpperASCII(guid)));
     }
 }
 
@@ -71,8 +71,8 @@ TEST(guid_test, guid_basic_uniqueness)
     const int kIterations = 10;
     for (int it = 0; it < kIterations; ++it)
     {
-        std::string guid1 = Guid::create();
-        std::string guid2 = Guid::create();
+        std::string guid1 = Guid::create().toStdString();
+        std::string guid2 = Guid::create().toStdString();
         EXPECT_EQ(36U, guid1.length());
         EXPECT_EQ(36U, guid2.length());
         EXPECT_NE(guid1, guid2);
@@ -81,4 +81,4 @@ TEST(guid_test, guid_basic_uniqueness)
     }
 }
 
-} // namespace aspia
+} // namespace base

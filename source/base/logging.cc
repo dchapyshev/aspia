@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -15,148 +15,136 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
-#include "build/build_config.h"
-
-#if defined CC_MSVC
 
 #include "base/logging.h"
 
-#include <io.h>
-#include <algorithm>
-#include <filesystem>
+#include "base/debug.h"
+#include "base/system_time.h"
+
+#if defined(OS_WIN)
+#include "base/strings/unicode.h"
+#endif // defined(OS_WIN)
+
+#include <fstream>
 #include <iomanip>
+#include <mutex>
 #include <ostream>
-#include <utility>
+#include <thread>
 
-#define WIN32_LEAN_AND_MEAN
-#define NOMINMAX
-#include <windows.h>
+#if defined(OS_WIN)
+#include <Windows.h>
+#include <Psapi.h>
+#endif // defined(OS_WIN)
 
-#include "base/string_util.h"
-#include "base/string_printf.h"
-#include "base/unicode.h"
-
-// Windows warns on using write().  It prefers _write().
-#define write(fd, buf, count) _write(fd, buf, static_cast<unsigned int>(count))
-// Windows doesn't define STDERR_FILENO.  Define it here.
-#define STDERR_FILENO 2
-
-namespace aspia {
+namespace base {
 
 namespace {
-
-using FileHandle = HANDLE;
 
 LoggingSeverity g_min_log_level = LS_INFO;
 LoggingDestination g_logging_destination = LOG_DEFAULT;
 
-// For LS_ERROR and above, always print to stderr.
-const int kAlwaysPrintErrorLevel = LS_ERROR;
-
-// This file is lazily opened and the handle may be nullptr
-FileHandle g_log_file = nullptr;
+std::ofstream g_log_file;
+std::mutex g_log_file_lock;
 
 const char* severityName(LoggingSeverity severity)
 {
-    static const char* const kLogSeverityNames[] = {"INFO", "WARNING", "ERROR", "FATAL"};
-    static_assert(LS_NUMBER == _countof(kLogSeverityNames));
+    static const char* const kLogSeverityNames[] =
+    {
+        "INFO", "WARNING", "ERROR", "FATAL"
+    };
+
+    static_assert(LS_NUMBER == std::size(kLogSeverityNames));
 
     if (severity >= 0 && severity < LS_NUMBER)
         return kLogSeverityNames[severity];
+
     return "UNKNOWN";
 }
 
-bool defaultLogFilePath(std::filesystem::path* path)
+void removeOldFiles(const std::filesystem::path& path,
+                    const std::filesystem::file_time_type& current_time,
+                    int max_file_age)
 {
-    std::error_code code;
+    std::filesystem::file_time_type time = current_time - std::chrono::hours(24 * max_file_age);
 
-    *path = std::filesystem::temp_directory_path(code);
-    if (code.value() != 0)
-        return false;
-
-    path->append(L"aspia");
-
-    if (!std::filesystem::exists(*path, code))
+    std::error_code ignored_code;
+    for (const auto& item : std::filesystem::directory_iterator(path, ignored_code))
     {
-        if (code.value() != 0)
-            return false;
+        if (item.is_directory())
+            continue;
 
-        if (!std::filesystem::create_directories(*path, code))
-            return false;
+        if (item.last_write_time() < time)
+            std::filesystem::remove(item.path(), ignored_code);
     }
-
-    SYSTEMTIME local_time;
-    GetLocalTime(&local_time);
-
-    wchar_t file_path[MAX_PATH] = { 0 };
-    GetModuleFileNameW(nullptr, file_path, _countof(file_path));
-
-    std::wostringstream stream;
-
-    stream << std::filesystem::path(file_path).filename().native()
-           << L'.'
-           << std::setfill(L'0')
-           << std::setw(4) << local_time.wYear
-           << std::setw(2) << local_time.wMonth
-           << std::setw(2) << local_time.wDay
-           << L'-'
-           << std::setw(2) << local_time.wHour
-           << std::setw(2) << local_time.wMinute
-           << std::setw(2) << local_time.wSecond
-           << L'.'
-           << std::setw(3) << local_time.wMilliseconds
-           << L".log";
-
-    path->append(stream.str());
-    return true;
 }
 
-// Called by logging functions to ensure that |g_log_file| is initialized
-// and can be used for writing. Returns false if the file could not be
-// initialized. |g_log_file| will be nullptr in this case.
-bool initializeLogFileHandle()
+std::filesystem::path defaultLogFileDir()
 {
-    if (g_log_file)
+    std::error_code error_code;
+
+    std::filesystem::path path = std::filesystem::temp_directory_path(error_code);
+    if (error_code)
+        return std::filesystem::path();
+
+    return path;
+}
+
+bool initLoggingImpl(const LoggingSettings& settings)
+{
+    std::scoped_lock lock(g_log_file_lock);
+    g_log_file.close();
+
+    g_logging_destination = settings.destination;
+
+    if (!(g_logging_destination & LOG_TO_FILE))
         return true;
 
-    std::filesystem::path file_path;
-    if (!defaultLogFilePath(&file_path))
+    std::filesystem::path file_dir = settings.log_dir;
+
+    if (file_dir.empty())
+        file_dir = defaultLogFileDir();
+
+    if (file_dir.empty())
         return false;
 
-    if ((g_logging_destination & LOG_TO_FILE) != 0)
+    std::error_code error_code;
+    if (!std::filesystem::exists(file_dir, error_code))
     {
-        // The FILE_APPEND_DATA access mask ensures that the file is atomically
-        // appended to across accesses from multiple threads.
-        // https://msdn.microsoft.com/en-us/library/windows/desktop/aa364399(v=vs.85).aspx
-        // https://msdn.microsoft.com/en-us/library/windows/desktop/aa363858(v=vs.85).aspx
-        g_log_file = CreateFileW(file_path.c_str(), FILE_APPEND_DATA | DELETE,
-                                 FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr,
-                                 OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
-        if (g_log_file == INVALID_HANDLE_VALUE || g_log_file == nullptr)
-        {
-            g_log_file = nullptr;
+        if (error_code)
             return false;
-        }
+
+        if (!std::filesystem::create_directories(file_dir, error_code))
+            return false;
     }
+
+    SystemTime time = SystemTime::now();
+
+    std::ostringstream file_name_stream;
+    file_name_stream << std::setfill('0')
+                     << std::setw(4) << time.year()
+                     << std::setw(2) << time.month()
+                     << std::setw(2) << time.day()
+                     << '-'
+                     << std::setw(2) << time.hour()
+                     << std::setw(2) << time.minute()
+                     << std::setw(2) << time.second()
+                     << '.'
+                     << std::setw(3) << time.millisecond()
+                     << ".log";
+
+    std::filesystem::path file_path(file_dir);
+    file_path.append(file_name_stream.str());
+
+    g_log_file.open(file_path);
+    if (!g_log_file.is_open())
+        return false;
+
+    std::filesystem::file_time_type file_time =
+        std::filesystem::last_write_time(file_path, error_code);
+    if (!error_code)
+        removeOldFiles(file_dir, file_time, settings.max_log_age);
 
     return true;
-}
-
-void closeLogFileUnlocked()
-{
-    if (!g_log_file)
-        return;
-
-    LARGE_INTEGER file_size;
-    if (GetFileSizeEx(g_log_file, &file_size) && !file_size.QuadPart)
-    {
-        FILE_DISPOSITION_INFO fdi;
-        fdi.DeleteFile = TRUE;
-        SetFileInformationByHandle(g_log_file, FileDispositionInfo, &fdi, sizeof(fdi));
-    }
-
-    CloseHandle(g_log_file);
-    g_log_file = nullptr;
 }
 
 } // namespace
@@ -167,30 +155,45 @@ void closeLogFileUnlocked()
 std::ostream* g_swallow_stream;
 
 LoggingSettings::LoggingSettings()
-    : logging_dest(LOG_DEFAULT),
-      lock_log(LOCK_LOG_FILE)
+    : destination(LOG_DEFAULT),
+      min_log_level(LS_INFO),
+      max_log_age(7)
 {
     // Nothing
 }
 
-bool baseInitLoggingImpl(const LoggingSettings& settings)
+bool initLogging(const LoggingSettings& settings)
 {
-    g_logging_destination = settings.logging_dest;
+    if (!initLoggingImpl(settings))
+        return false;
 
-    // ignore file options unless logging to file is set.
-    if ((g_logging_destination & LOG_TO_FILE) == 0)
-        return true;
+#if defined(OS_WIN)
+    wchar_t buffer[MAX_PATH] = { 0 };
 
-    // Calling InitLogging twice or after some log call has already opened the
-    // default log file will re-initialize to the new options.
-    closeLogFileUnlocked();
+    if (GetModuleFileNameExW(GetCurrentProcess(), nullptr, buffer, std::size(buffer)))
+    {
+        LOG(LS_INFO) << "Executable file: " << buffer;
+    }
 
-    return initializeLogFileHandle();
+#if defined(NDEBUG)
+    LOG(LS_INFO) << "Debug build: No";
+#else
+    LOG(LS_INFO) << "Debug build: Yes";
+#endif // defined(NDEBUG)
+#else
+    #warning Not implemented
+#endif
+
+    LOG(LS_INFO) << "Logging started";
+    return true;
 }
 
 void shutdownLogging()
 {
-    closeLogFileUnlocked();
+    LOG(LS_INFO) << "Logging finished";
+
+    std::scoped_lock lock(g_log_file_lock);
+    g_log_file.close();
 }
 
 bool shouldCreateLogMessage(LoggingSeverity severity)
@@ -201,7 +204,7 @@ bool shouldCreateLogMessage(LoggingSeverity severity)
     // Return true here unless we know ~LogMessage won't do anything. Note that
     // ~LogMessage writes to stderr if severity_ >= kAlwaysPrintErrorLevel, even
     // when g_logging_destination is LOG_NONE.
-    return g_logging_destination != LOG_NONE || severity >= kAlwaysPrintErrorLevel;
+    return g_logging_destination != LOG_NONE || severity >= LS_ERROR;
 }
 
 void makeCheckOpValueString(std::ostream* os, std::nullptr_t /* p */)
@@ -246,193 +249,109 @@ std::string* makeCheckOpString(const std::string& v1, const std::string& v2, con
     return makeCheckOpString<std::string, std::string>(v1, v2, names);
 }
 
-LogMessage::SaveLastError::SaveLastError()
-    : last_error_(::GetLastError())
-{
-    // Nothing
-}
-
-LogMessage::SaveLastError::~SaveLastError()
-{
-    ::SetLastError(last_error_);
-}
-
-LogMessage::LogMessage(const char* file, int line, LoggingSeverity severity)
-    : severity_(severity), file_(file), line_(line)
+LogMessage::LogMessage(std::string_view file, int line, LoggingSeverity severity)
+    : severity_(severity)
 {
     init(file, line);
 }
 
-LogMessage::LogMessage(const char* file, int line, const char* condition)
-    : severity_(LS_FATAL), file_(file), line_(line)
+LogMessage::LogMessage(std::string_view file, int line, const char* condition)
+    : severity_(LS_FATAL)
 {
     init(file, line);
     stream_ << "Check failed: " << condition << ". ";
 }
 
-LogMessage::LogMessage(const char* file, int line, std::string* result)
-    : severity_(LS_FATAL), file_(file), line_(line)
+LogMessage::LogMessage(std::string_view file, int line, std::string* result)
+    : severity_(LS_FATAL)
 {
+    std::unique_ptr<std::string> result_deleter(result);
     init(file, line);
     stream_ << "Check failed: " << *result;
-    delete result;
 }
 
-LogMessage::LogMessage(const char* file, int line, LoggingSeverity severity, std::string* result)
-    : severity_(severity), file_(file), line_(line)
+LogMessage::LogMessage(std::string_view file,
+                       int line,
+                       LoggingSeverity severity,
+                       std::string* result)
+    : severity_(severity)
 {
+    std::unique_ptr<std::string> result_deleter(result);
     init(file, line);
     stream_ << "Check failed: " << *result;
-    delete result;
 }
 
 LogMessage::~LogMessage()
 {
     stream_ << std::endl;
-    std::string str_newline(stream_.str());
+
+    std::string message(stream_.str());
 
     if ((g_logging_destination & LOG_TO_SYSTEM_DEBUG_LOG) != 0)
     {
-        OutputDebugStringA(str_newline.c_str());
+        debugPrint(message.data());
 
-        fwrite(str_newline.data(), str_newline.size(), 1, stderr);
+        fwrite(message.data(), message.size(), 1, stderr);
         fflush(stderr);
     }
-    else if (severity_ >= kAlwaysPrintErrorLevel)
+    else if (severity_ >= LS_ERROR)
     {
         // When we're only outputting to a log file, above a certain log level, we
         // should still output to stderr so that we can better detect and diagnose
         // problems with unit tests, especially on the buildbots.
-        fwrite(str_newline.data(), str_newline.size(), 1, stderr);
+        fwrite(message.data(), message.size(), 1, stderr);
         fflush(stderr);
     }
 
-    // write to log file
+    // Write to log file.
     if ((g_logging_destination & LOG_TO_FILE) != 0)
     {
-        // We can have multiple threads and/or processes, so try to prevent them
-        // from clobbering each other's writes.
-        // If the client app did not call InitLogging, and the lock has not
-        // been created do it now. We do this on demand, but if two threads try
-        // to do this at the same time, there will be a race condition to create
-        // the lock. This is why InitLogging should be called from the main
-        // thread at the beginning of execution.
-
-        if (initializeLogFileHandle())
-        {
-            DWORD num_written;
-            WriteFile(g_log_file,
-                      static_cast<const void*>(str_newline.c_str()),
-                      static_cast<DWORD>(str_newline.length()),
-                      &num_written,
-                      nullptr);
-        }
+        std::scoped_lock lock(g_log_file_lock);
+        g_log_file.write(message.c_str(), message.size());
+        g_log_file.flush();
     }
 
     if (severity_ == LS_FATAL)
     {
         // Crash the process.
-        __debugbreak();
+        debugBreak();
     }
 }
 
-// writes the common header info to the stream
-void LogMessage::init(const char* file, int line)
+// Writes the common header info to the stream.
+void LogMessage::init(std::string_view file, int line)
 {
-    std::string_view filename(file);
-
-    size_t last_slash_pos = filename.find_last_of("\\/");
+    size_t last_slash_pos = file.find_last_of("\\/");
     if (last_slash_pos != std::string_view::npos)
-        filename.remove_prefix(last_slash_pos + 1);
+        file.remove_prefix(last_slash_pos + 1);
 
-    SYSTEMTIME local_time;
-    GetLocalTime(&local_time);
+    SystemTime time = SystemTime::now();
 
     stream_ << std::setfill('0')
-            << std::setw(2) << local_time.wHour   << ':'
-            << std::setw(2) << local_time.wMinute << ':'
-            << std::setw(2) << local_time.wSecond << '.'
-            << std::setw(3) << local_time.wMilliseconds;
-
-    stream_ << ' ' << GetCurrentThreadId();
-    stream_ << ' ' << severityName(severity_);
-    stream_ << ' ' << filename.data() << ":" << line << "] ";
+            << std::setw(2) << time.hour()        << ':'
+            << std::setw(2) << time.minute()      << ':'
+            << std::setw(2) << time.second()      << '.'
+            << std::setw(3) << time.millisecond() << ' '
+            << std::this_thread::get_id()         << ' '
+            << severityName(severity_)            << ' '
+            << file.data() << ":" << line << "] ";
 
     message_start_ = stream_.str().length();
 }
 
-SystemErrorCode lastSystemErrorCode()
-{
-    return ::GetLastError();
-}
-
-std::string systemErrorCodeToString(SystemErrorCode error_code)
-{
-    constexpr int kErrorMessageBufferSize = 256;
-    char msgbuf[kErrorMessageBufferSize];
-
-    static const DWORD flags = FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS;
-
-    DWORD len = FormatMessageA(flags, nullptr, error_code, 0, msgbuf, _countof(msgbuf), nullptr);
-    if (len)
-    {
-        // Messages returned by system end with line breaks.
-        return collapseWhitespaceASCII(msgbuf, true) + stringPrintf(" (0x%lX)", error_code);
-    }
-
-    return stringPrintf("Error (0x%lX) while retrieving error. (0x%lX)", GetLastError(), error_code);
-}
-
-Win32ErrorLogMessage::Win32ErrorLogMessage(const char* file,
-                                           int line,
-                                           LoggingSeverity severity,
-                                           SystemErrorCode err)
-    : err_(err),
+ErrorLogMessage::ErrorLogMessage(std::string_view file,
+                                 int line,
+                                 LoggingSeverity severity,
+                                 SystemError error)
+    : error_(error),
       log_message_(file, line, severity)
 {
     // Nothing
 }
 
-Win32ErrorLogMessage::~Win32ErrorLogMessage()
+ErrorLogMessage::~ErrorLogMessage()
 {
-    stream() << ": " << systemErrorCodeToString(err_);
-}
-
-void rawLog(int level, const char* message)
-{
-    if (level >= g_min_log_level && message)
-    {
-        size_t bytes_written = 0;
-        const size_t message_len = strlen(message);
-        int rv;
-        while (bytes_written < message_len)
-        {
-            rv = write(STDERR_FILENO, message + bytes_written, message_len - bytes_written);
-            if (rv < 0)
-            {
-                // Give up, nothing we can do now.
-                break;
-            }
-            bytes_written += rv;
-        }
-
-        if (message_len > 0 && message[message_len - 1] != '\n')
-        {
-            do
-            {
-                rv = write(STDERR_FILENO, "\n", 1);
-                if (rv < 0)
-                {
-                    // Give up, nothing we can do now.
-                    break;
-                }
-            }
-            while (rv != 1);
-        }
-    }
-
-    if (level == LS_FATAL)
-        __debugbreak();
+    stream() << ": " << error_.toString();
 }
 
 void logErrorNotReached(const char* file, int line)
@@ -440,11 +359,30 @@ void logErrorNotReached(const char* file, int line)
     LogMessage(file, line, LS_ERROR).stream() << "NOTREACHED() hit.";
 }
 
-} // namespace aspia
+} // namespace base
+
+namespace std {
+
+#if defined(OS_WIN)
+std::ostream& operator<<(std::ostream& out, const std::wstring& wstr)
+{
+    return out << base::utf8FromWide(wstr);
+}
 
 std::ostream& std::operator<<(std::ostream& out, const wchar_t* wstr)
 {
-    return out << (wstr ? aspia::UTF8fromUTF16(wstr) : std::string());
+    return out << (wstr ? base::utf8FromWide(wstr) : "nullptr");
+}
+#endif // defined(OS_WIN)
+
+std::ostream& operator<<(std::ostream& out, const char16_t* ustr)
+{
+    return out << (ustr ? base::utf8FromUtf16(ustr) : "nullptr");
 }
 
-#endif //CC_MSVC
+std::ostream& operator<<(std::ostream& out, const std::u16string& ustr)
+{
+    return out << base::utf8FromUtf16(ustr);
+}
+
+} // namespace std

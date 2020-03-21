@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,22 +16,19 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CLIENT__UI__DESKTOP_CONFIG_DIALOG_H_
-#define ASPIA_CLIENT__UI__DESKTOP_CONFIG_DIALOG_H_
+#ifndef CLIENT__UI__DESKTOP_CONFIG_DIALOG_H
+#define CLIENT__UI__DESKTOP_CONFIG_DIALOG_H
+
+#include "base/macros_magic.h"
+#include "proto/common.pb.h"
+#include "proto/desktop.pb.h"
+#include "ui_desktop_config_dialog.h"
 
 #include <QDialog>
 
-#include "base/macros_magic.h"
-#include "protocol/common.pb.h"
-#include "protocol/desktop_session.pb.h"
-
-namespace Ui {
-class DesktopConfigDialog;
-} // namespace Ui
-
 class QAbstractButton;
 
-namespace aspia {
+namespace client {
 
 class DesktopConfigDialog : public QDialog
 {
@@ -39,14 +36,15 @@ class DesktopConfigDialog : public QDialog
 
 public:
     DesktopConfigDialog(proto::SessionType session_type,
-                        const proto::desktop::Config& config,
+                        const proto::DesktopConfig& config,
+                        uint32_t video_encodings,
                         QWidget* parent = nullptr);
     ~DesktopConfigDialog();
 
-    const proto::desktop::Config& config() { return config_; }
+    const proto::DesktopConfig& config() { return config_; }
 
 signals:
-    void configChanged(const proto::desktop::Config& config);
+    void configChanged(const proto::DesktopConfig& config);
 
 private slots:
     void onCodecChanged(int item_index);
@@ -54,13 +52,13 @@ private slots:
     void onButtonBoxClicked(QAbstractButton* button);
 
 private:
-    QScopedPointer<Ui::DesktopConfigDialog> ui;
+    Ui::DesktopConfigDialog ui;
 
-    proto::desktop::Config config_;
+    proto::DesktopConfig config_;
 
     DISALLOW_COPY_AND_ASSIGN(DesktopConfigDialog);
 };
 
-} // namespace aspia
+} // namespace client
 
-#endif // ASPIA_CLIENT__UI__DESKTOP_CONFIG_DIALOG_H_
+#endif // CLIENT__UI__DESKTOP_CONFIG_DIALOG_H

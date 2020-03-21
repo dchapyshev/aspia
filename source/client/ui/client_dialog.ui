@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>266</width>
-    <height>186</height>
+    <width>259</width>
+    <height>147</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -17,7 +17,7 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>Connection</string>
+   <string>Aspia Client</string>
   </property>
   <property name="sizeGripEnabled">
    <bool>true</bool>
@@ -28,36 +28,40 @@
      <item>
       <widget class="QLabel" name="label_address">
        <property name="text">
-        <string>Server Address:</string>
+        <string>Address:</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="edit_address">
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_port">
-       <property name="text">
-        <string>Server Port:</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QSpinBox" name="spin_port">
-       <property name="minimum">
-        <number>1</number>
-       </property>
-       <property name="maximum">
-        <number>65534</number>
-       </property>
-       <property name="value">
-        <number>8050</number>
-       </property>
-      </widget>
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <item>
+        <widget class="QComboBox" name="combo_address">
+         <property name="editable">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="button_clear">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset resource="../resources/client.qrc">
+           <normaloff>:/img/broom.png</normaloff>:/img/broom.png</iconset>
+         </property>
+         <property name="autoDefault">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
      <item>
       <widget class="QLabel" name="label_session_type">
@@ -84,7 +88,7 @@
          </property>
          <property name="icon">
           <iconset resource="../resources/client.qrc">
-           <normaloff>:/icon/settings.png</normaloff>:/icon/settings.png</iconset>
+           <normaloff>:/img/settings.png</normaloff>:/img/settings.png</iconset>
          </property>
          <property name="autoDefault">
           <bool>false</bool>

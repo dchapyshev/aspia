@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,31 +16,31 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_COMMON__USER_UTIL_H_
-#define ASPIA_COMMON__USER_UTIL_H_
-
-#include <QString>
+#ifndef COMMON__USER_UTIL_H
+#define COMMON__USER_UTIL_H
 
 #include "base/macros_magic.h"
 
-namespace aspia {
+#include <string>
+
+namespace common {
 
 class UserUtil
 {
 public:
-    static const int kMaxUserNameLength = 64;
-    static const int kMinPasswordLength = 1;
-    static const int kMaxPasswordLength = 64;
-    static const int kSafePasswordLength = 8;
+    static const size_t kMaxUserNameLength = 64;
+    static const size_t kMinPasswordLength = 1;
+    static const size_t kMaxPasswordLength = 64;
+    static const size_t kSafePasswordLength = 8;
 
-    static bool isValidUserName(const QString& username);
-    static bool isValidPassword(const QString& password);
-    static bool isSafePassword(const QString& password);
+    static bool isValidUserName(std::u16string_view username);
+    static bool isValidPassword(std::u16string_view password);
+    static bool isSafePassword(std::u16string_view password);
 
 private:
     DISALLOW_COPY_AND_ASSIGN(UserUtil);
 };
 
-} // namespace aspia
+} // namespace common
 
-#endif // ASPIA_COMMON__USER_UTIL_H_
+#endif // COMMON__USER_UTIL_H

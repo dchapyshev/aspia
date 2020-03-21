@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,11 +16,21 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include <gtest/gtest.h>
-
 #include "base/base64.h"
 
-namespace aspia {
+#include <gtest/gtest.h>
+
+namespace base {
+
+namespace {
+
+const char kTestData1[] = "0123456789abcdeffedcba98765432100123456789abcdeffedcba9876543210"
+                          "0123456789abcdeffedcba98765432100123456789abcdeffedcba9876543210";
+const char kTestData2[] = "0000000000000000000000000000000000000000000000000000000000000000"
+                          "0000000000000000000000000000000000000000000000000000000000000000";
+const int kIterationCount = 100000;
+
+} // namespace
 
 TEST(base64_test, basic)
 {
@@ -66,4 +76,26 @@ TEST(base64_test, empty)
     EXPECT_TRUE(decoded.empty());
 }
 
-} // namespace aspia
+TEST(base64_test, DISABLED_benchmark)
+{
+    for (int i = 0; i < kIterationCount; ++i)
+    {
+        std::string source_1(kTestData1);
+        std::string encoded_1 = Base64::encode(source_1);
+
+        std::string decoded_1;
+        Base64::decode(encoded_1, &decoded_1);
+
+        EXPECT_EQ(source_1, decoded_1);
+
+        std::string source_2(kTestData2);
+        std::string encoded_2 = Base64::encode(source_2);
+
+        std::string decoded_2;
+        Base64::decode(encoded_2, &decoded_2);
+
+        EXPECT_EQ(source_2, decoded_2);
+    }
+}
+
+} // namespace base

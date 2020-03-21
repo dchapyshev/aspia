@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -18,19 +18,17 @@
 
 #include "host/win/host_service.h"
 
-#define WIN32_LEAN_AND_MEAN
-#define NOMINMAX
-#include <windows.h>
-#include <sddl.h>
-
+#include "base/logging.h"
 #include "base/win/scoped_com_initializer.h"
 #include "base/win/security_helpers.h"
+#include "base/win/session_status.h"
 #include "host/win/host_service_constants.h"
-#include "base/logging.h"
 #include "host/host_server.h"
-#include "host/host_settings.h"
 
-namespace aspia {
+#include <Windows.h>
+#include <sddl.h>
+
+namespace host {
 
 namespace {
 
@@ -60,44 +58,36 @@ const wchar_t kComProcessMandatoryLabel[] =
 
 } // namespace
 
-HostService::HostService()
-    : Service<QCoreApplication>(kHostServiceName, kHostServiceDisplayName, kHostServiceDescription)
+Service::Service()
+    : base::win::Service(kHostServiceName, base::MessageLoop::Type::ASIO)
 {
     // Nothing
 }
 
-HostService::~HostService() = default;
+Service::~Service() = default;
 
-void HostService::start()
+void Service::onStart()
 {
-    LOG(LS_INFO) << "Command to start the service has been received";
+    LOG(LS_INFO) << "Service is started";
 
     SetPriorityClass(GetCurrentProcess(), HIGH_PRIORITY_CLASS);
 
-    com_initializer_.reset(new ScopedCOMInitializer());
+    com_initializer_ = std::make_unique<base::win::ScopedCOMInitializer>();
     if (!com_initializer_->isSucceeded())
     {
         LOG(LS_FATAL) << "COM not initialized";
-        QCoreApplication::quit();
         return;
     }
 
-    initializeComSecurity(kComProcessSd, kComProcessMandatoryLabel, false);
+    base::win::initializeComSecurity(kComProcessSd, kComProcessMandatoryLabel, false);
 
-    server_.reset(new HostServer());
-    if (!server_->start())
-    {
-        server_.reset();
-        QCoreApplication::quit();
-        return;
-    }
-
-    LOG(LS_INFO) << "Service is started";
+    server_ = std::make_unique<Server>(taskRunner());
+    server_->start();
 }
 
-void HostService::stop()
+void Service::onStop()
 {
-    LOG(LS_INFO) << "Command to stop the service has been received";
+    LOG(LS_INFO) << "Service stopping...";
 
     server_.reset();
     com_initializer_.reset();
@@ -105,10 +95,13 @@ void HostService::stop()
     LOG(LS_INFO) << "Service is stopped";
 }
 
-void HostService::sessionChange(uint32_t event, uint32_t session_id)
+void Service::onSessionEvent(base::win::SessionStatus status, base::SessionId session_id)
 {
+    LOG(LS_INFO) << "Session event detected (status: " << base::win::sessionStatusToString(status)
+                 << ", session_id: " << session_id << ")";
+
     if (server_)
-        server_->setSessionChanged(event, session_id);
+        server_->setSessionEvent(status, session_id);
 }
 
-} // namespace aspia
+} // namespace host

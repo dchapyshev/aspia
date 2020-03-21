@@ -1,5 +1,14 @@
 <RCC>
-  <qresource prefix="/icon">
+  <qresource prefix="/img">
+    <file>arrow-circle-double.png</file>
+    <file>key.png</file>
+    <file>computer.png</file>
+    <file>computer-cloud.png</file>
+    <file>exit.png</file>
+    <file>lifebuoy.png</file>
+    <file>settings.png</file>
+    <file>about.png</file>
+    <file>cross-script.png</file>
     <file>arrow-left-gray.png</file>
     <file>arrow-right-gray.png</file>
     <file>keyboard.png</file>
@@ -7,10 +16,10 @@
     <file>check-none.png</file>
     <file>user.png</file>
     <file>user-disabled.png</file>
-    <file>user-minus.png</file>
-    <file>user-pencil.png</file>
-    <file>user-plus.png</file>
     <file>main.png</file>
+    <file>minus.png</file>
+    <file>pencil.png</file>
+    <file>plus.png</file>
     <file>folder-stand.png</file>
     <file>monitor.png</file>
     <file>monitor-keyboard.png</file>

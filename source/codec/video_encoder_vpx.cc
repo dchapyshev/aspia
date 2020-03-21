@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -18,15 +18,16 @@
 
 #include "codec/video_encoder_vpx.h"
 
-#include <thread>
-
-#include <libyuv/convert_from_argb.h>
-
 #include "base/logging.h"
 #include "codec/video_util.h"
-#include "desktop_capture/desktop_frame.h"
+#include "desktop/desktop_frame.h"
 
-namespace aspia {
+#include <libyuv/convert.h>
+#include <libyuv/convert_from_argb.h>
+
+#include <thread>
+
+namespace codec {
 
 namespace {
 
@@ -39,7 +40,7 @@ const int kVp9I420ProfileNumber = 0;
 // Magic encoder constant for adaptive quantization strategy.
 const int kVp9AqModeCyclicRefresh = 3;
 
-void setCommonCodecParameters(vpx_codec_enc_cfg_t* config, const DesktopSize& size)
+void setCommonCodecParameters(vpx_codec_enc_cfg_t* config, const desktop::Size& size)
 {
     // Use millisecond granularity time base.
     config->g_timebase.num = 1;
@@ -65,7 +66,7 @@ void setCommonCodecParameters(vpx_codec_enc_cfg_t* config, const DesktopSize& si
     config->g_threads = (std::thread::hardware_concurrency() > 2) ? 2 : 1;
 }
 
-void createImage(const DesktopSize& size,
+void createImage(const desktop::Size& size,
                  std::unique_ptr<vpx_image_t>* out_image,
                  std::unique_ptr<uint8_t[]>* out_image_buffer)
 {
@@ -120,38 +121,38 @@ int roundToTwosMultiple(int x)
     return x & (~1);
 }
 
-DesktopRect alignRect(const DesktopRect& rect)
+desktop::Rect alignRect(const desktop::Rect& rect)
 {
     int x = roundToTwosMultiple(rect.left());
     int y = roundToTwosMultiple(rect.top());
     int right = roundToTwosMultiple(rect.right() + 1);
     int bottom = roundToTwosMultiple(rect.bottom() + 1);
 
-    return DesktopRect::makeLTRB(x, y, right, bottom);
+    return desktop::Rect::makeLTRB(x, y, right, bottom);
 }
 
 } // namespace
 
 // static
-VideoEncoderVPX* VideoEncoderVPX::createVP8()
+std::unique_ptr<VideoEncoderVPX> VideoEncoderVPX::createVP8()
 {
-    return new VideoEncoderVPX(proto::desktop::VIDEO_ENCODING_VP8);
+    return std::unique_ptr<VideoEncoderVPX>(new VideoEncoderVPX(proto::VIDEO_ENCODING_VP8));
 }
 
 // static
-VideoEncoderVPX* VideoEncoderVPX::createVP9()
+std::unique_ptr<VideoEncoderVPX> VideoEncoderVPX::createVP9()
 {
-    return new VideoEncoderVPX(proto::desktop::VIDEO_ENCODING_VP9);
+    return std::unique_ptr<VideoEncoderVPX>(new VideoEncoderVPX(proto::VIDEO_ENCODING_VP9));
 }
 
-VideoEncoderVPX::VideoEncoderVPX(proto::desktop::VideoEncoding encoding)
+VideoEncoderVPX::VideoEncoderVPX(proto::VideoEncoding encoding)
     : encoding_(encoding)
 {
     memset(&active_map_, 0, sizeof(active_map_));
     memset(&image_, 0, sizeof(image_));
 }
 
-void VideoEncoderVPX::createActiveMap(const DesktopSize& size)
+void VideoEncoderVPX::createActiveMap(const desktop::Size& size)
 {
     active_map_.cols = (size.width() + kMacroBlockSize - 1) / kMacroBlockSize;
     active_map_.rows = (size.height() + kMacroBlockSize - 1) / kMacroBlockSize;
@@ -162,7 +163,7 @@ void VideoEncoderVPX::createActiveMap(const DesktopSize& size)
     active_map_.active_map = active_map_buffer_.get();
 }
 
-void VideoEncoderVPX::createVp8Codec(const DesktopSize& size)
+void VideoEncoderVPX::createVp8Codec(const desktop::Size& size)
 {
     codec_.reset(new vpx_codec_ctx_t());
 
@@ -204,7 +205,7 @@ void VideoEncoderVPX::createVp8Codec(const DesktopSize& size)
     DCHECK_EQ(VPX_CODEC_OK, ret);
 }
 
-void VideoEncoderVPX::createVp9Codec(const DesktopSize& size)
+void VideoEncoderVPX::createVp9Codec(const desktop::Size& size)
 {
     codec_.reset(new vpx_codec_ctx_t());
 
@@ -249,7 +250,7 @@ void VideoEncoderVPX::createVp9Codec(const DesktopSize& size)
     DCHECK_EQ(VPX_CODEC_OK, ret);
 }
 
-void VideoEncoderVPX::setActiveMap(const DesktopRect& rect)
+void VideoEncoderVPX::setActiveMap(const desktop::Rect& rect)
 {
     int left   = rect.left() / kMacroBlockSize;
     int top    = rect.top() / kMacroBlockSize;
@@ -269,15 +270,14 @@ void VideoEncoderVPX::setActiveMap(const DesktopRect& rect)
     }
 }
 
-void VideoEncoderVPX::prepareImageAndActiveMap(const DesktopFrame* frame,
-                                               proto::desktop::VideoPacket* packet)
+void VideoEncoderVPX::prepareImageAndActiveMap(
+    const desktop::Frame* frame, proto::VideoPacket* packet)
 {
-    int padding = encoding_ == proto::desktop::VIDEO_ENCODING_VP9 ? 8 : 3;
-    DesktopRegion updated_region;
+    const int padding = ((encoding_ == proto::VIDEO_ENCODING_VP9) ? 8 : 3);
 
-    for (DesktopRegion::Iterator it(frame->constUpdatedRegion()); !it.isAtEnd(); it.advance())
+    for (desktop::Region::Iterator it(frame->constUpdatedRegion()); !it.isAtEnd(); it.advance())
     {
-        const DesktopRect& rect = it.rect();
+        const desktop::Rect& rect = it.rect();
 
         // Pad each rectangle to avoid the block-artefact filters in libvpx from introducing
         // artefacts; VP9 includes up to 8px either side, and VP8 up to 3px, so unchanged pixels
@@ -285,64 +285,89 @@ void VideoEncoderVPX::prepareImageAndActiveMap(const DesktopFrame* frame,
         // must be listed in the active map. After padding we align each rectangle to 16x16
         // active-map macroblocks. This implicitly ensures all rects have even top-left coords,
         // which is is required by ARGBToI420().
-        updated_region.addRect(
-            alignRect(DesktopRect::makeLTRB(rect.left() - padding, rect.top() - padding,
+        updated_region_.addRect(
+            alignRect(desktop::Rect::makeLTRB(rect.left() - padding, rect.top() - padding,
                                             rect.right() + padding, rect.bottom() + padding)));
     }
 
     // Clip back to the screen dimensions, in case they're not macroblock aligned. The conversion
     // routines don't require even width & height, so this is safe even if the source dimensions
     // are not even.
-    updated_region.intersectWith(DesktopRect::makeWH(image_->w, image_->h));
+    updated_region_.intersectWith(desktop::Rect::makeWH(image_->w, image_->h));
 
     memset(active_map_.active_map, 0, active_map_size_);
 
-    int y_stride = image_->stride[0];
-    int uv_stride = image_->stride[1];
+    const int y_stride = image_->stride[0];
+    const int uv_stride = image_->stride[1];
     uint8_t* y_data = image_->planes[0];
     uint8_t* u_data = image_->planes[1];
     uint8_t* v_data = image_->planes[2];
 
-    for (DesktopRegion::Iterator it(updated_region); !it.isAtEnd(); it.advance())
+    const int bits_per_pixel = frame->format().bitsPerPixel();
+
+    for (desktop::Region::Iterator it(updated_region_); !it.isAtEnd(); it.advance())
     {
-        const DesktopRect& rect = it.rect();
+        const desktop::Rect& rect = it.rect();
 
-        int y_offset = y_stride * rect.y() + rect.x();
-        int uv_offset = uv_stride * rect.y() / 2 + rect.x() / 2;
+        const int y_offset = y_stride * rect.y() + rect.x();
+        const int uv_offset = uv_stride * rect.y() / 2 + rect.x() / 2;
 
-        libyuv::ARGBToI420(frame->frameDataAtPos(rect.topLeft()),
-                           frame->stride(),
-                           y_data + y_offset, y_stride,
-                           u_data + uv_offset, uv_stride,
-                           v_data + uv_offset, uv_stride,
-                           rect.width(),
-                           rect.height());
+        if (bits_per_pixel == 32)
+        {
+            libyuv::ARGBToI420(frame->frameDataAtPos(rect.topLeft()),
+                               frame->stride(),
+                               y_data + y_offset, y_stride,
+                               u_data + uv_offset, uv_stride,
+                               v_data + uv_offset, uv_stride,
+                               rect.width(),
+                               rect.height());
+        }
+        else if (bits_per_pixel == 16)
+        {
+            libyuv::RGB565ToI420(frame->frameDataAtPos(rect.topLeft()),
+                                 frame->stride(),
+                                 y_data + y_offset, y_stride,
+                                 u_data + uv_offset, uv_stride,
+                                 v_data + uv_offset, uv_stride,
+                                 rect.width(),
+                                 rect.height());
+        }
+        else
+        {
+            NOTREACHED();
+        }
 
-        VideoUtil::toVideoRect(rect, packet->add_dirty_rect());
+        serializeRect(rect, packet->add_dirty_rect());
         setActiveMap(rect);
     }
 }
 
-void VideoEncoderVPX::encode(const DesktopFrame* frame, proto::desktop::VideoPacket* packet)
+void VideoEncoderVPX::encode(const desktop::Frame* frame, proto::VideoPacket* packet)
 {
     fillPacketInfo(encoding_, frame, packet);
 
     if (packet->has_format())
     {
-        const DesktopSize& screen_size = frame->size();
+        const desktop::Size& screen_size = frame->size();
 
         createImage(screen_size, &image_, &image_buffer_);
         createActiveMap(screen_size);
 
-        if (encoding_ == proto::desktop::VIDEO_ENCODING_VP8)
+        if (encoding_ == proto::VIDEO_ENCODING_VP8)
         {
             createVp8Codec(screen_size);
         }
         else
         {
-            DCHECK_EQ(encoding_, proto::desktop::VIDEO_ENCODING_VP9);
+            DCHECK_EQ(encoding_, proto::VIDEO_ENCODING_VP9);
             createVp9Codec(screen_size);
         }
+
+        updated_region_ = desktop::Region(desktop::Rect::makeSize(screen_size));
+    }
+    else
+    {
+        updated_region_.clear();
     }
 
     // Convert the updated capture data ready for encode.
@@ -374,4 +399,4 @@ void VideoEncoderVPX::encode(const DesktopFrame* frame, proto::desktop::VideoPac
     }
 }
 
-} // namespace aspia
+} // namespace codec

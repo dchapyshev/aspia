@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,26 +16,29 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CODEC__VIDEO_DECODER_H_
-#define ASPIA_CODEC__VIDEO_DECODER_H_
+#ifndef CODEC__VIDEO_DECODER_H
+#define CODEC__VIDEO_DECODER_H
+
+#include "proto/desktop.pb.h"
 
 #include <memory>
 
-#include "desktop_capture/desktop_frame.h"
-#include "protocol/desktop_session.pb.h"
+namespace desktop {
+class Frame;
+} // namespace desktop
 
-namespace aspia {
+namespace codec {
 
 class VideoDecoder
 {
 public:
     virtual ~VideoDecoder() = default;
 
-    static std::unique_ptr<VideoDecoder> create(proto::desktop::VideoEncoding encoding);
+    static std::unique_ptr<VideoDecoder> create(proto::VideoEncoding encoding);
 
-    virtual bool decode(const proto::desktop::VideoPacket& packet, DesktopFrame* frame) = 0;
+    virtual bool decode(const proto::VideoPacket& packet, desktop::Frame* frame) = 0;
 };
 
-} // namespace aspia
+} // namespace codec
 
-#endif // ASPIA_CODEC__VIDEO_DECODER_H_
+#endif // CODEC__VIDEO_DECODER_H

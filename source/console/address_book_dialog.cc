@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -18,14 +18,14 @@
 
 #include "console/address_book_dialog.h"
 
-#include <QAbstractButton>
-#include <QMessageBox>
-
 #include "base/logging.h"
 #include "crypto/password_hash.h"
 #include "crypto/random.h"
 
-namespace aspia {
+#include <QAbstractButton>
+#include <QMessageBox>
+
+namespace console {
 
 namespace {
 
@@ -220,15 +220,20 @@ void AddressBookDialog::buttonBoxClicked(QAbstractButton* button)
 
                 if (!isSafePassword(password))
                 {
+                    QString unsafe =
+                        tr("Password you entered does not meet the security requirements!");
+
+                    QString safe =
+                        tr("The password must contain lowercase and uppercase characters, "
+                           "numbers and should not be shorter than %n characters.",
+                           "", kSafePasswordLength);
+
+                    QString question = tr("Do you want to enter a different password?");
+
                     if (QMessageBox::warning(this,
                                              tr("Warning"),
-                                             tr("<b>Password you entered does not meet the security "
-                                                "requirements!</b><br/>"
-                                                "The password must contain lowercase and uppercase "
-                                                "characters, numbers and should not be shorter "
-                                                "than %n characters.<br/>"
-                                                "Do you want to enter a different password?",
-                                                "", kSafePasswordLength),
+                                             QString("<b>%1</b><br/>%2<br/>%3")
+                                                 .arg(unsafe).arg(safe).arg(question),
                                              QMessageBox::Yes,
                                              QMessageBox::No) == QMessageBox::Yes)
                     {
@@ -241,21 +246,21 @@ void AddressBookDialog::buttonBoxClicked(QAbstractButton* button)
 
                 // Generate salt, which is added after each iteration of the hashing.
                 // New salt is generated each time the password is changed.
-                file_->set_hashing_salt(Random::generateBuffer(ui.spinbox_password_salt->value()));
+                file_->set_hashing_salt(crypto::Random::string(ui.spinbox_password_salt->value()));
 
                 // Now generate a key for encryption/decryption.
-                *key_ = PasswordHash::hash(
-                    PasswordHash::SCRYPT, password.toStdString(), file_->hashing_salt());
+                *key_ = crypto::PasswordHash::hash(
+                    crypto::PasswordHash::SCRYPT, password.toStdString(), file_->hashing_salt());
             }
 
             int salt_before_size = ui.spinbox_salt_before->value();
             int salt_after_size = ui.spinbox_salt_after->value();
 
             if (salt_before_size != data_->salt1().size())
-                data_->set_salt1(Random::generateBuffer(salt_before_size));
+                data_->set_salt1(crypto::Random::string(salt_before_size));
 
             if (salt_after_size != data_->salt2().size())
-                data_->set_salt2(Random::generateBuffer(salt_after_size));
+                data_->set_salt2(crypto::Random::string(salt_after_size));
         }
         break;
 
@@ -359,4 +364,4 @@ void AddressBookDialog::showError(const QString& message)
     QMessageBox(QMessageBox::Warning, tr("Warning"), message, QMessageBox::Ok, this).exec();
 }
 
-} // namespace aspia
+} // namespace console

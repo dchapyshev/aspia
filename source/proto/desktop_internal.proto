@@ -1,0 +1,118 @@
+//
+// Aspia Project
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program. If not, see <https://www.gnu.org/licenses/>.
+//
+// WARNING! For internal use only, on the host side. Messages in this file are not intended for
+// transmission over the network.
+//
+
+syntax = "proto3";
+
+option optimize_for = LITE_RUNTIME;
+
+import "desktop.proto";
+import "desktop_extensions.proto";
+
+package proto.internal;
+
+message SerializedDesktopFrame
+{
+    int32 shared_buffer_id   = 1;
+    PixelFormat pixel_format = 2;
+    Rect desktop_rect        = 3;
+    repeated Rect dirty_rect = 4;
+}
+
+message SerializedMouseCursor
+{
+    int32 width     = 1;
+    int32 height    = 2;
+    int32 hotspot_x = 3;
+    int32 hotspot_y = 4;
+    bytes data      = 5;
+}
+
+message SharedBuffer
+{
+    enum Type
+    {
+        CREATE  = 0;
+        RELEASE = 1;
+    }
+
+    Type type = 1;
+    int32 shared_buffer_id = 2;
+}
+
+message EnableSession
+{
+    bool enable = 1;
+}
+
+message EncodeFrame
+{
+    SerializedDesktopFrame frame = 1;
+    SerializedMouseCursor mouse_cursor = 2;
+}
+
+message EncodeFrameResult
+{
+    int32 dummy = 1;
+}
+
+message SelectSource
+{
+    Screen screen = 1;
+}
+
+message EnableFeatures
+{
+    bool disable_font_smoothing = 1;
+    bool disable_wallpaper      = 2;
+    bool disable_effects        = 3;
+    bool block_input            = 4;
+}
+
+message UserSessionControl
+{
+    enum Action
+    {
+        LOGOFF = 0;
+        LOCK   = 1;
+    }
+
+    Action action = 1;
+}
+
+message ServiceToDesktop
+{
+    EnableSession enable_session            = 1;
+    SelectSource select_source              = 2;
+    EncodeFrameResult encode_frame_result   = 3;
+    EnableFeatures enable_features          = 4;
+    KeyEvent key_event                      = 5;
+    PointerEvent pointer_event              = 6;
+    ClipboardEvent clipboard_event          = 7;
+    UserSessionControl user_session_control = 8;
+}
+
+message DesktopToService
+{
+    ScreenList screen_list         = 1;
+    SharedBuffer shared_buffer     = 2;
+    EncodeFrame encode_frame       = 3;
+    ClipboardEvent clipboard_event = 4;
+}

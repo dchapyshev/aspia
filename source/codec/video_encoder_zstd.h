@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,15 +16,16 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CODEC__VIDEO_ENCODER_ZSTD_H_
-#define ASPIA_CODEC__VIDEO_ENCODER_ZSTD_H_
+#ifndef CODEC__VIDEO_ENCODER_ZSTD_H
+#define CODEC__VIDEO_ENCODER_ZSTD_H
 
-#include "base/aligned_memory.h"
+#include "base/memory/aligned_memory.h"
 #include "codec/scoped_zstd_stream.h"
 #include "codec/video_encoder.h"
-#include "desktop_capture/pixel_format.h"
+#include "desktop/desktop_region.h"
+#include "desktop/pixel_format.h"
 
-namespace aspia {
+namespace codec {
 
 class PixelTranslator;
 
@@ -33,29 +34,28 @@ class VideoEncoderZstd : public VideoEncoder
 public:
     ~VideoEncoderZstd() = default;
 
-    static VideoEncoderZstd* create(const PixelFormat& target_format, int compression_ratio);
+    static std::unique_ptr<VideoEncoderZstd> create(
+        const desktop::PixelFormat& target_format, int compression_ratio);
 
-    void encode(const DesktopFrame* frame, proto::desktop::VideoPacket* packet) override;
+    void encode(const desktop::Frame* frame, proto::VideoPacket* packet) override;
 
 private:
-    VideoEncoderZstd(std::unique_ptr<PixelTranslator> translator,
-                     const PixelFormat& target_format,
-                     int compression_ratio);
-    void compressPacket(proto::desktop::VideoPacket* packet,
+    VideoEncoderZstd(const desktop::PixelFormat& target_format, int compression_ratio);
+    void compressPacket(proto::VideoPacket* packet,
                         const uint8_t* input_data,
                         size_t input_size);
 
-    // Client's pixel format
-    PixelFormat target_format_;
+    desktop::Region updated_region_;
+    desktop::PixelFormat target_format_;
     int compress_ratio_;
     ScopedZstdCStream stream_;
     std::unique_ptr<PixelTranslator> translator_;
-    std::unique_ptr<uint8_t[], AlignedFreeDeleter> translate_buffer_;
+    std::unique_ptr<uint8_t[], base::AlignedFreeDeleter> translate_buffer_;
     size_t translate_buffer_size_ = 0;
 
     DISALLOW_COPY_AND_ASSIGN(VideoEncoderZstd);
 };
 
-} // namespace aspia
+} // namespace codec
 
-#endif // ASPIA_CODEC__VIDEO_ENCODER_ZSTD_H_
+#endif // CODEC__VIDEO_ENCODER_ZSTD_H

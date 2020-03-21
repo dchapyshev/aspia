@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -18,56 +18,84 @@
 
 #include "client/ui/client_dialog.h"
 
+#include "base/logging.h"
 #include "build/build_config.h"
-#include "client/ui/desktop_config_dialog.h"
-#include "client/client_session_desktop_manage.h"
-#include "client/client_session_desktop_view.h"
 #include "client/config_factory.h"
+#include "client/ui/client_settings.h"
+#include "client/ui/desktop_config_dialog.h"
+#include "client/ui/qt_desktop_window.h"
+#include "client/ui/qt_file_manager_window.h"
+#include "common/desktop_session_constants.h"
+#include "common/session_type.h"
+#include "net/address.h"
+#include "ui_client_dialog.h"
 
-namespace aspia {
+#include <QMessageBox>
+
+namespace client {
 
 ClientDialog::ClientDialog(QWidget* parent)
-    : QDialog(parent)
+    : QDialog(parent),
+      ui(std::make_unique<Ui::ClientDialog>())
 {
-    connect_data_.port = DEFAULT_HOST_TCP_PORT;
-    connect_data_.session_type = proto::SESSION_TYPE_DESKTOP_MANAGE;
-    connect_data_.desktop_config = ConfigFactory::defaultDesktopManageConfig();
+    config_.port = DEFAULT_HOST_TCP_PORT;
+    config_.session_type = proto::SESSION_TYPE_DESKTOP_MANAGE;
+    desktop_config_ = ConfigFactory::defaultDesktopManageConfig();
 
-    ui.setupUi(this);
+    ui->setupUi(this);
     setFixedHeight(sizeHint().height());
 
-    ui.spin_port->setValue(connect_data_.port);
+    QComboBox* combo_address = ui->combo_address;
 
-    ui.combo_session_type->addItem(QIcon(QStringLiteral(":/icon/monitor-keyboard.png")),
-                                   tr("Desktop Manage"),
-                                   QVariant(proto::SESSION_TYPE_DESKTOP_MANAGE));
+    ClientSettings settings;
+    combo_address->addItems(settings.addressList());
+    combo_address->setCurrentIndex(0);
 
-    ui.combo_session_type->addItem(QIcon(QStringLiteral(":/icon/monitor.png")),
-                                   tr("Desktop View"),
-                                   QVariant(proto::SESSION_TYPE_DESKTOP_VIEW));
+    auto add_session = [this](const QString& icon, proto::SessionType session_type)
+    {
+        ui->combo_session_type->addItem(QIcon(icon),
+                                        common::sessionTypeToLocalizedString(session_type),
+                                        QVariant(session_type));
+    };
 
-    ui.combo_session_type->addItem(QIcon(QStringLiteral(":/icon/folder-stand.png")),
-                                   tr("File Transfer"),
-                                   QVariant(proto::SESSION_TYPE_FILE_TRANSFER));
+    add_session(QStringLiteral(":/img/monitor-keyboard.png"), proto::SESSION_TYPE_DESKTOP_MANAGE);
+    add_session(QStringLiteral(":/img/monitor.png"), proto::SESSION_TYPE_DESKTOP_VIEW);
+    add_session(QStringLiteral(":/img/folder-stand.png"), proto::SESSION_TYPE_FILE_TRANSFER);
 
-    int current_session_type =
-        ui.combo_session_type->findData(QVariant(connect_data_.session_type));
+    int current_session_type = ui->combo_session_type->findData(QVariant(config_.session_type));
     if (current_session_type != -1)
     {
-        ui.combo_session_type->setCurrentIndex(current_session_type);
+        ui->combo_session_type->setCurrentIndex(current_session_type);
         sessionTypeChanged(current_session_type);
     }
 
-    connect(ui.combo_session_type, QOverload<int>::of(&QComboBox::currentIndexChanged),
+    connect(ui->button_clear, &QPushButton::released, [this]()
+    {
+        int ret = QMessageBox::question(
+            this,
+            tr("Confirmation"),
+            tr("The list of entered addresses will be cleared. Continue?"),
+            QMessageBox::Yes | QMessageBox::No);
+
+        if (ret == QMessageBox::Yes)
+        {
+            ui->combo_address->clear();
+
+            ClientSettings settings;
+            settings.setAddressList(QStringList());
+        }
+    });
+
+    connect(ui->combo_session_type, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &ClientDialog::sessionTypeChanged);
 
-    connect(ui.button_session_config, &QPushButton::pressed,
+    connect(ui->button_session_config, &QPushButton::released,
             this, &ClientDialog::sessionConfigButtonPressed);
 
-    connect(ui.button_connect, &QPushButton::pressed,
+    connect(ui->button_connect, &QPushButton::released,
             this, &ClientDialog::connectButtonPressed);
 
-    ui.edit_address->setFocus();
+    combo_address->setFocus();
 }
 
 ClientDialog::~ClientDialog() = default;
@@ -75,26 +103,26 @@ ClientDialog::~ClientDialog() = default;
 void ClientDialog::sessionTypeChanged(int item_index)
 {
     proto::SessionType session_type = static_cast<proto::SessionType>(
-        ui.combo_session_type->itemData(item_index).toInt());
+        ui->combo_session_type->itemData(item_index).toInt());
 
     switch (session_type)
     {
         case proto::SESSION_TYPE_DESKTOP_MANAGE:
         {
-            ui.button_session_config->setEnabled(true);
-            connect_data_.desktop_config = ConfigFactory::defaultDesktopManageConfig();
+            ui->button_session_config->setEnabled(true);
+            desktop_config_ = ConfigFactory::defaultDesktopManageConfig();
         }
         break;
 
         case proto::SESSION_TYPE_DESKTOP_VIEW:
         {
-            ui.button_session_config->setEnabled(true);
-            connect_data_.desktop_config = ConfigFactory::defaultDesktopViewConfig();
+            ui->button_session_config->setEnabled(true);
+            desktop_config_ = ConfigFactory::defaultDesktopViewConfig();
         }
         break;
 
         default:
-            ui.button_session_config->setEnabled(false);
+            ui->button_session_config->setEnabled(false);
             break;
     }
 }
@@ -102,17 +130,20 @@ void ClientDialog::sessionTypeChanged(int item_index)
 void ClientDialog::sessionConfigButtonPressed()
 {
     proto::SessionType session_type = static_cast<proto::SessionType>(
-        ui.combo_session_type->currentData().toInt());
+        ui->combo_session_type->currentData().toInt());
 
     switch (session_type)
     {
         case proto::SESSION_TYPE_DESKTOP_MANAGE:
         case proto::SESSION_TYPE_DESKTOP_VIEW:
         {
-            DesktopConfigDialog dialog(session_type, connect_data_.desktop_config, this);
+            DesktopConfigDialog dialog(session_type,
+                                       desktop_config_,
+                                       common::kSupportedVideoEncodings,
+                                       this);
 
             if (dialog.exec() == DesktopConfigDialog::Accepted)
-                connect_data_.desktop_config = dialog.config();
+                desktop_config_ = dialog.config();
         }
         break;
 
@@ -123,15 +154,76 @@ void ClientDialog::sessionConfigButtonPressed()
 
 void ClientDialog::connectButtonPressed()
 {
-    proto::SessionType session_type = static_cast<proto::SessionType>(
-        ui.combo_session_type->currentData().toInt());
+    QComboBox* combo_address = ui->combo_address;
+    QString current_address = combo_address->currentText();
 
-    connect_data_.address = ui.edit_address->text().toStdString();
-    connect_data_.port = ui.spin_port->value();
-    connect_data_.session_type = session_type;
+    net::Address address = net::Address::fromString(current_address.toStdU16String());
+    if (!address.isValid())
+    {
+        QMessageBox::warning(this,
+                             tr("Warning"),
+                             tr("An invalid computer address was entered."),
+                             QMessageBox::Ok);
+        combo_address->setFocus();
+    }
+    else
+    {
+        int current_index = combo_address->findText(current_address);
+        if (current_index != -1)
+            combo_address->removeItem(current_index);
 
-    accept();
-    close();
+        combo_address->insertItem(0, current_address);
+        combo_address->setCurrentIndex(0);
+
+        QStringList address_list;
+        for (int i = 0; i < std::min(combo_address->count(), 15); ++i)
+            address_list.append(combo_address->itemText(i));
+
+        ClientSettings settings;
+        settings.setAddressList(address_list);
+
+        proto::SessionType session_type = static_cast<proto::SessionType>(
+            ui->combo_session_type->currentData().toInt());
+
+        config_.address = address.host();
+        config_.port = address.port();
+        config_.session_type = session_type;
+
+        ClientWindow* client_window = nullptr;
+
+        switch (config_.session_type)
+        {
+            case proto::SESSION_TYPE_DESKTOP_MANAGE:
+            case proto::SESSION_TYPE_DESKTOP_VIEW:
+            {
+                client_window = new QtDesktopWindow(
+                    config_.session_type, desktop_config_, parentWidget());
+            }
+            break;
+
+            case proto::SESSION_TYPE_FILE_TRANSFER:
+                client_window = new client::QtFileManagerWindow(parentWidget());
+                break;
+
+            default:
+                NOTREACHED();
+                break;
+        }
+
+        if (!client_window)
+            return;
+
+        client_window->setAttribute(Qt::WA_DeleteOnClose);
+        if (!client_window->connectToHost(config_))
+        {
+            client_window->close();
+        }
+        else
+        {
+            accept();
+            close();
+        }
+    }
 }
 
-} // namespace aspia
+} // namespace client

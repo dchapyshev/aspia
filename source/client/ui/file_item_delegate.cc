@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,6 +17,8 @@
 //
 
 #include "client/ui/file_item_delegate.h"
+#include "client/ui/file_name_validator.h"
+#include "common/file_platform_util.h"
 
 #include <QApplication>
 #include <QPainter>
@@ -25,10 +27,7 @@
 #include <QLineEdit>
 #include <QToolTip>
 
-#include "client/ui/file_name_validator.h"
-#include "common/file_platform_util.h"
-
-namespace aspia {
+namespace client {
 
 namespace {
 
@@ -44,7 +43,7 @@ public:
         {
             QString characters;
 
-            for (const auto& character : FilePlatformUtil::invalidFileNameCharacters())
+            for (const auto& character : common::FilePlatformUtil::invalidFileNameCharacters())
             {
                 if (!characters.isEmpty())
                     characters += QLatin1String(", ");
@@ -137,4 +136,4 @@ void FileItemDelegate::updateEditorGeometry(QWidget* editor,
     edit->setGeometry(option.rect);
 }
 
-} // namespace aspia
+} // namespace client

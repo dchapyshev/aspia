@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+
+<!-- Variables -->
+<?define ProductName="Aspia Console"?>
+<?define Manufacturer="Dmitry Chapyshev"?>
+<?define Version="2.0.0"?>
+<?define InstallLocation="Aspia Console"?>
+<?define SourceFiles="..\build\Release"?>
+<?define Executable="aspia_console.exe"?>
+
+<!-- Product description -->
+<Product Id="*" Name="!(loc.ProductName)" Language="1033" Version="$(var.Version)" Manufacturer="$(var.Manufacturer)" UpgradeCode="{459185F3-2795-4E8D-89CA-82E3E2D10FBA}">
+    <Package Id="*" InstallerVersion="405" Compressed="yes" Manufacturer="$(var.Manufacturer)" InstallPrivileges="elevated" InstallScope="perMachine" />
+
+    <Media Id="1" Cabinet="media1.cab" EmbedCab="yes" />
+
+    <MajorUpgrade DowngradeErrorMessage="!(loc.DowngradeErrorMessage)" Schedule="afterInstallInitialize" AllowDowngrades="no" Disallow="no" />
+
+    <!-- Windows version checking -->
+    <Condition Message="This application is only supported on Windows 7, Windows Server 2008 R2, or higher.">
+        <![CDATA[Installed OR (VersionNT >= 601)]]>
+    </Condition>
+
+    <Icon Id="aspia.ico" SourceFile="resources/aspia.ico" />
+    <Property Id="ARPPRODUCTICON" Value="aspia.ico" />
+
+    <Directory Id="TARGETDIR" Name="SourceDir">
+        <Directory Id="ProgramFilesFolder">
+            <Directory Id="VendorProgramFilesFolder" Name="Aspia">
+                <Directory Id="INSTALLLOCATION" Name="Console" />
+            </Directory>
+        </Directory>
+        <Directory Id="ProgramMenuFolder">
+            <Directory Id="ApplicationMenuFolder" Name="Aspia" />
+        </Directory>
+        <Directory Id="DesktopFolder" />
+    </Directory>
+
+    <!-- Program Menu Shortcut -->
+    <DirectoryRef Id="ApplicationMenuFolder">
+        <Component Id="ProgramMenuShortcut" Guid="{50D24B57-80D4-4642-9B01-B19A7C16DF13}">
+            <Condition>STARTMENU_SHORTCUT</Condition>
+            <Shortcut Id="ProgramMenuShortcut" Name="!(loc.ShortcutName)" WorkingDirectory="INSTALLLOCATION" Target="[INSTALLLOCATION]$(var.Executable)" />
+            <RemoveFolder Id="ApplicationMenuFolder" On="uninstall" />
+            <RegistryValue Root="HKCU" Key="SOFTWARE\$(var.ProductName)" Type="string" Value="" KeyPath="yes" />
+        </Component>
+    </DirectoryRef>
+
+    <!-- Desktop Shortcut -->
+    <DirectoryRef Id="DesktopFolder">
+        <Component Id="DesktopShortcut" Guid="{D6EA8F32-5B86-4A1A-B180-72F4A8C149F0}">
+            <Condition>DESKTOP_SHORTCUT</Condition>
+            <Shortcut Id="DesktopShortcut" Name="!(loc.ShortcutName)" WorkingDirectory="INSTALLLOCATION" Target="[INSTALLLOCATION]$(var.Executable)" />
+            <RegistryValue Root="HKCU" Key="SOFTWARE\$(var.ProductName)" Type="string" Value="" KeyPath="yes" />
+        </Component>
+    </DirectoryRef>
+
+    <!-- Executable file and file associations -->
+    <DirectoryRef Id="INSTALLLOCATION" FileSource="$(var.SourceFiles)">
+        <Component Id ="Applications" DiskId="1" Guid="{9959642F-92BA-48BA-AF80-B08050922950}">
+            <File Id="$(var.Executable)" Name="$(var.Executable)" KeyPath="yes" />
+            <ProgId Id="AddressBook" Description="!(loc.AddressBookFile)" Icon="$(var.Executable)" IconIndex="1">
+                <Extension Id="aab">
+                    <Verb Id="AddressBookFile" Command="Open" TargetFile="$(var.Executable)" Argument='"%1"' />
+                </Extension>
+            </ProgId>
+        </Component>
+    </DirectoryRef>
+
+    <!-- Product features -->
+    <Feature Id="FeatureProduct" Title="$(var.ProductName)" InstallDefault="local" ConfigurableDirectory="INSTALLLOCATION" Level="1">
+        <ComponentRef Id="Applications" />
+        <ComponentRef Id="ProgramMenuShortcut" />
+        <ComponentRef Id="DesktopShortcut" />
+    </Feature>
+    <Property Id="INSTALLLEVEL" Value="1" />
+
+    <!-- Resource customization -->
+    <WixVariable Id="WixUIBannerBmp" Value="resources/banner.bmp" />
+    <WixVariable Id="WixUIDialogBmp" Value="resources/dialog.bmp" />
+    <WixVariable Id="WixUIExclamationIco" Value="resources/exclamation.ico" />
+    <WixVariable Id="WixUIInfoIco" Value="resources/info.ico" />
+    <WixVariable Id="WixUINewIco" Value="resources/new.ico" />
+    <WixVariable Id="WixUIUpIco" Value="resources/up.ico" />
+    <WixVariable Id="WixUILicenseRtf" Value="resources/license.rtf" />
+
+    <!-- UI description -->
+    <UI Id="InstallerUI">
+        <Dialog Id="ShortcutsDlg" Width="370" Height="270" Title="!(loc.InstallDirDlg_Title)">
+            <Control Id="BannerBitmap" Type="Bitmap" X="0" Y="0" Width="370" Height="44" TabSkip="no" Text="!(loc.InstallDirDlgBannerBitmap)" />
+            <Control Id="BannerLine" Type="Line" X="0" Y="44" Width="370" Height="2" />
+            <Control Id="BottomLine" Type="Line" X="0" Y="234" Width="370" Height="2" />
+            <Control Id="Title" Type="Text" X="15" Y="6" Width="210" Height="15" Transparent="yes" NoPrefix="yes" Text="!(loc.InstallDirDlgTitle)" />
+            <Control Id="Description" Type="Text" X="25" Y="23" Width="280" Height="15" Transparent="yes" NoPrefix="yes" Text="!(loc.InstallDirDlgDescription)" />
+
+            <Control Id="DesktopShortcutCheckBox" Type="CheckBox" Height="18" Width="295" X="26" Y="58" Text="!(loc.CreateDesktopShortcut)" Property="DESKTOP_SHORTCUT" CheckBoxValue="1" />
+            <Control Id="ProgramMenuShortcutCheckBox" Type="CheckBox" Height="18" Width="295" X="26" Y="79" Text="!(loc.CreateProgramMenuShortcut)" Property="STARTMENU_SHORTCUT" CheckBoxValue="1" />
+
+            <Control Id="Next" Type="PushButton" X="248" Y="243" Width="56" Height="17" Default="yes" Text="!(loc.WixUINext)">
+                <Publish Event="NewDialog" Value="VerifyReadyDlg" Order="10" />
+            </Control>
+            <Control Id="Back" Type="PushButton" X="192" Y="243" Width="56" Height="17" Text="!(loc.WixUIBack)">
+                <Publish Event="NewDialog" Value="InstallDirDlg" Order="10" />
+            </Control>
+            <Control Id="Cancel" Type="PushButton" X="304" Y="243" Width="56" Height="17" Cancel="yes" Text="!(loc.WixUICancel)">
+                <Publish Event="SpawnDialog" Value="CancelDlg">1</Publish>
+            </Control>
+        </Dialog>
+
+        <Property Id="STARTMENU_SHORTCUT">1</Property>
+        <Property Id="DESKTOP_SHORTCUT">1</Property>
+
+        <Publish Dialog="InstallDirDlg" Control="Next" Event="NewDialog" Value="ShortcutsDlg" Order="10">NOT Installed</Publish>
+        <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="ShortcutsDlg" Order="10">NOT Installed</Publish>
+
+        <Property Id="WIXUI_INSTALLDIR" Value="INSTALLLOCATION" />
+
+        <UIRef Id="WixUI_InstallDir" />
+        <UIRef Id="WixUI_ErrorProgressText" />
+    </UI>
+</Product>
+</Wix>

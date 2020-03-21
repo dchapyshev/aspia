@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,15 +16,15 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CLIENT__UI__SELECT_SCREEN_ACTION_H_
-#define ASPIA_CLIENT__UI__SELECT_SCREEN_ACTION_H_
+#ifndef CLIENT__UI__SELECT_SCREEN_ACTION_H
+#define CLIENT__UI__SELECT_SCREEN_ACTION_H
+
+#include "base/macros_magic.h"
+#include "proto/desktop_extensions.pb.h"
 
 #include <QAction>
 
-#include "base/macros_magic.h"
-#include "protocol/desktop_session.pb.h"
-
-namespace aspia {
+namespace client {
 
 class SelectScreenAction : public QAction
 {
@@ -42,22 +42,22 @@ public:
         screen_.set_id(-1);
     }
 
-    SelectScreenAction(const proto::desktop::Screen& screen, QObject* parent)
+    SelectScreenAction(const proto::Screen& screen, const QString& title, QObject* parent)
         : QAction(parent),
           screen_(screen)
     {
-        setText(QString::fromStdString(screen_.title()));
+        setText(title);
         setCheckable(true);
     }
 
-    const proto::desktop::Screen& screen() const { return screen_; }
+    const proto::Screen& screen() const { return screen_; }
 
 private:
-    proto::desktop::Screen screen_;
+    proto::Screen screen_;
 
     DISALLOW_COPY_AND_ASSIGN(SelectScreenAction);
 };
 
-} // namespace aspia
+} // namespace client
 
-#endif // ASPIA_CLIENT__UI__SELECT_SCREEN_ACTION_H_
+#endif // CLIENT__UI__SELECT_SCREEN_ACTION_H

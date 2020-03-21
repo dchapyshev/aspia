@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,15 +16,15 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CONSOLE__ADDRESS_BOOK_TAB_H_
-#define ASPIA_CONSOLE__ADDRESS_BOOK_TAB_H_
+#ifndef CONSOLE__ADDRESS_BOOK_TAB_H
+#define CONSOLE__ADDRESS_BOOK_TAB_H
 
 #include "base/macros_magic.h"
 #include "console/console_tab.h"
-#include "protocol/address_book.pb.h"
+#include "proto/address_book.pb.h"
 #include "ui_address_book_tab.h"
 
-namespace aspia {
+namespace console {
 
 class ComputerItem;
 
@@ -55,6 +55,7 @@ public:
 public slots:
     void addComputerGroup();
     void addComputer();
+    void copyComputer();
     void modifyAddressBook();
     void modifyComputerGroup();
     void modifyComputer();
@@ -94,6 +95,7 @@ private:
     void updateComputerList(ComputerGroupItem* computer_group);
     bool saveToFile(const QString& file_path);
 
+    static QString parentName(ComputerGroupItem* item);
     static void showOpenError(QWidget* parent, const QString& message);
     static void showSaveError(QWidget* parent, const QString& message);
 
@@ -110,6 +112,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(AddressBookTab);
 };
 
-} // namespace aspia
+} // namespace console
 
-#endif // ASPIA_CONSOLE__ADDRESS_BOOK_TAB_H_
+#endif // CONSOLE__ADDRESS_BOOK_TAB_H

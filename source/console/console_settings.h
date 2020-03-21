@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,23 +16,22 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CONSOLE__CONSOLE_SETTINGS_H_
-#define ASPIA_CONSOLE__CONSOLE_SETTINGS_H_
+#ifndef CONSOLE__CONSOLE_SETTINGS_H
+#define CONSOLE__CONSOLE_SETTINGS_H
+
+#include "base/macros_magic.h"
+#include "proto/common.pb.h"
 
 #include <QSettings>
 
-#include "base/macros_magic.h"
-#include "protocol/common.pb.h"
+namespace console {
 
-namespace aspia {
-
-class ConsoleSettings
+class Settings
 {
 public:
-    ConsoleSettings();
-    ~ConsoleSettings() = default;
+    Settings();
+    ~Settings() = default;
 
-    static QString defaultLocale();
     QString locale() const;
     void setLocale(const QString& locale);
 
@@ -50,6 +49,9 @@ public:
 
     QByteArray columnsState() const;
     void setColumnsState(const QByteArray& state);
+
+    bool isRecentOpenEnabled() const;
+    void setRecentOpenEnabled(bool enable);
 
     QStringList recentOpen() const;
     void setRecentOpen(const QStringList& list);
@@ -69,15 +71,30 @@ public:
     bool alwaysShowTrayIcon() const;
     void setAlwaysShowTrayIcon(bool enable);
 
-    proto::SessionType sessionType();
+    proto::SessionType sessionType() const;
     void setSessionType(proto::SessionType session_type);
+
+    bool checkUpdates() const;
+    void setCheckUpdates(bool check);
+
+    QString updateServer() const;
+    void setUpdateServer(const QString& server);
+
+    QByteArray computerDialogGeometry() const;
+    void setComputerDialogGeometry(const QByteArray& geometry);
+
+    QByteArray computerDialogState() const;
+    void setComputerDialogState(const QByteArray& state);
+
+    QByteArray computerGroupDialogGeometry() const;
+    void setComputerGroupDialogGeometry(const QByteArray& geometry);
 
 private:
     QSettings settings_;
 
-    DISALLOW_COPY_AND_ASSIGN(ConsoleSettings);
+    DISALLOW_COPY_AND_ASSIGN(Settings);
 };
 
-} // namespace aspia
+} // namespace console
 
-#endif // ASPIA_CONSOLE__CONSOLE_SETTINGS_H_
+#endif // CONSOLE__CONSOLE_SETTINGS_H

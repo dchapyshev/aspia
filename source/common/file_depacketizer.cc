@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,11 +17,9 @@
 //
 
 #include "common/file_depacketizer.h"
-
 #include "base/logging.h"
-#include "common/file_packet.h"
 
-namespace aspia {
+namespace common {
 
 FileDepacketizer::FileDepacketizer(const std::filesystem::path& file_path,
                                    std::ofstream&& file_stream)
@@ -63,15 +61,16 @@ std::unique_ptr<FileDepacketizer> FileDepacketizer::create(
         new FileDepacketizer(file_path, std::move(file_stream)));
 }
 
-bool FileDepacketizer::writeNextPacket(const proto::file_transfer::Packet& packet)
+bool FileDepacketizer::writeNextPacket(const proto::FilePacket& packet)
 {
     DCHECK(file_stream_.is_open());
 
-    if (packet.data().empty())
+    const size_t packet_size = packet.data().size();
+    if (!packet_size)
     {
         // If an empty data packet with the last packet flag set is received, the transfer
         // is canceled.
-        if (packet.flags() & proto::file_transfer::Packet::LAST_PACKET)
+        if (packet.flags() & proto::FilePacket::LAST_PACKET)
             return true;
 
         LOG(LS_WARNING) << "Wrong packet size";
@@ -79,65 +78,23 @@ bool FileDepacketizer::writeNextPacket(const proto::file_transfer::Packet& packe
     }
 
     // The first packet must have the full file size.
-    if (packet.flags() & proto::file_transfer::Packet::FIRST_PACKET)
+    if (packet.flags() & proto::FilePacket::FIRST_PACKET)
     {
         file_size_ = packet.file_size();
         left_size_ = file_size_;
-
-        if (packet.flags() & proto::file_transfer::Packet::COMPRESSED)
-        {
-            decompressor_.reset(ZSTD_createDStream());
-            if (!decompressor_)
-            {
-                LOG(LS_WARNING) << "ZSTD_createDStream failed";
-                return false;
-            }
-
-            write_buffer_.resize(kMaxFilePacketSize);
-        }
-    }
-
-    const char* write_data;
-    size_t write_size;
-
-    if (decompressor_)
-    {
-        size_t ret = ZSTD_initDStream(decompressor_.get());
-        DCHECK(!ZSTD_isError(ret)) << ZSTD_getErrorName(ret);
-
-        ZSTD_inBuffer input = { packet.data().data(), packet.data().size(), 0 };
-        ZSTD_outBuffer output = { write_buffer_.data(), write_buffer_.size(), 0 };
-
-        while (input.pos < input.size)
-        {
-            ret = ZSTD_decompressStream(decompressor_.get(), &output, &input);
-            if (ZSTD_isError(ret))
-            {
-                LOG(LS_WARNING) << "ZSTD_decompressStream failed: " << ZSTD_getErrorName(ret);
-                return false;
-            }
-        }
-
-        write_data = write_buffer_.data();
-        write_size = output.pos;
-    }
-    else
-    {
-        write_data = packet.data().data();
-        write_size = packet.data().size();
     }
 
     file_stream_.seekp(file_size_ - left_size_);
-    file_stream_.write(write_data, write_size);
+    file_stream_.write(packet.data().data(), packet_size);
     if (file_stream_.fail())
     {
         LOG(LS_WARNING) << "Unable to write file";
         return false;
     }
 
-    left_size_ -= write_size;
+    left_size_ -= packet_size;
 
-    if (packet.flags() & proto::file_transfer::Packet::LAST_PACKET)
+    if (packet.flags() & proto::FilePacket::LAST_PACKET)
     {
         file_size_ = 0;
         file_stream_.close();
@@ -146,4 +103,4 @@ bool FileDepacketizer::writeNextPacket(const proto::file_transfer::Packet& packe
     return true;
 }
 
-} // namespace aspia
+} // namespace common

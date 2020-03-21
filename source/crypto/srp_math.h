@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,12 +16,12 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CRYPTO__SRP_MATH_H_
-#define ASPIA_CRYPTO__SRP_MATH_H_
+#ifndef CRYPTO__SRP_MATH_H
+#define CRYPTO__SRP_MATH_H
 
 #include "crypto/big_num.h"
 
-namespace aspia {
+namespace crypto {
 
 // This class implements primitives to perform authorization using SRP algorithm.
 class SrpMath
@@ -41,7 +41,8 @@ public:
 
     static BigNum calc_u(const BigNum& A, const BigNum& B, const BigNum& N);
     static BigNum calc_B(const BigNum& b, const BigNum& N, const BigNum& g, const BigNum& v);
-    static BigNum calc_x(const BigNum& s, const std::string& I, const std::string& p);
+    static BigNum calc_x(const BigNum& s, std::u16string_view I, std::u16string_view p);
+    static BigNum calc_x(const BigNum& s, std::u16string_view I, const base::ByteArray& p);
     static BigNum calc_A(const BigNum& a, const BigNum& N, const BigNum& g);
 
     static BigNum calcServerKey(const BigNum& A, const BigNum& v, const BigNum& u, const BigNum& b,
@@ -56,13 +57,16 @@ public:
     // Checks if A % N == 0.
     static bool verify_A_mod_N(const BigNum& A, const BigNum& N);
 
-    static BigNum calc_v(const std::string& I, const std::string& p, const BigNum& s,
+    static BigNum calc_v(std::u16string_view I, std::u16string_view p, const BigNum& s,
+                         const BigNum& N, const BigNum& g);
+
+    static BigNum calc_v(const std::u16string_view I, const base::ByteArray& p, const BigNum& s,
                          const BigNum& N, const BigNum& g);
 
 private:
     DISALLOW_COPY_AND_ASSIGN(SrpMath);
 };
 
-} // namespace aspia
+} // namespace crypto
 
-#endif // ASPIA_CRYPTO__SRP_H_
+#endif // CRYPTO__SRP_H

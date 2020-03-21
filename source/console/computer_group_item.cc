@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -20,14 +20,14 @@
 
 #include <QApplication>
 
-namespace aspia {
+namespace console {
 
 ComputerGroupItem::ComputerGroupItem(proto::address_book::ComputerGroup* computer_group,
                                      ComputerGroupItem* parent_item)
     : QTreeWidgetItem(parent_item),
       computer_group_(computer_group)
 {
-    setIcon(0, QIcon(QStringLiteral(":/icon/folder.png")));
+    setIcon(0, QIcon(QStringLiteral(":/img/folder.png")));
     updateItem();
 
     for (int i = 0; i < computer_group_->computer_group_size(); ++i)
@@ -150,4 +150,4 @@ QList<QTreeWidgetItem*> ComputerGroupItem::ComputerList()
     return list;
 }
 
-} // namespace aspia
+} // namespace console

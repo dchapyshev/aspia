@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,16 +16,14 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_BASE__WIN__SCOPED_USER_OBJECT_H_
-#define ASPIA_BASE__WIN__SCOPED_USER_OBJECT_H_
-
-#define WIN32_LEAN_AND_MEAN
-#define NOMINMAX
-#include <windows.h>
+#ifndef BASE__WIN__SCOPED_USER_OBJECT_H
+#define BASE__WIN__SCOPED_USER_OBJECT_H
 
 #include "base/macros_magic.h"
 
-namespace aspia {
+#include <Windows.h>
+
+namespace base::win {
 
 // Like ScopedGDIObject but for User objects.
 template<class T, class Traits>
@@ -162,6 +160,6 @@ using ScopedHCURSOR = ScopedUserObject<HCURSOR, DestroyCursorTraits>;
 using ScopedHACCEL = ScopedUserObject<HACCEL, DestroyAccelTraits>;
 using ScopedHHOOK = ScopedUserObject<HHOOK, DestroyHookTraits>;
 
-} // namespace aspia
+} // namespace base::win
 
-#endif // ASPIA_BASE__WIN__SCOPED_USER_OBJECT_H_
+#endif // BASE__WIN__SCOPED_USER_OBJECT_H

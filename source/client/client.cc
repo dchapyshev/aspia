@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -18,178 +18,164 @@
 
 #include "client/client.h"
 
-#include "client/ui/status_dialog.h"
-#include "client/client_session_desktop_manage.h"
-#include "client/client_session_desktop_view.h"
-#include "client/client_session_file_transfer.h"
-#include "client/config_factory.h"
+#include "build/version.h"
+#include "client/status_window_proxy.h"
+#include "common/message_serialization.h"
+#include "net/network_channel_proxy.h"
 
-namespace aspia {
+namespace client {
 
-Client::Client(ConnectData&& connect_data, QObject* parent)
-    : QObject(parent),
-      connect_data_(std::move(connect_data))
+Client::Client(std::shared_ptr<base::TaskRunner> ui_task_runner)
+    : ui_task_runner_(std::move(ui_task_runner))
 {
-    ConfigFactory::fixupDesktopConfig(&connect_data_.desktop_config);
+    DCHECK(ui_task_runner_);
+    DCHECK(ui_task_runner_->belongsToCurrentThread());
+}
 
-    // Create a network channel.
-    network_channel_ = new NetworkChannelClient(this);
+Client::~Client()
+{
+    DCHECK(ui_task_runner_->belongsToCurrentThread());
+    stop();
+}
 
-    // Create a status dialog. It displays all information about the progress of the connection
-    // and errors.
-    status_dialog_ = new StatusDialog();
+bool Client::start(const Config& config)
+{
+    DCHECK(ui_task_runner_->belongsToCurrentThread());
 
-    connect(network_channel_, &NetworkChannelClient::connected, this, &Client::onChannelConnected);
-    connect(network_channel_, &NetworkChannelClient::errorOccurred, this, &Client::onChannelError);
-    connect(network_channel_, &NetworkChannelClient::disconnected, this, &Client::onChannelDisconnected);
+    config_ = config;
 
-    connect(status_dialog_, &StatusDialog::finished, [this](int /* result */)
+    if (!status_window_proxy_)
     {
-        // When the status dialog is finished, we stop the connection.
-        network_channel_->stop();
+        DLOG(LS_ERROR) << "Attempt to start the client without status window";
+        return false;
+    }
 
-        // Delete the dialog after the finish.
-        status_dialog_->deleteLater();
+    // Start the thread for IO.
+    io_thread_.start(base::MessageLoop::Type::ASIO, this);
+    return true;
+}
 
-        // When the status dialog is finished, we call the client's termination.
-        emit finished(this);
+void Client::stop()
+{
+    DCHECK(ui_task_runner_->belongsToCurrentThread());
+
+    io_thread_.stop();
+}
+
+void Client::setStatusWindow(StatusWindow* status_window)
+{
+    DCHECK(ui_task_runner_->belongsToCurrentThread());
+    DCHECK(!status_window_proxy_);
+
+    status_window_proxy_ = StatusWindowProxy::create(ui_task_runner_, status_window);
+}
+
+// static
+base::Version Client::version()
+{
+    return base::Version(ASPIA_VERSION_MAJOR, ASPIA_VERSION_MINOR, ASPIA_VERSION_PATCH);
+}
+
+std::shared_ptr<base::TaskRunner> Client::ioTaskRunner() const
+{
+    return io_task_runner_;
+}
+
+std::shared_ptr<base::TaskRunner> Client::uiTaskRunner() const
+{
+    return ui_task_runner_;
+}
+
+std::u16string Client::computerName() const
+{
+    return config_.computer_name;
+}
+
+proto::SessionType Client::sessionType() const
+{
+    return config_.session_type;
+}
+
+void Client::sendMessage(const google::protobuf::MessageLite& message)
+{
+    channel_->send(common::serializeMessage(message));
+}
+
+void Client::onBeforeThreadRunning()
+{
+    // Initialize the task runner for IO.
+    io_task_runner_ = io_thread_.taskRunner();
+
+    // Show the status window.
+    status_window_proxy_->onStarted(config_.address, config_.port);
+
+    // Create a network channel for messaging.
+    channel_ = std::make_unique<net::Channel>();
+
+    // Set the listener for the network channel.
+    channel_->setListener(this);
+
+    // Now connect to the host.
+    channel_->connect(config_.address, config_.port);
+}
+
+void Client::onAfterThreadRunning()
+{
+    authenticator_.reset();
+    channel_.reset();
+
+    if (session_started_)
+    {
+        // Session stopped.
+        onSessionStopped();
+    }
+}
+
+void Client::onConnected()
+{
+    channel_->setKeepAlive(true, std::chrono::minutes(1), std::chrono::seconds(1));
+    channel_->setNoDelay(true);
+
+    authenticator_ = std::make_unique<Authenticator>();
+
+    authenticator_->setUserName(config_.username);
+    authenticator_->setPassword(config_.password);
+    authenticator_->setSessionType(config_.session_type);
+
+    authenticator_->start(std::move(channel_), [this](Authenticator::ErrorCode error_code)
+    {
+        if (error_code == Authenticator::ErrorCode::SUCCESS)
+        {
+            // The authenticator takes the listener on itself, we return the receipt of
+            // notifications.
+            channel_ = authenticator_->takeChannel();
+            channel_->setListener(this);
+
+            status_window_proxy_->onConnected();
+
+            session_started_ = true;
+
+            // Signal that everything is ready to start the session (connection established,
+            // authentication passed).
+            onSessionStarted(authenticator_->peerVersion());
+
+            // Now the session will receive incoming messages.
+            channel_->resume();
+        }
+        else
+        {
+            status_window_proxy_->onAccessDenied(error_code);
+        }
+
+        // Authenticator is no longer needed.
+        io_task_runner_->deleteSoon(authenticator_.release());
     });
 }
 
-void Client::start()
+void Client::onDisconnected(net::ErrorCode error_code)
 {
-    status_dialog_->show();
-    status_dialog_->activateWindow();
-
-    QString address(QString::fromStdString(connect_data_.address));
-    QString username(QString::fromStdString(connect_data_.username));
-    QString password(QString::fromStdString(connect_data_.password));
-
-    status_dialog_->addStatus(tr("Attempt to connect to %1:%2.")
-                              .arg(address)
-                              .arg(connect_data_.port));
-
-    network_channel_->connectToHost(address, connect_data_.port,
-                                    username, password,
-                                    connect_data_.session_type);
+    // Show an error to the user.
+    status_window_proxy_->onDisconnected(error_code);
 }
 
-void Client::onChannelConnected()
-{
-    status_dialog_->addStatus(tr("Connection established."));
-
-    switch (connect_data_.session_type)
-    {
-        case proto::SESSION_TYPE_DESKTOP_MANAGE:
-            session_ = new ClientSessionDesktopManage(&connect_data_, this);
-            break;
-
-        case proto::SESSION_TYPE_DESKTOP_VIEW:
-            session_ = new ClientSessionDesktopView(&connect_data_, this);
-            break;
-
-        case proto::SESSION_TYPE_FILE_TRANSFER:
-            session_ = new ClientSessionFileTransfer(&connect_data_, this);
-            break;
-
-        default:
-            status_dialog_->addStatus(tr("Unsupported session type."));
-            return;
-    }
-
-    // Messages received from the network are sent to the session.
-    connect(network_channel_, &NetworkChannel::messageReceived, session_, &ClientSession::messageReceived);
-    connect(session_, &ClientSession::sendMessage, network_channel_, &NetworkChannel::send);
-    connect(network_channel_, &NetworkChannel::disconnected, session_, &ClientSession::closeSession);
-    connect(session_, &ClientSession::started, network_channel_, &NetworkChannel::start);
-
-    // When closing the session (closing the window), close the status dialog.
-    connect(session_, &ClientSession::closedByUser, this, &Client::onSessionClosedByUser);
-
-    // If an error occurs in the session, add a message to the status dialog and stop the channel.
-    connect(session_, &ClientSession::errorOccurred,
-            this, &Client::onSessionError,
-            Qt::QueuedConnection);
-
-    status_dialog_->addStatus(tr("Session started."));
-    status_dialog_->hide();
-
-    session_->startSession();
-}
-
-void Client::onChannelDisconnected()
-{
-    status_dialog_->addStatus(tr("Disconnected."));
-}
-
-void Client::onChannelError(NetworkChannel::Error error)
-{
-    const char* message;
-
-    switch (error)
-    {
-        case NetworkChannel::Error::CONNECTION_REFUSED:
-            message = QT_TR_NOOP("Connection was refused by the peer (or timed out).");
-            break;
-
-        case NetworkChannel::Error::REMOTE_HOST_CLOSED:
-            message = QT_TR_NOOP("Remote host closed the connection.");
-            break;
-
-        case NetworkChannel::Error::SPECIFIED_HOST_NOT_FOUND:
-            message = QT_TR_NOOP("Host address was not found.");
-            break;
-
-        case NetworkChannel::Error::SOCKET_TIMEOUT:
-            message = QT_TR_NOOP("Socket operation timed out.");
-            break;
-
-        case NetworkChannel::Error::ADDRESS_IN_USE:
-            message = QT_TR_NOOP("Address specified is already in use and was set to be exclusive.");
-            break;
-
-        case NetworkChannel::Error::ADDRESS_NOT_AVAILABLE:
-            message = QT_TR_NOOP("Address specified does not belong to the host.");
-            break;
-
-        case NetworkChannel::Error::PROTOCOL_FAILURE:
-            message = QT_TR_NOOP("Violation of the data exchange protocol.");
-            break;
-
-        case NetworkChannel::Error::ENCRYPTION_FAILURE:
-            message = QT_TR_NOOP("An error occurred while encrypting the message.");
-            break;
-
-        case NetworkChannel::Error::DECRYPTION_FAILURE:
-            message = QT_TR_NOOP("An error occurred while decrypting the message.");
-            break;
-
-        case NetworkChannel::Error::AUTHENTICATION_FAILURE:
-            message = QT_TR_NOOP("An error occured while authenticating: wrong user name or password.");
-            break;
-
-        case NetworkChannel::Error::SESSION_TYPE_NOT_ALLOWED:
-            message = QT_TR_NOOP("Specified session type is not allowed for the user.");
-            break;
-
-        default:
-            message = QT_TR_NOOP("An unknown error occurred.");
-            break;
-    }
-
-    status_dialog_->addStatus(tr(message));
-}
-
-void Client::onSessionClosedByUser()
-{
-    status_dialog_->show();
-    status_dialog_->close();
-}
-
-void Client::onSessionError(const QString& message)
-{
-    status_dialog_->addStatus(message);
-    network_channel_->stop();
-}
-
-} // namespace aspia
+} // namespace client

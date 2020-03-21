@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,73 +16,93 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_IPC__IPC_CHANNEL_H_
-#define ASPIA_IPC__IPC_CHANNEL_H_
+#ifndef IPC__IPC_CHANNEL_H
+#define IPC__IPC_CHANNEL_H
 
-#include <QByteArray>
-#include <QLocalSocket>
-#include <QQueue>
-#include <QPointer>
+#include "base/process_handle.h"
+#include "base/session_id.h"
+#include "base/memory/byte_array.h"
+#include "base/memory/scalable_queue.h"
+#include "base/threading/thread_checker.h"
 
-#include "base/macros_magic.h"
+#include <asio/windows/stream_handle.hpp>
 
-namespace aspia {
+#include <filesystem>
 
-class IpcServer;
+namespace base {
+class Location;
+} // namespace base
 
-class IpcChannel : public QObject
+namespace ipc {
+
+class ChannelProxy;
+class Listener;
+class Server;
+
+class Channel
 {
-    Q_OBJECT
-
 public:
-    ~IpcChannel() = default;
+    Channel();
+    ~Channel();
 
-    static IpcChannel* createClient(QObject* parent = nullptr);
+    std::shared_ptr<ChannelProxy> channelProxy();
 
-    void connectToServer(const QString& channel_name);
+    // Sets an instance of the class to receive connection status notifications or new messages.
+    // You can change this in the process.
+    void setListener(Listener* listener);
 
-public slots:
-    void stop();
+    [[nodiscard]]
+    bool connect(std::u16string_view channel_id);
 
-    // Starts reading the message.
-    void start();
+    void disconnect();
 
-    // Sends a message.
-    void send(const QByteArray& buffer);
+    bool isConnected() const;
+    bool isPaused() const;
 
-signals:
-    void connected();
-    void disconnected();
-    void errorOccurred();
-    void messageReceived(const QByteArray& buffer);
+    void pause();
+    void resume();
 
-private slots:
-    void onError(QLocalSocket::LocalSocketError socket_error);
-    void onBytesWritten(int64_t bytes);
-    void onReadyRead();
+    void send(base::ByteArray&& buffer);
+
+    base::ProcessId peerProcessId() const { return peer_process_id_; }
+    base::SessionId peerSessionId() const { return peer_session_id_; }
+    std::filesystem::path peerFilePath() const;
 
 private:
-    friend class IpcServer;
-    IpcChannel(QLocalSocket* socket, QObject* parent);
+    friend class Server;
+    friend class ChannelProxy;
 
-    void scheduleWrite();
+    Channel(std::u16string_view channel_name, asio::windows::stream_handle&& stream);
+    static std::u16string channelName(std::u16string_view channel_id);
 
-    using MessageSizeType = uint32_t;
+    void onErrorOccurred(const base::Location& location, const std::error_code& error_code);
+    void doWrite();
+    void doReadMessage();
+    void onMessageReceived();
 
-    QPointer<QLocalSocket> socket_;
+    std::u16string channel_name_;
+    asio::windows::stream_handle stream_;
 
-    QQueue<QByteArray> write_queue_;
-    MessageSizeType write_size_ = 0;
-    int64_t written_ = 0;
+    std::shared_ptr<ChannelProxy> proxy_;
+    Listener* listener_ = nullptr;
 
-    bool read_size_received_ = false;
-    QByteArray read_buffer_;
-    MessageSizeType read_size_ = 0;
-    int64_t read_ = 0;
+    bool is_connected_ = false;
+    bool is_paused_ = true;
 
-    DISALLOW_COPY_AND_ASSIGN(IpcChannel);
+    base::ScalableQueue<base::ByteArray> write_queue_;
+    uint32_t write_size_ = 0;
+
+    uint32_t read_size_ = 0;
+    base::ByteArray read_buffer_;
+
+    base::ProcessId peer_process_id_ = base::kNullProcessId;
+    base::SessionId peer_session_id_ = base::kInvalidSessionId;
+
+    THREAD_CHECKER(thread_checker_);
+
+    DISALLOW_COPY_AND_ASSIGN(Channel);
 };
 
-} // namespace aspia
+} // namespace ipc
 
-#endif // ASPIA_IPC__IPC_CHANNEL_H_
+#endif // IPC__IPC_CHANNEL_H

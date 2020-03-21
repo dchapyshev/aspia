@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -21,15 +21,15 @@
 #include "base/logging.h"
 #include "codec/pixel_translator.h"
 #include "codec/video_util.h"
-#include "desktop_capture/desktop_frame.h"
+#include "desktop/desktop_frame.h"
 
-namespace aspia {
+namespace codec {
 
 namespace {
 
 // Retrieves a pointer to the output buffer in |update| used for storing the
 // encoded rectangle data. Will resize the buffer to |size|.
-uint8_t* outputBuffer(proto::desktop::VideoPacket* packet, size_t size)
+uint8_t* outputBuffer(proto::VideoPacket* packet, size_t size)
 {
     packet->mutable_data()->resize(size);
     return reinterpret_cast<uint8_t*>(packet->mutable_data()->data());
@@ -37,37 +37,29 @@ uint8_t* outputBuffer(proto::desktop::VideoPacket* packet, size_t size)
 
 } // namespace
 
-VideoEncoderZstd::VideoEncoderZstd(std::unique_ptr<PixelTranslator> translator,
-                                   const PixelFormat& target_format,
+VideoEncoderZstd::VideoEncoderZstd(const desktop::PixelFormat& target_format,
                                    int compression_ratio)
     : target_format_(target_format),
       compress_ratio_(compression_ratio),
-      stream_(ZSTD_createCStream()),
-      translator_(std::move(translator))
+      stream_(ZSTD_createCStream())
 {
     // Nothing
 }
 
 // static
-VideoEncoderZstd* VideoEncoderZstd::create(const PixelFormat& target_format, int compression_ratio)
+std::unique_ptr<VideoEncoderZstd> VideoEncoderZstd::create(
+    const desktop::PixelFormat& target_format, int compression_ratio)
 {
     if (compression_ratio > ZSTD_maxCLevel())
         compression_ratio = ZSTD_maxCLevel();
     else if (compression_ratio < 1)
         compression_ratio = 1;
 
-    std::unique_ptr<PixelTranslator> translator =
-        PixelTranslator::create(PixelFormat::ARGB(), target_format);
-    if (!translator)
-    {
-        LOG(LS_WARNING) << "Unsupported pixel format";
-        return nullptr;
-    }
-
-    return new VideoEncoderZstd(std::move(translator), target_format, compression_ratio);
+    return std::unique_ptr<VideoEncoderZstd>(
+        new VideoEncoderZstd(target_format, compression_ratio));
 }
 
-void VideoEncoderZstd::compressPacket(proto::desktop::VideoPacket* packet,
+void VideoEncoderZstd::compressPacket(proto::VideoPacket* packet,
                                       const uint8_t* input_data,
                                       size_t input_size)
 {
@@ -96,37 +88,51 @@ void VideoEncoderZstd::compressPacket(proto::desktop::VideoPacket* packet,
     packet->mutable_data()->resize(output.pos);
 }
 
-void VideoEncoderZstd::encode(const DesktopFrame* frame, proto::desktop::VideoPacket* packet)
+void VideoEncoderZstd::encode(const desktop::Frame* frame, proto::VideoPacket* packet)
 {
-    fillPacketInfo(proto::desktop::VIDEO_ENCODING_ZSTD, frame, packet);
+    fillPacketInfo(proto::VIDEO_ENCODING_ZSTD, frame, packet);
 
     if (packet->has_format())
     {
-        VideoUtil::toVideoPixelFormat(
-            target_format_, packet->mutable_format()->mutable_pixel_format());
+        serializePixelFormat(target_format_, packet->mutable_format()->mutable_pixel_format());
+        updated_region_ = desktop::Region(desktop::Rect::makeSize(frame->size()));
+    }
+    else
+    {
+        updated_region_ = frame->constUpdatedRegion();
+    }
+
+    if (!translator_)
+    {
+        translator_ = PixelTranslator::create(frame->format(), target_format_);
+        if (!translator_)
+        {
+            LOG(LS_WARNING) << "Unsupported pixel format";
+            return;
+        }
     }
 
     size_t data_size = 0;
 
-    for (DesktopRegion::Iterator it(frame->constUpdatedRegion()); !it.isAtEnd(); it.advance())
+    for (desktop::Region::Iterator it(updated_region_); !it.isAtEnd(); it.advance())
     {
-        const DesktopRect& rect = it.rect();
+        const desktop::Rect& rect = it.rect();
 
         data_size += rect.width() * rect.height() * target_format_.bytesPerPixel();
-        VideoUtil::toVideoRect(rect, packet->add_dirty_rect());
+        serializeRect(rect, packet->add_dirty_rect());
     }
 
     if (translate_buffer_size_ < data_size)
     {
-        translate_buffer_.reset(static_cast<uint8_t*>(alignedAlloc(data_size, 32)));
+        translate_buffer_.reset(static_cast<uint8_t*>(base::alignedAlloc(data_size, 32)));
         translate_buffer_size_ = data_size;
     }
 
     uint8_t* translate_pos = translate_buffer_.get();
 
-    for (DesktopRegion::Iterator it(frame->constUpdatedRegion()); !it.isAtEnd(); it.advance())
+    for (desktop::Region::Iterator it(updated_region_); !it.isAtEnd(); it.advance())
     {
-        const DesktopRect& rect = it.rect();
+        const desktop::Rect& rect = it.rect();
         const int stride = rect.width() * target_format_.bytesPerPixel();
 
         translator_->translate(frame->frameDataAtPos(rect.topLeft()),
@@ -143,4 +149,4 @@ void VideoEncoderZstd::encode(const DesktopFrame* frame, proto::desktop::VideoPa
     compressPacket(packet, translate_buffer_.get(), data_size);
 }
 
-} // namespace aspia
+} // namespace codec

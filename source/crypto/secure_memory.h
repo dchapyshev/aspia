@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,16 +16,18 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CRYPTO__SECURE_MEMORY_H_
-#define ASPIA_CRYPTO__SECURE_MEMORY_H_
+#ifndef CRYPTO__SECURE_MEMORY_H
+#define CRYPTO__SECURE_MEMORY_H
 
-#include <string>
+#include "base/memory/byte_array.h"
 
-namespace aspia {
+namespace crypto {
 
-void secureMemZero(void* data, size_t data_size);
-void secureMemZero(std::string* str);
+void memZero(void* data, size_t data_size);
+void memZero(std::string* str);
+void memZero(std::u16string* str);
+void memZero(base::ByteArray* str);
 
-} // namespace aspia
+} // namespace crypto
 
-#endif // ASPIA_CRYPTO__SECURE_MEMORY_H_
+#endif // CRYPTO__SECURE_MEMORY_H

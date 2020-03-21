@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,47 +16,90 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CLIENT__CLIENT_H_
-#define ASPIA_CLIENT__CLIENT_H_
+#ifndef CLIENT__CLIENT_H
+#define CLIENT__CLIENT_H
 
-#include "client/client_session.h"
-#include "client/connect_data.h"
-#include "network/network_channel_client.h"
+#include "base/version.h"
+#include "base/threading/thread.h"
+#include "client/client_config.h"
+#include "net/network_listener.h"
 
-namespace aspia {
+namespace base {
+class TaskRunner;
+} // namespace base
 
-class StatusDialog;
+namespace net {
+class Channel;
+} // namespace net
 
-class Client : public QObject
+namespace client {
+
+class Authenticator;
+class StatusWindow;
+class StatusWindowProxy;
+
+class Client
+    : public base::Thread::Delegate,
+      public net::Listener
 {
-    Q_OBJECT
-
 public:
-    Client(ConnectData&& connect_data, QObject* parent = nullptr);
-    ~Client() = default;
+    explicit Client(std::shared_ptr<base::TaskRunner> ui_task_runner);
+    virtual ~Client();
 
-    void start();
+    // Starts a session.
+    bool start(const Config& config);
 
-signals:
-    void finished(Client* client);
+    // Stops a session.
+    void stop();
 
-private slots:
-    void onChannelConnected();
-    void onChannelDisconnected();
-    void onChannelError(NetworkChannel::Error error);
-    void onSessionClosedByUser();
-    void onSessionError(const QString& message);
+    // Sets the implementation of the status window.
+    // The method must be called before calling method start().
+    void setStatusWindow(StatusWindow* status_window);
+
+    // Returns the version of the current client.
+    static base::Version version();
+
+    Config config() const { return config_; }
+
+protected:
+    std::shared_ptr<base::TaskRunner> ioTaskRunner() const;
+    std::shared_ptr<base::TaskRunner> uiTaskRunner() const;
+
+    std::u16string computerName() const;
+    proto::SessionType sessionType() const;
+
+    // Indicates that the session is started.
+    // When calling this method, the client implementation should display a session window.
+    virtual void onSessionStarted(const base::Version& peer_version) = 0;
+
+    // Indicates that the session is stopped.
+    // When calling this method, the client implementation must destroy the session window.
+    virtual void onSessionStopped() = 0;
+
+    // Sends outgoing message.
+    void sendMessage(const google::protobuf::MessageLite& message);
+
+    // base::Thread::Delegate implementation.
+    void onBeforeThreadRunning() override;
+    void onAfterThreadRunning() override;
+
+    // net::Listener implementation.
+    void onConnected() override;
+    void onDisconnected(net::ErrorCode error_code) override;
 
 private:
-    ConnectData connect_data_;
+    base::Thread io_thread_;
+    std::shared_ptr<base::TaskRunner> io_task_runner_;
+    std::shared_ptr<base::TaskRunner> ui_task_runner_;
 
-    QPointer<NetworkChannelClient> network_channel_;
-    QPointer<StatusDialog> status_dialog_;
-    QPointer<ClientSession> session_;
+    std::unique_ptr<net::Channel> channel_;
+    std::unique_ptr<Authenticator> authenticator_;
+    std::unique_ptr<StatusWindowProxy> status_window_proxy_;
 
-    DISALLOW_COPY_AND_ASSIGN(Client);
+    bool session_started_ = false;
+    Config config_;
 };
 
-} // namespace aspia
+} // namespace client
 
-#endif // ASPIA_CLIENT__CLIENT_H_
+#endif // CLIENT__CLIENT_H

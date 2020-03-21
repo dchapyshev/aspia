@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,13 +17,12 @@
 //
 
 #include "codec/video_decoder_zstd.h"
-
 #include "base/logging.h"
 #include "codec/pixel_translator.h"
 #include "codec/video_util.h"
-#include "desktop_capture/desktop_frame_aligned.h"
+#include "desktop/desktop_frame_aligned.h"
 
-namespace aspia {
+namespace codec {
 
 VideoDecoderZstd::VideoDecoderZstd()
     : stream_(ZSTD_createDStream())
@@ -37,16 +36,16 @@ std::unique_ptr<VideoDecoderZstd> VideoDecoderZstd::create()
     return std::unique_ptr<VideoDecoderZstd>(new VideoDecoderZstd());
 }
 
-bool VideoDecoderZstd::decode(const proto::desktop::VideoPacket& packet,
-                              DesktopFrame* target_frame)
+bool VideoDecoderZstd::decode(const proto::VideoPacket& packet,
+                              desktop::Frame* target_frame)
 {
     if (packet.has_format())
     {
-        const proto::desktop::VideoPacketFormat& format = packet.format();
+        const proto::VideoPacketFormat& format = packet.format();
 
-        source_frame_ = DesktopFrameAligned::create(
-            DesktopSize(format.screen_rect().width(), format.screen_rect().height()),
-            VideoUtil::fromVideoPixelFormat(format.pixel_format()), 32);
+        source_frame_ = desktop::FrameAligned::create(
+            desktop::Size(format.screen_rect().width(), format.screen_rect().height()),
+            parsePixelFormat(format.pixel_format()), 32);
 
         translator_ = PixelTranslator::create(source_frame_->format(), target_frame->format());
     }
@@ -62,12 +61,12 @@ bool VideoDecoderZstd::decode(const proto::desktop::VideoPacket& packet,
     size_t ret = ZSTD_initDStream(stream_.get());
     DCHECK(!ZSTD_isError(ret)) << ZSTD_getErrorName(ret);
 
-    DesktopRect frame_rect = DesktopRect::makeSize(source_frame_->size());
+    desktop::Rect frame_rect = desktop::Rect::makeSize(source_frame_->size());
     ZSTD_inBuffer input = { packet.data().data(), packet.data().size(), 0 };
 
     for (int i = 0; i < packet.dirty_rect_size(); ++i)
     {
-        DesktopRect rect = VideoUtil::fromVideoRect(packet.dirty_rect(i));
+        desktop::Rect rect = parseRect(packet.dirty_rect(i));
 
         if (!frame_rect.containsRect(rect))
         {
@@ -83,7 +82,7 @@ bool VideoDecoderZstd::decode(const proto::desktop::VideoPacket& packet,
 
         while (row_y < rect.height())
         {
-            size_t ret = ZSTD_decompressStream(stream_.get(), &output, &input);
+            ret = ZSTD_decompressStream(stream_.get(), &output, &input);
             if (ZSTD_isError(ret))
             {
                 LOG(LS_WARNING) << "ZSTD_decompressStream failed: " << ZSTD_getErrorName(ret);
@@ -111,4 +110,4 @@ bool VideoDecoderZstd::decode(const proto::desktop::VideoPacket& packet,
     return true;
 }
 
-} // namespace aspia
+} // namespace codec

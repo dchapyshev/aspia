@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,18 +16,17 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_BASE__WIN__REGISTRY_H_
-#define ASPIA_BASE__WIN__REGISTRY_H_
-
-#define WIN32_LEAN_AND_MEAN
-#define NOMINMAX
-#include <windows.h>
-
-#include <vector>
+#ifndef BASE__WIN__REGISTRY_H
+#define BASE__WIN__REGISTRY_H
 
 #include "base/macros_magic.h"
 
-namespace aspia {
+#include <string>
+#include <vector>
+
+#include <Windows.h>
+
+namespace base::win {
 
 class RegistryKey
 {
@@ -35,6 +34,9 @@ public:
     RegistryKey() = default;
     explicit RegistryKey(HKEY key);
     RegistryKey(HKEY rootkey, const wchar_t* subkey, REGSAM access);
+
+    RegistryKey(RegistryKey&& other) noexcept;
+    RegistryKey& operator=(RegistryKey&& other) noexcept;
 
     ~RegistryKey();
 
@@ -46,37 +48,39 @@ public:
     LONG createWithDisposition(HKEY rootkey, const wchar_t* subkey,
                                DWORD *disposition, REGSAM access);
 
+    // Creates a subkey or open it if it already exists.
+    LONG createKey(const wchar_t* name, REGSAM access);
+
     // Opens an existing reg key.
     LONG open(HKEY rootkey, const wchar_t* subkey, REGSAM access);
 
-    //
+    // Opens an existing reg key, given the relative key name.
+    LONG openKey(const wchar_t* relative_key_name, REGSAM access);
+
     // Returns false if this key does not have the specified value, or if an error
     // occurrs while attempting to access it.
-    //
     bool hasValue(const wchar_t* name) const;
 
-    //
-    // Reads raw data into |data|. If |name| is null or empty, reads the key's
-    // default value, if any.
-    //
+    // Returns the number of values for this key, or 0 if the number cannot be determined.
+    DWORD valueCount() const;
+
+    // Reads raw data into |data|. If |name| is null or empty, reads the key's default value, if any.
     LONG readValue(const wchar_t* name, void* data, DWORD* dsize, DWORD* dtype) const;
 
-    //
-    // Reads a REG_DWORD (uint32_t) into |out_value|. If |name| is null or empty,
-    // reads the key's default value, if any.
-    //
+    // Reads a REG_DWORD (uint32_t) into |out_value|. If |name| is null or empty, reads the key's
+    // default value, if any.
     LONG readValueDW(const wchar_t* name, DWORD* out_value) const;
 
-    //
+    // Reads a REG_QWORD (int64_t) into |out_value|. If |name| is null or empty, reads the key's
+    // default value, if any.
+    LONG readInt64(const wchar_t* name, int64_t* out_value) const;
+
     // Reads a REG_BINARY (array of chars) into |out_value|. If |name| is null or empty,
     // reads the key's default value, if any.
-    //
     LONG readValueBIN(const wchar_t* name, std::string* out_value) const;
 
-    //
     // Reads a string into |out_value|. If |name| is null or empty, reads
     // the key's default value, if any.
-    //
     LONG readValue(const wchar_t* name, std::wstring* out_value) const;
 
     // Sets raw data, including type.
@@ -88,10 +92,22 @@ public:
     // Sets a string value.
     LONG writeValue(const wchar_t* name, const wchar_t* in_value);
 
+    // Kills a key and everything that lives below it; please be careful when using it.
+    LONG deleteKey(const wchar_t* name);
+
+    // Deletes an empty subkey.  If the subkey has subkeys or values then this will fail.
+    LONG deleteEmptyKey(const wchar_t* name);
+
+    // Deletes a single value within the key.
+    LONG deleteValue(const wchar_t* name);
+
     // Closes this reg key.
     void close();
 
 private:
+    // Recursively deletes a key and all of its subkeys.
+    static LONG deleteKeyRecurse(HKEY root_key, const std::wstring& name, REGSAM access);
+
     HKEY key_ = nullptr;
     REGSAM wow64access_ = 0;
 
@@ -197,6 +213,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(RegistryKeyIterator);
 };
 
-} // namespace aspia
+} // namespace base::win
 
-#endif // ASPIA_BASE__WIN__REGISTRY_H_
+#endif // BASE__WIN__REGISTRY_H

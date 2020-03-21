@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,22 +16,22 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CRYPTO__DATA_CRYPTOR_CHACHA20_POLY1305_H_
-#define ASPIA_CRYPTO__DATA_CRYPTOR_CHACHA20_POLY1305_H_
+#ifndef CRYPTO__DATA_CRYPTOR_CHACHA20_POLY1305_H
+#define CRYPTO__DATA_CRYPTOR_CHACHA20_POLY1305_H
 
 #include "base/macros_magic.h"
 #include "crypto/data_cryptor.h"
 
-namespace aspia {
+namespace crypto {
 
 class DataCryptorChaCha20Poly1305 : public DataCryptor
 {
 public:
-    DataCryptorChaCha20Poly1305(const std::string& key);
+    DataCryptorChaCha20Poly1305(std::string_view key);
     ~DataCryptorChaCha20Poly1305();
 
-    bool encrypt(const std::string& in, std::string* out) override;
-    bool decrypt(const std::string& in, std::string* out) override;
+    bool encrypt(std::string_view in, std::string* out) override;
+    bool decrypt(std::string_view in, std::string* out) override;
 
 private:
     std::string key_;
@@ -39,6 +39,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(DataCryptorChaCha20Poly1305);
 };
 
-} // namespace aspia
+} // namespace crypto
 
-#endif // ASPIA_CRYPTO__DATA_CRYPTOR_CHACHA20_POLY1305_H_
+#endif // CRYPTO__DATA_CRYPTOR_CHACHA20_POLY1305_H

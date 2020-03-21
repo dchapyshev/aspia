@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -18,7 +18,7 @@
 
 #include "client/ui/authorization_dialog.h"
 
-namespace aspia {
+namespace client {
 
 AuthorizationDialog::AuthorizationDialog(QWidget* parent)
     : QDialog(parent)
@@ -78,6 +78,8 @@ void AuthorizationDialog::onShowPasswordButtonToggled(bool checked)
         ui.edit_password->setInputMethodHints(Qt::ImhHiddenText | Qt::ImhSensitiveData |
                                               Qt::ImhNoAutoUppercase | Qt::ImhNoPredictiveText);
     }
+
+    ui.edit_password->setFocus();
 }
 
 void AuthorizationDialog::onButtonBoxClicked(QAbstractButton* button)
@@ -90,4 +92,4 @@ void AuthorizationDialog::onButtonBoxClicked(QAbstractButton* button)
     close();
 }
 
-} // namespace aspia
+} // namespace client

@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -18,172 +18,391 @@
 
 #include "ipc/ipc_channel.h"
 
+#include "base/location.h"
 #include "base/logging.h"
+#include "base/message_loop/message_loop.h"
+#include "base/message_loop/message_pump_asio.h"
+#include "base/strings/unicode.h"
+#include "base/win/scoped_object.h"
+#include "ipc/ipc_channel_proxy.h"
+#include "ipc/ipc_listener.h"
 
-namespace aspia {
+#include <asio/read.hpp>
+#include <asio/write.hpp>
+#include <asio/post.hpp>
 
-Q_DECLARE_METATYPE(QLocalSocket::LocalSocketError);
+#include <functional>
+
+#include <psapi.h>
+
+namespace ipc {
 
 namespace {
 
-constexpr uint32_t kMaxMessageSize = 16 * 1024 * 1024; // 16MB
+const char16_t kPipeNamePrefix[] = u"\\\\.\\pipe\\aspia.";
+const uint32_t kMaxMessageSize = 16 * 1024 * 1024; // 16MB
+const DWORD kConnectTimeout = 5000; // ms
+
+base::ProcessId clientProcessIdImpl(HANDLE pipe_handle)
+{
+    ULONG process_id = base::kNullProcessId;
+
+    if (!GetNamedPipeClientProcessId(pipe_handle, &process_id))
+    {
+        PLOG(LS_WARNING) << "GetNamedPipeClientProcessId failed";
+        return base::kNullProcessId;
+    }
+
+    return process_id;
+}
+
+base::ProcessId serverProcessIdImpl(HANDLE pipe_handle)
+{
+    ULONG process_id = base::kNullProcessId;
+
+    if (!GetNamedPipeServerProcessId(pipe_handle, &process_id))
+    {
+        PLOG(LS_WARNING) << "GetNamedPipeServerProcessId failed";
+        return base::kNullProcessId;
+    }
+
+    return process_id;
+}
+
+base::SessionId clientSessionIdImpl(HANDLE pipe_handle)
+{
+    ULONG session_id = base::kInvalidSessionId;
+
+    if (!GetNamedPipeClientSessionId(pipe_handle, &session_id))
+    {
+        PLOG(LS_WARNING) << "GetNamedPipeClientSessionId failed";
+        return base::kInvalidSessionId;
+    }
+
+    return session_id;
+}
+
+base::SessionId serverSessionIdImpl(HANDLE pipe_handle)
+{
+    ULONG session_id = base::kInvalidSessionId;
+
+    if (!GetNamedPipeServerSessionId(pipe_handle, &session_id))
+    {
+        PLOG(LS_WARNING) << "GetNamedPipeServerSessionId failed";
+        return base::kInvalidSessionId;
+    }
+
+    return session_id;
+}
 
 } // namespace
 
-IpcChannel::IpcChannel(QLocalSocket* socket, QObject* parent)
-    : QObject(parent),
-      socket_(socket)
+Channel::Channel()
+    : stream_(base::MessageLoop::current()->pumpAsio()->ioContext()),
+      proxy_(new ChannelProxy(base::MessageLoop::current()->taskRunner(), this))
 {
-    DCHECK(socket_);
+    // Nothing
+}
 
-    qRegisterMetaType<QLocalSocket::LocalSocketError>();
+Channel::Channel(std::u16string_view channel_name, asio::windows::stream_handle&& stream)
+    : channel_name_(channel_name),
+      stream_(std::move(stream)),
+      proxy_(new ChannelProxy(base::MessageLoop::current()->taskRunner(), this)),
+      is_connected_(true)
+{
+    peer_process_id_ = clientProcessIdImpl(stream_.native_handle());
+    peer_session_id_ = clientSessionIdImpl(stream_.native_handle());
+}
 
-    socket_->setParent(this);
+Channel::~Channel()
+{
+    DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
 
-    connect(socket_, &QLocalSocket::connected, this, &IpcChannel::connected);
-    connect(socket_, &QLocalSocket::bytesWritten, this, &IpcChannel::onBytesWritten);
-    connect(socket_, &QLocalSocket::readyRead, this, &IpcChannel::onReadyRead);
+    proxy_->willDestroyCurrentChannel();
+    proxy_ = nullptr;
 
-    connect(socket_, &QLocalSocket::disconnected,
-            this, &IpcChannel::disconnected,
-            Qt::QueuedConnection);
+    listener_ = nullptr;
 
-    connect(socket_, QOverload<QLocalSocket::LocalSocketError>::of(&QLocalSocket::error),
-            this, &IpcChannel::onError,
-            Qt::QueuedConnection);
+    disconnect();
+}
+
+std::shared_ptr<ChannelProxy> Channel::channelProxy()
+{
+    return proxy_;
+}
+
+void Channel::setListener(Listener* listener)
+{
+    listener_ = listener;
+}
+
+bool Channel::connect(std::u16string_view channel_id)
+{
+    DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
+
+    const DWORD flags = SECURITY_SQOS_PRESENT | SECURITY_IDENTIFICATION | FILE_FLAG_OVERLAPPED;
+    channel_name_ = channelName(channel_id);
+
+    base::win::ScopedHandle handle;
+
+    while (true)
+    {
+        handle.reset(CreateFileW(reinterpret_cast<const wchar_t*>(channel_name_.c_str()),
+                                 GENERIC_WRITE | GENERIC_READ,
+                                 0,
+                                 nullptr,
+                                 OPEN_EXISTING,
+                                 flags,
+                                 nullptr));
+        if (handle.isValid())
+            break;
+
+        DWORD error_code = GetLastError();
+
+        if (error_code != ERROR_PIPE_BUSY)
+        {
+            LOG(LS_WARNING) << "Failed to connect to the named pipe: "
+                            << base::SystemError::toString(error_code);
+            return false;
+        }
+
+        if (!WaitNamedPipeW(reinterpret_cast<const wchar_t*>(channel_name_.c_str()),
+                            kConnectTimeout))
+        {
+            PLOG(LS_WARNING) << "WaitNamedPipeW failed";
+            return false;
+        }
+    }
+
+    std::error_code error_code;
+    stream_.assign(handle.release(), error_code);
+    if (error_code)
+        return false;
+
+    peer_process_id_ = serverProcessIdImpl(stream_.native_handle());
+    peer_session_id_ = serverSessionIdImpl(stream_.native_handle());
+
+    is_connected_ = true;
+    return true;
+}
+
+void Channel::disconnect()
+{
+    DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
+
+    if (!is_connected_)
+        return;
+
+    is_connected_ = false;
+
+    std::error_code ignored_code;
+
+    stream_.cancel(ignored_code);
+    stream_.close(ignored_code);
+}
+
+bool Channel::isConnected() const
+{
+    DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
+    return is_connected_;
+}
+
+bool Channel::isPaused() const
+{
+    DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
+    return is_paused_;
+}
+
+void Channel::pause()
+{
+    DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
+    is_paused_ = true;
+}
+
+void Channel::resume()
+{
+    DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
+
+    if (!is_connected_ || !is_paused_)
+        return;
+
+    is_paused_ = false;
+
+    // If we have a message that was received before the pause command.
+    if (read_size_)
+        onMessageReceived();
+
+    DCHECK_EQ(read_size_, 0);
+
+    doReadMessage();
+}
+
+void Channel::send(base::ByteArray&& buffer)
+{
+    DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
+
+    const bool schedule_write = write_queue_.empty();
+
+    // Add the buffer to the queue for sending.
+    write_queue_.emplace(std::move(buffer));
+
+    if (schedule_write)
+        doWrite();
+}
+
+std::filesystem::path Channel::peerFilePath() const
+{
+    base::win::ScopedHandle process(
+        OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, peer_process_id_));
+    if (!process.isValid())
+    {
+        PLOG(LS_WARNING) << "OpenProcess failed";
+        return std::filesystem::path();
+    }
+
+    wchar_t buffer[MAX_PATH] = { 0 };
+
+    if (!GetModuleFileNameExW(process.get(), nullptr, buffer, std::size(buffer)))
+    {
+        PLOG(LS_WARNING) << "GetModuleFileNameExW failed";
+        return std::filesystem::path();
+    }
+
+    return buffer;
 }
 
 // static
-IpcChannel* IpcChannel::createClient(QObject* parent)
+std::u16string Channel::channelName(std::u16string_view channel_id)
 {
-    return new IpcChannel(new QLocalSocket(), parent);
+    std::u16string name(kPipeNamePrefix);
+    name.append(channel_id);
+    return name;
 }
 
-void IpcChannel::connectToServer(const QString& channel_name)
+void Channel::onErrorOccurred(const base::Location& location, const std::error_code& error_code)
 {
-    socket_->connectToServer(channel_name);
-}
+    if (error_code == asio::error::operation_aborted)
+        return;
 
-void IpcChannel::stop()
-{
-    if (socket_->state() != QLocalSocket::UnconnectedState)
+    LOG(LS_WARNING) << "Error in IPC channel '" << channel_name_ << "': "
+                    << base::utf16FromLocal8Bit(error_code.message())
+                    << " (code: " << error_code.value()
+                    << ", location: " << location.toString() << ")";
+
+    disconnect();
+
+    if (listener_)
     {
-        socket_->abort();
-
-        if (socket_->state() != QLocalSocket::UnconnectedState)
-            socket_->waitForDisconnected();
+        listener_->onDisconnected();
+        listener_ = nullptr;
     }
 }
 
-void IpcChannel::start()
+void Channel::doWrite()
 {
-    onReadyRead();
-}
+    write_size_ = write_queue_.front().size();
 
-void IpcChannel::send(const QByteArray& buffer)
-{
-    bool schedule_write = write_queue_.isEmpty();
-
-    write_queue_.push_back(buffer);
-
-    if (schedule_write)
-        scheduleWrite();
-}
-
-void IpcChannel::onError(QLocalSocket::LocalSocketError /* socket_error */)
-{
-    LOG(LS_WARNING) << "IPC channel error: " << socket_->errorString().toStdString();
-    emit errorOccurred();
-}
-
-void IpcChannel::onBytesWritten(int64_t bytes)
-{
-    const QByteArray& write_buffer = write_queue_.front();
-
-    written_ += bytes;
-
-    if (written_ < sizeof(MessageSizeType))
-    {
-        socket_->write(reinterpret_cast<const char*>(&write_size_) + written_,
-                       sizeof(MessageSizeType) - written_);
-    }
-    else if (written_ < sizeof(MessageSizeType) + write_buffer.size())
-    {
-        socket_->write(write_buffer.data() + (written_ - sizeof(MessageSizeType)),
-                       write_buffer.size() - (written_ - sizeof(MessageSizeType)));
-    }
-    else
-    {
-        write_queue_.pop_front();
-        written_ = 0;
-
-        if (!write_queue_.empty())
-            scheduleWrite();
-    }
-}
-
-void IpcChannel::onReadyRead()
-{
-    int64_t current;
-
-    for (;;)
-    {
-        if (!read_size_received_)
-        {
-            current = socket_->read(reinterpret_cast<char*>(&read_size_) + read_,
-                                    sizeof(MessageSizeType) - read_);
-            if (current + read_ == sizeof(MessageSizeType))
-            {
-                read_size_received_ = true;
-
-                if (!read_size_ || read_size_ > kMaxMessageSize)
-                {
-                    LOG(LS_WARNING) << "Wrong message size: " << read_size_;
-                    socket_->abort();
-                    return;
-                }
-
-                if (read_buffer_.capacity() < static_cast<int>(read_size_))
-                    read_buffer_.reserve(read_size_);
-
-                read_buffer_.resize(read_size_);
-                read_ = 0;
-                continue;
-            }
-        }
-        else if (read_ < read_size_)
-        {
-            current = socket_->read(read_buffer_.data() + read_, read_size_ - read_);
-        }
-        else
-        {
-            read_size_received_ = false;
-            read_ = 0;
-
-            emit messageReceived(read_buffer_);
-            continue;
-        }
-
-        if (current == 0)
-            break;
-
-        read_ += current;
-    }
-}
-
-void IpcChannel::scheduleWrite()
-{
-    const QByteArray& write_buffer = write_queue_.front();
-
-    write_size_ = write_buffer.size();
     if (!write_size_ || write_size_ > kMaxMessageSize)
     {
-        LOG(LS_WARNING) << "Wrong message size: " << write_size_;
-        socket_->abort();
+        onErrorOccurred(FROM_HERE, asio::error::message_size);
         return;
     }
 
-    socket_->write(reinterpret_cast<const char*>(&write_size_), sizeof(MessageSizeType));
+    asio::async_write(stream_, asio::buffer(&write_size_, sizeof(write_size_)),
+        [this](const std::error_code& error_code, size_t bytes_transferred)
+    {
+        if (error_code)
+        {
+            onErrorOccurred(FROM_HERE, error_code);
+            return;
+        }
+
+        DCHECK_EQ(bytes_transferred, sizeof(write_size_));
+        DCHECK(!write_queue_.empty());
+
+        const base::ByteArray& buffer = write_queue_.front();
+
+        // Send the buffer to the recipient.
+        asio::async_write(stream_, asio::buffer(buffer.data(), buffer.size()),
+            [this](const std::error_code& error_code, size_t bytes_transferred)
+        {
+            if (error_code)
+            {
+                onErrorOccurred(FROM_HERE, error_code);
+                return;
+            }
+
+            DCHECK_EQ(bytes_transferred, write_size_);
+            DCHECK(!write_queue_.empty());
+
+            // Delete the sent message from the queue.
+            write_queue_.pop();
+
+            // If the queue is not empty, then we send the following message.
+            if (write_queue_.empty() && !proxy_->reloadWriteQueue(&write_queue_))
+                return;
+
+            doWrite();
+        });
+    });
 }
 
-} // namespace aspia
+void Channel::doReadMessage()
+{
+    asio::async_read(stream_, asio::buffer(&read_size_, sizeof(read_size_)),
+        [this](const std::error_code& error_code, size_t bytes_transferred)
+    {
+        if (error_code)
+        {
+            onErrorOccurred(FROM_HERE, error_code);
+            return;
+        }
+
+        DCHECK_EQ(bytes_transferred, sizeof(read_size_));
+
+        if (!read_size_ || read_size_ > kMaxMessageSize)
+        {
+            onErrorOccurred(FROM_HERE, asio::error::message_size);
+            return;
+        }
+
+        if (read_buffer_.capacity() < read_size_)
+            read_buffer_.reserve(read_size_);
+
+        read_buffer_.resize(read_size_);
+
+        asio::async_read(stream_, asio::buffer(read_buffer_.data(), read_buffer_.size()),
+            [this](const std::error_code& error_code, size_t bytes_transferred)
+        {
+            if (error_code)
+            {
+                onErrorOccurred(FROM_HERE, error_code);
+                return;
+            }
+
+            DCHECK_EQ(bytes_transferred, read_size_);
+
+            if (is_paused_)
+                return;
+
+            onMessageReceived();
+
+            if (is_paused_)
+                return;
+
+            DCHECK_EQ(read_size_, 0);
+
+            doReadMessage();
+        });
+    });
+}
+
+void Channel::onMessageReceived()
+{
+    if (listener_)
+        listener_->onMessageReceived(read_buffer_);
+
+    read_size_ = 0;
+}
+
+} // namespace ipc

@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,14 +17,14 @@
 //
 
 #include "common/file_platform_util.h"
+#include "base/win/scoped_user_object.h"
 
 #include <QtWin>
+
 #include <shellapi.h>
 #include <shlwapi.h>
 
-#include "base/win/scoped_user_object.h"
-
-namespace aspia {
+namespace common {
 
 namespace {
 
@@ -51,12 +51,12 @@ QIcon stockIcon(SHSTOCKICONID icon_id)
 
     if (SUCCEEDED(SHGetStockIconInfo(icon_id, SHGSI_ICON | SHGSI_SMALLICON, &icon_info)))
     {
-        ScopedHICON icon(icon_info.hIcon);
+        base::win::ScopedHICON icon(icon_info.hIcon);
         if (icon.isValid())
             return QtWin::fromHICON(icon);
     }
 
-    return QIcon(QStringLiteral(":/icon/document.png"));
+    return QIcon(QStringLiteral(":/img/document.png"));
 }
 
 } // namespace
@@ -73,7 +73,7 @@ QPair<QIcon, QString> FilePlatformUtil::fileTypeInfo(const QString& file_name)
                    sizeof(file_info),
                    SHGFI_USEFILEATTRIBUTES | SHGFI_ICON | SHGFI_SMALLICON | SHGFI_TYPENAME);
 
-    ScopedHICON icon(file_info.hIcon);
+    base::win::ScopedHICON icon(file_info.hIcon);
     if (icon.isValid())
     {
         return QPair<QIcon, QString>(QtWin::fromHICON(icon),
@@ -81,7 +81,7 @@ QPair<QIcon, QString> FilePlatformUtil::fileTypeInfo(const QString& file_name)
                                          reinterpret_cast<const ushort*>(file_info.szTypeName)));
     }
 
-    return QPair<QIcon, QString>(QIcon(QStringLiteral(":/icon/document.png")),
+    return QPair<QIcon, QString>(QIcon(QStringLiteral(":/img/document.png")),
                                  QString::fromUtf16(
                                      reinterpret_cast<const ushort*>(file_info.szTypeName)));
 }
@@ -99,32 +99,32 @@ QIcon FilePlatformUtil::directoryIcon()
 }
 
 // static
-QIcon FilePlatformUtil::driveIcon(proto::file_transfer::DriveList::Item::Type type)
+QIcon FilePlatformUtil::driveIcon(proto::DriveList::Item::Type type)
 {
     // Desktop (not present in official header)
     static const SHSTOCKICONID SIID_DESKTOP = static_cast<SHSTOCKICONID>(34);
 
     switch (type)
     {
-        case proto::file_transfer::DriveList::Item::TYPE_FIXED:
+        case proto::DriveList::Item::TYPE_FIXED:
             return stockIcon(SIID_DRIVEFIXED);
 
-        case proto::file_transfer::DriveList::Item::TYPE_CDROM:
+        case proto::DriveList::Item::TYPE_CDROM:
             return stockIcon(SIID_DRIVECD);
 
-        case proto::file_transfer::DriveList::Item::TYPE_REMOVABLE:
+        case proto::DriveList::Item::TYPE_REMOVABLE:
             return stockIcon(SIID_DRIVEREMOVE);
 
-        case proto::file_transfer::DriveList::Item::TYPE_REMOTE:
+        case proto::DriveList::Item::TYPE_REMOTE:
             return stockIcon(SIID_DRIVENET);
 
-        case proto::file_transfer::DriveList::Item::TYPE_RAM:
+        case proto::DriveList::Item::TYPE_RAM:
             return stockIcon(SIID_DRIVERAM);
 
-        case proto::file_transfer::DriveList::Item::TYPE_HOME_FOLDER:
+        case proto::DriveList::Item::TYPE_HOME_FOLDER:
             return stockIcon(SIID_FOLDER);
 
-        case proto::file_transfer::DriveList::Item::TYPE_DESKTOP_FOLDER:
+        case proto::DriveList::Item::TYPE_DESKTOP_FOLDER:
             return stockIcon(SIID_DESKTOP);
 
         default:
@@ -191,7 +191,25 @@ bool FilePlatformUtil::isValidFileName(const QString& file_name)
 // static
 bool FilePlatformUtil::isRelativePath(const QString& path)
 {
-    return !!PathIsRelativeW(qUtf16Printable(path));
+    QString native_path(path);
+    native_path.replace(QLatin1Char('/'), QLatin1Char('\\'));
+    return !!PathIsRelativeW(qUtf16Printable(native_path));
 }
 
-} // namespace aspia
+// static
+bool FilePlatformUtil::isNetworkPath(const QString& path)
+{
+    QString native_path(path);
+    native_path.replace(QLatin1Char('/'), QLatin1Char('\\'));
+    return !!PathIsNetworkPathW(qUtf16Printable(native_path));
+}
+
+// static
+bool FilePlatformUtil::isRootPath(const QString& path)
+{
+    QString native_path(path);
+    native_path.replace(QLatin1Char('/'), QLatin1Char('\\'));
+    return !!PathIsRootW(qUtf16Printable(native_path));
+}
+
+} // namespace common

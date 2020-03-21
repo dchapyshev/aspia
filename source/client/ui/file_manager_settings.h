@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,14 +16,14 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CLIENT__UI__FILE_MANAGER_SETTINGS_H_
-#define ASPIA_CLIENT__UI__FILE_MANAGER_SETTINGS_H_
-
-#include <QSettings>
+#ifndef CLIENT__UI__FILE_MANAGER_SETTINGS_H
+#define CLIENT__UI__FILE_MANAGER_SETTINGS_H
 
 #include "base/macros_magic.h"
 
-namespace aspia {
+#include <QSettings>
+
+namespace client {
 
 class FileManagerSettings
 {
@@ -34,20 +34,8 @@ public:
     QByteArray windowGeometry() const;
     void setWindowGeometry(const QByteArray& geometry);
 
-    QByteArray splitterState() const;
-    void setSplitterState(const QByteArray& state);
-
-    QByteArray localDriveListState() const;
-    void setLocalDriveListState(const QByteArray& state);
-
-    QByteArray localFileListState() const;
-    void setLocalFileListState(const QByteArray& state);
-
-    QByteArray remoteDriveListState() const;
-    void setRemoteDriveListState(const QByteArray& state);
-
-    QByteArray remoteFileListState() const;
-    void setRemoteFileListState(const QByteArray& state);
+    QByteArray windowState() const;
+    void setWindowState(const QByteArray& state);
 
 private:
     QSettings settings_;
@@ -55,6 +43,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(FileManagerSettings);
 };
 
-} // namespace aspia
+} // namespace client
 
-#endif // ASPIA_CLIENT__UI__FILE_MANAGER_SETTINGS_H_
+#endif // CLIENT__UI__FILE_MANAGER_SETTINGS_H

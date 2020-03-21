@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,13 +17,12 @@
 //
 
 #include "codec/scoped_vpx_codec.h"
+#include "base/logging.h"
 
 #define VPX_CODEC_DISABLE_COMPAT 1
 #include "vpx/vpx_codec.h"
 
-#include "base/logging.h"
-
-namespace aspia {
+namespace codec {
 
 void VpxCodecDeleter::operator()(vpx_codec_ctx_t* codec)
 {
@@ -35,4 +34,4 @@ void VpxCodecDeleter::operator()(vpx_codec_ctx_t* codec)
     }
 }
 
-} // namespace aspia
+} // namespace codec

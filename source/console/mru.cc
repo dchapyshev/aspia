@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,10 +17,9 @@
 //
 
 #include "console/mru.h"
-
 #include "build/build_config.h"
 
-namespace aspia {
+namespace console {
 
 namespace {
 
@@ -122,4 +121,9 @@ bool Mru::isPinnedFile(const QString& file_path) const
 #endif
 }
 
-} // namespace aspia
+void Mru::clearRecentOpen()
+{
+    recent_list_.clear();
+}
+
+} // namespace console

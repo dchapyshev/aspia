@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,25 +17,25 @@
 //
 
 #include "codec/video_decoder_vpx.h"
+#include "base/logging.h"
+#include "codec/video_util.h"
+#include "desktop/desktop_frame.h"
 
 #include <libyuv/convert_from.h>
 #include <libyuv/convert_argb.h>
 
-#include "base/logging.h"
-#include "codec/video_util.h"
-
-namespace aspia {
+namespace codec {
 
 namespace {
 
-bool convertImage(const proto::desktop::VideoPacket& packet,
+bool convertImage(const proto::VideoPacket& packet,
                   vpx_image_t* image,
-                  DesktopFrame* frame)
+                  desktop::Frame* frame)
 {
     if (image->fmt != VPX_IMG_FMT_I420)
         return false;
 
-    DesktopRect frame_rect = DesktopRect::makeSize(frame->size());
+    desktop::Rect frame_rect = desktop::Rect::makeSize(frame->size());
 
     uint8_t* y_data = image->planes[0];
     uint8_t* u_data = image->planes[1];
@@ -46,7 +46,7 @@ bool convertImage(const proto::desktop::VideoPacket& packet,
 
     for (int i = 0; i < packet.dirty_rect_size(); ++i)
     {
-        DesktopRect rect = VideoUtil::fromVideoRect(packet.dirty_rect(i));
+        desktop::Rect rect = parseRect(packet.dirty_rect(i));
 
         if (!frame_rect.containsRect(rect))
         {
@@ -74,18 +74,17 @@ bool convertImage(const proto::desktop::VideoPacket& packet,
 // static
 std::unique_ptr<VideoDecoderVPX> VideoDecoderVPX::createVP8()
 {
-    return std::unique_ptr<VideoDecoderVPX>(
-        new VideoDecoderVPX(proto::desktop::VIDEO_ENCODING_VP8));
+    return std::unique_ptr<VideoDecoderVPX>(new VideoDecoderVPX(proto::VIDEO_ENCODING_VP8));
 }
 
 // static
 std::unique_ptr<VideoDecoderVPX> VideoDecoderVPX::createVP9()
 {
     return std::unique_ptr<VideoDecoderVPX>(
-        new VideoDecoderVPX(proto::desktop::VIDEO_ENCODING_VP9));
+        new VideoDecoderVPX(proto::VIDEO_ENCODING_VP9));
 }
 
-VideoDecoderVPX::VideoDecoderVPX(proto::desktop::VideoEncoding encoding)
+VideoDecoderVPX::VideoDecoderVPX(proto::VideoEncoding encoding)
 {
     codec_.reset(new vpx_codec_ctx_t());
 
@@ -99,11 +98,11 @@ VideoDecoderVPX::VideoDecoderVPX(proto::desktop::VideoEncoding encoding)
 
     switch (encoding)
     {
-        case proto::desktop::VIDEO_ENCODING_VP8:
+        case proto::VIDEO_ENCODING_VP8:
             algo = vpx_codec_vp8_dx();
             break;
 
-        case proto::desktop::VIDEO_ENCODING_VP9:
+        case proto::VIDEO_ENCODING_VP9:
             algo = vpx_codec_vp9_dx();
             break;
 
@@ -116,7 +115,7 @@ VideoDecoderVPX::VideoDecoderVPX(proto::desktop::VideoEncoding encoding)
     CHECK_EQ(ret, VPX_CODEC_OK);
 }
 
-bool VideoDecoderVPX::decode(const proto::desktop::VideoPacket& packet, DesktopFrame* frame)
+bool VideoDecoderVPX::decode(const proto::VideoPacket& packet, desktop::Frame* frame)
 {
     // Do the actual decoding.
     vpx_codec_err_t ret =
@@ -145,7 +144,7 @@ bool VideoDecoderVPX::decode(const proto::desktop::VideoPacket& packet, DesktopF
         return false;
     }
 
-    if (DesktopSize(image->d_w, image->d_h) != frame->size())
+    if (desktop::Size(image->d_w, image->d_h) != frame->size())
     {
         LOG(LS_WARNING) << "Size of the encoded frame doesn't match size in the header";
         return false;
@@ -154,4 +153,4 @@ bool VideoDecoderVPX::decode(const proto::desktop::VideoPacket& packet, DesktopF
     return convertImage(packet, image, frame);
 }
 
-} // namespace aspia
+} // namespace codec

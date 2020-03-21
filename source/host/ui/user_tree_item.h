@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,31 +16,34 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_HOST__UI__USER_TREE_ITEM_H_
-#define ASPIA_HOST__UI__USER_TREE_ITEM_H_
+#ifndef HOST__UI__USER_TREE_ITEM_H
+#define HOST__UI__USER_TREE_ITEM_H
+
+#include "base/macros_magic.h"
+#include "host/user.h"
 
 #include <QTreeWidget>
 
-#include "base/macros_magic.h"
+namespace host {
 
-namespace aspia {
-
-struct SrpUser;
+class User;
 
 class UserTreeItem : public QTreeWidgetItem
 {
 public:
-    UserTreeItem(size_t index, const SrpUser& user);
+    UserTreeItem(const User& user);
     ~UserTreeItem() = default;
 
-    size_t userIndex() const { return index_; }
+    const User& user() const { return user_; }
+    void setUser(const User& user);
 
 private:
-    size_t index_;
+    void updateData();
 
+    User user_;
     DISALLOW_COPY_AND_ASSIGN(UserTreeItem);
 };
 
-} // namespace aspia
+} // namespace host
 
-#endif // ASPIA_HOST__UI__USER_TREE_ITEM_H_
+#endif // HOST__UI__USER_TREE_ITEM_H

@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,15 +16,15 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_COMMON__FILE_PACKET_H_
-#define ASPIA_COMMON__FILE_PACKET_H_
+#ifndef COMMON__FILE_PACKET_H
+#define COMMON__FILE_PACKET_H
 
-namespace aspia {
+namespace common {
 
 // When transferring a file is divided into parts and each part is transmitted separately.
 // This parameter specifies the size of the part.
-static const size_t kMaxFilePacketSize = 32 * 1024; // 32 kB
+static const size_t kMaxFilePacketSize = 16 * 1024; // 16 kB
 
-} // namespace aspia
+} // namespace common
 
-#endif // ASPIA_COMMON__FILE_PACKET_H_
+#endif // COMMON__FILE_PACKET_H

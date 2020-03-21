@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,14 +16,13 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CRYPTO__RANDOM_H_
-#define ASPIA_CRYPTO__RANDOM_H_
-
-#include <string>
+#ifndef CRYPTO__RANDOM_H
+#define CRYPTO__RANDOM_H
 
 #include "base/macros_magic.h"
+#include "base/memory/byte_array.h"
 
-namespace aspia {
+namespace crypto {
 
 class Random
 {
@@ -32,16 +31,18 @@ public:
     // If successful, returns |true| otherwise |false|.
     static bool fillBuffer(void* buffer, size_t size);
 
-    // Generates a random buffer of size |size|. If the buffer is empty, an error occurred.
-    static std::string generateBuffer(size_t size);
+    // Generates a random buffer of size |size|.
+    static base::ByteArray byteArray(size_t size);
+    static std::string string(size_t size);
 
-    // Generates a random number. If an error occurs, it returns 0.
-    static uint32_t generateNumber();
+    // Generates a random number.
+    static uint32_t number32();
+    static uint64_t number64();
 
 private:
     DISALLOW_COPY_AND_ASSIGN(Random);
 };
 
-} // namespace aspia
+} // namespace crypto
 
-#endif // ASPIA_CRYPTO__RANDOM_H_
+#endif // CRYPTO__RANDOM_H

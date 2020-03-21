@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,15 +16,15 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CLIENT__UI__FILE_LIST_H_
-#define ASPIA_CLIENT__UI__FILE_LIST_H_
+#ifndef CLIENT__UI__FILE_LIST_H
+#define CLIENT__UI__FILE_LIST_H
+
+#include "client/file_transfer.h"
+#include "proto/file_transfer.pb.h"
 
 #include <QTreeView>
 
-#include "client/file_transfer.h"
-#include "protocol/file_transfer_session.pb.h"
-
-namespace aspia {
+namespace client {
 
 class AddressBarModel;
 class FileListModel;
@@ -38,22 +38,19 @@ public:
     ~FileList() = default;
 
     void showDriveList(AddressBarModel* model);
-    void showFileList(const proto::file_transfer::FileList& file_list);
+    void showFileList(const proto::FileList& file_list);
     void setMimeType(const QString& mime_type);
     bool isDriveListShown() const;
     bool isFileListShown() const;
     void createFolder();
 
-    void setDriveListState(const QByteArray& state);
-    QByteArray driveListState() const;
-
-    void setFileListState(const QByteArray& state);
-    QByteArray fileListState() const;
+    void restoreState(const QByteArray& state);
+    QByteArray saveState() const;
 
 signals:
     void nameChangeRequest(const QString& old_name, const QString& new_name);
     void createFolderRequest(const QString& name);
-    void fileListDropped(const QString& folder_name, const QList<FileTransfer::Item>& files);
+    void fileListDropped(const QString& folder_name, const std::vector<FileTransfer::Item>& files);
 
 protected:
     // QTreeView implemenation.
@@ -71,6 +68,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(FileList);
 };
 
-} // namespace aspia
+} // namespace client
 
-#endif // ASPIA_CLIENT__UI__FILE_LIST_H_
+#endif // CLIENT__UI__FILE_LIST_H

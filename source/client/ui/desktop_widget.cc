@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -18,20 +18,19 @@
 
 #include "client/ui/desktop_widget.h"
 
+#include "common/keycode_converter.h"
+#include "client/ui/frame_qimage.h"
+#include "proto/desktop.pb.h"
+
 #include <QApplication>
 #include <QPainter>
 #include <QWheelEvent>
 
-#include "base/keycode_converter.h"
-#include "desktop_capture/desktop_frame_qimage.h"
-#include "protocol/desktop_session.pb.h"
-
-namespace aspia {
+namespace client {
 
 namespace {
 
-constexpr uint32_t kWheelMask =
-    proto::desktop::PointerEvent::WHEEL_DOWN | proto::desktop::PointerEvent::WHEEL_UP;
+constexpr uint32_t kWheelMask = proto::PointerEvent::WHEEL_DOWN | proto::PointerEvent::WHEEL_UP;
 
 bool isNumLockActivated()
 {
@@ -59,8 +58,9 @@ bool isModifierKey(int key)
 
 } // namespace
 
-DesktopWidget::DesktopWidget(QWidget* parent)
-    : QWidget(parent)
+DesktopWidget::DesktopWidget(Delegate* delegate, QWidget* parent)
+    : QWidget(parent),
+      delegate_(delegate)
 {
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     setFocusPolicy(Qt::StrongFocus);
@@ -69,14 +69,14 @@ DesktopWidget::DesktopWidget(QWidget* parent)
     setMouseTracking(true);
 }
 
-void DesktopWidget::resizeDesktopFrame(const DesktopSize& screen_size)
-{
-    frame_ = DesktopFrameQImage::create(screen_size);
-}
-
-DesktopFrame* DesktopWidget::desktopFrame()
+desktop::Frame* DesktopWidget::desktopFrame()
 {
     return frame_.get();
+}
+
+void DesktopWidget::setDesktopFrame(std::shared_ptr<desktop::Frame>& frame)
+{
+    frame_ = std::move(frame);
 }
 
 void DesktopWidget::doMouseEvent(QEvent::Type event_type,
@@ -98,13 +98,13 @@ void DesktopWidget::doMouseEvent(QEvent::Type event_type,
         mask = 0;
 
         if (buttons & Qt::LeftButton)
-            mask |= proto::desktop::PointerEvent::LEFT_BUTTON;
+            mask |= proto::PointerEvent::LEFT_BUTTON;
 
         if (buttons & Qt::MiddleButton)
-            mask |= proto::desktop::PointerEvent::MIDDLE_BUTTON;
+            mask |= proto::PointerEvent::MIDDLE_BUTTON;
 
         if (buttons & Qt::RightButton)
-            mask |= proto::desktop::PointerEvent::RIGHT_BUTTON;
+            mask |= proto::PointerEvent::RIGHT_BUTTON;
     }
 
     int wheel_steps = 0;
@@ -113,12 +113,12 @@ void DesktopWidget::doMouseEvent(QEvent::Type event_type,
     {
         if (delta.y() < 0)
         {
-            mask |= proto::desktop::PointerEvent::WHEEL_DOWN;
+            mask |= proto::PointerEvent::WHEEL_DOWN;
             wheel_steps = -delta.y() / QWheelEvent::DefaultDeltasPerStep;
         }
         else
         {
-            mask |= proto::desktop::PointerEvent::WHEEL_UP;
+            mask |= proto::PointerEvent::WHEEL_UP;
             wheel_steps = delta.y() / QWheelEvent::DefaultDeltasPerStep;
         }
 
@@ -135,13 +135,13 @@ void DesktopWidget::doMouseEvent(QEvent::Type event_type,
         {
             for (int i = 0; i < wheel_steps; ++i)
             {
-                emit sendPointerEvent(pos, mask);
-                emit sendPointerEvent(pos, mask & ~kWheelMask);
+                delegate_->onPointerEvent(pos, mask);
+                delegate_->onPointerEvent(pos, mask & ~kWheelMask);
             }
         }
         else
         {
-            emit sendPointerEvent(pos, mask);
+            delegate_->onPointerEvent(pos, mask);
         }
     }
 }
@@ -155,13 +155,14 @@ void DesktopWidget::doKeyEvent(QKeyEvent* event)
     if (!enable_key_sequenses_ && isModifierKey(key))
         return;
 
-    uint32_t flags = ((event->type() == QEvent::KeyPress) ? proto::desktop::KeyEvent::PRESSED : 0);
+    uint32_t flags = ((event->type() == QEvent::KeyPress) ? proto::KeyEvent::PRESSED : 0);
 
-    flags |= (isCapsLockActivated() ? proto::desktop::KeyEvent::CAPSLOCK : 0);
-    flags |= (isNumLockActivated() ? proto::desktop::KeyEvent::NUMLOCK : 0);
+    flags |= (isCapsLockActivated() ? proto::KeyEvent::CAPSLOCK : 0);
+    flags |= (isNumLockActivated() ? proto::KeyEvent::NUMLOCK : 0);
 
-    uint32_t usb_keycode = KeycodeConverter::nativeKeycodeToUsbKeycode(event->nativeScanCode());
-    if (usb_keycode == KeycodeConverter::invalidUsbKeycode())
+    uint32_t usb_keycode =
+        common::KeycodeConverter::nativeKeycodeToUsbKeycode(event->nativeScanCode());
+    if (usb_keycode == common::KeycodeConverter::invalidUsbKeycode())
         return;
 
     executeKeyEvent(usb_keycode, flags);
@@ -174,7 +175,7 @@ void DesktopWidget::executeKeyCombination(int key_sequence)
     const uint32_t kUsbCodeLeftShift = 0x0700e1;
     const uint32_t kUsbCodeLeftMeta = 0x0700e3;
 
-    std::vector<int> keys;
+    QVector<int> keys;
 
     if (key_sequence & Qt::AltModifier)
         keys.push_back(kUsbCodeLeftAlt);
@@ -188,22 +189,22 @@ void DesktopWidget::executeKeyCombination(int key_sequence)
     if (key_sequence & Qt::MetaModifier)
         keys.push_back(kUsbCodeLeftMeta);
 
-    uint32_t key = KeycodeConverter::qtKeycodeToUsbKeycode(
+    uint32_t key = common::KeycodeConverter::qtKeycodeToUsbKeycode(
         key_sequence & ~Qt::KeyboardModifierMask);
-    if (key == KeycodeConverter::invalidUsbKeycode())
+    if (key == common::KeycodeConverter::invalidUsbKeycode())
         return;
 
     keys.push_back(key);
 
-    uint32_t flags = proto::desktop::KeyEvent::PRESSED;
+    uint32_t flags = proto::KeyEvent::PRESSED;
 
-    flags |= (isCapsLockActivated() ? proto::desktop::KeyEvent::CAPSLOCK : 0);
-    flags |= (isNumLockActivated() ? proto::desktop::KeyEvent::NUMLOCK : 0);
+    flags |= (isCapsLockActivated() ? proto::KeyEvent::CAPSLOCK : 0);
+    flags |= (isNumLockActivated() ? proto::KeyEvent::NUMLOCK : 0);
 
     for (auto it = keys.cbegin(); it != keys.cend(); ++it)
         executeKeyEvent(*it, flags);
 
-    flags ^= proto::desktop::KeyEvent::PRESSED;
+    flags ^= proto::KeyEvent::PRESSED;
 
     for (auto it = keys.crbegin(); it != keys.crend(); ++it)
         executeKeyEvent(*it, flags);
@@ -223,12 +224,15 @@ void DesktopWidget::enableKeyCombinations(bool enable)
 
 void DesktopWidget::paintEvent(QPaintEvent* /* event */)
 {
-    if (frame_)
+    FrameQImage* frame = reinterpret_cast<FrameQImage*>(frame_.get());
+    if (frame)
     {
         QPainter painter(this);
         painter.setRenderHint(QPainter::SmoothPixmapTransform);
-        painter.drawImage(rect(), frame_->constImage());
+        painter.drawImage(rect(), frame->constImage());
     }
+
+    delegate_->onDrawDesktop();
 }
 
 void DesktopWidget::mouseMoveEvent(QMouseEvent* event)
@@ -271,7 +275,7 @@ void DesktopWidget::leaveEvent(QEvent* event)
     // When the mouse cursor leaves the widget area, release all the mouse buttons.
     if (prev_mask_ != 0)
     {
-        emit sendPointerEvent(prev_pos_, 0);
+        delegate_->onPointerEvent(prev_pos_, 0);
         prev_mask_ = 0;
     }
 
@@ -299,8 +303,8 @@ void DesktopWidget::focusOutEvent(QFocusEvent* event)
     {
         uint32_t flags = 0;
 
-        flags |= (isCapsLockActivated() ? proto::desktop::KeyEvent::CAPSLOCK : 0);
-        flags |= (isNumLockActivated() ? proto::desktop::KeyEvent::NUMLOCK : 0);
+        flags |= (isCapsLockActivated() ? proto::KeyEvent::CAPSLOCK : 0);
+        flags |= (isNumLockActivated() ? proto::KeyEvent::NUMLOCK : 0);
 
         for (const auto& key : pressed_keys_)
             executeKeyEvent(key, flags);
@@ -311,12 +315,12 @@ void DesktopWidget::focusOutEvent(QFocusEvent* event)
 
 void DesktopWidget::executeKeyEvent(uint32_t usb_keycode, uint32_t flags)
 {
-    if (flags & proto::desktop::KeyEvent::PRESSED)
+    if (flags & proto::KeyEvent::PRESSED)
         pressed_keys_.insert(usb_keycode);
     else
         pressed_keys_.erase(usb_keycode);
 
-    emit sendKeyEvent(usb_keycode, flags);
+    delegate_->onKeyEvent(usb_keycode, flags);
 }
 
 #if defined(OS_WIN)
@@ -333,18 +337,19 @@ LRESULT CALLBACK DesktopWidget::keyboardHookProc(INT code, WPARAM wparam, LPARAM
             if (hook->vkCode != VK_CAPITAL && hook->vkCode != VK_NUMLOCK)
             {
                 uint32_t flags = ((wparam == WM_KEYDOWN || wparam == WM_SYSKEYDOWN) ?
-                                  proto::desktop::KeyEvent::PRESSED : 0);
+                                  proto::KeyEvent::PRESSED : 0);
 
-                flags |= (isCapsLockActivated() ? proto::desktop::KeyEvent::CAPSLOCK : 0);
-                flags |= (isNumLockActivated() ? proto::desktop::KeyEvent::NUMLOCK : 0);
+                flags |= (isCapsLockActivated() ? proto::KeyEvent::CAPSLOCK : 0);
+                flags |= (isNumLockActivated() ? proto::KeyEvent::NUMLOCK : 0);
 
                 uint32_t scan_code = hook->scanCode;
 
                 if (hook->flags & LLKHF_EXTENDED)
                     scan_code |= 0x100;
 
-                uint32_t usb_keycode = KeycodeConverter::nativeKeycodeToUsbKeycode(scan_code);
-                if (usb_keycode != KeycodeConverter::invalidUsbKeycode())
+                uint32_t usb_keycode =
+                    common::KeycodeConverter::nativeKeycodeToUsbKeycode(scan_code);
+                if (usb_keycode != common::KeycodeConverter::invalidUsbKeycode())
                 {
                     self->executeKeyEvent(usb_keycode, flags);
                     return TRUE;
@@ -357,4 +362,4 @@ LRESULT CALLBACK DesktopWidget::keyboardHookProc(INT code, WPARAM wparam, LPARAM
 }
 #endif // defined(OS_WIN)
 
-} // namespace aspia
+} // namespace client

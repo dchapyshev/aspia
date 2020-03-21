@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,19 +16,17 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_COMMON__WIN__FILE_ENUMERATOR_H_
-#define ASPIA_COMMON__WIN__FILE_ENUMERATOR_H_
+#ifndef COMMON__WIN__FILE_ENUMERATOR_H
+#define COMMON__WIN__FILE_ENUMERATOR_H
 
-#define WIN32_LEAN_AND_MEAN
-#define NOMINMAX
-#include <windows.h>
+#include "base/macros_magic.h"
+#include "proto/file_transfer.pb.h"
 
 #include <filesystem>
 
-#include "base/macros_magic.h"
-#include "protocol/file_transfer_session.pb.h"
+#include <Windows.h>
 
-namespace aspia {
+namespace common {
 
 class FileEnumerator
 {
@@ -56,16 +54,16 @@ public:
     bool isAtEnd() const;
     void advance();
 
-    proto::file_transfer::Status status() const { return status_; }
+    proto::FileError errorCode() const { return error_code_; }
 
 private:
-    proto::file_transfer::Status status_ = proto::file_transfer::STATUS_SUCCESS;
+    proto::FileError error_code_ = proto::FILE_ERROR_SUCCESS;
     HANDLE find_handle_ = INVALID_HANDLE_VALUE;
     FileInfo file_info_;
 
     DISALLOW_COPY_AND_ASSIGN(FileEnumerator);
 };
 
-}  // namespace aspia
+}  // namespace common
 
-#endif // ASPIA_COMMON__WIN__FILE_ENUMERATOR_H_
+#endif // COMMON__WIN__FILE_ENUMERATOR_H

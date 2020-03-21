@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CODEC__SCOPED_VPX_CODEC_H_
-#define ASPIA_CODEC__SCOPED_VPX_CODEC_H_
+#ifndef CODEC__SCOPED_VPX_CODEC_H
+#define CODEC__SCOPED_VPX_CODEC_H
 
 #include <memory>
 
@@ -26,7 +26,7 @@ extern "C"
 typedef struct vpx_codec_ctx vpx_codec_ctx_t;
 }
 
-namespace aspia {
+namespace codec {
 
 struct VpxCodecDeleter
 {
@@ -35,6 +35,6 @@ struct VpxCodecDeleter
 
 using ScopedVpxCodec = std::unique_ptr<vpx_codec_ctx_t, VpxCodecDeleter>;
 
-} // namespace aspia
+} // namespace codec
 
-#endif // ASPIA_CODEC__SCOPED_VPX_CODEC_H_
+#endif // CODEC__SCOPED_VPX_CODEC_H

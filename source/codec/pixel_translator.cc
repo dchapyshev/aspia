@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,11 +17,10 @@
 //
 
 #include "codec/pixel_translator.h"
-
-#include "build/build_config.h"
 #include "base/macros_magic.h"
+#include "build/build_config.h"
 
-namespace aspia {
+namespace codec {
 
 namespace {
 
@@ -31,7 +30,8 @@ template<typename SourceT, typename TargetT>
 class PixelTranslatorT : public PixelTranslator
 {
 public:
-    PixelTranslatorT(const PixelFormat& source_format, const PixelFormat& target_format)
+    PixelTranslatorT(const desktop::PixelFormat& source_format,
+                     const desktop::PixelFormat& target_format)
         : source_format_(source_format),
           target_format_(target_format)
     {
@@ -60,7 +60,7 @@ public:
 
     ~PixelTranslatorT() = default;
 
-    INLINE void translatePixel(const SourceT* src_ptr, TargetT* dst_ptr)
+    FORCEINLINE void translatePixel(const SourceT* src_ptr, TargetT* dst_ptr)
     {
         const uint32_t red = red_table_[
             *src_ptr >> source_format_.redShift() & source_format_.redMax()];
@@ -117,8 +117,8 @@ private:
     std::unique_ptr<uint32_t[]> green_table_;
     std::unique_ptr<uint32_t[]> blue_table_;
 
-    PixelFormat source_format_;
-    PixelFormat target_format_;
+    desktop::PixelFormat source_format_;
+    desktop::PixelFormat target_format_;
 
     DISALLOW_COPY_AND_ASSIGN(PixelTranslatorT);
 };
@@ -127,7 +127,8 @@ template<typename SourceT, typename TargetT>
 class PixelTranslatorFrom8_16bppT : public PixelTranslator
 {
 public:
-    PixelTranslatorFrom8_16bppT(const PixelFormat& source_format, const PixelFormat& target_format)
+    PixelTranslatorFrom8_16bppT(const desktop::PixelFormat& source_format,
+                                const desktop::PixelFormat& target_format)
         : source_format_(source_format),
           target_format_(target_format)
     {
@@ -202,8 +203,8 @@ public:
 private:
     std::unique_ptr<uint32_t[]> table_;
 
-    PixelFormat source_format_;
-    PixelFormat target_format_;
+    desktop::PixelFormat source_format_;
+    desktop::PixelFormat target_format_;
 
     DISALLOW_COPY_AND_ASSIGN(PixelTranslatorFrom8_16bppT);
 };
@@ -211,8 +212,8 @@ private:
 } // namespace
 
 // static
-std::unique_ptr<PixelTranslator> PixelTranslator::create(const PixelFormat& source_format,
-                                                         const PixelFormat& target_format)
+std::unique_ptr<PixelTranslator> PixelTranslator::create(
+    const desktop::PixelFormat& source_format, const desktop::PixelFormat& target_format)
 {
     switch (target_format.bytesPerPixel())
     {
@@ -231,6 +232,9 @@ std::unique_ptr<PixelTranslator> PixelTranslator::create(const PixelFormat& sour
                 case 1:
                     return std::make_unique<PixelTranslatorFrom8_16bppT<uint8_t, uint32_t>>(
                         source_format, target_format);
+
+                default:
+                    break;
             }
         }
         break;
@@ -250,6 +254,9 @@ std::unique_ptr<PixelTranslator> PixelTranslator::create(const PixelFormat& sour
                 case 1:
                     return std::make_unique<PixelTranslatorFrom8_16bppT<uint8_t, uint16_t>>(
                         source_format, target_format);
+
+                default:
+                    break;
             }
         }
         break;
@@ -269,12 +276,18 @@ std::unique_ptr<PixelTranslator> PixelTranslator::create(const PixelFormat& sour
                 case 1:
                     return std::make_unique<PixelTranslatorFrom8_16bppT<uint8_t, uint8_t>>(
                         source_format, target_format);
+
+                default:
+                    break;
             }
         }
         break;
+
+        default:
+            break;
     }
 
     return nullptr;
 }
 
-} // namespace aspia
+} // namespace codec

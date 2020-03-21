@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,13 +17,12 @@
 //
 
 #include "client/ui/file_list_model.h"
-
-#include <QDateTime>
-
 #include "client/ui/file_mime_data.h"
 #include "common/file_platform_util.h"
 
-namespace aspia {
+#include <QDateTime>
+
+namespace client {
 
 namespace {
 
@@ -91,7 +90,7 @@ void sortByTime(T& list, Qt::SortOrder order)
 
 FileListModel::FileListModel(QObject* parent)
     : QAbstractItemModel(parent),
-      dir_icon_(FilePlatformUtil::directoryIcon()),
+      dir_icon_(common::FilePlatformUtil::directoryIcon()),
       dir_type_(tr("Folder"))
 {
     // Nothing
@@ -102,7 +101,7 @@ void FileListModel::setMimeType(const QString& mime_type)
     mime_type_ = mime_type;
 }
 
-void FileListModel::setFileList(const proto::file_transfer::FileList& list)
+void FileListModel::setFileList(const proto::FileList& list)
 {
     clear();
 
@@ -113,7 +112,7 @@ void FileListModel::setFileList(const proto::file_transfer::FileList& list)
 
     for (int i = 0; i < list.item_size(); ++i)
     {
-        const proto::file_transfer::FileList::Item& item = list.item(i);
+        const proto::FileList::Item& item = list.item(i);
 
         if (item.is_directory())
         {
@@ -130,7 +129,7 @@ void FileListModel::setFileList(const proto::file_transfer::FileList& list)
             file.last_write = item.modification_time();
             file.size       = item.size();
 
-            QPair<QIcon, QString> file_info = FilePlatformUtil::fileTypeInfo(file.name);
+            QPair<QIcon, QString> file_info = common::FilePlatformUtil::fileTypeInfo(file.name);
             file.icon = file_info.first;
             file.type = file_info.second;
 
@@ -377,15 +376,15 @@ QStringList FileListModel::mimeTypes() const
 
 QMimeData* FileListModel::mimeData(const QModelIndexList& indexes) const
 {
-    QList<FileTransfer::Item> file_list;
+    std::vector<FileTransfer::Item> file_list;
 
     for (const auto& index : indexes)
     {
         if (index.column() == COLUMN_NAME)
-            file_list.append(FileTransfer::Item(nameAt(index), sizeAt(index), isFolder(index)));
+            file_list.emplace_back(nameAt(index).toStdString(), sizeAt(index), isFolder(index));
     }
 
-    if (file_list.isEmpty())
+    if (file_list.empty())
         return nullptr;
 
     FileMimeData* mime_data = new FileMimeData();
@@ -554,4 +553,4 @@ QString FileListModel::timeToString(time_t time)
     return QDateTime::fromSecsSinceEpoch(time).toString(Qt::DefaultLocaleShortDate);
 }
 
-} // namespace aspia
+} // namespace client

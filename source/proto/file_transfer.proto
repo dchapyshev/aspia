@@ -1,0 +1,164 @@
+//
+// Aspia Project
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program. If not, see <https://www.gnu.org/licenses/>.
+//
+
+syntax = "proto3";
+
+option optimize_for = LITE_RUNTIME;
+
+package proto;
+
+message DriveList
+{
+    message Item
+    {
+        enum Type
+        {
+            TYPE_UNKNOWN        = 0;
+            TYPE_CDROM          = 1;
+            TYPE_REMOVABLE      = 2;
+            TYPE_FIXED          = 3;
+            TYPE_REMOTE         = 4;
+            TYPE_RAM            = 5;
+            TYPE_HOME_FOLDER    = 6;
+            TYPE_DESKTOP_FOLDER = 7;
+        }
+
+        Type type         = 1;
+        string path       = 2;
+        string name       = 3;
+        int64 total_space = 4;
+        int64 free_space  = 5;
+    }
+
+    repeated Item item = 1;
+}
+
+message DriveListRequest
+{
+    uint32 dummy = 1;
+}
+
+message FileList
+{
+    message Item
+    {
+        string name             = 1;
+        uint64 size             = 2;
+        int64 modification_time = 3;
+        bool is_directory       = 4;
+    }
+
+    repeated Item item = 1;
+}
+
+message FileListRequest
+{
+    string path = 1;
+}
+
+message UploadRequest
+{
+    string path = 1;
+    bool overwrite = 2;
+}
+
+message DownloadRequest
+{
+   string path = 1;
+}
+
+message FilePacketRequest
+{
+    enum Flags
+    {
+        NO_FLAGS = 0;
+        CANCEL   = 1;
+    }
+
+    uint32 flags = 1;
+}
+
+message FilePacket
+{
+    enum Flags
+    {
+        NO_FLAGS     = 0;
+        FIRST_PACKET = 1;
+        LAST_PACKET  = 2;
+    }
+
+    uint32 flags = 1;
+    uint64 file_size = 2;
+    bytes data = 3;
+}
+
+message CreateDirectoryRequest
+{
+    string path = 1;
+}
+
+message RenameRequest
+{
+    string old_name = 1;
+    string new_name = 2;
+}
+
+message RemoveRequest
+{
+    string path = 1;
+}
+
+enum FileError
+{
+    FILE_ERROR_UNKNOWN             = 0;
+    FILE_ERROR_SUCCESS             = 1;
+    FILE_ERROR_NO_LOGGED_ON_USER   = 2;
+    FILE_ERROR_INVALID_REQUEST     = 3;
+    FILE_ERROR_INVALID_PATH_NAME   = 4;
+    FILE_ERROR_PATH_NOT_FOUND      = 5;
+    FILE_ERROR_PATH_ALREADY_EXISTS = 6;
+    FILE_ERROR_NO_DRIVES_FOUND     = 7;
+    FILE_ERROR_DISK_FULL           = 8;
+    FILE_ERROR_ACCESS_DENIED       = 9;
+    FILE_ERROR_FILE_OPEN_ERROR     = 10;
+    FILE_ERROR_FILE_CREATE_ERROR   = 11;
+    FILE_ERROR_FILE_WRITE_ERROR    = 12;
+    FILE_ERROR_FILE_READ_ERROR     = 13;
+    FILE_ERROR_DISK_NOT_READY      = 14;
+}
+
+message FileReply
+{
+    FileError error_code = 1;
+    DriveList drive_list = 2;
+    FileList file_list   = 3;
+    FilePacket packet    = 4;
+}
+
+message FileRequest
+{
+    DriveListRequest drive_list_request             = 1;
+    FileListRequest file_list_request               = 2;
+    CreateDirectoryRequest create_directory_request = 3;
+    RenameRequest rename_request                    = 4;
+    RemoveRequest remove_request                    = 5;
+    DownloadRequest download_request                = 6;
+    UploadRequest upload_request                    = 7;
+    FilePacketRequest packet_request                = 8;
+    FilePacket packet                               = 9;
+}

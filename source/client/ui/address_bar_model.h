@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,17 +16,16 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CLIENT__UI__ADDRESS_BAR_MODEL_H_
-#define ASPIA_CLIENT__UI__ADDRESS_BAR_MODEL_H_
-
-#include <QAbstractItemModel>
-#include <QIcon>
+#ifndef CLIENT__UI__ADDRESS_BAR_MODEL_H
+#define CLIENT__UI__ADDRESS_BAR_MODEL_H
 
 #include "base/macros_magic.h"
 #include "common/file_platform_util.h"
-#include "protocol/file_transfer_session.pb.h"
+#include "proto/file_transfer.pb.h"
 
-namespace aspia {
+#include <QAbstractItemModel>
+
+namespace client {
 
 class AddressBarModel : public QAbstractItemModel
 {
@@ -35,7 +34,7 @@ class AddressBarModel : public QAbstractItemModel
 public:
     explicit AddressBarModel(QObject* parent = nullptr);
 
-    void setDriveList(const proto::file_transfer::DriveList& list);
+    void setDriveList(const proto::DriveList& list);
     QModelIndex setCurrentPath(const QString& path);
     QString previousPath() const { return previous_path_; }
     QString pathAt(const QModelIndex& index) const;
@@ -64,13 +63,13 @@ signals:
     void invalidPathEntered();
 
 protected:
-    static QString typeToString(proto::file_transfer::DriveList::Item::Type type);
+    static QString typeToString(proto::DriveList::Item::Type type);
     static QString sizeToString(int64_t size);
 
 private:
     struct Drive
     {
-        proto::file_transfer::DriveList::Item::Type type;
+        proto::DriveList::Item::Type type;
         QIcon icon;
         QString name;
         QString path;
@@ -85,6 +84,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(AddressBarModel);
 };
 
-} // namespace aspia
+} // namespace client
 
-#endif // ASPIA_CLIENT__UI__ADDRESS_BAR_MODEL_H_
+#endif // CLIENT__UI__ADDRESS_BAR_MODEL_H

@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,56 +16,49 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CLIENT__FILE_REMOVE_QUEUE_BUILDER_H_
-#define ASPIA_CLIENT__FILE_REMOVE_QUEUE_BUILDER_H_
+#ifndef CLIENT__FILE_REMOVE_QUEUE_BUILDER_H
+#define CLIENT__FILE_REMOVE_QUEUE_BUILDER_H
 
 #include "client/file_remover.h"
 
-namespace aspia {
+namespace client {
 
 // The class prepares the task queue to perform the deletion.
-class FileRemoveQueueBuilder : public QObject
+class FileRemoveQueueBuilder : public common::FileTaskProducer
 {
-    Q_OBJECT
-
 public:
-    explicit FileRemoveQueueBuilder(QObject* parent = nullptr);
-    ~FileRemoveQueueBuilder() = default;
+    FileRemoveQueueBuilder(
+        std::shared_ptr<common::FileTaskConsumerProxy> task_consumer_proxy,
+        common::FileTask::Target target);
+    ~FileRemoveQueueBuilder();
 
-    // Returns the queue of tasks.
-    QQueue<FileRemoveTask> taskQueue() const;
+    using FinishCallback = std::function<void(proto::FileError)>;
 
-signals:
-    // Signals about the start of execution.
-    void started();
-
-    // Signals about the end of execution.
-    void finished();
-
-    // Signals an error when building a task queue. |message| contains a description of the error.
-    void error(const QString& message);
-
-    // Signals an outbound request.
-    void newRequest(FileRequest* request);
-
-public slots:
     // Starts building of the task queue.
-    void start(const QString& path, const QList<FileRemover::Item>& items);
+    void start(const FileRemover::TaskList& items, const FinishCallback& callback);
 
-    // Reads the reply to the request.
-    void reply(const proto::file_transfer::Request& request,
-               const proto::file_transfer::Reply& reply);
+    FileRemover::TaskList takeQueue();
+
+protected:
+    // FileTaskProducer implementation.
+    void onTaskDone(std::shared_ptr<common::FileTask> task) override;
 
 private:
-    void processNextPendingTask();
-    void processError(const QString& message);
+    void doPendingTasks();
+    void onAborted(proto::FileError error_code);
 
-    QQueue<FileRemoveTask> pending_tasks_;
-    QQueue<FileRemoveTask> tasks_;
+    std::shared_ptr<common::FileTaskConsumerProxy> task_consumer_proxy_;
+    std::shared_ptr<common::FileTaskProducerProxy> task_producer_proxy_;
+    std::unique_ptr<common::FileTaskFactory> task_factory_;
+
+    FinishCallback callback_;
+
+    FileRemover::TaskList pending_tasks_;
+    FileRemover::TaskList tasks_;
 
     DISALLOW_COPY_AND_ASSIGN(FileRemoveQueueBuilder);
 };
 
-} // namespace aspia
+} // namespace client
 
-#endif // ASPIA_CLIENT__FILE_REMOVE_QUEUE_BUILDER_H_
+#endif // CLIENT__FILE_REMOVE_QUEUE_BUILDER_H

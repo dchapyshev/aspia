@@ -1,0 +1,79 @@
+//
+// Aspia Project
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program. If not, see <https://www.gnu.org/licenses/>.
+//
+// WARNING! For internal use only, on the host side. Messages in this file are not intended for
+// transmission over the network.
+//
+
+syntax = "proto3";
+
+option optimize_for = LITE_RUNTIME;
+
+import "common.proto";
+
+package proto.internal;
+
+message CredentialsRequest
+{
+    enum Type
+    {
+        UNKNOWN_TYPE = 0;
+        REFRESH      = 1;
+        NEW_PASSWORD = 2;
+    }
+
+    Type type = 1;
+}
+
+message Credentials
+{
+    repeated string ip = 1;
+    string id          = 2;
+    string username    = 3;
+    string password    = 4;
+}
+
+message ConnectEvent
+{
+    string uuid              = 1;
+    string remote_address    = 2;
+    string username          = 3;
+    SessionType session_type = 4;
+}
+
+message DisconnectEvent
+{
+    string uuid = 1;
+}
+
+message KillSession
+{
+    string uuid = 1;
+}
+
+message UiToService
+{
+    CredentialsRequest credentials_request = 1;
+    KillSession kill_session = 2;
+}
+
+message ServiceToUi
+{
+    Credentials credentials          = 1;
+    ConnectEvent connect_event       = 2;
+    DisconnectEvent disconnect_event = 3;
+}

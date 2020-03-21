@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,53 +16,36 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_COMMON__FILE_WORKER_H_
-#define ASPIA_COMMON__FILE_WORKER_H_
+#ifndef COMMON__FILE_WORKER_H
+#define COMMON__FILE_WORKER_H
 
-#include "common/file_depacketizer.h"
-#include "common/file_packetizer.h"
-#include "common/file_request.h"
-#include "protocol/file_transfer_session.pb.h"
+#include "base/macros_magic.h"
 
-namespace aspia {
+#include <memory>
 
-class FileWorker : public QObject
+namespace base {
+class TaskRunner;
+} // namespace base
+
+namespace common {
+
+class FileTask;
+
+class FileWorker
 {
-    Q_OBJECT
-
 public:
-    FileWorker(QObject* parent = nullptr);
-    ~FileWorker() = default;
+    explicit FileWorker(std::shared_ptr<base::TaskRunner> task_runner);
+    ~FileWorker();
 
-    proto::file_transfer::Reply doRequest(const proto::file_transfer::Request& request);
-
-public slots:
-    void executeRequest(FileRequest* request);
+    void doTask(std::shared_ptr<FileTask> task);
 
 private:
-    proto::file_transfer::Reply doDriveListRequest();
-    proto::file_transfer::Reply doFileListRequest(
-        const proto::file_transfer::FileListRequest& request);
-    proto::file_transfer::Reply doCreateDirectoryRequest(
-        const proto::file_transfer::CreateDirectoryRequest& request);
-    proto::file_transfer::Reply doRenameRequest(
-        const proto::file_transfer::RenameRequest& request);
-    proto::file_transfer::Reply doRemoveRequest(
-        const proto::file_transfer::RemoveRequest& request);
-    proto::file_transfer::Reply doDownloadRequest(
-        const proto::file_transfer::DownloadRequest& request);
-    proto::file_transfer::Reply doUploadRequest(
-        const proto::file_transfer::UploadRequest& request);
-    proto::file_transfer::Reply doPacketRequest(
-        const proto::file_transfer::PacketRequest& request);
-    proto::file_transfer::Reply doPacket(const proto::file_transfer::Packet& packet);
-
-    std::unique_ptr<FileDepacketizer> depacketizer_;
-    std::unique_ptr<FilePacketizer> packetizer_;
+    class Impl;
+    std::shared_ptr<Impl> impl_;
 
     DISALLOW_COPY_AND_ASSIGN(FileWorker);
 };
 
-} // namespace aspia
+} // namespace common
 
-#endif // ASPIA_COMMON__FILE_WORKER_H_
+#endif // COMMON__FILE_WORKER_H

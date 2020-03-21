@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -18,11 +18,11 @@
 
 #include "crypto/generic_hash.h"
 
-#include <openssl/evp.h>
-
 #include "base/logging.h"
 
-namespace aspia {
+#include <openssl/evp.h>
+
+namespace crypto {
 
 GenericHash::GenericHash(Type type)
 {
@@ -74,7 +74,7 @@ GenericHash::~GenericHash()
 }
 
 // static
-std::string GenericHash::hash(Type type, const void* data, size_t size)
+base::ByteArray GenericHash::hash(Type type, const void* data, size_t size)
 {
     GenericHash generic_hash(type);
     generic_hash.addData(data, size);
@@ -82,9 +82,15 @@ std::string GenericHash::hash(Type type, const void* data, size_t size)
 }
 
 // static
-std::string GenericHash::hash(Type type, const std::string& data)
+base::ByteArray GenericHash::hash(Type type, std::string_view data)
 {
-    return hash(type, data.c_str(), data.size());
+    return hash(type, data.data(), data.size());
+}
+
+// static
+base::ByteArray GenericHash::hash(Type type, const base::ByteArray& data)
+{
+    return hash(type, data.data(), data.size());
 }
 
 void GenericHash::addData(const void* data, size_t size)
@@ -94,12 +100,17 @@ void GenericHash::addData(const void* data, size_t size)
     CHECK_EQ(ret, 1);
 }
 
-void GenericHash::addData(const std::string& data)
+void GenericHash::addData(std::string_view data)
 {
-    addData(data.c_str(), data.size());
+    addData(data.data(), data.size());
 }
 
-std::string GenericHash::result() const
+void GenericHash::addData(const base::ByteArray& data)
+{
+    addData(data.data(), data.size());
+}
+
+base::ByteArray GenericHash::result() const
 {
     DCHECK(ctxt_);
     DCHECK(md_);
@@ -107,10 +118,10 @@ std::string GenericHash::result() const
     int len = EVP_MD_size(md_);
     CHECK_GT(len, 0);
 
-    std::string result;
+    base::ByteArray result;
     result.resize(len);
 
-    int ret = EVP_DigestFinal(ctxt_, reinterpret_cast<uint8_t*>(result.data()), nullptr);
+    int ret = EVP_DigestFinal(ctxt_, result.data(), nullptr);
     CHECK_EQ(ret, 1);
 
     return result;
@@ -122,4 +133,4 @@ void GenericHash::reset()
     CHECK_EQ(ret, 1);
 }
 
-} // namespace aspia
+} // namespace crypto

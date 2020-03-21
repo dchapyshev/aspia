@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,15 +16,15 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_HOST__WIN__HOST_SERVICE_MAIN_H_
-#define ASPIA_HOST__WIN__HOST_SERVICE_MAIN_H_
+#ifndef HOST__WIN__HOST_SERVICE_MAIN_H
+#define HOST__WIN__HOST_SERVICE_MAIN_H
 
 #include "host/host_export.h"
 
-namespace aspia {
+namespace host {
 
 int HOST_EXPORT hostServiceMain(int argc, char *argv[]);
 
-} // namespace aspia
+} // namespace host
 
-#endif // ASPIA_HOST__WIN__HOST_SERVICE_MAIN_H_
+#endif // HOST__WIN__HOST_SERVICE_MAIN_H

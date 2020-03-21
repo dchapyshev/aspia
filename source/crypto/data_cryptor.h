@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,22 +16,22 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CRYPTO__DATA_CRYPTOR_H_
-#define ASPIA_CRYPTO__DATA_CRYPTOR_H_
+#ifndef CRYPTO__DATA_CRYPTOR_H
+#define CRYPTO__DATA_CRYPTOR_H
 
 #include <string>
 
-namespace aspia {
+namespace crypto {
 
 class DataCryptor
 {
 public:
     virtual ~DataCryptor() = default;
 
-    virtual bool encrypt(const std::string& in, std::string* out) = 0;
-    virtual bool decrypt(const std::string& in, std::string* out) = 0;
+    virtual bool encrypt(std::string_view in, std::string* out) = 0;
+    virtual bool decrypt(std::string_view in, std::string* out) = 0;
 };
 
-} // namespace aspia
+} // namespace crypto
 
-#endif // ASPIA_CRYPTO__DATA_CRYPTOR_H_
+#endif // CRYPTO__DATA_CRYPTOR_H

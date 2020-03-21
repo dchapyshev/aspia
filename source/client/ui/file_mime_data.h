@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,14 +16,14 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CLIENT__UI__FILE_MIME_DATA_H_
-#define ASPIA_CLIENT__UI__FILE_MIME_DATA_H_
-
-#include <QMimeData>
+#ifndef CLIENT__UI__FILE_MIME_DATA_H
+#define CLIENT__UI__FILE_MIME_DATA_H
 
 #include "client/file_transfer.h"
 
-namespace aspia {
+#include <QMimeData>
+
+namespace client {
 
 class FileListModel;
 
@@ -38,8 +38,8 @@ public:
     void setMimeType(const QString& mime_type);
     QString mimeType() const { return mime_type_; }
 
-    void setFileList(const QList<FileTransfer::Item>& file_list);
-    QList<FileTransfer::Item> fileList() const { return file_list_; }
+    void setFileList(const std::vector<FileTransfer::Item>& file_list);
+    std::vector<FileTransfer::Item> fileList() const { return file_list_; }
 
     void setSource(const FileListModel* source);
     const FileListModel* source() const { return source_; }
@@ -47,11 +47,11 @@ public:
 private:
     const FileListModel* source_;
     QString mime_type_;
-    QList<FileTransfer::Item> file_list_;
+    std::vector<FileTransfer::Item> file_list_;
 
     DISALLOW_COPY_AND_ASSIGN(FileMimeData);
 };
 
-} // namespace aspia
+} // namespace client
 
-#endif // ASPIA_CLIENT__UI__FILE_MIME_DATA_H_
+#endif // CLIENT__UI__FILE_MIME_DATA_H

@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -18,71 +18,65 @@
 
 #include "host/ui/user_dialog.h"
 
+#include "base/logging.h"
+#include "common/session_type.h"
+#include "common/user_util.h"
+#include "proto/common.pb.h"
+
 #include <QMessageBox>
 #include <QMouseEvent>
 
-#include "base/logging.h"
-#include "common/user_util.h"
-#include "network/srp_host_context.h"
-#include "protocol/common.pb.h"
+namespace host {
 
-namespace aspia {
-
-UserDialog::UserDialog(const SrpUserList& user_list, SrpUser* user, QWidget* parent)
+UserDialog::UserDialog(const User& user, const QStringList& exist_names, QWidget* parent)
     : QDialog(parent),
-      user_list_(user_list),
+      exist_names_(exist_names),
       user_(user)
 {
-    DCHECK(user_);
-
     ui.setupUi(this);
 
-    ui.edit_username->setText(QString::fromStdString(user_->name));
-
-    if (!user->verifier.empty())
+    if (user.isValid())
     {
-        DCHECK(!user_->number.empty());
-        DCHECK(!user_->generator.empty());
-        DCHECK(!user_->salt.empty());
+        ui.checkbox_disable_user->setChecked(!(user.flags & User::ENABLED));
+        ui.edit_username->setText(QString::fromStdU16String(user.name));
 
         setAccountChanged(false);
     }
+    else
+    {
+        ui.checkbox_disable_user->setChecked(false);
+    }
 
-    ui.checkbox_disable_user->setChecked(!(user_->flags & SrpUser::ENABLED));
-
-    auto add_session_type = [&](const QIcon& icon,
-                                const QString& name,
-                                proto::SessionType session_type)
+    auto add_session = [&](const QString& icon, proto::SessionType session_type)
     {
         QTreeWidgetItem* item = new QTreeWidgetItem();
 
-        item->setText(0, name);
-        item->setIcon(0, icon);
+        item->setText(0, common::sessionTypeToLocalizedString(session_type));
+        item->setIcon(0, QIcon(icon));
         item->setFlags(item->flags() | Qt::ItemIsUserCheckable);
         item->setData(0, Qt::UserRole, QVariant(session_type));
 
-        if (user->sessions & session_type)
-            item->setCheckState(0, Qt::Checked);
+        if (user.isValid())
+        {
+            if (user.sessions & session_type)
+                item->setCheckState(0, Qt::Checked);
+            else
+                item->setCheckState(0, Qt::Unchecked);
+        }
         else
-            item->setCheckState(0, Qt::Unchecked);
+        {
+            item->setCheckState(0, Qt::Checked);
+        }
 
         ui.tree_sessions->addTopLevelItem(item);
     };
 
-    add_session_type(QIcon(QStringLiteral(":/icon/monitor-keyboard.png")),
-                     tr("Desktop Manage"),
-                     proto::SESSION_TYPE_DESKTOP_MANAGE);
+    add_session(QStringLiteral(":/img/monitor-keyboard.png"), proto::SESSION_TYPE_DESKTOP_MANAGE);
+    add_session(QStringLiteral(":/img/monitor.png"), proto::SESSION_TYPE_DESKTOP_VIEW);
+    add_session(QStringLiteral(":/img/folder-stand.png"), proto::SESSION_TYPE_FILE_TRANSFER);
 
-    add_session_type(QIcon(QStringLiteral(":/icon/monitor.png")),
-                     tr("Desktop View"),
-                     proto::SESSION_TYPE_DESKTOP_VIEW);
-
-    add_session_type(QIcon(QStringLiteral(":/icon/folder-stand.png")),
-                     tr("File Transfer"),
-                     proto::SESSION_TYPE_FILE_TRANSFER);
-
-    connect(ui.button_check_all, &QPushButton::pressed, this, &UserDialog::onCheckAllButtonPressed);
-    connect(ui.button_check_none, &QPushButton::pressed, this, &UserDialog::onCheckNoneButtonPressed);
+    connect(ui.button_check_all, &QPushButton::released, this, &UserDialog::onCheckAllButtonPressed);
+    connect(ui.button_check_none, &QPushButton::released, this, &UserDialog::onCheckNoneButtonPressed);
     connect(ui.button_box, &QDialogButtonBox::clicked, this, &UserDialog::onButtonBoxClicked);
 
     connect(ui.edit_username, &QLineEdit::textEdited, [this]()
@@ -125,38 +119,30 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
     {
         if (account_changed_)
         {
-            QString name = ui.edit_username->text();
-            QString password = ui.edit_password->text();
+            std::u16string name = ui.edit_username->text().toStdU16String();
+            std::u16string password = ui.edit_password->text().toStdU16String();
 
-            if (!UserUtil::isValidUserName(name))
+            if (!common::UserUtil::isValidUserName(name))
             {
                 QMessageBox::warning(this,
                                      tr("Warning"),
                                      tr("The user name can not be empty and can contain only alphabet"
                                         " characters, numbers and ""_"", ""-"", ""."" characters."),
                                      QMessageBox::Ok);
+                ui.edit_username->selectAll();
                 ui.edit_username->setFocus();
                 return;
             }
 
-            QString old_name = QString::fromStdString(user_->name);
-
-            if (name.compare(old_name, Qt::CaseInsensitive) != 0)
+            if (exist_names_.contains(name, Qt::CaseInsensitive))
             {
-                for (const auto& user : user_list_.list)
-                {
-                    QString existing_name = QString::fromStdString(user.name);
-
-                    if (name.compare(existing_name, Qt::CaseInsensitive) == 0)
-                    {
-                        QMessageBox::warning(this,
-                                             tr("Warning"),
-                                             tr("The username you entered already exists."),
-                                             QMessageBox::Ok);
-                        ui.edit_username->setFocus();
-                        return;
-                    }
-                }
+                QMessageBox::warning(this,
+                                     tr("Warning"),
+                                     tr("The username you entered already exists."),
+                                     QMessageBox::Ok);
+                ui.edit_username->selectAll();
+                ui.edit_username->setFocus();
+                return;
             }
 
             if (password != ui.edit_password_repeat->text())
@@ -165,32 +151,39 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
                                      tr("Warning"),
                                      tr("The passwords you entered do not match."),
                                      QMessageBox::Ok);
+                ui.edit_password->selectAll();
                 ui.edit_password->setFocus();
                 return;
             }
 
-            if (!UserUtil::isValidPassword(password))
+            if (!common::UserUtil::isValidPassword(password))
             {
                 QMessageBox::warning(this,
                                      tr("Warning"),
                                      tr("Password can not be empty and should not exceed %n characters.",
-                                        "", UserUtil::kMaxPasswordLength),
+                                        "", common::UserUtil::kMaxPasswordLength),
                                      QMessageBox::Ok);
+                ui.edit_password->selectAll();
                 ui.edit_password->setFocus();
                 return;
             }
 
-            if (!UserUtil::isSafePassword(password))
+            if (!common::UserUtil::isSafePassword(password))
             {
+                QString unsafe =
+                    tr("Password you entered does not meet the security requirements!");
+
+                QString safe =
+                    tr("The password must contain lowercase and uppercase characters, "
+                       "numbers and should not be shorter than %n characters.",
+                       "", common::UserUtil::kSafePasswordLength);
+
+                QString question = tr("Do you want to enter a different password?");
+
                 if (QMessageBox::warning(this,
                                          tr("Warning"),
-                                         tr("<b>Password you entered does not meet the security "
-                                            "requirements!</b><br/>"
-                                            "The password must contain lowercase and uppercase "
-                                            "characters, numbers and should not be shorter "
-                                            "than %n characters.<br/>"
-                                            "Do you want to enter a different password?",
-                                            "", UserUtil::kSafePasswordLength),
+                                         QString("<b>%1</b><br/>%2<br/>%3")
+                                             .arg(unsafe).arg(safe).arg(question),
                                          QMessageBox::Yes,
                                          QMessageBox::No) == QMessageBox::Yes)
                 {
@@ -201,9 +194,8 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
                 }
             }
 
-            std::unique_ptr<SrpUser> user(
-                SrpHostContext::createUser(name.toLower().toStdString(), password.toStdString()));
-            if (!user)
+            user_ = User::create(name, password);
+            if (!user_.isValid())
             {
                 QMessageBox::warning(this,
                                      tr("Warning"),
@@ -211,8 +203,6 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
                                      QMessageBox::Ok);
                 return;
             }
-
-            *user_ = std::move(*user);
         }
 
         uint32_t sessions = 0;
@@ -225,10 +215,10 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
 
         uint32_t flags = 0;
         if (!ui.checkbox_disable_user->isChecked())
-            flags |= SrpUser::ENABLED;
+            flags |= User::ENABLED;
 
-        user_->sessions = sessions;
-        user_->flags = flags;
+        user_.sessions = sessions;
+        user_.flags = flags;
 
         accept();
     }
@@ -279,4 +269,4 @@ void UserDialog::setAccountChanged(bool changed)
     }
 }
 
-} // namespace aspia
+} // namespace host

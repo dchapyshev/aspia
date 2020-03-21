@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -21,22 +21,14 @@
 #include <openssl/opensslv.h>
 #include <openssl/bn.h>
 
-namespace aspia {
+namespace crypto {
 
-BigNum::BigNum(const ConstBuffer& buffer)
+BigNum::BigNum(const uint8_t* buffer, size_t buffer_size)
 {
-    if (!buffer.isValid())
+    if (!buffer || !buffer_size)
         return;
 
-    num_.reset(BN_bin2bn(buffer.data(), buffer.size(), nullptr));
-}
-
-BigNum::BigNum(const std::string& string)
-{
-    if (string.empty())
-        return;
-
-    num_.reset(BN_bin2bn(reinterpret_cast<const uint8_t*>(string.data()), string.size(), nullptr));
+    num_.reset(BN_bin2bn(buffer, buffer_size, nullptr));
 }
 
 BigNum::BigNum(BigNum&& other) noexcept
@@ -78,6 +70,22 @@ std::string BigNum::toStdString() const
     return result;
 }
 
+base::ByteArray BigNum::toByteArray() const
+{
+    if (!isValid())
+        return base::ByteArray();
+
+    int length = BN_num_bytes(num_.get());
+    if (length <= 0)
+        return base::ByteArray();
+
+    base::ByteArray result;
+    result.resize(length);
+
+    BN_bn2bin(num_.get(), result.data());
+    return result;
+}
+
 // static
 BigNum BigNum::create()
 {
@@ -85,15 +93,15 @@ BigNum BigNum::create()
 }
 
 // static
-BigNum BigNum::fromBuffer(const ConstBuffer& buffer)
+BigNum BigNum::fromStdString(std::string_view string)
 {
-    return BigNum(buffer);
+    return BigNum(reinterpret_cast<const uint8_t*>(string.data()), string.size());
 }
 
 // static
-BigNum BigNum::fromStdString(const std::string& string)
+BigNum BigNum::fromByteArray(const base::ByteArray& array)
 {
-    return BigNum(string);
+    return BigNum(array.data(), array.size());
 }
 
 BigNum::Context::Context(Context&& other) noexcept
@@ -125,4 +133,4 @@ bignum_ctx* BigNum::Context::release()
     return ctx_.release();
 }
 
-} // namespace aspia
+} // namespace crypto

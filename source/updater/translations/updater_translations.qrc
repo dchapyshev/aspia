@@ -1,0 +1,8 @@
+<RCC>
+  <qresource prefix="/tr">
+    <file>aspia_updater_de.qm</file>
+    <file>aspia_updater_nl.qm</file>
+    <file>aspia_updater_ru.qm</file>
+    <file>aspia_updater_uk.qm</file>
+  </qresource>
+</RCC>

@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,37 +16,38 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_HOST__HOST_SERVICE_H_
-#define ASPIA_HOST__HOST_SERVICE_H_
+#ifndef HOST__HOST_SERVICE_H
+#define HOST__HOST_SERVICE_H
 
-#include <QCoreApplication>
+#include "base/win/service.h"
 
-#include "base/service.h"
-
-namespace aspia {
-
-class HostServer;
+namespace base::win {
 class ScopedCOMInitializer;
+} // namespace base::win
 
-class HostService : public Service<QCoreApplication>
+namespace host {
+
+class Server;
+
+class Service : public base::win::Service
 {
 public:
-    HostService();
-    ~HostService();
+    Service();
+    ~Service();
 
 protected:
-    // Service implementation.
-    void start() override;
-    void stop() override;
-    void sessionChange(uint32_t event, uint32_t session_id) override;
+    // base::win::Service implementation.
+    void onStart() override;
+    void onStop() override;
+    void onSessionEvent(base::win::SessionStatus status, base::SessionId session_id) override;
 
 private:
-    std::unique_ptr<ScopedCOMInitializer> com_initializer_;
-    std::unique_ptr<HostServer> server_;
+    std::unique_ptr<base::win::ScopedCOMInitializer> com_initializer_;
+    std::unique_ptr<Server> server_;
 
-    DISALLOW_COPY_AND_ASSIGN(HostService);
+    DISALLOW_COPY_AND_ASSIGN(Service);
 };
 
-} // namespace aspia
+} // namespace host
 
-#endif // ASPIA_HOST__HOST_SERVICE_H_
+#endif // HOST__HOST_SERVICE_H

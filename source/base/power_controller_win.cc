@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,25 +17,23 @@
 //
 
 #include "base/power_controller.h"
-
-#define WIN32_LEAN_AND_MEAN
-#define NOMINMAX
-#include <windows.h>
-#include <wtsapi32.h>
-
+#include "base/win/scoped_impersonator.h"
 #include "base/win/scoped_object.h"
 #include "base/logging.h"
 
-namespace aspia {
+#include <Windows.h>
+#include <wtsapi32.h>
+
+namespace base {
 
 namespace {
 
 // Delay for shutdown and reboot.
 const DWORD kActionDelayInSeconds = 30;
 
-bool copyProcessToken(DWORD desired_access, ScopedHandle* token_out)
+bool copyProcessToken(DWORD desired_access, win::ScopedHandle* token_out)
 {
-    ScopedHandle process_token;
+    win::ScopedHandle process_token;
     if (!OpenProcessToken(GetCurrentProcess(),
                           TOKEN_DUPLICATE | desired_access,
                           process_token.recieve()))
@@ -59,12 +57,12 @@ bool copyProcessToken(DWORD desired_access, ScopedHandle* token_out)
 }
 
 // Creates a copy of the current process with SE_SHUTDOWN_NAME privilege enabled.
-bool createPrivilegedToken(ScopedHandle* token_out)
+bool createPrivilegedToken(win::ScopedHandle* token_out)
 {
     const DWORD desired_access = TOKEN_ADJUST_PRIVILEGES | TOKEN_IMPERSONATE |
         TOKEN_DUPLICATE | TOKEN_QUERY;
 
-    ScopedHandle privileged_token;
+    win::ScopedHandle privileged_token;
     if (!copyProcessToken(desired_access, &privileged_token))
         return false;
 
@@ -98,19 +96,17 @@ bool PowerController::shutdown()
     const DWORD desired_access =
         TOKEN_ADJUST_DEFAULT | TOKEN_ASSIGN_PRIMARY | TOKEN_DUPLICATE | TOKEN_QUERY;
 
-    ScopedHandle process_token;
+    win::ScopedHandle process_token;
     if (!copyProcessToken(desired_access, &process_token))
         return false;
 
-    ScopedHandle privileged_token;
+    win::ScopedHandle privileged_token;
     if (!createPrivilegedToken(&privileged_token))
         return false;
 
-    if (!ImpersonateLoggedOnUser(privileged_token))
-    {
-        PLOG(LS_WARNING) << "ImpersonateLoggedOnUser failed";
+    win::ScopedImpersonator impersonator;
+    if (!impersonator.loggedOnUser(privileged_token))
         return false;
-    }
 
     const DWORD reason = SHTDN_REASON_MAJOR_APPLICATION | SHTDN_REASON_MINOR_MAINTENANCE;
 
@@ -121,10 +117,9 @@ bool PowerController::shutdown()
                                               FALSE, // Shutdown.
                                               reason);
     if (!result)
+    {
         PLOG(LS_WARNING) << "InitiateSystemShutdownExW failed";
-
-    BOOL ret = RevertToSelf();
-    CHECK(ret);
+    }
 
     return result;
 }
@@ -135,19 +130,17 @@ bool PowerController::reboot()
     const DWORD desired_access =
         TOKEN_ADJUST_DEFAULT | TOKEN_ASSIGN_PRIMARY | TOKEN_DUPLICATE | TOKEN_QUERY;
 
-    ScopedHandle process_token;
+    win::ScopedHandle process_token;
     if (!copyProcessToken(desired_access, &process_token))
         return false;
 
-    ScopedHandle privileged_token;
+    win::ScopedHandle privileged_token;
     if (!createPrivilegedToken(&privileged_token))
         return false;
 
-    if (!ImpersonateLoggedOnUser(privileged_token))
-    {
-        PLOG(LS_WARNING) << "ImpersonateLoggedOnUser failed";
+    win::ScopedImpersonator impersonator;
+    if (!impersonator.loggedOnUser(privileged_token))
         return false;
-    }
 
     const DWORD reason = SHTDN_REASON_MAJOR_APPLICATION | SHTDN_REASON_MINOR_MAINTENANCE;
 
@@ -158,10 +151,9 @@ bool PowerController::reboot()
                                               TRUE, // Reboot.
                                               reason);
     if (!result)
+    {
         PLOG(LS_WARNING) << "InitiateSystemShutdownExW failed";
-
-    BOOL ret = RevertToSelf();
-    CHECK(ret);
+    }
 
     return result;
 }
@@ -190,4 +182,4 @@ bool PowerController::lock()
     return true;
 }
 
-} // namespace aspia
+} // namespace base

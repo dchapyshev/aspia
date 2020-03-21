@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -19,22 +19,42 @@
 #include "host/win/host_service_main.h"
 
 #include "base/logging.h"
+#include "base/files/base_paths.h"
 #include "crypto/scoped_crypto_initializer.h"
 #include "host/win/host_service.h"
 
-namespace aspia {
+namespace host {
+
+namespace {
+
+std::filesystem::path loggingDir()
+{
+    std::filesystem::path path;
+
+    if (!base::BasePaths::commonAppData(&path))
+        return std::filesystem::path();
+
+    path.append("aspia/logs");
+    return path;
+}
+
+} // namespace
 
 int hostServiceMain(int argc, char *argv[])
 {
-    LoggingSettings settings;
-    settings.logging_dest = LOG_TO_ALL;
+    base::LoggingSettings settings;
+    settings.destination = base::LOG_TO_FILE;
+    settings.log_dir = loggingDir();
 
-    ScopedLogging logging(settings);
+    base::initLogging(settings);
 
-    ScopedCryptoInitializer crypto_initializer;
+    crypto::ScopedCryptoInitializer crypto_initializer;
     CHECK(crypto_initializer.isSucceeded());
 
-    return HostService().exec(argc, argv);
+    Service().exec();
+
+    base::shutdownLogging();
+    return 0;
 }
 
-} // namespace aspia
+} // namespace host

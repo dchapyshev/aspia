@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,34 +16,34 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CODEC__VIDEO_ENCODER_H_
-#define ASPIA_CODEC__VIDEO_ENCODER_H_
+#ifndef CODEC__VIDEO_ENCODER_H
+#define CODEC__VIDEO_ENCODER_H
 
-#include <memory>
+#include "desktop/screen_settings_tracker.h"
+#include "proto/desktop.pb.h"
 
-#include "desktop_capture/screen_settings_tracker.h"
-#include "protocol/desktop_session.pb.h"
+namespace desktop {
+class Frame;
+} // namespace desktop
 
-namespace aspia {
-
-class DesktopFrame;
+namespace codec {
 
 class VideoEncoder
 {
 public:
     virtual ~VideoEncoder() = default;
 
-    virtual void encode(const DesktopFrame* frame, proto::desktop::VideoPacket* packet) = 0;
+    virtual void encode(const desktop::Frame* frame, proto::VideoPacket* packet) = 0;
 
 protected:
-    void fillPacketInfo(proto::desktop::VideoEncoding encoding,
-                        const DesktopFrame* frame,
-                        proto::desktop::VideoPacket* packet);
+    void fillPacketInfo(proto::VideoEncoding encoding,
+                        const desktop::Frame* frame,
+                        proto::VideoPacket* packet);
 
 private:
-    ScreenSettingsTracker screen_settings_tracker_;
+    desktop::ScreenSettingsTracker screen_settings_tracker_;
 };
 
-} // namespace aspia
+} // namespace codec
 
-#endif // ASPIA_CODEC__VIDEO_ENCODER_H_
+#endif // CODEC__VIDEO_ENCODER_H

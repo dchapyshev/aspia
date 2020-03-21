@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,15 +16,15 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CONSOLE__COMPUTER_ITEM_H_
-#define ASPIA_CONSOLE__COMPUTER_ITEM_H_
+#ifndef CONSOLE__COMPUTER_ITEM_H
+#define CONSOLE__COMPUTER_ITEM_H
+
+#include "base/macros_magic.h"
+#include "proto/address_book.pb.h"
 
 #include <QTreeWidget>
 
-#include "base/macros_magic.h"
-#include "protocol/address_book.pb.h"
-
-namespace aspia {
+namespace console {
 
 class ComputerGroupItem;
 
@@ -40,11 +40,9 @@ public:
     {
         COLUMN_INDEX_NAME      = 0,
         COLUMN_INDEX_ADDRESS   = 1,
-        COLUMN_INDEX_PORT      = 2,
-        COLUMN_INDEX_COMMENT   = 3,
-        COLUMN_INDEX_CREATED   = 4,
-        COLUMN_INDEX_MODIFIED  = 5,
-        COLUMN_INDEX_CONNECTED = 6
+        COLUMN_INDEX_COMMENT   = 2,
+        COLUMN_INDEX_CREATED   = 3,
+        COLUMN_INDEX_MODIFIED  = 4
     };
 
     proto::address_book::Computer* computer() { return computer_; }
@@ -62,6 +60,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(ComputerItem);
 };
 
-} // namespace aspia
+} // namespace console
 
-#endif // ASPIA_CONSOLE__COMPUTER_ITEM_H_
+#endif // CONSOLE__COMPUTER_ITEM_H

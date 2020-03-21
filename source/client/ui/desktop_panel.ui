@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>255</width>
+    <width>261</width>
     <height>40</height>
    </rect>
   </property>
@@ -69,8 +69,13 @@
      <addaction name="action_fullscreen"/>
      <addaction name="separator"/>
      <addaction name="action_file_transfer"/>
+     <addaction name="action_system_info"/>
      <addaction name="separator"/>
+     <addaction name="action_update"/>
      <addaction name="action_menu"/>
+     <addaction name="separator"/>
+     <addaction name="action_minimize"/>
+     <addaction name="action_close"/>
     </widget>
    </item>
    <item>
@@ -111,7 +116,7 @@
    </property>
    <property name="icon">
     <iconset resource="../resources/client.qrc">
-     <normaloff>:/icon/pin.png</normaloff>:/icon/pin.png</iconset>
+     <normaloff>:/img/pin.png</normaloff>:/img/pin.png</iconset>
    </property>
    <property name="text">
     <string notr="true"/>
@@ -123,7 +128,7 @@
   <action name="action_settings">
    <property name="icon">
     <iconset resource="../resources/client.qrc">
-     <normaloff>:/icon/settings.png</normaloff>:/icon/settings.png</iconset>
+     <normaloff>:/img/settings.png</normaloff>:/img/settings.png</iconset>
    </property>
    <property name="text">
     <string notr="true"/>
@@ -135,7 +140,7 @@
   <action name="action_monitors">
    <property name="icon">
     <iconset resource="../resources/client.qrc">
-     <normaloff>:/icon/monitors.png</normaloff>:/icon/monitors.png</iconset>
+     <normaloff>:/img/monitors.png</normaloff>:/img/monitors.png</iconset>
    </property>
    <property name="text">
     <string notr="true"/>
@@ -143,11 +148,14 @@
    <property name="toolTip">
     <string>Monitor selection</string>
    </property>
+   <property name="visible">
+    <bool>false</bool>
+   </property>
   </action>
   <action name="action_autosize">
    <property name="icon">
     <iconset resource="../resources/client.qrc">
-     <normaloff>:/icon/arrow-in-out.png</normaloff>:/icon/arrow-in-out.png</iconset>
+     <normaloff>:/img/arrow-in-out.png</normaloff>:/img/arrow-in-out.png</iconset>
    </property>
    <property name="text">
     <string notr="true"/>
@@ -162,7 +170,7 @@
    </property>
    <property name="icon">
     <iconset resource="../resources/client.qrc">
-     <normaloff>:/icon/application-resize-full.png</normaloff>:/icon/application-resize-full.png</iconset>
+     <normaloff>:/img/application-resize-full.png</normaloff>:/img/application-resize-full.png</iconset>
    </property>
    <property name="text">
     <string notr="true"/>
@@ -185,7 +193,7 @@
   <action name="action_cad">
    <property name="icon">
     <iconset resource="../resources/client.qrc">
-     <normaloff>:/icon/ctrl-alt-del.png</normaloff>:/icon/ctrl-alt-del.png</iconset>
+     <normaloff>:/img/ctrl-alt-del.png</normaloff>:/img/ctrl-alt-del.png</iconset>
    </property>
    <property name="text">
     <string notr="true"/>
@@ -197,7 +205,7 @@
   <action name="action_menu">
    <property name="icon">
     <iconset resource="../resources/client.qrc">
-     <normaloff>:/icon/menu.png</normaloff>:/icon/menu.png</iconset>
+     <normaloff>:/img/menu.png</normaloff>:/img/menu.png</iconset>
    </property>
    <property name="text">
     <string notr="true"/>
@@ -220,7 +228,7 @@
   <action name="action_file_transfer">
    <property name="icon">
     <iconset resource="../resources/client.qrc">
-     <normaloff>:/icon/folder-stand.png</normaloff>:/icon/folder-stand.png</iconset>
+     <normaloff>:/img/folder-stand.png</normaloff>:/img/folder-stand.png</iconset>
    </property>
    <property name="text">
     <string/>
@@ -229,12 +237,12 @@
     <string>File transfer</string>
    </property>
   </action>
-  <action name="action_scaling">
+  <action name="action_scale">
    <property name="checkable">
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Scaling an image</string>
+    <string>Scale</string>
    </property>
   </action>
   <action name="action_send_key_combinations">
@@ -251,13 +259,16 @@
   <action name="action_power_control">
    <property name="icon">
     <iconset resource="../resources/client.qrc">
-     <normaloff>:/icon/lightning.png</normaloff>:/icon/lightning.png</iconset>
+     <normaloff>:/img/lightning.png</normaloff>:/img/lightning.png</iconset>
    </property>
    <property name="text">
     <string>Power control</string>
    </property>
    <property name="toolTip">
     <string>Power control</string>
+   </property>
+   <property name="visible">
+    <bool>false</bool>
    </property>
   </action>
   <action name="action_shutdown">
@@ -278,6 +289,113 @@
   <action name="action_lock">
    <property name="text">
     <string>Lock</string>
+   </property>
+  </action>
+  <action name="action_update">
+   <property name="icon">
+    <iconset resource="../resources/client.qrc">
+     <normaloff>:/img/update.png</normaloff>:/img/update.png</iconset>
+   </property>
+   <property name="text">
+    <string>Remote Update</string>
+   </property>
+   <property name="visible">
+    <bool>false</bool>
+   </property>
+  </action>
+  <action name="action_system_info">
+   <property name="icon">
+    <iconset resource="../resources/client.qrc">
+     <normaloff>:/img/computer_info.png</normaloff>:/img/computer_info.png</iconset>
+   </property>
+   <property name="text">
+    <string>System Information</string>
+   </property>
+   <property name="visible">
+    <bool>false</bool>
+   </property>
+  </action>
+  <action name="action_close">
+   <property name="icon">
+    <iconset resource="../resources/client.qrc">
+     <normaloff>:/img/cross-button.png</normaloff>:/img/cross-button.png</iconset>
+   </property>
+   <property name="text">
+    <string>Close</string>
+   </property>
+   <property name="toolTip">
+    <string>Close session</string>
+   </property>
+  </action>
+  <action name="action_scale100">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string notr="true">100%</string>
+   </property>
+  </action>
+  <action name="action_scale90">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string notr="true">90%</string>
+   </property>
+  </action>
+  <action name="action_scale80">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string notr="true">80%</string>
+   </property>
+  </action>
+  <action name="action_scale70">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string notr="true">70%</string>
+   </property>
+  </action>
+  <action name="action_scale60">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string notr="true">60%</string>
+   </property>
+  </action>
+  <action name="action_scale50">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string notr="true">50%</string>
+   </property>
+  </action>
+  <action name="action_fit_window">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Fit window</string>
+   </property>
+  </action>
+  <action name="action_minimize">
+   <property name="icon">
+    <iconset resource="../resources/client.qrc">
+     <normaloff>:/img/arrow-stop-270.png</normaloff>:/img/arrow-stop-270.png</iconset>
+   </property>
+   <property name="text">
+    <string>Minimize</string>
+   </property>
+   <property name="toolTip">
+    <string>Minimize window</string>
    </property>
   </action>
  </widget>

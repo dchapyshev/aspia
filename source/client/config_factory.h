@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,30 +16,30 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CLIENT__CONFIG_FACTORY_H_
-#define ASPIA_CLIENT__CONFIG_FACTORY_H_
+#ifndef CLIENT__CONFIG_FACTORY_H
+#define CLIENT__CONFIG_FACTORY_H
 
 #include "base/macros_magic.h"
-#include "protocol/desktop_session.pb.h"
+#include "proto/desktop.pb.h"
 
-namespace aspia {
+namespace client {
 
 class ConfigFactory
 {
 public:
-    static proto::desktop::Config defaultDesktopManageConfig();
-    static proto::desktop::Config defaultDesktopViewConfig();
+    static proto::DesktopConfig defaultDesktopManageConfig();
+    static proto::DesktopConfig defaultDesktopViewConfig();
 
-    static void setDefaultDesktopManageConfig(proto::desktop::Config* config);
-    static void setDefaultDesktopViewConfig(proto::desktop::Config* config);
+    static void setDefaultDesktopManageConfig(proto::DesktopConfig* config);
+    static void setDefaultDesktopViewConfig(proto::DesktopConfig* config);
 
     // Corrects invalid values in the configuration if they are.
-    static void fixupDesktopConfig(proto::desktop::Config* config);
+    static void fixupDesktopConfig(proto::DesktopConfig* config);
 
 private:
     DISALLOW_COPY_AND_ASSIGN(ConfigFactory);
 };
 
-} // namespace aspia
+} // namespace client
 
-#endif // ASPIA_CLIENT__CONFIG_FACTORY_H_
+#endif // CLIENT__CONFIG_FACTORY_H

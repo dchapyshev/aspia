@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,45 +17,50 @@
 //
 
 #include "client/ui/desktop_panel.h"
+#include "base/logging.h"
+#include "client/ui/desktop_settings.h"
+#include "client/ui/select_screen_action.h"
 
 #include <QMenu>
 #include <QMessageBox>
 #include <QToolButton>
 
-#include "base/logging.h"
-#include "client/ui/desktop_settings.h"
-#include "client/ui/select_screen_action.h"
-
-namespace aspia {
+namespace client {
 
 DesktopPanel::DesktopPanel(proto::SessionType session_type, QWidget* parent)
-    : QFrame(parent)
+    : QFrame(parent),
+      session_type_(session_type)
 {
     ui.setupUi(this);
 
-    DesktopSettings settings;
-    ui.action_scaling->setChecked(settings.scaling());
-    ui.action_autoscroll->setChecked(settings.autoScrolling());
-    ui.action_send_key_combinations->setChecked(settings.sendKeyCombinations());
+    ui.action_autoscroll->setChecked(settings_.autoScrolling());
+
+    scale_ = settings_.scale();
+
+    // Sending key combinations is available only in desktop management.
+    if (session_type == proto::SESSION_TYPE_DESKTOP_MANAGE)
+        ui.action_send_key_combinations->setChecked(settings_.sendKeyCombinations());
+    else
+        ui.action_send_key_combinations->setChecked(false);
 
     connect(ui.action_settings, &QAction::triggered, this, &DesktopPanel::settingsButton);
     connect(ui.action_autosize, &QAction::triggered, this, &DesktopPanel::onAutosizeButton);
     connect(ui.action_fullscreen, &QAction::triggered, this, &DesktopPanel::onFullscreenButton);
     connect(ui.action_autoscroll, &QAction::triggered, this, &DesktopPanel::autoScrollChanged);
+    connect(ui.action_update, &QAction::triggered, this, &DesktopPanel::startRemoteUpdate);
+    connect(ui.action_system_info, &QAction::triggered, this, &DesktopPanel::startSystemInfo);
+    connect(ui.action_minimize, &QAction::triggered, this, &DesktopPanel::minimizeSession);
+    connect(ui.action_close, &QAction::triggered, this, &DesktopPanel::closeSession);
 
-    createScreensMenu();
     createAdditionalMenu(session_type);
 
     if (session_type == proto::SESSION_TYPE_DESKTOP_MANAGE)
     {
-        createPowerMenu();
         connect(ui.action_cad, &QAction::triggered, this, &DesktopPanel::onCtrlAltDel);
     }
     else
     {
         DCHECK(session_type == proto::SESSION_TYPE_DESKTOP_VIEW);
-
-        ui.action_power_control->setVisible(false);
         ui.action_cad->setVisible(false);
     }
 
@@ -65,53 +70,134 @@ DesktopPanel::DesktopPanel(proto::SessionType session_type, QWidget* parent)
     });
 
     ui.frame->hide();
-    adjustSize();
+    showFullScreenButtons(false);
 
     hide_timer_id_ = startTimer(std::chrono::seconds(1));
 }
 
 DesktopPanel::~DesktopPanel()
 {
-    DesktopSettings settings;
-    settings.setScaling(ui.action_scaling->isChecked());
-    settings.setAutoScrolling(ui.action_autoscroll->isChecked());
-    settings.setSendKeyCombinations(ui.action_send_key_combinations->isChecked());
+    settings_.setScale(scale_);
+    settings_.setAutoScrolling(ui.action_autoscroll->isChecked());
+
+    // Save the parameter only for desktop management.
+    if (session_type_ == proto::SESSION_TYPE_DESKTOP_MANAGE)
+        settings_.setSendKeyCombinations(ui.action_send_key_combinations->isChecked());
 }
 
-void DesktopPanel::setScreenList(const proto::desktop::ScreenList& screen_list)
+void DesktopPanel::enableScreenSelect(bool /* enable */)
 {
-    delete screens_group_;
+    // By default, we disable the monitor selection menu. Selection will be enabled when receiving
+    // a list of monitors.
+    ui.action_monitors->setVisible(false);
+    ui.action_monitors->setEnabled(false);
+    screens_menu_.reset();
+    updateSize();
+}
 
-    screens_group_ = new QActionGroup(this);
+void DesktopPanel::enablePowerControl(bool enable)
+{
+    ui.action_power_control->setVisible(enable);
+    ui.action_power_control->setEnabled(enable);
 
-    connect(screens_group_, &QActionGroup::triggered, [this](QAction* action)
+    if (!enable)
     {
-        SelectScreenAction* screen_action = dynamic_cast<SelectScreenAction*>(action);
-        if (!screen_action)
-            return;
+        power_menu_.reset();
+    }
+    else
+    {
+        power_menu_.reset(new QMenu());
+        power_menu_->addAction(ui.action_shutdown);
+        power_menu_->addAction(ui.action_reboot);
+        power_menu_->addAction(ui.action_logoff);
+        power_menu_->addAction(ui.action_lock);
 
-        emit screenSelected(screen_action->screen());
-    });
+        ui.action_power_control->setMenu(power_menu_.get());
 
-    SelectScreenAction* full_desktop_action = new SelectScreenAction(screens_group_);
+        QToolButton* button = qobject_cast<QToolButton*>(
+            ui.toolbar->widgetForAction(ui.action_power_control));
+        button->setPopupMode(QToolButton::InstantPopup);
 
-    screens_group_->addAction(full_desktop_action);
-    screens_menu_->addAction(full_desktop_action);
+        connect(power_menu_.get(), &QMenu::triggered, this, &DesktopPanel::onPowerControl);
+        connect(power_menu_.get(), &QMenu::aboutToShow, [this]() { allow_hide_ = false; });
+        connect(power_menu_.get(), &QMenu::aboutToHide, [this]()
+        {
+            allow_hide_ = true;
+
+            if (leaved_)
+                delayedHide();
+        });
+    }
+
+    updateSize();
+}
+
+void DesktopPanel::enableSystemInfo(bool enable)
+{
+    ui.action_system_info->setVisible(enable);
+    ui.action_system_info->setEnabled(enable);
+    updateSize();
+}
+
+void DesktopPanel::enableRemoteUpdate(bool enable)
+{
+    ui.action_update->setVisible(enable);
+    ui.action_update->setEnabled(enable);
+    updateSize();
+}
+
+void DesktopPanel::setScreenList(const proto::ScreenList& screen_list)
+{
+    screens_menu_.reset();
+
+    // If it has only one screen or an empty list is received.
+    if (screen_list.screen_size() <= 1)
+    {
+        // Monitor selection not available.
+        ui.action_monitors->setVisible(false);
+        return;
+    }
+
+    screens_menu_.reset(new QMenu());
+    screens_group_ = new QActionGroup(screens_menu_.get());
+
+    SelectScreenAction* full_screen_action = new SelectScreenAction(screens_group_);
+    screens_group_->addAction(full_screen_action);
+    screens_menu_->addAction(full_screen_action);
+
+    ui.action_monitors->setMenu(screens_menu_.get());
+
+    QToolButton* button = qobject_cast<QToolButton*>(
+        ui.toolbar->widgetForAction(ui.action_monitors));
+    button->setPopupMode(QToolButton::InstantPopup);
 
     for (int i = 0; i < screen_list.screen_size(); ++i)
     {
-        SelectScreenAction* action = new SelectScreenAction(screen_list.screen(i), screens_group_);
+        SelectScreenAction* action = new SelectScreenAction(
+            screen_list.screen(i), tr("Monitor %1").arg(i + 1), screens_group_);
 
         screens_group_->addAction(action);
         screens_menu_->addAction(action);
     }
 
-    ui.action_monitors->setEnabled(true);
-}
+    connect(screens_menu_.get(), &QMenu::aboutToShow, [this]() { allow_hide_ = false; });
+    connect(screens_menu_.get(), &QMenu::aboutToHide, [this]()
+    {
+        allow_hide_ = true;
 
-bool DesktopPanel::scaling() const
-{
-    return ui.action_scaling->isChecked();
+        if (leaved_)
+            delayedHide();
+    });
+
+    connect(screens_group_, &QActionGroup::triggered, [this](QAction* action)
+    {
+        emit screenSelected(static_cast<SelectScreenAction*>(action)->screen());
+    });
+
+    ui.action_monitors->setVisible(true);
+    ui.action_monitors->setEnabled(true);
+
+    updateSize();
 }
 
 bool DesktopPanel::autoScrolling() const
@@ -179,13 +265,15 @@ void DesktopPanel::onFullscreenButton(bool checked)
     if (checked)
     {
         ui.action_fullscreen->setIcon(
-            QIcon(QStringLiteral(":/icon/application-resize-actual.png")));
+            QIcon(QStringLiteral(":/img/application-resize-actual.png")));
     }
     else
     {
         ui.action_fullscreen->setIcon(
-            QIcon(QStringLiteral(":/icon/application-resize-full.png")));
+            QIcon(QStringLiteral(":/img/application-resize-full.png")));
     }
+
+    showFullScreenButtons(checked);
 
     emit switchToFullscreen(checked);
 }
@@ -195,8 +283,10 @@ void DesktopPanel::onAutosizeButton()
     if (ui.action_fullscreen->isChecked())
     {
         ui.action_fullscreen->setIcon(
-            QIcon(QStringLiteral(":/icon/application-resize-full.png")));
+            QIcon(QStringLiteral(":/img/application-resize-full.png")));
         ui.action_fullscreen->setChecked(false);
+
+        showFullScreenButtons(false);
     }
 
     emit switchToAutosize();
@@ -217,7 +307,7 @@ void DesktopPanel::onPowerControl(QAction* action)
                                   QMessageBox::Yes,
                                   QMessageBox::No) == QMessageBox::Yes)
         {
-            emit powerControl(proto::desktop::PowerControl::ACTION_SHUTDOWN);
+            emit powerControl(proto::PowerControl::ACTION_SHUTDOWN);
         }
     }
     else if (action == ui.action_reboot)
@@ -228,7 +318,7 @@ void DesktopPanel::onPowerControl(QAction* action)
                                   QMessageBox::Yes,
                                   QMessageBox::No) == QMessageBox::Yes)
         {
-            emit powerControl(proto::desktop::PowerControl::ACTION_REBOOT);
+            emit powerControl(proto::PowerControl::ACTION_REBOOT);
         }
     }
     else if (action == ui.action_logoff)
@@ -239,7 +329,7 @@ void DesktopPanel::onPowerControl(QAction* action)
                                   QMessageBox::Yes,
                                   QMessageBox::No) == QMessageBox::Yes)
         {
-            emit powerControl(proto::desktop::PowerControl::ACTION_LOGOFF);
+            emit powerControl(proto::PowerControl::ACTION_LOGOFF);
         }
     }
     else if (action == ui.action_lock)
@@ -250,7 +340,7 @@ void DesktopPanel::onPowerControl(QAction* action)
                                   QMessageBox::Yes,
                                   QMessageBox::No) == QMessageBox::Yes)
         {
-            emit powerControl(proto::desktop::PowerControl::ACTION_LOCK);
+            emit powerControl(proto::PowerControl::ACTION_LOCK);
         }
     }
 }
@@ -259,7 +349,22 @@ void DesktopPanel::createAdditionalMenu(proto::SessionType session_type)
 {
     // Create a menu and add actions to it.
     additional_menu_ = new QMenu(this);
-    additional_menu_->addAction(ui.action_scaling);
+
+    scale_group_ = new QActionGroup(additional_menu_);
+    scale_group_->addAction(ui.action_scale100);
+    scale_group_->addAction(ui.action_scale90);
+    scale_group_->addAction(ui.action_scale80);
+    scale_group_->addAction(ui.action_scale70);
+    scale_group_->addAction(ui.action_scale60);
+    scale_group_->addAction(ui.action_scale50);
+
+    scale_menu_ = additional_menu_->addMenu(tr("Scale"));
+    scale_menu_->addAction(ui.action_fit_window);
+    scale_menu_->addSeparator();
+    scale_menu_->addActions(scale_group_->actions());
+
+    updateScaleMenu();
+
     additional_menu_->addAction(ui.action_autoscroll);
 
     if (session_type == proto::SESSION_TYPE_DESKTOP_MANAGE)
@@ -281,10 +386,52 @@ void DesktopPanel::createAdditionalMenu(proto::SessionType session_type)
                 this, &DesktopPanel::keyCombinationsChanged);
     }
 
-    connect(ui.action_scaling, &QAction::toggled, [this](bool checked)
+    connect(scale_group_, &QActionGroup::triggered, [this](QAction* action)
+    {
+        if (action == ui.action_scale100)
+            scale_ = 100;
+        else if (action == ui.action_scale90)
+            scale_ = 90;
+        else if (action == ui.action_scale80)
+            scale_ = 80;
+        else if (action == ui.action_scale70)
+            scale_ = 70;
+        else if (action == ui.action_scale60)
+            scale_ = 60;
+        else if (action == ui.action_scale50)
+            scale_ = 50;
+        else
+            return;
+
+        emit scaleChanged();
+    });
+
+    connect(ui.action_fit_window, &QAction::toggled, [this](bool checked)
     {
         ui.action_autoscroll->setEnabled(!checked);
-        emit scalingChanged(checked);
+        scale_group_->setEnabled(!checked);
+
+        if (checked)
+        {
+            scale_ = -1;
+        }
+        else
+        {
+            if (ui.action_scale90->isChecked())
+                scale_ = 90;
+            else if (ui.action_scale80->isChecked())
+                scale_ = 80;
+            else if (ui.action_scale70->isChecked())
+                scale_ = 70;
+            else if (ui.action_scale60->isChecked())
+                scale_ = 60;
+            else if (ui.action_scale50->isChecked())
+                scale_ = 50;
+            else
+                scale_ = 100;
+        }
+
+        emit scaleChanged();
     });
 
     connect(ui.action_screenshot, &QAction::triggered, this, &DesktopPanel::takeScreenshot);
@@ -298,53 +445,63 @@ void DesktopPanel::createAdditionalMenu(proto::SessionType session_type)
     });
 }
 
-void DesktopPanel::createPowerMenu()
+void DesktopPanel::showFullScreenButtons(bool show)
 {
-    power_menu_ = new QMenu(this);
-    power_menu_->addAction(ui.action_shutdown);
-    power_menu_->addAction(ui.action_reboot);
-    power_menu_->addAction(ui.action_logoff);
-    power_menu_->addAction(ui.action_lock);
+    ui.action_minimize->setVisible(show);
+    ui.action_minimize->setEnabled(show);
+    ui.action_close->setVisible(show);
+    ui.action_close->setEnabled(show);
 
-    ui.action_power_control->setMenu(power_menu_);
+    QList<QAction*> actions = ui.toolbar->actions();
 
-    QToolButton* button = qobject_cast<QToolButton*>(
-        ui.toolbar->widgetForAction(ui.action_power_control));
-    button->setPopupMode(QToolButton::InstantPopup);
-
-    connect(power_menu_, &QMenu::triggered, this, &DesktopPanel::onPowerControl);
-    connect(power_menu_, &QMenu::aboutToShow, [this]() { allow_hide_ = false; });
-    connect(power_menu_, &QMenu::aboutToHide, [this]()
+    for (auto it = actions.crbegin(); it != actions.crend(); ++it)
     {
-        allow_hide_ = true;
+        QAction* action = *it;
 
-        if (leaved_)
-            delayedHide();
-    });
+        if (action->isSeparator())
+        {
+            action->setVisible(show);
+            break;
+        }
+    }
+
+    updateSize();
 }
 
-void DesktopPanel::createScreensMenu()
+void DesktopPanel::updateScaleMenu()
 {
-    screens_menu_ = new QMenu(this);
-    screens_group_ = new QActionGroup(this);
-
-    SelectScreenAction* full_screen_action = new SelectScreenAction(screens_group_);
-    screens_group_->addAction(full_screen_action);
-    screens_menu_->addAction(full_screen_action);
-
-    ui.action_monitors->setMenu(screens_menu_);
-
-    QToolButton* button = qobject_cast<QToolButton*>(ui.toolbar->widgetForAction(ui.action_monitors));
-    button->setPopupMode(QToolButton::InstantPopup);
-
-    connect(screens_menu_, &QMenu::aboutToShow, [this]() { allow_hide_ = false; });
-    connect(screens_menu_, &QMenu::aboutToHide, [this]()
+    if (scale_ == -1)
     {
-        allow_hide_ = true;
+        ui.action_fit_window->setChecked(true);
+        scale_group_->setEnabled(false);
+    }
+    else
+    {
+        ui.action_fit_window->setChecked(false);
+        scale_group_->setEnabled(true);
 
-        if (leaved_)
-            delayedHide();
-    });
+        if (scale_ == 90)
+            ui.action_scale90->setChecked(true);
+        else if (scale_ == 80)
+            ui.action_scale80->setChecked(true);
+        else if (scale_ == 70)
+            ui.action_scale70->setChecked(true);
+        else if (scale_ == 60)
+            ui.action_scale60->setChecked(true);
+        else if (scale_ == 50)
+            ui.action_scale50->setChecked(true);
+        else
+        {
+            ui.action_scale100->setChecked(true);
+            scale_ = 100;
+        }
+    }
+}
+
+void DesktopPanel::updateSize()
+{
+    ui.toolbar->adjustSize();
+    adjustSize();
 }
 
 void DesktopPanel::delayedHide()
@@ -353,4 +510,4 @@ void DesktopPanel::delayedHide()
         hide_timer_id_ = startTimer(std::chrono::seconds(1));
 }
 
-} // namespace aspia
+} // namespace client

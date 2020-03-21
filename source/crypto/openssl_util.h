@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,16 +16,20 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CRYPTO__OPENSSL_UTIL_H_
-#define ASPIA_CRYPTO__OPENSSL_UTIL_H_
+#ifndef CRYPTO__OPENSSL_UTIL_H
+#define CRYPTO__OPENSSL_UTIL_H
+
+#include "base/memory/byte_array.h"
 
 #include <memory>
 
 struct bignum_ctx;
 struct bignum_st;
 struct evp_cipher_ctx_st;
+struct evp_pkey_ctx_st;
+struct evp_pkey_st;
 
-namespace aspia {
+namespace crypto {
 
 struct BIGNUM_CTX_Deleter
 {
@@ -42,10 +46,37 @@ struct EVP_CIPHER_CTX_Deleter
     void operator()(evp_cipher_ctx_st* ctx);
 };
 
+struct EVP_PKEY_CTX_Deleter
+{
+    void operator()(evp_pkey_ctx_st* ctx);
+};
+
+struct EVP_PKEY_Deleter
+{
+    void operator()(evp_pkey_st* pkey);
+};
+
 using BIGNUM_CTX_ptr = std::unique_ptr<bignum_ctx, BIGNUM_CTX_Deleter>;
 using BIGNUM_ptr = std::unique_ptr<bignum_st, BIGNUM_Deleter>;
 using EVP_CIPHER_CTX_ptr = std::unique_ptr<evp_cipher_ctx_st, EVP_CIPHER_CTX_Deleter>;
+using EVP_PKEY_CTX_ptr = std::unique_ptr<evp_pkey_ctx_st, EVP_PKEY_CTX_Deleter>;
+using EVP_PKEY_ptr = std::unique_ptr<evp_pkey_st, EVP_PKEY_Deleter>;
 
-} // namespace aspia
+enum class CipherType
+{
+    AES256_GCM,
+    CHACHA20_POLY1305
+};
 
-#endif // ASPIA_CRYPTO__OPENSSL_UTIL_H_
+enum class CipherMode
+{
+    ENCRYPT,
+    DECRYPT
+};
+
+EVP_CIPHER_CTX_ptr createCipher(
+    CipherType type, CipherMode mode, const base::ByteArray& key, int iv_size);
+
+} // namespace crypto
+
+#endif // CRYPTO__OPENSSL_UTIL_H

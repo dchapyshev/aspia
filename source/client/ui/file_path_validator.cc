@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,10 +17,9 @@
 //
 
 #include "client/ui/file_path_validator.h"
-
 #include "common/file_platform_util.h"
 
-namespace aspia {
+namespace client {
 
 FilePathValidator::FilePathValidator(QObject* parent)
     : QValidator(parent)
@@ -32,7 +31,8 @@ FilePathValidator::State FilePathValidator::validate(QString& input, int& pos) c
 {
     if (!input.isEmpty())
     {
-        const QList<QChar>& invalid_characters = FilePlatformUtil::invalidPathCharacters();
+        const QList<QChar>& invalid_characters =
+            common::FilePlatformUtil::invalidPathCharacters();
 
         for (const auto& character : input)
         {
@@ -50,7 +50,7 @@ FilePathValidator::State FilePathValidator::validate(QString& input, int& pos) c
 void FilePathValidator::fixup(QString& input) const
 {
     const QList<QChar>& invalid_characters =
-        FilePlatformUtil::invalidPathCharacters();
+        common::FilePlatformUtil::invalidPathCharacters();
 
     for (auto it = input.begin(); it != input.end(); ++it)
     {
@@ -59,4 +59,4 @@ void FilePathValidator::fixup(QString& input) const
     }
 }
 
-} // namespace aspia
+} // namespace client

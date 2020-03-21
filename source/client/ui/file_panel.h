@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,15 +16,15 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CLIENT__UI__FILE_PANEL_H_
-#define ASPIA_CLIENT__UI__FILE_PANEL_H_
+#ifndef CLIENT__UI__FILE_PANEL_H
+#define CLIENT__UI__FILE_PANEL_H
 
 #include "client/file_remover.h"
 #include "client/file_transfer.h"
-#include "protocol/file_transfer_session.pb.h"
+#include "proto/file_transfer.pb.h"
 #include "ui_file_panel.h"
 
-namespace aspia {
+namespace client {
 
 class FilePanel : public QWidget
 {
@@ -34,6 +34,11 @@ public:
     explicit FilePanel(QWidget* parent = nullptr);
     ~FilePanel() = default;
 
+    void onDriveList(proto::FileError error_code, const proto::DriveList& drive_list);
+    void onFileList(proto::FileError error_code, const proto::FileList& file_list);
+    void onCreateDirectory(proto::FileError error_code);
+    void onRename(proto::FileError error_code);
+
     void setPanelName(const QString& name);
     void setMimeType(const QString& mime_type);
     void setTransferAllowed(bool allowed);
@@ -41,24 +46,22 @@ public:
 
     QString currentPath() const { return ui.address_bar->currentPath(); }
 
-    QByteArray driveListState() const { return ui.list->driveListState(); }
-    void setDriveListState(const QByteArray& state) { ui.list->setDriveListState(state); }
-
-    QByteArray fileListState() const { return ui.list->fileListState(); }
-    void setFileListState(const QByteArray& state) { ui.list->setFileListState(state); }
+    QByteArray saveState() const;
+    void restoreState(const QByteArray& state);
 
 signals:
-    void newRequest(FileRequest* request);
-    void removeItems(FilePanel* sender, const QList<FileRemover::Item>& items);
-    void sendItems(FilePanel* sender, const QList<FileTransfer::Item>& items);
+    void driveList();
+    void fileList(const QString& path);
+    void rename(const QString& old_name, const QString& new_name);
+    void createDirectory(const QString& path);
+    void removeItems(FilePanel* sender, const FileRemover::TaskList& items);
+    void sendItems(FilePanel* sender, const std::vector<FileTransfer::Item>& items);
     void receiveItems(FilePanel* sender,
                       const QString& folder,
-                      const QList<FileTransfer::Item>& items);
+                      const std::vector<FileTransfer::Item>& items);
     void pathChanged(FilePanel* sender, const QString& path);
 
 public slots:
-    void reply(const proto::file_transfer::Request& request,
-               const proto::file_transfer::Reply& reply);
     void refresh();
 
 protected:
@@ -80,6 +83,8 @@ private slots:
     void sendSelected();
 
 private:
+    void showError(const QString& message);
+
     Ui::FilePanel ui;
 
     bool transfer_allowed_ = false;
@@ -88,6 +93,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(FilePanel);
 };
 
-} // namespace aspia
+} // namespace client
 
-#endif // ASPIA_CLIENT__UI__FILE_PANEL_H_
+#endif // CLIENT__UI__FILE_PANEL_H

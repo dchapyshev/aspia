@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,20 +16,21 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_BASE__LOGGING_H_
-#define ASPIA_BASE__LOGGING_H_
+#ifndef BASE__LOGGING_H
+#define BASE__LOGGING_H
 
+#include "base/scoped_clear_last_error.h"
+#include "base/system_error.h"
+
+#include <filesystem>
 #include <sstream>
 #include <type_traits>
 #include <utility>
 
-#include "base/macros_magic.h"
-
-
 // Instructions
 // ------------
 //
-// Make a bunch of macros for logging.  The way to log things is to stream things to
+// Make a bunch of macros for logging. The way to log things is to stream things to
 // LOG(<a particular severity level>). E.g.,
 //
 //   LOG(LS_INFO) << "Found " << num_cookies << " cookies";
@@ -79,12 +80,12 @@
 //
 // There is the special severity of DFATAL, which logs LS_FATAL in debug mode, LS_ERROR in normal mode.
 
-namespace aspia {
+namespace base {
 
 #if defined(NDEBUG) && !defined(DCHECK_ALWAYS_ON)
-#define DCHECK_IS_ON() 0
+#define DCHECK_IS_ON() false
 #else
-#define DCHECK_IS_ON() 1
+#define DCHECK_IS_ON() true
 #endif
 
 // Where to record logging output? A flat file and/or system debug log via OutputDebugString.
@@ -99,14 +100,6 @@ enum LoggingDestination
     // On Windows, use a file next to the exe.
     LOG_DEFAULT = LOG_TO_FILE,
 };
-
-// Indicates that the log file should be locked when being written to. Unless there is only one
-// single-threaded process that is logging to the log file, the file should be locked during writes
-// to make each log output atomic. Other writers will block.
-//
-// All processes writing to the log file must have their locking set for it to work properly.
-// Defaults to LOCK_LOG_FILE.
-enum LogLockingState { LOCK_LOG_FILE, DONT_LOCK_LOG_FILE };
 
 enum LoggingSeverity : int
 {
@@ -123,47 +116,22 @@ struct LoggingSettings
 {
     // The defaults values are:
     //
-    //  logging_dest: LOG_DEFAULT
-    //  log_file:     NULL
-    //  lock_log:     LOCK_LOG_FILE
-    //  delete_old:   APPEND_TO_OLD_LOG_FILE
+    //  destination: LOG_DEFAULT
+    //  max_log_age: 7 days
+    //  min_log_level: LS_INFO
     LoggingSettings();
 
-    LoggingDestination logging_dest;
+    LoggingDestination destination;
+    LoggingSeverity min_log_level;
+    int max_log_age;
 
-    // The three settings below have an effect only when LOG_TO_FILE is set in |logging_dest|.
-    LogLockingState lock_log;
+    std::filesystem::path log_dir;
 };
-
-// Define different names for the baseInitLoggingImpl() function depending on whether NDEBUG is
-// defined or not so that we'll fail to link if someone tries to compile logging.cc with NDEBUG but
-// includes logging.h without defining it, or vice versa.
-#if defined(NDEBUG)
-#define baseInitLoggingImpl baseInitLoggingImpl_built_with_NDEBUG
-#else
-#define baseInitLoggingImpl baseInitLoggingImpl_built_without_NDEBUG
-#endif
-
-// Implementation of the initLogging() method declared below.  We use a more-specific name so we
-// can #define it above without affecting other code that has named stuff "initLogging".
-bool baseInitLoggingImpl(const LoggingSettings& settings);
 
 // Sets the log file name and other global logging state. Calling this function is recommended,
 // and is normally done at the beginning of application init.
-// If you don't call it, all the flags will be initialized to their default values, and there is a
-// race condition that may leak a critical section object if two threads try to do the first log at
-// the same time.
 // See the definition of the enums above for descriptions and default values.
-//
-// The default log file is initialized to "debug.log" in the application directory. You probably
-// don't want this, especially since the program directory may not be writable on an enduser's system.
-//
-// This function may be called a second time to re-direct logging (e.g after loging in to a user
-// partition), however it should never be called more than twice.
-inline bool initLogging(const LoggingSettings& settings)
-{
-    return baseInitLoggingImpl(settings);
-}
+bool initLogging(const LoggingSettings& settings = LoggingSettings());
 
 // Closes the log file explicitly if open.
 // NOTE: Since the log file is opened as necessary by the action of logging statements, there's no
@@ -173,30 +141,20 @@ void shutdownLogging();
 // Used by LOG_IS_ON to lazy-evaluate stream arguments.
 bool shouldCreateLogMessage(LoggingSeverity severity);
 
-class ScopedLogging
-{
-public:
-    explicit ScopedLogging(const LoggingSettings& settings) { initLogging(settings); }
-    ~ScopedLogging() { shutdownLogging(); }
-
-private:
-    DISALLOW_COPY_AND_ASSIGN(ScopedLogging);
-};
-
 // A few definitions of macros that don't generate much code. These are used by LOG() and LOG_IF,
 // etc. Since these are used all over our code, it's better to have compact code for these operations.
 #define COMPACT_LOG_EX_LS_INFO(ClassName, ...) \
-    ::aspia::ClassName(__FILE__, __LINE__, ::aspia::LS_INFO, ##__VA_ARGS__)
+    ::base::ClassName(__FILE__, __LINE__, ::base::LS_INFO, ##__VA_ARGS__)
 #define COMPACT_LOG_EX_LS_WARNING(ClassName, ...) \
-    ::aspia::ClassName(__FILE__, __LINE__, ::aspia::LS_WARNING, ##__VA_ARGS__)
+    ::base::ClassName(__FILE__, __LINE__, ::base::LS_WARNING, ##__VA_ARGS__)
 #define COMPACT_LOG_EX_LS_ERROR(ClassName, ...) \
-    ::aspia::ClassName(__FILE__, __LINE__, ::aspia::LS_ERROR, ##__VA_ARGS__)
+    ::base::ClassName(__FILE__, __LINE__, ::base::LS_ERROR, ##__VA_ARGS__)
 #define COMPACT_LOG_EX_LS_FATAL(ClassName, ...) \
-    ::aspia::ClassName(__FILE__, __LINE__, ::aspia::LS_FATAL, ##__VA_ARGS__)
+    ::base::ClassName(__FILE__, __LINE__, ::base::LS_FATAL, ##__VA_ARGS__)
 #define COMPACT_LOG_EX_LS_DFATAL(ClassName, ...) \
-    ::aspia::ClassName(__FILE__, __LINE__, ::aspia::LS_DFATAL, ##__VA_ARGS__)
+    ::base::ClassName(__FILE__, __LINE__, ::base::LS_DFATAL, ##__VA_ARGS__)
 #define COMPACT_LOG_EX_LS_DCHECK(ClassName, ...) \
-    ::aspia::ClassName(__FILE__, __LINE__, ::aspia::LS_DCHECK, ##__VA_ARGS__)
+    ::base::ClassName(__FILE__, __LINE__, ::base::LS_DCHECK, ##__VA_ARGS__)
 
 #define COMPACT_LOG_LS_INFO    COMPACT_LOG_EX_LS_INFO(LogMessage)
 #define COMPACT_LOG_LS_WARNING COMPACT_LOG_EX_LS_WARNING(LogMessage)
@@ -208,13 +166,12 @@ private:
 // As special cases, we can assume that LOG_IS_ON(LS_FATAL) always holds. Also, LOG_IS_ON(LS_DFATAL)
 // always holds in debug mode. In particular, CHECK()s will always fire if they fail.
 #define LOG_IS_ON(severity) \
-  (::aspia::shouldCreateLogMessage(::aspia::LS_ERROR))  
-//   (::aspia::shouldCreateLogMessage(::aspia::##severity))
+  (::base::shouldCreateLogMessage(::base::##severity))
 
 // Helper macro which avoids evaluating the arguments to a stream if the condition doesn't hold.
 // Condition is evaluated once and only once.
 #define LAZY_STREAM(stream, condition) \
-  !(condition) ? (void) 0 : ::aspia::LogMessageVoidify() & (stream)
+  !(condition) ? (void) 0 : ::base::LogMessageVoidify() & (stream)
 
 // We use the preprocessor's merging operator, "##", so that, e.g., LOG(LS_INFO) becomes the token
 // COMPACT_LOG_LS_INFO. There's some funny subtle difference between ostream member streaming
@@ -232,7 +189,7 @@ private:
   LOG_IF(FATAL, !(condition)) << "Assert failed: " #condition ". "
 
 #define PLOG_STREAM(severity) \
-  COMPACT_LOG_EX_ ## severity(Win32ErrorLogMessage, ::aspia::lastSystemErrorCode()).stream()
+  COMPACT_LOG_EX_ ## severity(ErrorLogMessage, ::base::SystemError::last()).stream()
 
 #define PLOG(severity) \
   LAZY_STREAM(PLOG_STREAM(severity), LOG_IS_ON(severity))
@@ -253,28 +210,27 @@ extern std::ostream* g_swallow_stream;
 // in some .cc files, because they become defined-but-unreferenced functions. A reinterpret_cast of
 // 0 to an ostream* also is not suitable, because some compilers warn of undefined behavior.
 #define EAT_STREAM_PARAMETERS \
-  true ? (void)0 : ::aspia::LogMessageVoidify() & (*::aspia::g_swallow_stream)
+  true ? (void)0 : ::base::LogMessageVoidify() & (*::base::g_swallow_stream)
 
 // Captures the result of a CHECK_EQ (for example) and facilitates testing as a boolean.
 class CheckOpResult
 {
 public:
     // |message| must be non-null if and only if the check failed.
-    CheckOpResult(std::string* message) : message_(message)
+    constexpr CheckOpResult(std::string* message)
+        : message_(message)
     {
         // Nothing
     }
 
     // Returns true if the check succeeded.
-    operator bool() const { return !message_; }
+    constexpr operator bool() const { return !message_; }
     // Returns the message.
     std::string* message() { return message_; }
 
 private:
     std::string* message_;
 };
-
-#define IMMEDIATE_CRASH() __debugbreak()
 
 // CHECK dies with a fatal error if condition is not true.  It is *not* controlled by NDEBUG, so
 // the check will be executed regardless of compilation mode.
@@ -284,7 +240,7 @@ private:
 
 // Do as much work as possible out of line to reduce inline code size.
 #define CHECK(condition)                                                                         \
-    LAZY_STREAM(::aspia::LogMessage(__FILE__, __LINE__, #condition).stream(), !(condition))
+    LAZY_STREAM(::base::LogMessage(__FILE__, __LINE__, #condition).stream(), !(condition))
 
 #define PCHECK(condition)                                                                        \
     LAZY_STREAM(PLOG_STREAM(FATAL), !(condition)) << "Check failed: " #condition ". "
@@ -297,10 +253,10 @@ private:
 //   CHECK_EQ(2, a);
 #define CHECK_OP(name, op, val1, val2)                                                           \
   switch (0) case 0: default:                                                                    \
-  if (::aspia::CheckOpResult true_if_passed =                                                    \
-      ::aspia::check##name##Impl((val1), (val2), #val1 " " #op " " #val2));                      \
+  if (::base::CheckOpResult true_if_passed =                                                     \
+      ::base::check##name##Impl((val1), (val2), #val1 " " #op " " #val2));                       \
   else                                                                                           \
-      ::aspia::LogMessage(__FILE__, __LINE__, true_if_passed.message()).stream()
+      ::base::LogMessage(__FILE__, __LINE__, true_if_passed.message()).stream()
 
 template <typename T, typename = void>
 struct SupportsOstreamOperator : std::false_type {};
@@ -309,12 +265,14 @@ template <typename T>
 struct SupportsOstreamOperator<T, decltype(
     void(std::declval<std::ostream&>() << std::declval<T>()))> : std::true_type {};
 
-// This formats a value for a failing CHECK_XX statement.  Ordinarily, it uses the definition for
+template<typename T>
+inline constexpr bool SupportsOstreamOperator_v = SupportsOstreamOperator<T>::value;
+
+// This formats a value for a failing CHECK_XX statement. Ordinarily, it uses the definition for
 // operator<<, with a few special cases below.
 template <typename T>
-inline typename std::enable_if<
-    SupportsOstreamOperator<const T&>::value &&
-        !std::is_function<typename std::remove_pointer<T>::type>::value, void>::type
+inline std::enable_if_t<
+    SupportsOstreamOperator_v<const T&> && !std::is_function_v<std::remove_pointer_t<T>>, void>
 makeCheckOpValueString(std::ostream* os, const T& v)
 {
     (*os) << v;
@@ -325,8 +283,7 @@ makeCheckOpValueString(std::ostream* os, const T& v)
 // printed as 1 or 0. (MSVC isn't standards-conforming here and converts function pointers to regular
 // pointers, so this is a no-op for MSVC.)
 template <typename T>
-inline typename std::enable_if<
-    std::is_function<typename std::remove_pointer<T>::type>::value, void>::type
+inline std::enable_if_t<std::is_function_v<std::remove_pointer_t<T>>, void>
 makeCheckOpValueString(std::ostream* os, const T& v)
 {
     (*os) << reinterpret_cast<const void*>(v);
@@ -335,11 +292,10 @@ makeCheckOpValueString(std::ostream* os, const T& v)
 // We need overloads for enums that don't support operator<<. (i.e. scoped enums where no
 // operator<< overload was declared).
 template <typename T>
-inline typename std::enable_if<
-    !SupportsOstreamOperator<const T&>::value && std::is_enum<T>::value, void>::type
+inline std::enable_if_t<!SupportsOstreamOperator_v<const T&> && std::is_enum_v<T>, void>
 makeCheckOpValueString(std::ostream* os, const T& v)
 {
-    (*os) << static_cast<typename std::underlying_type<T>::type>(v);
+    (*os) << static_cast<std::underlying_type_t<T>>(v);
 }
 
 // We need an explicit overload for std::nullptr_t.
@@ -375,19 +331,19 @@ std::string* makeCheckOpString(const std::string& v1, const std::string& v2, con
 // template version of the function on values of unnamed enum type - see comment below.
 #define DEFINE_CHECK_OP_IMPL(name, op)                                                           \
     template <class t1, class t2>                                                                \
-    inline std::string* check##name##Impl(const t1& v1, const t2& v2, const char* names)         \
+    constexpr std::string* check##name##Impl(const t1& v1, const t2& v2, const char* names)      \
     {                                                                                            \
         if ((v1 op v2))                                                                          \
             return nullptr;                                                                      \
         else                                                                                     \
-            return aspia::makeCheckOpString(v1, v2, names);                                      \
+            return ::base::makeCheckOpString(v1, v2, names);                                     \
     }                                                                                            \
-    inline std::string* check##name##Impl(int v1, int v2, const char* names)                     \
+    constexpr std::string* check##name##Impl(int v1, int v2, const char* names)                  \
     {                                                                                            \
         if ((v1 op v2))                                                                          \
             return nullptr;                                                                      \
         else                                                                                     \
-            return aspia::makeCheckOpString(v1, v2, names);                                      \
+            return ::base::makeCheckOpString(v1, v2, names);                                     \
     }
 
 DEFINE_CHECK_OP_IMPL(EQ, ==)
@@ -414,7 +370,7 @@ DEFINE_CHECK_OP_IMPL(GT, > )
 #define DLOG_ASSERT(condition) LOG_ASSERT(condition)
 #define DPLOG_IF(severity, condition) PLOG_IF(severity, condition)
 
-#else  // DCHECK_IS_ON()
+#else // DCHECK_IS_ON()
 
 // If !DCHECK_IS_ON(), we want to avoid emitting any references to |condition| (which may reference
 // a variable defined only if DCHECK_IS_ON()).
@@ -425,7 +381,7 @@ DEFINE_CHECK_OP_IMPL(GT, > )
 #define DLOG_ASSERT(condition) EAT_STREAM_PARAMETERS
 #define DPLOG_IF(severity, condition) EAT_STREAM_PARAMETERS
 
-#endif  // DCHECK_IS_ON()
+#endif // DCHECK_IS_ON()
 
 #define DLOG(severity) LAZY_STREAM(LOG_STREAM(severity), DLOG_IS_ON(severity))
 #define DPLOG(severity) LAZY_STREAM(PLOG_STREAM(severity), DLOG_IS_ON(severity))
@@ -447,12 +403,12 @@ DEFINE_CHECK_OP_IMPL(GT, > )
 #define DPCHECK(condition) \
   LAZY_STREAM(PLOG_STREAM(LS_DCHECK), !(condition)) << "Check failed: " #condition ". "
 
-#else  // DCHECK_IS_ON()
+#else // DCHECK_IS_ON()
 
 #define DCHECK(condition) EAT_STREAM_PARAMETERS << !(condition)
 #define DPCHECK(condition) EAT_STREAM_PARAMETERS << !(condition)
 
-#endif  // DCHECK_IS_ON()
+#endif // DCHECK_IS_ON()
 
 // Helper macro for binary operators.
 // Don't use this macro directly in your code, use DCHECK_EQ et al below.
@@ -464,14 +420,14 @@ DEFINE_CHECK_OP_IMPL(GT, > )
 
 #define DCHECK_OP(name, op, val1, val2)                                                          \
     switch (0) case 0: default:                                                                  \
-    if (::aspia::CheckOpResult true_if_passed =                                                  \
+    if (::base::CheckOpResult true_if_passed =                                                   \
         DCHECK_IS_ON() ?                                                                         \
-        ::aspia::check##name##Impl((val1), (val2),  #val1 " " #op " " #val2) : nullptr);         \
+        ::base::check##name##Impl((val1), (val2),  #val1 " " #op " " #val2) : nullptr);          \
     else                                                                                         \
-        ::aspia::LogMessage(__FILE__, __LINE__, ::aspia::LS_DCHECK,                              \
-                            true_if_passed.message()).stream()
+        ::base::LogMessage(__FILE__, __LINE__, ::base::LS_DCHECK,                                \
+                           true_if_passed.message()).stream()
 
-#else  // DCHECK_IS_ON()
+#else // DCHECK_IS_ON()
 
 // When DCHECKs aren't enabled, DCHECK_OP still needs to reference operator<< overloads for |val1|
 // and |val2| to avoid potential compiler warnings about unused functions. For the same reason, it
@@ -481,11 +437,11 @@ DEFINE_CHECK_OP_IMPL(GT, > )
 // |val1| and |val2| appear twice in this version of the macro expansion, this is OK, since the
 // expression is never actually evaluated.
 #define DCHECK_OP(name, op, val1, val2)                                                          \
-  EAT_STREAM_PARAMETERS << (::aspia::makeCheckOpValueString(::aspia::g_swallow_stream, val1),    \
-                            ::aspia::makeCheckOpValueString(::aspia::g_swallow_stream, val2),    \
+  EAT_STREAM_PARAMETERS << (::base::makeCheckOpValueString(::base::g_swallow_stream, val1),      \
+                            ::base::makeCheckOpValueString(::base::g_swallow_stream, val2),      \
                             (val1)op(val2))
 
-#endif  // DCHECK_IS_ON()
+#endif // DCHECK_IS_ON()
 
 // Equality/Inequality checks - compare two values, and log a LOG_DCHECK message including the two
 // values when the result is not as expected.  The values must have operator<<(ostream, ...)
@@ -524,17 +480,17 @@ class LogMessage
 {
 public:
     // Used for LOG(severity).
-    LogMessage(const char* file, int line, LoggingSeverity severity);
+    LogMessage(std::string_view file, int line, LoggingSeverity severity);
 
-    // Used for CHECK().  Implied severity = LOG_FATAL.
-    LogMessage(const char* file, int line, const char* condition);
+    // Used for CHECK(). Implied severity = LOG_FATAL.
+    LogMessage(std::string_view file, int line, const char* condition);
 
     // Used for CHECK_EQ(), etc. Takes ownership of the given string.
     // Implied severity = LOG_FATAL.
-    LogMessage(const char* file, int line, std::string* result);
+    LogMessage(std::string_view file, int line, std::string* result);
 
     // Used for DCHECK_EQ(), etc. Takes ownership of the given string.
-    LogMessage(const char* file, int line, LoggingSeverity severity, std::string* result);
+    LogMessage(std::string_view file, int line, LoggingSeverity severity, std::string* result);
 
     ~LogMessage();
 
@@ -544,33 +500,15 @@ public:
     std::string str() { return stream_.str(); }
 
 private:
-    void init(const char* file, int line);
+    void init(std::string_view file, int line);
 
     LoggingSeverity severity_;
     std::ostringstream stream_;
-    size_t message_start_;  // Offset of the start of the message (past prefix // info).
-    // The file and line information passed in to the constructor.
-    const char* file_;
-    const int line_;
 
-    // Stores the current value of GetLastError in the constructor and restores it in the destructor
-    // by calling SetLastError.
-    // This is useful since the LogMessage class uses a lot of Win32 calls that will lose the value
-    // of GLE and the code that called the log function will have lost the thread error value when
-    // the log call returns.
-    class SaveLastError
-    {
-    public:
-        SaveLastError();
-        ~SaveLastError();
+    // Offset of the start of the message (past prefix // info).
+    size_t message_start_;
 
-        unsigned long get_error() const { return last_error_; }
-
-    protected:
-        unsigned long last_error_;
-    };
-
-    SaveLastError last_error_;
+    ScopedClearLastError last_error_;
 
     DISALLOW_COPY_AND_ASSIGN(LogMessage);
 };
@@ -585,45 +523,25 @@ public:
     void operator&(std::ostream&) { }
 };
 
-using SystemErrorCode = unsigned long;
-
-// Alias for ::GetLastError() on Windows and errno on POSIX. Avoids having to pull in windows.h
-// just for GetLastError() and DWORD.
-SystemErrorCode lastSystemErrorCode();
-std::string systemErrorCodeToString(SystemErrorCode error_code);
-
 // Appends a formatted system message of the GetLastError() type.
-class Win32ErrorLogMessage
+class ErrorLogMessage
 {
 public:
-    Win32ErrorLogMessage(const char* file, int line, LoggingSeverity severity, SystemErrorCode err);
+    ErrorLogMessage(std::string_view file, int line, LoggingSeverity severity, SystemError error);
 
     // Appends the error message before destructing the encapsulated class.
-    ~Win32ErrorLogMessage();
+    ~ErrorLogMessage();
 
     std::ostream& stream() { return log_message_.stream(); }
 
 private:
-    SystemErrorCode err_;
+    SystemError error_;
     LogMessage log_message_;
 
-    DISALLOW_COPY_AND_ASSIGN(Win32ErrorLogMessage);
+    DISALLOW_COPY_AND_ASSIGN(ErrorLogMessage);
 };
 
-// Async signal safe logging mechanism.
-void rawLog(int level, const char* message);
-
-#define RAW_LOG(level, message) \
-    ::aspia::rawLog(::aspia::LOG_##level, message)
-
-#define RAW_CHECK(condition)                                                                     \
-    do                                                                                           \
-    {                                                                                            \
-        if (!(condition))                                                                        \
-            ::aspia::rawLog(::aspia::LOG_FATAL, "Check failed: " #condition "\n");               \
-    } while (0)
-
-} // namespace aspia
+} // namespace base
 
 // Note that "The behavior of a C++ program is undefined if it adds declarations or definitions to
 // namespace std or to a namespace within namespace std unless otherwise specified.
@@ -638,11 +556,13 @@ namespace std {
 // non-ASCII Unicode strings to the log file, which is normally ASCII. It is relatively slow, so
 // try not to use it for common cases. Non-ASCII characters will be converted to UTF-8 by these
 // operators.
+#if defined(OS_WIN)
 std::ostream& operator<<(std::ostream& out, const wchar_t* wstr);
-inline std::ostream& operator<<(std::ostream& out, const std::wstring& wstr)
-{
-    return out << wstr.c_str();
-}
+std::ostream& operator<<(std::ostream& out, const std::wstring& wstr);
+#endif // defined(OS_WIN)
+
+std::ostream& operator<<(std::ostream& out, const char16_t* ustr);
+std::ostream& operator<<(std::ostream& out, const std::u16string& ustr);
 
 } // namespace std
 
@@ -660,4 +580,4 @@ inline std::ostream& operator<<(std::ostream& out, const std::wstring& wstr)
     } while (0);                                                                                 \
     EAT_STREAM_PARAMETERS
 
-#endif // ASPIA_BASE__LOGGING_H_
+#endif // BASE__LOGGING_H

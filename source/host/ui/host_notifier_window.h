@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,43 +16,37 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_HOST__UI__HOST_NOTIFIER_WINDOW_H_
-#define ASPIA_HOST__UI__HOST_NOTIFIER_WINDOW_H_
+#ifndef HOST__UI__HOST_NOTIFIER_WINDOW_H
+#define HOST__UI__HOST_NOTIFIER_WINDOW_H
 
-#include "common/locale_loader.h"
-#include "host/host_notifier.h"
-#include "protocol/notifier.pb.h"
+#include "host/user_session_agent.h"
 #include "ui_host_notifier_window.h"
 
-namespace aspia {
+namespace host {
 
-class HostNotifierWindow : public QWidget
+class NotifierWindow : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit HostNotifierWindow(QWidget* parent = nullptr);
-    ~HostNotifierWindow() = default;
-
-    void setChannelId(const QString& channel_id);
+    explicit NotifierWindow(QWidget* parent = nullptr);
+    ~NotifierWindow() = default;
 
 public slots:
-    void sessionOpen(const proto::notifier::Session& session);
-    void sessionClose(const proto::notifier::SessionClose& session_close);
+    void onClientListChanged(const UserSessionAgent::ClientList& clients);
+    void disconnectAll();
 
 signals:
     void killSession(const std::string& uuid);
+    void finished();
 
 protected:
     // QWidget implementation.
     bool eventFilter(QObject* object, QEvent* event) override;
-    void showEvent(QShowEvent* event) override;
     void hideEvent(QHideEvent* event) override;
 
 private slots:
-    void quit();
     void onShowHidePressed();
-    void onDisconnectAllPressed();
     void onContextMenu(const QPoint& point);
     void updateWindowPosition();
 
@@ -62,16 +56,12 @@ private:
 
     Ui::HostNotifierWindow ui;
 
-    LocaleLoader locale_loader_;
     QPoint start_pos_;
     QRect window_rect_;
 
-    QPointer<HostNotifier> notifier_;
-    QString channel_id_;
-
-    DISALLOW_COPY_AND_ASSIGN(HostNotifierWindow);
+    DISALLOW_COPY_AND_ASSIGN(NotifierWindow);
 };
 
-} // namespace aspia
+} // namespace host
 
-#endif // ASPIA_HOST__UI__HOST_NOTIFIER_WINDOW_H_
+#endif // HOST__UI__HOST_NOTIFIER_WINDOW_H

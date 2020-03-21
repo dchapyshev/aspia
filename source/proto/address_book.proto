@@ -1,0 +1,106 @@
+//
+// Aspia Project
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program. If not, see <https://www.gnu.org/licenses/>.
+//
+
+syntax = "proto3";
+
+option optimize_for = LITE_RUNTIME;
+
+import "common.proto";
+import "desktop.proto";
+
+package proto.address_book;
+
+enum EncryptionType
+{
+    ENCRYPTION_TYPE_UNKNOWN            = 0;
+    ENCRYPTION_TYPE_NONE               = 1;
+    ENCRYPTION_TYPE_XCHACHA20_POLY1305 = 2;
+    ENCRYPTION_TYPE_CHACHA20_POLY1305  = 3;
+}
+
+message SessionConfig
+{
+    DesktopConfig desktop_manage = 1;
+    DesktopConfig desktop_view   = 2;
+}
+
+message Computer
+{
+    int64 create_time             = 1;
+    int64 modify_time             = 2;
+    // Field 3 not used (deprecated)
+
+    string name                   = 4;
+    string comment                = 5;
+    string address                = 6;
+    uint32 port                   = 7;
+    string username               = 8;
+    string password               = 9;
+
+    // Fields 10-15 are reserved.
+
+    // Session configurations.
+    SessionType session_type = 16;
+    SessionConfig session_config  = 17;
+}
+
+message ComputerGroup
+{
+    int64 create_time = 1;
+    int64 modify_time = 2;
+
+    // List of child computers.
+    repeated Computer computer = 3;
+
+    // List of child computer groups.
+    repeated ComputerGroup computer_group = 4;
+
+    string name    = 5;
+    string comment = 6;
+    bool expanded  = 7;
+}
+
+message Data
+{
+    // Random data before. If the address book is not encrypted, then the field is not used.
+    bytes salt1 = 1;
+
+    ComputerGroup root_group = 2;
+
+    // Random data after. If the address book is not encrypted, then the field is not used.
+    bytes salt2 = 3;
+}
+
+message File
+{
+    // Encryption type.
+    EncryptionType encryption_type = 1;
+
+    // Field 2 not used.
+
+    // If encryption is enabled, contains salt (random data), which are added at each iteration
+    // of the hashing to create the key.
+    // When the encryption is disabled, the field is not used.
+    bytes hashing_salt = 3;
+
+    // Fields 4-8 are reserved.
+
+    // If the encryption is enabled, it contains serialized and encrypted |Data|.
+    // If the encryption is disabled, it contains a serialized |Data|.
+    bytes data = 9;
+}

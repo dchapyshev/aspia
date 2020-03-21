@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,16 +16,14 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_BASE__WIN__SCOPED_HDC_H_
-#define ASPIA_BASE__WIN__SCOPED_HDC_H_
-
-#define WIN32_LEAN_AND_MEAN
-#define NOMINMAX
-#include <windows.h>
+#ifndef BASE__WIN__SCOPED_HDC_H
+#define BASE__WIN__SCOPED_HDC_H
 
 #include "base/logging.h"
 
-namespace aspia {
+#include <Windows.h>
+
+namespace base::win {
 
 // Like ScopedHandle but for HDC.  Only use this on HDCs returned from GetDC.
 class ScopedGetDC
@@ -87,6 +85,8 @@ public:
         hdc_ = h;
     }
 
+    bool isValid() const { return hdc_ != nullptr; }
+
     operator HDC() { return hdc_; }
 
 private:
@@ -101,6 +101,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(ScopedCreateDC);
 };
 
-} // namespace aspia
+} // namespace base::win
 
-#endif // ASPIA_BASE__WIN__SCOPED_HDC_H_
+#endif // BASE__WIN__SCOPED_HDC_H

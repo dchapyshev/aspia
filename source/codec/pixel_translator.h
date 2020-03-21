@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,22 +16,22 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CODEC__PIXEL_TRANSLATOR_H_
-#define ASPIA_CODEC__PIXEL_TRANSLATOR_H_
+#ifndef CODEC__PIXEL_TRANSLATOR_H
+#define CODEC__PIXEL_TRANSLATOR_H
+
+#include "desktop/pixel_format.h"
 
 #include <memory>
 
-#include "desktop_capture/pixel_format.h"
-
-namespace aspia {
+namespace codec {
 
 class PixelTranslator
 {
 public:
     virtual ~PixelTranslator() = default;
 
-    static std::unique_ptr<PixelTranslator> create(const PixelFormat& source_format,
-                                                   const PixelFormat& target_format);
+    static std::unique_ptr<PixelTranslator> create(const desktop::PixelFormat& source_format,
+                                                   const desktop::PixelFormat& target_format);
 
     virtual void translate(const uint8_t* src,
                            int src_stride,
@@ -41,6 +41,6 @@ public:
                            int height) = 0;
 };
 
-} // namespace aspia
+} // namespace codec
 
-#endif // ASPIA_CODEC__PIXEL_TRANSLATOR_H_
+#endif // CODEC__PIXEL_TRANSLATOR_H

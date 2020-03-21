@@ -1,0 +1,8 @@
+<RCC>
+  <qresource prefix="/img">
+    <file>heart.png</file>
+  </qresource>
+  <qresource prefix="/txt">
+    <file>license.txt</file>
+  </qresource>
+</RCC>

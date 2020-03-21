@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,25 +16,22 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_HOST__UI__HOST_CONFIG_DIALOG_H_
-#define ASPIA_HOST__UI__HOST_CONFIG_DIALOG_H_
+#ifndef HOST__UI__HOST_CONFIG_DIALOG_H
+#define HOST__UI__HOST_CONFIG_DIALOG_H
 
-#include "common/locale_loader.h"
-#include "network/srp_user.h"
+#include "host/user.h"
+#include "qt_base/locale_loader.h"
 #include "ui_host_config_dialog.h"
 
-namespace aspia {
+namespace host {
 
-class HostConfigDialog : public QDialog
+class ConfigDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    HostConfigDialog(LocaleLoader& locale_loader, QWidget* parent = nullptr);
-    ~HostConfigDialog() = default;
-
-    static bool importSettings(const QString& path, bool silent, QWidget* parent = nullptr);
-    static bool exportSettings(const QString& path, bool silent, QWidget* parent = nullptr);
+    ConfigDialog(QWidget* parent = nullptr);
+    ~ConfigDialog() = default;
 
 private slots:
     void onUserContextMenu(const QPoint& point);
@@ -46,15 +43,14 @@ private slots:
     void onServiceStartStop();
     void onImport();
     void onExport();
+    void onConfigChanged() { setConfigChanged(true); }
     void onButtonBoxClicked(QAbstractButton* button);
 
 private:
-    void createLanguageList(const QString& current_locale);
-    void retranslateUi(const QString& locale);
     void setConfigChanged(bool changed);
     bool isConfigChanged() const;
     void reloadAll();
-    void reloadUserList();
+    void reloadUserList(const UserList& user_list);
     void reloadServiceStatus();
     bool isServiceStarted();
     bool installService();
@@ -65,16 +61,12 @@ private:
 
     Ui::HostConfigDialog ui;
 
-    LocaleLoader& locale_loader_;
-    SrpUserList users_;
-
     enum class ServiceState { NOT_INSTALLED, ACCESS_DENIED, NOT_STARTED, STARTED };
-
     ServiceState service_state_;
 
-    DISALLOW_COPY_AND_ASSIGN(HostConfigDialog);
+    DISALLOW_COPY_AND_ASSIGN(ConfigDialog);
 };
 
-} // namespace aspia
+} // namespace host
 
-#endif // ASPIA_HOST__UI__HOST_CONFIG_DIALOG_H_
+#endif // HOST__UI__HOST_CONFIG_DIALOG_H

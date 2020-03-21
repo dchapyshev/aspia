@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,16 +17,16 @@
 //
 
 #include "console/computer_tree.h"
+#include "console/computer_drag.h"
+#include "console/computer_item.h"
 
 #include <QApplication>
 #include <QHeaderView>
 #include <QMenu>
 #include <QMouseEvent>
+#include <QUuid>
 
-#include "console/computer_drag.h"
-#include "console/computer_item.h"
-
-namespace aspia {
+namespace console {
 
 namespace {
 
@@ -50,7 +50,8 @@ private:
 } // namespace
 
 ComputerTree::ComputerTree(QWidget* parent)
-    : QTreeWidget(parent)
+    : QTreeWidget(parent),
+      mime_type_(QString("application/%1").arg(QUuid::createUuid().toString()))
 {
     header()->setContextMenuPolicy(Qt::CustomContextMenu);
 
@@ -105,7 +106,7 @@ void ComputerTree::startDrag(Qt::DropActions supported_actions)
     {
         ComputerDrag* drag = new ComputerDrag(this);
 
-        drag->setComputerItem(computer_item);
+        drag->setComputerItem(computer_item, mime_type_);
 
         QIcon icon = computer_item->icon(0);
         drag->setPixmap(icon.pixmap(icon.actualSize(QSize(16, 16))));
@@ -133,4 +134,4 @@ void ComputerTree::onHeaderContextMenu(const QPoint& pos)
     header()->setSectionHidden(action->columnIndex(), !action->isChecked());
 }
 
-} // namespace aspia
+} // namespace console

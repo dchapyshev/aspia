@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,13 +16,14 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CLIENT__UI__STATUS_DIALOG_H_
-#define ASPIA_CLIENT__UI__STATUS_DIALOG_H_
+#ifndef CLIENT__UI__STATUS_DIALOG_H
+#define CLIENT__UI__STATUS_DIALOG_H
 
 #include "base/macros_magic.h"
+#include "client/status_window.h"
 #include "ui_status_dialog.h"
 
-namespace aspia {
+namespace client {
 
 class StatusDialog : public QDialog
 {
@@ -32,9 +33,7 @@ public:
     explicit StatusDialog(QWidget* parent = nullptr);
     ~StatusDialog() = default;
 
-public slots:
-    // Adds a message to the status dialog. If the dialog is hidden, it also shows it.
-    void addStatus(const QString& status);
+    void addMessage(const QString& message);
 
 private:
     Ui::StatusDialog ui;
@@ -42,6 +41,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(StatusDialog);
 };
 
-} // namespace aspia
+} // namespace client
 
-#endif // ASPIA_CLIENT__UI__STATUS_DIALOG_H_
+#endif // CLIENT__UI__STATUS_DIALOG_H

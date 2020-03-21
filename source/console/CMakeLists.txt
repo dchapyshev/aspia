@@ -1,6 +1,6 @@
 #
 # Aspia Project
-# Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+# Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -16,12 +16,10 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 #
 
-add_subdirectory(translations)
+include(tbb)
+include(translations)
 
 list(APPEND SOURCE_CONSOLE
-    about_dialog.cc
-    about_dialog.h
-    about_dialog.ui
     address_book_dialog.cc
     address_book_dialog.h
     address_book_dialog.ui
@@ -31,6 +29,16 @@ list(APPEND SOURCE_CONSOLE
     computer_dialog.cc
     computer_dialog.h
     computer_dialog.ui
+    computer_dialog_desktop.cc
+    computer_dialog_desktop.h
+    computer_dialog_desktop.ui
+    computer_dialog_general.cc
+    computer_dialog_general.h
+    computer_dialog_general.ui
+    computer_dialog_parent.cc
+    computer_dialog_parent.h
+    computer_dialog_parent.ui
+    computer_dialog_tab.h
     computer_drag.h
     computer_factory.cc
     computer_factory.h
@@ -49,21 +57,28 @@ list(APPEND SOURCE_CONSOLE
     computer_tree.cc
     computer_tree.h
     console.rc
+    console_application.cc
+    console_application.h
     console_main.cc
+    console_main_window.cc
+    console_main_window.h
+    console_main_window.ui
     console_settings.cc
     console_settings.h
     console_statusbar.cc
     console_statusbar.h
     console_tab.cc
     console_tab.h
-    console_window.cc
-    console_window.h
-    console_window.ui
     mru.cc
     mru.h
+    mru_action.cc
+    mru_action.h
     open_address_book_dialog.cc
     open_address_book_dialog.h
-    open_address_book_dialog.ui)
+    open_address_book_dialog.ui
+    update_settings_dialog.cc
+    update_settings_dialog.h
+    update_settings_dialog.ui)
 
 list(APPEND SOURCE_CONSOLE_RESOURCES
     resources/console.qrc)
@@ -76,13 +91,45 @@ add_executable(aspia_console
     ${SOURCE_CONSOLE}
     ${SOURCE_CONSOLE_RESOURCES})
 set_target_properties(aspia_console PROPERTIES WIN32_EXECUTABLE TRUE)
+set_target_properties(aspia_console PROPERTIES LINK_FLAGS "/MANIFEST:NO")
 target_link_libraries(aspia_console
     aspia_base
     aspia_client
     aspia_codec
     aspia_common
     aspia_crypto
-    aspia_desktop_capture
-    aspia_network
-    aspia_protocol
+    aspia_desktop
+    aspia_net
+    aspia_proto
+    aspia_qt_base
+    aspia_updater
+    ${QT_LIBS}
+    ${WINDOWS_LIBS}
     ${THIRD_PARTY_LIBS})
+
+if (USE_TBB)
+    add_tbb(aspia_console ${ASPIA_THIRD_PARTY_DIR}/tbb)
+endif()
+
+if(Qt5LinguistTools_FOUND)
+    # Get the list of translation files.
+    file(GLOB CONSOLE_TS_FILES translations/*.ts)
+    add_translations(aspia_console QRC_FILE "translations/console_translations.qrc" TS_FILES ${CONSOLE_TS_FILES})
+
+    # Get the list of files containing messages.
+    file(GLOB_RECURSE CONSOLE_TR_SOURCES
+        ${PROJECT_SOURCE_DIR}/console/*.cc
+        ${PROJECT_SOURCE_DIR}/console/*.cpp
+        ${PROJECT_SOURCE_DIR}/console/*.h
+        ${PROJECT_SOURCE_DIR}/console/*.ui)
+
+    create_translation(TS_CONSOLE_UPDATE ${CONSOLE_TR_SOURCES} ${CONSOLE_TS_FILES})
+    add_custom_target(aspia_console_ts_update DEPENDS ${TS_CONSOLE_UPDATE})
+else()
+    message(WARNING "Qt5 linguist tools not found. Internationalization support will be disabled.")
+endif()
+
+if(NOT TARGET BUILD_CONSOLE)
+    add_custom_target(BUILD_CONSOLE)
+    add_dependencies(BUILD_CONSOLE aspia_console)
+endif()

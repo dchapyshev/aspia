@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -18,10 +18,38 @@
 
 #include "crypto/random.h"
 
-#include <openssl/opensslv.h>
+#include "base/logging.h"
+
 #include <openssl/rand.h>
 
-namespace aspia {
+namespace crypto {
+
+namespace {
+
+template <class ContainerT>
+ContainerT generateBuffer(size_t size)
+{
+    ContainerT random_buffer;
+    random_buffer.resize(size);
+
+    bool result = Random::fillBuffer(random_buffer.data(), random_buffer.size());
+    CHECK(result);
+
+    return random_buffer;
+}
+
+template <typename NumberT>
+NumberT generateNumber()
+{
+    NumberT ret;
+
+    bool result = Random::fillBuffer(&ret, sizeof(ret));
+    CHECK(result);
+
+    return ret;
+}
+
+} // namespace
 
 // static
 bool Random::fillBuffer(void* buffer, size_t size)
@@ -33,26 +61,27 @@ bool Random::fillBuffer(void* buffer, size_t size)
 }
 
 // static
-std::string Random::generateBuffer(size_t size)
+base::ByteArray Random::byteArray(size_t size)
 {
-    std::string random_buffer;
-    random_buffer.resize(size);
-
-    if (!fillBuffer(random_buffer.data(), random_buffer.size()))
-        return std::string();
-
-    return random_buffer;
+    return generateBuffer<base::ByteArray>(size);
 }
 
 // static
-uint32_t Random::generateNumber()
+std::string Random::string(size_t size)
 {
-    uint32_t result;
-
-    if (!fillBuffer(&result, sizeof(result)))
-        return 0;
-
-    return result;
+    return generateBuffer<std::string>(size);
 }
 
-} // namespace aspia
+// static
+uint32_t Random::number32()
+{
+    return generateNumber<uint32_t>();
+}
+
+// static
+uint64_t Random::number64()
+{
+    return generateNumber<uint64_t>();
+}
+
+} // namespace crypto

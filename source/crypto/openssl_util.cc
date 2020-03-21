@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -18,10 +18,12 @@
 
 #include "crypto/openssl_util.h"
 
+#include "base/logging.h"
+
 #include <openssl/bn.h>
 #include <openssl/evp.h>
 
-namespace aspia {
+namespace crypto {
 
 void BIGNUM_CTX_Deleter::operator()(bignum_ctx* bignum_ctx)
 {
@@ -39,4 +41,89 @@ void EVP_CIPHER_CTX_Deleter::operator()(evp_cipher_ctx_st* ctx)
     EVP_CIPHER_CTX_free(ctx);
 }
 
-} // namespace aspia
+void EVP_PKEY_CTX_Deleter::operator()(evp_pkey_ctx_st* ctx)
+{
+    EVP_PKEY_CTX_free(ctx);
+}
+
+void EVP_PKEY_Deleter::operator()(evp_pkey_st* pkey)
+{
+    EVP_PKEY_free(pkey);
+}
+
+namespace {
+
+const EVP_CIPHER* cipherType(CipherType type)
+{
+    switch (type)
+    {
+        case CipherType::AES256_GCM:
+            return EVP_aes_256_gcm();
+
+        case CipherType::CHACHA20_POLY1305:
+            return EVP_chacha20_poly1305();
+
+        default:
+            NOTREACHED();
+            return nullptr;
+    }
+}
+
+int cipherMode(CipherMode mode)
+{
+    switch (mode)
+    {
+        case CipherMode::ENCRYPT:
+            return 1;
+
+        case CipherMode::DECRYPT:
+            return 0;
+
+        default:
+            NOTREACHED();
+            return -1;
+    }
+}
+
+} // namespace
+
+EVP_CIPHER_CTX_ptr createCipher(
+    CipherType type, CipherMode mode, const base::ByteArray& key, int iv_size)
+{
+    EVP_CIPHER_CTX_ptr ctx(EVP_CIPHER_CTX_new());
+    if (!ctx)
+    {
+        LOG(LS_WARNING) << "EVP_CIPHER_CTX_new failed";
+        return nullptr;
+    }
+
+    if (EVP_CipherInit_ex(ctx.get(), cipherType(type), nullptr, nullptr, nullptr,
+                          cipherMode(mode)) != 1)
+    {
+        LOG(LS_WARNING) << "EVP_EncryptInit_ex failed";
+        return nullptr;
+    }
+
+    if (EVP_CIPHER_CTX_set_key_length(ctx.get(), key.size()) != 1)
+    {
+        LOG(LS_WARNING) << "EVP_CIPHER_CTX_set_key_length failed";
+        return nullptr;
+    }
+
+    if (EVP_CIPHER_CTX_ctrl(ctx.get(), EVP_CTRL_AEAD_SET_IVLEN, iv_size, nullptr) != 1)
+    {
+        LOG(LS_WARNING) << "EVP_CIPHER_CTX_ctrl failed";
+        return nullptr;
+    }
+
+    if (EVP_CipherInit_ex(ctx.get(), nullptr, nullptr, key.data(), nullptr,
+                          cipherMode(mode)) != 1)
+    {
+        LOG(LS_WARNING) << "EVP_CIPHER_CTX_ctrl failed";
+        return nullptr;
+    }
+
+    return ctx;
+}
+
+} // namespace crypto

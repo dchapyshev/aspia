@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,29 +16,21 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CODEC__VIDEO_UTIL_H_
-#define ASPIA_CODEC__VIDEO_UTIL_H_
+#ifndef CODEC__VIDEO_UTIL_H
+#define CODEC__VIDEO_UTIL_H
 
 #include "base/macros_magic.h"
-#include "desktop_capture/desktop_geometry.h"
-#include "desktop_capture/pixel_format.h"
-#include "protocol/desktop_session.pb.h"
+#include "desktop/desktop_geometry.h"
+#include "desktop/pixel_format.h"
+#include "proto/desktop.pb.h"
 
-namespace aspia {
+namespace codec {
 
-class VideoUtil
-{
-public:
-    static DesktopRect fromVideoRect(const proto::desktop::Rect& rect);
-    static void toVideoRect(const DesktopRect& from, proto::desktop::Rect* to);
+desktop::Rect parseRect(const proto::Rect& rect);
+void serializeRect(const desktop::Rect& from, proto::Rect* to);
+desktop::PixelFormat parsePixelFormat(const proto::PixelFormat& format);
+void serializePixelFormat(const desktop::PixelFormat& from, proto::PixelFormat* to);
 
-    static PixelFormat fromVideoPixelFormat(const proto::desktop::PixelFormat& format);
-    static void toVideoPixelFormat(const PixelFormat& from, proto::desktop::PixelFormat* to);
+} // namespace codec
 
-private:
-    DISALLOW_COPY_AND_ASSIGN(VideoUtil);
-};
-
-} // namespace aspia
-
-#endif // ASPIA_CODEC__VIDEO_UTIL_H_
+#endif // CODEC__VIDEO_UTIL_H

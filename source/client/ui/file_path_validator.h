@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,14 +16,14 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CLIENT__UI__FILE_PATH_VALIDATOR_H_
-#define ASPIA_CLIENT__UI__FILE_PATH_VALIDATOR_H_
-
-#include <QValidator>
+#ifndef CLIENT__UI__FILE_PATH_VALIDATOR_H
+#define CLIENT__UI__FILE_PATH_VALIDATOR_H
 
 #include "base/macros_magic.h"
 
-namespace aspia {
+#include <QValidator>
+
+namespace client {
 
 class FilePathValidator : public QValidator
 {
@@ -43,6 +43,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(FilePathValidator);
 };
 
-} // namespace aspia
+} // namespace client
 
-#endif // ASPIA_CLIENT__UI__FILE_PATH_VALIDATOR_H_
+#endif // CLIENT__UI__FILE_PATH_VALIDATOR_H

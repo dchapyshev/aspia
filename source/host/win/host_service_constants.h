@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,16 +16,16 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_HOST__WIN__HOST_SERVICE_CONSTANTS_H_
-#define ASPIA_HOST__WIN__HOST_SERVICE_CONSTANTS_H_
+#ifndef HOST__WIN__HOST_SERVICE_CONSTANTS_H
+#define HOST__WIN__HOST_SERVICE_CONSTANTS_H
 
-namespace aspia {
+namespace host {
 
-extern const char kHostServiceFileName[];
-extern const char kHostServiceName[];
-extern const char kHostServiceDisplayName[];
-extern const char kHostServiceDescription[];
+extern const char16_t kHostServiceFileName[];
+extern const char16_t kHostServiceName[];
+extern const char16_t kHostServiceDisplayName[];
+extern const char16_t kHostServiceDescription[];
 
-} // namespace aspia
+} // namespace host
 
-#endif // ASPIA_HOST__WIN__HOST_SERVICE_CONSTANTS_H_
+#endif // HOST__WIN__HOST_SERVICE_CONSTANTS_H

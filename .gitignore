@@ -1,6 +1,9 @@
 # VS build folders
 /.vs/
 /build/
+/installer/.vs/
+/installer/bin/
+/installer/obj/
 
 # VS generated files
 *.obj
@@ -8,5 +11,5 @@
 *.res
 *.exe
 
-# Dolphin files
-.directory
+# SW build dir
+.sw

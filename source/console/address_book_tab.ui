@@ -34,7 +34,7 @@
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
-     <widget class="aspia::ComputerGroupTree" name="tree_group">
+     <widget class="console::ComputerGroupTree" name="tree_group">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
         <horstretch>0</horstretch>
@@ -65,7 +65,7 @@
        </property>
       </column>
      </widget>
-     <widget class="aspia::ComputerTree" name="tree_computer">
+     <widget class="console::ComputerTree" name="tree_computer">
       <property name="contextMenuPolicy">
        <enum>Qt::CustomContextMenu</enum>
       </property>
@@ -88,7 +88,7 @@
        <bool>true</bool>
       </property>
       <property name="columnCount">
-       <number>7</number>
+       <number>5</number>
       </property>
       <column>
        <property name="text">
@@ -98,11 +98,6 @@
       <column>
        <property name="text">
         <string>Address</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>Port</string>
        </property>
       </column>
       <column>
@@ -120,11 +115,6 @@
         <string>Modified</string>
        </property>
       </column>
-      <column>
-       <property name="text">
-        <string>Connected</string>
-       </property>
-      </column>
      </widget>
     </widget>
    </item>
@@ -132,12 +122,12 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>aspia::ComputerGroupTree</class>
+   <class>console::ComputerGroupTree</class>
    <extends>QTreeWidget</extends>
    <header>console/computer_group_tree.h</header>
   </customwidget>
   <customwidget>
-   <class>aspia::ComputerTree</class>
+   <class>console::ComputerTree</class>
    <extends>QTreeWidget</extends>
    <header>console/computer_tree.h</header>
   </customwidget>

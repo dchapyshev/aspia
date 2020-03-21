@@ -13,8 +13,8 @@ image: Visual Studio 2017
 environment:
   ASPIA_DIR: &ASPIA_DIR c:\aspia
   CACHE_DIR: &CACHE_DIR c:\aspia_cache
-  LIB_URL: https://aspia.org/files/third_party_small.7z
-  VER_URL: https://aspia.org/files/third_party.txt
+  LIB_URL: https://files.aspia.org/dev/third_party.7z
+  VER_URL: https://files.aspia.org/dev/third_party.txt
 
 clone_folder: *ASPIA_DIR
 clone_depth: 1
@@ -75,8 +75,13 @@ test_script:
       If ($LastExitCode -ne 0) {
         exit $LastExitCode
       }
-      $test_desktop_capture = "$tests_dir\aspia_desktop_capture_tests"
-      & $test_desktop_capture
+      $test_desktop = "$tests_dir\aspia_desktop_tests"
+      & $test_desktop
+      If ($LastExitCode -ne 0) {
+        exit $LastExitCode
+      }
+      $test_net = "$tests_dir\aspia_net_tests"
+      & $test_net
       If ($LastExitCode -ne 0) {
         exit $LastExitCode
       }

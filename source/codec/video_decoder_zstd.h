@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,16 +16,15 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CODEC__VIDEO_DECODER_ZSTD_H_
-#define ASPIA_CODEC__VIDEO_DECODER_ZSTD_H_
+#ifndef CODEC__VIDEO_DECODER_ZSTD_H
+#define CODEC__VIDEO_DECODER_ZSTD_H
 
+#include "base/macros_magic.h"
 #include "codec/scoped_zstd_stream.h"
 #include "codec/video_decoder.h"
 
-namespace aspia {
+namespace codec {
 
-class Decompressor;
-class DesktopFrame;
 class PixelTranslator;
 
 class VideoDecoderZstd : public VideoDecoder
@@ -35,7 +34,7 @@ public:
 
     static std::unique_ptr<VideoDecoderZstd> create();
 
-    bool decode(const proto::desktop::VideoPacket& packet, DesktopFrame* target_frame) override;
+    bool decode(const proto::VideoPacket& packet, desktop::Frame* target_frame) override;
 
 private:
     VideoDecoderZstd();
@@ -43,11 +42,11 @@ private:
     ScopedZstdDStream stream_;
 
     std::unique_ptr<PixelTranslator> translator_;
-    std::unique_ptr<DesktopFrame> source_frame_;
+    std::unique_ptr<desktop::Frame> source_frame_;
 
     DISALLOW_COPY_AND_ASSIGN(VideoDecoderZstd);
 };
 
-} // namespace aspia
+} // namespace codec
 
-#endif // ASPIA_CODEC__VIDEO_DECODER_ZSTD_H_
+#endif // CODEC__VIDEO_DECODER_ZSTD_H

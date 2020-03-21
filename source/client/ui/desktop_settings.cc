@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -18,42 +18,62 @@
 
 #include "client/ui/desktop_settings.h"
 
-namespace aspia {
+#include "qt_base/qt_xml_settings.h"
+
+namespace client {
 
 DesktopSettings::DesktopSettings()
-    : settings_(QSettings::UserScope, QStringLiteral("aspia"), QStringLiteral("client"))
+    : settings_(qt_base::QtXmlSettings::format(),
+                QSettings::UserScope,
+                QStringLiteral("aspia"),
+                QStringLiteral("client"))
 {
     // Nothing
 }
 
-bool DesktopSettings::scaling() const
+int DesktopSettings::scale() const
 {
-    return settings_.value(QStringLiteral("desktop/scaling"), false).toBool();
+    int result = settings_.value(QStringLiteral("Desktop/Scale"), 100).toInt();
+
+    switch (result)
+    {
+        case 100:
+        case 90:
+        case 80:
+        case 70:
+        case 60:
+        case 50:
+        case -1:
+            return result;
+
+        default:
+            return 100;
+    }
 }
 
-void DesktopSettings::setScaling(bool enable)
+void DesktopSettings::setScale(int value)
 {
-    settings_.setValue(QStringLiteral("desktop/scaling"), enable);
+    settings_.setValue(QStringLiteral("Desktop/Scale"), value);
 }
 
 bool DesktopSettings::autoScrolling() const
 {
-    return settings_.value(QStringLiteral("desktop/auto_scrolling"), true).toBool();
+    return settings_.value(QStringLiteral("Desktop/AutoScrolling"), true).toBool();
 }
 
 void DesktopSettings::setAutoScrolling(bool enable)
 {
-    settings_.setValue(QStringLiteral("desktop/auto_scrolling"), enable);
+    settings_.setValue(QStringLiteral("Desktop/AutoScrolling"), enable);
 }
 
 bool DesktopSettings::sendKeyCombinations() const
 {
-    return settings_.value(QStringLiteral("desktop/send_key_combinations"), true).toBool();
+    return settings_.value(QStringLiteral("Desktop/SendKeyCombinations"), true).toBool();
 }
 
 void DesktopSettings::setSendKeyCombinations(bool enable)
 {
-    settings_.setValue(QStringLiteral("desktop/send_key_combinations"), enable);
+    settings_.setValue(QStringLiteral("Desktop/SendKeyCombinations"), enable);
 }
 
-} // namespace aspia
+} // namespace client
