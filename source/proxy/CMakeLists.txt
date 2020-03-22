@@ -21,7 +21,9 @@ include(tbb)
 list(APPEND SOURCE_PROXY
     proxy_main.cc
     proxy_server.cc
-    proxy_server.h)
+    proxy_server.h
+    session.cc
+    session.h)
 
 list(APPEND SOURCE_PROXY_WIN
     win/proxy_service.cc
