@@ -19,7 +19,6 @@
 #include "router/session.h"
 
 #include "base/logging.h"
-#include "common/message_serialization.h"
 #include "net/network_channel.h"
 #include "proto/router.pb.h"
 
@@ -71,7 +70,7 @@ void Session::onMessageReceived(const base::ByteArray& buffer)
 {
     proto::PeerToRouter message;
 
-    if (!common::parseMessage(buffer, &message))
+    if (!base::parse(buffer, &message))
     {
         LOG(LS_ERROR) << "Invalid message from peer";
         return;
