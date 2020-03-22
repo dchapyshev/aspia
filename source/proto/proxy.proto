@@ -42,8 +42,8 @@ message ProxyKeyPool
 
 message ProxyKeyPoolRequest
 {
-    // Not used. Must be set to 1.
-    uint32 dummy = 1;
+    // The number of keys requested.
+    uint32 pool_size = 1;
 }
 
 // Sent from proxy to router.

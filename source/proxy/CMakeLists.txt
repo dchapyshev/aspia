@@ -19,11 +19,21 @@
 include(tbb)
 
 list(APPEND SOURCE_PROXY
+    controller.cc
+    controller.h
+    controller_manager.cc
+    controller_manager.h
     proxy_main.cc
     proxy_server.cc
     proxy_server.h
     session.cc
-    session.h)
+    session.h
+    session_key.cc
+    session_key.h
+    session_manager.cc
+    session_manager.h
+    settings.cc
+    settings.h)
 
 list(APPEND SOURCE_PROXY_WIN
     win/proxy_service.cc
@@ -41,6 +51,7 @@ target_link_libraries(aspia_proxy
     aspia_crypto
     aspia_net
     aspia_proto
+    crypt32
     ${THIRD_PARTY_LIBS})
 
 if (USE_TBB)
