@@ -49,12 +49,12 @@ message PeerIdRequest
 
 message PeerIdResponse
 {
-    string peer_id = 1;
+    fixed64 peer_id = 1;
 }
 
 message ConnectionRequest
 {
-    string peer_id = 1;
+    fixed64 peer_id = 1;
 }
 
 message ConnectionCandidate
@@ -129,7 +129,7 @@ message Log
     uint64 entry_id  = 1;
     uint64 timestamp = 2;
     string ip        = 3;
-    string peer_id   = 4;
+    fixed64 peer_id  = 4;
     string action    = 5;
 }
 

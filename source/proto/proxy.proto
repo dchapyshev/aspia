@@ -32,9 +32,6 @@ message ProxyKey
 
     // Initialization vector.
     bytes iv         = 3;
-
-    // Random data set.
-    bytes data       = 4;
 }
 
 message ProxyKeyPool
@@ -65,12 +62,18 @@ message RouterToProxy
 // If the authentication failed, then the connection should be dropped.
 message PeerToProxy
 {
+    message IdPair
+    {
+        fixed64 first  = 1;
+        fixed64 second = 2;
+    }
+
     // Unique key identifier in the proxy pool.
     uint32 key_id    = 1;
 
     // Public key of the peer.
     bytes public_key = 2;
 
-    // Encrypted data to identify the peer.
+    // Encrypted IdPair.
     bytes data       = 3;
 }
