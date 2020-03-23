@@ -29,7 +29,7 @@ public:
     virtual ~MessageEncryptor() = default;
 
     virtual size_t encryptedDataSize(size_t in_size) = 0;
-    virtual bool encrypt(const uint8_t* in, size_t in_size, uint8_t* out) = 0;
+    virtual bool encrypt(const void* in, size_t in_size, void* out) = 0;
 };
 
 } // namespace crypto

@@ -32,7 +32,7 @@ public:
 
     // MessageEncryptor implementation.
     size_t encryptedDataSize(size_t in_size) override;
-    bool encrypt(const uint8_t* in, size_t in_size, uint8_t* out) override;
+    bool encrypt(const void* in, size_t in_size, void* out) override;
 
 private:
     DISALLOW_COPY_AND_ASSIGN(MessageEncryptorFake);

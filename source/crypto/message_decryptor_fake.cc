@@ -31,7 +31,7 @@ size_t MessageDecryptorFake::decryptedDataSize(size_t in_size)
     return in_size;
 }
 
-bool MessageDecryptorFake::decrypt(const uint8_t* in, size_t in_size, uint8_t* out)
+bool MessageDecryptorFake::decrypt(const void* in, size_t in_size, void* out)
 {
     memcpy(out, in, in_size);
     return true;
