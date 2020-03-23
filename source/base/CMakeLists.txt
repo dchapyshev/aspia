@@ -26,6 +26,8 @@ list(APPEND SOURCE_BASE
     converter.h
     cpuid.cc
     cpuid.h
+    crc32.cc
+    crc32.h
     debug.cc
     debug.h
     endian.h
@@ -76,6 +78,7 @@ list(APPEND SOURCE_BASE_UNIT_TESTS
     base64_unittest.cc
     bitset_unittest.cc
     converter_unittest.cc
+    crc32_unittest.cc
     guid_unittest.cc
     scoped_clear_last_error_unittest.cc
     stl_util_unittest.cc
