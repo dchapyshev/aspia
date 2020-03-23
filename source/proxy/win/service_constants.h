@@ -16,28 +16,16 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "proxy/proxy_server.h"
-
-#include "net/network_channel.h"
+#ifndef PROXY__WIN__SERVICE_CONSTANTS_H
+#define PROXY__WIN__SERVICE_CONSTANTS_H
 
 namespace proxy {
 
-Server::Server() = default;
-
-Server::~Server() = default;
-
-void Server::start()
-{
-    if (network_server_)
-        return;
-
-    network_server_ = std::make_unique<net::Server>();
-    network_server_->start(0, this);
-}
-
-void Server::onNewConnection(std::unique_ptr<net::Channel> channel)
-{
-    // TODO
-}
+extern const char16_t kServiceFileName[];
+extern const char16_t kServiceName[];
+extern const char16_t kServiceDisplayName[];
+extern const char16_t kServiceDescription[];
 
 } // namespace proxy
+
+#endif // PROXY__WIN__SERVICE_CONSTANTS_H

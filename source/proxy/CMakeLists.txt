@@ -23,12 +23,10 @@ list(APPEND SOURCE_PROXY
     controller.h
     controller_manager.cc
     controller_manager.h
+    main.cc
     peer_id.h
     pending_session.cc
     pending_session.h
-    proxy_main.cc
-    proxy_server.cc
-    proxy_server.h
     session.cc
     session.h
     session_key.cc
@@ -37,13 +35,14 @@ list(APPEND SOURCE_PROXY
     session_manager.h
     settings.cc
     settings.h
+    shared_pool.cc
     shared_pool.h)
 
 list(APPEND SOURCE_PROXY_WIN
-    win/proxy_service.cc
-    win/proxy_service.h
-    win/proxy_service_constants.cc
-    win/proxy_service_constants.h)
+    win/service.cc
+    win/service.h
+    win/service_constants.cc
+    win/service_constants.h)
 
 source_group("" FILES ${SOURCE_PROXY})
 source_group(win FILES ${SOURCE_PROXY_WIN})

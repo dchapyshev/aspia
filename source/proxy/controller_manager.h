@@ -19,17 +19,44 @@
 #ifndef PROXY__CONTROLLER_MANAGER_H
 #define PROXY__CONTROLLER_MANAGER_H
 
-#include "base/macros_magic.h"
+#include "base/memory/byte_array.h"
+#include "net/network_server.h"
+#include "proxy/controller.h"
+
+namespace base {
+class TaskRunner;
+} // namespace base
 
 namespace proxy {
 
+class SessionManager;
+class SharedPool;
+
 class ControllerManager
+    : public net::Server::Delegate,
+      public Controller::Delegate
 {
 public:
-    ControllerManager();
+    explicit ControllerManager(std::shared_ptr<base::TaskRunner> task_runner);
     ~ControllerManager();
 
+    bool start();
+
+protected:
+    // net::Server::Delegate implementation.
+    void onNewConnection(std::unique_ptr<net::Channel> channel) override;
+
+    // Controller::Delegate implementation.
+    void onControllerFinished(Controller* controller) override;
+
 private:
+    std::shared_ptr<base::TaskRunner> task_runner_;
+    std::unique_ptr<net::Server> server_;
+    std::unique_ptr<SharedPool> shared_pool_;
+    std::unique_ptr<SessionManager> session_manager_;
+    std::vector<std::unique_ptr<Controller>> controllers_;
+    base::ByteArray session_key_;
+
     DISALLOW_COPY_AND_ASSIGN(ControllerManager);
 };
 

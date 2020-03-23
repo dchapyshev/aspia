@@ -16,37 +16,36 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/logging.h"
-#include "base/files/base_paths.h"
-#include "proxy/win/proxy_service.h"
+#include "proxy/win/service.h"
 
-#if defined(USE_TBB)
-#include <tbb/tbbmalloc_proxy.h>
-#endif // defined(USE_TBB)
+#include "proxy/controller_manager.h"
+#include "proxy/win/service_constants.h"
 
-namespace {
+namespace proxy {
 
-std::filesystem::path loggingDir()
+Service::Service()
+    : base::win::Service(kServiceName, base::MessageLoop::Type::ASIO)
 {
-    std::filesystem::path path;
-
-    if (!base::BasePaths::commonAppData(&path))
-        return std::filesystem::path();
-
-    path.append("aspia/logs");
-    return path;
+    // Nothing
 }
 
-} // namespace
+Service::~Service() = default;
 
-int main(int argc, char* argv[])
+void Service::onStart()
 {
-    base::LoggingSettings settings;
-    settings.destination = base::LOG_TO_FILE;
-    settings.log_dir = loggingDir();
-
-    proxy::Service().exec();
-
-    base::shutdownLogging();
-    return 0;
+    controller_manager_ = std::make_unique<ControllerManager>(taskRunner());
+    controller_manager_->start();
 }
+
+void Service::onStop()
+{
+    controller_manager_.reset();
+}
+
+void Service::onSessionEvent(
+    base::win::SessionStatus /* event */, base::SessionId /* session_id */)
+{
+    // Nothing
+}
+
+} // namespace proxy

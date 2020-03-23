@@ -37,7 +37,7 @@ public:
     SessionManager(std::shared_ptr<base::TaskRunner> task_runner, uint16_t port);
     ~SessionManager();
 
-    void start(SharedPool shared_pool);
+    void start(std::unique_ptr<SharedPool> shared_pool);
 
 protected:
     // PendingSession::Delegate implementation.
@@ -59,7 +59,7 @@ private:
     std::vector<std::unique_ptr<PendingSession>> pending_sessions_;
     std::vector<std::unique_ptr<Session>> active_sessions_;
 
-    SharedPool shared_pool_;
+    std::unique_ptr<SharedPool> shared_pool_;
 
     DISALLOW_COPY_AND_ASSIGN(SessionManager);
 };

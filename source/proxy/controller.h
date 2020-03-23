@@ -41,10 +41,13 @@ public:
         virtual void onControllerFinished(Controller* controller) = 0;
     };
 
-    Controller(std::unique_ptr<net::Channel> channel, Delegate* delegate);
+    Controller(std::unique_ptr<SharedPool> shared_pool,
+               std::unique_ptr<net::Channel> channel,
+               Delegate* delegate);
     ~Controller();
 
     void start();
+    void stop();
 
 protected:
     // net::Listener implementation.
@@ -54,13 +57,11 @@ protected:
     void onMessageWritten() override;
 
 private:
+    std::unique_ptr<SharedPool> shared_pool_;
     std::unique_ptr<net::Channel> channel_;
 
     proto::RouterToProxy incoming_message_;
     proto::ProxyToRouter outgoing_message_;
-
-    SharedPool shared_pool_;
-    uint32_t current_key_id_ = 0;
 
     Delegate* delegate_;
 

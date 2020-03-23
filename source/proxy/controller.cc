@@ -23,9 +23,11 @@
 
 namespace proxy {
 
-Controller::Controller(std::unique_ptr<net::Channel> channel, Delegate* delegate)
-    : channel_(std::move(channel)),
-      shared_pool_(std::make_shared<Pool>()),
+Controller::Controller(std::unique_ptr<SharedPool> shared_pool,
+                       std::unique_ptr<net::Channel> channel,
+                       Delegate* delegate)
+    : shared_pool_(std::move(shared_pool)),
+      channel_(std::move(channel)),
       delegate_(delegate)
 {
     DCHECK(channel_ && delegate_);
@@ -39,6 +41,11 @@ void Controller::start()
     channel_->resume();
 }
 
+void Controller::stop()
+{
+    delegate_ = nullptr;
+}
+
 void Controller::onConnected()
 {
     NOTREACHED();
@@ -46,7 +53,8 @@ void Controller::onConnected()
 
 void Controller::onDisconnected(net::ErrorCode /* error_code */)
 {
-    delegate_->onControllerFinished(this);
+    if (delegate_)
+        delegate_->onControllerFinished(this);
 }
 
 void Controller::onMessageReceived(const base::ByteArray& buffer)
@@ -72,16 +80,13 @@ void Controller::onMessageReceived(const base::ByteArray& buffer)
         // Add the key to the outgoing message.
         proto::ProxyKey* key = outgoing_message_.mutable_key_pool()->add_key();
 
-        key->set_key_id(current_key_id_);
         key->set_type(proto::ProxyKey::TYPE_X25519);
         key->set_encryption(proto::ProxyKey::ENCRYPTION_CHACHA20_POLY1305);
         key->set_public_key(base::toStdString(session_key.publicKey()));
         key->set_iv(base::toStdString(session_key.iv()));
 
         // Add the key to the pool.
-        shared_pool_->emplace(current_key_id_, std::move(session_key));
-
-        ++current_key_id_;
+        key->set_key_id(shared_pool_->addKey(std::move(session_key)));
     }
 
     // Send a message to the router.

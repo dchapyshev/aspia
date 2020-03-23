@@ -23,8 +23,26 @@
 
 namespace proxy {
 
-using Pool = std::map<uint32_t, SessionKey>;
-using SharedPool = std::shared_ptr<Pool>;
+class SharedPool
+{
+public:
+    SharedPool();
+    ~SharedPool();
+
+    std::unique_ptr<SharedPool> share();
+
+    uint32_t addKey(SessionKey&& session_key);
+    void removeKey(uint32_t key_id);
+    const SessionKey& key(uint32_t key_id) const;
+
+private:
+    class Pool;
+    explicit SharedPool(std::shared_ptr<Pool> pool);
+
+    std::shared_ptr<Pool> pool_;
+
+    DISALLOW_COPY_AND_ASSIGN(SharedPool);
+};
 
 } // namespace proxy
 

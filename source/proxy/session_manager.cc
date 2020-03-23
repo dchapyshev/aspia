@@ -101,7 +101,7 @@ SessionManager::~SessionManager()
     acceptor_.close(ignored_code);
 }
 
-void SessionManager::start(SharedPool shared_pool)
+void SessionManager::start(std::unique_ptr<SharedPool> shared_pool)
 {
     shared_pool_ = std::move(shared_pool);
     SessionManager::doAccept(this);
@@ -111,11 +111,11 @@ void SessionManager::onPendingSessionReady(
     PendingSession* session, const proto::PeerToProxy& message)
 {
     // Looking for a key with the specified identifier.
-    auto result = shared_pool_->find(message.key_id());
-    if (result != shared_pool_->end())
+    const SessionKey& session_key = shared_pool_->key(message.key_id());
+    if (session_key.isValid())
     {
         // Decrypt the identifiers of peers.
-        std::optional<PeerIdPair> id_pair = decryptIdPair(message, result->second);
+        std::optional<PeerIdPair> id_pair = decryptIdPair(message, session_key);
         if (id_pair.has_value())
         {
             // Save the identifiers of peers and the identifier of their shared key.
@@ -126,6 +126,9 @@ void SessionManager::onPendingSessionReady(
             {
                 if (session->isPeerFor(*other_session))
                 {
+                    // Delete the key from the pool. It can no longer be used.
+                    shared_pool_->removeKey(message.key_id());
+
                     // Now the opposite peer is found, start the data transfer between them.
                     active_sessions_.emplace_back(std::make_unique<Session>(
                         std::make_pair(session->takeSocket(), other_session->takeSocket())));

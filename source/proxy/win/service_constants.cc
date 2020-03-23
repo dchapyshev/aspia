@@ -16,38 +16,16 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "proxy/win/proxy_service.h"
-
-#include "base/logging.h"
-#include "base/message_loop/message_pump_asio.h"
-#include "proxy/proxy_server.h"
-#include "proxy/win/proxy_service_constants.h"
+#include "proxy/win/service_constants.h"
 
 namespace proxy {
 
-Service::Service()
-    : base::win::Service(kProxyServiceName, base::MessageLoop::Type::ASIO)
-{
-    // Nothing
-}
+const char16_t kServiceFileName[] = u"aspia_proxy.exe";
 
-Service::~Service() = default;
+const char16_t kServiceName[] = u"aspia-proxy";
 
-void Service::onStart()
-{
-    server_ = std::make_unique<Server>();
-    server_->start();
-}
+const char16_t kServiceDisplayName[] = u"Aspia Proxy Service";
 
-void Service::onStop()
-{
-    server_.reset();
-}
-
-void Service::onSessionEvent(
-    base::win::SessionStatus /* event */, base::SessionId /* session_id */)
-{
-    // Nothing
-}
+const char16_t kServiceDescription[] = u"Proxies user traffic to bypass NAT.";
 
 } // namespace proxy
