@@ -41,13 +41,16 @@ public:
         virtual void onControllerFinished(Controller* controller) = 0;
     };
 
-    Controller(std::unique_ptr<SharedPool> shared_pool,
+    Controller(uint32_t controller_id,
+               std::unique_ptr<SharedPool> shared_pool,
                std::unique_ptr<net::Channel> channel,
                Delegate* delegate);
     ~Controller();
 
     void start();
     void stop();
+
+    uint32_t id() const { return controller_id_; }
 
 protected:
     // net::Listener implementation.
@@ -57,6 +60,8 @@ protected:
     void onMessageWritten() override;
 
 private:
+    const uint32_t controller_id_;
+
     std::unique_ptr<SharedPool> shared_pool_;
     std::unique_ptr<net::Channel> channel_;
 

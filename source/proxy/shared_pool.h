@@ -31,8 +31,9 @@ public:
 
     std::unique_ptr<SharedPool> share();
 
-    uint32_t addKey(SessionKey&& session_key);
+    uint32_t addKey(uint32_t controller_id, SessionKey&& session_key);
     void removeKey(uint32_t key_id);
+    void removeKeysForController(uint32_t controller_id);
     const SessionKey& key(uint32_t key_id) const;
 
 private:

@@ -23,10 +23,12 @@
 
 namespace proxy {
 
-Controller::Controller(std::unique_ptr<SharedPool> shared_pool,
+Controller::Controller(uint32_t controller_id,
+                       std::unique_ptr<SharedPool> shared_pool,
                        std::unique_ptr<net::Channel> channel,
                        Delegate* delegate)
-    : shared_pool_(std::move(shared_pool)),
+    : controller_id_(controller_id),
+      shared_pool_(std::move(shared_pool)),
       channel_(std::move(channel)),
       delegate_(delegate)
 {
@@ -86,7 +88,7 @@ void Controller::onMessageReceived(const base::ByteArray& buffer)
         key->set_iv(base::toStdString(session_key.iv()));
 
         // Add the key to the pool.
-        key->set_key_id(shared_pool_->addKey(std::move(session_key)));
+        key->set_key_id(shared_pool_->addKey(controller_id_, std::move(session_key)));
     }
 
     // Send a message to the router.

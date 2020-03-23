@@ -79,13 +79,14 @@ void ControllerManager::onNewConnection(std::unique_ptr<net::Channel> channel)
     channel->setEncryptor(std::move(encryptor));
     channel->setDecryptor(std::move(decryptor));
 
-    controllers_.emplace_back(
-        std::make_unique<Controller>(shared_pool_->share(), std::move(channel), this));
+    controllers_.emplace_back(std::make_unique<Controller>(
+        current_controller_++, shared_pool_->share(), std::move(channel), this));
     controllers_.back()->start();
 }
 
 void ControllerManager::onControllerFinished(Controller* controller)
 {
+    shared_pool_->removeKeysForController(controller->id());
     controller->stop();
 
     auto it = controllers_.begin();

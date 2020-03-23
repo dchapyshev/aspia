@@ -57,6 +57,8 @@ private:
     std::vector<std::unique_ptr<Controller>> controllers_;
     base::ByteArray session_key_;
 
+    uint32_t current_controller_ = 0;
+
     DISALLOW_COPY_AND_ASSIGN(ControllerManager);
 };
 
