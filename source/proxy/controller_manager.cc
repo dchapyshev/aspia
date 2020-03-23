@@ -18,6 +18,7 @@
 
 #include "proxy/controller_manager.h"
 
+#include "base/crc32.h"
 #include "base/task_runner.h"
 #include "crypto/generic_hash.h"
 #include "crypto/message_decryptor_openssl.h"
@@ -29,6 +30,28 @@
 #include "proxy/shared_pool.h"
 
 namespace proxy {
+
+namespace {
+
+const uint32_t kEncryptorSeedNumber = 0xAF129900;
+const uint32_t kDecryptorSeedNumber = 0x6712AF05;
+
+base::ByteArray createIv(uint32_t seed, const base::ByteArray& session_key)
+{
+    static const size_t kIvSize = 12;
+
+    base::ByteArray iv;
+    iv.resize(kIvSize);
+
+    uint32_t* data = reinterpret_cast<uint32_t*>(iv.data());
+
+    for (size_t i = 0; i < kIvSize / sizeof(uint32_t); ++i)
+        data[i] = seed = base::crc32(seed, session_key.data(), session_key.size());
+
+    return iv;
+}
+
+} // namespace
 
 ControllerManager::ControllerManager(std::shared_ptr<base::TaskRunner> task_runner)
     : task_runner_(std::move(task_runner)),
@@ -65,15 +88,16 @@ bool ControllerManager::start()
 
 void ControllerManager::onNewConnection(std::unique_ptr<net::Channel> channel)
 {
-    base::ByteArray iv(12);
-    std::fill(iv.begin(), iv.end(), 0);
-
     std::unique_ptr<crypto::MessageEncryptor> encryptor =
-        crypto::MessageEncryptorOpenssl::createForChaCha20Poly1305(session_key_, iv);
-    std::unique_ptr<crypto::MessageDecryptor> decryptor =
-        crypto::MessageDecryptorOpenssl::createForChaCha20Poly1305(session_key_, iv);
+        crypto::MessageEncryptorOpenssl::createForChaCha20Poly1305(
+            session_key_, createIv(kEncryptorSeedNumber, session_key_));
+    if (!encryptor)
+        return;
 
-    if (!encryptor || !decryptor)
+    std::unique_ptr<crypto::MessageDecryptor> decryptor =
+        crypto::MessageDecryptorOpenssl::createForChaCha20Poly1305(
+            session_key_, createIv(kDecryptorSeedNumber, session_key_));
+    if (!decryptor)
         return;
 
     channel->setEncryptor(std::move(encryptor));
