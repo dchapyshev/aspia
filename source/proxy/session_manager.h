@@ -19,17 +19,48 @@
 #ifndef PROXY__SESSION_MANAGER_H
 #define PROXY__SESSION_MANAGER_H
 
-#include "base/macros_magic.h"
+#include "proxy/pending_session.h"
+#include "proxy/session.h"
+#include "proxy/shared_pool.h"
+
+namespace base {
+class TaskRunner;
+} // namespace base
 
 namespace proxy {
 
 class SessionManager
+    : public PendingSession::Delegate,
+      public Session::Delegate
 {
 public:
-    SessionManager();
+    SessionManager(std::shared_ptr<base::TaskRunner> task_runner, uint16_t port);
     ~SessionManager();
 
+    void start(SharedPool shared_pool);
+
+protected:
+    // PendingSession::Delegate implementation.
+    void onPendingSessionReady(
+        PendingSession* session, const proto::PeerToProxy& message) override;
+    void onPendingSessionFailed(PendingSession* session) override;
+
+    // Session::Delegate implementation.
+    void onSessionFinished(Session* session) override;
+
 private:
+    static void doAccept(SessionManager* session_manager);
+    void removePendingSession(PendingSession* sessions);
+    void removeSession(Session* session);
+
+    std::shared_ptr<base::TaskRunner> task_runner_;
+
+    asio::ip::tcp::acceptor acceptor_;
+    std::vector<std::unique_ptr<PendingSession>> pending_sessions_;
+    std::vector<std::unique_ptr<Session>> active_sessions_;
+
+    SharedPool shared_pool_;
+
     DISALLOW_COPY_AND_ASSIGN(SessionManager);
 };
 

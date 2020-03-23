@@ -18,6 +18,7 @@
 
 #include "proxy/session_key.h"
 
+#include "crypto/generic_hash.h"
 #include "crypto/random.h"
 
 namespace proxy {
@@ -80,9 +81,13 @@ base::ByteArray SessionKey::publicKey() const
     return key_pair_.publicKey();
 }
 
-base::ByteArray SessionKey::sessionKey(const base::ByteArray& peer_public_key)
+base::ByteArray SessionKey::sessionKey(std::string_view peer_public_key) const
 {
-    return key_pair_.sessionKey(peer_public_key);
+    base::ByteArray temp = key_pair_.sessionKey(base::fromStdString(peer_public_key));
+    if (temp.empty())
+        return base::ByteArray();
+
+    return crypto::GenericHash::hash(crypto::GenericHash::Type::BLAKE2s256, temp);
 }
 
 base::ByteArray SessionKey::iv() const

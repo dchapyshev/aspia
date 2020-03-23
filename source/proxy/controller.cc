@@ -25,6 +25,7 @@ namespace proxy {
 
 Controller::Controller(std::unique_ptr<net::Channel> channel, Delegate* delegate)
     : channel_(std::move(channel)),
+      shared_pool_(std::make_shared<Pool>()),
       delegate_(delegate)
 {
     DCHECK(channel_ && delegate_);
@@ -72,11 +73,13 @@ void Controller::onMessageReceived(const base::ByteArray& buffer)
         proto::ProxyKey* key = outgoing_message_.mutable_key_pool()->add_key();
 
         key->set_key_id(current_key_id_);
+        key->set_type(proto::ProxyKey::TYPE_X25519);
+        key->set_encryption(proto::ProxyKey::ENCRYPTION_CHACHA20_POLY1305);
         key->set_public_key(base::toStdString(session_key.publicKey()));
         key->set_iv(base::toStdString(session_key.iv()));
 
         // Add the key to the pool.
-        pool_.emplace(current_key_id_, std::move(session_key));
+        shared_pool_->emplace(current_key_id_, std::move(session_key));
 
         ++current_key_id_;
     }

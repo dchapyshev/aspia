@@ -23,6 +23,9 @@ list(APPEND SOURCE_PROXY
     controller.h
     controller_manager.cc
     controller_manager.h
+    peer_id.h
+    pending_session.cc
+    pending_session.h
     proxy_main.cc
     proxy_server.cc
     proxy_server.h
@@ -33,7 +36,8 @@ list(APPEND SOURCE_PROXY
     session_manager.cc
     session_manager.h
     settings.cc
-    settings.h)
+    settings.h
+    shared_pool.h)
 
 list(APPEND SOURCE_PROXY_WIN
     win/proxy_service.cc

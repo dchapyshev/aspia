@@ -22,7 +22,7 @@
 #include "base/macros_magic.h"
 #include "net/network_listener.h"
 #include "proto/proxy.pb.h"
-#include "proxy/session_key.h"
+#include "proxy/shared_pool.h"
 
 namespace net {
 class Channel;
@@ -41,7 +41,7 @@ public:
         virtual void onControllerFinished(Controller* controller) = 0;
     };
 
-    explicit Controller(std::unique_ptr<net::Channel> channel, Delegate* delegate);
+    Controller(std::unique_ptr<net::Channel> channel, Delegate* delegate);
     ~Controller();
 
     void start();
@@ -59,7 +59,7 @@ private:
     proto::RouterToProxy incoming_message_;
     proto::ProxyToRouter outgoing_message_;
 
-    std::map<uint32_t, SessionKey> pool_;
+    SharedPool shared_pool_;
     uint32_t current_key_id_ = 0;
 
     Delegate* delegate_;

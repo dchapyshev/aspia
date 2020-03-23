@@ -16,39 +16,16 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef PROXY__SESSION_KEY_H
-#define PROXY__SESSION_KEY_H
+#ifndef PROXY__SHARED_POOL_H
+#define PROXY__SHARED_POOL_H
 
-#include "crypto/key_pair.h"
+#include "proxy/session_key.h"
 
 namespace proxy {
 
-class SessionKey
-{
-public:
-    SessionKey();
-    SessionKey(SessionKey&& other) noexcept;
-    SessionKey& operator=(SessionKey&& other) noexcept;
-    ~SessionKey();
-
-    static SessionKey create();
-
-    bool isValid() const;
-
-    base::ByteArray privateKey() const;
-    base::ByteArray publicKey() const;
-    base::ByteArray sessionKey(std::string_view peer_public_key) const;
-    base::ByteArray iv() const;
-
-private:
-    SessionKey(crypto::KeyPair&& key_pair, base::ByteArray&& iv);
-
-    crypto::KeyPair key_pair_;
-    base::ByteArray iv_;
-
-    DISALLOW_COPY_AND_ASSIGN(SessionKey);
-};
+using Pool = std::map<uint32_t, SessionKey>;
+using SharedPool = std::shared_ptr<Pool>;
 
 } // namespace proxy
 
-#endif // PROXY__SESSION_KEY_H
+#endif // PROXY__SHARED_POOL_H
