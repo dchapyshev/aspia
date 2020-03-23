@@ -65,7 +65,8 @@ bool ControllerManager::start()
 
 void ControllerManager::onNewConnection(std::unique_ptr<net::Channel> channel)
 {
-    base::ByteArray iv;
+    base::ByteArray iv(12);
+    std::fill(iv.begin(), iv.end(), 0);
 
     std::unique_ptr<crypto::MessageEncryptor> encryptor =
         crypto::MessageEncryptorOpenssl::createForChaCha20Poly1305(session_key_, iv);
