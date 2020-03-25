@@ -30,14 +30,14 @@ void build(Solution &s)
 
         // test
         if (add_tests)
-        {
-            auto &bt = t.addExecutable("test");
-            bt += cpp17;
-            bt += FileRegex(name, ".*_unittest.*", true);
-            bt += t;
-            bt += "org.sw.demo.google.googletest.gmock"_dep;
-            bt += "org.sw.demo.google.googletest.gtest.main"_dep;
-            t.addTest(bt);
+    {
+        auto &bt = t.addExecutable("test");
+        bt += cpp17;
+        bt += FileRegex(name, ".*_unittest.*", true);
+        bt += t;
+        bt += "org.sw.demo.google.googletest.gmock"_dep;
+        bt += "org.sw.demo.google.googletest.gtest.main"_dep;
+        t.addTest(bt);
         }
 
         return t;
@@ -66,6 +66,7 @@ void build(Solution &s)
     base.Public += "org.sw.demo.rapidxml"_dep;
     base.Public += "org.sw.demo.intel.tbb"_dep;
     base.Public += "org.sw.demo.intel.tbb.malloc.proxy"_dep;
+    base.Public += "org.sw.demo.google.protobuf.protobuf_lite"_dep;
     automoc("org.sw.demo.qtproject.qt.base.tools.moc"_dep, base);
 
     auto &desktop_capture = aspia.addStaticLibrary("desktop");
@@ -127,7 +128,6 @@ void build(Solution &s)
     common.Public += "org.sw.demo.qtproject.qt.base.widgets"_dep;
     common.Public += "org.sw.demo.qtproject.qt.winextras"_dep;
     qt_progs_and_tr(common);
-    qt_translations_rcc("org.sw.demo.qtproject.qt"_dep, aspia, common, "translations/qt_translations.qrc");
 
     auto &network = add_lib("net", true);
     network.Public += crypto, common;
@@ -145,6 +145,7 @@ void build(Solution &s)
     qt_base.Public += base;
     qt_base.Public += "org.sw.demo.qtproject.qt.base.widgets"_dep;
     automoc("org.sw.demo.qtproject.qt.base.tools.moc"_dep, qt_base);
+    qt_translations_rcc("org.sw.demo.qtproject.qt"_dep, aspia, qt_base, "qt_translations.qrc");
 
     auto &host = aspia.addExecutable("host");
     auto &core = host.addSharedLibrary("core");
