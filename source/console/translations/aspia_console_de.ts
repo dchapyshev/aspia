@@ -793,12 +793,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="98"/>
+        <location filename="../address_book_dialog.cc" line="112"/>
         <source>Double-click to change</source>
         <translation type="unfinished">Doppelklicken, um zu ändern</translation>
     </message>
+    <message>
+        <location filename="../address_book_dialog.cc" line="95"/>
+        <source>Address Book</source>
+        <translation type="unfinished"></translation>
+    </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="169"/>
+        <location filename="../address_book_dialog.cc" line="183"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation type="unfinished">
             <numerusform>Zu langer Name. Die maximale Länge des Namens beträgt %n Zeichen.</numerusform>
@@ -806,12 +811,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="175"/>
+        <location filename="../address_book_dialog.cc" line="189"/>
         <source>Name can not be empty.</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="182"/>
+        <location filename="../address_book_dialog.cc" line="196"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation type="unfinished">
             <numerusform>Zu langer Kommentar. Die maximale Länge des Kommentars beträgt %n Zeichen.</numerusform>
@@ -819,12 +824,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="210"/>
+        <location filename="../address_book_dialog.cc" line="224"/>
         <source>The passwords you entered do not match.</source>
         <translation type="unfinished">Die eingegebenen Kennwörter stimmen nicht überein.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="216"/>
+        <location filename="../address_book_dialog.cc" line="230"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -832,12 +837,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="224"/>
+        <location filename="../address_book_dialog.cc" line="238"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="227"/>
+        <location filename="../address_book_dialog.cc" line="241"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -845,23 +850,23 @@
         </translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="231"/>
+        <location filename="../address_book_dialog.cc" line="245"/>
         <source>Do you want to enter a different password?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="234"/>
-        <location filename="../address_book_dialog.cc" line="364"/>
+        <location filename="../address_book_dialog.cc" line="248"/>
+        <location filename="../address_book_dialog.cc" line="378"/>
         <source>Warning</source>
         <translation type="unfinished">Warnung</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="325"/>
+        <location filename="../address_book_dialog.cc" line="339"/>
         <source>Confirmation</source>
         <translation type="unfinished">Bestätigung</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="326"/>
+        <location filename="../address_book_dialog.cc" line="340"/>
         <source>At change the size of hashing salt, you will need to re-enter the password. Continue?</source>
         <translation type="unfinished">Um die Größe des Hashing-Salzes zu ändern, müssen Sie das Kennwort erneut eingeben. Fortsetzen?</translation>
     </message>
