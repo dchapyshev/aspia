@@ -161,15 +161,12 @@ void Channel::resume()
     paused_ = false;
 
     // We already have an incomplete read operation.
-    if (state_ != ReadState::IDLE)
+    if (state_ == ReadState::READ_SIZE || state_ == ReadState::READ_CONTENT)
         return;
 
     // If we have a message that was received before the pause command.
-    if (read_buffer_size_)
+    if (state_ == ReadState::PENDING)
         onMessageReceived();
-
-    DCHECK_EQ(bytes_transfered_, 0);
-    DCHECK_EQ(read_buffer_size_, 0);
 
     doReadSize();
 }
@@ -301,9 +298,6 @@ void Channel::onMessageReceived()
 
     if (listener_)
         listener_->onMessageReceived(decrypt_buffer_);
-
-    bytes_transfered_ = 0;
-    read_buffer_size_ = 0;
 }
 
 void Channel::doWrite()
@@ -324,31 +318,10 @@ void Channel::doWrite()
         return;
     }
 
-    uint8_t length_data[4];
-    size_t length_data_size = 1;
-
-    // Calculate the variable-length.
-    length_data[0] = target_data_size & 0x7F;
-    if (target_data_size > 0x7F) // 127 bytes
-    {
-        length_data[0] |= 0x80;
-        length_data[length_data_size++] = target_data_size >> 7 & 0x7F;
-
-        if (target_data_size > 0x3FFF) // 16383 bytes
-        {
-            length_data[1] |= 0x80;
-            length_data[length_data_size++] = target_data_size >> 14 & 0x7F;
-
-            if (target_data_size > 0x1FFFF) // 2097151 bytes
-            {
-                length_data[2] |= 0x80;
-                length_data[length_data_size++] = target_data_size >> 21 & 0xFF;
-            }
-        }
-    }
+    asio::const_buffer variable_size = variable_size_writer_.variableSize(target_data_size);
 
     // Now we can calculate the full size.
-    const size_t total_size = length_data_size + target_data_size;
+    const size_t total_size = variable_size.size() + target_data_size;
 
     // If the reserved buffer size is less, then increase it.
     if (write_buffer_.capacity() < total_size)
@@ -358,12 +331,12 @@ void Channel::doWrite()
     write_buffer_.resize(total_size);
 
     // Copy the size of the message to the buffer.
-    memcpy(write_buffer_.data(), length_data, length_data_size);
+    memcpy(write_buffer_.data(), variable_size.data(), variable_size.size());
 
     // Encrypt the message.
     if (!encryptor_->encrypt(source_buffer.data(),
                              source_buffer.size(),
-                             write_buffer_.data() + length_data_size))
+                             write_buffer_.data() + variable_size.size()))
     {
         onErrorOccurred(FROM_HERE, asio::error::access_denied);
         return;
@@ -403,9 +376,8 @@ void Channel::onWrite(const std::error_code& error_code, size_t bytes_transferre
 void Channel::doReadSize()
 {
     state_ = ReadState::READ_SIZE;
-
     asio::async_read(socket_,
-                     asio::buffer(&one_byte_, 1),
+                     variable_size_reader_.buffer(),
                      std::bind(&Channel::onReadSize,
                                this,
                                std::placeholders::_1,
@@ -420,62 +392,34 @@ void Channel::onReadSize(const std::error_code& error_code, size_t bytes_transfe
         return;
     }
 
-    DCHECK_EQ(bytes_transferred, 1);
-
-    bytes_transfered_ += bytes_transferred;
-
-    switch (bytes_transfered_)
+    std::optional<size_t> size = variable_size_reader_.messageSize();
+    if (size.has_value())
     {
-        case 1:
-            read_buffer_size_ += one_byte_ & 0x7F;
-            break;
+        size_t message_size = size.value();
 
-        case 2:
-            read_buffer_size_ += (one_byte_ & 0x7F) << 7;
-            break;
+        if (!message_size || message_size > kMaxMessageSize)
+        {
+            onErrorOccurred(FROM_HERE, asio::error::message_size);
+            return;
+        }
 
-        case 3:
-            read_buffer_size_ += (one_byte_ & 0x7F) << 14;
-            break;
+        if (read_buffer_.capacity() < message_size)
+            read_buffer_.reserve(message_size);
 
-        case 4:
-            read_buffer_size_ += one_byte_ << 21;
-            break;
+        read_buffer_.resize(message_size);
 
-        default:
-            break;
+        state_ = ReadState::READ_CONTENT;
+        asio::async_read(socket_,
+                         asio::buffer(read_buffer_.data(), read_buffer_.size()),
+                         std::bind(&Channel::onReadContent,
+                                   this,
+                                   std::placeholders::_1,
+                                   std::placeholders::_2));
     }
-
-    if ((one_byte_ & 0x80) && (bytes_transfered_ < 4))
+    else
     {
         doReadSize();
-        return;
     }
-
-    doReadContent();
-}
-
-void Channel::doReadContent()
-{
-    state_ = ReadState::READ_CONTENT;
-
-    if (!read_buffer_size_ || read_buffer_size_ > kMaxMessageSize)
-    {
-        onErrorOccurred(FROM_HERE, asio::error::message_size);
-        return;
-    }
-
-    if (read_buffer_.capacity() < read_buffer_size_)
-        read_buffer_.reserve(read_buffer_size_);
-
-    read_buffer_.resize(read_buffer_size_);
-
-    asio::async_read(socket_,
-                     asio::buffer(read_buffer_.data(), read_buffer_.size()),
-                     std::bind(&Channel::onReadContent,
-                               this,
-                               std::placeholders::_1,
-                               std::placeholders::_2));
 }
 
 void Channel::onReadContent(const std::error_code& error_code, size_t bytes_transferred)
@@ -490,7 +434,7 @@ void Channel::onReadContent(const std::error_code& error_code, size_t bytes_tran
 
     if (paused_)
     {
-        state_ = ReadState::IDLE;
+        state_ = ReadState::PENDING;
         return;
     }
 
@@ -501,9 +445,6 @@ void Channel::onReadContent(const std::error_code& error_code, size_t bytes_tran
         state_ = ReadState::IDLE;
         return;
     }
-
-    DCHECK_EQ(bytes_transfered_, 0);
-    DCHECK_EQ(read_buffer_size_, 0);
 
     doReadSize();
 }

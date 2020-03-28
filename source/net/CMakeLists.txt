@@ -33,7 +33,9 @@ list(APPEND SOURCE_NET
     network_error.h
     network_listener.h
     network_server.cc
-    network_server.h)
+    network_server.h
+    variable_size.cc
+    variable_size.h)
 
 list(APPEND SOURCE_NET_UNIT_TESTS
     address_unittest.cc)

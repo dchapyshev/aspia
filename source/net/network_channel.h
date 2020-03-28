@@ -23,6 +23,7 @@
 #include "base/memory/byte_array.h"
 #include "base/memory/scalable_queue.h"
 #include "net/network_error.h"
+#include "net/variable_size.h"
 
 #include <asio/ip/tcp.hpp>
 
@@ -123,8 +124,6 @@ private:
 
     void doReadSize();
     void onReadSize(const std::error_code& error_code, size_t bytes_transferred);
-
-    void doReadContent();
     void onReadContent(const std::error_code& error_code, size_t bytes_transferred);
 
     std::shared_ptr<ChannelProxy> proxy_;
@@ -140,21 +139,21 @@ private:
     std::unique_ptr<crypto::MessageDecryptor> decryptor_;
 
     base::ScalableQueue<base::ByteArray> write_queue_;
+    VariableSizeWriter variable_size_writer_;
     base::ByteArray write_buffer_;
 
     enum class ReadState
     {
-        IDLE,        // No reads are in progress right now.
-        READ_SIZE,   // Reading the message size.
-        READ_CONTENT // Reading the contents of the message.
+        IDLE,         // No reads are in progress right now.
+        READ_SIZE,    // Reading the message size.
+        READ_CONTENT, // Reading the contents of the message.
+        PENDING       // There is a message about which we did not notify.
     };
 
     ReadState state_ = ReadState::IDLE;
-    uint8_t one_byte_ = 0;
+    VariableSizeReader variable_size_reader_;
     base::ByteArray read_buffer_;
     base::ByteArray decrypt_buffer_;
-    size_t read_buffer_size_ = 0;
-    size_t bytes_transfered_ = 0;
 
     DISALLOW_COPY_AND_ASSIGN(Channel);
 };
