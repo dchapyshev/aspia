@@ -71,7 +71,7 @@ void ComputerDialogGeneral::restoreSettings(
     ui.edit_comment->setPlainText(QString::fromStdString(computer.comment()));
 
     has_name_ = !computer.name().empty();
-    if (has_name_)
+    if (!has_name_)
         ui.edit_name->setFocus();
 }
 
