@@ -39,12 +39,33 @@ void ServerAuthenticatorManager::setUserList(std::shared_ptr<ServerUserList> use
     DCHECK(userlist_);
 }
 
+void ServerAuthenticatorManager::setPrivateKey(const base::ByteArray& private_key)
+{
+    private_key_ = private_key;
+}
+
+void ServerAuthenticatorManager::setAnonymousAccess(
+    ServerAuthenticator::AnonymousAccess anonymous_access, uint32_t session_types)
+{
+    anonymous_access_ = anonymous_access;
+    anonymous_session_types_ = session_types;
+}
+
 void ServerAuthenticatorManager::addNewChannel(std::unique_ptr<Channel> channel)
 {
     DCHECK(channel);
 
+    std::unique_ptr<ServerAuthenticator> authenticator =
+        std::make_unique<ServerAuthenticator>(task_runner_);
+
+    if (!authenticator->setPrivateKey(private_key_))
+        return;
+
+    if (!authenticator->setAnonymousAccess(anonymous_access_, anonymous_session_types_))
+        return;
+
     // Create a new authenticator for the connection and put it on the list.
-    pending_.emplace_back(std::make_unique<ServerAuthenticator>(task_runner_));
+    pending_.emplace_back(std::move(authenticator));
 
     // Start the authentication process.
     pending_.back()->start(std::move(channel), userlist_, this);

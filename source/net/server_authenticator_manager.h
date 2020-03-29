@@ -43,6 +43,11 @@ public:
 
     void setUserList(std::shared_ptr<net::ServerUserList> userlist);
 
+    void setPrivateKey(const base::ByteArray& private_key);
+
+    void setAnonymousAccess(
+        ServerAuthenticator::AnonymousAccess anonymous_access, uint32_t session_types);
+
     // Adds a channel to the authentication queue. After success completion, a session will be
     // created (in a stopped state) and method Delegate::onNewSession will be called.
     // If authentication fails, the channel will be automatically deleted.
@@ -56,6 +61,14 @@ private:
     std::shared_ptr<base::TaskRunner> task_runner_;
     std::shared_ptr<ServerUserList> userlist_;
     std::vector<std::unique_ptr<ServerAuthenticator>> pending_;
+
+    base::ByteArray private_key_;
+
+    ServerAuthenticator::AnonymousAccess anonymous_access_ =
+        ServerAuthenticator::AnonymousAccess::DISABLE;
+
+    uint32_t anonymous_session_types_ = 0;
+
     Delegate* delegate_;
 
     DISALLOW_COPY_AND_ASSIGN(ServerAuthenticatorManager);
