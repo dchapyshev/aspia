@@ -37,8 +37,8 @@ public:
     static std::filesystem::path filePath();
 
     // Database implementation.
-    UserList userList() const override;
-    bool addUser(const User& user) override;
+    net::ServerUserList userList() const override;
+    bool addUser(const net::ServerUser& user) override;
     bool removeUser(std::u16string_view name) override;
     std::string id(std::string_view key) const override;
 

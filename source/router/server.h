@@ -16,11 +16,11 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ROUTER__ROUTER_SERVER_H
-#define ROUTER__ROUTER_SERVER_H
+#ifndef ROUTER__SERVER_H
+#define ROUTER__SERVER_H
 
 #include "net/server.h"
-#include "router/authenticator_manager.h"
+#include "net/server_authenticator_manager.h"
 #include "router/session.h"
 
 namespace router {
@@ -29,7 +29,7 @@ class Database;
 
 class Server
     : public net::Server::Delegate,
-      public AuthenticatorManager::Delegate,
+      public net::ServerAuthenticatorManager::Delegate,
       public Session::Delegate
 {
 public:
@@ -42,8 +42,8 @@ protected:
     // net::Server::Delegate implementation.
     void onNewConnection(std::unique_ptr<net::Channel> channel) override;
 
-    // AuthenticatorManager::Delegate implementation.
-    void onNewSession(std::unique_ptr<Session> session) override;
+    // net::ServerAuthenticatorManager::Delegate implementation.
+    void onNewSession(net::ServerAuthenticatorManager::SessionInfo&& session_info) override;
 
     // Session::Delegate implementation.
     void onSessionFinished() override;
@@ -51,8 +51,8 @@ protected:
 private:
     std::shared_ptr<base::TaskRunner> task_runner_;
     std::unique_ptr<Database> database_;
-    std::unique_ptr<net::Server> network_server_;
-    std::unique_ptr<AuthenticatorManager> authenticator_manager_;
+    std::unique_ptr<net::Server> server_;
+    std::unique_ptr<net::ServerAuthenticatorManager> authenticator_manager_;
     std::vector<std::unique_ptr<Session>> sessions_;
 
     DISALLOW_COPY_AND_ASSIGN(Server);

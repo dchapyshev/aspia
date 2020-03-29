@@ -80,12 +80,12 @@ std::filesystem::path DatabaseSqlite::filePath()
     return file_path;
 }
 
-UserList DatabaseSqlite::userList() const
+net::ServerUserList DatabaseSqlite::userList() const
 {
-    return UserList();
+    return net::ServerUserList();
 }
 
-bool DatabaseSqlite::addUser(const User& user)
+bool DatabaseSqlite::addUser(const net::ServerUser& user)
 {
     return false;
 }

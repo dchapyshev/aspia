@@ -16,12 +16,15 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "router/router_server.h"
+#include "router/server.h"
 
 #include "base/logging.h"
 #include "base/task_runner.h"
 #include "net/channel.h"
+#include "proto/router.pb.h"
 #include "router/database_sqlite.h"
+#include "router/session_manager.h"
+#include "router/session_peer.h"
 #include "router/settings.h"
 
 namespace router {
@@ -36,7 +39,7 @@ Server::~Server() = default;
 
 bool Server::start()
 {
-    if (network_server_)
+    if (server_)
         return false;
 
     database_ = DatabaseSqlite::open();
@@ -45,12 +48,13 @@ bool Server::start()
 
     Settings settings;
 
-    authenticator_manager_ = std::make_unique<AuthenticatorManager>(task_runner_, this);
+    authenticator_manager_ = std::make_unique<net::ServerAuthenticatorManager>(task_runner_, this);
     authenticator_manager_->setPrivateKey(settings.privateKey());
-    authenticator_manager_->setUserList(std::make_shared<UserList>(database_->userList()));
+    authenticator_manager_->setUserList(
+        std::make_shared<net::ServerUserList>(database_->userList()));
 
-    network_server_ = std::make_unique<net::Server>();
-    network_server_->start(settings.port(), this);
+    server_ = std::make_unique<net::Server>();
+    server_->start(settings.port(), this);
 
     return true;
 }
@@ -61,8 +65,32 @@ void Server::onNewConnection(std::unique_ptr<net::Channel> channel)
         authenticator_manager_->addNewChannel(std::move(channel));
 }
 
-void Server::onNewSession(std::unique_ptr<Session> session)
+void Server::onNewSession(net::ServerAuthenticatorManager::SessionInfo&& session_info)
 {
+    std::unique_ptr<Session> session;
+
+    switch (session_info.session_type)
+    {
+        case proto::ROUTER_SESSION_PEER:
+            session = std::make_unique<SessionPeer>(std::move(session_info.channel));
+            break;
+
+        case proto::ROUTER_SESSION_MANAGER:
+        {
+            if (!(session_info.user_flags & net::ServerUser::MANAGER))
+                return;
+
+            session = std::make_unique<SessionManager>(std::move(session_info.channel));
+        }
+        break;
+
+        default:
+            break;
+    }
+
+    if (!session)
+        return;
+
     sessions_.emplace_back(std::move(session));
     sessions_.back()->start(this);
 }

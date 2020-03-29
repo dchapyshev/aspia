@@ -20,7 +20,7 @@
 
 #include "base/logging.h"
 #include "base/message_loop/message_pump_asio.h"
-#include "router/router_server.h"
+#include "router/server.h"
 #include "router/win/router_service_constants.h"
 
 namespace router {
