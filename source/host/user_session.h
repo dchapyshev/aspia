@@ -23,8 +23,8 @@
 #include "base/waitable_timer.h"
 #include "host/client_session.h"
 #include "host/desktop_session_manager.h"
-#include "host/user.h"
 #include "ipc/ipc_listener.h"
+#include "net/server_user.h"
 #include "proto/host_internal.pb.h"
 
 namespace ipc {
@@ -74,7 +74,7 @@ public:
     Type type() const { return type_; }
     State state() const { return state_; }
     base::SessionId sessionId() const { return session_id_; }
-    User user() const;
+    net::ServerUser user() const;
 
     void addNewSession(std::unique_ptr<ClientSession> client_session);
     void setSessionEvent(base::win::SessionStatus status, base::SessionId session_id);

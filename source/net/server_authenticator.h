@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST__HOST_AUTHENTICATOR_H
-#define HOST__HOST_AUTHENTICATOR_H
+#ifndef NET__SERVER_AUTHENTICATOR_H
+#define NET__SERVER_AUTHENTICATOR_H
 
 #include "base/version.h"
 #include "base/waitable_timer.h"
@@ -30,19 +30,16 @@ class Location;
 } // namespace base
 
 namespace net {
+
 class Channel;
-} // namespace net
-
-namespace host {
-
 class ClientSession;
-class UserList;
+class ServerUserList;
 
-class Authenticator : public net::Listener
+class ServerAuthenticator : public net::Listener
 {
 public:
-    explicit Authenticator(std::shared_ptr<base::TaskRunner> task_runner);
-    ~Authenticator();
+    explicit ServerAuthenticator(std::shared_ptr<base::TaskRunner> task_runner);
+    ~ServerAuthenticator();
 
     enum class State
     {
@@ -61,16 +58,18 @@ public:
     };
 
     // The start of the authenticator.
-    void start(std::unique_ptr<net::Channel> channel,
-               std::shared_ptr<UserList> userlist,
+    void start(std::unique_ptr<Channel> channel,
+               std::shared_ptr<ServerUserList> userlist,
                Delegate* delegate);
 
     // Returns the current state.
     State state() const { return state_; }
 
-    // Prepares a session. It returns the correct value only in SUCCESS state.
-    // Otherwise, it returns nullptr.
-    std::unique_ptr<ClientSession> takeSession();
+    uint32_t sessionType() const { return session_type_; }
+    const base::Version& peerVersion() const { return peer_version_; }
+    const std::u16string& userName() const { return username_; }
+
+    std::unique_ptr<Channel> takeChannel();
 
 protected:
     // net::Listener implementation.
@@ -84,8 +83,8 @@ private:
     void onFailed(const base::Location& location);
 
     base::WaitableTimer timer_;
-    std::unique_ptr<net::Channel> channel_;
-    std::shared_ptr<UserList> userlist_;
+    std::unique_ptr<Channel> channel_;
+    std::shared_ptr<ServerUserList> userlist_;
 
     Delegate* delegate_ = nullptr;
     State state_ = State::STOPPED;
@@ -107,7 +106,7 @@ private:
     uint32_t session_types_ = 0;
 
     // Selected session type.
-    proto::SessionType session_type_ = proto::SESSION_TYPE_UNKNOWN;
+    uint32_t session_type_ = 0;
 
     // Selected authentication method.
     proto::Encryption encryption_ = proto::ENCRYPTION_UNKNOWN;
@@ -130,9 +129,9 @@ private:
     crypto::BigNum B_;
     crypto::BigNum A_;
 
-    DISALLOW_COPY_AND_ASSIGN(Authenticator);
+    DISALLOW_COPY_AND_ASSIGN(ServerAuthenticator);
 };
 
-} // namespace host
+} // namespace net
 
-#endif // HOST__HOST_AUTHENTICATOR_H
+#endif // NET__SERVER_AUTHENTICATOR_H

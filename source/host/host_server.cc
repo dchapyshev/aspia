@@ -109,8 +109,20 @@ void Server::onNewConnection(std::unique_ptr<net::Channel> channel)
         authenticator_manager_->addNewChannel(std::move(channel));
 }
 
-void Server::onNewSession(std::unique_ptr<ClientSession> session)
+void Server::onNewSession(std::unique_ptr<net::Channel> channel,
+                          uint32_t session_type,
+                          const base::Version& version,
+                          const std::u16string& username)
 {
+    std::unique_ptr<ClientSession> session =
+        ClientSession::create(static_cast<proto::SessionType>(session_type), std::move(channel));
+
+    if (session)
+    {
+        session->setVersion(version);
+        session->setUserName(username);
+    }
+
     if (user_session_manager_)
         user_session_manager_->addNewSession(std::move(session));
 }
@@ -152,7 +164,8 @@ void Server::deleteFirewallRules()
 void Server::reloadUserList()
 {
     // Read the list of regular users.
-    std::shared_ptr<UserList> user_list = std::make_shared<UserList>(settings_.userList());
+    std::shared_ptr<net::ServerUserList> user_list =
+        std::make_shared<net::ServerUserList>(settings_.userList());
 
     // Add a list of one-time users to the list of regular users.
     user_list->merge(user_session_manager_->userList());

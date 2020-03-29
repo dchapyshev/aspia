@@ -16,12 +16,11 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/host_authenticator.h"
+#include "net/server_authenticator.h"
 
 #include "base/cpuid.h"
 #include "base/location.h"
 #include "base/logging.h"
-#include "base/version.h"
 #include "base/strings/unicode.h"
 #include "build/version.h"
 #include "crypto/message_decryptor_openssl.h"
@@ -31,12 +30,10 @@
 #include "crypto/secure_memory.h"
 #include "crypto/srp_constants.h"
 #include "crypto/srp_math.h"
-#include "host/client_session.h"
-#include "host/user.h"
 #include "net/network_channel.h"
-#include "proto/key_exchange.pb.h"
+#include "net/server_user.h"
 
-namespace host {
+namespace net {
 
 namespace {
 
@@ -44,17 +41,17 @@ constexpr std::chrono::minutes kTimeout{ 1 };
 
 } // namespace
 
-Authenticator::Authenticator(std::shared_ptr<base::TaskRunner> task_runner)
-    : timer_(task_runner)
+ServerAuthenticator::ServerAuthenticator(std::shared_ptr<base::TaskRunner> task_runner)
+    : timer_(std::move(task_runner))
 {
     // Nothing
 }
 
-Authenticator::~Authenticator() = default;
+ServerAuthenticator::~ServerAuthenticator() = default;
 
-void Authenticator::start(std::unique_ptr<net::Channel> channel,
-                          std::shared_ptr<UserList> userlist,
-                          Delegate* delegate)
+void ServerAuthenticator::start(std::unique_ptr<Channel> channel,
+                                std::shared_ptr<ServerUserList> userlist,
+                                Delegate* delegate)
 {
     channel_ = std::move(channel);
     userlist_ = std::move(userlist);
@@ -67,7 +64,7 @@ void Authenticator::start(std::unique_ptr<net::Channel> channel,
 
     state_ = State::PENDING;
 
-    timer_.start(kTimeout, std::bind(&Authenticator::onFailed, this, FROM_HERE));
+    timer_.start(kTimeout, std::bind(&ServerAuthenticator::onFailed, this, FROM_HERE));
 
     channel_->setListener(this);
     channel_->resume();
@@ -76,35 +73,26 @@ void Authenticator::start(std::unique_ptr<net::Channel> channel,
     LOG(LS_INFO) << "Authentication started for: " << channel_->peerAddress();
 }
 
-std::unique_ptr<ClientSession> Authenticator::takeSession()
+std::unique_ptr<Channel> ServerAuthenticator::takeChannel()
 {
     if (state_ != State::SUCCESS)
         return nullptr;
 
-    std::unique_ptr<ClientSession> session =
-        ClientSession::create(session_type_, std::move(channel_));
-
-    if (session)
-    {
-        session->setVersion(peer_version_);
-        session->setUserName(username_);
-    }
-
-    return session;
+    return std::move(channel_);
 }
 
-void Authenticator::onConnected()
+void ServerAuthenticator::onConnected()
 {
     NOTREACHED();
 }
 
-void Authenticator::onDisconnected(net::ErrorCode error_code)
+void ServerAuthenticator::onDisconnected(net::ErrorCode error_code)
 {
     LOG(LS_WARNING) << "Network error: " << net::errorToString(error_code);
     onFailed(FROM_HERE);
 }
 
-void Authenticator::onMessageReceived(const base::ByteArray& buffer)
+void ServerAuthenticator::onMessageReceived(const base::ByteArray& buffer)
 {
     switch (internal_state_)
     {
@@ -167,7 +155,7 @@ void Authenticator::onMessageReceived(const base::ByteArray& buffer)
                 return;
             }
 
-            const User& user = userlist_->find(username_);
+            const ServerUser& user = userlist_->find(username_);
             if (!user.isValid())
             {
                 session_types_ = proto::SESSION_TYPE_ALL;
@@ -317,7 +305,7 @@ void Authenticator::onMessageReceived(const base::ByteArray& buffer)
     }
 }
 
-void Authenticator::onMessageWritten()
+void ServerAuthenticator::onMessageWritten()
 {
     switch (internal_state_)
     {
@@ -339,7 +327,7 @@ void Authenticator::onMessageWritten()
     }
 }
 
-base::ByteArray Authenticator::createKey()
+base::ByteArray ServerAuthenticator::createKey()
 {
     if (!crypto::SrpMath::verify_A_mod_N(A_, N_))
     {
@@ -378,7 +366,7 @@ base::ByteArray Authenticator::createKey()
     return base::ByteArray();
 }
 
-void Authenticator::onFailed(const base::Location& location)
+void ServerAuthenticator::onFailed(const base::Location& location)
 {
     // If the network channel is already destroyed, then exit (we have a repeated notification).
     if (!channel_)
@@ -400,4 +388,4 @@ void Authenticator::onFailed(const base::Location& location)
     delegate_->onComplete();
 }
 
-} // namespace host
+} // namespace net

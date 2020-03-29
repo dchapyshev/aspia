@@ -36,6 +36,10 @@ list(APPEND SOURCE_NET
     network_listener.h
     network_server.cc
     network_server.h
+    server_authenticator.cc
+    server_authenticator.h
+    server_user.cc
+    server_user.h
     variable_size.cc
     variable_size.h)
 

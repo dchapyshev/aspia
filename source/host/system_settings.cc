@@ -19,7 +19,7 @@
 #include "host/system_settings.h"
 
 #include "crypto/random.h"
-#include "host/user.h"
+#include "net/server_user.h"
 
 namespace host {
 
@@ -56,13 +56,13 @@ void SystemSettings::setTcpPort(uint16_t port)
     settings_.set<uint16_t>("TcpPort", port);
 }
 
-UserList SystemSettings::userList() const
+net::ServerUserList SystemSettings::userList() const
 {
-    UserList users;
+    net::ServerUserList users;
 
     for (const auto& item : settings_.getArray("Users"))
     {
-        User user;
+        net::ServerUser user;
 
         user.name = item.get<std::u16string>("Name");
         user.salt = item.get<base::ByteArray>("Salt");
@@ -84,16 +84,16 @@ UserList SystemSettings::userList() const
     return users;
 }
 
-void SystemSettings::setUserList(const UserList& users)
+void SystemSettings::setUserList(const net::ServerUserList& users)
 {
     // Clear the old list of users.
     settings_.remove("Users");
 
     base::Settings::Array users_array;
 
-    for (UserList::Iterator it(users); !it.isAtEnd(); it.advance())
+    for (net::ServerUserList::Iterator it(users); !it.isAtEnd(); it.advance())
     {
-        const User& user = it.user();
+        const net::ServerUser& user = it.user();
 
         base::Settings item;
         item.set("Name", user.name);

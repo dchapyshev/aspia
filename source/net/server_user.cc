@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/user.h"
+#include "net/server_user.h"
 
 #include "base/logging.h"
 #include "base/strings/string_util.h"
@@ -24,22 +24,22 @@
 #include "crypto/srp_constants.h"
 #include "crypto/srp_math.h"
 
-namespace host {
+namespace net {
 
 namespace {
 
-const User kInvalidUser;
+const ServerUser kInvalidUser;
 const size_t kUserSaltSize = 64; // In bytes.
 
 } // namespace
 
 // static
-User User::create(std::u16string_view name, std::u16string_view password)
+ServerUser ServerUser::create(std::u16string_view name, std::u16string_view password)
 {
     if (name.empty() || password.empty())
-        return User();
+        return ServerUser();
 
-    User user;
+    ServerUser user;
 
     user.name = name;
     user.salt = crypto::Random::byteArray(kUserSaltSize);
@@ -53,44 +53,44 @@ User User::create(std::u16string_view name, std::u16string_view password)
 
     user.verifier = v.toByteArray();
     if (user.verifier.empty())
-        return User();
+        return ServerUser();
 
     return user;
 }
 
-bool User::isValid() const
+bool ServerUser::isValid() const
 {
     return !name.empty() && !salt.empty() && !number.empty() &&
            !generator.empty() && !verifier.empty();
 }
 
-void UserList::add(const User& user)
+void ServerUserList::add(const ServerUser& user)
 {
     if (user.isValid())
         list_.emplace_back(user);
 }
 
-void UserList::add(User&& user)
+void ServerUserList::add(ServerUser&& user)
 {
     if (user.isValid())
         list_.emplace_back(std::move(user));
 }
 
-void UserList::merge(const UserList& user_list)
+void ServerUserList::merge(const ServerUserList& user_list)
 {
     for (const auto& user : user_list.list_)
         add(user);
 }
 
-void UserList::merge(UserList&& user_list)
+void ServerUserList::merge(ServerUserList&& user_list)
 {
     for (auto& user : user_list.list_)
         add(std::move(user));
 }
 
-const User& UserList::find(std::u16string_view username) const
+const ServerUser& ServerUserList::find(std::u16string_view username) const
 {
-    const User* user = &kInvalidUser;
+    const ServerUser* user = &kInvalidUser;
 
     for (const auto& item : list_)
     {
@@ -101,26 +101,26 @@ const User& UserList::find(std::u16string_view username) const
     return *user;
 }
 
-void UserList::setSeedKey(const base::ByteArray& seed_key)
+void ServerUserList::setSeedKey(const base::ByteArray& seed_key)
 {
     seed_key_ = seed_key;
 }
 
-void UserList::setSeedKey(base::ByteArray&& seed_key)
+void ServerUserList::setSeedKey(base::ByteArray&& seed_key)
 {
     seed_key_ = std::move(seed_key);
 }
 
-UserList::Iterator::Iterator(const UserList& list)
+ServerUserList::Iterator::Iterator(const ServerUserList& list)
     : list_(list.list_),
       pos_(list.list_.cbegin())
 {
     // Nothing
 }
 
-UserList::Iterator::~Iterator() = default;
+ServerUserList::Iterator::~Iterator() = default;
 
-const User& UserList::Iterator::user() const
+const ServerUser& ServerUserList::Iterator::user() const
 {
     if (isAtEnd())
         return kInvalidUser;
@@ -128,14 +128,14 @@ const User& UserList::Iterator::user() const
     return *pos_;
 }
 
-bool UserList::Iterator::isAtEnd() const
+bool ServerUserList::Iterator::isAtEnd() const
 {
     return pos_ == list_.cend();
 }
 
-void UserList::Iterator::advance()
+void ServerUserList::Iterator::advance()
 {
     ++pos_;
 }
 
-} // namespace host
+} // namespace net

@@ -19,9 +19,7 @@
 #ifndef HOST__HOST_AUTHENTICATOR_MANAGER_H
 #define HOST__HOST_AUTHENTICATOR_MANAGER_H
 
-#include "host/host_authenticator.h"
-
-#include <memory>
+#include "net/server_authenticator.h"
 
 namespace base {
 class TaskRunner;
@@ -33,7 +31,7 @@ class Channel;
 
 namespace host {
 
-class AuthenticatorManager : public Authenticator::Delegate
+class AuthenticatorManager : public net::ServerAuthenticator::Delegate
 {
 public:
     class Delegate
@@ -42,13 +40,16 @@ public:
         virtual ~Delegate() = default;
 
         // Called when authentication for the channel succeeds.
-        virtual void onNewSession(std::unique_ptr<ClientSession> session) = 0;
+        virtual void onNewSession(std::unique_ptr<net::Channel> channel,
+                                  uint32_t session_type,
+                                  const base::Version& version,
+                                  const std::u16string& username) = 0;
     };
 
     AuthenticatorManager(std::shared_ptr<base::TaskRunner> task_runner, Delegate* delegate);
     ~AuthenticatorManager();
 
-    void setUserList(std::shared_ptr<UserList> userlist);
+    void setUserList(std::shared_ptr<net::ServerUserList> userlist);
 
     // Adds a channel to the authentication queue. After success completion, a session will be
     // created (in a stopped state) and method Delegate::onNewSession will be called.
@@ -61,8 +62,8 @@ protected:
 
 private:
     std::shared_ptr<base::TaskRunner> task_runner_;
-    std::shared_ptr<UserList> userlist_;
-    std::vector<std::unique_ptr<Authenticator>> pending_;
+    std::shared_ptr<net::ServerUserList> userlist_;
+    std::vector<std::unique_ptr<net::ServerAuthenticator>> pending_;
     Delegate* delegate_;
 
     DISALLOW_COPY_AND_ASSIGN(AuthenticatorManager);

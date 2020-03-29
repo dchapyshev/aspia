@@ -28,7 +28,7 @@
 
 namespace host {
 
-UserDialog::UserDialog(const User& user, const QStringList& exist_names, QWidget* parent)
+UserDialog::UserDialog(const net::ServerUser& user, const QStringList& exist_names, QWidget* parent)
     : QDialog(parent),
       exist_names_(exist_names),
       user_(user)
@@ -37,7 +37,7 @@ UserDialog::UserDialog(const User& user, const QStringList& exist_names, QWidget
 
     if (user.isValid())
     {
-        ui.checkbox_disable_user->setChecked(!(user.flags & User::ENABLED));
+        ui.checkbox_disable_user->setChecked(!(user.flags & net::ServerUser::ENABLED));
         ui.edit_username->setText(QString::fromStdU16String(user.name));
 
         setAccountChanged(false);
@@ -194,7 +194,7 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
                 }
             }
 
-            user_ = User::create(name, password);
+            user_ = net::ServerUser::create(name, password);
             if (!user_.isValid())
             {
                 QMessageBox::warning(this,
@@ -215,7 +215,7 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
 
         uint32_t flags = 0;
         if (!ui.checkbox_disable_user->isChecked())
-            flags |= User::ENABLED;
+            flags |= net::ServerUser::ENABLED;
 
         user_.sessions = sessions;
         user_.flags = flags;

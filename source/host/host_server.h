@@ -48,7 +48,10 @@ protected:
     void onNewConnection(std::unique_ptr<net::Channel> channel) override;
 
     // AuthenticatorManager::Delegate implementation.
-    void onNewSession(std::unique_ptr<ClientSession> session) override;
+    void onNewSession(std::unique_ptr<net::Channel> channel,
+                      uint32_t session_type,
+                      const base::Version& version,
+                      const std::u16string& username) override;
 
     // UserSessionManager::Delegate implementation.
     void onUserListChanged() override;

@@ -29,7 +29,6 @@
 #include "host/ui/settings_util.h"
 #include "host/win/host_service_constants.h"
 #include "host/system_settings.h"
-#include "host/user.h"
 #include "qt_base/qt_xml_settings.h"
 #include "updater/update_dialog.h"
 
@@ -132,7 +131,7 @@ void ConfigDialog::onAddUser()
     for (int i = 0; i < ui.tree_users->topLevelItemCount(); ++i)
         exist_names.append(ui.tree_users->topLevelItem(i)->text(0));
 
-    UserDialog dialog(User(), exist_names, this);
+    UserDialog dialog(net::ServerUser(), exist_names, this);
     if (dialog.exec() == QDialog::Accepted)
     {
         ui.tree_users->addTopLevelItem(new UserTreeItem(dialog.user()));
@@ -308,7 +307,7 @@ void ConfigDialog::onButtonBoxClicked(QAbstractButton* button)
             }
         }
 
-        UserList user_list;
+        net::ServerUserList user_list;
 
         for (int i = 0; i < ui.tree_users->topLevelItemCount(); ++i)
         {
@@ -385,11 +384,11 @@ void ConfigDialog::reloadAll()
     setConfigChanged(false);
 }
 
-void ConfigDialog::reloadUserList(const UserList& user_list)
+void ConfigDialog::reloadUserList(const net::ServerUserList& user_list)
 {
     ui.tree_users->clear();
 
-    for (UserList::Iterator it(user_list); !it.isAtEnd(); it.advance())
+    for (net::ServerUserList::Iterator it(user_list); !it.isAtEnd(); it.advance())
         ui.tree_users->addTopLevelItem(new UserTreeItem(it.user()));
 
     ui.button_modify->setEnabled(false);

@@ -43,8 +43,6 @@ list(APPEND SOURCE_HOST_CORE
     desktop_session_process.h
     desktop_session_proxy.cc
     desktop_session_proxy.h
-    host_authenticator.cc
-    host_authenticator.h
     host_authenticator_manager.cc
     host_authenticator_manager.h
     host_export.h
@@ -61,8 +59,6 @@ list(APPEND SOURCE_HOST_CORE
     sas_injector.h
     system_settings.cc
     system_settings.h
-    user.cc
-    user.h
     user_session.cc
     user_session.h
     user_session_agent.cc

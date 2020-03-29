@@ -20,7 +20,6 @@
 
 #include "base/logging.h"
 #include "base/task_runner.h"
-#include "host/client_session.h"
 #include "net/network_channel.h"
 
 namespace host {
@@ -35,7 +34,7 @@ AuthenticatorManager::AuthenticatorManager(
 
 AuthenticatorManager::~AuthenticatorManager() = default;
 
-void AuthenticatorManager::setUserList(std::shared_ptr<UserList> userlist)
+void AuthenticatorManager::setUserList(std::shared_ptr<net::ServerUserList> userlist)
 {
     userlist_ = std::move(userlist);
     DCHECK(userlist_);
@@ -46,7 +45,7 @@ void AuthenticatorManager::addNewChannel(std::unique_ptr<net::Channel> channel)
     DCHECK(channel);
 
     // Create a new authenticator for the connection and put it on the list.
-    pending_.emplace_back(std::make_unique<Authenticator>(task_runner_));
+    pending_.emplace_back(std::make_unique<net::ServerAuthenticator>(task_runner_));
 
     // Start the authentication process.
     pending_.back()->start(std::move(channel), userlist_, this);
@@ -56,15 +55,20 @@ void AuthenticatorManager::onComplete()
 {
     for (auto it = pending_.begin(); it != pending_.end();)
     {
-        Authenticator* current = it->get();
+        net::ServerAuthenticator* current = it->get();
 
         switch (current->state())
         {
-            case Authenticator::State::SUCCESS:
-            case Authenticator::State::FAILED:
+            case net::ServerAuthenticator::State::SUCCESS:
+            case net::ServerAuthenticator::State::FAILED:
             {
-                if (current->state() == Authenticator::State::SUCCESS)
-                    delegate_->onNewSession(current->takeSession());
+                if (current->state() == net::ServerAuthenticator::State::SUCCESS)
+                {
+                    delegate_->onNewSession(current->takeChannel(),
+                                            current->sessionType(),
+                                            current->peerVersion(),
+                                            current->userName());
+                }
 
                 // Authenticator not needed anymore.
                 task_runner_->deleteSoon(std::move(*it));
@@ -72,7 +76,7 @@ void AuthenticatorManager::onComplete()
             }
             break;
 
-            case Authenticator::State::PENDING:
+            case net::ServerAuthenticator::State::PENDING:
                 // Authentication is not yet completed, skip.
                 ++it;
                 break;

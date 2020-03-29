@@ -276,9 +276,9 @@ void UserSessionManager::addNewSession(std::unique_ptr<ClientSession> client_ses
     }
 }
 
-UserList UserSessionManager::userList() const
+net::ServerUserList UserSessionManager::userList() const
 {
-    UserList user_list;
+    net::ServerUserList user_list;
 
     for (const auto& session : sessions_)
         user_list.add(session->user());
