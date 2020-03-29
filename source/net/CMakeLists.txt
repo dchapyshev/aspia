@@ -35,6 +35,8 @@ list(APPEND SOURCE_NET
     server.h
     server_authenticator.cc
     server_authenticator.h
+    server_authenticator_manager.cc
+    server_authenticator_manager.h
     server_user.cc
     server_user.h
     variable_size.cc

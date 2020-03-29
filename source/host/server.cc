@@ -48,7 +48,7 @@ Server::~Server()
     settings_watcher_.reset();
     authenticator_manager_.reset();
     user_session_manager_.reset();
-    network_server_.reset();
+    server_.reset();
 
     deleteFirewallRules();
 
@@ -57,7 +57,7 @@ Server::~Server()
 
 void Server::start()
 {
-    if (network_server_)
+    if (server_)
     {
         DLOG(LS_WARNING) << "An attempt was start an already running server";
         return;
@@ -83,7 +83,7 @@ void Server::start()
         }
     });
 
-    authenticator_manager_ = std::make_unique<AuthenticatorManager>(task_runner_, this);
+    authenticator_manager_ = std::make_unique<net::ServerAuthenticatorManager>(task_runner_, this);
 
     user_session_manager_ = std::make_unique<UserSessionManager>(task_runner_);
     user_session_manager_->start(this);
@@ -91,8 +91,8 @@ void Server::start()
     reloadUserList();
     addFirewallRules();
 
-    network_server_ = std::make_unique<net::Server>();
-    network_server_->start(settings_.tcpPort(), this);
+    server_ = std::make_unique<net::Server>();
+    server_->start(settings_.tcpPort(), this);
 
     LOG(LS_INFO) << "Host server is started successfully";
 }

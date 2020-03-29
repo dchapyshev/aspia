@@ -16,22 +16,14 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST__HOST_AUTHENTICATOR_MANAGER_H
-#define HOST__HOST_AUTHENTICATOR_MANAGER_H
+#ifndef NET__SERVER_AUTHENTICATOR_MANAGER_H
+#define NET__SERVER_AUTHENTICATOR_MANAGER_H
 
 #include "net/server_authenticator.h"
 
-namespace base {
-class TaskRunner;
-} // namespace base
-
 namespace net {
-class Channel;
-} // namespace net
 
-namespace host {
-
-class AuthenticatorManager : public net::ServerAuthenticator::Delegate
+class ServerAuthenticatorManager : public ServerAuthenticator::Delegate
 {
 public:
     class Delegate
@@ -40,14 +32,14 @@ public:
         virtual ~Delegate() = default;
 
         // Called when authentication for the channel succeeds.
-        virtual void onNewSession(std::unique_ptr<net::Channel> channel,
+        virtual void onNewSession(std::unique_ptr<Channel> channel,
                                   uint32_t session_type,
                                   const base::Version& version,
                                   const std::u16string& username) = 0;
     };
 
-    AuthenticatorManager(std::shared_ptr<base::TaskRunner> task_runner, Delegate* delegate);
-    ~AuthenticatorManager();
+    ServerAuthenticatorManager(std::shared_ptr<base::TaskRunner> task_runner, Delegate* delegate);
+    ~ServerAuthenticatorManager();
 
     void setUserList(std::shared_ptr<net::ServerUserList> userlist);
 
@@ -62,13 +54,13 @@ protected:
 
 private:
     std::shared_ptr<base::TaskRunner> task_runner_;
-    std::shared_ptr<net::ServerUserList> userlist_;
-    std::vector<std::unique_ptr<net::ServerAuthenticator>> pending_;
+    std::shared_ptr<ServerUserList> userlist_;
+    std::vector<std::unique_ptr<ServerAuthenticator>> pending_;
     Delegate* delegate_;
 
-    DISALLOW_COPY_AND_ASSIGN(AuthenticatorManager);
+    DISALLOW_COPY_AND_ASSIGN(ServerAuthenticatorManager);
 };
 
-} // namespace host
+} // namespace net
 
-#endif // HOST__HOST_AUTHENTICATOR_MANAGER_H
+#endif // NET__SERVER_AUTHENTICATOR_MANAGER_H

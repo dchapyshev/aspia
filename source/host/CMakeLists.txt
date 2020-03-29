@@ -43,8 +43,6 @@ list(APPEND SOURCE_HOST_CORE
     desktop_session_process.h
     desktop_session_proxy.cc
     desktop_session_proxy.h
-    host_authenticator_manager.cc
-    host_authenticator_manager.h
     host_export.h
     host_main.cc
     host_main.h

@@ -16,14 +16,14 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/host_authenticator_manager.h"
+#include "net/server_authenticator_manager.h"
 
 #include "base/logging.h"
 #include "base/task_runner.h"
 
-namespace host {
+namespace net {
 
-AuthenticatorManager::AuthenticatorManager(
+ServerAuthenticatorManager::ServerAuthenticatorManager(
     std::shared_ptr<base::TaskRunner> task_runner, Delegate* delegate)
     : task_runner_(std::move(task_runner)),
       delegate_(delegate)
@@ -31,37 +31,37 @@ AuthenticatorManager::AuthenticatorManager(
     DCHECK(task_runner_ && delegate_);
 }
 
-AuthenticatorManager::~AuthenticatorManager() = default;
+ServerAuthenticatorManager::~ServerAuthenticatorManager() = default;
 
-void AuthenticatorManager::setUserList(std::shared_ptr<net::ServerUserList> userlist)
+void ServerAuthenticatorManager::setUserList(std::shared_ptr<ServerUserList> userlist)
 {
     userlist_ = std::move(userlist);
     DCHECK(userlist_);
 }
 
-void AuthenticatorManager::addNewChannel(std::unique_ptr<net::Channel> channel)
+void ServerAuthenticatorManager::addNewChannel(std::unique_ptr<Channel> channel)
 {
     DCHECK(channel);
 
     // Create a new authenticator for the connection and put it on the list.
-    pending_.emplace_back(std::make_unique<net::ServerAuthenticator>(task_runner_));
+    pending_.emplace_back(std::make_unique<ServerAuthenticator>(task_runner_));
 
     // Start the authentication process.
     pending_.back()->start(std::move(channel), userlist_, this);
 }
 
-void AuthenticatorManager::onComplete()
+void ServerAuthenticatorManager::onComplete()
 {
     for (auto it = pending_.begin(); it != pending_.end();)
     {
-        net::ServerAuthenticator* current = it->get();
+        ServerAuthenticator* current = it->get();
 
         switch (current->state())
         {
-            case net::ServerAuthenticator::State::SUCCESS:
-            case net::ServerAuthenticator::State::FAILED:
+            case ServerAuthenticator::State::SUCCESS:
+            case ServerAuthenticator::State::FAILED:
             {
-                if (current->state() == net::ServerAuthenticator::State::SUCCESS)
+                if (current->state() == ServerAuthenticator::State::SUCCESS)
                 {
                     delegate_->onNewSession(current->takeChannel(),
                                             current->sessionType(),
@@ -75,7 +75,7 @@ void AuthenticatorManager::onComplete()
             }
             break;
 
-            case net::ServerAuthenticator::State::PENDING:
+            case ServerAuthenticator::State::PENDING:
                 // Authentication is not yet completed, skip.
                 ++it;
                 break;
@@ -88,4 +88,4 @@ void AuthenticatorManager::onComplete()
     }
 }
 
-} // namespace host
+} // namespace net
