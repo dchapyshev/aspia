@@ -20,7 +20,7 @@
 
 #include "base/logging.h"
 #include "base/task_runner.h"
-#include "net/network_channel.h"
+#include "net/channel.h"
 #include "router/database_sqlite.h"
 #include "router/settings.h"
 

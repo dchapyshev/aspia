@@ -19,7 +19,7 @@
 #include "router/session.h"
 
 #include "base/logging.h"
-#include "net/network_channel.h"
+#include "net/channel.h"
 #include "proto/router.pb.h"
 
 namespace router {
@@ -61,7 +61,7 @@ void Session::onConnected()
     NOTREACHED();
 }
 
-void Session::onDisconnected(net::ErrorCode error_code)
+void Session::onDisconnected(net::Channel::ErrorCode error_code)
 {
     // TODO
 }

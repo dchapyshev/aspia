@@ -29,7 +29,6 @@
 #include "host/desktop_session_proxy.h"
 #include "host/host_system_info.h"
 #include "host/win/updater_launcher.h"
-#include "net/network_channel.h"
 #include "proto/desktop_internal.pb.h"
 
 namespace host {

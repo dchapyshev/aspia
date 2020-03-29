@@ -19,7 +19,6 @@
 #include "proxy/controller.h"
 
 #include "base/logging.h"
-#include "net/network_channel.h"
 
 namespace proxy {
 
@@ -53,7 +52,7 @@ void Controller::onConnected()
     NOTREACHED();
 }
 
-void Controller::onDisconnected(net::ErrorCode /* error_code */)
+void Controller::onDisconnected(net::Channel::ErrorCode /* error_code */)
 {
     if (delegate_)
         delegate_->onControllerFinished(this);

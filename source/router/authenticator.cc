@@ -29,7 +29,6 @@
 #include "crypto/random.h"
 #include "crypto/srp_constants.h"
 #include "crypto/srp_math.h"
-#include "net/network_channel.h"
 #include "router/session_manager.h"
 #include "router/session_peer.h"
 #include "router/user.h"
@@ -115,7 +114,7 @@ void Authenticator::onConnected()
     NOTREACHED();
 }
 
-void Authenticator::onDisconnected(net::ErrorCode /* error_code */)
+void Authenticator::onDisconnected(net::Channel::ErrorCode /* error_code */)
 {
     onFailed(FROM_HERE);
 }

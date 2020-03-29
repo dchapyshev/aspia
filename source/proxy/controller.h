@@ -19,18 +19,13 @@
 #ifndef PROXY__CONTROLLER_H
 #define PROXY__CONTROLLER_H
 
-#include "base/macros_magic.h"
-#include "net/network_listener.h"
+#include "net/channel.h"
 #include "proto/proxy.pb.h"
 #include "proxy/shared_pool.h"
 
-namespace net {
-class Channel;
-} // namespace net
-
 namespace proxy {
 
-class Controller : public net::Listener
+class Controller : public net::Channel::Listener
 {
 public:
     class Delegate
@@ -53,9 +48,9 @@ public:
     uint32_t id() const { return controller_id_; }
 
 protected:
-    // net::Listener implementation.
+    // net::Channel::Listener implementation.
     void onConnected() override;
-    void onDisconnected(net::ErrorCode error_code) override;
+    void onDisconnected(net::Channel::ErrorCode error_code) override;
     void onMessageReceived(const base::ByteArray& buffer) override;
     void onMessageWritten() override;
 

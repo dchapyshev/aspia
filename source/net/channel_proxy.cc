@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "net/network_channel_proxy.h"
+#include "net/channel_proxy.h"
 
 #include "base/logging.h"
 #include "base/task_runner.h"

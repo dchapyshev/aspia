@@ -18,7 +18,7 @@
 
 #include "router/session_manager.h"
 
-#include "net/network_channel.h"
+#include "net/channel.h"
 
 namespace router {
 

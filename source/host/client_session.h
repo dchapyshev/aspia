@@ -21,7 +21,7 @@
 
 #include "base/session_id.h"
 #include "base/version.h"
-#include "net/network_channel.h"
+#include "net/channel.h"
 #include "proto/common.pb.h"
 
 namespace net {

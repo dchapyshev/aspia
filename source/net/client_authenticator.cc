@@ -29,7 +29,6 @@
 #include "crypto/random.h"
 #include "crypto/srp_constants.h"
 #include "crypto/srp_math.h"
-#include "net/network_channel.h"
 
 namespace net {
 

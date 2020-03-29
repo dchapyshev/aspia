@@ -19,7 +19,7 @@
 #ifndef ROUTER__ROUTER_SERVER_H
 #define ROUTER__ROUTER_SERVER_H
 
-#include "net/network_server.h"
+#include "net/server.h"
 #include "router/authenticator_manager.h"
 #include "router/session.h"
 

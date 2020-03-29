@@ -16,14 +16,12 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "net/network_server.h"
+#include "net/server.h"
 
 #include "base/logging.h"
 #include "base/message_loop/message_loop.h"
 #include "base/message_loop/message_pump_asio.h"
-#include "net/network_channel.h"
-
-#include <asio/ip/tcp.hpp>
+#include "net/channel.h"
 
 namespace net {
 

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef NET__NETWORK_CHANNEL_H
-#define NET__NETWORK_CHANNEL_H
+#ifndef NET__CHANNEL_H
+#define NET__CHANNEL_H
 
 #include "base/memory/byte_array.h"
 #include "base/memory/scalable_queue.h"
@@ -201,4 +201,4 @@ private:
 
 } // namespace net
 
-#endif // NET__NETWORK_CHANNEL_H
+#endif // NET__CHANNEL_H

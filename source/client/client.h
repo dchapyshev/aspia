@@ -22,7 +22,7 @@
 #include "base/version.h"
 #include "base/threading/thread.h"
 #include "client/client_config.h"
-#include "net/network_channel.h"
+#include "net/channel.h"
 
 namespace base {
 class TaskRunner;

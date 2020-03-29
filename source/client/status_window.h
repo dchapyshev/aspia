@@ -20,7 +20,6 @@
 #define CLIENT__STATUS_WINDOW_H
 
 #include "net/client_authenticator.h"
-#include "net/network_channel.h"
 
 namespace client {
 

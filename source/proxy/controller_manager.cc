@@ -24,7 +24,6 @@
 #include "crypto/message_decryptor_openssl.h"
 #include "crypto/message_encryptor_openssl.h"
 #include "crypto/key_pair.h"
-#include "net/network_channel.h"
 #include "proxy/session_manager.h"
 #include "proxy/settings.h"
 #include "proxy/shared_pool.h"

@@ -23,7 +23,7 @@
 #include "base/waitable_timer.h"
 #include "crypto/big_num.h"
 #include "crypto/key_pair.h"
-#include "net/network_channel.h"
+#include "net/channel.h"
 #include "proto/key_exchange.pb.h"
 
 namespace base {

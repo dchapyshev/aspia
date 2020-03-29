@@ -20,7 +20,6 @@
 
 #include "base/logging.h"
 #include "base/task_runner.h"
-#include "net/network_channel.h"
 
 namespace host {
 

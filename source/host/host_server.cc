@@ -24,7 +24,7 @@
 #include "base/files/file_path_watcher.h"
 #include "host/client_session.h"
 #include "net/firewall_manager.h"
-#include "net/network_channel.h"
+#include "net/channel.h"
 
 namespace host {
 

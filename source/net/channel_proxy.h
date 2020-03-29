@@ -16,10 +16,10 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef NET__NETWORK_CHANNEL_PROXY_H
-#define NET__NETWORK_CHANNEL_PROXY_H
+#ifndef NET__CHANNEL_PROXY_H
+#define NET__CHANNEL_PROXY_H
 
-#include "net/network_channel.h"
+#include "net/channel.h"
 
 #include <shared_mutex>
 
@@ -56,4 +56,4 @@ private:
 
 } // namespace net
 
-#endif // NET__NETWORK_CHANNEL_PROXY_H
+#endif // NET__CHANNEL_PROXY_H

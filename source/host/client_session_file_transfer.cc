@@ -26,8 +26,7 @@
 #include "common/file_task_producer.h"
 #include "common/file_task_producer_proxy.h"
 #include "common/file_worker.h"
-#include "net/network_channel.h"
-#include "net/network_channel_proxy.h"
+#include "net/channel_proxy.h"
 #include "proto/file_transfer.pb.h"
 
 #include <wtsapi32.h>

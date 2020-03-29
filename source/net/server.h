@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef NET__NETWORK_SERVER_H
-#define NET__NETWORK_SERVER_H
+#ifndef NET__SERVER_H
+#define NET__SERVER_H
 
 #include "base/macros_magic.h"
 
@@ -54,4 +54,4 @@ private:
 
 } // namespace net
 
-#endif // NET__NETWORK_SERVER_H
+#endif // NET__SERVER_H

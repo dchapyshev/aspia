@@ -19,20 +19,12 @@
 #ifndef ROUTER__SESSION_H
 #define ROUTER__SESSION_H
 
-#include "base/macros_magic.h"
 #include "base/version.h"
-#include "net/network_listener.h"
-
-#include <memory>
-#include <string>
-
-namespace net {
-class Channel;
-} // namespace net
+#include "net/channel.h"
 
 namespace router {
 
-class Session : public net::Listener
+class Session : public net::Channel::Listener
 {
 public:
     explicit Session(std::unique_ptr<net::Channel> channel);
@@ -58,7 +50,7 @@ public:
 protected:
     // net::Listener implementation.
     void onConnected() override;
-    void onDisconnected(net::ErrorCode error_code) override;
+    void onDisconnected(net::Channel::ErrorCode error_code) override;
     void onMessageReceived(const base::ByteArray& buffer) override;
     void onMessageWritten() override;
 

@@ -22,7 +22,7 @@
 #include "host/host_authenticator_manager.h"
 #include "host/user_session_manager.h"
 #include "host/system_settings.h"
-#include "net/network_server.h"
+#include "net/server.h"
 
 namespace base {
 class FilePathWatcher;

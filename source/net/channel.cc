@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "net/network_channel.h"
+#include "net/channel.h"
 
 #include "base/location.h"
 #include "base/logging.h"
@@ -26,7 +26,7 @@
 #include "base/strings/unicode.h"
 #include "crypto/message_encryptor_fake.h"
 #include "crypto/message_decryptor_fake.h"
-#include "net/network_channel_proxy.h"
+#include "net/channel_proxy.h"
 
 #include <asio/connect.hpp>
 #include <asio/read.hpp>

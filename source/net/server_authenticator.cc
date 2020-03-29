@@ -30,7 +30,6 @@
 #include "crypto/secure_memory.h"
 #include "crypto/srp_constants.h"
 #include "crypto/srp_math.h"
-#include "net/network_channel.h"
 #include "net/server_user.h"
 
 namespace net {

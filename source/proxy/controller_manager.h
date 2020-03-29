@@ -20,7 +20,7 @@
 #define PROXY__CONTROLLER_MANAGER_H
 
 #include "base/memory/byte_array.h"
-#include "net/network_server.h"
+#include "net/server.h"
 #include "proxy/controller.h"
 
 namespace base {

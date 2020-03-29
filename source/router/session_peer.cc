@@ -18,7 +18,7 @@
 
 #include "router/session_peer.h"
 
-#include "net/network_channel.h"
+#include "net/channel.h"
 
 namespace router {
 

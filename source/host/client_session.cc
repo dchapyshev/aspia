@@ -22,7 +22,7 @@
 #include "base/logging.h"
 #include "host/client_session_desktop.h"
 #include "host/client_session_file_transfer.h"
-#include "net/network_channel_proxy.h"
+#include "net/channel_proxy.h"
 
 namespace host {
 

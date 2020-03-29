@@ -23,7 +23,7 @@
 #include "base/version.h"
 #include "crypto/big_num.h"
 #include "crypto/key_pair.h"
-#include "net/network_listener.h"
+#include "net/channel.h"
 #include "proto/key_exchange.pb.h"
 #include "proto/router.pb.h"
 
@@ -32,16 +32,12 @@ class Location;
 class TaskRunner;
 } // namespace base
 
-namespace net {
-class Channel;
-} // namespace net
-
 namespace router {
 
 class Session;
 class UserList;
 
-class Authenticator : public net::Listener
+class Authenticator : public net::Channel::Listener
 {
 public:
     Authenticator(std::shared_ptr<base::TaskRunner> task_runner,
@@ -78,7 +74,7 @@ public:
 protected:
     // net::Listener implementation.
     void onConnected() override;
-    void onDisconnected(net::ErrorCode error_code) override;
+    void onDisconnected(net::Channel::ErrorCode error_code) override;
     void onMessageReceived(const base::ByteArray& buffer) override;
     void onMessageWritten() override;
 

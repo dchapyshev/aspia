@@ -21,7 +21,7 @@
 
 #include "base/version.h"
 #include "crypto/big_num.h"
-#include "net/network_channel.h"
+#include "net/channel.h"
 #include "proto/key_exchange.pb.h"
 
 #include <functional>
