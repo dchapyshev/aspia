@@ -33,10 +33,10 @@ ServerAuthenticatorManager::ServerAuthenticatorManager(
 
 ServerAuthenticatorManager::~ServerAuthenticatorManager() = default;
 
-void ServerAuthenticatorManager::setUserList(std::shared_ptr<ServerUserList> userlist)
+void ServerAuthenticatorManager::setUserList(std::shared_ptr<ServerUserList> user_list)
 {
-    userlist_ = std::move(userlist);
-    DCHECK(userlist_);
+    user_list_ = std::move(user_list);
+    DCHECK(user_list_);
 }
 
 void ServerAuthenticatorManager::setPrivateKey(const base::ByteArray& private_key)
@@ -58,17 +58,20 @@ void ServerAuthenticatorManager::addNewChannel(std::unique_ptr<Channel> channel)
     std::unique_ptr<ServerAuthenticator> authenticator =
         std::make_unique<ServerAuthenticator>(task_runner_);
 
-    if (!authenticator->setPrivateKey(private_key_))
-        return;
+    if (!private_key_.empty())
+    {
+        if (!authenticator->setPrivateKey(private_key_))
+            return;
 
-    if (!authenticator->setAnonymousAccess(anonymous_access_, anonymous_session_types_))
-        return;
+        if (!authenticator->setAnonymousAccess(anonymous_access_, anonymous_session_types_))
+            return;
+    }
 
     // Create a new authenticator for the connection and put it on the list.
     pending_.emplace_back(std::move(authenticator));
 
     // Start the authentication process.
-    pending_.back()->start(std::move(channel), userlist_, this);
+    pending_.back()->start(std::move(channel), user_list_, this);
 }
 
 void ServerAuthenticatorManager::onComplete()
@@ -84,10 +87,15 @@ void ServerAuthenticatorManager::onComplete()
             {
                 if (current->state() == ServerAuthenticator::State::SUCCESS)
                 {
-                    delegate_->onNewSession(current->takeChannel(),
-                                            current->sessionType(),
-                                            current->peerVersion(),
-                                            current->userName());
+                    SessionInfo session_info;
+
+                    session_info.channel = current->takeChannel();
+                    session_info.version = current->peerVersion();
+                    session_info.user_name = current->userName();
+                    session_info.user_flags = current->userFlags();
+                    session_info.session_type = current->sessionType();
+
+                    delegate_->onNewSession(std::move(session_info));
                 }
 
                 // Authenticator not needed anymore.

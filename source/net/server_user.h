@@ -35,7 +35,11 @@ public:
     ServerUser(ServerUser&& other) noexcept = default;
     ServerUser& operator=(ServerUser&& other) noexcept = default;
 
-    enum Flags { ENABLED = 1 };
+    enum Flags
+    {
+        ENABLED = 1,
+        MANAGER = 2
+    };
 
     static ServerUser create(std::u16string_view name, std::u16string_view password);
     bool isValid() const;

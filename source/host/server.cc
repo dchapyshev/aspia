@@ -109,18 +109,15 @@ void Server::onNewConnection(std::unique_ptr<net::Channel> channel)
         authenticator_manager_->addNewChannel(std::move(channel));
 }
 
-void Server::onNewSession(std::unique_ptr<net::Channel> channel,
-                          uint32_t session_type,
-                          const base::Version& version,
-                          const std::u16string& username)
+void Server::onNewSession(net::ServerAuthenticatorManager::SessionInfo&& session_info)
 {
-    std::unique_ptr<ClientSession> session =
-        ClientSession::create(static_cast<proto::SessionType>(session_type), std::move(channel));
+    std::unique_ptr<ClientSession> session = ClientSession::create(
+        static_cast<proto::SessionType>(session_info.session_type), std::move(session_info.channel));
 
     if (session)
     {
-        session->setVersion(version);
-        session->setUserName(username);
+        session->setVersion(session_info.version);
+        session->setUserName(session_info.user_name);
     }
 
     if (user_session_manager_)

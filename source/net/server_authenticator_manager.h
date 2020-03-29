@@ -26,22 +26,36 @@ namespace net {
 class ServerAuthenticatorManager : public ServerAuthenticator::Delegate
 {
 public:
+    struct SessionInfo
+    {
+        SessionInfo() = default;
+
+        SessionInfo(SessionInfo&& other) noexcept = default;
+        SessionInfo& operator=(SessionInfo&& other) noexcept = default;
+
+        SessionInfo(const SessionInfo& other) = delete;
+        SessionInfo& operator=(const SessionInfo& other) = delete;
+
+        std::unique_ptr<Channel> channel;
+        base::Version version;
+        std::u16string user_name;
+        uint32_t user_flags = 0;
+        uint32_t session_type = 0;
+    };
+
     class Delegate
     {
     public:
         virtual ~Delegate() = default;
 
         // Called when authentication for the channel succeeds.
-        virtual void onNewSession(std::unique_ptr<Channel> channel,
-                                  uint32_t session_type,
-                                  const base::Version& version,
-                                  const std::u16string& username) = 0;
+        virtual void onNewSession(SessionInfo&& session_info) = 0;
     };
 
     ServerAuthenticatorManager(std::shared_ptr<base::TaskRunner> task_runner, Delegate* delegate);
     ~ServerAuthenticatorManager();
 
-    void setUserList(std::shared_ptr<net::ServerUserList> userlist);
+    void setUserList(std::shared_ptr<net::ServerUserList> user_list);
 
     void setPrivateKey(const base::ByteArray& private_key);
 
@@ -59,7 +73,7 @@ protected:
 
 private:
     std::shared_ptr<base::TaskRunner> task_runner_;
-    std::shared_ptr<ServerUserList> userlist_;
+    std::shared_ptr<ServerUserList> user_list_;
     std::vector<std::unique_ptr<ServerAuthenticator>> pending_;
 
     base::ByteArray private_key_;

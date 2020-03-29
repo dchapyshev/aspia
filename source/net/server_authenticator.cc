@@ -50,19 +50,19 @@ ServerAuthenticator::ServerAuthenticator(std::shared_ptr<base::TaskRunner> task_
 ServerAuthenticator::~ServerAuthenticator() = default;
 
 void ServerAuthenticator::start(std::unique_ptr<Channel> channel,
-                                std::shared_ptr<ServerUserList> userlist,
+                                std::shared_ptr<ServerUserList> user_list,
                                 Delegate* delegate)
 {
     if (state_ != State::STOPPED)
         return;
 
     channel_ = std::move(channel);
-    userlist_ = std::move(userlist);
+    user_list_ = std::move(user_list);
     delegate_ = delegate;
 
     DCHECK_EQ(internal_state_, InternalState::READ_CLIENT_HELLO);
     DCHECK(channel_);
-    DCHECK(userlist_);
+    DCHECK(user_list_);
     DCHECK(delegate_);
 
     state_ = State::PENDING;
@@ -316,30 +316,32 @@ void ServerAuthenticator::onIdentify(const base::ByteArray& buffer)
         return;
     }
 
-    username_ = base::utf16FromUtf8(identify.username());
-    if (username_.empty())
+    user_name_ = base::utf16FromUtf8(identify.username());
+    if (user_name_.empty())
     {
         onFailed(FROM_HERE);
         return;
     }
 
-    const ServerUser& user = userlist_->find(username_);
+    const ServerUser& user = user_list_->find(user_name_);
     if (!user.isValid())
     {
         session_types_ = 0;
+        user_flags_ = 0;
 
         crypto::GenericHash hash(crypto::GenericHash::BLAKE2b512);
-        hash.addData(userlist_->seedKey());
+        hash.addData(user_list_->seedKey());
         hash.addData(identify.username());
 
         N_ = crypto::BigNum::fromStdString(crypto::kSrpNgPair_8192.first);
         g_ = crypto::BigNum::fromStdString(crypto::kSrpNgPair_8192.second);
         s_ = crypto::BigNum::fromByteArray(hash.result());
-        v_ = crypto::SrpMath::calc_v(username_, userlist_->seedKey(), s_, N_, g_);
+        v_ = crypto::SrpMath::calc_v(user_name_, user_list_->seedKey(), s_, N_, g_);
     }
     else
     {
         session_types_ = user.sessions;
+        user_flags_ = user.flags;
 
         N_ = crypto::BigNum::fromByteArray(user.number);
         g_ = crypto::BigNum::fromByteArray(user.generator);
@@ -456,6 +458,11 @@ void ServerAuthenticator::onSessionResponse(const base::ByteArray& buffer)
     peer_version_ = base::Version(version.major(), version.minor(), version.patch());
 
     session_type_ = session_response.session_type();
+    if (!(session_types_ & session_type_))
+    {
+        onFailed(FROM_HERE);
+        return;
+    }
 
     LOG(LS_INFO) << "Authentication completed successfully for " << channel_->peerAddress();
 

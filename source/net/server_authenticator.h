@@ -64,7 +64,7 @@ public:
 
     // The start of the authenticator.
     void start(std::unique_ptr<Channel> channel,
-               std::shared_ptr<ServerUserList> userlist,
+               std::shared_ptr<ServerUserList> user_list,
                Delegate* delegate);
 
     // Sets the private key.
@@ -81,7 +81,8 @@ public:
 
     [[nodiscard]] uint32_t sessionType() const { return session_type_; }
     [[nodiscard]] const base::Version& peerVersion() const { return peer_version_; }
-    [[nodiscard]] const std::u16string& userName() const { return username_; }
+    [[nodiscard]] const std::u16string& userName() const { return user_name_; }
+    [[nodiscard]] uint32_t userFlags() const { return user_flags_; }
 
     [[nodiscard]] std::unique_ptr<Channel> takeChannel();
 
@@ -104,7 +105,7 @@ private:
 
     base::WaitableTimer timer_;
     std::unique_ptr<Channel> channel_;
-    std::shared_ptr<ServerUserList> userlist_;
+    std::shared_ptr<ServerUserList> user_list_;
 
     Delegate* delegate_ = nullptr;
     State state_ = State::STOPPED;
@@ -137,7 +138,8 @@ private:
     base::Version peer_version_;
 
     // User name.
-    std::u16string username_;
+    std::u16string user_name_;
+    uint32_t user_flags_ = 0;
 
     base::ByteArray session_key_;
     base::ByteArray encrypt_iv_;
