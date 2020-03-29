@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "ipc/ipc_channel_proxy.h"
+#include "ipc/channel_proxy.h"
 
 #include "base/logging.h"
 #include "base/task_runner.h"

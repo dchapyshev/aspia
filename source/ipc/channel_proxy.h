@@ -16,10 +16,10 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef IPC__IPC_CHANNEL_PROXY_H
-#define IPC__IPC_CHANNEL_PROXY_H
+#ifndef IPC__CHANNEL_PROXY_H
+#define IPC__CHANNEL_PROXY_H
 
-#include "ipc/ipc_channel.h"
+#include "ipc/channel.h"
 
 namespace base {
 class TaskRunner;
@@ -53,4 +53,4 @@ private:
 
 } // namespace ipc
 
-#endif // IPC__IPC_CHANNEL_PROXY_H
+#endif // IPC__CHANNEL_PROXY_H

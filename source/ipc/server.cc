@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "ipc/ipc_server.h"
+#include "ipc/server.h"
 
 #include "base/location.h"
 #include "base/logging.h"
@@ -27,7 +27,7 @@
 #include "base/win/scoped_object.h"
 #include "base/win/security_helpers.h"
 #include "crypto/random.h"
-#include "ipc/ipc_channel.h"
+#include "ipc/channel.h"
 
 #include <asio/post.hpp>
 #include <asio/windows/overlapped_ptr.hpp>

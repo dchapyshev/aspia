@@ -31,7 +31,7 @@
 #include "host/client_session.h"
 #include "host/user_session.h"
 #include "host/user_session_constants.h"
-#include "ipc/ipc_channel.h"
+#include "ipc/channel.h"
 
 #include <userenv.h>
 

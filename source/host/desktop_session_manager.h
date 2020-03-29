@@ -23,7 +23,7 @@
 #include "base/waitable_timer.h"
 #include "base/win/session_status.h"
 #include "host/desktop_session.h"
-#include "ipc/ipc_server.h"
+#include "ipc/server.h"
 #include "proto/desktop_internal.pb.h"
 
 namespace base {

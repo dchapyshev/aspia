@@ -22,7 +22,7 @@
 #include "base/session_id.h"
 #include "base/win/session_status.h"
 #include "host/user_session.h"
-#include "ipc/ipc_server.h"
+#include "ipc/server.h"
 
 namespace host {
 

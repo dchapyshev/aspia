@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "ipc/ipc_channel.h"
+#include "ipc/channel.h"
 
 #include "base/location.h"
 #include "base/logging.h"
@@ -24,7 +24,7 @@
 #include "base/message_loop/message_pump_asio.h"
 #include "base/strings/unicode.h"
 #include "base/win/scoped_object.h"
-#include "ipc/ipc_channel_proxy.h"
+#include "ipc/channel_proxy.h"
 #include "ipc/ipc_listener.h"
 
 #include <asio/read.hpp>

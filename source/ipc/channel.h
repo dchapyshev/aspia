@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef IPC__IPC_CHANNEL_H
-#define IPC__IPC_CHANNEL_H
+#ifndef IPC__CHANNEL_H
+#define IPC__CHANNEL_H
 
 #include "base/process_handle.h"
 #include "base/session_id.h"
@@ -105,4 +105,4 @@ private:
 
 } // namespace ipc
 
-#endif // IPC__IPC_CHANNEL_H
+#endif // IPC__CHANNEL_H

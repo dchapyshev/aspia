@@ -16,10 +16,9 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef IPC__IPC_SERVER_H
-#define IPC__IPC_SERVER_H
+#ifndef IPC__SERVER_H
+#define IPC__SERVER_H
 
-#include "base/macros_magic.h"
 #include "base/threading/thread_checker.h"
 
 #include <asio/io_context.hpp>
@@ -74,4 +73,4 @@ private:
 
 } // namespace ipc
 
-#endif // IPC__IPC_SERVER_H
+#endif // IPC__SERVER_H

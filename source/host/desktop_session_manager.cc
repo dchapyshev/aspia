@@ -26,7 +26,7 @@
 #include "host/desktop_session_ipc.h"
 #include "host/desktop_session_process.h"
 #include "host/desktop_session_proxy.h"
-#include "ipc/ipc_channel.h"
+#include "ipc/channel.h"
 
 namespace host {
 

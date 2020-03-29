@@ -17,13 +17,13 @@
 #
 
 list(APPEND SOURCE_IPC
-    ipc_channel.cc
-    ipc_channel.h
-    ipc_channel_proxy.cc
-    ipc_channel_proxy.h
+    channel.cc
+    channel.h
+    channel_proxy.cc
+    channel_proxy.h
     ipc_listener.h
-    ipc_server.cc
-    ipc_server.h
+    server.cc
+    server.h
     shared_memory.cc
     shared_memory.h
     shared_memory_factory.cc

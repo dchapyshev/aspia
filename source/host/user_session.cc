@@ -29,7 +29,7 @@
 #include "host/client_session_desktop.h"
 #include "host/client_session_file_transfer.h"
 #include "host/desktop_session_proxy.h"
-#include "ipc/ipc_channel_proxy.h"
+#include "ipc/channel.h"
 #include "net/adapter_enumerator.h"
 
 namespace host {

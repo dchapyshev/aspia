@@ -22,7 +22,7 @@
 #include "codec/video_util.h"
 #include "desktop/mouse_cursor.h"
 #include "desktop/shared_memory_desktop_frame.h"
-#include "ipc/ipc_channel.h"
+#include "ipc/channel.h"
 #include "ipc/shared_memory.h"
 
 namespace host {

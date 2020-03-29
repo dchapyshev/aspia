@@ -27,7 +27,7 @@
 #include "desktop/screen_capturer_wrapper.h"
 #include "desktop/shared_desktop_frame.h"
 #include "host/input_injector_win.h"
-#include "ipc/ipc_channel.h"
+#include "ipc/channel.h"
 #include "ipc/shared_memory.h"
 
 namespace host {
