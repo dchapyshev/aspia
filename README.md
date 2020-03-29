@@ -23,7 +23,7 @@ Contacts
 --------
 E-Mail: dmitry@aspia.ru
 
-Russian Group in Telegram: [@aspia_ru](https://t.me/aspia_ru)
+Group in Telegram: [@aspia_ru](https://t.me/aspia_ru)
 
 Licensing
 ---------
@@ -33,6 +33,6 @@ For more information, see [license agreement](LICENSE.md).
 
 See also
 --------
-- [Code of Conduct](CODE_OF_CONDUCT.md)
+- [Code of conduct](CODE_OF_CONDUCT.md)
 - [Instructions for building the project](doc/building.md)
 - [Instructions for translators](doc/translators.md)
