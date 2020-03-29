@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/host_system_info.h"
+#include "host/system_info.h"
 
 #include "base/win/drive_enumerator.h"
 #include "base/win/printer_enumerator.h"
@@ -27,7 +27,7 @@
 
 namespace host {
 
-void createHostSystemInfo(proto::SystemInfo* system_info)
+void createSystemInfo(proto::SystemInfo* system_info)
 {
     proto::system_info::Computer* computer = system_info->mutable_computer();
     computer->set_name(base::SysInfo::computerName());

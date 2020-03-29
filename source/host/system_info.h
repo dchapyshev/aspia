@@ -16,15 +16,15 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST__HOST_SYSTEM_INFO_H
-#define HOST__HOST_SYSTEM_INFO_H
+#ifndef HOST__SYSTEM_INFO_H
+#define HOST__SYSTEM_INFO_H
 
 #include "proto/desktop_extensions.pb.h"
 
 namespace host {
 
-void createHostSystemInfo(proto::SystemInfo* system_info);
+void createSystemInfo(proto::SystemInfo* system_info);
 
 } // namespace host
 
-#endif // HOST__HOST_SYSTEM_INFO_H
+#endif // HOST__SYSTEM_INFO_H

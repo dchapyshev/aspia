@@ -27,7 +27,7 @@
 #include "common/desktop_session_constants.h"
 #include "desktop/desktop_frame.h"
 #include "host/desktop_session_proxy.h"
-#include "host/host_system_info.h"
+#include "host/system_info.h"
 #include "host/win/updater_launcher.h"
 #include "proto/desktop_internal.pb.h"
 
@@ -217,7 +217,7 @@ void ClientSessionDesktop::readExtension(const proto::DesktopExtension& extensio
     else if (extension.name() == common::kSystemInfoExtension)
     {
         proto::SystemInfo system_info;
-        createHostSystemInfo(&system_info);
+        createSystemInfo(&system_info);
 
         outgoing_message_.Clear();
 
