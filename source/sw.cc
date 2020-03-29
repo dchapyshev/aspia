@@ -179,8 +179,8 @@ void build(Solution &s)
     host += core;
 
     auto &service = add_exe(host, "service");
-    service += "host/win/host_service_entry_point.cc";
-    service += "host/win/host_service.rc";
+    service += "host/win/service_entry_point.cc";
+    service += "host/win/service.rc";
     service += core;
 
     auto &desktop_agent = add_exe(aspia, "desktop_agent");
