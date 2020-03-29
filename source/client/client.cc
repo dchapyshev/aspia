@@ -21,7 +21,6 @@
 #include "base/logging.h"
 #include "build/version.h"
 #include "client/status_window_proxy.h"
-#include "net/network_channel_proxy.h"
 
 namespace client {
 
@@ -174,7 +173,7 @@ void Client::onConnected()
     });
 }
 
-void Client::onDisconnected(net::ErrorCode error_code)
+void Client::onDisconnected(net::Channel::ErrorCode error_code)
 {
     // Show an error to the user.
     status_window_proxy_->onDisconnected(error_code);

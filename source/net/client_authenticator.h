@@ -21,7 +21,7 @@
 
 #include "base/version.h"
 #include "crypto/big_num.h"
-#include "net/network_listener.h"
+#include "net/network_channel.h"
 #include "proto/key_exchange.pb.h"
 
 #include <functional>
@@ -37,9 +37,7 @@ class MessageEncryptor;
 
 namespace net {
 
-class Channel;
-
-class ClientAuthenticator : public net::Listener
+class ClientAuthenticator : public Channel::Listener
 {
 public:
     ClientAuthenticator();
@@ -78,16 +76,16 @@ public:
     // Starts authentication.
     // |callback| is called upon completion. The authenticator guarantees that no code inside it
     // will be executed after call callback (you can remove the authenticator inside this callback).
-    void start(std::unique_ptr<net::Channel> channel, Callback callback);
+    void start(std::unique_ptr<Channel> channel, Callback callback);
 
-    std::unique_ptr<net::Channel> takeChannel();
+    std::unique_ptr<Channel> takeChannel();
 
     static const char* errorToString(ClientAuthenticator::ErrorCode error_code);
 
 protected:
-    // net::Listener implementation.
+    // Channel::Listener implementation.
     void onConnected() override;
-    void onDisconnected(net::ErrorCode error_code) override;
+    void onDisconnected(Channel::ErrorCode error_code) override;
     void onMessageReceived(const base::ByteArray& buffer) override;
     void onMessageWritten() override;
 
@@ -117,7 +115,7 @@ private:
 
     State state_ = State::NOT_STARTED;
 
-    std::unique_ptr<net::Channel> channel_;
+    std::unique_ptr<Channel> channel_;
     Callback callback_;
 
     base::ByteArray peer_public_key_;

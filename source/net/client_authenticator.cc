@@ -143,7 +143,7 @@ void ClientAuthenticator::setSessionType(uint32_t session_type)
     session_type_ = session_type;
 }
 
-void ClientAuthenticator::start(std::unique_ptr<net::Channel> channel, Callback callback)
+void ClientAuthenticator::start(std::unique_ptr<Channel> channel, Callback callback)
 {
     channel_ = std::move(channel);
     callback_ = std::move(callback);
@@ -158,7 +158,7 @@ void ClientAuthenticator::start(std::unique_ptr<net::Channel> channel, Callback 
     sendClientHello();
 }
 
-std::unique_ptr<net::Channel> ClientAuthenticator::takeChannel()
+std::unique_ptr<Channel> ClientAuthenticator::takeChannel()
 {
     return std::move(channel_);
 }
@@ -194,13 +194,13 @@ void ClientAuthenticator::onConnected()
     NOTREACHED();
 }
 
-void ClientAuthenticator::onDisconnected(net::ErrorCode error_code)
+void ClientAuthenticator::onDisconnected(Channel::ErrorCode error_code)
 {
-    LOG(LS_INFO) << "Network error: " << net::errorToString(error_code);
+    LOG(LS_INFO) << "Network error: " << Channel::errorToString(error_code);
 
     ErrorCode result = ErrorCode::NETWORK_ERROR;
 
-    if (error_code == net::ErrorCode::ACCESS_DENIED)
+    if (error_code == Channel::ErrorCode::ACCESS_DENIED)
         result = ErrorCode::ACCESS_DENIED;
 
     finished(FROM_HERE, result);

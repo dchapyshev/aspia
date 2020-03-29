@@ -134,9 +134,9 @@ void ServerAuthenticator::onConnected()
     NOTREACHED();
 }
 
-void ServerAuthenticator::onDisconnected(net::ErrorCode error_code)
+void ServerAuthenticator::onDisconnected(Channel::ErrorCode error_code)
 {
-    LOG(LS_WARNING) << "Network error: " << net::errorToString(error_code);
+    LOG(LS_WARNING) << "Network error: " << Channel::errorToString(error_code);
     onFailed(FROM_HERE);
 }
 

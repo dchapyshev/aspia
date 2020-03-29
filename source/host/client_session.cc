@@ -113,9 +113,10 @@ void ClientSession::onConnected()
     NOTREACHED();
 }
 
-void ClientSession::onDisconnected(net::ErrorCode error_code)
+void ClientSession::onDisconnected(net::Channel::ErrorCode error_code)
 {
-    LOG(LS_WARNING) << "Client disconnected with error: " << net::errorToString(error_code);
+    LOG(LS_WARNING) << "Client disconnected with error: "
+                    << net::Channel::errorToString(error_code);
 
     state_ = State::FINISHED;
     delegate_->onClientSessionFinished();

@@ -32,7 +32,7 @@ public:
     void onStarted(const std::u16string& address, uint16_t port);
     void onStopped();
     void onConnected();
-    void onDisconnected(net::ErrorCode error_code);
+    void onDisconnected(net::Channel::ErrorCode error_code);
     void onAccessDenied(net::ClientAuthenticator::ErrorCode error_code);
 
 private:
@@ -94,7 +94,7 @@ void StatusWindowProxy::Impl::onConnected()
         status_window_->onConnected();
 }
 
-void StatusWindowProxy::Impl::onDisconnected(net::ErrorCode error_code)
+void StatusWindowProxy::Impl::onDisconnected(net::Channel::ErrorCode error_code)
 {
     if (!ui_task_runner_->belongsToCurrentThread())
     {
@@ -158,7 +158,7 @@ void StatusWindowProxy::onConnected()
     impl_->onConnected();
 }
 
-void StatusWindowProxy::onDisconnected(net::ErrorCode error_code)
+void StatusWindowProxy::onDisconnected(net::Channel::ErrorCode error_code)
 {
     impl_->onDisconnected(error_code);
 }

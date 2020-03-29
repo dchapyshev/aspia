@@ -21,11 +21,10 @@
 
 #include "base/session_id.h"
 #include "base/version.h"
-#include "net/network_listener.h"
+#include "net/network_channel.h"
 #include "proto/common.pb.h"
 
 namespace net {
-class Channel;
 class ChannelProxy;
 } // namespace net
 
@@ -33,7 +32,7 @@ namespace host {
 
 class DesktopSessionProxy;
 
-class ClientSession : public net::Listener
+class ClientSession : public net::Channel::Listener
 {
 public:
     virtual ~ClientSession() = default;
@@ -82,9 +81,9 @@ protected:
     std::shared_ptr<net::ChannelProxy> channelProxy();
     void sendMessage(base::ByteArray&& buffer);
 
-    // net::Listener implementation.
+    // net::Channel::Listener implementation.
     void onConnected() override;
-    void onDisconnected(net::ErrorCode error_code) override;
+    void onDisconnected(net::Channel::ErrorCode error_code) override;
 
     Delegate* delegate_ = nullptr;
 

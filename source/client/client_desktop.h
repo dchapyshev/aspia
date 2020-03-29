@@ -65,7 +65,7 @@ protected:
     void onSessionStarted(const base::Version& peer_version) override;
     void onSessionStopped() override;
 
-    // net::Listener implementation.
+    // net::Channel::Listener implementation.
     void onMessageReceived(const base::ByteArray& buffer) override;
     void onMessageWritten() override;
 

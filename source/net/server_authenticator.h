@@ -23,7 +23,7 @@
 #include "base/waitable_timer.h"
 #include "crypto/big_num.h"
 #include "crypto/key_pair.h"
-#include "net/network_listener.h"
+#include "net/network_channel.h"
 #include "proto/key_exchange.pb.h"
 
 namespace base {
@@ -32,11 +32,9 @@ class Location;
 
 namespace net {
 
-class Channel;
-class ClientSession;
 class ServerUserList;
 
-class ServerAuthenticator : public net::Listener
+class ServerAuthenticator : public Channel::Listener
 {
 public:
     explicit ServerAuthenticator(std::shared_ptr<base::TaskRunner> task_runner);
@@ -88,9 +86,9 @@ public:
     [[nodiscard]] std::unique_ptr<Channel> takeChannel();
 
 protected:
-    // net::Listener implementation.
+    // Channel::Listener implementation.
     void onConnected() override;
-    void onDisconnected(net::ErrorCode error_code) override;
+    void onDisconnected(Channel::ErrorCode error_code) override;
     void onMessageReceived(const base::ByteArray& buffer) override;
     void onMessageWritten() override;
 

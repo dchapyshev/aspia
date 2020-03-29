@@ -22,11 +22,11 @@
 #include "base/logging.h"
 #include "base/message_loop/message_loop.h"
 #include "base/message_loop/message_pump_asio.h"
+#include "base/strings/string_printf.h"
 #include "base/strings/unicode.h"
 #include "crypto/message_encryptor_fake.h"
 #include "crypto/message_decryptor_fake.h"
 #include "net/network_channel_proxy.h"
-#include "net/network_listener.h"
 
 #include <asio/connect.hpp>
 #include <asio/read.hpp>
@@ -223,6 +223,53 @@ bool Channel::setKeepAlive(bool enable,
 #endif
 
     return true;
+}
+
+// static
+std::string Channel::errorToString(ErrorCode error_code)
+{
+    const char* str;
+
+    switch (error_code)
+    {
+        case ErrorCode::ACCESS_DENIED:
+            str = "ACCESS_DENIED";
+            break;
+
+        case ErrorCode::NETWORK_ERROR:
+            str = "NETWORK_ERROR";
+            break;
+
+        case ErrorCode::CONNECTION_REFUSED:
+            str = "CONNECTION_REFUSED";
+            break;
+
+        case ErrorCode::REMOTE_HOST_CLOSED:
+            str = "REMOTE_HOST_CLOSED";
+            break;
+
+        case ErrorCode::SPECIFIED_HOST_NOT_FOUND:
+            str = "SPECIFIED_HOST_NOT_FOUND";
+            break;
+
+        case ErrorCode::SOCKET_TIMEOUT:
+            str = "SOCKET_TIMEOUT";
+            break;
+
+        case ErrorCode::ADDRESS_IN_USE:
+            str = "ADDRESS_IN_USE";
+            break;
+
+        case ErrorCode::ADDRESS_NOT_AVAILABLE:
+            str = "ADDRESS_NOT_AVAILABLE";
+            break;
+
+        default:
+            str = "UNKNOWN";
+            break;
+    }
+
+    return base::stringPrintf("%s (%d)", str, static_cast<int>(error_code));
 }
 
 void Channel::disconnect()

@@ -42,7 +42,7 @@ public:
     void onStarted(const std::u16string& address, uint16_t port) override;
     void onStopped() override;
     void onConnected() override;
-    void onDisconnected(net::ErrorCode error_code) override;
+    void onDisconnected(net::Channel::ErrorCode error_code) override;
     void onAccessDenied(net::ClientAuthenticator::ErrorCode error_code) override;
 
 private:

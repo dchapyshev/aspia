@@ -102,47 +102,47 @@ void ClientWindow::onConnected()
     status_dialog_->hide();
 }
 
-void ClientWindow::onDisconnected(net::ErrorCode error_code)
+void ClientWindow::onDisconnected(net::Channel::ErrorCode error_code)
 {
     const char* message;
 
     switch (error_code)
     {
-        case net::ErrorCode::ACCESS_DENIED:
+        case net::Channel::ErrorCode::ACCESS_DENIED:
             message = QT_TR_NOOP("Cryptography error (message encryption or decryption failed).");
             break;
 
-        case net::ErrorCode::NETWORK_ERROR:
+        case net::Channel::ErrorCode::NETWORK_ERROR:
             message = QT_TR_NOOP("An error occurred with the network (e.g., the network cable was accidentally plugged out).");
             break;
 
-        case net::ErrorCode::CONNECTION_REFUSED:
+        case net::Channel::ErrorCode::CONNECTION_REFUSED:
             message = QT_TR_NOOP("Connection was refused by the peer (or timed out).");
             break;
 
-        case net::ErrorCode::REMOTE_HOST_CLOSED:
+        case net::Channel::ErrorCode::REMOTE_HOST_CLOSED:
             message = QT_TR_NOOP("Remote host closed the connection.");
             break;
 
-        case net::ErrorCode::SPECIFIED_HOST_NOT_FOUND:
+        case net::Channel::ErrorCode::SPECIFIED_HOST_NOT_FOUND:
             message = QT_TR_NOOP("Host address was not found.");
             break;
 
-        case net::ErrorCode::SOCKET_TIMEOUT:
+        case net::Channel::ErrorCode::SOCKET_TIMEOUT:
             message = QT_TR_NOOP("Socket operation timed out.");
             break;
 
-        case net::ErrorCode::ADDRESS_IN_USE:
+        case net::Channel::ErrorCode::ADDRESS_IN_USE:
             message = QT_TR_NOOP("Address specified is already in use and was set to be exclusive.");
             break;
 
-        case net::ErrorCode::ADDRESS_NOT_AVAILABLE:
+        case net::Channel::ErrorCode::ADDRESS_NOT_AVAILABLE:
             message = QT_TR_NOOP("Address specified does not belong to the host.");
             break;
 
         default:
         {
-            if (error_code != net::ErrorCode::UNKNOWN)
+            if (error_code != net::Channel::ErrorCode::UNKNOWN)
             {
                 LOG(LS_WARNING) << "Unknown error code: " << static_cast<int>(error_code);
             }

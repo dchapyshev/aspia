@@ -22,7 +22,7 @@
 #include "base/version.h"
 #include "base/threading/thread.h"
 #include "client/client_config.h"
-#include "net/network_listener.h"
+#include "net/network_channel.h"
 
 namespace base {
 class TaskRunner;
@@ -30,7 +30,6 @@ class TaskRunner;
 
 namespace net {
 class ClientAuthenticator;
-class Channel;
 } // namespace net
 
 namespace client {
@@ -40,7 +39,7 @@ class StatusWindowProxy;
 
 class Client
     : public base::Thread::Delegate,
-      public net::Listener
+      public net::Channel::Listener
 {
 public:
     explicit Client(std::shared_ptr<base::TaskRunner> ui_task_runner);
@@ -83,9 +82,9 @@ protected:
     void onBeforeThreadRunning() override;
     void onAfterThreadRunning() override;
 
-    // net::Listener implementation.
+    // net::Channel::Listener implementation.
     void onConnected() override;
-    void onDisconnected(net::ErrorCode error_code) override;
+    void onDisconnected(net::Channel::ErrorCode error_code) override;
 
 private:
     base::Thread io_thread_;

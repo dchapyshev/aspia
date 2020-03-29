@@ -19,15 +19,11 @@
 #ifndef NET__NETWORK_CHANNEL_H
 #define NET__NETWORK_CHANNEL_H
 
-#include "base/macros_magic.h"
 #include "base/memory/byte_array.h"
 #include "base/memory/scalable_queue.h"
-#include "net/network_error.h"
 #include "net/variable_size.h"
 
 #include <asio/ip/tcp.hpp>
-
-#include <memory>
 
 namespace base {
 class Location;
@@ -50,6 +46,47 @@ public:
     // Constructor available for client.
     Channel();
     ~Channel();
+
+    enum class ErrorCode
+    {
+        // Unknown error.
+        UNKNOWN,
+
+        // Cryptography error (message encryption or decryption failed).
+        ACCESS_DENIED,
+
+        // An error occurred with the network (e.g., the network cable was accidentally plugged out).
+        NETWORK_ERROR,
+
+        // The connection was refused by the peer (or timed out).
+        CONNECTION_REFUSED,
+
+        // The remote host closed the connection.
+        REMOTE_HOST_CLOSED,
+
+        // The host address was not found.
+        SPECIFIED_HOST_NOT_FOUND,
+
+        // The socket operation timed out.
+        SOCKET_TIMEOUT,
+
+        // The address specified is already in use and was set to be exclusive.
+        ADDRESS_IN_USE,
+
+        // The address specified does not belong to the host.
+        ADDRESS_NOT_AVAILABLE
+    };
+
+    class Listener
+    {
+    public:
+        virtual ~Listener() = default;
+
+        virtual void onConnected() = 0;
+        virtual void onDisconnected(ErrorCode error_code) = 0;
+        virtual void onMessageReceived(const base::ByteArray& buffer) = 0;
+        virtual void onMessageWritten() = 0;
+    };
 
     std::shared_ptr<ChannelProxy> channelProxy();
 
@@ -101,6 +138,10 @@ public:
     bool setKeepAlive(bool enable,
                       const std::chrono::milliseconds& time = std::chrono::milliseconds(),
                       const std::chrono::milliseconds& interval = std::chrono::milliseconds());
+
+    // Converts an error code to a human readable string.
+    // Does not support localization. Used for logs.
+    static std::string errorToString(ErrorCode error_code);
 
 protected:
     friend class Server;
