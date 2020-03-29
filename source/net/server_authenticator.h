@@ -22,6 +22,7 @@
 #include "base/version.h"
 #include "base/waitable_timer.h"
 #include "crypto/big_num.h"
+#include "crypto/key_pair.h"
 #include "net/network_listener.h"
 #include "proto/key_exchange.pb.h"
 
@@ -49,6 +50,12 @@ public:
         SUCCESS  // The authenticator completed successfully.
     };
 
+    enum class AnonymousAccess
+    {
+        ENABLE, // Anonymous access is enabled.
+        DISABLE // Anonymous access is disabled.
+    };
+
     class Delegate
     {
     public:
@@ -62,14 +69,23 @@ public:
                std::shared_ptr<ServerUserList> userlist,
                Delegate* delegate);
 
+    // Sets the private key.
+    [[nodiscard]] bool setPrivateKey(const base::ByteArray& private_key);
+
+    // Enables or disables anonymous access.
+    // |session_types] allowed session types for anonymous access.
+    // The private key must be set up for anonymous access.
+    // By default, anonymous access is disabled.
+    [[nodiscard]] bool setAnonymousAccess(AnonymousAccess anonymous_access, uint32_t session_types);
+
     // Returns the current state.
-    State state() const { return state_; }
+    [[nodiscard]] State state() const { return state_; }
 
-    uint32_t sessionType() const { return session_type_; }
-    const base::Version& peerVersion() const { return peer_version_; }
-    const std::u16string& userName() const { return username_; }
+    [[nodiscard]] uint32_t sessionType() const { return session_type_; }
+    [[nodiscard]] const base::Version& peerVersion() const { return peer_version_; }
+    [[nodiscard]] const std::u16string& userName() const { return username_; }
 
-    std::unique_ptr<Channel> takeChannel();
+    [[nodiscard]] std::unique_ptr<Channel> takeChannel();
 
 protected:
     // net::Listener implementation.
@@ -79,8 +95,14 @@ protected:
     void onMessageWritten() override;
 
 private:
-    base::ByteArray createKey();
+    void onClientHello(const base::ByteArray& buffer);
+    void onIdentify(const base::ByteArray& buffer);
+    void onClientKeyExchange(const base::ByteArray& buffer);
+    void doSessionChallenge();
+    void onSessionResponse(const base::ByteArray& buffer);
     void onFailed(const base::Location& location);
+    [[nodiscard]] bool onSessionKeyChanged();
+    [[nodiscard]] base::ByteArray createSrpKey();
 
     base::WaitableTimer timer_;
     std::unique_ptr<Channel> channel_;
@@ -100,9 +122,10 @@ private:
         READ_SESSION_RESPONSE
     };
 
+    AnonymousAccess anonymous_access_ = AnonymousAccess::DISABLE;
     InternalState internal_state_ = InternalState::READ_CLIENT_HELLO;
 
-    // Bitmask of allowed session types for the user.
+    // Bitmask of allowed session types.
     uint32_t session_types_ = 0;
 
     // Selected session type.
@@ -118,9 +141,11 @@ private:
     // User name.
     std::u16string username_;
 
+    base::ByteArray session_key_;
     base::ByteArray encrypt_iv_;
     base::ByteArray decrypt_iv_;
 
+    crypto::KeyPair key_pair_;
     crypto::BigNum N_;
     crypto::BigNum g_;
     crypto::BigNum v_;
