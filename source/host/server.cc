@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/host_server.h"
+#include "host/server.h"
 
 #include "base/logging.h"
 #include "base/task_runner.h"

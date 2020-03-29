@@ -48,13 +48,13 @@ list(APPEND SOURCE_HOST_CORE
     host_export.h
     host_main.cc
     host_main.h
-    host_server.cc
-    host_server.h
     input_injector.h
     input_injector_win.cc
     input_injector_win.h
     sas_injector.cc
     sas_injector.h
+    server.cc
+    server.h
     system_info.cc
     system_info.h
     system_settings.cc
@@ -100,12 +100,12 @@ list(APPEND SOURCE_HOST_CORE_UI
 
 list(APPEND SOURCE_HOST_CORE_WIN
     win/dll_main.cc
-    win/host_service.cc
-    win/host_service.h
-    win/host_service_constants.cc
-    win/host_service_constants.h
-    win/host_service_main.cc
-    win/host_service_main.h
+    win/service.cc
+    win/service.h
+    win/service_constants.cc
+    win/service_constants.h
+    win/service_main.cc
+    win/service_main.h
     win/updater_launcher.cc
     win/updater_launcher.h)
 
@@ -163,7 +163,7 @@ set_target_properties(aspia_host PROPERTIES WIN32_EXECUTABLE TRUE)
 set_target_properties(aspia_host PROPERTIES LINK_FLAGS "/MANIFEST:NO")
 target_link_libraries(aspia_host aspia_host_core)
 
-add_executable(aspia_host_service win/host_service_entry_point.cc win/host_service.rc)
+add_executable(aspia_host_service win/service_entry_point.cc win/service.rc)
 set_target_properties(aspia_host_service PROPERTIES LINK_FLAGS "/MANIFEST:NO")
 target_link_libraries(aspia_host_service aspia_host_core)
 

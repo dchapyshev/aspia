@@ -16,17 +16,15 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/win/host_service_constants.h"
+#ifndef HOST__WIN__SERVICE_MAIN_H
+#define HOST__WIN__SERVICE_MAIN_H
+
+#include "host/host_export.h"
 
 namespace host {
 
-const char16_t kHostServiceFileName[] = u"aspia_host_service.exe";
-
-const char16_t kHostServiceName[] = u"aspia-host-service";
-
-const char16_t kHostServiceDisplayName[] = u"Aspia Host Service";
-
-const char16_t kHostServiceDescription[] =
-    u"Accepts incoming remote desktop connections to this computer.";
+int HOST_EXPORT hostServiceMain(int argc, char *argv[]);
 
 } // namespace host
+
+#endif // HOST__WIN__SERVICE_MAIN_H

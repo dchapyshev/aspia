@@ -16,13 +16,38 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include <Windows.h>
+#ifndef HOST__SERVICE_H
+#define HOST__SERVICE_H
 
-LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
+#include "base/win/service.h"
 
-1 RT_MANIFEST "host_service.manifest"
+namespace base::win {
+class ScopedCOMInitializer;
+} // namespace base::win
 
-#define ASPIA_ORIGINAL_FILE_NAME "aspia_host_service.exe"
-#define ASPIA_FILE_DESCRIPTION "Aspia Host Service"
+namespace host {
 
-#include "build/version.rc"
+class Server;
+
+class Service : public base::win::Service
+{
+public:
+    Service();
+    ~Service();
+
+protected:
+    // base::win::Service implementation.
+    void onStart() override;
+    void onStop() override;
+    void onSessionEvent(base::win::SessionStatus status, base::SessionId session_id) override;
+
+private:
+    std::unique_ptr<base::win::ScopedCOMInitializer> com_initializer_;
+    std::unique_ptr<Server> server_;
+
+    DISALLOW_COPY_AND_ASSIGN(Service);
+};
+
+} // namespace host
+
+#endif // HOST__SERVICE_H

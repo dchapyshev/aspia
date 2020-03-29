@@ -16,15 +16,16 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST__WIN__HOST_SERVICE_MAIN_H
-#define HOST__WIN__HOST_SERVICE_MAIN_H
-
-#include "host/host_export.h"
+#ifndef HOST__WIN__SERVICE_CONSTANTS_H
+#define HOST__WIN__SERVICE_CONSTANTS_H
 
 namespace host {
 
-int HOST_EXPORT hostServiceMain(int argc, char *argv[]);
+extern const char16_t kHostServiceFileName[];
+extern const char16_t kHostServiceName[];
+extern const char16_t kHostServiceDisplayName[];
+extern const char16_t kHostServiceDescription[];
 
 } // namespace host
 
-#endif // HOST__WIN__HOST_SERVICE_MAIN_H
+#endif // HOST__WIN__SERVICE_CONSTANTS_H

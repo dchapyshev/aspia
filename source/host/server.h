@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST__HOST_SERVER_H
-#define HOST__HOST_SERVER_H
+#ifndef HOST__SERVER_H
+#define HOST__SERVER_H
 
 #include "host/host_authenticator_manager.h"
 #include "host/user_session_manager.h"
@@ -76,4 +76,4 @@ private:
 
 } // namespace host
 
-#endif // HOST__HOST_SERVER_H
+#endif // HOST__SERVER_H

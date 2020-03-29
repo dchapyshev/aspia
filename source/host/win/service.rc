@@ -16,9 +16,13 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/win/host_service_main.h"
+#include <Windows.h>
 
-int main(int argc, char *argv[])
-{
-    return host::hostServiceMain(argc, argv);
-}
+LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
+
+1 RT_MANIFEST "service.manifest"
+
+#define ASPIA_ORIGINAL_FILE_NAME "aspia_host_service.exe"
+#define ASPIA_FILE_DESCRIPTION "Aspia Host Service"
+
+#include "build/version.rc"

@@ -16,38 +16,9 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST__HOST_SERVICE_H
-#define HOST__HOST_SERVICE_H
+#include "host/win/service_main.h"
 
-#include "base/win/service.h"
-
-namespace base::win {
-class ScopedCOMInitializer;
-} // namespace base::win
-
-namespace host {
-
-class Server;
-
-class Service : public base::win::Service
+int main(int argc, char *argv[])
 {
-public:
-    Service();
-    ~Service();
-
-protected:
-    // base::win::Service implementation.
-    void onStart() override;
-    void onStop() override;
-    void onSessionEvent(base::win::SessionStatus status, base::SessionId session_id) override;
-
-private:
-    std::unique_ptr<base::win::ScopedCOMInitializer> com_initializer_;
-    std::unique_ptr<Server> server_;
-
-    DISALLOW_COPY_AND_ASSIGN(Service);
-};
-
-} // namespace host
-
-#endif // HOST__HOST_SERVICE_H
+    return host::hostServiceMain(argc, argv);
+}

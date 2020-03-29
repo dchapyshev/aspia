@@ -16,14 +16,14 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/win/host_service.h"
+#include "host/win/service.h"
 
 #include "base/logging.h"
 #include "base/win/scoped_com_initializer.h"
 #include "base/win/security_helpers.h"
 #include "base/win/session_status.h"
-#include "host/win/host_service_constants.h"
-#include "host/host_server.h"
+#include "host/win/service_constants.h"
+#include "host/server.h"
 
 #include <Windows.h>
 #include <sddl.h>

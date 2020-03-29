@@ -16,12 +16,12 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/win/host_service_main.h"
+#include "host/win/service_main.h"
 
 #include "base/logging.h"
 #include "base/files/base_paths.h"
 #include "crypto/scoped_crypto_initializer.h"
-#include "host/win/host_service.h"
+#include "host/win/service.h"
 
 namespace host {
 
