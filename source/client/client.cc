@@ -136,15 +136,17 @@ void Client::onConnected()
     channel_->setKeepAlive(true, std::chrono::minutes(1), std::chrono::seconds(1));
     channel_->setNoDelay(true);
 
-    authenticator_ = std::make_unique<Authenticator>();
+    authenticator_ = std::make_unique<net::ClientAuthenticator>();
 
+    authenticator_->setIdentify(proto::IDENTIFY_SRP);
     authenticator_->setUserName(config_.username);
     authenticator_->setPassword(config_.password);
     authenticator_->setSessionType(config_.session_type);
 
-    authenticator_->start(std::move(channel_), [this](Authenticator::ErrorCode error_code)
+    authenticator_->start(std::move(channel_),
+                          [this](net::ClientAuthenticator::ErrorCode error_code)
     {
-        if (error_code == Authenticator::ErrorCode::SUCCESS)
+        if (error_code == net::ClientAuthenticator::ErrorCode::SUCCESS)
         {
             // The authenticator takes the listener on itself, we return the receipt of
             // notifications.
@@ -168,7 +170,7 @@ void Client::onConnected()
         }
 
         // Authenticator is no longer needed.
-        io_task_runner_->deleteSoon(authenticator_.release());
+        io_task_runner_->deleteSoon(std::move(authenticator_));
     });
 }
 

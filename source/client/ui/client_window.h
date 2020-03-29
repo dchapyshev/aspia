@@ -62,7 +62,7 @@ protected:
     void onStopped() override;
     void onConnected() override;
     void onDisconnected(net::ErrorCode error_code) override;
-    void onAccessDenied(Authenticator::ErrorCode error_code) override;
+    void onAccessDenied(net::ClientAuthenticator::ErrorCode error_code) override;
 
 private:
     void setClientTitle(const Config& config);

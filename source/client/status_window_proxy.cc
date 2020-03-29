@@ -33,7 +33,7 @@ public:
     void onStopped();
     void onConnected();
     void onDisconnected(net::ErrorCode error_code);
-    void onAccessDenied(Authenticator::ErrorCode error_code);
+    void onAccessDenied(net::ClientAuthenticator::ErrorCode error_code);
 
 private:
     std::shared_ptr<base::TaskRunner> ui_task_runner_;
@@ -107,7 +107,7 @@ void StatusWindowProxy::Impl::onDisconnected(net::ErrorCode error_code)
         status_window_->onDisconnected(error_code);
 }
 
-void StatusWindowProxy::Impl::onAccessDenied(Authenticator::ErrorCode error_code)
+void StatusWindowProxy::Impl::onAccessDenied(net::ClientAuthenticator::ErrorCode error_code)
 {
     if (!ui_task_runner_->belongsToCurrentThread())
     {
@@ -163,7 +163,7 @@ void StatusWindowProxy::onDisconnected(net::ErrorCode error_code)
     impl_->onDisconnected(error_code);
 }
 
-void StatusWindowProxy::onAccessDenied(Authenticator::ErrorCode error_code)
+void StatusWindowProxy::onAccessDenied(net::ClientAuthenticator::ErrorCode error_code)
 {
     impl_->onAccessDenied(error_code);
 }

@@ -21,8 +21,6 @@ include(translations)
 list(APPEND SOURCE_CLIENT
     client.cc
     client.h
-    client_authenticator.cc
-    client_authenticator.h
     client_config.cc
     client_config.h
     client_desktop.cc

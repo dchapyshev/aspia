@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/client_authenticator.h"
+#include "net/client_authenticator.h"
 
 #include "base/cpuid.h"
 #include "base/location.h"
@@ -25,14 +25,17 @@
 #include "crypto/message_decryptor_openssl.h"
 #include "crypto/message_encryptor_openssl.h"
 #include "crypto/generic_hash.h"
+#include "crypto/key_pair.h"
 #include "crypto/random.h"
 #include "crypto/srp_constants.h"
 #include "crypto/srp_math.h"
 #include "net/network_channel.h"
 
-namespace client {
+namespace net {
 
 namespace {
+
+const size_t kIvSize = 12; // 12 bytes.
 
 bool verifyNg(std::string_view N, std::string_view g)
 {
@@ -101,36 +104,46 @@ std::unique_ptr<crypto::MessageDecryptor> createMessageDecryptor(
 
 } // namespace
 
-Authenticator::Authenticator() = default;
+ClientAuthenticator::ClientAuthenticator() = default;
 
-Authenticator::~Authenticator() = default;
+ClientAuthenticator::~ClientAuthenticator() = default;
 
-void Authenticator::setUserName(std::u16string_view username)
+void ClientAuthenticator::setPeerPublicKey(const base::ByteArray& public_key)
+{
+    peer_public_key_ = public_key;
+}
+
+void ClientAuthenticator::setIdentify(proto::Identify identify)
+{
+    identify_ = identify;
+}
+
+void ClientAuthenticator::setUserName(std::u16string_view username)
 {
     username_ = username;
 }
 
-const std::u16string& Authenticator::userName() const
+const std::u16string& ClientAuthenticator::userName() const
 {
     return username_;
 }
 
-void Authenticator::setPassword(std::u16string_view password)
+void ClientAuthenticator::setPassword(std::u16string_view password)
 {
     password_ = password;
 }
 
-const std::u16string& Authenticator::password() const
+const std::u16string& ClientAuthenticator::password() const
 {
     return password_;
 }
 
-void Authenticator::setSessionType(proto::SessionType session_type)
+void ClientAuthenticator::setSessionType(uint32_t session_type)
 {
     session_type_ = session_type;
 }
 
-void Authenticator::start(std::unique_ptr<net::Channel> channel, Callback callback)
+void ClientAuthenticator::start(std::unique_ptr<net::Channel> channel, Callback callback)
 {
     channel_ = std::move(channel);
     callback_ = std::move(callback);
@@ -145,29 +158,29 @@ void Authenticator::start(std::unique_ptr<net::Channel> channel, Callback callba
     sendClientHello();
 }
 
-std::unique_ptr<net::Channel> Authenticator::takeChannel()
+std::unique_ptr<net::Channel> ClientAuthenticator::takeChannel()
 {
     return std::move(channel_);
 }
 
 // static
-const char* Authenticator::errorToString(Authenticator::ErrorCode error_code)
+const char* ClientAuthenticator::errorToString(ClientAuthenticator::ErrorCode error_code)
 {
     switch (error_code)
     {
-        case Authenticator::ErrorCode::SUCCESS:
+        case ClientAuthenticator::ErrorCode::SUCCESS:
             return "SUCCESS";
 
-        case Authenticator::ErrorCode::NETWORK_ERROR:
+        case ClientAuthenticator::ErrorCode::NETWORK_ERROR:
             return "NETWORK_ERROR";
 
-        case Authenticator::ErrorCode::PROTOCOL_ERROR:
+        case ClientAuthenticator::ErrorCode::PROTOCOL_ERROR:
             return "PROTOCOL_ERROR";
 
-        case Authenticator::ErrorCode::ACCESS_DENIED:
+        case ClientAuthenticator::ErrorCode::ACCESS_DENIED:
             return "ACCESS_DENIED";
 
-        case Authenticator::ErrorCode::SESSION_DENIED:
+        case ClientAuthenticator::ErrorCode::SESSION_DENIED:
             return "SESSION_DENIED";
 
         default:
@@ -175,13 +188,13 @@ const char* Authenticator::errorToString(Authenticator::ErrorCode error_code)
     }
 }
 
-void Authenticator::onConnected()
+void ClientAuthenticator::onConnected()
 {
     // The authenticator receives the channel always in an already connected state.
     NOTREACHED();
 }
 
-void Authenticator::onDisconnected(net::ErrorCode error_code)
+void ClientAuthenticator::onDisconnected(net::ErrorCode error_code)
 {
     LOG(LS_INFO) << "Network error: " << net::errorToString(error_code);
 
@@ -193,7 +206,7 @@ void Authenticator::onDisconnected(net::ErrorCode error_code)
     finished(FROM_HERE, result);
 }
 
-void Authenticator::onMessageReceived(const base::ByteArray& buffer)
+void ClientAuthenticator::onMessageReceived(const base::ByteArray& buffer)
 {
     switch (state_)
     {
@@ -221,17 +234,6 @@ void Authenticator::onMessageReceived(const base::ByteArray& buffer)
         {
             if (readSessionChallenge(buffer))
             {
-                std::unique_ptr<crypto::MessageEncryptor> message_encryptor =
-                    createMessageEncryptor(encryption_, key_, encrypt_iv_);
-                if (!message_encryptor)
-                {
-                    finished(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
-                    return;
-                }
-
-                // Install the encryptor. Now all sent messages will be encrypted.
-                channel_->setEncryptor(std::move(message_encryptor));
-
                 state_ = State::SEND_SESSION_RESPONSE;
                 sendSessionResponse();
             }
@@ -246,7 +248,7 @@ void Authenticator::onMessageReceived(const base::ByteArray& buffer)
     }
 }
 
-void Authenticator::onMessageWritten()
+void ClientAuthenticator::onMessageWritten()
 {
     switch (state_)
     {
@@ -260,20 +262,8 @@ void Authenticator::onMessageWritten()
 
         case State::SEND_CLIENT_KEY_EXCHANGE:
         {
-            std::unique_ptr<crypto::MessageDecryptor> message_decryptor =
-                createMessageDecryptor(encryption_, key_, decrypt_iv_);
-            if (!message_decryptor)
-            {
-                finished(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
-                return;
-            }
-
-            // After the decryptor is installed, all incoming messages will be decrypted in it.
-            // We do not install an encryptor here because the next message should be sent
-            // without encryption.
-            channel_->setDecryptor(std::move(message_decryptor));
-
             state_ = State::READ_SESSION_CHALLENGE;
+            onSessionKeyChanged();
         }
         break;
 
@@ -286,20 +276,102 @@ void Authenticator::onMessageWritten()
     }
 }
 
-void Authenticator::sendClientHello()
+void ClientAuthenticator::onSessionKeyChanged()
 {
+    std::unique_ptr<crypto::MessageEncryptor> encryptor;
+    std::unique_ptr<crypto::MessageDecryptor> decryptor;
+
+    if (encryption_ == proto::ENCRYPTION_AES256_GCM)
+    {
+        encryptor = crypto::MessageEncryptorOpenssl::createForAes256Gcm(
+            session_key_, encrypt_iv_);
+        decryptor = crypto::MessageDecryptorOpenssl::createForAes256Gcm(
+            session_key_, decrypt_iv_);
+    }
+    else
+    {
+        DCHECK_EQ(encryption_, proto::ENCRYPTION_CHACHA20_POLY1305);
+
+        encryptor = crypto::MessageEncryptorOpenssl::createForChaCha20Poly1305(
+            session_key_, encrypt_iv_);
+        decryptor = crypto::MessageDecryptorOpenssl::createForChaCha20Poly1305(
+            session_key_, decrypt_iv_);
+    }
+
+    if (!encryptor || !decryptor)
+    {
+        finished(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
+        return;
+    }
+
+    channel_->setEncryptor(std::move(encryptor));
+    channel_->setDecryptor(std::move(decryptor));
+}
+
+void ClientAuthenticator::sendClientHello()
+{
+    // We do not allow anonymous connections without a public key.
+    if (identify_ == proto::IDENTIFY_ANONYMOUS && peer_public_key_.empty())
+    {
+        finished(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
+        return;
+    }
+
+    proto::ClientHello client_hello;
+
     uint32_t encryption = proto::ENCRYPTION_CHACHA20_POLY1305;
 
     if (base::CPUID::hasAesNi())
         encryption |= proto::ENCRYPTION_AES256_GCM;
 
-    proto::ClientHello client_hello;
     client_hello.set_encryption(encryption);
+    client_hello.set_identify(identify_);
+
+    if (!peer_public_key_.empty())
+    {
+        encrypt_iv_ = crypto::Random::byteArray(kIvSize);
+        if (encrypt_iv_.empty())
+        {
+            finished(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
+            return;
+        }
+
+        crypto::KeyPair key_pair = crypto::KeyPair::create(crypto::KeyPair::Type::X25519);
+        if (!key_pair.isValid())
+        {
+            finished(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
+            return;
+        }
+
+        base::ByteArray temp = key_pair.sessionKey(peer_public_key_);
+        if (temp.empty())
+        {
+            finished(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
+            return;
+        }
+
+        session_key_ = crypto::GenericHash::hash(crypto::GenericHash::Type::BLAKE2s256, temp);
+        if (session_key_.empty())
+        {
+            finished(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
+            return;
+        }
+
+        base::ByteArray public_key = key_pair.publicKey();
+        if (public_key.empty())
+        {
+            finished(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
+            return;
+        }
+
+        client_hello.set_public_key(base::toStdString(public_key));
+        client_hello.set_iv(base::toStdString(encrypt_iv_));
+    }
 
     channel_->send(base::serialize(client_hello));
 }
 
-bool Authenticator::readServerHello(const base::ByteArray& buffer)
+bool ClientAuthenticator::readServerHello(const base::ByteArray& buffer)
 {
     proto::ServerHello server_hello;
     if (!base::parse(buffer, &server_hello))
@@ -320,18 +392,28 @@ bool Authenticator::readServerHello(const base::ByteArray& buffer)
             return false;
     }
 
+    decrypt_iv_ = base::fromStdString(server_hello.iv());
+
+    if (session_key_.empty() != decrypt_iv_.empty())
+    {
+        finished(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
+        return false;
+    }
+
+    if (!session_key_.empty())
+        onSessionKeyChanged();
+
     return true;
 }
 
-void Authenticator::sendIdentify()
+void ClientAuthenticator::sendIdentify()
 {
     proto::SrpIdentify identify;
     identify.set_username(base::utf8FromUtf16(username_));
-
     channel_->send(base::serialize(identify));
 }
 
-bool Authenticator::readServerKeyExchange(const base::ByteArray& buffer)
+bool ClientAuthenticator::readServerKeyExchange(const base::ByteArray& buffer)
 {
     proto::SrpServerKeyExchange server_key_exchange;
     if (!base::parse(buffer, &server_key_exchange))
@@ -360,7 +442,7 @@ bool Authenticator::readServerKeyExchange(const base::ByteArray& buffer)
 
     a_ = crypto::BigNum::fromByteArray(crypto::Random::byteArray(128)); // 1024 bits.
     A_ = crypto::SrpMath::calc_A(a_, N_, g_);
-    encrypt_iv_ = crypto::Random::byteArray(12);
+    encrypt_iv_ = crypto::Random::byteArray(kIvSize);
 
     if (!crypto::SrpMath::verify_B_mod_N(B_, N_))
     {
@@ -378,11 +460,17 @@ bool Authenticator::readServerKeyExchange(const base::ByteArray& buffer)
     }
 
     // AES256-GCM and ChaCha20-Poly1305 requires 256 bit key.
-    key_ = crypto::GenericHash::hash(crypto::GenericHash::BLAKE2s256, key.toByteArray());
+    crypto::GenericHash hash(crypto::GenericHash::BLAKE2s256);
+
+    if (!session_key_.empty())
+        hash.addData(session_key_);
+    hash.addData(key.toByteArray());
+
+    session_key_ = hash.result();
     return true;
 }
 
-void Authenticator::sendClientKeyExchange()
+void ClientAuthenticator::sendClientKeyExchange()
 {
     proto::SrpClientKeyExchange client_key_exchange;
     client_key_exchange.set_a(A_.toStdString());
@@ -391,7 +479,7 @@ void Authenticator::sendClientKeyExchange()
     channel_->send(base::serialize(client_key_exchange));
 }
 
-bool Authenticator::readSessionChallenge(const base::ByteArray& buffer)
+bool ClientAuthenticator::readSessionChallenge(const base::ByteArray& buffer)
 {
     proto::SessionChallenge challenge;
     if (!base::parse(buffer, &challenge))
@@ -406,29 +494,28 @@ bool Authenticator::readSessionChallenge(const base::ByteArray& buffer)
         return false;
     }
 
-    const proto::Version& peer_version = challenge.version();
-    peer_version_ = base::Version(
-        peer_version.major(), peer_version.minor(), peer_version.patch());
+    const proto::Version& version = challenge.version();
+    peer_version_ = base::Version(version.major(), version.minor(), version.patch());
 
     return true;
 }
 
-void Authenticator::sendSessionResponse()
+void ClientAuthenticator::sendSessionResponse()
 {
     proto::SessionResponse response;
     response.set_session_type(session_type_);
-
     channel_->send(base::serialize(response));
 }
 
-void Authenticator::finished(const base::Location& location, ErrorCode error_code)
+void ClientAuthenticator::finished(const base::Location& location, ErrorCode error_code)
 {
     LOG(LS_INFO) << "Authenticator finished with code: " << errorToString(error_code)
                  << "(" << location.toString() << ")";
 
     channel_->pause();
     channel_->setListener(nullptr);
+
     callback_(error_code);
 }
 
-} // namespace client
+} // namespace net

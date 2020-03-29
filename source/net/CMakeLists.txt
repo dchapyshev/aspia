@@ -21,6 +21,8 @@ list(APPEND SOURCE_NET
     adapter_enumerator.h
     address.cc
     address.h
+    client_authenticator.cc
+    client_authenticator.h
     firewall_manager.cc
     firewall_manager.h
     ip_util.cc

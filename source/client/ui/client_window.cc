@@ -155,29 +155,29 @@ void ClientWindow::onDisconnected(net::ErrorCode error_code)
     onErrorOccurred(tr(message));
 }
 
-void ClientWindow::onAccessDenied(Authenticator::ErrorCode error_code)
+void ClientWindow::onAccessDenied(net::ClientAuthenticator::ErrorCode error_code)
 {
     const char* message;
 
     switch (error_code)
     {
-        case Authenticator::ErrorCode::SUCCESS:
+        case net::ClientAuthenticator::ErrorCode::SUCCESS:
             message = QT_TR_NOOP("Authentication successfully completed.");
             break;
 
-        case Authenticator::ErrorCode::NETWORK_ERROR:
+        case net::ClientAuthenticator::ErrorCode::NETWORK_ERROR:
             message = QT_TR_NOOP("Network authentication error.");
             break;
 
-        case Authenticator::ErrorCode::PROTOCOL_ERROR:
+        case net::ClientAuthenticator::ErrorCode::PROTOCOL_ERROR:
             message = QT_TR_NOOP("Violation of the data exchange protocol.");
             break;
 
-        case Authenticator::ErrorCode::ACCESS_DENIED:
+        case net::ClientAuthenticator::ErrorCode::ACCESS_DENIED:
             message = QT_TR_NOOP("An error occured while authenticating: wrong user name or password.");
             break;
 
-        case Authenticator::ErrorCode::SESSION_DENIED:
+        case net::ClientAuthenticator::ErrorCode::SESSION_DENIED:
             message = QT_TR_NOOP("Specified session type is not allowed for the user.");
             break;
 

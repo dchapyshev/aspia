@@ -29,12 +29,12 @@ class TaskRunner;
 } // namespace base
 
 namespace net {
+class ClientAuthenticator;
 class Channel;
 } // namespace net
 
 namespace client {
 
-class Authenticator;
 class StatusWindow;
 class StatusWindowProxy;
 
@@ -93,7 +93,7 @@ private:
     std::shared_ptr<base::TaskRunner> ui_task_runner_;
 
     std::unique_ptr<net::Channel> channel_;
-    std::unique_ptr<Authenticator> authenticator_;
+    std::unique_ptr<net::ClientAuthenticator> authenticator_;
     std::unique_ptr<StatusWindowProxy> status_window_proxy_;
 
     bool session_started_ = false;

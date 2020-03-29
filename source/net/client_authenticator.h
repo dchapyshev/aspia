@@ -16,10 +16,9 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__CLIENT_AUTHENTICATOR_H
-#define CLIENT__CLIENT_AUTHENTICATOR_H
+#ifndef NET__CLIENT_AUTHENTICATOR_H
+#define NET__CLIENT_AUTHENTICATOR_H
 
-#include "base/macros_magic.h"
 #include "base/version.h"
 #include "crypto/big_num.h"
 #include "net/network_listener.h"
@@ -37,16 +36,20 @@ class MessageEncryptor;
 } // namespace crypto
 
 namespace net {
+
 class Channel;
-} // namespace net
 
-namespace client {
-
-class Authenticator : public net::Listener
+class ClientAuthenticator : public net::Listener
 {
 public:
-    Authenticator();
-    ~Authenticator();
+    ClientAuthenticator();
+    ~ClientAuthenticator();
+
+    void setPeerPublicKey(const base::ByteArray& public_key);
+    const base::ByteArray& peerPublicKey() const { return peer_public_key_; }
+
+    void setIdentify(proto::Identify identify);
+    proto::Identify identify() const { return identify_; }
 
     void setUserName(std::u16string_view username);
     const std::u16string& userName() const;
@@ -54,11 +57,10 @@ public:
     void setPassword(std::u16string_view password);
     const std::u16string& password() const;
 
-    void setSessionType(proto::SessionType session_type);
-    proto::SessionType sessionType() const { return session_type_; }
+    void setSessionType(uint32_t session_type);
+    uint32_t sessionType() const { return session_type_; }
 
     proto::Encryption encryption() const { return encryption_; }
-    proto::Identify identify() const { return identify_; }
     const base::Version& peerVersion() const { return peer_version_; }
 
     enum class ErrorCode
@@ -80,7 +82,7 @@ public:
 
     std::unique_ptr<net::Channel> takeChannel();
 
-    static const char* errorToString(Authenticator::ErrorCode error_code);
+    static const char* errorToString(ClientAuthenticator::ErrorCode error_code);
 
 protected:
     // net::Listener implementation.
@@ -90,6 +92,7 @@ protected:
     void onMessageWritten() override;
 
 private:
+    void onSessionKeyChanged();
     void sendClientHello();
     bool readServerHello(const base::ByteArray& buffer);
     void sendIdentify();
@@ -117,12 +120,13 @@ private:
     std::unique_ptr<net::Channel> channel_;
     Callback callback_;
 
+    base::ByteArray peer_public_key_;
     std::u16string username_;
     std::u16string password_;
 
     proto::Encryption encryption_ = proto::ENCRYPTION_UNKNOWN;
     proto::Identify identify_ = proto::IDENTIFY_SRP;
-    proto::SessionType session_type_ = proto::SESSION_TYPE_UNKNOWN;
+    uint32_t session_type_ = 0;
     base::Version peer_version_;
 
     crypto::BigNum N_;
@@ -133,13 +137,13 @@ private:
     crypto::BigNum a_;
     crypto::BigNum A_;
 
-    base::ByteArray key_;
+    base::ByteArray session_key_;
     base::ByteArray encrypt_iv_;
     base::ByteArray decrypt_iv_;
 
-    DISALLOW_COPY_AND_ASSIGN(Authenticator);
+    DISALLOW_COPY_AND_ASSIGN(ClientAuthenticator);
 };
 
-} // namespace client
+} // namespace net
 
-#endif // CLIENT__CLIENT_AUTHENTICATOR_H
+#endif // NET__CLIENT_AUTHENTICATOR_H
