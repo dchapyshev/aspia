@@ -18,7 +18,7 @@
 
 #include "base/logging.h"
 #include "base/files/base_paths.h"
-#include "router/win/router_service.h"
+#include "router/win/service.h"
 
 #if defined(USE_TBB)
 #include <tbb/tbbmalloc_proxy.h>

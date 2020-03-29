@@ -16,17 +16,38 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "router/win/router_service_constants.h"
+#include "router/win/service.h"
+
+#include "base/logging.h"
+#include "base/message_loop/message_pump_asio.h"
+#include "router/server.h"
+#include "router/win/service_constants.h"
 
 namespace router {
 
-const char16_t kRouterServiceFileName[] = u"aspia_router.exe";
+Service::Service()
+    : base::win::Service(kRouterServiceName, base::MessageLoop::Type::ASIO)
+{
+    // Nothing
+}
 
-const char16_t kRouterServiceName[] = u"aspia-router";
+Service::~Service() = default;
 
-const char16_t kRouterServiceDisplayName[] = u"Aspia Router Service";
+void Service::onStart()
+{
+    server_ = std::make_unique<Server>(taskRunner());
+    server_->start();
+}
 
-const char16_t kRouterServiceDescription[] =
-    u"Assigns identifiers to users and routes traffic to bypass NAT.";
+void Service::onStop()
+{
+    server_.reset();
+}
+
+void Service::onSessionEvent(
+    base::win::SessionStatus /* event */, base::SessionId /* session_id */)
+{
+    // Nothing
+}
 
 } // namespace router

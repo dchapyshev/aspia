@@ -35,10 +35,10 @@ list(APPEND SOURCE_ROUTER
     settings.h)
 
 list(APPEND SOURCE_ROUTER_WIN
-    win/router_service.cc
-    win/router_service.h
-    win/router_service_constants.cc
-    win/router_service_constants.h)
+    win/service.cc
+    win/service.h
+    win/service_constants.cc
+    win/service_constants.h)
 
 source_group("" FILES ${SOURCE_ROUTER})
 source_group(win FILES ${SOURCE_ROUTER_WIN})

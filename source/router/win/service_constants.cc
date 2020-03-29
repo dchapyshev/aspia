@@ -16,33 +16,17 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ROUTER__WIN__ROUTER_SERVICE_H
-#define ROUTER__WIN__ROUTER_SERVICE_H
-
-#include "base/win/service.h"
+#include "router/win/service_constants.h"
 
 namespace router {
 
-class Server;
+const char16_t kRouterServiceFileName[] = u"aspia_router.exe";
 
-class Service : public base::win::Service
-{
-public:
-    Service();
-    ~Service();
+const char16_t kRouterServiceName[] = u"aspia-router";
 
-protected:
-    // base::win::Service implementation.
-    void onStart() override;
-    void onStop() override;
-    void onSessionEvent(base::win::SessionStatus event, base::SessionId session_id) override;
+const char16_t kRouterServiceDisplayName[] = u"Aspia Router Service";
 
-private:
-    std::unique_ptr<Server> server_;
-
-    DISALLOW_COPY_AND_ASSIGN(Service);
-};
+const char16_t kRouterServiceDescription[] =
+    u"Assigns identifiers to users and routes traffic to bypass NAT.";
 
 } // namespace router
-
-#endif // ROUTER__WIN__ROUTER_SERVICE_H

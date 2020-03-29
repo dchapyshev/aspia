@@ -16,38 +16,16 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "router/win/router_service.h"
-
-#include "base/logging.h"
-#include "base/message_loop/message_pump_asio.h"
-#include "router/server.h"
-#include "router/win/router_service_constants.h"
+#ifndef ROUTER__WIN__SERVICE_CONSTANTS_H
+#define ROUTER__WIN__SERVICE_CONSTANTS_H
 
 namespace router {
 
-Service::Service()
-    : base::win::Service(kRouterServiceName, base::MessageLoop::Type::ASIO)
-{
-    // Nothing
-}
-
-Service::~Service() = default;
-
-void Service::onStart()
-{
-    server_ = std::make_unique<Server>(taskRunner());
-    server_->start();
-}
-
-void Service::onStop()
-{
-    server_.reset();
-}
-
-void Service::onSessionEvent(
-    base::win::SessionStatus /* event */, base::SessionId /* session_id */)
-{
-    // Nothing
-}
+extern const char16_t kRouterServiceFileName[];
+extern const char16_t kRouterServiceName[];
+extern const char16_t kRouterServiceDisplayName[];
+extern const char16_t kRouterServiceDescription[];
 
 } // namespace router
+
+#endif // ROUTER__WIN__SERVICE_CONSTANTS_H
