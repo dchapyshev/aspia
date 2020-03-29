@@ -38,7 +38,7 @@ public:
     std::optional<size_t> messageSize();
 
 private:
-    uint8_t buffer_[4];
+    uint8_t buffer_[4] = { 0 };
     size_t pos_ = 0;
 
     DISALLOW_COPY_AND_ASSIGN(VariableSizeReader);
