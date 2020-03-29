@@ -21,7 +21,7 @@
 
 #include "desktop/screen_capturer_wrapper.h"
 #include "host/clipboard_monitor.h"
-#include "ipc/ipc_listener.h"
+#include "ipc/channel.h"
 #include "ipc/shared_memory_factory.h"
 #include "proto/desktop_internal.pb.h"
 
@@ -35,17 +35,13 @@ class CaptureScheduler;
 class SharedFrame;
 } // namespace desktop
 
-namespace ipc {
-class Channel;
-} // namespace ipc
-
 namespace host {
 
 class InputInjector;
 
 class DesktopSessionAgent
     : public std::enable_shared_from_this<DesktopSessionAgent>,
-      public ipc::Listener,
+      public ipc::Channel::Listener,
       public ipc::SharedMemoryFactory::Delegate,
       public desktop::ScreenCapturerWrapper::Delegate,
       public common::Clipboard::Delegate
@@ -57,7 +53,7 @@ public:
     void start(std::u16string_view channel_id);
 
 protected:
-    // ipc::Listener implementation.
+    // ipc::Channel::Listener implementation.
     void onDisconnected() override;
     void onMessageReceived(const base::ByteArray& buffer) override;
 

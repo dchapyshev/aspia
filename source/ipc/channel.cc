@@ -25,7 +25,6 @@
 #include "base/strings/unicode.h"
 #include "base/win/scoped_object.h"
 #include "ipc/channel_proxy.h"
-#include "ipc/ipc_listener.h"
 
 #include <asio/read.hpp>
 #include <asio/write.hpp>

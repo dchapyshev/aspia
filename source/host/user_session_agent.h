@@ -19,9 +19,8 @@
 #ifndef HOST__USER_SESSION_AGENT_H
 #define HOST__USER_SESSION_AGENT_H
 
-#include "base/macros_magic.h"
 #include "base/threading/thread.h"
-#include "ipc/ipc_listener.h"
+#include "ipc/channel.h"
 #include "proto/host_internal.pb.h"
 
 namespace ipc {
@@ -35,7 +34,7 @@ class UserSessionWindowProxy;
 
 class UserSessionAgent
     : public base::Thread::Delegate,
-      public ipc::Listener
+      public ipc::Channel::Listener
 {
 public:
     enum class State
@@ -75,7 +74,7 @@ protected:
     void onBeforeThreadRunning() override;
     void onAfterThreadRunning() override;
 
-    // ipc::Listener implementation.
+    // ipc::Channel::Listener implementation.
     void onDisconnected() override;
     void onMessageReceived(const base::ByteArray& buffer) override;
 

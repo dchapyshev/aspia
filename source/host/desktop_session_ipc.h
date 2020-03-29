@@ -19,19 +19,14 @@
 #ifndef HOST__DESKTOP_SESSION_IPC_H
 #define HOST__DESKTOP_SESSION_IPC_H
 
-#include "base/macros_magic.h"
 #include "host/desktop_session.h"
-#include "ipc/ipc_listener.h"
-
-namespace ipc {
-class Channel;
-} // namespace ipc
+#include "ipc/channel.h"
 
 namespace host {
 
 class DesktopSessionIpc
     : public DesktopSession,
-      public ipc::Listener
+      public ipc::Channel::Listener
 {
 public:
     DesktopSessionIpc(std::unique_ptr<ipc::Channel> channel, Delegate* delegate);
@@ -49,7 +44,7 @@ public:
     void userSessionControl(proto::internal::UserSessionControl::Action action) override;
 
 protected:
-    // ipc::Listener implementation.
+    // ipc::Channel::Listener implementation.
     void onDisconnected() override;
     void onMessageReceived(const base::ByteArray& buffer) override;
 

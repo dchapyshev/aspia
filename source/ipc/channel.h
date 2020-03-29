@@ -36,7 +36,6 @@ class Location;
 namespace ipc {
 
 class ChannelProxy;
-class Listener;
 class Server;
 
 class Channel
@@ -44,6 +43,15 @@ class Channel
 public:
     Channel();
     ~Channel();
+
+    class Listener
+    {
+    public:
+        virtual ~Listener() = default;
+
+        virtual void onDisconnected() = 0;
+        virtual void onMessageReceived(const base::ByteArray& buffer) = 0;
+    };
 
     std::shared_ptr<ChannelProxy> channelProxy();
 

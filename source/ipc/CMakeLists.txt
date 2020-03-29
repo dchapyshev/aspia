@@ -21,7 +21,6 @@ list(APPEND SOURCE_IPC
     channel.h
     channel_proxy.cc
     channel_proxy.h
-    ipc_listener.h
     server.cc
     server.h
     shared_memory.cc

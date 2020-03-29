@@ -23,19 +23,14 @@
 #include "base/waitable_timer.h"
 #include "host/client_session.h"
 #include "host/desktop_session_manager.h"
-#include "ipc/ipc_listener.h"
+#include "ipc/channel.h"
 #include "net/server_user.h"
 #include "proto/host_internal.pb.h"
-
-namespace ipc {
-class Channel;
-class ChannelProxy;
-} // namespace ipc
 
 namespace host {
 
 class UserSession
-    : public ipc::Listener,
+    : public ipc::Channel::Listener,
       public DesktopSession::Delegate,
       public ClientSession::Delegate
 {
@@ -80,7 +75,7 @@ public:
     void setSessionEvent(base::win::SessionStatus status, base::SessionId session_id);
 
 protected:
-    // ipc::Listener implementation.
+    // ipc::Channel::Listener implementation.
     void onDisconnected() override;
     void onMessageReceived(const base::ByteArray& buffer) override;
 

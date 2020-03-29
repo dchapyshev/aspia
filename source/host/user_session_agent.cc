@@ -22,7 +22,6 @@
 #include "host/user_session_constants.h"
 #include "host/user_session_agent_proxy.h"
 #include "host/user_session_window_proxy.h"
-#include "ipc/channel.h"
 
 namespace host {
 
