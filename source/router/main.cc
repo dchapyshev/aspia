@@ -45,8 +45,9 @@ int main(int argc, char* argv[])
     settings.destination = base::LOG_TO_FILE;
     settings.log_dir = loggingDir();
 
+    base::initLogging(settings);
     router::Service().exec();
-
     base::shutdownLogging();
+
     return 0;
 }
