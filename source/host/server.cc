@@ -105,6 +105,11 @@ void Server::setSessionEvent(base::win::SessionStatus status, base::SessionId se
 
 void Server::onNewConnection(std::unique_ptr<net::Channel> channel)
 {
+    static const size_t kReadBufferSize = 1 * 1024 * 1024; // 1 Mb.
+
+    channel->setReadBufferSize(kReadBufferSize);
+    channel->setNoDelay(true);
+
     if (authenticator_manager_)
         authenticator_manager_->addNewChannel(std::move(channel));
 }
