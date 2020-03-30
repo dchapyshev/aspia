@@ -95,10 +95,23 @@ void DesktopSessionIpc::stop()
     delegate_ = nullptr;
 }
 
-void DesktopSessionIpc::enableSession(bool enable)
+void DesktopSessionIpc::setEnabled(bool enable)
 {
     outgoing_message_.Clear();
-    outgoing_message_.mutable_enable_session()->set_enable(enable);
+    outgoing_message_.mutable_set_enabled()->set_enable(enable);
+    channel_->send(base::serialize(outgoing_message_));
+}
+
+void DesktopSessionIpc::setConfig(const Config& config)
+{
+    outgoing_message_.Clear();
+
+    proto::internal::SetConfig* set_config = outgoing_message_.mutable_set_config();
+    set_config->set_disable_font_smoothing(config.disable_font_smoothing);
+    set_config->set_disable_wallpaper(config.disable_wallpaper);
+    set_config->set_disable_effects(config.disable_effects);
+    set_config->set_block_input(config.block_input);
+
     channel_->send(base::serialize(outgoing_message_));
 }
 
@@ -106,13 +119,6 @@ void DesktopSessionIpc::selectScreen(const proto::Screen& screen)
 {
     outgoing_message_.Clear();
     outgoing_message_.mutable_select_source()->mutable_screen()->CopyFrom(screen);
-    channel_->send(base::serialize(outgoing_message_));
-}
-
-void DesktopSessionIpc::enableFeatures(const proto::internal::EnableFeatures& features)
-{
-    outgoing_message_.Clear();
-    outgoing_message_.mutable_enable_features()->CopyFrom(features);
     channel_->send(base::serialize(outgoing_message_));
 }
 

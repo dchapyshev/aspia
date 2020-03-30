@@ -54,7 +54,7 @@ void DesktopSessionAgent::start(std::u16string_view channel_id)
 
 void DesktopSessionAgent::onDisconnected()
 {
-    enableSession(false);
+    setEnabled(false);
     task_runner_->postQuit();
 }
 
@@ -87,28 +87,28 @@ void DesktopSessionAgent::onMessageReceived(const base::ByteArray& buffer)
         if (clipboard_monitor_)
             clipboard_monitor_->injectClipboardEvent(incoming_message_.clipboard_event());
     }
-    else if (incoming_message_.has_enable_session())
+    else if (incoming_message_.has_set_enabled())
     {
-        enableSession(incoming_message_.enable_session().enable());
+        setEnabled(incoming_message_.set_enabled().enable());
     }
     else if (incoming_message_.has_select_source())
     {
         if (screen_capturer_)
             screen_capturer_->selectScreen(incoming_message_.select_source().screen().id());
     }
-    else if (incoming_message_.has_enable_features())
+    else if (incoming_message_.has_set_config())
     {
-        const proto::internal::EnableFeatures& features = incoming_message_.enable_features();
+        const proto::internal::SetConfig& config = incoming_message_.set_config();
 
         if (screen_capturer_)
         {
-            screen_capturer_->enableWallpaper(!features.disable_wallpaper());
-            screen_capturer_->enableEffects(!features.disable_effects());
-            screen_capturer_->enableFontSmoothing(!features.disable_font_smoothing());
+            screen_capturer_->enableWallpaper(!config.disable_wallpaper());
+            screen_capturer_->enableEffects(!config.disable_effects());
+            screen_capturer_->enableFontSmoothing(!config.disable_font_smoothing());
         }
 
         if (input_injector_)
-            input_injector_->setBlockInput(features.block_input());
+            input_injector_->setBlockInput(config.block_input());
     }
     else if (incoming_message_.has_user_session_control())
     {
@@ -224,7 +224,7 @@ void DesktopSessionAgent::onClipboardEvent(const proto::ClipboardEvent& event)
     channel_->send(base::serialize(outgoing_message_));
 }
 
-void DesktopSessionAgent::enableSession(bool enable)
+void DesktopSessionAgent::setEnabled(bool enable)
 {
     if (enable)
     {

@@ -19,7 +19,6 @@
 #include "host/desktop_session_proxy.h"
 
 #include "base/logging.h"
-#include "host/desktop_session.h"
 
 namespace host {
 
@@ -30,22 +29,22 @@ DesktopSessionProxy::~DesktopSessionProxy()
     DCHECK(!desktop_session_);
 }
 
-void DesktopSessionProxy::enableSession(bool enable)
+void DesktopSessionProxy::setEnabled(bool enable)
 {
     if (desktop_session_)
-        desktop_session_->enableSession(enable);
+        desktop_session_->setEnabled(enable);
+}
+
+void DesktopSessionProxy::setConfig(const DesktopSession::Config& config)
+{
+    if (desktop_session_)
+        desktop_session_->setConfig(config);
 }
 
 void DesktopSessionProxy::selectScreen(const proto::Screen& screen)
 {
     if (desktop_session_)
         desktop_session_->selectScreen(screen);
-}
-
-void DesktopSessionProxy::enableFeatures(const proto::internal::EnableFeatures& features)
-{
-    if (desktop_session_)
-        desktop_session_->enableFeatures(features);
 }
 
 void DesktopSessionProxy::injectKeyEvent(const proto::KeyEvent& event)

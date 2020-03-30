@@ -136,7 +136,7 @@ void UserSession::addNewSession(std::unique_ptr<ClientSession> client_session)
                 static_cast<ClientSessionDesktop*>(client_session_ptr);
 
             desktop_client_session->setDesktopSessionProxy(desktop_session_proxy_);
-            desktop_session_proxy_->enableSession(true);
+            desktop_session_proxy_->setEnabled(true);
         }
         break;
 
@@ -239,7 +239,7 @@ void UserSession::onDesktopSessionStarted()
 {
     LOG(LS_INFO) << "Desktop session is connected";
 
-    desktop_session_proxy_->enableSession(!desktop_clients_.empty());
+    desktop_session_proxy_->setEnabled(!desktop_clients_.empty());
     onClientSessionConfigured();
 }
 
@@ -293,35 +293,34 @@ void UserSession::onClientSessionConfigured()
     if (desktop_clients_.empty())
         return;
 
-    proto::internal::EnableFeatures system_features;
+    DesktopSession::Config system_config;
 
     for (const auto& client : desktop_clients_)
     {
-        const proto::internal::EnableFeatures& client_features =
-            static_cast<ClientSessionDesktop*>(client.get())->features();
+        const DesktopSession::Config& client_config =
+            static_cast<ClientSessionDesktop*>(client.get())->desktopSessionConfig();
 
         // If at least one client has disabled font smoothing, then the font smoothing will be
         // disabled for everyone.
-        system_features.set_disable_font_smoothing(
-            system_features.disable_font_smoothing() || client_features.disable_font_smoothing());
+        system_config.disable_font_smoothing =
+            system_config.disable_font_smoothing || client_config.disable_font_smoothing;
 
         // If at least one client has disabled effects, then the effects will be disabled for
         // everyone.
-        system_features.set_disable_effects(
-            system_features.disable_effects() || client_features.disable_effects());
+        system_config.disable_effects =
+            system_config.disable_effects || client_config.disable_effects;
 
         // If at least one client has disabled the wallpaper, then the effects will be disabled for
         // everyone.
-        system_features.set_disable_wallpaper(
-            system_features.disable_wallpaper() || client_features.disable_wallpaper());
+        system_config.disable_wallpaper =
+            system_config.disable_wallpaper && client_config.disable_wallpaper;
 
         // If at least one client has enabled input block, then the block will be enabled for
         // everyone.
-        system_features.set_block_input(
-            system_features.block_input() || client_features.block_input());
+        system_config.block_input = system_config.block_input || client_config.block_input;
     }
 
-    desktop_session_proxy_->enableFeatures(system_features);
+    desktop_session_proxy_->setConfig(system_config);
 }
 
 void UserSession::onClientSessionFinished()
@@ -354,7 +353,7 @@ void UserSession::onClientSessionFinished()
     delete_finished(&file_transfer_clients_);
 
     if (desktop_clients_.empty())
-        desktop_session_proxy_->enableSession(false);
+        desktop_session_proxy_->setEnabled(false);
 }
 
 void UserSession::onSessionDettached(const base::Location& location)

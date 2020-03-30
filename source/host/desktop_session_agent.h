@@ -71,7 +71,7 @@ protected:
     void onClipboardEvent(const proto::ClipboardEvent& event) override;
 
 private:
-    void enableSession(bool enable);
+    void setEnabled(bool enable);
     void captureBegin();
     void captureEnd();
 

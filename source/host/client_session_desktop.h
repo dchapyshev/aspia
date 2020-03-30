@@ -21,9 +21,7 @@
 
 #include "base/macros_magic.h"
 #include "host/client_session.h"
-#include "proto/desktop.pb.h"
-#include "proto/desktop_extensions.pb.h"
-#include "proto/desktop_internal.pb.h"
+#include "host/desktop_session.h"
 
 namespace codec {
 class CursorEncoder;
@@ -52,7 +50,7 @@ public:
     void setScreenList(const proto::ScreenList& list);
     void injectClipboardEvent(const proto::ClipboardEvent& event);
 
-    const proto::internal::EnableFeatures& features() const { return features_; }
+    const DesktopSession::Config& desktopSessionConfig() const { return desktop_session_config_; }
 
 protected:
     // net::Listener implementation.
@@ -69,7 +67,7 @@ private:
     std::shared_ptr<DesktopSessionProxy> desktop_session_proxy_;
     std::unique_ptr<codec::VideoEncoder> video_encoder_;
     std::unique_ptr<codec::CursorEncoder> cursor_encoder_;
-    proto::internal::EnableFeatures features_;
+    DesktopSession::Config desktop_session_config_;
 
     proto::ClientToHost incoming_message_;
     proto::HostToClient outgoing_message_;

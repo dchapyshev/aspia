@@ -48,12 +48,20 @@ public:
         virtual void onClipboardEvent(const proto::ClipboardEvent& event) = 0;
     };
 
+    struct Config
+    {
+        bool disable_font_smoothing = false;
+        bool disable_wallpaper = false;
+        bool disable_effects = false;
+        bool block_input = false;
+    };
+
     virtual void start() = 0;
     virtual void stop() = 0;
 
-    virtual void enableSession(bool enable) = 0;
+    virtual void setEnabled(bool enable) = 0;
+    virtual void setConfig(const Config& config) = 0;
     virtual void selectScreen(const proto::Screen& screen) = 0;
-    virtual void enableFeatures(const proto::internal::EnableFeatures& features) = 0;
 
     virtual void injectKeyEvent(const proto::KeyEvent& event) = 0;
     virtual void injectPointerEvent(const proto::PointerEvent& event) = 0;

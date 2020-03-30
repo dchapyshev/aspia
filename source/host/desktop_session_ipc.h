@@ -35,9 +35,9 @@ public:
     // DesktopSession implementation.
     void start() override;
     void stop() override;
-    void enableSession(bool enable) override;
+    void setEnabled(bool enable) override;
+    void setConfig(const Config& config) override;
     void selectScreen(const proto::Screen& screen) override;
-    void enableFeatures(const proto::internal::EnableFeatures& features) override;
     void injectKeyEvent(const proto::KeyEvent& event) override;
     void injectPointerEvent(const proto::PointerEvent& event) override;
     void injectClipboardEvent(const proto::ClipboardEvent& event) override;
