@@ -294,6 +294,7 @@ void UserSession::onClientSessionConfigured()
         return;
 
     DesktopSession::Config system_config;
+    memset(&system_config, 0, sizeof(system_config));
 
     for (const auto& client : desktop_clients_)
     {
@@ -313,7 +314,7 @@ void UserSession::onClientSessionConfigured()
         // If at least one client has disabled the wallpaper, then the effects will be disabled for
         // everyone.
         system_config.disable_wallpaper =
-            system_config.disable_wallpaper && client_config.disable_wallpaper;
+            system_config.disable_wallpaper || client_config.disable_wallpaper;
 
         // If at least one client has enabled input block, then the block will be enabled for
         // everyone.

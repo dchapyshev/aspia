@@ -50,9 +50,9 @@ public:
 
     struct Config
     {
-        bool disable_font_smoothing = false;
-        bool disable_wallpaper = false;
-        bool disable_effects = false;
+        bool disable_font_smoothing = true;
+        bool disable_wallpaper = true;
+        bool disable_effects = true;
         bool block_input = false;
     };
 
