@@ -86,31 +86,12 @@ void updateUserSettings()
 
 WallpaperDisabler::WallpaperDisabler()
 {
-    wchar_t buffer[MAX_PATH] = { 0 };
-
-    if (!SystemParametersInfoW(SPI_GETDESKWALLPAPER, std::size(buffer), buffer, 0))
-    {
-        DPLOG(LS_WARNING) << "SystemParametersInfoW(SPI_GETDESKWALLPAPER) failed";
-        return;
-    }
-
-    // If the string is empty, then the desktop wallpaper is not installed.
-    if (!buffer[0])
-        return;
-
-    has_wallpaper_ = true;
-
     // We do not check the return value. For SPI_SETDESKWALLPAPER, always returns TRUE.
     SystemParametersInfoW(SPI_SETDESKWALLPAPER, 0, L"", SPIF_SENDCHANGE);
 }
 
 WallpaperDisabler::~WallpaperDisabler()
 {
-    if (!has_wallpaper_)
-        return;
-
-    // We do not check the return value. For SPI_SETDESKWALLPAPER, always returns TRUE.
-    SystemParametersInfoW(SPI_SETDESKWALLPAPER, 0, 0, 0);
     updateUserSettings();
 }
 

@@ -30,8 +30,6 @@ public:
     ~WallpaperDisabler();
 
 private:
-    bool has_wallpaper_ = false;
-
     DISALLOW_COPY_AND_ASSIGN(WallpaperDisabler);
 };
 
