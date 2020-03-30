@@ -102,6 +102,9 @@ void ScreenCapturerWrapper::setSharedMemoryFactory(ipc::SharedMemoryFactory* sha
 
 void ScreenCapturerWrapper::enableWallpaper(bool enable)
 {
+    if (enable == enable_wallpaper_)
+        return;
+
     enable_wallpaper_ = enable;
     wallpaper_disabler_.reset();
 
@@ -111,6 +114,9 @@ void ScreenCapturerWrapper::enableWallpaper(bool enable)
 
 void ScreenCapturerWrapper::enableEffects(bool enable)
 {
+    if (enable == enable_effects_)
+        return;
+
     enable_effects_ = enable;
     effects_disabler_.reset();
 
@@ -121,6 +127,9 @@ void ScreenCapturerWrapper::enableEffects(bool enable)
 
 void ScreenCapturerWrapper::enableFontSmoothing(bool enable)
 {
+    if (enable == enable_font_smoothing_)
+        return;
+
     enable_font_smoothing_ = enable;
     font_smoothing_disabler_.reset();
 
