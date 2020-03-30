@@ -269,10 +269,14 @@ void ClientSessionDesktop::readConfig(const proto::DesktopConfig& config)
     if (config.flags() & proto::ENABLE_CURSOR_SHAPE)
         cursor_encoder_ = std::make_unique<codec::CursorEncoder>();
 
-    desktop_session_config_.disable_font_smoothing = config.flags() & proto::DISABLE_FONT_SMOOTHING;
-    desktop_session_config_.disable_effects = config.flags() & proto::DISABLE_DESKTOP_EFFECTS;
-    desktop_session_config_.disable_wallpaper = config.flags() & proto::DISABLE_DESKTOP_WALLPAPER;
-    desktop_session_config_.block_input = config.flags() & proto::BLOCK_REMOTE_INPUT;
+    desktop_session_config_.disable_font_smoothing =
+        (config.flags() & proto::DISABLE_FONT_SMOOTHING);
+    desktop_session_config_.disable_effects =
+        (config.flags() & proto::DISABLE_DESKTOP_EFFECTS);
+    desktop_session_config_.disable_wallpaper =
+        (config.flags() & proto::DISABLE_DESKTOP_WALLPAPER);
+    desktop_session_config_.block_input =
+        (config.flags() & proto::BLOCK_REMOTE_INPUT);
 
     delegate_->onClientSessionConfigured();
 }
