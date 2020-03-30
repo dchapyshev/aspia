@@ -56,8 +56,7 @@ public:
 
 private:
     void selectCapturer();
-    bool switchToInputDesktop();
-    void atDesktopSwitch();
+    void switchToInputDesktop();
 
     Delegate* delegate_;
 

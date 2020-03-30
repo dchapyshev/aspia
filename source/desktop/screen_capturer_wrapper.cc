@@ -35,13 +35,15 @@ namespace desktop {
 ScreenCapturerWrapper::ScreenCapturerWrapper(Delegate* delegate)
     : delegate_(delegate)
 {
-    switchToInputDesktop();
-    atDesktopSwitch();
-
     // If the monitor is turned off, this call will turn it on.
     SetThreadExecutionState(ES_DISPLAY_REQUIRED);
 
+    switchToInputDesktop();
     selectCapturer();
+
+    wallpaper_disabler_ = std::make_unique<WallpaperDisabler>();
+    effects_disabler_ = std::make_unique<EffectsDisabler>();
+    font_smoothing_disabler_ = std::make_unique<FontSmoothingDisabler>();
 }
 
 ScreenCapturerWrapper::~ScreenCapturerWrapper() = default;
@@ -63,8 +65,7 @@ void ScreenCapturerWrapper::captureFrame()
 {
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
 
-    if (switchToInputDesktop())
-        atDesktopSwitch();
+    switchToInputDesktop();
 
     int count = screen_capturer_->screenCount();
     if (screen_count_ != count)
@@ -171,7 +172,7 @@ void ScreenCapturerWrapper::selectCapturer()
     }
 }
 
-bool ScreenCapturerWrapper::switchToInputDesktop()
+void ScreenCapturerWrapper::switchToInputDesktop()
 {
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
 
@@ -186,31 +187,10 @@ bool ScreenCapturerWrapper::switchToInputDesktop()
         if (cursor_capturer_)
             cursor_capturer_->reset();
 
-        effects_disabler_.reset();
-        wallpaper_disabler_.reset();
-        font_smoothing_disabler_.reset();
-
         // If setThreadDesktop() fails, the thread is still assigned a desktop.
         // So we can continue capture screen bits, just from the wrong desktop.
         desktop_.setThreadDesktop(std::move(input_desktop));
-        return true;
     }
-
-    return false;
-}
-
-void ScreenCapturerWrapper::atDesktopSwitch()
-{
-    DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
-
-    if (!enable_effects_)
-        effects_disabler_ = std::make_unique<EffectsDisabler>();
-
-    if (!enable_wallpaper_)
-        wallpaper_disabler_ = std::make_unique<WallpaperDisabler>();
-
-    if (!enable_font_smoothing_)
-        font_smoothing_disabler_ = std::make_unique<FontSmoothingDisabler>();
 }
 
 } // namespace desktop
