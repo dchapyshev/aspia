@@ -246,17 +246,8 @@ void ClientDesktop::readVideoPacket(const proto::VideoPacket& packet)
             return;
         }
 
-        if (screen_rect.x() < kMinValue || screen_rect.x() >= kMaxValue ||
-            screen_rect.y() < kMinValue || screen_rect.y() >= kMaxValue)
-        {
-            LOG(LS_ERROR) << "Wrong video frame position";
-            return;
-        }
-
         desktop_frame_ = desktop_window_proxy_->allocateFrame(
             desktop::Size(screen_rect.width(), screen_rect.height()));
-
-        desktop_frame_->setTopLeft(desktop::Point(screen_rect.x(), screen_rect.y()));
     }
 
     if (!desktop_frame_)

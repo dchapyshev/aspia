@@ -97,7 +97,6 @@ const Frame* ScreenCapturerMirror::captureFrame(Error* error)
     // Copy the image of the modified areas into the frame.
     helper_->copyRegion(frame_.get(), *updated_region);
 
-    frame_->setTopLeft(helper_->screenRect().topLeft());
     return frame_.get();
 }
 

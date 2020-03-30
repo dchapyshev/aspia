@@ -30,16 +30,14 @@ class ScreenSettingsTracker
 public:
     ScreenSettingsTracker() = default;
 
-    bool isRectChanged(const Rect& screen_rect);
     bool isSizeChanged(const Size& screen_size);
     bool isFormatChanged(const PixelFormat& pixel_format);
 
-    const Rect& screenRect() const { return screen_rect_; }
-    Size screenSize() const { return screen_rect_.size(); }
+    const Size& screenSize() const { return size_; }
     const PixelFormat& format() const { return pixel_format_; }
 
 private:
-    Rect screen_rect_;
+    Size size_;
     PixelFormat pixel_format_;
 
     DISALLOW_COPY_AND_ASSIGN(ScreenSettingsTracker);

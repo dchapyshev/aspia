@@ -208,14 +208,10 @@ void DesktopSessionIpc::onEncodeFrame(const proto::internal::EncodeFrame& encode
         if (!shared_buffer)
             return;
 
-        const proto::Rect& frame_rect = serialized_frame.desktop_rect();
-
         std::unique_ptr<desktop::Frame> frame = desktop::SharedMemoryFrame::attach(
-            desktop::Size(frame_rect.width(), frame_rect.height()),
+            desktop::Size(serialized_frame.width(), serialized_frame.height()),
             codec::parsePixelFormat(serialized_frame.pixel_format()),
             std::move(shared_buffer));
-
-        frame->setTopLeft(desktop::Point(frame_rect.x(), frame_rect.y()));
 
         for (int i = 0; i < serialized_frame.dirty_rect_size(); ++i)
             frame->updatedRegion()->addRect(codec::parseRect(serialized_frame.dirty_rect(i)));

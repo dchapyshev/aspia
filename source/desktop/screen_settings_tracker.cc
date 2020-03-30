@@ -20,22 +20,11 @@
 
 namespace desktop {
 
-bool ScreenSettingsTracker::isRectChanged(const Rect& screen_rect)
-{
-    if (screen_rect != screen_rect_)
-    {
-        screen_rect_ = screen_rect;
-        return true;
-    }
-
-    return false;
-}
-
 bool ScreenSettingsTracker::isSizeChanged(const Size& screen_size)
 {
-    if (screen_size != screen_rect_.size())
+    if (screen_size != size_)
     {
-        screen_rect_.setSize(screen_size);
+        size_ = screen_size;
         return true;
     }
 

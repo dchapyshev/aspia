@@ -186,10 +186,9 @@ void DesktopSessionAgent::onScreenCaptured(
         proto::internal::SerializedDesktopFrame* serialized_frame = encode_frame->mutable_frame();
 
         serialized_frame->set_shared_buffer_id(frame->sharedMemory()->id());
+        serialized_frame->set_width(frame->size().width());
+        serialized_frame->set_height(frame->size().height());
 
-        desktop::Rect frame_rect = desktop::Rect::makeXYWH(frame->topLeft(), frame->size());
-
-        codec::serializeRect(frame_rect, serialized_frame->mutable_desktop_rect());
         codec::serializePixelFormat(frame->format(), serialized_frame->mutable_pixel_format());
 
         for (desktop::Region::Iterator it(frame->constUpdatedRegion()); !it.isAtEnd(); it.advance())

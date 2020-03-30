@@ -277,8 +277,6 @@ void QtDesktopWindow::drawFrame(std::shared_ptr<desktop::Frame> frame)
 
     if (current_frame != frame.get())
     {
-        screen_top_left_ = frame->topLeft();
-
         desktop_->setDesktopFrame(frame);
 
         scaleDesktop();
@@ -372,8 +370,8 @@ void QtDesktopWindow::onPointerEvent(const QPoint& pos, uint32_t mask)
         proto::PointerEvent pointer_event;
 
         pointer_event.set_mask(mask);
-        pointer_event.set_x((static_cast<double>(pos.x() * 100) / scale) + screen_top_left_.x());
-        pointer_event.set_y((static_cast<double>(pos.y() * 100) / scale) + screen_top_left_.y());
+        pointer_event.set_x((static_cast<double>(pos.x() * 100) / scale));
+        pointer_event.set_y((static_cast<double>(pos.y() * 100) / scale));
 
         desktop_control_proxy_->onPointerEvent(pointer_event);
     }

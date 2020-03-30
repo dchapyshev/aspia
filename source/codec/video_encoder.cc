@@ -17,6 +17,7 @@
 //
 
 #include "codec/video_encoder.h"
+
 #include "desktop/desktop_frame.h"
 
 namespace codec {
@@ -27,13 +28,10 @@ void VideoEncoder::fillPacketInfo(proto::VideoEncoding encoding,
 {
     packet->set_encoding(encoding);
 
-    if (screen_settings_tracker_.isRectChanged(
-        desktop::Rect::makeXYWH(frame->topLeft(), frame->size())))
+    if (screen_settings_tracker_.isSizeChanged(frame->size()))
     {
         proto::Rect* rect = packet->mutable_format()->mutable_screen_rect();
 
-        rect->set_x(frame->topLeft().x());
-        rect->set_y(frame->topLeft().y());
         rect->set_width(frame->size().width());
         rect->set_height(frame->size().height());
     }

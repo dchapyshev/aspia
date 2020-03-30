@@ -121,8 +121,6 @@ const Frame* ScreenCapturerGdi::captureImage()
            screen_rect.left(), screen_rect.top(),
            CAPTUREBLT | SRCCOPY);
 
-    current->setTopLeft(screen_rect.topLeft());
-
     if (!previous || previous->size() != current->size())
     {
         differ_ = std::make_unique<Differ>(screen_rect.size(), pixel_format_);

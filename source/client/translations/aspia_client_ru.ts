@@ -1468,7 +1468,7 @@
     <message>
         <location filename="../ui/qt_desktop_window.cc" line="199"/>
         <location filename="../ui/qt_desktop_window.cc" line="207"/>
-        <location filename="../ui/qt_desktop_window.cc" line="469"/>
+        <location filename="../ui/qt_desktop_window.cc" line="467"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
@@ -1487,17 +1487,17 @@
         <translation type="obsolete">Выбор поддерживаемой видео-кодировки отменен пользователем.</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="447"/>
+        <location filename="../ui/qt_desktop_window.cc" line="445"/>
         <source>Save File</source>
         <translation>Сохранение файла</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="449"/>
+        <location filename="../ui/qt_desktop_window.cc" line="447"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG изображение (*.png);;BMP изображение (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="469"/>
+        <location filename="../ui/qt_desktop_window.cc" line="467"/>
         <source>Could not save image</source>
         <translation>Не удалось сохранить изображение</translation>
     </message>

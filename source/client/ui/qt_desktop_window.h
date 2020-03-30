@@ -114,8 +114,6 @@ private:
 
     bool is_maximized_ = false;
 
-    desktop::Point screen_top_left_;
-
     DISALLOW_COPY_AND_ASSIGN(QtDesktopWindow);
 };
 

@@ -144,8 +144,8 @@ void InputInjectorWin::injectPointerEvent(const proto::PointerEvent& event)
         return;
 
     // Translate the coordinates of the cursor into the coordinates of the virtual screen.
-    desktop::Point pos(((event.x() - screen_rect.x()) * 65535) / (screen_rect.width() - 1),
-                       ((event.y() - screen_rect.y()) * 65535) / (screen_rect.height() - 1));
+    desktop::Point pos((event.x() * 65535) / (screen_rect.width() - 1),
+                       (event.y() * 65535) / (screen_rect.height() - 1));
 
     DWORD flags = MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_VIRTUALDESK;
     DWORD wheel_movement = 0;
