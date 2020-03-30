@@ -225,6 +225,38 @@ bool Channel::setKeepAlive(bool enable,
     return true;
 }
 
+bool Channel::setReadBufferSize(size_t size)
+{
+    asio::socket_base::receive_buffer_size option(size);
+
+    asio::error_code error_code;
+    socket_.set_option(option, error_code);
+
+    if (error_code)
+    {
+        LOG(LS_ERROR) << "Failed to set read buffer size: " << error_code.message();
+        return false;
+    }
+
+    return true;
+}
+
+bool Channel::setWriteBufferSize(size_t size)
+{
+    asio::socket_base::send_buffer_size option(size);
+
+    asio::error_code error_code;
+    socket_.set_option(option, error_code);
+
+    if (error_code)
+    {
+        LOG(LS_ERROR) << "Failed to set write buffer size: " << error_code.message();
+        return false;
+    }
+
+    return true;
+}
+
 // static
 std::string Channel::errorToString(ErrorCode error_code)
 {

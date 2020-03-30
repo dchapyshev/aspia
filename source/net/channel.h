@@ -139,6 +139,9 @@ public:
                       const std::chrono::milliseconds& time = std::chrono::milliseconds(),
                       const std::chrono::milliseconds& interval = std::chrono::milliseconds());
 
+    bool setReadBufferSize(size_t size);
+    bool setWriteBufferSize(size_t size);
+
     // Converts an error code to a human readable string.
     // Does not support localization. Used for logs.
     static std::string errorToString(ErrorCode error_code);
