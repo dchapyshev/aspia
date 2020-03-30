@@ -132,7 +132,12 @@ void Client::onAfterThreadRunning()
 
 void Client::onConnected()
 {
-    channel_->setKeepAlive(true, std::chrono::minutes(1), std::chrono::seconds(1));
+    static const size_t kReadBufferSize = 1 * 1024 * 1024; // 1 Mb.
+    static const std::chrono::minutes kKeepAliveTime{ 1 };
+    static const std::chrono::seconds kKeepAliveInterval{ 3 };
+
+    channel_->setReadBufferSize(kReadBufferSize);
+    channel_->setKeepAlive(true, kKeepAliveTime, kKeepAliveInterval);
     channel_->setNoDelay(true);
 
     authenticator_ = std::make_unique<net::ClientAuthenticator>();
