@@ -219,8 +219,10 @@ void DesktopSessionIpc::onEncodeFrame(const proto::internal::EncodeFrame& encode
             codec::parsePixelFormat(serialized_frame.pixel_format()),
             std::move(shared_buffer));
 
+        desktop::Region* updated_region = frame->updatedRegion();
+
         for (int i = 0; i < serialized_frame.dirty_rect_size(); ++i)
-            frame->updatedRegion()->addRect(codec::parseRect(serialized_frame.dirty_rect(i)));
+            updated_region->addRect(codec::parseRect(serialized_frame.dirty_rect(i)));
 
         if (delegate_)
             delegate_->onScreenCaptured(*frame);
