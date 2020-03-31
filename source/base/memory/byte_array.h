@@ -59,6 +59,11 @@ bool parse(const base::ByteArray& buffer, T* message)
 
 int compare(const base::ByteArray& first, const base::ByteArray& second);
 
+inline bool equals(const base::ByteArray& first, const base::ByteArray& second)
+{
+    return compare(first, second) == 0;
+}
+
 std::ostream& operator<<(std::ostream& out, const ByteArray& bytearray);
 
 } // namespace base
