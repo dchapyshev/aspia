@@ -132,7 +132,7 @@ void Client::onAfterThreadRunning()
 
 void Client::onConnected()
 {
-    static const size_t kReadBufferSize = 1 * 1024 * 1024; // 1 Mb.
+    static const size_t kReadBufferSize = 2 * 1024 * 1024; // 2 Mb.
     static const std::chrono::minutes kKeepAliveTime{ 1 };
     static const std::chrono::seconds kKeepAliveInterval{ 3 };
 
