@@ -22,14 +22,19 @@
 #include "base/memory/byte_array.h"
 #include "desktop/desktop_geometry.h"
 
-#include <memory>
-
 namespace desktop {
 
 class MouseCursor
 {
 public:
     MouseCursor(base::ByteArray&& image, const Size& size, const Point& hotspot);
+
+    MouseCursor(MouseCursor&& other) noexcept;
+    MouseCursor& operator=(MouseCursor&& other) noexcept;
+
+    MouseCursor(const MouseCursor& other) = default;
+    MouseCursor& operator=(const MouseCursor& other) = default;
+
     ~MouseCursor() = default;
 
     const Size& size() const { return size_; }
@@ -45,12 +50,12 @@ public:
 
     int stride() const;
 
-    bool isEqual(const MouseCursor& other);
+    bool equals(const MouseCursor& other);
 
 private:
     base::ByteArray image_;
-    const Size size_;
-    const Point hotspot_;
+    Size size_;
+    Point hotspot_;
 };
 
 } // namespace desktop

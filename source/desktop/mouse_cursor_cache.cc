@@ -44,7 +44,7 @@ size_t MouseCursorCache::find(const MouseCursor* mouse_cursor)
     for (size_t index = 0; index < size; ++index)
     {
         // If the cursor is found in the cache.
-        if (cache_.at(index)->isEqual(*mouse_cursor))
+        if (cache_.at(index)->equals(*mouse_cursor))
         {
             // Return its index.
             return index;
