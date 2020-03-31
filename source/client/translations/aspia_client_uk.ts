@@ -370,32 +370,52 @@
 <context>
     <name>FilePanel</name>
     <message>
-        <location filename="../ui/file_panel.ui" line="163"/>
+        <location filename="../ui/file_panel.ui" line="169"/>
+        <source>Up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/file_panel.ui" line="172"/>
         <source>Browse to parent folder (Backspace)</source>
         <translation>Повернутись на каталог вище (Backspace)</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.ui" line="175"/>
+        <location filename="../ui/file_panel.ui" line="181"/>
+        <source>Refresh</source>
+        <translation type="unfinished">Оновити</translation>
+    </message>
+    <message>
+        <location filename="../ui/file_panel.ui" line="184"/>
         <source>Refresh (F5)</source>
         <translation>Оновити (F5)</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.ui" line="190"/>
+        <location filename="../ui/file_panel.ui" line="196"/>
+        <source>New Folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/file_panel.ui" line="199"/>
         <source>Create a new folder</source>
         <translation>Створити новий каталог</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.ui" line="205"/>
+        <location filename="../ui/file_panel.ui" line="211"/>
+        <source>Delete</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/file_panel.ui" line="214"/>
         <source>Delete selected object(s) (Delete)</source>
         <translation>Видалити обрані об&apos;єкти (Delete)</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.ui" line="220"/>
+        <location filename="../ui/file_panel.ui" line="229"/>
         <source>Send selected object(s) (F11)</source>
         <translation>Надіслати обрані об&apos;єкти (F11)</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.ui" line="217"/>
+        <location filename="../ui/file_panel.ui" line="226"/>
         <source>Send</source>
         <translation>Надіслати</translation>
     </message>
