@@ -24,6 +24,7 @@
 #include "base/strings/unicode.h"
 #include "ipc/shared_memory_factory_proxy.h"
 
+#include <atomic>
 #include <random>
 
 #include <AclAPI.h>
@@ -31,6 +32,21 @@
 namespace ipc {
 
 namespace {
+
+int randomInt()
+{
+    std::random_device device;
+    std::mt19937 generator(device());
+
+    std::uniform_int_distribution<> distance(0, std::numeric_limits<int>::max());
+    return distance(generator);
+}
+
+int createUniqueId()
+{
+    static std::atomic_int last_id = randomInt();
+    return last_id++;
+}
 
 std::u16string createFilePath(int id)
 {
@@ -178,15 +194,9 @@ std::unique_ptr<SharedMemory> SharedMemory::create(
     base::win::ScopedHandle file;
     int id;
 
-    std::random_device device;
-    std::mt19937 generator(device());
-
-    std::uniform_int_distribution<> distance(0, std::numeric_limits<int>::max());
-
     for (int i = 0; i < kRetryCount; ++i)
     {
-        id = distance(generator);
-
+        id = createUniqueId();
         if (createFileMapping(mode, id, size, &file))
             break;
     }
