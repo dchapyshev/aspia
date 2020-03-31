@@ -64,7 +64,7 @@ public:
         return Point(x() - other.x(), y() - other.y());
     }
 
-    bool isEqual(const Point& other) const
+    bool equals(const Point& other) const
     {
         return (x_ == other.x_ && y_ == other.y_);
     }
@@ -79,12 +79,13 @@ public:
 
     Point& operator=(const Point& other)
     {
-        set(other.x_, other.y_);
+        if (&other != this)
+            set(other.x_, other.y_);
         return *this;
     }
 
-    bool operator!=(const Point& other) const { return !isEqual(other); }
-    bool operator==(const Point& other) const { return isEqual(other); }
+    bool operator!=(const Point& other) const { return !equals(other); }
+    bool operator==(const Point& other) const { return equals(other); }
 
 private:
     int32_t x_ = 0;
@@ -126,7 +127,7 @@ public:
         return width_ <= 0 || height_ <= 0;
     }
 
-    bool isEqual(const Size& other) const
+    bool equals(const Size& other) const
     {
         return width_ == other.width_ && height_ == other.height_;
     }
@@ -139,12 +140,13 @@ public:
 
     Size& operator=(const Size& other)
     {
-        set(other.width_, other.height_);
+        if (&other != this)
+            set(other.width_, other.height_);
         return *this;
     }
 
-    bool operator!=(const Size& other) const { return !isEqual(other); }
-    bool operator==(const Size& other) const { return isEqual(other); }
+    bool operator!=(const Size& other) const { return !equals(other); }
+    bool operator==(const Size& other) const { return equals(other); }
 
 private:
     int32_t width_ = 0;
@@ -201,7 +203,7 @@ public:
 
     bool isEmpty() const { return left_ >= right_ || top_ >= bottom_; }
 
-    bool isEqual(const Rect& other) const
+    bool equals(const Rect& other) const
     {
         return left_ == other.left_  && top_ == other.top_   &&
                right_ == other.right_ && bottom_ == other.bottom_;
@@ -245,8 +247,8 @@ public:
 
     Rect& operator=(const Rect& other);
 
-    bool operator!=(const Rect& other) const { return !isEqual(other); }
-    bool operator==(const Rect& other) const { return isEqual(other); }
+    bool operator!=(const Rect& other) const { return !equals(other); }
+    bool operator==(const Rect& other) const { return equals(other); }
 
 private:
     Rect(int32_t left, int32_t top, int32_t right, int32_t bottom)
