@@ -81,13 +81,29 @@ void DesktopEnvironment::disableFontSmoothing()
 
 void DesktopEnvironment::disableEffects()
 {
-    SystemParametersInfoW(SPI_SETDRAGFULLWINDOWS, FALSE, 0, SPIF_SENDCHANGE);
+    BOOL drop_shadow = TRUE;
+    if (SystemParametersInfoW(SPI_GETDROPSHADOW, 0, &drop_shadow, 0))
+    {
+        if (drop_shadow)
+        {
+            SystemParametersInfoW(SPI_SETDROPSHADOW, 0, FALSE, SPIF_SENDCHANGE);
+            drop_shadow_changed_ = true;
+        }
+    }
 
     ANIMATIONINFO animation;
     animation.cbSize = sizeof(animation);
-    animation.iMinAnimate = FALSE;
-    SystemParametersInfoW(SPI_SETANIMATION, sizeof(animation), &animation, SPIF_SENDCHANGE);
+    if (SystemParametersInfoW(SPI_GETANIMATION, sizeof(animation), &animation, 0))
+    {
+        if (animation.iMinAnimate)
+        {
+            animation.iMinAnimate = FALSE;
+            SystemParametersInfoW(SPI_SETANIMATION, sizeof(animation), &animation, SPIF_SENDCHANGE);
+            animation_changed_ = true;
+        }
+    }
 
+    SystemParametersInfoW(SPI_SETDRAGFULLWINDOWS, FALSE, 0, SPIF_SENDCHANGE);
     SystemParametersInfoW(SPI_SETMENUANIMATION, 0, FALSE, SPIF_SENDCHANGE);
     SystemParametersInfoW(SPI_SETTOOLTIPANIMATION, 0, FALSE, SPIF_SENDCHANGE);
     SystemParametersInfoW(SPI_SETCOMBOBOXANIMATION, 0, FALSE, SPIF_SENDCHANGE);
@@ -101,6 +117,23 @@ void DesktopEnvironment::disableEffects()
 
 void DesktopEnvironment::revertAll()
 {
+    if (drop_shadow_changed_)
+    {
+        SystemParametersInfoW(SPI_SETDROPSHADOW, 0, reinterpret_cast<PVOID>(TRUE), SPIF_SENDCHANGE);
+        drop_shadow_changed_ = false;
+    }
+
+    if (animation_changed_)
+    {
+        ANIMATIONINFO animation;
+        animation.cbSize = sizeof(animation);
+        animation.iMinAnimate = TRUE;
+
+        SystemParametersInfoW(SPI_SETANIMATION, sizeof(animation), &animation, SPIF_SENDCHANGE);
+
+        animation_changed_ = false;
+    }
+
     base::win::ScopedHandle user_token;
 
     if (!WTSQueryUserToken(WTSGetActiveConsoleSessionId(), user_token.recieve()))

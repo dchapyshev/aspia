@@ -45,6 +45,9 @@ private:
     bool font_smoothing_ = false;
     bool effects_ = false;
 
+    bool drop_shadow_changed_ = false;
+    bool animation_changed_ = false;
+
     DISALLOW_COPY_AND_ASSIGN(DesktopEnvironment);
 };
 
