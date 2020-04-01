@@ -25,25 +25,20 @@
 #include "desktop/screen_capturer_dxgi.h"
 #include "desktop/screen_capturer_gdi.h"
 #include "desktop/screen_capturer_mirror.h"
-#include "desktop/win/font_smoothing_disabler.h"
-#include "desktop/win/effects_disabler.h"
-#include "desktop/win/wallpaper_disabler.h"
+#include "desktop/win/desktop_environment.h"
 #include "ipc/shared_memory_factory.h"
 
 namespace desktop {
 
 ScreenCapturerWrapper::ScreenCapturerWrapper(Delegate* delegate)
-    : delegate_(delegate)
+    : delegate_(delegate),
+      desktop_environment_(std::make_unique<DesktopEnvironment>())
 {
     // If the monitor is turned off, this call will turn it on.
     SetThreadExecutionState(ES_DISPLAY_REQUIRED);
 
     switchToInputDesktop();
     selectCapturer();
-
-    wallpaper_disabler_ = std::make_unique<WallpaperDisabler>();
-    effects_disabler_ = std::make_unique<EffectsDisabler>();
-    font_smoothing_disabler_ = std::make_unique<FontSmoothingDisabler>();
 }
 
 ScreenCapturerWrapper::~ScreenCapturerWrapper() = default;
@@ -103,39 +98,17 @@ void ScreenCapturerWrapper::setSharedMemoryFactory(ipc::SharedMemoryFactory* sha
 
 void ScreenCapturerWrapper::enableWallpaper(bool enable)
 {
-    if (enable == enable_wallpaper_)
-        return;
-
-    enable_wallpaper_ = enable;
-    wallpaper_disabler_.reset();
-
-    if (!enable)
-        wallpaper_disabler_ = std::make_unique<WallpaperDisabler>();
+    desktop_environment_->setWallpaper(enable);
 }
 
 void ScreenCapturerWrapper::enableEffects(bool enable)
 {
-    if (enable == enable_effects_)
-        return;
-
-    enable_effects_ = enable;
-    effects_disabler_.reset();
-
-    if (!enable)
-        effects_disabler_ = std::make_unique<EffectsDisabler>();
-
+    desktop_environment_->setEffects(enable);
 }
 
 void ScreenCapturerWrapper::enableFontSmoothing(bool enable)
 {
-    if (enable == enable_font_smoothing_)
-        return;
-
-    enable_font_smoothing_ = enable;
-    font_smoothing_disabler_.reset();
-
-    if (!enable)
-        font_smoothing_disabler_ = std::make_unique<FontSmoothingDisabler>();
+    desktop_environment_->setFontSmoothing(enable);
 }
 
 void ScreenCapturerWrapper::selectCapturer()

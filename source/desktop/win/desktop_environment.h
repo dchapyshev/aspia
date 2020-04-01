@@ -16,26 +16,38 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef DESKTOP__WIN__FONT_SMOOTHING_DISABLER_H
-#define DESKTOP__WIN__FONT_SMOOTHING_DISABLER_H
+#ifndef DESKTOP__WIN__DESKTOP_ENVIRONMENT_H
+#define DESKTOP__WIN__DESKTOP_ENVIRONMENT_H
 
 #include "base/macros_magic.h"
 
 namespace desktop {
 
-class FontSmoothingDisabler
+class DesktopEnvironment
 {
 public:
-    FontSmoothingDisabler();
-    ~FontSmoothingDisabler();
+    DesktopEnvironment();
+    ~DesktopEnvironment();
+
+    void setWallpaper(bool enable);
+    void setFontSmoothing(bool enable);
+    void setEffects(bool enable);
 
 private:
-    bool is_changed_ = false;
-    bool is_enabled_ = true;
+    void disableWallpaper();
+    void disableFontSmoothing();
+    void disableEffects();
 
-    DISALLOW_COPY_AND_ASSIGN(FontSmoothingDisabler);
+    void revertAll();
+    void applyNewSettings();
+
+    bool wallpaper_ = false;
+    bool font_smoothing_ = false;
+    bool effects_ = false;
+
+    DISALLOW_COPY_AND_ASSIGN(DesktopEnvironment);
 };
 
 } // namespace desktop
 
-#endif // DESKTOP__WIN__FONT_SMOOTHING_DISABLER_H
+#endif // DESKTOP__WIN__DESKTOP_ENVIRONMENT_H

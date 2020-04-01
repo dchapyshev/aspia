@@ -88,6 +88,8 @@ list(APPEND SOURCE_DESKTOP_WIN
     win/cursor.h
     win/d3d_device.cc
     win/d3d_device.h
+    win/desktop_environment.cc
+    win/desktop_environment.h
     win/dfmirage.h
     win/dfmirage_helper.cc
     win/dfmirage_helper.h
@@ -109,19 +111,13 @@ list(APPEND SOURCE_DESKTOP_WIN
     win/dxgi_texture_mapping.h
     win/dxgi_texture_staging.cc
     win/dxgi_texture_staging.h
-    win/effects_disabler.cc
-    win/effects_disabler.h
-    win/font_smoothing_disabler.cc
-    win/font_smoothing_disabler.h
     win/mirror_helper.cc
     win/mirror_helper.h
     win/mv2.h
     win/mv2_helper.cc
     win/mv2_helper.h
     win/screen_capture_utils.cc
-    win/screen_capture_utils.h
-    win/wallpaper_disabler.cc
-    win/wallpaper_disabler.h)
+    win/screen_capture_utils.h)
 
 list(APPEND SOURCE_DESKTOP_WIN_UNIT_TESTS
     win/cursor_unittest.cc
