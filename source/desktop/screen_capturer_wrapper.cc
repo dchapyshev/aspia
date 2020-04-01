@@ -24,7 +24,6 @@
 #include "desktop/mouse_cursor.h"
 #include "desktop/screen_capturer_dxgi.h"
 #include "desktop/screen_capturer_gdi.h"
-#include "desktop/screen_capturer_mirror.h"
 #include "desktop/win/desktop_environment.h"
 #include "ipc/shared_memory_factory.h"
 
@@ -117,28 +116,18 @@ void ScreenCapturerWrapper::selectCapturer()
 
     cursor_capturer_ = std::make_unique<CursorCapturerWin>();
 
-    // Mirror screen capture is available only in Windows 7/2008 R2.
-    if (base::win::windowsVersion() == base::win::VERSION_WIN7)
+    if (base::win::windowsVersion() >= base::win::VERSION_WIN8)
     {
-        std::unique_ptr<ScreenCapturerMirror> capturer_mirror =
-            std::make_unique<ScreenCapturerMirror>();
-
-        if (capturer_mirror->isSupported())
+        // Desktop Duplication API is available in Windows 8+.
+        std::unique_ptr<ScreenCapturerDxgi> capturer_dxgi = std::make_unique<ScreenCapturerDxgi>();
+        if (capturer_dxgi->isSupported())
         {
-            LOG(LS_INFO) << "Using mirror capturer";
-            screen_capturer_ = std::move(capturer_mirror);
-            return;
+            LOG(LS_INFO) << "Using DXGI capturer";
+            screen_capturer_ = std::move(capturer_dxgi);
         }
     }
 
-    // Desktop Duplication API is available in Windows 8+.
-    std::unique_ptr<ScreenCapturerDxgi> capturer_dxgi = std::make_unique<ScreenCapturerDxgi>();
-    if (capturer_dxgi->isSupported())
-    {
-        LOG(LS_INFO) << "Using DXGI capturer";
-        screen_capturer_ = std::move(capturer_dxgi);
-    }
-    else
+    if (!screen_capturer_)
     {
         LOG(LS_INFO) << "Using GDI capturer";
         screen_capturer_ = std::make_unique<ScreenCapturerGdi>();

@@ -63,8 +63,6 @@ list(APPEND SOURCE_DESKTOP
     screen_capturer_dxgi.h
     screen_capturer_gdi.cc
     screen_capturer_gdi.h
-    screen_capturer_mirror.cc
-    screen_capturer_mirror.h
     screen_capturer_wrapper.cc
     screen_capturer_wrapper.h
     screen_settings_tracker.cc
@@ -90,9 +88,6 @@ list(APPEND SOURCE_DESKTOP_WIN
     win/d3d_device.h
     win/desktop_environment.cc
     win/desktop_environment.h
-    win/dfmirage.h
-    win/dfmirage_helper.cc
-    win/dfmirage_helper.h
     win/display_configuration_monitor.cc
     win/display_configuration_monitor.h
     win/dxgi_adapter_duplicator.cc
@@ -111,11 +106,6 @@ list(APPEND SOURCE_DESKTOP_WIN
     win/dxgi_texture_mapping.h
     win/dxgi_texture_staging.cc
     win/dxgi_texture_staging.h
-    win/mirror_helper.cc
-    win/mirror_helper.h
-    win/mv2.h
-    win/mv2_helper.cc
-    win/mv2_helper.h
     win/screen_capture_utils.cc
     win/screen_capture_utils.h)
 
