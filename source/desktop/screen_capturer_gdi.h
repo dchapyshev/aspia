@@ -52,6 +52,8 @@ private:
     const Frame* captureImage();
     bool prepareCaptureResources();
 
+    bool composition_changed_ = false;
+
     ScreenId current_screen_id_ = kFullDesktopScreenId;
     std::wstring current_device_key_;
 

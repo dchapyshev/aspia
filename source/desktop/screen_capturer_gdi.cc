@@ -32,7 +32,11 @@ namespace desktop {
 
 ScreenCapturerGdi::ScreenCapturerGdi() = default;
 
-ScreenCapturerGdi::~ScreenCapturerGdi() = default;
+ScreenCapturerGdi::~ScreenCapturerGdi()
+{
+    if (composition_changed_)
+        DwmEnableComposition(DWM_EC_ENABLECOMPOSITION);
+}
 
 int ScreenCapturerGdi::screenCount()
 {
@@ -153,10 +157,16 @@ bool ScreenCapturerGdi::prepareCaptureResources()
     {
         DCHECK(!memory_dc_);
 
-        // Vote to disable Aero composited desktop effects while capturing.
-        // Windows will restore Aero automatically if the process exits.
-        // This has no effect under Windows 8 or higher. See crbug.com/124018.
-        DwmEnableComposition(DWM_EC_DISABLECOMPOSITION);
+        BOOL enabled;
+        HRESULT hr = DwmIsCompositionEnabled(&enabled);
+        if (SUCCEEDED(hr) && enabled)
+        {
+            // Vote to disable Aero composited desktop effects while capturing.
+            // Windows will restore Aero automatically if the process exits.
+            // This has no effect under Windows 8 or higher.
+            DwmEnableComposition(DWM_EC_DISABLECOMPOSITION);
+            composition_changed_ = true;
+        }
 
         // Create GDI device contexts to capture from the desktop into memory.
         desktop_dc_ = std::make_unique<base::win::ScopedGetDC>(nullptr);
