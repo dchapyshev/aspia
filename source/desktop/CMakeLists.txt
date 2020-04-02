@@ -50,8 +50,6 @@ list(APPEND SOURCE_DESKTOP
     differ.h
     mouse_cursor.cc
     mouse_cursor.h
-    mouse_cursor_cache.cc
-    mouse_cursor_cache.h
     pixel_format.cc
     pixel_format.h
     resolution_tracker.cc

@@ -19,9 +19,17 @@
 #include "codec/cursor_decoder.h"
 
 #include "base/logging.h"
-#include "desktop/mouse_cursor_cache.h"
+#include "desktop/mouse_cursor.h"
+#include "proto/desktop.pb.h"
 
 namespace codec {
+
+namespace {
+
+constexpr size_t kMinCacheSize = 2;
+constexpr size_t kMaxCacheSize = 31;
+
+} // namespace
 
 CursorDecoder::CursorDecoder()
     : stream_(ZSTD_createDStream())
@@ -52,7 +60,7 @@ base::ByteArray CursorDecoder::decompressCursor(const proto::CursorShape& cursor
         ret = ZSTD_decompressStream(stream_.get(), &output, &input);
         if (ZSTD_isError(ret))
         {
-            LOG(LS_WARNING) << "ZSTD_decompressStream failed: " << ZSTD_getErrorName(ret);
+            LOG(LS_ERROR) << "ZSTD_decompressStream failed: " << ZSTD_getErrorName(ret);
             return base::ByteArray();
         }
     }
@@ -72,12 +80,13 @@ std::shared_ptr<desktop::MouseCursor> CursorDecoder::decode(const proto::CursorS
     else
     {
         desktop::Size size(cursor_shape.width(), cursor_shape.height());
+        desktop::Point hotspot(cursor_shape.hotspot_x(), cursor_shape.hotspot_y());
 
         if (size.width()  <= 0 || size.width()  > (std::numeric_limits<int16_t>::max() / 2) ||
             size.height() <= 0 || size.height() > (std::numeric_limits<int16_t>::max() / 2))
         {
-            LOG(LS_WARNING) << "Cursor dimensions are out of bounds for SetCursor: "
-                            << size.width() << "x" << size.height();
+            LOG(LS_ERROR) << "Cursor dimensions are out of bounds for SetCursor: "
+                          << size.width() << "x" << size.height();
             return nullptr;
         }
 
@@ -86,31 +95,46 @@ std::shared_ptr<desktop::MouseCursor> CursorDecoder::decode(const proto::CursorS
             return nullptr;
 
         std::unique_ptr<desktop::MouseCursor> mouse_cursor =
-            std::make_unique<desktop::MouseCursor>(
-                std::move(image),
-                size,
-                desktop::Point(cursor_shape.hotspot_x(), cursor_shape.hotspot_y()));
+            std::make_unique<desktop::MouseCursor>(std::move(image), size, hotspot);
 
         if (cursor_shape.flags() & proto::CursorShape::RESET_CACHE)
         {
             size_t cache_size = cursor_shape.flags() & 0x1F;
 
-            if (!desktop::MouseCursorCache::isValidCacheSize(cache_size))
+            if (cache_size < kMinCacheSize || cache_size > kMaxCacheSize)
                 return nullptr;
 
-            cache_ = std::make_unique<desktop::MouseCursorCache>(cache_size);
+            cache_size_.emplace(cache_size);
+            cache_.reserve(cache_size);
+            cache_.clear();
         }
 
-        if (!cache_)
+        if (!cache_size_.has_value())
         {
-            LOG(LS_WARNING) << "Host did not send cache reset command";
+            LOG(LS_ERROR) << "Host did not send cache reset command";
             return nullptr;
         }
 
-        cache_index = cache_->add(std::move(mouse_cursor));
+        // Add the cursor to the end of the list.
+        cache_.emplace_back(std::move(mouse_cursor));
+
+        // If the current cache size exceeds the maximum cache size.
+        if (cache_.size() > cache_size_.value())
+        {
+            // Delete the first element in the cache (the oldest one).
+            cache_.erase(cache_.begin());
+        }
+
+        cache_index = cache_.size() - 1;
     }
 
-    return cache_->get(cache_index);
+    if (cache_index >= cache_.size())
+    {
+        LOG(LS_ERROR) << "Invalid cache index: " << cache_index;
+        return nullptr;
+    }
+
+    return cache_.at(cache_index);
 }
 
 } // namespace codec

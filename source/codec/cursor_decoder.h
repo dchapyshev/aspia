@@ -22,14 +22,16 @@
 #include "base/macros_magic.h"
 #include "base/memory/byte_array.h"
 #include "codec/scoped_zstd_stream.h"
-#include "proto/desktop.pb.h"
 
-#include <memory>
+#include <optional>
 
 namespace desktop {
 class MouseCursor;
-class MouseCursorCache;
-} // namespace aspia
+} // namespace desktop
+
+namespace proto {
+class CursorShape;
+} // namespace proto
 
 namespace codec {
 
@@ -44,7 +46,8 @@ public:
 private:
     base::ByteArray decompressCursor(const proto::CursorShape& cursor_shape);
 
-    std::unique_ptr<desktop::MouseCursorCache> cache_;
+    std::vector<std::shared_ptr<desktop::MouseCursor>> cache_;
+    std::optional<size_t> cache_size_;
     ScopedZstdDStream stream_;
 
     DISALLOW_COPY_AND_ASSIGN(CursorDecoder);
