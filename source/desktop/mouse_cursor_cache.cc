@@ -73,7 +73,7 @@ size_t MouseCursorCache::add(std::shared_ptr<MouseCursor> mouse_cursor)
 
 std::shared_ptr<MouseCursor> MouseCursorCache::get(size_t index)
 {
-    if (index > kMaxCacheSize)
+    if (index >= cache_size_)
     {
         LOG(LS_WARNING) << "Invalid cache index: " << index;
         return nullptr;
