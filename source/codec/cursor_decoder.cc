@@ -74,6 +74,12 @@ std::shared_ptr<desktop::MouseCursor> CursorDecoder::decode(const proto::CursorS
 
     if (cursor_shape.flags() & proto::CursorShape::CACHE)
     {
+        if (!cache_size_.has_value())
+        {
+            LOG(LS_ERROR) << "Host did not send cache reset command";
+            return nullptr;
+        }
+
         // Bits 0-4 contain the cursor position in the cache.
         cache_index = cursor_shape.flags() & 0x1F;
     }
