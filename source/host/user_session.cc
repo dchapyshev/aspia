@@ -262,7 +262,7 @@ void UserSession::onScreenCaptured(const desktop::Frame& frame)
         static_cast<ClientSessionDesktop*>(client.get())->encodeFrame(frame);
 }
 
-void UserSession::onCursorCaptured(std::shared_ptr<desktop::MouseCursor> mouse_cursor)
+void UserSession::onCursorCaptured(const desktop::MouseCursor& mouse_cursor)
 {
     for (const auto& client : desktop_clients_)
         static_cast<ClientSessionDesktop*>(client.get())->encodeMouseCursor(mouse_cursor);

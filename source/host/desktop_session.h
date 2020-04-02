@@ -43,7 +43,7 @@ public:
         virtual void onDesktopSessionStarted() = 0;
         virtual void onDesktopSessionStopped() = 0;
         virtual void onScreenCaptured(const desktop::Frame& frame) = 0;
-        virtual void onCursorCaptured(std::shared_ptr<desktop::MouseCursor> mouse_cursor) = 0;
+        virtual void onCursorCaptured(const desktop::MouseCursor& mouse_cursor) = 0;
         virtual void onScreenListChanged(const proto::ScreenList& list) = 0;
         virtual void onClipboardEvent(const proto::ClipboardEvent& event) = 0;
     };

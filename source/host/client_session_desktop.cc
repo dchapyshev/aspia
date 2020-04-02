@@ -131,14 +131,14 @@ void ClientSessionDesktop::encodeFrame(const desktop::Frame& frame)
     sendMessage(base::serialize(outgoing_message_));
 }
 
-void ClientSessionDesktop::encodeMouseCursor(std::shared_ptr<desktop::MouseCursor> mouse_cursor)
+void ClientSessionDesktop::encodeMouseCursor(const desktop::MouseCursor& mouse_cursor)
 {
     if (!cursor_encoder_)
         return;
 
     outgoing_message_.Clear();
 
-    if (cursor_encoder_->encode(std::move(mouse_cursor), outgoing_message_.mutable_cursor_shape()))
+    if (cursor_encoder_->encode(mouse_cursor, outgoing_message_.mutable_cursor_shape()))
         sendMessage(base::serialize(outgoing_message_));
 }
 

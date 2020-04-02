@@ -17,17 +17,25 @@
 //
 
 #include "codec/cursor_encoder.h"
+
 #include "base/logging.h"
+#include "desktop/mouse_cursor.h"
+#include "proto/desktop.pb.h"
+
+#include <libyuv/compare.h>
 
 namespace codec {
 
 namespace {
 
 // Cache size can be in the range from 2 to 31.
-constexpr uint8_t kCacheSize = 16;
+constexpr size_t kCacheSize = 31;
 
 // The compression ratio can be in the range of 1 to 22.
 constexpr int kCompressionRatio = 8;
+
+// Recommended seed value for a hash.
+constexpr uint32_t kHashingSeed = 5381;
 
 uint8_t* outputBuffer(proto::CursorShape* cursor_shape, size_t size)
 {
@@ -38,21 +46,25 @@ uint8_t* outputBuffer(proto::CursorShape* cursor_shape, size_t size)
 } // namespace
 
 CursorEncoder::CursorEncoder()
-    : stream_(ZSTD_createCStream()),
-      cache_(kCacheSize)
+    : stream_(ZSTD_createCStream())
 {
     static_assert(kCacheSize >= 2 && kCacheSize <= 31);
     static_assert(kCompressionRatio >= 1 && kCompressionRatio <= 22);
+
+    // Reserve memory for the maximum number of elements in the cache.
+    cache_.reserve(kCacheSize);
 }
 
-bool CursorEncoder::compressCursor(proto::CursorShape* cursor_shape,
-                                   const desktop::MouseCursor* mouse_cursor)
+CursorEncoder::~CursorEncoder() = default;
+
+bool CursorEncoder::compressCursor(
+    const desktop::MouseCursor& mouse_cursor, proto::CursorShape* cursor_shape)
 {
     size_t ret = ZSTD_initCStream(stream_.get(), kCompressionRatio);
     DCHECK(!ZSTD_isError(ret)) << ZSTD_getErrorName(ret);
 
-    const size_t input_size = mouse_cursor->constImage().size();
-    const uint8_t* input_data = mouse_cursor->constImage().data();
+    const size_t input_size = mouse_cursor.constImage().size();
+    const uint8_t* input_data = mouse_cursor.constImage().data();
 
     const size_t output_size = ZSTD_compressBound(input_size);
     uint8_t* output_data = outputBuffer(cursor_shape, output_size);
@@ -65,7 +77,7 @@ bool CursorEncoder::compressCursor(proto::CursorShape* cursor_shape,
         ret = ZSTD_compressStream(stream_.get(), &output, &input);
         if (ZSTD_isError(ret))
         {
-            LOG(LS_WARNING) << "ZSTD_compressStream failed: " << ZSTD_getErrorName(ret);
+            LOG(LS_ERROR) << "ZSTD_compressStream failed: " << ZSTD_getErrorName(ret);
             return false;
         }
     }
@@ -77,46 +89,61 @@ bool CursorEncoder::compressCursor(proto::CursorShape* cursor_shape,
     return true;
 }
 
-bool CursorEncoder::encode(std::shared_ptr<desktop::MouseCursor> mouse_cursor,
-                           proto::CursorShape* cursor_shape)
+bool CursorEncoder::encode(
+    const desktop::MouseCursor& mouse_cursor, proto::CursorShape* cursor_shape)
 {
-    if (!mouse_cursor)
-        return false;
-
-    const desktop::Size& size = mouse_cursor->size();
+    const desktop::Size& size = mouse_cursor.size();
     const int kMaxSize = std::numeric_limits<int16_t>::max() / 2;
 
+    // Check the correctness of the cursor size.
     if (size.width() <= 0 || size.width() > kMaxSize ||
         size.height() <= 0 || size.height() > kMaxSize)
     {
-        LOG(LS_WARNING) << "Wrong size of cursor: " << size.width() << "x" << size.height();
+        LOG(LS_ERROR) << "Wrong size of cursor: " << size.width() << "x" << size.height();
         return false;
     }
 
-    size_t index = cache_.find(mouse_cursor.get());
+    // Calculate the hash of the cursor to search in the cache.
+    uint32_t hash = libyuv::HashDjb2(mouse_cursor.constImage().data(),
+                                     mouse_cursor.constImage().size(),
+                                     kHashingSeed);
 
-    // The cursor is not found in the cache.
-    if (index == desktop::MouseCursorCache::kInvalidIndex)
+    // Trying to find cursor in cache.
+    for (size_t index = 0; index < cache_.size(); ++index)
     {
-        cursor_shape->set_width(size.width());
-        cursor_shape->set_height(size.height());
-        cursor_shape->set_hotspot_x(mouse_cursor->hotSpot().x());
-        cursor_shape->set_hotspot_y(mouse_cursor->hotSpot().y());
-
-        if (!compressCursor(cursor_shape, mouse_cursor.get()))
-            return false;
-
-        // If the cache is empty, then set the cache reset flag on the client
-        // side and pass the maximum cache size.
-        cursor_shape->set_flags(cache_.isEmpty() ?
-            (proto::CursorShape::RESET_CACHE | (kCacheSize & 0x1F)) : 0);
-
-        // Add the cursor to the cache.
-        cache_.add(std::move(mouse_cursor));
+        if (cache_[index] == hash)
+        {
+            // Cursor found in cache.
+            cursor_shape->set_flags(proto::CursorShape::CACHE | (index & 0x1F));
+            return true;
+        }
     }
-    else
+
+    // Set cursor parameters.
+    cursor_shape->set_width(size.width());
+    cursor_shape->set_height(size.height());
+    cursor_shape->set_hotspot_x(mouse_cursor.hotSpot().x());
+    cursor_shape->set_hotspot_y(mouse_cursor.hotSpot().y());
+
+    // Compress the cursor using ZSTD.
+    if (!compressCursor(mouse_cursor, cursor_shape))
+        return false;
+
+    if (cache_.empty())
     {
-        cursor_shape->set_flags(proto::CursorShape::CACHE | (index & 0x1F));
+        // If the cache is empty, then set the cache reset flag on the client side and pass the
+        // maximum cache size.
+        cursor_shape->set_flags(proto::CursorShape::RESET_CACHE | (kCacheSize & 0x1F));
+    }
+
+    // Add the cursor to the cache.
+    cache_.emplace_back(hash);
+
+    // If the current cache size exceeds the maximum cache size.
+    if (cache_.size() > kCacheSize)
+    {
+        // Delete the first element in the cache (the oldest one).
+        cache_.erase(cache_.begin());
     }
 
     return true;

@@ -21,8 +21,16 @@
 
 #include "base/macros_magic.h"
 #include "codec/scoped_zstd_stream.h"
-#include "desktop/mouse_cursor_cache.h"
-#include "proto/desktop.pb.h"
+
+#include <vector>
+
+namespace desktop {
+class MouseCursor;
+} // namespace desktop
+
+namespace proto {
+class CursorShape;
+} // namespace proto
 
 namespace codec {
 
@@ -30,17 +38,17 @@ class CursorEncoder
 {
 public:
     CursorEncoder();
-    ~CursorEncoder() = default;
+    ~CursorEncoder();
 
-    bool encode(std::shared_ptr<desktop::MouseCursor> mouse_cursor,
+    bool encode(const desktop::MouseCursor& mouse_cursor,
                 proto::CursorShape* cursor_shape);
 
 private:
-    bool compressCursor(proto::CursorShape* cursor_shape,
-                        const desktop::MouseCursor* mouse_cursor);
+    bool compressCursor(const desktop::MouseCursor& mouse_cursor,
+                        proto::CursorShape* cursor_shape);
 
     ScopedZstdCStream stream_;
-    desktop::MouseCursorCache cache_;
+    std::vector<uint32_t> cache_;
 
     DISALLOW_COPY_AND_ASSIGN(CursorEncoder);
 };
