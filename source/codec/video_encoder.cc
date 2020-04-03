@@ -28,12 +28,13 @@ void VideoEncoder::fillPacketInfo(proto::VideoEncoding encoding,
 {
     packet->set_encoding(encoding);
 
-    if (screen_settings_tracker_.isSizeChanged(frame->size()))
+    if (last_size_ != frame->size())
     {
-        proto::Rect* rect = packet->mutable_format()->mutable_screen_rect();
+        last_size_ = frame->size();
 
-        rect->set_width(frame->size().width());
-        rect->set_height(frame->size().height());
+        proto::Rect* rect = packet->mutable_format()->mutable_screen_rect();
+        rect->set_width(last_size_.width());
+        rect->set_height(last_size_.height());
     }
 }
 

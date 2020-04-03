@@ -19,6 +19,7 @@
 #ifndef CODEC__VIDEO_ENCODER_ZSTD_H
 #define CODEC__VIDEO_ENCODER_ZSTD_H
 
+#include "base/macros_magic.h"
 #include "base/memory/byte_array.h"
 #include "codec/scoped_zstd_stream.h"
 #include "codec/video_encoder.h"
