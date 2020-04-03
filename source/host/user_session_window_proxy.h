@@ -21,6 +21,10 @@
 
 #include "host/user_session_agent.h"
 
+namespace base {
+class TaskRunner;
+} // namespace base
+
 namespace host {
 
 class UserSessionWindow;

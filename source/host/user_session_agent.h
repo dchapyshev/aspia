@@ -19,7 +19,6 @@
 #ifndef HOST__USER_SESSION_AGENT_H
 #define HOST__USER_SESSION_AGENT_H
 
-#include "base/threading/thread.h"
 #include "ipc/channel.h"
 #include "proto/host_internal.pb.h"
 
@@ -32,9 +31,7 @@ namespace host {
 class UserSessionAgentProxy;
 class UserSessionWindowProxy;
 
-class UserSessionAgent
-    : public base::Thread::Delegate,
-      public ipc::Channel::Listener
+class UserSessionAgent : public ipc::Channel::Listener
 {
 public:
     enum class State
@@ -67,13 +64,7 @@ public:
 
     void start();
 
-    std::shared_ptr<UserSessionAgentProxy> agentProxy() const { return agent_proxy_; }
-
 protected:
-    // base::Thread::Delegate implementation.
-    void onBeforeThreadRunning() override;
-    void onAfterThreadRunning() override;
-
     // ipc::Channel::Listener implementation.
     void onDisconnected() override;
     void onMessageReceived(const base::ByteArray& buffer) override;
@@ -84,9 +75,6 @@ private:
     void updateCredentials(proto::internal::CredentialsRequest::Type request_type);
     void killClient(const std::string& uuid);
 
-    base::Thread io_thread_;
-
-    std::shared_ptr<UserSessionAgentProxy> agent_proxy_;
     std::shared_ptr<UserSessionWindowProxy> window_proxy_;
     std::unique_ptr<ipc::Channel> ipc_channel_;
 

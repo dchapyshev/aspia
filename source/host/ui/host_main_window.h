@@ -19,7 +19,6 @@
 #ifndef HOST__UI__HOST_MAIN_WINDOW_H
 #define HOST__UI__HOST_MAIN_WINDOW_H
 
-#include "host/user_session_agent.h"
 #include "host/user_session_window.h"
 #include "ui_host_main_window.h"
 
@@ -30,6 +29,7 @@
 namespace host {
 
 class NotifierWindow;
+class UserSessionAgentProxy;
 
 class MainWindow
     : public QMainWindow,
@@ -75,7 +75,6 @@ private:
     QMenu tray_menu_;
     QPointer<NotifierWindow> notifier_;
 
-    std::unique_ptr<UserSessionAgent> agent_;
     std::shared_ptr<UserSessionAgentProxy> agent_proxy_;
     std::shared_ptr<UserSessionWindowProxy> window_proxy_;
 

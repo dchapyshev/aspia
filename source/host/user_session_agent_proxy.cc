@@ -19,13 +19,14 @@
 #include "host/user_session_agent_proxy.h"
 
 #include "base/logging.h"
+#include "base/task_runner.h"
 
 namespace host {
 
 UserSessionAgentProxy::UserSessionAgentProxy(
-    std::shared_ptr<base::TaskRunner> io_task_runner, UserSessionAgent* agent)
+    std::shared_ptr<base::TaskRunner> io_task_runner, std::unique_ptr<UserSessionAgent> agent)
     : io_task_runner_(std::move(io_task_runner)),
-      agent_(agent)
+      agent_(std::move(agent))
 {
     DCHECK(io_task_runner_ && agent_);
     DCHECK(io_task_runner_->belongsToCurrentThread());
@@ -33,10 +34,27 @@ UserSessionAgentProxy::UserSessionAgentProxy(
 
 UserSessionAgentProxy::~UserSessionAgentProxy() = default;
 
-void UserSessionAgentProxy::dettach()
+void UserSessionAgentProxy::start()
 {
-    DCHECK(io_task_runner_->belongsToCurrentThread());
-    agent_ = nullptr;
+    if (!io_task_runner_->belongsToCurrentThread())
+    {
+        io_task_runner_->postTask(std::bind(&UserSessionAgentProxy::start, shared_from_this()));
+        return;
+    }
+
+    if (agent_)
+        agent_->start();
+}
+
+void UserSessionAgentProxy::stop()
+{
+    if (!io_task_runner_->belongsToCurrentThread())
+    {
+        io_task_runner_->postTask(std::bind(&UserSessionAgentProxy::stop, shared_from_this()));
+        return;
+    }
+
+    agent_.reset();
 }
 
 void UserSessionAgentProxy::updateCredentials(

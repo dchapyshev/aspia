@@ -95,8 +95,10 @@ MainWindow::~MainWindow() = default;
 
 void MainWindow::connectToService()
 {
-    agent_ = std::make_unique<UserSessionAgent>(window_proxy_);
-    agent_->start();
+    agent_proxy_ = std::make_shared<UserSessionAgentProxy>(
+        qt_base::Application::ioTaskRunner(), std::make_unique<UserSessionAgent>(window_proxy_));
+
+    agent_proxy_->start();
 }
 
 void MainWindow::activateHost()
@@ -139,12 +141,14 @@ void MainWindow::onStateChanged(UserSessionAgent::State state)
         ui.button_new_password->setEnabled(true);
         ui.button_refresh_ip_list->setEnabled(true);
 
-        agent_proxy_ = agent_->agentProxy();
-        agent_proxy_->updateCredentials(proto::internal::CredentialsRequest::REFRESH);
+        if (agent_proxy_)
+            agent_proxy_->updateCredentials(proto::internal::CredentialsRequest::REFRESH);
     }
     else
     {
         DCHECK_EQ(state, UserSessionAgent::State::DISCONNECTED);
+
+        agent_proxy_.reset();
 
         LOG(LS_INFO) << "The connection to the service is lost. The application will be closed";
         realClose();

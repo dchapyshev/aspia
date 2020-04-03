@@ -33,20 +33,10 @@ UserSessionAgent::UserSessionAgent(std::shared_ptr<UserSessionWindowProxy> windo
     SetProcessShutdownParameters(0x3FF, SHUTDOWN_NORETRY);
 }
 
-UserSessionAgent::~UserSessionAgent()
-{
-    io_thread_.stop();
-}
+UserSessionAgent::~UserSessionAgent() = default;
 
 void UserSessionAgent::start()
 {
-    io_thread_.start(base::MessageLoop::Type::ASIO, this);
-}
-
-void UserSessionAgent::onBeforeThreadRunning()
-{
-    agent_proxy_ = std::make_shared<UserSessionAgentProxy>(io_thread_.taskRunner(), this);
-
     ipc_channel_ = std::make_unique<ipc::Channel>();
     ipc_channel_->setListener(this);
 
@@ -55,12 +45,6 @@ void UserSessionAgent::onBeforeThreadRunning()
         window_proxy_->onStateChanged(State::CONNECTED);
         ipc_channel_->resume();
     }
-}
-
-void UserSessionAgent::onAfterThreadRunning()
-{
-    ipc_channel_.reset();
-    agent_proxy_.reset();
 }
 
 void UserSessionAgent::onDisconnected()

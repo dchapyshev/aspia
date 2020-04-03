@@ -19,6 +19,7 @@
 #include "host/user_session_window_proxy.h"
 
 #include "base/logging.h"
+#include "base/task_runner.h"
 #include "host/user_session_window.h"
 
 namespace host {
