@@ -24,9 +24,9 @@
 
 namespace desktop {
 
-DxgiFrame::DxgiFrame(std::shared_ptr<DxgiDuplicatorController>& controller,
+DxgiFrame::DxgiFrame(std::shared_ptr<DxgiDuplicatorController> controller,
                      ipc::SharedMemoryFactory* shared_memory_factory)
-    : context_(controller),
+    : context_(std::move(controller)),
       shared_memory_factory_(shared_memory_factory)
 {
     // Nothing
@@ -43,8 +43,11 @@ bool DxgiFrame::prepare(const Size& size, ScreenCapturer::ScreenId source_id)
         context_.reset();
     }
 
-    if (resolution_tracker_.setResolution(size))
+    if (!last_frame_size_.has_value() || last_frame_size_ != size)
     {
+        // Save the last frame size.
+        last_frame_size_.emplace(size);
+
         // Once the output size changed, recreate the SharedFrame.
         frame_.reset();
     }
