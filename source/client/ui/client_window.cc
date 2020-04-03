@@ -60,7 +60,7 @@ bool ClientWindow::connectToHost(Config config)
     }
 
     // Create a client instance.
-    client_ = createClient(qt_base::Application::taskRunner());
+    client_ = createClient(qt_base::Application::uiTaskRunner());
 
     // Set the window that will receive notifications.
     client_->setStatusWindow(this);

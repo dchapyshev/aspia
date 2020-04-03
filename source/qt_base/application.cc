@@ -191,8 +191,11 @@ Application::Application(int& argc, char* argv[])
     crypto_initializer_ = std::make_unique<crypto::ScopedCryptoInitializer>();
     CHECK(crypto_initializer_->isSucceeded());
 
+    io_thread_.start(base::MessageLoop::Type::ASIO);
+    io_task_runner_ = io_thread_.taskRunner();
+
     locale_loader_ = std::make_unique<LocaleLoader>();
-    task_runner_ = std::make_shared<QtTaskRunner>();
+    ui_task_runner_ = std::make_shared<QtTaskRunner>();
 }
 
 Application::~Application()
@@ -217,13 +220,23 @@ Application* Application::instance()
 }
 
 // static
-std::shared_ptr<base::TaskRunner> Application::taskRunner()
+std::shared_ptr<base::TaskRunner> Application::uiTaskRunner()
 {
     Application* application = instance();
     if (!application)
         return nullptr;
 
-    return application->task_runner_;
+    return application->ui_task_runner_;
+}
+
+// static
+std::shared_ptr<base::TaskRunner> Application::ioTaskRunner()
+{
+    Application* application = instance();
+    if (!application)
+        return nullptr;
+
+    return application->io_task_runner_;
 }
 
 bool Application::isRunning()

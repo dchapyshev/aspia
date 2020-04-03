@@ -40,7 +40,7 @@ namespace host {
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent),
       window_proxy_(std::make_shared<UserSessionWindowProxy>(
-          qt_base::Application::taskRunner(), this))
+          qt_base::Application::uiTaskRunner(), this))
 {
     ui.setupUi(this);
     setWindowFlag(Qt::WindowMaximizeButtonHint, false);
