@@ -19,7 +19,7 @@
 #ifndef DESKTOP__DESKTOP_FRAME_ROTATION_H
 #define DESKTOP__DESKTOP_FRAME_ROTATION_H
 
-#include "desktop/desktop_frame.h"
+#include "desktop/frame.h"
 
 namespace desktop {
 

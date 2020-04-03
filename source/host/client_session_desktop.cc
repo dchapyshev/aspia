@@ -25,7 +25,7 @@
 #include "codec/video_encoder_zstd.h"
 #include "codec/video_util.h"
 #include "common/desktop_session_constants.h"
-#include "desktop/desktop_frame.h"
+#include "desktop/frame.h"
 #include "host/desktop_session_proxy.h"
 #include "host/system_info.h"
 #include "host/win/updater_launcher.h"

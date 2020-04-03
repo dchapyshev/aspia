@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "desktop/desktop_frame.h"
+#include "desktop/frame.h"
 
 #include "base/logging.h"
 

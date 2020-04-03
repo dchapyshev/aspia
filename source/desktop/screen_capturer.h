@@ -19,7 +19,7 @@
 #ifndef DESKTOP__SCREEN_CAPTURER_H
 #define DESKTOP__SCREEN_CAPTURER_H
 
-#include "desktop/desktop_frame.h"
+#include "desktop/frame.h"
 
 #include <string>
 #include <vector>

@@ -19,7 +19,7 @@
 #include "desktop/win/dxgi_duplicator_controller.h"
 
 #include "base/logging.h"
-#include "desktop/desktop_frame_aligned.h"
+#include "desktop/frame_aligned.h"
 #include "desktop/win/dxgi_frame.h"
 #include "desktop/win/screen_capture_utils.h"
 

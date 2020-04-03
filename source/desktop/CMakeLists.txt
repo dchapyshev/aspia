@@ -22,16 +22,8 @@ list(APPEND SOURCE_DESKTOP
     cursor_capturer.h
     cursor_capturer_win.cc
     cursor_capturer_win.h
-    desktop_frame.cc
-    desktop_frame.h
-    desktop_frame_aligned.cc
-    desktop_frame_aligned.h
-    desktop_frame_dib.cc
-    desktop_frame_dib.h
     desktop_frame_rotation.cc
     desktop_frame_rotation.h
-    desktop_frame_simple.cc
-    desktop_frame_simple.h
     desktop_geometry.cc
     desktop_geometry.h
     desktop_region.cc
@@ -48,6 +40,14 @@ list(APPEND SOURCE_DESKTOP
     diff_block_32bpp_sse3.h
     differ.cc
     differ.h
+    frame.cc
+    frame.h
+    frame_aligned.cc
+    frame_aligned.h
+    frame_dib.cc
+    frame_dib.h
+    frame_simple.cc
+    frame_simple.h
     mouse_cursor.cc
     mouse_cursor.h
     pixel_format.cc

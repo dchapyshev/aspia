@@ -19,7 +19,7 @@
 #ifndef DESKTOP__SHARED_MEMORY_DESKTOP_FRAME_H
 #define DESKTOP__SHARED_MEMORY_DESKTOP_FRAME_H
 
-#include "desktop/desktop_frame.h"
+#include "desktop/frame.h"
 
 namespace ipc {
 class SharedMemoryFactory;

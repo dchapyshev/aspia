@@ -18,7 +18,7 @@
 
 #include "base/win/scoped_gdi_object.h"
 #include "base/win/scoped_user_object.h"
-#include "desktop/desktop_frame.h"
+#include "desktop/frame.h"
 #include "desktop/mouse_cursor.h"
 #include "desktop/win/cursor.h"
 #include "desktop/win/cursor_unittest_resources.h"

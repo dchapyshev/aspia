@@ -20,7 +20,7 @@
 
 #include "base/logging.h"
 #include "base/task_runner.h"
-#include "desktop/desktop_frame_simple.h"
+#include "desktop/frame_simple.h"
 
 namespace host {
 

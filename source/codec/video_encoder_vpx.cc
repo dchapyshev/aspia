@@ -20,7 +20,7 @@
 
 #include "base/logging.h"
 #include "codec/video_util.h"
-#include "desktop/desktop_frame.h"
+#include "desktop/frame.h"
 
 #include <libyuv/convert.h>
 #include <libyuv/convert_from_argb.h>

@@ -22,7 +22,7 @@
 #include "base/win/scoped_select_object.h"
 #include "desktop/win/bitmap_info.h"
 #include "desktop/win/screen_capture_utils.h"
-#include "desktop/desktop_frame_dib.h"
+#include "desktop/frame_dib.h"
 #include "desktop/differ.h"
 #include "ipc/shared_memory_factory.h"
 

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef DESKTOP__DESKTOP_FRAME_H
-#define DESKTOP__DESKTOP_FRAME_H
+#ifndef DESKTOP__FRAME_H
+#define DESKTOP__FRAME_H
 
 #include "base/macros_magic.h"
 #include "desktop/pixel_format.h"
@@ -80,4 +80,4 @@ private:
 
 } // namespace desktop
 
-#endif // DESKTOP__DESKTOP_FRAME_H
+#endif // DESKTOP__FRAME_H

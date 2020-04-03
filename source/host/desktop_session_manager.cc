@@ -21,7 +21,7 @@
 #include "base/location.h"
 #include "base/logging.h"
 #include "base/task_runner.h"
-#include "desktop/desktop_frame.h"
+#include "desktop/frame.h"
 #include "host/desktop_session_fake.h"
 #include "host/desktop_session_ipc.h"
 #include "host/desktop_session_process.h"

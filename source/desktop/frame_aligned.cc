@@ -16,28 +16,35 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef DESKTOP__DESKTOP_FRAME_SIMPLE_H
-#define DESKTOP__DESKTOP_FRAME_SIMPLE_H
+#include "desktop/frame_aligned.h"
 
-#include "desktop/desktop_frame.h"
-
-#include <memory>
+#include "base/memory/aligned_memory.h"
 
 namespace desktop {
 
-class FrameSimple : public Frame
+FrameAligned::FrameAligned(const Size& size, const PixelFormat& format, uint8_t* data)
+    : Frame(size, format, data, nullptr)
 {
-public:
-    ~FrameSimple();
+    // Nothing
+}
 
-    static std::unique_ptr<FrameSimple> create(const Size& size, const PixelFormat& format);
+FrameAligned::~FrameAligned()
+{
+    base::alignedFree(data_);
+}
 
-private:
-    FrameSimple(const Size& size, const PixelFormat& format, uint8_t* data);
+// static
+std::unique_ptr<FrameAligned> FrameAligned::create(
+    const Size& size, const PixelFormat& format, size_t alignment)
+{
+    int bytes_per_row = size.width() * format.bytesPerPixel();
 
-    DISALLOW_COPY_AND_ASSIGN(FrameSimple);
-};
+    uint8_t* data =
+        reinterpret_cast<uint8_t*>(base::alignedAlloc(bytes_per_row * size.height(), alignment));
+    if (!data)
+        return nullptr;
+
+    return std::unique_ptr<FrameAligned>(new FrameAligned(size, format, data));
+}
 
 } // namespace desktop
-
-#endif // DESKTOP__DESKTOP_FRAME_SIMPLE_H

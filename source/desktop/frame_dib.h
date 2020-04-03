@@ -16,11 +16,11 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef DESKTOP__DESKTOP_FRAME_DIB_H
-#define DESKTOP__DESKTOP_FRAME_DIB_H
+#ifndef DESKTOP__FRAME_DIB_H
+#define DESKTOP__FRAME_DIB_H
 
 #include "base/win/scoped_gdi_object.h"
-#include "desktop/desktop_frame.h"
+#include "desktop/frame.h"
 
 #include <memory>
 
@@ -58,4 +58,4 @@ private:
 
 } // namespace desktop
 
-#endif // DESKTOP__DESKTOP_FRAME_DIB_H
+#endif // DESKTOP__FRAME_DIB_H

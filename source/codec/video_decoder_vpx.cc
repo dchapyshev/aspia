@@ -17,9 +17,10 @@
 //
 
 #include "codec/video_decoder_vpx.h"
+
 #include "base/logging.h"
 #include "codec/video_util.h"
-#include "desktop/desktop_frame.h"
+#include "desktop/frame.h"
 
 #include <libyuv/convert_from.h>
 #include <libyuv/convert_argb.h>

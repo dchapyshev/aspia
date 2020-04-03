@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "desktop/desktop_frame_dib.h"
+#include "desktop/frame_dib.h"
 
 #include "base/logging.h"
 #include "desktop/win/bitmap_info.h"

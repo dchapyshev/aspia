@@ -21,7 +21,7 @@
 #include "base/logging.h"
 #include "codec/pixel_translator.h"
 #include "codec/video_util.h"
-#include "desktop/desktop_frame.h"
+#include "desktop/frame.h"
 
 namespace codec {
 
