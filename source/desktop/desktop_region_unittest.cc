@@ -41,7 +41,7 @@ void compareRegion(const Region& region, const Rect rects[], int rects_size)
 
         const Rect& current = it.rect();
 
-        EXPECT_TRUE(current.isEqual(rects[i]))
+        EXPECT_TRUE(current.equals(rects[i]))
             << current.left() << "-" << current.right() << "."
             << current.top() << "-" << current.bottom() << " "
             << rects[i].left() << "-" << rects[i].right() << "." << rects[i].top()

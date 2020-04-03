@@ -26,37 +26,37 @@ TEST(desktop_rect_test, union_between_two_non_empty_rects)
 {
     Rect rect = Rect::makeLTRB(1, 1, 2, 2);
     rect.unionWith(Rect::makeLTRB(-2, -2, -1, -1));
-    ASSERT_TRUE(rect.isEqual(Rect::makeLTRB(-2, -2, 2, 2)));
+    ASSERT_TRUE(rect.equals(Rect::makeLTRB(-2, -2, 2, 2)));
 }
 
 TEST(desktop_rect_test, union_with_empty_rect)
 {
     Rect rect = Rect::makeWH(1, 1);
     rect.unionWith(Rect());
-    ASSERT_TRUE(rect.isEqual(Rect::makeWH(1, 1)));
+    ASSERT_TRUE(rect.equals(Rect::makeWH(1, 1)));
 
     rect = Rect::makeXYWH(1, 1, 2, 2);
     rect.unionWith(Rect());
-    ASSERT_TRUE(rect.isEqual(Rect::makeXYWH(1, 1, 2, 2)));
+    ASSERT_TRUE(rect.equals(Rect::makeXYWH(1, 1, 2, 2)));
 
     rect = Rect::makeXYWH(1, 1, 2, 2);
     rect.unionWith(Rect::makeXYWH(3, 3, 0, 0));
-    ASSERT_TRUE(rect.isEqual(Rect::makeXYWH(1, 1, 2, 2)));
+    ASSERT_TRUE(rect.equals(Rect::makeXYWH(1, 1, 2, 2)));
 }
 
 TEST(desktop_rect_test, empty_rect_union_with_non_empty_one)
 {
     Rect rect;
     rect.unionWith(Rect::makeWH(1, 1));
-    ASSERT_TRUE(rect.isEqual(Rect::makeWH(1, 1)));
+    ASSERT_TRUE(rect.equals(Rect::makeWH(1, 1)));
 
     rect = Rect();
     rect.unionWith(Rect::makeXYWH(1, 1, 2, 2));
-    ASSERT_TRUE(rect.isEqual(Rect::makeXYWH(1, 1, 2, 2)));
+    ASSERT_TRUE(rect.equals(Rect::makeXYWH(1, 1, 2, 2)));
 
     rect = Rect::makeXYWH(3, 3, 0, 0);
     rect.unionWith(Rect::makeXYWH(1, 1, 2, 2));
-    ASSERT_TRUE(rect.isEqual(Rect::makeXYWH(1, 1, 2, 2)));
+    ASSERT_TRUE(rect.equals(Rect::makeXYWH(1, 1, 2, 2)));
 }
 
 TEST(desktop_rect_test, empty_rect_union_with_empty_one)
