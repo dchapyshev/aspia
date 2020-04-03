@@ -389,7 +389,7 @@
   <action name="action_minimize">
    <property name="icon">
     <iconset resource="../resources/client.qrc">
-     <normaloff>:/img/arrow-stop-270.png</normaloff>:/img/arrow-stop-270.png</iconset>
+     <normaloff>:/img/navigation-270-button.png</normaloff>:/img/navigation-270-button.png</iconset>
    </property>
    <property name="text">
     <string>Minimize</string>

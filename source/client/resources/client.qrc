@@ -1,7 +1,7 @@
 <RCC>
   <qresource prefix="/img">
-    <file>arrow-stop-270.png</file>
     <file>broom.png</file>
+    <file>navigation-270-button.png</file>
     <file>cross-button.png</file>
     <file>drive.png</file>
     <file>graphic-card.png</file>
