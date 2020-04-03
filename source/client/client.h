@@ -20,7 +20,6 @@
 #define CLIENT__CLIENT_H
 
 #include "base/version.h"
-#include "base/threading/thread.h"
 #include "client/client_config.h"
 #include "net/channel.h"
 
@@ -37,23 +36,21 @@ namespace client {
 class StatusWindow;
 class StatusWindowProxy;
 
-class Client
-    : public base::Thread::Delegate,
-      public net::Channel::Listener
+class Client : public net::Channel::Listener
 {
 public:
-    explicit Client(std::shared_ptr<base::TaskRunner> ui_task_runner);
+    explicit Client(std::shared_ptr<base::TaskRunner> io_task_runner);
     virtual ~Client();
 
     // Starts a session.
-    bool start(const Config& config);
+    void start(const Config& config);
 
     // Stops a session.
     void stop();
 
     // Sets the implementation of the status window.
     // The method must be called before calling method start().
-    void setStatusWindow(StatusWindow* status_window);
+    void setStatusWindow(std::shared_ptr<StatusWindowProxy> status_window_proxy);
 
     // Returns the version of the current client.
     static base::Version version();
@@ -61,9 +58,6 @@ public:
     Config config() const { return config_; }
 
 protected:
-    std::shared_ptr<base::TaskRunner> ioTaskRunner() const;
-    std::shared_ptr<base::TaskRunner> uiTaskRunner() const;
-
     std::u16string computerName() const;
     proto::SessionType sessionType() const;
 
@@ -71,31 +65,20 @@ protected:
     // When calling this method, the client implementation should display a session window.
     virtual void onSessionStarted(const base::Version& peer_version) = 0;
 
-    // Indicates that the session is stopped.
-    // When calling this method, the client implementation must destroy the session window.
-    virtual void onSessionStopped() = 0;
-
     // Sends outgoing message.
     void sendMessage(const google::protobuf::MessageLite& message);
-
-    // base::Thread::Delegate implementation.
-    void onBeforeThreadRunning() override;
-    void onAfterThreadRunning() override;
 
     // net::Channel::Listener implementation.
     void onConnected() override;
     void onDisconnected(net::Channel::ErrorCode error_code) override;
 
 private:
-    base::Thread io_thread_;
     std::shared_ptr<base::TaskRunner> io_task_runner_;
-    std::shared_ptr<base::TaskRunner> ui_task_runner_;
 
     std::unique_ptr<net::Channel> channel_;
     std::unique_ptr<net::ClientAuthenticator> authenticator_;
-    std::unique_ptr<StatusWindowProxy> status_window_proxy_;
+    std::shared_ptr<StatusWindowProxy> status_window_proxy_;
 
-    bool session_started_ = false;
     Config config_;
 };
 

@@ -46,14 +46,16 @@ namespace client {
 
 class DesktopControlProxy;
 class DesktopWindow;
+class FrameFactory;
 
-class DesktopWindowProxy
+class DesktopWindowProxy : public std::enable_shared_from_this<DesktopWindowProxy>
 {
 public:
+    DesktopWindowProxy(std::shared_ptr<base::TaskRunner> ui_task_runner,
+                       DesktopWindow* desktop_window);
     ~DesktopWindowProxy();
 
-    static std::unique_ptr<DesktopWindowProxy> create(
-        std::shared_ptr<base::TaskRunner> ui_task_runner, DesktopWindow* desktop_window);
+    void dettach();
 
     void showWindow(std::shared_ptr<DesktopControlProxy> desktop_control_proxy,
                     const base::Version& peer_version);
@@ -71,11 +73,9 @@ public:
     void injectClipboardEvent(const proto::ClipboardEvent& event);
 
 private:
-    DesktopWindowProxy(std::shared_ptr<base::TaskRunner> ui_task_runner,
-                       DesktopWindow* desktop_window);
-
-    class Impl;
-    std::shared_ptr<Impl> impl_;
+    std::shared_ptr<base::TaskRunner> ui_task_runner_;
+    std::unique_ptr<FrameFactory> frame_factory_;
+    DesktopWindow* desktop_window_;
 
     DISALLOW_COPY_AND_ASSIGN(DesktopWindowProxy);
 };

@@ -42,6 +42,8 @@ public:
 
     void doTask(std::shared_ptr<FileTask> task);
 
+    std::shared_ptr<base::TaskRunner> taskRunner() { return task_runner_; }
+
 private:
     std::unique_ptr<proto::FileReply> doRequest(const proto::FileRequest& request);
     std::unique_ptr<proto::FileReply> doDriveListRequest();
@@ -458,6 +460,11 @@ FileWorker::~FileWorker() = default;
 void FileWorker::doTask(std::shared_ptr<FileTask> task)
 {
     impl_->doTask(std::move(task));
+}
+
+std::shared_ptr<base::TaskRunner> FileWorker::taskRunner()
+{
+    return impl_->taskRunner();
 }
 
 } // namespace common

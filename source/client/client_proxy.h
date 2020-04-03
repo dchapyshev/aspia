@@ -16,13 +16,14 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__STATUS_WINDOW_PROXY_H
-#define CLIENT__STATUS_WINDOW_PROXY_H
+#ifndef CLIENT__CLIENT_PROXY_H
+#define CLIENT__CLIENT_PROXY_H
 
 #include "base/macros_magic.h"
-#include "client/status_window.h"
+#include "client/client_config.h"
 
 #include <memory>
+#include <shared_mutex>
 
 namespace base {
 class TaskRunner;
@@ -30,28 +31,27 @@ class TaskRunner;
 
 namespace client {
 
-class StatusWindowProxy : public std::enable_shared_from_this<StatusWindowProxy>
+class Client;
+
+class ClientProxy : public std::enable_shared_from_this<ClientProxy>
 {
 public:
-    StatusWindowProxy(std::shared_ptr<base::TaskRunner> ui_task_runner,
-                      StatusWindow* status_window);
-    ~StatusWindowProxy();
+    ClientProxy(std::shared_ptr<base::TaskRunner> io_task_runner, std::unique_ptr<Client> client);
+    ~ClientProxy();
 
-    void dettach();
+    void start(const Config& config);
+    void stop();
 
-    void onStarted(const std::u16string& address, uint16_t port);
-    void onStopped();
-    void onConnected();
-    void onDisconnected(net::Channel::ErrorCode error_code);
-    void onAccessDenied(net::ClientAuthenticator::ErrorCode error_code);
+    Config config() const;
 
 private:
-    std::shared_ptr<base::TaskRunner> ui_task_runner_;
-    StatusWindow* status_window_;
+    std::shared_ptr<base::TaskRunner> io_task_runner_;
+    mutable std::shared_mutex client_lock_;
+    std::unique_ptr<Client> client_;
 
-    DISALLOW_COPY_AND_ASSIGN(StatusWindowProxy);
+    DISALLOW_COPY_AND_ASSIGN(ClientProxy);
 };
 
 } // namespace client
 
-#endif // CLIENT__STATUS_WINDOW_PROXY_H
+#endif // CLIENT__CLIENT_PROXY_H

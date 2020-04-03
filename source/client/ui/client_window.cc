@@ -20,6 +20,8 @@
 
 #include "base/logging.h"
 #include "client/client.h"
+#include "client/client_proxy.h"
+#include "client/status_window_proxy.h"
 #include "client/ui/authorization_dialog.h"
 #include "client/ui/status_dialog.h"
 #include "qt_base/application.h"
@@ -27,16 +29,21 @@
 namespace client {
 
 ClientWindow::ClientWindow(QWidget* parent)
-    : QWidget(parent)
+    : QWidget(parent),
+      status_window_proxy_(
+          std::make_shared<StatusWindowProxy>(qt_base::Application::uiTaskRunner(), this))
 {
     // Nothing
 }
 
-ClientWindow::~ClientWindow() = default;
+ClientWindow::~ClientWindow()
+{
+    status_window_proxy_->dettach();
+}
 
 bool ClientWindow::connectToHost(Config config)
 {
-    if (client_)
+    if (client_proxy_)
     {
         DLOG(LS_ERROR) << "Attempt to start an already running client";
         return false;
@@ -60,23 +67,30 @@ bool ClientWindow::connectToHost(Config config)
     }
 
     // Create a client instance.
-    client_ = createClient(qt_base::Application::uiTaskRunner());
+    std::unique_ptr<Client> client = createClient();
 
     // Set the window that will receive notifications.
-    client_->setStatusWindow(this);
+    client->setStatusWindow(status_window_proxy_);
 
-    return client_->start(config);
+    client_proxy_ = std::make_shared<ClientProxy>(
+        qt_base::Application::ioTaskRunner(), std::move(client));
+
+    client_proxy_->start(config);
+    return true;
 }
 
 Config ClientWindow::config() const
 {
-    return client_->config();
+    return client_proxy_->config();
 }
 
 void ClientWindow::closeEvent(QCloseEvent* event)
 {
-    if (client_)
-        client_->stop();
+    if (client_proxy_)
+    {
+        client_proxy_->stop();
+        client_proxy_.reset();
+    }
 }
 
 void ClientWindow::onStarted(const std::u16string& address, uint16_t port)

@@ -200,6 +200,8 @@ Application::Application(int& argc, char* argv[])
 
 Application::~Application()
 {
+    io_thread_.stop();
+
     bool is_locked = lock_file_->isLocked();
 
     if (is_locked)

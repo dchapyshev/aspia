@@ -24,33 +24,7 @@
 
 namespace client {
 
-class FileManagerWindowProxy::Impl : public std::enable_shared_from_this<Impl>
-{
-public:
-    Impl(std::shared_ptr<base::TaskRunner> ui_task_runner, FileManagerWindow* file_manager_window);
-    ~Impl();
-
-    void dettach();
-
-    void start(std::shared_ptr<FileControlProxy> file_control_proxy);
-    void onErrorOccurred(proto::FileError error_code);
-    void onDriveList(common::FileTask::Target target,
-                     proto::FileError error_code,
-                     const proto::DriveList& drive_list);
-    void onFileList(common::FileTask::Target target,
-                    proto::FileError error_code,
-                    const proto::FileList& file_list);
-    void onCreateDirectory(common::FileTask::Target target, proto::FileError error_code);
-    void onRename(common::FileTask::Target target, proto::FileError error_code);
-
-private:
-    std::shared_ptr<base::TaskRunner> ui_task_runner_;
-    FileManagerWindow* file_manager_window_;
-
-    DISALLOW_COPY_AND_ASSIGN(Impl);
-};
-
-FileManagerWindowProxy::Impl::Impl(
+FileManagerWindowProxy::FileManagerWindowProxy(
     std::shared_ptr<base::TaskRunner> ui_task_runner, FileManagerWindow* file_manager_window)
     : ui_task_runner_(std::move(ui_task_runner)),
       file_manager_window_(file_manager_window)
@@ -60,40 +34,36 @@ FileManagerWindowProxy::Impl::Impl(
     DCHECK(file_manager_window_);
 }
 
-FileManagerWindowProxy::Impl::~Impl()
+FileManagerWindowProxy::~FileManagerWindowProxy()
 {
     DCHECK(!file_manager_window_);
 }
 
-void FileManagerWindowProxy::Impl::dettach()
+void FileManagerWindowProxy::dettach()
 {
-    if (!ui_task_runner_->belongsToCurrentThread())
-    {
-        ui_task_runner_->postTask(std::bind(&Impl::dettach, shared_from_this()));
-        return;
-    }
-
+    DCHECK(ui_task_runner_->belongsToCurrentThread());
     file_manager_window_ = nullptr;
 }
 
-void FileManagerWindowProxy::Impl::start(std::shared_ptr<FileControlProxy> file_manager_proxy)
-{
-    if (!ui_task_runner_->belongsToCurrentThread())
-    {
-        ui_task_runner_->postTask(std::bind(&Impl::start, shared_from_this(), file_manager_proxy));
-        return;
-    }
-
-    if (file_manager_window_)
-        file_manager_window_->start(file_manager_proxy);
-}
-
-void FileManagerWindowProxy::Impl::onErrorOccurred(proto::FileError error_code)
+void FileManagerWindowProxy::start(std::shared_ptr<FileControlProxy> file_control_proxy)
 {
     if (!ui_task_runner_->belongsToCurrentThread())
     {
         ui_task_runner_->postTask(
-            std::bind(&Impl::onErrorOccurred, shared_from_this(), error_code));
+            std::bind(&FileManagerWindowProxy::start, shared_from_this(), file_control_proxy));
+        return;
+    }
+
+    if (file_manager_window_)
+        file_manager_window_->start(file_control_proxy);
+}
+
+void FileManagerWindowProxy::onErrorOccurred(proto::FileError error_code)
+{
+    if (!ui_task_runner_->belongsToCurrentThread())
+    {
+        ui_task_runner_->postTask(
+            std::bind(&FileManagerWindowProxy::onErrorOccurred, shared_from_this(), error_code));
         return;
     }
 
@@ -101,13 +71,16 @@ void FileManagerWindowProxy::Impl::onErrorOccurred(proto::FileError error_code)
         file_manager_window_->onErrorOccurred(error_code);
 }
 
-void FileManagerWindowProxy::Impl::onDriveList(
+void FileManagerWindowProxy::onDriveList(
     common::FileTask::Target target, proto::FileError error_code, const proto::DriveList& drive_list)
 {
     if (!ui_task_runner_->belongsToCurrentThread())
     {
-        ui_task_runner_->postTask(
-            std::bind(&Impl::onDriveList, shared_from_this(), target, error_code, drive_list));
+        ui_task_runner_->postTask(std::bind(&FileManagerWindowProxy::onDriveList,
+                                            shared_from_this(),
+                                            target,
+                                            error_code,
+                                            drive_list));
         return;
     }
 
@@ -115,13 +88,16 @@ void FileManagerWindowProxy::Impl::onDriveList(
         file_manager_window_->onDriveList(target, error_code, drive_list);
 }
 
-void FileManagerWindowProxy::Impl::onFileList(
+void FileManagerWindowProxy::onFileList(
     common::FileTask::Target target, proto::FileError error_code, const proto::FileList& file_list)
 {
     if (!ui_task_runner_->belongsToCurrentThread())
     {
-        ui_task_runner_->postTask(
-            std::bind(&Impl::onFileList, shared_from_this(), target, error_code, file_list));
+        ui_task_runner_->postTask(std::bind(&FileManagerWindowProxy::onFileList,
+                                            shared_from_this(),
+                                            target,
+                                            error_code,
+                                            file_list));
         return;
     }
 
@@ -129,13 +105,15 @@ void FileManagerWindowProxy::Impl::onFileList(
         file_manager_window_->onFileList(target, error_code, file_list);
 }
 
-void FileManagerWindowProxy::Impl::onCreateDirectory(
+void FileManagerWindowProxy::onCreateDirectory(
     common::FileTask::Target target, proto::FileError error_code)
 {
     if (!ui_task_runner_->belongsToCurrentThread())
     {
-        ui_task_runner_->postTask(
-            std::bind(&Impl::onCreateDirectory, shared_from_this(), target, error_code));
+        ui_task_runner_->postTask(std::bind(&FileManagerWindowProxy::onCreateDirectory,
+                                            shared_from_this(),
+                                            target,
+                                            error_code));
         return;
     }
 
@@ -143,74 +121,17 @@ void FileManagerWindowProxy::Impl::onCreateDirectory(
         file_manager_window_->onCreateDirectory(target, error_code);
 }
 
-void FileManagerWindowProxy::Impl::onRename(
-    common::FileTask::Target target, proto::FileError error_code)
+void FileManagerWindowProxy::onRename(common::FileTask::Target target, proto::FileError error_code)
 {
     if (!ui_task_runner_->belongsToCurrentThread())
     {
         ui_task_runner_->postTask(
-            std::bind(&Impl::onRename, shared_from_this(), target, error_code));
+            std::bind(&FileManagerWindowProxy::onRename, shared_from_this(), target, error_code));
         return;
     }
 
     if (file_manager_window_)
         file_manager_window_->onRename(target, error_code);
-}
-
-FileManagerWindowProxy::FileManagerWindowProxy(
-    std::shared_ptr<base::TaskRunner> ui_task_runner, FileManagerWindow* file_manager_window)
-    : impl_(std::make_shared<Impl>(std::move(ui_task_runner), file_manager_window))
-{
-    // Nothing
-}
-
-FileManagerWindowProxy::~FileManagerWindowProxy()
-{
-    impl_->dettach();
-}
-
-// static
-std::unique_ptr<FileManagerWindowProxy> FileManagerWindowProxy::create(
-    std::shared_ptr<base::TaskRunner> ui_task_runner, FileManagerWindow* file_manager_window)
-{
-    if (!ui_task_runner || !file_manager_window)
-        return nullptr;
-
-    return std::unique_ptr<FileManagerWindowProxy>(
-        new FileManagerWindowProxy(std::move(ui_task_runner), file_manager_window));
-}
-
-void FileManagerWindowProxy::start(std::shared_ptr<FileControlProxy> file_control_proxy)
-{
-    impl_->start(file_control_proxy);
-}
-
-void FileManagerWindowProxy::onErrorOccurred(proto::FileError error_code)
-{
-    impl_->onErrorOccurred(error_code);
-}
-
-void FileManagerWindowProxy::onDriveList(
-    common::FileTask::Target target, proto::FileError error_code, const proto::DriveList& drive_list)
-{
-    impl_->onDriveList(target, error_code, drive_list);
-}
-
-void FileManagerWindowProxy::onFileList(
-    common::FileTask::Target target, proto::FileError error_code, const proto::FileList& file_list)
-{
-    impl_->onFileList(target, error_code, file_list);
-}
-
-void FileManagerWindowProxy::onCreateDirectory(
-    common::FileTask::Target target, proto::FileError error_code)
-{
-    impl_->onCreateDirectory(target, error_code);
-}
-
-void FileManagerWindowProxy::onRename(common::FileTask::Target target, proto::FileError error_code)
-{
-    impl_->onRename(target, error_code);
 }
 
 } // namespace client

@@ -21,6 +21,7 @@
 #include "ui_qt_file_manager_window.h"
 #include "base/logging.h"
 #include "client/file_control_proxy.h"
+#include "client/file_manager_window_proxy.h"
 #include "client/client_file_transfer.h"
 #include "client/ui/address_bar_model.h"
 #include "client/ui/file_error_code.h"
@@ -29,6 +30,7 @@
 #include "client/ui/file_manager_settings.h"
 #include "client/ui/file_mime_data.h"
 #include "common/file_worker.h"
+#include "qt_base/application.h"
 
 #include <QMessageBox>
 
@@ -36,7 +38,9 @@ namespace client {
 
 QtFileManagerWindow::QtFileManagerWindow(QWidget* parent)
     : ClientWindow(parent),
-      ui(std::make_unique<Ui::FileManagerWindow>())
+      ui(std::make_unique<Ui::FileManagerWindow>()),
+      file_manager_window_proxy_(
+          std::make_shared<FileManagerWindowProxy>(qt_base::Application::uiTaskRunner(), this))
 {
     ui->setupUi(this);
 
@@ -52,15 +56,17 @@ QtFileManagerWindow::QtFileManagerWindow(QWidget* parent)
     ui->local_panel->setFocus();
 }
 
-QtFileManagerWindow::~QtFileManagerWindow() = default;
-
-std::unique_ptr<Client> QtFileManagerWindow::createClient(
-    std::shared_ptr<base::TaskRunner> ui_task_runner)
+QtFileManagerWindow::~QtFileManagerWindow()
 {
-    std::unique_ptr<ClientFileTransfer> client =
-        std::make_unique<ClientFileTransfer>(std::move(ui_task_runner));
+    file_manager_window_proxy_->dettach();
+}
 
-    client->setFileManagerWindow(this);
+std::unique_ptr<Client> QtFileManagerWindow::createClient()
+{
+    std::unique_ptr<ClientFileTransfer> client = std::make_unique<ClientFileTransfer>(
+        qt_base::Application::ioTaskRunner());
+
+    client->setFileManagerWindow(file_manager_window_proxy_);
 
     return client;
 }

@@ -27,6 +27,8 @@ list(APPEND SOURCE_CLIENT
     client_desktop.h
     client_file_transfer.cc
     client_file_transfer.h
+    client_proxy.cc
+    client_proxy.h
     config_factory.cc
     config_factory.h
     desktop_control.h

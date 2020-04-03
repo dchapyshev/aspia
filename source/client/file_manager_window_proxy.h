@@ -33,13 +33,14 @@ namespace client {
 class FileControlProxy;
 class FileManagerWindow;
 
-class FileManagerWindowProxy
+class FileManagerWindowProxy : public std::enable_shared_from_this<FileManagerWindowProxy>
 {
 public:
+    FileManagerWindowProxy(std::shared_ptr<base::TaskRunner> ui_task_runner,
+                           FileManagerWindow* file_manager_window);
     ~FileManagerWindowProxy();
 
-    static std::unique_ptr<FileManagerWindowProxy> create(
-        std::shared_ptr<base::TaskRunner> ui_task_runner, FileManagerWindow* file_manager_window);
+    void dettach();
 
     void start(std::shared_ptr<FileControlProxy> file_control_proxy);
     void onErrorOccurred(proto::FileError error_code);
@@ -53,11 +54,8 @@ public:
     void onRename(common::FileTask::Target target, proto::FileError error_code);
 
 private:
-    FileManagerWindowProxy(std::shared_ptr<base::TaskRunner> ui_task_runner,
-                           FileManagerWindow* file_manager_window);
-
-    class Impl;
-    std::shared_ptr<Impl> impl_;
+    std::shared_ptr<base::TaskRunner> ui_task_runner_;
+    FileManagerWindow* file_manager_window_;
 
     DISALLOW_COPY_AND_ASSIGN(FileManagerWindowProxy);
 };

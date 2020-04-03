@@ -31,7 +31,9 @@ class TaskRunner;
 namespace client {
 
 class Client;
+class ClientProxy;
 class StatusDialog;
+class StatusWindowProxy;
 
 class ClientWindow
     : public QWidget,
@@ -51,8 +53,7 @@ public:
     Config config() const;
 
 protected:
-    virtual std::unique_ptr<Client> createClient(
-        std::shared_ptr<base::TaskRunner> ui_task_runner) = 0;
+    virtual std::unique_ptr<Client> createClient() = 0;
 
     // QWidget implementation.
     void closeEvent(QCloseEvent* event) override;
@@ -68,7 +69,8 @@ private:
     void setClientTitle(const Config& config);
     void onErrorOccurred(const QString& message);
 
-    std::unique_ptr<Client> client_;
+    std::shared_ptr<StatusWindowProxy> status_window_proxy_;
+    std::shared_ptr<ClientProxy> client_proxy_;
     StatusDialog* status_dialog_ = nullptr;
 };
 

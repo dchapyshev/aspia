@@ -32,6 +32,7 @@ class FileManagerWindow;
 
 namespace client {
 
+class FileManagerWindowProxy;
 class FilePanel;
 class FileRemoveDialog;
 class FileTransferDialog;
@@ -47,7 +48,7 @@ public:
     ~QtFileManagerWindow();
 
     // ClientWindow implementation.
-    std::unique_ptr<Client> createClient(std::shared_ptr<base::TaskRunner> ui_task_runner) override;
+    std::unique_ptr<Client> createClient() override;
 
     // FileManagerWindow implementation.
     void start(std::shared_ptr<FileControlProxy> file_control_proxy) override;
@@ -91,6 +92,7 @@ private:
                    FilePanel* panel);
 
     std::unique_ptr<Ui::FileManagerWindow> ui;
+    std::shared_ptr<FileManagerWindowProxy> file_manager_window_proxy_;
     std::shared_ptr<FileControlProxy> file_control_proxy_;
 
     QPointer<FileRemoveDialog> remove_dialog_;

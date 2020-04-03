@@ -45,10 +45,10 @@ class ClientDesktop
       public DesktopControl
 {
 public:
-    explicit ClientDesktop(std::shared_ptr<base::TaskRunner> ui_task_runner);
+    explicit ClientDesktop(std::shared_ptr<base::TaskRunner> io_task_runner);
     ~ClientDesktop();
 
-    void setDesktopWindow(DesktopWindow* desktop_window);
+    void setDesktopWindow(std::shared_ptr<DesktopWindowProxy> desktop_window_proxy);
 
     // DesktopControl implementation.
     void setDesktopConfig(const proto::DesktopConfig& config) override;
@@ -63,7 +63,6 @@ public:
 protected:
     // Client implementation.
     void onSessionStarted(const base::Version& peer_version) override;
-    void onSessionStopped() override;
 
     // net::Channel::Listener implementation.
     void onMessageReceived(const base::ByteArray& buffer) override;
@@ -79,7 +78,7 @@ private:
     bool started_ = false;
 
     std::shared_ptr<DesktopControlProxy> desktop_control_proxy_;
-    std::unique_ptr<DesktopWindowProxy> desktop_window_proxy_;
+    std::shared_ptr<DesktopWindowProxy> desktop_window_proxy_;
     std::shared_ptr<desktop::Frame> desktop_frame_;
     proto::DesktopConfig desktop_config_;
 
