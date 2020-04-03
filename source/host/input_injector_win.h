@@ -20,7 +20,7 @@
 #define HOST__INPUT_INJECTOR_WIN_H
 
 #include "base/win/scoped_thread_desktop.h"
-#include "desktop/desktop_geometry.h"
+#include "desktop/geometry.h"
 #include "host/input_injector.h"
 
 namespace host {

@@ -22,7 +22,7 @@
 #include "base/memory/byte_array.h"
 #include "codec/scoped_zstd_stream.h"
 #include "codec/video_encoder.h"
-#include "desktop/desktop_region.h"
+#include "desktop/region.h"
 #include "desktop/pixel_format.h"
 
 namespace codec {

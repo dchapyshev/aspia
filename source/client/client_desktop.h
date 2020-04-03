@@ -22,7 +22,7 @@
 #include "base/macros_magic.h"
 #include "client/client.h"
 #include "client/desktop_control.h"
-#include "desktop/desktop_geometry.h"
+#include "desktop/geometry.h"
 #include "proto/system_info.pb.h"
 
 namespace codec {

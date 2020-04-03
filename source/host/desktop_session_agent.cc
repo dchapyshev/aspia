@@ -25,7 +25,7 @@
 #include "desktop/capture_scheduler.h"
 #include "desktop/mouse_cursor.h"
 #include "desktop/screen_capturer_wrapper.h"
-#include "desktop/shared_desktop_frame.h"
+#include "desktop/shared_frame.h"
 #include "host/input_injector_win.h"
 #include "ipc/shared_memory.h"
 

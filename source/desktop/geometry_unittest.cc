@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "desktop/desktop_geometry.h"
+#include "desktop/geometry.h"
 
 #include <gtest/gtest.h>
 

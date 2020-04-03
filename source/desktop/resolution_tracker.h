@@ -19,7 +19,7 @@
 #ifndef DESKTOP__RESOLUTION_TRACKER_H
 #define DESKTOP__RESOLUTION_TRACKER_H
 
-#include "desktop/desktop_geometry.h"
+#include "desktop/geometry.h"
 
 namespace desktop {
 

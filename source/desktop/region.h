@@ -16,10 +16,10 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef DESKTOP__DESKTOP_REGION_H
-#define DESKTOP__DESKTOP_REGION_H
+#ifndef DESKTOP__REGION_H
+#define DESKTOP__REGION_H
 
-#include "desktop/desktop_geometry.h"
+#include "desktop/geometry.h"
 
 extern "C" {
 #include "third_party/x11region/x11region.h"
@@ -108,4 +108,4 @@ private:
 
 } // namespace desktop
 
-#endif // DESKTOP__DESKTOP_REGION_H
+#endif // DESKTOP__REGION_H

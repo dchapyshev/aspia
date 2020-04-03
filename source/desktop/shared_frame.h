@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef DESKTOP__SHARED_DESKTOP_FRAME_H
-#define DESKTOP__SHARED_DESKTOP_FRAME_H
+#ifndef DESKTOP__SHARED_FRAME_H
+#define DESKTOP__SHARED_FRAME_H
 
 #include "desktop/frame.h"
 
@@ -55,4 +55,4 @@ private:
 
 } // namespace desktop
 
-#endif // DESKTOP__SHARED_DESKTOP_FRAME_H
+#endif // DESKTOP__SHARED_FRAME_H

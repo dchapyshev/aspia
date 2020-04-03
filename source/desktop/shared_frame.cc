@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "desktop/shared_desktop_frame.h"
+#include "desktop/shared_frame.h"
 
 namespace desktop {
 

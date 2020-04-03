@@ -20,7 +20,7 @@
 
 #include "base/logging.h"
 #include "desktop/frame_aligned.h"
-#include "desktop/shared_memory_desktop_frame.h"
+#include "desktop/shared_memory_frame.h"
 
 namespace desktop {
 

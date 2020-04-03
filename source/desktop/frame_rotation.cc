@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "desktop/desktop_frame_rotation.h"
+#include "desktop/frame_rotation.h"
 
 #include "base/logging.h"
 

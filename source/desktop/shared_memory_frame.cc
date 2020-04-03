@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "desktop/shared_memory_desktop_frame.h"
+#include "desktop/shared_memory_frame.h"
 
 #include "ipc/shared_memory.h"
 #include "ipc/shared_memory_factory.h"

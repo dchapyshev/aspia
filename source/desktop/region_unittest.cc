@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "desktop/desktop_region.h"
+#include "desktop/region.h"
 
 #include <gtest/gtest.h>
 

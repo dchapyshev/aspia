@@ -22,12 +22,6 @@ list(APPEND SOURCE_DESKTOP
     cursor_capturer.h
     cursor_capturer_win.cc
     cursor_capturer_win.h
-    desktop_frame_rotation.cc
-    desktop_frame_rotation.h
-    desktop_geometry.cc
-    desktop_geometry.h
-    desktop_region.cc
-    desktop_region.h
     diff_block_16bpp_c.cc
     diff_block_16bpp_c.h
     diff_block_32bpp_avx2.cc
@@ -46,12 +40,18 @@ list(APPEND SOURCE_DESKTOP
     frame_aligned.h
     frame_dib.cc
     frame_dib.h
+    frame_rotation.cc
+    frame_rotation.h
     frame_simple.cc
     frame_simple.h
+    geometry.cc
+    geometry.h
     mouse_cursor.cc
     mouse_cursor.h
     pixel_format.cc
     pixel_format.h
+    region.cc
+    region.h
     resolution_tracker.cc
     resolution_tracker.h
     screen_capture_frame_queue.h
@@ -65,18 +65,18 @@ list(APPEND SOURCE_DESKTOP
     screen_capturer_wrapper.h
     screen_settings_tracker.cc
     screen_settings_tracker.h
-    shared_desktop_frame.cc
-    shared_desktop_frame.h
-    shared_memory_desktop_frame.cc
-    shared_memory_desktop_frame.h)
+    shared_frame.cc
+    shared_frame.h
+    shared_memory_frame.cc
+    shared_memory_frame.h)
 
 list(APPEND SOURCE_DESKTOP_UNIT_TESTS
-    desktop_geometry_unittest.cc
-    desktop_region_unittest.cc
     diff_block_32bpp_avx2_unittest.cc
     diff_block_32bpp_c_unittest.cc
     diff_block_32bpp_sse2_unittest.cc
-    diff_block_32bpp_sse3_unittest.cc)
+    diff_block_32bpp_sse3_unittest.cc
+    geometry_unittest.cc
+    region_unittest.cc)
 
 list(APPEND SOURCE_DESKTOP_WIN
     win/bitmap_info.h

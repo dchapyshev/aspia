@@ -19,8 +19,8 @@
 #ifndef DESKTOP__WIN__DXGI_OUTPUT_DUPLICATOR_H
 #define DESKTOP__WIN__DXGI_OUTPUT_DUPLICATOR_H
 
-#include "desktop/desktop_frame_rotation.h"
-#include "desktop/shared_desktop_frame.h"
+#include "desktop/frame_rotation.h"
+#include "desktop/shared_frame.h"
 #include "desktop/win/d3d_device.h"
 #include "desktop/win/dxgi_context.h"
 #include "desktop/win/dxgi_texture.h"

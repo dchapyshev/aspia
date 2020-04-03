@@ -20,7 +20,7 @@
 #define DESKTOP__MOUSE_CURSOR_H
 
 #include "base/memory/byte_array.h"
-#include "desktop/desktop_geometry.h"
+#include "desktop/geometry.h"
 
 namespace desktop {
 

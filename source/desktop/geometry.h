@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef DESKTOP__DESKTOP_GEOMETRY_H
-#define DESKTOP__DESKTOP_GEOMETRY_H
+#ifndef DESKTOP__GEOMETRY_H
+#define DESKTOP__GEOMETRY_H
 
 #include <cstdint>
 #include <ostream>
@@ -272,4 +272,4 @@ std::ostream& operator<<(std::ostream& stream, const Size& size);
 
 } // namespace desktop
 
-#endif // DESKTOP__DESKTOP_GEOMETRY_H
+#endif // DESKTOP__GEOMETRY_H

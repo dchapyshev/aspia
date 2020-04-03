@@ -19,7 +19,7 @@
 #ifndef DESKTOP__WIN__DISPLAY_CONFIGURATION_MONITOR_H
 #define DESKTOP__WIN__DISPLAY_CONFIGURATION_MONITOR_H
 
-#include "desktop/desktop_geometry.h"
+#include "desktop/geometry.h"
 
 namespace desktop {
 

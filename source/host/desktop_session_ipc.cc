@@ -21,7 +21,7 @@
 #include "base/logging.h"
 #include "codec/video_util.h"
 #include "desktop/mouse_cursor.h"
-#include "desktop/shared_memory_desktop_frame.h"
+#include "desktop/shared_memory_frame.h"
 #include "ipc/shared_memory.h"
 
 namespace host {

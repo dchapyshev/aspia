@@ -20,8 +20,8 @@
 #define DESKTOP__SCREEN_SETTINGS_TRACKER_H
 
 #include "base/macros_magic.h"
-#include "desktop/desktop_geometry.h"
 #include "desktop/pixel_format.h"
+#include "desktop/geometry.h"
 
 namespace desktop {
 

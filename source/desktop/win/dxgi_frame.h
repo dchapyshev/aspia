@@ -20,8 +20,8 @@
 #define DESKTOP__WIN__DXGI_FRAME_H
 
 #include "desktop/resolution_tracker.h"
-#include "desktop/shared_desktop_frame.h"
 #include "desktop/screen_capturer.h"
+#include "desktop/shared_frame.h"
 #include "desktop/win/dxgi_context.h"
 
 #include <memory>
