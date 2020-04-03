@@ -21,7 +21,6 @@
 
 #include "base/win/scoped_hdc.h"
 #include "desktop/screen_capturer.h"
-#include "desktop/screen_capture_frame_queue.h"
 #include "desktop/shared_frame.h"
 
 namespace ipc {
@@ -64,7 +63,7 @@ private:
     std::unique_ptr<base::win::ScopedGetDC> desktop_dc_;
     base::win::ScopedCreateDC memory_dc_;
 
-    ScreenCaptureFrameQueue<Frame> queue_;
+    FrameQueue<Frame> queue_;
 
     DISALLOW_COPY_AND_ASSIGN(ScreenCapturerGdi);
 };

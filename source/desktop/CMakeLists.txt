@@ -52,7 +52,6 @@ list(APPEND SOURCE_DESKTOP
     pixel_format.h
     region.cc
     region.h
-    screen_capture_frame_queue.h
     screen_capturer.cc
     screen_capturer.h
     screen_capturer_dxgi.cc

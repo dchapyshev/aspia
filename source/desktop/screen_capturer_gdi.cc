@@ -115,15 +115,17 @@ const Frame* ScreenCapturerGdi::captureImage()
     Frame* current = queue_.currentFrame();
     Frame* previous = queue_.previousFrame();
 
-    base::win::ScopedSelectObject select_object(
-        memory_dc_, static_cast<FrameDib*>(current)->bitmap());
+    {
+        base::win::ScopedSelectObject select_object(
+            memory_dc_, static_cast<FrameDib*>(current)->bitmap());
 
-    BitBlt(memory_dc_,
-           0, 0,
-           screen_rect.width(), screen_rect.height(),
-           *desktop_dc_,
-           screen_rect.left(), screen_rect.top(),
-           CAPTUREBLT | SRCCOPY);
+        BitBlt(memory_dc_,
+               0, 0,
+               screen_rect.width(), screen_rect.height(),
+               *desktop_dc_,
+               screen_rect.left(), screen_rect.top(),
+               CAPTUREBLT | SRCCOPY);
+    }
 
     if (!previous || previous->size() != current->size())
     {
