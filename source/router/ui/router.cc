@@ -43,21 +43,6 @@ void Router::refresh()
 
 }
 
-void Router::addProxy()
-{
-
-}
-
-void Router::modifyProxy()
-{
-
-}
-
-void Router::deleteProxy()
-{
-
-}
-
 void Router::addUser()
 {
 

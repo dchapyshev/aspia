@@ -37,10 +37,6 @@ public:
     void disconnectAll();
     void refresh();
 
-    void addProxy();
-    void modifyProxy();
-    void deleteProxy();
-
     void addUser();
     void modifyUser();
     void deleteUser();
