@@ -80,7 +80,7 @@
     </message>
     <message>
         <location filename="../main_window.ui" line="55"/>
-        <location filename="../main_window.ui" line="245"/>
+        <location filename="../main_window.ui" line="195"/>
         <source>User name</source>
         <translation>Имя пользователя</translation>
     </message>
@@ -106,48 +106,46 @@
     </message>
     <message>
         <location filename="../main_window.ui" line="112"/>
-        <source>Proxy List</source>
-        <translation>Список прокси</translation>
+        <source>Proxy</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="169"/>
+        <source>Proxy List</source>
+        <translation type="vanished">Список прокси</translation>
+    </message>
+    <message>
+        <location filename="../main_window.ui" line="119"/>
         <source>Address</source>
         <translation>Адрес</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="174"/>
+        <location filename="../main_window.ui" line="124"/>
         <source>Port</source>
         <translation>Порт</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="259"/>
         <source>Logging</source>
-        <translation>Логирование</translation>
+        <translation type="vanished">Логирование</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="267"/>
         <source>Page</source>
-        <translation>Страница</translation>
+        <translation type="vanished">Страница</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="315"/>
         <source>Time stamp</source>
-        <translation>Отметка времени</translation>
+        <translation type="vanished">Отметка времени</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="320"/>
         <source>IP</source>
-        <translation>IP</translation>
+        <translation type="vanished">IP</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="325"/>
         <source>ID</source>
-        <translation>ID</translation>
+        <translation type="vanished">ID</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="330"/>
         <source>Action</source>
-        <translation>Действие</translation>
+        <translation type="vanished">Действие</translation>
     </message>
     <message>
         <source>Black List</source>
@@ -158,13 +156,13 @@
         <translation type="vanished">Управляющие</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="188"/>
+        <location filename="../main_window.ui" line="138"/>
         <source>Users</source>
         <translation>Пользователи</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="179"/>
-        <location filename="../main_window.ui" line="250"/>
+        <location filename="../main_window.ui" line="129"/>
+        <location filename="../main_window.ui" line="200"/>
         <source>Enabled</source>
         <translation>Включен</translation>
     </message>
@@ -172,54 +170,44 @@
 <context>
     <name>ProxyDialog</name>
     <message>
-        <location filename="../proxy_dialog.ui" line="14"/>
         <source>Proxy Properties</source>
-        <translation>Свойства прокси</translation>
+        <translation type="vanished">Свойства прокси</translation>
     </message>
     <message>
-        <location filename="../proxy_dialog.ui" line="27"/>
         <source>Address:</source>
-        <translation>Адрес:</translation>
+        <translation type="vanished">Адрес:</translation>
     </message>
     <message>
-        <location filename="../proxy_dialog.ui" line="34"/>
         <source>Port:</source>
-        <translation>Порт:</translation>
+        <translation type="vanished">Порт:</translation>
     </message>
     <message>
-        <location filename="../proxy_dialog.ui" line="41"/>
         <source>Reconnect timeout:</source>
-        <translation>Таймаут переподключения:</translation>
+        <translation type="vanished">Таймаут переподключения:</translation>
     </message>
     <message>
-        <location filename="../proxy_dialog.ui" line="68"/>
         <source> seconds</source>
-        <translation> секунд</translation>
+        <translation type="vanished"> секунд</translation>
     </message>
     <message>
-        <location filename="../proxy_dialog.ui" line="91"/>
         <source>Private key:</source>
-        <translation>Закрытый ключ:</translation>
+        <translation type="vanished">Закрытый ключ:</translation>
     </message>
     <message>
-        <location filename="../proxy_dialog.ui" line="101"/>
         <source>Public key:</source>
-        <translation>Открытый ключ:</translation>
+        <translation type="vanished">Открытый ключ:</translation>
     </message>
     <message>
-        <location filename="../proxy_dialog.ui" line="130"/>
         <source>Create keys</source>
-        <translation>Создать ключи</translation>
+        <translation type="vanished">Создать ключи</translation>
     </message>
     <message>
-        <location filename="../proxy_dialog.ui" line="137"/>
         <source>Check keys</source>
-        <translation>Проверить ключи</translation>
+        <translation type="vanished">Проверить ключи</translation>
     </message>
     <message>
-        <location filename="../proxy_dialog.ui" line="146"/>
         <source>Enable</source>
-        <translation>Включить</translation>
+        <translation type="vanished">Включить</translation>
     </message>
 </context>
 <context>
@@ -273,57 +261,15 @@
 <context>
     <name>router::Channel</name>
     <message>
-        <location filename="../channel.cc" line="61"/>
-        <location filename="../channel.cc" line="155"/>
         <source>Unknown internal error: message with incorrect size.</source>
-        <translation>Неизвестная внутренняя ошибка: сообщение с некорректным размером.</translation>
+        <translation type="vanished">Неизвестная внутренняя ошибка: сообщение с некорректным размером.</translation>
     </message>
 </context>
 <context>
     <name>router::ProxyDialog</name>
     <message>
-        <location filename="../proxy_dialog.cc" line="106"/>
-        <location filename="../proxy_dialog.cc" line="124"/>
-        <location filename="../proxy_dialog.cc" line="134"/>
-        <location filename="../proxy_dialog.cc" line="144"/>
-        <location filename="../proxy_dialog.cc" line="153"/>
         <source>Warning</source>
-        <translation type="unfinished">Предупреждение</translation>
-    </message>
-    <message>
-        <location filename="../proxy_dialog.cc" line="107"/>
-        <source>Error generating keys.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../proxy_dialog.cc" line="125"/>
-        <source>Private key not entered.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../proxy_dialog.cc" line="135"/>
-        <source>Public key not entered.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../proxy_dialog.cc" line="145"/>
-        <source>Invalid private key entered.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../proxy_dialog.cc" line="154"/>
-        <source>An invalid key pair has been entered.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../proxy_dialog.cc" line="160"/>
-        <source>Information</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../proxy_dialog.cc" line="161"/>
-        <source>The correct key pair has been entered.</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Предупреждение</translation>
     </message>
 </context>
 <context>

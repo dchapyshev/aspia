@@ -18,7 +18,6 @@
 
 #include "router/ui/main_window.h"
 
-#include "router/ui/proxy_dialog.h"
 #include "router/ui/user_dialog.h"
 
 #include <QMessageBox>
@@ -32,10 +31,6 @@ MainWindow::MainWindow()
     connect(ui.button_disconnect, &QPushButton::released, this, &MainWindow::onDisconnectOne);
     connect(ui.button_disconnect_all, &QPushButton::released, this, &MainWindow::onDisconnectAll);
     connect(ui.button_refresh_active, &QPushButton::released, this, &MainWindow::onRefresh);
-
-    connect(ui.button_add_proxy, &QPushButton::released, this, &MainWindow::onAddProxy);
-    connect(ui.button_modify_proxy, &QPushButton::released, this, &MainWindow::onModifyProxy);
-    connect(ui.button_delete_proxy, &QPushButton::released, this, &MainWindow::onDeleteProxy);
 
     connect(ui.button_add_user, &QPushButton::released, this, &MainWindow::onAddUser);
     connect(ui.button_modify_user, &QPushButton::released, this, &MainWindow::onModifyUser);
@@ -58,21 +53,6 @@ void MainWindow::onDisconnectAll()
 }
 
 void MainWindow::onRefresh()
-{
-
-}
-
-void MainWindow::onAddProxy()
-{
-    ProxyDialog(this).exec();
-}
-
-void MainWindow::onModifyProxy()
-{
-
-}
-
-void MainWindow::onDeleteProxy()
 {
 
 }

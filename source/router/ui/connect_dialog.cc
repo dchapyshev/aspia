@@ -18,7 +18,7 @@
 
 #include "router/ui/connect_dialog.h"
 
-#include "qt_base/locale_loader.h"
+#include "qt_base/application.h"
 
 #include <QAbstractButton>
 
@@ -30,14 +30,14 @@ const int kMaxMruSize = 15;
 
 } // namespace
 
-ConnectDialog::ConnectDialog(qt_base::LocaleLoader& locale_loader)
-    : locale_loader_(locale_loader)
+ConnectDialog::ConnectDialog()
 {
-    locale_loader_.installTranslators(settings_.locale());
+    qt_base::Application* instance = qt_base::Application::instance();
+    instance->setLocale(settings_.locale());
 
     ui.setupUi(this);
 
-    for (const auto& locale : locale_loader_.localeList())
+    for (const auto& locale : instance->localeList())
         ui.combobox_language->addItem(locale.second, locale.first);
 
     int current_language = ui.combobox_language->findData(settings_.locale());
@@ -103,7 +103,7 @@ void ConnectDialog::onCurrentLanguageChanged(int index)
 {
     QString locale = ui.combobox_language->itemData(index).toString();
 
-    locale_loader_.installTranslators(locale);
+    qt_base::Application::instance()->setLocale(locale);
     settings_.setLocale(locale);
 
     ui.retranslateUi(this);

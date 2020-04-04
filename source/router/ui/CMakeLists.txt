@@ -20,8 +20,6 @@ include(tbb)
 include(translations)
 
 list(APPEND SOURCE_ROUTER_MANAGER
-    channel.cc
-    channel.h
     connect_dialog.cc
     connect_dialog.h
     connect_dialog.ui
@@ -29,9 +27,6 @@ list(APPEND SOURCE_ROUTER_MANAGER
     main_window.cc
     main_window.h
     main_window.ui
-    proxy_dialog.cc
-    proxy_dialog.h
-    proxy_dialog.ui
     router.cc
     router.h
     router_manager.rc

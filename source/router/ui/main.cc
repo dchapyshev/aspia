@@ -17,11 +17,9 @@
 //
 
 #include "build/version.h"
-#include "qt_base/locale_loader.h"
+#include "qt_base/application.h"
 #include "router/ui/connect_dialog.h"
 #include "router/ui/main_window.h"
-
-#include <QApplication>
 
 #if defined(QT_STATIC)
 
@@ -36,24 +34,18 @@ Q_IMPORT_PLUGIN(QWindowsPrinterSupportPlugin);
 #endif // defined(Q_OS_WIN)
 #endif // defined(QT_STATIC)
 
-#if defined(USE_TBB)
-#include <tbb/tbbmalloc_proxy.h>
-#endif // defined(USE_TBB)
-
 int main(int argc, char *argv[])
 {
     Q_INIT_RESOURCE(qt_translations);
 
-    QApplication application(argc, argv);
+    qt_base::Application application(argc, argv);
 
-    QApplication::setOrganizationName(QLatin1String("Aspia"));
-    QApplication::setApplicationName(QLatin1String("Host"));
-    QApplication::setApplicationVersion(QLatin1String(ASPIA_VERSION_STRING));
-    QApplication::setAttribute(Qt::AA_DisableWindowContextHelpButton, true);
+    qt_base::Application::setOrganizationName(QLatin1String("Aspia"));
+    qt_base::Application::setApplicationName(QLatin1String("Router"));
+    qt_base::Application::setApplicationVersion(QLatin1String(ASPIA_VERSION_STRING));
+    qt_base::Application::setAttribute(Qt::AA_DisableWindowContextHelpButton, true);
 
-    qt_base::LocaleLoader locale_loader;
-
-    router::ConnectDialog connect_dialog(locale_loader);
+    router::ConnectDialog connect_dialog;
     if (connect_dialog.exec() != QDialog::Accepted)
         return 0;
 
@@ -61,5 +53,5 @@ int main(int argc, char *argv[])
     main_window.show();
     main_window.activateWindow();
 
-    return QApplication::exec();
+    return qt_base::Application::exec();
 }

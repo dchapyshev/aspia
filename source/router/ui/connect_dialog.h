@@ -36,7 +36,7 @@ class ConnectDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit ConnectDialog(qt_base::LocaleLoader& locale_loader);
+    ConnectDialog();
     ~ConnectDialog();
 
     QString address() const;
@@ -55,7 +55,6 @@ private:
     void reloadMru();
 
     Ui::ConnectDialog ui;
-    qt_base::LocaleLoader& locale_loader_;
     Settings settings_;
     Settings::MruList mru_;
 

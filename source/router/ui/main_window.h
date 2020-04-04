@@ -38,9 +38,6 @@ private:
     void onDisconnectOne();
     void onDisconnectAll();
     void onRefresh();
-    void onAddProxy();
-    void onModifyProxy();
-    void onDeleteProxy();
     void onAddUser();
     void onModifyUser();
     void onDeleteUser();
