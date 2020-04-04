@@ -21,6 +21,8 @@
 
 #include "host/user_session_agent.h"
 
+#include <shared_mutex>
+
 namespace base {
 class TaskRunner;
 } // namespace base
@@ -43,6 +45,7 @@ public:
 private:
     std::shared_ptr<base::TaskRunner> io_task_runner_;
     std::unique_ptr<UserSessionAgent> agent_;
+    std::shared_mutex agent_lock_;
 
     DISALLOW_COPY_AND_ASSIGN(UserSessionAgentProxy);
 };

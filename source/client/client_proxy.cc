@@ -32,7 +32,10 @@ ClientProxy::ClientProxy(
     DCHECK(io_task_runner_ && client_);
 }
 
-ClientProxy::~ClientProxy() = default;
+ClientProxy::~ClientProxy()
+{
+    stop();
+}
 
 void ClientProxy::start(const Config& config)
 {
@@ -42,20 +45,15 @@ void ClientProxy::start(const Config& config)
         return;
     }
 
+    std::shared_lock lock(client_lock_);
     if (client_)
         client_->start(config);
 }
 
 void ClientProxy::stop()
 {
-    if (!io_task_runner_->belongsToCurrentThread())
-    {
-        io_task_runner_->postTask(std::bind(&ClientProxy::stop, shared_from_this()));
-        return;
-    }
-
     std::unique_lock lock(client_lock_);
-    client_.reset();
+    io_task_runner_->deleteSoon(std::move(client_));
 }
 
 Config ClientProxy::config() const

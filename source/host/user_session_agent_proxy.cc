@@ -32,7 +32,10 @@ UserSessionAgentProxy::UserSessionAgentProxy(
     DCHECK(io_task_runner_->belongsToCurrentThread());
 }
 
-UserSessionAgentProxy::~UserSessionAgentProxy() = default;
+UserSessionAgentProxy::~UserSessionAgentProxy()
+{
+    stop();
+}
 
 void UserSessionAgentProxy::start()
 {
@@ -48,13 +51,8 @@ void UserSessionAgentProxy::start()
 
 void UserSessionAgentProxy::stop()
 {
-    if (!io_task_runner_->belongsToCurrentThread())
-    {
-        io_task_runner_->postTask(std::bind(&UserSessionAgentProxy::stop, shared_from_this()));
-        return;
-    }
-
-    agent_.reset();
+    std::unique_lock lock(agent_lock_);
+    io_task_runner_->deleteSoon(std::move(agent_));
 }
 
 void UserSessionAgentProxy::updateCredentials(
@@ -67,6 +65,7 @@ void UserSessionAgentProxy::updateCredentials(
         return;
     }
 
+    std::shared_lock lock(agent_lock_);
     if (agent_)
         agent_->updateCredentials(request_type);
 }
@@ -80,6 +79,7 @@ void UserSessionAgentProxy::killClient(const std::string& uuid)
         return;
     }
 
+    std::shared_lock lock(agent_lock_);
     if (agent_)
         agent_->killClient(uuid);
 }
