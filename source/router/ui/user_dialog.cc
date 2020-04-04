@@ -29,7 +29,6 @@ UserDialog::UserDialog(QWidget* parent)
     : QDialog(parent)
 {
     ui.setupUi(this);
-    setFixedHeight(sizeHint().height());
 
     connect(ui.buttonbox, &QDialogButtonBox::clicked, this, &UserDialog::onButtonBoxClicked);
 }

@@ -60,11 +60,6 @@
             <string>IP address</string>
            </property>
           </column>
-          <column>
-           <property name="text">
-            <string>Connection time</string>
-           </property>
-          </column>
          </widget>
         </item>
         <item>
@@ -121,12 +116,7 @@
           </column>
           <column>
            <property name="text">
-            <string>Port</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Enabled</string>
+            <string>Pool Size</string>
            </property>
           </column>
          </widget>

@@ -30,6 +30,11 @@ list(APPEND SOURCE_ROUTER_MANAGER
     router.cc
     router.h
     router_manager.rc
+    router_proxy.cc
+    router_proxy.h
+    router_window.h
+    router_window_proxy.cc
+    router_window_proxy.h
     settings.cc
     settings.h
     user_dialog.cc

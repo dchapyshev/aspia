@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>290</width>
-    <height>169</height>
+    <width>316</width>
+    <height>253</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -68,20 +68,27 @@
     </layout>
    </item>
    <item>
-    <widget class="QCheckBox" name="checkbox_manager">
-     <property name="text">
-      <string>Manager</string>
-     </property>
-    </widget>
-   </item>
-   <item>
     <widget class="QCheckBox" name="checkbox_enable">
      <property name="text">
-      <string>Enable</string>
+      <string>Disable User Account</string>
      </property>
      <property name="checked">
       <bool>true</bool>
      </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Allowed Session Types:</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QTreeWidget" name="treeWidget">
+     <attribute name="headerVisible">
+      <bool>false</bool>
+     </attribute>
     </widget>
    </item>
    <item>

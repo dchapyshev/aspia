@@ -70,7 +70,7 @@
         <translation>Количество подключений:</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="102"/>
+        <location filename="../main_window.ui" line="97"/>
         <source>Refresh</source>
         <translation>Обновить</translation>
     </message>
@@ -80,7 +80,7 @@
     </message>
     <message>
         <location filename="../main_window.ui" line="55"/>
-        <location filename="../main_window.ui" line="195"/>
+        <location filename="../main_window.ui" line="185"/>
         <source>User name</source>
         <translation>Имя пользователя</translation>
     </message>
@@ -90,23 +90,27 @@
         <translation>IP адрес</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="65"/>
         <source>Connection time</source>
-        <translation>Время подключения</translation>
+        <translation type="vanished">Время подключения</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="88"/>
+        <location filename="../main_window.ui" line="83"/>
         <source>Disconnect</source>
         <translation>Отключить</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="95"/>
+        <location filename="../main_window.ui" line="90"/>
         <source>Disconnect all</source>
         <translation>Отключить всех</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="112"/>
+        <location filename="../main_window.ui" line="107"/>
         <source>Proxy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main_window.ui" line="119"/>
+        <source>Pool Size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -114,14 +118,13 @@
         <translation type="vanished">Список прокси</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="119"/>
+        <location filename="../main_window.ui" line="114"/>
         <source>Address</source>
         <translation>Адрес</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="124"/>
         <source>Port</source>
-        <translation>Порт</translation>
+        <translation type="vanished">Порт</translation>
     </message>
     <message>
         <source>Logging</source>
@@ -156,13 +159,12 @@
         <translation type="vanished">Управляющие</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="138"/>
+        <location filename="../main_window.ui" line="128"/>
         <source>Users</source>
         <translation>Пользователи</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="129"/>
-        <location filename="../main_window.ui" line="200"/>
+        <location filename="../main_window.ui" line="190"/>
         <source>Enabled</source>
         <translation>Включен</translation>
     </message>
@@ -234,13 +236,17 @@
     </message>
     <message>
         <location filename="../user_dialog.ui" line="73"/>
-        <source>Manager</source>
+        <source>Disable User Account</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../user_dialog.ui" line="80"/>
+        <location filename="../user_dialog.ui" line="83"/>
+        <source>Allowed Session Types:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Enable</source>
-        <translation>Включить</translation>
+        <translation type="vanished">Включить</translation>
     </message>
 </context>
 <context>
@@ -264,25 +270,25 @@
         <translation type="obsolete">Пользователи</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="74"/>
-        <location filename="../user_dialog.cc" line="87"/>
-        <location filename="../user_dialog.cc" line="101"/>
-        <location filename="../user_dialog.cc" line="124"/>
+        <location filename="../user_dialog.cc" line="73"/>
+        <location filename="../user_dialog.cc" line="86"/>
+        <location filename="../user_dialog.cc" line="100"/>
+        <location filename="../user_dialog.cc" line="123"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="75"/>
+        <location filename="../user_dialog.cc" line="74"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>Имя пользователя не может быть пустым и должно содержать только буквы алфавита, цифры и символы _, -, .</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="88"/>
+        <location filename="../user_dialog.cc" line="87"/>
         <source>The passwords you entered do not match.</source>
         <translation>Введенные пароли не совпадают.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../user_dialog.cc" line="102"/>
+        <location filename="../user_dialog.cc" line="101"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
         <translation>
             <numerusform>Пароль не может быть пустым и не должен быть длиннее %n символа.</numerusform>
@@ -291,12 +297,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="114"/>
+        <location filename="../user_dialog.cc" line="113"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Введенный пароль не отвечает требованиям безопасности!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../user_dialog.cc" line="117"/>
+        <location filename="../user_dialog.cc" line="116"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Пароль должен содержать символы в нижнем и верхнем регистре, цифры и не может быть короче %n символа.</numerusform>
@@ -305,7 +311,7 @@
         </translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="121"/>
+        <location filename="../user_dialog.cc" line="120"/>
         <source>Do you want to enter a different password?</source>
         <translation>Вы хотите ввести другой пароль?</translation>
     </message>

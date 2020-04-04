@@ -98,6 +98,55 @@ message PeerToRouter
     ConnectionCandidate connection_candidate = 3;
 }
 
+message Peer
+{
+    fixed64 peer_id   = 1;
+    string ip_address = 2;
+    string user_name  = 3;
+}
+
+message PeerListRequest
+{
+    uint32 dummy = 1;
+}
+
+message PeerList
+{
+    enum ErrorCode
+    {
+        SUCCESS       = 0;
+        UNKNOWN_ERROR = 1;
+    }
+
+    ErrorCode error_code = 1;
+    repeated Peer peer   = 2;
+}
+
+enum PeerRequestType
+{
+    PEER_REQUEST_UNKNOWN    = 0;
+    PEER_REQUEST_DISCONNECT = 1;
+}
+
+message PeerRequest
+{
+    PeerRequestType type = 1;
+    Peer peer            = 2;
+}
+
+message PeerResult
+{
+    enum ErrorCode
+    {
+        SUCCESS        = 0;
+        INTERNAL_ERROR = 1;
+        INVALID_DATA   = 2;
+    }
+
+    PeerRequestType type = 1;
+    ErrorCode error_code = 2;
+}
+
 message User
 {
     uint64 entry_id = 1;
@@ -107,56 +156,55 @@ message User
     uint32 flags    = 5;
 }
 
-message Proxy
-{
-    string host = 1;
-}
-
 message UserListRequest
 {
     uint32 dummy = 1;
 }
 
-message UserListResponse
+message UserList
 {
     enum ErrorCode
     {
         SUCCESS       = 0;
-        ACCESS_DENIED = 1;
+        UNKNOWN_ERROR = 1;
     }
 
     ErrorCode error_code = 1;
     repeated User user   = 2;
 }
 
-message UserModifyRequest
+enum UserRequestType
 {
-    enum Action
-    {
-        ACTION_ADD    = 0;
-        ACTION_UPDATE = 1;
-        ACTION_DELETE = 2;
-    }
-
-    Action action = 1;
-    User user     = 2;
+    USER_REQUEST_UNKNOWN = 0;
+    USER_REQUEST_ADD     = 1;
+    USER_REQUEST_MODIFY  = 2;
+    USER_REQUEST_DELETE  = 3;
 }
 
-message UserModifyResponse
+message UserRequest
+{
+    UserRequestType type = 1;
+    User user            = 2;
+}
+
+message UserResult
 {
     enum ErrorCode
     {
-        UNKNOWN          = 0;
-        SUCCESS          = 1;
-        ACCESS_DENIED    = 2;
-        INVALID_ID       = 3;
-        INVALID_NAME     = 4;
-        INVALID_PASSWORD = 5;
-        INVALID_SESSIONS = 6;
-        INVALID_FLAGS    = 7;
+        SUCCESS        = 0;
+        INTERNAL_ERROR = 1;
+        INVALID_DATA   = 2;
+        ALREADY_EXISTS = 3;
     }
 
-    ErrorCode error_code = 1;
+    UserRequestType type = 1;
+    ErrorCode error_code = 2;
+}
+
+message Proxy
+{
+    string address   = 1;
+    uint64 pool_size = 2;
 }
 
 message ProxyListRequest
@@ -164,12 +212,12 @@ message ProxyListRequest
     uint32 dummy = 1;
 }
 
-message ProxyListResponse
+message ProxyList
 {
     enum ErrorCode
     {
         SUCCESS       = 0;
-        ACCESS_DENIED = 1;
+        UNKNOWN_ERROR = 1;
     }
 
     ErrorCode error_code = 1;
@@ -178,14 +226,18 @@ message ProxyListResponse
 
 message RouterToManager
 {
-    UserListResponse user_list_response       = 1;
-    UserModifyResponse user_modify_response   = 2;
-    ProxyListResponse proxy_list_response     = 3;
+    PeerList peer_list     = 1;
+    PeerResult peer_result = 2;
+    UserList user_list     = 3;
+    UserResult user_result = 4;
+    ProxyList proxy_list   = 5;
 }
 
 message ManagerToRouter
 {
-    UserListRequest user_list_request       = 1;
-    UserModifyRequest user_modify_request   = 2;
-    ProxyListRequest proxy_list_request     = 3;
+    PeerListRequest peer_list_request   = 1;
+    PeerRequest peer_request            = 2;
+    UserListRequest user_list_request   = 3;
+    UserRequest user_request            = 4;
+    ProxyListRequest proxy_list_request = 5;
 }

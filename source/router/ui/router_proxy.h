@@ -16,35 +16,35 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ROUTER__UI__ROUTER_H
-#define ROUTER__UI__ROUTER_H
+#ifndef ROUTER__UI__ROUTER_PROXY_H
+#define ROUTER__UI__ROUTER_PROXY_H
 
 #include "base/macros_magic.h"
-#include "net/channel.h"
-#include "net/client_authenticator.h"
-#include "proto/router.pb.h"
+
+#include <memory>
+#include <string>
 
 namespace base {
 class TaskRunner;
 } // namespace base
 
+namespace proto {
+class User;
+} // namespace proto
+
 namespace router {
 
-class RouterWindowProxy;
+class Router;
 
-class Router : public net::Channel::Listener
+class RouterProxy : public std::enable_shared_from_this<RouterProxy>
 {
 public:
-    Router(std::shared_ptr<RouterWindowProxy> window_proxy,
-           std::shared_ptr<base::TaskRunner> io_task_runner);
-    ~Router();
+    RouterProxy(std::shared_ptr<base::TaskRunner> io_task_runner, std::unique_ptr<Router> router);
+    ~RouterProxy();
 
-    void setPublicKey(const base::ByteArray& public_key);
-    void setUserName(std::u16string_view user_name);
-    void setPassword(std::u16string_view password);
+    void dettach();
 
-    void connectToRouter(std::u16string_view address, uint16_t port);
-
+    void connectToRouter(const std::u16string& address, uint16_t port);
     void refreshPeerList();
     void disconnectPeer(uint64_t peer_id);
     void refreshProxyList();
@@ -53,22 +53,13 @@ public:
     void modifyUser(const proto::User& user);
     void deleteUser(uint64_t entry_id);
 
-protected:
-    // net::Channel::Listener implementation.
-    void onConnected() override;
-    void onDisconnected(net::Channel::ErrorCode error_code) override;
-    void onMessageReceived(const base::ByteArray& buffer) override;
-    void onMessageWritten() override;
-
 private:
     std::shared_ptr<base::TaskRunner> io_task_runner_;
-    std::unique_ptr<net::Channel> channel_;
-    std::unique_ptr<net::ClientAuthenticator> authenticator_;
-    std::shared_ptr<RouterWindowProxy> window_proxy_;
+    std::unique_ptr<Router> router_;
 
-    DISALLOW_COPY_AND_ASSIGN(Router);
+    DISALLOW_COPY_AND_ASSIGN(RouterProxy);
 };
 
 } // namespace router
 
-#endif // ROUTER__UI__ROUTER_H
+#endif // ROUTER__UI__ROUTER_PROXY_H
