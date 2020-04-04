@@ -37,7 +37,6 @@ class MessageDecryptor;
 namespace net {
 
 class ChannelProxy;
-class Listener;
 class Server;
 
 class Channel
