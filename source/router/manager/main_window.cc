@@ -16,9 +16,9 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "router/ui/main_window.h"
+#include "router/manager/main_window.h"
 
-#include "router/ui/user_dialog.h"
+#include "router/manager/user_dialog.h"
 
 #include <QMessageBox>
 

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ROUTER__UI__ROUTER_H
-#define ROUTER__UI__ROUTER_H
+#ifndef ROUTER__MANAGER__ROUTER_H
+#define ROUTER__MANAGER__ROUTER_H
 
 #include "base/macros_magic.h"
 #include "net/channel.h"
@@ -71,4 +71,4 @@ private:
 
 } // namespace router
 
-#endif // ROUTER__UI__ROUTER_H
+#endif // ROUTER__MANAGER__ROUTER_H

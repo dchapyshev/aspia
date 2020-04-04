@@ -16,11 +16,11 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ROUTER__UI__CONNECT_DIALOG_H
-#define ROUTER__UI__CONNECT_DIALOG_H
+#ifndef ROUTER__MANAGER__CONNECT_DIALOG_H
+#define ROUTER__MANAGER__CONNECT_DIALOG_H
 
 #include "base/macros_magic.h"
-#include "router/ui/settings.h"
+#include "router/manager/settings.h"
 #include "ui_connect_dialog.h"
 
 #include <QDialog>
@@ -63,4 +63,4 @@ private:
 
 } // namespace router
 
-#endif // ROUTER__UI__CONNECT_DIALOG_H
+#endif // ROUTER__MANAGER__CONNECT_DIALOG_H

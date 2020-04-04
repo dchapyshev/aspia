@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ROUTER__UI__ROUTER_WINDOW_H
-#define ROUTER__UI__ROUTER_WINDOW_H
+#ifndef ROUTER__MANAGER__ROUTER_WINDOW_H
+#define ROUTER__MANAGER__ROUTER_WINDOW_H
 
 #include "net/client_authenticator.h"
 
@@ -48,4 +48,4 @@ public:
 
 } // namespace router
 
-#endif // ROUTER__UI__ROUTER_WINDOW_H
+#endif // ROUTER__MANAGER__ROUTER_WINDOW_H

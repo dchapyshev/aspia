@@ -75,10 +75,10 @@ if(Qt5LinguistTools_FOUND)
 
     # Get the list of files containing messages.
     file(GLOB_RECURSE ROUTER_MANAGER_TR_SOURCES
-        ${PROJECT_SOURCE_DIR}/router/ui/*.cc
-        ${PROJECT_SOURCE_DIR}/router/ui/*.cpp
-        ${PROJECT_SOURCE_DIR}/router/ui/*.h
-        ${PROJECT_SOURCE_DIR}/router/ui/*.ui)
+        ${PROJECT_SOURCE_DIR}/router/manager/*.cc
+        ${PROJECT_SOURCE_DIR}/router/manager/*.cpp
+        ${PROJECT_SOURCE_DIR}/router/manager/*.h
+        ${PROJECT_SOURCE_DIR}/router/manager/*.ui)
 
     qt5_create_translation(TS_ROUTER_MANAGER_UPDATE ${ROUTER_MANAGER_TR_SOURCES} ${ROUTER_MANAGER_TS_FILES})
     add_custom_target(aspia_router_manager_ts_update DEPENDS ${TS_ROUTER_MANAGER_UPDATE})

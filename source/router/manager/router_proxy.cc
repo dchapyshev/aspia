@@ -16,11 +16,11 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "router/ui/router_proxy.h"
+#include "router/manager/router_proxy.h"
 
 #include "base/logging.h"
 #include "base/task_runner.h"
-#include "router/ui/router.h"
+#include "router/manager/router.h"
 
 namespace router {
 

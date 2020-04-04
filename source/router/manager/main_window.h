@@ -16,36 +16,37 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ROUTER__UI__USER_DIALOG_H
-#define ROUTER__UI__USER_DIALOG_H
+#ifndef ROUTER__MANAGER__MAIN_WINDOW_H
+#define ROUTER__MANAGER__MAIN_WINDOW_H
 
 #include "base/macros_magic.h"
-#include "ui_user_dialog.h"
+#include "ui_main_window.h"
+
+#include <QMainWindow>
 
 namespace router {
 
-class UserDialog : public QDialog
+class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    explicit UserDialog(QWidget* parent = nullptr);
-    ~UserDialog();
-
-    void setUserName(const QString& username);
-    QString userName() const;
-    QString password() const;
-    void setEnabled(bool enable);
-    bool isEnabled() const;
+    MainWindow();
+    ~MainWindow();
 
 private:
-    void onButtonBoxClicked(QAbstractButton* button);
+    void onDisconnectOne();
+    void onDisconnectAll();
+    void onRefresh();
+    void onAddUser();
+    void onModifyUser();
+    void onDeleteUser();
 
-    Ui::UserDialog ui;
+    Ui::MainWindow ui;
 
-    DISALLOW_COPY_AND_ASSIGN(UserDialog);
+    DISALLOW_COPY_AND_ASSIGN(MainWindow);
 };
 
 } // namespace router
 
-#endif // ROUTER__UI__USER_DIALOG_H
+#endif // ROUTER__MANAGER__MAIN_WINDOW_H

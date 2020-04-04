@@ -248,6 +248,42 @@
         <source>Enable</source>
         <translation type="vanished">Включить</translation>
     </message>
+    <message>
+        <source>Warning</source>
+        <translation type="obsolete">Предупреждение</translation>
+    </message>
+    <message>
+        <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
+        <translation type="obsolete">Имя пользователя не может быть пустым и должно содержать только буквы алфавита, цифры и символы _, -, .</translation>
+    </message>
+    <message>
+        <source>The passwords you entered do not match.</source>
+        <translation type="obsolete">Введенные пароли не совпадают.</translation>
+    </message>
+    <message numerus="yes">
+        <source>Password can not be empty and should not exceed %n characters.</source>
+        <translation type="obsolete">
+            <numerusform>Пароль не может быть пустым и не должен быть длиннее %n символа.</numerusform>
+            <numerusform>Пароль не может быть пустым и не должен быть длиннее %n символов.</numerusform>
+            <numerusform>Пароль не может быть пустым и не должен быть длиннее %n символов.</numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>Password you entered does not meet the security requirements!</source>
+        <translation type="obsolete">Введенный пароль не отвечает требованиям безопасности!</translation>
+    </message>
+    <message numerus="yes">
+        <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
+        <translation type="obsolete">
+            <numerusform>Пароль должен содержать символы в нижнем и верхнем регистре, цифры и не может быть короче %n символа.</numerusform>
+            <numerusform>Пароль должен содержать символы в нижнем и верхнем регистре, цифры и не может быть короче %n символов.</numerusform>
+            <numerusform>Пароль должен содержать символы в нижнем и верхнем регистре, цифры и не может быть короче %n символов.</numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>Do you want to enter a different password?</source>
+        <translation type="obsolete">Вы хотите ввести другой пароль?</translation>
+    </message>
 </context>
 <context>
     <name>router::Channel</name>

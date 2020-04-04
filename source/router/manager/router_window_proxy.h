@@ -16,10 +16,10 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ROUTER__UI__ROUTER_WINDOW_PROXY_H
-#define ROUTER__UI__ROUTER_WINDOW_PROXY_H
+#ifndef ROUTER__MANAGER__ROUTER_WINDOW_PROXY_H
+#define ROUTER__MANAGER__ROUTER_WINDOW_PROXY_H
 
-#include "router/ui/router_window.h"
+#include "router/manager/router_window.h"
 
 namespace base {
 class TaskRunner;
@@ -54,4 +54,4 @@ private:
 
 } // namespace router
 
-#endif // ROUTER__UI__ROUTER_WINDOW_PROXY_H
+#endif // ROUTER__MANAGER__ROUTER_WINDOW_PROXY_H

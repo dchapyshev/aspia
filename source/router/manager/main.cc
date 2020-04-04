@@ -18,8 +18,8 @@
 
 #include "build/version.h"
 #include "qt_base/application.h"
-#include "router/ui/connect_dialog.h"
-#include "router/ui/main_window.h"
+#include "router/manager/connect_dialog.h"
+#include "router/manager/main_window.h"
 
 #if defined(QT_STATIC)
 

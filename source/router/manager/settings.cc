@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "router/ui/settings.h"
+#include "router/manager/settings.h"
 
 #include "qt_base/qt_xml_settings.h"
 

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ROUTER__UI__SETTINGS_H
-#define ROUTER__UI__SETTINGS_H
+#ifndef ROUTER__MANAGER__SETTINGS_H
+#define ROUTER__MANAGER__SETTINGS_H
 
 #include "base/macros_magic.h"
 
@@ -55,4 +55,4 @@ private:
 
 } // namespace router
 
-#endif // ROUTER__UI__SETTINGS_H
+#endif // ROUTER__MANAGER__SETTINGS_H

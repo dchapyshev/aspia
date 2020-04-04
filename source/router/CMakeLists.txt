@@ -61,4 +61,4 @@ if (USE_TBB)
     add_tbb(aspia_router ${ASPIA_THIRD_PARTY_DIR}/tbb)
 endif()
 
-add_subdirectory(ui)
+add_subdirectory(manager)

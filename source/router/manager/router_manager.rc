@@ -21,7 +21,7 @@
 LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 
 1 RT_MANIFEST "router_manager.manifest"
-IDI_ICON1 ICON "router/ui/resources/main.ico"
+IDI_ICON1 ICON "router/manager/resources/main.ico"
 
 #define ASPIA_ORIGINAL_FILE_NAME "aspia_router_manager.exe"
 #define ASPIA_FILE_DESCRIPTION "Aspia Router Manager"

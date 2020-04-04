@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "router/ui/connect_dialog.h"
+#include "router/manager/connect_dialog.h"
 
 #include "qt_base/application.h"
 
