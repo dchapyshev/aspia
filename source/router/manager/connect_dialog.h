@@ -19,17 +19,20 @@
 #ifndef ROUTER__MANAGER__CONNECT_DIALOG_H
 #define ROUTER__MANAGER__CONNECT_DIALOG_H
 
-#include "base/macros_magic.h"
 #include "router/manager/settings.h"
 #include "ui_connect_dialog.h"
 
 #include <QDialog>
+#include <QPointer>
 
 namespace qt_base {
 class LocaleLoader;
 } // namespace qt_base
 
 namespace router {
+
+class MainWindow;
+class RouterProxy;
 
 class ConnectDialog : public QDialog
 {
@@ -57,6 +60,8 @@ private:
     Ui::ConnectDialog ui;
     Settings settings_;
     Settings::MruList mru_;
+
+    QPointer<MainWindow> main_window_;
 
     DISALLOW_COPY_AND_ASSIGN(ConnectDialog);
 };

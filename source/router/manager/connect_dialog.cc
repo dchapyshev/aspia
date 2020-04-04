@@ -19,6 +19,7 @@
 #include "router/manager/connect_dialog.h"
 
 #include "qt_base/application.h"
+#include "router/manager/main_window.h"
 
 #include <QAbstractButton>
 
@@ -145,14 +146,14 @@ void ConnectDialog::onButtonBoxClicked(QAbstractButton* button)
         mru_.insert(0, entry);
 
         reloadMru();
-        accept();
+
+        main_window_ = new MainWindow(this);
+        main_window_->connectToRouter(address(), port(), QByteArray(), userName(), password());
     }
     else
     {
-        reject();
+        close();
     }
-
-    close();
 }
 
 void ConnectDialog::reloadMru()

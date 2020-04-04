@@ -28,7 +28,6 @@ Router::Router(std::shared_ptr<RouterWindowProxy> window_proxy,
                std::shared_ptr<base::TaskRunner> io_task_runner)
     : io_task_runner_(std::move(io_task_runner)),
       window_proxy_(std::move(window_proxy)),
-      channel_(std::make_unique<net::Channel>()),
       authenticator_(std::make_unique<net::ClientAuthenticator>())
 {
     authenticator_->setIdentify(proto::IDENTIFY_SRP);
@@ -54,6 +53,7 @@ void Router::setPassword(std::u16string_view password)
 
 void Router::connectToRouter(std::u16string_view address, uint16_t port)
 {
+    channel_ = std::make_unique<net::Channel>();
     channel_->setListener(this);
     channel_->connect(address, port);
 }

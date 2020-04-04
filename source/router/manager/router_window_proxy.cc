@@ -28,7 +28,7 @@ namespace router {
 RouterWindowProxy::RouterWindowProxy(std::shared_ptr<base::TaskRunner> ui_task_runner,
                                      RouterWindow* router_window)
     : ui_task_runner_(std::move(ui_task_runner)),
-      router_window_(router_window_)
+      router_window_(router_window)
 {
     DCHECK(ui_task_runner_ && router_window_);
 }

@@ -20,29 +20,65 @@
 #define ROUTER__MANAGER__MAIN_WINDOW_H
 
 #include "base/macros_magic.h"
+#include "router/manager/router_window.h"
 #include "ui_main_window.h"
 
 #include <QMainWindow>
 
 namespace router {
 
-class MainWindow : public QMainWindow
+class RouterProxy;
+class RouterWindowProxy;
+
+class MainWindow
+    : public QMainWindow,
+      public RouterWindow
 {
     Q_OBJECT
 
 public:
-    MainWindow();
+    explicit MainWindow(QWidget* parent);
     ~MainWindow();
 
+    void connectToRouter(const QString& address,
+                         uint16_t port,
+                         const QByteArray& public_key,
+                         const QString& user_name,
+                         const QString& password);
+
+    // RouterWindow implementation.
+    void onConnected(const base::Version& peer_version) override;
+    void onDisconnected(net::Channel::ErrorCode error_code) override;
+    void onAccessDenied(net::ClientAuthenticator::ErrorCode error_code) override;
+    void onPeerList(std::shared_ptr<proto::PeerList> peer_list) override;
+    void onPeerResult(std::shared_ptr<proto::PeerResult> peer_result) override;
+    void onProxyList(std::shared_ptr<proto::ProxyList> proxy_list) override;
+    void onUserList(std::shared_ptr<proto::UserList> user_list) override;
+    void onUserResult(std::shared_ptr<proto::UserResult> user_result) override;
+
+signals:
+    void disconnected();
+
+protected:
+    // QMainWindow implementation.
+    void closeEvent(QCloseEvent* event) override;
+
 private:
-    void onDisconnectOne();
-    void onDisconnectAll();
-    void onRefresh();
-    void onAddUser();
-    void onModifyUser();
-    void onDeleteUser();
+    void onRefreshPeerListPressed();
+    void onDisconnectPeerPressed();
+    void onRefreshProxyListPressed();
+    void onRefreshUserListPressed();
+    void onAddUserPressed();
+    void onModifyUserPressed();
+    void onDeleteUserPressed();
 
     Ui::MainWindow ui;
+
+    QString peer_address_;
+    uint16_t peer_port_ = 0;
+
+    std::shared_ptr<RouterWindowProxy> window_proxy_;
+    std::shared_ptr<RouterProxy> router_proxy_;
 
     DISALLOW_COPY_AND_ASSIGN(MainWindow);
 };

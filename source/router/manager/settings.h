@@ -37,6 +37,7 @@ public:
 
     struct MruEntry
     {
+        QByteArray public_key;
         QString address;
         uint16_t port;
         QString username;

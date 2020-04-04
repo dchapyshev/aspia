@@ -19,7 +19,6 @@
 #include "build/version.h"
 #include "qt_base/application.h"
 #include "router/manager/connect_dialog.h"
-#include "router/manager/main_window.h"
 
 #if defined(QT_STATIC)
 
@@ -46,12 +45,8 @@ int main(int argc, char *argv[])
     qt_base::Application::setAttribute(Qt::AA_DisableWindowContextHelpButton, true);
 
     router::ConnectDialog connect_dialog;
-    if (connect_dialog.exec() != QDialog::Accepted)
-        return 0;
-
-    router::MainWindow main_window;
-    main_window.show();
-    main_window.activateWindow();
+    connect_dialog.show();
+    connect_dialog.activateWindow();
 
     return qt_base::Application::exec();
 }

@@ -34,13 +34,7 @@ RouterProxy::RouterProxy(std::shared_ptr<base::TaskRunner> io_task_runner,
 
 RouterProxy::~RouterProxy()
 {
-    DCHECK(!router_);
-}
-
-void RouterProxy::dettach()
-{
-    DCHECK(io_task_runner_->belongsToCurrentThread());
-    router_ = nullptr;
+    disconnectFromRouter();
 }
 
 void RouterProxy::connectToRouter(const std::u16string& address, uint16_t port)
@@ -52,8 +46,13 @@ void RouterProxy::connectToRouter(const std::u16string& address, uint16_t port)
         return;
     }
 
-    if (router_)
-        router_->connectToRouter(address, port);
+    router_->connectToRouter(address, port);
+}
+
+void RouterProxy::disconnectFromRouter()
+{
+    std::unique_lock lock(router_lock_);
+    io_task_runner_->deleteSoon(std::move(router_));
 }
 
 void RouterProxy::refreshPeerList()
@@ -64,6 +63,7 @@ void RouterProxy::refreshPeerList()
         return;
     }
 
+    std::shared_lock lock(router_lock_);
     if (router_)
         router_->refreshPeerList();
 }
@@ -77,6 +77,7 @@ void RouterProxy::disconnectPeer(uint64_t peer_id)
         return;
     }
 
+    std::shared_lock lock(router_lock_);
     if (router_)
         router_->disconnectPeer(peer_id);
 }
@@ -89,6 +90,7 @@ void RouterProxy::refreshProxyList()
         return;
     }
 
+    std::shared_lock lock(router_lock_);
     if (router_)
         router_->refreshProxyList();
 }
@@ -101,6 +103,7 @@ void RouterProxy::refreshUserList()
         return;
     }
 
+    std::shared_lock lock(router_lock_);
     if (router_)
         router_->refreshUserList();
 }
@@ -113,6 +116,7 @@ void RouterProxy::addUser(const proto::User& user)
         return;
     }
 
+    std::shared_lock lock(router_lock_);
     if (router_)
         router_->addUser(user);
 }
@@ -125,6 +129,7 @@ void RouterProxy::modifyUser(const proto::User& user)
         return;
     }
 
+    std::shared_lock lock(router_lock_);
     if (router_)
         router_->modifyUser(user);
 }
@@ -137,6 +142,7 @@ void RouterProxy::deleteUser(uint64_t entry_id)
         return;
     }
 
+    std::shared_lock lock(router_lock_);
     if (router_)
         router_->deleteUser(entry_id);
 }

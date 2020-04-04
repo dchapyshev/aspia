@@ -70,7 +70,8 @@
         <translation>Количество подключений:</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="97"/>
+        <location filename="../main_window.ui" line="90"/>
+        <location filename="../main_window.ui" line="135"/>
         <source>Refresh</source>
         <translation>Обновить</translation>
     </message>
@@ -80,7 +81,6 @@
     </message>
     <message>
         <location filename="../main_window.ui" line="55"/>
-        <location filename="../main_window.ui" line="185"/>
         <source>User name</source>
         <translation>Имя пользователя</translation>
     </message>
@@ -99,18 +99,22 @@
         <translation>Отключить</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="90"/>
         <source>Disconnect all</source>
-        <translation>Отключить всех</translation>
+        <translation type="vanished">Отключить всех</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="107"/>
+        <location filename="../main_window.ui" line="100"/>
         <source>Proxy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="119"/>
+        <location filename="../main_window.ui" line="112"/>
         <source>Pool Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main_window.ui" line="213"/>
+        <source>User Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -118,7 +122,7 @@
         <translation type="vanished">Список прокси</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="114"/>
+        <location filename="../main_window.ui" line="107"/>
         <source>Address</source>
         <translation>Адрес</translation>
     </message>
@@ -159,14 +163,13 @@
         <translation type="vanished">Управляющие</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="128"/>
+        <location filename="../main_window.ui" line="145"/>
         <source>Users</source>
         <translation>Пользователи</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="190"/>
         <source>Enabled</source>
-        <translation>Включен</translation>
+        <translation type="vanished">Включен</translation>
     </message>
 </context>
 <context>
@@ -290,6 +293,91 @@
     <message>
         <source>Unknown internal error: message with incorrect size.</source>
         <translation type="vanished">Неизвестная внутренняя ошибка: сообщение с некорректным размером.</translation>
+    </message>
+</context>
+<context>
+    <name>router::MainWindow</name>
+    <message>
+        <location filename="../main_window.cc" line="126"/>
+        <source>Connected to: %1:%2 (%3).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main_window.cc" line="148"/>
+        <source>Cryptography error (message encryption or decryption failed).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main_window.cc" line="152"/>
+        <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main_window.cc" line="156"/>
+        <source>Connection was refused by the peer (or timed out).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main_window.cc" line="160"/>
+        <source>Remote host closed the connection.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main_window.cc" line="164"/>
+        <source>Host address was not found.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main_window.cc" line="168"/>
+        <source>Socket operation timed out.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main_window.cc" line="172"/>
+        <source>Address specified is already in use and was set to be exclusive.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main_window.cc" line="176"/>
+        <source>Address specified does not belong to the host.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main_window.cc" line="186"/>
+        <location filename="../main_window.cc" line="222"/>
+        <source>An unknown error occurred.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main_window.cc" line="191"/>
+        <location filename="../main_window.cc" line="226"/>
+        <source>Warning</source>
+        <translation type="unfinished">Предупреждение</translation>
+    </message>
+    <message>
+        <location filename="../main_window.cc" line="202"/>
+        <source>Authentication successfully completed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main_window.cc" line="206"/>
+        <source>Network authentication error.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main_window.cc" line="210"/>
+        <source>Violation of the data exchange protocol.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main_window.cc" line="214"/>
+        <source>An error occured while authenticating: wrong user name or password.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main_window.cc" line="218"/>
+        <source>Specified session type is not allowed for the user.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

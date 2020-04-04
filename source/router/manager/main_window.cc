@@ -18,56 +18,288 @@
 
 #include "router/manager/main_window.h"
 
+#include "base/logging.h"
+#include "qt_base/application.h"
 #include "router/manager/user_dialog.h"
+#include "router/manager/router.h"
+#include "router/manager/router_proxy.h"
+#include "router/manager/router_window_proxy.h"
 
 #include <QMessageBox>
 
 namespace router {
 
-MainWindow::MainWindow()
+namespace {
+
+class PeerTreeItem : public QTreeWidgetItem
+{
+public:
+    explicit PeerTreeItem(const proto::Peer& peer)
+    {
+        setText(0, QString::number(peer.peer_id()));
+        setText(1, QString::fromStdString(peer.user_name()));
+        setText(2, QString::fromStdString(peer.ip_address()));
+    }
+
+    ~PeerTreeItem() = default;
+
+    uint64_t peer_id;
+
+private:
+    DISALLOW_COPY_AND_ASSIGN(PeerTreeItem);
+};
+
+class ProxyTreeItem : public QTreeWidgetItem
+{
+public:
+    explicit ProxyTreeItem(const proto::Proxy& proxy)
+    {
+        setText(0, QString::fromStdString(proxy.address()));
+        setText(1, QString::number(proxy.pool_size()));
+    }
+
+private:
+    DISALLOW_COPY_AND_ASSIGN(ProxyTreeItem);
+};
+
+class UserTreeItem : public QTreeWidgetItem
+{
+public:
+    explicit UserTreeItem(const proto::User& user)
+        : user(user)
+    {
+        setText(0, QString::fromStdString(user.name()));
+    }
+
+    proto::User user;
+
+private:
+    DISALLOW_COPY_AND_ASSIGN(UserTreeItem);
+};
+
+} // namespace
+
+MainWindow::MainWindow(QWidget* parent)
+    : QMainWindow(parent),
+      window_proxy_(std::make_shared<RouterWindowProxy>(
+        qt_base::Application::uiTaskRunner(), this))
 {
     ui.setupUi(this);
 
-    connect(ui.button_disconnect, &QPushButton::released, this, &MainWindow::onDisconnectOne);
-    connect(ui.button_disconnect_all, &QPushButton::released, this, &MainWindow::onDisconnectAll);
-    connect(ui.button_refresh_active, &QPushButton::released, this, &MainWindow::onRefresh);
-
-    connect(ui.button_add_user, &QPushButton::released, this, &MainWindow::onAddUser);
-    connect(ui.button_modify_user, &QPushButton::released, this, &MainWindow::onModifyUser);
-    connect(ui.button_delete_user, &QPushButton::released, this, &MainWindow::onDeleteUser);
+    connect(ui.button_refresh_peers, &QPushButton::released, this, &MainWindow::onRefreshPeerListPressed);
+    connect(ui.button_disconnect_peer, &QPushButton::released, this, &MainWindow::onDisconnectPeerPressed);
+    connect(ui.button_refresh_proxy, &QPushButton::released, this, &MainWindow::onRefreshProxyListPressed);
+    connect(ui.button_add_user, &QPushButton::released, this, &MainWindow::onAddUserPressed);
+    connect(ui.button_modify_user, &QPushButton::released, this, &MainWindow::onModifyUserPressed);
+    connect(ui.button_delete_user, &QPushButton::released, this, &MainWindow::onDeleteUserPressed);
 }
 
 MainWindow::~MainWindow()
 {
-
+    window_proxy_->dettach();
 }
 
-void MainWindow::onDisconnectOne()
+void MainWindow::connectToRouter(const QString& address,
+                                 uint16_t port,
+                                 const QByteArray& public_key,
+                                 const QString& user_name,
+                                 const QString& password)
+{
+    peer_address_ = address;
+    peer_port_ = port;
+
+    std::unique_ptr<Router> router = std::make_unique<Router>(
+        window_proxy_, qt_base::Application::ioTaskRunner());
+
+    router->setPublicKey(base::fromHex(public_key.toStdString()));
+    router->setUserName(user_name.toStdU16String());
+    router->setPassword(password.toStdU16String());
+
+    router_proxy_ = std::make_shared<RouterProxy>(
+        qt_base::Application::ioTaskRunner(), std::move(router));
+
+    router_proxy_->connectToRouter(address.toStdU16String(), port);
+}
+
+void MainWindow::onConnected(const base::Version& peer_version)
+{
+    ui.statusbar->showMessage(tr("Connected to: %1:%2 (%3).")
+                              .arg(peer_address_)
+                              .arg(peer_port_)
+                              .arg(QString::fromStdString(peer_version.toString())));
+    show();
+    activateWindow();
+
+    if (router_proxy_)
+    {
+        router_proxy_->refreshPeerList();
+        router_proxy_->refreshProxyList();
+        router_proxy_->refreshUserList();
+    }
+}
+
+void MainWindow::onDisconnected(net::Channel::ErrorCode error_code)
+{
+    const char* message;
+
+    switch (error_code)
+    {
+        case net::Channel::ErrorCode::ACCESS_DENIED:
+            message = QT_TR_NOOP("Cryptography error (message encryption or decryption failed).");
+            break;
+
+        case net::Channel::ErrorCode::NETWORK_ERROR:
+            message = QT_TR_NOOP("An error occurred with the network (e.g., the network cable was accidentally plugged out).");
+            break;
+
+        case net::Channel::ErrorCode::CONNECTION_REFUSED:
+            message = QT_TR_NOOP("Connection was refused by the peer (or timed out).");
+            break;
+
+        case net::Channel::ErrorCode::REMOTE_HOST_CLOSED:
+            message = QT_TR_NOOP("Remote host closed the connection.");
+            break;
+
+        case net::Channel::ErrorCode::SPECIFIED_HOST_NOT_FOUND:
+            message = QT_TR_NOOP("Host address was not found.");
+            break;
+
+        case net::Channel::ErrorCode::SOCKET_TIMEOUT:
+            message = QT_TR_NOOP("Socket operation timed out.");
+            break;
+
+        case net::Channel::ErrorCode::ADDRESS_IN_USE:
+            message = QT_TR_NOOP("Address specified is already in use and was set to be exclusive.");
+            break;
+
+        case net::Channel::ErrorCode::ADDRESS_NOT_AVAILABLE:
+            message = QT_TR_NOOP("Address specified does not belong to the host.");
+            break;
+
+        default:
+        {
+            if (error_code != net::Channel::ErrorCode::UNKNOWN)
+            {
+                LOG(LS_WARNING) << "Unknown error code: " << static_cast<int>(error_code);
+            }
+
+            message = QT_TR_NOOP("An unknown error occurred.");
+        }
+        break;
+    }
+
+    QMessageBox::warning(this, tr("Warning"), tr(message), QMessageBox::Ok);
+    emit disconnected();
+}
+
+void MainWindow::onAccessDenied(net::ClientAuthenticator::ErrorCode error_code)
+{
+    const char* message;
+
+    switch (error_code)
+    {
+        case net::ClientAuthenticator::ErrorCode::SUCCESS:
+            message = QT_TR_NOOP("Authentication successfully completed.");
+            break;
+
+        case net::ClientAuthenticator::ErrorCode::NETWORK_ERROR:
+            message = QT_TR_NOOP("Network authentication error.");
+            break;
+
+        case net::ClientAuthenticator::ErrorCode::PROTOCOL_ERROR:
+            message = QT_TR_NOOP("Violation of the data exchange protocol.");
+            break;
+
+        case net::ClientAuthenticator::ErrorCode::ACCESS_DENIED:
+            message = QT_TR_NOOP("An error occured while authenticating: wrong user name or password.");
+            break;
+
+        case net::ClientAuthenticator::ErrorCode::SESSION_DENIED:
+            message = QT_TR_NOOP("Specified session type is not allowed for the user.");
+            break;
+
+        default:
+            message = QT_TR_NOOP("An unknown error occurred.");
+            break;
+    }
+
+    QMessageBox::warning(this, tr("Warning"), tr(message), QMessageBox::Ok);
+    emit disconnected();
+}
+
+void MainWindow::onPeerList(std::shared_ptr<proto::PeerList> peer_list)
+{
+    ui.tree_peer->clear();
+
+    for (int i = 0; i < peer_list->peer_size(); ++i)
+        ui.tree_peer->addTopLevelItem(new PeerTreeItem(peer_list->peer(i)));
+}
+
+void MainWindow::onPeerResult(std::shared_ptr<proto::PeerResult> peer_result)
 {
 
 }
 
-void MainWindow::onDisconnectAll()
+void MainWindow::onProxyList(std::shared_ptr<proto::ProxyList> proxy_list)
+{
+    ui.tree_proxy->clear();
+
+    for (int i = 0; i < proxy_list->proxy_size(); ++i)
+        ui.tree_proxy->addTopLevelItem(new ProxyTreeItem(proxy_list->proxy(i)));
+}
+
+void MainWindow::onUserList(std::shared_ptr<proto::UserList> user_list)
+{
+    ui.tree_users->clear();
+
+    for (int i = 0; i < user_list->user_size(); ++i)
+        ui.tree_users->addTopLevelItem(new UserTreeItem(user_list->user(i)));
+}
+
+void MainWindow::onUserResult(std::shared_ptr<proto::UserResult> user_result)
 {
 
 }
 
-void MainWindow::onRefresh()
+void MainWindow::closeEvent(QCloseEvent* event)
+{
+    if (router_proxy_)
+        router_proxy_->disconnectFromRouter();
+
+    emit disconnected();
+}
+
+void MainWindow::onRefreshPeerListPressed()
+{
+    router_proxy_->refreshPeerList();
+}
+
+void MainWindow::onDisconnectPeerPressed()
 {
 
 }
 
-void MainWindow::onAddUser()
+void MainWindow::onRefreshProxyListPressed()
+{
+
+}
+
+void MainWindow::onRefreshUserListPressed()
+{
+
+}
+
+void MainWindow::onAddUserPressed()
 {
     UserDialog(this).exec();
 }
 
-void MainWindow::onModifyUser()
+void MainWindow::onModifyUserPressed()
 {
 
 }
 
-void MainWindow::onDeleteUser()
+void MainWindow::onDeleteUserPressed()
 {
 
 }

@@ -20,9 +20,9 @@
 #define ROUTER__MANAGER__ROUTER_PROXY_H
 
 #include "base/macros_magic.h"
+#include "base/memory/byte_array.h"
 
-#include <memory>
-#include <string>
+#include <shared_mutex>
 
 namespace base {
 class TaskRunner;
@@ -42,9 +42,8 @@ public:
     RouterProxy(std::shared_ptr<base::TaskRunner> io_task_runner, std::unique_ptr<Router> router);
     ~RouterProxy();
 
-    void dettach();
-
     void connectToRouter(const std::u16string& address, uint16_t port);
+    void disconnectFromRouter();
     void refreshPeerList();
     void disconnectPeer(uint64_t peer_id);
     void refreshProxyList();
@@ -56,6 +55,7 @@ public:
 private:
     std::shared_ptr<base::TaskRunner> io_task_runner_;
     std::unique_ptr<Router> router_;
+    std::shared_mutex router_lock_;
 
     DISALLOW_COPY_AND_ASSIGN(RouterProxy);
 };
