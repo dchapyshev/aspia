@@ -233,27 +233,12 @@
         <translation>Пароль (повторить):</translation>
     </message>
     <message>
-        <location filename="../user_dialog.ui" line="77"/>
-        <source>Access</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../user_dialog.ui" line="82"/>
-        <source>Read</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../user_dialog.ui" line="87"/>
-        <source>Write</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../user_dialog.ui" line="95"/>
+        <location filename="../user_dialog.ui" line="73"/>
         <source>Manager</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../user_dialog.ui" line="102"/>
+        <location filename="../user_dialog.ui" line="80"/>
         <source>Enable</source>
         <translation>Включить</translation>
     </message>
@@ -275,40 +260,29 @@
 <context>
     <name>router::UserDialog</name>
     <message>
-        <location filename="../user_dialog.cc" line="57"/>
-        <source>Logs</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../user_dialog.cc" line="58"/>
         <source>Users</source>
-        <translation type="unfinished">Пользователи</translation>
+        <translation type="obsolete">Пользователи</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="59"/>
-        <source>Proxy</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../user_dialog.cc" line="104"/>
-        <location filename="../user_dialog.cc" line="117"/>
-        <location filename="../user_dialog.cc" line="131"/>
-        <location filename="../user_dialog.cc" line="154"/>
+        <location filename="../user_dialog.cc" line="74"/>
+        <location filename="../user_dialog.cc" line="87"/>
+        <location filename="../user_dialog.cc" line="101"/>
+        <location filename="../user_dialog.cc" line="124"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="105"/>
+        <location filename="../user_dialog.cc" line="75"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>Имя пользователя не может быть пустым и должно содержать только буквы алфавита, цифры и символы _, -, .</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="118"/>
+        <location filename="../user_dialog.cc" line="88"/>
         <source>The passwords you entered do not match.</source>
         <translation>Введенные пароли не совпадают.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../user_dialog.cc" line="132"/>
+        <location filename="../user_dialog.cc" line="102"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
         <translation>
             <numerusform>Пароль не может быть пустым и не должен быть длиннее %n символа.</numerusform>
@@ -317,12 +291,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="144"/>
+        <location filename="../user_dialog.cc" line="114"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Введенный пароль не отвечает требованиям безопасности!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../user_dialog.cc" line="147"/>
+        <location filename="../user_dialog.cc" line="117"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Пароль должен содержать символы в нижнем и верхнем регистре, цифры и не может быть короче %n символа.</numerusform>
@@ -331,7 +305,7 @@
         </translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="151"/>
+        <location filename="../user_dialog.cc" line="121"/>
         <source>Do you want to enter a different password?</source>
         <translation>Вы хотите ввести другой пароль?</translation>
     </message>
