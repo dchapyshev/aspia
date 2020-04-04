@@ -78,7 +78,7 @@ const Frame* ScreenCapturerGdi::captureFrame(Error* error)
 void ScreenCapturerGdi::reset()
 {
     // Release GDI resources otherwise SetThreadDesktop will fail.
-    desktop_dc_.reset();
+    desktop_dc_.close();
     memory_dc_.reset();
 }
 
@@ -122,7 +122,7 @@ const Frame* ScreenCapturerGdi::captureImage()
         BitBlt(memory_dc_,
                0, 0,
                screen_rect.width(), screen_rect.height(),
-               *desktop_dc_,
+               desktop_dc_,
                screen_rect.left(), screen_rect.top(),
                CAPTUREBLT | SRCCOPY);
     }
@@ -149,7 +149,7 @@ bool ScreenCapturerGdi::prepareCaptureResources()
     // If the display bounds have changed then recreate GDI resources.
     if (desktop_rect != desktop_dc_rect_)
     {
-        desktop_dc_.reset();
+        desktop_dc_.close();
         memory_dc_.reset();
 
         desktop_dc_rect_ = Rect();
@@ -171,8 +171,8 @@ bool ScreenCapturerGdi::prepareCaptureResources()
         }
 
         // Create GDI device contexts to capture from the desktop into memory.
-        desktop_dc_ = std::make_unique<base::win::ScopedGetDC>(nullptr);
-        memory_dc_.reset(CreateCompatibleDC(*desktop_dc_));
+        desktop_dc_.getDC(nullptr);
+        memory_dc_.reset(CreateCompatibleDC(desktop_dc_));
         if (!memory_dc_)
         {
             LOG(LS_WARNING) << "CreateCompatibleDC failed";

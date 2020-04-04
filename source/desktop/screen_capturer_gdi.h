@@ -60,7 +60,7 @@ private:
     PixelFormat pixel_format_;
 
     std::unique_ptr<Differ> differ_;
-    std::unique_ptr<base::win::ScopedGetDC> desktop_dc_;
+    base::win::ScopedGetDC desktop_dc_;
     base::win::ScopedCreateDC memory_dc_;
 
     FrameQueue<Frame> queue_;

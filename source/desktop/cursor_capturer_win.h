@@ -19,16 +19,10 @@
 #ifndef DESKTOP__CURSOR_CAPTURER_WIN_H
 #define DESKTOP__CURSOR_CAPTURER_WIN_H
 
-#include "base/macros_magic.h"
+#include "base/win/scoped_hdc.h"
 #include "desktop/cursor_capturer.h"
 
 #include <memory>
-
-#include <Windows.h>
-
-namespace base::win {
-class ScopedGetDC;
-} // namespace base::win
 
 namespace desktop {
 
@@ -42,7 +36,7 @@ public:
     void reset() override;
 
 private:
-    std::unique_ptr<base::win::ScopedGetDC> desktop_dc_;
+    base::win::ScopedGetDC desktop_dc_;
     std::unique_ptr<MouseCursor> mouse_cursor_;
     CURSORINFO prev_cursor_info_;
 

@@ -18,7 +18,6 @@
 
 #include "desktop/cursor_capturer_win.h"
 
-#include "base/win/scoped_hdc.h"
 #include "desktop/mouse_cursor.h"
 #include "desktop/win/cursor.h"
 
@@ -44,8 +43,8 @@ CursorCapturerWin::~CursorCapturerWin() = default;
 
 const MouseCursor* CursorCapturerWin::captureCursor()
 {
-    if (!desktop_dc_)
-        desktop_dc_.reset(new base::win::ScopedGetDC(nullptr));
+    if (!desktop_dc_.isValid())
+        desktop_dc_.getDC(nullptr);
 
     CURSORINFO cursor_info = { 0 };
 
@@ -63,7 +62,7 @@ const MouseCursor* CursorCapturerWin::captureCursor()
                 cursor_info.hCursor = LoadCursorW(nullptr, IDC_ARROW);
             }
 
-            mouse_cursor_.reset(mouseCursorFromHCursor(*desktop_dc_, cursor_info.hCursor));
+            mouse_cursor_.reset(mouseCursorFromHCursor(desktop_dc_, cursor_info.hCursor));
             if (mouse_cursor_)
             {
                 prev_cursor_info_ = cursor_info;
@@ -77,7 +76,7 @@ const MouseCursor* CursorCapturerWin::captureCursor()
 
 void CursorCapturerWin::reset()
 {
-    desktop_dc_.reset();
+    desktop_dc_.close();
 }
 
 } // namespace desktop
