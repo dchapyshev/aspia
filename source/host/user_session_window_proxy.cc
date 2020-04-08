@@ -45,17 +45,17 @@ void UserSessionWindowProxy::dettach()
     window_ = nullptr;
 }
 
-void UserSessionWindowProxy::onStateChanged(UserSessionAgent::State state)
+void UserSessionWindowProxy::onStatusChanged(UserSessionAgent::Status status)
 {
     if (!ui_task_runner_->belongsToCurrentThread())
     {
         ui_task_runner_->postTask(std::bind(
-            &UserSessionWindowProxy::onStateChanged, shared_from_this(), state));
+            &UserSessionWindowProxy::onStatusChanged, shared_from_this(), status));
         return;
     }
 
     if (window_)
-        window_->onStateChanged(state);
+        window_->onStatusChanged(status);
 }
 
 void UserSessionWindowProxy::onClientListChanged(const UserSessionAgent::ClientList& clients)

@@ -654,29 +654,29 @@
     </message>
     <message>
         <location filename="../ui/host_main_window.cc" line="113"/>
-        <location filename="../ui/host_main_window.cc" line="254"/>
+        <location filename="../ui/host_main_window.cc" line="263"/>
         <source>Show</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/host_main_window.cc" line="48"/>
-        <location filename="../ui/host_main_window.cc" line="195"/>
-        <location filename="../ui/host_main_window.cc" line="202"/>
+        <location filename="../ui/host_main_window.cc" line="204"/>
+        <location filename="../ui/host_main_window.cc" line="211"/>
         <source>Not available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/host_main_window.cc" line="259"/>
+        <location filename="../ui/host_main_window.cc" line="268"/>
         <source>Hide</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/host_main_window.cc" line="284"/>
+        <location filename="../ui/host_main_window.cc" line="300"/>
         <source>Confirmation</source>
         <translation>Підтвердження</translation>
     </message>
     <message>
-        <location filename="../ui/host_main_window.cc" line="285"/>
+        <location filename="../ui/host_main_window.cc" line="301"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation type="unfinished"></translation>
     </message>

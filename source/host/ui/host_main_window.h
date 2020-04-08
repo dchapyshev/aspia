@@ -51,7 +51,7 @@ protected:
     void closeEvent(QCloseEvent* event) override;
 
     // UserSessionWindow implementation.
-    void onStateChanged(UserSessionAgent::State state) override;
+    void onStatusChanged(UserSessionAgent::Status status) override;
     void onClientListChanged(const UserSessionAgent::ClientList& clients) override;
     void onCredentialsChanged(const proto::internal::Credentials& credentials) override;
 

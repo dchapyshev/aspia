@@ -28,7 +28,7 @@ class UserSessionWindow
 public:
     virtual ~UserSessionWindow() = default;
 
-    virtual void onStateChanged(UserSessionAgent::State state) = 0;
+    virtual void onStatusChanged(UserSessionAgent::Status status) = 0;
     virtual void onClientListChanged(const UserSessionAgent::ClientList& clients) = 0;
     virtual void onCredentialsChanged(const proto::internal::Credentials& credentials) = 0;
 };

@@ -38,7 +38,7 @@ public:
 
     void dettach();
 
-    void onStateChanged(UserSessionAgent::State state);
+    void onStatusChanged(UserSessionAgent::Status status);
     void onClientListChanged(const UserSessionAgent::ClientList& clients);
     void onCredentialsChanged(const proto::internal::Credentials& credentials);
 

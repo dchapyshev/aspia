@@ -34,10 +34,11 @@ class UserSessionWindowProxy;
 class UserSessionAgent : public ipc::Channel::Listener
 {
 public:
-    enum class State
+    enum class Status
     {
-        CONNECTED,
-        DISCONNECTED
+        CONNECTED_TO_SERVICE,
+        DISCONNECTED_FROM_SERVICE,
+        SERVICE_NOT_AVAILABLE
     };
 
     struct Client

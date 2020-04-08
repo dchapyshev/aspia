@@ -42,14 +42,18 @@ void UserSessionAgent::start()
 
     if (ipc_channel_->connect(kIpcChannelIdForUI))
     {
-        window_proxy_->onStateChanged(State::CONNECTED);
+        window_proxy_->onStatusChanged(Status::CONNECTED_TO_SERVICE);
         ipc_channel_->resume();
+    }
+    else
+    {
+        window_proxy_->onStatusChanged(Status::SERVICE_NOT_AVAILABLE);
     }
 }
 
 void UserSessionAgent::onDisconnected()
 {
-    window_proxy_->onStateChanged(State::DISCONNECTED);
+    window_proxy_->onStatusChanged(Status::DISCONNECTED_FROM_SERVICE);
 }
 
 void UserSessionAgent::onMessageReceived(const base::ByteArray& buffer)
