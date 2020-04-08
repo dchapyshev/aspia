@@ -78,7 +78,7 @@ private:
     uint16_t peer_port_ = 0;
 
     std::shared_ptr<RouterWindowProxy> window_proxy_;
-    std::shared_ptr<RouterProxy> router_proxy_;
+    std::unique_ptr<RouterProxy> router_proxy_;
 
     DISALLOW_COPY_AND_ASSIGN(MainWindow);
 };

@@ -22,8 +22,6 @@
 #include "base/macros_magic.h"
 #include "base/memory/byte_array.h"
 
-#include <shared_mutex>
-
 namespace base {
 class TaskRunner;
 } // namespace base
@@ -36,7 +34,7 @@ namespace router {
 
 class Router;
 
-class RouterProxy : public std::enable_shared_from_this<RouterProxy>
+class RouterProxy
 {
 public:
     RouterProxy(std::shared_ptr<base::TaskRunner> io_task_runner, std::unique_ptr<Router> router);
@@ -53,9 +51,8 @@ public:
     void deleteUser(uint64_t entry_id);
 
 private:
-    std::shared_ptr<base::TaskRunner> io_task_runner_;
-    std::unique_ptr<Router> router_;
-    std::shared_mutex router_lock_;
+    class Impl;
+    std::shared_ptr<Impl> impl_;
 
     DISALLOW_COPY_AND_ASSIGN(RouterProxy);
 };

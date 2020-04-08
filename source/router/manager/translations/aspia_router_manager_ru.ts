@@ -52,9 +52,8 @@
         <translation>Менеджер маршрутизатора</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="25"/>
         <source>Statistics</source>
-        <translation>Статистика</translation>
+        <translation type="vanished">Статистика</translation>
     </message>
     <message>
         <source>Service</source>
@@ -101,6 +100,11 @@
     <message>
         <source>Disconnect all</source>
         <translation type="vanished">Отключить всех</translation>
+    </message>
+    <message>
+        <location filename="../main_window.ui" line="25"/>
+        <source>Peers</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="100"/>

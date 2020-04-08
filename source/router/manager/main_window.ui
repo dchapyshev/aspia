@@ -20,9 +20,9 @@
       <property name="currentIndex">
        <number>0</number>
       </property>
-      <widget class="QWidget" name="tab_statistics">
+      <widget class="QWidget" name="tab_peers">
        <attribute name="title">
-        <string>Statistics</string>
+        <string>Peers</string>
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>

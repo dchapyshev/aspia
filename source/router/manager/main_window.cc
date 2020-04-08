@@ -115,7 +115,7 @@ void MainWindow::connectToRouter(const QString& address,
     router->setUserName(user_name.toStdU16String());
     router->setPassword(password.toStdU16String());
 
-    router_proxy_ = std::make_shared<RouterProxy>(
+    router_proxy_ = std::make_unique<RouterProxy>(
         qt_base::Application::ioTaskRunner(), std::move(router));
 
     router_proxy_->connectToRouter(address.toStdU16String(), port);
@@ -276,17 +276,24 @@ void MainWindow::onRefreshPeerListPressed()
 
 void MainWindow::onDisconnectPeerPressed()
 {
+    PeerTreeItem* tree_item = static_cast<PeerTreeItem*>(ui.tree_peer->currentItem());
+    if (!tree_item)
+        return;
 
+    if (router_proxy_)
+        router_proxy_->disconnectPeer(tree_item->peer_id);
 }
 
 void MainWindow::onRefreshProxyListPressed()
 {
-
+    if (router_proxy_)
+        router_proxy_->refreshProxyList();
 }
 
 void MainWindow::onRefreshUserListPressed()
 {
-
+    if (router_proxy_)
+        router_proxy_->refreshUserList();
 }
 
 void MainWindow::onAddUserPressed()
