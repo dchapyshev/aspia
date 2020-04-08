@@ -70,7 +70,7 @@ private:
     void onErrorOccurred(const QString& message);
 
     std::shared_ptr<StatusWindowProxy> status_window_proxy_;
-    std::shared_ptr<ClientProxy> client_proxy_;
+    std::unique_ptr<ClientProxy> client_proxy_;
     StatusDialog* status_dialog_ = nullptr;
 };
 

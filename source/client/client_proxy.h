@@ -23,7 +23,6 @@
 #include "client/client_config.h"
 
 #include <memory>
-#include <shared_mutex>
 
 namespace base {
 class TaskRunner;
@@ -33,21 +32,23 @@ namespace client {
 
 class Client;
 
-class ClientProxy : public std::enable_shared_from_this<ClientProxy>
+class ClientProxy
 {
 public:
-    ClientProxy(std::shared_ptr<base::TaskRunner> io_task_runner, std::unique_ptr<Client> client);
+    ClientProxy(std::shared_ptr<base::TaskRunner> io_task_runner,
+                std::unique_ptr<Client> client,
+                const Config& config);
     ~ClientProxy();
 
-    void start(const Config& config);
+    void start();
     void stop();
 
-    Config config() const;
+    const Config& config() const { return config_; }
 
 private:
-    std::shared_ptr<base::TaskRunner> io_task_runner_;
-    mutable std::shared_mutex client_lock_;
-    std::unique_ptr<Client> client_;
+    class Impl;
+    std::shared_ptr<Impl> impl_;
+    Config config_;
 
     DISALLOW_COPY_AND_ASSIGN(ClientProxy);
 };

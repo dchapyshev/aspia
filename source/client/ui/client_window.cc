@@ -72,10 +72,10 @@ bool ClientWindow::connectToHost(Config config)
     // Set the window that will receive notifications.
     client->setStatusWindow(status_window_proxy_);
 
-    client_proxy_ = std::make_shared<ClientProxy>(
-        qt_base::Application::ioTaskRunner(), std::move(client));
+    client_proxy_ = std::make_unique<ClientProxy>(
+        qt_base::Application::ioTaskRunner(), std::move(client), config);
 
-    client_proxy_->start(config);
+    client_proxy_->start();
     return true;
 }
 

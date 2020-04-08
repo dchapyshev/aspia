@@ -24,47 +24,84 @@
 
 namespace client {
 
-ClientProxy::ClientProxy(
-    std::shared_ptr<base::TaskRunner> io_task_runner, std::unique_ptr<Client> client)
+class ClientProxy::Impl : public std::enable_shared_from_this<Impl>
+{
+public:
+    Impl(std::shared_ptr<base::TaskRunner> io_task_runner, std::unique_ptr<Client> client);
+    ~Impl();
+
+    void start(const Config& config);
+    void stop();
+
+private:
+    std::shared_ptr<base::TaskRunner> io_task_runner_;
+    std::unique_ptr<Client> client_;
+
+    DISALLOW_COPY_AND_ASSIGN(Impl);
+};
+
+ClientProxy::Impl::Impl(std::shared_ptr<base::TaskRunner> io_task_runner,
+                        std::unique_ptr<Client> client)
     : io_task_runner_(std::move(io_task_runner)),
       client_(std::move(client))
 {
     DCHECK(io_task_runner_ && client_);
 }
 
-ClientProxy::~ClientProxy()
+ClientProxy::Impl::~Impl()
 {
-    stop();
+    DCHECK(!client_);
 }
 
-void ClientProxy::start(const Config& config)
+void ClientProxy::Impl::start(const Config& config)
 {
     if (!io_task_runner_->belongsToCurrentThread())
     {
-        io_task_runner_->postTask(std::bind(&ClientProxy::start, shared_from_this(), config));
+        io_task_runner_->postTask(std::bind(&Impl::start, shared_from_this(), config));
         return;
     }
 
-    std::shared_lock lock(client_lock_);
     if (client_)
         client_->start(config);
 }
 
-void ClientProxy::stop()
+void ClientProxy::Impl::stop()
 {
-    std::unique_lock lock(client_lock_);
-    io_task_runner_->deleteSoon(std::move(client_));
+    if (!io_task_runner_->belongsToCurrentThread())
+    {
+        io_task_runner_->postTask(std::bind(&Impl::stop, shared_from_this()));
+        return;
+    }
+
+    if (client_)
+    {
+        client_->stop();
+        client_.reset();
+    }
 }
 
-Config ClientProxy::config() const
+ClientProxy::ClientProxy(std::shared_ptr<base::TaskRunner> io_task_runner,
+                         std::unique_ptr<Client> client,
+                         const Config& config)
+    : impl_(std::make_shared<Impl>(std::move(io_task_runner), std::move(client))),
+      config_(config)
 {
-    Config config;
+    // Nothing
+}
 
-    std::shared_lock lock(client_lock_);
-    if (client_)
-        config = client_->config();
+ClientProxy::~ClientProxy()
+{
+    impl_->stop();
+}
 
-    return config;
+void ClientProxy::start()
+{
+    impl_->start(config_);
+}
+
+void ClientProxy::stop()
+{
+    impl_->stop();
 }
 
 } // namespace client
