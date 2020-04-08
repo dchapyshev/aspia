@@ -21,19 +21,17 @@
 
 #include "host/user_session_agent.h"
 
-#include <shared_mutex>
-
 namespace base {
 class TaskRunner;
 } // namespace base
 
 namespace host {
 
-class UserSessionAgentProxy : public std::enable_shared_from_this<UserSessionAgentProxy>
+class UserSessionAgentProxy
 {
 public:
-    UserSessionAgentProxy(
-        std::shared_ptr<base::TaskRunner> io_task_runner, std::unique_ptr<UserSessionAgent> agent);
+    UserSessionAgentProxy(std::shared_ptr<base::TaskRunner> io_task_runner,
+                          std::unique_ptr<UserSessionAgent> agent);
     ~UserSessionAgentProxy();
 
     void start();
@@ -43,9 +41,8 @@ public:
     void killClient(const std::string& uuid);
 
 private:
-    std::shared_ptr<base::TaskRunner> io_task_runner_;
-    std::unique_ptr<UserSessionAgent> agent_;
-    std::shared_mutex agent_lock_;
+    class Impl;
+    std::shared_ptr<Impl> impl_;
 
     DISALLOW_COPY_AND_ASSIGN(UserSessionAgentProxy);
 };

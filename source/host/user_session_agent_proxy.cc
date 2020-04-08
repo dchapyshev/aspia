@@ -23,8 +23,27 @@
 
 namespace host {
 
-UserSessionAgentProxy::UserSessionAgentProxy(
-    std::shared_ptr<base::TaskRunner> io_task_runner, std::unique_ptr<UserSessionAgent> agent)
+class UserSessionAgentProxy::Impl : public std::enable_shared_from_this<Impl>
+{
+public:
+    Impl(std::shared_ptr<base::TaskRunner> io_task_runner,
+         std::unique_ptr<UserSessionAgent> agent);
+    ~Impl();
+
+    void start();
+    void stop();
+    void updateCredentials(proto::internal::CredentialsRequest::Type request_type);
+    void killClient(const std::string& uuid);
+
+private:
+    std::shared_ptr<base::TaskRunner> io_task_runner_;
+    std::unique_ptr<UserSessionAgent> agent_;
+
+    DISALLOW_COPY_AND_ASSIGN(Impl);
+};
+
+UserSessionAgentProxy::Impl::Impl(std::shared_ptr<base::TaskRunner> io_task_runner,
+                                  std::unique_ptr<UserSessionAgent> agent)
     : io_task_runner_(std::move(io_task_runner)),
       agent_(std::move(agent))
 {
@@ -32,16 +51,16 @@ UserSessionAgentProxy::UserSessionAgentProxy(
     DCHECK(io_task_runner_->belongsToCurrentThread());
 }
 
-UserSessionAgentProxy::~UserSessionAgentProxy()
+UserSessionAgentProxy::Impl::~Impl()
 {
-    stop();
+    DCHECK(!agent_);
 }
 
-void UserSessionAgentProxy::start()
+void UserSessionAgentProxy::Impl::start()
 {
     if (!io_task_runner_->belongsToCurrentThread())
     {
-        io_task_runner_->postTask(std::bind(&UserSessionAgentProxy::start, shared_from_this()));
+        io_task_runner_->postTask(std::bind(&Impl::start, shared_from_this()));
         return;
     }
 
@@ -49,39 +68,74 @@ void UserSessionAgentProxy::start()
         agent_->start();
 }
 
+void UserSessionAgentProxy::Impl::stop()
+{
+    if (!io_task_runner_->belongsToCurrentThread())
+    {
+        io_task_runner_->postTask(std::bind(&Impl::stop, shared_from_this()));
+        return;
+    }
+
+    agent_.reset();
+}
+
+void UserSessionAgentProxy::Impl::updateCredentials(
+    proto::internal::CredentialsRequest::Type request_type)
+{
+    if (!io_task_runner_->belongsToCurrentThread())
+    {
+        io_task_runner_->postTask(
+            std::bind(&Impl::updateCredentials, shared_from_this(), request_type));
+        return;
+    }
+
+    if (agent_)
+        agent_->updateCredentials(request_type);
+}
+
+void UserSessionAgentProxy::Impl::killClient(const std::string& uuid)
+{
+    if (!io_task_runner_->belongsToCurrentThread())
+    {
+        io_task_runner_->postTask(std::bind(&Impl::killClient, shared_from_this(), uuid));
+        return;
+    }
+
+    if (agent_)
+        agent_->killClient(uuid);
+}
+
+UserSessionAgentProxy::UserSessionAgentProxy(std::shared_ptr<base::TaskRunner> io_task_runner,
+                                             std::unique_ptr<UserSessionAgent> agent)
+    : impl_(std::make_shared<Impl>(std::move(io_task_runner), std::move(agent)))
+{
+    // Nothing
+}
+
+UserSessionAgentProxy::~UserSessionAgentProxy()
+{
+    impl_->stop();
+}
+
+void UserSessionAgentProxy::start()
+{
+    impl_->start();
+}
+
 void UserSessionAgentProxy::stop()
 {
-    std::unique_lock lock(agent_lock_);
-    io_task_runner_->deleteSoon(std::move(agent_));
+    impl_->stop();
 }
 
 void UserSessionAgentProxy::updateCredentials(
     proto::internal::CredentialsRequest::Type request_type)
 {
-    if (!io_task_runner_->belongsToCurrentThread())
-    {
-        io_task_runner_->postTask(std::bind(
-            &UserSessionAgentProxy::updateCredentials, shared_from_this(), request_type));
-        return;
-    }
-
-    std::shared_lock lock(agent_lock_);
-    if (agent_)
-        agent_->updateCredentials(request_type);
+    impl_->updateCredentials(request_type);
 }
 
 void UserSessionAgentProxy::killClient(const std::string& uuid)
 {
-    if (!io_task_runner_->belongsToCurrentThread())
-    {
-        io_task_runner_->postTask(std::bind(
-            &UserSessionAgentProxy::killClient, shared_from_this(), uuid));
-        return;
-    }
-
-    std::shared_lock lock(agent_lock_);
-    if (agent_)
-        agent_->killClient(uuid);
+    impl_->killClient(uuid);
 }
 
 } // namespace host

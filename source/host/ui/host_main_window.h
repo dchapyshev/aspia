@@ -75,7 +75,7 @@ private:
     QMenu tray_menu_;
     QPointer<NotifierWindow> notifier_;
 
-    std::shared_ptr<UserSessionAgentProxy> agent_proxy_;
+    std::unique_ptr<UserSessionAgentProxy> agent_proxy_;
     std::shared_ptr<UserSessionWindowProxy> window_proxy_;
 
     DISALLOW_COPY_AND_ASSIGN(MainWindow);

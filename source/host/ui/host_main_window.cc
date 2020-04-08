@@ -95,7 +95,7 @@ MainWindow::~MainWindow() = default;
 
 void MainWindow::connectToService()
 {
-    agent_proxy_ = std::make_shared<UserSessionAgentProxy>(
+    agent_proxy_ = std::make_unique<UserSessionAgentProxy>(
         qt_base::Application::ioTaskRunner(), std::make_unique<UserSessionAgent>(window_proxy_));
 
     agent_proxy_->start();
