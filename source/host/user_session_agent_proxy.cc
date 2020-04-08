@@ -48,7 +48,6 @@ UserSessionAgentProxy::Impl::Impl(std::shared_ptr<base::TaskRunner> io_task_runn
       agent_(std::move(agent))
 {
     DCHECK(io_task_runner_ && agent_);
-    DCHECK(io_task_runner_->belongsToCurrentThread());
 }
 
 UserSessionAgentProxy::Impl::~Impl()
