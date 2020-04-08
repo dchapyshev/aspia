@@ -18,7 +18,7 @@
     <item>
      <widget class="QLabel" name="label_private_key">
       <property name="text">
-       <string>Private key:</string>
+       <string>Private key</string>
       </property>
      </widget>
     </item>
@@ -75,7 +75,7 @@
     <item>
      <widget class="QLabel" name="label_public_key">
       <property name="text">
-       <string>Public key:</string>
+       <string>Public key</string>
       </property>
      </widget>
     </item>

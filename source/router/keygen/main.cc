@@ -18,7 +18,7 @@
 
 #include "build/version.h"
 #include "qt_base/application.h"
-#include "router/manager/main_window.h"
+#include "router/keygen/main_window.h"
 
 #if defined(QT_STATIC)
 
@@ -34,8 +34,6 @@ Q_IMPORT_PLUGIN(QWindowsVistaStylePlugin);
 
 int main(int argc, char *argv[])
 {
-    Q_INIT_RESOURCE(qt_translations);
-
     qt_base::Application application(argc, argv);
 
     qt_base::Application::setOrganizationName(QLatin1String("Aspia"));
