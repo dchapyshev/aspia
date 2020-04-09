@@ -55,6 +55,8 @@ Settings::MruList Settings::mru() const
         settings_.setArrayIndex(i);
 
         MruEntry entry;
+        entry.public_key = settings_.value(QLatin1String("PublicKey")).toByteArray();
+        entry.encrypt_iv = settings_.value(QLatin1String("EncryptIV")).toByteArray();
         entry.address = settings_.value(QLatin1String("Address")).toString();
         entry.port = settings_.value(QLatin1String("Port")).toUInt();
         entry.username = settings_.value(QLatin1String("UserName")).toString();
@@ -87,6 +89,8 @@ void Settings::setMru(const MruList& mru)
 
         const MruEntry& entry = mru.at(i);
 
+        settings_.setValue(QLatin1String("PublicKey"), entry.public_key);
+        settings_.setValue(QLatin1String("EncryptIV"), entry.encrypt_iv);
         settings_.setValue(QLatin1String("Address"), entry.address);
         settings_.setValue(QLatin1String("Port"), entry.port);
         settings_.setValue(QLatin1String("UserName"), entry.username);
