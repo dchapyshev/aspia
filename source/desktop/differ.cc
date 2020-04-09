@@ -108,9 +108,7 @@ Differ::DiffFullBlockFunc Differ::diffFunctionFor32bpp()
     {
         LOG(LS_INFO) << "AVX2 differ loaded (32bpp)";
 
-        if constexpr (kBlockSize == 8)
-            func = diffFullBlock_32bpp_8x8_AVX2;
-        else if constexpr (kBlockSize == 16)
+        if constexpr (kBlockSize == 16)
             func = diffFullBlock_32bpp_16x16_AVX2;
         else if constexpr (kBlockSize == 32)
             func = diffFullBlock_32bpp_32x32_AVX2;
@@ -119,9 +117,7 @@ Differ::DiffFullBlockFunc Differ::diffFunctionFor32bpp()
     {
         LOG(LS_INFO) << "SSE3 differ loaded (32bpp)";
 
-        if constexpr (kBlockSize == 8)
-            func = diffFullBlock_32bpp_8x8_SSE3;
-        else if constexpr (kBlockSize == 16)
+        if constexpr (kBlockSize == 16)
             func = diffFullBlock_32bpp_16x16_SSE3;
         else if constexpr (kBlockSize == 32)
             func = diffFullBlock_32bpp_32x32_SSE3;
@@ -130,9 +126,7 @@ Differ::DiffFullBlockFunc Differ::diffFunctionFor32bpp()
     {
         LOG(LS_INFO) << "SSE2 differ loaded (32bpp)";
 
-        if constexpr (kBlockSize == 8)
-            func = diffFullBlock_32bpp_8x8_SSE2;
-        else if constexpr (kBlockSize == 16)
+        if constexpr (kBlockSize == 16)
             func = diffFullBlock_32bpp_16x16_SSE2;
         else if constexpr (kBlockSize == 32)
             func = diffFullBlock_32bpp_32x32_SSE2;
@@ -141,9 +135,7 @@ Differ::DiffFullBlockFunc Differ::diffFunctionFor32bpp()
     {
         LOG(LS_INFO) << "C differ loaded (32bpp)";
 
-        if constexpr (kBlockSize == 8)
-            func = diffFullBlock_32bpp_8x8_C;
-        else if constexpr (kBlockSize == 16)
+        if constexpr (kBlockSize == 16)
             func = diffFullBlock_32bpp_16x16_C;
         else if constexpr (kBlockSize == 32)
             func = diffFullBlock_32bpp_32x32_C;
@@ -159,9 +151,7 @@ Differ::DiffFullBlockFunc Differ::diffFunctionFor16bpp()
 
     LOG(LS_INFO) << "C differ loaded (16bpp)";
 
-    if constexpr (kBlockSize == 8)
-        func = diffFullBlock_16bpp_8x8_C;
-    else if constexpr (kBlockSize == 16)
+    if constexpr (kBlockSize == 16)
         func = diffFullBlock_16bpp_16x16_C;
     else if constexpr (kBlockSize == 32)
         func = diffFullBlock_16bpp_32x32_C;

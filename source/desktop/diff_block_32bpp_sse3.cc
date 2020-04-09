@@ -116,36 +116,4 @@ uint8_t diffFullBlock_32bpp_16x16_SSE3(
     return 0U;
 }
 
-uint8_t diffFullBlock_32bpp_8x8_SSE3(
-    const uint8_t* image1, const uint8_t* image2, int bytes_per_row)
-{
-    __m128i acc = _mm_setzero_si128();
-    __m128i sad;
-
-    for (int i = 0; i < 8; ++i)
-    {
-        const __m128i* i1 = reinterpret_cast<const __m128i*>(image1);
-        const __m128i* i2 = reinterpret_cast<const __m128i*>(image2);
-
-        sad = _mm_sad_epu8(_mm_lddqu_si128(i1 + 0), _mm_lddqu_si128(i2 + 0));
-        acc = _mm_adds_epu16(acc, sad);
-
-        sad = _mm_sad_epu8(_mm_lddqu_si128(i1 + 1), _mm_lddqu_si128(i2 + 1));
-        acc = _mm_adds_epu16(acc, sad);
-
-        // This essential means sad = acc >> 64. We only care about the lower 16 bits.
-        sad = _mm_shuffle_epi32(acc, 0xEE);
-        sad = _mm_adds_epu16(sad, acc);
-
-        // If the row has differences.
-        if (_mm_cvtsi128_si32(sad))
-            return 1U;
-
-        image1 += bytes_per_row;
-        image2 += bytes_per_row;
-    }
-
-    return 0U;
-}
-
 } // namespace desktop

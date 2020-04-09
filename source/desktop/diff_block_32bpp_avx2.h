@@ -29,9 +29,6 @@ uint8_t diffFullBlock_32bpp_32x32_AVX2(
 uint8_t diffFullBlock_32bpp_16x16_AVX2(
     const uint8_t* image1, const uint8_t* image2, int bytes_per_row);
 
-uint8_t diffFullBlock_32bpp_8x8_AVX2(
-    const uint8_t* image1, const uint8_t* image2, int bytes_per_row);
-
 } // namespace desktop
 
 #endif // DESKTOP__DIFF_BLOCK_32BPP_AVX2_H

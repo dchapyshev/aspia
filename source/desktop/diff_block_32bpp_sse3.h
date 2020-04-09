@@ -29,9 +29,6 @@ uint8_t diffFullBlock_32bpp_32x32_SSE3(
 uint8_t diffFullBlock_32bpp_16x16_SSE3(
     const uint8_t* image1, const uint8_t* image2, int bytes_per_row);
 
-uint8_t diffFullBlock_32bpp_8x8_SSE3(
-    const uint8_t* image1, const uint8_t* image2, int bytes_per_row);
-
 } // namespace desktop
 
 #endif // DESKTOP__DIFF_BLOCK_32BPP_SSE3_H
