@@ -18,7 +18,7 @@
 
 #include "build/version.h"
 #include "qt_base/application.h"
-#include "router/manager/connect_dialog.h"
+#include "router/manager/router_dialog.h"
 
 #if defined(QT_STATIC)
 
@@ -27,7 +27,6 @@
 #if defined(Q_OS_WIN)
 Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin);
 Q_IMPORT_PLUGIN(QWindowsVistaStylePlugin);
-Q_IMPORT_PLUGIN(QWindowsPrinterSupportPlugin);
 #else
 #error Platform support needed
 #endif // defined(Q_OS_WIN)
@@ -44,9 +43,9 @@ int main(int argc, char *argv[])
     qt_base::Application::setApplicationVersion(QLatin1String(ASPIA_VERSION_STRING));
     qt_base::Application::setAttribute(Qt::AA_DisableWindowContextHelpButton, true);
 
-    router::ConnectDialog connect_dialog;
-    connect_dialog.show();
-    connect_dialog.activateWindow();
+    router::RouterDialog dialog;
+    dialog.show();
+    dialog.activateWindow();
 
     return qt_base::Application::exec();
 }

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>ConnectDialog</class>
- <widget class="QDialog" name="ConnectDialog">
+ <class>RouterDialog</class>
+ <widget class="QDialog" name="RouterDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>313</width>
-    <height>237</height>
+    <width>325</width>
+    <height>269</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -81,6 +81,38 @@
         </property>
        </widget>
       </item>
+      <item row="4" column="0">
+       <widget class="QLabel" name="label_public_key">
+        <property name="text">
+         <string>Public Key:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1">
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <item>
+         <widget class="QLineEdit" name="edit_public_key">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="button_public_key">
+          <property name="text">
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset resource="resources/router_manager.qrc">
+            <normaloff>:/img/folder-open-document-text.png</normaloff>:/img/folder-open-document-text.png</iconset>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
      </layout>
     </widget>
    </item>
@@ -112,6 +144,8 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="resources/router_manager.qrc"/>
+ </resources>
  <connections/>
 </ui>

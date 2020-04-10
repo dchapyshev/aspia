@@ -20,9 +20,9 @@
 #define ROUTER__MANAGER__SETTINGS_H
 
 #include "base/macros_magic.h"
+#include "router/manager/mru_cache.h"
 
 #include <QSettings>
-#include <QVector>
 
 namespace router {
 
@@ -35,19 +35,8 @@ public:
     QString locale() const;
     void setLocale(const QString& locale);
 
-    struct MruEntry
-    {
-        QByteArray public_key;
-        QByteArray encrypt_iv;
-        QString address;
-        uint16_t port;
-        QString username;
-    };
-
-    using MruList = QVector<MruEntry>;
-
-    MruList mru() const;
-    void setMru(const MruList& mru);
+    MruCache mru(int max_size) const;
+    void setMru(const MruCache& mru);
 
 private:
     mutable QSettings settings_;

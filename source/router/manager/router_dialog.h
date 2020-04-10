@@ -16,36 +16,28 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ROUTER__MANAGER__CONNECT_DIALOG_H
-#define ROUTER__MANAGER__CONNECT_DIALOG_H
+#ifndef ROUTER__MANAGER__ROUTER_DIALOG_H
+#define ROUTER__MANAGER__ROUTER_DIALOG_H
 
+#include "router/manager/mru_cache.h"
 #include "router/manager/settings.h"
-#include "ui_connect_dialog.h"
+#include "ui_router_dialog.h"
 
 #include <QDialog>
 #include <QPointer>
-
-namespace qt_base {
-class LocaleLoader;
-} // namespace qt_base
 
 namespace router {
 
 class MainWindow;
 class RouterProxy;
 
-class ConnectDialog : public QDialog
+class RouterDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    ConnectDialog();
-    ~ConnectDialog();
-
-    QString address() const;
-    uint16_t port() const;
-    QString userName() const;
-    QString password() const;
+    RouterDialog();
+    ~RouterDialog();
 
 protected:
     // QDialog implementation.
@@ -57,15 +49,15 @@ private:
     void onButtonBoxClicked(QAbstractButton* button);
     void reloadMru();
 
-    Ui::ConnectDialog ui;
+    Ui::RouterDialog ui;
     Settings settings_;
-    Settings::MruList mru_;
+    MruCache mru_;
 
     QPointer<MainWindow> main_window_;
 
-    DISALLOW_COPY_AND_ASSIGN(ConnectDialog);
+    DISALLOW_COPY_AND_ASSIGN(RouterDialog);
 };
 
 } // namespace router
 
-#endif // ROUTER__MANAGER__CONNECT_DIALOG_H
+#endif // ROUTER__MANAGER__ROUTER_DIALOG_H

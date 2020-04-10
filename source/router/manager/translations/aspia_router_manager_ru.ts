@@ -4,44 +4,36 @@
 <context>
     <name>ConnectDialog</name>
     <message>
-        <location filename="../connect_dialog.ui" line="14"/>
         <source>Connection to router</source>
-        <translation>Подключение к маршрутизатору</translation>
+        <translation type="vanished">Подключение к маршрутизатору</translation>
     </message>
     <message>
-        <location filename="../connect_dialog.ui" line="23"/>
         <source>Connection</source>
-        <translation>Подключение</translation>
+        <translation type="vanished">Подключение</translation>
     </message>
     <message>
-        <location filename="../connect_dialog.ui" line="29"/>
         <source>Address:</source>
-        <translation>Адрес:</translation>
+        <translation type="vanished">Адрес:</translation>
     </message>
     <message>
-        <location filename="../connect_dialog.ui" line="43"/>
         <source>Port:</source>
-        <translation>Порт:</translation>
+        <translation type="vanished">Порт:</translation>
     </message>
     <message>
-        <location filename="../connect_dialog.ui" line="63"/>
         <source>User name:</source>
-        <translation>Имя пользователя:</translation>
+        <translation type="vanished">Имя пользователя:</translation>
     </message>
     <message>
-        <location filename="../connect_dialog.ui" line="73"/>
         <source>Password:</source>
-        <translation>Пароль:</translation>
+        <translation type="vanished">Пароль:</translation>
     </message>
     <message>
-        <location filename="../connect_dialog.ui" line="90"/>
         <source>User interface</source>
-        <translation>Интерфейс пользователя</translation>
+        <translation type="vanished">Интерфейс пользователя</translation>
     </message>
     <message>
-        <location filename="../connect_dialog.ui" line="96"/>
         <source>Language:</source>
-        <translation>Язык:</translation>
+        <translation type="vanished">Язык:</translation>
     </message>
 </context>
 <context>
@@ -220,6 +212,54 @@
     </message>
 </context>
 <context>
+    <name>RouterDialog</name>
+    <message>
+        <location filename="../router_dialog.ui" line="14"/>
+        <source>Connection to router</source>
+        <translation type="unfinished">Подключение к маршрутизатору</translation>
+    </message>
+    <message>
+        <location filename="../router_dialog.ui" line="23"/>
+        <source>Connection</source>
+        <translation type="unfinished">Подключение</translation>
+    </message>
+    <message>
+        <location filename="../router_dialog.ui" line="29"/>
+        <source>Address:</source>
+        <translation type="unfinished">Адрес:</translation>
+    </message>
+    <message>
+        <location filename="../router_dialog.ui" line="43"/>
+        <source>Port:</source>
+        <translation type="unfinished">Порт:</translation>
+    </message>
+    <message>
+        <location filename="../router_dialog.ui" line="63"/>
+        <source>User name:</source>
+        <translation type="unfinished">Имя пользователя:</translation>
+    </message>
+    <message>
+        <location filename="../router_dialog.ui" line="73"/>
+        <source>Password:</source>
+        <translation type="unfinished">Пароль:</translation>
+    </message>
+    <message>
+        <location filename="../router_dialog.ui" line="87"/>
+        <source>Public Key:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../router_dialog.ui" line="122"/>
+        <source>User interface</source>
+        <translation type="unfinished">Интерфейс пользователя</translation>
+    </message>
+    <message>
+        <location filename="../router_dialog.ui" line="128"/>
+        <source>Language:</source>
+        <translation type="unfinished">Язык:</translation>
+    </message>
+</context>
+<context>
     <name>UserDialog</name>
     <message>
         <location filename="../user_dialog.ui" line="14"/>
@@ -389,6 +429,59 @@
     <message>
         <source>Warning</source>
         <translation type="obsolete">Предупреждение</translation>
+    </message>
+</context>
+<context>
+    <name>router::RouterDialog</name>
+    <message>
+        <location filename="../router_dialog.cc" line="77"/>
+        <source>Open Public Key</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../router_dialog.cc" line="79"/>
+        <source>Public Key (*.txt)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../router_dialog.cc" line="126"/>
+        <location filename="../router_dialog.cc" line="137"/>
+        <location filename="../router_dialog.cc" line="148"/>
+        <location filename="../router_dialog.cc" line="159"/>
+        <location filename="../router_dialog.cc" line="170"/>
+        <location filename="../router_dialog.cc" line="181"/>
+        <source>Warning</source>
+        <translation type="unfinished">Предупреждение</translation>
+    </message>
+    <message>
+        <location filename="../router_dialog.cc" line="127"/>
+        <source>You must enter a address.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../router_dialog.cc" line="138"/>
+        <source>You must enter a user name.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../router_dialog.cc" line="149"/>
+        <source>You must enter a password.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../router_dialog.cc" line="160"/>
+        <source>The path to the public key file must be specified.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../router_dialog.cc" line="171"/>
+        <source>The public key file has an invalid size.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../router_dialog.cc" line="182"/>
+        <source>Unable to open public key file &quot;%1&quot;.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
