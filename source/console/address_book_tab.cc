@@ -97,7 +97,7 @@ AddressBookTab::AddressBookTab(const QString& file_path,
                                proto::address_book::Data&& data,
                                std::string&& key,
                                QWidget* parent)
-    : ConsoleTab(ConsoleTab::AddressBook, parent),
+    : QWidget(parent),
       file_path_(file_path),
       file_(std::move(file)),
       data_(std::move(data)),

@@ -59,8 +59,6 @@ list(APPEND SOURCE_CONSOLE
     computer_tree.cc
     computer_tree.h
     console.rc
-    console_tab.cc
-    console_tab.h
     main.cc
     main_window.cc
     main_window.h

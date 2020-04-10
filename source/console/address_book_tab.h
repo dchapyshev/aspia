@@ -20,7 +20,6 @@
 #define CONSOLE__ADDRESS_BOOK_TAB_H
 
 #include "base/macros_magic.h"
-#include "console/console_tab.h"
 #include "proto/address_book.pb.h"
 #include "ui_address_book_tab.h"
 
@@ -28,7 +27,7 @@ namespace console {
 
 class ComputerItem;
 
-class AddressBookTab : public ConsoleTab
+class AddressBookTab : public QWidget
 {
     Q_OBJECT
 
