@@ -20,6 +20,9 @@ include(tbb)
 include(translations)
 
 list(APPEND SOURCE_ROUTER_MANAGER
+    connect_dialog.cc
+    connect_dialog.h
+    connect_dialog.ui
     main.cc
     main_window.cc
     main_window.h

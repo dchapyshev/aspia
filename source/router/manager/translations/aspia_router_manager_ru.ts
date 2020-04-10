@@ -35,6 +35,11 @@
         <source>Language:</source>
         <translation type="vanished">Язык:</translation>
     </message>
+    <message>
+        <location filename="../connect_dialog.ui" line="14"/>
+        <source>Status</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MainWindow</name>
@@ -337,6 +342,14 @@
     <message>
         <source>Unknown internal error: message with incorrect size.</source>
         <translation type="vanished">Неизвестная внутренняя ошибка: сообщение с некорректным размером.</translation>
+    </message>
+</context>
+<context>
+    <name>router::ConnectDialog</name>
+    <message>
+        <location filename="../connect_dialog.cc" line="30"/>
+        <source>Connecting to %1:%2...</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
