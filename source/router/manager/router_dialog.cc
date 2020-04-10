@@ -207,6 +207,7 @@ void RouterDialog::onButtonBoxClicked(QAbstractButton* button)
 
         mru_.put(std::move(entry));
         reloadMru();
+        hide();
         return;
     }
 
