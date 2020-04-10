@@ -35,11 +35,6 @@
         <source>Language:</source>
         <translation type="vanished">Язык:</translation>
     </message>
-    <message>
-        <location filename="../connect_dialog.ui" line="14"/>
-        <source>Status</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>MainWindow</name>
@@ -265,6 +260,14 @@
     </message>
 </context>
 <context>
+    <name>StatusDialog</name>
+    <message>
+        <location filename="../status_dialog.ui" line="14"/>
+        <source>Status</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>UserDialog</name>
     <message>
         <location filename="../user_dialog.ui" line="14"/>
@@ -345,94 +348,95 @@
     </message>
 </context>
 <context>
-    <name>router::ConnectDialog</name>
+    <name>router::MainWindow</name>
     <message>
-        <location filename="../connect_dialog.cc" line="30"/>
+        <location filename="../main_window.cc" line="113"/>
         <source>Connecting to %1:%2...</source>
         <translation type="unfinished"></translation>
     </message>
-</context>
-<context>
-    <name>router::MainWindow</name>
     <message>
-        <location filename="../main_window.cc" line="126"/>
+        <location filename="../main_window.cc" line="140"/>
         <source>Connected to: %1:%2 (%3).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="148"/>
+        <location filename="../main_window.cc" line="162"/>
         <source>Cryptography error (message encryption or decryption failed).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="152"/>
+        <location filename="../main_window.cc" line="166"/>
         <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="156"/>
+        <location filename="../main_window.cc" line="170"/>
         <source>Connection was refused by the peer (or timed out).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="160"/>
+        <location filename="../main_window.cc" line="174"/>
         <source>Remote host closed the connection.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="164"/>
+        <location filename="../main_window.cc" line="178"/>
         <source>Host address was not found.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="168"/>
+        <location filename="../main_window.cc" line="182"/>
         <source>Socket operation timed out.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="172"/>
+        <location filename="../main_window.cc" line="186"/>
         <source>Address specified is already in use and was set to be exclusive.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="176"/>
+        <location filename="../main_window.cc" line="190"/>
         <source>Address specified does not belong to the host.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="186"/>
-        <location filename="../main_window.cc" line="222"/>
+        <location filename="../main_window.cc" line="200"/>
+        <location filename="../main_window.cc" line="238"/>
         <source>An unknown error occurred.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="191"/>
-        <location filename="../main_window.cc" line="226"/>
-        <source>Warning</source>
-        <translation type="unfinished">Предупреждение</translation>
+        <location filename="../main_window.cc" line="205"/>
+        <location filename="../main_window.cc" line="242"/>
+        <source>Error: %1</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="202"/>
+        <source>Warning</source>
+        <translation type="obsolete">Предупреждение</translation>
+    </message>
+    <message>
+        <location filename="../main_window.cc" line="218"/>
         <source>Authentication successfully completed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="206"/>
+        <location filename="../main_window.cc" line="222"/>
         <source>Network authentication error.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="210"/>
+        <location filename="../main_window.cc" line="226"/>
         <source>Violation of the data exchange protocol.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="214"/>
+        <location filename="../main_window.cc" line="230"/>
         <source>An error occured while authenticating: wrong user name or password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="218"/>
+        <location filename="../main_window.cc" line="234"/>
         <source>Specified session type is not allowed for the user.</source>
         <translation type="unfinished"></translation>
     </message>

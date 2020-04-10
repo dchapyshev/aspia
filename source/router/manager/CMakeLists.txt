@@ -20,9 +20,6 @@ include(tbb)
 include(translations)
 
 list(APPEND SOURCE_ROUTER_MANAGER
-    connect_dialog.cc
-    connect_dialog.h
-    connect_dialog.ui
     main.cc
     main_window.cc
     main_window.h
@@ -42,6 +39,9 @@ list(APPEND SOURCE_ROUTER_MANAGER
     router_window_proxy.h
     settings.cc
     settings.h
+    status_dialog.cc
+    status_dialog.h
+    status_dialog.ui
     user_dialog.cc
     user_dialog.h
     user_dialog.ui)

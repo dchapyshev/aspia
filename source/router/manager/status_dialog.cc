@@ -16,18 +16,16 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "router/manager/connect_dialog.h"
+#include "router/manager/status_dialog.h"
 
 #include <QAbstractButton>
 
 namespace router {
 
-ConnectDialog::ConnectDialog(QWidget* parent, const QString& address, uint16_t port)
+StatusDialog::StatusDialog(QWidget* parent)
     : QDialog(parent)
 {
     ui.setupUi(this);
-
-    ui.label->setText(tr("Connecting to %1:%2...").arg(address).arg(port));
 
     connect(ui.buttonbox, &QDialogButtonBox::clicked, [this](QAbstractButton* button)
     {
@@ -36,9 +34,15 @@ ConnectDialog::ConnectDialog(QWidget* parent, const QString& address, uint16_t p
             return;
 
         emit canceled();
+        close();
     });
 }
 
-ConnectDialog::~ConnectDialog() = default;
+StatusDialog::~StatusDialog() = default;
+
+void StatusDialog::setStatus(const QString& message)
+{
+    ui.label->setText(message);
+}
 
 } // namespace router

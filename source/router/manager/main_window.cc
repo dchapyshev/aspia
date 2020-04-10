@@ -24,6 +24,7 @@
 #include "router/manager/router.h"
 #include "router/manager/router_proxy.h"
 #include "router/manager/router_window_proxy.h"
+#include "router/manager/status_dialog.h"
 
 #include <QMessageBox>
 
@@ -81,6 +82,7 @@ private:
 
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent),
+      status_dialog_(new StatusDialog(this)),
       window_proxy_(std::make_shared<RouterWindowProxy>(
         qt_base::Application::uiTaskRunner(), this))
 {
@@ -108,6 +110,16 @@ void MainWindow::connectToRouter(const QString& address,
     peer_address_ = address;
     peer_port_ = port;
 
+    status_dialog_->setStatus(tr("Connecting to %1:%2...").arg(address).arg(port));
+    status_dialog_->show();
+    status_dialog_->activateWindow();
+
+    connect(status_dialog_, &StatusDialog::canceled, [this]()
+    {
+        router_proxy_.reset();
+        close();
+    });
+
     std::unique_ptr<Router> router = std::make_unique<Router>(
         window_proxy_, qt_base::Application::ioTaskRunner());
 
@@ -123,6 +135,8 @@ void MainWindow::connectToRouter(const QString& address,
 
 void MainWindow::onConnected(const base::Version& peer_version)
 {
+    status_dialog_->hide();
+
     ui.statusbar->showMessage(tr("Connected to: %1:%2 (%3).")
                               .arg(peer_address_)
                               .arg(peer_port_)
@@ -188,7 +202,9 @@ void MainWindow::onDisconnected(net::Channel::ErrorCode error_code)
         break;
     }
 
-    QMessageBox::warning(this, tr("Warning"), tr(message), QMessageBox::Ok);
+    status_dialog_->setStatus(tr("Error: %1").arg(tr(message)));
+    status_dialog_->show();
+
     emit disconnected();
 }
 
@@ -223,7 +239,9 @@ void MainWindow::onAccessDenied(net::ClientAuthenticator::ErrorCode error_code)
             break;
     }
 
-    QMessageBox::warning(this, tr("Warning"), tr(message), QMessageBox::Ok);
+    status_dialog_->setStatus(tr("Error: %1").arg(tr(message)));
+    status_dialog_->show();
+
     emit disconnected();
 }
 

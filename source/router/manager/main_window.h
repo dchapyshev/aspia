@@ -24,11 +24,13 @@
 #include "ui_main_window.h"
 
 #include <QMainWindow>
+#include <QPointer>
 
 namespace router {
 
 class RouterProxy;
 class RouterWindowProxy;
+class StatusDialog;
 
 class MainWindow
     : public QMainWindow,
@@ -76,6 +78,8 @@ private:
 
     QString peer_address_;
     uint16_t peer_port_ = 0;
+
+    StatusDialog* status_dialog_;
 
     std::shared_ptr<RouterWindowProxy> window_proxy_;
     std::unique_ptr<RouterProxy> router_proxy_;
