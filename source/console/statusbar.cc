@@ -16,20 +16,20 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "console/console_statusbar.h"
+#include "console/statusbar.h"
 
 #include <QIcon>
 #include <QLabel>
 
 namespace console {
 
-ConsoleStatusBar::ConsoleStatusBar(QWidget* parent)
+StatusBar::StatusBar(QWidget* parent)
     : QStatusBar(parent)
 {
     // Nothing
 }
 
-void ConsoleStatusBar::setCurrentComputerGroup(
+void StatusBar::setCurrentComputerGroup(
     const proto::address_book::ComputerGroup& computer_group)
 {
     clear();
@@ -58,7 +58,7 @@ void ConsoleStatusBar::setCurrentComputerGroup(
     addWidget(third_label);
 }
 
-void ConsoleStatusBar::clear()
+void StatusBar::clear()
 {
     QList<QLabel*> items = findChildren<QLabel*>();
 

@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "console/console_application.h"
+#include "console/application.h"
 
 #include "build/version.h"
 #include "qt_base/qt_logging.h"

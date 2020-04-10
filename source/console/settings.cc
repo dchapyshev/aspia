@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "console/console_settings.h"
+#include "console/settings.h"
 
 #include "build/build_config.h"
 #include "qt_base/qt_xml_settings.h"

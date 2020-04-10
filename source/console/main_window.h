@@ -16,13 +16,13 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CONSOLE__CONSOLE_MAIN_WINDOW_H
-#define CONSOLE__CONSOLE_MAIN_WINDOW_H
+#ifndef CONSOLE__MAIN_WINDOW_H
+#define CONSOLE__MAIN_WINDOW_H
 
 #include "console/mru.h"
 #include "updater/update_checker.h"
 #include "proto/address_book.pb.h"
-#include "ui_console_main_window.h"
+#include "ui_main_window.h"
 
 class QSystemTrayIcon;
 
@@ -109,4 +109,4 @@ private:
 
 } // namespace console
 
-#endif // CONSOLE__CONSOLE_MAIN_WINDOW_H
+#endif // CONSOLE__MAIN_WINDOW_H

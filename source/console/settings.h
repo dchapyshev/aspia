@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CONSOLE__CONSOLE_SETTINGS_H
-#define CONSOLE__CONSOLE_SETTINGS_H
+#ifndef CONSOLE__SETTINGS_H
+#define CONSOLE__SETTINGS_H
 
 #include "base/macros_magic.h"
 #include "proto/common.pb.h"
@@ -97,4 +97,4 @@ private:
 
 } // namespace console
 
-#endif // CONSOLE__CONSOLE_SETTINGS_H
+#endif // CONSOLE__SETTINGS_H

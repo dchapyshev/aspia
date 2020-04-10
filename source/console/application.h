@@ -16,10 +16,10 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CONSOLE__CONSOLE_APPLICATION_H
-#define CONSOLE__CONSOLE_APPLICATION_H
+#ifndef CONSOLE__APPLICATION_H
+#define CONSOLE__APPLICATION_H
 
-#include "console/console_settings.h"
+#include "console/settings.h"
 #include "qt_base/application.h"
 
 namespace console {
@@ -52,4 +52,4 @@ private:
 
 } // namespace console
 
-#endif // CONSOLE__CONSOLE_APPLICATION_H
+#endif // CONSOLE__APPLICATION_H

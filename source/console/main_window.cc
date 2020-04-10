@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "console/console_main_window.h"
+#include "console/main_window.h"
 
 #include "base/logging.h"
 #include "base/strings/unicode.h"
@@ -28,7 +28,7 @@
 #include "common/ui/about_dialog.h"
 #include "common/ui/language_action.h"
 #include "console/address_book_tab.h"
-#include "console/console_application.h"
+#include "console/application.h"
 #include "console/mru_action.h"
 #include "console/update_settings_dialog.h"
 #include "updater/update_dialog.h"

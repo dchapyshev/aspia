@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CONSOLE__CONSOLE_STATUSBAR_H
-#define CONSOLE__CONSOLE_STATUSBAR_H
+#ifndef CONSOLE__STATUSBAR_H
+#define CONSOLE__STATUSBAR_H
 
 #include "base/macros_magic.h"
 #include "proto/address_book.pb.h"
@@ -26,21 +26,21 @@
 
 namespace console {
 
-class ConsoleStatusBar : public QStatusBar
+class StatusBar : public QStatusBar
 {
     Q_OBJECT
 
 public:
-    explicit ConsoleStatusBar(QWidget* parent);
-    ~ConsoleStatusBar() = default;
+    explicit StatusBar(QWidget* parent);
+    ~StatusBar() = default;
 
     void setCurrentComputerGroup(const proto::address_book::ComputerGroup& computer_group);
     void clear();
 
 private:
-    DISALLOW_COPY_AND_ASSIGN(ConsoleStatusBar);
+    DISALLOW_COPY_AND_ASSIGN(StatusBar);
 };
 
 } // namespace console
 
-#endif // CONSOLE__CONSOLE_STATUSBAR_H
+#endif // CONSOLE__STATUSBAR_H

@@ -23,7 +23,7 @@
 #include "console/computer_dialog.h"
 #include "console/computer_group_dialog.h"
 #include "console/computer_item.h"
-#include "console/console_settings.h"
+#include "console/settings.h"
 #include "console/open_address_book_dialog.h"
 #include "crypto/data_cryptor_chacha20_poly1305.h"
 #include "crypto/data_cryptor_fake.h"

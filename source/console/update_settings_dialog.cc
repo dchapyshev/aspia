@@ -17,8 +17,9 @@
 //
 
 #include "console/update_settings_dialog.h"
+
 #include "build/build_config.h"
-#include "console/console_settings.h"
+#include "console/settings.h"
 
 namespace console {
 

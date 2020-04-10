@@ -21,8 +21,8 @@
 #include "client/ui/client_dialog.h"
 #include "client/ui/qt_desktop_window.h"
 #include "client/ui/qt_file_manager_window.h"
-#include "console/console_application.h"
-#include "console/console_main_window.h"
+#include "console/application.h"
+#include "console/main_window.h"
 #include "qt_base/qt_logging.h"
 
 #if defined(USE_TBB)
