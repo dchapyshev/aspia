@@ -40,6 +40,7 @@ RouterDialog::RouterDialog()
     instance->setLocale(settings_.locale());
 
     ui.setupUi(this);
+    setFixedHeight(sizeHint().height());
 
     for (const auto& locale : instance->localeList())
         ui.combobox_language->addItem(locale.second, locale.first);

@@ -96,22 +96,22 @@
     <message>
         <location filename="../main_window.ui" line="25"/>
         <source>Peers</source>
-        <translation type="unfinished"></translation>
+        <translation>Пиры</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="100"/>
         <source>Proxy</source>
-        <translation type="unfinished"></translation>
+        <translation>Прокси</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="112"/>
         <source>Pool Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Размер пула</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="213"/>
         <source>User Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Имя пользователя</translation>
     </message>
     <message>
         <source>Proxy List</source>
@@ -216,47 +216,47 @@
     <message>
         <location filename="../router_dialog.ui" line="14"/>
         <source>Connection to router</source>
-        <translation type="unfinished">Подключение к маршрутизатору</translation>
+        <translation>Подключение к маршрутизатору</translation>
     </message>
     <message>
         <location filename="../router_dialog.ui" line="23"/>
         <source>Connection</source>
-        <translation type="unfinished">Подключение</translation>
+        <translation>Подключение</translation>
     </message>
     <message>
         <location filename="../router_dialog.ui" line="29"/>
         <source>Address:</source>
-        <translation type="unfinished">Адрес:</translation>
+        <translation>Адрес:</translation>
     </message>
     <message>
         <location filename="../router_dialog.ui" line="43"/>
         <source>Port:</source>
-        <translation type="unfinished">Порт:</translation>
+        <translation>Порт:</translation>
     </message>
     <message>
         <location filename="../router_dialog.ui" line="63"/>
         <source>User name:</source>
-        <translation type="unfinished">Имя пользователя:</translation>
+        <translation>Имя пользователя:</translation>
     </message>
     <message>
         <location filename="../router_dialog.ui" line="73"/>
         <source>Password:</source>
-        <translation type="unfinished">Пароль:</translation>
+        <translation>Пароль:</translation>
     </message>
     <message>
         <location filename="../router_dialog.ui" line="87"/>
         <source>Public Key:</source>
-        <translation type="unfinished"></translation>
+        <translation>Публичный ключ:</translation>
     </message>
     <message>
         <location filename="../router_dialog.ui" line="122"/>
         <source>User interface</source>
-        <translation type="unfinished">Интерфейс пользователя</translation>
+        <translation>Интерфейс пользователя</translation>
     </message>
     <message>
         <location filename="../router_dialog.ui" line="128"/>
         <source>Language:</source>
-        <translation type="unfinished">Язык:</translation>
+        <translation>Язык:</translation>
     </message>
 </context>
 <context>
@@ -264,7 +264,7 @@
     <message>
         <location filename="../status_dialog.ui" line="14"/>
         <source>Status</source>
-        <translation type="unfinished"></translation>
+        <translation>Состояние</translation>
     </message>
 </context>
 <context>
@@ -292,12 +292,12 @@
     <message>
         <location filename="../user_dialog.ui" line="73"/>
         <source>Disable User Account</source>
-        <translation type="unfinished"></translation>
+        <translation>Отключить аккаунт пользователя</translation>
     </message>
     <message>
         <location filename="../user_dialog.ui" line="83"/>
         <source>Allowed Session Types:</source>
-        <translation type="unfinished"></translation>
+        <translation>Разрешенные типы сессий:</translation>
     </message>
     <message>
         <source>Enable</source>
@@ -352,64 +352,64 @@
     <message>
         <location filename="../main_window.cc" line="113"/>
         <source>Connecting to %1:%2...</source>
-        <translation type="unfinished"></translation>
+        <translation>Подключение к %1:%2...</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="140"/>
         <source>Connected to: %1:%2 (%3).</source>
-        <translation type="unfinished"></translation>
+        <translation>Подключено к: %1:%2 (%3).</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="162"/>
         <source>Cryptography error (message encryption or decryption failed).</source>
-        <translation type="unfinished"></translation>
+        <translation>Ошибка криптографии (не удалось зашифровать или расшифровать сообщение).</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="166"/>
         <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
-        <translation type="unfinished"></translation>
+        <translation>Произошла ошибка в сети (например, сетевой кабель был случайно отключен).</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="170"/>
         <source>Connection was refused by the peer (or timed out).</source>
-        <translation type="unfinished"></translation>
+        <translation>Подключение было отклонено другой стороной (или превышено время ожидания).</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="174"/>
         <source>Remote host closed the connection.</source>
-        <translation type="unfinished"></translation>
+        <translation>Удаленный узел закрыл подключение.</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="178"/>
         <source>Host address was not found.</source>
-        <translation type="unfinished"></translation>
+        <translation>Не найден адрес удаленного узла.</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="182"/>
         <source>Socket operation timed out.</source>
-        <translation type="unfinished"></translation>
+        <translation>Превышено время ожидания.</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="186"/>
         <source>Address specified is already in use and was set to be exclusive.</source>
-        <translation type="unfinished"></translation>
+        <translation>Указанный адрес уже используется и был установлен монопольно.</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="190"/>
         <source>Address specified does not belong to the host.</source>
-        <translation type="unfinished"></translation>
+        <translation>Указанный адрес не принадлежит узлу.</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="200"/>
         <location filename="../main_window.cc" line="238"/>
         <source>An unknown error occurred.</source>
-        <translation type="unfinished"></translation>
+        <translation>Произошла неизвестная ошибка.</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="205"/>
         <location filename="../main_window.cc" line="242"/>
         <source>Error: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Ошибка: %1</translation>
     </message>
     <message>
         <source>Warning</source>
@@ -418,27 +418,27 @@
     <message>
         <location filename="../main_window.cc" line="218"/>
         <source>Authentication successfully completed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Аутентификация успешно завершена.</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="222"/>
         <source>Network authentication error.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ошибка сети при аутентификации.</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="226"/>
         <source>Violation of the data exchange protocol.</source>
-        <translation type="unfinished"></translation>
+        <translation>Нарушение протокола обмена данными.</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="230"/>
         <source>An error occured while authenticating: wrong user name or password.</source>
-        <translation type="unfinished"></translation>
+        <translation>Произошла ошибка при аутентификации: неправильное имя пользователя или пароль.</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="234"/>
         <source>Specified session type is not allowed for the user.</source>
-        <translation type="unfinished"></translation>
+        <translation>Указанный тип сессии не разрешен для пользователя.</translation>
     </message>
 </context>
 <context>
@@ -451,49 +451,49 @@
 <context>
     <name>router::RouterDialog</name>
     <message>
-        <location filename="../router_dialog.cc" line="64"/>
+        <location filename="../router_dialog.cc" line="65"/>
         <source>Open Public Key</source>
-        <translation type="unfinished"></translation>
+        <translation>Открытие публичного ключа</translation>
     </message>
     <message>
-        <location filename="../router_dialog.cc" line="66"/>
+        <location filename="../router_dialog.cc" line="67"/>
         <source>Public Key (*.txt)</source>
-        <translation type="unfinished"></translation>
+        <translation>Публичный ключ (*.txt)</translation>
     </message>
     <message>
-        <location filename="../router_dialog.cc" line="196"/>
+        <location filename="../router_dialog.cc" line="197"/>
         <source>Warning</source>
-        <translation type="unfinished">Предупреждение</translation>
+        <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../router_dialog.cc" line="118"/>
+        <location filename="../router_dialog.cc" line="119"/>
         <source>You must enter a address.</source>
-        <translation type="unfinished"></translation>
+        <translation>Вы должны ввести адрес.</translation>
     </message>
     <message>
-        <location filename="../router_dialog.cc" line="126"/>
+        <location filename="../router_dialog.cc" line="127"/>
         <source>You must enter a user name.</source>
-        <translation type="unfinished"></translation>
+        <translation>Вы должны ввести имя пользователя.</translation>
     </message>
     <message>
-        <location filename="../router_dialog.cc" line="134"/>
+        <location filename="../router_dialog.cc" line="135"/>
         <source>You must enter a password.</source>
-        <translation type="unfinished"></translation>
+        <translation>Вы должны ввести пароль.</translation>
     </message>
     <message>
-        <location filename="../router_dialog.cc" line="142"/>
+        <location filename="../router_dialog.cc" line="143"/>
         <source>The path to the public key file must be specified.</source>
-        <translation type="unfinished"></translation>
+        <translation>Путь к файлу публичного ключа должен быть указан.</translation>
     </message>
     <message>
-        <location filename="../router_dialog.cc" line="150"/>
+        <location filename="../router_dialog.cc" line="151"/>
         <source>The public key file has an invalid size.</source>
-        <translation type="unfinished"></translation>
+        <translation>Публичный ключ имеет некорректный размер.</translation>
     </message>
     <message>
-        <location filename="../router_dialog.cc" line="158"/>
+        <location filename="../router_dialog.cc" line="159"/>
         <source>Unable to open public key file &quot;%1&quot;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось открыть файл публичного ключа &quot;%1&quot;.</translation>
     </message>
 </context>
 <context>
