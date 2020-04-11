@@ -39,7 +39,7 @@ class MainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget* parent);
+    explicit MainWindow(QWidget* parent = nullptr);
     ~MainWindow();
 
     void connectToRouter(const QString& address,

@@ -48,6 +48,7 @@ private:
     void onCurrentRouterChanged(int index);
     void onButtonBoxClicked(QAbstractButton* button);
     void reloadMru();
+    void showWarning(const QString& message);
 
     Ui::RouterDialog ui;
     Settings settings_;

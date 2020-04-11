@@ -122,10 +122,7 @@ void RouterDialog::onButtonBoxClicked(QAbstractButton* button)
         QString address = ui.combobox_address->currentText();
         if (address.isEmpty())
         {
-            QMessageBox::warning(this,
-                                 tr("Warning"),
-                                 tr("You must enter a address."),
-                                 QMessageBox::Ok);
+            showWarning(tr("You must enter a address."));
             ui.combobox_address->setFocus();
             return;
         }
@@ -133,10 +130,7 @@ void RouterDialog::onButtonBoxClicked(QAbstractButton* button)
         QString username = ui.edit_username->text();
         if (username.isEmpty())
         {
-            QMessageBox::warning(this,
-                                 tr("Warning"),
-                                 tr("You must enter a user name."),
-                                 QMessageBox::Ok);
+            showWarning(tr("You must enter a user name."));
             ui.edit_username->setFocus();
             return;
         }
@@ -144,10 +138,7 @@ void RouterDialog::onButtonBoxClicked(QAbstractButton* button)
         QString password = ui.edit_password->text();
         if (password.isEmpty())
         {
-            QMessageBox::warning(this,
-                                 tr("Warning"),
-                                 tr("You must enter a password."),
-                                 QMessageBox::Ok);
+            showWarning(tr("You must enter a password."));
             ui.edit_password->setFocus();
             return;
         }
@@ -155,10 +146,7 @@ void RouterDialog::onButtonBoxClicked(QAbstractButton* button)
         QString file_path = ui.edit_public_key->text();
         if (file_path.isEmpty())
         {
-            QMessageBox::warning(this,
-                                 tr("Warning"),
-                                 tr("The path to the public key file must be specified."),
-                                 QMessageBox::Ok);
+            showWarning(tr("The path to the public key file must be specified."));
             ui.edit_public_key->setFocus();
             return;
         }
@@ -166,10 +154,7 @@ void RouterDialog::onButtonBoxClicked(QAbstractButton* button)
         int64_t file_size = QFileInfo(file_path).size();
         if (file_size <= 0 || file_size > 512)
         {
-            QMessageBox::warning(this,
-                                 tr("Warning"),
-                                 tr("The public key file has an invalid size."),
-                                 QMessageBox::Ok);
+            showWarning(tr("The public key file has an invalid size."));
             ui.edit_public_key->setFocus();
             return;
         }
@@ -177,10 +162,7 @@ void RouterDialog::onButtonBoxClicked(QAbstractButton* button)
         QFile file(file_path);
         if (!file.open(QIODevice::ReadOnly))
         {
-            QMessageBox::warning(this,
-                                 tr("Warning"),
-                                 tr("Unable to open public key file \"%1\".").arg(file_path),
-                                 QMessageBox::Ok);
+            showWarning(tr("Unable to open public key file \"%1\".").arg(file_path));
             ui.edit_public_key->setFocus();
             return;
         }
@@ -225,6 +207,11 @@ void RouterDialog::reloadMru()
         ui.combobox_address->addItem(entry.address);
 
     ui.combobox_address->setCurrentIndex(0);
+}
+
+void RouterDialog::showWarning(const QString& message)
+{
+    QMessageBox::warning(this, tr("Warning"), message, QMessageBox::Ok);
 }
 
 } // namespace router
