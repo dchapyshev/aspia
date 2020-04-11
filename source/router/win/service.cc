@@ -26,7 +26,7 @@
 namespace router {
 
 Service::Service()
-    : base::win::Service(kRouterServiceName, base::MessageLoop::Type::ASIO)
+    : base::win::Service(kServiceName, base::MessageLoop::Type::ASIO)
 {
     // Nothing
 }

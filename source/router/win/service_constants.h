@@ -21,10 +21,10 @@
 
 namespace router {
 
-extern const char16_t kRouterServiceFileName[];
-extern const char16_t kRouterServiceName[];
-extern const char16_t kRouterServiceDisplayName[];
-extern const char16_t kRouterServiceDescription[];
+extern const char16_t kServiceFileName[];
+extern const char16_t kServiceName[];
+extern const char16_t kServiceDisplayName[];
+extern const char16_t kServiceDescription[];
 
 } // namespace router
 
