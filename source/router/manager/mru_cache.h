@@ -39,6 +39,8 @@ public:
     using EntryList = QVector<Entry>;
     using Iterator = EntryList::iterator;
     using ConstIterator = EntryList::const_iterator;
+    using ReverseIterator = EntryList::reverse_iterator;
+    using ConstReverseIterator = EntryList::const_reverse_iterator;
 
     explicit MruCache(int max_size);
     MruCache(const MruCache& other);
@@ -49,6 +51,7 @@ public:
     int size() const { return list_.size(); }
     bool isEmpty() const { return list_.isEmpty(); }
 
+    void shrinkToSize(int new_size);
     void clear();
 
     Iterator put(Entry&& entry);
@@ -58,10 +61,16 @@ public:
 
     ConstIterator cfind(const QString& address) const;
     Iterator find(const QString& address);
+
     ConstIterator cbegin() const { return list_.cbegin(); }
     Iterator begin() { return list_.begin(); }
+    ConstReverseIterator crbegin() const { return list_.crbegin(); }
+    ReverseIterator rbegin() { return list_.rbegin(); }
+
     ConstIterator cend() const { return list_.cend(); }
     Iterator end() { return list_.end(); }
+    ConstReverseIterator crend() const { return list_.crend(); }
+    ReverseIterator rend() { return list_.rend(); }
 
 private:
     int max_size_;

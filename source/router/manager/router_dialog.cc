@@ -34,7 +34,7 @@ const int kMaxMruSize = 15;
 } // namespace
 
 RouterDialog::RouterDialog()
-    : mru_(kMaxMruSize)
+    : mru_cache_(kMaxMruSize)
 {
     qt_base::Application* instance = qt_base::Application::instance();
     instance->setLocale(settings_.locale());
@@ -47,19 +47,6 @@ RouterDialog::RouterDialog()
     int current_language = ui.combobox_language->findData(settings_.locale());
     if (current_language != -1)
         ui.combobox_language->setCurrentIndex(current_language);
-
-    mru_ = settings_.mru(kMaxMruSize);
-    if (!mru_.isEmpty())
-    {
-        for (const auto& entry : mru_)
-            ui.combobox_address->addItem(entry.address);
-
-        ui.combobox_address->setCurrentIndex(0);
-
-        auto current_mru_entry = mru_.cbegin();
-        ui.spinbox_port->setValue(current_mru_entry->port);
-        ui.edit_username->setText(current_mru_entry->username);
-    }
 
     connect(ui.combobox_language, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &RouterDialog::onCurrentLanguageChanged);
@@ -83,14 +70,15 @@ RouterDialog::RouterDialog()
         ui.edit_public_key->setText(file_path);
     });
 
+    settings_.readMru(&mru_cache_);
+    reloadMru();
+
     ui.combobox_address->setFocus();
 }
 
-RouterDialog::~RouterDialog() = default;
-
-void RouterDialog::closeEvent(QCloseEvent* /* event */)
+RouterDialog::~RouterDialog()
 {
-    settings_.setMru(mru_);
+    settings_.writeMru(mru_cache_);
 }
 
 void RouterDialog::onCurrentLanguageChanged(int index)
@@ -105,105 +93,99 @@ void RouterDialog::onCurrentLanguageChanged(int index)
 
 void RouterDialog::onCurrentRouterChanged(int index)
 {
-    if (!mru_.hasIndex(index))
+    if (!mru_cache_.hasIndex(index))
         return;
 
-    const MruCache::Entry& entry = mru_.at(index);
+    const MruCache::Entry& entry = mru_cache_.at(index);
 
     ui.spinbox_port->setValue(entry.port);
     ui.edit_username->setText(entry.username);
+    ui.edit_public_key->setText(entry.key_path);
 }
 
 void RouterDialog::onButtonBoxClicked(QAbstractButton* button)
 {
     QDialogButtonBox::StandardButton standard_button = ui.buttonbox->standardButton(button);
-    if (standard_button == QDialogButtonBox::Ok)
+    if (standard_button != QDialogButtonBox::Ok)
     {
-        QString address = ui.combobox_address->currentText();
-        if (address.isEmpty())
-        {
-            showWarning(tr("You must enter a address."));
-            ui.combobox_address->setFocus();
-            return;
-        }
-
-        QString username = ui.edit_username->text();
-        if (username.isEmpty())
-        {
-            showWarning(tr("You must enter a user name."));
-            ui.edit_username->setFocus();
-            return;
-        }
-
-        QString password = ui.edit_password->text();
-        if (password.isEmpty())
-        {
-            showWarning(tr("You must enter a password."));
-            ui.edit_password->setFocus();
-            return;
-        }
-
-        QString file_path = ui.edit_public_key->text();
-        if (file_path.isEmpty())
-        {
-            showWarning(tr("The path to the public key file must be specified."));
-            ui.edit_public_key->setFocus();
-            return;
-        }
-
-        int64_t file_size = QFileInfo(file_path).size();
-        if (file_size <= 0 || file_size > 512)
-        {
-            showWarning(tr("The public key file has an invalid size."));
-            ui.edit_public_key->setFocus();
-            return;
-        }
-
-        QFile file(file_path);
-        if (!file.open(QIODevice::ReadOnly))
-        {
-            showWarning(tr("Unable to open public key file \"%1\".").arg(file_path));
-            ui.edit_public_key->setFocus();
-            return;
-        }
-
-        QByteArray public_key = QByteArray::fromHex(file.readAll());
-        MruCache::Entry entry;
-
-        auto result = mru_.find(address);
-        if (result != mru_.end())
-        {
-            entry = *result;
-        }
-        else
-        {
-            entry.address = address;
-            entry.port = ui.spinbox_port->value();
-            entry.username = username;
-            entry.key_path = file_path;
-        }
-
-        main_window_ = new MainWindow(this);
-        main_window_->connectToRouter(
-            entry.address, entry.port, public_key, entry.username, password);
-
-        mru_.put(std::move(entry));
-        reloadMru();
-        hide();
+        close();
         return;
     }
 
-    close();
+    QString address = ui.combobox_address->currentText();
+    if (address.isEmpty())
+    {
+        showWarning(tr("You must enter a address."));
+        ui.combobox_address->setFocus();
+        return;
+    }
+
+    QString username = ui.edit_username->text();
+    if (username.isEmpty())
+    {
+        showWarning(tr("You must enter a user name."));
+        ui.edit_username->setFocus();
+        return;
+    }
+
+    QString password = ui.edit_password->text();
+    if (password.isEmpty())
+    {
+        showWarning(tr("You must enter a password."));
+        ui.edit_password->setFocus();
+        return;
+    }
+
+    QString file_path = ui.edit_public_key->text();
+    if (file_path.isEmpty())
+    {
+        showWarning(tr("The path to the public key file must be specified."));
+        ui.edit_public_key->setFocus();
+        return;
+    }
+
+    int64_t file_size = QFileInfo(file_path).size();
+    if (file_size <= 0 || file_size > 512)
+    {
+        showWarning(tr("The public key file has an invalid size."));
+        ui.edit_public_key->setFocus();
+        return;
+    }
+
+    QFile file(file_path);
+    if (!file.open(QIODevice::ReadOnly))
+    {
+        showWarning(tr("Unable to open public key file \"%1\".").arg(file_path));
+        ui.edit_public_key->setFocus();
+        return;
+    }
+
+    QByteArray public_key = QByteArray::fromHex(file.readAll());
+    uint16_t port = ui.spinbox_port->value();
+
+    MruCache::Entry entry;
+    entry.address = address;
+    entry.port = port;
+    entry.username = username;
+    entry.key_path = file_path;
+
+    mru_cache_.put(std::move(entry));
+    reloadMru();
+
+    main_window_ = new MainWindow(this);
+    main_window_->connectToRouter(address, port, public_key, username, password);
+
+    hide();
 }
 
 void RouterDialog::reloadMru()
 {
     ui.combobox_address->clear();
 
-    if (mru_.isEmpty())
+    if (mru_cache_.isEmpty())
         return;
 
-    for (const auto& entry : mru_)
+    for (const auto& entry : mru_cache_)
         ui.combobox_address->addItem(entry.address);
 
     ui.combobox_address->setCurrentIndex(0);

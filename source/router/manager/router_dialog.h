@@ -39,10 +39,6 @@ public:
     RouterDialog();
     ~RouterDialog();
 
-protected:
-    // QDialog implementation.
-    void closeEvent(QCloseEvent* event) override;
-
 private:
     void onCurrentLanguageChanged(int index);
     void onCurrentRouterChanged(int index);
@@ -52,7 +48,7 @@ private:
 
     Ui::RouterDialog ui;
     Settings settings_;
-    MruCache mru_;
+    MruCache mru_cache_;
 
     QPointer<MainWindow> main_window_;
 

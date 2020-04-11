@@ -32,6 +32,12 @@ MruCache& MruCache::operator=(const MruCache& other) = default;
 
 MruCache::~MruCache() = default;
 
+void MruCache::shrinkToSize(int new_size)
+{
+    while (list_.size() > new_size)
+        list_.removeLast();
+}
+
 void MruCache::clear()
 {
     list_.clear();
@@ -46,8 +52,7 @@ MruCache::Iterator MruCache::put(Entry&& entry)
     }
     else
     {
-        if (!list_.isEmpty())
-            list_.removeLast();
+        shrinkToSize(max_size_ - 1);
     }
 
     list_.push_front(std::move(entry));

@@ -35,8 +35,8 @@ public:
     QString locale() const;
     void setLocale(const QString& locale);
 
-    MruCache mru(int max_size) const;
-    void setMru(const MruCache& mru);
+    void readMru(MruCache* mru) const;
+    void writeMru(const MruCache& mru);
 
 private:
     mutable QSettings settings_;

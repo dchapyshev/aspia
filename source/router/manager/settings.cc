@@ -18,6 +18,7 @@
 
 #include "router/manager/settings.h"
 
+#include "build/build_config.h"
 #include "qt_base/qt_xml_settings.h"
 
 #include <QLocale>
@@ -45,10 +46,8 @@ void Settings::setLocale(const QString& locale)
     settings_.setValue(QLatin1String("Locale"), locale);
 }
 
-MruCache Settings::mru(int max_size) const
+void Settings::readMru(MruCache* mru) const
 {
-    MruCache mru(max_size);
-
     int count = settings_.beginReadArray(QLatin1String("MRU"));
     for (int i = 0; i < count; ++i)
     {
@@ -60,38 +59,35 @@ MruCache Settings::mru(int max_size) const
         entry.username = settings_.value(QLatin1String("UserName")).toString();
         entry.key_path = settings_.value(QLatin1String("KeyPath")).toString();
 
-        mru.put(std::move(entry));
+        mru->put(std::move(entry));
     }
     settings_.endArray();
 
-    if (mru.isEmpty())
+    if (mru->isEmpty())
     {
         MruCache::Entry entry;
         entry.address = QLatin1String("localhost");
-        entry.port = 8061;
+        entry.port = DEFAULT_ROUTER_TCP_PORT;
         entry.username = QLatin1String("admin");
 
-        mru.put(std::move(entry));
+        mru->put(std::move(entry));
     }
-
-    return mru;
 }
 
-void Settings::setMru(const MruCache& mru)
+void Settings::writeMru(const MruCache& mru)
 {
     settings_.remove(QLatin1String("MRU"));
 
+    int entry_index = 0;
+
     settings_.beginWriteArray(QLatin1String("MRU"));
-    for (int i = 0; i < mru.size(); ++i)
+    for (auto entry = mru.crbegin(); entry != mru.crend(); ++entry)
     {
-        settings_.setArrayIndex(i);
-
-        const MruCache::Entry& entry = mru.at(i);
-
-        settings_.setValue(QLatin1String("Address"), entry.address);
-        settings_.setValue(QLatin1String("Port"), entry.port);
-        settings_.setValue(QLatin1String("UserName"), entry.username);
-        settings_.setValue(QLatin1String("KeyPath"), entry.key_path);
+        settings_.setArrayIndex(entry_index++);
+        settings_.setValue(QLatin1String("Address"), entry->address);
+        settings_.setValue(QLatin1String("Port"), entry->port);
+        settings_.setValue(QLatin1String("UserName"), entry->username);
+        settings_.setValue(QLatin1String("KeyPath"), entry->key_path);
     }
     settings_.endArray();
 }

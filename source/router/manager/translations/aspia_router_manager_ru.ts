@@ -451,47 +451,47 @@
 <context>
     <name>router::RouterDialog</name>
     <message>
-        <location filename="../router_dialog.cc" line="77"/>
+        <location filename="../router_dialog.cc" line="64"/>
         <source>Open Public Key</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../router_dialog.cc" line="79"/>
+        <location filename="../router_dialog.cc" line="66"/>
         <source>Public Key (*.txt)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../router_dialog.cc" line="214"/>
+        <location filename="../router_dialog.cc" line="196"/>
         <source>Warning</source>
         <translation type="unfinished">Предупреждение</translation>
     </message>
     <message>
-        <location filename="../router_dialog.cc" line="125"/>
+        <location filename="../router_dialog.cc" line="118"/>
         <source>You must enter a address.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../router_dialog.cc" line="133"/>
+        <location filename="../router_dialog.cc" line="126"/>
         <source>You must enter a user name.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../router_dialog.cc" line="141"/>
+        <location filename="../router_dialog.cc" line="134"/>
         <source>You must enter a password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../router_dialog.cc" line="149"/>
+        <location filename="../router_dialog.cc" line="142"/>
         <source>The path to the public key file must be specified.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../router_dialog.cc" line="157"/>
+        <location filename="../router_dialog.cc" line="150"/>
         <source>The public key file has an invalid size.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../router_dialog.cc" line="165"/>
+        <location filename="../router_dialog.cc" line="158"/>
         <source>Unable to open public key file &quot;%1&quot;.</source>
         <translation type="unfinished"></translation>
     </message>
