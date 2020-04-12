@@ -128,7 +128,8 @@ void Server::onNewSession(net::ServerAuthenticatorManager::SessionInfo&& session
 
         case proto::ROUTER_SESSION_MANAGER:
         {
-            session = std::make_unique<SessionManager>(std::move(session_info.channel), database_);
+            session = std::make_unique<SessionManager>(
+                std::move(session_info.channel), database_);
         }
         break;
 

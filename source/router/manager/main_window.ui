@@ -45,6 +45,9 @@
         </item>
         <item>
          <widget class="QTreeWidget" name="tree_peer">
+          <property name="indentation">
+           <number>0</number>
+          </property>
           <column>
            <property name="text">
             <string notr="true">ID</string>
@@ -102,6 +105,9 @@
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
          <widget class="QTreeWidget" name="tree_proxy">
+          <property name="indentation">
+           <number>0</number>
+          </property>
           <column>
            <property name="text">
             <string>Address</string>
@@ -160,6 +166,9 @@
           </item>
           <item>
            <widget class="QPushButton" name="button_modify_user">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="text">
              <string/>
             </property>
@@ -171,6 +180,9 @@
           </item>
           <item>
            <widget class="QPushButton" name="button_delete_user">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="text">
              <string/>
             </property>
@@ -208,6 +220,9 @@
         </item>
         <item>
          <widget class="QTreeWidget" name="tree_users">
+          <property name="indentation">
+           <number>0</number>
+          </property>
           <column>
            <property name="text">
             <string>User Name</string>

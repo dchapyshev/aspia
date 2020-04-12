@@ -19,8 +19,10 @@
 #include "router/session_manager.h"
 
 #include "base/logging.h"
+#include "base/strings/unicode.h"
 #include "net/channel.h"
 #include "proto/router.pb.h"
+#include "router/database.h"
 
 namespace router {
 
@@ -58,7 +60,7 @@ void SessionManager::onMessageReceived(const base::ByteArray& buffer)
     }
     else if (message.has_user_list_request())
     {
-        LOG(LS_INFO) << "USER LIST REQUEST";
+        doUserListRequest();
     }
     else if (message.has_user_request())
     {
@@ -73,6 +75,25 @@ void SessionManager::onMessageReceived(const base::ByteArray& buffer)
 void SessionManager::onMessageWritten()
 {
     // Nothing
+}
+
+void SessionManager::doUserListRequest()
+{
+    proto::RouterToManager message;
+    proto::UserList* list = message.mutable_user_list();
+
+    net::ServerUserList users = database_->userList();
+    for (net::ServerUserList::Iterator it(users); !it.isAtEnd(); it.advance())
+    {
+        const net::ServerUser& user = it.user();
+        proto::User* item = list->add_user();
+
+        item->set_name(base::utf8FromUtf16(user.name));
+        item->set_sessions(user.sessions);
+        item->set_flags(user.flags);
+    }
+
+    send(base::serialize(message));
 }
 
 } // namespace router

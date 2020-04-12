@@ -34,7 +34,10 @@ std::optional<T> readInteger(sqlite3_stmt* statement, int column)
 {
     int column_type = sqlite3_column_type(statement, column);
     if (column_type != SQLITE_INTEGER)
+    {
+        LOG(LS_ERROR) << "Type is not SQLITE_INTEGER";
         return std::nullopt;
+    }
 
     return static_cast<T>(sqlite3_column_int64(statement, column));
 }
@@ -43,15 +46,24 @@ std::optional<base::ByteArray> readBlob(sqlite3_stmt* statement, int column)
 {
     int column_type = sqlite3_column_type(statement, column);
     if (column_type != SQLITE_BLOB)
+    {
+        LOG(LS_ERROR) << "Type is not SQLITE_BLOB";
         return std::nullopt;
+    }
 
     int blob_size = sqlite3_column_bytes(statement, column);
     if (blob_size <= 0)
+    {
+        LOG(LS_ERROR) << "Field has an invalid size";
         return std::nullopt;
+    }
 
     const void* blob = sqlite3_column_blob(statement, column);
     if (!blob)
+    {
+        LOG(LS_ERROR) << "Failed to get the pointer to the field";
         return std::nullopt;
+    }
 
     return base::fromData(blob, static_cast<size_t>(blob_size));
 }
@@ -60,15 +72,24 @@ std::optional<std::string> readText(sqlite3_stmt* statement, int column)
 {
     int column_type = sqlite3_column_type(statement, column);
     if (column_type != SQLITE_TEXT)
+    {
+        LOG(LS_ERROR) << "Type is not SQLITE_TEXT";
         return std::nullopt;
+    }
 
     int string_size = sqlite3_column_bytes(statement, column);
     if (string_size <= 0)
+    {
+        LOG(LS_ERROR) << "Field has an invalid size";
         return std::nullopt;
+    }
 
     const uint8_t* string = sqlite3_column_text(statement, column);
     if (!string)
+    {
+        LOG(LS_ERROR) << "Failed to get the pointer to the field";
         return std::nullopt;
+    }
 
     return std::string(reinterpret_cast<const char*>(string), string_size);
 }
@@ -84,32 +105,58 @@ std::optional<std::u16string> readText16(sqlite3_stmt* statement, int column)
 
 std::optional<net::ServerUser> readUser(sqlite3_stmt* statement)
 {
+    std::optional<uint64_t> entry_id = readInteger<uint64_t>(statement, 0);
+    if (!entry_id.has_value())
+    {
+        LOG(LS_ERROR) << "Failed to get field 'id'";
+        return std::nullopt;
+    }
+
     std::optional<std::u16string> name = readText16(statement, 1);
     if (!name.has_value())
+    {
+        LOG(LS_ERROR) << "Failed to get field 'name'";
         return std::nullopt;
+    }
 
     std::optional<std::string> group = readText(statement, 2);
     if (!group.has_value())
+    {
+        LOG(LS_ERROR) << "Failed to get field 'group'";
         return std::nullopt;
+    }
 
     std::optional<base::ByteArray> salt = readBlob(statement, 3);
     if (!salt.has_value())
+    {
+        LOG(LS_ERROR) << "Failed to get field 'salt'";
         return std::nullopt;
+    }
 
     std::optional<base::ByteArray> verifier = readBlob(statement, 4);
     if (!verifier.has_value())
+    {
+        LOG(LS_ERROR) << "Failed to get field 'verifier'";
         return std::nullopt;
+    }
 
     std::optional<uint32_t> sessions = readInteger<uint32_t>(statement, 5);
     if (!sessions.has_value())
+    {
+        LOG(LS_ERROR) << "Failed to get field 'sessions'";
         return std::nullopt;
+    }
 
     std::optional<uint32_t> flags = readInteger<uint32_t>(statement, 6);
     if (!flags.has_value())
+    {
+        LOG(LS_ERROR) << "Failed to get field 'flags'";
         return std::nullopt;
+    }
 
     net::ServerUser user;
 
+    user.entry_id  = entry_id.value();
     user.name      = std::move(name.value());
     user.group     = std::move(group.value());
     user.salt      = std::move(salt.value());
@@ -201,16 +248,19 @@ net::ServerUserList DatabaseSqlite::userList() const
 
 bool DatabaseSqlite::addUser(const net::ServerUser& user)
 {
+    NOTIMPLEMENTED();
     return false;
 }
 
-bool DatabaseSqlite::removeUser(std::u16string_view name)
+bool DatabaseSqlite::removeUser(uint64_t entry_id)
 {
+    NOTIMPLEMENTED();
     return false;
 }
 
 uint64_t DatabaseSqlite::peerId(std::string_view key) const
 {
+    NOTIMPLEMENTED();
     return 0;
 }
 

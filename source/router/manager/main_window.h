@@ -58,9 +58,6 @@ public:
     void onUserList(std::shared_ptr<proto::UserList> user_list) override;
     void onUserResult(std::shared_ptr<proto::UserResult> user_result) override;
 
-signals:
-    void disconnected();
-
 protected:
     // QMainWindow implementation.
     void closeEvent(QCloseEvent* event) override;
@@ -73,6 +70,7 @@ private:
     void onAddUserPressed();
     void onModifyUserPressed();
     void onDeleteUserPressed();
+    void onCurrentUserChanged(QTreeWidgetItem* current, QTreeWidgetItem* previous);
 
     Ui::MainWindow ui;
 

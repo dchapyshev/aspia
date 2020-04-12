@@ -40,6 +40,7 @@ public:
     static ServerUser create(std::u16string_view name, std::u16string_view password);
     bool isValid() const;
 
+    uint64_t entry_id = -1;
     std::u16string name;
     std::string group;
     base::ByteArray salt;

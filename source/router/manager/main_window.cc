@@ -19,6 +19,7 @@
 #include "router/manager/main_window.h"
 
 #include "base/logging.h"
+#include "net/server_user.h"
 #include "qt_base/application.h"
 #include "router/manager/user_dialog.h"
 #include "router/manager/router.h"
@@ -70,6 +71,11 @@ public:
         : user(user)
     {
         setText(0, QString::fromStdString(user.name()));
+
+        if (user.flags() & net::ServerUser::ENABLED)
+            setIcon(0, QIcon(QLatin1String(":/img/user.png")));
+        else
+            setIcon(0, QIcon(QLatin1String(":/img/user-disabled.png")));
     }
 
     proto::User user;
@@ -88,12 +94,20 @@ MainWindow::MainWindow(QWidget* parent)
 {
     ui.setupUi(this);
 
-    connect(ui.button_refresh_peers, &QPushButton::released, this, &MainWindow::onRefreshPeerListPressed);
-    connect(ui.button_disconnect_peer, &QPushButton::released, this, &MainWindow::onDisconnectPeerPressed);
-    connect(ui.button_refresh_proxy, &QPushButton::released, this, &MainWindow::onRefreshProxyListPressed);
-    connect(ui.button_add_user, &QPushButton::released, this, &MainWindow::onAddUserPressed);
-    connect(ui.button_modify_user, &QPushButton::released, this, &MainWindow::onModifyUserPressed);
-    connect(ui.button_delete_user, &QPushButton::released, this, &MainWindow::onDeleteUserPressed);
+    connect(ui.button_refresh_peers, &QPushButton::released,
+            this, &MainWindow::onRefreshPeerListPressed);
+    connect(ui.button_disconnect_peer, &QPushButton::released,
+            this, &MainWindow::onDisconnectPeerPressed);
+    connect(ui.button_refresh_proxy, &QPushButton::released,
+            this, &MainWindow::onRefreshProxyListPressed);
+    connect(ui.button_add_user, &QPushButton::released,
+            this, &MainWindow::onAddUserPressed);
+    connect(ui.button_modify_user, &QPushButton::released,
+            this, &MainWindow::onModifyUserPressed);
+    connect(ui.button_delete_user, &QPushButton::released,
+            this, &MainWindow::onDeleteUserPressed);
+    connect(ui.tree_users, &QTreeWidget::currentItemChanged,
+            this, &MainWindow::onCurrentUserChanged);
 }
 
 MainWindow::~MainWindow()
@@ -137,7 +151,7 @@ void MainWindow::onConnected(const base::Version& peer_version)
 {
     status_dialog_->hide();
 
-    ui.statusbar->showMessage(tr("Connected to: %1:%2 (%3).")
+    ui.statusbar->showMessage(tr("Connected to: %1:%2 (version %3)")
                               .arg(peer_address_)
                               .arg(peer_port_)
                               .arg(QString::fromStdString(peer_version.toString())));
@@ -204,8 +218,6 @@ void MainWindow::onDisconnected(net::Channel::ErrorCode error_code)
 
     status_dialog_->setStatus(tr("Error: %1").arg(tr(message)));
     status_dialog_->show();
-
-    emit disconnected();
 }
 
 void MainWindow::onAccessDenied(net::ClientAuthenticator::ErrorCode error_code)
@@ -241,8 +253,6 @@ void MainWindow::onAccessDenied(net::ClientAuthenticator::ErrorCode error_code)
 
     status_dialog_->setStatus(tr("Error: %1").arg(tr(message)));
     status_dialog_->show();
-
-    emit disconnected();
 }
 
 void MainWindow::onPeerList(std::shared_ptr<proto::PeerList> peer_list)
@@ -284,7 +294,7 @@ void MainWindow::closeEvent(QCloseEvent* event)
     if (router_proxy_)
         router_proxy_->disconnectFromRouter();
 
-    emit disconnected();
+    QApplication::quit();
 }
 
 void MainWindow::onRefreshPeerListPressed()
@@ -327,6 +337,12 @@ void MainWindow::onModifyUserPressed()
 void MainWindow::onDeleteUserPressed()
 {
 
+}
+
+void MainWindow::onCurrentUserChanged(QTreeWidgetItem* current, QTreeWidgetItem* previous)
+{
+    ui.button_modify_user->setEnabled(true);
+    ui.button_delete_user->setEnabled(true);
 }
 
 } // namespace router

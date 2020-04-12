@@ -35,6 +35,8 @@ protected:
     void onMessageWritten() override;
 
 private:
+    void doUserListRequest();
+
     std::shared_ptr<Database> database_;
 
     DISALLOW_COPY_AND_ASSIGN(SessionManager);
