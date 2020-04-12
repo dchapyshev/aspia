@@ -18,6 +18,7 @@
 
 #include "net/server_authenticator.h"
 
+#include "base/bitset.h"
 #include "base/cpuid.h"
 #include "base/location.h"
 #include "base/logging.h"
@@ -54,7 +55,10 @@ void ServerAuthenticator::start(std::unique_ptr<Channel> channel,
                                 Delegate* delegate)
 {
     if (state_ != State::STOPPED)
+    {
+        LOG(LS_ERROR) << "Trying to start an already running authenticator";
         return;
+    }
 
     channel_ = std::move(channel);
     user_list_ = std::move(user_list);
@@ -72,6 +76,32 @@ void ServerAuthenticator::start(std::unique_ptr<Channel> channel,
     {
         onFailed(FROM_HERE);
         return;
+    }
+
+    if (anonymous_access_ == AnonymousAccess::ENABLE)
+    {
+        // When anonymous access is enabled, a private key must be installed.
+        if (!key_pair_.isValid())
+        {
+            onFailed(FROM_HERE);
+            return;
+        }
+
+        // When anonymous access is enabled, there must be at least one session for anonymous access.
+        if (!session_types_)
+        {
+            onFailed(FROM_HERE);
+            return;
+        }
+    }
+    else
+    {
+        // If anonymous access is disabled, then there should not be allowed sessions by default.
+        if (session_types_)
+        {
+            onFailed(FROM_HERE);
+            return;
+        }
     }
 
     // If authentication does not complete within the specified time interval, an error will be
@@ -92,15 +122,24 @@ bool ServerAuthenticator::setPrivateKey(const base::ByteArray& private_key)
         return false;
 
     if (private_key.empty())
+    {
+        LOG(LS_ERROR) << "An empty private key is not valid";
         return false;
+    }
 
     key_pair_ = crypto::KeyPair::fromPrivateKey(private_key);
-    if (key_pair_.isValid())
+    if (!key_pair_.isValid())
+    {
+        LOG(LS_ERROR) << "Failed to load private key. Perhaps the key is incorrect";
         return false;
+    }
 
     encrypt_iv_ = crypto::Random::byteArray(kIvSize);
     if (encrypt_iv_.empty())
+    {
+        LOG(LS_ERROR) << "An empty IV is not valid";
         return false;
+    }
 
     return true;
 }
@@ -112,11 +151,29 @@ bool ServerAuthenticator::setAnonymousAccess(
     if (state_ != State::STOPPED)
         return false;
 
-    if (anonymous_access == AnonymousAccess::ENABLE && !key_pair_.isValid())
-        return false;
+    if (anonymous_access == AnonymousAccess::ENABLE)
+    {
+        if (!key_pair_.isValid())
+        {
+            LOG(LS_ERROR) << "When anonymous access is enabled, a private key must be installed";
+            return false;
+        }
+
+        if (!session_types)
+        {
+            LOG(LS_ERROR) << "When anonymous access is enabled, there must be at least one "
+                          << "session for anonymous access";
+            return false;
+        }
+
+        session_types_ = session_types;
+    }
+    else
+    {
+        session_types_ = 0;
+    }
 
     anonymous_access_ = anonymous_access;
-    session_types_ = session_types;
     return true;
 }
 
@@ -466,7 +523,14 @@ void ServerAuthenticator::onSessionResponse(const base::ByteArray& buffer)
     const proto::Version& version = session_response.version();
     peer_version_ = base::Version(version.major(), version.minor(), version.patch());
 
-    session_type_ = session_response.session_type();
+    base::BitSet<uint32_t> session_type = session_response.session_type();
+    if (session_type.count() != 1)
+    {
+        onFailed(FROM_HERE);
+        return;
+    }
+
+    session_type_ = session_type.value();
     if (!(session_types_ & session_type_))
     {
         onFailed(FROM_HERE);

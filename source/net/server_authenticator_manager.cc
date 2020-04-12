@@ -61,10 +61,16 @@ void ServerAuthenticatorManager::addNewChannel(std::unique_ptr<Channel> channel)
     if (!private_key_.empty())
     {
         if (!authenticator->setPrivateKey(private_key_))
+        {
+            LOG(LS_ERROR) << "Failed to set private key for authenticator";
             return;
+        }
 
         if (!authenticator->setAnonymousAccess(anonymous_access_, anonymous_session_types_))
+        {
+            LOG(LS_ERROR) << "Failed to set anonymous access settings";
             return;
+        }
     }
 
     // Create a new authenticator for the connection and put it on the list.
@@ -110,8 +116,7 @@ void ServerAuthenticatorManager::onComplete()
 
             default:
                 NOTREACHED();
-                ++it;
-                break;
+                return;
         }
     }
 }
