@@ -31,7 +31,7 @@
 #include "crypto/secure_memory.h"
 #include "crypto/srp_constants.h"
 #include "crypto/srp_math.h"
-#include "net/server_user.h"
+#include "net/user.h"
 
 namespace net {
 
@@ -51,7 +51,7 @@ ServerAuthenticator::ServerAuthenticator(std::shared_ptr<base::TaskRunner> task_
 ServerAuthenticator::~ServerAuthenticator() = default;
 
 void ServerAuthenticator::start(std::unique_ptr<Channel> channel,
-                                std::shared_ptr<ServerUserList> user_list,
+                                std::shared_ptr<UserList> user_list,
                                 Delegate* delegate)
 {
     if (state_ != State::STOPPED)
@@ -382,8 +382,8 @@ void ServerAuthenticator::onIdentify(const base::ByteArray& buffer)
 
     do
     {
-        const ServerUser& user = user_list_->find(user_name_);
-        if (user.isValid() && (user.flags & ServerUser::ENABLED))
+        const User& user = user_list_->find(user_name_);
+        if (user.isValid() && (user.flags & User::ENABLED))
         {
             session_types_ = user.sessions;
 

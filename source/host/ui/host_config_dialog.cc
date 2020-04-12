@@ -131,7 +131,7 @@ void ConfigDialog::onAddUser()
     for (int i = 0; i < ui.tree_users->topLevelItemCount(); ++i)
         exist_names.append(ui.tree_users->topLevelItem(i)->text(0));
 
-    UserDialog dialog(net::ServerUser(), exist_names, this);
+    UserDialog dialog(net::User(), exist_names, this);
     if (dialog.exec() == QDialog::Accepted)
     {
         ui.tree_users->addTopLevelItem(new UserTreeItem(dialog.user()));
@@ -307,7 +307,7 @@ void ConfigDialog::onButtonBoxClicked(QAbstractButton* button)
             }
         }
 
-        net::ServerUserList user_list;
+        net::UserList user_list;
 
         for (int i = 0; i < ui.tree_users->topLevelItemCount(); ++i)
         {
@@ -384,11 +384,11 @@ void ConfigDialog::reloadAll()
     setConfigChanged(false);
 }
 
-void ConfigDialog::reloadUserList(const net::ServerUserList& user_list)
+void ConfigDialog::reloadUserList(const net::UserList& user_list)
 {
     ui.tree_users->clear();
 
-    for (net::ServerUserList::Iterator it(user_list); !it.isAtEnd(); it.advance())
+    for (net::UserList::Iterator it(user_list); !it.isAtEnd(); it.advance())
         ui.tree_users->addTopLevelItem(new UserTreeItem(it.user()));
 
     ui.button_modify->setEnabled(false);

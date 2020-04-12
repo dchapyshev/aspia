@@ -32,7 +32,7 @@ class Location;
 
 namespace net {
 
-class ServerUserList;
+class UserList;
 
 class ServerAuthenticator : public Channel::Listener
 {
@@ -64,7 +64,7 @@ public:
 
     // The start of the authenticator.
     void start(std::unique_ptr<Channel> channel,
-               std::shared_ptr<ServerUserList> user_list,
+               std::shared_ptr<UserList> user_list,
                Delegate* delegate);
 
     // Sets the private key.
@@ -104,7 +104,7 @@ private:
 
     base::WaitableTimer timer_;
     std::unique_ptr<Channel> channel_;
-    std::shared_ptr<ServerUserList> user_list_;
+    std::shared_ptr<UserList> user_list_;
 
     Delegate* delegate_ = nullptr;
     State state_ = State::STOPPED;

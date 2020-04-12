@@ -16,28 +16,28 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef NET__SERVER_USER_H
-#define NET__SERVER_USER_H
+#ifndef NET__USER_H
+#define NET__USER_H
 
 #include "base/memory/byte_array.h"
 
 namespace net {
 
-class ServerUser
+class User
 {
 public:
-    ServerUser() = default;
-    ~ServerUser() = default;
+    User() = default;
+    ~User() = default;
 
-    ServerUser(const ServerUser& other) = default;
-    ServerUser& operator=(const ServerUser& other) = default;
+    User(const User& other) = default;
+    User& operator=(const User& other) = default;
 
-    ServerUser(ServerUser&& other) noexcept = default;
-    ServerUser& operator=(ServerUser&& other) noexcept = default;
+    User(User&& other) noexcept = default;
+    User& operator=(User&& other) noexcept = default;
 
     enum Flags { ENABLED = 1 };
 
-    static ServerUser create(std::u16string_view name, std::u16string_view password);
+    static User create(std::u16string_view name, std::u16string_view password);
     bool isValid() const;
 
     uint64_t entry_id = -1;
@@ -49,23 +49,23 @@ public:
     uint32_t flags = 0;
 };
 
-class ServerUserList
+class UserList
 {
 public:
-    ServerUserList() = default;
+    UserList() = default;
 
-    ServerUserList(const ServerUserList& other) = default;
-    ServerUserList& operator=(const ServerUserList& other) = default;
+    UserList(const UserList& other) = default;
+    UserList& operator=(const UserList& other) = default;
 
-    ServerUserList(ServerUserList&& other) noexcept = default;
-    ServerUserList& operator=(ServerUserList&& other) noexcept = default;
+    UserList(UserList&& other) noexcept = default;
+    UserList& operator=(UserList&& other) noexcept = default;
 
-    void add(const ServerUser& user);
-    void add(ServerUser&& user);
-    void merge(const ServerUserList& user_list);
-    void merge(ServerUserList&& user_list);
+    void add(const User& user);
+    void add(User&& user);
+    void merge(const UserList& user_list);
+    void merge(UserList&& user_list);
 
-    const ServerUser& find(std::u16string_view username) const;
+    const User& find(std::u16string_view username) const;
     size_t count() const { return list_.size(); }
     bool empty() const { return list_.empty(); }
 
@@ -76,23 +76,23 @@ public:
     class Iterator
     {
     public:
-        Iterator(const ServerUserList& list);
+        Iterator(const UserList& list);
         ~Iterator();
 
-        const ServerUser& user() const;
+        const User& user() const;
         bool isAtEnd() const;
         void advance();
 
     private:
-        const std::vector<ServerUser>& list_;
-        std::vector<ServerUser>::const_iterator pos_;
+        const std::vector<User>& list_;
+        std::vector<User>::const_iterator pos_;
     };
 
 private:
     base::ByteArray seed_key_;
-    std::vector<ServerUser> list_;
+    std::vector<User> list_;
 };
 
 } // namespace net
 
-#endif // NET__SERVER_USER_H
+#endif // NET__USER_H

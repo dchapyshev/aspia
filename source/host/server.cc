@@ -166,8 +166,8 @@ void Server::deleteFirewallRules()
 void Server::reloadUserList()
 {
     // Read the list of regular users.
-    std::shared_ptr<net::ServerUserList> user_list =
-        std::make_shared<net::ServerUserList>(settings_.userList());
+    std::shared_ptr<net::UserList> user_list =
+        std::make_shared<net::UserList>(settings_.userList());
 
     // Add a list of one-time users to the list of regular users.
     user_list->merge(user_session_manager_->userList());

@@ -33,7 +33,7 @@ ServerAuthenticatorManager::ServerAuthenticatorManager(
 
 ServerAuthenticatorManager::~ServerAuthenticatorManager() = default;
 
-void ServerAuthenticatorManager::setUserList(std::shared_ptr<ServerUserList> user_list)
+void ServerAuthenticatorManager::setUserList(std::shared_ptr<UserList> user_list)
 {
     user_list_ = std::move(user_list);
     DCHECK(user_list_);

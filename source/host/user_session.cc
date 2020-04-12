@@ -108,13 +108,13 @@ void UserSession::restart(std::unique_ptr<ipc::Channel> channel)
     delegate_->onUserSessionStarted();
 }
 
-net::ServerUser UserSession::user() const
+net::User UserSession::user() const
 {
-    net::ServerUser user = net::ServerUser::create(
+    net::User user = net::User::create(
         base::utf16FromAscii(username_), base::utf16FromAscii(password_));
 
     user.sessions = proto::SESSION_TYPE_ALL;
-    user.flags = net::ServerUser::ENABLED;
+    user.flags = net::User::ENABLED;
 
     return user;
 }

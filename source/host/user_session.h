@@ -24,7 +24,7 @@
 #include "host/client_session.h"
 #include "host/desktop_session_manager.h"
 #include "ipc/channel.h"
-#include "net/server_user.h"
+#include "net/user.h"
 #include "proto/host_internal.pb.h"
 
 namespace host {
@@ -69,7 +69,7 @@ public:
     Type type() const { return type_; }
     State state() const { return state_; }
     base::SessionId sessionId() const { return session_id_; }
-    net::ServerUser user() const;
+    net::User user() const;
 
     void addNewSession(std::unique_ptr<ClientSession> client_session);
     void setSessionEvent(base::win::SessionStatus status, base::SessionId session_id);
