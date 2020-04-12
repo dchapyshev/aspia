@@ -19,6 +19,7 @@
 #ifndef ROUTER__SESSION_MANAGER_H
 #define ROUTER__SESSION_MANAGER_H
 
+#include "proto/router.pb.h"
 #include "router/session.h"
 
 namespace router {
@@ -36,6 +37,7 @@ protected:
 
 private:
     void doUserListRequest();
+    void doUserRequest(const proto::UserRequest& request);
 
     std::shared_ptr<Database> database_;
 

@@ -39,8 +39,6 @@ list(APPEND SOURCE_NET
     server_authenticator_manager.h
     user.cc
     user.h
-    user_util.cc
-    user_util.h
     variable_size.cc
     variable_size.h)
 

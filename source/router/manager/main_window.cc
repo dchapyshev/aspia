@@ -19,7 +19,7 @@
 #include "router/manager/main_window.h"
 
 #include "base/logging.h"
-#include "net/server_user.h"
+#include "net/user.h"
 #include "qt_base/application.h"
 #include "router/manager/user_dialog.h"
 #include "router/manager/router.h"
@@ -72,7 +72,7 @@ public:
     {
         setText(0, QString::fromStdString(user.name()));
 
-        if (user.flags() & net::ServerUser::ENABLED)
+        if (user.flags() & net::User::ENABLED)
             setIcon(0, QIcon(QLatin1String(":/img/user.png")));
         else
             setIcon(0, QIcon(QLatin1String(":/img/user-disabled.png")));

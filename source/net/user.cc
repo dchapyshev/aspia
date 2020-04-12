@@ -24,6 +24,8 @@
 #include "crypto/srp_constants.h"
 #include "crypto/srp_math.h"
 
+#include <cwctype>
+
 namespace net {
 
 namespace {
@@ -32,7 +34,79 @@ const User kInvalidUser;
 const size_t kSaltSize = 64; // In bytes.
 const char kDefaultGroup[] = "8192";
 
+bool isValidUserNameChar(char16_t username_char)
+{
+    if (std::iswalnum(username_char))
+        return true;
+
+    if (username_char == '.' ||
+        username_char == '_' ||
+        username_char == '-')
+    {
+        return true;
+    }
+
+    return false;
+}
+
 } // namespace
+
+// static
+bool User::isValidUserName(std::u16string_view username)
+{
+    size_t length = username.length();
+
+    if (!length || length > kMaxUserNameLength)
+        return false;
+
+    for (size_t i = 0; i < length; ++i)
+    {
+        if (!isValidUserNameChar(username[i]))
+            return false;
+    }
+
+    return true;
+}
+
+// static
+bool User::isValidPassword(std::u16string_view password)
+{
+    size_t length = password.length();
+
+    if (length < kMinPasswordLength || length > kMaxPasswordLength)
+        return false;
+
+    return true;
+}
+
+// static
+bool User::isSafePassword(std::u16string_view password)
+{
+    size_t length = password.length();
+
+    if (length < kSafePasswordLength)
+        return false;
+
+    bool has_upper = false;
+    bool has_lower = false;
+    bool has_digit = false;
+
+    for (size_t i = 0; i < length; ++i)
+    {
+        char16_t character = password[i];
+
+        if (std::iswupper(character))
+            has_upper = true;
+
+        if (std::iswlower(character))
+            has_lower = true;
+
+        if (std::iswdigit(character))
+            has_digit = true;
+    }
+
+    return has_upper && has_lower && has_digit;
+}
 
 // static
 User User::create(std::u16string_view name, std::u16string_view password)

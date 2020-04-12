@@ -21,7 +21,7 @@
 #include "base/logging.h"
 #include "base/strings/unicode.h"
 #include "net/channel.h"
-#include "proto/router.pb.h"
+#include "net/user.h"
 #include "router/database.h"
 
 namespace router {
@@ -64,7 +64,7 @@ void SessionManager::onMessageReceived(const base::ByteArray& buffer)
     }
     else if (message.has_user_request())
     {
-        LOG(LS_INFO) << "USER REQUEST";
+        doUserRequest(message.user_request());
     }
     else
     {
@@ -82,15 +82,76 @@ void SessionManager::doUserListRequest()
     proto::RouterToManager message;
     proto::UserList* list = message.mutable_user_list();
 
-    net::ServerUserList users = database_->userList();
-    for (net::ServerUserList::Iterator it(users); !it.isAtEnd(); it.advance())
+    net::UserList users = database_->userList();
+    for (net::UserList::Iterator it(users); !it.isAtEnd(); it.advance())
     {
-        const net::ServerUser& user = it.user();
+        const net::User& user = it.user();
         proto::User* item = list->add_user();
 
         item->set_name(base::utf8FromUtf16(user.name));
         item->set_sessions(user.sessions);
         item->set_flags(user.flags);
+    }
+
+    send(base::serialize(message));
+}
+
+void SessionManager::doUserRequest(const proto::UserRequest& request)
+{
+    proto::RouterToManager message;
+    proto::UserResult* result = message.mutable_user_result();
+    result->set_type(request.type());
+
+    switch (request.type())
+    {
+        case proto::USER_REQUEST_ADD:
+        {
+            std::u16string username = base::utf16FromUtf8(request.user().name());
+            std::u16string password = base::utf16FromUtf8(request.user().password());
+
+            if (!net::User::isValidUserName(username) || !net::User::isValidPassword(password))
+            {
+                result->set_error_code(proto::UserResult::INVALID_DATA);
+                break;
+            }
+
+            net::User user = net::User::create(username, password);
+            if (!user.isValid())
+            {
+                result->set_error_code(proto::UserResult::INTERNAL_ERROR);
+                break;
+            }
+
+            user.sessions = request.user().sessions();
+            user.flags = request.user().flags();
+
+            if (!database_->addUser(user))
+            {
+                result->set_error_code(proto::UserResult::INTERNAL_ERROR);
+                break;
+            }
+
+            result->set_error_code(proto::UserResult::SUCCESS);
+        }
+        break;
+
+        case proto::USER_REQUEST_MODIFY:
+        {
+            NOTIMPLEMENTED();
+        }
+        break;
+
+        case proto::USER_REQUEST_DELETE:
+        {
+            if (!database_->removeUser(request.user().entry_id()))
+            {
+                result->set_error_code(proto::UserResult::INTERNAL_ERROR);
+                break;
+            }
+
+            result->set_error_code(proto::UserResult::SUCCESS);
+        }
+        break;
     }
 
     send(base::serialize(message));

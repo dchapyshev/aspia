@@ -18,7 +18,7 @@
 
 #include "router/manager/user_dialog.h"
 
-#include "common/user_util.h"
+#include "net/user.h"
 
 #include <QAbstractButton>
 #include <QMessageBox>
@@ -67,7 +67,7 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
     {
         std::u16string name = userName().toStdU16String();
 
-        if (!common::UserUtil::isValidUserName(name))
+        if (!net::User::isValidUserName(name))
         {
             QMessageBox::warning(this,
                                  tr("Warning"),
@@ -94,12 +94,12 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
 
         std::u16string pass = password().toStdU16String();
 
-        if (!common::UserUtil::isValidPassword(pass))
+        if (!net::User::isValidPassword(pass))
         {
             QMessageBox::warning(this,
                                  tr("Warning"),
                                  tr("Password can not be empty and should not exceed %n characters.",
-                                    "", common::UserUtil::kMaxPasswordLength),
+                                    "", net::User::kMaxPasswordLength),
                                  QMessageBox::Ok);
 
             ui.edit_password->selectAll();
@@ -107,7 +107,7 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
             return;
         }
 
-        if (!common::UserUtil::isSafePassword(pass))
+        if (!net::User::isSafePassword(pass))
         {
             QString unsafe =
                 tr("Password you entered does not meet the security requirements!");
@@ -115,7 +115,7 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
             QString safe =
                 tr("The password must contain lowercase and uppercase characters, "
                    "numbers and should not be shorter than %n characters.",
-                   "", common::UserUtil::kSafePasswordLength);
+                   "", net::User::kSafePasswordLength);
 
             QString question = tr("Do you want to enter a different password?");
 

@@ -103,7 +103,7 @@ std::optional<std::u16string> readText16(sqlite3_stmt* statement, int column)
     return base::utf16FromUtf8(str.value());
 }
 
-std::optional<net::ServerUser> readUser(sqlite3_stmt* statement)
+std::optional<net::User> readUser(sqlite3_stmt* statement)
 {
     std::optional<uint64_t> entry_id = readInteger<uint64_t>(statement, 0);
     if (!entry_id.has_value())
@@ -154,7 +154,7 @@ std::optional<net::ServerUser> readUser(sqlite3_stmt* statement)
         return std::nullopt;
     }
 
-    net::ServerUser user;
+    net::User user;
 
     user.entry_id  = entry_id.value();
     user.name      = std::move(name.value());
@@ -219,7 +219,7 @@ std::filesystem::path DatabaseSqlite::filePath()
     return file_path;
 }
 
-net::ServerUserList DatabaseSqlite::userList() const
+net::UserList DatabaseSqlite::userList() const
 {
     const char kQuery[] = "SELECT * FROM users";
 
@@ -228,16 +228,16 @@ net::ServerUserList DatabaseSqlite::userList() const
     if (error_code != SQLITE_OK)
     {
         LOG(LS_ERROR) << "sqlite3_prepare failed: " << sqlite3_errstr(error_code);
-        return net::ServerUserList();
+        return net::UserList();
     }
 
-    net::ServerUserList users;
+    net::UserList users;
     for (;;)
     {
         if (sqlite3_step(statement) != SQLITE_ROW)
             break;
 
-        std::optional<net::ServerUser> user = readUser(statement);
+        std::optional<net::User> user = readUser(statement);
         if (user.has_value())
             users.add(std::move(user.value()));
     }
@@ -246,7 +246,7 @@ net::ServerUserList DatabaseSqlite::userList() const
     return users;
 }
 
-bool DatabaseSqlite::addUser(const net::ServerUser& user)
+bool DatabaseSqlite::addUser(const net::User& user)
 {
     NOTIMPLEMENTED();
     return false;

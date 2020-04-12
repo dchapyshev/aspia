@@ -89,8 +89,7 @@ bool Server::start()
 
     authenticator_manager_ = std::make_unique<net::ServerAuthenticatorManager>(task_runner_, this);
     authenticator_manager_->setPrivateKey(private_key);
-    authenticator_manager_->setUserList(
-        std::make_shared<net::ServerUserList>(database_->userList()));
+    authenticator_manager_->setUserList(std::make_shared<net::UserList>(database_->userList()));
 
     server_ = std::make_unique<net::Server>();
     server_->start(port, this);
