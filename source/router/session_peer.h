@@ -19,6 +19,7 @@
 #ifndef ROUTER__SESSION_PEER_H
 #define ROUTER__SESSION_PEER_H
 
+#include "proto/router.pb.h"
 #include "router/session.h"
 
 namespace router {
@@ -26,7 +27,9 @@ namespace router {
 class SessionPeer : public Session
 {
 public:
-    SessionPeer(std::unique_ptr<net::Channel> channel, std::shared_ptr<Database> database);
+    SessionPeer(proto::RouterSession session_type,
+                std::unique_ptr<net::Channel> channel,
+                std::shared_ptr<Database> database);
     ~SessionPeer();
 
 protected:
@@ -35,6 +38,7 @@ protected:
     void onMessageWritten() override;
 
 private:
+    const proto::RouterSession session_type_;
     std::shared_ptr<Database> database_;
 
     DISALLOW_COPY_AND_ASSIGN(SessionPeer);

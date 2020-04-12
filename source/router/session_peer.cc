@@ -20,12 +20,14 @@
 
 #include "base/logging.h"
 #include "net/channel.h"
-#include "proto/router.pb.h"
 
 namespace router {
 
-SessionPeer::SessionPeer(std::unique_ptr<net::Channel> channel, std::shared_ptr<Database> database)
+SessionPeer::SessionPeer(proto::RouterSession session_type,
+                         std::unique_ptr<net::Channel> channel,
+                         std::shared_ptr<Database> database)
     : Session(std::move(channel)),
+      session_type_(session_type),
       database_(std::move(database))
 {
     // Nothing

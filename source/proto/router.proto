@@ -24,9 +24,10 @@ package proto;
 
 enum RouterSession
 {
-    ROUTER_SESSION_UNKNOWN = 0;
-    ROUTER_SESSION_MANAGER = 1;
-    ROUTER_SESSION_PEER    = 2;
+    ROUTER_SESSION_UNKNOWN         = 0;
+    ROUTER_SESSION_MANAGER         = 1;
+    ROUTER_SESSION_AUTHORIZED_PEER = 2;
+    ROUTER_SESSION_ANONIMOUS_PEER  = 4;
 }
 
 enum ConnectionType
