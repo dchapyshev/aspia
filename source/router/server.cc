@@ -29,6 +29,25 @@
 
 namespace router {
 
+namespace {
+
+const char* sessionTypeToString(uint32_t session_type)
+{
+    switch (session_type)
+    {
+        case proto::ROUTER_SESSION_PEER:
+            return "ROUTER_SESSION_PEER";
+
+        case proto::ROUTER_SESSION_MANAGER:
+            return "ROUTER_SESSION_MANAGER";
+
+        default:
+            return "ROUTER_SESSION_UNKNOWN";
+    }
+}
+
+} // namespace
+
 Server::Server(std::shared_ptr<base::TaskRunner> task_runner)
     : task_runner_(std::move(task_runner))
 {
@@ -44,45 +63,62 @@ bool Server::start()
 
     database_ = DatabaseSqlite::open();
     if (!database_)
+    {
+        LOG(LS_ERROR) << "Failed to open the database";
         return false;
+    }
 
     Settings settings;
 
+    base::ByteArray private_key = settings.privateKey();
+    if (private_key.empty())
+    {
+        LOG(LS_ERROR) << "The private key is not specified in the configuration file";
+        return false;
+    }
+
+    uint16_t port = settings.port();
+    if (!port)
+    {
+        LOG(LS_ERROR) << "Invalid port specified in configuration file";
+        return false;
+    }
+
     authenticator_manager_ = std::make_unique<net::ServerAuthenticatorManager>(task_runner_, this);
-    authenticator_manager_->setPrivateKey(settings.privateKey());
+    authenticator_manager_->setPrivateKey(private_key);
     authenticator_manager_->setUserList(
         std::make_shared<net::ServerUserList>(database_->userList()));
 
     server_ = std::make_unique<net::Server>();
-    server_->start(settings.port(), this);
+    server_->start(port, this);
 
     return true;
 }
 
 void Server::onNewConnection(std::unique_ptr<net::Channel> channel)
 {
+    LOG(LS_INFO) << "New connection: " << channel->peerAddress();
+
     if (authenticator_manager_)
         authenticator_manager_->addNewChannel(std::move(channel));
 }
 
 void Server::onNewSession(net::ServerAuthenticatorManager::SessionInfo&& session_info)
 {
+    LOG(LS_INFO) << "New session: " << sessionTypeToString(session_info.session_type)
+                 << " (" << session_info.channel->peerAddress() << ")";
+
     std::unique_ptr<Session> session;
 
     switch (session_info.session_type)
     {
         case proto::ROUTER_SESSION_PEER:
-            session = std::make_unique<SessionPeer>(std::move(session_info.channel));
+            session = std::make_unique<SessionPeer>(std::move(session_info.channel), database_);
             break;
 
         case proto::ROUTER_SESSION_MANAGER:
-        {
-            if (!(session_info.user_flags & net::ServerUser::MANAGER))
-                return;
-
-            session = std::make_unique<SessionManager>(std::move(session_info.channel));
-        }
-        break;
+            session = std::make_unique<SessionManager>(std::move(session_info.channel), database_);
+            break;
 
         default:
             break;

@@ -18,16 +18,61 @@
 
 #include "router/session_manager.h"
 
+#include "base/logging.h"
 #include "net/channel.h"
+#include "proto/router.pb.h"
 
 namespace router {
 
-SessionManager::SessionManager(std::unique_ptr<net::Channel> channel)
-    : Session(std::move(channel))
+SessionManager::SessionManager(std::unique_ptr<net::Channel> channel,
+                               std::shared_ptr<Database> database)
+    : Session(std::move(channel)),
+      database_(std::move(database))
 {
     // Nothing
 }
 
 SessionManager::~SessionManager() = default;
+
+void SessionManager::onMessageReceived(const base::ByteArray& buffer)
+{
+    proto::ManagerToRouter message;
+
+    if (!base::parse(buffer, &message))
+    {
+        LOG(LS_ERROR) << "Could not read message from manager";
+        return;
+    }
+
+    if (message.has_peer_list_request())
+    {
+        LOG(LS_INFO) << "PEER LIST REQUEST";
+    }
+    else if (message.has_peer_request())
+    {
+        LOG(LS_INFO) << "PEER REQUEST";
+    }
+    else if (message.has_proxy_list_request())
+    {
+        LOG(LS_INFO) << "PROXY LIST REQUEST";
+    }
+    else if (message.has_user_list_request())
+    {
+        LOG(LS_INFO) << "USER LIST REQUEST";
+    }
+    else if (message.has_user_request())
+    {
+        LOG(LS_INFO) << "USER REQUEST";
+    }
+    else
+    {
+        LOG(LS_WARNING) << "Unhandled message from manager";
+    }
+}
+
+void SessionManager::onMessageWritten()
+{
+    // Nothing
+}
 
 } // namespace router

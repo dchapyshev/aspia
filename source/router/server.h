@@ -50,7 +50,7 @@ protected:
 
 private:
     std::shared_ptr<base::TaskRunner> task_runner_;
-    std::unique_ptr<Database> database_;
+    std::shared_ptr<Database> database_;
     std::unique_ptr<net::Server> server_;
     std::unique_ptr<net::ServerAuthenticatorManager> authenticator_manager_;
     std::vector<std::unique_ptr<Session>> sessions_;

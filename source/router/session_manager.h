@@ -26,10 +26,17 @@ namespace router {
 class SessionManager : public Session
 {
 public:
-    explicit SessionManager(std::unique_ptr<net::Channel> channel);
+    SessionManager(std::unique_ptr<net::Channel> channel, std::shared_ptr<Database> database);
     ~SessionManager();
 
+protected:
+    // net::Channel::Listener implementation.
+    void onMessageReceived(const base::ByteArray& buffer) override;
+    void onMessageWritten() override;
+
 private:
+    std::shared_ptr<Database> database_;
+
     DISALLOW_COPY_AND_ASSIGN(SessionManager);
 };
 

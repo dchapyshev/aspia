@@ -18,16 +18,54 @@
 
 #include "router/session_peer.h"
 
+#include "base/logging.h"
 #include "net/channel.h"
+#include "proto/router.pb.h"
 
 namespace router {
 
-SessionPeer::SessionPeer(std::unique_ptr<net::Channel> channel)
-    : Session(std::move(channel))
+SessionPeer::SessionPeer(std::unique_ptr<net::Channel> channel, std::shared_ptr<Database> database)
+    : Session(std::move(channel)),
+      database_(std::move(database))
 {
     // Nothing
 }
 
 SessionPeer::~SessionPeer() = default;
+
+void SessionPeer::onMessageReceived(const base::ByteArray& buffer)
+{
+    proto::PeerToRouter message;
+
+    if (!base::parse(buffer, &message))
+    {
+        LOG(LS_ERROR) << "Could not read message from peer";
+        return;
+    }
+
+    if (message.has_peer_id_request())
+    {
+        LOG(LS_INFO) << "PEER ID REQUEST";
+    }
+    else if (message.has_connection_request())
+    {
+        LOG(LS_INFO) << "CONNECTION REQUEST";
+    }
+    else if (message.has_connection_candidate())
+    {
+        LOG(LS_INFO) << "CONNECTION CANDIDATE";
+    }
+    else
+    {
+        LOG(LS_WARNING) << "Unhandled message from peer";
+    }
+
+    // TODO
+}
+
+void SessionPeer::onMessageWritten()
+{
+    // Nothing
+}
 
 } // namespace router

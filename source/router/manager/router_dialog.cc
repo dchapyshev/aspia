@@ -161,8 +161,8 @@ void RouterDialog::onButtonBoxClicked(QAbstractButton* button)
         return;
     }
 
-    QByteArray public_key = QByteArray::fromHex(file.readAll());
-    uint16_t port = ui.spinbox_port->value();
+    uint16_t port = static_cast<uint16_t>(ui.spinbox_port->value());
+    QByteArray public_key = file.readAll();
 
     MruCache::Entry entry;
     entry.address = address;

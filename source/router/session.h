@@ -24,6 +24,8 @@
 
 namespace router {
 
+class Database;
+
 class Session : public net::Channel::Listener
 {
 public:
@@ -48,14 +50,15 @@ public:
     const std::u16string& userName() const { return username_; }
 
 protected:
-    // net::Listener implementation.
+    void send(base::ByteArray&& buffer);
+
+    // net::Channel::Listener implementation.
     void onConnected() override;
     void onDisconnected(net::Channel::ErrorCode error_code) override;
-    void onMessageReceived(const base::ByteArray& buffer) override;
-    void onMessageWritten() override;
 
 private:
     std::unique_ptr<net::Channel> channel_;
+
     std::u16string username_;
     base::Version version_;
 
