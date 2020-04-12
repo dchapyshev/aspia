@@ -21,6 +21,7 @@
 
 namespace base {
 
+bool isDebuggerPresent();
 void debugPrint(const char* str);
 void debugBreak();
 
