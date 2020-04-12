@@ -509,7 +509,7 @@ void ClientAuthenticator::sendSessionResponse()
 void ClientAuthenticator::finished(const base::Location& location, ErrorCode error_code)
 {
     LOG(LS_INFO) << "Authenticator finished with code: " << errorToString(error_code)
-                 << "(" << location.toString() << ")";
+                 << " (" << location.toString() << ")";
 
     channel_->pause();
     channel_->setListener(nullptr);
