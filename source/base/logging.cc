@@ -184,6 +184,7 @@ bool initLogging(const LoggingSettings& settings)
     #warning Not implemented
 #endif
 
+    LOG(LS_INFO) << "Debugger present: " << (isDebuggerPresent() ? "Yes" : "No");
     LOG(LS_INFO) << "Logging started";
     return true;
 }
