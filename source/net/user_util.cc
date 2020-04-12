@@ -16,11 +16,11 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "common/user_util.h"
+#include "net/user_util.h"
 
 #include <cwctype>
 
-namespace common {
+namespace net {
 
 namespace {
 
@@ -98,4 +98,4 @@ bool UserUtil::isSafePassword(std::u16string_view password)
     return has_upper && has_lower && has_digit;
 }
 
-} // namespace common
+} // namespace net

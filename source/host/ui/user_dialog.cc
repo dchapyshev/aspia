@@ -20,7 +20,7 @@
 
 #include "base/logging.h"
 #include "common/session_type.h"
-#include "common/user_util.h"
+#include "net/user_util.h"
 #include "proto/common.pb.h"
 
 #include <QMessageBox>
@@ -122,7 +122,7 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
             std::u16string name = ui.edit_username->text().toStdU16String();
             std::u16string password = ui.edit_password->text().toStdU16String();
 
-            if (!common::UserUtil::isValidUserName(name))
+            if (!net::UserUtil::isValidUserName(name))
             {
                 QMessageBox::warning(this,
                                      tr("Warning"),
@@ -156,19 +156,19 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
                 return;
             }
 
-            if (!common::UserUtil::isValidPassword(password))
+            if (!net::UserUtil::isValidPassword(password))
             {
                 QMessageBox::warning(this,
                                      tr("Warning"),
                                      tr("Password can not be empty and should not exceed %n characters.",
-                                        "", common::UserUtil::kMaxPasswordLength),
+                                        "", net::UserUtil::kMaxPasswordLength),
                                      QMessageBox::Ok);
                 ui.edit_password->selectAll();
                 ui.edit_password->setFocus();
                 return;
             }
 
-            if (!common::UserUtil::isSafePassword(password))
+            if (!net::UserUtil::isSafePassword(password))
             {
                 QString unsafe =
                     tr("Password you entered does not meet the security requirements!");
@@ -176,7 +176,7 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
                 QString safe =
                     tr("The password must contain lowercase and uppercase characters, "
                        "numbers and should not be shorter than %n characters.",
-                       "", common::UserUtil::kSafePasswordLength);
+                       "", net::UserUtil::kSafePasswordLength);
 
                 QString question = tr("Do you want to enter a different password?");
 

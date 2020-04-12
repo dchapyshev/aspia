@@ -45,9 +45,7 @@ list(APPEND SOURCE_COMMON
     keycode_converter.cc
     keycode_converter.h
     session_type.cc
-    session_type.h
-    user_util.cc
-    user_util.h)
+    session_type.h)
 
 list(APPEND SOURCE_COMMON_UI
     ui/about_dialog.cc

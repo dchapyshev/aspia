@@ -19,8 +19,8 @@
 #include "console/computer_dialog_general.h"
 
 #include "base/strings/unicode.h"
-#include "common/user_util.h"
 #include "net/address.h"
+#include "net/user_util.h"
 
 #include <QMessageBox>
 
@@ -96,7 +96,7 @@ bool ComputerDialogGeneral::saveSettings(proto::address_book::Computer* computer
     std::u16string username = ui.edit_username->text().toStdU16String();
     std::u16string password = ui.edit_password->text().toStdU16String();
 
-    if (!username.empty() && !common::UserUtil::isValidUserName(username))
+    if (!username.empty() && !net::UserUtil::isValidUserName(username))
     {
         showError(tr("The user name can not be empty and can contain only"
                      " alphabet characters, numbers and ""_"", ""-"", ""."" characters."));

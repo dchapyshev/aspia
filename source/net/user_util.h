@@ -16,14 +16,14 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef COMMON__USER_UTIL_H
-#define COMMON__USER_UTIL_H
+#ifndef NET__USER_UTIL_H
+#define NET__USER_UTIL_H
 
 #include "base/macros_magic.h"
 
 #include <string>
 
-namespace common {
+namespace net {
 
 class UserUtil
 {
@@ -41,6 +41,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(UserUtil);
 };
 
-} // namespace common
+} // namespace net
 
-#endif // COMMON__USER_UTIL_H
+#endif // NET__USER_UTIL_H
