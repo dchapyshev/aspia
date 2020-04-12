@@ -21,16 +21,26 @@
 namespace router {
 
 Settings::Settings()
-    : impl_(base::XmlSettings::Scope::SYSTEM, "aspia", "router")
+    : impl_("aspia_router")
 {
     // Nothing
 }
 
 Settings::~Settings() = default;
 
+void Settings::setPort(uint16_t port)
+{
+    impl_.set<uint16_t>("Port", port);
+}
+
 uint16_t Settings::port() const
 {
     return impl_.get<uint16_t>("Port", DEFAULT_ROUTER_TCP_PORT);
+}
+
+void Settings::setPrivateKey(const base::ByteArray& private_key)
+{
+    impl_.set<std::string>("PrivateKey", base::toHex(private_key));
 }
 
 base::ByteArray Settings::privateKey() const

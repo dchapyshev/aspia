@@ -29,7 +29,10 @@ public:
     Settings();
     ~Settings();
 
+    void setPort(uint16_t port);
     uint16_t port() const;
+
+    void setPrivateKey(const base::ByteArray& private_key);
     base::ByteArray privateKey() const;
 
 private:
