@@ -35,13 +35,26 @@ Service::~Service() = default;
 
 void Service::onStart()
 {
-    server_ = std::make_unique<Server>(taskRunner());
-    server_->start();
+    LOG(LS_INFO) << "Service start...";
+
+    std::shared_ptr<base::TaskRunner> task_runner = taskRunner();
+    DCHECK(task_runner);
+
+    server_ = std::make_unique<Server>(task_runner); 
+    if (!server_->start())
+    {
+        task_runner->postQuit();
+        return;
+    }
+
+    LOG(LS_INFO) << "Service started";
 }
 
 void Service::onStop()
 {
+    LOG(LS_INFO) << "Service stop...";
     server_.reset();
+    LOG(LS_INFO) << "Service stopped";
 }
 
 void Service::onSessionEvent(
