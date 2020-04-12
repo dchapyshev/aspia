@@ -27,6 +27,6 @@ const char16_t kServiceName[] = u"aspia-router";
 const char16_t kServiceDisplayName[] = u"Aspia Router Service";
 
 const char16_t kServiceDescription[] =
-    u"Assigns identifiers to users and routes traffic to bypass NAT.";
+    u"Assigns identifiers to peers and routes traffic to bypass NAT.";
 
 } // namespace router

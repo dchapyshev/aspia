@@ -104,6 +104,7 @@ void installService()
         }
         else
         {
+            controller.setDescription(router::kServiceDescription);
             std::cout << "The service has been successfully installed." << std::endl;
         }
     }
