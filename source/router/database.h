@@ -31,7 +31,7 @@ public:
     virtual net::ServerUserList userList() const = 0;
     virtual bool addUser(const net::ServerUser& user) = 0;
     virtual bool removeUser(std::u16string_view name) = 0;
-    virtual std::string id(std::string_view key) const = 0;
+    virtual uint64_t peerId(std::string_view key) const = 0;
 };
 
 } // namespace router
