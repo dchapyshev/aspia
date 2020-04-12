@@ -89,6 +89,15 @@ bool parseXmlNode(const rapidxml::xml_node<>* node,
 
 } // namespace
 
+XmlSettings::XmlSettings(std::string_view file_name)
+{
+    path_ = filePath(file_name);
+    if (path_.empty())
+        return;
+
+    readFile(path_, map());
+}
+
 XmlSettings::XmlSettings(Scope scope,
                          std::string_view application_name,
                          std::string_view file_name)
@@ -132,6 +141,22 @@ bool XmlSettings::isWritable() const
 void XmlSettings::sync()
 {
     readFile(path_, map());
+}
+
+// static
+std::filesystem::path XmlSettings::filePath(std::string_view file_name)
+{
+    if (file_name.empty())
+        return std::filesystem::path();
+
+    std::filesystem::path file_path;
+    if (!BasePaths::currentExecDir(&file_path))
+        return std::filesystem::path();
+
+    file_path.append(file_name);
+    file_path.replace_extension("xml");
+
+    return file_path;
 }
 
 // static
