@@ -39,7 +39,6 @@ public:
         std::unique_ptr<Channel> channel;
         base::Version version;
         std::u16string user_name;
-        uint32_t user_flags = 0;
         uint32_t session_type = 0;
     };
 

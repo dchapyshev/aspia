@@ -323,11 +323,29 @@ void ServerAuthenticator::onIdentify(const base::ByteArray& buffer)
         return;
     }
 
-    const ServerUser& user = user_list_->find(user_name_);
-    if (!user.isValid())
+    do
     {
+        const ServerUser& user = user_list_->find(user_name_);
+        if (user.isValid() && (user.flags & ServerUser::ENABLED))
+        {
+            session_types_ = user.sessions;
+
+            std::optional<crypto::SrpNgPair> Ng_pair = crypto::pairByGroup(user.group);
+            if (Ng_pair.has_value())
+            {
+                N_ = crypto::BigNum::fromStdString(Ng_pair->first);
+                g_ = crypto::BigNum::fromStdString(Ng_pair->second);
+                s_ = crypto::BigNum::fromByteArray(user.salt);
+                v_ = crypto::BigNum::fromByteArray(user.verifier);
+                break;
+            }
+            else
+            {
+                LOG(LS_ERROR) << "User '" << user.name << "' has an invalid SRP group";
+            }
+        }
+
         session_types_ = 0;
-        user_flags_ = 0;
 
         crypto::GenericHash hash(crypto::GenericHash::BLAKE2b512);
         hash.addData(user_list_->seedKey());
@@ -338,16 +356,7 @@ void ServerAuthenticator::onIdentify(const base::ByteArray& buffer)
         s_ = crypto::BigNum::fromByteArray(hash.result());
         v_ = crypto::SrpMath::calc_v(user_name_, user_list_->seedKey(), s_, N_, g_);
     }
-    else
-    {
-        session_types_ = user.sessions;
-        user_flags_ = user.flags;
-
-        N_ = crypto::BigNum::fromByteArray(user.number);
-        g_ = crypto::BigNum::fromByteArray(user.generator);
-        s_ = crypto::BigNum::fromByteArray(user.salt);
-        v_ = crypto::BigNum::fromByteArray(user.verifier);
-    }
+    while (false);
 
     b_ = crypto::BigNum::fromByteArray(crypto::Random::byteArray(128)); // 1024 bits.
     B_ = crypto::SrpMath::calc_B(b_, N_, g_, v_);

@@ -29,7 +29,8 @@ namespace net {
 namespace {
 
 const ServerUser kInvalidUser;
-const size_t kUserSaltSize = 64; // In bytes.
+const size_t kSaltSize = 64; // In bytes.
+const char kDefaultGroup[] = "8192";
 
 } // namespace
 
@@ -39,16 +40,18 @@ ServerUser ServerUser::create(std::u16string_view name, std::u16string_view pass
     if (name.empty() || password.empty())
         return ServerUser();
 
-    ServerUser user;
+    std::optional<crypto::SrpNgPair> Ng_pair = crypto::pairByGroup(kDefaultGroup);
+    if (!Ng_pair.has_value())
+        return ServerUser();
 
+    ServerUser user;
     user.name = name;
-    user.salt = crypto::Random::byteArray(kUserSaltSize);
-    user.number = base::fromStdString(crypto::kSrpNgPair_8192.first);
-    user.generator = base::fromStdString(crypto::kSrpNgPair_8192.second);
+    user.group = kDefaultGroup;
+    user.salt = crypto::Random::byteArray(kSaltSize);
 
     crypto::BigNum s = crypto::BigNum::fromByteArray(user.salt);
-    crypto::BigNum N = crypto::BigNum::fromByteArray(user.number);
-    crypto::BigNum g = crypto::BigNum::fromByteArray(user.generator);
+    crypto::BigNum N = crypto::BigNum::fromStdString(Ng_pair->first);
+    crypto::BigNum g = crypto::BigNum::fromStdString(Ng_pair->second);
     crypto::BigNum v = crypto::SrpMath::calc_v(name, password, s, N, g);
 
     user.verifier = v.toByteArray();
@@ -60,8 +63,7 @@ ServerUser ServerUser::create(std::u16string_view name, std::u16string_view pass
 
 bool ServerUser::isValid() const
 {
-    return !name.empty() && !salt.empty() && !number.empty() &&
-           !generator.empty() && !verifier.empty();
+    return !name.empty() && !salt.empty() && !group.empty() && !verifier.empty();
 }
 
 void ServerUserList::add(const ServerUser& user)

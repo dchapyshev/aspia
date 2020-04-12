@@ -64,13 +64,12 @@ net::ServerUserList SystemSettings::userList() const
     {
         net::ServerUser user;
 
-        user.name = item.get<std::u16string>("Name");
-        user.salt = item.get<base::ByteArray>("Salt");
+        user.name     = item.get<std::u16string>("Name");
+        user.group    = item.get<std::string>("Group", "8192");
+        user.salt     = item.get<base::ByteArray>("Salt");
         user.verifier = item.get<base::ByteArray>("Verifier");
-        user.number = item.get<base::ByteArray>("Number");
-        user.generator = item.get<base::ByteArray>("Generator");
         user.sessions = item.get<uint32_t>("Sessions");
-        user.flags = item.get<uint32_t>("Flags");
+        user.flags    = item.get<uint32_t>("Flags");
 
         users.add(std::move(user));
     }
@@ -97,10 +96,9 @@ void SystemSettings::setUserList(const net::ServerUserList& users)
 
         base::Settings item;
         item.set("Name", user.name);
+        item.set("Group", user.group);
         item.set("Salt", user.salt);
         item.set("Verifier", user.verifier);
-        item.set("Number", user.number);
-        item.set("Generator", user.generator);
         item.set("Sessions", user.sessions);
         item.set("Flags", user.flags);
 

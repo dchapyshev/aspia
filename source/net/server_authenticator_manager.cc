@@ -92,7 +92,6 @@ void ServerAuthenticatorManager::onComplete()
                     session_info.channel = current->takeChannel();
                     session_info.version = current->peerVersion();
                     session_info.user_name = current->userName();
-                    session_info.user_flags = current->userFlags();
                     session_info.session_type = current->sessionType();
 
                     delegate_->onNewSession(std::move(session_info));
