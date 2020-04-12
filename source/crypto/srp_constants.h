@@ -19,6 +19,7 @@
 #ifndef CRYPTO__SRP_CONSTANTS_H
 #define CRYPTO__SRP_CONSTANTS_H
 
+#include <optional>
 #include <string_view>
 
 namespace crypto {
@@ -32,6 +33,8 @@ extern const SrpNgPair kSrpNgPair_3072;
 extern const SrpNgPair kSrpNgPair_4096;
 extern const SrpNgPair kSrpNgPair_6144;
 extern const SrpNgPair kSrpNgPair_8192;
+
+std::optional<SrpNgPair> pairByGroup(std::string_view group);
 
 } // namespace crypto
 
