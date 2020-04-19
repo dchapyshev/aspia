@@ -194,14 +194,8 @@
 <context>
     <name>HostNotifierWindow</name>
     <message>
-        <location filename="../ui/host_notifier_window.ui" line="180"/>
         <source>Connections</source>
-        <translation>Verbindungen</translation>
-    </message>
-    <message>
-        <location filename="../ui/host_notifier_window.ui" line="327"/>
-        <source>Disconnect All</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Verbindungen</translation>
     </message>
 </context>
 <context>
@@ -281,8 +275,14 @@
 <context>
     <name>NotifierWindow</name>
     <message>
+        <location filename="../ui/notifier_window.ui" line="180"/>
         <source>Connections</source>
-        <translation type="obsolete">Verbindungen</translation>
+        <translation type="unfinished">Verbindungen</translation>
+    </message>
+    <message>
+        <location filename="../ui/notifier_window.ui" line="327"/>
+        <source>Disconnect All</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -618,7 +618,7 @@
 <context>
     <name>host::NotifierWindow</name>
     <message>
-        <location filename="../ui/host_notifier_window.cc" line="185"/>
+        <location filename="../ui/notifier_window.cc" line="185"/>
         <source>Disconnect</source>
         <translation>Trennen</translation>
     </message>

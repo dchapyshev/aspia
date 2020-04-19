@@ -92,17 +92,6 @@
     </message>
 </context>
 <context>
-    <name>HostNotifierWindow</name>
-    <message>
-        <source>Connections</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Disconnect All</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>MainWindow</name>
     <message>
         <source>Aspia Host</source>
@@ -150,6 +139,17 @@
     </message>
     <message>
         <source>Hide</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>NotifierWindow</name>
+    <message>
+        <source>Connections</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Disconnect All</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

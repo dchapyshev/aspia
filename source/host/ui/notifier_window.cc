@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/ui/host_notifier_window.h"
+#include "host/ui/notifier_window.h"
 
 #include "base/logging.h"
 #include "build/build_config.h"

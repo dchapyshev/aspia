@@ -16,11 +16,11 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST__UI__HOST_NOTIFIER_WINDOW_H
-#define HOST__UI__HOST_NOTIFIER_WINDOW_H
+#ifndef HOST__UI__NOTIFIER_WINDOW_H
+#define HOST__UI__NOTIFIER_WINDOW_H
 
 #include "host/user_session_agent.h"
-#include "ui_host_notifier_window.h"
+#include "ui_notifier_window.h"
 
 namespace host {
 
@@ -54,7 +54,7 @@ private:
     void showNotifier();
     void hideNotifier();
 
-    Ui::HostNotifierWindow ui;
+    Ui::NotifierWindow ui;
 
     QPoint start_pos_;
     QRect window_rect_;
@@ -64,4 +64,4 @@ private:
 
 } // namespace host
 
-#endif // HOST__UI__HOST_NOTIFIER_WINDOW_H
+#endif // HOST__UI__NOTIFIER_WINDOW_H

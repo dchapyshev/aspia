@@ -338,14 +338,12 @@
 <context>
     <name>HostNotifierWindow</name>
     <message>
-        <location filename="../ui/host_notifier_window.ui" line="180"/>
         <source>Connections</source>
-        <translation>Подключения</translation>
+        <translation type="vanished">Подключения</translation>
     </message>
     <message>
-        <location filename="../ui/host_notifier_window.ui" line="327"/>
         <source>Disconnect All</source>
-        <translation>Отключить всех</translation>
+        <translation type="vanished">Отключить всех</translation>
     </message>
 </context>
 <context>
@@ -465,12 +463,14 @@
 <context>
     <name>NotifierWindow</name>
     <message>
+        <location filename="../ui/notifier_window.ui" line="180"/>
         <source>Connections</source>
-        <translation type="obsolete">Подключения</translation>
+        <translation type="unfinished">Подключения</translation>
     </message>
     <message>
+        <location filename="../ui/notifier_window.ui" line="327"/>
         <source>Disconnect All</source>
-        <translation type="obsolete">Отключить всех</translation>
+        <translation type="unfinished">Отключить всех</translation>
     </message>
 </context>
 <context>
@@ -890,7 +890,7 @@
 <context>
     <name>host::NotifierWindow</name>
     <message>
-        <location filename="../ui/host_notifier_window.cc" line="185"/>
+        <location filename="../ui/notifier_window.cc" line="185"/>
         <source>Disconnect</source>
         <translation>Отключить</translation>
     </message>

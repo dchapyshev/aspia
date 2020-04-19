@@ -266,14 +266,12 @@
 <context>
     <name>HostNotifierWindow</name>
     <message>
-        <location filename="../ui/host_notifier_window.ui" line="180"/>
         <source>Connections</source>
-        <translation>Verbindingen</translation>
+        <translation type="vanished">Verbindingen</translation>
     </message>
     <message>
-        <location filename="../ui/host_notifier_window.ui" line="327"/>
         <source>Disconnect All</source>
-        <translation>Alle Verbreken</translation>
+        <translation type="vanished">Alle Verbreken</translation>
     </message>
 </context>
 <context>
@@ -353,12 +351,14 @@
 <context>
     <name>NotifierWindow</name>
     <message>
+        <location filename="../ui/notifier_window.ui" line="180"/>
         <source>Connections</source>
-        <translation type="obsolete">Verbindingen</translation>
+        <translation type="unfinished">Verbindingen</translation>
     </message>
     <message>
+        <location filename="../ui/notifier_window.ui" line="327"/>
         <source>Disconnect All</source>
-        <translation type="obsolete">Alle Verbreken</translation>
+        <translation type="unfinished">Alle Verbreken</translation>
     </message>
 </context>
 <context>
@@ -722,7 +722,7 @@
 <context>
     <name>host::NotifierWindow</name>
     <message>
-        <location filename="../ui/host_notifier_window.cc" line="185"/>
+        <location filename="../ui/notifier_window.cc" line="185"/>
         <source>Disconnect</source>
         <translation>Verbinding verbreken</translation>
     </message>

@@ -25,7 +25,7 @@
 #include "host/user_session_window_proxy.h"
 #include "host/ui/application.h"
 #include "host/ui/config_dialog.h"
-#include "host/ui/host_notifier_window.h"
+#include "host/ui/notifier_window.h"
 #include "qt_base/qt_logging.h"
 #include "qt_base/qt_xml_settings.h"
 
