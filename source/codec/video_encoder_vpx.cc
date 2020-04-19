@@ -240,7 +240,7 @@ void VideoEncoderVPX::createVp9Codec(const desktop::Size& size)
 
     // Use the lowest level of noise sensitivity so as to spend less time on motion estimation and
     // inter-prediction mode.
-    ret = vpx_codec_control(codec_.get(), VP8E_SET_NOISE_SENSITIVITY, 0);
+    ret = vpx_codec_control(codec_.get(), VP9E_SET_NOISE_SENSITIVITY, 0);
     DCHECK_EQ(VPX_CODEC_OK, ret);
 
     // Set cyclic refresh (aka "top-off") only for lossy encoding.
