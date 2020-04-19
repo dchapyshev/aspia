@@ -140,15 +140,15 @@ endif()
 
 if(Qt5LinguistTools_FOUND)
     # Get the list of translation files.
-    file(GLOB HOST_TS_FILES translations/*.ts)
-    add_translations(aspia_host_core QRC_FILE "translations/host_translations.qrc" TS_FILES ${HOST_TS_FILES})
+    file(GLOB HOST_TS_FILES ui/translations/*.ts)
+    add_translations(aspia_host_core QRC_FILE "ui/translations/host_translations.qrc" TS_FILES ${HOST_TS_FILES})
 
     # Get the list of files containing messages.
     file(GLOB_RECURSE HOST_TR_SOURCES
-        ${PROJECT_SOURCE_DIR}/host/*.cc
-        ${PROJECT_SOURCE_DIR}/host/*.cpp
-        ${PROJECT_SOURCE_DIR}/host/*.h
-        ${PROJECT_SOURCE_DIR}/host/*.ui)
+        ${PROJECT_SOURCE_DIR}/host/ui/*.cc
+        ${PROJECT_SOURCE_DIR}/host/ui/*.cpp
+        ${PROJECT_SOURCE_DIR}/host/ui/*.h
+        ${PROJECT_SOURCE_DIR}/host/ui/*.ui)
 
     create_translation(TS_HOST_UPDATE ${HOST_TR_SOURCES} ${HOST_TS_FILES})
     add_custom_target(aspia_host_ts_update DEPENDS ${TS_HOST_UPDATE})
