@@ -2,18 +2,7 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="it">
 <context>
-    <name>Host</name>
-    <message>
-        <source>Warning</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Export and import parameters can not be specified together.</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>HostConfigDialog</name>
+    <name>ConfigDialog</name>
     <message>
         <source>Settings</source>
         <translation type="unfinished"></translation>
@@ -88,6 +77,17 @@
     </message>
     <message>
         <source>Delete</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Host</name>
+    <message>
+        <source>Warning</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export and import parameters can not be specified together.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

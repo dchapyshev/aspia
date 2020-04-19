@@ -2,6 +2,106 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="de_DE">
 <context>
+    <name>ConfigDialog</name>
+    <message>
+        <location filename="../ui/config_dialog.ui" line="14"/>
+        <location filename="../ui/config_dialog.ui" line="109"/>
+        <source>Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/config_dialog.ui" line="27"/>
+        <source>General</source>
+        <translation type="unfinished">Allgemein</translation>
+    </message>
+    <message>
+        <location filename="../ui/config_dialog.ui" line="33"/>
+        <source>Service</source>
+        <translation type="unfinished">Dienst</translation>
+    </message>
+    <message>
+        <location filename="../ui/config_dialog.ui" line="80"/>
+        <source>Incoming Connections</source>
+        <translation type="unfinished">Eingehende Verbindugen</translation>
+    </message>
+    <message>
+        <location filename="../ui/config_dialog.ui" line="86"/>
+        <source>Port:</source>
+        <translation type="unfinished">Port:</translation>
+    </message>
+    <message>
+        <location filename="../ui/config_dialog.ui" line="128"/>
+        <source>Import...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/config_dialog.ui" line="135"/>
+        <source>Export...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/config_dialog.ui" line="159"/>
+        <location filename="../ui/config_dialog.ui" line="252"/>
+        <source>Users</source>
+        <translation type="unfinished">Benutzer</translation>
+    </message>
+    <message>
+        <location filename="../ui/config_dialog.ui" line="173"/>
+        <source>Add new user</source>
+        <translation type="unfinished">Neuen Benutzer hinzufügen</translation>
+    </message>
+    <message>
+        <location filename="../ui/config_dialog.ui" line="193"/>
+        <source>Edit user</source>
+        <translation type="unfinished">Benutzer bearbeiten</translation>
+    </message>
+    <message>
+        <location filename="../ui/config_dialog.ui" line="213"/>
+        <source>Delete user</source>
+        <translation type="unfinished">Benutzer löschen</translation>
+    </message>
+    <message>
+        <location filename="../ui/config_dialog.ui" line="261"/>
+        <source>Update</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/config_dialog.ui" line="267"/>
+        <source>Update Server</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/config_dialog.ui" line="273"/>
+        <source>Use custom update server</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/config_dialog.ui" line="282"/>
+        <source>Server:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/config_dialog.ui" line="332"/>
+        <source>Check for updates</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/config_dialog.ui" line="356"/>
+        <source>Add</source>
+        <translation type="unfinished">Hinzufügen</translation>
+    </message>
+    <message>
+        <location filename="../ui/config_dialog.ui" line="365"/>
+        <source>Modify</source>
+        <translation type="unfinished">Ändern</translation>
+    </message>
+    <message>
+        <location filename="../ui/config_dialog.ui" line="374"/>
+        <source>Delete</source>
+        <translation type="unfinished">Löschen</translation>
+    </message>
+</context>
+<context>
     <name>Host</name>
     <message>
         <location filename="../host_main.cc" line="96"/>
@@ -28,9 +128,8 @@
         <translation type="vanished">Hostkonfiguration</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.ui" line="27"/>
         <source>General</source>
-        <translation>Allgemein</translation>
+        <translation type="vanished">Allgemein</translation>
     </message>
     <message>
         <source>User Interface</source>
@@ -41,96 +140,44 @@
         <translation type="vanished">Sprache:</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.ui" line="14"/>
-        <location filename="../ui/host_config_dialog.ui" line="109"/>
-        <source>Settings</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/host_config_dialog.ui" line="33"/>
         <source>Service</source>
-        <translation>Dienst</translation>
+        <translation type="vanished">Dienst</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.ui" line="80"/>
         <source>Incoming Connections</source>
-        <translation>Eingehende Verbindugen</translation>
+        <translation type="vanished">Eingehende Verbindugen</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.ui" line="86"/>
         <source>Port:</source>
-        <translation>Port:</translation>
+        <translation type="vanished">Port:</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.ui" line="128"/>
-        <source>Import...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/host_config_dialog.ui" line="135"/>
-        <source>Export...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/host_config_dialog.ui" line="159"/>
-        <location filename="../ui/host_config_dialog.ui" line="252"/>
         <source>Users</source>
-        <translation>Benutzer</translation>
+        <translation type="vanished">Benutzer</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.ui" line="173"/>
         <source>Add new user</source>
-        <translation>Neuen Benutzer hinzufügen</translation>
+        <translation type="vanished">Neuen Benutzer hinzufügen</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.ui" line="193"/>
         <source>Edit user</source>
-        <translation>Benutzer bearbeiten</translation>
+        <translation type="vanished">Benutzer bearbeiten</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.ui" line="213"/>
         <source>Delete user</source>
-        <translation>Benutzer löschen</translation>
+        <translation type="vanished">Benutzer löschen</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.ui" line="261"/>
-        <source>Update</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/host_config_dialog.ui" line="267"/>
-        <source>Update Server</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/host_config_dialog.ui" line="273"/>
-        <source>Use custom update server</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/host_config_dialog.ui" line="282"/>
-        <source>Server:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/host_config_dialog.ui" line="332"/>
-        <source>Check for updates</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/host_config_dialog.ui" line="356"/>
         <source>Add</source>
-        <translation>Hinzufügen</translation>
+        <translation type="vanished">Hinzufügen</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.ui" line="365"/>
         <source>Modify</source>
-        <translation>Ändern</translation>
+        <translation type="vanished">Ändern</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.ui" line="374"/>
         <source>Delete</source>
-        <translation>Löschen</translation>
+        <translation type="vanished">Löschen</translation>
     </message>
 </context>
 <context>
@@ -316,125 +363,125 @@
 <context>
     <name>host::ConfigDialog</name>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="173"/>
-        <location filename="../ui/host_config_dialog.cc" line="248"/>
-        <location filename="../ui/host_config_dialog.cc" line="301"/>
+        <location filename="../ui/config_dialog.cc" line="173"/>
+        <location filename="../ui/config_dialog.cc" line="248"/>
+        <location filename="../ui/config_dialog.cc" line="301"/>
         <source>Confirmation</source>
         <translation>Bestätigung</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="174"/>
+        <location filename="../ui/config_dialog.cc" line="174"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation>Möchten Sie den Benutzer &quot;%1&quot; wirklich löschen?</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="234"/>
+        <location filename="../ui/config_dialog.cc" line="234"/>
         <source>Import</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="234"/>
-        <location filename="../ui/host_config_dialog.cc" line="264"/>
+        <location filename="../ui/config_dialog.cc" line="234"/>
+        <location filename="../ui/config_dialog.cc" line="264"/>
         <source>XML-files (*.xml)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="243"/>
-        <location filename="../ui/host_config_dialog.cc" line="296"/>
+        <location filename="../ui/config_dialog.cc" line="243"/>
+        <location filename="../ui/config_dialog.cc" line="296"/>
         <source>Service configuration changed. For the changes to take effect, you must restart the service. Restart the service now?</source>
         <translation>Servicekonfiguration geändert. Damit die Änderungen wirksam werden, müssen Sie den Dienst neu starten. Den Dienst jetzt neu?</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="264"/>
+        <location filename="../ui/config_dialog.cc" line="264"/>
         <source>Export</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="283"/>
+        <location filename="../ui/config_dialog.cc" line="283"/>
         <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
         <translation>Die Konfiguration kann nicht geschrieben werden. Stellen Sie sicher, dass Sie über ausreichende Schreibrechte verfügen.</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="286"/>
-        <location filename="../ui/host_config_dialog.cc" line="476"/>
-        <location filename="../ui/host_config_dialog.cc" line="495"/>
-        <location filename="../ui/host_config_dialog.cc" line="510"/>
-        <location filename="../ui/host_config_dialog.cc" line="520"/>
-        <location filename="../ui/host_config_dialog.cc" line="536"/>
-        <location filename="../ui/host_config_dialog.cc" line="546"/>
+        <location filename="../ui/config_dialog.cc" line="286"/>
+        <location filename="../ui/config_dialog.cc" line="476"/>
+        <location filename="../ui/config_dialog.cc" line="495"/>
+        <location filename="../ui/config_dialog.cc" line="510"/>
+        <location filename="../ui/config_dialog.cc" line="520"/>
+        <location filename="../ui/config_dialog.cc" line="536"/>
+        <location filename="../ui/config_dialog.cc" line="546"/>
         <source>Warning</source>
         <translation>Warnung</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="410"/>
+        <location filename="../ui/config_dialog.cc" line="410"/>
         <source>Remove</source>
         <translation>Löschen</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="419"/>
+        <location filename="../ui/config_dialog.cc" line="419"/>
         <source>Started</source>
         <translation>Gestartet</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="420"/>
+        <location filename="../ui/config_dialog.cc" line="420"/>
         <source>Stop</source>
         <translation>Stopp</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="425"/>
+        <location filename="../ui/config_dialog.cc" line="425"/>
         <source>Not started</source>
         <translation>Nicht gestartet</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="426"/>
-        <location filename="../ui/host_config_dialog.cc" line="433"/>
-        <location filename="../ui/host_config_dialog.cc" line="446"/>
+        <location filename="../ui/config_dialog.cc" line="426"/>
+        <location filename="../ui/config_dialog.cc" line="433"/>
+        <location filename="../ui/config_dialog.cc" line="446"/>
         <source>Start</source>
         <translation>Starten</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="432"/>
+        <location filename="../ui/config_dialog.cc" line="432"/>
         <source>Installed</source>
         <translation>Installiert</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="443"/>
+        <location filename="../ui/config_dialog.cc" line="443"/>
         <source>Not installed</source>
         <translation>Nicht installiert</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="445"/>
+        <location filename="../ui/config_dialog.cc" line="445"/>
         <source>Install</source>
         <translation>Installieren</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="450"/>
+        <location filename="../ui/config_dialog.cc" line="450"/>
         <source>Current state: %1</source>
         <translation>Aktueller Zustand: %1</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="477"/>
+        <location filename="../ui/config_dialog.cc" line="477"/>
         <source>The service could not be installed.</source>
         <translation>Dienst konnte nicht installiert werden.</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="496"/>
+        <location filename="../ui/config_dialog.cc" line="496"/>
         <source>The service could not be removed.</source>
         <translation>Dienst konnte nicht gelöscht werden.</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="511"/>
-        <location filename="../ui/host_config_dialog.cc" line="537"/>
+        <location filename="../ui/config_dialog.cc" line="511"/>
+        <location filename="../ui/config_dialog.cc" line="537"/>
         <source>Could not access the service.</source>
         <translation>Kann nicht auf den Dienst zugreifen.</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="521"/>
+        <location filename="../ui/config_dialog.cc" line="521"/>
         <source>The service could not be started.</source>
         <translation>Dienst konnte nicht gestartet werden.</translation>
     </message>
     <message>
-        <location filename="../ui/host_config_dialog.cc" line="547"/>
+        <location filename="../ui/config_dialog.cc" line="547"/>
         <source>The service could not be stopped.</source>
         <translation>Dienst konnte nicht angehalten werden.</translation>
     </message>

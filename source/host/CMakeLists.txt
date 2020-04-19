@@ -77,9 +77,9 @@ list(APPEND SOURCE_HOST_CORE_RESOURCES
 list(APPEND SOURCE_HOST_CORE_UI
     ui/application.cc
     ui/application.h
-    ui/host_config_dialog.cc
-    ui/host_config_dialog.h
-    ui/host_config_dialog.ui
+    ui/config_dialog.cc
+    ui/config_dialog.h
+    ui/config_dialog.ui
     ui/host_notifier_window.cc
     ui/host_notifier_window.h
     ui/host_notifier_window.ui

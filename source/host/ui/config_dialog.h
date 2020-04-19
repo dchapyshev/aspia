@@ -16,12 +16,12 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST__UI__HOST_CONFIG_DIALOG_H
-#define HOST__UI__HOST_CONFIG_DIALOG_H
+#ifndef HOST__UI__CONFIG_DIALOG_H
+#define HOST__UI__CONFIG_DIALOG_H
 
 #include "net/user.h"
 #include "qt_base/locale_loader.h"
-#include "ui_host_config_dialog.h"
+#include "ui_config_dialog.h"
 
 namespace host {
 
@@ -59,7 +59,7 @@ private:
     bool stopService();
     bool restartService();
 
-    Ui::HostConfigDialog ui;
+    Ui::ConfigDialog ui;
 
     enum class ServiceState { NOT_INSTALLED, ACCESS_DENIED, NOT_STARTED, STARTED };
     ServiceState service_state_;
@@ -69,4 +69,4 @@ private:
 
 } // namespace host
 
-#endif // HOST__UI__HOST_CONFIG_DIALOG_H
+#endif // HOST__UI__CONFIG_DIALOG_H
