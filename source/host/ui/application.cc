@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/ui/host_application.h"
+#include "host/ui/application.h"
 
 #include "build/version.h"
 #include "qt_base/qt_logging.h"

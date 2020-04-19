@@ -75,8 +75,8 @@ list(APPEND SOURCE_HOST_CORE_RESOURCES
     resources/host.qrc)
 
 list(APPEND SOURCE_HOST_CORE_UI
-    ui/host_application.cc
-    ui/host_application.h
+    ui/application.cc
+    ui/application.h
     ui/host_config_dialog.cc
     ui/host_config_dialog.h
     ui/host_config_dialog.ui
