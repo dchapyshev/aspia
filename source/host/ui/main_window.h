@@ -16,11 +16,11 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST__UI__HOST_MAIN_WINDOW_H
-#define HOST__UI__HOST_MAIN_WINDOW_H
+#ifndef HOST__UI__MAIN_WINDOW_H
+#define HOST__UI__MAIN_WINDOW_H
 
 #include "host/user_session_window.h"
-#include "ui_host_main_window.h"
+#include "ui_main_window.h"
 
 #include <QMainWindow>
 #include <QPointer>
@@ -67,7 +67,7 @@ private slots:
 private:
     void createLanguageMenu(const QString& current_locale);
 
-    Ui::HostMainWindow ui;
+    Ui::MainWindow ui;
 
     bool should_be_quit_ = false;
 
@@ -83,4 +83,4 @@ private:
 
 } // namespace host
 
-#endif // HOST__UI__HOST_MAIN_WINDOW_H
+#endif // HOST__UI__MAIN_WINDOW_H

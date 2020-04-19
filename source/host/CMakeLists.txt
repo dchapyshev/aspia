@@ -80,12 +80,12 @@ list(APPEND SOURCE_HOST_CORE_UI
     ui/host_config_dialog.cc
     ui/host_config_dialog.h
     ui/host_config_dialog.ui
-    ui/host_main_window.cc
-    ui/host_main_window.h
-    ui/host_main_window.ui
     ui/host_notifier_window.cc
     ui/host_notifier_window.h
     ui/host_notifier_window.ui
+    ui/main_window.cc
+    ui/main_window.h
+    ui/main_window.ui
     ui/settings_util.cc
     ui/settings_util.h
     ui/user_dialog.cc

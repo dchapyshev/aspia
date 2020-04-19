@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/ui/host_main_window.h"
+#include "host/ui/main_window.h"
 
 #include "common/ui/about_dialog.h"
 #include "common/ui/language_action.h"

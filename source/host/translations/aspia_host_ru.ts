@@ -184,9 +184,8 @@
 <context>
     <name>HostMainWindow</name>
     <message>
-        <location filename="../ui/host_main_window.ui" line="26"/>
         <source>Aspia Host</source>
-        <translation>Хост Aspia</translation>
+        <translation type="vanished">Хост Aspia</translation>
     </message>
     <message>
         <source>Your ID:</source>
@@ -213,59 +212,48 @@
         <translation type="vanished">Запустить</translation>
     </message>
     <message>
-        <location filename="../ui/host_main_window.ui" line="60"/>
         <source>Your ID</source>
-        <translation>Ваш ID</translation>
+        <translation type="vanished">Ваш ID</translation>
     </message>
     <message>
-        <location filename="../ui/host_main_window.ui" line="109"/>
         <source>Your IP</source>
-        <translation>Ваш IP</translation>
+        <translation type="vanished">Ваш IP</translation>
     </message>
     <message>
-        <location filename="../ui/host_main_window.ui" line="181"/>
         <source>User</source>
-        <translation>Пользователь</translation>
+        <translation type="vanished">Пользователь</translation>
     </message>
     <message>
-        <location filename="../ui/host_main_window.ui" line="217"/>
         <source>Password</source>
-        <translation>Пароль</translation>
+        <translation type="vanished">Пароль</translation>
     </message>
     <message>
-        <location filename="../ui/host_main_window.ui" line="312"/>
         <source>Help</source>
-        <translation>Помощь</translation>
+        <translation type="vanished">Помощь</translation>
     </message>
     <message>
-        <location filename="../ui/host_main_window.ui" line="320"/>
         <source>Language</source>
-        <translation>Язык</translation>
+        <translation type="vanished">Язык</translation>
     </message>
     <message>
-        <location filename="../ui/host_main_window.ui" line="333"/>
         <source>Exit</source>
-        <translation>Выход</translation>
+        <translation type="vanished">Выход</translation>
     </message>
     <message>
-        <location filename="../ui/host_main_window.ui" line="342"/>
         <source>Online Help...</source>
-        <translation>Онлайн справка...</translation>
+        <translation type="vanished">Онлайн справка...</translation>
     </message>
     <message>
-        <location filename="../ui/host_main_window.ui" line="354"/>
         <source>About</source>
-        <translation>О программе</translation>
+        <translation type="vanished">О программе</translation>
     </message>
     <message>
-        <location filename="../ui/host_main_window.ui" line="363"/>
         <source>Settings...</source>
-        <translation>Параметры...</translation>
+        <translation type="vanished">Параметры...</translation>
     </message>
     <message>
-        <location filename="../ui/host_main_window.ui" line="368"/>
         <source>Hide</source>
-        <translation>Спрятать</translation>
+        <translation type="vanished">Спрятать</translation>
     </message>
 </context>
 <context>
@@ -330,6 +318,69 @@
     <message>
         <source>Hide</source>
         <translation type="vanished">Спрятать</translation>
+    </message>
+</context>
+<context>
+    <name>MainWindow</name>
+    <message>
+        <location filename="../ui/main_window.ui" line="26"/>
+        <source>Aspia Host</source>
+        <translation type="unfinished">Хост Aspia</translation>
+    </message>
+    <message>
+        <location filename="../ui/main_window.ui" line="60"/>
+        <source>Your ID</source>
+        <translation type="unfinished">Ваш ID</translation>
+    </message>
+    <message>
+        <location filename="../ui/main_window.ui" line="109"/>
+        <source>Your IP</source>
+        <translation type="unfinished">Ваш IP</translation>
+    </message>
+    <message>
+        <location filename="../ui/main_window.ui" line="181"/>
+        <source>User</source>
+        <translation type="unfinished">Пользователь</translation>
+    </message>
+    <message>
+        <location filename="../ui/main_window.ui" line="217"/>
+        <source>Password</source>
+        <translation type="unfinished">Пароль</translation>
+    </message>
+    <message>
+        <location filename="../ui/main_window.ui" line="312"/>
+        <source>Help</source>
+        <translation type="unfinished">Помощь</translation>
+    </message>
+    <message>
+        <location filename="../ui/main_window.ui" line="320"/>
+        <source>Language</source>
+        <translation type="unfinished">Язык</translation>
+    </message>
+    <message>
+        <location filename="../ui/main_window.ui" line="333"/>
+        <source>Exit</source>
+        <translation type="unfinished">Выход</translation>
+    </message>
+    <message>
+        <location filename="../ui/main_window.ui" line="342"/>
+        <source>Online Help...</source>
+        <translation type="unfinished">Онлайн справка...</translation>
+    </message>
+    <message>
+        <location filename="../ui/main_window.ui" line="354"/>
+        <source>About</source>
+        <translation type="unfinished">О программе</translation>
+    </message>
+    <message>
+        <location filename="../ui/main_window.ui" line="363"/>
+        <source>Settings...</source>
+        <translation type="unfinished">Параметры...</translation>
+    </message>
+    <message>
+        <location filename="../ui/main_window.ui" line="368"/>
+        <source>Hide</source>
+        <translation type="unfinished">Спрятать</translation>
     </message>
 </context>
 <context>
@@ -724,35 +775,35 @@
 <context>
     <name>host::MainWindow</name>
     <message>
-        <location filename="../ui/host_main_window.cc" line="58"/>
+        <location filename="../ui/main_window.cc" line="58"/>
         <source>Aspia Host</source>
         <translation>Хост Aspia</translation>
     </message>
     <message>
-        <location filename="../ui/host_main_window.cc" line="113"/>
-        <location filename="../ui/host_main_window.cc" line="263"/>
+        <location filename="../ui/main_window.cc" line="113"/>
+        <location filename="../ui/main_window.cc" line="263"/>
         <source>Show</source>
         <translation>Показать</translation>
     </message>
     <message>
-        <location filename="../ui/host_main_window.cc" line="48"/>
-        <location filename="../ui/host_main_window.cc" line="204"/>
-        <location filename="../ui/host_main_window.cc" line="211"/>
+        <location filename="../ui/main_window.cc" line="48"/>
+        <location filename="../ui/main_window.cc" line="204"/>
+        <location filename="../ui/main_window.cc" line="211"/>
         <source>Not available</source>
         <translation>Недоступен</translation>
     </message>
     <message>
-        <location filename="../ui/host_main_window.cc" line="268"/>
+        <location filename="../ui/main_window.cc" line="268"/>
         <source>Hide</source>
         <translation>Спрятать</translation>
     </message>
     <message>
-        <location filename="../ui/host_main_window.cc" line="300"/>
+        <location filename="../ui/main_window.cc" line="300"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../ui/host_main_window.cc" line="301"/>
+        <location filename="../ui/main_window.cc" line="301"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation>Если вы выйдите из Aspia, то вы не сможете подключиться к этому компьютеру пока вы снова не включите компьютер или Aspia вручную. Вы действительно хотите выйти из приложения?</translation>
     </message>

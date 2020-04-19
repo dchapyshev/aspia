@@ -24,7 +24,7 @@
 #include "base/win/scoped_thread_desktop.h"
 #include "host/system_settings.h"
 #include "host/ui/application.h"
-#include "host/ui/host_main_window.h"
+#include "host/ui/main_window.h"
 #include "host/ui/settings_util.h"
 #include "updater/update_dialog.h"
 

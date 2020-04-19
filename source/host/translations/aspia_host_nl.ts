@@ -180,72 +180,12 @@
 <context>
     <name>HostMainWindow</name>
     <message>
-        <location filename="../ui/host_main_window.ui" line="26"/>
-        <source>Aspia Host</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Password:</source>
         <translation type="vanished">Wachtwoord:</translation>
     </message>
     <message>
         <source>Start</source>
         <translation type="vanished">Starten</translation>
-    </message>
-    <message>
-        <location filename="../ui/host_main_window.ui" line="60"/>
-        <source>Your ID</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/host_main_window.ui" line="109"/>
-        <source>Your IP</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/host_main_window.ui" line="181"/>
-        <source>User</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/host_main_window.ui" line="217"/>
-        <source>Password</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/host_main_window.ui" line="312"/>
-        <source>Help</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/host_main_window.ui" line="320"/>
-        <source>Language</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/host_main_window.ui" line="333"/>
-        <source>Exit</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/host_main_window.ui" line="342"/>
-        <source>Online Help...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/host_main_window.ui" line="354"/>
-        <source>About</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/host_main_window.ui" line="363"/>
-        <source>Settings...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/host_main_window.ui" line="368"/>
-        <source>Hide</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -270,6 +210,69 @@
     <message>
         <source>Start</source>
         <translation type="vanished">Starten</translation>
+    </message>
+</context>
+<context>
+    <name>MainWindow</name>
+    <message>
+        <location filename="../ui/main_window.ui" line="26"/>
+        <source>Aspia Host</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/main_window.ui" line="60"/>
+        <source>Your ID</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/main_window.ui" line="109"/>
+        <source>Your IP</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/main_window.ui" line="181"/>
+        <source>User</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/main_window.ui" line="217"/>
+        <source>Password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/main_window.ui" line="312"/>
+        <source>Help</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/main_window.ui" line="320"/>
+        <source>Language</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/main_window.ui" line="333"/>
+        <source>Exit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/main_window.ui" line="342"/>
+        <source>Online Help...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/main_window.ui" line="354"/>
+        <source>About</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/main_window.ui" line="363"/>
+        <source>Settings...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/main_window.ui" line="368"/>
+        <source>Hide</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -608,35 +611,35 @@
 <context>
     <name>host::MainWindow</name>
     <message>
-        <location filename="../ui/host_main_window.cc" line="58"/>
+        <location filename="../ui/main_window.cc" line="58"/>
         <source>Aspia Host</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/host_main_window.cc" line="113"/>
-        <location filename="../ui/host_main_window.cc" line="263"/>
+        <location filename="../ui/main_window.cc" line="113"/>
+        <location filename="../ui/main_window.cc" line="263"/>
         <source>Show</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/host_main_window.cc" line="48"/>
-        <location filename="../ui/host_main_window.cc" line="204"/>
-        <location filename="../ui/host_main_window.cc" line="211"/>
+        <location filename="../ui/main_window.cc" line="48"/>
+        <location filename="../ui/main_window.cc" line="204"/>
+        <location filename="../ui/main_window.cc" line="211"/>
         <source>Not available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/host_main_window.cc" line="268"/>
+        <location filename="../ui/main_window.cc" line="268"/>
         <source>Hide</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/host_main_window.cc" line="300"/>
+        <location filename="../ui/main_window.cc" line="300"/>
         <source>Confirmation</source>
         <translation>Bevestiging</translation>
     </message>
     <message>
-        <location filename="../ui/host_main_window.cc" line="301"/>
+        <location filename="../ui/main_window.cc" line="301"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation type="unfinished"></translation>
     </message>
