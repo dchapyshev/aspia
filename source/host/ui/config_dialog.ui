@@ -176,7 +176,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../resources/host.qrc">
+            <iconset resource="resources.qrc">
              <normaloff>:/img/plus.png</normaloff>:/img/plus.png</iconset>
            </property>
           </widget>
@@ -196,7 +196,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../resources/host.qrc">
+            <iconset resource="resources.qrc">
              <normaloff>:/img/pencil.png</normaloff>:/img/pencil.png</iconset>
            </property>
           </widget>
@@ -216,7 +216,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../resources/host.qrc">
+            <iconset resource="resources.qrc">
              <normaloff>:/img/minus.png</normaloff>:/img/minus.png</iconset>
            </property>
           </widget>
@@ -376,7 +376,7 @@
   </action>
  </widget>
  <resources>
-  <include location="../resources/host.qrc"/>
+  <include location="resources.qrc"/>
  </resources>
  <connections/>
 </ui>

@@ -71,9 +71,6 @@ list(APPEND SOURCE_HOST_CORE
     user_session_window_proxy.cc
     user_session_window_proxy.h)
 
-list(APPEND SOURCE_HOST_CORE_RESOURCES
-    resources/host.qrc)
-
 list(APPEND SOURCE_HOST_CORE_UI
     ui/application.cc
     ui/application.h
@@ -86,6 +83,7 @@ list(APPEND SOURCE_HOST_CORE_UI
     ui/notifier_window.cc
     ui/notifier_window.h
     ui/notifier_window.ui
+    ui/resources.qrc
     ui/settings_util.cc
     ui/settings_util.h
     ui/user_dialog.cc
@@ -108,14 +106,11 @@ list(APPEND SOURCE_HOST_CORE_WIN
     win/updater_launcher.h)
 
 source_group("" FILES ${SOURCE_HOST_CORE})
-source_group(moc FILES ${SOURCE_HOST_CORE_MOC})
-source_group(resources FILES ${SOURCE_HOST_CORE_RESOURCES})
 source_group(ui FILES ${SOURCE_HOST_CORE_UI})
 source_group(win FILES ${SOURCE_HOST_CORE_WIN})
 
 add_library(aspia_host_core SHARED
     ${SOURCE_HOST_CORE}
-    ${SOURCE_HOST_CORE_RESOURCES}
     ${SOURCE_HOST_CORE_UI}
     ${SOURCE_HOST_CORE_WIN})
 target_link_libraries(aspia_host_core
@@ -141,7 +136,7 @@ endif()
 if(Qt5LinguistTools_FOUND)
     # Get the list of translation files.
     file(GLOB HOST_TS_FILES ui/translations/*.ts)
-    add_translations(aspia_host_core QRC_FILE "ui/translations/host_translations.qrc" TS_FILES ${HOST_TS_FILES})
+    add_translations(aspia_host_core QRC_FILE "ui/translations.qrc" TS_FILES ${HOST_TS_FILES})
 
     # Get the list of files containing messages.
     file(GLOB_RECURSE HOST_TR_SOURCES

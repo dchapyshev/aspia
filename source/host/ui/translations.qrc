@@ -1,0 +1,9 @@
+<RCC>
+  <qresource prefix="/tr">
+    <file alias="aspia_host_de.qm">translations/aspia_host_de.qm</file>
+    <file alias="aspia_host_it.qm">translations/aspia_host_it.qm</file>
+    <file alias="aspia_host_nl.qm">translations/aspia_host_nl.qm</file>
+    <file alias="aspia_host_ru.qm">translations/aspia_host_ru.qm</file>
+    <file alias="aspia_host_uk.qm">translations/aspia_host_uk.qm</file>
+  </qresource>
+</RCC>
