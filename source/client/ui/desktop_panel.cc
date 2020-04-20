@@ -23,6 +23,7 @@
 
 #include <QMenu>
 #include <QMessageBox>
+#include <QTimer>
 #include <QToolButton>
 
 namespace client {
@@ -32,6 +33,9 @@ DesktopPanel::DesktopPanel(proto::SessionType session_type, QWidget* parent)
       session_type_(session_type)
 {
     ui.setupUi(this);
+
+    hide_timer_ = new QTimer(this);
+    connect(hide_timer_, &QTimer::timeout, this, &DesktopPanel::onHideTimer);
 
     ui.action_autoscroll->setChecked(settings_.autoScrolling());
 
@@ -72,7 +76,7 @@ DesktopPanel::DesktopPanel(proto::SessionType session_type, QWidget* parent)
     ui.frame->hide();
     showFullScreenButtons(false);
 
-    hide_timer_id_ = startTimer(std::chrono::seconds(1));
+    hide_timer_->start(std::chrono::seconds(1));
 }
 
 DesktopPanel::~DesktopPanel()
@@ -210,36 +214,14 @@ bool DesktopPanel::sendKeyCombinations() const
     return ui.action_send_key_combinations->isChecked();
 }
 
-void DesktopPanel::timerEvent(QTimerEvent* event)
-{
-    if (event->timerId() == hide_timer_id_)
-    {
-        killTimer(hide_timer_id_);
-        hide_timer_id_ = 0;
-
-        ui.frame->setFixedWidth(ui.toolbar->width());
-
-        ui.toolbar->hide();
-        ui.frame->show();
-
-        adjustSize();
-        return;
-    }
-
-    QFrame::timerEvent(event);
-}
-
 void DesktopPanel::enterEvent(QEvent* event)
 {
     leaved_ = false;
 
     if (allow_hide_)
     {
-        if (hide_timer_id_)
-        {
-            killTimer(hide_timer_id_);
-            hide_timer_id_ = 0;
-        }
+        if (hide_timer_->isActive())
+            hide_timer_->stop();
 
         ui.toolbar->show();
         ui.frame->hide();
@@ -258,6 +240,17 @@ void DesktopPanel::leaveEvent(QEvent* event)
         delayedHide();
 
     QFrame::leaveEvent(event);
+}
+
+void DesktopPanel::onHideTimer()
+{
+    hide_timer_->stop();
+
+    ui.frame->setFixedWidth(ui.toolbar->width());
+    ui.toolbar->hide();
+    ui.frame->show();
+
+    adjustSize();
 }
 
 void DesktopPanel::onFullscreenButton(bool checked)
@@ -506,8 +499,8 @@ void DesktopPanel::updateSize()
 
 void DesktopPanel::delayedHide()
 {
-    if (!ui.action_pin->isChecked() && !hide_timer_id_)
-        hide_timer_id_ = startTimer(std::chrono::seconds(1));
+    if (!ui.action_pin->isChecked() && !hide_timer_->isActive())
+        hide_timer_->start(std::chrono::seconds(1));
 }
 
 } // namespace client

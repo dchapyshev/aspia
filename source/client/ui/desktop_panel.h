@@ -66,11 +66,11 @@ signals:
 
 protected:
     // QFrame implementation.
-    void timerEvent(QTimerEvent* event) override;
     void enterEvent(QEvent* event) override;
     void leaveEvent(QEvent* event) override;
 
 private slots:
+    void onHideTimer();
     void onFullscreenButton(bool checked);
     void onAutosizeButton();
     void onCtrlAltDel();
@@ -98,7 +98,7 @@ private:
     QScopedPointer<QMenu> screens_menu_;
     QActionGroup* screens_group_ = nullptr;
 
-    int hide_timer_id_ = 0;
+    QTimer* hide_timer_ = nullptr;
 
     bool allow_hide_ = true;
     bool leaved_ = true;
