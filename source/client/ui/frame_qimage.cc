@@ -41,6 +41,9 @@ FrameQImage::FrameQImage(QImage&& img)
 // static
 std::unique_ptr<FrameQImage> FrameQImage::create(const desktop::Size& size)
 {
+    if (size.isEmpty())
+        return nullptr;
+
     return std::unique_ptr<FrameQImage>(
         new FrameQImage(QImage(size.width(), size.height(), QImage::Format_RGB32)));
 }
