@@ -341,7 +341,13 @@ bool DxgiDuplicatorController::doDuplicateOne(Context* context, int monitor_id, 
         }
         else
         {
-            return duplicators_[i].duplicateMonitor(&context->contexts[i], monitor_id, target);
+            if (duplicators_[i].duplicateMonitor(&context->contexts[i], monitor_id, target))
+            {
+                target->setTopLeft(duplicators_[i].screenRect(monitor_id).topLeft());
+                return true;
+            }
+
+            return false;
         }
     }
     return false;

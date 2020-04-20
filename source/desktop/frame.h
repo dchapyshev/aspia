@@ -50,6 +50,9 @@ public:
     const Region& constUpdatedRegion() const { return updated_region_; }
     Region* updatedRegion() { return &updated_region_; }
 
+    void setTopLeft(const Point& top_left) { top_left_ = top_left; }
+    const Point& topLeft() const { return top_left_; }
+
     // Copies various information from |other|. Anything initialized in constructor are not copied.
     // This function is usually used when sharing a source Frame with several clients: the original
     // Frame should be kept unchanged. For example, BasicDesktopFrame::copyOf() and
@@ -74,6 +77,7 @@ private:
     const int stride_;
 
     Region updated_region_;
+    Point top_left_;
 
     DISALLOW_COPY_AND_ASSIGN(Frame);
 };
