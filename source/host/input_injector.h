@@ -19,6 +19,7 @@
 #ifndef HOST__INPUT_INJECTOR_H
 #define HOST__INPUT_INJECTOR_H
 
+#include "desktop/geometry.h"
 #include "proto/desktop.pb.h"
 
 namespace host {
@@ -28,6 +29,7 @@ class InputInjector
 public:
     virtual ~InputInjector() = default;
 
+    virtual void setScreenOffset(const desktop::Point& offset) = 0;
     virtual void setBlockInput(bool enable) = 0;
     virtual void injectKeyEvent(const proto::KeyEvent& event) = 0;
     virtual void injectPointerEvent(const proto::PointerEvent& event) = 0;

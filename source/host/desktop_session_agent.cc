@@ -183,6 +183,9 @@ void DesktopSessionAgent::onScreenCaptured(
 
     if (frame && !frame->constUpdatedRegion().isEmpty())
     {
+        if (input_injector_)
+            input_injector_->setScreenOffset(frame->topLeft());
+
         proto::internal::SerializedDesktopFrame* serialized_frame = encode_frame->mutable_frame();
 
         serialized_frame->set_shared_buffer_id(frame->sharedMemory()->id());
