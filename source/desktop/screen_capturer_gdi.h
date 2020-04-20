@@ -57,7 +57,6 @@ private:
     std::wstring current_device_key_;
 
     Rect desktop_dc_rect_;
-    PixelFormat pixel_format_;
 
     std::unique_ptr<Differ> differ_;
     base::win::ScopedGetDC desktop_dc_;

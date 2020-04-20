@@ -49,10 +49,6 @@ public:
     // The number of visible display monitors on a desktop.
     static int screenCount();
 
-    // Detects the current pixel format. If the current format is not supported or an error has
-    // occurred, then returns PixelFormat::ARGB().
-    static PixelFormat detectPixelFormat();
-
 private:
     DISALLOW_COPY_AND_ASSIGN(ScreenCaptureUtils);
 };

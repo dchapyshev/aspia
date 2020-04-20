@@ -31,7 +31,7 @@ namespace desktop {
 class Differ
 {
 public:
-    Differ(const Size& size, const PixelFormat& format);
+    explicit Differ(const Size& size);
     ~Differ() = default;
 
     void calcDirtyRegion(const uint8_t* prev_image,
@@ -41,31 +41,23 @@ public:
 private:
     typedef uint8_t(*DiffFullBlockFunc)(const uint8_t*, const uint8_t*, int);
 
-    static DiffFullBlockFunc diffFunctionFor32bpp();
-    static DiffFullBlockFunc diffFunctionFor16bpp();
+    static DiffFullBlockFunc diffFunction();
 
     void markDirtyBlocks(const uint8_t* prev_image, const uint8_t* curr_image);
     void mergeBlocks(Region* dirty_region);
 
     const Rect screen_rect_;
-
-    int bytes_per_pixel_;
-    int bytes_per_row_;
-    int bytes_per_block_;
-
+    const int bytes_per_row_;
+    const int diff_width_;
+    const int diff_height_;
     const int full_blocks_x_;
     const int full_blocks_y_;
 
     int partial_column_width_;
     int partial_row_height_;
-
     int block_stride_y_;
 
-    const int diff_width_;
-    const int diff_height_;
-
     std::unique_ptr<uint8_t[]> diff_info_;
-
     DiffFullBlockFunc diff_full_block_func_;
 
     DISALLOW_COPY_AND_ASSIGN(Differ);

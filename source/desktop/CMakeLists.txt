@@ -22,8 +22,6 @@ list(APPEND SOURCE_DESKTOP
     cursor_capturer.h
     cursor_capturer_win.cc
     cursor_capturer_win.h
-    diff_block_16bpp_c.cc
-    diff_block_16bpp_c.h
     diff_block_32bpp_avx2.cc
     diff_block_32bpp_avx2.h
     diff_block_32bpp_c.cc

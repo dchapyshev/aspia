@@ -23,7 +23,6 @@
 #include "desktop/frame.h"
 
 #include <libyuv/convert.h>
-#include <libyuv/convert_from_argb.h>
 
 #include <thread>
 
@@ -301,11 +300,6 @@ void VideoEncoderVPX::prepareImageAndActiveMap(
     uint8_t* u_data = image_->planes[1];
     uint8_t* v_data = image_->planes[2];
 
-    auto convert_to_i420 = libyuv::ARGBToI420;
-
-    if (frame->format().bitsPerPixel() == 16)
-        convert_to_i420 = libyuv::RGB565ToI420;
-
     for (desktop::Region::Iterator it(updated_region_); !it.isAtEnd(); it.advance())
     {
         const desktop::Rect& rect = it.rect();
@@ -313,13 +307,13 @@ void VideoEncoderVPX::prepareImageAndActiveMap(
         const int y_offset = y_stride * rect.y() + rect.x();
         const int uv_offset = uv_stride * rect.y() / 2 + rect.x() / 2;
 
-        convert_to_i420(frame->frameDataAtPos(rect.topLeft()),
-                        frame->stride(),
-                        y_data + y_offset, y_stride,
-                        u_data + uv_offset, uv_stride,
-                        v_data + uv_offset, uv_stride,
-                        rect.width(),
-                        rect.height());
+        libyuv::ARGBToI420(frame->frameDataAtPos(rect.topLeft()),
+                           frame->stride(),
+                           y_data + y_offset, y_stride,
+                           u_data + uv_offset, uv_stride,
+                           v_data + uv_offset, uv_stride,
+                           rect.width(),
+                           rect.height());
 
         serializeRect(rect, packet->add_dirty_rect());
         setActiveMap(rect);

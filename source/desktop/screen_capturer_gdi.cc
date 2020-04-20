@@ -102,7 +102,7 @@ const Frame* ScreenCapturerGdi::captureImage()
         DCHECK(memory_dc_);
 
         std::unique_ptr<Frame> frame = FrameDib::create(
-            screen_rect.size(), pixel_format_, sharedMemoryFactory(), memory_dc_);
+            screen_rect.size(), PixelFormat::ARGB(), sharedMemoryFactory(), memory_dc_);
         if (!frame)
         {
             LOG(LS_WARNING) << "Failed to create frame buffer";
@@ -131,7 +131,7 @@ const Frame* ScreenCapturerGdi::captureImage()
 
     if (!previous || previous->size() != current->size())
     {
-        differ_ = std::make_unique<Differ>(screen_rect.size(), pixel_format_);
+        differ_ = std::make_unique<Differ>(screen_rect.size());
         current->updatedRegion()->addRect(Rect::makeSize(screen_rect.size()));
     }
     else
@@ -181,7 +181,6 @@ bool ScreenCapturerGdi::prepareCaptureResources()
             return false;
         }
 
-        pixel_format_ = ScreenCaptureUtils::detectPixelFormat();
         desktop_dc_rect_ = desktop_rect;
 
         // Make sure the frame buffers will be reallocated.
