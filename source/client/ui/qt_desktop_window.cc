@@ -44,6 +44,7 @@
 #include <QResizeEvent>
 #include <QScrollArea>
 #include <QScrollBar>
+#include <QTimer>
 
 namespace client {
 
@@ -88,6 +89,9 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
     layout_->addWidget(scroll_area_);
 
     panel_ = new DesktopPanel(session_type_, this);
+
+    scroll_timer_ = new QTimer(this);
+    connect(scroll_timer_, &QTimer::timeout, this, &QtDesktopWindow::onScrollTimer);
 
     desktop_->enableKeyCombinations(panel_->sendKeyCombinations());
 
@@ -348,19 +352,17 @@ void QtDesktopWindow::onPointerEvent(const QPoint& pos, uint32_t mask)
 
         if (!scroll_delta_.isNull())
         {
-            if (scroll_timer_id_ == 0)
-                scroll_timer_id_ = startTimer(15);
+            if (!scroll_timer_->isActive())
+                scroll_timer_->start(std::chrono::milliseconds(15));
         }
-        else if (scroll_timer_id_ != 0)
+        else if (scroll_timer_->isActive())
         {
-            killTimer(scroll_timer_id_);
-            scroll_timer_id_ = 0;
+            scroll_timer_->stop();
         }
     }
-    else if (scroll_timer_id_ != 0)
+    else if (scroll_timer_->isActive())
     {
-        killTimer(scroll_timer_id_);
-        scroll_timer_id_ = 0;
+        scroll_timer_->stop();
     }
 
     desktop::Frame* current_frame = desktop_->desktopFrame();
@@ -396,6 +398,61 @@ void QtDesktopWindow::onKeyEvent(uint32_t usb_keycode, uint32_t flags)
 void QtDesktopWindow::onDrawDesktop()
 {
     panel_->update();
+}
+
+void QtDesktopWindow::resizeEvent(QResizeEvent* event)
+{
+    panel_->move(QPoint(width() / 2 - panel_->width() / 2, 0));
+    scaleDesktop();
+
+    QWidget::resizeEvent(event);
+}
+
+void QtDesktopWindow::leaveEvent(QEvent* event)
+{
+    if (scroll_timer_->isActive())
+        scroll_timer_->stop();
+
+    QWidget::leaveEvent(event);
+}
+
+bool QtDesktopWindow::eventFilter(QObject* object, QEvent* event)
+{
+    if (object == desktop_)
+    {
+        if (event->type() == QEvent::KeyPress || event->type() == QEvent::KeyRelease)
+        {
+            QKeyEvent* key_event = static_cast<QKeyEvent*>(event);
+            if (key_event->key() == Qt::Key_Tab)
+            {
+                desktop_->doKeyEvent(key_event);
+                return true;
+            }
+        }
+
+        return false;
+    }
+    else if (object == scroll_area_->viewport())
+    {
+        if (event->type() == QEvent::Wheel)
+        {
+            QWheelEvent* wheel_event = static_cast<QWheelEvent*>(event);
+            QPoint pos = desktop_->mapFromGlobal(wheel_event->globalPos());
+
+            desktop_->doMouseEvent(wheel_event->type(),
+                                   wheel_event->buttons(),
+                                   pos,
+                                   wheel_event->angleDelta());
+            return true;
+        }
+    }
+
+    return QWidget::eventFilter(object, event);
+}
+
+void QtDesktopWindow::onClipboardEvent(const proto::ClipboardEvent& event)
+{
+    desktop_control_proxy_->onClipboardEvent(event);
 }
 
 void QtDesktopWindow::changeSettings()
@@ -491,94 +548,31 @@ void QtDesktopWindow::scaleDesktop()
     desktop_->resize(source_size.scaled(target_size, Qt::KeepAspectRatio));
 }
 
-void QtDesktopWindow::timerEvent(QTimerEvent* event)
+void QtDesktopWindow::onScrollTimer()
 {
-    if (event->timerId() == scroll_timer_id_)
+    if (scroll_delta_.x() != 0)
     {
-        if (scroll_delta_.x() != 0)
-        {
-            QScrollBar* scrollbar = scroll_area_->horizontalScrollBar();
+        QScrollBar* scrollbar = scroll_area_->horizontalScrollBar();
 
-            int pos = scrollbar->sliderPosition() + scroll_delta_.x();
+        int pos = scrollbar->sliderPosition() + scroll_delta_.x();
 
-            pos = std::max(pos, scrollbar->minimum());
-            pos = std::min(pos, scrollbar->maximum());
+        pos = std::max(pos, scrollbar->minimum());
+        pos = std::min(pos, scrollbar->maximum());
 
-            scrollbar->setSliderPosition(pos);
-        }
-
-        if (scroll_delta_.y() != 0)
-        {
-            QScrollBar* scrollbar = scroll_area_->verticalScrollBar();
-
-            int pos = scrollbar->sliderPosition() + scroll_delta_.y();
-
-            pos = std::max(pos, scrollbar->minimum());
-            pos = std::min(pos, scrollbar->maximum());
-
-            scrollbar->setSliderPosition(pos);
-        }
+        scrollbar->setSliderPosition(pos);
     }
 
-    QWidget::timerEvent(event);
-}
-
-void QtDesktopWindow::resizeEvent(QResizeEvent* event)
-{
-    panel_->move(QPoint(width() / 2 - panel_->width() / 2, 0));
-    scaleDesktop();
-
-    QWidget::resizeEvent(event);
-}
-
-void QtDesktopWindow::leaveEvent(QEvent* event)
-{
-    if (scroll_timer_id_)
+    if (scroll_delta_.y() != 0)
     {
-        killTimer(scroll_timer_id_);
-        scroll_timer_id_ = 0;
+        QScrollBar* scrollbar = scroll_area_->verticalScrollBar();
+
+        int pos = scrollbar->sliderPosition() + scroll_delta_.y();
+
+        pos = std::max(pos, scrollbar->minimum());
+        pos = std::min(pos, scrollbar->maximum());
+
+        scrollbar->setSliderPosition(pos);
     }
-
-    QWidget::leaveEvent(event);
-}
-
-bool QtDesktopWindow::eventFilter(QObject* object, QEvent* event)
-{
-    if (object == desktop_)
-    {
-        if (event->type() == QEvent::KeyPress || event->type() == QEvent::KeyRelease)
-        {
-            QKeyEvent* key_event = static_cast<QKeyEvent*>(event);
-            if (key_event->key() == Qt::Key_Tab)
-            {
-                desktop_->doKeyEvent(key_event);
-                return true;
-            }
-        }
-
-        return false;
-    }
-    else if (object == scroll_area_->viewport())
-    {
-        if (event->type() == QEvent::Wheel)
-        {
-            QWheelEvent* wheel_event = static_cast<QWheelEvent*>(event);
-            QPoint pos = desktop_->mapFromGlobal(wheel_event->globalPos());
-
-            desktop_->doMouseEvent(wheel_event->type(),
-                                   wheel_event->buttons(),
-                                   pos,
-                                   wheel_event->angleDelta());
-            return true;
-        }
-    }
-
-    return QWidget::eventFilter(object, event);
-}
-
-void QtDesktopWindow::onClipboardEvent(const proto::ClipboardEvent& event)
-{
-    desktop_control_proxy_->onClipboardEvent(event);
 }
 
 } // namespace client

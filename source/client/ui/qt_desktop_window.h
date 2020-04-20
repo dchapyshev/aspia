@@ -78,7 +78,6 @@ public:
 
 protected:
     // QWidget implementation.
-    void timerEvent(QTimerEvent* event) override;
     void resizeEvent(QResizeEvent* event) override;
     void leaveEvent(QEvent* event) override;
     bool eventFilter(QObject* object, QEvent* event) override;
@@ -92,6 +91,7 @@ private slots:
     void autosizeWindow();
     void takeScreenshot();
     void scaleDesktop();
+    void onScrollTimer();
 
 private:
     const proto::SessionType session_type_;
@@ -111,7 +111,7 @@ private:
 
     QPointer<SystemInfoWindow> system_info_;
 
-    int scroll_timer_id_ = 0;
+    QTimer* scroll_timer_ = nullptr;
     QPoint scroll_delta_;
 
     bool is_maximized_ = false;
