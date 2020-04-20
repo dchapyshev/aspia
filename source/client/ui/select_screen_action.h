@@ -35,10 +35,7 @@ public:
         : QAction(parent)
     {
         setText(tr("Full Desktop"));
-
         setCheckable(true);
-        setChecked(true);
-
         screen_.set_id(-1);
     }
 

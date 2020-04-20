@@ -166,6 +166,9 @@ void DesktopPanel::setScreenList(const proto::ScreenList& screen_list)
     screens_group_ = new QActionGroup(screens_menu_.get());
 
     SelectScreenAction* full_screen_action = new SelectScreenAction(screens_group_);
+    if (screen_list.current_screen() == -1)
+        full_screen_action->setChecked(true);
+
     screens_group_->addAction(full_screen_action);
     screens_menu_->addAction(full_screen_action);
 
@@ -177,8 +180,13 @@ void DesktopPanel::setScreenList(const proto::ScreenList& screen_list)
 
     for (int i = 0; i < screen_list.screen_size(); ++i)
     {
+        const proto::Screen& screen = screen_list.screen(i);
+
         SelectScreenAction* action = new SelectScreenAction(
-            screen_list.screen(i), tr("Monitor %1").arg(i + 1), screens_group_);
+            screen, tr("Monitor %1").arg(i + 1), screens_group_);
+
+        if (screen_list.current_screen() == screen.id())
+            action->setChecked(true);
 
         screens_group_->addAction(action);
         screens_menu_->addAction(action);
