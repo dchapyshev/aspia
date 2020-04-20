@@ -28,6 +28,7 @@ namespace desktop {
 class CursorCapturer;
 class DesktopEnvironment;
 class MouseCursor;
+class PowerSaveBlocker;
 
 class ScreenCapturerWrapper
 {
@@ -61,6 +62,7 @@ private:
     base::ScopedThreadDesktop desktop_;
     int screen_count_ = 0;
 
+    std::unique_ptr<PowerSaveBlocker> power_save_blocker_;
     std::unique_ptr<DesktopEnvironment> desktop_environment_;
     std::unique_ptr<ScreenCapturer> screen_capturer_;
     std::unique_ptr<CursorCapturer> cursor_capturer_;

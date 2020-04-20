@@ -94,6 +94,8 @@ list(APPEND SOURCE_DESKTOP_WIN
     win/dxgi_texture_mapping.h
     win/dxgi_texture_staging.cc
     win/dxgi_texture_staging.h
+    win/power_save_blocker.cc
+    win/power_save_blocker.h
     win/screen_capture_utils.cc
     win/screen_capture_utils.h)
 

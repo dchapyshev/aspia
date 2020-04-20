@@ -25,13 +25,15 @@
 #include "desktop/screen_capturer_dxgi.h"
 #include "desktop/screen_capturer_gdi.h"
 #include "desktop/win/desktop_environment.h"
+#include "desktop/win/power_save_blocker.h"
 #include "ipc/shared_memory_factory.h"
 
 namespace desktop {
 
 ScreenCapturerWrapper::ScreenCapturerWrapper(Delegate* delegate)
     : delegate_(delegate),
-      desktop_environment_(std::make_unique<DesktopEnvironment>())
+      desktop_environment_(std::make_unique<DesktopEnvironment>()),
+      power_save_blocker_(std::make_unique<PowerSaveBlocker>())
 {
     // If the monitor is turned off, this call will turn it on.
     SetThreadExecutionState(ES_DISPLAY_REQUIRED);
