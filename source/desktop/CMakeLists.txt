@@ -28,8 +28,6 @@ list(APPEND SOURCE_DESKTOP
     diff_block_32bpp_c.h
     diff_block_32bpp_sse2.cc
     diff_block_32bpp_sse2.h
-    diff_block_32bpp_sse3.cc
-    diff_block_32bpp_sse3.h
     differ.cc
     differ.h
     frame.cc
@@ -67,7 +65,6 @@ list(APPEND SOURCE_DESKTOP_UNIT_TESTS
     diff_block_32bpp_avx2_unittest.cc
     diff_block_32bpp_c_unittest.cc
     diff_block_32bpp_sse2_unittest.cc
-    diff_block_32bpp_sse3_unittest.cc
     geometry_unittest.cc
     region_unittest.cc)
 

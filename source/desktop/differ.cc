@@ -21,7 +21,6 @@
 #include "base/logging.h"
 #include "desktop/diff_block_32bpp_avx2.h"
 #include "desktop/diff_block_32bpp_sse2.h"
-#include "desktop/diff_block_32bpp_sse3.h"
 #include "desktop/diff_block_32bpp_c.h"
 
 #include <libyuv/cpu_id.h>
@@ -97,15 +96,6 @@ Differ::DiffFullBlockFunc Differ::diffFunction()
             func = diffFullBlock_32bpp_16x16_AVX2;
         else if constexpr (kBlockSize == 32)
             func = diffFullBlock_32bpp_32x32_AVX2;
-    }
-    else if (libyuv::TestCpuFlag(libyuv::kCpuHasSSSE3))
-    {
-        LOG(LS_INFO) << "SSE3 differ loaded";
-
-        if constexpr (kBlockSize == 16)
-            func = diffFullBlock_32bpp_16x16_SSE3;
-        else if constexpr (kBlockSize == 32)
-            func = diffFullBlock_32bpp_32x32_SSE3;
     }
     else if (libyuv::TestCpuFlag(libyuv::kCpuHasSSE2))
     {
