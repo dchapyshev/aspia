@@ -72,9 +72,6 @@
      <property name="text">
       <string>Disable User Account</string>
      </property>
-     <property name="checked">
-      <bool>true</bool>
-     </property>
     </widget>
    </item>
    <item>
@@ -85,10 +82,18 @@
     </widget>
    </item>
    <item>
-    <widget class="QTreeWidget" name="treeWidget">
+    <widget class="QTreeWidget" name="tree_sessions">
+     <property name="indentation">
+      <number>0</number>
+     </property>
      <attribute name="headerVisible">
       <bool>false</bool>
      </attribute>
+     <column>
+      <property name="text">
+       <string notr="true">1</string>
+      </property>
+     </column>
     </widget>
    </item>
    <item>

@@ -326,17 +326,63 @@ void MainWindow::onRefreshUserListPressed()
 
 void MainWindow::onAddUserPressed()
 {
-    UserDialog(this).exec();
+    UserTreeItem* tree_item = static_cast<UserTreeItem*>(ui.tree_users->currentItem());
+    if (!tree_item)
+        return;
+
+    QStringList exist_names;
+
+    for (int i = 0; i < ui.tree_users->topLevelItemCount(); ++i)
+        exist_names.append(ui.tree_users->topLevelItem(i)->text(0));
+
+    UserDialog dialog(proto::User(), exist_names, this);
+    if (dialog.exec() == QDialog::Accepted)
+    {
+        if (router_proxy_)
+            router_proxy_->addUser(dialog.user());
+    }
 }
 
 void MainWindow::onModifyUserPressed()
 {
+    UserTreeItem* tree_item = static_cast<UserTreeItem*>(ui.tree_users->currentItem());
+    if (!tree_item)
+        return;
 
+    QString current_name = tree_item->text(0);
+    QStringList exist_names;
+
+    for (int i = 0; i < ui.tree_users->topLevelItemCount(); ++i)
+    {
+        QString name = ui.tree_users->topLevelItem(i)->text(0);
+        if (name.compare(current_name, Qt::CaseInsensitive) != 0)
+            exist_names.append(name);
+    }
+
+    UserDialog dialog(tree_item->user, exist_names, this);
+    if (dialog.exec() == QDialog::Accepted)
+    {
+        if (router_proxy_)
+            router_proxy_->modifyUser(dialog.user());
+    }
 }
 
 void MainWindow::onDeleteUserPressed()
 {
+    UserTreeItem* tree_item = static_cast<UserTreeItem*>(ui.tree_users->currentItem());
+    if (!tree_item)
+        return;
 
+    if (QMessageBox::question(this,
+                              tr("Confirmation"),
+                              tr("Are you sure you want to delete user \"%1\"?")
+                              .arg(tree_item->text(0)),
+                              QMessageBox::Yes,
+                              QMessageBox::No) == QMessageBox::Yes)
+    {
+        if (router_proxy_)
+            router_proxy_->deleteUser(tree_item->user.entry_id());
+    }
 }
 
 void MainWindow::onCurrentUserChanged(QTreeWidgetItem* current, QTreeWidgetItem* previous)

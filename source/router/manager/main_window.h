@@ -19,7 +19,7 @@
 #ifndef ROUTER__MANAGER__MAIN_WINDOW_H
 #define ROUTER__MANAGER__MAIN_WINDOW_H
 
-#include "base/macros_magic.h"
+#include "proto/router.pb.h"
 #include "router/manager/router_window.h"
 #include "ui_main_window.h"
 
