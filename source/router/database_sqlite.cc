@@ -20,6 +20,7 @@
 
 #include "base/logging.h"
 #include "base/files/base_paths.h"
+#include "base/strings/strcat.h"
 #include "base/strings/unicode.h"
 #include "build/build_config.h"
 
@@ -28,6 +29,58 @@
 namespace router {
 
 namespace {
+
+bool writeText(sqlite3_stmt* statement, const std::string& text, int column)
+{
+    int error_code = sqlite3_bind_text(statement, column, text.c_str(), text.length(), SQLITE_STATIC);
+    if (error_code != SQLITE_OK)
+    {
+        LOG(LS_ERROR) << "sqlite3_bind_text failed: " << sqlite3_errstr(error_code)
+                      << " (column: " << column << ")";
+        return false;
+    }
+
+    return true;
+}
+
+bool writeBlob(sqlite3_stmt* statement, const base::ByteArray& blob, int column)
+{
+    int error_code = sqlite3_bind_blob(statement, column, blob.data(), blob.size(), SQLITE_STATIC);
+    if (error_code != SQLITE_OK)
+    {
+        LOG(LS_ERROR) << "sqlite3_bind_blob failed: " << sqlite3_errstr(error_code)
+                      << " (column: " << column << ")";
+        return false;
+    }
+
+    return true;
+}
+
+bool writeInt(sqlite3_stmt* statement, int number, int column)
+{
+    int error_code = sqlite3_bind_int(statement, column, number);
+    if (error_code != SQLITE_OK)
+    {
+        LOG(LS_ERROR) << "sqlite3_bind_int failed: " << sqlite3_errstr(error_code)
+                      << " (column: " << column << ")";
+        return false;
+    }
+
+    return true;
+}
+
+bool writeInt64(sqlite3_stmt* statement, int64_t number, int column)
+{
+    int error_code = sqlite3_bind_int64(statement, column, number);
+    if (error_code != SQLITE_OK)
+    {
+        LOG(LS_ERROR) << "sqlite3_bind_int64 failed: " << sqlite3_errstr(error_code)
+                      << " (column: " << column << ")";
+        return false;
+    }
+
+    return true;
+}
 
 template <typename T>
 std::optional<T> readInteger(sqlite3_stmt* statement, int column)
@@ -248,14 +301,79 @@ net::UserList DatabaseSqlite::userList() const
 
 bool DatabaseSqlite::addUser(const net::User& user)
 {
-    NOTIMPLEMENTED();
-    return false;
+    if (!user.isValid())
+        return false;
+
+    static const char kQuery[] =
+        "INSERT INTO users (name, group, salt, verifier, sessions, flags) VALUES (?, ?, ?, ?, ?, ?)";
+
+    sqlite3_stmt* statement = nullptr;
+    int error_code = sqlite3_prepare(db_, kQuery, std::size(kQuery), &statement, nullptr);
+    if (error_code != SQLITE_OK)
+    {
+        LOG(LS_ERROR) << "sqlite3_prepare failed: " << sqlite3_errstr(error_code);
+        return false;
+    }
+
+    do
+    {
+        if (!writeText(statement, base::utf8FromUtf16(user.name), 1))
+            break;
+
+        if (!writeText(statement, user.group, 2))
+            break;
+
+        if (!writeBlob(statement, user.salt, 3))
+            break;
+
+        if (!writeBlob(statement, user.verifier, 4))
+            break;
+
+        if (!writeInt(statement, static_cast<int>(user.sessions), 5))
+            break;
+
+        if (!writeInt(statement, static_cast<int>(user.flags), 6))
+            break;
+
+        error_code = sqlite3_step(statement);
+        if (error_code != SQLITE_OK)
+        {
+            LOG(LS_ERROR) << "sqlite3_step failed: " << sqlite3_errstr(error_code);
+        }
+    }
+    while (false);
+
+    sqlite3_finalize(statement);
+    return true;
 }
 
 bool DatabaseSqlite::removeUser(uint64_t entry_id)
 {
-    NOTIMPLEMENTED();
-    return false;
+    static const char kQuery[] = "DELETE FROM users WHERE id=?";
+
+    sqlite3_stmt* statement = nullptr;
+    int error_code = sqlite3_prepare(db_, kQuery, std::size(kQuery), &statement, nullptr);
+    if (error_code != SQLITE_OK)
+    {
+        LOG(LS_ERROR) << "sqlite3_prepare failed: " << sqlite3_errstr(error_code);
+        return false;
+    }
+
+    do
+    {
+        if (!writeInt64(statement, static_cast<int64_t>(entry_id), 1))
+            break;
+
+        error_code = sqlite3_step(statement);
+        if (error_code != SQLITE_OK)
+        {
+            LOG(LS_ERROR) << "sqlite3_step failed: " << sqlite3_errstr(error_code);
+        }
+    }
+    while (false);
+
+    sqlite3_finalize(statement);
+    return true;
 }
 
 uint64_t DatabaseSqlite::peerId(std::string_view key) const
