@@ -346,7 +346,7 @@ bool DxgiOutputDuplicator::doDetectUpdatedRegion(const DXGI_OUTDUPL_FRAME_INFO& 
     if (metadata_.capacity() < frame_info.TotalMetadataBufferSize)
     {
         metadata_.clear(); // Avoid data copy
-        metadata_.reserve(frame_info.TotalMetadataBufferSize);
+        metadata_.resize(frame_info.TotalMetadataBufferSize);
     }
 
     UINT buff_size = 0;
