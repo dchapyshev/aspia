@@ -24,36 +24,50 @@
 #include "base/message_loop/message_loop.h"
 #include "host/desktop_session_agent.h"
 
-int desktopAgentMain(int argc, char* argv[])
+namespace {
+
+void initLogging()
 {
     std::filesystem::path path;
+    if (!base::BasePaths::commonAppData(&path))
+        return;
 
-    if (base::BasePaths::commonAppData(&path))
+    path.append("aspia/logs");
+
+    base::LoggingSettings settings;
+    settings.destination = base::LOG_TO_FILE;
+    settings.log_dir = path;
+
+    base::initLogging(settings);
+}
+
+void shutdownLogging()
+{
+    base::shutdownLogging();
+}
+
+} // namespace
+
+void desktopAgentMain()
+{
+    initLogging();
+
+    base::CommandLine command_line = base::CommandLine::forCurrentProcess();
+    if (command_line.hasSwitch(u"channel_id"))
     {
-        path.append("aspia/logs");
+        std::unique_ptr<base::MessageLoop> message_loop =
+            std::make_unique<base::MessageLoop>(base::MessageLoop::Type::ASIO);
 
-        base::LoggingSettings settings;
-        settings.destination = base::LOG_TO_FILE;
-        settings.log_dir = path;
+        std::shared_ptr<host::DesktopSessionAgent> desktop_agent =
+            std::make_shared<host::DesktopSessionAgent>(message_loop->taskRunner());
 
-        base::initLogging(settings);
-
-        base::CommandLine command_line(argc, argv);
-
-        if (command_line.hasSwitch(u"channel_id"))
-        {
-            std::unique_ptr<base::MessageLoop> message_loop =
-                std::make_unique<base::MessageLoop>(base::MessageLoop::Type::ASIO);
-
-            std::shared_ptr<host::DesktopSessionAgent> desktop_agent =
-                std::make_shared<host::DesktopSessionAgent>(message_loop->taskRunner());
-
-            desktop_agent->start(command_line.switchValue(u"channel_id"));
-            message_loop->run();
-        }
-
-        base::shutdownLogging();
+        desktop_agent->start(command_line.switchValue(u"channel_id"));
+        message_loop->run();
+    }
+    else
+    {
+        LOG(LS_ERROR) << "Parameter channel_id is not specified";
     }
 
-    return 0;
+    shutdownLogging();
 }
