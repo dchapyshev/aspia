@@ -30,7 +30,7 @@ public:
 
     virtual net::UserList userList() const = 0;
     virtual bool addUser(const net::User& user) = 0;
-    virtual bool removeUser(uint64_t entry_id) = 0;
+    virtual bool removeUser(int64_t entry_id) = 0;
     virtual uint64_t peerId(std::string_view key) const = 0;
 };
 

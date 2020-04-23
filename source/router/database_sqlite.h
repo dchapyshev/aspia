@@ -38,7 +38,7 @@ public:
     // Database implementation.
     net::UserList userList() const override;
     bool addUser(const net::User& user) override;
-    bool removeUser(uint64_t entry_id) override;
+    bool removeUser(int64_t entry_id) override;
     uint64_t peerId(std::string_view key) const override;
 
 private:

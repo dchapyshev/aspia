@@ -88,6 +88,7 @@ void SessionManager::doUserListRequest()
         const net::User& user = it.user();
         proto::User* item = list->add_user();
 
+        item->set_entry_id(user.entry_id);
         item->set_name(base::utf8FromUtf16(user.name));
         item->set_sessions(user.sessions);
         item->set_flags(user.flags);

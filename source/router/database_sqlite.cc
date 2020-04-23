@@ -159,7 +159,7 @@ std::optional<std::u16string> readText16(sqlite3_stmt* statement, int column)
 
 std::optional<net::User> readUser(sqlite3_stmt* statement)
 {
-    std::optional<uint64_t> entry_id = readInteger<uint64_t>(statement, 0);
+    std::optional<int64_t> entry_id = readInteger<int64_t>(statement, 0);
     if (!entry_id.has_value())
     {
         LOG(LS_ERROR) << "Failed to get field 'id'";
@@ -354,7 +354,7 @@ bool DatabaseSqlite::addUser(const net::User& user)
     return true;
 }
 
-bool DatabaseSqlite::removeUser(uint64_t entry_id)
+bool DatabaseSqlite::removeUser(int64_t entry_id)
 {
     static const char kQuery[] = "DELETE FROM users WHERE id=?";
 
@@ -368,7 +368,7 @@ bool DatabaseSqlite::removeUser(uint64_t entry_id)
 
     do
     {
-        if (!writeInt64(statement, static_cast<int64_t>(entry_id), 1))
+        if (!writeInt64(statement, entry_id, 1))
             break;
 
         error_code = sqlite3_step(statement);

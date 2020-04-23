@@ -112,7 +112,7 @@ void Router::modifyUser(const proto::User& user)
     channel_->send(base::serialize(message));
 }
 
-void Router::deleteUser(uint64_t entry_id)
+void Router::deleteUser(int64_t entry_id)
 {
     proto::ManagerToRouter message;
 

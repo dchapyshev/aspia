@@ -350,7 +350,7 @@
 <context>
     <name>router::MainWindow</name>
     <message>
-        <location filename="../main_window.cc" line="127"/>
+        <location filename="../main_window.cc" line="122"/>
         <source>Connecting to %1:%2...</source>
         <translation>Подключение к %1:%2...</translation>
     </message>
@@ -359,69 +359,69 @@
         <translation type="vanished">Подключено к: %1:%2 (%3).</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="154"/>
+        <location filename="../main_window.cc" line="149"/>
         <source>Connected to: %1:%2 (version %3)</source>
         <translation>Подключено к: %1:%2 (версия %3)</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="176"/>
+        <location filename="../main_window.cc" line="171"/>
         <source>Cryptography error (message encryption or decryption failed).</source>
         <translation>Ошибка криптографии (не удалось зашифровать или расшифровать сообщение).</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="180"/>
+        <location filename="../main_window.cc" line="175"/>
         <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
         <translation>Произошла ошибка в сети (например, сетевой кабель был случайно отключен).</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="184"/>
+        <location filename="../main_window.cc" line="179"/>
         <source>Connection was refused by the peer (or timed out).</source>
         <translation>Подключение было отклонено другой стороной (или превышено время ожидания).</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="188"/>
+        <location filename="../main_window.cc" line="183"/>
         <source>Remote host closed the connection.</source>
         <translation>Удаленный узел закрыл подключение.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="192"/>
+        <location filename="../main_window.cc" line="187"/>
         <source>Host address was not found.</source>
         <translation>Не найден адрес удаленного узла.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="196"/>
+        <location filename="../main_window.cc" line="191"/>
         <source>Socket operation timed out.</source>
         <translation>Превышено время ожидания.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="200"/>
+        <location filename="../main_window.cc" line="195"/>
         <source>Address specified is already in use and was set to be exclusive.</source>
         <translation>Указанный адрес уже используется и был установлен монопольно.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="204"/>
+        <location filename="../main_window.cc" line="199"/>
         <source>Address specified does not belong to the host.</source>
         <translation>Указанный адрес не принадлежит узлу.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="214"/>
-        <location filename="../main_window.cc" line="250"/>
+        <location filename="../main_window.cc" line="209"/>
+        <location filename="../main_window.cc" line="245"/>
         <source>An unknown error occurred.</source>
         <translation>Произошла неизвестная ошибка.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="219"/>
-        <location filename="../main_window.cc" line="254"/>
+        <location filename="../main_window.cc" line="214"/>
+        <location filename="../main_window.cc" line="249"/>
         <source>Error: %1</source>
         <translation>Ошибка: %1</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="373"/>
+        <location filename="../main_window.cc" line="395"/>
         <source>Confirmation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="374"/>
+        <location filename="../main_window.cc" line="396"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -430,27 +430,27 @@
         <translation type="obsolete">Предупреждение</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="230"/>
+        <location filename="../main_window.cc" line="225"/>
         <source>Authentication successfully completed.</source>
         <translation>Аутентификация успешно завершена.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="234"/>
+        <location filename="../main_window.cc" line="229"/>
         <source>Network authentication error.</source>
         <translation>Ошибка сети при аутентификации.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="238"/>
+        <location filename="../main_window.cc" line="233"/>
         <source>Violation of the data exchange protocol.</source>
         <translation>Нарушение протокола обмена данными.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="242"/>
+        <location filename="../main_window.cc" line="237"/>
         <source>An error occured while authenticating: wrong user name or password.</source>
         <translation>Произошла ошибка при аутентификации: неправильное имя пользователя или пароль.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="246"/>
+        <location filename="../main_window.cc" line="241"/>
         <source>Specified session type is not allowed for the user.</source>
         <translation>Указанный тип сессии не разрешен для пользователя.</translation>
     </message>

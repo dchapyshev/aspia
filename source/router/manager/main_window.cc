@@ -28,6 +28,7 @@
 #include "router/manager/status_dialog.h"
 
 #include <QMessageBox>
+#include <QTimer>
 
 namespace router {
 
@@ -94,20 +95,14 @@ MainWindow::MainWindow(QWidget* parent)
 {
     ui.setupUi(this);
 
-    connect(ui.button_refresh_peers, &QPushButton::released,
-            this, &MainWindow::onRefreshPeerListPressed);
-    connect(ui.button_disconnect_peer, &QPushButton::released,
-            this, &MainWindow::onDisconnectPeerPressed);
-    connect(ui.button_refresh_proxy, &QPushButton::released,
-            this, &MainWindow::onRefreshProxyListPressed);
-    connect(ui.button_add_user, &QPushButton::released,
-            this, &MainWindow::onAddUserPressed);
-    connect(ui.button_modify_user, &QPushButton::released,
-            this, &MainWindow::onModifyUserPressed);
-    connect(ui.button_delete_user, &QPushButton::released,
-            this, &MainWindow::onDeleteUserPressed);
-    connect(ui.tree_users, &QTreeWidget::currentItemChanged,
-            this, &MainWindow::onCurrentUserChanged);
+    connect(ui.button_refresh_peers, &QPushButton::released, this, &MainWindow::refreshPeerList);
+    connect(ui.button_disconnect_peer, &QPushButton::released, this, &MainWindow::disconnectPeer);
+    connect(ui.button_refresh_proxy, &QPushButton::released, this, &MainWindow::refreshProxyList);
+    connect(ui.button_refresh_users, &QPushButton::released, this, &MainWindow::refreshUserList);
+    connect(ui.button_add_user, &QPushButton::released, this, &MainWindow::addUser);
+    connect(ui.button_modify_user, &QPushButton::released, this, &MainWindow::modifyUser);
+    connect(ui.button_delete_user, &QPushButton::released, this, &MainWindow::deleteUser);
+    connect(ui.tree_users, &QTreeWidget::currentItemChanged, this, &MainWindow::onCurrentUserChanged);
 }
 
 MainWindow::~MainWindow()
@@ -261,11 +256,14 @@ void MainWindow::onPeerList(std::shared_ptr<proto::PeerList> peer_list)
 
     for (int i = 0; i < peer_list->peer_size(); ++i)
         ui.tree_peer->addTopLevelItem(new PeerTreeItem(peer_list->peer(i)));
+
+    afterRequest();
 }
 
 void MainWindow::onPeerResult(std::shared_ptr<proto::PeerResult> peer_result)
 {
-
+    refreshPeerList();
+    afterRequest();
 }
 
 void MainWindow::onProxyList(std::shared_ptr<proto::ProxyList> proxy_list)
@@ -274,6 +272,8 @@ void MainWindow::onProxyList(std::shared_ptr<proto::ProxyList> proxy_list)
 
     for (int i = 0; i < proxy_list->proxy_size(); ++i)
         ui.tree_proxy->addTopLevelItem(new ProxyTreeItem(proxy_list->proxy(i)));
+
+    afterRequest();
 }
 
 void MainWindow::onUserList(std::shared_ptr<proto::UserList> user_list)
@@ -282,11 +282,14 @@ void MainWindow::onUserList(std::shared_ptr<proto::UserList> user_list)
 
     for (int i = 0; i < user_list->user_size(); ++i)
         ui.tree_users->addTopLevelItem(new UserTreeItem(user_list->user(i)));
+
+    afterRequest();
 }
 
 void MainWindow::onUserResult(std::shared_ptr<proto::UserResult> user_result)
 {
-
+    refreshUserList();
+    afterRequest();
 }
 
 void MainWindow::closeEvent(QCloseEvent* event)
@@ -297,34 +300,47 @@ void MainWindow::closeEvent(QCloseEvent* event)
     QApplication::quit();
 }
 
-void MainWindow::onRefreshPeerListPressed()
+void MainWindow::refreshPeerList()
 {
-    router_proxy_->refreshPeerList();
+    if (router_proxy_)
+    {
+        beforeRequest();
+        router_proxy_->refreshPeerList();
+    }
 }
 
-void MainWindow::onDisconnectPeerPressed()
+void MainWindow::disconnectPeer()
 {
     PeerTreeItem* tree_item = static_cast<PeerTreeItem*>(ui.tree_peer->currentItem());
     if (!tree_item)
         return;
 
     if (router_proxy_)
+    {
+        beforeRequest();
         router_proxy_->disconnectPeer(tree_item->peer_id);
+    }
 }
 
-void MainWindow::onRefreshProxyListPressed()
+void MainWindow::refreshProxyList()
 {
     if (router_proxy_)
+    {
+        beforeRequest();
         router_proxy_->refreshProxyList();
+    }
 }
 
-void MainWindow::onRefreshUserListPressed()
+void MainWindow::refreshUserList()
 {
     if (router_proxy_)
+    {
+        beforeRequest();
         router_proxy_->refreshUserList();
+    }
 }
 
-void MainWindow::onAddUserPressed()
+void MainWindow::addUser()
 {
     QStringList exist_names;
 
@@ -335,11 +351,14 @@ void MainWindow::onAddUserPressed()
     if (dialog.exec() == QDialog::Accepted)
     {
         if (router_proxy_)
+        {
+            beforeRequest();
             router_proxy_->addUser(dialog.user());
+        }
     }
 }
 
-void MainWindow::onModifyUserPressed()
+void MainWindow::modifyUser()
 {
     UserTreeItem* tree_item = static_cast<UserTreeItem*>(ui.tree_users->currentItem());
     if (!tree_item)
@@ -359,11 +378,14 @@ void MainWindow::onModifyUserPressed()
     if (dialog.exec() == QDialog::Accepted)
     {
         if (router_proxy_)
+        {
+            beforeRequest();
             router_proxy_->modifyUser(dialog.user());
+        }
     }
 }
 
-void MainWindow::onDeleteUserPressed()
+void MainWindow::deleteUser()
 {
     UserTreeItem* tree_item = static_cast<UserTreeItem*>(ui.tree_users->currentItem());
     if (!tree_item)
@@ -377,7 +399,10 @@ void MainWindow::onDeleteUserPressed()
                               QMessageBox::No) == QMessageBox::Yes)
     {
         if (router_proxy_)
+        {
+            beforeRequest();
             router_proxy_->deleteUser(tree_item->user.entry_id());
+        }
     }
 }
 
@@ -385,6 +410,16 @@ void MainWindow::onCurrentUserChanged(QTreeWidgetItem* current, QTreeWidgetItem*
 {
     ui.button_modify_user->setEnabled(true);
     ui.button_delete_user->setEnabled(true);
+}
+
+void MainWindow::beforeRequest()
+{
+    ui.tab->setEnabled(false);
+}
+
+void MainWindow::afterRequest()
+{
+    ui.tab->setEnabled(true);
 }
 
 } // namespace router

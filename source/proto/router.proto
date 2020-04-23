@@ -150,7 +150,7 @@ message PeerResult
 
 message User
 {
-    uint64 entry_id = 1;
+    int64 entry_id  = 1;
     string name     = 2;
     string password = 3;
     uint32 sessions = 4;

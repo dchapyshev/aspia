@@ -38,7 +38,7 @@ public:
     void refreshUserList();
     void addUser(const proto::User& user);
     void modifyUser(const proto::User& user);
-    void deleteUser(uint64_t entry_id);
+    void deleteUser(int64_t entry_id);
 
 private:
     std::shared_ptr<base::TaskRunner> io_task_runner_;
@@ -157,7 +157,7 @@ void RouterProxy::Impl::modifyUser(const proto::User& user)
         router_->modifyUser(user);
 }
 
-void RouterProxy::Impl::deleteUser(uint64_t entry_id)
+void RouterProxy::Impl::deleteUser(int64_t entry_id)
 {
     if (!io_task_runner_->belongsToCurrentThread())
     {
@@ -221,7 +221,7 @@ void RouterProxy::modifyUser(const proto::User& user)
     impl_->modifyUser(user);
 }
 
-void RouterProxy::deleteUser(uint64_t entry_id)
+void RouterProxy::deleteUser(int64_t entry_id)
 {
     impl_->deleteUser(entry_id);
 }

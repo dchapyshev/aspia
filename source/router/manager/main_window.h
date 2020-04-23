@@ -63,14 +63,17 @@ protected:
     void closeEvent(QCloseEvent* event) override;
 
 private:
-    void onRefreshPeerListPressed();
-    void onDisconnectPeerPressed();
-    void onRefreshProxyListPressed();
-    void onRefreshUserListPressed();
-    void onAddUserPressed();
-    void onModifyUserPressed();
-    void onDeleteUserPressed();
+    void refreshPeerList();
+    void disconnectPeer();
+    void refreshProxyList();
+    void refreshUserList();
+    void addUser();
+    void modifyUser();
+    void deleteUser();
     void onCurrentUserChanged(QTreeWidgetItem* current, QTreeWidgetItem* previous);
+
+    void beforeRequest();
+    void afterRequest();
 
     Ui::MainWindow ui;
 

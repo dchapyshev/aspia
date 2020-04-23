@@ -51,7 +51,7 @@ public:
     void refreshUserList();
     void addUser(const proto::User& user);
     void modifyUser(const proto::User& user);
-    void deleteUser(uint64_t entry_id);
+    void deleteUser(int64_t entry_id);
 
 protected:
     // net::Channel::Listener implementation.
