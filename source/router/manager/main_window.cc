@@ -326,10 +326,6 @@ void MainWindow::onRefreshUserListPressed()
 
 void MainWindow::onAddUserPressed()
 {
-    UserTreeItem* tree_item = static_cast<UserTreeItem*>(ui.tree_users->currentItem());
-    if (!tree_item)
-        return;
-
     QStringList exist_names;
 
     for (int i = 0; i < ui.tree_users->topLevelItemCount(); ++i)

@@ -68,7 +68,7 @@
     </layout>
    </item>
    <item>
-    <widget class="QCheckBox" name="checkbox_enable">
+    <widget class="QCheckBox" name="checkbox_disable">
      <property name="text">
       <string>Disable User Account</string>
      </property>

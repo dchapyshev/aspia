@@ -18,6 +18,7 @@
 
 #include "router/manager/user_dialog.h"
 
+#include "base/strings/unicode.h"
 #include "net/user.h"
 
 #include <QAbstractButton>
@@ -34,14 +35,14 @@ UserDialog::UserDialog(const proto::User& user, const QStringList& exist_names, 
 
     if (!user.name().empty())
     {
-        ui.checkbox_enable->setChecked(!(user.flags() & net::User::ENABLED));
+        ui.checkbox_disable->setChecked(!(user.flags() & net::User::ENABLED));
         ui.edit_username->setText(QString::fromStdString(user.name()));
 
         setAccountChanged(false);
     }
     else
     {
-        ui.checkbox_enable->setChecked(true);
+        ui.checkbox_disable->setChecked(false);
     }
 
     auto add_session = [&](proto::RouterSession session_type)
@@ -75,6 +76,10 @@ UserDialog::UserDialog(const proto::User& user, const QStringList& exist_names, 
     add_session(proto::ROUTER_SESSION_MANAGER);
 
     connect(ui.buttonbox, &QDialogButtonBox::clicked, this, &UserDialog::onButtonBoxClicked);
+    connect(ui.edit_username, &QLineEdit::textEdited, [this]()
+    {
+        setAccountChanged(true);
+    });
 }
 
 UserDialog::~UserDialog() = default;
@@ -100,9 +105,9 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
     QDialogButtonBox::StandardButton standard_button = ui.buttonbox->standardButton(button);
     if (standard_button == QDialogButtonBox::Ok)
     {
-        std::u16string name = ui.edit_username->text().toStdU16String();
+        std::u16string username = ui.edit_username->text().toStdU16String();
 
-        if (!net::User::isValidUserName(name))
+        if (!net::User::isValidUserName(username))
         {
             QMessageBox::warning(this,
                                  tr("Warning"),
@@ -127,9 +132,9 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
             return;
         }
 
-        std::u16string pass = ui.edit_password->text().toStdU16String();
+        std::u16string password = ui.edit_password->text().toStdU16String();
 
-        if (!net::User::isValidPassword(pass))
+        if (!net::User::isValidPassword(password))
         {
             QMessageBox::warning(this,
                                  tr("Warning"),
@@ -142,7 +147,7 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
             return;
         }
 
-        if (!net::User::isSafePassword(pass))
+        if (!net::User::isSafePassword(password))
         {
             QString unsafe =
                 tr("Password you entered does not meet the security requirements!");
@@ -167,6 +172,23 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
                 return;
             }
         }
+
+        uint32_t sessions = 0;
+        for (int i = 0; i < ui.tree_sessions->topLevelItemCount(); ++i)
+        {
+            QTreeWidgetItem* item = ui.tree_sessions->topLevelItem(i);
+            if (item->checkState(0) == Qt::Checked)
+                sessions |= item->data(0, Qt::UserRole).toInt();
+        }
+
+        uint32_t flags = 0;
+        if (!ui.checkbox_disable->isChecked())
+            flags |= net::User::ENABLED;
+
+        user_.set_name(base::utf8FromUtf16(username));
+        user_.set_password(base::utf8FromUtf16(password));
+        user_.set_sessions(sessions);
+        user_.set_flags(flags);
 
         accept();
     }

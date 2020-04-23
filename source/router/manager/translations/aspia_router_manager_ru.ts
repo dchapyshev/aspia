@@ -416,12 +416,12 @@
         <translation>Ошибка: %1</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="377"/>
+        <location filename="../main_window.cc" line="373"/>
         <source>Confirmation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="378"/>
+        <location filename="../main_window.cc" line="374"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -517,25 +517,25 @@
         <translation type="obsolete">Пользователи</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="108"/>
-        <location filename="../user_dialog.cc" line="121"/>
-        <location filename="../user_dialog.cc" line="135"/>
-        <location filename="../user_dialog.cc" line="158"/>
+        <location filename="../user_dialog.cc" line="113"/>
+        <location filename="../user_dialog.cc" line="126"/>
+        <location filename="../user_dialog.cc" line="140"/>
+        <location filename="../user_dialog.cc" line="163"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="109"/>
+        <location filename="../user_dialog.cc" line="114"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>Имя пользователя не может быть пустым и должно содержать только буквы алфавита, цифры и символы _, -, .</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="122"/>
+        <location filename="../user_dialog.cc" line="127"/>
         <source>The passwords you entered do not match.</source>
         <translation>Введенные пароли не совпадают.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../user_dialog.cc" line="136"/>
+        <location filename="../user_dialog.cc" line="141"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
         <translation>
             <numerusform>Пароль не может быть пустым и не должен быть длиннее %n символа.</numerusform>
@@ -544,12 +544,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="148"/>
+        <location filename="../user_dialog.cc" line="153"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Введенный пароль не отвечает требованиям безопасности!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../user_dialog.cc" line="151"/>
+        <location filename="../user_dialog.cc" line="156"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Пароль должен содержать символы в нижнем и верхнем регистре, цифры и не может быть короче %n символа.</numerusform>
@@ -558,22 +558,22 @@
         </translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="155"/>
+        <location filename="../user_dialog.cc" line="160"/>
         <source>Do you want to enter a different password?</source>
         <translation>Вы хотите ввести другой пароль?</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="204"/>
+        <location filename="../user_dialog.cc" line="226"/>
         <source>Double-click to change</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="228"/>
+        <location filename="../user_dialog.cc" line="250"/>
         <source>Manager</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="232"/>
+        <location filename="../user_dialog.cc" line="254"/>
         <source>Authorized Peer</source>
         <translation type="unfinished"></translation>
     </message>

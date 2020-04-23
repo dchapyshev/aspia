@@ -109,8 +109,11 @@ void SessionManager::doUserRequest(const proto::UserRequest& request)
             std::u16string username = base::utf16FromUtf8(request.user().name());
             std::u16string password = base::utf16FromUtf8(request.user().password());
 
+            LOG(LS_INFO) << "User add request: " << username;
+
             if (!net::User::isValidUserName(username) || !net::User::isValidPassword(password))
             {
+                LOG(LS_ERROR) << "Invalid user name or password";
                 result->set_error_code(proto::UserResult::INVALID_DATA);
                 break;
             }
@@ -118,6 +121,7 @@ void SessionManager::doUserRequest(const proto::UserRequest& request)
             net::User user = net::User::create(username, password);
             if (!user.isValid())
             {
+                LOG(LS_ERROR) << "Failed to create user";
                 result->set_error_code(proto::UserResult::INTERNAL_ERROR);
                 break;
             }
@@ -143,7 +147,11 @@ void SessionManager::doUserRequest(const proto::UserRequest& request)
 
         case proto::USER_REQUEST_DELETE:
         {
-            if (!database_->removeUser(request.user().entry_id()))
+            uint64_t entry_id = request.user().entry_id();
+
+            LOG(LS_INFO) << "User remove request: " << entry_id;
+
+            if (!database_->removeUser(entry_id))
             {
                 result->set_error_code(proto::UserResult::INTERNAL_ERROR);
                 break;

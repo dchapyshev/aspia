@@ -32,7 +32,8 @@ namespace {
 
 bool writeText(sqlite3_stmt* statement, const std::string& text, int column)
 {
-    int error_code = sqlite3_bind_text(statement, column, text.c_str(), text.length(), SQLITE_STATIC);
+    int error_code = sqlite3_bind_text(
+        statement, column, text.c_str(), text.size(), SQLITE_STATIC);
     if (error_code != SQLITE_OK)
     {
         LOG(LS_ERROR) << "sqlite3_bind_text failed: " << sqlite3_errstr(error_code)
@@ -302,10 +303,14 @@ net::UserList DatabaseSqlite::userList() const
 bool DatabaseSqlite::addUser(const net::User& user)
 {
     if (!user.isValid())
+    {
+        LOG(LS_ERROR) << "Not valid user";
         return false;
+    }
 
     static const char kQuery[] =
-        "INSERT INTO users (name, group, salt, verifier, sessions, flags) VALUES (?, ?, ?, ?, ?, ?)";
+        "INSERT INTO users ('id', 'name', 'group', 'salt', 'verifier', 'sessions', 'flags') "
+        "VALUES (NULL, ?, ?, ?, ?, ?, ?)";
 
     sqlite3_stmt* statement = nullptr;
     int error_code = sqlite3_prepare(db_, kQuery, std::size(kQuery), &statement, nullptr);
@@ -315,9 +320,11 @@ bool DatabaseSqlite::addUser(const net::User& user)
         return false;
     }
 
+    std::string username = base::utf8FromUtf16(user.name);
+
     do
     {
-        if (!writeText(statement, base::utf8FromUtf16(user.name), 1))
+        if (!writeText(statement, username, 1))
             break;
 
         if (!writeText(statement, user.group, 2))
