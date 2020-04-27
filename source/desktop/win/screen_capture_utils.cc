@@ -66,7 +66,9 @@ bool ScreenCaptureUtils::screenList(ScreenCapturer::ScreenList* screens)
             continue;
         }
 
-        screens->push_back({device_index, base::utf8FromWide(device.DeviceName) });
+        bool is_primary = (device.StateFlags & DISPLAY_DEVICE_PRIMARY_DEVICE);
+
+        screens->push_back({device_index, base::utf8FromWide(device.DeviceName), is_primary });
     }
 
     return true;
