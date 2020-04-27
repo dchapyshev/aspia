@@ -182,9 +182,14 @@ void DesktopPanel::setScreenList(const proto::ScreenList& screen_list)
     {
         const proto::Screen& screen = screen_list.screen(i);
 
-        SelectScreenAction* action = new SelectScreenAction(
-            screen, tr("Monitor %1").arg(i + 1), screens_group_);
+        QString title;
 
+        if (screen.id() == screen_list.primary_screen())
+            title = tr("Monitor %1 (primary)").arg(i + 1);
+        else
+            title = tr("Monitor %1").arg(i + 1);
+
+        SelectScreenAction* action = new SelectScreenAction(screen, title, screens_group_);
         if (screen_list.current_screen() == screen.id())
             action->setChecked(true);
 

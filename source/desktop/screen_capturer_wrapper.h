@@ -54,6 +54,7 @@ public:
     void enableFontSmoothing(bool enable);
 
 private:
+    ScreenCapturer::ScreenId defaultScreen();
     void selectCapturer();
     void switchToInputDesktop();
 

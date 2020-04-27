@@ -67,7 +67,7 @@ void ScreenCapturerWrapper::captureFrame()
     if (screen_count_ != count)
     {
         screen_count_ = count;
-        selectScreen(ScreenCapturer::kFullDesktopScreenId);
+        selectScreen(defaultScreen());
     }
 
     ScreenCapturer::Error error;
@@ -110,6 +110,21 @@ void ScreenCapturerWrapper::enableEffects(bool enable)
 void ScreenCapturerWrapper::enableFontSmoothing(bool enable)
 {
     desktop_environment_->setFontSmoothing(enable);
+}
+
+ScreenCapturer::ScreenId ScreenCapturerWrapper::defaultScreen()
+{
+    ScreenCapturer::ScreenList screens;
+    if (screen_capturer_->screenList(&screens))
+    {
+        for (const auto& screen : screens)
+        {
+            if (screen.is_primary)
+                return screen.id;
+        }
+    }
+
+    return ScreenCapturer::kFullDesktopScreenId;
 }
 
 void ScreenCapturerWrapper::selectCapturer()

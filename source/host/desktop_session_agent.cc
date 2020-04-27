@@ -169,6 +169,9 @@ void DesktopSessionAgent::onScreenListChanged(
         proto::Screen* screen = screen_list->add_screen();
         screen->set_id(list_item.id);
         screen->set_title(list_item.title);
+
+        if (list_item.is_primary)
+            screen_list->set_primary_screen(list_item.id);
     }
 
     channel_->send(base::serialize(outgoing_message_));

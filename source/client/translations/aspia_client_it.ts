@@ -782,40 +782,45 @@
 <context>
     <name>client::DesktopPanel</name>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="186"/>
+        <location filename="../ui/desktop_panel.cc" line="188"/>
+        <source>Monitor %1 (primary)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_panel.cc" line="190"/>
         <source>Monitor %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="306"/>
-        <location filename="../ui/desktop_panel.cc" line="317"/>
-        <location filename="../ui/desktop_panel.cc" line="328"/>
-        <location filename="../ui/desktop_panel.cc" line="339"/>
+        <location filename="../ui/desktop_panel.cc" line="311"/>
+        <location filename="../ui/desktop_panel.cc" line="322"/>
+        <location filename="../ui/desktop_panel.cc" line="333"/>
+        <location filename="../ui/desktop_panel.cc" line="344"/>
         <source>Confirmation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="307"/>
+        <location filename="../ui/desktop_panel.cc" line="312"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="318"/>
+        <location filename="../ui/desktop_panel.cc" line="323"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="329"/>
+        <location filename="../ui/desktop_panel.cc" line="334"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="340"/>
+        <location filename="../ui/desktop_panel.cc" line="345"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="362"/>
+        <location filename="../ui/desktop_panel.cc" line="367"/>
         <source>Scale</source>
         <translation type="unfinished"></translation>
     </message>
