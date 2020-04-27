@@ -43,7 +43,7 @@ public:
     const desktop::Frame* scaleFrame(const desktop::Frame* source_frame, int scale_factor);
 
 private:
-    std::unique_ptr<desktop::Frame> scaled_frame_;
+    std::unique_ptr<desktop::Frame> target_frame_;
     int last_scale_factor_ = kDefScaleFactor;
     desktop::Size last_frame_size_;
 

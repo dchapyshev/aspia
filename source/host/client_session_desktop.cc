@@ -21,6 +21,7 @@
 #include "base/logging.h"
 #include "base/power_controller.h"
 #include "codec/cursor_encoder.h"
+#include "codec/scale_reducer.h"
 #include "codec/video_encoder_vpx.h"
 #include "codec/video_encoder_zstd.h"
 #include "codec/video_util.h"
@@ -119,14 +120,17 @@ void ClientSessionDesktop::onStarted()
 
 void ClientSessionDesktop::encodeFrame(const desktop::Frame& frame)
 {
-    if (!video_encoder_)
+    if (!video_encoder_ || !scale_reducer_)
         return;
 
     outgoing_message_.Clear();
     proto::VideoPacket* packet = outgoing_message_.mutable_video_packet();
 
+    const desktop::Frame* scaled_frame =
+        scale_reducer_->scaleFrame(&frame, codec::ScaleReducer::kDefScaleFactor);
+
     // Encode the frame into a video packet.
-    video_encoder_->encode(&frame, packet);
+    video_encoder_->encode(scaled_frame, packet);
 
     sendMessage(base::serialize(outgoing_message_));
 }
@@ -268,6 +272,8 @@ void ClientSessionDesktop::readConfig(const proto::DesktopConfig& config)
 
     if (config.flags() & proto::ENABLE_CURSOR_SHAPE)
         cursor_encoder_ = std::make_unique<codec::CursorEncoder>();
+
+    scale_reducer_ = std::make_unique<codec::ScaleReducer>();
 
     desktop_session_config_.disable_font_smoothing =
         (config.flags() & proto::DISABLE_FONT_SMOOTHING);

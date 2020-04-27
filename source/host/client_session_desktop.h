@@ -25,6 +25,7 @@
 
 namespace codec {
 class CursorEncoder;
+class ScaleReducer;
 class VideoEncoder;
 } // namespace codec
 
@@ -65,6 +66,7 @@ private:
     void readConfig(const proto::DesktopConfig& config);
 
     std::shared_ptr<DesktopSessionProxy> desktop_session_proxy_;
+    std::unique_ptr<codec::ScaleReducer> scale_reducer_;
     std::unique_ptr<codec::VideoEncoder> video_encoder_;
     std::unique_ptr<codec::CursorEncoder> cursor_encoder_;
     DesktopSession::Config desktop_session_config_;
