@@ -27,10 +27,6 @@ namespace codec {
 
 namespace {
 
-const int kMinScaleFactor = 30;
-const int kMaxScaleFactor = 100;
-const int kDefScaleFactor = 100;
-
 int div(int num, int div)
 {
     return (num + div - 1) / div;
@@ -38,52 +34,51 @@ int div(int num, int div)
 
 desktop::Size scaledSize(const desktop::Size& source_size, int scale_factor)
 {
-    return desktop::Size(div(source_size.width() * scale_factor, kDefScaleFactor),
-                         div(source_size.height() * scale_factor, kDefScaleFactor));
+    return desktop::Size(div(source_size.width() * scale_factor, ScaleReducer::kDefScaleFactor),
+                         div(source_size.height() * scale_factor, ScaleReducer::kDefScaleFactor));
 }
 
 desktop::Rect scaledRect(const desktop::Rect& source_rect, int scale_factor)
 {
-    int left = (source_rect.left() * scale_factor) / kDefScaleFactor;
-    int top = (source_rect.top() * scale_factor) / kDefScaleFactor;
-    int right = div(source_rect.right() * scale_factor, kDefScaleFactor);
-    int bottom = div(source_rect.bottom() * scale_factor, kDefScaleFactor);
+    int left = (source_rect.left() * scale_factor) / ScaleReducer::kDefScaleFactor;
+    int top = (source_rect.top() * scale_factor) / ScaleReducer::kDefScaleFactor;
+    int right = div(source_rect.right() * scale_factor, ScaleReducer::kDefScaleFactor);
+    int bottom = div(source_rect.bottom() * scale_factor, ScaleReducer::kDefScaleFactor);
 
     return desktop::Rect::makeLTRB(left, top, right, bottom);
 }
 
 } // namespace
 
-ScaleReducer::ScaleReducer(int scale_factor)
-    : scale_factor_(scale_factor)
-{
-    // Nothing
-}
+ScaleReducer::ScaleReducer() = default;
 
-// static
-ScaleReducer* ScaleReducer::create(int scale_factor)
-{
-    if (scale_factor < kMinScaleFactor || scale_factor > kMaxScaleFactor)
-        return nullptr;
+ScaleReducer::~ScaleReducer() = default;
 
-    return new ScaleReducer(scale_factor);
-}
-
-const desktop::Frame* ScaleReducer::scaleFrame(const desktop::Frame* source_frame)
+const desktop::Frame* ScaleReducer::scaleFrame(const desktop::Frame* source_frame, int scale_factor)
 {
     DCHECK(source_frame);
     DCHECK(!source_frame->constUpdatedRegion().isEmpty());
     DCHECK(source_frame->format() == desktop::PixelFormat::ARGB());
 
-    if (scale_factor_ == kDefScaleFactor)
+    if (scale_factor == kDefScaleFactor)
         return source_frame;
 
-    if (last_frame_size_ != source_frame->size())
+    if (scale_factor < kMinScaleFactor)
+        scale_factor = kMinScaleFactor;
+
+    if (scale_factor > kMaxScaleFactor)
+        scale_factor = kMaxScaleFactor;
+
+    if (last_frame_size_ != source_frame->size() || last_scale_factor_ != scale_factor)
+    {
+        last_frame_size_ = source_frame->size();
+        last_scale_factor_ = scale_factor;
         scaled_frame_.reset();
+    }
 
     if (!scaled_frame_)
     {
-        desktop::Size size = scaledSize(source_frame->size(), scale_factor_);
+        desktop::Size size = scaledSize(source_frame->size(), scale_factor);
 
         scaled_frame_ = desktop::FrameSimple::create(size, source_frame->format());
         if (!scaled_frame_)
@@ -100,7 +95,7 @@ const desktop::Frame* ScaleReducer::scaleFrame(const desktop::Frame* source_fram
 
     for (desktop::Region::Iterator it(source_frame->constUpdatedRegion()); !it.isAtEnd(); it.advance())
     {
-        desktop::Rect scaled_rect = scaledRect(it.rect(), scale_factor_);
+        desktop::Rect scaled_rect = scaledRect(it.rect(), scale_factor);
         scaled_rect.intersectWith(scaled_frame_rect);
 
         if (libyuv::ARGBScaleClip(source_frame->frameData(),

@@ -33,18 +33,18 @@ namespace codec {
 class ScaleReducer
 {
 public:
-    ~ScaleReducer() = default;
+    ScaleReducer();
+    ~ScaleReducer();
 
-    static ScaleReducer* create(int scale_factor);
+    static const int kMinScaleFactor = 30;
+    static const int kMaxScaleFactor = 100;
+    static const int kDefScaleFactor = 100;
 
-    const desktop::Frame* scaleFrame(const desktop::Frame* source_frame);
-
-protected:
-    explicit ScaleReducer(int scale_factor);
+    const desktop::Frame* scaleFrame(const desktop::Frame* source_frame, int scale_factor);
 
 private:
-    const int scale_factor_;
     std::unique_ptr<desktop::Frame> scaled_frame_;
+    int last_scale_factor_ = kDefScaleFactor;
     desktop::Size last_frame_size_;
 
     DISALLOW_COPY_AND_ASSIGN(ScaleReducer);
