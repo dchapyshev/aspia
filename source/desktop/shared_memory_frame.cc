@@ -40,7 +40,7 @@ SharedMemoryFrame::~SharedMemoryFrame()
 std::unique_ptr<Frame> SharedMemoryFrame::create(
     const Size& size, const PixelFormat& format, ipc::SharedMemoryFactory* shared_memory_factory)
 {
-    const size_t buffer_size = size.width() * size.height() * format.bytesPerPixel();
+    const size_t buffer_size = calcMemorySize(size, format.bytesPerPixel());
 
     std::unique_ptr<ipc::SharedMemory> shared_memory = shared_memory_factory->create(buffer_size);
     if (!shared_memory)

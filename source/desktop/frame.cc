@@ -77,4 +77,10 @@ void Frame::copyFrameInfoFrom(const Frame& other)
     top_left_ = other.top_left_;
 }
 
+// static
+size_t Frame::calcMemorySize(const Size& size, int bytes_per_pixel)
+{
+    return ((size.width() + 128 * 2) * (size.height() + 128 * 2)) * bytes_per_pixel;
+}
+
 } // namespace desktop

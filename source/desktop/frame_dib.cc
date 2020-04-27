@@ -44,7 +44,7 @@ std::unique_ptr<FrameDib> FrameDib::create(const Size& size,
                                            HDC hdc)
 {
     const int bytes_per_row = size.width() * format.bytesPerPixel();
-    const int buffer_size = bytes_per_row * size.height();
+    const int buffer_size = calcMemorySize(size, format.bytesPerPixel());
 
     BitmapInfo bmi = { 0 };
     bmi.header.biSize      = sizeof(bmi.header);

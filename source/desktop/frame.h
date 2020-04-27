@@ -55,8 +55,7 @@ public:
 
     // Copies various information from |other|. Anything initialized in constructor are not copied.
     // This function is usually used when sharing a source Frame with several clients: the original
-    // Frame should be kept unchanged. For example, BasicDesktopFrame::copyOf() and
-    // SharedFrame::share().
+    // Frame should be kept unchanged. For example and SharedFrame::share().
     void copyFrameInfoFrom(const Frame& other);
 
 protected:
@@ -64,6 +63,8 @@ protected:
           const PixelFormat& format,
           uint8_t* data,
           ipc::SharedMemoryBase* shared_memory);
+
+    static size_t calcMemorySize(const Size& size, int bytes_per_pixel);
 
     // Ownership of the buffers is defined by the classes that inherit from
     // this class. They must guarantee that the buffer is not deleted before

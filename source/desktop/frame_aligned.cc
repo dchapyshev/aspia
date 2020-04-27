@@ -37,10 +37,8 @@ FrameAligned::~FrameAligned()
 std::unique_ptr<FrameAligned> FrameAligned::create(
     const Size& size, const PixelFormat& format, size_t alignment)
 {
-    int bytes_per_row = size.width() * format.bytesPerPixel();
-
-    uint8_t* data =
-        reinterpret_cast<uint8_t*>(base::alignedAlloc(bytes_per_row * size.height(), alignment));
+    uint8_t* data = reinterpret_cast<uint8_t*>(
+        base::alignedAlloc(calcMemorySize(size, format.bytesPerPixel()), alignment));
     if (!data)
         return nullptr;
 

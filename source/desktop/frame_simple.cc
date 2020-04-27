@@ -34,10 +34,8 @@ FrameSimple::~FrameSimple()
 // static
 std::unique_ptr<FrameSimple> FrameSimple::create(const Size& size, const PixelFormat& format)
 {
-    int bytes_per_row = size.width() * format.bytesPerPixel();
-
-    uint8_t* data =
-        reinterpret_cast<uint8_t*>(malloc(bytes_per_row * size.height()));
+    uint8_t* data = reinterpret_cast<uint8_t*>(
+        malloc(calcMemorySize(size, format.bytesPerPixel())));
     if (!data)
         return nullptr;
 
