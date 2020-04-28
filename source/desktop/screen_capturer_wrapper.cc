@@ -32,7 +32,7 @@ namespace desktop {
 
 ScreenCapturerWrapper::ScreenCapturerWrapper(Delegate* delegate)
     : delegate_(delegate),
-      desktop_environment_(std::make_unique<DesktopEnvironment>()),
+      environment_(std::make_unique<DesktopEnvironment>()),
       power_save_blocker_(std::make_unique<PowerSaveBlocker>())
 {
     // If the monitor is turned off, this call will turn it on.
@@ -99,17 +99,17 @@ void ScreenCapturerWrapper::setSharedMemoryFactory(ipc::SharedMemoryFactory* sha
 
 void ScreenCapturerWrapper::enableWallpaper(bool enable)
 {
-    desktop_environment_->setWallpaper(enable);
+    environment_->setWallpaper(enable);
 }
 
 void ScreenCapturerWrapper::enableEffects(bool enable)
 {
-    desktop_environment_->setEffects(enable);
+    environment_->setEffects(enable);
 }
 
 void ScreenCapturerWrapper::enableFontSmoothing(bool enable)
 {
-    desktop_environment_->setFontSmoothing(enable);
+    environment_->setFontSmoothing(enable);
 }
 
 ScreenCapturer::ScreenId ScreenCapturerWrapper::defaultScreen()
