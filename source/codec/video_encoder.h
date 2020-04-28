@@ -20,7 +20,6 @@
 #define CODEC__VIDEO_ENCODER_H
 
 #include "desktop/geometry.h"
-#include "desktop/pixel_format.h"
 #include "proto/desktop.pb.h"
 
 namespace desktop {
@@ -32,16 +31,18 @@ namespace codec {
 class VideoEncoder
 {
 public:
+    explicit VideoEncoder(proto::VideoEncoding encoding);
     virtual ~VideoEncoder() = default;
 
     virtual void encode(const desktop::Frame* frame, proto::VideoPacket* packet) = 0;
 
+    proto::VideoEncoding encoding() const { return encoding_; }
+
 protected:
-    void fillPacketInfo(proto::VideoEncoding encoding,
-                        const desktop::Frame* frame,
-                        proto::VideoPacket* packet);
+    void fillPacketInfo(const desktop::Frame* frame, proto::VideoPacket* packet);
 
 private:
+    const proto::VideoEncoding encoding_;
     desktop::Size last_size_;
 };
 

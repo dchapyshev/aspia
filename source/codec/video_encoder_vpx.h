@@ -50,8 +50,6 @@ private:
     void prepareImageAndActiveMap(const desktop::Frame* frame, proto::VideoPacket* packet);
     void setActiveMap(const desktop::Rect& rect);
 
-    const proto::VideoEncoding encoding_;
-
     desktop::Region updated_region_;
     ScopedVpxCodec codec_;
 

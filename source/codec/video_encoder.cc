@@ -22,11 +22,15 @@
 
 namespace codec {
 
-void VideoEncoder::fillPacketInfo(proto::VideoEncoding encoding,
-                                  const desktop::Frame* frame,
-                                  proto::VideoPacket* packet)
+VideoEncoder::VideoEncoder(proto::VideoEncoding encoding)
+    : encoding_(encoding)
 {
-    packet->set_encoding(encoding);
+    // Nothing
+}
+
+void VideoEncoder::fillPacketInfo(const desktop::Frame* frame, proto::VideoPacket* packet)
+{
+    packet->set_encoding(encoding_);
 
     if (last_size_ != frame->size())
     {

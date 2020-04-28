@@ -39,7 +39,8 @@ uint8_t* outputBuffer(proto::VideoPacket* packet, size_t size)
 
 VideoEncoderZstd::VideoEncoderZstd(const desktop::PixelFormat& target_format,
                                    int compression_ratio)
-    : target_format_(target_format),
+    : VideoEncoder(proto::VIDEO_ENCODING_ZSTD),
+      target_format_(target_format),
       compress_ratio_(compression_ratio),
       stream_(ZSTD_createCStream())
 {
@@ -88,7 +89,7 @@ void VideoEncoderZstd::compressPacket(const base::ByteArray& buffer, proto::Vide
 
 void VideoEncoderZstd::encode(const desktop::Frame* frame, proto::VideoPacket* packet)
 {
-    fillPacketInfo(proto::VIDEO_ENCODING_ZSTD, frame, packet);
+    fillPacketInfo(frame, packet);
 
     if (packet->has_format())
     {
