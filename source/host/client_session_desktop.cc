@@ -62,15 +62,18 @@ void ClientSessionDesktop::onMessageReceived(const base::ByteArray& buffer)
 
     if (incoming_message_.has_pointer_event())
     {
-        desktop_session_proxy_->injectPointerEvent(incoming_message_.pointer_event());
+        if (sessionType() == proto::SESSION_TYPE_DESKTOP_MANAGE)
+            desktop_session_proxy_->injectPointerEvent(incoming_message_.pointer_event());
     }
     else if (incoming_message_.has_key_event())
     {
-        desktop_session_proxy_->injectKeyEvent(incoming_message_.key_event());
+        if (sessionType() == proto::SESSION_TYPE_DESKTOP_MANAGE)
+            desktop_session_proxy_->injectKeyEvent(incoming_message_.key_event());
     }
     else if (incoming_message_.has_clipboard_event())
     {
-        desktop_session_proxy_->injectClipboardEvent(incoming_message_.clipboard_event());
+        if (sessionType() == proto::SESSION_TYPE_DESKTOP_MANAGE)
+            desktop_session_proxy_->injectClipboardEvent(incoming_message_.clipboard_event());
     }
     else if (incoming_message_.has_extension())
     {
@@ -126,8 +129,9 @@ void ClientSessionDesktop::encodeFrame(const desktop::Frame& frame)
     outgoing_message_.Clear();
     proto::VideoPacket* packet = outgoing_message_.mutable_video_packet();
 
-    const desktop::Frame* scaled_frame =
-        scale_reducer_->scaleFrame(&frame, codec::ScaleReducer::kDefScaleFactor);
+    const desktop::Frame* scaled_frame = scale_reducer_->scaleFrame(&frame);
+    if (!scaled_frame)
+        return;
 
     // Encode the frame into a video packet.
     video_encoder_->encode(scaled_frame, packet);
@@ -159,10 +163,13 @@ void ClientSessionDesktop::setScreenList(const proto::ScreenList& list)
 
 void ClientSessionDesktop::injectClipboardEvent(const proto::ClipboardEvent& event)
 {
-    outgoing_message_.Clear();
+    if (sessionType() == proto::SESSION_TYPE_DESKTOP_MANAGE)
+    {
+        outgoing_message_.Clear();
 
-    outgoing_message_.mutable_clipboard_event()->CopyFrom(event);
-    sendMessage(base::serialize(outgoing_message_));
+        outgoing_message_.mutable_clipboard_event()->CopyFrom(event);
+        sendMessage(base::serialize(outgoing_message_));
+    }
 }
 
 void ClientSessionDesktop::readExtension(const proto::DesktopExtension& extension)
@@ -181,6 +188,9 @@ void ClientSessionDesktop::readExtension(const proto::DesktopExtension& extensio
     }
     else if (extension.name() == common::kPowerControlExtension)
     {
+        if (sessionType() != proto::SESSION_TYPE_DESKTOP_MANAGE)
+            return;
+
         proto::PowerControl power_control;
 
         if (!power_control.ParseFromString(extension.data()))
@@ -216,7 +226,8 @@ void ClientSessionDesktop::readExtension(const proto::DesktopExtension& extensio
     }
     else if (extension.name() == common::kRemoteUpdateExtension)
     {
-        launchUpdater(sessionId());
+        if (sessionType() == proto::SESSION_TYPE_DESKTOP_MANAGE)
+            launchUpdater(sessionId());
     }
     else if (extension.name() == common::kSystemInfoExtension)
     {
@@ -239,27 +250,30 @@ void ClientSessionDesktop::readExtension(const proto::DesktopExtension& extensio
 
 void ClientSessionDesktop::readConfig(const proto::DesktopConfig& config)
 {
-    switch (config.video_encoding())
+    if (!video_encoder_ || video_encoder_->encoding() != config.video_encoding())
     {
-        case proto::VIDEO_ENCODING_VP8:
-            video_encoder_ = codec::VideoEncoderVPX::createVP8();
-            break;
-
-        case proto::VIDEO_ENCODING_VP9:
-            video_encoder_ = codec::VideoEncoderVPX::createVP9();
-            break;
-
-        case proto::VIDEO_ENCODING_ZSTD:
-            video_encoder_ = codec::VideoEncoderZstd::create(
-                codec::parsePixelFormat(config.pixel_format()), config.compress_ratio());
-            break;
-
-        default:
+        switch (config.video_encoding())
         {
-            // No supported video encoding.
-            LOG(LS_WARNING) << "Unsupported video encoding: " << config.video_encoding();
+            case proto::VIDEO_ENCODING_VP8:
+                video_encoder_ = codec::VideoEncoderVPX::createVP8();
+                break;
+
+            case proto::VIDEO_ENCODING_VP9:
+                video_encoder_ = codec::VideoEncoderVPX::createVP9();
+                break;
+
+            case proto::VIDEO_ENCODING_ZSTD:
+                video_encoder_ = codec::VideoEncoderZstd::create(
+                    codec::parsePixelFormat(config.pixel_format()), config.compress_ratio());
+                break;
+
+            default:
+            {
+                // No supported video encoding.
+                LOG(LS_WARNING) << "Unsupported video encoding: " << config.video_encoding();
+            }
+            break;
         }
-        break;
     }
 
     if (!video_encoder_)
@@ -268,23 +282,32 @@ void ClientSessionDesktop::readConfig(const proto::DesktopConfig& config)
         return;
     }
 
-    cursor_encoder_.reset();
+    bool new_cursor_shape_state = (config.flags() & proto::ENABLE_CURSOR_SHAPE) != 0;
+    bool cursor_shape_state = cursor_encoder_ != nullptr;
 
-    if (config.flags() & proto::ENABLE_CURSOR_SHAPE)
-        cursor_encoder_ = std::make_unique<codec::CursorEncoder>();
+    if (new_cursor_shape_state != cursor_shape_state)
+    {
+        cursor_encoder_.reset();
 
-    scale_reducer_ = std::make_unique<codec::ScaleReducer>();
+        if (new_cursor_shape_state)
+            cursor_encoder_ = std::make_unique<codec::CursorEncoder>();
+    }
 
-    desktop_session_config_.disable_font_smoothing =
-        (config.flags() & proto::DISABLE_FONT_SMOOTHING);
-    desktop_session_config_.disable_effects =
-        (config.flags() & proto::DISABLE_DESKTOP_EFFECTS);
-    desktop_session_config_.disable_wallpaper =
-        (config.flags() & proto::DISABLE_DESKTOP_WALLPAPER);
-    desktop_session_config_.block_input =
-        (config.flags() & proto::BLOCK_REMOTE_INPUT);
+    if (!scale_reducer_)
+        scale_reducer_ = std::make_unique<codec::ScaleReducer>();
+    scale_reducer_->setScaleFactor(config.scale_factor());
 
-    delegate_->onClientSessionConfigured();
+    DesktopSession::Config new_config;
+    new_config.disable_font_smoothing = (config.flags() & proto::DISABLE_FONT_SMOOTHING);
+    new_config.disable_effects = (config.flags() & proto::DISABLE_DESKTOP_EFFECTS);
+    new_config.disable_wallpaper = (config.flags() & proto::DISABLE_DESKTOP_WALLPAPER);
+    new_config.block_input = (config.flags() & proto::BLOCK_REMOTE_INPUT);
+
+    if (!new_config.equals(desktop_session_config_))
+    {
+        desktop_session_config_ = new_config;
+        delegate_->onClientSessionConfigured();
+    }
 }
 
 } // namespace host

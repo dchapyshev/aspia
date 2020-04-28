@@ -55,33 +55,44 @@ ScaleReducer::ScaleReducer() = default;
 
 ScaleReducer::~ScaleReducer() = default;
 
-const desktop::Frame* ScaleReducer::scaleFrame(const desktop::Frame* source_frame,
-                                               int scale_factor)
+void ScaleReducer::setScaleFactor(int scale_factor)
+{
+    if (scale_factor == scale_factor_)
+        return;
+
+    scale_factor_ = scale_factor;
+
+    if (scale_factor_ < kMinScaleFactor)
+        scale_factor_ = kMinScaleFactor;
+
+    if (scale_factor_ > kMaxScaleFactor)
+        scale_factor_ = kMaxScaleFactor;
+
+    target_frame_.reset();
+}
+
+int ScaleReducer::scaleFactor() const
+{
+    return scale_factor_;
+}
+
+const desktop::Frame* ScaleReducer::scaleFrame(const desktop::Frame* source_frame)
 {
     DCHECK(source_frame);
     DCHECK(!source_frame->constUpdatedRegion().isEmpty());
     DCHECK(source_frame->format() == desktop::PixelFormat::ARGB());
 
-    if (scale_factor == kDefScaleFactor)
+    if (scale_factor_ == kDefScaleFactor)
         return source_frame;
-
-    if (scale_factor < kMinScaleFactor)
-        scale_factor = kMinScaleFactor;
-
-    if (scale_factor > kMaxScaleFactor)
-        scale_factor = kMaxScaleFactor;
 
     const desktop::Size& source_size = source_frame->size();
 
-    if (last_frame_size_ != source_size || last_scale_factor_ != scale_factor)
-    {
-        last_scale_factor_ = scale_factor;
+    if (last_frame_size_ != source_size)
         target_frame_.reset();
-    }
 
     if (!target_frame_)
     {
-        desktop::Size target_size = scaledSize(source_size, scale_factor);
+        desktop::Size target_size = scaledSize(source_size, scale_factor_);
 
         target_frame_ = desktop::FrameSimple::create(target_size, source_frame->format());
         if (!target_frame_)
@@ -111,7 +122,7 @@ const desktop::Frame* ScaleReducer::scaleFrame(const desktop::Frame* source_fram
              !it.isAtEnd(); it.advance())
         {
             desktop::Rect source_rect = it.rect();
-            desktop::Rect target_rect = scaledRect(source_rect, scale_factor);
+            desktop::Rect target_rect = scaledRect(source_rect, scale_factor_);
 
             target_rect.intersectWith(scaled_frame_rect);
 

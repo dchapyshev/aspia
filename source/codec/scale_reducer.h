@@ -40,11 +40,14 @@ public:
     static const int kMaxScaleFactor = 100;
     static const int kDefScaleFactor = 100;
 
-    const desktop::Frame* scaleFrame(const desktop::Frame* source_frame, int scale_factor);
+    void setScaleFactor(int scale_factor);
+    int scaleFactor() const;
+
+    const desktop::Frame* scaleFrame(const desktop::Frame* source_frame);
 
 private:
     std::unique_ptr<desktop::Frame> target_frame_;
-    int last_scale_factor_ = kDefScaleFactor;
+    int scale_factor_ = kDefScaleFactor;
     desktop::Size last_frame_size_;
 
     DISALLOW_COPY_AND_ASSIGN(ScaleReducer);

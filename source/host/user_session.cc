@@ -277,15 +277,7 @@ void UserSession::onScreenListChanged(const proto::ScreenList& list)
 void UserSession::onClipboardEvent(const proto::ClipboardEvent& event)
 {
     for (const auto& client : desktop_clients_)
-    {
-        if (client->sessionType() == proto::SESSION_TYPE_DESKTOP_MANAGE)
-        {
-            ClientSessionDesktop* desktop_client =
-                static_cast<ClientSessionDesktop*>(client.get());
-
-            desktop_client->injectClipboardEvent(event);
-        }
-    }
+        static_cast<ClientSessionDesktop*>(client.get())->injectClipboardEvent(event);
 }
 
 void UserSession::onClientSessionConfigured()
