@@ -50,13 +50,17 @@ namespace client {
 
 namespace {
 
+int div(int num, int div)
+{
+    return (num + div - 1) / div;
+}
+
 QSize scaledSize(const QSize& source_size, int scale)
 {
     if (scale == -1)
         return source_size;
 
-    return QSize((source_size.width() * scale) / 100,
-                 (source_size.height() * scale) / 100);
+    return QSize(div(source_size.width() * scale, 100), div(source_size.height() * scale, 100));
 }
 
 } // namespace
