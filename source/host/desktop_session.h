@@ -54,6 +54,14 @@ public:
         bool disable_wallpaper = true;
         bool disable_effects = true;
         bool block_input = false;
+
+        bool equals(const Config& other) const
+        {
+            return (disable_font_smoothing == other.disable_font_smoothing) &&
+                   (disable_wallpaper == other.disable_wallpaper) &&
+                   (disable_effects == other.disable_effects) &&
+                   (block_input == other.block_input);
+        }
     };
 
     virtual void start() = 0;
