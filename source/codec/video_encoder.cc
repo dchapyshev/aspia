@@ -36,7 +36,7 @@ void VideoEncoder::fillPacketInfo(const desktop::Frame* frame, proto::VideoPacke
     {
         last_size_ = frame->size();
 
-        proto::Rect* rect = packet->mutable_format()->mutable_screen_rect();
+        proto::Rect* rect = packet->mutable_format()->mutable_video_rect();
         rect->set_width(last_size_.width());
         rect->set_height(last_size_.height());
     }

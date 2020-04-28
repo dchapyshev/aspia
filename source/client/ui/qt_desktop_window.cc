@@ -90,6 +90,9 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
 
     panel_ = new DesktopPanel(session_type_, this);
 
+    resize_timer_ = new QTimer(this);
+    connect(resize_timer_, &QTimer::timeout, this, &QtDesktopWindow::onResizeTimer);
+
     scroll_timer_ = new QTimer(this);
     connect(scroll_timer_, &QTimer::timeout, this, &QtDesktopWindow::onScrollTimer);
 
@@ -281,24 +284,26 @@ std::unique_ptr<FrameFactory> QtDesktopWindow::frameFactory()
     return std::make_unique<FrameFactoryQImage>();
 }
 
-void QtDesktopWindow::drawFrame(std::shared_ptr<desktop::Frame> frame)
+void QtDesktopWindow::setFrame(
+    const desktop::Size& screen_size, std::shared_ptr<desktop::Frame> frame)
 {
-    desktop::Frame* current_frame = desktop_->desktopFrame();
+    last_screen_size_ = QSize(screen_size.width(), screen_size.height());
 
-    if (current_frame != frame.get())
-    {
-        desktop_->setDesktopFrame(frame);
+    bool resize = desktop_->desktopFrame() == nullptr;
 
-        scaleDesktop();
+    desktop_->setDesktopFrame(frame);
+    scaleDesktop();
 
-        if (!current_frame)
-            autosizeWindow();
-    }
+    if (resize)
+        autosizeWindow();
+}
 
+void QtDesktopWindow::drawFrame()
+{
     desktop_->update();
 }
 
-void QtDesktopWindow::drawMouseCursor(std::shared_ptr<desktop::MouseCursor> mouse_cursor)
+void QtDesktopWindow::setMouseCursor(std::shared_ptr<desktop::MouseCursor> mouse_cursor)
 {
     QImage image(mouse_cursor->constImage().data(),
                  mouse_cursor->width(),
@@ -377,9 +382,11 @@ void QtDesktopWindow::onPointerEvent(const QPoint& pos, uint32_t mask)
 
         proto::PointerEvent pointer_event;
 
+        int remote_scale_factor = desktop_config_.scale_factor();
+
         pointer_event.set_mask(mask);
-        pointer_event.set_x((static_cast<double>(pos.x() * 100) / scale));
-        pointer_event.set_y((static_cast<double>(pos.y() * 100) / scale));
+        pointer_event.set_x((static_cast<double>(pos.x() * 10000) / (scale * remote_scale_factor)));
+        pointer_event.set_y((static_cast<double>(pos.y() * 10000) / (scale * remote_scale_factor)));
 
         desktop_control_proxy_->onPointerEvent(pointer_event);
     }
@@ -404,6 +411,12 @@ void QtDesktopWindow::resizeEvent(QResizeEvent* event)
 {
     panel_->move(QPoint(width() / 2 - panel_->width() / 2, 0));
     scaleDesktop();
+
+    if (resize_timer_->isActive())
+        resize_timer_->stop();
+
+    if (panel_->scale() == -1)
+        resize_timer_->start(std::chrono::seconds(1));
 
     QWidget::resizeEvent(event);
 }
@@ -546,6 +559,29 @@ void QtDesktopWindow::scaleDesktop()
         target_size = size();
 
     desktop_->resize(source_size.scaled(target_size, Qt::KeepAspectRatio));
+}
+
+void QtDesktopWindow::onResizeTimer()
+{
+    resize_timer_->stop();
+
+    if (panel_->scale() != -1)
+        return;
+
+    if (last_screen_size_.isEmpty())
+        return;
+
+    int scale_factor = (desktop_->size().width() * 100) / last_screen_size_.width();
+    if (scale_factor > 100)
+        scale_factor = 100;
+    else if (scale_factor < 30)
+        scale_factor = 30;
+
+    if (scale_factor == desktop_config_.scale_factor())
+        return;
+
+    desktop_config_.set_scale_factor(scale_factor);
+    onConfigChanged(desktop_config_);
 }
 
 void QtDesktopWindow::onScrollTimer()

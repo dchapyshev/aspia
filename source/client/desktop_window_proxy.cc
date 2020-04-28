@@ -24,6 +24,7 @@
 #include "client/desktop_control_proxy.h"
 #include "client/desktop_window.h"
 #include "client/frame_factory.h"
+#include "desktop/geometry.h"
 #include "proto/desktop.pb.h"
 #include "proto/desktop_extensions.pb.h"
 
@@ -124,30 +125,43 @@ void DesktopWindowProxy::showWindow(
         desktop_window_->showWindow(desktop_control_proxy, peer_version);
 }
 
-void DesktopWindowProxy::drawFrame(std::shared_ptr<desktop::Frame> frame)
+void DesktopWindowProxy::setFrame(
+    const desktop::Size& screen_size, std::shared_ptr<desktop::Frame> frame)
 {
     if (!ui_task_runner_->belongsToCurrentThread())
     {
         ui_task_runner_->postTask(
-            std::bind(&DesktopWindowProxy::drawFrame, shared_from_this(), frame));
+            std::bind(&DesktopWindowProxy::setFrame, shared_from_this(), screen_size, frame));
         return;
     }
 
     if (desktop_window_)
-        desktop_window_->drawFrame(frame);
+        desktop_window_->setFrame(screen_size, frame);
 }
 
-void DesktopWindowProxy::drawMouseCursor(std::shared_ptr<desktop::MouseCursor> mouse_cursor)
+void DesktopWindowProxy::drawFrame()
 {
     if (!ui_task_runner_->belongsToCurrentThread())
     {
-        ui_task_runner_->postTask(
-            std::bind(&DesktopWindowProxy::drawMouseCursor, shared_from_this(), mouse_cursor));
+        ui_task_runner_->postTask(std::bind(&DesktopWindowProxy::drawFrame, shared_from_this()));
         return;
     }
 
     if (desktop_window_)
-        desktop_window_->drawMouseCursor(mouse_cursor);
+        desktop_window_->drawFrame();
+}
+
+void DesktopWindowProxy::setMouseCursor(std::shared_ptr<desktop::MouseCursor> mouse_cursor)
+{
+    if (!ui_task_runner_->belongsToCurrentThread())
+    {
+        ui_task_runner_->postTask(
+            std::bind(&DesktopWindowProxy::setMouseCursor, shared_from_this(), mouse_cursor));
+        return;
+    }
+
+    if (desktop_window_)
+        desktop_window_->setMouseCursor(mouse_cursor);
 }
 
 void DesktopWindowProxy::injectClipboardEvent(const proto::ClipboardEvent& event)

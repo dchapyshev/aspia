@@ -89,6 +89,12 @@ message CursorShape
     bytes data = 6;
 }
 
+message Size
+{
+    int32 width  = 1;
+    int32 height = 2;
+}
+
 message Rect
 {
     int32 x      = 1;
@@ -121,8 +127,9 @@ enum VideoEncoding
 
 message VideoPacketFormat
 {
-    Rect screen_rect = 1;
+    Rect video_rect = 1;
     PixelFormat pixel_format = 2;
+    Size screen_size = 3;
 }
 
 message VideoPacket

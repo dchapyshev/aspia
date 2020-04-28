@@ -67,8 +67,9 @@ public:
     void setScreenList(const proto::ScreenList& screen_list) override;
     void setSystemInfo(const proto::SystemInfo& system_info) override;
     std::unique_ptr<FrameFactory> frameFactory() override;
-    void drawFrame(std::shared_ptr<desktop::Frame> frame) override;
-    void drawMouseCursor(std::shared_ptr<desktop::MouseCursor> mouse_cursor) override;
+    void setFrame(const desktop::Size& screen_size, std::shared_ptr<desktop::Frame> frame) override;
+    void drawFrame() override;
+    void setMouseCursor(std::shared_ptr<desktop::MouseCursor> mouse_cursor) override;
     void injectClipboardEvent(const proto::ClipboardEvent& event) override;
 
     // DesktopWidget::Delegate implementation.
@@ -91,6 +92,7 @@ private slots:
     void autosizeWindow();
     void takeScreenshot();
     void scaleDesktop();
+    void onResizeTimer();
     void onScrollTimer();
 
 private:
@@ -110,6 +112,9 @@ private:
     DesktopWidget* desktop_ = nullptr;
 
     QPointer<SystemInfoWindow> system_info_;
+
+    QTimer* resize_timer_ = nullptr;
+    QSize last_screen_size_;
 
     QTimer* scroll_timer_ = nullptr;
     QPoint scroll_delta_;

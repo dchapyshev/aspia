@@ -93,6 +93,7 @@ const desktop::Frame* ScaleReducer::scaleFrame(const desktop::Frame* source_fram
     if (!target_frame_)
     {
         desktop::Size target_size = scaledSize(source_size, scale_factor_);
+        LOG(LS_INFO) << "SCALED FROM " << source_size << " TO " << target_size;
 
         target_frame_ = desktop::FrameSimple::create(target_size, source_frame->format());
         if (!target_frame_)

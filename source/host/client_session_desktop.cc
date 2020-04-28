@@ -136,6 +136,13 @@ void ClientSessionDesktop::encodeFrame(const desktop::Frame& frame)
     // Encode the frame into a video packet.
     video_encoder_->encode(scaled_frame, packet);
 
+    if (packet->has_format())
+    {
+        proto::Size* screen_size = packet->mutable_format()->mutable_screen_size();
+        screen_size->set_width(frame.size().width());
+        screen_size->set_height(frame.size().height());
+    }
+
     sendMessage(base::serialize(outgoing_message_));
 }
 
@@ -292,6 +299,8 @@ void ClientSessionDesktop::readConfig(const proto::DesktopConfig& config)
         if (new_cursor_shape_state)
             cursor_encoder_ = std::make_unique<codec::CursorEncoder>();
     }
+
+    LOG(LS_INFO) << "SCALE FACTOR: " << config.scale_factor();
 
     if (!scale_reducer_)
         scale_reducer_ = std::make_unique<codec::ScaleReducer>();

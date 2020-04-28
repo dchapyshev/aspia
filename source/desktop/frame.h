@@ -66,9 +66,8 @@ protected:
 
     static size_t calcMemorySize(const Size& size, int bytes_per_pixel);
 
-    // Ownership of the buffers is defined by the classes that inherit from
-    // this class. They must guarantee that the buffer is not deleted before
-    // the frame is deleted.
+    // Ownership of the buffers is defined by the classes that inherit from this class. They must
+    // guarantee that the buffer is not deleted before the frame is deleted.
     uint8_t* const data_;
     ipc::SharedMemoryBase* const shared_memory_;
 

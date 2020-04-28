@@ -28,6 +28,7 @@ class Version;
 namespace desktop {
 class Frame;
 class MouseCursor;
+class Size;
 } // namespace desktop
 
 namespace proto {
@@ -56,8 +57,9 @@ public:
     virtual void setSystemInfo(const proto::SystemInfo& system_info) = 0;
 
     virtual std::unique_ptr<FrameFactory> frameFactory() = 0;
-    virtual void drawFrame(std::shared_ptr<desktop::Frame> frame) = 0;
-    virtual void drawMouseCursor(std::shared_ptr<desktop::MouseCursor> mouse_cursor) = 0;
+    virtual void setFrame(const desktop::Size& screen_size, std::shared_ptr<desktop::Frame> frame) = 0;
+    virtual void drawFrame() = 0;
+    virtual void setMouseCursor(std::shared_ptr<desktop::MouseCursor> mouse_cursor) = 0;
 
     virtual void injectClipboardEvent(const proto::ClipboardEvent& event) = 0;
 };

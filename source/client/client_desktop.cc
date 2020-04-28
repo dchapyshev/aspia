@@ -229,20 +229,42 @@ void ClientDesktop::readVideoPacket(const proto::VideoPacket& packet)
 
     if (packet.has_format())
     {
-        const proto::Rect& screen_rect = packet.format().screen_rect();
+        const proto::VideoPacketFormat& format = packet.format();
+        desktop::Size video_size(format.video_rect().width(), format.video_rect().height());
+        desktop::Size screen_size = video_size;
 
         static const int kMaxValue = std::numeric_limits<uint16_t>::max();
         static const int kMinValue = -std::numeric_limits<uint16_t>::max();
 
-        if (screen_rect.width()  <= 0 || screen_rect.width()  >= kMaxValue ||
-            screen_rect.height() <= 0 || screen_rect.height() >= kMaxValue)
+        if (video_size.width()  <= 0 || video_size.width()  >= kMaxValue ||
+            video_size.height() <= 0 || video_size.height() >= kMaxValue)
         {
             LOG(LS_ERROR) << "Wrong video frame size";
             return;
         }
 
-        desktop_frame_ = desktop_window_proxy_->allocateFrame(
-            desktop::Size(screen_rect.width(), screen_rect.height()));
+        if (format.has_screen_size())
+        {
+            screen_size = desktop::Size(
+                format.screen_size().width(), format.screen_size().height());
+
+            if (screen_size.width() <= 0 || screen_size.width() >= kMaxValue ||
+                screen_size.height() <= 0 || screen_size.height() >= kMaxValue)
+            {
+                LOG(LS_ERROR) << "Wrong screen size";
+                return;
+            }
+        }
+
+        if (video_size.width() <= 0 || video_size.width() >= kMaxValue ||
+            video_size.height() <= 0 || video_size.height() >= kMaxValue)
+        {
+            LOG(LS_ERROR) << "Wrong video frame size";
+            return;
+        }
+
+        desktop_frame_ = desktop_window_proxy_->allocateFrame(video_size);
+        desktop_window_proxy_->setFrame(screen_size, desktop_frame_);
     }
 
     if (!desktop_frame_)
@@ -257,7 +279,7 @@ void ClientDesktop::readVideoPacket(const proto::VideoPacket& packet)
         return;
     }
 
-    desktop_window_proxy_->drawFrame(desktop_frame_);
+    desktop_window_proxy_->drawFrame();
 }
 
 void ClientDesktop::readCursorShape(const proto::CursorShape& cursor_shape)
@@ -275,7 +297,7 @@ void ClientDesktop::readCursorShape(const proto::CursorShape& cursor_shape)
     if (!mouse_cursor)
         return;
 
-    desktop_window_proxy_->drawMouseCursor(mouse_cursor);
+    desktop_window_proxy_->setMouseCursor(mouse_cursor);
 }
 
 void ClientDesktop::readClipboardEvent(const proto::ClipboardEvent& clipboard_event)

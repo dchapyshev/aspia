@@ -41,6 +41,7 @@ void setDefaultDesktopManageConfig(proto::DesktopConfig* config)
     config->set_video_encoding(proto::VideoEncoding::VIDEO_ENCODING_VP8);
     config->set_compress_ratio(kDefCompressRatio);
     config->set_update_interval(kDefUpdateInterval);
+    config->set_scale_factor(100);
 
     codec::serializePixelFormat(desktop::PixelFormat::RGB332(), config->mutable_pixel_format());
 }
@@ -57,6 +58,7 @@ void setDefaultDesktopViewConfig(proto::DesktopConfig* config)
     config->set_video_encoding(proto::VideoEncoding::VIDEO_ENCODING_VP8);
     config->set_compress_ratio(kDefCompressRatio);
     config->set_update_interval(kDefUpdateInterval);
+    config->set_scale_factor(100);
 
     codec::serializePixelFormat(desktop::PixelFormat::RGB332(), config->mutable_pixel_format());
 }
