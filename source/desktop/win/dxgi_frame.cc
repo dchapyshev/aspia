@@ -41,6 +41,7 @@ bool DxgiFrame::prepare(const Size& size, ScreenCapturer::ScreenId source_id)
         // Once the source has been changed, the entire source should be copied.
         source_id_ = source_id;
         context_.reset();
+        frame_.reset();
     }
 
     if (!last_frame_size_.has_value() || last_frame_size_ != size)
