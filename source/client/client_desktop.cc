@@ -128,6 +128,22 @@ void ClientDesktop::setCurrentScreen(const proto::Screen& screen)
     sendMessage(outgoing_message_);
 }
 
+void ClientDesktop::setPreferredSize(int width, int height)
+{
+    outgoing_message_.Clear();
+
+    proto::PreferredSize preferred_size;
+    preferred_size.set_width(width);
+    preferred_size.set_height(height);
+
+    proto::DesktopExtension* extension = outgoing_message_.mutable_extension();
+
+    extension->set_name(common::kPreferredSizeExtension);
+    extension->set_data(preferred_size.SerializeAsString());
+
+    sendMessage(outgoing_message_);
+}
+
 void ClientDesktop::onKeyEvent(const proto::KeyEvent& event)
 {
     if (sessionType() != proto::SESSION_TYPE_DESKTOP_MANAGE)
@@ -254,13 +270,6 @@ void ClientDesktop::readVideoPacket(const proto::VideoPacket& packet)
                 LOG(LS_ERROR) << "Wrong screen size";
                 return;
             }
-        }
-
-        if (video_size.width() <= 0 || video_size.width() >= kMaxValue ||
-            video_size.height() <= 0 || video_size.height() >= kMaxValue)
-        {
-            LOG(LS_ERROR) << "Wrong video frame size";
-            return;
         }
 
         desktop_frame_ = desktop_window_proxy_->allocateFrame(video_size);

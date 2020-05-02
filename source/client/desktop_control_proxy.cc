@@ -70,6 +70,19 @@ void DesktopControlProxy::setCurrentScreen(const proto::Screen& screen)
         desktop_control_->setCurrentScreen(screen);
 }
 
+void DesktopControlProxy::setPreferredSize(int width, int height)
+{
+    if (!io_task_runner_->belongsToCurrentThread())
+    {
+        io_task_runner_->postTask(
+            std::bind(&DesktopControlProxy::setPreferredSize, shared_from_this(), width, height));
+        return;
+    }
+
+    if (desktop_control_)
+        desktop_control_->setPreferredSize(width, height);
+}
+
 void DesktopControlProxy::onKeyEvent(const proto::KeyEvent& event)
 {
     if (!io_task_runner_->belongsToCurrentThread())

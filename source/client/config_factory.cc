@@ -58,7 +58,6 @@ void ConfigFactory::setDefaultDesktopManageConfig(proto::DesktopConfig* config)
     config->set_flags(kDefaultFlags);
     config->set_video_encoding(proto::VideoEncoding::VIDEO_ENCODING_VP8);
     config->set_compress_ratio(kDefCompressRatio);
-    config->set_scale_factor(100);
 
     codec::serializePixelFormat(desktop::PixelFormat::RGB332(), config->mutable_pixel_format());
 }
@@ -75,7 +74,6 @@ void ConfigFactory::setDefaultDesktopViewConfig(proto::DesktopConfig* config)
     config->set_flags(kDefaultFlags);
     config->set_video_encoding(proto::VideoEncoding::VIDEO_ENCODING_VP8);
     config->set_compress_ratio(kDefCompressRatio);
-    config->set_scale_factor(100);
 
     codec::serializePixelFormat(desktop::PixelFormat::RGB332(), config->mutable_pixel_format());
 }
@@ -83,6 +81,7 @@ void ConfigFactory::setDefaultDesktopViewConfig(proto::DesktopConfig* config)
 // static
 void ConfigFactory::fixupDesktopConfig(proto::DesktopConfig* config)
 {
+    config->set_scale_factor(100);
     config->set_update_interval(30);
 
     if (config->compress_ratio() < kMinCompressRatio || config->compress_ratio() > kMaxCompressRatio)

@@ -22,84 +22,46 @@
 #include "desktop/frame_simple.h"
 
 #include <libyuv/scale_argb.h>
-#include <libyuv/scale_row.h>
 
 namespace codec {
-
-namespace {
-
-int div(int num, int div)
-{
-    return (num + div - 1) / div;
-}
-
-desktop::Size scaledSize(const desktop::Size& source, int scale_factor)
-{
-    return desktop::Size(div(source.width() * scale_factor, ScaleReducer::kDefScaleFactor),
-                         div(source.height() * scale_factor, ScaleReducer::kDefScaleFactor));
-}
-
-desktop::Rect scaledRect(const desktop::Rect& source_rect, int scale_factor)
-{
-    int left = (source_rect.left() * scale_factor) / ScaleReducer::kDefScaleFactor;
-    int top = (source_rect.top() * scale_factor) / ScaleReducer::kDefScaleFactor;
-    int right = div(source_rect.right() * scale_factor, ScaleReducer::kDefScaleFactor);
-    int bottom = div(source_rect.bottom() * scale_factor, ScaleReducer::kDefScaleFactor);
-
-    return desktop::Rect::makeLTRB(left, top, right, bottom);
-}
-
-} // namespace
 
 ScaleReducer::ScaleReducer() = default;
 
 ScaleReducer::~ScaleReducer() = default;
 
-void ScaleReducer::setScaleFactor(int scale_factor)
-{
-    if (scale_factor == scale_factor_)
-        return;
-
-    scale_factor_ = scale_factor;
-
-    if (scale_factor_ < kMinScaleFactor)
-        scale_factor_ = kMinScaleFactor;
-
-    if (scale_factor_ > kMaxScaleFactor)
-        scale_factor_ = kMaxScaleFactor;
-
-    target_frame_.reset();
-}
-
-int ScaleReducer::scaleFactor() const
-{
-    return scale_factor_;
-}
-
-const desktop::Frame* ScaleReducer::scaleFrame(const desktop::Frame* source_frame)
+const desktop::Frame* ScaleReducer::scaleFrame(
+    const desktop::Frame* source_frame, const desktop::Size& target_size)
 {
     DCHECK(source_frame);
     DCHECK(!source_frame->constUpdatedRegion().isEmpty());
     DCHECK(source_frame->format() == desktop::PixelFormat::ARGB());
 
-    if (scale_factor_ == kDefScaleFactor)
-        return source_frame;
-
     const desktop::Size& source_size = source_frame->size();
 
-    if (last_frame_size_ != source_size)
+    if (source_size_ != source_size || target_size_ != target_size)
+    {
+        const_cast<desktop::Frame*>(source_frame)->updatedRegion()->addRect(
+            desktop::Rect::makeSize(source_size));
+
+        scale_x_ = double(target_size.width() * 100.0) / double(source_size.width());
+        scale_y_ = double(target_size.height() * 100.0) / double(source_size.height());
+        source_size_ = source_size;
+        target_size_ = target_size;
         target_frame_.reset();
+    }
+
+    if (source_size == target_size)
+        return source_frame;
+
+    desktop::Rect target_frame_rect = desktop::Rect::makeSize(target_size);
 
     if (!target_frame_)
     {
-        desktop::Size target_size = scaledSize(source_size, scale_factor_);
-        LOG(LS_INFO) << "SCALED FROM " << source_size << " TO " << target_size;
-
         target_frame_ = desktop::FrameSimple::create(target_size, source_frame->format());
         if (!target_frame_)
             return nullptr;
 
-        target_frame_->updatedRegion()->addRect(desktop::Rect::makeSize(target_size));
+        target_frame_->updatedRegion()->addRect(target_frame_rect);
 
         libyuv::ARGBScale(source_frame->frameData(),
                           source_frame->stride(),
@@ -114,18 +76,14 @@ const desktop::Frame* ScaleReducer::scaleFrame(const desktop::Frame* source_fram
     else
     {
         desktop::Region* updated_region = target_frame_->updatedRegion();
-        const desktop::Size& target_size = target_frame_->size();
-        desktop::Rect scaled_frame_rect = desktop::Rect::makeSize(target_size);
-
         updated_region->clear();
 
         for (desktop::Region::Iterator it(source_frame->constUpdatedRegion());
              !it.isAtEnd(); it.advance())
         {
-            desktop::Rect source_rect = it.rect();
-            desktop::Rect target_rect = scaledRect(source_rect, scale_factor_);
+            desktop::Rect target_rect = scaledRect(it.rect());
 
-            target_rect.intersectWith(scaled_frame_rect);
+            target_rect.intersectWith(target_frame_rect);
 
             libyuv::ARGBScaleClip(source_frame->frameData(),
                                   source_frame->stride(),
@@ -146,6 +104,16 @@ const desktop::Frame* ScaleReducer::scaleFrame(const desktop::Frame* source_fram
     }
 
     return target_frame_.get();
+}
+
+desktop::Rect ScaleReducer::scaledRect(const desktop::Rect& source_rect)
+{
+    int left = int(double(source_rect.left() * scale_x_) / 100.0);
+    int top = int(double(source_rect.top() * scale_y_) / 100.0);
+    int right = int(double(source_rect.right() * scale_x_) / 100.0);
+    int bottom = int(double(source_rect.bottom() * scale_y_) / 100.0);
+
+    return desktop::Rect::makeLTRB(left - 1, top - 1, right + 2, bottom + 2);
 }
 
 } // namespace codec

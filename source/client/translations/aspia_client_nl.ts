@@ -1487,19 +1487,19 @@
         <translation type="obsolete">Bureaublad Weergeven</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="216"/>
-        <location filename="../ui/qt_desktop_window.cc" line="224"/>
-        <location filename="../ui/qt_desktop_window.cc" line="547"/>
+        <location filename="../ui/qt_desktop_window.cc" line="214"/>
+        <location filename="../ui/qt_desktop_window.cc" line="222"/>
+        <location filename="../ui/qt_desktop_window.cc" line="535"/>
         <source>Warning</source>
         <translation type="unfinished">Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="217"/>
+        <location filename="../ui/qt_desktop_window.cc" line="215"/>
         <source>There are no supported video encodings.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="225"/>
+        <location filename="../ui/qt_desktop_window.cc" line="223"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
         <translation type="unfinished">De huidige video encoding wordt niet ondersteund door de host. Specificeer AUB een andere encoding.</translation>
     </message>
@@ -1508,17 +1508,17 @@
         <translation type="obsolete">Selecteer een video encoding is geannuleerd door de gebruiker.</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="525"/>
+        <location filename="../ui/qt_desktop_window.cc" line="513"/>
         <source>Save File</source>
         <translation type="unfinished">Bestand Opslaan</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="527"/>
+        <location filename="../ui/qt_desktop_window.cc" line="515"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation type="unfinished">PNG Afbeelding (*.png);;BMP Afbeelding (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="547"/>
+        <location filename="../ui/qt_desktop_window.cc" line="535"/>
         <source>Could not save image</source>
         <translation type="unfinished">Kon het bestand niet opslaan</translation>
     </message>

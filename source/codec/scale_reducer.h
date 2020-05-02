@@ -26,7 +26,7 @@
 
 namespace desktop {
 class Frame;
-} // namespace aspia
+} // namespace desktop
 
 namespace codec {
 
@@ -36,19 +36,20 @@ public:
     ScaleReducer();
     ~ScaleReducer();
 
-    static const int kMinScaleFactor = 30;
-    static const int kMaxScaleFactor = 100;
-    static const int kDefScaleFactor = 100;
+    const desktop::Frame* scaleFrame(
+        const desktop::Frame* source_frame, const desktop::Size& target_size);
 
-    void setScaleFactor(int scale_factor);
-    int scaleFactor() const;
-
-    const desktop::Frame* scaleFrame(const desktop::Frame* source_frame);
+    double scaleFactorX() const { return scale_x_; }
+    double scaleFactorY() const { return scale_y_; }
 
 private:
+    desktop::Rect scaledRect(const desktop::Rect& source_rect);
+
     std::unique_ptr<desktop::Frame> target_frame_;
-    int scale_factor_ = kDefScaleFactor;
-    desktop::Size last_frame_size_;
+    desktop::Size source_size_;
+    desktop::Size target_size_;
+    double scale_x_ = 0;
+    double scale_y_ = 0;
 
     DISALLOW_COPY_AND_ASSIGN(ScaleReducer);
 };

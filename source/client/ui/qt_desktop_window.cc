@@ -50,17 +50,15 @@ namespace client {
 
 namespace {
 
-int div(int num, int div)
-{
-    return (num + div - 1) / div;
-}
-
 QSize scaledSize(const QSize& source_size, int scale)
 {
     if (scale == -1)
         return source_size;
 
-    return QSize(div(source_size.width() * scale, 100), div(source_size.height() * scale, 100));
+    int width = int(double(source_size.width() * scale) / 100.0);
+    int height = int(double(source_size.height() * scale) / 100.0);
+
+    return QSize(width, height);
 }
 
 } // namespace
@@ -291,7 +289,7 @@ std::unique_ptr<FrameFactory> QtDesktopWindow::frameFactory()
 void QtDesktopWindow::setFrame(
     const desktop::Size& screen_size, std::shared_ptr<desktop::Frame> frame)
 {
-    last_screen_size_ = QSize(screen_size.width(), screen_size.height());
+    screen_size_ = QSize(screen_size.width(), screen_size.height());
 
     bool resize = desktop_->desktopFrame() == nullptr;
 
@@ -415,13 +413,6 @@ void QtDesktopWindow::resizeEvent(QResizeEvent* event)
 {
     panel_->move(QPoint(width() / 2 - panel_->width() / 2, 0));
     scaleDesktop();
-
-    if (resize_timer_->isActive())
-        resize_timer_->stop();
-
-    if (panel_->scale() == -1)
-        resize_timer_->start(std::chrono::seconds(1));
-
     QWidget::resizeEvent(event);
 }
 
@@ -492,19 +483,16 @@ void QtDesktopWindow::onConfigChanged(const proto::DesktopConfig& desktop_config
 
 void QtDesktopWindow::autosizeWindow()
 {
-    desktop::Frame* frame = desktop_->desktopFrame();
-    if (!frame)
+    if (screen_size_.isEmpty())
         return;
 
-    QSize frame_size(desktop_->desktopFrame()->size().width(),
-                     desktop_->desktopFrame()->size().height());
     QRect local_screen_rect = QApplication::desktop()->availableGeometry(this);
-    QSize window_size = frame_size + frameSize() - size();
+    QSize window_size = screen_size_ + frameSize() - size();
 
     if (window_size.width() < local_screen_rect.width() &&
         window_size.height() < local_screen_rect.height())
     {
-        QSize remote_screen_size = scaledSize(frame_size, panel_->scale());
+        QSize remote_screen_size = scaledSize(screen_size_, panel_->scale());
 
         showNormal();
 
@@ -549,43 +537,28 @@ void QtDesktopWindow::takeScreenshot()
 
 void QtDesktopWindow::scaleDesktop()
 {
-    desktop::Frame* current_frame = desktop_->desktopFrame();
-    if (!current_frame)
+    if (screen_size_.isEmpty())
         return;
 
-    QSize source_size(current_frame->size().width(), current_frame->size().height());
-    QSize target_size;
+    QSize source_size(screen_size_);
+    QSize target_size(size());
 
     int scale = panel_->scale();
     if (scale != -1)
         target_size = scaledSize(source_size, scale);
-    else
-        target_size = size();
 
     desktop_->resize(source_size.scaled(target_size, Qt::KeepAspectRatio));
+
+    if (resize_timer_->isActive())
+        resize_timer_->stop();
+
+    resize_timer_->start(std::chrono::milliseconds(500));
 }
 
 void QtDesktopWindow::onResizeTimer()
 {
+    desktop_control_proxy_->setPreferredSize(desktop_->width(), desktop_->height());
     resize_timer_->stop();
-
-    if (panel_->scale() != -1)
-        return;
-
-    if (last_screen_size_.isEmpty())
-        return;
-
-    int scale_factor = (desktop_->size().width() * 100) / last_screen_size_.width();
-    if (scale_factor > 100)
-        scale_factor = 100;
-    else if (scale_factor < 30)
-        scale_factor = 30;
-
-    if (scale_factor == desktop_config_.scale_factor())
-        return;
-
-    desktop_config_.set_scale_factor(scale_factor);
-    onConfigChanged(desktop_config_);
 }
 
 void QtDesktopWindow::onScrollTimer()

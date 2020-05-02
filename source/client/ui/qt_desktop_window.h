@@ -114,8 +114,7 @@ private:
     QPointer<SystemInfoWindow> system_info_;
 
     QTimer* resize_timer_ = nullptr;
-    QSize last_screen_size_;
-
+    QSize screen_size_;
     QTimer* scroll_timer_ = nullptr;
     QPoint scroll_delta_;
 
