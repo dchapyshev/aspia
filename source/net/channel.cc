@@ -43,6 +43,14 @@ namespace {
 
 static const size_t kMaxMessageSize = 16 * 1024 * 1024; // 16 MB
 
+int64_t calculateBps(std::chrono::milliseconds duration, int64_t bytes, int64_t last_bps)
+{
+    static const double kAlpha = 0.5;
+
+    return int64_t(kAlpha * (1000.0 / double(duration.count() * bytes)) +
+        ((1.0 - kAlpha) * double(last_bps)));
+}
+
 } // namespace
 
 Channel::Channel()
@@ -257,6 +265,17 @@ bool Channel::setWriteBufferSize(size_t size)
     return true;
 }
 
+void Channel::metrics(Metrics* metrics) const
+{
+    if (!metrics)
+        return;
+
+    metrics->total_rx = total_rx_;
+    metrics->total_tx = total_tx_;
+    metrics->bps_rx = bps_rx_;
+    metrics->bps_tx = bps_tx_;
+}
+
 // static
 std::string Channel::errorToString(ErrorCode error_code)
 {
@@ -421,6 +440,10 @@ void Channel::doWrite()
         return;
     }
 
+    // Save the start time of writing.
+    begin_time_tx_ = Clock::now();
+    bytes_tx_ = 0;
+
     // Send the buffer to the recipient.
     asio::async_write(socket_,
                       asio::buffer(write_buffer_.data(), write_buffer_.size()),
@@ -440,6 +463,14 @@ void Channel::onWrite(const std::error_code& error_code, size_t bytes_transferre
 
     DCHECK(!write_queue_.empty());
 
+    std::chrono::milliseconds duration =
+        std::chrono::duration_cast<std::chrono::milliseconds>(Clock::now() - begin_time_tx_);
+
+    // Update TX statistics.
+    bytes_tx_ += bytes_transferred;
+    total_tx_ += bytes_transferred;
+    bps_tx_ = calculateBps(duration, bytes_tx_, bps_tx_);
+
     onMessageWritten();
 
     // Delete the sent message from the queue.
@@ -454,6 +485,10 @@ void Channel::onWrite(const std::error_code& error_code, size_t bytes_transferre
 
 void Channel::doReadSize()
 {
+    // Save the start time of reading.
+    begin_time_rx_ = Clock::now();
+    bytes_rx_ = 0;
+
     state_ = ReadState::READ_SIZE;
     asio::async_read(socket_,
                      variable_size_reader_.buffer(),
@@ -470,6 +505,8 @@ void Channel::onReadSize(const std::error_code& error_code, size_t bytes_transfe
         onErrorOccurred(FROM_HERE, error_code);
         return;
     }
+
+    bytes_rx_ += bytes_transferred;
 
     std::optional<size_t> size = variable_size_reader_.messageSize();
     if (size.has_value())
@@ -508,6 +545,14 @@ void Channel::onReadContent(const std::error_code& error_code, size_t bytes_tran
         onErrorOccurred(FROM_HERE, error_code);
         return;
     }
+
+    std::chrono::milliseconds duration =
+        std::chrono::duration_cast<std::chrono::milliseconds>(Clock::now() - begin_time_rx_);
+
+    // Update RX statistics.
+    bytes_rx_ += bytes_transferred;
+    total_rx_ += bytes_rx_;
+    bps_rx_ = calculateBps(duration, bytes_rx_, bps_rx_);
 
     DCHECK_EQ(bytes_transferred, read_buffer_.size());
 

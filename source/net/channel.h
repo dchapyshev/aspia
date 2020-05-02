@@ -87,6 +87,14 @@ public:
         virtual void onMessageWritten() = 0;
     };
 
+    struct Metrics
+    {
+        int64_t total_rx;
+        int64_t total_tx;
+        int64_t bps_rx;
+        int64_t bps_tx;
+    };
+
     std::shared_ptr<ChannelProxy> channelProxy();
 
     // Sets an instance of the class to receive connection status notifications or new messages.
@@ -140,6 +148,8 @@ public:
 
     bool setReadBufferSize(size_t size);
     bool setWriteBufferSize(size_t size);
+
+    void metrics(Metrics* metrics) const;
 
     // Converts an error code to a human readable string.
     // Does not support localization. Used for logs.
@@ -197,6 +207,20 @@ private:
     VariableSizeReader variable_size_reader_;
     base::ByteArray read_buffer_;
     base::ByteArray decrypt_buffer_;
+
+    using Clock = std::chrono::high_resolution_clock;
+    using TimePoint = std::chrono::time_point<Clock>;
+
+    int64_t total_tx_ = 0;
+    int64_t total_rx_ = 0;
+
+    TimePoint begin_time_tx_;
+    int64_t bytes_tx_ = 0;
+    int64_t bps_tx_ = 0;
+
+    TimePoint begin_time_rx_;
+    int64_t bytes_rx_ = 0;
+    int64_t bps_rx_ = 0;
 
     DISALLOW_COPY_AND_ASSIGN(Channel);
 };
