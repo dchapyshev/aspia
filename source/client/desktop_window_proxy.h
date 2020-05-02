@@ -20,33 +20,17 @@
 #define CLIENT__DESKTOP_WINDOW_PROXY_H
 
 #include "base/macros_magic.h"
+#include "client/desktop_window.h"
 
-#include <memory>
 #include <string>
 
 namespace base {
 class TaskRunner;
-class Version;
 } // namespace base
-
-namespace desktop {
-class Frame;
-class MouseCursor;
-class Size;
-} // namespace desktop
-
-namespace proto {
-class ClipboardEvent;
-class DesktopConfig;
-class ScreenList;
-class SystemInfo;
-} // namespace proto
 
 namespace client {
 
 class DesktopControlProxy;
-class DesktopWindow;
-class FrameFactory;
 
 class DesktopWindowProxy : public std::enable_shared_from_this<DesktopWindowProxy>
 {
@@ -65,6 +49,7 @@ public:
     void setCapabilities(const std::string& extensions, uint32_t video_encodings);
     void setScreenList(const proto::ScreenList& screen_list);
     void setSystemInfo(const proto::SystemInfo& system_info);
+    void setMetrics(const DesktopWindow::Metrics& metrics);
 
     std::shared_ptr<desktop::Frame> allocateFrame(const desktop::Size& size);
     void setFrame(const desktop::Size& screen_size, std::shared_ptr<desktop::Frame> frame);

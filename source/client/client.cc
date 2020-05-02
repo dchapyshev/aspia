@@ -93,6 +93,11 @@ void Client::sendMessage(const google::protobuf::MessageLite& message)
     channel_->send(base::serialize(message));
 }
 
+void Client::networkMetrics(net::Channel::Metrics* metrics)
+{
+    channel_->metrics(metrics);
+}
+
 void Client::onConnected()
 {
     static const size_t kReadBufferSize = 2 * 1024 * 1024; // 2 Mb.

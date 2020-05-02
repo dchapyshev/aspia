@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>StatisticDialog</class>
+ <widget class="QDialog" name="StatisticDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>315</width>
+    <height>153</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Statistic</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QTreeWidget" name="tree">
+     <property name="indentation">
+      <number>0</number>
+     </property>
+     <column>
+      <property name="text">
+       <string>Parameter</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Value</string>
+      </property>
+     </column>
+     <item>
+      <property name="text">
+       <string notr="true">Total RX</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string notr="true">Total TX</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string notr="true">Speed RX</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string notr="true">Speed TX</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string notr="true">AVG Video Packet</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string notr="true">FPS</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

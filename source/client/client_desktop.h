@@ -60,6 +60,7 @@ public:
     void onPowerControl(proto::PowerControl::Action action) override;
     void onRemoteUpdate() override;
     void onSystemInfoRequest() override;
+    void onMetricsRequest() override;
 
 protected:
     // Client implementation.
@@ -89,6 +90,14 @@ private:
     proto::VideoEncoding video_encoding_ = proto::VIDEO_ENCODING_UNKNOWN;
     std::unique_ptr<codec::VideoDecoder> video_decoder_;
     std::unique_ptr<codec::CursorDecoder> cursor_decoder_;
+
+    using Clock = std::chrono::high_resolution_clock;
+    using TimePoint = std::chrono::time_point<Clock>;
+
+    TimePoint begin_time_;
+    int64_t video_frame_count_ = 0;
+    int avg_video_packet_ = 0;
+    int fps_ = 0;
 
     DISALLOW_COPY_AND_ASSIGN(ClientDesktop);
 };

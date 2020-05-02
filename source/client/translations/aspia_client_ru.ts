@@ -260,6 +260,11 @@
         <translation>Свернуть окно</translation>
     </message>
     <message>
+        <location filename="../ui/desktop_panel.ui" line="403"/>
+        <source>Statistic</source>
+        <translation>Статистика</translation>
+    </message>
+    <message>
         <location filename="../ui/desktop_panel.ui" line="219"/>
         <location filename="../ui/desktop_panel.ui" line="222"/>
         <location filename="../ui/desktop_panel.ui" line="225"/>
@@ -557,6 +562,24 @@
     <message>
         <source>File Transfer</source>
         <translation type="obsolete">Передача файлов</translation>
+    </message>
+</context>
+<context>
+    <name>StatisticDialog</name>
+    <message>
+        <location filename="../ui/statistic_dialog.ui" line="14"/>
+        <source>Statistic</source>
+        <translation>Статистика</translation>
+    </message>
+    <message>
+        <location filename="../ui/statistic_dialog.ui" line="24"/>
+        <source>Parameter</source>
+        <translation>Параметр</translation>
+    </message>
+    <message>
+        <location filename="../ui/statistic_dialog.ui" line="29"/>
+        <source>Value</source>
+        <translation>Значение</translation>
     </message>
 </context>
 <context>
@@ -1078,45 +1101,45 @@
 <context>
     <name>client::DesktopPanel</name>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="188"/>
+        <location filename="../ui/desktop_panel.cc" line="189"/>
         <source>Monitor %1 (primary)</source>
         <translation>Монитор %1 (основной)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="190"/>
+        <location filename="../ui/desktop_panel.cc" line="191"/>
         <source>Monitor %1</source>
         <translation>Монитор %1</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="311"/>
-        <location filename="../ui/desktop_panel.cc" line="322"/>
-        <location filename="../ui/desktop_panel.cc" line="333"/>
-        <location filename="../ui/desktop_panel.cc" line="344"/>
+        <location filename="../ui/desktop_panel.cc" line="312"/>
+        <location filename="../ui/desktop_panel.cc" line="323"/>
+        <location filename="../ui/desktop_panel.cc" line="334"/>
+        <location filename="../ui/desktop_panel.cc" line="345"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="312"/>
+        <location filename="../ui/desktop_panel.cc" line="313"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>Вы действительно хотите выключить удаленный компьютер?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="323"/>
+        <location filename="../ui/desktop_panel.cc" line="324"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>Вы действительно хотите перезагрузить удаленный компьютер?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="334"/>
+        <location filename="../ui/desktop_panel.cc" line="335"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>Вы действительно хотите завершить сеанс пользователя на удаленном компьютере?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="345"/>
+        <location filename="../ui/desktop_panel.cc" line="346"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>Вы действительно хотите заблокировать сеанс пользователя на удаленном компьютере?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="367"/>
+        <location filename="../ui/desktop_panel.cc" line="368"/>
         <source>Scale</source>
         <translation>Масштаб</translation>
     </message>
@@ -1491,19 +1514,19 @@
         <translation type="obsolete">Просмотр рабочего стола</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="214"/>
-        <location filename="../ui/qt_desktop_window.cc" line="222"/>
-        <location filename="../ui/qt_desktop_window.cc" line="535"/>
+        <location filename="../ui/qt_desktop_window.cc" line="220"/>
+        <location filename="../ui/qt_desktop_window.cc" line="228"/>
+        <location filename="../ui/qt_desktop_window.cc" line="560"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="215"/>
+        <location filename="../ui/qt_desktop_window.cc" line="221"/>
         <source>There are no supported video encodings.</source>
         <translation>Нет поддерживаемых кодировок видео.</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="223"/>
+        <location filename="../ui/qt_desktop_window.cc" line="229"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
         <translation>Текущий видео-кодек не поддерживается хостом. Пожалуйста, выберите другой кодек.</translation>
     </message>
@@ -1512,17 +1535,17 @@
         <translation type="obsolete">Выбор поддерживаемой видео-кодировки отменен пользователем.</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="513"/>
+        <location filename="../ui/qt_desktop_window.cc" line="538"/>
         <source>Save File</source>
         <translation>Сохранение файла</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="515"/>
+        <location filename="../ui/qt_desktop_window.cc" line="540"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG изображение (*.png);;BMP изображение (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="535"/>
+        <location filename="../ui/qt_desktop_window.cc" line="560"/>
         <source>Could not save image</source>
         <translation>Не удалось сохранить изображение</translation>
     </message>
@@ -1556,6 +1579,29 @@
         <location filename="../ui/select_screen_action.h" line="37"/>
         <source>Full Desktop</source>
         <translation>Весь рабочий стол</translation>
+    </message>
+</context>
+<context>
+    <name>client::StatisticDialog</name>
+    <message>
+        <source>TB</source>
+        <translation type="obsolete">ТБ</translation>
+    </message>
+    <message>
+        <source>GB</source>
+        <translation type="obsolete">ГБ</translation>
+    </message>
+    <message>
+        <source>MB</source>
+        <translation type="obsolete">МБ</translation>
+    </message>
+    <message>
+        <source>kB</source>
+        <translation type="obsolete">кБ</translation>
+    </message>
+    <message>
+        <source>B</source>
+        <translation type="obsolete">Б</translation>
     </message>
 </context>
 <context>

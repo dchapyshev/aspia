@@ -67,6 +67,7 @@ protected:
 
     // Sends outgoing message.
     void sendMessage(const google::protobuf::MessageLite& message);
+    void networkMetrics(net::Channel::Metrics* metrics);
 
     // net::Channel::Listener implementation.
     void onConnected() override;

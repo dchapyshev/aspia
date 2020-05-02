@@ -39,6 +39,7 @@ public:
     virtual void onPowerControl(proto::PowerControl::Action action) = 0;
     virtual void onRemoteUpdate() = 0;
     virtual void onSystemInfoRequest() = 0;
+    virtual void onMetricsRequest() = 0;
 };
 
 } // namespace client

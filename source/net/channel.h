@@ -91,8 +91,8 @@ public:
     {
         int64_t total_rx;
         int64_t total_tx;
-        int64_t bps_rx;
-        int64_t bps_tx;
+        int speed_rx;
+        int speed_tx;
     };
 
     std::shared_ptr<ChannelProxy> channelProxy();
@@ -149,7 +149,7 @@ public:
     bool setReadBufferSize(size_t size);
     bool setWriteBufferSize(size_t size);
 
-    void metrics(Metrics* metrics) const;
+    void metrics(Metrics* metrics);
 
     // Converts an error code to a human readable string.
     // Does not support localization. Used for logs.
@@ -214,13 +214,11 @@ private:
     int64_t total_tx_ = 0;
     int64_t total_rx_ = 0;
 
-    TimePoint begin_time_tx_;
+    TimePoint begin_time_;
     int64_t bytes_tx_ = 0;
-    int64_t bps_tx_ = 0;
-
-    TimePoint begin_time_rx_;
+    int speed_tx_ = 0;
     int64_t bytes_rx_ = 0;
-    int64_t bps_rx_ = 0;
+    int speed_rx_ = 0;
 
     DISALLOW_COPY_AND_ASSIGN(Channel);
 };

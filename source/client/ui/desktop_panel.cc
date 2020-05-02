@@ -53,6 +53,7 @@ DesktopPanel::DesktopPanel(proto::SessionType session_type, QWidget* parent)
     connect(ui.action_autoscroll, &QAction::triggered, this, &DesktopPanel::autoScrollChanged);
     connect(ui.action_update, &QAction::triggered, this, &DesktopPanel::startRemoteUpdate);
     connect(ui.action_system_info, &QAction::triggered, this, &DesktopPanel::startSystemInfo);
+    connect(ui.action_statistic, &QAction::triggered, this, &DesktopPanel::startStatistic);
     connect(ui.action_minimize, &QAction::triggered, this, &DesktopPanel::minimizeSession);
     connect(ui.action_close, &QAction::triggered, this, &DesktopPanel::closeSession);
 
@@ -378,6 +379,7 @@ void DesktopPanel::createAdditionalMenu(proto::SessionType session_type)
 
     additional_menu_->addSeparator();
     additional_menu_->addAction(ui.action_screenshot);
+    additional_menu_->addAction(ui.action_statistic);
 
     // Set the menu for the button on the toolbar.
     ui.action_menu->setMenu(additional_menu_);

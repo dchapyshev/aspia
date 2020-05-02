@@ -104,6 +104,19 @@ void DesktopWindowProxy::setSystemInfo(const proto::SystemInfo& system_info)
         desktop_window_->setSystemInfo(system_info);
 }
 
+void DesktopWindowProxy::setMetrics(const DesktopWindow::Metrics& metrics)
+{
+    if (!ui_task_runner_->belongsToCurrentThread())
+    {
+        ui_task_runner_->postTask(
+            std::bind(&DesktopWindowProxy::setMetrics, shared_from_this(), metrics));
+        return;
+    }
+
+    if (desktop_window_)
+        desktop_window_->setMetrics(metrics);
+}
+
 std::shared_ptr<desktop::Frame> DesktopWindowProxy::allocateFrame(const desktop::Size& size)
 {
     return frame_factory_->allocateFrame(size);

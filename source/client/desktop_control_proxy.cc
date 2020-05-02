@@ -161,4 +161,17 @@ void DesktopControlProxy::onSystemInfoRequest()
         desktop_control_->onSystemInfoRequest();
 }
 
+void DesktopControlProxy::onMetricsRequest()
+{
+    if (!io_task_runner_->belongsToCurrentThread())
+    {
+        io_task_runner_->postTask(
+            std::bind(&DesktopControlProxy::onMetricsRequest, shared_from_this()));
+        return;
+    }
+
+    if (desktop_control_)
+        desktop_control_->onMetricsRequest();
+}
+
 } // namespace client

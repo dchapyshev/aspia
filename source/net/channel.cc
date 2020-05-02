@@ -43,12 +43,11 @@ namespace {
 
 static const size_t kMaxMessageSize = 16 * 1024 * 1024; // 16 MB
 
-int64_t calculateBps(std::chrono::milliseconds duration, int64_t bytes, int64_t last_bps)
+int calculateSpeed(int last_speed, std::chrono::milliseconds duration, int64_t bytes)
 {
-    static const double kAlpha = 0.5;
-
-    return int64_t(kAlpha * (1000.0 / double(duration.count() * bytes)) +
-        ((1.0 - kAlpha) * double(last_bps)));
+    static const double kAlpha = 0.1;
+    return int((kAlpha * ((1000.0 / double(duration.count())) * double(bytes))) +
+        ((1.0 - kAlpha) * double(last_speed)));
 }
 
 } // namespace
@@ -265,15 +264,27 @@ bool Channel::setWriteBufferSize(size_t size)
     return true;
 }
 
-void Channel::metrics(Metrics* metrics) const
+void Channel::metrics(Metrics* metrics)
 {
     if (!metrics)
         return;
 
+    TimePoint current_time = Clock::now();
+
+    std::chrono::milliseconds duration =
+        std::chrono::duration_cast<std::chrono::milliseconds>(current_time - begin_time_);
+
+    speed_rx_ = calculateSpeed(speed_rx_, duration, bytes_rx_);
+    speed_tx_ = calculateSpeed(speed_tx_, duration, bytes_tx_);
+
     metrics->total_rx = total_rx_;
     metrics->total_tx = total_tx_;
-    metrics->bps_rx = bps_rx_;
-    metrics->bps_tx = bps_tx_;
+    metrics->speed_rx = speed_rx_;
+    metrics->speed_tx = speed_tx_;
+
+    begin_time_ = current_time;
+    bytes_rx_ = 0;
+    bytes_tx_ = 0;
 }
 
 // static
@@ -440,10 +451,6 @@ void Channel::doWrite()
         return;
     }
 
-    // Save the start time of writing.
-    begin_time_tx_ = Clock::now();
-    bytes_tx_ = 0;
-
     // Send the buffer to the recipient.
     asio::async_write(socket_,
                       asio::buffer(write_buffer_.data(), write_buffer_.size()),
@@ -463,13 +470,9 @@ void Channel::onWrite(const std::error_code& error_code, size_t bytes_transferre
 
     DCHECK(!write_queue_.empty());
 
-    std::chrono::milliseconds duration =
-        std::chrono::duration_cast<std::chrono::milliseconds>(Clock::now() - begin_time_tx_);
-
     // Update TX statistics.
     bytes_tx_ += bytes_transferred;
     total_tx_ += bytes_transferred;
-    bps_tx_ = calculateBps(duration, bytes_tx_, bps_tx_);
 
     onMessageWritten();
 
@@ -485,10 +488,6 @@ void Channel::onWrite(const std::error_code& error_code, size_t bytes_transferre
 
 void Channel::doReadSize()
 {
-    // Save the start time of reading.
-    begin_time_rx_ = Clock::now();
-    bytes_rx_ = 0;
-
     state_ = ReadState::READ_SIZE;
     asio::async_read(socket_,
                      variable_size_reader_.buffer(),
@@ -546,13 +545,9 @@ void Channel::onReadContent(const std::error_code& error_code, size_t bytes_tran
         return;
     }
 
-    std::chrono::milliseconds duration =
-        std::chrono::duration_cast<std::chrono::milliseconds>(Clock::now() - begin_time_rx_);
-
     // Update RX statistics.
     bytes_rx_ += bytes_transferred;
-    total_rx_ += bytes_rx_;
-    bps_rx_ = calculateBps(duration, bytes_rx_, bps_rx_);
+    total_rx_ += bytes_transferred;
 
     DCHECK_EQ(bytes_transferred, read_buffer_.size());
 

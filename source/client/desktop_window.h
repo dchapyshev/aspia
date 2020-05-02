@@ -20,6 +20,7 @@
 #define CLIENT__DESKTOP_WINDOW_H
 
 #include <memory>
+#include <string>
 
 namespace base {
 class Version;
@@ -40,12 +41,23 @@ class SystemInfo;
 
 namespace client {
 
+class DesktopControlProxy;
 class FrameFactory;
 
 class DesktopWindow
 {
 public:
     virtual ~DesktopWindow() = default;
+
+    struct Metrics
+    {
+        int64_t total_rx;
+        int64_t total_tx;
+        int speed_rx;
+        int speed_tx;
+        int avg_video_packet;
+        int fps;
+    };
 
     virtual void showWindow(std::shared_ptr<DesktopControlProxy> desktop_control_proxy,
                             const base::Version& peer_version) = 0;
@@ -55,6 +67,7 @@ public:
     virtual void setCapabilities(const std::string& extensions, uint32_t video_encodings) = 0;
     virtual void setScreenList(const proto::ScreenList& screen_list) = 0;
     virtual void setSystemInfo(const proto::SystemInfo& system_info) = 0;
+    virtual void setMetrics(const Metrics& metrics) = 0;
 
     virtual std::unique_ptr<FrameFactory> frameFactory() = 0;
     virtual void setFrame(const desktop::Size& screen_size,

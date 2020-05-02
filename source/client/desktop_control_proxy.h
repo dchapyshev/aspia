@@ -49,6 +49,7 @@ public:
     void onPowerControl(proto::PowerControl::Action action);
     void onRemoteUpdate();
     void onSystemInfoRequest();
+    void onMetricsRequest();
 
 private:
     std::shared_ptr<base::TaskRunner> io_task_runner_;

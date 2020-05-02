@@ -41,6 +41,7 @@ class DesktopConfigDialog;
 class DesktopPanel;
 class DesktopWindowProxy;
 class SystemInfoWindow;
+class StatisticDialog;
 
 class QtDesktopWindow :
     public ClientWindow,
@@ -66,6 +67,7 @@ public:
     void setCapabilities(const std::string& extensions, uint32_t video_encodings) override;
     void setScreenList(const proto::ScreenList& screen_list) override;
     void setSystemInfo(const proto::SystemInfo& system_info) override;
+    void setMetrics(const DesktopWindow::Metrics& metrics) override;
     std::unique_ptr<FrameFactory> frameFactory() override;
     void setFrame(const desktop::Size& screen_size, std::shared_ptr<desktop::Frame> frame) override;
     void drawFrame() override;
@@ -112,6 +114,7 @@ private:
     DesktopWidget* desktop_ = nullptr;
 
     QPointer<SystemInfoWindow> system_info_;
+    QPointer<StatisticDialog> statistic_dialog_;
 
     QTimer* resize_timer_ = nullptr;
     QSize screen_size_;

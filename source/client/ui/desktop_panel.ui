@@ -398,6 +398,11 @@
     <string>Minimize window</string>
    </property>
   </action>
+  <action name="action_statistic">
+   <property name="text">
+    <string>Statistic</string>
+   </property>
+  </action>
  </widget>
  <resources>
   <include location="../resources/client.qrc"/>

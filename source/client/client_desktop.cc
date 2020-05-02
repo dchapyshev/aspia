@@ -33,6 +33,23 @@
 
 namespace client {
 
+namespace {
+
+int calculateFps(int last_fps, std::chrono::milliseconds duration, int64_t count)
+{
+    static const double kAlpha = 0.1;
+    return int((kAlpha * ((1000.0 / double(duration.count())) * double(count))) +
+        ((1.0 - kAlpha) * double(last_fps)));
+}
+
+int calculateAvgVideoSize(int last_avg_size, int64_t bytes)
+{
+    static const double kAlpha = 0.1;
+    return int((kAlpha * double(bytes)) + ((1.0 - kAlpha) * double(last_avg_size)));
+}
+
+} // namespace
+
 ClientDesktop::ClientDesktop(std::shared_ptr<base::TaskRunner> io_task_runner)
     : Client(io_task_runner),
       desktop_control_proxy_(std::make_shared<DesktopControlProxy>(io_task_runner, this))
@@ -209,6 +226,32 @@ void ClientDesktop::onSystemInfoRequest()
     sendMessage(outgoing_message_);
 }
 
+void ClientDesktop::onMetricsRequest()
+{
+    net::Channel::Metrics network_metrics;
+    networkMetrics(&network_metrics);
+
+    TimePoint current_time = Clock::now();
+
+    std::chrono::milliseconds duration =
+        std::chrono::duration_cast<std::chrono::milliseconds>(current_time - begin_time_);
+
+    fps_ = calculateFps(fps_, duration, video_frame_count_);
+
+    begin_time_ = current_time;
+    video_frame_count_ = 0;
+
+    DesktopWindow::Metrics metrics;
+    metrics.total_rx = network_metrics.total_rx;
+    metrics.total_tx = network_metrics.total_tx;
+    metrics.speed_rx = network_metrics.speed_rx;
+    metrics.speed_tx = network_metrics.speed_tx;
+    metrics.avg_video_packet = avg_video_packet_;
+    metrics.fps = fps_;
+
+    desktop_window_proxy_->setMetrics(metrics);
+}
+
 void ClientDesktop::readConfigRequest(const proto::DesktopConfigRequest& config_request)
 {
     // We notify the window about changes in the list of extensions and video encodings.
@@ -287,6 +330,9 @@ void ClientDesktop::readVideoPacket(const proto::VideoPacket& packet)
         LOG(LS_ERROR) << "The video packet could not be decoded";
         return;
     }
+
+    avg_video_packet_ = calculateAvgVideoSize(avg_video_packet_, packet.ByteSizeLong());
+    ++video_frame_count_;
 
     desktop_window_proxy_->drawFrame();
 }
