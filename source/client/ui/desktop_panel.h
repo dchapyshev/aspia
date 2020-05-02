@@ -61,7 +61,7 @@ signals:
     void powerControl(proto::PowerControl::Action action);
     void startRemoteUpdate();
     void startSystemInfo();
-    void startStatistic();
+    void startStatistics();
     void minimizeSession();
     void closeSession();
 

@@ -16,25 +16,25 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/ui/statistic_dialog.h"
+#include "client/ui/statistics_dialog.h"
 
 #include <QTimer>
 
 namespace client {
 
-StatisticDialog::StatisticDialog(QWidget* parent)
+StatisticsDialog::StatisticsDialog(QWidget* parent)
     : QDialog(parent)
 {
     ui.setupUi(this);
 
     update_timer_ = new QTimer(this);
-    connect(update_timer_, &QTimer::timeout, this, &StatisticDialog::metricsRequired);
+    connect(update_timer_, &QTimer::timeout, this, &StatisticsDialog::metricsRequired);
     update_timer_->start(std::chrono::milliseconds(500));
 }
 
-StatisticDialog::~StatisticDialog() = default;
+StatisticsDialog::~StatisticsDialog() = default;
 
-void StatisticDialog::setMetrics(const DesktopWindow::Metrics& metrics)
+void StatisticsDialog::setMetrics(const DesktopWindow::Metrics& metrics)
 {
     for (int i = 0; i < ui.tree->topLevelItemCount(); ++i)
     {
@@ -70,7 +70,7 @@ void StatisticDialog::setMetrics(const DesktopWindow::Metrics& metrics)
 }
 
 // static
-QString StatisticDialog::sizeToString(int64_t size)
+QString StatisticsDialog::sizeToString(int64_t size)
 {
     static const int64_t kKB = 1024LL;
     static const int64_t kMB = kKB * 1024LL;
@@ -112,7 +112,7 @@ QString StatisticDialog::sizeToString(int64_t size)
 }
 
 // static
-QString StatisticDialog::speedToString(int64_t speed)
+QString StatisticsDialog::speedToString(int64_t speed)
 {
     static const int64_t kKB = 1024LL;
     static const int64_t kMB = kKB * 1024LL;

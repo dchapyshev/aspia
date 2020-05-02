@@ -129,9 +129,9 @@ list(APPEND SOURCE_CLIENT_UI
     ui/qt_file_manager_window.h
     ui/qt_file_manager_window.ui
     ui/select_screen_action.h
-    ui/statistic_dialog.cc
-    ui/statistic_dialog.h
-    ui/statistic_dialog.ui
+    ui/statistics_dialog.cc
+    ui/statistics_dialog.h
+    ui/statistics_dialog.ui
     ui/status_dialog.cc
     ui/status_dialog.h
     ui/status_dialog.ui

@@ -16,22 +16,22 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__UI__STATISTIC_DIALOG_H
-#define CLIENT__UI__STATISTIC_DIALOG_H
+#ifndef CLIENT__UI__STATISTICS_DIALOG_H
+#define CLIENT__UI__STATISTICS_DIALOG_H
 
 #include "base/macros_magic.h"
 #include "client/desktop_window.h"
-#include "ui_statistic_dialog.h"
+#include "ui_statistics_dialog.h"
 
 namespace client {
 
-class StatisticDialog : public QDialog
+class StatisticsDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit StatisticDialog(QWidget* parent = nullptr);
-    ~StatisticDialog();
+    explicit StatisticsDialog(QWidget* parent = nullptr);
+    ~StatisticsDialog();
 
     void setMetrics(const DesktopWindow::Metrics& metrics);
 
@@ -42,12 +42,12 @@ private:
     static QString sizeToString(int64_t size);
     static QString speedToString(int64_t speed);
 
-    Ui::StatisticDialog ui;
+    Ui::StatisticsDialog ui;
     QTimer* update_timer_ = nullptr;
 
-    DISALLOW_COPY_AND_ASSIGN(StatisticDialog);
+    DISALLOW_COPY_AND_ASSIGN(StatisticsDialog);
 };
 
 } // namespace client
 
-#endif // CLIENT__UI__STATISTIC_DIALOG_H
+#endif // CLIENT__UI__STATISTICS_DIALOG_H

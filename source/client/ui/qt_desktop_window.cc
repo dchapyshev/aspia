@@ -30,7 +30,7 @@
 #include "client/ui/frame_qimage.h"
 #include "client/ui/qt_file_manager_window.h"
 #include "client/ui/system_info_window.h"
-#include "client/ui/statistic_dialog.h"
+#include "client/ui/statistics_dialog.h"
 #include "common/desktop_session_constants.h"
 #include "desktop/mouse_cursor.h"
 #include "qt_base/application.h"
@@ -129,7 +129,7 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
         desktop_control_proxy_->onSystemInfoRequest();
     });
 
-    connect(panel_, &DesktopPanel::startStatistic, [this]()
+    connect(panel_, &DesktopPanel::startStatistics, [this]()
     {
         desktop_control_proxy_->onMetricsRequest();
     });
@@ -289,21 +289,21 @@ void QtDesktopWindow::setSystemInfo(const proto::SystemInfo& system_info)
 
 void QtDesktopWindow::setMetrics(const DesktopWindow::Metrics& metrics)
 {
-    if (!statistic_dialog_)
+    if (!statistics_dialog_)
     {
-        statistic_dialog_ = new StatisticDialog(this);
-        statistic_dialog_->setAttribute(Qt::WA_DeleteOnClose);
+        statistics_dialog_ = new StatisticsDialog(this);
+        statistics_dialog_->setAttribute(Qt::WA_DeleteOnClose);
 
-        connect(statistic_dialog_, &StatisticDialog::metricsRequired, [this]()
+        connect(statistics_dialog_, &StatisticsDialog::metricsRequired, [this]()
         {
             desktop_control_proxy_->onMetricsRequest();
         });
 
-        statistic_dialog_->show();
-        statistic_dialog_->activateWindow();
+        statistics_dialog_->show();
+        statistics_dialog_->activateWindow();
     }
 
-    statistic_dialog_->setMetrics(metrics);
+    statistics_dialog_->setMetrics(metrics);
 }
 
 std::unique_ptr<FrameFactory> QtDesktopWindow::frameFactory()

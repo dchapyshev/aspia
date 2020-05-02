@@ -261,8 +261,13 @@
     </message>
     <message>
         <location filename="../ui/desktop_panel.ui" line="403"/>
-        <source>Statistic</source>
+        <location filename="../ui/desktop_panel.ui" line="406"/>
+        <source>Statistics</source>
         <translation>Статистика</translation>
+    </message>
+    <message>
+        <source>Statistic</source>
+        <translation type="vanished">Статистика</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.ui" line="219"/>
@@ -567,17 +572,32 @@
 <context>
     <name>StatisticDialog</name>
     <message>
-        <location filename="../ui/statistic_dialog.ui" line="14"/>
         <source>Statistic</source>
+        <translation type="vanished">Статистика</translation>
+    </message>
+    <message>
+        <source>Parameter</source>
+        <translation type="vanished">Параметр</translation>
+    </message>
+    <message>
+        <source>Value</source>
+        <translation type="vanished">Значение</translation>
+    </message>
+</context>
+<context>
+    <name>StatisticsDialog</name>
+    <message>
+        <location filename="../ui/statistics_dialog.ui" line="14"/>
+        <source>Statistics</source>
         <translation>Статистика</translation>
     </message>
     <message>
-        <location filename="../ui/statistic_dialog.ui" line="24"/>
+        <location filename="../ui/statistics_dialog.ui" line="24"/>
         <source>Parameter</source>
         <translation>Параметр</translation>
     </message>
     <message>
-        <location filename="../ui/statistic_dialog.ui" line="29"/>
+        <location filename="../ui/statistics_dialog.ui" line="29"/>
         <source>Value</source>
         <translation>Значение</translation>
     </message>

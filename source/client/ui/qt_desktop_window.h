@@ -41,7 +41,7 @@ class DesktopConfigDialog;
 class DesktopPanel;
 class DesktopWindowProxy;
 class SystemInfoWindow;
-class StatisticDialog;
+class StatisticsDialog;
 
 class QtDesktopWindow :
     public ClientWindow,
@@ -114,7 +114,7 @@ private:
     DesktopWidget* desktop_ = nullptr;
 
     QPointer<SystemInfoWindow> system_info_;
-    QPointer<StatisticDialog> statistic_dialog_;
+    QPointer<StatisticsDialog> statistics_dialog_;
 
     QTimer* resize_timer_ = nullptr;
     QSize screen_size_;

@@ -398,9 +398,12 @@
     <string>Minimize window</string>
    </property>
   </action>
-  <action name="action_statistic">
+  <action name="action_statistics">
    <property name="text">
-    <string>Statistic</string>
+    <string>Statistics</string>
+   </property>
+   <property name="toolTip">
+    <string>Statistics</string>
    </property>
   </action>
  </widget>
