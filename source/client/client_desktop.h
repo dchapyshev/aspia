@@ -96,7 +96,9 @@ private:
 
     TimePoint begin_time_;
     int64_t video_frame_count_ = 0;
-    int avg_video_packet_ = 0;
+    size_t min_video_packet_ = std::numeric_limits<size_t>::max();
+    size_t max_video_packet_ = 0;
+    size_t avg_video_packet_ = 0;
     int fps_ = 0;
 
     DISALLOW_COPY_AND_ASSIGN(ClientDesktop);

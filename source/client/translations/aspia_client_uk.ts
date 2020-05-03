@@ -584,12 +584,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/statistics_dialog.ui" line="24"/>
+        <location filename="../ui/statistics_dialog.ui" line="36"/>
         <source>Parameter</source>
         <translation type="unfinished">Параметр</translation>
     </message>
     <message>
-        <location filename="../ui/statistics_dialog.ui" line="29"/>
+        <location filename="../ui/statistics_dialog.ui" line="41"/>
         <source>Value</source>
         <translation type="unfinished">Значення</translation>
     </message>

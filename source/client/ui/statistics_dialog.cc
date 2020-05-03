@@ -26,6 +26,7 @@ StatisticsDialog::StatisticsDialog(QWidget* parent)
     : QDialog(parent)
 {
     ui.setupUi(this);
+    ui.tree->resizeColumnToContents(0);
 
     update_timer_ = new QTimer(this);
     connect(update_timer_, &QTimer::timeout, this, &StatisticsDialog::metricsRequired);
@@ -59,10 +60,18 @@ void StatisticsDialog::setMetrics(const DesktopWindow::Metrics& metrics)
                 break;
 
             case 4:
-                item->setText(1, sizeToString(metrics.avg_video_packet));
+                item->setText(1, sizeToString(metrics.min_video_packet));
                 break;
 
             case 5:
+                item->setText(1, sizeToString(metrics.max_video_packet));
+                break;
+
+            case 6:
+                item->setText(1, sizeToString(metrics.avg_video_packet));
+                break;
+
+            case 7:
                 item->setText(1, QString::number(metrics.fps));
                 break;
         }

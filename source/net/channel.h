@@ -87,14 +87,6 @@ public:
         virtual void onMessageWritten() = 0;
     };
 
-    struct Metrics
-    {
-        int64_t total_rx;
-        int64_t total_tx;
-        int speed_rx;
-        int speed_tx;
-    };
-
     std::shared_ptr<ChannelProxy> channelProxy();
 
     // Sets an instance of the class to receive connection status notifications or new messages.
@@ -149,7 +141,10 @@ public:
     bool setReadBufferSize(size_t size);
     bool setWriteBufferSize(size_t size);
 
-    void metrics(Metrics* metrics);
+    int64_t totalRx() const { return total_rx_; }
+    int64_t totalTx() const { return total_tx_; }
+    int speedRx();
+    int speedTx();
 
     // Converts an error code to a human readable string.
     // Does not support localization. Used for logs.
@@ -214,9 +209,11 @@ private:
     int64_t total_tx_ = 0;
     int64_t total_rx_ = 0;
 
-    TimePoint begin_time_;
+    TimePoint begin_time_tx_;
     int64_t bytes_tx_ = 0;
     int speed_tx_ = 0;
+
+    TimePoint begin_time_rx_;
     int64_t bytes_rx_ = 0;
     int speed_rx_ = 0;
 

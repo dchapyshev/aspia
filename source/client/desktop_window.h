@@ -55,7 +55,9 @@ public:
         int64_t total_tx;
         int speed_rx;
         int speed_tx;
-        int avg_video_packet;
+        size_t min_video_packet;
+        size_t max_video_packet;
+        size_t avg_video_packet;
         int fps;
     };
 

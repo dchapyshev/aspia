@@ -264,27 +264,34 @@ bool Channel::setWriteBufferSize(size_t size)
     return true;
 }
 
-void Channel::metrics(Metrics* metrics)
+int Channel::speedRx()
 {
-    if (!metrics)
-        return;
-
     TimePoint current_time = Clock::now();
 
     std::chrono::milliseconds duration =
-        std::chrono::duration_cast<std::chrono::milliseconds>(current_time - begin_time_);
+        std::chrono::duration_cast<std::chrono::milliseconds>(current_time - begin_time_rx_);
 
     speed_rx_ = calculateSpeed(speed_rx_, duration, bytes_rx_);
+
+    begin_time_rx_ = current_time;
+    bytes_rx_ = 0;
+
+    return speed_rx_;
+}
+
+int Channel::speedTx()
+{
+    TimePoint current_time = Clock::now();
+
+    std::chrono::milliseconds duration =
+        std::chrono::duration_cast<std::chrono::milliseconds>(current_time - begin_time_tx_);
+
     speed_tx_ = calculateSpeed(speed_tx_, duration, bytes_tx_);
 
-    metrics->total_rx = total_rx_;
-    metrics->total_tx = total_tx_;
-    metrics->speed_rx = speed_rx_;
-    metrics->speed_tx = speed_tx_;
-
-    begin_time_ = current_time;
-    bytes_rx_ = 0;
+    begin_time_tx_ = current_time;
     bytes_tx_ = 0;
+
+    return speed_tx_;
 }
 
 // static

@@ -93,9 +93,24 @@ void Client::sendMessage(const google::protobuf::MessageLite& message)
     channel_->send(base::serialize(message));
 }
 
-void Client::networkMetrics(net::Channel::Metrics* metrics)
+int64_t Client::totalRx() const
 {
-    channel_->metrics(metrics);
+    return channel_->totalRx();
+}
+
+int64_t Client::totalTx() const
+{
+    return channel_->totalTx();
+}
+
+int Client::speedRx()
+{
+    return channel_->speedRx();
+}
+
+int Client::speedTx()
+{
+    return channel_->speedTx();
 }
 
 void Client::onConnected()

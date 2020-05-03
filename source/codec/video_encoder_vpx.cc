@@ -326,22 +326,22 @@ void VideoEncoderVPX::encode(const desktop::Frame* frame, proto::VideoPacket* pa
 
     if (packet->has_format())
     {
-        const desktop::Size& screen_size = frame->size();
+        const desktop::Size& frame_size = frame->size();
 
-        createImage(screen_size, &image_, &image_buffer_);
-        createActiveMap(screen_size);
+        createImage(frame_size, &image_, &image_buffer_);
+        createActiveMap(frame_size);
 
         if (encoding() == proto::VIDEO_ENCODING_VP8)
         {
-            createVp8Codec(screen_size);
+            createVp8Codec(frame_size);
         }
         else
         {
             DCHECK_EQ(encoding(), proto::VIDEO_ENCODING_VP9);
-            createVp9Codec(screen_size);
+            createVp9Codec(frame_size);
         }
 
-        updated_region_ = desktop::Region(desktop::Rect::makeSize(screen_size));
+        updated_region_ = desktop::Region(desktop::Rect::makeSize(frame_size));
     }
     else
     {

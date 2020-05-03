@@ -42,10 +42,10 @@ int calculateFps(int last_fps, std::chrono::milliseconds duration, int64_t count
         ((1.0 - kAlpha) * double(last_fps)));
 }
 
-int calculateAvgVideoSize(int last_avg_size, int64_t bytes)
+size_t calculateAvgVideoSize(size_t last_avg_size, size_t bytes)
 {
     static const double kAlpha = 0.1;
-    return int((kAlpha * double(bytes)) + ((1.0 - kAlpha) * double(last_avg_size)));
+    return size_t((kAlpha * double(bytes)) + ((1.0 - kAlpha) * double(last_avg_size)));
 }
 
 } // namespace
@@ -228,9 +228,6 @@ void ClientDesktop::onSystemInfoRequest()
 
 void ClientDesktop::onMetricsRequest()
 {
-    net::Channel::Metrics network_metrics;
-    networkMetrics(&network_metrics);
-
     TimePoint current_time = Clock::now();
 
     std::chrono::milliseconds duration =
@@ -242,10 +239,12 @@ void ClientDesktop::onMetricsRequest()
     video_frame_count_ = 0;
 
     DesktopWindow::Metrics metrics;
-    metrics.total_rx = network_metrics.total_rx;
-    metrics.total_tx = network_metrics.total_tx;
-    metrics.speed_rx = network_metrics.speed_rx;
-    metrics.speed_tx = network_metrics.speed_tx;
+    metrics.total_rx = totalRx();
+    metrics.total_tx = totalTx();
+    metrics.speed_rx = speedRx();
+    metrics.speed_tx = speedTx();
+    metrics.min_video_packet = min_video_packet_;
+    metrics.max_video_packet = max_video_packet_;
     metrics.avg_video_packet = avg_video_packet_;
     metrics.fps = fps_;
 
@@ -331,8 +330,13 @@ void ClientDesktop::readVideoPacket(const proto::VideoPacket& packet)
         return;
     }
 
-    avg_video_packet_ = calculateAvgVideoSize(avg_video_packet_, packet.ByteSizeLong());
     ++video_frame_count_;
+
+    size_t packet_size = packet.ByteSizeLong();
+
+    avg_video_packet_ = calculateAvgVideoSize(avg_video_packet_, packet_size);
+    min_video_packet_ = std::min(min_video_packet_, packet_size);
+    max_video_packet_ = std::max(max_video_packet_, packet_size);
 
     desktop_window_proxy_->drawFrame();
 }
