@@ -23,12 +23,35 @@
 #include "desktop/frame.h"
 
 #include <libyuv/convert.h>
+#include <libyuv/cpu_id.h>
+#include <libyuv/row.h>
 
 #include <thread>
 
 namespace codec {
 
 namespace {
+
+const std::chrono::milliseconds kTargetFrameInterval{ 80 };
+
+// Target quantizer at which stop the encoding top-off.
+const int kTargetQuantizerForVp8TopOff = 30;
+
+// Estimated size (in bytes per megapixel) of encoded frame at target quantizer value
+// (see kTargetQuantizerForVp8TopOff). Compression ratio varies depending on the image, so this
+// is just a rough estimate. It's used to predict when encoded "big" frame may be too large to
+// be delivered to the client quickly.
+static const int64_t kEstimatedBytesPerMegapixel = 100000;
+static const int64_t kPixelsPerMegapixel = 1000000;
+
+// Threshold in number of updated pixels used to detect "big" frames. These frames update
+// significant portion of the screen compared to the preceding frames. For these frames min
+// quantizer may need to be adjusted in order to ensure that they get delivered to the client
+// as soon as possible, in exchange for lower-quality image.
+static const int64_t kBigFrameThresholdPixels = 300000;
+
+// Number of samples used to estimate processing time for the next frame.
+const int kStatsWindow = 5;
 
 // Defines the dimension of a macro block. This is used to compute the active map for the encoder.
 const int kMacroBlockSize = 16;
@@ -39,11 +62,18 @@ const int kVp9I420ProfileNumber = 0;
 // Magic encoder constant for adaptive quantization strategy.
 const int kVp9AqModeCyclicRefresh = 3;
 
+const int kDefaultTargetBitrateKbps = 1000;
+
+// Minimum target bitrate per megapixel. The value is chosen experimentally such that when screen
+// is not changing the codec converges to the target quantizer above in less than 10 frames.
+// This value is for VP8 only; reconsider the value for VP9.
+const int kVp8MinimumTargetBitrateKbpsPerMegapixel = 2500;
+
 void setCommonCodecParameters(vpx_codec_enc_cfg_t* config, const desktop::Size& size)
 {
     // Use millisecond granularity time base.
     config->g_timebase.num = 1;
-    config->g_timebase.den = 1000;
+    config->g_timebase.den = std::chrono::microseconds(std::chrono::seconds(1)).count();
 
     config->g_w = size.width();
     config->g_h = size.height();
@@ -62,7 +92,15 @@ void setCommonCodecParameters(vpx_codec_enc_cfg_t* config, const desktop::Size& 
     // adequate processing power. NB: Going to multiple threads on low end
     // windows systems can really hurt performance.
     // http://crbug.com/99179
-    config->g_threads = (std::thread::hardware_concurrency() > 2) ? 2 : 1;
+    config->g_threads = (std::thread::hardware_concurrency() + 1) / 2;
+
+    // Do not drop any frames at encoder.
+    config->rc_dropframe_thresh = 0;
+
+    // We do not want variations in bandwidth.
+    config->rc_end_usage = VPX_CBR;
+    config->rc_undershoot_pct = 100;
+    config->rc_overshoot_pct = 15;
 }
 
 void createImage(const desktop::Size& size,
@@ -92,7 +130,6 @@ void createImage(const desktop::Size& size,
     // Assuming macroblocks are 16x16, aligning the planes' strides above also macroblock aligned
     // them.
     const int y_rows = ((image->h - 1) & ~(kMacroBlockSize - 1)) + kMacroBlockSize;
-
     const int uv_rows = y_rows >> image->y_chroma_shift;
 
     base::ByteArray image_buffer;
@@ -130,6 +167,43 @@ desktop::Rect alignRect(const desktop::Rect& rect)
     return desktop::Rect::makeLTRB(x, y, right, bottom);
 }
 
+int ARGBToGrayscaleI420(const uint8_t* src_argb,
+                        int src_stride_argb,
+                        uint8_t* dst_y, int dst_stride_y,
+                        uint8_t* /* dst_u */, int /* dst_stride_u */,
+                        uint8_t* /* dst_v */, int /* dst_stride_v */,
+                        int width, int height)
+{
+    auto ARGBToYRow = libyuv::ARGBToYRow_C;
+
+    if (libyuv::TestCpuFlag(libyuv::kCpuHasSSSE3))
+    {
+        ARGBToYRow = libyuv::ARGBToYRow_Any_SSSE3;
+        if (IS_ALIGNED(width, 16))
+            ARGBToYRow = libyuv::ARGBToYRow_SSSE3;
+    }
+
+    if (libyuv::TestCpuFlag(libyuv::kCpuHasAVX2))
+    {
+        ARGBToYRow = libyuv::ARGBToYRow_Any_AVX2;
+        if (IS_ALIGNED(width, 32))
+            ARGBToYRow = libyuv::ARGBToYRow_AVX2;
+    }
+
+    for (int y = 0; y < height - 1; y += 2)
+    {
+        ARGBToYRow(src_argb, dst_y, width);
+        ARGBToYRow(src_argb + src_stride_argb, dst_y + dst_stride_y, width);
+        src_argb += src_stride_argb * 2;
+        dst_y += dst_stride_y * 2;
+    }
+
+    if (height & 1)
+        ARGBToYRow(src_argb, dst_y, width);
+
+    return 0;
+}
+
 } // namespace
 
 // static
@@ -145,9 +219,82 @@ std::unique_ptr<VideoEncoderVPX> VideoEncoderVPX::createVP9()
 }
 
 VideoEncoderVPX::VideoEncoderVPX(proto::VideoEncoding encoding)
-    : VideoEncoder(encoding)
+    : VideoEncoder(encoding),
+      bitrate_filter_(kVp8MinimumTargetBitrateKbpsPerMegapixel),
+      updated_region_area_(kStatsWindow)
 {
-    // Nothing
+    memset(&config_, 0, sizeof(config_));
+}
+
+void VideoEncoderVPX::encode(const desktop::Frame* frame, proto::VideoPacket* packet)
+{
+    fillPacketInfo(frame, packet);
+
+    bool is_key_frame = false;
+
+    if (packet->has_format())
+    {
+        const desktop::Size& frame_size = frame->size();
+
+        bitrate_filter_.setFrameSize(frame_size.width(), frame_size.height());
+
+        createImage(frame_size, &image_, &image_buffer_);
+        createActiveMap(frame_size);
+
+        if (encoding() == proto::VIDEO_ENCODING_VP8)
+        {
+            createVp8Codec(frame_size);
+        }
+        else
+        {
+            DCHECK_EQ(encoding(), proto::VIDEO_ENCODING_VP9);
+            createVp9Codec(frame_size);
+        }
+
+        is_key_frame = true;
+    }
+
+    // Convert the updated capture data ready for encode.
+    // Update active map based on updated region.
+    int64_t updated_area = prepareImageAndActiveMap(is_key_frame, frame, packet);
+
+    updateConfig(updated_area);
+
+    // Apply active map to the encoder.
+    vpx_codec_err_t ret = vpx_codec_control(codec_.get(), VP8E_SET_ACTIVEMAP, &active_map_);
+    DCHECK_EQ(ret, VPX_CODEC_OK);
+
+    // Do the actual encoding.
+    ret = vpx_codec_encode(codec_.get(),
+                           image_.get(),
+                           0, // pts
+                           std::chrono::microseconds(kTargetFrameInterval).count(),
+                           0, // flags
+                           VPX_DL_REALTIME);
+    DCHECK_EQ(ret, VPX_CODEC_OK);
+
+    top_off_is_active_ = config_.rc_min_quantizer > kTargetQuantizerForVp8TopOff;
+
+    // Read the encoded data.
+    vpx_codec_iter_t iter = nullptr;
+
+    while (true)
+    {
+        const vpx_codec_cx_pkt_t* pkt = vpx_codec_get_cx_data(codec_.get(), &iter);
+        if (!pkt)
+            break;
+
+        if (pkt->kind == VPX_CODEC_CX_FRAME_PKT)
+        {
+            packet->set_data(pkt->data.frame.buf, pkt->data.frame.sz);
+            break;
+        }
+    }
+}
+
+void VideoEncoderVPX::setBandwidthEstimateKbps(int bandwidth_kbps)
+{
+    bitrate_filter_.setBandwidthEstimateKbps(bandwidth_kbps);
 }
 
 void VideoEncoderVPX::createActiveMap(const desktop::Size& size)
@@ -156,37 +303,37 @@ void VideoEncoderVPX::createActiveMap(const desktop::Size& size)
     active_map_.rows = (size.height() + kMacroBlockSize - 1) / kMacroBlockSize;
 
     active_map_buffer_.resize(active_map_.cols * active_map_.rows);
-    memset(active_map_buffer_.data(), 0, active_map_buffer_.size());
     active_map_.active_map = active_map_buffer_.data();
+
+    clearActiveMap();
 }
 
 void VideoEncoderVPX::createVp8Codec(const desktop::Size& size)
 {
     codec_.reset(new vpx_codec_ctx_t());
 
-    vpx_codec_enc_cfg_t config = { 0 };
-
     // Configure the encoder.
     vpx_codec_iface_t* algo = vpx_codec_vp8_cx();
 
-    vpx_codec_err_t ret = vpx_codec_enc_config_default(algo, &config, 0);
+    vpx_codec_err_t ret = vpx_codec_enc_config_default(algo, &config_, 0);
     DCHECK_EQ(VPX_CODEC_OK, ret);
 
-    // Adjust default target bit-rate to account for actual desktop size.
-    config.rc_target_bitrate = size.width() * size.height() *
-        config.rc_target_bitrate / config.g_w / config.g_h;
-
-    setCommonCodecParameters(&config, size);
+    setCommonCodecParameters(&config_, size);
 
     // Value of 2 means using the real time profile. This is basically a redundant option since we
     // explicitly select real time mode when doing encoding.
-    config.g_profile = 2;
+    config_.g_profile = 2;
 
-    // Clamping the quantizer constrains the worst-case quality and CPU usage.
-    config.rc_min_quantizer = 20;
-    config.rc_max_quantizer = 30;
+    // To enable remoting to be highly interactive and allow the target bitrate to be met, we relax
+    // the max quantizer. The quality will get topped-off in subsequent frames.
+    config_.rc_min_quantizer = 20;
+    config_.rc_max_quantizer = 30;
 
-    ret = vpx_codec_enc_init(codec_.get(), algo, &config, 0);
+    // In the absence of a good bandwidth estimator set the target bitrate to a
+    // conservative default.
+    config_.rc_target_bitrate = kDefaultTargetBitrateKbps;
+
+    ret = vpx_codec_enc_init(codec_.get(), algo, &config_, 0);
     DCHECK_EQ(VPX_CODEC_OK, ret);
 
     // Value of 16 will have the smallest CPU load. This turns off subpixel motion search.
@@ -206,27 +353,25 @@ void VideoEncoderVPX::createVp9Codec(const desktop::Size& size)
 {
     codec_.reset(new vpx_codec_ctx_t());
 
-    vpx_codec_enc_cfg_t config = { 0 };
-
     // Configure the encoder.
     vpx_codec_iface_t* algo = vpx_codec_vp9_cx();
 
-    vpx_codec_err_t ret = vpx_codec_enc_config_default(algo, &config, 0);
+    vpx_codec_err_t ret = vpx_codec_enc_config_default(algo, &config_, 0);
     DCHECK_EQ(VPX_CODEC_OK, ret);
 
-    setCommonCodecParameters(&config, size);
+    setCommonCodecParameters(&config_, size);
 
     // Configure VP9 for I420 source frames.
-    config.g_profile = kVp9I420ProfileNumber;
-    config.rc_min_quantizer = 20;
-    config.rc_max_quantizer = 30;
-    config.rc_end_usage = VPX_CBR;
+    config_.g_profile = kVp9I420ProfileNumber;
+    config_.rc_min_quantizer = 20;
+    config_.rc_max_quantizer = 30;
+    config_.rc_end_usage = VPX_CBR;
 
     // In the absence of a good bandwidth estimator set the target bitrate to a
     // conservative default.
-    config.rc_target_bitrate = 500;
+    config_.rc_target_bitrate = kDefaultTargetBitrateKbps;
 
-    ret = vpx_codec_enc_init(codec_.get(), algo, &config, 0);
+    ret = vpx_codec_enc_init(codec_.get(), algo, &config_, 0);
     DCHECK_EQ(VPX_CODEC_OK, ret);
 
     // Request the lowest-CPU usage that VP9 supports, which depends on whether we are encoding
@@ -247,52 +392,44 @@ void VideoEncoderVPX::createVp9Codec(const desktop::Size& size)
     DCHECK_EQ(VPX_CODEC_OK, ret);
 }
 
-void VideoEncoderVPX::setActiveMap(const desktop::Rect& rect)
+int64_t VideoEncoderVPX::prepareImageAndActiveMap(
+    bool is_key_frame, const desktop::Frame* frame, proto::VideoPacket* packet)
 {
-    int left   = rect.left() / kMacroBlockSize;
-    int top    = rect.top() / kMacroBlockSize;
-    int right  = (rect.right() - 1) / kMacroBlockSize;
-    int bottom = (rect.bottom() - 1) / kMacroBlockSize;
+    desktop::Rect image_rect = desktop::Rect::makeWH(image_->w, image_->h);
+    desktop::Region updated_region;
 
-    uint8_t* map = active_map_.active_map + top * active_map_.cols;
-
-    for (int y = top; y <= bottom; ++y)
+    if (!is_key_frame)
     {
-        for (int x = left; x <= right; ++x)
+        const int padding = ((encoding() == proto::VIDEO_ENCODING_VP9) ? 8 : 3);
+
+        for (desktop::Region::Iterator it(frame->constUpdatedRegion()); !it.isAtEnd(); it.advance())
         {
-            map[x] = 1;
+            desktop::Rect rect = it.rect();
+
+            // Pad each rectangle to avoid the block-artefact filters in libvpx from introducing
+            // artefacts; VP9 includes up to 8px either side, and VP8 up to 3px, so unchanged
+            // pixels up to that far out may still be affected by the changes in the updated
+            // region, and so must be listed in the active map. After padding we align each
+            // rectangle to 16x16 active-map macroblocks. This implicitly ensures all rects have
+            // even top-left coords, which is is required by ARGBToI420().
+            updated_region.addRect(
+                alignRect(desktop::Rect::makeLTRB(
+                    rect.left() - padding, rect.top() - padding,
+                    rect.right() + padding, rect.bottom() + padding)));
         }
 
-        map += active_map_.cols;
+        // Clip back to the screen dimensions, in case they're not macroblock aligned.
+        // The conversion routines don't require even width & height, so this is safe even if the
+        // source dimensions are not even.
+        updated_region.intersectWith(image_rect);
     }
-}
-
-void VideoEncoderVPX::prepareImageAndActiveMap(
-    const desktop::Frame* frame, proto::VideoPacket* packet)
-{
-    const int padding = ((encoding() == proto::VIDEO_ENCODING_VP9) ? 8 : 3);
-
-    for (desktop::Region::Iterator it(frame->constUpdatedRegion()); !it.isAtEnd(); it.advance())
+    else
     {
-        const desktop::Rect& rect = it.rect();
-
-        // Pad each rectangle to avoid the block-artefact filters in libvpx from introducing
-        // artefacts; VP9 includes up to 8px either side, and VP8 up to 3px, so unchanged pixels
-        // up to that far out may still be affected by the changes in the updated region, and so
-        // must be listed in the active map. After padding we align each rectangle to 16x16
-        // active-map macroblocks. This implicitly ensures all rects have even top-left coords,
-        // which is is required by ARGBToI420().
-        updated_region_.addRect(
-            alignRect(desktop::Rect::makeLTRB(rect.left() - padding, rect.top() - padding,
-                                              rect.right() + padding, rect.bottom() + padding)));
+        updated_region = desktop::Region(image_rect);
     }
 
-    // Clip back to the screen dimensions, in case they're not macroblock aligned. The conversion
-    // routines don't require even width & height, so this is safe even if the source dimensions
-    // are not even.
-    updated_region_.intersectWith(desktop::Rect::makeWH(image_->w, image_->h));
-
-    memset(active_map_buffer_.data(), 0, active_map_buffer_.size());
+    if (!top_off_is_active_)
+        clearActiveMap();
 
     const int y_stride = image_->stride[0];
     const int uv_stride = image_->stride[1];
@@ -300,81 +437,142 @@ void VideoEncoderVPX::prepareImageAndActiveMap(
     uint8_t* u_data = image_->planes[1];
     uint8_t* v_data = image_->planes[2];
 
-    for (desktop::Region::Iterator it(updated_region_); !it.isAtEnd(); it.advance())
+    auto convertToI420 = libyuv::ARGBToI420;
+    if (bitrate_filter_.targetBitrateKbps() < 32)
+        convertToI420 = ARGBToGrayscaleI420;
+
+    int64_t updated_area = 0;
+
+    for (desktop::Region::Iterator it(updated_region); !it.isAtEnd(); it.advance())
     {
-        const desktop::Rect& rect = it.rect();
+        desktop::Rect rect = it.rect();
 
         const int y_offset = y_stride * rect.y() + rect.x();
         const int uv_offset = uv_stride * rect.y() / 2 + rect.x() / 2;
+        const int width = rect.width();
+        const int height = rect.height();
 
-        libyuv::ARGBToI420(frame->frameDataAtPos(rect.topLeft()),
-                           frame->stride(),
-                           y_data + y_offset, y_stride,
-                           u_data + uv_offset, uv_stride,
-                           v_data + uv_offset, uv_stride,
-                           rect.width(),
-                           rect.height());
+        convertToI420(frame->frameDataAtPos(rect.topLeft()),
+                      frame->stride(),
+                      y_data + y_offset, y_stride,
+                      u_data + uv_offset, uv_stride,
+                      v_data + uv_offset, uv_stride,
+                      width,
+                      height);
 
-        serializeRect(rect, packet->add_dirty_rect());
-        setActiveMap(rect);
+        updated_area += width * height;
+        addRectToActiveMap(rect);
+    }
+
+    if (top_off_is_active_)
+        regionFromActiveMap(&updated_region);
+
+    for (desktop::Region::Iterator it(updated_region); !it.isAtEnd(); it.advance())
+        serializeRect(it.rect(), packet->add_dirty_rect());
+
+    return updated_area;
+}
+
+void VideoEncoderVPX::regionFromActiveMap(desktop::Region* updated_region)
+{
+    const uint8_t* map = active_map_.active_map;
+
+    for (int y = 0; y < active_map_.rows; ++y)
+    {
+        for (int x0 = 0; x0 < active_map_.cols;)
+        {
+            int x1 = x0;
+
+            for (; x1 < active_map_.cols; ++x1)
+            {
+                if (map[y * active_map_.cols + x1] == 0)
+                    break;
+            }
+
+            if (x1 > x0)
+            {
+                updated_region->addRect(desktop::Rect::makeLTRB(
+                    kMacroBlockSize * x0, kMacroBlockSize * y, kMacroBlockSize * x1,
+                    kMacroBlockSize * (y + 1)));
+            }
+
+            x0 = x1 + 1;
+        }
+    }
+
+    updated_region->intersectWith(desktop::Rect::makeWH(image_->w, image_->h));
+}
+
+void VideoEncoderVPX::addRectToActiveMap(const desktop::Rect& rect)
+{
+    int left = rect.left() / kMacroBlockSize;
+    int top = rect.top() / kMacroBlockSize;
+    int right = (rect.right() - 1) / kMacroBlockSize;
+    int bottom = (rect.bottom() - 1) / kMacroBlockSize;
+
+    uint8_t* map = active_map_.active_map + top * active_map_.cols;
+
+    for (int y = top; y <= bottom; ++y)
+    {
+        for (int x = left; x <= right; ++x)
+            map[x] = 1;
+
+        map += active_map_.cols;
     }
 }
 
-void VideoEncoderVPX::encode(const desktop::Frame* frame, proto::VideoPacket* packet)
+void VideoEncoderVPX::clearActiveMap()
 {
-    fillPacketInfo(frame, packet);
+    memset(active_map_buffer_.data(), 0, active_map_buffer_.size());
+}
 
-    if (packet->has_format())
+void VideoEncoderVPX::updateConfig(int64_t updated_area)
+{
+    bool changed = false;
+
+    uint32_t target_bitrate = static_cast<uint32_t>(bitrate_filter_.targetBitrateKbps());
+    if (config_.rc_target_bitrate != target_bitrate)
     {
-        const desktop::Size& frame_size = frame->size();
-
-        createImage(frame_size, &image_, &image_buffer_);
-        createActiveMap(frame_size);
-
-        if (encoding() == proto::VIDEO_ENCODING_VP8)
-        {
-            createVp8Codec(frame_size);
-        }
-        else
-        {
-            DCHECK_EQ(encoding(), proto::VIDEO_ENCODING_VP9);
-            createVp9Codec(frame_size);
-        }
-
-        updated_region_ = desktop::Region(desktop::Rect::makeSize(frame_size));
-    }
-    else
-    {
-        updated_region_.clear();
+        config_.rc_target_bitrate = target_bitrate;
+        changed = true;
     }
 
-    // Convert the updated capture data ready for encode.
-    // Update active map based on updated region.
-    prepareImageAndActiveMap(frame, packet);
+    uint32_t min_quantizer = 20;
+    uint32_t max_quantizer = 30;
 
-    // Apply active map to the encoder.
-    vpx_codec_err_t ret = vpx_codec_control(codec_.get(), VP8E_SET_ACTIVEMAP, &active_map_);
-    DCHECK_EQ(ret, VPX_CODEC_OK);
-
-    // Do the actual encoding.
-    ret = vpx_codec_encode(codec_.get(), image_.get(), 0, 1, 0, VPX_DL_REALTIME);
-    DCHECK_EQ(ret, VPX_CODEC_OK);
-
-    // Read the encoded data.
-    vpx_codec_iter_t iter = nullptr;
-
-    while (true)
+    if (updated_area - updated_region_area_.max() > kBigFrameThresholdPixels)
     {
-        const vpx_codec_cx_pkt_t* pkt = vpx_codec_get_cx_data(codec_.get(), &iter);
-        if (!pkt)
-            break;
+        int64_t expected_frame_size =
+            updated_area * kEstimatedBytesPerMegapixel / kPixelsPerMegapixel;
+        std::chrono::milliseconds expected_send_delay(expected_frame_size / target_bitrate);
 
-        if (pkt->kind == VPX_CODEC_CX_FRAME_PKT)
+        if (expected_send_delay > kTargetFrameInterval)
         {
-            packet->set_data(pkt->data.frame.buf, pkt->data.frame.sz);
-            break;
+            max_quantizer = 50;
+            min_quantizer = 50;
         }
     }
+
+    updated_region_area_.record(updated_area);
+
+    if (config_.rc_min_quantizer != min_quantizer)
+    {
+        config_.rc_min_quantizer = min_quantizer;
+        changed = true;
+    }
+
+    if (config_.rc_max_quantizer != max_quantizer)
+    {
+        config_.rc_max_quantizer = max_quantizer;
+        changed = true;
+    }
+
+    if (!changed)
+        return;
+
+    // Update encoder context.
+    if (vpx_codec_enc_config_set(codec_.get(), &config_))
+        NOTREACHED() << "Unable to set encoder config";
 }
 
 } // namespace codec

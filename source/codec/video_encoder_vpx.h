@@ -21,6 +21,8 @@
 
 #include "base/macros_magic.h"
 #include "base/memory/byte_array.h"
+#include "codec/encoder_bitrate_filter.h"
+#include "codec/running_samples.h"
 #include "codec/scoped_vpx_codec.h"
 #include "codec/video_encoder.h"
 #include "desktop/region.h"
@@ -40,6 +42,7 @@ public:
     static std::unique_ptr<VideoEncoderVPX> createVP9();
 
     void encode(const desktop::Frame* frame, proto::VideoPacket* packet) override;
+    void setBandwidthEstimateKbps(int bandwidth_kbps);
 
 private:
     explicit VideoEncoderVPX(proto::VideoEncoding encoding);
@@ -47,18 +50,29 @@ private:
     void createActiveMap(const desktop::Size& size);
     void createVp8Codec(const desktop::Size& size);
     void createVp9Codec(const desktop::Size& size);
-    void prepareImageAndActiveMap(const desktop::Frame* frame, proto::VideoPacket* packet);
-    void setActiveMap(const desktop::Rect& rect);
+    int64_t prepareImageAndActiveMap(
+        bool is_key_frame, const desktop::Frame* frame, proto::VideoPacket* packet);
+    void regionFromActiveMap(desktop::Region* updated_region);
+    void addRectToActiveMap(const desktop::Rect& rect);
+    void clearActiveMap();
 
-    desktop::Region updated_region_;
+    void updateConfig(int64_t updated_area);
+
+    vpx_codec_enc_cfg_t config_;
     ScopedVpxCodec codec_;
 
+    bool top_off_is_active_ = false;
     base::ByteArray active_map_buffer_;
     vpx_active_map_t active_map_;
 
     // VPX image and buffer to hold the actual YUV planes.
     std::unique_ptr<vpx_image_t> image_;
     base::ByteArray image_buffer_;
+
+    EncoderBitrateFilter bitrate_filter_;
+
+    // Accumulator for updated region area in the previously encoded frames.
+    RunningSamples updated_region_area_;
 
     DISALLOW_COPY_AND_ASSIGN(VideoEncoderVPX);
 };

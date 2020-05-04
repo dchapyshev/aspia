@@ -21,8 +21,12 @@ list(APPEND SOURCE_CODEC
     cursor_decoder.h
     cursor_encoder.cc
     cursor_encoder.h
+    encoder_bitrate_filter.cc
+    encoder_bitrate_filter.h
     pixel_translator.cc
     pixel_translator.h
+    running_samples.cc
+    running_samples.h
     scale_reducer.cc
     scale_reducer.h
     scoped_vpx_codec.cc
@@ -42,12 +46,15 @@ list(APPEND SOURCE_CODEC
     video_encoder_zstd.cc
     video_encoder_zstd.h
     video_util.cc
-    video_util.h)
+    video_util.h
+    weighted_samples.cc
+    weighted_samples.h)
 
 list(APPEND SOURCE_CODEC_UNIT_TESTS
-    compressor_zstd_unittest.cc)
+    running_samples_unittest.cc
+    weighted_samples_unittest.cc)
 
-source_group("" FILES ${SOURCE_CODEC})
+source_group("" FILES ${SOURCE_CODEC} ${SOURCE_CODEC_UNIT_TESTS})
 
 add_library(aspia_codec STATIC ${SOURCE_CODEC})
 target_link_libraries(aspia_codec
@@ -55,3 +62,19 @@ target_link_libraries(aspia_codec
     aspia_desktop
     aspia_proto
     ${THIRD_PARTY_LIBS})
+
+# If the build of unit tests is enabled.
+if (BUILD_UNIT_TESTS)
+    add_executable(aspia_codec_tests ${SOURCE_CODEC_UNIT_TESTS})
+    target_link_libraries(aspia_codec_tests
+        aspia_base
+        aspia_codec
+        optimized gtest
+        optimized gtest_main
+        debug gtestd
+        debug gtest_maind
+        ${WINDOWS_LIBS}
+        ${THIRD_PARTY_LIBS})
+
+    add_test(NAME aspia_codec_tests COMMAND aspia_codec_tests)
+endif()
