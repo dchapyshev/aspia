@@ -222,7 +222,7 @@ void ServerAuthenticator::onMessageReceived(const base::ByteArray& buffer)
     }
 }
 
-void ServerAuthenticator::onMessageWritten()
+void ServerAuthenticator::onMessageWritten(size_t /* pending */)
 {
     switch (internal_state_)
     {

@@ -68,7 +68,7 @@ protected:
 
     // net::Channel::Listener implementation.
     void onMessageReceived(const base::ByteArray& buffer) override;
-    void onMessageWritten() override;
+    void onMessageWritten(size_t pending) override;
 
 private:
     void readConfigRequest(const proto::DesktopConfigRequest& config_request);

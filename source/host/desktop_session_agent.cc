@@ -254,7 +254,7 @@ void DesktopSessionAgent::setEnabled(bool enable)
         shared_memory_factory_ = std::make_unique<ipc::SharedMemoryFactory>(this);
 
         capture_scheduler_ = std::make_unique<desktop::CaptureScheduler>(
-            std::chrono::milliseconds(33));
+            std::chrono::milliseconds(40));
 
         screen_capturer_ = std::make_unique<desktop::ScreenCapturerWrapper>(this);
         screen_capturer_->setSharedMemoryFactory(shared_memory_factory_.get());

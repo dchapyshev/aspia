@@ -87,7 +87,7 @@ protected:
     void onConnected() override;
     void onDisconnected(Channel::ErrorCode error_code) override;
     void onMessageReceived(const base::ByteArray& buffer) override;
-    void onMessageWritten() override;
+    void onMessageWritten(size_t pending) override;
 
 private:
     void onSessionKeyChanged();

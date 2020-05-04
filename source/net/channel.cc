@@ -394,7 +394,7 @@ void Channel::onErrorOccurred(const base::Location& location, const std::error_c
 void Channel::onMessageWritten()
 {
     if (listener_)
-        listener_->onMessageWritten();
+        listener_->onMessageWritten(write_queue_.size());
 }
 
 void Channel::onMessageReceived()
@@ -481,10 +481,10 @@ void Channel::onWrite(const std::error_code& error_code, size_t bytes_transferre
     bytes_tx_ += bytes_transferred;
     total_tx_ += bytes_transferred;
 
-    onMessageWritten();
-
     // Delete the sent message from the queue.
     write_queue_.pop();
+
+    onMessageWritten();
 
     // If the queue is not empty, then we send the following message.
     if (write_queue_.empty() && !proxy_->reloadWriteQueue(&write_queue_))

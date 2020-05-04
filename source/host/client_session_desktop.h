@@ -57,7 +57,7 @@ public:
 protected:
     // net::Listener implementation.
     void onMessageReceived(const base::ByteArray& buffer) override;
-    void onMessageWritten() override;
+    void onMessageWritten(size_t pending) override;
 
     // ClientSession implementation.
     void onStarted() override;

@@ -84,7 +84,7 @@ public:
         virtual void onConnected() = 0;
         virtual void onDisconnected(ErrorCode error_code) = 0;
         virtual void onMessageReceived(const base::ByteArray& buffer) = 0;
-        virtual void onMessageWritten() = 0;
+        virtual void onMessageWritten(size_t pending) = 0;
     };
 
     std::shared_ptr<ChannelProxy> channelProxy();

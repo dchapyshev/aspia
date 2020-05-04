@@ -215,7 +215,7 @@ void ClientSessionFileTransfer::onMessageReceived(const base::ByteArray& buffer)
     worker_->postRequest(std::move(request));
 }
 
-void ClientSessionFileTransfer::onMessageWritten()
+void ClientSessionFileTransfer::onMessageWritten(size_t /* pending */)
 {
     // Nothing
 }

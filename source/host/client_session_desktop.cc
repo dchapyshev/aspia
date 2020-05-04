@@ -105,7 +105,7 @@ void ClientSessionDesktop::onMessageReceived(const base::ByteArray& buffer)
     }
 }
 
-void ClientSessionDesktop::onMessageWritten()
+void ClientSessionDesktop::onMessageWritten(size_t pending)
 {
     // Nothing
 }

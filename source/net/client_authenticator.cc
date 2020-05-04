@@ -247,7 +247,7 @@ void ClientAuthenticator::onMessageReceived(const base::ByteArray& buffer)
     }
 }
 
-void ClientAuthenticator::onMessageWritten()
+void ClientAuthenticator::onMessageWritten(size_t /* pending */)
 {
     switch (state_)
     {
