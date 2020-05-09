@@ -83,8 +83,6 @@ const desktop::Frame* ScaleReducer::scaleFrame(
         {
             desktop::Rect target_rect = scaledRect(it.rect());
 
-            target_rect.intersectWith(target_frame_rect);
-
             libyuv::ARGBScaleClip(source_frame->frameData(),
                                   source_frame->stride(),
                                   source_size.width(),
@@ -101,6 +99,8 @@ const desktop::Frame* ScaleReducer::scaleFrame(
 
             updated_region->addRect(target_rect);
         }
+
+        updated_region->intersectWith(target_frame_rect);
     }
 
     return target_frame_.get();
