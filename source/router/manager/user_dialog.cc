@@ -18,6 +18,7 @@
 
 #include "router/manager/user_dialog.h"
 
+#include "base/strings/string_util.h"
 #include "base/strings/unicode.h"
 #include "net/user.h"
 
@@ -26,15 +27,17 @@
 
 namespace router {
 
-UserDialog::UserDialog(const proto::User& user, const QStringList& exist_names, QWidget* parent)
+UserDialog::UserDialog(const QVector<proto::User>& users, int user_index, QWidget* parent)
     : QDialog(parent),
-      user_(user),
-      exist_names_(exist_names)
+      users_(users),
+      user_index_(user_index)
 {
     ui.setupUi(this);
 
-    if (!user.name().empty())
+    if (user_index_ != -1)
     {
+        const proto::User& user = users_.at(user_index_);
+
         ui.checkbox_disable->setChecked(!(user.flags() & net::User::ENABLED));
         ui.edit_username->setText(QString::fromStdString(user.name()));
 
@@ -53,8 +56,10 @@ UserDialog::UserDialog(const proto::User& user, const QStringList& exist_names, 
         item->setFlags(item->flags() | Qt::ItemIsUserCheckable);
         item->setData(0, Qt::UserRole, QVariant(session_type));
 
-        if (!user.name().empty())
+        if (user_index_ != -1)
         {
+            const proto::User& user = users_.at(user_index_);
+
             if (user.sessions() & session_type)
                 item->setCheckState(0, Qt::Checked);
             else
@@ -84,6 +89,11 @@ UserDialog::UserDialog(const proto::User& user, const QStringList& exist_names, 
 
 UserDialog::~UserDialog() = default;
 
+const proto::User& UserDialog::user() const
+{
+    return users_.at(user_index_);
+}
+
 bool UserDialog::eventFilter(QObject* object, QEvent* event)
 {
     if (event->type() == QEvent::MouseButtonDblClick &&
@@ -103,7 +113,27 @@ bool UserDialog::eventFilter(QObject* object, QEvent* event)
 void UserDialog::onButtonBoxClicked(QAbstractButton* button)
 {
     QDialogButtonBox::StandardButton standard_button = ui.buttonbox->standardButton(button);
-    if (standard_button == QDialogButtonBox::Ok)
+    if (standard_button != QDialogButtonBox::Ok)
+    {
+        reject();
+        close();
+        return;
+    }
+
+    proto::User* user;
+    if (user_index_ == -1)
+    {
+        // New user.
+        users_.push_back(proto::User());
+        user = &users_.back();
+    }
+    else
+    {
+        // Modify existing.
+        user = &users_[user_index_];
+    }
+
+    if (account_changed_)
     {
         std::u16string username = ui.edit_username->text().toStdU16String();
 
@@ -118,6 +148,25 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
             ui.edit_username->selectAll();
             ui.edit_username->setFocus();
             return;
+        }
+
+        for (int i = 0; i < users_.size(); ++i)
+        {
+            if (i == user_index_)
+                continue;
+
+            if (base::compareCaseInsensitive(
+                username, base::utf16FromUtf8(users_.at(i).name())) == 0)
+            {
+                QMessageBox::warning(this,
+                                     tr("Warning"),
+                                     tr("The username you entered already exists."),
+                                     QMessageBox::Ok);
+
+                ui.edit_username->selectAll();
+                ui.edit_username->setFocus();
+                return;
+            }
         }
 
         if (ui.edit_password->text() != ui.edit_password_retry->text())
@@ -173,30 +222,26 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
             }
         }
 
-        uint32_t sessions = 0;
-        for (int i = 0; i < ui.tree_sessions->topLevelItemCount(); ++i)
-        {
-            QTreeWidgetItem* item = ui.tree_sessions->topLevelItem(i);
-            if (item->checkState(0) == Qt::Checked)
-                sessions |= item->data(0, Qt::UserRole).toInt();
-        }
-
-        uint32_t flags = 0;
-        if (!ui.checkbox_disable->isChecked())
-            flags |= net::User::ENABLED;
-
-        user_.set_name(base::utf8FromUtf16(username));
-        user_.set_password(base::utf8FromUtf16(password));
-        user_.set_sessions(sessions);
-        user_.set_flags(flags);
-
-        accept();
+        user->set_name(base::utf8FromUtf16(username));
+        user->set_password(base::utf8FromUtf16(password));
     }
-    else
+
+    uint32_t sessions = 0;
+    for (int i = 0; i < ui.tree_sessions->topLevelItemCount(); ++i)
     {
-        reject();
+        QTreeWidgetItem* item = ui.tree_sessions->topLevelItem(i);
+        if (item->checkState(0) == Qt::Checked)
+            sessions |= item->data(0, Qt::UserRole).toInt();
     }
 
+    uint32_t flags = 0;
+    if (!ui.checkbox_disable->isChecked())
+        flags |= net::User::ENABLED;
+
+    user->set_sessions(sessions);
+    user->set_flags(flags);
+
+    accept();
     close();
 }
 
