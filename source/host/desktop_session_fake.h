@@ -37,13 +37,13 @@ public:
     // DesktopSession implementation.
     void start() override;
     void stop() override;
-    void setEnabled(bool enable) override;
-    void setConfig(const Config& config) override;
+    void control(proto::internal::Control::Action action) override;
+    void configure(const Config& config) override;
     void selectScreen(const proto::Screen& screen) override;
+    void captureScreen() override;
     void injectKeyEvent(const proto::KeyEvent& event) override;
     void injectPointerEvent(const proto::PointerEvent& event) override;
     void injectClipboardEvent(const proto::ClipboardEvent& event) override;
-    void desktopControl(proto::internal::DesktopControl::Action action) override;
 
 private:
     class FrameGenerator;

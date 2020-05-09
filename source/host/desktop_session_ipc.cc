@@ -95,22 +95,22 @@ void DesktopSessionIpc::stop()
     delegate_ = nullptr;
 }
 
-void DesktopSessionIpc::setEnabled(bool enable)
+void DesktopSessionIpc::control(proto::internal::Control::Action action)
 {
     outgoing_message_.Clear();
-    outgoing_message_.mutable_set_enabled()->set_enable(enable);
+    outgoing_message_.mutable_control()->set_action(action);
     channel_->send(base::serialize(outgoing_message_));
 }
 
-void DesktopSessionIpc::setConfig(const Config& config)
+void DesktopSessionIpc::configure(const Config& config)
 {
     outgoing_message_.Clear();
 
-    proto::internal::SetConfig* set_config = outgoing_message_.mutable_set_config();
-    set_config->set_disable_font_smoothing(config.disable_font_smoothing);
-    set_config->set_disable_wallpaper(config.disable_wallpaper);
-    set_config->set_disable_effects(config.disable_effects);
-    set_config->set_block_input(config.block_input);
+    proto::internal::Configure* configure = outgoing_message_.mutable_configure();
+    configure->set_disable_font_smoothing(config.disable_font_smoothing);
+    configure->set_disable_wallpaper(config.disable_wallpaper);
+    configure->set_disable_effects(config.disable_effects);
+    configure->set_block_input(config.block_input);
 
     channel_->send(base::serialize(outgoing_message_));
 }
@@ -120,6 +120,21 @@ void DesktopSessionIpc::selectScreen(const proto::Screen& screen)
     outgoing_message_.Clear();
     outgoing_message_.mutable_select_source()->mutable_screen()->CopyFrom(screen);
     channel_->send(base::serialize(outgoing_message_));
+}
+
+void DesktopSessionIpc::captureScreen()
+{
+    if (last_frame_)
+    {
+        last_frame_->updatedRegion()->addRect(desktop::Rect::makeSize(last_frame_->size()));
+        delegate_->onScreenCaptured(*last_frame_);
+    }
+    else
+    {
+        outgoing_message_.Clear();
+        outgoing_message_.mutable_next_screen_capture()->set_update_interval(0);
+        channel_->send(base::serialize(outgoing_message_));
+    }
 }
 
 void DesktopSessionIpc::injectKeyEvent(const proto::KeyEvent& event)
@@ -140,13 +155,6 @@ void DesktopSessionIpc::injectClipboardEvent(const proto::ClipboardEvent& event)
 {
     outgoing_message_.Clear();
     outgoing_message_.mutable_clipboard_event()->CopyFrom(event);
-    channel_->send(base::serialize(outgoing_message_));
-}
-
-void DesktopSessionIpc::desktopControl(proto::internal::DesktopControl::Action action)
-{
-    outgoing_message_.Clear();
-    outgoing_message_.mutable_desktop_control()->set_action(action);
     channel_->send(base::serialize(outgoing_message_));
 }
 
@@ -239,7 +247,7 @@ void DesktopSessionIpc::onScreenCaptured(const proto::internal::ScreenCaptured& 
     }
 
     outgoing_message_.Clear();
-    outgoing_message_.mutable_capture_screen()->set_update_interval(40);
+    outgoing_message_.mutable_next_screen_capture()->set_update_interval(40);
     channel_->send(base::serialize(outgoing_message_));
 }
 

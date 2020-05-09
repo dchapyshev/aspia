@@ -231,6 +231,7 @@ void ClientSessionDesktop::readExtension(const proto::DesktopExtension& extensio
         }
 
         preferred_size_.set(preferred_size.width(), preferred_size.height());
+        desktop_session_proxy_->captureScreen();
     }
     else if (extension.name() == common::kPowerControlExtension)
     {
@@ -256,11 +257,11 @@ void ClientSessionDesktop::readExtension(const proto::DesktopExtension& extensio
                 break;
 
             case proto::PowerControl::ACTION_LOGOFF:
-                desktop_session_proxy_->desktopControl(proto::internal::DesktopControl::LOGOFF);
+                desktop_session_proxy_->control(proto::internal::Control::LOGOFF);
                 break;
 
             case proto::PowerControl::ACTION_LOCK:
-                desktop_session_proxy_->desktopControl(proto::internal::DesktopControl::LOCK);
+                desktop_session_proxy_->control(proto::internal::Control::LOCK);
                 break;
 
             default:

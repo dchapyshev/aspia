@@ -68,10 +68,10 @@ void DesktopSessionAgent::onMessageReceived(const base::ByteArray& buffer)
         return;
     }
 
-    if (incoming_message_.has_capture_screen())
+    if (incoming_message_.has_next_screen_capture())
     {
         captureEnd(std::chrono::milliseconds(
-            incoming_message_.capture_screen().update_interval()));
+            incoming_message_.next_screen_capture().update_interval()));
     }
     else if (incoming_message_.has_pointer_event())
     {
@@ -88,18 +88,14 @@ void DesktopSessionAgent::onMessageReceived(const base::ByteArray& buffer)
         if (clipboard_monitor_)
             clipboard_monitor_->injectClipboardEvent(incoming_message_.clipboard_event());
     }
-    else if (incoming_message_.has_set_enabled())
-    {
-        setEnabled(incoming_message_.set_enabled().enable());
-    }
     else if (incoming_message_.has_select_source())
     {
         if (screen_capturer_)
             screen_capturer_->selectScreen(incoming_message_.select_source().screen().id());
     }
-    else if (incoming_message_.has_set_config())
+    else if (incoming_message_.has_configure())
     {
-        const proto::internal::SetConfig& config = incoming_message_.set_config();
+        const proto::internal::Configure& config = incoming_message_.configure();
 
         if (screen_capturer_)
         {
@@ -111,15 +107,23 @@ void DesktopSessionAgent::onMessageReceived(const base::ByteArray& buffer)
         if (input_injector_)
             input_injector_->setBlockInput(config.block_input());
     }
-    else if (incoming_message_.has_desktop_control())
+    else if (incoming_message_.has_control())
     {
-        switch (incoming_message_.desktop_control().action())
+        switch (incoming_message_.control().action())
         {
-            case proto::internal::DesktopControl::LOGOFF:
+            case proto::internal::Control::ENABLE:
+                setEnabled(true);
+                break;
+
+            case proto::internal::Control::DISABLE:
+                setEnabled(false);
+                break;
+
+            case proto::internal::Control::LOGOFF:
                 base::PowerController::logoff();
                 break;
 
-            case proto::internal::DesktopControl::LOCK:
+            case proto::internal::Control::LOCK:
                 base::PowerController::lock();
                 break;
 
@@ -291,11 +295,20 @@ void DesktopSessionAgent::captureEnd(std::chrono::milliseconds update_interval)
         return;
 
     capture_scheduler_->endCapture();
-    capture_scheduler_->setUpdateInterval(update_interval);
 
-    task_runner_->postDelayedTask(
-        std::bind(&DesktopSessionAgent::captureBegin, shared_from_this()),
-        capture_scheduler_->nextCaptureDelay());
+    if (update_interval == std::chrono::milliseconds::zero())
+    {
+        // Capture immediately.
+        task_runner_->postTask(std::bind(&DesktopSessionAgent::captureBegin, shared_from_this()));
+    }
+    else
+    {
+        capture_scheduler_->setUpdateInterval(update_interval);
+
+        task_runner_->postDelayedTask(
+            std::bind(&DesktopSessionAgent::captureBegin, shared_from_this()),
+            capture_scheduler_->nextCaptureDelay());
+    }
 }
 
 } // namespace host

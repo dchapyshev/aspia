@@ -57,18 +57,13 @@ message SharedBuffer
     int32 shared_buffer_id = 2;
 }
 
-message SetEnabled
-{
-    bool enable = 1;
-}
-
 message ScreenCaptured
 {
     DesktopFrame frame       = 1;
     MouseCursor mouse_cursor = 2;
 }
 
-message CaptureScreen
+message NextScreenCapture
 {
     uint32 update_interval = 1;
 }
@@ -78,7 +73,7 @@ message SelectSource
     Screen screen = 1;
 }
 
-message SetConfig
+message Configure
 {
     bool disable_font_smoothing = 1;
     bool disable_wallpaper      = 2;
@@ -86,12 +81,15 @@ message SetConfig
     bool block_input            = 4;
 }
 
-message DesktopControl
+message Control
 {
     enum Action
     {
-        LOGOFF = 0;
-        LOCK   = 1;
+        UNKNOWN       = 0;
+        DISABLE       = 1;
+        ENABLE        = 2;
+        LOGOFF        = 3;
+        LOCK          = 4;
     }
 
     Action action = 1;
@@ -99,14 +97,13 @@ message DesktopControl
 
 message ServiceToDesktop
 {
-    SetEnabled set_enabled         = 1;
-    SetConfig set_config           = 2;
-    SelectSource select_source     = 3;
-    CaptureScreen capture_screen   = 4;
-    KeyEvent key_event             = 5;
-    PointerEvent pointer_event     = 6;
-    ClipboardEvent clipboard_event = 7;
-    DesktopControl desktop_control = 8;
+    Control control                       = 1;
+    Configure configure                   = 2;
+    SelectSource select_source            = 3;
+    NextScreenCapture next_screen_capture = 4;
+    KeyEvent key_event                    = 5;
+    PointerEvent pointer_event            = 6;
+    ClipboardEvent clipboard_event        = 7;
 }
 
 message DesktopToService

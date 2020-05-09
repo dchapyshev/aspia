@@ -39,9 +39,9 @@ public:
 
     void start(Delegate* delegate);
     void stop();
+    void generateFrame();
 
 private:
-    void generateFrame();
 
     Delegate* delegate_ = nullptr;
 
@@ -120,15 +120,24 @@ void DesktopSessionFake::stop()
     frame_generator_->stop();
 }
 
-void DesktopSessionFake::setEnabled(bool enable)
+void DesktopSessionFake::control(proto::internal::Control::Action action)
 {
-    if (enable)
-        frame_generator_->start(delegate_);
-    else
-        frame_generator_->stop();
+    switch (action)
+    {
+        case proto::internal::Control::ENABLE:
+            frame_generator_->start(delegate_);
+            break;
+
+        case proto::internal::Control::DISABLE:
+            frame_generator_->stop();
+            break;
+
+        default:
+            break;
+    }
 }
 
-void DesktopSessionFake::setConfig(const Config& /* config */)
+void DesktopSessionFake::configure(const Config& /* config */)
 {
     // Nothing
 }
@@ -136,6 +145,11 @@ void DesktopSessionFake::setConfig(const Config& /* config */)
 void DesktopSessionFake::selectScreen(const proto::Screen& /* screen */)
 {
     // Nothing
+}
+
+void DesktopSessionFake::captureScreen()
+{
+    frame_generator_->generateFrame();
 }
 
 void DesktopSessionFake::injectKeyEvent(const proto::KeyEvent& /* event */)
@@ -149,11 +163,6 @@ void DesktopSessionFake::injectPointerEvent(const proto::PointerEvent& /* event 
 }
 
 void DesktopSessionFake::injectClipboardEvent(const proto::ClipboardEvent& /* event */)
-{
-    // Nothing
-}
-
-void DesktopSessionFake::desktopControl(proto::internal::DesktopControl::Action /* action */)
 {
     // Nothing
 }

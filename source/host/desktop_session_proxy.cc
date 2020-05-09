@@ -29,22 +29,28 @@ DesktopSessionProxy::~DesktopSessionProxy()
     DCHECK(!desktop_session_);
 }
 
-void DesktopSessionProxy::setEnabled(bool enable)
+void DesktopSessionProxy::control(proto::internal::Control::Action action)
 {
     if (desktop_session_)
-        desktop_session_->setEnabled(enable);
+        desktop_session_->control(action);
 }
 
-void DesktopSessionProxy::setConfig(const DesktopSession::Config& config)
+void DesktopSessionProxy::configure(const DesktopSession::Config& config)
 {
     if (desktop_session_)
-        desktop_session_->setConfig(config);
+        desktop_session_->configure(config);
 }
 
 void DesktopSessionProxy::selectScreen(const proto::Screen& screen)
 {
     if (desktop_session_)
         desktop_session_->selectScreen(screen);
+}
+
+void DesktopSessionProxy::captureScreen()
+{
+    if (desktop_session_)
+        desktop_session_->captureScreen();
 }
 
 void DesktopSessionProxy::injectKeyEvent(const proto::KeyEvent& event)
@@ -63,12 +69,6 @@ void DesktopSessionProxy::injectClipboardEvent(const proto::ClipboardEvent& even
 {
     if (desktop_session_)
         desktop_session_->injectClipboardEvent(event);
-}
-
-void DesktopSessionProxy::desktopControl(proto::internal::DesktopControl::Action action)
-{
-    if (desktop_session_)
-        desktop_session_->desktopControl(action);
 }
 
 void DesktopSessionProxy::attachAndStart(DesktopSession* desktop_session)

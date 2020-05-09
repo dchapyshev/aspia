@@ -136,7 +136,8 @@ void UserSession::addNewSession(std::unique_ptr<ClientSession> client_session)
                 static_cast<ClientSessionDesktop*>(client_session_ptr);
 
             desktop_client_session->setDesktopSessionProxy(desktop_session_proxy_);
-            desktop_session_proxy_->setEnabled(true);
+            desktop_session_proxy_->control(proto::internal::Control::ENABLE);
+            desktop_session_proxy_->captureScreen();
         }
         break;
 
@@ -239,7 +240,11 @@ void UserSession::onDesktopSessionStarted()
 {
     LOG(LS_INFO) << "Desktop session is connected";
 
-    desktop_session_proxy_->setEnabled(!desktop_clients_.empty());
+    proto::internal::Control::Action action = proto::internal::Control::ENABLE;
+    if (desktop_clients_.empty())
+        action = proto::internal::Control::DISABLE;
+
+    desktop_session_proxy_->control(action);
     onClientSessionConfigured();
 }
 
@@ -313,7 +318,7 @@ void UserSession::onClientSessionConfigured()
         system_config.block_input = system_config.block_input || client_config.block_input;
     }
 
-    desktop_session_proxy_->setConfig(system_config);
+    desktop_session_proxy_->configure(system_config);
 }
 
 void UserSession::onClientSessionFinished()
@@ -346,7 +351,7 @@ void UserSession::onClientSessionFinished()
     delete_finished(&file_transfer_clients_);
 
     if (desktop_clients_.empty())
-        desktop_session_proxy_->setEnabled(false);
+        desktop_session_proxy_->control(proto::internal::Control::DISABLE);
 }
 
 void UserSession::onSessionDettached(const base::Location& location)

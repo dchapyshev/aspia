@@ -67,15 +67,14 @@ public:
     virtual void start() = 0;
     virtual void stop() = 0;
 
-    virtual void setEnabled(bool enable) = 0;
-    virtual void setConfig(const Config& config) = 0;
+    virtual void control(proto::internal::Control::Action action) = 0;
+    virtual void configure(const Config& config) = 0;
     virtual void selectScreen(const proto::Screen& screen) = 0;
+    virtual void captureScreen() = 0;
 
     virtual void injectKeyEvent(const proto::KeyEvent& event) = 0;
     virtual void injectPointerEvent(const proto::PointerEvent& event) = 0;
     virtual void injectClipboardEvent(const proto::ClipboardEvent& event) = 0;
-
-    virtual void desktopControl(proto::internal::DesktopControl::Action action) = 0;
 };
 
 } // namespace host
