@@ -53,6 +53,9 @@ public:
     void setTopLeft(const Point& top_left) { top_left_ = top_left; }
     const Point& topLeft() const { return top_left_; }
 
+    void setDpi(const Point& dpi) { dpi_ = dpi; }
+    const Point& dpi() const { return dpi_; }
+
     // Copies various information from |other|. Anything initialized in constructor are not copied.
     // This function is usually used when sharing a source Frame with several clients: the original
     // Frame should be kept unchanged. For example and SharedFrame::share().
@@ -78,6 +81,7 @@ private:
 
     Region updated_region_;
     Point top_left_;
+    Point dpi_;
 
     DISALLOW_COPY_AND_ASSIGN(Frame);
 };

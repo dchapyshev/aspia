@@ -75,6 +75,7 @@ void Frame::copyFrameInfoFrom(const Frame& other)
 {
     updated_region_ = other.updated_region_;
     top_left_ = other.top_left_;
+    dpi_ = other.dpi_;
 }
 
 // static
