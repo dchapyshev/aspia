@@ -75,7 +75,7 @@ public:
     virtual void injectPointerEvent(const proto::PointerEvent& event) = 0;
     virtual void injectClipboardEvent(const proto::ClipboardEvent& event) = 0;
 
-    virtual void userSessionControl(proto::internal::UserSessionControl::Action action) = 0;
+    virtual void desktopControl(proto::internal::DesktopControl::Action action) = 0;
 };
 
 } // namespace host

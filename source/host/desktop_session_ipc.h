@@ -41,7 +41,7 @@ public:
     void injectKeyEvent(const proto::KeyEvent& event) override;
     void injectPointerEvent(const proto::PointerEvent& event) override;
     void injectClipboardEvent(const proto::ClipboardEvent& event) override;
-    void userSessionControl(proto::internal::UserSessionControl::Action action) override;
+    void desktopControl(proto::internal::DesktopControl::Action action) override;
 
 protected:
     // ipc::Channel::Listener implementation.
@@ -52,7 +52,7 @@ private:
     class SharedBuffer;
     using SharedBuffers = std::map<int, std::unique_ptr<SharedBuffer>>;
 
-    void onEncodeFrame(const proto::internal::EncodeFrame& encode_frame);
+    void onScreenCaptured(const proto::internal::ScreenCaptured& screen_captured);
     void onCreateSharedBuffer(int shared_buffer_id);
     void onReleaseSharedBuffer(int shared_buffer_id);
     std::unique_ptr<SharedBuffer> sharedBuffer(int shared_buffer_id);

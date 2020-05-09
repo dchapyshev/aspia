@@ -65,10 +65,10 @@ void DesktopSessionProxy::injectClipboardEvent(const proto::ClipboardEvent& even
         desktop_session_->injectClipboardEvent(event);
 }
 
-void DesktopSessionProxy::userSessionControl(proto::internal::UserSessionControl::Action action)
+void DesktopSessionProxy::desktopControl(proto::internal::DesktopControl::Action action)
 {
     if (desktop_session_)
-        desktop_session_->userSessionControl(action);
+        desktop_session_->desktopControl(action);
 }
 
 void DesktopSessionProxy::attachAndStart(DesktopSession* desktop_session)

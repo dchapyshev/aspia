@@ -143,10 +143,10 @@ void DesktopSessionIpc::injectClipboardEvent(const proto::ClipboardEvent& event)
     channel_->send(base::serialize(outgoing_message_));
 }
 
-void DesktopSessionIpc::userSessionControl(proto::internal::UserSessionControl::Action action)
+void DesktopSessionIpc::desktopControl(proto::internal::DesktopControl::Action action)
 {
     outgoing_message_.Clear();
-    outgoing_message_.mutable_user_session_control()->set_action(action);
+    outgoing_message_.mutable_desktop_control()->set_action(action);
     channel_->send(base::serialize(outgoing_message_));
 }
 
@@ -166,9 +166,9 @@ void DesktopSessionIpc::onMessageReceived(const base::ByteArray& buffer)
         return;
     }
 
-    if (incoming_message_.has_encode_frame())
+    if (incoming_message_.has_screen_captured())
     {
-        onEncodeFrame(incoming_message_.encode_frame());
+        onScreenCaptured(incoming_message_.screen_captured());
     }
     else if (incoming_message_.has_screen_list())
     {
@@ -204,11 +204,11 @@ void DesktopSessionIpc::onMessageReceived(const base::ByteArray& buffer)
     }
 }
 
-void DesktopSessionIpc::onEncodeFrame(const proto::internal::EncodeFrame& encode_frame)
+void DesktopSessionIpc::onScreenCaptured(const proto::internal::ScreenCaptured& screen_captured)
 {
-    if (encode_frame.has_frame())
+    if (screen_captured.has_frame())
     {
-        const proto::internal::SerializedDesktopFrame& serialized_frame = encode_frame.frame();
+        const proto::internal::DesktopFrame& serialized_frame = screen_captured.frame();
 
         std::unique_ptr<SharedBuffer> shared_buffer = sharedBuffer(serialized_frame.shared_buffer_id());
         if (!shared_buffer)
@@ -228,10 +228,9 @@ void DesktopSessionIpc::onEncodeFrame(const proto::internal::EncodeFrame& encode
             delegate_->onScreenCaptured(*frame);
     }
 
-    if (encode_frame.has_mouse_cursor() && delegate_)
+    if (screen_captured.has_mouse_cursor() && delegate_)
     {
-        const proto::internal::SerializedMouseCursor& mouse_cursor =
-            encode_frame.mouse_cursor();
+        const proto::internal::MouseCursor& mouse_cursor = screen_captured.mouse_cursor();
 
         delegate_->onCursorCaptured(desktop::MouseCursor(
             base::fromStdString(mouse_cursor.data()),
@@ -240,7 +239,7 @@ void DesktopSessionIpc::onEncodeFrame(const proto::internal::EncodeFrame& encode
     }
 
     outgoing_message_.Clear();
-    outgoing_message_.mutable_encode_frame_result()->set_dummy(1);
+    outgoing_message_.mutable_capture_screen()->set_update_interval(40);
     channel_->send(base::serialize(outgoing_message_));
 }
 

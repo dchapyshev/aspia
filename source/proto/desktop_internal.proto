@@ -28,7 +28,7 @@ import "desktop_extensions.proto";
 
 package proto.internal;
 
-message SerializedDesktopFrame
+message DesktopFrame
 {
     int32 shared_buffer_id   = 1;
     int32 width              = 2;
@@ -37,7 +37,7 @@ message SerializedDesktopFrame
     repeated Rect dirty_rect = 5;
 }
 
-message SerializedMouseCursor
+message MouseCursor
 {
     int32 width     = 1;
     int32 height    = 2;
@@ -63,15 +63,15 @@ message SetEnabled
     bool enable = 1;
 }
 
-message EncodeFrame
+message ScreenCaptured
 {
-    SerializedDesktopFrame frame       = 1;
-    SerializedMouseCursor mouse_cursor = 2;
+    DesktopFrame frame       = 1;
+    MouseCursor mouse_cursor = 2;
 }
 
-message EncodeFrameResult
+message CaptureScreen
 {
-    int32 dummy = 1;
+    uint32 update_interval = 1;
 }
 
 message SelectSource
@@ -87,7 +87,7 @@ message SetConfig
     bool block_input            = 4;
 }
 
-message UserSessionControl
+message DesktopControl
 {
     enum Action
     {
@@ -100,20 +100,20 @@ message UserSessionControl
 
 message ServiceToDesktop
 {
-    SetEnabled set_enabled                  = 1;
-    SetConfig set_config                    = 2;
-    SelectSource select_source              = 3;
-    EncodeFrameResult encode_frame_result   = 4;
-    KeyEvent key_event                      = 5;
-    PointerEvent pointer_event              = 6;
-    ClipboardEvent clipboard_event          = 7;
-    UserSessionControl user_session_control = 8;
+    SetEnabled set_enabled         = 1;
+    SetConfig set_config           = 2;
+    SelectSource select_source     = 3;
+    CaptureScreen capture_screen   = 4;
+    KeyEvent key_event             = 5;
+    PointerEvent pointer_event     = 6;
+    ClipboardEvent clipboard_event = 7;
+    DesktopControl desktop_control = 8;
 }
 
 message DesktopToService
 {
     ScreenList screen_list         = 1;
     SharedBuffer shared_buffer     = 2;
-    EncodeFrame encode_frame       = 3;
+    ScreenCaptured screen_captured = 3;
     ClipboardEvent clipboard_event = 4;
 }

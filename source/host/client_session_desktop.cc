@@ -256,13 +256,11 @@ void ClientSessionDesktop::readExtension(const proto::DesktopExtension& extensio
                 break;
 
             case proto::PowerControl::ACTION_LOGOFF:
-                desktop_session_proxy_->userSessionControl(
-                    proto::internal::UserSessionControl::LOGOFF);
+                desktop_session_proxy_->desktopControl(proto::internal::DesktopControl::LOGOFF);
                 break;
 
             case proto::PowerControl::ACTION_LOCK:
-                desktop_session_proxy_->userSessionControl(
-                    proto::internal::UserSessionControl::LOCK);
+                desktop_session_proxy_->desktopControl(proto::internal::DesktopControl::LOCK);
                 break;
 
             default:

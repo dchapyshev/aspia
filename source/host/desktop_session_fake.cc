@@ -153,8 +153,7 @@ void DesktopSessionFake::injectClipboardEvent(const proto::ClipboardEvent& /* ev
     // Nothing
 }
 
-void DesktopSessionFake::userSessionControl(
-    proto::internal::UserSessionControl::Action /* action */)
+void DesktopSessionFake::desktopControl(proto::internal::DesktopControl::Action /* action */)
 {
     // Nothing
 }

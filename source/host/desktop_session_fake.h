@@ -43,7 +43,7 @@ public:
     void injectKeyEvent(const proto::KeyEvent& event) override;
     void injectPointerEvent(const proto::PointerEvent& event) override;
     void injectClipboardEvent(const proto::ClipboardEvent& event) override;
-    void userSessionControl(proto::internal::UserSessionControl::Action action) override;
+    void desktopControl(proto::internal::DesktopControl::Action action) override;
 
 private:
     class FrameGenerator;

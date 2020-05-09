@@ -68,9 +68,10 @@ void DesktopSessionAgent::onMessageReceived(const base::ByteArray& buffer)
         return;
     }
 
-    if (incoming_message_.has_encode_frame_result())
+    if (incoming_message_.has_capture_screen())
     {
-        captureEnd();
+        captureEnd(std::chrono::milliseconds(
+            incoming_message_.capture_screen().update_interval()));
     }
     else if (incoming_message_.has_pointer_event())
     {
@@ -110,15 +111,15 @@ void DesktopSessionAgent::onMessageReceived(const base::ByteArray& buffer)
         if (input_injector_)
             input_injector_->setBlockInput(config.block_input());
     }
-    else if (incoming_message_.has_user_session_control())
+    else if (incoming_message_.has_desktop_control())
     {
-        switch (incoming_message_.user_session_control().action())
+        switch (incoming_message_.desktop_control().action())
         {
-            case proto::internal::UserSessionControl::LOGOFF:
+            case proto::internal::DesktopControl::LOGOFF:
                 base::PowerController::logoff();
                 break;
 
-            case proto::internal::UserSessionControl::LOCK:
+            case proto::internal::DesktopControl::LOCK:
                 base::PowerController::lock();
                 break;
 
@@ -182,14 +183,14 @@ void DesktopSessionAgent::onScreenCaptured(
 {
     outgoing_message_.Clear();
 
-    proto::internal::EncodeFrame* encode_frame = outgoing_message_.mutable_encode_frame();
+    proto::internal::ScreenCaptured* screen_captured = outgoing_message_.mutable_screen_captured();
 
     if (frame && !frame->constUpdatedRegion().isEmpty())
     {
         if (input_injector_)
             input_injector_->setScreenOffset(frame->topLeft());
 
-        proto::internal::SerializedDesktopFrame* serialized_frame = encode_frame->mutable_frame();
+        proto::internal::DesktopFrame* serialized_frame = screen_captured->mutable_frame();
 
         serialized_frame->set_shared_buffer_id(frame->sharedMemory()->id());
         serialized_frame->set_width(frame->size().width());
@@ -203,8 +204,8 @@ void DesktopSessionAgent::onScreenCaptured(
 
     if (mouse_cursor)
     {
-        proto::internal::SerializedMouseCursor* serialized_mouse_cursor =
-            encode_frame->mutable_mouse_cursor();
+        proto::internal::MouseCursor* serialized_mouse_cursor =
+            screen_captured->mutable_mouse_cursor();
 
         serialized_mouse_cursor->set_width(mouse_cursor->width());
         serialized_mouse_cursor->set_height(mouse_cursor->height());
@@ -213,13 +214,13 @@ void DesktopSessionAgent::onScreenCaptured(
         serialized_mouse_cursor->set_data(base::toStdString(mouse_cursor->constImage()));
     }
 
-    if (encode_frame->has_frame() || encode_frame->has_mouse_cursor())
+    if (screen_captured->has_frame() || screen_captured->has_mouse_cursor())
     {
         channel_->send(base::serialize(outgoing_message_));
     }
     else
     {
-        captureEnd();
+        captureEnd(capture_scheduler_->updateInterval());
     }
 }
 
@@ -286,12 +287,13 @@ void DesktopSessionAgent::captureBegin()
     screen_capturer_->captureFrame();
 }
 
-void DesktopSessionAgent::captureEnd()
+void DesktopSessionAgent::captureEnd(std::chrono::milliseconds update_interval)
 {
     if (!capture_scheduler_)
         return;
 
     capture_scheduler_->endCapture();
+    capture_scheduler_->setUpdateInterval(update_interval);
 
     task_runner_->postDelayedTask(
         std::bind(&DesktopSessionAgent::captureBegin, shared_from_this()),

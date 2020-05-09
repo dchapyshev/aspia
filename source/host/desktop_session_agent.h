@@ -73,7 +73,7 @@ protected:
 private:
     void setEnabled(bool enable);
     void captureBegin();
-    void captureEnd();
+    void captureEnd(std::chrono::milliseconds update_interval);
 
     std::shared_ptr<base::TaskRunner> task_runner_;
 
