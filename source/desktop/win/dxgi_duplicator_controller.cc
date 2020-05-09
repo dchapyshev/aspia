@@ -112,6 +112,14 @@ DxgiDuplicatorController::Result DxgiDuplicatorController::duplicateMonitor(
     return doDuplicate(frame, monitor_id);
 }
 
+Point DxgiDuplicatorController::dpi()
+{
+    if (!initialize())
+        return Point();
+
+    return dpi_;
+}
+
 int DxgiDuplicatorController::screenCount()
 {
     if (initialize())
@@ -279,6 +287,14 @@ bool DxgiDuplicatorController::doInitialize()
 
     translateRect();
 
+    HDC hdc = GetDC(nullptr);
+    // Use old DPI value if failed.
+    if (hdc)
+    {
+        dpi_.set(GetDeviceCaps(hdc, LOGPIXELSX), GetDeviceCaps(hdc, LOGPIXELSY));
+        ReleaseDC(nullptr, hdc);
+    }
+
     ++identity_;
 
     if (duplicators_.empty())
@@ -344,6 +360,7 @@ bool DxgiDuplicatorController::doDuplicateOne(Context* context, int monitor_id, 
             if (duplicators_[i].duplicateMonitor(&context->contexts[i], monitor_id, target))
             {
                 target->setTopLeft(duplicators_[i].screenRect(monitor_id).topLeft());
+                target->setDpi(dpi_);
                 return true;
             }
 

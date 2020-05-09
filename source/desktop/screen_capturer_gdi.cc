@@ -128,6 +128,8 @@ const Frame* ScreenCapturerGdi::captureImage()
     }
 
     current->setTopLeft(screen_rect.topLeft());
+    current->setDpi(Point(GetDeviceCaps(desktop_dc_, LOGPIXELSX),
+                          GetDeviceCaps(desktop_dc_, LOGPIXELSY)));
 
     if (!previous || previous->size() != current->size())
     {

@@ -199,6 +199,8 @@ void DesktopSessionAgent::onScreenCaptured(
         serialized_frame->set_shared_buffer_id(frame->sharedMemory()->id());
         serialized_frame->set_width(frame->size().width());
         serialized_frame->set_height(frame->size().height());
+        serialized_frame->set_dpi_x(frame->dpi().x());
+        serialized_frame->set_dpi_y(frame->dpi().y());
 
         for (desktop::Region::Iterator it(frame->constUpdatedRegion()); !it.isAtEnd(); it.advance())
             codec::serializeRect(it.rect(), serialized_frame->add_dirty_rect());

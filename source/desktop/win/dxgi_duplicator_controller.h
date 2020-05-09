@@ -100,6 +100,10 @@ public:
     // greater than the total screen count of all the Duplicators, this function returns false.
     Result duplicateMonitor(DxgiFrame* frame, int monitor_id);
 
+    // Returns dpi of current system. Returns an empty DesktopVector if system
+    // does not support DXGI based capturer.
+    Point dpi();
+
     // Returns the count of screens on the system. These screens can be retrieved by an integer in
     // the range of [0, screenCount()). If system does not support DXGI based capturer, this
     // function returns 0.
@@ -182,6 +186,7 @@ private:
     // is always initialized after DxgiDuplicatorController.
     int identity_ = 0;
     Rect desktop_rect_;
+    Point dpi_;
     std::vector<DxgiAdapterDuplicator> duplicators_;
     D3dInfo d3d_info_;
     DisplayConfigurationMonitor display_configuration_monitor_;

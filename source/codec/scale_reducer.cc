@@ -48,6 +48,10 @@ const desktop::Frame* ScaleReducer::scaleFrame(
         source_size_ = source_size;
         target_size_ = target_size;
         target_frame_.reset();
+
+        LOG(LS_INFO) << "Scale mode changed (dpi:" << source_frame->dpi()
+                     << " source:" << source_size << " target:" << target_size
+                     << " scale_x:" << scale_x_ << " scale_y:" << scale_y_ << ")";
     }
 
     if (source_size == target_size)
