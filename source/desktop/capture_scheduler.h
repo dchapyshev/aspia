@@ -28,8 +28,11 @@ namespace desktop {
 class CaptureScheduler
 {
 public:
-    explicit CaptureScheduler(const std::chrono::milliseconds& update_interval);
+    explicit CaptureScheduler(std::chrono::milliseconds update_interval);
     ~CaptureScheduler() = default;
+
+    void setUpdateInterval(std::chrono::milliseconds update_interval);
+    std::chrono::milliseconds updateInterval() const;
 
     void beginCapture();
     void endCapture();

@@ -20,10 +20,20 @@
 
 namespace desktop {
 
-CaptureScheduler::CaptureScheduler(const std::chrono::milliseconds& update_interval)
+CaptureScheduler::CaptureScheduler(std::chrono::milliseconds update_interval)
     : update_interval_(update_interval)
 {
     // Nothing
+}
+
+void CaptureScheduler::setUpdateInterval(std::chrono::milliseconds update_interval)
+{
+    update_interval_ = update_interval;
+}
+
+std::chrono::milliseconds CaptureScheduler::updateInterval() const
+{
+    return update_interval_;
 }
 
 void CaptureScheduler::beginCapture()
