@@ -158,6 +158,9 @@ void DesktopSessionIpc::onDisconnected()
 
 void DesktopSessionIpc::onMessageReceived(const base::ByteArray& buffer)
 {
+    if (!delegate_)
+        return;
+
     incoming_message_.Clear();
 
     if (!base::parse(buffer, &incoming_message_))
@@ -172,8 +175,7 @@ void DesktopSessionIpc::onMessageReceived(const base::ByteArray& buffer)
     }
     else if (incoming_message_.has_screen_list())
     {
-        if (delegate_)
-            delegate_->onScreenListChanged(incoming_message_.screen_list());
+        delegate_->onScreenListChanged(incoming_message_.screen_list());
     }
     else if (incoming_message_.has_shared_buffer())
     {
@@ -194,8 +196,7 @@ void DesktopSessionIpc::onMessageReceived(const base::ByteArray& buffer)
     }
     else if (incoming_message_.has_clipboard_event())
     {
-        if (delegate_)
-            delegate_->onClipboardEvent(incoming_message_.clipboard_event());
+        delegate_->onClipboardEvent(incoming_message_.clipboard_event());
     }
     else
     {
@@ -214,21 +215,20 @@ void DesktopSessionIpc::onScreenCaptured(const proto::internal::ScreenCaptured& 
         if (!shared_buffer)
             return;
 
-        std::unique_ptr<desktop::Frame> frame = desktop::SharedMemoryFrame::attach(
+        last_frame_ = desktop::SharedMemoryFrame::attach(
             desktop::Size(serialized_frame.width(), serialized_frame.height()),
             codec::parsePixelFormat(serialized_frame.pixel_format()),
             std::move(shared_buffer));
 
-        desktop::Region* updated_region = frame->updatedRegion();
+        desktop::Region* updated_region = last_frame_->updatedRegion();
 
         for (int i = 0; i < serialized_frame.dirty_rect_size(); ++i)
             updated_region->addRect(codec::parseRect(serialized_frame.dirty_rect(i)));
 
-        if (delegate_)
-            delegate_->onScreenCaptured(*frame);
+        delegate_->onScreenCaptured(*last_frame_);
     }
 
-    if (screen_captured.has_mouse_cursor() && delegate_)
+    if (screen_captured.has_mouse_cursor())
     {
         const proto::internal::MouseCursor& mouse_cursor = screen_captured.mouse_cursor();
 
