@@ -100,7 +100,12 @@
         <translation>Beste</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="164"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="129"/>
+        <source>Lock at disconnect</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_config_dialog.ui" line="171"/>
         <source>Disable font smoothing</source>
         <translation type="unfinished"></translation>
     </message>
@@ -126,27 +131,27 @@
         <translation>Geavanceerd</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="129"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="136"/>
         <source>Block remote input</source>
         <translation>Blokkeer invoer op afstand</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="136"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="143"/>
         <source>Enable cursor shape</source>
         <translation>Muis vorm inschakelen</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="143"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="150"/>
         <source>Enable clipboard</source>
         <translation>Klembord inschakelen</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="150"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="157"/>
         <source>Disable desktop effects</source>
         <translation>Schakel bureaublad effecten uit</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="157"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="164"/>
         <source>Disable desktop wallpaper</source>
         <translation>Geen bureaublad achtergrond</translation>
     </message>
@@ -1101,7 +1106,7 @@
         <translation>8 kleuren (3 bit)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="150"/>
+        <location filename="../ui/desktop_config_dialog.cc" line="154"/>
         <source>Compression ratio: %1</source>
         <translation>Compressie ratio: %1</translation>
     </message>

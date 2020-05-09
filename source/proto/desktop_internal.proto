@@ -81,6 +81,7 @@ message Configure
     bool disable_wallpaper      = 2;
     bool disable_effects        = 3;
     bool block_input            = 4;
+    bool lock_at_disconnect     = 5;
 }
 
 message Control

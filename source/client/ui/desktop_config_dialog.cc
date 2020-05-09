@@ -95,6 +95,9 @@ DesktopConfigDialog::DesktopConfigDialog(proto::SessionType session_type,
 
     if (session_type == proto::SESSION_TYPE_DESKTOP_MANAGE)
     {
+        if (config_.flags() & proto::LOCK_AT_DISCONNECT)
+            ui.checkbox_lock_at_disconnect->setChecked(true);
+
         if (config_.flags() & proto::BLOCK_REMOTE_INPUT)
             ui.checkbox_block_remote_input->setChecked(true);
 
@@ -106,6 +109,7 @@ DesktopConfigDialog::DesktopConfigDialog(proto::SessionType session_type,
     }
     else
     {
+        ui.checkbox_lock_at_disconnect->hide();
         ui.checkbox_block_remote_input->hide();
         ui.checkbox_cursor_shape->hide();
         ui.checkbox_clipboard->hide();
@@ -214,6 +218,9 @@ void DesktopConfigDialog::onButtonBoxClicked(QAbstractButton* button)
 
         if (ui.checkbox_block_remote_input->isChecked())
             flags |= proto::BLOCK_REMOTE_INPUT;
+
+        if (ui.checkbox_lock_at_disconnect->isChecked())
+            flags |= proto::LOCK_AT_DISCONNECT;
 
         config_.set_flags(flags);
 

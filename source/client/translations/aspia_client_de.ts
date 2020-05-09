@@ -106,31 +106,36 @@
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.ui" line="129"/>
-        <source>Block remote input</source>
+        <source>Lock at disconnect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.ui" line="136"/>
+        <source>Block remote input</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_config_dialog.ui" line="143"/>
         <source>Enable cursor shape</source>
         <translation>Cursorform erlauben</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="143"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="150"/>
         <source>Enable clipboard</source>
         <translation>Zwischenablage erlauben</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="150"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="157"/>
         <source>Disable desktop effects</source>
         <translation>Desktop-Effekte deaktivieren</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="157"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="164"/>
         <source>Disable desktop wallpaper</source>
         <translation>Desktop-Hintergrundbild deaktivieren</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="164"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="171"/>
         <source>Disable font smoothing</source>
         <translation type="unfinished"></translation>
     </message>
@@ -922,7 +927,7 @@
         <translation type="unfinished">8 Farben (3 Bit)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="150"/>
+        <location filename="../ui/desktop_config_dialog.cc" line="154"/>
         <source>Compression ratio: %1</source>
         <translation type="unfinished">Kompressionsrate: %1</translation>
     </message>

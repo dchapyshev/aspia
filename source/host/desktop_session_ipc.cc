@@ -111,6 +111,7 @@ void DesktopSessionIpc::configure(const Config& config)
     configure->set_disable_wallpaper(config.disable_wallpaper);
     configure->set_disable_effects(config.disable_effects);
     configure->set_block_input(config.block_input);
+    configure->set_lock_at_disconnect(config.lock_at_disconnect);
 
     channel_->send(base::serialize(outgoing_message_));
 }

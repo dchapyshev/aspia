@@ -150,7 +150,12 @@
         <translation>Сильнее</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="164"/>
+        <location filename="../computer_dialog_desktop.ui" line="129"/>
+        <source>Lock at disconnect</source>
+        <translation>Блокировать при отключении</translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog_desktop.ui" line="171"/>
         <source>Disable font smoothing</source>
         <translation>Отключить сглаживание шрифтов</translation>
     </message>
@@ -176,27 +181,27 @@
         <translation>Дополнительно</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="129"/>
+        <location filename="../computer_dialog_desktop.ui" line="136"/>
         <source>Block remote input</source>
         <translation>Блокировать удаленный ввод</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="136"/>
+        <location filename="../computer_dialog_desktop.ui" line="143"/>
         <source>Enable cursor shape</source>
         <translation>Включить изображение курсора</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="143"/>
+        <location filename="../computer_dialog_desktop.ui" line="150"/>
         <source>Enable clipboard</source>
         <translation>Включить буфер обмена</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="150"/>
+        <location filename="../computer_dialog_desktop.ui" line="157"/>
         <source>Disable desktop effects</source>
         <translation>Отключить эффекты рабочего стола</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="157"/>
+        <location filename="../computer_dialog_desktop.ui" line="164"/>
         <source>Disable desktop wallpaper</source>
         <translation>Отключить обои рабочего стола</translation>
     </message>
@@ -1053,7 +1058,7 @@
         <translation>8 цветов (3 бита)</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.cc" line="204"/>
+        <location filename="../computer_dialog_desktop.cc" line="211"/>
         <source>Compression ratio: %1</source>
         <translation>Уровень сжатия: %1</translation>
     </message>
@@ -1324,7 +1329,7 @@
     <message numerus="yes">
         <location filename="../statusbar.cc" line="37"/>
         <source>%n child group(s)</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>%n дочерняя группа</numerusform>
             <numerusform>%n дочерние группы</numerusform>
             <numerusform>%n дочерних групп</numerusform>
@@ -1333,7 +1338,7 @@
     <message numerus="yes">
         <location filename="../statusbar.cc" line="38"/>
         <source>%n child computer(s)</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>%n дочерний компьютер</numerusform>
             <numerusform>%n дочерних компьютера</numerusform>
             <numerusform>%n дочерних компьютеров</numerusform>

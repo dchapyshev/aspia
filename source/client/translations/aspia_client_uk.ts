@@ -100,7 +100,12 @@
         <translation>Якісно</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="164"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="129"/>
+        <source>Lock at disconnect</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_config_dialog.ui" line="171"/>
         <source>Disable font smoothing</source>
         <translation type="unfinished"></translation>
     </message>
@@ -126,27 +131,27 @@
         <translation>Додатково</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="129"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="136"/>
         <source>Block remote input</source>
         <translation>Блокувати віддалений ввід</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="136"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="143"/>
         <source>Enable cursor shape</source>
         <translation>Показати курсор</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="143"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="150"/>
         <source>Enable clipboard</source>
         <translation>Буфер обміну</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="150"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="157"/>
         <source>Disable desktop effects</source>
         <translation>Відключити ефекти робочого стола</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="157"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="164"/>
         <source>Disable desktop wallpaper</source>
         <translation>Відключити шпалери робочого стола</translation>
     </message>
@@ -1105,7 +1110,7 @@
         <translation>8 кольорів (3 біти)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="150"/>
+        <location filename="../ui/desktop_config_dialog.cc" line="154"/>
         <source>Compression ratio: %1</source>
         <translation>Стиснення: %1</translation>
     </message>

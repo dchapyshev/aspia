@@ -316,6 +316,9 @@ void UserSession::onClientSessionConfigured()
         // If at least one client has enabled input block, then the block will be enabled for
         // everyone.
         system_config.block_input = system_config.block_input || client_config.block_input;
+
+        system_config.lock_at_disconnect =
+            system_config.lock_at_disconnect || client_config.lock_at_disconnect;
     }
 
     desktop_session_proxy_->configure(system_config);

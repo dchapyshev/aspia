@@ -94,6 +94,9 @@ void ComputerDialogDesktop::restoreSettings(
 
     if (session_type == proto::SESSION_TYPE_DESKTOP_MANAGE)
     {
+        if (config.flags() & proto::LOCK_AT_DISCONNECT)
+            ui.checkbox_lock_at_disconnect->setChecked(true);
+
         if (config.flags() & proto::BLOCK_REMOTE_INPUT)
             ui.checkbox_block_remote_input->setChecked(true);
 
@@ -105,6 +108,7 @@ void ComputerDialogDesktop::restoreSettings(
     }
     else
     {
+        ui.checkbox_lock_at_disconnect->hide();
         ui.checkbox_block_remote_input->hide();
         ui.checkbox_cursor_shape->hide();
         ui.checkbox_clipboard->hide();
@@ -182,6 +186,9 @@ void ComputerDialogDesktop::saveSettings(proto::DesktopConfig* config)
 
     if (ui.checkbox_block_remote_input->isChecked())
         flags |= proto::BLOCK_REMOTE_INPUT;
+
+    if (ui.checkbox_lock_at_disconnect->isChecked())
+        flags |= proto::LOCK_AT_DISCONNECT;
 
     config->set_flags(flags);
 }

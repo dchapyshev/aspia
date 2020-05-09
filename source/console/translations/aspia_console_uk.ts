@@ -150,7 +150,12 @@
         <translation>Якісніше</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="164"/>
+        <location filename="../computer_dialog_desktop.ui" line="129"/>
+        <source>Lock at disconnect</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog_desktop.ui" line="171"/>
         <source>Disable font smoothing</source>
         <translation type="unfinished"></translation>
     </message>
@@ -176,27 +181,27 @@
         <translation>Додаткові</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="129"/>
+        <location filename="../computer_dialog_desktop.ui" line="136"/>
         <source>Block remote input</source>
         <translation>Блокувати віддалений ввід</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="136"/>
+        <location filename="../computer_dialog_desktop.ui" line="143"/>
         <source>Enable cursor shape</source>
         <translation>Включити форму курсора</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="143"/>
+        <location filename="../computer_dialog_desktop.ui" line="150"/>
         <source>Enable clipboard</source>
         <translation>Включити буфер обміну</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="150"/>
+        <location filename="../computer_dialog_desktop.ui" line="157"/>
         <source>Disable desktop effects</source>
         <translation>Відключити ефекти робочого стола</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="157"/>
+        <location filename="../computer_dialog_desktop.ui" line="164"/>
         <source>Disable desktop wallpaper</source>
         <translation>Відключити шпалери робочого стола</translation>
     </message>
@@ -1085,7 +1090,7 @@
         <translation>8 кольорів (3 біти)</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.cc" line="204"/>
+        <location filename="../computer_dialog_desktop.cc" line="211"/>
         <source>Compression ratio: %1</source>
         <translation>Коефіцієнт стиснення: %1</translation>
     </message>

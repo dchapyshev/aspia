@@ -156,31 +156,36 @@
     </message>
     <message>
         <location filename="../computer_dialog_desktop.ui" line="129"/>
-        <source>Block remote input</source>
+        <source>Lock at disconnect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../computer_dialog_desktop.ui" line="136"/>
-        <source>Enable cursor shape</source>
+        <source>Block remote input</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../computer_dialog_desktop.ui" line="143"/>
-        <source>Enable clipboard</source>
+        <source>Enable cursor shape</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../computer_dialog_desktop.ui" line="150"/>
-        <source>Disable desktop effects</source>
+        <source>Enable clipboard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../computer_dialog_desktop.ui" line="157"/>
-        <source>Disable desktop wallpaper</source>
+        <source>Disable desktop effects</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../computer_dialog_desktop.ui" line="164"/>
+        <source>Disable desktop wallpaper</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog_desktop.ui" line="171"/>
         <source>Disable font smoothing</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1017,7 +1022,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.cc" line="204"/>
+        <location filename="../computer_dialog_desktop.cc" line="211"/>
         <source>Compression ratio: %1</source>
         <translation type="unfinished"></translation>
     </message>

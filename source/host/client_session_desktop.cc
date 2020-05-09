@@ -338,6 +338,8 @@ void ClientSessionDesktop::readConfig(const proto::DesktopConfig& config)
         (config.flags() & proto::DISABLE_DESKTOP_WALLPAPER);
     desktop_session_config_.block_input =
         (config.flags() & proto::BLOCK_REMOTE_INPUT);
+    desktop_session_config_.lock_at_disconnect =
+        (config.flags() & proto::LOCK_AT_DISCONNECT);
 
     delegate_->onClientSessionConfigured();
 }

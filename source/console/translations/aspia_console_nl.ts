@@ -150,7 +150,12 @@
         <translation>Beste</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="164"/>
+        <location filename="../computer_dialog_desktop.ui" line="129"/>
+        <source>Lock at disconnect</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog_desktop.ui" line="171"/>
         <source>Disable font smoothing</source>
         <translation type="unfinished"></translation>
     </message>
@@ -176,27 +181,27 @@
         <translation>Geavanceerd</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="129"/>
+        <location filename="../computer_dialog_desktop.ui" line="136"/>
         <source>Block remote input</source>
         <translation>Blokkeer input op afstand</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="136"/>
+        <location filename="../computer_dialog_desktop.ui" line="143"/>
         <source>Enable cursor shape</source>
         <translation>Cursor vorm inschakelen</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="143"/>
+        <location filename="../computer_dialog_desktop.ui" line="150"/>
         <source>Enable clipboard</source>
         <translation>Klembord inschakelen</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="150"/>
+        <location filename="../computer_dialog_desktop.ui" line="157"/>
         <source>Disable desktop effects</source>
         <translation>Bureaublad effecten uitschakelen</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="157"/>
+        <location filename="../computer_dialog_desktop.ui" line="164"/>
         <source>Disable desktop wallpaper</source>
         <translation>Bureaublad achtergrond verbergen</translation>
     </message>
@@ -1083,7 +1088,7 @@
         <translation>8 kleuren (3 bit)</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.cc" line="204"/>
+        <location filename="../computer_dialog_desktop.cc" line="211"/>
         <source>Compression ratio: %1</source>
         <translation>Compressie ratio: %1</translation>
     </message>

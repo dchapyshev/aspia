@@ -106,6 +106,8 @@ void DesktopSessionAgent::onMessageReceived(const base::ByteArray& buffer)
 
         if (input_injector_)
             input_injector_->setBlockInput(config.block_input());
+
+        lock_at_disconnect_ = config.lock_at_disconnect();
     }
     else if (incoming_message_.has_control())
     {
@@ -277,6 +279,12 @@ void DesktopSessionAgent::setEnabled(bool enable)
         screen_capturer_.reset();
         shared_memory_factory_.reset();
         clipboard_monitor_.reset();
+
+        if (lock_at_disconnect_)
+        {
+            base::PowerController::lock();
+            lock_at_disconnect_ = false;
+        }
 
         LOG(LS_INFO) << "Session successfully stopped";
     }

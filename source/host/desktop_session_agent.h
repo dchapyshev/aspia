@@ -88,6 +88,8 @@ private:
     std::unique_ptr<desktop::CaptureScheduler> capture_scheduler_;
     std::unique_ptr<desktop::ScreenCapturerWrapper> screen_capturer_;
 
+    bool lock_at_disconnect_ = false;
+
     DISALLOW_COPY_AND_ASSIGN(DesktopSessionAgent);
 };
 

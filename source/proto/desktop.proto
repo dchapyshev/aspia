@@ -167,6 +167,7 @@ enum DesktopFlags
     DISABLE_DESKTOP_WALLPAPER = 8;
     DISABLE_FONT_SMOOTHING    = 16;
     BLOCK_REMOTE_INPUT        = 32;
+    LOCK_AT_DISCONNECT        = 64;
 }
 
 message DesktopConfig
