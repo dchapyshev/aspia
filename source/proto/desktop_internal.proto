@@ -33,8 +33,7 @@ message DesktopFrame
     int32 shared_buffer_id   = 1;
     int32 width              = 2;
     int32 height             = 3;
-    PixelFormat pixel_format = 4;
-    repeated Rect dirty_rect = 5;
+    repeated Rect dirty_rect = 4;
 }
 
 message MouseCursor

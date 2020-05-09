@@ -209,21 +209,21 @@ void DesktopSessionIpc::onScreenCaptured(const proto::internal::ScreenCaptured& 
 {
     if (screen_captured.has_frame())
     {
-        const proto::internal::DesktopFrame& serialized_frame = screen_captured.frame();
+        const proto::internal::DesktopFrame& frame = screen_captured.frame();
 
-        std::unique_ptr<SharedBuffer> shared_buffer = sharedBuffer(serialized_frame.shared_buffer_id());
+        std::unique_ptr<SharedBuffer> shared_buffer = sharedBuffer(frame.shared_buffer_id());
         if (!shared_buffer)
             return;
 
         last_frame_ = desktop::SharedMemoryFrame::attach(
-            desktop::Size(serialized_frame.width(), serialized_frame.height()),
-            codec::parsePixelFormat(serialized_frame.pixel_format()),
+            desktop::Size(frame.width(), frame.height()),
+            desktop::PixelFormat::ARGB(),
             std::move(shared_buffer));
 
         desktop::Region* updated_region = last_frame_->updatedRegion();
 
-        for (int i = 0; i < serialized_frame.dirty_rect_size(); ++i)
-            updated_region->addRect(codec::parseRect(serialized_frame.dirty_rect(i)));
+        for (int i = 0; i < frame.dirty_rect_size(); ++i)
+            updated_region->addRect(codec::parseRect(frame.dirty_rect(i)));
 
         delegate_->onScreenCaptured(*last_frame_);
     }

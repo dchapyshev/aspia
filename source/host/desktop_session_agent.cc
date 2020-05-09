@@ -196,8 +196,6 @@ void DesktopSessionAgent::onScreenCaptured(
         serialized_frame->set_width(frame->size().width());
         serialized_frame->set_height(frame->size().height());
 
-        codec::serializePixelFormat(frame->format(), serialized_frame->mutable_pixel_format());
-
         for (desktop::Region::Iterator it(frame->constUpdatedRegion()); !it.isAtEnd(); it.advance())
             codec::serializeRect(it.rect(), serialized_frame->add_dirty_rect());
     }
