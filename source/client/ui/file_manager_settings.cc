@@ -18,12 +18,10 @@
 
 #include "client/ui/file_manager_settings.h"
 
-#include "qt_base/qt_xml_settings.h"
-
 namespace client {
 
 FileManagerSettings::FileManagerSettings()
-    : settings_(qt_base::QtXmlSettings::format(),
+    : settings_(QSettings::IniFormat,
                 QSettings::UserScope,
                 QLatin1String("aspia"),
                 QLatin1String("client"))

@@ -465,125 +465,125 @@
 <context>
     <name>host::ConfigDialog</name>
     <message>
-        <location filename="../config_dialog.cc" line="173"/>
-        <location filename="../config_dialog.cc" line="248"/>
-        <location filename="../config_dialog.cc" line="301"/>
+        <location filename="../config_dialog.cc" line="172"/>
+        <location filename="../config_dialog.cc" line="247"/>
+        <location filename="../config_dialog.cc" line="300"/>
         <source>Confirmation</source>
         <translation>Підтвердження</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="174"/>
+        <location filename="../config_dialog.cc" line="173"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation>Ви впевнені, що хочете видалити користувача &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="234"/>
+        <location filename="../config_dialog.cc" line="233"/>
         <source>Import</source>
         <translation>Імпорт</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="234"/>
-        <location filename="../config_dialog.cc" line="264"/>
+        <location filename="../config_dialog.cc" line="233"/>
+        <location filename="../config_dialog.cc" line="263"/>
         <source>XML-files (*.xml)</source>
         <translation>XML-файли (*.xml)</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="243"/>
-        <location filename="../config_dialog.cc" line="296"/>
+        <location filename="../config_dialog.cc" line="242"/>
+        <location filename="../config_dialog.cc" line="295"/>
         <source>Service configuration changed. For the changes to take effect, you must restart the service. Restart the service now?</source>
         <translation>Налаштування сервісу замінено. Для примінення нових налаштувань потрібно перезапустити сервіс. Перезапустити сервіс зараз?</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="264"/>
+        <location filename="../config_dialog.cc" line="263"/>
         <source>Export</source>
         <translation>Експорт</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="283"/>
+        <location filename="../config_dialog.cc" line="282"/>
         <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
         <translation>Неможливо записати налаштування.Переконайтеся, що у вас є відповідні права для запису.</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="286"/>
-        <location filename="../config_dialog.cc" line="476"/>
-        <location filename="../config_dialog.cc" line="495"/>
-        <location filename="../config_dialog.cc" line="510"/>
-        <location filename="../config_dialog.cc" line="520"/>
-        <location filename="../config_dialog.cc" line="536"/>
-        <location filename="../config_dialog.cc" line="546"/>
+        <location filename="../config_dialog.cc" line="285"/>
+        <location filename="../config_dialog.cc" line="475"/>
+        <location filename="../config_dialog.cc" line="494"/>
+        <location filename="../config_dialog.cc" line="509"/>
+        <location filename="../config_dialog.cc" line="519"/>
+        <location filename="../config_dialog.cc" line="535"/>
+        <location filename="../config_dialog.cc" line="545"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="410"/>
+        <location filename="../config_dialog.cc" line="409"/>
         <source>Remove</source>
         <translation>Видалити</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="419"/>
+        <location filename="../config_dialog.cc" line="418"/>
         <source>Started</source>
         <translation>Розпочато</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="420"/>
+        <location filename="../config_dialog.cc" line="419"/>
         <source>Stop</source>
         <translation>Зупинити</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="425"/>
+        <location filename="../config_dialog.cc" line="424"/>
         <source>Not started</source>
         <translation>Не розпочато</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="426"/>
-        <location filename="../config_dialog.cc" line="433"/>
-        <location filename="../config_dialog.cc" line="446"/>
+        <location filename="../config_dialog.cc" line="425"/>
+        <location filename="../config_dialog.cc" line="432"/>
+        <location filename="../config_dialog.cc" line="445"/>
         <source>Start</source>
         <translation>Почати</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="432"/>
+        <location filename="../config_dialog.cc" line="431"/>
         <source>Installed</source>
         <translation>Встановлено</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="443"/>
+        <location filename="../config_dialog.cc" line="442"/>
         <source>Not installed</source>
         <translation>Не встановлено</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="445"/>
+        <location filename="../config_dialog.cc" line="444"/>
         <source>Install</source>
         <translation>Встановити</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="450"/>
+        <location filename="../config_dialog.cc" line="449"/>
         <source>Current state: %1</source>
         <translation>Поточний стан: %1</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="477"/>
+        <location filename="../config_dialog.cc" line="476"/>
         <source>The service could not be installed.</source>
         <translation>Неможливо встановити службу.</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="496"/>
+        <location filename="../config_dialog.cc" line="495"/>
         <source>The service could not be removed.</source>
         <translation>Неможливо видалити службу.</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="511"/>
-        <location filename="../config_dialog.cc" line="537"/>
+        <location filename="../config_dialog.cc" line="510"/>
+        <location filename="../config_dialog.cc" line="536"/>
         <source>Could not access the service.</source>
         <translation>Немає доступу до служби.</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="521"/>
+        <location filename="../config_dialog.cc" line="520"/>
         <source>The service could not be started.</source>
         <translation>Неможливо запустити службу.</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="547"/>
+        <location filename="../config_dialog.cc" line="546"/>
         <source>The service could not be stopped.</source>
         <translation>Неможливо зупинити службу.</translation>
     </message>
@@ -724,35 +724,35 @@
 <context>
     <name>host::MainWindow</name>
     <message>
-        <location filename="../main_window.cc" line="58"/>
+        <location filename="../main_window.cc" line="57"/>
         <source>Aspia Host</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="113"/>
-        <location filename="../main_window.cc" line="263"/>
+        <location filename="../main_window.cc" line="112"/>
+        <location filename="../main_window.cc" line="262"/>
         <source>Show</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="48"/>
-        <location filename="../main_window.cc" line="204"/>
-        <location filename="../main_window.cc" line="211"/>
+        <location filename="../main_window.cc" line="47"/>
+        <location filename="../main_window.cc" line="203"/>
+        <location filename="../main_window.cc" line="210"/>
         <source>Not available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="268"/>
+        <location filename="../main_window.cc" line="267"/>
         <source>Hide</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="300"/>
+        <location filename="../main_window.cc" line="299"/>
         <source>Confirmation</source>
         <translation>Підтвердження</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="301"/>
+        <location filename="../main_window.cc" line="300"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation type="unfinished"></translation>
     </message>

@@ -26,9 +26,7 @@ list(APPEND SOURCE_QT_BASE
     qt_logging.cc
     qt_logging.h
     qt_task_runner.cc
-    qt_task_runner.h
-    qt_xml_settings.cc
-    qt_xml_settings.h)
+    qt_task_runner.h)
 
 source_group("" FILES ${SOURCE_QT_BASE})
 

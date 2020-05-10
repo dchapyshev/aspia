@@ -27,7 +27,6 @@
 #include "host/ui/config_dialog.h"
 #include "host/ui/notifier_window.h"
 #include "qt_base/qt_logging.h"
-#include "qt_base/qt_xml_settings.h"
 
 #include <QCloseEvent>
 #include <QDesktopServices>

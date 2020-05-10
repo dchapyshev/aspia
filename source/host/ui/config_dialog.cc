@@ -29,7 +29,6 @@
 #include "host/ui/settings_util.h"
 #include "host/win/service_constants.h"
 #include "host/system_settings.h"
-#include "qt_base/qt_xml_settings.h"
 #include "updater/update_dialog.h"
 
 #include <QFileDialog>

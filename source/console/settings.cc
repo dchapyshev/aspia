@@ -19,7 +19,6 @@
 #include "console/settings.h"
 
 #include "build/build_config.h"
-#include "qt_base/qt_xml_settings.h"
 
 #include <QDir>
 #include <QLocale>
@@ -27,7 +26,7 @@
 namespace console {
 
 Settings::Settings()
-    : settings_(qt_base::QtXmlSettings::format(),
+    : settings_(QSettings::IniFormat,
                 QSettings::UserScope,
                 QStringLiteral("aspia"),
                 QStringLiteral("console"))
