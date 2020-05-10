@@ -106,17 +106,11 @@ set(QT_LIBS
     Qt5::QWindowsIntegrationPlugin
     Qt5::QWindowsVistaStylePlugin
     Qt5::QWindowsPrinterSupportPlugin
-    Qt5::AccessibilitySupport
     Qt5::EventDispatcherSupport
     Qt5::FontDatabaseSupport
     Qt5::ThemeSupport
-    Qt5::WindowsUIAutomationSupport
-    debug qtfreetyped
-    debug qtharfbuzzd
     debug qtlibpngd
     debug qtpcre2d
-    optimized qtfreetype
-    optimized qtharfbuzz
     optimized qtlibpng
     optimized qtpcre2)
 

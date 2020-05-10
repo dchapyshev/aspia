@@ -32,7 +32,9 @@ call configure ^
     -mp ^
     -ssl ^
     -openssl-linked ^
+    -skip qt3d ^
     -skip qtactiveqt ^
+    -skip qtcanvas3d ^
     -skip qtcharts ^
     -skip qtdatavis3d ^
     -skip qtdeclarative ^
@@ -41,6 +43,7 @@ call configure ^
     -skip qtgamepad ^
     -skip qtlocation ^
     -skip qtmultimedia ^
+    -skip qtnetworkauth ^
     -skip qtpurchasing ^
     -skip qtquickcontrols ^
     -skip qtquickcontrols2 ^
@@ -57,13 +60,31 @@ call configure ^
     -skip qtwebsockets ^
     -skip qtwebview ^
     -skip qtxmlpatterns ^
-    -make tools ^
+    -nomake tools ^
     -nomake examples ^
     -nomake tests ^
+    -no-feature-accessibility ^
+    -no-feature-concurrent ^
+    -no-feature-graphicseffect ^
+    -no-feature-keysequenceedit ^
+    -no-feature-textodfwriter ^
+    -no-feature-ftp ^
+    -no-feature-networkdiskcache ^
+    -no-feature-sharedmemory ^
+    -no-feature-udpsocket ^
+    -no-freetype ^
+    -no-harfbuzz ^
     -no-icu ^
     -no-opengl ^
     -no-angle ^
     -no-dbus ^
+    -no-sql-sqlite2 ^
+    -no-sql-psql ^
+    -no-sql-mysql ^
+    -no-sql-odbc ^
+    -no-sql-oci ^
+    -no-sql-ibase ^
+    -no-sql-db2 ^
     -I "%3\include" ^
     -L "%3\lib" ^
     -prefix %2 ^
