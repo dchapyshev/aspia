@@ -31,6 +31,8 @@ list(APPEND SOURCE_NET
     firewall_manager.h
     ip_util.cc
     ip_util.h
+    peer_controller.cc
+    peer_controller.h
     server.cc
     server.h
     server_authenticator.cc
