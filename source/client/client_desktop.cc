@@ -166,6 +166,8 @@ void ClientDesktop::onKeyEvent(const proto::KeyEvent& event)
     if (sessionType() != proto::SESSION_TYPE_DESKTOP_MANAGE)
         return;
 
+    ++key_events_;
+
     outgoing_message_.Clear();
     outgoing_message_.mutable_key_event()->CopyFrom(event);
     sendMessage(outgoing_message_);
@@ -175,6 +177,8 @@ void ClientDesktop::onPointerEvent(const proto::PointerEvent& event)
 {
     if (sessionType() != proto::SESSION_TYPE_DESKTOP_MANAGE)
         return;
+
+    ++pointer_events_;
 
     outgoing_message_.Clear();
     outgoing_message_.mutable_pointer_event()->CopyFrom(event);
@@ -247,6 +251,8 @@ void ClientDesktop::onMetricsRequest()
     metrics.max_video_packet = max_video_packet_;
     metrics.avg_video_packet = avg_video_packet_;
     metrics.fps = fps_;
+    metrics.pointer_events = pointer_events_;
+    metrics.key_events = key_events_;
 
     desktop_window_proxy_->setMetrics(metrics);
 }

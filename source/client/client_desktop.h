@@ -100,6 +100,8 @@ private:
     size_t max_video_packet_ = 0;
     size_t avg_video_packet_ = 0;
     int fps_ = 0;
+    size_t pointer_events_ = 0;
+    size_t key_events_ = 0;
 
     DISALLOW_COPY_AND_ASSIGN(ClientDesktop);
 };

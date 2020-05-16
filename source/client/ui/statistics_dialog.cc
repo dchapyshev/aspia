@@ -74,6 +74,14 @@ void StatisticsDialog::setMetrics(const DesktopWindow::Metrics& metrics)
             case 7:
                 item->setText(1, QString::number(metrics.fps));
                 break;
+
+            case 8:
+                item->setText(1, QString::number(metrics.pointer_events));
+                break;
+
+            case 9:
+                item->setText(1, QString::number(metrics.key_events));
+                break;
         }
     }
 }
