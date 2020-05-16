@@ -267,8 +267,8 @@ void AddressBookDialog::buttonBoxClicked(QAbstractButton* button)
                     crypto::PasswordHash::SCRYPT, password.toStdString(), file_->hashing_salt());
             }
 
-            int salt_before_size = ui.spinbox_salt_before->value();
-            int salt_after_size = ui.spinbox_salt_after->value();
+            size_t salt_before_size = static_cast<size_t>(ui.spinbox_salt_before->value());
+            size_t salt_after_size = static_cast<size_t>(ui.spinbox_salt_after->value());
 
             if (salt_before_size != data_->salt1().size())
                 data_->set_salt1(crypto::Random::string(salt_before_size));

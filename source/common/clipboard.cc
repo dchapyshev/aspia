@@ -138,7 +138,7 @@ void Clipboard::stop()
     delegate_ = nullptr;
 }
 
-bool Clipboard::onMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESULT& result)
+bool Clipboard::onMessage(UINT message, WPARAM /* wParam */, LPARAM /* lParam */, LRESULT& result)
 {
     switch (message)
     {

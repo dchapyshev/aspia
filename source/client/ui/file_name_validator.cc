@@ -27,7 +27,7 @@ FileNameValidator::FileNameValidator(QObject* parent)
     // Nothing
 }
 
-FileNameValidator::State FileNameValidator::validate(QString& input, int& pos) const
+FileNameValidator::State FileNameValidator::validate(QString& input, int& /* pos */) const
 {
     if (!input.isEmpty())
     {

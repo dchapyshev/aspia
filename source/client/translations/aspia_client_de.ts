@@ -1021,27 +1021,27 @@
         <translation type="unfinished">Geändert</translation>
     </message>
     <message>
-        <location filename="../ui/file_list_model.cc" line="521"/>
+        <location filename="../ui/file_list_model.cc" line="522"/>
         <source>TB</source>
         <translation type="unfinished">TB</translation>
     </message>
     <message>
-        <location filename="../ui/file_list_model.cc" line="526"/>
+        <location filename="../ui/file_list_model.cc" line="527"/>
         <source>GB</source>
         <translation type="unfinished">GB</translation>
     </message>
     <message>
-        <location filename="../ui/file_list_model.cc" line="531"/>
+        <location filename="../ui/file_list_model.cc" line="532"/>
         <source>MB</source>
         <translation type="unfinished">MB</translation>
     </message>
     <message>
-        <location filename="../ui/file_list_model.cc" line="536"/>
+        <location filename="../ui/file_list_model.cc" line="537"/>
         <source>kB</source>
         <translation type="unfinished">kB</translation>
     </message>
     <message>
-        <location filename="../ui/file_list_model.cc" line="541"/>
+        <location filename="../ui/file_list_model.cc" line="542"/>
         <source>B</source>
         <translation type="unfinished">B</translation>
     </message>

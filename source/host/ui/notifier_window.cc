@@ -163,7 +163,7 @@ bool NotifierWindow::eventFilter(QObject* object, QEvent* event)
     return QWidget::eventFilter(object, event);
 }
 
-void NotifierWindow::hideEvent(QHideEvent* event)
+void NotifierWindow::hideEvent(QHideEvent* /* event */)
 {
     show();
 }

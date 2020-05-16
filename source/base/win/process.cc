@@ -43,7 +43,7 @@ bool createToken(const wchar_t* privilege_name, win::ScopedHandle* token_out)
     state.PrivilegeCount = 1;
     state.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
 
-    if (!LookupPrivilegeValueW(nullptr, SE_DEBUG_NAME, &state.Privileges[0].Luid))
+    if (!LookupPrivilegeValueW(nullptr, privilege_name, &state.Privileges[0].Luid))
     {
         PLOG(LS_WARNING) << "LookupPrivilegeValueW failed";
         return false;

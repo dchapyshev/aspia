@@ -129,7 +129,12 @@ OSInfo** OSInfo::instanceStorage()
     static OSInfo* info = []()
     {
         _OSVERSIONINFOEXW version_info = { sizeof(version_info) };
+
+#pragma warning(push)
+#pragma warning(disable:4996)
+        // C4996: 'GetVersionExW': was declared deprecated.
         GetVersionExW(reinterpret_cast<_OSVERSIONINFOW*>(&version_info));
+#pragma warning(pop)
 
         _SYSTEM_INFO system_info = {};
         GetNativeSystemInfo(&system_info);

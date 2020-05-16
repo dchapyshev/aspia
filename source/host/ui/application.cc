@@ -53,7 +53,7 @@ EventFilter* EventFilter::instance()
     return &event_filter;
 }
 
-bool EventFilter::nativeEventFilter(const QByteArray& event_type, void* message, long* result)
+bool EventFilter::nativeEventFilter(const QByteArray& /* event_type */, void* message, long* result)
 {
     MSG* native_message = reinterpret_cast<MSG*>(message);
 

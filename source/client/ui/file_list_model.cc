@@ -395,8 +395,9 @@ QMimeData* FileListModel::mimeData(const QModelIndexList& indexes) const
     return mime_data;
 }
 
-bool FileListModel::canDropMimeData(const QMimeData* data, Qt::DropAction action,
-                                    int row, int column, const QModelIndex& parent) const
+bool FileListModel::canDropMimeData(const QMimeData* data, Qt::DropAction /* action */,
+                                    int /* row */, int /* column */,
+                                    const QModelIndex& /* parent */) const
 {
     if (!data->hasFormat(mime_type_))
         return false;

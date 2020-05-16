@@ -27,7 +27,7 @@ FilePathValidator::FilePathValidator(QObject* parent)
     // Nothing
 }
 
-FilePathValidator::State FilePathValidator::validate(QString& input, int& pos) const
+FilePathValidator::State FilePathValidator::validate(QString& input, int& /* pos */) const
 {
     if (!input.isEmpty())
     {

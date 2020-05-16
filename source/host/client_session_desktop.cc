@@ -105,7 +105,7 @@ void ClientSessionDesktop::onMessageReceived(const base::ByteArray& buffer)
     }
 }
 
-void ClientSessionDesktop::onMessageWritten(size_t pending)
+void ClientSessionDesktop::onMessageWritten(size_t /* pending */)
 {
     // Nothing
 }
@@ -281,9 +281,9 @@ void ClientSessionDesktop::readExtension(const proto::DesktopExtension& extensio
 
         outgoing_message_.Clear();
 
-        proto::DesktopExtension* extension = outgoing_message_.mutable_extension();
-        extension->set_name(common::kSystemInfoExtension);
-        extension->set_data(system_info.SerializeAsString());
+        proto::DesktopExtension* desktop_extension = outgoing_message_.mutable_extension();
+        desktop_extension->set_name(common::kSystemInfoExtension);
+        desktop_extension->set_data(system_info.SerializeAsString());
 
         sendMessage(base::serialize(outgoing_message_));
     }

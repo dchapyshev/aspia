@@ -372,7 +372,7 @@ QVariant AddressBarModel::data(const QModelIndex& index, int role) const
     return QVariant();
 }
 
-bool AddressBarModel::setData(const QModelIndex& index, const QVariant& value, int role)
+bool AddressBarModel::setData(const QModelIndex& /* index */, const QVariant& value, int role)
 {
     if (role != Qt::EditRole)
         return false;
@@ -425,7 +425,7 @@ Qt::ItemFlags AddressBarModel::flags(const QModelIndex& index) const
     return default_flags | Qt::ItemNeverHasChildren;
 }
 
-bool AddressBarModel::insertRows(int row, int count, const QModelIndex& parent)
+bool AddressBarModel::insertRows(int /* row */, int /* count */, const QModelIndex& /* parent */)
 {
     return true;
 }

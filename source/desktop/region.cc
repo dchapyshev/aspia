@@ -41,10 +41,10 @@ Region::Region(const Rect& rect)
     if (!rect.isEmpty())
     {
         BoxRec box;
-        box.x1 = rect.left();
-        box.x2 = rect.right();
-        box.y1 = rect.top();
-        box.y2 = rect.bottom();
+        box.x1 = static_cast<short>(rect.left());
+        box.x2 = static_cast<short>(rect.right());
+        box.y1 = static_cast<short>(rect.top());
+        box.y2 = static_cast<short>(rect.bottom());
         miRegionInit(&x11reg_, &box, 0);
     }
     else
