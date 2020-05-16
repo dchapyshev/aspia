@@ -65,13 +65,28 @@ call configure ^
     -nomake tests ^
     -no-feature-accessibility ^
     -no-feature-concurrent ^
+    -no-feature-dial ^
+    -no-feature-dtls ^
     -no-feature-graphicseffect ^
+    -no-feature-gssapi ^
     -no-feature-keysequenceedit ^
+    -no-feature-lcdnumber ^
+    -no-feature-movie ^
+    -no-feature-hijricalendar ^
+    -no-feature-islamiccivilcalendar ^
+    -no-feature-jalalicalendar ^
     -no-feature-textodfwriter ^
     -no-feature-ftp ^
     -no-feature-networkdiskcache ^
+    -no-feature-sessionmanager ^
+    -no-feature-statemachine ^
     -no-feature-sharedmemory ^
+    -no-feature-splashscreen ^
+    -no-feature-sspi ^
+    -no-feature-textmarkdownreader ^
+    -no-feature-textmarkdownwriter ^
     -no-feature-udpsocket ^
+    -no-feature-whatsthis ^
     -no-freetype ^
     -no-harfbuzz ^
     -no-icu ^
