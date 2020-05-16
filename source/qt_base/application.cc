@@ -185,7 +185,7 @@ Application::Application(int& argc, char* argv[])
     QByteArray app_path_hash = QCryptographicHash::hash(app_path, QCryptographicHash::Md5);
 
     server_name_ = QString::fromLatin1(app_path_hash.toHex()) + session_id;
-    lock_file_name_ = temp_path + QLatin1Char('/') + server_name_ + QStringLiteral(".lock");
+    lock_file_name_ = temp_path + QLatin1Char('/') + server_name_ + ".lock";
     lock_file_ = new QLockFile(lock_file_name_);
 
     crypto_initializer_ = std::make_unique<crypto::ScopedCryptoInitializer>();

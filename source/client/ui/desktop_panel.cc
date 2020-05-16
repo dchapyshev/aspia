@@ -270,15 +270,9 @@ void DesktopPanel::onHideTimer()
 void DesktopPanel::onFullscreenButton(bool checked)
 {
     if (checked)
-    {
-        ui.action_fullscreen->setIcon(
-            QIcon(QStringLiteral(":/img/application-resize-actual.png")));
-    }
+        ui.action_fullscreen->setIcon(QIcon(":/img/application-resize-actual.png"));
     else
-    {
-        ui.action_fullscreen->setIcon(
-            QIcon(QStringLiteral(":/img/application-resize-full.png")));
-    }
+        ui.action_fullscreen->setIcon(QIcon(":/img/application-resize-full.png"));
 
     showFullScreenButtons(checked);
 
@@ -289,8 +283,7 @@ void DesktopPanel::onAutosizeButton()
 {
     if (ui.action_fullscreen->isChecked())
     {
-        ui.action_fullscreen->setIcon(
-            QIcon(QStringLiteral(":/img/application-resize-full.png")));
+        ui.action_fullscreen->setIcon(QIcon(":/img/application-resize-full.png"));
         ui.action_fullscreen->setChecked(false);
 
         showFullScreenButtons(false);

@@ -33,9 +33,9 @@ const char kOpenFile[] = "open_file:";
 Application::Application(int& argc, char* argv[])
     : qt_base::Application(argc, argv)
 {
-    setOrganizationName(QStringLiteral("Aspia"));
-    setApplicationName(QStringLiteral("Console"));
-    setApplicationVersion(QStringLiteral(ASPIA_VERSION_STRING));
+    setOrganizationName("Aspia");
+    setApplicationName("Console");
+    setApplicationVersion(ASPIA_VERSION_STRING);
     setAttribute(Qt::AA_DisableWindowContextHelpButton, true);
     setQuitOnLastWindowClosed(false);
 
@@ -60,7 +60,7 @@ Application::Application(int& argc, char* argv[])
     });
 
     if (!hasLocale(settings_.locale()))
-        settings_.setLocale(QStringLiteral(DEFAULT_LOCALE));
+        settings_.setLocale(DEFAULT_LOCALE);
 
     setLocale(settings_.locale());
 }

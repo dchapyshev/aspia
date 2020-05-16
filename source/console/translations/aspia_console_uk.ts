@@ -1273,14 +1273,14 @@
     </message>
     <message>
         <location filename="../main_window.cc" line="508"/>
-        <location filename="../main_window.cc" line="816"/>
-        <location filename="../main_window.cc" line="893"/>
+        <location filename="../main_window.cc" line="809"/>
+        <location filename="../main_window.cc" line="886"/>
         <source>Confirmation</source>
         <translation>Підтвердження</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="509"/>
-        <location filename="../main_window.cc" line="894"/>
+        <location filename="../main_window.cc" line="887"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation>Адресну книгу &quot;%1&quot; змінено. Зберегти зміни?</translation>
     </message>
@@ -1290,28 +1290,28 @@
         <translation>Закрити інші вкладки</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="720"/>
+        <location filename="../main_window.cc" line="719"/>
         <source>Close tab</source>
         <translation>Закрити вкладку</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="723"/>
-        <location filename="../main_window.cc" line="730"/>
+        <location filename="../main_window.cc" line="720"/>
+        <location filename="../main_window.cc" line="725"/>
         <source>Pin tab</source>
         <translation>Закріпити вкладку</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="817"/>
+        <location filename="../main_window.cc" line="810"/>
         <source>The list of recently opened address books will be cleared. Continue?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="850"/>
+        <location filename="../main_window.cc" line="843"/>
         <source>Hide</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="865"/>
+        <location filename="../main_window.cc" line="858"/>
         <source>Show</source>
         <translation>Показати</translation>
     </message>
@@ -1320,7 +1320,7 @@
         <translation type="vanished">&lt;порожньо&gt;</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1000"/>
+        <location filename="../main_window.cc" line="993"/>
         <source>Aspia Console</source>
         <translation>Консоль Aspia</translation>
     </message>

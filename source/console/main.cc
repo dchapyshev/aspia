@@ -58,29 +58,29 @@ int main(int argc, char *argv[])
     console::Application application(argc, argv);
 
     QCommandLineOption address_option(
-        QStringLiteral("address"),
+        "address",
         QApplication::translate("Console", "Remote computer address."),
         QApplication::translate("Console", "address"));
 
     QCommandLineOption port_option(
-        QStringLiteral("port"),
+        "port",
         QApplication::translate("Console", "Remote computer port."),
         QApplication::translate("Console", "port"),
         QString::number(DEFAULT_HOST_TCP_PORT));
 
     QCommandLineOption username_option(
-        QStringLiteral("username"),
+        "username",
         QApplication::translate("Console", "Name of user."),
         QApplication::translate("Console", "username"));
 
     QCommandLineOption session_type_option(
-        QStringLiteral("session-type"),
+        "session-type",
         QApplication::translate("Console", "Session type. Possible values: desktop-manage, "
             "desktop-view, file-transfer."),
-        QStringLiteral("desktop-manage"));
+        "desktop-manage");
 
     QCommandLineOption client_option(
-        QStringLiteral("client"),
+        "client",
         QApplication::translate("Console", "Open the client to connect to the computer."));
 
     QCommandLineParser parser;

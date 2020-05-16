@@ -1128,35 +1128,35 @@
         <translation>Монітор %1</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="312"/>
-        <location filename="../ui/desktop_panel.cc" line="323"/>
-        <location filename="../ui/desktop_panel.cc" line="334"/>
-        <location filename="../ui/desktop_panel.cc" line="345"/>
+        <location filename="../ui/desktop_panel.cc" line="305"/>
+        <location filename="../ui/desktop_panel.cc" line="316"/>
+        <location filename="../ui/desktop_panel.cc" line="327"/>
+        <location filename="../ui/desktop_panel.cc" line="338"/>
         <source>Confirmation</source>
         <translation>Підтвердження</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="313"/>
+        <location filename="../ui/desktop_panel.cc" line="306"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>Ви впевнені, що хочете відключити віддалений комп&apos;ютер?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="324"/>
+        <location filename="../ui/desktop_panel.cc" line="317"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>Ви впевнені, що хочете перезавантажити віддалений комп&apos;ютер?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="335"/>
+        <location filename="../ui/desktop_panel.cc" line="328"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>Ви впевнені, що хочете завершити сесію користувача на віддаленому комп&apos;ютері?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="346"/>
+        <location filename="../ui/desktop_panel.cc" line="339"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>Ви впевнені, що хочете заблокувати сесію користувача на віддаленому комп&apos;ютері?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="368"/>
+        <location filename="../ui/desktop_panel.cc" line="361"/>
         <source>Scale</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1267,7 +1267,7 @@
 <context>
     <name>client::FilePanel</name>
     <message>
-        <location filename="../ui/file_panel.cc" line="435"/>
+        <location filename="../ui/file_panel.cc" line="433"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
@@ -1309,27 +1309,27 @@
         <translation>Ім&apos;я містить недійсні символи.</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="332"/>
+        <location filename="../ui/file_panel.cc" line="331"/>
         <source>&amp;Send	F11</source>
         <translation>&amp;Надіслати F11</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="334"/>
+        <location filename="../ui/file_panel.cc" line="332"/>
         <source>&amp;Delete	Delete</source>
         <translation>&amp;Видалити Delete</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="344"/>
+        <location filename="../ui/file_panel.cc" line="342"/>
         <source>&amp;Create Folder</source>
         <translation>&amp;Створити каталог</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="401"/>
+        <location filename="../ui/file_panel.cc" line="399"/>
         <source>Confirmation</source>
         <translation>Підтвердження</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="402"/>
+        <location filename="../ui/file_panel.cc" line="400"/>
         <source>Are you sure you want to delete the selected items?</source>
         <translation>Ви впевнені, що хочете видалити обрані об&apos;єкти?</translation>
     </message>
@@ -1645,7 +1645,7 @@
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="174"/>
-        <location filename="../ui/system_info_window.cc" line="198"/>
+        <location filename="../ui/system_info_window.cc" line="197"/>
         <source>Name</source>
         <translation>Ім&apos;я</translation>
     </message>
@@ -1665,261 +1665,261 @@
         <translation>Час роботи</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="188"/>
+        <location filename="../ui/system_info_window.cc" line="187"/>
         <source>Computer</source>
         <translation>Комп&apos;ютер</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="201"/>
-        <location filename="../ui/system_info_window.cc" line="267"/>
+        <location filename="../ui/system_info_window.cc" line="200"/>
+        <location filename="../ui/system_info_window.cc" line="266"/>
         <source>Version</source>
         <translation>Версія</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="204"/>
+        <location filename="../ui/system_info_window.cc" line="203"/>
         <source>Architecture</source>
         <translation>Архітектура</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="209"/>
+        <location filename="../ui/system_info_window.cc" line="208"/>
         <source>Operating System</source>
         <translation>Операційна система</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="219"/>
-        <location filename="../ui/system_info_window.cc" line="292"/>
+        <location filename="../ui/system_info_window.cc" line="218"/>
+        <location filename="../ui/system_info_window.cc" line="290"/>
         <source>Manufacturer</source>
         <translation>Виробник</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="222"/>
-        <location filename="../ui/system_info_window.cc" line="237"/>
+        <location filename="../ui/system_info_window.cc" line="221"/>
+        <location filename="../ui/system_info_window.cc" line="236"/>
         <source>Model</source>
         <translation>Модель</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="227"/>
+        <location filename="../ui/system_info_window.cc" line="226"/>
         <source>Motherboard</source>
         <translation>Материнська плата</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="240"/>
-        <location filename="../ui/system_info_window.cc" line="264"/>
+        <location filename="../ui/system_info_window.cc" line="239"/>
+        <location filename="../ui/system_info_window.cc" line="263"/>
         <source>Vendor</source>
         <translation>Вендор</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="243"/>
+        <location filename="../ui/system_info_window.cc" line="242"/>
         <source>Packages</source>
         <translation>Пакети</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="246"/>
+        <location filename="../ui/system_info_window.cc" line="245"/>
         <source>Cores</source>
         <translation>Ядра</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="249"/>
+        <location filename="../ui/system_info_window.cc" line="248"/>
         <source>Threads</source>
         <translation>Потоки</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="254"/>
+        <location filename="../ui/system_info_window.cc" line="253"/>
         <source>Processor</source>
         <translation>Процесор</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="270"/>
+        <location filename="../ui/system_info_window.cc" line="269"/>
         <source>Date</source>
         <translation>Дата</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="295"/>
+        <location filename="../ui/system_info_window.cc" line="293"/>
         <source>Size</source>
         <translation>Розмір</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="298"/>
+        <location filename="../ui/system_info_window.cc" line="296"/>
         <source>Speed</source>
         <translation>Швидкість</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="298"/>
+        <location filename="../ui/system_info_window.cc" line="296"/>
         <source>%1 MHz</source>
         <translation>%1 МГц</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="301"/>
+        <location filename="../ui/system_info_window.cc" line="299"/>
         <source>Type</source>
         <translation>Тип</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="304"/>
+        <location filename="../ui/system_info_window.cc" line="302"/>
         <source>Form Factor</source>
         <translation>Форм фактор</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="307"/>
+        <location filename="../ui/system_info_window.cc" line="305"/>
         <source>Part Number</source>
         <translation>Партномер</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="311"/>
+        <location filename="../ui/system_info_window.cc" line="309"/>
         <source>Installed</source>
         <translation>Встановлено</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="311"/>
-        <location filename="../ui/system_info_window.cc" line="387"/>
-        <location filename="../ui/system_info_window.cc" line="446"/>
-        <location filename="../ui/system_info_window.cc" line="454"/>
+        <location filename="../ui/system_info_window.cc" line="309"/>
+        <location filename="../ui/system_info_window.cc" line="384"/>
+        <location filename="../ui/system_info_window.cc" line="443"/>
+        <location filename="../ui/system_info_window.cc" line="451"/>
         <source>No</source>
         <translation>Ні</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="321"/>
+        <location filename="../ui/system_info_window.cc" line="319"/>
         <source>Memory</source>
         <translation>Пам&apos;ять</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="350"/>
+        <location filename="../ui/system_info_window.cc" line="348"/>
         <source>%1 (%2 free)</source>
         <translation>%1 (%2 вільно)</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="361"/>
+        <location filename="../ui/system_info_window.cc" line="358"/>
         <source>Logical Drives</source>
         <translation>Логічні диски</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="376"/>
+        <location filename="../ui/system_info_window.cc" line="373"/>
         <source>Adapter Name</source>
         <translation>Ім&apos;я адаптера</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="379"/>
+        <location filename="../ui/system_info_window.cc" line="376"/>
         <source>Interface Type</source>
         <translation>Тип інтерфейса</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="382"/>
+        <location filename="../ui/system_info_window.cc" line="379"/>
         <source>Connection Speed</source>
         <translation>Швидкість з&apos;єднання</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="385"/>
+        <location filename="../ui/system_info_window.cc" line="382"/>
         <source>MAC Address</source>
         <translation>MAC адреса</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="387"/>
+        <location filename="../ui/system_info_window.cc" line="384"/>
         <source>DHCP Enabled</source>
         <translation>DHCP включено</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="387"/>
-        <location filename="../ui/system_info_window.cc" line="446"/>
-        <location filename="../ui/system_info_window.cc" line="454"/>
+        <location filename="../ui/system_info_window.cc" line="384"/>
+        <location filename="../ui/system_info_window.cc" line="443"/>
+        <location filename="../ui/system_info_window.cc" line="451"/>
         <source>Yes</source>
         <translation>Так</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="392"/>
+        <location filename="../ui/system_info_window.cc" line="389"/>
         <source>DHCP Server #%1</source>
         <translation>DHCP сервер #%1</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="392"/>
+        <location filename="../ui/system_info_window.cc" line="389"/>
         <source>DHCP Server</source>
         <translation>DHCP сервер</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="404"/>
+        <location filename="../ui/system_info_window.cc" line="401"/>
         <source>Address #%1</source>
         <translation>Адреса #%1</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="404"/>
+        <location filename="../ui/system_info_window.cc" line="401"/>
         <source>Address</source>
         <translation>Адреса</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="412"/>
+        <location filename="../ui/system_info_window.cc" line="409"/>
         <source>Gateway #%1</source>
         <translation>Шлюз #%1</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="412"/>
+        <location filename="../ui/system_info_window.cc" line="409"/>
         <source>Gateway</source>
         <translation>Шлюз</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="432"/>
+        <location filename="../ui/system_info_window.cc" line="429"/>
         <source>Network Connections</source>
         <translation>Мережеві з&apos;єднання</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="446"/>
+        <location filename="../ui/system_info_window.cc" line="443"/>
         <source>Default</source>
         <translation>За замовчанням</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="449"/>
+        <location filename="../ui/system_info_window.cc" line="446"/>
         <source>Port</source>
         <translation>Порт</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="452"/>
+        <location filename="../ui/system_info_window.cc" line="449"/>
         <source>Driver</source>
         <translation>Драйвер</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="454"/>
+        <location filename="../ui/system_info_window.cc" line="451"/>
         <source>Shared</source>
         <translation>Спільне користування</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="457"/>
+        <location filename="../ui/system_info_window.cc" line="454"/>
         <source>Share Name</source>
         <translation>Спільне ім&apos;я</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="459"/>
+        <location filename="../ui/system_info_window.cc" line="456"/>
         <source>Jobs Count</source>
         <translation>Лічильник завдань</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="468"/>
+        <location filename="../ui/system_info_window.cc" line="464"/>
         <source>Printers</source>
         <translation>Принтери</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="529"/>
+        <location filename="../ui/system_info_window.cc" line="525"/>
         <source>TB</source>
         <translation>ТБ</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="534"/>
+        <location filename="../ui/system_info_window.cc" line="530"/>
         <source>GB</source>
         <translation>ГБ</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="539"/>
+        <location filename="../ui/system_info_window.cc" line="535"/>
         <source>MB</source>
         <translation>МБ</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="544"/>
+        <location filename="../ui/system_info_window.cc" line="540"/>
         <source>kB</source>
         <translation>кБ</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="549"/>
+        <location filename="../ui/system_info_window.cc" line="545"/>
         <source>B</source>
         <translation>Б</translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/system_info_window.cc" line="565"/>
+        <location filename="../ui/system_info_window.cc" line="561"/>
         <source>%n seconds</source>
         <translation>
             <numerusform>%n секунда</numerusform>
@@ -1928,7 +1928,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/system_info_window.cc" line="566"/>
+        <location filename="../ui/system_info_window.cc" line="562"/>
         <source>%n minutes</source>
         <translation>
             <numerusform>%n хвилина</numerusform>
@@ -1937,7 +1937,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/system_info_window.cc" line="567"/>
+        <location filename="../ui/system_info_window.cc" line="563"/>
         <source>%n hours</source>
         <translation>
             <numerusform>%n година</numerusform>
@@ -1946,7 +1946,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/system_info_window.cc" line="591"/>
+        <location filename="../ui/system_info_window.cc" line="587"/>
         <source>%n days</source>
         <translation>
             <numerusform>%n день</numerusform>
@@ -1955,22 +1955,22 @@
         </translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="612"/>
+        <location filename="../ui/system_info_window.cc" line="608"/>
         <source>Gbps</source>
         <translation>Гб/с</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="617"/>
+        <location filename="../ui/system_info_window.cc" line="613"/>
         <source>Mbps</source>
         <translation>Мб/с</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="622"/>
+        <location filename="../ui/system_info_window.cc" line="618"/>
         <source>Kbps</source>
         <translation>Кб/с</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="627"/>
+        <location filename="../ui/system_info_window.cc" line="623"/>
         <source>bps</source>
         <translation>б/с</translation>
     </message>

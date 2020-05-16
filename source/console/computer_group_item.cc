@@ -27,7 +27,7 @@ ComputerGroupItem::ComputerGroupItem(proto::address_book::ComputerGroup* compute
     : QTreeWidgetItem(parent_item),
       computer_group_(computer_group)
 {
-    setIcon(0, QIcon(QStringLiteral(":/img/folder.png")));
+    setIcon(0, QIcon(":/img/folder.png"));
     updateItem();
 
     for (int i = 0; i < computer_group_->computer_group_size(); ++i)

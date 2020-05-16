@@ -73,9 +73,9 @@ void CheckerImpl::start()
     base::Version current_version(ASPIA_VERSION_MAJOR, ASPIA_VERSION_MINOR, ASPIA_VERSION_PATCH);
     QUrl url(update_server_);
 
-    url.setPath(QStringLiteral("/update.php"));
+    url.setPath("/update.php");
     url.setQuery(QUrlQuery(
-        QStringLiteral("package=%1&version=%2")
+        QString("package=%1&version=%2")
         .arg(package_name_)
         .arg(QString::fromStdString(current_version.toString()))));
 

@@ -188,7 +188,7 @@ MainWindow::MainWindow(const QString& file_path)
         updater::Checker* checker = new updater::Checker(this);
 
         checker->setUpdateServer(settings.updateServer());
-        checker->setPackageName(QStringLiteral("console"));
+        checker->setPackageName("console");
 
         connect(checker, &updater::Checker::finished, this, &MainWindow::onUpdateChecked);
         connect(checker, &updater::Checker::finished, checker, &updater::Checker::deleteLater);
@@ -709,25 +709,20 @@ void MainWindow::onTabContextMenu(const QPoint& pos)
         if (i != tab_index && !mru_.isPinnedFile(tab_at->filePath()))
         {
             close_other_action = new QAction(
-                QIcon(QStringLiteral(":/img/ui-tab-multi-close.png")), tr("Close other tabs"), &menu);
+                QIcon(":/img/ui-tab-multi-close.png"), tr("Close other tabs"), &menu);
             break;
         }
     }
 
     if (!is_pinned)
     {
-        close_action = new QAction(
-            QIcon(QStringLiteral(":/img/ui-tab-close.png")), tr("Close tab"), &menu);
-
-        pin_action = new QAction(
-            QIcon(QStringLiteral(":/img/lock-unlock.png")), tr("Pin tab"), &menu);
+        close_action = new QAction(QIcon(":/img/ui-tab-close.png"), tr("Close tab"), &menu);
+        pin_action = new QAction(QIcon(":/img/lock-unlock.png"), tr("Pin tab"), &menu);
     }
     else
     {
         close_action = nullptr;
-
-        pin_action = new QAction(
-            QIcon(QStringLiteral(":/img/lock.png")), tr("Pin tab"), &menu);
+        pin_action = new QAction(QIcon(":/img/lock.png"), tr("Pin tab"), &menu);
     }
 
     pin_action->setCheckable(true);
@@ -769,14 +764,12 @@ void MainWindow::onTabContextMenu(const QPoint& pos)
                     return;
             }
 
-            ui.tab_widget->setTabIcon(
-                tab_index, QIcon(QStringLiteral(":/img/address-book-pinned.png")));
+            ui.tab_widget->setTabIcon(tab_index, QIcon(":/img/address-book-pinned.png"));
             mru_.pinFile(current_path);
         }
         else
         {
-            ui.tab_widget->setTabIcon(
-                tab_index, QIcon(QStringLiteral(":/img/address-book.png")));
+            ui.tab_widget->setTabIcon(tab_index, QIcon(":/img/address-book.png"));
             mru_.unpinFile(current_path);
         }
 
@@ -996,7 +989,7 @@ void MainWindow::showTrayIcon(bool show)
         tray_menu_->addAction(ui.action_exit);
 
         tray_icon_.reset(new QSystemTrayIcon(this));
-        tray_icon_->setIcon(QIcon(QStringLiteral(":/img/main.png")));
+        tray_icon_->setIcon(QIcon(":/img/main.png"));
         tray_icon_->setToolTip(tr("Aspia Console"));
         tray_icon_->setContextMenu(tray_menu_.get());
         tray_icon_->show();
@@ -1044,8 +1037,8 @@ void MainWindow::addAddressBookTab(AddressBookTab* new_tab)
             this, &MainWindow::onComputerDoubleClicked);
 
     QIcon icon = mru_.isPinnedFile(file_path) ?
-        QIcon(QStringLiteral(":/img/address-book-pinned.png")) :
-        QIcon(QStringLiteral(":/img/address-book.png"));
+        QIcon(":/img/address-book-pinned.png") :
+        QIcon(":/img/address-book.png");
 
     int index = ui.tab_widget->addTab(new_tab, icon, new_tab->addressBookName());
 

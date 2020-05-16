@@ -39,15 +39,15 @@ public:
         switch (client.session_type)
         {
             case proto::SESSION_TYPE_DESKTOP_MANAGE:
-                setIcon(0, QIcon(QStringLiteral(":/img/monitor-keyboard.png")));
+                setIcon(0, QIcon(":/img/monitor-keyboard.png"));
                 break;
 
             case proto::SESSION_TYPE_DESKTOP_VIEW:
-                setIcon(0, QIcon(QStringLiteral(":/img/monitor.png")));
+                setIcon(0, QIcon(":/img/monitor.png"));
                 break;
 
             case proto::SESSION_TYPE_FILE_TRANSFER:
-                setIcon(0, QIcon(QStringLiteral(":/img/folder-stand.png")));
+                setIcon(0, QIcon(":/img/folder-stand.png"));
                 break;
 
             default:
@@ -212,7 +212,7 @@ void NotifierWindow::showNotifier()
         move(window_rect_.topLeft());
         setFixedSize(window_rect_.size());
 
-        ui.button_show_hide->setIcon(QIcon(QStringLiteral(":/img/arrow-left-gray.png")));
+        ui.button_show_hide->setIcon(QIcon(":/img/arrow-left-gray.png"));
     }
 }
 
@@ -230,7 +230,7 @@ void NotifierWindow::hideNotifier()
     setFixedSize(window_rect_.width() - content_size.width(),
                  window_rect_.height());
 
-    ui.button_show_hide->setIcon(QIcon(QStringLiteral(":/img/arrow-right-gray.png")));
+    ui.button_show_hide->setIcon(QIcon(":/img/arrow-right-gray.png"));
 }
 
 } // namespace host
