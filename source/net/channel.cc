@@ -213,8 +213,8 @@ bool Channel::setKeepAlive(bool enable,
     struct tcp_keepalive alive;
 
     alive.onoff = enable ? TRUE : FALSE;
-    alive.keepalivetime = time.count();
-    alive.keepaliveinterval = interval.count();
+    alive.keepalivetime = static_cast<ULONG>(time.count());
+    alive.keepaliveinterval = static_cast<ULONG>(interval.count());
 
     DWORD bytes_returned;
 

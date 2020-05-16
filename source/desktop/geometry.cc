@@ -115,8 +115,8 @@ void Rect::extend(int32_t left_offset,
 
 void Rect::scale(double horizontal, double vertical)
 {
-    right_ += width() * (horizontal - 1);
-    bottom_ += height() * (vertical - 1);
+    right_ += static_cast<int32_t>(width() * (horizontal - 1));
+    bottom_ += static_cast<int32_t>(height() * (vertical - 1));
 }
 
 void Rect::move(int32_t x, int32_t y)

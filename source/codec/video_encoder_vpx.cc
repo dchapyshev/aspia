@@ -73,7 +73,8 @@ void setCommonCodecParameters(vpx_codec_enc_cfg_t* config, const desktop::Size& 
 {
     // Use millisecond granularity time base.
     config->g_timebase.num = 1;
-    config->g_timebase.den = std::chrono::microseconds(std::chrono::seconds(1)).count();
+    config->g_timebase.den = static_cast<int>(
+        std::chrono::microseconds(std::chrono::seconds(1)).count());
 
     config->g_w = size.width();
     config->g_h = size.height();
@@ -268,7 +269,8 @@ void VideoEncoderVPX::encode(const desktop::Frame* frame, proto::VideoPacket* pa
     ret = vpx_codec_encode(codec_.get(),
                            image_.get(),
                            0, // pts
-                           std::chrono::microseconds(kTargetFrameInterval).count(),
+                           static_cast<unsigned long>(
+                               std::chrono::microseconds(kTargetFrameInterval).count()),
                            0, // flags
                            VPX_DL_REALTIME);
     DCHECK_EQ(ret, VPX_CODEC_OK);
@@ -477,13 +479,13 @@ void VideoEncoderVPX::regionFromActiveMap(desktop::Region* updated_region)
 {
     const uint8_t* map = active_map_.active_map;
 
-    for (int y = 0; y < active_map_.rows; ++y)
+    for (int y = 0; y < static_cast<int>(active_map_.rows); ++y)
     {
-        for (int x0 = 0; x0 < active_map_.cols;)
+        for (int x0 = 0; x0 < static_cast<int>(active_map_.cols);)
         {
             int x1 = x0;
 
-            for (; x1 < active_map_.cols; ++x1)
+            for (; x1 < static_cast<int>(active_map_.cols); ++x1)
             {
                 if (map[y * active_map_.cols + x1] == 0)
                     break;

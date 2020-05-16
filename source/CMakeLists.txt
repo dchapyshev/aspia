@@ -52,7 +52,8 @@ add_definitions(-DNTDDI_VERSION=0x06010000
 
 # For Asio.
 add_definitions(-DASIO_STANDALONE
-                -DASIO_NO_DEPRECATED)
+                -DASIO_NO_DEPRECATED
+                -D_SILENCE_CXX17_ALLOCATOR_VOID_DEPRECATION_WARNING)
 
 # For Qt.
 add_definitions(-DQT_NO_CAST_TO_ASCII

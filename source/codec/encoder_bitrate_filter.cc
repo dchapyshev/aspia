@@ -55,7 +55,7 @@ void EncoderBitrateFilter::setBandwidthEstimateKbps(int bandwidth_kbps)
 {
     bandwidth_kbps_.record(bandwidth_kbps);
 
-    int current_kbps = bandwidth_kbps_.weightedAverage();
+    int current_kbps = static_cast<int>(bandwidth_kbps_.weightedAverage());
     if (std::abs(current_kbps - bitrate_kbps_) >
         bitrate_kbps_ * kEncoderBitrateChangePercentage / 100)
     {
@@ -65,10 +65,10 @@ void EncoderBitrateFilter::setBandwidthEstimateKbps(int bandwidth_kbps)
 
 void EncoderBitrateFilter::setFrameSize(int width, int height)
 {
-    minimum_bitrate_kbps_ =
+    minimum_bitrate_kbps_ = static_cast<int>(
         std::max(static_cast<int64_t>(minimum_bitrate_kbps_per_megapixel_) *
                  width * height / 1000000,
-                 static_cast<int64_t>(minimum_bitrate_kbps_));
+                 static_cast<int64_t>(minimum_bitrate_kbps_)));
 }
 
 int EncoderBitrateFilter::targetBitrateKbps() const

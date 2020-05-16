@@ -91,7 +91,10 @@ void DesktopSessionAgent::onMessageReceived(const base::ByteArray& buffer)
     else if (incoming_message_.has_select_source())
     {
         if (screen_capturer_)
-            screen_capturer_->selectScreen(incoming_message_.select_source().screen().id());
+        {
+            screen_capturer_->selectScreen(static_cast<desktop::ScreenCapturer::ScreenId>(
+                incoming_message_.select_source().screen().id()));
+        }
     }
     else if (incoming_message_.has_configure())
     {
