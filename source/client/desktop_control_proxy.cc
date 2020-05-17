@@ -96,17 +96,17 @@ void DesktopControlProxy::onKeyEvent(const proto::KeyEvent& event)
         desktop_control_->onKeyEvent(event);
 }
 
-void DesktopControlProxy::onMouseEvent(const proto::MouseEvent& event)
+void DesktopControlProxy::onMouseEvents(const std::vector<proto::MouseEvent>& events)
 {
     if (!io_task_runner_->belongsToCurrentThread())
     {
         io_task_runner_->postTask(
-            std::bind(&DesktopControlProxy::onMouseEvent, shared_from_this(), event));
+            std::bind(&DesktopControlProxy::onMouseEvents, shared_from_this(), events));
         return;
     }
 
     if (desktop_control_)
-        desktop_control_->onMouseEvent(event);
+        desktop_control_->onMouseEvents(events);
 }
 
 void DesktopControlProxy::onClipboardEvent(const proto::ClipboardEvent& event)

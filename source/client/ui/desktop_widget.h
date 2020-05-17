@@ -20,10 +20,12 @@
 #define CLIENT__UI__DESKTOP_WIDGET_H
 
 #include "build/build_config.h"
+#include "desktop/frame.h"
+#include "proto/desktop.pb.h"
+
 #if defined(OS_WIN)
 #include "base/win/scoped_user_object.h"
 #endif // defined(OS_WIN)
-#include "desktop/frame.h"
 
 #include <QEvent>
 #include <QWidget>
@@ -43,7 +45,7 @@ public:
     public:
         virtual ~Delegate() = default;
 
-        virtual void onMouseEvent(const QPoint& pos, uint32_t mask) = 0;
+        virtual void onMouseEvents(const std::vector<proto::MouseEvent>& events) = 0;
         virtual void onKeyEvent(uint32_t usb_keycode, uint32_t flags) = 0;
         virtual void onDrawDesktop() = 0;
     };

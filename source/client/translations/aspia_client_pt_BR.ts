@@ -464,6 +464,11 @@
         <source>Duration</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../ui/statistics_dialog.ui" line="101"/>
+        <source>Glue Mouse</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>StatusDialog</name>
@@ -1113,7 +1118,7 @@
     <message>
         <location filename="../ui/qt_desktop_window.cc" line="220"/>
         <location filename="../ui/qt_desktop_window.cc" line="228"/>
-        <location filename="../ui/qt_desktop_window.cc" line="560"/>
+        <location filename="../ui/qt_desktop_window.cc" line="570"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1128,17 +1133,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="538"/>
+        <location filename="../ui/qt_desktop_window.cc" line="548"/>
         <source>Save File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="540"/>
+        <location filename="../ui/qt_desktop_window.cc" line="550"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="560"/>
+        <location filename="../ui/qt_desktop_window.cc" line="570"/>
         <source>Could not save image</source>
         <translation type="unfinished"></translation>
     </message>

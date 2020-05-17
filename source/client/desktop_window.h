@@ -63,6 +63,7 @@ public:
         int fps;
         int send_mouse;
         int drop_mouse;
+        int glue_mouse;
         int send_key;
         int read_clipboard;
         int send_clipboard;

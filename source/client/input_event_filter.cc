@@ -37,13 +37,6 @@ void InputEventFilter::setClipboardEnabled(bool enable)
     clipboard_enabled_ = enable;
 }
 
-std::vector<proto::MouseEvent> InputEventFilter::mouseEvent(const proto::MouseEvent& event)
-{
-    std::vector<proto::MouseEvent> in_events;
-    in_events.push_back(event);
-    return mouseEvents(in_events);
-}
-
 std::vector<proto::MouseEvent> InputEventFilter::mouseEvents(
     const std::vector<proto::MouseEvent>& events)
 {
@@ -63,14 +56,21 @@ std::vector<proto::MouseEvent> InputEventFilter::mouseEvents(
             last_pos_y_ = event.y();
             last_mask_ = event.mask();
 
-            ++send_mouse_count_;
-
             out_events.push_back(event);
         }
         else
         {
             ++drop_mouse_count_;
         }
+    }
+
+    size_t events_count = out_events.size();
+    if (events_count > 0)
+    {
+        ++send_mouse_count_;
+
+        if (events_count > 1)
+            glue_mouse_count_ += static_cast<int>(out_events.size());
     }
 
     return out_events;

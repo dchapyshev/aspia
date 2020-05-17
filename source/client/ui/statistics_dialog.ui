@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>315</width>
-    <height>288</height>
+    <height>309</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -94,6 +94,11 @@
      <item>
       <property name="text">
        <string notr="true">Drop Mouse</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Glue Mouse</string>
       </property>
      </item>
      <item>

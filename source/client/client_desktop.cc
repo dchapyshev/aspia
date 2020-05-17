@@ -180,15 +180,15 @@ void ClientDesktop::onKeyEvent(const proto::KeyEvent& event)
     sendMessage(outgoing_message_);
 }
 
-void ClientDesktop::onMouseEvent(const proto::MouseEvent& event)
+void ClientDesktop::onMouseEvents(const std::vector<proto::MouseEvent>& events)
 {
-    std::vector<proto::MouseEvent> events = input_event_filter_.mouseEvent(event);
-    if (events.empty())
+    std::vector<proto::MouseEvent> out_events = input_event_filter_.mouseEvents(events);
+    if (out_events.empty())
         return;
 
     outgoing_message_.Clear();
 
-    for (const auto& out_event : events)
+    for (const auto& out_event : out_events)
         outgoing_message_.add_mouse_event()->CopyFrom(out_event);
 
     sendMessage(outgoing_message_);
@@ -264,6 +264,7 @@ void ClientDesktop::onMetricsRequest()
     metrics.fps = fps_;
     metrics.send_mouse = input_event_filter_.sendMouseCount();
     metrics.drop_mouse = input_event_filter_.dropMouseCount();
+    metrics.glue_mouse = input_event_filter_.glueMouseCount();
     metrics.send_key   = input_event_filter_.sendKeyCount();
     metrics.read_clipboard = input_event_filter_.readClipboardCount();
     metrics.send_clipboard = input_event_filter_.sendClipboardCount();

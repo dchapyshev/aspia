@@ -20,7 +20,6 @@
 
 #include "common/keycode_converter.h"
 #include "client/ui/frame_qimage.h"
-#include "proto/desktop.pb.h"
 
 #include <QApplication>
 #include <QPainter>
@@ -54,6 +53,25 @@ bool isModifierKey(int key)
 {
     return key == Qt::Key_Control || key == Qt::Key_Alt ||
            key == Qt::Key_Shift || key == Qt::Key_Meta;
+}
+
+void addMouseEvent(std::vector<proto::MouseEvent>* events, const QPoint& pos, uint32_t mask)
+{
+    proto::MouseEvent event;
+    event.set_x(pos.x());
+    event.set_y(pos.y());
+    event.set_mask(mask);
+
+    events->push_back(event);
+};
+
+void addKeyEvent(std::vector<proto::KeyEvent>* events, uint32_t usb_keycode, uint32_t flags)
+{
+    proto::KeyEvent event;
+    event.set_usb_keycode(usb_keycode);
+    event.set_flags(flags);
+
+    events->push_back(event);
 }
 
 } // namespace
@@ -126,6 +144,8 @@ void DesktopWidget::doMouseEvent(QEvent::Type event_type,
             wheel_steps = 1;
     }
 
+    std::vector<proto::MouseEvent> events;
+
     if (prev_pos_ != pos || prev_mask_ != mask)
     {
         prev_pos_ = pos;
@@ -135,15 +155,18 @@ void DesktopWidget::doMouseEvent(QEvent::Type event_type,
         {
             for (int i = 0; i < wheel_steps; ++i)
             {
-                delegate_->onMouseEvent(pos, mask);
-                delegate_->onMouseEvent(pos, mask & ~kWheelMask);
+                addMouseEvent(&events, pos, mask);
+                addMouseEvent(&events, pos, mask & ~kWheelMask);
             }
         }
         else
         {
-            delegate_->onMouseEvent(pos, mask);
+            addMouseEvent(&events, pos, mask);
         }
     }
+
+    if (!events.empty())
+        delegate_->onMouseEvents(events);
 }
 
 void DesktopWidget::doKeyEvent(QKeyEvent* event)
@@ -275,7 +298,10 @@ void DesktopWidget::leaveEvent(QEvent* event)
     // When the mouse cursor leaves the widget area, release all the mouse buttons.
     if (prev_mask_ != 0)
     {
-        delegate_->onMouseEvent(prev_pos_, 0);
+        std::vector<proto::MouseEvent> events;
+        addMouseEvent(&events, prev_pos_, 0);
+
+        delegate_->onMouseEvents(events);
         prev_mask_ = 0;
     }
 

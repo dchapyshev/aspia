@@ -89,14 +89,18 @@ void StatisticsDialog::setMetrics(const DesktopWindow::Metrics& metrics)
                 break;
 
             case 11:
-                item->setText(1, QString::number(metrics.send_key));
+                item->setText(1, QString::number(metrics.glue_mouse));
                 break;
 
             case 12:
-                item->setText(1, QString::number(metrics.read_clipboard));
+                item->setText(1, QString::number(metrics.send_key));
                 break;
 
             case 13:
+                item->setText(1, QString::number(metrics.read_clipboard));
+                break;
+
+            case 14:
                 item->setText(1, QString::number(metrics.send_clipboard));
                 break;
         }
