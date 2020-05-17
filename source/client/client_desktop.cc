@@ -166,15 +166,15 @@ void ClientDesktop::setPreferredSize(int width, int height)
     sendMessage(outgoing_message_);
 }
 
-void ClientDesktop::onKeyEvent(const proto::KeyEvent& event)
+void ClientDesktop::onKeyEvents(const std::vector<proto::KeyEvent>& events)
 {
-    std::vector<proto::KeyEvent> events = input_event_filter_.keyEvent(event);
-    if (events.empty())
+    std::vector<proto::KeyEvent> out_events = input_event_filter_.keyEvents(events);
+    if (out_events.empty())
         return;
 
     outgoing_message_.Clear();
 
-    for (const auto& out_event : events)
+    for (const auto& out_event : out_events)
         outgoing_message_.add_key_event()->CopyFrom(out_event);
 
     sendMessage(outgoing_message_);
@@ -266,6 +266,7 @@ void ClientDesktop::onMetricsRequest()
     metrics.drop_mouse = input_event_filter_.dropMouseCount();
     metrics.glue_mouse = input_event_filter_.glueMouseCount();
     metrics.send_key   = input_event_filter_.sendKeyCount();
+    metrics.glue_key   = input_event_filter_.glueKeyCount();
     metrics.read_clipboard = input_event_filter_.readClipboardCount();
     metrics.send_clipboard = input_event_filter_.sendClipboardCount();
 

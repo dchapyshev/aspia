@@ -594,16 +594,6 @@
         <source>Value</source>
         <translation type="unfinished">Waarde</translation>
     </message>
-    <message>
-        <location filename="../ui/statistics_dialog.ui" line="46"/>
-        <source>Duration</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/statistics_dialog.ui" line="101"/>
-        <source>Glue Mouse</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>StatusDialog</name>
@@ -1539,7 +1529,7 @@
     <message>
         <location filename="../ui/qt_desktop_window.cc" line="220"/>
         <location filename="../ui/qt_desktop_window.cc" line="228"/>
-        <location filename="../ui/qt_desktop_window.cc" line="570"/>
+        <location filename="../ui/qt_desktop_window.cc" line="565"/>
         <source>Warning</source>
         <translation type="unfinished">Waarschuwing</translation>
     </message>
@@ -1558,17 +1548,17 @@
         <translation type="obsolete">Selecteer een video encoding is geannuleerd door de gebruiker.</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="548"/>
+        <location filename="../ui/qt_desktop_window.cc" line="543"/>
         <source>Save File</source>
         <translation type="unfinished">Bestand Opslaan</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="550"/>
+        <location filename="../ui/qt_desktop_window.cc" line="545"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation type="unfinished">PNG Afbeelding (*.png);;BMP Afbeelding (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="570"/>
+        <location filename="../ui/qt_desktop_window.cc" line="565"/>
         <source>Could not save image</source>
         <translation type="unfinished">Kon het bestand niet opslaan</translation>
     </message>

@@ -429,14 +429,9 @@ void QtDesktopWindow::onMouseEvents(const std::vector<proto::MouseEvent>& events
         desktop_control_proxy_->onMouseEvents(out_events);
 }
 
-void QtDesktopWindow::onKeyEvent(uint32_t usb_keycode, uint32_t flags)
+void QtDesktopWindow::onKeyEvents(const std::vector<proto::KeyEvent>& events)
 {
-    proto::KeyEvent key_event;
-
-    key_event.set_usb_keycode(usb_keycode);
-    key_event.set_flags(flags);
-
-    desktop_control_proxy_->onKeyEvent(key_event);
+    desktop_control_proxy_->onKeyEvents(events);
 }
 
 void QtDesktopWindow::onDrawDesktop()

@@ -598,16 +598,6 @@
         <source>Value</source>
         <translation type="unfinished">Значення</translation>
     </message>
-    <message>
-        <location filename="../ui/statistics_dialog.ui" line="46"/>
-        <source>Duration</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/statistics_dialog.ui" line="101"/>
-        <source>Glue Mouse</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>StatusDialog</name>
@@ -1543,7 +1533,7 @@
     <message>
         <location filename="../ui/qt_desktop_window.cc" line="220"/>
         <location filename="../ui/qt_desktop_window.cc" line="228"/>
-        <location filename="../ui/qt_desktop_window.cc" line="570"/>
+        <location filename="../ui/qt_desktop_window.cc" line="565"/>
         <source>Warning</source>
         <translation type="unfinished">Попередження</translation>
     </message>
@@ -1562,17 +1552,17 @@
         <translation type="obsolete">Вибір підтримуваного кодування відео відмінено користувачем.</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="548"/>
+        <location filename="../ui/qt_desktop_window.cc" line="543"/>
         <source>Save File</source>
         <translation type="unfinished">Зберегти файл</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="550"/>
+        <location filename="../ui/qt_desktop_window.cc" line="545"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation type="unfinished">Зображення PNG (*.png);;Зображення BMP (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="570"/>
+        <location filename="../ui/qt_desktop_window.cc" line="565"/>
         <source>Could not save image</source>
         <translation type="unfinished">Неможливо зберегти зображення</translation>
     </message>

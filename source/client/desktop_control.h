@@ -33,7 +33,7 @@ public:
     virtual void setCurrentScreen(const proto::Screen& screen) = 0;
     virtual void setPreferredSize(int width, int height) = 0;
 
-    virtual void onKeyEvent(const proto::KeyEvent& event) = 0;
+    virtual void onKeyEvents(const std::vector<proto::KeyEvent>& events) = 0;
     virtual void onMouseEvents(const std::vector<proto::MouseEvent>& event) = 0;
     virtual void onClipboardEvent(const proto::ClipboardEvent& event) = 0;
     virtual void onPowerControl(proto::PowerControl::Action action) = 0;

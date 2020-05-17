@@ -65,6 +65,7 @@ public:
         int drop_mouse;
         int glue_mouse;
         int send_key;
+        int glue_key;
         int read_clipboard;
         int send_clipboard;
     };

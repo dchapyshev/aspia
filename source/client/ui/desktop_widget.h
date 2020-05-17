@@ -46,7 +46,7 @@ public:
         virtual ~Delegate() = default;
 
         virtual void onMouseEvents(const std::vector<proto::MouseEvent>& events) = 0;
-        virtual void onKeyEvent(uint32_t usb_keycode, uint32_t flags) = 0;
+        virtual void onKeyEvents(const std::vector<proto::KeyEvent>& events) = 0;
         virtual void onDrawDesktop() = 0;
     };
 

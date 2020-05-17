@@ -83,17 +83,17 @@ void DesktopControlProxy::setPreferredSize(int width, int height)
         desktop_control_->setPreferredSize(width, height);
 }
 
-void DesktopControlProxy::onKeyEvent(const proto::KeyEvent& event)
+void DesktopControlProxy::onKeyEvents(const std::vector<proto::KeyEvent>& events)
 {
     if (!io_task_runner_->belongsToCurrentThread())
     {
         io_task_runner_->postTask(
-            std::bind(&DesktopControlProxy::onKeyEvent, shared_from_this(), event));
+            std::bind(&DesktopControlProxy::onKeyEvents, shared_from_this(), events));
         return;
     }
 
     if (desktop_control_)
-        desktop_control_->onKeyEvent(event);
+        desktop_control_->onKeyEvents(events);
 }
 
 void DesktopControlProxy::onMouseEvents(const std::vector<proto::MouseEvent>& events)

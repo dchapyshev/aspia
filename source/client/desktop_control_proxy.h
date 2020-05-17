@@ -43,7 +43,7 @@ public:
     void setDesktopConfig(const proto::DesktopConfig& desktop_config);
     void setCurrentScreen(const proto::Screen& screen);
     void setPreferredSize(int width, int height);
-    void onKeyEvent(const proto::KeyEvent& event);
+    void onKeyEvents(const std::vector<proto::KeyEvent>& events);
     void onMouseEvents(const std::vector<proto::MouseEvent>& events);
     void onClipboardEvent(const proto::ClipboardEvent& event);
     void onPowerControl(proto::PowerControl::Action action);

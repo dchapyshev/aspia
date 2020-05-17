@@ -37,8 +37,6 @@ public:
     void setClipboardEnabled(bool enable);
 
     std::vector<proto::MouseEvent> mouseEvents(const std::vector<proto::MouseEvent>& events);
-
-    std::vector<proto::KeyEvent> keyEvent(const proto::KeyEvent& event);
     std::vector<proto::KeyEvent> keyEvents(const std::vector<proto::KeyEvent>& events);
 
     std::optional<proto::ClipboardEvent> readClipboardEvent(const proto::ClipboardEvent& event);
@@ -48,6 +46,7 @@ public:
     int dropMouseCount() const { return drop_mouse_count_; }
     int glueMouseCount() const { return glue_mouse_count_; }
     int sendKeyCount() const { return send_key_count_; }
+    int glueKeyCount() const { return glue_key_count_; }
     int readClipboardCount() const { return read_clipboard_count_; }
     int sendClipboardCount() const { return send_clipboard_count_; }
 
@@ -63,6 +62,7 @@ private:
     int drop_mouse_count_ = 0;
     int glue_mouse_count_ = 0;
     int send_key_count_ = 0;
+    int glue_key_count_ = 0;
     int read_clipboard_count_ = 0;
     int send_clipboard_count_ = 0;
 };

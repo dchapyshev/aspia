@@ -76,7 +76,7 @@ public:
 
     // DesktopWidget::Delegate implementation.
     void onMouseEvents(const std::vector<proto::MouseEvent>& events) override;
-    void onKeyEvent(uint32_t usb_keycode, uint32_t flags) override;
+    void onKeyEvents(const std::vector<proto::KeyEvent>& events) override;
     void onDrawDesktop() override;
 
 protected:

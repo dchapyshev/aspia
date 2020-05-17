@@ -198,39 +198,47 @@ void DesktopWidget::executeKeyCombination(int key_sequence)
     const uint32_t kUsbCodeLeftShift = 0x0700e1;
     const uint32_t kUsbCodeLeftMeta = 0x0700e3;
 
-    QVector<int> keys;
+    uint32_t flags;
 
-    if (key_sequence & Qt::AltModifier)
-        keys.push_back(kUsbCodeLeftAlt);
-
-    if (key_sequence & Qt::ControlModifier)
-        keys.push_back(kUsbCodeLeftCtrl);
-
-    if (key_sequence & Qt::ShiftModifier)
-        keys.push_back(kUsbCodeLeftShift);
-
-    if (key_sequence & Qt::MetaModifier)
-        keys.push_back(kUsbCodeLeftMeta);
+    flags |= (isCapsLockActivated() ? proto::KeyEvent::CAPSLOCK : 0);
+    flags |= (isNumLockActivated() ? proto::KeyEvent::NUMLOCK : 0);
 
     uint32_t key = common::KeycodeConverter::qtKeycodeToUsbKeycode(
         key_sequence & ~Qt::KeyboardModifierMask);
     if (key == common::KeycodeConverter::invalidUsbKeycode())
         return;
 
-    keys.push_back(key);
+    std::vector<proto::KeyEvent> events;
 
-    uint32_t flags = proto::KeyEvent::PRESSED;
+    if (key_sequence & Qt::AltModifier)
+        addKeyEvent(&events, kUsbCodeLeftAlt, flags | proto::KeyEvent::PRESSED);
 
-    flags |= (isCapsLockActivated() ? proto::KeyEvent::CAPSLOCK : 0);
-    flags |= (isNumLockActivated() ? proto::KeyEvent::NUMLOCK : 0);
+    if (key_sequence & Qt::ControlModifier)
+        addKeyEvent(&events, kUsbCodeLeftCtrl, flags | proto::KeyEvent::PRESSED);
 
-    for (auto it = keys.cbegin(); it != keys.cend(); ++it)
-        executeKeyEvent(*it, flags);
+    if (key_sequence & Qt::ShiftModifier)
+        addKeyEvent(&events, kUsbCodeLeftShift, flags | proto::KeyEvent::PRESSED);
 
-    flags ^= proto::KeyEvent::PRESSED;
+    if (key_sequence & Qt::MetaModifier)
+        addKeyEvent(&events, kUsbCodeLeftMeta, flags | proto::KeyEvent::PRESSED);
 
-    for (auto it = keys.crbegin(); it != keys.crend(); ++it)
-        executeKeyEvent(*it, flags);
+    addKeyEvent(&events, key, flags | proto::KeyEvent::PRESSED);
+    addKeyEvent(&events, key, flags);
+
+    if (key_sequence & Qt::MetaModifier)
+        addKeyEvent(&events, kUsbCodeLeftMeta, flags);
+
+    if (key_sequence & Qt::ShiftModifier)
+        addKeyEvent(&events, kUsbCodeLeftShift, flags);
+
+    if (key_sequence & Qt::ControlModifier)
+        addKeyEvent(&events, kUsbCodeLeftCtrl, flags);
+
+    if (key_sequence & Qt::AltModifier)
+        addKeyEvent(&events, kUsbCodeLeftAlt, flags);
+
+    if (!events.empty())
+        delegate_->onKeyEvents(events);
 }
 
 void DesktopWidget::enableKeyCombinations(bool enable)
@@ -332,8 +340,16 @@ void DesktopWidget::focusOutEvent(QFocusEvent* event)
         flags |= (isCapsLockActivated() ? proto::KeyEvent::CAPSLOCK : 0);
         flags |= (isNumLockActivated() ? proto::KeyEvent::NUMLOCK : 0);
 
-        for (const auto& key : pressed_keys_)
-            executeKeyEvent(key, flags);
+        std::vector<proto::KeyEvent> events;
+
+        auto it = pressed_keys_.begin();
+        while (it != pressed_keys_.end())
+        {
+            addKeyEvent(&events, *it, flags);
+            it = pressed_keys_.erase(it);
+        }
+
+        delegate_->onKeyEvents(events);
     }
 
     QWidget::focusOutEvent(event);
@@ -346,7 +362,10 @@ void DesktopWidget::executeKeyEvent(uint32_t usb_keycode, uint32_t flags)
     else
         pressed_keys_.erase(usb_keycode);
 
-    delegate_->onKeyEvent(usb_keycode, flags);
+    std::vector<proto::KeyEvent> events;
+    addKeyEvent(&events, usb_keycode, flags);
+
+    delegate_->onKeyEvents(events);
 }
 
 #if defined(OS_WIN)
