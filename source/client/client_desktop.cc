@@ -178,10 +178,12 @@ void ClientDesktop::onMouseEvent(const proto::MouseEvent& event)
     if (sessionType() != proto::SESSION_TYPE_DESKTOP_MANAGE)
         return;
 
-    ++pointer_events_;
+    std::optional<proto::MouseEvent> out_event = mouse_event_filter_.mouseEvent(event);
+    if (!out_event.has_value())
+        return;
 
     outgoing_message_.Clear();
-    outgoing_message_.mutable_mouse_event()->CopyFrom(event);
+    outgoing_message_.mutable_mouse_event()->CopyFrom(out_event.value());
     sendMessage(outgoing_message_);
 }
 
@@ -251,7 +253,8 @@ void ClientDesktop::onMetricsRequest()
     metrics.max_video_packet = max_video_packet_;
     metrics.avg_video_packet = avg_video_packet_;
     metrics.fps = fps_;
-    metrics.pointer_events = pointer_events_;
+    metrics.send_mouse_events = mouse_event_filter_.sendCount();
+    metrics.drop_mouse_events = mouse_event_filter_.dropCount();
     metrics.key_events = key_events_;
 
     desktop_window_proxy_->setMetrics(metrics);
