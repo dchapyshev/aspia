@@ -60,6 +60,7 @@ private:
     std::unique_ptr<ipc::Channel> channel_;
     SharedBuffers shared_buffers_;
     std::unique_ptr<desktop::Frame> last_frame_;
+    std::unique_ptr<desktop::MouseCursor> last_mouse_cursor_;
 
     proto::internal::ServiceToDesktop outgoing_message_;
     proto::internal::DesktopToService incoming_message_;

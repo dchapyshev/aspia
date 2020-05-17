@@ -47,8 +47,7 @@ public:
 
     void setDesktopSessionProxy(std::shared_ptr<DesktopSessionProxy> desktop_session_proxy);
 
-    void encodeFrame(const desktop::Frame& frame);
-    void encodeMouseCursor(const desktop::MouseCursor& mouse_cursor);
+    void encode(const desktop::Frame* frame, const desktop::MouseCursor* cursor);
     void setScreenList(const proto::ScreenList& list);
     void injectClipboardEvent(const proto::ClipboardEvent& event);
 

@@ -261,16 +261,10 @@ void UserSession::onDesktopSessionStopped()
     }
 }
 
-void UserSession::onScreenCaptured(const desktop::Frame& frame)
+void UserSession::onScreenCaptured(const desktop::Frame* frame, const desktop::MouseCursor* cursor)
 {
     for (const auto& client : desktop_clients_)
-        static_cast<ClientSessionDesktop*>(client.get())->encodeFrame(frame);
-}
-
-void UserSession::onCursorCaptured(const desktop::MouseCursor& mouse_cursor)
-{
-    for (const auto& client : desktop_clients_)
-        static_cast<ClientSessionDesktop*>(client.get())->encodeMouseCursor(mouse_cursor);
+        static_cast<ClientSessionDesktop*>(client.get())->encode(frame, cursor);
 }
 
 void UserSession::onScreenListChanged(const proto::ScreenList& list)

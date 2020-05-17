@@ -167,14 +167,10 @@ void DesktopSessionManager::onDesktopSessionStopped()
     dettachSession(FROM_HERE);
 }
 
-void DesktopSessionManager::onScreenCaptured(const desktop::Frame& frame)
+void DesktopSessionManager::onScreenCaptured(
+    const desktop::Frame* frame, const desktop::MouseCursor* mouse_cursor)
 {
-    delegate_->onScreenCaptured(frame);
-}
-
-void DesktopSessionManager::onCursorCaptured(const desktop::MouseCursor& mouse_cursor)
-{
-    delegate_->onCursorCaptured(std::move(mouse_cursor));
+    delegate_->onScreenCaptured(frame, mouse_cursor);
 }
 
 void DesktopSessionManager::onScreenListChanged(const proto::ScreenList& list)

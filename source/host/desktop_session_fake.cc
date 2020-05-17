@@ -83,7 +83,7 @@ void DesktopSessionFake::FrameGenerator::generateFrame()
 
     if (delegate_)
     {
-        delegate_->onScreenCaptured(*frame_);
+        delegate_->onScreenCaptured(frame_.get(), nullptr);
 
         task_runner_->postDelayedTask(
             std::bind(&FrameGenerator::generateFrame, shared_from_this()),

@@ -128,7 +128,7 @@ void DesktopSessionIpc::captureScreen()
     if (last_frame_)
     {
         last_frame_->updatedRegion()->addRect(desktop::Rect::makeSize(last_frame_->size()));
-        delegate_->onScreenCaptured(*last_frame_);
+        delegate_->onScreenCaptured(last_frame_.get(), last_mouse_cursor_.get());
     }
     else
     {
@@ -216,37 +216,50 @@ void DesktopSessionIpc::onMessageReceived(const base::ByteArray& buffer)
 
 void DesktopSessionIpc::onScreenCaptured(const proto::internal::ScreenCaptured& screen_captured)
 {
+    const desktop::Frame* frame = nullptr;
+    const desktop::MouseCursor* mouse_cursor = nullptr;
+
     if (screen_captured.has_frame())
     {
-        const proto::internal::DesktopFrame& frame = screen_captured.frame();
+        const proto::internal::DesktopFrame& serialized_frame = screen_captured.frame();
 
-        std::unique_ptr<SharedBuffer> shared_buffer = sharedBuffer(frame.shared_buffer_id());
-        if (!shared_buffer)
-            return;
+        std::unique_ptr<SharedBuffer> shared_buffer = sharedBuffer(
+            serialized_frame.shared_buffer_id());
+        if (shared_buffer)
+        {
+            last_frame_ = desktop::SharedMemoryFrame::attach(
+                desktop::Size(serialized_frame.width(), serialized_frame.height()),
+                desktop::PixelFormat::ARGB(),
+                std::move(shared_buffer));
+            last_frame_->setDpi(desktop::Point(
+                serialized_frame.dpi_x(), serialized_frame.dpi_y()));
 
-        last_frame_ = desktop::SharedMemoryFrame::attach(
-            desktop::Size(frame.width(), frame.height()),
-            desktop::PixelFormat::ARGB(),
-            std::move(shared_buffer));
-        last_frame_->setDpi(desktop::Point(frame.dpi_x(), frame.dpi_y()));
+            desktop::Region* updated_region = last_frame_->updatedRegion();
 
-        desktop::Region* updated_region = last_frame_->updatedRegion();
+            for (int i = 0; i < serialized_frame.dirty_rect_size(); ++i)
+                updated_region->addRect(codec::parseRect(serialized_frame.dirty_rect(i)));
 
-        for (int i = 0; i < frame.dirty_rect_size(); ++i)
-            updated_region->addRect(codec::parseRect(frame.dirty_rect(i)));
-
-        delegate_->onScreenCaptured(*last_frame_);
+            frame = last_frame_.get();
+        }
     }
 
     if (screen_captured.has_mouse_cursor())
     {
-        const proto::internal::MouseCursor& mouse_cursor = screen_captured.mouse_cursor();
+        const proto::internal::MouseCursor& serialized_mouse_cursor =
+            screen_captured.mouse_cursor();
 
-        delegate_->onCursorCaptured(desktop::MouseCursor(
-            base::fromStdString(mouse_cursor.data()),
-            desktop::Size(mouse_cursor.width(), mouse_cursor.height()),
-            desktop::Point(mouse_cursor.hotspot_x(), mouse_cursor.hotspot_y())));
+        desktop::Size size =
+            desktop::Size(serialized_mouse_cursor.width(), serialized_mouse_cursor.height());
+        desktop::Point hotspot =
+            desktop::Point(serialized_mouse_cursor.hotspot_x(), serialized_mouse_cursor.hotspot_y());
+
+        last_mouse_cursor_ = std::make_unique<desktop::MouseCursor>(
+            base::fromStdString(serialized_mouse_cursor.data()), size, hotspot);
+
+        mouse_cursor = last_mouse_cursor_.get();
     }
+
+    delegate_->onScreenCaptured(frame, mouse_cursor);
 
     outgoing_message_.Clear();
     outgoing_message_.mutable_next_screen_capture()->set_update_interval(40);

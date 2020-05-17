@@ -142,51 +142,47 @@ void ClientSessionDesktop::onStarted()
     sendMessage(base::serialize(outgoing_message_));
 }
 
-void ClientSessionDesktop::encodeFrame(const desktop::Frame& frame)
+void ClientSessionDesktop::encode(const desktop::Frame* frame, const desktop::MouseCursor* cursor)
 {
-    if (!video_encoder_ || !scale_reducer_)
-        return;
+    outgoing_message_.Clear();
 
-    const desktop::Size& source_size = frame.size();
-
-    if (preferred_size_.width() > source_size.width() ||
-        preferred_size_.height() > source_size.height())
+    if (frame && video_encoder_ && scale_reducer_)
     {
-        preferred_size_ = source_size;
+        const desktop::Size& source_size = frame->size();
+
+        if (preferred_size_.width() > source_size.width() ||
+            preferred_size_.height() > source_size.height())
+        {
+            preferred_size_ = source_size;
+        }
+
+        if (preferred_size_.isEmpty())
+            preferred_size_ = source_size;
+
+        const desktop::Frame* scaled_frame = scale_reducer_->scaleFrame(frame, preferred_size_);
+        if (!scaled_frame)
+            return;
+
+        proto::VideoPacket* packet = outgoing_message_.mutable_video_packet();
+
+        // Encode the frame into a video packet.
+        video_encoder_->encode(scaled_frame, packet);
+
+        if (packet->has_format())
+        {
+            proto::Size* screen_size = packet->mutable_format()->mutable_screen_size();
+            screen_size->set_width(frame->size().width());
+            screen_size->set_height(frame->size().height());
+        }
     }
 
-    if (preferred_size_.isEmpty())
-        preferred_size_ = source_size;
-
-    const desktop::Frame* scaled_frame = scale_reducer_->scaleFrame(&frame, preferred_size_);
-    if (!scaled_frame)
-        return;
-
-    outgoing_message_.Clear();
-    proto::VideoPacket* packet = outgoing_message_.mutable_video_packet();
-
-    // Encode the frame into a video packet.
-    video_encoder_->encode(scaled_frame, packet);
-
-    if (packet->has_format())
+    if (cursor && cursor_encoder_)
     {
-        proto::Size* screen_size = packet->mutable_format()->mutable_screen_size();
-        screen_size->set_width(frame.size().width());
-        screen_size->set_height(frame.size().height());
+        if (!cursor_encoder_->encode(*cursor, outgoing_message_.mutable_cursor_shape()))
+            outgoing_message_.clear_cursor_shape();
     }
 
     sendMessage(base::serialize(outgoing_message_));
-}
-
-void ClientSessionDesktop::encodeMouseCursor(const desktop::MouseCursor& mouse_cursor)
-{
-    if (!cursor_encoder_)
-        return;
-
-    outgoing_message_.Clear();
-
-    if (cursor_encoder_->encode(mouse_cursor, outgoing_message_.mutable_cursor_shape()))
-        sendMessage(base::serialize(outgoing_message_));
 }
 
 void ClientSessionDesktop::setScreenList(const proto::ScreenList& list)
