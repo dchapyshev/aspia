@@ -88,37 +88,37 @@
      </item>
      <item>
       <property name="text">
-       <string notr="true">Send Mouse</string>
+       <string notr="true">Send Mouse Event</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string notr="true">Drop Mouse</string>
+       <string notr="true">Drop Mouse Event</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string notr="true">Glue Mouse</string>
+       <string notr="true">Glue Mouse Event</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string notr="true">Send Key</string>
+       <string notr="true">Send Key Event</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string notr="true">Glue Key</string>
+       <string notr="true">Glue Key Event</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string notr="true">Read Clipboard</string>
+       <string notr="true">Read Clipboard Event</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string notr="true">Send Clipboard</string>
+       <string notr="true">Send Clipboard Event</string>
       </property>
      </item>
     </widget>
