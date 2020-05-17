@@ -89,7 +89,7 @@ std::filesystem::path defaultLogFileDir()
     return path;
 }
 
-bool initLoggingImpl(const LoggingSettings& settings)
+bool initLoggingImpl(const LoggingSettings& settings, const std::filesystem::path& file_name)
 {
     std::scoped_lock lock(g_log_file_lock);
     g_log_file.close();
@@ -120,7 +120,8 @@ bool initLoggingImpl(const LoggingSettings& settings)
     SystemTime time = SystemTime::now();
 
     std::ostringstream file_name_stream;
-    file_name_stream << std::setfill('0')
+    file_name_stream << file_name.c_str() << '-'
+                     << std::setfill('0')
                      << std::setw(4) << time.year()
                      << std::setw(2) << time.month()
                      << std::setw(2) << time.day()
@@ -164,17 +165,25 @@ LoggingSettings::LoggingSettings()
 
 bool initLogging(const LoggingSettings& settings)
 {
-    if (!initLoggingImpl(settings))
-        return false;
-
+    std::filesystem::path file_path;
 #if defined(OS_WIN)
     wchar_t buffer[MAX_PATH] = { 0 };
+    GetModuleFileNameExW(GetCurrentProcess(), nullptr, buffer, std::size(buffer));
+    file_path = buffer;
+#else
+    file_path = "unknown";
+#endif
 
-    if (GetModuleFileNameExW(GetCurrentProcess(), nullptr, buffer, std::size(buffer)))
-    {
-        LOG(LS_INFO) << "Executable file: " << buffer;
-    }
+    std::filesystem::path file_name = file_path.filename();
+    file_name.replace_extension();
 
+    if (!initLoggingImpl(settings, file_name))
+        return false;
+
+    LOG(LS_INFO) << "Executable file: " << file_path.c_str();
+    LOG(LS_INFO) << "Debugger present: " << (isDebuggerPresent() ? "Yes" : "No");
+
+#if defined(OS_WIN)
 #if defined(NDEBUG)
     LOG(LS_INFO) << "Debug build: No";
 #else
@@ -184,7 +193,6 @@ bool initLogging(const LoggingSettings& settings)
     #warning Not implemented
 #endif
 
-    LOG(LS_INFO) << "Debugger present: " << (isDebuggerPresent() ? "Yes" : "No");
     LOG(LS_INFO) << "Logging started";
     return true;
 }
