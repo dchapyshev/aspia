@@ -28,7 +28,7 @@ namespace net {
 class Server::Impl : public std::enable_shared_from_this<Impl>
 {
 public:
-    Impl(asio::io_context& io_context);
+    explicit Impl(asio::io_context& io_context);
     ~Impl();
 
     void start(uint16_t port, Delegate* delegate);
