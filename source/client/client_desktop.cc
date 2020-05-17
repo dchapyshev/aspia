@@ -169,7 +169,7 @@ void ClientDesktop::onKeyEvent(const proto::KeyEvent& event)
     ++key_events_;
 
     outgoing_message_.Clear();
-    outgoing_message_.mutable_key_event()->CopyFrom(event);
+    outgoing_message_.add_key_event()->CopyFrom(event);
     sendMessage(outgoing_message_);
 }
 
@@ -183,7 +183,7 @@ void ClientDesktop::onMouseEvent(const proto::MouseEvent& event)
         return;
 
     outgoing_message_.Clear();
-    outgoing_message_.mutable_mouse_event()->CopyFrom(out_event.value());
+    outgoing_message_.add_mouse_event()->CopyFrom(out_event.value());
     sendMessage(outgoing_message_);
 }
 

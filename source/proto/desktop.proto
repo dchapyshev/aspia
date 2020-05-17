@@ -192,11 +192,11 @@ message HostToClient
 
 message ClientToHost
 {
-    MouseEvent mouse_event         = 1;
-    KeyEvent key_event             = 2;
+    repeated MouseEvent mouse_event = 1;
+    repeated KeyEvent key_event     = 2;
     // Field 3 reserved for TouchEvent.
     // Field 4 reserved for TextEvent.
-    ClipboardEvent clipboard_event = 5;
-    DesktopExtension extension     = 6;
-    DesktopConfig config           = 7;
+    ClipboardEvent clipboard_event  = 5;
+    DesktopExtension extension      = 6;
+    DesktopConfig config            = 7;
 }
