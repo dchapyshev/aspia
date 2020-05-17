@@ -606,6 +606,11 @@
         <source>Value</source>
         <translation>Значение</translation>
     </message>
+    <message>
+        <location filename="../ui/statistics_dialog.ui" line="46"/>
+        <source>Duration</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>StatusDialog</name>

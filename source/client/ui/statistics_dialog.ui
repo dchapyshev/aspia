@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>315</width>
-    <height>272</height>
+    <height>288</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -41,6 +41,11 @@
        <string>Value</string>
       </property>
      </column>
+     <item>
+      <property name="text">
+       <string>Duration</string>
+      </property>
+     </item>
      <item>
       <property name="text">
        <string notr="true">Total RX</string>

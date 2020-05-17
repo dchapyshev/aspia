@@ -19,6 +19,7 @@
 #ifndef CLIENT__DESKTOP_WINDOW_H
 #define CLIENT__DESKTOP_WINDOW_H
 
+#include <chrono>
 #include <memory>
 #include <string>
 
@@ -51,6 +52,7 @@ public:
 
     struct Metrics
     {
+        std::chrono::seconds duration;
         int64_t total_rx;
         int64_t total_tx;
         int speed_rx;

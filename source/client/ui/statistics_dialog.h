@@ -23,6 +23,8 @@
 #include "client/desktop_window.h"
 #include "ui_statistics_dialog.h"
 
+#include <QTime>
+
 namespace client {
 
 class StatisticsDialog : public QDialog
@@ -44,6 +46,7 @@ private:
 
     Ui::StatisticsDialog ui;
     QTimer* update_timer_ = nullptr;
+    QTime duration_;
 
     DISALLOW_COPY_AND_ASSIGN(StatisticsDialog);
 };

@@ -69,7 +69,9 @@ void ClientDesktop::setDesktopWindow(std::shared_ptr<DesktopWindowProxy> desktop
 
 void ClientDesktop::onSessionStarted(const base::Version& peer_version)
 {
+    start_time_ = Clock::now();
     started_ = true;
+
     input_event_filter_.setSessionType(sessionType());
     desktop_window_proxy_->showWindow(desktop_control_proxy_, peer_version);
 }
@@ -239,15 +241,19 @@ void ClientDesktop::onMetricsRequest()
 {
     TimePoint current_time = Clock::now();
 
-    std::chrono::milliseconds duration =
+    std::chrono::milliseconds fps_duration =
         std::chrono::duration_cast<std::chrono::milliseconds>(current_time - begin_time_);
 
-    fps_ = calculateFps(fps_, duration, video_frame_count_);
+    fps_ = calculateFps(fps_, fps_duration, video_frame_count_);
 
     begin_time_ = current_time;
     video_frame_count_ = 0;
 
+    std::chrono::seconds session_duration =
+        std::chrono::duration_cast<std::chrono::seconds>(current_time - start_time_);
+
     DesktopWindow::Metrics metrics;
+    metrics.duration = session_duration;
     metrics.total_rx = totalRx();
     metrics.total_tx = totalTx();
     metrics.speed_rx = speedRx();
