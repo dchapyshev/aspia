@@ -182,7 +182,8 @@ void ClientSessionDesktop::encode(const desktop::Frame* frame, const desktop::Mo
             outgoing_message_.clear_cursor_shape();
     }
 
-    sendMessage(base::serialize(outgoing_message_));
+    if (outgoing_message_.has_video_packet() || outgoing_message_.has_cursor_shape())
+        sendMessage(base::serialize(outgoing_message_));
 }
 
 void ClientSessionDesktop::setScreenList(const proto::ScreenList& list)
