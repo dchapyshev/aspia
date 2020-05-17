@@ -126,7 +126,10 @@ void DesktopWidget::doMouseEvent(QEvent::Type event_type,
             wheel_steps = 1;
     }
 
-    if (prev_pos_ != pos || prev_mask_ != mask)
+    int delta_x = std::abs(prev_pos_.x() - pos.x());
+    int delta_y = std::abs(prev_pos_.y() - pos.y());
+
+    if (delta_x > 1 || delta_y > 1 || prev_mask_ != mask)
     {
         prev_pos_ = pos;
         prev_mask_ = mask & ~kWheelMask;
