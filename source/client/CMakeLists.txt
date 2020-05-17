@@ -62,8 +62,8 @@ list(APPEND SOURCE_CLIENT
     file_transfer_window_proxy.cc
     file_transfer_window_proxy.h
     frame_factory.h
-    mouse_event_filter.cc
-    mouse_event_filter.h
+    input_event_filter.cc
+    input_event_filter.h
     status_window.h
     status_window_proxy.cc
     status_window_proxy.h)

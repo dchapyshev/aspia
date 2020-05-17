@@ -59,9 +59,11 @@ public:
         size_t max_video_packet;
         size_t avg_video_packet;
         int fps;
-        int send_mouse_events;
-        int drop_mouse_events;
-        int key_events;
+        int send_mouse;
+        int drop_mouse;
+        int send_key;
+        int read_clipboard;
+        int send_clipboard;
     };
 
     virtual void showWindow(std::shared_ptr<DesktopControlProxy> desktop_control_proxy,

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>315</width>
-    <height>238</height>
+    <height>272</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -83,17 +83,27 @@
      </item>
      <item>
       <property name="text">
-       <string notr="true">Send Mouse Events</string>
+       <string notr="true">Send Mouse</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string notr="true">Drop Mouse Events</string>
+       <string notr="true">Drop Mouse</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string notr="true">Key Events</string>
+       <string notr="true">Send Key</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string notr="true">Read Clipboard</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string notr="true">Send Clipboard</string>
       </property>
      </item>
     </widget>

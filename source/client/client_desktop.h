@@ -22,7 +22,7 @@
 #include "base/macros_magic.h"
 #include "client/client.h"
 #include "client/desktop_control.h"
-#include "client/mouse_event_filter.h"
+#include "client/input_event_filter.h"
 #include "desktop/geometry.h"
 #include "proto/system_info.pb.h"
 
@@ -75,7 +75,7 @@ private:
     void readConfigRequest(const proto::DesktopConfigRequest& config_request);
     void readVideoPacket(const proto::VideoPacket& packet);
     void readCursorShape(const proto::CursorShape& cursor_shape);
-    void readClipboardEvent(const proto::ClipboardEvent& clipboard_event);
+    void readClipboardEvent(const proto::ClipboardEvent& event);
     void readExtension(const proto::DesktopExtension& extension);
 
     bool started_ = false;
@@ -92,7 +92,7 @@ private:
     std::unique_ptr<codec::VideoDecoder> video_decoder_;
     std::unique_ptr<codec::CursorDecoder> cursor_decoder_;
 
-    MouseEventFilter mouse_event_filter_;
+    InputEventFilter input_event_filter_;
 
     using Clock = std::chrono::high_resolution_clock;
     using TimePoint = std::chrono::time_point<Clock>;
@@ -103,7 +103,6 @@ private:
     size_t max_video_packet_ = 0;
     size_t avg_video_packet_ = 0;
     int fps_ = 0;
-    int key_events_ = 0;
 
     DISALLOW_COPY_AND_ASSIGN(ClientDesktop);
 };
