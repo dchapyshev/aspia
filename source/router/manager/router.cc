@@ -196,7 +196,7 @@ void Router::onMessageReceived(const base::ByteArray& buffer)
     }
 }
 
-void Router::onMessageWritten()
+void Router::onMessageWritten(size_t /* pending */)
 {
     // Not used.
 }

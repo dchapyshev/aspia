@@ -19,14 +19,13 @@
 #include "router/manager/settings.h"
 
 #include "build/build_config.h"
-#include "qt_base/qt_xml_settings.h"
 
 #include <QLocale>
 
 namespace router {
 
 Settings::Settings()
-    : settings_(qt_base::QtXmlSettings::format(),
+    : settings_(QSettings::IniFormat,
                 QSettings::UserScope,
                 QLatin1String("aspia"),
                 QLatin1String("router_manager"))
