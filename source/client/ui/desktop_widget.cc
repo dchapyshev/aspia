@@ -30,7 +30,7 @@ namespace client {
 
 namespace {
 
-constexpr uint32_t kWheelMask = proto::PointerEvent::WHEEL_DOWN | proto::PointerEvent::WHEEL_UP;
+constexpr uint32_t kWheelMask = proto::MouseEvent::WHEEL_DOWN | proto::MouseEvent::WHEEL_UP;
 
 bool isNumLockActivated()
 {
@@ -98,13 +98,13 @@ void DesktopWidget::doMouseEvent(QEvent::Type event_type,
         mask = 0;
 
         if (buttons & Qt::LeftButton)
-            mask |= proto::PointerEvent::LEFT_BUTTON;
+            mask |= proto::MouseEvent::LEFT_BUTTON;
 
         if (buttons & Qt::MiddleButton)
-            mask |= proto::PointerEvent::MIDDLE_BUTTON;
+            mask |= proto::MouseEvent::MIDDLE_BUTTON;
 
         if (buttons & Qt::RightButton)
-            mask |= proto::PointerEvent::RIGHT_BUTTON;
+            mask |= proto::MouseEvent::RIGHT_BUTTON;
     }
 
     int wheel_steps = 0;
@@ -113,12 +113,12 @@ void DesktopWidget::doMouseEvent(QEvent::Type event_type,
     {
         if (delta.y() < 0)
         {
-            mask |= proto::PointerEvent::WHEEL_DOWN;
+            mask |= proto::MouseEvent::WHEEL_DOWN;
             wheel_steps = -delta.y() / QWheelEvent::DefaultDeltasPerStep;
         }
         else
         {
-            mask |= proto::PointerEvent::WHEEL_UP;
+            mask |= proto::MouseEvent::WHEEL_UP;
             wheel_steps = delta.y() / QWheelEvent::DefaultDeltasPerStep;
         }
 
@@ -138,13 +138,13 @@ void DesktopWidget::doMouseEvent(QEvent::Type event_type,
         {
             for (int i = 0; i < wheel_steps; ++i)
             {
-                delegate_->onPointerEvent(pos, mask);
-                delegate_->onPointerEvent(pos, mask & ~kWheelMask);
+                delegate_->onMouseEvent(pos, mask);
+                delegate_->onMouseEvent(pos, mask & ~kWheelMask);
             }
         }
         else
         {
-            delegate_->onPointerEvent(pos, mask);
+            delegate_->onMouseEvent(pos, mask);
         }
     }
 }
@@ -278,7 +278,7 @@ void DesktopWidget::leaveEvent(QEvent* event)
     // When the mouse cursor leaves the widget area, release all the mouse buttons.
     if (prev_mask_ != 0)
     {
-        delegate_->onPointerEvent(prev_pos_, 0);
+        delegate_->onMouseEvent(prev_pos_, 0);
         prev_mask_ = 0;
     }
 

@@ -37,7 +37,7 @@ public:
     void selectScreen(const proto::Screen& screen);
     void captureScreen();
     void injectKeyEvent(const proto::KeyEvent& event);
-    void injectPointerEvent(const proto::PointerEvent& event);
+    void injectMouseEvent(const proto::MouseEvent& event);
     void injectClipboardEvent(const proto::ClipboardEvent& event);
 
 private:

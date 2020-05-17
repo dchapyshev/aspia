@@ -73,10 +73,10 @@ void DesktopSessionAgent::onMessageReceived(const base::ByteArray& buffer)
         captureEnd(std::chrono::milliseconds(
             incoming_message_.next_screen_capture().update_interval()));
     }
-    else if (incoming_message_.has_pointer_event())
+    else if (incoming_message_.has_mouse_event())
     {
         if (input_injector_)
-            input_injector_->injectPointerEvent(incoming_message_.pointer_event());
+            input_injector_->injectMouseEvent(incoming_message_.mouse_event());
     }
     else if (incoming_message_.has_key_event())
     {

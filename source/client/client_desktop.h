@@ -55,7 +55,7 @@ public:
     void setCurrentScreen(const proto::Screen& screen) override;
     void setPreferredSize(int width, int height) override;
     void onKeyEvent(const proto::KeyEvent& event) override;
-    void onPointerEvent(const proto::PointerEvent& event) override;
+    void onMouseEvent(const proto::MouseEvent& event) override;
     void onClipboardEvent(const proto::ClipboardEvent& event) override;
     void onPowerControl(proto::PowerControl::Action action) override;
     void onRemoteUpdate() override;

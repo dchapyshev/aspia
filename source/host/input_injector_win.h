@@ -34,7 +34,7 @@ public:
     void setScreenOffset(const desktop::Point& offset) override;
     void setBlockInput(bool enable) override;
     void injectKeyEvent(const proto::KeyEvent& event) override;
-    void injectPointerEvent(const proto::PointerEvent& event) override;
+    void injectMouseEvent(const proto::MouseEvent& event) override;
 
 private:
     void switchToInputDesktop();

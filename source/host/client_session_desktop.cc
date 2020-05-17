@@ -60,7 +60,7 @@ void ClientSessionDesktop::onMessageReceived(const base::ByteArray& buffer)
         return;
     }
 
-    if (incoming_message_.has_pointer_event())
+    if (incoming_message_.has_mouse_event())
     {
         if (sessionType() != proto::SESSION_TYPE_DESKTOP_MANAGE)
             return;
@@ -68,17 +68,17 @@ void ClientSessionDesktop::onMessageReceived(const base::ByteArray& buffer)
         if (!scale_reducer_)
             return;
 
-        const proto::PointerEvent& pointer_event = incoming_message_.pointer_event();
+        const proto::MouseEvent& mouse_event = incoming_message_.mouse_event();
 
-        int pos_x = int(double(pointer_event.x() * 100) / scale_reducer_->scaleFactorX());
-        int pos_y = int(double(pointer_event.y() * 100) / scale_reducer_->scaleFactorY());
+        int pos_x = int(double(mouse_event.x() * 100) / scale_reducer_->scaleFactorX());
+        int pos_y = int(double(mouse_event.y() * 100) / scale_reducer_->scaleFactorY());
 
-        proto::PointerEvent out_pointer_event;
-        out_pointer_event.set_mask(pointer_event.mask());
-        out_pointer_event.set_x(pos_x);
-        out_pointer_event.set_y(pos_y);
+        proto::MouseEvent out_mouse_event;
+        out_mouse_event.set_mask(mouse_event.mask());
+        out_mouse_event.set_x(pos_x);
+        out_mouse_event.set_y(pos_y);
 
-        desktop_session_proxy_->injectPointerEvent(out_pointer_event);
+        desktop_session_proxy_->injectMouseEvent(out_mouse_event);
     }
     else if (incoming_message_.has_key_event())
     {

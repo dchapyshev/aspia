@@ -59,10 +59,10 @@ void DesktopSessionProxy::injectKeyEvent(const proto::KeyEvent& event)
         desktop_session_->injectKeyEvent(event);
 }
 
-void DesktopSessionProxy::injectPointerEvent(const proto::PointerEvent& event)
+void DesktopSessionProxy::injectMouseEvent(const proto::MouseEvent& event)
 {
     if (desktop_session_)
-        desktop_session_->injectPointerEvent(event);
+        desktop_session_->injectMouseEvent(event);
 }
 
 void DesktopSessionProxy::injectClipboardEvent(const proto::ClipboardEvent& event)

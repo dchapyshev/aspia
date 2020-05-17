@@ -43,7 +43,7 @@ public:
     public:
         virtual ~Delegate() = default;
 
-        virtual void onPointerEvent(const QPoint& pos, uint32_t mask) = 0;
+        virtual void onMouseEvent(const QPoint& pos, uint32_t mask) = 0;
         virtual void onKeyEvent(uint32_t usb_keycode, uint32_t flags) = 0;
         virtual void onDrawDesktop() = 0;
     };

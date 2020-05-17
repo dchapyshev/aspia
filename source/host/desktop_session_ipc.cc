@@ -145,10 +145,10 @@ void DesktopSessionIpc::injectKeyEvent(const proto::KeyEvent& event)
     channel_->send(base::serialize(outgoing_message_));
 }
 
-void DesktopSessionIpc::injectPointerEvent(const proto::PointerEvent& event)
+void DesktopSessionIpc::injectMouseEvent(const proto::MouseEvent& event)
 {
     outgoing_message_.Clear();
-    outgoing_message_.mutable_pointer_event()->CopyFrom(event);
+    outgoing_message_.mutable_mouse_event()->CopyFrom(event);
     channel_->send(base::serialize(outgoing_message_));
 }
 

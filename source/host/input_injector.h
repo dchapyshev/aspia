@@ -32,7 +32,7 @@ public:
     virtual void setScreenOffset(const desktop::Point& offset) = 0;
     virtual void setBlockInput(bool enable) = 0;
     virtual void injectKeyEvent(const proto::KeyEvent& event) = 0;
-    virtual void injectPointerEvent(const proto::PointerEvent& event) = 0;
+    virtual void injectMouseEvent(const proto::MouseEvent& event) = 0;
 };
 
 } // namespace host

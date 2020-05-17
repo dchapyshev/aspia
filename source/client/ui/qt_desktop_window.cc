@@ -347,7 +347,7 @@ void QtDesktopWindow::injectClipboardEvent(const proto::ClipboardEvent& event)
     clipboard_->injectClipboardEvent(event);
 }
 
-void QtDesktopWindow::onPointerEvent(const QPoint& pos, uint32_t mask)
+void QtDesktopWindow::onMouseEvent(const QPoint& pos, uint32_t mask)
 {
     if (panel_->autoScrolling() && panel_->scale() != -1)
     {
@@ -403,19 +403,19 @@ void QtDesktopWindow::onPointerEvent(const QPoint& pos, uint32_t mask)
         const desktop::Size& source_size = current_frame->size();
         QSize scaled_size = desktop_->size();
 
-        double scale_x = (scaled_size.width() * 100) / static_cast<double>(source_size.width());
-        double scale_y = (scaled_size.height() * 100) / static_cast<double>(source_size.height());
+        double scale_x = (scaled_size.width() * 100) / double(source_size.width());
+        double scale_y = (scaled_size.height() * 100) / double(source_size.height());
         double scale = std::min(scale_x, scale_y);
 
-        proto::PointerEvent pointer_event;
+        proto::MouseEvent pointer_event;
 
         int remote_scale_factor = desktop_config_.scale_factor();
 
         pointer_event.set_mask(mask);
-        pointer_event.set_x((static_cast<double>(pos.x() * 10000) / (scale * remote_scale_factor)));
-        pointer_event.set_y((static_cast<double>(pos.y() * 10000) / (scale * remote_scale_factor)));
+        pointer_event.set_x((double(pos.x() * 10000) / (scale * remote_scale_factor)));
+        pointer_event.set_y((double(pos.y() * 10000) / (scale * remote_scale_factor)));
 
-        desktop_control_proxy_->onPointerEvent(pointer_event);
+        desktop_control_proxy_->onMouseEvent(pointer_event);
     }
 }
 

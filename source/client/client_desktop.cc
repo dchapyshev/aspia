@@ -173,7 +173,7 @@ void ClientDesktop::onKeyEvent(const proto::KeyEvent& event)
     sendMessage(outgoing_message_);
 }
 
-void ClientDesktop::onPointerEvent(const proto::PointerEvent& event)
+void ClientDesktop::onMouseEvent(const proto::MouseEvent& event)
 {
     if (sessionType() != proto::SESSION_TYPE_DESKTOP_MANAGE)
         return;
@@ -181,7 +181,7 @@ void ClientDesktop::onPointerEvent(const proto::PointerEvent& event)
     ++pointer_events_;
 
     outgoing_message_.Clear();
-    outgoing_message_.mutable_pointer_event()->CopyFrom(event);
+    outgoing_message_.mutable_mouse_event()->CopyFrom(event);
     sendMessage(outgoing_message_);
 }
 

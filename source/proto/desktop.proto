@@ -37,7 +37,7 @@ message KeyEvent
     uint32 flags = 2;
 }
 
-message PointerEvent
+message MouseEvent
 {
     enum ButtonMask
     {
@@ -192,7 +192,7 @@ message HostToClient
 
 message ClientToHost
 {
-    PointerEvent pointer_event     = 1;
+    MouseEvent mouse_event         = 1;
     KeyEvent key_event             = 2;
     // Field 3 reserved for TouchEvent.
     // Field 4 reserved for TextEvent.
