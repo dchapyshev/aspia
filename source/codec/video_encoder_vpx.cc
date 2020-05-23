@@ -56,7 +56,7 @@ const int kStatsWindow = 5;
 // Defines the dimension of a macro block. This is used to compute the active map for the encoder.
 const int kMacroBlockSize = 16;
 
-// Magic encoder profile numbers for I444 input formats.
+// Magic encoder profile numbers for I420 input formats.
 const int kVp9I420ProfileNumber = 0;
 
 // Magic encoder constant for adaptive quantization strategy.
