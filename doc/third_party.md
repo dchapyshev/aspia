@@ -12,4 +12,4 @@ Third-party components information
 | qt         | 5.14.2  | GNU General Public License 3.0 | https://download.qt.io/official_releases/qt/5.14 |
 | rapidxml   | 1.13    | Boost Software License 1.0     | http://rapidxml.sourceforge.net                  |
 | tbb        | 2020.1  | Apache 2.0 license             | https://github.com/01org/tbb/releases            |
-| zstd       | 1.4.4   | BSD License                    | https://github.com/facebook/zstd/releases        |
+| zstd       | 1.4.5   | BSD License                    | https://github.com/facebook/zstd/releases        |
