@@ -70,7 +70,7 @@ std::vector<proto::MouseEvent> InputEventFilter::mouseEvents(
         ++send_mouse_count_;
 
         if (events_count > 1)
-            glue_mouse_count_ += static_cast<int>(events_count);
+            glue_mouse_count_ += static_cast<int>(events_count) - 1;
     }
 
     return out_events;
@@ -83,7 +83,7 @@ std::vector<proto::KeyEvent> InputEventFilter::keyEvents(
         return std::vector<proto::KeyEvent>();
 
     if (events.size() > 1)
-        glue_key_count_ += static_cast<int>(events.size());
+        glue_key_count_ += static_cast<int>(events.size()) - 1;
 
     ++send_key_count_;
     return events;
