@@ -27,10 +27,11 @@ namespace desktop {
 
 FrameDib::FrameDib(const Size& size,
                    const PixelFormat& format,
+                   int stride,
                    uint8_t* data,
                    std::unique_ptr<ipc::SharedMemory> shared_memory,
                    HBITMAP bitmap)
-    : Frame(size, format, data, shared_memory.get()),
+    : Frame(size, format, stride, data, shared_memory.get()),
       bitmap_(bitmap),
       owned_shared_memory_(std::move(shared_memory))
 {
@@ -102,7 +103,8 @@ std::unique_ptr<FrameDib> FrameDib::create(const Size& size,
     }
 
     return std::unique_ptr<FrameDib>(new FrameDib(
-        size, format, reinterpret_cast<uint8_t*>(data), std::move(shared_memory), bitmap));
+        size, format, bytes_per_row, reinterpret_cast<uint8_t*>(data),
+        std::move(shared_memory), bitmap));
 }
 
 } // namespace desktop

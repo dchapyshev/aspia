@@ -64,6 +64,7 @@ public:
 protected:
     Frame(const Size& size,
           const PixelFormat& format,
+          int stride,
           uint8_t* data,
           ipc::SharedMemoryBase* shared_memory);
 

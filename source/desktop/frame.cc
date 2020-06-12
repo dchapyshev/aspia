@@ -24,11 +24,12 @@ namespace desktop {
 
 Frame::Frame(const Size& size,
              const PixelFormat& format,
+             int stride,
              uint8_t* data,
              ipc::SharedMemoryBase* shared_memory)
     : size_(size),
       format_(format),
-      stride_(format.bytesPerPixel() * size.width()),
+      stride_(stride),
       data_(data),
       shared_memory_(shared_memory)
 {

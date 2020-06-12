@@ -23,7 +23,7 @@
 namespace desktop {
 
 FrameAligned::FrameAligned(const Size& size, const PixelFormat& format, uint8_t* data)
-    : Frame(size, format, data, nullptr)
+    : Frame(size, format, size.width() * format.bytesPerPixel(), data, nullptr)
 {
     // Nothing
 }

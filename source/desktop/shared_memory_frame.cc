@@ -26,7 +26,8 @@ namespace desktop {
 SharedMemoryFrame::SharedMemoryFrame(const Size& size,
                   const PixelFormat& format,
                   ipc::SharedMemoryBase* shared_memory)
-    : Frame(size, format, reinterpret_cast<uint8_t*>(shared_memory->data()), shared_memory)
+    : Frame(size, format, size.width() * format.bytesPerPixel(),
+            reinterpret_cast<uint8_t*>(shared_memory->data()), shared_memory)
 {
     // Nothing
 }
