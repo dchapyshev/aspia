@@ -32,7 +32,7 @@ public:
 
     // MessageDecryptor implementation.
     size_t decryptedDataSize(size_t in_size) override;
-    bool decrypt(const uint8_t* in, size_t in_size, uint8_t* out) override;
+    bool decrypt(const void* in, size_t in_size, void* out) override;
 
 private:
     DISALLOW_COPY_AND_ASSIGN(MessageDecryptorFake);

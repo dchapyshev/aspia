@@ -19,7 +19,7 @@
 #ifndef ROUTER__DATABASE_H
 #define ROUTER__DATABASE_H
 
-#include "router/user.h"
+#include "net/user.h"
 
 namespace router {
 
@@ -28,10 +28,10 @@ class Database
 public:
     virtual ~Database() = default;
 
-    virtual UserList userList() const = 0;
-    virtual bool addUser(const User& user) = 0;
-    virtual bool removeUser(std::u16string_view name) = 0;
-    virtual std::string id(std::string_view key) const = 0;
+    virtual net::UserList userList() const = 0;
+    virtual bool addUser(const net::User& user) = 0;
+    virtual bool removeUser(uint64_t entry_id) = 0;
+    virtual uint64_t peerId(std::string_view key) const = 0;
 };
 
 } // namespace router

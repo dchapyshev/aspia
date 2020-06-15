@@ -66,22 +66,4 @@ uint8_t diffFullBlock_32bpp_16x16_C(
     return 0U;
 }
 
-uint8_t diffFullBlock_32bpp_8x8_C(const uint8_t* image1, const uint8_t* image2, int bytes_per_row)
-{
-    static const int kBlockSize = 8;
-
-    for (int y = 0; y < kBlockSize; ++y)
-    {
-        if (memcmp(image1, image2, kBlockSize * kBytesPerPixel) != 0)
-        {
-            return 1U;
-        }
-
-        image1 += bytes_per_row;
-        image2 += bytes_per_row;
-    }
-
-    return 0U;
-}
-
 } // namespace desktop

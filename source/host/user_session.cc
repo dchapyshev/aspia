@@ -24,13 +24,11 @@
 #include "base/strings/string_number_conversions.h"
 #include "base/strings/string_util.h"
 #include "base/strings/unicode.h"
-#include "common/message_serialization.h"
 #include "crypto/password_generator.h"
-#include "desktop/desktop_frame.h"
+#include "desktop/frame.h"
 #include "host/client_session_desktop.h"
 #include "host/client_session_file_transfer.h"
 #include "host/desktop_session_proxy.h"
-#include "ipc/ipc_channel_proxy.h"
 #include "net/adapter_enumerator.h"
 
 namespace host {
@@ -110,12 +108,13 @@ void UserSession::restart(std::unique_ptr<ipc::Channel> channel)
     delegate_->onUserSessionStarted();
 }
 
-User UserSession::user() const
+net::User UserSession::user() const
 {
-    User user = User::create(base::utf16FromAscii(username_), base::utf16FromAscii(password_));
+    net::User user = net::User::create(
+        base::utf16FromAscii(username_), base::utf16FromAscii(password_));
 
     user.sessions = proto::SESSION_TYPE_ALL;
-    user.flags = User::ENABLED;
+    user.flags = net::User::ENABLED;
 
     return user;
 }
@@ -137,7 +136,7 @@ void UserSession::addNewSession(std::unique_ptr<ClientSession> client_session)
                 static_cast<ClientSessionDesktop*>(client_session_ptr);
 
             desktop_client_session->setDesktopSessionProxy(desktop_session_proxy_);
-            desktop_session_proxy_->enableSession(true);
+            desktop_session_proxy_->setEnabled(true);
         }
         break;
 
@@ -204,7 +203,7 @@ void UserSession::onMessageReceived(const base::ByteArray& buffer)
 {
     incoming_message_.Clear();
 
-    if (!common::parseMessage(buffer, &incoming_message_))
+    if (!base::parse(buffer, &incoming_message_))
     {
         LOG(LS_ERROR) << "Invalid message from UI";
         return;
@@ -240,7 +239,7 @@ void UserSession::onDesktopSessionStarted()
 {
     LOG(LS_INFO) << "Desktop session is connected";
 
-    desktop_session_proxy_->enableSession(!desktop_clients_.empty());
+    desktop_session_proxy_->setEnabled(!desktop_clients_.empty());
     onClientSessionConfigured();
 }
 
@@ -263,7 +262,7 @@ void UserSession::onScreenCaptured(const desktop::Frame& frame)
         static_cast<ClientSessionDesktop*>(client.get())->encodeFrame(frame);
 }
 
-void UserSession::onCursorCaptured(std::shared_ptr<desktop::MouseCursor> mouse_cursor)
+void UserSession::onCursorCaptured(const desktop::MouseCursor& mouse_cursor)
 {
     for (const auto& client : desktop_clients_)
         static_cast<ClientSessionDesktop*>(client.get())->encodeMouseCursor(mouse_cursor);
@@ -294,35 +293,35 @@ void UserSession::onClientSessionConfigured()
     if (desktop_clients_.empty())
         return;
 
-    proto::internal::EnableFeatures system_features;
+    DesktopSession::Config system_config;
+    memset(&system_config, 0, sizeof(system_config));
 
     for (const auto& client : desktop_clients_)
     {
-        const proto::internal::EnableFeatures& client_features =
-            static_cast<ClientSessionDesktop*>(client.get())->features();
+        const DesktopSession::Config& client_config =
+            static_cast<ClientSessionDesktop*>(client.get())->desktopSessionConfig();
 
         // If at least one client has disabled font smoothing, then the font smoothing will be
         // disabled for everyone.
-        system_features.set_disable_font_smoothing(
-            system_features.disable_font_smoothing() || client_features.disable_font_smoothing());
+        system_config.disable_font_smoothing =
+            system_config.disable_font_smoothing || client_config.disable_font_smoothing;
 
         // If at least one client has disabled effects, then the effects will be disabled for
         // everyone.
-        system_features.set_disable_effects(
-            system_features.disable_effects() || client_features.disable_effects());
+        system_config.disable_effects =
+            system_config.disable_effects || client_config.disable_effects;
 
         // If at least one client has disabled the wallpaper, then the effects will be disabled for
         // everyone.
-        system_features.set_disable_wallpaper(
-            system_features.disable_wallpaper() || client_features.disable_wallpaper());
+        system_config.disable_wallpaper =
+            system_config.disable_wallpaper || client_config.disable_wallpaper;
 
         // If at least one client has enabled input block, then the block will be enabled for
         // everyone.
-        system_features.set_block_input(
-            system_features.block_input() || client_features.block_input());
+        system_config.block_input = system_config.block_input || client_config.block_input;
     }
 
-    desktop_session_proxy_->enableFeatures(system_features);
+    desktop_session_proxy_->setConfig(system_config);
 }
 
 void UserSession::onClientSessionFinished()
@@ -355,7 +354,7 @@ void UserSession::onClientSessionFinished()
     delete_finished(&file_transfer_clients_);
 
     if (desktop_clients_.empty())
-        desktop_session_proxy_->enableSession(false);
+        desktop_session_proxy_->setEnabled(false);
 }
 
 void UserSession::onSessionDettached(const base::Location& location)
@@ -412,7 +411,7 @@ void UserSession::sendConnectEvent(const ClientSession& client_session)
     event->set_session_type(client_session.sessionType());
     event->set_uuid(client_session.id());
 
-    channel_->send(common::serializeMessage(outgoing_message_));
+    channel_->send(base::serialize(outgoing_message_));
 }
 
 void UserSession::sendDisconnectEvent(const std::string& session_id)
@@ -422,7 +421,7 @@ void UserSession::sendDisconnectEvent(const std::string& session_id)
 
     outgoing_message_.Clear();
     outgoing_message_.mutable_disconnect_event()->set_uuid(session_id);
-    channel_->send(common::serializeMessage(outgoing_message_));
+    channel_->send(base::serialize(outgoing_message_));
 }
 
 void UserSession::updateCredentials()
@@ -464,7 +463,7 @@ void UserSession::sendCredentials()
         }
     }
 
-    channel_->send(common::serializeMessage(outgoing_message_));
+    channel_->send(base::serialize(outgoing_message_));
 }
 
 void UserSession::killClientSession(std::string_view id)

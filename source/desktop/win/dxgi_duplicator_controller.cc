@@ -19,7 +19,7 @@
 #include "desktop/win/dxgi_duplicator_controller.h"
 
 #include "base/logging.h"
-#include "desktop/desktop_frame_aligned.h"
+#include "desktop/frame_aligned.h"
 #include "desktop/win/dxgi_frame.h"
 #include "desktop/win/screen_capture_utils.h"
 
@@ -341,15 +341,7 @@ bool DxgiDuplicatorController::doDuplicateOne(Context* context, int monitor_id, 
         }
         else
         {
-            if (duplicators_[i].duplicateMonitor(&context->contexts[i],
-                                                 monitor_id,
-                                                 target))
-            {
-                target->setTopLeft(duplicators_[i].screenRect(monitor_id).topLeft());
-                return true;
-            }
-
-            return false;
+            return duplicators_[i].duplicateMonitor(&context->contexts[i], monitor_id, target);
         }
     }
     return false;

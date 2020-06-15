@@ -19,6 +19,7 @@
 #include "client/client_desktop.h"
 
 #include "base/logging.h"
+#include "base/task_runner.h"
 #include "client/desktop_control_proxy.h"
 #include "client/desktop_window.h"
 #include "client/desktop_window_proxy.h"
@@ -27,38 +28,32 @@
 #include "codec/video_decoder.h"
 #include "codec/video_util.h"
 #include "common/desktop_session_constants.h"
-#include "desktop/desktop_frame.h"
+#include "desktop/frame.h"
 #include "desktop/mouse_cursor.h"
 
 namespace client {
 
-ClientDesktop::ClientDesktop(std::shared_ptr<base::TaskRunner> ui_task_runner)
-    : Client(std::move(ui_task_runner))
+ClientDesktop::ClientDesktop(std::shared_ptr<base::TaskRunner> io_task_runner)
+    : Client(io_task_runner),
+      desktop_control_proxy_(std::make_shared<DesktopControlProxy>(io_task_runner, this))
 {
     // Nothing
 }
 
-ClientDesktop::~ClientDesktop() = default;
-
-void ClientDesktop::setDesktopWindow(DesktopWindow* desktop_window)
+ClientDesktop::~ClientDesktop()
 {
-    DCHECK(uiTaskRunner()->belongsToCurrentThread());
+    desktop_control_proxy_->dettach();
+}
 
-    desktop_window_proxy_ = DesktopWindowProxy::create(uiTaskRunner(), desktop_window);
+void ClientDesktop::setDesktopWindow(std::shared_ptr<DesktopWindowProxy> desktop_window_proxy)
+{
+    desktop_window_proxy_ = std::move(desktop_window_proxy);
 }
 
 void ClientDesktop::onSessionStarted(const base::Version& peer_version)
 {
-    desktop_control_proxy_ = std::make_shared<DesktopControlProxy>(ioTaskRunner(), this);
     started_ = true;
-
     desktop_window_proxy_->showWindow(desktop_control_proxy_, peer_version);
-}
-
-void ClientDesktop::onSessionStopped()
-{
-    started_ = false;
-    desktop_control_proxy_->dettach();
 }
 
 void ClientDesktop::onMessageReceived(const base::ByteArray& buffer)
@@ -246,17 +241,8 @@ void ClientDesktop::readVideoPacket(const proto::VideoPacket& packet)
             return;
         }
 
-        if (screen_rect.x() < kMinValue || screen_rect.x() >= kMaxValue ||
-            screen_rect.y() < kMinValue || screen_rect.y() >= kMaxValue)
-        {
-            LOG(LS_ERROR) << "Wrong video frame position";
-            return;
-        }
-
         desktop_frame_ = desktop_window_proxy_->allocateFrame(
             desktop::Size(screen_rect.width(), screen_rect.height()));
-
-        desktop_frame_->setTopLeft(desktop::Point(screen_rect.x(), screen_rect.y()));
     }
 
     if (!desktop_frame_)

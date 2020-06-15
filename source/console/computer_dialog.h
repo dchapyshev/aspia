@@ -19,8 +19,7 @@
 #ifndef CONSOLE__COMPUTER_DIALOG_H
 #define CONSOLE__COMPUTER_DIALOG_H
 
-#include "base/macros_magic.h"
-#include "console/console_settings.h"
+#include "console/settings.h"
 #include "proto/address_book.pb.h"
 #include "ui_computer_dialog.h"
 

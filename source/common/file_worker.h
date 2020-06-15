@@ -39,6 +39,8 @@ public:
 
     void doTask(std::shared_ptr<FileTask> task);
 
+    std::shared_ptr<base::TaskRunner> taskRunner();
+
 private:
     class Impl;
     std::shared_ptr<Impl> impl_;

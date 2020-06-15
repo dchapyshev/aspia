@@ -31,9 +31,10 @@ package proto.internal;
 message SerializedDesktopFrame
 {
     int32 shared_buffer_id   = 1;
-    PixelFormat pixel_format = 2;
-    Rect desktop_rect        = 3;
-    repeated Rect dirty_rect = 4;
+    int32 width              = 2;
+    int32 height             = 3;
+    PixelFormat pixel_format = 4;
+    repeated Rect dirty_rect = 5;
 }
 
 message SerializedMouseCursor
@@ -57,14 +58,14 @@ message SharedBuffer
     int32 shared_buffer_id = 2;
 }
 
-message EnableSession
+message SetEnabled
 {
     bool enable = 1;
 }
 
 message EncodeFrame
 {
-    SerializedDesktopFrame frame = 1;
+    SerializedDesktopFrame frame       = 1;
     SerializedMouseCursor mouse_cursor = 2;
 }
 
@@ -78,7 +79,7 @@ message SelectSource
     Screen screen = 1;
 }
 
-message EnableFeatures
+message SetConfig
 {
     bool disable_font_smoothing = 1;
     bool disable_wallpaper      = 2;
@@ -99,10 +100,10 @@ message UserSessionControl
 
 message ServiceToDesktop
 {
-    EnableSession enable_session            = 1;
-    SelectSource select_source              = 2;
-    EncodeFrameResult encode_frame_result   = 3;
-    EnableFeatures enable_features          = 4;
+    SetEnabled set_enabled                  = 1;
+    SetConfig set_config                    = 2;
+    SelectSource select_source              = 3;
+    EncodeFrameResult encode_frame_result   = 4;
     KeyEvent key_event                      = 5;
     PointerEvent pointer_event              = 6;
     ClipboardEvent clipboard_event          = 7;

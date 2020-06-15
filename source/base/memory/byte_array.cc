@@ -124,6 +124,19 @@ std::string toHex(const ByteArray& in)
     return out;
 }
 
+base::ByteArray serialize(const google::protobuf::MessageLite& message)
+{
+    const size_t size = message.ByteSizeLong();
+    if (!size)
+        return base::ByteArray();
+
+    base::ByteArray buffer;
+    buffer.resize(size);
+
+    message.SerializeWithCachedSizesToArray(buffer.data());
+    return buffer;
+}
+
 int compare(const base::ByteArray& first, const base::ByteArray& second)
 {
     if (first.empty() && second.empty())

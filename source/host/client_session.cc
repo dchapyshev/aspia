@@ -22,7 +22,7 @@
 #include "base/logging.h"
 #include "host/client_session_desktop.h"
 #include "host/client_session_file_transfer.h"
-#include "net/network_channel_proxy.h"
+#include "net/channel_proxy.h"
 
 namespace host {
 
@@ -113,9 +113,10 @@ void ClientSession::onConnected()
     NOTREACHED();
 }
 
-void ClientSession::onDisconnected(net::ErrorCode error_code)
+void ClientSession::onDisconnected(net::Channel::ErrorCode error_code)
 {
-    LOG(LS_WARNING) << "Client disconnected with error: " << net::errorToString(error_code);
+    LOG(LS_WARNING) << "Client disconnected with error: "
+                    << net::Channel::errorToString(error_code);
 
     state_ = State::FINISHED;
     delegate_->onClientSessionFinished();

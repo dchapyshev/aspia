@@ -31,7 +31,7 @@
 #include "host/client_session.h"
 #include "host/user_session.h"
 #include "host/user_session_constants.h"
-#include "ipc/ipc_channel.h"
+#include "ipc/channel.h"
 
 #include <userenv.h>
 
@@ -276,9 +276,9 @@ void UserSessionManager::addNewSession(std::unique_ptr<ClientSession> client_ses
     }
 }
 
-UserList UserSessionManager::userList() const
+net::UserList UserSessionManager::userList() const
 {
-    UserList user_list;
+    net::UserList user_list;
 
     for (const auto& session : sessions_)
         user_list.add(session->user());

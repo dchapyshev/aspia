@@ -18,7 +18,7 @@
 
 #include "base/win/scoped_gdi_object.h"
 #include "base/win/scoped_user_object.h"
-#include "desktop/desktop_frame.h"
+#include "desktop/frame.h"
 #include "desktop/mouse_cursor.h"
 #include "desktop/win/cursor.h"
 #include "desktop/win/cursor_unittest_resources.h"
@@ -74,7 +74,7 @@ bool ñonvertToMouseShapeAndCompare(unsigned left, unsigned right)
     EXPECT_TRUE(GetBitmapBits(scoped_color, size * sizeof(uint32_t), data.get()));
 
     // Compare the 32bpp image in |mouse_shape| with the one loaded from |right|.
-    return memcmp(data.get(), mouse_shape->data(), size * sizeof(uint32_t)) == 0;
+    return memcmp(data.get(), mouse_shape->constImage().data(), size * sizeof(uint32_t)) == 0;
 }
 
 } // namespace

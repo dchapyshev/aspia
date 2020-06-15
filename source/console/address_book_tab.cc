@@ -18,12 +18,12 @@
 
 #include "console/address_book_tab.h"
 
-#include "common/message_serialization.h"
+#include "base/logging.h"
 #include "console/address_book_dialog.h"
 #include "console/computer_dialog.h"
 #include "console/computer_group_dialog.h"
 #include "console/computer_item.h"
-#include "console/console_settings.h"
+#include "console/settings.h"
 #include "console/open_address_book_dialog.h"
 #include "crypto/data_cryptor_chacha20_poly1305.h"
 #include "crypto/data_cryptor_fake.h"
@@ -97,7 +97,7 @@ AddressBookTab::AddressBookTab(const QString& file_path,
                                proto::address_book::Data&& data,
                                std::string&& key,
                                QWidget* parent)
-    : ConsoleTab(ConsoleTab::AddressBook, parent),
+    : QWidget(parent),
       file_path_(file_path),
       file_(std::move(file)),
       data_(std::move(data)),
@@ -788,7 +788,7 @@ bool AddressBookTab::saveToFile(const QString& file_path)
         return false;
     }
 
-    base::ByteArray buffer = common::serializeMessage(file_);
+    base::ByteArray buffer = base::serialize(file_);
 
     int64_t bytes_written = file.write(
         reinterpret_cast<const char*>(buffer.data()), buffer.size());

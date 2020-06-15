@@ -1,0 +1,564 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ConsoleMainWindow</class>
+ <widget class="QMainWindow" name="ConsoleMainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>891</width>
+    <height>613</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Aspia Console</string>
+  </property>
+  <widget class="QWidget" name="central_widget">
+   <layout class="QVBoxLayout" name="verticalLayout_2">
+    <property name="spacing">
+     <number>0</number>
+    </property>
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
+    <item>
+     <widget class="QTabWidget" name="tab_widget">
+      <property name="currentIndex">
+       <number>-1</number>
+      </property>
+      <property name="documentMode">
+       <bool>true</bool>
+      </property>
+      <property name="tabsClosable">
+       <bool>true</bool>
+      </property>
+      <property name="movable">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menu_bar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>891</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menu_file">
+    <property name="title">
+     <string>&amp;File</string>
+    </property>
+    <widget class="QMenu" name="menu_recent_open">
+     <property name="title">
+      <string>Recent open</string>
+     </property>
+     <addaction name="action_remember_last"/>
+     <addaction name="action_clear_mru"/>
+     <addaction name="separator"/>
+    </widget>
+    <addaction name="action_new"/>
+    <addaction name="action_open"/>
+    <addaction name="menu_recent_open"/>
+    <addaction name="action_save"/>
+    <addaction name="action_save_as"/>
+    <addaction name="action_save_all"/>
+    <addaction name="action_close"/>
+    <addaction name="action_close_all"/>
+    <addaction name="separator"/>
+    <addaction name="action_fast_connect"/>
+    <addaction name="separator"/>
+    <addaction name="action_exit"/>
+   </widget>
+   <widget class="QMenu" name="menu_edit">
+    <property name="title">
+     <string>&amp;Edit</string>
+    </property>
+    <addaction name="action_address_book_properties"/>
+    <addaction name="separator"/>
+    <addaction name="action_add_computer_group"/>
+    <addaction name="action_modify_computer_group"/>
+    <addaction name="action_delete_computer_group"/>
+    <addaction name="separator"/>
+    <addaction name="action_add_computer"/>
+    <addaction name="action_copy_computer"/>
+    <addaction name="action_modify_computer"/>
+    <addaction name="action_delete_computer"/>
+   </widget>
+   <widget class="QMenu" name="menu_session_type">
+    <property name="title">
+     <string>&amp;Session Type</string>
+    </property>
+    <addaction name="action_desktop_manage"/>
+    <addaction name="action_desktop_view"/>
+    <addaction name="action_file_transfer"/>
+   </widget>
+   <widget class="QMenu" name="menu_help">
+    <property name="title">
+     <string>&amp;Help</string>
+    </property>
+    <addaction name="action_online_help"/>
+    <addaction name="separator"/>
+    <addaction name="action_check_updates"/>
+    <addaction name="action_update_settings"/>
+    <addaction name="separator"/>
+    <addaction name="action_about"/>
+   </widget>
+   <widget class="QMenu" name="menu_view">
+    <property name="title">
+     <string>&amp;View</string>
+    </property>
+    <widget class="QMenu" name="menu_language">
+     <property name="title">
+      <string>&amp;Language</string>
+     </property>
+     <property name="icon">
+      <iconset resource="resources/console.qrc">
+       <normaloff>:/img/locale.png</normaloff>:/img/locale.png</iconset>
+     </property>
+    </widget>
+    <addaction name="menu_language"/>
+    <addaction name="action_toolbar"/>
+    <addaction name="action_statusbar"/>
+    <addaction name="separator"/>
+    <addaction name="action_show_tray_icon"/>
+    <addaction name="action_minimize_to_tray"/>
+   </widget>
+   <addaction name="menu_file"/>
+   <addaction name="menu_edit"/>
+   <addaction name="menu_view"/>
+   <addaction name="menu_session_type"/>
+   <addaction name="menu_help"/>
+  </widget>
+  <widget class="console::StatusBar" name="status_bar"/>
+  <widget class="QToolBar" name="tool_bar">
+   <property name="windowTitle">
+    <string>Tool Bar</string>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>16</width>
+     <height>16</height>
+    </size>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="action_new"/>
+   <addaction name="action_open"/>
+   <addaction name="action_save"/>
+   <addaction name="action_save_all"/>
+   <addaction name="separator"/>
+   <addaction name="action_fast_connect"/>
+   <addaction name="separator"/>
+   <addaction name="action_address_book_properties"/>
+   <addaction name="action_add_computer_group"/>
+   <addaction name="action_modify_computer_group"/>
+   <addaction name="action_delete_computer_group"/>
+   <addaction name="action_add_computer"/>
+   <addaction name="action_copy_computer"/>
+   <addaction name="action_modify_computer"/>
+   <addaction name="action_delete_computer"/>
+   <addaction name="separator"/>
+   <addaction name="action_desktop_manage"/>
+   <addaction name="action_desktop_view"/>
+   <addaction name="action_file_transfer"/>
+   <addaction name="separator"/>
+   <addaction name="action_about"/>
+   <addaction name="action_exit"/>
+  </widget>
+  <action name="action_new">
+   <property name="icon">
+    <iconset resource="resources/console.qrc">
+     <normaloff>:/img/document.png</normaloff>:/img/document.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;New address book</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
+   </property>
+  </action>
+  <action name="action_open">
+   <property name="icon">
+    <iconset resource="resources/console.qrc">
+     <normaloff>:/img/open.png</normaloff>:/img/open.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Open address book...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="action_save">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources/console.qrc">
+     <normaloff>:/img/disk.png</normaloff>:/img/disk.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Save</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="action_save_as">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Save &amp;as...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Alt+S</string>
+   </property>
+  </action>
+  <action name="action_close">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>&amp;Close</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+W</string>
+   </property>
+  </action>
+  <action name="action_exit">
+   <property name="icon">
+    <iconset resource="resources/console.qrc">
+     <normaloff>:/img/exit.png</normaloff>:/img/exit.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Exit</string>
+   </property>
+  </action>
+  <action name="action_add_computer_group">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources/console.qrc">
+     <normaloff>:/img/folder-plus.png</normaloff>:/img/folder-plus.png</iconset>
+   </property>
+   <property name="text">
+    <string>Add Computer Group</string>
+   </property>
+  </action>
+  <action name="action_modify_computer_group">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources/console.qrc">
+     <normaloff>:/img/folder-pencil.png</normaloff>:/img/folder-pencil.png</iconset>
+   </property>
+   <property name="text">
+    <string>Modify Computer Group</string>
+   </property>
+  </action>
+  <action name="action_delete_computer_group">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources/console.qrc">
+     <normaloff>:/img/folder-minus.png</normaloff>:/img/folder-minus.png</iconset>
+   </property>
+   <property name="text">
+    <string>Delete Computer Group</string>
+   </property>
+  </action>
+  <action name="action_add_computer">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources/console.qrc">
+     <normaloff>:/img/computer-plus.png</normaloff>:/img/computer-plus.png</iconset>
+   </property>
+   <property name="text">
+    <string>Add Computer</string>
+   </property>
+  </action>
+  <action name="action_modify_computer">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources/console.qrc">
+     <normaloff>:/img/computer-pencil.png</normaloff>:/img/computer-pencil.png</iconset>
+   </property>
+   <property name="text">
+    <string>Modify Computer</string>
+   </property>
+  </action>
+  <action name="action_delete_computer">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources/console.qrc">
+     <normaloff>:/img/computer-minus.png</normaloff>:/img/computer-minus.png</iconset>
+   </property>
+   <property name="text">
+    <string>Delete Computer</string>
+   </property>
+  </action>
+  <action name="action_desktop_manage">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources/console.qrc">
+     <normaloff>:/img/monitor-keyboard.png</normaloff>:/img/monitor-keyboard.png</iconset>
+   </property>
+   <property name="text">
+    <string>Desktop &amp;Manage</string>
+   </property>
+  </action>
+  <action name="action_desktop_view">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources/console.qrc">
+     <normaloff>:/img/monitor.png</normaloff>:/img/monitor.png</iconset>
+   </property>
+   <property name="text">
+    <string>Desktop &amp;View</string>
+   </property>
+  </action>
+  <action name="action_file_transfer">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources/console.qrc">
+     <normaloff>:/img/folder-stand.png</normaloff>:/img/folder-stand.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;File Transfer</string>
+   </property>
+  </action>
+  <action name="action_online_help">
+   <property name="icon">
+    <iconset resource="resources/console.qrc">
+     <normaloff>:/img/lifebuoy.png</normaloff>:/img/lifebuoy.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Online Help...</string>
+   </property>
+   <property name="shortcut">
+    <string>F1</string>
+   </property>
+  </action>
+  <action name="action_about">
+   <property name="icon">
+    <iconset resource="resources/console.qrc">
+     <normaloff>:/img/about.png</normaloff>:/img/about.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;About</string>
+   </property>
+  </action>
+  <action name="action_address_book_properties">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources/console.qrc">
+     <normaloff>:/img/book-pencil.png</normaloff>:/img/book-pencil.png</iconset>
+   </property>
+   <property name="text">
+    <string>Address Book Properties</string>
+   </property>
+  </action>
+  <action name="action_desktop_manage_connect">
+   <property name="icon">
+    <iconset resource="resources/console.qrc">
+     <normaloff>:/img/monitor-keyboard.png</normaloff>:/img/monitor-keyboard.png</iconset>
+   </property>
+   <property name="text">
+    <string>Desktop Manage</string>
+   </property>
+   <property name="toolTip">
+    <string>Desktop Manage</string>
+   </property>
+  </action>
+  <action name="action_desktop_view_connect">
+   <property name="icon">
+    <iconset resource="resources/console.qrc">
+     <normaloff>:/img/monitor.png</normaloff>:/img/monitor.png</iconset>
+   </property>
+   <property name="text">
+    <string>Desktop View</string>
+   </property>
+   <property name="toolTip">
+    <string>Desktop View</string>
+   </property>
+  </action>
+  <action name="action_file_transfer_connect">
+   <property name="icon">
+    <iconset resource="resources/console.qrc">
+     <normaloff>:/img/folder-stand.png</normaloff>:/img/folder-stand.png</iconset>
+   </property>
+   <property name="text">
+    <string>File Transfer</string>
+   </property>
+   <property name="toolTip">
+    <string>File Transfer</string>
+   </property>
+  </action>
+  <action name="action_toolbar">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Tool Bar</string>
+   </property>
+  </action>
+  <action name="action_statusbar">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Status Bar</string>
+   </property>
+  </action>
+  <action name="action_fast_connect">
+   <property name="icon">
+    <iconset resource="resources/console.qrc">
+     <normaloff>:/img/plug-disconnect.png</normaloff>:/img/plug-disconnect.png</iconset>
+   </property>
+   <property name="text">
+    <string>Fast Connect...</string>
+   </property>
+  </action>
+  <action name="action_show_tray_icon">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show tray icon</string>
+   </property>
+  </action>
+  <action name="action_minimize_to_tray">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Minimize to tray</string>
+   </property>
+  </action>
+  <action name="action_show_hide">
+   <property name="text">
+    <string>Hide</string>
+   </property>
+  </action>
+  <action name="action_save_all">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources/console.qrc">
+     <normaloff>:/img/disks.png</normaloff>:/img/disks.png</iconset>
+   </property>
+   <property name="text">
+    <string>Save all</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+S</string>
+   </property>
+  </action>
+  <action name="action_close_all">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Close all</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+W</string>
+   </property>
+  </action>
+  <action name="action_check_updates">
+   <property name="text">
+    <string>Check for updates...</string>
+   </property>
+  </action>
+  <action name="action_update_settings">
+   <property name="text">
+    <string>Update Settings</string>
+   </property>
+  </action>
+  <action name="action_clear_mru">
+   <property name="text">
+    <string>Clear</string>
+   </property>
+  </action>
+  <action name="action_remember_last">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Remember latest</string>
+   </property>
+  </action>
+  <action name="action_copy_computer">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources/console.qrc">
+     <normaloff>:/img/computer-copy.png</normaloff>:/img/computer-copy.png</iconset>
+   </property>
+   <property name="text">
+    <string>Copy Computer</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>console::StatusBar</class>
+   <extends>QStatusBar</extends>
+   <header>console/statusbar.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="resources/console.qrc"/>
+ </resources>
+ <connections/>
+</ui>

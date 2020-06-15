@@ -20,10 +20,8 @@
 
 #include "base/logging.h"
 #include "codec/video_util.h"
-#include "common/message_serialization.h"
 #include "desktop/mouse_cursor.h"
-#include "desktop/shared_memory_desktop_frame.h"
-#include "ipc/ipc_channel.h"
+#include "desktop/shared_memory_frame.h"
 #include "ipc/shared_memory.h"
 
 namespace host {
@@ -97,53 +95,59 @@ void DesktopSessionIpc::stop()
     delegate_ = nullptr;
 }
 
-void DesktopSessionIpc::enableSession(bool enable)
+void DesktopSessionIpc::setEnabled(bool enable)
 {
     outgoing_message_.Clear();
-    outgoing_message_.mutable_enable_session()->set_enable(enable);
-    channel_->send(common::serializeMessage(outgoing_message_));
+    outgoing_message_.mutable_set_enabled()->set_enable(enable);
+    channel_->send(base::serialize(outgoing_message_));
+}
+
+void DesktopSessionIpc::setConfig(const Config& config)
+{
+    outgoing_message_.Clear();
+
+    proto::internal::SetConfig* set_config = outgoing_message_.mutable_set_config();
+    set_config->set_disable_font_smoothing(config.disable_font_smoothing);
+    set_config->set_disable_wallpaper(config.disable_wallpaper);
+    set_config->set_disable_effects(config.disable_effects);
+    set_config->set_block_input(config.block_input);
+
+    channel_->send(base::serialize(outgoing_message_));
 }
 
 void DesktopSessionIpc::selectScreen(const proto::Screen& screen)
 {
     outgoing_message_.Clear();
     outgoing_message_.mutable_select_source()->mutable_screen()->CopyFrom(screen);
-    channel_->send(common::serializeMessage(outgoing_message_));
-}
-
-void DesktopSessionIpc::enableFeatures(const proto::internal::EnableFeatures& features)
-{
-    outgoing_message_.Clear();
-    outgoing_message_.mutable_enable_features()->CopyFrom(features);
-    channel_->send(common::serializeMessage(outgoing_message_));
+    channel_->send(base::serialize(outgoing_message_));
 }
 
 void DesktopSessionIpc::injectKeyEvent(const proto::KeyEvent& event)
 {
     outgoing_message_.Clear();
     outgoing_message_.mutable_key_event()->CopyFrom(event);
-    channel_->send(common::serializeMessage(outgoing_message_));
+    channel_->send(base::serialize(outgoing_message_));
 }
 
 void DesktopSessionIpc::injectPointerEvent(const proto::PointerEvent& event)
 {
     outgoing_message_.Clear();
     outgoing_message_.mutable_pointer_event()->CopyFrom(event);
-    channel_->send(common::serializeMessage(outgoing_message_));
+    channel_->send(base::serialize(outgoing_message_));
 }
 
 void DesktopSessionIpc::injectClipboardEvent(const proto::ClipboardEvent& event)
 {
     outgoing_message_.Clear();
     outgoing_message_.mutable_clipboard_event()->CopyFrom(event);
-    channel_->send(common::serializeMessage(outgoing_message_));
+    channel_->send(base::serialize(outgoing_message_));
 }
 
 void DesktopSessionIpc::userSessionControl(proto::internal::UserSessionControl::Action action)
 {
     outgoing_message_.Clear();
     outgoing_message_.mutable_user_session_control()->set_action(action);
-    channel_->send(common::serializeMessage(outgoing_message_));
+    channel_->send(base::serialize(outgoing_message_));
 }
 
 void DesktopSessionIpc::onDisconnected()
@@ -156,7 +160,7 @@ void DesktopSessionIpc::onMessageReceived(const base::ByteArray& buffer)
 {
     incoming_message_.Clear();
 
-    if (!common::parseMessage(buffer, &incoming_message_))
+    if (!base::parse(buffer, &incoming_message_))
     {
         LOG(LS_ERROR) << "Invalid message from desktop";
         return;
@@ -210,17 +214,15 @@ void DesktopSessionIpc::onEncodeFrame(const proto::internal::EncodeFrame& encode
         if (!shared_buffer)
             return;
 
-        const proto::Rect& frame_rect = serialized_frame.desktop_rect();
-
         std::unique_ptr<desktop::Frame> frame = desktop::SharedMemoryFrame::attach(
-            desktop::Size(frame_rect.width(), frame_rect.height()),
+            desktop::Size(serialized_frame.width(), serialized_frame.height()),
             codec::parsePixelFormat(serialized_frame.pixel_format()),
             std::move(shared_buffer));
 
-        frame->setTopLeft(desktop::Point(frame_rect.x(), frame_rect.y()));
+        desktop::Region* updated_region = frame->updatedRegion();
 
         for (int i = 0; i < serialized_frame.dirty_rect_size(); ++i)
-            frame->updatedRegion()->addRect(codec::parseRect(serialized_frame.dirty_rect(i)));
+            updated_region->addRect(codec::parseRect(serialized_frame.dirty_rect(i)));
 
         if (delegate_)
             delegate_->onScreenCaptured(*frame);
@@ -228,27 +230,18 @@ void DesktopSessionIpc::onEncodeFrame(const proto::internal::EncodeFrame& encode
 
     if (encode_frame.has_mouse_cursor() && delegate_)
     {
-        const proto::internal::SerializedMouseCursor& serialized_mouse_cursor =
+        const proto::internal::SerializedMouseCursor& mouse_cursor =
             encode_frame.mouse_cursor();
 
-        const std::string& serialized_data = serialized_mouse_cursor.data();
-
-        desktop::Size size = desktop::Size(
-            serialized_mouse_cursor.width(), serialized_mouse_cursor.height());
-        desktop::Point hotspot = desktop::Point(
-            serialized_mouse_cursor.hotspot_x(), serialized_mouse_cursor.hotspot_y());
-        std::unique_ptr<uint8_t[]> data =
-            std::make_unique<uint8_t[]>(serialized_data.size());
-
-        memcpy(data.get(), serialized_data.data(), serialized_data.size());
-
-        delegate_->onCursorCaptured(
-            std::make_shared<desktop::MouseCursor>(std::move(data), size, hotspot));
+        delegate_->onCursorCaptured(desktop::MouseCursor(
+            base::fromStdString(mouse_cursor.data()),
+            desktop::Size(mouse_cursor.width(), mouse_cursor.height()),
+            desktop::Point(mouse_cursor.hotspot_x(), mouse_cursor.hotspot_y())));
     }
 
     outgoing_message_.Clear();
     outgoing_message_.mutable_encode_frame_result()->set_dummy(1);
-    channel_->send(common::serializeMessage(outgoing_message_));
+    channel_->send(base::serialize(outgoing_message_));
 }
 
 void DesktopSessionIpc::onCreateSharedBuffer(int shared_buffer_id)

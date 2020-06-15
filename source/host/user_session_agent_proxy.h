@@ -21,23 +21,28 @@
 
 #include "host/user_session_agent.h"
 
+namespace base {
+class TaskRunner;
+} // namespace base
+
 namespace host {
 
-class UserSessionAgentProxy : public std::enable_shared_from_this<UserSessionAgentProxy>
+class UserSessionAgentProxy
 {
 public:
-    UserSessionAgentProxy(
-        std::shared_ptr<base::TaskRunner> io_task_runner, UserSessionAgent* agent);
+    UserSessionAgentProxy(std::shared_ptr<base::TaskRunner> io_task_runner,
+                          std::unique_ptr<UserSessionAgent> agent);
     ~UserSessionAgentProxy();
 
-    void dettach();
+    void start();
+    void stop();
 
     void updateCredentials(proto::internal::CredentialsRequest::Type request_type);
     void killClient(const std::string& uuid);
 
 private:
-    std::shared_ptr<base::TaskRunner> io_task_runner_;
-    UserSessionAgent* agent_;
+    class Impl;
+    std::shared_ptr<Impl> impl_;
 
     DISALLOW_COPY_AND_ASSIGN(UserSessionAgentProxy);
 };

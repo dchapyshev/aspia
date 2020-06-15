@@ -24,23 +24,19 @@
 #include "desktop/mouse_cursor.h"
 #include "desktop/screen_capturer_dxgi.h"
 #include "desktop/screen_capturer_gdi.h"
-#include "desktop/screen_capturer_mirror.h"
-#include "desktop/win/font_smoothing_disabler.h"
-#include "desktop/win/effects_disabler.h"
-#include "desktop/win/wallpaper_disabler.h"
+#include "desktop/win/desktop_environment.h"
 #include "ipc/shared_memory_factory.h"
 
 namespace desktop {
 
 ScreenCapturerWrapper::ScreenCapturerWrapper(Delegate* delegate)
-    : delegate_(delegate)
+    : delegate_(delegate),
+      desktop_environment_(std::make_unique<DesktopEnvironment>())
 {
-    switchToInputDesktop();
-    atDesktopSwitch();
-
     // If the monitor is turned off, this call will turn it on.
     SetThreadExecutionState(ES_DISPLAY_REQUIRED);
 
+    switchToInputDesktop();
     selectCapturer();
 }
 
@@ -63,8 +59,7 @@ void ScreenCapturerWrapper::captureFrame()
 {
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
 
-    if (switchToInputDesktop())
-        atDesktopSwitch();
+    switchToInputDesktop();
 
     int count = screen_capturer_->screenCount();
     if (screen_count_ != count)
@@ -92,10 +87,7 @@ void ScreenCapturerWrapper::captureFrame()
         }
     }
 
-    std::unique_ptr<MouseCursor> mouse_cursor;
-    mouse_cursor.reset(cursor_capturer_->captureCursor());
-
-    delegate_->onScreenCaptured(frame, mouse_cursor.get());
+    delegate_->onScreenCaptured(frame, cursor_capturer_->captureCursor());
 }
 
 void ScreenCapturerWrapper::setSharedMemoryFactory(ipc::SharedMemoryFactory* shared_memory_factory)
@@ -105,30 +97,17 @@ void ScreenCapturerWrapper::setSharedMemoryFactory(ipc::SharedMemoryFactory* sha
 
 void ScreenCapturerWrapper::enableWallpaper(bool enable)
 {
-    enable_wallpaper_ = enable;
-    wallpaper_disabler_.reset();
-
-    if (!enable)
-        wallpaper_disabler_ = std::make_unique<WallpaperDisabler>();
+    desktop_environment_->setWallpaper(enable);
 }
 
 void ScreenCapturerWrapper::enableEffects(bool enable)
 {
-    enable_effects_ = enable;
-    effects_disabler_.reset();
-
-    if (!enable)
-        effects_disabler_ = std::make_unique<EffectsDisabler>();
-
+    desktop_environment_->setEffects(enable);
 }
 
 void ScreenCapturerWrapper::enableFontSmoothing(bool enable)
 {
-    enable_font_smoothing_ = enable;
-    font_smoothing_disabler_.reset();
-
-    if (!enable)
-        font_smoothing_disabler_ = std::make_unique<FontSmoothingDisabler>();
+    desktop_environment_->setFontSmoothing(enable);
 }
 
 void ScreenCapturerWrapper::selectCapturer()
@@ -137,35 +116,25 @@ void ScreenCapturerWrapper::selectCapturer()
 
     cursor_capturer_ = std::make_unique<CursorCapturerWin>();
 
-    // Mirror screen capture is available only in Windows 7/2008 R2.
-    if (base::win::windowsVersion() == base::win::VERSION_WIN7)
+    if (base::win::windowsVersion() >= base::win::VERSION_WIN8)
     {
-        std::unique_ptr<ScreenCapturerMirror> capturer_mirror =
-            std::make_unique<ScreenCapturerMirror>();
-
-        if (capturer_mirror->isSupported())
+        // Desktop Duplication API is available in Windows 8+.
+        std::unique_ptr<ScreenCapturerDxgi> capturer_dxgi = std::make_unique<ScreenCapturerDxgi>();
+        if (capturer_dxgi->isSupported())
         {
-            LOG(LS_INFO) << "Using mirror capturer";
-            screen_capturer_ = std::move(capturer_mirror);
-            return;
+            LOG(LS_INFO) << "Using DXGI capturer";
+            screen_capturer_ = std::move(capturer_dxgi);
         }
     }
 
-    // Desktop Duplication API is available in Windows 8+.
-    std::unique_ptr<ScreenCapturerDxgi> capturer_dxgi = std::make_unique<ScreenCapturerDxgi>();
-    if (capturer_dxgi->isSupported())
-    {
-        LOG(LS_INFO) << "Using DXGI capturer";
-        screen_capturer_ = std::move(capturer_dxgi);
-    }
-    else
+    if (!screen_capturer_)
     {
         LOG(LS_INFO) << "Using GDI capturer";
         screen_capturer_ = std::make_unique<ScreenCapturerGdi>();
     }
 }
 
-bool ScreenCapturerWrapper::switchToInputDesktop()
+void ScreenCapturerWrapper::switchToInputDesktop()
 {
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
 
@@ -177,31 +146,13 @@ bool ScreenCapturerWrapper::switchToInputDesktop()
         if (screen_capturer_)
             screen_capturer_->reset();
 
-        effects_disabler_.reset();
-        wallpaper_disabler_.reset();
-        font_smoothing_disabler_.reset();
+        if (cursor_capturer_)
+            cursor_capturer_->reset();
 
         // If setThreadDesktop() fails, the thread is still assigned a desktop.
         // So we can continue capture screen bits, just from the wrong desktop.
         desktop_.setThreadDesktop(std::move(input_desktop));
-        return true;
     }
-
-    return false;
-}
-
-void ScreenCapturerWrapper::atDesktopSwitch()
-{
-    DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
-
-    if (!enable_effects_)
-        effects_disabler_ = std::make_unique<EffectsDisabler>();
-
-    if (!enable_wallpaper_)
-        wallpaper_disabler_ = std::make_unique<WallpaperDisabler>();
-
-    if (!enable_font_smoothing_)
-        font_smoothing_disabler_ = std::make_unique<FontSmoothingDisabler>();
 }
 
 } // namespace desktop

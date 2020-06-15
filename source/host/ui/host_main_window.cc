@@ -40,7 +40,7 @@ namespace host {
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent),
       window_proxy_(std::make_shared<UserSessionWindowProxy>(
-          qt_base::Application::taskRunner(), this))
+          qt_base::Application::uiTaskRunner(), this))
 {
     ui.setupUi(this);
     setWindowFlag(Qt::WindowMaximizeButtonHint, false);
@@ -95,8 +95,10 @@ MainWindow::~MainWindow() = default;
 
 void MainWindow::connectToService()
 {
-    agent_ = std::make_unique<UserSessionAgent>(window_proxy_);
-    agent_->start();
+    agent_proxy_ = std::make_unique<UserSessionAgentProxy>(
+        qt_base::Application::ioTaskRunner(), std::make_unique<UserSessionAgent>(window_proxy_));
+
+    agent_proxy_->start();
 }
 
 void MainWindow::activateHost()
@@ -130,24 +132,35 @@ void MainWindow::closeEvent(QCloseEvent* event)
     }
 }
 
-void MainWindow::onStateChanged(UserSessionAgent::State state)
+void MainWindow::onStatusChanged(UserSessionAgent::Status status)
 {
-    if (state == UserSessionAgent::State::CONNECTED)
+    if (status == UserSessionAgent::Status::CONNECTED_TO_SERVICE)
     {
-        LOG(LS_INFO) << "The connection to the service was successfully established";
+        LOG(LS_INFO) << "The connection to the service was successfully established.";
 
         ui.button_new_password->setEnabled(true);
         ui.button_refresh_ip_list->setEnabled(true);
 
-        agent_proxy_ = agent_->agentProxy();
-        agent_proxy_->updateCredentials(proto::internal::CredentialsRequest::REFRESH);
+        if (agent_proxy_)
+            agent_proxy_->updateCredentials(proto::internal::CredentialsRequest::REFRESH);
+    }
+    else if (status == UserSessionAgent::Status::DISCONNECTED_FROM_SERVICE)
+    {
+        agent_proxy_.reset();
+
+        LOG(LS_INFO) << "The connection to the service is lost. The application will be closed.";
+        realClose();
+    }
+    else if (status == UserSessionAgent::Status::SERVICE_NOT_AVAILABLE)
+    {
+        agent_proxy_.reset();
+
+        LOG(LS_INFO) << "The connection to the service has not been established. "
+                     << "The application works offline.";
     }
     else
     {
-        DCHECK_EQ(state, UserSessionAgent::State::DISCONNECTED);
-
-        LOG(LS_INFO) << "The connection to the service is lost. The application will be closed";
-        realClose();
+        LOG(LS_WARNING) << "Unandled status code: " << static_cast<int>(status);
     }
 }
 
@@ -273,6 +286,13 @@ void MainWindow::onAbout()
 
 void MainWindow::onExit()
 {
+    // If the connection to the service is not established, then exit immediately.
+    if (!agent_proxy_)
+    {
+        realClose();
+        return;
+    }
+
     QApplication::setQuitOnLastWindowClosed(false);
 
     int button = QMessageBox::question(

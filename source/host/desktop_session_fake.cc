@@ -20,7 +20,7 @@
 
 #include "base/logging.h"
 #include "base/task_runner.h"
-#include "desktop/desktop_frame_simple.h"
+#include "desktop/frame_simple.h"
 
 namespace host {
 
@@ -120,7 +120,7 @@ void DesktopSessionFake::stop()
     frame_generator_->stop();
 }
 
-void DesktopSessionFake::enableSession(bool enable)
+void DesktopSessionFake::setEnabled(bool enable)
 {
     if (enable)
         frame_generator_->start(delegate_);
@@ -128,12 +128,12 @@ void DesktopSessionFake::enableSession(bool enable)
         frame_generator_->stop();
 }
 
-void DesktopSessionFake::selectScreen(const proto::Screen& /* screen */)
+void DesktopSessionFake::setConfig(const Config& /* config */)
 {
     // Nothing
 }
 
-void DesktopSessionFake::enableFeatures(const proto::internal::EnableFeatures& /* features */)
+void DesktopSessionFake::selectScreen(const proto::Screen& /* screen */)
 {
     // Nothing
 }

@@ -29,7 +29,6 @@ FileControlProxy::FileControlProxy(
       file_control_(file_control)
 {
     DCHECK(io_task_runner_);
-    DCHECK(io_task_runner_->belongsToCurrentThread());
     DCHECK(file_control_);
 }
 

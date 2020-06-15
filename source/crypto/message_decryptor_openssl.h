@@ -39,7 +39,7 @@ public:
 
     // MessageDecryptor implementation.
     size_t decryptedDataSize(size_t in_size) override;
-    bool decrypt(const uint8_t* in, size_t in_size, uint8_t* out) override;
+    bool decrypt(const void* in, size_t in_size, void* out) override;
 
 private:
     MessageDecryptorOpenssl(EVP_CIPHER_CTX_ptr ctx, const base::ByteArray& iv);

@@ -21,19 +21,26 @@ list(APPEND SOURCE_NET
     adapter_enumerator.h
     address.cc
     address.h
+    channel.cc
+    channel.h
+    channel_proxy.cc
+    channel_proxy.h
+    client_authenticator.cc
+    client_authenticator.h
     firewall_manager.cc
     firewall_manager.h
     ip_util.cc
     ip_util.h
-    network_channel.cc
-    network_channel.h
-    network_channel_proxy.cc
-    network_channel_proxy.h
-    network_error.cc
-    network_error.h
-    network_listener.h
-    network_server.cc
-    network_server.h)
+    server.cc
+    server.h
+    server_authenticator.cc
+    server_authenticator.h
+    server_authenticator_manager.cc
+    server_authenticator_manager.h
+    user.cc
+    user.h
+    variable_size.cc
+    variable_size.h)
 
 list(APPEND SOURCE_NET_UNIT_TESTS
     address_unittest.cc)

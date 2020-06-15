@@ -18,93 +18,31 @@
 
 #include "client/client.h"
 
+#include "base/logging.h"
+#include "base/task_runner.h"
 #include "build/version.h"
 #include "client/status_window_proxy.h"
-#include "common/message_serialization.h"
-#include "net/network_channel_proxy.h"
 
 namespace client {
 
-Client::Client(std::shared_ptr<base::TaskRunner> ui_task_runner)
-    : ui_task_runner_(std::move(ui_task_runner))
+Client::Client(std::shared_ptr<base::TaskRunner> io_task_runner)
+    : io_task_runner_(std::move(io_task_runner))
 {
-    DCHECK(ui_task_runner_);
-    DCHECK(ui_task_runner_->belongsToCurrentThread());
+    DCHECK(io_task_runner_);
 }
 
 Client::~Client()
 {
-    DCHECK(ui_task_runner_->belongsToCurrentThread());
+    DCHECK(io_task_runner_->belongsToCurrentThread());
     stop();
 }
 
-bool Client::start(const Config& config)
+void Client::start(const Config& config)
 {
-    DCHECK(ui_task_runner_->belongsToCurrentThread());
+    DCHECK(io_task_runner_->belongsToCurrentThread());
+    DCHECK(status_window_proxy_);
 
     config_ = config;
-
-    if (!status_window_proxy_)
-    {
-        DLOG(LS_ERROR) << "Attempt to start the client without status window";
-        return false;
-    }
-
-    // Start the thread for IO.
-    io_thread_.start(base::MessageLoop::Type::ASIO, this);
-    return true;
-}
-
-void Client::stop()
-{
-    DCHECK(ui_task_runner_->belongsToCurrentThread());
-
-    io_thread_.stop();
-}
-
-void Client::setStatusWindow(StatusWindow* status_window)
-{
-    DCHECK(ui_task_runner_->belongsToCurrentThread());
-    DCHECK(!status_window_proxy_);
-
-    status_window_proxy_ = StatusWindowProxy::create(ui_task_runner_, status_window);
-}
-
-// static
-base::Version Client::version()
-{
-    return base::Version(ASPIA_VERSION_MAJOR, ASPIA_VERSION_MINOR, ASPIA_VERSION_PATCH);
-}
-
-std::shared_ptr<base::TaskRunner> Client::ioTaskRunner() const
-{
-    return io_task_runner_;
-}
-
-std::shared_ptr<base::TaskRunner> Client::uiTaskRunner() const
-{
-    return ui_task_runner_;
-}
-
-std::u16string Client::computerName() const
-{
-    return config_.computer_name;
-}
-
-proto::SessionType Client::sessionType() const
-{
-    return config_.session_type;
-}
-
-void Client::sendMessage(const google::protobuf::MessageLite& message)
-{
-    channel_->send(common::serializeMessage(message));
-}
-
-void Client::onBeforeThreadRunning()
-{
-    // Initialize the task runner for IO.
-    io_task_runner_ = io_thread_.taskRunner();
 
     // Show the status window.
     status_window_proxy_->onStarted(config_.address, config_.port);
@@ -119,32 +57,63 @@ void Client::onBeforeThreadRunning()
     channel_->connect(config_.address, config_.port);
 }
 
-void Client::onAfterThreadRunning()
+void Client::stop()
 {
+    DCHECK(io_task_runner_->belongsToCurrentThread());
+
     authenticator_.reset();
     channel_.reset();
 
-    if (session_started_)
-    {
-        // Session stopped.
-        onSessionStopped();
-    }
+    status_window_proxy_->onStopped();
+}
+
+void Client::setStatusWindow(std::shared_ptr<StatusWindowProxy> status_window_proxy)
+{
+    status_window_proxy_ = std::move(status_window_proxy);
+}
+
+// static
+base::Version Client::version()
+{
+    return base::Version(ASPIA_VERSION_MAJOR, ASPIA_VERSION_MINOR, ASPIA_VERSION_PATCH);
+}
+
+std::u16string Client::computerName() const
+{
+    return config_.computer_name;
+}
+
+proto::SessionType Client::sessionType() const
+{
+    return config_.session_type;
+}
+
+void Client::sendMessage(const google::protobuf::MessageLite& message)
+{
+    channel_->send(base::serialize(message));
 }
 
 void Client::onConnected()
 {
-    channel_->setKeepAlive(true, std::chrono::minutes(1), std::chrono::seconds(1));
+    static const size_t kReadBufferSize = 2 * 1024 * 1024; // 2 Mb.
+    static const std::chrono::minutes kKeepAliveTime{ 1 };
+    static const std::chrono::seconds kKeepAliveInterval{ 3 };
+
+    channel_->setReadBufferSize(kReadBufferSize);
+    channel_->setKeepAlive(true, kKeepAliveTime, kKeepAliveInterval);
     channel_->setNoDelay(true);
 
-    authenticator_ = std::make_unique<Authenticator>();
+    authenticator_ = std::make_unique<net::ClientAuthenticator>();
 
+    authenticator_->setIdentify(proto::IDENTIFY_SRP);
     authenticator_->setUserName(config_.username);
     authenticator_->setPassword(config_.password);
     authenticator_->setSessionType(config_.session_type);
 
-    authenticator_->start(std::move(channel_), [this](Authenticator::ErrorCode error_code)
+    authenticator_->start(std::move(channel_),
+                          [this](net::ClientAuthenticator::ErrorCode error_code)
     {
-        if (error_code == Authenticator::ErrorCode::SUCCESS)
+        if (error_code == net::ClientAuthenticator::ErrorCode::SUCCESS)
         {
             // The authenticator takes the listener on itself, we return the receipt of
             // notifications.
@@ -152,8 +121,6 @@ void Client::onConnected()
             channel_->setListener(this);
 
             status_window_proxy_->onConnected();
-
-            session_started_ = true;
 
             // Signal that everything is ready to start the session (connection established,
             // authentication passed).
@@ -168,11 +135,11 @@ void Client::onConnected()
         }
 
         // Authenticator is no longer needed.
-        io_task_runner_->deleteSoon(authenticator_.release());
+        io_task_runner_->deleteSoon(std::move(authenticator_));
     });
 }
 
-void Client::onDisconnected(net::ErrorCode error_code)
+void Client::onDisconnected(net::Channel::ErrorCode error_code)
 {
     // Show an error to the user.
     status_window_proxy_->onDisconnected(error_code);

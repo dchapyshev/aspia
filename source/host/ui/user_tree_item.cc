@@ -18,17 +18,15 @@
 
 #include "host/ui/user_tree_item.h"
 
-#include "host/user.h"
-
 namespace host {
 
-UserTreeItem::UserTreeItem(const User& user)
+UserTreeItem::UserTreeItem(const net::User& user)
     : user_(user)
 {
     updateData();
 }
 
-void UserTreeItem::setUser(const User& user)
+void UserTreeItem::setUser(const net::User& user)
 {
     user_ = user;
     updateData();
@@ -36,7 +34,7 @@ void UserTreeItem::setUser(const User& user)
 
 void UserTreeItem::updateData()
 {
-    if (user_.flags & User::ENABLED)
+    if (user_.flags & net::User::ENABLED)
         setIcon(0, QIcon(QLatin1String(":/img/user.png")));
     else
         setIcon(0, QIcon(QLatin1String(":/img/user-disabled.png")));

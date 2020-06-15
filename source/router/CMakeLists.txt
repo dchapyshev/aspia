@@ -19,16 +19,12 @@
 include(tbb)
 
 list(APPEND SOURCE_ROUTER
-    authenticator.cc
-    authenticator.h
-    authenticator_manager.cc
-    authenticator_manager.h
     database.h
     database_sqlite.cc
     database_sqlite.h
-    router_main.cc
-    router_server.cc
-    router_server.h
+    main.cc
+    server.cc
+    server.h
     session.cc
     session.h
     session_manager.cc
@@ -36,15 +32,13 @@ list(APPEND SOURCE_ROUTER
     session_peer.cc
     session_peer.h
     settings.cc
-    settings.h
-    user.cc
-    user.h)
+    settings.h)
 
 list(APPEND SOURCE_ROUTER_WIN
-    win/router_service.cc
-    win/router_service.h
-    win/router_service_constants.cc
-    win/router_service_constants.h)
+    win/service.cc
+    win/service.h
+    win/service_constants.cc
+    win/service_constants.h)
 
 source_group("" FILES ${SOURCE_ROUTER})
 source_group(win FILES ${SOURCE_ROUTER_WIN})
@@ -67,4 +61,5 @@ if (USE_TBB)
     add_tbb(aspia_router ${ASPIA_THIRD_PARTY_DIR}/tbb)
 endif()
 
-add_subdirectory(ui)
+add_subdirectory(keygen)
+add_subdirectory(manager)

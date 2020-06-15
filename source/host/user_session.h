@@ -23,19 +23,14 @@
 #include "base/waitable_timer.h"
 #include "host/client_session.h"
 #include "host/desktop_session_manager.h"
-#include "host/user.h"
-#include "ipc/ipc_listener.h"
+#include "ipc/channel.h"
+#include "net/user.h"
 #include "proto/host_internal.pb.h"
-
-namespace ipc {
-class Channel;
-class ChannelProxy;
-} // namespace ipc
 
 namespace host {
 
 class UserSession
-    : public ipc::Listener,
+    : public ipc::Channel::Listener,
       public DesktopSession::Delegate,
       public ClientSession::Delegate
 {
@@ -74,13 +69,13 @@ public:
     Type type() const { return type_; }
     State state() const { return state_; }
     base::SessionId sessionId() const { return session_id_; }
-    User user() const;
+    net::User user() const;
 
     void addNewSession(std::unique_ptr<ClientSession> client_session);
     void setSessionEvent(base::win::SessionStatus status, base::SessionId session_id);
 
 protected:
-    // ipc::Listener implementation.
+    // ipc::Channel::Listener implementation.
     void onDisconnected() override;
     void onMessageReceived(const base::ByteArray& buffer) override;
 
@@ -88,7 +83,7 @@ protected:
     void onDesktopSessionStarted() override;
     void onDesktopSessionStopped() override;
     void onScreenCaptured(const desktop::Frame& frame) override;
-    void onCursorCaptured(std::shared_ptr<desktop::MouseCursor> mouse_cursor) override;
+    void onCursorCaptured(const desktop::MouseCursor& mouse_cursor) override;
     void onScreenListChanged(const proto::ScreenList& list) override;
     void onClipboardEvent(const proto::ClipboardEvent& event) override;
 

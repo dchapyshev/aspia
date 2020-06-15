@@ -19,45 +19,45 @@
 #ifndef BASE__WIN__SCOPED_HDC_H
 #define BASE__WIN__SCOPED_HDC_H
 
-#include "base/logging.h"
+#include "base/macros_magic.h"
 
 #include <Windows.h>
 
 namespace base::win {
 
-// Like ScopedHandle but for HDC.  Only use this on HDCs returned from GetDC.
+// Like ScopedHandle but for HDC. Only use this on HDCs returned from GetDC.
 class ScopedGetDC
 {
 public:
+    ScopedGetDC() = default;
+
     explicit ScopedGetDC(HWND hwnd)
-        : hwnd_(hwnd),
-          hdc_(GetDC(hwnd))
     {
-        if (hwnd_)
-        {
-            DCHECK(IsWindow(hwnd_));
-            DCHECK(hdc_);
-        }
-        else
-        {
-            // If GetDC(NULL) returns NULL, something really bad has happened, like
-            // GDI handle exhaustion.  In this case Chrome is going to behave badly no
-            // matter what, so we may as well just force a crash now.
-            CHECK(hdc_);
-        }
+        getDC(hwnd);
     }
 
-    ~ScopedGetDC()
+    ~ScopedGetDC() { close(); }
+
+    void close()
     {
         if (hdc_)
             ReleaseDC(hwnd_, hdc_);
     }
 
+    void getDC(HWND hwnd)
+    {
+        close();
+
+        hwnd_ = hwnd;
+        hdc_ = GetDC(hwnd);
+    }
+
+    bool isValid() const { return hdc_ != nullptr; }
     operator HDC() const { return hdc_; }
 
 private:
-    HWND hwnd_;
-    HDC hdc_;
+    HWND hwnd_ = nullptr;
+    HDC hdc_ = nullptr;
 
     DISALLOW_COPY_AND_ASSIGN(ScopedGetDC);
 };

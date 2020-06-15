@@ -26,6 +26,8 @@ list(APPEND SOURCE_CONSOLE
     address_book_tab.cc
     address_book_tab.h
     address_book_tab.ui
+    application.cc
+    application.h
     computer_dialog.cc
     computer_dialog.h
     computer_dialog.ui
@@ -57,18 +59,10 @@ list(APPEND SOURCE_CONSOLE
     computer_tree.cc
     computer_tree.h
     console.rc
-    console_application.cc
-    console_application.h
-    console_main.cc
-    console_main_window.cc
-    console_main_window.h
-    console_main_window.ui
-    console_settings.cc
-    console_settings.h
-    console_statusbar.cc
-    console_statusbar.h
-    console_tab.cc
-    console_tab.h
+    main.cc
+    main_window.cc
+    main_window.h
+    main_window.ui
     mru.cc
     mru.h
     mru_action.cc
@@ -76,6 +70,10 @@ list(APPEND SOURCE_CONSOLE
     open_address_book_dialog.cc
     open_address_book_dialog.h
     open_address_book_dialog.ui
+    settings.cc
+    settings.h
+    statusbar.cc
+    statusbar.h
     update_settings_dialog.cc
     update_settings_dialog.h
     update_settings_dialog.ui)

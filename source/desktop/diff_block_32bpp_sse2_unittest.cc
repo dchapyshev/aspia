@@ -93,20 +93,6 @@ TEST(diff_block_sse2, block_difference_test_same)
             EXPECT_EQ(0, result);
         }
     }
-
-    {
-        static const int kBlockSize = 8;
-
-        prepareBuffers(&block1, &block2, kBlockSize, kAlignment);
-
-        // These blocks should match.
-        for (int i = 0; i < kTimesToRun; ++i)
-        {
-            int result = diffFullBlock_32bpp_8x8_SSE2(
-                block1.get(), block2.get(), kBlockSize * kBytesPerPixel);
-            EXPECT_EQ(0, result);
-        }
-    }
 }
 
 TEST(diff_block_sse2, block_difference_test_last)
@@ -140,20 +126,6 @@ TEST(diff_block_sse2, block_difference_test_last)
         for (int i = 0; i < kTimesToRun; ++i)
         {
             int result = diffFullBlock_32bpp_16x16_SSE2(
-                block1.get(), block2.get(), kBlockSize * kBytesPerPixel);
-            EXPECT_EQ(1, result);
-        }
-    }
-
-    {
-        static const int kBlockSize = 8;
-
-        prepareBuffers(&block1, &block2, kBlockSize, kAlignment);
-        block2.get()[fullBlockSize(kBlockSize) - 2] += 1;
-
-        for (int i = 0; i < kTimesToRun; ++i)
-        {
-            int result = diffFullBlock_32bpp_8x8_SSE2(
                 block1.get(), block2.get(), kBlockSize * kBytesPerPixel);
             EXPECT_EQ(1, result);
         }
@@ -195,20 +167,6 @@ TEST(diff_block_sse2, block_difference_test_mid)
             EXPECT_EQ(1, result);
         }
     }
-
-    {
-        static const int kBlockSize = 8;
-
-        prepareBuffers(&block1, &block2, kBlockSize, kAlignment);
-        block2.get()[fullBlockSize(kBlockSize) / 2 + 1] += 1;
-
-        for (int i = 0; i < kTimesToRun; ++i)
-        {
-            int result = diffFullBlock_32bpp_8x8_SSE2(
-                block1.get(), block2.get(), kBlockSize * kBytesPerPixel);
-            EXPECT_EQ(1, result);
-        }
-    }
 }
 
 TEST(diff_block_sse2, block_difference_test_first)
@@ -242,20 +200,6 @@ TEST(diff_block_sse2, block_difference_test_first)
         for (int i = 0; i < kTimesToRun; ++i)
         {
             int result = diffFullBlock_32bpp_16x16_SSE2(
-                block1.get(), block2.get(), kBlockSize * kBytesPerPixel);
-            EXPECT_EQ(1, result);
-        }
-    }
-
-    {
-        static const int kBlockSize = 8;
-
-        prepareBuffers(&block1, &block2, kBlockSize, kAlignment);
-        block2.get()[0] += 1;
-
-        for (int i = 0; i < kTimesToRun; ++i)
-        {
-            int result = diffFullBlock_32bpp_8x8_SSE2(
                 block1.get(), block2.get(), kBlockSize * kBytesPerPixel);
             EXPECT_EQ(1, result);
         }

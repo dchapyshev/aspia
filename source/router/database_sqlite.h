@@ -33,14 +33,13 @@ public:
     ~DatabaseSqlite();
 
     static std::unique_ptr<DatabaseSqlite> open();
-    static std::unique_ptr<DatabaseSqlite> create();
     static std::filesystem::path filePath();
 
     // Database implementation.
-    UserList userList() const override;
-    bool addUser(const User& user) override;
-    bool removeUser(std::u16string_view name) override;
-    std::string id(std::string_view key) const override;
+    net::UserList userList() const override;
+    bool addUser(const net::User& user) override;
+    bool removeUser(uint64_t entry_id) override;
+    uint64_t peerId(std::string_view key) const override;
 
 private:
     explicit DatabaseSqlite(sqlite3* db);

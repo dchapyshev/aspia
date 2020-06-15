@@ -23,6 +23,7 @@
 #include "base/strings/string_split.h"
 #include "client/client_desktop.h"
 #include "client/desktop_control_proxy.h"
+#include "client/desktop_window_proxy.h"
 #include "client/ui/desktop_config_dialog.h"
 #include "client/ui/desktop_panel.h"
 #include "client/ui/frame_factory_qimage.h"
@@ -31,6 +32,7 @@
 #include "client/ui/system_info_window.h"
 #include "common/desktop_session_constants.h"
 #include "desktop/mouse_cursor.h"
+#include "qt_base/application.h"
 
 #include <QApplication>
 #include <QBrush>
@@ -62,6 +64,8 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
                                  const proto::DesktopConfig& desktop_config,
                                  QWidget* parent)
     : ClientWindow(parent),
+      desktop_window_proxy_(std::make_shared<DesktopWindowProxy>(
+          qt_base::Application::uiTaskRunner(), this)),
       session_type_(session_type),
       desktop_config_(desktop_config)
 {
@@ -164,16 +168,18 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
     });
 }
 
-QtDesktopWindow::~QtDesktopWindow() = default;
-
-std::unique_ptr<Client> QtDesktopWindow::createClient(
-    std::shared_ptr<base::TaskRunner> ui_task_runner)
+QtDesktopWindow::~QtDesktopWindow()
 {
-    std::unique_ptr<ClientDesktop> client =
-        std::make_unique<ClientDesktop>(std::move(ui_task_runner));
+    desktop_window_proxy_->dettach();
+}
+
+std::unique_ptr<Client> QtDesktopWindow::createClient()
+{
+    std::unique_ptr<ClientDesktop> client = std::make_unique<ClientDesktop>(
+        qt_base::Application::ioTaskRunner());
 
     client->setDesktopConfig(desktop_config_);
-    client->setDesktopWindow(this);
+    client->setDesktopWindow(desktop_window_proxy_);
 
     return client;
 }
@@ -277,8 +283,6 @@ void QtDesktopWindow::drawFrame(std::shared_ptr<desktop::Frame> frame)
 
     if (current_frame != frame.get())
     {
-        screen_top_left_ = frame->topLeft();
-
         desktop_->setDesktopFrame(frame);
 
         scaleDesktop();
@@ -292,15 +296,14 @@ void QtDesktopWindow::drawFrame(std::shared_ptr<desktop::Frame> frame)
 
 void QtDesktopWindow::drawMouseCursor(std::shared_ptr<desktop::MouseCursor> mouse_cursor)
 {
-    QImage image(mouse_cursor->data(),
-                 mouse_cursor->size().width(),
-                 mouse_cursor->size().height(),
+    QImage image(mouse_cursor->constImage().data(),
+                 mouse_cursor->width(),
+                 mouse_cursor->height(),
                  mouse_cursor->stride(),
                  QImage::Format::Format_ARGB32);
 
-    desktop_->setCursor(QCursor(QPixmap::fromImage(image),
-                                mouse_cursor->hotSpot().x(),
-                                mouse_cursor->hotSpot().y()));
+    desktop_->setCursor(QCursor(
+        QPixmap::fromImage(image), mouse_cursor->hotSpotX(), mouse_cursor->hotSpotY()));
 }
 
 void QtDesktopWindow::injectClipboardEvent(const proto::ClipboardEvent& event)
@@ -373,8 +376,8 @@ void QtDesktopWindow::onPointerEvent(const QPoint& pos, uint32_t mask)
         proto::PointerEvent pointer_event;
 
         pointer_event.set_mask(mask);
-        pointer_event.set_x((static_cast<double>(pos.x() * 100) / scale) + screen_top_left_.x());
-        pointer_event.set_y((static_cast<double>(pos.y() * 100) / scale) + screen_top_left_.y());
+        pointer_event.set_x((static_cast<double>(pos.x() * 100) / scale));
+        pointer_event.set_y((static_cast<double>(pos.y() * 100) / scale));
 
         desktop_control_proxy_->onPointerEvent(pointer_event);
     }

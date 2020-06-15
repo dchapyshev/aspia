@@ -39,6 +39,7 @@ namespace client {
 
 class DesktopConfigDialog;
 class DesktopPanel;
+class DesktopWindowProxy;
 class SystemInfoWindow;
 
 class QtDesktopWindow :
@@ -56,7 +57,7 @@ public:
     ~QtDesktopWindow();
 
     // ClientWindow implementation.
-    std::unique_ptr<Client> createClient(std::shared_ptr<base::TaskRunner> ui_task_runner) override;
+    std::unique_ptr<Client> createClient() override;
 
     // DesktopWindow implementation.
     void showWindow(std::shared_ptr<DesktopControlProxy> desktop_control_proxy,
@@ -96,6 +97,7 @@ private:
     const proto::SessionType session_type_;
     proto::DesktopConfig desktop_config_;
 
+    std::shared_ptr<DesktopWindowProxy> desktop_window_proxy_;
     std::shared_ptr<DesktopControlProxy> desktop_control_proxy_;
     base::Version peer_version_;
     uint32_t video_encodings_ = 0;
@@ -113,8 +115,6 @@ private:
     QPoint scroll_delta_;
 
     bool is_maximized_ = false;
-
-    desktop::Point screen_top_left_;
 
     DISALLOW_COPY_AND_ASSIGN(QtDesktopWindow);
 };

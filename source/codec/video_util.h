@@ -20,7 +20,7 @@
 #define CODEC__VIDEO_UTIL_H
 
 #include "base/macros_magic.h"
-#include "desktop/desktop_geometry.h"
+#include "desktop/geometry.h"
 #include "desktop/pixel_format.h"
 #include "proto/desktop.pb.h"
 

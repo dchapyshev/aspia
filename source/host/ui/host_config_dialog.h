@@ -19,7 +19,7 @@
 #ifndef HOST__UI__HOST_CONFIG_DIALOG_H
 #define HOST__UI__HOST_CONFIG_DIALOG_H
 
-#include "host/user.h"
+#include "net/user.h"
 #include "qt_base/locale_loader.h"
 #include "ui_host_config_dialog.h"
 
@@ -50,7 +50,7 @@ private:
     void setConfigChanged(bool changed);
     bool isConfigChanged() const;
     void reloadAll();
-    void reloadUserList(const UserList& user_list);
+    void reloadUserList(const net::UserList& user_list);
     void reloadServiceStatus();
     bool isServiceStarted();
     bool installService();

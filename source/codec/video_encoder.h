@@ -19,7 +19,8 @@
 #ifndef CODEC__VIDEO_ENCODER_H
 #define CODEC__VIDEO_ENCODER_H
 
-#include "desktop/screen_settings_tracker.h"
+#include "desktop/geometry.h"
+#include "desktop/pixel_format.h"
 #include "proto/desktop.pb.h"
 
 namespace desktop {
@@ -41,7 +42,7 @@ protected:
                         proto::VideoPacket* packet);
 
 private:
-    desktop::ScreenSettingsTracker screen_settings_tracker_;
+    desktop::Size last_size_;
 };
 
 } // namespace codec

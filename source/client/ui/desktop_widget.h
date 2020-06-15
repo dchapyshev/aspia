@@ -23,7 +23,7 @@
 #if defined(OS_WIN)
 #include "base/win/scoped_user_object.h"
 #endif // defined(OS_WIN)
-#include "desktop/desktop_frame.h"
+#include "desktop/frame.h"
 
 #include <QEvent>
 #include <QWidget>

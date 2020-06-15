@@ -78,7 +78,7 @@ size_t MessageDecryptorOpenssl::decryptedDataSize(size_t in_size)
     return in_size - kTagSize;
 }
 
-bool MessageDecryptorOpenssl::decrypt(const uint8_t* in, size_t in_size, uint8_t* out)
+bool MessageDecryptorOpenssl::decrypt(const void* in, size_t in_size, void* out)
 {
     if (EVP_DecryptInit_ex(ctx_.get(), nullptr, nullptr, nullptr, iv_.data()) != 1)
     {
@@ -88,20 +88,22 @@ bool MessageDecryptorOpenssl::decrypt(const uint8_t* in, size_t in_size, uint8_t
 
     int length;
 
-    if (EVP_DecryptUpdate(ctx_.get(), out, &length, in + kTagSize, in_size - kTagSize) != 1)
+    if (EVP_DecryptUpdate(ctx_.get(),
+                          reinterpret_cast<uint8_t*>(out), &length,
+                          reinterpret_cast<const uint8_t*>(in) + kTagSize, in_size - kTagSize) != 1)
     {
         LOG(LS_WARNING) << "EVP_DecryptUpdate failed";
         return false;
     }
 
     if (EVP_CIPHER_CTX_ctrl(ctx_.get(), EVP_CTRL_AEAD_SET_TAG, kTagSize,
-                            const_cast<uint8_t*>(in)) != 1)
+                            const_cast<void*>(in)) != 1)
     {
         LOG(LS_WARNING) << "EVP_CIPHER_CTX_ctrl failed";
         return false;
     }
 
-    if (EVP_DecryptFinal_ex(ctx_.get(), out + length, &length) <= 0)
+    if (EVP_DecryptFinal_ex(ctx_.get(), reinterpret_cast<uint8_t*>(out) + length, &length) <= 0)
     {
         LOG(LS_WARNING) << "EVP_DecryptFinal_ex failed";
         return false;

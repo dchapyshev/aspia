@@ -78,7 +78,7 @@ size_t MessageEncryptorOpenssl::encryptedDataSize(size_t in_size)
     return in_size + kTagSize;
 }
 
-bool MessageEncryptorOpenssl::encrypt(const uint8_t* in, size_t in_size, uint8_t* out)
+bool MessageEncryptorOpenssl::encrypt(const void* in, size_t in_size, void* out)
 {
     if (EVP_EncryptInit_ex(ctx_.get(), nullptr, nullptr, nullptr, iv_.data()) != 1)
     {
@@ -88,13 +88,17 @@ bool MessageEncryptorOpenssl::encrypt(const uint8_t* in, size_t in_size, uint8_t
 
     int length;
 
-    if (EVP_EncryptUpdate(ctx_.get(), out + kTagSize, &length, in, in_size) != 1)
+    if (EVP_EncryptUpdate(ctx_.get(),
+                          reinterpret_cast<uint8_t*>(out) + kTagSize, &length,
+                          reinterpret_cast<const uint8_t*>(in), in_size) != 1)
     {
         LOG(LS_WARNING) << "EVP_EncryptUpdate failed";
         return false;
     }
 
-    if (EVP_EncryptFinal_ex(ctx_.get(), out + kTagSize + length, &length) != 1)
+    if (EVP_EncryptFinal_ex(ctx_.get(),
+                            reinterpret_cast<uint8_t*>(out) + kTagSize + length,
+                            &length) != 1)
     {
         LOG(LS_WARNING) << "EVP_EncryptFinal_ex failed";
         return false;

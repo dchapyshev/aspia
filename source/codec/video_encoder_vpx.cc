@@ -20,7 +20,7 @@
 
 #include "base/logging.h"
 #include "codec/video_util.h"
-#include "desktop/desktop_frame.h"
+#include "desktop/frame.h"
 
 #include <libyuv/convert.h>
 #include <libyuv/convert_from_argb.h>
@@ -68,7 +68,7 @@ void setCommonCodecParameters(vpx_codec_enc_cfg_t* config, const desktop::Size& 
 
 void createImage(const desktop::Size& size,
                  std::unique_ptr<vpx_image_t>* out_image,
-                 std::unique_ptr<uint8_t[]>* out_image_buffer)
+                 base::ByteArray* out_image_buffer)
 {
     std::unique_ptr<vpx_image_t> image = std::make_unique<vpx_image_t>();
 
@@ -96,16 +96,16 @@ void createImage(const desktop::Size& size,
 
     const int uv_rows = y_rows >> image->y_chroma_shift;
 
-    // Allocate a YUV buffer large enough for the aligned data & padding.
-    const int buffer_size = y_stride * y_rows + (2 * uv_stride) * uv_rows;
+    base::ByteArray image_buffer;
 
-    std::unique_ptr<uint8_t[]> image_buffer = std::make_unique<uint8_t[]>(buffer_size);
+    // Allocate a YUV buffer large enough for the aligned data & padding.
+    image_buffer.resize(y_stride * y_rows + (2 * uv_stride) * uv_rows);
 
     // Reset image value to 128 so we just need to fill in the y plane.
-    memset(image_buffer.get(), 128, buffer_size);
+    memset(image_buffer.data(), 128, image_buffer.size());
 
-    // Fill in the information
-    image->planes[0] = image_buffer.get();
+    // Fill in the information.
+    image->planes[0] = image_buffer.data();
     image->planes[1] = image->planes[0] + y_stride * y_rows;
     image->planes[2] = image->planes[1] + uv_stride * uv_rows;
 
@@ -148,19 +148,17 @@ std::unique_ptr<VideoEncoderVPX> VideoEncoderVPX::createVP9()
 VideoEncoderVPX::VideoEncoderVPX(proto::VideoEncoding encoding)
     : encoding_(encoding)
 {
-    memset(&active_map_, 0, sizeof(active_map_));
-    memset(&image_, 0, sizeof(image_));
+    // Nothing
 }
 
 void VideoEncoderVPX::createActiveMap(const desktop::Size& size)
 {
     active_map_.cols = (size.width() + kMacroBlockSize - 1) / kMacroBlockSize;
     active_map_.rows = (size.height() + kMacroBlockSize - 1) / kMacroBlockSize;
-    active_map_size_ = active_map_.cols * active_map_.rows;
-    active_map_buffer_ = std::make_unique<uint8_t[]>(active_map_size_);
 
-    memset(active_map_buffer_.get(), 0, active_map_size_);
-    active_map_.active_map = active_map_buffer_.get();
+    active_map_buffer_.resize(active_map_.cols * active_map_.rows);
+    memset(active_map_buffer_.data(), 0, active_map_buffer_.size());
+    active_map_.active_map = active_map_buffer_.data();
 }
 
 void VideoEncoderVPX::createVp8Codec(const desktop::Size& size)
@@ -287,7 +285,7 @@ void VideoEncoderVPX::prepareImageAndActiveMap(
         // which is is required by ARGBToI420().
         updated_region_.addRect(
             alignRect(desktop::Rect::makeLTRB(rect.left() - padding, rect.top() - padding,
-                                            rect.right() + padding, rect.bottom() + padding)));
+                                              rect.right() + padding, rect.bottom() + padding)));
     }
 
     // Clip back to the screen dimensions, in case they're not macroblock aligned. The conversion
@@ -295,7 +293,7 @@ void VideoEncoderVPX::prepareImageAndActiveMap(
     // are not even.
     updated_region_.intersectWith(desktop::Rect::makeWH(image_->w, image_->h));
 
-    memset(active_map_.active_map, 0, active_map_size_);
+    memset(active_map_buffer_.data(), 0, active_map_buffer_.size());
 
     const int y_stride = image_->stride[0];
     const int uv_stride = image_->stride[1];
@@ -303,7 +301,10 @@ void VideoEncoderVPX::prepareImageAndActiveMap(
     uint8_t* u_data = image_->planes[1];
     uint8_t* v_data = image_->planes[2];
 
-    const int bits_per_pixel = frame->format().bitsPerPixel();
+    auto convert_to_i420 = libyuv::ARGBToI420;
+
+    if (frame->format().bitsPerPixel() == 16)
+        convert_to_i420 = libyuv::RGB565ToI420;
 
     for (desktop::Region::Iterator it(updated_region_); !it.isAtEnd(); it.advance())
     {
@@ -312,30 +313,13 @@ void VideoEncoderVPX::prepareImageAndActiveMap(
         const int y_offset = y_stride * rect.y() + rect.x();
         const int uv_offset = uv_stride * rect.y() / 2 + rect.x() / 2;
 
-        if (bits_per_pixel == 32)
-        {
-            libyuv::ARGBToI420(frame->frameDataAtPos(rect.topLeft()),
-                               frame->stride(),
-                               y_data + y_offset, y_stride,
-                               u_data + uv_offset, uv_stride,
-                               v_data + uv_offset, uv_stride,
-                               rect.width(),
-                               rect.height());
-        }
-        else if (bits_per_pixel == 16)
-        {
-            libyuv::RGB565ToI420(frame->frameDataAtPos(rect.topLeft()),
-                                 frame->stride(),
-                                 y_data + y_offset, y_stride,
-                                 u_data + uv_offset, uv_stride,
-                                 v_data + uv_offset, uv_stride,
-                                 rect.width(),
-                                 rect.height());
-        }
-        else
-        {
-            NOTREACHED();
-        }
+        convert_to_i420(frame->frameDataAtPos(rect.topLeft()),
+                        frame->stride(),
+                        y_data + y_offset, y_stride,
+                        u_data + uv_offset, uv_stride,
+                        v_data + uv_offset, uv_stride,
+                        rect.width(),
+                        rect.height());
 
         serializeRect(rect, packet->add_dirty_rect());
         setActiveMap(rect);

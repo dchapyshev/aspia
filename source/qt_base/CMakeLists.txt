@@ -16,6 +16,8 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 #
 
+include(translations)
+
 list(APPEND SOURCE_QT_BASE
     application.cc
     application.h
@@ -35,3 +37,11 @@ target_link_libraries(aspia_qt_base
     aspia_base
     ${QT_LIBS}
     ${THIRD_PARTY_LIBS})
+
+if(Qt5LinguistTools_FOUND)
+    # Get the list of Qt translation files.
+    file(GLOB QT_QM_FILES ${ASPIA_THIRD_PARTY_DIR}/qt/translations/*.qm)
+    add_qt_translations(aspia_qt_base QRC_FILE "qt_translations.qrc" QM_FILES ${QT_QM_FILES})
+else()
+    message(WARNING "Qt5 linguist tools not found. Internationalization support will be disabled.")
+endif()

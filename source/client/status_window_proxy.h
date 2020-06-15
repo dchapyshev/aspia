@@ -30,27 +30,24 @@ class TaskRunner;
 
 namespace client {
 
-class StatusWindowProxy : public StatusWindow
+class StatusWindowProxy : public std::enable_shared_from_this<StatusWindowProxy>
 {
 public:
-    ~StatusWindowProxy();
-
-    static std::unique_ptr<StatusWindowProxy> create(
-        std::shared_ptr<base::TaskRunner> ui_task_runner, StatusWindow* status_window);
-
-    // StatusWindow implementation.
-    void onStarted(const std::u16string& address, uint16_t port) override;
-    void onStopped() override;
-    void onConnected() override;
-    void onDisconnected(net::ErrorCode error_code) override;
-    void onAccessDenied(Authenticator::ErrorCode error_code) override;
-
-private:
     StatusWindowProxy(std::shared_ptr<base::TaskRunner> ui_task_runner,
                       StatusWindow* status_window);
+    ~StatusWindowProxy();
 
-    class Impl;
-    std::shared_ptr<Impl> impl_;
+    void dettach();
+
+    void onStarted(const std::u16string& address, uint16_t port);
+    void onStopped();
+    void onConnected();
+    void onDisconnected(net::Channel::ErrorCode error_code);
+    void onAccessDenied(net::ClientAuthenticator::ErrorCode error_code);
+
+private:
+    std::shared_ptr<base::TaskRunner> ui_task_runner_;
+    StatusWindow* status_window_;
 
     DISALLOW_COPY_AND_ASSIGN(StatusWindowProxy);
 };

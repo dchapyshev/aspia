@@ -18,7 +18,7 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
-    <number>0</number>
+    <number>1</number>
    </property>
    <property name="leftMargin">
     <number>2</number>
@@ -34,6 +34,12 @@
    </property>
    <item>
     <widget class="QLabel" name="label_name">
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Plain</enum>
+     </property>
      <property name="text">
       <string notr="true">Panel Name</string>
      </property>
@@ -61,6 +67,9 @@
          <width>16</width>
          <height>16</height>
         </size>
+       </property>
+       <property name="toolButtonStyle">
+        <enum>Qt::ToolButtonTextBesideIcon</enum>
        </property>
        <addaction name="action_up"/>
        <addaction name="action_refresh"/>
@@ -157,7 +166,7 @@
      <normaloff>:/img/folder-up.png</normaloff>:/img/folder-up.png</iconset>
    </property>
    <property name="text">
-    <string/>
+    <string>Up</string>
    </property>
    <property name="toolTip">
     <string>Browse to parent folder (Backspace)</string>
@@ -169,7 +178,7 @@
      <normaloff>:/img/arrow-circle-double.png</normaloff>:/img/arrow-circle-double.png</iconset>
    </property>
    <property name="text">
-    <string/>
+    <string>Refresh</string>
    </property>
    <property name="toolTip">
     <string>Refresh (F5)</string>
@@ -184,7 +193,7 @@
      <normaloff>:/img/folder-plus.png</normaloff>:/img/folder-plus.png</iconset>
    </property>
    <property name="text">
-    <string/>
+    <string>New Folder</string>
    </property>
    <property name="toolTip">
     <string>Create a new folder</string>
@@ -199,7 +208,7 @@
      <normaloff>:/img/cross-script.png</normaloff>:/img/cross-script.png</iconset>
    </property>
    <property name="text">
-    <string/>
+    <string>Delete</string>
    </property>
    <property name="toolTip">
     <string>Delete selected object(s) (Delete)</string>

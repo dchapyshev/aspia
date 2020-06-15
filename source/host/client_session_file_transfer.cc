@@ -18,6 +18,7 @@
 
 #include "host/client_session_file_transfer.h"
 
+#include "base/logging.h"
 #include "base/threading/thread.h"
 #include "base/win/scoped_impersonator.h"
 #include "base/win/scoped_object.h"
@@ -25,9 +26,7 @@
 #include "common/file_task_producer.h"
 #include "common/file_task_producer_proxy.h"
 #include "common/file_worker.h"
-#include "common/message_serialization.h"
-#include "net/network_channel.h"
-#include "net/network_channel_proxy.h"
+#include "net/channel_proxy.h"
 #include "proto/file_transfer.pb.h"
 
 #include <wtsapi32.h>
@@ -154,7 +153,7 @@ void ClientSessionFileTransfer::Worker::postRequest(std::unique_ptr<proto::FileR
     {
         proto::FileReply reply;
         reply.set_error_code(proto::FILE_ERROR_NO_LOGGED_ON_USER);
-        channel_proxy_->send(common::serializeMessage(reply));
+        channel_proxy_->send(base::serialize(reply));
     }
 }
 
@@ -186,7 +185,7 @@ void ClientSessionFileTransfer::Worker::onAfterThreadRunning()
 
 void ClientSessionFileTransfer::Worker::onTaskDone(std::shared_ptr<common::FileTask> task)
 {
-    channel_proxy_->send(common::serializeMessage(task->reply()));
+    channel_proxy_->send(base::serialize(task->reply()));
 }
 
 ClientSessionFileTransfer::ClientSessionFileTransfer(std::unique_ptr<net::Channel> channel)
@@ -201,7 +200,7 @@ void ClientSessionFileTransfer::onMessageReceived(const base::ByteArray& buffer)
 {
     std::unique_ptr<proto::FileRequest> request = std::make_unique<proto::FileRequest>();
 
-    if (!common::parseMessage(buffer, request.get()))
+    if (!base::parse(buffer, request.get()))
     {
         LOG(LS_ERROR) << "Invalid message from client";
         return;

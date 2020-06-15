@@ -42,6 +42,8 @@ public:
 
     void doTask(std::shared_ptr<FileTask> task);
 
+    std::shared_ptr<base::TaskRunner> taskRunner() { return task_runner_; }
+
 private:
     std::unique_ptr<proto::FileReply> doRequest(const proto::FileRequest& request);
     std::unique_ptr<proto::FileReply> doDriveListRequest();
@@ -233,7 +235,7 @@ std::unique_ptr<proto::FileReply> FileWorker::Impl::doFileListRequest(
         const FileEnumerator::FileInfo& file_info = enumerator.fileInfo();
 
         proto::FileList::Item* item = file_list->add_item();
-        item->set_name(file_info.name().u8string());
+        item->set_name(file_info.u8name());
         item->set_size(file_info.size());
         item->set_modification_time(file_info.lastWriteTime());
         item->set_is_directory(file_info.isDirectory());
@@ -458,6 +460,11 @@ FileWorker::~FileWorker() = default;
 void FileWorker::doTask(std::shared_ptr<FileTask> task)
 {
     impl_->doTask(std::move(task));
+}
+
+std::shared_ptr<base::TaskRunner> FileWorker::taskRunner()
+{
+    return impl_->taskRunner();
 }
 
 } // namespace common

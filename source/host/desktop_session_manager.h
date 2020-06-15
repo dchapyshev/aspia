@@ -23,7 +23,7 @@
 #include "base/waitable_timer.h"
 #include "base/win/session_status.h"
 #include "host/desktop_session.h"
-#include "ipc/ipc_server.h"
+#include "ipc/server.h"
 #include "proto/desktop_internal.pb.h"
 
 namespace base {
@@ -66,7 +66,7 @@ protected:
     void onDesktopSessionStarted() override;
     void onDesktopSessionStopped() override;
     void onScreenCaptured(const desktop::Frame& frame) override;
-    void onCursorCaptured(std::shared_ptr<desktop::MouseCursor> mouse_cursor) override;
+    void onCursorCaptured(const desktop::MouseCursor& mouse_cursor) override;
     void onScreenListChanged(const proto::ScreenList& list) override;
     void onClipboardEvent(const proto::ClipboardEvent& event) override;
 

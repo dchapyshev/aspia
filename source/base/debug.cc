@@ -26,6 +26,16 @@
 
 namespace base {
 
+bool isDebuggerPresent()
+{
+#if defined(OS_WIN)
+    return !!IsDebuggerPresent();
+#else
+#warning Platform support not implemented
+    return false;
+#endif
+}
+
 void debugPrint(const char* str)
 {
 #if defined(OS_WIN)

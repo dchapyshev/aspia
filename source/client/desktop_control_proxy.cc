@@ -30,7 +30,6 @@ DesktopControlProxy::DesktopControlProxy(std::shared_ptr<base::TaskRunner> io_ta
       desktop_control_(desktop_control)
 {
     DCHECK(io_task_runner_);
-    DCHECK(io_task_runner_->belongsToCurrentThread());
     DCHECK(desktop_control_);
 }
 

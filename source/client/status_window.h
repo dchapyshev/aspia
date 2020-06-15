@@ -19,8 +19,7 @@
 #ifndef CLIENT__STATUS_WINDOW_H
 #define CLIENT__STATUS_WINDOW_H
 
-#include "client/client_authenticator.h"
-#include "net/network_error.h"
+#include "net/client_authenticator.h"
 
 namespace client {
 
@@ -32,8 +31,8 @@ public:
     virtual void onStarted(const std::u16string& address, uint16_t port) = 0;
     virtual void onStopped() = 0;
     virtual void onConnected() = 0;
-    virtual void onDisconnected(net::ErrorCode error_code) = 0;
-    virtual void onAccessDenied(Authenticator::ErrorCode error_code) = 0;
+    virtual void onDisconnected(net::Channel::ErrorCode error_code) = 0;
+    virtual void onAccessDenied(net::ClientAuthenticator::ErrorCode error_code) = 0;
 };
 
 } // namespace client

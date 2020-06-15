@@ -23,43 +23,31 @@
 
 namespace client {
 
-class StatusWindowProxy::Impl : public std::enable_shared_from_this<Impl>
-{
-public:
-    Impl(std::shared_ptr<base::TaskRunner> ui_task_runner, StatusWindow* status_window);
-    ~Impl();
-
-    void onStarted(const std::u16string& address, uint16_t port);
-    void onStopped();
-    void onConnected();
-    void onDisconnected(net::ErrorCode error_code);
-    void onAccessDenied(Authenticator::ErrorCode error_code);
-
-private:
-    std::shared_ptr<base::TaskRunner> ui_task_runner_;
-    StatusWindow* status_window_;
-
-    DISALLOW_COPY_AND_ASSIGN(Impl);
-};
-
-StatusWindowProxy::Impl::Impl(std::shared_ptr<base::TaskRunner> ui_task_runner,
-                              StatusWindow* status_window)
+StatusWindowProxy::StatusWindowProxy(std::shared_ptr<base::TaskRunner> ui_task_runner,
+                                     StatusWindow* status_window)
     : ui_task_runner_(std::move(ui_task_runner)),
       status_window_(status_window)
 {
     // Nothing
 }
 
-StatusWindowProxy::Impl::~Impl()
+StatusWindowProxy::~StatusWindowProxy()
 {
     DCHECK(!status_window_);
 }
 
-void StatusWindowProxy::Impl::onStarted(const std::u16string& address, uint16_t port)
+void StatusWindowProxy::dettach()
+{
+    DCHECK(ui_task_runner_->belongsToCurrentThread());
+    status_window_ = nullptr;
+}
+
+void StatusWindowProxy::onStarted(const std::u16string& address, uint16_t port)
 {
     if (!ui_task_runner_->belongsToCurrentThread())
     {
-        ui_task_runner_->postTask(std::bind(&Impl::onStarted, shared_from_this(), address, port));
+        ui_task_runner_->postTask(
+            std::bind(&StatusWindowProxy::onStarted, shared_from_this(), address, port));
         return;
     }
 
@@ -67,11 +55,11 @@ void StatusWindowProxy::Impl::onStarted(const std::u16string& address, uint16_t 
         status_window_->onStarted(address, port);
 }
 
-void StatusWindowProxy::Impl::onStopped()
+void StatusWindowProxy::onStopped()
 {
     if (!ui_task_runner_->belongsToCurrentThread())
     {
-        ui_task_runner_->postTask(std::bind(&Impl::onStopped, shared_from_this()));
+        ui_task_runner_->postTask(std::bind(&StatusWindowProxy::onStopped, shared_from_this()));
         return;
     }
 
@@ -82,11 +70,11 @@ void StatusWindowProxy::Impl::onStopped()
     }
 }
 
-void StatusWindowProxy::Impl::onConnected()
+void StatusWindowProxy::onConnected()
 {
     if (!ui_task_runner_->belongsToCurrentThread())
     {
-        ui_task_runner_->postTask(std::bind(&Impl::onConnected, shared_from_this()));
+        ui_task_runner_->postTask(std::bind(&StatusWindowProxy::onConnected, shared_from_this()));
         return;
     }
 
@@ -94,12 +82,12 @@ void StatusWindowProxy::Impl::onConnected()
         status_window_->onConnected();
 }
 
-void StatusWindowProxy::Impl::onDisconnected(net::ErrorCode error_code)
+void StatusWindowProxy::onDisconnected(net::Channel::ErrorCode error_code)
 {
     if (!ui_task_runner_->belongsToCurrentThread())
     {
         ui_task_runner_->postTask(
-            std::bind(&Impl::onDisconnected, shared_from_this(), error_code));
+            std::bind(&StatusWindowProxy::onDisconnected, shared_from_this(), error_code));
         return;
     }
 
@@ -107,65 +95,17 @@ void StatusWindowProxy::Impl::onDisconnected(net::ErrorCode error_code)
         status_window_->onDisconnected(error_code);
 }
 
-void StatusWindowProxy::Impl::onAccessDenied(Authenticator::ErrorCode error_code)
+void StatusWindowProxy::onAccessDenied(net::ClientAuthenticator::ErrorCode error_code)
 {
     if (!ui_task_runner_->belongsToCurrentThread())
     {
         ui_task_runner_->postTask(
-            std::bind(&Impl::onAccessDenied, shared_from_this(), error_code));
+            std::bind(&StatusWindowProxy::onAccessDenied, shared_from_this(), error_code));
         return;
     }
 
     if (status_window_)
         status_window_->onAccessDenied(error_code);
-}
-
-StatusWindowProxy::StatusWindowProxy(std::shared_ptr<base::TaskRunner> ui_task_runner,
-                                     StatusWindow* status_window)
-    : impl_(std::make_shared<Impl>(std::move(ui_task_runner), status_window))
-{
-    // Nothing
-}
-
-StatusWindowProxy::~StatusWindowProxy()
-{
-    impl_->onStopped();
-}
-
-// static
-std::unique_ptr<StatusWindowProxy> StatusWindowProxy::create(
-    std::shared_ptr<base::TaskRunner> ui_task_runner, StatusWindow* status_window)
-{
-    if (!ui_task_runner || !status_window)
-        return nullptr;
-
-    return std::unique_ptr<StatusWindowProxy>(
-        new StatusWindowProxy(std::move(ui_task_runner), status_window));
-}
-
-void StatusWindowProxy::onStarted(const std::u16string& address, uint16_t port)
-{
-    impl_->onStarted(address, port);
-}
-
-void StatusWindowProxy::onStopped()
-{
-    impl_->onStopped();
-}
-
-void StatusWindowProxy::onConnected()
-{
-    impl_->onConnected();
-}
-
-void StatusWindowProxy::onDisconnected(net::ErrorCode error_code)
-{
-    impl_->onDisconnected(error_code);
-}
-
-void StatusWindowProxy::onAccessDenied(Authenticator::ErrorCode error_code)
-{
-    impl_->onAccessDenied(error_code);
 }
 
 } // namespace client

@@ -39,7 +39,7 @@ namespace client {
 FileRemoveDialog::FileRemoveDialog(QWidget* parent)
     : QDialog(parent),
       remover_window_proxy_(std::make_shared<FileRemoveWindowProxy>(
-          qt_base::Application::taskRunner(), this))
+          qt_base::Application::uiTaskRunner(), this))
 {
     ui.setupUi(this);
     setFixedHeight(sizeHint().height());

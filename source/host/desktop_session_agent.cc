@@ -22,13 +22,11 @@
 #include "base/power_controller.h"
 #include "base/threading/thread.h"
 #include "codec/video_util.h"
-#include "common/message_serialization.h"
 #include "desktop/capture_scheduler.h"
 #include "desktop/mouse_cursor.h"
 #include "desktop/screen_capturer_wrapper.h"
-#include "desktop/shared_desktop_frame.h"
+#include "desktop/shared_frame.h"
 #include "host/input_injector_win.h"
-#include "ipc/ipc_channel.h"
 #include "ipc/shared_memory.h"
 
 namespace host {
@@ -56,7 +54,7 @@ void DesktopSessionAgent::start(std::u16string_view channel_id)
 
 void DesktopSessionAgent::onDisconnected()
 {
-    enableSession(false);
+    setEnabled(false);
     task_runner_->postQuit();
 }
 
@@ -64,7 +62,7 @@ void DesktopSessionAgent::onMessageReceived(const base::ByteArray& buffer)
 {
     incoming_message_.Clear();
 
-    if (!common::parseMessage(buffer, &incoming_message_))
+    if (!base::parse(buffer, &incoming_message_))
     {
         LOG(LS_ERROR) << "Invalid message from service";
         return;
@@ -89,28 +87,28 @@ void DesktopSessionAgent::onMessageReceived(const base::ByteArray& buffer)
         if (clipboard_monitor_)
             clipboard_monitor_->injectClipboardEvent(incoming_message_.clipboard_event());
     }
-    else if (incoming_message_.has_enable_session())
+    else if (incoming_message_.has_set_enabled())
     {
-        enableSession(incoming_message_.enable_session().enable());
+        setEnabled(incoming_message_.set_enabled().enable());
     }
     else if (incoming_message_.has_select_source())
     {
         if (screen_capturer_)
             screen_capturer_->selectScreen(incoming_message_.select_source().screen().id());
     }
-    else if (incoming_message_.has_enable_features())
+    else if (incoming_message_.has_set_config())
     {
-        const proto::internal::EnableFeatures& features = incoming_message_.enable_features();
+        const proto::internal::SetConfig& config = incoming_message_.set_config();
 
         if (screen_capturer_)
         {
-            screen_capturer_->enableWallpaper(!features.disable_wallpaper());
-            screen_capturer_->enableEffects(!features.disable_effects());
-            screen_capturer_->enableFontSmoothing(!features.disable_font_smoothing());
+            screen_capturer_->enableWallpaper(!config.disable_wallpaper());
+            screen_capturer_->enableEffects(!config.disable_effects());
+            screen_capturer_->enableFontSmoothing(!config.disable_font_smoothing());
         }
 
         if (input_injector_)
-            input_injector_->setBlockInput(features.block_input());
+            input_injector_->setBlockInput(config.block_input());
     }
     else if (incoming_message_.has_user_session_control())
     {
@@ -144,7 +142,7 @@ void DesktopSessionAgent::onSharedMemoryCreate(int id)
     shared_buffer->set_type(proto::internal::SharedBuffer::CREATE);
     shared_buffer->set_shared_buffer_id(id);
 
-    channel_->send(common::serializeMessage(outgoing_message_));
+    channel_->send(base::serialize(outgoing_message_));
 }
 
 void DesktopSessionAgent::onSharedMemoryDestroy(int id)
@@ -155,7 +153,7 @@ void DesktopSessionAgent::onSharedMemoryDestroy(int id)
     shared_buffer->set_type(proto::internal::SharedBuffer::RELEASE);
     shared_buffer->set_shared_buffer_id(id);
 
-    channel_->send(common::serializeMessage(outgoing_message_));
+    channel_->send(base::serialize(outgoing_message_));
 }
 
 void DesktopSessionAgent::onScreenListChanged(
@@ -173,7 +171,7 @@ void DesktopSessionAgent::onScreenListChanged(
         screen->set_title(list_item.title);
     }
 
-    channel_->send(common::serializeMessage(outgoing_message_));
+    channel_->send(base::serialize(outgoing_message_));
 }
 
 void DesktopSessionAgent::onScreenCaptured(
@@ -188,10 +186,9 @@ void DesktopSessionAgent::onScreenCaptured(
         proto::internal::SerializedDesktopFrame* serialized_frame = encode_frame->mutable_frame();
 
         serialized_frame->set_shared_buffer_id(frame->sharedMemory()->id());
+        serialized_frame->set_width(frame->size().width());
+        serialized_frame->set_height(frame->size().height());
 
-        desktop::Rect frame_rect = desktop::Rect::makeXYWH(frame->topLeft(), frame->size());
-
-        codec::serializeRect(frame_rect, serialized_frame->mutable_desktop_rect());
         codec::serializePixelFormat(frame->format(), serialized_frame->mutable_pixel_format());
 
         for (desktop::Region::Iterator it(frame->constUpdatedRegion()); !it.isAtEnd(); it.advance())
@@ -200,22 +197,19 @@ void DesktopSessionAgent::onScreenCaptured(
 
     if (mouse_cursor)
     {
-        const desktop::Size& cursor_size = mouse_cursor->size();
-
         proto::internal::SerializedMouseCursor* serialized_mouse_cursor =
             encode_frame->mutable_mouse_cursor();
 
-        serialized_mouse_cursor->set_width(cursor_size.width());
-        serialized_mouse_cursor->set_height(cursor_size.height());
-        serialized_mouse_cursor->set_hotspot_x(mouse_cursor->hotSpot().x());
-        serialized_mouse_cursor->set_hotspot_y(mouse_cursor->hotSpot().y());
-        serialized_mouse_cursor->set_data(
-            mouse_cursor->data(), mouse_cursor->stride() * cursor_size.height());
+        serialized_mouse_cursor->set_width(mouse_cursor->width());
+        serialized_mouse_cursor->set_height(mouse_cursor->height());
+        serialized_mouse_cursor->set_hotspot_x(mouse_cursor->hotSpotX());
+        serialized_mouse_cursor->set_hotspot_y(mouse_cursor->hotSpotY());
+        serialized_mouse_cursor->set_data(base::toStdString(mouse_cursor->constImage()));
     }
 
     if (encode_frame->has_frame() || encode_frame->has_mouse_cursor())
     {
-        channel_->send(common::serializeMessage(outgoing_message_));
+        channel_->send(base::serialize(outgoing_message_));
     }
     else
     {
@@ -227,10 +221,10 @@ void DesktopSessionAgent::onClipboardEvent(const proto::ClipboardEvent& event)
 {
     outgoing_message_.Clear();
     outgoing_message_.mutable_clipboard_event()->CopyFrom(event);
-    channel_->send(common::serializeMessage(outgoing_message_));
+    channel_->send(base::serialize(outgoing_message_));
 }
 
-void DesktopSessionAgent::enableSession(bool enable)
+void DesktopSessionAgent::setEnabled(bool enable)
 {
     if (enable)
     {

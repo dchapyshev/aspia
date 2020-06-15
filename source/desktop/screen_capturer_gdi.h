@@ -21,8 +21,7 @@
 
 #include "base/win/scoped_hdc.h"
 #include "desktop/screen_capturer.h"
-#include "desktop/screen_capture_frame_queue.h"
-#include "desktop/shared_desktop_frame.h"
+#include "desktop/shared_frame.h"
 
 namespace ipc {
 class SharedMemoryFactory;
@@ -52,6 +51,8 @@ private:
     const Frame* captureImage();
     bool prepareCaptureResources();
 
+    bool composition_changed_ = false;
+
     ScreenId current_screen_id_ = kFullDesktopScreenId;
     std::wstring current_device_key_;
 
@@ -59,10 +60,10 @@ private:
     PixelFormat pixel_format_;
 
     std::unique_ptr<Differ> differ_;
-    std::unique_ptr<base::win::ScopedGetDC> desktop_dc_;
+    base::win::ScopedGetDC desktop_dc_;
     base::win::ScopedCreateDC memory_dc_;
 
-    ScreenCaptureFrameQueue<Frame> queue_;
+    FrameQueue<Frame> queue_;
 
     DISALLOW_COPY_AND_ASSIGN(ScreenCapturerGdi);
 };

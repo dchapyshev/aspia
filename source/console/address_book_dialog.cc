@@ -83,8 +83,22 @@ AddressBookDialog::AddressBookDialog(QWidget* parent,
     ui.combo_encryption->addItem(tr("ChaCha20 + Poly1305 (256-bit key)"),
                                  QVariant(proto::address_book::ENCRYPTION_TYPE_CHACHA20_POLY1305));
 
-    ui.edit_name->setText(QString::fromStdString(data_->root_group().name()));
+    const std::string& address_book_name = data_->root_group().name();
+    if (!address_book_name.empty())
+    {
+        // Use the name of the root group of computers.
+        ui.edit_name->setText(QString::fromStdString(address_book_name));
+    }
+    else
+    {
+        // Set the default address book name.
+        ui.edit_name->setText(tr("Address Book"));
+    }
+
     ui.edit_file->setText(file_path);
+    if (file_path.isEmpty())
+        ui.edit_file->setEnabled(false);
+
     ui.edit_comment->setPlainText(QString::fromStdString(data_->root_group().comment()));
 
     int current = ui.combo_encryption->findData(QVariant(file->encryption_type()));

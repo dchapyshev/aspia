@@ -19,32 +19,43 @@
 #ifndef DESKTOP__MOUSE_CURSOR_H
 #define DESKTOP__MOUSE_CURSOR_H
 
-#include "desktop/desktop_geometry.h"
-
-#include <memory>
+#include "base/memory/byte_array.h"
+#include "desktop/geometry.h"
 
 namespace desktop {
 
 class MouseCursor
 {
 public:
-    MouseCursor(std::unique_ptr<uint8_t[]> data,
-                const Size& size,
-                const Point& hotspot);
+    MouseCursor(base::ByteArray&& image, const Size& size, const Point& hotspot);
+
+    MouseCursor(MouseCursor&& other) noexcept;
+    MouseCursor& operator=(MouseCursor&& other) noexcept;
+
+    MouseCursor(const MouseCursor& other) = default;
+    MouseCursor& operator=(const MouseCursor& other) = default;
+
     ~MouseCursor() = default;
 
     const Size& size() const { return size_; }
+    int width() const { return size_.width(); }
+    int height() const { return size_.height(); }
+
     const Point& hotSpot() const { return hotspot_; }
-    uint8_t* data() const { return data_.get(); }
+    int hotSpotX() const { return hotspot_.x(); }
+    int hotSpotY() const { return hotspot_.y(); }
+
+    const base::ByteArray& constImage() const { return image_; }
+    base::ByteArray& image() { return image_; }
 
     int stride() const;
 
-    bool isEqual(const MouseCursor& other);
+    bool equals(const MouseCursor& other);
 
 private:
-    std::unique_ptr<uint8_t[]> const data_;
-    const Size size_;
-    const Point hotspot_;
+    base::ByteArray image_;
+    Size size_;
+    Point hotspot_;
 };
 
 } // namespace desktop

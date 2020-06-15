@@ -31,6 +31,7 @@ class XmlSettings : public Settings
 public:
     enum class Scope { USER, SYSTEM };
 
+    explicit XmlSettings(std::string_view file_name);
     XmlSettings(Scope scope,
                 std::string_view application_name,
                 std::string_view file_name);
@@ -41,6 +42,7 @@ public:
 
     const std::filesystem::path& filePath() const { return path_; }
 
+    static std::filesystem::path filePath(std::string_view file_name);
     static std::filesystem::path filePath(Scope scope,
                                           std::string_view application_name,
                                           std::string_view file_name);

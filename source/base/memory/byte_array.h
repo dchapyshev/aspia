@@ -21,6 +21,8 @@
 
 #include "build/build_config.h"
 
+#include <google/protobuf/message_lite.h>
+
 #if defined(USE_TBB)
 #include <tbb/scalable_allocator.h>
 #endif // defined(USE_TBB)
@@ -47,7 +49,20 @@ std::string toStdString(const ByteArray& in);
 ByteArray fromHex(std::string_view in);
 std::string toHex(const ByteArray& in);
 
+base::ByteArray serialize(const google::protobuf::MessageLite& message);
+
+template <class T>
+bool parse(const base::ByteArray& buffer, T* message)
+{
+    return message->ParseFromArray(buffer.data(), buffer.size());
+}
+
 int compare(const base::ByteArray& first, const base::ByteArray& second);
+
+inline bool equals(const base::ByteArray& first, const base::ByteArray& second)
+{
+    return compare(first, second) == 0;
+}
 
 std::ostream& operator<<(std::ostream& out, const ByteArray& bytearray);
 

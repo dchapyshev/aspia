@@ -26,10 +26,8 @@
 namespace desktop {
 
 class CursorCapturer;
-class EffectsDisabler;
-class FontSmoothingDisabler;
+class DesktopEnvironment;
 class MouseCursor;
-class WallpaperDisabler;
 
 class ScreenCapturerWrapper
 {
@@ -56,24 +54,16 @@ public:
 
 private:
     void selectCapturer();
-    bool switchToInputDesktop();
-    void atDesktopSwitch();
+    void switchToInputDesktop();
 
     Delegate* delegate_;
 
     base::ScopedThreadDesktop desktop_;
-
-    bool enable_effects_ = true;
-    bool enable_wallpaper_ = true;
-    bool enable_font_smoothing_ = true;
     int screen_count_ = 0;
 
+    std::unique_ptr<DesktopEnvironment> desktop_environment_;
     std::unique_ptr<ScreenCapturer> screen_capturer_;
     std::unique_ptr<CursorCapturer> cursor_capturer_;
-
-    std::unique_ptr<EffectsDisabler> effects_disabler_;
-    std::unique_ptr<WallpaperDisabler> wallpaper_disabler_;
-    std::unique_ptr<FontSmoothingDisabler> font_smoothing_disabler_;
 
     THREAD_CHECKER(thread_checker_);
 

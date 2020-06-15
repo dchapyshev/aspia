@@ -19,7 +19,7 @@
 #ifndef DESKTOP__WIN__DXGI_TEXTURE_H
 #define DESKTOP__WIN__DXGI_TEXTURE_H
 
-#include "desktop/desktop_frame.h"
+#include "desktop/frame.h"
 
 #include <memory>
 

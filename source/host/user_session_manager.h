@@ -22,7 +22,7 @@
 #include "base/session_id.h"
 #include "base/win/session_status.h"
 #include "host/user_session.h"
-#include "ipc/ipc_server.h"
+#include "ipc/server.h"
 
 namespace host {
 
@@ -47,7 +47,7 @@ public:
     bool start(Delegate* delegate);
     void setSessionEvent(base::win::SessionStatus status, base::SessionId session_id);
     void addNewSession(std::unique_ptr<ClientSession> client_session);
-    UserList userList() const;
+    net::UserList userList() const;
 
 protected:
     // ipc::Server::Delegate implementation.

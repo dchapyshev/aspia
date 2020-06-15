@@ -21,14 +21,14 @@ include(translations)
 list(APPEND SOURCE_CLIENT
     client.cc
     client.h
-    client_authenticator.cc
-    client_authenticator.h
     client_config.cc
     client_config.h
     client_desktop.cc
     client_desktop.h
     client_file_transfer.cc
     client_file_transfer.h
+    client_proxy.cc
+    client_proxy.h
     config_factory.cc
     config_factory.h
     desktop_control.h

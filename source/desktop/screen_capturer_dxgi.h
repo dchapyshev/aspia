@@ -20,7 +20,6 @@
 #define DESKTOP__SCREEN_CAPTURER_DXGI_H
 
 #include "desktop/screen_capturer.h"
-#include "desktop/screen_capture_frame_queue.h"
 #include "desktop/win/dxgi_duplicator_controller.h"
 #include "desktop/win/dxgi_frame.h"
 
@@ -56,7 +55,7 @@ private:
     std::shared_ptr<DxgiDuplicatorController> controller_;
 
     ScreenId current_screen_id_ = kFullDesktopScreenId;
-    ScreenCaptureFrameQueue<DxgiFrame> queue_;
+    FrameQueue<DxgiFrame> queue_;
 
     DISALLOW_COPY_AND_ASSIGN(ScreenCapturerDxgi);
 };

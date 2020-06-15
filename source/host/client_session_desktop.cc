@@ -18,18 +18,17 @@
 
 #include "host/client_session_desktop.h"
 
+#include "base/logging.h"
 #include "base/power_controller.h"
 #include "codec/cursor_encoder.h"
 #include "codec/video_encoder_vpx.h"
 #include "codec/video_encoder_zstd.h"
 #include "codec/video_util.h"
 #include "common/desktop_session_constants.h"
-#include "common/message_serialization.h"
-#include "desktop/desktop_frame.h"
+#include "desktop/frame.h"
 #include "host/desktop_session_proxy.h"
-#include "host/host_system_info.h"
+#include "host/system_info.h"
 #include "host/win/updater_launcher.h"
-#include "net/network_channel.h"
 #include "proto/desktop_internal.pb.h"
 
 namespace host {
@@ -54,7 +53,7 @@ void ClientSessionDesktop::onMessageReceived(const base::ByteArray& buffer)
 {
     incoming_message_.Clear();
 
-    if (!common::parseMessage(buffer, &incoming_message_))
+    if (!base::parse(buffer, &incoming_message_))
     {
         LOG(LS_ERROR) << "Invalid message from client";
         return;
@@ -115,7 +114,7 @@ void ClientSessionDesktop::onStarted()
     request->set_video_encodings(common::kSupportedVideoEncodings);
 
     // Send the request.
-    sendMessage(common::serializeMessage(outgoing_message_));
+    sendMessage(base::serialize(outgoing_message_));
 }
 
 void ClientSessionDesktop::encodeFrame(const desktop::Frame& frame)
@@ -129,18 +128,18 @@ void ClientSessionDesktop::encodeFrame(const desktop::Frame& frame)
     // Encode the frame into a video packet.
     video_encoder_->encode(&frame, packet);
 
-    sendMessage(common::serializeMessage(outgoing_message_));
+    sendMessage(base::serialize(outgoing_message_));
 }
 
-void ClientSessionDesktop::encodeMouseCursor(std::shared_ptr<desktop::MouseCursor> mouse_cursor)
+void ClientSessionDesktop::encodeMouseCursor(const desktop::MouseCursor& mouse_cursor)
 {
     if (!cursor_encoder_)
         return;
 
     outgoing_message_.Clear();
 
-    if (cursor_encoder_->encode(std::move(mouse_cursor), outgoing_message_.mutable_cursor_shape()))
-        sendMessage(common::serializeMessage(outgoing_message_));
+    if (cursor_encoder_->encode(mouse_cursor, outgoing_message_.mutable_cursor_shape()))
+        sendMessage(base::serialize(outgoing_message_));
 }
 
 void ClientSessionDesktop::setScreenList(const proto::ScreenList& list)
@@ -151,7 +150,7 @@ void ClientSessionDesktop::setScreenList(const proto::ScreenList& list)
     extension->set_name(common::kSelectScreenExtension);
     extension->set_data(list.SerializeAsString());
 
-    sendMessage(common::serializeMessage(outgoing_message_));
+    sendMessage(base::serialize(outgoing_message_));
 }
 
 void ClientSessionDesktop::injectClipboardEvent(const proto::ClipboardEvent& event)
@@ -159,7 +158,7 @@ void ClientSessionDesktop::injectClipboardEvent(const proto::ClipboardEvent& eve
     outgoing_message_.Clear();
 
     outgoing_message_.mutable_clipboard_event()->CopyFrom(event);
-    sendMessage(common::serializeMessage(outgoing_message_));
+    sendMessage(base::serialize(outgoing_message_));
 }
 
 void ClientSessionDesktop::readExtension(const proto::DesktopExtension& extension)
@@ -218,7 +217,7 @@ void ClientSessionDesktop::readExtension(const proto::DesktopExtension& extensio
     else if (extension.name() == common::kSystemInfoExtension)
     {
         proto::SystemInfo system_info;
-        createHostSystemInfo(&system_info);
+        createSystemInfo(&system_info);
 
         outgoing_message_.Clear();
 
@@ -226,7 +225,7 @@ void ClientSessionDesktop::readExtension(const proto::DesktopExtension& extensio
         extension->set_name(common::kSystemInfoExtension);
         extension->set_data(system_info.SerializeAsString());
 
-        sendMessage(common::serializeMessage(outgoing_message_));
+        sendMessage(base::serialize(outgoing_message_));
     }
     else
     {
@@ -270,10 +269,14 @@ void ClientSessionDesktop::readConfig(const proto::DesktopConfig& config)
     if (config.flags() & proto::ENABLE_CURSOR_SHAPE)
         cursor_encoder_ = std::make_unique<codec::CursorEncoder>();
 
-    features_.set_disable_font_smoothing(config.flags() & proto::DISABLE_FONT_SMOOTHING);
-    features_.set_disable_effects(config.flags() & proto::DISABLE_DESKTOP_EFFECTS);
-    features_.set_disable_wallpaper(config.flags() & proto::DISABLE_DESKTOP_WALLPAPER);
-    features_.set_block_input(config.flags() & proto::BLOCK_REMOTE_INPUT);
+    desktop_session_config_.disable_font_smoothing =
+        (config.flags() & proto::DISABLE_FONT_SMOOTHING);
+    desktop_session_config_.disable_effects =
+        (config.flags() & proto::DISABLE_DESKTOP_EFFECTS);
+    desktop_session_config_.disable_wallpaper =
+        (config.flags() & proto::DISABLE_DESKTOP_WALLPAPER);
+    desktop_session_config_.block_input =
+        (config.flags() & proto::BLOCK_REMOTE_INPUT);
 
     delegate_->onClientSessionConfigured();
 }

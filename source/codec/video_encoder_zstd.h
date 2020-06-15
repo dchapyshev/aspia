@@ -19,10 +19,11 @@
 #ifndef CODEC__VIDEO_ENCODER_ZSTD_H
 #define CODEC__VIDEO_ENCODER_ZSTD_H
 
-#include "base/memory/aligned_memory.h"
+#include "base/macros_magic.h"
+#include "base/memory/byte_array.h"
 #include "codec/scoped_zstd_stream.h"
 #include "codec/video_encoder.h"
-#include "desktop/desktop_region.h"
+#include "desktop/region.h"
 #include "desktop/pixel_format.h"
 
 namespace codec {
@@ -41,17 +42,14 @@ public:
 
 private:
     VideoEncoderZstd(const desktop::PixelFormat& target_format, int compression_ratio);
-    void compressPacket(proto::VideoPacket* packet,
-                        const uint8_t* input_data,
-                        size_t input_size);
+    void compressPacket(const base::ByteArray& buffer, proto::VideoPacket* packet);
 
     desktop::Region updated_region_;
     desktop::PixelFormat target_format_;
     int compress_ratio_;
     ScopedZstdCStream stream_;
     std::unique_ptr<PixelTranslator> translator_;
-    std::unique_ptr<uint8_t[], base::AlignedFreeDeleter> translate_buffer_;
-    size_t translate_buffer_size_ = 0;
+    base::ByteArray translate_buffer_;
 
     DISALLOW_COPY_AND_ASSIGN(VideoEncoderZstd);
 };

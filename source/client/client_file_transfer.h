@@ -38,7 +38,6 @@ class FileReply;
 namespace client {
 
 class FileControlProxy;
-class FileManagerWindow;
 class FileManagerWindowProxy;
 
 class ClientFileTransfer
@@ -48,10 +47,10 @@ class ClientFileTransfer
       public common::FileTaskProducer
 {
 public:
-    explicit ClientFileTransfer(std::shared_ptr<base::TaskRunner> ui_task_runner);
+    explicit ClientFileTransfer(std::shared_ptr<base::TaskRunner> io_task_runner);
     ~ClientFileTransfer();
 
-    void setFileManagerWindow(FileManagerWindow* file_manager_window);
+    void setFileManagerWindow(std::shared_ptr<FileManagerWindowProxy> file_manager_window_proxy);
 
     // FileTaskConsumer implementation.
     void doTask(std::shared_ptr<common::FileTask> task) override;
@@ -59,9 +58,8 @@ public:
 protected:
     // Client implementation.
     void onSessionStarted(const base::Version& peer_version) override;
-    void onSessionStopped() override;
 
-    // net::Listener implementation.
+    // net::Channel::Listener implementation.
     void onMessageReceived(const base::ByteArray& buffer) override;
     void onMessageWritten() override;
 
@@ -99,7 +97,7 @@ private:
     std::unique_ptr<common::FileWorker> local_worker_;
 
     std::shared_ptr<FileControlProxy> file_control_proxy_;
-    std::unique_ptr<FileManagerWindowProxy> file_manager_window_proxy_;
+    std::shared_ptr<FileManagerWindowProxy> file_manager_window_proxy_;
     std::unique_ptr<FileRemover> remover_;
     std::unique_ptr<FileTransfer> transfer_;
 

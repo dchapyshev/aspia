@@ -22,7 +22,7 @@
 #include "base/win/scoped_select_object.h"
 #include "desktop/win/bitmap_info.h"
 #include "desktop/win/screen_capture_utils.h"
-#include "desktop/desktop_frame_dib.h"
+#include "desktop/frame_dib.h"
 #include "desktop/differ.h"
 #include "ipc/shared_memory_factory.h"
 
@@ -32,7 +32,11 @@ namespace desktop {
 
 ScreenCapturerGdi::ScreenCapturerGdi() = default;
 
-ScreenCapturerGdi::~ScreenCapturerGdi() = default;
+ScreenCapturerGdi::~ScreenCapturerGdi()
+{
+    if (composition_changed_)
+        DwmEnableComposition(DWM_EC_ENABLECOMPOSITION);
+}
 
 int ScreenCapturerGdi::screenCount()
 {
@@ -74,7 +78,7 @@ const Frame* ScreenCapturerGdi::captureFrame(Error* error)
 void ScreenCapturerGdi::reset()
 {
     // Release GDI resources otherwise SetThreadDesktop will fail.
-    desktop_dc_.reset();
+    desktop_dc_.close();
     memory_dc_.reset();
 }
 
@@ -111,17 +115,17 @@ const Frame* ScreenCapturerGdi::captureImage()
     Frame* current = queue_.currentFrame();
     Frame* previous = queue_.previousFrame();
 
-    base::win::ScopedSelectObject select_object(
-        memory_dc_, static_cast<FrameDib*>(current)->bitmap());
+    {
+        base::win::ScopedSelectObject select_object(
+            memory_dc_, static_cast<FrameDib*>(current)->bitmap());
 
-    BitBlt(memory_dc_,
-           0, 0,
-           screen_rect.width(), screen_rect.height(),
-           *desktop_dc_,
-           screen_rect.left(), screen_rect.top(),
-           CAPTUREBLT | SRCCOPY);
-
-    current->setTopLeft(screen_rect.topLeft());
+        BitBlt(memory_dc_,
+               0, 0,
+               screen_rect.width(), screen_rect.height(),
+               desktop_dc_,
+               screen_rect.left(), screen_rect.top(),
+               CAPTUREBLT | SRCCOPY);
+    }
 
     if (!previous || previous->size() != current->size())
     {
@@ -145,7 +149,7 @@ bool ScreenCapturerGdi::prepareCaptureResources()
     // If the display bounds have changed then recreate GDI resources.
     if (desktop_rect != desktop_dc_rect_)
     {
-        desktop_dc_.reset();
+        desktop_dc_.close();
         memory_dc_.reset();
 
         desktop_dc_rect_ = Rect();
@@ -155,14 +159,20 @@ bool ScreenCapturerGdi::prepareCaptureResources()
     {
         DCHECK(!memory_dc_);
 
-        // Vote to disable Aero composited desktop effects while capturing.
-        // Windows will restore Aero automatically if the process exits.
-        // This has no effect under Windows 8 or higher. See crbug.com/124018.
-        DwmEnableComposition(DWM_EC_DISABLECOMPOSITION);
+        BOOL enabled;
+        HRESULT hr = DwmIsCompositionEnabled(&enabled);
+        if (SUCCEEDED(hr) && enabled)
+        {
+            // Vote to disable Aero composited desktop effects while capturing.
+            // Windows will restore Aero automatically if the process exits.
+            // This has no effect under Windows 8 or higher.
+            DwmEnableComposition(DWM_EC_DISABLECOMPOSITION);
+            composition_changed_ = true;
+        }
 
         // Create GDI device contexts to capture from the desktop into memory.
-        desktop_dc_ = std::make_unique<base::win::ScopedGetDC>(nullptr);
-        memory_dc_.reset(CreateCompatibleDC(*desktop_dc_));
+        desktop_dc_.getDC(nullptr);
+        memory_dc_.reset(CreateCompatibleDC(desktop_dc_));
         if (!memory_dc_)
         {
             LOG(LS_WARNING) << "CreateCompatibleDC failed";

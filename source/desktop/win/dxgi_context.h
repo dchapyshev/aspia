@@ -19,7 +19,7 @@
 #ifndef DESKTOP__WIN__DXGI_CONTEXT_H
 #define DESKTOP__WIN__DXGI_CONTEXT_H
 
-#include "desktop/desktop_region.h"
+#include "desktop/region.h"
 
 #include <memory>
 #include <vector>

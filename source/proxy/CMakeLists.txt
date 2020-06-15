@@ -19,15 +19,30 @@
 include(tbb)
 
 list(APPEND SOURCE_PROXY
-    proxy_main.cc
-    proxy_server.cc
-    proxy_server.h)
+    controller.cc
+    controller.h
+    controller_manager.cc
+    controller_manager.h
+    main.cc
+    peer_id.h
+    pending_session.cc
+    pending_session.h
+    session.cc
+    session.h
+    session_key.cc
+    session_key.h
+    session_manager.cc
+    session_manager.h
+    settings.cc
+    settings.h
+    shared_pool.cc
+    shared_pool.h)
 
 list(APPEND SOURCE_PROXY_WIN
-    win/proxy_service.cc
-    win/proxy_service.h
-    win/proxy_service_constants.cc
-    win/proxy_service_constants.h)
+    win/service.cc
+    win/service.h
+    win/service_constants.cc
+    win/service_constants.h)
 
 source_group("" FILES ${SOURCE_PROXY})
 source_group(win FILES ${SOURCE_PROXY_WIN})
@@ -39,6 +54,7 @@ target_link_libraries(aspia_proxy
     aspia_crypto
     aspia_net
     aspia_proto
+    crypt32
     ${THIRD_PARTY_LIBS})
 
 if (USE_TBB)

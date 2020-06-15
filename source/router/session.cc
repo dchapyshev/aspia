@@ -19,9 +19,8 @@
 #include "router/session.h"
 
 #include "base/logging.h"
-#include "common/message_serialization.h"
-#include "net/network_channel.h"
-#include "proto/router.pb.h"
+#include "net/channel.h"
+#include "router/database_sqlite.h"
 
 namespace router {
 
@@ -44,7 +43,7 @@ void Session::start(Delegate* delegate)
 
 bool Session::isFinished() const
 {
-    return true;
+    return channel_ == nullptr;
 }
 
 void Session::setVersion(const base::Version& version)
@@ -57,32 +56,23 @@ void Session::setUserName(const std::u16string& username)
     username_ = username;
 }
 
+void Session::send(base::ByteArray&& buffer)
+{
+    if (channel_)
+        channel_->send(std::move(buffer));
+}
+
 void Session::onConnected()
 {
     NOTREACHED();
 }
 
-void Session::onDisconnected(net::ErrorCode error_code)
+void Session::onDisconnected(net::Channel::ErrorCode error_code)
 {
-    // TODO
-}
+    LOG(LS_INFO) << "Network error: " << net::Channel::errorToString(error_code);
 
-void Session::onMessageReceived(const base::ByteArray& buffer)
-{
-    proto::PeerToRouter message;
-
-    if (!common::parseMessage(buffer, &message))
-    {
-        LOG(LS_ERROR) << "Invalid message from peer";
-        return;
-    }
-
-    // TODO
-}
-
-void Session::onMessageWritten()
-{
-    // TODO
+    if (delegate_)
+        delegate_->onSessionFinished();
 }
 
 } // namespace router

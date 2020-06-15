@@ -19,7 +19,7 @@
 #ifndef DESKTOP__SCREEN_CAPTURER_H
 #define DESKTOP__SCREEN_CAPTURER_H
 
-#include "desktop/desktop_frame.h"
+#include "desktop/frame.h"
 
 #include <string>
 #include <vector>
@@ -64,9 +64,67 @@ protected:
     friend class ScreenCapturerWrapper;
     virtual void reset() = 0;
 
+    template <typename FrameType>
+    class FrameQueue
+    {
+    public:
+        FrameQueue() = default;
+
+        // Moves to the next frame in the queue, moving the 'current' frame to become the
+        // 'previous' one.
+        void moveToNextFrame();
+
+        void replaceCurrentFrame(std::unique_ptr<FrameType> frame);
+        void reset();
+
+        FrameType* currentFrame() const;
+        FrameType* previousFrame() const;
+
+    private:
+        // Index of the current frame.
+        int current_ = 0;
+
+        static const int kQueueLength = 2;
+        std::unique_ptr<FrameType> frames_[kQueueLength];
+
+        DISALLOW_COPY_AND_ASSIGN(FrameQueue);
+    };
+
 private:
     ipc::SharedMemoryFactory* shared_memory_factory_;
 };
+
+template <typename FrameType>
+void ScreenCapturer::FrameQueue<FrameType>::moveToNextFrame()
+{
+    current_ = (current_ + 1) % kQueueLength;
+}
+
+template <typename FrameType>
+void ScreenCapturer::FrameQueue<FrameType>::replaceCurrentFrame(std::unique_ptr<FrameType> frame)
+{
+    frames_[current_] = std::move(frame);
+}
+
+template <typename FrameType>
+void ScreenCapturer::FrameQueue<FrameType>::reset()
+{
+    for (int i = 0; i < kQueueLength; ++i)
+        frames_[i].reset();
+    current_ = 0;
+}
+
+template <typename FrameType>
+FrameType* ScreenCapturer::FrameQueue<FrameType>::currentFrame() const
+{
+    return frames_[current_].get();
+}
+
+template <typename FrameType>
+FrameType* ScreenCapturer::FrameQueue<FrameType>::previousFrame() const
+{
+    return frames_[(current_ + kQueueLength - 1) % kQueueLength].get();
+}
 
 } // namespace desktop
 

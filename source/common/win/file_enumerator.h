@@ -39,6 +39,7 @@ public:
 
         bool isDirectory() const;
         std::filesystem::path name() const;
+        std::string u8name() const;
         int64_t size() const;
         time_t lastWriteTime() const;
 
@@ -47,7 +48,7 @@ public:
         WIN32_FIND_DATA find_data_;
     };
 
-    FileEnumerator(const std::filesystem::path& root_path);
+    explicit FileEnumerator(const std::filesystem::path& root_path);
     ~FileEnumerator();
 
     const FileInfo& fileInfo() const { return file_info_; }

@@ -370,32 +370,52 @@
 <context>
     <name>FilePanel</name>
     <message>
-        <location filename="../ui/file_panel.ui" line="163"/>
+        <location filename="../ui/file_panel.ui" line="169"/>
+        <source>Up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/file_panel.ui" line="172"/>
         <source>Browse to parent folder (Backspace)</source>
         <translation>Navigeer naar bovenliggende map (Backspace)</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.ui" line="175"/>
+        <location filename="../ui/file_panel.ui" line="181"/>
+        <source>Refresh</source>
+        <translation type="unfinished">Vernieuwen</translation>
+    </message>
+    <message>
+        <location filename="../ui/file_panel.ui" line="184"/>
         <source>Refresh (F5)</source>
         <translation>Vernieuwen (F5)</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.ui" line="190"/>
+        <location filename="../ui/file_panel.ui" line="196"/>
+        <source>New Folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/file_panel.ui" line="199"/>
         <source>Create a new folder</source>
         <translation>Nieuwe map maken</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.ui" line="205"/>
+        <location filename="../ui/file_panel.ui" line="211"/>
+        <source>Delete</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/file_panel.ui" line="214"/>
         <source>Delete selected object(s) (Delete)</source>
         <translation>Verwijder geselecteerde object(en) (Delete)</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.ui" line="220"/>
+        <location filename="../ui/file_panel.ui" line="229"/>
         <source>Send selected object(s) (F11)</source>
         <translation>Geselecteerde object(en) versturen (F11)</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.ui" line="217"/>
+        <location filename="../ui/file_panel.ui" line="226"/>
         <source>Send</source>
         <translation>Stuur</translation>
     </message>
@@ -918,98 +938,98 @@
 <context>
     <name>client::ClientWindow</name>
     <message>
-        <location filename="../ui/client_window.cc" line="91"/>
+        <location filename="../ui/client_window.cc" line="105"/>
         <source>Attempt to connect to %1:%2.</source>
         <translation>Probeer te verbinden met %1:%2.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="101"/>
+        <location filename="../ui/client_window.cc" line="115"/>
         <source>Connection established.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="112"/>
+        <location filename="../ui/client_window.cc" line="126"/>
         <source>Cryptography error (message encryption or decryption failed).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="116"/>
+        <location filename="../ui/client_window.cc" line="130"/>
         <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
         <translation type="unfinished">Er is een probleem opgetreden in het netwerk (bijv, de netwerk kabel is per ongelijk verwijderd).</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="120"/>
+        <location filename="../ui/client_window.cc" line="134"/>
         <source>Connection was refused by the peer (or timed out).</source>
         <translation type="unfinished">Verbinding is geweigerd door de peer (of er was een timeout).</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="124"/>
+        <location filename="../ui/client_window.cc" line="138"/>
         <source>Remote host closed the connection.</source>
         <translation type="unfinished">De remote host heeft de verbinding gesloten.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="128"/>
+        <location filename="../ui/client_window.cc" line="142"/>
         <source>Host address was not found.</source>
         <translation type="unfinished">Host adres is niet gevonden.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="132"/>
+        <location filename="../ui/client_window.cc" line="146"/>
         <source>Socket operation timed out.</source>
         <translation type="unfinished">Socket operatie gaf een timeout.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="136"/>
+        <location filename="../ui/client_window.cc" line="150"/>
         <source>Address specified is already in use and was set to be exclusive.</source>
         <translation type="unfinished">Het opgegeven adres is al in gebruik, en is ingesteld als exclusief.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="140"/>
+        <location filename="../ui/client_window.cc" line="154"/>
         <source>Address specified does not belong to the host.</source>
         <translation type="unfinished">Het opgegeven adres behoort niet toe aan de host.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="150"/>
-        <location filename="../ui/client_window.cc" line="185"/>
+        <location filename="../ui/client_window.cc" line="164"/>
+        <location filename="../ui/client_window.cc" line="199"/>
         <source>An unknown error occurred.</source>
         <translation type="unfinished">Een onbekende error is opgetreden.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="165"/>
+        <location filename="../ui/client_window.cc" line="179"/>
         <source>Authentication successfully completed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="169"/>
+        <location filename="../ui/client_window.cc" line="183"/>
         <source>Network authentication error.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="173"/>
+        <location filename="../ui/client_window.cc" line="187"/>
         <source>Violation of the data exchange protocol.</source>
         <translation type="unfinished">Schending van het data uitwisselings protocol.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="177"/>
+        <location filename="../ui/client_window.cc" line="191"/>
         <source>An error occured while authenticating: wrong user name or password.</source>
         <translation type="unfinished">Er is een error opgetreden bij het authenticeren: verkeerde gebruikers naam of wachtwoord.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="181"/>
+        <location filename="../ui/client_window.cc" line="195"/>
         <source>Specified session type is not allowed for the user.</source>
         <translation type="unfinished">Het gespecificeerde sessie type is niet toegestaan voor de gebruiker.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="199"/>
+        <location filename="../ui/client_window.cc" line="213"/>
         <source>Desktop Manage</source>
         <translation type="unfinished">Bureaublad Beheren</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="203"/>
+        <location filename="../ui/client_window.cc" line="217"/>
         <source>Desktop View</source>
         <translation type="unfinished">Bureaublad Weergeven</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="207"/>
+        <location filename="../ui/client_window.cc" line="221"/>
         <source>File Transfer</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1462,19 +1482,19 @@
         <translation type="obsolete">Bureaublad Weergeven</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="199"/>
-        <location filename="../ui/qt_desktop_window.cc" line="207"/>
-        <location filename="../ui/qt_desktop_window.cc" line="470"/>
+        <location filename="../ui/qt_desktop_window.cc" line="205"/>
+        <location filename="../ui/qt_desktop_window.cc" line="213"/>
+        <location filename="../ui/qt_desktop_window.cc" line="473"/>
         <source>Warning</source>
         <translation type="unfinished">Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="200"/>
+        <location filename="../ui/qt_desktop_window.cc" line="206"/>
         <source>There are no supported video encodings.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="208"/>
+        <location filename="../ui/qt_desktop_window.cc" line="214"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
         <translation type="unfinished">De huidige video encoding wordt niet ondersteund door de host. Specificeer AUB een andere encoding.</translation>
     </message>
@@ -1483,17 +1503,17 @@
         <translation type="obsolete">Selecteer een video encoding is geannuleerd door de gebruiker.</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="448"/>
+        <location filename="../ui/qt_desktop_window.cc" line="451"/>
         <source>Save File</source>
         <translation type="unfinished">Bestand Opslaan</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="450"/>
+        <location filename="../ui/qt_desktop_window.cc" line="453"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation type="unfinished">PNG Afbeelding (*.png);;BMP Afbeelding (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="470"/>
+        <location filename="../ui/qt_desktop_window.cc" line="473"/>
         <source>Could not save image</source>
         <translation type="unfinished">Kon het bestand niet opslaan</translation>
     </message>
@@ -1501,22 +1521,22 @@
 <context>
     <name>client::QtFileManagerWindow</name>
     <message>
-        <location filename="../ui/qt_file_manager_window.cc" line="49"/>
+        <location filename="../ui/qt_file_manager_window.cc" line="53"/>
         <source>Local Computer</source>
         <translation type="unfinished">Lokale Computer</translation>
     </message>
     <message>
-        <location filename="../ui/qt_file_manager_window.cc" line="50"/>
+        <location filename="../ui/qt_file_manager_window.cc" line="54"/>
         <source>Remote Computer</source>
         <translation type="unfinished">Computer op afstand</translation>
     </message>
     <message>
-        <location filename="../ui/qt_file_manager_window.cc" line="81"/>
+        <location filename="../ui/qt_file_manager_window.cc" line="87"/>
         <source>Warning</source>
         <translation type="unfinished">Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../ui/qt_file_manager_window.cc" line="82"/>
+        <location filename="../ui/qt_file_manager_window.cc" line="88"/>
         <source>Session error: %1</source>
         <translation type="unfinished"></translation>
     </message>

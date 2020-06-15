@@ -18,11 +18,10 @@
 
 #include "host/user_session_agent.h"
 
-#include "common/message_serialization.h"
+#include "base/logging.h"
 #include "host/user_session_constants.h"
 #include "host/user_session_agent_proxy.h"
 #include "host/user_session_window_proxy.h"
-#include "ipc/ipc_channel_proxy.h"
 
 namespace host {
 
@@ -34,46 +33,34 @@ UserSessionAgent::UserSessionAgent(std::shared_ptr<UserSessionWindowProxy> windo
     SetProcessShutdownParameters(0x3FF, SHUTDOWN_NORETRY);
 }
 
-UserSessionAgent::~UserSessionAgent()
-{
-    io_thread_.stop();
-}
+UserSessionAgent::~UserSessionAgent() = default;
 
 void UserSessionAgent::start()
 {
-    io_thread_.start(base::MessageLoop::Type::ASIO, this);
-}
-
-void UserSessionAgent::onBeforeThreadRunning()
-{
-    agent_proxy_ = std::make_shared<UserSessionAgentProxy>(io_thread_.taskRunner(), this);
-
     ipc_channel_ = std::make_unique<ipc::Channel>();
     ipc_channel_->setListener(this);
 
     if (ipc_channel_->connect(kIpcChannelIdForUI))
     {
-        window_proxy_->onStateChanged(State::CONNECTED);
+        window_proxy_->onStatusChanged(Status::CONNECTED_TO_SERVICE);
         ipc_channel_->resume();
     }
-}
-
-void UserSessionAgent::onAfterThreadRunning()
-{
-    ipc_channel_.reset();
-    agent_proxy_.reset();
+    else
+    {
+        window_proxy_->onStatusChanged(Status::SERVICE_NOT_AVAILABLE);
+    }
 }
 
 void UserSessionAgent::onDisconnected()
 {
-    window_proxy_->onStateChanged(State::DISCONNECTED);
+    window_proxy_->onStatusChanged(Status::DISCONNECTED_FROM_SERVICE);
 }
 
 void UserSessionAgent::onMessageReceived(const base::ByteArray& buffer)
 {
     incoming_message_.Clear();
 
-    if (!common::parseMessage(buffer, &incoming_message_))
+    if (!base::parse(buffer, &incoming_message_))
     {
         DLOG(LS_ERROR) << "Invalid message from service";
         return;
@@ -111,14 +98,14 @@ void UserSessionAgent::updateCredentials(proto::internal::CredentialsRequest::Ty
 {
     outgoing_message_.Clear();
     outgoing_message_.mutable_credentials_request()->set_type(request_type);
-    ipc_channel_->send(common::serializeMessage(outgoing_message_));
+    ipc_channel_->send(base::serialize(outgoing_message_));
 }
 
 void UserSessionAgent::killClient(const std::string& uuid)
 {
     outgoing_message_.Clear();
     outgoing_message_.mutable_kill_session()->set_uuid(uuid);
-    ipc_channel_->send(common::serializeMessage(outgoing_message_));
+    ipc_channel_->send(base::serialize(outgoing_message_));
 }
 
 } // namespace host

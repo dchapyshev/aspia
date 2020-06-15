@@ -19,6 +19,7 @@
 #include "client/client_file_transfer.h"
 
 #include "base/logging.h"
+#include "base/task_runner.h"
 #include "client/file_control_proxy.h"
 #include "client/file_manager_window_proxy.h"
 #include "common/file_task_factory.h"
@@ -28,41 +29,17 @@
 
 namespace client {
 
-ClientFileTransfer::ClientFileTransfer(std::shared_ptr<base::TaskRunner> ui_task_runner)
-    : Client(std::move(ui_task_runner))
+ClientFileTransfer::ClientFileTransfer(std::shared_ptr<base::TaskRunner> io_task_runner)
+    : Client(io_task_runner),
+      file_control_proxy_(std::make_shared<FileControlProxy>(io_task_runner, this)),
+      task_consumer_proxy_(std::make_shared<common::FileTaskConsumerProxy>(this)),
+      task_producer_proxy_(std::make_shared<common::FileTaskProducerProxy>(this)),
+      local_worker_(std::make_unique<common::FileWorker>(io_task_runner))
 {
     // Nothing
 }
 
-ClientFileTransfer::~ClientFileTransfer() = default;
-
-void ClientFileTransfer::setFileManagerWindow(FileManagerWindow* file_manager_window)
-{
-    DCHECK(!ioTaskRunner());
-    DCHECK(uiTaskRunner()->belongsToCurrentThread());
-
-    file_manager_window_proxy_ =
-        FileManagerWindowProxy::create(uiTaskRunner(), file_manager_window);
-}
-
-void ClientFileTransfer::onSessionStarted(const base::Version& /* peer_version */)
-{
-    task_consumer_proxy_ = std::make_shared<common::FileTaskConsumerProxy>(this);
-    task_producer_proxy_ = std::make_shared<common::FileTaskProducerProxy>(this);
-
-    local_task_factory_ = std::make_unique<common::FileTaskFactory>(
-        task_producer_proxy_, common::FileTask::Target::LOCAL);
-
-    remote_task_factory_ = std::make_unique<common::FileTaskFactory>(
-        task_producer_proxy_, common::FileTask::Target::REMOTE);
-
-    file_control_proxy_ = std::make_shared<FileControlProxy>(ioTaskRunner(), this);
-    local_worker_ = std::make_unique<common::FileWorker>(ioTaskRunner());
-
-    file_manager_window_proxy_->start(file_control_proxy_);
-}
-
-void ClientFileTransfer::onSessionStopped()
+ClientFileTransfer::~ClientFileTransfer()
 {
     task_consumer_proxy_->dettach();
     task_producer_proxy_->dettach();
@@ -70,6 +47,23 @@ void ClientFileTransfer::onSessionStopped()
 
     remover_.reset();
     transfer_.reset();
+}
+
+void ClientFileTransfer::setFileManagerWindow(
+    std::shared_ptr<FileManagerWindowProxy> file_manager_window_proxy)
+{
+    file_manager_window_proxy_ = std::move(file_manager_window_proxy);
+}
+
+void ClientFileTransfer::onSessionStarted(const base::Version& /* peer_version */)
+{
+    local_task_factory_ = std::make_unique<common::FileTaskFactory>(
+        task_producer_proxy_, common::FileTask::Target::LOCAL);
+
+    remote_task_factory_ = std::make_unique<common::FileTaskFactory>(
+        task_producer_proxy_, common::FileTask::Target::REMOTE);
+
+    file_manager_window_proxy_->start(file_control_proxy_);
 }
 
 void ClientFileTransfer::onMessageReceived(const base::ByteArray& buffer)
@@ -212,7 +206,7 @@ void ClientFileTransfer::remove(common::FileTask::Target target,
     DCHECK(!remover_);
 
     remover_ = std::make_unique<FileRemover>(
-        ioTaskRunner(), remove_window_proxy, task_consumer_proxy_, target);
+        local_worker_->taskRunner(), remove_window_proxy, task_consumer_proxy_, target);
 
     remover_->start(items, [this]()
     {
@@ -229,7 +223,7 @@ void ClientFileTransfer::transfer(std::shared_ptr<FileTransferWindowProxy> trans
     DCHECK(!transfer_);
 
     transfer_ = std::make_unique<FileTransfer>(
-        ioTaskRunner(), transfer_window_proxy, task_consumer_proxy_, transfer_type);
+        local_worker_->taskRunner(), transfer_window_proxy, task_consumer_proxy_, transfer_type);
 
     transfer_->start(source_path, target_path, items, [this]()
     {

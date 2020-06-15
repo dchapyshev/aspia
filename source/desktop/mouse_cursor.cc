@@ -20,12 +20,32 @@
 
 namespace desktop {
 
-MouseCursor::MouseCursor(std::unique_ptr<uint8_t[]> data, const Size& size, const Point& hotspot)
-    : data_(std::move(data)),
+MouseCursor::MouseCursor(base::ByteArray&& image, const Size& size, const Point& hotspot)
+    : image_(std::move(image)),
       size_(size),
       hotspot_(hotspot)
 {
     // Nothing
+}
+
+MouseCursor::MouseCursor(MouseCursor&& other) noexcept
+{
+    *this = std::move(other);
+}
+
+MouseCursor& MouseCursor::operator=(MouseCursor&& other) noexcept
+{
+    if (&other != this)
+    {
+        image_ = std::move(other.image_);
+        size_ = other.size_;
+        hotspot_ = other.hotspot_;
+
+        other.size_ = Size();
+        other.hotspot_ = Point();
+    }
+
+    return *this;
 }
 
 int MouseCursor::stride() const
@@ -33,16 +53,11 @@ int MouseCursor::stride() const
     return size_.width() * sizeof(uint32_t);
 }
 
-bool MouseCursor::isEqual(const MouseCursor& other)
+bool MouseCursor::equals(const MouseCursor& other)
 {
-    if (size_ == other.size_ &&
-        hotspot_ == other.hotspot_ &&
-        memcmp(data_.get(), other.data_.get(), stride() * size_.height()) == 0)
-    {
-        return true;
-    }
-
-    return false;
+    return size_.equals(other.size_) &&
+           hotspot_.equals(other.hotspot_) &&
+           base::equals(image_, other.image_);
 }
 
 } // namespace desktop

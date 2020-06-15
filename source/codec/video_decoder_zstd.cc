@@ -20,7 +20,7 @@
 #include "base/logging.h"
 #include "codec/pixel_translator.h"
 #include "codec/video_util.h"
-#include "desktop/desktop_frame_aligned.h"
+#include "desktop/frame_aligned.h"
 
 namespace codec {
 

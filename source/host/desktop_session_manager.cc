@@ -21,12 +21,12 @@
 #include "base/location.h"
 #include "base/logging.h"
 #include "base/task_runner.h"
-#include "desktop/desktop_frame.h"
+#include "desktop/frame.h"
 #include "host/desktop_session_fake.h"
 #include "host/desktop_session_ipc.h"
 #include "host/desktop_session_process.h"
 #include "host/desktop_session_proxy.h"
-#include "ipc/ipc_channel.h"
+#include "ipc/channel.h"
 
 namespace host {
 
@@ -172,7 +172,7 @@ void DesktopSessionManager::onScreenCaptured(const desktop::Frame& frame)
     delegate_->onScreenCaptured(frame);
 }
 
-void DesktopSessionManager::onCursorCaptured(std::shared_ptr<desktop::MouseCursor> mouse_cursor)
+void DesktopSessionManager::onCursorCaptured(const desktop::MouseCursor& mouse_cursor)
 {
     delegate_->onCursorCaptured(std::move(mouse_cursor));
 }

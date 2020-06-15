@@ -21,7 +21,7 @@
 #include "base/logging.h"
 #include "codec/pixel_translator.h"
 #include "codec/video_util.h"
-#include "desktop/desktop_frame.h"
+#include "desktop/frame.h"
 
 namespace codec {
 
@@ -59,17 +59,15 @@ std::unique_ptr<VideoEncoderZstd> VideoEncoderZstd::create(
         new VideoEncoderZstd(target_format, compression_ratio));
 }
 
-void VideoEncoderZstd::compressPacket(proto::VideoPacket* packet,
-                                      const uint8_t* input_data,
-                                      size_t input_size)
+void VideoEncoderZstd::compressPacket(const base::ByteArray& buffer, proto::VideoPacket* packet)
 {
     size_t ret = ZSTD_initCStream(stream_.get(), compress_ratio_);
     DCHECK(!ZSTD_isError(ret)) << ZSTD_getErrorName(ret);
 
-    const size_t output_size = ZSTD_compressBound(input_size);
+    const size_t output_size = ZSTD_compressBound(buffer.size());
     uint8_t* output_data = outputBuffer(packet, output_size);
 
-    ZSTD_inBuffer input = { input_data, input_size, 0 };
+    ZSTD_inBuffer input = { buffer.data(), buffer.size(), 0 };
     ZSTD_outBuffer output = { output_data, output_size, 0 };
 
     while (input.pos < input.size)
@@ -122,13 +120,12 @@ void VideoEncoderZstd::encode(const desktop::Frame* frame, proto::VideoPacket* p
         serializeRect(rect, packet->add_dirty_rect());
     }
 
-    if (translate_buffer_size_ < data_size)
-    {
-        translate_buffer_.reset(static_cast<uint8_t*>(base::alignedAlloc(data_size, 32)));
-        translate_buffer_size_ = data_size;
-    }
+    if (translate_buffer_.capacity() < data_size)
+        translate_buffer_.reserve(data_size);
 
-    uint8_t* translate_pos = translate_buffer_.get();
+    translate_buffer_.resize(data_size);
+
+    uint8_t* translate_pos = translate_buffer_.data();
 
     for (desktop::Region::Iterator it(updated_region_); !it.isAtEnd(); it.advance())
     {
@@ -146,7 +143,7 @@ void VideoEncoderZstd::encode(const desktop::Frame* frame, proto::VideoPacket* p
     }
 
     // Compress data with using Zstd compressor.
-    compressPacket(packet, translate_buffer_.get(), data_size);
+    compressPacket(translate_buffer_, packet);
 }
 
 } // namespace codec

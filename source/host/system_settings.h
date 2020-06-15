@@ -24,9 +24,11 @@
 
 #include <filesystem>
 
-namespace host {
-
+namespace net {
 class UserList;
+} // namespace net
+
+namespace host {
 
 class SystemSettings
 {
@@ -41,8 +43,8 @@ public:
     uint16_t tcpPort() const;
     void setTcpPort(uint16_t port);
 
-    UserList userList() const;
-    void setUserList(const UserList& user_list);
+    net::UserList userList() const;
+    void setUserList(const net::UserList& user_list);
 
     std::string updateServer() const;
     void setUpdateServer(const std::string& server);

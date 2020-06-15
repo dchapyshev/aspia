@@ -19,12 +19,12 @@
 #ifndef DESKTOP__WIN__DXGI_FRAME_H
 #define DESKTOP__WIN__DXGI_FRAME_H
 
-#include "desktop/resolution_tracker.h"
-#include "desktop/shared_desktop_frame.h"
 #include "desktop/screen_capturer.h"
+#include "desktop/shared_frame.h"
 #include "desktop/win/dxgi_context.h"
 
 #include <memory>
+#include <optional>
 #include <vector>
 
 namespace ipc {
@@ -42,7 +42,7 @@ class DxgiFrame final
 public:
     using Context = DxgiFrameContext;
 
-    explicit DxgiFrame(std::shared_ptr<DxgiDuplicatorController>& controller,
+    explicit DxgiFrame(std::shared_ptr<DxgiDuplicatorController> controller,
                        ipc::SharedMemoryFactory* shared_memory_factory);
     ~DxgiFrame();
 
@@ -61,7 +61,7 @@ private:
     Context* context();
 
     ipc::SharedMemoryFactory* const shared_memory_factory_;
-    ResolutionTracker resolution_tracker_;
+    std::optional<Size> last_frame_size_;
     ScreenCapturer::ScreenId source_id_ = ScreenCapturer::kFullDesktopScreenId;
     std::unique_ptr<SharedFrame> frame_;
     Context context_;

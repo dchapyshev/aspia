@@ -29,7 +29,7 @@ public:
     virtual ~MessageDecryptor() = default;
 
     virtual size_t decryptedDataSize(size_t in_size) = 0;
-    virtual bool decrypt(const uint8_t* in, size_t in_size, uint8_t* out) = 0;
+    virtual bool decrypt(const void* in, size_t in_size, void* out) = 0;
 };
 
 } // namespace crypto
