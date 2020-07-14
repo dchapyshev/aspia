@@ -127,7 +127,7 @@ const Frame* ScreenCapturerGdi::captureImage()
                CAPTUREBLT | SRCCOPY);
     }
 
-    current->setTopLeft(screen_rect.topLeft());
+    current->setTopLeft(screen_rect.topLeft().subtract(desktop_dc_rect_.topLeft()));
     current->setDpi(Point(GetDeviceCaps(desktop_dc_, LOGPIXELSX),
                           GetDeviceCaps(desktop_dc_, LOGPIXELSY)));
 
