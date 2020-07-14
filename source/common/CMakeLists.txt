@@ -72,6 +72,9 @@ add_library(aspia_common STATIC
     ${SOURCE_COMMON_WIN}
     ${SOURCE_COMMON_RESOURCES})
 target_link_libraries(aspia_common aspia_base aspia_proto ${QT_LIBS} ${THIRD_PARTY_LIBS})
+set_property(TARGET aspia_common PROPERTY AUTOMOC ON)
+set_property(TARGET aspia_common PROPERTY AUTOUIC ON)
+set_property(TARGET aspia_common PROPERTY AUTORCC ON)
 
 if(Qt5LinguistTools_FOUND)
     # Get the list of translation files.

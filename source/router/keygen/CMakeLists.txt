@@ -45,6 +45,9 @@ target_link_libraries(aspia_router_keygen
     ${QT_LIBS}
     ${WINDOWS_LIBS}
     ${THIRD_PARTY_LIBS})
+set_property(TARGET aspia_router_keygen PROPERTY AUTOMOC ON)
+set_property(TARGET aspia_router_keygen PROPERTY AUTOUIC ON)
+set_property(TARGET aspia_router_keygen PROPERTY AUTORCC ON)
 
 if (USE_TBB)
     add_tbb(aspia_router_keygen ${ASPIA_THIRD_PARTY_DIR}/tbb)

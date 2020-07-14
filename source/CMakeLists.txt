@@ -16,7 +16,7 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 #
 
-cmake_minimum_required(VERSION 3.16.0)
+cmake_minimum_required(VERSION 3.17.0)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
@@ -29,9 +29,6 @@ project(aspia)
 
 # Qt configuration.
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTOUIC ON)
-set(CMAKE_AUTORCC ON)
 
 set(CMAKE_PREFIX_PATH "${ASPIA_THIRD_PARTY_DIR}/qt;${ASPIA_THIRD_PARTY_DIR}/protobuf")
 
@@ -107,9 +104,12 @@ set(QT_LIBS
     Qt5::QWindowsIntegrationPlugin
     Qt5::QWindowsVistaStylePlugin
     Qt5::QWindowsPrinterSupportPlugin
-    Qt5::EventDispatcherSupport
-    Qt5::FontDatabaseSupport
-    Qt5::ThemeSupport
+    debug Qt5EventDispatcherSupportd
+    optimized Qt5EventDispatcherSupport
+    debug Qt5FontDatabaseSupportd
+    optimized Qt5FontDatabaseSupport
+    debug Qt5ThemeSupportd
+    optimized Qt5ThemeSupport
     debug qtlibpngd
     debug qtpcre2d
     optimized qtlibpng

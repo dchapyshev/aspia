@@ -9,7 +9,7 @@ Third-party components information
 | libyuv     | 1754    | BSD 3-Clause License           | https://chromium.googlesource.com/libyuv/libyuv  |
 | openssl    | 1.1.1g  | OpenSSL License                | https://github.com/openssl/openssl/releases      |
 | protobuf   | 3.12.0  | BSD 3-Clause License           | https://github.com/google/protobuf/releases      |
-| qt         | 5.14.2  | GNU General Public License 3.0 | https://download.qt.io/official_releases/qt/5.14 |
+| qt         | 5.12.9  | GNU General Public License 3.0 | https://download.qt.io/official_releases/qt/5.12 |
 | rapidxml   | 1.13    | Boost Software License 1.0     | http://rapidxml.sourceforge.net                  |
 | tbb        | 2020.1  | Apache 2.0 license             | https://github.com/01org/tbb/releases            |
 | zstd       | 1.4.5   | BSD License                    | https://github.com/facebook/zstd/releases        |

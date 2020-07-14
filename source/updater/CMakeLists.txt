@@ -44,6 +44,9 @@ add_library(aspia_updater STATIC
     ${SOURCE_UPDATER_RESOURCES}
     ${SOURCE_UPDATER_UI})
 target_link_libraries(aspia_updater aspia_base ${QT_LIBS} ${THIRD_PARTY_LIBS})
+set_property(TARGET aspia_updater PROPERTY AUTOMOC ON)
+set_property(TARGET aspia_updater PROPERTY AUTOUIC ON)
+set_property(TARGET aspia_updater PROPERTY AUTORCC ON)
 
 if(Qt5LinguistTools_FOUND)
     # Get the list of translation files.

@@ -128,6 +128,9 @@ target_link_libraries(aspia_host_core
     ${WINDOWS_LIBS}
     ${THIRD_PARTY_LIBS})
 set_target_properties(aspia_host_core PROPERTIES COMPILE_DEFINITIONS "HOST_IMPLEMENTATION")
+set_property(TARGET aspia_host_core PROPERTY AUTOMOC ON)
+set_property(TARGET aspia_host_core PROPERTY AUTOUIC ON)
+set_property(TARGET aspia_host_core PROPERTY AUTORCC ON)
 
 if (USE_TBB)
     add_tbb(aspia_host_core ${ASPIA_THIRD_PARTY_DIR}/tbb)

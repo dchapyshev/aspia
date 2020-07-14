@@ -68,6 +68,9 @@ target_link_libraries(aspia_router_manager
     ${QT_LIBS}
     ${WINDOWS_LIBS}
     ${THIRD_PARTY_LIBS})
+set_property(TARGET aspia_router_manager PROPERTY AUTOMOC ON)
+set_property(TARGET aspia_router_manager PROPERTY AUTOUIC ON)
+set_property(TARGET aspia_router_manager PROPERTY AUTORCC ON)
 
 if (USE_TBB)
     add_tbb(aspia_router_manager ${ASPIA_THIRD_PARTY_DIR}/tbb)
