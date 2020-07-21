@@ -19,6 +19,7 @@
 #ifndef DESKTOP__WIN__DXGI_OUTPUT_DUPLICATOR_H
 #define DESKTOP__WIN__DXGI_OUTPUT_DUPLICATOR_H
 
+#include "base/win/desktop.h"
 #include "desktop/frame_rotation.h"
 #include "desktop/shared_frame.h"
 #include "desktop/win/d3d_device.h"
@@ -132,6 +133,7 @@ private:
     Point last_frame_offset_;
 
     int64_t num_frames_captured_ = 0;
+    base::Desktop desktop_;
 };
 
 } // namespace desktop
