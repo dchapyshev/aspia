@@ -28,6 +28,7 @@
 #endif // defined(OS_WIN)
 
 #include <QEvent>
+#include <QPainter>
 #include <QWidget>
 
 #include <memory>
@@ -86,9 +87,10 @@ protected:
 private:
     void executeKeyEvent(uint32_t usb_keycode, uint32_t flags);
 
+    QPainter painter_;
+
 #if defined(OS_WIN)
     static LRESULT CALLBACK keyboardHookProc(INT code, WPARAM wparam, LPARAM lparam);
-
     base::win::ScopedHHOOK keyboard_hook_;
 #endif // defined(OS_WIN)
 

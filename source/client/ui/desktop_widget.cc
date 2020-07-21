@@ -255,9 +255,10 @@ void DesktopWidget::paintEvent(QPaintEvent* /* event */)
     FrameQImage* frame = reinterpret_cast<FrameQImage*>(frame_.get());
     if (frame)
     {
-        QPainter painter(this);
-        painter.setRenderHint(QPainter::SmoothPixmapTransform);
-        painter.drawImage(rect(), frame->constImage());
+        painter_.begin(this);
+        painter_.setRenderHint(QPainter::SmoothPixmapTransform);
+        painter_.drawImage(rect(), frame->constImage());
+        painter_.end();
     }
 
     delegate_->onDrawDesktop();
