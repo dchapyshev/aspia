@@ -20,7 +20,7 @@
 
 #include "base/logging.h"
 #include "base/task_runner.h"
-#include "desktop/frame_simple.h"
+#include "base/desktop/frame_simple.h"
 
 namespace host {
 
@@ -46,7 +46,7 @@ private:
     Delegate* delegate_ = nullptr;
 
     std::shared_ptr<base::TaskRunner> task_runner_;
-    std::unique_ptr<desktop::Frame> frame_;
+    std::unique_ptr<base::Frame> frame_;
 
     DISALLOW_COPY_AND_ASSIGN(FrameGenerator);
 };
@@ -62,8 +62,8 @@ void DesktopSessionFake::FrameGenerator::start(Delegate* delegate)
     delegate_ = delegate;
     DCHECK(delegate);
 
-    frame_ = desktop::FrameSimple::create(
-        desktop::Size(kFrameWidth, kFrameHeight), desktop::PixelFormat::ARGB());
+    frame_ = base::FrameSimple::create(
+        base::Size(kFrameWidth, kFrameHeight), base::PixelFormat::ARGB());
 
     memset(frame_->frameData(), 0, frame_->stride() * frame_->size().height());
 
@@ -77,9 +77,9 @@ void DesktopSessionFake::FrameGenerator::stop()
 
 void DesktopSessionFake::FrameGenerator::generateFrame()
 {
-    desktop::Region* updated_region = frame_->updatedRegion();
+    base::Region* updated_region = frame_->updatedRegion();
     updated_region->clear();
-    updated_region->addRect(desktop::Rect::makeWH(kFrameWidth, kFrameHeight));
+    updated_region->addRect(base::Rect::makeWH(kFrameWidth, kFrameHeight));
 
     if (delegate_)
     {

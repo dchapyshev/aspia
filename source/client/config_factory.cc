@@ -59,7 +59,7 @@ void ConfigFactory::setDefaultDesktopManageConfig(proto::DesktopConfig* config)
     config->set_video_encoding(proto::VideoEncoding::VIDEO_ENCODING_VP8);
     config->set_compress_ratio(kDefCompressRatio);
 
-    codec::serializePixelFormat(desktop::PixelFormat::RGB332(), config->mutable_pixel_format());
+    codec::serializePixelFormat(base::PixelFormat::RGB332(), config->mutable_pixel_format());
 }
 
 // static
@@ -75,7 +75,7 @@ void ConfigFactory::setDefaultDesktopViewConfig(proto::DesktopConfig* config)
     config->set_video_encoding(proto::VideoEncoding::VIDEO_ENCODING_VP8);
     config->set_compress_ratio(kDefCompressRatio);
 
-    codec::serializePixelFormat(desktop::PixelFormat::RGB332(), config->mutable_pixel_format());
+    codec::serializePixelFormat(base::PixelFormat::RGB332(), config->mutable_pixel_format());
 }
 
 // static

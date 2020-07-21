@@ -19,7 +19,7 @@
 #ifndef CLIENT__UI__FRAME_QIMAGE_H
 #define CLIENT__UI__FRAME_QIMAGE_H
 
-#include "desktop/frame.h"
+#include "base/desktop/frame.h"
 
 #include <QImage>
 
@@ -27,12 +27,12 @@
 
 namespace client {
 
-class FrameQImage : public desktop::Frame
+class FrameQImage : public base::Frame
 {
 public:
     ~FrameQImage() = default;
 
-    static std::unique_ptr<FrameQImage> create(const desktop::Size& size);
+    static std::unique_ptr<FrameQImage> create(const base::Size& size);
     static std::unique_ptr<FrameQImage> create(const QPixmap& pixmap);
     static std::unique_ptr<FrameQImage> create(QImage&& image);
 

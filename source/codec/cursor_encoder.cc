@@ -19,7 +19,7 @@
 #include "codec/cursor_encoder.h"
 
 #include "base/logging.h"
-#include "desktop/mouse_cursor.h"
+#include "base/desktop/mouse_cursor.h"
 #include "proto/desktop.pb.h"
 
 #include <libyuv/compare.h>
@@ -58,7 +58,7 @@ CursorEncoder::CursorEncoder()
 CursorEncoder::~CursorEncoder() = default;
 
 bool CursorEncoder::compressCursor(
-    const desktop::MouseCursor& mouse_cursor, proto::CursorShape* cursor_shape)
+    const base::MouseCursor& mouse_cursor, proto::CursorShape* cursor_shape)
 {
     size_t ret = ZSTD_initCStream(stream_.get(), kCompressionRatio);
     DCHECK(!ZSTD_isError(ret)) << ZSTD_getErrorName(ret);
@@ -90,9 +90,9 @@ bool CursorEncoder::compressCursor(
 }
 
 bool CursorEncoder::encode(
-    const desktop::MouseCursor& mouse_cursor, proto::CursorShape* cursor_shape)
+    const base::MouseCursor& mouse_cursor, proto::CursorShape* cursor_shape)
 {
-    const desktop::Size& size = mouse_cursor.size();
+    const base::Size& size = mouse_cursor.size();
     const int kMaxSize = std::numeric_limits<int16_t>::max() / 2;
 
     // Check the correctness of the cursor size.

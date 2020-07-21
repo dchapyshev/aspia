@@ -37,7 +37,7 @@ public:
     static std::unique_ptr<VideoDecoderVPX> createVP8();
     static std::unique_ptr<VideoDecoderVPX> createVP9();
 
-    bool decode(const proto::VideoPacket& packet, desktop::Frame* frame) override;
+    bool decode(const proto::VideoPacket& packet, base::Frame* frame) override;
 
 private:
     explicit VideoDecoderVPX(proto::VideoEncoding encoding);

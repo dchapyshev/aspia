@@ -20,16 +20,16 @@
 #define CODEC__VIDEO_UTIL_H
 
 #include "base/macros_magic.h"
-#include "desktop/geometry.h"
-#include "desktop/pixel_format.h"
+#include "base/desktop/geometry.h"
+#include "base/desktop/pixel_format.h"
 #include "proto/desktop.pb.h"
 
 namespace codec {
 
-desktop::Rect parseRect(const proto::Rect& rect);
-void serializeRect(const desktop::Rect& from, proto::Rect* to);
-desktop::PixelFormat parsePixelFormat(const proto::PixelFormat& format);
-void serializePixelFormat(const desktop::PixelFormat& from, proto::PixelFormat* to);
+base::Rect parseRect(const proto::Rect& rect);
+void serializeRect(const base::Rect& from, proto::Rect* to);
+base::PixelFormat parsePixelFormat(const proto::PixelFormat& format);
+void serializePixelFormat(const base::PixelFormat& from, proto::PixelFormat* to);
 
 } // namespace codec
 

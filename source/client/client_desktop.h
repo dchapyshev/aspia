@@ -20,20 +20,20 @@
 #define CLIENT__CLIENT_DESKTOP_H
 
 #include "base/macros_magic.h"
+#include "base/desktop/geometry.h"
 #include "client/client.h"
 #include "client/desktop_control.h"
 #include "client/input_event_filter.h"
-#include "desktop/geometry.h"
 #include "proto/system_info.pb.h"
+
+namespace base {
+class Frame;
+} // namespace base
 
 namespace codec {
 class CursorDecoder;
 class VideoDecoder;
 } // namespace codec
-
-namespace desktop {
-class Frame;
-} // namespace desktop
 
 namespace client {
 
@@ -82,7 +82,7 @@ private:
 
     std::shared_ptr<DesktopControlProxy> desktop_control_proxy_;
     std::shared_ptr<DesktopWindowProxy> desktop_window_proxy_;
-    std::shared_ptr<desktop::Frame> desktop_frame_;
+    std::shared_ptr<base::Frame> desktop_frame_;
     proto::DesktopConfig desktop_config_;
 
     proto::HostToClient incoming_message_;

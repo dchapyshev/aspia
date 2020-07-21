@@ -20,7 +20,7 @@
 #define HOST__CLIENT_SESSION_DESKTOP_H
 
 #include "base/macros_magic.h"
-#include "desktop/geometry.h"
+#include "base/desktop/geometry.h"
 #include "host/client_session.h"
 #include "host/desktop_session.h"
 
@@ -47,7 +47,7 @@ public:
 
     void setDesktopSessionProxy(std::shared_ptr<DesktopSessionProxy> desktop_session_proxy);
 
-    void encode(const desktop::Frame* frame, const desktop::MouseCursor* cursor);
+    void encode(const base::Frame* frame, const base::MouseCursor* cursor);
     void setScreenList(const proto::ScreenList& list);
     void injectClipboardEvent(const proto::ClipboardEvent& event);
 
@@ -70,7 +70,7 @@ private:
     std::unique_ptr<codec::VideoEncoder> video_encoder_;
     std::unique_ptr<codec::CursorEncoder> cursor_encoder_;
     DesktopSession::Config desktop_session_config_;
-    desktop::Size preferred_size_;
+    base::Size preferred_size_;
 
     proto::ClientToHost incoming_message_;
     proto::HostToClient outgoing_message_;

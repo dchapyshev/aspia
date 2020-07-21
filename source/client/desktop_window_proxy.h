@@ -51,10 +51,10 @@ public:
     void setSystemInfo(const proto::SystemInfo& system_info);
     void setMetrics(const DesktopWindow::Metrics& metrics);
 
-    std::shared_ptr<desktop::Frame> allocateFrame(const desktop::Size& size);
-    void setFrame(const desktop::Size& screen_size, std::shared_ptr<desktop::Frame> frame);
+    std::shared_ptr<base::Frame> allocateFrame(const base::Size& size);
+    void setFrame(const base::Size& screen_size, std::shared_ptr<base::Frame> frame);
     void drawFrame();
-    void setMouseCursor(std::shared_ptr<desktop::MouseCursor> mouse_cursor);
+    void setMouseCursor(std::shared_ptr<base::MouseCursor> mouse_cursor);
 
     void injectClipboardEvent(const proto::ClipboardEvent& event);
 

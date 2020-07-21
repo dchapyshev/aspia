@@ -19,12 +19,12 @@
 #ifndef CODEC__VIDEO_ENCODER_H
 #define CODEC__VIDEO_ENCODER_H
 
-#include "desktop/geometry.h"
+#include "base/desktop/geometry.h"
 #include "proto/desktop.pb.h"
 
-namespace desktop {
+namespace base {
 class Frame;
-} // namespace desktop
+} // namespace base
 
 namespace codec {
 
@@ -34,16 +34,16 @@ public:
     explicit VideoEncoder(proto::VideoEncoding encoding);
     virtual ~VideoEncoder() = default;
 
-    virtual void encode(const desktop::Frame* frame, proto::VideoPacket* packet) = 0;
+    virtual void encode(const base::Frame* frame, proto::VideoPacket* packet) = 0;
 
     proto::VideoEncoding encoding() const { return encoding_; }
 
 protected:
-    void fillPacketInfo(const desktop::Frame* frame, proto::VideoPacket* packet);
+    void fillPacketInfo(const base::Frame* frame, proto::VideoPacket* packet);
 
 private:
     const proto::VideoEncoding encoding_;
-    desktop::Size last_size_;
+    base::Size last_size_;
 };
 
 } // namespace codec

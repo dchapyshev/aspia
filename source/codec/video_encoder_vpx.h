@@ -20,12 +20,12 @@
 #define CODEC__VIDEO_ENCODER_VPX_H
 
 #include "base/macros_magic.h"
+#include "base/desktop/region.h"
 #include "base/memory/byte_array.h"
 #include "codec/encoder_bitrate_filter.h"
 #include "codec/running_samples.h"
 #include "codec/scoped_vpx_codec.h"
 #include "codec/video_encoder.h"
-#include "desktop/region.h"
 
 #define VPX_CODEC_DISABLE_COMPAT 1
 #include <vpx/vpx_encoder.h>
@@ -41,19 +41,19 @@ public:
     static std::unique_ptr<VideoEncoderVPX> createVP8();
     static std::unique_ptr<VideoEncoderVPX> createVP9();
 
-    void encode(const desktop::Frame* frame, proto::VideoPacket* packet) override;
+    void encode(const base::Frame* frame, proto::VideoPacket* packet) override;
     void setBandwidthEstimateKbps(int bandwidth_kbps);
 
 private:
     explicit VideoEncoderVPX(proto::VideoEncoding encoding);
 
-    void createActiveMap(const desktop::Size& size);
-    void createVp8Codec(const desktop::Size& size);
-    void createVp9Codec(const desktop::Size& size);
+    void createActiveMap(const base::Size& size);
+    void createVp8Codec(const base::Size& size);
+    void createVp9Codec(const base::Size& size);
     int64_t prepareImageAndActiveMap(
-        bool is_key_frame, const desktop::Frame* frame, proto::VideoPacket* packet);
-    void regionFromActiveMap(desktop::Region* updated_region);
-    void addRectToActiveMap(const desktop::Rect& rect);
+        bool is_key_frame, const base::Frame* frame, proto::VideoPacket* packet);
+    void regionFromActiveMap(base::Region* updated_region);
+    void addRectToActiveMap(const base::Rect& rect);
     void clearActiveMap();
 
     void updateConfig(int64_t updated_area);

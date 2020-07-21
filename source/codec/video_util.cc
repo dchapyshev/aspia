@@ -20,12 +20,12 @@
 
 namespace codec {
 
-desktop::Rect parseRect(const proto::Rect& rect)
+base::Rect parseRect(const proto::Rect& rect)
 {
-    return desktop::Rect::makeXYWH(rect.x(), rect.y(), rect.width(), rect.height());
+    return base::Rect::makeXYWH(rect.x(), rect.y(), rect.width(), rect.height());
 }
 
-void serializeRect(const desktop::Rect& from, proto::Rect* to)
+void serializeRect(const base::Rect& from, proto::Rect* to)
 {
     to->set_x(from.x());
     to->set_y(from.y());
@@ -33,9 +33,9 @@ void serializeRect(const desktop::Rect& from, proto::Rect* to)
     to->set_height(from.height());
 }
 
-desktop::PixelFormat parsePixelFormat(const proto::PixelFormat& format)
+base::PixelFormat parsePixelFormat(const proto::PixelFormat& format)
 {
-    return desktop::PixelFormat(
+    return base::PixelFormat(
         static_cast<uint8_t>(format.bits_per_pixel()),
         static_cast<uint16_t>(format.red_max()),
         static_cast<uint16_t>(format.green_max()),
@@ -45,7 +45,7 @@ desktop::PixelFormat parsePixelFormat(const proto::PixelFormat& format)
         static_cast<uint8_t>(format.blue_shift()));
 }
 
-void serializePixelFormat(const desktop::PixelFormat& from, proto::PixelFormat* to)
+void serializePixelFormat(const base::PixelFormat& from, proto::PixelFormat* to)
 {
     to->set_bits_per_pixel(from.bitsPerPixel());
 

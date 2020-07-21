@@ -72,18 +72,18 @@ DesktopConfigDialog::DesktopConfigDialog(proto::SessionType session_type,
     combo_color_depth->addItem(tr("64 colors (6 bit)"), COLOR_DEPTH_RGB222);
     combo_color_depth->addItem(tr("8 colors (3 bit)"), COLOR_DEPTH_RGB111);
 
-    desktop::PixelFormat pixel_format = codec::parsePixelFormat(config_.pixel_format());
+    base::PixelFormat pixel_format = codec::parsePixelFormat(config_.pixel_format());
     ColorDepth color_depth = COLOR_DEPTH_ARGB;
 
-    if (pixel_format.isEqual(desktop::PixelFormat::ARGB()))
+    if (pixel_format.isEqual(base::PixelFormat::ARGB()))
         color_depth = COLOR_DEPTH_ARGB;
-    else if (pixel_format.isEqual(desktop::PixelFormat::RGB565()))
+    else if (pixel_format.isEqual(base::PixelFormat::RGB565()))
         color_depth = COLOR_DEPTH_RGB565;
-    else if (pixel_format.isEqual(desktop::PixelFormat::RGB332()))
+    else if (pixel_format.isEqual(base::PixelFormat::RGB332()))
         color_depth = COLOR_DEPTH_RGB332;
-    else if (pixel_format.isEqual(desktop::PixelFormat::RGB222()))
+    else if (pixel_format.isEqual(base::PixelFormat::RGB222()))
         color_depth = COLOR_DEPTH_RGB222;
-    else if (pixel_format.isEqual(desktop::PixelFormat::RGB111()))
+    else if (pixel_format.isEqual(base::PixelFormat::RGB111()))
         color_depth = COLOR_DEPTH_RGB111;
 
     int current_color_depth = combo_color_depth->findData(QVariant(color_depth));
@@ -165,28 +165,28 @@ void DesktopConfigDialog::onButtonBoxClicked(QAbstractButton* button)
 
         if (video_encoding == proto::VIDEO_ENCODING_ZSTD)
         {
-            desktop::PixelFormat pixel_format;
+            base::PixelFormat pixel_format;
 
             switch (ui.combo_color_depth->currentData().toInt())
             {
                 case COLOR_DEPTH_ARGB:
-                    pixel_format = desktop::PixelFormat::ARGB();
+                    pixel_format = base::PixelFormat::ARGB();
                     break;
 
                 case COLOR_DEPTH_RGB565:
-                    pixel_format = desktop::PixelFormat::RGB565();
+                    pixel_format = base::PixelFormat::RGB565();
                     break;
 
                 case COLOR_DEPTH_RGB332:
-                    pixel_format = desktop::PixelFormat::RGB332();
+                    pixel_format = base::PixelFormat::RGB332();
                     break;
 
                 case COLOR_DEPTH_RGB222:
-                    pixel_format = desktop::PixelFormat::RGB222();
+                    pixel_format = base::PixelFormat::RGB222();
                     break;
 
                 case COLOR_DEPTH_RGB111:
-                    pixel_format = desktop::PixelFormat::RGB111();
+                    pixel_format = base::PixelFormat::RGB111();
                     break;
 
                 default:

@@ -24,14 +24,11 @@
 #include <string>
 
 namespace base {
-class Version;
-} // namespace base
-
-namespace desktop {
 class Frame;
 class MouseCursor;
 class Size;
-} // namespace desktop
+class Version;
+} // namespace base
 
 namespace proto {
 class ClipboardEvent;
@@ -81,10 +78,10 @@ public:
     virtual void setMetrics(const Metrics& metrics) = 0;
 
     virtual std::unique_ptr<FrameFactory> frameFactory() = 0;
-    virtual void setFrame(const desktop::Size& screen_size,
-                          std::shared_ptr<desktop::Frame> frame) = 0;
+    virtual void setFrame(const base::Size& screen_size,
+                          std::shared_ptr<base::Frame> frame) = 0;
     virtual void drawFrame() = 0;
-    virtual void setMouseCursor(std::shared_ptr<desktop::MouseCursor> mouse_cursor) = 0;
+    virtual void setMouseCursor(std::shared_ptr<base::MouseCursor> mouse_cursor) = 0;
 
     virtual void injectClipboardEvent(const proto::ClipboardEvent& event) = 0;
 };

@@ -18,7 +18,7 @@
 
 #include "codec/video_encoder.h"
 
-#include "desktop/frame.h"
+#include "base/desktop/frame.h"
 
 namespace codec {
 
@@ -28,7 +28,7 @@ VideoEncoder::VideoEncoder(proto::VideoEncoding encoding)
     // Nothing
 }
 
-void VideoEncoder::fillPacketInfo(const desktop::Frame* frame, proto::VideoPacket* packet)
+void VideoEncoder::fillPacketInfo(const base::Frame* frame, proto::VideoPacket* packet)
 {
     packet->set_encoding(encoding_);
 

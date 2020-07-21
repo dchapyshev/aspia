@@ -18,9 +18,9 @@
 
 #include "codec/video_decoder_zstd.h"
 #include "base/logging.h"
+#include "base/desktop/frame_aligned.h"
 #include "codec/pixel_translator.h"
 #include "codec/video_util.h"
-#include "desktop/frame_aligned.h"
 
 namespace codec {
 
@@ -37,14 +37,14 @@ std::unique_ptr<VideoDecoderZstd> VideoDecoderZstd::create()
 }
 
 bool VideoDecoderZstd::decode(const proto::VideoPacket& packet,
-                              desktop::Frame* target_frame)
+                              base::Frame* target_frame)
 {
     if (packet.has_format())
     {
         const proto::VideoPacketFormat& format = packet.format();
 
-        source_frame_ = desktop::FrameAligned::create(
-            desktop::Size(format.video_rect().width(), format.video_rect().height()),
+        source_frame_ = base::FrameAligned::create(
+            base::Size(format.video_rect().width(), format.video_rect().height()),
             parsePixelFormat(format.pixel_format()), 32);
 
         translator_ = PixelTranslator::create(source_frame_->format(), target_frame->format());
@@ -61,12 +61,12 @@ bool VideoDecoderZstd::decode(const proto::VideoPacket& packet,
     size_t ret = ZSTD_initDStream(stream_.get());
     DCHECK(!ZSTD_isError(ret)) << ZSTD_getErrorName(ret);
 
-    desktop::Rect frame_rect = desktop::Rect::makeSize(source_frame_->size());
+    base::Rect frame_rect = base::Rect::makeSize(source_frame_->size());
     ZSTD_inBuffer input = { packet.data().data(), packet.data().size(), 0 };
 
     for (int i = 0; i < packet.dirty_rect_size(); ++i)
     {
-        desktop::Rect rect = parseRect(packet.dirty_rect(i));
+        base::Rect rect = parseRect(packet.dirty_rect(i));
 
         if (!frame_rect.containsRect(rect))
         {

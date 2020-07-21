@@ -69,9 +69,9 @@ public:
     void setSystemInfo(const proto::SystemInfo& system_info) override;
     void setMetrics(const DesktopWindow::Metrics& metrics) override;
     std::unique_ptr<FrameFactory> frameFactory() override;
-    void setFrame(const desktop::Size& screen_size, std::shared_ptr<desktop::Frame> frame) override;
+    void setFrame(const base::Size& screen_size, std::shared_ptr<base::Frame> frame) override;
     void drawFrame() override;
-    void setMouseCursor(std::shared_ptr<desktop::MouseCursor> mouse_cursor) override;
+    void setMouseCursor(std::shared_ptr<base::MouseCursor> mouse_cursor) override;
     void injectClipboardEvent(const proto::ClipboardEvent& event) override;
 
     // DesktopWidget::Delegate implementation.

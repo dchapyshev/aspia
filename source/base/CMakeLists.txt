@@ -137,6 +137,94 @@ list(APPEND SOURCE_BASE_CRYPTO_UNIT_TESTS
     crypto/password_hash_unittest.cc
     crypto/srp_math_unittest.cc)
 
+list(APPEND SOURCE_BASE_DESKTOP
+    desktop/capture_scheduler.cc
+    desktop/capture_scheduler.h
+    desktop/cursor_capturer.h
+    desktop/cursor_capturer_win.cc
+    desktop/cursor_capturer_win.h
+    desktop/diff_block_32bpp_avx2.cc
+    desktop/diff_block_32bpp_avx2.h
+    desktop/diff_block_32bpp_c.cc
+    desktop/diff_block_32bpp_c.h
+    desktop/diff_block_32bpp_sse2.cc
+    desktop/diff_block_32bpp_sse2.h
+    desktop/differ.cc
+    desktop/differ.h
+    desktop/frame.cc
+    desktop/frame.h
+    desktop/frame_aligned.cc
+    desktop/frame_aligned.h
+    desktop/frame_dib.cc
+    desktop/frame_dib.h
+    desktop/frame_rotation.cc
+    desktop/frame_rotation.h
+    desktop/frame_simple.cc
+    desktop/frame_simple.h
+    desktop/geometry.cc
+    desktop/geometry.h
+    desktop/mouse_cursor.cc
+    desktop/mouse_cursor.h
+    desktop/pixel_format.cc
+    desktop/pixel_format.h
+    desktop/region.cc
+    desktop/region.h
+    desktop/screen_capturer.cc
+    desktop/screen_capturer.h
+    desktop/screen_capturer_dxgi.cc
+    desktop/screen_capturer_dxgi.h
+    desktop/screen_capturer_gdi.cc
+    desktop/screen_capturer_gdi.h
+    desktop/screen_capturer_wrapper.cc
+    desktop/screen_capturer_wrapper.h
+    desktop/shared_frame.cc
+    desktop/shared_frame.h
+    desktop/shared_memory_frame.cc
+    desktop/shared_memory_frame.h)
+
+list(APPEND SOURCE_DESKTOP_UNIT_TESTS
+    desktop/diff_block_32bpp_avx2_unittest.cc
+    desktop/diff_block_32bpp_c_unittest.cc
+    desktop/diff_block_32bpp_sse2_unittest.cc
+    desktop/geometry_unittest.cc
+    desktop/region_unittest.cc)
+
+list(APPEND SOURCE_BASE_DESKTOP_WIN
+    desktop/win/bitmap_info.h
+    desktop/win/cursor.cc
+    desktop/win/cursor.h
+    desktop/win/d3d_device.cc
+    desktop/win/d3d_device.h
+    desktop/win/desktop_environment.cc
+    desktop/win/desktop_environment.h
+    desktop/win/display_configuration_monitor.cc
+    desktop/win/display_configuration_monitor.h
+    desktop/win/dxgi_adapter_duplicator.cc
+    desktop/win/dxgi_adapter_duplicator.h
+    desktop/win/dxgi_context.cc
+    desktop/win/dxgi_context.h
+    desktop/win/dxgi_duplicator_controller.cc
+    desktop/win/dxgi_duplicator_controller.h
+    desktop/win/dxgi_frame.cc
+    desktop/win/dxgi_frame.h
+    desktop/win/dxgi_output_duplicator.cc
+    desktop/win/dxgi_output_duplicator.h
+    desktop/win/dxgi_texture.cc
+    desktop/win/dxgi_texture.h
+    desktop/win/dxgi_texture_mapping.cc
+    desktop/win/dxgi_texture_mapping.h
+    desktop/win/dxgi_texture_staging.cc
+    desktop/win/dxgi_texture_staging.h
+    desktop/win/power_save_blocker.cc
+    desktop/win/power_save_blocker.h
+    desktop/win/screen_capture_utils.cc
+    desktop/win/screen_capture_utils.h)
+
+list(APPEND SOURCE_BASE_DESKTOP_WIN_UNIT_TESTS
+    desktop/win/cursor_unittest.cc
+    desktop/win/cursor_unittest_resources.h
+    desktop/win/cursor_unittest_resources.rc)
+
 list(APPEND SOURCE_BASE_FILES
     files/base_paths.cc
     files/base_paths.h
@@ -280,6 +368,8 @@ list(APPEND SOURCE_BASE_WIN_UNIT_TESTS
 
 source_group("" FILES ${SOURCE_BASE} ${SOURCE_BASE_UNIT_TESTS})
 source_group(crypto FILES ${SOURCE_BASE_CRYPTO} ${SOURCE_BASE_CRYPTO_UNIT_TESTS})
+source_group(desktop FILES ${SOURCE_BASE_DESKTOP} ${SOURCE_BASE_DESKTOP_UNIT_TESTS})
+source_group(desktop\\win FILES ${SOURCE_BASE_DESKTOP_WIN} ${SOURCE_BASE_DESKTOP_WIN_UNIT_TESTS})
 source_group(files FILES ${SOURCE_BASE_FILES})
 source_group(ipc FILES ${SOURCE_BASE_IPC})
 source_group(memory FILES ${SOURCE_BASE_MEMORY} ${SOURCE_BASE_MEMORY_UNIT_TESTS})
@@ -291,6 +381,8 @@ source_group(win FILES ${SOURCE_BASE_WIN} ${SOURCE_BASE_WIN_UNIT_TESTS})
 add_library(aspia_base STATIC
     ${SOURCE_BASE}
     ${SOURCE_BASE_CRYPTO}
+    ${SOURCE_BASE_DESKTOP}
+    ${SOURCE_BASE_DESKTOP_WIN}
     ${SOURCE_BASE_FILES}
     ${SOURCE_BASE_IPC}
     ${SOURCE_BASE_MEMORY}
@@ -305,6 +397,8 @@ if (BUILD_UNIT_TESTS)
     add_executable(aspia_base_tests
         ${SOURCE_BASE_UNIT_TESTS}
         ${SOURCE_BASE_CRYPTO_UNIT_TESTS}
+        ${SOURCE_BASE_DESKTOP_UNIT_TESTS}
+        ${SOURCE_BASE_DESKTOP_WIN_UNIT_TESTS}
         ${SOURCE_BASE_MEMORY_UNIT_TESTS}
         ${SOURCE_BASE_STRINGS_UNIT_TESTS}
         ${SOURCE_BASE_WIN_UNIT_TESTS})

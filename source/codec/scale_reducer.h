@@ -20,13 +20,13 @@
 #define CODEC__SCALE_REDUCER_H
 
 #include "base/macros_magic.h"
-#include "desktop/geometry.h"
+#include "base/desktop/geometry.h"
 
 #include <memory>
 
-namespace desktop {
+namespace base {
 class Frame;
-} // namespace desktop
+} // namespace base
 
 namespace codec {
 
@@ -36,18 +36,18 @@ public:
     ScaleReducer();
     ~ScaleReducer();
 
-    const desktop::Frame* scaleFrame(
-        const desktop::Frame* source_frame, const desktop::Size& target_size);
+    const base::Frame* scaleFrame(
+        const base::Frame* source_frame, const base::Size& target_size);
 
     double scaleFactorX() const { return scale_x_; }
     double scaleFactorY() const { return scale_y_; }
 
 private:
-    desktop::Rect scaledRect(const desktop::Rect& source_rect);
+    base::Rect scaledRect(const base::Rect& source_rect);
 
-    std::unique_ptr<desktop::Frame> target_frame_;
-    desktop::Size source_size_;
-    desktop::Size target_size_;
+    std::unique_ptr<base::Frame> target_frame_;
+    base::Size source_size_;
+    base::Size target_size_;
     double scale_x_ = 0;
     double scale_y_ = 0;
 

@@ -59,7 +59,6 @@ source_group("" FILES ${SOURCE_CODEC} ${SOURCE_CODEC_UNIT_TESTS})
 add_library(aspia_codec STATIC ${SOURCE_CODEC})
 target_link_libraries(aspia_codec
     aspia_base
-    aspia_desktop
     aspia_proto
     ${THIRD_PARTY_LIBS})
 

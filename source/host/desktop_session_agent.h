@@ -19,21 +19,18 @@
 #ifndef HOST__DESKTOP_SESSION_AGENT_H
 #define HOST__DESKTOP_SESSION_AGENT_H
 
+#include "base/desktop/screen_capturer_wrapper.h"
 #include "base/ipc/ipc_channel.h"
 #include "base/ipc/shared_memory_factory.h"
-#include "desktop/screen_capturer_wrapper.h"
 #include "host/clipboard_monitor.h"
 #include "proto/desktop_internal.pb.h"
 
 namespace base {
+class CaptureScheduler;
 class TaskRunner;
 class Thread;
-} // namespace base
-
-namespace desktop {
-class CaptureScheduler;
 class SharedFrame;
-} // namespace desktop
+} // namespace base
 
 namespace host {
 
@@ -43,7 +40,7 @@ class DesktopSessionAgent
     : public std::enable_shared_from_this<DesktopSessionAgent>,
       public base::IpcChannel::Listener,
       public base::SharedMemoryFactory::Delegate,
-      public desktop::ScreenCapturerWrapper::Delegate,
+      public base::ScreenCapturerWrapper::Delegate,
       public common::Clipboard::Delegate
 {
 public:
@@ -61,11 +58,11 @@ protected:
     void onSharedMemoryCreate(int id) override;
     void onSharedMemoryDestroy(int id) override;
 
-    // desktop::ScreenCapturerWrapper::Delegate implementation.
-    void onScreenListChanged(const desktop::ScreenCapturer::ScreenList& list,
-                             desktop::ScreenCapturer::ScreenId current) override;
-    void onScreenCaptured(const desktop::Frame* frame,
-                          const desktop::MouseCursor* mouse_cursor) override;
+    // base::ScreenCapturerWrapper::Delegate implementation.
+    void onScreenListChanged(const base::ScreenCapturer::ScreenList& list,
+                             base::ScreenCapturer::ScreenId current) override;
+    void onScreenCaptured(const base::Frame* frame,
+                          const base::MouseCursor* mouse_cursor) override;
 
     // common::Clipboard::Delegate implementation.
     void onClipboardEvent(const proto::ClipboardEvent& event) override;
@@ -85,8 +82,8 @@ private:
     std::unique_ptr<InputInjector> input_injector_;
 
     std::unique_ptr<base::SharedMemoryFactory> shared_memory_factory_;
-    std::unique_ptr<desktop::CaptureScheduler> capture_scheduler_;
-    std::unique_ptr<desktop::ScreenCapturerWrapper> screen_capturer_;
+    std::unique_ptr<base::CaptureScheduler> capture_scheduler_;
+    std::unique_ptr<base::ScreenCapturerWrapper> screen_capturer_;
 
     bool lock_at_disconnect_ = false;
 

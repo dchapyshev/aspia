@@ -21,10 +21,10 @@
 
 #include <memory>
 
-namespace desktop {
+namespace base {
 class Frame;
 class Size;
-} // namespace desktop
+} // namespace base
 
 namespace client {
 
@@ -33,7 +33,7 @@ class FrameFactory
 public:
     virtual ~FrameFactory() = default;
 
-    virtual std::shared_ptr<desktop::Frame> allocateFrame(const desktop::Size& size) = 0;
+    virtual std::shared_ptr<base::Frame> allocateFrame(const base::Size& size) = 0;
 };
 
 } // namespace client

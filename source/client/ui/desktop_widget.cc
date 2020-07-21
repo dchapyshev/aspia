@@ -87,12 +87,12 @@ DesktopWidget::DesktopWidget(Delegate* delegate, QWidget* parent)
     setMouseTracking(true);
 }
 
-desktop::Frame* DesktopWidget::desktopFrame()
+base::Frame* DesktopWidget::desktopFrame()
 {
     return frame_.get();
 }
 
-void DesktopWidget::setDesktopFrame(std::shared_ptr<desktop::Frame>& frame)
+void DesktopWidget::setDesktopFrame(std::shared_ptr<base::Frame>& frame)
 {
     frame_ = std::move(frame);
 }

@@ -22,10 +22,10 @@
 #include "base/logging.h"
 #include "base/task_runner.h"
 #include "base/crypto/password_generator.h"
+#include "base/desktop/frame.h"
 #include "base/strings/string_number_conversions.h"
 #include "base/strings/string_util.h"
 #include "base/strings/unicode.h"
-#include "desktop/frame.h"
 #include "host/client_session_desktop.h"
 #include "host/client_session_file_transfer.h"
 #include "host/desktop_session_proxy.h"
@@ -261,7 +261,7 @@ void UserSession::onDesktopSessionStopped()
     }
 }
 
-void UserSession::onScreenCaptured(const desktop::Frame* frame, const desktop::MouseCursor* cursor)
+void UserSession::onScreenCaptured(const base::Frame* frame, const base::MouseCursor* cursor)
 {
     for (const auto& client : desktop_clients_)
         static_cast<ClientSessionDesktop*>(client.get())->encode(frame, cursor);

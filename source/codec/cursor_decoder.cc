@@ -19,7 +19,7 @@
 #include "codec/cursor_decoder.h"
 
 #include "base/logging.h"
-#include "desktop/mouse_cursor.h"
+#include "base/desktop/mouse_cursor.h"
 #include "proto/desktop.pb.h"
 
 namespace codec {
@@ -68,7 +68,7 @@ base::ByteArray CursorDecoder::decompressCursor(const proto::CursorShape& cursor
     return image;
 }
 
-std::shared_ptr<desktop::MouseCursor> CursorDecoder::decode(const proto::CursorShape& cursor_shape)
+std::shared_ptr<base::MouseCursor> CursorDecoder::decode(const proto::CursorShape& cursor_shape)
 {
     size_t cache_index;
 
@@ -85,8 +85,8 @@ std::shared_ptr<desktop::MouseCursor> CursorDecoder::decode(const proto::CursorS
     }
     else
     {
-        desktop::Size size(cursor_shape.width(), cursor_shape.height());
-        desktop::Point hotspot(cursor_shape.hotspot_x(), cursor_shape.hotspot_y());
+        base::Size size(cursor_shape.width(), cursor_shape.height());
+        base::Point hotspot(cursor_shape.hotspot_x(), cursor_shape.hotspot_y());
 
         if (size.width()  <= 0 || size.width()  > (std::numeric_limits<int16_t>::max() / 2) ||
             size.height() <= 0 || size.height() > (std::numeric_limits<int16_t>::max() / 2))
@@ -100,8 +100,8 @@ std::shared_ptr<desktop::MouseCursor> CursorDecoder::decode(const proto::CursorS
         if (image.empty())
             return nullptr;
 
-        std::unique_ptr<desktop::MouseCursor> mouse_cursor =
-            std::make_unique<desktop::MouseCursor>(std::move(image), size, hotspot);
+        std::unique_ptr<base::MouseCursor> mouse_cursor =
+            std::make_unique<base::MouseCursor>(std::move(image), size, hotspot);
 
         if (cursor_shape.flags() & proto::CursorShape::RESET_CACHE)
         {

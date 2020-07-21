@@ -27,13 +27,10 @@
 #include "proto/desktop_internal.pb.h"
 
 namespace base {
+class Frame;
 class Location;
 class SharedMemory;
 } // namespace base
-
-namespace desktop {
-class Frame;
-} // namespace desktop
 
 namespace host {
 
@@ -62,8 +59,7 @@ protected:
     // DesktopSession::Delegate implementation.
     void onDesktopSessionStarted() override;
     void onDesktopSessionStopped() override;
-    void onScreenCaptured(
-        const desktop::Frame* frame, const desktop::MouseCursor* mouse_cursor) override;
+    void onScreenCaptured(const base::Frame* frame, const base::MouseCursor* mouse_cursor) override;
     void onScreenListChanged(const proto::ScreenList& list) override;
     void onClipboardEvent(const proto::ClipboardEvent& event) override;
 

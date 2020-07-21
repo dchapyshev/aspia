@@ -19,9 +19,9 @@
 #include "codec/video_encoder_zstd.h"
 
 #include "base/logging.h"
+#include "base/desktop/frame.h"
 #include "codec/pixel_translator.h"
 #include "codec/video_util.h"
-#include "desktop/frame.h"
 
 namespace codec {
 
@@ -37,7 +37,7 @@ uint8_t* outputBuffer(proto::VideoPacket* packet, size_t size)
 
 } // namespace
 
-VideoEncoderZstd::VideoEncoderZstd(const desktop::PixelFormat& target_format,
+VideoEncoderZstd::VideoEncoderZstd(const base::PixelFormat& target_format,
                                    int compression_ratio)
     : VideoEncoder(proto::VIDEO_ENCODING_ZSTD),
       target_format_(target_format),
@@ -49,7 +49,7 @@ VideoEncoderZstd::VideoEncoderZstd(const desktop::PixelFormat& target_format,
 
 // static
 std::unique_ptr<VideoEncoderZstd> VideoEncoderZstd::create(
-    const desktop::PixelFormat& target_format, int compression_ratio)
+    const base::PixelFormat& target_format, int compression_ratio)
 {
     if (compression_ratio > ZSTD_maxCLevel())
         compression_ratio = ZSTD_maxCLevel();
@@ -87,14 +87,14 @@ void VideoEncoderZstd::compressPacket(const base::ByteArray& buffer, proto::Vide
     packet->mutable_data()->resize(output.pos);
 }
 
-void VideoEncoderZstd::encode(const desktop::Frame* frame, proto::VideoPacket* packet)
+void VideoEncoderZstd::encode(const base::Frame* frame, proto::VideoPacket* packet)
 {
     fillPacketInfo(frame, packet);
 
     if (packet->has_format())
     {
         serializePixelFormat(target_format_, packet->mutable_format()->mutable_pixel_format());
-        updated_region_ = desktop::Region(desktop::Rect::makeSize(frame->size()));
+        updated_region_ = base::Region(base::Rect::makeSize(frame->size()));
     }
     else
     {
@@ -113,9 +113,9 @@ void VideoEncoderZstd::encode(const desktop::Frame* frame, proto::VideoPacket* p
 
     size_t data_size = 0;
 
-    for (desktop::Region::Iterator it(updated_region_); !it.isAtEnd(); it.advance())
+    for (base::Region::Iterator it(updated_region_); !it.isAtEnd(); it.advance())
     {
-        const desktop::Rect& rect = it.rect();
+        const base::Rect& rect = it.rect();
 
         data_size += rect.width() * rect.height() * target_format_.bytesPerPixel();
         serializeRect(rect, packet->add_dirty_rect());
@@ -128,9 +128,9 @@ void VideoEncoderZstd::encode(const desktop::Frame* frame, proto::VideoPacket* p
 
     uint8_t* translate_pos = translate_buffer_.data();
 
-    for (desktop::Region::Iterator it(updated_region_); !it.isAtEnd(); it.advance())
+    for (base::Region::Iterator it(updated_region_); !it.isAtEnd(); it.advance())
     {
-        const desktop::Rect& rect = it.rect();
+        const base::Rect& rect = it.rect();
         const int stride = rect.width() * target_format_.bytesPerPixel();
 
         translator_->translate(frame->frameDataAtPos(rect.topLeft()),

@@ -20,13 +20,13 @@
 
 #include "base/logging.h"
 #include "base/power_controller.h"
+#include "base/desktop/frame.h"
 #include "codec/cursor_encoder.h"
 #include "codec/scale_reducer.h"
 #include "codec/video_encoder_vpx.h"
 #include "codec/video_encoder_zstd.h"
 #include "codec/video_util.h"
 #include "common/desktop_session_constants.h"
-#include "desktop/frame.h"
 #include "host/desktop_session_proxy.h"
 #include "host/system_info.h"
 #include "host/win/updater_launcher.h"
@@ -142,13 +142,13 @@ void ClientSessionDesktop::onStarted()
     sendMessage(base::serialize(outgoing_message_));
 }
 
-void ClientSessionDesktop::encode(const desktop::Frame* frame, const desktop::MouseCursor* cursor)
+void ClientSessionDesktop::encode(const base::Frame* frame, const base::MouseCursor* cursor)
 {
     outgoing_message_.Clear();
 
     if (frame && video_encoder_ && scale_reducer_)
     {
-        const desktop::Size& source_size = frame->size();
+        const base::Size& source_size = frame->size();
 
         if (preferred_size_.width() > source_size.width() ||
             preferred_size_.height() > source_size.height())
@@ -159,7 +159,7 @@ void ClientSessionDesktop::encode(const desktop::Frame* frame, const desktop::Mo
         if (preferred_size_.isEmpty())
             preferred_size_ = source_size;
 
-        const desktop::Frame* scaled_frame = scale_reducer_->scaleFrame(frame, preferred_size_);
+        const base::Frame* scaled_frame = scale_reducer_->scaleFrame(frame, preferred_size_);
         if (!scaled_frame)
             return;
 
@@ -221,7 +221,7 @@ void ClientSessionDesktop::readExtension(const proto::DesktopExtension& extensio
         }
 
         desktop_session_proxy_->selectScreen(screen);
-        preferred_size_ = desktop::Size();
+        preferred_size_ = base::Size();
     }
     else if (extension.name() == common::kPreferredSizeExtension)
     {

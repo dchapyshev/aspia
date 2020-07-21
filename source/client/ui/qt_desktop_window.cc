@@ -20,6 +20,7 @@
 
 #include "base/logging.h"
 #include "base/stl_util.h"
+#include "base/desktop/mouse_cursor.h"
 #include "base/strings/string_split.h"
 #include "client/client_desktop.h"
 #include "client/desktop_control_proxy.h"
@@ -32,7 +33,6 @@
 #include "client/ui/system_info_window.h"
 #include "client/ui/statistics_dialog.h"
 #include "common/desktop_session_constants.h"
-#include "desktop/mouse_cursor.h"
 #include "qt_base/application.h"
 
 #include <QApplication>
@@ -312,7 +312,7 @@ std::unique_ptr<FrameFactory> QtDesktopWindow::frameFactory()
 }
 
 void QtDesktopWindow::setFrame(
-    const desktop::Size& screen_size, std::shared_ptr<desktop::Frame> frame)
+    const base::Size& screen_size, std::shared_ptr<base::Frame> frame)
 {
     screen_size_ = QSize(screen_size.width(), screen_size.height());
 
@@ -330,7 +330,7 @@ void QtDesktopWindow::drawFrame()
     desktop_->update();
 }
 
-void QtDesktopWindow::setMouseCursor(std::shared_ptr<desktop::MouseCursor> mouse_cursor)
+void QtDesktopWindow::setMouseCursor(std::shared_ptr<base::MouseCursor> mouse_cursor)
 {
     QImage image(mouse_cursor->constImage().data(),
                  mouse_cursor->width(),
@@ -403,10 +403,10 @@ void QtDesktopWindow::onMouseEvents(const std::vector<proto::MouseEvent>& events
             scroll_timer_->stop();
         }
 
-        desktop::Frame* current_frame = desktop_->desktopFrame();
+        base::Frame* current_frame = desktop_->desktopFrame();
         if (current_frame)
         {
-            const desktop::Size& source_size = current_frame->size();
+            const base::Size& source_size = current_frame->size();
             QSize scaled_size = desktop_->size();
 
             double scale_x = (scaled_size.width() * 100) / double(source_size.width());

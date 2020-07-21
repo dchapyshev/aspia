@@ -20,6 +20,8 @@
 
 #include "base/logging.h"
 #include "base/task_runner.h"
+#include "base/desktop/frame.h"
+#include "base/desktop/mouse_cursor.h"
 #include "client/desktop_control_proxy.h"
 #include "client/desktop_window.h"
 #include "client/desktop_window_proxy.h"
@@ -28,8 +30,6 @@
 #include "codec/video_decoder.h"
 #include "codec/video_util.h"
 #include "common/desktop_session_constants.h"
-#include "desktop/frame.h"
-#include "desktop/mouse_cursor.h"
 
 namespace client {
 
@@ -310,8 +310,8 @@ void ClientDesktop::readVideoPacket(const proto::VideoPacket& packet)
     if (packet.has_format())
     {
         const proto::VideoPacketFormat& format = packet.format();
-        desktop::Size video_size(format.video_rect().width(), format.video_rect().height());
-        desktop::Size screen_size = video_size;
+        base::Size video_size(format.video_rect().width(), format.video_rect().height());
+        base::Size screen_size = video_size;
 
         static const int kMaxValue = std::numeric_limits<uint16_t>::max();
         static const int kMinValue = -std::numeric_limits<uint16_t>::max();
@@ -325,7 +325,7 @@ void ClientDesktop::readVideoPacket(const proto::VideoPacket& packet)
 
         if (format.has_screen_size())
         {
-            screen_size = desktop::Size(
+            screen_size = base::Size(
                 format.screen_size().width(), format.screen_size().height());
 
             if (screen_size.width() <= 0 || screen_size.width() >= kMaxValue ||
@@ -374,7 +374,7 @@ void ClientDesktop::readCursorShape(const proto::CursorShape& cursor_shape)
     if (!cursor_decoder_)
         cursor_decoder_ = std::make_unique<codec::CursorDecoder>();
 
-    std::shared_ptr<desktop::MouseCursor> mouse_cursor = cursor_decoder_->decode(cursor_shape);
+    std::shared_ptr<base::MouseCursor> mouse_cursor = cursor_decoder_->decode(cursor_shape);
     if (!mouse_cursor)
         return;
 

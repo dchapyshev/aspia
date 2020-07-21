@@ -95,7 +95,6 @@ target_link_libraries(aspia_console
     aspia_client
     aspia_codec
     aspia_common
-    aspia_desktop
     aspia_net
     aspia_proto
     aspia_qt_base

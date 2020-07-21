@@ -19,8 +19,8 @@
 #ifndef CLIENT__UI__DESKTOP_WIDGET_H
 #define CLIENT__UI__DESKTOP_WIDGET_H
 
+#include "base/desktop/frame.h"
 #include "build/build_config.h"
-#include "desktop/frame.h"
 #include "proto/desktop.pb.h"
 
 #if defined(OS_WIN)
@@ -53,8 +53,8 @@ public:
     DesktopWidget(Delegate* delegate, QWidget* parent);
     ~DesktopWidget() = default;
 
-    desktop::Frame* desktopFrame();
-    void setDesktopFrame(std::shared_ptr<desktop::Frame>& frame);
+    base::Frame* desktopFrame();
+    void setDesktopFrame(std::shared_ptr<base::Frame>& frame);
 
     void doMouseEvent(QEvent::Type event_type,
                       const Qt::MouseButtons& buttons,
@@ -94,7 +94,7 @@ private:
 
     Delegate* delegate_;
 
-    std::shared_ptr<desktop::Frame> frame_;
+    std::shared_ptr<base::Frame> frame_;
     bool enable_key_sequenses_ = true;
 
     QPoint prev_pos_;

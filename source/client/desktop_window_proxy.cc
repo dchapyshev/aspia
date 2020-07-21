@@ -21,10 +21,10 @@
 #include "base/logging.h"
 #include "base/task_runner.h"
 #include "base/version.h"
+#include "base/desktop/geometry.h"
 #include "client/desktop_control_proxy.h"
 #include "client/desktop_window.h"
 #include "client/frame_factory.h"
-#include "desktop/geometry.h"
 #include "proto/desktop.pb.h"
 #include "proto/desktop_extensions.pb.h"
 
@@ -117,7 +117,7 @@ void DesktopWindowProxy::setMetrics(const DesktopWindow::Metrics& metrics)
         desktop_window_->setMetrics(metrics);
 }
 
-std::shared_ptr<desktop::Frame> DesktopWindowProxy::allocateFrame(const desktop::Size& size)
+std::shared_ptr<base::Frame> DesktopWindowProxy::allocateFrame(const base::Size& size)
 {
     return frame_factory_->allocateFrame(size);
 }
@@ -139,7 +139,7 @@ void DesktopWindowProxy::showWindow(
 }
 
 void DesktopWindowProxy::setFrame(
-    const desktop::Size& screen_size, std::shared_ptr<desktop::Frame> frame)
+    const base::Size& screen_size, std::shared_ptr<base::Frame> frame)
 {
     if (!ui_task_runner_->belongsToCurrentThread())
     {
@@ -164,7 +164,7 @@ void DesktopWindowProxy::drawFrame()
         desktop_window_->drawFrame();
 }
 
-void DesktopWindowProxy::setMouseCursor(std::shared_ptr<desktop::MouseCursor> mouse_cursor)
+void DesktopWindowProxy::setMouseCursor(std::shared_ptr<base::MouseCursor> mouse_cursor)
 {
     if (!ui_task_runner_->belongsToCurrentThread())
     {

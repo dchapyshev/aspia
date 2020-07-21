@@ -19,8 +19,8 @@
 #include "codec/video_decoder_vpx.h"
 
 #include "base/logging.h"
+#include "base/desktop/frame.h"
 #include "codec/video_util.h"
-#include "desktop/frame.h"
 
 #include <libyuv/convert_from.h>
 #include <libyuv/convert_argb.h>
@@ -29,14 +29,12 @@ namespace codec {
 
 namespace {
 
-bool convertImage(const proto::VideoPacket& packet,
-                  vpx_image_t* image,
-                  desktop::Frame* frame)
+bool convertImage(const proto::VideoPacket& packet, vpx_image_t* image, base::Frame* frame)
 {
     if (image->fmt != VPX_IMG_FMT_I420)
         return false;
 
-    desktop::Rect frame_rect = desktop::Rect::makeSize(frame->size());
+    base::Rect frame_rect = base::Rect::makeSize(frame->size());
 
     uint8_t* y_data = image->planes[0];
     uint8_t* u_data = image->planes[1];
@@ -47,7 +45,7 @@ bool convertImage(const proto::VideoPacket& packet,
 
     for (int i = 0; i < packet.dirty_rect_size(); ++i)
     {
-        desktop::Rect rect = parseRect(packet.dirty_rect(i));
+        base::Rect rect = parseRect(packet.dirty_rect(i));
 
         if (!frame_rect.containsRect(rect))
         {
@@ -116,7 +114,7 @@ VideoDecoderVPX::VideoDecoderVPX(proto::VideoEncoding encoding)
     CHECK_EQ(ret, VPX_CODEC_OK);
 }
 
-bool VideoDecoderVPX::decode(const proto::VideoPacket& packet, desktop::Frame* frame)
+bool VideoDecoderVPX::decode(const proto::VideoPacket& packet, base::Frame* frame)
 {
     // Do the actual decoding.
     vpx_codec_err_t ret =
@@ -145,7 +143,7 @@ bool VideoDecoderVPX::decode(const proto::VideoPacket& packet, desktop::Frame* f
         return false;
     }
 
-    if (desktop::Size(image->d_w, image->d_h) != frame->size())
+    if (base::Size(image->d_w, image->d_h) != frame->size())
     {
         LOG(LS_WARNING) << "Size of the encoded frame doesn't match size in the header";
         return false;

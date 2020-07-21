@@ -19,8 +19,8 @@
 #include "codec/video_encoder_vpx.h"
 
 #include "base/logging.h"
+#include "base/desktop/frame.h"
 #include "codec/video_util.h"
-#include "desktop/frame.h"
 
 #include <libyuv/convert.h>
 #include <libyuv/cpu_id.h>
@@ -69,7 +69,7 @@ const int kDefaultTargetBitrateKbps = 1000;
 // This value is for VP8 only; reconsider the value for VP9.
 const int kVp8MinimumTargetBitrateKbpsPerMegapixel = 2500;
 
-void setCommonCodecParameters(vpx_codec_enc_cfg_t* config, const desktop::Size& size)
+void setCommonCodecParameters(vpx_codec_enc_cfg_t* config, const base::Size& size)
 {
     // Use millisecond granularity time base.
     config->g_timebase.num = 1;
@@ -104,7 +104,7 @@ void setCommonCodecParameters(vpx_codec_enc_cfg_t* config, const desktop::Size& 
     config->rc_overshoot_pct = 15;
 }
 
-void createImage(const desktop::Size& size,
+void createImage(const base::Size& size,
                  std::unique_ptr<vpx_image_t>* out_image,
                  base::ByteArray* out_image_buffer)
 {
@@ -158,14 +158,14 @@ int roundToTwosMultiple(int x)
     return x & (~1);
 }
 
-desktop::Rect alignRect(const desktop::Rect& rect)
+base::Rect alignRect(const base::Rect& rect)
 {
     int x = roundToTwosMultiple(rect.left());
     int y = roundToTwosMultiple(rect.top());
     int right = roundToTwosMultiple(rect.right() + 1);
     int bottom = roundToTwosMultiple(rect.bottom() + 1);
 
-    return desktop::Rect::makeLTRB(x, y, right, bottom);
+    return base::Rect::makeLTRB(x, y, right, bottom);
 }
 
 int ARGBToGrayscaleI420(const uint8_t* src_argb,
@@ -227,7 +227,7 @@ VideoEncoderVPX::VideoEncoderVPX(proto::VideoEncoding encoding)
     memset(&config_, 0, sizeof(config_));
 }
 
-void VideoEncoderVPX::encode(const desktop::Frame* frame, proto::VideoPacket* packet)
+void VideoEncoderVPX::encode(const base::Frame* frame, proto::VideoPacket* packet)
 {
     fillPacketInfo(frame, packet);
 
@@ -235,7 +235,7 @@ void VideoEncoderVPX::encode(const desktop::Frame* frame, proto::VideoPacket* pa
 
     if (packet->has_format())
     {
-        const desktop::Size& frame_size = frame->size();
+        const base::Size& frame_size = frame->size();
 
         bitrate_filter_.setFrameSize(frame_size.width(), frame_size.height());
 
@@ -299,7 +299,7 @@ void VideoEncoderVPX::setBandwidthEstimateKbps(int bandwidth_kbps)
     bitrate_filter_.setBandwidthEstimateKbps(bandwidth_kbps);
 }
 
-void VideoEncoderVPX::createActiveMap(const desktop::Size& size)
+void VideoEncoderVPX::createActiveMap(const base::Size& size)
 {
     active_map_.cols = (size.width() + kMacroBlockSize - 1) / kMacroBlockSize;
     active_map_.rows = (size.height() + kMacroBlockSize - 1) / kMacroBlockSize;
@@ -310,7 +310,7 @@ void VideoEncoderVPX::createActiveMap(const desktop::Size& size)
     clearActiveMap();
 }
 
-void VideoEncoderVPX::createVp8Codec(const desktop::Size& size)
+void VideoEncoderVPX::createVp8Codec(const base::Size& size)
 {
     codec_.reset(new vpx_codec_ctx_t());
 
@@ -351,7 +351,7 @@ void VideoEncoderVPX::createVp8Codec(const desktop::Size& size)
     DCHECK_EQ(VPX_CODEC_OK, ret);
 }
 
-void VideoEncoderVPX::createVp9Codec(const desktop::Size& size)
+void VideoEncoderVPX::createVp9Codec(const base::Size& size)
 {
     codec_.reset(new vpx_codec_ctx_t());
 
@@ -395,18 +395,18 @@ void VideoEncoderVPX::createVp9Codec(const desktop::Size& size)
 }
 
 int64_t VideoEncoderVPX::prepareImageAndActiveMap(
-    bool is_key_frame, const desktop::Frame* frame, proto::VideoPacket* packet)
+    bool is_key_frame, const base::Frame* frame, proto::VideoPacket* packet)
 {
-    desktop::Rect image_rect = desktop::Rect::makeWH(image_->w, image_->h);
-    desktop::Region updated_region;
+    base::Rect image_rect = base::Rect::makeWH(image_->w, image_->h);
+    base::Region updated_region;
 
     if (!is_key_frame)
     {
         const int padding = ((encoding() == proto::VIDEO_ENCODING_VP9) ? 8 : 3);
 
-        for (desktop::Region::Iterator it(frame->constUpdatedRegion()); !it.isAtEnd(); it.advance())
+        for (base::Region::Iterator it(frame->constUpdatedRegion()); !it.isAtEnd(); it.advance())
         {
-            desktop::Rect rect = it.rect();
+            base::Rect rect = it.rect();
 
             // Pad each rectangle to avoid the block-artefact filters in libvpx from introducing
             // artefacts; VP9 includes up to 8px either side, and VP8 up to 3px, so unchanged
@@ -415,7 +415,7 @@ int64_t VideoEncoderVPX::prepareImageAndActiveMap(
             // rectangle to 16x16 active-map macroblocks. This implicitly ensures all rects have
             // even top-left coords, which is is required by ARGBToI420().
             updated_region.addRect(
-                alignRect(desktop::Rect::makeLTRB(
+                alignRect(base::Rect::makeLTRB(
                     rect.left() - padding, rect.top() - padding,
                     rect.right() + padding, rect.bottom() + padding)));
         }
@@ -427,7 +427,7 @@ int64_t VideoEncoderVPX::prepareImageAndActiveMap(
     }
     else
     {
-        updated_region = desktop::Region(image_rect);
+        updated_region = base::Region(image_rect);
     }
 
     if (!top_off_is_active_)
@@ -445,9 +445,9 @@ int64_t VideoEncoderVPX::prepareImageAndActiveMap(
 
     int64_t updated_area = 0;
 
-    for (desktop::Region::Iterator it(updated_region); !it.isAtEnd(); it.advance())
+    for (base::Region::Iterator it(updated_region); !it.isAtEnd(); it.advance())
     {
-        desktop::Rect rect = it.rect();
+        base::Rect rect = it.rect();
 
         const int y_offset = y_stride * rect.y() + rect.x();
         const int uv_offset = uv_stride * rect.y() / 2 + rect.x() / 2;
@@ -469,13 +469,13 @@ int64_t VideoEncoderVPX::prepareImageAndActiveMap(
     if (top_off_is_active_)
         regionFromActiveMap(&updated_region);
 
-    for (desktop::Region::Iterator it(updated_region); !it.isAtEnd(); it.advance())
+    for (base::Region::Iterator it(updated_region); !it.isAtEnd(); it.advance())
         serializeRect(it.rect(), packet->add_dirty_rect());
 
     return updated_area;
 }
 
-void VideoEncoderVPX::regionFromActiveMap(desktop::Region* updated_region)
+void VideoEncoderVPX::regionFromActiveMap(base::Region* updated_region)
 {
     const uint8_t* map = active_map_.active_map;
 
@@ -493,7 +493,7 @@ void VideoEncoderVPX::regionFromActiveMap(desktop::Region* updated_region)
 
             if (x1 > x0)
             {
-                updated_region->addRect(desktop::Rect::makeLTRB(
+                updated_region->addRect(base::Rect::makeLTRB(
                     kMacroBlockSize * x0, kMacroBlockSize * y, kMacroBlockSize * x1,
                     kMacroBlockSize * (y + 1)));
             }
@@ -502,10 +502,10 @@ void VideoEncoderVPX::regionFromActiveMap(desktop::Region* updated_region)
         }
     }
 
-    updated_region->intersectWith(desktop::Rect::makeWH(image_->w, image_->h));
+    updated_region->intersectWith(base::Rect::makeWH(image_->w, image_->h));
 }
 
-void VideoEncoderVPX::addRectToActiveMap(const desktop::Rect& rect)
+void VideoEncoderVPX::addRectToActiveMap(const base::Rect& rect)
 {
     int left = rect.left() / kMacroBlockSize;
     int top = rect.top() / kMacroBlockSize;

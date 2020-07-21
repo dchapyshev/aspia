@@ -75,7 +75,7 @@ void sendKeyboardVirtualKey(WORD key_code, DWORD flags)
 
 } // namespace
 
-void InputInjectorWin::setScreenOffset(const desktop::Point& offset)
+void InputInjectorWin::setScreenOffset(const base::Point& offset)
 {
     screen_offset_ = offset;
 }
@@ -140,14 +140,14 @@ void InputInjectorWin::injectMouseEvent(const proto::MouseEvent& event)
 {
     switchToInputDesktop();
 
-    desktop::Size full_size(GetSystemMetrics(SM_CXVIRTUALSCREEN),
-                            GetSystemMetrics(SM_CYVIRTUALSCREEN));
+    base::Size full_size(GetSystemMetrics(SM_CXVIRTUALSCREEN),
+                         GetSystemMetrics(SM_CYVIRTUALSCREEN));
     if (full_size.width() <= 1 || full_size.height() <= 1)
         return;
 
     // Translate the coordinates of the cursor into the coordinates of the virtual screen.
-    desktop::Point pos(((event.x() + screen_offset_.x()) * 65535) / (full_size.width() - 1),
-                       ((event.y() + screen_offset_.y()) * 65535) / (full_size.height() - 1));
+    base::Point pos(((event.x() + screen_offset_.x()) * 65535) / (full_size.width() - 1),
+                    ((event.y() + screen_offset_.y()) * 65535) / (full_size.height() - 1));
 
     DWORD flags = MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_VIRTUALDESK;
     DWORD wheel_movement = 0;

@@ -24,9 +24,9 @@
 
 #include <vector>
 
-namespace desktop {
+namespace base {
 class MouseCursor;
-} // namespace desktop
+} // namespace base
 
 namespace proto {
 class CursorShape;
@@ -40,11 +40,11 @@ public:
     CursorEncoder();
     ~CursorEncoder();
 
-    bool encode(const desktop::MouseCursor& mouse_cursor,
+    bool encode(const base::MouseCursor& mouse_cursor,
                 proto::CursorShape* cursor_shape);
 
 private:
-    bool compressCursor(const desktop::MouseCursor& mouse_cursor,
+    bool compressCursor(const base::MouseCursor& mouse_cursor,
                         proto::CursorShape* cursor_shape);
 
     ScopedZstdCStream stream_;

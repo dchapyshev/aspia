@@ -82,7 +82,7 @@ protected:
     // DesktopSession::Delegate implementation.
     void onDesktopSessionStarted() override;
     void onDesktopSessionStopped() override;
-    void onScreenCaptured(const desktop::Frame* frame, const desktop::MouseCursor* cursor) override;
+    void onScreenCaptured(const base::Frame* frame, const base::MouseCursor* cursor) override;
     void onScreenListChanged(const proto::ScreenList& list) override;
     void onClipboardEvent(const proto::ClipboardEvent& event) override;
 

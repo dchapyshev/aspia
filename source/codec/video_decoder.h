@@ -23,9 +23,9 @@
 
 #include <memory>
 
-namespace desktop {
+namespace base {
 class Frame;
-} // namespace desktop
+} // namespace base
 
 namespace codec {
 
@@ -36,7 +36,7 @@ public:
 
     static std::unique_ptr<VideoDecoder> create(proto::VideoEncoding encoding);
 
-    virtual bool decode(const proto::VideoPacket& packet, desktop::Frame* frame) = 0;
+    virtual bool decode(const proto::VideoPacket& packet, base::Frame* frame) = 0;
 };
 
 } // namespace codec

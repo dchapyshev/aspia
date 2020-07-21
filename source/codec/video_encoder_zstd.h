@@ -20,11 +20,11 @@
 #define CODEC__VIDEO_ENCODER_ZSTD_H
 
 #include "base/macros_magic.h"
+#include "base/desktop/region.h"
+#include "base/desktop/pixel_format.h"
 #include "base/memory/byte_array.h"
 #include "codec/scoped_zstd_stream.h"
 #include "codec/video_encoder.h"
-#include "desktop/region.h"
-#include "desktop/pixel_format.h"
 
 namespace codec {
 
@@ -36,16 +36,16 @@ public:
     ~VideoEncoderZstd() = default;
 
     static std::unique_ptr<VideoEncoderZstd> create(
-        const desktop::PixelFormat& target_format, int compression_ratio);
+        const base::PixelFormat& target_format, int compression_ratio);
 
-    void encode(const desktop::Frame* frame, proto::VideoPacket* packet) override;
+    void encode(const base::Frame* frame, proto::VideoPacket* packet) override;
 
 private:
-    VideoEncoderZstd(const desktop::PixelFormat& target_format, int compression_ratio);
+    VideoEncoderZstd(const base::PixelFormat& target_format, int compression_ratio);
     void compressPacket(const base::ByteArray& buffer, proto::VideoPacket* packet);
 
-    desktop::Region updated_region_;
-    desktop::PixelFormat target_format_;
+    base::Region updated_region_;
+    base::PixelFormat target_format_;
     int compress_ratio_;
     ScopedZstdCStream stream_;
     std::unique_ptr<PixelTranslator> translator_;

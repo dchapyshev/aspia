@@ -20,13 +20,13 @@
 
 #include "base/logging.h"
 #include "base/power_controller.h"
+#include "base/desktop/capture_scheduler.h"
+#include "base/desktop/mouse_cursor.h"
+#include "base/desktop/screen_capturer_wrapper.h"
+#include "base/desktop/shared_frame.h"
 #include "base/ipc/shared_memory.h"
 #include "base/threading/thread.h"
 #include "codec/video_util.h"
-#include "desktop/capture_scheduler.h"
-#include "desktop/mouse_cursor.h"
-#include "desktop/screen_capturer_wrapper.h"
-#include "desktop/shared_frame.h"
 #include "host/input_injector_win.h"
 
 namespace host {
@@ -92,7 +92,7 @@ void DesktopSessionAgent::onMessageReceived(const base::ByteArray& buffer)
     {
         if (screen_capturer_)
         {
-            screen_capturer_->selectScreen(static_cast<desktop::ScreenCapturer::ScreenId>(
+            screen_capturer_->selectScreen(static_cast<base::ScreenCapturer::ScreenId>(
                 incoming_message_.select_source().screen().id()));
         }
     }
@@ -167,7 +167,7 @@ void DesktopSessionAgent::onSharedMemoryDestroy(int id)
 }
 
 void DesktopSessionAgent::onScreenListChanged(
-    const desktop::ScreenCapturer::ScreenList& list, desktop::ScreenCapturer::ScreenId current)
+    const base::ScreenCapturer::ScreenList& list, base::ScreenCapturer::ScreenId current)
 {
     outgoing_message_.Clear();
 
@@ -188,7 +188,7 @@ void DesktopSessionAgent::onScreenListChanged(
 }
 
 void DesktopSessionAgent::onScreenCaptured(
-    const desktop::Frame* frame, const desktop::MouseCursor* mouse_cursor)
+    const base::Frame* frame, const base::MouseCursor* mouse_cursor)
 {
     outgoing_message_.Clear();
 
@@ -207,7 +207,7 @@ void DesktopSessionAgent::onScreenCaptured(
         serialized_frame->set_dpi_x(frame->dpi().x());
         serialized_frame->set_dpi_y(frame->dpi().y());
 
-        for (desktop::Region::Iterator it(frame->constUpdatedRegion()); !it.isAtEnd(); it.advance())
+        for (base::Region::Iterator it(frame->constUpdatedRegion()); !it.isAtEnd(); it.advance())
             codec::serializeRect(it.rect(), serialized_frame->add_dirty_rect());
     }
 
@@ -263,10 +263,10 @@ void DesktopSessionAgent::setEnabled(bool enable)
         // We will receive notifications of all creations and destruction of shared memory.
         shared_memory_factory_ = std::make_unique<base::SharedMemoryFactory>(this);
 
-        capture_scheduler_ = std::make_unique<desktop::CaptureScheduler>(
+        capture_scheduler_ = std::make_unique<base::CaptureScheduler>(
             std::chrono::milliseconds(40));
 
-        screen_capturer_ = std::make_unique<desktop::ScreenCapturerWrapper>(this);
+        screen_capturer_ = std::make_unique<base::ScreenCapturerWrapper>(this);
         screen_capturer_->setSharedMemoryFactory(shared_memory_factory_.get());
 
         LOG(LS_INFO) << "Session successfully started";

@@ -21,8 +21,8 @@
 #include "base/location.h"
 #include "base/logging.h"
 #include "base/task_runner.h"
+#include "base/desktop/frame.h"
 #include "base/ipc/ipc_channel.h"
-#include "desktop/frame.h"
 #include "host/desktop_session_fake.h"
 #include "host/desktop_session_ipc.h"
 #include "host/desktop_session_process.h"
@@ -168,7 +168,7 @@ void DesktopSessionManager::onDesktopSessionStopped()
 }
 
 void DesktopSessionManager::onScreenCaptured(
-    const desktop::Frame* frame, const desktop::MouseCursor* mouse_cursor)
+    const base::Frame* frame, const base::MouseCursor* mouse_cursor)
 {
     delegate_->onScreenCaptured(frame, mouse_cursor);
 }

@@ -19,10 +19,10 @@
 #include "host/desktop_session_ipc.h"
 
 #include "base/logging.h"
+#include "base/desktop/mouse_cursor.h"
+#include "base/desktop/shared_memory_frame.h"
 #include "base/ipc/shared_memory.h"
 #include "codec/video_util.h"
-#include "desktop/mouse_cursor.h"
-#include "desktop/shared_memory_frame.h"
 
 namespace host {
 
@@ -127,7 +127,7 @@ void DesktopSessionIpc::captureScreen()
 {
     if (last_frame_)
     {
-        last_frame_->updatedRegion()->addRect(desktop::Rect::makeSize(last_frame_->size()));
+        last_frame_->updatedRegion()->addRect(base::Rect::makeSize(last_frame_->size()));
         delegate_->onScreenCaptured(last_frame_.get(), last_mouse_cursor_.get());
     }
     else
@@ -216,8 +216,8 @@ void DesktopSessionIpc::onMessageReceived(const base::ByteArray& buffer)
 
 void DesktopSessionIpc::onScreenCaptured(const proto::internal::ScreenCaptured& screen_captured)
 {
-    const desktop::Frame* frame = nullptr;
-    const desktop::MouseCursor* mouse_cursor = nullptr;
+    const base::Frame* frame = nullptr;
+    const base::MouseCursor* mouse_cursor = nullptr;
 
     if (screen_captured.has_frame())
     {
@@ -227,14 +227,14 @@ void DesktopSessionIpc::onScreenCaptured(const proto::internal::ScreenCaptured& 
             serialized_frame.shared_buffer_id());
         if (shared_buffer)
         {
-            last_frame_ = desktop::SharedMemoryFrame::attach(
-                desktop::Size(serialized_frame.width(), serialized_frame.height()),
-                desktop::PixelFormat::ARGB(),
+            last_frame_ = base::SharedMemoryFrame::attach(
+                base::Size(serialized_frame.width(), serialized_frame.height()),
+                base::PixelFormat::ARGB(),
                 std::move(shared_buffer));
-            last_frame_->setDpi(desktop::Point(
+            last_frame_->setDpi(base::Point(
                 serialized_frame.dpi_x(), serialized_frame.dpi_y()));
 
-            desktop::Region* updated_region = last_frame_->updatedRegion();
+            base::Region* updated_region = last_frame_->updatedRegion();
 
             for (int i = 0; i < serialized_frame.dirty_rect_size(); ++i)
                 updated_region->addRect(codec::parseRect(serialized_frame.dirty_rect(i)));
@@ -248,12 +248,12 @@ void DesktopSessionIpc::onScreenCaptured(const proto::internal::ScreenCaptured& 
         const proto::internal::MouseCursor& serialized_mouse_cursor =
             screen_captured.mouse_cursor();
 
-        desktop::Size size =
-            desktop::Size(serialized_mouse_cursor.width(), serialized_mouse_cursor.height());
-        desktop::Point hotspot =
-            desktop::Point(serialized_mouse_cursor.hotspot_x(), serialized_mouse_cursor.hotspot_y());
+        base::Size size =
+            base::Size(serialized_mouse_cursor.width(), serialized_mouse_cursor.height());
+        base::Point hotspot =
+            base::Point(serialized_mouse_cursor.hotspot_x(), serialized_mouse_cursor.hotspot_y());
 
-        last_mouse_cursor_ = std::make_unique<desktop::MouseCursor>(
+        last_mouse_cursor_ = std::make_unique<base::MouseCursor>(
             base::fromStdString(serialized_mouse_cursor.data()), size, hotspot);
 
         mouse_cursor = last_mouse_cursor_.get();
