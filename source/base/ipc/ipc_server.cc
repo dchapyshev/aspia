@@ -20,6 +20,7 @@
 
 #include "base/location.h"
 #include "base/logging.h"
+#include "base/crypto/random.h"
 #include "base/ipc/ipc_channel.h"
 #include "base/message_loop/message_loop.h"
 #include "base/message_loop/message_pump_asio.h"
@@ -27,7 +28,6 @@
 #include "base/strings/unicode.h"
 #include "base/win/scoped_object.h"
 #include "base/win/security_helpers.h"
-#include "crypto/random.h"
 
 #include <asio/post.hpp>
 #include <asio/windows/overlapped_ptr.hpp>
@@ -188,7 +188,7 @@ std::u16string IpcServer::createUniqueId()
 
     uint32_t channel_id = last_channel_id++;
     uint32_t process_id = GetCurrentProcessId();
-    uint32_t random_number = crypto::Random::number32();
+    uint32_t random_number = Random::number32();
 
     return base::utf16FromAscii(
         base::stringPrintf("%lu.%lu.%lu", process_id, channel_id, random_number));

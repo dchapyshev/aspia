@@ -18,10 +18,10 @@
 
 #include "qt_base/application.h"
 
+#include "base/crypto/scoped_crypto_initializer.h"
 #include "base/files/base_paths.h"
 #include "base/win/process_util.h"
 #include "build/build_config.h"
-#include "crypto/scoped_crypto_initializer.h"
 #include "qt_base/qt_logging.h"
 #include "qt_base/qt_task_runner.h"
 
@@ -188,7 +188,7 @@ Application::Application(int& argc, char* argv[])
     lock_file_name_ = temp_path + QLatin1Char('/') + server_name_ + ".lock";
     lock_file_ = new QLockFile(lock_file_name_);
 
-    crypto_initializer_ = std::make_unique<crypto::ScopedCryptoInitializer>();
+    crypto_initializer_ = std::make_unique<base::ScopedCryptoInitializer>();
     CHECK(crypto_initializer_->isSucceeded());
 
     io_thread_.start(base::MessageLoop::Type::ASIO);

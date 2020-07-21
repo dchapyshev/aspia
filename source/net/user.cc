@@ -19,10 +19,10 @@
 #include "net/user.h"
 
 #include "base/logging.h"
+#include "base/crypto/random.h"
+#include "base/crypto/srp_constants.h"
+#include "base/crypto/srp_math.h"
 #include "base/strings/string_util.h"
-#include "crypto/random.h"
-#include "crypto/srp_constants.h"
-#include "crypto/srp_math.h"
 
 #include <cwctype>
 
@@ -114,19 +114,19 @@ User User::create(std::u16string_view name, std::u16string_view password)
     if (name.empty() || password.empty())
         return User();
 
-    std::optional<crypto::SrpNgPair> Ng_pair = crypto::pairByGroup(kDefaultGroup);
+    std::optional<base::SrpNgPair> Ng_pair = base::pairByGroup(kDefaultGroup);
     if (!Ng_pair.has_value())
         return User();
 
     User user;
     user.name = name;
     user.group = kDefaultGroup;
-    user.salt = crypto::Random::byteArray(kSaltSize);
+    user.salt = base::Random::byteArray(kSaltSize);
 
-    crypto::BigNum s = crypto::BigNum::fromByteArray(user.salt);
-    crypto::BigNum N = crypto::BigNum::fromStdString(Ng_pair->first);
-    crypto::BigNum g = crypto::BigNum::fromStdString(Ng_pair->second);
-    crypto::BigNum v = crypto::SrpMath::calc_v(name, password, s, N, g);
+    base::BigNum s = base::BigNum::fromByteArray(user.salt);
+    base::BigNum N = base::BigNum::fromStdString(Ng_pair->first);
+    base::BigNum g = base::BigNum::fromStdString(Ng_pair->second);
+    base::BigNum v = base::SrpMath::calc_v(name, password, s, N, g);
 
     user.verifier = v.toByteArray();
     if (user.verifier.empty())

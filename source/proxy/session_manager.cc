@@ -22,8 +22,8 @@
 #include "base/task_runner.h"
 #include "base/message_loop/message_loop.h"
 #include "base/message_loop/message_pump_asio.h"
-#include "crypto/key_pair.h"
-#include "crypto/message_decryptor_openssl.h"
+#include "base/crypto/key_pair.h"
+#include "base/crypto/message_decryptor_openssl.h"
 #include "proxy/peer_id.h"
 
 #include <optional>
@@ -36,8 +36,8 @@ namespace {
 std::optional<PeerIdPair> decryptIdPair(
     const proto::PeerToProxy& message, const SessionKey& session_key)
 {
-    std::unique_ptr<crypto::MessageDecryptor> decryptor =
-        crypto::MessageDecryptorOpenssl::createForChaCha20Poly1305(
+    std::unique_ptr<base::MessageDecryptor> decryptor =
+        base::MessageDecryptorOpenssl::createForChaCha20Poly1305(
             session_key.sessionKey(message.public_key()), session_key.iv());
     if (!decryptor)
         return std::nullopt;

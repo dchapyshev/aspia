@@ -21,10 +21,10 @@
 #include "base/location.h"
 #include "base/logging.h"
 #include "base/task_runner.h"
+#include "base/crypto/password_generator.h"
 #include "base/strings/string_number_conversions.h"
 #include "base/strings/string_util.h"
 #include "base/strings/unicode.h"
-#include "crypto/password_generator.h"
 #include "desktop/frame.h"
 #include "host/client_session_desktop.h"
 #include "host/client_session_file_transfer.h"
@@ -420,10 +420,10 @@ void UserSession::sendDisconnectEvent(const std::string& session_id)
 
 void UserSession::updateCredentials()
 {
-    crypto::PasswordGenerator generator;
+    base::PasswordGenerator generator;
 
-    static const uint32_t kPasswordCharacters = crypto::PasswordGenerator::UPPER_CASE |
-        crypto::PasswordGenerator::LOWER_CASE | crypto::PasswordGenerator::DIGITS;
+    static const uint32_t kPasswordCharacters = base::PasswordGenerator::UPPER_CASE |
+        base::PasswordGenerator::LOWER_CASE | base::PasswordGenerator::DIGITS;
     static const int kPasswordLength = 6;
 
     // TODO: Get password parameters from settings.

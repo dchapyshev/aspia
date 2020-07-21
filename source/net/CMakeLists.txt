@@ -51,7 +51,7 @@ source_group("" FILES ${SOURCE_NET})
 source_group("" FILES ${SOURCE_NET_UNIT_TESTS})
 
 add_library(aspia_net STATIC ${SOURCE_NET})
-target_link_libraries(aspia_net aspia_base aspia_crypto ${THIRD_PARTY_LIBS})
+target_link_libraries(aspia_net aspia_base ${THIRD_PARTY_LIBS})
 
 # If the build of unit tests is enabled.
 if (BUILD_UNIT_TESTS)

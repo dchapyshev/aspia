@@ -52,7 +52,7 @@ protected:
     void onConnected() override;
     void onDisconnected(net::Channel::ErrorCode error_code) override;
     void onMessageReceived(const base::ByteArray& buffer) override;
-    void onMessageWritten() override;
+    void onMessageWritten(size_t pending) override;
 
 private:
     const uint32_t controller_id_;

@@ -18,7 +18,7 @@
 
 #include "host/system_settings.h"
 
-#include "crypto/random.h"
+#include "base/crypto/random.h"
 #include "net/user.h"
 
 namespace host {
@@ -76,7 +76,7 @@ net::UserList SystemSettings::userList() const
 
     base::ByteArray seed_key = settings_.get<base::ByteArray>("SeedKey");
     if (seed_key.empty())
-        seed_key = crypto::Random::byteArray(64);
+        seed_key = base::Random::byteArray(64);
 
     users.setSeedKey(seed_key);
 

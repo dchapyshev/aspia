@@ -18,14 +18,14 @@
 
 #include "proxy/session_key.h"
 
-#include "crypto/generic_hash.h"
-#include "crypto/random.h"
+#include "base/crypto/generic_hash.h"
+#include "base/crypto/random.h"
 
 namespace proxy {
 
 SessionKey::SessionKey() = default;
 
-SessionKey::SessionKey(crypto::KeyPair&& key_pair, base::ByteArray&& iv)
+SessionKey::SessionKey(base::KeyPair&& key_pair, base::ByteArray&& iv)
     : key_pair_(std::move(key_pair)),
       iv_(std::move(iv))
 {
@@ -55,11 +55,11 @@ SessionKey::~SessionKey() = default;
 // static
 SessionKey SessionKey::create()
 {
-    crypto::KeyPair key_pair = crypto::KeyPair::create(crypto::KeyPair::Type::X25519);
+    base::KeyPair key_pair = base::KeyPair::create(base::KeyPair::Type::X25519);
     if (!key_pair.isValid())
         return SessionKey();
 
-    base::ByteArray iv = crypto::Random::byteArray(12);
+    base::ByteArray iv = base::Random::byteArray(12);
     if (iv.empty())
         return SessionKey();
 
@@ -87,7 +87,7 @@ base::ByteArray SessionKey::sessionKey(std::string_view peer_public_key) const
     if (temp.empty())
         return base::ByteArray();
 
-    return crypto::GenericHash::hash(crypto::GenericHash::Type::BLAKE2s256, temp);
+    return base::GenericHash::hash(base::GenericHash::Type::BLAKE2s256, temp);
 }
 
 base::ByteArray SessionKey::iv() const

@@ -18,12 +18,12 @@
 
 #include "console/computer_dialog.h"
 
+#include "base/crypto/secure_memory.h"
 #include "client/config_factory.h"
 #include "console/computer_dialog_desktop.h"
 #include "console/computer_dialog_general.h"
 #include "console/computer_dialog_parent.h"
 #include "console/computer_factory.h"
-#include "crypto/secure_memory.h"
 
 #include <QAbstractButton>
 #include <QDateTime>
@@ -127,11 +127,11 @@ ComputerDialog::ComputerDialog(QWidget* parent,
 
 ComputerDialog::~ComputerDialog()
 {
-    crypto::memZero(computer_.mutable_name());
-    crypto::memZero(computer_.mutable_address());
-    crypto::memZero(computer_.mutable_username());
-    crypto::memZero(computer_.mutable_password());
-    crypto::memZero(computer_.mutable_comment());
+    base::memZero(computer_.mutable_name());
+    base::memZero(computer_.mutable_address());
+    base::memZero(computer_.mutable_username());
+    base::memZero(computer_.mutable_password());
+    base::memZero(computer_.mutable_comment());
 }
 
 void ComputerDialog::closeEvent(QCloseEvent* event)

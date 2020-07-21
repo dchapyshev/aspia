@@ -72,7 +72,7 @@ void SessionManager::onMessageReceived(const base::ByteArray& buffer)
     }
 }
 
-void SessionManager::onMessageWritten()
+void SessionManager::onMessageWritten(size_t pending)
 {
     // Nothing
 }

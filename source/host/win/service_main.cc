@@ -19,8 +19,8 @@
 #include "host/win/service_main.h"
 
 #include "base/logging.h"
+#include "base/crypto/scoped_crypto_initializer.h"
 #include "base/files/base_paths.h"
-#include "crypto/scoped_crypto_initializer.h"
 #include "host/win/service.h"
 
 namespace host {
@@ -54,7 +54,7 @@ void hostServiceMain()
 {
     initLogging();
 
-    crypto::ScopedCryptoInitializer crypto_initializer;
+    base::ScopedCryptoInitializer crypto_initializer;
     CHECK(crypto_initializer.isSucceeded());
 
     Service().exec();

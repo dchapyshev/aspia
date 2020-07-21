@@ -19,7 +19,7 @@
 #ifndef PROXY__SESSION_KEY_H
 #define PROXY__SESSION_KEY_H
 
-#include "crypto/key_pair.h"
+#include "base/crypto/key_pair.h"
 
 namespace proxy {
 
@@ -41,9 +41,9 @@ public:
     base::ByteArray iv() const;
 
 private:
-    SessionKey(crypto::KeyPair&& key_pair, base::ByteArray&& iv);
+    SessionKey(base::KeyPair&& key_pair, base::ByteArray&& iv);
 
-    crypto::KeyPair key_pair_;
+    base::KeyPair key_pair_;
     base::ByteArray iv_;
 
     DISALLOW_COPY_AND_ASSIGN(SessionKey);

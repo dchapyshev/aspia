@@ -117,7 +117,6 @@ target_link_libraries(aspia_host_core
     aspia_base
     aspia_codec
     aspia_common
-    aspia_crypto
     aspia_desktop
     aspia_net
     aspia_proto

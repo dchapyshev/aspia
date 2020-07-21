@@ -155,7 +155,6 @@ target_link_libraries(aspia_client
     aspia_base
     aspia_codec
     aspia_common
-    aspia_crypto
     aspia_desktop
     aspia_net
     aspia_proto

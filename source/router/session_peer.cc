@@ -65,7 +65,7 @@ void SessionPeer::onMessageReceived(const base::ByteArray& buffer)
     // TODO
 }
 
-void SessionPeer::onMessageWritten()
+void SessionPeer::onMessageWritten(size_t pending)
 {
     // Nothing
 }

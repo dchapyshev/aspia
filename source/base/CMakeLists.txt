@@ -82,8 +82,60 @@ list(APPEND SOURCE_BASE_UNIT_TESTS
     guid_unittest.cc
     scoped_clear_last_error_unittest.cc
     stl_util_unittest.cc
+    tests_main.cc
     version_unittest.cc
     xml_settings_unittest.cc)
+
+list(APPEND SOURCE_BASE_CRYPTO
+    crypto/big_num.cc
+    crypto/big_num.h
+    crypto/data_cryptor.h
+    crypto/data_cryptor_chacha20_poly1305.cc
+    crypto/data_cryptor_chacha20_poly1305.h
+    crypto/data_cryptor_fake.cc
+    crypto/data_cryptor_fake.h
+    crypto/generic_hash.cc
+    crypto/generic_hash.h
+    crypto/key_pair.cc
+    crypto/key_pair.h
+    crypto/large_number_increment.cc
+    crypto/large_number_increment.h
+    crypto/message_decryptor.h
+    crypto/message_decryptor_fake.cc
+    crypto/message_decryptor_fake.h
+    crypto/message_decryptor_openssl.cc
+    crypto/message_decryptor_openssl.h
+    crypto/message_encryptor.h
+    crypto/message_encryptor_fake.cc
+    crypto/message_encryptor_fake.h
+    crypto/message_encryptor_openssl.cc
+    crypto/message_encryptor_openssl.h
+    crypto/openssl_util.cc
+    crypto/openssl_util.h
+    crypto/password_generator.cc
+    crypto/password_generator.h
+    crypto/password_hash.cc
+    crypto/password_hash.h
+    crypto/random.cc
+    crypto/random.h
+    crypto/scoped_crypto_initializer.cc
+    crypto/scoped_crypto_initializer.h
+    crypto/secure_memory.cc
+    crypto/secure_memory.h
+    crypto/srp_constants.cc
+    crypto/srp_constants.h
+    crypto/srp_math.cc
+    crypto/srp_math.h)
+
+list(APPEND SOURCE_BASE_CRYPTO_UNIT_TESTS
+    crypto/cryptor_unittest.cc
+    crypto/data_cryptor_unittest.cc
+    crypto/generic_hash_unittest.cc
+    crypto/key_pair_unittest.cc
+    crypto/large_number_increment_unittest.cc
+    crypto/password_generator_unittest.cc
+    crypto/password_hash_unittest.cc
+    crypto/srp_math_unittest.cc)
 
 list(APPEND SOURCE_BASE_FILES
     files/base_paths.cc
@@ -226,21 +278,19 @@ list(APPEND SOURCE_BASE_WIN_UNIT_TESTS
     win/registry_unittest.cc
     win/scoped_object_unittest.cc)
 
-source_group("" FILES ${SOURCE_BASE})
-source_group("" FILES ${SOURCE_BASE_UNIT_TESTS})
+source_group("" FILES ${SOURCE_BASE} ${SOURCE_BASE_UNIT_TESTS})
+source_group(crypto FILES ${SOURCE_BASE_CRYPTO} ${SOURCE_BASE_CRYPTO_UNIT_TESTS})
 source_group(files FILES ${SOURCE_BASE_FILES})
 source_group(ipc FILES ${SOURCE_BASE_IPC})
-source_group(memory FILES ${SOURCE_BASE_MEMORY})
-source_group(memory FILES ${SOURCE_BASE_MEMORY_UNIT_TESTS})
+source_group(memory FILES ${SOURCE_BASE_MEMORY} ${SOURCE_BASE_MEMORY_UNIT_TESTS})
 source_group(message_loop FILES ${SOURCE_BASE_MESSAGE_LOOP})
-source_group(strings FILES ${SOURCE_BASE_STRINGS})
-source_group(strings FILES ${SOURCE_BASE_STRINGS_UNIT_TESTS})
+source_group(strings FILES ${SOURCE_BASE_STRINGS} ${SOURCE_BASE_STRINGS_UNIT_TESTS})
 source_group(threading FILES ${SOURCE_BASE_THREADING})
-source_group(win FILES ${SOURCE_BASE_WIN})
-source_group(win FILES ${SOURCE_BASE_WIN_UNIT_TESTS})
+source_group(win FILES ${SOURCE_BASE_WIN} ${SOURCE_BASE_WIN_UNIT_TESTS})
 
 add_library(aspia_base STATIC
     ${SOURCE_BASE}
+    ${SOURCE_BASE_CRYPTO}
     ${SOURCE_BASE_FILES}
     ${SOURCE_BASE_IPC}
     ${SOURCE_BASE_MEMORY}
@@ -254,15 +304,15 @@ target_link_libraries(aspia_base ${THIRD_PARTY_LIBS})
 if (BUILD_UNIT_TESTS)
     add_executable(aspia_base_tests
         ${SOURCE_BASE_UNIT_TESTS}
+        ${SOURCE_BASE_CRYPTO_UNIT_TESTS}
         ${SOURCE_BASE_MEMORY_UNIT_TESTS}
         ${SOURCE_BASE_STRINGS_UNIT_TESTS}
         ${SOURCE_BASE_WIN_UNIT_TESTS})
     target_link_libraries(aspia_base_tests
         aspia_base
         optimized gtest
-        optimized gtest_main
         debug gtestd
-        debug gtest_maind
+        ${WINDOWS_LIBS}
         ${THIRD_PARTY_LIBS})
 
     add_test(NAME aspia_base_tests COMMAND aspia_base_tests)

@@ -94,7 +94,7 @@ void Controller::onMessageReceived(const base::ByteArray& buffer)
     channel_->send(base::serialize(outgoing_message_));
 }
 
-void Controller::onMessageWritten()
+void Controller::onMessageWritten(size_t pending)
 {
     // Nothing
 }

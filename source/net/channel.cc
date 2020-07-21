@@ -20,12 +20,12 @@
 
 #include "base/location.h"
 #include "base/logging.h"
+#include "base/crypto/message_encryptor_fake.h"
+#include "base/crypto/message_decryptor_fake.h"
 #include "base/message_loop/message_loop.h"
 #include "base/message_loop/message_pump_asio.h"
 #include "base/strings/string_printf.h"
 #include "base/strings/unicode.h"
-#include "crypto/message_encryptor_fake.h"
-#include "crypto/message_decryptor_fake.h"
 #include "net/channel_proxy.h"
 
 #include <asio/connect.hpp>
@@ -57,8 +57,8 @@ Channel::Channel()
       socket_(io_context_),
       resolver_(std::make_unique<asio::ip::tcp::resolver>(io_context_)),
       proxy_(new ChannelProxy(base::MessageLoop::current()->taskRunner(), this)),
-      encryptor_(std::make_unique<crypto::MessageEncryptorFake>()),
-      decryptor_(std::make_unique<crypto::MessageDecryptorFake>())
+      encryptor_(std::make_unique<base::MessageEncryptorFake>()),
+      decryptor_(std::make_unique<base::MessageDecryptorFake>())
 {
     // Nothing
 }
@@ -67,8 +67,8 @@ Channel::Channel(asio::ip::tcp::socket&& socket)
     : io_context_(base::MessageLoop::current()->pumpAsio()->ioContext()),
       socket_(std::move(socket)),
       proxy_(new ChannelProxy(base::MessageLoop::current()->taskRunner(), this)),
-      encryptor_(std::make_unique<crypto::MessageEncryptorFake>()),
-      decryptor_(std::make_unique<crypto::MessageDecryptorFake>()),
+      encryptor_(std::make_unique<base::MessageEncryptorFake>()),
+      decryptor_(std::make_unique<base::MessageDecryptorFake>()),
       connected_(true)
 {
     DCHECK(socket_.is_open());
@@ -94,12 +94,12 @@ void Channel::setListener(Listener* listener)
     listener_ = listener;
 }
 
-void Channel::setEncryptor(std::unique_ptr<crypto::MessageEncryptor> encryptor)
+void Channel::setEncryptor(std::unique_ptr<base::MessageEncryptor> encryptor)
 {
     encryptor_ = std::move(encryptor);
 }
 
-void Channel::setDecryptor(std::unique_ptr<crypto::MessageDecryptor> decryptor)
+void Channel::setDecryptor(std::unique_ptr<base::MessageDecryptor> decryptor)
 {
     decryptor_ = std::move(decryptor);
 }

@@ -20,7 +20,7 @@
 #define NET__CLIENT_AUTHENTICATOR_H
 
 #include "base/version.h"
-#include "crypto/big_num.h"
+#include "base/crypto/big_num.h"
 #include "net/channel.h"
 #include "proto/key_exchange.pb.h"
 
@@ -28,12 +28,9 @@
 
 namespace base {
 class Location;
-} // namespace base
-
-namespace crypto {
 class MessageDecryptor;
 class MessageEncryptor;
-} // namespace crypto
+} // namespace base
 
 namespace net {
 
@@ -127,13 +124,13 @@ private:
     uint32_t session_type_ = 0;
     base::Version peer_version_;
 
-    crypto::BigNum N_;
-    crypto::BigNum g_;
-    crypto::BigNum s_;
-    crypto::BigNum B_;
+    base::BigNum N_;
+    base::BigNum g_;
+    base::BigNum s_;
+    base::BigNum B_;
 
-    crypto::BigNum a_;
-    crypto::BigNum A_;
+    base::BigNum a_;
+    base::BigNum A_;
 
     base::ByteArray session_key_;
     base::ByteArray encrypt_iv_;

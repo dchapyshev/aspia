@@ -20,10 +20,10 @@
 
 #include "base/crc32.h"
 #include "base/task_runner.h"
-#include "crypto/generic_hash.h"
-#include "crypto/message_decryptor_openssl.h"
-#include "crypto/message_encryptor_openssl.h"
-#include "crypto/key_pair.h"
+#include "base/crypto/generic_hash.h"
+#include "base/crypto/message_decryptor_openssl.h"
+#include "base/crypto/message_encryptor_openssl.h"
+#include "base/crypto/key_pair.h"
 #include "proxy/session_manager.h"
 #include "proxy/settings.h"
 #include "proxy/shared_pool.h"
@@ -66,7 +66,7 @@ bool ControllerManager::start()
 {
     Settings settings;
 
-    crypto::KeyPair key_pair = crypto::KeyPair::fromPrivateKey(settings.proxyPrivateKey());
+    base::KeyPair key_pair = base::KeyPair::fromPrivateKey(settings.proxyPrivateKey());
     if (!key_pair.isValid())
         return false;
 
@@ -74,7 +74,7 @@ bool ControllerManager::start()
     if (temp.empty())
         return false;
 
-    session_key_ = crypto::GenericHash::hash(crypto::GenericHash::Type::BLAKE2s256, temp);
+    session_key_ = base::GenericHash::hash(base::GenericHash::Type::BLAKE2s256, temp);
     if (session_key_.empty())
         return false;
 
@@ -87,14 +87,14 @@ bool ControllerManager::start()
 
 void ControllerManager::onNewConnection(std::unique_ptr<net::Channel> channel)
 {
-    std::unique_ptr<crypto::MessageEncryptor> encryptor =
-        crypto::MessageEncryptorOpenssl::createForChaCha20Poly1305(
+    std::unique_ptr<base::MessageEncryptor> encryptor =
+        base::MessageEncryptorOpenssl::createForChaCha20Poly1305(
             session_key_, createIv(kEncryptorSeedNumber, session_key_));
     if (!encryptor)
         return;
 
-    std::unique_ptr<crypto::MessageDecryptor> decryptor =
-        crypto::MessageDecryptorOpenssl::createForChaCha20Poly1305(
+    std::unique_ptr<base::MessageDecryptor> decryptor =
+        base::MessageDecryptorOpenssl::createForChaCha20Poly1305(
             session_key_, createIv(kDecryptorSeedNumber, session_key_));
     if (!decryptor)
         return;

@@ -27,12 +27,9 @@
 
 namespace base {
 class Location;
-} // namespace base
-
-namespace crypto {
 class MessageEncryptor;
 class MessageDecryptor;
-} // namespace crypto
+} // namespace base
 
 namespace net {
 
@@ -96,8 +93,8 @@ public:
     // Sets an instance of a class to encrypt and decrypt messages.
     // By default, a fake cryptographer is created that only copies the original message.
     // You must explicitly establish a cryptographer before or after establishing a connection.
-    void setEncryptor(std::unique_ptr<crypto::MessageEncryptor> encryptor);
-    void setDecryptor(std::unique_ptr<crypto::MessageDecryptor> decryptor);
+    void setEncryptor(std::unique_ptr<base::MessageEncryptor> encryptor);
+    void setDecryptor(std::unique_ptr<base::MessageDecryptor> decryptor);
 
     // Gets the address of the remote host as a string.
     std::u16string peerAddress() const;
@@ -183,8 +180,8 @@ private:
     bool connected_ = false;
     bool paused_ = true;
 
-    std::unique_ptr<crypto::MessageEncryptor> encryptor_;
-    std::unique_ptr<crypto::MessageDecryptor> decryptor_;
+    std::unique_ptr<base::MessageEncryptor> encryptor_;
+    std::unique_ptr<base::MessageDecryptor> decryptor_;
 
     base::ScalableQueue<base::ByteArray> write_queue_;
     VariableSizeWriter variable_size_writer_;

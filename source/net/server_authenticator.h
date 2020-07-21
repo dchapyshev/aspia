@@ -21,8 +21,8 @@
 
 #include "base/version.h"
 #include "base/waitable_timer.h"
-#include "crypto/big_num.h"
-#include "crypto/key_pair.h"
+#include "base/crypto/big_num.h"
+#include "base/crypto/key_pair.h"
 #include "net/channel.h"
 #include "proto/key_exchange.pb.h"
 
@@ -143,14 +143,14 @@ private:
     base::ByteArray encrypt_iv_;
     base::ByteArray decrypt_iv_;
 
-    crypto::KeyPair key_pair_;
-    crypto::BigNum N_;
-    crypto::BigNum g_;
-    crypto::BigNum v_;
-    crypto::BigNum s_;
-    crypto::BigNum b_;
-    crypto::BigNum B_;
-    crypto::BigNum A_;
+    base::KeyPair key_pair_;
+    base::BigNum N_;
+    base::BigNum g_;
+    base::BigNum v_;
+    base::BigNum s_;
+    base::BigNum b_;
+    base::BigNum B_;
+    base::BigNum A_;
 
     DISALLOW_COPY_AND_ASSIGN(ServerAuthenticator);
 };

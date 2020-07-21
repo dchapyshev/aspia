@@ -19,16 +19,16 @@
 #include "console/address_book_tab.h"
 
 #include "base/logging.h"
+#include "base/crypto/data_cryptor_chacha20_poly1305.h"
+#include "base/crypto/data_cryptor_fake.h"
+#include "base/crypto/password_hash.h"
+#include "base/crypto/secure_memory.h"
 #include "console/address_book_dialog.h"
 #include "console/computer_dialog.h"
 #include "console/computer_group_dialog.h"
 #include "console/computer_item.h"
 #include "console/settings.h"
 #include "console/open_address_book_dialog.h"
-#include "crypto/data_cryptor_chacha20_poly1305.h"
-#include "crypto/data_cryptor_fake.h"
-#include "crypto/password_hash.h"
-#include "crypto/secure_memory.h"
 
 #include <QFileDialog>
 #include <QMenu>
@@ -43,11 +43,11 @@ void cleanupComputer(proto::address_book::Computer* computer)
     if (!computer)
         return;
 
-    crypto::memZero(computer->mutable_name());
-    crypto::memZero(computer->mutable_address());
-    crypto::memZero(computer->mutable_username());
-    crypto::memZero(computer->mutable_password());
-    crypto::memZero(computer->mutable_comment());
+    base::memZero(computer->mutable_name());
+    base::memZero(computer->mutable_address());
+    base::memZero(computer->mutable_username());
+    base::memZero(computer->mutable_password());
+    base::memZero(computer->mutable_comment());
 }
 
 void cleanupComputerGroup(proto::address_book::ComputerGroup* computer_group)
@@ -63,8 +63,8 @@ void cleanupComputerGroup(proto::address_book::ComputerGroup* computer_group)
         proto::address_book::ComputerGroup* child_group =
             computer_group->mutable_computer_group(i);
 
-        crypto::memZero(child_group->mutable_name());
-        crypto::memZero(child_group->mutable_comment());
+        base::memZero(child_group->mutable_name());
+        base::memZero(child_group->mutable_comment());
 
         cleanupComputerGroup(child_group);
     }
@@ -77,8 +77,8 @@ void cleanupData(proto::address_book::Data* data)
 
     cleanupComputerGroup(data->mutable_root_group());
 
-    crypto::memZero(data->mutable_salt1());
-    crypto::memZero(data->mutable_salt2());
+    base::memZero(data->mutable_salt1());
+    base::memZero(data->mutable_salt2());
 }
 
 void cleanupFile(proto::address_book::File* file)
@@ -86,8 +86,8 @@ void cleanupFile(proto::address_book::File* file)
     if (!file)
         return;
 
-    crypto::memZero(file->mutable_hashing_salt());
-    crypto::memZero(file->mutable_data());
+    base::memZero(file->mutable_hashing_salt());
+    base::memZero(file->mutable_data());
 }
 
 } // namespace
@@ -193,7 +193,7 @@ AddressBookTab::~AddressBookTab()
     cleanupData(&data_);
     cleanupFile(&file_);
 
-    crypto::memZero(&key_);
+    base::memZero(&key_);
 
     Settings settings;
     settings.setSplitterState(ui.splitter->saveState());
@@ -250,13 +250,13 @@ AddressBookTab* AddressBookTab::openFromFile(const QString& file_path, QWidget* 
 
     proto::address_book::Data address_book_data;
 
-    std::unique_ptr<crypto::DataCryptor> cryptor;
+    std::unique_ptr<base::DataCryptor> cryptor;
     std::string key;
 
     switch (address_book_file.encryption_type())
     {
         case proto::address_book::ENCRYPTION_TYPE_NONE:
-            cryptor = std::make_unique<crypto::DataCryptorFake>();
+            cryptor = std::make_unique<base::DataCryptorFake>();
             break;
 
         case proto::address_book::ENCRYPTION_TYPE_CHACHA20_POLY1305:
@@ -265,12 +265,12 @@ AddressBookTab* AddressBookTab::openFromFile(const QString& file_path, QWidget* 
             if (dialog.exec() != QDialog::Accepted)
                 return nullptr;
 
-            key = crypto::PasswordHash::hash(
-                crypto::PasswordHash::SCRYPT,
+            key = base::PasswordHash::hash(
+                base::PasswordHash::SCRYPT,
                 dialog.password().toStdString(),
                 address_book_file.hashing_salt());
 
-            cryptor = std::make_unique<crypto::DataCryptorChaCha20Poly1305>(key);
+            cryptor = std::make_unique<base::DataCryptorChaCha20Poly1305>(key);
         }
         break;
 
@@ -297,7 +297,7 @@ AddressBookTab* AddressBookTab::openFromFile(const QString& file_path, QWidget* 
         return nullptr;
     }
 
-    crypto::memZero(&decrypted_data);
+    base::memZero(&decrypted_data);
 
     return new AddressBookTab(file_path,
                               std::move(address_book_file),
@@ -743,16 +743,16 @@ void AddressBookTab::updateComputerList(ComputerGroupItem* computer_group)
 bool AddressBookTab::saveToFile(const QString& file_path)
 {
     std::string serialized_data = data_.SerializeAsString();
-    std::unique_ptr<crypto::DataCryptor> cryptor;
+    std::unique_ptr<base::DataCryptor> cryptor;
 
     switch (file_.encryption_type())
     {
         case proto::address_book::ENCRYPTION_TYPE_NONE:
-            cryptor = std::make_unique<crypto::DataCryptorFake>();
+            cryptor = std::make_unique<base::DataCryptorFake>();
             break;
 
         case proto::address_book::ENCRYPTION_TYPE_CHACHA20_POLY1305:
-            cryptor = std::make_unique<crypto::DataCryptorChaCha20Poly1305>(key_);
+            cryptor = std::make_unique<base::DataCryptorChaCha20Poly1305>(key_);
             break;
 
         default:
@@ -762,7 +762,7 @@ bool AddressBookTab::saveToFile(const QString& file_path)
 
     std::string encrypted_data;
     CHECK(cryptor->encrypt(serialized_data, &encrypted_data));
-    crypto::memZero(&serialized_data);
+    base::memZero(&serialized_data);
 
     file_.set_data(std::move(encrypted_data));
 
@@ -793,7 +793,7 @@ bool AddressBookTab::saveToFile(const QString& file_path)
     int64_t bytes_written = file.write(
         reinterpret_cast<const char*>(buffer.data()), buffer.size());
 
-    crypto::memZero(buffer.data(), buffer.size());
+    base::memZero(buffer.data(), buffer.size());
 
     if (bytes_written != buffer.size())
     {

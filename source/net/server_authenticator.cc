@@ -22,15 +22,15 @@
 #include "base/cpuid.h"
 #include "base/location.h"
 #include "base/logging.h"
+#include "base/crypto/message_decryptor_openssl.h"
+#include "base/crypto/message_encryptor_openssl.h"
+#include "base/crypto/generic_hash.h"
+#include "base/crypto/random.h"
+#include "base/crypto/secure_memory.h"
+#include "base/crypto/srp_constants.h"
+#include "base/crypto/srp_math.h"
 #include "base/strings/unicode.h"
 #include "build/version.h"
-#include "crypto/message_decryptor_openssl.h"
-#include "crypto/message_encryptor_openssl.h"
-#include "crypto/generic_hash.h"
-#include "crypto/random.h"
-#include "crypto/secure_memory.h"
-#include "crypto/srp_constants.h"
-#include "crypto/srp_math.h"
 #include "net/user.h"
 
 namespace net {
@@ -127,14 +127,14 @@ bool ServerAuthenticator::setPrivateKey(const base::ByteArray& private_key)
         return false;
     }
 
-    key_pair_ = crypto::KeyPair::fromPrivateKey(private_key);
+    key_pair_ = base::KeyPair::fromPrivateKey(private_key);
     if (!key_pair_.isValid())
     {
         LOG(LS_ERROR) << "Failed to load private key. Perhaps the key is incorrect";
         return false;
     }
 
-    encrypt_iv_ = crypto::Random::byteArray(kIvSize);
+    encrypt_iv_ = base::Random::byteArray(kIvSize);
     if (encrypt_iv_.empty())
     {
         LOG(LS_ERROR) << "An empty IV is not valid";
@@ -334,7 +334,7 @@ void ServerAuthenticator::onClientHello(const base::ByteArray& buffer)
             return;
         }
 
-        session_key_ = crypto::GenericHash::hash(crypto::GenericHash::Type::BLAKE2s256, temp);
+        session_key_ = base::GenericHash::hash(base::GenericHash::Type::BLAKE2s256, temp);
         if (session_key_.empty())
         {
             onFailed(FROM_HERE);
@@ -387,13 +387,13 @@ void ServerAuthenticator::onIdentify(const base::ByteArray& buffer)
         {
             session_types_ = user.sessions;
 
-            std::optional<crypto::SrpNgPair> Ng_pair = crypto::pairByGroup(user.group);
+            std::optional<base::SrpNgPair> Ng_pair = base::pairByGroup(user.group);
             if (Ng_pair.has_value())
             {
-                N_ = crypto::BigNum::fromStdString(Ng_pair->first);
-                g_ = crypto::BigNum::fromStdString(Ng_pair->second);
-                s_ = crypto::BigNum::fromByteArray(user.salt);
-                v_ = crypto::BigNum::fromByteArray(user.verifier);
+                N_ = base::BigNum::fromStdString(Ng_pair->first);
+                g_ = base::BigNum::fromStdString(Ng_pair->second);
+                s_ = base::BigNum::fromByteArray(user.salt);
+                v_ = base::BigNum::fromByteArray(user.verifier);
                 break;
             }
             else
@@ -404,19 +404,19 @@ void ServerAuthenticator::onIdentify(const base::ByteArray& buffer)
 
         session_types_ = 0;
 
-        crypto::GenericHash hash(crypto::GenericHash::BLAKE2b512);
+        base::GenericHash hash(base::GenericHash::BLAKE2b512);
         hash.addData(user_list_->seedKey());
         hash.addData(identify.username());
 
-        N_ = crypto::BigNum::fromStdString(crypto::kSrpNgPair_8192.first);
-        g_ = crypto::BigNum::fromStdString(crypto::kSrpNgPair_8192.second);
-        s_ = crypto::BigNum::fromByteArray(hash.result());
-        v_ = crypto::SrpMath::calc_v(user_name_, user_list_->seedKey(), s_, N_, g_);
+        N_ = base::BigNum::fromStdString(base::kSrpNgPair_8192.first);
+        g_ = base::BigNum::fromStdString(base::kSrpNgPair_8192.second);
+        s_ = base::BigNum::fromByteArray(hash.result());
+        v_ = base::SrpMath::calc_v(user_name_, user_list_->seedKey(), s_, N_, g_);
     }
     while (false);
 
-    b_ = crypto::BigNum::fromByteArray(crypto::Random::byteArray(128)); // 1024 bits.
-    B_ = crypto::SrpMath::calc_B(b_, N_, g_, v_);
+    b_ = base::BigNum::fromByteArray(base::Random::byteArray(128)); // 1024 bits.
+    B_ = base::SrpMath::calc_B(b_, N_, g_, v_);
 
     if (!N_.isValid() || !g_.isValid() || !s_.isValid() || !B_.isValid())
     {
@@ -425,7 +425,7 @@ void ServerAuthenticator::onIdentify(const base::ByteArray& buffer)
     }
 
     internal_state_ = InternalState::SEND_SERVER_KEY_EXCHANGE;
-    encrypt_iv_ = crypto::Random::byteArray(kIvSize);
+    encrypt_iv_ = base::Random::byteArray(kIvSize);
 
     proto::SrpServerKeyExchange server_key_exchange;
 
@@ -447,7 +447,7 @@ void ServerAuthenticator::onClientKeyExchange(const base::ByteArray& buffer)
         return;
     }
 
-    A_ = crypto::BigNum::fromStdString(client_key_exchange.a());
+    A_ = base::BigNum::fromStdString(client_key_exchange.a());
     decrypt_iv_ = base::fromStdString(client_key_exchange.iv());
 
     if (!A_.isValid() || decrypt_iv_.empty())
@@ -469,7 +469,7 @@ void ServerAuthenticator::onClientKeyExchange(const base::ByteArray& buffer)
         case proto::ENCRYPTION_AES256_GCM:
         case proto::ENCRYPTION_CHACHA20_POLY1305:
         {
-            crypto::GenericHash hash(crypto::GenericHash::BLAKE2s256);
+            base::GenericHash hash(base::GenericHash::BLAKE2s256);
 
             if (!session_key_.empty())
                 hash.addData(session_key_);
@@ -572,23 +572,23 @@ void ServerAuthenticator::onFailed(const base::Location& location)
 
 bool ServerAuthenticator::onSessionKeyChanged()
 {
-    std::unique_ptr<crypto::MessageEncryptor> encryptor;
-    std::unique_ptr<crypto::MessageDecryptor> decryptor;
+    std::unique_ptr<base::MessageEncryptor> encryptor;
+    std::unique_ptr<base::MessageDecryptor> decryptor;
 
     if (encryption_ == proto::ENCRYPTION_AES256_GCM)
     {
-        encryptor = crypto::MessageEncryptorOpenssl::createForAes256Gcm(
+        encryptor = base::MessageEncryptorOpenssl::createForAes256Gcm(
             session_key_, encrypt_iv_);
-        decryptor = crypto::MessageDecryptorOpenssl::createForAes256Gcm(
+        decryptor = base::MessageDecryptorOpenssl::createForAes256Gcm(
             session_key_, decrypt_iv_);
     }
     else
     {
         DCHECK_EQ(encryption_, proto::ENCRYPTION_CHACHA20_POLY1305);
 
-        encryptor = crypto::MessageEncryptorOpenssl::createForChaCha20Poly1305(
+        encryptor = base::MessageEncryptorOpenssl::createForChaCha20Poly1305(
             session_key_, encrypt_iv_);
-        decryptor = crypto::MessageDecryptorOpenssl::createForChaCha20Poly1305(
+        decryptor = base::MessageDecryptorOpenssl::createForChaCha20Poly1305(
             session_key_, decrypt_iv_);
     }
 
@@ -605,14 +605,14 @@ bool ServerAuthenticator::onSessionKeyChanged()
 
 base::ByteArray ServerAuthenticator::createSrpKey()
 {
-    if (!crypto::SrpMath::verify_A_mod_N(A_, N_))
+    if (!base::SrpMath::verify_A_mod_N(A_, N_))
     {
         LOG(LS_ERROR) << "SrpMath::verify_A_mod_N failed";
         return base::ByteArray();
     }
 
-    crypto::BigNum u = crypto::SrpMath::calc_u(A_, B_, N_);
-    crypto::BigNum server_key = crypto::SrpMath::calcServerKey(A_, v_, u, b_, N_);
+    base::BigNum u = base::SrpMath::calc_u(A_, B_, N_);
+    base::BigNum server_key = base::SrpMath::calcServerKey(A_, v_, u, b_, N_);
 
     return server_key.toByteArray();
 }
