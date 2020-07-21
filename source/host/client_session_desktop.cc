@@ -20,12 +20,12 @@
 
 #include "base/logging.h"
 #include "base/power_controller.h"
+#include "base/codec/cursor_encoder.h"
+#include "base/codec/scale_reducer.h"
+#include "base/codec/video_encoder_vpx.h"
+#include "base/codec/video_encoder_zstd.h"
+#include "base/codec/video_util.h"
 #include "base/desktop/frame.h"
-#include "codec/cursor_encoder.h"
-#include "codec/scale_reducer.h"
-#include "codec/video_encoder_vpx.h"
-#include "codec/video_encoder_zstd.h"
-#include "codec/video_util.h"
 #include "common/desktop_session_constants.h"
 #include "host/desktop_session_proxy.h"
 #include "host/system_info.h"
@@ -301,16 +301,16 @@ void ClientSessionDesktop::readConfig(const proto::DesktopConfig& config)
     switch (config.video_encoding())
     {
         case proto::VIDEO_ENCODING_VP8:
-            video_encoder_ = codec::VideoEncoderVPX::createVP8();
+            video_encoder_ = base::VideoEncoderVPX::createVP8();
             break;
 
         case proto::VIDEO_ENCODING_VP9:
-            video_encoder_ = codec::VideoEncoderVPX::createVP9();
+            video_encoder_ = base::VideoEncoderVPX::createVP9();
             break;
 
         case proto::VIDEO_ENCODING_ZSTD:
-            video_encoder_ = codec::VideoEncoderZstd::create(
-                codec::parsePixelFormat(config.pixel_format()), config.compress_ratio());
+            video_encoder_ = base::VideoEncoderZstd::create(
+                base::parsePixelFormat(config.pixel_format()), config.compress_ratio());
             break;
 
         default:
@@ -329,9 +329,9 @@ void ClientSessionDesktop::readConfig(const proto::DesktopConfig& config)
 
     cursor_encoder_.reset();
     if (config.flags() & proto::ENABLE_CURSOR_SHAPE)
-        cursor_encoder_ = std::make_unique<codec::CursorEncoder>();
+        cursor_encoder_ = std::make_unique<base::CursorEncoder>();
     
-    scale_reducer_ = std::make_unique<codec::ScaleReducer>();
+    scale_reducer_ = std::make_unique<base::ScaleReducer>();
 
     desktop_session_config_.disable_font_smoothing =
         (config.flags() & proto::DISABLE_FONT_SMOOTHING);

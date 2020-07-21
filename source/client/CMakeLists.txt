@@ -153,7 +153,6 @@ add_library(aspia_client STATIC
     ${SOURCE_CLIENT_UI})
 target_link_libraries(aspia_client
     aspia_base
-    aspia_codec
     aspia_common
     aspia_net
     aspia_proto

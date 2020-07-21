@@ -1033,32 +1033,32 @@
 <context>
     <name>console::ComputerDialogDesktop</name>
     <message>
-        <location filename="../computer_dialog_desktop.cc" line="59"/>
+        <location filename="../computer_dialog_desktop.cc" line="60"/>
         <source>True color (32 bit)</source>
         <translation>True color (32 бит)</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.cc" line="60"/>
+        <location filename="../computer_dialog_desktop.cc" line="61"/>
         <source>High color (16 bit)</source>
         <translation>High color (16 бит)</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.cc" line="61"/>
+        <location filename="../computer_dialog_desktop.cc" line="62"/>
         <source>256 colors (8 bit)</source>
         <translation>256 цветов (8 бит)</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.cc" line="62"/>
+        <location filename="../computer_dialog_desktop.cc" line="63"/>
         <source>64 colors (6 bit)</source>
         <translation>64 цвета (6 бит)</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.cc" line="63"/>
+        <location filename="../computer_dialog_desktop.cc" line="64"/>
         <source>8 colors (3 bit)</source>
         <translation>8 цветов (3 бита)</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.cc" line="211"/>
+        <location filename="../computer_dialog_desktop.cc" line="212"/>
         <source>Compression ratio: %1</source>
         <translation>Уровень сжатия: %1</translation>
     </message>

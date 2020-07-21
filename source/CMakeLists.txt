@@ -177,7 +177,6 @@ endif()
 
 add_subdirectory(base)
 add_subdirectory(client)
-add_subdirectory(codec)
 add_subdirectory(common)
 add_subdirectory(console)
 add_subdirectory(host)

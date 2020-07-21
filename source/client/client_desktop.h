@@ -27,13 +27,10 @@
 #include "proto/system_info.pb.h"
 
 namespace base {
-class Frame;
-} // namespace base
-
-namespace codec {
 class CursorDecoder;
+class Frame;
 class VideoDecoder;
-} // namespace codec
+} // namespace base
 
 namespace client {
 
@@ -89,8 +86,8 @@ private:
     proto::ClientToHost outgoing_message_;
 
     proto::VideoEncoding video_encoding_ = proto::VIDEO_ENCODING_UNKNOWN;
-    std::unique_ptr<codec::VideoDecoder> video_decoder_;
-    std::unique_ptr<codec::CursorDecoder> cursor_decoder_;
+    std::unique_ptr<base::VideoDecoder> video_decoder_;
+    std::unique_ptr<base::CursorDecoder> cursor_decoder_;
 
     InputEventFilter input_event_filter_;
 

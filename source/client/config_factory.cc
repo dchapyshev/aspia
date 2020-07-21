@@ -17,8 +17,9 @@
 //
 
 #include "client/config_factory.h"
+
 #include "base/logging.h"
-#include "codec/video_util.h"
+#include "base/codec/video_util.h"
 
 namespace client {
 
@@ -59,7 +60,7 @@ void ConfigFactory::setDefaultDesktopManageConfig(proto::DesktopConfig* config)
     config->set_video_encoding(proto::VideoEncoding::VIDEO_ENCODING_VP8);
     config->set_compress_ratio(kDefCompressRatio);
 
-    codec::serializePixelFormat(base::PixelFormat::RGB332(), config->mutable_pixel_format());
+    base::serializePixelFormat(base::PixelFormat::RGB332(), config->mutable_pixel_format());
 }
 
 // static
@@ -75,7 +76,7 @@ void ConfigFactory::setDefaultDesktopViewConfig(proto::DesktopConfig* config)
     config->set_video_encoding(proto::VideoEncoding::VIDEO_ENCODING_VP8);
     config->set_compress_ratio(kDefCompressRatio);
 
-    codec::serializePixelFormat(base::PixelFormat::RGB332(), config->mutable_pixel_format());
+    base::serializePixelFormat(base::PixelFormat::RGB332(), config->mutable_pixel_format());
 }
 
 // static

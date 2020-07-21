@@ -20,15 +20,15 @@
 
 #include "base/logging.h"
 #include "base/task_runner.h"
+#include "base/codec/cursor_decoder.h"
+#include "base/codec/video_decoder.h"
+#include "base/codec/video_util.h"
 #include "base/desktop/frame.h"
 #include "base/desktop/mouse_cursor.h"
 #include "client/desktop_control_proxy.h"
 #include "client/desktop_window.h"
 #include "client/desktop_window_proxy.h"
 #include "client/config_factory.h"
-#include "codec/cursor_decoder.h"
-#include "codec/video_decoder.h"
-#include "codec/video_util.h"
 #include "common/desktop_session_constants.h"
 
 namespace client {
@@ -297,7 +297,7 @@ void ClientDesktop::readVideoPacket(const proto::VideoPacket& packet)
 {
     if (video_encoding_ != packet.encoding())
     {
-        video_decoder_ = codec::VideoDecoder::create(packet.encoding());
+        video_decoder_ = base::VideoDecoder::create(packet.encoding());
         video_encoding_ = packet.encoding();
     }
 
@@ -372,7 +372,7 @@ void ClientDesktop::readCursorShape(const proto::CursorShape& cursor_shape)
         return;
 
     if (!cursor_decoder_)
-        cursor_decoder_ = std::make_unique<codec::CursorDecoder>();
+        cursor_decoder_ = std::make_unique<base::CursorDecoder>();
 
     std::shared_ptr<base::MouseCursor> mouse_cursor = cursor_decoder_->decode(cursor_shape);
     if (!mouse_cursor)

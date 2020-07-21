@@ -20,13 +20,13 @@
 
 #include "base/logging.h"
 #include "base/power_controller.h"
+#include "base/codec/video_util.h"
 #include "base/desktop/capture_scheduler.h"
 #include "base/desktop/mouse_cursor.h"
 #include "base/desktop/screen_capturer_wrapper.h"
 #include "base/desktop/shared_frame.h"
 #include "base/ipc/shared_memory.h"
 #include "base/threading/thread.h"
-#include "codec/video_util.h"
 #include "host/input_injector_win.h"
 
 namespace host {
@@ -208,7 +208,7 @@ void DesktopSessionAgent::onScreenCaptured(
         serialized_frame->set_dpi_y(frame->dpi().y());
 
         for (base::Region::Iterator it(frame->constUpdatedRegion()); !it.isAtEnd(); it.advance())
-            codec::serializeRect(it.rect(), serialized_frame->add_dirty_rect());
+            base::serializeRect(it.rect(), serialized_frame->add_dirty_rect());
     }
 
     if (mouse_cursor)

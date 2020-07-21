@@ -19,10 +19,10 @@
 #include "host/desktop_session_ipc.h"
 
 #include "base/logging.h"
+#include "base/codec/video_util.h"
 #include "base/desktop/mouse_cursor.h"
 #include "base/desktop/shared_memory_frame.h"
 #include "base/ipc/shared_memory.h"
-#include "codec/video_util.h"
 
 namespace host {
 
@@ -237,7 +237,7 @@ void DesktopSessionIpc::onScreenCaptured(const proto::internal::ScreenCaptured& 
             base::Region* updated_region = last_frame_->updatedRegion();
 
             for (int i = 0; i < serialized_frame.dirty_rect_size(); ++i)
-                updated_region->addRect(codec::parseRect(serialized_frame.dirty_rect(i)));
+                updated_region->addRect(base::parseRect(serialized_frame.dirty_rect(i)));
 
             frame = last_frame_.get();
         }

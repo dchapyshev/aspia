@@ -115,7 +115,6 @@ add_library(aspia_host_core SHARED
     ${SOURCE_HOST_CORE_WIN})
 target_link_libraries(aspia_host_core
     aspia_base
-    aspia_codec
     aspia_common
     aspia_net
     aspia_proto

@@ -18,9 +18,9 @@
 
 #include "console/computer_factory.h"
 
-#include "build/build_config.h"
 #include "base/logging.h"
-#include "codec/video_util.h"
+#include "base/codec/video_util.h"
+#include "build/build_config.h"
 
 namespace console {
 
@@ -42,7 +42,7 @@ void setDefaultDesktopManageConfig(proto::DesktopConfig* config)
     config->set_compress_ratio(kDefCompressRatio);
     config->set_update_interval(kDefUpdateInterval);
 
-    codec::serializePixelFormat(desktop::PixelFormat::RGB332(), config->mutable_pixel_format());
+    base::serializePixelFormat(base::PixelFormat::RGB332(), config->mutable_pixel_format());
 }
 
 void setDefaultDesktopViewConfig(proto::DesktopConfig* config)
@@ -58,7 +58,7 @@ void setDefaultDesktopViewConfig(proto::DesktopConfig* config)
     config->set_compress_ratio(kDefCompressRatio);
     config->set_update_interval(kDefUpdateInterval);
 
-    codec::serializePixelFormat(desktop::PixelFormat::RGB332(), config->mutable_pixel_format());
+    base::serializePixelFormat(base::PixelFormat::RGB332(), config->mutable_pixel_format());
 }
 
 } // namespace

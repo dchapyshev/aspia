@@ -24,16 +24,13 @@
 #include "host/client_session.h"
 #include "host/desktop_session.h"
 
-namespace codec {
+namespace base {
 class CursorEncoder;
-class ScaleReducer;
-class VideoEncoder;
-} // namespace codec
-
-namespace desktop {
 class Frame;
 class MouseCursor;
-} // namespace desktop
+class ScaleReducer;
+class VideoEncoder;
+} // namespace base
 
 namespace host {
 
@@ -66,9 +63,9 @@ private:
     void readConfig(const proto::DesktopConfig& config);
 
     std::shared_ptr<DesktopSessionProxy> desktop_session_proxy_;
-    std::unique_ptr<codec::ScaleReducer> scale_reducer_;
-    std::unique_ptr<codec::VideoEncoder> video_encoder_;
-    std::unique_ptr<codec::CursorEncoder> cursor_encoder_;
+    std::unique_ptr<base::ScaleReducer> scale_reducer_;
+    std::unique_ptr<base::VideoEncoder> video_encoder_;
+    std::unique_ptr<base::CursorEncoder> cursor_encoder_;
     DesktopSession::Config desktop_session_config_;
     base::Size preferred_size_;
 

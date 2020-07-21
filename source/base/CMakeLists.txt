@@ -86,6 +86,44 @@ list(APPEND SOURCE_BASE_UNIT_TESTS
     version_unittest.cc
     xml_settings_unittest.cc)
 
+list(APPEND SOURCE_BASE_CODEC
+    codec/cursor_decoder.cc
+    codec/cursor_decoder.h
+    codec/cursor_encoder.cc
+    codec/cursor_encoder.h
+    codec/encoder_bitrate_filter.cc
+    codec/encoder_bitrate_filter.h
+    codec/pixel_translator.cc
+    codec/pixel_translator.h
+    codec/running_samples.cc
+    codec/running_samples.h
+    codec/scale_reducer.cc
+    codec/scale_reducer.h
+    codec/scoped_vpx_codec.cc
+    codec/scoped_vpx_codec.h
+    codec/scoped_zstd_stream.cc
+    codec/scoped_zstd_stream.h
+    codec/video_decoder.cc
+    codec/video_decoder.h
+    codec/video_decoder_vpx.cc
+    codec/video_decoder_vpx.h
+    codec/video_decoder_zstd.cc
+    codec/video_decoder_zstd.h
+    codec/video_encoder.cc
+    codec/video_encoder.h
+    codec/video_encoder_vpx.cc
+    codec/video_encoder_vpx.h
+    codec/video_encoder_zstd.cc
+    codec/video_encoder_zstd.h
+    codec/video_util.cc
+    codec/video_util.h
+    codec/weighted_samples.cc
+    codec/weighted_samples.h)
+
+list(APPEND SOURCE_BASE_CODEC_UNIT_TESTS
+    codec/running_samples_unittest.cc
+    codec/weighted_samples_unittest.cc)
+
 list(APPEND SOURCE_BASE_CRYPTO
     crypto/big_num.cc
     crypto/big_num.h
@@ -367,6 +405,7 @@ list(APPEND SOURCE_BASE_WIN_UNIT_TESTS
     win/scoped_object_unittest.cc)
 
 source_group("" FILES ${SOURCE_BASE} ${SOURCE_BASE_UNIT_TESTS})
+source_group(codec FILES ${SOURCE_BASE_CODEC} ${SOURCE_BASE_CODEC_UNIT_TESTS})
 source_group(crypto FILES ${SOURCE_BASE_CRYPTO} ${SOURCE_BASE_CRYPTO_UNIT_TESTS})
 source_group(desktop FILES ${SOURCE_BASE_DESKTOP} ${SOURCE_BASE_DESKTOP_UNIT_TESTS})
 source_group(desktop\\win FILES ${SOURCE_BASE_DESKTOP_WIN} ${SOURCE_BASE_DESKTOP_WIN_UNIT_TESTS})
@@ -380,6 +419,7 @@ source_group(win FILES ${SOURCE_BASE_WIN} ${SOURCE_BASE_WIN_UNIT_TESTS})
 
 add_library(aspia_base STATIC
     ${SOURCE_BASE}
+    ${SOURCE_BASE_CODEC}
     ${SOURCE_BASE_CRYPTO}
     ${SOURCE_BASE_DESKTOP}
     ${SOURCE_BASE_DESKTOP_WIN}
@@ -396,6 +436,7 @@ target_link_libraries(aspia_base ${THIRD_PARTY_LIBS})
 if (BUILD_UNIT_TESTS)
     add_executable(aspia_base_tests
         ${SOURCE_BASE_UNIT_TESTS}
+        ${SOURCE_BASE_CODEC_UNIT_TESTS}
         ${SOURCE_BASE_CRYPTO_UNIT_TESTS}
         ${SOURCE_BASE_DESKTOP_UNIT_TESTS}
         ${SOURCE_BASE_DESKTOP_WIN_UNIT_TESTS}
