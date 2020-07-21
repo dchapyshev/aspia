@@ -19,7 +19,7 @@
 #ifndef HOST__DESKTOP_SESSION_IPC_H
 #define HOST__DESKTOP_SESSION_IPC_H
 
-#include "base/ipc/channel.h"
+#include "base/ipc/ipc_channel.h"
 #include "host/desktop_session.h"
 
 namespace host {

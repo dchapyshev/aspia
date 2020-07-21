@@ -19,7 +19,7 @@
 #ifndef HOST__USER_SESSION_AGENT_H
 #define HOST__USER_SESSION_AGENT_H
 
-#include "base/ipc/channel.h"
+#include "base/ipc/ipc_channel.h"
 #include "proto/host_internal.pb.h"
 
 namespace host {

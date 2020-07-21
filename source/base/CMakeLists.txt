@@ -97,12 +97,12 @@ list(APPEND SOURCE_BASE_FILES
     files/scoped_temp_file.h)
 
 list(APPEND SOURCE_BASE_IPC
-    ipc/channel.cc
-    ipc/channel.h
-    ipc/channel_proxy.cc
-    ipc/channel_proxy.h
-    ipc/server.cc
-    ipc/server.h
+    ipc/ipc_channel.cc
+    ipc/ipc_channel.h
+    ipc/ipc_channel_proxy.cc
+    ipc/ipc_channel_proxy.h
+    ipc/ipc_server.cc
+    ipc/ipc_server.h
     ipc/shared_memory.cc
     ipc/shared_memory.h
     ipc/shared_memory_factory.cc

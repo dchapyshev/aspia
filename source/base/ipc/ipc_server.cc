@@ -16,11 +16,11 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/ipc/server.h"
+#include "base/ipc/ipc_server.h"
 
 #include "base/location.h"
 #include "base/logging.h"
-#include "base/ipc/channel.h"
+#include "base/ipc/ipc_channel.h"
 #include "base/message_loop/message_loop.h"
 #include "base/message_loop/message_pump_asio.h"
 #include "base/strings/string_printf.h"

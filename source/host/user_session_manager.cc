@@ -21,7 +21,7 @@
 #include "base/command_line.h"
 #include "base/logging.h"
 #include "base/task_runner.h"
-#include "base/ipc/channel.h"
+#include "base/ipc/ipc_channel.h"
 #include "base/files/base_paths.h"
 #include "base/strings/string_number_conversions.h"
 #include "base/strings/string_util.h"

@@ -20,7 +20,7 @@
 #define HOST__USER_SESSION_MANAGER_H
 
 #include "base/session_id.h"
-#include "base/ipc/server.h"
+#include "base/ipc/ipc_server.h"
 #include "base/win/session_status.h"
 #include "host/user_session.h"
 

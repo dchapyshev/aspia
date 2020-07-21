@@ -21,7 +21,7 @@
 
 #include "base/session_id.h"
 #include "base/waitable_timer.h"
-#include "base/ipc/channel.h"
+#include "base/ipc/ipc_channel.h"
 #include "host/client_session.h"
 #include "host/desktop_session_manager.h"
 #include "net/user.h"

@@ -19,7 +19,7 @@
 #ifndef HOST__DESKTOP_SESSION_AGENT_H
 #define HOST__DESKTOP_SESSION_AGENT_H
 
-#include "base/ipc/channel.h"
+#include "base/ipc/ipc_channel.h"
 #include "base/ipc/shared_memory_factory.h"
 #include "desktop/screen_capturer_wrapper.h"
 #include "host/clipboard_monitor.h"

@@ -19,7 +19,7 @@
 #ifndef BASE__IPC__CHANNEL_PROXY_H
 #define BASE__IPC__CHANNEL_PROXY_H
 
-#include "base/ipc/channel.h"
+#include "base/ipc/ipc_channel.h"
 
 namespace base {
 
