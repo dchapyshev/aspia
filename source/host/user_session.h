@@ -21,16 +21,16 @@
 
 #include "base/session_id.h"
 #include "base/waitable_timer.h"
+#include "base/ipc/channel.h"
 #include "host/client_session.h"
 #include "host/desktop_session_manager.h"
-#include "ipc/channel.h"
 #include "net/user.h"
 #include "proto/host_internal.pb.h"
 
 namespace host {
 
 class UserSession
-    : public ipc::Channel::Listener,
+    : public base::IpcChannel::Listener,
       public DesktopSession::Delegate,
       public ClientSession::Delegate
 {
@@ -60,11 +60,11 @@ public:
 
     UserSession(std::shared_ptr<base::TaskRunner> task_runner,
                 base::SessionId session_id,
-                std::unique_ptr<ipc::Channel> channel);
+                std::unique_ptr<base::IpcChannel> channel);
     ~UserSession();
 
     void start(Delegate* delegate);
-    void restart(std::unique_ptr<ipc::Channel> channel);
+    void restart(std::unique_ptr<base::IpcChannel> channel);
 
     Type type() const { return type_; }
     State state() const { return state_; }
@@ -75,7 +75,7 @@ public:
     void setSessionEvent(base::win::SessionStatus status, base::SessionId session_id);
 
 protected:
-    // ipc::Channel::Listener implementation.
+    // base::IpcChannel::Listener implementation.
     void onDisconnected() override;
     void onMessageReceived(const base::ByteArray& buffer) override;
 
@@ -99,7 +99,7 @@ private:
     void killClientSession(std::string_view id);
 
     std::shared_ptr<base::TaskRunner> task_runner_;
-    std::unique_ptr<ipc::Channel> channel_;
+    std::unique_ptr<base::IpcChannel> channel_;
 
     Type type_;
     State state_ = State::DETTACHED;

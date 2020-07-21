@@ -27,9 +27,9 @@
 #include <optional>
 #include <vector>
 
-namespace ipc {
+namespace base {
 class SharedMemoryFactory;
-} // namespace ipc
+} // namespace base
 
 namespace desktop {
 
@@ -43,7 +43,7 @@ public:
     using Context = DxgiFrameContext;
 
     explicit DxgiFrame(std::shared_ptr<DxgiDuplicatorController> controller,
-                       ipc::SharedMemoryFactory* shared_memory_factory);
+                       base::SharedMemoryFactory* shared_memory_factory);
     ~DxgiFrame();
 
     // Should not be called if prepare() is not executed or returns false.
@@ -60,7 +60,7 @@ private:
     // Should not be called if prepare() is not executed or returns false.
     Context* context();
 
-    ipc::SharedMemoryFactory* const shared_memory_factory_;
+    base::SharedMemoryFactory* const shared_memory_factory_;
     std::optional<Size> last_frame_size_;
     ScreenCapturer::ScreenId source_id_ = ScreenCapturer::kFullDesktopScreenId;
     std::unique_ptr<SharedFrame> frame_;

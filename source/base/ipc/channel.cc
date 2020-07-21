@@ -16,15 +16,15 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "ipc/channel.h"
+#include "base/ipc/channel.h"
 
 #include "base/location.h"
 #include "base/logging.h"
+#include "base/ipc/channel_proxy.h"
 #include "base/message_loop/message_loop.h"
 #include "base/message_loop/message_pump_asio.h"
 #include "base/strings/unicode.h"
 #include "base/win/scoped_object.h"
-#include "ipc/channel_proxy.h"
 
 #include <asio/read.hpp>
 #include <asio/write.hpp>
@@ -34,7 +34,7 @@
 
 #include <psapi.h>
 
-namespace ipc {
+namespace base {
 
 namespace {
 
@@ -42,7 +42,7 @@ const char16_t kPipeNamePrefix[] = u"\\\\.\\pipe\\aspia.";
 const uint32_t kMaxMessageSize = 16 * 1024 * 1024; // 16MB
 const DWORD kConnectTimeout = 5000; // ms
 
-base::ProcessId clientProcessIdImpl(HANDLE pipe_handle)
+ProcessId clientProcessIdImpl(HANDLE pipe_handle)
 {
     ULONG process_id = base::kNullProcessId;
 
@@ -55,7 +55,7 @@ base::ProcessId clientProcessIdImpl(HANDLE pipe_handle)
     return process_id;
 }
 
-base::ProcessId serverProcessIdImpl(HANDLE pipe_handle)
+ProcessId serverProcessIdImpl(HANDLE pipe_handle)
 {
     ULONG process_id = base::kNullProcessId;
 
@@ -68,7 +68,7 @@ base::ProcessId serverProcessIdImpl(HANDLE pipe_handle)
     return process_id;
 }
 
-base::SessionId clientSessionIdImpl(HANDLE pipe_handle)
+SessionId clientSessionIdImpl(HANDLE pipe_handle)
 {
     ULONG session_id = base::kInvalidSessionId;
 
@@ -81,7 +81,7 @@ base::SessionId clientSessionIdImpl(HANDLE pipe_handle)
     return session_id;
 }
 
-base::SessionId serverSessionIdImpl(HANDLE pipe_handle)
+SessionId serverSessionIdImpl(HANDLE pipe_handle)
 {
     ULONG session_id = base::kInvalidSessionId;
 
@@ -96,24 +96,24 @@ base::SessionId serverSessionIdImpl(HANDLE pipe_handle)
 
 } // namespace
 
-Channel::Channel()
-    : stream_(base::MessageLoop::current()->pumpAsio()->ioContext()),
-      proxy_(new ChannelProxy(base::MessageLoop::current()->taskRunner(), this))
+IpcChannel::IpcChannel()
+    : stream_(MessageLoop::current()->pumpAsio()->ioContext()),
+      proxy_(new IpcChannelProxy(MessageLoop::current()->taskRunner(), this))
 {
     // Nothing
 }
 
-Channel::Channel(std::u16string_view channel_name, asio::windows::stream_handle&& stream)
+IpcChannel::IpcChannel(std::u16string_view channel_name, asio::windows::stream_handle&& stream)
     : channel_name_(channel_name),
       stream_(std::move(stream)),
-      proxy_(new ChannelProxy(base::MessageLoop::current()->taskRunner(), this)),
+      proxy_(new IpcChannelProxy(MessageLoop::current()->taskRunner(), this)),
       is_connected_(true)
 {
     peer_process_id_ = clientProcessIdImpl(stream_.native_handle());
     peer_session_id_ = clientSessionIdImpl(stream_.native_handle());
 }
 
-Channel::~Channel()
+IpcChannel::~IpcChannel()
 {
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
 
@@ -125,24 +125,24 @@ Channel::~Channel()
     disconnect();
 }
 
-std::shared_ptr<ChannelProxy> Channel::channelProxy()
+std::shared_ptr<IpcChannelProxy> IpcChannel::channelProxy()
 {
     return proxy_;
 }
 
-void Channel::setListener(Listener* listener)
+void IpcChannel::setListener(Listener* listener)
 {
     listener_ = listener;
 }
 
-bool Channel::connect(std::u16string_view channel_id)
+bool IpcChannel::connect(std::u16string_view channel_id)
 {
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
 
     const DWORD flags = SECURITY_SQOS_PRESENT | SECURITY_IDENTIFICATION | FILE_FLAG_OVERLAPPED;
     channel_name_ = channelName(channel_id);
 
-    base::win::ScopedHandle handle;
+    win::ScopedHandle handle;
 
     while (true)
     {
@@ -185,7 +185,7 @@ bool Channel::connect(std::u16string_view channel_id)
     return true;
 }
 
-void Channel::disconnect()
+void IpcChannel::disconnect()
 {
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
 
@@ -200,25 +200,25 @@ void Channel::disconnect()
     stream_.close(ignored_code);
 }
 
-bool Channel::isConnected() const
+bool IpcChannel::isConnected() const
 {
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
     return is_connected_;
 }
 
-bool Channel::isPaused() const
+bool IpcChannel::isPaused() const
 {
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
     return is_paused_;
 }
 
-void Channel::pause()
+void IpcChannel::pause()
 {
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
     is_paused_ = true;
 }
 
-void Channel::resume()
+void IpcChannel::resume()
 {
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
 
@@ -236,7 +236,7 @@ void Channel::resume()
     doReadMessage();
 }
 
-void Channel::send(base::ByteArray&& buffer)
+void IpcChannel::send(ByteArray&& buffer)
 {
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
 
@@ -249,7 +249,7 @@ void Channel::send(base::ByteArray&& buffer)
         doWrite();
 }
 
-std::filesystem::path Channel::peerFilePath() const
+std::filesystem::path IpcChannel::peerFilePath() const
 {
     base::win::ScopedHandle process(
         OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, peer_process_id_));
@@ -271,20 +271,20 @@ std::filesystem::path Channel::peerFilePath() const
 }
 
 // static
-std::u16string Channel::channelName(std::u16string_view channel_id)
+std::u16string IpcChannel::channelName(std::u16string_view channel_id)
 {
     std::u16string name(kPipeNamePrefix);
     name.append(channel_id);
     return name;
 }
 
-void Channel::onErrorOccurred(const base::Location& location, const std::error_code& error_code)
+void IpcChannel::onErrorOccurred(const Location& location, const std::error_code& error_code)
 {
     if (error_code == asio::error::operation_aborted)
         return;
 
     LOG(LS_WARNING) << "Error in IPC channel '" << channel_name_ << "': "
-                    << base::utf16FromLocal8Bit(error_code.message())
+                    << utf16FromLocal8Bit(error_code.message())
                     << " (code: " << error_code.value()
                     << ", location: " << location.toString() << ")";
 
@@ -297,7 +297,7 @@ void Channel::onErrorOccurred(const base::Location& location, const std::error_c
     }
 }
 
-void Channel::doWrite()
+void IpcChannel::doWrite()
 {
     write_size_ = write_queue_.front().size();
 
@@ -346,7 +346,7 @@ void Channel::doWrite()
     });
 }
 
-void Channel::doReadMessage()
+void IpcChannel::doReadMessage()
 {
     asio::async_read(stream_, asio::buffer(&read_size_, sizeof(read_size_)),
         [this](const std::error_code& error_code, size_t bytes_transferred)
@@ -396,7 +396,7 @@ void Channel::doReadMessage()
     });
 }
 
-void Channel::onMessageReceived()
+void IpcChannel::onMessageReceived()
 {
     if (listener_)
         listener_->onMessageReceived(read_buffer_);
@@ -404,4 +404,4 @@ void Channel::onMessageReceived()
     read_size_ = 0;
 }
 
-} // namespace ipc
+} // namespace base

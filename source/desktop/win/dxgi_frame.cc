@@ -25,7 +25,7 @@
 namespace desktop {
 
 DxgiFrame::DxgiFrame(std::shared_ptr<DxgiDuplicatorController> controller,
-                     ipc::SharedMemoryFactory* shared_memory_factory)
+                     base::SharedMemoryFactory* shared_memory_factory)
     : context_(std::move(controller)),
       shared_memory_factory_(shared_memory_factory)
 {

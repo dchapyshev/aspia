@@ -96,6 +96,20 @@ list(APPEND SOURCE_BASE_FILES
     files/scoped_temp_file.cc
     files/scoped_temp_file.h)
 
+list(APPEND SOURCE_BASE_IPC
+    ipc/channel.cc
+    ipc/channel.h
+    ipc/channel_proxy.cc
+    ipc/channel_proxy.h
+    ipc/server.cc
+    ipc/server.h
+    ipc/shared_memory.cc
+    ipc/shared_memory.h
+    ipc/shared_memory_factory.cc
+    ipc/shared_memory_factory.h
+    ipc/shared_memory_factory_proxy.cc
+    ipc/shared_memory_factory_proxy.h)
+
 list(APPEND SOURCE_BASE_MEMORY
     memory/aligned_memory.cc
     memory/aligned_memory.h
@@ -215,6 +229,7 @@ list(APPEND SOURCE_BASE_WIN_UNIT_TESTS
 source_group("" FILES ${SOURCE_BASE})
 source_group("" FILES ${SOURCE_BASE_UNIT_TESTS})
 source_group(files FILES ${SOURCE_BASE_FILES})
+source_group(ipc FILES ${SOURCE_BASE_IPC})
 source_group(memory FILES ${SOURCE_BASE_MEMORY})
 source_group(memory FILES ${SOURCE_BASE_MEMORY_UNIT_TESTS})
 source_group(message_loop FILES ${SOURCE_BASE_MESSAGE_LOOP})
@@ -227,6 +242,7 @@ source_group(win FILES ${SOURCE_BASE_WIN_UNIT_TESTS})
 add_library(aspia_base STATIC
     ${SOURCE_BASE}
     ${SOURCE_BASE_FILES}
+    ${SOURCE_BASE_IPC}
     ${SOURCE_BASE_MEMORY}
     ${SOURCE_BASE_MESSAGE_LOOP}
     ${SOURCE_BASE_STRINGS}

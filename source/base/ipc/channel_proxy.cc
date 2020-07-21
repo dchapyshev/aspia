@@ -16,21 +16,21 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "ipc/channel_proxy.h"
+#include "base/ipc/channel_proxy.h"
 
 #include "base/logging.h"
 #include "base/task_runner.h"
 
-namespace ipc {
+namespace base {
 
-ChannelProxy::ChannelProxy(std::shared_ptr<base::TaskRunner> task_runner, Channel* channel)
+IpcChannelProxy::IpcChannelProxy(std::shared_ptr<TaskRunner> task_runner, IpcChannel* channel)
     : task_runner_(std::move(task_runner)),
       channel_(channel)
 {
     DCHECK(task_runner_ && channel_);
 }
 
-void ChannelProxy::send(base::ByteArray&& buffer)
+void IpcChannelProxy::send(ByteArray&& buffer)
 {
     std::scoped_lock lock(incoming_queue_lock_);
 
@@ -41,15 +41,15 @@ void ChannelProxy::send(base::ByteArray&& buffer)
     if (!schedule_write)
         return;
 
-    task_runner_->postTask(std::bind(&ChannelProxy::scheduleWrite, shared_from_this()));
+    task_runner_->postTask(std::bind(&IpcChannelProxy::scheduleWrite, shared_from_this()));
 }
 
-void ChannelProxy::willDestroyCurrentChannel()
+void IpcChannelProxy::willDestroyCurrentChannel()
 {
     channel_ = nullptr;
 }
 
-void ChannelProxy::scheduleWrite()
+void IpcChannelProxy::scheduleWrite()
 {
     if (!channel_)
         return;
@@ -60,7 +60,7 @@ void ChannelProxy::scheduleWrite()
     channel_->doWrite();
 }
 
-bool ChannelProxy::reloadWriteQueue(base::ScalableQueue<base::ByteArray>* work_queue)
+bool IpcChannelProxy::reloadWriteQueue(base::ScalableQueue<base::ByteArray>* work_queue)
 {
     if (!work_queue->empty())
         return false;
@@ -76,4 +76,4 @@ bool ChannelProxy::reloadWriteQueue(base::ScalableQueue<base::ByteArray>* work_q
     return true;
 }
 
-} // namespace ipc
+} // namespace base

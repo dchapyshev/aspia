@@ -19,9 +19,9 @@
 #include "desktop/screen_capturer_dxgi.h"
 
 #include "base/logging.h"
+#include "base/ipc/shared_memory_factory.h"
 #include "base/strings/unicode.h"
 #include "desktop/win/screen_capture_utils.h"
-#include "ipc/shared_memory_factory.h"
 
 namespace desktop {
 

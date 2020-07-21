@@ -16,12 +16,12 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "ipc/shared_memory_factory_proxy.h"
+#include "base/ipc/shared_memory_factory_proxy.h"
 
 #include "base/logging.h"
-#include "ipc/shared_memory_factory.h"
+#include "base/ipc/shared_memory_factory.h"
 
-namespace ipc {
+namespace base {
 
 SharedMemoryFactoryProxy::SharedMemoryFactoryProxy(SharedMemoryFactory* factory)
     : factory_(factory)
@@ -55,4 +55,4 @@ void SharedMemoryFactoryProxy::onSharedMemoryDestroy(int id)
     factory_->onSharedMemoryDestroy(id);
 }
 
-} // namespace ipc
+} // namespace base

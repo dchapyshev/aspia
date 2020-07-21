@@ -21,9 +21,9 @@
 
 #include "desktop/frame.h"
 
-namespace ipc {
+namespace base {
 class SharedMemoryFactory;
-} // namespace ipc
+} // namespace base
 
 namespace desktop {
 
@@ -33,18 +33,18 @@ public:
     ~SharedMemoryFrame();
 
     static std::unique_ptr<Frame> create(
-        const Size& size, const PixelFormat& format, ipc::SharedMemoryFactory* shared_memory_factory);
+        const Size& size, const PixelFormat& format, base::SharedMemoryFactory* shared_memory_factory);
 
     static std::unique_ptr<Frame> open(
-        const Size& size, const PixelFormat& format, int id, ipc::SharedMemoryFactory* shared_memory_factory);
+        const Size& size, const PixelFormat& format, int id, base::SharedMemoryFactory* shared_memory_factory);
 
     static std::unique_ptr<Frame> attach(
-        const Size& size, const PixelFormat& format, std::unique_ptr<ipc::SharedMemoryBase> shared_memory);
+        const Size& size, const PixelFormat& format, std::unique_ptr<base::SharedMemoryBase> shared_memory);
 
 private:
     SharedMemoryFrame(const Size& size,
                       const PixelFormat& format,
-                      ipc::SharedMemoryBase* shared_memory);
+                      base::SharedMemoryBase* shared_memory);
 
     DISALLOW_COPY_AND_ASSIGN(SharedMemoryFrame);
 };

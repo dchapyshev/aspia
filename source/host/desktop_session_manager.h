@@ -21,22 +21,19 @@
 
 #include "base/session_id.h"
 #include "base/waitable_timer.h"
+#include "base/ipc/server.h"
 #include "base/win/session_status.h"
 #include "host/desktop_session.h"
-#include "ipc/server.h"
 #include "proto/desktop_internal.pb.h"
 
 namespace base {
 class Location;
+class SharedMemory;
 } // namespace base
 
 namespace desktop {
 class Frame;
 } // namespace desktop
-
-namespace ipc {
-class SharedMemory;
-} // namespace ipc
 
 namespace host {
 
@@ -44,7 +41,7 @@ class DesktopSessionProcess;
 class DesktopSessionProxy;
 
 class DesktopSessionManager
-    : public ipc::Server::Delegate,
+    : public base::IpcServer::Delegate,
       public DesktopSession::Delegate
 {
 public:
@@ -59,7 +56,7 @@ public:
 
 protected:
     // ipc::Server::Delegate implementation.
-    void onNewConnection(std::unique_ptr<ipc::Channel> channel) override;
+    void onNewConnection(std::unique_ptr<base::IpcChannel> channel) override;
     void onErrorOccurred() override;
 
     // DesktopSession::Delegate implementation.
@@ -74,7 +71,7 @@ private:
     enum class State { STOPPED, STARTING, STOPPING, DETACHED, ATTACHED };
 
     std::shared_ptr<base::TaskRunner> task_runner_;
-    std::unique_ptr<ipc::Server> server_;
+    std::unique_ptr<base::IpcServer> server_;
     std::unique_ptr<DesktopSession> session_;
     std::shared_ptr<DesktopSessionProxy> session_proxy_;
     base::WaitableTimer session_attach_timer_;

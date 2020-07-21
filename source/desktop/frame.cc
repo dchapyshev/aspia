@@ -26,7 +26,7 @@ Frame::Frame(const Size& size,
              const PixelFormat& format,
              int stride,
              uint8_t* data,
-             ipc::SharedMemoryBase* shared_memory)
+             base::SharedMemoryBase* shared_memory)
     : size_(size),
       format_(format),
       stride_(stride),

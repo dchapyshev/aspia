@@ -35,7 +35,7 @@ namespace host {
 
 UserSession::UserSession(std::shared_ptr<base::TaskRunner> task_runner,
                          base::SessionId session_id,
-                         std::unique_ptr<ipc::Channel> channel)
+                         std::unique_ptr<base::IpcChannel> channel)
     : task_runner_(task_runner),
       channel_(std::move(channel)),
       attach_timer_(task_runner),
@@ -76,7 +76,7 @@ void UserSession::start(Delegate* delegate)
     delegate_->onUserSessionStarted();
 }
 
-void UserSession::restart(std::unique_ptr<ipc::Channel> channel)
+void UserSession::restart(std::unique_ptr<base::IpcChannel> channel)
 {
     channel_ = std::move(channel);
 

@@ -19,19 +19,15 @@
 #ifndef HOST__USER_SESSION_AGENT_H
 #define HOST__USER_SESSION_AGENT_H
 
-#include "ipc/channel.h"
+#include "base/ipc/channel.h"
 #include "proto/host_internal.pb.h"
-
-namespace ipc {
-class Channel;
-} // namespace ipc
 
 namespace host {
 
 class UserSessionAgentProxy;
 class UserSessionWindowProxy;
 
-class UserSessionAgent : public ipc::Channel::Listener
+class UserSessionAgent : public base::IpcChannel::Listener
 {
 public:
     enum class Status
@@ -77,7 +73,7 @@ private:
     void killClient(const std::string& uuid);
 
     std::shared_ptr<UserSessionWindowProxy> window_proxy_;
-    std::unique_ptr<ipc::Channel> ipc_channel_;
+    std::unique_ptr<base::IpcChannel> ipc_channel_;
 
     proto::internal::ServiceToUi incoming_message_;
     proto::internal::UiToService outgoing_message_;

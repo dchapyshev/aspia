@@ -18,16 +18,16 @@
 
 #include "desktop/screen_capturer.h"
 
-#include "ipc/shared_memory_factory.h"
+#include "base/ipc/shared_memory_factory.h"
 
 namespace desktop {
 
-void ScreenCapturer::setSharedMemoryFactory(ipc::SharedMemoryFactory* shared_memory_factory)
+void ScreenCapturer::setSharedMemoryFactory(base::SharedMemoryFactory* shared_memory_factory)
 {
     shared_memory_factory_ = shared_memory_factory;
 }
 
-ipc::SharedMemoryFactory* ScreenCapturer::sharedMemoryFactory() const
+base::SharedMemoryFactory* ScreenCapturer::sharedMemoryFactory() const
 {
     return shared_memory_factory_;
 }

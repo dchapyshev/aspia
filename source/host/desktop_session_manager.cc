@@ -26,7 +26,7 @@
 #include "host/desktop_session_ipc.h"
 #include "host/desktop_session_process.h"
 #include "host/desktop_session_proxy.h"
-#include "ipc/channel.h"
+#include "base/ipc/channel.h"
 
 namespace host {
 
@@ -66,9 +66,9 @@ void DesktopSessionManager::attachSession(
 
     state_ = State::STARTING;
 
-    std::u16string channel_id = ipc::Server::createUniqueId();
+    std::u16string channel_id = base::IpcServer::createUniqueId();
 
-    server_ = std::make_unique<ipc::Server>();
+    server_ = std::make_unique<base::IpcServer>();
     if (!server_->start(channel_id, this))
     {
         LOG(LS_ERROR) << "Failed to start IPC server";
@@ -123,7 +123,7 @@ std::shared_ptr<DesktopSessionProxy> DesktopSessionManager::sessionProxy() const
     return session_proxy_;
 }
 
-void DesktopSessionManager::onNewConnection(std::unique_ptr<ipc::Channel> channel)
+void DesktopSessionManager::onNewConnection(std::unique_ptr<base::IpcChannel> channel)
 {
     if (DesktopSessionProcess::filePath() != channel->peerFilePath())
     {

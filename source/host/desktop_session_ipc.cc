@@ -19,21 +19,21 @@
 #include "host/desktop_session_ipc.h"
 
 #include "base/logging.h"
+#include "base/ipc/shared_memory.h"
 #include "codec/video_util.h"
 #include "desktop/mouse_cursor.h"
 #include "desktop/shared_memory_frame.h"
-#include "ipc/shared_memory.h"
 
 namespace host {
 
-class DesktopSessionIpc::SharedBuffer : public ipc::SharedMemoryBase
+class DesktopSessionIpc::SharedBuffer : public base::SharedMemoryBase
 {
 public:
     ~SharedBuffer() = default;
 
-    static std::unique_ptr<SharedBuffer> wrap(std::unique_ptr<ipc::SharedMemory> shared_memory)
+    static std::unique_ptr<SharedBuffer> wrap(std::unique_ptr<base::SharedMemory> shared_memory)
     {
-        std::shared_ptr<ipc::SharedMemory> shared_frame(shared_memory.release());
+        std::shared_ptr<base::SharedMemory> shared_frame(shared_memory.release());
         return std::unique_ptr<SharedBuffer>(new SharedBuffer(shared_frame));
     }
 
@@ -58,18 +58,18 @@ public:
     }
 
 private:
-    explicit SharedBuffer(std::shared_ptr<ipc::SharedMemory>& shared_memory)
+    explicit SharedBuffer(std::shared_ptr<base::SharedMemory>& shared_memory)
         : shared_memory_(shared_memory)
     {
         // Nothing
     }
 
-    std::shared_ptr<ipc::SharedMemory> shared_memory_;
+    std::shared_ptr<base::SharedMemory> shared_memory_;
 
     DISALLOW_COPY_AND_ASSIGN(SharedBuffer);
 };
 
-DesktopSessionIpc::DesktopSessionIpc(std::unique_ptr<ipc::Channel> channel, Delegate* delegate)
+DesktopSessionIpc::DesktopSessionIpc(std::unique_ptr<base::IpcChannel> channel, Delegate* delegate)
     : channel_(std::move(channel)),
       delegate_(delegate)
 {
@@ -268,8 +268,8 @@ void DesktopSessionIpc::onScreenCaptured(const proto::internal::ScreenCaptured& 
 
 void DesktopSessionIpc::onCreateSharedBuffer(int shared_buffer_id)
 {
-    std::unique_ptr<ipc::SharedMemory> shared_memory =
-        ipc::SharedMemory::open(ipc::SharedMemory::Mode::READ_ONLY, shared_buffer_id);
+    std::unique_ptr<base::SharedMemory> shared_memory =
+        base::SharedMemory::open(base::SharedMemory::Mode::READ_ONLY, shared_buffer_id);
 
     if (!shared_memory)
     {

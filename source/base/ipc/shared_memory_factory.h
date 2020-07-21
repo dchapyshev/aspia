@@ -16,14 +16,14 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef IPC__SHARED_MEMORY_FACTORY_H
-#define IPC__SHARED_MEMORY_FACTORY_H
+#ifndef BASE__IPC__SHARED_MEMORY_FACTORY_H
+#define BASE__IPC__SHARED_MEMORY_FACTORY_H
 
 #include "base/macros_magic.h"
 
 #include <memory>
 
-namespace ipc {
+namespace base {
 
 class SharedMemory;
 
@@ -64,6 +64,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(SharedMemoryFactory);
 };
 
-} // namespace ipc
+} // namespace base
 
-#endif // IPC__SHARED_MEMORY_FACTORY_H
+#endif // BASE__IPC__SHARED_MEMORY_FACTORY_H

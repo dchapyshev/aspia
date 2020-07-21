@@ -19,6 +19,7 @@
 #include "desktop/screen_capturer_wrapper.h"
 
 #include "base/logging.h"
+#include "base/ipc/shared_memory_factory.h"
 #include "base/win/windows_version.h"
 #include "desktop/cursor_capturer_win.h"
 #include "desktop/mouse_cursor.h"
@@ -26,7 +27,6 @@
 #include "desktop/screen_capturer_gdi.h"
 #include "desktop/win/desktop_environment.h"
 #include "desktop/win/power_save_blocker.h"
-#include "ipc/shared_memory_factory.h"
 
 namespace desktop {
 
@@ -92,7 +92,7 @@ void ScreenCapturerWrapper::captureFrame()
     delegate_->onScreenCaptured(frame, cursor_capturer_->captureCursor());
 }
 
-void ScreenCapturerWrapper::setSharedMemoryFactory(ipc::SharedMemoryFactory* shared_memory_factory)
+void ScreenCapturerWrapper::setSharedMemoryFactory(base::SharedMemoryFactory* shared_memory_factory)
 {
     screen_capturer_->setSharedMemoryFactory(shared_memory_factory);
 }

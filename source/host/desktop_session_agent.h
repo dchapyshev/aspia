@@ -19,10 +19,10 @@
 #ifndef HOST__DESKTOP_SESSION_AGENT_H
 #define HOST__DESKTOP_SESSION_AGENT_H
 
+#include "base/ipc/channel.h"
+#include "base/ipc/shared_memory_factory.h"
 #include "desktop/screen_capturer_wrapper.h"
 #include "host/clipboard_monitor.h"
-#include "ipc/channel.h"
-#include "ipc/shared_memory_factory.h"
 #include "proto/desktop_internal.pb.h"
 
 namespace base {
@@ -41,8 +41,8 @@ class InputInjector;
 
 class DesktopSessionAgent
     : public std::enable_shared_from_this<DesktopSessionAgent>,
-      public ipc::Channel::Listener,
-      public ipc::SharedMemoryFactory::Delegate,
+      public base::IpcChannel::Listener,
+      public base::SharedMemoryFactory::Delegate,
       public desktop::ScreenCapturerWrapper::Delegate,
       public common::Clipboard::Delegate
 {
@@ -53,11 +53,11 @@ public:
     void start(std::u16string_view channel_id);
 
 protected:
-    // ipc::Channel::Listener implementation.
+    // base::IpcChannel::Listener implementation.
     void onDisconnected() override;
     void onMessageReceived(const base::ByteArray& buffer) override;
 
-    // ipc::SharedMemoryFactory::Delegate implementation.
+    // base::SharedMemoryFactory::Delegate implementation.
     void onSharedMemoryCreate(int id) override;
     void onSharedMemoryDestroy(int id) override;
 
@@ -77,14 +77,14 @@ private:
 
     std::shared_ptr<base::TaskRunner> task_runner_;
 
-    std::unique_ptr<ipc::Channel> channel_;
+    std::unique_ptr<base::IpcChannel> channel_;
     proto::internal::ServiceToDesktop incoming_message_;
     proto::internal::DesktopToService outgoing_message_;
 
     std::unique_ptr<ClipboardMonitor> clipboard_monitor_;
     std::unique_ptr<InputInjector> input_injector_;
 
-    std::unique_ptr<ipc::SharedMemoryFactory> shared_memory_factory_;
+    std::unique_ptr<base::SharedMemoryFactory> shared_memory_factory_;
     std::unique_ptr<desktop::CaptureScheduler> capture_scheduler_;
     std::unique_ptr<desktop::ScreenCapturerWrapper> screen_capturer_;
 

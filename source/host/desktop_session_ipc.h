@@ -19,17 +19,17 @@
 #ifndef HOST__DESKTOP_SESSION_IPC_H
 #define HOST__DESKTOP_SESSION_IPC_H
 
+#include "base/ipc/channel.h"
 #include "host/desktop_session.h"
-#include "ipc/channel.h"
 
 namespace host {
 
 class DesktopSessionIpc
     : public DesktopSession,
-      public ipc::Channel::Listener
+      public base::IpcChannel::Listener
 {
 public:
-    DesktopSessionIpc(std::unique_ptr<ipc::Channel> channel, Delegate* delegate);
+    DesktopSessionIpc(std::unique_ptr<base::IpcChannel> channel, Delegate* delegate);
     ~DesktopSessionIpc();
 
     // DesktopSession implementation.
@@ -44,7 +44,7 @@ public:
     void injectClipboardEvent(const proto::ClipboardEvent& event) override;
 
 protected:
-    // ipc::Channel::Listener implementation.
+    // base::IpcChannel::Listener implementation.
     void onDisconnected() override;
     void onMessageReceived(const base::ByteArray& buffer) override;
 
@@ -57,7 +57,7 @@ private:
     void onReleaseSharedBuffer(int shared_buffer_id);
     std::unique_ptr<SharedBuffer> sharedBuffer(int shared_buffer_id);
 
-    std::unique_ptr<ipc::Channel> channel_;
+    std::unique_ptr<base::IpcChannel> channel_;
     SharedBuffers shared_buffers_;
     std::unique_ptr<desktop::Frame> last_frame_;
     std::unique_ptr<desktop::MouseCursor> last_mouse_cursor_;

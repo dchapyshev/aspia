@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef IPC__CHANNEL_H
-#define IPC__CHANNEL_H
+#ifndef BASE__IPC__CHANNEL_H
+#define BASE__IPC__CHANNEL_H
 
 #include "base/process_handle.h"
 #include "base/session_id.h"
@@ -30,19 +30,16 @@
 #include <filesystem>
 
 namespace base {
+
+class IpcChannelProxy;
+class IpcServer;
 class Location;
-} // namespace base
 
-namespace ipc {
-
-class ChannelProxy;
-class Server;
-
-class Channel
+class IpcChannel
 {
 public:
-    Channel();
-    ~Channel();
+    IpcChannel();
+    ~IpcChannel();
 
     class Listener
     {
@@ -50,10 +47,10 @@ public:
         virtual ~Listener() = default;
 
         virtual void onDisconnected() = 0;
-        virtual void onMessageReceived(const base::ByteArray& buffer) = 0;
+        virtual void onMessageReceived(const ByteArray& buffer) = 0;
     };
 
-    std::shared_ptr<ChannelProxy> channelProxy();
+    std::shared_ptr<IpcChannelProxy> channelProxy();
 
     // Sets an instance of the class to receive connection status notifications or new messages.
     // You can change this in the process.
@@ -70,20 +67,20 @@ public:
     void pause();
     void resume();
 
-    void send(base::ByteArray&& buffer);
+    void send(ByteArray&& buffer);
 
-    base::ProcessId peerProcessId() const { return peer_process_id_; }
-    base::SessionId peerSessionId() const { return peer_session_id_; }
+    ProcessId peerProcessId() const { return peer_process_id_; }
+    SessionId peerSessionId() const { return peer_session_id_; }
     std::filesystem::path peerFilePath() const;
 
 private:
-    friend class Server;
-    friend class ChannelProxy;
+    friend class IpcServer;
+    friend class IpcChannelProxy;
 
-    Channel(std::u16string_view channel_name, asio::windows::stream_handle&& stream);
+    IpcChannel(std::u16string_view channel_name, asio::windows::stream_handle&& stream);
     static std::u16string channelName(std::u16string_view channel_id);
 
-    void onErrorOccurred(const base::Location& location, const std::error_code& error_code);
+    void onErrorOccurred(const Location& location, const std::error_code& error_code);
     void doWrite();
     void doReadMessage();
     void onMessageReceived();
@@ -91,13 +88,13 @@ private:
     std::u16string channel_name_;
     asio::windows::stream_handle stream_;
 
-    std::shared_ptr<ChannelProxy> proxy_;
+    std::shared_ptr<IpcChannelProxy> proxy_;
     Listener* listener_ = nullptr;
 
     bool is_connected_ = false;
     bool is_paused_ = true;
 
-    base::ScalableQueue<base::ByteArray> write_queue_;
+    ScalableQueue<ByteArray> write_queue_;
     uint32_t write_size_ = 0;
 
     uint32_t read_size_ = 0;
@@ -108,9 +105,9 @@ private:
 
     THREAD_CHECKER(thread_checker_);
 
-    DISALLOW_COPY_AND_ASSIGN(Channel);
+    DISALLOW_COPY_AND_ASSIGN(IpcChannel);
 };
 
-} // namespace ipc
+} // namespace base
 
-#endif // IPC__CHANNEL_H
+#endif // BASE__IPC__CHANNEL_H

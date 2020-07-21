@@ -37,7 +37,7 @@ UserSessionAgent::~UserSessionAgent() = default;
 
 void UserSessionAgent::start()
 {
-    ipc_channel_ = std::make_unique<ipc::Channel>();
+    ipc_channel_ = std::make_unique<base::IpcChannel>();
     ipc_channel_->setListener(this);
 
     if (ipc_channel_->connect(kIpcChannelIdForUI))

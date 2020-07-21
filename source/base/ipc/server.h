@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef IPC__SERVER_H
-#define IPC__SERVER_H
+#ifndef BASE__IPC__SERVER_H
+#define BASE__IPC__SERVER_H
 
 #include "base/threading/thread_checker.h"
 
@@ -26,18 +26,15 @@
 #include <array>
 
 namespace base {
+
+class IpcChannel;
 class Location;
-} // namespace base
 
-namespace ipc {
-
-class Channel;
-
-class Server
+class IpcServer
 {
 public:
-    Server();
-    ~Server();
+    IpcServer();
+    ~IpcServer();
 
     static std::u16string createUniqueId();
 
@@ -46,7 +43,7 @@ public:
     public:
         virtual ~Delegate() = default;
 
-        virtual void onNewConnection(std::unique_ptr<Channel> channel) = 0;
+        virtual void onNewConnection(std::unique_ptr<IpcChannel> channel) = 0;
         virtual void onErrorOccurred() = 0;
     };
 
@@ -55,8 +52,8 @@ public:
 
 private:
     bool runListener(size_t index);
-    void onNewConnection(size_t index, std::unique_ptr<Channel> channel);
-    void onErrorOccurred(const base::Location& location);
+    void onNewConnection(size_t index, std::unique_ptr<IpcChannel> channel);
+    void onErrorOccurred(const Location& location);
 
     Delegate* delegate_ = nullptr;
 
@@ -68,9 +65,9 @@ private:
 
     THREAD_CHECKER(thread_checker_);
 
-    DISALLOW_COPY_AND_ASSIGN(Server);
+    DISALLOW_COPY_AND_ASSIGN(IpcServer);
 };
 
-} // namespace ipc
+} // namespace base::ipc
 
-#endif // IPC__SERVER_H
+#endif // BASE__IPC__SERVER_H

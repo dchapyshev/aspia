@@ -16,20 +16,20 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "ipc/shared_memory.h"
+#include "base/ipc/shared_memory.h"
 
 #include "base/logging.h"
+#include "base/ipc/shared_memory_factory_proxy.h"
 #include "base/strings/string_number_conversions.h"
 #include "base/strings/string_util.h"
 #include "base/strings/unicode.h"
-#include "ipc/shared_memory_factory_proxy.h"
 
 #include <atomic>
 #include <random>
 
 #include <AclAPI.h>
 
-namespace ipc {
+namespace base {
 
 namespace {
 
@@ -51,7 +51,7 @@ int createUniqueId()
 std::u16string createFilePath(int id)
 {
     static const char16_t kPrefix[] = u"Global\\aspia_";
-    return kPrefix + base::numberToString16(id);
+    return kPrefix + numberToString16(id);
 }
 
 bool modeToDesiredAccess(SharedMemory::Mode mode, DWORD* desired_access)
@@ -72,7 +72,7 @@ bool modeToDesiredAccess(SharedMemory::Mode mode, DWORD* desired_access)
     }
 }
 
-bool createFileMapping(SharedMemory::Mode mode, int id, size_t size, base::win::ScopedHandle* out)
+bool createFileMapping(SharedMemory::Mode mode, int id, size_t size, win::ScopedHandle* out)
 {
     DWORD protect;
 
@@ -96,7 +96,7 @@ bool createFileMapping(SharedMemory::Mode mode, int id, size_t size, base::win::
 
     std::u16string path = createFilePath(id);
 
-    base::win::ScopedHandle file(CreateFileMappingW(
+    win::ScopedHandle file(CreateFileMappingW(
         INVALID_HANDLE_VALUE, nullptr, protect, high, low, base::asWide(path)));
     if (!file.isValid())
     {
@@ -114,7 +114,7 @@ bool createFileMapping(SharedMemory::Mode mode, int id, size_t size, base::win::
         file, SE_FILE_OBJECT, DACL_SECURITY_INFORMATION, nullptr, nullptr, nullptr, nullptr);
     if (error_code != ERROR_SUCCESS)
     {
-        LOG(LS_WARNING) << "SetSecurityInfo failed: " << base::SystemError::toString(error_code);
+        LOG(LS_WARNING) << "SetSecurityInfo failed: " << SystemError::toString(error_code);
         return false;
     }
 
@@ -122,14 +122,13 @@ bool createFileMapping(SharedMemory::Mode mode, int id, size_t size, base::win::
     return true;
 }
 
-bool openFileMapping(SharedMemory::Mode mode, int id, base::win::ScopedHandle* out)
+bool openFileMapping(SharedMemory::Mode mode, int id, win::ScopedHandle* out)
 {
     DWORD desired_access;
     if (!modeToDesiredAccess(mode, &desired_access))
         return false;
 
-    base::win::ScopedHandle file(
-        OpenFileMappingW(desired_access, FALSE, base::asWide(createFilePath(id))));
+    win::ScopedHandle file(OpenFileMappingW(desired_access, FALSE, asWide(createFilePath(id))));
     if (!file.isValid())
     {
         PLOG(LS_WARNING) << "OpenFileMappingW failed";
@@ -165,7 +164,7 @@ const SharedMemory::Handle kInvalidHandle = -1;
 #endif
 
 SharedMemory::SharedMemory(int id,
-                           base::win::ScopedHandle&& handle,
+                           win::ScopedHandle&& handle,
                            void* data,
                            std::shared_ptr<SharedMemoryFactoryProxy> factory_proxy)
     : factory_proxy_(std::move(factory_proxy)),
@@ -191,7 +190,7 @@ std::unique_ptr<SharedMemory> SharedMemory::create(
 {
     static const int kRetryCount = 10;
 
-    base::win::ScopedHandle file;
+    win::ScopedHandle file;
     int id;
 
     for (int i = 0; i < kRetryCount; ++i)
@@ -218,7 +217,7 @@ std::unique_ptr<SharedMemory> SharedMemory::create(
 std::unique_ptr<SharedMemory> SharedMemory::open(
     Mode mode, int id, std::shared_ptr<SharedMemoryFactoryProxy> factory_proxy)
 {
-    base::win::ScopedHandle file;
+    win::ScopedHandle file;
     if (!openFileMapping(mode, id, &file))
         return nullptr;
 
@@ -230,4 +229,4 @@ std::unique_ptr<SharedMemory> SharedMemory::open(
         new SharedMemory(id, std::move(file), memory, std::move(factory_proxy)));
 }
 
-} // namespace ipc
+} // namespace base::ipc

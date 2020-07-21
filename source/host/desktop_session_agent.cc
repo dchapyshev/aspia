@@ -20,6 +20,7 @@
 
 #include "base/logging.h"
 #include "base/power_controller.h"
+#include "base/ipc/shared_memory.h"
 #include "base/threading/thread.h"
 #include "codec/video_util.h"
 #include "desktop/capture_scheduler.h"
@@ -27,7 +28,6 @@
 #include "desktop/screen_capturer_wrapper.h"
 #include "desktop/shared_frame.h"
 #include "host/input_injector_win.h"
-#include "ipc/shared_memory.h"
 
 namespace host {
 
@@ -43,7 +43,7 @@ DesktopSessionAgent::~DesktopSessionAgent() = default;
 
 void DesktopSessionAgent::start(std::u16string_view channel_id)
 {
-    channel_ = std::make_unique<ipc::Channel>();
+    channel_ = std::make_unique<base::IpcChannel>();
 
     if (!channel_->connect(channel_id))
         return;
@@ -261,7 +261,7 @@ void DesktopSessionAgent::setEnabled(bool enable)
 
         // Create a shared memory factory.
         // We will receive notifications of all creations and destruction of shared memory.
-        shared_memory_factory_ = std::make_unique<ipc::SharedMemoryFactory>(this);
+        shared_memory_factory_ = std::make_unique<base::SharedMemoryFactory>(this);
 
         capture_scheduler_ = std::make_unique<desktop::CaptureScheduler>(
             std::chrono::milliseconds(40));

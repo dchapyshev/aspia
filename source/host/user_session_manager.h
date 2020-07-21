@@ -20,16 +20,16 @@
 #define HOST__USER_SESSION_MANAGER_H
 
 #include "base/session_id.h"
+#include "base/ipc/server.h"
 #include "base/win/session_status.h"
 #include "host/user_session.h"
-#include "ipc/server.h"
 
 namespace host {
 
 class UserSession;
 
 class UserSessionManager
-    : public ipc::Server::Delegate,
+    : public base::IpcServer::Delegate,
       public UserSession::Delegate
 {
 public:
@@ -50,8 +50,8 @@ public:
     net::UserList userList() const;
 
 protected:
-    // ipc::Server::Delegate implementation.
-    void onNewConnection(std::unique_ptr<ipc::Channel> channel) override;
+    // base::IpcServer::Delegate implementation.
+    void onNewConnection(std::unique_ptr<base::IpcChannel> channel) override;
     void onErrorOccurred() override;
 
     // UserSession::Delegate implementation.
@@ -61,10 +61,10 @@ protected:
 
 private:
     void startSessionProcess(base::SessionId session_id);
-    void addUserSession(base::SessionId session_id, std::unique_ptr<ipc::Channel> channel);
+    void addUserSession(base::SessionId session_id, std::unique_ptr<base::IpcChannel> channel);
 
     std::shared_ptr<base::TaskRunner> task_runner_;
-    std::unique_ptr<ipc::Server> ipc_server_;
+    std::unique_ptr<base::IpcServer> ipc_server_;
     std::vector<std::unique_ptr<UserSession>> sessions_;
     Delegate* delegate_ = nullptr;
 

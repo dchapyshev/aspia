@@ -24,9 +24,9 @@
 #include <string>
 #include <vector>
 
-namespace ipc {
+namespace base {
 class SharedMemoryFactory;
-} // namespace ipc
+} // namespace base
 
 namespace desktop {
 
@@ -58,8 +58,8 @@ public:
     virtual bool selectScreen(ScreenId screen_id) = 0;
     virtual const Frame* captureFrame(Error* error) = 0;
 
-    void setSharedMemoryFactory(ipc::SharedMemoryFactory* shared_memory_factory);
-    ipc::SharedMemoryFactory* sharedMemoryFactory() const;
+    void setSharedMemoryFactory(base::SharedMemoryFactory* shared_memory_factory);
+    base::SharedMemoryFactory* sharedMemoryFactory() const;
 
 protected:
     friend class ScreenCapturerWrapper;
@@ -92,7 +92,7 @@ protected:
     };
 
 private:
-    ipc::SharedMemoryFactory* shared_memory_factory_;
+    base::SharedMemoryFactory* shared_memory_factory_;
 };
 
 template <typename FrameType>

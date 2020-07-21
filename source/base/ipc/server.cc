@@ -16,10 +16,11 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "ipc/server.h"
+#include "base/ipc/server.h"
 
 #include "base/location.h"
 #include "base/logging.h"
+#include "base/ipc/channel.h"
 #include "base/message_loop/message_loop.h"
 #include "base/message_loop/message_pump_asio.h"
 #include "base/strings/string_printf.h"
@@ -27,13 +28,12 @@
 #include "base/win/scoped_object.h"
 #include "base/win/security_helpers.h"
 #include "crypto/random.h"
-#include "ipc/channel.h"
 
 #include <asio/post.hpp>
 #include <asio/windows/overlapped_ptr.hpp>
 #include <asio/windows/stream_handle.hpp>
 
-namespace ipc {
+namespace base {
 
 namespace {
 
@@ -42,10 +42,10 @@ const DWORD kPipeBufferSize = 512 * 1024; // 512 kB
 
 } // namespace
 
-class Server::Listener : public std::enable_shared_from_this<Listener>
+class IpcServer::Listener : public std::enable_shared_from_this<Listener>
 {
 public:
-    Listener(Server* server, size_t index);
+    Listener(IpcServer* server, size_t index);
     ~Listener();
 
     void dettach() { server_ = nullptr; }
@@ -54,7 +54,7 @@ public:
     void onNewConnetion(const std::error_code& error_code, size_t bytes_transferred);
 
 private:
-    Server* server_;
+    IpcServer* server_;
     const size_t index_;
 
     std::unique_ptr<asio::windows::stream_handle> handle_;
@@ -63,20 +63,20 @@ private:
     DISALLOW_COPY_AND_ASSIGN(Listener);
 };
 
-Server::Listener::Listener(Server* server, size_t index)
+IpcServer::Listener::Listener(IpcServer* server, size_t index)
     : server_(server),
       index_(index)
 {
     // Nothing
 }
 
-Server::Listener::~Listener() = default;
+IpcServer::Listener::~Listener() = default;
 
-bool Server::Listener::listen(asio::io_context& io_context, std::u16string_view channel_name)
+bool IpcServer::Listener::listen(asio::io_context& io_context, std::u16string_view channel_name)
 {
     std::wstring user_sid;
 
-    if (!base::win::userSidString(&user_sid))
+    if (!win::userSidString(&user_sid))
     {
         LOG(LS_ERROR) << "Failed to query the current user SID";
         return false;
@@ -102,7 +102,7 @@ bool Server::Listener::listen(asio::io_context& io_context, std::u16string_view 
     security_attributes.lpSecurityDescriptor = sd.get();
     security_attributes.bInheritHandle = FALSE;
 
-    base::win::ScopedHandle handle(
+    win::ScopedHandle handle(
         CreateNamedPipeW(reinterpret_cast<const wchar_t*>(channel_name.data()),
                          FILE_FLAG_OVERLAPPED | PIPE_ACCESS_DUPLEX,
                          PIPE_TYPE_BYTE | PIPE_READMODE_BYTE | PIPE_REJECT_REMOTE_CLIENTS,
@@ -121,7 +121,7 @@ bool Server::Listener::listen(asio::io_context& io_context, std::u16string_view 
 
     overlapped_ = std::make_unique<asio::windows::overlapped_ptr>(
         io_context,
-        std::bind(&Server::Listener::onNewConnetion,
+        std::bind(&IpcServer::Listener::onNewConnetion,
                   shared_from_this(),
                   std::placeholders::_1,
                   std::placeholders::_2));
@@ -150,7 +150,7 @@ bool Server::Listener::listen(asio::io_context& io_context, std::u16string_view 
     return true;
 }
 
-void Server::Listener::onNewConnetion(
+void IpcServer::Listener::onNewConnetion(
     const std::error_code& error_code, size_t /* bytes_transferred */)
 {
     if (!server_)
@@ -162,27 +162,27 @@ void Server::Listener::onNewConnetion(
         return;
     }
 
-    std::unique_ptr<Channel> channel =
-        std::unique_ptr<Channel>(new Channel(server_->channel_name_, std::move(*handle_)));
+    std::unique_ptr<IpcChannel> channel =
+        std::unique_ptr<IpcChannel>(new IpcChannel(server_->channel_name_, std::move(*handle_)));
 
     server_->onNewConnection(index_, std::move(channel));
 }
 
-Server::Server()
+IpcServer::IpcServer()
     : io_context_(base::MessageLoop::current()->pumpAsio()->ioContext())
 {
     for (size_t i = 0; i < listeners_.size(); ++i)
         listeners_[i] = std::make_shared<Listener>(this, i);
 }
 
-Server::~Server()
+IpcServer::~IpcServer()
 {
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
     stop();
 }
 
 // static
-std::u16string Server::createUniqueId()
+std::u16string IpcServer::createUniqueId()
 {
     static std::atomic_uint32_t last_channel_id = 0;
 
@@ -194,7 +194,7 @@ std::u16string Server::createUniqueId()
         base::stringPrintf("%lu.%lu.%lu", process_id, channel_id, random_number));
 }
 
-bool Server::start(std::u16string_view channel_id, Delegate* delegate)
+bool IpcServer::start(std::u16string_view channel_id, Delegate* delegate)
 {
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
     DCHECK(delegate);
@@ -205,7 +205,7 @@ bool Server::start(std::u16string_view channel_id, Delegate* delegate)
         return false;
     }
 
-    channel_name_ = Channel::channelName(channel_id);
+    channel_name_ = IpcChannel::channelName(channel_id);
     delegate_ = delegate;
 
     for (size_t i = 0; i < listeners_.size(); ++i)
@@ -217,7 +217,7 @@ bool Server::start(std::u16string_view channel_id, Delegate* delegate)
     return true;
 }
 
-void Server::stop()
+void IpcServer::stop()
 {
     delegate_ = nullptr;
 
@@ -231,7 +231,7 @@ void Server::stop()
     }
 }
 
-bool Server::runListener(size_t index)
+bool IpcServer::runListener(size_t index)
 {
     std::shared_ptr<Listener> listener = listeners_[index];
     if (!listener)
@@ -240,7 +240,7 @@ bool Server::runListener(size_t index)
     return listener->listen(io_context_, channel_name_);
 }
 
-void Server::onNewConnection(size_t index, std::unique_ptr<Channel> channel)
+void IpcServer::onNewConnection(size_t index, std::unique_ptr<IpcChannel> channel)
 {
     if (delegate_)
     {
@@ -249,7 +249,7 @@ void Server::onNewConnection(size_t index, std::unique_ptr<Channel> channel)
     }
 }
 
-void Server::onErrorOccurred(const base::Location& location)
+void IpcServer::onErrorOccurred(const base::Location& location)
 {
     LOG(LS_WARNING) << "Error in IPC server with name: " << channel_name_
                     << " (" << location.toString() << ")";
@@ -258,4 +258,4 @@ void Server::onErrorOccurred(const base::Location& location)
         delegate_->onErrorOccurred();
 }
 
-} // namespace ipc
+} // namespace base::ipc

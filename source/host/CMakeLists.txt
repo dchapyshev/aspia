@@ -119,7 +119,6 @@ target_link_libraries(aspia_host_core
     aspia_common
     aspia_crypto
     aspia_desktop
-    aspia_ipc
     aspia_net
     aspia_proto
     aspia_qt_base

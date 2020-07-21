@@ -24,10 +24,10 @@
 
 #include <memory>
 
-namespace ipc {
+namespace base {
 class SharedMemory;
 class SharedMemoryFactory;
-} // namespace ipc
+} // namespace base
 
 namespace desktop {
 
@@ -38,7 +38,7 @@ public:
 
     static std::unique_ptr<FrameDib> create(const Size& size,
                                             const PixelFormat& format,
-                                            ipc::SharedMemoryFactory* shared_memory_factory,
+                                            base::SharedMemoryFactory* shared_memory_factory,
                                             HDC hdc);
 
     HBITMAP bitmap() { return bitmap_; }
@@ -48,11 +48,11 @@ private:
              const PixelFormat& format,
              int stride,
              uint8_t* data,
-             std::unique_ptr<ipc::SharedMemory> shared_memory,
+             std::unique_ptr<base::SharedMemory> shared_memory,
              HBITMAP bitmap);
 
     base::win::ScopedHBITMAP bitmap_;
-    std::unique_ptr<ipc::SharedMemory> owned_shared_memory_;
+    std::unique_ptr<base::SharedMemory> owned_shared_memory_;
 
     DISALLOW_COPY_AND_ASSIGN(FrameDib);
 };

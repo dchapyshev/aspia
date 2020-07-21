@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef IPC__SHARED_MEMORY_H
-#define IPC__SHARED_MEMORY_H
+#ifndef BASE__IPC__SHARED_MEMORY_H
+#define BASE__IPC__SHARED_MEMORY_H
 
 #include "build/build_config.h"
 
@@ -28,7 +28,7 @@
 #include <cstddef>
 #include <memory>
 
-namespace ipc {
+namespace base {
 
 class SharedMemoryFactoryProxy;
 
@@ -73,18 +73,18 @@ public:
 
 private:
     SharedMemory(int id,
-                 base::win::ScopedHandle&& handle,
+                 win::ScopedHandle&& handle,
                  void* data,
                  std::shared_ptr<SharedMemoryFactoryProxy> factory_proxy);
 
     std::shared_ptr<SharedMemoryFactoryProxy> factory_proxy_;
-    base::win::ScopedHandle handle_;
+    win::ScopedHandle handle_;
     void* data_;
     int id_;
 
     DISALLOW_COPY_AND_ASSIGN(SharedMemory);
 };
 
-} // namespace ipc
+} // namespace base
 
-#endif // IPC__SHARED_MEMORY_H
+#endif // BASE__IPC__SHARED_MEMORY_H

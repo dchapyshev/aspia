@@ -16,41 +16,39 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef IPC__CHANNEL_PROXY_H
-#define IPC__CHANNEL_PROXY_H
+#ifndef BASE__IPC__CHANNEL_PROXY_H
+#define BASE__IPC__CHANNEL_PROXY_H
 
-#include "ipc/channel.h"
+#include "base/ipc/channel.h"
 
 namespace base {
+
 class TaskRunner;
-} // namespace base
 
-namespace ipc {
-
-class ChannelProxy : public std::enable_shared_from_this<ChannelProxy>
+class IpcChannelProxy : public std::enable_shared_from_this<IpcChannelProxy>
 {
 public:
-    void send(base::ByteArray&& buffer);
+    void send(ByteArray&& buffer);
 
 private:
-    friend class Channel;
-    ChannelProxy(std::shared_ptr<base::TaskRunner> task_runner, Channel* channel);
+    friend class IpcChannel;
+    IpcChannelProxy(std::shared_ptr<TaskRunner> task_runner, IpcChannel* channel);
 
     // Called directly by Channel::~Channel.
     void willDestroyCurrentChannel();
 
     void scheduleWrite();
-    bool reloadWriteQueue(base::ScalableQueue<base::ByteArray>* work_queue);
+    bool reloadWriteQueue(ScalableQueue<ByteArray>* work_queue);
 
-    std::shared_ptr<base::TaskRunner> task_runner_;
-    Channel* channel_;
+    std::shared_ptr<TaskRunner> task_runner_;
+    IpcChannel* channel_;
 
-    base::ScalableQueue<base::ByteArray> incoming_queue_;
+    base::ScalableQueue<ByteArray> incoming_queue_;
     std::mutex incoming_queue_lock_;
 
-    DISALLOW_COPY_AND_ASSIGN(ChannelProxy);
+    DISALLOW_COPY_AND_ASSIGN(IpcChannelProxy);
 };
 
-} // namespace ipc
+} // namespace base
 
-#endif // IPC__CHANNEL_PROXY_H
+#endif // BASE__IPC__CHANNEL_PROXY_H

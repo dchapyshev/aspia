@@ -21,6 +21,7 @@
 #include "base/command_line.h"
 #include "base/logging.h"
 #include "base/task_runner.h"
+#include "base/ipc/channel.h"
 #include "base/files/base_paths.h"
 #include "base/strings/string_number_conversions.h"
 #include "base/strings/string_util.h"
@@ -31,7 +32,6 @@
 #include "host/client_session.h"
 #include "host/user_session.h"
 #include "host/user_session_constants.h"
-#include "ipc/channel.h"
 
 #include <userenv.h>
 
@@ -183,7 +183,7 @@ bool UserSessionManager::start(Delegate* delegate)
 
     delegate_ = delegate;
 
-    ipc_server_ = std::make_unique<ipc::Server>();
+    ipc_server_ = std::make_unique<base::IpcServer>();
 
     // Start the server which will accept incoming connections from UI processes in user sessions.
     if (!ipc_server_->start(kIpcChannelIdForUI, this))
@@ -286,7 +286,7 @@ net::UserList UserSessionManager::userList() const
     return user_list;
 }
 
-void UserSessionManager::onNewConnection(std::unique_ptr<ipc::Channel> channel)
+void UserSessionManager::onNewConnection(std::unique_ptr<base::IpcChannel> channel)
 {
     std::filesystem::path reference_path;
     if (!base::BasePaths::currentExecDir(&reference_path))
@@ -368,7 +368,7 @@ void UserSessionManager::startSessionProcess(base::SessionId session_id)
 }
 
 void UserSessionManager::addUserSession(
-    base::SessionId session_id, std::unique_ptr<ipc::Channel> channel)
+    base::SessionId session_id, std::unique_ptr<base::IpcChannel> channel)
 {
     for (const auto& session : sessions_)
     {
