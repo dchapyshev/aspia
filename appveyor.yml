@@ -75,11 +75,6 @@ test_script:
       If ($LastExitCode -ne 0) {
         exit $LastExitCode
       }
-      $test_crypto = "$tests_dir\aspia_crypto_tests"
-      & $test_crypto
-      If ($LastExitCode -ne 0) {
-        exit $LastExitCode
-      }
       $test_desktop = "$tests_dir\aspia_desktop_tests"
       & $test_desktop
       If ($LastExitCode -ne 0) {
