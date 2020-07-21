@@ -52,9 +52,12 @@ std::vector<proto::MouseEvent> InputEventFilter::mouseEvents(
 
         if (delta_x > 1 || delta_y > 1 || event.mask() != last_mask_)
         {
+            static const uint32_t kWheelMask =
+                proto::MouseEvent::WHEEL_DOWN | proto::MouseEvent::WHEEL_UP;
+
             last_pos_x_ = event.x();
             last_pos_y_ = event.y();
-            last_mask_ = event.mask();
+            last_mask_ = event.mask() & ~kWheelMask;
 
             out_events.push_back(event);
         }

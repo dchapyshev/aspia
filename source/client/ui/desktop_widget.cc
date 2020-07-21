@@ -22,7 +22,6 @@
 #include "client/ui/frame_qimage.h"
 
 #include <QApplication>
-#include <QPainter>
 #include <QWheelEvent>
 
 namespace client {
@@ -282,11 +281,6 @@ void DesktopWidget::mouseReleaseEvent(QMouseEvent* event)
 void DesktopWidget::mouseDoubleClickEvent(QMouseEvent* event)
 {
     doMouseEvent(event->type(), event->buttons(), event->pos());
-}
-
-void DesktopWidget::wheelEvent(QWheelEvent* event)
-{
-    doMouseEvent(event->type(), event->buttons(), event->pos(), event->angleDelta());
 }
 
 void DesktopWidget::keyPressEvent(QKeyEvent* event)
