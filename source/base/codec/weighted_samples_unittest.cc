@@ -16,13 +16,13 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "codec/weighted_samples.h"
+#include "base/codec/weighted_samples.h"
 
 #include "base/stl_util.h"
 
 #include <gtest/gtest.h>
 
-namespace codec {
+namespace base {
 
 TEST(WeightedSamplesTest, CalculateWeightedAverage)
 {
@@ -58,4 +58,4 @@ TEST(WeightedSamplesTest, ReturnZeroIfNoRecords)
     EXPECT_EQ(samples.weightedAverage(), 0);
 }
 
-} // namespace codec
+} // namespace base

@@ -16,14 +16,14 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "codec/running_samples.h"
+#include "base/codec/running_samples.h"
 
 #include <gtest/gtest.h>
 
 #include <cstddef>
 #include <cstdint>
 
-namespace codec {
+namespace base {
 
 typedef void(*TestFunction)(size_t i, RunningSamples& samples);
 
@@ -115,4 +115,4 @@ TEST(RunningSamplesTest, MaxLongWindow)
     });
 }
 
-} // namespace codec
+} // namespace base
