@@ -216,7 +216,7 @@ void InputInjectorWin::injectMouseEvent(const proto::MouseEvent& event)
         PLOG(LS_WARNING) << "SendInput failed";
     }
 
-    last_mouse_mask_ = mask;
+    last_mouse_mask_ = mask & ~(proto::MouseEvent::WHEEL_DOWN | proto::MouseEvent::WHEEL_UP);
 }
 
 void InputInjectorWin::switchToInputDesktop()

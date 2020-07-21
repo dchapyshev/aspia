@@ -154,10 +154,7 @@ void DesktopWidget::doMouseEvent(QEvent::Type event_type,
         if (mask & kWheelMask)
         {
             for (int i = 0; i < wheel_steps; ++i)
-            {
                 addMouseEvent(&events, pos, mask);
-                addMouseEvent(&events, pos, mask & ~kWheelMask);
-            }
         }
         else
         {
