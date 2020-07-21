@@ -301,6 +301,10 @@ void DesktopWidget::keyReleaseEvent(QKeyEvent* event)
 
 void DesktopWidget::leaveEvent(QEvent* event)
 {
+#if defined(OS_WIN)
+    keyboard_hook_.reset();
+#endif // defined(OS_WIN)
+
     // When the mouse cursor leaves the widget area, release all the mouse buttons.
     if (prev_mask_ != 0)
     {
