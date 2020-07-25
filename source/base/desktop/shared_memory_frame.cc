@@ -39,11 +39,11 @@ SharedMemoryFrame::~SharedMemoryFrame()
 
 // static
 std::unique_ptr<Frame> SharedMemoryFrame::create(
-    const Size& size, const PixelFormat& format, base::SharedMemoryFactory* shared_memory_factory)
+    const Size& size, const PixelFormat& format, SharedMemoryFactory* shared_memory_factory)
 {
     const size_t buffer_size = calcMemorySize(size, format.bytesPerPixel());
 
-    std::unique_ptr<base::SharedMemory> shared_memory = shared_memory_factory->create(buffer_size);
+    std::unique_ptr<SharedMemory> shared_memory = shared_memory_factory->create(buffer_size);
     if (!shared_memory)
         return nullptr;
 
@@ -52,9 +52,9 @@ std::unique_ptr<Frame> SharedMemoryFrame::create(
 
 // static
 std::unique_ptr<Frame> SharedMemoryFrame::open(
-    const Size& size, const PixelFormat& format, int id, base::SharedMemoryFactory* shared_memory_factory)
+    const Size& size, const PixelFormat& format, int id, SharedMemoryFactory* shared_memory_factory)
 {
-    std::unique_ptr<base::SharedMemory> shared_memory = shared_memory_factory->open(id);
+    std::unique_ptr<SharedMemory> shared_memory = shared_memory_factory->open(id);
     if (!shared_memory)
         return nullptr;
 
@@ -63,7 +63,7 @@ std::unique_ptr<Frame> SharedMemoryFrame::open(
 
 // static
 std::unique_ptr<Frame> SharedMemoryFrame::attach(
-    const Size& size, const PixelFormat& format, std::unique_ptr<base::SharedMemoryBase> shared_memory)
+    const Size& size, const PixelFormat& format, std::unique_ptr<SharedMemoryBase> shared_memory)
 {
     return std::unique_ptr<Frame>(new SharedMemoryFrame(size, format, shared_memory.release()));
 }

@@ -23,7 +23,6 @@
 #include "asio/detail/fenced_block.hpp"
 #include "asio/detail/handler_alloc_helpers.hpp"
 #include "asio/detail/handler_invoke_helpers.hpp"
-#include "asio/detail/handler_work.hpp"
 #include "asio/detail/memory.hpp"
 #include "asio/detail/reactor_op.hpp"
 #include "asio/detail/socket_ops.hpp"
@@ -38,8 +37,7 @@ class win_iocp_socket_connect_op_base : public reactor_op
 {
 public:
   win_iocp_socket_connect_op_base(socket_type socket, func_type complete_func)
-    : reactor_op(asio::error_code(),
-        &win_iocp_socket_connect_op_base::do_perform, complete_func),
+    : reactor_op(&win_iocp_socket_connect_op_base::do_perform, complete_func),
       socket_(socket),
       connect_ex_(false)
   {
@@ -69,8 +67,9 @@ public:
     : win_iocp_socket_connect_op_base(socket,
         &win_iocp_socket_connect_op::do_complete),
       handler_(ASIO_MOVE_CAST(Handler)(handler)),
-      work_(handler_, io_ex)
+      io_executor_(io_ex)
   {
+    handler_work<Handler, IoExecutor>::start(handler_, io_executor_);
   }
 
   static void do_complete(void* owner, operation* base,
@@ -83,6 +82,7 @@ public:
     win_iocp_socket_connect_op* o(
         static_cast<win_iocp_socket_connect_op*>(base));
     ptr p = { asio::detail::addressof(o->handler_), o, o };
+    handler_work<Handler, IoExecutor> w(o->handler_, o->io_executor_);
 
     if (owner)
     {
@@ -93,11 +93,6 @@ public:
     }
 
     ASIO_HANDLER_COMPLETION((*o));
-
-    // Take ownership of the operation's outstanding work.
-    handler_work<Handler, IoExecutor> w(
-        ASIO_MOVE_CAST2(handler_work<Handler, IoExecutor>)(
-          o->work_));
 
     // Make a copy of the handler so that the memory can be deallocated before
     // the upcall is made. Even if we're not about to make an upcall, a
@@ -122,7 +117,7 @@ public:
 
 private:
   Handler handler_;
-  handler_work<Handler, IoExecutor> work_;
+  IoExecutor io_executor_;
 };
 
 } // namespace detail

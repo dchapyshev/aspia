@@ -44,7 +44,7 @@ bool VideoDecoderZstd::decode(const proto::VideoPacket& packet, Frame* target_fr
         const proto::VideoPacketFormat& format = packet.format();
 
         source_frame_ = FrameAligned::create(
-            base::Size(format.video_rect().width(), format.video_rect().height()),
+            Size(format.video_rect().width(), format.video_rect().height()),
             parsePixelFormat(format.pixel_format()), 32);
 
         translator_ = PixelTranslator::create(source_frame_->format(), target_frame->format());

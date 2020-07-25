@@ -59,10 +59,9 @@ OutputT hashT(PasswordHash::Type type, std::string_view password, InputT salt)
 } // namespace
 
 // static
-base::ByteArray PasswordHash::hash(
-    Type type, std::string_view password, const base::ByteArray& salt)
+ByteArray PasswordHash::hash(Type type, std::string_view password, const ByteArray& salt)
 {
-    return hashT<const base::ByteArray, base::ByteArray>(type, password, salt);
+    return hashT<const ByteArray, ByteArray>(type, password, salt);
 }
 
 // static

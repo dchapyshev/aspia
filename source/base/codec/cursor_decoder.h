@@ -39,12 +39,12 @@ public:
     CursorDecoder();
     ~CursorDecoder();
 
-    std::shared_ptr<base::MouseCursor> decode(const proto::CursorShape& cursor_shape);
+    std::shared_ptr<MouseCursor> decode(const proto::CursorShape& cursor_shape);
 
 private:
-    base::ByteArray decompressCursor(const proto::CursorShape& cursor_shape);
+    ByteArray decompressCursor(const proto::CursorShape& cursor_shape);
 
-    std::vector<std::shared_ptr<base::MouseCursor>> cache_;
+    std::vector<std::shared_ptr<MouseCursor>> cache_;
     std::optional<size_t> cache_size_;
     ScopedZstdDStream stream_;
 

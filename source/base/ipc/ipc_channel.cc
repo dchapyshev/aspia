@@ -57,12 +57,12 @@ ProcessId clientProcessIdImpl(HANDLE pipe_handle)
 
 ProcessId serverProcessIdImpl(HANDLE pipe_handle)
 {
-    ULONG process_id = base::kNullProcessId;
+    ULONG process_id = kNullProcessId;
 
     if (!GetNamedPipeServerProcessId(pipe_handle, &process_id))
     {
         PLOG(LS_WARNING) << "GetNamedPipeServerProcessId failed";
-        return base::kNullProcessId;
+        return kNullProcessId;
     }
 
     return process_id;
@@ -70,12 +70,12 @@ ProcessId serverProcessIdImpl(HANDLE pipe_handle)
 
 SessionId clientSessionIdImpl(HANDLE pipe_handle)
 {
-    ULONG session_id = base::kInvalidSessionId;
+    ULONG session_id = kInvalidSessionId;
 
     if (!GetNamedPipeClientSessionId(pipe_handle, &session_id))
     {
         PLOG(LS_WARNING) << "GetNamedPipeClientSessionId failed";
-        return base::kInvalidSessionId;
+        return kInvalidSessionId;
     }
 
     return session_id;
@@ -83,12 +83,12 @@ SessionId clientSessionIdImpl(HANDLE pipe_handle)
 
 SessionId serverSessionIdImpl(HANDLE pipe_handle)
 {
-    ULONG session_id = base::kInvalidSessionId;
+    ULONG session_id = kInvalidSessionId;
 
     if (!GetNamedPipeServerSessionId(pipe_handle, &session_id))
     {
         PLOG(LS_WARNING) << "GetNamedPipeServerSessionId failed";
-        return base::kInvalidSessionId;
+        return kInvalidSessionId;
     }
 
     return session_id;
@@ -251,7 +251,7 @@ void IpcChannel::send(ByteArray&& buffer)
 
 std::filesystem::path IpcChannel::peerFilePath() const
 {
-    base::win::ScopedHandle process(
+    win::ScopedHandle process(
         OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, peer_process_id_));
     if (!process.isValid())
     {

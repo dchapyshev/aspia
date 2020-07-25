@@ -50,18 +50,13 @@ enum
 
 typedef unsigned char state_type;
 
-inline void get_last_error(
-    asio::error_code& ec, bool is_error_condition)
+template <typename ReturnType>
+inline ReturnType error_wrapper(ReturnType return_value,
+    asio::error_code& ec)
 {
-  if (!is_error_condition)
-  {
-    ec.assign(0, ec.category());
-  }
-  else
-  {
-    ec = asio::error_code(errno,
-        asio::error::get_system_category());
-  }
+  ec = asio::error_code(errno,
+      asio::error::get_system_category());
+  return return_value;
 }
 
 ASIO_DECL int open(const char* path, int flags,
@@ -81,28 +76,15 @@ typedef iovec buf;
 ASIO_DECL std::size_t sync_read(int d, state_type state, buf* bufs,
     std::size_t count, bool all_empty, asio::error_code& ec);
 
-ASIO_DECL std::size_t sync_read1(int d, state_type state, void* data,
-    std::size_t size, asio::error_code& ec);
-
 ASIO_DECL bool non_blocking_read(int d, buf* bufs, std::size_t count,
-    asio::error_code& ec, std::size_t& bytes_transferred);
-
-ASIO_DECL bool non_blocking_read1(int d, void* data, std::size_t size,
     asio::error_code& ec, std::size_t& bytes_transferred);
 
 ASIO_DECL std::size_t sync_write(int d, state_type state,
     const buf* bufs, std::size_t count, bool all_empty,
     asio::error_code& ec);
 
-ASIO_DECL std::size_t sync_write1(int d, state_type state,
-    const void* data, std::size_t size, asio::error_code& ec);
-
 ASIO_DECL bool non_blocking_write(int d,
     const buf* bufs, std::size_t count,
-    asio::error_code& ec, std::size_t& bytes_transferred);
-
-ASIO_DECL bool non_blocking_write1(int d,
-    const void* data, std::size_t size,
     asio::error_code& ec, std::size_t& bytes_transferred);
 
 ASIO_DECL int ioctl(int d, state_type& state, long cmd,

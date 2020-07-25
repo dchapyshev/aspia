@@ -19,9 +19,6 @@
 #include "asio/detail/bind_handler.hpp"
 #include "asio/detail/buffer_sequence_adapter.hpp"
 #include "asio/detail/fenced_block.hpp"
-#include "asio/detail/handler_alloc_helpers.hpp"
-#include "asio/detail/handler_invoke_helpers.hpp"
-#include "asio/detail/handler_work.hpp"
 #include "asio/detail/memory.hpp"
 #include "asio/detail/reactor_op.hpp"
 #include "asio/detail/socket_ops.hpp"
@@ -35,12 +32,10 @@ template <typename MutableBufferSequence, typename Endpoint>
 class reactive_socket_recvfrom_op_base : public reactor_op
 {
 public:
-  reactive_socket_recvfrom_op_base(const asio::error_code& success_ec,
-      socket_type socket, int protocol_type,
+  reactive_socket_recvfrom_op_base(socket_type socket, int protocol_type,
       const MutableBufferSequence& buffers, Endpoint& endpoint,
       socket_base::message_flags flags, func_type complete_func)
-    : reactor_op(success_ec,
-        &reactive_socket_recvfrom_op_base::do_perform, complete_func),
+    : reactor_op(&reactive_socket_recvfrom_op_base::do_perform, complete_func),
       socket_(socket),
       protocol_type_(protocol_type),
       buffers_(buffers),
@@ -54,27 +49,14 @@ public:
     reactive_socket_recvfrom_op_base* o(
         static_cast<reactive_socket_recvfrom_op_base*>(base));
 
-    typedef buffer_sequence_adapter<asio::mutable_buffer,
-        MutableBufferSequence> bufs_type;
+    buffer_sequence_adapter<asio::mutable_buffer,
+        MutableBufferSequence> bufs(o->buffers_);
 
     std::size_t addr_len = o->sender_endpoint_.capacity();
-    status result;
-    if (bufs_type::is_single_buffer)
-    {
-      result = socket_ops::non_blocking_recvfrom1(
-          o->socket_, bufs_type::first(o->buffers_).data(),
-          bufs_type::first(o->buffers_).size(), o->flags_,
-          o->sender_endpoint_.data(), &addr_len,
-          o->ec_, o->bytes_transferred_) ? done : not_done;
-    }
-    else
-    {
-      bufs_type bufs(o->buffers_);
-      result = socket_ops::non_blocking_recvfrom(o->socket_,
-          bufs.buffers(), bufs.count(), o->flags_,
-          o->sender_endpoint_.data(), &addr_len,
-          o->ec_, o->bytes_transferred_) ? done : not_done;
-    }
+    status result = socket_ops::non_blocking_recvfrom(o->socket_,
+        bufs.buffers(), bufs.count(), o->flags_,
+        o->sender_endpoint_.data(), &addr_len,
+        o->ec_, o->bytes_transferred_) ? done : not_done;
 
     if (result && !o->ec_)
       o->sender_endpoint_.resize(addr_len);
@@ -101,17 +83,17 @@ class reactive_socket_recvfrom_op :
 public:
   ASIO_DEFINE_HANDLER_PTR(reactive_socket_recvfrom_op);
 
-  reactive_socket_recvfrom_op(const asio::error_code& success_ec,
-      socket_type socket, int protocol_type,
+  reactive_socket_recvfrom_op(socket_type socket, int protocol_type,
       const MutableBufferSequence& buffers, Endpoint& endpoint,
       socket_base::message_flags flags, Handler& handler,
       const IoExecutor& io_ex)
     : reactive_socket_recvfrom_op_base<MutableBufferSequence, Endpoint>(
-        success_ec, socket, protocol_type, buffers, endpoint, flags,
+        socket, protocol_type, buffers, endpoint, flags,
         &reactive_socket_recvfrom_op::do_complete),
       handler_(ASIO_MOVE_CAST(Handler)(handler)),
-      work_(handler_, io_ex)
+      io_executor_(io_ex)
   {
+    handler_work<Handler, IoExecutor>::start(handler_, io_executor_);
   }
 
   static void do_complete(void* owner, operation* base,
@@ -122,13 +104,9 @@ public:
     reactive_socket_recvfrom_op* o(
         static_cast<reactive_socket_recvfrom_op*>(base));
     ptr p = { asio::detail::addressof(o->handler_), o, o };
+    handler_work<Handler, IoExecutor> w(o->handler_, o->io_executor_);
 
     ASIO_HANDLER_COMPLETION((*o));
-
-    // Take ownership of the operation's outstanding work.
-    handler_work<Handler, IoExecutor> w(
-        ASIO_MOVE_CAST2(handler_work<Handler, IoExecutor>)(
-          o->work_));
 
     // Make a copy of the handler so that the memory can be deallocated before
     // the upcall is made. Even if we're not about to make an upcall, a
@@ -153,7 +131,7 @@ public:
 
 private:
   Handler handler_;
-  handler_work<Handler, IoExecutor> work_;
+  IoExecutor io_executor_;
 };
 
 } // namespace detail

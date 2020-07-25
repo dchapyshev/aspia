@@ -61,9 +61,9 @@ bool Random::fillBuffer(void* buffer, size_t size)
 }
 
 // static
-base::ByteArray Random::byteArray(size_t size)
+ByteArray Random::byteArray(size_t size)
 {
-    return generateBuffer<base::ByteArray>(size);
+    return generateBuffer<ByteArray>(size);
 }
 
 // static

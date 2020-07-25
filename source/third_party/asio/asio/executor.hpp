@@ -16,12 +16,8 @@
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include "asio/detail/config.hpp"
-
-#if !defined(ASIO_NO_TS_EXECUTORS)
-
 #include <typeinfo>
 #include "asio/detail/cstddef.hpp"
-#include "asio/detail/executor_function.hpp"
 #include "asio/detail/memory.hpp"
 #include "asio/detail/throw_exception.hpp"
 #include "asio/execution_context.hpp"
@@ -257,7 +253,7 @@ public:
 
 private:
 #if !defined(GENERATING_DOCUMENTATION)
-  typedef detail::executor_function function;
+  class function;
   template <typename, typename> class impl;
 
 #if !defined(ASIO_NO_TYPEID)
@@ -341,7 +337,5 @@ ASIO_USES_ALLOCATOR(asio::executor)
 #if defined(ASIO_HEADER_ONLY)
 # include "asio/impl/executor.ipp"
 #endif // defined(ASIO_HEADER_ONLY)
-
-#endif // !defined(ASIO_NO_TS_EXECUTORS)
 
 #endif // ASIO_EXECUTOR_HPP

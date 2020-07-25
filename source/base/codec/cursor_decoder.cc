@@ -39,14 +39,14 @@ CursorDecoder::CursorDecoder()
 
 CursorDecoder::~CursorDecoder() = default;
 
-base::ByteArray CursorDecoder::decompressCursor(const proto::CursorShape& cursor_shape)
+ByteArray CursorDecoder::decompressCursor(const proto::CursorShape& cursor_shape)
 {
     const std::string& data = cursor_shape.data();
 
     if (data.empty())
-        return base::ByteArray();
+        return ByteArray();
 
-    base::ByteArray image;
+    ByteArray image;
     image.resize(cursor_shape.width() * cursor_shape.height() * sizeof(uint32_t));
 
     size_t ret = ZSTD_initDStream(stream_.get());
@@ -61,14 +61,14 @@ base::ByteArray CursorDecoder::decompressCursor(const proto::CursorShape& cursor
         if (ZSTD_isError(ret))
         {
             LOG(LS_ERROR) << "ZSTD_decompressStream failed: " << ZSTD_getErrorName(ret);
-            return base::ByteArray();
+            return ByteArray();
         }
     }
 
     return image;
 }
 
-std::shared_ptr<base::MouseCursor> CursorDecoder::decode(const proto::CursorShape& cursor_shape)
+std::shared_ptr<MouseCursor> CursorDecoder::decode(const proto::CursorShape& cursor_shape)
 {
     size_t cache_index;
 
@@ -85,8 +85,8 @@ std::shared_ptr<base::MouseCursor> CursorDecoder::decode(const proto::CursorShap
     }
     else
     {
-        base::Size size(cursor_shape.width(), cursor_shape.height());
-        base::Point hotspot(cursor_shape.hotspot_x(), cursor_shape.hotspot_y());
+        Size size(cursor_shape.width(), cursor_shape.height());
+        Point hotspot(cursor_shape.hotspot_x(), cursor_shape.hotspot_y());
 
         if (size.width()  <= 0 || size.width()  > (std::numeric_limits<int16_t>::max() / 2) ||
             size.height() <= 0 || size.height() > (std::numeric_limits<int16_t>::max() / 2))
@@ -96,12 +96,12 @@ std::shared_ptr<base::MouseCursor> CursorDecoder::decode(const proto::CursorShap
             return nullptr;
         }
 
-        base::ByteArray image = decompressCursor(cursor_shape);
+        ByteArray image = decompressCursor(cursor_shape);
         if (image.empty())
             return nullptr;
 
-        std::unique_ptr<base::MouseCursor> mouse_cursor =
-            std::make_unique<base::MouseCursor>(std::move(image), size, hotspot);
+        std::unique_ptr<MouseCursor> mouse_cursor =
+            std::make_unique<MouseCursor>(std::move(image), size, hotspot);
 
         if (cursor_shape.flags() & proto::CursorShape::RESET_CACHE)
         {

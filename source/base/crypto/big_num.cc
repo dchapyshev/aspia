@@ -70,16 +70,16 @@ std::string BigNum::toStdString() const
     return result;
 }
 
-base::ByteArray BigNum::toByteArray() const
+ByteArray BigNum::toByteArray() const
 {
     if (!isValid())
-        return base::ByteArray();
+        return ByteArray();
 
     int length = BN_num_bytes(num_.get());
     if (length <= 0)
-        return base::ByteArray();
+        return ByteArray();
 
-    base::ByteArray result;
+    ByteArray result;
     result.resize(length);
 
     BN_bn2bin(num_.get(), result.data());
@@ -99,7 +99,7 @@ BigNum BigNum::fromStdString(std::string_view string)
 }
 
 // static
-BigNum BigNum::fromByteArray(const base::ByteArray& array)
+BigNum BigNum::fromByteArray(const ByteArray& array)
 {
     return BigNum(array.data(), array.size());
 }

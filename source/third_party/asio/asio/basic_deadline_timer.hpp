@@ -21,7 +21,6 @@
   || defined(GENERATING_DOCUMENTATION)
 
 #include <cstddef>
-#include "asio/any_io_executor.hpp"
 #include "asio/detail/deadline_timer_service.hpp"
 #include "asio/detail/handler_type_requirements.hpp"
 #include "asio/detail/io_object_impl.hpp"
@@ -29,6 +28,7 @@
 #include "asio/detail/throw_error.hpp"
 #include "asio/error.hpp"
 #include "asio/execution_context.hpp"
+#include "asio/executor.hpp"
 #include "asio/time_traits.hpp"
 
 #include "asio/detail/push_options.hpp"
@@ -125,7 +125,7 @@ namespace asio {
  */
 template <typename Time,
     typename TimeTraits = asio::time_traits<Time>,
-    typename Executor = any_io_executor>
+    typename Executor = executor>
 class basic_deadline_timer
 {
 public:
@@ -671,8 +671,8 @@ private:
 
       detail::non_const_lvalue<WaitHandler> handler2(handler);
       self_->impl_.get_service().async_wait(
-          self_->impl_.get_implementation(),
-          handler2.value, self_->impl_.get_executor());
+          self_->impl_.get_implementation(), handler2.value,
+          self_->impl_.get_implementation_executor());
     }
 
   private:
