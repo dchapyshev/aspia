@@ -19,6 +19,7 @@
 #include "client/ui/client_dialog.h"
 
 #include "base/logging.h"
+#include "base/net/address.h"
 #include "build/build_config.h"
 #include "client/config_factory.h"
 #include "client/ui/client_settings.h"
@@ -27,7 +28,6 @@
 #include "client/ui/qt_file_manager_window.h"
 #include "common/desktop_session_constants.h"
 #include "common/session_type.h"
-#include "net/address.h"
 #include "ui_client_dialog.h"
 
 #include <QMessageBox>
@@ -157,7 +157,7 @@ void ClientDialog::connectButtonPressed()
     QComboBox* combo_address = ui->combo_address;
     QString current_address = combo_address->currentText();
 
-    net::Address address = net::Address::fromString(current_address.toStdU16String());
+    base::Address address = base::Address::fromString(current_address.toStdU16String());
     if (!address.isValid())
     {
         QMessageBox::warning(this,

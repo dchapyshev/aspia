@@ -16,21 +16,22 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "net/channel_proxy.h"
+#include "base/net/network_channel_proxy.h"
 
 #include "base/logging.h"
 #include "base/task_runner.h"
 
-namespace net {
+namespace base {
 
-ChannelProxy::ChannelProxy(std::shared_ptr<base::TaskRunner> task_runner, Channel* channel)
+NetworkChannelProxy::NetworkChannelProxy(
+    std::shared_ptr<TaskRunner> task_runner, NetworkChannel* channel)
     : task_runner_(std::move(task_runner)),
       channel_(channel)
 {
     // Nothing
 }
 
-void ChannelProxy::send(base::ByteArray&& buffer)
+void NetworkChannelProxy::send(ByteArray&& buffer)
 {
     std::scoped_lock lock(incoming_queue_lock_);
 
@@ -41,15 +42,15 @@ void ChannelProxy::send(base::ByteArray&& buffer)
     if (!schedule_write)
         return;
 
-    task_runner_->postTask(std::bind(&ChannelProxy::scheduleWrite, shared_from_this()));
+    task_runner_->postTask(std::bind(&NetworkChannelProxy::scheduleWrite, shared_from_this()));
 }
 
-void ChannelProxy::willDestroyCurrentChannel()
+void NetworkChannelProxy::willDestroyCurrentChannel()
 {
     channel_ = nullptr;
 }
 
-void ChannelProxy::scheduleWrite()
+void NetworkChannelProxy::scheduleWrite()
 {
     if (!channel_)
         return;
@@ -60,7 +61,7 @@ void ChannelProxy::scheduleWrite()
     channel_->doWrite();
 }
 
-bool ChannelProxy::reloadWriteQueue(base::ScalableQueue<base::ByteArray>* work_queue)
+bool NetworkChannelProxy::reloadWriteQueue(ScalableQueue<ByteArray>* work_queue)
 {
     if (!work_queue->empty())
         return false;
@@ -76,4 +77,4 @@ bool ChannelProxy::reloadWriteQueue(base::ScalableQueue<base::ByteArray>* work_q
     return true;
 }
 
-} // namespace net
+} // namespace base

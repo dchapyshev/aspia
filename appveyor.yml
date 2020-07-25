@@ -70,8 +70,3 @@ test_script:
       If ($LastExitCode -ne 0) {
         exit $LastExitCode
       }
-      $test_net = "$tests_dir\aspia_net_tests"
-      & $test_net
-      If ($LastExitCode -ne 0) {
-        exit $LastExitCode
-      }

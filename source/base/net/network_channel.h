@@ -16,32 +16,29 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef NET__CHANNEL_H
-#define NET__CHANNEL_H
+#ifndef BASE__NET__NETWORK_CHANNEL_H
+#define BASE__NET__NETWORK_CHANNEL_H
 
 #include "base/memory/byte_array.h"
 #include "base/memory/scalable_queue.h"
-#include "net/variable_size.h"
+#include "base/net/variable_size.h"
 
 #include <asio/ip/tcp.hpp>
 
 namespace base {
+
+class NetworkChannelProxy;
 class Location;
 class MessageEncryptor;
 class MessageDecryptor;
-} // namespace base
+class NetworkServer;
 
-namespace net {
-
-class ChannelProxy;
-class Server;
-
-class Channel
+class NetworkChannel
 {
 public:
     // Constructor available for client.
-    Channel();
-    ~Channel();
+    NetworkChannel();
+    ~NetworkChannel();
 
     enum class ErrorCode
     {
@@ -80,11 +77,11 @@ public:
 
         virtual void onConnected() = 0;
         virtual void onDisconnected(ErrorCode error_code) = 0;
-        virtual void onMessageReceived(const base::ByteArray& buffer) = 0;
+        virtual void onMessageReceived(const ByteArray& buffer) = 0;
         virtual void onMessageWritten(size_t pending) = 0;
     };
 
-    std::shared_ptr<ChannelProxy> channelProxy();
+    std::shared_ptr<NetworkChannelProxy> channelProxy();
 
     // Sets an instance of the class to receive connection status notifications or new messages.
     // You can change this in the process.
@@ -93,8 +90,8 @@ public:
     // Sets an instance of a class to encrypt and decrypt messages.
     // By default, a fake cryptographer is created that only copies the original message.
     // You must explicitly establish a cryptographer before or after establishing a connection.
-    void setEncryptor(std::unique_ptr<base::MessageEncryptor> encryptor);
-    void setDecryptor(std::unique_ptr<base::MessageDecryptor> decryptor);
+    void setEncryptor(std::unique_ptr<MessageEncryptor> encryptor);
+    void setDecryptor(std::unique_ptr<MessageDecryptor> decryptor);
 
     // Gets the address of the remote host as a string.
     std::u16string peerAddress() const;
@@ -119,7 +116,7 @@ public:
 
     // Sending a message. The method call is thread safe. After the call, the message will be added
     // to the queue to be sent.
-    void send(base::ByteArray&& buffer);
+    void send(ByteArray&& buffer);
 
     // Disable or enable the algorithm of Nagle.
     bool setNoDelay(bool enable);
@@ -148,19 +145,19 @@ public:
     static std::string errorToString(ErrorCode error_code);
 
 protected:
-    friend class Server;
+    friend class NetworkServer;
 
     // Constructor available for server. An already connected socket is being moved.
-    explicit Channel(asio::ip::tcp::socket&& socket);
+    explicit NetworkChannel(asio::ip::tcp::socket&& socket);
 
     // Disconnects to remote host. The method is not available for an external call.
     // To disconnect, you must destroy the channel by calling the destructor.
     void disconnect();
 
 private:
-    friend class ChannelProxy;
+    friend class NetworkChannelProxy;
 
-    void onErrorOccurred(const base::Location& location, const std::error_code& error_code);
+    void onErrorOccurred(const Location& location, const std::error_code& error_code);
     void onMessageWritten();
     void onMessageReceived();
 
@@ -171,7 +168,7 @@ private:
     void onReadSize(const std::error_code& error_code, size_t bytes_transferred);
     void onReadContent(const std::error_code& error_code, size_t bytes_transferred);
 
-    std::shared_ptr<ChannelProxy> proxy_;
+    std::shared_ptr<NetworkChannelProxy> proxy_;
     asio::io_context& io_context_;
     asio::ip::tcp::socket socket_;
     std::unique_ptr<asio::ip::tcp::resolver> resolver_;
@@ -180,12 +177,12 @@ private:
     bool connected_ = false;
     bool paused_ = true;
 
-    std::unique_ptr<base::MessageEncryptor> encryptor_;
-    std::unique_ptr<base::MessageDecryptor> decryptor_;
+    std::unique_ptr<MessageEncryptor> encryptor_;
+    std::unique_ptr<MessageDecryptor> decryptor_;
 
-    base::ScalableQueue<base::ByteArray> write_queue_;
+    ScalableQueue<ByteArray> write_queue_;
     VariableSizeWriter variable_size_writer_;
-    base::ByteArray write_buffer_;
+    ByteArray write_buffer_;
 
     enum class ReadState
     {
@@ -197,8 +194,8 @@ private:
 
     ReadState state_ = ReadState::IDLE;
     VariableSizeReader variable_size_reader_;
-    base::ByteArray read_buffer_;
-    base::ByteArray decrypt_buffer_;
+    ByteArray read_buffer_;
+    ByteArray decrypt_buffer_;
 
     using Clock = std::chrono::high_resolution_clock;
     using TimePoint = std::chrono::time_point<Clock>;
@@ -214,9 +211,9 @@ private:
     int64_t bytes_rx_ = 0;
     int speed_rx_ = 0;
 
-    DISALLOW_COPY_AND_ASSIGN(Channel);
+    DISALLOW_COPY_AND_ASSIGN(NetworkChannel);
 };
 
-} // namespace net
+} // namespace base
 
-#endif // NET__CHANNEL_H
+#endif // BASE__NET__NETWORK_CHANNEL_H

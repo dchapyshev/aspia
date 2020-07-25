@@ -16,44 +16,42 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef NET__CHANNEL_PROXY_H
-#define NET__CHANNEL_PROXY_H
+#ifndef BASE__NET__NETWORK_CHANNEL_PROXY_H
+#define BASE__NET__NETWORK_CHANNEL_PROXY_H
 
-#include "net/channel.h"
+#include "base/net/network_channel.h"
 
 #include <shared_mutex>
 
 namespace base {
+
 class TaskRunner;
-} // namespace base
 
-namespace net {
-
-class ChannelProxy : public std::enable_shared_from_this<ChannelProxy>
+class NetworkChannelProxy : public std::enable_shared_from_this<NetworkChannelProxy>
 {
 public:
-    void send(base::ByteArray&& buffer);
+    void send(ByteArray&& buffer);
 
 private:
-    friend class Channel;
-    ChannelProxy(std::shared_ptr<base::TaskRunner> task_runner, Channel* channel);
+    friend class NetworkChannel;
+    NetworkChannelProxy(std::shared_ptr<TaskRunner> task_runner, NetworkChannel* channel);
 
-    // Called directly by Channel::~Channel.
+    // Called directly by NetworkChannel::~NetworkChannel.
     void willDestroyCurrentChannel();
 
     void scheduleWrite();
-    bool reloadWriteQueue(base::ScalableQueue<base::ByteArray>* work_queue);
+    bool reloadWriteQueue(ScalableQueue<ByteArray>* work_queue);
 
-    std::shared_ptr<base::TaskRunner> task_runner_;
+    std::shared_ptr<TaskRunner> task_runner_;
 
-    Channel* channel_;
+    NetworkChannel* channel_;
 
-    base::ScalableQueue<base::ByteArray> incoming_queue_;
+    base::ScalableQueue<ByteArray> incoming_queue_;
     std::mutex incoming_queue_lock_;
 
-    DISALLOW_COPY_AND_ASSIGN(ChannelProxy);
+    DISALLOW_COPY_AND_ASSIGN(NetworkChannelProxy);
 };
 
-} // namespace net
+} // namespace base
 
-#endif // NET__CHANNEL_PROXY_H
+#endif // BASE__NET__NETWORK_CHANNEL_PROXY_H

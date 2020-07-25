@@ -39,7 +39,8 @@ class DesktopSessionProxy;
 class ClientSessionDesktop : public ClientSession
 {
 public:
-    ClientSessionDesktop(proto::SessionType session_type, std::unique_ptr<net::Channel> channel);
+    ClientSessionDesktop(proto::SessionType session_type,
+                         std::unique_ptr<base::NetworkChannel> channel);
     ~ClientSessionDesktop();
 
     void setDesktopSessionProxy(std::shared_ptr<DesktopSessionProxy> desktop_session_proxy);

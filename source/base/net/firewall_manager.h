@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef NET__FIREWALL_MANAGER_H
-#define NET__FIREWALL_MANAGER_H
+#ifndef BASE__NET__FIREWALL_MANAGER_H
+#define BASE__NET__FIREWALL_MANAGER_H
 
 #include "base/macros_magic.h"
 
@@ -27,7 +27,7 @@
 #include <wrl/client.h>
 #include <netfw.h>
 
-namespace net {
+namespace base {
 
 class FirewallManager
 {
@@ -71,6 +71,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(FirewallManager);
 };
 
-} // namespace net
+} // namespace base
 
-#endif // NET__FIREWALL_MANAGER_H
+#endif // BASE__NET__FIREWALL_MANAGER_H

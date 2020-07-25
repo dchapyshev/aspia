@@ -16,28 +16,25 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef NET__SERVER_AUTHENTICATOR_H
-#define NET__SERVER_AUTHENTICATOR_H
+#ifndef BASE__NET__SERVER_AUTHENTICATOR_H
+#define BASE__NET__SERVER_AUTHENTICATOR_H
 
 #include "base/version.h"
 #include "base/waitable_timer.h"
 #include "base/crypto/big_num.h"
 #include "base/crypto/key_pair.h"
-#include "net/channel.h"
+#include "base/net/network_channel.h"
 #include "proto/key_exchange.pb.h"
 
 namespace base {
+
 class Location;
-} // namespace base
-
-namespace net {
-
 class UserList;
 
-class ServerAuthenticator : public Channel::Listener
+class ServerAuthenticator : public NetworkChannel::Listener
 {
 public:
-    explicit ServerAuthenticator(std::shared_ptr<base::TaskRunner> task_runner);
+    explicit ServerAuthenticator(std::shared_ptr<TaskRunner> task_runner);
     ~ServerAuthenticator();
 
     enum class State
@@ -63,12 +60,12 @@ public:
     };
 
     // The start of the authenticator.
-    void start(std::unique_ptr<Channel> channel,
+    void start(std::unique_ptr<NetworkChannel> channel,
                std::shared_ptr<UserList> user_list,
                Delegate* delegate);
 
     // Sets the private key.
-    [[nodiscard]] bool setPrivateKey(const base::ByteArray& private_key);
+    [[nodiscard]] bool setPrivateKey(const ByteArray& private_key);
 
     // Enables or disables anonymous access.
     // |session_types] allowed session types for anonymous access.
@@ -80,30 +77,30 @@ public:
     [[nodiscard]] State state() const { return state_; }
 
     [[nodiscard]] uint32_t sessionType() const { return session_type_; }
-    [[nodiscard]] const base::Version& peerVersion() const { return peer_version_; }
+    [[nodiscard]] const Version& peerVersion() const { return peer_version_; }
     [[nodiscard]] const std::u16string& userName() const { return user_name_; }
 
-    [[nodiscard]] std::unique_ptr<Channel> takeChannel();
+    [[nodiscard]] std::unique_ptr<NetworkChannel> takeChannel();
 
 protected:
     // Channel::Listener implementation.
     void onConnected() override;
-    void onDisconnected(Channel::ErrorCode error_code) override;
-    void onMessageReceived(const base::ByteArray& buffer) override;
+    void onDisconnected(NetworkChannel::ErrorCode error_code) override;
+    void onMessageReceived(const ByteArray& buffer) override;
     void onMessageWritten(size_t pending) override;
 
 private:
-    void onClientHello(const base::ByteArray& buffer);
-    void onIdentify(const base::ByteArray& buffer);
-    void onClientKeyExchange(const base::ByteArray& buffer);
+    void onClientHello(const ByteArray& buffer);
+    void onIdentify(const ByteArray& buffer);
+    void onClientKeyExchange(const ByteArray& buffer);
     void doSessionChallenge();
-    void onSessionResponse(const base::ByteArray& buffer);
-    void onFailed(const base::Location& location);
+    void onSessionResponse(const ByteArray& buffer);
+    void onFailed(const Location& location);
     [[nodiscard]] bool onSessionKeyChanged();
-    [[nodiscard]] base::ByteArray createSrpKey();
+    [[nodiscard]] ByteArray createSrpKey();
 
-    base::WaitableTimer timer_;
-    std::unique_ptr<Channel> channel_;
+    WaitableTimer timer_;
+    std::unique_ptr<NetworkChannel> channel_;
     std::shared_ptr<UserList> user_list_;
 
     Delegate* delegate_ = nullptr;
@@ -134,27 +131,27 @@ private:
     proto::Identify identify_ = proto::IDENTIFY_SRP;
 
     // Remote client version.
-    base::Version peer_version_;
+    Version peer_version_;
 
     // User name.
     std::u16string user_name_;
 
-    base::ByteArray session_key_;
-    base::ByteArray encrypt_iv_;
-    base::ByteArray decrypt_iv_;
+    ByteArray session_key_;
+    ByteArray encrypt_iv_;
+    ByteArray decrypt_iv_;
 
-    base::KeyPair key_pair_;
-    base::BigNum N_;
-    base::BigNum g_;
-    base::BigNum v_;
-    base::BigNum s_;
-    base::BigNum b_;
-    base::BigNum B_;
-    base::BigNum A_;
+    KeyPair key_pair_;
+    BigNum N_;
+    BigNum g_;
+    BigNum v_;
+    BigNum s_;
+    BigNum b_;
+    BigNum B_;
+    BigNum A_;
 
     DISALLOW_COPY_AND_ASSIGN(ServerAuthenticator);
 };
 
-} // namespace net
+} // namespace base
 
-#endif // NET__SERVER_AUTHENTICATOR_H
+#endif // BASE__NET__SERVER_AUTHENTICATOR_H

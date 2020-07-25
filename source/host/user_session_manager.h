@@ -47,7 +47,7 @@ public:
     bool start(Delegate* delegate);
     void setSessionEvent(base::win::SessionStatus status, base::SessionId session_id);
     void addNewSession(std::unique_ptr<ClientSession> client_session);
-    net::UserList userList() const;
+    base::UserList userList() const;
 
 protected:
     // base::IpcServer::Delegate implementation.

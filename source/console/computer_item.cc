@@ -18,9 +18,9 @@
 
 #include "console/computer_item.h"
 
+#include "base/net/address.h"
 #include "base/strings/unicode.h"
 #include "console/computer_group_item.h"
-#include "net/address.h"
 
 #include <QDateTime>
 
@@ -37,7 +37,7 @@ ComputerItem::ComputerItem(proto::address_book::Computer* computer,
 
 void ComputerItem::updateItem()
 {
-    net::Address address;
+    base::Address address;
     address.setHost(base::utf16FromUtf8(computer_->address()));
     address.setPort(computer_->port());
 

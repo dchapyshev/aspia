@@ -16,14 +16,14 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "net/address.h"
+#include "base/net/address.h"
 
+#include "base/net/ip_util.h"
 #include "base/strings/string_number_conversions.h"
-#include "net/ip_util.h"
 
 #include <cwctype>
 
-namespace net {
+namespace base {
 
 namespace {
 
@@ -79,7 +79,7 @@ bool isValidPort(std::u16string_view str)
 {
     uint16_t value;
 
-    if (!base::stringToUShort(str, &value))
+    if (!stringToUShort(str, &value))
         return false;
 
     return isValidPort(value);
@@ -265,12 +265,12 @@ Address Address::fromString(std::u16string_view str)
 
     if (parse(begin, end, &parts))
     {
-        if (net::isValidIpV4Address(parts.host) || net::isValidIpV6Address(parts.host) ||
+        if (isValidIpV4Address(parts.host) || isValidIpV6Address(parts.host) ||
             isValidHostName(parts.host))
         {
             uint16_t port;
 
-            if (!base::stringToUShort(parts.port, &port))
+            if (!stringToUShort(parts.port, &port))
                 port = DEFAULT_HOST_TCP_PORT;
 
             return Address(std::move(parts.host), port);
@@ -285,7 +285,7 @@ std::u16string Address::toString() const
     if (!isValidPort(port_))
         return std::u16string();
 
-    if (net::isValidIpV6Address(host_))
+    if (isValidIpV6Address(host_))
     {
         if (port_ == DEFAULT_HOST_TCP_PORT)
         {
@@ -293,18 +293,18 @@ std::u16string Address::toString() const
         }
         else
         {
-            return u"[" + host_ + u"]:" + base::numberToString16(port_);
+            return u"[" + host_ + u"]:" + numberToString16(port_);
         }
     }
     else
     {
-        if (!net::isValidIpV4Address(host_) && !isValidHostName(host_))
+        if (!isValidIpV4Address(host_) && !isValidHostName(host_))
             return std::u16string();
 
         if (port_ == DEFAULT_HOST_TCP_PORT)
             return host();
 
-        return host_ + u":" + base::numberToString16(port_);
+        return host_ + u":" + numberToString16(port_);
     }
 }
 
@@ -333,8 +333,8 @@ bool Address::isValid() const
     if (!isValidPort(port_))
         return false;
 
-    if (!net::isValidIpV4Address(host_) &&
-        !net::isValidIpV6Address(host_) &&
+    if (!isValidIpV4Address(host_) &&
+        !isValidIpV6Address(host_) &&
         !isValidHostName(host_))
     {
         return false;
@@ -358,4 +358,4 @@ bool Address::operator!=(const Address& other)
     return !isEqual(other);
 }
 
-} // namespace net
+} // namespace base

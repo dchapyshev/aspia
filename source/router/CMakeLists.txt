@@ -47,7 +47,6 @@ add_executable(aspia_router ${SOURCE_ROUTER} ${SOURCE_ROUTER_WIN} win/router.rc)
 set_target_properties(aspia_router PROPERTIES LINK_FLAGS "/MANIFEST:NO")
 target_link_libraries(aspia_router
     aspia_base
-    aspia_net
     aspia_proto
     crypt32
     libcrypto

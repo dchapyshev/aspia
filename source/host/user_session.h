@@ -22,9 +22,9 @@
 #include "base/session_id.h"
 #include "base/waitable_timer.h"
 #include "base/ipc/ipc_channel.h"
+#include "base/net/user.h"
 #include "host/client_session.h"
 #include "host/desktop_session_manager.h"
-#include "net/user.h"
 #include "proto/host_internal.pb.h"
 
 namespace host {
@@ -69,7 +69,7 @@ public:
     Type type() const { return type_; }
     State state() const { return state_; }
     base::SessionId sessionId() const { return session_id_; }
-    net::User user() const;
+    base::User user() const;
 
     void addNewSession(std::unique_ptr<ClientSession> client_session);
     void setSessionEvent(base::win::SessionStatus status, base::SessionId session_id);

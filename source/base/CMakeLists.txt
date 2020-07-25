@@ -316,6 +316,37 @@ list(APPEND SOURCE_BASE_MESSAGE_LOOP
     message_loop/pending_task.cc
     message_loop/pending_task.h)
 
+list(APPEND SOURCE_BASE_NET
+    net/adapter_enumerator.cc
+    net/adapter_enumerator.h
+    net/address.cc
+    net/address.h
+    net/client_authenticator.cc
+    net/client_authenticator.h
+    net/firewall_manager.cc
+    net/firewall_manager.h
+    net/ip_util.cc
+    net/ip_util.h
+    net/network_channel.cc
+    net/network_channel.h
+    net/network_channel_proxy.cc
+    net/network_channel_proxy.h
+    net/network_server.cc
+    net/network_server.h
+    net/peer_controller.cc
+    net/peer_controller.h
+    net/server_authenticator.cc
+    net/server_authenticator.h
+    net/server_authenticator_manager.cc
+    net/server_authenticator_manager.h
+    net/user.cc
+    net/user.h
+    net/variable_size.cc
+    net/variable_size.h)
+
+list(APPEND SOURCE_BASE_NET_UNIT_TESTS
+    net/address_unittest.cc)
+
 list(APPEND SOURCE_BASE_STRINGS
     strings/strcat.cc
     strings/strcat.h
@@ -413,6 +444,7 @@ source_group(files FILES ${SOURCE_BASE_FILES})
 source_group(ipc FILES ${SOURCE_BASE_IPC})
 source_group(memory FILES ${SOURCE_BASE_MEMORY} ${SOURCE_BASE_MEMORY_UNIT_TESTS})
 source_group(message_loop FILES ${SOURCE_BASE_MESSAGE_LOOP})
+source_group(net FILES ${SOURCE_BASE_NET} ${SOURCE_BASE_NET_UNIT_TESTS})
 source_group(strings FILES ${SOURCE_BASE_STRINGS} ${SOURCE_BASE_STRINGS_UNIT_TESTS})
 source_group(threading FILES ${SOURCE_BASE_THREADING})
 source_group(win FILES ${SOURCE_BASE_WIN} ${SOURCE_BASE_WIN_UNIT_TESTS})
@@ -427,6 +459,7 @@ add_library(aspia_base STATIC
     ${SOURCE_BASE_IPC}
     ${SOURCE_BASE_MEMORY}
     ${SOURCE_BASE_MESSAGE_LOOP}
+    ${SOURCE_BASE_NET}
     ${SOURCE_BASE_STRINGS}
     ${SOURCE_BASE_THREADING}
     ${SOURCE_BASE_WIN})
@@ -441,6 +474,7 @@ if (BUILD_UNIT_TESTS)
         ${SOURCE_BASE_DESKTOP_UNIT_TESTS}
         ${SOURCE_BASE_DESKTOP_WIN_UNIT_TESTS}
         ${SOURCE_BASE_MEMORY_UNIT_TESTS}
+        ${SOURCE_BASE_NET_UNIT_TESTS}
         ${SOURCE_BASE_STRINGS_UNIT_TESTS}
         ${SOURCE_BASE_WIN_UNIT_TESTS})
     target_link_libraries(aspia_base_tests

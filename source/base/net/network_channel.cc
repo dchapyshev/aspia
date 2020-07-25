@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "net/channel.h"
+#include "base/net/network_channel.h"
 
 #include "base/location.h"
 #include "base/logging.h"
@@ -24,9 +24,9 @@
 #include "base/crypto/message_decryptor_fake.h"
 #include "base/message_loop/message_loop.h"
 #include "base/message_loop/message_pump_asio.h"
+#include "base/net/network_channel_proxy.h"
 #include "base/strings/string_printf.h"
 #include "base/strings/unicode.h"
-#include "net/channel_proxy.h"
 
 #include <asio/connect.hpp>
 #include <asio/read.hpp>
@@ -37,7 +37,7 @@
 #include <mstcpip.h>
 #endif // defined(OS_WIN)
 
-namespace net {
+namespace base {
 
 namespace {
 
@@ -52,29 +52,29 @@ int calculateSpeed(int last_speed, std::chrono::milliseconds duration, int64_t b
 
 } // namespace
 
-Channel::Channel()
-    : io_context_(base::MessageLoop::current()->pumpAsio()->ioContext()),
+NetworkChannel::NetworkChannel()
+    : io_context_(MessageLoop::current()->pumpAsio()->ioContext()),
       socket_(io_context_),
       resolver_(std::make_unique<asio::ip::tcp::resolver>(io_context_)),
-      proxy_(new ChannelProxy(base::MessageLoop::current()->taskRunner(), this)),
-      encryptor_(std::make_unique<base::MessageEncryptorFake>()),
-      decryptor_(std::make_unique<base::MessageDecryptorFake>())
+      proxy_(new NetworkChannelProxy(MessageLoop::current()->taskRunner(), this)),
+      encryptor_(std::make_unique<MessageEncryptorFake>()),
+      decryptor_(std::make_unique<MessageDecryptorFake>())
 {
     // Nothing
 }
 
-Channel::Channel(asio::ip::tcp::socket&& socket)
-    : io_context_(base::MessageLoop::current()->pumpAsio()->ioContext()),
+NetworkChannel::NetworkChannel(asio::ip::tcp::socket&& socket)
+    : io_context_(MessageLoop::current()->pumpAsio()->ioContext()),
       socket_(std::move(socket)),
-      proxy_(new ChannelProxy(base::MessageLoop::current()->taskRunner(), this)),
-      encryptor_(std::make_unique<base::MessageEncryptorFake>()),
-      decryptor_(std::make_unique<base::MessageDecryptorFake>()),
+      proxy_(new NetworkChannelProxy(MessageLoop::current()->taskRunner(), this)),
+      encryptor_(std::make_unique<MessageEncryptorFake>()),
+      decryptor_(std::make_unique<MessageDecryptorFake>()),
       connected_(true)
 {
     DCHECK(socket_.is_open());
 }
 
-Channel::~Channel()
+NetworkChannel::~NetworkChannel()
 {
     proxy_->willDestroyCurrentChannel();
     proxy_ = nullptr;
@@ -84,40 +84,40 @@ Channel::~Channel()
     disconnect();
 }
 
-std::shared_ptr<ChannelProxy> Channel::channelProxy()
+std::shared_ptr<NetworkChannelProxy> NetworkChannel::channelProxy()
 {
     return proxy_;
 }
 
-void Channel::setListener(Listener* listener)
+void NetworkChannel::setListener(Listener* listener)
 {
     listener_ = listener;
 }
 
-void Channel::setEncryptor(std::unique_ptr<base::MessageEncryptor> encryptor)
+void NetworkChannel::setEncryptor(std::unique_ptr<MessageEncryptor> encryptor)
 {
     encryptor_ = std::move(encryptor);
 }
 
-void Channel::setDecryptor(std::unique_ptr<base::MessageDecryptor> decryptor)
+void NetworkChannel::setDecryptor(std::unique_ptr<MessageDecryptor> decryptor)
 {
     decryptor_ = std::move(decryptor);
 }
 
-std::u16string Channel::peerAddress() const
+std::u16string NetworkChannel::peerAddress() const
 {
     if (!socket_.is_open())
         return std::u16string();
 
-    return base::utf16FromLocal8Bit(socket_.remote_endpoint().address().to_string());
+    return utf16FromLocal8Bit(socket_.remote_endpoint().address().to_string());
 }
 
-void Channel::connect(std::u16string_view address, uint16_t port)
+void NetworkChannel::connect(std::u16string_view address, uint16_t port)
 {
     if (connected_ || !resolver_)
         return;
 
-    resolver_->async_resolve(base::local8BitFromUtf16(address), std::to_string(port),
+    resolver_->async_resolve(local8BitFromUtf16(address), std::to_string(port),
         [this](const std::error_code& error_code,
                const asio::ip::tcp::resolver::results_type& endpoints)
     {
@@ -145,22 +145,22 @@ void Channel::connect(std::u16string_view address, uint16_t port)
     });
 }
 
-bool Channel::isConnected() const
+bool NetworkChannel::isConnected() const
 {
     return connected_;
 }
 
-bool Channel::isPaused() const
+bool NetworkChannel::isPaused() const
 {
     return paused_;
 }
 
-void Channel::pause()
+void NetworkChannel::pause()
 {
     paused_ = true;
 }
 
-void Channel::resume()
+void NetworkChannel::resume()
 {
     if (!connected_ || !paused_)
         return;
@@ -178,7 +178,7 @@ void Channel::resume()
     doReadSize();
 }
 
-void Channel::send(base::ByteArray&& buffer)
+void NetworkChannel::send(ByteArray&& buffer)
 {
     const bool schedule_write = write_queue_.empty();
 
@@ -189,7 +189,7 @@ void Channel::send(base::ByteArray&& buffer)
         doWrite();
 }
 
-bool Channel::setNoDelay(bool enable)
+bool NetworkChannel::setNoDelay(bool enable)
 {
     asio::ip::tcp::no_delay option(enable);
 
@@ -205,9 +205,9 @@ bool Channel::setNoDelay(bool enable)
     return true;
 }
 
-bool Channel::setKeepAlive(bool enable,
-                           const std::chrono::milliseconds& time,
-                           const std::chrono::milliseconds& interval)
+bool NetworkChannel::setKeepAlive(bool enable,
+                                  const std::chrono::milliseconds& time,
+                                  const std::chrono::milliseconds& interval)
 {
 #if defined(OS_WIN)
     struct tcp_keepalive alive;
@@ -232,7 +232,7 @@ bool Channel::setKeepAlive(bool enable,
     return true;
 }
 
-bool Channel::setReadBufferSize(size_t size)
+bool NetworkChannel::setReadBufferSize(size_t size)
 {
     asio::socket_base::receive_buffer_size option(size);
 
@@ -248,7 +248,7 @@ bool Channel::setReadBufferSize(size_t size)
     return true;
 }
 
-bool Channel::setWriteBufferSize(size_t size)
+bool NetworkChannel::setWriteBufferSize(size_t size)
 {
     asio::socket_base::send_buffer_size option(size);
 
@@ -264,7 +264,7 @@ bool Channel::setWriteBufferSize(size_t size)
     return true;
 }
 
-int Channel::speedRx()
+int NetworkChannel::speedRx()
 {
     TimePoint current_time = Clock::now();
 
@@ -279,7 +279,7 @@ int Channel::speedRx()
     return speed_rx_;
 }
 
-int Channel::speedTx()
+int NetworkChannel::speedTx()
 {
     TimePoint current_time = Clock::now();
 
@@ -295,7 +295,7 @@ int Channel::speedTx()
 }
 
 // static
-std::string Channel::errorToString(ErrorCode error_code)
+std::string NetworkChannel::errorToString(ErrorCode error_code)
 {
     const char* str;
 
@@ -338,10 +338,10 @@ std::string Channel::errorToString(ErrorCode error_code)
             break;
     }
 
-    return base::stringPrintf("%s (%d)", str, static_cast<int>(error_code));
+    return stringPrintf("%s (%d)", str, static_cast<int>(error_code));
 }
 
-void Channel::disconnect()
+void NetworkChannel::disconnect()
 {
     if (!connected_)
         return;
@@ -354,7 +354,7 @@ void Channel::disconnect()
     socket_.close(ignored_code);
 }
 
-void Channel::onErrorOccurred(const base::Location& location, const std::error_code& error_code)
+void NetworkChannel::onErrorOccurred(const Location& location, const std::error_code& error_code)
 {
     if (error_code == asio::error::operation_aborted)
         return;
@@ -378,7 +378,7 @@ void Channel::onErrorOccurred(const base::Location& location, const std::error_c
     else if (error_code == asio::error::network_down)
         error = ErrorCode::NETWORK_ERROR;
 
-    LOG(LS_WARNING) << "Network error: " << base::utf16FromLocal8Bit(error_code.message())
+    LOG(LS_WARNING) << "Network error: " << utf16FromLocal8Bit(error_code.message())
                     << " (code: " << error_code.value()
                     << ", location: " << location.toString() << ")";
 
@@ -391,13 +391,13 @@ void Channel::onErrorOccurred(const base::Location& location, const std::error_c
     }
 }
 
-void Channel::onMessageWritten()
+void NetworkChannel::onMessageWritten()
 {
     if (listener_)
         listener_->onMessageWritten(write_queue_.size());
 }
 
-void Channel::onMessageReceived()
+void NetworkChannel::onMessageReceived()
 {
     const size_t decrypt_buffer_size = decryptor_->decryptedDataSize(read_buffer_.size());
 
@@ -416,9 +416,9 @@ void Channel::onMessageReceived()
         listener_->onMessageReceived(decrypt_buffer_);
 }
 
-void Channel::doWrite()
+void NetworkChannel::doWrite()
 {
-    const base::ByteArray& source_buffer = write_queue_.front();
+    const ByteArray& source_buffer = write_queue_.front();
     if (source_buffer.empty())
     {
         onErrorOccurred(FROM_HERE, asio::error::message_size);
@@ -461,13 +461,13 @@ void Channel::doWrite()
     // Send the buffer to the recipient.
     asio::async_write(socket_,
                       asio::buffer(write_buffer_.data(), write_buffer_.size()),
-                      std::bind(&Channel::onWrite,
+                      std::bind(&NetworkChannel::onWrite,
                                 this,
                                 std::placeholders::_1,
                                 std::placeholders::_2));
 }
 
-void Channel::onWrite(const std::error_code& error_code, size_t bytes_transferred)
+void NetworkChannel::onWrite(const std::error_code& error_code, size_t bytes_transferred)
 {
     if (error_code)
     {
@@ -493,18 +493,18 @@ void Channel::onWrite(const std::error_code& error_code, size_t bytes_transferre
     doWrite();
 }
 
-void Channel::doReadSize()
+void NetworkChannel::doReadSize()
 {
     state_ = ReadState::READ_SIZE;
     asio::async_read(socket_,
                      variable_size_reader_.buffer(),
-                     std::bind(&Channel::onReadSize,
+                     std::bind(&NetworkChannel::onReadSize,
                                this,
                                std::placeholders::_1,
                                std::placeholders::_2));
 }
 
-void Channel::onReadSize(const std::error_code& error_code, size_t bytes_transferred)
+void NetworkChannel::onReadSize(const std::error_code& error_code, size_t bytes_transferred)
 {
     if (error_code)
     {
@@ -533,7 +533,7 @@ void Channel::onReadSize(const std::error_code& error_code, size_t bytes_transfe
         state_ = ReadState::READ_CONTENT;
         asio::async_read(socket_,
                          asio::buffer(read_buffer_.data(), read_buffer_.size()),
-                         std::bind(&Channel::onReadContent,
+                         std::bind(&NetworkChannel::onReadContent,
                                    this,
                                    std::placeholders::_1,
                                    std::placeholders::_2));
@@ -544,7 +544,7 @@ void Channel::onReadSize(const std::error_code& error_code, size_t bytes_transfe
     }
 }
 
-void Channel::onReadContent(const std::error_code& error_code, size_t bytes_transferred)
+void NetworkChannel::onReadContent(const std::error_code& error_code, size_t bytes_transferred)
 {
     if (error_code)
     {
@@ -575,4 +575,4 @@ void Channel::onReadContent(const std::error_code& error_code, size_t bytes_tran
     doReadSize();
 }
 
-} // namespace net
+} // namespace base

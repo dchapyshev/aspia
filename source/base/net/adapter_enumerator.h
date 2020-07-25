@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef NET__ADAPTER_ENUMERATOR_H
-#define NET__ADAPTER_ENUMERATOR_H
+#ifndef BASE__NET__ADAPTER_ENUMERATOR_H
+#define BASE__NET__ADAPTER_ENUMERATOR_H
 
 #include "base/macros_magic.h"
 
@@ -29,7 +29,7 @@ struct _IP_ADAPTER_UNICAST_ADDRESS_LH;
 struct _IP_ADAPTER_DNS_SERVER_ADDRESS_XP;
 struct _IP_ADAPTER_GATEWAY_ADDRESS_LH;
 
-namespace net {
+namespace base {
 
 class AdapterEnumerator
 {
@@ -104,6 +104,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(AdapterEnumerator);
 };
 
-} // namespace net
+} // namespace base
 
-#endif // NET__ADAPTER_ENUMERATOR_H
+#endif // BASE__NET__ADAPTER_ENUMERATOR_H

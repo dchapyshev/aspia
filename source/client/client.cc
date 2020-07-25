@@ -48,7 +48,7 @@ void Client::start(const Config& config)
     status_window_proxy_->onStarted(config_.address, config_.port);
 
     // Create a network channel for messaging.
-    channel_ = std::make_unique<net::Channel>();
+    channel_ = std::make_unique<base::NetworkChannel>();
 
     // Set the listener for the network channel.
     channel_->setListener(this);
@@ -123,7 +123,7 @@ void Client::onConnected()
     channel_->setKeepAlive(true, kKeepAliveTime, kKeepAliveInterval);
     channel_->setNoDelay(true);
 
-    authenticator_ = std::make_unique<net::ClientAuthenticator>();
+    authenticator_ = std::make_unique<base::ClientAuthenticator>();
 
     authenticator_->setIdentify(proto::IDENTIFY_SRP);
     authenticator_->setUserName(config_.username);
@@ -131,9 +131,9 @@ void Client::onConnected()
     authenticator_->setSessionType(config_.session_type);
 
     authenticator_->start(std::move(channel_),
-                          [this](net::ClientAuthenticator::ErrorCode error_code)
+                          [this](base::ClientAuthenticator::ErrorCode error_code)
     {
-        if (error_code == net::ClientAuthenticator::ErrorCode::SUCCESS)
+        if (error_code == base::ClientAuthenticator::ErrorCode::SUCCESS)
         {
             // The authenticator takes the listener on itself, we return the receipt of
             // notifications.
@@ -159,7 +159,7 @@ void Client::onConnected()
     });
 }
 
-void Client::onDisconnected(net::Channel::ErrorCode error_code)
+void Client::onDisconnected(base::NetworkChannel::ErrorCode error_code)
 {
     // Show an error to the user.
     status_window_proxy_->onDisconnected(error_code);

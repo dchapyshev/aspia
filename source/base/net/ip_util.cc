@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "net/ip_util.h"
+#include "base/net/ip_util.h"
 
 #include "base/strings/unicode.h"
 #include "build/build_config.h"
@@ -27,7 +27,7 @@
 #error Platform support not implemented
 #endif // defined(OS_*)
 
-namespace net {
+namespace base {
 
 bool isValidIpV4Address(std::u16string_view address)
 {
@@ -41,4 +41,4 @@ bool isValidIpV6Address(std::u16string_view address)
     return inet_pton(AF_INET6, base::local8BitFromUtf16(address).c_str(), &(sa.sin6_addr)) != 0;
 }
 
-} // namespace net
+} // namespace base

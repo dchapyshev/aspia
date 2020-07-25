@@ -16,14 +16,14 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CONSOLE__ADDRESS_H
-#define CONSOLE__ADDRESS_H
+#ifndef BASE__NET__ADDRESS_H
+#define BASE__NET__ADDRESS_H
 
 #include "build/build_config.h"
 
 #include <string>
 
-namespace net {
+namespace base {
 
 class Address
 {
@@ -62,6 +62,6 @@ private:
     uint16_t port_ = 0;
 };
 
-} // namespace net
+} // namespace base
 
-#endif // CONSOLE__ADDRESS_H
+#endif // BASE__NET__ADDRESS_H

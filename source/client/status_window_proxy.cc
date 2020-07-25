@@ -82,7 +82,7 @@ void StatusWindowProxy::onConnected()
         status_window_->onConnected();
 }
 
-void StatusWindowProxy::onDisconnected(net::Channel::ErrorCode error_code)
+void StatusWindowProxy::onDisconnected(base::NetworkChannel::ErrorCode error_code)
 {
     if (!ui_task_runner_->belongsToCurrentThread())
     {
@@ -95,7 +95,7 @@ void StatusWindowProxy::onDisconnected(net::Channel::ErrorCode error_code)
         status_window_->onDisconnected(error_code);
 }
 
-void StatusWindowProxy::onAccessDenied(net::ClientAuthenticator::ErrorCode error_code)
+void StatusWindowProxy::onAccessDenied(base::ClientAuthenticator::ErrorCode error_code)
 {
     if (!ui_task_runner_->belongsToCurrentThread())
     {

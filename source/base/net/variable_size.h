@@ -16,42 +16,48 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef NET__SERVER_H
-#define NET__SERVER_H
+#ifndef BASE__NET__VARIABLE_SIZE_H
+#define BASE__NET__VARIABLE_SIZE_H
 
 #include "base/macros_magic.h"
 
+#include <asio/buffer.hpp>
+
 #include <cstdint>
-#include <memory>
+#include <optional>
 
-namespace net {
+namespace base {
 
-class Channel;
-
-class Server
+class VariableSizeReader
 {
 public:
-    Server();
-    ~Server();
+    VariableSizeReader();
+    ~VariableSizeReader();
 
-    class Delegate
-    {
-    public:
-        virtual ~Delegate() = default;
-
-        virtual void onNewConnection(std::unique_ptr<Channel> channel) = 0;
-    };
-
-    void start(uint16_t port, Delegate* delegate);
-    void stop();
+    asio::mutable_buffer buffer();
+    std::optional<size_t> messageSize();
 
 private:
-    class Impl;
-    std::shared_ptr<Impl> impl_;
+    uint8_t buffer_[4] = { 0 };
+    size_t pos_ = 0;
 
-    DISALLOW_COPY_AND_ASSIGN(Server);
+    DISALLOW_COPY_AND_ASSIGN(VariableSizeReader);
 };
 
-} // namespace net
+class VariableSizeWriter
+{
+public:
+    VariableSizeWriter();
+    ~VariableSizeWriter();
 
-#endif // NET__SERVER_H
+    asio::const_buffer variableSize(size_t size);
+
+private:
+    uint8_t buffer_[4];
+
+    DISALLOW_COPY_AND_ASSIGN(VariableSizeWriter);
+};
+
+} // namespace base
+
+#endif // BASE__NET__VARIABLE_SIZE_H

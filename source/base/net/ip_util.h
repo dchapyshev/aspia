@@ -16,48 +16,16 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef NET__VARIABLE_SIZE_H
-#define NET__VARIABLE_SIZE_H
+#ifndef BASE__NET__IP_UTIL_H
+#define BASE__NET__IP_UTIL_H
 
-#include "base/macros_magic.h"
+#include <string_view>
 
-#include <asio/buffer.hpp>
+namespace base {
 
-#include <cstdint>
-#include <optional>
+bool isValidIpV4Address(std::u16string_view address);
+bool isValidIpV6Address(std::u16string_view address);
 
-namespace net {
+} // namespace base
 
-class VariableSizeReader
-{
-public:
-    VariableSizeReader();
-    ~VariableSizeReader();
-
-    asio::mutable_buffer buffer();
-    std::optional<size_t> messageSize();
-
-private:
-    uint8_t buffer_[4] = { 0 };
-    size_t pos_ = 0;
-
-    DISALLOW_COPY_AND_ASSIGN(VariableSizeReader);
-};
-
-class VariableSizeWriter
-{
-public:
-    VariableSizeWriter();
-    ~VariableSizeWriter();
-
-    asio::const_buffer variableSize(size_t size);
-
-private:
-    uint8_t buffer_[4];
-
-    DISALLOW_COPY_AND_ASSIGN(VariableSizeWriter);
-};
-
-} // namespace net
-
-#endif // NET__VARIABLE_SIZE_H
+#endif // BASE__NET__IP_UTIL_H

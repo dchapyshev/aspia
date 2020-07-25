@@ -51,7 +51,6 @@ add_executable(aspia_proxy ${SOURCE_PROXY} ${SOURCE_PROXY_WIN} win/proxy.rc)
 set_target_properties(aspia_proxy PROPERTIES LINK_FLAGS "/MANIFEST:NO")
 target_link_libraries(aspia_proxy
     aspia_base
-    aspia_net
     aspia_proto
     crypt32
     ${THIRD_PARTY_LIBS})

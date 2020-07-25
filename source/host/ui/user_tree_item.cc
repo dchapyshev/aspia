@@ -20,13 +20,13 @@
 
 namespace host {
 
-UserTreeItem::UserTreeItem(const net::User& user)
+UserTreeItem::UserTreeItem(const base::User& user)
     : user_(user)
 {
     updateData();
 }
 
-void UserTreeItem::setUser(const net::User& user)
+void UserTreeItem::setUser(const base::User& user)
 {
     user_ = user;
     updateData();
@@ -34,7 +34,7 @@ void UserTreeItem::setUser(const net::User& user)
 
 void UserTreeItem::updateData()
 {
-    if (user_.flags & net::User::ENABLED)
+    if (user_.flags & base::User::ENABLED)
         setIcon(0, QIcon(QLatin1String(":/img/user.png")));
     else
         setIcon(0, QIcon(QLatin1String(":/img/user-disabled.png")));

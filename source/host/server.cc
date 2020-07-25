@@ -22,9 +22,9 @@
 #include "base/task_runner.h"
 #include "base/files/base_paths.h"
 #include "base/files/file_path_watcher.h"
+#include "base/net/network_channel.h"
+#include "base/net/firewall_manager.h"
 #include "host/client_session.h"
-#include "net/firewall_manager.h"
-#include "net/channel.h"
 
 namespace host {
 
@@ -83,7 +83,7 @@ void Server::start()
         }
     });
 
-    authenticator_manager_ = std::make_unique<net::ServerAuthenticatorManager>(task_runner_, this);
+    authenticator_manager_ = std::make_unique<base::ServerAuthenticatorManager>(task_runner_, this);
 
     user_session_manager_ = std::make_unique<UserSessionManager>(task_runner_);
     user_session_manager_->start(this);
@@ -91,7 +91,7 @@ void Server::start()
     reloadUserList();
     addFirewallRules();
 
-    server_ = std::make_unique<net::Server>();
+    server_ = std::make_unique<base::NetworkServer>();
     server_->start(settings_.tcpPort(), this);
 
     LOG(LS_INFO) << "Host server is started successfully";
@@ -103,7 +103,7 @@ void Server::setSessionEvent(base::win::SessionStatus status, base::SessionId se
         user_session_manager_->setSessionEvent(status, session_id);
 }
 
-void Server::onNewConnection(std::unique_ptr<net::Channel> channel)
+void Server::onNewConnection(std::unique_ptr<base::NetworkChannel> channel)
 {
     static const size_t kReadBufferSize = 1 * 1024 * 1024; // 1 Mb.
 
@@ -114,7 +114,7 @@ void Server::onNewConnection(std::unique_ptr<net::Channel> channel)
         authenticator_manager_->addNewChannel(std::move(channel));
 }
 
-void Server::onNewSession(net::ServerAuthenticatorManager::SessionInfo&& session_info)
+void Server::onNewSession(base::ServerAuthenticatorManager::SessionInfo&& session_info)
 {
     std::unique_ptr<ClientSession> session = ClientSession::create(
         static_cast<proto::SessionType>(session_info.session_type), std::move(session_info.channel));
@@ -140,7 +140,7 @@ void Server::addFirewallRules()
     if (!base::BasePaths::currentExecFile(&file_path))
         return;
 
-    net::FirewallManager firewall(file_path);
+    base::FirewallManager firewall(file_path);
     if (!firewall.isValid())
         return;
 
@@ -156,7 +156,7 @@ void Server::deleteFirewallRules()
     if (!base::BasePaths::currentExecFile(&file_path))
         return;
 
-    net::FirewallManager firewall(file_path);
+    base::FirewallManager firewall(file_path);
     if (!firewall.isValid())
         return;
 
@@ -166,8 +166,8 @@ void Server::deleteFirewallRules()
 void Server::reloadUserList()
 {
     // Read the list of regular users.
-    std::shared_ptr<net::UserList> user_list =
-        std::make_shared<net::UserList>(settings_.userList());
+    std::shared_ptr<base::UserList> user_list =
+        std::make_shared<base::UserList>(settings_.userList());
 
     // Add a list of one-time users to the list of regular users.
     user_list->merge(user_session_manager_->userList());

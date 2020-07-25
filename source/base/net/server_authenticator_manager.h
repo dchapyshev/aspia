@@ -16,12 +16,12 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef NET__SERVER_AUTHENTICATOR_MANAGER_H
-#define NET__SERVER_AUTHENTICATOR_MANAGER_H
+#ifndef BASE__NET__SERVER_AUTHENTICATOR_MANAGER_H
+#define BASE__NET__SERVER_AUTHENTICATOR_MANAGER_H
 
-#include "net/server_authenticator.h"
+#include "base/net/server_authenticator.h"
 
-namespace net {
+namespace base {
 
 class ServerAuthenticatorManager : public ServerAuthenticator::Delegate
 {
@@ -36,8 +36,8 @@ public:
         SessionInfo(const SessionInfo& other) = delete;
         SessionInfo& operator=(const SessionInfo& other) = delete;
 
-        std::unique_ptr<Channel> channel;
-        base::Version version;
+        std::unique_ptr<NetworkChannel> channel;
+        Version version;
         std::u16string user_name;
         uint32_t session_type = 0;
     };
@@ -51,12 +51,12 @@ public:
         virtual void onNewSession(SessionInfo&& session_info) = 0;
     };
 
-    ServerAuthenticatorManager(std::shared_ptr<base::TaskRunner> task_runner, Delegate* delegate);
+    ServerAuthenticatorManager(std::shared_ptr<TaskRunner> task_runner, Delegate* delegate);
     ~ServerAuthenticatorManager();
 
-    void setUserList(std::shared_ptr<net::UserList> user_list);
+    void setUserList(std::shared_ptr<UserList> user_list);
 
-    void setPrivateKey(const base::ByteArray& private_key);
+    void setPrivateKey(const ByteArray& private_key);
 
     void setAnonymousAccess(
         ServerAuthenticator::AnonymousAccess anonymous_access, uint32_t session_types);
@@ -64,18 +64,18 @@ public:
     // Adds a channel to the authentication queue. After success completion, a session will be
     // created (in a stopped state) and method Delegate::onNewSession will be called.
     // If authentication fails, the channel will be automatically deleted.
-    void addNewChannel(std::unique_ptr<net::Channel> channel);
+    void addNewChannel(std::unique_ptr<NetworkChannel> channel);
 
 protected:
     // Authenticator::Delegate implementation.
     void onComplete() override;
 
 private:
-    std::shared_ptr<base::TaskRunner> task_runner_;
+    std::shared_ptr<TaskRunner> task_runner_;
     std::shared_ptr<UserList> user_list_;
     std::vector<std::unique_ptr<ServerAuthenticator>> pending_;
 
-    base::ByteArray private_key_;
+    ByteArray private_key_;
 
     ServerAuthenticator::AnonymousAccess anonymous_access_ =
         ServerAuthenticator::AnonymousAccess::DISABLE;
@@ -87,6 +87,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(ServerAuthenticatorManager);
 };
 
-} // namespace net
+} // namespace base
 
-#endif // NET__SERVER_AUTHENTICATOR_MANAGER_H
+#endif // BASE__NET__SERVER_AUTHENTICATOR_MANAGER_H

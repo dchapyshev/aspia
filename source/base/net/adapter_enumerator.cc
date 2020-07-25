@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "net/adapter_enumerator.h"
+#include "base/net/adapter_enumerator.h"
 
 #include "base/strings/string_printf.h"
 #include "base/strings/unicode.h"
@@ -24,7 +24,7 @@
 #include <ws2tcpip.h>
 #include <iphlpapi.h>
 
-namespace net {
+namespace base {
 
 namespace {
 
@@ -292,4 +292,4 @@ std::string AdapterEnumerator::DnsEnumerator::address() const
     return addressToString(address_->Address);
 }
 
-} // namespace net
+} // namespace base

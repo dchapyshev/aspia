@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "net/user.h"
+#include "base/net/user.h"
 
 #include "base/logging.h"
 #include "base/crypto/random.h"
@@ -26,7 +26,7 @@
 
 #include <cwctype>
 
-namespace net {
+namespace base {
 
 namespace {
 
@@ -114,7 +114,7 @@ User User::create(std::u16string_view name, std::u16string_view password)
     if (name.empty() || password.empty())
         return User();
 
-    std::optional<base::SrpNgPair> Ng_pair = base::pairByGroup(kDefaultGroup);
+    std::optional<SrpNgPair> Ng_pair = base::pairByGroup(kDefaultGroup);
     if (!Ng_pair.has_value())
         return User();
 
@@ -123,10 +123,10 @@ User User::create(std::u16string_view name, std::u16string_view password)
     user.group = kDefaultGroup;
     user.salt = base::Random::byteArray(kSaltSize);
 
-    base::BigNum s = base::BigNum::fromByteArray(user.salt);
-    base::BigNum N = base::BigNum::fromStdString(Ng_pair->first);
-    base::BigNum g = base::BigNum::fromStdString(Ng_pair->second);
-    base::BigNum v = base::SrpMath::calc_v(name, password, s, N, g);
+    BigNum s = BigNum::fromByteArray(user.salt);
+    BigNum N = BigNum::fromStdString(Ng_pair->first);
+    BigNum g = BigNum::fromStdString(Ng_pair->second);
+    BigNum v = SrpMath::calc_v(name, password, s, N, g);
 
     user.verifier = v.toByteArray();
     if (user.verifier.empty())
@@ -170,19 +170,19 @@ const User& UserList::find(std::u16string_view username) const
 
     for (const auto& item : list_)
     {
-        if (base::compareCaseInsensitive(username, item.name) == 0)
+        if (compareCaseInsensitive(username, item.name) == 0)
             user = &item;
     }
 
     return *user;
 }
 
-void UserList::setSeedKey(const base::ByteArray& seed_key)
+void UserList::setSeedKey(const ByteArray& seed_key)
 {
     seed_key_ = seed_key;
 }
 
-void UserList::setSeedKey(base::ByteArray&& seed_key)
+void UserList::setSeedKey(ByteArray&& seed_key)
 {
     seed_key_ = std::move(seed_key);
 }
@@ -214,4 +214,4 @@ void UserList::Iterator::advance()
     ++pos_;
 }
 
-} // namespace net
+} // namespace base

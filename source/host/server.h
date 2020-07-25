@@ -19,10 +19,10 @@
 #ifndef HOST__SERVER_H
 #define HOST__SERVER_H
 
+#include "base/net/network_server.h"
+#include "base/net/server_authenticator_manager.h"
 #include "host/user_session_manager.h"
 #include "host/system_settings.h"
-#include "net/server.h"
-#include "net/server_authenticator_manager.h"
 
 namespace base {
 class FilePathWatcher;
@@ -32,8 +32,8 @@ class TaskRunner;
 namespace host {
 
 class Server
-    : public net::Server::Delegate,
-      public net::ServerAuthenticatorManager::Delegate,
+    : public base::NetworkServer::Delegate,
+      public base::ServerAuthenticatorManager::Delegate,
       public UserSessionManager::Delegate
 {
 public:
@@ -45,10 +45,10 @@ public:
 
 protected:
     // net::Server::Delegate implementation.
-    void onNewConnection(std::unique_ptr<net::Channel> channel) override;
+    void onNewConnection(std::unique_ptr<base::NetworkChannel> channel) override;
 
     // net::AuthenticatorManager::Delegate implementation.
-    void onNewSession(net::ServerAuthenticatorManager::SessionInfo&& session_info) override;
+    void onNewSession(base::ServerAuthenticatorManager::SessionInfo&& session_info) override;
 
     // UserSessionManager::Delegate implementation.
     void onUserListChanged() override;
@@ -64,8 +64,8 @@ private:
     SystemSettings settings_;
 
     // Accepts incoming network connections.
-    std::unique_ptr<net::Server> server_;
-    std::unique_ptr<net::ServerAuthenticatorManager> authenticator_manager_;
+    std::unique_ptr<base::NetworkServer> server_;
+    std::unique_ptr<base::ServerAuthenticatorManager> authenticator_manager_;
     std::unique_ptr<UserSessionManager> user_session_manager_;
 
     DISALLOW_COPY_AND_ASSIGN(Server);

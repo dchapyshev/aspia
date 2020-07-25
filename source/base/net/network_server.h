@@ -16,16 +16,42 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef NET__IP_UTIL_H
-#define NET__IP_UTIL_H
+#ifndef BASE__NET__NETWORK_SERVER_H
+#define BASE__NET__NETWORK_SERVER_H
 
-#include <string_view>
+#include "base/macros_magic.h"
 
-namespace net {
+#include <cstdint>
+#include <memory>
 
-bool isValidIpV4Address(std::u16string_view address);
-bool isValidIpV6Address(std::u16string_view address);
+namespace base {
 
-} // namespace net
+class NetworkChannel;
 
-#endif // NET__IP_UTIL_H
+class NetworkServer
+{
+public:
+    NetworkServer();
+    ~NetworkServer();
+
+    class Delegate
+    {
+    public:
+        virtual ~Delegate() = default;
+
+        virtual void onNewConnection(std::unique_ptr<NetworkChannel> channel) = 0;
+    };
+
+    void start(uint16_t port, Delegate* delegate);
+    void stop();
+
+private:
+    class Impl;
+    std::shared_ptr<Impl> impl_;
+
+    DISALLOW_COPY_AND_ASSIGN(NetworkServer);
+};
+
+} // namespace base
+
+#endif // BASE__NET__NETWORK_SERVER_H

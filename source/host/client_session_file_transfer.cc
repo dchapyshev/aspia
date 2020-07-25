@@ -19,6 +19,7 @@
 #include "host/client_session_file_transfer.h"
 
 #include "base/logging.h"
+#include "base/net/network_channel_proxy.h"
 #include "base/threading/thread.h"
 #include "base/win/scoped_impersonator.h"
 #include "base/win/scoped_object.h"
@@ -26,7 +27,6 @@
 #include "common/file_task_producer.h"
 #include "common/file_task_producer_proxy.h"
 #include "common/file_worker.h"
-#include "net/channel_proxy.h"
 #include "proto/file_transfer.pb.h"
 
 #include <wtsapi32.h>
@@ -97,7 +97,7 @@ class ClientSessionFileTransfer::Worker
       public common::FileTaskProducer
 {
 public:
-    Worker(base::SessionId session_id, std::shared_ptr<net::ChannelProxy> channel_proxy);
+    Worker(base::SessionId session_id, std::shared_ptr<base::NetworkChannelProxy> channel_proxy);
     ~Worker();
 
     void start();
@@ -115,7 +115,7 @@ private:
     base::Thread thread_;
     const base::SessionId session_id_;
     std::unique_ptr<base::win::ScopedImpersonator> impersonator_;
-    std::shared_ptr<net::ChannelProxy> channel_proxy_;
+    std::shared_ptr<base::NetworkChannelProxy> channel_proxy_;
     std::shared_ptr<common::FileTaskProducerProxy> producer_proxy_;
     std::unique_ptr<common::FileWorker> impl_;
 
@@ -123,7 +123,7 @@ private:
 };
 
 ClientSessionFileTransfer::Worker::Worker(
-    base::SessionId session_id, std::shared_ptr<net::ChannelProxy> channel_proxy)
+    base::SessionId session_id, std::shared_ptr<base::NetworkChannelProxy> channel_proxy)
     : session_id_(session_id),
       channel_proxy_(std::move(channel_proxy))
 {
@@ -188,7 +188,7 @@ void ClientSessionFileTransfer::Worker::onTaskDone(std::shared_ptr<common::FileT
     channel_proxy_->send(base::serialize(task->reply()));
 }
 
-ClientSessionFileTransfer::ClientSessionFileTransfer(std::unique_ptr<net::Channel> channel)
+ClientSessionFileTransfer::ClientSessionFileTransfer(std::unique_ptr<base::NetworkChannel> channel)
     : ClientSession(proto::SESSION_TYPE_FILE_TRANSFER, std::move(channel))
 {
     // Nothing

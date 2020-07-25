@@ -35,7 +35,7 @@
 namespace host {
 
 ClientSessionDesktop::ClientSessionDesktop(
-    proto::SessionType session_type, std::unique_ptr<net::Channel> channel)
+    proto::SessionType session_type, std::unique_ptr<base::NetworkChannel> channel)
     : ClientSession(session_type, std::move(channel))
 {
     // Nothing

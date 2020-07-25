@@ -20,7 +20,7 @@
 #define HOST__UI__USER_DIALOG_H
 
 #include "base/macros_magic.h"
-#include "net/user.h"
+#include "base/net/user.h"
 #include "ui_user_dialog.h"
 
 namespace host {
@@ -30,10 +30,10 @@ class UserDialog : public QDialog
     Q_OBJECT
 
 public:
-    UserDialog(const net::User& user, const QStringList& exist_names, QWidget* parent);
+    UserDialog(const base::User& user, const QStringList& exist_names, QWidget* parent);
     ~UserDialog() = default;
 
-    net::User user() { return user_; }
+    base::User user() { return user_; }
 
 protected:
     // QDialog implementation.
@@ -50,7 +50,7 @@ private:
     Ui::UserDialog ui;
 
     QStringList exist_names_;
-    net::User user_;
+    base::User user_;
     bool account_changed_ = true;
 
     DISALLOW_COPY_AND_ASSIGN(UserDialog);

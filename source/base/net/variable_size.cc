@@ -16,11 +16,11 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "net/variable_size.h"
+#include "base/net/variable_size.h"
 
 #include "base/logging.h"
 
-namespace net {
+namespace base {
 
 VariableSizeReader::VariableSizeReader() = default;
 
@@ -93,4 +93,4 @@ asio::const_buffer VariableSizeWriter::variableSize(size_t size)
     return asio::const_buffer(buffer_, length);
 }
 
-} // namespace net
+} // namespace base

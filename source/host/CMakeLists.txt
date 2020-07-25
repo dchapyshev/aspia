@@ -116,7 +116,6 @@ add_library(aspia_host_core SHARED
 target_link_libraries(aspia_host_core
     aspia_base
     aspia_common
-    aspia_net
     aspia_proto
     aspia_qt_base
     aspia_updater

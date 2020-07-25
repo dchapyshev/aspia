@@ -23,13 +23,13 @@
 #include "base/task_runner.h"
 #include "base/crypto/password_generator.h"
 #include "base/desktop/frame.h"
+#include "base/net/adapter_enumerator.h"
 #include "base/strings/string_number_conversions.h"
 #include "base/strings/string_util.h"
 #include "base/strings/unicode.h"
 #include "host/client_session_desktop.h"
 #include "host/client_session_file_transfer.h"
 #include "host/desktop_session_proxy.h"
-#include "net/adapter_enumerator.h"
 
 namespace host {
 
@@ -108,13 +108,13 @@ void UserSession::restart(std::unique_ptr<base::IpcChannel> channel)
     delegate_->onUserSessionStarted();
 }
 
-net::User UserSession::user() const
+base::User UserSession::user() const
 {
-    net::User user = net::User::create(
+    base::User user = base::User::create(
         base::utf16FromAscii(username_), base::utf16FromAscii(password_));
 
     user.sessions = proto::SESSION_TYPE_ALL;
-    user.flags = net::User::ENABLED;
+    user.flags = base::User::ENABLED;
 
     return user;
 }
@@ -445,9 +445,9 @@ void UserSession::sendCredentials()
     credentials->set_username(username_);
     credentials->set_password(password_);
 
-    for (net::AdapterEnumerator adapters; !adapters.isAtEnd(); adapters.advance())
+    for (base::AdapterEnumerator adapters; !adapters.isAtEnd(); adapters.advance())
     {
-        for (net::AdapterEnumerator::IpAddressEnumerator addresses(adapters);
+        for (base::AdapterEnumerator::IpAddressEnumerator addresses(adapters);
              !addresses.isAtEnd(); addresses.advance())
         {
             std::string ip = addresses.address();

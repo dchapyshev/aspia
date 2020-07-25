@@ -42,8 +42,8 @@ public:
     void onStarted(const std::u16string& address, uint16_t port);
     void onStopped();
     void onConnected();
-    void onDisconnected(net::Channel::ErrorCode error_code);
-    void onAccessDenied(net::ClientAuthenticator::ErrorCode error_code);
+    void onDisconnected(base::NetworkChannel::ErrorCode error_code);
+    void onAccessDenied(base::ClientAuthenticator::ErrorCode error_code);
 
 private:
     std::shared_ptr<base::TaskRunner> ui_task_runner_;

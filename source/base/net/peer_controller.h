@@ -20,14 +20,14 @@
 #define NET__PEER_CONTROLLER_H
 
 #include "base/macros_magic.h"
-#include "net/channel.h"
+#include "base/net/network_channel.h"
 
 #include <memory>
 #include <string>
 
-namespace net {
+namespace base {
 
-class PeerController : public Channel::Listener
+class PeerController : public NetworkChannel::Listener
 {
 public:
     PeerController();
@@ -37,7 +37,7 @@ public:
     {
         std::u16string address;
         uint16_t port;
-        base::ByteArray public_key;
+        ByteArray public_key;
         std::u16string username;
         std::u16string password;
     };
@@ -51,7 +51,7 @@ public:
 
         virtual void onRouterConnected() = 0;
         virtual void onRouterDisconnected() = 0;
-        virtual void onPeerConnected(std::unique_ptr<Channel> channel) = 0;
+        virtual void onPeerConnected(std::unique_ptr<NetworkChannel> channel) = 0;
     };
 
     void start(const RouterList& router_list, Delegate* delegate);
@@ -60,8 +60,8 @@ public:
 protected:
     // Channel::Listener implementation.
     void onConnected() override;
-    void onDisconnected(Channel::ErrorCode error_code) override;
-    void onMessageReceived(const base::ByteArray& buffer) override;
+    void onDisconnected(NetworkChannel::ErrorCode error_code) override;
+    void onMessageReceived(const ByteArray& buffer) override;
     void onMessageWritten(size_t pending) override;
 
 private:
@@ -71,11 +71,11 @@ private:
     Delegate* delegate_ = nullptr;
 
     size_t current_router_ = 0;
-    std::unique_ptr<Channel> channel_;
+    std::unique_ptr<NetworkChannel> channel_;
 
     DISALLOW_COPY_AND_ASSIGN(PeerController);
 };
 
-} // namespace net
+} // namespace base
 
-#endif // NET__PEER_CONTROLLER_H
+#endif // BASE__NET__PEER_CONTROLLER_H
