@@ -40,7 +40,7 @@ public:
     using Context = DxgiFrameContext;
 
     explicit DxgiFrame(std::shared_ptr<DxgiDuplicatorController> controller,
-                       base::SharedMemoryFactory* shared_memory_factory);
+                       SharedMemoryFactory* shared_memory_factory);
     ~DxgiFrame();
 
     // Should not be called if prepare() is not executed or returns false.
@@ -57,7 +57,7 @@ private:
     // Should not be called if prepare() is not executed or returns false.
     Context* context();
 
-    base::SharedMemoryFactory* const shared_memory_factory_;
+    SharedMemoryFactory* const shared_memory_factory_;
     std::optional<Size> last_frame_size_;
     ScreenCapturer::ScreenId source_id_ = ScreenCapturer::kFullDesktopScreenId;
     std::unique_ptr<SharedFrame> frame_;

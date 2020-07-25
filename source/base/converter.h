@@ -72,12 +72,12 @@ struct ConverterImpl<ByteArray>
 {
     static bool fromString(std::string_view str, ByteArray* value)
     {
-        return base::Base64::decodeT<std::string_view, base::ByteArray>(str, value);
+        return Base64::decodeT<std::string_view, ByteArray>(str, value);
     }
 
     static std::string toString(const ByteArray& value)
     {
-        return base::Base64::encodeT<base::ByteArray, std::string>(value);
+        return Base64::encodeT<ByteArray, std::string>(value);
     }
 };
 

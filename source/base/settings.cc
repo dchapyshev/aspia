@@ -54,13 +54,13 @@ Settings::Settings(Map&& map) noexcept
 
 Settings::Array Settings::getArray(std::string_view key) const
 {
-    const size_t array_size = get<size_t>(base::strCat({ key, kSeparator, "size" }));
+    const size_t array_size = get<size_t>(strCat({ key, kSeparator, "size" }));
     Array result;
 
     for (size_t i = 0; i < array_size; ++i)
     {
         result.emplace_back(getGroup(
-            base::strCat({ key, kSeparator, base::numberToString(i) })));
+            strCat({ key, kSeparator, numberToString(i) })));
     }
 
     return result;
@@ -69,19 +69,19 @@ Settings::Array Settings::getArray(std::string_view key) const
 void Settings::setArray(std::string_view key, const Array& array)
 {
     for (size_t i = 0; i < array.size(); ++i)
-        setGroup(base::strCat({ key, kSeparator, base::numberToString(i) }), array[i]);
+        setGroup(strCat({ key, kSeparator, numberToString(i) }), array[i]);
 
-    set(base::strCat({ key, kSeparator, "size" }), array.size());
+    set(strCat({ key, kSeparator, "size" }), array.size());
 }
 
 Settings Settings::getGroup(std::string_view key) const
 {
-    const std::string prefix = base::strCat({ key, kSeparator });
+    const std::string prefix = strCat({ key, kSeparator });
     Map map;
 
     for (auto it = map_.cbegin(); it != map_.cend(); ++it)
     {
-        if (base::startsWith(it->first, prefix))
+        if (startsWith(it->first, prefix))
             map.insert_or_assign(it->first.substr(prefix.length()), it->second);
     }
 
@@ -93,18 +93,18 @@ void Settings::setGroup(std::string_view key, const Settings& group)
     const Map& array_map = group.constMap();
 
     for (auto it = array_map.cbegin(); it != array_map.cend(); ++it)
-        map_.insert_or_assign(base::strCat({ key, kSeparator, it->first }), it->second);
+        map_.insert_or_assign(strCat({ key, kSeparator, it->first }), it->second);
 
     is_changed_ = true;
 }
 
 void Settings::remove(std::string_view key)
 {
-    const std::string prefix = base::strCat({ key, kSeparator });
+    const std::string prefix = strCat({ key, kSeparator });
 
     for (auto it = map_.begin(); it != map_.end();)
     {
-        if (base::startsWith(it->first, prefix))
+        if (startsWith(it->first, prefix))
             it = map_.erase(it);
         else
             ++it;

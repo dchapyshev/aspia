@@ -56,8 +56,8 @@ private:
     Rect desktop_dc_rect_;
 
     std::unique_ptr<Differ> differ_;
-    base::win::ScopedGetDC desktop_dc_;
-    base::win::ScopedCreateDC memory_dc_;
+    win::ScopedGetDC desktop_dc_;
+    win::ScopedCreateDC memory_dc_;
 
     FrameQueue<Frame> queue_;
 

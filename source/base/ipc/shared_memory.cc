@@ -97,7 +97,7 @@ bool createFileMapping(SharedMemory::Mode mode, int id, size_t size, win::Scoped
     std::u16string path = createFilePath(id);
 
     win::ScopedHandle file(CreateFileMappingW(
-        INVALID_HANDLE_VALUE, nullptr, protect, high, low, base::asWide(path)));
+        INVALID_HANDLE_VALUE, nullptr, protect, high, low, asWide(path)));
     if (!file.isValid())
     {
         PLOG(LS_WARNING) << "CreateFileMappingW failed";
@@ -229,4 +229,4 @@ std::unique_ptr<SharedMemory> SharedMemory::open(
         new SharedMemory(id, std::move(file), memory, std::move(factory_proxy)));
 }
 
-} // namespace base::ipc
+} // namespace base

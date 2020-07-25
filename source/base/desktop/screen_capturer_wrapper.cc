@@ -92,7 +92,7 @@ void ScreenCapturerWrapper::captureFrame()
     delegate_->onScreenCaptured(frame, cursor_capturer_->captureCursor());
 }
 
-void ScreenCapturerWrapper::setSharedMemoryFactory(base::SharedMemoryFactory* shared_memory_factory)
+void ScreenCapturerWrapper::setSharedMemoryFactory(SharedMemoryFactory* shared_memory_factory)
 {
     screen_capturer_->setSharedMemoryFactory(shared_memory_factory);
 }
@@ -133,7 +133,7 @@ void ScreenCapturerWrapper::selectCapturer()
 
     cursor_capturer_ = std::make_unique<CursorCapturerWin>();
 
-    if (base::win::windowsVersion() >= base::win::VERSION_WIN8)
+    if (win::windowsVersion() >= win::VERSION_WIN8)
     {
         // Desktop Duplication API is available in Windows 8+.
         std::unique_ptr<ScreenCapturerDxgi> capturer_dxgi = std::make_unique<ScreenCapturerDxgi>();
@@ -156,7 +156,7 @@ void ScreenCapturerWrapper::switchToInputDesktop()
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
 
     // Switch to the desktop receiving user input if different from the current one.
-    base::Desktop input_desktop(base::Desktop::inputDesktop());
+    Desktop input_desktop(Desktop::inputDesktop());
 
     if (input_desktop.isValid() && !desktop_.isSame(input_desktop))
     {

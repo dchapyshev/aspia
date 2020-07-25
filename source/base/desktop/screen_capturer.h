@@ -55,8 +55,8 @@ public:
     virtual bool selectScreen(ScreenId screen_id) = 0;
     virtual const Frame* captureFrame(Error* error) = 0;
 
-    void setSharedMemoryFactory(base::SharedMemoryFactory* shared_memory_factory);
-    base::SharedMemoryFactory* sharedMemoryFactory() const;
+    void setSharedMemoryFactory(SharedMemoryFactory* shared_memory_factory);
+    SharedMemoryFactory* sharedMemoryFactory() const;
 
 protected:
     friend class ScreenCapturerWrapper;

@@ -27,7 +27,7 @@ namespace base {
 class MouseCursor
 {
 public:
-    MouseCursor(base::ByteArray&& image, const Size& size, const Point& hotspot);
+    MouseCursor(ByteArray&& image, const Size& size, const Point& hotspot);
 
     MouseCursor(MouseCursor&& other) noexcept;
     MouseCursor& operator=(MouseCursor&& other) noexcept;
@@ -45,15 +45,15 @@ public:
     int hotSpotX() const { return hotspot_.x(); }
     int hotSpotY() const { return hotspot_.y(); }
 
-    const base::ByteArray& constImage() const { return image_; }
-    base::ByteArray& image() { return image_; }
+    const ByteArray& constImage() const { return image_; }
+    ByteArray& image() { return image_; }
 
     int stride() const;
 
     bool equals(const MouseCursor& other);
 
 private:
-    base::ByteArray image_;
+    ByteArray image_;
     Size size_;
     Point hotspot_;
 };

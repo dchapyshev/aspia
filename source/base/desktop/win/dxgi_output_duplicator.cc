@@ -132,7 +132,7 @@ bool DxgiOutputDuplicator::duplicateOutput()
             // DuplicateOutput may temporarily return E_ACCESSDENIED.
             if (error.Error() == E_ACCESSDENIED && i < kRetryCount)
             {
-                desktop_ = base::Desktop::inputDesktop();
+                desktop_ = Desktop::inputDesktop();
                 if (desktop_.isValid())
                     desktop_.setThreadDesktop();
                 continue;

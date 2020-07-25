@@ -49,7 +49,7 @@ public:
 private:
     class Impl;
     std::shared_ptr<Impl> impl_;
-    std::shared_ptr<base::TaskRunner> task_runner_;
+    std::shared_ptr<TaskRunner> task_runner_;
 
     DISALLOW_COPY_AND_ASSIGN(WaitableTimer);
 };

@@ -98,10 +98,10 @@ private:
     uint32_t write_size_ = 0;
 
     uint32_t read_size_ = 0;
-    base::ByteArray read_buffer_;
+    ByteArray read_buffer_;
 
-    base::ProcessId peer_process_id_ = base::kNullProcessId;
-    base::SessionId peer_session_id_ = base::kInvalidSessionId;
+    ProcessId peer_process_id_ = kNullProcessId;
+    SessionId peer_session_id_ = kInvalidSessionId;
 
     THREAD_CHECKER(thread_checker_);
 

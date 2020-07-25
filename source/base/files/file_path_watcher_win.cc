@@ -27,7 +27,7 @@ namespace base {
 namespace {
 
 class FilePathWatcherImpl : public FilePathWatcher::PlatformDelegate,
-                            public base::win::ObjectWatcher::Delegate
+                            public win::ObjectWatcher::Delegate
 {
 public:
     FilePathWatcherImpl(std::shared_ptr<TaskRunner> task_runner);
@@ -39,7 +39,7 @@ public:
                const FilePathWatcher::Callback& callback) override;
     void cancel() override;
 
-    // base::win::ObjectWatcher::Delegate implementation.
+    // win::ObjectWatcher::Delegate implementation.
     void onObjectSignaled(HANDLE object) override;
 
 private:
@@ -73,7 +73,7 @@ private:
     HANDLE handle_ = INVALID_HANDLE_VALUE;
 
     // ObjectWatcher to watch handle_ for events.
-    base::win::ObjectWatcher watcher_;
+    win::ObjectWatcher watcher_;
 
     // Set to true to watch the sub trees of the specified directory file path.
     bool recursive_watch_ = false;

@@ -127,12 +127,12 @@ void DesktopEnvironment::revertAll()
         animation_changed_ = false;
     }
 
-    base::win::ScopedHandle user_token;
+    win::ScopedHandle user_token;
 
     if (!WTSQueryUserToken(WTSGetActiveConsoleSessionId(), user_token.recieve()))
         return;
 
-    base::win::ScopedImpersonator impersonator;
+    win::ScopedImpersonator impersonator;
 
     // The process of the desktop session is running with "SYSTEM" account.
     // We need the current real user, not "SYSTEM".

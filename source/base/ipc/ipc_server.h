@@ -68,6 +68,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(IpcServer);
 };
 
-} // namespace base::ipc
+} // namespace base
 
 #endif // BASE__IPC__SERVER_H

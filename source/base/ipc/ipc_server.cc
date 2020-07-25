@@ -85,12 +85,12 @@ bool IpcServer::Listener::listen(asio::io_context& io_context, std::u16string_vi
     // Create a security descriptor that gives full access to the caller and authenticated users
     // and denies access by anyone else.
     std::wstring security_descriptor =
-        base::stringPrintf(L"O:%sG:%sD:(A;;GA;;;%s)(A;;GA;;;AU)",
-                           user_sid.c_str(),
-                           user_sid.c_str(),
-                           user_sid.c_str());
+        stringPrintf(L"O:%sG:%sD:(A;;GA;;;%s)(A;;GA;;;AU)",
+                     user_sid.c_str(),
+                     user_sid.c_str(),
+                     user_sid.c_str());
 
-    base::win::ScopedSd sd = base::win::convertSddlToSd(security_descriptor);
+    win::ScopedSd sd = win::convertSddlToSd(security_descriptor);
     if (!sd.get())
     {
         LOG(LS_ERROR) << "Failed to create a security descriptor";
@@ -169,7 +169,7 @@ void IpcServer::Listener::onNewConnetion(
 }
 
 IpcServer::IpcServer()
-    : io_context_(base::MessageLoop::current()->pumpAsio()->ioContext())
+    : io_context_(MessageLoop::current()->pumpAsio()->ioContext())
 {
     for (size_t i = 0; i < listeners_.size(); ++i)
         listeners_[i] = std::make_shared<Listener>(this, i);
@@ -190,8 +190,8 @@ std::u16string IpcServer::createUniqueId()
     uint32_t process_id = GetCurrentProcessId();
     uint32_t random_number = Random::number32();
 
-    return base::utf16FromAscii(
-        base::stringPrintf("%lu.%lu.%lu", process_id, channel_id, random_number));
+    return utf16FromAscii(
+        stringPrintf("%lu.%lu.%lu", process_id, channel_id, random_number));
 }
 
 bool IpcServer::start(std::u16string_view channel_id, Delegate* delegate)
@@ -249,7 +249,7 @@ void IpcServer::onNewConnection(size_t index, std::unique_ptr<IpcChannel> channe
     }
 }
 
-void IpcServer::onErrorOccurred(const base::Location& location)
+void IpcServer::onErrorOccurred(const Location& location)
 {
     LOG(LS_WARNING) << "Error in IPC server with name: " << channel_name_
                     << " (" << location.toString() << ")";
@@ -258,4 +258,4 @@ void IpcServer::onErrorOccurred(const base::Location& location)
         delegate_->onErrorOccurred();
 }
 
-} // namespace base::ipc
+} // namespace base

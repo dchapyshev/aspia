@@ -48,7 +48,7 @@ public:
 
     void selectScreen(ScreenCapturer::ScreenId screen_id);
     void captureFrame();
-    void setSharedMemoryFactory(base::SharedMemoryFactory* shared_memory_factory);
+    void setSharedMemoryFactory(SharedMemoryFactory* shared_memory_factory);
     void enableWallpaper(bool enable);
     void enableEffects(bool enable);
     void enableFontSmoothing(bool enable);
@@ -60,7 +60,7 @@ private:
 
     Delegate* delegate_;
 
-    base::ScopedThreadDesktop desktop_;
+    ScopedThreadDesktop desktop_;
     int screen_count_ = 0;
 
     std::unique_ptr<PowerSaveBlocker> power_save_blocker_;

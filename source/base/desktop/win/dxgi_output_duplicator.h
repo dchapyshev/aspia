@@ -133,7 +133,7 @@ private:
     Point last_frame_offset_;
 
     int64_t num_frames_captured_ = 0;
-    base::Desktop desktop_;
+    Desktop desktop_;
 };
 
 } // namespace base

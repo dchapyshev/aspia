@@ -121,8 +121,8 @@ MouseCursor* mouseCursorFromHCursor(HDC dc, HCURSOR cursor)
     }
 
     // Make sure the bitmaps will be freed.
-    base::win::ScopedHBITMAP scoped_mask(icon_info.hbmMask);
-    base::win::ScopedHBITMAP scoped_color(icon_info.hbmColor);
+    win::ScopedHBITMAP scoped_mask(icon_info.hbmMask);
+    win::ScopedHBITMAP scoped_color(icon_info.hbmColor);
 
     bool is_color = (icon_info.hbmColor != nullptr);
 
@@ -168,7 +168,7 @@ MouseCursor* mouseCursorFromHCursor(HDC dc, HCURSOR cursor)
 
     uint32_t* mask_plane = mask_data.get();
 
-    base::ByteArray image;
+    ByteArray image;
 
     bool has_alpha = false;
 

@@ -29,7 +29,7 @@ FrameDib::FrameDib(const Size& size,
                    const PixelFormat& format,
                    int stride,
                    uint8_t* data,
-                   std::unique_ptr<base::SharedMemory> shared_memory,
+                   std::unique_ptr<SharedMemory> shared_memory,
                    HBITMAP bitmap)
     : Frame(size, format, stride, data, shared_memory.get()),
       bitmap_(bitmap),
@@ -41,7 +41,7 @@ FrameDib::FrameDib(const Size& size,
 // static
 std::unique_ptr<FrameDib> FrameDib::create(const Size& size,
                                            const PixelFormat& format,
-                                           base::SharedMemoryFactory* shared_memory_factory,
+                                           SharedMemoryFactory* shared_memory_factory,
                                            HDC hdc)
 {
     const int bytes_per_row = size.width() * format.bytesPerPixel();
@@ -79,7 +79,7 @@ std::unique_ptr<FrameDib> FrameDib::create(const Size& size,
         }
     }
 
-    std::unique_ptr<base::SharedMemory> shared_memory;
+    std::unique_ptr<SharedMemory> shared_memory;
     HANDLE section_handle = nullptr;
 
     if (shared_memory_factory)

@@ -36,7 +36,7 @@ public:
     void reset() override;
 
 private:
-    base::win::ScopedGetDC desktop_dc_;
+    win::ScopedGetDC desktop_dc_;
     std::unique_ptr<MouseCursor> mouse_cursor_;
     CURSORINFO prev_cursor_info_;
 

@@ -20,7 +20,7 @@
 
 namespace base {
 
-MouseCursor::MouseCursor(base::ByteArray&& image, const Size& size, const Point& hotspot)
+MouseCursor::MouseCursor(ByteArray&& image, const Size& size, const Point& hotspot)
     : image_(std::move(image)),
       size_(size),
       hotspot_(hotspot)

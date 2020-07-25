@@ -48,7 +48,7 @@ bool screenListFromDeviceNames(const std::vector<std::wstring>& device_names,
 
         for (const auto& gdi_screen : gdi_screens)
         {
-            std::string device_name_utf8 = base::utf8FromWide(device_name);
+            std::string device_name_utf8 = utf8FromWide(device_name);
 
             if (gdi_screen.title == device_name_utf8)
             {

@@ -252,7 +252,7 @@ void CommandLine::initFromArgv(int argc, const char* const* argv)
     StringVector new_argv;
 
     for (int i = 0; i < argc; ++i)
-        new_argv.emplace_back(base::utf16FromLocal8Bit(argv[i]));
+        new_argv.emplace_back(utf16FromLocal8Bit(argv[i]));
 
     initFromArgv(new_argv);
 }

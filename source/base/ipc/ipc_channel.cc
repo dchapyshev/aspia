@@ -44,12 +44,12 @@ const DWORD kConnectTimeout = 5000; // ms
 
 ProcessId clientProcessIdImpl(HANDLE pipe_handle)
 {
-    ULONG process_id = base::kNullProcessId;
+    ULONG process_id = kNullProcessId;
 
     if (!GetNamedPipeClientProcessId(pipe_handle, &process_id))
     {
         PLOG(LS_WARNING) << "GetNamedPipeClientProcessId failed";
-        return base::kNullProcessId;
+        return kNullProcessId;
     }
 
     return process_id;
@@ -161,7 +161,7 @@ bool IpcChannel::connect(std::u16string_view channel_id)
         if (error_code != ERROR_PIPE_BUSY)
         {
             LOG(LS_WARNING) << "Failed to connect to the named pipe: "
-                            << base::SystemError::toString(error_code);
+                            << SystemError::toString(error_code);
             return false;
         }
 
@@ -319,7 +319,7 @@ void IpcChannel::doWrite()
         DCHECK_EQ(bytes_transferred, sizeof(write_size_));
         DCHECK(!write_queue_.empty());
 
-        const base::ByteArray& buffer = write_queue_.front();
+        const ByteArray& buffer = write_queue_.front();
 
         // Send the buffer to the recipient.
         asio::async_write(stream_, asio::buffer(buffer.data(), buffer.size()),

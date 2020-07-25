@@ -30,7 +30,7 @@ FrameAligned::FrameAligned(const Size& size, const PixelFormat& format, uint8_t*
 
 FrameAligned::~FrameAligned()
 {
-    base::alignedFree(data_);
+    alignedFree(data_);
 }
 
 // static
@@ -38,7 +38,7 @@ std::unique_ptr<FrameAligned> FrameAligned::create(
     const Size& size, const PixelFormat& format, size_t alignment)
 {
     uint8_t* data = reinterpret_cast<uint8_t*>(
-        base::alignedAlloc(calcMemorySize(size, format.bytesPerPixel()), alignment));
+        alignedAlloc(calcMemorySize(size, format.bytesPerPixel()), alignment));
     if (!data)
         return nullptr;
 

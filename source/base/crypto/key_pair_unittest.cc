@@ -35,7 +35,7 @@ TEST(KeyPair, SessionKey)
     EXPECT_NE(compare(side1.privateKey(), side2.privateKey()), 0);
     EXPECT_NE(compare(side1.publicKey(), side2.publicKey()), 0);
 
-    base::ByteArray session_key1 = side1.sessionKey(side2.publicKey());
+    ByteArray session_key1 = side1.sessionKey(side2.publicKey());
     EXPECT_FALSE(session_key1.empty());
 
     ByteArray session_key2 = side2.sessionKey(side1.publicKey());
@@ -58,7 +58,7 @@ TEST(KeyPair, Convert)
 
     KeyPair pair2 = KeyPair::fromPrivateKey(private_key1);
     EXPECT_TRUE(pair2.isValid());
-    EXPECT_NE(base::compare(pair2.privateKey(), pair2.publicKey()), 0);
+    EXPECT_NE(compare(pair2.privateKey(), pair2.publicKey()), 0);
 
     ByteArray private_key2 = pair2.privateKey();
     EXPECT_FALSE(private_key2.empty());

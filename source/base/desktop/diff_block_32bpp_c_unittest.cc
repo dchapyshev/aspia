@@ -25,7 +25,7 @@ namespace desktop {
 
 namespace {
 
-using AlignedBuffer = std::unique_ptr<uint8_t, base::AlignedFreeDeleter>;
+using AlignedBuffer = std::unique_ptr<uint8_t, AlignedFreeDeleter>;
 
 // Run 900 times to mimic 1280x720.
 const int kTimesToRun = 900;
@@ -47,8 +47,8 @@ void prepareBuffers(AlignedBuffer* block1, AlignedBuffer* block2, int block_size
 {
     int full_block_size = fullBlockSize(block_size);
 
-    block1->reset(reinterpret_cast<uint8_t*>(base::alignedAlloc(full_block_size, alignment)));
-    block2->reset(reinterpret_cast<uint8_t*>(base::alignedAlloc(full_block_size, alignment)));
+    block1->reset(reinterpret_cast<uint8_t*>(alignedAlloc(full_block_size, alignment)));
+    block2->reset(reinterpret_cast<uint8_t*>(alignedAlloc(full_block_size, alignment)));
 
     generateData(block1->get(), full_block_size);
 

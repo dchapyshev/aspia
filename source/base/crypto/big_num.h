@@ -46,11 +46,11 @@ public:
     const bignum_st* get() const { return num_.get(); }
 
     std::string toStdString() const;
-    base::ByteArray toByteArray() const;
+    ByteArray toByteArray() const;
 
     static BigNum create();
     static BigNum fromStdString(std::string_view string);
-    static BigNum fromByteArray(const base::ByteArray& array);
+    static BigNum fromByteArray(const ByteArray& array);
 
     operator bignum_st*() const { return num_.get(); }
 

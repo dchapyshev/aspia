@@ -63,7 +63,7 @@ void largeNumberIncrement(uint8_t* buffer, size_t buffer_size)
     }
 }
 
-void largeNumberIncrement(base::ByteArray* buffer)
+void largeNumberIncrement(ByteArray* buffer)
 {
     DCHECK(buffer);
     largeNumberIncrement(buffer->data(), buffer->size());
