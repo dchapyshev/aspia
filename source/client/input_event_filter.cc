@@ -37,59 +37,41 @@ void InputEventFilter::setClipboardEnabled(bool enable)
     clipboard_enabled_ = enable;
 }
 
-std::vector<proto::MouseEvent> InputEventFilter::mouseEvents(
-    const std::vector<proto::MouseEvent>& events)
+std::optional<proto::MouseEvent> InputEventFilter::mouseEvent(const proto::MouseEvent& event)
 {
     if (session_type_ != proto::SESSION_TYPE_DESKTOP_MANAGE)
-        return std::vector<proto::MouseEvent>();
+        return std::nullopt;
 
-    std::vector<proto::MouseEvent> out_events;
+    int32_t delta_x = std::abs(event.x() - last_pos_x_);
+    int32_t delta_y = std::abs(event.y() - last_pos_y_);
 
-    for (const auto& event : events)
+    if (delta_x > 1 || delta_y > 1 || event.mask() != last_mask_)
     {
-        int32_t delta_x = std::abs(event.x() - last_pos_x_);
-        int32_t delta_y = std::abs(event.y() - last_pos_y_);
+        static const uint32_t kWheelMask =
+            proto::MouseEvent::WHEEL_DOWN | proto::MouseEvent::WHEEL_UP;
 
-        if (delta_x > 1 || delta_y > 1 || event.mask() != last_mask_)
-        {
-            static const uint32_t kWheelMask =
-                proto::MouseEvent::WHEEL_DOWN | proto::MouseEvent::WHEEL_UP;
+        last_pos_x_ = event.x();
+        last_pos_y_ = event.y();
+        last_mask_ = event.mask() & ~kWheelMask;
 
-            last_pos_x_ = event.x();
-            last_pos_y_ = event.y();
-            last_mask_ = event.mask() & ~kWheelMask;
-
-            out_events.push_back(event);
-        }
-        else
-        {
-            ++drop_mouse_count_;
-        }
-    }
-
-    size_t events_count = out_events.size();
-    if (events_count > 0)
-    {
         ++send_mouse_count_;
-
-        if (events_count > 1)
-            glue_mouse_count_ += static_cast<int>(events_count) - 1;
+        return event;
+    }
+    else
+    {
+        ++drop_mouse_count_;
     }
 
-    return out_events;
+    return std::nullopt;
 }
 
-std::vector<proto::KeyEvent> InputEventFilter::keyEvents(
-    const std::vector<proto::KeyEvent>& events)
+std::optional<proto::KeyEvent> InputEventFilter::keyEvent(const proto::KeyEvent& event)
 {
     if (session_type_ != proto::SESSION_TYPE_DESKTOP_MANAGE)
-        return std::vector<proto::KeyEvent>();
-
-    if (events.size() > 1)
-        glue_key_count_ += static_cast<int>(events.size()) - 1;
+        return std::nullopt;
 
     ++send_key_count_;
-    return events;
+    return event;
 }
 
 std::optional<proto::ClipboardEvent> InputEventFilter::readClipboardEvent(

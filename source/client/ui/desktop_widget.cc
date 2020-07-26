@@ -54,25 +54,6 @@ bool isModifierKey(int key)
            key == Qt::Key_Shift || key == Qt::Key_Meta;
 }
 
-void addMouseEvent(std::vector<proto::MouseEvent>* events, const QPoint& pos, uint32_t mask)
-{
-    proto::MouseEvent event;
-    event.set_x(pos.x());
-    event.set_y(pos.y());
-    event.set_mask(mask);
-
-    events->push_back(event);
-};
-
-void addKeyEvent(std::vector<proto::KeyEvent>* events, uint32_t usb_keycode, uint32_t flags)
-{
-    proto::KeyEvent event;
-    event.set_usb_keycode(usb_keycode);
-    event.set_flags(flags);
-
-    events->push_back(event);
-}
-
 } // namespace
 
 DesktopWidget::DesktopWidget(Delegate* delegate, QWidget* parent)
@@ -143,26 +124,26 @@ void DesktopWidget::doMouseEvent(QEvent::Type event_type,
             wheel_steps = 1;
     }
 
-    std::vector<proto::MouseEvent> events;
-
     if (prev_pos_ != pos || prev_mask_ != mask)
     {
         prev_pos_ = pos;
         prev_mask_ = mask & ~kWheelMask;
 
+        proto::MouseEvent event;
+        event.set_x(pos.x());
+        event.set_y(pos.y());
+        event.set_mask(mask);
+
         if (mask & kWheelMask)
         {
             for (int i = 0; i < wheel_steps; ++i)
-                addMouseEvent(&events, pos, mask);
+                delegate_->onMouseEvent(event);
         }
         else
         {
-            addMouseEvent(&events, pos, mask);
+            delegate_->onMouseEvent(event);
         }
     }
-
-    if (!events.empty())
-        delegate_->onMouseEvents(events);
 }
 
 void DesktopWidget::doKeyEvent(QKeyEvent* event)
@@ -204,37 +185,64 @@ void DesktopWidget::executeKeyCombination(int key_sequence)
     if (key == common::KeycodeConverter::invalidUsbKeycode())
         return;
 
-    std::vector<proto::KeyEvent> events;
+    proto::KeyEvent event;
+    event.set_flags(flags | proto::KeyEvent::PRESSED);
 
     if (key_sequence & Qt::AltModifier)
-        addKeyEvent(&events, kUsbCodeLeftAlt, flags | proto::KeyEvent::PRESSED);
+    {
+        event.set_usb_keycode(kUsbCodeLeftAlt);
+        delegate_->onKeyEvent(event);
+    }
 
     if (key_sequence & Qt::ControlModifier)
-        addKeyEvent(&events, kUsbCodeLeftCtrl, flags | proto::KeyEvent::PRESSED);
+    {
+        event.set_usb_keycode(kUsbCodeLeftCtrl);
+        delegate_->onKeyEvent(event);
+    }
 
     if (key_sequence & Qt::ShiftModifier)
-        addKeyEvent(&events, kUsbCodeLeftShift, flags | proto::KeyEvent::PRESSED);
+    {
+        event.set_usb_keycode(kUsbCodeLeftShift);
+        delegate_->onKeyEvent(event);
+    }
 
     if (key_sequence & Qt::MetaModifier)
-        addKeyEvent(&events, kUsbCodeLeftMeta, flags | proto::KeyEvent::PRESSED);
+    {
+        event.set_usb_keycode(kUsbCodeLeftMeta);
+        delegate_->onKeyEvent(event);
+    }
 
-    addKeyEvent(&events, key, flags | proto::KeyEvent::PRESSED);
-    addKeyEvent(&events, key, flags);
+    event.set_usb_keycode(key);
+    delegate_->onKeyEvent(event);
+
+    event.set_flags(flags);
+
+    event.set_usb_keycode(key);
+    delegate_->onKeyEvent(event);
 
     if (key_sequence & Qt::MetaModifier)
-        addKeyEvent(&events, kUsbCodeLeftMeta, flags);
+    {
+        event.set_usb_keycode(kUsbCodeLeftMeta);
+        delegate_->onKeyEvent(event);
+    }
 
     if (key_sequence & Qt::ShiftModifier)
-        addKeyEvent(&events, kUsbCodeLeftShift, flags);
+    {
+        event.set_usb_keycode(kUsbCodeLeftShift);
+        delegate_->onKeyEvent(event);
+    }
 
     if (key_sequence & Qt::ControlModifier)
-        addKeyEvent(&events, kUsbCodeLeftCtrl, flags);
+    {
+        event.set_usb_keycode(kUsbCodeLeftCtrl);
+        delegate_->onKeyEvent(event);
+    }
 
     if (key_sequence & Qt::AltModifier)
-        addKeyEvent(&events, kUsbCodeLeftAlt, flags);
-
-    if (!events.empty())
-        delegate_->onKeyEvents(events);
+    {
+        event.set_usb_keycode(kUsbCodeLeftAlt);
+        delegate_->onKeyEvent(event);
+    }
 }
 
 void DesktopWidget::enableKeyCombinations(bool enable)
@@ -302,10 +310,11 @@ void DesktopWidget::leaveEvent(QEvent* event)
     // When the mouse cursor leaves the widget area, release all the mouse buttons.
     if (prev_mask_ != 0)
     {
-        std::vector<proto::MouseEvent> events;
-        addMouseEvent(&events, prev_pos_, 0);
+        proto::MouseEvent event;
+        event.set_x(prev_pos_.x());
+        event.set_y(prev_pos_.y());
 
-        delegate_->onMouseEvents(events);
+        delegate_->onMouseEvent(event);
         prev_mask_ = 0;
     }
 
@@ -336,16 +345,16 @@ void DesktopWidget::focusOutEvent(QFocusEvent* event)
         flags |= (isCapsLockActivated() ? proto::KeyEvent::CAPSLOCK : 0);
         flags |= (isNumLockActivated() ? proto::KeyEvent::NUMLOCK : 0);
 
-        std::vector<proto::KeyEvent> events;
+        proto::KeyEvent event;
+        event.set_flags(flags);
 
         auto it = pressed_keys_.begin();
         while (it != pressed_keys_.end())
         {
-            addKeyEvent(&events, *it, flags);
+            event.set_usb_keycode(*it);
+            delegate_->onKeyEvent(event);
             it = pressed_keys_.erase(it);
         }
-
-        delegate_->onKeyEvents(events);
     }
 
     QWidget::focusOutEvent(event);
@@ -358,10 +367,11 @@ void DesktopWidget::executeKeyEvent(uint32_t usb_keycode, uint32_t flags)
     else
         pressed_keys_.erase(usb_keycode);
 
-    std::vector<proto::KeyEvent> events;
-    addKeyEvent(&events, usb_keycode, flags);
+    proto::KeyEvent event;
+    event.set_usb_keycode(usb_keycode);
+    event.set_flags(flags);
 
-    delegate_->onKeyEvents(events);
+    delegate_->onKeyEvent(event);
 }
 
 #if defined(OS_WIN)

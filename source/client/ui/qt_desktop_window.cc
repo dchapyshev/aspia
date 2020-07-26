@@ -347,91 +347,83 @@ void QtDesktopWindow::injectClipboardEvent(const proto::ClipboardEvent& event)
     clipboard_->injectClipboardEvent(event);
 }
 
-void QtDesktopWindow::onMouseEvents(const std::vector<proto::MouseEvent>& events)
+void QtDesktopWindow::onMouseEvent(const proto::MouseEvent& event)
 {
-    std::vector<proto::MouseEvent> out_events;
+    QPoint pos(event.x(), event.y());
 
-    for (const auto& event : events)
+    if (panel_->autoScrolling() && panel_->scale() != -1)
     {
-        QPoint pos(event.x(), event.y());
+        QPoint cursor = desktop_->mapTo(scroll_area_, pos);
+        QRect client_area = scroll_area_->rect();
 
-        if (panel_->autoScrolling() && panel_->scale() != -1)
+        QScrollBar* hscrollbar = scroll_area_->horizontalScrollBar();
+        QScrollBar* vscrollbar = scroll_area_->verticalScrollBar();
+
+        if (!hscrollbar->isHidden())
+            client_area.setHeight(client_area.height() - hscrollbar->height());
+
+        if (!vscrollbar->isHidden())
+            client_area.setWidth(client_area.width() - vscrollbar->width());
+
+        scroll_delta_.setX(0);
+        scroll_delta_.setY(0);
+
+        if (client_area.width() < desktop_->width())
         {
-            QPoint cursor = desktop_->mapTo(scroll_area_, pos);
-            QRect client_area = scroll_area_->rect();
+            if (cursor.x() > client_area.width() - 150)
+                scroll_delta_.setX(10);
+            else if (cursor.x() < 150)
+                scroll_delta_.setX(-10);
+        }
 
-            QScrollBar* hscrollbar = scroll_area_->horizontalScrollBar();
-            QScrollBar* vscrollbar = scroll_area_->verticalScrollBar();
+        if (client_area.height() < desktop_->height())
+        {
+            if (cursor.y() > client_area.height() - 150)
+                scroll_delta_.setY(10);
+            else if (cursor.y() < 150)
+                scroll_delta_.setY(-10);
+        }
 
-            if (!hscrollbar->isHidden())
-                client_area.setHeight(client_area.height() - hscrollbar->height());
-
-            if (!vscrollbar->isHidden())
-                client_area.setWidth(client_area.width() - vscrollbar->width());
-
-            scroll_delta_.setX(0);
-            scroll_delta_.setY(0);
-
-            if (client_area.width() < desktop_->width())
-            {
-                if (cursor.x() > client_area.width() - 150)
-                    scroll_delta_.setX(10);
-                else if (cursor.x() < 150)
-                    scroll_delta_.setX(-10);
-            }
-
-            if (client_area.height() < desktop_->height())
-            {
-                if (cursor.y() > client_area.height() - 150)
-                    scroll_delta_.setY(10);
-                else if (cursor.y() < 150)
-                    scroll_delta_.setY(-10);
-            }
-
-            if (!scroll_delta_.isNull())
-            {
-                if (!scroll_timer_->isActive())
-                    scroll_timer_->start(std::chrono::milliseconds(15));
-            }
-            else if (scroll_timer_->isActive())
-            {
-                scroll_timer_->stop();
-            }
+        if (!scroll_delta_.isNull())
+        {
+            if (!scroll_timer_->isActive())
+                scroll_timer_->start(std::chrono::milliseconds(15));
         }
         else if (scroll_timer_->isActive())
         {
             scroll_timer_->stop();
         }
-
-        base::Frame* current_frame = desktop_->desktopFrame();
-        if (current_frame)
-        {
-            const base::Size& source_size = current_frame->size();
-            QSize scaled_size = desktop_->size();
-
-            double scale_x = (scaled_size.width() * 100) / double(source_size.width());
-            double scale_y = (scaled_size.height() * 100) / double(source_size.height());
-            double scale = std::min(scale_x, scale_y);
-
-            proto::MouseEvent out_event;
-
-            int remote_scale_factor = desktop_config_.scale_factor();
-
-            out_event.set_mask(event.mask());
-            out_event.set_x((double(pos.x() * 10000) / (scale * remote_scale_factor)));
-            out_event.set_y((double(pos.y() * 10000) / (scale * remote_scale_factor)));
-
-            out_events.push_back(out_event);
-        }
+    }
+    else if (scroll_timer_->isActive())
+    {
+        scroll_timer_->stop();
     }
 
-    if (!out_events.empty())
-        desktop_control_proxy_->onMouseEvents(out_events);
+    base::Frame* current_frame = desktop_->desktopFrame();
+    if (current_frame)
+    {
+        const base::Size& source_size = current_frame->size();
+        QSize scaled_size = desktop_->size();
+
+        double scale_x = (scaled_size.width() * 100) / double(source_size.width());
+        double scale_y = (scaled_size.height() * 100) / double(source_size.height());
+        double scale = std::min(scale_x, scale_y);
+
+        proto::MouseEvent out_event;
+
+        int remote_scale_factor = desktop_config_.scale_factor();
+
+        out_event.set_mask(event.mask());
+        out_event.set_x((double(pos.x() * 10000) / (scale * remote_scale_factor)));
+        out_event.set_y((double(pos.y() * 10000) / (scale * remote_scale_factor)));
+
+        desktop_control_proxy_->onMouseEvent(out_event);
+    }
 }
 
-void QtDesktopWindow::onKeyEvents(const std::vector<proto::KeyEvent>& events)
+void QtDesktopWindow::onKeyEvent(const proto::KeyEvent& event)
 {
-    desktop_control_proxy_->onKeyEvents(events);
+    desktop_control_proxy_->onKeyEvent(event);
 }
 
 void QtDesktopWindow::onDrawDesktop()

@@ -52,8 +52,8 @@ public:
     void setDesktopConfig(const proto::DesktopConfig& config) override;
     void setCurrentScreen(const proto::Screen& screen) override;
     void setPreferredSize(int width, int height) override;
-    void onKeyEvents(const std::vector<proto::KeyEvent>& events) override;
-    void onMouseEvents(const std::vector<proto::MouseEvent>& events) override;
+    void onKeyEvent(const proto::KeyEvent& event) override;
+    void onMouseEvent(const proto::MouseEvent& event) override;
     void onClipboardEvent(const proto::ClipboardEvent& event) override;
     void onPowerControl(proto::PowerControl::Action action) override;
     void onRemoteUpdate() override;

@@ -83,30 +83,30 @@ void DesktopControlProxy::setPreferredSize(int width, int height)
         desktop_control_->setPreferredSize(width, height);
 }
 
-void DesktopControlProxy::onKeyEvents(const std::vector<proto::KeyEvent>& events)
+void DesktopControlProxy::onKeyEvent(const proto::KeyEvent& event)
 {
     if (!io_task_runner_->belongsToCurrentThread())
     {
         io_task_runner_->postTask(
-            std::bind(&DesktopControlProxy::onKeyEvents, shared_from_this(), events));
+            std::bind(&DesktopControlProxy::onKeyEvent, shared_from_this(), event));
         return;
     }
 
     if (desktop_control_)
-        desktop_control_->onKeyEvents(events);
+        desktop_control_->onKeyEvent(event);
 }
 
-void DesktopControlProxy::onMouseEvents(const std::vector<proto::MouseEvent>& events)
+void DesktopControlProxy::onMouseEvent(const proto::MouseEvent& event)
 {
     if (!io_task_runner_->belongsToCurrentThread())
     {
         io_task_runner_->postTask(
-            std::bind(&DesktopControlProxy::onMouseEvents, shared_from_this(), events));
+            std::bind(&DesktopControlProxy::onMouseEvent, shared_from_this(), event));
         return;
     }
 
     if (desktop_control_)
-        desktop_control_->onMouseEvents(events);
+        desktop_control_->onMouseEvent(event);
 }
 
 void DesktopControlProxy::onClipboardEvent(const proto::ClipboardEvent& event)

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>315</width>
-    <height>325</height>
+    <height>289</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -98,17 +98,7 @@
      </item>
      <item>
       <property name="text">
-       <string notr="true">Glue Mouse Event</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
        <string notr="true">Send Key Event</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string notr="true">Glue Key Event</string>
       </property>
      </item>
      <item>

@@ -60,7 +60,7 @@ void ClientSessionDesktop::onMessageReceived(const base::ByteArray& buffer)
         return;
     }
 
-    if (incoming_message_.mouse_event_size())
+    if (incoming_message_.has_mouse_event())
     {
         if (sessionType() != proto::SESSION_TYPE_DESKTOP_MANAGE)
             return;
@@ -68,28 +68,22 @@ void ClientSessionDesktop::onMessageReceived(const base::ByteArray& buffer)
         if (!scale_reducer_)
             return;
 
-        for (int i = 0; i < incoming_message_.mouse_event_size(); ++i)
-        {
-            const proto::MouseEvent& mouse_event = incoming_message_.mouse_event(i);
+        const proto::MouseEvent& mouse_event = incoming_message_.mouse_event();
 
-            int pos_x = int(double(mouse_event.x() * 100) / scale_reducer_->scaleFactorX());
-            int pos_y = int(double(mouse_event.y() * 100) / scale_reducer_->scaleFactorY());
+        int pos_x = int(double(mouse_event.x() * 100) / scale_reducer_->scaleFactorX());
+        int pos_y = int(double(mouse_event.y() * 100) / scale_reducer_->scaleFactorY());
 
-            proto::MouseEvent out_mouse_event;
-            out_mouse_event.set_mask(mouse_event.mask());
-            out_mouse_event.set_x(pos_x);
-            out_mouse_event.set_y(pos_y);
+        proto::MouseEvent out_mouse_event;
+        out_mouse_event.set_mask(mouse_event.mask());
+        out_mouse_event.set_x(pos_x);
+        out_mouse_event.set_y(pos_y);
 
-            desktop_session_proxy_->injectMouseEvent(out_mouse_event);
-        }
+        desktop_session_proxy_->injectMouseEvent(out_mouse_event);
     }
-    else if (incoming_message_.key_event_size())
+    else if (incoming_message_.has_key_event())
     {
         if (sessionType() == proto::SESSION_TYPE_DESKTOP_MANAGE)
-        {
-            for (int i = 0; i < incoming_message_.key_event_size(); ++i)
-                desktop_session_proxy_->injectKeyEvent(incoming_message_.key_event(i));
-        }
+            desktop_session_proxy_->injectKeyEvent(incoming_message_.key_event());
     }
     else if (incoming_message_.has_clipboard_event())
     {

@@ -75,8 +75,8 @@ public:
     void injectClipboardEvent(const proto::ClipboardEvent& event) override;
 
     // DesktopWidget::Delegate implementation.
-    void onMouseEvents(const std::vector<proto::MouseEvent>& events) override;
-    void onKeyEvents(const std::vector<proto::KeyEvent>& events) override;
+    void onMouseEvent(const proto::MouseEvent& event) override;
+    void onKeyEvent(const proto::KeyEvent& event) override;
     void onDrawDesktop() override;
 
 protected:
