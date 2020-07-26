@@ -75,6 +75,21 @@ void sendKeyboardVirtualKey(WORD key_code, DWORD flags)
 
 } // namespace
 
+InputInjectorWin::InputInjectorWin() = default;
+
+InputInjectorWin::~InputInjectorWin()
+{
+    for (const auto& key : pressed_keys_)
+    {
+        int scancode = common::KeycodeConverter::usbKeycodeToNativeKeycode(key);
+        if (scancode != common::KeycodeConverter::invalidNativeKeycode())
+        {
+            sendKeyboardScancode(
+                static_cast<WORD>(scancode), KEYEVENTF_SCANCODE | KEYEVENTF_KEYUP);
+        }
+    }
+}
+
 void InputInjectorWin::setScreenOffset(const base::Point& offset)
 {
     screen_offset_ = offset;

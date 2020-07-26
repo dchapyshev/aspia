@@ -27,8 +27,8 @@ namespace host {
 class InputInjectorWin : public InputInjector
 {
 public:
-    InputInjectorWin() = default;
-    ~InputInjectorWin() = default;
+    InputInjectorWin();
+    ~InputInjectorWin();
 
     // InputInjector implementation.
     void setScreenOffset(const base::Point& offset) override;
