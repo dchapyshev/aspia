@@ -178,10 +178,12 @@ void removeCharsT(StringType* str, std::basic_string_view<typename StringType::v
 
 } // namespace
 
-std::string replaceLfByCrLf(std::string_view in)
+std::string replaceLfByCrLf(const std::string& in)
 {
-    std::string out;
+    if (in.empty())
+        return std::string();
 
+    std::string out;
     out.resize(2 * in.size());
 
     char* out_p_begin = &out[0];
@@ -203,10 +205,12 @@ std::string replaceLfByCrLf(std::string_view in)
     return out;
 }
 
-std::string replaceCrLfByLf(std::string_view in)
+std::string replaceCrLfByLf(const std::string& in)
 {
-    std::string out;
+    if (in.empty())
+        return std::string();
 
+    std::string out;
     out.resize(in.size());
 
     char* out_p_begin = &out[0];

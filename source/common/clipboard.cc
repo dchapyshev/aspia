@@ -33,6 +33,7 @@ namespace common {
 namespace {
 
 const char kMimeTypeTextUtf8[] = "text/plain; charset=UTF-8";
+const char kMimeTypeCompressedTextUtf8[] = "text/plain; charset=UTF-8; compression=ZSTD";
 
 // The compression ratio can be in the range of 1 to 22.
 const int kCompressionRatio = 8;
@@ -143,34 +144,25 @@ void Clipboard::injectClipboardEvent(const proto::ClipboardEvent& event)
     if (!window_)
         return;
 
-    // Currently we only handle UTF-8 text.
-    if (event.mime_type() != kMimeTypeTextUtf8)
-    {
-        LOG(LS_WARNING) << "Unsupported mime type: " << event.mime_type();
-        return;
-    }
-
-    if (event.compression() == proto::ClipboardEvent::ZSTD)
+    if (event.mime_type() == kMimeTypeCompressedTextUtf8)
     {
         std::string decompressed_data;
         if (!decompress(event.data(), &decompressed_data))
             return;
 
         // Store last injected data.
-        last_data_ = decompressed_data;
+        last_data_ = std::move(decompressed_data);
     }
-    else if (event.compression() == proto::ClipboardEvent::NONE)
+    else if (event.mime_type() == kMimeTypeTextUtf8)
     {
         // Store last injected data.
         last_data_ = event.data();
     }
     else
     {
-        LOG(LS_ERROR) << "Unknown compression method: " << event.compression();
+        LOG(LS_WARNING) << "Unsupported mime type: " << event.mime_type();
         return;
     }
-
-    last_mime_type_ = event.mime_type();
 
     std::wstring text;
     if (!base::utf8ToWide(base::replaceLfByCrLf(last_data_), &text))
@@ -218,10 +210,7 @@ void Clipboard::stop()
 
     RemoveClipboardFormatListener(window_->hwnd());
     window_.reset();
-
-    last_mime_type_.clear();
     last_data_.clear();
-
     delegate_ = nullptr;
 }
 
@@ -285,10 +274,9 @@ void Clipboard::onClipboardUpdate()
     {
         data = base::replaceCrLfByLf(data);
 
-        if (last_mime_type_ != kMimeTypeTextUtf8 || last_data_ != data)
+        if (last_data_ != data)
         {
             proto::ClipboardEvent event;
-            event.set_mime_type(kMimeTypeTextUtf8);
 
             if (data.size() > kMinSizeToCompress)
             {
@@ -296,12 +284,12 @@ void Clipboard::onClipboardUpdate()
                 if (!compress(data, &compressed_data))
                     return;
 
-                event.set_compression(proto::ClipboardEvent::ZSTD);
+                event.set_mime_type(kMimeTypeCompressedTextUtf8);
                 event.set_data(std::move(compressed_data));
             }
             else
             {
-                event.set_compression(proto::ClipboardEvent::NONE);
+                event.set_mime_type(kMimeTypeTextUtf8);
                 event.set_data(std::move(data));
             }
 

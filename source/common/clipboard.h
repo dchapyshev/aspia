@@ -62,8 +62,6 @@ private:
 
     // Used to subscribe to WM_CLIPBOARDUPDATE messages.
     std::unique_ptr<base::win::MessageWindow> window_;
-
-    std::string last_mime_type_;
     std::string last_data_;
 
     DISALLOW_COPY_AND_ASSIGN(Clipboard);

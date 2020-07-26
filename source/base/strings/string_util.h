@@ -25,8 +25,8 @@
 
 namespace base {
 
-std::string replaceLfByCrLf(std::string_view in);
-std::string replaceCrLfByLf(std::string_view in);
+std::string replaceLfByCrLf(const std::string& in);
+std::string replaceCrLfByLf(const std::string& in);
 
 bool isStringUTF8(std::string_view str);
 bool isStringASCII(std::string_view str);
