@@ -16,11 +16,11 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/net/peer_controller.h"
+#include "peer/peer_controller.h"
 
 #include "base/logging.h"
 
-namespace base {
+namespace peer {
 
 PeerController::PeerController()
 {
@@ -57,7 +57,7 @@ void PeerController::onConnected()
     // TODO
 }
 
-void PeerController::onDisconnected(NetworkChannel::ErrorCode error_code)
+void PeerController::onDisconnected(base::NetworkChannel::ErrorCode error_code)
 {
     // TODO
 }
@@ -76,7 +76,7 @@ void PeerController::connectToRouter()
 {
     const Router& current = router_list_[current_router_];
 
-    channel_ = std::make_unique<NetworkChannel>();
+    channel_ = std::make_unique<base::NetworkChannel>();
     channel_->connect(current.address, current.port);
 }
 

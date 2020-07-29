@@ -19,7 +19,7 @@
 #include "host/system_settings.h"
 
 #include "base/crypto/random.h"
-#include "base/net/user.h"
+#include "peer/user.h"
 
 namespace host {
 
@@ -56,13 +56,13 @@ void SystemSettings::setTcpPort(uint16_t port)
     settings_.set<uint16_t>("TcpPort", port);
 }
 
-base::UserList SystemSettings::userList() const
+peer::UserList SystemSettings::userList() const
 {
-    base::UserList users;
+    peer::UserList users;
 
     for (const auto& item : settings_.getArray("Users"))
     {
-        base::User user;
+        peer::User user;
 
         user.name     = item.get<std::u16string>("Name");
         user.group    = item.get<std::string>("Group", "8192");
@@ -83,16 +83,16 @@ base::UserList SystemSettings::userList() const
     return users;
 }
 
-void SystemSettings::setUserList(const base::UserList& users)
+void SystemSettings::setUserList(const peer::UserList& users)
 {
     // Clear the old list of users.
     settings_.remove("Users");
 
     base::Settings::Array users_array;
 
-    for (base::UserList::Iterator it(users); !it.isAtEnd(); it.advance())
+    for (peer::UserList::Iterator it(users); !it.isAtEnd(); it.advance())
     {
-        const base::User& user = it.user();
+        const peer::User& user = it.user();
 
         base::Settings item;
         item.set("Name", user.name);

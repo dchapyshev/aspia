@@ -20,7 +20,7 @@
 
 #include "base/logging.h"
 #include "base/task_runner.h"
-#include "net/channel.h"
+#include "base/net/network_channel.h"
 #include "proto/router.pb.h"
 #include "router/database_sqlite.h"
 #include "router/session_manager.h"
@@ -87,17 +87,18 @@ bool Server::start()
         return false;
     }
 
-    authenticator_manager_ = std::make_unique<net::ServerAuthenticatorManager>(task_runner_, this);
+    authenticator_manager_ =
+        std::make_unique<peer::ServerAuthenticatorManager>(task_runner_, this);
     authenticator_manager_->setPrivateKey(private_key);
-    authenticator_manager_->setUserList(std::make_shared<net::UserList>(database_->userList()));
+    authenticator_manager_->setUserList(std::make_shared<peer::UserList>(database_->userList()));
 
-    server_ = std::make_unique<net::Server>();
+    server_ = std::make_unique<base::NetworkServer>();
     server_->start(port, this);
 
     return true;
 }
 
-void Server::onNewConnection(std::unique_ptr<net::Channel> channel)
+void Server::onNewConnection(std::unique_ptr<base::NetworkChannel> channel)
 {
     LOG(LS_INFO) << "New connection: " << channel->peerAddress();
 
@@ -105,7 +106,7 @@ void Server::onNewConnection(std::unique_ptr<net::Channel> channel)
         authenticator_manager_->addNewChannel(std::move(channel));
 }
 
-void Server::onNewSession(net::ServerAuthenticatorManager::SessionInfo&& session_info)
+void Server::onNewSession(peer::ServerAuthenticatorManager::SessionInfo&& session_info)
 {
     proto::RouterSession session_type =
         static_cast<proto::RouterSession>(session_info.session_type);

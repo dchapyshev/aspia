@@ -94,6 +94,7 @@ target_link_libraries(aspia_console
     aspia_base
     aspia_client
     aspia_common
+    aspia_peer
     aspia_proto
     aspia_qt_base
     aspia_updater

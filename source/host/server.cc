@@ -83,7 +83,8 @@ void Server::start()
         }
     });
 
-    authenticator_manager_ = std::make_unique<base::ServerAuthenticatorManager>(task_runner_, this);
+    authenticator_manager_ =
+        std::make_unique<peer::ServerAuthenticatorManager>(task_runner_, this);
 
     user_session_manager_ = std::make_unique<UserSessionManager>(task_runner_);
     user_session_manager_->start(this);
@@ -114,7 +115,7 @@ void Server::onNewConnection(std::unique_ptr<base::NetworkChannel> channel)
         authenticator_manager_->addNewChannel(std::move(channel));
 }
 
-void Server::onNewSession(base::ServerAuthenticatorManager::SessionInfo&& session_info)
+void Server::onNewSession(peer::ServerAuthenticatorManager::SessionInfo&& session_info)
 {
     std::unique_ptr<ClientSession> session = ClientSession::create(
         static_cast<proto::SessionType>(session_info.session_type), std::move(session_info.channel));
@@ -166,8 +167,8 @@ void Server::deleteFirewallRules()
 void Server::reloadUserList()
 {
     // Read the list of regular users.
-    std::shared_ptr<base::UserList> user_list =
-        std::make_shared<base::UserList>(settings_.userList());
+    std::shared_ptr<peer::UserList> user_list =
+        std::make_shared<peer::UserList>(settings_.userList());
 
     // Add a list of one-time users to the list of regular users.
     user_list->merge(user_session_manager_->userList());

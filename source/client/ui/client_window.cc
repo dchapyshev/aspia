@@ -169,29 +169,29 @@ void ClientWindow::onDisconnected(base::NetworkChannel::ErrorCode error_code)
     onErrorOccurred(tr(message));
 }
 
-void ClientWindow::onAccessDenied(base::ClientAuthenticator::ErrorCode error_code)
+void ClientWindow::onAccessDenied(peer::ClientAuthenticator::ErrorCode error_code)
 {
     const char* message;
 
     switch (error_code)
     {
-        case base::ClientAuthenticator::ErrorCode::SUCCESS:
+        case peer::ClientAuthenticator::ErrorCode::SUCCESS:
             message = QT_TR_NOOP("Authentication successfully completed.");
             break;
 
-        case base::ClientAuthenticator::ErrorCode::NETWORK_ERROR:
+        case peer::ClientAuthenticator::ErrorCode::NETWORK_ERROR:
             message = QT_TR_NOOP("Network authentication error.");
             break;
 
-        case base::ClientAuthenticator::ErrorCode::PROTOCOL_ERROR:
+        case peer::ClientAuthenticator::ErrorCode::PROTOCOL_ERROR:
             message = QT_TR_NOOP("Violation of the data exchange protocol.");
             break;
 
-        case base::ClientAuthenticator::ErrorCode::ACCESS_DENIED:
+        case peer::ClientAuthenticator::ErrorCode::ACCESS_DENIED:
             message = QT_TR_NOOP("An error occured while authenticating: wrong user name or password.");
             break;
 
-        case base::ClientAuthenticator::ErrorCode::SESSION_DENIED:
+        case peer::ClientAuthenticator::ErrorCode::SESSION_DENIED:
             message = QT_TR_NOOP("Specified session type is not allowed for the user.");
             break;
 

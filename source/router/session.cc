@@ -19,12 +19,12 @@
 #include "router/session.h"
 
 #include "base/logging.h"
-#include "net/channel.h"
+#include "base/net/network_channel.h"
 #include "router/database_sqlite.h"
 
 namespace router {
 
-Session::Session(std::unique_ptr<net::Channel> channel)
+Session::Session(std::unique_ptr<base::NetworkChannel> channel)
     : channel_(std::move(channel))
 {
     DCHECK(channel_);
@@ -67,9 +67,9 @@ void Session::onConnected()
     NOTREACHED();
 }
 
-void Session::onDisconnected(net::Channel::ErrorCode error_code)
+void Session::onDisconnected(base::NetworkChannel::ErrorCode error_code)
 {
-    LOG(LS_INFO) << "Network error: " << net::Channel::errorToString(error_code);
+    LOG(LS_INFO) << "Network error: " << base::NetworkChannel::errorToString(error_code);
 
     if (delegate_)
         delegate_->onSessionFinished();

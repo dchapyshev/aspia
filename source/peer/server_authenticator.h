@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__NET__SERVER_AUTHENTICATOR_H
-#define BASE__NET__SERVER_AUTHENTICATOR_H
+#ifndef PEER__SERVER_AUTHENTICATOR_H
+#define PEER__SERVER_AUTHENTICATOR_H
 
 #include "base/version.h"
 #include "base/waitable_timer.h"
@@ -27,14 +27,17 @@
 #include "proto/key_exchange.pb.h"
 
 namespace base {
-
 class Location;
+} // namespace base
+
+namespace peer {
+
 class UserList;
 
-class ServerAuthenticator : public NetworkChannel::Listener
+class ServerAuthenticator : public base::NetworkChannel::Listener
 {
 public:
-    explicit ServerAuthenticator(std::shared_ptr<TaskRunner> task_runner);
+    explicit ServerAuthenticator(std::shared_ptr<base::TaskRunner> task_runner);
     ~ServerAuthenticator();
 
     enum class State
@@ -60,12 +63,12 @@ public:
     };
 
     // The start of the authenticator.
-    void start(std::unique_ptr<NetworkChannel> channel,
+    void start(std::unique_ptr<base::NetworkChannel> channel,
                std::shared_ptr<UserList> user_list,
                Delegate* delegate);
 
     // Sets the private key.
-    [[nodiscard]] bool setPrivateKey(const ByteArray& private_key);
+    [[nodiscard]] bool setPrivateKey(const base::ByteArray& private_key);
 
     // Enables or disables anonymous access.
     // |session_types] allowed session types for anonymous access.
@@ -77,30 +80,30 @@ public:
     [[nodiscard]] State state() const { return state_; }
 
     [[nodiscard]] uint32_t sessionType() const { return session_type_; }
-    [[nodiscard]] const Version& peerVersion() const { return peer_version_; }
+    [[nodiscard]] const base::Version& peerVersion() const { return peer_version_; }
     [[nodiscard]] const std::u16string& userName() const { return user_name_; }
 
-    [[nodiscard]] std::unique_ptr<NetworkChannel> takeChannel();
+    [[nodiscard]] std::unique_ptr<base::NetworkChannel> takeChannel();
 
 protected:
     // Channel::Listener implementation.
     void onConnected() override;
-    void onDisconnected(NetworkChannel::ErrorCode error_code) override;
-    void onMessageReceived(const ByteArray& buffer) override;
+    void onDisconnected(base::NetworkChannel::ErrorCode error_code) override;
+    void onMessageReceived(const base::ByteArray& buffer) override;
     void onMessageWritten(size_t pending) override;
 
 private:
-    void onClientHello(const ByteArray& buffer);
-    void onIdentify(const ByteArray& buffer);
-    void onClientKeyExchange(const ByteArray& buffer);
+    void onClientHello(const base::ByteArray& buffer);
+    void onIdentify(const base::ByteArray& buffer);
+    void onClientKeyExchange(const base::ByteArray& buffer);
     void doSessionChallenge();
-    void onSessionResponse(const ByteArray& buffer);
-    void onFailed(const Location& location);
+    void onSessionResponse(const base::ByteArray& buffer);
+    void onFailed(const base::Location& location);
     [[nodiscard]] bool onSessionKeyChanged();
-    [[nodiscard]] ByteArray createSrpKey();
+    [[nodiscard]] base::ByteArray createSrpKey();
 
-    WaitableTimer timer_;
-    std::unique_ptr<NetworkChannel> channel_;
+    base::WaitableTimer timer_;
+    std::unique_ptr<base::NetworkChannel> channel_;
     std::shared_ptr<UserList> user_list_;
 
     Delegate* delegate_ = nullptr;
@@ -131,27 +134,27 @@ private:
     proto::Identify identify_ = proto::IDENTIFY_SRP;
 
     // Remote client version.
-    Version peer_version_;
+    base::Version peer_version_;
 
     // User name.
     std::u16string user_name_;
 
-    ByteArray session_key_;
-    ByteArray encrypt_iv_;
-    ByteArray decrypt_iv_;
+    base::ByteArray session_key_;
+    base::ByteArray encrypt_iv_;
+    base::ByteArray decrypt_iv_;
 
-    KeyPair key_pair_;
-    BigNum N_;
-    BigNum g_;
-    BigNum v_;
-    BigNum s_;
-    BigNum b_;
-    BigNum B_;
-    BigNum A_;
+    base::KeyPair key_pair_;
+    base::BigNum N_;
+    base::BigNum g_;
+    base::BigNum v_;
+    base::BigNum s_;
+    base::BigNum b_;
+    base::BigNum B_;
+    base::BigNum A_;
 
     DISALLOW_COPY_AND_ASSIGN(ServerAuthenticator);
 };
 
-} // namespace base
+} // namespace peer
 
-#endif // BASE__NET__SERVER_AUTHENTICATOR_H
+#endif // PEER__SERVER_AUTHENTICATOR_H

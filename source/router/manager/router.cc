@@ -28,7 +28,7 @@ Router::Router(std::shared_ptr<RouterWindowProxy> window_proxy,
                std::shared_ptr<base::TaskRunner> io_task_runner)
     : io_task_runner_(std::move(io_task_runner)),
       window_proxy_(std::move(window_proxy)),
-      authenticator_(std::make_unique<net::ClientAuthenticator>())
+      authenticator_(std::make_unique<peer::ClientAuthenticator>())
 {
     authenticator_->setIdentify(proto::IDENTIFY_SRP);
     authenticator_->setSessionType(proto::ROUTER_SESSION_MANAGER);
@@ -53,7 +53,7 @@ void Router::setPassword(std::u16string_view password)
 
 void Router::connectToRouter(std::u16string_view address, uint16_t port)
 {
-    channel_ = std::make_unique<net::Channel>();
+    channel_ = std::make_unique<base::NetworkChannel>();
     channel_->setListener(this);
     channel_->connect(address, port);
 }
@@ -126,9 +126,9 @@ void Router::deleteUser(int64_t entry_id)
 void Router::onConnected()
 {
     authenticator_->start(std::move(channel_),
-                          [this](net::ClientAuthenticator::ErrorCode error_code)
+                          [this](peer::ClientAuthenticator::ErrorCode error_code)
     {
-        if (error_code == net::ClientAuthenticator::ErrorCode::SUCCESS)
+        if (error_code == peer::ClientAuthenticator::ErrorCode::SUCCESS)
         {
             // The authenticator takes the listener on itself, we return the receipt of
             // notifications.
@@ -150,7 +150,7 @@ void Router::onConnected()
     });
 }
 
-void Router::onDisconnected(net::Channel::ErrorCode error_code)
+void Router::onDisconnected(base::NetworkChannel::ErrorCode error_code)
 {
     window_proxy_->onDisconnected(error_code);
 }

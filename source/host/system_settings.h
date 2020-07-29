@@ -24,9 +24,9 @@
 
 #include <filesystem>
 
-namespace base {
+namespace peer {
 class UserList;
-} // namespace base
+} // namespace peer
 
 namespace host {
 
@@ -43,8 +43,8 @@ public:
     uint16_t tcpPort() const;
     void setTcpPort(uint16_t port);
 
-    base::UserList userList() const;
-    void setUserList(const base::UserList& user_list);
+    peer::UserList userList() const;
+    void setUserList(const peer::UserList& user_list);
 
     std::string updateServer() const;
     void setUpdateServer(const std::string& server);

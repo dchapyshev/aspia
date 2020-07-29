@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef NET__PEER_CONTROLLER_H
-#define NET__PEER_CONTROLLER_H
+#ifndef PEER__PEER_CONTROLLER_H
+#define PEER__PEER_CONTROLLER_H
 
 #include "base/macros_magic.h"
 #include "base/net/network_channel.h"
@@ -25,9 +25,9 @@
 #include <memory>
 #include <string>
 
-namespace base {
+namespace peer {
 
-class PeerController : public NetworkChannel::Listener
+class PeerController : public base::NetworkChannel::Listener
 {
 public:
     PeerController();
@@ -37,7 +37,7 @@ public:
     {
         std::u16string address;
         uint16_t port;
-        ByteArray public_key;
+        base::ByteArray public_key;
         std::u16string username;
         std::u16string password;
     };
@@ -51,17 +51,17 @@ public:
 
         virtual void onRouterConnected() = 0;
         virtual void onRouterDisconnected() = 0;
-        virtual void onPeerConnected(std::unique_ptr<NetworkChannel> channel) = 0;
+        virtual void onPeerConnected(std::unique_ptr<base::NetworkChannel> channel) = 0;
     };
 
     void start(const RouterList& router_list, Delegate* delegate);
     void connectTo(uint64_t peer_id);
 
 protected:
-    // Channel::Listener implementation.
+    // NetworkChannel::Listener implementation.
     void onConnected() override;
-    void onDisconnected(NetworkChannel::ErrorCode error_code) override;
-    void onMessageReceived(const ByteArray& buffer) override;
+    void onDisconnected(base::NetworkChannel::ErrorCode error_code) override;
+    void onMessageReceived(const base::ByteArray& buffer) override;
     void onMessageWritten(size_t pending) override;
 
 private:
@@ -71,11 +71,11 @@ private:
     Delegate* delegate_ = nullptr;
 
     size_t current_router_ = 0;
-    std::unique_ptr<NetworkChannel> channel_;
+    std::unique_ptr<base::NetworkChannel> channel_;
 
     DISALLOW_COPY_AND_ASSIGN(PeerController);
 };
 
-} // namespace base
+} // namespace peer
 
-#endif // BASE__NET__PEER_CONTROLLER_H
+#endif // PEER__PEER_CONTROLLER_H

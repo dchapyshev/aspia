@@ -20,16 +20,16 @@
 #define ROUTER__SESSION_H
 
 #include "base/version.h"
-#include "net/channel.h"
+#include "base/net/network_channel.h"
 
 namespace router {
 
 class Database;
 
-class Session : public net::Channel::Listener
+class Session : public base::NetworkChannel::Listener
 {
 public:
-    explicit Session(std::unique_ptr<net::Channel> channel);
+    explicit Session(std::unique_ptr<base::NetworkChannel> channel);
     virtual ~Session();
 
     class Delegate
@@ -54,10 +54,10 @@ protected:
 
     // net::Channel::Listener implementation.
     void onConnected() override;
-    void onDisconnected(net::Channel::ErrorCode error_code) override;
+    void onDisconnected(base::NetworkChannel::ErrorCode error_code) override;
 
 private:
-    std::unique_ptr<net::Channel> channel_;
+    std::unique_ptr<base::NetworkChannel> channel_;
 
     std::u16string username_;
     base::Version version_;

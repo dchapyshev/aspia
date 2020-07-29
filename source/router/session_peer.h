@@ -28,7 +28,7 @@ class SessionPeer : public Session
 {
 public:
     SessionPeer(proto::RouterSession session_type,
-                std::unique_ptr<net::Channel> channel,
+                std::unique_ptr<base::NetworkChannel> channel,
                 std::shared_ptr<Database> database);
     ~SessionPeer();
 

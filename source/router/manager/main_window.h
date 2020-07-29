@@ -50,8 +50,8 @@ public:
 
     // RouterWindow implementation.
     void onConnected(const base::Version& peer_version) override;
-    void onDisconnected(net::Channel::ErrorCode error_code) override;
-    void onAccessDenied(net::ClientAuthenticator::ErrorCode error_code) override;
+    void onDisconnected(base::NetworkChannel::ErrorCode error_code) override;
+    void onAccessDenied(peer::ClientAuthenticator::ErrorCode error_code) override;
     void onPeerList(std::shared_ptr<proto::PeerList> peer_list) override;
     void onPeerResult(std::shared_ptr<proto::PeerResult> peer_result) override;
     void onProxyList(std::shared_ptr<proto::ProxyList> proxy_list) override;

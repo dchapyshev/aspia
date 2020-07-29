@@ -20,7 +20,7 @@
 
 #include "base/strings/string_util.h"
 #include "base/strings/unicode.h"
-#include "net/user.h"
+#include "peer/user.h"
 
 #include <QAbstractButton>
 #include <QMessageBox>
@@ -38,7 +38,7 @@ UserDialog::UserDialog(const QVector<proto::User>& users, int user_index, QWidge
     {
         const proto::User& user = users_.at(user_index_);
 
-        ui.checkbox_disable->setChecked(!(user.flags() & net::User::ENABLED));
+        ui.checkbox_disable->setChecked(!(user.flags() & peer::User::ENABLED));
         ui.edit_username->setText(QString::fromStdString(user.name()));
 
         setAccountChanged(false);
@@ -137,7 +137,7 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
     {
         std::u16string username = ui.edit_username->text().toStdU16String();
 
-        if (!net::User::isValidUserName(username))
+        if (!peer::User::isValidUserName(username))
         {
             QMessageBox::warning(this,
                                  tr("Warning"),
@@ -183,12 +183,12 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
 
         std::u16string password = ui.edit_password->text().toStdU16String();
 
-        if (!net::User::isValidPassword(password))
+        if (!peer::User::isValidPassword(password))
         {
             QMessageBox::warning(this,
                                  tr("Warning"),
                                  tr("Password can not be empty and should not exceed %n characters.",
-                                    "", net::User::kMaxPasswordLength),
+                                    "", peer::User::kMaxPasswordLength),
                                  QMessageBox::Ok);
 
             ui.edit_password->selectAll();
@@ -196,7 +196,7 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
             return;
         }
 
-        if (!net::User::isSafePassword(password))
+        if (!peer::User::isSafePassword(password))
         {
             QString unsafe =
                 tr("Password you entered does not meet the security requirements!");
@@ -204,7 +204,7 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
             QString safe =
                 tr("The password must contain lowercase and uppercase characters, "
                    "numbers and should not be shorter than %n characters.",
-                   "", net::User::kSafePasswordLength);
+                   "", peer::User::kSafePasswordLength);
 
             QString question = tr("Do you want to enter a different password?");
 
@@ -236,7 +236,7 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
 
     uint32_t flags = 0;
     if (!ui.checkbox_disable->isChecked())
-        flags |= net::User::ENABLED;
+        flags |= peer::User::ENABLED;
 
     user->set_sessions(sessions);
     user->set_flags(flags);

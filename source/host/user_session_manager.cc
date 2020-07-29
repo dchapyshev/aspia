@@ -276,9 +276,9 @@ void UserSessionManager::addNewSession(std::unique_ptr<ClientSession> client_ses
     }
 }
 
-base::UserList UserSessionManager::userList() const
+peer::UserList UserSessionManager::userList() const
 {
-    base::UserList user_list;
+    peer::UserList user_list;
 
     for (const auto& session : sessions_)
         user_list.add(session->user());

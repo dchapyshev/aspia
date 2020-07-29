@@ -20,8 +20,7 @@
 #define ROUTER__MANAGER__ROUTER_H
 
 #include "base/macros_magic.h"
-#include "net/channel.h"
-#include "net/client_authenticator.h"
+#include "peer/client_authenticator.h"
 #include "proto/router.pb.h"
 
 namespace base {
@@ -32,7 +31,7 @@ namespace router {
 
 class RouterWindowProxy;
 
-class Router : public net::Channel::Listener
+class Router : public base::NetworkChannel::Listener
 {
 public:
     Router(std::shared_ptr<RouterWindowProxy> window_proxy,
@@ -56,14 +55,14 @@ public:
 protected:
     // net::Channel::Listener implementation.
     void onConnected() override;
-    void onDisconnected(net::Channel::ErrorCode error_code) override;
+    void onDisconnected(base::NetworkChannel::ErrorCode error_code) override;
     void onMessageReceived(const base::ByteArray& buffer) override;
     void onMessageWritten(size_t pending) override;
 
 private:
     std::shared_ptr<base::TaskRunner> io_task_runner_;
-    std::unique_ptr<net::Channel> channel_;
-    std::unique_ptr<net::ClientAuthenticator> authenticator_;
+    std::unique_ptr<base::NetworkChannel> channel_;
+    std::unique_ptr<peer::ClientAuthenticator> authenticator_;
     std::shared_ptr<RouterWindowProxy> window_proxy_;
 
     DISALLOW_COPY_AND_ASSIGN(Router);

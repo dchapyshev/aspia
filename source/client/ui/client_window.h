@@ -63,7 +63,7 @@ protected:
     void onStopped() override;
     void onConnected() override;
     void onDisconnected(base::NetworkChannel::ErrorCode error_code) override;
-    void onAccessDenied(base::ClientAuthenticator::ErrorCode error_code) override;
+    void onAccessDenied(peer::ClientAuthenticator::ErrorCode error_code) override;
 
 private:
     void setClientTitle(const Config& config);

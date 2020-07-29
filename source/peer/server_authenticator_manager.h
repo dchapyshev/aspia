@@ -16,12 +16,12 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__NET__SERVER_AUTHENTICATOR_MANAGER_H
-#define BASE__NET__SERVER_AUTHENTICATOR_MANAGER_H
+#ifndef PEER__SERVER_AUTHENTICATOR_MANAGER_H
+#define PEER__SERVER_AUTHENTICATOR_MANAGER_H
 
-#include "base/net/server_authenticator.h"
+#include "peer/server_authenticator.h"
 
-namespace base {
+namespace peer {
 
 class ServerAuthenticatorManager : public ServerAuthenticator::Delegate
 {
@@ -36,8 +36,8 @@ public:
         SessionInfo(const SessionInfo& other) = delete;
         SessionInfo& operator=(const SessionInfo& other) = delete;
 
-        std::unique_ptr<NetworkChannel> channel;
-        Version version;
+        std::unique_ptr<base::NetworkChannel> channel;
+        base::Version version;
         std::u16string user_name;
         uint32_t session_type = 0;
     };
@@ -51,12 +51,12 @@ public:
         virtual void onNewSession(SessionInfo&& session_info) = 0;
     };
 
-    ServerAuthenticatorManager(std::shared_ptr<TaskRunner> task_runner, Delegate* delegate);
+    ServerAuthenticatorManager(std::shared_ptr<base::TaskRunner> task_runner, Delegate* delegate);
     ~ServerAuthenticatorManager();
 
     void setUserList(std::shared_ptr<UserList> user_list);
 
-    void setPrivateKey(const ByteArray& private_key);
+    void setPrivateKey(const base::ByteArray& private_key);
 
     void setAnonymousAccess(
         ServerAuthenticator::AnonymousAccess anonymous_access, uint32_t session_types);
@@ -64,18 +64,18 @@ public:
     // Adds a channel to the authentication queue. After success completion, a session will be
     // created (in a stopped state) and method Delegate::onNewSession will be called.
     // If authentication fails, the channel will be automatically deleted.
-    void addNewChannel(std::unique_ptr<NetworkChannel> channel);
+    void addNewChannel(std::unique_ptr<base::NetworkChannel> channel);
 
 protected:
     // Authenticator::Delegate implementation.
     void onComplete() override;
 
 private:
-    std::shared_ptr<TaskRunner> task_runner_;
+    std::shared_ptr<base::TaskRunner> task_runner_;
     std::shared_ptr<UserList> user_list_;
     std::vector<std::unique_ptr<ServerAuthenticator>> pending_;
 
-    ByteArray private_key_;
+    base::ByteArray private_key_;
 
     ServerAuthenticator::AnonymousAccess anonymous_access_ =
         ServerAuthenticator::AnonymousAccess::DISABLE;
@@ -87,6 +87,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(ServerAuthenticatorManager);
 };
 
-} // namespace base
+} // namespace peer
 
-#endif // BASE__NET__SERVER_AUTHENTICATOR_MANAGER_H
+#endif // PEER__SERVER_AUTHENTICATOR_MANAGER_H

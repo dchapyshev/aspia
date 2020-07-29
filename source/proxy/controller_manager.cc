@@ -54,7 +54,7 @@ base::ByteArray createIv(uint32_t seed, const base::ByteArray& session_key)
 
 ControllerManager::ControllerManager(std::shared_ptr<base::TaskRunner> task_runner)
     : task_runner_(std::move(task_runner)),
-      server_(std::make_unique<net::Server>()),
+      server_(std::make_unique<base::NetworkServer>()),
       shared_pool_(std::make_unique<SharedPool>())
 {
     // Nothing
@@ -85,7 +85,7 @@ bool ControllerManager::start()
     return true;
 }
 
-void ControllerManager::onNewConnection(std::unique_ptr<net::Channel> channel)
+void ControllerManager::onNewConnection(std::unique_ptr<base::NetworkChannel> channel)
 {
     std::unique_ptr<base::MessageEncryptor> encryptor =
         base::MessageEncryptorOpenssl::createForChaCha20Poly1305(

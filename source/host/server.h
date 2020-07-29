@@ -20,9 +20,9 @@
 #define HOST__SERVER_H
 
 #include "base/net/network_server.h"
-#include "base/net/server_authenticator_manager.h"
 #include "host/user_session_manager.h"
 #include "host/system_settings.h"
+#include "peer/server_authenticator_manager.h"
 
 namespace base {
 class FilePathWatcher;
@@ -33,7 +33,7 @@ namespace host {
 
 class Server
     : public base::NetworkServer::Delegate,
-      public base::ServerAuthenticatorManager::Delegate,
+      public peer::ServerAuthenticatorManager::Delegate,
       public UserSessionManager::Delegate
 {
 public:
@@ -48,7 +48,7 @@ protected:
     void onNewConnection(std::unique_ptr<base::NetworkChannel> channel) override;
 
     // net::AuthenticatorManager::Delegate implementation.
-    void onNewSession(base::ServerAuthenticatorManager::SessionInfo&& session_info) override;
+    void onNewSession(peer::ServerAuthenticatorManager::SessionInfo&& session_info) override;
 
     // UserSessionManager::Delegate implementation.
     void onUserListChanged() override;
@@ -65,7 +65,7 @@ private:
 
     // Accepts incoming network connections.
     std::unique_ptr<base::NetworkServer> server_;
-    std::unique_ptr<base::ServerAuthenticatorManager> authenticator_manager_;
+    std::unique_ptr<peer::ServerAuthenticatorManager> authenticator_manager_;
     std::unique_ptr<UserSessionManager> user_session_manager_;
 
     DISALLOW_COPY_AND_ASSIGN(Server);

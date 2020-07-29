@@ -43,7 +43,7 @@ public:
     void onStopped();
     void onConnected();
     void onDisconnected(base::NetworkChannel::ErrorCode error_code);
-    void onAccessDenied(base::ClientAuthenticator::ErrorCode error_code);
+    void onAccessDenied(peer::ClientAuthenticator::ErrorCode error_code);
 
 private:
     std::shared_ptr<base::TaskRunner> ui_task_runner_;

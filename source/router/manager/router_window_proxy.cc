@@ -57,7 +57,7 @@ void RouterWindowProxy::onConnected(const base::Version& peer_version)
         router_window_->onConnected(peer_version);
 }
 
-void RouterWindowProxy::onDisconnected(net::Channel::ErrorCode error_code)
+void RouterWindowProxy::onDisconnected(base::NetworkChannel::ErrorCode error_code)
 {
     if (!ui_task_runner_->belongsToCurrentThread())
     {
@@ -70,7 +70,7 @@ void RouterWindowProxy::onDisconnected(net::Channel::ErrorCode error_code)
         router_window_->onDisconnected(error_code);
 }
 
-void RouterWindowProxy::onAccessDenied(net::ClientAuthenticator::ErrorCode error_code)
+void RouterWindowProxy::onAccessDenied(peer::ClientAuthenticator::ErrorCode error_code)
 {
     if (!ui_task_runner_->belongsToCurrentThread())
     {

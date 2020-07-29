@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__NET__CLIENT_AUTHENTICATOR_H
-#define BASE__NET__CLIENT_AUTHENTICATOR_H
+#ifndef PEER__CLIENT_AUTHENTICATOR_H
+#define PEER__CLIENT_AUTHENTICATOR_H
 
 #include "base/version.h"
 #include "base/crypto/big_num.h"
@@ -27,19 +27,21 @@
 #include <functional>
 
 namespace base {
-
 class Location;
 class MessageDecryptor;
 class MessageEncryptor;
+} // namespace base
 
-class ClientAuthenticator : public NetworkChannel::Listener
+namespace peer {
+
+class ClientAuthenticator : public base::NetworkChannel::Listener
 {
 public:
     ClientAuthenticator();
     ~ClientAuthenticator();
 
-    void setPeerPublicKey(const ByteArray& public_key);
-    const ByteArray& peerPublicKey() const { return peer_public_key_; }
+    void setPeerPublicKey(const base::ByteArray& public_key);
+    const base::ByteArray& peerPublicKey() const { return peer_public_key_; }
 
     void setIdentify(proto::Identify identify);
     proto::Identify identify() const { return identify_; }
@@ -71,29 +73,29 @@ public:
     // Starts authentication.
     // |callback| is called upon completion. The authenticator guarantees that no code inside it
     // will be executed after call callback (you can remove the authenticator inside this callback).
-    void start(std::unique_ptr<NetworkChannel> channel, Callback callback);
+    void start(std::unique_ptr<base::NetworkChannel> channel, Callback callback);
 
-    std::unique_ptr<NetworkChannel> takeChannel();
+    std::unique_ptr<base::NetworkChannel> takeChannel();
 
     static const char* errorToString(ClientAuthenticator::ErrorCode error_code);
 
 protected:
     // Channel::Listener implementation.
     void onConnected() override;
-    void onDisconnected(NetworkChannel::ErrorCode error_code) override;
-    void onMessageReceived(const ByteArray& buffer) override;
+    void onDisconnected(base::NetworkChannel::ErrorCode error_code) override;
+    void onMessageReceived(const base::ByteArray& buffer) override;
     void onMessageWritten(size_t pending) override;
 
 private:
     void onSessionKeyChanged();
     void sendClientHello();
-    bool readServerHello(const ByteArray& buffer);
+    bool readServerHello(const base::ByteArray& buffer);
     void sendIdentify();
-    bool readServerKeyExchange(const ByteArray& buffer);
+    bool readServerKeyExchange(const base::ByteArray& buffer);
     void sendClientKeyExchange();
-    bool readSessionChallenge(const ByteArray& buffer);
+    bool readSessionChallenge(const base::ByteArray& buffer);
     void sendSessionResponse();
-    void finished(const Location& location, ErrorCode error_code);
+    void finished(const base::Location& location, ErrorCode error_code);
 
     enum class State
     {
@@ -110,10 +112,10 @@ private:
 
     State state_ = State::NOT_STARTED;
 
-    std::unique_ptr<NetworkChannel> channel_;
+    std::unique_ptr<base::NetworkChannel> channel_;
     Callback callback_;
 
-    ByteArray peer_public_key_;
+    base::ByteArray peer_public_key_;
     std::u16string username_;
     std::u16string password_;
 
@@ -122,21 +124,21 @@ private:
     uint32_t session_type_ = 0;
     base::Version peer_version_;
 
-    BigNum N_;
-    BigNum g_;
-    BigNum s_;
-    BigNum B_;
+    base::BigNum N_;
+    base::BigNum g_;
+    base::BigNum s_;
+    base::BigNum B_;
 
-    BigNum a_;
-    BigNum A_;
+    base::BigNum a_;
+    base::BigNum A_;
 
-    ByteArray session_key_;
-    ByteArray encrypt_iv_;
-    ByteArray decrypt_iv_;
+    base::ByteArray session_key_;
+    base::ByteArray encrypt_iv_;
+    base::ByteArray decrypt_iv_;
 
     DISALLOW_COPY_AND_ASSIGN(ClientAuthenticator);
 };
 
-} // namespace base
+} // namespace peer
 
-#endif // BASE__NET__CLIENT_AUTHENTICATOR_H
+#endif // PEER__CLIENT_AUTHENTICATOR_H

@@ -19,7 +19,7 @@
 #include "router/manager/main_window.h"
 
 #include "base/logging.h"
-#include "net/user.h"
+#include "peer/user.h"
 #include "qt_base/application.h"
 #include "router/manager/user_dialog.h"
 #include "router/manager/router.h"
@@ -73,7 +73,7 @@ public:
     {
         setText(0, QString::fromStdString(user.name()));
 
-        if (user.flags() & net::User::ENABLED)
+        if (user.flags() & peer::User::ENABLED)
             setIcon(0, QIcon(QLatin1String(":/img/user.png")));
         else
             setIcon(0, QIcon(QLatin1String(":/img/user-disabled.png")));
@@ -161,47 +161,47 @@ void MainWindow::onConnected(const base::Version& peer_version)
     }
 }
 
-void MainWindow::onDisconnected(net::Channel::ErrorCode error_code)
+void MainWindow::onDisconnected(base::NetworkChannel::ErrorCode error_code)
 {
     const char* message;
 
     switch (error_code)
     {
-        case net::Channel::ErrorCode::ACCESS_DENIED:
+        case base::NetworkChannel::ErrorCode::ACCESS_DENIED:
             message = QT_TR_NOOP("Cryptography error (message encryption or decryption failed).");
             break;
 
-        case net::Channel::ErrorCode::NETWORK_ERROR:
+        case base::NetworkChannel::ErrorCode::NETWORK_ERROR:
             message = QT_TR_NOOP("An error occurred with the network (e.g., the network cable was accidentally plugged out).");
             break;
 
-        case net::Channel::ErrorCode::CONNECTION_REFUSED:
+        case base::NetworkChannel::ErrorCode::CONNECTION_REFUSED:
             message = QT_TR_NOOP("Connection was refused by the peer (or timed out).");
             break;
 
-        case net::Channel::ErrorCode::REMOTE_HOST_CLOSED:
+        case base::NetworkChannel::ErrorCode::REMOTE_HOST_CLOSED:
             message = QT_TR_NOOP("Remote host closed the connection.");
             break;
 
-        case net::Channel::ErrorCode::SPECIFIED_HOST_NOT_FOUND:
+        case base::NetworkChannel::ErrorCode::SPECIFIED_HOST_NOT_FOUND:
             message = QT_TR_NOOP("Host address was not found.");
             break;
 
-        case net::Channel::ErrorCode::SOCKET_TIMEOUT:
+        case base::NetworkChannel::ErrorCode::SOCKET_TIMEOUT:
             message = QT_TR_NOOP("Socket operation timed out.");
             break;
 
-        case net::Channel::ErrorCode::ADDRESS_IN_USE:
+        case base::NetworkChannel::ErrorCode::ADDRESS_IN_USE:
             message = QT_TR_NOOP("Address specified is already in use and was set to be exclusive.");
             break;
 
-        case net::Channel::ErrorCode::ADDRESS_NOT_AVAILABLE:
+        case base::NetworkChannel::ErrorCode::ADDRESS_NOT_AVAILABLE:
             message = QT_TR_NOOP("Address specified does not belong to the host.");
             break;
 
         default:
         {
-            if (error_code != net::Channel::ErrorCode::UNKNOWN)
+            if (error_code != base::NetworkChannel::ErrorCode::UNKNOWN)
             {
                 LOG(LS_WARNING) << "Unknown error code: " << static_cast<int>(error_code);
             }
@@ -215,29 +215,29 @@ void MainWindow::onDisconnected(net::Channel::ErrorCode error_code)
     status_dialog_->show();
 }
 
-void MainWindow::onAccessDenied(net::ClientAuthenticator::ErrorCode error_code)
+void MainWindow::onAccessDenied(peer::ClientAuthenticator::ErrorCode error_code)
 {
     const char* message;
 
     switch (error_code)
     {
-        case net::ClientAuthenticator::ErrorCode::SUCCESS:
+        case peer::ClientAuthenticator::ErrorCode::SUCCESS:
             message = QT_TR_NOOP("Authentication successfully completed.");
             break;
 
-        case net::ClientAuthenticator::ErrorCode::NETWORK_ERROR:
+        case peer::ClientAuthenticator::ErrorCode::NETWORK_ERROR:
             message = QT_TR_NOOP("Network authentication error.");
             break;
 
-        case net::ClientAuthenticator::ErrorCode::PROTOCOL_ERROR:
+        case peer::ClientAuthenticator::ErrorCode::PROTOCOL_ERROR:
             message = QT_TR_NOOP("Violation of the data exchange protocol.");
             break;
 
-        case net::ClientAuthenticator::ErrorCode::ACCESS_DENIED:
+        case peer::ClientAuthenticator::ErrorCode::ACCESS_DENIED:
             message = QT_TR_NOOP("An error occured while authenticating: wrong user name or password.");
             break;
 
-        case net::ClientAuthenticator::ErrorCode::SESSION_DENIED:
+        case peer::ClientAuthenticator::ErrorCode::SESSION_DENIED:
             message = QT_TR_NOOP("Specified session type is not allowed for the user.");
             break;
 

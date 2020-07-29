@@ -123,7 +123,7 @@ void Client::onConnected()
     channel_->setKeepAlive(true, kKeepAliveTime, kKeepAliveInterval);
     channel_->setNoDelay(true);
 
-    authenticator_ = std::make_unique<base::ClientAuthenticator>();
+    authenticator_ = std::make_unique<peer::ClientAuthenticator>();
 
     authenticator_->setIdentify(proto::IDENTIFY_SRP);
     authenticator_->setUserName(config_.username);
@@ -131,9 +131,9 @@ void Client::onConnected()
     authenticator_->setSessionType(config_.session_type);
 
     authenticator_->start(std::move(channel_),
-                          [this](base::ClientAuthenticator::ErrorCode error_code)
+                          [this](peer::ClientAuthenticator::ErrorCode error_code)
     {
-        if (error_code == base::ClientAuthenticator::ErrorCode::SUCCESS)
+        if (error_code == peer::ClientAuthenticator::ErrorCode::SUCCESS)
         {
             // The authenticator takes the listener on itself, we return the receipt of
             // notifications.

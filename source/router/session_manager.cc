@@ -20,13 +20,13 @@
 
 #include "base/logging.h"
 #include "base/strings/unicode.h"
-#include "net/channel.h"
-#include "net/user.h"
+#include "base/net/network_channel.h"
+#include "peer/user.h"
 #include "router/database.h"
 
 namespace router {
 
-SessionManager::SessionManager(std::unique_ptr<net::Channel> channel,
+SessionManager::SessionManager(std::unique_ptr<base::NetworkChannel> channel,
                                std::shared_ptr<Database> database)
     : Session(std::move(channel)),
       database_(std::move(database))
@@ -82,10 +82,10 @@ void SessionManager::doUserListRequest()
     proto::RouterToManager message;
     proto::UserList* list = message.mutable_user_list();
 
-    net::UserList users = database_->userList();
-    for (net::UserList::Iterator it(users); !it.isAtEnd(); it.advance())
+    peer::UserList users = database_->userList();
+    for (peer::UserList::Iterator it(users); !it.isAtEnd(); it.advance())
     {
-        const net::User& user = it.user();
+        const peer::User& user = it.user();
         proto::User* item = list->add_user();
 
         item->set_entry_id(user.entry_id);
@@ -112,14 +112,14 @@ void SessionManager::doUserRequest(const proto::UserRequest& request)
 
             LOG(LS_INFO) << "User add request: " << username;
 
-            if (!net::User::isValidUserName(username) || !net::User::isValidPassword(password))
+            if (!peer::User::isValidUserName(username) || !peer::User::isValidPassword(password))
             {
                 LOG(LS_ERROR) << "Invalid user name or password";
                 result->set_error_code(proto::UserResult::INVALID_DATA);
                 break;
             }
 
-            net::User user = net::User::create(username, password);
+            peer::User user = peer::User::create(username, password);
             if (!user.isValid())
             {
                 LOG(LS_ERROR) << "Failed to create user";

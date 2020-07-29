@@ -19,8 +19,8 @@
 #ifndef ROUTER__SERVER_H
 #define ROUTER__SERVER_H
 
-#include "net/server.h"
-#include "net/server_authenticator_manager.h"
+#include "base/net/network_server.h"
+#include "peer/server_authenticator_manager.h"
 #include "router/session.h"
 
 namespace router {
@@ -28,8 +28,8 @@ namespace router {
 class Database;
 
 class Server
-    : public net::Server::Delegate,
-      public net::ServerAuthenticatorManager::Delegate,
+    : public base::NetworkServer::Delegate,
+      public peer::ServerAuthenticatorManager::Delegate,
       public Session::Delegate
 {
 public:
@@ -40,10 +40,10 @@ public:
 
 protected:
     // net::Server::Delegate implementation.
-    void onNewConnection(std::unique_ptr<net::Channel> channel) override;
+    void onNewConnection(std::unique_ptr<base::NetworkChannel> channel) override;
 
     // net::ServerAuthenticatorManager::Delegate implementation.
-    void onNewSession(net::ServerAuthenticatorManager::SessionInfo&& session_info) override;
+    void onNewSession(peer::ServerAuthenticatorManager::SessionInfo&& session_info) override;
 
     // Session::Delegate implementation.
     void onSessionFinished() override;
@@ -51,8 +51,8 @@ protected:
 private:
     std::shared_ptr<base::TaskRunner> task_runner_;
     std::shared_ptr<Database> database_;
-    std::unique_ptr<net::Server> server_;
-    std::unique_ptr<net::ServerAuthenticatorManager> authenticator_manager_;
+    std::unique_ptr<base::NetworkServer> server_;
+    std::unique_ptr<peer::ServerAuthenticatorManager> authenticator_manager_;
     std::vector<std::unique_ptr<Session>> sessions_;
 
     DISALLOW_COPY_AND_ASSIGN(Server);

@@ -108,13 +108,13 @@ void UserSession::restart(std::unique_ptr<base::IpcChannel> channel)
     delegate_->onUserSessionStarted();
 }
 
-base::User UserSession::user() const
+peer::User UserSession::user() const
 {
-    base::User user = base::User::create(
+    peer::User user = peer::User::create(
         base::utf16FromAscii(username_), base::utf16FromAscii(password_));
 
     user.sessions = proto::SESSION_TYPE_ALL;
-    user.flags = base::User::ENABLED;
+    user.flags = peer::User::ENABLED;
 
     return user;
 }

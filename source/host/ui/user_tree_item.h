@@ -20,7 +20,7 @@
 #define HOST__UI__USER_TREE_ITEM_H
 
 #include "base/macros_magic.h"
-#include "base/net/user.h"
+#include "peer/user.h"
 
 #include <QTreeWidget>
 
@@ -31,16 +31,16 @@ class User;
 class UserTreeItem : public QTreeWidgetItem
 {
 public:
-    UserTreeItem(const base::User& user);
+    UserTreeItem(const peer::User& user);
     ~UserTreeItem() = default;
 
-    const base::User& user() const { return user_; }
-    void setUser(const base::User& user);
+    const peer::User& user() const { return user_; }
+    void setUser(const peer::User& user);
 
 private:
     void updateData();
 
-    base::User user_;
+    peer::User user_;
     DISALLOW_COPY_AND_ASSIGN(UserTreeItem);
 };
 

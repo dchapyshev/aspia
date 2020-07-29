@@ -19,7 +19,7 @@
 #ifndef ROUTER__MANAGER__ROUTER_WINDOW_H
 #define ROUTER__MANAGER__ROUTER_WINDOW_H
 
-#include "net/client_authenticator.h"
+#include "peer/client_authenticator.h"
 
 namespace proto {
 class PeerList;
@@ -37,8 +37,8 @@ public:
     virtual ~RouterWindow() = default;
 
     virtual void onConnected(const base::Version& peer_version) = 0;
-    virtual void onDisconnected(net::Channel::ErrorCode error_code) = 0;
-    virtual void onAccessDenied(net::ClientAuthenticator::ErrorCode error_code) = 0;
+    virtual void onDisconnected(base::NetworkChannel::ErrorCode error_code) = 0;
+    virtual void onAccessDenied(peer::ClientAuthenticator::ErrorCode error_code) = 0;
     virtual void onPeerList(std::shared_ptr<proto::PeerList> peer_list) = 0;
     virtual void onPeerResult(std::shared_ptr<proto::PeerResult> peer_result) = 0;
     virtual void onProxyList(std::shared_ptr<proto::ProxyList> proxy_list) = 0;

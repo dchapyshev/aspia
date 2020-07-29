@@ -24,7 +24,7 @@ namespace proxy {
 
 Controller::Controller(uint32_t controller_id,
                        std::unique_ptr<SharedPool> shared_pool,
-                       std::unique_ptr<net::Channel> channel,
+                       std::unique_ptr<base::NetworkChannel> channel,
                        Delegate* delegate)
     : controller_id_(controller_id),
       shared_pool_(std::move(shared_pool)),
@@ -52,7 +52,7 @@ void Controller::onConnected()
     NOTREACHED();
 }
 
-void Controller::onDisconnected(net::Channel::ErrorCode /* error_code */)
+void Controller::onDisconnected(base::NetworkChannel::ErrorCode /* error_code */)
 {
     if (delegate_)
         delegate_->onControllerFinished(this);

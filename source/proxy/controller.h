@@ -19,13 +19,13 @@
 #ifndef PROXY__CONTROLLER_H
 #define PROXY__CONTROLLER_H
 
-#include "net/channel.h"
+#include "base/net/network_channel.h"
 #include "proto/proxy.pb.h"
 #include "proxy/shared_pool.h"
 
 namespace proxy {
 
-class Controller : public net::Channel::Listener
+class Controller : public base::NetworkChannel::Listener
 {
 public:
     class Delegate
@@ -38,7 +38,7 @@ public:
 
     Controller(uint32_t controller_id,
                std::unique_ptr<SharedPool> shared_pool,
-               std::unique_ptr<net::Channel> channel,
+               std::unique_ptr<base::NetworkChannel> channel,
                Delegate* delegate);
     ~Controller();
 
@@ -50,7 +50,7 @@ public:
 protected:
     // net::Channel::Listener implementation.
     void onConnected() override;
-    void onDisconnected(net::Channel::ErrorCode error_code) override;
+    void onDisconnected(base::NetworkChannel::ErrorCode error_code) override;
     void onMessageReceived(const base::ByteArray& buffer) override;
     void onMessageWritten(size_t pending) override;
 
@@ -58,7 +58,7 @@ private:
     const uint32_t controller_id_;
 
     std::unique_ptr<SharedPool> shared_pool_;
-    std::unique_ptr<net::Channel> channel_;
+    std::unique_ptr<base::NetworkChannel> channel_;
 
     proto::RouterToProxy incoming_message_;
     proto::ProxyToRouter outgoing_message_;

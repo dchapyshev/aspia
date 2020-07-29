@@ -20,7 +20,7 @@
 #define PROXY__CONTROLLER_MANAGER_H
 
 #include "base/memory/byte_array.h"
-#include "net/server.h"
+#include "base/net/network_server.h"
 #include "proxy/controller.h"
 
 namespace base {
@@ -33,7 +33,7 @@ class SessionManager;
 class SharedPool;
 
 class ControllerManager
-    : public net::Server::Delegate,
+    : public base::NetworkServer::Delegate,
       public Controller::Delegate
 {
 public:
@@ -44,14 +44,14 @@ public:
 
 protected:
     // net::Server::Delegate implementation.
-    void onNewConnection(std::unique_ptr<net::Channel> channel) override;
+    void onNewConnection(std::unique_ptr<base::NetworkChannel> channel) override;
 
     // Controller::Delegate implementation.
     void onControllerFinished(Controller* controller) override;
 
 private:
     std::shared_ptr<base::TaskRunner> task_runner_;
-    std::unique_ptr<net::Server> server_;
+    std::unique_ptr<base::NetworkServer> server_;
     std::unique_ptr<SharedPool> shared_pool_;
     std::unique_ptr<SessionManager> session_manager_;
     std::vector<std::unique_ptr<Controller>> controllers_;
