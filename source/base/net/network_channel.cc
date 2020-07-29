@@ -198,7 +198,8 @@ bool NetworkChannel::setNoDelay(bool enable)
 
     if (error_code)
     {
-        LOG(LS_ERROR) << "Failed to disable Nagle's algorithm: " << error_code.message();
+        LOG(LS_ERROR) << "Failed to disable Nagle's algorithm: "
+                      << base::utf16FromLocal8Bit(error_code.message());
         return false;
     }
 
@@ -241,7 +242,8 @@ bool NetworkChannel::setReadBufferSize(size_t size)
 
     if (error_code)
     {
-        LOG(LS_ERROR) << "Failed to set read buffer size: " << error_code.message();
+        LOG(LS_ERROR) << "Failed to set read buffer size: "
+                      << base::utf16FromLocal8Bit(error_code.message());
         return false;
     }
 
@@ -257,7 +259,8 @@ bool NetworkChannel::setWriteBufferSize(size_t size)
 
     if (error_code)
     {
-        LOG(LS_ERROR) << "Failed to set write buffer size: " << error_code.message();
+        LOG(LS_ERROR) << "Failed to set write buffer size: "
+                      << base::utf16FromLocal8Bit(error_code.message());
         return false;
     }
 
