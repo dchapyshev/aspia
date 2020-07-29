@@ -16,12 +16,12 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "updater/update_dialog.h"
+#include "common/ui/update_dialog.h"
 
 #include "base/win/process_util.h"
 #include "build/version.h"
-#include "updater/download_dialog.h"
-#include "updater/update_checker.h"
+#include "common/ui/download_dialog.h"
+#include "common/ui/update_checker.h"
 #include "ui_update_dialog.h"
 
 #include <QCloseEvent>
@@ -29,7 +29,7 @@
 #include <QMessageBox>
 #include <QTemporaryFile>
 
-namespace updater {
+namespace common {
 
 namespace {
 
@@ -50,13 +50,13 @@ UpdateDialog::UpdateDialog(const QString& update_server,
 
     ui->label_available->setText(tr("Receiving information..."));
 
-    checker_ = new Checker(this);
+    checker_ = new UpdateChecker(this);
 
     checker_->setUpdateServer(update_server);
     checker_->setPackageName(package_name);
 
-    connect(checker_, &Checker::finished, this, &UpdateDialog::onUpdateChecked);
-    connect(checker_, &Checker::finished, checker_, &Checker::deleteLater);
+    connect(checker_, &UpdateChecker::finished, this, &UpdateDialog::onUpdateChecked);
+    connect(checker_, &UpdateChecker::finished, checker_, &UpdateChecker::deleteLater);
 
     checker_->start();
 }
@@ -93,7 +93,7 @@ void UpdateDialog::closeEvent(QCloseEvent* event)
     {
         checker_finished_ = false;
 
-        connect(checker_, &Checker::finished, [this]()
+        connect(checker_, &UpdateChecker::finished, [this]()
         {
             checker_finished_ = true;
             close();
@@ -223,4 +223,4 @@ void UpdateDialog::initialize()
     ui->label_current->setText(QString::fromStdString(current_version.toString()));
 }
 
-} // namespace updater
+} // namespace common

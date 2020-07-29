@@ -16,32 +16,33 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "updater/update_checker.h"
-#include "updater/update_checker_impl.h"
+#include "common/ui/update_checker.h"
+
+#include "common/ui/update_checker_impl.h"
 
 #include <QThread>
 
-namespace updater {
+namespace common {
 
-Checker::Checker(QObject* parent)
+UpdateChecker::UpdateChecker(QObject* parent)
     : QObject(parent)
 {
     qRegisterMetaType<UpdateInfo>();
 
     thread_ = new QThread(this);
-    impl_ = new CheckerImpl();
+    impl_ = new UpdateCheckerImpl();
 
     impl_->moveToThread(thread_);
 
-    connect(impl_, &CheckerImpl::finished, this, &Checker::finished);
-    connect(impl_, &CheckerImpl::finished, impl_, &CheckerImpl::deleteLater);
-    connect(impl_, &CheckerImpl::finished, thread_, &QThread::quit);
+    connect(impl_, &UpdateCheckerImpl::finished, this, &UpdateChecker::finished);
+    connect(impl_, &UpdateCheckerImpl::finished, impl_, &UpdateCheckerImpl::deleteLater);
+    connect(impl_, &UpdateCheckerImpl::finished, thread_, &QThread::quit);
 
-    connect(thread_, &QThread::started, impl_, &CheckerImpl::start);
+    connect(thread_, &QThread::started, impl_, &UpdateCheckerImpl::start);
     connect(thread_, &QThread::finished, thread_, &QThread::deleteLater);
 }
 
-Checker::~Checker()
+UpdateChecker::~UpdateChecker()
 {
     if (thread_ && thread_->isRunning())
     {
@@ -50,22 +51,22 @@ Checker::~Checker()
     }
 }
 
-void Checker::setUpdateServer(const QString& update_server)
+void UpdateChecker::setUpdateServer(const QString& update_server)
 {
     if (impl_)
         impl_->setUpdateServer(update_server);
 }
 
-void Checker::setPackageName(const QString& package_name)
+void UpdateChecker::setPackageName(const QString& package_name)
 {
     if (impl_)
         impl_->setPackageName(package_name);
 }
 
-void Checker::start()
+void UpdateChecker::start()
 {
     if (thread_)
         thread_->start(QThread::LowPriority);
 }
 
-} // namespace updater
+} // namespace common

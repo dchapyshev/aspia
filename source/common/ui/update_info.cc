@@ -16,13 +16,13 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "updater/update_info.h"
+#include "common/ui/update_info.h"
 
 #include "qt_base/qt_logging.h"
 
 #include <QtXml>
 
-namespace updater {
+namespace common {
 
 namespace {
 
@@ -101,4 +101,4 @@ bool UpdateInfo::hasUpdate() const
     return !version_.isValid() && !url_.isEmpty();
 }
 
-} // namespace updater
+} // namespace common

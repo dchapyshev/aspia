@@ -119,7 +119,6 @@ target_link_libraries(aspia_host_core
     aspia_peer
     aspia_proto
     aspia_qt_base
-    aspia_updater
     ${QT_LIBS}
     ${WINDOWS_LIBS}
     ${THIRD_PARTY_LIBS})

@@ -16,45 +16,39 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef UPDATER__UPDATE_CHECKER_H
-#define UPDATER__UPDATE_CHECKER_H
+#ifndef COMMON__UI__UPDATE_INFO_H
+#define COMMON__UI__UPDATE_INFO_H
 
-#include "base/macros_magic.h"
-#include "updater/update_info.h"
+#include "base/version.h"
 
-#include <QPointer>
+#include <QUrl>
 
-class QThread;
+namespace common {
 
-namespace updater {
-
-class CheckerImpl;
-
-Q_DECLARE_METATYPE(UpdateInfo);
-
-class Checker : public QObject
+class UpdateInfo
 {
-    Q_OBJECT
-
 public:
-    explicit Checker(QObject* parent = nullptr);
-    ~Checker();
+    UpdateInfo() = default;
+    UpdateInfo(const UpdateInfo& other) = default;
+    UpdateInfo& operator=(const UpdateInfo& other) = default;
+    ~UpdateInfo() = default;
 
-    void setUpdateServer(const QString& update_server);
-    void setPackageName(const QString& package_name);
+    static UpdateInfo fromXml(const QByteArray& buffer);
 
-    void start();
+    bool hasUpdate() const;
 
-signals:
-    void finished(const UpdateInfo& update_info);
+    bool isValid() const { return valid_; }
+    base::Version version() const { return version_; }
+    QString description() const { return description_; }
+    QUrl url() const { return url_; }
 
 private:
-    QPointer<QThread> thread_;
-    QPointer<CheckerImpl> impl_;
-
-    DISALLOW_COPY_AND_ASSIGN(Checker);
+    bool valid_ = false;
+    base::Version version_;
+    QString description_;
+    QUrl url_;
 };
 
-} // namespace updater
+} // namespace common
 
-#endif // UPDATER__UPDATE_CHECKER_H
+#endif // COMMON__UI__UPDATE_INFO_H

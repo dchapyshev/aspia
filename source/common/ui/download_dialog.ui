@@ -47,7 +47,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="resources/updater.qrc"/>
+  <include location="../resources/common.qrc"/>
  </resources>
  <connections/>
 </ui>

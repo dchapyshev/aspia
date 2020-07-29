@@ -16,14 +16,14 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "updater/download_dialog.h"
+#include "common/ui/download_dialog.h"
 
 #include <QAbstractButton>
 #include <QFile>
 #include <QMessageBox>
 #include <QNetworkReply>
 
-namespace updater {
+namespace common {
 
 DownloadDialog::DownloadDialog(const QUrl& url, QFile& file, QWidget* parent)
     : QDialog(parent),
@@ -76,4 +76,4 @@ DownloadDialog::DownloadDialog(const QUrl& url, QFile& file, QWidget* parent)
     });
 }
 
-} // namespace updater
+} // namespace common

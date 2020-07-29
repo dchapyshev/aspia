@@ -37,7 +37,7 @@
            <string notr="true"/>
           </property>
           <property name="pixmap">
-           <pixmap resource="resources/updater.qrc">:/img/globe-green.png</pixmap>
+           <pixmap resource="../resources/common.qrc">:/img/globe-green.png</pixmap>
           </property>
          </widget>
         </item>
@@ -197,7 +197,7 @@ p, li { white-space: pre-wrap; }
   </layout>
  </widget>
  <resources>
-  <include location="resources/updater.qrc"/>
+  <include location="../resources/common.qrc"/>
  </resources>
  <connections/>
 </ui>

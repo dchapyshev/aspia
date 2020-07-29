@@ -16,45 +16,34 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef UPDATER__UPDATE_CHECKER_IMPL_H
-#define UPDATER__UPDATE_CHECKER_IMPL_H
+#ifndef COMMON__UI__DOWNLOAD_DIALOG_H
+#define COMMON__UI__DOWNLOAD_DIALOG_H
 
 #include "base/macros_magic.h"
-#include "updater/update_info.h"
+#include "ui_download_dialog.h"
 
-#include <QObject>
+#include <QFile>
+#include <QNetworkAccessManager>
 
-class QNetworkAccessManager;
-class QNetworkReply;
+namespace common {
 
-namespace updater {
-
-class CheckerImpl : public QObject
+class DownloadDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit CheckerImpl(QObject* parent = nullptr);
-    ~CheckerImpl();
-
-    void setUpdateServer(const QString& update_server);
-    void setPackageName(const QString& package_name);
-
-signals:
-    void finished(const UpdateInfo& update_info);
-
-public slots:
-    void start();
+    DownloadDialog(const QUrl& url, QFile& file, QWidget* parent = nullptr);
+    ~DownloadDialog() = default;
 
 private:
-    QNetworkAccessManager* network_manager_ = nullptr;
+    Ui::DownloadDialog ui;
 
-    QString update_server_;
-    QString package_name_;
+    QNetworkAccessManager network_manager_;
+    QFile& file_;
 
-    DISALLOW_COPY_AND_ASSIGN(CheckerImpl);
+    DISALLOW_COPY_AND_ASSIGN(DownloadDialog);
 };
 
-} // namespace updater
+} // namespace common
 
-#endif // UPDATER__UPDATE_CHECKER_IMPL_H
+#endif // COMMON__UI__DOWNLOAD_DIALOG_H

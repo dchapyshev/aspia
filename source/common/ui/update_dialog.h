@@ -16,11 +16,11 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef UPDATER__UPDATE_DIALOG_H
-#define UPDATER__UPDATE_DIALOG_H
+#ifndef COMMON__UI__UPDATE_DIALOG_H
+#define COMMON__UI__UPDATE_DIALOG_H
 
 #include "base/macros_magic.h"
-#include "updater/update_info.h"
+#include "common/ui/update_info.h"
 
 #include <QDialog>
 #include <QPointer>
@@ -29,9 +29,9 @@ namespace Ui {
 class UpdateDialog;
 } // namespace Ui
 
-namespace updater {
+namespace common {
 
-class Checker;
+class UpdateChecker;
 
 class UpdateDialog : public QDialog
 {
@@ -59,12 +59,12 @@ private:
     std::unique_ptr<Ui::UpdateDialog> ui;
     UpdateInfo update_info_;
 
-    QPointer<Checker> checker_;
+    QPointer<UpdateChecker> checker_;
     bool checker_finished_ = true;
 
     DISALLOW_COPY_AND_ASSIGN(UpdateDialog);
 };
 
-} // namespace updater
+} // namespace common
 
-#endif // UPDATER__UPDATE_DIALOG_H
+#endif // COMMON__UI__UPDATE_DIALOG_H

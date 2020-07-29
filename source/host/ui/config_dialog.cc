@@ -29,7 +29,7 @@
 #include "host/ui/settings_util.h"
 #include "host/win/service_constants.h"
 #include "host/system_settings.h"
-#include "updater/update_dialog.h"
+#include "common/ui/update_dialog.h"
 
 #include <QFileDialog>
 #include <QMenu>
@@ -61,7 +61,7 @@ ConfigDialog::ConfigDialog(QWidget* parent)
 
     connect(ui.button_check_updates, &QPushButton::released, [this]()
     {
-        updater::UpdateDialog(
+        common::UpdateDialog(
             QString::fromStdString(SystemSettings().updateServer()), "host", this).exec();
     });
 

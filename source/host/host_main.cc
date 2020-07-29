@@ -26,7 +26,7 @@
 #include "host/ui/application.h"
 #include "host/ui/main_window.h"
 #include "host/ui/settings_util.h"
-#include "updater/update_dialog.h"
+#include "common/ui/update_dialog.h"
 
 #include <QMessageBox>
 
@@ -65,8 +65,6 @@ int hostMain(int argc, char* argv[])
     Q_INIT_RESOURCE(qt_translations);
     Q_INIT_RESOURCE(common);
     Q_INIT_RESOURCE(common_translations);
-    Q_INIT_RESOURCE(updater);
-    Q_INIT_RESOURCE(updater_translations);
 
     base::CommandLine command_line(argc, argv);
 
@@ -118,7 +116,7 @@ int hostMain(int argc, char* argv[])
     }
     else if (command_line.hasSwitch(u"update"))
     {
-        updater::UpdateDialog dialog(
+        common::UpdateDialog dialog(
             QString::fromStdString(host::SystemSettings().updateServer()), "host");
         dialog.show();
         dialog.activateWindow();

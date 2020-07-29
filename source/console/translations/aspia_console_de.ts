@@ -265,67 +265,67 @@
 <context>
     <name>Console</name>
     <message>
-        <location filename="../main.cc" line="62"/>
+        <location filename="../main.cc" line="60"/>
         <source>Remote computer address.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.cc" line="63"/>
+        <location filename="../main.cc" line="61"/>
         <source>address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.cc" line="67"/>
+        <location filename="../main.cc" line="65"/>
         <source>Remote computer port.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.cc" line="68"/>
+        <location filename="../main.cc" line="66"/>
         <source>port</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.cc" line="73"/>
+        <location filename="../main.cc" line="71"/>
         <source>Name of user.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.cc" line="74"/>
+        <location filename="../main.cc" line="72"/>
         <source>username</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.cc" line="78"/>
+        <location filename="../main.cc" line="76"/>
         <source>Session type. Possible values: desktop-manage, desktop-view, file-transfer.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.cc" line="84"/>
+        <location filename="../main.cc" line="82"/>
         <source>Open the client to connect to the computer.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.cc" line="87"/>
+        <location filename="../main.cc" line="85"/>
         <source>Aspia Console</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.cc" line="90"/>
+        <location filename="../main.cc" line="88"/>
         <source>file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.cc" line="91"/>
+        <location filename="../main.cc" line="89"/>
         <source>The file to open.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.cc" line="130"/>
+        <location filename="../main.cc" line="128"/>
         <source>Warning</source>
         <translation type="unfinished">Warnung</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="131"/>
+        <location filename="../main.cc" line="129"/>
         <source>Incorrect session type entered.</source>
         <translation type="unfinished"></translation>
     </message>

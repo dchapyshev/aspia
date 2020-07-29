@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "updater/update_checker_impl.h"
+#include "common/ui/update_checker_impl.h"
 
 #include "build/version.h"
 #include "qt_base/qt_logging.h"
@@ -28,27 +28,27 @@
 #include <QNetworkReply>
 #include <QUrlQuery>
 
-namespace updater {
+namespace common {
 
-CheckerImpl::CheckerImpl(QObject* parent)
+UpdateCheckerImpl::UpdateCheckerImpl(QObject* parent)
     : QObject(parent)
 {
     // Nothing
 }
 
-CheckerImpl::~CheckerImpl() = default;
+UpdateCheckerImpl::~UpdateCheckerImpl() = default;
 
-void CheckerImpl::setUpdateServer(const QString& update_server)
+void UpdateCheckerImpl::setUpdateServer(const QString& update_server)
 {
     update_server_ = update_server;
 }
 
-void CheckerImpl::setPackageName(const QString& package_name)
+void UpdateCheckerImpl::setPackageName(const QString& package_name)
 {
     package_name_ = package_name;
 }
 
-void CheckerImpl::start()
+void UpdateCheckerImpl::start()
 {
     network_manager_ = new QNetworkAccessManager(this);
 
@@ -82,4 +82,4 @@ void CheckerImpl::start()
     network_manager_->get(QNetworkRequest(url));
 }
 
-} // namespace updater
+} // namespace common

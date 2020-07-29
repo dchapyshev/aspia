@@ -31,7 +31,7 @@
 #include "console/application.h"
 #include "console/mru_action.h"
 #include "console/update_settings_dialog.h"
-#include "updater/update_dialog.h"
+#include "common/ui/update_dialog.h"
 
 #include <QCloseEvent>
 #include <QDesktopServices>
@@ -185,13 +185,13 @@ MainWindow::MainWindow(const QString& file_path)
 
     if (settings.checkUpdates())
     {
-        updater::Checker* checker = new updater::Checker(this);
+        common::UpdateChecker* checker = new common::UpdateChecker(this);
 
         checker->setUpdateServer(settings.updateServer());
         checker->setPackageName("console");
 
-        connect(checker, &updater::Checker::finished, this, &MainWindow::onUpdateChecked);
-        connect(checker, &updater::Checker::finished, checker, &updater::Checker::deleteLater);
+        connect(checker, &common::UpdateChecker::finished, this, &MainWindow::onUpdateChecked);
+        connect(checker, &common::UpdateChecker::finished, checker, &common::UpdateChecker::deleteLater);
 
         checker->start();
     }
@@ -406,9 +406,9 @@ void MainWindow::onOnlineHelp()
 
 void MainWindow::onCheckUpdates()
 {
-    updater::UpdateDialog(Application::instance()->settings().updateServer(),
-                          QLatin1String("console"),
-                          this).exec();
+    common::UpdateDialog(Application::instance()->settings().updateServer(),
+                         QLatin1String("console"),
+                         this).exec();
 }
 
 void MainWindow::onAbout()
@@ -928,7 +928,7 @@ void MainWindow::closeEvent(QCloseEvent* event)
     QMainWindow::closeEvent(event);
 }
 
-void MainWindow::onUpdateChecked(const updater::UpdateInfo& update_info)
+void MainWindow::onUpdateChecked(const common::UpdateInfo& update_info)
 {
     if (!update_info.isValid() || !update_info.hasUpdate())
         return;
@@ -936,7 +936,7 @@ void MainWindow::onUpdateChecked(const updater::UpdateInfo& update_info)
     base::Version current_version(ASPIA_VERSION_MAJOR, ASPIA_VERSION_MINOR, ASPIA_VERSION_PATCH);
 
     if (update_info.version() > current_version)
-        updater::UpdateDialog(update_info, this).exec();
+        common::UpdateDialog(update_info, this).exec();
 }
 
 void MainWindow::createLanguageMenu(const QString& current_locale)
