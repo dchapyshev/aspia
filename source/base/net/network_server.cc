@@ -22,6 +22,7 @@
 #include "base/message_loop/message_loop.h"
 #include "base/message_loop/message_pump_asio.h"
 #include "base/net/network_channel.h"
+#include "base/strings/unicode.h"
 
 namespace base {
 
@@ -86,13 +87,18 @@ void NetworkServer::Impl::onAccept(const std::error_code& error_code, asio::ip::
         return;
 
     if (error_code)
-        return;
+    {
+        LOG(LS_ERROR) << "Error while accepting connection: "
+                      << base::utf16FromLocal8Bit(error_code.message());
+    }
+    else
+    {
+        std::unique_ptr<NetworkChannel> channel =
+            std::unique_ptr<NetworkChannel>(new NetworkChannel(std::move(socket)));
 
-    std::unique_ptr<NetworkChannel> channel =
-        std::unique_ptr<NetworkChannel>(new NetworkChannel(std::move(socket)));
-
-    // Connection accepted.
-    delegate_->onNewConnection(std::move(channel));
+        // Connection accepted.
+        delegate_->onNewConnection(std::move(channel));
+    }
 
     // Accept next connection.
     doAccept();
