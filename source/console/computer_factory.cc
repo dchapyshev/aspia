@@ -38,7 +38,7 @@ void setDefaultDesktopManageConfig(proto::DesktopConfig* config)
         proto::DISABLE_DESKTOP_WALLPAPER | proto::DISABLE_FONT_SMOOTHING;
 
     config->set_flags(kDefaultFlags);
-    config->set_video_encoding(proto::VideoEncoding::VIDEO_ENCODING_VP8);
+    config->set_video_encoding(proto::VideoEncoding::VIDEO_ENCODING_VP9);
     config->set_compress_ratio(kDefCompressRatio);
     config->set_update_interval(kDefUpdateInterval);
 
@@ -54,7 +54,7 @@ void setDefaultDesktopViewConfig(proto::DesktopConfig* config)
         proto::DISABLE_FONT_SMOOTHING;
 
     config->set_flags(kDefaultFlags);
-    config->set_video_encoding(proto::VideoEncoding::VIDEO_ENCODING_VP8);
+    config->set_video_encoding(proto::VideoEncoding::VIDEO_ENCODING_VP9);
     config->set_compress_ratio(kDefCompressRatio);
     config->set_update_interval(kDefUpdateInterval);
 
