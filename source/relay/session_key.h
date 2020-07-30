@@ -16,30 +16,39 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef PROXY__SETTINGS_H
-#define PROXY__SETTINGS_H
+#ifndef RELAY__SESSION_KEY_H
+#define RELAY__SESSION_KEY_H
 
-#include "base/xml_settings.h"
+#include "base/crypto/key_pair.h"
 
-namespace proxy {
+namespace relay {
 
-class Settings
+class SessionKey
 {
 public:
-    Settings();
-    ~Settings();
+    SessionKey();
+    SessionKey(SessionKey&& other) noexcept;
+    SessionKey& operator=(SessionKey&& other) noexcept;
+    ~SessionKey();
 
-    uint16_t controllerPort() const;
-    uint16_t peerPort() const;
-    size_t maxControllerCount() const;
-    size_t maxPeerCount() const;
-    base::ByteArray controllerPublicKey() const;
-    base::ByteArray proxyPrivateKey() const;
+    static SessionKey create();
+
+    bool isValid() const;
+
+    base::ByteArray privateKey() const;
+    base::ByteArray publicKey() const;
+    base::ByteArray sessionKey(std::string_view peer_public_key) const;
+    base::ByteArray iv() const;
 
 private:
-    base::XmlSettings impl_;
+    SessionKey(base::KeyPair&& key_pair, base::ByteArray&& iv);
+
+    base::KeyPair key_pair_;
+    base::ByteArray iv_;
+
+    DISALLOW_COPY_AND_ASSIGN(SessionKey);
 };
 
-} // namespace proxy
+} // namespace relay
 
-#endif // PROXY__SETTINGS_H
+#endif // RELAY__SESSION_KEY_H

@@ -16,13 +16,13 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef PROXY__PENDING_SESSION_H
-#define PROXY__PENDING_SESSION_H
+#ifndef RELAY__PENDING_SESSION_H
+#define RELAY__PENDING_SESSION_H
 
 #include "base/waitable_timer.h"
 #include "base/memory/byte_array.h"
 #include "proto/proxy.pb.h"
-#include "proxy/peer_id.h"
+#include "relay/peer_id.h"
 
 #include <asio/ip/tcp.hpp>
 
@@ -32,7 +32,7 @@ namespace base {
 class TaskRunner;
 } // namespace base
 
-namespace proxy {
+namespace relay {
 
 class PendingSession
 {
@@ -91,6 +91,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(PendingSession);
 };
 
-} // namespace proxy
+} // namespace relay
 
-#endif // PROXY__PENDING_SESSION_H
+#endif // RELAY__PENDING_SESSION_H

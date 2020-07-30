@@ -16,12 +16,12 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "proxy/settings.h"
+#include "relay/settings.h"
 
-namespace proxy {
+namespace relay {
 
 Settings::Settings()
-    : impl_(base::XmlSettings::Scope::SYSTEM, "aspia", "proxy")
+    : impl_(base::XmlSettings::Scope::SYSTEM, "aspia", "relay")
 {
     // Nothing
 }
@@ -58,4 +58,4 @@ base::ByteArray Settings::proxyPrivateKey() const
     return base::fromHex(impl_.get<std::string>("ProxyPrivateKey"));
 }
 
-} // namespace proxy
+} // namespace relay

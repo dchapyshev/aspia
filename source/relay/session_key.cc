@@ -16,12 +16,12 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "proxy/session_key.h"
+#include "relay/session_key.h"
 
 #include "base/crypto/generic_hash.h"
 #include "base/crypto/random.h"
 
-namespace proxy {
+namespace relay {
 
 SessionKey::SessionKey() = default;
 
@@ -95,4 +95,4 @@ base::ByteArray SessionKey::iv() const
     return iv_;
 }
 
-} // namespace proxy
+} // namespace relay

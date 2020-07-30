@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "proxy/session_manager.h"
+#include "relay/session_manager.h"
 
 #include "base/logging.h"
 #include "base/task_runner.h"
@@ -24,11 +24,11 @@
 #include "base/message_loop/message_pump_asio.h"
 #include "base/crypto/key_pair.h"
 #include "base/crypto/message_decryptor_openssl.h"
-#include "proxy/peer_id.h"
+#include "relay/peer_id.h"
 
 #include <optional>
 
-namespace proxy {
+namespace relay {
 
 namespace {
 
@@ -188,4 +188,4 @@ void SessionManager::removeSession(Session* session)
     task_runner_->deleteSoon(removeSessionT(&active_sessions_, session));
 }
 
-} // namespace proxy
+} // namespace relay

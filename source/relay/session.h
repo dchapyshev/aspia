@@ -16,14 +16,14 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef PROXY__SESSION_H
-#define PROXY__SESSION_H
+#ifndef RELAY__SESSION_H
+#define RELAY__SESSION_H
 
 #include "base/macros_magic.h"
 
 #include <asio/ip/tcp.hpp>
 
-namespace proxy {
+namespace relay {
 
 class Session
 {
@@ -63,6 +63,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(Session);
 };
 
-} // namespace proxy
+} // namespace relay
 
-#endif // PROXY__SESSION_H
+#endif // RELAY__SESSION_H

@@ -16,9 +16,9 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "proxy/shared_pool.h"
+#include "relay/shared_pool.h"
 
-namespace proxy {
+namespace relay {
 
 namespace {
 
@@ -150,4 +150,4 @@ const SessionKey& SharedPool::key(uint32_t key_id) const
     return pool_->key(key_id);
 }
 
-} // namespace proxy
+} // namespace relay

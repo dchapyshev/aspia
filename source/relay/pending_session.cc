@@ -16,13 +16,13 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "proxy/pending_session.h"
+#include "relay/pending_session.h"
 
 #include "base/endian.h"
 
 #include <asio/read.hpp>
 
-namespace proxy {
+namespace relay {
 
 namespace {
 
@@ -143,4 +143,4 @@ void PendingSession::onMessage()
         delegate_->onPendingSessionReady(this, message);
 }
 
-} // namespace proxy
+} // namespace relay

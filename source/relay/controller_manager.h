@@ -16,18 +16,18 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef PROXY__CONTROLLER_MANAGER_H
-#define PROXY__CONTROLLER_MANAGER_H
+#ifndef RELAY__CONTROLLER_MANAGER_H
+#define RELAY__CONTROLLER_MANAGER_H
 
 #include "base/memory/byte_array.h"
 #include "base/net/network_server.h"
-#include "proxy/controller.h"
+#include "relay/controller.h"
 
 namespace base {
 class TaskRunner;
 } // namespace base
 
-namespace proxy {
+namespace relay {
 
 class SessionManager;
 class SharedPool;
@@ -62,6 +62,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(ControllerManager);
 };
 
-} // namespace proxy
+} // namespace relay
 
-#endif // PROXY__CONTROLLER_MANAGER_H
+#endif // RELAY__CONTROLLER_MANAGER_H

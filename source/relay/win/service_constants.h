@@ -16,16 +16,16 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef PROXY__WIN__SERVICE_CONSTANTS_H
-#define PROXY__WIN__SERVICE_CONSTANTS_H
+#ifndef RELAY__WIN__SERVICE_CONSTANTS_H
+#define RELAY__WIN__SERVICE_CONSTANTS_H
 
-namespace proxy {
+namespace relay {
 
 extern const char16_t kServiceFileName[];
 extern const char16_t kServiceName[];
 extern const char16_t kServiceDisplayName[];
 extern const char16_t kServiceDescription[];
 
-} // namespace proxy
+} // namespace relay
 
-#endif // PROXY__WIN__SERVICE_CONSTANTS_H
+#endif // RELAY__WIN__SERVICE_CONSTANTS_H

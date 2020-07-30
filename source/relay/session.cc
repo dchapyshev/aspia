@@ -16,11 +16,11 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "proxy/session.h"
+#include "relay/session.h"
 
 #include <asio/write.hpp>
 
-namespace proxy {
+namespace relay {
 
 Session::Session(std::pair<asio::ip::tcp::socket, asio::ip::tcp::socket>&& sockets)
     : socket_{ std::move(sockets.first), std::move(sockets.second) }
@@ -113,4 +113,4 @@ void Session::onErrorOccurred()
     terminate();
 }
 
-} // namespace proxy
+} // namespace relay

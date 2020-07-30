@@ -16,35 +16,30 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef PROXY__SHARED_POOL_H
-#define PROXY__SHARED_POOL_H
+#ifndef RELAY__SETTINGS_H
+#define RELAY__SETTINGS_H
 
-#include "proxy/session_key.h"
+#include "base/xml_settings.h"
 
-namespace proxy {
+namespace relay {
 
-class SharedPool
+class Settings
 {
 public:
-    SharedPool();
-    ~SharedPool();
+    Settings();
+    ~Settings();
 
-    std::unique_ptr<SharedPool> share();
-
-    uint32_t addKey(uint32_t controller_id, SessionKey&& session_key);
-    void removeKey(uint32_t key_id);
-    void removeKeysForController(uint32_t controller_id);
-    const SessionKey& key(uint32_t key_id) const;
+    uint16_t controllerPort() const;
+    uint16_t peerPort() const;
+    size_t maxControllerCount() const;
+    size_t maxPeerCount() const;
+    base::ByteArray controllerPublicKey() const;
+    base::ByteArray proxyPrivateKey() const;
 
 private:
-    class Pool;
-    explicit SharedPool(std::shared_ptr<Pool> pool);
-
-    std::shared_ptr<Pool> pool_;
-
-    DISALLOW_COPY_AND_ASSIGN(SharedPool);
+    base::XmlSettings impl_;
 };
 
-} // namespace proxy
+} // namespace relay
 
-#endif // PROXY__SHARED_POOL_H
+#endif // RELAY__SETTINGS_H

@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "proxy/controller_manager.h"
+#include "relay/controller_manager.h"
 
 #include "base/crc32.h"
 #include "base/task_runner.h"
@@ -24,11 +24,11 @@
 #include "base/crypto/message_decryptor_openssl.h"
 #include "base/crypto/message_encryptor_openssl.h"
 #include "base/crypto/key_pair.h"
-#include "proxy/session_manager.h"
-#include "proxy/settings.h"
-#include "proxy/shared_pool.h"
+#include "relay/session_manager.h"
+#include "relay/settings.h"
+#include "relay/shared_pool.h"
 
-namespace proxy {
+namespace relay {
 
 namespace {
 
@@ -129,4 +129,4 @@ void ControllerManager::onControllerFinished(Controller* controller)
     }
 }
 
-} // namespace proxy
+} // namespace relay

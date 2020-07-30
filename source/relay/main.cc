@@ -20,8 +20,8 @@
 #include "base/logging.h"
 #include "base/files/base_paths.h"
 #include "base/win/service_controller.h"
-#include "proxy/win/service.h"
-#include "proxy/win/service_constants.h"
+#include "relay/win/service.h"
+#include "relay/win/service_constants.h"
 
 #if defined(USE_TBB)
 #include <tbb/tbbmalloc_proxy.h>
@@ -55,7 +55,7 @@ void shutdownLogging()
 void startService()
 {
     base::win::ServiceController controller =
-        base::win::ServiceController::open(proxy::kServiceName);
+        base::win::ServiceController::open(relay::kServiceName);
     if (!controller.isValid())
     {
         std::cout << "Failed to access the service. Not enough rights or service not installed."
@@ -77,7 +77,7 @@ void startService()
 void stopService()
 {
     base::win::ServiceController controller =
-        base::win::ServiceController::open(proxy::kServiceName);
+        base::win::ServiceController::open(relay::kServiceName);
     if (!controller.isValid())
     {
         std::cout << "Failed to access the service. Not enough rights or service not installed."
@@ -107,14 +107,14 @@ void installService()
     else
     {
         base::win::ServiceController controller = base::win::ServiceController::install(
-            proxy::kServiceName, proxy::kServiceDisplayName, file_path);
+            relay::kServiceName, relay::kServiceDisplayName, file_path);
         if (!controller.isValid())
         {
             std::cout << "Failed to install the service." << std::endl;
         }
         else
         {
-            controller.setDescription(proxy::kServiceDescription);
+            controller.setDescription(relay::kServiceDescription);
             std::cout << "The service has been successfully installed." << std::endl;
         }
     }
@@ -122,12 +122,12 @@ void installService()
 
 void removeService()
 {
-    if (base::win::ServiceController::isRunning(proxy::kServiceName))
+    if (base::win::ServiceController::isRunning(relay::kServiceName))
     {
         stopService();
     }
 
-    if (!base::win::ServiceController::remove(proxy::kServiceName))
+    if (!base::win::ServiceController::remove(relay::kServiceName))
     {
         std::cout << "Failed to remove the service." << std::endl;
     }
@@ -139,7 +139,7 @@ void removeService()
 
 void showHelp()
 {
-    std::cout << "aspia_proxy [switch]" << std::endl
+    std::cout << "aspia_relay [switch]" << std::endl
         << "Available switches:" << std::endl
         << '\t' << "--install" << '\t' << "Install service" << std::endl
         << '\t' << "--remove"  << '\t' << "Remove service"  << std::endl
@@ -177,7 +177,7 @@ int wmain()
     }
     else
     {
-        proxy::Service().exec();
+        relay::Service().exec();
     }
 
     shutdownLogging();

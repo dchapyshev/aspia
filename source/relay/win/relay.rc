@@ -16,17 +16,13 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef PROXY__ID_PAIR_H
-#define PROXY__ID_PAIR_H
+#include <Windows.h>
 
-#include <cstdint>
-#include <utility>
+LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 
-namespace proxy {
+1 RT_MANIFEST "relay.manifest"
 
-using PeerId = uint64_t;
-using PeerIdPair = std::pair<PeerId, PeerId>;
+#define ASPIA_ORIGINAL_FILE_NAME "aspia_relay.exe"
+#define ASPIA_FILE_DESCRIPTION "Aspia Relay Service"
 
-} // namespace proxy
-
-#endif // PROXY__ID_PAIR_H
+#include "build/version.rc"

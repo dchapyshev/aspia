@@ -16,33 +16,16 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef PROXY__WIN__SERVICE_H
-#define PROXY__WIN__SERVICE_H
+#include "relay/win/service_constants.h"
 
-#include "base/win/service.h"
+namespace relay {
 
-namespace proxy {
+const char16_t kServiceFileName[] = u"aspia_relay.exe";
 
-class ControllerManager;
+const char16_t kServiceName[] = u"aspia-relay";
 
-class Service : public base::win::Service
-{
-public:
-    Service();
-    ~Service();
+const char16_t kServiceDisplayName[] = u"Aspia Relay Service";
 
-protected:
-    // base::win::Service implementation.
-    void onStart() override;
-    void onStop() override;
-    void onSessionEvent(base::win::SessionStatus event, base::SessionId session_id) override;
+const char16_t kServiceDescription[] = u"Proxies user traffic to bypass NAT.";
 
-private:
-    std::unique_ptr<ControllerManager> controller_manager_;
-
-    DISALLOW_COPY_AND_ASSIGN(Service);
-};
-
-} // namespace proxy
-
-#endif // PROXY__WIN__SERVICE_H
+} // namespace relay

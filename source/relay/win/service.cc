@@ -16,16 +16,36 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "proxy/win/service_constants.h"
+#include "relay/win/service.h"
 
-namespace proxy {
+#include "relay/controller_manager.h"
+#include "relay/win/service_constants.h"
 
-const char16_t kServiceFileName[] = u"aspia_proxy.exe";
+namespace relay {
 
-const char16_t kServiceName[] = u"aspia-proxy";
+Service::Service()
+    : base::win::Service(kServiceName, base::MessageLoop::Type::ASIO)
+{
+    // Nothing
+}
 
-const char16_t kServiceDisplayName[] = u"Aspia Proxy Service";
+Service::~Service() = default;
 
-const char16_t kServiceDescription[] = u"Proxies user traffic to bypass NAT.";
+void Service::onStart()
+{
+    controller_manager_ = std::make_unique<ControllerManager>(taskRunner());
+    controller_manager_->start();
+}
 
-} // namespace proxy
+void Service::onStop()
+{
+    controller_manager_.reset();
+}
+
+void Service::onSessionEvent(
+    base::win::SessionStatus /* event */, base::SessionId /* session_id */)
+{
+    // Nothing
+}
+
+} // namespace relay

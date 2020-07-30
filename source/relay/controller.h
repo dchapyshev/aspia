@@ -16,14 +16,14 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef PROXY__CONTROLLER_H
-#define PROXY__CONTROLLER_H
+#ifndef RELAY__CONTROLLER_H
+#define RELAY__CONTROLLER_H
 
 #include "base/net/network_channel.h"
 #include "proto/proxy.pb.h"
-#include "proxy/shared_pool.h"
+#include "relay/shared_pool.h"
 
-namespace proxy {
+namespace relay {
 
 class Controller : public base::NetworkChannel::Listener
 {
@@ -48,7 +48,7 @@ public:
     uint32_t id() const { return controller_id_; }
 
 protected:
-    // net::Channel::Listener implementation.
+    // base::NetworkChannel::Listener implementation.
     void onConnected() override;
     void onDisconnected(base::NetworkChannel::ErrorCode error_code) override;
     void onMessageReceived(const base::ByteArray& buffer) override;
@@ -68,6 +68,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(Controller);
 };
 
-} // namespace proxy
+} // namespace relay
 
-#endif // PROXY__CONTROLLER_H
+#endif // RELAY__CONTROLLER_H

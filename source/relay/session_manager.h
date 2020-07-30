@@ -16,18 +16,18 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef PROXY__SESSION_MANAGER_H
-#define PROXY__SESSION_MANAGER_H
+#ifndef RELAY__SESSION_MANAGER_H
+#define RELAY__SESSION_MANAGER_H
 
-#include "proxy/pending_session.h"
-#include "proxy/session.h"
-#include "proxy/shared_pool.h"
+#include "relay/pending_session.h"
+#include "relay/session.h"
+#include "relay/shared_pool.h"
 
 namespace base {
 class TaskRunner;
 } // namespace base
 
-namespace proxy {
+namespace relay {
 
 class SessionManager
     : public PendingSession::Delegate,
@@ -64,6 +64,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(SessionManager);
 };
 
-} // namespace proxy
+} // namespace relay
 
-#endif // PROXY__SESSION_MANAGER_H
+#endif // RELAY__SESSION_MANAGER_H

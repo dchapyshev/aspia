@@ -16,36 +16,33 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "proxy/win/service.h"
+#ifndef RELAY__WIN__SERVICE_H
+#define RELAY__WIN__SERVICE_H
 
-#include "proxy/controller_manager.h"
-#include "proxy/win/service_constants.h"
+#include "base/win/service.h"
 
-namespace proxy {
+namespace relay {
 
-Service::Service()
-    : base::win::Service(kServiceName, base::MessageLoop::Type::ASIO)
+class ControllerManager;
+
+class Service : public base::win::Service
 {
-    // Nothing
-}
+public:
+    Service();
+    ~Service();
 
-Service::~Service() = default;
+protected:
+    // base::win::Service implementation.
+    void onStart() override;
+    void onStop() override;
+    void onSessionEvent(base::win::SessionStatus event, base::SessionId session_id) override;
 
-void Service::onStart()
-{
-    controller_manager_ = std::make_unique<ControllerManager>(taskRunner());
-    controller_manager_->start();
-}
+private:
+    std::unique_ptr<ControllerManager> controller_manager_;
 
-void Service::onStop()
-{
-    controller_manager_.reset();
-}
+    DISALLOW_COPY_AND_ASSIGN(Service);
+};
 
-void Service::onSessionEvent(
-    base::win::SessionStatus /* event */, base::SessionId /* session_id */)
-{
-    // Nothing
-}
+} // namespace relay
 
-} // namespace proxy
+#endif // RELAY__WIN__SERVICE_H

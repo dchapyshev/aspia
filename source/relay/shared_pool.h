@@ -16,39 +16,35 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef PROXY__SESSION_KEY_H
-#define PROXY__SESSION_KEY_H
+#ifndef RELAY__SHARED_POOL_H
+#define RELAY__SHARED_POOL_H
 
-#include "base/crypto/key_pair.h"
+#include "relay/session_key.h"
 
-namespace proxy {
+namespace relay {
 
-class SessionKey
+class SharedPool
 {
 public:
-    SessionKey();
-    SessionKey(SessionKey&& other) noexcept;
-    SessionKey& operator=(SessionKey&& other) noexcept;
-    ~SessionKey();
+    SharedPool();
+    ~SharedPool();
 
-    static SessionKey create();
+    std::unique_ptr<SharedPool> share();
 
-    bool isValid() const;
-
-    base::ByteArray privateKey() const;
-    base::ByteArray publicKey() const;
-    base::ByteArray sessionKey(std::string_view peer_public_key) const;
-    base::ByteArray iv() const;
+    uint32_t addKey(uint32_t controller_id, SessionKey&& session_key);
+    void removeKey(uint32_t key_id);
+    void removeKeysForController(uint32_t controller_id);
+    const SessionKey& key(uint32_t key_id) const;
 
 private:
-    SessionKey(base::KeyPair&& key_pair, base::ByteArray&& iv);
+    class Pool;
+    explicit SharedPool(std::shared_ptr<Pool> pool);
 
-    base::KeyPair key_pair_;
-    base::ByteArray iv_;
+    std::shared_ptr<Pool> pool_;
 
-    DISALLOW_COPY_AND_ASSIGN(SessionKey);
+    DISALLOW_COPY_AND_ASSIGN(SharedPool);
 };
 
-} // namespace proxy
+} // namespace relay
 
-#endif // PROXY__SESSION_KEY_H
+#endif // RELAY__SHARED_POOL_H

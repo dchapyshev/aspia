@@ -16,11 +16,11 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "proxy/controller.h"
+#include "relay/controller.h"
 
 #include "base/logging.h"
 
-namespace proxy {
+namespace relay {
 
 Controller::Controller(uint32_t controller_id,
                        std::unique_ptr<SharedPool> shared_pool,
@@ -99,4 +99,4 @@ void Controller::onMessageWritten(size_t pending)
     // Nothing
 }
 
-} // namespace proxy
+} // namespace relay

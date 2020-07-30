@@ -18,7 +18,7 @@
 
 include(tbb)
 
-list(APPEND SOURCE_PROXY
+list(APPEND SOURCE_RELAY
     controller.cc
     controller.h
     controller_manager.cc
@@ -38,23 +38,23 @@ list(APPEND SOURCE_PROXY
     shared_pool.cc
     shared_pool.h)
 
-list(APPEND SOURCE_PROXY_WIN
+list(APPEND SOURCE_RELAY_WIN
     win/service.cc
     win/service.h
     win/service_constants.cc
     win/service_constants.h)
 
-source_group("" FILES ${SOURCE_PROXY})
-source_group(win FILES ${SOURCE_PROXY_WIN})
+source_group("" FILES ${SOURCE_RELAY})
+source_group(win FILES ${SOURCE_RELAY_WIN})
 
-add_executable(aspia_proxy ${SOURCE_PROXY} ${SOURCE_PROXY_WIN} win/proxy.rc)
-set_target_properties(aspia_proxy PROPERTIES LINK_FLAGS "/MANIFEST:NO")
-target_link_libraries(aspia_proxy
+add_executable(aspia_relay ${SOURCE_RELAY} ${SOURCE_RELAY_WIN} win/relay.rc)
+set_target_properties(aspia_relay PROPERTIES LINK_FLAGS "/MANIFEST:NO")
+target_link_libraries(aspia_relay
     aspia_base
     aspia_proto
     crypt32
     ${THIRD_PARTY_LIBS})
 
 if (USE_TBB)
-    add_tbb(aspia_proxy ${ASPIA_THIRD_PARTY_DIR}/tbb)
+    add_tbb(aspia_relay ${ASPIA_THIRD_PARTY_DIR}/tbb)
 endif()
