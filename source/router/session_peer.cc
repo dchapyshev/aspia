@@ -19,7 +19,10 @@
 #include "router/session_peer.h"
 
 #include "base/logging.h"
+#include "base/crypto/generic_hash.h"
+#include "base/crypto/random.h"
 #include "base/net/network_channel.h"
+#include "router/database.h"
 
 namespace router {
 
@@ -37,32 +40,76 @@ SessionPeer::~SessionPeer() = default;
 
 void SessionPeer::onMessageReceived(const base::ByteArray& buffer)
 {
-    proto::PeerToRouter message;
+    proto::PeerToRouter incoming_message;
 
-    if (!base::parse(buffer, &message))
+    if (!base::parse(buffer, &incoming_message))
     {
         LOG(LS_ERROR) << "Could not read message from peer";
         return;
     }
 
-    if (message.has_peer_id_request())
+    if (incoming_message.has_peer_id_request())
     {
-        LOG(LS_INFO) << "PEER ID REQUEST";
-    }
-    else if (message.has_connection_request())
-    {
-        LOG(LS_INFO) << "CONNECTION REQUEST";
-    }
-    else if (message.has_connection_candidate())
-    {
-        LOG(LS_INFO) << "CONNECTION CANDIDATE";
+        if (peer_id_ != peer::kInvalidPeerId)
+        {
+            LOG(LS_ERROR) << "Peer ID already assigned";
+            return;
+        }
+
+        base::ByteArray keyHash;
+        base::ByteArray key;
+
+        const proto::PeerIdRequest& peer_id_request = incoming_message.peer_id_request();
+        if (peer_id_request.type() == proto::PeerIdRequest::NEW_ID)
+        {
+            // Generate new key.
+            key = base::Random::byteArray(1024);
+        }
+        else if (peer_id_request.type() == proto::PeerIdRequest::EXISTING_ID)
+        {
+            // Using existing key.
+            key = base::fromStdString(peer_id_request.key());
+        }
+        else
+        {
+            LOG(LS_ERROR) << "Unknown request type: " << peer_id_request.type();
+            return;
+        }
+
+        keyHash = base::GenericHash::hash(base::GenericHash::Type::BLAKE2b512, key);
+        peer_id_ = database_->peerId(keyHash);
+
+        if (peer_id_ == peer::kInvalidPeerId)
+        {
+            LOG(LS_ERROR) << "Failed to get peer ID";
+            return;
+        }
+
+        proto::RouterToPeer outgoing_message;
+        outgoing_message.mutable_peer_id_response()->set_peer_id(peer_id_);
+        send(base::serialize(outgoing_message));
     }
     else
     {
-        LOG(LS_WARNING) << "Unhandled message from peer";
-    }
+        if (peer_id_ == peer::kInvalidPeerId)
+        {
+            LOG(LS_ERROR) << "Request could not be processed (peer ID not assigned yet)";
+            return;
+        }
 
-    // TODO
+        if (incoming_message.has_connection_request())
+        {
+            LOG(LS_INFO) << "CONNECTION REQUEST";
+        }
+        else if (incoming_message.has_connection_candidate())
+        {
+            LOG(LS_INFO) << "CONNECTION CANDIDATE";
+        }
+        else
+        {
+            LOG(LS_WARNING) << "Unhandled message from peer";
+        }
+    }
 }
 
 void SessionPeer::onMessageWritten(size_t pending)

@@ -19,10 +19,18 @@
 #include "peer/peer_controller.h"
 
 #include "base/logging.h"
+#include "proto/router.pb.h"
 
 namespace peer {
 
-PeerController::PeerController()
+namespace {
+
+const std::chrono::seconds kReconnectTimeout{ 10 };
+
+} // namespace
+
+PeerController::PeerController(std::shared_ptr<base::TaskRunner> task_runner)
+    : reconnect_timer_(std::move(task_runner))
 {
     // TODO
 }
@@ -43,7 +51,6 @@ void PeerController::start(const RouterInfo& router_info, Delegate* delegate)
         return;
     }
 
-    current_router_ = 0;
     connectToRouter();
 }
 
@@ -54,26 +61,107 @@ void PeerController::connectTo(peer::PeerId peer_id)
 
 void PeerController::onConnected()
 {
-    // TODO
+    LOG(LS_INFO) << "Connection to the router is established";
+    delegate_->onRouterConnected();
+
+    LOG(LS_INFO) << "Receiving peer ID...";
+
+    proto::PeerToRouter message;
+    proto::PeerIdRequest* peer_id_request = message.mutable_peer_id_request();
+
+    if (router_info_.peer_key.empty())
+    {
+        peer_id_request->set_type(proto::PeerIdRequest::NEW_ID);
+    }
+    else
+    {
+        peer_id_request->set_type(proto::PeerIdRequest::EXISTING_ID);
+        peer_id_request->set_key(base::toStdString(router_info_.peer_key));
+    }
+
+    channel_->send(base::serialize(message));
 }
 
 void PeerController::onDisconnected(base::NetworkChannel::ErrorCode error_code)
 {
-    // TODO
+    LOG(LS_INFO) << "Connection to the router is lost ("
+                 << base::NetworkChannel::errorToString(error_code) << ")";
+
+    delegate_->onRouterDisconnected(error_code);
+    peer_id_ = kInvalidPeerId;
+
+    LOG(LS_INFO) << "Reconnect after " << kReconnectTimeout.count() << " seconds";
+    reconnect_timer_.start(kReconnectTimeout, [this]()
+    {
+        connectToRouter();
+    });
 }
 
 void PeerController::onMessageReceived(const base::ByteArray& buffer)
 {
-    // TODO
+    proto::RouterToPeer message;
+
+    if (!base::parse(buffer, &message))
+    {
+        LOG(LS_ERROR) << "Invalid message from router";
+        return;
+    }
+
+    if (message.has_peer_id_response())
+    {
+        if (peer_id_ != kInvalidPeerId)
+        {
+            LOG(LS_ERROR) << "Peer ID already assigned";
+            return;
+        }
+
+        const proto::PeerIdResponse& peer_id_response = message.peer_id_response();
+        if (peer_id_response.peer_id() == kInvalidPeerId)
+        {
+            LOG(LS_ERROR) << "Invalid peer ID received";
+            return;
+        }
+
+        LOG(LS_INFO) << "Peer ID received: " << peer_id_response.peer_id();
+        peer_id_ = peer_id_response.peer_id();
+        delegate_->onPeerIdAssigned(peer_id_);
+    }
+    else
+    {
+        if (peer_id_ == kInvalidPeerId)
+        {
+            LOG(LS_ERROR) << "Request could not be processed (peer ID not received yet)";
+            return;
+        }
+
+        if (message.has_connection_request())
+        {
+            LOG(LS_INFO) << "CONNECTION REQUEST";
+        }
+        else if (message.has_connection_response())
+        {
+            LOG(LS_INFO) << "CONNECTION RESPONSE";
+        }
+        else if (message.has_connection_offer())
+        {
+            LOG(LS_INFO) << "CONNECTION OFFER";
+        }
+        else
+        {
+            LOG(LS_WARNING) << "Unhandled message from router";
+        }
+    }
 }
 
 void PeerController::onMessageWritten(size_t /* pending */)
 {
-    // TODO
+    // Nothing
 }
 
 void PeerController::connectToRouter()
 {
+    LOG(LS_INFO) << "Connecting to router...";
+
     channel_ = std::make_unique<base::NetworkChannel>();
     channel_->connect(router_info_.address, router_info_.port);
 }

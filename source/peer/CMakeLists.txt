@@ -21,6 +21,7 @@ list(APPEND SOURCE_PEER
     client_authenticator.h
     peer_controller.cc
     peer_controller.h
+    peer_id.cc
     peer_id.h
     server_authenticator.cc
     server_authenticator.h

@@ -27,6 +27,8 @@ namespace peer {
 using PeerId = uint64_t;
 using PeerIdPair = std::pair<PeerId, PeerId>;
 
+extern const PeerId kInvalidPeerId;
+
 } // namespace peer
 
 #endif // PEER__ID_PAIR_H

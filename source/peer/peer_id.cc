@@ -16,25 +16,10 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ROUTER__DATABASE_H
-#define ROUTER__DATABASE_H
-
 #include "peer/peer_id.h"
-#include "peer/user.h"
 
-namespace router {
+namespace peer {
 
-class Database
-{
-public:
-    virtual ~Database() = default;
+const PeerId kInvalidPeerId = 0;
 
-    virtual peer::UserList userList() const = 0;
-    virtual bool addUser(const peer::User& user) = 0;
-    virtual bool removeUser(int64_t entry_id) = 0;
-    virtual peer::PeerId peerId(const base::ByteArray& keyHash) const = 0;
-};
-
-} // namespace router
-
-#endif // ROUTER__DATABASE_H
+} // namespace peer

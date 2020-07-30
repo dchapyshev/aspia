@@ -21,6 +21,7 @@
 
 #include "proto/router.pb.h"
 #include "router/session.h"
+#include "peer/peer_id.h"
 
 namespace router {
 
@@ -39,6 +40,7 @@ protected:
 
 private:
     const proto::RouterSession session_type_;
+    peer::PeerId peer_id_ = peer::kInvalidPeerId;
     std::shared_ptr<Database> database_;
 
     DISALLOW_COPY_AND_ASSIGN(SessionPeer);

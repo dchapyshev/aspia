@@ -383,7 +383,7 @@ bool DatabaseSqlite::removeUser(int64_t entry_id)
     return true;
 }
 
-uint64_t DatabaseSqlite::peerId(std::string_view key) const
+peer::PeerId DatabaseSqlite::peerId(const base::ByteArray& keyHash) const
 {
     NOTIMPLEMENTED();
     return 0;

@@ -45,7 +45,15 @@ message EndPoint
 
 message PeerIdRequest
 {
-    bytes key = 1;
+    enum Type
+    {
+        UNKNOWN     = 0;
+        NEW_ID      = 1;
+        EXISTING_ID = 2;
+    }
+
+    Type type = 1;
+    bytes key = 2;
 }
 
 message PeerIdResponse

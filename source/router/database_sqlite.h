@@ -39,7 +39,7 @@ public:
     peer::UserList userList() const override;
     bool addUser(const peer::User& user) override;
     bool removeUser(int64_t entry_id) override;
-    uint64_t peerId(std::string_view key) const override;
+    peer::PeerId peerId(const base::ByteArray& keyHash) const override;
 
 private:
     explicit DatabaseSqlite(sqlite3* db);

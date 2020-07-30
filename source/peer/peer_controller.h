@@ -20,18 +20,16 @@
 #define PEER__PEER_CONTROLLER_H
 
 #include "base/macros_magic.h"
+#include "base/waitable_timer.h"
 #include "base/net/network_channel.h"
 #include "peer/peer_id.h"
-
-#include <memory>
-#include <string>
 
 namespace peer {
 
 class PeerController : public base::NetworkChannel::Listener
 {
 public:
-    PeerController();
+    explicit PeerController(std::shared_ptr<base::TaskRunner> task_runner);
     ~PeerController();
 
     struct RouterInfo
@@ -41,6 +39,7 @@ public:
         base::ByteArray public_key;
         std::u16string username;
         std::u16string password;
+        base::ByteArray peer_key;
     };
 
     class Delegate
@@ -49,7 +48,8 @@ public:
         virtual ~Delegate() = default;
 
         virtual void onRouterConnected() = 0;
-        virtual void onRouterDisconnected() = 0;
+        virtual void onRouterDisconnected(base::NetworkChannel::ErrorCode error_code) = 0;
+        virtual void onPeerIdAssigned(PeerId peer_id) = 0;
         virtual void onPeerConnected(std::unique_ptr<base::NetworkChannel> channel) = 0;
     };
 
@@ -57,7 +57,7 @@ public:
     void connectTo(peer::PeerId peer_id);
 
 protected:
-    // NetworkChannel::Listener implementation.
+    // base::NetworkChannel::Listener implementation.
     void onConnected() override;
     void onDisconnected(base::NetworkChannel::ErrorCode error_code) override;
     void onMessageReceived(const base::ByteArray& buffer) override;
@@ -66,11 +66,12 @@ protected:
 private:
     void connectToRouter();
 
+    base::WaitableTimer reconnect_timer_;
     RouterInfo router_info_;
     Delegate* delegate_ = nullptr;
 
-    size_t current_router_ = 0;
     std::unique_ptr<base::NetworkChannel> channel_;
+    PeerId peer_id_ = kInvalidPeerId;
 
     DISALLOW_COPY_AND_ASSIGN(PeerController);
 };
