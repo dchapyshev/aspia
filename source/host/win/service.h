@@ -21,10 +21,6 @@
 
 #include "base/win/service.h"
 
-namespace base::win {
-class ScopedCOMInitializer;
-} // namespace base::win
-
 namespace host {
 
 class Server;
@@ -42,7 +38,6 @@ protected:
     void onSessionEvent(base::win::SessionStatus status, base::SessionId session_id) override;
 
 private:
-    std::unique_ptr<base::win::ScopedCOMInitializer> com_initializer_;
     std::unique_ptr<Server> server_;
 
     DISALLOW_COPY_AND_ASSIGN(Service);

@@ -19,13 +19,42 @@
 #include "base/win/service.h"
 
 #include "base/logging.h"
+#include "base/crypto/scoped_crypto_initializer.h"
 #include "base/message_loop/message_loop_task_runner.h"
 #include "base/strings/string_util.h"
 #include "base/threading/simple_thread.h"
+#include "base/win/scoped_com_initializer.h"
+#include "base/win/security_helpers.h"
+
+#include <sddl.h>
 
 namespace base::win {
 
 namespace {
+
+// Concatenates ACE type, permissions and sid given as SDDL strings into an ACE
+// definition in SDDL form.
+#define SDDL_ACE(type, permissions, sid) L"(" type L";;" permissions L";;;" sid L")"
+
+// Text representation of COM_RIGHTS_EXECUTE and COM_RIGHTS_EXECUTE_LOCAL
+// permission bits that is used in the SDDL definition below.
+#define SDDL_COM_EXECUTE_LOCAL L"0x3"
+
+// Security descriptor allowing local processes running under SYSTEM or
+// LocalService accounts to call COM methods exposed by the daemon.
+const wchar_t kComProcessSd[] =
+    SDDL_OWNER L":" SDDL_LOCAL_SYSTEM
+    SDDL_GROUP L":" SDDL_LOCAL_SYSTEM
+    SDDL_DACL L":"
+    SDDL_ACE(SDDL_ACCESS_ALLOWED, SDDL_COM_EXECUTE_LOCAL, SDDL_LOCAL_SYSTEM)
+    SDDL_ACE(SDDL_ACCESS_ALLOWED, SDDL_COM_EXECUTE_LOCAL, SDDL_LOCAL_SERVICE);
+
+// Appended to |kComProcessSd| to specify that only callers running at medium
+// or higher integrity level are allowed to call COM methods exposed by the
+// daemon.
+const wchar_t kComProcessMandatoryLabel[] =
+    SDDL_SACL L":"
+    SDDL_ACE(SDDL_MANDATORY_LABEL, SDDL_NO_EXECUTE_UP, SDDL_ML_MEDIUM);
 
 class ServiceThread : public SimpleThread
 {
@@ -279,6 +308,16 @@ Service::~Service() = default;
 
 void Service::exec()
 {
+    std::unique_ptr<ScopedCryptoInitializer> crypto_initializer =
+        std::make_unique<ScopedCryptoInitializer>();
+    CHECK(crypto_initializer->isSucceeded());
+
+    std::unique_ptr<ScopedCOMInitializer> com_initializer =
+        std::make_unique<ScopedCOMInitializer>();
+    CHECK(com_initializer->isSucceeded());
+
+    initializeComSecurity(kComProcessSd, kComProcessMandatoryLabel, false);
+
     message_loop_ = std::make_unique<MessageLoop>(type_);
     task_runner_ = message_loop_->taskRunner();
 

@@ -56,7 +56,6 @@ void SessionPeer::onMessageReceived(const base::ByteArray& buffer)
             return;
         }
 
-        base::ByteArray keyHash;
         base::ByteArray key;
 
         const proto::PeerIdRequest& peer_id_request = incoming_message.peer_id_request();
@@ -76,7 +75,7 @@ void SessionPeer::onMessageReceived(const base::ByteArray& buffer)
             return;
         }
 
-        keyHash = base::GenericHash::hash(base::GenericHash::Type::BLAKE2b512, key);
+        base::ByteArray keyHash = base::GenericHash::hash(base::GenericHash::Type::BLAKE2b512, key);
         peer_id_ = database_->peerId(keyHash);
 
         if (peer_id_ == peer::kInvalidPeerId)
