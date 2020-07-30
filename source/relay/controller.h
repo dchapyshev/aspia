@@ -20,7 +20,7 @@
 #define RELAY__CONTROLLER_H
 
 #include "base/net/network_channel.h"
-#include "proto/proxy.pb.h"
+#include "proto/relay.pb.h"
 #include "relay/shared_pool.h"
 
 namespace relay {

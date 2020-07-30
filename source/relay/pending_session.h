@@ -22,7 +22,7 @@
 #include "base/waitable_timer.h"
 #include "base/memory/byte_array.h"
 #include "peer/peer_id.h"
-#include "proto/proxy.pb.h"
+#include "proto/relay.pb.h"
 
 #include <asio/ip/tcp.hpp>
 

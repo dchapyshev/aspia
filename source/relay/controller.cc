@@ -72,7 +72,7 @@ void Controller::onMessageReceived(const base::ByteArray& buffer)
     outgoing_message_.Clear();
 
     // Add the requested number of keys to the pool.
-    for (int i = 0; i < incoming_message_.key_pool_request().pool_size(); ++i)
+    for (uint32_t i = 0; i < incoming_message_.key_pool_request().pool_size(); ++i)
     {
         SessionKey session_key = SessionKey::create();
         if (!session_key.isValid())

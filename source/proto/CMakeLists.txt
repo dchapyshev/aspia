@@ -25,7 +25,7 @@ list(APPEND SOURCE_PROTO
     file_transfer.proto
     key_exchange.proto
     host_internal.proto
-    proxy.proto
+    relay.proto
     router.proto
     system_info.proto)
 
