@@ -107,6 +107,7 @@ std::filesystem::path loggingDir()
 {
     std::filesystem::path path;
 
+#if defined(OS_WIN)
     if (base::win::isProcessElevated())
     {
         if (!base::BasePaths::commonAppData(&path))
@@ -118,7 +119,11 @@ std::filesystem::path loggingDir()
             return std::filesystem::path();
     }
 
-    path.append("aspia/logs");
+    path.append("Aspia/Logs");
+#else
+#error Not implemented
+#endif
+
     return path;
 }
 

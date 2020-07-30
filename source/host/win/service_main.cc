@@ -32,8 +32,7 @@ void initLogging()
 
     if (!base::BasePaths::commonAppData(&path))
         return;
-
-    path.append("aspia/logs");
+    path.append("Aspia/Logs");
 
     base::LoggingSettings settings;
     settings.destination = base::LOG_TO_FILE;

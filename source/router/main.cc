@@ -19,9 +19,12 @@
 #include "base/command_line.h"
 #include "base/logging.h"
 #include "base/files/base_paths.h"
+
+#if defined(OS_WIN)
 #include "base/win/service_controller.h"
 #include "router/win/service.h"
 #include "router/win/service_constants.h"
+#endif // defined(OS_WIN)
 
 #if defined(USE_TBB)
 #include <tbb/tbbmalloc_proxy.h>
@@ -35,10 +38,13 @@ void initLogging()
 {
     std::filesystem::path path;
 
+#if defined(OS_WIN)
     if (!base::BasePaths::commonAppData(&path))
         return;
-
-    path.append("aspia/logs");
+    path.append("Aspia/Logs");
+#else
+#error Not implemented
+#endif
 
     base::LoggingSettings settings;
     settings.destination = base::LOG_TO_FILE;
