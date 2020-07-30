@@ -21,6 +21,7 @@
 
 #include "base/macros_magic.h"
 #include "base/net/network_channel.h"
+#include "peer/peer_id.h"
 
 #include <memory>
 #include <string>
@@ -53,7 +54,7 @@ public:
     };
 
     void start(const RouterInfo& router_info, Delegate* delegate);
-    void connectTo(uint64_t peer_id);
+    void connectTo(peer::PeerId peer_id);
 
 protected:
     // NetworkChannel::Listener implementation.

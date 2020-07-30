@@ -24,7 +24,6 @@ list(APPEND SOURCE_RELAY
     controller_manager.cc
     controller_manager.h
     main.cc
-    peer_id.h
     pending_session.cc
     pending_session.h
     session.cc

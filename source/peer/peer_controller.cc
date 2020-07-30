@@ -47,7 +47,7 @@ void PeerController::start(const RouterInfo& router_info, Delegate* delegate)
     connectToRouter();
 }
 
-void PeerController::connectTo(uint64_t peer_id)
+void PeerController::connectTo(peer::PeerId peer_id)
 {
     // TODO
 }

@@ -16,17 +16,17 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef RELAY__ID_PAIR_H
-#define RELAY__ID_PAIR_H
+#ifndef PEER__ID_PAIR_H
+#define PEER__ID_PAIR_H
 
 #include <cstdint>
 #include <utility>
 
-namespace relay {
+namespace peer {
 
 using PeerId = uint64_t;
 using PeerIdPair = std::pair<PeerId, PeerId>;
 
-} // namespace relay
+} // namespace peer
 
-#endif // RELAY__ID_PAIR_H
+#endif // PEER__ID_PAIR_H

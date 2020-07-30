@@ -64,7 +64,7 @@ void PendingSession::stop()
     socket_.close(ignored_code);
 }
 
-void PendingSession::setIdentify(const PeerIdPair& id_pair, uint32_t key_id)
+void PendingSession::setIdentify(const peer::PeerIdPair& id_pair, uint32_t key_id)
 {
     id_pair_ = id_pair;
     key_id_ = key_id;

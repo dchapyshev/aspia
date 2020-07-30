@@ -24,7 +24,7 @@
 #include "base/message_loop/message_pump_asio.h"
 #include "base/crypto/key_pair.h"
 #include "base/crypto/message_decryptor_openssl.h"
-#include "relay/peer_id.h"
+#include "peer/peer_id.h"
 
 #include <optional>
 
@@ -33,7 +33,7 @@ namespace relay {
 namespace {
 
 // Decrypts an encrypted pair of peer identifiers using key |session_key|.
-std::optional<PeerIdPair> decryptIdPair(
+std::optional<peer::PeerIdPair> decryptIdPair(
     const proto::PeerToProxy& message, const SessionKey& session_key)
 {
     std::unique_ptr<base::MessageDecryptor> decryptor =
@@ -115,7 +115,7 @@ void SessionManager::onPendingSessionReady(
     if (session_key.isValid())
     {
         // Decrypt the identifiers of peers.
-        std::optional<PeerIdPair> id_pair = decryptIdPair(message, session_key);
+        std::optional<peer::PeerIdPair> id_pair = decryptIdPair(message, session_key);
         if (id_pair.has_value())
         {
             // Save the identifiers of peers and the identifier of their shared key.

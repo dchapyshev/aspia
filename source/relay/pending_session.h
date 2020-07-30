@@ -21,8 +21,8 @@
 
 #include "base/waitable_timer.h"
 #include "base/memory/byte_array.h"
+#include "peer/peer_id.h"
 #include "proto/proxy.pb.h"
-#include "relay/peer_id.h"
 
 #include <asio/ip/tcp.hpp>
 
@@ -64,7 +64,7 @@ public:
     void stop();
 
     // Sets session credentials.
-    void setIdentify(const PeerIdPair& id_pair, uint32_t key_id);
+    void setIdentify(const peer::PeerIdPair& id_pair, uint32_t key_id);
 
     // Returns true if the other session is a pair and false otherwise.
     bool isPeerFor(const PendingSession& other) const;
@@ -85,7 +85,7 @@ private:
     uint32_t buffer_size_ = 0;
     std::array<uint8_t, 8192> buffer_;
 
-    std::optional<PeerIdPair> id_pair_;
+    std::optional<peer::PeerIdPair> id_pair_;
     uint32_t key_id_ = -1;
 
     DISALLOW_COPY_AND_ASSIGN(PendingSession);
