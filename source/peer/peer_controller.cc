@@ -32,12 +32,12 @@ PeerController::~PeerController()
     // TODO
 }
 
-void PeerController::start(const RouterList& router_list, Delegate* delegate)
+void PeerController::start(const RouterInfo& router_info, Delegate* delegate)
 {
-    router_list_ = router_list;
+    router_info_ = router_info;
     delegate_ = delegate;
 
-    if (router_list_.empty() || !delegate_)
+    if (!delegate_)
     {
         LOG(LS_ERROR) << "Invalid parameters";
         return;
@@ -74,10 +74,8 @@ void PeerController::onMessageWritten(size_t /* pending */)
 
 void PeerController::connectToRouter()
 {
-    const Router& current = router_list_[current_router_];
-
     channel_ = std::make_unique<base::NetworkChannel>();
-    channel_->connect(current.address, current.port);
+    channel_->connect(router_info_.address, router_info_.port);
 }
 
 } // namespace base

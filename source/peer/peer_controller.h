@@ -33,7 +33,7 @@ public:
     PeerController();
     ~PeerController();
 
-    struct Router
+    struct RouterInfo
     {
         std::u16string address;
         uint16_t port;
@@ -41,8 +41,6 @@ public:
         std::u16string username;
         std::u16string password;
     };
-
-    using RouterList = std::vector<Router>;
 
     class Delegate
     {
@@ -54,7 +52,7 @@ public:
         virtual void onPeerConnected(std::unique_ptr<base::NetworkChannel> channel) = 0;
     };
 
-    void start(const RouterList& router_list, Delegate* delegate);
+    void start(const RouterInfo& router_info, Delegate* delegate);
     void connectTo(uint64_t peer_id);
 
 protected:
@@ -67,7 +65,7 @@ protected:
 private:
     void connectToRouter();
 
-    RouterList router_list_;
+    RouterInfo router_info_;
     Delegate* delegate_ = nullptr;
 
     size_t current_router_ = 0;
