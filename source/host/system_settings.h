@@ -43,6 +43,18 @@ public:
     uint16_t tcpPort() const;
     void setTcpPort(uint16_t port);
 
+    std::u16string routerAddress() const;
+    void setRouterAddress(const std::u16string& address);
+
+    uint16_t routerPort() const;
+    void setRouterPort(uint16_t port);
+
+    base::ByteArray routerPublicKey() const;
+    void setRouterPublicKey(const base::ByteArray& key);
+
+    base::ByteArray peerKey() const;
+    void setPeerKey(const base::ByteArray& key);
+
     peer::UserList userList() const;
     void setUserList(const peer::UserList& user_list);
 
