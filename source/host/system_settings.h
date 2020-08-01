@@ -43,6 +43,9 @@ public:
     uint16_t tcpPort() const;
     void setTcpPort(uint16_t port);
 
+    bool isRouterEnabled() const;
+    void setRouterEnabled(bool enable);
+
     std::u16string routerAddress() const;
     void setRouterAddress(const std::u16string& address);
 
@@ -58,8 +61,8 @@ public:
     peer::UserList userList() const;
     void setUserList(const peer::UserList& user_list);
 
-    std::string updateServer() const;
-    void setUpdateServer(const std::string& server);
+    std::u16string updateServer() const;
+    void setUpdateServer(const std::u16string& server);
 
 private:
     base::XmlSettings settings_;

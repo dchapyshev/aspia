@@ -56,6 +56,16 @@ void SystemSettings::setTcpPort(uint16_t port)
     settings_.set<uint16_t>("TcpPort", port);
 }
 
+bool SystemSettings::isRouterEnabled() const
+{
+    return settings_.get<bool>("RouterEnabled", false);
+}
+
+void SystemSettings::setRouterEnabled(bool enable)
+{
+    settings_.set<bool>("RouterEnabled", enable);
+}
+
 std::u16string SystemSettings::routerAddress() const
 {
     return settings_.get<std::u16string>("RouterAddress");
@@ -149,12 +159,12 @@ void SystemSettings::setUserList(const peer::UserList& users)
     settings_.set("SeedKey", users.seedKey());
 }
 
-std::string SystemSettings::updateServer() const
+std::u16string SystemSettings::updateServer() const
 {
-    return settings_.get<std::string>("UpdateServer", DEFAULT_UPDATE_SERVER);
+    return settings_.get<std::u16string>("UpdateServer", DEFAULT_UPDATE_SERVER);
 }
 
-void SystemSettings::setUpdateServer(const std::string& server)
+void SystemSettings::setUpdateServer(const std::u16string& server)
 {
     settings_.set("UpdateServer", server);
 }
