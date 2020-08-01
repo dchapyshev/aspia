@@ -22,6 +22,7 @@
 #include "base/net/network_server.h"
 #include "host/user_session_manager.h"
 #include "host/system_settings.h"
+#include "peer/peer_controller.h"
 #include "peer/server_authenticator_manager.h"
 
 namespace base {
@@ -33,6 +34,7 @@ namespace host {
 
 class Server
     : public base::NetworkServer::Delegate,
+      public peer::PeerController::Delegate,
       public peer::ServerAuthenticatorManager::Delegate,
       public UserSessionManager::Delegate
 {
@@ -47,6 +49,12 @@ protected:
     // net::Server::Delegate implementation.
     void onNewConnection(std::unique_ptr<base::NetworkChannel> channel) override;
 
+    // peer::PeerController::Delegate implementation.
+    void onRouterConnected() override;
+    void onRouterDisconnected(base::NetworkChannel::ErrorCode error_code) override;
+    void onPeerIdAssigned(peer::PeerId peer_id) override;
+    void onPeerConnected(std::unique_ptr<base::NetworkChannel> channel) override;
+
     // net::AuthenticatorManager::Delegate implementation.
     void onNewSession(peer::ServerAuthenticatorManager::SessionInfo&& session_info) override;
 
@@ -54,6 +62,7 @@ protected:
     void onUserListChanged() override;
 
 private:
+    void startAuthentication(std::unique_ptr<base::NetworkChannel> channel);
     void addFirewallRules();
     void deleteFirewallRules();
     void reloadUserList();
@@ -65,6 +74,7 @@ private:
 
     // Accepts incoming network connections.
     std::unique_ptr<base::NetworkServer> server_;
+    std::unique_ptr<peer::PeerController> peer_controller_;
     std::unique_ptr<peer::ServerAuthenticatorManager> authenticator_manager_;
     std::unique_ptr<UserSessionManager> user_session_manager_;
 

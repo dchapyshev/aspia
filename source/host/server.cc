@@ -95,6 +95,18 @@ void Server::start()
     server_ = std::make_unique<base::NetworkServer>();
     server_->start(settings_.tcpPort(), this);
 
+    if (settings_.isRouterEnabled())
+    {
+        peer::PeerController::RouterInfo router_info;
+        router_info.address = settings_.routerAddress();
+        router_info.port = settings_.routerPort();
+        router_info.public_key = settings_.routerPublicKey();
+        router_info.peer_key = settings_.peerKey();
+
+        peer_controller_ = std::make_unique<peer::PeerController>(task_runner_);
+        peer_controller_->start(router_info, this);
+    }
+
     LOG(LS_INFO) << "Host server is started successfully";
 }
 
@@ -106,13 +118,30 @@ void Server::setSessionEvent(base::win::SessionStatus status, base::SessionId se
 
 void Server::onNewConnection(std::unique_ptr<base::NetworkChannel> channel)
 {
-    static const size_t kReadBufferSize = 1 * 1024 * 1024; // 1 Mb.
+    LOG(LS_INFO) << "New DIRECT connection";
+    startAuthentication(std::move(channel));
+}
 
-    channel->setReadBufferSize(kReadBufferSize);
-    channel->setNoDelay(true);
+void Server::onRouterConnected()
+{
+    LOG(LS_INFO) << "ROUTER CONNECTED";
+}
 
-    if (authenticator_manager_)
-        authenticator_manager_->addNewChannel(std::move(channel));
+void Server::onRouterDisconnected(base::NetworkChannel::ErrorCode error_code)
+{
+    LOG(LS_INFO) << "ROUTER DISCONNECTED";
+}
+
+void Server::onPeerIdAssigned(peer::PeerId peer_id)
+{
+    LOG(LS_INFO) << "New peer ID assigned: " << peer_id;
+    user_session_manager_->setPeerId(peer_id);
+}
+
+void Server::onPeerConnected(std::unique_ptr<base::NetworkChannel> channel)
+{
+    LOG(LS_INFO) << "New RELAY connection";
+    startAuthentication(std::move(channel));
 }
 
 void Server::onNewSession(peer::ServerAuthenticatorManager::SessionInfo&& session_info)
@@ -133,6 +162,17 @@ void Server::onNewSession(peer::ServerAuthenticatorManager::SessionInfo&& sessio
 void Server::onUserListChanged()
 {
     reloadUserList();
+}
+
+void Server::startAuthentication(std::unique_ptr<base::NetworkChannel> channel)
+{
+    static const size_t kReadBufferSize = 1 * 1024 * 1024; // 1 Mb.
+
+    channel->setReadBufferSize(kReadBufferSize);
+    channel->setNoDelay(true);
+
+    if (authenticator_manager_)
+        authenticator_manager_->addNewChannel(std::move(channel));
 }
 
 void Server::addFirewallRules()

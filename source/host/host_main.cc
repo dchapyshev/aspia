@@ -120,7 +120,7 @@ int hostMain(int argc, char* argv[])
     else if (command_line.hasSwitch(u"update"))
     {
         common::UpdateDialog dialog(
-            QString::fromStdString(host::SystemSettings().updateServer()), "host");
+            QString::fromStdU16String(host::SystemSettings().updateServer()), "host");
         dialog.show();
         dialog.activateWindow();
 

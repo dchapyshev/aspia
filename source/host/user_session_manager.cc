@@ -223,6 +223,13 @@ void UserSessionManager::setSessionEvent(
     }
 }
 
+void UserSessionManager::setPeerId(peer::PeerId peer_id)
+{
+    // Send an event of each session.
+    for (const auto& session : sessions_)
+        session->setPeerId(peer_id);
+}
+
 void UserSessionManager::addNewSession(std::unique_ptr<ClientSession> client_session)
 {
     LOG(LS_INFO) << "Adding a new client connection (user: " << client_session->userName() << ")";

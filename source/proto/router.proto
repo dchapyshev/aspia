@@ -59,6 +59,7 @@ message PeerIdRequest
 message PeerIdResponse
 {
     fixed64 peer_id = 1;
+    bytes key = 2;
 }
 
 message ConnectionRequest

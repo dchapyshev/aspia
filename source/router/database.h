@@ -33,6 +33,7 @@ public:
     virtual bool addUser(const peer::User& user) = 0;
     virtual bool removeUser(int64_t entry_id) = 0;
     virtual peer::PeerId peerId(const base::ByteArray& keyHash) const = 0;
+    virtual bool addPeer(const base::ByteArray& keyHash) = 0;
 };
 
 } // namespace router

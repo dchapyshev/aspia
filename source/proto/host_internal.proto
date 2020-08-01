@@ -42,7 +42,7 @@ message CredentialsRequest
 message Credentials
 {
     repeated string ip = 1;
-    string id          = 2;
+    fixed64 id         = 2;
     string username    = 3;
     string password    = 4;
 }

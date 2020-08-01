@@ -321,6 +321,7 @@ bool DatabaseSqlite::addUser(const peer::User& user)
     }
 
     std::string username = base::utf8FromUtf16(user.name);
+    bool result = false;
 
     do
     {
@@ -346,12 +347,15 @@ bool DatabaseSqlite::addUser(const peer::User& user)
         if (error_code != SQLITE_OK)
         {
             LOG(LS_ERROR) << "sqlite3_step failed: " << sqlite3_errstr(error_code);
+            break;
         }
+
+        result = true;
     }
     while (false);
 
     sqlite3_finalize(statement);
-    return true;
+    return result;
 }
 
 bool DatabaseSqlite::removeUser(int64_t entry_id)
@@ -366,6 +370,8 @@ bool DatabaseSqlite::removeUser(int64_t entry_id)
         return false;
     }
 
+    bool result = false;
+
     do
     {
         if (!writeInt64(statement, entry_id, 1))
@@ -375,18 +381,101 @@ bool DatabaseSqlite::removeUser(int64_t entry_id)
         if (error_code != SQLITE_OK)
         {
             LOG(LS_ERROR) << "sqlite3_step failed: " << sqlite3_errstr(error_code);
+            break;
         }
+
+        result = true;
     }
     while (false);
 
     sqlite3_finalize(statement);
-    return true;
+    return result;
 }
 
 peer::PeerId DatabaseSqlite::peerId(const base::ByteArray& keyHash) const
 {
-    NOTIMPLEMENTED();
-    return 0;
+    if (keyHash.empty())
+    {
+        LOG(LS_ERROR) << "Invalid parameters";
+        return peer::kInvalidPeerId;
+    }
+
+    const char kQuery[] = "SELECT * FROM peers WHERE key=?";
+
+    sqlite3_stmt* statement;
+    int error_code = sqlite3_prepare(db_, kQuery, std::size(kQuery), &statement, nullptr);
+    if (error_code != SQLITE_OK)
+    {
+        LOG(LS_ERROR) << "sqlite3_prepare failed: " << sqlite3_errstr(error_code);
+        return peer::kInvalidPeerId;
+    }
+
+    peer::PeerId result = peer::kInvalidPeerId;
+
+    do
+    {
+        if (!writeBlob(statement, keyHash, 1))
+            break;
+
+        if (sqlite3_step(statement) != SQLITE_ROW)
+        {
+            LOG(LS_ERROR) << "sqlite3_step failed: " << sqlite3_errstr(error_code);
+            break;
+        }
+
+        std::optional<int64_t> entry_id = readInteger<int64_t>(statement, 0);
+        if (!entry_id.has_value())
+        {
+            LOG(LS_ERROR) << "Failed to get field 'id'";
+            break;
+        }
+
+        result = entry_id.value();
+    }
+    while (false);
+
+    sqlite3_finalize(statement);
+    return result;
+}
+
+bool DatabaseSqlite::addPeer(const base::ByteArray& keyHash)
+{
+    if (keyHash.empty())
+    {
+        LOG(LS_ERROR) << "Invalid parameters";
+        return false;
+    }
+
+    const char kQuery[] = "INSERT INTO peers ('id', 'key') VALUES (NULL, ?)";
+
+    sqlite3_stmt* statement;
+    int error_code = sqlite3_prepare(db_, kQuery, std::size(kQuery), &statement, nullptr);
+    if (error_code != SQLITE_OK)
+    {
+        LOG(LS_ERROR) << "sqlite3_prepare failed: " << sqlite3_errstr(error_code);
+        return false;
+    }
+
+    bool result = false;
+
+    do
+    {
+        if (!writeBlob(statement, keyHash, 1))
+            break;
+
+        error_code = sqlite3_step(statement);
+        if (error_code != SQLITE_OK)
+        {
+            LOG(LS_ERROR) << "sqlite3_step failed: " << sqlite3_errstr(error_code);
+            break;
+        }
+
+        result = true;
+    }
+    while (false);
+
+    sqlite3_finalize(statement);
+    return result;
 }
 
 } // namespace router

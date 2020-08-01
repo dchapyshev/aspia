@@ -24,6 +24,7 @@
 #include "base/ipc/ipc_channel.h"
 #include "host/client_session.h"
 #include "host/desktop_session_manager.h"
+#include "peer/peer_id.h"
 #include "peer/user.h"
 #include "proto/host_internal.pb.h"
 
@@ -73,6 +74,7 @@ public:
 
     void addNewSession(std::unique_ptr<ClientSession> client_session);
     void setSessionEvent(base::win::SessionStatus status, base::SessionId session_id);
+    void setPeerId(peer::PeerId peer_id);
 
 protected:
     // base::IpcChannel::Listener implementation.
@@ -106,6 +108,7 @@ private:
     base::WaitableTimer attach_timer_;
 
     base::SessionId session_id_;
+    peer::PeerId peer_id_ = peer::kInvalidPeerId;
     std::string username_;
     std::string password_;
 

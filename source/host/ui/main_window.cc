@@ -26,6 +26,7 @@
 #include "host/ui/application.h"
 #include "host/ui/config_dialog.h"
 #include "host/ui/notifier_window.h"
+#include "peer/peer_id.h"
 #include "qt_base/qt_logging.h"
 
 #include <QCloseEvent>
@@ -195,12 +196,12 @@ void MainWindow::onCredentialsChanged(const proto::internal::Credentials& creden
         ip += credentials.ip(i);
     }
 
-    bool has_id = !credentials.id().empty();
+    bool has_id = credentials.id() != peer::kInvalidPeerId;
 
     ui.label_icon_id->setEnabled(has_id);
     ui.label_id->setEnabled(has_id);
     ui.edit_id->setEnabled(has_id);
-    ui.edit_id->setText(has_id ? QString::fromStdString(credentials.id()) : tr("Not available"));
+    ui.edit_id->setText(has_id ? QString::number(credentials.id()) : tr("Not available"));
 
     bool has_ip = !ip.empty();
 

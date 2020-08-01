@@ -79,6 +79,22 @@
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Router</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enable the use of a router</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Address:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Public Key:</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MainWindow</name>
@@ -284,6 +300,14 @@
     </message>
     <message>
         <source>The service could not be stopped.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Incorrect router address entered.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Incorrect router public key entered.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

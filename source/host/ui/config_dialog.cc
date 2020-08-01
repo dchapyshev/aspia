@@ -20,6 +20,7 @@
 
 #include "base/logging.h"
 #include "base/files/base_paths.h"
+#include "base/net/address.h"
 #include "base/win/service_controller.h"
 #include "build/build_config.h"
 #include "common/ui/about_dialog.h"
@@ -43,27 +44,53 @@ ConfigDialog::ConfigDialog(QWidget* parent)
 {
     ui.setupUi(this);
 
+    //---------------------------------------------------------------------------------------------
+    // General Tab
+    //---------------------------------------------------------------------------------------------
+
     connect(ui.spinbox_port, QOverload<int>::of(&QSpinBox::valueChanged),
             this, &ConfigDialog::onConfigChanged);
 
-    connect(ui.checkbox_use_custom_server, &QCheckBox::toggled, [this](bool checked)
+    connect(ui.button_service_install_remove, &QPushButton::released,
+            this, &ConfigDialog::onServiceInstallRemove);
+    connect(ui.button_service_start_stop, &QPushButton::released,
+            this, &ConfigDialog::onServiceStartStop);
+
+    connect(ui.button_import, &QPushButton::released, this, &ConfigDialog::onImport);
+    connect(ui.button_export, &QPushButton::released, this, &ConfigDialog::onExport);
+
+    //---------------------------------------------------------------------------------------------
+    // Router Tab
+    //---------------------------------------------------------------------------------------------
+
+    SystemSettings settings;
+    bool is_router_enabled = settings.isRouterEnabled();
+
+    ui.checkbox_enable_router->setChecked(is_router_enabled);
+    ui.edit_router_address->setText(QString::fromStdU16String(settings.routerAddress()));
+    ui.edit_router_public_key->setPlainText(
+        QString::fromStdString(base::toHex(settings.routerPublicKey())));
+
+    ui.label_router_address->setEnabled(is_router_enabled);
+    ui.edit_router_address->setEnabled(is_router_enabled);
+    ui.label_router_public_key->setEnabled(is_router_enabled);
+    ui.edit_router_public_key->setEnabled(is_router_enabled);
+
+    connect(ui.checkbox_enable_router, &QCheckBox::toggled, [this](bool checked)
     {
         setConfigChanged(true);
-
-        ui.edit_update_server->setEnabled(checked);
-
-        if (!checked)
-            ui.edit_update_server->setText(DEFAULT_UPDATE_SERVER);
+        ui.label_router_address->setEnabled(checked);
+        ui.edit_router_address->setEnabled(checked);
+        ui.label_router_public_key->setEnabled(checked);
+        ui.edit_router_public_key->setEnabled(checked);
     });
 
-    connect(ui.edit_update_server, &QLineEdit::textEdited,
-            this, &ConfigDialog::onConfigChanged);
+    connect(ui.edit_router_address, &QLineEdit::textEdited, this, &ConfigDialog::onConfigChanged);
+    connect(ui.edit_router_public_key, &QPlainTextEdit::textChanged, this, &ConfigDialog::onConfigChanged);
 
-    connect(ui.button_check_updates, &QPushButton::released, [this]()
-    {
-        common::UpdateDialog(
-            QString::fromStdString(SystemSettings().updateServer()), "host", this).exec();
-    });
+    //---------------------------------------------------------------------------------------------
+    // Users Tab
+    //---------------------------------------------------------------------------------------------
 
     connect(ui.tree_users, &QTreeWidget::customContextMenuRequested,
             this, &ConfigDialog::onUserContextMenu);
@@ -81,17 +108,34 @@ ConfigDialog::ConfigDialog(QWidget* parent)
     connect(ui.button_modify, &QPushButton::released, this, &ConfigDialog::onModifyUser);
     connect(ui.button_delete, &QPushButton::released, this, &ConfigDialog::onDeleteUser);
 
-    connect(ui.button_service_install_remove, &QPushButton::released,
-            this, &ConfigDialog::onServiceInstallRemove);
-    connect(ui.button_service_start_stop, &QPushButton::released,
-            this, &ConfigDialog::onServiceStartStop);
+    //---------------------------------------------------------------------------------------------
+    // Update Tab
+    //---------------------------------------------------------------------------------------------
 
-    connect(ui.button_import, &QPushButton::released, this, &ConfigDialog::onImport);
-    connect(ui.button_export, &QPushButton::released, this, &ConfigDialog::onExport);
+    connect(ui.checkbox_use_custom_server, &QCheckBox::toggled, [this](bool checked)
+    {
+        setConfigChanged(true);
 
-    connect(ui.button_box, &QDialogButtonBox::clicked,
-            this, &ConfigDialog::onButtonBoxClicked);
+        ui.edit_update_server->setEnabled(checked);
 
+        if (!checked)
+            ui.edit_update_server->setText(QString::fromStdU16String(DEFAULT_UPDATE_SERVER));
+    });
+
+    connect(ui.edit_update_server, &QLineEdit::textEdited,
+            this, &ConfigDialog::onConfigChanged);
+
+    connect(ui.button_check_updates, &QPushButton::released, [this]()
+    {
+        common::UpdateDialog(
+            QString::fromStdU16String(SystemSettings().updateServer()), "host", this).exec();
+    });
+
+    //---------------------------------------------------------------------------------------------
+    // Other
+    //---------------------------------------------------------------------------------------------
+
+    connect(ui.button_box, &QDialogButtonBox::clicked, this, &ConfigDialog::onButtonBoxClicked);
     reloadAll();
 }
 
@@ -306,6 +350,40 @@ void ConfigDialog::onButtonBoxClicked(QAbstractButton* button)
             }
         }
 
+        settings.setRouterEnabled(ui.checkbox_enable_router->isChecked());
+        if (ui.checkbox_enable_router->isChecked())
+        {
+            base::Address router_address =
+                base::Address::fromString(ui.edit_router_address->text().toStdU16String());
+            if (!router_address.isValid())
+            {
+                QMessageBox::warning(this,
+                                     tr("Warning"),
+                                     tr("Incorrect router address entered."),
+                                     QMessageBox::Ok);
+                ui.edit_router_address->setFocus();
+                ui.edit_router_address->selectAll();
+                return;
+            }
+
+            base::ByteArray router_public_key =
+                base::fromHex(ui.edit_router_public_key->toPlainText().toStdString());
+            if (router_public_key.size() != 32)
+            {
+                QMessageBox::warning(this,
+                                     tr("Warning"),
+                                     tr("Incorrect router public key entered."),
+                                     QMessageBox::Ok);
+                ui.edit_router_public_key->setFocus();
+                ui.edit_router_public_key->selectAll();
+                return;
+            }
+
+            settings.setRouterAddress(router_address.host());
+            settings.setRouterPort(router_address.port());
+            settings.setRouterPublicKey(router_public_key);
+        }
+
         peer::UserList user_list;
 
         for (int i = 0; i < ui.tree_users->topLevelItemCount(); ++i)
@@ -319,7 +397,7 @@ void ConfigDialog::onButtonBoxClicked(QAbstractButton* button)
         // Update the parameters.
         settings.setTcpPort(ui.spinbox_port->value());
         settings.setUserList(user_list);
-        settings.setUpdateServer(ui.edit_update_server->text().toStdString());
+        settings.setUpdateServer(ui.edit_update_server->text().toStdU16String());
 
         setConfigChanged(false);
 
@@ -376,7 +454,7 @@ void ConfigDialog::reloadAll()
 
     ui.spinbox_port->setValue(settings.tcpPort());
     ui.checkbox_use_custom_server->setChecked(settings.updateServer() != DEFAULT_UPDATE_SERVER);
-    ui.edit_update_server->setText(QString::fromStdString(settings.updateServer()));
+    ui.edit_update_server->setText(QString::fromStdU16String(settings.updateServer()));
 
     ui.edit_update_server->setEnabled(ui.checkbox_use_custom_server->isChecked());
 

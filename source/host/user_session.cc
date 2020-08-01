@@ -195,6 +195,12 @@ void UserSession::setSessionEvent(base::win::SessionStatus status, base::Session
     }
 }
 
+void UserSession::setPeerId(peer::PeerId peer_id)
+{
+    peer_id_ = peer_id;
+    sendCredentials();
+}
+
 void UserSession::onDisconnected()
 {
     onSessionDettached(FROM_HERE);
@@ -442,6 +448,7 @@ void UserSession::sendCredentials()
     outgoing_message_.Clear();
 
     proto::internal::Credentials* credentials = outgoing_message_.mutable_credentials();
+    credentials->set_id(peer_id_);
     credentials->set_username(username_);
     credentials->set_password(password_);
 

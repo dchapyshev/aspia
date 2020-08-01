@@ -46,6 +46,7 @@ public:
 
     bool start(Delegate* delegate);
     void setSessionEvent(base::win::SessionStatus status, base::SessionId session_id);
+    void setPeerId(peer::PeerId peer_id);
     void addNewSession(std::unique_ptr<ClientSession> client_session);
     peer::UserList userList() const;
 
