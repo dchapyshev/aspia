@@ -64,7 +64,7 @@ void SessionPeer::onMessageReceived(const base::ByteArray& buffer)
         if (peer_id_request.type() == proto::PeerIdRequest::NEW_ID)
         {
             // Generate new key.
-            std::string key = base::Random::string(1024);
+            std::string key = base::Random::string(512);
 
             // Calculate hash for key.
             keyHash = base::GenericHash::hash(base::GenericHash::Type::BLAKE2b512, key);
