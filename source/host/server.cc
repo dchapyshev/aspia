@@ -132,9 +132,13 @@ void Server::onRouterDisconnected(base::NetworkChannel::ErrorCode error_code)
     LOG(LS_INFO) << "ROUTER DISCONNECTED";
 }
 
-void Server::onPeerIdAssigned(peer::PeerId peer_id)
+void Server::onPeerIdAssigned(peer::PeerId peer_id, const base::ByteArray& peer_key)
 {
     LOG(LS_INFO) << "New peer ID assigned: " << peer_id;
+
+    if (!peer_key.empty())
+        settings_.setPeerKey(peer_key);
+
     user_session_manager_->setPeerId(peer_id);
 }
 

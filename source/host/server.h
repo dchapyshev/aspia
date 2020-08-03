@@ -52,7 +52,7 @@ protected:
     // peer::PeerController::Delegate implementation.
     void onRouterConnected() override;
     void onRouterDisconnected(base::NetworkChannel::ErrorCode error_code) override;
-    void onPeerIdAssigned(peer::PeerId peer_id) override;
+    void onPeerIdAssigned(peer::PeerId peer_id, const base::ByteArray& peer_key) override;
     void onPeerConnected(std::unique_ptr<base::NetworkChannel> channel) override;
 
     // net::AuthenticatorManager::Delegate implementation.
