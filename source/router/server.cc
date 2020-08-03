@@ -91,6 +91,8 @@ bool Server::start()
         std::make_unique<peer::ServerAuthenticatorManager>(task_runner_, this);
     authenticator_manager_->setPrivateKey(private_key);
     authenticator_manager_->setUserList(std::make_shared<peer::UserList>(database_->userList()));
+    authenticator_manager_->setAnonymousAccess(
+        peer::ServerAuthenticator::AnonymousAccess::ENABLE, proto::ROUTER_SESSION_ANONIMOUS_PEER);
 
     server_ = std::make_unique<base::NetworkServer>();
     server_->start(port, this);
