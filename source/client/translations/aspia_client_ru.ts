@@ -962,12 +962,12 @@
         <translation>Список введенных адресов будет очищен. Продолжить?</translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.cc" line="164"/>
+        <location filename="../ui/client_dialog.cc" line="165"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.cc" line="165"/>
+        <location filename="../ui/client_dialog.cc" line="166"/>
         <source>An invalid computer address was entered.</source>
         <translation>Введен некорректный адрес компьютера.</translation>
     </message>

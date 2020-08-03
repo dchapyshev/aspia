@@ -786,12 +786,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.cc" line="164"/>
+        <location filename="../ui/client_dialog.cc" line="165"/>
         <source>Warning</source>
         <translation type="unfinished">Warnung</translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.cc" line="165"/>
+        <location filename="../ui/client_dialog.cc" line="166"/>
         <source>An invalid computer address was entered.</source>
         <translation type="unfinished"></translation>
     </message>

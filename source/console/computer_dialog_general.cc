@@ -59,7 +59,7 @@ ComputerDialogGeneral::ComputerDialogGeneral(int type, QWidget* parent)
 void ComputerDialogGeneral::restoreSettings(
     const QString& parent_name, const proto::address_book::Computer& computer)
 {
-    base::Address address;
+    base::Address address(DEFAULT_HOST_TCP_PORT);
     address.setHost(base::utf16FromUtf8(computer.address()));
     address.setPort(computer.port());
 
@@ -115,7 +115,8 @@ bool ComputerDialogGeneral::saveSettings(proto::address_book::Computer* computer
         return false;
     }
 
-    base::Address address = base::Address::fromString(ui.edit_address->text().toStdU16String());
+    base::Address address = base::Address::fromString(
+        ui.edit_address->text().toStdU16String(), DEFAULT_HOST_TCP_PORT);
     if (!address.isValid())
     {
         showError(tr("An invalid computer address was entered."));

@@ -909,12 +909,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_dialog_general.cc" line="121"/>
+        <location filename="../computer_dialog_general.cc" line="122"/>
         <source>An invalid computer address was entered.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_dialog_general.cc" line="155"/>
+        <location filename="../computer_dialog_general.cc" line="156"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>

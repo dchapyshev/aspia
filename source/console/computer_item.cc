@@ -37,7 +37,7 @@ ComputerItem::ComputerItem(proto::address_book::Computer* computer,
 
 void ComputerItem::updateItem()
 {
-    base::Address address;
+    base::Address address(DEFAULT_HOST_TCP_PORT);
     address.setHost(base::utf16FromUtf8(computer_->address()));
     address.setPort(computer_->port());
 

@@ -157,7 +157,8 @@ void ClientDialog::connectButtonPressed()
     QComboBox* combo_address = ui->combo_address;
     QString current_address = combo_address->currentText();
 
-    base::Address address = base::Address::fromString(current_address.toStdU16String());
+    base::Address address = base::Address::fromString(
+        current_address.toStdU16String(), DEFAULT_HOST_TCP_PORT);
     if (!address.isValid())
     {
         QMessageBox::warning(this,

@@ -353,8 +353,8 @@ void ConfigDialog::onButtonBoxClicked(QAbstractButton* button)
         settings.setRouterEnabled(ui.checkbox_enable_router->isChecked());
         if (ui.checkbox_enable_router->isChecked())
         {
-            base::Address router_address =
-                base::Address::fromString(ui.edit_router_address->text().toStdU16String());
+            base::Address router_address = base::Address::fromString(
+                ui.edit_router_address->text().toStdU16String(), DEFAULT_ROUTER_TCP_PORT);
             if (!router_address.isValid())
             {
                 QMessageBox::warning(this,
