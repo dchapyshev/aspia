@@ -487,13 +487,13 @@ void NetworkChannel::onWrite(const std::error_code& error_code, size_t bytes_tra
     // Delete the sent message from the queue.
     write_queue_.pop();
 
+    // If the queue is not empty, then we send the following message.
+    bool schedule_write = !write_queue_.empty() || proxy_->reloadWriteQueue(&write_queue_);
+
     onMessageWritten();
 
-    // If the queue is not empty, then we send the following message.
-    if (write_queue_.empty() && !proxy_->reloadWriteQueue(&write_queue_))
-        return;
-
-    doWrite();
+    if (schedule_write)
+        doWrite();
 }
 
 void NetworkChannel::doReadSize()
