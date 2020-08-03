@@ -213,8 +213,15 @@ void ClientAuthenticator::onMessageReceived(const base::ByteArray& buffer)
         {
             if (readServerHello(buffer))
             {
-                state_ = State::SEND_IDENTIFY;
-                sendIdentify();
+                if (identify_ == proto::IDENTIFY_ANONYMOUS)
+                {
+                    state_ = State::READ_SESSION_CHALLENGE;
+                }
+                else
+                {
+                    state_ = State::SEND_IDENTIFY;
+                    sendIdentify();
+                }
             }
         }
         break;
@@ -252,15 +259,22 @@ void ClientAuthenticator::onMessageWritten(size_t /* pending */)
     switch (state_)
     {
         case State::SEND_CLIENT_HELLO:
+        {
+            LOG(LS_INFO) << "Sended: ClientHello";
             state_ = State::READ_SERVER_HELLO;
-            break;
+        }
+        break;
 
         case State::SEND_IDENTIFY:
+        {
+            LOG(LS_INFO) << "Sended: Identify";
             state_ = State::READ_SERVER_KEY_EXCHANGE;
-            break;
+        }
+        break;
 
         case State::SEND_CLIENT_KEY_EXCHANGE:
         {
+            LOG(LS_INFO) << "Sended: ClientKeyExchange";
             state_ = State::READ_SESSION_CHALLENGE;
             onSessionKeyChanged();
         }
@@ -268,6 +282,7 @@ void ClientAuthenticator::onMessageWritten(size_t /* pending */)
 
         case State::SEND_SESSION_RESPONSE:
         {
+            LOG(LS_INFO) << "Sended: SessionResponse";
             state_ = State::FINISHED;
             finished(FROM_HERE, ErrorCode::SUCCESS);
         }
@@ -277,6 +292,8 @@ void ClientAuthenticator::onMessageWritten(size_t /* pending */)
 
 void ClientAuthenticator::onSessionKeyChanged()
 {
+    LOG(LS_INFO) << "Session key changed";
+
     std::unique_ptr<base::MessageEncryptor> encryptor;
     std::unique_ptr<base::MessageDecryptor> decryptor;
 
@@ -367,17 +384,22 @@ void ClientAuthenticator::sendClientHello()
         client_hello.set_iv(base::toStdString(encrypt_iv_));
     }
 
+    LOG(LS_INFO) << "Sending: ClientHello";
     channel_->send(base::serialize(client_hello));
 }
 
 bool ClientAuthenticator::readServerHello(const base::ByteArray& buffer)
 {
+    LOG(LS_INFO) << "Received: ServerHello";
+
     proto::ServerHello server_hello;
     if (!base::parse(buffer, &server_hello))
     {
         finished(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
         return false;
     }
+
+    LOG(LS_INFO) << "Encryption: " << server_hello.encryption();
 
     encryption_ = server_hello.encryption();
     switch (encryption_)
@@ -409,11 +431,15 @@ void ClientAuthenticator::sendIdentify()
 {
     proto::SrpIdentify identify;
     identify.set_username(base::utf8FromUtf16(username_));
+
+    LOG(LS_INFO) << "Sending: Identify";
     channel_->send(base::serialize(identify));
 }
 
 bool ClientAuthenticator::readServerKeyExchange(const base::ByteArray& buffer)
 {
+    LOG(LS_INFO) << "Received: ServerKeyExchange";
+
     proto::SrpServerKeyExchange server_key_exchange;
     if (!base::parse(buffer, &server_key_exchange))
     {
@@ -475,11 +501,14 @@ void ClientAuthenticator::sendClientKeyExchange()
     client_key_exchange.set_a(A_.toStdString());
     client_key_exchange.set_iv(base::toStdString(encrypt_iv_));
 
+    LOG(LS_INFO) << "Sending: ClientKeyExchange";
     channel_->send(base::serialize(client_key_exchange));
 }
 
 bool ClientAuthenticator::readSessionChallenge(const base::ByteArray& buffer)
 {
+    LOG(LS_INFO) << "Received: SessionChallenge";
+
     proto::SessionChallenge challenge;
     if (!base::parse(buffer, &challenge))
     {
@@ -503,6 +532,8 @@ void ClientAuthenticator::sendSessionResponse()
 {
     proto::SessionResponse response;
     response.set_session_type(session_type_);
+
+    LOG(LS_INFO) << "Sending: SessionResponse";
     channel_->send(base::serialize(response));
 }
 
