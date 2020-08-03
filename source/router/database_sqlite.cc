@@ -448,7 +448,7 @@ bool DatabaseSqlite::addPeer(const base::ByteArray& keyHash)
 
     const char kQuery[] = "INSERT INTO peers ('id', 'key') VALUES (NULL, ?)";
 
-    sqlite3_stmt* statement;
+    sqlite3_stmt* statement = nullptr;
     int error_code = sqlite3_prepare(db_, kQuery, std::size(kQuery), &statement, nullptr);
     if (error_code != SQLITE_OK)
     {
@@ -464,9 +464,10 @@ bool DatabaseSqlite::addPeer(const base::ByteArray& keyHash)
             break;
 
         error_code = sqlite3_step(statement);
-        if (error_code != SQLITE_OK)
+        if (error_code != SQLITE_OK && error_code != SQLITE_DONE)
         {
-            LOG(LS_ERROR) << "sqlite3_step failed: " << sqlite3_errstr(error_code);
+            LOG(LS_ERROR) << "sqlite3_step failed: " << sqlite3_errstr(error_code)
+                          << " (" << error_code << ")";
             break;
         }
 
