@@ -228,6 +228,8 @@ void ServerAuthenticator::onMessageWritten(size_t /* pending */)
     {
         case InternalState::SEND_SERVER_HELLO:
         {
+            LOG(LS_INFO) << "Sended: ServerHello";
+
             if (!session_key_.empty())
             {
                 if (!onSessionKeyChanged())
@@ -237,12 +239,17 @@ void ServerAuthenticator::onMessageWritten(size_t /* pending */)
             switch (identify_)
             {
                 case proto::IDENTIFY_SRP:
+                {
                     internal_state_ = InternalState::READ_IDENTIFY;
-                    break;
+                }
+                break;
 
                 case proto::IDENTIFY_ANONYMOUS:
+                {
+                    internal_state_ = InternalState::SEND_SESSION_CHALLENGE;
                     doSessionChallenge();
-                    break;
+                }
+                break;
 
                 default:
                     NOTREACHED();
@@ -252,12 +259,18 @@ void ServerAuthenticator::onMessageWritten(size_t /* pending */)
         break;
 
         case InternalState::SEND_SERVER_KEY_EXCHANGE:
+        {
+            LOG(LS_INFO) << "Sended: ServerKeyExchange";
             internal_state_ = InternalState::READ_CLIENT_KEY_EXCHANGE;
-            break;
+        }
+        break;
 
         case InternalState::SEND_SESSION_CHALLENGE:
+        {
+            LOG(LS_INFO) << "Sended: SessionChallenge";
             internal_state_ = InternalState::READ_SESSION_RESPONSE;
-            break;
+        }
+        break;
 
         default:
             NOTREACHED();
@@ -267,12 +280,17 @@ void ServerAuthenticator::onMessageWritten(size_t /* pending */)
 
 void ServerAuthenticator::onClientHello(const base::ByteArray& buffer)
 {
+    LOG(LS_INFO) << "Received: ClientHello";
+
     proto::ClientHello client_hello;
     if (!base::parse(buffer, &client_hello))
     {
         onFailed(FROM_HERE);
         return;
     }
+
+    LOG(LS_INFO) << "Encryption: " << client_hello.encryption();
+    LOG(LS_INFO) << "Identify: " << client_hello.identify();
 
     if (!(client_hello.encryption() & proto::ENCRYPTION_AES256_GCM) &&
         !(client_hello.encryption() & proto::ENCRYPTION_CHACHA20_POLY1305))
@@ -292,7 +310,7 @@ void ServerAuthenticator::onClientHello(const base::ByteArray& buffer)
         case proto::IDENTIFY_ANONYMOUS:
         {
             // If anonymous method is not allowed.
-            if (anonymous_access_ == AnonymousAccess::ENABLE)
+            if (anonymous_access_ != AnonymousAccess::ENABLE)
             {
                 onFailed(FROM_HERE);
                 return;
@@ -347,11 +365,13 @@ void ServerAuthenticator::onClientHello(const base::ByteArray& buffer)
 
     if ((client_hello.encryption() & proto::ENCRYPTION_AES256_GCM) && base::CPUID::hasAesNi())
     {
+        LOG(LS_INFO) << "Both sides have hardware support AES. Using AES256 GCM";
         // If both sides of the connection support AES, then method AES256 GCM is the fastest option.
         server_hello.set_encryption(proto::ENCRYPTION_AES256_GCM);
     }
     else
     {
+        LOG(LS_INFO) << "Using ChaCha20 Poly1305";
         // Otherwise, we use ChaCha20+Poly1305. This works faster in the absence of hardware
         // support AES.
         server_hello.set_encryption(proto::ENCRYPTION_CHACHA20_POLY1305);
@@ -361,17 +381,22 @@ void ServerAuthenticator::onClientHello(const base::ByteArray& buffer)
     internal_state_ = InternalState::SEND_SERVER_HELLO;
     encryption_ = server_hello.encryption();
 
+    LOG(LS_INFO) << "Sending: ServerHello";
     channel_->send(base::serialize(server_hello));
 }
 
 void ServerAuthenticator::onIdentify(const base::ByteArray& buffer)
 {
+    LOG(LS_INFO) << "Received: Identify";
+
     proto::SrpIdentify identify;
     if (!base::parse(buffer, &identify))
     {
         onFailed(FROM_HERE);
         return;
     }
+
+    LOG(LS_INFO) << "Username:" << identify.username();
 
     user_name_ = base::utf16FromUtf8(identify.username());
     if (user_name_.empty())
@@ -435,11 +460,14 @@ void ServerAuthenticator::onIdentify(const base::ByteArray& buffer)
     server_key_exchange.set_b(B_.toStdString());
     server_key_exchange.set_iv(base::toStdString(encrypt_iv_));
 
+    LOG(LS_INFO) << "Sending: ServerKeyExchange";
     channel_->send(base::serialize(server_key_exchange));
 }
 
 void ServerAuthenticator::onClientKeyExchange(const base::ByteArray& buffer)
 {
+    LOG(LS_INFO) << "Received: ClientKeyExchange";
+
     proto::SrpClientKeyExchange client_key_exchange;
     if (!base::parse(buffer, &client_key_exchange))
     {
@@ -504,11 +532,14 @@ void ServerAuthenticator::doSessionChallenge()
     version->set_minor(ASPIA_VERSION_MINOR);
     version->set_patch(ASPIA_VERSION_PATCH);
 
+    LOG(LS_INFO) << "Sending: SessionChallenge";
     channel_->send(base::serialize(session_challenge));
 }
 
 void ServerAuthenticator::onSessionResponse(const base::ByteArray& buffer)
 {
+    LOG(LS_INFO) << "Received: SessionResponse";
+
     // Stop receiving incoming messages.
     channel_->pause();
     channel_->setListener(nullptr);
@@ -522,6 +553,9 @@ void ServerAuthenticator::onSessionResponse(const base::ByteArray& buffer)
 
     const proto::Version& version = session_response.version();
     peer_version_ = base::Version(version.major(), version.minor(), version.patch());
+
+    LOG(LS_INFO) << "SessionType: " << session_response.session_type();
+    LOG(LS_INFO) << "Version: " << peer_version_;
 
     base::BitSet<uint32_t> session_type = session_response.session_type();
     if (session_type.count() != 1)
@@ -572,6 +606,8 @@ void ServerAuthenticator::onFailed(const base::Location& location)
 
 bool ServerAuthenticator::onSessionKeyChanged()
 {
+    LOG(LS_INFO) << "Session key changed";
+
     std::unique_ptr<base::MessageEncryptor> encryptor;
     std::unique_ptr<base::MessageDecryptor> decryptor;
 
