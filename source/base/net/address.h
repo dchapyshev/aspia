@@ -28,7 +28,7 @@ namespace base {
 class Address
 {
 public:
-    Address() = default;
+    Address(uint16_t default_port);
 
     Address(const Address& other);
     Address& operator=(const Address& other);
@@ -38,7 +38,7 @@ public:
 
     ~Address() = default;
 
-    static Address fromString(std::u16string_view str);
+    static Address fromString(std::u16string_view str, uint16_t default_port);
 
     std::u16string toString() const;
 
@@ -56,9 +56,10 @@ public:
     bool operator!=(const Address& other);
 
 private:
-    Address(std::u16string&& host, uint16_t port);
+    Address(std::u16string&& host, uint16_t port, uint16_t default_port);
 
     std::u16string host_;
+    uint16_t default_port_;
     uint16_t port_ = 0;
 };
 

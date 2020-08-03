@@ -212,16 +212,24 @@ bool parse(std::u16string_view::const_iterator& it,
 
 } // namespace
 
-Address::Address(std::u16string&& host, uint16_t port)
+Address::Address(uint16_t default_port)
+    : default_port_(default_port)
+{
+    // Nothing
+}
+
+Address::Address(std::u16string&& host, uint16_t port, uint16_t default_port)
     : host_(std::move(host)),
-      port_(port)
+      port_(port),
+      default_port_(default_port)
 {
     // Nothing
 }
 
 Address::Address(const Address& other)
     : host_(other.host_),
-      port_(other.port_)
+      port_(other.port_),
+      default_port_(other.default_port_)
 {
     // Nothing
 }
@@ -232,6 +240,7 @@ Address& Address::operator=(const Address& other)
     {
         host_ = other.host_;
         port_ = other.port_;
+        default_port_ = other.default_port_;
     }
 
     return *this;
@@ -239,7 +248,8 @@ Address& Address::operator=(const Address& other)
 
 Address::Address(Address&& other) noexcept
     : host_(std::move(other.host_)),
-      port_(other.port_)
+      port_(other.port_),
+      default_port_(other.default_port_)
 {
     // Nothing
 }
@@ -250,13 +260,14 @@ Address& Address::operator=(Address&& other) noexcept
     {
         host_ = std::move(other.host_);
         port_ = other.port_;
+        default_port_ = other.default_port_;
     }
 
     return *this;
 }
 
 // static
-Address Address::fromString(std::u16string_view str)
+Address Address::fromString(std::u16string_view str, uint16_t default_port)
 {
     auto begin = str.cbegin();
     auto end = str.cend();
@@ -271,13 +282,13 @@ Address Address::fromString(std::u16string_view str)
             uint16_t port;
 
             if (!stringToUShort(parts.port, &port))
-                port = DEFAULT_HOST_TCP_PORT;
+                port = default_port;
 
-            return Address(std::move(parts.host), port);
+            return Address(std::move(parts.host), port, default_port);
         }
     }
 
-    return Address();
+    return Address(default_port);
 }
 
 std::u16string Address::toString() const
@@ -287,7 +298,7 @@ std::u16string Address::toString() const
 
     if (isValidIpV6Address(host_))
     {
-        if (port_ == DEFAULT_HOST_TCP_PORT)
+        if (port_ == default_port_)
         {
             return u"[" + host_ + u"]";
         }
@@ -301,7 +312,7 @@ std::u16string Address::toString() const
         if (!isValidIpV4Address(host_) && !isValidHostName(host_))
             return std::u16string();
 
-        if (port_ == DEFAULT_HOST_TCP_PORT)
+        if (port_ == default_port_)
             return host();
 
         return host_ + u":" + numberToString16(port_);
