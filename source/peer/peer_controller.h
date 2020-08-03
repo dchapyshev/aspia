@@ -26,6 +26,8 @@
 
 namespace peer {
 
+class ClientAuthenticator;
+
 class PeerController : public base::NetworkChannel::Listener
 {
 public:
@@ -49,12 +51,15 @@ public:
 
         virtual void onRouterConnected() = 0;
         virtual void onRouterDisconnected(base::NetworkChannel::ErrorCode error_code) = 0;
-        virtual void onPeerIdAssigned(PeerId peer_id) = 0;
+        virtual void onPeerIdAssigned(PeerId peer_id, const base::ByteArray& peer_key) = 0;
         virtual void onPeerConnected(std::unique_ptr<base::NetworkChannel> channel) = 0;
     };
 
     void start(const RouterInfo& router_info, Delegate* delegate);
     void connectTo(peer::PeerId peer_id);
+
+    const base::ByteArray& peerKey() const { return router_info_.peer_key; }
+    PeerId peerId() const { return peer_id_; }
 
 protected:
     // base::NetworkChannel::Listener implementation.
@@ -65,13 +70,16 @@ protected:
 
 private:
     void connectToRouter();
+    void delayedConnectToRouter();
 
-    base::WaitableTimer reconnect_timer_;
-    RouterInfo router_info_;
     Delegate* delegate_ = nullptr;
 
+    std::shared_ptr<base::TaskRunner> task_runner_;
     std::unique_ptr<base::NetworkChannel> channel_;
+    std::unique_ptr<peer::ClientAuthenticator> authenticator_;
+    base::WaitableTimer reconnect_timer_;
     PeerId peer_id_ = kInvalidPeerId;
+    RouterInfo router_info_;
 
     DISALLOW_COPY_AND_ASSIGN(PeerController);
 };
