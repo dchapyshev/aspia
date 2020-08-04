@@ -186,11 +186,6 @@ std::unique_ptr<base::NetworkChannel> ServerAuthenticator::takeChannel()
     return std::move(channel_);
 }
 
-void ServerAuthenticator::onConnected()
-{
-    NOTREACHED();
-}
-
 void ServerAuthenticator::onDisconnected(base::NetworkChannel::ErrorCode error_code)
 {
     LOG(LS_WARNING) << "Network error: " << base::NetworkChannel::errorToString(error_code);

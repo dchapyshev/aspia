@@ -34,9 +34,7 @@ namespace peer {
 
 class UserList;
 
-class ServerAuthenticator
-    : public Authenticator,
-      public base::NetworkChannel::Listener
+class ServerAuthenticator : public Authenticator
 {
 public:
     explicit ServerAuthenticator(std::shared_ptr<base::TaskRunner> task_runner);
@@ -88,8 +86,7 @@ public:
     [[nodiscard]] std::unique_ptr<base::NetworkChannel> takeChannel();
 
 protected:
-    // Channel::Listener implementation.
-    void onConnected() override;
+    // base::NetworkChannel::Listener implementation.
     void onDisconnected(base::NetworkChannel::ErrorCode error_code) override;
     void onMessageReceived(const base::ByteArray& buffer) override;
     void onMessageWritten(size_t pending) override;

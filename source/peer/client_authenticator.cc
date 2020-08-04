@@ -189,12 +189,6 @@ const char* ClientAuthenticator::errorToString(ClientAuthenticator::ErrorCode er
     }
 }
 
-void ClientAuthenticator::onConnected()
-{
-    // The authenticator receives the channel always in an already connected state.
-    NOTREACHED();
-}
-
 void ClientAuthenticator::onDisconnected(base::NetworkChannel::ErrorCode error_code)
 {
     LOG(LS_INFO) << "Network error: " << base::NetworkChannel::errorToString(error_code);

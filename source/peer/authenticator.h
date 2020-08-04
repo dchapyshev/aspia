@@ -19,16 +19,21 @@
 #ifndef PEER__AUTHENTICATOR_H
 #define PEER__AUTHENTICATOR_H
 
+#include "base/net/network_channel.h"
 #include "proto/key_exchange.pb.h"
 
 namespace peer {
 
-class Authenticator
+class Authenticator : public base::NetworkChannel::Listener
 {
 public:
     virtual ~Authenticator() = default;
 
     static const char* osTypeToString(proto::OsType os_type);
+
+protected:
+    // base::NetworkChannel::Listener implementation.
+    void onConnected() final;
 };
 
 } // namespace peer

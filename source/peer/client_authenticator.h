@@ -21,7 +21,6 @@
 
 #include "base/version.h"
 #include "base/crypto/big_num.h"
-#include "base/net/network_channel.h"
 #include "peer/authenticator.h"
 
 #include <functional>
@@ -34,9 +33,7 @@ class MessageEncryptor;
 
 namespace peer {
 
-class ClientAuthenticator
-    : public Authenticator,
-      public base::NetworkChannel::Listener
+class ClientAuthenticator : public Authenticator
 {
 public:
     ClientAuthenticator();
@@ -82,8 +79,7 @@ public:
     static const char* errorToString(ClientAuthenticator::ErrorCode error_code);
 
 protected:
-    // Channel::Listener implementation.
-    void onConnected() override;
+    // base::NetworkChannel::Listener implementation.
     void onDisconnected(base::NetworkChannel::ErrorCode error_code) override;
     void onMessageReceived(const base::ByteArray& buffer) override;
     void onMessageWritten(size_t pending) override;

@@ -18,6 +18,8 @@
 
 #include "peer/authenticator.h"
 
+#include "base/logging.h"
+
 namespace peer {
 
 // static
@@ -43,6 +45,12 @@ const char* Authenticator::osTypeToString(proto::OsType os_type)
         default:
             return "Unknown";
     }
+}
+
+void Authenticator::onConnected()
+{
+    // The authenticator receives the channel always in an already connected state.
+    NOTREACHED();
 }
 
 } // namespace peer
