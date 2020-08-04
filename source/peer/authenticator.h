@@ -16,36 +16,21 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-syntax = "proto3";
+#ifndef PEER__AUTHENTICATOR_H
+#define PEER__AUTHENTICATOR_H
 
-option optimize_for = LITE_RUNTIME;
+#include "proto/key_exchange.pb.h"
 
-package proto;
+namespace peer {
 
-enum SessionType
+class Authenticator
 {
-    SESSION_TYPE_UNKNOWN        = 0;
-    SESSION_TYPE_DESKTOP_MANAGE = 1;
-    SESSION_TYPE_DESKTOP_VIEW   = 2;
-    SESSION_TYPE_FILE_TRANSFER  = 4;
+public:
+    virtual ~Authenticator() = default;
 
-    // When adding or removing session types, you need to recalculate this value.
-    SESSION_TYPE_ALL            = 7;
-}
+    static const char* osTypeToString(proto::OsType os_type);
+};
 
-message Version
-{
-    uint32 major = 1;
-    uint32 minor = 2;
-    uint32 patch = 3;
-}
+} // namespace peer
 
-enum OsType
-{
-    OS_TYPE_UNKNOWN = 0;
-    OS_TYPE_WINDOWS = 1;
-    OS_TYPE_LINUX   = 2;
-    OS_TYPE_ANDROID = 3;
-    OS_TYPE_OSX     = 4;
-    OS_TYPE_IOS     = 5;
-}
+#endif // PEER__AUTHENTICATOR_H

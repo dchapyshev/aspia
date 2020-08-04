@@ -53,7 +53,9 @@ target_link_libraries(aspia_router
     libcrypto
     libssl
     modp_b64
+    netapi32
     sqlite
+    version
     ${Protobuf_LITE_LIBRARIES})
 
 if (USE_TBB)

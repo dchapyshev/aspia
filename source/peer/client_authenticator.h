@@ -22,7 +22,7 @@
 #include "base/version.h"
 #include "base/crypto/big_num.h"
 #include "base/net/network_channel.h"
-#include "proto/key_exchange.pb.h"
+#include "peer/authenticator.h"
 
 #include <functional>
 
@@ -34,7 +34,9 @@ class MessageEncryptor;
 
 namespace peer {
 
-class ClientAuthenticator : public base::NetworkChannel::Listener
+class ClientAuthenticator
+    : public Authenticator,
+      public base::NetworkChannel::Listener
 {
 public:
     ClientAuthenticator();

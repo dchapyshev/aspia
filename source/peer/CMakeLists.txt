@@ -17,6 +17,8 @@
 #
 
 list(APPEND SOURCE_PEER
+    authenticator.cc
+    authenticator.h
     client_authenticator.cc
     client_authenticator.h
     peer_controller.cc

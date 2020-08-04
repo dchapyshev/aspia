@@ -16,36 +16,33 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-syntax = "proto3";
+#include "peer/authenticator.h"
 
-option optimize_for = LITE_RUNTIME;
+namespace peer {
 
-package proto;
-
-enum SessionType
+// static
+const char* Authenticator::osTypeToString(proto::OsType os_type)
 {
-    SESSION_TYPE_UNKNOWN        = 0;
-    SESSION_TYPE_DESKTOP_MANAGE = 1;
-    SESSION_TYPE_DESKTOP_VIEW   = 2;
-    SESSION_TYPE_FILE_TRANSFER  = 4;
+    switch (os_type)
+    {
+        case proto::OS_TYPE_WINDOWS:
+            return "Windows";
 
-    // When adding or removing session types, you need to recalculate this value.
-    SESSION_TYPE_ALL            = 7;
+        case proto::OS_TYPE_LINUX:
+            return "Linux";
+
+        case proto::OS_TYPE_ANDROID:
+            return "Android";
+
+        case proto::OS_TYPE_OSX:
+            return "OSX";
+
+        case proto::OS_TYPE_IOS:
+            return "IOS";
+
+        default:
+            return "Unknown";
+    }
 }
 
-message Version
-{
-    uint32 major = 1;
-    uint32 minor = 2;
-    uint32 patch = 3;
-}
-
-enum OsType
-{
-    OS_TYPE_UNKNOWN = 0;
-    OS_TYPE_WINDOWS = 1;
-    OS_TYPE_LINUX   = 2;
-    OS_TYPE_ANDROID = 3;
-    OS_TYPE_OSX     = 4;
-    OS_TYPE_IOS     = 5;
-}
+} // namespace peer

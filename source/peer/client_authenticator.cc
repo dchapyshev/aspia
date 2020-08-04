@@ -21,6 +21,7 @@
 #include "base/cpuid.h"
 #include "base/location.h"
 #include "base/logging.h"
+#include "base/sys_info.h"
 #include "base/crypto/message_decryptor_openssl.h"
 #include "base/crypto/message_encryptor_openssl.h"
 #include "base/crypto/generic_hash.h"
@@ -29,6 +30,7 @@
 #include "base/crypto/srp_constants.h"
 #include "base/crypto/srp_math.h"
 #include "base/strings/unicode.h"
+#include "build/version.h"
 
 namespace peer {
 
@@ -525,6 +527,11 @@ bool ClientAuthenticator::readSessionChallenge(const base::ByteArray& buffer)
     const proto::Version& version = challenge.version();
     peer_version_ = base::Version(version.major(), version.minor(), version.patch());
 
+    LOG(LS_INFO) << "Server Version: " << peer_version_;
+    LOG(LS_INFO) << "Server Name: " << challenge.computer_name();
+    LOG(LS_INFO) << "Server OS: " << osTypeToString(challenge.os_type());
+    LOG(LS_INFO) << "Server CPU Cores: " << challenge.cpu_cores();
+
     return true;
 }
 
@@ -532,6 +539,20 @@ void ClientAuthenticator::sendSessionResponse()
 {
     proto::SessionResponse response;
     response.set_session_type(session_type_);
+
+    proto::Version* version = response.mutable_version();
+    version->set_major(ASPIA_VERSION_MAJOR);
+    version->set_minor(ASPIA_VERSION_MINOR);
+    version->set_patch(ASPIA_VERSION_PATCH);
+
+#if defined(OS_WIN)
+    response.set_os_type(proto::OS_TYPE_WINDOWS);
+#else
+#error Not implemented
+#endif
+
+    response.set_computer_name(base::SysInfo::computerName());
+    response.set_cpu_cores(base::SysInfo::processorCores());
 
     LOG(LS_INFO) << "Sending: SessionResponse";
     channel_->send(base::serialize(response));

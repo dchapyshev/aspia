@@ -24,7 +24,7 @@
 #include "base/crypto/big_num.h"
 #include "base/crypto/key_pair.h"
 #include "base/net/network_channel.h"
-#include "proto/key_exchange.pb.h"
+#include "peer/authenticator.h"
 
 namespace base {
 class Location;
@@ -34,7 +34,9 @@ namespace peer {
 
 class UserList;
 
-class ServerAuthenticator : public base::NetworkChannel::Listener
+class ServerAuthenticator
+    : public Authenticator,
+      public base::NetworkChannel::Listener
 {
 public:
     explicit ServerAuthenticator(std::shared_ptr<base::TaskRunner> task_runner);

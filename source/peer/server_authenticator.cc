@@ -22,6 +22,7 @@
 #include "base/cpuid.h"
 #include "base/location.h"
 #include "base/logging.h"
+#include "base/sys_info.h"
 #include "base/crypto/message_decryptor_openssl.h"
 #include "base/crypto/message_encryptor_openssl.h"
 #include "base/crypto/generic_hash.h"
@@ -532,6 +533,15 @@ void ServerAuthenticator::doSessionChallenge()
     version->set_minor(ASPIA_VERSION_MINOR);
     version->set_patch(ASPIA_VERSION_PATCH);
 
+#if defined(OS_WIN)
+    session_challenge.set_os_type(proto::OS_TYPE_WINDOWS);
+#else
+#error Not implemented
+#endif
+
+    session_challenge.set_computer_name(base::SysInfo::computerName());
+    session_challenge.set_cpu_cores(base::SysInfo::processorCores());
+
     LOG(LS_INFO) << "Sending: SessionChallenge";
     channel_->send(base::serialize(session_challenge));
 }
@@ -554,8 +564,11 @@ void ServerAuthenticator::onSessionResponse(const base::ByteArray& buffer)
     const proto::Version& version = session_response.version();
     peer_version_ = base::Version(version.major(), version.minor(), version.patch());
 
-    LOG(LS_INFO) << "SessionType: " << session_response.session_type();
-    LOG(LS_INFO) << "Version: " << peer_version_;
+    LOG(LS_INFO) << "Client Session Type: " << session_response.session_type();
+    LOG(LS_INFO) << "Client Version: " << peer_version_;
+    LOG(LS_INFO) << "Client Name: " << session_response.computer_name();
+    LOG(LS_INFO) << "Client OS: " << osTypeToString(session_response.os_type());
+    LOG(LS_INFO) << "Client CPU Cores: " << session_response.cpu_cores();
 
     base::BitSet<uint32_t> session_type = session_response.session_type();
     if (session_type.count() != 1)
