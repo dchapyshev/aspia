@@ -23,7 +23,7 @@
 
 namespace peer {
 
-class ServerAuthenticatorManager : public ServerAuthenticator::Delegate
+class ServerAuthenticatorManager
 {
 public:
     struct SessionInfo
@@ -66,11 +66,9 @@ public:
     // If authentication fails, the channel will be automatically deleted.
     void addNewChannel(std::unique_ptr<base::NetworkChannel> channel);
 
-protected:
-    // Authenticator::Delegate implementation.
-    void onComplete() override;
-
 private:
+    void onComplete();
+
     std::shared_ptr<base::TaskRunner> task_runner_;
     std::shared_ptr<UserList> user_list_;
     std::vector<std::unique_ptr<ServerAuthenticator>> pending_;

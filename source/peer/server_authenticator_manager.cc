@@ -57,6 +57,7 @@ void ServerAuthenticatorManager::addNewChannel(std::unique_ptr<base::NetworkChan
 
     std::unique_ptr<ServerAuthenticator> authenticator =
         std::make_unique<ServerAuthenticator>(task_runner_);
+    authenticator->setUserList(user_list_);
 
     if (!private_key_.empty())
     {
@@ -77,7 +78,8 @@ void ServerAuthenticatorManager::addNewChannel(std::unique_ptr<base::NetworkChan
     pending_.emplace_back(std::move(authenticator));
 
     // Start the authentication process.
-    pending_.back()->start(std::move(channel), user_list_, this);
+    pending_.back()->start(
+        std::move(channel), std::bind(&ServerAuthenticatorManager::onComplete, this));
 }
 
 void ServerAuthenticatorManager::onComplete()
@@ -88,10 +90,10 @@ void ServerAuthenticatorManager::onComplete()
 
         switch (current->state())
         {
-            case ServerAuthenticator::State::SUCCESS:
-            case ServerAuthenticator::State::FAILED:
+            case Authenticator::State::SUCCESS:
+            case Authenticator::State::FAILED:
             {
-                if (current->state() == ServerAuthenticator::State::SUCCESS)
+                if (current->state() == Authenticator::State::SUCCESS)
                 {
                     SessionInfo session_info;
 
@@ -109,7 +111,7 @@ void ServerAuthenticatorManager::onComplete()
             }
             break;
 
-            case ServerAuthenticator::State::PENDING:
+            case Authenticator::State::PENDING:
                 // Authentication is not yet completed, skip.
                 ++it;
                 break;

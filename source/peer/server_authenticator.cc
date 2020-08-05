@@ -38,88 +38,28 @@ namespace peer {
 
 namespace {
 
-constexpr std::chrono::minutes kTimeout{ 1 };
 constexpr size_t kIvSize = 12;
 
 } // namespace
 
 ServerAuthenticator::ServerAuthenticator(std::shared_ptr<base::TaskRunner> task_runner)
-    : timer_(std::move(task_runner))
+    : Authenticator(std::move(task_runner))
 {
     // Nothing
 }
 
 ServerAuthenticator::~ServerAuthenticator() = default;
 
-void ServerAuthenticator::start(std::unique_ptr<base::NetworkChannel> channel,
-                                std::shared_ptr<UserList> user_list,
-                                Delegate* delegate)
+void ServerAuthenticator::setUserList(std::shared_ptr<UserList> user_list)
 {
-    if (state_ != State::STOPPED)
-    {
-        LOG(LS_ERROR) << "Trying to start an already running authenticator";
-        return;
-    }
-
-    channel_ = std::move(channel);
     user_list_ = std::move(user_list);
-    delegate_ = delegate;
-
-    DCHECK_EQ(internal_state_, InternalState::READ_CLIENT_HELLO);
-    DCHECK(channel_);
     DCHECK(user_list_);
-    DCHECK(delegate_);
-
-    state_ = State::PENDING;
-
-    // We do not allow anonymous access without a private key.
-    if (anonymous_access_ == AnonymousAccess::ENABLE && !key_pair_.isValid())
-    {
-        onFailed(FROM_HERE);
-        return;
-    }
-
-    if (anonymous_access_ == AnonymousAccess::ENABLE)
-    {
-        // When anonymous access is enabled, a private key must be installed.
-        if (!key_pair_.isValid())
-        {
-            onFailed(FROM_HERE);
-            return;
-        }
-
-        // When anonymous access is enabled, there must be at least one session for anonymous access.
-        if (!session_types_)
-        {
-            onFailed(FROM_HERE);
-            return;
-        }
-    }
-    else
-    {
-        // If anonymous access is disabled, then there should not be allowed sessions by default.
-        if (session_types_)
-        {
-            onFailed(FROM_HERE);
-            return;
-        }
-    }
-
-    // If authentication does not complete within the specified time interval, an error will be
-    // raised.
-    timer_.start(kTimeout, std::bind(&ServerAuthenticator::onFailed, this, FROM_HERE));
-
-    channel_->setListener(this);
-    channel_->resume();
-
-    // We are waiting for message ClientHello from the client.
-    LOG(LS_INFO) << "Authentication started for: " << channel_->peerAddress();
 }
 
 bool ServerAuthenticator::setPrivateKey(const base::ByteArray& private_key)
 {
     // The method must be called before calling start().
-    if (state_ != State::STOPPED)
+    if (state() != State::STOPPED)
         return false;
 
     if (private_key.empty())
@@ -149,7 +89,7 @@ bool ServerAuthenticator::setAnonymousAccess(
     AnonymousAccess anonymous_access, uint32_t session_types)
 {
     // The method must be called before calling start().
-    if (state_ != State::STOPPED)
+    if (state() != State::STOPPED)
         return false;
 
     if (anonymous_access == AnonymousAccess::ENABLE)
@@ -178,21 +118,49 @@ bool ServerAuthenticator::setAnonymousAccess(
     return true;
 }
 
-std::unique_ptr<base::NetworkChannel> ServerAuthenticator::takeChannel()
+bool ServerAuthenticator::onStarted()
 {
-    if (state_ != State::SUCCESS)
-        return nullptr;
+    DCHECK(user_list_);
 
-    return std::move(channel_);
+    internal_state_ = InternalState::READ_CLIENT_HELLO;
+
+    // We do not allow anonymous access without a private key.
+    if (anonymous_access_ == AnonymousAccess::ENABLE && !key_pair_.isValid())
+    {
+        finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
+        return false;
+    }
+
+    if (anonymous_access_ == AnonymousAccess::ENABLE)
+    {
+        // When anonymous access is enabled, a private key must be installed.
+        if (!key_pair_.isValid())
+        {
+            finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
+            return false;
+        }
+
+        // When anonymous access is enabled, there must be at least one session for anonymous access.
+        if (!session_types_)
+        {
+            finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
+            return false;
+        }
+    }
+    else
+    {
+        // If anonymous access is disabled, then there should not be allowed sessions by default.
+        if (session_types_)
+        {
+            finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
+            return false;
+        }
+    }
+
+    return true;
 }
 
-void ServerAuthenticator::onDisconnected(base::NetworkChannel::ErrorCode error_code)
-{
-    LOG(LS_WARNING) << "Network error: " << base::NetworkChannel::errorToString(error_code);
-    onFailed(FROM_HERE);
-}
-
-void ServerAuthenticator::onMessageReceived(const base::ByteArray& buffer)
+void ServerAuthenticator::onReceived(const base::ByteArray& buffer)
 {
     switch (internal_state_)
     {
@@ -218,7 +186,7 @@ void ServerAuthenticator::onMessageReceived(const base::ByteArray& buffer)
     }
 }
 
-void ServerAuthenticator::onMessageWritten(size_t /* pending */)
+void ServerAuthenticator::onWritten()
 {
     switch (internal_state_)
     {
@@ -281,7 +249,7 @@ void ServerAuthenticator::onClientHello(const base::ByteArray& buffer)
     proto::ClientHello client_hello;
     if (!base::parse(buffer, &client_hello))
     {
-        onFailed(FROM_HERE);
+        finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
         return;
     }
 
@@ -292,7 +260,7 @@ void ServerAuthenticator::onClientHello(const base::ByteArray& buffer)
         !(client_hello.encryption() & proto::ENCRYPTION_CHACHA20_POLY1305))
     {
         // No encryption methods supported.
-        onFailed(FROM_HERE);
+        finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
         return;
     }
 
@@ -308,7 +276,7 @@ void ServerAuthenticator::onClientHello(const base::ByteArray& buffer)
             // If anonymous method is not allowed.
             if (anonymous_access_ != AnonymousAccess::ENABLE)
             {
-                onFailed(FROM_HERE);
+                finish(FROM_HERE, ErrorCode::ACCESS_DENIED);
                 return;
             }
         }
@@ -317,7 +285,7 @@ void ServerAuthenticator::onClientHello(const base::ByteArray& buffer)
         default:
         {
             // Unsupported identication method.
-            onFailed(FROM_HERE);
+            finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
             return;
         }
         break;
@@ -330,28 +298,28 @@ void ServerAuthenticator::onClientHello(const base::ByteArray& buffer)
         decrypt_iv_ = base::fromStdString(client_hello.iv());
         if (decrypt_iv_.empty())
         {
-            onFailed(FROM_HERE);
+            finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
             return;
         }
 
         base::ByteArray peer_public_key = base::fromStdString(client_hello.public_key());
         if (peer_public_key.empty())
         {
-            onFailed(FROM_HERE);
+            finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
             return;
         }
 
         base::ByteArray temp = key_pair_.sessionKey(peer_public_key);
         if (temp.empty())
         {
-            onFailed(FROM_HERE);
+            finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
             return;
         }
 
         session_key_ = base::GenericHash::hash(base::GenericHash::Type::BLAKE2s256, temp);
         if (session_key_.empty())
         {
-            onFailed(FROM_HERE);
+            finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
             return;
         }
 
@@ -378,7 +346,7 @@ void ServerAuthenticator::onClientHello(const base::ByteArray& buffer)
     encryption_ = server_hello.encryption();
 
     LOG(LS_INFO) << "Sending: ServerHello";
-    channel_->send(base::serialize(server_hello));
+    sendMessage(server_hello);
 }
 
 void ServerAuthenticator::onIdentify(const base::ByteArray& buffer)
@@ -388,7 +356,7 @@ void ServerAuthenticator::onIdentify(const base::ByteArray& buffer)
     proto::SrpIdentify identify;
     if (!base::parse(buffer, &identify))
     {
-        onFailed(FROM_HERE);
+        finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
         return;
     }
 
@@ -397,7 +365,7 @@ void ServerAuthenticator::onIdentify(const base::ByteArray& buffer)
     user_name_ = base::utf16FromUtf8(identify.username());
     if (user_name_.empty())
     {
-        onFailed(FROM_HERE);
+        finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
         return;
     }
 
@@ -441,7 +409,7 @@ void ServerAuthenticator::onIdentify(const base::ByteArray& buffer)
 
     if (!N_.isValid() || !g_.isValid() || !s_.isValid() || !B_.isValid())
     {
-        onFailed(FROM_HERE);
+        finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
         return;
     }
 
@@ -457,7 +425,7 @@ void ServerAuthenticator::onIdentify(const base::ByteArray& buffer)
     server_key_exchange.set_iv(base::toStdString(encrypt_iv_));
 
     LOG(LS_INFO) << "Sending: ServerKeyExchange";
-    channel_->send(base::serialize(server_key_exchange));
+    sendMessage(server_key_exchange);
 }
 
 void ServerAuthenticator::onClientKeyExchange(const base::ByteArray& buffer)
@@ -467,7 +435,7 @@ void ServerAuthenticator::onClientKeyExchange(const base::ByteArray& buffer)
     proto::SrpClientKeyExchange client_key_exchange;
     if (!base::parse(buffer, &client_key_exchange))
     {
-        onFailed(FROM_HERE);
+        finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
         return;
     }
 
@@ -476,14 +444,14 @@ void ServerAuthenticator::onClientKeyExchange(const base::ByteArray& buffer)
 
     if (!A_.isValid() || decrypt_iv_.empty())
     {
-        onFailed(FROM_HERE);
+        finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
         return;
     }
 
     base::ByteArray srp_key = createSrpKey();
     if (srp_key.empty())
     {
-        onFailed(FROM_HERE);
+        finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
         return;
     }
 
@@ -505,7 +473,7 @@ void ServerAuthenticator::onClientKeyExchange(const base::ByteArray& buffer)
 
         default:
         {
-            onFailed(FROM_HERE);
+            finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
             return;
         }
         break;
@@ -538,21 +506,17 @@ void ServerAuthenticator::doSessionChallenge()
     session_challenge.set_cpu_cores(base::SysInfo::processorCores());
 
     LOG(LS_INFO) << "Sending: SessionChallenge";
-    channel_->send(base::serialize(session_challenge));
+    sendMessage(session_challenge);
 }
 
 void ServerAuthenticator::onSessionResponse(const base::ByteArray& buffer)
 {
     LOG(LS_INFO) << "Received: SessionResponse";
 
-    // Stop receiving incoming messages.
-    channel_->pause();
-    channel_->setListener(nullptr);
-
     proto::SessionResponse session_response;
     if (!base::parse(buffer, &session_response))
     {
-        onFailed(FROM_HERE);
+        finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
         return;
     }
 
@@ -568,83 +532,19 @@ void ServerAuthenticator::onSessionResponse(const base::ByteArray& buffer)
     base::BitSet<uint32_t> session_type = session_response.session_type();
     if (session_type.count() != 1)
     {
-        onFailed(FROM_HERE);
+        finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
         return;
     }
 
     session_type_ = session_type.value();
     if (!(session_types_ & session_type_))
     {
-        onFailed(FROM_HERE);
+        finish(FROM_HERE, ErrorCode::SESSION_DENIED);
         return;
     }
-
-    LOG(LS_INFO) << "Authentication completed successfully for " << channel_->peerAddress();
-
-    timer_.stop();
 
     // Authentication completed successfully.
-    state_ = State::SUCCESS;
-
-    // Notify of completion.
-    delegate_->onComplete();
-}
-
-void ServerAuthenticator::onFailed(const base::Location& location)
-{
-    // If the network channel is already destroyed, then exit (we have a repeated notification).
-    if (!channel_)
-        return;
-
-    LOG(LS_INFO) << "Authentication failed for: " << channel_->peerAddress()
-                 << " (" << location.toString() << ")";
-
-    timer_.stop();
-
-    // Destroy the network channel.
-    channel_->setListener(nullptr);
-    channel_.reset();
-
-    // A connection failure occurred, authentication failed.
-    state_ = State::FAILED;
-
-    // Notify of completion.
-    delegate_->onComplete();
-}
-
-bool ServerAuthenticator::onSessionKeyChanged()
-{
-    LOG(LS_INFO) << "Session key changed";
-
-    std::unique_ptr<base::MessageEncryptor> encryptor;
-    std::unique_ptr<base::MessageDecryptor> decryptor;
-
-    if (encryption_ == proto::ENCRYPTION_AES256_GCM)
-    {
-        encryptor = base::MessageEncryptorOpenssl::createForAes256Gcm(
-            session_key_, encrypt_iv_);
-        decryptor = base::MessageDecryptorOpenssl::createForAes256Gcm(
-            session_key_, decrypt_iv_);
-    }
-    else
-    {
-        DCHECK_EQ(encryption_, proto::ENCRYPTION_CHACHA20_POLY1305);
-
-        encryptor = base::MessageEncryptorOpenssl::createForChaCha20Poly1305(
-            session_key_, encrypt_iv_);
-        decryptor = base::MessageDecryptorOpenssl::createForChaCha20Poly1305(
-            session_key_, decrypt_iv_);
-    }
-
-    if (!encryptor || !decryptor)
-    {
-        onFailed(FROM_HERE);
-        return false;
-    }
-
-    channel_->setEncryptor(std::move(encryptor));
-    channel_->setDecryptor(std::move(decryptor));
-    return true;
+    finish(FROM_HERE, ErrorCode::SUCCESS);
 }
 
 base::ByteArray ServerAuthenticator::createSrpKey()

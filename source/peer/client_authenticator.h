@@ -19,7 +19,6 @@
 #ifndef PEER__CLIENT_AUTHENTICATOR_H
 #define PEER__CLIENT_AUTHENTICATOR_H
 
-#include "base/version.h"
 #include "base/crypto/big_num.h"
 #include "peer/authenticator.h"
 
@@ -36,56 +35,22 @@ namespace peer {
 class ClientAuthenticator : public Authenticator
 {
 public:
-    ClientAuthenticator();
+    explicit ClientAuthenticator(std::shared_ptr<base::TaskRunner> task_runner);
     ~ClientAuthenticator();
 
     void setPeerPublicKey(const base::ByteArray& public_key);
-    const base::ByteArray& peerPublicKey() const { return peer_public_key_; }
-
     void setIdentify(proto::Identify identify);
-    proto::Identify identify() const { return identify_; }
-
     void setUserName(std::u16string_view username);
-    const std::u16string& userName() const;
-
     void setPassword(std::u16string_view password);
-    const std::u16string& password() const;
-
     void setSessionType(uint32_t session_type);
-    uint32_t sessionType() const { return session_type_; }
-
-    proto::Encryption encryption() const { return encryption_; }
-    const base::Version& peerVersion() const { return peer_version_; }
-
-    enum class ErrorCode
-    {
-        SUCCESS,
-        UNKNOWN_ERROR,
-        NETWORK_ERROR,
-        PROTOCOL_ERROR,
-        ACCESS_DENIED,
-        SESSION_DENIED
-    };
-
-    using Callback = std::function<void(ErrorCode error_code)>;
-
-    // Starts authentication.
-    // |callback| is called upon completion. The authenticator guarantees that no code inside it
-    // will be executed after call callback (you can remove the authenticator inside this callback).
-    void start(std::unique_ptr<base::NetworkChannel> channel, Callback callback);
-
-    std::unique_ptr<base::NetworkChannel> takeChannel();
-
-    static const char* errorToString(ClientAuthenticator::ErrorCode error_code);
 
 protected:
-    // base::NetworkChannel::Listener implementation.
-    void onDisconnected(base::NetworkChannel::ErrorCode error_code) override;
-    void onMessageReceived(const base::ByteArray& buffer) override;
-    void onMessageWritten(size_t pending) override;
+    // Authenticator implementation.
+    bool onStarted() override;
+    void onReceived(const base::ByteArray& buffer) override;
+    void onWritten() override;
 
 private:
-    void onSessionKeyChanged();
     void sendClientHello();
     bool readServerHello(const base::ByteArray& buffer);
     void sendIdentify();
@@ -93,46 +58,30 @@ private:
     void sendClientKeyExchange();
     bool readSessionChallenge(const base::ByteArray& buffer);
     void sendSessionResponse();
-    void finished(const base::Location& location, ErrorCode error_code);
 
-    enum class State
+    enum class InternalState
     {
-        NOT_STARTED,
         SEND_CLIENT_HELLO,
         READ_SERVER_HELLO,
         SEND_IDENTIFY,
         READ_SERVER_KEY_EXCHANGE,
         SEND_CLIENT_KEY_EXCHANGE,
         READ_SESSION_CHALLENGE,
-        SEND_SESSION_RESPONSE,
-        FINISHED
+        SEND_SESSION_RESPONSE
     };
 
-    State state_ = State::NOT_STARTED;
-
-    std::unique_ptr<base::NetworkChannel> channel_;
-    Callback callback_;
+    InternalState internal_state_ = InternalState::SEND_CLIENT_HELLO;
 
     base::ByteArray peer_public_key_;
     std::u16string username_;
     std::u16string password_;
 
-    proto::Encryption encryption_ = proto::ENCRYPTION_UNKNOWN;
-    proto::Identify identify_ = proto::IDENTIFY_SRP;
-    uint32_t session_type_ = 0;
-    base::Version peer_version_;
-
     base::BigNum N_;
     base::BigNum g_;
     base::BigNum s_;
     base::BigNum B_;
-
     base::BigNum a_;
     base::BigNum A_;
-
-    base::ByteArray session_key_;
-    base::ByteArray encrypt_iv_;
-    base::ByteArray decrypt_iv_;
 
     DISALLOW_COPY_AND_ASSIGN(ClientAuthenticator);
 };

@@ -26,9 +26,9 @@ namespace router {
 
 Router::Router(std::shared_ptr<RouterWindowProxy> window_proxy,
                std::shared_ptr<base::TaskRunner> io_task_runner)
-    : io_task_runner_(std::move(io_task_runner)),
+    : io_task_runner_(io_task_runner),
       window_proxy_(std::move(window_proxy)),
-      authenticator_(std::make_unique<peer::ClientAuthenticator>())
+      authenticator_(std::make_unique<peer::ClientAuthenticator>(io_task_runner))
 {
     authenticator_->setIdentify(proto::IDENTIFY_SRP);
     authenticator_->setSessionType(proto::ROUTER_SESSION_MANAGER);

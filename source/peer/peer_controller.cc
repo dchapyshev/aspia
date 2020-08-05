@@ -75,7 +75,7 @@ void PeerController::onConnected()
     channel_->setKeepAlive(true, kKeepAliveTime, kKeepAliveInterval);
     channel_->setNoDelay(true);
 
-    authenticator_ = std::make_unique<peer::ClientAuthenticator>();
+    authenticator_ = std::make_unique<peer::ClientAuthenticator>(task_runner_);
 
     authenticator_->setIdentify(proto::IDENTIFY_ANONYMOUS);
     authenticator_->setPeerPublicKey(router_info_.public_key);

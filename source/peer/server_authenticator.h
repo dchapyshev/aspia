@@ -19,16 +19,10 @@
 #ifndef PEER__SERVER_AUTHENTICATOR_H
 #define PEER__SERVER_AUTHENTICATOR_H
 
-#include "base/version.h"
-#include "base/waitable_timer.h"
 #include "base/crypto/big_num.h"
 #include "base/crypto/key_pair.h"
 #include "base/net/network_channel.h"
 #include "peer/authenticator.h"
-
-namespace base {
-class Location;
-} // namespace base
 
 namespace peer {
 
@@ -40,32 +34,14 @@ public:
     explicit ServerAuthenticator(std::shared_ptr<base::TaskRunner> task_runner);
     ~ServerAuthenticator();
 
-    enum class State
-    {
-        STOPPED, // The authenticator has not been started yet.
-        PENDING, // The authenticator is waiting for completion.
-        FAILED,  // The authenticator failed.
-        SUCCESS  // The authenticator completed successfully.
-    };
-
     enum class AnonymousAccess
     {
         ENABLE, // Anonymous access is enabled.
         DISABLE // Anonymous access is disabled.
     };
 
-    class Delegate
-    {
-    public:
-        virtual ~Delegate() = default;
-
-        virtual void onComplete() = 0;
-    };
-
-    // The start of the authenticator.
-    void start(std::unique_ptr<base::NetworkChannel> channel,
-               std::shared_ptr<UserList> user_list,
-               Delegate* delegate);
+    // Sets the user list.
+    void setUserList(std::shared_ptr<UserList> user_list);
 
     // Sets the private key.
     [[nodiscard]] bool setPrivateKey(const base::ByteArray& private_key);
@@ -76,20 +52,11 @@ public:
     // By default, anonymous access is disabled.
     [[nodiscard]] bool setAnonymousAccess(AnonymousAccess anonymous_access, uint32_t session_types);
 
-    // Returns the current state.
-    [[nodiscard]] State state() const { return state_; }
-
-    [[nodiscard]] uint32_t sessionType() const { return session_type_; }
-    [[nodiscard]] const base::Version& peerVersion() const { return peer_version_; }
-    [[nodiscard]] const std::u16string& userName() const { return user_name_; }
-
-    [[nodiscard]] std::unique_ptr<base::NetworkChannel> takeChannel();
-
 protected:
-    // base::NetworkChannel::Listener implementation.
-    void onDisconnected(base::NetworkChannel::ErrorCode error_code) override;
-    void onMessageReceived(const base::ByteArray& buffer) override;
-    void onMessageWritten(size_t pending) override;
+    // Authenticator implementation.
+    bool onStarted() override;
+    void onReceived(const base::ByteArray& buffer) override;
+    void onWritten() override;
 
 private:
     void onClientHello(const base::ByteArray& buffer);
@@ -97,16 +64,9 @@ private:
     void onClientKeyExchange(const base::ByteArray& buffer);
     void doSessionChallenge();
     void onSessionResponse(const base::ByteArray& buffer);
-    void onFailed(const base::Location& location);
-    [[nodiscard]] bool onSessionKeyChanged();
     [[nodiscard]] base::ByteArray createSrpKey();
 
-    base::WaitableTimer timer_;
-    std::unique_ptr<base::NetworkChannel> channel_;
     std::shared_ptr<UserList> user_list_;
-
-    Delegate* delegate_ = nullptr;
-    State state_ = State::STOPPED;
 
     enum class InternalState
     {
@@ -124,23 +84,6 @@ private:
 
     // Bitmask of allowed session types.
     uint32_t session_types_ = 0;
-
-    // Selected session type.
-    uint32_t session_type_ = 0;
-
-    // Selected authentication method.
-    proto::Encryption encryption_ = proto::ENCRYPTION_UNKNOWN;
-    proto::Identify identify_ = proto::IDENTIFY_SRP;
-
-    // Remote client version.
-    base::Version peer_version_;
-
-    // User name.
-    std::u16string user_name_;
-
-    base::ByteArray session_key_;
-    base::ByteArray encrypt_iv_;
-    base::ByteArray decrypt_iv_;
 
     base::KeyPair key_pair_;
     base::BigNum N_;

@@ -123,7 +123,7 @@ void Client::onConnected()
     channel_->setKeepAlive(true, kKeepAliveTime, kKeepAliveInterval);
     channel_->setNoDelay(true);
 
-    authenticator_ = std::make_unique<peer::ClientAuthenticator>();
+    authenticator_ = std::make_unique<peer::ClientAuthenticator>(io_task_runner_);
 
     authenticator_->setIdentify(proto::IDENTIFY_SRP);
     authenticator_->setUserName(config_.username);
