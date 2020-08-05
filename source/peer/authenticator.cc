@@ -171,6 +171,11 @@ void Authenticator::finish(const base::Location& location, ErrorCode error_code)
     callback_(error_code);
 }
 
+void Authenticator::setPeerVersion(const proto::Version& version)
+{
+    peer_version_ = base::Version(version.major(), version.minor(), version.patch());
+}
+
 void Authenticator::onConnected()
 {
     // The authenticator receives the channel always in an already connected state.

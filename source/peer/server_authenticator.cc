@@ -520,11 +520,10 @@ void ServerAuthenticator::onSessionResponse(const base::ByteArray& buffer)
         return;
     }
 
-    const proto::Version& version = session_response.version();
-    peer_version_ = base::Version(version.major(), version.minor(), version.patch());
+    setPeerVersion(session_response.version());
 
     LOG(LS_INFO) << "Client Session Type: " << session_response.session_type();
-    LOG(LS_INFO) << "Client Version: " << peer_version_;
+    LOG(LS_INFO) << "Client Version: " << peerVersion();
     LOG(LS_INFO) << "Client Name: " << session_response.computer_name();
     LOG(LS_INFO) << "Client OS: " << osTypeToString(session_response.os_type());
     LOG(LS_INFO) << "Client CPU Cores: " << session_response.cpu_cores();

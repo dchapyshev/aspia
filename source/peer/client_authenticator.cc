@@ -400,10 +400,9 @@ bool ClientAuthenticator::readSessionChallenge(const base::ByteArray& buffer)
         return false;
     }
 
-    const proto::Version& version = challenge.version();
-    peer_version_ = base::Version(version.major(), version.minor(), version.patch());
+    setPeerVersion(challenge.version());
 
-    LOG(LS_INFO) << "Server Version: " << peer_version_;
+    LOG(LS_INFO) << "Server Version: " << peerVersion();
     LOG(LS_INFO) << "Server Name: " << challenge.computer_name();
     LOG(LS_INFO) << "Server OS: " << osTypeToString(challenge.os_type());
     LOG(LS_INFO) << "Server CPU Cores: " << challenge.cpu_cores();

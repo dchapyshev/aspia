@@ -81,6 +81,7 @@ protected:
 
     void sendMessage(const google::protobuf::MessageLite& message);
     void finish(const base::Location& location, ErrorCode error_code);
+    void setPeerVersion(const proto::Version& version);
 
     // base::NetworkChannel::Listener implementation.
     void onConnected() final;
@@ -96,7 +97,6 @@ protected:
     base::ByteArray encrypt_iv_;
     base::ByteArray decrypt_iv_;
 
-    base::Version peer_version_; // Remote peer version.
     uint32_t session_type_ = 0; // Selected session type.
     std::u16string user_name_;
 
@@ -105,6 +105,8 @@ private:
     std::unique_ptr<base::NetworkChannel> channel_;
     Callback callback_;
     State state_ = State::STOPPED;
+
+    base::Version peer_version_; // Remote peer version.
 };
 
 } // namespace peer
