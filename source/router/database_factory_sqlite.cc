@@ -26,7 +26,7 @@ DatabaseFactorySqlite::DatabaseFactorySqlite() = default;
 
 DatabaseFactorySqlite::~DatabaseFactorySqlite() = default;
 
-std::unique_ptr<Database> DatabaseFactorySqlite::create()
+std::unique_ptr<Database> DatabaseFactorySqlite::openDatabase() const
 {
     return DatabaseSqlite::open();
 }

@@ -26,12 +26,17 @@
 
 namespace router {
 
+namespace {
+
+const size_t kPeerKeySize = 512;
+
+} // namespace
+
 SessionPeer::SessionPeer(proto::RouterSession session_type,
                          std::unique_ptr<base::NetworkChannel> channel,
-                         std::shared_ptr<Database> database)
-    : Session(std::move(channel)),
-      session_type_(session_type),
-      database_(std::move(database))
+                         std::shared_ptr<DatabaseFactory> database_factory)
+    : Session(std::move(channel), std::move(database_factory)),
+      session_type_(session_type)
 {
     // Nothing
 }
@@ -40,64 +45,17 @@ SessionPeer::~SessionPeer() = default;
 
 void SessionPeer::onMessageReceived(const base::ByteArray& buffer)
 {
-    proto::PeerToRouter incoming_message;
+    proto::PeerToRouter message;
 
-    if (!base::parse(buffer, &incoming_message))
+    if (!base::parse(buffer, &message))
     {
         LOG(LS_ERROR) << "Could not read message from peer";
         return;
     }
 
-    if (incoming_message.has_peer_id_request())
+    if (message.has_peer_id_request())
     {
-        if (peer_id_ != peer::kInvalidPeerId)
-        {
-            LOG(LS_ERROR) << "Peer ID already assigned";
-            return;
-        }
-
-        proto::RouterToPeer outgoing_message;
-        proto::PeerIdResponse* peer_id_response = outgoing_message.mutable_peer_id_response();
-        base::ByteArray keyHash;
-
-        const proto::PeerIdRequest& peer_id_request = incoming_message.peer_id_request();
-        if (peer_id_request.type() == proto::PeerIdRequest::NEW_ID)
-        {
-            // Generate new key.
-            std::string key = base::Random::string(512);
-
-            // Calculate hash for key.
-            keyHash = base::GenericHash::hash(base::GenericHash::Type::BLAKE2b512, key);
-
-            if (!database_->addPeer(keyHash))
-            {
-                LOG(LS_ERROR) << "Unable to add peer";
-                return;
-            }
-
-            peer_id_response->set_key(std::move(key));
-        }
-        else if (peer_id_request.type() == proto::PeerIdRequest::EXISTING_ID)
-        {
-            // Using existing key.
-            keyHash = base::GenericHash::hash(
-                base::GenericHash::Type::BLAKE2b512, peer_id_request.key());
-        }
-        else
-        {
-            LOG(LS_ERROR) << "Unknown request type: " << peer_id_request.type();
-            return;
-        }
-
-        peer_id_ = database_->peerId(keyHash);
-        if (peer_id_ == peer::kInvalidPeerId)
-        {
-            LOG(LS_ERROR) << "Failed to get peer ID";
-            return;
-        }
-
-        peer_id_response->set_peer_id(peer_id_);
-        send(base::serialize(outgoing_message));
+        readPeerIdRequest(message.peer_id_request());
     }
     else
     {
@@ -107,11 +65,11 @@ void SessionPeer::onMessageReceived(const base::ByteArray& buffer)
             return;
         }
 
-        if (incoming_message.has_connection_request())
+        if (message.has_connection_request())
         {
             LOG(LS_INFO) << "CONNECTION REQUEST";
         }
-        else if (incoming_message.has_connection_candidate())
+        else if (message.has_connection_candidate())
         {
             LOG(LS_INFO) << "CONNECTION CANDIDATE";
         }
@@ -122,9 +80,67 @@ void SessionPeer::onMessageReceived(const base::ByteArray& buffer)
     }
 }
 
-void SessionPeer::onMessageWritten(size_t pending)
+void SessionPeer::onMessageWritten(size_t /* pending */)
 {
     // Nothing
+}
+
+void SessionPeer::readPeerIdRequest(const proto::PeerIdRequest& peer_id_request)
+{
+    if (peer_id_ != peer::kInvalidPeerId)
+    {
+        LOG(LS_ERROR) << "Peer ID already assigned";
+        return;
+    }
+
+    std::unique_ptr<Database> database = openDatabase();
+    if (!database)
+    {
+        LOG(LS_ERROR) << "Failed to connect to database";
+        return;
+    }
+
+    proto::RouterToPeer message;
+    proto::PeerIdResponse* peer_id_response = message.mutable_peer_id_response();
+    base::ByteArray keyHash;
+
+    if (peer_id_request.type() == proto::PeerIdRequest::NEW_ID)
+    {
+        // Generate new key.
+        std::string key = base::Random::string(kPeerKeySize);
+
+        // Calculate hash for key.
+        keyHash = base::GenericHash::hash(base::GenericHash::Type::BLAKE2b512, key);
+
+        if (!database->addPeer(keyHash))
+        {
+            LOG(LS_ERROR) << "Unable to add peer";
+            return;
+        }
+
+        peer_id_response->set_key(std::move(key));
+    }
+    else if (peer_id_request.type() == proto::PeerIdRequest::EXISTING_ID)
+    {
+        // Using existing key.
+        keyHash = base::GenericHash::hash(
+            base::GenericHash::Type::BLAKE2b512, peer_id_request.key());
+    }
+    else
+    {
+        LOG(LS_ERROR) << "Unknown request type: " << peer_id_request.type();
+        return;
+    }
+
+    peer_id_ = database->peerId(keyHash);
+    if (peer_id_ == peer::kInvalidPeerId)
+    {
+        LOG(LS_ERROR) << "Failed to get peer ID";
+        return;
+    }
+
+    peer_id_response->set_peer_id(peer_id_);
+    send(base::serialize(message));
 }
 
 } // namespace router

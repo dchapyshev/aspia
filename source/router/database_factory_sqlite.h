@@ -30,7 +30,7 @@ public:
     DatabaseFactorySqlite();
     ~DatabaseFactorySqlite();
 
-    std::unique_ptr<Database> create() override;
+    std::unique_ptr<Database> openDatabase() const override;
 
 private:
     DISALLOW_COPY_AND_ASSIGN(DatabaseFactorySqlite);

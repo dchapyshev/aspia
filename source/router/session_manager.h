@@ -28,7 +28,7 @@ class SessionManager : public Session
 {
 public:
     SessionManager(std::unique_ptr<base::NetworkChannel> channel,
-                   std::shared_ptr<Database> database);
+                   std::shared_ptr<DatabaseFactory> database_factory);
     ~SessionManager();
 
 protected:
@@ -39,8 +39,6 @@ protected:
 private:
     void doUserListRequest();
     void doUserRequest(const proto::UserRequest& request);
-
-    std::shared_ptr<Database> database_;
 
     DISALLOW_COPY_AND_ASSIGN(SessionManager);
 };

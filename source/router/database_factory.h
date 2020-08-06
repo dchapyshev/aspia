@@ -30,7 +30,7 @@ class DatabaseFactory
 public:
     virtual ~DatabaseFactory() = default;
 
-    virtual std::unique_ptr<Database> create() = 0;
+    virtual std::unique_ptr<Database> openDatabase() const = 0;
 };
 
 } // namespace router

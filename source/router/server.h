@@ -25,7 +25,7 @@
 
 namespace router {
 
-class Database;
+class DatabaseFactory;
 
 class Server
     : public base::NetworkServer::Delegate,
@@ -50,7 +50,7 @@ protected:
 
 private:
     std::shared_ptr<base::TaskRunner> task_runner_;
-    std::shared_ptr<Database> database_;
+    std::shared_ptr<DatabaseFactory> database_factory_;
     std::unique_ptr<base::NetworkServer> server_;
     std::unique_ptr<peer::ServerAuthenticatorManager> authenticator_manager_;
     std::vector<std::unique_ptr<Session>> sessions_;

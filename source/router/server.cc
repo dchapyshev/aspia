@@ -22,6 +22,7 @@
 #include "base/task_runner.h"
 #include "base/net/network_channel.h"
 #include "proto/router.pb.h"
+#include "router/database_factory_sqlite.h"
 #include "router/database_sqlite.h"
 #include "router/session_manager.h"
 #include "router/session_peer.h"
@@ -52,7 +53,8 @@ const char* sessionTypeToString(proto::RouterSession session_type)
 } // namespace
 
 Server::Server(std::shared_ptr<base::TaskRunner> task_runner)
-    : task_runner_(std::move(task_runner))
+    : task_runner_(std::move(task_runner)),
+      database_factory_(std::make_shared<DatabaseFactorySqlite>())
 {
     DCHECK(task_runner_);
 }
@@ -64,8 +66,8 @@ bool Server::start()
     if (server_)
         return false;
 
-    database_ = DatabaseSqlite::open();
-    if (!database_)
+    std::unique_ptr<Database> database = database_factory_->openDatabase();
+    if (!database)
     {
         LOG(LS_ERROR) << "Failed to open the database";
         return false;
@@ -90,7 +92,7 @@ bool Server::start()
     authenticator_manager_ =
         std::make_unique<peer::ServerAuthenticatorManager>(task_runner_, this);
     authenticator_manager_->setPrivateKey(private_key);
-    authenticator_manager_->setUserList(std::make_shared<peer::UserList>(database_->userList()));
+    authenticator_manager_->setUserList(std::make_shared<peer::UserList>(database->userList()));
     authenticator_manager_->setAnonymousAccess(
         peer::ServerAuthenticator::AnonymousAccess::ENABLE, proto::ROUTER_SESSION_ANONIMOUS_PEER);
 
@@ -124,14 +126,14 @@ void Server::onNewSession(peer::ServerAuthenticatorManager::SessionInfo&& sessio
         case proto::ROUTER_SESSION_AUTHORIZED_PEER:
         {
             session = std::make_unique<SessionPeer>(
-                session_type, std::move(session_info.channel), database_);
+                session_type, std::move(session_info.channel), database_factory_);
         }
         break;
 
         case proto::ROUTER_SESSION_MANAGER:
         {
             session = std::make_unique<SessionManager>(
-                std::move(session_info.channel), database_);
+                std::move(session_info.channel), database_factory_);
         }
         break;
 

@@ -30,7 +30,7 @@ class SessionPeer : public Session
 public:
     SessionPeer(proto::RouterSession session_type,
                 std::unique_ptr<base::NetworkChannel> channel,
-                std::shared_ptr<Database> database);
+                std::shared_ptr<DatabaseFactory> database_factory);
     ~SessionPeer();
 
 protected:
@@ -39,9 +39,10 @@ protected:
     void onMessageWritten(size_t pending) override;
 
 private:
+    void readPeerIdRequest(const proto::PeerIdRequest& peer_id_request);
+
     const proto::RouterSession session_type_;
     peer::PeerId peer_id_ = peer::kInvalidPeerId;
-    std::shared_ptr<Database> database_;
 
     DISALLOW_COPY_AND_ASSIGN(SessionPeer);
 };

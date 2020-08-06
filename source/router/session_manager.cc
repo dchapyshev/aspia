@@ -27,9 +27,8 @@
 namespace router {
 
 SessionManager::SessionManager(std::unique_ptr<base::NetworkChannel> channel,
-                               std::shared_ptr<Database> database)
-    : Session(std::move(channel)),
-      database_(std::move(database))
+                               std::shared_ptr<DatabaseFactory> database_factory)
+    : Session(std::move(channel), std::move(database_factory))
 {
     // Nothing
 }
@@ -79,10 +78,17 @@ void SessionManager::onMessageWritten(size_t pending)
 
 void SessionManager::doUserListRequest()
 {
+    std::unique_ptr<Database> database = openDatabase();
+    if (!database)
+    {
+        LOG(LS_ERROR) << "Failed to connect to database";
+        return;
+    }
+
     proto::RouterToManager message;
     proto::UserList* list = message.mutable_user_list();
 
-    peer::UserList users = database_->userList();
+    peer::UserList users = database->userList();
     for (peer::UserList::Iterator it(users); !it.isAtEnd(); it.advance())
     {
         const peer::User& user = it.user();
@@ -99,6 +105,13 @@ void SessionManager::doUserListRequest()
 
 void SessionManager::doUserRequest(const proto::UserRequest& request)
 {
+    std::unique_ptr<Database> database = openDatabase();
+    if (!database)
+    {
+        LOG(LS_ERROR) << "Failed to connect to database";
+        return;
+    }
+
     proto::RouterToManager message;
     proto::UserResult* result = message.mutable_user_result();
     result->set_type(request.type());
@@ -130,7 +143,7 @@ void SessionManager::doUserRequest(const proto::UserRequest& request)
             user.sessions = request.user().sessions();
             user.flags = request.user().flags();
 
-            if (!database_->addUser(user))
+            if (!database->addUser(user))
             {
                 result->set_error_code(proto::UserResult::INTERNAL_ERROR);
                 break;
@@ -152,7 +165,7 @@ void SessionManager::doUserRequest(const proto::UserRequest& request)
 
             LOG(LS_INFO) << "User remove request: " << entry_id;
 
-            if (!database_->removeUser(entry_id))
+            if (!database->removeUser(entry_id))
             {
                 result->set_error_code(proto::UserResult::INTERNAL_ERROR);
                 break;

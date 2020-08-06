@@ -25,11 +25,13 @@
 namespace router {
 
 class Database;
+class DatabaseFactory;
 
 class Session : public base::NetworkChannel::Listener
 {
 public:
-    explicit Session(std::unique_ptr<base::NetworkChannel> channel);
+    Session(std::unique_ptr<base::NetworkChannel> channel,
+            std::shared_ptr<DatabaseFactory> database_factory);
     virtual ~Session();
 
     class Delegate
@@ -51,6 +53,7 @@ public:
 
 protected:
     void send(base::ByteArray&& buffer);
+    std::unique_ptr<Database> openDatabase() const;
 
     // net::Channel::Listener implementation.
     void onConnected() override;
@@ -58,6 +61,7 @@ protected:
 
 private:
     std::unique_ptr<base::NetworkChannel> channel_;
+    std::shared_ptr<DatabaseFactory> database_factory_;
 
     std::u16string username_;
     base::Version version_;

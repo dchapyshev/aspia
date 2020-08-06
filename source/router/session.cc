@@ -20,14 +20,17 @@
 
 #include "base/logging.h"
 #include "base/net/network_channel.h"
-#include "router/database_sqlite.h"
+#include "router/database.h"
+#include "router/database_factory.h"
 
 namespace router {
 
-Session::Session(std::unique_ptr<base::NetworkChannel> channel)
-    : channel_(std::move(channel))
+Session::Session(std::unique_ptr<base::NetworkChannel> channel,
+                 std::shared_ptr<DatabaseFactory> database_factory)
+    : channel_(std::move(channel)),
+      database_factory_(std::move(database_factory))
 {
-    DCHECK(channel_);
+    DCHECK(channel_ && database_factory_);
 }
 
 Session::~Session() = default;
@@ -44,6 +47,11 @@ void Session::start(Delegate* delegate)
 bool Session::isFinished() const
 {
     return channel_ == nullptr;
+}
+
+std::unique_ptr<Database> Session::openDatabase() const
+{
+    return database_factory_->openDatabase();
 }
 
 void Session::setVersion(const base::Version& version)
