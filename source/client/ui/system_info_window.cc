@@ -45,7 +45,11 @@ public:
             child->setIcon(0, icon);
 
             for (int i = 0; i < child->childCount(); ++i)
-                child->child(i)->setIcon(0, icon);
+            {
+                QTreeWidgetItem* item = child->child(i);
+                if (item)
+                    item->setIcon(0, icon);
+            }
         }
 
         addChildren(childs);
