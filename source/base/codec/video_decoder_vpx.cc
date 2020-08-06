@@ -151,4 +151,4 @@ bool VideoDecoderVPX::decode(const proto::VideoPacket& packet, Frame* frame)
     return convertImage(packet, image, frame);
 }
 
-} // namespace codec
+} // namespace base
