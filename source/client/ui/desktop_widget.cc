@@ -175,7 +175,7 @@ void DesktopWidget::executeKeyCombination(int key_sequence)
     const uint32_t kUsbCodeLeftShift = 0x0700e1;
     const uint32_t kUsbCodeLeftMeta = 0x0700e3;
 
-    uint32_t flags;
+    uint32_t flags = 0;
 
     flags |= (isCapsLockActivated() ? proto::KeyEvent::CAPSLOCK : 0);
     flags |= (isNumLockActivated() ? proto::KeyEvent::NUMLOCK : 0);
