@@ -225,6 +225,7 @@ VideoEncoderVPX::VideoEncoderVPX(proto::VideoEncoding encoding)
       updated_region_area_(kStatsWindow)
 {
     memset(&config_, 0, sizeof(config_));
+    memset(&active_map_, 0, sizeof(active_map_));
 }
 
 void VideoEncoderVPX::encode(const Frame* frame, proto::VideoPacket* packet)

@@ -25,7 +25,8 @@ namespace relay {
 Session::Session(std::pair<asio::ip::tcp::socket, asio::ip::tcp::socket>&& sockets)
     : socket_{ std::move(sockets.first), std::move(sockets.second) }
 {
-    // Nothing
+    for (size_t i = 0; i < kNumberOfSides; ++i)
+        std::fill(buffer_[i].begin(), buffer_[i].end(), 0);
 }
 
 Session::~Session()
@@ -65,7 +66,7 @@ std::chrono::seconds Session::duration() const
     return std::chrono::duration_cast<std::chrono::seconds>(current_time - start_time_);
 }
 
-int32_t Session::bytesTransferred() const
+int64_t Session::bytesTransferred() const
 {
     return bytes_transferred_;
 }

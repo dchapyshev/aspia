@@ -43,7 +43,7 @@ public:
     void stop();
 
     std::chrono::seconds duration() const;
-    int32_t bytesTransferred() const;
+    int64_t bytesTransferred() const;
 
 private:
     static void doReadSome(Session* session, int source);

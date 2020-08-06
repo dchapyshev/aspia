@@ -79,8 +79,7 @@ std::unique_ptr<VideoDecoderVPX> VideoDecoderVPX::createVP8()
 // static
 std::unique_ptr<VideoDecoderVPX> VideoDecoderVPX::createVP9()
 {
-    return std::unique_ptr<VideoDecoderVPX>(
-        new VideoDecoderVPX(proto::VIDEO_ENCODING_VP9));
+    return std::unique_ptr<VideoDecoderVPX>(new VideoDecoderVPX(proto::VIDEO_ENCODING_VP9));
 }
 
 VideoDecoderVPX::VideoDecoderVPX(proto::VideoEncoding encoding)
