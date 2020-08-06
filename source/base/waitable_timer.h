@@ -38,7 +38,7 @@ public:
 
     // Starts execution |signal_callback| in the time interval |time_delta_in_ms|.
     // If the timer is already in a running state, then no action is taken.
-    void start(std::chrono::milliseconds time_delta, TimeoutCallback signal_callback);
+    void start(const std::chrono::milliseconds& time_delta, TimeoutCallback signal_callback);
 
     // Stops the timer and waits for the callback function to complete, if it is running.
     void stop();

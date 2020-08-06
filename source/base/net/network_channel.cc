@@ -43,7 +43,7 @@ namespace {
 
 static const size_t kMaxMessageSize = 16 * 1024 * 1024; // 16 MB
 
-int calculateSpeed(int last_speed, std::chrono::milliseconds duration, int64_t bytes)
+int calculateSpeed(int last_speed, const std::chrono::milliseconds& duration, int64_t bytes)
 {
     static const double kAlpha = 0.1;
     return int((kAlpha * ((1000.0 / double(duration.count())) * double(bytes))) +
