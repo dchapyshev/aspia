@@ -29,12 +29,20 @@ public:
     Settings();
     ~Settings();
 
-    uint16_t controllerPort() const;
+    void setRouterAddress(const std::u16string& address);
+    std::u16string routerAddress() const;
+
+    void setRouterPort(uint16_t port);
+    uint16_t routerPort() const;
+
+    void setRouterPublicKey(const base::ByteArray& public_key);
+    base::ByteArray routerPublicKey() const;
+
+    void setPeerPort(uint16_t port);
     uint16_t peerPort() const;
-    size_t maxControllerCount() const;
+
+    void setMaxPeerCount(size_t count);
     size_t maxPeerCount() const;
-    base::ByteArray controllerPublicKey() const;
-    base::ByteArray proxyPrivateKey() const;
 
 private:
     base::XmlSettings impl_;

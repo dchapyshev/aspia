@@ -21,16 +21,46 @@
 namespace relay {
 
 Settings::Settings()
-    : impl_(base::XmlSettings::Scope::SYSTEM, "aspia", "relay")
+    : impl_("aspia_relay")
 {
     // Nothing
 }
 
 Settings::~Settings() = default;
 
-uint16_t Settings::controllerPort() const
+void Settings::setRouterAddress(const std::u16string& address)
 {
-    return impl_.get<uint16_t>("ControllerPort", DEFAULT_PROXY_CONTROLLER_TCP_PORT);
+    impl_.set<std::u16string>("RouterAddress", address);
+}
+
+std::u16string Settings::routerAddress() const
+{
+    return impl_.get<std::u16string>("RouterAddress");
+}
+
+void Settings::setRouterPort(uint16_t port)
+{
+    impl_.set<uint16_t>("RouterPort", port);
+}
+
+uint16_t Settings::routerPort() const
+{
+    return impl_.get<uint16_t>("RouterPort", DEFAULT_ROUTER_TCP_PORT);
+}
+
+void Settings::setRouterPublicKey(const base::ByteArray& public_key)
+{
+    impl_.set<base::ByteArray>("RouterPublicKey", public_key);
+}
+
+base::ByteArray Settings::routerPublicKey() const
+{
+    return impl_.get<base::ByteArray>("RouterPublicKey");
+}
+
+void Settings::setPeerPort(uint16_t port)
+{
+    impl_.set<uint16_t>("PeerPort", port);
 }
 
 uint16_t Settings::peerPort() const
@@ -38,24 +68,14 @@ uint16_t Settings::peerPort() const
     return impl_.get<uint16_t>("PeerPort", DEFAULT_PROXY_PEER_TCP_PORT);
 }
 
-size_t Settings::maxControllerCount() const
+void Settings::setMaxPeerCount(size_t count)
 {
-    return impl_.get<size_t>("MaxControllerCount", 1);
+    impl_.set<size_t>("MaxPeerCount", count);
 }
 
 size_t Settings::maxPeerCount() const
 {
     return impl_.get<size_t>("MaxPeerCount", 100);
-}
-
-base::ByteArray Settings::controllerPublicKey() const
-{
-    return base::fromHex(impl_.get<std::string>("ControllerPublicKey"));
-}
-
-base::ByteArray Settings::proxyPrivateKey() const
-{
-    return base::fromHex(impl_.get<std::string>("ProxyPrivateKey"));
 }
 
 } // namespace relay
