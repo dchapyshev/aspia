@@ -42,7 +42,7 @@ public:
 protected:
     // PendingSession::Delegate implementation.
     void onPendingSessionReady(
-        PendingSession* session, const proto::PeerToProxy& message) override;
+        PendingSession* session, const proto::PeerToRelay& message) override;
     void onPendingSessionFailed(PendingSession* session) override;
 
     // Session::Delegate implementation.

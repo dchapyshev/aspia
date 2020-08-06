@@ -127,12 +127,12 @@ void PendingSession::onErrorOccurred()
     if (delegate_)
         delegate_->onPendingSessionFailed(this);
 
-    terminate();
+    stop();
 }
 
 void PendingSession::onMessage()
 {
-    proto::PeerToProxy message;
+    proto::PeerToRelay message;
     if (!message.ParseFromArray(buffer_.data(), buffer_.size()))
     {
         onErrorOccurred();

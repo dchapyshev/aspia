@@ -34,7 +34,7 @@ namespace {
 
 // Decrypts an encrypted pair of peer identifiers using key |session_key|.
 std::optional<peer::PeerIdPair> decryptIdPair(
-    const proto::PeerToProxy& message, const SessionKey& session_key)
+    const proto::PeerToRelay& message, const SessionKey& session_key)
 {
     std::unique_ptr<base::MessageDecryptor> decryptor =
         base::MessageDecryptorOpenssl::createForChaCha20Poly1305(
@@ -52,7 +52,7 @@ std::optional<peer::PeerIdPair> decryptIdPair(
     if (!decryptor->decrypt(source.data(), source.size(), target.data()))
         return std::nullopt;
 
-    proto::PeerToProxy::IdPair id_pair;
+    proto::PeerToRelay::IdPair id_pair;
     if (!id_pair.ParseFromString(target))
         return std::nullopt;
 
@@ -108,7 +108,7 @@ void SessionManager::start(std::unique_ptr<SharedPool> shared_pool)
 }
 
 void SessionManager::onPendingSessionReady(
-    PendingSession* session, const proto::PeerToProxy& message)
+    PendingSession* session, const proto::PeerToRelay& message)
 {
     // Looking for a key with the specified identifier.
     const SessionKey& session_key = shared_pool_->key(message.key_id());

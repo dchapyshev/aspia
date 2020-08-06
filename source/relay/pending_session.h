@@ -44,7 +44,7 @@ public:
 
         // Called when received authentication data from a peer.
         virtual void onPendingSessionReady(
-            PendingSession* session, const proto::PeerToProxy& message) = 0;
+            PendingSession* session, const proto::PeerToRelay& message) = 0;
 
         // Called when an error has occurred.
         virtual void onPendingSessionFailed(PendingSession* session) = 0;

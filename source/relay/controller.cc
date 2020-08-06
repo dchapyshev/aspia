@@ -79,10 +79,10 @@ void Controller::onMessageReceived(const base::ByteArray& buffer)
             return;
 
         // Add the key to the outgoing message.
-        proto::ProxyKey* key = outgoing_message_.mutable_key_pool()->add_key();
+        proto::RelayKey* key = outgoing_message_.mutable_key_pool()->add_key();
 
-        key->set_type(proto::ProxyKey::TYPE_X25519);
-        key->set_encryption(proto::ProxyKey::ENCRYPTION_CHACHA20_POLY1305);
+        key->set_type(proto::RelayKey::TYPE_X25519);
+        key->set_encryption(proto::RelayKey::ENCRYPTION_CHACHA20_POLY1305);
         key->set_public_key(base::toStdString(session_key.publicKey()));
         key->set_iv(base::toStdString(session_key.iv()));
 

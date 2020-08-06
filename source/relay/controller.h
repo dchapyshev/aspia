@@ -60,8 +60,8 @@ private:
     std::unique_ptr<SharedPool> shared_pool_;
     std::unique_ptr<base::NetworkChannel> channel_;
 
-    proto::RouterToProxy incoming_message_;
-    proto::ProxyToRouter outgoing_message_;
+    proto::RouterToRelay incoming_message_;
+    proto::RelayToRouter outgoing_message_;
 
     Delegate* delegate_;
 
