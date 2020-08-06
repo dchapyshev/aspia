@@ -196,6 +196,9 @@ void ClientAuthenticator::onWritten()
             finish(FROM_HERE, ErrorCode::SUCCESS);
         }
         break;
+
+        default:
+            break;
     }
 }
 
