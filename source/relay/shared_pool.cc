@@ -49,7 +49,7 @@ private:
 
         Entry(Entry&& other) noexcept
             : controller_id(other.controller_id),
-              session_key(std::move(session_key))
+              session_key(std::move(other.session_key))
         {
             // Nothing
         }
@@ -59,7 +59,7 @@ private:
             if (&other != this)
             {
                 controller_id = other.controller_id;
-                session_key = std::move(session_key);
+                session_key = std::move(other.session_key);
             }
 
             return *this;
