@@ -70,8 +70,10 @@ void ClientSessionDesktop::onMessageReceived(const base::ByteArray& buffer)
 
         const proto::MouseEvent& mouse_event = incoming_message_.mouse_event();
 
-        int pos_x = int(double(mouse_event.x() * 100) / scale_reducer_->scaleFactorX());
-        int pos_y = int(double(mouse_event.y() * 100) / scale_reducer_->scaleFactorY());
+        int pos_x = static_cast<int>(
+            static_cast<double>(mouse_event.x() * 100) / scale_reducer_->scaleFactorX());
+        int pos_y = static_cast<int>(
+            static_cast<double>(mouse_event.y() * 100) / scale_reducer_->scaleFactorY());
 
         proto::MouseEvent out_mouse_event;
         out_mouse_event.set_mask(mouse_event.mask());

@@ -56,8 +56,8 @@ QSize scaledSize(const QSize& source_size, int scale)
     if (scale == -1)
         return source_size;
 
-    int width = int(double(source_size.width() * scale) / 100.0);
-    int height = int(double(source_size.height() * scale) / 100.0);
+    int width = static_cast<int>(static_cast<double>(source_size.width() * scale) / 100.0);
+    int height = static_cast<int>(static_cast<double>(source_size.height() * scale) / 100.0);
 
     return QSize(width, height);
 }
@@ -405,8 +405,8 @@ void QtDesktopWindow::onMouseEvent(const proto::MouseEvent& event)
         const base::Size& source_size = current_frame->size();
         QSize scaled_size = desktop_->size();
 
-        double scale_x = (scaled_size.width() * 100) / double(source_size.width());
-        double scale_y = (scaled_size.height() * 100) / double(source_size.height());
+        double scale_x = (scaled_size.width() * 100) / static_cast<double>(source_size.width());
+        double scale_y = (scaled_size.height() * 100) / static_cast<double>(source_size.height());
         double scale = std::min(scale_x, scale_y);
 
         proto::MouseEvent out_event;
@@ -414,8 +414,8 @@ void QtDesktopWindow::onMouseEvent(const proto::MouseEvent& event)
         int remote_scale_factor = desktop_config_.scale_factor();
 
         out_event.set_mask(event.mask());
-        out_event.set_x((double(pos.x() * 10000) / (scale * remote_scale_factor)));
-        out_event.set_y((double(pos.y() * 10000) / (scale * remote_scale_factor)));
+        out_event.set_x((static_cast<double>(pos.x() * 10000) / (scale * remote_scale_factor)));
+        out_event.set_y((static_cast<double>(pos.y() * 10000) / (scale * remote_scale_factor)));
 
         desktop_control_proxy_->onMouseEvent(out_event);
     }

@@ -35,17 +35,20 @@ namespace client {
 
 namespace {
 
-int calculateFps(int last_fps, std::chrono::milliseconds duration, int64_t count)
+int calculateFps(int last_fps, const std::chrono::milliseconds& duration, int64_t count)
 {
     static const double kAlpha = 0.1;
-    return int((kAlpha * ((1000.0 / double(duration.count())) * double(count))) +
-        ((1.0 - kAlpha) * double(last_fps)));
+    return static_cast<int>(
+        (kAlpha * ((1000.0 / static_cast<double>(duration.count())) * static_cast<double>(count))) +
+        ((1.0 - kAlpha) * static_cast<double>(last_fps)));
 }
 
 size_t calculateAvgVideoSize(size_t last_avg_size, size_t bytes)
 {
     static const double kAlpha = 0.1;
-    return size_t((kAlpha * double(bytes)) + ((1.0 - kAlpha) * double(last_avg_size)));
+    return static_cast<size_t>(
+        (kAlpha * static_cast<double>(bytes)) +
+        ((1.0 - kAlpha) * static_cast<double>(last_avg_size)));
 }
 
 } // namespace

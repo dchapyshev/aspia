@@ -41,8 +41,10 @@ const Frame* ScaleReducer::scaleFrame(const Frame* source_frame, const Size& tar
     {
         const_cast<Frame*>(source_frame)->updatedRegion()->addRect(Rect::makeSize(source_size));
 
-        scale_x_ = double(target_size.width() * 100.0) / double(source_size.width());
-        scale_y_ = double(target_size.height() * 100.0) / double(source_size.height());
+        scale_x_ = static_cast<double>(target_size.width() * 100.0) /
+            static_cast<double>(source_size.width());
+        scale_y_ = static_cast<double>(target_size.height() * 100.0) /
+            static_cast<double>(source_size.height());
         source_size_ = source_size;
         target_size_ = target_size;
         target_frame_.reset();
@@ -109,10 +111,14 @@ const Frame* ScaleReducer::scaleFrame(const Frame* source_frame, const Size& tar
 
 Rect ScaleReducer::scaledRect(const Rect& source_rect)
 {
-    int left = int(double(source_rect.left() * scale_x_) / 100.0);
-    int top = int(double(source_rect.top() * scale_y_) / 100.0);
-    int right = int(double(source_rect.right() * scale_x_) / 100.0);
-    int bottom = int(double(source_rect.bottom() * scale_y_) / 100.0);
+    int left = static_cast<int>(
+        static_cast<double>(source_rect.left() * scale_x_) / 100.0);
+    int top = static_cast<int>(
+        static_cast<double>(source_rect.top() * scale_y_) / 100.0);
+    int right = static_cast<int>(
+        static_cast<double>(source_rect.right() * scale_x_) / 100.0);
+    int bottom = static_cast<int>(
+        static_cast<double>(source_rect.bottom() * scale_y_) / 100.0);
 
     return Rect::makeLTRB(left - 1, top - 1, right + 2, bottom + 2);
 }
