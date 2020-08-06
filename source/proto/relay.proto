@@ -22,7 +22,7 @@ option optimize_for = LITE_RUNTIME;
 
 package proto;
 
-message ProxyKey
+message RelayKey
 {
     enum Type
     {
@@ -52,33 +52,33 @@ message ProxyKey
     bytes iv = 5;
 }
 
-message ProxyKeyPool
+message RelayKeyPool
 {
     // A pool of one time keys.
-    repeated ProxyKey key = 1;
+    repeated RelayKey key = 1;
 }
 
-message ProxyKeyPoolRequest
+message RelayKeyPoolRequest
 {
     // The number of keys requested.
     uint32 pool_size = 1;
 }
 
 // Sent from proxy to router.
-message ProxyToRouter
+message RelayToRouter
 {
-    ProxyKeyPool key_pool = 1;
+    RelayKeyPool key_pool = 1;
 }
 
 // Sent from router to proxy.
-message RouterToProxy
+message RouterToRelay
 {
-    ProxyKeyPoolRequest key_pool_request = 1;
+    RelayKeyPoolRequest key_pool_request = 1;
 }
 
 // Sent from peer to proxy for authentication.
 // If the authentication failed, then the connection should be dropped.
-message PeerToProxy
+message PeerToRelay
 {
     message IdPair
     {

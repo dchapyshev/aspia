@@ -24,7 +24,7 @@
 namespace proto {
 class PeerList;
 class PeerResult;
-class ProxyList;
+class RelayList;
 class UserList;
 class UserResult;
 } // namespace proto
@@ -41,7 +41,7 @@ public:
     virtual void onAccessDenied(peer::ClientAuthenticator::ErrorCode error_code) = 0;
     virtual void onPeerList(std::shared_ptr<proto::PeerList> peer_list) = 0;
     virtual void onPeerResult(std::shared_ptr<proto::PeerResult> peer_result) = 0;
-    virtual void onProxyList(std::shared_ptr<proto::ProxyList> proxy_list) = 0;
+    virtual void onRelayList(std::shared_ptr<proto::RelayList> relay_list) = 0;
     virtual void onUserList(std::shared_ptr<proto::UserList> user_list) = 0;
     virtual void onUserResult(std::shared_ptr<proto::UserResult> user_result) = 0;
 };

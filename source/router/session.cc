@@ -64,10 +64,10 @@ void Session::setUserName(const std::u16string& username)
     username_ = username;
 }
 
-void Session::send(base::ByteArray&& buffer)
+void Session::sendMessage(const google::protobuf::MessageLite& message)
 {
     if (channel_)
-        channel_->send(std::move(buffer));
+        channel_->send(base::serialize(message));
 }
 
 void Session::onConnected()

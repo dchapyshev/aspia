@@ -54,7 +54,7 @@ public:
     void onAccessDenied(peer::ClientAuthenticator::ErrorCode error_code) override;
     void onPeerList(std::shared_ptr<proto::PeerList> peer_list) override;
     void onPeerResult(std::shared_ptr<proto::PeerResult> peer_result) override;
-    void onProxyList(std::shared_ptr<proto::ProxyList> proxy_list) override;
+    void onRelayList(std::shared_ptr<proto::RelayList> relay_list) override;
     void onUserList(std::shared_ptr<proto::UserList> user_list) override;
     void onUserResult(std::shared_ptr<proto::UserResult> user_result) override;
 
@@ -65,7 +65,7 @@ protected:
 private:
     void refreshPeerList();
     void disconnectPeer();
-    void refreshProxyList();
+    void refreshRelayList();
     void refreshUserList();
     void addUser();
     void modifyUser();

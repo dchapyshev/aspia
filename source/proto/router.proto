@@ -28,6 +28,7 @@ enum RouterSession
     ROUTER_SESSION_MANAGER         = 1;
     ROUTER_SESSION_AUTHORIZED_PEER = 2;
     ROUTER_SESSION_ANONIMOUS_PEER  = 4;
+    ROUTER_SESSION_RELAY           = 8;
 }
 
 enum ConnectionType
@@ -211,18 +212,18 @@ message UserResult
     ErrorCode error_code = 2;
 }
 
-message Proxy
+message Relay
 {
     string address   = 1;
     uint64 pool_size = 2;
 }
 
-message ProxyListRequest
+message RelayListRequest
 {
     uint32 dummy = 1;
 }
 
-message ProxyList
+message RelayList
 {
     enum ErrorCode
     {
@@ -231,7 +232,7 @@ message ProxyList
     }
 
     ErrorCode error_code = 1;
-    repeated Proxy proxy = 2;
+    repeated Relay relay = 2;
 }
 
 message RouterToManager
@@ -240,7 +241,7 @@ message RouterToManager
     PeerResult peer_result = 2;
     UserList user_list     = 3;
     UserResult user_result = 4;
-    ProxyList proxy_list   = 5;
+    RelayList relay_list   = 5;
 }
 
 message ManagerToRouter
@@ -249,5 +250,5 @@ message ManagerToRouter
     PeerRequest peer_request            = 2;
     UserListRequest user_list_request   = 3;
     UserRequest user_request            = 4;
-    ProxyListRequest proxy_list_request = 5;
+    RelayListRequest relay_list_request = 5;
 }

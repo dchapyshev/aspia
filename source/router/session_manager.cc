@@ -53,9 +53,9 @@ void SessionManager::onMessageReceived(const base::ByteArray& buffer)
     {
         LOG(LS_INFO) << "PEER REQUEST";
     }
-    else if (message.has_proxy_list_request())
+    else if (message.has_relay_list_request())
     {
-        LOG(LS_INFO) << "PROXY LIST REQUEST";
+        LOG(LS_INFO) << "RELAY LIST REQUEST";
     }
     else if (message.has_user_list_request())
     {
@@ -100,7 +100,7 @@ void SessionManager::doUserListRequest()
         item->set_flags(user.flags);
     }
 
-    send(base::serialize(message));
+    sendMessage(message);
 }
 
 void SessionManager::doUserRequest(const proto::UserRequest& request)
@@ -176,7 +176,7 @@ void SessionManager::doUserRequest(const proto::UserRequest& request)
         break;
     }
 
-    send(base::serialize(message));
+    sendMessage(message);
 }
 
 } // namespace router

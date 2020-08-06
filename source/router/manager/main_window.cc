@@ -55,10 +55,10 @@ private:
 class ProxyTreeItem : public QTreeWidgetItem
 {
 public:
-    explicit ProxyTreeItem(const proto::Proxy& proxy)
+    explicit ProxyTreeItem(const proto::Relay& relay)
     {
-        setText(0, QString::fromStdString(proxy.address()));
-        setText(1, QString::number(proxy.pool_size()));
+        setText(0, QString::fromStdString(relay.address()));
+        setText(1, QString::number(relay.pool_size()));
     }
 
 private:
@@ -97,7 +97,7 @@ MainWindow::MainWindow(QWidget* parent)
 
     connect(ui.button_refresh_peers, &QPushButton::released, this, &MainWindow::refreshPeerList);
     connect(ui.button_disconnect_peer, &QPushButton::released, this, &MainWindow::disconnectPeer);
-    connect(ui.button_refresh_proxy, &QPushButton::released, this, &MainWindow::refreshProxyList);
+    connect(ui.button_refresh_relay, &QPushButton::released, this, &MainWindow::refreshRelayList);
     connect(ui.button_refresh_users, &QPushButton::released, this, &MainWindow::refreshUserList);
     connect(ui.button_add_user, &QPushButton::released, this, &MainWindow::addUser);
     connect(ui.button_modify_user, &QPushButton::released, this, &MainWindow::modifyUser);
@@ -266,12 +266,12 @@ void MainWindow::onPeerResult(std::shared_ptr<proto::PeerResult> peer_result)
     afterRequest();
 }
 
-void MainWindow::onProxyList(std::shared_ptr<proto::ProxyList> proxy_list)
+void MainWindow::onRelayList(std::shared_ptr<proto::RelayList> relay_list)
 {
-    ui.tree_proxy->clear();
+    ui.tree_relay->clear();
 
-    for (int i = 0; i < proxy_list->proxy_size(); ++i)
-        ui.tree_proxy->addTopLevelItem(new ProxyTreeItem(proxy_list->proxy(i)));
+    for (int i = 0; i < relay_list->relay_size(); ++i)
+        ui.tree_relay->addTopLevelItem(new ProxyTreeItem(relay_list->relay(i)));
 
     afterRequest();
 }
@@ -322,7 +322,7 @@ void MainWindow::disconnectPeer()
     }
 }
 
-void MainWindow::refreshProxyList()
+void MainWindow::refreshRelayList()
 {
     if (router_proxy_)
     {

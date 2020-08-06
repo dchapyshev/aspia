@@ -140,7 +140,7 @@ void SessionPeer::readPeerIdRequest(const proto::PeerIdRequest& peer_id_request)
     }
 
     peer_id_response->set_peer_id(peer_id_);
-    send(base::serialize(message));
+    sendMessage(message);
 }
 
 } // namespace router

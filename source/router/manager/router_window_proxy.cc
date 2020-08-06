@@ -109,17 +109,17 @@ void RouterWindowProxy::onPeerResult(std::shared_ptr<proto::PeerResult> peer_res
         router_window_->onPeerResult(peer_result);
 }
 
-void RouterWindowProxy::onProxyList(std::shared_ptr<proto::ProxyList> proxy_list)
+void RouterWindowProxy::onRelayList(std::shared_ptr<proto::RelayList> relay_list)
 {
     if (!ui_task_runner_->belongsToCurrentThread())
     {
         ui_task_runner_->postTask(
-            std::bind(&RouterWindowProxy::onProxyList, shared_from_this(), proxy_list));
+            std::bind(&RouterWindowProxy::onRelayList, shared_from_this(), relay_list));
         return;
     }
 
     if (router_window_)
-        router_window_->onProxyList(proxy_list);
+        router_window_->onRelayList(relay_list);
 }
 
 void RouterWindowProxy::onUserList(std::shared_ptr<proto::UserList> user_list)

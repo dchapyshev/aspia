@@ -26,6 +26,7 @@
 #include "router/database_sqlite.h"
 #include "router/session_manager.h"
 #include "router/session_peer.h"
+#include "router/session_relay.h"
 #include "router/settings.h"
 
 namespace router {
@@ -44,6 +45,9 @@ const char* sessionTypeToString(proto::RouterSession session_type)
 
         case proto::ROUTER_SESSION_MANAGER:
             return "ROUTER_SESSION_MANAGER";
+
+        case proto::ROUTER_SESSION_RELAY:
+            return "ROUTER_SESSION_RELAY";
 
         default:
             return "ROUTER_SESSION_UNKNOWN";
@@ -133,6 +137,13 @@ void Server::onNewSession(peer::ServerAuthenticatorManager::SessionInfo&& sessio
         case proto::ROUTER_SESSION_MANAGER:
         {
             session = std::make_unique<SessionManager>(
+                std::move(session_info.channel), database_factory_);
+        }
+        break;
+
+        case proto::ROUTER_SESSION_RELAY:
+        {
+            session = std::make_unique<SessionRelay>(
                 std::move(session_info.channel), database_factory_);
         }
         break;

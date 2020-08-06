@@ -79,7 +79,7 @@ void Router::disconnectPeer(uint64_t peer_id)
 void Router::refreshProxyList()
 {
     proto::ManagerToRouter message;
-    message.mutable_proxy_list_request()->set_dummy(1);
+    message.mutable_relay_list_request()->set_dummy(1);
     channel_->send(base::serialize(message));
 }
 
@@ -175,10 +175,10 @@ void Router::onMessageReceived(const base::ByteArray& buffer)
         window_proxy_->onPeerResult(
             std::shared_ptr<proto::PeerResult>(message.release_peer_result()));
     }
-    else if (message.has_proxy_list())
+    else if (message.has_relay_list())
     {
-        window_proxy_->onProxyList(
-            std::shared_ptr<proto::ProxyList>(message.release_proxy_list()));
+        window_proxy_->onRelayList(
+            std::shared_ptr<proto::RelayList>(message.release_relay_list()));
     }
     else if (message.has_user_list())
     {

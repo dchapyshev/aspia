@@ -52,7 +52,7 @@ public:
     const std::u16string& userName() const { return username_; }
 
 protected:
-    void send(base::ByteArray&& buffer);
+    void sendMessage(const google::protobuf::MessageLite& message);
     std::unique_ptr<Database> openDatabase() const;
 
     // net::Channel::Listener implementation.

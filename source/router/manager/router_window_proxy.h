@@ -41,7 +41,7 @@ public:
     void onAccessDenied(peer::ClientAuthenticator::ErrorCode error_code);
     void onPeerList(std::shared_ptr<proto::PeerList> peer_list);
     void onPeerResult(std::shared_ptr<proto::PeerResult> peer_result);
-    void onProxyList(std::shared_ptr<proto::ProxyList> proxy_list);
+    void onRelayList(std::shared_ptr<proto::RelayList> relay_list);
     void onUserList(std::shared_ptr<proto::UserList> user_list);
     void onUserResult(std::shared_ptr<proto::UserResult> user_result);
 

@@ -67,6 +67,11 @@
         <translation>Обновить</translation>
     </message>
     <message>
+        <location filename="../main_window.ui" line="103"/>
+        <source>Relay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Active connections</source>
         <translation type="vanished">Активные подключения</translation>
     </message>
@@ -99,9 +104,8 @@
         <translation>Пиры</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="103"/>
         <source>Proxy</source>
-        <translation>Прокси</translation>
+        <translation type="vanished">Прокси</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="118"/>

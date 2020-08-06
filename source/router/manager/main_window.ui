@@ -98,13 +98,13 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="tab_proxy">
+      <widget class="QWidget" name="tab_relay">
        <attribute name="title">
-        <string>Proxy</string>
+        <string>Relay</string>
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
-         <widget class="QTreeWidget" name="tree_proxy">
+         <widget class="QTreeWidget" name="tree_relay">
           <property name="indentation">
            <number>0</number>
           </property>
@@ -136,7 +136,7 @@
            </spacer>
           </item>
           <item>
-           <widget class="QPushButton" name="button_refresh_proxy">
+           <widget class="QPushButton" name="button_refresh_relay">
             <property name="text">
              <string>Refresh</string>
             </property>
