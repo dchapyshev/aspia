@@ -20,6 +20,9 @@ include(tbb)
 
 list(APPEND SOURCE_ROUTER
     database.h
+    database_factory.h
+    database_factory_sqlite.cc
+    database_factory_sqlite.h
     database_sqlite.cc
     database_sqlite.h
     main.cc
