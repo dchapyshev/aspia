@@ -33,8 +33,6 @@ list(APPEND SOURCE_BASE
     endian.h
     guid.cc
     guid.h
-    json_settings.cc
-    json_settings.h
     location.cc
     location.h
     logging.cc
@@ -48,8 +46,6 @@ list(APPEND SOURCE_BASE
     scoped_clear_last_error.h
     session_id.cc
     session_id.h
-    settings.cc
-    settings.h
     smbios.h
     smbios_parser.cc
     smbios_parser.h
@@ -72,9 +68,7 @@ list(APPEND SOURCE_BASE
     waitable_timer.cc
     waitable_timer.h
     xml_sax_writer.cc
-    xml_sax_writer.h
-    xml_settings.cc
-    xml_settings.h)
+    xml_sax_writer.h)
 
 list(APPEND SOURCE_BASE_UNIT_TESTS
     base64_unittest.cc
@@ -85,8 +79,7 @@ list(APPEND SOURCE_BASE_UNIT_TESTS
     scoped_clear_last_error_unittest.cc
     stl_util_unittest.cc
     tests_main.cc
-    version_unittest.cc
-    xml_settings_unittest.cc)
+    version_unittest.cc)
 
 list(APPEND SOURCE_BASE_CODEC
     codec/cursor_decoder.cc
@@ -339,6 +332,17 @@ list(APPEND SOURCE_BASE_NET
 list(APPEND SOURCE_BASE_NET_UNIT_TESTS
     net/address_unittest.cc)
 
+list(APPEND SOURCE_BASE_SETTINGS
+    settings/json_settings.cc
+    settings/json_settings.h
+    settings/settings.cc
+    settings/settings.h
+    settings/xml_settings.cc
+    settings/xml_settings.h)
+
+list(APPEND SOURCE_BASE_SETTINGS_UNIT_TESTS
+    settings/xml_settings_unittest.cc)
+
 list(APPEND SOURCE_BASE_STRINGS
     strings/strcat.cc
     strings/strcat.h
@@ -437,6 +441,7 @@ source_group(ipc FILES ${SOURCE_BASE_IPC})
 source_group(memory FILES ${SOURCE_BASE_MEMORY} ${SOURCE_BASE_MEMORY_UNIT_TESTS})
 source_group(message_loop FILES ${SOURCE_BASE_MESSAGE_LOOP})
 source_group(net FILES ${SOURCE_BASE_NET} ${SOURCE_BASE_NET_UNIT_TESTS})
+source_group(settings FILES ${SOURCE_BASE_SETTINGS} ${SOURCE_BASE_SETTINGS_UNIT_TESTS})
 source_group(strings FILES ${SOURCE_BASE_STRINGS} ${SOURCE_BASE_STRINGS_UNIT_TESTS})
 source_group(threading FILES ${SOURCE_BASE_THREADING})
 source_group(win FILES ${SOURCE_BASE_WIN} ${SOURCE_BASE_WIN_UNIT_TESTS})
@@ -452,6 +457,7 @@ add_library(aspia_base STATIC
     ${SOURCE_BASE_MEMORY}
     ${SOURCE_BASE_MESSAGE_LOOP}
     ${SOURCE_BASE_NET}
+    ${SOURCE_BASE_SETTINGS}
     ${SOURCE_BASE_STRINGS}
     ${SOURCE_BASE_THREADING}
     ${SOURCE_BASE_WIN})
@@ -467,6 +473,7 @@ if (BUILD_UNIT_TESTS)
         ${SOURCE_BASE_DESKTOP_WIN_UNIT_TESTS}
         ${SOURCE_BASE_MEMORY_UNIT_TESTS}
         ${SOURCE_BASE_NET_UNIT_TESTS}
+        ${SOURCE_BASE_SETTINGS_UNIT_TESTS}
         ${SOURCE_BASE_STRINGS_UNIT_TESTS}
         ${SOURCE_BASE_WIN_UNIT_TESTS})
     target_link_libraries(aspia_base_tests

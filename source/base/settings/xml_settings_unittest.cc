@@ -16,9 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/xml_settings.h"
-
-#include <filesystem>
+#include "base/settings/xml_settings.h"
 
 #include <gtest/gtest.h>
 

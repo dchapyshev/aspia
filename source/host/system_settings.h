@@ -20,7 +20,7 @@
 #define HOST__SYSTEM_SETTINGS_H
 
 #include "base/macros_magic.h"
-#include "base/json_settings.h"
+#include "base/settings/json_settings.h"
 
 #include <filesystem>
 

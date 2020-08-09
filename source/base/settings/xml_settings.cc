@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/xml_settings.h"
+#include "base/settings/xml_settings.h"
 
 #include "base/logging.h"
 #include "base/xml_sax_writer.h"

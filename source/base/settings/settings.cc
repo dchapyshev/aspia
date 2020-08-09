@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/settings.h"
+#include "base/settings/settings.h"
 
 #include "base/strings/strcat.h"
 #include "base/strings/string_number_conversions.h"

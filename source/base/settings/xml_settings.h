@@ -16,26 +16,26 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__JSON_SETTINGS_H
-#define BASE__JSON_SETTINGS_H
+#ifndef BASE__SETTINGS__XML_SETTINGS_H
+#define BASE__SETTINGS__XML_SETTINGS_H
 
 #include "base/macros_magic.h"
-#include "base/settings.h"
+#include "base/settings/settings.h"
 
 #include <filesystem>
 
 namespace base {
 
-class JsonSettings : public Settings
+class XmlSettings : public Settings
 {
 public:
     enum class Scope { USER, SYSTEM };
 
-    explicit JsonSettings(std::string_view file_name);
-    JsonSettings(Scope scope,
+    explicit XmlSettings(std::string_view file_name);
+    XmlSettings(Scope scope,
                 std::string_view application_name,
                 std::string_view file_name);
-    ~JsonSettings();
+    ~XmlSettings();
 
     bool isWritable() const;
     void sync();
@@ -53,9 +53,9 @@ public:
 private:
     std::filesystem::path path_;
 
-    DISALLOW_COPY_AND_ASSIGN(JsonSettings);
+    DISALLOW_COPY_AND_ASSIGN(XmlSettings);
 };
 
 } // namespace base
 
-#endif // BASE__JSON_SETTINGS_H
+#endif // BASE__SETTINGS__XML_SETTINGS_H

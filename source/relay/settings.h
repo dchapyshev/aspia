@@ -19,7 +19,7 @@
 #ifndef RELAY__SETTINGS_H
 #define RELAY__SETTINGS_H
 
-#include "base/json_settings.h"
+#include "base/settings/json_settings.h"
 
 namespace relay {
 

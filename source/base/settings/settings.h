@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__SETTINGS_H
-#define BASE__SETTINGS_H
+#ifndef BASE__SETTINGS__SETTINGS_H
+#define BASE__SETTINGS__SETTINGS_H
 
 #include "base/converter.h"
 
@@ -110,4 +110,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__SETTINGS_H
+#endif // BASE__SETTINGS__SETTINGS_H

@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/json_settings.h"
+#include "base/settings/json_settings.h"
 
 #include "base/logging.h"
 #include "base/files/base_paths.h"
