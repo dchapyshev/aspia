@@ -27,7 +27,7 @@ namespace peer {
 
 namespace {
 
-const std::chrono::seconds kReconnectTimeout{ 10 };
+const std::chrono::seconds kReconnectTimeout{ 15 };
 
 } // namespace
 
@@ -69,7 +69,7 @@ void PeerController::onConnected()
 {
     LOG(LS_INFO) << "Connection to the router is established";
 
-    static const std::chrono::minutes kKeepAliveTime{ 1 };
+    static const std::chrono::seconds kKeepAliveTime{ 30 };
     static const std::chrono::seconds kKeepAliveInterval{ 3 };
 
     channel_->setKeepAlive(true, kKeepAliveTime, kKeepAliveInterval);
@@ -131,6 +131,7 @@ void PeerController::onDisconnected(base::NetworkChannel::ErrorCode error_code)
     LOG(LS_INFO) << "Connection to the router is lost ("
                  << base::NetworkChannel::errorToString(error_code) << ")";
 
+    delegate_->onPeerIdAssigned(kInvalidPeerId, base::ByteArray());
     delegate_->onRouterDisconnected(error_code);
     peer_id_ = kInvalidPeerId;
 

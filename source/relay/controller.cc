@@ -92,7 +92,7 @@ void Controller::onConnected()
 {
     LOG(LS_INFO) << "Connection to the router is established";
 
-    static const std::chrono::minutes kKeepAliveTime{ 1 };
+    static const std::chrono::seconds kKeepAliveTime{ 30 };
     static const std::chrono::seconds kKeepAliveInterval{ 3 };
 
     channel_->setKeepAlive(true, kKeepAliveTime, kKeepAliveInterval);
