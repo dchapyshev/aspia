@@ -43,6 +43,11 @@ SessionPeer::SessionPeer(proto::RouterSession session_type,
 
 SessionPeer::~SessionPeer() = default;
 
+void SessionPeer::onSessionReady()
+{
+    // Nothing
+}
+
 void SessionPeer::onMessageReceived(const base::ByteArray& buffer)
 {
     proto::PeerToRouter message;

@@ -32,6 +32,9 @@ public:
     ~SessionManager();
 
 protected:
+    // Session implementation.
+    void onSessionReady() override;
+
     // base::NetworkChannel::Listener implementation.
     void onMessageReceived(const base::ByteArray& buffer) override;
     void onMessageWritten(size_t pending) override;

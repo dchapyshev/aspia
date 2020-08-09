@@ -35,6 +35,11 @@ SessionManager::SessionManager(std::unique_ptr<base::NetworkChannel> channel,
 
 SessionManager::~SessionManager() = default;
 
+void SessionManager::onSessionReady()
+{
+    // Nothing
+}
+
 void SessionManager::onMessageReceived(const base::ByteArray& buffer)
 {
     proto::ManagerToRouter message;

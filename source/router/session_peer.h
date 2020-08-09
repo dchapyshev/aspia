@@ -34,6 +34,9 @@ public:
     ~SessionPeer();
 
 protected:
+    // Session implementation.
+    void onSessionReady() override;
+
     // net::Channel::Listener implementation.
     void onMessageReceived(const base::ByteArray& buffer) override;
     void onMessageWritten(size_t pending) override;

@@ -22,6 +22,12 @@
 
 namespace router {
 
+namespace {
+
+const uint32_t kDefaultPoolSize = 25;
+
+} // namespace
+
 SessionRelay::SessionRelay(std::unique_ptr<base::NetworkChannel> channel,
                            std::shared_ptr<DatabaseFactory> database_factory)
     : Session(std::move(channel), std::move(database_factory))
@@ -30,6 +36,16 @@ SessionRelay::SessionRelay(std::unique_ptr<base::NetworkChannel> channel,
 }
 
 SessionRelay::~SessionRelay() = default;
+
+uint32_t SessionRelay::poolSize() const
+{
+    return pool_.size();
+}
+
+void SessionRelay::onSessionReady()
+{
+    sendKeyPoolRequest(kDefaultPoolSize);
+}
 
 void SessionRelay::onMessageReceived(const base::ByteArray& buffer)
 {
@@ -56,9 +72,21 @@ void SessionRelay::onMessageWritten(size_t /* pending */)
     // Nothing
 }
 
+void SessionRelay::sendKeyPoolRequest(uint32_t pool_size)
+{
+    LOG(LS_INFO) << "Send key pool request: " << pool_size;
+
+    proto::RouterToRelay message;
+    message.mutable_key_pool_request()->set_pool_size(pool_size);
+    sendMessage(message);
+}
+
 void SessionRelay::readKeyPool(const proto::RelayKeyPool& key_pool)
 {
-    // TODO
+    LOG(LS_INFO) << "Received key pool: " << key_pool.key_size();
+
+    for (uint32_t i = 0; i < key_pool.key_size(); ++i)
+        pool_.push_back(key_pool.key(i));
 }
 
 } // namespace router

@@ -31,13 +31,21 @@ public:
                  std::shared_ptr<DatabaseFactory> database_factory);
     ~SessionRelay();
 
+    uint32_t poolSize() const;
+
 protected:
+    // Session implementation.
+    void onSessionReady() override;
+
     // net::Channel::Listener implementation.
     void onMessageReceived(const base::ByteArray& buffer) override;
     void onMessageWritten(size_t pending) override;
 
 private:
+    void sendKeyPoolRequest(uint32_t pool_size);
     void readKeyPool(const proto::RelayKeyPool& key_pool);
+
+    std::vector<proto::RelayKey> pool_;
 
     DISALLOW_COPY_AND_ASSIGN(SessionRelay);
 };

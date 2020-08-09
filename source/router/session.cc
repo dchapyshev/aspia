@@ -42,6 +42,8 @@ void Session::start(Delegate* delegate)
 
     channel_->setListener(this);
     channel_->resume();
+
+    onSessionReady();
 }
 
 bool Session::isFinished() const

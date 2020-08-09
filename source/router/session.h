@@ -55,6 +55,8 @@ protected:
     void sendMessage(const google::protobuf::MessageLite& message);
     std::unique_ptr<Database> openDatabase() const;
 
+    virtual void onSessionReady() = 0;
+
     // net::Channel::Listener implementation.
     void onConnected() override;
     void onDisconnected(base::NetworkChannel::ErrorCode error_code) override;
