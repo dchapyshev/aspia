@@ -24,11 +24,14 @@
 
 namespace router {
 
+class ServerProxy;
+
 class SessionManager : public Session
 {
 public:
     SessionManager(std::unique_ptr<base::NetworkChannel> channel,
-                   std::shared_ptr<DatabaseFactory> database_factory);
+                   std::shared_ptr<DatabaseFactory> database_factory,
+                   std::shared_ptr<ServerProxy> server_proxy);
     ~SessionManager();
 
 protected:
@@ -42,6 +45,10 @@ protected:
 private:
     void doUserListRequest();
     void doUserRequest(const proto::UserRequest& request);
+    void doRelayListRequest();
+    void doPeerListRequest();
+
+    std::shared_ptr<ServerProxy> server_proxy_;
 
     DISALLOW_COPY_AND_ASSIGN(SessionManager);
 };

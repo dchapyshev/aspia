@@ -23,14 +23,17 @@
 #include "base/net/network_channel.h"
 #include "peer/user.h"
 #include "router/database.h"
+#include "router/server_proxy.h"
 
 namespace router {
 
 SessionManager::SessionManager(std::unique_ptr<base::NetworkChannel> channel,
-                               std::shared_ptr<DatabaseFactory> database_factory)
-    : Session(std::move(channel), std::move(database_factory))
+                               std::shared_ptr<DatabaseFactory> database_factory,
+                               std::shared_ptr<ServerProxy> server_proxy)
+    : Session(proto::ROUTER_SESSION_MANAGER, std::move(channel), std::move(database_factory)),
+      server_proxy_(std::move(server_proxy))
 {
-    // Nothing
+    DCHECK(server_proxy_);
 }
 
 SessionManager::~SessionManager() = default;
@@ -52,7 +55,7 @@ void SessionManager::onMessageReceived(const base::ByteArray& buffer)
 
     if (message.has_peer_list_request())
     {
-        LOG(LS_INFO) << "PEER LIST REQUEST";
+        doPeerListRequest();
     }
     else if (message.has_peer_request())
     {
@@ -60,7 +63,7 @@ void SessionManager::onMessageReceived(const base::ByteArray& buffer)
     }
     else if (message.has_relay_list_request())
     {
-        LOG(LS_INFO) << "RELAY LIST REQUEST";
+        doRelayListRequest();
     }
     else if (message.has_user_list_request())
     {
@@ -180,6 +183,28 @@ void SessionManager::doUserRequest(const proto::UserRequest& request)
         }
         break;
     }
+
+    sendMessage(message);
+}
+
+void SessionManager::doRelayListRequest()
+{
+    proto::RouterToManager message;
+    message.mutable_relay_list()->set_error_code(proto::RelayList::SUCCESS);
+
+    for (auto relay : server_proxy_->relayList())
+        message.mutable_relay_list()->add_relay()->CopyFrom(relay);
+
+    sendMessage(message);
+}
+
+void SessionManager::doPeerListRequest()
+{
+    proto::RouterToManager message;
+    message.mutable_peer_list()->set_error_code(proto::PeerList::SUCCESS);
+
+    for (auto peer : server_proxy_->peerList())
+        message.mutable_peer_list()->add_peer()->CopyFrom(peer);
 
     sendMessage(message);
 }

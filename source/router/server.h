@@ -21,11 +21,13 @@
 
 #include "base/net/network_server.h"
 #include "peer/server_authenticator_manager.h"
+#include "proto/router.pb.h"
 #include "router/session.h"
 
 namespace router {
 
 class DatabaseFactory;
+class ServerProxy;
 
 class Server
     : public base::NetworkServer::Delegate,
@@ -38,6 +40,9 @@ public:
 
     bool start();
 
+    std::vector<proto::Relay> relayList() const;
+    std::vector<proto::Peer> peerList() const;
+
 protected:
     // net::Server::Delegate implementation.
     void onNewConnection(std::unique_ptr<base::NetworkChannel> channel) override;
@@ -49,6 +54,7 @@ protected:
     void onSessionFinished() override;
 
 private:
+    std::shared_ptr<ServerProxy> server_proxy_;
     std::shared_ptr<base::TaskRunner> task_runner_;
     std::shared_ptr<DatabaseFactory> database_factory_;
     std::unique_ptr<base::NetworkServer> server_;

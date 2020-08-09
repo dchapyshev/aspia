@@ -21,6 +21,7 @@
 
 #include "base/version.h"
 #include "base/net/network_channel.h"
+#include "proto/router.pb.h"
 
 namespace router {
 
@@ -30,7 +31,8 @@ class DatabaseFactory;
 class Session : public base::NetworkChannel::Listener
 {
 public:
-    Session(std::unique_ptr<base::NetworkChannel> channel,
+    Session(proto::RouterSession session_type,
+            std::unique_ptr<base::NetworkChannel> channel,
             std::shared_ptr<DatabaseFactory> database_factory);
     virtual ~Session();
 
@@ -50,6 +52,8 @@ public:
     const base::Version& version() const { return version_; }
     void setUserName(const std::u16string& username);
     const std::u16string& userName() const { return username_; }
+    proto::RouterSession sessionType() const { return session_type_; }
+    std::u16string address() const;
 
 protected:
     void sendMessage(const google::protobuf::MessageLite& message);
@@ -62,6 +66,8 @@ protected:
     void onDisconnected(base::NetworkChannel::ErrorCode error_code) override;
 
 private:
+    const proto::RouterSession session_type_;
+
     std::unique_ptr<base::NetworkChannel> channel_;
     std::shared_ptr<DatabaseFactory> database_factory_;
 

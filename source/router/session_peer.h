@@ -33,6 +33,8 @@ public:
                 std::shared_ptr<DatabaseFactory> database_factory);
     ~SessionPeer();
 
+    peer::PeerId peerId() const { return peer_id_; }
+
 protected:
     // Session implementation.
     void onSessionReady() override;
@@ -44,7 +46,6 @@ protected:
 private:
     void readPeerIdRequest(const proto::PeerIdRequest& peer_id_request);
 
-    const proto::RouterSession session_type_;
     peer::PeerId peer_id_ = peer::kInvalidPeerId;
 
     DISALLOW_COPY_AND_ASSIGN(SessionPeer);

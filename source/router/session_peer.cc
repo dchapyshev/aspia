@@ -35,8 +35,7 @@ const size_t kPeerKeySize = 512;
 SessionPeer::SessionPeer(proto::RouterSession session_type,
                          std::unique_ptr<base::NetworkChannel> channel,
                          std::shared_ptr<DatabaseFactory> database_factory)
-    : Session(std::move(channel), std::move(database_factory)),
-      session_type_(session_type)
+    : Session(session_type, std::move(channel), std::move(database_factory))
 {
     // Nothing
 }

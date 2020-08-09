@@ -21,9 +21,11 @@
 #include "base/logging.h"
 #include "base/task_runner.h"
 #include "base/net/network_channel.h"
+#include "base/strings/unicode.h"
 #include "proto/router.pb.h"
 #include "router/database_factory_sqlite.h"
 #include "router/database_sqlite.h"
+#include "router/server_proxy.h"
 #include "router/session_manager.h"
 #include "router/session_peer.h"
 #include "router/session_relay.h"
@@ -57,13 +59,17 @@ const char* sessionTypeToString(proto::RouterSession session_type)
 } // namespace
 
 Server::Server(std::shared_ptr<base::TaskRunner> task_runner)
-    : task_runner_(std::move(task_runner)),
+    : server_proxy_(new ServerProxy(this)),
+      task_runner_(std::move(task_runner)),
       database_factory_(std::make_shared<DatabaseFactorySqlite>())
 {
     DCHECK(task_runner_);
 }
 
-Server::~Server() = default;
+Server::~Server()
+{
+    server_proxy_->willDestroyCurrentServer();
+}
 
 bool Server::start()
 {
@@ -107,6 +113,50 @@ bool Server::start()
     return true;
 }
 
+std::vector<proto::Relay> Server::relayList() const
+{
+    std::vector<proto::Relay> result;
+
+    for (const auto& session : sessions_)
+    {
+        if (session->sessionType() != proto::ROUTER_SESSION_RELAY)
+            continue;
+
+        SessionRelay* session_relay = static_cast<SessionRelay*>(session.get());
+
+        proto::Relay relay;
+        relay.set_address(base::utf8FromUtf16(session_relay->address()));
+        relay.set_pool_size(session_relay->poolSize());
+
+        result.emplace_back(std::move(relay));
+    }
+
+    return result;
+}
+
+std::vector<proto::Peer> Server::peerList() const
+{
+    std::vector<proto::Peer> result;
+
+    for (const auto& session : sessions_)
+    {
+        if (session->sessionType() != proto::ROUTER_SESSION_ANONIMOUS_PEER &&
+            session->sessionType() != proto::ROUTER_SESSION_AUTHORIZED_PEER)
+            continue;
+
+        SessionPeer* session_peer = static_cast<SessionPeer*>(session.get());
+
+        proto::Peer peer;
+        peer.set_ip_address(base::utf8FromUtf16(session_peer->address()));
+        peer.set_user_name(base::utf8FromUtf16(session_peer->userName()));
+        peer.set_peer_id(session_peer->peerId());
+
+        result.emplace_back(std::move(peer));
+    }
+
+    return result;
+}
+
 void Server::onNewConnection(std::unique_ptr<base::NetworkChannel> channel)
 {
     LOG(LS_INFO) << "New connection: " << channel->peerAddress();
@@ -138,7 +188,7 @@ void Server::onNewSession(peer::ServerAuthenticatorManager::SessionInfo&& sessio
         case proto::ROUTER_SESSION_MANAGER:
         {
             session = std::make_unique<SessionManager>(
-                std::move(session_info.channel), database_factory_);
+                std::move(session_info.channel), database_factory_, server_proxy_);
         }
         break;
 

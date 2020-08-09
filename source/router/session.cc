@@ -25,9 +25,11 @@
 
 namespace router {
 
-Session::Session(std::unique_ptr<base::NetworkChannel> channel,
+Session::Session(proto::RouterSession session_type,
+                 std::unique_ptr<base::NetworkChannel> channel,
                  std::shared_ptr<DatabaseFactory> database_factory)
-    : channel_(std::move(channel)),
+    : session_type_(session_type),
+      channel_(std::move(channel)),
       database_factory_(std::move(database_factory))
 {
     DCHECK(channel_ && database_factory_);
@@ -64,6 +66,14 @@ void Session::setVersion(const base::Version& version)
 void Session::setUserName(const std::u16string& username)
 {
     username_ = username;
+}
+
+std::u16string Session::address() const
+{
+    if (!channel_)
+        return std::u16string();
+
+    return channel_->peerAddress();
 }
 
 void Session::sendMessage(const google::protobuf::MessageLite& message)

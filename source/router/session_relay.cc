@@ -30,7 +30,7 @@ const uint32_t kDefaultPoolSize = 25;
 
 SessionRelay::SessionRelay(std::unique_ptr<base::NetworkChannel> channel,
                            std::shared_ptr<DatabaseFactory> database_factory)
-    : Session(std::move(channel), std::move(database_factory))
+    : Session(proto::ROUTER_SESSION_RELAY, std::move(channel), std::move(database_factory))
 {
     // Nothing
 }
@@ -85,7 +85,7 @@ void SessionRelay::readKeyPool(const proto::RelayKeyPool& key_pool)
 {
     LOG(LS_INFO) << "Received key pool: " << key_pool.key_size();
 
-    for (uint32_t i = 0; i < key_pool.key_size(); ++i)
+    for (int i = 0; i < key_pool.key_size(); ++i)
         pool_.push_back(key_pool.key(i));
 }
 
