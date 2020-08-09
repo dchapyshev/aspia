@@ -19,14 +19,12 @@
 #ifndef BASE__CONVERTER_H
 #define BASE__CONVERTER_H
 
-#include "base/base64.h"
 #include "base/memory/byte_array.h"
 #include "base/strings/string_number_conversions.h"
 #include "base/strings/string_util.h"
 #include "base/strings/unicode.h"
 
 #include <optional>
-#include <string>
 
 namespace base {
 
@@ -72,12 +70,13 @@ struct ConverterImpl<ByteArray>
 {
     static bool fromString(std::string_view str, ByteArray* value)
     {
-        return Base64::decodeT<std::string_view, ByteArray>(str, value);
+        *value = std::move(fromHex(str));
+        return true;
     }
 
     static std::string toString(const ByteArray& value)
     {
-        return Base64::encodeT<ByteArray, std::string>(value);
+        return toHex(value);
     }
 };
 

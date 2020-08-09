@@ -19,6 +19,7 @@
 #ifndef BASE__JSON_SETTINGS_H
 #define BASE__JSON_SETTINGS_H
 
+#include "base/macros_magic.h"
 #include "base/settings.h"
 
 #include <filesystem>
