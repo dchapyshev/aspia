@@ -29,7 +29,7 @@ namespace relay {
 
 namespace {
 
-const std::chrono::seconds kReconnectTimeout{ 10 };
+const std::chrono::seconds kReconnectTimeout{ 30 };
 
 } // namespace
 
