@@ -33,6 +33,8 @@ list(APPEND SOURCE_BASE
     endian.h
     guid.cc
     guid.h
+    json_settings.cc
+    json_settings.h
     location.cc
     location.h
     logging.cc
