@@ -77,7 +77,8 @@ include_directories(
     ${ASPIA_THIRD_PARTY_DIR}/protobuf/include
     ${ASPIA_THIRD_PARTY_DIR}/tbb/include
     ${ASPIA_THIRD_PARTY_DIR}/zstd/include
-    third_party/asio)
+    third_party/asio
+    third_party/rapidjson/include)
 
 link_directories(
     ${ASPIA_THIRD_PARTY_DIR}/googletest/lib
