@@ -18,7 +18,7 @@
 
 #include "host/ui/settings_util.h"
 
-#include "base/xml_settings.h"
+#include "base/settings/xml_settings.h"
 #include "host/system_settings.h"
 
 #include <QMessageBox>
