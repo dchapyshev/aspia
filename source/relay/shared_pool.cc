@@ -32,74 +32,34 @@ public:
     Pool() = default;
     ~Pool() = default;
 
-    uint32_t addKey(uint32_t controller_id, SessionKey&& session_key);
-    void removeKey(uint32_t key_id);
-    void removeKeysForController(uint32_t controller_id);
+    uint32_t addKey(SessionKey&& session_key);
+    bool removeKey(uint32_t key_id);
     const SessionKey& key(uint32_t key_id) const;
 
 private:
-    struct Entry
-    {
-        Entry(uint32_t controller_id, SessionKey&& session_key) noexcept
-            : controller_id(controller_id),
-              session_key(std::move(session_key))
-        {
-            // Nothing
-        }
-
-        Entry(Entry&& other) noexcept
-            : controller_id(other.controller_id),
-              session_key(std::move(other.session_key))
-        {
-            // Nothing
-        }
-
-        Entry& operator=(Entry&& other) noexcept
-        {
-            if (&other != this)
-            {
-                controller_id = other.controller_id;
-                session_key = std::move(other.session_key);
-            }
-
-            return *this;
-        }
-
-        uint32_t controller_id;
-        SessionKey session_key;
-    };
-
-    std::map<uint32_t, Entry> map_;
+    std::map<uint32_t, SessionKey> map_;
     uint32_t current_key_id_ = 0;
 
     DISALLOW_COPY_AND_ASSIGN(Pool);
 };
 
-uint32_t SharedPool::Pool::addKey(uint32_t controller_id, SessionKey&& session_key)
+uint32_t SharedPool::Pool::addKey(SessionKey&& session_key)
 {
     uint32_t key_id = current_key_id_++;
-    map_.emplace(key_id, Entry(controller_id, std::move(session_key)));
+    map_.emplace(key_id, std::move(session_key));
     return key_id;
 }
 
-void SharedPool::Pool::removeKey(uint32_t key_id)
+bool SharedPool::Pool::removeKey(uint32_t key_id)
 {
-    map_.erase(key_id);
-}
-
-void SharedPool::Pool::removeKeysForController(uint32_t controller_id)
-{
-    for (auto it = map_.begin(); it != map_.end();)
+    auto result = map_.find(key_id);
+    if (result != map_.end())
     {
-        if (it->second.controller_id == controller_id)
-        {
-            it = map_.erase(it);
-        }
-        else
-        {
-            ++it;
-        }
+        map_.erase(result);
+        return true;
     }
+
+    return false;
 }
 
 const SessionKey& SharedPool::Pool::key(uint32_t key_id) const
@@ -108,7 +68,7 @@ const SessionKey& SharedPool::Pool::key(uint32_t key_id) const
     if (result == map_.end())
         return kInvalidKey;
 
-    return result->second.session_key;
+    return result->second;
 }
 
 SharedPool::SharedPool()
@@ -130,19 +90,14 @@ std::unique_ptr<SharedPool> SharedPool::share()
     return std::unique_ptr<SharedPool>(new SharedPool(pool_));
 }
 
-uint32_t SharedPool::addKey(uint32_t controller_id, SessionKey&& session_key)
+uint32_t SharedPool::addKey(SessionKey&& session_key)
 {
-    return pool_->addKey(controller_id, std::move(session_key));
+    return pool_->addKey(std::move(session_key));
 }
 
-void SharedPool::removeKey(uint32_t key_id)
+bool SharedPool::removeKey(uint32_t key_id)
 {
-    pool_->removeKey(key_id);
-}
-
-void SharedPool::removeKeysForController(uint32_t controller_id)
-{
-    pool_->removeKeysForController(controller_id);
+    return pool_->removeKey(key_id);
 }
 
 const SessionKey& SharedPool::key(uint32_t key_id) const
