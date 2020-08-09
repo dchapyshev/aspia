@@ -341,6 +341,7 @@ list(APPEND SOURCE_BASE_SETTINGS
     settings/xml_settings.h)
 
 list(APPEND SOURCE_BASE_SETTINGS_UNIT_TESTS
+    settings/json_settings_unittest.cc
     settings/xml_settings_unittest.cc)
 
 list(APPEND SOURCE_BASE_STRINGS
