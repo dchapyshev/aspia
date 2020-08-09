@@ -38,7 +38,7 @@ public:
     explicit Controller(std::shared_ptr<base::TaskRunner> task_runner);
     ~Controller();
 
-    void start();
+    bool start();
 
 protected:
     // base::NetworkChannel::Listener implementation.

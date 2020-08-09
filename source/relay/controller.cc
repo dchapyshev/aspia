@@ -59,14 +59,33 @@ Controller::Controller(std::shared_ptr<base::TaskRunner> task_runner)
 
 Controller::~Controller() = default;
 
-void Controller::start()
+bool Controller::start()
 {
-    LOG(LS_INFO) << "Start controller";
+    LOG(LS_INFO) << "Starting controller";
+
+    if (router_address_.empty())
+    {
+        LOG(LS_ERROR) << "Empty router address";
+        return false;
+    }
+
+    if (router_port_ == 0)
+    {
+        LOG(LS_ERROR) << "Invalid router port";
+        return false;
+    }
+
+    if (router_public_key_.empty())
+    {
+        LOG(LS_ERROR) << "Empty router public key";
+        return false;
+    }
 
     session_manager_ = std::make_unique<SessionManager>(task_runner_, peer_port_);
     session_manager_->start(shared_pool_->share());
 
     connectToRouter();
+    return true;
 }
 
 void Controller::onConnected()
