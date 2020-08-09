@@ -213,11 +213,7 @@ void PeerController::connectToRouter()
 void PeerController::delayedConnectToRouter()
 {
     LOG(LS_INFO) << "Reconnect after " << kReconnectTimeout.count() << " seconds";
-
-    reconnect_timer_.start(kReconnectTimeout, [this]()
-    {
-        connectToRouter();
-    });
+    reconnect_timer_.start(kReconnectTimeout, std::bind(&PeerController::connectToRouter, this));
 }
 
 } // namespace peer

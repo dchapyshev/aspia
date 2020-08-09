@@ -35,6 +35,7 @@ public:
     uint32_t addKey(SessionKey&& session_key);
     bool removeKey(uint32_t key_id);
     const SessionKey& key(uint32_t key_id) const;
+    void clear();
 
 private:
     std::map<uint32_t, SessionKey> map_;
@@ -71,6 +72,11 @@ const SessionKey& SharedPool::Pool::key(uint32_t key_id) const
     return result->second;
 }
 
+void SharedPool::Pool::clear()
+{
+    map_.clear();
+}
+
 SharedPool::SharedPool()
     : pool_(std::make_shared<Pool>())
 {
@@ -103,6 +109,11 @@ bool SharedPool::removeKey(uint32_t key_id)
 const SessionKey& SharedPool::key(uint32_t key_id) const
 {
     return pool_->key(key_id);
+}
+
+void SharedPool::clear()
+{
+    pool_->clear();
 }
 
 } // namespace relay

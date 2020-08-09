@@ -18,7 +18,7 @@
 
 #include "relay/win/service.h"
 
-#include "relay/controller_manager.h"
+#include "relay/controller.h"
 #include "relay/win/service_constants.h"
 
 namespace relay {
@@ -33,13 +33,13 @@ Service::~Service() = default;
 
 void Service::onStart()
 {
-    controller_manager_ = std::make_unique<ControllerManager>(taskRunner());
-    controller_manager_->start();
+    controller_ = std::make_unique<Controller>(taskRunner());
+    controller_->start();
 }
 
 void Service::onStop()
 {
-    controller_manager_.reset();
+    controller_.reset();
 }
 
 void Service::onSessionEvent(

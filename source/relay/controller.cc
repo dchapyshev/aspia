@@ -19,43 +19,109 @@
 #include "relay/controller.h"
 
 #include "base/logging.h"
+#include "base/task_runner.h"
+#include "peer/client_authenticator.h"
+#include "proto/router.pb.h"
+#include "relay/session_manager.h"
+#include "relay/settings.h"
 
 namespace relay {
 
-Controller::Controller(uint32_t controller_id,
-                       std::unique_ptr<SharedPool> shared_pool,
-                       std::unique_ptr<base::NetworkChannel> channel,
-                       Delegate* delegate)
-    : controller_id_(controller_id),
-      shared_pool_(std::move(shared_pool)),
-      channel_(std::move(channel)),
-      delegate_(delegate)
+namespace {
+
+const std::chrono::seconds kReconnectTimeout{ 10 };
+
+} // namespace
+
+Controller::Controller(std::shared_ptr<base::TaskRunner> task_runner)
+    : task_runner_(task_runner),
+      reconnect_timer_(task_runner),
+      shared_pool_(std::make_unique<SharedPool>())
 {
-    DCHECK(channel_ && delegate_);
+    Settings settings;
+
+    // Router settings.
+    router_address_ = settings.routerAddress();
+    router_port_ = settings.routerPort();
+    router_public_key_ = settings.routerPublicKey();
+
+    LOG(LS_INFO) << "Router address: " << router_address_;
+    LOG(LS_INFO) << "Router port: " << router_port_;
+    LOG(LS_INFO) << "Router public key: " << base::toHex(router_public_key_);
+
+    // Peers settings.
+    peer_port_ = settings.peerPort();
+    max_peer_count_ = settings.maxPeerCount();
+
+    LOG(LS_INFO) << "Peer port: " << peer_port_;
+    LOG(LS_INFO) << "Max peer count: " << max_peer_count_;
 }
 
 Controller::~Controller() = default;
 
 void Controller::start()
 {
-    channel_->setListener(this);
-    channel_->resume();
-}
+    LOG(LS_INFO) << "Start controller";
 
-void Controller::stop()
-{
-    delegate_ = nullptr;
+    session_manager_ = std::make_unique<SessionManager>(task_runner_, peer_port_);
+    session_manager_->start(shared_pool_->share());
+
+    connectToRouter();
 }
 
 void Controller::onConnected()
 {
-    NOTREACHED();
+    LOG(LS_INFO) << "Connection to the router is established";
+
+    static const std::chrono::minutes kKeepAliveTime{ 1 };
+    static const std::chrono::seconds kKeepAliveInterval{ 3 };
+
+    channel_->setKeepAlive(true, kKeepAliveTime, kKeepAliveInterval);
+    channel_->setNoDelay(true);
+
+    authenticator_ = std::make_unique<peer::ClientAuthenticator>(task_runner_);
+
+    authenticator_->setIdentify(proto::IDENTIFY_ANONYMOUS);
+    authenticator_->setPeerPublicKey(router_public_key_);
+    authenticator_->setSessionType(proto::ROUTER_SESSION_RELAY);
+
+    authenticator_->start(std::move(channel_),
+                          [this](peer::ClientAuthenticator::ErrorCode error_code)
+    {
+        if (error_code == peer::ClientAuthenticator::ErrorCode::SUCCESS)
+        {
+            // The authenticator takes the listener on itself, we return the receipt of
+            // notifications.
+            channel_ = authenticator_->takeChannel();
+            channel_->setListener(this);
+
+            LOG(LS_INFO) << "Authentication complete";
+
+            // Now the session will receive incoming messages.
+            channel_->resume();
+        }
+        else
+        {
+            LOG(LS_WARNING) << "Authentication failed: "
+                            << peer::ClientAuthenticator::errorToString(error_code);
+            delayedConnectToRouter();
+        }
+
+        // Authenticator is no longer needed.
+        task_runner_->deleteSoon(std::move(authenticator_));
+    });
 }
 
-void Controller::onDisconnected(base::NetworkChannel::ErrorCode /* error_code */)
+void Controller::onDisconnected(base::NetworkChannel::ErrorCode error_code)
 {
-    if (delegate_)
-        delegate_->onControllerFinished(this);
+    LOG(LS_INFO) << "The connection to the router has been lost: "
+                 << base::NetworkChannel::errorToString(error_code);
+
+    // Clearing the key pool.
+    shared_pool_->clear();
+
+    // Retrying a connection at a time interval.
+    delayedConnectToRouter();
 }
 
 void Controller::onMessageReceived(const base::ByteArray& buffer)
@@ -87,16 +153,34 @@ void Controller::onMessageReceived(const base::ByteArray& buffer)
         key->set_iv(base::toStdString(session_key.iv()));
 
         // Add the key to the pool.
-        key->set_key_id(shared_pool_->addKey(controller_id_, std::move(session_key)));
+        key->set_key_id(shared_pool_->addKey(std::move(session_key)));
     }
 
     // Send a message to the router.
     channel_->send(base::serialize(outgoing_message_));
 }
 
-void Controller::onMessageWritten(size_t pending)
+void Controller::onMessageWritten(size_t /* pending */)
 {
     // Nothing
+}
+
+void Controller::connectToRouter()
+{
+    LOG(LS_INFO) << "Connecting to router...";
+
+    // Create channel.
+    channel_ = std::make_unique<base::NetworkChannel>();
+
+    // Connect to router.
+    channel_->setListener(this);
+    channel_->connect(router_address_, router_port_);
+}
+
+void Controller::delayedConnectToRouter()
+{
+    LOG(LS_INFO) << "Reconnect after " << kReconnectTimeout.count() << " seconds";
+    reconnect_timer_.start(kReconnectTimeout, std::bind(&Controller::connectToRouter, this));
 }
 
 } // namespace relay

@@ -21,8 +21,6 @@ include(tbb)
 list(APPEND SOURCE_RELAY
     controller.cc
     controller.h
-    controller_manager.cc
-    controller_manager.h
     main.cc
     pending_session.cc
     pending_session.h
@@ -50,8 +48,11 @@ add_executable(aspia_relay ${SOURCE_RELAY} ${SOURCE_RELAY_WIN} win/relay.rc)
 set_target_properties(aspia_relay PROPERTIES LINK_FLAGS "/MANIFEST:NO")
 target_link_libraries(aspia_relay
     aspia_base
+    aspia_peer
     aspia_proto
     crypt32
+    netapi32
+    version
     ${THIRD_PARTY_LIBS})
 
 if (USE_TBB)

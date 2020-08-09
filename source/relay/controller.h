@@ -19,33 +19,26 @@
 #ifndef RELAY__CONTROLLER_H
 #define RELAY__CONTROLLER_H
 
+#include "base/waitable_timer.h"
 #include "base/net/network_channel.h"
 #include "proto/relay.pb.h"
 #include "relay/shared_pool.h"
 
+namespace peer {
+class ClientAuthenticator;
+} // namespace peer
+
 namespace relay {
+
+class SessionManager;
 
 class Controller : public base::NetworkChannel::Listener
 {
 public:
-    class Delegate
-    {
-    public:
-        virtual ~Delegate() = default;
-
-        virtual void onControllerFinished(Controller* controller) = 0;
-    };
-
-    Controller(uint32_t controller_id,
-               std::unique_ptr<SharedPool> shared_pool,
-               std::unique_ptr<base::NetworkChannel> channel,
-               Delegate* delegate);
+    explicit Controller(std::shared_ptr<base::TaskRunner> task_runner);
     ~Controller();
 
     void start();
-    void stop();
-
-    uint32_t id() const { return controller_id_; }
 
 protected:
     // base::NetworkChannel::Listener implementation.
@@ -55,15 +48,27 @@ protected:
     void onMessageWritten(size_t pending) override;
 
 private:
-    const uint32_t controller_id_;
+    void connectToRouter();
+    void delayedConnectToRouter();
 
-    std::unique_ptr<SharedPool> shared_pool_;
+    // Router settings.
+    std::u16string router_address_;
+    uint16_t router_port_ = 0;
+    base::ByteArray router_public_key_;
+
+    // Peers settings.
+    uint16_t peer_port_ = 0;
+    size_t max_peer_count_ = 0;
+
+    std::shared_ptr<base::TaskRunner> task_runner_;
+    base::WaitableTimer reconnect_timer_;
     std::unique_ptr<base::NetworkChannel> channel_;
+    std::unique_ptr<peer::ClientAuthenticator> authenticator_;
+    std::unique_ptr<SharedPool> shared_pool_;
+    std::unique_ptr<SessionManager> session_manager_;
 
     proto::RouterToRelay incoming_message_;
     proto::RelayToRouter outgoing_message_;
-
-    Delegate* delegate_;
 
     DISALLOW_COPY_AND_ASSIGN(Controller);
 };

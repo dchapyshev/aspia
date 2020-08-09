@@ -34,6 +34,7 @@ public:
     uint32_t addKey(SessionKey&& session_key);
     bool removeKey(uint32_t key_id);
     const SessionKey& key(uint32_t key_id) const;
+    void clear();
 
 private:
     class Pool;

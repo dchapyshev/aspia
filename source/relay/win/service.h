@@ -23,7 +23,7 @@
 
 namespace relay {
 
-class ControllerManager;
+class Controller;
 
 class Service : public base::win::Service
 {
@@ -38,7 +38,7 @@ protected:
     void onSessionEvent(base::win::SessionStatus event, base::SessionId session_id) override;
 
 private:
-    std::unique_ptr<ControllerManager> controller_manager_;
+    std::unique_ptr<Controller> controller_;
 
     DISALLOW_COPY_AND_ASSIGN(Service);
 };
