@@ -20,7 +20,7 @@
 #define HOST__SYSTEM_SETTINGS_H
 
 #include "base/macros_magic.h"
-#include "base/xml_settings.h"
+#include "base/json_settings.h"
 
 #include <filesystem>
 
@@ -65,7 +65,7 @@ public:
     void setUpdateServer(const std::u16string& server);
 
 private:
-    base::XmlSettings settings_;
+    base::JsonSettings settings_;
 
     DISALLOW_COPY_AND_ASSIGN(SystemSettings);
 };

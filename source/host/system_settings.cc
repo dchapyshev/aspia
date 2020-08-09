@@ -24,7 +24,7 @@
 namespace host {
 
 SystemSettings::SystemSettings()
-    : settings_(base::XmlSettings::Scope::SYSTEM, "aspia", "host")
+    : settings_(base::JsonSettings::Scope::SYSTEM, "aspia", "host")
 {
     // Nothing
 }
