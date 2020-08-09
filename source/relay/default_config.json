@@ -1,0 +1,7 @@
+{
+	"RouterAddress": "localhost",
+	"RouterPort": "8060",
+	"RouterPublicKey": "",
+	"PeerPort": "8070",
+	"MaxPeerCount": "100"
+}

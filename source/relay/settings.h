@@ -19,7 +19,7 @@
 #ifndef RELAY__SETTINGS_H
 #define RELAY__SETTINGS_H
 
-#include "base/xml_settings.h"
+#include "base/json_settings.h"
 
 namespace relay {
 
@@ -45,7 +45,7 @@ public:
     size_t maxPeerCount() const;
 
 private:
-    base::XmlSettings impl_;
+    base::JsonSettings impl_;
 };
 
 } // namespace relay
