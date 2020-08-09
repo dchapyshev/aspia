@@ -165,7 +165,9 @@ void PeerController::onMessageReceived(const base::ByteArray& buffer)
 
         LOG(LS_INFO) << "Peer ID received: " << peer_id_response.peer_id();
 
-        router_info_.peer_key = base::fromStdString(peer_id_response.key());
+        base::ByteArray peer_key = base::fromStdString(peer_id_response.key());
+        if (!peer_key.empty())
+            router_info_.peer_key = base::fromStdString(peer_id_response.key());
         peer_id_ = peer_id_response.peer_id();
 
         delegate_->onPeerIdAssigned(peer_id_, router_info_.peer_key);
