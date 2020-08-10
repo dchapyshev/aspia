@@ -53,7 +53,7 @@ DxgiTexture::~DxgiTexture() = default;
 
 bool DxgiTexture::copyFrom(const DXGI_OUTDUPL_FRAME_INFO& frame_info, IDXGIResource* resource)
 {
-    DCHECK_GT(frame_info.AccumulatedFrames, 0);
+    DCHECK_GT(frame_info.AccumulatedFrames, 0u);
     DCHECK(resource);
 
     ComPtr<ID3D11Texture2D> texture;

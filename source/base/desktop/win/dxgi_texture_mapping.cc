@@ -37,7 +37,7 @@ DxgiTextureMapping::~DxgiTextureMapping() = default;
 bool DxgiTextureMapping::copyFromTexture(const DXGI_OUTDUPL_FRAME_INFO& frame_info,
                                          ID3D11Texture2D* texture)
 {
-    DCHECK_GT(frame_info.AccumulatedFrames, 0);
+    DCHECK_GT(frame_info.AccumulatedFrames, 0u);
     DCHECK(texture);
 
     *rect() = { 0 };
