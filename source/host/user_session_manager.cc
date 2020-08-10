@@ -225,6 +225,8 @@ void UserSessionManager::setSessionEvent(
 
 void UserSessionManager::setPeerId(peer::PeerId peer_id)
 {
+    peer_id_ = peer_id;
+
     // Send an event of each session.
     for (const auto& session : sessions_)
         session->setPeerId(peer_id);
@@ -388,7 +390,7 @@ void UserSessionManager::addUserSession(
 
     sessions_.emplace_back(std::make_unique<UserSession>(
         task_runner_, session_id, std::move(channel)));
-    sessions_.back()->start(this);
+    sessions_.back()->start(peer_id_, this);
 }
 
 } // namespace host

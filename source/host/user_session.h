@@ -64,7 +64,7 @@ public:
                 std::unique_ptr<base::IpcChannel> channel);
     ~UserSession();
 
-    void start(Delegate* delegate);
+    void start(peer::PeerId peer_id, Delegate* delegate);
     void restart(std::unique_ptr<base::IpcChannel> channel);
 
     Type type() const { return type_; }

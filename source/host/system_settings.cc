@@ -104,6 +104,7 @@ base::ByteArray SystemSettings::peerKey() const
 void SystemSettings::setPeerKey(const base::ByteArray& key)
 {
     settings_.set<base::ByteArray>("PeerKey", key);
+    settings_.flush();
 }
 
 peer::UserList SystemSettings::userList() const

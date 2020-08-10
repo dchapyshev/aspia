@@ -58,6 +58,9 @@ public:
     void start(const RouterInfo& router_info, Delegate* delegate);
     void connectTo(peer::PeerId peer_id);
 
+    const std::u16string& address() const { return router_info_.address; }
+    uint16_t port() const { return router_info_.port; }
+    const base::ByteArray& publicKey() const { return router_info_.public_key; }
     const base::ByteArray& peerKey() const { return router_info_.peer_key; }
     PeerId peerId() const { return peer_id_; }
 

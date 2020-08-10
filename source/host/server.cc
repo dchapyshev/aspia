@@ -67,21 +67,7 @@ void Server::start()
 
     settings_watcher_ = std::make_unique<base::FilePathWatcher>(task_runner_);
     settings_watcher_->watch(settings_.filePath(), false,
-        [this](const std::filesystem::path& path, bool error)
-    {
-        LOG(LS_INFO) << "Configuration file change detected";
-
-        if (!error)
-        {
-            DCHECK_EQ(path, settings_.filePath());
-
-            // Synchronize the parameters from the file.
-            settings_.sync();
-
-            // Reload user lists.
-            reloadUserList();
-        }
-    });
+        std::bind(&Server::updateConfiguration, this, std::placeholders::_1, std::placeholders::_2));
 
     authenticator_manager_ =
         std::make_unique<peer::ServerAuthenticatorManager>(task_runner_, this);
@@ -96,16 +82,7 @@ void Server::start()
     server_->start(settings_.tcpPort(), this);
 
     if (settings_.isRouterEnabled())
-    {
-        peer::PeerController::RouterInfo router_info;
-        router_info.address = settings_.routerAddress();
-        router_info.port = settings_.routerPort();
-        router_info.public_key = settings_.routerPublicKey();
-        router_info.peer_key = settings_.peerKey();
-
-        peer_controller_ = std::make_unique<peer::PeerController>(task_runner_);
-        peer_controller_->start(router_info, this);
-    }
+        connectToRouter();
 
     LOG(LS_INFO) << "Host server is started successfully";
 }
@@ -208,6 +185,49 @@ void Server::deleteFirewallRules()
     firewall.deleteRuleByName(kFirewallRuleName);
 }
 
+void Server::updateConfiguration(const std::filesystem::path& path, bool error)
+{
+    LOG(LS_INFO) << "Configuration file change detected";
+
+    if (!error)
+    {
+        DCHECK_EQ(path, settings_.filePath());
+
+        // Synchronize the parameters from the file.
+        settings_.sync();
+
+        // Reload user lists.
+        reloadUserList();
+
+        // If a controller instance already exists.
+        if (peer_controller_)
+        {
+            if (settings_.isRouterEnabled())
+            {
+                // Check if the connection parameters have changed.
+                if (peer_controller_->address() != settings_.routerAddress() ||
+                    peer_controller_->port() != settings_.routerPort() ||
+                    peer_controller_->publicKey() != settings_.routerPublicKey())
+                {
+                    // Reconnect to the router with new parameters.
+                    LOG(LS_INFO) << "Router parameters have changed";
+                    connectToRouter();
+                }
+            }
+            else
+            {
+                // Destroy the controller.
+                peer_controller_.reset();
+            }
+        }
+        else
+        {
+            if (settings_.isRouterEnabled())
+                connectToRouter();
+        }
+    }
+}
+
 void Server::reloadUserList()
 {
     // Read the list of regular users.
@@ -219,6 +239,25 @@ void Server::reloadUserList()
 
     // Updating the list of users.
     authenticator_manager_->setUserList(user_list);
+}
+
+void Server::connectToRouter()
+{
+    LOG(LS_INFO) << "Connecting to the router...";
+
+    // Destroy the previous instance.
+    peer_controller_.reset();
+
+    // Fill the connection parameters.
+    peer::PeerController::RouterInfo router_info;
+    router_info.address = settings_.routerAddress();
+    router_info.port = settings_.routerPort();
+    router_info.public_key = settings_.routerPublicKey();
+    router_info.peer_key = settings_.peerKey();
+
+    // Connect to the router.
+    peer_controller_ = std::make_unique<peer::PeerController>(task_runner_);
+    peer_controller_->start(router_info, this);
 }
 
 } // namespace host

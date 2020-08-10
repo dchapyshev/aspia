@@ -51,9 +51,11 @@ UserSession::UserSession(std::shared_ptr<base::TaskRunner> task_runner,
 
 UserSession::~UserSession() = default;
 
-void UserSession::start(Delegate* delegate)
+void UserSession::start(peer::PeerId peer_id, Delegate* delegate)
 {
     delegate_ = delegate;
+    peer_id_ = peer_id;
+
     DCHECK(delegate_);
 
     LOG(LS_INFO) << "User session started "
@@ -444,6 +446,10 @@ void UserSession::sendCredentials()
 {
     if (!channel_)
         return;
+
+    LOG(LS_INFO) << "Sending credentials to UI";
+    LOG(LS_INFO) << "Peer ID: " << peer_id_;
+    LOG(LS_INFO) << "User Name: " << username_;
 
     outgoing_message_.Clear();
 

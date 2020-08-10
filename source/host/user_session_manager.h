@@ -68,6 +68,7 @@ private:
     std::unique_ptr<base::IpcServer> ipc_server_;
     std::vector<std::unique_ptr<UserSession>> sessions_;
     Delegate* delegate_ = nullptr;
+    peer::PeerId peer_id_ = peer::kInvalidPeerId;
 
     DISALLOW_COPY_AND_ASSIGN(UserSessionManager);
 };

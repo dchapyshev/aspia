@@ -65,7 +65,9 @@ private:
     void startAuthentication(std::unique_ptr<base::NetworkChannel> channel);
     void addFirewallRules();
     void deleteFirewallRules();
+    void updateConfiguration(const std::filesystem::path& path, bool error);
     void reloadUserList();
+    void connectToRouter();
 
     std::shared_ptr<base::TaskRunner> task_runner_;
 
