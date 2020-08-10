@@ -202,13 +202,34 @@ bool JsonSettings::readFile(const std::filesystem::path& file, Map& map)
 {
     map.clear();
 
+    std::error_code ignored_code;
+    std::filesystem::file_status status = std::filesystem::status(file, ignored_code);
+
+    if (!std::filesystem::exists(status))
+    {
+        // The absence of a configuration file is normal case.
+        return true;
+    }
+
+    if (!std::filesystem::is_regular_file(status))
+    {
+        LOG(LS_ERROR) << "The specified configuration file is not a file";
+        return false;
+    }
+
+    if (std::filesystem::is_empty(file, ignored_code))
+    {
+        // The configuration file may be empty.
+        return true;
+    }
+
     std::ifstream stream(file);
     rapidjson::IStreamWrapper wrapper(stream);
 
     rapidjson::Document doc;
     doc.ParseStream(wrapper);
 
-    if (doc.HasParseError() || !doc.IsObject())
+    if (doc.HasParseError())
     {
         LOG(LS_ERROR) << "The configuration file is damaged: " << doc.GetParseError();
         return false;
