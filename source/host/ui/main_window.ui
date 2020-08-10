@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>262</width>
-    <height>201</height>
+    <width>287</width>
+    <height>221</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -294,7 +294,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>262</width>
+     <width>287</width>
      <height>21</height>
     </rect>
    </property>
@@ -324,6 +324,7 @@
    <addaction name="menu_language"/>
    <addaction name="menu_help"/>
   </widget>
+  <widget class="QStatusBar" name="statusbar"/>
   <action name="action_exit">
    <property name="icon">
     <iconset resource="resources.qrc">

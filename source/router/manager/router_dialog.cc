@@ -132,7 +132,7 @@ void RouterDialog::onButtonBoxClicked(QAbstractButton* button)
     mru_cache_.put(std::move(entry));
     reloadMru();
 
-    main_window_ = new MainWindow(this);
+    main_window_ = new MainWindow();
     main_window_->connectToRouter(address, port, username, password);
 
     hide();

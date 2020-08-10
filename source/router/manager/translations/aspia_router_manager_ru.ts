@@ -419,12 +419,12 @@
         <translation>Ошибка: %1</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="395"/>
+        <location filename="../main_window.cc" line="398"/>
         <source>Confirmation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="396"/>
+        <location filename="../main_window.cc" line="399"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>

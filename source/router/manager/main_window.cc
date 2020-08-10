@@ -252,8 +252,11 @@ void MainWindow::onPeerList(std::shared_ptr<proto::PeerList> peer_list)
 {
     ui.tree_peer->clear();
 
-    for (int i = 0; i < peer_list->peer_size(); ++i)
+    int peer_size = peer_list->peer_size();
+
+    for (int i = 0; i < peer_size; ++i)
         ui.tree_peer->addTopLevelItem(new PeerTreeItem(peer_list->peer(i)));
+    ui.label_connections_count->setText(QString::number(peer_size));
 
     afterRequest();
 }
