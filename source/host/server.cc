@@ -114,7 +114,10 @@ void Server::onPeerIdAssigned(peer::PeerId peer_id, const base::ByteArray& peer_
     LOG(LS_INFO) << "New peer ID assigned: " << peer_id;
 
     if (!peer_key.empty())
+    {
+        LOG(LS_INFO) << "Peer key changed";
         settings_.setPeerKey(peer_key);
+    }
 
     user_session_manager_->setPeerId(peer_id);
 }
@@ -217,6 +220,7 @@ void Server::updateConfiguration(const std::filesystem::path& path, bool error)
             else
             {
                 // Destroy the controller.
+                LOG(LS_INFO) << "The router is now disabled";
                 peer_controller_.reset();
             }
         }
