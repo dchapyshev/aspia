@@ -34,6 +34,7 @@ public:
 
     void start(uint16_t port, Delegate* delegate);
     void stop();
+    uint16_t port() const;
 
 private:
     void doAccept();
@@ -42,6 +43,7 @@ private:
     asio::io_context& io_context_;
     std::unique_ptr<asio::ip::tcp::acceptor> acceptor_;
     Delegate* delegate_ = nullptr;
+    uint16_t port_ = 0;
 
     DISALLOW_COPY_AND_ASSIGN(Impl);
 };
@@ -60,6 +62,7 @@ NetworkServer::Impl::~Impl()
 void NetworkServer::Impl::start(uint16_t port, Delegate* delegate)
 {
     delegate_ = delegate;
+    port_ = port;
 
     DCHECK(delegate_);
 
@@ -73,6 +76,11 @@ void NetworkServer::Impl::stop()
 {
     delegate_ = nullptr;
     acceptor_.reset();
+}
+
+uint16_t NetworkServer::Impl::port() const
+{
+    return port_;
 }
 
 void NetworkServer::Impl::doAccept()
@@ -123,6 +131,11 @@ void NetworkServer::start(uint16_t port, Delegate* delegate)
 void NetworkServer::stop()
 {
     impl_->stop();
+}
+
+uint16_t NetworkServer::port() const
+{
+    return impl_->port();
 }
 
 } // namespace base

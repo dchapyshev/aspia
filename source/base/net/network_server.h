@@ -44,6 +44,7 @@ public:
 
     void start(uint16_t port, Delegate* delegate);
     void stop();
+    uint16_t port() const;
 
 private:
     class Impl;
