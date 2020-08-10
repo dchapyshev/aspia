@@ -305,6 +305,10 @@ std::string NetworkChannel::errorToString(ErrorCode error_code)
 
     switch (error_code)
     {
+        case ErrorCode::SUCCESS:
+            str = "SUCCESS";
+            break;
+
         case ErrorCode::ACCESS_DENIED:
             str = "ACCESS_DENIED";
             break;

@@ -45,6 +45,9 @@ public:
         // Unknown error.
         UNKNOWN,
 
+        // No error.
+        SUCCESS,
+
         // Cryptography error (message encryption or decryption failed).
         ACCESS_DENIED,
 
