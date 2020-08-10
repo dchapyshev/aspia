@@ -146,6 +146,11 @@ void JsonSettings::sync()
     readFile(path_, map());
 }
 
+void JsonSettings::flush()
+{
+    writeFile(path_, map());
+}
+
 // static
 std::filesystem::path JsonSettings::filePath(std::string_view file_name)
 {

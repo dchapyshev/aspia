@@ -143,6 +143,11 @@ void XmlSettings::sync()
     readFile(path_, map());
 }
 
+void XmlSettings::flush()
+{
+    writeFile(path_, map());
+}
+
 // static
 std::filesystem::path XmlSettings::filePath(std::string_view file_name)
 {
