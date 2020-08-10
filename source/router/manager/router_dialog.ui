@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>347</width>
-    <height>269</height>
+    <height>237</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -80,38 +80,6 @@
          <enum>QLineEdit::Password</enum>
         </property>
        </widget>
-      </item>
-      <item row="4" column="0">
-       <widget class="QLabel" name="label_public_key">
-        <property name="text">
-         <string>Public Key:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="1">
-       <layout class="QHBoxLayout" name="horizontalLayout_2">
-        <item>
-         <widget class="QLineEdit" name="edit_public_key">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="button_public_key">
-          <property name="text">
-           <string/>
-          </property>
-          <property name="icon">
-           <iconset resource="resources/router_manager.qrc">
-            <normaloff>:/img/folder-open-document-text.png</normaloff>:/img/folder-open-document-text.png</iconset>
-          </property>
-         </widget>
-        </item>
-       </layout>
       </item>
      </layout>
     </widget>

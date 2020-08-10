@@ -44,7 +44,6 @@ public:
 
     void connectToRouter(const QString& address,
                          uint16_t port,
-                         const QByteArray& public_key,
                          const QString& user_name,
                          const QString& password);
 

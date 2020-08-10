@@ -33,7 +33,6 @@ public:
         QString address;
         uint16_t port;
         QString username;
-        QString key_path;
     };
 
     using EntryList = QVector<Entry>;

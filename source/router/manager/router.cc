@@ -36,11 +36,6 @@ Router::Router(std::shared_ptr<RouterWindowProxy> window_proxy,
 
 Router::~Router() = default;
 
-void Router::setPublicKey(const base::ByteArray& public_key)
-{
-    authenticator_->setPeerPublicKey(public_key);
-}
-
 void Router::setUserName(std::u16string_view user_name)
 {
     authenticator_->setUserName(user_name);

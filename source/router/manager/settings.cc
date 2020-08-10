@@ -56,7 +56,6 @@ void Settings::readMru(MruCache* mru) const
         entry.address = settings_.value(QLatin1String("Address")).toString();
         entry.port = settings_.value(QLatin1String("Port")).toUInt();
         entry.username = settings_.value(QLatin1String("UserName")).toString();
-        entry.key_path = settings_.value(QLatin1String("KeyPath")).toString();
 
         mru->put(std::move(entry));
     }
@@ -86,7 +85,6 @@ void Settings::writeMru(const MruCache& mru)
         settings_.setValue(QLatin1String("Address"), entry->address);
         settings_.setValue(QLatin1String("Port"), entry->port);
         settings_.setValue(QLatin1String("UserName"), entry->username);
-        settings_.setValue(QLatin1String("KeyPath"), entry->key_path);
     }
     settings_.endArray();
 }

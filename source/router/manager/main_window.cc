@@ -112,7 +112,6 @@ MainWindow::~MainWindow()
 
 void MainWindow::connectToRouter(const QString& address,
                                  uint16_t port,
-                                 const QByteArray& public_key,
                                  const QString& user_name,
                                  const QString& password)
 {
@@ -132,7 +131,6 @@ void MainWindow::connectToRouter(const QString& address,
     std::unique_ptr<Router> router = std::make_unique<Router>(
         window_proxy_, qt_base::Application::ioTaskRunner());
 
-    router->setPublicKey(base::fromHex(public_key.toStdString()));
     router->setUserName(user_name.toStdU16String());
     router->setPassword(password.toStdU16String());
 

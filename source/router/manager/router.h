@@ -38,7 +38,6 @@ public:
            std::shared_ptr<base::TaskRunner> io_task_runner);
     ~Router();
 
-    void setPublicKey(const base::ByteArray& public_key);
     void setUserName(std::u16string_view user_name);
     void setPassword(std::u16string_view password);
 
