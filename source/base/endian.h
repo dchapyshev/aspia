@@ -80,58 +80,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(Endian);
 };
 
-// static
-bool Endian::isLittle()
-{
-    const union
-    {
-        long one;
-        char little;
-    } is_endian = { 1 };
-
-    return is_endian.little;
-}
-
-// static
-uint16_t Endian::byteSwap(uint16_t value)
-{
-#if defined(CC_MSVC)
-    return _byteswap_ushort(value);
-#else // defined(CC_MSVC)
-    return ((value & 0x00FF) << 8) | ((value & 0xFF00) >> 8);
-#endif // defined(CC_*)
-}
-
-// static
-uint32_t Endian::byteSwap(uint32_t value)
-{
-#if defined(CC_MSVC)
-    return _byteswap_ulong(value);
-#else // defined(CC_MSVC)
-    return ((value & 0x000000FFUL) << 24) |
-           ((value & 0x0000FF00UL) << 8) |
-           ((value & 0x00FF0000UL) >> 8) |
-           ((value & 0xFF000000UL) >> 24);
-#endif // defined(CC_*)
-}
-
-// static
-uint64_t Endian::byteSwap(uint64_t value)
-{
-#if defined(CC_MSVC)
-    return _byteswap_uint64(value);
-#else // defined(CC_MSVC)
-    return ((value & 0x00000000000000FFULL) << 56) |
-           ((value & 0x000000000000FF00ULL) << 40) |
-           ((value & 0x0000000000FF0000ULL) << 24) |
-           ((value & 0x00000000FF000000ULL) << 8) |
-           ((value & 0x000000FF00000000ULL) >> 8) |
-           ((value & 0x0000FF0000000000ULL) >> 24) |
-           ((value & 0x00FF000000000000ULL) >> 40) |
-           ((value & 0xFF00000000000000ULL) >> 56);
-#endif // defined(CC_*)
-}
-
 } // namespace base
 
 #endif // BASE__ENDIAN_H
