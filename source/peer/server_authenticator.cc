@@ -295,36 +295,34 @@ void ServerAuthenticator::onClientHello(const base::ByteArray& buffer)
 
     if (key_pair_.isValid())
     {
-        decrypt_iv_ = base::fromStdString(client_hello.iv());
-        if (decrypt_iv_.empty())
-        {
-            finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
-            return;
-        }
-
         base::ByteArray peer_public_key = base::fromStdString(client_hello.public_key());
-        if (peer_public_key.empty())
+        decrypt_iv_ = base::fromStdString(client_hello.iv());
+
+        if (peer_public_key.empty() != decrypt_iv_.empty())
         {
             finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
             return;
         }
 
-        base::ByteArray temp = key_pair_.sessionKey(peer_public_key);
-        if (temp.empty())
+        if (!peer_public_key.empty() && !decrypt_iv_.empty())
         {
-            finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
-            return;
-        }
+            base::ByteArray temp = key_pair_.sessionKey(peer_public_key);
+            if (temp.empty())
+            {
+                finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
+                return;
+            }
 
-        session_key_ = base::GenericHash::hash(base::GenericHash::Type::BLAKE2s256, temp);
-        if (session_key_.empty())
-        {
-            finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
-            return;
-        }
+            session_key_ = base::GenericHash::hash(base::GenericHash::Type::BLAKE2s256, temp);
+            if (session_key_.empty())
+            {
+                finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
+                return;
+            }
 
-        DCHECK(!encrypt_iv_.empty());
-        server_hello.set_iv(base::toStdString(encrypt_iv_));
+            DCHECK(!encrypt_iv_.empty());
+            server_hello.set_iv(base::toStdString(encrypt_iv_));
+        }
     }
 
     if ((client_hello.encryption() & proto::ENCRYPTION_AES256_GCM) && base::CPUID::hasAesNi())
