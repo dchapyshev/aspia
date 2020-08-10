@@ -293,7 +293,8 @@ void Clipboard::onClipboardUpdate()
                 event.set_data(std::move(data));
             }
 
-            delegate_->onClipboardEvent(event);
+            if (delegate_)
+                delegate_->onClipboardEvent(event);
         }
     }
 }

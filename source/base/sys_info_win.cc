@@ -187,7 +187,7 @@ std::string SysInfo::computerName()
 // static
 std::string SysInfo::computerDomain()
 {
-    DWORD buffer_size;
+    DWORD buffer_size = 0;
 
     if (GetComputerNameExW(ComputerNameDnsDomain, nullptr, &buffer_size) ||
         GetLastError() != ERROR_MORE_DATA)

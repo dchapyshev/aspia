@@ -31,7 +31,7 @@ public:
     struct Entry
     {
         QString address;
-        uint16_t port;
+        uint16_t port = 0;
         QString username;
     };
 

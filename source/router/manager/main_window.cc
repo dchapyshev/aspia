@@ -38,6 +38,7 @@ class PeerTreeItem : public QTreeWidgetItem
 {
 public:
     explicit PeerTreeItem(const proto::Peer& peer)
+        : peer_id(peer.peer_id())
     {
         setText(0, QString::number(peer.peer_id()));
         setText(1, QString::fromStdString(peer.user_name()));
