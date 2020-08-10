@@ -190,10 +190,10 @@ void SessionManager::doUserRequest(const proto::UserRequest& request)
 void SessionManager::doRelayListRequest()
 {
     proto::RouterToManager message;
-    message.mutable_relay_list()->set_error_code(proto::RelayList::SUCCESS);
 
-    for (auto relay : server_proxy_->relayList())
-        message.mutable_relay_list()->add_relay()->CopyFrom(relay);
+    message.set_allocated_relay_list(server_proxy_->relayList().release());
+    if (!message.has_relay_list())
+        message.mutable_relay_list()->set_error_code(proto::RelayList::UNKNOWN_ERROR);
 
     sendMessage(message);
 }
@@ -201,10 +201,10 @@ void SessionManager::doRelayListRequest()
 void SessionManager::doPeerListRequest()
 {
     proto::RouterToManager message;
-    message.mutable_peer_list()->set_error_code(proto::PeerList::SUCCESS);
 
-    for (auto peer : server_proxy_->peerList())
-        message.mutable_peer_list()->add_peer()->CopyFrom(peer);
+    message.set_allocated_peer_list(server_proxy_->peerList().release());
+    if (!message.has_peer_list())
+        message.mutable_peer_list()->set_error_code(proto::PeerList::UNKNOWN_ERROR);
 
     sendMessage(message);
 }

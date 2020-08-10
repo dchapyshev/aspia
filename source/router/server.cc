@@ -113,9 +113,9 @@ bool Server::start()
     return true;
 }
 
-std::vector<proto::Relay> Server::relayList() const
+std::unique_ptr<proto::RelayList> Server::relayList() const
 {
-    std::vector<proto::Relay> result;
+    std::unique_ptr<proto::RelayList> result = std::make_unique<proto::RelayList>();
 
     for (const auto& session : sessions_)
     {
@@ -124,19 +124,18 @@ std::vector<proto::Relay> Server::relayList() const
 
         SessionRelay* session_relay = static_cast<SessionRelay*>(session.get());
 
-        proto::Relay relay;
-        relay.set_address(base::utf8FromUtf16(session_relay->address()));
-        relay.set_pool_size(session_relay->poolSize());
-
-        result.emplace_back(std::move(relay));
+        proto::Relay* relay = result->add_relay();
+        relay->set_address(base::utf8FromUtf16(session_relay->address()));
+        relay->set_pool_size(session_relay->poolSize());
     }
 
+    result->set_error_code(proto::RelayList::SUCCESS);
     return result;
 }
 
-std::vector<proto::Peer> Server::peerList() const
+std::unique_ptr<proto::PeerList> Server::peerList() const
 {
-    std::vector<proto::Peer> result;
+    std::unique_ptr<proto::PeerList> result = std::make_unique<proto::PeerList>();
 
     for (const auto& session : sessions_)
     {
@@ -146,14 +145,13 @@ std::vector<proto::Peer> Server::peerList() const
 
         SessionPeer* session_peer = static_cast<SessionPeer*>(session.get());
 
-        proto::Peer peer;
-        peer.set_ip_address(base::utf8FromUtf16(session_peer->address()));
-        peer.set_user_name(base::utf8FromUtf16(session_peer->userName()));
-        peer.set_peer_id(session_peer->peerId());
-
-        result.emplace_back(std::move(peer));
+        proto::Peer* peer = result->add_peer();
+        peer->set_ip_address(base::utf8FromUtf16(session_peer->address()));
+        peer->set_user_name(base::utf8FromUtf16(session_peer->userName()));
+        peer->set_peer_id(session_peer->peerId());
     }
 
+    result->set_error_code(proto::PeerList::SUCCESS);
     return result;
 }
 

@@ -28,8 +28,8 @@ class ServerProxy
 public:
     ~ServerProxy();
 
-    std::vector<proto::Relay> relayList() const;
-    std::vector<proto::Peer> peerList() const;
+    std::unique_ptr<proto::RelayList> relayList() const;
+    std::unique_ptr<proto::PeerList> peerList() const;
 
 private:
     friend class Server;

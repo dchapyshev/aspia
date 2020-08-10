@@ -33,18 +33,18 @@ ServerProxy::~ServerProxy()
     DCHECK(!server_);
 }
 
-std::vector<proto::Relay> ServerProxy::relayList() const
+std::unique_ptr<proto::RelayList> ServerProxy::relayList() const
 {
     if (!server_)
-        return std::vector<proto::Relay>();
+        return nullptr;
 
     return server_->relayList();
 }
 
-std::vector<proto::Peer> ServerProxy::peerList() const
+std::unique_ptr<proto::PeerList> ServerProxy::peerList() const
 {
     if (!server_)
-        return std::vector<proto::Peer>();
+        return nullptr;
 
     return server_->peerList();
 }
