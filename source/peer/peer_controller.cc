@@ -141,7 +141,6 @@ void PeerController::onDisconnected(base::NetworkChannel::ErrorCode error_code)
 void PeerController::onMessageReceived(const base::ByteArray& buffer)
 {
     proto::RouterToPeer message;
-
     if (!base::parse(buffer, &message))
     {
         LOG(LS_ERROR) << "Invalid message from router";

@@ -340,12 +340,15 @@ void MainWindow::refreshUserList()
 
 void MainWindow::addUser()
 {
-    QVector<proto::User> users;
+    std::vector<std::string> users;
 
     for (int i = 0; i < ui.tree_users->topLevelItemCount(); ++i)
-        users.append(static_cast<UserTreeItem*>(ui.tree_users->topLevelItem(i))->user);
+    {
+        users.emplace_back(static_cast<UserTreeItem*>(
+            ui.tree_users->topLevelItem(i))->user.name());
+    }
 
-    UserDialog dialog(users, -1, this);
+    UserDialog dialog(nullptr, users, this);
     if (dialog.exec() == QDialog::Accepted)
     {
         if (router_proxy_)
@@ -362,19 +365,16 @@ void MainWindow::modifyUser()
     if (!tree_item)
         return;
 
-    QVector<proto::User> users;
-    int user_index = -1;
+    std::vector<std::string> users;
 
     for (int i = 0; i < ui.tree_users->topLevelItemCount(); ++i)
     {
         UserTreeItem* current_item = static_cast<UserTreeItem*>(ui.tree_users->topLevelItem(i));
-        if (current_item->text(0).compare(tree_item->text(0), Qt::CaseInsensitive) == 0)
-            user_index = i;
-
-        users.append(current_item->user);
+        if (current_item->text(0).compare(tree_item->text(0), Qt::CaseInsensitive) != 0)
+            users.emplace_back(current_item->user.name());
     }
 
-    UserDialog dialog(users, user_index, this);
+    UserDialog dialog(std::make_unique<proto::User>(tree_item->user), users, this);
     if (dialog.exec() == QDialog::Accepted)
     {
         if (router_proxy_)

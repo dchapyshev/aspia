@@ -30,7 +30,9 @@ class UserDialog : public QDialog
     Q_OBJECT
 
 public:
-    UserDialog(const QVector<proto::User>& users, int user_index, QWidget* parent);
+    UserDialog(std::unique_ptr<proto::User>,
+               const std::vector<std::string>& users,
+               QWidget* parent);
     ~UserDialog();
 
     const proto::User& user() const;
@@ -46,8 +48,8 @@ private:
 
     Ui::UserDialog ui;
 
-    QVector<proto::User> users_;
-    int user_index_;
+    std::unique_ptr<proto::User> user_;
+    std::vector<std::string> users_;
     bool account_changed_ = true;
 
     DISALLOW_COPY_AND_ASSIGN(UserDialog);

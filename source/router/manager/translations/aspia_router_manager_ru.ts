@@ -515,31 +515,31 @@
         <translation type="obsolete">Пользователи</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="143"/>
-        <location filename="../user_dialog.cc" line="162"/>
-        <location filename="../user_dialog.cc" line="175"/>
-        <location filename="../user_dialog.cc" line="189"/>
-        <location filename="../user_dialog.cc" line="212"/>
+        <location filename="../user_dialog.cc" line="130"/>
+        <location filename="../user_dialog.cc" line="145"/>
+        <location filename="../user_dialog.cc" line="158"/>
+        <location filename="../user_dialog.cc" line="172"/>
+        <location filename="../user_dialog.cc" line="195"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="144"/>
+        <location filename="../user_dialog.cc" line="131"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>Имя пользователя не может быть пустым и должно содержать только буквы алфавита, цифры и символы _, -, .</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="163"/>
+        <location filename="../user_dialog.cc" line="146"/>
         <source>The username you entered already exists.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="176"/>
+        <location filename="../user_dialog.cc" line="159"/>
         <source>The passwords you entered do not match.</source>
         <translation>Введенные пароли не совпадают.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../user_dialog.cc" line="190"/>
+        <location filename="../user_dialog.cc" line="173"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
         <translation>
             <numerusform>Пароль не может быть пустым и не должен быть длиннее %n символа.</numerusform>
@@ -548,12 +548,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="202"/>
+        <location filename="../user_dialog.cc" line="185"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Введенный пароль не отвечает требованиям безопасности!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../user_dialog.cc" line="205"/>
+        <location filename="../user_dialog.cc" line="188"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Пароль должен содержать символы в нижнем и верхнем регистре, цифры и не может быть короче %n символа.</numerusform>
@@ -562,22 +562,22 @@
         </translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="209"/>
+        <location filename="../user_dialog.cc" line="192"/>
         <source>Do you want to enter a different password?</source>
         <translation>Вы хотите ввести другой пароль?</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="271"/>
+        <location filename="../user_dialog.cc" line="256"/>
         <source>Double-click to change</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="295"/>
+        <location filename="../user_dialog.cc" line="280"/>
         <source>Manager</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="299"/>
+        <location filename="../user_dialog.cc" line="284"/>
         <source>Authorized Peer</source>
         <translation type="unfinished"></translation>
     </message>

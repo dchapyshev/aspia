@@ -133,9 +133,16 @@ void SessionManager::doUserRequest(const proto::UserRequest& request)
 
             LOG(LS_INFO) << "User add request: " << username;
 
-            if (!peer::User::isValidUserName(username) || !peer::User::isValidPassword(password))
+            if (!peer::User::isValidUserName(username))
             {
-                LOG(LS_ERROR) << "Invalid user name or password";
+                LOG(LS_ERROR) << "Invalid user name";
+                result->set_error_code(proto::UserResult::INVALID_DATA);
+                break;
+            }
+
+            if (!peer::User::isValidPassword(password))
+            {
+                LOG(LS_ERROR) << "Invalid password";
                 result->set_error_code(proto::UserResult::INVALID_DATA);
                 break;
             }

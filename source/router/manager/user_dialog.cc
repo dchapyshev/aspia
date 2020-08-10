@@ -27,19 +27,19 @@
 
 namespace router {
 
-UserDialog::UserDialog(const QVector<proto::User>& users, int user_index, QWidget* parent)
+UserDialog::UserDialog(std::unique_ptr<proto::User> user,
+                       const std::vector<std::string>& users,
+                       QWidget* parent)
     : QDialog(parent),
-      users_(users),
-      user_index_(user_index)
+      user_(std::move(user)),
+      users_(users)
 {
     ui.setupUi(this);
 
-    if (user_index_ != -1)
+    if (user_)
     {
-        const proto::User& user = users_.at(user_index_);
-
-        ui.checkbox_disable->setChecked(!(user.flags() & peer::User::ENABLED));
-        ui.edit_username->setText(QString::fromStdString(user.name()));
+        ui.checkbox_disable->setChecked(!(user_->flags() & peer::User::ENABLED));
+        ui.edit_username->setText(QString::fromStdString(user_->name()));
 
         setAccountChanged(false);
     }
@@ -56,11 +56,9 @@ UserDialog::UserDialog(const QVector<proto::User>& users, int user_index, QWidge
         item->setFlags(item->flags() | Qt::ItemIsUserCheckable);
         item->setData(0, Qt::UserRole, QVariant(session_type));
 
-        if (user_index_ != -1)
+        if (user_)
         {
-            const proto::User& user = users_.at(user_index_);
-
-            if (user.sessions() & session_type)
+            if (user_->sessions() & session_type)
                 item->setCheckState(0, Qt::Checked);
             else
                 item->setCheckState(0, Qt::Unchecked);
@@ -91,7 +89,7 @@ UserDialog::~UserDialog() = default;
 
 const proto::User& UserDialog::user() const
 {
-    return users_.at(user_index_);
+    return *user_;
 }
 
 bool UserDialog::eventFilter(QObject* object, QEvent* event)
@@ -120,18 +118,7 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
         return;
     }
 
-    proto::User* user;
-    if (user_index_ == -1)
-    {
-        // New user.
-        users_.push_back(proto::User());
-        user = &users_.back();
-    }
-    else
-    {
-        // Modify existing.
-        user = &users_[user_index_];
-    }
+    std::unique_ptr<proto::User> user = std::make_unique<proto::User>();
 
     if (account_changed_)
     {
@@ -150,13 +137,9 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
             return;
         }
 
-        for (int i = 0; i < users_.size(); ++i)
+        for (size_t i = 0; i < users_.size(); ++i)
         {
-            if (i == user_index_)
-                continue;
-
-            if (base::compareCaseInsensitive(
-                username, base::utf16FromUtf8(users_.at(i).name())) == 0)
+            if (base::compareCaseInsensitive(username, base::utf16FromUtf8(users_.at(i))) == 0)
             {
                 QMessageBox::warning(this,
                                      tr("Warning"),
@@ -240,6 +223,8 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
 
     user->set_sessions(sessions);
     user->set_flags(flags);
+
+    user_ = std::move(user);
 
     accept();
     close();

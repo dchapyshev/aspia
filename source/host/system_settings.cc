@@ -130,7 +130,6 @@ peer::UserList SystemSettings::userList() const
         seed_key = base::Random::byteArray(64);
 
     users.setSeedKey(seed_key);
-
     return users;
 }
 
