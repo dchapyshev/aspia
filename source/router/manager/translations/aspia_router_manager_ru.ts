@@ -419,18 +419,43 @@
         <translation>Ошибка: %1</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="398"/>
+        <location filename="../main_window.cc" line="273"/>
+        <location filename="../main_window.cc" line="321"/>
+        <source>Unknown internal error.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main_window.cc" line="277"/>
+        <location filename="../main_window.cc" line="325"/>
+        <source>Invalid data was passed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main_window.cc" line="281"/>
+        <location filename="../main_window.cc" line="333"/>
+        <source>Unknown error type.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main_window.cc" line="329"/>
+        <source>A user with the specified name already exists.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main_window.cc" line="446"/>
         <source>Confirmation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="399"/>
+        <location filename="../main_window.cc" line="447"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../main_window.cc" line="285"/>
+        <location filename="../main_window.cc" line="337"/>
         <source>Warning</source>
-        <translation type="obsolete">Предупреждение</translation>
+        <translation type="unfinished">Предупреждение</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="223"/>

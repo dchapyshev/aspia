@@ -263,6 +263,28 @@ void MainWindow::onPeerList(std::shared_ptr<proto::PeerList> peer_list)
 
 void MainWindow::onPeerResult(std::shared_ptr<proto::PeerResult> peer_result)
 {
+    if (peer_result->error_code() != proto::PeerResult::SUCCESS)
+    {
+        const char* message;
+
+        switch (peer_result->error_code())
+        {
+            case proto::PeerResult::INTERNAL_ERROR:
+                message = QT_TR_NOOP("Unknown internal error.");
+                break;
+
+            case proto::PeerResult::INVALID_DATA:
+                message = QT_TR_NOOP("Invalid data was passed.");
+                break;
+
+            default:
+                message = QT_TR_NOOP("Unknown error type.");
+                break;
+        }
+
+        QMessageBox::warning(this, tr("Warning"), tr(message), QMessageBox::Ok);
+    }
+
     refreshPeerList();
     afterRequest();
 }
@@ -289,6 +311,32 @@ void MainWindow::onUserList(std::shared_ptr<proto::UserList> user_list)
 
 void MainWindow::onUserResult(std::shared_ptr<proto::UserResult> user_result)
 {
+    if (user_result->error_code() != proto::UserResult::SUCCESS)
+    {
+        const char* message;
+
+        switch (user_result->error_code())
+        {
+            case proto::UserResult::INTERNAL_ERROR:
+                message = QT_TR_NOOP("Unknown internal error.");
+                break;
+
+            case proto::UserResult::INVALID_DATA:
+                message = QT_TR_NOOP("Invalid data was passed.");
+                break;
+
+            case proto::UserResult::ALREADY_EXISTS:
+                message = QT_TR_NOOP("A user with the specified name already exists.");
+                break;
+
+            default:
+                message = QT_TR_NOOP("Unknown error type.");
+                break;
+        }
+
+        QMessageBox::warning(this, tr("Warning"), tr(message), QMessageBox::Ok);
+    }
+
     refreshUserList();
     afterRequest();
 }
