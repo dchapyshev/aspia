@@ -25,11 +25,21 @@
 #include "relay/session_manager.h"
 #include "relay/settings.h"
 
+#if defined(OS_WIN)
+#include "base/files/base_paths.h"
+#include "base/net/firewall_manager.h"
+#endif // defined(OS_WIN)
+
 namespace relay {
 
 namespace {
 
 const std::chrono::seconds kReconnectTimeout{ 30 };
+
+#if defined(OS_WIN)
+const wchar_t kFirewallRuleName[] = L"Aspia Relay Service";
+const wchar_t kFirewallRuleDecription[] = L"Allow incoming TCP connections";
+#endif // defined(OS_WIN)
 
 } // namespace
 
@@ -57,7 +67,12 @@ Controller::Controller(std::shared_ptr<base::TaskRunner> task_runner)
     LOG(LS_INFO) << "Max peer count: " << max_peer_count_;
 }
 
-Controller::~Controller() = default;
+Controller::~Controller()
+{
+#if defined(OS_WIN)
+    deleteFirewallRules();
+#endif // defined(OS_WIN)
+}
 
 bool Controller::start()
 {
@@ -80,6 +95,16 @@ bool Controller::start()
         LOG(LS_ERROR) << "Empty router public key";
         return false;
     }
+
+    if (peer_port_ == 0)
+    {
+        LOG(LS_ERROR) << "Invalid peer port";
+        return false;
+    }
+
+#if defined(OS_WIN)
+    addFirewallRules(peer_port_);
+#endif // defined(OS_WIN)
 
     session_manager_ = std::make_unique<SessionManager>(task_runner_, peer_port_);
     session_manager_->start(shared_pool_->share());
@@ -201,5 +226,37 @@ void Controller::delayedConnectToRouter()
     LOG(LS_INFO) << "Reconnect after " << kReconnectTimeout.count() << " seconds";
     reconnect_timer_.start(kReconnectTimeout, std::bind(&Controller::connectToRouter, this));
 }
+
+
+#if defined(OS_WIN)
+void Controller::addFirewallRules(uint16_t port)
+{
+    std::filesystem::path file_path;
+    if (!base::BasePaths::currentExecFile(&file_path))
+        return;
+
+    base::FirewallManager firewall(file_path);
+    if (!firewall.isValid())
+        return;
+
+    if (!firewall.addTcpRule(kFirewallRuleName, kFirewallRuleDecription, port))
+        return;
+
+    LOG(LS_INFO) << "Rule is added to the firewall";
+}
+
+void Controller::deleteFirewallRules()
+{
+    std::filesystem::path file_path;
+    if (!base::BasePaths::currentExecFile(&file_path))
+        return;
+
+    base::FirewallManager firewall(file_path);
+    if (!firewall.isValid())
+        return;
+
+    firewall.deleteRuleByName(kFirewallRuleName);
+}
+#endif // defined(OS_WIN)
 
 } // namespace relay

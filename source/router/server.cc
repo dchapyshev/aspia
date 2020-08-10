@@ -31,9 +31,19 @@
 #include "router/session_relay.h"
 #include "router/settings.h"
 
+#if defined(OS_WIN)
+#include "base/files/base_paths.h"
+#include "base/net/firewall_manager.h"
+#endif // defined(OS_WIN)
+
 namespace router {
 
 namespace {
+
+#if defined(OS_WIN)
+const wchar_t kFirewallRuleName[] = L"Aspia Router Service";
+const wchar_t kFirewallRuleDecription[] = L"Allow incoming TCP connections";
+#endif // defined(OS_WIN)
 
 const char* sessionTypeToString(proto::RouterSession session_type)
 {
@@ -68,6 +78,10 @@ Server::Server(std::shared_ptr<base::TaskRunner> task_runner)
 
 Server::~Server()
 {
+#if defined(OS_WIN)
+    deleteFirewallRules();
+#endif // defined(OS_WIN)
+
     server_proxy_->willDestroyCurrentServer();
 }
 
@@ -98,6 +112,10 @@ bool Server::start()
         LOG(LS_ERROR) << "Invalid port specified in configuration file";
         return false;
     }
+
+#if defined(OS_WIN)
+    addFirewallRules(port);
+#endif // defined(OS_WIN)
 
     authenticator_manager_ =
         std::make_unique<peer::ServerAuthenticatorManager>(task_runner_, this);
@@ -230,5 +248,36 @@ void Server::onSessionFinished()
         }
     }
 }
+
+#if defined(OS_WIN)
+void Server::addFirewallRules(uint16_t port)
+{
+    std::filesystem::path file_path;
+    if (!base::BasePaths::currentExecFile(&file_path))
+        return;
+
+    base::FirewallManager firewall(file_path);
+    if (!firewall.isValid())
+        return;
+
+    if (!firewall.addTcpRule(kFirewallRuleName, kFirewallRuleDecription, port))
+        return;
+
+    LOG(LS_INFO) << "Rule is added to the firewall";
+}
+
+void Server::deleteFirewallRules()
+{
+    std::filesystem::path file_path;
+    if (!base::BasePaths::currentExecFile(&file_path))
+        return;
+
+    base::FirewallManager firewall(file_path);
+    if (!firewall.isValid())
+        return;
+
+    firewall.deleteRuleByName(kFirewallRuleName);
+}
+#endif // defined(OS_WIN)
 
 } // namespace router

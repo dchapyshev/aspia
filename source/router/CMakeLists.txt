@@ -56,6 +56,7 @@ target_link_libraries(aspia_router
     aspia_base
     aspia_peer
     aspia_proto
+    comsupp
     crypt32
     libcrypto
     libssl

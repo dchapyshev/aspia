@@ -50,6 +50,7 @@ target_link_libraries(aspia_relay
     aspia_base
     aspia_peer
     aspia_proto
+    comsupp
     crypt32
     netapi32
     version

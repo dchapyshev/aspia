@@ -51,6 +51,11 @@ private:
     void connectToRouter();
     void delayedConnectToRouter();
 
+#if defined(OS_WIN)
+    void addFirewallRules(uint16_t port);
+    void deleteFirewallRules();
+#endif // defined(OS_WIN)
+
     // Router settings.
     std::u16string router_address_;
     uint16_t router_port_ = 0;

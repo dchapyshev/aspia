@@ -54,6 +54,11 @@ protected:
     void onSessionFinished() override;
 
 private:
+#if defined(OS_WIN)
+    void addFirewallRules(uint16_t port);
+    void deleteFirewallRules();
+#endif // defined(OS_WIN)
+
     std::shared_ptr<ServerProxy> server_proxy_;
     std::shared_ptr<base::TaskRunner> task_runner_;
     std::shared_ptr<DatabaseFactory> database_factory_;
