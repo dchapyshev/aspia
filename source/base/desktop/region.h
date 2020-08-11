@@ -61,11 +61,11 @@ public:
     explicit Region(const Rect& rect);
     Region(const Rect* rects, int count);
     Region(const Region& other);
-    Region(Region&& other);
+    Region(Region&& other) noexcept;
     ~Region();
 
     Region& operator=(const Region& other);
-    Region& operator=(Region&& other);
+    Region& operator=(Region&& other) noexcept;
 
     bool isEmpty() const;
 

@@ -65,7 +65,7 @@ Region::Region(const Region& other)
     miRegionCopy(&x11reg_, region_cast(&other.x11reg_));
 }
 
-Region::Region(Region&& other)
+Region::Region(Region&& other) noexcept
 {
     *this = std::move(other);
 }
@@ -84,7 +84,7 @@ Region& Region::operator=(const Region& other)
     return *this;
 }
 
-Region& Region::operator=(Region&& other)
+Region& Region::operator=(Region&& other) noexcept
 {
     if (this == &other)
         return *this;

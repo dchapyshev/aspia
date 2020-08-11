@@ -144,8 +144,8 @@ Version::Version() = default;
 Version::Version(const Version& other) = default;
 Version& Version::operator=(const Version& other) = default;
 
-Version::Version(Version&& other) = default;
-Version& Version::operator=(Version&& other) = default;
+Version::Version(Version&& other) noexcept = default;
+Version& Version::operator=(Version&& other) noexcept = default;
 
 Version::Version(uint32_t major, uint32_t minor, uint32_t build, uint32_t revision)
 {
