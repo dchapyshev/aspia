@@ -51,7 +51,7 @@ public:
     bool isValid() const;
 
     static User parseFrom(const proto::User& serialized_user);
-    std::unique_ptr<proto::User> serialize();
+    proto::User serialize() const;
 
     int64_t entry_id = 0;
     std::u16string name;

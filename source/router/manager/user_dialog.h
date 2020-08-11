@@ -20,6 +20,7 @@
 #define ROUTER__MANAGER__USER_DIALOG_H
 
 #include "base/macros_magic.h"
+#include "peer/user.h"
 #include "proto/router.pb.h"
 #include "ui_user_dialog.h"
 
@@ -30,12 +31,12 @@ class UserDialog : public QDialog
     Q_OBJECT
 
 public:
-    UserDialog(std::unique_ptr<proto::User>,
-               const std::vector<std::string>& users,
+    UserDialog(const peer::User& user,
+               const std::vector<std::u16string>& users,
                QWidget* parent);
     ~UserDialog();
 
-    const proto::User& user() const;
+    const peer::User& user() const;
 
 protected:
     // QDialog implementation.
@@ -48,8 +49,8 @@ private:
 
     Ui::UserDialog ui;
 
-    std::unique_ptr<proto::User> user_;
-    std::vector<std::string> users_;
+    peer::User user_;
+    std::vector<std::u16string> users_;
     bool account_changed_ = true;
 
     DISALLOW_COPY_AND_ASSIGN(UserDialog);

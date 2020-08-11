@@ -48,6 +48,10 @@ private:
     void doRelayListRequest();
     void doPeerListRequest();
 
+    proto::UserResult::ErrorCode addUser(const proto::User& user);
+    proto::UserResult::ErrorCode modifyUser(const proto::User& user);
+    proto::UserResult::ErrorCode deleteUser(const proto::User& user);
+
     std::shared_ptr<ServerProxy> server_proxy_;
 
     DISALLOW_COPY_AND_ASSIGN(SessionManager);

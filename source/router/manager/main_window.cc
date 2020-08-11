@@ -70,7 +70,7 @@ class UserTreeItem : public QTreeWidgetItem
 {
 public:
     explicit UserTreeItem(const proto::User& user)
-        : user(user)
+        : user(peer::User::parseFrom(user))
     {
         setText(0, QString::fromStdString(user.name()));
 
@@ -80,7 +80,7 @@ public:
             setIcon(0, QIcon(QLatin1String(":/img/user-disabled.png")));
     }
 
-    proto::User user;
+    peer::User user;
 
 private:
     DISALLOW_COPY_AND_ASSIGN(UserTreeItem);
@@ -91,8 +91,7 @@ private:
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent),
       status_dialog_(new StatusDialog(this)),
-      window_proxy_(std::make_shared<RouterWindowProxy>(
-        qt_base::Application::uiTaskRunner(), this))
+      window_proxy_(std::make_shared<RouterWindowProxy>(qt_base::Application::uiTaskRunner(), this))
 {
     ui.setupUi(this);
 
@@ -392,21 +391,21 @@ void MainWindow::refreshUserList()
 
 void MainWindow::addUser()
 {
-    std::vector<std::string> users;
+    std::vector<std::u16string> users;
 
     for (int i = 0; i < ui.tree_users->topLevelItemCount(); ++i)
     {
         users.emplace_back(static_cast<UserTreeItem*>(
-            ui.tree_users->topLevelItem(i))->user.name());
+            ui.tree_users->topLevelItem(i))->user.name);
     }
 
-    UserDialog dialog(nullptr, users, this);
+    UserDialog dialog(peer::User(), users, this);
     if (dialog.exec() == QDialog::Accepted)
     {
         if (router_proxy_)
         {
             beforeRequest();
-            router_proxy_->addUser(dialog.user());
+            router_proxy_->addUser(dialog.user().serialize());
         }
     }
 }
@@ -417,22 +416,22 @@ void MainWindow::modifyUser()
     if (!tree_item)
         return;
 
-    std::vector<std::string> users;
+    std::vector<std::u16string> users;
 
     for (int i = 0; i < ui.tree_users->topLevelItemCount(); ++i)
     {
         UserTreeItem* current_item = static_cast<UserTreeItem*>(ui.tree_users->topLevelItem(i));
         if (current_item->text(0).compare(tree_item->text(0), Qt::CaseInsensitive) != 0)
-            users.emplace_back(current_item->user.name());
+            users.emplace_back(current_item->user.name);
     }
 
-    UserDialog dialog(std::make_unique<proto::User>(tree_item->user), users, this);
+    UserDialog dialog(tree_item->user, users, this);
     if (dialog.exec() == QDialog::Accepted)
     {
         if (router_proxy_)
         {
             beforeRequest();
-            router_proxy_->modifyUser(dialog.user());
+            router_proxy_->modifyUser(dialog.user().serialize());
         }
     }
 }
@@ -453,7 +452,7 @@ void MainWindow::deleteUser()
         if (router_proxy_)
         {
             beforeRequest();
-            router_proxy_->deleteUser(tree_item->user.entry_id());
+            router_proxy_->deleteUser(tree_item->user.entry_id);
         }
     }
 }

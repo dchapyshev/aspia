@@ -157,20 +157,17 @@ User User::parseFrom(const proto::User& serialized_user)
     return user;
 }
 
-std::unique_ptr<proto::User> User::serialize()
+proto::User User::serialize() const
 {
-    if (!isValid())
-        return nullptr;
+    proto::User user;
 
-    std::unique_ptr<proto::User> user = std::make_unique<proto::User>();
-
-    user->set_entry_id(entry_id);
-    user->set_name(base::utf8FromUtf16(name));
-    user->set_group(group);
-    user->set_salt(base::toStdString(salt));
-    user->set_verifier(base::toStdString(verifier));
-    user->set_sessions(sessions);
-    user->set_flags(flags);
+    user.set_entry_id(entry_id);
+    user.set_name(base::utf8FromUtf16(name));
+    user.set_group(group);
+    user.set_salt(base::toStdString(salt));
+    user.set_verifier(base::toStdString(verifier));
+    user.set_sessions(sessions);
+    user.set_flags(flags);
 
     return user;
 }

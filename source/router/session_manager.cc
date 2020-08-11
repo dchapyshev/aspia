@@ -98,28 +98,13 @@ void SessionManager::doUserListRequest()
 
     peer::UserList users = database->userList();
     for (peer::UserList::Iterator it(users); !it.isAtEnd(); it.advance())
-    {
-        const peer::User& user = it.user();
-        proto::User* item = list->add_user();
-
-        item->set_entry_id(user.entry_id);
-        item->set_name(base::utf8FromUtf16(user.name));
-        item->set_sessions(user.sessions);
-        item->set_flags(user.flags);
-    }
+        list->add_user()->CopyFrom(it.user().serialize());
 
     sendMessage(message);
 }
 
 void SessionManager::doUserRequest(const proto::UserRequest& request)
 {
-    std::unique_ptr<Database> database = openDatabase();
-    if (!database)
-    {
-        LOG(LS_ERROR) << "Failed to connect to database";
-        return;
-    }
-
     proto::RouterToManager message;
     proto::UserResult* result = message.mutable_user_result();
     result->set_type(request.type());
@@ -127,68 +112,16 @@ void SessionManager::doUserRequest(const proto::UserRequest& request)
     switch (request.type())
     {
         case proto::USER_REQUEST_ADD:
-        {
-            std::u16string username = base::utf16FromUtf8(request.user().name());
-            std::u16string password = base::utf16FromUtf8(request.user().password());
-
-            LOG(LS_INFO) << "User add request: " << username;
-
-            if (!peer::User::isValidUserName(username))
-            {
-                LOG(LS_ERROR) << "Invalid user name";
-                result->set_error_code(proto::UserResult::INVALID_DATA);
-                break;
-            }
-
-            if (!peer::User::isValidPassword(password))
-            {
-                LOG(LS_ERROR) << "Invalid password";
-                result->set_error_code(proto::UserResult::INVALID_DATA);
-                break;
-            }
-
-            peer::User user = peer::User::create(username, password);
-            if (!user.isValid())
-            {
-                LOG(LS_ERROR) << "Failed to create user";
-                result->set_error_code(proto::UserResult::INTERNAL_ERROR);
-                break;
-            }
-
-            user.sessions = request.user().sessions();
-            user.flags = request.user().flags();
-
-            if (!database->addUser(user))
-            {
-                result->set_error_code(proto::UserResult::INTERNAL_ERROR);
-                break;
-            }
-
-            result->set_error_code(proto::UserResult::SUCCESS);
-        }
-        break;
+            result->set_error_code(addUser(request.user()));
+            break;
 
         case proto::USER_REQUEST_MODIFY:
-        {
-            NOTIMPLEMENTED();
-        }
-        break;
+            result->set_error_code(modifyUser(request.user()));
+            break;
 
         case proto::USER_REQUEST_DELETE:
-        {
-            uint64_t entry_id = request.user().entry_id();
-
-            LOG(LS_INFO) << "User remove request: " << entry_id;
-
-            if (!database->removeUser(entry_id))
-            {
-                result->set_error_code(proto::UserResult::INTERNAL_ERROR);
-                break;
-            }
-
-            result->set_error_code(proto::UserResult::SUCCESS);
-        }
-        break;
+            result->set_error_code(deleteUser(request.user()));
+            break;
     }
 
     sendMessage(message);
@@ -214,6 +147,79 @@ void SessionManager::doPeerListRequest()
         message.mutable_peer_list()->set_error_code(proto::PeerList::UNKNOWN_ERROR);
 
     sendMessage(message);
+}
+
+proto::UserResult::ErrorCode SessionManager::addUser(const proto::User& user)
+{
+    LOG(LS_INFO) << "User add request: " << user.name();
+
+    peer::User new_user = peer::User::parseFrom(user);
+    if (!new_user.isValid())
+    {
+        LOG(LS_ERROR) << "Failed to create user";
+        return proto::UserResult::INTERNAL_ERROR;
+    }
+
+    std::unique_ptr<Database> database = openDatabase();
+    if (!database)
+    {
+        LOG(LS_ERROR) << "Failed to connect to database";
+        return proto::UserResult::INTERNAL_ERROR;
+    }
+
+    if (!database->addUser(new_user))
+        return proto::UserResult::INTERNAL_ERROR;
+
+    return proto::UserResult::SUCCESS;
+}
+
+proto::UserResult::ErrorCode SessionManager::modifyUser(const proto::User& user)
+{
+    LOG(LS_INFO) << "User modify request: " << user.name();
+
+    if (user.entry_id() <= 0)
+    {
+        LOG(LS_ERROR) << "Invalid user ID: " << user.entry_id();
+        return proto::UserResult::INVALID_DATA;
+    }
+
+    peer::User new_user = peer::User::parseFrom(user);
+    if (!new_user.isValid())
+    {
+        LOG(LS_ERROR) << "Failed to create user";
+        return proto::UserResult::INTERNAL_ERROR;
+    }
+
+    std::unique_ptr<Database> database = openDatabase();
+    if (!database)
+    {
+        LOG(LS_ERROR) << "Failed to connect to database";
+        return proto::UserResult::INTERNAL_ERROR;
+    }
+
+    if (!database->modifyUser(new_user))
+        return proto::UserResult::INTERNAL_ERROR;
+
+    return proto::UserResult::SUCCESS;
+}
+
+proto::UserResult::ErrorCode SessionManager::deleteUser(const proto::User& user)
+{
+    std::unique_ptr<Database> database = openDatabase();
+    if (!database)
+    {
+        LOG(LS_ERROR) << "Failed to connect to database";
+        return proto::UserResult::INTERNAL_ERROR;
+    }
+
+    uint64_t entry_id = user.entry_id();
+
+    LOG(LS_INFO) << "User remove request: " << entry_id;
+
+    if (!database->removeUser(entry_id))
+        return proto::UserResult::INTERNAL_ERROR;
+
+    return proto::UserResult::SUCCESS;
 }
 
 } // namespace router

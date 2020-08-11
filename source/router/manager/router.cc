@@ -55,6 +55,8 @@ void Router::connectToRouter(std::u16string_view address, uint16_t port)
 
 void Router::refreshPeerList()
 {
+    LOG(LS_INFO) << "Sending peer list request";
+
     proto::ManagerToRouter message;
     message.mutable_peer_list_request()->set_dummy(1);
     channel_->send(base::serialize(message));
@@ -62,6 +64,8 @@ void Router::refreshPeerList()
 
 void Router::disconnectPeer(uint64_t peer_id)
 {
+    LOG(LS_INFO) << "Sending disconnect peer request (peer_id: " << peer_id << ")";
+
     proto::ManagerToRouter message;
 
     proto::PeerRequest* request = message.mutable_peer_request();
@@ -73,6 +77,8 @@ void Router::disconnectPeer(uint64_t peer_id)
 
 void Router::refreshProxyList()
 {
+    LOG(LS_INFO) << "Sending relay list request";
+
     proto::ManagerToRouter message;
     message.mutable_relay_list_request()->set_dummy(1);
     channel_->send(base::serialize(message));
@@ -80,6 +86,8 @@ void Router::refreshProxyList()
 
 void Router::refreshUserList()
 {
+    LOG(LS_INFO) << "Sending user list request";
+
     proto::ManagerToRouter message;
     message.mutable_user_list_request()->set_dummy(1);
     channel_->send(base::serialize(message));
@@ -87,6 +95,9 @@ void Router::refreshUserList()
 
 void Router::addUser(const proto::User& user)
 {
+    LOG(LS_INFO) << "Sending user add request (username: " << user.name()
+                 << ", entry_id: " << user.entry_id() << ")";
+
     proto::ManagerToRouter message;
 
     proto::UserRequest* request = message.mutable_user_request();
@@ -98,6 +109,9 @@ void Router::addUser(const proto::User& user)
 
 void Router::modifyUser(const proto::User& user)
 {
+    LOG(LS_INFO) << "Sending user modify request (username: " << user.name()
+                 << ", entry_id: " << user.entry_id() << ")";
+
     proto::ManagerToRouter message;
 
     proto::UserRequest* request = message.mutable_user_request();
@@ -109,6 +123,8 @@ void Router::modifyUser(const proto::User& user)
 
 void Router::deleteUser(int64_t entry_id)
 {
+    LOG(LS_INFO) << "Sending user delete request (entry_id: " << entry_id << ")";
+
     proto::ManagerToRouter message;
 
     proto::UserRequest* request = message.mutable_user_request();
@@ -162,26 +178,36 @@ void Router::onMessageReceived(const base::ByteArray& buffer)
 
     if (message.has_peer_list())
     {
+        LOG(LS_INFO) << "Peer list received";
+
         window_proxy_->onPeerList(
             std::shared_ptr<proto::PeerList>(message.release_peer_list()));
     }
     else if (message.has_peer_result())
     {
+        LOG(LS_INFO) << "Peer result received with code: " << message.peer_result().error_code();
+
         window_proxy_->onPeerResult(
             std::shared_ptr<proto::PeerResult>(message.release_peer_result()));
     }
     else if (message.has_relay_list())
     {
+        LOG(LS_INFO) << "Relay list received";
+
         window_proxy_->onRelayList(
             std::shared_ptr<proto::RelayList>(message.release_relay_list()));
     }
     else if (message.has_user_list())
     {
+        LOG(LS_INFO) << "User list received";
+
         window_proxy_->onUserList(
             std::shared_ptr<proto::UserList>(message.release_user_list()));
     }
     else if (message.has_user_result())
     {
+        LOG(LS_INFO) << "User result received with code: " << message.user_result().error_code();
+
         window_proxy_->onUserResult(
             std::shared_ptr<proto::UserResult>(message.release_user_result()));
     }

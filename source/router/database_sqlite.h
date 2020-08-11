@@ -38,6 +38,7 @@ public:
     // Database implementation.
     peer::UserList userList() const override;
     bool addUser(const peer::User& user) override;
+    bool modifyUser(const peer::User& user) override;
     bool removeUser(int64_t entry_id) override;
     peer::PeerId peerId(const base::ByteArray& keyHash) const override;
     bool addPeer(const base::ByteArray& keyHash) override;

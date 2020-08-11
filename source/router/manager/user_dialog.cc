@@ -19,7 +19,6 @@
 #include "router/manager/user_dialog.h"
 
 #include "base/strings/string_util.h"
-#include "base/strings/unicode.h"
 #include "peer/user.h"
 
 #include <QAbstractButton>
@@ -27,19 +26,19 @@
 
 namespace router {
 
-UserDialog::UserDialog(std::unique_ptr<proto::User> user,
-                       const std::vector<std::string>& users,
+UserDialog::UserDialog(const peer::User& user,
+                       const std::vector<std::u16string>& users,
                        QWidget* parent)
     : QDialog(parent),
-      user_(std::move(user)),
+      user_(user),
       users_(users)
 {
     ui.setupUi(this);
 
-    if (user_)
+    if (user_.isValid())
     {
-        ui.checkbox_disable->setChecked(!(user_->flags() & peer::User::ENABLED));
-        ui.edit_username->setText(QString::fromStdString(user_->name()));
+        ui.checkbox_disable->setChecked(!(user_.flags & peer::User::ENABLED));
+        ui.edit_username->setText(QString::fromStdU16String(user_.name));
 
         setAccountChanged(false);
     }
@@ -56,9 +55,9 @@ UserDialog::UserDialog(std::unique_ptr<proto::User> user,
         item->setFlags(item->flags() | Qt::ItemIsUserCheckable);
         item->setData(0, Qt::UserRole, QVariant(session_type));
 
-        if (user_)
+        if (user_.isValid())
         {
-            if (user_->sessions() & session_type)
+            if (user_.sessions & session_type)
                 item->setCheckState(0, Qt::Checked);
             else
                 item->setCheckState(0, Qt::Unchecked);
@@ -87,9 +86,9 @@ UserDialog::UserDialog(std::unique_ptr<proto::User> user,
 
 UserDialog::~UserDialog() = default;
 
-const proto::User& UserDialog::user() const
+const peer::User& UserDialog::user() const
 {
-    return *user_;
+    return user_;
 }
 
 bool UserDialog::eventFilter(QObject* object, QEvent* event)
@@ -118,8 +117,6 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
         return;
     }
 
-    std::unique_ptr<proto::User> user = std::make_unique<proto::User>();
-
     if (account_changed_)
     {
         std::u16string username = ui.edit_username->text().toStdU16String();
@@ -139,7 +136,7 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
 
         for (size_t i = 0; i < users_.size(); ++i)
         {
-            if (base::compareCaseInsensitive(username, base::utf16FromUtf8(users_.at(i))) == 0)
+            if (base::compareCaseInsensitive(username, users_.at(i)) == 0)
             {
                 QMessageBox::warning(this,
                                      tr("Warning"),
@@ -205,8 +202,23 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
             }
         }
 
-        user->set_name(base::utf8FromUtf16(username));
-        user->set_password(base::utf8FromUtf16(password));
+        // Save entry ID.
+        int64_t entry_id = user_.entry_id;
+
+        // Create new user.
+        user_ = peer::User::create(username, password);
+
+        // Restore entry ID.
+        user_.entry_id = entry_id;
+
+        if (!user_.isValid())
+        {
+            QMessageBox::warning(this,
+                                 tr("Warning"),
+                                 tr("Unknown internal error when creating or modifying a user."),
+                                 QMessageBox::Ok);
+            return;
+        }
     }
 
     uint32_t sessions = 0;
@@ -221,10 +233,8 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
     if (!ui.checkbox_disable->isChecked())
         flags |= peer::User::ENABLED;
 
-    user->set_sessions(sessions);
-    user->set_flags(flags);
-
-    user_ = std::move(user);
+    user_.sessions = sessions;
+    user_.flags = flags;
 
     accept();
     close();

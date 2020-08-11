@@ -343,7 +343,68 @@ bool DatabaseSqlite::addUser(const peer::User& user)
             break;
 
         error_code = sqlite3_step(statement);
-        if (error_code != SQLITE_OK)
+        if (error_code != SQLITE_DONE)
+        {
+            LOG(LS_ERROR) << "sqlite3_step failed: " << sqlite3_errstr(error_code);
+            break;
+        }
+
+        result = true;
+    }
+    while (false);
+
+    sqlite3_finalize(statement);
+    return result;
+}
+
+bool DatabaseSqlite::modifyUser(const peer::User& user)
+{
+    if (!user.isValid())
+    {
+        LOG(LS_ERROR) << "Not valid user";
+        return false;
+    }
+
+    static const char kQuery[] =
+        "UPDATE users SET ('name', 'group', 'salt', 'verifier', 'sessions', 'flags') = "
+        "(?, ?, ?, ?, ?, ?) WHERE id=?";
+
+    sqlite3_stmt* statement = nullptr;
+    int error_code = sqlite3_prepare(db_, kQuery, std::size(kQuery), &statement, nullptr);
+    if (error_code != SQLITE_OK)
+    {
+        LOG(LS_ERROR) << "sqlite3_prepare failed: " << sqlite3_errstr(error_code);
+        return false;
+    }
+
+    std::string username = base::utf8FromUtf16(user.name);
+    bool result = false;
+
+    do
+    {
+        if (!writeText(statement, username, 1))
+            break;
+
+        if (!writeText(statement, user.group, 2))
+            break;
+
+        if (!writeBlob(statement, user.salt, 3))
+            break;
+
+        if (!writeBlob(statement, user.verifier, 4))
+            break;
+
+        if (!writeInt(statement, static_cast<int>(user.sessions), 5))
+            break;
+
+        if (!writeInt(statement, static_cast<int>(user.flags), 6))
+            break;
+
+        if (!writeInt64(statement, user.entry_id, 7))
+            break;
+
+        error_code = sqlite3_step(statement);
+        if (error_code != SQLITE_DONE)
         {
             LOG(LS_ERROR) << "sqlite3_step failed: " << sqlite3_errstr(error_code);
             break;
@@ -377,7 +438,7 @@ bool DatabaseSqlite::removeUser(int64_t entry_id)
             break;
 
         error_code = sqlite3_step(statement);
-        if (error_code != SQLITE_OK)
+        if (error_code != SQLITE_DONE)
         {
             LOG(LS_ERROR) << "sqlite3_step failed: " << sqlite3_errstr(error_code);
             break;
@@ -463,7 +524,7 @@ bool DatabaseSqlite::addPeer(const base::ByteArray& keyHash)
             break;
 
         error_code = sqlite3_step(statement);
-        if (error_code != SQLITE_OK && error_code != SQLITE_DONE)
+        if (error_code != SQLITE_DONE)
         {
             LOG(LS_ERROR) << "sqlite3_step failed: " << sqlite3_errstr(error_code)
                           << " (" << error_code << ")";

@@ -353,7 +353,7 @@
 <context>
     <name>router::MainWindow</name>
     <message>
-        <location filename="../main_window.cc" line="122"/>
+        <location filename="../main_window.cc" line="121"/>
         <source>Connecting to %1:%2...</source>
         <translation>Подключение к %1:%2...</translation>
     </message>
@@ -362,123 +362,123 @@
         <translation type="vanished">Подключено к: %1:%2 (%3).</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="148"/>
+        <location filename="../main_window.cc" line="147"/>
         <source>Connected to: %1:%2 (version %3)</source>
         <translation>Подключено к: %1:%2 (версия %3)</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="170"/>
+        <location filename="../main_window.cc" line="169"/>
         <source>Cryptography error (message encryption or decryption failed).</source>
         <translation>Ошибка криптографии (не удалось зашифровать или расшифровать сообщение).</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="174"/>
+        <location filename="../main_window.cc" line="173"/>
         <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
         <translation>Произошла ошибка в сети (например, сетевой кабель был случайно отключен).</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="178"/>
+        <location filename="../main_window.cc" line="177"/>
         <source>Connection was refused by the peer (or timed out).</source>
         <translation>Подключение было отклонено другой стороной (или превышено время ожидания).</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="182"/>
+        <location filename="../main_window.cc" line="181"/>
         <source>Remote host closed the connection.</source>
         <translation>Удаленный узел закрыл подключение.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="186"/>
+        <location filename="../main_window.cc" line="185"/>
         <source>Host address was not found.</source>
         <translation>Не найден адрес удаленного узла.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="190"/>
+        <location filename="../main_window.cc" line="189"/>
         <source>Socket operation timed out.</source>
         <translation>Превышено время ожидания.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="194"/>
+        <location filename="../main_window.cc" line="193"/>
         <source>Address specified is already in use and was set to be exclusive.</source>
         <translation>Указанный адрес уже используется и был установлен монопольно.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="198"/>
+        <location filename="../main_window.cc" line="197"/>
         <source>Address specified does not belong to the host.</source>
         <translation>Указанный адрес не принадлежит узлу.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="208"/>
-        <location filename="../main_window.cc" line="244"/>
+        <location filename="../main_window.cc" line="207"/>
+        <location filename="../main_window.cc" line="243"/>
         <source>An unknown error occurred.</source>
         <translation>Произошла неизвестная ошибка.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="213"/>
-        <location filename="../main_window.cc" line="248"/>
+        <location filename="../main_window.cc" line="212"/>
+        <location filename="../main_window.cc" line="247"/>
         <source>Error: %1</source>
         <translation>Ошибка: %1</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="274"/>
-        <location filename="../main_window.cc" line="322"/>
+        <location filename="../main_window.cc" line="273"/>
+        <location filename="../main_window.cc" line="321"/>
         <source>Unknown internal error.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="278"/>
-        <location filename="../main_window.cc" line="326"/>
+        <location filename="../main_window.cc" line="277"/>
+        <location filename="../main_window.cc" line="325"/>
         <source>Invalid data was passed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="282"/>
-        <location filename="../main_window.cc" line="334"/>
+        <location filename="../main_window.cc" line="281"/>
+        <location filename="../main_window.cc" line="333"/>
         <source>Unknown error type.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="330"/>
+        <location filename="../main_window.cc" line="329"/>
         <source>A user with the specified name already exists.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="447"/>
+        <location filename="../main_window.cc" line="446"/>
         <source>Confirmation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="448"/>
+        <location filename="../main_window.cc" line="447"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="286"/>
-        <location filename="../main_window.cc" line="338"/>
+        <location filename="../main_window.cc" line="285"/>
+        <location filename="../main_window.cc" line="337"/>
         <source>Warning</source>
         <translation type="unfinished">Предупреждение</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="224"/>
+        <location filename="../main_window.cc" line="223"/>
         <source>Authentication successfully completed.</source>
         <translation>Аутентификация успешно завершена.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="228"/>
+        <location filename="../main_window.cc" line="227"/>
         <source>Network authentication error.</source>
         <translation>Ошибка сети при аутентификации.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="232"/>
+        <location filename="../main_window.cc" line="231"/>
         <source>Violation of the data exchange protocol.</source>
         <translation>Нарушение протокола обмена данными.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="236"/>
+        <location filename="../main_window.cc" line="235"/>
         <source>An error occured while authenticating: wrong user name or password.</source>
         <translation>Произошла ошибка при аутентификации: неправильное имя пользователя или пароль.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="240"/>
+        <location filename="../main_window.cc" line="239"/>
         <source>Specified session type is not allowed for the user.</source>
         <translation>Указанный тип сессии не разрешен для пользователя.</translation>
     </message>
@@ -540,31 +540,32 @@
         <translation type="obsolete">Пользователи</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="130"/>
-        <location filename="../user_dialog.cc" line="145"/>
-        <location filename="../user_dialog.cc" line="158"/>
-        <location filename="../user_dialog.cc" line="172"/>
-        <location filename="../user_dialog.cc" line="195"/>
+        <location filename="../user_dialog.cc" line="128"/>
+        <location filename="../user_dialog.cc" line="143"/>
+        <location filename="../user_dialog.cc" line="156"/>
+        <location filename="../user_dialog.cc" line="170"/>
+        <location filename="../user_dialog.cc" line="193"/>
+        <location filename="../user_dialog.cc" line="218"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="131"/>
+        <location filename="../user_dialog.cc" line="129"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>Имя пользователя не может быть пустым и должно содержать только буквы алфавита, цифры и символы _, -, .</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="146"/>
+        <location filename="../user_dialog.cc" line="144"/>
         <source>The username you entered already exists.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="159"/>
+        <location filename="../user_dialog.cc" line="157"/>
         <source>The passwords you entered do not match.</source>
         <translation>Введенные пароли не совпадают.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../user_dialog.cc" line="173"/>
+        <location filename="../user_dialog.cc" line="171"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
         <translation>
             <numerusform>Пароль не может быть пустым и не должен быть длиннее %n символа.</numerusform>
@@ -573,12 +574,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="185"/>
+        <location filename="../user_dialog.cc" line="183"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Введенный пароль не отвечает требованиям безопасности!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../user_dialog.cc" line="188"/>
+        <location filename="../user_dialog.cc" line="186"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Пароль должен содержать символы в нижнем и верхнем регистре, цифры и не может быть короче %n символа.</numerusform>
@@ -587,22 +588,27 @@
         </translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="192"/>
+        <location filename="../user_dialog.cc" line="190"/>
         <source>Do you want to enter a different password?</source>
         <translation>Вы хотите ввести другой пароль?</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="256"/>
+        <location filename="../user_dialog.cc" line="219"/>
+        <source>Unknown internal error when creating or modifying a user.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../user_dialog.cc" line="267"/>
         <source>Double-click to change</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="280"/>
+        <location filename="../user_dialog.cc" line="291"/>
         <source>Manager</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="284"/>
+        <location filename="../user_dialog.cc" line="295"/>
         <source>Authorized Peer</source>
         <translation type="unfinished"></translation>
     </message>
