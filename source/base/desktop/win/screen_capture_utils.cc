@@ -22,28 +22,8 @@
 #include "base/desktop/win/bitmap_info.h"
 #include "base/strings/unicode.h"
 #include "base/win/scoped_gdi_object.h"
-#include "base/win/scoped_hdc.h"
-
-#include <Windows.h>
 
 namespace base {
-
-namespace {
-
-int createShift(uint32_t bits)
-{
-    int shift = 0;
-
-    while ((shift < 32) && !(bits & 1))
-    {
-        bits >>= 1;
-        ++shift;
-    }
-
-    return shift;
-}
-
-} // namespace
 
 // static
 bool ScreenCaptureUtils::screenList(ScreenCapturer::ScreenList* screens)
