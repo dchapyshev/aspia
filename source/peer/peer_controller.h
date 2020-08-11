@@ -37,7 +37,7 @@ public:
     struct RouterInfo
     {
         std::u16string address;
-        uint16_t port;
+        uint16_t port = 0;
         base::ByteArray public_key;
         std::u16string username;
         std::u16string password;
