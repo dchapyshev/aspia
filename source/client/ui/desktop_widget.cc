@@ -310,11 +310,11 @@ void DesktopWidget::leaveEvent(QEvent* event)
     // When the mouse cursor leaves the widget area, release all the mouse buttons.
     if (prev_mask_ != 0)
     {
-        proto::MouseEvent event;
-        event.set_x(prev_pos_.x());
-        event.set_y(prev_pos_.y());
+        proto::MouseEvent mouse_event;
+        mouse_event.set_x(prev_pos_.x());
+        mouse_event.set_y(prev_pos_.y());
 
-        delegate_->onMouseEvent(event);
+        delegate_->onMouseEvent(mouse_event);
         prev_mask_ = 0;
     }
 
@@ -345,14 +345,14 @@ void DesktopWidget::focusOutEvent(QFocusEvent* event)
         flags |= (isCapsLockActivated() ? proto::KeyEvent::CAPSLOCK : 0);
         flags |= (isNumLockActivated() ? proto::KeyEvent::NUMLOCK : 0);
 
-        proto::KeyEvent event;
-        event.set_flags(flags);
+        proto::KeyEvent key_event;
+        key_event.set_flags(flags);
 
         auto it = pressed_keys_.begin();
         while (it != pressed_keys_.end())
         {
-            event.set_usb_keycode(*it);
-            delegate_->onKeyEvent(event);
+            key_event.set_usb_keycode(*it);
+            delegate_->onKeyEvent(key_event);
             it = pressed_keys_.erase(it);
         }
     }
