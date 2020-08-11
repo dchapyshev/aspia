@@ -57,7 +57,8 @@ CursorEncoder::CursorEncoder()
 
 CursorEncoder::~CursorEncoder() = default;
 
-bool CursorEncoder::compressCursor(const MouseCursor& mouse_cursor, proto::CursorShape* cursor_shape)
+bool CursorEncoder::compressCursor(
+    const MouseCursor& mouse_cursor, proto::CursorShape* cursor_shape) const
 {
     size_t ret = ZSTD_initCStream(stream_.get(), kCompressionRatio);
     DCHECK(!ZSTD_isError(ret)) << ZSTD_getErrorName(ret);

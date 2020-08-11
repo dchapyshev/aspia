@@ -41,7 +41,7 @@ public:
     bool encode(const MouseCursor& mouse_cursor, proto::CursorShape* cursor_shape);
 
 private:
-    bool compressCursor(const MouseCursor& mouse_cursor, proto::CursorShape* cursor_shape);
+    bool compressCursor(const MouseCursor& mouse_cursor, proto::CursorShape* cursor_shape) const;
 
     ScopedZstdCStream stream_;
     std::vector<uint32_t> cache_;

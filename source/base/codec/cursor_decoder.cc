@@ -27,7 +27,7 @@ namespace base {
 namespace {
 
 constexpr size_t kMinCacheSize = 2;
-constexpr size_t kMaxCacheSize = 31;
+constexpr size_t kMaxCacheSize = 30;
 
 } // namespace
 
@@ -39,7 +39,7 @@ CursorDecoder::CursorDecoder()
 
 CursorDecoder::~CursorDecoder() = default;
 
-ByteArray CursorDecoder::decompressCursor(const proto::CursorShape& cursor_shape)
+ByteArray CursorDecoder::decompressCursor(const proto::CursorShape& cursor_shape) const
 {
     const std::string& data = cursor_shape.data();
 

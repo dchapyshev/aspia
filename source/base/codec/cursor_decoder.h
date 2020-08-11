@@ -42,7 +42,7 @@ public:
     std::shared_ptr<MouseCursor> decode(const proto::CursorShape& cursor_shape);
 
 private:
-    ByteArray decompressCursor(const proto::CursorShape& cursor_shape);
+    ByteArray decompressCursor(const proto::CursorShape& cursor_shape) const;
 
     std::vector<std::shared_ptr<MouseCursor>> cache_;
     std::optional<size_t> cache_size_;
