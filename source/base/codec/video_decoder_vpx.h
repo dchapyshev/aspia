@@ -23,10 +23,6 @@
 #include "base/codec/scoped_vpx_codec.h"
 #include "base/codec/video_decoder.h"
 
-#define VPX_CODEC_DISABLE_COMPAT 1
-#include <vpx/vpx_decoder.h>
-#include <vpx/vp8dx.h>
-
 namespace base {
 
 class VideoDecoderVPX : public VideoDecoder

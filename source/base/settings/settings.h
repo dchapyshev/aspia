@@ -22,7 +22,6 @@
 #include "base/converter.h"
 
 #include <map>
-#include <vector>
 
 namespace base {
 

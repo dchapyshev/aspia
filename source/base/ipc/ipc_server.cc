@@ -29,7 +29,6 @@
 #include "base/win/scoped_object.h"
 #include "base/win/security_helpers.h"
 
-#include <asio/post.hpp>
 #include <asio/windows/overlapped_ptr.hpp>
 #include <asio/windows/stream_handle.hpp>
 

@@ -19,9 +19,6 @@
 #ifndef BASE__GUID_H
 #define BASE__GUID_H
 
-#include "base/macros_magic.h"
-#include "build/build_config.h"
-
 #include <string>
 
 namespace base {

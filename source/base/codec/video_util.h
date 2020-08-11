@@ -19,7 +19,6 @@
 #ifndef BASE__CODEC__VIDEO_UTIL_H
 #define BASE__CODEC__VIDEO_UTIL_H
 
-#include "base/macros_magic.h"
 #include "base/desktop/geometry.h"
 #include "base/desktop/pixel_format.h"
 #include "proto/desktop.pb.h"

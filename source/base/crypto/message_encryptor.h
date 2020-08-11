@@ -19,8 +19,6 @@
 #ifndef BASE__CRYPTO__MESSAGE_ENCRYPTOR_H
 #define BASE__CRYPTO__MESSAGE_ENCRYPTOR_H
 
-#include <cstdint>
-
 namespace base {
 
 class MessageEncryptor

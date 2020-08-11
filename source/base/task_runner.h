@@ -19,8 +19,6 @@
 #ifndef BASE__TASK_RUNNER_H
 #define BASE__TASK_RUNNER_H
 
-#include "base/macros_magic.h"
-
 #include <chrono>
 #include <functional>
 #include <memory>

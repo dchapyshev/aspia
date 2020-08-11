@@ -17,6 +17,7 @@
 //
 
 #include "base/smbios_reader.h"
+
 #include "base/logging.h"
 
 #include <Windows.h>

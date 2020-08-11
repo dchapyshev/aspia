@@ -28,7 +28,6 @@
 
 #include <asio/read.hpp>
 #include <asio/write.hpp>
-#include <asio/post.hpp>
 
 #include <functional>
 

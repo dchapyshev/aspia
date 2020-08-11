@@ -19,7 +19,6 @@
 #ifndef BASE__DESKTOP__WIN__SCREEN_CAPTURE_UTILS_H
 #define BASE__DESKTOP__WIN__SCREEN_CAPTURE_UTILS_H
 
-#include "base/desktop/pixel_format.h"
 #include "base/desktop/screen_capturer.h"
 
 namespace base {

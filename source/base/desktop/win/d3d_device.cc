@@ -22,6 +22,8 @@
 
 #include <utility>
 
+#include <comdef.h>
+
 namespace base {
 
 using Microsoft::WRL::ComPtr;

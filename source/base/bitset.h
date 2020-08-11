@@ -19,7 +19,6 @@
 #ifndef ASPIA_BASE__BITSET_H
 #define ASPIA_BASE__BITSET_H
 
-#include <cassert>
 #include <limits>
 
 namespace base {

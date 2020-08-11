@@ -19,8 +19,6 @@
 #ifndef BASE__CODEC__WEIGHTED_SAMPLES_H
 #define BASE__CODEC__WEIGHTED_SAMPLES_H
 
-#include <cstdint>
-
 namespace base {
 
 // Aggregates the samples and gives each of them a weight based on its age. This class can help to

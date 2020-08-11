@@ -21,10 +21,6 @@
 #include "base/strings/string_util_constants.h"
 #include "base/strings/unicode.h"
 
-#include <algorithm>
-#include <cwctype>
-#include <cctype>
-
 namespace base {
 
 namespace {

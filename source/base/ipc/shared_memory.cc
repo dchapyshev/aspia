@@ -22,7 +22,6 @@
 #include "base/ipc/shared_memory_factory_proxy.h"
 #include "base/strings/string_number_conversions.h"
 #include "base/strings/string_util.h"
-#include "base/strings/unicode.h"
 
 #include <atomic>
 #include <random>
@@ -191,7 +190,7 @@ std::unique_ptr<SharedMemory> SharedMemory::create(
     static const int kRetryCount = 10;
 
     win::ScopedHandle file;
-    int id;
+    int id = -1;
 
     for (int i = 0; i < kRetryCount; ++i)
     {

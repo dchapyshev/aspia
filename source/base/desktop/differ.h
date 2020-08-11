@@ -20,7 +20,6 @@
 #define BASE__DESKTOP__DIFFER_H
 
 #include "base/macros_magic.h"
-#include "base/desktop/pixel_format.h"
 #include "base/desktop/region.h"
 
 #include <memory>

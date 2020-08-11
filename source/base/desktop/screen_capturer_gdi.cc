@@ -23,7 +23,6 @@
 #include "base/desktop/win/screen_capture_utils.h"
 #include "base/desktop/frame_dib.h"
 #include "base/desktop/differ.h"
-#include "base/ipc/shared_memory_factory.h"
 #include "base/win/scoped_select_object.h"
 
 #include <dwmapi.h>

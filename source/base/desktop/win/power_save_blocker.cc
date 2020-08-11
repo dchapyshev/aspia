@@ -20,8 +20,6 @@
 
 #include "base/logging.h"
 
-#include <utility>
-
 namespace base {
 
 namespace {

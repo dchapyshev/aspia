@@ -23,7 +23,6 @@
 
 #include <D3D11.h>
 #include <DXGI.h>
-#include <comdef.h>
 #include <wrl/client.h>
 
 namespace base {

@@ -18,6 +18,12 @@
 
 #include "base/endian.h"
 
+#include "build/build_config.h"
+
+#if defined(CC_MSVC)
+#include <intrin.h>
+#endif // defined(CC_MSVC)
+
 namespace base {
 
 // static

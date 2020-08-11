@@ -28,10 +28,8 @@
 
 #include <DXGI.h>
 #include <DXGI1_2.h>
-#include <comdef.h>
 #include <wrl/client.h>
 
-#include <memory>
 #include <string>
 #include <vector>
 

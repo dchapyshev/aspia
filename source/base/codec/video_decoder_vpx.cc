@@ -25,6 +25,10 @@
 #include <libyuv/convert_from.h>
 #include <libyuv/convert_argb.h>
 
+#define VPX_CODEC_DISABLE_COMPAT 1
+#include <vpx/vpx_decoder.h>
+#include <vpx/vp8dx.h>
+
 namespace base {
 
 namespace {

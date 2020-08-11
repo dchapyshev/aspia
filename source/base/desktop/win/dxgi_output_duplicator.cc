@@ -22,14 +22,13 @@
 #include "base/desktop/win/dxgi_texture_mapping.h"
 #include "base/desktop/win/dxgi_texture_staging.h"
 
-#include <string.h>
+#include <algorithm>
+#include <cstring>
 
+#include <comdef.h>
 #include <DXGI.h>
 #include <DXGIFormat.h>
 #include <Windows.h>
-#include <unknwn.h>
-
-#include <algorithm>
 
 namespace base {
 
@@ -351,7 +350,6 @@ bool DxgiOutputDuplicator::doDetectUpdatedRegion(const DXGI_OUTDUPL_FRAME_INFO& 
 
     UINT buff_size = 0;
     DXGI_OUTDUPL_MOVE_RECT* move_rects = reinterpret_cast<DXGI_OUTDUPL_MOVE_RECT*>(metadata_.data());
-    size_t move_rects_count = 0;
 
     _com_error error = duplication_->GetFrameMoveRects(
         static_cast<UINT>(metadata_.capacity()), move_rects, &buff_size);
@@ -362,10 +360,9 @@ bool DxgiOutputDuplicator::doDetectUpdatedRegion(const DXGI_OUTDUPL_FRAME_INFO& 
         return false;
     }
 
-    move_rects_count = buff_size / sizeof(DXGI_OUTDUPL_MOVE_RECT);
+    size_t move_rects_count = buff_size / sizeof(DXGI_OUTDUPL_MOVE_RECT);
 
     RECT* dirty_rects = reinterpret_cast<RECT*>(metadata_.data() + buff_size);
-    size_t dirty_rects_count = 0;
 
     error = duplication_->GetFrameDirtyRects(
         static_cast<UINT>(metadata_.capacity()) - buff_size, dirty_rects, &buff_size);
@@ -376,7 +373,7 @@ bool DxgiOutputDuplicator::doDetectUpdatedRegion(const DXGI_OUTDUPL_FRAME_INFO& 
         return false;
     }
 
-    dirty_rects_count = buff_size / sizeof(RECT);
+    size_t dirty_rects_count = buff_size / sizeof(RECT);
 
     while (move_rects_count > 0)
     {

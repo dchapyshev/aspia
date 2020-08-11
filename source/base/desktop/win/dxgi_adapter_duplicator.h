@@ -26,8 +26,6 @@
 
 #include <vector>
 
-#include <wrl/client.h>
-
 namespace base {
 
 // A container of DxgiOutputDuplicators to duplicate monitors attached to a single video card.

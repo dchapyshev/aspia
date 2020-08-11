@@ -23,7 +23,6 @@
 #include <DXGI.h>
 #include <DXGI1_2.h>
 #include <comdef.h>
-#include <unknwn.h>
 
 using Microsoft::WRL::ComPtr;
 

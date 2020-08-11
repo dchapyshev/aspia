@@ -18,8 +18,6 @@
 
 #include "base/threading/simple_thread.h"
 
-#include "base/logging.h"
-
 namespace base {
 
 void SimpleThread::threadMain()

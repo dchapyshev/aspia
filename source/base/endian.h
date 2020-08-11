@@ -20,13 +20,8 @@
 #define BASE__ENDIAN_H
 
 #include "base/macros_magic.h"
-#include "build/build_config.h"
 
 #include <cstdint>
-
-#if defined(CC_MSVC)
-#include <intrin.h>
-#endif // defined(CC_MSVC)
 
 namespace base {
 
