@@ -22,12 +22,6 @@
 
 namespace client {
 
-namespace {
-
-constexpr int kBytesPerPixel = 4;
-
-} // namespace
-
 FrameQImage::FrameQImage(QImage&& img)
     : Frame(base::Size(img.size().width(), img.size().height()),
             base::PixelFormat::ARGB(),
