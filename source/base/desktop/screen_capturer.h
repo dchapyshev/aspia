@@ -89,7 +89,7 @@ protected:
     };
 
 private:
-    SharedMemoryFactory* shared_memory_factory_;
+    SharedMemoryFactory* shared_memory_factory_ = nullptr;
 };
 
 template <typename FrameType>
