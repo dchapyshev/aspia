@@ -22,7 +22,6 @@
 #include "base/task_runner.h"
 #include "base/message_loop/message_loop.h"
 #include "base/message_loop/message_pump_asio.h"
-#include "base/crypto/key_pair.h"
 #include "base/crypto/message_decryptor_openssl.h"
 #include "peer/peer_id.h"
 
