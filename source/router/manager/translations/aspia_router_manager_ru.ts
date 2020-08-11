@@ -69,7 +69,7 @@
     <message>
         <location filename="../main_window.ui" line="103"/>
         <source>Relay</source>
-        <translation type="unfinished"></translation>
+        <translation>Ретрансляторы</translation>
     </message>
     <message>
         <source>Active connections</source>
@@ -422,40 +422,40 @@
         <location filename="../main_window.cc" line="273"/>
         <location filename="../main_window.cc" line="321"/>
         <source>Unknown internal error.</source>
-        <translation type="unfinished"></translation>
+        <translation>Неизвестная внутренняя ошибка.</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="277"/>
         <location filename="../main_window.cc" line="325"/>
         <source>Invalid data was passed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Были переданы неверные данные.</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="281"/>
         <location filename="../main_window.cc" line="333"/>
         <source>Unknown error type.</source>
-        <translation type="unfinished"></translation>
+        <translation>Неизвестный тип ошибки.</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="329"/>
         <source>A user with the specified name already exists.</source>
-        <translation type="unfinished"></translation>
+        <translation>Пользователь с указанным именем уже существует.</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="446"/>
         <source>Confirmation</source>
-        <translation type="unfinished"></translation>
+        <translation>Подтверждение</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="447"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>Вы действительно хотите удалить пользователя &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="285"/>
         <location filename="../main_window.cc" line="337"/>
         <source>Warning</source>
-        <translation type="unfinished">Предупреждение</translation>
+        <translation>Предупреждение</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="223"/>
@@ -557,7 +557,7 @@
     <message>
         <location filename="../user_dialog.cc" line="144"/>
         <source>The username you entered already exists.</source>
-        <translation type="unfinished"></translation>
+        <translation>Имя пользователя, которое вы ввели уже существует.</translation>
     </message>
     <message>
         <location filename="../user_dialog.cc" line="157"/>
@@ -595,22 +595,22 @@
     <message>
         <location filename="../user_dialog.cc" line="219"/>
         <source>Unknown internal error when creating or modifying a user.</source>
-        <translation type="unfinished"></translation>
+        <translation>Неизвестная внутренняя ошибка при создании или изменении пользователя.</translation>
     </message>
     <message>
         <location filename="../user_dialog.cc" line="267"/>
         <source>Double-click to change</source>
-        <translation type="unfinished"></translation>
+        <translation>Двойной щелчок для изменения</translation>
     </message>
     <message>
         <location filename="../user_dialog.cc" line="291"/>
         <source>Manager</source>
-        <translation type="unfinished"></translation>
+        <translation>Менеджер</translation>
     </message>
     <message>
         <location filename="../user_dialog.cc" line="295"/>
         <source>Authorized Peer</source>
-        <translation type="unfinished"></translation>
+        <translation>Авторизованный пир</translation>
     </message>
 </context>
 </TS>
