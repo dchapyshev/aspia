@@ -23,6 +23,7 @@
 #include "base/crypto/srp_constants.h"
 #include "base/crypto/srp_math.h"
 #include "base/strings/string_util.h"
+#include "base/strings/unicode.h"
 
 #include <cwctype>
 
@@ -138,6 +139,40 @@ User User::create(std::u16string_view name, std::u16string_view password)
 bool User::isValid() const
 {
     return !name.empty() && !salt.empty() && !group.empty() && !verifier.empty();
+}
+
+// static
+User User::parseFrom(const proto::User& serialized_user)
+{
+    User user;
+
+    user.entry_id = serialized_user.entry_id();
+    user.name     = base::utf16FromUtf8(serialized_user.name());
+    user.group    = serialized_user.group();
+    user.salt     = base::fromStdString(serialized_user.salt());
+    user.verifier = base::fromStdString(serialized_user.verifier());
+    user.sessions = serialized_user.sessions();
+    user.flags    = serialized_user.flags();
+
+    return user;
+}
+
+std::unique_ptr<proto::User> User::serialize()
+{
+    if (!isValid())
+        return nullptr;
+
+    std::unique_ptr<proto::User> user = std::make_unique<proto::User>();
+
+    user->set_entry_id(entry_id);
+    user->set_name(base::utf8FromUtf16(name));
+    user->set_group(group);
+    user->set_salt(base::toStdString(salt));
+    user->set_verifier(base::toStdString(verifier));
+    user->set_sessions(sessions);
+    user->set_flags(flags);
+
+    return user;
 }
 
 void UserList::add(const User& user)

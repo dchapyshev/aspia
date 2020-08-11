@@ -20,6 +20,7 @@
 #define PEER__USER_H
 
 #include "base/memory/byte_array.h"
+#include "proto/router.pb.h"
 
 namespace peer {
 
@@ -49,7 +50,10 @@ public:
     static User create(std::u16string_view name, std::u16string_view password);
     bool isValid() const;
 
-    int64_t entry_id = -1;
+    static User parseFrom(const proto::User& serialized_user);
+    std::unique_ptr<proto::User> serialize();
+
+    int64_t entry_id = 0;
     std::u16string name;
     std::string group;
     base::ByteArray salt;
