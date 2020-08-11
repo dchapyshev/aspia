@@ -29,7 +29,7 @@ namespace base {
 class ScopedTempFile
 {
 public:
-    ScopedTempFile(const std::filesystem::path& file_path);
+    explicit ScopedTempFile(const std::filesystem::path& file_path);
     ~ScopedTempFile();
 
     const std::filesystem::path& filePath() const;
