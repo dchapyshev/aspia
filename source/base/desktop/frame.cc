@@ -27,11 +27,11 @@ Frame::Frame(const Size& size,
              int stride,
              uint8_t* data,
              SharedMemoryBase* shared_memory)
-    : size_(size),
+    : data_(data),
+      shared_memory_(shared_memory),
+      size_(size),
       format_(format),
-      stride_(stride),
-      data_(data),
-      shared_memory_(shared_memory)
+      stride_(stride)
 {
     DCHECK(size_.width() >= 0);
     DCHECK(size_.height() >= 0);

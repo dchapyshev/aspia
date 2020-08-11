@@ -59,8 +59,8 @@ private:
     Address(std::u16string&& host, uint16_t port, uint16_t default_port);
 
     std::u16string host_;
-    uint16_t default_port_;
     uint16_t port_ = 0;
+    uint16_t default_port_;
 };
 
 } // namespace base
