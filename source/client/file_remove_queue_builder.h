@@ -20,6 +20,7 @@
 #define CLIENT__FILE_REMOVE_QUEUE_BUILDER_H
 
 #include "client/file_remover.h"
+#include "proto/file_transfer.pb.h"
 
 namespace client {
 

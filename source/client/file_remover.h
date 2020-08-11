@@ -22,7 +22,6 @@
 #include "base/memory/scalable_queue.h"
 #include "common/file_task.h"
 #include "common/file_task_producer.h"
-#include "proto/file_transfer.pb.h"
 
 #include <functional>
 

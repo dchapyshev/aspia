@@ -20,11 +20,9 @@
 #define CLIENT__CLIENT_DESKTOP_H
 
 #include "base/macros_magic.h"
-#include "base/desktop/geometry.h"
 #include "client/client.h"
 #include "client/desktop_control.h"
 #include "client/input_event_filter.h"
-#include "proto/system_info.pb.h"
 
 namespace base {
 class CursorDecoder;

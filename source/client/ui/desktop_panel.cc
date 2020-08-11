@@ -17,6 +17,7 @@
 //
 
 #include "client/ui/desktop_panel.h"
+
 #include "base/logging.h"
 #include "client/ui/desktop_settings.h"
 #include "client/ui/select_screen_action.h"

@@ -17,6 +17,7 @@
 //
 
 #include "client/ui/system_info_window.h"
+
 #include "client/ui/tree_to_html.h"
 
 #include <QClipboard>

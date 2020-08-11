@@ -22,7 +22,6 @@
 #include "base/macros_magic.h"
 #include "client/ui/desktop_settings.h"
 #include "proto/common.pb.h"
-#include "proto/desktop.pb.h"
 #include "proto/desktop_extensions.pb.h"
 #include "ui_desktop_panel.h"
 

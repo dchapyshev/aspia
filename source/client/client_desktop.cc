@@ -23,7 +23,6 @@
 #include "base/codec/cursor_decoder.h"
 #include "base/codec/video_decoder.h"
 #include "base/codec/video_util.h"
-#include "base/desktop/frame.h"
 #include "base/desktop/mouse_cursor.h"
 #include "client/desktop_control_proxy.h"
 #include "client/desktop_window.h"
@@ -311,7 +310,6 @@ void ClientDesktop::readVideoPacket(const proto::VideoPacket& packet)
         base::Size screen_size = video_size;
 
         static const int kMaxValue = std::numeric_limits<uint16_t>::max();
-        static const int kMinValue = -std::numeric_limits<uint16_t>::max();
 
         if (video_size.width()  <= 0 || video_size.width()  >= kMaxValue ||
             video_size.height() <= 0 || video_size.height() >= kMaxValue)
