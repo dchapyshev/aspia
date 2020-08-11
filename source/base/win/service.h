@@ -37,9 +37,9 @@ public:
 
     void exec();
 
-    const std::u16string& name() { return name_; }
-    MessageLoop* messageLoop() { return message_loop_.get(); }
-    std::shared_ptr<TaskRunner> taskRunner() { return task_runner_; }
+    const std::u16string& name() const { return name_; }
+    MessageLoop* messageLoop() const { return message_loop_.get(); }
+    std::shared_ptr<TaskRunner> taskRunner() const { return task_runner_; }
 
 protected:
     friend class ServiceThread;
