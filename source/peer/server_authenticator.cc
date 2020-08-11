@@ -23,11 +23,8 @@
 #include "base/location.h"
 #include "base/logging.h"
 #include "base/sys_info.h"
-#include "base/crypto/message_decryptor_openssl.h"
-#include "base/crypto/message_encryptor_openssl.h"
 #include "base/crypto/generic_hash.h"
 #include "base/crypto/random.h"
-#include "base/crypto/secure_memory.h"
 #include "base/crypto/srp_constants.h"
 #include "base/crypto/srp_math.h"
 #include "base/strings/unicode.h"
@@ -288,7 +285,6 @@ void ServerAuthenticator::onClientHello(const base::ByteArray& buffer)
             finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
             return;
         }
-        break;
     }
 
     proto::ServerHello server_hello;
@@ -474,7 +470,6 @@ void ServerAuthenticator::onClientKeyExchange(const base::ByteArray& buffer)
             finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
             return;
         }
-        break;
     }
 
     if (!onSessionKeyChanged())

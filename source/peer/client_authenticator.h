@@ -22,14 +22,6 @@
 #include "base/crypto/big_num.h"
 #include "peer/authenticator.h"
 
-#include <functional>
-
-namespace base {
-class Location;
-class MessageDecryptor;
-class MessageEncryptor;
-} // namespace base
-
 namespace peer {
 
 class ClientAuthenticator : public Authenticator
