@@ -17,6 +17,7 @@
 //
 
 #include "common/ui/about_dialog.h"
+
 #include "build/version.h"
 #include "ui_about_dialog.h"
 

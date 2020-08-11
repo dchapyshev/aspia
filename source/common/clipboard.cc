@@ -24,7 +24,6 @@
 #include "base/win/message_window.h"
 #include "base/win/scoped_clipboard.h"
 #include "base/win/scoped_hglobal.h"
-#include "build/build_config.h"
 
 #include <zstd.h>
 
