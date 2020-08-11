@@ -111,7 +111,7 @@ void Session::onErrorOccurred()
     if (delegate_)
         delegate_->onSessionFinished(this);
 
-    terminate();
+    stop();
 }
 
 } // namespace relay
