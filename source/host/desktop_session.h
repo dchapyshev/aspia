@@ -21,8 +21,6 @@
 
 #include "proto/desktop_internal.pb.h"
 
-#include <memory>
-
 namespace base {
 class Frame;
 class MouseCursor;

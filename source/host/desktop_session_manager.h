@@ -22,7 +22,6 @@
 #include "base/session_id.h"
 #include "base/waitable_timer.h"
 #include "base/ipc/ipc_server.h"
-#include "base/win/session_status.h"
 #include "host/desktop_session.h"
 #include "proto/desktop_internal.pb.h"
 

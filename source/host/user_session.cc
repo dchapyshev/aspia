@@ -28,7 +28,6 @@
 #include "base/strings/string_util.h"
 #include "base/strings/unicode.h"
 #include "host/client_session_desktop.h"
-#include "host/client_session_file_transfer.h"
 #include "host/desktop_session_proxy.h"
 
 namespace host {
