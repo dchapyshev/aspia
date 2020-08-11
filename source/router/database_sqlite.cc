@@ -20,7 +20,6 @@
 
 #include "base/logging.h"
 #include "base/files/base_paths.h"
-#include "base/strings/strcat.h"
 #include "base/strings/unicode.h"
 #include "build/build_config.h"
 
