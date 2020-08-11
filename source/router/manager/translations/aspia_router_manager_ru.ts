@@ -353,7 +353,7 @@
 <context>
     <name>router::MainWindow</name>
     <message>
-        <location filename="../main_window.cc" line="121"/>
+        <location filename="../main_window.cc" line="122"/>
         <source>Connecting to %1:%2...</source>
         <translation>Подключение к %1:%2...</translation>
     </message>
@@ -362,123 +362,123 @@
         <translation type="vanished">Подключено к: %1:%2 (%3).</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="147"/>
+        <location filename="../main_window.cc" line="148"/>
         <source>Connected to: %1:%2 (version %3)</source>
         <translation>Подключено к: %1:%2 (версия %3)</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="169"/>
+        <location filename="../main_window.cc" line="170"/>
         <source>Cryptography error (message encryption or decryption failed).</source>
         <translation>Ошибка криптографии (не удалось зашифровать или расшифровать сообщение).</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="173"/>
+        <location filename="../main_window.cc" line="174"/>
         <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
         <translation>Произошла ошибка в сети (например, сетевой кабель был случайно отключен).</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="177"/>
+        <location filename="../main_window.cc" line="178"/>
         <source>Connection was refused by the peer (or timed out).</source>
         <translation>Подключение было отклонено другой стороной (или превышено время ожидания).</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="181"/>
+        <location filename="../main_window.cc" line="182"/>
         <source>Remote host closed the connection.</source>
         <translation>Удаленный узел закрыл подключение.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="185"/>
+        <location filename="../main_window.cc" line="186"/>
         <source>Host address was not found.</source>
         <translation>Не найден адрес удаленного узла.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="189"/>
+        <location filename="../main_window.cc" line="190"/>
         <source>Socket operation timed out.</source>
         <translation>Превышено время ожидания.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="193"/>
+        <location filename="../main_window.cc" line="194"/>
         <source>Address specified is already in use and was set to be exclusive.</source>
         <translation>Указанный адрес уже используется и был установлен монопольно.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="197"/>
+        <location filename="../main_window.cc" line="198"/>
         <source>Address specified does not belong to the host.</source>
         <translation>Указанный адрес не принадлежит узлу.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="207"/>
-        <location filename="../main_window.cc" line="243"/>
+        <location filename="../main_window.cc" line="208"/>
+        <location filename="../main_window.cc" line="244"/>
         <source>An unknown error occurred.</source>
         <translation>Произошла неизвестная ошибка.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="212"/>
-        <location filename="../main_window.cc" line="247"/>
+        <location filename="../main_window.cc" line="213"/>
+        <location filename="../main_window.cc" line="248"/>
         <source>Error: %1</source>
         <translation>Ошибка: %1</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="273"/>
-        <location filename="../main_window.cc" line="321"/>
+        <location filename="../main_window.cc" line="274"/>
+        <location filename="../main_window.cc" line="322"/>
         <source>Unknown internal error.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="277"/>
-        <location filename="../main_window.cc" line="325"/>
+        <location filename="../main_window.cc" line="278"/>
+        <location filename="../main_window.cc" line="326"/>
         <source>Invalid data was passed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="281"/>
-        <location filename="../main_window.cc" line="333"/>
+        <location filename="../main_window.cc" line="282"/>
+        <location filename="../main_window.cc" line="334"/>
         <source>Unknown error type.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="329"/>
+        <location filename="../main_window.cc" line="330"/>
         <source>A user with the specified name already exists.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="446"/>
+        <location filename="../main_window.cc" line="447"/>
         <source>Confirmation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="447"/>
+        <location filename="../main_window.cc" line="448"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="285"/>
-        <location filename="../main_window.cc" line="337"/>
+        <location filename="../main_window.cc" line="286"/>
+        <location filename="../main_window.cc" line="338"/>
         <source>Warning</source>
         <translation type="unfinished">Предупреждение</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="223"/>
+        <location filename="../main_window.cc" line="224"/>
         <source>Authentication successfully completed.</source>
         <translation>Аутентификация успешно завершена.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="227"/>
+        <location filename="../main_window.cc" line="228"/>
         <source>Network authentication error.</source>
         <translation>Ошибка сети при аутентификации.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="231"/>
+        <location filename="../main_window.cc" line="232"/>
         <source>Violation of the data exchange protocol.</source>
         <translation>Нарушение протокола обмена данными.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="235"/>
+        <location filename="../main_window.cc" line="236"/>
         <source>An error occured while authenticating: wrong user name or password.</source>
         <translation>Произошла ошибка при аутентификации: неправильное имя пользователя или пароль.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="239"/>
+        <location filename="../main_window.cc" line="240"/>
         <source>Specified session type is not allowed for the user.</source>
         <translation>Указанный тип сессии не разрешен для пользователя.</translation>
     </message>
