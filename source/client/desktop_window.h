@@ -50,19 +50,19 @@ public:
     struct Metrics
     {
         std::chrono::seconds duration;
-        int64_t total_rx;
-        int64_t total_tx;
-        int speed_rx;
-        int speed_tx;
-        size_t min_video_packet;
-        size_t max_video_packet;
-        size_t avg_video_packet;
-        int fps;
-        int send_mouse;
-        int drop_mouse;
-        int send_key;
-        int read_clipboard;
-        int send_clipboard;
+        int64_t total_rx = 0;
+        int64_t total_tx = 0;
+        int speed_rx = 0;
+        int speed_tx = 0;
+        size_t min_video_packet = 0;
+        size_t max_video_packet = 0;
+        size_t avg_video_packet = 0;
+        int fps = 0;
+        int send_mouse = 0;
+        int drop_mouse = 0;
+        int send_key = 0;
+        int read_clipboard = 0;
+        int send_clipboard = 0;
     };
 
     virtual void showWindow(std::shared_ptr<DesktopControlProxy> desktop_control_proxy,

@@ -69,12 +69,12 @@ protected:
 private:
     struct Drive
     {
-        proto::DriveList::Item::Type type;
+        proto::DriveList::Item::Type type = proto::DriveList::Item::TYPE_UNKNOWN;
         QIcon icon;
         QString name;
         QString path;
-        int64_t total_space;
-        int64_t free_space;
+        int64_t total_space = 0;
+        int64_t free_space = 0;
     };
 
     QString current_path_ = computerPath();
