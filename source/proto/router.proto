@@ -162,9 +162,11 @@ message User
 {
     int64 entry_id  = 1;
     string name     = 2;
-    string password = 3;
-    uint32 sessions = 4;
-    uint32 flags    = 5;
+    string group    = 3;
+    bytes salt      = 4;
+    bytes verifier  = 5;
+    uint32 sessions = 6;
+    uint32 flags    = 7;
 }
 
 message UserListRequest
