@@ -26,7 +26,7 @@
 #include "router/database_factory_sqlite.h"
 #include "router/database_sqlite.h"
 #include "router/server_proxy.h"
-#include "router/session_manager.h"
+#include "router/session_admin.h"
 #include "router/session_peer.h"
 #include "router/session_relay.h"
 #include "router/settings.h"
@@ -55,8 +55,8 @@ const char* sessionTypeToString(proto::RouterSession session_type)
         case proto::ROUTER_SESSION_ANONIMOUS_PEER:
             return "ROUTER_SESSION_ANONIMOUS_PEER";
 
-        case proto::ROUTER_SESSION_MANAGER:
-            return "ROUTER_SESSION_MANAGER";
+        case proto::ROUTER_SESSION_ADMIN:
+            return "ROUTER_SESSION_ADMIN";
 
         case proto::ROUTER_SESSION_RELAY:
             return "ROUTER_SESSION_RELAY";
@@ -223,9 +223,9 @@ void Server::onNewSession(peer::ServerAuthenticatorManager::SessionInfo&& sessio
         }
         break;
 
-        case proto::ROUTER_SESSION_MANAGER:
+        case proto::ROUTER_SESSION_ADMIN:
         {
-            session = std::make_unique<SessionManager>(
+            session = std::make_unique<SessionAdmin>(
                 std::move(session_info.channel), database_factory_, server_proxy_);
         }
         break;

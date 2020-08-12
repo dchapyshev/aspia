@@ -75,7 +75,7 @@ UserDialog::UserDialog(const peer::User& user,
     };
 
     add_session(proto::ROUTER_SESSION_AUTHORIZED_PEER);
-    add_session(proto::ROUTER_SESSION_MANAGER);
+    add_session(proto::ROUTER_SESSION_ADMIN);
 
     connect(ui.buttonbox, &QDialogButtonBox::clicked, this, &UserDialog::onButtonBoxClicked);
     connect(ui.edit_username, &QLineEdit::textEdited, [this]()
@@ -286,8 +286,8 @@ QString UserDialog::sessionTypeToString(proto::RouterSession session_type)
 
     switch (session_type)
     {
-        case proto::ROUTER_SESSION_MANAGER:
-            str = QT_TR_NOOP("Manager");
+        case proto::ROUTER_SESSION_ADMIN:
+            str = QT_TR_NOOP("Administrator");
             break;
 
         case proto::ROUTER_SESSION_AUTHORIZED_PEER:

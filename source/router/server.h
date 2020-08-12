@@ -21,7 +21,7 @@
 
 #include "base/net/network_server.h"
 #include "peer/server_authenticator_manager.h"
-#include "proto/router.pb.h"
+#include "proto/router_admin.pb.h"
 #include "router/session.h"
 
 namespace router {

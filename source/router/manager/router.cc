@@ -20,6 +20,7 @@
 
 #include "base/logging.h"
 #include "base/task_runner.h"
+#include "proto/router.pb.h"
 #include "router/manager/router_window_proxy.h"
 
 namespace router {
@@ -31,7 +32,7 @@ Router::Router(std::shared_ptr<RouterWindowProxy> window_proxy,
       authenticator_(std::make_unique<peer::ClientAuthenticator>(io_task_runner))
 {
     authenticator_->setIdentify(proto::IDENTIFY_SRP);
-    authenticator_->setSessionType(proto::ROUTER_SESSION_MANAGER);
+    authenticator_->setSessionType(proto::ROUTER_SESSION_ADMIN);
 }
 
 Router::~Router() = default;
@@ -57,7 +58,7 @@ void Router::refreshPeerList()
 {
     LOG(LS_INFO) << "Sending peer list request";
 
-    proto::ManagerToRouter message;
+    proto::AdminToRouter message;
     message.mutable_peer_list_request()->set_dummy(1);
     channel_->send(base::serialize(message));
 }
@@ -66,7 +67,7 @@ void Router::disconnectPeer(uint64_t peer_id)
 {
     LOG(LS_INFO) << "Sending disconnect peer request (peer_id: " << peer_id << ")";
 
-    proto::ManagerToRouter message;
+    proto::AdminToRouter message;
 
     proto::PeerRequest* request = message.mutable_peer_request();
     request->set_type(proto::PEER_REQUEST_DISCONNECT);
@@ -79,7 +80,7 @@ void Router::refreshProxyList()
 {
     LOG(LS_INFO) << "Sending relay list request";
 
-    proto::ManagerToRouter message;
+    proto::AdminToRouter message;
     message.mutable_relay_list_request()->set_dummy(1);
     channel_->send(base::serialize(message));
 }
@@ -88,7 +89,7 @@ void Router::refreshUserList()
 {
     LOG(LS_INFO) << "Sending user list request";
 
-    proto::ManagerToRouter message;
+    proto::AdminToRouter message;
     message.mutable_user_list_request()->set_dummy(1);
     channel_->send(base::serialize(message));
 }
@@ -98,7 +99,7 @@ void Router::addUser(const proto::User& user)
     LOG(LS_INFO) << "Sending user add request (username: " << user.name()
                  << ", entry_id: " << user.entry_id() << ")";
 
-    proto::ManagerToRouter message;
+    proto::AdminToRouter message;
 
     proto::UserRequest* request = message.mutable_user_request();
     request->set_type(proto::USER_REQUEST_ADD);
@@ -112,7 +113,7 @@ void Router::modifyUser(const proto::User& user)
     LOG(LS_INFO) << "Sending user modify request (username: " << user.name()
                  << ", entry_id: " << user.entry_id() << ")";
 
-    proto::ManagerToRouter message;
+    proto::AdminToRouter message;
 
     proto::UserRequest* request = message.mutable_user_request();
     request->set_type(proto::USER_REQUEST_MODIFY);
@@ -125,7 +126,7 @@ void Router::deleteUser(int64_t entry_id)
 {
     LOG(LS_INFO) << "Sending user delete request (entry_id: " << entry_id << ")";
 
-    proto::ManagerToRouter message;
+    proto::AdminToRouter message;
 
     proto::UserRequest* request = message.mutable_user_request();
     request->set_type(proto::USER_REQUEST_DELETE);
@@ -168,7 +169,7 @@ void Router::onDisconnected(base::NetworkChannel::ErrorCode error_code)
 
 void Router::onMessageReceived(const base::ByteArray& buffer)
 {
-    proto::RouterToManager message;
+    proto::RouterToAdmin message;
 
     if (!base::parse(buffer, &message))
     {

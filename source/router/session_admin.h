@@ -16,23 +16,23 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ROUTER__SESSION_MANAGER_H
-#define ROUTER__SESSION_MANAGER_H
+#ifndef ROUTER__SESSION_ADMIN_H
+#define ROUTER__SESSION_ADMIN_H
 
-#include "proto/router.pb.h"
+#include "proto/router_admin.pb.h"
 #include "router/session.h"
 
 namespace router {
 
 class ServerProxy;
 
-class SessionManager : public Session
+class SessionAdmin : public Session
 {
 public:
-    SessionManager(std::unique_ptr<base::NetworkChannel> channel,
-                   std::shared_ptr<DatabaseFactory> database_factory,
-                   std::shared_ptr<ServerProxy> server_proxy);
-    ~SessionManager();
+    SessionAdmin(std::unique_ptr<base::NetworkChannel> channel,
+                 std::shared_ptr<DatabaseFactory> database_factory,
+                 std::shared_ptr<ServerProxy> server_proxy);
+    ~SessionAdmin();
 
 protected:
     // Session implementation.
@@ -54,9 +54,9 @@ private:
 
     std::shared_ptr<ServerProxy> server_proxy_;
 
-    DISALLOW_COPY_AND_ASSIGN(SessionManager);
+    DISALLOW_COPY_AND_ASSIGN(SessionAdmin);
 };
 
 } // namespace router
 
-#endif // ROUTER__SESSION_MANAGER_H
+#endif // ROUTER__SESSION_ADMIN_H

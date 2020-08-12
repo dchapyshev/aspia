@@ -20,7 +20,7 @@
 #define PEER__USER_H
 
 #include "base/memory/byte_array.h"
-#include "proto/router.pb.h"
+#include "proto/router_admin.pb.h"
 
 namespace peer {
 

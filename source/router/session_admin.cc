@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "router/session_manager.h"
+#include "router/session_admin.h"
 
 #include "base/logging.h"
 #include "base/strings/unicode.h"
@@ -27,25 +27,25 @@
 
 namespace router {
 
-SessionManager::SessionManager(std::unique_ptr<base::NetworkChannel> channel,
+SessionAdmin::SessionAdmin(std::unique_ptr<base::NetworkChannel> channel,
                                std::shared_ptr<DatabaseFactory> database_factory,
                                std::shared_ptr<ServerProxy> server_proxy)
-    : Session(proto::ROUTER_SESSION_MANAGER, std::move(channel), std::move(database_factory)),
+    : Session(proto::ROUTER_SESSION_ADMIN, std::move(channel), std::move(database_factory)),
       server_proxy_(std::move(server_proxy))
 {
     DCHECK(server_proxy_);
 }
 
-SessionManager::~SessionManager() = default;
+SessionAdmin::~SessionAdmin() = default;
 
-void SessionManager::onSessionReady()
+void SessionAdmin::onSessionReady()
 {
     // Nothing
 }
 
-void SessionManager::onMessageReceived(const base::ByteArray& buffer)
+void SessionAdmin::onMessageReceived(const base::ByteArray& buffer)
 {
-    proto::ManagerToRouter message;
+    proto::AdminToRouter message;
 
     if (!base::parse(buffer, &message))
     {
@@ -79,12 +79,12 @@ void SessionManager::onMessageReceived(const base::ByteArray& buffer)
     }
 }
 
-void SessionManager::onMessageWritten(size_t pending)
+void SessionAdmin::onMessageWritten(size_t pending)
 {
     // Nothing
 }
 
-void SessionManager::doUserListRequest()
+void SessionAdmin::doUserListRequest()
 {
     std::unique_ptr<Database> database = openDatabase();
     if (!database)
@@ -93,7 +93,7 @@ void SessionManager::doUserListRequest()
         return;
     }
 
-    proto::RouterToManager message;
+    proto::RouterToAdmin message;
     proto::UserList* list = message.mutable_user_list();
 
     peer::UserList users = database->userList();
@@ -103,9 +103,9 @@ void SessionManager::doUserListRequest()
     sendMessage(message);
 }
 
-void SessionManager::doUserRequest(const proto::UserRequest& request)
+void SessionAdmin::doUserRequest(const proto::UserRequest& request)
 {
-    proto::RouterToManager message;
+    proto::RouterToAdmin message;
     proto::UserResult* result = message.mutable_user_result();
     result->set_type(request.type());
 
@@ -127,9 +127,9 @@ void SessionManager::doUserRequest(const proto::UserRequest& request)
     sendMessage(message);
 }
 
-void SessionManager::doRelayListRequest()
+void SessionAdmin::doRelayListRequest()
 {
-    proto::RouterToManager message;
+    proto::RouterToAdmin message;
 
     message.set_allocated_relay_list(server_proxy_->relayList().release());
     if (!message.has_relay_list())
@@ -138,9 +138,9 @@ void SessionManager::doRelayListRequest()
     sendMessage(message);
 }
 
-void SessionManager::doPeerListRequest()
+void SessionAdmin::doPeerListRequest()
 {
-    proto::RouterToManager message;
+    proto::RouterToAdmin message;
 
     message.set_allocated_peer_list(server_proxy_->peerList().release());
     if (!message.has_peer_list())
@@ -149,7 +149,7 @@ void SessionManager::doPeerListRequest()
     sendMessage(message);
 }
 
-proto::UserResult::ErrorCode SessionManager::addUser(const proto::User& user)
+proto::UserResult::ErrorCode SessionAdmin::addUser(const proto::User& user)
 {
     LOG(LS_INFO) << "User add request: " << user.name();
 
@@ -173,7 +173,7 @@ proto::UserResult::ErrorCode SessionManager::addUser(const proto::User& user)
     return proto::UserResult::SUCCESS;
 }
 
-proto::UserResult::ErrorCode SessionManager::modifyUser(const proto::User& user)
+proto::UserResult::ErrorCode SessionAdmin::modifyUser(const proto::User& user)
 {
     LOG(LS_INFO) << "User modify request: " << user.name();
 
@@ -203,7 +203,7 @@ proto::UserResult::ErrorCode SessionManager::modifyUser(const proto::User& user)
     return proto::UserResult::SUCCESS;
 }
 
-proto::UserResult::ErrorCode SessionManager::deleteUser(const proto::User& user)
+proto::UserResult::ErrorCode SessionAdmin::deleteUser(const proto::User& user)
 {
     std::unique_ptr<Database> database = openDatabase();
     if (!database)

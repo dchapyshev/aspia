@@ -21,7 +21,7 @@
 
 #include "base/macros_magic.h"
 #include "peer/client_authenticator.h"
-#include "proto/router.pb.h"
+#include "proto/router_admin.pb.h"
 
 namespace base {
 class TaskRunner;
