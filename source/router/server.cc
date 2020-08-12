@@ -22,12 +22,11 @@
 #include "base/task_runner.h"
 #include "base/net/network_channel.h"
 #include "base/strings/unicode.h"
-#include "proto/router.pb.h"
 #include "router/database_factory_sqlite.h"
 #include "router/database_sqlite.h"
 #include "router/server_proxy.h"
 #include "router/session_admin.h"
-#include "router/session_peer.h"
+#include "router/session_host.h"
 #include "router/session_relay.h"
 #include "router/settings.h"
 
@@ -49,11 +48,11 @@ const char* sessionTypeToString(proto::RouterSession session_type)
 {
     switch (session_type)
     {
-        case proto::ROUTER_SESSION_AUTHORIZED_PEER:
-            return "ROUTER_SESSION_AUTHORIZED_PEER";
+        case proto::ROUTER_SESSION_CLIENT:
+            return "ROUTER_SESSION_CLIENT";
 
-        case proto::ROUTER_SESSION_ANONIMOUS_PEER:
-            return "ROUTER_SESSION_ANONIMOUS_PEER";
+        case proto::ROUTER_SESSION_HOST:
+            return "ROUTER_SESSION_HOST";
 
         case proto::ROUTER_SESSION_ADMIN:
             return "ROUTER_SESSION_ADMIN";
@@ -123,7 +122,7 @@ bool Server::start()
     authenticator_manager_->setUserList(std::make_shared<peer::UserList>(database->userList()));
     authenticator_manager_->setAnonymousAccess(
         peer::ServerAuthenticator::AnonymousAccess::ENABLE,
-        proto::ROUTER_SESSION_ANONIMOUS_PEER | proto::ROUTER_SESSION_RELAY);
+        proto::ROUTER_SESSION_HOST | proto::ROUTER_SESSION_RELAY);
 
     server_ = std::make_unique<base::NetworkServer>();
     server_->start(port, this);
@@ -151,40 +150,40 @@ std::unique_ptr<proto::RelayList> Server::relayList() const
     return result;
 }
 
-std::unique_ptr<proto::PeerList> Server::peerList() const
+std::unique_ptr<proto::HostList> Server::hostList() const
 {
-    std::unique_ptr<proto::PeerList> result = std::make_unique<proto::PeerList>();
+    std::unique_ptr<proto::HostList> result = std::make_unique<proto::HostList>();
 
     for (const auto& session : sessions_)
     {
-        if (session->sessionType() != proto::ROUTER_SESSION_ANONIMOUS_PEER)
+        if (session->sessionType() != proto::ROUTER_SESSION_HOST)
             continue;
 
-        SessionPeer* session_peer = static_cast<SessionPeer*>(session.get());
+        SessionHost* session_host = static_cast<SessionHost*>(session.get());
 
-        proto::Peer* peer = result->add_peer();
-        peer->set_ip_address(base::utf8FromUtf16(session_peer->address()));
-        peer->set_user_name(base::utf8FromUtf16(session_peer->userName()));
-        peer->set_peer_id(session_peer->peerId());
+        proto::Host* host = result->add_host();
+        host->set_ip_address(base::utf8FromUtf16(session_host->address()));
+        host->set_user_name(base::utf8FromUtf16(session_host->userName()));
+        host->set_host_id(session_host->hostId());
     }
 
-    result->set_error_code(proto::PeerList::SUCCESS);
+    result->set_error_code(proto::HostList::SUCCESS);
     return result;
 }
 
-void Server::onPeerSessionWithId(SessionPeer* session)
+void Server::onHostSessionWithId(SessionHost* session)
 {
-    peer::PeerId peer_id = session->peerId();
+    peer::HostId host_id = session->hostId();
 
     for (auto it = sessions_.begin(); it != sessions_.end();)
     {
         Session* entry = it->get();
 
         if (entry != session &&
-            entry->sessionType() == proto::ROUTER_SESSION_ANONIMOUS_PEER &&
-            static_cast<SessionPeer*>(entry)->peerId() == peer_id)
+            entry->sessionType() == proto::ROUTER_SESSION_HOST &&
+            static_cast<SessionHost*>(entry)->hostId() == host_id)
         {
-            LOG(LS_INFO) << "Detected previous connection with ID " << peer_id
+            LOG(LS_INFO) << "Detected previous connection with ID " << host_id
                          << ". It will be completed";
 
             it = sessions_.erase(it);
@@ -215,11 +214,16 @@ void Server::onNewSession(peer::ServerAuthenticatorManager::SessionInfo&& sessio
 
     switch (session_info.session_type)
     {
-        case proto::ROUTER_SESSION_ANONIMOUS_PEER:
-        case proto::ROUTER_SESSION_AUTHORIZED_PEER:
+        case proto::ROUTER_SESSION_CLIENT:
         {
-            session = std::make_unique<SessionPeer>(
-                session_type, std::move(session_info.channel), database_factory_, server_proxy_);
+            // TODO
+        }
+        break;
+
+        case proto::ROUTER_SESSION_HOST:
+        {
+            session = std::make_unique<SessionHost>(
+                std::move(session_info.channel), database_factory_, server_proxy_);
         }
         break;
 

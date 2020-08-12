@@ -452,25 +452,25 @@ bool DatabaseSqlite::removeUser(int64_t entry_id)
     return result;
 }
 
-peer::PeerId DatabaseSqlite::peerId(const base::ByteArray& keyHash) const
+peer::HostId DatabaseSqlite::hostId(const base::ByteArray& keyHash) const
 {
     if (keyHash.empty())
     {
         LOG(LS_ERROR) << "Invalid parameters";
-        return peer::kInvalidPeerId;
+        return peer::kInvalidHostId;
     }
 
-    const char kQuery[] = "SELECT * FROM peers WHERE key=?";
+    const char kQuery[] = "SELECT * FROM hosts WHERE key=?";
 
     sqlite3_stmt* statement;
     int error_code = sqlite3_prepare(db_, kQuery, std::size(kQuery), &statement, nullptr);
     if (error_code != SQLITE_OK)
     {
         LOG(LS_ERROR) << "sqlite3_prepare failed: " << sqlite3_errstr(error_code);
-        return peer::kInvalidPeerId;
+        return peer::kInvalidHostId;
     }
 
-    peer::PeerId result = peer::kInvalidPeerId;
+    peer::HostId result = peer::kInvalidHostId;
 
     do
     {
@@ -498,7 +498,7 @@ peer::PeerId DatabaseSqlite::peerId(const base::ByteArray& keyHash) const
     return result;
 }
 
-bool DatabaseSqlite::addPeer(const base::ByteArray& keyHash)
+bool DatabaseSqlite::addHost(const base::ByteArray& keyHash)
 {
     if (keyHash.empty())
     {
@@ -506,7 +506,7 @@ bool DatabaseSqlite::addPeer(const base::ByteArray& keyHash)
         return false;
     }
 
-    const char kQuery[] = "INSERT INTO peers ('id', 'key') VALUES (NULL, ?)";
+    const char kQuery[] = "INSERT INTO hosts ('id', 'key') VALUES (NULL, ?)";
 
     sqlite3_stmt* statement = nullptr;
     int error_code = sqlite3_prepare(db_, kQuery, std::size(kQuery), &statement, nullptr);

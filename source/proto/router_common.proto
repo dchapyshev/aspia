@@ -16,10 +16,38 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "peer/peer_id.h"
+syntax = "proto3";
 
-namespace peer {
+option optimize_for = LITE_RUNTIME;
 
-const PeerId kInvalidPeerId = 0;
+package proto;
 
-} // namespace peer
+enum RouterSession
+{
+    ROUTER_SESSION_UNKNOWN = 0;
+    ROUTER_SESSION_ADMIN   = 1;
+    ROUTER_SESSION_CLIENT  = 2;
+    ROUTER_SESSION_HOST    = 4;
+    ROUTER_SESSION_RELAY   = 8;
+}
+
+message RelayCredentials
+{
+    string host = 1;
+    uint32 port = 2;
+    bytes key   = 3;
+}
+
+message ConnectionOffer
+{
+    enum ErrorCode
+    {
+        SUCCESS        = 0;
+        PEER_NOT_FOUND = 1;
+        ACCESS_DENIED  = 2;
+    }
+
+    ErrorCode error_code   = 1;
+    RelayCredentials relay = 2;
+    bytes secret           = 3;
+}

@@ -25,7 +25,7 @@
 #include "base/win/session_status.h"
 #include "host/client_session.h"
 #include "host/desktop_session_manager.h"
-#include "peer/peer_id.h"
+#include "peer/host_id.h"
 #include "peer/user.h"
 #include "proto/host_internal.pb.h"
 
@@ -65,7 +65,7 @@ public:
                 std::unique_ptr<base::IpcChannel> channel);
     ~UserSession();
 
-    void start(peer::PeerId peer_id, Delegate* delegate);
+    void start(peer::HostId host_id, Delegate* delegate);
     void restart(std::unique_ptr<base::IpcChannel> channel);
 
     Type type() const { return type_; }
@@ -75,7 +75,7 @@ public:
 
     void addNewSession(std::unique_ptr<ClientSession> client_session);
     void setSessionEvent(base::win::SessionStatus status, base::SessionId session_id);
-    void setPeerId(peer::PeerId peer_id);
+    void setHostId(peer::HostId host_id);
 
 protected:
     // base::IpcChannel::Listener implementation.
@@ -109,7 +109,7 @@ private:
     base::WaitableTimer attach_timer_;
 
     base::SessionId session_id_;
-    peer::PeerId peer_id_ = peer::kInvalidPeerId;
+    peer::HostId host_id_ = peer::kInvalidHostId;
     std::string username_;
     std::string password_;
 

@@ -109,20 +109,20 @@ void Server::onRouterDisconnected(base::NetworkChannel::ErrorCode error_code)
     LOG(LS_INFO) << "ROUTER DISCONNECTED";
 }
 
-void Server::onPeerIdAssigned(peer::PeerId peer_id, const base::ByteArray& peer_key)
+void Server::onHostIdAssigned(peer::HostId host_id, const base::ByteArray& host_key)
 {
-    LOG(LS_INFO) << "New peer ID assigned: " << peer_id;
+    LOG(LS_INFO) << "New host ID assigned: " << host_id;
 
-    if (!peer_key.empty())
+    if (!host_key.empty())
     {
-        LOG(LS_INFO) << "Peer key changed";
-        settings_.setPeerKey(peer_key);
+        LOG(LS_INFO) << "Host key changed";
+        settings_.setHostKey(host_key);
     }
 
-    user_session_manager_->setPeerId(peer_id);
+    user_session_manager_->setHostId(host_id);
 }
 
-void Server::onPeerConnected(std::unique_ptr<base::NetworkChannel> channel)
+void Server::onClientConnected(std::unique_ptr<base::NetworkChannel> channel)
 {
     LOG(LS_INFO) << "New RELAY connection";
     startAuthentication(std::move(channel));
@@ -203,14 +203,14 @@ void Server::updateConfiguration(const std::filesystem::path& path, bool error)
         reloadUserList();
 
         // If a controller instance already exists.
-        if (peer_controller_)
+        if (router_controller_)
         {
             if (settings_.isRouterEnabled())
             {
                 // Check if the connection parameters have changed.
-                if (peer_controller_->address() != settings_.routerAddress() ||
-                    peer_controller_->port() != settings_.routerPort() ||
-                    peer_controller_->publicKey() != settings_.routerPublicKey())
+                if (router_controller_->address() != settings_.routerAddress() ||
+                    router_controller_->port() != settings_.routerPort() ||
+                    router_controller_->publicKey() != settings_.routerPublicKey())
                 {
                     // Reconnect to the router with new parameters.
                     LOG(LS_INFO) << "Router parameters have changed";
@@ -221,7 +221,7 @@ void Server::updateConfiguration(const std::filesystem::path& path, bool error)
             {
                 // Destroy the controller.
                 LOG(LS_INFO) << "The router is now disabled";
-                peer_controller_.reset();
+                router_controller_.reset();
             }
         }
         else
@@ -250,18 +250,18 @@ void Server::connectToRouter()
     LOG(LS_INFO) << "Connecting to the router...";
 
     // Destroy the previous instance.
-    peer_controller_.reset();
+    router_controller_.reset();
 
     // Fill the connection parameters.
-    peer::PeerController::RouterInfo router_info;
+    RouterController::RouterInfo router_info;
     router_info.address = settings_.routerAddress();
     router_info.port = settings_.routerPort();
     router_info.public_key = settings_.routerPublicKey();
-    router_info.peer_key = settings_.peerKey();
+    router_info.host_key = settings_.hostKey();
 
     // Connect to the router.
-    peer_controller_ = std::make_unique<peer::PeerController>(task_runner_);
-    peer_controller_->start(router_info, this);
+    router_controller_ = std::make_unique<RouterController>(task_runner_);
+    router_controller_->start(router_info, this);
 }
 
 } // namespace host

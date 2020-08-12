@@ -16,19 +16,26 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef PEER__ID_PAIR_H
-#define PEER__ID_PAIR_H
+syntax = "proto3";
 
-#include <cstdint>
-#include <utility>
+option optimize_for = LITE_RUNTIME;
 
-namespace peer {
+import "router_common.proto";
 
-using PeerId = uint64_t;
-using PeerIdPair = std::pair<PeerId, PeerId>;
+package proto;
 
-extern const PeerId kInvalidPeerId;
+message ConnectionRequest
+{
+    fixed64 host_id = 1;
+}
 
-} // namespace peer
+message RouterToClient
+{
+    ConnectionOffer connection_offer = 1;
+}
 
-#endif // PEER__ID_PAIR_H
+message ClientToRouter
+{
+    ConnectionRequest connection_request = 1;
+}
+

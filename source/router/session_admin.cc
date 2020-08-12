@@ -53,11 +53,11 @@ void SessionAdmin::onMessageReceived(const base::ByteArray& buffer)
         return;
     }
 
-    if (message.has_peer_list_request())
+    if (message.has_host_list_request())
     {
         doPeerListRequest();
     }
-    else if (message.has_peer_request())
+    else if (message.has_host_request())
     {
         LOG(LS_INFO) << "PEER REQUEST";
     }
@@ -142,9 +142,9 @@ void SessionAdmin::doPeerListRequest()
 {
     proto::RouterToAdmin message;
 
-    message.set_allocated_peer_list(server_proxy_->peerList().release());
-    if (!message.has_peer_list())
-        message.mutable_peer_list()->set_error_code(proto::PeerList::UNKNOWN_ERROR);
+    message.set_allocated_host_list(server_proxy_->hostList().release());
+    if (!message.has_host_list())
+        message.mutable_host_list()->set_error_code(proto::HostList::UNKNOWN_ERROR);
 
     sendMessage(message);
 }

@@ -20,9 +20,9 @@
       <property name="currentIndex">
        <number>0</number>
       </property>
-      <widget class="QWidget" name="tab_peers">
+      <widget class="QWidget" name="tab_hosts">
        <attribute name="title">
-        <string>Peers</string>
+        <string>Hosts</string>
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
@@ -44,18 +44,13 @@
          </layout>
         </item>
         <item>
-         <widget class="QTreeWidget" name="tree_peer">
+         <widget class="QTreeWidget" name="tree_hosts">
           <property name="indentation">
            <number>0</number>
           </property>
           <column>
            <property name="text">
             <string notr="true">ID</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>User name</string>
            </property>
           </column>
           <column>
@@ -81,14 +76,14 @@
            </spacer>
           </item>
           <item>
-           <widget class="QPushButton" name="button_disconnect_peer">
+           <widget class="QPushButton" name="button_disconnect_host">
             <property name="text">
              <string>Disconnect</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="button_refresh_peers">
+           <widget class="QPushButton" name="button_refresh_hosts">
             <property name="text">
              <string>Refresh</string>
             </property>

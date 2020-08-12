@@ -55,8 +55,8 @@ public:
     base::ByteArray routerPublicKey() const;
     void setRouterPublicKey(const base::ByteArray& key);
 
-    base::ByteArray peerKey() const;
-    void setPeerKey(const base::ByteArray& key);
+    base::ByteArray hostKey() const;
+    void setHostKey(const base::ByteArray& key);
 
     peer::UserList userList() const;
     void setUserList(const peer::UserList& user_list);

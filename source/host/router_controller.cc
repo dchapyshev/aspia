@@ -16,14 +16,14 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "peer/peer_controller.h"
+#include "host/router_controller.h"
 
 #include "base/logging.h"
 #include "base/task_runner.h"
 #include "peer/client_authenticator.h"
-#include "proto/router.pb.h"
+#include "proto/router_host.pb.h"
 
-namespace peer {
+namespace host {
 
 namespace {
 
@@ -31,19 +31,19 @@ const std::chrono::seconds kReconnectTimeout{ 15 };
 
 } // namespace
 
-PeerController::PeerController(std::shared_ptr<base::TaskRunner> task_runner)
+RouterController::RouterController(std::shared_ptr<base::TaskRunner> task_runner)
     : task_runner_(task_runner),
       reconnect_timer_(task_runner)
 {
     // TODO
 }
 
-PeerController::~PeerController()
+RouterController::~RouterController()
 {
     // TODO
 }
 
-void PeerController::start(const RouterInfo& router_info, Delegate* delegate)
+void RouterController::start(const RouterInfo& router_info, Delegate* delegate)
 {
     router_info_ = router_info;
     delegate_ = delegate;
@@ -54,18 +54,13 @@ void PeerController::start(const RouterInfo& router_info, Delegate* delegate)
         return;
     }
 
-    LOG(LS_INFO) << "Starting peer controller for router: "
+    LOG(LS_INFO) << "Starting host controller for router: "
                  << router_info_.address << ":" << router_info_.port;
 
     connectToRouter();
 }
 
-void PeerController::connectTo(peer::PeerId peer_id)
-{
-    // TODO
-}
-
-void PeerController::onConnected()
+void RouterController::onConnected()
 {
     LOG(LS_INFO) << "Connection to the router is established";
 
@@ -79,7 +74,7 @@ void PeerController::onConnected()
 
     authenticator_->setIdentify(proto::IDENTIFY_ANONYMOUS);
     authenticator_->setPeerPublicKey(router_info_.public_key);
-    authenticator_->setSessionType(proto::ROUTER_SESSION_ANONIMOUS_PEER);
+    authenticator_->setSessionType(proto::ROUTER_SESSION_HOST);
 
     authenticator_->start(std::move(channel_),
                           [this](peer::ClientAuthenticator::ErrorCode error_code)
@@ -91,21 +86,21 @@ void PeerController::onConnected()
             channel_ = authenticator_->takeChannel();
             channel_->setListener(this);
 
-            LOG(LS_INFO) << "Router connected. Receiving peer ID...";
+            LOG(LS_INFO) << "Router connected. Receiving host ID...";
 
             delegate_->onRouterConnected();
 
-            proto::PeerToRouter message;
-            proto::PeerIdRequest* peer_id_request = message.mutable_peer_id_request();
+            proto::HostToRouter message;
+            proto::HostIdRequest* host_id_request = message.mutable_host_id_request();
 
-            if (router_info_.peer_key.empty())
+            if (router_info_.host_key.empty())
             {
-                peer_id_request->set_type(proto::PeerIdRequest::NEW_ID);
+                host_id_request->set_type(proto::HostIdRequest::NEW_ID);
             }
             else
             {
-                peer_id_request->set_type(proto::PeerIdRequest::EXISTING_ID);
-                peer_id_request->set_key(base::toStdString(router_info_.peer_key));
+                host_id_request->set_type(proto::HostIdRequest::EXISTING_ID);
+                host_id_request->set_key(base::toStdString(router_info_.host_key));
             }
 
             // Now the session will receive incoming messages.
@@ -117,7 +112,7 @@ void PeerController::onConnected()
         else
         {
             LOG(LS_WARNING) << "Authentication failed: "
-                            << ClientAuthenticator::errorToString(error_code);
+                            << peer::ClientAuthenticator::errorToString(error_code);
             delayedConnectToRouter();
         }
 
@@ -126,68 +121,60 @@ void PeerController::onConnected()
     });
 }
 
-void PeerController::onDisconnected(base::NetworkChannel::ErrorCode error_code)
+void RouterController::onDisconnected(base::NetworkChannel::ErrorCode error_code)
 {
     LOG(LS_INFO) << "Connection to the router is lost ("
                  << base::NetworkChannel::errorToString(error_code) << ")";
 
-    delegate_->onPeerIdAssigned(kInvalidPeerId, base::ByteArray());
+    delegate_->onHostIdAssigned(peer::kInvalidHostId, base::ByteArray());
     delegate_->onRouterDisconnected(error_code);
-    peer_id_ = kInvalidPeerId;
+    host_id_ = peer::kInvalidHostId;
 
     delayedConnectToRouter();
 }
 
-void PeerController::onMessageReceived(const base::ByteArray& buffer)
+void RouterController::onMessageReceived(const base::ByteArray& buffer)
 {
-    proto::RouterToPeer message;
+    proto::RouterToHost message;
     if (!base::parse(buffer, &message))
     {
         LOG(LS_ERROR) << "Invalid message from router";
         return;
     }
 
-    if (message.has_peer_id_response())
+    if (message.has_host_id_response())
     {
-        if (peer_id_ != kInvalidPeerId)
+        if (host_id_ != peer::kInvalidHostId)
         {
-            LOG(LS_ERROR) << "Peer ID already assigned";
+            LOG(LS_ERROR) << "Host ID already assigned";
             return;
         }
 
-        const proto::PeerIdResponse& peer_id_response = message.peer_id_response();
-        if (peer_id_response.peer_id() == kInvalidPeerId)
+        const proto::HostIdResponse& host_id_response = message.host_id_response();
+        if (host_id_response.host_id() == peer::kInvalidHostId)
         {
-            LOG(LS_ERROR) << "Invalid peer ID received";
+            LOG(LS_ERROR) << "Invalid host ID received";
             return;
         }
 
-        LOG(LS_INFO) << "Peer ID received: " << peer_id_response.peer_id();
+        LOG(LS_INFO) << "Host ID received: " << host_id_response.host_id();
 
-        base::ByteArray peer_key = base::fromStdString(peer_id_response.key());
+        base::ByteArray peer_key = base::fromStdString(host_id_response.key());
         if (!peer_key.empty())
-            router_info_.peer_key = base::fromStdString(peer_id_response.key());
-        peer_id_ = peer_id_response.peer_id();
+            router_info_.host_key = base::fromStdString(host_id_response.key());
+        host_id_ = host_id_response.host_id();
 
-        delegate_->onPeerIdAssigned(peer_id_, router_info_.peer_key);
+        delegate_->onHostIdAssigned(host_id_, router_info_.host_key);
     }
     else
     {
-        if (peer_id_ == kInvalidPeerId)
+        if (host_id_ == peer::kInvalidHostId)
         {
-            LOG(LS_ERROR) << "Request could not be processed (peer ID not received yet)";
+            LOG(LS_ERROR) << "Request could not be processed (host ID not received yet)";
             return;
         }
 
-        if (message.has_connection_request())
-        {
-            LOG(LS_INFO) << "CONNECTION REQUEST";
-        }
-        else if (message.has_connection_response())
-        {
-            LOG(LS_INFO) << "CONNECTION RESPONSE";
-        }
-        else if (message.has_connection_offer())
+        if (message.has_connection_offer())
         {
             LOG(LS_INFO) << "CONNECTION OFFER";
         }
@@ -198,12 +185,12 @@ void PeerController::onMessageReceived(const base::ByteArray& buffer)
     }
 }
 
-void PeerController::onMessageWritten(size_t /* pending */)
+void RouterController::onMessageWritten(size_t /* pending */)
 {
     // Nothing
 }
 
-void PeerController::connectToRouter()
+void RouterController::connectToRouter()
 {
     LOG(LS_INFO) << "Connecting to router...";
 
@@ -212,10 +199,10 @@ void PeerController::connectToRouter()
     channel_->connect(router_info_.address, router_info_.port);
 }
 
-void PeerController::delayedConnectToRouter()
+void RouterController::delayedConnectToRouter()
 {
     LOG(LS_INFO) << "Reconnect after " << kReconnectTimeout.count() << " seconds";
-    reconnect_timer_.start(kReconnectTimeout, std::bind(&PeerController::connectToRouter, this));
+    reconnect_timer_.start(kReconnectTimeout, std::bind(&RouterController::connectToRouter, this));
 }
 
-} // namespace peer
+} // namespace host

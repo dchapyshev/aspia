@@ -19,7 +19,7 @@
 #ifndef ROUTER__DATABASE_H
 #define ROUTER__DATABASE_H
 
-#include "peer/peer_id.h"
+#include "peer/host_id.h"
 #include "peer/user.h"
 
 namespace router {
@@ -33,8 +33,8 @@ public:
     virtual bool addUser(const peer::User& user) = 0;
     virtual bool modifyUser(const peer::User& user) = 0;
     virtual bool removeUser(int64_t entry_id) = 0;
-    virtual peer::PeerId peerId(const base::ByteArray& keyHash) const = 0;
-    virtual bool addPeer(const base::ByteArray& keyHash) = 0;
+    virtual peer::HostId hostId(const base::ByteArray& keyHash) const = 0;
+    virtual bool addHost(const base::ByteArray& keyHash) = 0;
 };
 
 } // namespace router

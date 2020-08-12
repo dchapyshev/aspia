@@ -22,19 +22,18 @@ option optimize_for = LITE_RUNTIME;
 
 package proto;
 
-message Peer
+message Host
 {
-    fixed64 peer_id   = 1;
+    fixed64 host_id   = 1;
     string ip_address = 2;
-    string user_name  = 3;
 }
 
-message PeerListRequest
+message HostListRequest
 {
     uint32 dummy = 1;
 }
 
-message PeerList
+message HostList
 {
     enum ErrorCode
     {
@@ -43,22 +42,22 @@ message PeerList
     }
 
     ErrorCode error_code = 1;
-    repeated Peer peer   = 2;
+    repeated Host host   = 2;
 }
 
-enum PeerRequestType
+enum HostRequestType
 {
-    PEER_REQUEST_UNKNOWN    = 0;
-    PEER_REQUEST_DISCONNECT = 1;
+    HOST_REQUEST_UNKNOWN    = 0;
+    HOST_REQUEST_DISCONNECT = 1;
 }
 
-message PeerRequest
+message HostRequest
 {
-    PeerRequestType type = 1;
-    Peer peer            = 2;
+    HostRequestType type = 1;
+    Host host            = 2;
 }
 
-message PeerResult
+message HostResult
 {
     enum ErrorCode
     {
@@ -67,7 +66,7 @@ message PeerResult
         INVALID_DATA   = 2;
     }
 
-    PeerRequestType type = 1;
+    HostRequestType type = 1;
     ErrorCode error_code = 2;
 }
 
@@ -152,8 +151,8 @@ message RelayList
 
 message RouterToAdmin
 {
-    PeerList peer_list     = 1;
-    PeerResult peer_result = 2;
+    HostList host_list     = 1;
+    HostResult host_result = 2;
     UserList user_list     = 3;
     UserResult user_result = 4;
     RelayList relay_list   = 5;
@@ -161,8 +160,8 @@ message RouterToAdmin
 
 message AdminToRouter
 {
-    PeerListRequest peer_list_request   = 1;
-    PeerRequest peer_request            = 2;
+    HostListRequest host_list_request   = 1;
+    HostRequest host_request            = 2;
     UserListRequest user_list_request   = 3;
     UserRequest user_request            = 4;
     RelayListRequest relay_list_request = 5;

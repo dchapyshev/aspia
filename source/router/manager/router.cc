@@ -20,7 +20,7 @@
 
 #include "base/logging.h"
 #include "base/task_runner.h"
-#include "proto/router.pb.h"
+#include "proto/router_common.pb.h"
 #include "router/manager/router_window_proxy.h"
 
 namespace router {
@@ -54,29 +54,29 @@ void Router::connectToRouter(std::u16string_view address, uint16_t port)
     channel_->connect(address, port);
 }
 
-void Router::refreshPeerList()
+void Router::refreshHostList()
 {
-    LOG(LS_INFO) << "Sending peer list request";
+    LOG(LS_INFO) << "Sending host list request";
 
     proto::AdminToRouter message;
-    message.mutable_peer_list_request()->set_dummy(1);
+    message.mutable_host_list_request()->set_dummy(1);
     channel_->send(base::serialize(message));
 }
 
-void Router::disconnectPeer(uint64_t peer_id)
+void Router::disconnectHost(uint64_t host_id)
 {
-    LOG(LS_INFO) << "Sending disconnect peer request (peer_id: " << peer_id << ")";
+    LOG(LS_INFO) << "Sending disconnect host request (host_id: " << host_id << ")";
 
     proto::AdminToRouter message;
 
-    proto::PeerRequest* request = message.mutable_peer_request();
-    request->set_type(proto::PEER_REQUEST_DISCONNECT);
-    request->mutable_peer()->set_peer_id(peer_id);
+    proto::HostRequest* request = message.mutable_host_request();
+    request->set_type(proto::HOST_REQUEST_DISCONNECT);
+    request->mutable_host()->set_host_id(host_id);
 
     channel_->send(base::serialize(message));
 }
 
-void Router::refreshProxyList()
+void Router::refreshRelayList()
 {
     LOG(LS_INFO) << "Sending relay list request";
 
@@ -177,19 +177,19 @@ void Router::onMessageReceived(const base::ByteArray& buffer)
         return;
     }
 
-    if (message.has_peer_list())
+    if (message.has_host_list())
     {
-        LOG(LS_INFO) << "Peer list received";
+        LOG(LS_INFO) << "Host list received";
 
-        window_proxy_->onPeerList(
-            std::shared_ptr<proto::PeerList>(message.release_peer_list()));
+        window_proxy_->onHostList(
+            std::shared_ptr<proto::HostList>(message.release_host_list()));
     }
-    else if (message.has_peer_result())
+    else if (message.has_host_result())
     {
-        LOG(LS_INFO) << "Peer result received with code: " << message.peer_result().error_code();
+        LOG(LS_INFO) << "Host result received with code: " << message.host_result().error_code();
 
-        window_proxy_->onPeerResult(
-            std::shared_ptr<proto::PeerResult>(message.release_peer_result()));
+        window_proxy_->onHostResult(
+            std::shared_ptr<proto::HostResult>(message.release_host_result()));
     }
     else if (message.has_relay_list())
     {

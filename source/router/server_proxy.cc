@@ -41,20 +41,20 @@ std::unique_ptr<proto::RelayList> ServerProxy::relayList() const
     return server_->relayList();
 }
 
-std::unique_ptr<proto::PeerList> ServerProxy::peerList() const
+std::unique_ptr<proto::HostList> ServerProxy::hostList() const
 {
     if (!server_)
         return nullptr;
 
-    return server_->peerList();
+    return server_->hostList();
 }
 
-void ServerProxy::onPeerSessionWithId(SessionPeer* session)
+void ServerProxy::onHostSessionWithId(SessionHost* session)
 {
     if (!server_)
         return;
 
-    server_->onPeerSessionWithId(session);
+    server_->onHostSessionWithId(session);
 }
 
 void ServerProxy::willDestroyCurrentServer()

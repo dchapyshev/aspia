@@ -16,32 +16,40 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ROUTER__SERVER_PROXY_H
-#define ROUTER__SERVER_PROXY_H
+syntax = "proto3";
 
-#include "router/server.h"
+option optimize_for = LITE_RUNTIME;
 
-namespace router {
+import "router_common.proto";
 
-class ServerProxy
+package proto;
+
+message HostIdRequest
 {
-public:
-    ~ServerProxy();
+    enum Type
+    {
+        UNKNOWN     = 0;
+        NEW_ID      = 1;
+        EXISTING_ID = 2;
+    }
 
-    std::unique_ptr<proto::RelayList> relayList() const;
-    std::unique_ptr<proto::HostList> hostList() const;
+    Type type = 1;
+    bytes key = 2;
+}
 
-    void onHostSessionWithId(SessionHost* session);
+message HostIdResponse
+{
+    fixed64 host_id = 1;
+    bytes key       = 2;
+}
 
-private:
-    friend class Server;
-    explicit ServerProxy(Server* server);
+message RouterToHost
+{
+    HostIdResponse host_id_response  = 1;
+    ConnectionOffer connection_offer = 2;
+}
 
-    void willDestroyCurrentServer(); // Called by ~Server().
-
-    Server* server_;
-};
-
-} // namespace router
-
-#endif // ROUTER__SERVER_PROXY_H
+message HostToRouter
+{
+    HostIdRequest host_id_request = 1;
+}

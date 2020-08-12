@@ -51,6 +51,8 @@ list(APPEND SOURCE_HOST_CORE
     input_injector_win.h
     sas_injector.cc
     sas_injector.h
+    router_controller.cc
+    router_controller.h
     server.cc
     server.h
     system_info.cc

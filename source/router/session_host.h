@@ -16,45 +16,44 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ROUTER__SESSION_PEER_H
-#define ROUTER__SESSION_PEER_H
+#ifndef ROUTER__SESSION_HOST_H
+#define ROUTER__SESSION_HOST_H
 
-#include "proto/router.pb.h"
+#include "proto/router_host.pb.h"
 #include "router/session.h"
-#include "peer/peer_id.h"
+#include "peer/host_id.h"
 
 namespace router {
 
 class ServerProxy;
 
-class SessionPeer : public Session
+class SessionHost : public Session
 {
 public:
-    SessionPeer(proto::RouterSession session_type,
-                std::unique_ptr<base::NetworkChannel> channel,
+    SessionHost(std::unique_ptr<base::NetworkChannel> channel,
                 std::shared_ptr<DatabaseFactory> database_factory,
                 std::shared_ptr<ServerProxy> server_proxy);
-    ~SessionPeer();
+    ~SessionHost();
 
-    peer::PeerId peerId() const { return peer_id_; }
+    peer::HostId hostId() const { return host_id_; }
 
 protected:
     // Session implementation.
     void onSessionReady() override;
 
-    // net::Channel::Listener implementation.
+    // base::NetworkChannel::Listener implementation.
     void onMessageReceived(const base::ByteArray& buffer) override;
     void onMessageWritten(size_t pending) override;
 
 private:
-    void readPeerIdRequest(const proto::PeerIdRequest& peer_id_request);
+    void readHostIdRequest(const proto::HostIdRequest& host_id_request);
 
     std::shared_ptr<ServerProxy> server_proxy_;
-    peer::PeerId peer_id_ = peer::kInvalidPeerId;
+    peer::HostId host_id_ = peer::kInvalidHostId;
 
-    DISALLOW_COPY_AND_ASSIGN(SessionPeer);
+    DISALLOW_COPY_AND_ASSIGN(SessionHost);
 };
 
 } // namespace router
 
-#endif // ROUTER__SESSION_PEER_H
+#endif // ROUTER__SESSION_HOST_H

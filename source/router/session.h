@@ -21,7 +21,7 @@
 
 #include "base/version.h"
 #include "base/net/network_channel.h"
-#include "proto/router.pb.h"
+#include "proto/router_common.pb.h"
 
 namespace router {
 

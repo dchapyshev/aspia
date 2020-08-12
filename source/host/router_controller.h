@@ -16,23 +16,25 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef PEER__PEER_CONTROLLER_H
-#define PEER__PEER_CONTROLLER_H
+#ifndef HOST__ROUTER_CONTROLLER_H
+#define HOST__ROUTER_CONTROLLER_H
 
 #include "base/macros_magic.h"
 #include "base/waitable_timer.h"
 #include "base/net/network_channel.h"
-#include "peer/peer_id.h"
+#include "peer/host_id.h"
 
 namespace peer {
-
 class ClientAuthenticator;
+} // namespace peer
 
-class PeerController : public base::NetworkChannel::Listener
+namespace host {
+
+class RouterController : public base::NetworkChannel::Listener
 {
 public:
-    explicit PeerController(std::shared_ptr<base::TaskRunner> task_runner);
-    ~PeerController();
+    explicit RouterController(std::shared_ptr<base::TaskRunner> task_runner);
+    ~RouterController();
 
     struct RouterInfo
     {
@@ -41,7 +43,7 @@ public:
         base::ByteArray public_key;
         std::u16string username;
         std::u16string password;
-        base::ByteArray peer_key;
+        base::ByteArray host_key;
     };
 
     class Delegate
@@ -51,18 +53,17 @@ public:
 
         virtual void onRouterConnected() = 0;
         virtual void onRouterDisconnected(base::NetworkChannel::ErrorCode error_code) = 0;
-        virtual void onPeerIdAssigned(PeerId peer_id, const base::ByteArray& peer_key) = 0;
-        virtual void onPeerConnected(std::unique_ptr<base::NetworkChannel> channel) = 0;
+        virtual void onHostIdAssigned(peer::HostId host_id, const base::ByteArray& host_key) = 0;
+        virtual void onClientConnected(std::unique_ptr<base::NetworkChannel> channel) = 0;
     };
 
     void start(const RouterInfo& router_info, Delegate* delegate);
-    void connectTo(peer::PeerId peer_id);
 
     const std::u16string& address() const { return router_info_.address; }
     uint16_t port() const { return router_info_.port; }
     const base::ByteArray& publicKey() const { return router_info_.public_key; }
-    const base::ByteArray& peerKey() const { return router_info_.peer_key; }
-    PeerId peerId() const { return peer_id_; }
+    const base::ByteArray& hostKey() const { return router_info_.host_key; }
+    peer::HostId hostId() const { return host_id_; }
 
 protected:
     // base::NetworkChannel::Listener implementation.
@@ -81,12 +82,12 @@ private:
     std::unique_ptr<base::NetworkChannel> channel_;
     std::unique_ptr<peer::ClientAuthenticator> authenticator_;
     base::WaitableTimer reconnect_timer_;
-    PeerId peer_id_ = kInvalidPeerId;
+    peer::HostId host_id_ = peer::kInvalidHostId;
     RouterInfo router_info_;
 
-    DISALLOW_COPY_AND_ASSIGN(PeerController);
+    DISALLOW_COPY_AND_ASSIGN(RouterController);
 };
 
-} // namespace peer
+} // namespace host
 
-#endif // PEER__PEER_CONTROLLER_H
+#endif // HOST__ROUTER_CONTROLLER_H

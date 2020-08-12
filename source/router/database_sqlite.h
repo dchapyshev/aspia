@@ -40,8 +40,8 @@ public:
     bool addUser(const peer::User& user) override;
     bool modifyUser(const peer::User& user) override;
     bool removeUser(int64_t entry_id) override;
-    peer::PeerId peerId(const base::ByteArray& keyHash) const override;
-    bool addPeer(const base::ByteArray& keyHash) override;
+    peer::HostId hostId(const base::ByteArray& keyHash) const override;
+    bool addHost(const base::ByteArray& keyHash) override;
 
 private:
     explicit DatabaseSqlite(sqlite3* db);

@@ -16,32 +16,18 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ROUTER__SERVER_PROXY_H
-#define ROUTER__SERVER_PROXY_H
+#ifndef PEER__HOST_ID_H
+#define PEER__HOST_ID_H
 
-#include "router/server.h"
+#include <cstdint>
+#include <utility>
 
-namespace router {
+namespace peer {
 
-class ServerProxy
-{
-public:
-    ~ServerProxy();
+using HostId = uint64_t;
 
-    std::unique_ptr<proto::RelayList> relayList() const;
-    std::unique_ptr<proto::HostList> hostList() const;
+extern const HostId kInvalidHostId;
 
-    void onHostSessionWithId(SessionHost* session);
+} // namespace peer
 
-private:
-    friend class Server;
-    explicit ServerProxy(Server* server);
-
-    void willDestroyCurrentServer(); // Called by ~Server().
-
-    Server* server_;
-};
-
-} // namespace router
-
-#endif // ROUTER__SERVER_PROXY_H
+#endif // PEER__HOST_ID_H

@@ -34,23 +34,22 @@ namespace router {
 
 namespace {
 
-class PeerTreeItem : public QTreeWidgetItem
+class HostTreeItem : public QTreeWidgetItem
 {
 public:
-    explicit PeerTreeItem(const proto::Peer& peer)
-        : peer_id(peer.peer_id())
+    explicit HostTreeItem(const proto::Host& host)
+        : host_id(host.host_id())
     {
-        setText(0, QString::number(peer.peer_id()));
-        setText(1, QString::fromStdString(peer.user_name()));
-        setText(2, QString::fromStdString(peer.ip_address()));
+        setText(0, QString::number(host.host_id()));
+        setText(1, QString::fromStdString(host.ip_address()));
     }
 
-    ~PeerTreeItem() = default;
+    ~HostTreeItem() = default;
 
-    uint64_t peer_id;
+    uint64_t host_id;
 
 private:
-    DISALLOW_COPY_AND_ASSIGN(PeerTreeItem);
+    DISALLOW_COPY_AND_ASSIGN(HostTreeItem);
 };
 
 class ProxyTreeItem : public QTreeWidgetItem
@@ -95,8 +94,8 @@ MainWindow::MainWindow(QWidget* parent)
 {
     ui.setupUi(this);
 
-    connect(ui.button_refresh_peers, &QPushButton::released, this, &MainWindow::refreshPeerList);
-    connect(ui.button_disconnect_peer, &QPushButton::released, this, &MainWindow::disconnectPeer);
+    connect(ui.button_refresh_hosts, &QPushButton::released, this, &MainWindow::refreshHostList);
+    connect(ui.button_disconnect_host, &QPushButton::released, this, &MainWindow::disconnectHost);
     connect(ui.button_refresh_relay, &QPushButton::released, this, &MainWindow::refreshRelayList);
     connect(ui.button_refresh_users, &QPushButton::released, this, &MainWindow::refreshUserList);
     connect(ui.button_add_user, &QPushButton::released, this, &MainWindow::addUser);
@@ -153,8 +152,8 @@ void MainWindow::onConnected(const base::Version& peer_version)
 
     if (router_proxy_)
     {
-        router_proxy_->refreshPeerList();
-        router_proxy_->refreshProxyList();
+        router_proxy_->refreshHostList();
+        router_proxy_->refreshRelayList();
         router_proxy_->refreshUserList();
     }
 }
@@ -248,32 +247,32 @@ void MainWindow::onAccessDenied(peer::ClientAuthenticator::ErrorCode error_code)
     status_dialog_->show();
 }
 
-void MainWindow::onPeerList(std::shared_ptr<proto::PeerList> peer_list)
+void MainWindow::onHostList(std::shared_ptr<proto::HostList> host_list)
 {
-    ui.tree_peer->clear();
+    ui.tree_hosts->clear();
 
-    int peer_size = peer_list->peer_size();
+    int host_size = host_list->host_size();
 
-    for (int i = 0; i < peer_size; ++i)
-        ui.tree_peer->addTopLevelItem(new PeerTreeItem(peer_list->peer(i)));
-    ui.label_connections_count->setText(QString::number(peer_size));
+    for (int i = 0; i < host_size; ++i)
+        ui.tree_hosts->addTopLevelItem(new HostTreeItem(host_list->host(i)));
+    ui.label_connections_count->setText(QString::number(host_size));
 
     afterRequest();
 }
 
-void MainWindow::onPeerResult(std::shared_ptr<proto::PeerResult> peer_result)
+void MainWindow::onHostResult(std::shared_ptr<proto::HostResult> host_result)
 {
-    if (peer_result->error_code() != proto::PeerResult::SUCCESS)
+    if (host_result->error_code() != proto::HostResult::SUCCESS)
     {
         const char* message;
 
-        switch (peer_result->error_code())
+        switch (host_result->error_code())
         {
-            case proto::PeerResult::INTERNAL_ERROR:
+            case proto::HostResult::INTERNAL_ERROR:
                 message = QT_TR_NOOP("Unknown internal error.");
                 break;
 
-            case proto::PeerResult::INVALID_DATA:
+            case proto::HostResult::INVALID_DATA:
                 message = QT_TR_NOOP("Invalid data was passed.");
                 break;
 
@@ -285,7 +284,7 @@ void MainWindow::onPeerResult(std::shared_ptr<proto::PeerResult> peer_result)
         QMessageBox::warning(this, tr("Warning"), tr(message), QMessageBox::Ok);
     }
 
-    refreshPeerList();
+    refreshHostList();
     afterRequest();
 }
 
@@ -349,25 +348,25 @@ void MainWindow::closeEvent(QCloseEvent* event)
     QApplication::quit();
 }
 
-void MainWindow::refreshPeerList()
+void MainWindow::refreshHostList()
 {
     if (router_proxy_)
     {
         beforeRequest();
-        router_proxy_->refreshPeerList();
+        router_proxy_->refreshHostList();
     }
 }
 
-void MainWindow::disconnectPeer()
+void MainWindow::disconnectHost()
 {
-    PeerTreeItem* tree_item = static_cast<PeerTreeItem*>(ui.tree_peer->currentItem());
+    HostTreeItem* tree_item = static_cast<HostTreeItem*>(ui.tree_hosts->currentItem());
     if (!tree_item)
         return;
 
     if (router_proxy_)
     {
         beforeRequest();
-        router_proxy_->disconnectPeer(tree_item->peer_id);
+        router_proxy_->disconnectHost(tree_item->host_id);
     }
 }
 
@@ -376,7 +375,7 @@ void MainWindow::refreshRelayList()
     if (router_proxy_)
     {
         beforeRequest();
-        router_proxy_->refreshProxyList();
+        router_proxy_->refreshRelayList();
     }
 }
 

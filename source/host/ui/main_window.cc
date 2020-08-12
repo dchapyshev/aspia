@@ -26,7 +26,7 @@
 #include "host/ui/application.h"
 #include "host/ui/config_dialog.h"
 #include "host/ui/notifier_window.h"
-#include "peer/peer_id.h"
+#include "peer/host_id.h"
 #include "qt_base/qt_logging.h"
 
 #include <QCloseEvent>
@@ -195,7 +195,7 @@ void MainWindow::onCredentialsChanged(const proto::internal::Credentials& creden
         ip += credentials.ip(i);
     }
 
-    bool has_id = credentials.id() != peer::kInvalidPeerId;
+    bool has_id = credentials.id() != peer::kInvalidHostId;
 
     ui.label_icon_id->setEnabled(has_id);
     ui.label_id->setEnabled(has_id);

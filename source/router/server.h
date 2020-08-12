@@ -27,7 +27,7 @@
 namespace router {
 
 class DatabaseFactory;
-class SessionPeer;
+class SessionHost;
 class ServerProxy;
 
 class Server
@@ -42,8 +42,8 @@ public:
     bool start();
 
     std::unique_ptr<proto::RelayList> relayList() const;
-    std::unique_ptr<proto::PeerList> peerList() const;
-    void onPeerSessionWithId(SessionPeer* session);
+    std::unique_ptr<proto::HostList> hostList() const;
+    void onHostSessionWithId(SessionHost* session);
 
 protected:
     // base::NetworkServer::Delegate implementation.

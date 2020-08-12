@@ -43,9 +43,9 @@ public:
 
     void connectToRouter(std::u16string_view address, uint16_t port);
 
-    void refreshPeerList();
-    void disconnectPeer(uint64_t peer_id);
-    void refreshProxyList();
+    void refreshHostList();
+    void disconnectHost(uint64_t host_id);
+    void refreshRelayList();
     void refreshUserList();
     void addUser(const proto::User& user);
     void modifyUser(const proto::User& user);

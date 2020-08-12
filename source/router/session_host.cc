@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "router/session_peer.h"
+#include "router/session_host.h"
 
 #include "base/logging.h"
 #include "base/crypto/generic_hash.h"
@@ -33,26 +33,25 @@ const size_t kPeerKeySize = 512;
 
 } // namespace
 
-SessionPeer::SessionPeer(proto::RouterSession session_type,
-                         std::unique_ptr<base::NetworkChannel> channel,
+SessionHost::SessionHost(std::unique_ptr<base::NetworkChannel> channel,
                          std::shared_ptr<DatabaseFactory> database_factory,
                          std::shared_ptr<ServerProxy> server_proxy)
-    : Session(session_type, std::move(channel), std::move(database_factory)),
+    : Session(proto::ROUTER_SESSION_HOST, std::move(channel), std::move(database_factory)),
       server_proxy_(std::move(server_proxy))
 {
     DCHECK(server_proxy_);
 }
 
-SessionPeer::~SessionPeer() = default;
+SessionHost::~SessionHost() = default;
 
-void SessionPeer::onSessionReady()
+void SessionHost::onSessionReady()
 {
     // Nothing
 }
 
-void SessionPeer::onMessageReceived(const base::ByteArray& buffer)
+void SessionHost::onMessageReceived(const base::ByteArray& buffer)
 {
-    proto::PeerToRouter message;
+    proto::HostToRouter message;
 
     if (!base::parse(buffer, &message))
     {
@@ -60,43 +59,32 @@ void SessionPeer::onMessageReceived(const base::ByteArray& buffer)
         return;
     }
 
-    if (message.has_peer_id_request())
+    if (message.has_host_id_request())
     {
-        readPeerIdRequest(message.peer_id_request());
+        readHostIdRequest(message.host_id_request());
     }
     else
     {
-        if (peer_id_ == peer::kInvalidPeerId)
+        if (host_id_ == peer::kInvalidHostId)
         {
-            LOG(LS_ERROR) << "Request could not be processed (peer ID not assigned yet)";
+            LOG(LS_ERROR) << "Request could not be processed (host ID not assigned yet)";
             return;
         }
 
-        if (message.has_connection_request())
-        {
-            LOG(LS_INFO) << "CONNECTION REQUEST";
-        }
-        else if (message.has_connection_candidate())
-        {
-            LOG(LS_INFO) << "CONNECTION CANDIDATE";
-        }
-        else
-        {
-            LOG(LS_WARNING) << "Unhandled message from peer";
-        }
+        LOG(LS_WARNING) << "Unhandled message from peer";
     }
 }
 
-void SessionPeer::onMessageWritten(size_t /* pending */)
+void SessionHost::onMessageWritten(size_t /* pending */)
 {
     // Nothing
 }
 
-void SessionPeer::readPeerIdRequest(const proto::PeerIdRequest& peer_id_request)
+void SessionHost::readHostIdRequest(const proto::HostIdRequest& host_id_request)
 {
-    if (peer_id_ != peer::kInvalidPeerId)
+    if (host_id_ != peer::kInvalidHostId)
     {
-        LOG(LS_ERROR) << "Peer ID already assigned";
+        LOG(LS_ERROR) << "Host ID already assigned";
         return;
     }
 
@@ -107,11 +95,11 @@ void SessionPeer::readPeerIdRequest(const proto::PeerIdRequest& peer_id_request)
         return;
     }
 
-    proto::RouterToPeer message;
-    proto::PeerIdResponse* peer_id_response = message.mutable_peer_id_response();
+    proto::RouterToHost message;
+    proto::HostIdResponse* host_id_response = message.mutable_host_id_response();
     base::ByteArray keyHash;
 
-    if (peer_id_request.type() == proto::PeerIdRequest::NEW_ID)
+    if (host_id_request.type() == proto::HostIdRequest::NEW_ID)
     {
         // Generate new key.
         std::string key = base::Random::string(kPeerKeySize);
@@ -119,37 +107,37 @@ void SessionPeer::readPeerIdRequest(const proto::PeerIdRequest& peer_id_request)
         // Calculate hash for key.
         keyHash = base::GenericHash::hash(base::GenericHash::Type::BLAKE2b512, key);
 
-        if (!database->addPeer(keyHash))
+        if (!database->addHost(keyHash))
         {
-            LOG(LS_ERROR) << "Unable to add peer";
+            LOG(LS_ERROR) << "Unable to add host";
             return;
         }
 
-        peer_id_response->set_key(std::move(key));
+        host_id_response->set_key(std::move(key));
     }
-    else if (peer_id_request.type() == proto::PeerIdRequest::EXISTING_ID)
+    else if (host_id_request.type() == proto::HostIdRequest::EXISTING_ID)
     {
         // Using existing key.
         keyHash = base::GenericHash::hash(
-            base::GenericHash::Type::BLAKE2b512, peer_id_request.key());
+            base::GenericHash::Type::BLAKE2b512, host_id_request.key());
     }
     else
     {
-        LOG(LS_ERROR) << "Unknown request type: " << peer_id_request.type();
+        LOG(LS_ERROR) << "Unknown request type: " << host_id_request.type();
         return;
     }
 
-    peer_id_ = database->peerId(keyHash);
-    if (peer_id_ == peer::kInvalidPeerId)
+    host_id_ = database->hostId(keyHash);
+    if (host_id_ == peer::kInvalidHostId)
     {
-        LOG(LS_ERROR) << "Failed to get peer ID";
+        LOG(LS_ERROR) << "Failed to get host ID";
         return;
     }
 
     // Notify the server that the ID has been assigned.
-    server_proxy_->onPeerSessionWithId(this);
+    server_proxy_->onHostSessionWithId(this);
 
-    peer_id_response->set_peer_id(peer_id_);
+    host_id_response->set_host_id(host_id_);
     sendMessage(message);
 }
 

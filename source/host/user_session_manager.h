@@ -46,7 +46,7 @@ public:
 
     bool start(Delegate* delegate);
     void setSessionEvent(base::win::SessionStatus status, base::SessionId session_id);
-    void setPeerId(peer::PeerId peer_id);
+    void setHostId(peer::HostId host_id);
     void addNewSession(std::unique_ptr<ClientSession> client_session);
     peer::UserList userList() const;
 
@@ -68,7 +68,7 @@ private:
     std::unique_ptr<base::IpcServer> ipc_server_;
     std::vector<std::unique_ptr<UserSession>> sessions_;
     Delegate* delegate_ = nullptr;
-    peer::PeerId peer_id_ = peer::kInvalidPeerId;
+    peer::HostId host_id_ = peer::kInvalidHostId;
 
     DISALLOW_COPY_AND_ASSIGN(UserSessionManager);
 };

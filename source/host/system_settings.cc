@@ -96,14 +96,14 @@ void SystemSettings::setRouterPublicKey(const base::ByteArray& key)
     settings_.set<base::ByteArray>("RouterPublicKey", key);
 }
 
-base::ByteArray SystemSettings::peerKey() const
+base::ByteArray SystemSettings::hostKey() const
 {
-    return settings_.get<base::ByteArray>("PeerKey");
+    return settings_.get<base::ByteArray>("HostKey");
 }
 
-void SystemSettings::setPeerKey(const base::ByteArray& key)
+void SystemSettings::setHostKey(const base::ByteArray& key)
 {
-    settings_.set<base::ByteArray>("PeerKey", key);
+    settings_.set<base::ByteArray>("HostKey", key);
     settings_.flush();
 }
 

@@ -50,10 +50,10 @@ UserSession::UserSession(std::shared_ptr<base::TaskRunner> task_runner,
 
 UserSession::~UserSession() = default;
 
-void UserSession::start(peer::PeerId peer_id, Delegate* delegate)
+void UserSession::start(peer::HostId host_id, Delegate* delegate)
 {
     delegate_ = delegate;
-    peer_id_ = peer_id;
+    host_id_ = host_id;
 
     DCHECK(delegate_);
 
@@ -196,9 +196,9 @@ void UserSession::setSessionEvent(base::win::SessionStatus status, base::Session
     }
 }
 
-void UserSession::setPeerId(peer::PeerId peer_id)
+void UserSession::setHostId(peer::HostId host_id)
 {
-    peer_id_ = peer_id;
+    host_id_ = host_id;
     sendCredentials();
 }
 
@@ -447,13 +447,13 @@ void UserSession::sendCredentials()
         return;
 
     LOG(LS_INFO) << "Sending credentials to UI";
-    LOG(LS_INFO) << "Peer ID: " << peer_id_;
+    LOG(LS_INFO) << "Host ID: " << host_id_;
     LOG(LS_INFO) << "User Name: " << username_;
 
     outgoing_message_.Clear();
 
     proto::internal::Credentials* credentials = outgoing_message_.mutable_credentials();
-    credentials->set_id(peer_id_);
+    credentials->set_id(host_id_);
     credentials->set_username(username_);
     credentials->set_password(password_);
 

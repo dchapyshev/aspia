@@ -62,7 +62,7 @@ UserDialog::UserDialog(const peer::User& user,
             else
                 item->setCheckState(0, Qt::Unchecked);
         }
-        else if (session_type == proto::ROUTER_SESSION_AUTHORIZED_PEER)
+        else if (session_type == proto::ROUTER_SESSION_CLIENT)
         {
             item->setCheckState(0, Qt::Checked);
         }
@@ -74,7 +74,7 @@ UserDialog::UserDialog(const peer::User& user,
         ui.tree_sessions->addTopLevelItem(item);
     };
 
-    add_session(proto::ROUTER_SESSION_AUTHORIZED_PEER);
+    add_session(proto::ROUTER_SESSION_CLIENT);
     add_session(proto::ROUTER_SESSION_ADMIN);
 
     connect(ui.buttonbox, &QDialogButtonBox::clicked, this, &UserDialog::onButtonBoxClicked);
@@ -290,8 +290,8 @@ QString UserDialog::sessionTypeToString(proto::RouterSession session_type)
             str = QT_TR_NOOP("Administrator");
             break;
 
-        case proto::ROUTER_SESSION_AUTHORIZED_PEER:
-            str = QT_TR_NOOP("Authorized Peer");
+        case proto::ROUTER_SESSION_CLIENT:
+            str = QT_TR_NOOP("Client");
             break;
 
         default:

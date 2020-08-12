@@ -20,9 +20,9 @@
 #define HOST__SERVER_H
 
 #include "base/net/network_server.h"
+#include "host/router_controller.h"
 #include "host/user_session_manager.h"
 #include "host/system_settings.h"
-#include "peer/peer_controller.h"
 #include "peer/server_authenticator_manager.h"
 
 namespace base {
@@ -34,7 +34,7 @@ namespace host {
 
 class Server
     : public base::NetworkServer::Delegate,
-      public peer::PeerController::Delegate,
+      public RouterController::Delegate,
       public peer::ServerAuthenticatorManager::Delegate,
       public UserSessionManager::Delegate
 {
@@ -49,11 +49,11 @@ protected:
     // net::Server::Delegate implementation.
     void onNewConnection(std::unique_ptr<base::NetworkChannel> channel) override;
 
-    // peer::PeerController::Delegate implementation.
+    // peer::HostController::Delegate implementation.
     void onRouterConnected() override;
     void onRouterDisconnected(base::NetworkChannel::ErrorCode error_code) override;
-    void onPeerIdAssigned(peer::PeerId peer_id, const base::ByteArray& peer_key) override;
-    void onPeerConnected(std::unique_ptr<base::NetworkChannel> channel) override;
+    void onHostIdAssigned(peer::HostId host_id, const base::ByteArray& host_key) override;
+    void onClientConnected(std::unique_ptr<base::NetworkChannel> channel) override;
 
     // net::AuthenticatorManager::Delegate implementation.
     void onNewSession(peer::ServerAuthenticatorManager::SessionInfo&& session_info) override;
@@ -76,7 +76,7 @@ private:
 
     // Accepts incoming network connections.
     std::unique_ptr<base::NetworkServer> server_;
-    std::unique_ptr<peer::PeerController> peer_controller_;
+    std::unique_ptr<RouterController> router_controller_;
     std::unique_ptr<peer::ServerAuthenticatorManager> authenticator_manager_;
     std::unique_ptr<UserSessionManager> user_session_manager_;
 

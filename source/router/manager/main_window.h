@@ -19,7 +19,6 @@
 #ifndef ROUTER__MANAGER__MAIN_WINDOW_H
 #define ROUTER__MANAGER__MAIN_WINDOW_H
 
-#include "proto/router.pb.h"
 #include "router/manager/router_window.h"
 #include "ui_main_window.h"
 
@@ -51,8 +50,8 @@ public:
     void onConnected(const base::Version& peer_version) override;
     void onDisconnected(base::NetworkChannel::ErrorCode error_code) override;
     void onAccessDenied(peer::ClientAuthenticator::ErrorCode error_code) override;
-    void onPeerList(std::shared_ptr<proto::PeerList> peer_list) override;
-    void onPeerResult(std::shared_ptr<proto::PeerResult> peer_result) override;
+    void onHostList(std::shared_ptr<proto::HostList> peer_list) override;
+    void onHostResult(std::shared_ptr<proto::HostResult> peer_result) override;
     void onRelayList(std::shared_ptr<proto::RelayList> relay_list) override;
     void onUserList(std::shared_ptr<proto::UserList> user_list) override;
     void onUserResult(std::shared_ptr<proto::UserResult> user_result) override;
@@ -62,8 +61,8 @@ protected:
     void closeEvent(QCloseEvent* event) override;
 
 private:
-    void refreshPeerList();
-    void disconnectPeer();
+    void refreshHostList();
+    void disconnectHost();
     void refreshRelayList();
     void refreshUserList();
     void addUser();
