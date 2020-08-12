@@ -44,9 +44,16 @@ public:
         virtual void onSessionFinished() = 0;
     };
 
+    enum class State
+    {
+        NOT_STARTED,
+        STARTED,
+        FINISHED
+    };
+
     void start(Delegate* delegate);
 
-    bool isFinished() const;
+    State state() const { return state_; }
 
     void setVersion(const base::Version& version);
     const base::Version& version() const { return version_; }
@@ -67,6 +74,7 @@ protected:
 
 private:
     const proto::RouterSession session_type_;
+    State state_ = State::NOT_STARTED;
 
     std::unique_ptr<base::NetworkChannel> channel_;
     std::shared_ptr<DatabaseFactory> database_factory_;

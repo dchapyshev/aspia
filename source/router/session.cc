@@ -39,6 +39,7 @@ Session::~Session() = default;
 
 void Session::start(Delegate* delegate)
 {
+    state_ = State::STARTED;
     delegate_ = delegate;
     DCHECK(delegate_);
 
@@ -46,11 +47,6 @@ void Session::start(Delegate* delegate)
     channel_->resume();
 
     onSessionReady();
-}
-
-bool Session::isFinished() const
-{
-    return channel_ == nullptr;
 }
 
 std::unique_ptr<Database> Session::openDatabase() const
@@ -91,6 +87,7 @@ void Session::onDisconnected(base::NetworkChannel::ErrorCode error_code)
 {
     LOG(LS_INFO) << "Network error: " << base::NetworkChannel::errorToString(error_code);
 
+    state_ = State::FINISHED;
     if (delegate_)
         delegate_->onSessionFinished();
 }
