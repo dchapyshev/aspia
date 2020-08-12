@@ -341,27 +341,27 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="333"/>
+        <location filename="../main_window.ui" line="334"/>
         <source>Exit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="342"/>
+        <location filename="../main_window.ui" line="343"/>
         <source>Online Help...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="354"/>
+        <location filename="../main_window.ui" line="355"/>
         <source>About</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="363"/>
+        <location filename="../main_window.ui" line="364"/>
         <source>Settings...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="368"/>
+        <location filename="../main_window.ui" line="369"/>
         <source>Hide</source>
         <translation type="unfinished"></translation>
     </message>
@@ -716,35 +716,35 @@
 <context>
     <name>host::MainWindow</name>
     <message>
-        <location filename="../main_window.cc" line="58"/>
+        <location filename="../main_window.cc" line="57"/>
         <source>Aspia Host</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="113"/>
-        <location filename="../main_window.cc" line="263"/>
+        <location filename="../main_window.cc" line="112"/>
+        <location filename="../main_window.cc" line="262"/>
         <source>Show</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="48"/>
-        <location filename="../main_window.cc" line="204"/>
-        <location filename="../main_window.cc" line="211"/>
+        <location filename="../main_window.cc" line="47"/>
+        <location filename="../main_window.cc" line="203"/>
+        <location filename="../main_window.cc" line="210"/>
         <source>Not available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="268"/>
+        <location filename="../main_window.cc" line="267"/>
         <source>Hide</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="300"/>
+        <location filename="../main_window.cc" line="299"/>
         <source>Confirmation</source>
         <translation>Bevestiging</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="301"/>
+        <location filename="../main_window.cc" line="300"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation type="unfinished"></translation>
     </message>
