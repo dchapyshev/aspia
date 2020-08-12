@@ -25,12 +25,15 @@
 
 namespace router {
 
+class ServerProxy;
+
 class SessionPeer : public Session
 {
 public:
     SessionPeer(proto::RouterSession session_type,
                 std::unique_ptr<base::NetworkChannel> channel,
-                std::shared_ptr<DatabaseFactory> database_factory);
+                std::shared_ptr<DatabaseFactory> database_factory,
+                std::shared_ptr<ServerProxy> server_proxy);
     ~SessionPeer();
 
     peer::PeerId peerId() const { return peer_id_; }
@@ -46,6 +49,7 @@ protected:
 private:
     void readPeerIdRequest(const proto::PeerIdRequest& peer_id_request);
 
+    std::shared_ptr<ServerProxy> server_proxy_;
     peer::PeerId peer_id_ = peer::kInvalidPeerId;
 
     DISALLOW_COPY_AND_ASSIGN(SessionPeer);

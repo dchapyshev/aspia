@@ -157,8 +157,7 @@ std::unique_ptr<proto::PeerList> Server::peerList() const
 
     for (const auto& session : sessions_)
     {
-        if (session->sessionType() != proto::ROUTER_SESSION_ANONIMOUS_PEER &&
-            session->sessionType() != proto::ROUTER_SESSION_AUTHORIZED_PEER)
+        if (session->sessionType() != proto::ROUTER_SESSION_ANONIMOUS_PEER)
             continue;
 
         SessionPeer* session_peer = static_cast<SessionPeer*>(session.get());
@@ -171,6 +170,29 @@ std::unique_ptr<proto::PeerList> Server::peerList() const
 
     result->set_error_code(proto::PeerList::SUCCESS);
     return result;
+}
+
+void Server::onPeerSessionWithId(SessionPeer* session)
+{
+    peer::PeerId peer_id = session->peerId();
+
+    for (auto it = sessions_.begin(); it != sessions_.end();)
+    {
+        Session* entry = it->get();
+
+        if (entry != session &&
+            entry->sessionType() == proto::ROUTER_SESSION_ANONIMOUS_PEER &&
+            static_cast<SessionPeer*>(entry)->peerId() == peer_id)
+        {
+            LOG(LS_INFO) << "Detected previous connection with ID " << peer_id
+                         << ". It will be completed";
+
+            it = sessions_.erase(it);
+            continue;
+        }
+
+        ++it;
+    }
 }
 
 void Server::onNewConnection(std::unique_ptr<base::NetworkChannel> channel)
@@ -197,7 +219,7 @@ void Server::onNewSession(peer::ServerAuthenticatorManager::SessionInfo&& sessio
         case proto::ROUTER_SESSION_AUTHORIZED_PEER:
         {
             session = std::make_unique<SessionPeer>(
-                session_type, std::move(session_info.channel), database_factory_);
+                session_type, std::move(session_info.channel), database_factory_, server_proxy_);
         }
         break;
 

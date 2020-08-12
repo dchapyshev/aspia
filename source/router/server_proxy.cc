@@ -49,6 +49,14 @@ std::unique_ptr<proto::PeerList> ServerProxy::peerList() const
     return server_->peerList();
 }
 
+void ServerProxy::onPeerSessionWithId(SessionPeer* session)
+{
+    if (!server_)
+        return;
+
+    server_->onPeerSessionWithId(session);
+}
+
 void ServerProxy::willDestroyCurrentServer()
 {
     server_ = nullptr;

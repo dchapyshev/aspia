@@ -23,6 +23,7 @@
 #include "base/crypto/random.h"
 #include "base/net/network_channel.h"
 #include "router/database.h"
+#include "router/server_proxy.h"
 
 namespace router {
 
@@ -34,10 +35,12 @@ const size_t kPeerKeySize = 512;
 
 SessionPeer::SessionPeer(proto::RouterSession session_type,
                          std::unique_ptr<base::NetworkChannel> channel,
-                         std::shared_ptr<DatabaseFactory> database_factory)
-    : Session(session_type, std::move(channel), std::move(database_factory))
+                         std::shared_ptr<DatabaseFactory> database_factory,
+                         std::shared_ptr<ServerProxy> server_proxy)
+    : Session(session_type, std::move(channel), std::move(database_factory)),
+      server_proxy_(std::move(server_proxy))
 {
-    // Nothing
+    DCHECK(server_proxy_);
 }
 
 SessionPeer::~SessionPeer() = default;
@@ -142,6 +145,9 @@ void SessionPeer::readPeerIdRequest(const proto::PeerIdRequest& peer_id_request)
         LOG(LS_ERROR) << "Failed to get peer ID";
         return;
     }
+
+    // Notify the server that the ID has been assigned.
+    server_proxy_->onPeerSessionWithId(this);
 
     peer_id_response->set_peer_id(peer_id_);
     sendMessage(message);

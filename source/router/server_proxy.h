@@ -31,6 +31,8 @@ public:
     std::unique_ptr<proto::RelayList> relayList() const;
     std::unique_ptr<proto::PeerList> peerList() const;
 
+    void onPeerSessionWithId(SessionPeer* session);
+
 private:
     friend class Server;
     explicit ServerProxy(Server* server);
