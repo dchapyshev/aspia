@@ -19,8 +19,8 @@
 #ifndef ROUTER__DATABASE_H
 #define ROUTER__DATABASE_H
 
-#include "peer/host_id.h"
-#include "peer/user.h"
+#include "base/peer/host_id.h"
+#include "base/peer/user.h"
 
 namespace router {
 
@@ -29,11 +29,11 @@ class Database
 public:
     virtual ~Database() = default;
 
-    virtual peer::UserList userList() const = 0;
-    virtual bool addUser(const peer::User& user) = 0;
-    virtual bool modifyUser(const peer::User& user) = 0;
+    virtual base::UserList userList() const = 0;
+    virtual bool addUser(const base::User& user) = 0;
+    virtual bool modifyUser(const base::User& user) = 0;
     virtual bool removeUser(int64_t entry_id) = 0;
-    virtual peer::HostId hostId(const base::ByteArray& keyHash) const = 0;
+    virtual base::HostId hostId(const base::ByteArray& keyHash) const = 0;
     virtual bool addHost(const base::ByteArray& keyHash) = 0;
 };
 

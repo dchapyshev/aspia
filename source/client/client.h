@@ -24,12 +24,9 @@
 #include "base/net/network_channel.h"
 
 namespace base {
+class ClientAuthenticator;
 class TaskRunner;
 } // namespace base
-
-namespace peer {
-class ClientAuthenticator;
-} // namespace peer
 
 namespace client {
 
@@ -80,9 +77,8 @@ protected:
 
 private:
     std::shared_ptr<base::TaskRunner> io_task_runner_;
-
     std::unique_ptr<base::NetworkChannel> channel_;
-    std::unique_ptr<peer::ClientAuthenticator> authenticator_;
+    std::unique_ptr<base::ClientAuthenticator> authenticator_;
     std::shared_ptr<StatusWindowProxy> status_window_proxy_;
 
     Config config_;

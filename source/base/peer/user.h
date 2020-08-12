@@ -16,13 +16,13 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef PEER__USER_H
-#define PEER__USER_H
+#ifndef BASE__PEER__USER_H
+#define BASE__PEER__USER_H
 
 #include "base/memory/byte_array.h"
 #include "proto/router_admin.pb.h"
 
-namespace peer {
+namespace base {
 
 class User
 {
@@ -56,8 +56,8 @@ public:
     int64_t entry_id = 0;
     std::u16string name;
     std::string group;
-    base::ByteArray salt;
-    base::ByteArray verifier;
+    ByteArray salt;
+    ByteArray verifier;
     uint32_t sessions = 0;
     uint32_t flags = 0;
 };
@@ -82,9 +82,9 @@ public:
     size_t count() const { return list_.size(); }
     bool empty() const { return list_.empty(); }
 
-    const base::ByteArray& seedKey() const { return seed_key_; }
-    void setSeedKey(const base::ByteArray& seed_key);
-    void setSeedKey(base::ByteArray&& seed_key);
+    const ByteArray& seedKey() const { return seed_key_; }
+    void setSeedKey(const ByteArray& seed_key);
+    void setSeedKey(ByteArray&& seed_key);
 
     class Iterator
     {
@@ -102,10 +102,10 @@ public:
     };
 
 private:
-    base::ByteArray seed_key_;
+    ByteArray seed_key_;
     std::vector<User> list_;
 };
 
-} // namespace peer
+} // namespace base
 
-#endif // PEER__USER_H
+#endif // BASE__PEER__USER_H

@@ -223,7 +223,7 @@ void UserSessionManager::setSessionEvent(
     }
 }
 
-void UserSessionManager::setHostId(peer::HostId host_id)
+void UserSessionManager::setHostId(base::HostId host_id)
 {
     host_id_ = host_id;
 
@@ -285,9 +285,9 @@ void UserSessionManager::addNewSession(std::unique_ptr<ClientSession> client_ses
     }
 }
 
-peer::UserList UserSessionManager::userList() const
+base::UserList UserSessionManager::userList() const
 {
-    peer::UserList user_list;
+    base::UserList user_list;
 
     for (const auto& session : sessions_)
         user_list.add(session->user());

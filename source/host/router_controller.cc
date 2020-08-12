@@ -20,7 +20,7 @@
 
 #include "base/logging.h"
 #include "base/task_runner.h"
-#include "peer/client_authenticator.h"
+#include "base/peer/client_authenticator.h"
 #include "proto/router_host.pb.h"
 
 namespace host {
@@ -70,16 +70,16 @@ void RouterController::onConnected()
     channel_->setKeepAlive(true, kKeepAliveTime, kKeepAliveInterval);
     channel_->setNoDelay(true);
 
-    authenticator_ = std::make_unique<peer::ClientAuthenticator>(task_runner_);
+    authenticator_ = std::make_unique<base::ClientAuthenticator>(task_runner_);
 
     authenticator_->setIdentify(proto::IDENTIFY_ANONYMOUS);
     authenticator_->setPeerPublicKey(router_info_.public_key);
     authenticator_->setSessionType(proto::ROUTER_SESSION_HOST);
 
     authenticator_->start(std::move(channel_),
-                          [this](peer::ClientAuthenticator::ErrorCode error_code)
+                          [this](base::ClientAuthenticator::ErrorCode error_code)
     {
-        if (error_code == peer::ClientAuthenticator::ErrorCode::SUCCESS)
+        if (error_code == base::ClientAuthenticator::ErrorCode::SUCCESS)
         {
             // The authenticator takes the listener on itself, we return the receipt of
             // notifications.
@@ -112,7 +112,7 @@ void RouterController::onConnected()
         else
         {
             LOG(LS_WARNING) << "Authentication failed: "
-                            << peer::ClientAuthenticator::errorToString(error_code);
+                            << base::ClientAuthenticator::errorToString(error_code);
             delayedConnectToRouter();
         }
 
@@ -126,9 +126,9 @@ void RouterController::onDisconnected(base::NetworkChannel::ErrorCode error_code
     LOG(LS_INFO) << "Connection to the router is lost ("
                  << base::NetworkChannel::errorToString(error_code) << ")";
 
-    delegate_->onHostIdAssigned(peer::kInvalidHostId, base::ByteArray());
+    delegate_->onHostIdAssigned(base::kInvalidHostId, base::ByteArray());
     delegate_->onRouterDisconnected(error_code);
-    host_id_ = peer::kInvalidHostId;
+    host_id_ = base::kInvalidHostId;
 
     delayedConnectToRouter();
 }
@@ -144,14 +144,14 @@ void RouterController::onMessageReceived(const base::ByteArray& buffer)
 
     if (message.has_host_id_response())
     {
-        if (host_id_ != peer::kInvalidHostId)
+        if (host_id_ != base::kInvalidHostId)
         {
             LOG(LS_ERROR) << "Host ID already assigned";
             return;
         }
 
         const proto::HostIdResponse& host_id_response = message.host_id_response();
-        if (host_id_response.host_id() == peer::kInvalidHostId)
+        if (host_id_response.host_id() == base::kInvalidHostId)
         {
             LOG(LS_ERROR) << "Invalid host ID received";
             return;
@@ -168,7 +168,7 @@ void RouterController::onMessageReceived(const base::ByteArray& buffer)
     }
     else
     {
-        if (host_id_ == peer::kInvalidHostId)
+        if (host_id_ == base::kInvalidHostId)
         {
             LOG(LS_ERROR) << "Request could not be processed (host ID not received yet)";
             return;

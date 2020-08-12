@@ -156,7 +156,7 @@ std::optional<std::u16string> readText16(sqlite3_stmt* statement, int column)
     return base::utf16FromUtf8(str.value());
 }
 
-std::optional<peer::User> readUser(sqlite3_stmt* statement)
+std::optional<base::User> readUser(sqlite3_stmt* statement)
 {
     std::optional<int64_t> entry_id = readInteger<int64_t>(statement, 0);
     if (!entry_id.has_value())
@@ -207,7 +207,7 @@ std::optional<peer::User> readUser(sqlite3_stmt* statement)
         return std::nullopt;
     }
 
-    peer::User user;
+    base::User user;
 
     user.entry_id  = entry_id.value();
     user.name      = std::move(name.value());
@@ -272,7 +272,7 @@ std::filesystem::path DatabaseSqlite::filePath()
     return file_path;
 }
 
-peer::UserList DatabaseSqlite::userList() const
+base::UserList DatabaseSqlite::userList() const
 {
     const char kQuery[] = "SELECT * FROM users";
 
@@ -281,16 +281,16 @@ peer::UserList DatabaseSqlite::userList() const
     if (error_code != SQLITE_OK)
     {
         LOG(LS_ERROR) << "sqlite3_prepare failed: " << sqlite3_errstr(error_code);
-        return peer::UserList();
+        return base::UserList();
     }
 
-    peer::UserList users;
+    base::UserList users;
     for (;;)
     {
         if (sqlite3_step(statement) != SQLITE_ROW)
             break;
 
-        std::optional<peer::User> user = readUser(statement);
+        std::optional<base::User> user = readUser(statement);
         if (user.has_value())
             users.add(std::move(user.value()));
     }
@@ -299,7 +299,7 @@ peer::UserList DatabaseSqlite::userList() const
     return users;
 }
 
-bool DatabaseSqlite::addUser(const peer::User& user)
+bool DatabaseSqlite::addUser(const base::User& user)
 {
     if (!user.isValid())
     {
@@ -357,7 +357,7 @@ bool DatabaseSqlite::addUser(const peer::User& user)
     return result;
 }
 
-bool DatabaseSqlite::modifyUser(const peer::User& user)
+bool DatabaseSqlite::modifyUser(const base::User& user)
 {
     if (!user.isValid())
     {
@@ -452,12 +452,12 @@ bool DatabaseSqlite::removeUser(int64_t entry_id)
     return result;
 }
 
-peer::HostId DatabaseSqlite::hostId(const base::ByteArray& keyHash) const
+base::HostId DatabaseSqlite::hostId(const base::ByteArray& keyHash) const
 {
     if (keyHash.empty())
     {
         LOG(LS_ERROR) << "Invalid parameters";
-        return peer::kInvalidHostId;
+        return base::kInvalidHostId;
     }
 
     const char kQuery[] = "SELECT * FROM hosts WHERE key=?";
@@ -467,10 +467,10 @@ peer::HostId DatabaseSqlite::hostId(const base::ByteArray& keyHash) const
     if (error_code != SQLITE_OK)
     {
         LOG(LS_ERROR) << "sqlite3_prepare failed: " << sqlite3_errstr(error_code);
-        return peer::kInvalidHostId;
+        return base::kInvalidHostId;
     }
 
-    peer::HostId result = peer::kInvalidHostId;
+    base::HostId result = base::kInvalidHostId;
 
     do
     {

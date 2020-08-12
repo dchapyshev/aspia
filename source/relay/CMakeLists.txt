@@ -48,7 +48,6 @@ add_executable(aspia_relay ${SOURCE_RELAY} ${SOURCE_RELAY_WIN} win/relay.rc)
 set_target_properties(aspia_relay PROPERTIES LINK_FLAGS "/MANIFEST:NO")
 target_link_libraries(aspia_relay
     aspia_base
-    aspia_peer
     aspia_proto
     comsupp
     crypt32

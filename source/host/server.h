@@ -20,10 +20,10 @@
 #define HOST__SERVER_H
 
 #include "base/net/network_server.h"
+#include "base/peer/server_authenticator_manager.h"
 #include "host/router_controller.h"
 #include "host/user_session_manager.h"
 #include "host/system_settings.h"
-#include "peer/server_authenticator_manager.h"
 
 namespace base {
 class FilePathWatcher;
@@ -35,7 +35,7 @@ namespace host {
 class Server
     : public base::NetworkServer::Delegate,
       public RouterController::Delegate,
-      public peer::ServerAuthenticatorManager::Delegate,
+      public base::ServerAuthenticatorManager::Delegate,
       public UserSessionManager::Delegate
 {
 public:
@@ -49,14 +49,14 @@ protected:
     // net::Server::Delegate implementation.
     void onNewConnection(std::unique_ptr<base::NetworkChannel> channel) override;
 
-    // peer::HostController::Delegate implementation.
+    // RouterController::Delegate implementation.
     void onRouterConnected() override;
     void onRouterDisconnected(base::NetworkChannel::ErrorCode error_code) override;
-    void onHostIdAssigned(peer::HostId host_id, const base::ByteArray& host_key) override;
+    void onHostIdAssigned(base::HostId host_id, const base::ByteArray& host_key) override;
     void onClientConnected(std::unique_ptr<base::NetworkChannel> channel) override;
 
-    // net::AuthenticatorManager::Delegate implementation.
-    void onNewSession(peer::ServerAuthenticatorManager::SessionInfo&& session_info) override;
+    // base::AuthenticatorManager::Delegate implementation.
+    void onNewSession(base::ServerAuthenticatorManager::SessionInfo&& session_info) override;
 
     // UserSessionManager::Delegate implementation.
     void onUserListChanged() override;
@@ -77,7 +77,7 @@ private:
     // Accepts incoming network connections.
     std::unique_ptr<base::NetworkServer> server_;
     std::unique_ptr<RouterController> router_controller_;
-    std::unique_ptr<peer::ServerAuthenticatorManager> authenticator_manager_;
+    std::unique_ptr<base::ServerAuthenticatorManager> authenticator_manager_;
     std::unique_ptr<UserSessionManager> user_session_manager_;
 
     DISALLOW_COPY_AND_ASSIGN(Server);

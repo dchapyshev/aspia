@@ -117,11 +117,11 @@ bool Server::start()
 #endif // defined(OS_WIN)
 
     authenticator_manager_ =
-        std::make_unique<peer::ServerAuthenticatorManager>(task_runner_, this);
+        std::make_unique<base::ServerAuthenticatorManager>(task_runner_, this);
     authenticator_manager_->setPrivateKey(private_key);
-    authenticator_manager_->setUserList(std::make_shared<peer::UserList>(database->userList()));
+    authenticator_manager_->setUserList(std::make_shared<base::UserList>(database->userList()));
     authenticator_manager_->setAnonymousAccess(
-        peer::ServerAuthenticator::AnonymousAccess::ENABLE,
+        base::ServerAuthenticator::AnonymousAccess::ENABLE,
         proto::ROUTER_SESSION_HOST | proto::ROUTER_SESSION_RELAY);
 
     server_ = std::make_unique<base::NetworkServer>();
@@ -163,7 +163,6 @@ std::unique_ptr<proto::HostList> Server::hostList() const
 
         proto::Host* host = result->add_host();
         host->set_ip_address(base::utf8FromUtf16(session_host->address()));
-        host->set_user_name(base::utf8FromUtf16(session_host->userName()));
         host->set_host_id(session_host->hostId());
     }
 
@@ -173,7 +172,7 @@ std::unique_ptr<proto::HostList> Server::hostList() const
 
 void Server::onHostSessionWithId(SessionHost* session)
 {
-    peer::HostId host_id = session->hostId();
+    base::HostId host_id = session->hostId();
 
     for (auto it = sessions_.begin(); it != sessions_.end();)
     {
@@ -202,7 +201,7 @@ void Server::onNewConnection(std::unique_ptr<base::NetworkChannel> channel)
         authenticator_manager_->addNewChannel(std::move(channel));
 }
 
-void Server::onNewSession(peer::ServerAuthenticatorManager::SessionInfo&& session_info)
+void Server::onNewSession(base::ServerAuthenticatorManager::SessionInfo&& session_info)
 {
     proto::RouterSession session_type =
         static_cast<proto::RouterSession>(session_info.session_type);

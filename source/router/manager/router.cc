@@ -29,7 +29,7 @@ Router::Router(std::shared_ptr<RouterWindowProxy> window_proxy,
                std::shared_ptr<base::TaskRunner> io_task_runner)
     : io_task_runner_(io_task_runner),
       window_proxy_(std::move(window_proxy)),
-      authenticator_(std::make_unique<peer::ClientAuthenticator>(io_task_runner))
+      authenticator_(std::make_unique<base::ClientAuthenticator>(io_task_runner))
 {
     authenticator_->setIdentify(proto::IDENTIFY_SRP);
     authenticator_->setSessionType(proto::ROUTER_SESSION_ADMIN);
@@ -138,9 +138,9 @@ void Router::deleteUser(int64_t entry_id)
 void Router::onConnected()
 {
     authenticator_->start(std::move(channel_),
-                          [this](peer::ClientAuthenticator::ErrorCode error_code)
+                          [this](base::ClientAuthenticator::ErrorCode error_code)
     {
-        if (error_code == peer::ClientAuthenticator::ErrorCode::SUCCESS)
+        if (error_code == base::ClientAuthenticator::ErrorCode::SUCCESS)
         {
             // The authenticator takes the listener on itself, we return the receipt of
             // notifications.

@@ -16,14 +16,14 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "peer/authenticator.h"
+#include "base/peer/authenticator.h"
 
 #include "base/location.h"
 #include "base/logging.h"
 #include "base/crypto/message_decryptor_openssl.h"
 #include "base/crypto/message_encryptor_openssl.h"
 
-namespace peer {
+namespace base {
 
 namespace {
 
@@ -31,13 +31,13 @@ constexpr std::chrono::minutes kTimeout{ 1 };
 
 } // namespace
 
-Authenticator::Authenticator(std::shared_ptr<base::TaskRunner> task_runner)
+Authenticator::Authenticator(std::shared_ptr<TaskRunner> task_runner)
     : timer_(std::move(task_runner))
 {
     // Nothing
 }
 
-void Authenticator::start(std::unique_ptr<base::NetworkChannel> channel, Callback callback)
+void Authenticator::start(std::unique_ptr<NetworkChannel> channel, Callback callback)
 {
     if (state() != State::STOPPED)
     {
@@ -65,7 +65,7 @@ void Authenticator::start(std::unique_ptr<base::NetworkChannel> channel, Callbac
         channel_->resume();
 }
 
-std::unique_ptr<base::NetworkChannel> Authenticator::takeChannel()
+std::unique_ptr<NetworkChannel> Authenticator::takeChannel()
 {
     if (state() != State::SUCCESS)
         return nullptr;
@@ -151,7 +151,7 @@ void Authenticator::sendMessage(const google::protobuf::MessageLite& message)
     channel_->send(base::serialize(message));
 }
 
-void Authenticator::finish(const base::Location& location, ErrorCode error_code)
+void Authenticator::finish(const Location& location, ErrorCode error_code)
 {
     // If the network channel is already destroyed, then exit (we have a repeated notification).
     if (!channel_)
@@ -173,7 +173,7 @@ void Authenticator::finish(const base::Location& location, ErrorCode error_code)
 
 void Authenticator::setPeerVersion(const proto::Version& version)
 {
-    peer_version_ = base::Version(version.major(), version.minor(), version.patch());
+    peer_version_ = Version(version.major(), version.minor(), version.patch());
 }
 
 void Authenticator::onConnected()
@@ -182,19 +182,19 @@ void Authenticator::onConnected()
     NOTREACHED();
 }
 
-void Authenticator::onDisconnected(base::NetworkChannel::ErrorCode error_code)
+void Authenticator::onDisconnected(NetworkChannel::ErrorCode error_code)
 {
-    LOG(LS_INFO) << "Network error: " << base::NetworkChannel::errorToString(error_code);
+    LOG(LS_INFO) << "Network error: " << NetworkChannel::errorToString(error_code);
 
     ErrorCode result = ErrorCode::NETWORK_ERROR;
 
-    if (error_code == base::NetworkChannel::ErrorCode::ACCESS_DENIED)
+    if (error_code == NetworkChannel::ErrorCode::ACCESS_DENIED)
         result = ErrorCode::ACCESS_DENIED;
 
     finish(FROM_HERE, result);
 }
 
-void Authenticator::onMessageReceived(const base::ByteArray& buffer)
+void Authenticator::onMessageReceived(const ByteArray& buffer)
 {
     if (state() != State::PENDING)
         return;
@@ -214,23 +214,23 @@ bool Authenticator::onSessionKeyChanged()
 {
     LOG(LS_INFO) << "Session key changed";
 
-    std::unique_ptr<base::MessageEncryptor> encryptor;
-    std::unique_ptr<base::MessageDecryptor> decryptor;
+    std::unique_ptr<MessageEncryptor> encryptor;
+    std::unique_ptr<MessageDecryptor> decryptor;
 
     if (encryption_ == proto::ENCRYPTION_AES256_GCM)
     {
-        encryptor = base::MessageEncryptorOpenssl::createForAes256Gcm(
+        encryptor = MessageEncryptorOpenssl::createForAes256Gcm(
             session_key_, encrypt_iv_);
-        decryptor = base::MessageDecryptorOpenssl::createForAes256Gcm(
+        decryptor = MessageDecryptorOpenssl::createForAes256Gcm(
             session_key_, decrypt_iv_);
     }
     else
     {
         DCHECK_EQ(encryption_, proto::ENCRYPTION_CHACHA20_POLY1305);
 
-        encryptor = base::MessageEncryptorOpenssl::createForChaCha20Poly1305(
+        encryptor = MessageEncryptorOpenssl::createForChaCha20Poly1305(
             session_key_, encrypt_iv_);
-        decryptor = base::MessageDecryptorOpenssl::createForChaCha20Poly1305(
+        decryptor = MessageDecryptorOpenssl::createForChaCha20Poly1305(
             session_key_, decrypt_iv_);
     }
 
@@ -242,4 +242,4 @@ bool Authenticator::onSessionKeyChanged()
     return true;
 }
 
-} // namespace peer
+} // namespace base

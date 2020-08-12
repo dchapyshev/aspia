@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef PEER__AUTHENTICATOR_H
-#define PEER__AUTHENTICATOR_H
+#ifndef BASE__PEER__AUTHENTICATOR_H
+#define BASE__PEER__AUTHENTICATOR_H
 
 #include "base/waitable_timer.h"
 #include "base/version.h"
@@ -25,15 +25,13 @@
 #include "proto/key_exchange.pb.h"
 
 namespace base {
+
 class Location;
-} // namespace base
 
-namespace peer {
-
-class Authenticator : public base::NetworkChannel::Listener
+class Authenticator : public NetworkChannel::Listener
 {
 public:
-    explicit Authenticator(std::shared_ptr<base::TaskRunner> task_runner);
+    explicit Authenticator(std::shared_ptr<TaskRunner> task_runner);
     virtual ~Authenticator() = default;
 
     enum class State
@@ -56,11 +54,11 @@ public:
 
     using Callback = std::function<void(ErrorCode error_code)>;
 
-    void start(std::unique_ptr<base::NetworkChannel> channel, Callback callback);
+    void start(std::unique_ptr<NetworkChannel> channel, Callback callback);
 
     [[nodiscard]] proto::Identify identify() const { return identify_; }
     [[nodiscard]] proto::Encryption encryption() const { return encryption_; }
-    [[nodiscard]] const base::Version& peerVersion() const { return peer_version_; }
+    [[nodiscard]] const Version& peerVersion() const { return peer_version_; }
     [[nodiscard]] uint32_t sessionType() const { return session_type_; }
     [[nodiscard]] const std::u16string& userName() const { return user_name_; }
 
@@ -68,7 +66,7 @@ public:
     [[nodiscard]] State state() const { return state_; }
 
     // Releases network channel.
-    [[nodiscard]] std::unique_ptr<base::NetworkChannel> takeChannel();
+    [[nodiscard]] std::unique_ptr<NetworkChannel> takeChannel();
 
     static const char* osTypeToString(proto::OsType os_type);
     static const char* stateToString(State state);
@@ -76,39 +74,38 @@ public:
 
 protected:
     [[nodiscard]] virtual bool onStarted() = 0;
-    virtual void onReceived(const base::ByteArray& buffer) = 0;
+    virtual void onReceived(const ByteArray& buffer) = 0;
     virtual void onWritten() = 0;
 
     void sendMessage(const google::protobuf::MessageLite& message);
-    void finish(const base::Location& location, ErrorCode error_code);
+    void finish(const Location& location, ErrorCode error_code);
     void setPeerVersion(const proto::Version& version);
 
     // base::NetworkChannel::Listener implementation.
     void onConnected() final;
-    void onDisconnected(base::NetworkChannel::ErrorCode error_code) final;
-    void onMessageReceived(const base::ByteArray& buffer) final;
+    void onDisconnected(NetworkChannel::ErrorCode error_code) final;
+    void onMessageReceived(const ByteArray& buffer) final;
     void onMessageWritten(size_t pending) final;
 
     [[nodiscard]] bool onSessionKeyChanged();
 
     proto::Encryption encryption_ = proto::ENCRYPTION_UNKNOWN;
     proto::Identify identify_ = proto::IDENTIFY_SRP;
-    base::ByteArray session_key_;
-    base::ByteArray encrypt_iv_;
-    base::ByteArray decrypt_iv_;
+    ByteArray session_key_;
+    ByteArray encrypt_iv_;
+    ByteArray decrypt_iv_;
 
     uint32_t session_type_ = 0; // Selected session type.
     std::u16string user_name_;
 
 private:
-    base::WaitableTimer timer_;
-    std::unique_ptr<base::NetworkChannel> channel_;
+    WaitableTimer timer_;
+    std::unique_ptr<NetworkChannel> channel_;
     Callback callback_;
     State state_ = State::STOPPED;
-
-    base::Version peer_version_; // Remote peer version.
+    Version peer_version_; // Remote peer version.
 };
 
-} // namespace peer
+} // namespace base
 
-#endif // PEER__AUTHENTICATOR_H
+#endif // BASE__PEER__AUTHENTICATOR_H

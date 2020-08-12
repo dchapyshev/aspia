@@ -19,7 +19,7 @@
 #ifndef CLIENT__STATUS_WINDOW_H
 #define CLIENT__STATUS_WINDOW_H
 
-#include "peer/client_authenticator.h"
+#include "base/peer/client_authenticator.h"
 
 namespace client {
 
@@ -32,7 +32,7 @@ public:
     virtual void onStopped() = 0;
     virtual void onConnected() = 0;
     virtual void onDisconnected(base::NetworkChannel::ErrorCode error_code) = 0;
-    virtual void onAccessDenied(peer::ClientAuthenticator::ErrorCode error_code) = 0;
+    virtual void onAccessDenied(base::ClientAuthenticator::ErrorCode error_code) = 0;
 };
 
 } // namespace client

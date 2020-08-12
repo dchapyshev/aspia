@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "peer/user.h"
+#include "base/peer/user.h"
 
 #include "base/logging.h"
 #include "base/crypto/random.h"
@@ -27,7 +27,7 @@
 
 #include <cwctype>
 
-namespace peer {
+namespace base {
 
 namespace {
 
@@ -115,19 +115,19 @@ User User::create(std::u16string_view name, std::u16string_view password)
     if (name.empty() || password.empty())
         return User();
 
-    std::optional<base::SrpNgPair> Ng_pair = base::pairByGroup(kDefaultGroup);
+    std::optional<SrpNgPair> Ng_pair = pairByGroup(kDefaultGroup);
     if (!Ng_pair.has_value())
         return User();
 
     User user;
     user.name = name;
     user.group = kDefaultGroup;
-    user.salt = base::Random::byteArray(kSaltSize);
+    user.salt = Random::byteArray(kSaltSize);
 
-    base::BigNum s = base::BigNum::fromByteArray(user.salt);
-    base::BigNum N = base::BigNum::fromStdString(Ng_pair->first);
-    base::BigNum g = base::BigNum::fromStdString(Ng_pair->second);
-    base::BigNum v = base::SrpMath::calc_v(name, password, s, N, g);
+    BigNum s = BigNum::fromByteArray(user.salt);
+    BigNum N = BigNum::fromStdString(Ng_pair->first);
+    BigNum g = BigNum::fromStdString(Ng_pair->second);
+    BigNum v = SrpMath::calc_v(name, password, s, N, g);
 
     user.verifier = v.toByteArray();
     if (user.verifier.empty())
@@ -147,10 +147,10 @@ User User::parseFrom(const proto::User& serialized_user)
     User user;
 
     user.entry_id = serialized_user.entry_id();
-    user.name     = base::utf16FromUtf8(serialized_user.name());
+    user.name     = utf16FromUtf8(serialized_user.name());
     user.group    = serialized_user.group();
-    user.salt     = base::fromStdString(serialized_user.salt());
-    user.verifier = base::fromStdString(serialized_user.verifier());
+    user.salt     = fromStdString(serialized_user.salt());
+    user.verifier = fromStdString(serialized_user.verifier());
     user.sessions = serialized_user.sessions();
     user.flags    = serialized_user.flags();
 
@@ -162,10 +162,10 @@ proto::User User::serialize() const
     proto::User user;
 
     user.set_entry_id(entry_id);
-    user.set_name(base::utf8FromUtf16(name));
+    user.set_name(utf8FromUtf16(name));
     user.set_group(group);
-    user.set_salt(base::toStdString(salt));
-    user.set_verifier(base::toStdString(verifier));
+    user.set_salt(toStdString(salt));
+    user.set_verifier(toStdString(verifier));
     user.set_sessions(sessions);
     user.set_flags(flags);
 
@@ -202,19 +202,19 @@ const User& UserList::find(std::u16string_view username) const
 
     for (const auto& item : list_)
     {
-        if (base::compareCaseInsensitive(username, item.name) == 0)
+        if (compareCaseInsensitive(username, item.name) == 0)
             user = &item;
     }
 
     return *user;
 }
 
-void UserList::setSeedKey(const base::ByteArray& seed_key)
+void UserList::setSeedKey(const ByteArray& seed_key)
 {
     seed_key_ = seed_key;
 }
 
-void UserList::setSeedKey(base::ByteArray&& seed_key)
+void UserList::setSeedKey(ByteArray&& seed_key)
 {
     seed_key_ = std::move(seed_key);
 }

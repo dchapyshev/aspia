@@ -18,15 +18,15 @@
 
 #include "router/manager/user_dialog.h"
 
+#include "base/peer/user.h"
 #include "base/strings/string_util.h"
-#include "peer/user.h"
 
 #include <QAbstractButton>
 #include <QMessageBox>
 
 namespace router {
 
-UserDialog::UserDialog(const peer::User& user,
+UserDialog::UserDialog(const base::User& user,
                        const std::vector<std::u16string>& users,
                        QWidget* parent)
     : QDialog(parent),
@@ -37,7 +37,7 @@ UserDialog::UserDialog(const peer::User& user,
 
     if (user_.isValid())
     {
-        ui.checkbox_disable->setChecked(!(user_.flags & peer::User::ENABLED));
+        ui.checkbox_disable->setChecked(!(user_.flags & base::User::ENABLED));
         ui.edit_username->setText(QString::fromStdU16String(user_.name));
 
         setAccountChanged(false);
@@ -86,7 +86,7 @@ UserDialog::UserDialog(const peer::User& user,
 
 UserDialog::~UserDialog() = default;
 
-const peer::User& UserDialog::user() const
+const base::User& UserDialog::user() const
 {
     return user_;
 }
@@ -121,7 +121,7 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
     {
         std::u16string username = ui.edit_username->text().toStdU16String();
 
-        if (!peer::User::isValidUserName(username))
+        if (!base::User::isValidUserName(username))
         {
             QMessageBox::warning(this,
                                  tr("Warning"),
@@ -163,12 +163,12 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
 
         std::u16string password = ui.edit_password->text().toStdU16String();
 
-        if (!peer::User::isValidPassword(password))
+        if (!base::User::isValidPassword(password))
         {
             QMessageBox::warning(this,
                                  tr("Warning"),
                                  tr("Password can not be empty and should not exceed %n characters.",
-                                    "", peer::User::kMaxPasswordLength),
+                                    "", base::User::kMaxPasswordLength),
                                  QMessageBox::Ok);
 
             ui.edit_password->selectAll();
@@ -176,7 +176,7 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
             return;
         }
 
-        if (!peer::User::isSafePassword(password))
+        if (!base::User::isSafePassword(password))
         {
             QString unsafe =
                 tr("Password you entered does not meet the security requirements!");
@@ -184,7 +184,7 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
             QString safe =
                 tr("The password must contain lowercase and uppercase characters, "
                    "numbers and should not be shorter than %n characters.",
-                   "", peer::User::kSafePasswordLength);
+                   "", base::User::kSafePasswordLength);
 
             QString question = tr("Do you want to enter a different password?");
 
@@ -206,7 +206,7 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
         int64_t entry_id = user_.entry_id;
 
         // Create new user.
-        user_ = peer::User::create(username, password);
+        user_ = base::User::create(username, password);
 
         // Restore entry ID.
         user_.entry_id = entry_id;
@@ -231,7 +231,7 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
 
     uint32_t flags = 0;
     if (!ui.checkbox_disable->isChecked())
-        flags |= peer::User::ENABLED;
+        flags |= base::User::ENABLED;
 
     user_.sessions = sessions;
     user_.flags = flags;

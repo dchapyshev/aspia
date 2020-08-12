@@ -373,7 +373,7 @@
 <context>
     <name>FileNameEditor</name>
     <message>
-        <location filename="../ui/file_item_delegate.cc" line="55"/>
+        <location filename="../ui/file_item_delegate.cc" line="56"/>
         <source>The name can not contain characters %1.</source>
         <translation>De naam mag de karakters %1 niet bevatten.</translation>
     </message>
@@ -674,17 +674,17 @@
 <context>
     <name>client::AddressBar</name>
     <message>
-        <location filename="../ui/address_bar.cc" line="55"/>
+        <location filename="../ui/address_bar.cc" line="56"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar.cc" line="56"/>
+        <location filename="../ui/address_bar.cc" line="57"/>
         <source>An incorrect path to the folder was entered.</source>
         <translation>Er is een ongeldig pad voor de map opgegeven.</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar.cc" line="76"/>
+        <location filename="../ui/address_bar.cc" line="77"/>
         <source>The path can not contain characters %1.</source>
         <translation>Het pad mag de karakters %1 niet bevatten.</translation>
     </message>
@@ -1114,45 +1114,45 @@
 <context>
     <name>client::DesktopPanel</name>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="189"/>
+        <location filename="../ui/desktop_panel.cc" line="190"/>
         <source>Monitor %1 (primary)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="191"/>
+        <location filename="../ui/desktop_panel.cc" line="192"/>
         <source>Monitor %1</source>
         <translation>Beeldscherm %1</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="305"/>
-        <location filename="../ui/desktop_panel.cc" line="316"/>
-        <location filename="../ui/desktop_panel.cc" line="327"/>
-        <location filename="../ui/desktop_panel.cc" line="338"/>
+        <location filename="../ui/desktop_panel.cc" line="306"/>
+        <location filename="../ui/desktop_panel.cc" line="317"/>
+        <location filename="../ui/desktop_panel.cc" line="328"/>
+        <location filename="../ui/desktop_panel.cc" line="339"/>
         <source>Confirmation</source>
         <translation>Bevestiging</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="306"/>
+        <location filename="../ui/desktop_panel.cc" line="307"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>Weet U zeker dat U de computer op afstand wilt afsluiten?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="317"/>
+        <location filename="../ui/desktop_panel.cc" line="318"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>Weet U zeker dat U de computer op afstand wilt herstarten?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="328"/>
+        <location filename="../ui/desktop_panel.cc" line="329"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>Weet U zeker dat U de gebruikers sessie van de computer op afstand wilt beeindigen?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="339"/>
+        <location filename="../ui/desktop_panel.cc" line="340"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>Weet U zeker dat U de gebruikers sessie van de computer op afstand wilt vergrendelen?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="361"/>
+        <location filename="../ui/desktop_panel.cc" line="362"/>
         <source>Scale</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1566,22 +1566,22 @@
 <context>
     <name>client::QtFileManagerWindow</name>
     <message>
-        <location filename="../ui/qt_file_manager_window.cc" line="53"/>
+        <location filename="../ui/qt_file_manager_window.cc" line="52"/>
         <source>Local Computer</source>
         <translation type="unfinished">Lokale Computer</translation>
     </message>
     <message>
-        <location filename="../ui/qt_file_manager_window.cc" line="54"/>
+        <location filename="../ui/qt_file_manager_window.cc" line="53"/>
         <source>Remote Computer</source>
         <translation type="unfinished">Computer op afstand</translation>
     </message>
     <message>
-        <location filename="../ui/qt_file_manager_window.cc" line="87"/>
+        <location filename="../ui/qt_file_manager_window.cc" line="86"/>
         <source>Warning</source>
         <translation type="unfinished">Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../ui/qt_file_manager_window.cc" line="88"/>
+        <location filename="../ui/qt_file_manager_window.cc" line="87"/>
         <source>Session error: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1620,302 +1620,302 @@
 <context>
     <name>client::SystemInfoWindow</name>
     <message>
-        <location filename="../ui/system_info_window.cc" line="106"/>
+        <location filename="../ui/system_info_window.cc" line="107"/>
         <source>HTML File</source>
         <translation>HTML Bestand</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="108"/>
+        <location filename="../ui/system_info_window.cc" line="109"/>
         <source>HTML File (*.html)</source>
         <translation>HTML Bestand (*.html)</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="117"/>
+        <location filename="../ui/system_info_window.cc" line="118"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="118"/>
+        <location filename="../ui/system_info_window.cc" line="119"/>
         <source>Failed to save file: %1</source>
         <translation>Kon het bestand %1 niet opslaan</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="178"/>
-        <location filename="../ui/system_info_window.cc" line="201"/>
+        <location filename="../ui/system_info_window.cc" line="179"/>
+        <location filename="../ui/system_info_window.cc" line="202"/>
         <source>Name</source>
         <translation>Naam</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="181"/>
+        <location filename="../ui/system_info_window.cc" line="182"/>
         <source>Domain</source>
         <translation>Domein</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="184"/>
+        <location filename="../ui/system_info_window.cc" line="185"/>
         <source>Workgroup</source>
         <translation>Werkgroep</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="187"/>
+        <location filename="../ui/system_info_window.cc" line="188"/>
         <source>Uptime</source>
         <translation>Uptime</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="191"/>
+        <location filename="../ui/system_info_window.cc" line="192"/>
         <source>Computer</source>
         <translation>Computer</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="204"/>
-        <location filename="../ui/system_info_window.cc" line="270"/>
+        <location filename="../ui/system_info_window.cc" line="205"/>
+        <location filename="../ui/system_info_window.cc" line="271"/>
         <source>Version</source>
         <translation>Versie</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="207"/>
+        <location filename="../ui/system_info_window.cc" line="208"/>
         <source>Architecture</source>
         <translation>Architectuur</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="212"/>
+        <location filename="../ui/system_info_window.cc" line="213"/>
         <source>Operating System</source>
         <translation>Besturingssysteem</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="222"/>
-        <location filename="../ui/system_info_window.cc" line="294"/>
+        <location filename="../ui/system_info_window.cc" line="223"/>
+        <location filename="../ui/system_info_window.cc" line="295"/>
         <source>Manufacturer</source>
         <translation>Producent</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="225"/>
-        <location filename="../ui/system_info_window.cc" line="240"/>
+        <location filename="../ui/system_info_window.cc" line="226"/>
+        <location filename="../ui/system_info_window.cc" line="241"/>
         <source>Model</source>
         <translation>Model</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="230"/>
+        <location filename="../ui/system_info_window.cc" line="231"/>
         <source>Motherboard</source>
         <translation>Moederbord</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="243"/>
-        <location filename="../ui/system_info_window.cc" line="267"/>
+        <location filename="../ui/system_info_window.cc" line="244"/>
+        <location filename="../ui/system_info_window.cc" line="268"/>
         <source>Vendor</source>
         <translation>Verkoper</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="246"/>
+        <location filename="../ui/system_info_window.cc" line="247"/>
         <source>Packages</source>
         <translation>Pakketten</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="249"/>
+        <location filename="../ui/system_info_window.cc" line="250"/>
         <source>Cores</source>
         <translation>Kernen</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="252"/>
+        <location filename="../ui/system_info_window.cc" line="253"/>
         <source>Threads</source>
         <translation>Threads</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="257"/>
+        <location filename="../ui/system_info_window.cc" line="258"/>
         <source>Processor</source>
         <translation>Processor</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="273"/>
+        <location filename="../ui/system_info_window.cc" line="274"/>
         <source>Date</source>
         <translation>Datum</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="297"/>
+        <location filename="../ui/system_info_window.cc" line="298"/>
         <source>Size</source>
         <translation>Grootte</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="300"/>
+        <location filename="../ui/system_info_window.cc" line="301"/>
         <source>Speed</source>
         <translation>Snelheid</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="300"/>
+        <location filename="../ui/system_info_window.cc" line="301"/>
         <source>%1 MHz</source>
         <translation>%1 MHz</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="303"/>
+        <location filename="../ui/system_info_window.cc" line="304"/>
         <source>Type</source>
         <translation>Type</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="306"/>
+        <location filename="../ui/system_info_window.cc" line="307"/>
         <source>Form Factor</source>
         <translation>Form Factor</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="309"/>
+        <location filename="../ui/system_info_window.cc" line="310"/>
         <source>Part Number</source>
         <translation>Onderdeel Nummer</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="313"/>
+        <location filename="../ui/system_info_window.cc" line="314"/>
         <source>Installed</source>
         <translation>Geinstalleerd</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="313"/>
-        <location filename="../ui/system_info_window.cc" line="388"/>
-        <location filename="../ui/system_info_window.cc" line="447"/>
-        <location filename="../ui/system_info_window.cc" line="455"/>
+        <location filename="../ui/system_info_window.cc" line="314"/>
+        <location filename="../ui/system_info_window.cc" line="389"/>
+        <location filename="../ui/system_info_window.cc" line="448"/>
+        <location filename="../ui/system_info_window.cc" line="456"/>
         <source>No</source>
         <translation>Nee</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="323"/>
+        <location filename="../ui/system_info_window.cc" line="324"/>
         <source>Memory</source>
         <translation>Geheugen</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="352"/>
+        <location filename="../ui/system_info_window.cc" line="353"/>
         <source>%1 (%2 free)</source>
         <translation>%1 (%2 vrij)</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="362"/>
+        <location filename="../ui/system_info_window.cc" line="363"/>
         <source>Logical Drives</source>
         <translation>Logische Drives</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="377"/>
+        <location filename="../ui/system_info_window.cc" line="378"/>
         <source>Adapter Name</source>
         <translation>Adapter Naam</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="380"/>
+        <location filename="../ui/system_info_window.cc" line="381"/>
         <source>Interface Type</source>
         <translation>Interface Type</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="383"/>
+        <location filename="../ui/system_info_window.cc" line="384"/>
         <source>Connection Speed</source>
         <translation>Verbindings Snelheid</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="386"/>
+        <location filename="../ui/system_info_window.cc" line="387"/>
         <source>MAC Address</source>
         <translation>MAC Adres</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="388"/>
+        <location filename="../ui/system_info_window.cc" line="389"/>
         <source>DHCP Enabled</source>
         <translation>DHCP Ingeschakeld</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="388"/>
-        <location filename="../ui/system_info_window.cc" line="447"/>
-        <location filename="../ui/system_info_window.cc" line="455"/>
+        <location filename="../ui/system_info_window.cc" line="389"/>
+        <location filename="../ui/system_info_window.cc" line="448"/>
+        <location filename="../ui/system_info_window.cc" line="456"/>
         <source>Yes</source>
         <translation>Ya</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="393"/>
+        <location filename="../ui/system_info_window.cc" line="394"/>
         <source>DHCP Server #%1</source>
         <translation>DHCP Server #%1</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="393"/>
+        <location filename="../ui/system_info_window.cc" line="394"/>
         <source>DHCP Server</source>
         <translation>DHCP Server</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="405"/>
+        <location filename="../ui/system_info_window.cc" line="406"/>
         <source>Address #%1</source>
         <translation>Adres #%1</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="405"/>
+        <location filename="../ui/system_info_window.cc" line="406"/>
         <source>Address</source>
         <translation>Adres</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="413"/>
+        <location filename="../ui/system_info_window.cc" line="414"/>
         <source>Gateway #%1</source>
         <translation>Gateway #%1</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="413"/>
+        <location filename="../ui/system_info_window.cc" line="414"/>
         <source>Gateway</source>
         <translation>Gateway</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="433"/>
+        <location filename="../ui/system_info_window.cc" line="434"/>
         <source>Network Connections</source>
         <translation>Netwerk Verbindingen</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="447"/>
+        <location filename="../ui/system_info_window.cc" line="448"/>
         <source>Default</source>
         <translation>Standaard</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="450"/>
+        <location filename="../ui/system_info_window.cc" line="451"/>
         <source>Port</source>
         <translation>Poort</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="453"/>
+        <location filename="../ui/system_info_window.cc" line="454"/>
         <source>Driver</source>
         <translation>Driver</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="455"/>
+        <location filename="../ui/system_info_window.cc" line="456"/>
         <source>Shared</source>
         <translation>Gedeeld</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="458"/>
+        <location filename="../ui/system_info_window.cc" line="459"/>
         <source>Share Name</source>
         <translation>Share Naam</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="460"/>
+        <location filename="../ui/system_info_window.cc" line="461"/>
         <source>Jobs Count</source>
         <translation>Aantal Jobs</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="468"/>
+        <location filename="../ui/system_info_window.cc" line="469"/>
         <source>Printers</source>
         <translation>Printers</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="529"/>
+        <location filename="../ui/system_info_window.cc" line="530"/>
         <source>TB</source>
         <translation>TB</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="534"/>
+        <location filename="../ui/system_info_window.cc" line="535"/>
         <source>GB</source>
         <translation>GB</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="539"/>
+        <location filename="../ui/system_info_window.cc" line="540"/>
         <source>MB</source>
         <translation>MB</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="544"/>
+        <location filename="../ui/system_info_window.cc" line="545"/>
         <source>kB</source>
         <translation>kB</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="549"/>
+        <location filename="../ui/system_info_window.cc" line="550"/>
         <source>B</source>
         <translation>B</translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/system_info_window.cc" line="565"/>
+        <location filename="../ui/system_info_window.cc" line="566"/>
         <source>%n seconds</source>
         <translation>
             <numerusform>%n seconde</numerusform>
@@ -1923,7 +1923,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/system_info_window.cc" line="566"/>
+        <location filename="../ui/system_info_window.cc" line="567"/>
         <source>%n minutes</source>
         <translation>
             <numerusform>%n minuut</numerusform>
@@ -1931,7 +1931,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/system_info_window.cc" line="567"/>
+        <location filename="../ui/system_info_window.cc" line="568"/>
         <source>%n hours</source>
         <translation>
             <numerusform>%n uur</numerusform>
@@ -1939,7 +1939,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/system_info_window.cc" line="591"/>
+        <location filename="../ui/system_info_window.cc" line="592"/>
         <source>%n days</source>
         <translation>
             <numerusform>%n dag</numerusform>
@@ -1947,22 +1947,22 @@
         </translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="612"/>
+        <location filename="../ui/system_info_window.cc" line="613"/>
         <source>Gbps</source>
         <translation>Gbps</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="617"/>
+        <location filename="../ui/system_info_window.cc" line="618"/>
         <source>Mbps</source>
         <translation>Mbps</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="622"/>
+        <location filename="../ui/system_info_window.cc" line="623"/>
         <source>Kbps</source>
         <translation>Kbps</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="627"/>
+        <location filename="../ui/system_info_window.cc" line="628"/>
         <source>bps</source>
         <translation>bps</translation>
     </message>

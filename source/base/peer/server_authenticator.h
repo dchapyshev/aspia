@@ -16,22 +16,22 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef PEER__SERVER_AUTHENTICATOR_H
-#define PEER__SERVER_AUTHENTICATOR_H
+#ifndef BASE__PEER__SERVER_AUTHENTICATOR_H
+#define BASE__PEER__SERVER_AUTHENTICATOR_H
 
 #include "base/crypto/big_num.h"
 #include "base/crypto/key_pair.h"
 #include "base/net/network_channel.h"
-#include "peer/authenticator.h"
+#include "base/peer/authenticator.h"
 
-namespace peer {
+namespace base {
 
 class UserList;
 
 class ServerAuthenticator : public Authenticator
 {
 public:
-    explicit ServerAuthenticator(std::shared_ptr<base::TaskRunner> task_runner);
+    explicit ServerAuthenticator(std::shared_ptr<TaskRunner> task_runner);
     ~ServerAuthenticator();
 
     enum class AnonymousAccess
@@ -44,7 +44,7 @@ public:
     void setUserList(std::shared_ptr<UserList> user_list);
 
     // Sets the private key.
-    [[nodiscard]] bool setPrivateKey(const base::ByteArray& private_key);
+    [[nodiscard]] bool setPrivateKey(const ByteArray& private_key);
 
     // Enables or disables anonymous access.
     // |session_types] allowed session types for anonymous access.
@@ -55,16 +55,16 @@ public:
 protected:
     // Authenticator implementation.
     bool onStarted() override;
-    void onReceived(const base::ByteArray& buffer) override;
+    void onReceived(const ByteArray& buffer) override;
     void onWritten() override;
 
 private:
-    void onClientHello(const base::ByteArray& buffer);
-    void onIdentify(const base::ByteArray& buffer);
-    void onClientKeyExchange(const base::ByteArray& buffer);
+    void onClientHello(const ByteArray& buffer);
+    void onIdentify(const ByteArray& buffer);
+    void onClientKeyExchange(const ByteArray& buffer);
     void doSessionChallenge();
-    void onSessionResponse(const base::ByteArray& buffer);
-    [[nodiscard]] base::ByteArray createSrpKey();
+    void onSessionResponse(const ByteArray& buffer);
+    [[nodiscard]] ByteArray createSrpKey();
 
     std::shared_ptr<UserList> user_list_;
 
@@ -85,18 +85,18 @@ private:
     // Bitmask of allowed session types.
     uint32_t session_types_ = 0;
 
-    base::KeyPair key_pair_;
-    base::BigNum N_;
-    base::BigNum g_;
-    base::BigNum v_;
-    base::BigNum s_;
-    base::BigNum b_;
-    base::BigNum B_;
-    base::BigNum A_;
+    KeyPair key_pair_;
+    BigNum N_;
+    BigNum g_;
+    BigNum v_;
+    BigNum s_;
+    BigNum b_;
+    BigNum B_;
+    BigNum A_;
 
     DISALLOW_COPY_AND_ASSIGN(ServerAuthenticator);
 };
 
-} // namespace peer
+} // namespace base
 
-#endif // PEER__SERVER_AUTHENTICATOR_H
+#endif // BASE__PEER__SERVER_AUTHENTICATOR_H

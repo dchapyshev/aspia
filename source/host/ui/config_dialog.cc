@@ -174,7 +174,7 @@ void ConfigDialog::onAddUser()
     for (int i = 0; i < ui.tree_users->topLevelItemCount(); ++i)
         exist_names.append(ui.tree_users->topLevelItem(i)->text(0));
 
-    UserDialog dialog(peer::User(), exist_names, this);
+    UserDialog dialog(base::User(), exist_names, this);
     if (dialog.exec() == QDialog::Accepted)
     {
         ui.tree_users->addTopLevelItem(new UserTreeItem(dialog.user()));
@@ -384,7 +384,7 @@ void ConfigDialog::onButtonBoxClicked(QAbstractButton* button)
             settings.setRouterPublicKey(router_public_key);
         }
 
-        peer::UserList user_list;
+        base::UserList user_list;
 
         for (int i = 0; i < ui.tree_users->topLevelItemCount(); ++i)
         {
@@ -461,11 +461,11 @@ void ConfigDialog::reloadAll()
     setConfigChanged(false);
 }
 
-void ConfigDialog::reloadUserList(const peer::UserList& user_list)
+void ConfigDialog::reloadUserList(const base::UserList& user_list)
 {
     ui.tree_users->clear();
 
-    for (peer::UserList::Iterator it(user_list); !it.isAtEnd(); it.advance())
+    for (base::UserList::Iterator it(user_list); !it.isAtEnd(); it.advance())
         ui.tree_users->addTopLevelItem(new UserTreeItem(it.user()));
 
     ui.button_modify->setEnabled(false);

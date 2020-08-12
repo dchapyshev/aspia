@@ -20,7 +20,7 @@
 #define ROUTER__SERVER_H
 
 #include "base/net/network_server.h"
-#include "peer/server_authenticator_manager.h"
+#include "base/peer/server_authenticator_manager.h"
 #include "proto/router_admin.pb.h"
 #include "router/session.h"
 
@@ -32,7 +32,7 @@ class ServerProxy;
 
 class Server
     : public base::NetworkServer::Delegate,
-      public peer::ServerAuthenticatorManager::Delegate,
+      public base::ServerAuthenticatorManager::Delegate,
       public Session::Delegate
 {
 public:
@@ -49,8 +49,8 @@ protected:
     // base::NetworkServer::Delegate implementation.
     void onNewConnection(std::unique_ptr<base::NetworkChannel> channel) override;
 
-    // peer::ServerAuthenticatorManager::Delegate implementation.
-    void onNewSession(peer::ServerAuthenticatorManager::SessionInfo&& session_info) override;
+    // base::ServerAuthenticatorManager::Delegate implementation.
+    void onNewSession(base::ServerAuthenticatorManager::SessionInfo&& session_info) override;
 
     // Session::Delegate implementation.
     void onSessionFinished() override;
@@ -65,7 +65,7 @@ private:
     std::shared_ptr<base::TaskRunner> task_runner_;
     std::shared_ptr<DatabaseFactory> database_factory_;
     std::unique_ptr<base::NetworkServer> server_;
-    std::unique_ptr<peer::ServerAuthenticatorManager> authenticator_manager_;
+    std::unique_ptr<base::ServerAuthenticatorManager> authenticator_manager_;
     std::vector<std::unique_ptr<Session>> sessions_;
 
     DISALLOW_COPY_AND_ASSIGN(Server);

@@ -16,18 +16,18 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef PEER__HOST_ID_H
-#define PEER__HOST_ID_H
+#ifndef BASE__PEER__HOST_ID_H
+#define BASE__PEER__HOST_ID_H
 
 #include <cstdint>
 #include <utility>
 
-namespace peer {
+namespace base {
 
 using HostId = uint64_t;
 
 extern const HostId kInvalidHostId;
 
-} // namespace peer
+} // namespace base
 
-#endif // PEER__HOST_ID_H
+#endif // BASE__PEER__HOST_ID_H

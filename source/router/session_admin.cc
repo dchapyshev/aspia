@@ -21,7 +21,7 @@
 #include "base/logging.h"
 #include "base/strings/unicode.h"
 #include "base/net/network_channel.h"
-#include "peer/user.h"
+#include "base/peer/user.h"
 #include "router/database.h"
 #include "router/server_proxy.h"
 
@@ -96,8 +96,8 @@ void SessionAdmin::doUserListRequest()
     proto::RouterToAdmin message;
     proto::UserList* list = message.mutable_user_list();
 
-    peer::UserList users = database->userList();
-    for (peer::UserList::Iterator it(users); !it.isAtEnd(); it.advance())
+    base::UserList users = database->userList();
+    for (base::UserList::Iterator it(users); !it.isAtEnd(); it.advance())
         list->add_user()->CopyFrom(it.user().serialize());
 
     sendMessage(message);
@@ -153,7 +153,7 @@ proto::UserResult::ErrorCode SessionAdmin::addUser(const proto::User& user)
 {
     LOG(LS_INFO) << "User add request: " << user.name();
 
-    peer::User new_user = peer::User::parseFrom(user);
+    base::User new_user = base::User::parseFrom(user);
     if (!new_user.isValid())
     {
         LOG(LS_ERROR) << "Failed to create user";
@@ -183,7 +183,7 @@ proto::UserResult::ErrorCode SessionAdmin::modifyUser(const proto::User& user)
         return proto::UserResult::INVALID_DATA;
     }
 
-    peer::User new_user = peer::User::parseFrom(user);
+    base::User new_user = base::User::parseFrom(user);
     if (!new_user.isValid())
     {
         LOG(LS_ERROR) << "Failed to create user";

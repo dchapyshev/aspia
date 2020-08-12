@@ -19,7 +19,7 @@
 #include "host/system_settings.h"
 
 #include "base/crypto/random.h"
-#include "peer/user.h"
+#include "base/peer/user.h"
 
 namespace host {
 
@@ -107,13 +107,13 @@ void SystemSettings::setHostKey(const base::ByteArray& key)
     settings_.flush();
 }
 
-peer::UserList SystemSettings::userList() const
+base::UserList SystemSettings::userList() const
 {
-    peer::UserList users;
+    base::UserList users;
 
     for (const auto& item : settings_.getArray("Users"))
     {
-        peer::User user;
+        base::User user;
 
         user.name     = item.get<std::u16string>("Name");
         user.group    = item.get<std::string>("Group", "8192");
@@ -133,16 +133,16 @@ peer::UserList SystemSettings::userList() const
     return users;
 }
 
-void SystemSettings::setUserList(const peer::UserList& users)
+void SystemSettings::setUserList(const base::UserList& users)
 {
     // Clear the old list of users.
     settings_.remove("Users");
 
     base::Settings::Array users_array;
 
-    for (peer::UserList::Iterator it(users); !it.isAtEnd(); it.advance())
+    for (base::UserList::Iterator it(users); !it.isAtEnd(); it.advance())
     {
-        const peer::User& user = it.user();
+        const base::User& user = it.user();
 
         base::Settings item;
         item.set("Name", user.name);

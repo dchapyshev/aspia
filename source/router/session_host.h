@@ -19,9 +19,9 @@
 #ifndef ROUTER__SESSION_HOST_H
 #define ROUTER__SESSION_HOST_H
 
+#include "base/peer/host_id.h"
 #include "proto/router_host.pb.h"
 #include "router/session.h"
-#include "peer/host_id.h"
 
 namespace router {
 
@@ -35,7 +35,7 @@ public:
                 std::shared_ptr<ServerProxy> server_proxy);
     ~SessionHost();
 
-    peer::HostId hostId() const { return host_id_; }
+    base::HostId hostId() const { return host_id_; }
 
 protected:
     // Session implementation.
@@ -49,7 +49,7 @@ private:
     void readHostIdRequest(const proto::HostIdRequest& host_id_request);
 
     std::shared_ptr<ServerProxy> server_proxy_;
-    peer::HostId host_id_ = peer::kInvalidHostId;
+    base::HostId host_id_ = base::kInvalidHostId;
 
     DISALLOW_COPY_AND_ASSIGN(SessionHost);
 };

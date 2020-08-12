@@ -16,15 +16,15 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "peer/server_authenticator_manager.h"
+#include "base/peer/server_authenticator_manager.h"
 
 #include "base/logging.h"
 #include "base/task_runner.h"
 
-namespace peer {
+namespace base {
 
 ServerAuthenticatorManager::ServerAuthenticatorManager(
-    std::shared_ptr<base::TaskRunner> task_runner, Delegate* delegate)
+    std::shared_ptr<TaskRunner> task_runner, Delegate* delegate)
     : task_runner_(std::move(task_runner)),
       delegate_(delegate)
 {
@@ -39,7 +39,7 @@ void ServerAuthenticatorManager::setUserList(std::shared_ptr<UserList> user_list
     DCHECK(user_list_);
 }
 
-void ServerAuthenticatorManager::setPrivateKey(const base::ByteArray& private_key)
+void ServerAuthenticatorManager::setPrivateKey(const ByteArray& private_key)
 {
     private_key_ = private_key;
 }
@@ -51,7 +51,7 @@ void ServerAuthenticatorManager::setAnonymousAccess(
     anonymous_session_types_ = session_types;
 }
 
-void ServerAuthenticatorManager::addNewChannel(std::unique_ptr<base::NetworkChannel> channel)
+void ServerAuthenticatorManager::addNewChannel(std::unique_ptr<NetworkChannel> channel)
 {
     DCHECK(channel);
 
@@ -123,4 +123,4 @@ void ServerAuthenticatorManager::onComplete()
     }
 }
 
-} // namespace peer
+} // namespace base

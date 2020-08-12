@@ -333,6 +333,20 @@ list(APPEND SOURCE_BASE_NET
 list(APPEND SOURCE_BASE_NET_UNIT_TESTS
     net/address_unittest.cc)
 
+list(APPEND SOURCE_BASE_PEER
+    peer/authenticator.cc
+    peer/authenticator.h
+    peer/client_authenticator.cc
+    peer/client_authenticator.h
+    peer/host_id.cc
+    peer/host_id.h
+    peer/server_authenticator.cc
+    peer/server_authenticator.h
+    peer/server_authenticator_manager.cc
+    peer/server_authenticator_manager.h
+    peer/user.cc
+    peer/user.h)
+
 list(APPEND SOURCE_BASE_SETTINGS
     settings/json_settings.cc
     settings/json_settings.h
@@ -443,6 +457,7 @@ source_group(ipc FILES ${SOURCE_BASE_IPC})
 source_group(memory FILES ${SOURCE_BASE_MEMORY} ${SOURCE_BASE_MEMORY_UNIT_TESTS})
 source_group(message_loop FILES ${SOURCE_BASE_MESSAGE_LOOP})
 source_group(net FILES ${SOURCE_BASE_NET} ${SOURCE_BASE_NET_UNIT_TESTS})
+source_group(peer FILES ${SOURCE_BASE_PEER})
 source_group(settings FILES ${SOURCE_BASE_SETTINGS} ${SOURCE_BASE_SETTINGS_UNIT_TESTS})
 source_group(strings FILES ${SOURCE_BASE_STRINGS} ${SOURCE_BASE_STRINGS_UNIT_TESTS})
 source_group(threading FILES ${SOURCE_BASE_THREADING})
@@ -459,6 +474,7 @@ add_library(aspia_base STATIC
     ${SOURCE_BASE_MEMORY}
     ${SOURCE_BASE_MESSAGE_LOOP}
     ${SOURCE_BASE_NET}
+    ${SOURCE_BASE_PEER}
     ${SOURCE_BASE_SETTINGS}
     ${SOURCE_BASE_STRINGS}
     ${SOURCE_BASE_THREADING}

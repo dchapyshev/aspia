@@ -22,9 +22,9 @@
 #include "base/macros_magic.h"
 #include "base/waitable_timer.h"
 #include "base/net/network_channel.h"
-#include "peer/host_id.h"
+#include "base/peer/host_id.h"
 
-namespace peer {
+namespace base {
 class ClientAuthenticator;
 } // namespace peer
 
@@ -53,7 +53,7 @@ public:
 
         virtual void onRouterConnected() = 0;
         virtual void onRouterDisconnected(base::NetworkChannel::ErrorCode error_code) = 0;
-        virtual void onHostIdAssigned(peer::HostId host_id, const base::ByteArray& host_key) = 0;
+        virtual void onHostIdAssigned(base::HostId host_id, const base::ByteArray& host_key) = 0;
         virtual void onClientConnected(std::unique_ptr<base::NetworkChannel> channel) = 0;
     };
 
@@ -63,7 +63,7 @@ public:
     uint16_t port() const { return router_info_.port; }
     const base::ByteArray& publicKey() const { return router_info_.public_key; }
     const base::ByteArray& hostKey() const { return router_info_.host_key; }
-    peer::HostId hostId() const { return host_id_; }
+    base::HostId hostId() const { return host_id_; }
 
 protected:
     // base::NetworkChannel::Listener implementation.
@@ -80,9 +80,9 @@ private:
 
     std::shared_ptr<base::TaskRunner> task_runner_;
     std::unique_ptr<base::NetworkChannel> channel_;
-    std::unique_ptr<peer::ClientAuthenticator> authenticator_;
+    std::unique_ptr<base::ClientAuthenticator> authenticator_;
     base::WaitableTimer reconnect_timer_;
-    peer::HostId host_id_ = peer::kInvalidHostId;
+    base::HostId host_id_ = base::kInvalidHostId;
     RouterInfo router_info_;
 
     DISALLOW_COPY_AND_ASSIGN(RouterController);

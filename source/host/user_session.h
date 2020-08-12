@@ -22,11 +22,11 @@
 #include "base/session_id.h"
 #include "base/waitable_timer.h"
 #include "base/ipc/ipc_channel.h"
+#include "base/peer/host_id.h"
+#include "base/peer/user.h"
 #include "base/win/session_status.h"
 #include "host/client_session.h"
 #include "host/desktop_session_manager.h"
-#include "peer/host_id.h"
-#include "peer/user.h"
 #include "proto/host_internal.pb.h"
 
 namespace host {
@@ -65,17 +65,17 @@ public:
                 std::unique_ptr<base::IpcChannel> channel);
     ~UserSession();
 
-    void start(peer::HostId host_id, Delegate* delegate);
+    void start(base::HostId host_id, Delegate* delegate);
     void restart(std::unique_ptr<base::IpcChannel> channel);
 
     Type type() const { return type_; }
     State state() const { return state_; }
     base::SessionId sessionId() const { return session_id_; }
-    peer::User user() const;
+    base::User user() const;
 
     void addNewSession(std::unique_ptr<ClientSession> client_session);
     void setSessionEvent(base::win::SessionStatus status, base::SessionId session_id);
-    void setHostId(peer::HostId host_id);
+    void setHostId(base::HostId host_id);
 
 protected:
     // base::IpcChannel::Listener implementation.
@@ -109,7 +109,7 @@ private:
     base::WaitableTimer attach_timer_;
 
     base::SessionId session_id_;
-    peer::HostId host_id_ = peer::kInvalidHostId;
+    base::HostId host_id_ = base::kInvalidHostId;
     std::string username_;
     std::string password_;
 

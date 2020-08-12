@@ -20,7 +20,7 @@
 #define ROUTER__MANAGER__ROUTER_H
 
 #include "base/macros_magic.h"
-#include "peer/client_authenticator.h"
+#include "base/peer/client_authenticator.h"
 #include "proto/router_admin.pb.h"
 
 namespace base {
@@ -61,7 +61,7 @@ protected:
 private:
     std::shared_ptr<base::TaskRunner> io_task_runner_;
     std::unique_ptr<base::NetworkChannel> channel_;
-    std::unique_ptr<peer::ClientAuthenticator> authenticator_;
+    std::unique_ptr<base::ClientAuthenticator> authenticator_;
     std::shared_ptr<RouterWindowProxy> window_proxy_;
 
     DISALLOW_COPY_AND_ASSIGN(Router);

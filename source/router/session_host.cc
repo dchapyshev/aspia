@@ -65,7 +65,7 @@ void SessionHost::onMessageReceived(const base::ByteArray& buffer)
     }
     else
     {
-        if (host_id_ == peer::kInvalidHostId)
+        if (host_id_ == base::kInvalidHostId)
         {
             LOG(LS_ERROR) << "Request could not be processed (host ID not assigned yet)";
             return;
@@ -82,7 +82,7 @@ void SessionHost::onMessageWritten(size_t /* pending */)
 
 void SessionHost::readHostIdRequest(const proto::HostIdRequest& host_id_request)
 {
-    if (host_id_ != peer::kInvalidHostId)
+    if (host_id_ != base::kInvalidHostId)
     {
         LOG(LS_ERROR) << "Host ID already assigned";
         return;
@@ -128,7 +128,7 @@ void SessionHost::readHostIdRequest(const proto::HostIdRequest& host_id_request)
     }
 
     host_id_ = database->hostId(keyHash);
-    if (host_id_ == peer::kInvalidHostId)
+    if (host_id_ == base::kInvalidHostId)
     {
         LOG(LS_ERROR) << "Failed to get host ID";
         return;

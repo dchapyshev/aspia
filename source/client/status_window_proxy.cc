@@ -95,7 +95,7 @@ void StatusWindowProxy::onDisconnected(base::NetworkChannel::ErrorCode error_cod
         status_window_->onDisconnected(error_code);
 }
 
-void StatusWindowProxy::onAccessDenied(peer::ClientAuthenticator::ErrorCode error_code)
+void StatusWindowProxy::onAccessDenied(base::ClientAuthenticator::ErrorCode error_code)
 {
     if (!ui_task_runner_->belongsToCurrentThread())
     {

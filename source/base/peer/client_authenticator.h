@@ -16,21 +16,21 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef PEER__CLIENT_AUTHENTICATOR_H
-#define PEER__CLIENT_AUTHENTICATOR_H
+#ifndef BASE__PEER__CLIENT_AUTHENTICATOR_H
+#define BASE__PEER__CLIENT_AUTHENTICATOR_H
 
 #include "base/crypto/big_num.h"
-#include "peer/authenticator.h"
+#include "base/peer/authenticator.h"
 
-namespace peer {
+namespace base {
 
 class ClientAuthenticator : public Authenticator
 {
 public:
-    explicit ClientAuthenticator(std::shared_ptr<base::TaskRunner> task_runner);
+    explicit ClientAuthenticator(std::shared_ptr<TaskRunner> task_runner);
     ~ClientAuthenticator();
 
-    void setPeerPublicKey(const base::ByteArray& public_key);
+    void setPeerPublicKey(const ByteArray& public_key);
     void setIdentify(proto::Identify identify);
     void setUserName(std::u16string_view username);
     void setPassword(std::u16string_view password);
@@ -39,16 +39,16 @@ public:
 protected:
     // Authenticator implementation.
     bool onStarted() override;
-    void onReceived(const base::ByteArray& buffer) override;
+    void onReceived(const ByteArray& buffer) override;
     void onWritten() override;
 
 private:
     void sendClientHello();
-    bool readServerHello(const base::ByteArray& buffer);
+    bool readServerHello(const ByteArray& buffer);
     void sendIdentify();
-    bool readServerKeyExchange(const base::ByteArray& buffer);
+    bool readServerKeyExchange(const ByteArray& buffer);
     void sendClientKeyExchange();
-    bool readSessionChallenge(const base::ByteArray& buffer);
+    bool readSessionChallenge(const ByteArray& buffer);
     void sendSessionResponse();
 
     enum class InternalState
@@ -64,20 +64,20 @@ private:
 
     InternalState internal_state_ = InternalState::SEND_CLIENT_HELLO;
 
-    base::ByteArray peer_public_key_;
+    ByteArray peer_public_key_;
     std::u16string username_;
     std::u16string password_;
 
-    base::BigNum N_;
-    base::BigNum g_;
-    base::BigNum s_;
-    base::BigNum B_;
-    base::BigNum a_;
-    base::BigNum A_;
+    BigNum N_;
+    BigNum g_;
+    BigNum s_;
+    BigNum B_;
+    BigNum a_;
+    BigNum A_;
 
     DISALLOW_COPY_AND_ASSIGN(ClientAuthenticator);
 };
 
-} // namespace peer
+} // namespace base
 
-#endif // PEER__CLIENT_AUTHENTICATOR_H
+#endif // BASE__PEER__CLIENT_AUTHENTICATOR_H

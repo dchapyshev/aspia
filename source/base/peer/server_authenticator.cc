@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "peer/server_authenticator.h"
+#include "base/peer/server_authenticator.h"
 
 #include "base/bitset.h"
 #include "base/cpuid.h"
@@ -27,11 +27,11 @@
 #include "base/crypto/random.h"
 #include "base/crypto/srp_constants.h"
 #include "base/crypto/srp_math.h"
+#include "base/peer/user.h"
 #include "base/strings/unicode.h"
 #include "build/version.h"
-#include "peer/user.h"
 
-namespace peer {
+namespace base {
 
 namespace {
 
@@ -39,7 +39,7 @@ constexpr size_t kIvSize = 12;
 
 } // namespace
 
-ServerAuthenticator::ServerAuthenticator(std::shared_ptr<base::TaskRunner> task_runner)
+ServerAuthenticator::ServerAuthenticator(std::shared_ptr<TaskRunner> task_runner)
     : Authenticator(std::move(task_runner))
 {
     // Nothing
@@ -53,7 +53,7 @@ void ServerAuthenticator::setUserList(std::shared_ptr<UserList> user_list)
     DCHECK(user_list_);
 }
 
-bool ServerAuthenticator::setPrivateKey(const base::ByteArray& private_key)
+bool ServerAuthenticator::setPrivateKey(const ByteArray& private_key)
 {
     // The method must be called before calling start().
     if (state() != State::STOPPED)
@@ -65,14 +65,14 @@ bool ServerAuthenticator::setPrivateKey(const base::ByteArray& private_key)
         return false;
     }
 
-    key_pair_ = base::KeyPair::fromPrivateKey(private_key);
+    key_pair_ = KeyPair::fromPrivateKey(private_key);
     if (!key_pair_.isValid())
     {
         LOG(LS_ERROR) << "Failed to load private key. Perhaps the key is incorrect";
         return false;
     }
 
-    encrypt_iv_ = base::Random::byteArray(kIvSize);
+    encrypt_iv_ = Random::byteArray(kIvSize);
     if (encrypt_iv_.empty())
     {
         LOG(LS_ERROR) << "An empty IV is not valid";
@@ -157,7 +157,7 @@ bool ServerAuthenticator::onStarted()
     return true;
 }
 
-void ServerAuthenticator::onReceived(const base::ByteArray& buffer)
+void ServerAuthenticator::onReceived(const ByteArray& buffer)
 {
     switch (internal_state_)
     {
@@ -239,12 +239,12 @@ void ServerAuthenticator::onWritten()
     }
 }
 
-void ServerAuthenticator::onClientHello(const base::ByteArray& buffer)
+void ServerAuthenticator::onClientHello(const ByteArray& buffer)
 {
     LOG(LS_INFO) << "Received: ClientHello";
 
     proto::ClientHello client_hello;
-    if (!base::parse(buffer, &client_hello))
+    if (!parse(buffer, &client_hello))
     {
         finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
         return;
@@ -291,8 +291,8 @@ void ServerAuthenticator::onClientHello(const base::ByteArray& buffer)
 
     if (key_pair_.isValid())
     {
-        base::ByteArray peer_public_key = base::fromStdString(client_hello.public_key());
-        decrypt_iv_ = base::fromStdString(client_hello.iv());
+        ByteArray peer_public_key = fromStdString(client_hello.public_key());
+        decrypt_iv_ = fromStdString(client_hello.iv());
 
         if (peer_public_key.empty() != decrypt_iv_.empty())
         {
@@ -302,14 +302,14 @@ void ServerAuthenticator::onClientHello(const base::ByteArray& buffer)
 
         if (!peer_public_key.empty() && !decrypt_iv_.empty())
         {
-            base::ByteArray temp = key_pair_.sessionKey(peer_public_key);
+            ByteArray temp = key_pair_.sessionKey(peer_public_key);
             if (temp.empty())
             {
                 finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
                 return;
             }
 
-            session_key_ = base::GenericHash::hash(base::GenericHash::Type::BLAKE2s256, temp);
+            session_key_ = GenericHash::hash(GenericHash::Type::BLAKE2s256, temp);
             if (session_key_.empty())
             {
                 finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
@@ -317,11 +317,11 @@ void ServerAuthenticator::onClientHello(const base::ByteArray& buffer)
             }
 
             DCHECK(!encrypt_iv_.empty());
-            server_hello.set_iv(base::toStdString(encrypt_iv_));
+            server_hello.set_iv(toStdString(encrypt_iv_));
         }
     }
 
-    if ((client_hello.encryption() & proto::ENCRYPTION_AES256_GCM) && base::CPUID::hasAesNi())
+    if ((client_hello.encryption() & proto::ENCRYPTION_AES256_GCM) && CPUID::hasAesNi())
     {
         LOG(LS_INFO) << "Both sides have hardware support AES. Using AES256 GCM";
         // If both sides of the connection support AES, then method AES256 GCM is the fastest option.
@@ -343,12 +343,12 @@ void ServerAuthenticator::onClientHello(const base::ByteArray& buffer)
     sendMessage(server_hello);
 }
 
-void ServerAuthenticator::onIdentify(const base::ByteArray& buffer)
+void ServerAuthenticator::onIdentify(const ByteArray& buffer)
 {
     LOG(LS_INFO) << "Received: Identify";
 
     proto::SrpIdentify identify;
-    if (!base::parse(buffer, &identify))
+    if (!parse(buffer, &identify))
     {
         finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
         return;
@@ -356,7 +356,7 @@ void ServerAuthenticator::onIdentify(const base::ByteArray& buffer)
 
     LOG(LS_INFO) << "Username:" << identify.username();
 
-    user_name_ = base::utf16FromUtf8(identify.username());
+    user_name_ = utf16FromUtf8(identify.username());
     if (user_name_.empty())
     {
         finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
@@ -370,13 +370,13 @@ void ServerAuthenticator::onIdentify(const base::ByteArray& buffer)
         {
             session_types_ = user.sessions;
 
-            std::optional<base::SrpNgPair> Ng_pair = base::pairByGroup(user.group);
+            std::optional<SrpNgPair> Ng_pair = pairByGroup(user.group);
             if (Ng_pair.has_value())
             {
-                N_ = base::BigNum::fromStdString(Ng_pair->first);
-                g_ = base::BigNum::fromStdString(Ng_pair->second);
-                s_ = base::BigNum::fromByteArray(user.salt);
-                v_ = base::BigNum::fromByteArray(user.verifier);
+                N_ = BigNum::fromStdString(Ng_pair->first);
+                g_ = BigNum::fromStdString(Ng_pair->second);
+                s_ = BigNum::fromByteArray(user.salt);
+                v_ = BigNum::fromByteArray(user.verifier);
                 break;
             }
             else
@@ -387,19 +387,19 @@ void ServerAuthenticator::onIdentify(const base::ByteArray& buffer)
 
         session_types_ = 0;
 
-        base::GenericHash hash(base::GenericHash::BLAKE2b512);
+        GenericHash hash(GenericHash::BLAKE2b512);
         hash.addData(user_list_->seedKey());
         hash.addData(identify.username());
 
-        N_ = base::BigNum::fromStdString(base::kSrpNgPair_8192.first);
-        g_ = base::BigNum::fromStdString(base::kSrpNgPair_8192.second);
-        s_ = base::BigNum::fromByteArray(hash.result());
-        v_ = base::SrpMath::calc_v(user_name_, user_list_->seedKey(), s_, N_, g_);
+        N_ = BigNum::fromStdString(kSrpNgPair_8192.first);
+        g_ = BigNum::fromStdString(kSrpNgPair_8192.second);
+        s_ = BigNum::fromByteArray(hash.result());
+        v_ = SrpMath::calc_v(user_name_, user_list_->seedKey(), s_, N_, g_);
     }
     while (false);
 
-    b_ = base::BigNum::fromByteArray(base::Random::byteArray(128)); // 1024 bits.
-    B_ = base::SrpMath::calc_B(b_, N_, g_, v_);
+    b_ = BigNum::fromByteArray(Random::byteArray(128)); // 1024 bits.
+    B_ = SrpMath::calc_B(b_, N_, g_, v_);
 
     if (!N_.isValid() || !g_.isValid() || !s_.isValid() || !B_.isValid())
     {
@@ -408,7 +408,7 @@ void ServerAuthenticator::onIdentify(const base::ByteArray& buffer)
     }
 
     internal_state_ = InternalState::SEND_SERVER_KEY_EXCHANGE;
-    encrypt_iv_ = base::Random::byteArray(kIvSize);
+    encrypt_iv_ = Random::byteArray(kIvSize);
 
     proto::SrpServerKeyExchange server_key_exchange;
 
@@ -416,25 +416,25 @@ void ServerAuthenticator::onIdentify(const base::ByteArray& buffer)
     server_key_exchange.set_generator(g_.toStdString());
     server_key_exchange.set_salt(s_.toStdString());
     server_key_exchange.set_b(B_.toStdString());
-    server_key_exchange.set_iv(base::toStdString(encrypt_iv_));
+    server_key_exchange.set_iv(toStdString(encrypt_iv_));
 
     LOG(LS_INFO) << "Sending: ServerKeyExchange";
     sendMessage(server_key_exchange);
 }
 
-void ServerAuthenticator::onClientKeyExchange(const base::ByteArray& buffer)
+void ServerAuthenticator::onClientKeyExchange(const ByteArray& buffer)
 {
     LOG(LS_INFO) << "Received: ClientKeyExchange";
 
     proto::SrpClientKeyExchange client_key_exchange;
-    if (!base::parse(buffer, &client_key_exchange))
+    if (!parse(buffer, &client_key_exchange))
     {
         finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
         return;
     }
 
-    A_ = base::BigNum::fromStdString(client_key_exchange.a());
-    decrypt_iv_ = base::fromStdString(client_key_exchange.iv());
+    A_ = BigNum::fromStdString(client_key_exchange.a());
+    decrypt_iv_ = fromStdString(client_key_exchange.iv());
 
     if (!A_.isValid() || decrypt_iv_.empty())
     {
@@ -442,7 +442,7 @@ void ServerAuthenticator::onClientKeyExchange(const base::ByteArray& buffer)
         return;
     }
 
-    base::ByteArray srp_key = createSrpKey();
+    ByteArray srp_key = createSrpKey();
     if (srp_key.empty())
     {
         finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
@@ -455,7 +455,7 @@ void ServerAuthenticator::onClientKeyExchange(const base::ByteArray& buffer)
         case proto::ENCRYPTION_AES256_GCM:
         case proto::ENCRYPTION_CHACHA20_POLY1305:
         {
-            base::GenericHash hash(base::GenericHash::BLAKE2s256);
+            GenericHash hash(GenericHash::BLAKE2s256);
 
             if (!session_key_.empty())
                 hash.addData(session_key_);
@@ -495,19 +495,19 @@ void ServerAuthenticator::doSessionChallenge()
 #error Not implemented
 #endif
 
-    session_challenge.set_computer_name(base::SysInfo::computerName());
-    session_challenge.set_cpu_cores(base::SysInfo::processorCores());
+    session_challenge.set_computer_name(SysInfo::computerName());
+    session_challenge.set_cpu_cores(SysInfo::processorCores());
 
     LOG(LS_INFO) << "Sending: SessionChallenge";
     sendMessage(session_challenge);
 }
 
-void ServerAuthenticator::onSessionResponse(const base::ByteArray& buffer)
+void ServerAuthenticator::onSessionResponse(const ByteArray& buffer)
 {
     LOG(LS_INFO) << "Received: SessionResponse";
 
     proto::SessionResponse session_response;
-    if (!base::parse(buffer, &session_response))
+    if (!parse(buffer, &session_response))
     {
         finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
         return;
@@ -521,7 +521,7 @@ void ServerAuthenticator::onSessionResponse(const base::ByteArray& buffer)
     LOG(LS_INFO) << "Client OS: " << osTypeToString(session_response.os_type());
     LOG(LS_INFO) << "Client CPU Cores: " << session_response.cpu_cores();
 
-    base::BitSet<uint32_t> session_type = session_response.session_type();
+    BitSet<uint32_t> session_type = session_response.session_type();
     if (session_type.count() != 1)
     {
         finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
@@ -539,18 +539,18 @@ void ServerAuthenticator::onSessionResponse(const base::ByteArray& buffer)
     finish(FROM_HERE, ErrorCode::SUCCESS);
 }
 
-base::ByteArray ServerAuthenticator::createSrpKey()
+ByteArray ServerAuthenticator::createSrpKey()
 {
-    if (!base::SrpMath::verify_A_mod_N(A_, N_))
+    if (!SrpMath::verify_A_mod_N(A_, N_))
     {
         LOG(LS_ERROR) << "SrpMath::verify_A_mod_N failed";
-        return base::ByteArray();
+        return ByteArray();
     }
 
-    base::BigNum u = base::SrpMath::calc_u(A_, B_, N_);
-    base::BigNum server_key = base::SrpMath::calcServerKey(A_, v_, u, b_, N_);
+    BigNum u = SrpMath::calc_u(A_, B_, N_);
+    BigNum server_key = SrpMath::calcServerKey(A_, v_, u, b_, N_);
 
     return server_key.toByteArray();
 }
 
-} // namespace peer
+} // namespace base

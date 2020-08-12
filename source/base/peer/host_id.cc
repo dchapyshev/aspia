@@ -16,10 +16,10 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "peer/host_id.h"
+#include "base/peer/host_id.h"
 
-namespace peer {
+namespace base {
 
 const HostId kInvalidHostId = 0;
 
-} // namespace peer
+} // namespace base

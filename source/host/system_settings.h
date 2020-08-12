@@ -24,7 +24,7 @@
 
 #include <filesystem>
 
-namespace peer {
+namespace base {
 class UserList;
 } // namespace peer
 
@@ -58,8 +58,8 @@ public:
     base::ByteArray hostKey() const;
     void setHostKey(const base::ByteArray& key);
 
-    peer::UserList userList() const;
-    void setUserList(const peer::UserList& user_list);
+    base::UserList userList() const;
+    void setUserList(const base::UserList& user_list);
 
     std::u16string updateServer() const;
     void setUpdateServer(const std::u16string& server);

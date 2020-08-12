@@ -1041,12 +1041,12 @@
 <context>
     <name>console::OpenAddressBookDialog</name>
     <message>
-        <location filename="../open_address_book_dialog.cc" line="41"/>
+        <location filename="../open_address_book_dialog.cc" line="42"/>
         <source>Without Encryption</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../open_address_book_dialog.cc" line="45"/>
+        <location filename="../open_address_book_dialog.cc" line="46"/>
         <source>ChaCha20 + Poly1305 (256-bit key)</source>
         <translation type="unfinished"></translation>
     </message>

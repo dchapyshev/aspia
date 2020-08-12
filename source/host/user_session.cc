@@ -50,7 +50,7 @@ UserSession::UserSession(std::shared_ptr<base::TaskRunner> task_runner,
 
 UserSession::~UserSession() = default;
 
-void UserSession::start(peer::HostId host_id, Delegate* delegate)
+void UserSession::start(base::HostId host_id, Delegate* delegate)
 {
     delegate_ = delegate;
     host_id_ = host_id;
@@ -109,13 +109,13 @@ void UserSession::restart(std::unique_ptr<base::IpcChannel> channel)
     delegate_->onUserSessionStarted();
 }
 
-peer::User UserSession::user() const
+base::User UserSession::user() const
 {
-    peer::User user = peer::User::create(
+    base::User user = base::User::create(
         base::utf16FromAscii(username_), base::utf16FromAscii(password_));
 
     user.sessions = proto::SESSION_TYPE_ALL;
-    user.flags = peer::User::ENABLED;
+    user.flags = base::User::ENABLED;
 
     return user;
 }
@@ -196,7 +196,7 @@ void UserSession::setSessionEvent(base::win::SessionStatus status, base::Session
     }
 }
 
-void UserSession::setHostId(peer::HostId host_id)
+void UserSession::setHostId(base::HostId host_id)
 {
     host_id_ = host_id;
     sendCredentials();

@@ -38,7 +38,7 @@ public:
 
     void onConnected(const base::Version& peer_version);
     void onDisconnected(base::NetworkChannel::ErrorCode error_code);
-    void onAccessDenied(peer::ClientAuthenticator::ErrorCode error_code);
+    void onAccessDenied(base::ClientAuthenticator::ErrorCode error_code);
     void onHostList(std::shared_ptr<proto::HostList> host_list);
     void onHostResult(std::shared_ptr<proto::HostResult> host_result);
     void onRelayList(std::shared_ptr<proto::RelayList> relay_list);

@@ -19,7 +19,7 @@
 #include "router/manager/main_window.h"
 
 #include "base/logging.h"
-#include "peer/user.h"
+#include "base/peer/user.h"
 #include "qt_base/application.h"
 #include "router/manager/user_dialog.h"
 #include "router/manager/router.h"
@@ -69,17 +69,17 @@ class UserTreeItem : public QTreeWidgetItem
 {
 public:
     explicit UserTreeItem(const proto::User& user)
-        : user(peer::User::parseFrom(user))
+        : user(base::User::parseFrom(user))
     {
         setText(0, QString::fromStdString(user.name()));
 
-        if (user.flags() & peer::User::ENABLED)
+        if (user.flags() & base::User::ENABLED)
             setIcon(0, QIcon(QLatin1String(":/img/user.png")));
         else
             setIcon(0, QIcon(QLatin1String(":/img/user-disabled.png")));
     }
 
-    peer::User user;
+    base::User user;
 
 private:
     DISALLOW_COPY_AND_ASSIGN(UserTreeItem);
@@ -212,29 +212,29 @@ void MainWindow::onDisconnected(base::NetworkChannel::ErrorCode error_code)
     status_dialog_->show();
 }
 
-void MainWindow::onAccessDenied(peer::ClientAuthenticator::ErrorCode error_code)
+void MainWindow::onAccessDenied(base::ClientAuthenticator::ErrorCode error_code)
 {
     const char* message;
 
     switch (error_code)
     {
-        case peer::ClientAuthenticator::ErrorCode::SUCCESS:
+        case base::ClientAuthenticator::ErrorCode::SUCCESS:
             message = QT_TR_NOOP("Authentication successfully completed.");
             break;
 
-        case peer::ClientAuthenticator::ErrorCode::NETWORK_ERROR:
+        case base::ClientAuthenticator::ErrorCode::NETWORK_ERROR:
             message = QT_TR_NOOP("Network authentication error.");
             break;
 
-        case peer::ClientAuthenticator::ErrorCode::PROTOCOL_ERROR:
+        case base::ClientAuthenticator::ErrorCode::PROTOCOL_ERROR:
             message = QT_TR_NOOP("Violation of the data exchange protocol.");
             break;
 
-        case peer::ClientAuthenticator::ErrorCode::ACCESS_DENIED:
+        case base::ClientAuthenticator::ErrorCode::ACCESS_DENIED:
             message = QT_TR_NOOP("An error occured while authenticating: wrong user name or password.");
             break;
 
-        case peer::ClientAuthenticator::ErrorCode::SESSION_DENIED:
+        case base::ClientAuthenticator::ErrorCode::SESSION_DENIED:
             message = QT_TR_NOOP("Specified session type is not allowed for the user.");
             break;
 
@@ -398,7 +398,7 @@ void MainWindow::addUser()
             ui.tree_users->topLevelItem(i))->user.name);
     }
 
-    UserDialog dialog(peer::User(), users, this);
+    UserDialog dialog(base::User(), users, this);
     if (dialog.exec() == QDialog::Accepted)
     {
         if (router_proxy_)

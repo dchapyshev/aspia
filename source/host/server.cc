@@ -70,7 +70,7 @@ void Server::start()
         std::bind(&Server::updateConfiguration, this, std::placeholders::_1, std::placeholders::_2));
 
     authenticator_manager_ =
-        std::make_unique<peer::ServerAuthenticatorManager>(task_runner_, this);
+        std::make_unique<base::ServerAuthenticatorManager>(task_runner_, this);
 
     user_session_manager_ = std::make_unique<UserSessionManager>(task_runner_);
     user_session_manager_->start(this);
@@ -109,7 +109,7 @@ void Server::onRouterDisconnected(base::NetworkChannel::ErrorCode error_code)
     LOG(LS_INFO) << "ROUTER DISCONNECTED";
 }
 
-void Server::onHostIdAssigned(peer::HostId host_id, const base::ByteArray& host_key)
+void Server::onHostIdAssigned(base::HostId host_id, const base::ByteArray& host_key)
 {
     LOG(LS_INFO) << "New host ID assigned: " << host_id;
 
@@ -128,7 +128,7 @@ void Server::onClientConnected(std::unique_ptr<base::NetworkChannel> channel)
     startAuthentication(std::move(channel));
 }
 
-void Server::onNewSession(peer::ServerAuthenticatorManager::SessionInfo&& session_info)
+void Server::onNewSession(base::ServerAuthenticatorManager::SessionInfo&& session_info)
 {
     std::unique_ptr<ClientSession> session = ClientSession::create(
         static_cast<proto::SessionType>(session_info.session_type), std::move(session_info.channel));
@@ -235,8 +235,8 @@ void Server::updateConfiguration(const std::filesystem::path& path, bool error)
 void Server::reloadUserList()
 {
     // Read the list of regular users.
-    std::shared_ptr<peer::UserList> user_list =
-        std::make_shared<peer::UserList>(settings_.userList());
+    std::shared_ptr<base::UserList> user_list =
+        std::make_shared<base::UserList>(settings_.userList());
 
     // Add a list of one-time users to the list of regular users.
     user_list->merge(user_session_manager_->userList());
