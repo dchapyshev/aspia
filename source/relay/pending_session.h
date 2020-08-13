@@ -21,12 +21,10 @@
 
 #include "base/waitable_timer.h"
 #include "base/memory/byte_array.h"
-#include "peer/peer_id.h"
-#include "proto/relay.pb.h"
+#include "base/peer/host_id.h"
+#include "proto/relay_peer.pb.h"
 
 #include <asio/ip/tcp.hpp>
-
-#include <optional>
 
 namespace base {
 class TaskRunner;
@@ -64,7 +62,7 @@ public:
     void stop();
 
     // Sets session credentials.
-    void setIdentify(const peer::PeerIdPair& id_pair, uint32_t key_id);
+    void setIdentify(uint32_t key_id, const base::ByteArray& secret);
 
     // Returns true if the other session is a pair and false otherwise.
     bool isPeerFor(const PendingSession& other) const;
@@ -85,7 +83,7 @@ private:
     uint32_t buffer_size_ = 0;
     std::array<uint8_t, 8192> buffer_;
 
-    std::optional<peer::PeerIdPair> id_pair_;
+    base::ByteArray secret_;
     uint32_t key_id_ = -1;
 
     DISALLOW_COPY_AND_ASSIGN(PendingSession);

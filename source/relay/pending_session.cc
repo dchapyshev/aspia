@@ -64,20 +64,18 @@ void PendingSession::stop()
     socket_.close(ignored_code);
 }
 
-void PendingSession::setIdentify(const peer::PeerIdPair& id_pair, uint32_t key_id)
+void PendingSession::setIdentify(uint32_t key_id, const base::ByteArray& secret)
 {
-    id_pair_ = id_pair;
+    secret_ = secret;
     key_id_ = key_id;
 }
 
 bool PendingSession::isPeerFor(const PendingSession& other) const
 {
-    if (!id_pair_.has_value() || !other.id_pair_.has_value())
+    if (secret_.empty() || other.secret_.empty())
         return false;
 
-    return other.id_pair_->first == id_pair_->second &&
-           other.id_pair_->second == id_pair_->first &&
-           key_id_ == other.key_id_;
+    return key_id_ == other.key_id_ && base::equals(secret_, other.secret_);
 }
 
 asio::ip::tcp::socket PendingSession::takeSocket()

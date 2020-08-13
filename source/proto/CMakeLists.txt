@@ -25,11 +25,12 @@ list(APPEND SOURCE_PROTO
     file_transfer.proto
     key_exchange.proto
     host_internal.proto
-    relay.proto
+    relay_peer.proto
     router_admin.proto
     router_client.proto
     router_common.proto
     router_host.proto
+    router_relay.proto
     system_info.proto)
 
 protobuf_generate_cpp(PROTO_CC_FILES PROTO_H_FILES ${SOURCE_PROTO})

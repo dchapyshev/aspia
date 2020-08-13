@@ -20,8 +20,8 @@
 
 #include "base/logging.h"
 #include "base/task_runner.h"
-#include "peer/client_authenticator.h"
-#include "proto/router.pb.h"
+#include "base/peer/client_authenticator.h"
+#include "proto/router_common.pb.h"
 #include "relay/session_manager.h"
 #include "relay/settings.h"
 
@@ -123,16 +123,16 @@ void Controller::onConnected()
     channel_->setKeepAlive(true, kKeepAliveTime, kKeepAliveInterval);
     channel_->setNoDelay(true);
 
-    authenticator_ = std::make_unique<peer::ClientAuthenticator>(task_runner_);
+    authenticator_ = std::make_unique<base::ClientAuthenticator>(task_runner_);
 
     authenticator_->setIdentify(proto::IDENTIFY_ANONYMOUS);
     authenticator_->setPeerPublicKey(router_public_key_);
     authenticator_->setSessionType(proto::ROUTER_SESSION_RELAY);
 
     authenticator_->start(std::move(channel_),
-                          [this](peer::ClientAuthenticator::ErrorCode error_code)
+                          [this](base::ClientAuthenticator::ErrorCode error_code)
     {
-        if (error_code == peer::ClientAuthenticator::ErrorCode::SUCCESS)
+        if (error_code == base::ClientAuthenticator::ErrorCode::SUCCESS)
         {
             // The authenticator takes the listener on itself, we return the receipt of
             // notifications.
@@ -147,7 +147,7 @@ void Controller::onConnected()
         else
         {
             LOG(LS_WARNING) << "Authentication failed: "
-                            << peer::ClientAuthenticator::errorToString(error_code);
+                            << base::ClientAuthenticator::errorToString(error_code);
             delayedConnectToRouter();
         }
 

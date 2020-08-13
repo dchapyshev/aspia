@@ -23,39 +23,32 @@
 #include "base/message_loop/message_loop.h"
 #include "base/message_loop/message_pump_asio.h"
 #include "base/crypto/message_decryptor_openssl.h"
-#include "peer/peer_id.h"
-
-#include <optional>
+#include "base/peer/host_id.h"
 
 namespace relay {
 
 namespace {
 
 // Decrypts an encrypted pair of peer identifiers using key |session_key|.
-std::optional<peer::PeerIdPair> decryptIdPair(
-    const proto::PeerToRelay& message, const SessionKey& session_key)
+base::ByteArray decryptSecret(const proto::PeerToRelay& message, const SessionKey& session_key)
 {
     std::unique_ptr<base::MessageDecryptor> decryptor =
         base::MessageDecryptorOpenssl::createForChaCha20Poly1305(
             session_key.sessionKey(message.public_key()), session_key.iv());
     if (!decryptor)
-        return std::nullopt;
+        return base::ByteArray();
 
     const std::string& source = message.data();
     if (source.empty())
-        return std::nullopt;
+        return base::ByteArray();
 
-    std::string target;
+    base::ByteArray target;
     target.resize(decryptor->decryptedDataSize(source.size()));
 
     if (!decryptor->decrypt(source.data(), source.size(), target.data()))
-        return std::nullopt;
+        return base::ByteArray();
 
-    proto::PeerToRelay::IdPair id_pair;
-    if (!id_pair.ParseFromString(target))
-        return std::nullopt;
-
-    return std::make_pair(id_pair.first(), id_pair.second());
+    return target;
 }
 
 // Removes a session from the list and returns a pointer to it.
@@ -114,11 +107,11 @@ void SessionManager::onPendingSessionReady(
     if (session_key.isValid())
     {
         // Decrypt the identifiers of peers.
-        std::optional<peer::PeerIdPair> id_pair = decryptIdPair(message, session_key);
-        if (id_pair.has_value())
+        base::ByteArray secret = decryptSecret(message, session_key);
+        if (!secret.empty())
         {
             // Save the identifiers of peers and the identifier of their shared key.
-            session->setIdentify(id_pair.value(), message.key_id());
+            session->setIdentify(message.key_id(), secret);
 
             // Trying to find a peer that wants to be connected.
             for (auto& other_session : pending_sessions_)

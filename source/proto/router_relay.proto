@@ -75,23 +75,3 @@ message RouterToRelay
 {
     RelayKeyPoolRequest key_pool_request = 1;
 }
-
-// Sent from peer to proxy for authentication.
-// If the authentication failed, then the connection should be dropped.
-message PeerToRelay
-{
-    message IdPair
-    {
-        fixed64 first  = 1;
-        fixed64 second = 2;
-    }
-
-    // Unique key identifier in the proxy pool.
-    uint32 key_id = 1;
-
-    // Public key of the peer.
-    bytes public_key = 2;
-
-    // Encrypted IdPair.
-    bytes data = 3;
-}

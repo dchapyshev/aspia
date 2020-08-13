@@ -21,12 +21,12 @@
 
 #include "base/waitable_timer.h"
 #include "base/net/network_channel.h"
-#include "proto/relay.pb.h"
+#include "proto/router_relay.pb.h"
 #include "relay/shared_pool.h"
 
-namespace peer {
+namespace base {
 class ClientAuthenticator;
-} // namespace peer
+} // namespace base
 
 namespace relay {
 
@@ -68,7 +68,7 @@ private:
     std::shared_ptr<base::TaskRunner> task_runner_;
     base::WaitableTimer reconnect_timer_;
     std::unique_ptr<base::NetworkChannel> channel_;
-    std::unique_ptr<peer::ClientAuthenticator> authenticator_;
+    std::unique_ptr<base::ClientAuthenticator> authenticator_;
     std::unique_ptr<SharedPool> shared_pool_;
     std::unique_ptr<SessionManager> session_manager_;
 

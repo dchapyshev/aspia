@@ -19,6 +19,7 @@
 #ifndef RELAY__SESSION_MANAGER_H
 #define RELAY__SESSION_MANAGER_H
 
+#include "proto/relay_peer.pb.h"
 #include "relay/pending_session.h"
 #include "relay/session.h"
 #include "relay/shared_pool.h"
