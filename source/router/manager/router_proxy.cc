@@ -33,7 +33,7 @@ public:
     void connectToRouter(const std::u16string& address, uint16_t port);
     void disconnectFromRouter();
     void refreshHostList();
-    void disconnectHost(uint64_t host_id);
+    void disconnectHost(base::HostId host_id);
     void refreshRelayList();
     void refreshUserList();
     void addUser(const proto::User& user);
@@ -97,7 +97,7 @@ void RouterProxy::Impl::refreshHostList()
         router_->refreshHostList();
 }
 
-void RouterProxy::Impl::disconnectHost(uint64_t host_id)
+void RouterProxy::Impl::disconnectHost(base::HostId host_id)
 {
     if (!io_task_runner_->belongsToCurrentThread())
     {

@@ -63,7 +63,7 @@ void Router::refreshHostList()
     channel_->send(base::serialize(message));
 }
 
-void Router::disconnectHost(uint64_t host_id)
+void Router::disconnectHost(base::HostId host_id)
 {
     LOG(LS_INFO) << "Sending disconnect host request (host_id: " << host_id << ")";
 

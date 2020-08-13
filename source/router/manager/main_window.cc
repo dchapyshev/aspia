@@ -46,7 +46,7 @@ public:
 
     ~HostTreeItem() = default;
 
-    uint64_t host_id;
+    base::HostId host_id;
 
 private:
     DISALLOW_COPY_AND_ASSIGN(HostTreeItem);
@@ -268,12 +268,20 @@ void MainWindow::onHostResult(std::shared_ptr<proto::HostResult> host_result)
 
         switch (host_result->error_code())
         {
+            case proto::HostResult::INVALID_REQUEST:
+                message = QT_TR_NOOP("Invalid request.");
+                break;
+
             case proto::HostResult::INTERNAL_ERROR:
                 message = QT_TR_NOOP("Unknown internal error.");
                 break;
 
-            case proto::HostResult::INVALID_DATA:
-                message = QT_TR_NOOP("Invalid data was passed.");
+            case proto::HostResult::INVALID_HOST_ID:
+                message = QT_TR_NOOP("Invalid host ID was passed.");
+                break;
+
+            case proto::HostResult::HOST_MISSED:
+                message = QT_TR_NOOP("The specified host is not connected to the router.");
                 break;
 
             default:

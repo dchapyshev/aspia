@@ -31,6 +31,7 @@ public:
     std::unique_ptr<proto::RelayList> relayList() const;
     std::unique_ptr<proto::HostList> hostList() const;
 
+    bool disconnectHost(base::HostId host_id);
     void onHostSessionWithId(SessionHost* session);
 
 private:

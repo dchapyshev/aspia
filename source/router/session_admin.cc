@@ -55,11 +55,11 @@ void SessionAdmin::onMessageReceived(const base::ByteArray& buffer)
 
     if (message.has_host_list_request())
     {
-        doPeerListRequest();
+        doHostListRequest();
     }
     else if (message.has_host_request())
     {
-        LOG(LS_INFO) << "PEER REQUEST";
+        doHostRequest(message.host_request());
     }
     else if (message.has_relay_list_request())
     {
@@ -138,13 +138,51 @@ void SessionAdmin::doRelayListRequest()
     sendMessage(message);
 }
 
-void SessionAdmin::doPeerListRequest()
+void SessionAdmin::doHostListRequest()
 {
     proto::RouterToAdmin message;
 
     message.set_allocated_host_list(server_proxy_->hostList().release());
     if (!message.has_host_list())
         message.mutable_host_list()->set_error_code(proto::HostList::UNKNOWN_ERROR);
+
+    sendMessage(message);
+}
+
+void SessionAdmin::doHostRequest(const proto::HostRequest& request)
+{
+    proto::RouterToAdmin message;
+    proto::HostResult* host_result = message.mutable_host_result();
+    host_result->set_type(request.type());
+
+    if (request.type() == proto::HOST_REQUEST_DISCONNECT)
+    {
+        base::HostId host_id = request.host().host_id();
+
+        if (host_id == base::kInvalidHostId)
+        {
+            LOG(LS_INFO) << "Invalid host ID";
+            host_result->set_error_code(proto::HostResult::INVALID_HOST_ID);
+        }
+        else
+        {
+            if (!server_proxy_->disconnectHost(host_id))
+            {
+                LOG(LS_WARNING) << "Host not found: " << host_id;
+                host_result->set_error_code(proto::HostResult::HOST_MISSED);
+            }
+            else
+            {
+                LOG(LS_INFO) << "Host '" << host_id << "' disconnected by " << userName();
+                host_result->set_error_code(proto::HostResult::SUCCESS);
+            }
+        }
+    }
+    else
+    {
+        LOG(LS_WARNING) << "Unknown host request: " << request.type();
+        host_result->set_error_code(proto::HostResult::INVALID_REQUEST);
+    }
 
     sendMessage(message);
 }

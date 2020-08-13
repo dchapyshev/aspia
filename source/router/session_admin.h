@@ -46,7 +46,8 @@ private:
     void doUserListRequest();
     void doUserRequest(const proto::UserRequest& request);
     void doRelayListRequest();
-    void doPeerListRequest();
+    void doHostListRequest();
+    void doHostRequest(const proto::HostRequest& request);
 
     proto::UserResult::ErrorCode addUser(const proto::User& user);
     proto::UserResult::ErrorCode modifyUser(const proto::User& user);

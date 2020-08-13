@@ -170,6 +170,25 @@ std::unique_ptr<proto::HostList> Server::hostList() const
     return result;
 }
 
+bool Server::disconnectHost(base::HostId host_id)
+{
+    for (auto it = sessions_.begin(); it != sessions_.end(); ++it)
+    {
+        Session* entry = it->get();
+
+        if (entry->sessionType() != proto::ROUTER_SESSION_HOST)
+            continue;
+
+        if (static_cast<SessionHost*>(entry)->hostId() == host_id)
+        {
+            it = sessions_.erase(it);
+            return true;
+        }
+    }
+
+    return false;
+}
+
 void Server::onHostSessionWithId(SessionHost* session)
 {
     base::HostId host_id = session->hostId();

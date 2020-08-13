@@ -21,6 +21,7 @@
 
 #include "base/macros_magic.h"
 #include "base/peer/client_authenticator.h"
+#include "base/peer/host_id.h"
 #include "proto/router_admin.pb.h"
 
 namespace base {
@@ -44,7 +45,7 @@ public:
     void connectToRouter(std::u16string_view address, uint16_t port);
 
     void refreshHostList();
-    void disconnectHost(uint64_t host_id);
+    void disconnectHost(base::HostId host_id);
     void refreshRelayList();
     void refreshUserList();
     void addUser(const proto::User& user);

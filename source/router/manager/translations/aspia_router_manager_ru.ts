@@ -423,40 +423,54 @@
     </message>
     <message>
         <location filename="../main_window.cc" line="272"/>
-        <location filename="../main_window.cc" line="320"/>
+        <source>Invalid request.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main_window.cc" line="276"/>
+        <location filename="../main_window.cc" line="328"/>
         <source>Unknown internal error.</source>
         <translation>Неизвестная внутренняя ошибка.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="276"/>
-        <location filename="../main_window.cc" line="324"/>
+        <location filename="../main_window.cc" line="280"/>
+        <source>Invalid host ID was passed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main_window.cc" line="284"/>
+        <source>The specified host is not connected to the router.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main_window.cc" line="332"/>
         <source>Invalid data was passed.</source>
         <translation>Были переданы неверные данные.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="280"/>
-        <location filename="../main_window.cc" line="332"/>
+        <location filename="../main_window.cc" line="288"/>
+        <location filename="../main_window.cc" line="340"/>
         <source>Unknown error type.</source>
         <translation>Неизвестный тип ошибки.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="328"/>
+        <location filename="../main_window.cc" line="336"/>
         <source>A user with the specified name already exists.</source>
         <translation>Пользователь с указанным именем уже существует.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="445"/>
+        <location filename="../main_window.cc" line="453"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="446"/>
+        <location filename="../main_window.cc" line="454"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation>Вы действительно хотите удалить пользователя &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="284"/>
-        <location filename="../main_window.cc" line="336"/>
+        <location filename="../main_window.cc" line="292"/>
+        <location filename="../main_window.cc" line="344"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>

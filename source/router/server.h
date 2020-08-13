@@ -20,6 +20,7 @@
 #define ROUTER__SERVER_H
 
 #include "base/net/network_server.h"
+#include "base/peer/host_id.h"
 #include "base/peer/server_authenticator_manager.h"
 #include "proto/router_admin.pb.h"
 #include "router/session.h"
@@ -43,6 +44,7 @@ public:
 
     std::unique_ptr<proto::RelayList> relayList() const;
     std::unique_ptr<proto::HostList> hostList() const;
+    bool disconnectHost(base::HostId host_id);
     void onHostSessionWithId(SessionHost* session);
 
 protected:

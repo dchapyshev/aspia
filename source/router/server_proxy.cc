@@ -49,6 +49,14 @@ std::unique_ptr<proto::HostList> ServerProxy::hostList() const
     return server_->hostList();
 }
 
+bool ServerProxy::disconnectHost(base::HostId host_id)
+{
+    if (!server_)
+        return false;
+
+    return server_->disconnectHost(host_id);
+}
+
 void ServerProxy::onHostSessionWithId(SessionHost* session)
 {
     if (!server_)
