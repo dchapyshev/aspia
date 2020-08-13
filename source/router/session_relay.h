@@ -19,7 +19,7 @@
 #ifndef ROUTER__SESSION_RELAY_H
 #define ROUTER__SESSION_RELAY_H
 
-#include "proto/relay.pb.h"
+#include "proto/router_relay.pb.h"
 #include "router/session.h"
 
 namespace router {
