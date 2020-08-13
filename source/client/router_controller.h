@@ -16,31 +16,43 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST__ROUTER_CONTROLLER_H
-#define HOST__ROUTER_CONTROLLER_H
+#ifndef CLIENT__ROUTER_CONTROLLER_H
+#define CLIENT__ROUTER_CONTROLLER_H
 
 #include "base/waitable_timer.h"
 #include "base/net/network_channel.h"
+#include "base/peer/authenticator.h"
 #include "base/peer/host_id.h"
 
 namespace base {
 class ClientAuthenticator;
 } // namespace base
 
-namespace host {
+namespace client {
 
 class RouterController : public base::NetworkChannel::Listener
 {
 public:
-    explicit RouterController(std::shared_ptr<base::TaskRunner> task_runner);
-    ~RouterController();
-
     struct RouterInfo
     {
         std::u16string address;
         uint16_t port = 0;
-        base::ByteArray public_key;
-        base::ByteArray host_key;
+        std::u16string username;
+        std::u16string password;
+    };
+
+    enum class ErrorType
+    {
+        NETWORK,
+        AUTHENTICATION,
+        ROUTER
+    };
+
+    enum class ErrorCode
+    {
+        SUCCESS,
+        PEER_NOT_FOUND,
+        ACCESS_DENIED
     };
 
     class Delegate
@@ -48,19 +60,18 @@ public:
     public:
         virtual ~Delegate() = default;
 
-        virtual void onRouterConnected() = 0;
-        virtual void onRouterDisconnected(base::NetworkChannel::ErrorCode error_code) = 0;
-        virtual void onHostIdAssigned(base::HostId host_id, const base::ByteArray& host_key) = 0;
-        virtual void onClientConnected(std::unique_ptr<base::NetworkChannel> channel) = 0;
+        virtual void onHostConnected(std::unique_ptr<base::NetworkChannel> channel) = 0;
+        virtual void onErrorOccurred(ErrorType error_type) = 0;
     };
 
-    void start(const RouterInfo& router_info, Delegate* delegate);
+    RouterController(const RouterInfo& router_info, std::shared_ptr<base::TaskRunner> task_runner);
+    ~RouterController();
 
-    const std::u16string& address() const { return router_info_.address; }
-    uint16_t port() const { return router_info_.port; }
-    const base::ByteArray& publicKey() const { return router_info_.public_key; }
-    const base::ByteArray& hostKey() const { return router_info_.host_key; }
-    base::HostId hostId() const { return host_id_; }
+    void connectTo(base::HostId host_id, Delegate* delegate);
+
+    base::NetworkChannel::ErrorCode networkError() const { return network_error_; }
+    base::Authenticator::ErrorCode authenticationError() const { return authentication_error_; }
+    ErrorCode routerError() const { return router_error_; }
 
 protected:
     // base::NetworkChannel::Listener implementation.
@@ -70,21 +81,21 @@ protected:
     void onMessageWritten(size_t pending) override;
 
 private:
-    void connectToRouter();
-    void delayedConnectToRouter();
-
-    Delegate* delegate_ = nullptr;
-
     std::shared_ptr<base::TaskRunner> task_runner_;
     std::unique_ptr<base::NetworkChannel> channel_;
     std::unique_ptr<base::ClientAuthenticator> authenticator_;
-    base::WaitableTimer reconnect_timer_;
-    base::HostId host_id_ = base::kInvalidHostId;
     RouterInfo router_info_;
+
+    base::HostId host_id_ = base::kInvalidHostId;
+    Delegate* delegate_ = nullptr;
+
+    base::NetworkChannel::ErrorCode network_error_ = base::NetworkChannel::ErrorCode::SUCCESS;
+    base::Authenticator::ErrorCode authentication_error_ = base::Authenticator::ErrorCode::SUCCESS;
+    ErrorCode router_error_ = ErrorCode::SUCCESS;
 
     DISALLOW_COPY_AND_ASSIGN(RouterController);
 };
 
-} // namespace host
+} // namespace client
 
-#endif // HOST__ROUTER_CONTROLLER_H
+#endif // CLIENT__ROUTER_CONTROLLER_H

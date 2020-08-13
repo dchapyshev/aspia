@@ -64,6 +64,8 @@ list(APPEND SOURCE_CLIENT
     frame_factory.h
     input_event_filter.cc
     input_event_filter.h
+    router_controller.cc
+    router_controller.h
     status_window.h
     status_window_proxy.cc
     status_window_proxy.h)

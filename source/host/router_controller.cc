@@ -38,10 +38,7 @@ RouterController::RouterController(std::shared_ptr<base::TaskRunner> task_runner
     // TODO
 }
 
-RouterController::~RouterController()
-{
-    // TODO
-}
+RouterController::~RouterController() = default;
 
 void RouterController::start(const RouterInfo& router_info, Delegate* delegate)
 {
