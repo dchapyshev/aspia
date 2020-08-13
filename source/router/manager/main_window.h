@@ -63,6 +63,7 @@ protected:
 private:
     void refreshHostList();
     void disconnectHost();
+    void disconnectAllHosts();
     void refreshRelayList();
     void refreshUserList();
     void addUser();

@@ -83,6 +83,13 @@
            </widget>
           </item>
           <item>
+           <widget class="QPushButton" name="button_disconnect_all_hosts">
+            <property name="text">
+             <string>Disconnect All</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="QPushButton" name="button_refresh_hosts">
             <property name="text">
              <string>Refresh</string>

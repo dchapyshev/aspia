@@ -96,6 +96,7 @@ MainWindow::MainWindow(QWidget* parent)
 
     connect(ui.button_refresh_hosts, &QPushButton::released, this, &MainWindow::refreshHostList);
     connect(ui.button_disconnect_host, &QPushButton::released, this, &MainWindow::disconnectHost);
+    connect(ui.button_disconnect_all_hosts, &QPushButton::released, this, &MainWindow::disconnectAllHosts);
     connect(ui.button_refresh_relay, &QPushButton::released, this, &MainWindow::refreshRelayList);
     connect(ui.button_refresh_users, &QPushButton::released, this, &MainWindow::refreshUserList);
     connect(ui.button_add_user, &QPushButton::released, this, &MainWindow::addUser);
@@ -375,6 +376,21 @@ void MainWindow::disconnectHost()
     {
         beforeRequest();
         router_proxy_->disconnectHost(tree_item->host_id);
+    }
+}
+
+void MainWindow::disconnectAllHosts()
+{
+    if (!router_proxy_)
+        return;
+
+    beforeRequest();
+
+    for (int i = 0; i < ui.tree_hosts->topLevelItemCount(); ++i)
+    {
+        HostTreeItem* tree_item = static_cast<HostTreeItem*>(ui.tree_hosts->topLevelItem(i));
+        if (tree_item)
+            router_proxy_->disconnectHost(tree_item->host_id);
     }
 }
 
