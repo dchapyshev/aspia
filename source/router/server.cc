@@ -26,6 +26,7 @@
 #include "router/database_sqlite.h"
 #include "router/server_proxy.h"
 #include "router/session_admin.h"
+#include "router/session_client.h"
 #include "router/session_host.h"
 #include "router/session_relay.h"
 #include "router/settings.h"
@@ -240,7 +241,8 @@ void Server::onNewSession(base::ServerAuthenticatorManager::SessionInfo&& sessio
     {
         case proto::ROUTER_SESSION_CLIENT:
         {
-            // TODO
+            session = std::make_unique<SessionClient>(
+                std::move(session_info.channel), database_factory_, server_proxy_);
         }
         break;
 

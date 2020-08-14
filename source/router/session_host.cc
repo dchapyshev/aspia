@@ -52,10 +52,9 @@ void SessionHost::onSessionReady()
 void SessionHost::onMessageReceived(const base::ByteArray& buffer)
 {
     proto::HostToRouter message;
-
     if (!base::parse(buffer, &message))
     {
-        LOG(LS_ERROR) << "Could not read message from peer";
+        LOG(LS_ERROR) << "Could not read message from host";
         return;
     }
 
@@ -71,7 +70,7 @@ void SessionHost::onMessageReceived(const base::ByteArray& buffer)
             return;
         }
 
-        LOG(LS_WARNING) << "Unhandled message from peer";
+        LOG(LS_WARNING) << "Unhandled message from host";
     }
 }
 
