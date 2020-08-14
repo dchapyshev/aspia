@@ -464,12 +464,24 @@
         <translation>Пользователь с указанным именем уже существует.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="469"/>
+        <location filename="../main_window.cc" line="376"/>
+        <location filename="../main_window.cc" line="397"/>
+        <location filename="../main_window.cc" line="486"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="470"/>
+        <location filename="../main_window.cc" line="377"/>
+        <source>Are you sure you want to disconnect host with ID &quot;%1&quot;?</source>
+        <translation>Вы действительно хотите отключить хост с ID &quot;%1&quot;?</translation>
+    </message>
+    <message>
+        <location filename="../main_window.cc" line="398"/>
+        <source>Are you sure you want to disconnect all hosts?</source>
+        <translation>Вы действительно хотите отключить все хосты?</translation>
+    </message>
+    <message>
+        <location filename="../main_window.cc" line="487"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation>Вы действительно хотите удалить пользователя &quot;%1&quot;?</translation>
     </message>

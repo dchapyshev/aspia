@@ -372,6 +372,15 @@ void MainWindow::disconnectHost()
     if (!tree_item)
         return;
 
+    if (QMessageBox::question(this,
+                              tr("Confirmation"),
+                              tr("Are you sure you want to disconnect host with ID \"%1\"?")
+                              .arg(tree_item->host_id),
+                              QMessageBox::Yes | QMessageBox::No) == QMessageBox::No)
+    {
+        return;
+    }
+
     if (router_proxy_)
     {
         beforeRequest();
@@ -383,6 +392,14 @@ void MainWindow::disconnectAllHosts()
 {
     if (!router_proxy_)
         return;
+
+    if (QMessageBox::question(this,
+                              tr("Confirmation"),
+                              tr("Are you sure you want to disconnect all hosts?"),
+                              QMessageBox::Yes | QMessageBox::No) == QMessageBox::No)
+    {
+        return;
+    }
 
     beforeRequest();
 
