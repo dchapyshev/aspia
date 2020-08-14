@@ -11,5 +11,6 @@
 *.res
 *.exe
 
-# SW build dir
+# SW build dir and generated files
 .sw
+/*.lnk
