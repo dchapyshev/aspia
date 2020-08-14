@@ -496,6 +496,7 @@ if (BUILD_UNIT_TESTS)
         ${SOURCE_BASE_WIN_UNIT_TESTS})
     target_link_libraries(aspia_base_tests
         aspia_base
+        aspia_proto
         optimized gtest
         debug gtestd
         ${WINDOWS_LIBS}
