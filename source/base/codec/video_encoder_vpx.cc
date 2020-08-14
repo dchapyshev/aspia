@@ -24,7 +24,6 @@
 
 #include <libyuv/convert.h>
 #include <libyuv/cpu_id.h>
-#include <libyuv/row.h>
 
 #include <thread>
 
@@ -166,43 +165,6 @@ Rect alignRect(const Rect& rect)
     int bottom = roundToTwosMultiple(rect.bottom() + 1);
 
     return Rect::makeLTRB(x, y, right, bottom);
-}
-
-int ARGBToGrayscaleI420(const uint8_t* src_argb,
-                        int src_stride_argb,
-                        uint8_t* dst_y, int dst_stride_y,
-                        uint8_t* /* dst_u */, int /* dst_stride_u */,
-                        uint8_t* /* dst_v */, int /* dst_stride_v */,
-                        int width, int height)
-{
-    auto ARGBToYRow = libyuv::ARGBToYRow_C;
-
-    if (libyuv::TestCpuFlag(libyuv::kCpuHasSSSE3))
-    {
-        ARGBToYRow = libyuv::ARGBToYRow_Any_SSSE3;
-        if (IS_ALIGNED(width, 16))
-            ARGBToYRow = libyuv::ARGBToYRow_SSSE3;
-    }
-
-    if (libyuv::TestCpuFlag(libyuv::kCpuHasAVX2))
-    {
-        ARGBToYRow = libyuv::ARGBToYRow_Any_AVX2;
-        if (IS_ALIGNED(width, 32))
-            ARGBToYRow = libyuv::ARGBToYRow_AVX2;
-    }
-
-    for (int y = 0; y < height - 1; y += 2)
-    {
-        ARGBToYRow(src_argb, dst_y, width);
-        ARGBToYRow(src_argb + src_stride_argb, dst_y + dst_stride_y, width);
-        src_argb += src_stride_argb * 2;
-        dst_y += dst_stride_y * 2;
-    }
-
-    if (height & 1)
-        ARGBToYRow(src_argb, dst_y, width);
-
-    return 0;
 }
 
 } // namespace
@@ -440,10 +402,6 @@ int64_t VideoEncoderVPX::prepareImageAndActiveMap(
     uint8_t* u_data = image_->planes[1];
     uint8_t* v_data = image_->planes[2];
 
-    auto convertToI420 = libyuv::ARGBToI420;
-    if (bitrate_filter_.targetBitrateKbps() < 32)
-        convertToI420 = ARGBToGrayscaleI420;
-
     int64_t updated_area = 0;
 
     for (Region::Iterator it(updated_region); !it.isAtEnd(); it.advance())
@@ -455,13 +413,13 @@ int64_t VideoEncoderVPX::prepareImageAndActiveMap(
         const int width = rect.width();
         const int height = rect.height();
 
-        convertToI420(frame->frameDataAtPos(rect.topLeft()),
-                      frame->stride(),
-                      y_data + y_offset, y_stride,
-                      u_data + uv_offset, uv_stride,
-                      v_data + uv_offset, uv_stride,
-                      width,
-                      height);
+        libyuv::ARGBToI420(frame->frameDataAtPos(rect.topLeft()),
+                           frame->stride(),
+                           y_data + y_offset, y_stride,
+                           u_data + uv_offset, uv_stride,
+                           v_data + uv_offset, uv_stride,
+                           width,
+                           height);
 
         updated_area += width * height;
         addRectToActiveMap(rect);
