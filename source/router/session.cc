@@ -59,6 +59,16 @@ void Session::setVersion(const base::Version& version)
     version_ = version;
 }
 
+void Session::setOsName(const std::u16string& os_name)
+{
+    os_name_ = os_name;
+}
+
+void Session::setComputerName(const std::u16string& computer_name)
+{
+    computer_name_ = computer_name;
+}
+
 void Session::setUserName(const std::u16string& username)
 {
     username_ = username;

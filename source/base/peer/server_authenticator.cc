@@ -489,12 +489,7 @@ void ServerAuthenticator::doSessionChallenge()
     version->set_minor(ASPIA_VERSION_MINOR);
     version->set_patch(ASPIA_VERSION_PATCH);
 
-#if defined(OS_WIN)
-    session_challenge.set_os_type(proto::OS_TYPE_WINDOWS);
-#else
-#error Not implemented
-#endif
-
+    session_challenge.set_os_name(SysInfo::operatingSystemName());
     session_challenge.set_computer_name(SysInfo::computerName());
     session_challenge.set_cpu_cores(SysInfo::processorCores());
 
@@ -514,11 +509,13 @@ void ServerAuthenticator::onSessionResponse(const ByteArray& buffer)
     }
 
     setPeerVersion(session_response.version());
+    setPeerOsName(session_response.os_name());
+    setPeerComputerName(session_response.computer_name());
 
     LOG(LS_INFO) << "Client Session Type: " << session_response.session_type();
     LOG(LS_INFO) << "Client Version: " << peerVersion();
     LOG(LS_INFO) << "Client Name: " << session_response.computer_name();
-    LOG(LS_INFO) << "Client OS: " << osTypeToString(session_response.os_type());
+    LOG(LS_INFO) << "Client OS: " << session_response.os_name();
     LOG(LS_INFO) << "Client CPU Cores: " << session_response.cpu_cores();
 
     BitSet<uint32_t> session_type = session_response.session_type();

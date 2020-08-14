@@ -59,6 +59,8 @@ public:
     [[nodiscard]] proto::Identify identify() const { return identify_; }
     [[nodiscard]] proto::Encryption encryption() const { return encryption_; }
     [[nodiscard]] const Version& peerVersion() const { return peer_version_; }
+    [[nodiscard]] const std::u16string& peerOsName() const { return peer_os_name_; }
+    [[nodiscard]] const std::u16string& peerComputerName() const { return peer_computer_name_; }
     [[nodiscard]] uint32_t sessionType() const { return session_type_; }
     [[nodiscard]] const std::u16string& userName() const { return user_name_; }
 
@@ -68,7 +70,6 @@ public:
     // Releases network channel.
     [[nodiscard]] std::unique_ptr<NetworkChannel> takeChannel();
 
-    static const char* osTypeToString(proto::OsType os_type);
     static const char* stateToString(State state);
     static const char* errorToString(Authenticator::ErrorCode error_code);
 
@@ -80,6 +81,8 @@ protected:
     void sendMessage(const google::protobuf::MessageLite& message);
     void finish(const Location& location, ErrorCode error_code);
     void setPeerVersion(const proto::Version& version);
+    void setPeerOsName(const std::string& name);
+    void setPeerComputerName(const std::string& name);
 
     // base::NetworkChannel::Listener implementation.
     void onConnected() final;
@@ -104,6 +107,8 @@ private:
     Callback callback_;
     State state_ = State::STOPPED;
     Version peer_version_; // Remote peer version.
+    std::u16string peer_os_name_;
+    std::u16string peer_computer_name_;
 };
 
 } // namespace base

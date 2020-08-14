@@ -22,6 +22,7 @@
 #include "base/logging.h"
 #include "base/crypto/message_decryptor_openssl.h"
 #include "base/crypto/message_encryptor_openssl.h"
+#include "base/strings/unicode.h"
 
 namespace base {
 
@@ -71,31 +72,6 @@ std::unique_ptr<NetworkChannel> Authenticator::takeChannel()
         return nullptr;
 
     return std::move(channel_);
-}
-
-// static
-const char* Authenticator::osTypeToString(proto::OsType os_type)
-{
-    switch (os_type)
-    {
-        case proto::OS_TYPE_WINDOWS:
-            return "Windows";
-
-        case proto::OS_TYPE_LINUX:
-            return "Linux";
-
-        case proto::OS_TYPE_ANDROID:
-            return "Android";
-
-        case proto::OS_TYPE_OSX:
-            return "OSX";
-
-        case proto::OS_TYPE_IOS:
-            return "IOS";
-
-        default:
-            return "Unknown";
-    }
 }
 
 // static
@@ -174,6 +150,16 @@ void Authenticator::finish(const Location& location, ErrorCode error_code)
 void Authenticator::setPeerVersion(const proto::Version& version)
 {
     peer_version_ = Version(version.major(), version.minor(), version.patch());
+}
+
+void Authenticator::setPeerOsName(const std::string& name)
+{
+    peer_os_name_ = utf16FromUtf8(name);
+}
+
+void Authenticator::setPeerComputerName(const std::string& name)
+{
+    peer_computer_name_ = utf16FromUtf8(name);
 }
 
 void Authenticator::onConnected()

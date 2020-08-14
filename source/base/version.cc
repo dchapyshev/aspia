@@ -255,6 +255,40 @@ const std::string Version::toString() const
     return version_str;
 }
 
+proto::Version Version::toProto() const
+{
+    proto::Version proto_version;
+
+    for (size_t i = 0; i < components_.size(); ++i)
+    {
+        switch (i)
+        {
+            case 0:
+                proto_version.set_major(components_[i]);
+                break;
+
+            case 1:
+                proto_version.set_minor(components_[i]);
+                break;
+
+            case 2:
+                proto_version.set_patch(components_[i]);
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    return proto_version;
+}
+
+// static
+Version Version::fromProto(const proto::Version& proto_version)
+{
+    return Version(proto_version.major(), proto_version.minor(), proto_version.patch());
+}
+
 bool operator==(const Version& v1, const Version& v2)
 {
     return v1.compareTo(v2) == 0;

@@ -404,10 +404,12 @@ bool ClientAuthenticator::readSessionChallenge(const ByteArray& buffer)
     }
 
     setPeerVersion(challenge.version());
+    setPeerOsName(challenge.os_name());
+    setPeerComputerName(challenge.computer_name());
 
     LOG(LS_INFO) << "Server Version: " << peerVersion();
     LOG(LS_INFO) << "Server Name: " << challenge.computer_name();
-    LOG(LS_INFO) << "Server OS: " << osTypeToString(challenge.os_type());
+    LOG(LS_INFO) << "Server OS: " << challenge.os_name();
     LOG(LS_INFO) << "Server CPU Cores: " << challenge.cpu_cores();
 
     return true;
@@ -423,12 +425,7 @@ void ClientAuthenticator::sendSessionResponse()
     version->set_minor(ASPIA_VERSION_MINOR);
     version->set_patch(ASPIA_VERSION_PATCH);
 
-#if defined(OS_WIN)
-    response.set_os_type(proto::OS_TYPE_WINDOWS);
-#else
-#error Not implemented
-#endif
-
+    response.set_os_name(SysInfo::operatingSystemName());
     response.set_computer_name(SysInfo::computerName());
     response.set_cpu_cores(SysInfo::processorCores());
 

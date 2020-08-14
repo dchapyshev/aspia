@@ -42,6 +42,12 @@ public:
     {
         setText(0, QString::number(host.host_id()));
         setText(1, QString::fromStdString(host.ip_address()));
+        setText(2, QString("%1.%2.%3")
+                .arg(host.version().major())
+                .arg(host.version().minor())
+                .arg(host.version().patch()));
+        setText(3, QString::fromStdString(host.computer_name()));
+        setText(4, QString::fromStdString(host.os_name()));
     }
 
     ~HostTreeItem() = default;
@@ -52,17 +58,23 @@ private:
     DISALLOW_COPY_AND_ASSIGN(HostTreeItem);
 };
 
-class ProxyTreeItem : public QTreeWidgetItem
+class RelayTreeItem : public QTreeWidgetItem
 {
 public:
-    explicit ProxyTreeItem(const proto::Relay& relay)
+    explicit RelayTreeItem(const proto::Relay& relay)
     {
         setText(0, QString::fromStdString(relay.address()));
         setText(1, QString::number(relay.pool_size()));
+        setText(2, QString("%1.%2.%3")
+                .arg(relay.version().major())
+                .arg(relay.version().minor())
+                .arg(relay.version().patch()));
+        setText(3, QString::fromStdString(relay.computer_name()));
+        setText(4, QString::fromStdString(relay.os_name()));
     }
 
 private:
-    DISALLOW_COPY_AND_ASSIGN(ProxyTreeItem);
+    DISALLOW_COPY_AND_ASSIGN(RelayTreeItem);
 };
 
 class UserTreeItem : public QTreeWidgetItem
@@ -256,7 +268,10 @@ void MainWindow::onHostList(std::shared_ptr<proto::HostList> host_list)
 
     for (int i = 0; i < host_size; ++i)
         ui.tree_hosts->addTopLevelItem(new HostTreeItem(host_list->host(i)));
-    ui.label_connections_count->setText(QString::number(host_size));
+    ui.label_hosts_conn_count->setText(QString::number(host_size));
+
+    for (int i = 0; i < ui.tree_hosts->columnCount(); ++i)
+        ui.tree_hosts->resizeColumnToContents(i);
 
     afterRequest();
 }
@@ -301,8 +316,13 @@ void MainWindow::onRelayList(std::shared_ptr<proto::RelayList> relay_list)
 {
     ui.tree_relay->clear();
 
-    for (int i = 0; i < relay_list->relay_size(); ++i)
-        ui.tree_relay->addTopLevelItem(new ProxyTreeItem(relay_list->relay(i)));
+    int relay_size = relay_list->relay_size();
+    for (int i = 0; i < relay_size; ++i)
+        ui.tree_relay->addTopLevelItem(new RelayTreeItem(relay_list->relay(i)));
+    ui.label_relay_conn_count->setText(QString::number(relay_size));
+
+    for (int i = 0; i < ui.tree_relay->columnCount(); ++i)
+        ui.tree_relay->resizeColumnToContents(i);
 
     afterRequest();
 }

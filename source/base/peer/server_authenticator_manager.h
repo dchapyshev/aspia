@@ -38,6 +38,8 @@ public:
 
         std::unique_ptr<NetworkChannel> channel;
         Version version;
+        std::u16string os_name;
+        std::u16string computer_name;
         std::u16string user_name;
         uint32_t session_type = 0;
     };

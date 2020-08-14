@@ -140,10 +140,13 @@ std::unique_ptr<proto::RelayList> Server::relayList() const
             continue;
 
         SessionRelay* session_relay = static_cast<SessionRelay*>(session.get());
-
         proto::Relay* relay = result->add_relay();
+
         relay->set_address(base::utf8FromUtf16(session_relay->address()));
         relay->set_pool_size(session_relay->poolSize());
+        relay->mutable_version()->CopyFrom(session_relay->version().toProto());
+        relay->set_os_name(base::utf8FromUtf16(session_relay->osName()));
+        relay->set_computer_name(base::utf8FromUtf16(session_relay->computerName()));
     }
 
     result->set_error_code(proto::RelayList::SUCCESS);
@@ -160,10 +163,13 @@ std::unique_ptr<proto::HostList> Server::hostList() const
             continue;
 
         SessionHost* session_host = static_cast<SessionHost*>(session.get());
-
         proto::Host* host = result->add_host();
-        host->set_ip_address(base::utf8FromUtf16(session_host->address()));
+
         host->set_host_id(session_host->hostId());
+        host->set_ip_address(base::utf8FromUtf16(session_host->address()));
+        host->mutable_version()->CopyFrom(session_host->version().toProto());
+        host->set_os_name(base::utf8FromUtf16(session_host->osName()));
+        host->set_computer_name(base::utf8FromUtf16(session_host->computerName()));
     }
 
     result->set_error_code(proto::HostList::SUCCESS);
@@ -269,6 +275,10 @@ void Server::onNewSession(base::ServerAuthenticatorManager::SessionInfo&& sessio
                       << static_cast<int>(session_info.session_type);
         return;
     }
+
+    session->setVersion(session_info.version);
+    session->setOsName(session_info.os_name);
+    session->setComputerName(session_info.computer_name);
 
     sessions_.emplace_back(std::move(session));
     sessions_.back()->start(this);

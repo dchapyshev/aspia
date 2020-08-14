@@ -39,13 +39,3 @@ message Version
     uint32 minor = 2;
     uint32 patch = 3;
 }
-
-enum OsType
-{
-    OS_TYPE_UNKNOWN = 0;
-    OS_TYPE_WINDOWS = 1;
-    OS_TYPE_LINUX   = 2;
-    OS_TYPE_ANDROID = 3;
-    OS_TYPE_OSX     = 4;
-    OS_TYPE_IOS     = 5;
-}
