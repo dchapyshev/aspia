@@ -72,7 +72,8 @@ target_link_libraries(aspia_router_manager
     version
     winmm
     wtsapi32
-    ${QT_LIBS}
+    ${QT_COMMON_LIBS}
+    ${QT_PLATFORM_LIBS}
     ${THIRD_PARTY_LIBS})
 set_property(TARGET aspia_router_manager PROPERTY AUTOMOC ON)
 set_property(TARGET aspia_router_manager PROPERTY AUTOUIC ON)

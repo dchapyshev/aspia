@@ -52,7 +52,7 @@ if (WIN32)
                     -D_WIN32_IE=0x0800
                     -DPSAPI_VERSION=2)
 
-    # Other definations.
+    # Other definitions.
     add_definitions(-D_UNICODE
                     -DUNICODE
                     -DWIN32_LEAN_AND_MEAN
@@ -105,18 +105,13 @@ link_directories(
     ${ASPIA_THIRD_PARTY_DIR}/tbb/lib
     ${ASPIA_THIRD_PARTY_DIR}/zstd/lib)
 
-set(QT_LIBS
+set(QT_COMMON_LIBS
     Qt5::Core
     Qt5::Gui
     Qt5::Network
     Qt5::PrintSupport
     Qt5::Widgets
-    Qt5::WinMain
-    Qt5::WinExtras
     Qt5::Xml
-    Qt5::QWindowsIntegrationPlugin
-    Qt5::QWindowsVistaStylePlugin
-    Qt5::QWindowsPrinterSupportPlugin
     debug Qt5EventDispatcherSupportd
     optimized Qt5EventDispatcherSupport
     debug Qt5FontDatabaseSupportd
@@ -127,6 +122,15 @@ set(QT_LIBS
     debug qtpcre2d
     optimized qtlibpng
     optimized qtpcre2)
+
+if (WIN32)
+    set(QT_PLATFORM_LIBS
+        Qt5::WinMain
+        Qt5::WinExtras
+        Qt5::QWindowsIntegrationPlugin
+        Qt5::QWindowsVistaStylePlugin
+        Qt5::QWindowsPrinterSupportPlugin)
+endif()
 
 set(THIRD_PARTY_LIBS
     debug vpxmtd
@@ -145,17 +149,19 @@ set(THIRD_PARTY_LIBS
 
 # C++ compliller flags.
 set(CMAKE_CXX_STANDARD 17)
+
+if (MSVC)
+# C++ compliller flags.
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /GL /W3 /MP /arch:SSE2")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MP /W3")
-
 # C compiller flags.
 set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} /GL /W3 /MP /arch:SSE2")
 set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} /MP /W3")
-
 # Linker flags.
 set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} /LTCG /INCREMENTAL:NO /OPT:REF")
 set(CMAKE_STATIC_LINKER_FLAGS_RELEASE "${CMAKE_STATIC_LINKER_FLAGS_RELEASE} /LTCG")
 set(CMAKE_EXE_LINKER_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE} /LTCG /INCREMENTAL:NO /OPT:REF")
+endif()
 
 # Static runtime library.
 set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")

@@ -154,7 +154,8 @@ target_link_libraries(aspia_host_core
     version
     winmm
     wtsapi32
-    ${QT_LIBS}
+    ${QT_COMMON_LIBS}
+    ${QT_PLATFORM_LIBS}
     ${THIRD_PARTY_LIBS})
 set_target_properties(aspia_host_core PROPERTIES COMPILE_DEFINITIONS "HOST_IMPLEMENTATION")
 set_property(TARGET aspia_host_core PROPERTY AUTOMOC ON)

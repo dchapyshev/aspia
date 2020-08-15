@@ -107,7 +107,8 @@ target_link_libraries(aspia_console
     version
     winmm
     wtsapi32
-    ${QT_LIBS}
+    ${QT_COMMON_LIBS}
+    ${QT_PLATFORM_LIBS}
     ${THIRD_PARTY_LIBS})
 set_property(TARGET aspia_console PROPERTY AUTOMOC ON)
 set_property(TARGET aspia_console PROPERTY AUTOUIC ON)
