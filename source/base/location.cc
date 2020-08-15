@@ -68,7 +68,7 @@ std::string Location::toString(PathType path_type) const
 
         if (path_type == SHORT_PATH)
         {
-            size_t last_slash_pos = file_name.find_last_of("\\/");
+            std::size_t last_slash_pos = file_name.find_last_of("\\/");
             if (last_slash_pos != std::string_view::npos)
                 file_name.remove_prefix(last_slash_pos + 1);
         }

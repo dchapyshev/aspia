@@ -56,7 +56,7 @@ private:
     DISALLOW_COPY_AND_ASSIGN(ScopedClearLastError);
 };
 
-#elif defined(OS_POSIX)
+#elif defined(linux)
 using ScopedClearLastError = ScopedClearLastErrorBase;
 #else
 #error Platform support not implemented

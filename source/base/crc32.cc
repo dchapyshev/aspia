@@ -84,11 +84,11 @@ const uint32_t kCrcTable[256] =
 // to get the CRC correct for big-endian vs little-ending calculations. All we need is a nice hash,
 // that tends to depend on all the bits of the sample, with very little chance of changes in one
 // place impacting changes in another place.
-uint32_t crc32(uint32_t sum, const void* data, size_t size)
+uint32_t crc32(uint32_t sum, const void* data, std::size_t size)
 {
     const uint8_t* bytes = reinterpret_cast<const uint8_t*>(data);
 
-    for (size_t i = 0; i < size; ++i)
+    for (std::size_t i = 0; i < size; ++i)
         sum = kCrcTable[(sum & 0x000000FF) ^ bytes[i]] ^ (sum >> 8);
 
     return sum;

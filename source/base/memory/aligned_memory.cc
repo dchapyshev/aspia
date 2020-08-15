@@ -26,7 +26,7 @@
 
 namespace base {
 
-void* alignedAlloc(size_t size, size_t alignment)
+void* alignedAlloc(std::size_t size, std::size_t alignment)
 {
     DCHECK_GT(size, 0U);
     DCHECK_EQ((alignment & (alignment - 1)), 0U);

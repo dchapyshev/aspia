@@ -57,7 +57,7 @@ TEST(converter_test, for_bool)
         { "   0 ",     true,  false }
     };
 
-    for (size_t i = 0; i < std::size(kTable); ++i)
+    for (std::size_t i = 0; i < std::size(kTable); ++i)
     {
         std::optional<bool> result = Converter<bool>::get_value(kTable[i].source_value);
 
@@ -92,7 +92,7 @@ TEST(converter_test, for_string)
         { "  ",       false, nullptr }
     };
 
-    for (size_t i = 0; i < std::size(kTableForGet); ++i)
+    for (std::size_t i = 0; i < std::size(kTableForGet); ++i)
     {
         std::optional<std::string> result =
             Converter<std::string>::get_value(kTableForGet[i].source_value);
@@ -110,7 +110,7 @@ TEST(converter_test, for_string)
         { "   ",  true, "   "  }
     };
 
-    for (size_t i = 0; i < std::size(kTableForSet); ++i)
+    for (std::size_t i = 0; i < std::size(kTableForSet); ++i)
     {
         std::string result = Converter<std::string>::set_value(kTableForSet[i].source_value);
         EXPECT_EQ(result, kTableForSet[i].expected_value);
@@ -134,7 +134,7 @@ TEST(converter_test, for_double)
         { "  1.000  ", true,  1.0 }
     };
 
-    for (size_t i = 0; i < std::size(kTable); ++i)
+    for (std::size_t i = 0; i < std::size(kTable); ++i)
     {
         std::optional<double> result = Converter<double>::get_value(kTable[i].source_value);
 
@@ -166,7 +166,7 @@ TEST(converter_test, for_uint16_t)
         { "   ",     false, 0  }
     };
 
-    for (size_t i = 0; i < std::size(kTable); ++i)
+    for (std::size_t i = 0; i < std::size(kTable); ++i)
     {
         std::optional<uint16_t> result = Converter<uint16_t>::get_value(kTable[i].source_value);
 

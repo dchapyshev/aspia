@@ -24,12 +24,12 @@ namespace base {
 
 namespace {
 
-int vsnprintfT(char* buffer, size_t buffer_size, const char* format, va_list args)
+int vsnprintfT(char* buffer, std::size_t buffer_size, const char* format, va_list args)
 {
     return _vsnprintf(buffer, buffer_size, format, args);
 }
 
-int vsnprintfT(wchar_t* buffer, size_t buffer_size, const wchar_t* format, va_list args)
+int vsnprintfT(wchar_t* buffer, std::size_t buffer_size, const wchar_t* format, va_list args)
 {
     return _vsnwprintf(buffer, buffer_size, format, args);
 }

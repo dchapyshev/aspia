@@ -26,7 +26,7 @@ bool resourceFromModule(HMODULE module,
                         int resource_id,
                         const wchar_t* resource_type,
                         void** data,
-                        size_t* length)
+                        std::size_t* length)
 {
     if (!module)
         return false;
@@ -51,7 +51,7 @@ bool resourceFromModule(HMODULE module,
         return false;
 
     *data = resource;
-    *length = static_cast<size_t>(data_size);
+    *length = static_cast<std::size_t>(data_size);
 
     return true;
 }
@@ -59,7 +59,7 @@ bool resourceFromModule(HMODULE module,
 bool dataResourceFromModule(HMODULE module,
                             int resource_id,
                             void** data,
-                            size_t* length)
+                            std::size_t* length)
 {
     return resourceFromModule(module, resource_id, L"BINDATA", data, length);
 }

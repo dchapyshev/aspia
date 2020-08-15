@@ -47,22 +47,22 @@ std::string_view whitespaceForType<char>()
 //
 // There is no corresponding FindFirstNotOf because StringPiece already implements these different
 // versions that do the optimized searching.
-size_t findFirstOf(std::string_view piece, char c, size_t pos)
+std::size_t findFirstOf(std::string_view piece, char c, std::size_t pos)
 {
     return piece.find(c, pos);
 }
 
-size_t findFirstOf(std::u16string_view piece, char16_t c, size_t pos)
+std::size_t findFirstOf(std::u16string_view piece, char16_t c, std::size_t pos)
 {
     return piece.find(c, pos);
 }
 
-size_t findFirstOf(std::string_view piece, std::string_view one_of, size_t pos)
+std::size_t findFirstOf(std::string_view piece, std::string_view one_of, std::size_t pos)
 {
     return piece.find_first_of(one_of, pos);
 }
 
-size_t findFirstOf(std::u16string_view piece, std::u16string_view one_of, size_t pos)
+std::size_t findFirstOf(std::u16string_view piece, std::u16string_view one_of, std::size_t pos)
 {
     return piece.find_first_of(one_of, pos);
 }
@@ -86,11 +86,11 @@ std::vector<OutputStringType> splitStringT(InputStringType str,
     if (str.empty())
         return result;
 
-    size_t start = 0;
+    std::size_t start = 0;
 
     while (start != InputStringType::npos)
     {
-        const size_t end = findFirstOf(str, delimiter, start);
+        const std::size_t end = findFirstOf(str, delimiter, start);
 
         InputStringType piece;
 

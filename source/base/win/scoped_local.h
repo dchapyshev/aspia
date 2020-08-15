@@ -42,7 +42,7 @@ public:
         // Nothing
     }
 
-    explicit ScopedLocal(SIZE_T length)
+    explicit ScopedLocal(std::size_t length)
     {
         local_ = reinterpret_cast<T>(LocalAlloc(LHND, length));
     }

@@ -59,7 +59,7 @@ const int kAlwaysPrintErrorLevel = LS_ERROR;
 const char* severityName(LoggingSeverity severity)
 {
     static const char* const kLogSeverityNames[] = {"INFO", "WARNING", "ERROR", "FATAL"};
-    const size_t kLogSeverityNamesCount = std::extent< decltype(kLogSeverityNames) >::value;
+    const std::size_t kLogSeverityNamesCount = std::extent< decltype(kLogSeverityNames) >::value;
     static_assert(LS_NUMBER == kLogSeverityNamesCount);
 
     if (severity >= 0 && severity < LS_NUMBER)
@@ -346,7 +346,7 @@ void LogMessage::init(const char* file, int line)
 {
     std::string_view filename(file);
 
-    size_t last_slash_pos = filename.find_last_of("\\/");
+    std::size_t last_slash_pos = filename.find_last_of("\\/");
     if (last_slash_pos != std::string_view::npos)
         filename.remove_prefix(last_slash_pos + 1);
 
@@ -407,8 +407,8 @@ void rawLog(int level, const char* message)
 {
     if (level >= g_min_log_level && message)
     {
-        size_t bytes_written = 0;
-        const size_t message_len = strlen(message);
+        std::size_t bytes_written = 0;
+        const std::size_t message_len = strlen(message);
         int rv;
         while (bytes_written < message_len)
         {

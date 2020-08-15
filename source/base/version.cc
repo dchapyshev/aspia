@@ -37,11 +37,11 @@ std::vector<std::string_view> splitString(std::string_view str, char separator)
     if (str.empty())
         return result;
 
-    size_t start = 0;
+    std::size_t start = 0;
 
     while (start != std::string_view::npos)
     {
-        size_t end = str.find_first_of(separator, start);
+        std::size_t end = str.find_first_of(separator, start);
 
         std::string_view piece;
 
@@ -106,9 +106,9 @@ bool parseVersionNumbers(std::string_view version_str, std::vector<uint32_t>* pa
 int compareVersionComponents(const std::vector<uint32_t>& components1,
                              const std::vector<uint32_t>& components2)
 {
-    const size_t count = std::min(components1.size(), components2.size());
+    const std::size_t count = std::min(components1.size(), components2.size());
 
-    for (size_t i = 0; i < count; ++i)
+    for (std::size_t i = 0; i < count; ++i)
     {
         if (components1[i] > components2[i])
             return 1;
@@ -119,7 +119,7 @@ int compareVersionComponents(const std::vector<uint32_t>& components1,
 
     if (components1.size() > components2.size())
     {
-        for (size_t i = count; i < components1.size(); ++i)
+        for (std::size_t i = count; i < components1.size(); ++i)
         {
             if (components1[i] > 0)
                 return 1;
@@ -127,7 +127,7 @@ int compareVersionComponents(const std::vector<uint32_t>& components1,
     }
     else if (components1.size() < components2.size())
     {
-        for (size_t i = count; i < components2.size(); ++i)
+        for (std::size_t i = count; i < components2.size(); ++i)
         {
             if (components2[i] > 0)
                 return -1;
@@ -221,8 +221,8 @@ int Version::compareToWildcardString(std::string_view wildcard_string) const
     // components is greater (e.g. 3.2.3 vs 1.*).
     DCHECK_GT(parsed.size(), 0UL);
 
-    const size_t min_num_comp = std::min(components_.size(), parsed.size());
-    for (size_t i = 0; i < min_num_comp; ++i)
+    const std::size_t min_num_comp = std::min(components_.size(), parsed.size());
+    for (std::size_t i = 0; i < min_num_comp; ++i)
     {
         if (components_[i] != parsed[i])
             return 1;
@@ -244,8 +244,8 @@ const std::string Version::toString() const
 
     std::string version_str;
 
-    const size_t count = components_.size() - 1;
-    for (size_t i = 0; i < count; ++i)
+    const std::size_t count = components_.size() - 1;
+    for (std::size_t i = 0; i < count; ++i)
     {
         version_str.append(numberToString(components_[i]));
         version_str.append(".");

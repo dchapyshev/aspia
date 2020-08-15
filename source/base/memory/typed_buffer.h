@@ -42,7 +42,7 @@ public:
     }
 
     // Creates an instance of the object allocating a buffer of the given size.
-    explicit TypedBuffer(size_t length)
+    explicit TypedBuffer(std::size_t length)
         : length_(length)
     {
         if (length_ != 0)
@@ -85,7 +85,7 @@ public:
     }
 
     T* get() const { return buffer_; }
-    size_t length() const { return length_; }
+    std::size_t length() const { return length_; }
 
     // Helper returning a pointer to the structure starting at a specified byte
     // offset.
@@ -109,7 +109,7 @@ private:
     T* buffer_ = nullptr;
 
     // Length of the owned buffer in bytes.
-    size_t length_;
+    std::size_t length_;
 
     DISALLOW_COPY_AND_ASSIGN(TypedBuffer);
 };

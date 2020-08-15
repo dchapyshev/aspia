@@ -20,17 +20,16 @@ list(APPEND SOURCE_BASE
     base64.cc
     base64.h
     bitset.h
-    command_line.cc
     command_line.h
     compiler_specific.h
     converter.h
-    cpuid.cc
-    cpuid.h
+    cpuid_wrapper.cc
+    cpuid_wrapper.h
     crc32.cc
     crc32.h
     debug.cc
     debug.h
-    endian.h
+    endian_util.h
     guid.cc
     guid.h
     location.cc
@@ -154,7 +153,12 @@ list(APPEND SOURCE_BASE_THREADING
     threading/thread_checker.cc
     threading/thread_checker.h)
 
+list(APPEND SOURCE_BASE_LINUX
+    linux/command_line_linux.cc
+    )
+
 list(APPEND SOURCE_BASE_WIN
+    win/command_line_win.cc
     win/desktop.cc
     win/desktop.h
     win/drive_enumerator.cc
@@ -208,6 +212,12 @@ list(APPEND SOURCE_BASE_WIN
     win/windows_version.cc
     win/windows_version.h)
 
+if (WIN32)
+    set(SOURCE_BASE_PLATFORM ${SOURCE_BASE_WIN})
+else()
+    set(SOURCE_BASE_PLATFORM ${SOURCE_BASE_LINUX})
+endif()
+
 list(APPEND SOURCE_BASE_WIN_UNIT_TESTS
     win/registry_unittest.cc
     win/scoped_object_unittest.cc)
@@ -221,7 +231,7 @@ source_group(message_loop FILES ${SOURCE_BASE_MESSAGE_LOOP})
 source_group(strings FILES ${SOURCE_BASE_STRINGS})
 source_group(strings FILES ${SOURCE_BASE_STRINGS_UNIT_TESTS})
 source_group(threading FILES ${SOURCE_BASE_THREADING})
-source_group(win FILES ${SOURCE_BASE_WIN})
+source_group(platform FILES ${SOURCE_BASE_PLATFORM})
 source_group(win FILES ${SOURCE_BASE_WIN_UNIT_TESTS})
 
 add_library(aspia_base STATIC
@@ -231,7 +241,7 @@ add_library(aspia_base STATIC
     ${SOURCE_BASE_MESSAGE_LOOP}
     ${SOURCE_BASE_STRINGS}
     ${SOURCE_BASE_THREADING}
-    ${SOURCE_BASE_WIN})
+    ${SOURCE_BASE_PLATFORM})
 target_link_libraries(aspia_base ${THIRD_PARTY_LIBS})
 
 # If the build of unit tests is enabled.

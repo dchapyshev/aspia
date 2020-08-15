@@ -65,7 +65,7 @@ bool parseXmlNode(const rapidxml::xml_node<>* node,
         {
             std::string key;
 
-            for (size_t i = 0; i < segments->size(); ++i)
+            for (std::size_t i = 0; i < segments->size(); ++i)
             {
                 if (i != 0)
                     key += Settings::kSeparator;
@@ -256,15 +256,15 @@ bool XmlSettings::writeFile(const std::filesystem::path& file, const Map& map)
     {
         std::vector<std::string_view> segments =
             splitStringView(map_item.first, "/", TRIM_WHITESPACE, SPLIT_WANT_NONEMPTY);
-        size_t count = 0;
+        std::size_t count = 0;
 
         while (count < prev.size() && segments.at(count) == prev.at(count))
             ++count;
 
-        for (size_t i = prev.size(); i > count; --i)
+        for (std::size_t i = prev.size(); i > count; --i)
             xml.endElement();
 
-        for (size_t i = count; i < segments.size(); ++i)
+        for (std::size_t i = count; i < segments.size(); ++i)
         {
             if (i == segments.size() - 1)
                 xml.startElement("Value");
@@ -278,7 +278,7 @@ bool XmlSettings::writeFile(const std::filesystem::path& file, const Map& map)
         prev.swap(segments);
     }
 
-    for (size_t i = 0; i < prev.size(); ++i)
+    for (std::size_t i = 0; i < prev.size(); ++i)
         xml.endElement();
 
     xml.endElement();

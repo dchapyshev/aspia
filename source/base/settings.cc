@@ -54,10 +54,10 @@ Settings::Settings(Map&& map) noexcept
 
 Settings::Array Settings::getArray(std::string_view key) const
 {
-    const size_t array_size = get<size_t>(base::strCat({ key, kSeparator, "size" }));
+    const std::size_t array_size = get<std::size_t>(base::strCat({ key, kSeparator, "size" }));
     Array result;
 
-    for (size_t i = 0; i < array_size; ++i)
+    for (std::size_t i = 0; i < array_size; ++i)
     {
         result.emplace_back(getGroup(
             base::strCat({ key, kSeparator, base::numberToString(i) })));
@@ -68,7 +68,7 @@ Settings::Array Settings::getArray(std::string_view key) const
 
 void Settings::setArray(std::string_view key, const Array& array)
 {
-    for (size_t i = 0; i < array.size(); ++i)
+    for (std::size_t i = 0; i < array.size(); ++i)
         setGroup(base::strCat({ key, kSeparator, base::numberToString(i) }), array[i]);
 
     set(base::strCat({ key, kSeparator, "size" }), array.size());

@@ -322,7 +322,7 @@ std::vector<std::u16string> ServiceController::dependencies() const
         return std::vector<std::u16string>();
 
     std::vector<std::u16string> list;
-    size_t len = 0;
+    std::size_t len = 0;
 
     for (;;)
     {

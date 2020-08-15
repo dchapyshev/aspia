@@ -102,7 +102,7 @@ target_link_libraries(aspia_console
     aspia_qt_base
     aspia_updater
     ${QT_LIBS}
-    ${WINDOWS_LIBS}
+    ${PLATFORM_LIBS}
     ${THIRD_PARTY_LIBS})
 
 if (USE_TBB)

@@ -130,7 +130,7 @@ target_link_libraries(aspia_host_core
     aspia_qt_base
     aspia_updater
     ${QT_LIBS}
-    ${WINDOWS_LIBS}
+    ${PLATFORM_LIBS}
     ${THIRD_PARTY_LIBS})
 set_target_properties(aspia_host_core PROPERTIES COMPILE_DEFINITIONS "HOST_IMPLEMENTATION")
 

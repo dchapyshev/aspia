@@ -33,14 +33,14 @@ public:
     BitSet(const BitSet& other) { copyFrom(other); }
     virtual ~BitSet() = default;
 
-    static constexpr size_t kBitsPerByte = 8;
+    static constexpr std::size_t kBitsPerByte = 8;
     static constexpr NumericType kMaxValue = std::numeric_limits<NumericType>::max();
 
     // Returns the value of the bit at the position |pos|.
-    bool test(size_t pos) const { return !!range(pos, pos); }
+    bool test(std::size_t pos) const { return !!range(pos, pos); }
 
     // Returns the value of the bit range at the range from |from| to |to|.
-    NumericType range(size_t from, size_t to) const
+    NumericType range(std::size_t from, std::size_t to) const
     {
         if (from > size() - 1)
             return 0;
@@ -72,7 +72,7 @@ public:
     }
 
     // Sets the bit at position |pos| to the value |value|.
-    BitSet& set(size_t pos, bool value = true)
+    BitSet &set(std::size_t pos, bool value = true)
     {
         if (pos > size() - 1)
             return *this;
@@ -95,7 +95,7 @@ public:
     }
 
     // Sets the bit at position |pos| to false.
-    BitSet& reset(size_t pos) { return set(pos, false); }
+    BitSet& reset(std::size_t pos) { return set(pos, false); }
 
     // Flips all bits.
     BitSet& flip()
@@ -105,7 +105,7 @@ public:
     }
 
     // Flips the bit at the position |pos|.
-    BitSet& flip(size_t pos)
+    BitSet& flip(std::size_t pos)
     {
         if (pos > size() - 1)
             return *this;
@@ -115,11 +115,11 @@ public:
     }
 
     // Returns the number of bits that are set to true.
-    size_t count() const
+    std::size_t count() const
     {
-        size_t counter = 0;
+        std::size_t counter = 0;
 
-        for (size_t pos = 0; pos < size(); ++pos)
+        for (std::size_t pos = 0; pos < size(); ++pos)
         {
             if (test(pos))
                 ++counter;
@@ -136,7 +136,7 @@ public:
     void copyFrom(const BitSet& other) { value_ = other.value_; }
 
     // Returns the number of bits that the bitset can hold.
-    static size_t size() { return sizeof(NumericType) * kBitsPerByte; }
+    static std::size_t size() { return sizeof(NumericType) * kBitsPerByte; }
 
     // Returns true if all of the bits in *this and |other| are equal.
     bool operator==(const BitSet& other) const { return value_ == other.value_; }

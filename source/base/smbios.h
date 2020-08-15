@@ -23,7 +23,7 @@
 
 namespace base {
 
-const size_t kSmbiosMaxDataSize = 0xFA00; // 64kB
+const std::size_t kSmbiosMaxDataSize = 0xFA00; // 64kB
 
 struct SmbiosDump
 {

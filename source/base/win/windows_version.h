@@ -126,7 +126,7 @@ public:
     std::string servicePackString() const { return service_pack_str_; }
     WindowsArchitecture architecture() const { return architecture_; }
     int processors() const { return processors_; }
-    size_t allocationGranularity() const { return allocation_granularity_; }
+    std::size_t allocationGranularity() const { return allocation_granularity_; }
     WOW64Status wow64Status() const { return wow64_status_; }
     std::string processorModelName();
 
@@ -148,7 +148,7 @@ private:
     std::string service_pack_str_;
     WindowsArchitecture architecture_;
     int processors_;
-    size_t allocation_granularity_;
+    std::size_t allocation_granularity_;
     WOW64Status wow64_status_;
     std::string processor_model_name_;
 

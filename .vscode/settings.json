@@ -42,6 +42,25 @@
         "memory": "cpp",
         "climits": "cpp",
         "algorithm": "cpp",
-        "cstdarg": "cpp"
+        "cstdarg": "cpp",
+        "atomic": "cpp",
+        "bit": "cpp",
+        "condition_variable": "cpp",
+        "csignal": "cpp",
+        "cstddef": "cpp",
+        "list": "cpp",
+        "map": "cpp",
+        "set": "cpp",
+        "functional": "cpp",
+        "iterator": "cpp",
+        "memory_resource": "cpp",
+        "numeric": "cpp",
+        "random": "cpp",
+        "future": "cpp",
+        "iostream": "cpp",
+        "mutex": "cpp",
+        "shared_mutex": "cpp",
+        "thread": "cpp",
+        "cinttypes": "cpp"
     }
 }

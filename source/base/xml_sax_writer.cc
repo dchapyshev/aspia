@@ -165,7 +165,7 @@ void XmlSaxWriter::indent()
     if (elements_.empty())
         return;
 
-    for (size_t i = 0; i < elements_.size() - 1; ++i)
+    for (std::size_t i = 0; i < elements_.size() - 1; ++i)
         stream_ << "\t";
 }
 

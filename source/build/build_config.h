@@ -22,6 +22,8 @@
 // OS detection.
 #if defined(_WIN32)
 #define OS_WIN
+#elif defined(linux)
+#define OS_LINUX
 #else
 #error Unknown OS
 #endif

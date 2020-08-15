@@ -41,7 +41,7 @@ using ByteArrayAllocator = std::allocator<uint8_t>;
 
 using ByteArray = std::vector<uint8_t, ByteArrayAllocator>;
 
-ByteArray fromData(const void* data, size_t size);
+ByteArray fromData(const void* data, std::size_t size);
 
 ByteArray fromStdString(std::string_view in);
 std::string toStdString(const ByteArray& in);

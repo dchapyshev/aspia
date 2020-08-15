@@ -20,7 +20,9 @@
 
 #include "build/build_config.h"
 
+#if defined(OS_WIN)
 #include <Windows.h>
+#endif
 
 namespace base {
 
@@ -33,7 +35,7 @@ bool wideToLocalImpl(InputType in, std::string* out)
 {
     out->clear();
 
-    const size_t in_len = in.length();
+    const std::size_t in_len = in.length();
     if (!in_len)
         return true;
 
@@ -62,7 +64,7 @@ bool localToWideImpl(std::string_view in, OutputType* out)
 {
     out->clear();
 
-    const size_t in_len = in.length();
+    const std::size_t in_len = in.length();
     if (!in_len)
         return true;
 
@@ -87,7 +89,7 @@ bool wideToUtf8Impl(InputType in, std::string* out)
 {
     out->clear();
 
-    const size_t in_len = in.length();
+    const std::size_t in_len = in.length();
     if (!in_len)
         return true;
 
@@ -116,7 +118,7 @@ bool utf8ToWideImpl(std::string_view in, OutputType* out)
 {
     out->clear();
 
-    const size_t in_len = in.length();
+    const std::size_t in_len = in.length();
     if (!in_len)
         return true;
 
@@ -146,7 +148,7 @@ OutputString asciiConverter(InputString in)
     OutputString out;
     out.resize(in.size());
 
-    for (size_t i = 0; i < out.size(); ++i)
+    for (std::size_t i = 0; i < out.size(); ++i)
         out[i] = static_cast<OutputString::value_type>(in[i]);
 
     return out;

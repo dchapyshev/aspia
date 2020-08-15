@@ -20,6 +20,9 @@
 #define BASE__CPUID_H
 
 #include <cstdint>
+#if !defined(CC_MSVC)
+#include <climits>
+#endif
 
 namespace base {
 
@@ -50,7 +53,11 @@ private:
     static constexpr int kECX = 2;
     static constexpr int kEDX = 3;
 
+#if defined(CC_MSVC)
     int cpu_info_[4] = { -1, -1, -1, -1 };
+#else
+    unsigned int cpu_info_[4] = {UINT_MAX, UINT_MAX, UINT_MAX, UINT_MAX};
+#endif // CC_MSVC
 };
 
 } // namespace base

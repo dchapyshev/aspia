@@ -28,7 +28,7 @@ extern const uint32_t kCrcTable[256];
 // This provides a simple, fast CRC-32 calculation that can be used for checking the integrity of
 // data. It is not a "secure" calculation! |sum| can start with any seed or be used to continue an
 // operation began with previous data.
-uint32_t crc32(uint32_t sum, const void* data, size_t size);
+uint32_t crc32(uint32_t sum, const void* data, std::size_t size);
 
 } // namespace base
 

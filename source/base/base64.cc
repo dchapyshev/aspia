@@ -30,7 +30,8 @@ namespace base {
 void Base64::encode(std::string_view input, std::string* output)
 {
     DCHECK(output);
-    output->swap(encode(input));
+    auto temp = encode(input);
+    output->swap(temp);
 }
 
 // static
@@ -53,25 +54,25 @@ std::string Base64::decode(std::string_view input)
 }
 
 // static
-size_t Base64::encodeImpl(char* dest, const char* str, size_t len)
+std::size_t Base64::encodeImpl(char* dest, const char* str, std::size_t len)
 {
     return modp_b64_encode(dest, str, len);
 }
 
 // static
-size_t Base64::decodeImpl(char* dest, const char* src, size_t len)
+std::size_t Base64::decodeImpl(char* dest, const char* src, std::size_t len)
 {
     return modp_b64_decode(dest, src, len);
 }
 
 // static
-size_t Base64::encodedLength(size_t len)
+std::size_t Base64::encodedLength(std::size_t len)
 {
     return modp_b64_encode_strlen(len) + 1;
 }
 
 // static
-size_t Base64::decodedLength(size_t len)
+std::size_t Base64::decodedLength(std::size_t len)
 {
     return modp_b64_decode_len(len);
 }

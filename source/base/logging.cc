@@ -21,9 +21,7 @@
 #include "base/debug.h"
 #include "base/system_time.h"
 
-#if defined(OS_WIN)
 #include "base/strings/unicode.h"
-#endif // defined(OS_WIN)
 
 #include <fstream>
 #include <iomanip>
@@ -174,15 +172,16 @@ bool initLogging(const LoggingSettings& settings)
     {
         LOG(LS_INFO) << "Executable file: " << buffer;
     }
+#elif defined(OS_LINUX)
 
+#else
+    #warning Not implemented
+#endif
 #if defined(NDEBUG)
     LOG(LS_INFO) << "Debug build: No";
 #else
     LOG(LS_INFO) << "Debug build: Yes";
 #endif // defined(NDEBUG)
-#else
-    #warning Not implemented
-#endif
 
     LOG(LS_INFO) << "Debugger present: " << (isDebuggerPresent() ? "Yes" : "No");
     LOG(LS_INFO) << "Logging started";
@@ -191,7 +190,7 @@ bool initLogging(const LoggingSettings& settings)
 
 void shutdownLogging()
 {
-    LOG(LS_INFO) << "Logging finished";
+    // LOG(LS_INFO) << "Logging finished";
 
     std::scoped_lock lock(g_log_file_lock);
     g_log_file.close();
@@ -322,7 +321,7 @@ LogMessage::~LogMessage()
 // Writes the common header info to the stream.
 void LogMessage::init(std::string_view file, int line)
 {
-    size_t last_slash_pos = file.find_last_of("\\/");
+    std::size_t last_slash_pos = file.find_last_of("\\/");
     if (last_slash_pos != std::string_view::npos)
         file.remove_prefix(last_slash_pos + 1);
 

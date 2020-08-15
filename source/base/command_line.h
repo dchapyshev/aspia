@@ -126,7 +126,7 @@ private:
     SwitchMap switches_;
 
     // The index after the program and switches, any arguments start here.
-    size_t begin_args_;
+    std::size_t begin_args_;
 };
 
 } // namespace base

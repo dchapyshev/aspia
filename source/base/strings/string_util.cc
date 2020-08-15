@@ -72,7 +72,7 @@ struct NonASCIIMask<wchar_t>
 };
 
 template <class Char>
-bool doIsStringASCII(const Char* characters, size_t length)
+bool doIsStringASCII(const Char* characters, std::size_t length)
 {
     if (!length)
         return true;
@@ -88,7 +88,7 @@ bool doIsStringASCII(const Char* characters, size_t length)
         return false;
 
     // Compare the values of CPU word size.
-    constexpr size_t chars_per_word = sizeof(MachineWord) / sizeof(Char);
+    constexpr std::size_t chars_per_word = sizeof(MachineWord) / sizeof(Char);
     constexpr int batch_count = 16;
     while (characters <= end - batch_count * chars_per_word)
     {
@@ -170,7 +170,7 @@ std::basic_string<CharType> collapseWhitespaceT(
 template<typename StringType>
 void removeCharsT(StringType* str, std::basic_string_view<typename StringType::value_type> substr)
 {
-    size_t pos;
+    std::size_t pos;
 
     while ((pos = str->find(substr)) != StringType::npos)
         str->erase(pos, substr.length());
@@ -323,7 +323,7 @@ int compareCaseInsensitiveASCIIT(std::basic_string_view<CharType> a,
 {
     // Find the first characters that aren't equal and compare them.  If the end of one of the
     // strings is found before a nonequal character, the lengths of the strings are compared.
-    size_t i = 0;
+    std::size_t i = 0;
 
     while (i < a.length() && i < b.length())
     {
@@ -427,10 +427,10 @@ TrimPositions trimStringT(std::basic_string_view<CharType> input,
     // a StringPiece version of input to be able to call find* on it with the
     // StringPiece version of trim_chars (normally the trim_chars will be a
     // constant so avoid making a copy).
-    const size_t last_char = input.length() - 1;
-    const size_t first_good_char = (positions & TRIM_LEADING) ?
+    const std::size_t last_char = input.length() - 1;
+    const std::size_t first_good_char = (positions & TRIM_LEADING) ?
         input.find_first_not_of(trim_chars) : 0;
-    const size_t last_good_char = (positions & TRIM_TRAILING) ?
+    const std::size_t last_good_char = (positions & TRIM_TRAILING) ?
         input.find_last_not_of(trim_chars) : last_char;
 
     // When the string was all trimmed, report that we stripped off characters
@@ -457,8 +457,8 @@ TrimPositions trimStringT(std::basic_string_view<CharType> input,
 template <typename StringType>
 StringType trimStringViewT(StringType input, StringType trim_chars, TrimPositions positions)
 {
-    size_t begin = (positions & TRIM_LEADING) ? input.find_first_not_of(trim_chars) : 0;
-    size_t end = (positions & TRIM_TRAILING) ? input.find_last_not_of(trim_chars) + 1 : input.size();
+    std::size_t begin = (positions & TRIM_LEADING) ? input.find_first_not_of(trim_chars) : 0;
+    std::size_t end = (positions & TRIM_TRAILING) ? input.find_last_not_of(trim_chars) + 1 : input.size();
 
     if (begin > input.size())
         begin = input.size();
@@ -537,7 +537,7 @@ std::basic_string<CharType> toLowerASCIIT(std::basic_string_view<CharType> str)
     std::basic_string<CharType> ret;
     ret.reserve(str.size());
 
-    for (size_t i = 0; i < str.size(); ++i)
+    for (std::size_t i = 0; i < str.size(); ++i)
         ret.push_back(toLowerASCII(str[i]));
 
     return ret;
@@ -549,7 +549,7 @@ std::basic_string<CharType> toUpperASCIIT(std::basic_string_view<CharType> str)
     std::basic_string<CharType> ret;
     ret.reserve(str.size());
 
-    for (size_t i = 0; i < str.size(); ++i)
+    for (std::size_t i = 0; i < str.size(); ++i)
         ret.push_back(toUpperASCII(str[i]));
 
     return ret;

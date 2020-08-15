@@ -43,7 +43,7 @@ target_link_libraries(aspia_router_keygen
     aspia_net
     aspia_qt_base
     ${QT_LIBS}
-    ${WINDOWS_LIBS}
+    ${PLATFORM_LIBS}
     ${THIRD_PARTY_LIBS})
 
 if (USE_TBB)

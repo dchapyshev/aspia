@@ -25,7 +25,7 @@ option(USE_TBB "Using Intel TBB" ON)
 
 set(ASPIA_THIRD_PARTY_DIR "$ENV{ASPIA_THIRD_PARTY_DIR}")
 
-project(aspia)
+project(aspia LANGUAGES CXX)
 
 # Qt configuration.
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -35,7 +35,12 @@ set(CMAKE_AUTORCC ON)
 
 set(CMAKE_PREFIX_PATH "${ASPIA_THIRD_PARTY_DIR}/qt;${ASPIA_THIRD_PARTY_DIR}/protobuf")
 
-find_package(Qt5 REQUIRED Core Gui Network PrintSupport Widgets WinExtras Xml)
+find_package(Qt5 REQUIRED Core Gui Network PrintSupport Widgets Xml)
+if (WIN32)
+    find_package(Qt5 REQUIRED WinExtras)
+else()
+    find_package(Qt5 REQUIRED X11Extras)
+endif()
 find_package(Qt5LinguistTools)
 find_package(Protobuf REQUIRED)
 
@@ -59,11 +64,13 @@ add_definitions(-DQT_NO_CAST_TO_ASCII
                 -DQT_NO_CAST_FROM_BYTEARRAY
                 -DQT_USE_QSTRINGBUILDER)
 
+if (WIN32)
 # For Windows.
 add_definitions(-D_UNICODE
                 -DUNICODE
                 -DWIN32_LEAN_AND_MEAN
                 -DNOMINMAX)
+endif()
 
 if (USE_TBB)
     add_definitions(-DUSE_TBB)
@@ -101,7 +108,6 @@ set(QT_LIBS
     Qt5::PrintSupport
     Qt5::Widgets
     Qt5::WinMain
-    Qt5::WinExtras
     Qt5::Xml
     Qt5::QWindowsIntegrationPlugin
     Qt5::QWindowsVistaStylePlugin
@@ -125,24 +131,44 @@ set(QT_LIBS
     optimized qtlibpng
     optimized qtpcre2)
 
-set(WINDOWS_LIBS
-    crypt32
-    dwmapi
-    dxgi
-    d3d11
-    imm32
-    iphlpapi
-    mpr
-    netapi32
-    sas
-    setupapi
-    shlwapi
-    userenv
-    uxtheme
-    version
-    winmm
-    ws2_32
-    wtsapi32)
+if (WIN32)
+    set(QT_LIBS
+        ${QT_LIBS}
+        Qt5::WinExtras)
+else()
+    set(QT_LIBS
+        ${QT_LIBS}
+        Qt5::X11Extras)
+endif()
+
+if (WIN32)
+    find_package(Qt5 REQUIRED WinExtras)
+else()
+    find_package(Qt5 REQUIRED X11Extras)
+endif()
+
+if (WIN32)
+    set(PLATFORM_LIBS
+        crypt32
+        dwmapi
+        dxgi
+        d3d11
+        imm32
+        iphlpapi
+        mpr
+        netapi32
+        sas
+        setupapi
+        shlwapi
+        userenv
+        uxtheme
+        version
+        winmm
+        ws2_32
+        wtsapi32)
+else()
+    set(PLATFORM_LIBS)
+endif()
 
 set(THIRD_PARTY_LIBS
     debug vpxmtd
@@ -186,18 +212,18 @@ if (BUILD_UNIT_TESTS)
 endif()
 
 add_subdirectory(base)
-add_subdirectory(client)
-add_subdirectory(codec)
-add_subdirectory(common)
-add_subdirectory(console)
-add_subdirectory(crypto)
-add_subdirectory(desktop)
-add_subdirectory(host)
-add_subdirectory(ipc)
-add_subdirectory(net)
-add_subdirectory(proto)
-add_subdirectory(proxy)
-add_subdirectory(qt_base)
-add_subdirectory(router)
-add_subdirectory(third_party)
-add_subdirectory(updater)
+# add_subdirectory(client)
+# add_subdirectory(codec)
+# add_subdirectory(common)
+# add_subdirectory(console)
+# add_subdirectory(crypto)
+# add_subdirectory(desktop)
+# add_subdirectory(host)
+# add_subdirectory(ipc)
+# add_subdirectory(net)
+# add_subdirectory(proto)
+# add_subdirectory(proxy)
+# add_subdirectory(qt_base)
+# add_subdirectory(router)
+# add_subdirectory(third_party)
+# add_subdirectory(updater)

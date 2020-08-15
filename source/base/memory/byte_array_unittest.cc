@@ -118,7 +118,7 @@ TEST(ByteArray, HexConvert)
         { "B%!$", "0B"   }
     };
 
-    for (size_t i = 0; i < std::size(table); ++i)
+    for (std::size_t i = 0; i < std::size(table); ++i)
     {
         EXPECT_EQ(toHex(fromHex(table[i].hex)), table[i].expected);
     }

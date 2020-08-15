@@ -62,7 +62,7 @@ TEST(XmlSettingsTest, SettingsTest)
 
     base::Settings::Array test_array;
 
-    for (size_t i = 0; i < std::size(kUserList); ++i)
+    for (std::size_t i = 0; i < std::size(kUserList); ++i)
     {
         base::Settings item;
 
@@ -80,7 +80,7 @@ TEST(XmlSettingsTest, SettingsTest)
 
     test_array = settings->getArray("Users");
 
-    for (size_t i = 0; i < std::size(kUserList); ++i)
+    for (std::size_t i = 0; i < std::size(kUserList); ++i)
     {
         EXPECT_EQ(test_array[i].get<std::string>("Name", std::string()), kUserList[i].name);
         EXPECT_EQ(test_array[i].get<base::ByteArray>("Salt", base::ByteArray()), base::fromHex(kUserList[i].salt));
@@ -100,7 +100,7 @@ TEST(XmlSettingsTest, SettingsTest)
 
     if (!test_array.empty())
     {
-        for (size_t i = 0; i < std::size(kUserList); ++i)
+        for (std::size_t i = 0; i < std::size(kUserList); ++i)
         {
             EXPECT_EQ(test_array[i].get<std::string>("Name", std::string()), kUserList[i].name);
             EXPECT_EQ(test_array[i].get<base::ByteArray>("Salt", base::ByteArray()), base::fromHex(kUserList[i].salt));
@@ -120,7 +120,7 @@ TEST(XmlSettingsTest, DISABLED_Performance)
     std::unique_ptr<XmlSettings> settings =
         std::make_unique<XmlSettings>(XmlSettings::Scope::USER, "test", "temp.xml");
 
-    for (size_t i = 0; i < 1000000; ++i)
+    for (std::size_t i = 0; i < 1000000; ++i)
     {
         settings->set<bool>("key1", true);
 
