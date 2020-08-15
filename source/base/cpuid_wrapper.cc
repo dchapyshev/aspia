@@ -16,6 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
+#include "base/compiler_specific.h"
 #include "base/cpuid_wrapper.h"
 #include "base/bitset.h"
 
