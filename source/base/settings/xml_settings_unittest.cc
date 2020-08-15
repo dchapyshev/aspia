@@ -18,6 +18,7 @@
 
 #include "base/settings/xml_settings.h"
 
+#include <cstddef>
 #include <gtest/gtest.h>
 
 namespace base {

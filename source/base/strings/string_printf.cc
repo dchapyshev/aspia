@@ -19,6 +19,7 @@
 #include "base/strings/string_printf.h"
 
 #include <cstdarg>
+#include <cstddef>
 
 namespace base {
 

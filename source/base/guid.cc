@@ -22,6 +22,7 @@
 #include "base/logging.h"
 
 #include <random>
+#include <cstddef>
 
 namespace base {
 

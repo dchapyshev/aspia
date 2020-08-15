@@ -19,6 +19,8 @@
 #include "base/win/registry.h"
 #include "base/logging.h"
 
+#include <cstddef>
+
 namespace base::win {
 
 namespace {

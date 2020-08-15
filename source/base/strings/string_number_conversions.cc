@@ -21,6 +21,7 @@
 #include "base/logging.h"
 
 #include <limits>
+#include <cstddef>
 
 namespace base {
 

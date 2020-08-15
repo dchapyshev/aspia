@@ -22,6 +22,7 @@
 #include "base/memory/byte_array.h"
 
 #include <filesystem>
+#include <cstddef>
 
 namespace base {
 

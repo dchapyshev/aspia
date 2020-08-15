@@ -23,6 +23,7 @@
 #include "base/version.h"
 
 #include <string>
+#include <cstddef>
 
 struct _OSVERSIONINFOEXW;
 struct _SYSTEM_INFO;

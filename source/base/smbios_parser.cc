@@ -29,7 +29,7 @@ SmbiosTableEnumerator::SmbiosTableEnumerator(const std::string& smbios_dump)
     if (smbios_dump.size() > sizeof(SmbiosDump))
         return;
 
-    memset(&smbios_, 0, sizeof(SmbiosDump));
+    std::memset(&smbios_, 0, sizeof(SmbiosDump));
     memcpy(&smbios_, smbios_dump.data(), smbios_dump.size());
 
     if (smbios_.length > kSmbiosMaxDataSize)

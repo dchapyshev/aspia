@@ -19,6 +19,7 @@
 #include "base/converter.h"
 
 #include <gtest/gtest.h>
+#include <cstddef>
 
 namespace base {
 

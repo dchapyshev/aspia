@@ -39,7 +39,6 @@ list(APPEND SOURCE_BASE
     logging.h
     macros_magic.h
     power_controller.h
-    power_controller_win.cc
     process_handle.cc
     process_handle.h
     scoped_clear_last_error.cc
@@ -393,6 +392,7 @@ list(APPEND SOURCE_BASE_LINUX
     )
 
 list(APPEND SOURCE_BASE_WIN
+    win/power_controller_win.cc
     win/command_line_win.cc
     win/desktop.cc
     win/desktop.h

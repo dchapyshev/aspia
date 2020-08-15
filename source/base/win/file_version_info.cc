@@ -18,6 +18,8 @@
 
 #include "base/win/file_version_info.h"
 
+#include <cstddef>
+
 #include "base/logging.h"
 #include "base/win/resource_util.h"
 

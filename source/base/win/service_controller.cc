@@ -22,6 +22,7 @@
 #include "base/strings/string_util.h"
 
 #include <memory>
+#include <cstddef>
 
 namespace base::win {
 

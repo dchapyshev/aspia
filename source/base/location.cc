@@ -22,6 +22,7 @@
 #include "base/logging.h"
 #include "base/strings/string_number_conversions.h"
 #include "base/strings/string_printf.h"
+#include <cstddef>
 
 #if defined(CC_MSVC)
 #include <intrin.h>

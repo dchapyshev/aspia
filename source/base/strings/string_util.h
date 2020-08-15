@@ -22,6 +22,7 @@
 #include "build/build_config.h"
 
 #include <string>
+#include <cstddef>
 
 namespace base {
 

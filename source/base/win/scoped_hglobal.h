@@ -21,6 +21,8 @@
 
 #include "base/macros_magic.h"
 
+#include <cstddef>
+
 #include <Windows.h>
 
 namespace base::win {
