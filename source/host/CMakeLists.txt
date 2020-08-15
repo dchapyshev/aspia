@@ -77,6 +77,18 @@ if (WIN32)
         sas_injector.h)
 endif()
 
+if (LINUX)
+    list(APPEND SOURCE_HOST_CORE
+        input_injector_x11.cc
+        input_injector_x11.h)
+endif()
+
+if (APPLE)
+    list(APPEND SOURCE_HOST_CORE
+        input_injector_mac.mm
+        input_injector_mac.h)
+endif()
+
 list(APPEND SOURCE_HOST_CORE_UI
     ui/application.cc
     ui/application.h
