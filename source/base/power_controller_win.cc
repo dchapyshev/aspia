@@ -17,6 +17,7 @@
 //
 
 #include "base/power_controller.h"
+
 #include "base/win/scoped_impersonator.h"
 #include "base/win/scoped_object.h"
 #include "base/logging.h"

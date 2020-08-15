@@ -16,48 +16,16 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/cpuid.h"
+#include "base/smbios_reader.h"
 
-#include "base/bitset.h"
-
-#include <intrin.h>
-#include <cstring>
+#include "base/logging.h"
 
 namespace base {
 
-CPUID::CPUID(const CPUID& other)
+std::string readSmbiosDump()
 {
-    memcpy(cpu_info_, other.cpu_info_, sizeof(cpu_info_));
-}
-
-CPUID& CPUID::operator=(const CPUID& other)
-{
-    if (&other == this)
-        return *this;
-
-    memcpy(cpu_info_, other.cpu_info_, sizeof(cpu_info_));
-    return *this;
-}
-
-void CPUID::get(int leaf)
-{
-    __cpuid(cpu_info_, leaf);
-}
-
-void CPUID::get(int leaf, int subleaf)
-{
-    __cpuidex(cpu_info_, leaf, subleaf);
-}
-
-// static
-bool CPUID::hasAesNi()
-{
-    // Check if function 1 is supported.
-    if (CPUID(0).eax() < 1)
-        return false;
-
-    // Bit 25 of register ECX set to 1 indicates the support of AES instructions.
-    return BitSet<uint32_t>(CPUID(1).ecx()).test(25);
+    NOTIMPLEMENTED();
+    return std::string();
 }
 
 } // namespace base

@@ -76,8 +76,17 @@ if (WIN32)
 endif()
 
 if (LINUX)
-    #list(APPEND SOURCE_BASE
-    #   ...)
+    list(APPEND SOURCE_BASE
+        power_controller_linux.cc
+        smbios_reader_linux.cc
+        sys_info_linux.cc)
+endif()
+
+if (APPLE)
+    list(APPEND SOURCE_BASE
+        power_controller_mac.mm
+        smbios_reader_mac.mm
+        sys_info_mac.mm)
 endif()
 
 list(APPEND SOURCE_BASE_UNIT_TESTS
