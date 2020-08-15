@@ -22,15 +22,10 @@
 
 namespace client {
 
-namespace {
-
-constexpr int kBytesPerPixel = 4;
-
-} // namespace
-
 FrameQImage::FrameQImage(QImage&& img)
-    : Frame(desktop::Size(img.size().width(), img.size().height()),
-            desktop::PixelFormat::ARGB(),
+    : Frame(base::Size(img.size().width(), img.size().height()),
+            base::PixelFormat::ARGB(),
+            img.bytesPerLine(),
             img.bits(),
             nullptr),
       image_(std::move(img))
@@ -39,8 +34,11 @@ FrameQImage::FrameQImage(QImage&& img)
 }
 
 // static
-std::unique_ptr<FrameQImage> FrameQImage::create(const desktop::Size& size)
+std::unique_ptr<FrameQImage> FrameQImage::create(const base::Size& size)
 {
+    if (size.isEmpty())
+        return nullptr;
+
     return std::unique_ptr<FrameQImage>(
         new FrameQImage(QImage(size.width(), size.height(), QImage::Format_RGB32)));
 }

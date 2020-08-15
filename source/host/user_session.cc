@@ -21,21 +21,20 @@
 #include "base/location.h"
 #include "base/logging.h"
 #include "base/task_runner.h"
+#include "base/crypto/password_generator.h"
+#include "base/desktop/frame.h"
+#include "base/net/adapter_enumerator.h"
 #include "base/strings/string_number_conversions.h"
 #include "base/strings/string_util.h"
 #include "base/strings/unicode.h"
-#include "crypto/password_generator.h"
-#include "desktop/frame.h"
 #include "host/client_session_desktop.h"
-#include "host/client_session_file_transfer.h"
 #include "host/desktop_session_proxy.h"
-#include "net/adapter_enumerator.h"
 
 namespace host {
 
 UserSession::UserSession(std::shared_ptr<base::TaskRunner> task_runner,
                          base::SessionId session_id,
-                         std::unique_ptr<ipc::Channel> channel)
+                         std::unique_ptr<base::IpcChannel> channel)
     : task_runner_(task_runner),
       channel_(std::move(channel)),
       attach_timer_(task_runner),
@@ -51,9 +50,11 @@ UserSession::UserSession(std::shared_ptr<base::TaskRunner> task_runner,
 
 UserSession::~UserSession() = default;
 
-void UserSession::start(Delegate* delegate)
+void UserSession::start(base::HostId host_id, Delegate* delegate)
 {
     delegate_ = delegate;
+    host_id_ = host_id;
+
     DCHECK(delegate_);
 
     LOG(LS_INFO) << "User session started "
@@ -76,7 +77,7 @@ void UserSession::start(Delegate* delegate)
     delegate_->onUserSessionStarted();
 }
 
-void UserSession::restart(std::unique_ptr<ipc::Channel> channel)
+void UserSession::restart(std::unique_ptr<base::IpcChannel> channel)
 {
     channel_ = std::move(channel);
 
@@ -108,13 +109,13 @@ void UserSession::restart(std::unique_ptr<ipc::Channel> channel)
     delegate_->onUserSessionStarted();
 }
 
-net::User UserSession::user() const
+base::User UserSession::user() const
 {
-    net::User user = net::User::create(
+    base::User user = base::User::create(
         base::utf16FromAscii(username_), base::utf16FromAscii(password_));
 
     user.sessions = proto::SESSION_TYPE_ALL;
-    user.flags = net::User::ENABLED;
+    user.flags = base::User::ENABLED;
 
     return user;
 }
@@ -136,7 +137,8 @@ void UserSession::addNewSession(std::unique_ptr<ClientSession> client_session)
                 static_cast<ClientSessionDesktop*>(client_session_ptr);
 
             desktop_client_session->setDesktopSessionProxy(desktop_session_proxy_);
-            desktop_session_proxy_->setEnabled(true);
+            desktop_session_proxy_->control(proto::internal::Control::ENABLE);
+            desktop_session_proxy_->captureScreen();
         }
         break;
 
@@ -194,6 +196,12 @@ void UserSession::setSessionEvent(base::win::SessionStatus status, base::Session
     }
 }
 
+void UserSession::setHostId(base::HostId host_id)
+{
+    host_id_ = host_id;
+    sendCredentials();
+}
+
 void UserSession::onDisconnected()
 {
     onSessionDettached(FROM_HERE);
@@ -239,7 +247,11 @@ void UserSession::onDesktopSessionStarted()
 {
     LOG(LS_INFO) << "Desktop session is connected";
 
-    desktop_session_proxy_->setEnabled(!desktop_clients_.empty());
+    proto::internal::Control::Action action = proto::internal::Control::ENABLE;
+    if (desktop_clients_.empty())
+        action = proto::internal::Control::DISABLE;
+
+    desktop_session_proxy_->control(action);
     onClientSessionConfigured();
 }
 
@@ -256,16 +268,10 @@ void UserSession::onDesktopSessionStopped()
     }
 }
 
-void UserSession::onScreenCaptured(const desktop::Frame& frame)
+void UserSession::onScreenCaptured(const base::Frame* frame, const base::MouseCursor* cursor)
 {
     for (const auto& client : desktop_clients_)
-        static_cast<ClientSessionDesktop*>(client.get())->encodeFrame(frame);
-}
-
-void UserSession::onCursorCaptured(const desktop::MouseCursor& mouse_cursor)
-{
-    for (const auto& client : desktop_clients_)
-        static_cast<ClientSessionDesktop*>(client.get())->encodeMouseCursor(mouse_cursor);
+        static_cast<ClientSessionDesktop*>(client.get())->encode(frame, cursor);
 }
 
 void UserSession::onScreenListChanged(const proto::ScreenList& list)
@@ -277,15 +283,7 @@ void UserSession::onScreenListChanged(const proto::ScreenList& list)
 void UserSession::onClipboardEvent(const proto::ClipboardEvent& event)
 {
     for (const auto& client : desktop_clients_)
-    {
-        if (client->sessionType() == proto::SESSION_TYPE_DESKTOP_MANAGE)
-        {
-            ClientSessionDesktop* desktop_client =
-                static_cast<ClientSessionDesktop*>(client.get());
-
-            desktop_client->injectClipboardEvent(event);
-        }
-    }
+        static_cast<ClientSessionDesktop*>(client.get())->injectClipboardEvent(event);
 }
 
 void UserSession::onClientSessionConfigured()
@@ -319,9 +317,12 @@ void UserSession::onClientSessionConfigured()
         // If at least one client has enabled input block, then the block will be enabled for
         // everyone.
         system_config.block_input = system_config.block_input || client_config.block_input;
+
+        system_config.lock_at_disconnect =
+            system_config.lock_at_disconnect || client_config.lock_at_disconnect;
     }
 
-    desktop_session_proxy_->setConfig(system_config);
+    desktop_session_proxy_->configure(system_config);
 }
 
 void UserSession::onClientSessionFinished()
@@ -354,7 +355,7 @@ void UserSession::onClientSessionFinished()
     delete_finished(&file_transfer_clients_);
 
     if (desktop_clients_.empty())
-        desktop_session_proxy_->setEnabled(false);
+        desktop_session_proxy_->control(proto::internal::Control::DISABLE);
 }
 
 void UserSession::onSessionDettached(const base::Location& location)
@@ -426,10 +427,10 @@ void UserSession::sendDisconnectEvent(const std::string& session_id)
 
 void UserSession::updateCredentials()
 {
-    crypto::PasswordGenerator generator;
+    base::PasswordGenerator generator;
 
-    static const uint32_t kPasswordCharacters = crypto::PasswordGenerator::UPPER_CASE |
-        crypto::PasswordGenerator::LOWER_CASE | crypto::PasswordGenerator::DIGITS;
+    static const uint32_t kPasswordCharacters = base::PasswordGenerator::UPPER_CASE |
+        base::PasswordGenerator::LOWER_CASE | base::PasswordGenerator::DIGITS;
     static const int kPasswordLength = 6;
 
     // TODO: Get password parameters from settings.
@@ -445,15 +446,20 @@ void UserSession::sendCredentials()
     if (!channel_)
         return;
 
+    LOG(LS_INFO) << "Sending credentials to UI";
+    LOG(LS_INFO) << "Host ID: " << host_id_;
+    LOG(LS_INFO) << "User Name: " << username_;
+
     outgoing_message_.Clear();
 
     proto::internal::Credentials* credentials = outgoing_message_.mutable_credentials();
+    credentials->set_id(host_id_);
     credentials->set_username(username_);
     credentials->set_password(password_);
 
-    for (net::AdapterEnumerator adapters; !adapters.isAtEnd(); adapters.advance())
+    for (base::AdapterEnumerator adapters; !adapters.isAtEnd(); adapters.advance())
     {
-        for (net::AdapterEnumerator::IpAddressEnumerator addresses(adapters);
+        for (base::AdapterEnumerator::IpAddressEnumerator addresses(adapters);
              !addresses.isAtEnd(); addresses.advance())
         {
             std::string ip = addresses.address();

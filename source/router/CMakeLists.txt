@@ -20,17 +20,26 @@ include(tbb)
 
 list(APPEND SOURCE_ROUTER
     database.h
+    database_factory.h
+    database_factory_sqlite.cc
+    database_factory_sqlite.h
     database_sqlite.cc
     database_sqlite.h
     main.cc
     server.cc
     server.h
+    server_proxy.cc
+    server_proxy.h
     session.cc
     session.h
-    session_manager.cc
-    session_manager.h
-    session_peer.cc
-    session_peer.h
+    session_admin.cc
+    session_admin.h
+    session_client.cc
+    session_client.h
+    session_host.cc
+    session_host.h
+    session_relay.cc
+    session_relay.h
     settings.cc
     settings.h)
 
@@ -47,14 +56,15 @@ add_executable(aspia_router ${SOURCE_ROUTER} ${SOURCE_ROUTER_WIN} win/router.rc)
 set_target_properties(aspia_router PROPERTIES LINK_FLAGS "/MANIFEST:NO")
 target_link_libraries(aspia_router
     aspia_base
-    aspia_crypto
-    aspia_net
     aspia_proto
+    comsupp
     crypt32
     libcrypto
     libssl
     modp_b64
+    netapi32
     sqlite
+    version
     ${Protobuf_LITE_LIBRARIES})
 
 if (USE_TBB)

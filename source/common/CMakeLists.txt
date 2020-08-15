@@ -51,8 +51,20 @@ list(APPEND SOURCE_COMMON_UI
     ui/about_dialog.cc
     ui/about_dialog.h
     ui/about_dialog.ui
+    ui/download_dialog.cc
+    ui/download_dialog.h
+    ui/download_dialog.ui
     ui/language_action.cc
-    ui/language_action.h)
+    ui/language_action.h
+    ui/update_checker.cc
+    ui/update_checker.h
+    ui/update_checker_impl.cc
+    ui/update_checker_impl.h
+    ui/update_dialog.cc
+    ui/update_dialog.h
+    ui/update_dialog.ui
+    ui/update_info.cc
+    ui/update_info.h)
 
 list(APPEND SOURCE_COMMON_WIN
     win/file_enumerator.cc
@@ -72,6 +84,9 @@ add_library(aspia_common STATIC
     ${SOURCE_COMMON_WIN}
     ${SOURCE_COMMON_RESOURCES})
 target_link_libraries(aspia_common aspia_base aspia_proto ${QT_LIBS} ${THIRD_PARTY_LIBS})
+set_property(TARGET aspia_common PROPERTY AUTOMOC ON)
+set_property(TARGET aspia_common PROPERTY AUTOUIC ON)
+set_property(TARGET aspia_common PROPERTY AUTORCC ON)
 
 if(Qt5LinguistTools_FOUND)
     # Get the list of translation files.

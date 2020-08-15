@@ -47,8 +47,8 @@ public:
     CommandLine(const CommandLine& other) = default;
     CommandLine& operator=(const CommandLine& other) = default;
 
-    CommandLine(CommandLine&& other);
-    CommandLine& operator=(CommandLine&& other);
+    CommandLine(CommandLine&& other) noexcept;
+    CommandLine& operator=(CommandLine&& other) noexcept;
 
     ~CommandLine() = default;
 

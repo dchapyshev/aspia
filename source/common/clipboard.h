@@ -58,12 +58,10 @@ private:
     bool onMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESULT& result);
     void onClipboardUpdate();
 
-    Delegate* delegate_;
+    Delegate* delegate_ = nullptr;
 
     // Used to subscribe to WM_CLIPBOARDUPDATE messages.
     std::unique_ptr<base::win::MessageWindow> window_;
-
-    std::string last_mime_type_;
     std::string last_data_;
 
     DISALLOW_COPY_AND_ASSIGN(Clipboard);

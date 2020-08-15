@@ -18,14 +18,12 @@
 
 #include "host/ui/user_settings.h"
 
-#include "qt_base/qt_xml_settings.h"
-
 #include <QLocale>
 
 namespace host {
 
 UserSettings::UserSettings()
-    : settings_(qt_base::QtXmlSettings::format(),
+    : settings_(QSettings::IniFormat,
                 QSettings::UserScope,
                 QLatin1String("aspia"),
                 QLatin1String("host"))

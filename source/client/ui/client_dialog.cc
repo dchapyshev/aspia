@@ -19,6 +19,7 @@
 #include "client/ui/client_dialog.h"
 
 #include "base/logging.h"
+#include "base/net/address.h"
 #include "build/build_config.h"
 #include "client/config_factory.h"
 #include "client/ui/client_settings.h"
@@ -27,7 +28,6 @@
 #include "client/ui/qt_file_manager_window.h"
 #include "common/desktop_session_constants.h"
 #include "common/session_type.h"
-#include "net/address.h"
 #include "ui_client_dialog.h"
 
 #include <QMessageBox>
@@ -58,9 +58,9 @@ ClientDialog::ClientDialog(QWidget* parent)
                                         QVariant(session_type));
     };
 
-    add_session(QStringLiteral(":/img/monitor-keyboard.png"), proto::SESSION_TYPE_DESKTOP_MANAGE);
-    add_session(QStringLiteral(":/img/monitor.png"), proto::SESSION_TYPE_DESKTOP_VIEW);
-    add_session(QStringLiteral(":/img/folder-stand.png"), proto::SESSION_TYPE_FILE_TRANSFER);
+    add_session(":/img/monitor-keyboard.png", proto::SESSION_TYPE_DESKTOP_MANAGE);
+    add_session(":/img/monitor.png", proto::SESSION_TYPE_DESKTOP_VIEW);
+    add_session(":/img/folder-stand.png", proto::SESSION_TYPE_FILE_TRANSFER);
 
     int current_session_type = ui->combo_session_type->findData(QVariant(config_.session_type));
     if (current_session_type != -1)
@@ -157,7 +157,8 @@ void ClientDialog::connectButtonPressed()
     QComboBox* combo_address = ui->combo_address;
     QString current_address = combo_address->currentText();
 
-    net::Address address = net::Address::fromString(current_address.toStdU16String());
+    base::Address address = base::Address::fromString(
+        current_address.toStdU16String(), DEFAULT_HOST_TCP_PORT);
     if (!address.isValid())
     {
         QMessageBox::warning(this,

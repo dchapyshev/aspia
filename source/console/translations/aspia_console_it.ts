@@ -156,31 +156,36 @@
     </message>
     <message>
         <location filename="../computer_dialog_desktop.ui" line="129"/>
-        <source>Block remote input</source>
+        <source>Lock at disconnect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../computer_dialog_desktop.ui" line="136"/>
-        <source>Enable cursor shape</source>
+        <source>Block remote input</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../computer_dialog_desktop.ui" line="143"/>
-        <source>Enable clipboard</source>
+        <source>Enable cursor shape</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../computer_dialog_desktop.ui" line="150"/>
-        <source>Disable desktop effects</source>
+        <source>Enable clipboard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../computer_dialog_desktop.ui" line="157"/>
-        <source>Disable desktop wallpaper</source>
+        <source>Disable desktop effects</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../computer_dialog_desktop.ui" line="164"/>
+        <source>Disable desktop wallpaper</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog_desktop.ui" line="171"/>
         <source>Disable font smoothing</source>
         <translation type="unfinished"></translation>
     </message>
@@ -260,67 +265,67 @@
 <context>
     <name>Console</name>
     <message>
-        <location filename="../main.cc" line="62"/>
+        <location filename="../main.cc" line="60"/>
         <source>Remote computer address.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.cc" line="63"/>
+        <location filename="../main.cc" line="61"/>
         <source>address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.cc" line="67"/>
+        <location filename="../main.cc" line="65"/>
         <source>Remote computer port.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.cc" line="68"/>
+        <location filename="../main.cc" line="66"/>
         <source>port</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.cc" line="73"/>
+        <location filename="../main.cc" line="71"/>
         <source>Name of user.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.cc" line="74"/>
+        <location filename="../main.cc" line="72"/>
         <source>username</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.cc" line="78"/>
+        <location filename="../main.cc" line="76"/>
         <source>Session type. Possible values: desktop-manage, desktop-view, file-transfer.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.cc" line="84"/>
+        <location filename="../main.cc" line="82"/>
         <source>Open the client to connect to the computer.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.cc" line="87"/>
+        <location filename="../main.cc" line="85"/>
         <source>Aspia Console</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.cc" line="90"/>
+        <location filename="../main.cc" line="88"/>
         <source>file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.cc" line="91"/>
+        <location filename="../main.cc" line="89"/>
         <source>The file to open.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.cc" line="130"/>
+        <location filename="../main.cc" line="128"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.cc" line="131"/>
+        <location filename="../main.cc" line="129"/>
         <source>Incorrect session type entered.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -845,32 +850,32 @@
 <context>
     <name>console::ComputerDialogDesktop</name>
     <message>
-        <location filename="../computer_dialog_desktop.cc" line="59"/>
+        <location filename="../computer_dialog_desktop.cc" line="60"/>
         <source>True color (32 bit)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.cc" line="60"/>
+        <location filename="../computer_dialog_desktop.cc" line="61"/>
         <source>High color (16 bit)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.cc" line="61"/>
+        <location filename="../computer_dialog_desktop.cc" line="62"/>
         <source>256 colors (8 bit)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.cc" line="62"/>
+        <location filename="../computer_dialog_desktop.cc" line="63"/>
         <source>64 colors (6 bit)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.cc" line="63"/>
+        <location filename="../computer_dialog_desktop.cc" line="64"/>
         <source>8 colors (3 bit)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.cc" line="204"/>
+        <location filename="../computer_dialog_desktop.cc" line="212"/>
         <source>Compression ratio: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -904,12 +909,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_dialog_general.cc" line="121"/>
+        <location filename="../computer_dialog_general.cc" line="122"/>
         <source>An invalid computer address was entered.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_dialog_general.cc" line="155"/>
+        <location filename="../computer_dialog_general.cc" line="156"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
@@ -977,14 +982,14 @@
     </message>
     <message>
         <location filename="../main_window.cc" line="508"/>
-        <location filename="../main_window.cc" line="816"/>
-        <location filename="../main_window.cc" line="893"/>
+        <location filename="../main_window.cc" line="809"/>
+        <location filename="../main_window.cc" line="886"/>
         <source>Confirmation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="509"/>
-        <location filename="../main_window.cc" line="894"/>
+        <location filename="../main_window.cc" line="887"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -994,33 +999,33 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="720"/>
+        <location filename="../main_window.cc" line="719"/>
         <source>Close tab</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="723"/>
-        <location filename="../main_window.cc" line="730"/>
+        <location filename="../main_window.cc" line="720"/>
+        <location filename="../main_window.cc" line="725"/>
         <source>Pin tab</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="817"/>
+        <location filename="../main_window.cc" line="810"/>
         <source>The list of recently opened address books will be cleared. Continue?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="850"/>
+        <location filename="../main_window.cc" line="843"/>
         <source>Hide</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="865"/>
+        <location filename="../main_window.cc" line="858"/>
         <source>Show</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1000"/>
+        <location filename="../main_window.cc" line="993"/>
         <source>Aspia Console</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1036,12 +1041,12 @@
 <context>
     <name>console::OpenAddressBookDialog</name>
     <message>
-        <location filename="../open_address_book_dialog.cc" line="41"/>
+        <location filename="../open_address_book_dialog.cc" line="42"/>
         <source>Without Encryption</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../open_address_book_dialog.cc" line="45"/>
+        <location filename="../open_address_book_dialog.cc" line="46"/>
         <source>ChaCha20 + Poly1305 (256-bit key)</source>
         <translation type="unfinished"></translation>
     </message>

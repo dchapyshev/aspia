@@ -22,9 +22,9 @@
 #include "base/task_runner.h"
 #include "base/files/base_paths.h"
 #include "base/files/file_path_watcher.h"
+#include "base/net/network_channel.h"
+#include "base/net/firewall_manager.h"
 #include "host/client_session.h"
-#include "net/firewall_manager.h"
-#include "net/channel.h"
 
 namespace host {
 
@@ -67,23 +67,10 @@ void Server::start()
 
     settings_watcher_ = std::make_unique<base::FilePathWatcher>(task_runner_);
     settings_watcher_->watch(settings_.filePath(), false,
-        [this](const std::filesystem::path& path, bool error)
-    {
-        LOG(LS_INFO) << "Configuration file change detected";
+        std::bind(&Server::updateConfiguration, this, std::placeholders::_1, std::placeholders::_2));
 
-        if (!error)
-        {
-            DCHECK_EQ(path, settings_.filePath());
-
-            // Synchronize the parameters from the file.
-            settings_.sync();
-
-            // Reload user lists.
-            reloadUserList();
-        }
-    });
-
-    authenticator_manager_ = std::make_unique<net::ServerAuthenticatorManager>(task_runner_, this);
+    authenticator_manager_ =
+        std::make_unique<base::ServerAuthenticatorManager>(task_runner_, this);
 
     user_session_manager_ = std::make_unique<UserSessionManager>(task_runner_);
     user_session_manager_->start(this);
@@ -91,8 +78,11 @@ void Server::start()
     reloadUserList();
     addFirewallRules();
 
-    server_ = std::make_unique<net::Server>();
+    server_ = std::make_unique<base::NetworkServer>();
     server_->start(settings_.tcpPort(), this);
+
+    if (settings_.isRouterEnabled())
+        connectToRouter();
 
     LOG(LS_INFO) << "Host server is started successfully";
 }
@@ -103,18 +93,42 @@ void Server::setSessionEvent(base::win::SessionStatus status, base::SessionId se
         user_session_manager_->setSessionEvent(status, session_id);
 }
 
-void Server::onNewConnection(std::unique_ptr<net::Channel> channel)
+void Server::onNewConnection(std::unique_ptr<base::NetworkChannel> channel)
 {
-    static const size_t kReadBufferSize = 1 * 1024 * 1024; // 1 Mb.
-
-    channel->setReadBufferSize(kReadBufferSize);
-    channel->setNoDelay(true);
-
-    if (authenticator_manager_)
-        authenticator_manager_->addNewChannel(std::move(channel));
+    LOG(LS_INFO) << "New DIRECT connection";
+    startAuthentication(std::move(channel));
 }
 
-void Server::onNewSession(net::ServerAuthenticatorManager::SessionInfo&& session_info)
+void Server::onRouterConnected()
+{
+    LOG(LS_INFO) << "ROUTER CONNECTED";
+}
+
+void Server::onRouterDisconnected(base::NetworkChannel::ErrorCode error_code)
+{
+    LOG(LS_INFO) << "ROUTER DISCONNECTED";
+}
+
+void Server::onHostIdAssigned(base::HostId host_id, const base::ByteArray& host_key)
+{
+    LOG(LS_INFO) << "New host ID assigned: " << host_id;
+
+    if (!host_key.empty())
+    {
+        LOG(LS_INFO) << "Host key changed";
+        settings_.setHostKey(host_key);
+    }
+
+    user_session_manager_->setHostId(host_id);
+}
+
+void Server::onClientConnected(std::unique_ptr<base::NetworkChannel> channel)
+{
+    LOG(LS_INFO) << "New RELAY connection";
+    startAuthentication(std::move(channel));
+}
+
+void Server::onNewSession(base::ServerAuthenticatorManager::SessionInfo&& session_info)
 {
     std::unique_ptr<ClientSession> session = ClientSession::create(
         static_cast<proto::SessionType>(session_info.session_type), std::move(session_info.channel));
@@ -134,13 +148,24 @@ void Server::onUserListChanged()
     reloadUserList();
 }
 
+void Server::startAuthentication(std::unique_ptr<base::NetworkChannel> channel)
+{
+    static const size_t kReadBufferSize = 1 * 1024 * 1024; // 1 Mb.
+
+    channel->setReadBufferSize(kReadBufferSize);
+    channel->setNoDelay(true);
+
+    if (authenticator_manager_)
+        authenticator_manager_->addNewChannel(std::move(channel));
+}
+
 void Server::addFirewallRules()
 {
     std::filesystem::path file_path;
     if (!base::BasePaths::currentExecFile(&file_path))
         return;
 
-    net::FirewallManager firewall(file_path);
+    base::FirewallManager firewall(file_path);
     if (!firewall.isValid())
         return;
 
@@ -156,24 +181,87 @@ void Server::deleteFirewallRules()
     if (!base::BasePaths::currentExecFile(&file_path))
         return;
 
-    net::FirewallManager firewall(file_path);
+    base::FirewallManager firewall(file_path);
     if (!firewall.isValid())
         return;
 
     firewall.deleteRuleByName(kFirewallRuleName);
 }
 
+void Server::updateConfiguration(const std::filesystem::path& path, bool error)
+{
+    LOG(LS_INFO) << "Configuration file change detected";
+
+    if (!error)
+    {
+        DCHECK_EQ(path, settings_.filePath());
+
+        // Synchronize the parameters from the file.
+        settings_.sync();
+
+        // Reload user lists.
+        reloadUserList();
+
+        // If a controller instance already exists.
+        if (router_controller_)
+        {
+            if (settings_.isRouterEnabled())
+            {
+                // Check if the connection parameters have changed.
+                if (router_controller_->address() != settings_.routerAddress() ||
+                    router_controller_->port() != settings_.routerPort() ||
+                    router_controller_->publicKey() != settings_.routerPublicKey())
+                {
+                    // Reconnect to the router with new parameters.
+                    LOG(LS_INFO) << "Router parameters have changed";
+                    connectToRouter();
+                }
+            }
+            else
+            {
+                // Destroy the controller.
+                LOG(LS_INFO) << "The router is now disabled";
+                router_controller_.reset();
+            }
+        }
+        else
+        {
+            if (settings_.isRouterEnabled())
+                connectToRouter();
+        }
+    }
+}
+
 void Server::reloadUserList()
 {
     // Read the list of regular users.
-    std::shared_ptr<net::UserList> user_list =
-        std::make_shared<net::UserList>(settings_.userList());
+    std::shared_ptr<base::UserList> user_list =
+        std::make_shared<base::UserList>(settings_.userList());
 
     // Add a list of one-time users to the list of regular users.
     user_list->merge(user_session_manager_->userList());
 
     // Updating the list of users.
     authenticator_manager_->setUserList(user_list);
+}
+
+void Server::connectToRouter()
+{
+    LOG(LS_INFO) << "Connecting to the router...";
+
+    // Destroy the previous instance.
+    router_controller_.reset();
+
+    // Fill the connection parameters.
+    RouterController::RouterInfo router_info;
+    router_info.address = settings_.routerAddress();
+    router_info.port = settings_.routerPort();
+    router_info.public_key = settings_.routerPublicKey();
+    router_info.host_key = settings_.hostKey();
+
+    // Connect to the router.
+    router_controller_ = std::make_unique<RouterController>(task_runner_);
+    router_controller_->start(router_info, this);
 }
 
 } // namespace host

@@ -108,7 +108,7 @@ void MessagePumpDefault::scheduleWork()
     event_.notify_one();
 }
 
-void MessagePumpDefault::scheduleDelayedWork(TimePoint delayed_work_time)
+void MessagePumpDefault::scheduleDelayedWork(const TimePoint& delayed_work_time)
 {
     // We know that we can't be blocked on Wait right now since this method can
     // only be called on the same thread as Run, so we only need to update our

@@ -70,6 +70,19 @@ void DesktopControlProxy::setCurrentScreen(const proto::Screen& screen)
         desktop_control_->setCurrentScreen(screen);
 }
 
+void DesktopControlProxy::setPreferredSize(int width, int height)
+{
+    if (!io_task_runner_->belongsToCurrentThread())
+    {
+        io_task_runner_->postTask(
+            std::bind(&DesktopControlProxy::setPreferredSize, shared_from_this(), width, height));
+        return;
+    }
+
+    if (desktop_control_)
+        desktop_control_->setPreferredSize(width, height);
+}
+
 void DesktopControlProxy::onKeyEvent(const proto::KeyEvent& event)
 {
     if (!io_task_runner_->belongsToCurrentThread())
@@ -83,17 +96,17 @@ void DesktopControlProxy::onKeyEvent(const proto::KeyEvent& event)
         desktop_control_->onKeyEvent(event);
 }
 
-void DesktopControlProxy::onPointerEvent(const proto::PointerEvent& event)
+void DesktopControlProxy::onMouseEvent(const proto::MouseEvent& event)
 {
     if (!io_task_runner_->belongsToCurrentThread())
     {
         io_task_runner_->postTask(
-            std::bind(&DesktopControlProxy::onPointerEvent, shared_from_this(), event));
+            std::bind(&DesktopControlProxy::onMouseEvent, shared_from_this(), event));
         return;
     }
 
     if (desktop_control_)
-        desktop_control_->onPointerEvent(event);
+        desktop_control_->onMouseEvent(event);
 }
 
 void DesktopControlProxy::onClipboardEvent(const proto::ClipboardEvent& event)
@@ -146,6 +159,19 @@ void DesktopControlProxy::onSystemInfoRequest()
 
     if (desktop_control_)
         desktop_control_->onSystemInfoRequest();
+}
+
+void DesktopControlProxy::onMetricsRequest()
+{
+    if (!io_task_runner_->belongsToCurrentThread())
+    {
+        io_task_runner_->postTask(
+            std::bind(&DesktopControlProxy::onMetricsRequest, shared_from_this()));
+        return;
+    }
+
+    if (desktop_control_)
+        desktop_control_->onMetricsRequest();
 }
 
 } // namespace client

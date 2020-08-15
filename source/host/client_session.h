@@ -21,18 +21,18 @@
 
 #include "base/session_id.h"
 #include "base/version.h"
-#include "net/channel.h"
+#include "base/net/network_channel.h"
 #include "proto/common.pb.h"
 
-namespace net {
-class ChannelProxy;
-} // namespace net
+namespace base {
+class NetworkChannelProxy;
+} // namespace base
 
 namespace host {
 
 class DesktopSessionProxy;
 
-class ClientSession : public net::Channel::Listener
+class ClientSession : public base::NetworkChannel::Listener
 {
 public:
     virtual ~ClientSession() = default;
@@ -54,7 +54,7 @@ public:
     };
 
     static std::unique_ptr<ClientSession> create(
-        proto::SessionType session_type, std::unique_ptr<net::Channel> channel);
+        proto::SessionType session_type, std::unique_ptr<base::NetworkChannel> channel);
 
     void start(Delegate* delegate);
     void stop();
@@ -75,15 +75,15 @@ public:
     base::SessionId sessionId() const { return session_id_; }
 
 protected:
-    ClientSession(proto::SessionType session_type, std::unique_ptr<net::Channel> channel);
+    ClientSession(proto::SessionType session_type, std::unique_ptr<base::NetworkChannel> channel);
 
     virtual void onStarted() = 0;
-    std::shared_ptr<net::ChannelProxy> channelProxy();
+    std::shared_ptr<base::NetworkChannelProxy> channelProxy();
     void sendMessage(base::ByteArray&& buffer);
 
-    // net::Channel::Listener implementation.
+    // base::NetworkChannel::Listener implementation.
     void onConnected() override;
-    void onDisconnected(net::Channel::ErrorCode error_code) override;
+    void onDisconnected(base::NetworkChannel::ErrorCode error_code) override;
 
     Delegate* delegate_ = nullptr;
 
@@ -95,7 +95,7 @@ private:
     base::Version version_;
     std::u16string username_;
 
-    std::unique_ptr<net::Channel> channel_;
+    std::unique_ptr<base::NetworkChannel> channel_;
 };
 
 } // namespace host

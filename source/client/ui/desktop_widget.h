@@ -19,13 +19,16 @@
 #ifndef CLIENT__UI__DESKTOP_WIDGET_H
 #define CLIENT__UI__DESKTOP_WIDGET_H
 
+#include "base/desktop/frame.h"
 #include "build/build_config.h"
+#include "proto/desktop.pb.h"
+
 #if defined(OS_WIN)
 #include "base/win/scoped_user_object.h"
 #endif // defined(OS_WIN)
-#include "desktop/frame.h"
 
 #include <QEvent>
+#include <QPainter>
 #include <QWidget>
 
 #include <memory>
@@ -43,16 +46,16 @@ public:
     public:
         virtual ~Delegate() = default;
 
-        virtual void onPointerEvent(const QPoint& pos, uint32_t mask) = 0;
-        virtual void onKeyEvent(uint32_t usb_keycode, uint32_t flags) = 0;
+        virtual void onMouseEvent(const proto::MouseEvent& event) = 0;
+        virtual void onKeyEvent(const proto::KeyEvent& event) = 0;
         virtual void onDrawDesktop() = 0;
     };
 
     DesktopWidget(Delegate* delegate, QWidget* parent);
     ~DesktopWidget() = default;
 
-    desktop::Frame* desktopFrame();
-    void setDesktopFrame(std::shared_ptr<desktop::Frame>& frame);
+    base::Frame* desktopFrame();
+    void setDesktopFrame(std::shared_ptr<base::Frame>& frame);
 
     void doMouseEvent(QEvent::Type event_type,
                       const Qt::MouseButtons& buttons,
@@ -74,7 +77,6 @@ protected:
     void mousePressEvent(QMouseEvent* event) override;
     void mouseReleaseEvent(QMouseEvent* event) override;
     void mouseDoubleClickEvent(QMouseEvent* event) override;
-    void wheelEvent(QWheelEvent* event) override;
     void keyPressEvent(QKeyEvent* event) override;
     void keyReleaseEvent(QKeyEvent* event) override;
     void leaveEvent(QEvent *event) override;
@@ -84,15 +86,16 @@ protected:
 private:
     void executeKeyEvent(uint32_t usb_keycode, uint32_t flags);
 
+    QPainter painter_;
+
 #if defined(OS_WIN)
     static LRESULT CALLBACK keyboardHookProc(INT code, WPARAM wparam, LPARAM lparam);
-
     base::win::ScopedHHOOK keyboard_hook_;
 #endif // defined(OS_WIN)
 
     Delegate* delegate_;
 
-    std::shared_ptr<desktop::Frame> frame_;
+    std::shared_ptr<base::Frame> frame_;
     bool enable_key_sequenses_ = true;
 
     QPoint prev_pos_;

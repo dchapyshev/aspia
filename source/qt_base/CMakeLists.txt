@@ -26,9 +26,7 @@ list(APPEND SOURCE_QT_BASE
     qt_logging.cc
     qt_logging.h
     qt_task_runner.cc
-    qt_task_runner.h
-    qt_xml_settings.cc
-    qt_xml_settings.h)
+    qt_task_runner.h)
 
 source_group("" FILES ${SOURCE_QT_BASE})
 
@@ -37,6 +35,9 @@ target_link_libraries(aspia_qt_base
     aspia_base
     ${QT_LIBS}
     ${THIRD_PARTY_LIBS})
+set_property(TARGET aspia_qt_base PROPERTY AUTOMOC ON)
+set_property(TARGET aspia_qt_base PROPERTY AUTOUIC ON)
+set_property(TARGET aspia_qt_base PROPERTY AUTORCC ON)
 
 if(Qt5LinguistTools_FOUND)
     # Get the list of Qt translation files.

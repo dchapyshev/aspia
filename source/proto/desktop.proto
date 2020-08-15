@@ -37,7 +37,7 @@ message KeyEvent
     uint32 flags = 2;
 }
 
-message PointerEvent
+message MouseEvent
 {
     enum ButtonMask
     {
@@ -89,6 +89,12 @@ message CursorShape
     bytes data = 6;
 }
 
+message Size
+{
+    int32 width  = 1;
+    int32 height = 2;
+}
+
 message Rect
 {
     int32 x      = 1;
@@ -121,8 +127,9 @@ enum VideoEncoding
 
 message VideoPacketFormat
 {
-    Rect screen_rect = 1;
+    Rect video_rect = 1;
     PixelFormat pixel_format = 2;
+    Size screen_size = 3;
 }
 
 message VideoPacket
@@ -160,6 +167,7 @@ enum DesktopFlags
     DISABLE_DESKTOP_WALLPAPER = 8;
     DISABLE_FONT_SMOOTHING    = 16;
     BLOCK_REMOTE_INPUT        = 32;
+    LOCK_AT_DISCONNECT        = 64;
 }
 
 message DesktopConfig
@@ -184,7 +192,7 @@ message HostToClient
 
 message ClientToHost
 {
-    PointerEvent pointer_event     = 1;
+    MouseEvent mouse_event         = 1;
     KeyEvent key_event             = 2;
     // Field 3 reserved for TouchEvent.
     // Field 4 reserved for TextEvent.

@@ -27,9 +27,9 @@
 class QLocalServer;
 class QLockFile;
 
-namespace crypto {
+namespace base {
 class ScopedCryptoInitializer;
-} // namespace crypto
+} // namespace base
 
 namespace qt_base {
 
@@ -71,7 +71,7 @@ private:
     QLocalServer* server_ = nullptr;
 
     base::Thread io_thread_;
-    std::unique_ptr<crypto::ScopedCryptoInitializer> crypto_initializer_;
+    std::unique_ptr<base::ScopedCryptoInitializer> crypto_initializer_;
     std::unique_ptr<LocaleLoader> locale_loader_;
     std::shared_ptr<base::TaskRunner> ui_task_runner_;
     std::shared_ptr<base::TaskRunner> io_task_runner_;

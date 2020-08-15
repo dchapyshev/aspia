@@ -59,7 +59,7 @@ public:
     virtual void run(Delegate* delegate) = 0;
     virtual void quit() = 0;
     virtual void scheduleWork() = 0;
-    virtual void scheduleDelayedWork(TimePoint delayed_work_time) = 0;
+    virtual void scheduleDelayedWork(const TimePoint& delayed_work_time) = 0;
 };
 
 } // namespace base

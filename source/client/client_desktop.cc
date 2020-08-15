@@ -20,18 +20,37 @@
 
 #include "base/logging.h"
 #include "base/task_runner.h"
+#include "base/codec/cursor_decoder.h"
+#include "base/codec/video_decoder.h"
+#include "base/codec/video_util.h"
+#include "base/desktop/mouse_cursor.h"
 #include "client/desktop_control_proxy.h"
 #include "client/desktop_window.h"
 #include "client/desktop_window_proxy.h"
 #include "client/config_factory.h"
-#include "codec/cursor_decoder.h"
-#include "codec/video_decoder.h"
-#include "codec/video_util.h"
 #include "common/desktop_session_constants.h"
-#include "desktop/frame.h"
-#include "desktop/mouse_cursor.h"
 
 namespace client {
+
+namespace {
+
+int calculateFps(int last_fps, const std::chrono::milliseconds& duration, int64_t count)
+{
+    static const double kAlpha = 0.1;
+    return static_cast<int>(
+        (kAlpha * ((1000.0 / static_cast<double>(duration.count())) * static_cast<double>(count))) +
+        ((1.0 - kAlpha) * static_cast<double>(last_fps)));
+}
+
+size_t calculateAvgVideoSize(size_t last_avg_size, size_t bytes)
+{
+    static const double kAlpha = 0.1;
+    return static_cast<size_t>(
+        (kAlpha * static_cast<double>(bytes)) +
+        ((1.0 - kAlpha) * static_cast<double>(last_avg_size)));
+}
+
+} // namespace
 
 ClientDesktop::ClientDesktop(std::shared_ptr<base::TaskRunner> io_task_runner)
     : Client(io_task_runner),
@@ -52,7 +71,10 @@ void ClientDesktop::setDesktopWindow(std::shared_ptr<DesktopWindowProxy> desktop
 
 void ClientDesktop::onSessionStarted(const base::Version& peer_version)
 {
+    start_time_ = Clock::now();
     started_ = true;
+
+    input_event_filter_.setSessionType(sessionType());
     desktop_window_proxy_->showWindow(desktop_control_proxy_, peer_version);
 }
 
@@ -93,7 +115,7 @@ void ClientDesktop::onMessageReceived(const base::ByteArray& buffer)
     }
 }
 
-void ClientDesktop::onMessageWritten()
+void ClientDesktop::onMessageWritten(size_t /* pending */)
 {
     // Nothing
 }
@@ -110,6 +132,8 @@ void ClientDesktop::setDesktopConfig(const proto::DesktopConfig& desktop_config)
 
     if (!(desktop_config_.flags() & proto::ENABLE_CURSOR_SHAPE))
         cursor_decoder_.reset();
+
+    input_event_filter_.setClipboardEnabled(desktop_config_.flags() & proto::ENABLE_CLIPBOARD);
 
     outgoing_message_.Clear();
     outgoing_message_.mutable_config()->CopyFrom(desktop_config_);
@@ -128,36 +152,54 @@ void ClientDesktop::setCurrentScreen(const proto::Screen& screen)
     sendMessage(outgoing_message_);
 }
 
-void ClientDesktop::onKeyEvent(const proto::KeyEvent& event)
+void ClientDesktop::setPreferredSize(int width, int height)
 {
-    if (sessionType() != proto::SESSION_TYPE_DESKTOP_MANAGE)
-        return;
-
     outgoing_message_.Clear();
-    outgoing_message_.mutable_key_event()->CopyFrom(event);
+
+    proto::PreferredSize preferred_size;
+    preferred_size.set_width(width);
+    preferred_size.set_height(height);
+
+    proto::DesktopExtension* extension = outgoing_message_.mutable_extension();
+
+    extension->set_name(common::kPreferredSizeExtension);
+    extension->set_data(preferred_size.SerializeAsString());
+
     sendMessage(outgoing_message_);
 }
 
-void ClientDesktop::onPointerEvent(const proto::PointerEvent& event)
+void ClientDesktop::onKeyEvent(const proto::KeyEvent& event)
 {
-    if (sessionType() != proto::SESSION_TYPE_DESKTOP_MANAGE)
+    std::optional<proto::KeyEvent> out_event = input_event_filter_.keyEvent(event);
+    if (!out_event.has_value())
         return;
 
     outgoing_message_.Clear();
-    outgoing_message_.mutable_pointer_event()->CopyFrom(event);
+    outgoing_message_.mutable_key_event()->CopyFrom(out_event.value());
+
+    sendMessage(outgoing_message_);
+}
+
+void ClientDesktop::onMouseEvent(const proto::MouseEvent& event)
+{
+    std::optional<proto::MouseEvent> out_event = input_event_filter_.mouseEvent(event);
+    if (!out_event.has_value())
+        return;
+
+    outgoing_message_.Clear();
+    outgoing_message_.mutable_mouse_event()->CopyFrom(out_event.value());
+
     sendMessage(outgoing_message_);
 }
 
 void ClientDesktop::onClipboardEvent(const proto::ClipboardEvent& event)
 {
-    if (sessionType() != proto::SESSION_TYPE_DESKTOP_MANAGE)
-        return;
-
-    if (!(desktop_config_.flags() & proto::ENABLE_CLIPBOARD))
+    std::optional<proto::ClipboardEvent> out_event = input_event_filter_.sendClipboardEvent(event);
+    if (!out_event.has_value())
         return;
 
     outgoing_message_.Clear();
-    outgoing_message_.mutable_clipboard_event()->CopyFrom(event);
+    outgoing_message_.mutable_clipboard_event()->CopyFrom(out_event.value());
     sendMessage(outgoing_message_);
 }
 
@@ -193,6 +235,40 @@ void ClientDesktop::onSystemInfoRequest()
     sendMessage(outgoing_message_);
 }
 
+void ClientDesktop::onMetricsRequest()
+{
+    TimePoint current_time = Clock::now();
+
+    std::chrono::milliseconds fps_duration =
+        std::chrono::duration_cast<std::chrono::milliseconds>(current_time - begin_time_);
+
+    fps_ = calculateFps(fps_, fps_duration, video_frame_count_);
+
+    begin_time_ = current_time;
+    video_frame_count_ = 0;
+
+    std::chrono::seconds session_duration =
+        std::chrono::duration_cast<std::chrono::seconds>(current_time - start_time_);
+
+    DesktopWindow::Metrics metrics;
+    metrics.duration = session_duration;
+    metrics.total_rx = totalRx();
+    metrics.total_tx = totalTx();
+    metrics.speed_rx = speedRx();
+    metrics.speed_tx = speedTx();
+    metrics.min_video_packet = min_video_packet_;
+    metrics.max_video_packet = max_video_packet_;
+    metrics.avg_video_packet = avg_video_packet_;
+    metrics.fps = fps_;
+    metrics.send_mouse = input_event_filter_.sendMouseCount();
+    metrics.drop_mouse = input_event_filter_.dropMouseCount();
+    metrics.send_key   = input_event_filter_.sendKeyCount();
+    metrics.read_clipboard = input_event_filter_.readClipboardCount();
+    metrics.send_clipboard = input_event_filter_.sendClipboardCount();
+
+    desktop_window_proxy_->setMetrics(metrics);
+}
+
 void ClientDesktop::readConfigRequest(const proto::DesktopConfigRequest& config_request)
 {
     // We notify the window about changes in the list of extensions and video encodings.
@@ -217,7 +293,7 @@ void ClientDesktop::readVideoPacket(const proto::VideoPacket& packet)
 {
     if (video_encoding_ != packet.encoding())
     {
-        video_decoder_ = codec::VideoDecoder::create(packet.encoding());
+        video_decoder_ = base::VideoDecoder::create(packet.encoding());
         video_encoding_ = packet.encoding();
     }
 
@@ -229,20 +305,34 @@ void ClientDesktop::readVideoPacket(const proto::VideoPacket& packet)
 
     if (packet.has_format())
     {
-        const proto::Rect& screen_rect = packet.format().screen_rect();
+        const proto::VideoPacketFormat& format = packet.format();
+        base::Size video_size(format.video_rect().width(), format.video_rect().height());
+        base::Size screen_size = video_size;
 
         static const int kMaxValue = std::numeric_limits<uint16_t>::max();
-        static const int kMinValue = -std::numeric_limits<uint16_t>::max();
 
-        if (screen_rect.width()  <= 0 || screen_rect.width()  >= kMaxValue ||
-            screen_rect.height() <= 0 || screen_rect.height() >= kMaxValue)
+        if (video_size.width()  <= 0 || video_size.width()  >= kMaxValue ||
+            video_size.height() <= 0 || video_size.height() >= kMaxValue)
         {
             LOG(LS_ERROR) << "Wrong video frame size";
             return;
         }
 
-        desktop_frame_ = desktop_window_proxy_->allocateFrame(
-            desktop::Size(screen_rect.width(), screen_rect.height()));
+        if (format.has_screen_size())
+        {
+            screen_size = base::Size(
+                format.screen_size().width(), format.screen_size().height());
+
+            if (screen_size.width() <= 0 || screen_size.width() >= kMaxValue ||
+                screen_size.height() <= 0 || screen_size.height() >= kMaxValue)
+            {
+                LOG(LS_ERROR) << "Wrong screen size";
+                return;
+            }
+        }
+
+        desktop_frame_ = desktop_window_proxy_->allocateFrame(video_size);
+        desktop_window_proxy_->setFrame(screen_size, desktop_frame_);
     }
 
     if (!desktop_frame_)
@@ -257,7 +347,15 @@ void ClientDesktop::readVideoPacket(const proto::VideoPacket& packet)
         return;
     }
 
-    desktop_window_proxy_->drawFrame(desktop_frame_);
+    ++video_frame_count_;
+
+    size_t packet_size = packet.ByteSizeLong();
+
+    avg_video_packet_ = calculateAvgVideoSize(avg_video_packet_, packet_size);
+    min_video_packet_ = std::min(min_video_packet_, packet_size);
+    max_video_packet_ = std::max(max_video_packet_, packet_size);
+
+    desktop_window_proxy_->drawFrame();
 }
 
 void ClientDesktop::readCursorShape(const proto::CursorShape& cursor_shape)
@@ -269,24 +367,22 @@ void ClientDesktop::readCursorShape(const proto::CursorShape& cursor_shape)
         return;
 
     if (!cursor_decoder_)
-        cursor_decoder_ = std::make_unique<codec::CursorDecoder>();
+        cursor_decoder_ = std::make_unique<base::CursorDecoder>();
 
-    std::shared_ptr<desktop::MouseCursor> mouse_cursor = cursor_decoder_->decode(cursor_shape);
+    std::shared_ptr<base::MouseCursor> mouse_cursor = cursor_decoder_->decode(cursor_shape);
     if (!mouse_cursor)
         return;
 
-    desktop_window_proxy_->drawMouseCursor(mouse_cursor);
+    desktop_window_proxy_->setMouseCursor(mouse_cursor);
 }
 
-void ClientDesktop::readClipboardEvent(const proto::ClipboardEvent& clipboard_event)
+void ClientDesktop::readClipboardEvent(const proto::ClipboardEvent& event)
 {
-    if (sessionType() != proto::SESSION_TYPE_DESKTOP_MANAGE)
+    std::optional<proto::ClipboardEvent> out_event = input_event_filter_.readClipboardEvent(event);
+    if (!out_event.has_value())
         return;
 
-    if (!(desktop_config_.flags() & proto::ENABLE_CLIPBOARD))
-        return;
-
-    desktop_window_proxy_->injectClipboardEvent(clipboard_event);
+    desktop_window_proxy_->injectClipboardEvent(out_event.value());
 }
 
 void ClientDesktop::readExtension(const proto::DesktopExtension& extension)

@@ -19,21 +19,21 @@
 #include "host/desktop_session_ipc.h"
 
 #include "base/logging.h"
-#include "codec/video_util.h"
-#include "desktop/mouse_cursor.h"
-#include "desktop/shared_memory_frame.h"
-#include "ipc/shared_memory.h"
+#include "base/codec/video_util.h"
+#include "base/desktop/mouse_cursor.h"
+#include "base/desktop/shared_memory_frame.h"
+#include "base/ipc/shared_memory.h"
 
 namespace host {
 
-class DesktopSessionIpc::SharedBuffer : public ipc::SharedMemoryBase
+class DesktopSessionIpc::SharedBuffer : public base::SharedMemoryBase
 {
 public:
     ~SharedBuffer() = default;
 
-    static std::unique_ptr<SharedBuffer> wrap(std::unique_ptr<ipc::SharedMemory> shared_memory)
+    static std::unique_ptr<SharedBuffer> wrap(std::unique_ptr<base::SharedMemory> shared_memory)
     {
-        std::shared_ptr<ipc::SharedMemory> shared_frame(shared_memory.release());
+        std::shared_ptr<base::SharedMemory> shared_frame(shared_memory.release());
         return std::unique_ptr<SharedBuffer>(new SharedBuffer(shared_frame));
     }
 
@@ -58,18 +58,18 @@ public:
     }
 
 private:
-    explicit SharedBuffer(std::shared_ptr<ipc::SharedMemory>& shared_memory)
+    explicit SharedBuffer(std::shared_ptr<base::SharedMemory>& shared_memory)
         : shared_memory_(shared_memory)
     {
         // Nothing
     }
 
-    std::shared_ptr<ipc::SharedMemory> shared_memory_;
+    std::shared_ptr<base::SharedMemory> shared_memory_;
 
     DISALLOW_COPY_AND_ASSIGN(SharedBuffer);
 };
 
-DesktopSessionIpc::DesktopSessionIpc(std::unique_ptr<ipc::Channel> channel, Delegate* delegate)
+DesktopSessionIpc::DesktopSessionIpc(std::unique_ptr<base::IpcChannel> channel, Delegate* delegate)
     : channel_(std::move(channel)),
       delegate_(delegate)
 {
@@ -95,22 +95,23 @@ void DesktopSessionIpc::stop()
     delegate_ = nullptr;
 }
 
-void DesktopSessionIpc::setEnabled(bool enable)
+void DesktopSessionIpc::control(proto::internal::Control::Action action)
 {
     outgoing_message_.Clear();
-    outgoing_message_.mutable_set_enabled()->set_enable(enable);
+    outgoing_message_.mutable_control()->set_action(action);
     channel_->send(base::serialize(outgoing_message_));
 }
 
-void DesktopSessionIpc::setConfig(const Config& config)
+void DesktopSessionIpc::configure(const Config& config)
 {
     outgoing_message_.Clear();
 
-    proto::internal::SetConfig* set_config = outgoing_message_.mutable_set_config();
-    set_config->set_disable_font_smoothing(config.disable_font_smoothing);
-    set_config->set_disable_wallpaper(config.disable_wallpaper);
-    set_config->set_disable_effects(config.disable_effects);
-    set_config->set_block_input(config.block_input);
+    proto::internal::Configure* configure = outgoing_message_.mutable_configure();
+    configure->set_disable_font_smoothing(config.disable_font_smoothing);
+    configure->set_disable_wallpaper(config.disable_wallpaper);
+    configure->set_disable_effects(config.disable_effects);
+    configure->set_block_input(config.block_input);
+    configure->set_lock_at_disconnect(config.lock_at_disconnect);
 
     channel_->send(base::serialize(outgoing_message_));
 }
@@ -122,6 +123,21 @@ void DesktopSessionIpc::selectScreen(const proto::Screen& screen)
     channel_->send(base::serialize(outgoing_message_));
 }
 
+void DesktopSessionIpc::captureScreen()
+{
+    if (last_frame_)
+    {
+        last_frame_->updatedRegion()->addRect(base::Rect::makeSize(last_frame_->size()));
+        delegate_->onScreenCaptured(last_frame_.get(), last_mouse_cursor_.get());
+    }
+    else
+    {
+        outgoing_message_.Clear();
+        outgoing_message_.mutable_next_screen_capture()->set_update_interval(0);
+        channel_->send(base::serialize(outgoing_message_));
+    }
+}
+
 void DesktopSessionIpc::injectKeyEvent(const proto::KeyEvent& event)
 {
     outgoing_message_.Clear();
@@ -129,10 +145,10 @@ void DesktopSessionIpc::injectKeyEvent(const proto::KeyEvent& event)
     channel_->send(base::serialize(outgoing_message_));
 }
 
-void DesktopSessionIpc::injectPointerEvent(const proto::PointerEvent& event)
+void DesktopSessionIpc::injectMouseEvent(const proto::MouseEvent& event)
 {
     outgoing_message_.Clear();
-    outgoing_message_.mutable_pointer_event()->CopyFrom(event);
+    outgoing_message_.mutable_mouse_event()->CopyFrom(event);
     channel_->send(base::serialize(outgoing_message_));
 }
 
@@ -140,13 +156,6 @@ void DesktopSessionIpc::injectClipboardEvent(const proto::ClipboardEvent& event)
 {
     outgoing_message_.Clear();
     outgoing_message_.mutable_clipboard_event()->CopyFrom(event);
-    channel_->send(base::serialize(outgoing_message_));
-}
-
-void DesktopSessionIpc::userSessionControl(proto::internal::UserSessionControl::Action action)
-{
-    outgoing_message_.Clear();
-    outgoing_message_.mutable_user_session_control()->set_action(action);
     channel_->send(base::serialize(outgoing_message_));
 }
 
@@ -158,6 +167,9 @@ void DesktopSessionIpc::onDisconnected()
 
 void DesktopSessionIpc::onMessageReceived(const base::ByteArray& buffer)
 {
+    if (!delegate_)
+        return;
+
     incoming_message_.Clear();
 
     if (!base::parse(buffer, &incoming_message_))
@@ -166,14 +178,13 @@ void DesktopSessionIpc::onMessageReceived(const base::ByteArray& buffer)
         return;
     }
 
-    if (incoming_message_.has_encode_frame())
+    if (incoming_message_.has_screen_captured())
     {
-        onEncodeFrame(incoming_message_.encode_frame());
+        onScreenCaptured(incoming_message_.screen_captured());
     }
     else if (incoming_message_.has_screen_list())
     {
-        if (delegate_)
-            delegate_->onScreenListChanged(incoming_message_.screen_list());
+        delegate_->onScreenListChanged(incoming_message_.screen_list());
     }
     else if (incoming_message_.has_shared_buffer())
     {
@@ -194,8 +205,7 @@ void DesktopSessionIpc::onMessageReceived(const base::ByteArray& buffer)
     }
     else if (incoming_message_.has_clipboard_event())
     {
-        if (delegate_)
-            delegate_->onClipboardEvent(incoming_message_.clipboard_event());
+        delegate_->onClipboardEvent(incoming_message_.clipboard_event());
     }
     else
     {
@@ -204,50 +214,62 @@ void DesktopSessionIpc::onMessageReceived(const base::ByteArray& buffer)
     }
 }
 
-void DesktopSessionIpc::onEncodeFrame(const proto::internal::EncodeFrame& encode_frame)
+void DesktopSessionIpc::onScreenCaptured(const proto::internal::ScreenCaptured& screen_captured)
 {
-    if (encode_frame.has_frame())
+    const base::Frame* frame = nullptr;
+    const base::MouseCursor* mouse_cursor = nullptr;
+
+    if (screen_captured.has_frame())
     {
-        const proto::internal::SerializedDesktopFrame& serialized_frame = encode_frame.frame();
+        const proto::internal::DesktopFrame& serialized_frame = screen_captured.frame();
 
-        std::unique_ptr<SharedBuffer> shared_buffer = sharedBuffer(serialized_frame.shared_buffer_id());
-        if (!shared_buffer)
-            return;
+        std::unique_ptr<SharedBuffer> shared_buffer = sharedBuffer(
+            serialized_frame.shared_buffer_id());
+        if (shared_buffer)
+        {
+            last_frame_ = base::SharedMemoryFrame::attach(
+                base::Size(serialized_frame.width(), serialized_frame.height()),
+                base::PixelFormat::ARGB(),
+                std::move(shared_buffer));
+            last_frame_->setDpi(base::Point(
+                serialized_frame.dpi_x(), serialized_frame.dpi_y()));
 
-        std::unique_ptr<desktop::Frame> frame = desktop::SharedMemoryFrame::attach(
-            desktop::Size(serialized_frame.width(), serialized_frame.height()),
-            codec::parsePixelFormat(serialized_frame.pixel_format()),
-            std::move(shared_buffer));
+            base::Region* updated_region = last_frame_->updatedRegion();
 
-        desktop::Region* updated_region = frame->updatedRegion();
+            for (int i = 0; i < serialized_frame.dirty_rect_size(); ++i)
+                updated_region->addRect(base::parseRect(serialized_frame.dirty_rect(i)));
 
-        for (int i = 0; i < serialized_frame.dirty_rect_size(); ++i)
-            updated_region->addRect(codec::parseRect(serialized_frame.dirty_rect(i)));
-
-        if (delegate_)
-            delegate_->onScreenCaptured(*frame);
+            frame = last_frame_.get();
+        }
     }
 
-    if (encode_frame.has_mouse_cursor() && delegate_)
+    if (screen_captured.has_mouse_cursor())
     {
-        const proto::internal::SerializedMouseCursor& mouse_cursor =
-            encode_frame.mouse_cursor();
+        const proto::internal::MouseCursor& serialized_mouse_cursor =
+            screen_captured.mouse_cursor();
 
-        delegate_->onCursorCaptured(desktop::MouseCursor(
-            base::fromStdString(mouse_cursor.data()),
-            desktop::Size(mouse_cursor.width(), mouse_cursor.height()),
-            desktop::Point(mouse_cursor.hotspot_x(), mouse_cursor.hotspot_y())));
+        base::Size size =
+            base::Size(serialized_mouse_cursor.width(), serialized_mouse_cursor.height());
+        base::Point hotspot =
+            base::Point(serialized_mouse_cursor.hotspot_x(), serialized_mouse_cursor.hotspot_y());
+
+        last_mouse_cursor_ = std::make_unique<base::MouseCursor>(
+            base::fromStdString(serialized_mouse_cursor.data()), size, hotspot);
+
+        mouse_cursor = last_mouse_cursor_.get();
     }
+
+    delegate_->onScreenCaptured(frame, mouse_cursor);
 
     outgoing_message_.Clear();
-    outgoing_message_.mutable_encode_frame_result()->set_dummy(1);
+    outgoing_message_.mutable_next_screen_capture()->set_update_interval(40);
     channel_->send(base::serialize(outgoing_message_));
 }
 
 void DesktopSessionIpc::onCreateSharedBuffer(int shared_buffer_id)
 {
-    std::unique_ptr<ipc::SharedMemory> shared_memory =
-        ipc::SharedMemory::open(ipc::SharedMemory::Mode::READ_ONLY, shared_buffer_id);
+    std::unique_ptr<base::SharedMemory> shared_memory =
+        base::SharedMemory::open(base::SharedMemory::Mode::READ_ONLY, shared_buffer_id);
 
     if (!shared_memory)
     {

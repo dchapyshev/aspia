@@ -109,13 +109,19 @@ message SrpClientKeyExchange
 // Server to client.
 message SessionChallenge
 {
-    Version version = 1;
+    Version version      = 1;
     uint32 session_types = 2;
+    uint32 cpu_cores     = 3;
+    string os_name       = 4;
+    string computer_name = 5;
 }
 
 // Client to server.
 message SessionResponse
 {
-    Version version = 1;
-    uint32 session_type = 2;
+    Version version      = 1;
+    uint32 session_type  = 2;
+    uint32 cpu_cores     = 3;
+    string os_name       = 4;
+    string computer_name = 5;
 }

@@ -21,22 +21,19 @@
 
 #include "base/version.h"
 #include "client/client_config.h"
-#include "net/channel.h"
+#include "base/net/network_channel.h"
 
 namespace base {
+class ClientAuthenticator;
 class TaskRunner;
 } // namespace base
-
-namespace net {
-class ClientAuthenticator;
-} // namespace net
 
 namespace client {
 
 class StatusWindow;
 class StatusWindowProxy;
 
-class Client : public net::Channel::Listener
+class Client : public base::NetworkChannel::Listener
 {
 public:
     explicit Client(std::shared_ptr<base::TaskRunner> io_task_runner);
@@ -68,15 +65,20 @@ protected:
     // Sends outgoing message.
     void sendMessage(const google::protobuf::MessageLite& message);
 
-    // net::Channel::Listener implementation.
+    // Methods for obtaining network metrics.
+    int64_t totalRx() const;
+    int64_t totalTx() const;
+    int speedRx();
+    int speedTx();
+
+    // base::NetworkChannel::Listener implementation.
     void onConnected() override;
-    void onDisconnected(net::Channel::ErrorCode error_code) override;
+    void onDisconnected(base::NetworkChannel::ErrorCode error_code) override;
 
 private:
     std::shared_ptr<base::TaskRunner> io_task_runner_;
-
-    std::unique_ptr<net::Channel> channel_;
-    std::unique_ptr<net::ClientAuthenticator> authenticator_;
+    std::unique_ptr<base::NetworkChannel> channel_;
+    std::unique_ptr<base::ClientAuthenticator> authenticator_;
     std::shared_ptr<StatusWindowProxy> status_window_proxy_;
 
     Config config_;

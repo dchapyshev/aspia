@@ -175,7 +175,17 @@ std::string SmbiosMemoryDevice::manufacturer() const
     if (table_->length < 0x1B)
         return std::string();
 
-    return smbiosString(table_, table_->manufacturer);
+    static const char* kBlackList[] = { "0000" };
+
+    std::string result = smbiosString(table_, table_->manufacturer);
+
+    for (size_t i = 0; i < std::size(kBlackList); ++i)
+    {
+        if (result == kBlackList[i])
+            return std::string();
+    }
+
+    return result;
 }
 
 uint64_t SmbiosMemoryDevice::size() const

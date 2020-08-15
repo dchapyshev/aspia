@@ -18,9 +18,9 @@
 
 #include "console/computer_dialog_general.h"
 
+#include "base/net/address.h"
+#include "base/peer/user.h"
 #include "base/strings/unicode.h"
-#include "net/address.h"
-#include "net/user.h"
 
 #include <QMessageBox>
 
@@ -59,7 +59,7 @@ ComputerDialogGeneral::ComputerDialogGeneral(int type, QWidget* parent)
 void ComputerDialogGeneral::restoreSettings(
     const QString& parent_name, const proto::address_book::Computer& computer)
 {
-    net::Address address;
+    base::Address address(DEFAULT_HOST_TCP_PORT);
     address.setHost(base::utf16FromUtf8(computer.address()));
     address.setPort(computer.port());
 
@@ -96,7 +96,7 @@ bool ComputerDialogGeneral::saveSettings(proto::address_book::Computer* computer
     std::u16string username = ui.edit_username->text().toStdU16String();
     std::u16string password = ui.edit_password->text().toStdU16String();
 
-    if (!username.empty() && !net::User::isValidUserName(username))
+    if (!username.empty() && !base::User::isValidUserName(username))
     {
         showError(tr("The user name can not be empty and can contain only"
                      " alphabet characters, numbers and ""_"", ""-"", ""."" characters."));
@@ -115,7 +115,8 @@ bool ComputerDialogGeneral::saveSettings(proto::address_book::Computer* computer
         return false;
     }
 
-    net::Address address = net::Address::fromString(ui.edit_address->text().toStdU16String());
+    base::Address address = base::Address::fromString(
+        ui.edit_address->text().toStdU16String(), DEFAULT_HOST_TCP_PORT);
     if (!address.isValid())
     {
         showError(tr("An invalid computer address was entered."));

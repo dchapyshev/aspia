@@ -20,17 +20,15 @@
 
 #include "common/keycode_converter.h"
 #include "client/ui/frame_qimage.h"
-#include "proto/desktop.pb.h"
 
 #include <QApplication>
-#include <QPainter>
 #include <QWheelEvent>
 
 namespace client {
 
 namespace {
 
-constexpr uint32_t kWheelMask = proto::PointerEvent::WHEEL_DOWN | proto::PointerEvent::WHEEL_UP;
+constexpr uint32_t kWheelMask = proto::MouseEvent::WHEEL_DOWN | proto::MouseEvent::WHEEL_UP;
 
 bool isNumLockActivated()
 {
@@ -69,12 +67,12 @@ DesktopWidget::DesktopWidget(Delegate* delegate, QWidget* parent)
     setMouseTracking(true);
 }
 
-desktop::Frame* DesktopWidget::desktopFrame()
+base::Frame* DesktopWidget::desktopFrame()
 {
     return frame_.get();
 }
 
-void DesktopWidget::setDesktopFrame(std::shared_ptr<desktop::Frame>& frame)
+void DesktopWidget::setDesktopFrame(std::shared_ptr<base::Frame>& frame)
 {
     frame_ = std::move(frame);
 }
@@ -98,13 +96,13 @@ void DesktopWidget::doMouseEvent(QEvent::Type event_type,
         mask = 0;
 
         if (buttons & Qt::LeftButton)
-            mask |= proto::PointerEvent::LEFT_BUTTON;
+            mask |= proto::MouseEvent::LEFT_BUTTON;
 
         if (buttons & Qt::MiddleButton)
-            mask |= proto::PointerEvent::MIDDLE_BUTTON;
+            mask |= proto::MouseEvent::MIDDLE_BUTTON;
 
         if (buttons & Qt::RightButton)
-            mask |= proto::PointerEvent::RIGHT_BUTTON;
+            mask |= proto::MouseEvent::RIGHT_BUTTON;
     }
 
     int wheel_steps = 0;
@@ -113,12 +111,12 @@ void DesktopWidget::doMouseEvent(QEvent::Type event_type,
     {
         if (delta.y() < 0)
         {
-            mask |= proto::PointerEvent::WHEEL_DOWN;
+            mask |= proto::MouseEvent::WHEEL_DOWN;
             wheel_steps = -delta.y() / QWheelEvent::DefaultDeltasPerStep;
         }
         else
         {
-            mask |= proto::PointerEvent::WHEEL_UP;
+            mask |= proto::MouseEvent::WHEEL_UP;
             wheel_steps = delta.y() / QWheelEvent::DefaultDeltasPerStep;
         }
 
@@ -131,17 +129,19 @@ void DesktopWidget::doMouseEvent(QEvent::Type event_type,
         prev_pos_ = pos;
         prev_mask_ = mask & ~kWheelMask;
 
+        proto::MouseEvent event;
+        event.set_x(pos.x());
+        event.set_y(pos.y());
+        event.set_mask(mask);
+
         if (mask & kWheelMask)
         {
             for (int i = 0; i < wheel_steps; ++i)
-            {
-                delegate_->onPointerEvent(pos, mask);
-                delegate_->onPointerEvent(pos, mask & ~kWheelMask);
-            }
+                delegate_->onMouseEvent(event);
         }
         else
         {
-            delegate_->onPointerEvent(pos, mask);
+            delegate_->onMouseEvent(event);
         }
     }
 }
@@ -175,39 +175,74 @@ void DesktopWidget::executeKeyCombination(int key_sequence)
     const uint32_t kUsbCodeLeftShift = 0x0700e1;
     const uint32_t kUsbCodeLeftMeta = 0x0700e3;
 
-    QVector<int> keys;
+    uint32_t flags = 0;
 
-    if (key_sequence & Qt::AltModifier)
-        keys.push_back(kUsbCodeLeftAlt);
-
-    if (key_sequence & Qt::ControlModifier)
-        keys.push_back(kUsbCodeLeftCtrl);
-
-    if (key_sequence & Qt::ShiftModifier)
-        keys.push_back(kUsbCodeLeftShift);
-
-    if (key_sequence & Qt::MetaModifier)
-        keys.push_back(kUsbCodeLeftMeta);
+    flags |= (isCapsLockActivated() ? proto::KeyEvent::CAPSLOCK : 0);
+    flags |= (isNumLockActivated() ? proto::KeyEvent::NUMLOCK : 0);
 
     uint32_t key = common::KeycodeConverter::qtKeycodeToUsbKeycode(
         key_sequence & ~Qt::KeyboardModifierMask);
     if (key == common::KeycodeConverter::invalidUsbKeycode())
         return;
 
-    keys.push_back(key);
+    proto::KeyEvent event;
+    event.set_flags(flags | proto::KeyEvent::PRESSED);
 
-    uint32_t flags = proto::KeyEvent::PRESSED;
+    if (key_sequence & Qt::AltModifier)
+    {
+        event.set_usb_keycode(kUsbCodeLeftAlt);
+        delegate_->onKeyEvent(event);
+    }
 
-    flags |= (isCapsLockActivated() ? proto::KeyEvent::CAPSLOCK : 0);
-    flags |= (isNumLockActivated() ? proto::KeyEvent::NUMLOCK : 0);
+    if (key_sequence & Qt::ControlModifier)
+    {
+        event.set_usb_keycode(kUsbCodeLeftCtrl);
+        delegate_->onKeyEvent(event);
+    }
 
-    for (auto it = keys.cbegin(); it != keys.cend(); ++it)
-        executeKeyEvent(*it, flags);
+    if (key_sequence & Qt::ShiftModifier)
+    {
+        event.set_usb_keycode(kUsbCodeLeftShift);
+        delegate_->onKeyEvent(event);
+    }
 
-    flags ^= proto::KeyEvent::PRESSED;
+    if (key_sequence & Qt::MetaModifier)
+    {
+        event.set_usb_keycode(kUsbCodeLeftMeta);
+        delegate_->onKeyEvent(event);
+    }
 
-    for (auto it = keys.crbegin(); it != keys.crend(); ++it)
-        executeKeyEvent(*it, flags);
+    event.set_usb_keycode(key);
+    delegate_->onKeyEvent(event);
+
+    event.set_flags(flags);
+
+    event.set_usb_keycode(key);
+    delegate_->onKeyEvent(event);
+
+    if (key_sequence & Qt::MetaModifier)
+    {
+        event.set_usb_keycode(kUsbCodeLeftMeta);
+        delegate_->onKeyEvent(event);
+    }
+
+    if (key_sequence & Qt::ShiftModifier)
+    {
+        event.set_usb_keycode(kUsbCodeLeftShift);
+        delegate_->onKeyEvent(event);
+    }
+
+    if (key_sequence & Qt::ControlModifier)
+    {
+        event.set_usb_keycode(kUsbCodeLeftCtrl);
+        delegate_->onKeyEvent(event);
+    }
+
+    if (key_sequence & Qt::AltModifier)
+    {
+        event.set_usb_keycode(kUsbCodeLeftAlt);
+        delegate_->onKeyEvent(event);
+    }
 }
 
 void DesktopWidget::enableKeyCombinations(bool enable)
@@ -227,9 +262,10 @@ void DesktopWidget::paintEvent(QPaintEvent* /* event */)
     FrameQImage* frame = reinterpret_cast<FrameQImage*>(frame_.get());
     if (frame)
     {
-        QPainter painter(this);
-        painter.setRenderHint(QPainter::SmoothPixmapTransform);
-        painter.drawImage(rect(), frame->constImage());
+        painter_.begin(this);
+        painter_.setRenderHint(QPainter::SmoothPixmapTransform);
+        painter_.drawImage(rect(), frame->constImage());
+        painter_.end();
     }
 
     delegate_->onDrawDesktop();
@@ -255,11 +291,6 @@ void DesktopWidget::mouseDoubleClickEvent(QMouseEvent* event)
     doMouseEvent(event->type(), event->buttons(), event->pos());
 }
 
-void DesktopWidget::wheelEvent(QWheelEvent* event)
-{
-    doMouseEvent(event->type(), event->buttons(), event->pos(), event->angleDelta());
-}
-
 void DesktopWidget::keyPressEvent(QKeyEvent* event)
 {
     doKeyEvent(event);
@@ -272,10 +303,18 @@ void DesktopWidget::keyReleaseEvent(QKeyEvent* event)
 
 void DesktopWidget::leaveEvent(QEvent* event)
 {
+#if defined(OS_WIN)
+    keyboard_hook_.reset();
+#endif // defined(OS_WIN)
+
     // When the mouse cursor leaves the widget area, release all the mouse buttons.
     if (prev_mask_ != 0)
     {
-        delegate_->onPointerEvent(prev_pos_, 0);
+        proto::MouseEvent mouse_event;
+        mouse_event.set_x(prev_pos_.x());
+        mouse_event.set_y(prev_pos_.y());
+
+        delegate_->onMouseEvent(mouse_event);
         prev_mask_ = 0;
     }
 
@@ -306,8 +345,16 @@ void DesktopWidget::focusOutEvent(QFocusEvent* event)
         flags |= (isCapsLockActivated() ? proto::KeyEvent::CAPSLOCK : 0);
         flags |= (isNumLockActivated() ? proto::KeyEvent::NUMLOCK : 0);
 
-        for (const auto& key : pressed_keys_)
-            executeKeyEvent(key, flags);
+        proto::KeyEvent key_event;
+        key_event.set_flags(flags);
+
+        auto it = pressed_keys_.begin();
+        while (it != pressed_keys_.end())
+        {
+            key_event.set_usb_keycode(*it);
+            delegate_->onKeyEvent(key_event);
+            it = pressed_keys_.erase(it);
+        }
     }
 
     QWidget::focusOutEvent(event);
@@ -320,7 +367,11 @@ void DesktopWidget::executeKeyEvent(uint32_t usb_keycode, uint32_t flags)
     else
         pressed_keys_.erase(usb_keycode);
 
-    delegate_->onKeyEvent(usb_keycode, flags);
+    proto::KeyEvent event;
+    event.set_usb_keycode(usb_keycode);
+    event.set_flags(flags);
+
+    delegate_->onKeyEvent(event);
 }
 
 #if defined(OS_WIN)

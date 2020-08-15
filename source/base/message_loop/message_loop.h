@@ -76,9 +76,9 @@ protected:
     using Milliseconds = MessagePump::Milliseconds;
 
     void postTask(PendingTask::Callback callback);
-    void postDelayedTask(PendingTask::Callback callback, Milliseconds delay);
+    void postDelayedTask(PendingTask::Callback callback, const Milliseconds& delay);
     void postNonNestableTask(PendingTask::Callback callback);
-    void postNonNestableDelayedTask(PendingTask::Callback callback, Milliseconds delay);
+    void postNonNestableDelayedTask(PendingTask::Callback callback, const Milliseconds& delay);
 
     PendingTask::Callback quitClosure();
 
@@ -97,7 +97,7 @@ protected:
     // Caller retains ownership of |pending_task|, but this function will reset the value of
     // pending_task->task. This is needed to ensure that the posting call stack does not retain
     // pending_task->task beyond this function call.
-    void addToIncomingQueue(PendingTask::Callback&& callback, Milliseconds delay, bool nestable);
+    void addToIncomingQueue(PendingTask::Callback&& callback, const Milliseconds& delay, bool nestable);
 
     // Load tasks from the incoming_queue_ into work_queue_ if the latter is empty. The former
     // requires a lock to access, while the latter is directly accessible on this thread.
@@ -106,7 +106,7 @@ protected:
     bool deletePendingTasks();
 
     // Calculates the time at which a PendingTask should run.
-    static TimePoint calculateDelayedRuntime(Milliseconds delay);
+    static TimePoint calculateDelayedRuntime(const Milliseconds& delay);
 
     // MessagePump::Delegate methods:
     bool doWork() override;

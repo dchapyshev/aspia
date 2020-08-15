@@ -42,6 +42,9 @@ public:
     {
         if (hdc_)
             ReleaseDC(hwnd_, hdc_);
+
+        hdc_ = nullptr;
+        hwnd_ = nullptr;
     }
 
     void getDC(HWND hwnd)

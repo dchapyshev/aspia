@@ -29,7 +29,6 @@
 #include "client/ui/file_transfer_dialog.h"
 #include "client/ui/file_manager_settings.h"
 #include "client/ui/file_mime_data.h"
-#include "common/file_worker.h"
 #include "qt_base/application.h"
 
 #include <QMessageBox>

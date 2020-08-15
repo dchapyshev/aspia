@@ -26,12 +26,12 @@ namespace {
 
 int vsnprintfT(char* buffer, std::size_t buffer_size, const char* format, va_list args)
 {
-    return _vsnprintf(buffer, buffer_size, format, args);
+    return _vsnprintf_s(buffer, buffer_size, _TRUNCATE, format, args);
 }
 
 int vsnprintfT(wchar_t* buffer, std::size_t buffer_size, const wchar_t* format, va_list args)
 {
-    return _vsnwprintf(buffer, buffer_size, format, args);
+    return _vsnwprintf_s(buffer, buffer_size, _TRUNCATE, format, args);
 }
 
 int vscprintfT(const char* format, va_list args)
@@ -48,7 +48,6 @@ template<class StringType>
 StringType stringPrintfVT(const typename StringType::value_type* format, va_list args)
 {
     va_list args_copy;
-
     va_copy(args_copy, args);
 
     const int length = vscprintfT(format, args_copy);
@@ -62,7 +61,6 @@ StringType stringPrintfVT(const typename StringType::value_type* format, va_list
     result.resize(length);
 
     const int ret = vsnprintfT(result.data(), length + 1, format, args_copy);
-
     va_end(args_copy);
 
     if (ret < 0 || ret > length)

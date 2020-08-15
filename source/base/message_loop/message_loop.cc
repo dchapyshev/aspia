@@ -125,7 +125,7 @@ void MessageLoop::postTask(PendingTask::Callback callback)
     addToIncomingQueue(std::move(callback), Milliseconds::zero(), true);
 }
 
-void MessageLoop::postDelayedTask(PendingTask::Callback callback, Milliseconds delay)
+void MessageLoop::postDelayedTask(PendingTask::Callback callback, const Milliseconds& delay)
 {
     DCHECK(callback != nullptr);
     addToIncomingQueue(std::move(callback), delay, true);
@@ -137,7 +137,8 @@ void MessageLoop::postNonNestableTask(PendingTask::Callback callback)
     addToIncomingQueue(std::move(callback), Milliseconds::zero(), false);
 }
 
-void MessageLoop::postNonNestableDelayedTask(PendingTask::Callback callback, Milliseconds delay)
+void MessageLoop::postNonNestableDelayedTask(
+    PendingTask::Callback callback, const Milliseconds& delay)
 {
     DCHECK(callback != nullptr);
     addToIncomingQueue(std::move(callback), delay, false);
@@ -200,7 +201,7 @@ void MessageLoop::addToDelayedWorkQueue(PendingTask* pending_task)
 }
 
 void MessageLoop::addToIncomingQueue(
-    PendingTask::Callback&& callback, Milliseconds delay, bool nestable)
+    PendingTask::Callback&& callback, const Milliseconds& delay, bool nestable)
 {
     bool empty;
 
@@ -266,7 +267,7 @@ bool MessageLoop::deletePendingTasks()
 }
 
 // static
-MessageLoop::TimePoint MessageLoop::calculateDelayedRuntime(Milliseconds delay)
+MessageLoop::TimePoint MessageLoop::calculateDelayedRuntime(const Milliseconds& delay)
 {
     TimePoint delayed_run_time;
 

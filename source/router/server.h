@@ -19,17 +19,21 @@
 #ifndef ROUTER__SERVER_H
 #define ROUTER__SERVER_H
 
-#include "net/server.h"
-#include "net/server_authenticator_manager.h"
+#include "base/net/network_server.h"
+#include "base/peer/host_id.h"
+#include "base/peer/server_authenticator_manager.h"
+#include "proto/router_admin.pb.h"
 #include "router/session.h"
 
 namespace router {
 
-class Database;
+class DatabaseFactory;
+class SessionHost;
+class ServerProxy;
 
 class Server
-    : public net::Server::Delegate,
-      public net::ServerAuthenticatorManager::Delegate,
+    : public base::NetworkServer::Delegate,
+      public base::ServerAuthenticatorManager::Delegate,
       public Session::Delegate
 {
 public:
@@ -38,21 +42,32 @@ public:
 
     bool start();
 
-protected:
-    // net::Server::Delegate implementation.
-    void onNewConnection(std::unique_ptr<net::Channel> channel) override;
+    std::unique_ptr<proto::RelayList> relayList() const;
+    std::unique_ptr<proto::HostList> hostList() const;
+    bool disconnectHost(base::HostId host_id);
+    void onHostSessionWithId(SessionHost* session);
 
-    // net::ServerAuthenticatorManager::Delegate implementation.
-    void onNewSession(net::ServerAuthenticatorManager::SessionInfo&& session_info) override;
+protected:
+    // base::NetworkServer::Delegate implementation.
+    void onNewConnection(std::unique_ptr<base::NetworkChannel> channel) override;
+
+    // base::ServerAuthenticatorManager::Delegate implementation.
+    void onNewSession(base::ServerAuthenticatorManager::SessionInfo&& session_info) override;
 
     // Session::Delegate implementation.
     void onSessionFinished() override;
 
 private:
+#if defined(OS_WIN)
+    void addFirewallRules(uint16_t port);
+    void deleteFirewallRules();
+#endif // defined(OS_WIN)
+
+    std::shared_ptr<ServerProxy> server_proxy_;
     std::shared_ptr<base::TaskRunner> task_runner_;
-    std::shared_ptr<Database> database_;
-    std::unique_ptr<net::Server> server_;
-    std::unique_ptr<net::ServerAuthenticatorManager> authenticator_manager_;
+    std::shared_ptr<DatabaseFactory> database_factory_;
+    std::unique_ptr<base::NetworkServer> server_;
+    std::unique_ptr<base::ServerAuthenticatorManager> authenticator_manager_;
     std::vector<std::unique_ptr<Session>> sessions_;
 
     DISALLOW_COPY_AND_ASSIGN(Server);

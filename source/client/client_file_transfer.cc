@@ -97,7 +97,7 @@ void ClientFileTransfer::onMessageReceived(const base::ByteArray& buffer)
     }
 }
 
-void ClientFileTransfer::onMessageWritten()
+void ClientFileTransfer::onMessageWritten(size_t /* pending */)
 {
     // Nothing
 }

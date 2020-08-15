@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>306</width>
-    <height>236</height>
+    <height>253</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -123,6 +123,13 @@
        <string>Advanced</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="QCheckBox" name="checkbox_lock_at_disconnect">
+         <property name="text">
+          <string>Lock at disconnect</string>
+         </property>
+        </widget>
+       </item>
        <item>
         <widget class="QCheckBox" name="checkbox_block_remote_input">
          <property name="text">

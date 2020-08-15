@@ -21,12 +21,12 @@
 #include "base/location.h"
 #include "base/logging.h"
 #include "base/task_runner.h"
-#include "desktop/frame.h"
+#include "base/desktop/frame.h"
+#include "base/ipc/ipc_channel.h"
 #include "host/desktop_session_fake.h"
 #include "host/desktop_session_ipc.h"
 #include "host/desktop_session_process.h"
 #include "host/desktop_session_proxy.h"
-#include "ipc/channel.h"
 
 namespace host {
 
@@ -66,9 +66,9 @@ void DesktopSessionManager::attachSession(
 
     state_ = State::STARTING;
 
-    std::u16string channel_id = ipc::Server::createUniqueId();
+    std::u16string channel_id = base::IpcServer::createUniqueId();
 
-    server_ = std::make_unique<ipc::Server>();
+    server_ = std::make_unique<base::IpcServer>();
     if (!server_->start(channel_id, this))
     {
         LOG(LS_ERROR) << "Failed to start IPC server";
@@ -123,7 +123,7 @@ std::shared_ptr<DesktopSessionProxy> DesktopSessionManager::sessionProxy() const
     return session_proxy_;
 }
 
-void DesktopSessionManager::onNewConnection(std::unique_ptr<ipc::Channel> channel)
+void DesktopSessionManager::onNewConnection(std::unique_ptr<base::IpcChannel> channel)
 {
     if (DesktopSessionProcess::filePath() != channel->peerFilePath())
     {
@@ -167,14 +167,10 @@ void DesktopSessionManager::onDesktopSessionStopped()
     dettachSession(FROM_HERE);
 }
 
-void DesktopSessionManager::onScreenCaptured(const desktop::Frame& frame)
+void DesktopSessionManager::onScreenCaptured(
+    const base::Frame* frame, const base::MouseCursor* mouse_cursor)
 {
-    delegate_->onScreenCaptured(frame);
-}
-
-void DesktopSessionManager::onCursorCaptured(const desktop::MouseCursor& mouse_cursor)
-{
-    delegate_->onCursorCaptured(std::move(mouse_cursor));
+    delegate_->onScreenCaptured(frame, mouse_cursor);
 }
 
 void DesktopSessionManager::onScreenListChanged(const proto::ScreenList& list)

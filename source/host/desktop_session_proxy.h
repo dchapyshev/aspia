@@ -32,13 +32,13 @@ public:
     DesktopSessionProxy();
     ~DesktopSessionProxy();
 
-    void setEnabled(bool enable);
-    void setConfig(const DesktopSession::Config& config);
+    void control(proto::internal::Control::Action action);
+    void configure(const DesktopSession::Config& config);
     void selectScreen(const proto::Screen& screen);
+    void captureScreen();
     void injectKeyEvent(const proto::KeyEvent& event);
-    void injectPointerEvent(const proto::PointerEvent& event);
+    void injectMouseEvent(const proto::MouseEvent& event);
     void injectClipboardEvent(const proto::ClipboardEvent& event);
-    void userSessionControl(proto::internal::UserSessionControl::Action action);
 
 private:
     friend class DesktopSessionManager;

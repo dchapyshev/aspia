@@ -19,9 +19,12 @@
 #include "base/command_line.h"
 #include "base/logging.h"
 #include "base/files/base_paths.h"
+
+#if defined(OS_WIN)
 #include "base/win/service_controller.h"
 #include "router/win/service.h"
 #include "router/win/service_constants.h"
+#endif // defined(OS_WIN)
 
 #if defined(USE_TBB)
 #include <tbb/tbbmalloc_proxy.h>
@@ -31,15 +34,28 @@
 
 namespace {
 
-std::filesystem::path loggingDir()
+void initLogging()
 {
     std::filesystem::path path;
 
+#if defined(OS_WIN)
     if (!base::BasePaths::commonAppData(&path))
-        return std::filesystem::path();
+        return;
+    path.append("Aspia/Logs");
+#else
+#error Not implemented
+#endif
 
-    path.append("aspia/logs");
-    return path;
+    base::LoggingSettings settings;
+    settings.destination = base::LOG_TO_FILE;
+    settings.log_dir = path;
+
+    base::initLogging(settings);
+}
+
+void shutdownLogging()
+{
+    base::shutdownLogging();
 }
 
 void startService()
@@ -140,16 +156,11 @@ void showHelp()
 
 } // namespace
 
-int main(int argc, char* argv[])
+int wmain()
 {
-    base::LoggingSettings settings;
-    settings.destination = base::LOG_TO_FILE;
-    settings.log_dir = loggingDir();
+    initLogging();
 
-    base::initLogging(settings);
-
-    base::CommandLine command_line(argc, argv);
-
+    base::CommandLine command_line = base::CommandLine::forCurrentProcess();
     if (command_line.hasSwitch(u"install"))
     {
         installService();
@@ -175,6 +186,6 @@ int main(int argc, char* argv[])
         router::Service().exec();
     }
 
-    base::shutdownLogging();
+    shutdownLogging();
     return 0;
 }

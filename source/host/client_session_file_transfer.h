@@ -27,13 +27,13 @@ namespace host {
 class ClientSessionFileTransfer : public ClientSession
 {
 public:
-    explicit ClientSessionFileTransfer(std::unique_ptr<net::Channel> channel);
+    explicit ClientSessionFileTransfer(std::unique_ptr<base::NetworkChannel> channel);
     ~ClientSessionFileTransfer();
 
 protected:
     // net::Listener implementation.
     void onMessageReceived(const base::ByteArray& buffer) override;
-    void onMessageWritten() override;
+    void onMessageWritten(size_t pending) override;
 
     // ClientSession implementation.
     void onStarted() override;

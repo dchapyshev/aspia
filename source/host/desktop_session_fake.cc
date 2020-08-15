@@ -20,7 +20,7 @@
 
 #include "base/logging.h"
 #include "base/task_runner.h"
-#include "desktop/frame_simple.h"
+#include "base/desktop/frame_simple.h"
 
 namespace host {
 
@@ -39,14 +39,14 @@ public:
 
     void start(Delegate* delegate);
     void stop();
+    void generateFrame();
 
 private:
-    void generateFrame();
 
     Delegate* delegate_ = nullptr;
 
     std::shared_ptr<base::TaskRunner> task_runner_;
-    std::unique_ptr<desktop::Frame> frame_;
+    std::unique_ptr<base::Frame> frame_;
 
     DISALLOW_COPY_AND_ASSIGN(FrameGenerator);
 };
@@ -62,8 +62,8 @@ void DesktopSessionFake::FrameGenerator::start(Delegate* delegate)
     delegate_ = delegate;
     DCHECK(delegate);
 
-    frame_ = desktop::FrameSimple::create(
-        desktop::Size(kFrameWidth, kFrameHeight), desktop::PixelFormat::ARGB());
+    frame_ = base::FrameSimple::create(
+        base::Size(kFrameWidth, kFrameHeight), base::PixelFormat::ARGB());
 
     memset(frame_->frameData(), 0, frame_->stride() * frame_->size().height());
 
@@ -77,13 +77,13 @@ void DesktopSessionFake::FrameGenerator::stop()
 
 void DesktopSessionFake::FrameGenerator::generateFrame()
 {
-    desktop::Region* updated_region = frame_->updatedRegion();
+    base::Region* updated_region = frame_->updatedRegion();
     updated_region->clear();
-    updated_region->addRect(desktop::Rect::makeWH(kFrameWidth, kFrameHeight));
+    updated_region->addRect(base::Rect::makeWH(kFrameWidth, kFrameHeight));
 
     if (delegate_)
     {
-        delegate_->onScreenCaptured(*frame_);
+        delegate_->onScreenCaptured(frame_.get(), nullptr);
 
         task_runner_->postDelayedTask(
             std::bind(&FrameGenerator::generateFrame, shared_from_this()),
@@ -120,15 +120,24 @@ void DesktopSessionFake::stop()
     frame_generator_->stop();
 }
 
-void DesktopSessionFake::setEnabled(bool enable)
+void DesktopSessionFake::control(proto::internal::Control::Action action)
 {
-    if (enable)
-        frame_generator_->start(delegate_);
-    else
-        frame_generator_->stop();
+    switch (action)
+    {
+        case proto::internal::Control::ENABLE:
+            frame_generator_->start(delegate_);
+            break;
+
+        case proto::internal::Control::DISABLE:
+            frame_generator_->stop();
+            break;
+
+        default:
+            break;
+    }
 }
 
-void DesktopSessionFake::setConfig(const Config& /* config */)
+void DesktopSessionFake::configure(const Config& /* config */)
 {
     // Nothing
 }
@@ -138,23 +147,22 @@ void DesktopSessionFake::selectScreen(const proto::Screen& /* screen */)
     // Nothing
 }
 
+void DesktopSessionFake::captureScreen()
+{
+    frame_generator_->generateFrame();
+}
+
 void DesktopSessionFake::injectKeyEvent(const proto::KeyEvent& /* event */)
 {
     // Nothing
 }
 
-void DesktopSessionFake::injectPointerEvent(const proto::PointerEvent& /* event */)
+void DesktopSessionFake::injectMouseEvent(const proto::MouseEvent& /* event */)
 {
     // Nothing
 }
 
 void DesktopSessionFake::injectClipboardEvent(const proto::ClipboardEvent& /* event */)
-{
-    // Nothing
-}
-
-void DesktopSessionFake::userSessionControl(
-    proto::internal::UserSessionControl::Action /* action */)
 {
     // Nothing
 }

@@ -20,14 +20,14 @@
 
 #include "base/logging.h"
 #include "base/power_controller.h"
+#include "base/codec/video_util.h"
+#include "base/desktop/capture_scheduler.h"
+#include "base/desktop/mouse_cursor.h"
+#include "base/desktop/screen_capturer_wrapper.h"
+#include "base/desktop/shared_frame.h"
+#include "base/ipc/shared_memory.h"
 #include "base/threading/thread.h"
-#include "codec/video_util.h"
-#include "desktop/capture_scheduler.h"
-#include "desktop/mouse_cursor.h"
-#include "desktop/screen_capturer_wrapper.h"
-#include "desktop/shared_frame.h"
 #include "host/input_injector_win.h"
-#include "ipc/shared_memory.h"
 
 namespace host {
 
@@ -43,7 +43,7 @@ DesktopSessionAgent::~DesktopSessionAgent() = default;
 
 void DesktopSessionAgent::start(std::u16string_view channel_id)
 {
-    channel_ = std::make_unique<ipc::Channel>();
+    channel_ = std::make_unique<base::IpcChannel>();
 
     if (!channel_->connect(channel_id))
         return;
@@ -68,14 +68,15 @@ void DesktopSessionAgent::onMessageReceived(const base::ByteArray& buffer)
         return;
     }
 
-    if (incoming_message_.has_encode_frame_result())
+    if (incoming_message_.has_next_screen_capture())
     {
-        captureEnd();
+        captureEnd(std::chrono::milliseconds(
+            incoming_message_.next_screen_capture().update_interval()));
     }
-    else if (incoming_message_.has_pointer_event())
+    else if (incoming_message_.has_mouse_event())
     {
         if (input_injector_)
-            input_injector_->injectPointerEvent(incoming_message_.pointer_event());
+            input_injector_->injectMouseEvent(incoming_message_.mouse_event());
     }
     else if (incoming_message_.has_key_event())
     {
@@ -87,18 +88,17 @@ void DesktopSessionAgent::onMessageReceived(const base::ByteArray& buffer)
         if (clipboard_monitor_)
             clipboard_monitor_->injectClipboardEvent(incoming_message_.clipboard_event());
     }
-    else if (incoming_message_.has_set_enabled())
-    {
-        setEnabled(incoming_message_.set_enabled().enable());
-    }
     else if (incoming_message_.has_select_source())
     {
         if (screen_capturer_)
-            screen_capturer_->selectScreen(incoming_message_.select_source().screen().id());
+        {
+            screen_capturer_->selectScreen(static_cast<base::ScreenCapturer::ScreenId>(
+                incoming_message_.select_source().screen().id()));
+        }
     }
-    else if (incoming_message_.has_set_config())
+    else if (incoming_message_.has_configure())
     {
-        const proto::internal::SetConfig& config = incoming_message_.set_config();
+        const proto::internal::Configure& config = incoming_message_.configure();
 
         if (screen_capturer_)
         {
@@ -109,16 +109,26 @@ void DesktopSessionAgent::onMessageReceived(const base::ByteArray& buffer)
 
         if (input_injector_)
             input_injector_->setBlockInput(config.block_input());
+
+        lock_at_disconnect_ = config.lock_at_disconnect();
     }
-    else if (incoming_message_.has_user_session_control())
+    else if (incoming_message_.has_control())
     {
-        switch (incoming_message_.user_session_control().action())
+        switch (incoming_message_.control().action())
         {
-            case proto::internal::UserSessionControl::LOGOFF:
+            case proto::internal::Control::ENABLE:
+                setEnabled(true);
+                break;
+
+            case proto::internal::Control::DISABLE:
+                setEnabled(false);
+                break;
+
+            case proto::internal::Control::LOGOFF:
                 base::PowerController::logoff();
                 break;
 
-            case proto::internal::UserSessionControl::LOCK:
+            case proto::internal::Control::LOCK:
                 base::PowerController::lock();
                 break;
 
@@ -157,7 +167,7 @@ void DesktopSessionAgent::onSharedMemoryDestroy(int id)
 }
 
 void DesktopSessionAgent::onScreenListChanged(
-    const desktop::ScreenCapturer::ScreenList& list, desktop::ScreenCapturer::ScreenId current)
+    const base::ScreenCapturer::ScreenList& list, base::ScreenCapturer::ScreenId current)
 {
     outgoing_message_.Clear();
 
@@ -169,36 +179,42 @@ void DesktopSessionAgent::onScreenListChanged(
         proto::Screen* screen = screen_list->add_screen();
         screen->set_id(list_item.id);
         screen->set_title(list_item.title);
+
+        if (list_item.is_primary)
+            screen_list->set_primary_screen(list_item.id);
     }
 
     channel_->send(base::serialize(outgoing_message_));
 }
 
 void DesktopSessionAgent::onScreenCaptured(
-    const desktop::Frame* frame, const desktop::MouseCursor* mouse_cursor)
+    const base::Frame* frame, const base::MouseCursor* mouse_cursor)
 {
     outgoing_message_.Clear();
 
-    proto::internal::EncodeFrame* encode_frame = outgoing_message_.mutable_encode_frame();
+    proto::internal::ScreenCaptured* screen_captured = outgoing_message_.mutable_screen_captured();
 
     if (frame && !frame->constUpdatedRegion().isEmpty())
     {
-        proto::internal::SerializedDesktopFrame* serialized_frame = encode_frame->mutable_frame();
+        if (input_injector_)
+            input_injector_->setScreenOffset(frame->topLeft());
+
+        proto::internal::DesktopFrame* serialized_frame = screen_captured->mutable_frame();
 
         serialized_frame->set_shared_buffer_id(frame->sharedMemory()->id());
         serialized_frame->set_width(frame->size().width());
         serialized_frame->set_height(frame->size().height());
+        serialized_frame->set_dpi_x(frame->dpi().x());
+        serialized_frame->set_dpi_y(frame->dpi().y());
 
-        codec::serializePixelFormat(frame->format(), serialized_frame->mutable_pixel_format());
-
-        for (desktop::Region::Iterator it(frame->constUpdatedRegion()); !it.isAtEnd(); it.advance())
-            codec::serializeRect(it.rect(), serialized_frame->add_dirty_rect());
+        for (base::Region::Iterator it(frame->constUpdatedRegion()); !it.isAtEnd(); it.advance())
+            base::serializeRect(it.rect(), serialized_frame->add_dirty_rect());
     }
 
     if (mouse_cursor)
     {
-        proto::internal::SerializedMouseCursor* serialized_mouse_cursor =
-            encode_frame->mutable_mouse_cursor();
+        proto::internal::MouseCursor* serialized_mouse_cursor =
+            screen_captured->mutable_mouse_cursor();
 
         serialized_mouse_cursor->set_width(mouse_cursor->width());
         serialized_mouse_cursor->set_height(mouse_cursor->height());
@@ -207,13 +223,13 @@ void DesktopSessionAgent::onScreenCaptured(
         serialized_mouse_cursor->set_data(base::toStdString(mouse_cursor->constImage()));
     }
 
-    if (encode_frame->has_frame() || encode_frame->has_mouse_cursor())
+    if (screen_captured->has_frame() || screen_captured->has_mouse_cursor())
     {
         channel_->send(base::serialize(outgoing_message_));
     }
     else
     {
-        captureEnd();
+        captureEnd(capture_scheduler_->updateInterval());
     }
 }
 
@@ -245,12 +261,12 @@ void DesktopSessionAgent::setEnabled(bool enable)
 
         // Create a shared memory factory.
         // We will receive notifications of all creations and destruction of shared memory.
-        shared_memory_factory_ = std::make_unique<ipc::SharedMemoryFactory>(this);
+        shared_memory_factory_ = std::make_unique<base::SharedMemoryFactory>(this);
 
-        capture_scheduler_ = std::make_unique<desktop::CaptureScheduler>(
-            std::chrono::milliseconds(33));
+        capture_scheduler_ = std::make_unique<base::CaptureScheduler>(
+            std::chrono::milliseconds(40));
 
-        screen_capturer_ = std::make_unique<desktop::ScreenCapturerWrapper>(this);
+        screen_capturer_ = std::make_unique<base::ScreenCapturerWrapper>(this);
         screen_capturer_->setSharedMemoryFactory(shared_memory_factory_.get());
 
         LOG(LS_INFO) << "Session successfully started";
@@ -267,6 +283,12 @@ void DesktopSessionAgent::setEnabled(bool enable)
         shared_memory_factory_.reset();
         clipboard_monitor_.reset();
 
+        if (lock_at_disconnect_)
+        {
+            base::PowerController::lock();
+            lock_at_disconnect_ = false;
+        }
+
         LOG(LS_INFO) << "Session successfully stopped";
     }
 }
@@ -280,16 +302,26 @@ void DesktopSessionAgent::captureBegin()
     screen_capturer_->captureFrame();
 }
 
-void DesktopSessionAgent::captureEnd()
+void DesktopSessionAgent::captureEnd(std::chrono::milliseconds update_interval)
 {
     if (!capture_scheduler_)
         return;
 
     capture_scheduler_->endCapture();
 
-    task_runner_->postDelayedTask(
-        std::bind(&DesktopSessionAgent::captureBegin, shared_from_this()),
-        capture_scheduler_->nextCaptureDelay());
+    if (update_interval == std::chrono::milliseconds::zero())
+    {
+        // Capture immediately.
+        task_runner_->postTask(std::bind(&DesktopSessionAgent::captureBegin, shared_from_this()));
+    }
+    else
+    {
+        capture_scheduler_->setUpdateInterval(update_interval);
+
+        task_runner_->postDelayedTask(
+            std::bind(&DesktopSessionAgent::captureBegin, shared_from_this()),
+            capture_scheduler_->nextCaptureDelay());
+    }
 }
 
 } // namespace host

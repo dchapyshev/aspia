@@ -38,7 +38,16 @@ message ScreenList
 {
     // List of screens (monitors) on the remote computer.
     repeated Screen screen = 1;
-    int64 current_screen = 2;
+    int64 current_screen   = 2;
+    int64 primary_screen   = 3;
+}
+
+// Extension name: "preferred_size"
+// Sent by client to host.
+message PreferredSize
+{
+    int32 width  = 1;
+    int32 height = 2;
 }
 
 // Extension name: "power_control"

@@ -18,6 +18,8 @@
 
 #include "base/task_runner.h"
 
+#include "base/macros_magic.h"
+
 namespace base {
 
 namespace {

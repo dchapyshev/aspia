@@ -19,8 +19,6 @@
 #ifndef BASE__MEMORY__BYTE_ARRAY_H
 #define BASE__MEMORY__BYTE_ARRAY_H
 
-#include "build/build_config.h"
-
 #include <google/protobuf/message_lite.h>
 
 #if defined(USE_TBB)

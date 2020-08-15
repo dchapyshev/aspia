@@ -20,26 +20,22 @@
 
 #include "base/logging.h"
 #include "base/task_runner.h"
+#include "proto/router_common.pb.h"
 #include "router/manager/router_window_proxy.h"
 
 namespace router {
 
 Router::Router(std::shared_ptr<RouterWindowProxy> window_proxy,
                std::shared_ptr<base::TaskRunner> io_task_runner)
-    : io_task_runner_(std::move(io_task_runner)),
+    : io_task_runner_(io_task_runner),
       window_proxy_(std::move(window_proxy)),
-      authenticator_(std::make_unique<net::ClientAuthenticator>())
+      authenticator_(std::make_unique<base::ClientAuthenticator>(io_task_runner))
 {
     authenticator_->setIdentify(proto::IDENTIFY_SRP);
-    authenticator_->setSessionType(proto::ROUTER_SESSION_MANAGER);
+    authenticator_->setSessionType(proto::ROUTER_SESSION_ADMIN);
 }
 
 Router::~Router() = default;
-
-void Router::setPublicKey(const base::ByteArray& public_key)
-{
-    authenticator_->setPeerPublicKey(public_key);
-}
 
 void Router::setUserName(std::u16string_view user_name)
 {
@@ -53,46 +49,57 @@ void Router::setPassword(std::u16string_view password)
 
 void Router::connectToRouter(std::u16string_view address, uint16_t port)
 {
-    channel_ = std::make_unique<net::Channel>();
+    channel_ = std::make_unique<base::NetworkChannel>();
     channel_->setListener(this);
     channel_->connect(address, port);
 }
 
-void Router::refreshPeerList()
+void Router::refreshHostList()
 {
-    proto::ManagerToRouter message;
-    message.mutable_peer_list_request()->set_dummy(1);
+    LOG(LS_INFO) << "Sending host list request";
+
+    proto::AdminToRouter message;
+    message.mutable_host_list_request()->set_dummy(1);
     channel_->send(base::serialize(message));
 }
 
-void Router::disconnectPeer(uint64_t peer_id)
+void Router::disconnectHost(base::HostId host_id)
 {
-    proto::ManagerToRouter message;
+    LOG(LS_INFO) << "Sending disconnect host request (host_id: " << host_id << ")";
 
-    proto::PeerRequest* request = message.mutable_peer_request();
-    request->set_type(proto::PEER_REQUEST_DISCONNECT);
-    request->mutable_peer()->set_peer_id(peer_id);
+    proto::AdminToRouter message;
+
+    proto::HostRequest* request = message.mutable_host_request();
+    request->set_type(proto::HOST_REQUEST_DISCONNECT);
+    request->mutable_host()->set_host_id(host_id);
 
     channel_->send(base::serialize(message));
 }
 
-void Router::refreshProxyList()
+void Router::refreshRelayList()
 {
-    proto::ManagerToRouter message;
-    message.mutable_proxy_list_request()->set_dummy(1);
+    LOG(LS_INFO) << "Sending relay list request";
+
+    proto::AdminToRouter message;
+    message.mutable_relay_list_request()->set_dummy(1);
     channel_->send(base::serialize(message));
 }
 
 void Router::refreshUserList()
 {
-    proto::ManagerToRouter message;
+    LOG(LS_INFO) << "Sending user list request";
+
+    proto::AdminToRouter message;
     message.mutable_user_list_request()->set_dummy(1);
     channel_->send(base::serialize(message));
 }
 
 void Router::addUser(const proto::User& user)
 {
-    proto::ManagerToRouter message;
+    LOG(LS_INFO) << "Sending user add request (username: " << user.name()
+                 << ", entry_id: " << user.entry_id() << ")";
+
+    proto::AdminToRouter message;
 
     proto::UserRequest* request = message.mutable_user_request();
     request->set_type(proto::USER_REQUEST_ADD);
@@ -103,7 +110,10 @@ void Router::addUser(const proto::User& user)
 
 void Router::modifyUser(const proto::User& user)
 {
-    proto::ManagerToRouter message;
+    LOG(LS_INFO) << "Sending user modify request (username: " << user.name()
+                 << ", entry_id: " << user.entry_id() << ")";
+
+    proto::AdminToRouter message;
 
     proto::UserRequest* request = message.mutable_user_request();
     request->set_type(proto::USER_REQUEST_MODIFY);
@@ -112,9 +122,11 @@ void Router::modifyUser(const proto::User& user)
     channel_->send(base::serialize(message));
 }
 
-void Router::deleteUser(uint64_t entry_id)
+void Router::deleteUser(int64_t entry_id)
 {
-    proto::ManagerToRouter message;
+    LOG(LS_INFO) << "Sending user delete request (entry_id: " << entry_id << ")";
+
+    proto::AdminToRouter message;
 
     proto::UserRequest* request = message.mutable_user_request();
     request->set_type(proto::USER_REQUEST_DELETE);
@@ -126,9 +138,9 @@ void Router::deleteUser(uint64_t entry_id)
 void Router::onConnected()
 {
     authenticator_->start(std::move(channel_),
-                          [this](net::ClientAuthenticator::ErrorCode error_code)
+                          [this](base::ClientAuthenticator::ErrorCode error_code)
     {
-        if (error_code == net::ClientAuthenticator::ErrorCode::SUCCESS)
+        if (error_code == base::ClientAuthenticator::ErrorCode::SUCCESS)
         {
             // The authenticator takes the listener on itself, we return the receipt of
             // notifications.
@@ -150,14 +162,14 @@ void Router::onConnected()
     });
 }
 
-void Router::onDisconnected(net::Channel::ErrorCode error_code)
+void Router::onDisconnected(base::NetworkChannel::ErrorCode error_code)
 {
     window_proxy_->onDisconnected(error_code);
 }
 
 void Router::onMessageReceived(const base::ByteArray& buffer)
 {
-    proto::RouterToManager message;
+    proto::RouterToAdmin message;
 
     if (!base::parse(buffer, &message))
     {
@@ -165,28 +177,38 @@ void Router::onMessageReceived(const base::ByteArray& buffer)
         return;
     }
 
-    if (message.has_peer_list())
+    if (message.has_host_list())
     {
-        window_proxy_->onPeerList(
-            std::shared_ptr<proto::PeerList>(message.release_peer_list()));
+        LOG(LS_INFO) << "Host list received";
+
+        window_proxy_->onHostList(
+            std::shared_ptr<proto::HostList>(message.release_host_list()));
     }
-    else if (message.has_peer_result())
+    else if (message.has_host_result())
     {
-        window_proxy_->onPeerResult(
-            std::shared_ptr<proto::PeerResult>(message.release_peer_result()));
+        LOG(LS_INFO) << "Host result received with code: " << message.host_result().error_code();
+
+        window_proxy_->onHostResult(
+            std::shared_ptr<proto::HostResult>(message.release_host_result()));
     }
-    else if (message.has_proxy_list())
+    else if (message.has_relay_list())
     {
-        window_proxy_->onProxyList(
-            std::shared_ptr<proto::ProxyList>(message.release_proxy_list()));
+        LOG(LS_INFO) << "Relay list received";
+
+        window_proxy_->onRelayList(
+            std::shared_ptr<proto::RelayList>(message.release_relay_list()));
     }
     else if (message.has_user_list())
     {
+        LOG(LS_INFO) << "User list received";
+
         window_proxy_->onUserList(
             std::shared_ptr<proto::UserList>(message.release_user_list()));
     }
     else if (message.has_user_result())
     {
+        LOG(LS_INFO) << "User result received with code: " << message.user_result().error_code();
+
         window_proxy_->onUserResult(
             std::shared_ptr<proto::UserResult>(message.release_user_result()));
     }
@@ -196,7 +218,7 @@ void Router::onMessageReceived(const base::ByteArray& buffer)
     }
 }
 
-void Router::onMessageWritten()
+void Router::onMessageWritten(size_t /* pending */)
 {
     // Not used.
 }

@@ -44,7 +44,7 @@ void MessageLoopTaskRunner::postTask(Callback callback)
         loop_->postTask(std::move(callback));
 }
 
-void MessageLoopTaskRunner::postDelayedTask(Callback callback, Milliseconds delay)
+void MessageLoopTaskRunner::postDelayedTask(Callback callback, const Milliseconds& delay)
 {
     std::shared_lock lock(loop_lock_);
 
@@ -60,7 +60,7 @@ void MessageLoopTaskRunner::postNonNestableTask(Callback callback)
         loop_->postNonNestableTask(std::move(callback));
 }
 
-void MessageLoopTaskRunner::postNonNestableDelayedTask(Callback callback, Milliseconds delay)
+void MessageLoopTaskRunner::postNonNestableDelayedTask(Callback callback, const Milliseconds& delay)
 {
     std::shared_lock lock(loop_lock_);
 

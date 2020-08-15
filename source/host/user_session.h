@@ -21,16 +21,18 @@
 
 #include "base/session_id.h"
 #include "base/waitable_timer.h"
+#include "base/ipc/ipc_channel.h"
+#include "base/peer/host_id.h"
+#include "base/peer/user.h"
+#include "base/win/session_status.h"
 #include "host/client_session.h"
 #include "host/desktop_session_manager.h"
-#include "ipc/channel.h"
-#include "net/user.h"
 #include "proto/host_internal.pb.h"
 
 namespace host {
 
 class UserSession
-    : public ipc::Channel::Listener,
+    : public base::IpcChannel::Listener,
       public DesktopSession::Delegate,
       public ClientSession::Delegate
 {
@@ -60,30 +62,30 @@ public:
 
     UserSession(std::shared_ptr<base::TaskRunner> task_runner,
                 base::SessionId session_id,
-                std::unique_ptr<ipc::Channel> channel);
+                std::unique_ptr<base::IpcChannel> channel);
     ~UserSession();
 
-    void start(Delegate* delegate);
-    void restart(std::unique_ptr<ipc::Channel> channel);
+    void start(base::HostId host_id, Delegate* delegate);
+    void restart(std::unique_ptr<base::IpcChannel> channel);
 
     Type type() const { return type_; }
     State state() const { return state_; }
     base::SessionId sessionId() const { return session_id_; }
-    net::User user() const;
+    base::User user() const;
 
     void addNewSession(std::unique_ptr<ClientSession> client_session);
     void setSessionEvent(base::win::SessionStatus status, base::SessionId session_id);
+    void setHostId(base::HostId host_id);
 
 protected:
-    // ipc::Channel::Listener implementation.
+    // base::IpcChannel::Listener implementation.
     void onDisconnected() override;
     void onMessageReceived(const base::ByteArray& buffer) override;
 
     // DesktopSession::Delegate implementation.
     void onDesktopSessionStarted() override;
     void onDesktopSessionStopped() override;
-    void onScreenCaptured(const desktop::Frame& frame) override;
-    void onCursorCaptured(const desktop::MouseCursor& mouse_cursor) override;
+    void onScreenCaptured(const base::Frame* frame, const base::MouseCursor* cursor) override;
     void onScreenListChanged(const proto::ScreenList& list) override;
     void onClipboardEvent(const proto::ClipboardEvent& event) override;
 
@@ -100,13 +102,14 @@ private:
     void killClientSession(std::string_view id);
 
     std::shared_ptr<base::TaskRunner> task_runner_;
-    std::unique_ptr<ipc::Channel> channel_;
+    std::unique_ptr<base::IpcChannel> channel_;
 
     Type type_;
     State state_ = State::DETTACHED;
     base::WaitableTimer attach_timer_;
 
     base::SessionId session_id_;
+    base::HostId host_id_ = base::kInvalidHostId;
     std::string username_;
     std::string password_;
 

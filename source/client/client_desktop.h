@@ -22,17 +22,13 @@
 #include "base/macros_magic.h"
 #include "client/client.h"
 #include "client/desktop_control.h"
-#include "desktop/geometry.h"
-#include "proto/system_info.pb.h"
+#include "client/input_event_filter.h"
 
-namespace codec {
+namespace base {
 class CursorDecoder;
-class VideoDecoder;
-} // namespace codec
-
-namespace desktop {
 class Frame;
-} // namespace desktop
+class VideoDecoder;
+} // namespace base
 
 namespace client {
 
@@ -53,12 +49,14 @@ public:
     // DesktopControl implementation.
     void setDesktopConfig(const proto::DesktopConfig& config) override;
     void setCurrentScreen(const proto::Screen& screen) override;
+    void setPreferredSize(int width, int height) override;
     void onKeyEvent(const proto::KeyEvent& event) override;
-    void onPointerEvent(const proto::PointerEvent& event) override;
+    void onMouseEvent(const proto::MouseEvent& event) override;
     void onClipboardEvent(const proto::ClipboardEvent& event) override;
     void onPowerControl(proto::PowerControl::Action action) override;
     void onRemoteUpdate() override;
     void onSystemInfoRequest() override;
+    void onMetricsRequest() override;
 
 protected:
     // Client implementation.
@@ -66,28 +64,41 @@ protected:
 
     // net::Channel::Listener implementation.
     void onMessageReceived(const base::ByteArray& buffer) override;
-    void onMessageWritten() override;
+    void onMessageWritten(size_t pending) override;
 
 private:
     void readConfigRequest(const proto::DesktopConfigRequest& config_request);
     void readVideoPacket(const proto::VideoPacket& packet);
     void readCursorShape(const proto::CursorShape& cursor_shape);
-    void readClipboardEvent(const proto::ClipboardEvent& clipboard_event);
+    void readClipboardEvent(const proto::ClipboardEvent& event);
     void readExtension(const proto::DesktopExtension& extension);
 
     bool started_ = false;
 
     std::shared_ptr<DesktopControlProxy> desktop_control_proxy_;
     std::shared_ptr<DesktopWindowProxy> desktop_window_proxy_;
-    std::shared_ptr<desktop::Frame> desktop_frame_;
+    std::shared_ptr<base::Frame> desktop_frame_;
     proto::DesktopConfig desktop_config_;
 
     proto::HostToClient incoming_message_;
     proto::ClientToHost outgoing_message_;
 
     proto::VideoEncoding video_encoding_ = proto::VIDEO_ENCODING_UNKNOWN;
-    std::unique_ptr<codec::VideoDecoder> video_decoder_;
-    std::unique_ptr<codec::CursorDecoder> cursor_decoder_;
+    std::unique_ptr<base::VideoDecoder> video_decoder_;
+    std::unique_ptr<base::CursorDecoder> cursor_decoder_;
+
+    InputEventFilter input_event_filter_;
+
+    using Clock = std::chrono::high_resolution_clock;
+    using TimePoint = std::chrono::time_point<Clock>;
+
+    TimePoint start_time_;
+    TimePoint begin_time_;
+    int64_t video_frame_count_ = 0;
+    size_t min_video_packet_ = std::numeric_limits<size_t>::max();
+    size_t max_video_packet_ = 0;
+    size_t avg_video_packet_ = 0;
+    int fps_ = 0;
 
     DISALLOW_COPY_AND_ASSIGN(ClientDesktop);
 };

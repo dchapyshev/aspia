@@ -20,41 +20,39 @@
 
 #include "base/logging.h"
 #include "base/files/base_paths.h"
-#include "crypto/scoped_crypto_initializer.h"
 #include "host/win/service.h"
 
 namespace host {
 
 namespace {
 
-std::filesystem::path loggingDir()
+void initLogging()
 {
     std::filesystem::path path;
 
     if (!base::BasePaths::commonAppData(&path))
-        return std::filesystem::path();
+        return;
+    path.append("Aspia/Logs");
 
-    path.append("aspia/logs");
-    return path;
+    base::LoggingSettings settings;
+    settings.destination = base::LOG_TO_FILE;
+    settings.log_dir = path;
+
+    base::initLogging(settings);
+}
+
+void shutdownLogging()
+{
+    base::shutdownLogging();
 }
 
 } // namespace
 
-int hostServiceMain(int argc, char *argv[])
+void hostServiceMain()
 {
-    base::LoggingSettings settings;
-    settings.destination = base::LOG_TO_FILE;
-    settings.log_dir = loggingDir();
-
-    base::initLogging(settings);
-
-    crypto::ScopedCryptoInitializer crypto_initializer;
-    CHECK(crypto_initializer.isSucceeded());
-
+    initLogging();
     Service().exec();
-
-    base::shutdownLogging();
-    return 0;
+    shutdownLogging();
 }
 
 } // namespace host

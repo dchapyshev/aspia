@@ -200,7 +200,7 @@ CommandLine::CommandLine(const StringVector& argv)
     initFromArgv(argv);
 }
 
-CommandLine::CommandLine(CommandLine&& other)
+CommandLine::CommandLine(CommandLine&& other) noexcept
     : argv_(std::move(other.argv_)),
       switches_(std::move(other.switches_)),
       begin_args_(other.begin_args_)
@@ -208,7 +208,7 @@ CommandLine::CommandLine(CommandLine&& other)
     // Nothing
 }
 
-CommandLine& CommandLine::operator=(CommandLine&& other)
+CommandLine& CommandLine::operator=(CommandLine&& other) noexcept
 {
     if (this != &other)
     {
@@ -252,7 +252,7 @@ void CommandLine::initFromArgv(int argc, const char* const* argv)
     StringVector new_argv;
 
     for (int i = 0; i < argc; ++i)
-        new_argv.emplace_back(base::utf16FromLocal8Bit(argv[i]));
+        new_argv.emplace_back(utf16FromLocal8Bit(argv[i]));
 
     initFromArgv(new_argv);
 }

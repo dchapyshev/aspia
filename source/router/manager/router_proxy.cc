@@ -32,13 +32,13 @@ public:
 
     void connectToRouter(const std::u16string& address, uint16_t port);
     void disconnectFromRouter();
-    void refreshPeerList();
-    void disconnectPeer(uint64_t peer_id);
-    void refreshProxyList();
+    void refreshHostList();
+    void disconnectHost(base::HostId host_id);
+    void refreshRelayList();
     void refreshUserList();
     void addUser(const proto::User& user);
     void modifyUser(const proto::User& user);
-    void deleteUser(uint64_t entry_id);
+    void deleteUser(int64_t entry_id);
 
 private:
     std::shared_ptr<base::TaskRunner> io_task_runner_;
@@ -85,40 +85,40 @@ void RouterProxy::Impl::disconnectFromRouter()
     router_.reset();
 }
 
-void RouterProxy::Impl::refreshPeerList()
+void RouterProxy::Impl::refreshHostList()
 {
     if (!io_task_runner_->belongsToCurrentThread())
     {
-        io_task_runner_->postTask(std::bind(&Impl::refreshPeerList, shared_from_this()));
+        io_task_runner_->postTask(std::bind(&Impl::refreshHostList, shared_from_this()));
         return;
     }
 
     if (router_)
-        router_->refreshPeerList();
+        router_->refreshHostList();
 }
 
-void RouterProxy::Impl::disconnectPeer(uint64_t peer_id)
+void RouterProxy::Impl::disconnectHost(base::HostId host_id)
 {
     if (!io_task_runner_->belongsToCurrentThread())
     {
-        io_task_runner_->postTask(std::bind(&Impl::disconnectPeer, shared_from_this(), peer_id));
+        io_task_runner_->postTask(std::bind(&Impl::disconnectHost, shared_from_this(), host_id));
         return;
     }
 
     if (router_)
-        router_->disconnectPeer(peer_id);
+        router_->disconnectHost(host_id);
 }
 
-void RouterProxy::Impl::refreshProxyList()
+void RouterProxy::Impl::refreshRelayList()
 {
     if (!io_task_runner_->belongsToCurrentThread())
     {
-        io_task_runner_->postTask(std::bind(&Impl::refreshProxyList, shared_from_this()));
+        io_task_runner_->postTask(std::bind(&Impl::refreshRelayList, shared_from_this()));
         return;
     }
 
     if (router_)
-        router_->refreshProxyList();
+        router_->refreshRelayList();
 }
 
 void RouterProxy::Impl::refreshUserList()
@@ -157,7 +157,7 @@ void RouterProxy::Impl::modifyUser(const proto::User& user)
         router_->modifyUser(user);
 }
 
-void RouterProxy::Impl::deleteUser(uint64_t entry_id)
+void RouterProxy::Impl::deleteUser(int64_t entry_id)
 {
     if (!io_task_runner_->belongsToCurrentThread())
     {
@@ -191,19 +191,19 @@ void RouterProxy::disconnectFromRouter()
     impl_->disconnectFromRouter();
 }
 
-void RouterProxy::refreshPeerList()
+void RouterProxy::refreshHostList()
 {
-    impl_->refreshPeerList();
+    impl_->refreshHostList();
 }
 
-void RouterProxy::disconnectPeer(uint64_t peer_id)
+void RouterProxy::disconnectHost(uint64_t host_id)
 {
-    impl_->disconnectPeer(peer_id);
+    impl_->disconnectHost(host_id);
 }
 
-void RouterProxy::refreshProxyList()
+void RouterProxy::refreshRelayList()
 {
-    impl_->refreshProxyList();
+    impl_->refreshRelayList();
 }
 
 void RouterProxy::refreshUserList()
@@ -221,7 +221,7 @@ void RouterProxy::modifyUser(const proto::User& user)
     impl_->modifyUser(user);
 }
 
-void RouterProxy::deleteUser(uint64_t entry_id)
+void RouterProxy::deleteUser(int64_t entry_id)
 {
     impl_->deleteUser(entry_id);
 }

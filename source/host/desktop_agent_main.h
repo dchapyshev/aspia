@@ -21,6 +21,6 @@
 
 #include "host/host_export.h"
 
-int HOST_EXPORT desktopAgentMain(int argc, char* argv[]);
+void HOST_EXPORT desktopAgentMain();
 
 #endif // HOST__DESKTOP_AGENT_MAIN_H

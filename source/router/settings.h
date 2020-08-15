@@ -19,7 +19,7 @@
 #ifndef ROUTER__SETTINGS_H
 #define ROUTER__SETTINGS_H
 
-#include "base/xml_settings.h"
+#include "base/settings/json_settings.h"
 
 namespace router {
 
@@ -36,7 +36,7 @@ public:
     base::ByteArray privateKey() const;
 
 private:
-    base::XmlSettings impl_;
+    base::JsonSettings impl_;
 };
 
 } // namespace router

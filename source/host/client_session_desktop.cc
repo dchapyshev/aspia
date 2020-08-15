@@ -20,12 +20,13 @@
 
 #include "base/logging.h"
 #include "base/power_controller.h"
-#include "codec/cursor_encoder.h"
-#include "codec/video_encoder_vpx.h"
-#include "codec/video_encoder_zstd.h"
-#include "codec/video_util.h"
+#include "base/codec/cursor_encoder.h"
+#include "base/codec/scale_reducer.h"
+#include "base/codec/video_encoder_vpx.h"
+#include "base/codec/video_encoder_zstd.h"
+#include "base/codec/video_util.h"
+#include "base/desktop/frame.h"
 #include "common/desktop_session_constants.h"
-#include "desktop/frame.h"
 #include "host/desktop_session_proxy.h"
 #include "host/system_info.h"
 #include "host/win/updater_launcher.h"
@@ -34,7 +35,7 @@
 namespace host {
 
 ClientSessionDesktop::ClientSessionDesktop(
-    proto::SessionType session_type, std::unique_ptr<net::Channel> channel)
+    proto::SessionType session_type, std::unique_ptr<base::NetworkChannel> channel)
     : ClientSession(session_type, std::move(channel))
 {
     // Nothing
@@ -59,17 +60,37 @@ void ClientSessionDesktop::onMessageReceived(const base::ByteArray& buffer)
         return;
     }
 
-    if (incoming_message_.has_pointer_event())
+    if (incoming_message_.has_mouse_event())
     {
-        desktop_session_proxy_->injectPointerEvent(incoming_message_.pointer_event());
+        if (sessionType() != proto::SESSION_TYPE_DESKTOP_MANAGE)
+            return;
+
+        if (!scale_reducer_)
+            return;
+
+        const proto::MouseEvent& mouse_event = incoming_message_.mouse_event();
+
+        int pos_x = static_cast<int>(
+            static_cast<double>(mouse_event.x() * 100) / scale_reducer_->scaleFactorX());
+        int pos_y = static_cast<int>(
+            static_cast<double>(mouse_event.y() * 100) / scale_reducer_->scaleFactorY());
+
+        proto::MouseEvent out_mouse_event;
+        out_mouse_event.set_mask(mouse_event.mask());
+        out_mouse_event.set_x(pos_x);
+        out_mouse_event.set_y(pos_y);
+
+        desktop_session_proxy_->injectMouseEvent(out_mouse_event);
     }
     else if (incoming_message_.has_key_event())
     {
-        desktop_session_proxy_->injectKeyEvent(incoming_message_.key_event());
+        if (sessionType() == proto::SESSION_TYPE_DESKTOP_MANAGE)
+            desktop_session_proxy_->injectKeyEvent(incoming_message_.key_event());
     }
     else if (incoming_message_.has_clipboard_event())
     {
-        desktop_session_proxy_->injectClipboardEvent(incoming_message_.clipboard_event());
+        if (sessionType() == proto::SESSION_TYPE_DESKTOP_MANAGE)
+            desktop_session_proxy_->injectClipboardEvent(incoming_message_.clipboard_event());
     }
     else if (incoming_message_.has_extension())
     {
@@ -86,7 +107,7 @@ void ClientSessionDesktop::onMessageReceived(const base::ByteArray& buffer)
     }
 }
 
-void ClientSessionDesktop::onMessageWritten()
+void ClientSessionDesktop::onMessageWritten(size_t /* pending */)
 {
     // Nothing
 }
@@ -117,28 +138,47 @@ void ClientSessionDesktop::onStarted()
     sendMessage(base::serialize(outgoing_message_));
 }
 
-void ClientSessionDesktop::encodeFrame(const desktop::Frame& frame)
+void ClientSessionDesktop::encode(const base::Frame* frame, const base::MouseCursor* cursor)
 {
-    if (!video_encoder_)
-        return;
-
-    outgoing_message_.Clear();
-    proto::VideoPacket* packet = outgoing_message_.mutable_video_packet();
-
-    // Encode the frame into a video packet.
-    video_encoder_->encode(&frame, packet);
-
-    sendMessage(base::serialize(outgoing_message_));
-}
-
-void ClientSessionDesktop::encodeMouseCursor(const desktop::MouseCursor& mouse_cursor)
-{
-    if (!cursor_encoder_)
-        return;
-
     outgoing_message_.Clear();
 
-    if (cursor_encoder_->encode(mouse_cursor, outgoing_message_.mutable_cursor_shape()))
+    if (frame && video_encoder_ && scale_reducer_)
+    {
+        const base::Size& source_size = frame->size();
+
+        if (preferred_size_.width() > source_size.width() ||
+            preferred_size_.height() > source_size.height())
+        {
+            preferred_size_ = source_size;
+        }
+
+        if (preferred_size_.isEmpty())
+            preferred_size_ = source_size;
+
+        const base::Frame* scaled_frame = scale_reducer_->scaleFrame(frame, preferred_size_);
+        if (!scaled_frame)
+            return;
+
+        proto::VideoPacket* packet = outgoing_message_.mutable_video_packet();
+
+        // Encode the frame into a video packet.
+        video_encoder_->encode(scaled_frame, packet);
+
+        if (packet->has_format())
+        {
+            proto::Size* screen_size = packet->mutable_format()->mutable_screen_size();
+            screen_size->set_width(frame->size().width());
+            screen_size->set_height(frame->size().height());
+        }
+    }
+
+    if (cursor && cursor_encoder_)
+    {
+        if (!cursor_encoder_->encode(*cursor, outgoing_message_.mutable_cursor_shape()))
+            outgoing_message_.clear_cursor_shape();
+    }
+
+    if (outgoing_message_.has_video_packet() || outgoing_message_.has_cursor_shape())
         sendMessage(base::serialize(outgoing_message_));
 }
 
@@ -155,10 +195,13 @@ void ClientSessionDesktop::setScreenList(const proto::ScreenList& list)
 
 void ClientSessionDesktop::injectClipboardEvent(const proto::ClipboardEvent& event)
 {
-    outgoing_message_.Clear();
+    if (sessionType() == proto::SESSION_TYPE_DESKTOP_MANAGE)
+    {
+        outgoing_message_.Clear();
 
-    outgoing_message_.mutable_clipboard_event()->CopyFrom(event);
-    sendMessage(base::serialize(outgoing_message_));
+        outgoing_message_.mutable_clipboard_event()->CopyFrom(event);
+        sendMessage(base::serialize(outgoing_message_));
+    }
 }
 
 void ClientSessionDesktop::readExtension(const proto::DesktopExtension& extension)
@@ -174,9 +217,26 @@ void ClientSessionDesktop::readExtension(const proto::DesktopExtension& extensio
         }
 
         desktop_session_proxy_->selectScreen(screen);
+        preferred_size_ = base::Size();
+    }
+    else if (extension.name() == common::kPreferredSizeExtension)
+    {
+        proto::PreferredSize preferred_size;
+
+        if (!preferred_size.ParseFromString(extension.data()))
+        {
+            LOG(LS_ERROR) << "Unable to parse preferred size extension data";
+            return;
+        }
+
+        preferred_size_.set(preferred_size.width(), preferred_size.height());
+        desktop_session_proxy_->captureScreen();
     }
     else if (extension.name() == common::kPowerControlExtension)
     {
+        if (sessionType() != proto::SESSION_TYPE_DESKTOP_MANAGE)
+            return;
+
         proto::PowerControl power_control;
 
         if (!power_control.ParseFromString(extension.data()))
@@ -196,13 +256,11 @@ void ClientSessionDesktop::readExtension(const proto::DesktopExtension& extensio
                 break;
 
             case proto::PowerControl::ACTION_LOGOFF:
-                desktop_session_proxy_->userSessionControl(
-                    proto::internal::UserSessionControl::LOGOFF);
+                desktop_session_proxy_->control(proto::internal::Control::LOGOFF);
                 break;
 
             case proto::PowerControl::ACTION_LOCK:
-                desktop_session_proxy_->userSessionControl(
-                    proto::internal::UserSessionControl::LOCK);
+                desktop_session_proxy_->control(proto::internal::Control::LOCK);
                 break;
 
             default:
@@ -212,7 +270,8 @@ void ClientSessionDesktop::readExtension(const proto::DesktopExtension& extensio
     }
     else if (extension.name() == common::kRemoteUpdateExtension)
     {
-        launchUpdater(sessionId());
+        if (sessionType() == proto::SESSION_TYPE_DESKTOP_MANAGE)
+            launchUpdater(sessionId());
     }
     else if (extension.name() == common::kSystemInfoExtension)
     {
@@ -221,9 +280,9 @@ void ClientSessionDesktop::readExtension(const proto::DesktopExtension& extensio
 
         outgoing_message_.Clear();
 
-        proto::DesktopExtension* extension = outgoing_message_.mutable_extension();
-        extension->set_name(common::kSystemInfoExtension);
-        extension->set_data(system_info.SerializeAsString());
+        proto::DesktopExtension* desktop_extension = outgoing_message_.mutable_extension();
+        desktop_extension->set_name(common::kSystemInfoExtension);
+        desktop_extension->set_data(system_info.SerializeAsString());
 
         sendMessage(base::serialize(outgoing_message_));
     }
@@ -238,16 +297,16 @@ void ClientSessionDesktop::readConfig(const proto::DesktopConfig& config)
     switch (config.video_encoding())
     {
         case proto::VIDEO_ENCODING_VP8:
-            video_encoder_ = codec::VideoEncoderVPX::createVP8();
+            video_encoder_ = base::VideoEncoderVPX::createVP8();
             break;
 
         case proto::VIDEO_ENCODING_VP9:
-            video_encoder_ = codec::VideoEncoderVPX::createVP9();
+            video_encoder_ = base::VideoEncoderVPX::createVP9();
             break;
 
         case proto::VIDEO_ENCODING_ZSTD:
-            video_encoder_ = codec::VideoEncoderZstd::create(
-                codec::parsePixelFormat(config.pixel_format()), config.compress_ratio());
+            video_encoder_ = base::VideoEncoderZstd::create(
+                base::parsePixelFormat(config.pixel_format()), config.compress_ratio());
             break;
 
         default:
@@ -265,9 +324,10 @@ void ClientSessionDesktop::readConfig(const proto::DesktopConfig& config)
     }
 
     cursor_encoder_.reset();
-
     if (config.flags() & proto::ENABLE_CURSOR_SHAPE)
-        cursor_encoder_ = std::make_unique<codec::CursorEncoder>();
+        cursor_encoder_ = std::make_unique<base::CursorEncoder>();
+    
+    scale_reducer_ = std::make_unique<base::ScaleReducer>();
 
     desktop_session_config_.disable_font_smoothing =
         (config.flags() & proto::DISABLE_FONT_SMOOTHING);
@@ -277,6 +337,8 @@ void ClientSessionDesktop::readConfig(const proto::DesktopConfig& config)
         (config.flags() & proto::DISABLE_DESKTOP_WALLPAPER);
     desktop_session_config_.block_input =
         (config.flags() & proto::BLOCK_REMOTE_INPUT);
+    desktop_session_config_.lock_at_disconnect =
+        (config.flags() & proto::LOCK_AT_DISCONNECT);
 
     delegate_->onClientSessionConfigured();
 }

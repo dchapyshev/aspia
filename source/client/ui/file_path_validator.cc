@@ -17,6 +17,7 @@
 //
 
 #include "client/ui/file_path_validator.h"
+
 #include "common/file_platform_util.h"
 
 namespace client {
@@ -27,7 +28,7 @@ FilePathValidator::FilePathValidator(QObject* parent)
     // Nothing
 }
 
-FilePathValidator::State FilePathValidator::validate(QString& input, int& pos) const
+FilePathValidator::State FilePathValidator::validate(QString& input, int& /* pos */) const
 {
     if (!input.isEmpty())
     {

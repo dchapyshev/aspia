@@ -20,7 +20,7 @@
 
 #include "base/logging.h"
 #include "base/task_runner.h"
-#include "proto/router.pb.h"
+#include "proto/router_admin.pb.h"
 #include "router/manager/router_window.h"
 
 namespace router {
@@ -57,7 +57,7 @@ void RouterWindowProxy::onConnected(const base::Version& peer_version)
         router_window_->onConnected(peer_version);
 }
 
-void RouterWindowProxy::onDisconnected(net::Channel::ErrorCode error_code)
+void RouterWindowProxy::onDisconnected(base::NetworkChannel::ErrorCode error_code)
 {
     if (!ui_task_runner_->belongsToCurrentThread())
     {
@@ -70,7 +70,7 @@ void RouterWindowProxy::onDisconnected(net::Channel::ErrorCode error_code)
         router_window_->onDisconnected(error_code);
 }
 
-void RouterWindowProxy::onAccessDenied(net::ClientAuthenticator::ErrorCode error_code)
+void RouterWindowProxy::onAccessDenied(base::ClientAuthenticator::ErrorCode error_code)
 {
     if (!ui_task_runner_->belongsToCurrentThread())
     {
@@ -83,43 +83,43 @@ void RouterWindowProxy::onAccessDenied(net::ClientAuthenticator::ErrorCode error
         router_window_->onAccessDenied(error_code);
 }
 
-void RouterWindowProxy::onPeerList(std::shared_ptr<proto::PeerList> peer_list)
+void RouterWindowProxy::onHostList(std::shared_ptr<proto::HostList> host_list)
 {
     if (!ui_task_runner_->belongsToCurrentThread())
     {
         ui_task_runner_->postTask(
-            std::bind(&RouterWindowProxy::onPeerList, shared_from_this(), peer_list));
+            std::bind(&RouterWindowProxy::onHostList, shared_from_this(), host_list));
         return;
     }
 
     if (router_window_)
-        router_window_->onPeerList(peer_list);
+        router_window_->onHostList(host_list);
 }
 
-void RouterWindowProxy::onPeerResult(std::shared_ptr<proto::PeerResult> peer_result)
+void RouterWindowProxy::onHostResult(std::shared_ptr<proto::HostResult> host_result)
 {
     if (!ui_task_runner_->belongsToCurrentThread())
     {
         ui_task_runner_->postTask(
-            std::bind(&RouterWindowProxy::onPeerResult, shared_from_this(), peer_result));
+            std::bind(&RouterWindowProxy::onHostResult, shared_from_this(), host_result));
         return;
     }
 
     if (router_window_)
-        router_window_->onPeerResult(peer_result);
+        router_window_->onHostResult(host_result);
 }
 
-void RouterWindowProxy::onProxyList(std::shared_ptr<proto::ProxyList> proxy_list)
+void RouterWindowProxy::onRelayList(std::shared_ptr<proto::RelayList> relay_list)
 {
     if (!ui_task_runner_->belongsToCurrentThread())
     {
         ui_task_runner_->postTask(
-            std::bind(&RouterWindowProxy::onProxyList, shared_from_this(), proxy_list));
+            std::bind(&RouterWindowProxy::onRelayList, shared_from_this(), relay_list));
         return;
     }
 
     if (router_window_)
-        router_window_->onProxyList(proxy_list);
+        router_window_->onRelayList(relay_list);
 }
 
 void RouterWindowProxy::onUserList(std::shared_ptr<proto::UserList> user_list)

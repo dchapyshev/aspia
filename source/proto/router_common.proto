@@ -1,0 +1,53 @@
+//
+// Aspia Project
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program. If not, see <https://www.gnu.org/licenses/>.
+//
+
+syntax = "proto3";
+
+option optimize_for = LITE_RUNTIME;
+
+package proto;
+
+enum RouterSession
+{
+    ROUTER_SESSION_UNKNOWN = 0;
+    ROUTER_SESSION_ADMIN   = 1;
+    ROUTER_SESSION_CLIENT  = 2;
+    ROUTER_SESSION_HOST    = 4;
+    ROUTER_SESSION_RELAY   = 8;
+}
+
+message RelayCredentials
+{
+    string host = 1;
+    uint32 port = 2;
+    bytes key   = 3;
+}
+
+message ConnectionOffer
+{
+    enum ErrorCode
+    {
+        SUCCESS        = 0;
+        PEER_NOT_FOUND = 1;
+        ACCESS_DENIED  = 2;
+    }
+
+    ErrorCode error_code   = 1;
+    RelayCredentials relay = 2;
+    bytes secret           = 3;
+}

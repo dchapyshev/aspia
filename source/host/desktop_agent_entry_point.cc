@@ -18,7 +18,13 @@
 
 #include "host/desktop_agent_main.h"
 
-int main(int argc, char *argv[])
+#include <Windows.h>
+
+int WINAPI wWinMain(HINSTANCE /* hInstance */,
+                    HINSTANCE /* hPrevInstance */,
+                    LPWSTR /* lpCmdLine */,
+                    int /* nCmdShow */)
 {
-    return desktopAgentMain(argc, argv);
+    desktopAgentMain();
+    return 0;
 }

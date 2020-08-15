@@ -21,12 +21,10 @@
 
 #include "proto/desktop_internal.pb.h"
 
-#include <memory>
-
-namespace desktop {
+namespace base {
 class Frame;
 class MouseCursor;
-} // namespace desktop
+} // namespace base
 
 namespace host {
 
@@ -42,8 +40,7 @@ public:
 
         virtual void onDesktopSessionStarted() = 0;
         virtual void onDesktopSessionStopped() = 0;
-        virtual void onScreenCaptured(const desktop::Frame& frame) = 0;
-        virtual void onCursorCaptured(const desktop::MouseCursor& mouse_cursor) = 0;
+        virtual void onScreenCaptured(const base::Frame* frame, const base::MouseCursor* cursor) = 0;
         virtual void onScreenListChanged(const proto::ScreenList& list) = 0;
         virtual void onClipboardEvent(const proto::ClipboardEvent& event) = 0;
     };
@@ -54,20 +51,29 @@ public:
         bool disable_wallpaper = true;
         bool disable_effects = true;
         bool block_input = false;
+        bool lock_at_disconnect = false;
+
+        bool equals(const Config& other) const
+        {
+            return (disable_font_smoothing == other.disable_font_smoothing) &&
+                   (disable_wallpaper == other.disable_wallpaper) &&
+                   (disable_effects == other.disable_effects) &&
+                   (block_input == other.block_input) &&
+                   (lock_at_disconnect == other.lock_at_disconnect);
+        }
     };
 
     virtual void start() = 0;
     virtual void stop() = 0;
 
-    virtual void setEnabled(bool enable) = 0;
-    virtual void setConfig(const Config& config) = 0;
+    virtual void control(proto::internal::Control::Action action) = 0;
+    virtual void configure(const Config& config) = 0;
     virtual void selectScreen(const proto::Screen& screen) = 0;
+    virtual void captureScreen() = 0;
 
     virtual void injectKeyEvent(const proto::KeyEvent& event) = 0;
-    virtual void injectPointerEvent(const proto::PointerEvent& event) = 0;
+    virtual void injectMouseEvent(const proto::MouseEvent& event) = 0;
     virtual void injectClipboardEvent(const proto::ClipboardEvent& event) = 0;
-
-    virtual void userSessionControl(proto::internal::UserSessionControl::Action action) = 0;
 };
 
 } // namespace host

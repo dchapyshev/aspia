@@ -61,13 +61,14 @@ set_target_properties(aspia_router_manager PROPERTIES LINK_FLAGS "/MANIFEST:NO")
 target_link_libraries(aspia_router_manager
     aspia_base
     aspia_common
-    aspia_crypto
-    aspia_net
     aspia_proto
     aspia_qt_base
     ${QT_LIBS}
     ${PLATFORM_LIBS}
     ${THIRD_PARTY_LIBS})
+set_property(TARGET aspia_router_manager PROPERTY AUTOMOC ON)
+set_property(TARGET aspia_router_manager PROPERTY AUTOUIC ON)
+set_property(TARGET aspia_router_manager PROPERTY AUTORCC ON)
 
 if (USE_TBB)
     add_tbb(aspia_router_manager ${ASPIA_THIRD_PARTY_DIR}/tbb)

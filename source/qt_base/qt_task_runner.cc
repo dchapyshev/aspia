@@ -109,7 +109,7 @@ void QtTaskRunner::postTask(Callback callback)
     impl_->postTask(std::move(callback), Qt::NormalEventPriority);
 }
 
-void QtTaskRunner::postDelayedTask(Callback /* callback */, Milliseconds /* delay */)
+void QtTaskRunner::postDelayedTask(Callback /* callback */, const Milliseconds& /* delay */)
 {
     NOTIMPLEMENTED();
 }
@@ -119,7 +119,8 @@ void QtTaskRunner::postNonNestableTask(Callback callback)
     impl_->postTask(std::move(callback), Qt::LowEventPriority);
 }
 
-void QtTaskRunner::postNonNestableDelayedTask(Callback /* callback */, Milliseconds /* delay */)
+void QtTaskRunner::postNonNestableDelayedTask(
+    Callback /* callback */, const Milliseconds& /* delay */)
 {
     NOTIMPLEMENTED();
 }

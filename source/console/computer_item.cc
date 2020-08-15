@@ -18,9 +18,9 @@
 
 #include "console/computer_item.h"
 
+#include "base/net/address.h"
 #include "base/strings/unicode.h"
 #include "console/computer_group_item.h"
-#include "net/address.h"
 
 #include <QDateTime>
 
@@ -31,13 +31,13 @@ ComputerItem::ComputerItem(proto::address_book::Computer* computer,
     : computer_(computer),
       parent_group_item_(parent_group_item)
 {
-    setIcon(0, QIcon(QStringLiteral(":/img/computer.png")));
+    setIcon(0, QIcon(":/img/computer.png"));
     updateItem();
 }
 
 void ComputerItem::updateItem()
 {
-    net::Address address;
+    base::Address address(DEFAULT_HOST_TCP_PORT);
     address.setHost(base::utf16FromUtf8(computer_->address()));
     address.setPort(computer_->port());
 

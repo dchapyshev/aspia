@@ -150,7 +150,12 @@
         <translation>Сильнее</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="164"/>
+        <location filename="../computer_dialog_desktop.ui" line="129"/>
+        <source>Lock at disconnect</source>
+        <translation>Блокировать при отключении</translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog_desktop.ui" line="171"/>
         <source>Disable font smoothing</source>
         <translation>Отключить сглаживание шрифтов</translation>
     </message>
@@ -176,27 +181,27 @@
         <translation>Дополнительно</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="129"/>
+        <location filename="../computer_dialog_desktop.ui" line="136"/>
         <source>Block remote input</source>
         <translation>Блокировать удаленный ввод</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="136"/>
+        <location filename="../computer_dialog_desktop.ui" line="143"/>
         <source>Enable cursor shape</source>
         <translation>Включить изображение курсора</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="143"/>
+        <location filename="../computer_dialog_desktop.ui" line="150"/>
         <source>Enable clipboard</source>
         <translation>Включить буфер обмена</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="150"/>
+        <location filename="../computer_dialog_desktop.ui" line="157"/>
         <source>Disable desktop effects</source>
         <translation>Отключить эффекты рабочего стола</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="157"/>
+        <location filename="../computer_dialog_desktop.ui" line="164"/>
         <source>Disable desktop wallpaper</source>
         <translation>Отключить обои рабочего стола</translation>
     </message>
@@ -276,42 +281,42 @@
 <context>
     <name>Console</name>
     <message>
-        <location filename="../main.cc" line="62"/>
+        <location filename="../main.cc" line="60"/>
         <source>Remote computer address.</source>
         <translation>Адрес удаленного компьютера.</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="63"/>
+        <location filename="../main.cc" line="61"/>
         <source>address</source>
         <translation>адрес</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="67"/>
+        <location filename="../main.cc" line="65"/>
         <source>Remote computer port.</source>
         <translation>Порт удаленного компьютера.</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="68"/>
+        <location filename="../main.cc" line="66"/>
         <source>port</source>
         <translation>порт</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="73"/>
+        <location filename="../main.cc" line="71"/>
         <source>Name of user.</source>
         <translation>Имя пользователя.</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="74"/>
+        <location filename="../main.cc" line="72"/>
         <source>username</source>
         <translation>имя_пользователя</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="78"/>
+        <location filename="../main.cc" line="76"/>
         <source>Session type. Possible values: desktop-manage, desktop-view, file-transfer.</source>
         <translation>Тип сессии. Возможные значения: desktop-manage, desktop-view, file-transfer.</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="84"/>
+        <location filename="../main.cc" line="82"/>
         <source>Open the client to connect to the computer.</source>
         <translation>Открыть клиент для подключения к компьютеру.</translation>
     </message>
@@ -320,27 +325,27 @@
         <translation type="vanished">Запуск программы с упрощенным интерфейсом пользователя.</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="87"/>
+        <location filename="../main.cc" line="85"/>
         <source>Aspia Console</source>
         <translation>Консоль Aspia</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="90"/>
+        <location filename="../main.cc" line="88"/>
         <source>file</source>
         <translation>файл</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="91"/>
+        <location filename="../main.cc" line="89"/>
         <source>The file to open.</source>
         <translation>Файл для открытия.</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="130"/>
+        <location filename="../main.cc" line="128"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="131"/>
+        <location filename="../main.cc" line="129"/>
         <source>Incorrect session type entered.</source>
         <translation>Введен некорректный тип сессии.</translation>
     </message>
@@ -1028,32 +1033,32 @@
 <context>
     <name>console::ComputerDialogDesktop</name>
     <message>
-        <location filename="../computer_dialog_desktop.cc" line="59"/>
+        <location filename="../computer_dialog_desktop.cc" line="60"/>
         <source>True color (32 bit)</source>
         <translation>True color (32 бит)</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.cc" line="60"/>
+        <location filename="../computer_dialog_desktop.cc" line="61"/>
         <source>High color (16 bit)</source>
         <translation>High color (16 бит)</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.cc" line="61"/>
+        <location filename="../computer_dialog_desktop.cc" line="62"/>
         <source>256 colors (8 bit)</source>
         <translation>256 цветов (8 бит)</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.cc" line="62"/>
+        <location filename="../computer_dialog_desktop.cc" line="63"/>
         <source>64 colors (6 bit)</source>
         <translation>64 цвета (6 бит)</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.cc" line="63"/>
+        <location filename="../computer_dialog_desktop.cc" line="64"/>
         <source>8 colors (3 bit)</source>
         <translation>8 цветов (3 бита)</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.cc" line="204"/>
+        <location filename="../computer_dialog_desktop.cc" line="212"/>
         <source>Compression ratio: %1</source>
         <translation>Уровень сжатия: %1</translation>
     </message>
@@ -1089,12 +1094,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_dialog_general.cc" line="121"/>
+        <location filename="../computer_dialog_general.cc" line="122"/>
         <source>An invalid computer address was entered.</source>
         <translation>Введен некорректный адрес компьютера.</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_general.cc" line="155"/>
+        <location filename="../computer_dialog_general.cc" line="156"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
@@ -1236,14 +1241,14 @@
     </message>
     <message>
         <location filename="../main_window.cc" line="508"/>
-        <location filename="../main_window.cc" line="816"/>
-        <location filename="../main_window.cc" line="893"/>
+        <location filename="../main_window.cc" line="809"/>
+        <location filename="../main_window.cc" line="886"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="509"/>
-        <location filename="../main_window.cc" line="894"/>
+        <location filename="../main_window.cc" line="887"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation>Адресная книга &quot;%1&quot; изменена. Сохранить изменения?</translation>
     </message>
@@ -1253,28 +1258,28 @@
         <translation>Закрыть другие вкладки</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="720"/>
+        <location filename="../main_window.cc" line="719"/>
         <source>Close tab</source>
         <translation>Закрыть вкладку</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="723"/>
-        <location filename="../main_window.cc" line="730"/>
+        <location filename="../main_window.cc" line="720"/>
+        <location filename="../main_window.cc" line="725"/>
         <source>Pin tab</source>
         <translation>Закрепить вкладку</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="817"/>
+        <location filename="../main_window.cc" line="810"/>
         <source>The list of recently opened address books will be cleared. Continue?</source>
         <translation>Список недавно открытых адресных книг будет очищен. Продолжить?</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="850"/>
+        <location filename="../main_window.cc" line="843"/>
         <source>Hide</source>
         <translation>Спрятать</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="865"/>
+        <location filename="../main_window.cc" line="858"/>
         <source>Show</source>
         <translation>Показать</translation>
     </message>
@@ -1283,7 +1288,7 @@
         <translation type="vanished">&lt;пусто&gt;</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1000"/>
+        <location filename="../main_window.cc" line="993"/>
         <source>Aspia Console</source>
         <translation>Консоль Aspia</translation>
     </message>
@@ -1309,12 +1314,12 @@
 <context>
     <name>console::OpenAddressBookDialog</name>
     <message>
-        <location filename="../open_address_book_dialog.cc" line="41"/>
+        <location filename="../open_address_book_dialog.cc" line="42"/>
         <source>Without Encryption</source>
         <translation>Без шифрования</translation>
     </message>
     <message>
-        <location filename="../open_address_book_dialog.cc" line="45"/>
+        <location filename="../open_address_book_dialog.cc" line="46"/>
         <source>ChaCha20 + Poly1305 (256-bit key)</source>
         <translation>ChaCha20 + Poly1305 (256-битный ключ)</translation>
     </message>
@@ -1324,7 +1329,7 @@
     <message numerus="yes">
         <location filename="../statusbar.cc" line="37"/>
         <source>%n child group(s)</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>%n дочерняя группа</numerusform>
             <numerusform>%n дочерние группы</numerusform>
             <numerusform>%n дочерних групп</numerusform>
@@ -1333,7 +1338,7 @@
     <message numerus="yes">
         <location filename="../statusbar.cc" line="38"/>
         <source>%n child computer(s)</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>%n дочерний компьютер</numerusform>
             <numerusform>%n дочерних компьютера</numerusform>
             <numerusform>%n дочерних компьютеров</numerusform>

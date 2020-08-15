@@ -17,6 +17,7 @@
 //
 
 #include "base/win/desktop.h"
+
 #include "base/logging.h"
 
 namespace base {

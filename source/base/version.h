@@ -19,6 +19,8 @@
 #ifndef BASE__VERSION_H
 #define BASE__VERSION_H
 
+#include "proto/common.pb.h"
+
 #include <cstdint>
 #include <iosfwd>
 #include <string>
@@ -36,8 +38,8 @@ public:
     Version(const Version& other);
     Version& operator=(const Version& other);
 
-    Version(Version&& other);
-    Version& operator=(Version&& other);
+    Version(Version&& other) noexcept;
+    Version& operator=(Version&& other) noexcept;
 
     Version(uint32_t major, uint32_t minor, uint32_t build, uint32_t revision = 0);
 
@@ -71,6 +73,9 @@ public:
     const std::string toString() const;
 
     const std::vector<uint32_t>& components() const { return components_; }
+
+    proto::Version toProto() const;
+    static Version fromProto(const proto::Version& proto_version);
 
 private:
     std::vector<uint32_t> components_;

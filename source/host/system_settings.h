@@ -20,13 +20,13 @@
 #define HOST__SYSTEM_SETTINGS_H
 
 #include "base/macros_magic.h"
-#include "base/xml_settings.h"
+#include "base/settings/json_settings.h"
 
 #include <filesystem>
 
-namespace net {
+namespace base {
 class UserList;
-} // namespace net
+} // namespace peer
 
 namespace host {
 
@@ -43,14 +43,29 @@ public:
     uint16_t tcpPort() const;
     void setTcpPort(uint16_t port);
 
-    net::UserList userList() const;
-    void setUserList(const net::UserList& user_list);
+    bool isRouterEnabled() const;
+    void setRouterEnabled(bool enable);
 
-    std::string updateServer() const;
-    void setUpdateServer(const std::string& server);
+    std::u16string routerAddress() const;
+    void setRouterAddress(const std::u16string& address);
+
+    uint16_t routerPort() const;
+    void setRouterPort(uint16_t port);
+
+    base::ByteArray routerPublicKey() const;
+    void setRouterPublicKey(const base::ByteArray& key);
+
+    base::ByteArray hostKey() const;
+    void setHostKey(const base::ByteArray& key);
+
+    base::UserList userList() const;
+    void setUserList(const base::UserList& user_list);
+
+    std::u16string updateServer() const;
+    void setUpdateServer(const std::u16string& server);
 
 private:
-    base::XmlSettings settings_;
+    base::JsonSettings settings_;
 
     DISALLOW_COPY_AND_ASSIGN(SystemSettings);
 };

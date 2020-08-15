@@ -102,16 +102,16 @@ public:
     {
         Item(const std::string& name, int64_t size, bool is_directory)
             : name(name),
-              size(size),
-              is_directory(is_directory)
+              is_directory(is_directory),
+              size(size)
         {
             // Nothing
         }
 
         Item(std::string&& name, int64_t size, bool is_directory)
             : name(std::move(name)),
-              size(size),
-              is_directory(is_directory)
+              is_directory(is_directory),
+              size(size)
         {
             // Nothing
         }

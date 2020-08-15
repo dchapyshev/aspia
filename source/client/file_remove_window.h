@@ -21,8 +21,6 @@
 
 #include "proto/file_transfer.pb.h"
 
-#include <filesystem>
-
 namespace client {
 
 class FileRemoverProxy;

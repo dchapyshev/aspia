@@ -17,6 +17,7 @@
 //
 
 #include "client/ui/address_bar.h"
+
 #include "client/ui/address_bar_model.h"
 #include "client/ui/file_path_validator.h"
 

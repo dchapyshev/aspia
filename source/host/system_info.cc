@@ -18,12 +18,12 @@
 
 #include "host/system_info.h"
 
-#include "base/win/drive_enumerator.h"
-#include "base/win/printer_enumerator.h"
 #include "base/smbios_parser.h"
 #include "base/smbios_reader.h"
 #include "base/sys_info.h"
-#include "net/adapter_enumerator.h"
+#include "base/net/adapter_enumerator.h"
+#include "base/win/drive_enumerator.h"
+#include "base/win/printer_enumerator.h"
 
 namespace host {
 
@@ -133,7 +133,7 @@ void createSystemInfo(proto::SystemInfo* system_info)
         printer->set_share_name(enumerator.shareName());
     }
 
-    for (net::AdapterEnumerator enumerator; !enumerator.isAtEnd(); enumerator.advance())
+    for (base::AdapterEnumerator enumerator; !enumerator.isAtEnd(); enumerator.advance())
     {
         proto::system_info::NetworkAdapters::Adapter* adapter =
             system_info->mutable_network_adapters()->add_adapter();
@@ -152,13 +152,13 @@ void createSystemInfo(proto::SystemInfo* system_info)
                 adapter->add_dhcp()->append(dhcp4_server);
         }
 
-        for (net::AdapterEnumerator::GatewayEnumerator gateway(enumerator);
+        for (base::AdapterEnumerator::GatewayEnumerator gateway(enumerator);
              !gateway.isAtEnd(); gateway.advance())
         {
             adapter->add_gateway()->assign(gateway.address());
         }
 
-        for (net::AdapterEnumerator::IpAddressEnumerator ip(enumerator);
+        for (base::AdapterEnumerator::IpAddressEnumerator ip(enumerator);
              !ip.isAtEnd(); ip.advance())
         {
             proto::system_info::NetworkAdapters::Adapter::Address* address = adapter->add_address();
@@ -167,7 +167,7 @@ void createSystemInfo(proto::SystemInfo* system_info)
             address->set_mask(ip.mask());
         }
 
-        for (net::AdapterEnumerator::DnsEnumerator dns(enumerator);
+        for (base::AdapterEnumerator::DnsEnumerator dns(enumerator);
              !dns.isAtEnd(); dns.advance())
         {
             adapter->add_dns()->assign(dns.address());

@@ -20,16 +20,20 @@
 #define ROUTER__SESSION_H
 
 #include "base/version.h"
-#include "net/channel.h"
+#include "base/net/network_channel.h"
+#include "proto/router_common.pb.h"
 
 namespace router {
 
 class Database;
+class DatabaseFactory;
 
-class Session : public net::Channel::Listener
+class Session : public base::NetworkChannel::Listener
 {
 public:
-    explicit Session(std::unique_ptr<net::Channel> channel);
+    Session(proto::RouterSession session_type,
+            std::unique_ptr<base::NetworkChannel> channel,
+            std::shared_ptr<DatabaseFactory> database_factory);
     virtual ~Session();
 
     class Delegate
@@ -40,27 +44,49 @@ public:
         virtual void onSessionFinished() = 0;
     };
 
+    enum class State
+    {
+        NOT_STARTED,
+        STARTED,
+        FINISHED
+    };
+
     void start(Delegate* delegate);
 
-    bool isFinished() const;
+    State state() const { return state_; }
 
     void setVersion(const base::Version& version);
     const base::Version& version() const { return version_; }
+    void setOsName(const std::u16string& os_name);
+    const std::u16string& osName() const { return os_name_; }
+    void setComputerName(const std::u16string& computer_name);
+    const std::u16string& computerName() const { return computer_name_; }
     void setUserName(const std::u16string& username);
     const std::u16string& userName() const { return username_; }
+    proto::RouterSession sessionType() const { return session_type_; }
+    std::u16string address() const;
 
 protected:
-    void send(base::ByteArray&& buffer);
+    void sendMessage(const google::protobuf::MessageLite& message);
+    std::unique_ptr<Database> openDatabase() const;
+
+    virtual void onSessionReady() = 0;
 
     // net::Channel::Listener implementation.
     void onConnected() override;
-    void onDisconnected(net::Channel::ErrorCode error_code) override;
+    void onDisconnected(base::NetworkChannel::ErrorCode error_code) override;
 
 private:
-    std::unique_ptr<net::Channel> channel_;
+    const proto::RouterSession session_type_;
+    State state_ = State::NOT_STARTED;
+
+    std::unique_ptr<base::NetworkChannel> channel_;
+    std::shared_ptr<DatabaseFactory> database_factory_;
 
     std::u16string username_;
     base::Version version_;
+    std::u16string os_name_;
+    std::u16string computer_name_;
 
     Delegate* delegate_ = nullptr;
 };

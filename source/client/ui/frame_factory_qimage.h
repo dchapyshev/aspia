@@ -30,7 +30,7 @@ public:
     FrameFactoryQImage();
     ~FrameFactoryQImage();
 
-    std::shared_ptr<desktop::Frame> allocateFrame(const desktop::Size& size) override;
+    std::shared_ptr<base::Frame> allocateFrame(const base::Size& size) override;
 
 private:
     DISALLOW_COPY_AND_ASSIGN(FrameFactoryQImage);

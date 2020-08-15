@@ -22,7 +22,6 @@
 #include "router/manager/main_window.h"
 
 #include <QAbstractButton>
-#include <QFileDialog>
 #include <QMessageBox>
 
 namespace router {
@@ -58,19 +57,6 @@ RouterDialog::RouterDialog()
     connect(ui.buttonbox, &QDialogButtonBox::clicked,
             this, &RouterDialog::onButtonBoxClicked);
 
-    connect(ui.button_public_key, &QPushButton::clicked, [this]()
-    {
-        QString file_path =
-            QFileDialog::getOpenFileName(this,
-                                         tr("Open Public Key"),
-                                         QString(),
-                                         tr("Public Key (*.txt)"));
-        if (file_path.isEmpty())
-            return;
-
-        ui.edit_public_key->setText(file_path);
-    });
-
     settings_.readMru(&mru_cache_);
     reloadMru();
 
@@ -101,7 +87,6 @@ void RouterDialog::onCurrentRouterChanged(int index)
 
     ui.spinbox_port->setValue(entry.port);
     ui.edit_username->setText(entry.username);
-    ui.edit_public_key->setText(entry.key_path);
 }
 
 void RouterDialog::onButtonBoxClicked(QAbstractButton* button)
@@ -137,44 +122,18 @@ void RouterDialog::onButtonBoxClicked(QAbstractButton* button)
         return;
     }
 
-    QString file_path = ui.edit_public_key->text();
-    if (file_path.isEmpty())
-    {
-        showWarning(tr("The path to the public key file must be specified."));
-        ui.edit_public_key->setFocus();
-        return;
-    }
-
-    int64_t file_size = QFileInfo(file_path).size();
-    if (file_size <= 0 || file_size > 512)
-    {
-        showWarning(tr("The public key file has an invalid size."));
-        ui.edit_public_key->setFocus();
-        return;
-    }
-
-    QFile file(file_path);
-    if (!file.open(QIODevice::ReadOnly))
-    {
-        showWarning(tr("Unable to open public key file \"%1\".").arg(file_path));
-        ui.edit_public_key->setFocus();
-        return;
-    }
-
     uint16_t port = static_cast<uint16_t>(ui.spinbox_port->value());
-    QByteArray public_key = file.readAll();
 
     MruCache::Entry entry;
     entry.address = address;
     entry.port = port;
     entry.username = username;
-    entry.key_path = file_path;
 
     mru_cache_.put(std::move(entry));
     reloadMru();
 
-    main_window_ = new MainWindow(this);
-    main_window_->connectToRouter(address, port, public_key, username, password);
+    main_window_ = new MainWindow();
+    main_window_->connectToRouter(address, port, username, password);
 
     hide();
 }

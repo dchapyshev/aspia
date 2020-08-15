@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>600</width>
+    <width>561</width>
     <height>377</height>
    </rect>
   </property>
@@ -20,22 +20,22 @@
       <property name="currentIndex">
        <number>0</number>
       </property>
-      <widget class="QWidget" name="tab_peers">
+      <widget class="QWidget" name="tab_hosts">
        <attribute name="title">
-        <string>Peers</string>
+        <string>Hosts</string>
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_2">
           <item>
-           <widget class="QLabel" name="label_title_connections_count">
+           <widget class="QLabel" name="label_title_hosts_conn_count">
             <property name="text">
              <string>Connections count:</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QLabel" name="label_connections_count">
+           <widget class="QLabel" name="label_hosts_conn_count">
             <property name="text">
              <string notr="true">0</string>
             </property>
@@ -44,7 +44,7 @@
          </layout>
         </item>
         <item>
-         <widget class="QTreeWidget" name="tree_peer">
+         <widget class="QTreeWidget" name="tree_hosts">
           <property name="indentation">
            <number>0</number>
           </property>
@@ -55,12 +55,22 @@
           </column>
           <column>
            <property name="text">
-            <string>User name</string>
+            <string>IP Address</string>
            </property>
           </column>
           <column>
            <property name="text">
-            <string>IP address</string>
+            <string>Version</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Computer Name</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Operating System</string>
            </property>
           </column>
          </widget>
@@ -81,14 +91,21 @@
            </spacer>
           </item>
           <item>
-           <widget class="QPushButton" name="button_disconnect_peer">
+           <widget class="QPushButton" name="button_disconnect_host">
             <property name="text">
              <string>Disconnect</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="button_refresh_peers">
+           <widget class="QPushButton" name="button_disconnect_all_hosts">
+            <property name="text">
+             <string>Disconnect All</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="button_refresh_hosts">
             <property name="text">
              <string>Refresh</string>
             </property>
@@ -98,13 +115,31 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="tab_proxy">
+      <widget class="QWidget" name="tab_relay">
        <attribute name="title">
-        <string>Proxy</string>
+        <string>Relay</string>
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
-         <widget class="QTreeWidget" name="tree_proxy">
+         <layout class="QHBoxLayout" name="horizontalLayout_5">
+          <item>
+           <widget class="QLabel" name="label_title_relay_conn_count">
+            <property name="text">
+             <string>Connections count:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_relay_conn_count">
+            <property name="text">
+             <string notr="true">0</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QTreeWidget" name="tree_relay">
           <property name="indentation">
            <number>0</number>
           </property>
@@ -116,6 +151,21 @@
           <column>
            <property name="text">
             <string>Pool Size</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Version</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Computer Name</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Operating System</string>
            </property>
           </column>
          </widget>
@@ -136,7 +186,7 @@
            </spacer>
           </item>
           <item>
-           <widget class="QPushButton" name="button_refresh_proxy">
+           <widget class="QPushButton" name="button_refresh_relay">
             <property name="text">
              <string>Refresh</string>
             </property>

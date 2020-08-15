@@ -18,7 +18,7 @@
 
 #include "router/keygen/main_window.h"
 
-#include "crypto/key_pair.h"
+#include "base/crypto/key_pair.h"
 
 #include <QClipboard>
 #include <QFile>
@@ -63,7 +63,7 @@ void MainWindow::onSavePublicKey()
 
 void MainWindow::onGenerate()
 {
-    crypto::KeyPair key_pair = crypto::KeyPair::create(crypto::KeyPair::Type::X25519);
+    base::KeyPair key_pair = base::KeyPair::create(base::KeyPair::Type::X25519);
     if (!key_pair.isValid())
     {
         QMessageBox::warning(this,

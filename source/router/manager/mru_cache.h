@@ -19,8 +19,6 @@
 #ifndef ROUTER__MANAGER__MRU_CACHE_H
 #define ROUTER__MANAGER__MRU_CACHE_H
 
-#include <QByteArray>
-#include <QString>
 #include <QVector>
 
 namespace router {
@@ -31,9 +29,8 @@ public:
     struct Entry
     {
         QString address;
-        uint16_t port;
+        uint16_t port = 0;
         QString username;
-        QString key_path;
     };
 
     using EntryList = QVector<Entry>;

@@ -17,8 +17,9 @@
 //
 
 #include "console/computer_dialog_desktop.h"
+
 #include "base/logging.h"
-#include "codec/video_util.h"
+#include "base/codec/video_util.h"
 
 namespace console {
 
@@ -69,18 +70,18 @@ void ComputerDialogDesktop::restoreSettings(
     combo_codec->setCurrentIndex(current_codec);
     onCodecChanged(current_codec);
 
-    desktop::PixelFormat pixel_format = codec::parsePixelFormat(config.pixel_format());
+    base::PixelFormat pixel_format = base::parsePixelFormat(config.pixel_format());
     ColorDepth color_depth;
 
-    if (pixel_format.isEqual(desktop::PixelFormat::ARGB()))
+    if (pixel_format.isEqual(base::PixelFormat::ARGB()))
         color_depth = COLOR_DEPTH_ARGB;
-    else if (pixel_format.isEqual(desktop::PixelFormat::RGB565()))
+    else if (pixel_format.isEqual(base::PixelFormat::RGB565()))
         color_depth = COLOR_DEPTH_RGB565;
-    else if (pixel_format.isEqual(desktop::PixelFormat::RGB332()))
+    else if (pixel_format.isEqual(base::PixelFormat::RGB332()))
         color_depth = COLOR_DEPTH_RGB332;
-    else if (pixel_format.isEqual(desktop::PixelFormat::RGB222()))
+    else if (pixel_format.isEqual(base::PixelFormat::RGB222()))
         color_depth = COLOR_DEPTH_RGB222;
-    else if (pixel_format.isEqual(desktop::PixelFormat::RGB111()))
+    else if (pixel_format.isEqual(base::PixelFormat::RGB111()))
         color_depth = COLOR_DEPTH_RGB111;
     else
         color_depth = COLOR_DEPTH_ARGB;
@@ -94,6 +95,9 @@ void ComputerDialogDesktop::restoreSettings(
 
     if (session_type == proto::SESSION_TYPE_DESKTOP_MANAGE)
     {
+        if (config.flags() & proto::LOCK_AT_DISCONNECT)
+            ui.checkbox_lock_at_disconnect->setChecked(true);
+
         if (config.flags() & proto::BLOCK_REMOTE_INPUT)
             ui.checkbox_block_remote_input->setChecked(true);
 
@@ -105,6 +109,7 @@ void ComputerDialogDesktop::restoreSettings(
     }
     else
     {
+        ui.checkbox_lock_at_disconnect->hide();
         ui.checkbox_block_remote_input->hide();
         ui.checkbox_cursor_shape->hide();
         ui.checkbox_clipboard->hide();
@@ -129,28 +134,28 @@ void ComputerDialogDesktop::saveSettings(proto::DesktopConfig* config)
 
     if (video_encoding == proto::VIDEO_ENCODING_ZSTD)
     {
-        desktop::PixelFormat pixel_format;
+        base::PixelFormat pixel_format;
 
         switch (ui.combo_color_depth->currentData().toInt())
         {
             case COLOR_DEPTH_ARGB:
-                pixel_format = desktop::PixelFormat::ARGB();
+                pixel_format = base::PixelFormat::ARGB();
                 break;
 
             case COLOR_DEPTH_RGB565:
-                pixel_format = desktop::PixelFormat::RGB565();
+                pixel_format = base::PixelFormat::RGB565();
                 break;
 
             case COLOR_DEPTH_RGB332:
-                pixel_format = desktop::PixelFormat::RGB332();
+                pixel_format = base::PixelFormat::RGB332();
                 break;
 
             case COLOR_DEPTH_RGB222:
-                pixel_format = desktop::PixelFormat::RGB222();
+                pixel_format = base::PixelFormat::RGB222();
                 break;
 
             case COLOR_DEPTH_RGB111:
-                pixel_format = desktop::PixelFormat::RGB111();
+                pixel_format = base::PixelFormat::RGB111();
                 break;
 
             default:
@@ -158,7 +163,7 @@ void ComputerDialogDesktop::saveSettings(proto::DesktopConfig* config)
                 break;
         }
 
-        codec::serializePixelFormat(pixel_format, config->mutable_pixel_format());
+        base::serializePixelFormat(pixel_format, config->mutable_pixel_format());
 
         config->set_compress_ratio(ui.slider_compression_ratio->value());
     }
@@ -182,6 +187,9 @@ void ComputerDialogDesktop::saveSettings(proto::DesktopConfig* config)
 
     if (ui.checkbox_block_remote_input->isChecked())
         flags |= proto::BLOCK_REMOTE_INPUT;
+
+    if (ui.checkbox_lock_at_disconnect->isChecked())
+        flags |= proto::LOCK_AT_DISCONNECT;
 
     config->set_flags(flags);
 }

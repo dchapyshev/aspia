@@ -56,36 +56,73 @@
         <translation type="vanished">Состояние службы:</translation>
     </message>
     <message>
+        <location filename="../main_window.ui" line="25"/>
+        <source>Hosts</source>
+        <translation>Хосты</translation>
+    </message>
+    <message>
         <location filename="../main_window.ui" line="33"/>
+        <location filename="../main_window.ui" line="128"/>
         <source>Connections count:</source>
         <translation>Количество подключений:</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="93"/>
-        <location filename="../main_window.ui" line="141"/>
+        <location filename="../main_window.ui" line="58"/>
+        <source>IP Address</source>
+        <translation>IP адрес</translation>
+    </message>
+    <message>
+        <location filename="../main_window.ui" line="68"/>
+        <location filename="../main_window.ui" line="163"/>
+        <source>Computer Name</source>
+        <translation>Имя компьютера</translation>
+    </message>
+    <message>
+        <location filename="../main_window.ui" line="63"/>
+        <location filename="../main_window.ui" line="158"/>
+        <source>Version</source>
+        <translation>Версия</translation>
+    </message>
+    <message>
+        <location filename="../main_window.ui" line="73"/>
+        <location filename="../main_window.ui" line="168"/>
+        <source>Operating System</source>
+        <translation>Операционная система</translation>
+    </message>
+    <message>
+        <location filename="../main_window.ui" line="103"/>
+        <source>Disconnect All</source>
+        <translation>Отключить всех</translation>
+    </message>
+    <message>
+        <location filename="../main_window.ui" line="110"/>
+        <location filename="../main_window.ui" line="191"/>
         <source>Refresh</source>
         <translation>Обновить</translation>
+    </message>
+    <message>
+        <location filename="../main_window.ui" line="120"/>
+        <source>Relay</source>
+        <translation>Ретрансляторы</translation>
     </message>
     <message>
         <source>Active connections</source>
         <translation type="vanished">Активные подключения</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="58"/>
         <source>User name</source>
-        <translation>Имя пользователя</translation>
+        <translation type="vanished">Имя пользователя</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="63"/>
         <source>IP address</source>
-        <translation>IP адрес</translation>
+        <translation type="vanished">IP адрес</translation>
     </message>
     <message>
         <source>Connection time</source>
         <translation type="vanished">Время подключения</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="86"/>
+        <location filename="../main_window.ui" line="96"/>
         <source>Disconnect</source>
         <translation>Отключить</translation>
     </message>
@@ -94,22 +131,20 @@
         <translation type="vanished">Отключить всех</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="25"/>
         <source>Peers</source>
-        <translation>Пиры</translation>
+        <translation type="vanished">Пиры</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="103"/>
         <source>Proxy</source>
-        <translation>Прокси</translation>
+        <translation type="vanished">Прокси</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="118"/>
+        <location filename="../main_window.ui" line="153"/>
         <source>Pool Size</source>
         <translation>Размер пула</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="228"/>
+        <location filename="../main_window.ui" line="278"/>
         <source>User Name</source>
         <translation>Имя пользователя</translation>
     </message>
@@ -118,7 +153,7 @@
         <translation type="vanished">Список прокси</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="113"/>
+        <location filename="../main_window.ui" line="148"/>
         <source>Address</source>
         <translation>Адрес</translation>
     </message>
@@ -159,7 +194,7 @@
         <translation type="vanished">Управляющие</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="151"/>
+        <location filename="../main_window.ui" line="201"/>
         <source>Users</source>
         <translation>Пользователи</translation>
     </message>
@@ -244,17 +279,16 @@
         <translation>Пароль:</translation>
     </message>
     <message>
-        <location filename="../router_dialog.ui" line="87"/>
         <source>Public Key:</source>
-        <translation>Публичный ключ:</translation>
+        <translation type="vanished">Публичный ключ:</translation>
     </message>
     <message>
-        <location filename="../router_dialog.ui" line="122"/>
+        <location filename="../router_dialog.ui" line="90"/>
         <source>User interface</source>
         <translation>Интерфейс пользователя</translation>
     </message>
     <message>
-        <location filename="../router_dialog.ui" line="128"/>
+        <location filename="../router_dialog.ui" line="96"/>
         <source>Language:</source>
         <translation>Язык:</translation>
     </message>
@@ -295,7 +329,7 @@
         <translation>Отключить аккаунт пользователя</translation>
     </message>
     <message>
-        <location filename="../user_dialog.ui" line="83"/>
+        <location filename="../user_dialog.ui" line="80"/>
         <source>Allowed Session Types:</source>
         <translation>Разрешенные типы сессий:</translation>
     </message>
@@ -350,7 +384,7 @@
 <context>
     <name>router::MainWindow</name>
     <message>
-        <location filename="../main_window.cc" line="127"/>
+        <location filename="../main_window.cc" line="133"/>
         <source>Connecting to %1:%2...</source>
         <translation>Подключение к %1:%2...</translation>
     </message>
@@ -359,88 +393,149 @@
         <translation type="vanished">Подключено к: %1:%2 (%3).</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="154"/>
+        <location filename="../main_window.cc" line="159"/>
         <source>Connected to: %1:%2 (version %3)</source>
         <translation>Подключено к: %1:%2 (версия %3)</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="176"/>
+        <location filename="../main_window.cc" line="181"/>
         <source>Cryptography error (message encryption or decryption failed).</source>
         <translation>Ошибка криптографии (не удалось зашифровать или расшифровать сообщение).</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="180"/>
+        <location filename="../main_window.cc" line="185"/>
         <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
         <translation>Произошла ошибка в сети (например, сетевой кабель был случайно отключен).</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="184"/>
+        <location filename="../main_window.cc" line="189"/>
         <source>Connection was refused by the peer (or timed out).</source>
         <translation>Подключение было отклонено другой стороной (или превышено время ожидания).</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="188"/>
+        <location filename="../main_window.cc" line="193"/>
         <source>Remote host closed the connection.</source>
         <translation>Удаленный узел закрыл подключение.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="192"/>
+        <location filename="../main_window.cc" line="197"/>
         <source>Host address was not found.</source>
         <translation>Не найден адрес удаленного узла.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="196"/>
+        <location filename="../main_window.cc" line="201"/>
         <source>Socket operation timed out.</source>
         <translation>Превышено время ожидания.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="200"/>
+        <location filename="../main_window.cc" line="205"/>
         <source>Address specified is already in use and was set to be exclusive.</source>
         <translation>Указанный адрес уже используется и был установлен монопольно.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="204"/>
+        <location filename="../main_window.cc" line="209"/>
         <source>Address specified does not belong to the host.</source>
         <translation>Указанный адрес не принадлежит узлу.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="214"/>
-        <location filename="../main_window.cc" line="250"/>
+        <location filename="../main_window.cc" line="219"/>
+        <location filename="../main_window.cc" line="255"/>
         <source>An unknown error occurred.</source>
         <translation>Произошла неизвестная ошибка.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="219"/>
-        <location filename="../main_window.cc" line="254"/>
+        <location filename="../main_window.cc" line="224"/>
+        <location filename="../main_window.cc" line="259"/>
         <source>Error: %1</source>
         <translation>Ошибка: %1</translation>
     </message>
     <message>
-        <source>Warning</source>
-        <translation type="obsolete">Предупреждение</translation>
+        <location filename="../main_window.cc" line="288"/>
+        <source>Invalid request.</source>
+        <translation>Некорректный запрос.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="230"/>
+        <location filename="../main_window.cc" line="292"/>
+        <location filename="../main_window.cc" line="349"/>
+        <source>Unknown internal error.</source>
+        <translation>Неизвестная внутренняя ошибка.</translation>
+    </message>
+    <message>
+        <location filename="../main_window.cc" line="296"/>
+        <source>Invalid host ID was passed.</source>
+        <translation>Передан некорректный ID хоста.</translation>
+    </message>
+    <message>
+        <location filename="../main_window.cc" line="300"/>
+        <source>The specified host is not connected to the router.</source>
+        <translation>Указанный хост не подключен к маршрутизатору.</translation>
+    </message>
+    <message>
+        <location filename="../main_window.cc" line="353"/>
+        <source>Invalid data was passed.</source>
+        <translation>Были переданы неверные данные.</translation>
+    </message>
+    <message>
+        <location filename="../main_window.cc" line="304"/>
+        <location filename="../main_window.cc" line="361"/>
+        <source>Unknown error type.</source>
+        <translation>Неизвестный тип ошибки.</translation>
+    </message>
+    <message>
+        <location filename="../main_window.cc" line="357"/>
+        <source>A user with the specified name already exists.</source>
+        <translation>Пользователь с указанным именем уже существует.</translation>
+    </message>
+    <message>
+        <location filename="../main_window.cc" line="396"/>
+        <location filename="../main_window.cc" line="417"/>
+        <location filename="../main_window.cc" line="506"/>
+        <source>Confirmation</source>
+        <translation>Подтверждение</translation>
+    </message>
+    <message>
+        <location filename="../main_window.cc" line="397"/>
+        <source>Are you sure you want to disconnect host with ID &quot;%1&quot;?</source>
+        <translation>Вы действительно хотите отключить хост с ID &quot;%1&quot;?</translation>
+    </message>
+    <message>
+        <location filename="../main_window.cc" line="418"/>
+        <source>Are you sure you want to disconnect all hosts?</source>
+        <translation>Вы действительно хотите отключить все хосты?</translation>
+    </message>
+    <message>
+        <location filename="../main_window.cc" line="507"/>
+        <source>Are you sure you want to delete user &quot;%1&quot;?</source>
+        <translation>Вы действительно хотите удалить пользователя &quot;%1&quot;?</translation>
+    </message>
+    <message>
+        <location filename="../main_window.cc" line="308"/>
+        <location filename="../main_window.cc" line="365"/>
+        <source>Warning</source>
+        <translation>Предупреждение</translation>
+    </message>
+    <message>
+        <location filename="../main_window.cc" line="235"/>
         <source>Authentication successfully completed.</source>
         <translation>Аутентификация успешно завершена.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="234"/>
+        <location filename="../main_window.cc" line="239"/>
         <source>Network authentication error.</source>
         <translation>Ошибка сети при аутентификации.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="238"/>
+        <location filename="../main_window.cc" line="243"/>
         <source>Violation of the data exchange protocol.</source>
         <translation>Нарушение протокола обмена данными.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="242"/>
+        <location filename="../main_window.cc" line="247"/>
         <source>An error occured while authenticating: wrong user name or password.</source>
         <translation>Произошла ошибка при аутентификации: неправильное имя пользователя или пароль.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="246"/>
+        <location filename="../main_window.cc" line="251"/>
         <source>Specified session type is not allowed for the user.</source>
         <translation>Указанный тип сессии не разрешен для пользователя.</translation>
     </message>
@@ -455,49 +550,44 @@
 <context>
     <name>router::RouterDialog</name>
     <message>
-        <location filename="../router_dialog.cc" line="65"/>
         <source>Open Public Key</source>
-        <translation>Открытие публичного ключа</translation>
+        <translation type="vanished">Открытие публичного ключа</translation>
     </message>
     <message>
-        <location filename="../router_dialog.cc" line="67"/>
         <source>Public Key (*.txt)</source>
-        <translation>Публичный ключ (*.txt)</translation>
+        <translation type="vanished">Публичный ключ (*.txt)</translation>
     </message>
     <message>
-        <location filename="../router_dialog.cc" line="197"/>
+        <location filename="../router_dialog.cc" line="156"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../router_dialog.cc" line="119"/>
+        <location filename="../router_dialog.cc" line="104"/>
         <source>You must enter a address.</source>
         <translation>Вы должны ввести адрес.</translation>
     </message>
     <message>
-        <location filename="../router_dialog.cc" line="127"/>
+        <location filename="../router_dialog.cc" line="112"/>
         <source>You must enter a user name.</source>
         <translation>Вы должны ввести имя пользователя.</translation>
     </message>
     <message>
-        <location filename="../router_dialog.cc" line="135"/>
+        <location filename="../router_dialog.cc" line="120"/>
         <source>You must enter a password.</source>
         <translation>Вы должны ввести пароль.</translation>
     </message>
     <message>
-        <location filename="../router_dialog.cc" line="143"/>
         <source>The path to the public key file must be specified.</source>
-        <translation>Путь к файлу публичного ключа должен быть указан.</translation>
+        <translation type="vanished">Путь к файлу публичного ключа должен быть указан.</translation>
     </message>
     <message>
-        <location filename="../router_dialog.cc" line="151"/>
         <source>The public key file has an invalid size.</source>
-        <translation>Публичный ключ имеет некорректный размер.</translation>
+        <translation type="vanished">Публичный ключ имеет некорректный размер.</translation>
     </message>
     <message>
-        <location filename="../router_dialog.cc" line="159"/>
         <source>Unable to open public key file &quot;%1&quot;.</source>
-        <translation>Не удалось открыть файл публичного ключа &quot;%1&quot;.</translation>
+        <translation type="vanished">Не удалось открыть файл публичного ключа &quot;%1&quot;.</translation>
     </message>
 </context>
 <context>
@@ -507,25 +597,32 @@
         <translation type="obsolete">Пользователи</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="73"/>
-        <location filename="../user_dialog.cc" line="86"/>
-        <location filename="../user_dialog.cc" line="100"/>
-        <location filename="../user_dialog.cc" line="123"/>
+        <location filename="../user_dialog.cc" line="127"/>
+        <location filename="../user_dialog.cc" line="142"/>
+        <location filename="../user_dialog.cc" line="155"/>
+        <location filename="../user_dialog.cc" line="169"/>
+        <location filename="../user_dialog.cc" line="192"/>
+        <location filename="../user_dialog.cc" line="217"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="74"/>
+        <location filename="../user_dialog.cc" line="128"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>Имя пользователя не может быть пустым и должно содержать только буквы алфавита, цифры и символы _, -, .</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="87"/>
+        <location filename="../user_dialog.cc" line="143"/>
+        <source>The username you entered already exists.</source>
+        <translation>Имя пользователя, которое вы ввели уже существует.</translation>
+    </message>
+    <message>
+        <location filename="../user_dialog.cc" line="156"/>
         <source>The passwords you entered do not match.</source>
         <translation>Введенные пароли не совпадают.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../user_dialog.cc" line="101"/>
+        <location filename="../user_dialog.cc" line="170"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
         <translation>
             <numerusform>Пароль не может быть пустым и не должен быть длиннее %n символа.</numerusform>
@@ -534,12 +631,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="113"/>
+        <location filename="../user_dialog.cc" line="182"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Введенный пароль не отвечает требованиям безопасности!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../user_dialog.cc" line="116"/>
+        <location filename="../user_dialog.cc" line="185"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Пароль должен содержать символы в нижнем и верхнем регистре, цифры и не может быть короче %n символа.</numerusform>
@@ -548,9 +645,37 @@
         </translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="120"/>
+        <location filename="../user_dialog.cc" line="189"/>
         <source>Do you want to enter a different password?</source>
         <translation>Вы хотите ввести другой пароль?</translation>
+    </message>
+    <message>
+        <location filename="../user_dialog.cc" line="218"/>
+        <source>Unknown internal error when creating or modifying a user.</source>
+        <translation>Неизвестная внутренняя ошибка при создании или изменении пользователя.</translation>
+    </message>
+    <message>
+        <location filename="../user_dialog.cc" line="266"/>
+        <source>Double-click to change</source>
+        <translation>Двойной щелчок для изменения</translation>
+    </message>
+    <message>
+        <location filename="../user_dialog.cc" line="290"/>
+        <source>Administrator</source>
+        <translation>Администратор</translation>
+    </message>
+    <message>
+        <location filename="../user_dialog.cc" line="294"/>
+        <source>Client</source>
+        <translation>Клиент</translation>
+    </message>
+    <message>
+        <source>Manager</source>
+        <translation type="vanished">Менеджер</translation>
+    </message>
+    <message>
+        <source>Authorized Peer</source>
+        <translation type="vanished">Авторизованный пир</translation>
     </message>
 </context>
 </TS>

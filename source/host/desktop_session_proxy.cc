@@ -29,16 +29,16 @@ DesktopSessionProxy::~DesktopSessionProxy()
     DCHECK(!desktop_session_);
 }
 
-void DesktopSessionProxy::setEnabled(bool enable)
+void DesktopSessionProxy::control(proto::internal::Control::Action action)
 {
     if (desktop_session_)
-        desktop_session_->setEnabled(enable);
+        desktop_session_->control(action);
 }
 
-void DesktopSessionProxy::setConfig(const DesktopSession::Config& config)
+void DesktopSessionProxy::configure(const DesktopSession::Config& config)
 {
     if (desktop_session_)
-        desktop_session_->setConfig(config);
+        desktop_session_->configure(config);
 }
 
 void DesktopSessionProxy::selectScreen(const proto::Screen& screen)
@@ -47,28 +47,28 @@ void DesktopSessionProxy::selectScreen(const proto::Screen& screen)
         desktop_session_->selectScreen(screen);
 }
 
+void DesktopSessionProxy::captureScreen()
+{
+    if (desktop_session_)
+        desktop_session_->captureScreen();
+}
+
 void DesktopSessionProxy::injectKeyEvent(const proto::KeyEvent& event)
 {
     if (desktop_session_)
         desktop_session_->injectKeyEvent(event);
 }
 
-void DesktopSessionProxy::injectPointerEvent(const proto::PointerEvent& event)
+void DesktopSessionProxy::injectMouseEvent(const proto::MouseEvent& event)
 {
     if (desktop_session_)
-        desktop_session_->injectPointerEvent(event);
+        desktop_session_->injectMouseEvent(event);
 }
 
 void DesktopSessionProxy::injectClipboardEvent(const proto::ClipboardEvent& event)
 {
     if (desktop_session_)
         desktop_session_->injectClipboardEvent(event);
-}
-
-void DesktopSessionProxy::userSessionControl(proto::internal::UserSessionControl::Action action)
-{
-    if (desktop_session_)
-        desktop_session_->userSessionControl(action);
 }
 
 void DesktopSessionProxy::attachAndStart(DesktopSession* desktop_session)

@@ -68,7 +68,7 @@ void MessagePumpForWin::scheduleWork()
     InterlockedExchange(&work_state_, READY);
 }
 
-void MessagePumpForWin::scheduleDelayedWork(TimePoint delayed_work_time)
+void MessagePumpForWin::scheduleDelayedWork(const TimePoint& delayed_work_time)
 {
     // We would *like* to provide high resolution timers. Windows timers using SetTimer() have a
     // 10ms granularity. We have to use WM_TIMER as a wakeup mechanism because the application can

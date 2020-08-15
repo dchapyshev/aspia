@@ -36,10 +36,12 @@ public:
     static std::filesystem::path filePath();
 
     // Database implementation.
-    net::UserList userList() const override;
-    bool addUser(const net::User& user) override;
-    bool removeUser(uint64_t entry_id) override;
-    uint64_t peerId(std::string_view key) const override;
+    base::UserList userList() const override;
+    bool addUser(const base::User& user) override;
+    bool modifyUser(const base::User& user) override;
+    bool removeUser(int64_t entry_id) override;
+    base::HostId hostId(const base::ByteArray& keyHash) const override;
+    bool addHost(const base::ByteArray& keyHash) override;
 
 private:
     explicit DatabaseSqlite(sqlite3* db);

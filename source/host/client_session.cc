@@ -20,14 +20,14 @@
 
 #include "base/guid.h"
 #include "base/logging.h"
+#include "base/net/network_channel_proxy.h"
 #include "host/client_session_desktop.h"
 #include "host/client_session_file_transfer.h"
-#include "net/channel_proxy.h"
 
 namespace host {
 
 ClientSession::ClientSession(
-    proto::SessionType session_type, std::unique_ptr<net::Channel> channel)
+    proto::SessionType session_type, std::unique_ptr<base::NetworkChannel> channel)
     : session_type_(session_type),
       channel_(std::move(channel))
 {
@@ -38,7 +38,7 @@ ClientSession::ClientSession(
 
 // static
 std::unique_ptr<ClientSession> ClientSession::create(
-    proto::SessionType session_type, std::unique_ptr<net::Channel> channel)
+    proto::SessionType session_type, std::unique_ptr<base::NetworkChannel> channel)
 {
     if (!channel)
         return nullptr;
@@ -98,7 +98,7 @@ void ClientSession::setSessionId(base::SessionId session_id)
     session_id_ = session_id;
 }
 
-std::shared_ptr<net::ChannelProxy> ClientSession::channelProxy()
+std::shared_ptr<base::NetworkChannelProxy> ClientSession::channelProxy()
 {
     return channel_->channelProxy();
 }
@@ -113,10 +113,10 @@ void ClientSession::onConnected()
     NOTREACHED();
 }
 
-void ClientSession::onDisconnected(net::Channel::ErrorCode error_code)
+void ClientSession::onDisconnected(base::NetworkChannel::ErrorCode error_code)
 {
     LOG(LS_WARNING) << "Client disconnected with error: "
-                    << net::Channel::errorToString(error_code);
+                    << base::NetworkChannel::errorToString(error_code);
 
     state_ = State::FINISHED;
     delegate_->onClientSessionFinished();

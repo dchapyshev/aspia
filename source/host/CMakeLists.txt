@@ -51,6 +51,8 @@ list(APPEND SOURCE_HOST_CORE
     input_injector_win.h
     sas_injector.cc
     sas_injector.h
+    router_controller.cc
+    router_controller.h
     server.cc
     server.h
     system_info.cc
@@ -71,21 +73,19 @@ list(APPEND SOURCE_HOST_CORE
     user_session_window_proxy.cc
     user_session_window_proxy.h)
 
-list(APPEND SOURCE_HOST_CORE_RESOURCES
-    resources/host.qrc)
-
 list(APPEND SOURCE_HOST_CORE_UI
-    ui/host_application.cc
-    ui/host_application.h
-    ui/host_config_dialog.cc
-    ui/host_config_dialog.h
-    ui/host_config_dialog.ui
-    ui/host_main_window.cc
-    ui/host_main_window.h
-    ui/host_main_window.ui
-    ui/host_notifier_window.cc
-    ui/host_notifier_window.h
-    ui/host_notifier_window.ui
+    ui/application.cc
+    ui/application.h
+    ui/config_dialog.cc
+    ui/config_dialog.h
+    ui/config_dialog.ui
+    ui/main_window.cc
+    ui/main_window.h
+    ui/main_window.ui
+    ui/notifier_window.cc
+    ui/notifier_window.h
+    ui/notifier_window.ui
+    ui/resources.qrc
     ui/settings_util.cc
     ui/settings_util.h
     ui/user_dialog.cc
@@ -108,31 +108,25 @@ list(APPEND SOURCE_HOST_CORE_WIN
     win/updater_launcher.h)
 
 source_group("" FILES ${SOURCE_HOST_CORE})
-source_group(moc FILES ${SOURCE_HOST_CORE_MOC})
-source_group(resources FILES ${SOURCE_HOST_CORE_RESOURCES})
 source_group(ui FILES ${SOURCE_HOST_CORE_UI})
 source_group(win FILES ${SOURCE_HOST_CORE_WIN})
 
 add_library(aspia_host_core SHARED
     ${SOURCE_HOST_CORE}
-    ${SOURCE_HOST_CORE_RESOURCES}
     ${SOURCE_HOST_CORE_UI}
     ${SOURCE_HOST_CORE_WIN})
 target_link_libraries(aspia_host_core
     aspia_base
-    aspia_codec
     aspia_common
-    aspia_crypto
-    aspia_desktop
-    aspia_ipc
-    aspia_net
     aspia_proto
     aspia_qt_base
-    aspia_updater
     ${QT_LIBS}
     ${PLATFORM_LIBS}
     ${THIRD_PARTY_LIBS})
 set_target_properties(aspia_host_core PROPERTIES COMPILE_DEFINITIONS "HOST_IMPLEMENTATION")
+set_property(TARGET aspia_host_core PROPERTY AUTOMOC ON)
+set_property(TARGET aspia_host_core PROPERTY AUTOUIC ON)
+set_property(TARGET aspia_host_core PROPERTY AUTORCC ON)
 
 if (USE_TBB)
     add_tbb(aspia_host_core ${ASPIA_THIRD_PARTY_DIR}/tbb)
@@ -140,15 +134,15 @@ endif()
 
 if(Qt5LinguistTools_FOUND)
     # Get the list of translation files.
-    file(GLOB HOST_TS_FILES translations/*.ts)
-    add_translations(aspia_host_core QRC_FILE "translations/host_translations.qrc" TS_FILES ${HOST_TS_FILES})
+    file(GLOB HOST_TS_FILES ui/translations/*.ts)
+    add_translations(aspia_host_core QRC_FILE "ui/translations.qrc" TS_FILES ${HOST_TS_FILES})
 
     # Get the list of files containing messages.
     file(GLOB_RECURSE HOST_TR_SOURCES
-        ${PROJECT_SOURCE_DIR}/host/*.cc
-        ${PROJECT_SOURCE_DIR}/host/*.cpp
-        ${PROJECT_SOURCE_DIR}/host/*.h
-        ${PROJECT_SOURCE_DIR}/host/*.ui)
+        ${PROJECT_SOURCE_DIR}/host/ui/*.cc
+        ${PROJECT_SOURCE_DIR}/host/ui/*.cpp
+        ${PROJECT_SOURCE_DIR}/host/ui/*.h
+        ${PROJECT_SOURCE_DIR}/host/ui/*.ui)
 
     create_translation(TS_HOST_UPDATE ${HOST_TR_SOURCES} ${HOST_TS_FILES})
     add_custom_target(aspia_host_ts_update DEPENDS ${TS_HOST_UPDATE})
@@ -165,8 +159,7 @@ add_executable(aspia_host_service win/service_entry_point.cc win/service.rc)
 set_target_properties(aspia_host_service PROPERTIES LINK_FLAGS "/MANIFEST:NO")
 target_link_libraries(aspia_host_service aspia_host_core)
 
-add_executable(aspia_desktop_agent desktop_agent_entry_point.cc desktop_agent.rc)
-set_target_properties(aspia_desktop_agent PROPERTIES WIN32_EXECUTABLE TRUE)
+add_executable(aspia_desktop_agent WIN32 desktop_agent_entry_point.cc desktop_agent.rc)
 set_target_properties(aspia_desktop_agent PROPERTIES LINK_FLAGS "/MANIFEST:NO")
 target_link_libraries(aspia_desktop_agent aspia_host_core)
 

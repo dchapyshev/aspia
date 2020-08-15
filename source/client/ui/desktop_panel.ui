@@ -398,6 +398,14 @@
     <string>Minimize window</string>
    </property>
   </action>
+  <action name="action_statistics">
+   <property name="text">
+    <string>Statistics</string>
+   </property>
+   <property name="toolTip">
+    <string>Statistics</string>
+   </property>
+  </action>
  </widget>
  <resources>
   <include location="../resources/client.qrc"/>

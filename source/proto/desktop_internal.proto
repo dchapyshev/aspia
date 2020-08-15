@@ -28,16 +28,17 @@ import "desktop_extensions.proto";
 
 package proto.internal;
 
-message SerializedDesktopFrame
+message DesktopFrame
 {
     int32 shared_buffer_id   = 1;
     int32 width              = 2;
     int32 height             = 3;
-    PixelFormat pixel_format = 4;
-    repeated Rect dirty_rect = 5;
+    int32 dpi_x              = 4;
+    int32 dpi_y              = 5;
+    repeated Rect dirty_rect = 6;
 }
 
-message SerializedMouseCursor
+message MouseCursor
 {
     int32 width     = 1;
     int32 height    = 2;
@@ -58,20 +59,15 @@ message SharedBuffer
     int32 shared_buffer_id = 2;
 }
 
-message SetEnabled
+message ScreenCaptured
 {
-    bool enable = 1;
+    DesktopFrame frame       = 1;
+    MouseCursor mouse_cursor = 2;
 }
 
-message EncodeFrame
+message NextScreenCapture
 {
-    SerializedDesktopFrame frame       = 1;
-    SerializedMouseCursor mouse_cursor = 2;
-}
-
-message EncodeFrameResult
-{
-    int32 dummy = 1;
+    uint32 update_interval = 1;
 }
 
 message SelectSource
@@ -79,20 +75,24 @@ message SelectSource
     Screen screen = 1;
 }
 
-message SetConfig
+message Configure
 {
     bool disable_font_smoothing = 1;
     bool disable_wallpaper      = 2;
     bool disable_effects        = 3;
     bool block_input            = 4;
+    bool lock_at_disconnect     = 5;
 }
 
-message UserSessionControl
+message Control
 {
     enum Action
     {
-        LOGOFF = 0;
-        LOCK   = 1;
+        UNKNOWN       = 0;
+        DISABLE       = 1;
+        ENABLE        = 2;
+        LOGOFF        = 3;
+        LOCK          = 4;
     }
 
     Action action = 1;
@@ -100,20 +100,19 @@ message UserSessionControl
 
 message ServiceToDesktop
 {
-    SetEnabled set_enabled                  = 1;
-    SetConfig set_config                    = 2;
-    SelectSource select_source              = 3;
-    EncodeFrameResult encode_frame_result   = 4;
-    KeyEvent key_event                      = 5;
-    PointerEvent pointer_event              = 6;
-    ClipboardEvent clipboard_event          = 7;
-    UserSessionControl user_session_control = 8;
+    Control control                       = 1;
+    Configure configure                   = 2;
+    SelectSource select_source            = 3;
+    NextScreenCapture next_screen_capture = 4;
+    KeyEvent key_event                    = 5;
+    MouseEvent mouse_event                = 6;
+    ClipboardEvent clipboard_event        = 7;
 }
 
 message DesktopToService
 {
     ScreenList screen_list         = 1;
     SharedBuffer shared_buffer     = 2;
-    EncodeFrame encode_frame       = 3;
+    ScreenCaptured screen_captured = 3;
     ClipboardEvent clipboard_event = 4;
 }

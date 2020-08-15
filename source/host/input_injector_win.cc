@@ -75,6 +75,26 @@ void sendKeyboardVirtualKey(WORD key_code, DWORD flags)
 
 } // namespace
 
+InputInjectorWin::InputInjectorWin() = default;
+
+InputInjectorWin::~InputInjectorWin()
+{
+    for (const auto& key : pressed_keys_)
+    {
+        int scancode = common::KeycodeConverter::usbKeycodeToNativeKeycode(key);
+        if (scancode != common::KeycodeConverter::invalidNativeKeycode())
+        {
+            sendKeyboardScancode(
+                static_cast<WORD>(scancode), KEYEVENTF_SCANCODE | KEYEVENTF_KEYUP);
+        }
+    }
+}
+
+void InputInjectorWin::setScreenOffset(const base::Point& offset)
+{
+    screen_offset_ = offset;
+}
+
 void InputInjectorWin::setBlockInput(bool enable)
 {
     switchToInputDesktop();
@@ -131,29 +151,26 @@ void InputInjectorWin::injectKeyEvent(const proto::KeyEvent& event)
     sendKeyboardScancode(static_cast<WORD>(scancode), flags);
 }
 
-void InputInjectorWin::injectPointerEvent(const proto::PointerEvent& event)
+void InputInjectorWin::injectMouseEvent(const proto::MouseEvent& event)
 {
     switchToInputDesktop();
 
-    desktop::Rect screen_rect =
-        desktop::Rect::makeXYWH(GetSystemMetrics(SM_XVIRTUALSCREEN),
-                                GetSystemMetrics(SM_YVIRTUALSCREEN),
-                                GetSystemMetrics(SM_CXVIRTUALSCREEN),
-                                GetSystemMetrics(SM_CYVIRTUALSCREEN));
-    if (screen_rect.isEmpty())
+    base::Size full_size(GetSystemMetrics(SM_CXVIRTUALSCREEN),
+                         GetSystemMetrics(SM_CYVIRTUALSCREEN));
+    if (full_size.width() <= 1 || full_size.height() <= 1)
         return;
 
     // Translate the coordinates of the cursor into the coordinates of the virtual screen.
-    desktop::Point pos((event.x() * 65535) / (screen_rect.width() - 1),
-                       (event.y() * 65535) / (screen_rect.height() - 1));
+    base::Point pos(((event.x() + screen_offset_.x()) * 65535) / (full_size.width() - 1),
+                    ((event.y() + screen_offset_.y()) * 65535) / (full_size.height() - 1));
 
     DWORD flags = MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_VIRTUALDESK;
     DWORD wheel_movement = 0;
 
-    if (pos != prev_mouse_pos_)
+    if (pos != last_mouse_pos_)
     {
         flags |= MOUSEEVENTF_MOVE;
-        prev_mouse_pos_ = pos;
+        last_mouse_pos_ = pos;
     }
 
     uint32_t mask = event.mask();
@@ -161,8 +178,8 @@ void InputInjectorWin::injectPointerEvent(const proto::PointerEvent& event)
     // If the host is configured to swap left & right buttons.
     bool swap_buttons = !!GetSystemMetrics(SM_SWAPBUTTON);
 
-    bool prev = (prev_mouse_button_mask_ & proto::PointerEvent::LEFT_BUTTON) != 0;
-    bool curr = (mask & proto::PointerEvent::LEFT_BUTTON) != 0;
+    bool prev = (last_mouse_mask_ & proto::MouseEvent::LEFT_BUTTON) != 0;
+    bool curr = (mask & proto::MouseEvent::LEFT_BUTTON) != 0;
     if (curr != prev)
     {
         if (!swap_buttons)
@@ -171,15 +188,15 @@ void InputInjectorWin::injectPointerEvent(const proto::PointerEvent& event)
             flags |= (curr ? MOUSEEVENTF_RIGHTDOWN : MOUSEEVENTF_RIGHTUP);
     }
 
-    prev = (prev_mouse_button_mask_ & proto::PointerEvent::MIDDLE_BUTTON) != 0;
-    curr = (mask & proto::PointerEvent::MIDDLE_BUTTON) != 0;
+    prev = (last_mouse_mask_ & proto::MouseEvent::MIDDLE_BUTTON) != 0;
+    curr = (mask & proto::MouseEvent::MIDDLE_BUTTON) != 0;
     if (curr != prev)
     {
         flags |= (curr ? MOUSEEVENTF_MIDDLEDOWN : MOUSEEVENTF_MIDDLEUP);
     }
 
-    prev = (prev_mouse_button_mask_ & proto::PointerEvent::RIGHT_BUTTON) != 0;
-    curr = (mask & proto::PointerEvent::RIGHT_BUTTON) != 0;
+    prev = (last_mouse_mask_ & proto::MouseEvent::RIGHT_BUTTON) != 0;
+    curr = (mask & proto::MouseEvent::RIGHT_BUTTON) != 0;
     if (curr != prev)
     {
         if (!swap_buttons)
@@ -188,12 +205,12 @@ void InputInjectorWin::injectPointerEvent(const proto::PointerEvent& event)
             flags |= (curr ? MOUSEEVENTF_LEFTDOWN : MOUSEEVENTF_LEFTUP);
     }
 
-    if (mask & proto::PointerEvent::WHEEL_UP)
+    if (mask & proto::MouseEvent::WHEEL_UP)
     {
         flags |= MOUSEEVENTF_WHEEL;
         wheel_movement = static_cast<DWORD>(WHEEL_DELTA);
     }
-    else if (mask & proto::PointerEvent::WHEEL_DOWN)
+    else if (mask & proto::MouseEvent::WHEEL_DOWN)
     {
         flags |= MOUSEEVENTF_WHEEL;
         wheel_movement = static_cast<DWORD>(-WHEEL_DELTA);
@@ -214,7 +231,7 @@ void InputInjectorWin::injectPointerEvent(const proto::PointerEvent& event)
         PLOG(LS_WARNING) << "SendInput failed";
     }
 
-    prev_mouse_button_mask_ = mask;
+    last_mouse_mask_ = mask;
 }
 
 void InputInjectorWin::switchToInputDesktop()

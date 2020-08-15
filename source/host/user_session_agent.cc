@@ -20,7 +20,6 @@
 
 #include "base/logging.h"
 #include "host/user_session_constants.h"
-#include "host/user_session_agent_proxy.h"
 #include "host/user_session_window_proxy.h"
 
 namespace host {
@@ -37,7 +36,7 @@ UserSessionAgent::~UserSessionAgent() = default;
 
 void UserSessionAgent::start()
 {
-    ipc_channel_ = std::make_unique<ipc::Channel>();
+    ipc_channel_ = std::make_unique<base::IpcChannel>();
     ipc_channel_->setListener(this);
 
     if (ipc_channel_->connect(kIpcChannelIdForUI))

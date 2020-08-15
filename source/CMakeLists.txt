@@ -29,9 +29,6 @@ project(aspia LANGUAGES CXX)
 
 # Qt configuration.
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTOUIC ON)
-set(CMAKE_AUTORCC ON)
 
 set(CMAKE_PREFIX_PATH "${ASPIA_THIRD_PARTY_DIR}/qt;${ASPIA_THIRD_PARTY_DIR}/protobuf")
 
@@ -57,7 +54,11 @@ add_definitions(-DNTDDI_VERSION=0x06010000
 
 # For Asio.
 add_definitions(-DASIO_STANDALONE
-                -DASIO_NO_DEPRECATED)
+                -DASIO_NO_DEPRECATED
+                -D_SILENCE_CXX17_ALLOCATOR_VOID_DEPRECATION_WARNING)
+
+# For RapidJSON.
+add_definitions(-DRAPIDJSON_SSE2)
 
 # For Qt.
 add_definitions(-DQT_NO_CAST_TO_ASCII
@@ -86,7 +87,8 @@ include_directories(
     ${ASPIA_THIRD_PARTY_DIR}/protobuf/include
     ${ASPIA_THIRD_PARTY_DIR}/tbb/include
     ${ASPIA_THIRD_PARTY_DIR}/zstd/include
-    third_party/asio)
+    third_party/asio
+    third_party/rapidjson/include)
 
 link_directories(
     ${ASPIA_THIRD_PARTY_DIR}/googletest/lib
@@ -112,22 +114,14 @@ set(QT_LIBS
     Qt5::QWindowsIntegrationPlugin
     Qt5::QWindowsVistaStylePlugin
     Qt5::QWindowsPrinterSupportPlugin
-    debug Qt5AccessibilitySupportd
     debug Qt5EventDispatcherSupportd
+    optimized Qt5EventDispatcherSupport
     debug Qt5FontDatabaseSupportd
+    optimized Qt5FontDatabaseSupport
     debug Qt5ThemeSupportd
-    debug Qt5WindowsUIAutomationSupportd
-    debug qtfreetyped
-    debug qtharfbuzzd
+    optimized Qt5ThemeSupport
     debug qtlibpngd
     debug qtpcre2d
-    optimized Qt5AccessibilitySupport
-    optimized Qt5EventDispatcherSupport
-    optimized Qt5FontDatabaseSupport
-    optimized Qt5ThemeSupport
-    optimized Qt5WindowsUIAutomationSupport
-    optimized qtfreetype
-    optimized qtharfbuzz
     optimized qtlibpng
     optimized qtpcre2)
 
@@ -187,12 +181,12 @@ set(THIRD_PARTY_LIBS
 
 # C++ compliller flags.
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /GL /MP /arch:SSE2")
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MP")
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /GL /W3 /MP /arch:SSE2")
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MP /W3")
 
 # C compiller flags.
-set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} /GL /MP /arch:SSE2")
-set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} /MP")
+set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} /GL /W3 /MP /arch:SSE2")
+set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} /MP /W3")
 
 # Linker flags.
 set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} /LTCG /INCREMENTAL:NO /OPT:REF")
@@ -212,18 +206,12 @@ if (BUILD_UNIT_TESTS)
 endif()
 
 add_subdirectory(base)
-# add_subdirectory(client)
-# add_subdirectory(codec)
-# add_subdirectory(common)
-# add_subdirectory(console)
-# add_subdirectory(crypto)
-# add_subdirectory(desktop)
-# add_subdirectory(host)
-# add_subdirectory(ipc)
-# add_subdirectory(net)
-# add_subdirectory(proto)
-# add_subdirectory(proxy)
-# add_subdirectory(qt_base)
-# add_subdirectory(router)
-# add_subdirectory(third_party)
-# add_subdirectory(updater)
+add_subdirectory(client)
+add_subdirectory(common)
+add_subdirectory(console)
+add_subdirectory(host)
+add_subdirectory(proto)
+add_subdirectory(qt_base)
+add_subdirectory(relay)
+add_subdirectory(router)
+add_subdirectory(third_party)

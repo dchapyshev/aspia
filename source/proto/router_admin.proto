@@ -1,0 +1,178 @@
+//
+// Aspia Project
+// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program. If not, see <https://www.gnu.org/licenses/>.
+//
+
+syntax = "proto3";
+
+option optimize_for = LITE_RUNTIME;
+
+import "common.proto";
+
+package proto;
+
+message Host
+{
+    fixed64 host_id      = 1;
+    string ip_address    = 2;
+    Version version      = 3;
+    string os_name       = 4;
+    string computer_name = 5;
+}
+
+message HostListRequest
+{
+    uint32 dummy = 1;
+}
+
+message HostList
+{
+    enum ErrorCode
+    {
+        SUCCESS       = 0;
+        UNKNOWN_ERROR = 1;
+    }
+
+    ErrorCode error_code = 1;
+    repeated Host host   = 2;
+}
+
+enum HostRequestType
+{
+    HOST_REQUEST_UNKNOWN    = 0;
+    HOST_REQUEST_DISCONNECT = 1;
+}
+
+message HostRequest
+{
+    HostRequestType type = 1;
+    Host host            = 2;
+}
+
+message HostResult
+{
+    enum ErrorCode
+    {
+        SUCCESS         = 0;
+        INVALID_REQUEST = 1;
+        INTERNAL_ERROR  = 2;
+        INVALID_HOST_ID = 3;
+        HOST_MISSED     = 4;
+    }
+
+    HostRequestType type = 1;
+    ErrorCode error_code = 2;
+}
+
+message User
+{
+    int64 entry_id  = 1;
+    string name     = 2;
+    string group    = 3;
+    bytes salt      = 4;
+    bytes verifier  = 5;
+    uint32 sessions = 6;
+    uint32 flags    = 7;
+}
+
+message UserListRequest
+{
+    uint32 dummy = 1;
+}
+
+message UserList
+{
+    enum ErrorCode
+    {
+        SUCCESS       = 0;
+        UNKNOWN_ERROR = 1;
+    }
+
+    ErrorCode error_code = 1;
+    repeated User user   = 2;
+}
+
+enum UserRequestType
+{
+    USER_REQUEST_UNKNOWN = 0;
+    USER_REQUEST_ADD     = 1;
+    USER_REQUEST_MODIFY  = 2;
+    USER_REQUEST_DELETE  = 3;
+}
+
+message UserRequest
+{
+    UserRequestType type = 1;
+    User user            = 2;
+}
+
+message UserResult
+{
+    enum ErrorCode
+    {
+        SUCCESS        = 0;
+        INTERNAL_ERROR = 1;
+        INVALID_DATA   = 2;
+        ALREADY_EXISTS = 3;
+    }
+
+    UserRequestType type = 1;
+    ErrorCode error_code = 2;
+}
+
+message Relay
+{
+    string address       = 1;
+    uint64 pool_size     = 2;
+    Version version      = 3;
+    string os_name       = 4;
+    string computer_name = 5;
+}
+
+message RelayListRequest
+{
+    uint32 dummy = 1;
+}
+
+message RelayList
+{
+    enum ErrorCode
+    {
+        SUCCESS       = 0;
+        UNKNOWN_ERROR = 1;
+    }
+
+    ErrorCode error_code = 1;
+    repeated Relay relay = 2;
+}
+
+message RouterToAdmin
+{
+    HostList host_list     = 1;
+    HostResult host_result = 2;
+    UserList user_list     = 3;
+    UserResult user_result = 4;
+    RelayList relay_list   = 5;
+}
+
+message AdminToRouter
+{
+    HostListRequest host_list_request   = 1;
+    HostRequest host_request            = 2;
+    UserListRequest user_list_request   = 3;
+    UserRequest user_request            = 4;
+    RelayListRequest relay_list_request = 5;
+}

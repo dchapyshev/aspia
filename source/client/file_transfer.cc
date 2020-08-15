@@ -276,8 +276,10 @@ void FileTransfer::targetReply(const proto::FileRequest& request, const proto::F
 
             total_transfered_size_ += packet_size;
 
-            const int task_percentage = task_transfered_size_ * 100 / full_task_size;
-            const int total_percentage = total_transfered_size_ * 100 / total_size_;
+            const int task_percentage =
+                static_cast<int>(task_transfered_size_ * 100 / full_task_size);
+            const int total_percentage =
+                static_cast<int>(total_transfered_size_ * 100 / total_size_);
 
             if (task_percentage != task_percentage_ || total_percentage != total_percentage_)
             {

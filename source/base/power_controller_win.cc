@@ -173,9 +173,9 @@ bool PowerController::logoff()
 // static
 bool PowerController::lock()
 {
-    if (!WTSDisconnectSession(WTS_CURRENT_SERVER_HANDLE, WTS_CURRENT_SESSION, FALSE))
+    if (!LockWorkStation())
     {
-        PLOG(LS_WARNING) << "WTSDisconnectSession failed";
+        PLOG(LS_WARNING) << "LockWorkStation failed";
         return false;
     }
 

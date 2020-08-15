@@ -17,6 +17,7 @@
 //
 
 #include "client/ui/file_list.h"
+
 #include "client/ui/address_bar_model.h"
 #include "client/ui/file_item_delegate.h"
 #include "client/ui/file_list_model.h"

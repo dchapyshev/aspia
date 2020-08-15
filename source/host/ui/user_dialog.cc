@@ -27,7 +27,7 @@
 
 namespace host {
 
-UserDialog::UserDialog(const net::User& user, const QStringList& exist_names, QWidget* parent)
+UserDialog::UserDialog(const base::User& user, const QStringList& exist_names, QWidget* parent)
     : QDialog(parent),
       exist_names_(exist_names),
       user_(user)
@@ -36,7 +36,7 @@ UserDialog::UserDialog(const net::User& user, const QStringList& exist_names, QW
 
     if (user.isValid())
     {
-        ui.checkbox_disable_user->setChecked(!(user.flags & net::User::ENABLED));
+        ui.checkbox_disable_user->setChecked(!(user.flags & base::User::ENABLED));
         ui.edit_username->setText(QString::fromStdU16String(user.name));
 
         setAccountChanged(false);
@@ -70,9 +70,9 @@ UserDialog::UserDialog(const net::User& user, const QStringList& exist_names, QW
         ui.tree_sessions->addTopLevelItem(item);
     };
 
-    add_session(QStringLiteral(":/img/monitor-keyboard.png"), proto::SESSION_TYPE_DESKTOP_MANAGE);
-    add_session(QStringLiteral(":/img/monitor.png"), proto::SESSION_TYPE_DESKTOP_VIEW);
-    add_session(QStringLiteral(":/img/folder-stand.png"), proto::SESSION_TYPE_FILE_TRANSFER);
+    add_session(":/img/monitor-keyboard.png", proto::SESSION_TYPE_DESKTOP_MANAGE);
+    add_session(":/img/monitor.png", proto::SESSION_TYPE_DESKTOP_VIEW);
+    add_session(":/img/folder-stand.png", proto::SESSION_TYPE_FILE_TRANSFER);
 
     connect(ui.button_check_all, &QPushButton::released, this, &UserDialog::onCheckAllButtonPressed);
     connect(ui.button_check_none, &QPushButton::released, this, &UserDialog::onCheckNoneButtonPressed);
@@ -121,7 +121,7 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
             std::u16string name = ui.edit_username->text().toStdU16String();
             std::u16string password = ui.edit_password->text().toStdU16String();
 
-            if (!net::User::isValidUserName(name))
+            if (!base::User::isValidUserName(name))
             {
                 QMessageBox::warning(this,
                                      tr("Warning"),
@@ -155,19 +155,19 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
                 return;
             }
 
-            if (!net::User::isValidPassword(password))
+            if (!base::User::isValidPassword(password))
             {
                 QMessageBox::warning(this,
                                      tr("Warning"),
                                      tr("Password can not be empty and should not exceed %n characters.",
-                                        "", net::User::kMaxPasswordLength),
+                                        "", base::User::kMaxPasswordLength),
                                      QMessageBox::Ok);
                 ui.edit_password->selectAll();
                 ui.edit_password->setFocus();
                 return;
             }
 
-            if (!net::User::isSafePassword(password))
+            if (!base::User::isSafePassword(password))
             {
                 QString unsafe =
                     tr("Password you entered does not meet the security requirements!");
@@ -175,7 +175,7 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
                 QString safe =
                     tr("The password must contain lowercase and uppercase characters, "
                        "numbers and should not be shorter than %n characters.",
-                       "", net::User::kSafePasswordLength);
+                       "", base::User::kSafePasswordLength);
 
                 QString question = tr("Do you want to enter a different password?");
 
@@ -193,7 +193,7 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
                 }
             }
 
-            user_ = net::User::create(name, password);
+            user_ = base::User::create(name, password);
             if (!user_.isValid())
             {
                 QMessageBox::warning(this,
@@ -214,7 +214,7 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
 
         uint32_t flags = 0;
         if (!ui.checkbox_disable_user->isChecked())
-            flags |= net::User::ENABLED;
+            flags |= base::User::ENABLED;
 
         user_.sessions = sessions;
         user_.flags = flags;

@@ -37,11 +37,11 @@ public:
     void dettach();
 
     void onConnected(const base::Version& peer_version);
-    void onDisconnected(net::Channel::ErrorCode error_code);
-    void onAccessDenied(net::ClientAuthenticator::ErrorCode error_code);
-    void onPeerList(std::shared_ptr<proto::PeerList> peer_list);
-    void onPeerResult(std::shared_ptr<proto::PeerResult> peer_result);
-    void onProxyList(std::shared_ptr<proto::ProxyList> proxy_list);
+    void onDisconnected(base::NetworkChannel::ErrorCode error_code);
+    void onAccessDenied(base::ClientAuthenticator::ErrorCode error_code);
+    void onHostList(std::shared_ptr<proto::HostList> host_list);
+    void onHostResult(std::shared_ptr<proto::HostResult> host_result);
+    void onRelayList(std::shared_ptr<proto::RelayList> relay_list);
     void onUserList(std::shared_ptr<proto::UserList> user_list);
     void onUserResult(std::shared_ptr<proto::UserResult> user_result);
 

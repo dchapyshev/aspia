@@ -17,6 +17,7 @@
 //
 
 #include "common/file_platform_util.h"
+
 #include "base/win/scoped_user_object.h"
 
 #include <QtWin>

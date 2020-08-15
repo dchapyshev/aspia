@@ -19,8 +19,6 @@
 #ifndef BASE__TASK_RUNNER_H
 #define BASE__TASK_RUNNER_H
 
-#include "base/macros_magic.h"
-
 #include <chrono>
 #include <functional>
 #include <memory>
@@ -37,9 +35,9 @@ public:
 
     virtual bool belongsToCurrentThread() const = 0;
     virtual void postTask(Callback task) = 0;
-    virtual void postDelayedTask(Callback callback, Milliseconds delay) = 0;
+    virtual void postDelayedTask(Callback callback, const Milliseconds& delay) = 0;
     virtual void postNonNestableTask(Callback callback) = 0;
-    virtual void postNonNestableDelayedTask(Callback callback, Milliseconds delay) = 0;
+    virtual void postNonNestableDelayedTask(Callback callback, const Milliseconds& delay) = 0;
     virtual void postQuit() = 0;
 
     template <class T>

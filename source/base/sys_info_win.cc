@@ -111,24 +111,24 @@ std::string SysInfo::operatingSystemName()
 // static
 std::string SysInfo::operatingSystemVersion()
 {
-    return base::win::OSInfo::instance()->kernel32BaseVersion().toString();
+    return win::OSInfo::instance()->kernel32BaseVersion().toString();
 }
 
 // static
 std::string SysInfo::operatingSystemArchitecture()
 {
-    switch (base::win::OSInfo::instance()->architecture())
+    switch (win::OSInfo::instance()->architecture())
     {
-        case base::win::OSInfo::X64_ARCHITECTURE:
+        case win::OSInfo::X64_ARCHITECTURE:
             return "AMD64";
 
-        case base::win::OSInfo::X86_ARCHITECTURE:
+        case win::OSInfo::X86_ARCHITECTURE:
             return "X86";
 
-        case base::win::OSInfo::IA64_ARCHITECTURE:
+        case win::OSInfo::IA64_ARCHITECTURE:
             return "IA64";
 
-        case base::win::OSInfo::ARM_ARCHITECTURE:
+        case win::OSInfo::ARM_ARCHITECTURE:
             return "ARM";
 
         default:
@@ -187,7 +187,7 @@ std::string SysInfo::computerName()
 // static
 std::string SysInfo::computerDomain()
 {
-    DWORD buffer_size;
+    DWORD buffer_size = 0;
 
     if (GetComputerNameExW(ComputerNameDnsDomain, nullptr, &buffer_size) ||
         GetLastError() != ERROR_MORE_DATA)

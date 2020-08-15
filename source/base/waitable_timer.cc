@@ -29,7 +29,7 @@ public:
     explicit Impl(TimeoutCallback signal_callback);
     ~Impl();
 
-    void start(std::chrono::milliseconds time_delta, std::shared_ptr<TaskRunner>& task_runner);
+    void start(const std::chrono::milliseconds& time_delta, std::shared_ptr<TaskRunner>& task_runner);
     void dettach();
 
 private:
@@ -52,7 +52,7 @@ WaitableTimer::Impl::~Impl()
 }
 
 void WaitableTimer::Impl::start(
-    std::chrono::milliseconds time_delta, std::shared_ptr<TaskRunner>& task_runner)
+    const std::chrono::milliseconds& time_delta, std::shared_ptr<TaskRunner>& task_runner)
 {
     task_runner->postDelayedTask(std::bind(&Impl::onSignal, shared_from_this()), time_delta);
 }
@@ -79,7 +79,7 @@ WaitableTimer::~WaitableTimer()
     stop();
 }
 
-void WaitableTimer::start(std::chrono::milliseconds time_delta,
+void WaitableTimer::start(const std::chrono::milliseconds& time_delta,
                           TimeoutCallback signal_callback)
 {
     impl_ = std::make_shared<Impl>(std::move(signal_callback));

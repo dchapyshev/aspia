@@ -42,12 +42,14 @@ public:
 
     void setDesktopConfig(const proto::DesktopConfig& desktop_config);
     void setCurrentScreen(const proto::Screen& screen);
+    void setPreferredSize(int width, int height);
     void onKeyEvent(const proto::KeyEvent& event);
-    void onPointerEvent(const proto::PointerEvent& event);
+    void onMouseEvent(const proto::MouseEvent& event);
     void onClipboardEvent(const proto::ClipboardEvent& event);
     void onPowerControl(proto::PowerControl::Action action);
     void onRemoteUpdate();
     void onSystemInfoRequest();
+    void onMetricsRequest();
 
 private:
     std::shared_ptr<base::TaskRunner> io_task_runner_;

@@ -21,6 +21,7 @@
 
 #include "base/macros_magic.h"
 #include "base/memory/byte_array.h"
+#include "base/peer/host_id.h"
 
 namespace base {
 class TaskRunner;
@@ -42,13 +43,13 @@ public:
 
     void connectToRouter(const std::u16string& address, uint16_t port);
     void disconnectFromRouter();
-    void refreshPeerList();
-    void disconnectPeer(uint64_t peer_id);
-    void refreshProxyList();
+    void refreshHostList();
+    void disconnectHost(base::HostId host_id);
+    void refreshRelayList();
     void refreshUserList();
     void addUser(const proto::User& user);
     void modifyUser(const proto::User& user);
-    void deleteUser(uint64_t entry_id);
+    void deleteUser(int64_t entry_id);
 
 private:
     class Impl;

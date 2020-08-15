@@ -20,6 +20,8 @@
 #define ROUTER__MANAGER__USER_DIALOG_H
 
 #include "base/macros_magic.h"
+#include "base/peer/user.h"
+#include "proto/router_common.pb.h"
 #include "ui_user_dialog.h"
 
 namespace router {
@@ -29,19 +31,27 @@ class UserDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit UserDialog(QWidget* parent = nullptr);
+    UserDialog(const base::User& user,
+               const std::vector<std::u16string>& users,
+               QWidget* parent);
     ~UserDialog();
 
-    void setUserName(const QString& username);
-    QString userName() const;
-    QString password() const;
-    void setEnabled(bool enable);
-    bool isEnabled() const;
+    const base::User& user() const;
+
+protected:
+    // QDialog implementation.
+    bool eventFilter(QObject* object, QEvent* event) override;
 
 private:
     void onButtonBoxClicked(QAbstractButton* button);
+    void setAccountChanged(bool changed);
+    static QString sessionTypeToString(proto::RouterSession session_type);
 
     Ui::UserDialog ui;
+
+    base::User user_;
+    std::vector<std::u16string> users_;
+    bool account_changed_ = true;
 
     DISALLOW_COPY_AND_ASSIGN(UserDialog);
 };

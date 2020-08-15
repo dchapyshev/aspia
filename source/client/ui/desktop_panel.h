@@ -22,7 +22,6 @@
 #include "base/macros_magic.h"
 #include "client/ui/desktop_settings.h"
 #include "proto/common.pb.h"
-#include "proto/desktop.pb.h"
 #include "proto/desktop_extensions.pb.h"
 #include "ui_desktop_panel.h"
 
@@ -61,16 +60,17 @@ signals:
     void powerControl(proto::PowerControl::Action action);
     void startRemoteUpdate();
     void startSystemInfo();
+    void startStatistics();
     void minimizeSession();
     void closeSession();
 
 protected:
     // QFrame implementation.
-    void timerEvent(QTimerEvent* event) override;
     void enterEvent(QEvent* event) override;
     void leaveEvent(QEvent* event) override;
 
 private slots:
+    void onHideTimer();
     void onFullscreenButton(bool checked);
     void onAutosizeButton();
     void onCtrlAltDel();
@@ -98,7 +98,7 @@ private:
     QScopedPointer<QMenu> screens_menu_;
     QActionGroup* screens_group_ = nullptr;
 
-    int hide_timer_id_ = 0;
+    QTimer* hide_timer_ = nullptr;
 
     bool allow_hide_ = true;
     bool leaved_ = true;

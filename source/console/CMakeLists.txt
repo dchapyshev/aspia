@@ -93,17 +93,15 @@ set_target_properties(aspia_console PROPERTIES LINK_FLAGS "/MANIFEST:NO")
 target_link_libraries(aspia_console
     aspia_base
     aspia_client
-    aspia_codec
     aspia_common
-    aspia_crypto
-    aspia_desktop
-    aspia_net
     aspia_proto
     aspia_qt_base
-    aspia_updater
     ${QT_LIBS}
     ${PLATFORM_LIBS}
     ${THIRD_PARTY_LIBS})
+set_property(TARGET aspia_console PROPERTY AUTOMOC ON)
+set_property(TARGET aspia_console PROPERTY AUTOUIC ON)
+set_property(TARGET aspia_console PROPERTY AUTORCC ON)
 
 if (USE_TBB)
     add_tbb(aspia_console ${ASPIA_THIRD_PARTY_DIR}/tbb)

@@ -18,13 +18,13 @@
 
 #include "host/system_settings.h"
 
-#include "crypto/random.h"
-#include "net/user.h"
+#include "base/crypto/random.h"
+#include "base/peer/user.h"
 
 namespace host {
 
 SystemSettings::SystemSettings()
-    : settings_(base::XmlSettings::Scope::SYSTEM, "aspia", "host")
+    : settings_(base::JsonSettings::Scope::SYSTEM, "aspia", "host")
 {
     // Nothing
 }
@@ -56,13 +56,64 @@ void SystemSettings::setTcpPort(uint16_t port)
     settings_.set<uint16_t>("TcpPort", port);
 }
 
-net::UserList SystemSettings::userList() const
+bool SystemSettings::isRouterEnabled() const
 {
-    net::UserList users;
+    return settings_.get<bool>("RouterEnabled", false);
+}
+
+void SystemSettings::setRouterEnabled(bool enable)
+{
+    settings_.set<bool>("RouterEnabled", enable);
+}
+
+std::u16string SystemSettings::routerAddress() const
+{
+    return settings_.get<std::u16string>("RouterAddress");
+}
+
+void SystemSettings::setRouterAddress(const std::u16string& address)
+{
+    settings_.set<std::u16string>("RouterAddress", address);
+}
+
+uint16_t SystemSettings::routerPort() const
+{
+    return settings_.get<uint16_t>("RouterPort", DEFAULT_ROUTER_TCP_PORT);
+}
+
+void SystemSettings::setRouterPort(uint16_t port)
+{
+    settings_.set<uint16_t>("RouterPort", port);
+}
+
+base::ByteArray SystemSettings::routerPublicKey() const
+{
+    return settings_.get<base::ByteArray>("RouterPublicKey");
+}
+
+void SystemSettings::setRouterPublicKey(const base::ByteArray& key)
+{
+    settings_.set<base::ByteArray>("RouterPublicKey", key);
+}
+
+base::ByteArray SystemSettings::hostKey() const
+{
+    return settings_.get<base::ByteArray>("HostKey");
+}
+
+void SystemSettings::setHostKey(const base::ByteArray& key)
+{
+    settings_.set<base::ByteArray>("HostKey", key);
+    settings_.flush();
+}
+
+base::UserList SystemSettings::userList() const
+{
+    base::UserList users;
 
     for (const auto& item : settings_.getArray("Users"))
     {
-        net::User user;
+        base::User user;
 
         user.name     = item.get<std::u16string>("Name");
         user.group    = item.get<std::string>("Group", "8192");
@@ -76,23 +127,22 @@ net::UserList SystemSettings::userList() const
 
     base::ByteArray seed_key = settings_.get<base::ByteArray>("SeedKey");
     if (seed_key.empty())
-        seed_key = crypto::Random::byteArray(64);
+        seed_key = base::Random::byteArray(64);
 
     users.setSeedKey(seed_key);
-
     return users;
 }
 
-void SystemSettings::setUserList(const net::UserList& users)
+void SystemSettings::setUserList(const base::UserList& users)
 {
     // Clear the old list of users.
     settings_.remove("Users");
 
     base::Settings::Array users_array;
 
-    for (net::UserList::Iterator it(users); !it.isAtEnd(); it.advance())
+    for (base::UserList::Iterator it(users); !it.isAtEnd(); it.advance())
     {
-        const net::User& user = it.user();
+        const base::User& user = it.user();
 
         base::Settings item;
         item.set("Name", user.name);
@@ -109,12 +159,12 @@ void SystemSettings::setUserList(const net::UserList& users)
     settings_.set("SeedKey", users.seedKey());
 }
 
-std::string SystemSettings::updateServer() const
+std::u16string SystemSettings::updateServer() const
 {
-    return settings_.get<std::string>("UpdateServer", DEFAULT_UPDATE_SERVER);
+    return settings_.get<std::u16string>("UpdateServer", DEFAULT_UPDATE_SERVER);
 }
 
-void SystemSettings::setUpdateServer(const std::string& server)
+void SystemSettings::setUpdateServer(const std::u16string& server)
 {
     settings_.set("UpdateServer", server);
 }

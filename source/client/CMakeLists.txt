@@ -62,6 +62,10 @@ list(APPEND SOURCE_CLIENT
     file_transfer_window_proxy.cc
     file_transfer_window_proxy.h
     frame_factory.h
+    input_event_filter.cc
+    input_event_filter.h
+    router_controller.cc
+    router_controller.h
     status_window.h
     status_window_proxy.cc
     status_window_proxy.h)
@@ -129,6 +133,9 @@ list(APPEND SOURCE_CLIENT_UI
     ui/qt_file_manager_window.h
     ui/qt_file_manager_window.ui
     ui/select_screen_action.h
+    ui/statistics_dialog.cc
+    ui/statistics_dialog.h
+    ui/statistics_dialog.ui
     ui/status_dialog.cc
     ui/status_dialog.h
     ui/status_dialog.ui
@@ -148,14 +155,13 @@ add_library(aspia_client STATIC
     ${SOURCE_CLIENT_UI})
 target_link_libraries(aspia_client
     aspia_base
-    aspia_codec
     aspia_common
-    aspia_crypto
-    aspia_desktop
-    aspia_net
     aspia_proto
     ${THIRD_PARTY_LIBS})
 set_target_properties(aspia_client PROPERTIES COMPILE_DEFINITIONS "CLIENT_IMPLEMENTATION")
+set_property(TARGET aspia_client PROPERTY AUTOMOC ON)
+set_property(TARGET aspia_client PROPERTY AUTOUIC ON)
+set_property(TARGET aspia_client PROPERTY AUTORCC ON)
 
 if(Qt5LinguistTools_FOUND)
     # Get the list of translation files.

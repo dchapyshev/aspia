@@ -41,6 +41,7 @@ class DesktopConfigDialog;
 class DesktopPanel;
 class DesktopWindowProxy;
 class SystemInfoWindow;
+class StatisticsDialog;
 
 class QtDesktopWindow :
     public ClientWindow,
@@ -66,19 +67,20 @@ public:
     void setCapabilities(const std::string& extensions, uint32_t video_encodings) override;
     void setScreenList(const proto::ScreenList& screen_list) override;
     void setSystemInfo(const proto::SystemInfo& system_info) override;
+    void setMetrics(const DesktopWindow::Metrics& metrics) override;
     std::unique_ptr<FrameFactory> frameFactory() override;
-    void drawFrame(std::shared_ptr<desktop::Frame> frame) override;
-    void drawMouseCursor(std::shared_ptr<desktop::MouseCursor> mouse_cursor) override;
+    void setFrame(const base::Size& screen_size, std::shared_ptr<base::Frame> frame) override;
+    void drawFrame() override;
+    void setMouseCursor(std::shared_ptr<base::MouseCursor> mouse_cursor) override;
     void injectClipboardEvent(const proto::ClipboardEvent& event) override;
 
     // DesktopWidget::Delegate implementation.
-    void onPointerEvent(const QPoint& pos, uint32_t mask) override;
-    void onKeyEvent(uint32_t usb_keycode, uint32_t flags) override;
+    void onMouseEvent(const proto::MouseEvent& event) override;
+    void onKeyEvent(const proto::KeyEvent& event) override;
     void onDrawDesktop() override;
 
 protected:
     // QWidget implementation.
-    void timerEvent(QTimerEvent* event) override;
     void resizeEvent(QResizeEvent* event) override;
     void leaveEvent(QEvent* event) override;
     bool eventFilter(QObject* object, QEvent* event) override;
@@ -92,6 +94,8 @@ private slots:
     void autosizeWindow();
     void takeScreenshot();
     void scaleDesktop();
+    void onResizeTimer();
+    void onScrollTimer();
 
 private:
     const proto::SessionType session_type_;
@@ -110,8 +114,11 @@ private:
     DesktopWidget* desktop_ = nullptr;
 
     QPointer<SystemInfoWindow> system_info_;
+    QPointer<StatisticsDialog> statistics_dialog_;
 
-    int scroll_timer_id_ = 0;
+    QTimer* resize_timer_ = nullptr;
+    QSize screen_size_;
+    QTimer* scroll_timer_ = nullptr;
     QPoint scroll_delta_;
 
     bool is_maximized_ = false;

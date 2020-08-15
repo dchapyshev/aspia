@@ -19,31 +19,39 @@
 #include "router/session.h"
 
 #include "base/logging.h"
-#include "net/channel.h"
-#include "router/database_sqlite.h"
+#include "base/net/network_channel.h"
+#include "router/database.h"
+#include "router/database_factory.h"
 
 namespace router {
 
-Session::Session(std::unique_ptr<net::Channel> channel)
-    : channel_(std::move(channel))
+Session::Session(proto::RouterSession session_type,
+                 std::unique_ptr<base::NetworkChannel> channel,
+                 std::shared_ptr<DatabaseFactory> database_factory)
+    : session_type_(session_type),
+      channel_(std::move(channel)),
+      database_factory_(std::move(database_factory))
 {
-    DCHECK(channel_);
+    DCHECK(channel_ && database_factory_);
 }
 
 Session::~Session() = default;
 
 void Session::start(Delegate* delegate)
 {
+    state_ = State::STARTED;
     delegate_ = delegate;
     DCHECK(delegate_);
 
     channel_->setListener(this);
     channel_->resume();
+
+    onSessionReady();
 }
 
-bool Session::isFinished() const
+std::unique_ptr<Database> Session::openDatabase() const
 {
-    return channel_ == nullptr;
+    return database_factory_->openDatabase();
 }
 
 void Session::setVersion(const base::Version& version)
@@ -51,15 +59,33 @@ void Session::setVersion(const base::Version& version)
     version_ = version;
 }
 
+void Session::setOsName(const std::u16string& os_name)
+{
+    os_name_ = os_name;
+}
+
+void Session::setComputerName(const std::u16string& computer_name)
+{
+    computer_name_ = computer_name;
+}
+
 void Session::setUserName(const std::u16string& username)
 {
     username_ = username;
 }
 
-void Session::send(base::ByteArray&& buffer)
+std::u16string Session::address() const
+{
+    if (!channel_)
+        return std::u16string();
+
+    return channel_->peerAddress();
+}
+
+void Session::sendMessage(const google::protobuf::MessageLite& message)
 {
     if (channel_)
-        channel_->send(std::move(buffer));
+        channel_->send(base::serialize(message));
 }
 
 void Session::onConnected()
@@ -67,10 +93,11 @@ void Session::onConnected()
     NOTREACHED();
 }
 
-void Session::onDisconnected(net::Channel::ErrorCode error_code)
+void Session::onDisconnected(base::NetworkChannel::ErrorCode error_code)
 {
-    LOG(LS_INFO) << "Network error: " << net::Channel::errorToString(error_code);
+    LOG(LS_INFO) << "Network error: " << base::NetworkChannel::errorToString(error_code);
 
+    state_ = State::FINISHED;
     if (delegate_)
         delegate_->onSessionFinished();
 }

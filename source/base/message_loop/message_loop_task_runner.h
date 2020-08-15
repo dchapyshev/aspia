@@ -35,9 +35,9 @@ public:
     // TaskRunner implementation.
     bool belongsToCurrentThread() const override;
     void postTask(Callback callback) override;
-    void postDelayedTask(Callback callback, Milliseconds delay) override;
+    void postDelayedTask(Callback callback, const Milliseconds& delay) override;
     void postNonNestableTask(Callback callback) override;
-    void postNonNestableDelayedTask(Callback callback, Milliseconds delay) override;
+    void postNonNestableDelayedTask(Callback callback, const Milliseconds& delay) override;
     void postQuit() override;
 
 private:

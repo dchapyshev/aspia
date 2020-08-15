@@ -17,6 +17,7 @@
 //
 
 #include "client/ui/file_item_delegate.h"
+
 #include "client/ui/file_name_validator.h"
 #include "common/file_platform_util.h"
 
@@ -97,7 +98,7 @@ FileItemDelegate::FileItemDelegate(QObject* parent)
 }
 
 QWidget* FileItemDelegate::createEditor(QWidget* parent,
-                                        const QStyleOptionViewItem& option,
+                                        const QStyleOptionViewItem& /* option */,
                                         const QModelIndex& index) const
 {
     Editor* editor = new Editor(parent);
@@ -127,7 +128,7 @@ void FileItemDelegate::setModelData(QWidget* editor,
 
 void FileItemDelegate::updateEditorGeometry(QWidget* editor,
                                             const QStyleOptionViewItem& option,
-                                            const QModelIndex& index) const
+                                            const QModelIndex& /* index */) const
 {
     Editor* edit = dynamic_cast<Editor*>(editor);
     if (!edit)

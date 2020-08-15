@@ -24,13 +24,84 @@
 #include "base/win/message_window.h"
 #include "base/win/scoped_clipboard.h"
 #include "base/win/scoped_hglobal.h"
-#include "build/build_config.h"
+
+#include <zstd.h>
 
 namespace common {
 
 namespace {
 
 const char kMimeTypeTextUtf8[] = "text/plain; charset=UTF-8";
+const char kMimeTypeCompressedTextUtf8[] = "text/plain; charset=UTF-8; compression=ZSTD";
+
+// The compression ratio can be in the range of 1 to 22.
+const int kCompressionRatio = 8;
+
+// Smaller data will not be compressed.
+const size_t kMinSizeToCompress = 512;
+
+uint8_t* outputBuffer(std::string* out, size_t size)
+{
+    out->resize(size);
+    return reinterpret_cast<uint8_t*>(out->data());
+}
+
+bool compress(const std::string& in, std::string* out)
+{
+    if (in.empty())
+        return false;
+
+    const size_t input_size = in.size();
+    const uint8_t* input_data = reinterpret_cast<const uint8_t*>(in.data());
+
+    size_t output_size = ZSTD_compressBound(in.size());
+    uint8_t* output_data = outputBuffer(out, output_size);
+
+    size_t ret = ZSTD_compress(
+        output_data, output_size, input_data, input_size, kCompressionRatio);
+    if (ZSTD_isError(ret))
+    {
+        LOG(LS_ERROR) << "ZSTD_compress failed: " << ZSTD_getErrorName(ret);
+        return false;
+    }
+
+    out->resize(ret);
+    return true;
+}
+
+bool decompress(const std::string& in, std::string* out)
+{
+    if (in.empty())
+        return false;
+
+    int64_t output_size = ZSTD_getFrameContentSize(in.data(), in.size());
+    if (output_size == ZSTD_CONTENTSIZE_ERROR)
+    {
+        LOG(LS_ERROR) << "Data not compressed by ZSTD";
+        return false;
+    }
+
+    if (output_size == ZSTD_CONTENTSIZE_UNKNOWN)
+    {
+        LOG(LS_ERROR) << "Original size unknown";
+        return false;
+    }
+
+    if (!output_size)
+        return false;
+
+    uint8_t* output_data = outputBuffer(out, static_cast<size_t>(output_size));
+
+    size_t ret = ZSTD_decompress(
+        output_data, static_cast<size_t>(output_size), in.data(), in.size());
+    if (ZSTD_isError(ret))
+    {
+        LOG(LS_ERROR) << "ZSTD_decompress failed: " << ZSTD_getErrorName(ret);
+        return false;
+    }
+
+    return true;
+}
 
 } // namespace
 
@@ -72,19 +143,27 @@ void Clipboard::injectClipboardEvent(const proto::ClipboardEvent& event)
     if (!window_)
         return;
 
-    // Currently we only handle UTF-8 text.
-    if (event.mime_type() != kMimeTypeTextUtf8)
+    if (event.mime_type() == kMimeTypeCompressedTextUtf8)
+    {
+        std::string decompressed_data;
+        if (!decompress(event.data(), &decompressed_data))
+            return;
+
+        // Store last injected data.
+        last_data_ = std::move(decompressed_data);
+    }
+    else if (event.mime_type() == kMimeTypeTextUtf8)
+    {
+        // Store last injected data.
+        last_data_ = event.data();
+    }
+    else
     {
         LOG(LS_WARNING) << "Unsupported mime type: " << event.mime_type();
         return;
     }
 
-    // Store last injected data.
-    last_mime_type_ = event.mime_type();
-    last_data_ = event.data();
-
     std::wstring text;
-
     if (!base::utf8ToWide(base::replaceLfByCrLf(last_data_), &text))
     {
         LOG(LS_WARNING) << "Couldn't convert data to unicode";
@@ -92,7 +171,6 @@ void Clipboard::injectClipboardEvent(const proto::ClipboardEvent& event)
     }
 
     base::win::ScopedClipboard clipboard;
-
     if (!clipboard.init(window_->hwnd()))
     {
         PLOG(LS_WARNING) << "Couldn't open the clipboard";
@@ -131,14 +209,11 @@ void Clipboard::stop()
 
     RemoveClipboardFormatListener(window_->hwnd());
     window_.reset();
-
-    last_mime_type_.clear();
     last_data_.clear();
-
     delegate_ = nullptr;
 }
 
-bool Clipboard::onMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESULT& result)
+bool Clipboard::onMessage(UINT message, WPARAM /* wParam */, LPARAM /* lParam */, LRESULT& result)
 {
     switch (message)
     {
@@ -198,14 +273,27 @@ void Clipboard::onClipboardUpdate()
     {
         data = base::replaceCrLfByLf(data);
 
-        if (last_mime_type_ != kMimeTypeTextUtf8 || last_data_ != data)
+        if (last_data_ != data)
         {
             proto::ClipboardEvent event;
 
-            event.set_mime_type(kMimeTypeTextUtf8);
-            event.set_data(data);
+            if (data.size() > kMinSizeToCompress)
+            {
+                std::string compressed_data;
+                if (!compress(data, &compressed_data))
+                    return;
 
-            delegate_->onClipboardEvent(event);
+                event.set_mime_type(kMimeTypeCompressedTextUtf8);
+                event.set_data(std::move(compressed_data));
+            }
+            else
+            {
+                event.set_mime_type(kMimeTypeTextUtf8);
+                event.set_data(std::move(data));
+            }
+
+            if (delegate_)
+                delegate_->onClipboardEvent(event);
         }
     }
 }
