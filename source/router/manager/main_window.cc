@@ -27,6 +27,7 @@
 #include "router/manager/router_window_proxy.h"
 #include "router/manager/status_dialog.h"
 
+#include <QDateTime>
 #include <QMessageBox>
 #include <QTimer>
 
@@ -41,13 +42,14 @@ public:
         : host_id(host.host_id())
     {
         setText(0, QString::number(host.host_id()));
-        setText(1, QString::fromStdString(host.ip_address()));
-        setText(2, QString("%1.%2.%3")
+        setText(1, QDateTime::fromTime_t(host.timepoint()).toString(Qt::DefaultLocaleShortDate));
+        setText(2, QString::fromStdString(host.ip_address()));
+        setText(3, QString("%1.%2.%3")
                 .arg(host.version().major())
                 .arg(host.version().minor())
                 .arg(host.version().patch()));
-        setText(3, QString::fromStdString(host.computer_name()));
-        setText(4, QString::fromStdString(host.os_name()));
+        setText(4, QString::fromStdString(host.computer_name()));
+        setText(5, QString::fromStdString(host.os_name()));
     }
 
     ~HostTreeItem() = default;
@@ -64,13 +66,14 @@ public:
     explicit RelayTreeItem(const proto::Relay& relay)
     {
         setText(0, QString::fromStdString(relay.address()));
-        setText(1, QString::number(relay.pool_size()));
-        setText(2, QString("%1.%2.%3")
+        setText(1, QDateTime::fromTime_t(relay.timepoint()).toString(Qt::DefaultLocaleShortDate));
+        setText(2, QString::number(relay.pool_size()));
+        setText(3, QString("%1.%2.%3")
                 .arg(relay.version().major())
                 .arg(relay.version().minor())
                 .arg(relay.version().patch()));
-        setText(3, QString::fromStdString(relay.computer_name()));
-        setText(4, QString::fromStdString(relay.os_name()));
+        setText(4, QString::fromStdString(relay.computer_name()));
+        setText(5, QString::fromStdString(relay.os_name()));
     }
 
 private:
