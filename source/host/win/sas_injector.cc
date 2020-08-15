@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/sas_injector.h"
+#include "host/win/sas_injector.h"
 
 #include "base/logging.h"
 #include "base/win/registry.h"

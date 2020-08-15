@@ -72,9 +72,7 @@ list(APPEND SOURCE_HOST_CORE
 if (WIN32)
     list(APPEND SOURCE_HOST_CORE
         input_injector_win.cc
-        input_injector_win.h
-        sas_injector.cc
-        sas_injector.h)
+        input_injector_win.h)
 endif()
 
 if (LINUX)
@@ -115,6 +113,8 @@ list(APPEND SOURCE_HOST_CORE_UI
 if (WIN32)
     list(APPEND SOURCE_HOST_CORE_WIN
         win/dll_main.cc
+        win/sas_injector.cc
+        win/sas_injector.h
         win/service.cc
         win/service.h
         win/service_constants.cc

@@ -20,7 +20,7 @@
 
 #include "base/logging.h"
 #include "common/keycode_converter.h"
-#include "host/sas_injector.h"
+#include "host/win/sas_injector.h"
 
 namespace host {
 
