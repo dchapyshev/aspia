@@ -27,25 +27,40 @@ set(ASPIA_THIRD_PARTY_DIR "$ENV{ASPIA_THIRD_PARTY_DIR}")
 
 project(aspia)
 
+# Detecting Linux.
+if (UNIX AND NOT APPLE)
+    set(LINUX TRUE)
+endif()
+
 # Qt configuration.
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 set(CMAKE_PREFIX_PATH "${ASPIA_THIRD_PARTY_DIR}/qt;${ASPIA_THIRD_PARTY_DIR}/protobuf")
 
-find_package(Qt5 REQUIRED Core Gui Network PrintSupport Widgets WinExtras Xml)
-find_package(Qt5LinguistTools)
+find_package(Qt5 REQUIRED Core Gui Network PrintSupport Widgets Xml)
 find_package(Protobuf REQUIRED)
+find_package(Qt5LinguistTools)
+
+if (WIN32)
+    find_package(Qt5WinExtras REQUIRED)
+
+    # Target version.
+    add_definitions(-DNTDDI_VERSION=0x06010000
+                    -D_WIN32_WINNT=0x0601
+                    -D_WIN32_WINDOWS=_WIN32_WINNT
+                    -DWINVER=_WIN32_WINNT
+                    -D_WIN32_IE=0x0800
+                    -DPSAPI_VERSION=2)
+
+    # Other definations.
+    add_definitions(-D_UNICODE
+                    -DUNICODE
+                    -DWIN32_LEAN_AND_MEAN
+                    -DNOMINMAX)
+endif()
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 list(APPEND CMAKE_AUTORCC_OPTIONS -compress 9 -threshold 5)
-
-# Target version.
-add_definitions(-DNTDDI_VERSION=0x06010000
-                -D_WIN32_WINNT=0x0601
-                -D_WIN32_WINDOWS=_WIN32_WINNT
-                -DWINVER=_WIN32_WINNT
-                -D_WIN32_IE=0x0800
-                -DPSAPI_VERSION=2)
 
 # For Asio.
 add_definitions(-DASIO_STANDALONE
@@ -59,12 +74,6 @@ add_definitions(-DRAPIDJSON_SSE2)
 add_definitions(-DQT_NO_CAST_TO_ASCII
                 -DQT_NO_CAST_FROM_BYTEARRAY
                 -DQT_USE_QSTRINGBUILDER)
-
-# For Windows.
-add_definitions(-D_UNICODE
-                -DUNICODE
-                -DWIN32_LEAN_AND_MEAN
-                -DNOMINMAX)
 
 if (USE_TBB)
     add_definitions(-DUSE_TBB)
@@ -118,25 +127,6 @@ set(QT_LIBS
     debug qtpcre2d
     optimized qtlibpng
     optimized qtpcre2)
-
-set(WINDOWS_LIBS
-    crypt32
-    dwmapi
-    dxgi
-    d3d11
-    imm32
-    iphlpapi
-    mpr
-    netapi32
-    sas
-    setupapi
-    shlwapi
-    userenv
-    uxtheme
-    version
-    winmm
-    ws2_32
-    wtsapi32)
 
 set(THIRD_PARTY_LIBS
     debug vpxmtd

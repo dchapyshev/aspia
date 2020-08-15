@@ -535,7 +535,9 @@ if (BUILD_UNIT_TESTS)
         aspia_proto
         optimized gtest
         debug gtestd
-        ${WINDOWS_LIBS}
+        crypt32
+        iphlpapi
+        ws2_32
         ${THIRD_PARTY_LIBS})
 
     add_test(NAME aspia_base_tests COMMAND aspia_base_tests)

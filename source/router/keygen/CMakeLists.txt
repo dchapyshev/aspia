@@ -40,8 +40,16 @@ set_target_properties(aspia_router_keygen PROPERTIES LINK_FLAGS "/MANIFEST:NO")
 target_link_libraries(aspia_router_keygen
     aspia_base
     aspia_qt_base
+    crypt32
+    dwmapi
+    imm32
+    netapi32
+    userenv
+    uxtheme
+    version
+    winmm
+    wtsapi32
     ${QT_LIBS}
-    ${WINDOWS_LIBS}
     ${THIRD_PARTY_LIBS})
 set_property(TARGET aspia_router_keygen PROPERTY AUTOMOC ON)
 set_property(TARGET aspia_router_keygen PROPERTY AUTOUIC ON)

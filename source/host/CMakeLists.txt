@@ -129,8 +129,20 @@ target_link_libraries(aspia_host_core
     aspia_common
     aspia_proto
     aspia_qt_base
+    crypt32
+    dwmapi
+    dxgi
+    d3d11
+    imm32
+    iphlpapi
+    netapi32
+    sas
+    userenv
+    uxtheme
+    version
+    winmm
+    wtsapi32
     ${QT_LIBS}
-    ${WINDOWS_LIBS}
     ${THIRD_PARTY_LIBS})
 set_target_properties(aspia_host_core PROPERTIES COMPILE_DEFINITIONS "HOST_IMPLEMENTATION")
 set_property(TARGET aspia_host_core PROPERTY AUTOMOC ON)
