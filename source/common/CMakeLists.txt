@@ -29,7 +29,6 @@ list(APPEND SOURCE_COMMON
     file_packetizer.cc
     file_packetizer.h
     file_platform_util.h
-    file_platform_util_win.cc
     file_task.cc
     file_task.h
     file_task_consumer.h
@@ -46,6 +45,21 @@ list(APPEND SOURCE_COMMON
     keycode_converter.h
     session_type.cc
     session_type.h)
+
+if (WIN32)
+    list(APPEND SOURCE_COMMON
+        file_platform_util_win.cc)
+endif()
+
+if (LINUX)
+    list(APPEND SOURCE_COMMON
+        file_platform_util_linux.cc)
+endif()
+
+if (APPLE)
+    list(APPEND SOURCE_COMMON
+        file_platform_util_mac.mm)
+endif()
 
 list(APPEND SOURCE_COMMON_UI
     ui/about_dialog.cc
