@@ -35,16 +35,22 @@ list(APPEND SOURCE_RELAY
     shared_pool.cc
     shared_pool.h)
 
-list(APPEND SOURCE_RELAY_WIN
-    win/service.cc
-    win/service.h
-    win/service_constants.cc
-    win/service_constants.h)
+if (WIN32)
+    list(APPEND SOURCE_RELAY_WIN
+        win/relay.rc
+        win/service.cc
+        win/service.h
+        win/service_constants.cc
+        win/service_constants.h)
+endif()
 
 source_group("" FILES ${SOURCE_RELAY})
-source_group(win FILES ${SOURCE_RELAY_WIN})
 
-add_executable(aspia_relay ${SOURCE_RELAY} ${SOURCE_RELAY_WIN} win/relay.rc)
+if (WIN32)
+    source_group(win FILES ${SOURCE_RELAY_WIN})
+endif()
+
+add_executable(aspia_relay ${SOURCE_RELAY} ${SOURCE_RELAY_WIN})
 set_target_properties(aspia_relay PROPERTIES LINK_FLAGS "/MANIFEST:NO")
 target_link_libraries(aspia_relay
     aspia_base

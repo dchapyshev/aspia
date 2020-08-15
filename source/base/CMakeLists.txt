@@ -495,8 +495,8 @@ source_group(strings FILES ${SOURCE_BASE_STRINGS} ${SOURCE_BASE_STRINGS_UNIT_TES
 source_group(threading FILES ${SOURCE_BASE_THREADING})
 
 if (WIN32)
-source_group(desktop\\win FILES ${SOURCE_BASE_DESKTOP_WIN} ${SOURCE_BASE_DESKTOP_WIN_UNIT_TESTS})
-source_group(win FILES ${SOURCE_BASE_WIN} ${SOURCE_BASE_WIN_UNIT_TESTS})
+    source_group(desktop\\win FILES ${SOURCE_BASE_DESKTOP_WIN} ${SOURCE_BASE_DESKTOP_WIN_UNIT_TESTS})
+    source_group(win FILES ${SOURCE_BASE_WIN} ${SOURCE_BASE_WIN_UNIT_TESTS})
 endif()
 
 add_library(aspia_base STATIC

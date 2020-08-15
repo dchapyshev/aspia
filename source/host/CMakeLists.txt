@@ -47,10 +47,6 @@ list(APPEND SOURCE_HOST_CORE
     host_main.cc
     host_main.h
     input_injector.h
-    input_injector_win.cc
-    input_injector_win.h
-    sas_injector.cc
-    sas_injector.h
     router_controller.cc
     router_controller.h
     server.cc
@@ -72,6 +68,14 @@ list(APPEND SOURCE_HOST_CORE
     user_session_window.h
     user_session_window_proxy.cc
     user_session_window_proxy.h)
+
+if (WIN32)
+    list(APPEND SOURCE_HOST_CORE
+        input_injector_win.cc
+        input_injector_win.h
+        sas_injector.cc
+        sas_injector.h)
+endif()
 
 list(APPEND SOURCE_HOST_CORE_UI
     ui/application.cc
@@ -96,20 +100,25 @@ list(APPEND SOURCE_HOST_CORE_UI
     ui/user_tree_item.cc
     ui/user_tree_item.h)
 
-list(APPEND SOURCE_HOST_CORE_WIN
-    win/dll_main.cc
-    win/service.cc
-    win/service.h
-    win/service_constants.cc
-    win/service_constants.h
-    win/service_main.cc
-    win/service_main.h
-    win/updater_launcher.cc
-    win/updater_launcher.h)
+if (WIN32)
+    list(APPEND SOURCE_HOST_CORE_WIN
+        win/dll_main.cc
+        win/service.cc
+        win/service.h
+        win/service_constants.cc
+        win/service_constants.h
+        win/service_main.cc
+        win/service_main.h
+        win/updater_launcher.cc
+        win/updater_launcher.h)
+endif()
 
 source_group("" FILES ${SOURCE_HOST_CORE})
 source_group(ui FILES ${SOURCE_HOST_CORE_UI})
-source_group(win FILES ${SOURCE_HOST_CORE_WIN})
+
+if (WIN32)
+    source_group(win FILES ${SOURCE_HOST_CORE_WIN})
+endif()
 
 add_library(aspia_host_core SHARED
     ${SOURCE_HOST_CORE}

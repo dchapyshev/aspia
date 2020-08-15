@@ -66,17 +66,22 @@ list(APPEND SOURCE_COMMON_UI
     ui/update_info.cc
     ui/update_info.h)
 
-list(APPEND SOURCE_COMMON_WIN
-    win/file_enumerator.cc
-    win/file_enumerator.h)
+if (WIN32)
+    list(APPEND SOURCE_COMMON_WIN
+        win/file_enumerator.cc
+        win/file_enumerator.h)
+endif()
 
 list(APPEND SOURCE_COMMON_RESOURCES
     resources/common.qrc)
 
 source_group("" FILES ${SOURCE_COMMON})
 source_group(ui FILES ${SOURCE_COMMON_UI})
-source_group(win FILES ${SOURCE_COMMON_WIN})
 source_group(resources FILES ${SOURCE_COMMON_RESOURCES})
+
+if (WIN32)
+    source_group(win FILES ${SOURCE_COMMON_WIN})
+endif()
 
 add_library(aspia_common STATIC
     ${SOURCE_COMMON}
