@@ -29,7 +29,7 @@ list(APPEND SOURCE_BASE
     crc32.h
     debug.cc
     debug.h
-    endian.cc
+    endian_util.cc
     endian_util.h
     guid.cc
     guid.h
