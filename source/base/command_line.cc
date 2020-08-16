@@ -21,7 +21,6 @@
 #include "base/logging.h"
 #include "base/strings/string_util.h"
 #include "base/strings/unicode.h"
-#include "build/build_config.h"
 
 #if defined(OS_WIN)
 #include <Windows.h>
@@ -29,6 +28,8 @@
 #endif // defined(OS_WIN)
 
 namespace base {
+
+CommandLine* CommandLine::current_process_commandline_ = nullptr;
 
 namespace {
 
@@ -98,6 +99,7 @@ void appendSwitchesAndArguments(CommandLine* command_line, const CommandLine::St
     }
 }
 
+#if defined(OS_WIN)
 // Quote a string as necessary for CommandLineToArgvW compatiblity *on Windows*.
 std::u16string quoteForCommandLineToArgvW(const std::u16string& arg, bool quote_placeholders)
 {
@@ -162,6 +164,7 @@ std::u16string quoteForCommandLineToArgvW(const std::u16string& arg, bool quote_
     out.push_back(u'"');
     return out;
 }
+#endif // defined(OS_WIN)
 
 } // namespace
 
@@ -220,6 +223,7 @@ CommandLine& CommandLine::operator=(CommandLine&& other) noexcept
     return *this;
 }
 
+#if defined(OS_WIN)
 // static
 CommandLine CommandLine::fromString(std::u16string_view command_line)
 {
@@ -227,18 +231,51 @@ CommandLine CommandLine::fromString(std::u16string_view command_line)
     cmd.parseFromString(command_line);
     return cmd;
 }
+#endif // defined(OS_WIN)
 
 // static
-const CommandLine& CommandLine::forCurrentProcess()
+bool CommandLine::init(int argc, const char* const* argv)
 {
-#if defined(OS_WIN)
-    static CommandLine command_line =
-        CommandLine::fromString(asWritableUtf16(GetCommandLineW()));
+    if (current_process_commandline_)
+    {
+        // If this is intentional, reset() must be called first. If we are using the shared build
+        // mode, we have to share a single object across multiple shared libraries.
+        return false;
+    }
 
-    return command_line;
+    current_process_commandline_ = new CommandLine(NO_PROGRAM);
+#if defined(OS_WIN)
+    (void)argc; // Unused in Windows.
+    (void)argv; // Unused in Windows.
+    current_process_commandline_->parseFromString(asWritableUtf16(GetCommandLineW()));
+#elif defined(OS_POSIX)
+    current_process_commandline_->initFromArgv(argc, argv);
 #else
-    NOTIMPLEMENTED();
+#error Unsupported platform
 #endif
+
+    return true;
+}
+
+// static
+void CommandLine::reset()
+{
+    DCHECK(current_process_commandline_);
+    delete current_process_commandline_;
+    current_process_commandline_ = nullptr;
+}
+
+// static
+CommandLine* CommandLine::forCurrentProcess()
+{
+    DCHECK(current_process_commandline_);
+    return current_process_commandline_;
+}
+
+// static
+bool CommandLine::isInitializedForCurrentProcess()
+{
+    return !!current_process_commandline_;
 }
 
 void CommandLine::initFromArgv(int argc, const char16_t* const* argv)
@@ -349,7 +386,6 @@ void CommandLine::removeSwitch(std::u16string_view switch_string)
 
 CommandLine::StringVector CommandLine::args() const
 {
-#if defined(OS_WIN)
     // Gather all arguments after the last switch (may include kSwitchTerminator).
     StringVector args(argv_.begin() + begin_args_, argv_.end());
 
@@ -361,9 +397,6 @@ CommandLine::StringVector CommandLine::args() const
         args.erase(switch_terminator);
 
     return args;
-#else
-    NOTIMPLEMENTED();
-#endif
 }
 
 void CommandLine::appendArgPath(const std::filesystem::path& value)
@@ -376,9 +409,9 @@ void CommandLine::appendArg(std::u16string_view value)
     argv_.emplace_back(value);
 }
 
+#if defined(OS_WIN)
 void CommandLine::parseFromString(std::u16string_view command_line)
 {
-#if defined(OS_WIN)
     command_line = trimWhitespace(command_line, TRIM_ALL);
     if (command_line.empty())
         return;
@@ -416,16 +449,18 @@ void CommandLine::parseFromString(std::u16string_view command_line)
 
     initFromArgv(num_args, reinterpret_cast<const char16_t* const*>(args));
     LocalFree(args);
-#else
-    NOTIMPLEMENTED();
-#endif
 }
+#endif // defined(OS_WIN)
 
 std::u16string CommandLine::commandLineStringInternal(bool quote_placeholders) const
 {
-    std::u16string string = quoteForCommandLineToArgvW(argv_[0], quote_placeholders);
-    const std::u16string params(argumentsStringInternal(quote_placeholders));
+    std::u16string string(argv_[0]);
 
+#if defined(OS_WIN)
+    string = quoteForCommandLineToArgvW(string, quote_placeholders);
+#endif // defined(OS_WIN)
+
+    const std::u16string params(argumentsStringInternal(quote_placeholders));
     if (!params.empty())
     {
         string.append(u" ");
@@ -459,13 +494,17 @@ std::u16string CommandLine::argumentsStringInternal(bool quote_placeholders) con
 
             if (!switch_value.empty())
             {
+#if defined(OS_WIN)
                 switch_value = quoteForCommandLineToArgvW(switch_value, quote_placeholders);
+#endif // defined(OS_WIN)
                 params.append(kSwitchValueSeparator + switch_value);
             }
         }
         else
         {
+#if defined(OS_WIN)
             arg = quoteForCommandLineToArgvW(arg, quote_placeholders);
+#endif // defined(OS_WIN)
             params.append(arg);
         }
     }

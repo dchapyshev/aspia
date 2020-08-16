@@ -48,12 +48,14 @@ void shutdownLogging()
 
 } // namespace
 
-void desktopAgentMain()
+void desktopAgentMain(int argc, const char* const* argv)
 {
     initLogging();
 
-    base::CommandLine command_line = base::CommandLine::forCurrentProcess();
-    if (command_line.hasSwitch(u"channel_id"))
+    base::CommandLine::init(argc, argv);
+    base::CommandLine* command_line = base::CommandLine::forCurrentProcess();
+
+    if (command_line->hasSwitch(u"channel_id"))
     {
         std::unique_ptr<base::MessageLoop> message_loop =
             std::make_unique<base::MessageLoop>(base::MessageLoop::Type::ASIO);
@@ -61,7 +63,7 @@ void desktopAgentMain()
         std::shared_ptr<host::DesktopSessionAgent> desktop_agent =
             std::make_shared<host::DesktopSessionAgent>(message_loop->taskRunner());
 
-        desktop_agent->start(command_line.switchValue(u"channel_id"));
+        desktop_agent->start(command_line->switchValue(u"channel_id"));
         message_loop->run();
     }
     else

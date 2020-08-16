@@ -25,6 +25,6 @@ int WINAPI wWinMain(HINSTANCE /* hInstance */,
                     LPWSTR /* lpCmdLine */,
                     int /* nCmdShow */)
 {
-    desktopAgentMain();
+    desktopAgentMain(0, nullptr); // On Windows ignores arguments.
     return 0;
 }

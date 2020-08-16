@@ -19,6 +19,8 @@
 #ifndef BASE__COMMAND_LINE_H
 #define BASE__COMMAND_LINE_H
 
+#include "build/build_config.h"
+
 #include <filesystem>
 #include <map>
 #include <string>
@@ -52,8 +54,30 @@ public:
 
     ~CommandLine() = default;
 
+    // Initialize the current process CommandLine singleton. On Windows, ignores its arguments (we
+    // instead parse GetCommandLineW() directly) because we don't trust the CRT's parsing of the
+    // command line, but it still must be called to set up the command line. Returns false if
+    // initialization has already occurred, and true otherwise. Only the caller receiving a 'true'
+    // return value should take responsibility for calling reset().
+    static bool init(int argc, const char* const* argv);
+
+    // Destroys the current process CommandLine singleton. This is necessary if you want to reset
+    // the base library to its initial state (for example, in an outer library that needs to be
+    // able to terminate, and be re-initialized).
+    // If Init is called only once, as in main(), reset() is not necessary.
+    static void reset();
+
+    // Get the singleton CommandLine representing the current process's command line.
+    // Note: returned value is mutable, but not thread safe; only mutate if you know what you're
+    // doing!
+    static CommandLine* forCurrentProcess();
+
+    // Returns true if the CommandLine has been initialized for the given process.
+    static bool isInitializedForCurrentProcess();
+
+#if defined(OS_WIN)
     static CommandLine fromString(std::u16string_view command_line);
-    static const CommandLine& forCurrentProcess();
+#endif // defined(OS_WIN)
 
     // Initialize from an argv vector.
     void initFromArgv(int argc, const char16_t* const* argv);
@@ -103,9 +127,11 @@ public:
     void appendArgPath(const std::filesystem::path& value);
     void appendArg(std::u16string_view value);
 
+#if defined(OS_WIN)
     // Initialize by parsing the given command line string.
     // The program name is assumed to be the first item in the string.
     void parseFromString(std::u16string_view command_line);
+#endif // defined(OS_WIN)
 
 private:
     // Disallow default constructor; a program name must be explicitly specified.
@@ -127,6 +153,9 @@ private:
 
     // The index after the program and switches, any arguments start here.
     size_t begin_args_;
+
+    // The singleton CommandLine representing the current process's command line.
+    static CommandLine* current_process_commandline_;
 };
 
 } // namespace base
