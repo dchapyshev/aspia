@@ -238,6 +238,18 @@ if (WIN32)
         desktop/screen_capturer_gdi.h)
 endif()
 
+if (LINUX)
+    list(APPEND SOURCE_BASE_DESKTOP
+        desktop/screen_capturer_x11.cc
+        desktop/screen_capturer_x11.h)
+endif()
+
+if (APPLE)
+    list(APPEND SOURCE_BASE_DESKTOP
+        desktop/screen_capturer_mac.mm
+        desktop/screen_capturer_mac.h)
+endif()
+
 list(APPEND SOURCE_DESKTOP_UNIT_TESTS
     desktop/diff_block_32bpp_avx2_unittest.cc
     desktop/diff_block_32bpp_c_unittest.cc
