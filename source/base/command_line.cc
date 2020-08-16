@@ -237,7 +237,7 @@ const CommandLine& CommandLine::forCurrentProcess()
 
     return command_line;
 #else
-    throw std::logic_error{"Method not implmented"};
+    NOTIMPLEMENTED();
 #endif
 }
 
@@ -362,7 +362,7 @@ CommandLine::StringVector CommandLine::args() const
 
     return args;
 #else
-    throw std::logic_error{"Method not implmented"};
+    NOTIMPLEMENTED();
 #endif
 }
 
@@ -417,7 +417,7 @@ void CommandLine::parseFromString(std::u16string_view command_line)
     initFromArgv(num_args, reinterpret_cast<const char16_t* const*>(args));
     LocalFree(args);
 #else
-    throw std::logic_error{"Method not implmented"};
+    NOTIMPLEMENTED();
 #endif
 }
 
