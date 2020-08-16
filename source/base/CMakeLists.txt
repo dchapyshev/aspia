@@ -240,12 +240,16 @@ endif()
 
 if (LINUX)
     list(APPEND SOURCE_BASE_DESKTOP
+        desktop/cursor_capturer_x11.cc
+        desktop/cursor_capturer_x11.h
         desktop/screen_capturer_x11.cc
         desktop/screen_capturer_x11.h)
 endif()
 
 if (APPLE)
     list(APPEND SOURCE_BASE_DESKTOP
+        desktop/cursor_capturer_mac.mm
+        desktop/cursor_capturer_mac.h
         desktop/screen_capturer_mac.mm
         desktop/screen_capturer_mac.h)
 endif()
