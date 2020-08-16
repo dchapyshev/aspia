@@ -165,8 +165,13 @@ bool shouldCreateLogMessage(LoggingSeverity severity);
 
 // As special cases, we can assume that LOG_IS_ON(LS_FATAL) always holds. Also, LOG_IS_ON(LS_DFATAL)
 // always holds in debug mode. In particular, CHECK()s will always fire if they fail.
+#if defined(CC_MSVC)
 #define LOG_IS_ON(severity) \
-  (::base::shouldCreateLogMessage(::base::##severity))
+    (::base::shouldCreateLogMessage(::base::##severity))
+#else
+#define LOG_IS_ON(severity) \
+    (::base::shouldCreateLogMessage(::base::severity))
+#endif // CC_MSVC
 
 // Helper macro which avoids evaluating the arguments to a stream if the condition doesn't hold.
 // Condition is evaluated once and only once.

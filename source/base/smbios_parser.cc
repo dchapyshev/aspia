@@ -19,6 +19,8 @@
 #include "base/smbios_parser.h"
 #include "base/strings/string_util.h"
 
+#include <cstring>
+
 namespace base {
 
 SmbiosTableEnumerator::SmbiosTableEnumerator(const std::string& smbios_dump)

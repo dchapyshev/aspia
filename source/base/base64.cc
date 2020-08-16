@@ -30,7 +30,8 @@ namespace base {
 void Base64::encode(std::string_view input, std::string* output)
 {
     DCHECK(output);
-    output->swap(encode(input));
+    auto temp = encode(input);
+    output->swap(temp);
 }
 
 // static

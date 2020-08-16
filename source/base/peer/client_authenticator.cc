@@ -18,7 +18,7 @@
 
 #include "base/peer/client_authenticator.h"
 
-#include "base/cpuid.h"
+#include "base/cpuid_util.h"
 #include "base/location.h"
 #include "base/logging.h"
 #include "base/sys_info.h"
@@ -215,7 +215,7 @@ void ClientAuthenticator::sendClientHello()
 
     uint32_t encryption = proto::ENCRYPTION_CHACHA20_POLY1305;
 
-    if (CPUID::hasAesNi())
+    if (CpuidUtil::hasAesNi())
         encryption |= proto::ENCRYPTION_AES256_GCM;
 
     client_hello.set_encryption(encryption);

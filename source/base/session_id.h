@@ -31,6 +31,8 @@ const SessionId kServiceSessionId = 0;
 
 SessionId activeConsoleSessionId();
 
+#elif defined(OS_LINUX)
+
 #else // defined(OS_*)
 
 #error Not implemented

@@ -231,10 +231,14 @@ CommandLine CommandLine::fromString(std::u16string_view command_line)
 // static
 const CommandLine& CommandLine::forCurrentProcess()
 {
+#if defined(OS_WIN)
     static CommandLine command_line =
         CommandLine::fromString(asWritableUtf16(GetCommandLineW()));
 
     return command_line;
+#else
+    NOTIMPLEMENTED();
+#endif
 }
 
 void CommandLine::initFromArgv(int argc, const char16_t* const* argv)
@@ -345,6 +349,7 @@ void CommandLine::removeSwitch(std::u16string_view switch_string)
 
 CommandLine::StringVector CommandLine::args() const
 {
+#if defined(OS_WIN)
     // Gather all arguments after the last switch (may include kSwitchTerminator).
     StringVector args(argv_.begin() + begin_args_, argv_.end());
 
@@ -356,6 +361,9 @@ CommandLine::StringVector CommandLine::args() const
         args.erase(switch_terminator);
 
     return args;
+#else
+    NOTIMPLEMENTED();
+#endif
 }
 
 void CommandLine::appendArgPath(const std::filesystem::path& value)
@@ -370,6 +378,7 @@ void CommandLine::appendArg(std::u16string_view value)
 
 void CommandLine::parseFromString(std::u16string_view command_line)
 {
+#if defined(OS_WIN)
     command_line = trimWhitespace(command_line, TRIM_ALL);
     if (command_line.empty())
         return;
@@ -407,6 +416,9 @@ void CommandLine::parseFromString(std::u16string_view command_line)
 
     initFromArgv(num_args, reinterpret_cast<const char16_t* const*>(args));
     LocalFree(args);
+#else
+    NOTIMPLEMENTED();
+#endif
 }
 
 std::u16string CommandLine::commandLineStringInternal(bool quote_placeholders) const

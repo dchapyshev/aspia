@@ -183,7 +183,7 @@ bool initLogging(const LoggingSettings& settings)
     LOG(LS_INFO) << "Executable file: " << file_path.c_str();
     LOG(LS_INFO) << "Debugger present: " << (isDebuggerPresent() ? "Yes" : "No");
 
-#if defined(OS_WIN)
+#if defined(OS_WIN) or defined(OS_LINUX)
 #if defined(NDEBUG)
     LOG(LS_INFO) << "Debug build: No";
 #else
@@ -382,7 +382,6 @@ std::ostream& std::operator<<(std::ostream& out, const wchar_t* wstr)
 {
     return out << (wstr ? base::utf8FromWide(wstr) : "nullptr");
 }
-#endif // defined(OS_WIN)
 
 std::ostream& operator<<(std::ostream& out, const char16_t* ustr)
 {
@@ -393,5 +392,6 @@ std::ostream& operator<<(std::ostream& out, const std::u16string& ustr)
 {
     return out << base::utf8FromUtf16(ustr);
 }
+#endif // defined(OS_WIN)
 
 } // namespace std

@@ -20,19 +20,22 @@
 #define BASE__CPUID_H
 
 #include <cstdint>
+#if !defined(CC_MSVC)
+#include <climits>
+#endif
 
 namespace base {
 
-class CPUID
+class CpuidUtil
 {
 public:
-    CPUID() = default;
-    explicit CPUID(int leaf) { get(leaf); }
-    CPUID(int leaf, int subleaf) { get(leaf, subleaf); }
-    virtual ~CPUID() = default;
+    CpuidUtil() = default;
+    explicit CpuidUtil(int leaf) { get(leaf); }
+    CpuidUtil(int leaf, int subleaf) { get(leaf, subleaf); }
+    virtual ~CpuidUtil() = default;
 
-    CPUID(const CPUID& other);
-    CPUID& operator=(const CPUID& other);
+    CpuidUtil(const CpuidUtil& other);
+    CpuidUtil& operator=(const CpuidUtil& other);
 
     void get(int leaf);
     void get(int leaf, int subleaf);
@@ -50,7 +53,11 @@ private:
     static constexpr int kECX = 2;
     static constexpr int kEDX = 3;
 
+#if defined(CC_MSVC)
     int cpu_info_[4] = { -1, -1, -1, -1 };
+#else
+    unsigned int cpu_info_[4] = { UINT_MAX, UINT_MAX, UINT_MAX, UINT_MAX };
+#endif // CC_MSVC
 };
 
 } // namespace base
