@@ -416,6 +416,11 @@ if (WIN32)
         strings/string_util_win.cc)
 endif()
 
+if (UNIX)
+    list(APPEND SOURCE_BASE_STRINGS
+        strings/string_util_icu.cc)
+endif()
+
 list(APPEND SOURCE_BASE_STRINGS_UNIT_TESTS
     strings/string_number_conversions_unittest.cc
     strings/string_printf_unittest.cc
