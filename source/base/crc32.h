@@ -20,7 +20,7 @@
 #define BASE__CRC32_H
 
 #include <cstdint>
-#include "stddef.h"
+#include <cstddef>
 
 namespace base {
 

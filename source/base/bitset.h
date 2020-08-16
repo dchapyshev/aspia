@@ -20,7 +20,7 @@
 #define ASPIA_BASE__BITSET_H
 
 #include <limits>
-#include "stddef.h"
+#include <cstddef>
 
 namespace base {
 
