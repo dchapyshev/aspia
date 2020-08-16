@@ -310,6 +310,16 @@ if (WIN32)
         files/file_path_watcher_win.cc)
 endif()
 
+if (LINUX)
+    list(APPEND SOURCE_BASE_FILES
+        files/file_path_watcher_linux.cc)
+endif()
+
+if (APPLE)
+    list(APPEND SOURCE_BASE_FILES
+        files/file_path_watcher_mac.cc)
+endif()
+
 list(APPEND SOURCE_BASE_IPC
     ipc/ipc_channel.cc
     ipc/ipc_channel.h
