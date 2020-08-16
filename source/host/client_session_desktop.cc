@@ -340,6 +340,15 @@ void ClientSessionDesktop::readConfig(const proto::DesktopConfig& config)
     desktop_session_config_.lock_at_disconnect =
         (config.flags() & proto::LOCK_AT_DISCONNECT);
 
+    LOG(LS_INFO) << "NEW CLIENT CONFIGURATION";
+    LOG(LS_INFO) << "Video encoding: " << config.video_encoding();
+    LOG(LS_INFO) << "Enable cursor shape: " << (cursor_encoder_ != nullptr);
+    LOG(LS_INFO) << "Disable font smoothing: " << desktop_session_config_.disable_font_smoothing;
+    LOG(LS_INFO) << "Disable desktop effects: " << desktop_session_config_.disable_effects;
+    LOG(LS_INFO) << "Disable desktop wallpaper: " << desktop_session_config_.disable_wallpaper;
+    LOG(LS_INFO) << "Block input: " << desktop_session_config_.block_input;
+    LOG(LS_INFO) << "Lock at disconnect: " << desktop_session_config_.lock_at_disconnect;
+
     delegate_->onClientSessionConfigured();
 }
 
