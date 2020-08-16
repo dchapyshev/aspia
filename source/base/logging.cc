@@ -183,7 +183,7 @@ bool initLogging(const LoggingSettings& settings)
     LOG(LS_INFO) << "Executable file: " << file_path.c_str();
     LOG(LS_INFO) << "Debugger present: " << (isDebuggerPresent() ? "Yes" : "No");
 
-#if defined(OS_WIN) or defined(OS_LINUX)
+#if defined(OS_WIN) || defined(OS_LINUX)
 #if defined(NDEBUG)
     LOG(LS_INFO) << "Debug build: No";
 #else

@@ -21,19 +21,24 @@
 
 // OS detection.
 #if defined(_WIN32)
-#define OS_WIN
-#elif defined(linux)
-#define OS_LINUX
-#define OS_POSIX
+#define OS_WIN 1
+#elif defined(linux) || defined(__linux__)
+#define OS_LINUX 1
+#elif defined(__APPLE__)
+#define OS_MACOSX 1
 #else
 #error Unknown OS
 #endif
 
-// Compiler detection.
+#if defined(OS_LINUX) || defined(OS_MACOSX)
+#define OS_POSIX 1
+#endif
+
+// Compiler detection. Note: clang masquerades as GCC on POSIX and as MSVC on Windows.
 #if defined(_MSC_VER)
-#define CC_MSVC
+#define CC_MSVC 1
 #elif defined(__GNUC__)
-#define CC_GCC
+#define CC_GCC 1
 #else
 #error Unknown compiller
 #endif
@@ -63,6 +68,14 @@
 
 #if defined(OS_WIN)
 #define WCHAR_T_IS_UTF16
+#elif defined(OS_POSIX) && defined(COMPILER_GCC) && defined(__WCHAR_MAX__) && \
+    (__WCHAR_MAX__ == 0x7fffffff || __WCHAR_MAX__ == 0xffffffff)
+#define WCHAR_T_IS_UTF32
+#elif defined(OS_POSIX) && defined(COMPILER_GCC) && defined(__WCHAR_MAX__) && \
+    (__WCHAR_MAX__ == 0x7fff || __WCHAR_MAX__ == 0xffff)
+#define WCHAR_T_IS_UTF16
+#else
+#error Unknown wchar_t size
 #endif
 
 #define DEFAULT_LOCALE        "en"
