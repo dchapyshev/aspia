@@ -154,30 +154,30 @@ void showHelp()
         << '\t' << "--help"    << '\t' << "Show help"       << std::endl;
 }
 
-} // namespace
-
-int wmain()
+void entryPoint(int argc, const char* const* argv)
 {
     initLogging();
 
-    base::CommandLine command_line = base::CommandLine::forCurrentProcess();
-    if (command_line.hasSwitch(u"install"))
+    base::CommandLine::init(argc, argv);
+    base::CommandLine* command_line = base::CommandLine::forCurrentProcess();
+
+    if (command_line->hasSwitch(u"install"))
     {
         installService();
     }
-    else if (command_line.hasSwitch(u"remove"))
+    else if (command_line->hasSwitch(u"remove"))
     {
         removeService();
     }
-    else if (command_line.hasSwitch(u"start"))
+    else if (command_line->hasSwitch(u"start"))
     {
         startService();
     }
-    else if (command_line.hasSwitch(u"stop"))
+    else if (command_line->hasSwitch(u"stop"))
     {
         stopService();
     }
-    else if (command_line.hasSwitch(u"help"))
+    else if (command_line->hasSwitch(u"help"))
     {
         showHelp();
     }
@@ -187,5 +187,12 @@ int wmain()
     }
 
     shutdownLogging();
+}
+
+} // namespace
+
+int wmain()
+{
+    entryPoint(0, nullptr); // On Windows ignores arguments.
     return 0;
 }
