@@ -34,7 +34,9 @@ public:
     ComputerDialogGeneral(int type, QWidget* parent);
     ~ComputerDialogGeneral() = default;
 
-    void restoreSettings(const QString& parent_name, const proto::address_book::Computer& computer);
+    void restoreSettings(const QMap<QString, QString>& routers,
+                         const QString& parent_name,
+                         const proto::address_book::Computer& computer);
     bool saveSettings(proto::address_book::Computer* computer);
 
 private slots:

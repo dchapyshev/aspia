@@ -378,6 +378,7 @@ void AddressBookTab::addComputer()
 
     ComputerDialog dialog(this,
                           ComputerDialog::Mode::CREATE,
+                          routersList(),
                           parentName(parent_item));
     if (dialog.exec() != QDialog::Accepted)
         return;
@@ -406,6 +407,7 @@ void AddressBookTab::copyComputer()
 
     ComputerDialog dialog(this,
                           ComputerDialog::Mode::COPY,
+                          routersList(),
                           parentName(parent_group_item),
                           *current_item->computer());
     if (dialog.exec() != QDialog::Accepted)
@@ -471,6 +473,7 @@ void AddressBookTab::modifyComputer()
 
     ComputerDialog dialog(this,
                           ComputerDialog::Mode::MODIFY,
+                          routersList(),
                           parentName(current_item->parentComputerGroupItem()),
                           *current_item->computer());
     if (dialog.exec() != QDialog::Accepted)
@@ -805,6 +808,20 @@ bool AddressBookTab::saveToFile(const QString& file_path)
 
     setChanged(false);
     return true;
+}
+
+QMap<QString, QString> AddressBookTab::routersList() const
+{
+    QMap<QString, QString> routers;
+
+    for (int i = 0; i < data_.router_size(); ++i)
+    {
+        const proto::address_book::Router& router = data_.router(i);
+        routers.insert(QString::fromStdString(router.name()),
+                       QString::fromStdString(router.guid()));
+    }
+
+    return routers;
 }
 
 // static

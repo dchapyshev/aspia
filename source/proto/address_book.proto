@@ -51,8 +51,9 @@ message Computer
     uint32 port                   = 7;
     string username               = 8;
     string password               = 9;
+    string router_guid            = 10;
 
-    // Fields 10-15 are reserved.
+    // Fields 11-15 are reserved.
 
     // Session configurations.
     SessionType session_type = 16;

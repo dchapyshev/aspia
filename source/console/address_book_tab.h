@@ -93,6 +93,7 @@ private:
 
     void updateComputerList(ComputerGroupItem* computer_group);
     bool saveToFile(const QString& file_path);
+    QMap<QString, QString> routersList() const;
 
     static QString parentName(ComputerGroupItem* item);
     static void showOpenError(QWidget* parent, const QString& message);

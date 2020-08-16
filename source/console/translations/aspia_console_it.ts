@@ -110,7 +110,7 @@
     </message>
     <message>
         <location filename="../address_book_tab.ui" line="100"/>
-        <source>Address</source>
+        <source>Address or ID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -213,32 +213,37 @@
 <context>
     <name>ComputerDialogGeneral</name>
     <message>
-        <location filename="../computer_dialog_general.ui" line="36"/>
+        <location filename="../computer_dialog_general.ui" line="37"/>
         <source>Name:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_dialog_general.ui" line="43"/>
+        <location filename="../computer_dialog_general.ui" line="51"/>
         <source>Parent Group:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_dialog_general.ui" line="50"/>
+        <location filename="../computer_dialog_general.ui" line="68"/>
+        <source>Router:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog_general.ui" line="78"/>
         <source>Address:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_dialog_general.ui" line="57"/>
+        <location filename="../computer_dialog_general.ui" line="92"/>
         <source>User Name:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_dialog_general.ui" line="64"/>
+        <location filename="../computer_dialog_general.ui" line="106"/>
         <source>Password:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_dialog_general.ui" line="146"/>
+        <location filename="../computer_dialog_general.ui" line="151"/>
         <source>Comment:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -821,59 +826,59 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="496"/>
+        <location filename="../address_book_tab.cc" line="499"/>
         <source>Are you sure you want to delete computer group &quot;%1&quot; and all child items?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="500"/>
-        <location filename="../address_book_tab.cc" line="522"/>
+        <location filename="../address_book_tab.cc" line="503"/>
+        <location filename="../address_book_tab.cc" line="525"/>
         <source>Confirmation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="518"/>
+        <location filename="../address_book_tab.cc" line="521"/>
         <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="775"/>
+        <location filename="../address_book_tab.cc" line="778"/>
         <source>Save Address Book</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="777"/>
+        <location filename="../address_book_tab.cc" line="780"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="787"/>
+        <location filename="../address_book_tab.cc" line="790"/>
         <source>Unable to create or open address book file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="800"/>
+        <location filename="../address_book_tab.cc" line="803"/>
         <source>Unable to write address book file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="814"/>
+        <location filename="../address_book_tab.cc" line="831"/>
         <source>Root Group</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="825"/>
-        <location filename="../address_book_tab.cc" line="839"/>
+        <location filename="../address_book_tab.cc" line="842"/>
+        <location filename="../address_book_tab.cc" line="856"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="827"/>
+        <location filename="../address_book_tab.cc" line="844"/>
         <source>Could not open address book</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="841"/>
+        <location filename="../address_book_tab.cc" line="858"/>
         <source>Failed to save address book</source>
         <translation type="unfinished"></translation>
     </message>
@@ -881,27 +886,27 @@
 <context>
     <name>console::ComputerDialog</name>
     <message>
-        <location filename="../computer_dialog.cc" line="62"/>
+        <location filename="../computer_dialog.cc" line="63"/>
         <source>(copy)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="73"/>
+        <location filename="../computer_dialog.cc" line="74"/>
         <source>General</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="77"/>
+        <location filename="../computer_dialog.cc" line="78"/>
         <source>Sessions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="84"/>
+        <location filename="../computer_dialog.cc" line="85"/>
         <source>Manage</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="88"/>
+        <location filename="../computer_dialog.cc" line="89"/>
         <source>View</source>
         <translation type="unfinished"></translation>
     </message>
@@ -941,8 +946,19 @@
 </context>
 <context>
     <name>console::ComputerDialogGeneral</name>
+    <message>
+        <location filename="../computer_dialog_general.cc" line="62"/>
+        <location filename="../computer_dialog_general.cc" line="101"/>
+        <source>Address:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog_general.cc" line="76"/>
+        <source>Without Router</source>
+        <translation type="unfinished"></translation>
+    </message>
     <message numerus="yes">
-        <location filename="../computer_dialog_general.cc" line="83"/>
+        <location filename="../computer_dialog_general.cc" line="120"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -950,17 +966,17 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_dialog_general.cc" line="91"/>
+        <location filename="../computer_dialog_general.cc" line="128"/>
         <source>Name can not be empty.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_dialog_general.cc" line="101"/>
+        <location filename="../computer_dialog_general.cc" line="138"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../computer_dialog_general.cc" line="111"/>
+        <location filename="../computer_dialog_general.cc" line="148"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -968,12 +984,17 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_dialog_general.cc" line="122"/>
+        <location filename="../computer_dialog_general.cc" line="163"/>
+        <source>The ID can only contain numbers.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog_general.cc" line="181"/>
         <source>An invalid computer address was entered.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_dialog_general.cc" line="156"/>
+        <location filename="../computer_dialog_general.cc" line="218"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
