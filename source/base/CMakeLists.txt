@@ -524,7 +524,7 @@ add_library(aspia_base STATIC
     ${SOURCE_BASE_STRINGS}
     ${SOURCE_BASE_THREADING}
     ${SOURCE_BASE_WIN})
-target_link_libraries(aspia_base ${THIRD_PARTY_LIBS})
+target_link_libraries(aspia_base aspia_proto ${THIRD_PARTY_LIBS})
 
 # If the build of unit tests is enabled.
 if (BUILD_UNIT_TESTS)
