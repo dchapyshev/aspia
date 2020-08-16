@@ -20,6 +20,7 @@
 #define BASE__SMBIOS_H
 
 #include <cstdint>
+#include "stddef.h"
 
 namespace base {
 

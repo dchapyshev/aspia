@@ -18,7 +18,7 @@
 
 #include "base/guid.h"
 
-#include "base/endian.h"
+#include "base/endian_util.h"
 #include "base/logging.h"
 
 #include <random>

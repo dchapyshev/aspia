@@ -18,7 +18,7 @@
 
 #include "relay/pending_session.h"
 
-#include "base/endian.h"
+#include "base/endian_util.h"
 
 #include <asio/read.hpp>
 

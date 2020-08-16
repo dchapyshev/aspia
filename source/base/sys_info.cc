@@ -18,20 +18,21 @@
 
 #include "base/sys_info.h"
 
-#include "base/cpuid.h"
+#include "base/cpuid_util.h"
 #include "base/strings/string_util.h"
 
 #include <algorithm>
+#include <cstring>
 
 namespace base {
 
 // static
 std::string SysInfo::processorName()
 {
-    CPUID cpuid;
-    cpuid.get(0x80000000);
+    CpuidUtil cpuidUtil;
+    cpuidUtil.get(0x80000000);
 
-    uint32_t max_leaf = cpuid.eax();
+    uint32_t max_leaf = cpuidUtil.eax();
     if (max_leaf < 0x80000002)
         return std::string();
 
@@ -42,12 +43,12 @@ std::string SysInfo::processorName()
 
     for (uint32_t leaf = 0x80000002, offset = 0; leaf <= max_leaf; ++leaf, offset += 16)
     {
-        cpuid.get(leaf);
+        cpuidUtil.get(leaf);
 
-        uint32_t eax = cpuid.eax();
-        uint32_t ebx = cpuid.ebx();
-        uint32_t ecx = cpuid.ecx();
-        uint32_t edx = cpuid.edx();
+        uint32_t eax = cpuidUtil.eax();
+        uint32_t ebx = cpuidUtil.ebx();
+        uint32_t ecx = cpuidUtil.ecx();
+        uint32_t edx = cpuidUtil.edx();
 
         memcpy(&buffer[offset + 0], &eax, sizeof(eax));
         memcpy(&buffer[offset + 4], &ebx, sizeof(ebx));
@@ -76,12 +77,12 @@ std::string SysInfo::processorName()
 // static
 std::string SysInfo::processorVendor()
 {
-    CPUID cpuid;
-    cpuid.get(0x00000000);
+    CpuidUtil cpuidUtil;
+    cpuidUtil.get(0x00000000);
 
-    uint32_t ebx = cpuid.ebx();
-    uint32_t ecx = cpuid.ecx();
-    uint32_t edx = cpuid.edx();
+    uint32_t ebx = cpuidUtil.ebx();
+    uint32_t ecx = cpuidUtil.ecx();
+    uint32_t edx = cpuidUtil.edx();
 
     char buffer[13];
     memset(&buffer[0], 0, sizeof(buffer));

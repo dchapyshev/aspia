@@ -20,6 +20,8 @@
 
 #include "build/build_config.h"
 
+#include <cstring>
+
 #if defined(OS_WIN)
 #include <Windows.h>
 #endif // defined(OS_WIN)

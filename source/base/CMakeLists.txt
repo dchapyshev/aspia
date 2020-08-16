@@ -24,14 +24,14 @@ list(APPEND SOURCE_BASE
     command_line.h
     compiler_specific.h
     converter.h
-    cpuid.cc
-    cpuid.h
+    cpuid_util.cc
+    cpuid_util.h
     crc32.cc
     crc32.h
     debug.cc
     debug.h
-    endian.cc
-    endian.h
+    endian_util.cc
+    endian_util.h
     guid.cc
     guid.h
     location.cc

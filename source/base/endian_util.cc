@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/endian.h"
+#include "base/endian_util.h"
 
 #include "build/build_config.h"
 

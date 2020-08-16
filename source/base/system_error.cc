@@ -26,6 +26,8 @@
 
 #if defined(OS_WIN)
 #include <Windows.h>
+#elif defined(OS_POSIX)
+#include <cstring>
 #endif // defined(OS_WIN)
 
 namespace base {
@@ -76,8 +78,8 @@ std::string SystemError::toString(Code code)
     return stringPrintf("Error (0x%lX) while retrieving error. (0x%lX)",
                         GetLastError(),
                         code);
-#elif (OS_POSIX)
-    return strerror(code_);
+#elif defined(OS_POSIX)
+    return std::strerror(code);
 #else
 #error Platform support not implemented
 #endif

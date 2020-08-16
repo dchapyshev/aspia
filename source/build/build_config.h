@@ -24,6 +24,7 @@
 #define OS_WIN
 #elif defined(linux)
 #define OS_LINUX
+#define OS_POSIX
 #else
 #error Unknown OS
 #endif
